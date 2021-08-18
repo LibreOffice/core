@@ -22,6 +22,30 @@
       "revId": "91462e05f0e6925c1a6405b0b351cb2cf403a8cb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60f4e5ca_22623d86",
+        "filename": "svx/source/svdraw/svdtrans.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-18T12:10:07Z",
+      "side": 1,
+      "message": "Thanks!\n\n\u003e shearX expects the tan of the angle\n\nI consulted getAttributedShapeTransformation (slideshow/source/engine/tools.cxx), where the return from ShapeAttributeLayer::getShearXAngle gets used in the shearX. I admit I could be confused 😊",
+      "parentUuid": "93eb0280_c467510e",
+      "range": {
+        "startLine": 534,
+        "startChar": 45,
+        "endLine": 534,
+        "endChar": 59
+      },
+      "revId": "91462e05f0e6925c1a6405b0b351cb2cf403a8cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
