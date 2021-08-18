@@ -1325,6 +1325,37 @@ css::uno::Reference<css::frame::XLayoutManager> getLayoutManager(const SfxFrame&
 }
 }
 
+bool SfxApplication::IsHeadlessOrUITest()
+{
+    if (Application::IsHeadlessModeEnabled())
+        return true;
+
+    bool bIsUITest = false; //uitest.uicheck fails when the dialog is open
+    for (sal_uInt16 i = 0, nCount = Application::GetCommandLineParamCount(); i < nCount; ++i)
+    {
+        if (Application::GetCommandLineParam(i) == "--nologo")
+        {
+            bIsUITest = true;
+            break;
+        }
+    }
+    return bIsUITest;
+}
+
+bool SfxApplication::IsTipOfTheDayDue()
+{
+    const bool bShowTipOfTheDay = officecfg::Office::Common::Misc::ShowTipOfTheDay::get();
+    if (!bShowTipOfTheDay)
+        return false;
+
+    const auto t0 = std::chrono::system_clock::now().time_since_epoch();
+
+    // show tip-of-the-day dialog ?
+    const sal_Int32 nLastTipOfTheDay = officecfg::Office::Common::Misc::LastTipOfTheDayShown::get();
+    const sal_Int32 nDay = std::chrono::duration_cast<std::chrono::hours>(t0).count()/24; // days since 1970-01-01
+    return nDay - nLastTipOfTheDay > 0; //only once per day
+}
+
 void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if(m_pImpl->bIsDowning)
@@ -1357,14 +1388,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 rBind.Invalidate( SID_RELOAD );
                 rBind.Invalidate( SID_EDITDOC );
 
-                const auto t0 = std::chrono::system_clock::now().time_since_epoch();
-
-                bool bIsUITest = false; //uitest.uicheck fails when the dialog is open
-                for( sal_uInt16 i = 0; i < Application::GetCommandLineParamCount(); i++ )
-                {
-                    if( Application::GetCommandLineParam(i) == "--nologo" )
-                        bIsUITest = true;
-                }
+                bool bIsHeadlessOrUITest = SfxApplication::IsHeadlessOrUITest(); //uitest.uicheck fails when the dialog is open
 
                 //what's new infobar
                 OUString sSetupVersion = utl::ConfigManager::getProductVersion();
@@ -1372,7 +1396,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 OUString sLastVersion
                     = officecfg::Setup::Product::ooSetupLastVersion::get().value_or("0.0");
                 sal_Int32 iLast = sLastVersion.getToken(0,'.').toInt32() * 10 + sLastVersion.getToken(1,'.').toInt32();
-                if ((iCurrent > iLast) && !Application::IsHeadlessModeEnabled() && !bIsUITest)
+                if ((iCurrent > iLast) && !bIsHeadlessOrUITest)
                 {
                     VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("whatsnew", "", SfxResId(STR_WHATSNEW_TEXT), InfobarType::INFO);
                     if (pInfoBar)
@@ -1387,19 +1411,17 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     batch->commit();
                 }
 
-                // show tip-of-the-day dialog
-                const bool bShowTipOfTheDay = officecfg::Office::Common::Misc::ShowTipOfTheDay::get();
-                if (bShowTipOfTheDay && !Application::IsHeadlessModeEnabled() && !bIsUITest) {
-                    const sal_Int32 nLastTipOfTheDay = officecfg::Office::Common::Misc::LastTipOfTheDayShown::get();
-                    const sal_Int32 nDay = std::chrono::duration_cast<std::chrono::hours>(t0).count()/24; // days since 1970-01-01
-                    if (nDay-nLastTipOfTheDay > 0) { //only once per day
-                        // tdf#127946 pass in argument for dialog parent
-                        SfxUnoFrameItem aDocFrame(SID_FILLFRAME, GetFrame().GetFrameInterface());
-                        GetDispatcher()->ExecuteList(SID_TIPOFTHEDAY, SfxCallMode::SLOT, {}, { &aDocFrame });
-                    }
-                } //bShowTipOfTheDay
+                // show tip-of-the-day dialog if it due, but not if there is the impress modal template dialog
+                // open where SdModule::ExecuteNewDocument will launch it instead when that dialog is dismissed
+                if (SfxApplication::IsTipOfTheDayDue() && !bIsHeadlessOrUITest && !IsInModalMode())
+                {
+                    // tdf#127946 pass in argument for dialog parent
+                    SfxUnoFrameItem aDocFrame(SID_FILLFRAME, GetFrame().GetFrameInterface());
+                    GetDispatcher()->ExecuteList(SID_TIPOFTHEDAY, SfxCallMode::SLOT, {}, { &aDocFrame });
+                }
 
                 // inform about the community involvement
+                const auto t0 = std::chrono::system_clock::now().time_since_epoch();
                 const sal_Int64 nLastGetInvolvedShown = officecfg::Setup::Product::LastTimeGetInvolvedShown::get();
                 const sal_Int64 nNow = std::chrono::duration_cast<std::chrono::seconds>(t0).count();
                 const sal_Int64 nPeriodSec(60 * 60 * 24 * 180); // 180 days in seconds
