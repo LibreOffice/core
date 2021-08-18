@@ -111,7 +111,7 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
     }
 
     // Get doc shell
-    m_pDocShell = pModel ? static_cast<SmDocShell*>(pModel->GetObjectShell()) : nullptr;
+    m_pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     if (m_pDocShell == nullptr)
     {
         SAL_WARN("starmath", "Failed to fetch smdoc shell while file input");
@@ -314,7 +314,7 @@ ErrCode SmMLImportWrapper::Import(std::u16string_view aSource)
     }
 
     // Get doc shell
-    m_pDocShell = pModel ? static_cast<SmDocShell*>(pModel->GetObjectShell()) : nullptr;
+    m_pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     if (m_pDocShell == nullptr)
     {
         SAL_WARN("starmath", "Failed to fetch smdoc shell while file input");
