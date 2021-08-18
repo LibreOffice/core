@@ -609,7 +609,7 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
         _vdev->DrawRect(tools::Rectangle(pSpl->_tlx+pSpl->_barspace, pSpl->_tly+pSpl->_barspace, pSpl->_tlx+pSpl->_barspace+length, pSpl->_tly+pSpl->_barheight-pSpl->_barspace));
         vcl::Font aFont;
         aFont.SetFontSize(Size(0, 12));
-        aFont.SetAlignment(TextAlign::Baseline);
+        aFont.SetAlignment(ALIGN_BASELINE);
         _vdev->SetFont(aFont);
         _vdev->SetTextColor(pSpl->_cProgressTextColor);
         _vdev->DrawText(Point(pSpl->_tlx, pSpl->_textBaseline), pSpl->_sProgressText);

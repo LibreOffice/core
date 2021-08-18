@@ -597,7 +597,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             SetEmphasisMark( static_cast<const SvxEmphasisMarkItem*>(pItem)->GetEmphasisMark() );
 
         SetTransparent( true );
-        SetAlign( TextAlign::Baseline );
+        SetAlign( ALIGN_BASELINE );
         if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_CONTOUR,
             true, &pItem ))
             SetOutline( static_cast<const SvxContourItem*>(pItem)->GetValue() );
@@ -788,7 +788,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     SetStrikeout( pAttrSet->GetCrossedOut().GetStrikeout() );
     SetColor( pAttrSet->GetColor().GetValue() );
     SetTransparent( true );
-    SetAlign( TextAlign::Baseline );
+    SetAlign( ALIGN_BASELINE );
     SetOutline( pAttrSet->GetContour().GetValue() );
     SetShadow( pAttrSet->GetShadowed().GetValue() );
     SetPropWidth( pAttrSet->GetCharScaleW().GetValue() );

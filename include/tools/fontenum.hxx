@@ -27,15 +27,7 @@ enum FontFamily { FAMILY_DONTKNOW, FAMILY_DECORATIVE, FAMILY_MODERN,
 
 enum FontPitch { PITCH_DONTKNOW, PITCH_FIXED, PITCH_VARIABLE, FontPitch_FORCE_EQUAL_SIZE=SAL_MAX_ENUM };
 
-enum class TextAlign : sal_Int16 {
-    Top      = 0x0000,
-    Baseline = 0x0001,
-    Bottom   = 0x0002,
-};
-namespace o3tl
-{
-    template<> struct typed_flags<TextAlign> : is_typed_flags<TextAlign, 0x3> {};
-}
+enum TextAlign { ALIGN_TOP, ALIGN_BASELINE, ALIGN_BOTTOM, TextAlign_FORCE_EQUAL_SIZE=SAL_MAX_ENUM };
 
 enum FontWeight { WEIGHT_DONTKNOW, WEIGHT_THIN, WEIGHT_ULTRALIGHT,
                   WEIGHT_LIGHT, WEIGHT_SEMILIGHT, WEIGHT_NORMAL,

@@ -880,7 +880,7 @@ ImplFont::ImplFont() :
     mePitch( PITCH_DONTKNOW ),
     meWidthType( WIDTH_DONTKNOW ),
     meItalic( ITALIC_NONE ),
-    meAlign( TextAlign::Top ),
+    meAlign( ALIGN_TOP ),
     meUnderline( LINESTYLE_NONE ),
     meOverline( LINESTYLE_NONE ),
     meStrikeout( STRIKEOUT_NONE ),

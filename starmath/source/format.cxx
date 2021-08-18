@@ -81,7 +81,7 @@ SmFormat::SmFormat()
     {
         SmFace &rFace = vFont[i];
         rFace.SetTransparent( true );
-        rFace.SetAlignment( TextAlign::Baseline );
+        rFace.SetAlignment( ALIGN_BASELINE );
         rFace.SetColor( COL_AUTO );
         bDefaultFont[i] = false;
     }
@@ -92,7 +92,7 @@ void SmFormat::SetFont(sal_uInt16 nIdent, const SmFace &rFont, bool bDefault )
 {
     vFont[nIdent] = rFont;
     vFont[nIdent].SetTransparent( true );
-    vFont[nIdent].SetAlignment( TextAlign::Baseline );
+    vFont[nIdent].SetAlignment( ALIGN_BASELINE );
 
     bDefaultFont[nIdent] = bDefault;
 }

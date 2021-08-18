@@ -2034,7 +2034,7 @@ class DemoPopup : public FloatingWindow
         tools::Rectangle aTextRect(Point(6, 6), aSize);
 
         SetTextColor(COL_BLACK);
-        SetTextAlign(TextAlign::Top);
+        SetTextAlign(ALIGN_TOP);
         rRenderContext.DrawText(aTextRect, "This is a standalone help text test",
                  DrawTextFlags::MultiLine|DrawTextFlags::WordBreak|
                  DrawTextFlags::Left|DrawTextFlags::Top);

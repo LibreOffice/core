@@ -121,7 +121,7 @@ void lcl_PrintHeader( Printer* pPrinter, sal_uInt16 nPages, sal_uInt16 nCurPage,
 
     vcl::Font aFont( aOldFont );
     aFont.SetWeight( WEIGHT_BOLD );
-    aFont.SetAlignment( TextAlign::Bottom );
+    aFont.SetAlignment( ALIGN_BOTTOM );
     pPrinter->SetFont( aFont );
 
     tools::Long nFontHeight = pPrinter->GetTextHeight();
@@ -829,7 +829,7 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
     vcl::Font aOldFont( pPrinter->GetFont() );
 
     vcl::Font aFont( GetEditEngine()->GetFont() );
-    aFont.SetAlignment( TextAlign::Bottom );
+    aFont.SetAlignment( ALIGN_BOTTOM );
     aFont.SetTransparent( true );
     aFont.SetFontSize( Size( 0, 360 ) );
     pPrinter->SetFont( aFont );

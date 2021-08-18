@@ -1569,7 +1569,7 @@ rtl::Reference<MetaAction> MetaOverlineColorAction::Clone() const
 
 MetaTextAlignAction::MetaTextAlignAction() :
     MetaAction  ( MetaActionType::TEXTALIGN ),
-    maAlign     ( TextAlign::Top )
+    maAlign     ( ALIGN_TOP )
 {}
 
 MetaTextAlignAction::~MetaTextAlignAction()

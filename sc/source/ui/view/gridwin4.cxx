@@ -124,7 +124,7 @@ static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const tools::Rectangle& 
     vcl::Font aAppFont = pDev->GetSettings().GetStyleSettings().GetAppFont();
     aAppFont.SetFontSize( aAttrFont.GetFontSize() );
 
-    aAppFont.SetAlignment( TextAlign::Top );
+    aAppFont.SetAlignment( ALIGN_TOP );
     pDev->SetFont( aAppFont );
 
     Size aTextSize( pDev->GetTextWidth( rTitle ), pDev->GetTextHeight() );

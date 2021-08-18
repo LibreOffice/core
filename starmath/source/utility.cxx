@@ -185,7 +185,7 @@ void SmFace::Impl_Init()
 {
     SetSize( GetFontSize() );
     SetTransparent( true );
-    SetAlignment( TextAlign::Baseline );
+    SetAlignment( ALIGN_BASELINE );
     SetColor( COL_AUTO );
 }
 

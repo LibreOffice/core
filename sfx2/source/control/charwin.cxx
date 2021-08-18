@@ -234,7 +234,7 @@ void SvxCharView::SetFont(const vcl::Font& rFont)
     tools::Long nWinHeight = GetOutputSizePixel().Height();
     maFont = rFont;
     maFont.SetWeight(WEIGHT_NORMAL);
-    maFont.SetAlignment(TextAlign::Top);
+    maFont.SetAlignment(ALIGN_TOP);
     maFont.SetFontSize(mxVirDev->PixelToLogic(Size(0, nWinHeight / 2)));
     maFont.SetTransparent(true);
 

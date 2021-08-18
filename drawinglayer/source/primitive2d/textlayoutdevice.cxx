@@ -367,7 +367,7 @@ vcl::Font getVclFontFromFontAttribute(const attribute::FontAttribute& rFontAttri
                       Size(bFontIsScaled ? std::max<sal_uInt32>(nWidth, 1) : 0, nHeight));
 #endif
     // define various other FontAttribute
-    aRetval.SetAlignment(TextAlign::Baseline);
+    aRetval.SetAlignment(ALIGN_BASELINE);
     aRetval.SetCharSet(rFontAttribute.getSymbol() ? RTL_TEXTENCODING_SYMBOL
                                                   : RTL_TEXTENCODING_UNICODE);
     aRetval.SetVertical(rFontAttribute.getVertical());

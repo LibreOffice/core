@@ -86,10 +86,10 @@ void VclFontTest::testAlignment()
 {
     vcl::Font aFont;
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Text alignment should be TextAlign::Top", TextAlign::Top, aFont.GetAlignment());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Text alignment should be ALIGN_TOP", TextAlign::ALIGN_TOP, aFont.GetAlignment());
 
-    aFont.SetAlignment(TextAlign::Baseline);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Text alignment should be TextAlign::Baseline", TextAlign::Baseline, aFont.GetAlignment());
+    aFont.SetAlignment(TextAlign::ALIGN_BASELINE);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Text alignment should be ALIGN_BASELINE", TextAlign::ALIGN_BASELINE, aFont.GetAlignment());
 }
 
 

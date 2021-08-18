@@ -1742,11 +1742,11 @@ namespace emfio
         SetGfxMode( nGfxMode );
         TextAlign eTextAlign;
         if ( ( mnTextAlign & TA_BASELINE) == TA_BASELINE )
-            eTextAlign = TextAlign::Baseline;
+            eTextAlign = ALIGN_BASELINE;
         else if( ( mnTextAlign & TA_BOTTOM) == TA_BOTTOM )
-            eTextAlign = TextAlign::Bottom;
+            eTextAlign = ALIGN_BOTTOM;
         else
-            eTextAlign = TextAlign::Top;
+            eTextAlign = ALIGN_TOP;
         bool bChangeFont = false;
         if ( mnLatestTextAlign != mnTextAlign )
         {

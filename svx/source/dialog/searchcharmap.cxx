@@ -291,7 +291,7 @@ void SvxSearchCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
 
     vcl::Font aFont = rRenderContext.GetFont();
     aFont.SetWeight(WEIGHT_LIGHT);
-    aFont.SetAlignment(TextAlign::Top);
+    aFont.SetAlignment(ALIGN_TOP);
     int nFontHeight = (aSize.Height() - 5) * 2 / (3 * ROW_COUNT);
     maFontSize = rRenderContext.PixelToLogic(Size(0, nFontHeight));
     aFont.SetFontSize(maFontSize);

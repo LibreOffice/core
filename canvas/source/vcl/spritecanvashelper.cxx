@@ -107,7 +107,7 @@ namespace vclcanvas
             aVCLFont.SetFontHeight( 20 );
             aVCLFont.SetColor( INFO_COLOR );
 
-            rOutDev.SetTextAlign(TextAlign::Top);
+            rOutDev.SetTextAlign(ALIGN_TOP);
             rOutDev.SetTextColor( INFO_COLOR );
             rOutDev.SetFont( aVCLFont );
 

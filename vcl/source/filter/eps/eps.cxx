@@ -408,7 +408,7 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     eLineCap = SvtGraphicStroke::capButt;
     eJoinType = SvtGraphicStroke::joinMiter;
     aBackgroundColor = COL_WHITE;
-    eTextAlign = TextAlign::Baseline;
+    eTextAlign = ALIGN_BASELINE;
 
     if( pMTF->GetActionSize() )
     {
@@ -2075,11 +2075,11 @@ void PSWriter::ImplSetAttrForText( const Point& rPoint )
         ImplWriteDouble( aSize.Height() );
         mpPS->WriteCharPtr( "sf " );
     }
-    if ( eTextAlign != TextAlign::Baseline )
+    if ( eTextAlign != ALIGN_BASELINE )
     {                                                       // PostScript does not know about FontAlignment
-        if ( eTextAlign == TextAlign::Top )                 // -> so I assume that
+        if ( eTextAlign == ALIGN_TOP )                      // -> so I assume that
             aPoint.AdjustY( aSize.Height() * 4 / 5 );       // the area under the baseline
-        else if ( eTextAlign == TextAlign::Bottom )         // is about 20% of the font size
+        else if ( eTextAlign == ALIGN_BOTTOM )              // is about 20% of the font size
             aPoint.AdjustY( -( aSize.Height() / 5 ) );
     }
     ImplMoveTo( aPoint );

@@ -215,7 +215,7 @@ namespace vclcanvas
         aVCLFont.SetFontHeight( std::min(::tools::Long(20),aOutputSize.Height()) );
         aVCLFont.SetColor( COL_RED );
 
-        rTargetSurface.SetTextAlign(TextAlign::Top);
+        rTargetSurface.SetTextAlign(ALIGN_TOP);
         rTargetSurface.SetTextColor( COL_RED );
         rTargetSurface.SetFont( aVCLFont );
 

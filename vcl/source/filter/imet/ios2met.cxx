@@ -2348,7 +2348,7 @@ void OS2METReader::ReadFont(sal_uInt16 nFieldSize)
     pF->pSucc=pFontList; pFontList=pF;
     pF->nID=0;
     pF->aFont.SetTransparent(true);
-    pF->aFont.SetAlignment(TextAlign::Baseline);
+    pF->aFont.SetAlignment(ALIGN_BASELINE);
 
     auto nPos=pOS2MET->Tell();
     auto nMaxPos = nPos + nFieldSize;
