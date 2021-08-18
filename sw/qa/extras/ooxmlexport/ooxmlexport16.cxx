@@ -258,7 +258,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf137742, "tdf137742.docx")
 {
     lang::Locale locale(
         getProperty<lang::Locale>(getParagraph(1), "CharLocale"));
-    // the \lang inside the group was applied to CJK not Western
     CPPUNIT_ASSERT_EQUAL(OUString("en"), locale.Language);
 
     // Without the fix in place, this test would have failed with
