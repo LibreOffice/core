@@ -142,13 +142,6 @@ void SvxFillToolBoxControl::StateChangedAtToolBoxControl(
                     mpLbFillType->set_sensitive(true);
                     drawing::FillStyle eXFS = mpStyleItem->GetValue();
                     mnLastXFS = sal::static_int_cast< sal_Int32 >(eXFS);
-
-                    if (eXFS == drawing::FillStyle_BITMAP &&
-                        mpBitmapItem && mpBitmapItem->isPattern() )
-                    {
-                        mnLastXFS = sal::static_int_cast<sal_Int32>(PATTERN);
-                    }
-
                     mpLbFillType->set_active(mnLastXFS);
 
                     if(drawing::FillStyle_NONE == eXFS)
@@ -555,6 +548,9 @@ void SvxFillToolBoxControl::Update()
                 }
                 else if (mpBitmapItem && mpBitmapItem->isPattern() && pSh->GetItem(SID_PATTERN_LIST))
                 {
+                    mnLastXFS = sal::static_int_cast<sal_Int32>(PATTERN);
+                    mpLbFillType->set_active(mnLastXFS);
+
                     SvxFillAttrBox::Fill(*mpLbFillAttr, pSh->GetItem(SID_PATTERN_LIST)->GetPatternList());
                     const OUString aString(mpBitmapItem->GetName());
 
