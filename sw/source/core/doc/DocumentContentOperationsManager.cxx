@@ -1645,10 +1645,42 @@ namespace //local functions originally from docfmt.cxx
         }
 
         SwRangeRedline * pRedline = nullptr;
+        SwRedlineExtraData_FormatColl* pExtra = nullptr;
         if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() && pCharSet && pCharSet->Count() )
         {
             if( pUndo )
                 pUndo->SaveRedlineData( rRg, false );
+
+            // check existing redline on the same range, and use its extra data, if it exists
+            SwRedlineTable::size_type nRedlPos = rDoc.getIDocumentRedlineAccess().GetRedlinePos(
+                    rRg.Start()->nNode.GetNode(), RedlineType::Format );
+            if( SwRedlineTable::npos != nRedlPos )
+            {
+                const SwPosition *pRStt, *pREnd;
+                do {
+                    SwRangeRedline* pTmp = rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nRedlPos ];
+                    pRStt = pTmp->Start();
+                    pREnd = pTmp->End();
+                    SwComparePosition eCompare = ComparePosition( *rRg.Start(), *rRg.End(), *pRStt, *pREnd );
+                    if ( eCompare == SwComparePosition::Inside || eCompare == SwComparePosition::Equal )
+                    {
+                        if (pTmp->GetExtraData())
+                        {
+                            const SwRedlineExtraData* pExtraData = pTmp->GetExtraData();
+                            const SwRedlineExtraData_FormatColl* pFormattingChanges =
+                                dynamic_cast<const SwRedlineExtraData_FormatColl*>(pExtraData);
+                            // Check if the extra data is of type 'formatting changes'
+                            if (pFormattingChanges)
+                            {
+                                // Get the item set that holds all the changes properties
+                                const SfxItemSet *pChangesSet = pFormattingChanges->GetItemSet();
+                                pExtra = new SwRedlineExtraData_FormatColl( "", USHRT_MAX, pChangesSet );
+                                break;
+                            }
+                        }
+                    }
+                } while( pRStt <= rRg.Start() && ++nRedlPos < rDoc.getIDocumentRedlineAccess().GetRedlineTable().size());
+            }
 
             pRedline = new SwRangeRedline( RedlineType::Format, rRg );
             auto const result(rDoc.getIDocumentRedlineAccess().AppendRedline( pRedline, true));
@@ -1679,20 +1711,24 @@ namespace //local functions originally from docfmt.cxx
                     // store original text attributes to reject formatting change
                     if (pRedline)
                     {
-                        // Apply the first character's attributes to the ReplaceText
-                        SfxItemSet aSet( rDoc.GetAttrPool(),
-                                    svl::Items<RES_CHRATR_BEGIN,     RES_TXTATR_WITHEND_END - 1,
-                                    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1> );
-                        pNode->GetTextNode()->GetParaAttr( aSet, pStt->nContent.GetIndex() + 1, aCntEnd.GetIndex() );
+                        // no existing format redline in the range
+                        if (!pExtra)
+                        {
+                            // Apply the first character's attributes to the ReplaceText
+                            SfxItemSet aSet( rDoc.GetAttrPool(),
+                                        svl::Items<RES_CHRATR_BEGIN,     RES_TXTATR_WITHEND_END - 1,
+                                        RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1> );
+                            pNode->GetTextNode()->GetParaAttr( aSet, pStt->nContent.GetIndex() + 1, aCntEnd.GetIndex() );
 
-                        aSet.ClearItem( RES_TXTATR_REFMARK );
-                        aSet.ClearItem( RES_TXTATR_TOXMARK );
-                        aSet.ClearItem( RES_TXTATR_CJK_RUBY );
-                        aSet.ClearItem( RES_TXTATR_INETFMT );
-                        aSet.ClearItem( RES_TXTATR_META );
-                        aSet.ClearItem( RES_TXTATR_METAFIELD );
+                            aSet.ClearItem( RES_TXTATR_REFMARK );
+                            aSet.ClearItem( RES_TXTATR_TOXMARK );
+                            aSet.ClearItem( RES_TXTATR_CJK_RUBY );
+                            aSet.ClearItem( RES_TXTATR_INETFMT );
+                            aSet.ClearItem( RES_TXTATR_META );
+                            aSet.ClearItem( RES_TXTATR_METAFIELD );
+                            pExtra = new SwRedlineExtraData_FormatColl( "", USHRT_MAX, &aSet );
+                        }
 
-                        auto pExtra = new SwRedlineExtraData_FormatColl( "", USHRT_MAX, &aSet );
                         if ( pExtra )
                         {
                             std::unique_ptr<SwRedlineExtraData_FormatColl> xRedlineExtraData;
