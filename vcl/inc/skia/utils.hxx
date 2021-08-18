@@ -27,9 +27,11 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/salgtype.hxx>
 
+#include <premac.h>
 #include <SkRegion.h>
 #include <SkSurface.h>
 #include <tools/sk_app/VulkanWindowContext.h>
+#include <postmac.h>
 
 namespace SkiaHelper
 {

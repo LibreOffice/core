@@ -25,8 +25,10 @@
 #include <salgdiimpl.hxx>
 #include <salgeom.hxx>
 
+#include <premac.h>
 #include <SkSurface.h>
 #include <SkRegion.h>
+#include <postmac.h>
 
 #include <prewin.h>
 #include <tools/sk_app/WindowContext.h>

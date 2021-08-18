@@ -63,6 +63,8 @@ else ifeq ($(OS),MACOSX)
 
 $(eval $(call gb_Library_use_system_darwin_frameworks,skia,\
     Cocoa \
+    Metal \
+    QuartzCore \
 ))
 
 ifneq ($(SKIA_DISABLE_VMA_USE_STL_SHARED_MUTEX),)
@@ -905,10 +907,37 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/utils/mac/SkCreateCGImageRef \
 ))
 
+$(eval $(call gb_Library_add_generated_objcxxobjects,skia,\
+    UnpackedTarball/skia/tools/sk_app/MetalWindowContext \
+    UnpackedTarball/skia/tools/sk_app/mac/MetalWindowContext_mac \
+))
+
 # Not used, uses OpenGL - UnpackedTarball/skia/tools/sk_app/mac/RasterWindowContext_mac
 
-#    UnpackedTarball/skia/tools/sk_app/mac/VulkanWindowContext_mac \
-#    UnpackedTarball/skia/tools/sk_app/mac/MetalWindowContext_mac \
+$(eval $(call gb_Library_add_generated_objcxxobjects,skia,\
+    UnpackedTarball/skia/src/gpu/mtl/GrMtlAttachment \
+    UnpackedTarball/skia/src/gpu/mtl/GrMtlBuffer \
+    UnpackedTarball/skia/src/gpu/mtl/GrMtlCaps \
+    UnpackedTarball/skia/src/gpu/mtl/GrMtlCommandBuffer \
+    UnpackedTarball/skia/src/gpu/mtl/GrMtlDepthStencil \
+    UnpackedTarball/skia/src/gpu/mtl/GrMtlGpu \
+    UnpackedTarball/skia/src/gpu/mtl/GrMtlOpsRenderPass \
+    UnpackedTarball/skia/src/gpu/mtl/GrMtlPipelineState \
+    UnpackedTarball/skia/src/gpu/mtl/GrMtlPipelineStateBuilder \
+    UnpackedTarball/skia/src/gpu/mtl/GrMtlPipelineStateDataManager \
+    UnpackedTarball/skia/src/gpu/mtl/GrMtlRenderTarget \
+    UnpackedTarball/skia/src/gpu/mtl/GrMtlResourceProvider \
+    UnpackedTarball/skia/src/gpu/mtl/GrMtlSampler \
+    UnpackedTarball/skia/src/gpu/mtl/GrMtlSemaphore \
+    UnpackedTarball/skia/src/gpu/mtl/GrMtlTexture \
+    UnpackedTarball/skia/src/gpu/mtl/GrMtlTextureRenderTarget \
+    UnpackedTarball/skia/src/gpu/mtl/GrMtlTrampoline \
+    UnpackedTarball/skia/src/gpu/mtl/GrMtlUniformHandler \
+    UnpackedTarball/skia/src/gpu/mtl/GrMtlUtil \
+    UnpackedTarball/skia/src/gpu/mtl/GrMtlVaryingHandler \
+    UnpackedTarball/skia/src/image/SkSurface_GpuMtl \
+    , -fobjc-arc \
+))
 
 else
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
