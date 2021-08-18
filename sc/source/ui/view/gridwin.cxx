@@ -482,6 +482,10 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData* pData, ScSplitPos 
 
     SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
     EnableRTL( false );
+
+    bInitialPageBreaks = true;
+    maShowPageBreaksTimer.SetInvokeHandler(LINK(this, ScGridWindow, InitiatePageBreaksTimer));
+    maShowPageBreaksTimer.SetTimeout(1);
 }
 
 ScGridWindow::~ScGridWindow()
@@ -491,6 +495,8 @@ ScGridWindow::~ScGridWindow()
 
 void ScGridWindow::dispose()
 {
+    maShowPageBreaksTimer.Stop();
+
     ImpDestroyOverlayObjects();
 
     mpFilterBox.disposeAndClear();
