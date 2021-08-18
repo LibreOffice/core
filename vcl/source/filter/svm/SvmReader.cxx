@@ -832,14 +832,14 @@ rtl::Reference<MetaAction> SvmReader::TextLineHandler()
     sal_uInt32 nTempUnderline(0);
     mrStream.ReadUInt32(nTempUnderline);
 
-    pAction->SetStrikeout(static_cast<FontStrikeout>(nTempStrikeout));
-    pAction->SetUnderline(static_cast<FontLineStyle>(nTempUnderline));
+    pAction->SetStrikeout(static_cast<FontStrikeout>(nTempStrikeout & SAL_MAX_ENUM));
+    pAction->SetUnderline(static_cast<FontLineStyle>(nTempUnderline & SAL_MAX_ENUM));
 
     if (aCompat.GetVersion() >= 2)
     {
         sal_uInt32 nTempOverline(0);
         mrStream.ReadUInt32(nTempOverline);
-        pAction->SetOverline(static_cast<FontLineStyle>(nTempOverline));
+        pAction->SetOverline(static_cast<FontLineStyle>(nTempOverline & SAL_MAX_ENUM));
     }
 
     return pAction;
