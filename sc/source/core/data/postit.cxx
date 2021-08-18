@@ -1241,18 +1241,15 @@ ScPostIt* ScNoteUtil::CreateNoteFromCaption(
 
 ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
         ScDocument& rDoc, const ScAddress& rPos, std::unique_ptr<SfxItemSet> pItemSet,
-        const OutlinerParaObject* pOutlinerObj, const tools::Rectangle& rCaptionRect,
+        const OutlinerParaObject& rOutlinerObj, const tools::Rectangle& rCaptionRect,
         bool bShown )
 {
-    OSL_ENSURE( pItemSet && pOutlinerObj, "ScNoteUtil::CreateNoteFromObjectData - item set and outliner object expected" );
+    OSL_ENSURE( pItemSet, "ScNoteUtil::CreateNoteFromObjectData - item set expected" );
     ScNoteData aNoteData( bShown );
     aNoteData.mxInitData = std::make_shared<ScCaptionInitData>();
     ScCaptionInitData& rInitData = *aNoteData.mxInitData;
     rInitData.mxItemSet = std::move(pItemSet);
-    if (pOutlinerObj)
-        rInitData.mxOutlinerObj = *pOutlinerObj;
-    else
-        rInitData.mxOutlinerObj.reset();
+    rInitData.mxOutlinerObj = rOutlinerObj;
 
     // convert absolute caption position to relative position
     rInitData.mbDefaultPosSize = rCaptionRect.IsEmpty();

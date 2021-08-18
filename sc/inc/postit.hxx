@@ -318,9 +318,8 @@ public:
             formatting attributes of the caption object. This function takes
             ownership of the passed item set.
 
-        @param pOutlinerObj  Pointer to an outliner object on heap memory
-            containing (formatted) text for the caption object. This function
-            takes ownership of the passed outliner object.
+        @param rOutlinerObj  An outliner object containing (formatted) text
+            for the caption object.
 
         @param rCaptionRect  The absolute position and size of the caption
             object. The rectangle may be empty, in this case the default
@@ -332,7 +331,8 @@ public:
      */
     static ScPostIt*    CreateNoteFromObjectData(
                             ScDocument& rDoc, const ScAddress& rPos,
-                            std::unique_ptr<SfxItemSet> pItemSet, const OutlinerParaObject* pOutlinerObj,
+                            std::unique_ptr<SfxItemSet> pItemSet,
+                            const OutlinerParaObject& rOutlinerObj,
                             const tools::Rectangle& rCaptionRect, bool bShown );
 
     /** Creates a cell note based on the passed string and inserts it into the
