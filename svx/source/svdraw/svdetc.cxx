@@ -211,22 +211,20 @@ const SdrOle2Obj* OLEObjCache::operator[](size_t nPos) const
 bool OLEObjCache::UnloadObj(SdrOle2Obj* pObj)
 {
     bool bUnloaded = false;
-    if (pObj)
+
+    //#i80528# The old mechanism is completely useless, only taking into account if
+    // in all views the GrafDraft feature is used. This will nearly never have been the
+    // case since no one ever used this option.
+
+    // A much better (and working) criteria would be the VOC contact count.
+    // The question is what will happen when i make it work now suddenly? I
+    // will try it for 2.4.
+    const sdr::contact::ViewContact& rViewContact = pObj->GetViewContact();
+    const bool bVisible(rViewContact.HasViewObjectContacts());
+
+    if(!bVisible)
     {
-        //#i80528# The old mechanism is completely useless, only taking into account if
-        // in all views the GrafDraft feature is used. This will nearly never have been the
-        // case since no one ever used this option.
-
-        // A much better (and working) criteria would be the VOC contact count.
-        // The question is what will happen when i make it work now suddenly? I
-        // will try it for 2.4.
-        const sdr::contact::ViewContact& rViewContact = pObj->GetViewContact();
-        const bool bVisible(rViewContact.HasViewObjectContacts());
-
-        if(!bVisible)
-        {
-            bUnloaded = pObj->Unload();
-        }
+        bUnloaded = pObj->Unload();
     }
 
     return bUnloaded;
