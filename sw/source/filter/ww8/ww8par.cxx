@@ -2067,7 +2067,16 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
     pRdr->m_xCtrlStck = std::move(mxOldStck);
 
     pRdr->m_xRedlineStack->closeall(*pRdr->m_pPaM->GetPoint());
+
+    // ofz#37322 drop m_pLastAnchorPos during RedlineStack dtor and restore it afterwards to the same
+    // place, or somewhere close if that place got destroyed
+    std::shared_ptr<SwUnoCursor> xLastAnchorCursor(pRdr->m_pLastAnchorPos ? pRdr->m_rDoc.CreateUnoCursor(*pRdr->m_pLastAnchorPos) : nullptr);
+    pRdr->m_pLastAnchorPos.reset();
+
     pRdr->m_xRedlineStack = std::move(mxOldRedlines);
+
+    if (xLastAnchorCursor)
+        pRdr->m_pLastAnchorPos.reset(new SwPosition(*xLastAnchorCursor->GetPoint()));
 
     pRdr->DeleteAnchorStack();
     pRdr->m_xAnchorStck = std::move(mxOldAnchorStck);
