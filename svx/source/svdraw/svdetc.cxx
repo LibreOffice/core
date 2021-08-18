@@ -151,7 +151,7 @@ IMPL_LINK_NOARG(OLEObjCache, UnloadCheckHdl, Timer*, void)
                 }
             }
 
-            if ( bUnload && UnloadObj(pUnloadObj) )
+            if (bUnload && UnloadObj(*pUnloadObj))
                 // object was successfully unloaded
                 nCount2--;
         }
@@ -211,7 +211,7 @@ const SdrOle2Obj* OLEObjCache::operator[](size_t nPos) const
     return maObjs[nPos];
 }
 
-bool OLEObjCache::UnloadObj(SdrOle2Obj* pObj)
+bool OLEObjCache::UnloadObj(SdrOle2Obj& rObj)
 {
     bool bUnloaded = false;
 
@@ -222,12 +222,12 @@ bool OLEObjCache::UnloadObj(SdrOle2Obj* pObj)
     // A much better (and working) criteria would be the VOC contact count.
     // The question is what will happen when i make it work now suddenly? I
     // will try it for 2.4.
-    const sdr::contact::ViewContact& rViewContact = pObj->GetViewContact();
+    const sdr::contact::ViewContact& rViewContact = rObj.GetViewContact();
     const bool bVisible(rViewContact.HasViewObjectContacts());
 
     if(!bVisible)
     {
-        bUnloaded = pObj->Unload();
+        bUnloaded = rObj.Unload();
     }
 
     return bUnloaded;
