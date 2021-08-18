@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a8659d1a_078fd9f2",
+        "filename": "chart2/qa/extras/chart2export.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 944,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-08-18T06:24:17Z",
+      "side": 1,
+      "message": "You can not assign -1 to nColor.",
+      "revId": "084c47d0230c09eea87a10e84653e7d1a31bad92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6584bbe4_1e33dfa3",
+        "filename": "chart2/qa/extras/chart2export.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 971,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-08-18T06:24:17Z",
+      "side": 1,
+      "message": "This is also wrong. You can not assign -1 to nColor.",
+      "revId": "084c47d0230c09eea87a10e84653e7d1a31bad92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
