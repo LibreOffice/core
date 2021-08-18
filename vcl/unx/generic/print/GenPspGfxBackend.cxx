@@ -191,6 +191,16 @@ void GenPspGfxBackend::SetFillColor(Color nColor)
     m_pPrinterGfx->SetFillColor(aColor);
 }
 
+void GenPspGfxBackend::SetFillRule()
+{
+    m_eFillRule = ::css::rendering::FillRule::FillRule_EVEN_ODD;
+}
+
+void GenPspGfxBackend::SetFillRule(::css::rendering::FillRule eFillRule)
+{
+    m_eFillRule = eFillRule;
+}
+
 void GenPspGfxBackend::SetXORMode(bool bSet, bool /*bInvertOnly*/)
 {
     SAL_WARN_IF(bSet, "vcl", "Error: PrinterGfx::SetXORMode() not implemented");

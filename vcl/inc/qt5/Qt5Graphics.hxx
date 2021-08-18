@@ -47,6 +47,7 @@ class Qt5GraphicsBackend final : public SalGraphicsImpl, public Qt5GraphicsBase
     QPainterPath m_aClipPath;
     Color m_aLineColor;
     Color m_aFillColor;
+    ::css::rendering::FillRule m_eFillRule;
     QPainter::CompositionMode m_eCompositionMode;
 
 public:
@@ -74,6 +75,8 @@ public:
     void SetLineColor(Color nColor) override;
     void SetFillColor() override;
     void SetFillColor(Color nColor) override;
+    void SetFillRule() override;
+    void SetFillRule(::css::rendering::FillRule eFillRule) override;
     void SetXORMode(bool bSet, bool bInvertOnly) override;
     void SetROPLineColor(SalROPColor nROPColor) override;
     void SetROPFillColor(SalROPColor nROPColor) override;

@@ -77,6 +77,7 @@ struct StackMember
     SvtGraphicStroke::CapType   eLineCap;
     SvtGraphicStroke::JoinType  eJoinType;
     SvtGraphicStroke::DashArray aDashArray;
+    SvtGraphicFill::FillRule eFillRule;
 };
 
 struct PSLZWCTreeNode
@@ -988,6 +989,19 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                     bFillColor = false;
             }
             break;
+
+            case MetaActionType::FILLMODE :
+            {
+                if ( static_cast<const MetaFillColorAction*>(pMA)->IsSetting() )
+                {
+                    bFillColor = true;
+                    aFillColor =  static_cast<const MetaFillColorAction*>(pMA)->GetColor();
+                }
+                else
+                    bFillColor = false;
+            }
+            break;
+
 
             case MetaActionType::TEXTCOLOR :
             {

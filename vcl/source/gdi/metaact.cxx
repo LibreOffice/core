@@ -272,6 +272,18 @@ rtl::Reference<MetaAction> MetaAction::ReadMetaAction( SvStream& rIStm, ImplMeta
     return pAction;
 }
 
+void MetaAction::ReadFillMode(SvStream& rIStm, PolyFillMode &rFillMode)
+{
+    sal_uInt32 nTmp;
+    rIStm.ReadUInt32(nTmp);
+    rFillMode = PolyFillMode(nTmp);
+}
+
+void MetaAction::WriteFillMode(SvStream& rIStm, PolyFillMode eFillMode)
+{
+    rIStm.WriteUInt32(static_cast<sal_uInt32>(eFillMode));
+}
+
 void MetaAction::ReadColor(SvStream& rIStm, ::Color& rColor)
 {
     sal_uInt32 nTmp;
@@ -2584,6 +2596,48 @@ void MetaTextFillColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadColor(rIStm, maColor);
     rIStm.ReadCharAsBool( mbSet );
 }
+
+MetaFillModeAction::MetaFillModeAction() :
+    MetaAction  ( MetaActionType::FILLMODE ),
+    mbSet       ( false )
+{}
+
+MetaFillModeAction::~MetaFillModeAction()
+{}
+
+void MetaFillModeAction::Execute( OutputDevice* pOut )
+{
+    if( mbSet )
+        pOut->SetFillMode( mePolyFillMode );
+    else
+        pOut->SetFillMode();
+}
+
+rtl::Reference<MetaAction> MetaFillModeAction::Clone() const
+{
+    return new MetaFillModeAction( *this );
+}
+
+void MetaFillModeAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
+{
+    MetaAction::Write(rOStm, pData);
+    VersionCompatWrite aCompat(rOStm, 1);
+    WriteFillMode(rOStm, mePolyFillMode);
+    rOStm.WriteBool( mbSet );
+}
+
+void MetaFillModeAction::Read( SvStream& rIStm, ImplMetaReadData* )
+{
+    VersionCompatRead aCompat(rIStm);
+    ReadFillMode(rIStm, mePolyFillMode);
+    rIStm.ReadCharAsBool( mbSet );
+}
+
+MetaFillModeAction::MetaFillModeAction( const PolyFillMode& rPolyFillMode, bool bSet )
+    :    MetaAction  ( MetaActionType::FILLMODE),
+      mePolyFillMode     ( rPolyFillMode ),
+      mbSet       ( bSet )
+{}
 
 MetaTextLineColorAction::MetaTextLineColorAction() :
     MetaAction  ( MetaActionType::TEXTLINECOLOR ),

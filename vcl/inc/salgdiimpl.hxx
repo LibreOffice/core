@@ -30,6 +30,7 @@
 #include <vcl/vclenum.hxx>
 
 #include <com/sun/star/drawing/LineCap.hpp>
+#include <com/sun/star/rendering/FillRule.hpp>
 
 class SalGraphics;
 class SalBitmap;
@@ -91,6 +92,12 @@ public:
     // set the fill color to a specific color, shapes will be
     // filled accordingly
     virtual void SetFillColor( Color nColor ) = 0;
+
+    // set the fill rule to default (= FillRule_NON_ZERO)
+    virtual void            SetFillRule() = 0;
+
+    // set the fill rule to specific rule (FillRule_NON_ZERO OR FillRule_EVEN_ODD)
+    virtual void            SetFillRule( css::rendering::FillRule eFillRule ) = 0;
 
     // enable/disable XOR drawing
     virtual void SetXORMode( bool bSet, bool bInvertOnly ) = 0;
