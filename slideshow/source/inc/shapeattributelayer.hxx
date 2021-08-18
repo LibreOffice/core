@@ -230,7 +230,7 @@ namespace slideshow::internal
             bool isShearXAngleValid() const;
             /** Query the current shear angle at the x axis of the shape
 
-                @return the shear angle in degrees.
+                @return the shear angle in radians.
              */
             double getShearXAngle() const;
             /** Set the new shear angle at the x axis of the shape
@@ -245,7 +245,7 @@ namespace slideshow::internal
             bool isShearYAngleValid() const;
             /** Query the current shear angle at the y axis of the shape
 
-                @return the shear angle in degrees.
+                @return the shear angle in radians.
              */
             double getShearYAngle() const;
             /** Set the new shear angle at the y axis of the shape
