@@ -142,7 +142,10 @@ IMPL_LINK_NOARG(OLEObjCache, UnloadCheckHdl, Timer*, void)
                         {
                             uno::Reference< frame::XModel > xParentModel = pCacheObj->GetParentXModel();
                             if ( xUnloadModel == xParentModel )
+                            {
                                 bUnload = false; // the object has running embedded objects
+                                break;
+                            }
                         }
                     }
                 }
