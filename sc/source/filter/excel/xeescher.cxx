@@ -1549,13 +1549,10 @@ XclExpChartObj::XclExpChartObj( XclExpObjectManager& rObjMgr, Reference< XShape 
 
     // create the chart substream object
     ScfPropertySet aShapeProp( xShape );
-    Reference< XModel > xModel;
-    aShapeProp.GetProperty( xModel, "Model" );
-    mxChartDoc.set( xModel,UNO_QUERY );
     css::awt::Rectangle aBoundRect;
     aShapeProp.GetProperty( aBoundRect, "BoundRect" );
     tools::Rectangle aChartRect( Point( aBoundRect.X, aBoundRect.Y ), Size( aBoundRect.Width, aBoundRect.Height ) );
-    mxChart = std::make_shared<XclExpChart>( GetRoot(), xModel, aChartRect );
+    mxChart = std::make_shared<XclExpChart>(GetRoot(), GetChartDoc(), aChartRect);
 }
 
 XclExpChartObj::~XclExpChartObj()
@@ -1581,7 +1578,7 @@ void XclExpChartObj::SaveXml( XclExpXmlStream& rStrm )
     if (xPropSet.is())
     {
         XclObjAny::WriteFromTo( rStrm, mxShape, GetTab() );
-        ChartExport aChartExport(XML_xdr, pDrawing, mxChartDoc, &rStrm, drawingml::DOCUMENT_XLSX);
+        ChartExport aChartExport(XML_xdr, pDrawing, GetChartDoc(), &rStrm, drawingml::DOCUMENT_XLSX);
         auto pURLTransformer = std::make_shared<ScURLTransformer>(*mpDoc);
         aChartExport.SetURLTranslator(pURLTransformer);
         static sal_Int32 nChartCount = 0;
@@ -1598,9 +1595,14 @@ void XclExpChartObj::SaveXml( XclExpXmlStream& rStrm )
     pDrawing->endElement( FSNS( XML_xdr, XML_twoCellAnchor ) );
 }
 
-const css::uno::Reference<css::chart::XChartDocument>& XclExpChartObj::GetChartDoc() const
+css::uno::Reference<css::chart::XChartDocument> XclExpChartObj::GetChartDoc() const
 {
-    return mxChartDoc;
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape(mxShape);
+    if (!pObj || pObj->GetObjIdentifier() != OBJ_OLE2)
+        return {};
+    // May load here - makes sure that we are working with actually loaded OLE object
+    return css::uno::Reference<css::chart::XChartDocument>(
+        static_cast<SdrOle2Obj*>(pObj)->getXModel(), css::uno::UNO_QUERY);
 }
 
 XclExpNote::XclExpNote(const XclExpRoot& rRoot, const ScAddress& rScPos,
