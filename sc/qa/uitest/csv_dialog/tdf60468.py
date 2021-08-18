@@ -27,6 +27,9 @@ class Tdf60468(UITestCase):
         self.assertEqual('1', get_state_as_dict(xDialog.getChild("fromrow"))['Text'])
 
         # Set text delimiter in case it's changed by another test
+        xSeparatedBy = xDialog.getChild("toseparatedby")
+        xSeparatedBy.executeAction("CLICK", tuple())
+
         xTextDelimiter = xDialog.getChild("textdelimiter")
         xTextDelimiter.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
         xTextDelimiter.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))

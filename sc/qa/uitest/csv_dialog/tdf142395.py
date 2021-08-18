@@ -21,6 +21,9 @@ class Tdf142395(UITestCase):
 
 
         xDialog = self.ui_test.wait_for_top_focus_window('TextImportCsvDialog')
+        xSeparatedBy = xDialog.getChild("toseparatedby")
+        xSeparatedBy.executeAction("CLICK", tuple())
+
         # Remove the text delimiter
         xTextDelimiter = xDialog.getChild("textdelimiter")
         xTextDelimiter.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
