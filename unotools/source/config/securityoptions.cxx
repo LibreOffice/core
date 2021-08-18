@@ -263,6 +263,8 @@ void SetTrustedAuthors( const std::vector< Certificate >& rAuthors )
 
 bool IsOptionSet( EOption eOption )
 {
+    if (utl::ConfigManager::IsFuzzing())
+        return false;
     bool    bSet = false;
     switch(eOption)
     {
