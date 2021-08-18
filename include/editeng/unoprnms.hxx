@@ -327,6 +327,8 @@
 #define UNO_NAME_EDIT_CHAR_LOCALE_COMPLEX       "CharLocaleComplex"
 
 #define UNO_NAME_EDIT_CHAR_COLOR                "CharColor"
+#define UNO_NAME_EDIT_CHAR_COLOR_THEME          "CharColorTheme"
+#define UNO_NAME_EDIT_CHAR_COLOR_TINT_OR_SHADE  "CharColorTintOrShade"
 #define UNO_NAME_EDIT_CHAR_TRANSPARENCE         "CharTransparence"
 #define UNO_NAME_EDIT_CHAR_CROSSEDOUT           "CharCrossedOut"
 #define UNO_NAME_EDIT_CHAR_STRIKEOUT            "CharStrikeout"
