@@ -44,6 +44,14 @@
 //! TODO make dynamic
 const SCSIZE ASCIIDLG_MAXROWS                = MAXROWCOUNT;
 
+// Maximum number of source lines to concatenate while generating the preview
+// for one logical line. This may result in a wrong preview if the actual
+// number of embedded line feeds is greater, but a number too high would take
+// too much time (loop excessively if unlimited and large data) if none of the
+// selected separators are actually used in data but a field at start of line
+// is quoted.
+constexpr sal_uInt32 kMaxEmbeddedLinefeeds = 500;
+
 using namespace com::sun::star::uno;
 
 namespace {
@@ -293,7 +301,7 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatNa
     , mnRowPosCount(0)
     , mcTextSep(ScAsciiOptions::cDefaultTextSep)
     , meCall(eCall)
-    , mbDetectSpaceSep(eCall != SC_TEXTTOCOLUMNS)
+    , mbDetectSep(eCall != SC_TEXTTOCOLUMNS)
     , mxFtCharSet(m_xBuilder->weld_label("textcharset"))
     , mxLbCharSet(new SvxTextEncodingBox(m_xBuilder->weld_combo_box("charset")))
     , mxFtCustomLang(m_xBuilder->weld_label("textlanguage"))
@@ -579,7 +587,7 @@ bool ScImportAsciiDlg::GetLine( sal_uLong nLine, OUString &rText, sal_Unicode& r
                 break;
             }
             rText = ReadCsvLine(*mpDatStream, !bFixed, maFieldSeparators,
-                    mcTextSep, rcDetectSep);
+                    mcTextSep, rcDetectSep, kMaxEmbeddedLinefeeds);
             mnStreamPos = mpDatStream->Tell();
             mpRowPosArray[++mnRowPosCount] = mnStreamPos;
         } while (nLine >= mnRowPosCount && mpDatStream->good());
@@ -594,7 +602,7 @@ bool ScImportAsciiDlg::GetLine( sal_uLong nLine, OUString &rText, sal_Unicode& r
     else
     {
         Seek( mpRowPosArray[nLine]);
-        rText = ReadCsvLine(*mpDatStream, !bFixed, maFieldSeparators, mcTextSep, rcDetectSep);
+        rText = ReadCsvLine(*mpDatStream, !bFixed, maFieldSeparators, mcTextSep, rcDetectSep, kMaxEmbeddedLinefeeds);
         mnStreamPos = mpDatStream->Tell();
     }
 
@@ -793,7 +801,9 @@ IMPL_LINK_NOARG(ScImportAsciiDlg, UpdateTextHdl, ScCsvTableBox&, void)
     // when the dialog wasn't already presented to the user.
     // As a side effect this has the benefit that the check is only done on the
     // first set of visible lines.
-    sal_Unicode cDetectSep = (mbDetectSpaceSep && !mxRbFixed->get_active() && !mxCkbSpace->get_active() ? 0 : 0xffff);
+    sal_Unicode cDetectSep = ((mbDetectSep && !mxRbFixed->get_active()
+                && (!mxCkbTab->get_active() || !mxCkbSemicolon->get_active()
+                    || !mxCkbComma->get_active() || !mxCkbSpace->get_active())) ? 0 : 0xffff);
 
     sal_Int32 nBaseLine = mxTableBox->GetGrid().GetFirstVisLine();
     sal_Int32 nRead = mxTableBox->GetGrid().GetVisLineCount();
@@ -813,16 +823,22 @@ IMPL_LINK_NOARG(ScImportAsciiDlg, UpdateTextHdl, ScCsvTableBox&, void)
     for (; i < CSV_PREVIEW_LINES; i++)
         maPreviewLine[i].clear();
 
-    if (mbDetectSpaceSep)
+    if (mbDetectSep)
     {
-        mbDetectSpaceSep = false;
-        if (cDetectSep == ' ')
+        mbDetectSep = false;
+        if (cDetectSep)
         {
-            // Expect space to be appended by now so all subsequent
+            // Expect separator to be appended by now so all subsequent
             // GetLine()/ReadCsvLine() actually used it.
-            assert(maFieldSeparators.endsWith(" "));
-            // Preselect Space in UI.
-            mxCkbSpace->set_active(true);
+            assert(maFieldSeparators.endsWith(OUStringChar(cDetectSep)));
+            // Preselect separator in UI.
+            switch (cDetectSep)
+            {
+                case '\t':  mxCkbTab->set_active(true);         break;
+                case ';':   mxCkbSemicolon->set_active(true);   break;
+                case ',':   mxCkbComma->set_active(true);       break;
+                case ' ':   mxCkbSpace->set_active(true);       break;
+            }
         }
     }
 
