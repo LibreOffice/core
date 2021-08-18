@@ -1115,10 +1115,7 @@ void SdrTextObj::RecalcSnapRect()
 {
     if (maGeo.nRotationAngle || maGeo.nShearAngle)
     {
-        tools::Polygon aPol(maRect);
-        if (maGeo.nShearAngle) ShearPoly(aPol,maRect.TopLeft(),maGeo.mfTanShearAngle);
-        if (maGeo.nRotationAngle) RotatePoly(aPol,maRect.TopLeft(),maGeo.mfSinRotationAngle,maGeo.mfCosRotationAngle);
-        maSnapRect=aPol.GetBoundRect();
+        maSnapRect= Rect2Poly(maRect, maGeo).GetBoundRect();
     } else {
         maSnapRect = maRect;
     }
