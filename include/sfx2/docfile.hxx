@@ -101,7 +101,7 @@ public:
     void AddToCheckEditableWorkerList();
     void SetWorkerReloadEvent(ImplSVEvent* pEvent);
     ImplSVEvent* GetWorkerReloadEvent() const;
-    std::shared_ptr<std::recursive_mutex> GetCheckEditableMutex() const;
+    const std::shared_ptr<std::recursive_mutex>& GetCheckEditableMutex() const;
     void CancelCheckEditableEntry(bool bRemoveEvent = true);
 
     void                UseInteractionHandler( bool );

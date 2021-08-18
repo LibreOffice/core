@@ -95,7 +95,7 @@ public:
     }
     // for the automatic conversion (mail/news/...)
     void ReadUserData( const OUString& );
-    void WriteUserData( OUString& );
+    void WriteUserData( OUString& ) const;
 
     SwAsciiOptions() { Reset(); }
 };

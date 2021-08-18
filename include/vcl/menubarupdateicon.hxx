@@ -77,8 +77,8 @@ public:
 
     bool GetShowMenuIcon() const { return mbShowMenuIcon; }
     bool GetShowBubble() const { return mbShowBubble; }
-    OUString GetBubbleTitle() const { return maBubbleTitle; }
-    OUString GetBubbleText() const { return maBubbleText; }
+    const OUString& GetBubbleTitle() const { return maBubbleTitle; }
+    const OUString& GetBubbleText() const { return maBubbleText; }
 
     void RemoveBubbleWindow(bool bRemoveIcon);
 

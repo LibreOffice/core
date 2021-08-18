@@ -63,7 +63,7 @@ namespace connectivity::evoab
             virtual sal_Int32 SAL_CALL getMinorVersion(  ) override;
 
         public:
-            css::uno::Reference< css::uno::XComponentContext > getComponentContext( ) const { return m_xContext; }
+            const css::uno::Reference< css::uno::XComponentContext >& getComponentContext( ) const { return m_xContext; }
 
             // static methods
             static bool acceptsURL_Stat( std::u16string_view url );

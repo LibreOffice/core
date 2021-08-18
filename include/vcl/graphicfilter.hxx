@@ -232,13 +232,13 @@ public:
      * Returns the logic size, according to the map mode available via GetPreferredMapMode(). Prefer
      * this size over GetSize_100TH_MM().
      */
-    std::optional<Size> GetPreferredLogSize() const { return maPreferredLogSize; }
+    const std::optional<Size>& GetPreferredLogSize() const { return maPreferredLogSize; }
 
     /**
      * If available, this returns the map mode the graphic prefers, which may be other than pixel or
      * 100th mm. Prefer this map mode over just assuming MapUnit::Map100thMM.
      */
-    std::optional<MapMode> GetPreferredMapMode() const { return maPreferredMapMode; }
+    const std::optional<MapMode>& GetPreferredMapMode() const { return maPreferredMapMode; }
 
     /** @return bits/pixel or 0 **/
     sal_uInt16          GetBitsPerPixel() const { return nBitsPerPixel; }

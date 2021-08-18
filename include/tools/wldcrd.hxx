@@ -48,7 +48,7 @@ public:
     {
     }
 
-    OUString getGlob() const
+    const OUString & getGlob() const
     {
         return aWildString;
     }

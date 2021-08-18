@@ -869,7 +869,7 @@ public:
     // If fillstyle is drawing::FillStyle_BITMAP, returns the graphic.
     const Graphic* getFillGraphic() const;
 
-    OUString getHyperlink() const { return msHyperlink; }
+    const OUString& getHyperlink() const { return msHyperlink; }
     void setHyperlink(const OUString& sHyperlink) { msHyperlink = sHyperlink; }
 
 protected:

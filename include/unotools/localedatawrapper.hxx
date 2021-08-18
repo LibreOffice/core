@@ -158,7 +158,7 @@ public:
     css::uno::Sequence< css::i18n::FormatElement > getAllFormats() const;
     css::i18n::ForbiddenCharacters getForbiddenCharacters() const;
     const css::uno::Sequence< css::lang::Locale > & getAllInstalledLocaleNames() const;
-    css::uno::Sequence< OUString > getDateAcceptancePatterns() const;
+    const css::uno::Sequence< OUString > & getDateAcceptancePatterns() const;
 
 
     /// same as the wrapper implementation but static
@@ -199,7 +199,7 @@ public:
         Indian grouping. The sal_Int32* getConstArray() can be passed directly
         to the ::rtl::math::doubleToString() methods as argument for the
         pGroups parameter. */
-    css::uno::Sequence< sal_Int32 > getDigitGrouping() const;
+    const css::uno::Sequence< sal_Int32 >& getDigitGrouping() const;
 
     // Functionality of class International methods, LocaleItem
 

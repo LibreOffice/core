@@ -571,7 +571,7 @@ void SwAsciiOptions::ReadUserData( const OUString& rStr )
         m_bIncludeHidden = !(sToken.equalsIgnoreAsciiCase("FALSE"));
 }
 
-void SwAsciiOptions::WriteUserData(OUString& rStr)
+void SwAsciiOptions::WriteUserData(OUString& rStr) const
 {
     // 1. charset
     rStr = NameFromCharSet(m_eCharSet) + ",";

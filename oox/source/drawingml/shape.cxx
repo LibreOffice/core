@@ -660,11 +660,11 @@ void lcl_doSpecialMSOWidthHeightToggle(basegfx::B2DHomMatrix& aTransformation)
     return;
 }
 
-void lcl_RotateAtCenter(basegfx::B2DHomMatrix& aTransformation, const sal_Int32& rMSORotationAngle)
+void lcl_RotateAtCenter(basegfx::B2DHomMatrix& aTransformation,sal_Int32 nMSORotationAngle)
 {
-    if (rMSORotationAngle == 0)
+    if (nMSORotationAngle == 0)
         return;
-    double fRad = basegfx::deg2rad(rMSORotationAngle / 60000.0);
+    double fRad = basegfx::deg2rad(nMSORotationAngle / 60000.0);
     basegfx::B2DPoint aCenter(0.5, 0.5);
     aCenter *= aTransformation;
     aTransformation.translate(-aCenter);

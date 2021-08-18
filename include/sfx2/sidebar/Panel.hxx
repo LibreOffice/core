@@ -69,7 +69,7 @@ public:
     {
         return mxPanelComponent;
     }
-    css::uno::Reference<css::awt::XWindow> GetElementParentWindow();
+    const css::uno::Reference<css::awt::XWindow>& GetElementParentWindow();
     css::uno::Reference<css::awt::XWindow> GetElementWindow();
     void SetExpanded(const bool bIsExpanded);
     bool IsExpanded() const { return mbIsExpanded; }

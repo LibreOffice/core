@@ -261,7 +261,7 @@ public:
     }
 
     FormulaError getError() const { return mnError; }
-    KahanSum getResult() const { return maSum; }
+    const KahanSum& getResult() const { return maSum; }
 };
 
 class NumericCellCounter
@@ -369,7 +369,7 @@ public:
     };
 
     FormulaError getError() const { return mnError; }
-    KahanSum getSum() const { return mfSum; }
+    const KahanSum& getSum() const { return mfSum; }
     sal_uInt32 getNumberFormat() const { return mnNumFmt; }
 };
 

@@ -93,9 +93,10 @@ public:
 
     // not a public XDispatchHelper-method, need in sfx2/source/control/statcach.cxx for extensions
     /// @throws css::uno::RuntimeException
-    css::uno::Any executeDispatch(const css::uno::Reference<css::frame::XDispatch>& xDispatch,
-                                  const css::util::URL& aURL, bool SyncronFlag,
-                                  const css::uno::Sequence<css::beans::PropertyValue>& lArguments);
+    const css::uno::Any&
+    executeDispatch(const css::uno::Reference<css::frame::XDispatch>& xDispatch,
+                    const css::util::URL& aURL, bool SyncronFlag,
+                    const css::uno::Sequence<css::beans::PropertyValue>& lArguments);
 
     // XDispatchResultListener
     virtual void SAL_CALL dispatchFinished(const css::frame::DispatchResultEvent& aResult) override;

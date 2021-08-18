@@ -104,11 +104,12 @@ private:
     bool IsYFlipped() { return m_bIsFlipped.second; };
 
     // Returns with the shape type, like triangle for example
-    OUString GetShapeType();
+    const OUString& GetShapeType();
     // Returns with the handle points
-    css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>> GetHandleValues();
+    const css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>& GetHandleValues();
     // Returns with the adjustment values
-    css::uno::Sequence<css::drawing::EnhancedCustomShapeAdjustmentValue> GetAdjustmentValues();
+    const css::uno::Sequence<css::drawing::EnhancedCustomShapeAdjustmentValue>&
+    GetAdjustmentValues();
     // Returns with the raw value of the given property of the shape geometry.
     css::uno::Any GetHandleValueOfModificationPoint(sal_Int32 nPoint, std::u16string_view sType);
     // Returns with the appropriate value of the handle point.

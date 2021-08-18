@@ -227,7 +227,7 @@ Reference<awt::XWindow> Panel::GetElementWindow()
     return nullptr;
 }
 
-Reference<awt::XWindow> Panel::GetElementParentWindow()
+const Reference<awt::XWindow>& Panel::GetElementParentWindow()
 {
     if (!mxXWindow)
     {
