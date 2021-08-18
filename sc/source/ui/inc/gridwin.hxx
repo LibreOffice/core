@@ -200,6 +200,8 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
 
     RfCorner                aRFSelectedCorned;
 
+    Timer                   maShowPageBreaksTimer;
+
     bool                    bEEMouse:1;               // Edit Engine has mouse
     bool                    bDPMouse:1;               // DataPilot D&D (new Pivot table)
     bool                    bRFMouse:1;               // RangeFinder drag
@@ -210,6 +212,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
     bool                    bNeedsRepaint:1;
     bool                    bAutoMarkVisible:1;
     bool                    bListValButton:1;
+    bool                    bInitialPageBreaks:1;
 
     DECL_LINK( PopupModeEndHdl, weld::Popover&, void );
     DECL_LINK( PopupSpellingHdl, SpellCallbackInfo&, void );
@@ -309,10 +312,9 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
     void            InvalidateLOKViewCursor(const tools::Rectangle& rCursorRect,
                                             const Fraction aScaleX, const Fraction aScaleY);
 
-    Timer           maShowPageBreaksTimer;
-    bool            bInitialPageBreaks;
-    void            SetupInitialPageBreaks(const ScDocument& rDoc, SCTAB nTab, bool bSetup);
+    void            SetupInitialPageBreaks(const ScDocument& rDoc, SCTAB nTab);
     DECL_LINK(InitiatePageBreaksTimer, Timer*, void);
+
 protected:
     virtual void    PrePaint(vcl::RenderContext& rRenderContext) override;
     virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
