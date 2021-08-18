@@ -194,13 +194,24 @@ public:
     The quote character used.
 
     @param rcDetectSep
-    If 0 then attempt to detect a possible space (blank) separator if
+    If 0 then attempt to detect a possible separator if
     rFieldSeparators doesn't include it already. This can be necessary because
     of the "accept broken misquoted CSV fields" feature that tries to ignore
     trailing blanks after a quoted field and if no separator follows continues
     to add content to the field assuming the single double quote was in error.
-    If this blank separator is detected it is added to rFieldSeparators and the
+    It is also necessary if the only possible separator was not selected and
+    not included in rFieldSeparators and a line starts with a quoted field, in
+    which case appending lines is tried until end of file.
+    If a separator is detected it is added to rFieldSeparators and the
     line is reread with the new separators
+
+    @param nMaxSourceLines
+    Maximum source lines to read and combine into one logical line for embedded
+    new line purpose. Should be limited for the preview dialog because only
+    non-matching separators selected otherwise would lead to trying to
+    concatenate lines until file end.
+    If 0 no limit other than the internal arbitrary resulting line length
+    limit.
 
     check Stream::good() to detect IO problems during read
 
@@ -222,6 +233,7 @@ public:
 
   */
 SC_DLLPUBLIC OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
-        OUString& rFieldSeparators, sal_Unicode cFieldQuote, sal_Unicode& rcDetectSep );
+        OUString& rFieldSeparators, sal_Unicode cFieldQuote, sal_Unicode& rcDetectSep,
+        sal_uInt32 nMaxSourceLines = 0 );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

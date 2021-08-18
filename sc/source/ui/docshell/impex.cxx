@@ -606,17 +606,40 @@ static QuoteType lcl_isFieldEndQuote( const sal_Unicode* p, const sal_Unicode* p
     // Due to broken CSV generators that don't double embedded quotes check if
     // a field separator immediately or with trailing spaces follows the quote,
     // only then end the field, or at end of string.
-    const sal_Unicode cBlank = ' ';
+    constexpr sal_Unicode cBlank = ' ';
     if (p[1] == cBlank && ScGlobal::UnicodeStrChr( pSeps, cBlank))
         return FIELDEND_QUOTE;
     // Detect a possible blank separator if it's not already in the list (which
     // was checked right above for p[1]==cBlank).
-    if (p[1] == cBlank && !rcDetectSep && p[2] && p[2] != cBlank)
-        rcDetectSep = cBlank;
+    const bool bBlankSep = (p[1] == cBlank && !rcDetectSep && p[2] && p[2] != cBlank);
     while (p[1] == cBlank)
         ++p;
     if (!p[1] || ScGlobal::UnicodeStrChr( pSeps, p[1]))
         return FIELDEND_QUOTE;
+    // Extended separator detection after a closing quote (with or without
+    // blanks). Note that nQuotes is incremented *after* the call so is not yet
+    // even here, and that with separator detection we reach here only if
+    // lcl_isEscapedOrFieldEndQuote() did not already detect FIRST_QUOTE or
+    // SECOND_QUOTE for an escaped embedded quote, thus nQuotes does not have
+    // to be checked.
+    if (!rcDetectSep)
+    {
+        constexpr sal_Unicode vSep[] = { ',', '\t', ';' };
+        for (const sal_Unicode c : vSep)
+        {
+            if (p[1] == c)
+            {
+                rcDetectSep = c;
+                return FIELDEND_QUOTE;
+            }
+        }
+    }
+    // Blank separator is least significant, after others.
+    if (bBlankSep)
+    {
+        rcDetectSep = cBlank;
+        return FIELDEND_QUOTE;
+    }
     return DONTKNOW_QUOTE;
 }
 
@@ -644,7 +667,7 @@ static QuoteType lcl_isFieldEndQuote( const sal_Unicode* p, const sal_Unicode* p
 static QuoteType lcl_isEscapedOrFieldEndQuote( sal_Int32 nQuotes, const sal_Unicode* p,
         const sal_Unicode* pSeps, sal_Unicode cStr, sal_Unicode& rcDetectSep )
 {
-    if ((nQuotes % 2) == 0)
+    if ((nQuotes & 1) == 0)
     {
         if (p[-1] == cStr)
             return SECOND_QUOTE;
@@ -2480,7 +2503,7 @@ ScImportStringStream::ScImportStringStream( const OUString& rStr )
 }
 
 OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
-        OUString& rFieldSeparators, sal_Unicode cFieldQuote, sal_Unicode& rcDetectSep )
+        OUString& rFieldSeparators, sal_Unicode cFieldQuote, sal_Unicode& rcDetectSep, sal_uInt32 nMaxSourceLines )
 {
     enum RetryState
     {
@@ -2505,6 +2528,8 @@ Label_RetryWithNewSep:
 
     if (bEmbeddedLineBreak)
     {
+        sal_uInt32 nLine = 0;
+
         const sal_Unicode* pSeps = rFieldSeparators.getStr();
 
         QuoteType eQuoteState = FIELDEND_QUOTE;
@@ -2543,10 +2568,11 @@ Label_RetryWithNewSep:
                         {
                             eQuoteState = lcl_isEscapedOrFieldEndQuote( nQuotes, p, pSeps, cFieldQuote, rcDetectSep);
 
-                            if (eRetryState == RetryState::ALLOW && rcDetectSep == ' ')
+                            if (eRetryState == RetryState::ALLOW && rcDetectSep)
                             {
                                 eRetryState = RetryState::RETRY;
-                                rFieldSeparators += " ";
+                                rFieldSeparators += OUStringChar(rcDetectSep);
+                                pSeps = rFieldSeparators.getStr();
                                 goto Label_RetryWithNewSep;
                             }
 
@@ -2592,10 +2618,14 @@ Label_RetryWithNewSep:
                 ++p;
             }
 
-            if (nQuotes % 2 == 0)
+            if ((nQuotes & 1) == 0)
                 // We still have a (theoretical?) problem here if due to
-                // nArbitraryLineLengthLimit we split a string right between a
-                // doubled quote pair.
+                // nArbitraryLineLengthLimit (or nMaxSourceLines below) we
+                // split a string right between a doubled quote pair.
+                break;
+            else if (++nLine >= nMaxSourceLines && nMaxSourceLines > 0)
+                // Unconditionally increment nLine even if nMaxSourceLines==0
+                // so it can be observed in debugger.
                 break;
             else
             {
