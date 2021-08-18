@@ -138,7 +138,7 @@ Wallpaper::Wallpaper( const BitmapEx& rBmpEx )
 
 Wallpaper::~Wallpaper() = default;
 
-void Wallpaper::ImplSetCachedBitmap( BitmapEx& rBmp ) const
+void Wallpaper::ImplSetCachedBitmap( const BitmapEx& rBmp ) const
 {
     maCache = rBmp;
 }

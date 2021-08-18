@@ -828,11 +828,11 @@ i12626
     /* writes an XObject of type image, may create
        a second for the mask
      */
-    bool writeBitmapObject( BitmapEmit& rObject, bool bMask = false );
+    bool writeBitmapObject( const BitmapEmit& rObject, bool bMask = false );
 
-    void writeJPG( JPGEmit& rEmit );
+    void writeJPG( const JPGEmit& rEmit );
     /// Writes the form XObject proxy for the image.
-    void writeReferenceXObject(ReferenceXObjectEmit& rEmit);
+    void writeReferenceXObject(const ReferenceXObjectEmit& rEmit);
 
     /* tries to find the bitmap by its id and returns its emit data if exists,
        else creates a new emit data block */

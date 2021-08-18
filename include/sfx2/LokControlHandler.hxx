@@ -23,8 +23,9 @@
 class LokControlHandler
 {
 public:
-    static bool postMouseEvent(SdrPage* pPage, SdrView* pDrawView, vcl::Window const& rMainWindow,
-                               int nType, Point aPointHmm, int nCount, int nButtons, int nModifier)
+    static bool postMouseEvent(const SdrPage* pPage, const SdrView* pDrawView,
+                               vcl::Window const& rMainWindow, int nType, Point aPointHmm,
+                               int nCount, int nButtons, int nModifier)
     {
         SdrObjListIter aIterator(pPage, SdrIterMode::Flat);
         while (aIterator.IsMore())
@@ -68,7 +69,7 @@ public:
         return false;
     }
 
-    static void drawUnoControl(SdrView* pDrawView, SdrUnoObj* pUnoObect,
+    static void drawUnoControl(const SdrView* pDrawView, const SdrUnoObj* pUnoObect,
                                vcl::Window const& rMainWindow, VirtualDevice& rDevice,
                                tools::Rectangle const& rTileRectHMM, double scaleX, double scaleY)
     {
@@ -104,9 +105,9 @@ public:
         xControlView->draw(aRectanglePx.Left() * scaleX, aRectanglePx.Top() * scaleY);
     }
 
-    static void paintControlTile(SdrPage* pPage, SdrView* pDrawView, vcl::Window const& rMainWindow,
-                                 VirtualDevice& rDevice, Size aOutputSize,
-                                 tools::Rectangle const& rTileRect)
+    static void paintControlTile(const SdrPage* pPage, const SdrView* pDrawView,
+                                 vcl::Window const& rMainWindow, VirtualDevice& rDevice,
+                                 Size aOutputSize, tools::Rectangle const& rTileRect)
     {
         tools::Rectangle aTileRectHMM
             = o3tl::convert(rTileRect, o3tl::Length::twip, o3tl::Length::mm100);

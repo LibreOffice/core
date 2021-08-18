@@ -244,7 +244,7 @@ static OUString extractPngString(const SvLBoxContextBmp* pBmpItem)
 }
 
 static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter, SvTreeListEntry* pEntry,
-                                     SvTreeListBox* pTabListBox)
+                                     const SvTreeListBox* pTabListBox)
 {
     while (pEntry)
     {

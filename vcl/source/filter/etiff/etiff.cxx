@@ -577,7 +577,7 @@ void TIFFWriter::EndCompression()
     pTable.reset();
 }
 
-bool ExportTiffGraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilterConfigItem)
+bool ExportTiffGraphicImport(SvStream & rStream, const Graphic & rGraphic, const FilterConfigItem* pFilterConfigItem)
 {
     TIFFWriter aWriter(rStream);
     return aWriter.WriteTIFF( rGraphic, pFilterConfigItem );

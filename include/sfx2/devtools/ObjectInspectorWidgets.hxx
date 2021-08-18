@@ -14,7 +14,7 @@
 
 struct ObjectInspectorWidgets
 {
-    ObjectInspectorWidgets(std::unique_ptr<weld::Builder>& rxBuilder)
+    ObjectInspectorWidgets(const std::unique_ptr<weld::Builder>& rxBuilder)
         : mpClassNameLabel(rxBuilder->weld_label("class_name_value_id"))
         , mpInterfacesTreeView(rxBuilder->weld_tree_view("interfaces_treeview_id"))
         , mpServicesTreeView(rxBuilder->weld_tree_view("services_treeview_id"))

@@ -540,7 +540,7 @@ void GIFWriter::WriteTerminator()
 }
 
 
-bool ExportGifGraphic(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem)
+bool ExportGifGraphic(SvStream& rStream, const Graphic& rGraphic, FilterConfigItem* pConfigItem)
 {
     GIFWriter aWriter(rStream);
     return aWriter.WriteGIF(rGraphic, pConfigItem);

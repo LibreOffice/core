@@ -570,7 +570,7 @@ ScCheckListMenuControl::~ScCheckListMenuControl()
 
 ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc, bool bCanHaveSubMenu,
                                              bool bTreeMode, int nWidth, ScCheckListMenuWindow* pParentMenu,
-                                             vcl::ILibreOfficeKitNotifier* pNotifier)
+                                             const vcl::ILibreOfficeKitNotifier* pNotifier)
     : DropdownDockingWindow(pParent)
     , mxParentMenu(pParentMenu)
 {

@@ -3180,7 +3180,7 @@ sal_Int32 XclExpDxfs::GetDxfId( const OUString& rStyleName )
     return -1;
 }
 
-sal_Int32 XclExpDxfs::GetDxfByBackColor(Color& aColor)
+sal_Int32 XclExpDxfs::GetDxfByBackColor(Color aColor)
 {
     std::map<Color, sal_Int32>::iterator itr = maBackColorToDxfId.find(aColor);
     if (itr != maBackColorToDxfId.end())
@@ -3188,7 +3188,7 @@ sal_Int32 XclExpDxfs::GetDxfByBackColor(Color& aColor)
     return -1;
 }
 
-sal_Int32 XclExpDxfs::GetDxfByForeColor(Color& aColor)
+sal_Int32 XclExpDxfs::GetDxfByForeColor(Color aColor)
 {
     std::map<Color, sal_Int32>::iterator itr = maForeColorToDxfId.find(aColor);
     if (itr != maForeColorToDxfId.end())

@@ -2423,7 +2423,7 @@ class FilterEntriesHandler
     ScColumn& mrColumn;
     ScFilterEntries& mrFilterEntries;
 
-    void processCell(ScColumn& rColumn, SCROW nRow, ScRefCellValue& rCell)
+    void processCell(const ScColumn& rColumn, SCROW nRow, ScRefCellValue& rCell)
     {
         SvNumberFormatter* pFormatter = mrColumn.GetDoc().GetFormatTable();
         OUString aStr;

@@ -123,7 +123,7 @@ struct Signature
 };
 
 /// Turns an array of floats into offset + length pairs.
-void GetByteRangesFromPDF(std::unique_ptr<vcl::pdf::PDFiumSignature>& pSignature,
+void GetByteRangesFromPDF(const std::unique_ptr<vcl::pdf::PDFiumSignature>& pSignature,
                           std::vector<std::pair<size_t, size_t>>& rByteRanges)
 {
     std::vector<int> aByteRange = pSignature->getByteRange();

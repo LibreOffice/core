@@ -1070,7 +1070,7 @@ namespace
         pShape->NbcMirror(aCenter, aPoint2);
     }
 
-    void handleMirroring(const ShapeTypeModel& rTypeModel, Reference<XShape>& rxShape)
+    void handleMirroring(const ShapeTypeModel& rTypeModel, const Reference<XShape>& rxShape)
     {
         if (!rTypeModel.maFlip.isEmpty())
         {
@@ -1084,7 +1084,7 @@ namespace
         }
     }
 
-    void handleRotation(const ShapeTypeModel& rTypeModel, Reference<XShape>& rxShape)
+    void handleRotation(const ShapeTypeModel& rTypeModel, const Reference<XShape>& rxShape)
     {
         if (!rTypeModel.maRotation.isEmpty())
         {

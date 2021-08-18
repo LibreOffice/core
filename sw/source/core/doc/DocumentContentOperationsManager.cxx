@@ -4587,8 +4587,8 @@ static void lcl_PushNumruleState(
 }
 
 static void lcl_PopNumruleState(
-    std::shared_ptr<SwNumRuleItem>& aNumRuleItemHolderIfSet,
-    std::shared_ptr<SfxStringItem>& aListIdItemHolderIfSet,
+    const std::shared_ptr<SwNumRuleItem>& aNumRuleItemHolderIfSet,
+    const std::shared_ptr<SfxStringItem>& aListIdItemHolderIfSet,
     SwTextNode *pDestTextNd, const SwPaM& rPam )
 {
     /* If only a part of one paragraph is copied

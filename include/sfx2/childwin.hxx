@@ -94,7 +94,7 @@ struct SFX2_DLLPUBLIC SfxChildWinFactory
 
 struct SfxChildWindow_Impl;
 
-extern SFX2_DLLPUBLIC bool ParentIsFloatingWindow(vcl::Window *pParent);
+extern SFX2_DLLPUBLIC bool ParentIsFloatingWindow(const vcl::Window *pParent);
 
 class SFX2_DLLPUBLIC SfxChildWindow
 {

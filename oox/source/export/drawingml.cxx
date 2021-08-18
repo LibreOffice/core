@@ -1863,7 +1863,7 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
             bFlipHWrite, bFlipVWrite, ExportRotateClockwisify(nRotation + nCameraRotation), IsGroupShape( rXShape ));
 }
 
-static OUString lcl_GetTarget(const css::uno::Reference<css::frame::XModel>& xModel, OUString& rURL)
+static OUString lcl_GetTarget(const css::uno::Reference<css::frame::XModel>& xModel, std::u16string_view rURL)
 {
     Reference<drawing::XDrawPagesSupplier> xDPS(xModel, uno::UNO_QUERY_THROW);
     Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages(), uno::UNO_SET_THROW);

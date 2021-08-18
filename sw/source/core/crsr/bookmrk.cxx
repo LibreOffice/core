@@ -692,7 +692,7 @@ namespace sw::mark
         }
     }
 
-    void DropDownFieldmark::SendLOKShowMessage(SfxViewShell* pViewShell)
+    void DropDownFieldmark::SendLOKShowMessage(const SfxViewShell* pViewShell)
     {
         if (!comphelper::LibreOfficeKit::isActive())
             return;
@@ -737,7 +737,7 @@ namespace sw::mark
         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_FORM_FIELD_BUTTON, sPayload.toString().getStr());
     }
 
-    void DropDownFieldmark::SendLOKHideMessage(SfxViewShell* pViewShell)
+    void DropDownFieldmark::SendLOKHideMessage(const SfxViewShell* pViewShell)
     {
         OString sPayload = "{\"action\": \"hide\", \"type\": \"drop-down\"}";
         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_FORM_FIELD_BUTTON, sPayload.getStr());

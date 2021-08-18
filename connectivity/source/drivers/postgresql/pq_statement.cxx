@@ -559,7 +559,7 @@ static void getAutoValues(
     const Reference< XConnection > & connection,
     const OUString &schemaName,
     const OUString & tableName,
-    ConnectionSettings *pConnectionSettings )
+    const ConnectionSettings *pConnectionSettings )
 {
     OUString strDefaultValue = getColExprForDefaultSettingVal(pConnectionSettings);
     Reference< XPreparedStatement > stmt = connection->prepareStatement(

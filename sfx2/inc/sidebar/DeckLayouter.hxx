@@ -33,7 +33,7 @@ class SidebarDockingWindow;
 namespace DeckLayouter
 {
     void LayoutDeck (
-        SidebarDockingWindow* pDockingWindow,
+        const SidebarDockingWindow* pDockingWindow,
         const tools::Rectangle& rContentArea,
         sal_Int32& rMinimalWidth,
         sal_Int32& rMinimalHeight,

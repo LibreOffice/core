@@ -8326,7 +8326,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit const & rObject )
     return writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
-void PDFWriterImpl::writeJPG( JPGEmit& rObject )
+void PDFWriterImpl::writeJPG( const JPGEmit& rObject )
 {
     if (rObject.m_aReferenceXObject.hasExternalPDFData() && !m_aContext.UseReferenceXObject)
     {
@@ -8401,7 +8401,7 @@ void PDFWriterImpl::writeJPG( JPGEmit& rObject )
     writeReferenceXObject(rObject.m_aReferenceXObject);
 }
 
-void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
+void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
 {
     if (rEmit.m_nFormObject <= 0)
         return;
@@ -8666,7 +8666,7 @@ namespace
     }
 }
 
-bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
+bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject, bool bMask )
 {
     if (rObject.m_aReferenceXObject.hasExternalPDFData() && !m_aContext.UseReferenceXObject)
     {

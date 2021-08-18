@@ -20,7 +20,7 @@
 #include <filter/BmpWriter.hxx>
 #include <vcl/dibtools.hxx>
 
-bool BmpWriter(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
+bool BmpWriter(SvStream& rStream, const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
 {
     BitmapEx aBitmap = rGraphic.GetBitmapEx();
     sal_Int32 nColor = pFilterConfigItem->ReadInt32("Color", 0);

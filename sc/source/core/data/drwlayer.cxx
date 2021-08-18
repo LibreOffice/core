@@ -679,13 +679,13 @@ bool lcl_AreRectanglesApproxEqual(const tools::Rectangle& rRectA, const tools::R
     return true;
 }
 
-bool lcl_NeedsMirrorYCorrection(SdrObject* pObj)
+bool lcl_NeedsMirrorYCorrection(const SdrObject* pObj)
 {
     return pObj->GetObjIdentifier() == OBJ_CUSTOMSHAPE
-           && static_cast<SdrObjCustomShape*>(pObj)->IsMirroredY();
+           && static_cast<const SdrObjCustomShape*>(pObj)->IsMirroredY();
 }
 
-void lcl_SetLogicRectFromAnchor(SdrObject* pObj, ScDrawObjData& rAnchor, ScDocument* pDoc)
+void lcl_SetLogicRectFromAnchor(SdrObject* pObj, const ScDrawObjData& rAnchor, const ScDocument* pDoc)
 {
     // This is only used during initialization. At that time, shape handling is always LTR. No need
     // to consider negative page.

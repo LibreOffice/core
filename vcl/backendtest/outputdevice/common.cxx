@@ -617,7 +617,7 @@ basegfx::B2DPolygon OutputDeviceTestCommon::createHalfEllipsePolygon()
     return aPolygon;
 }
 
-tools::Polygon OutputDeviceTestCommon::createClosedBezierLoop(tools::Rectangle& rRect)
+tools::Polygon OutputDeviceTestCommon::createClosedBezierLoop(const tools::Rectangle& rRect)
 {
     tools::Long minX = rRect.Left();
     tools::Long maxX = rRect.Right() - 2;

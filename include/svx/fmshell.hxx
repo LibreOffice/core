@@ -146,7 +146,7 @@ public:
     void    ToggleControlFocus(
         const SdrUnoObj& i_rNextCandidate,
         const SdrView& i_rView,
-              OutputDevice& i_rDevice
+        const OutputDevice& i_rDevice
     ) const;
 
     static ::std::unique_ptr< svx::ISdrObjectFilter >

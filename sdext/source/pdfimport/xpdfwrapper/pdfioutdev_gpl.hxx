@@ -147,7 +147,7 @@ namespace pdfi
         std::unique_ptr<UnicodeMap>             m_pUtf8Map;
         bool                                    m_bSkipImages;
 
-        int  parseFont( long long nNewId, GfxFont* pFont, GfxState* state ) const;
+        int  parseFont( long long nNewId, GfxFont* pFont, const GfxState* state ) const;
         void writeFontFile( GfxFont* gfxFont ) const;
 #if POPPLER_CHECK_VERSION(0, 83, 0)
         static void printPath( const GfxPath* pPath );

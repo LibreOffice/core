@@ -141,9 +141,9 @@ void MenuContentHandler::findInMenuRecursive(
     }
 }
 
-void MenuContentHandler::addCommandIfPossible(MenuContent const& rMenuContent,
-                                              std::unique_ptr<weld::TreeView>& rpCommandTreeView,
-                                              std::vector<CurrentEntry>& rCommandList)
+void MenuContentHandler::addCommandIfPossible(
+    MenuContent const& rMenuContent, const std::unique_ptr<weld::TreeView>& rpCommandTreeView,
+    std::vector<CurrentEntry>& rCommandList)
 {
     if (m_aAdded.find(rMenuContent.m_aFullLabelWithPath) != m_aAdded.end())
         return;

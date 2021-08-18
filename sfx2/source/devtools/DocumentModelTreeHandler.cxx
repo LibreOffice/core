@@ -90,8 +90,8 @@ public:
 };
 
 // append an entry to a input TreeView to a parent
-void lclAppendToParentEntry(std::unique_ptr<weld::TreeView>& rTree, weld::TreeIter const& rParent,
-                            DocumentModelTreeEntry* pEntry)
+void lclAppendToParentEntry(const std::unique_ptr<weld::TreeView>& rTree,
+                            weld::TreeIter const& rParent, DocumentModelTreeEntry* pEntry)
 {
     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
     OUString const& rString = pEntry->getString();
@@ -100,7 +100,7 @@ void lclAppendToParentEntry(std::unique_ptr<weld::TreeView>& rTree, weld::TreeIt
 }
 
 // append a root entry to a input TreeView
-OUString lclAppend(std::unique_ptr<weld::TreeView>& rTree, DocumentModelTreeEntry* pEntry)
+OUString lclAppend(const std::unique_ptr<weld::TreeView>& rTree, DocumentModelTreeEntry* pEntry)
 {
     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
     OUString const& rString = pEntry->getString();

@@ -407,7 +407,7 @@ int pickBestDevice(std::unique_ptr<ds_profile> const & profile)
 }
 
 /* Return device ID for matching device name */
-int matchDevice(std::unique_ptr<ds_profile> const & profile, char* deviceName)
+int matchDevice(std::unique_ptr<ds_profile> const & profile, const char* deviceName)
 {
     int deviceMatch = -1;
     for (size_t d = 0; d < profile->devices.size() - 1; d++)

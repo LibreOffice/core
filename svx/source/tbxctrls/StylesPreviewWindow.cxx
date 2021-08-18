@@ -353,7 +353,7 @@ void StyleItemController::DrawText(vcl::RenderContext& rRenderContext)
 }
 
 StylesPreviewWindow_Base::StylesPreviewWindow_Base(
-    weld::Builder& xBuilder, std::vector<std::pair<OUString, OUString>>& aDefaultStyles,
+    weld::Builder& xBuilder, const std::vector<std::pair<OUString, OUString>>& aDefaultStyles,
     const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider)
     : m_xDispatchProvider(xDispatchProvider)
     , m_xStylesView(xBuilder.weld_icon_view("stylesview"))
@@ -477,7 +477,7 @@ void StylesPreviewWindow_Base::UpdateStylesList()
 }
 
 StylesPreviewWindow_Impl::StylesPreviewWindow_Impl(
-    vcl::Window* pParent, std::vector<std::pair<OUString, OUString>>& aDefaultStyles,
+    vcl::Window* pParent, const std::vector<std::pair<OUString, OUString>>& aDefaultStyles,
     const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider)
     : InterimItemWindow(pParent, "svx/ui/stylespreview.ui", "ApplyStyleBox", true,
                         reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))

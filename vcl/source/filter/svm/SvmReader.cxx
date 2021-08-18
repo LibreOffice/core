@@ -638,7 +638,7 @@ rtl::Reference<MetaAction> SvmReader::PolyPolygonHandler()
     return pAction;
 }
 
-rtl::Reference<MetaAction> SvmReader::TextHandler(ImplMetaReadData* pData)
+rtl::Reference<MetaAction> SvmReader::TextHandler(const ImplMetaReadData* pData)
 {
     rtl::Reference<MetaTextAction> pAction(new MetaTextAction);
 
@@ -678,7 +678,7 @@ rtl::Reference<MetaAction> SvmReader::TextHandler(ImplMetaReadData* pData)
     return pAction;
 }
 
-rtl::Reference<MetaAction> SvmReader::TextArrayHandler(ImplMetaReadData* pData)
+rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData* pData)
 {
     rtl::Reference<MetaTextArrayAction> pAction(new MetaTextArrayAction);
 
@@ -758,7 +758,7 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(ImplMetaReadData* pData)
     return pAction;
 }
 
-rtl::Reference<MetaAction> SvmReader::StretchTextHandler(ImplMetaReadData* pData)
+rtl::Reference<MetaAction> SvmReader::StretchTextHandler(const ImplMetaReadData* pData)
 {
     rtl::Reference<MetaStretchTextAction> pAction(new MetaStretchTextAction);
 
@@ -788,7 +788,7 @@ rtl::Reference<MetaAction> SvmReader::StretchTextHandler(ImplMetaReadData* pData
     return pAction;
 }
 
-rtl::Reference<MetaAction> SvmReader::TextRectHandler(ImplMetaReadData* pData)
+rtl::Reference<MetaAction> SvmReader::TextRectHandler(const ImplMetaReadData* pData)
 {
     rtl::Reference<MetaTextRectAction> pAction(new MetaTextRectAction);
 

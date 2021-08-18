@@ -311,7 +311,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
     svx::FontworkBar::getState( pView, rSet );
 }
 
-static void setupFillColorForChart(SfxViewShell* pShell, SfxItemSet& rSet)
+static void setupFillColorForChart(const SfxViewShell* pShell, SfxItemSet& rSet)
 {
     if (!pShell)
         return;

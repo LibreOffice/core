@@ -3023,7 +3023,7 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
 
 namespace {
 
-bool CanOptimizeQueryStringToNumber( SvNumberFormatter* pFormatter, sal_uInt32 nFormatIndex, bool& bDateFormat )
+bool CanOptimizeQueryStringToNumber( const SvNumberFormatter* pFormatter, sal_uInt32 nFormatIndex, bool& bDateFormat )
 {
     // tdf#105629: ScQueryEntry::ByValue queries are faster than ScQueryEntry::ByString.
     // The problem with this optimization is that the autofilter dialog apparently converts

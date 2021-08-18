@@ -332,7 +332,7 @@ public:
      */
     static ScPostIt*    CreateNoteFromObjectData(
                             ScDocument& rDoc, const ScAddress& rPos,
-                            std::unique_ptr<SfxItemSet> pItemSet, OutlinerParaObject* pOutlinerObj,
+                            std::unique_ptr<SfxItemSet> pItemSet, const OutlinerParaObject* pOutlinerObj,
                             const tools::Rectangle& rCaptionRect, bool bShown );
 
     /** Creates a cell note based on the passed string and inserts it into the

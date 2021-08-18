@@ -41,7 +41,7 @@ enum class ScUpdateMode { All, Marks };
 class SC_DLLPUBLIC ScViewUtil
 {
 public:
-    static void ExecuteCharMap(const SvxFontItem& rOldFont, ScTabViewShell& rShell);
+    static void ExecuteCharMap(const SvxFontItem& rOldFont, const ScTabViewShell& rShell);
 
     static bool IsActionShown( const ScChangeAction& rAction,
                                 const ScChangeViewSettings& rSettings,

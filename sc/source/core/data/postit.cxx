@@ -1241,7 +1241,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromCaption(
 
 ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
         ScDocument& rDoc, const ScAddress& rPos, std::unique_ptr<SfxItemSet> pItemSet,
-        OutlinerParaObject* pOutlinerObj, const tools::Rectangle& rCaptionRect,
+        const OutlinerParaObject* pOutlinerObj, const tools::Rectangle& rCaptionRect,
         bool bShown )
 {
     OSL_ENSURE( pItemSet && pOutlinerObj, "ScNoteUtil::CreateNoteFromObjectData - item set and outliner object expected" );

@@ -90,7 +90,7 @@ using namespace sfx2::sidebar;
 
 namespace {
 
-bool inChartContext(ScTabViewShell* pViewShell)
+bool inChartContext(const ScTabViewShell* pViewShell)
 {
     SidebarController* pSidebar = SidebarController::GetSidebarControllerForView(pViewShell);
     if (pSidebar)

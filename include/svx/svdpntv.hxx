@@ -339,7 +339,7 @@ public:
     SdrPaintWindow* BeginDrawLayers(OutputDevice* pOut, const vcl::Region& rReg, bool bDisableIntersect = false);
 
     // Used when the region passed to BeginDrawLayers needs to be changed
-    void UpdateDrawLayersRegion(OutputDevice* pOut, const vcl::Region& rReg);
+    void UpdateDrawLayersRegion(const OutputDevice* pOut, const vcl::Region& rReg);
     void EndDrawLayers(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer);
 
 protected:
@@ -347,7 +347,7 @@ protected:
     // Used to paint the form layer after the PreRender device is flushed (painted) to the window.
     void ImpFormLayerDrawing( SdrPaintWindow& rPaintWindow );
 
-    static vcl::Region OptimizeDrawLayersRegion(OutputDevice* pOut, const vcl::Region& rReg, bool bDisableIntersect);
+    static vcl::Region OptimizeDrawLayersRegion(const OutputDevice* pOut, const vcl::Region& rReg, bool bDisableIntersect);
 
 public:
     /// Draw Page as a white area or not

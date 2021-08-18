@@ -42,7 +42,7 @@ namespace drawing = com::sun::star::drawing;
 
 namespace {
 
-bool inChartContext(ScTabViewShell* pViewShell)
+bool inChartContext(const ScTabViewShell* pViewShell)
 {
     SidebarController* pSidebar = SidebarController::GetSidebarControllerForView(pViewShell);
     if (pSidebar)

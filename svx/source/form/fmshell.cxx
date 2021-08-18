@@ -1265,7 +1265,7 @@ namespace
 }
 
 
-void FmFormShell::ToggleControlFocus( const SdrUnoObj& i_rUnoObject, const SdrView& i_rView, OutputDevice& i_rDevice ) const
+void FmFormShell::ToggleControlFocus( const SdrUnoObj& i_rUnoObject, const SdrView& i_rView, const OutputDevice& i_rDevice ) const
 {
     try
     {

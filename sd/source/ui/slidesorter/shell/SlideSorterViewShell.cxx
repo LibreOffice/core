@@ -74,7 +74,7 @@ namespace sd::slidesorter {
 
 namespace {
 
-bool inChartContext(sd::View* pView)
+bool inChartContext(const sd::View* pView)
 {
     if (!pView)
         return false;

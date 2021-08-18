@@ -50,7 +50,7 @@ void xforms_setValueAny(
 
 template<typename T>
 inline void xforms_setValue(
-    css::uno::Reference<css::beans::XPropertySet>& xPropSet,
+    const css::uno::Reference<css::beans::XPropertySet>& xPropSet,
     const OUString& rName,
     const T& aValue )
 {
@@ -58,7 +58,7 @@ inline void xforms_setValue(
 }
 template<>
 inline void xforms_setValue(
-    css::uno::Reference<css::beans::XPropertySet>& xPropSet,
+    const css::uno::Reference<css::beans::XPropertySet>& xPropSet,
     const OUString& rName,
     const css::uno::Any& aValue )
 {

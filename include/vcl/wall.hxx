@@ -52,7 +52,7 @@ enum class WallpaperStyle
 class VCL_DLLPUBLIC Wallpaper
 {
 public:
-    SAL_DLLPRIVATE void             ImplSetCachedBitmap( BitmapEx& rBmp ) const;
+    SAL_DLLPRIVATE void             ImplSetCachedBitmap( const BitmapEx& rBmp ) const;
     SAL_DLLPRIVATE const BitmapEx*  ImplGetCachedBitmap() const;
     SAL_DLLPRIVATE void             ImplReleaseCachedBitmap() const;
 

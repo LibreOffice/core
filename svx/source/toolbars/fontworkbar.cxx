@@ -205,7 +205,7 @@ FontworkBar::~FontworkBar()
 }
 
 namespace svx {
-bool checkForFontWork( SdrObject* pObj )
+bool checkForFontWork( const SdrObject* pObj )
 {
     static constexpr OUStringLiteral sTextPath = u"TextPath";
     bool bFound = false;
