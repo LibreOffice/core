@@ -41,7 +41,7 @@ $(call gb_ExternalProject_get_state_target,libxml2,build):
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________URELIB) \
 			LDFLAGS="$(if $(SYSBASE),-L$(SYSBASE)/usr/lib)" \
-			CFLAGS="$(if $(SYSBASE),-I$(SYSBASE)/usr/include) $(if $(debug),-g) $(if $(gb_Module_CURRENTMODULE_SYMBOLS_ENABLED),-g)" \
+			CFLAGS="$(CFLAGS) $(if $(SYSBASE),-I$(SYSBASE)/usr/include) $(if $(debug),-g) $(if $(gb_Module_CURRENTMODULE_SYMBOLS_ENABLED),-g)" \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
 		&& $(MAKE) \
 	)
