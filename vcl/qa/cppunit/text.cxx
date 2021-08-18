@@ -253,6 +253,9 @@ void VclTextTest::testVerticalText()
         || device->GetGraphics()->getRenderBackendName() == "gtk3svp"
         || device->GetGraphics()->getRenderBackendName() == "aqua"
         || device->GetGraphics()->getRenderBackendName() == "gen"
+#ifdef MACOSX // vertical fonts are broken on Mac with or without Skia
+        || device->GetGraphics()->getRenderBackendName() == "skia"
+#endif
         || device->GetGraphics()->getRenderBackendName() == "genpsp")
         return;
 
@@ -260,8 +263,9 @@ void VclTextTest::testVerticalText()
     vcl::Font baseFont;
     vcl::Font font;
     bool fontFound = false;
-    for (const char* ptrfontName : { "Droid Sans Japanese", "Baekmuk Gulim", "Microsoft JhengHei",
-                                     "Microsoft YaHei", "MS PGothic" })
+    for (const char* ptrfontName :
+         { "Droid Sans Japanese", "Baekmuk Gulim", "Microsoft JhengHei", "Microsoft YaHei",
+           "MS PGothic", "Hiragino Sans", "Arial Unicode MS" })
     {
         OUString fontName = OUString::fromUtf8(ptrfontName);
         if (!device->IsFontAvailable(fontName))
