@@ -38,10 +38,12 @@ struct OptionInfo
     bool m_has_argument;
 };
 
-struct LockFileException : public css::uno::Exception
+struct LockFileException
 {
     explicit LockFileException(OUString const & sMessage) :
-        css::uno::Exception(sMessage, css::uno::Reference< css::uno::XInterface > ()) {}
+        Message(sMessage) {}
+
+    OUString Message;
 };
 
 
