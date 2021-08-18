@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "93eb0280_c467510e",
+        "filename": "svx/source/svdraw/svdtrans.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-08-18T12:04:31Z",
+      "side": 1,
+      "message": "shearX expects the tan of the angle. The tan need not be calculated here, but is available from  GeoStat.",
+      "range": {
+        "startLine": 534,
+        "startChar": 45,
+        "endLine": 534,
+        "endChar": 59
+      },
+      "revId": "91462e05f0e6925c1a6405b0b351cb2cf403a8cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
