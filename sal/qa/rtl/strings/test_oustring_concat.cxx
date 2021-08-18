@@ -69,10 +69,16 @@ void test::oustring::StringConcat::checkConcat()
     CPPUNIT_ASSERT_EQUAL( OUString( "foobar" ), OUString( OUStringBuffer( "foo" ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringBuffer, const char[ 4 ] > )), typeid( OUStringBuffer( "foo" ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL( OUString( "foobar" ), OUString( OUStringLiteral( u"foo" ) + "bar" ));
-    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringLiteral<4>, const char[ 4 ] > )), typeid( OUStringLiteral<4>( u"foo" ) + "bar" ));
-        //TODO: the explicit OUStringLiteral<4> template argument in the unevaluated typeid context
+    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringLiteral<4>, const char[ 4 ] > )),
+#if defined __GNUC__ && __GNUC__ <= 11 && !defined __clang__
+        typeid( OUStringLiteral<4>( u"foo" ) + "bar" )
+        // the explicit OUStringLiteral<4> template argument in the unevaluated typeid context
         // is needed by some GCC versions, see <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96878>
         // "Failed class template argument deduction in unevaluated, parenthesized context"
+#else
+        typeid( OUStringLiteral( u"foo" ) + "bar" )
+#endif
+        );
     const char d1[] = "xyz";
     CPPUNIT_ASSERT_EQUAL( OUString( "fooxyz" ), OUString( OUString( "foo" ) + d1 ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, const char[ 4 ] > )), typeid( OUString( "foo" ) + d1 ));
