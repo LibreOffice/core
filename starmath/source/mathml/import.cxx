@@ -375,7 +375,7 @@ ErrCode SmMLImportWrapper::ReadThroughComponent(const Reference<io::XInputStream
             OUString(pFilterName), aArgs, rxContext);
     if (!xFilter.is())
     {
-        SAL_WARN("starmath", "Can't instantiate filter component " << pFilterName);
+        SAL_WARN("starmath", "Can't instantiate filter component " << OUString(pFilterName));
         return ERRCODE_SFX_DOLOADFAILED;
     }
 
