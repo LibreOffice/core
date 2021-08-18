@@ -30,7 +30,7 @@ class SdrUndoAction;
 class ScRefUndoData;
 class ScDBData;
 
-class SC_DLLPUBLIC ScSimpleUndo: public SfxUndoAction
+class ScSimpleUndo: public SfxUndoAction
 {
     ScSimpleUndo(const ScSimpleUndo&) = delete;
 
@@ -95,7 +95,7 @@ protected:
     void            ShowBlock();
 };
 
-class SC_DLLPUBLIC ScMultiBlockUndo: public ScSimpleUndo
+class ScMultiBlockUndo: public ScSimpleUndo
 {
 public:
     ScMultiBlockUndo(ScDocShell* pDocSh, const ScRangeList& rRanges);

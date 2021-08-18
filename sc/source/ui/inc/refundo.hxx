@@ -32,7 +32,7 @@ class ScChartListenerCollection;
 class ScAreaLinkSaveCollection;
 class ScUnoRefList;
 
-class SC_DLLPUBLIC ScRefUndoData
+class ScRefUndoData
 {
 private:
     std::unique_ptr<ScDBCollection>             pDBCollection;

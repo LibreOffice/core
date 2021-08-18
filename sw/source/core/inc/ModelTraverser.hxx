@@ -26,7 +26,7 @@ public:
     virtual void handleSdrObject(SdrObject* pObject) = 0;
 };
 
-class SW_DLLPUBLIC ModelTraverser
+class ModelTraverser
 {
 private:
     std::vector<std::shared_ptr<ModelTraverseHandler>> mpNodeHandler;

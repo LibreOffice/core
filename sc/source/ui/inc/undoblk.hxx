@@ -131,7 +131,7 @@ private:
     void            SetChangeTrack();
 };
 
-class SC_DLLPUBLIC ScUndoCut: public ScBlockUndo
+class ScUndoCut: public ScBlockUndo
 {
 public:
     ScUndoCut(ScDocShell* pNewDocShell,
@@ -177,7 +177,7 @@ struct ScUndoPasteOptions
     {}
 };
 
-class SC_DLLPUBLIC ScUndoPaste: public ScMultiBlockUndo
+class ScUndoPaste: public ScMultiBlockUndo
 {
 public:
     ScUndoPaste(ScDocShell* pNewDocShell, const ScRangeList& rRanges,
