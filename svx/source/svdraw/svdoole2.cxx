@@ -1797,8 +1797,7 @@ uno::Reference < embed::XEmbeddedObject > const & SdrOle2Obj::GetObjRef_NoInit()
 
 uno::Reference< frame::XModel > SdrOle2Obj::getXModel() const
 {
-    GetObjRef();
-    if ( svt::EmbeddedObjectRef::TryRunningState(mpImpl->mxObjRef.GetObject()) )
+    if (svt::EmbeddedObjectRef::TryRunningState(GetObjRef()))
         return uno::Reference< frame::XModel >( mpImpl->mxObjRef->getComponent(), uno::UNO_QUERY );
     else
         return uno::Reference< frame::XModel >();
