@@ -4282,6 +4282,30 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testOfz18563)
     TestImportDOCX(aFileStream);
 }
 
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf143904)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf143904.odt");
+
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+
+    dispatchCommand(mxComponent, ".uno:InsertRowsAfter", {});
+    pWrtShell->Down(false);
+    pWrtShell->Insert("foo");
+
+    SwTextNode* pTextNodeA1 = static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex]);
+    CPPUNIT_ASSERT(pTextNodeA1->GetText().startsWith("Insert"));
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwTextNode* pTextNodeA2 = static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex]);
+    CPPUNIT_ASSERT_EQUAL(OUString("foo"), pTextNodeA2->GetText());
+    CPPUNIT_ASSERT_EQUAL(false, pTextNodeA2->GetSwAttrSet().HasItem(RES_CHRATR_FONT));
+    OUString sFontName = pTextNodeA2->GetSwAttrSet().GetItem(RES_CHRATR_FONT)->GetFamilyName();
+    CPPUNIT_ASSERT_EQUAL(OUString("Liberation Serif"), sFontName);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf90069)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf90069.docx");
