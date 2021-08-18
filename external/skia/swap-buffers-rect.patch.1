@@ -11,6 +11,32 @@ index c519903006..5dc5bcd180 100644
  
      void setDisplayParams(const DisplayParams& params) override;
  
+diff --git a/tools/sk_app/MetalWindowContext.h b/tools/sk_app/MetalWindowContext.h
+index e8c8392a15..0d8fd1df6e 100644
+--- a/tools/sk_app/MetalWindowContext.h
++++ b/tools/sk_app/MetalWindowContext.h
+@@ -24,7 +24,7 @@ public:
+ 
+     bool isValid() override { return fValid; }
+ 
+-    void swapBuffers() override;
++    void swapBuffers(const SkIRect* rect = nullptr) override;
+ 
+     void setDisplayParams(const DisplayParams& params) override;
+ 
+diff --git a/tools/sk_app/MetalWindowContext.mm b/tools/sk_app/MetalWindowContext.mm
+index 5b623811ed..bae6b24138 100644
+--- a/tools/sk_app/MetalWindowContext.mm
++++ b/tools/sk_app/MetalWindowContext.mm
+@@ -152,7 +152,7 @@ GrBackendRenderTarget backendRT(fWidth,
+     return surface;
+ }
+ 
+-void MetalWindowContext::swapBuffers() {
++void MetalWindowContext::swapBuffers(const SkIRect*) {
+     id<CAMetalDrawable> currentDrawable = (id<CAMetalDrawable>)fDrawableHandle;
+ 
+     id<MTLCommandBuffer> commandBuffer([*fQueue commandBuffer]);
 diff --git a/tools/sk_app/VulkanWindowContext.cpp b/tools/sk_app/VulkanWindowContext.cpp
 index 2b36d60076..d73978c9e4 100644
 --- a/tools/sk_app/VulkanWindowContext.cpp

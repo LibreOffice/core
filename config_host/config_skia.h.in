@@ -30,10 +30,13 @@ are the same.
 #define SKIA_USE_BITMAP32 0
 
 
-
-#define SK_SUPPORT_GPU 1
-
+// GPU support (set by configure).
+#undef SK_SUPPORT_GPU
+// Vulkan support enabled (set by configure).
+// temporary override
 #define SK_VULKAN 1
+// Metal support enabled (set by configure).
+#undef SK_METAL
 
 // Memory allocator for Vulkan.
 #define SK_USE_VMA 1
