@@ -1401,6 +1401,7 @@ void XMLTextFrameContext::EndElement()
         (pMultiContext.is()) ? pMultiContext.get() : m_xImplContext.get();
     XMLTextFrameContext_Impl *pImpl = const_cast<XMLTextFrameContext_Impl*>(dynamic_cast< const XMLTextFrameContext_Impl*>( pContext ));
     assert(!pMultiContext.is() || pImpl);
+
     if( pImpl )
     {
         pImpl->CreateIfNotThere();
@@ -1430,6 +1431,18 @@ void XMLTextFrameContext::EndElement()
 
         GetImport().GetTextImport()->StoreLastImportedFrameName(pImpl->GetOrigName());
 
+    }
+    else
+    {
+        // When we are dealing with a textbox, pImpl will be null;
+        // we need to set the hyperlink to the shape instead
+        Reference<XShape> xShape = GetShape();
+        if (xShape.is() && m_pHyperlink)
+        {
+            Reference<XPropertySet> xProps(xShape, UNO_QUERY);
+            if (xProps.is())
+                xProps->setPropertyValue("Hyperlink", Any(m_pHyperlink->GetHRef()));
+        }
     }
 }
 
