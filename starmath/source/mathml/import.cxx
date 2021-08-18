@@ -705,7 +705,7 @@ void SmMLImportContext::inheritStyle()
     }
 
     // Inherit mathvariant
-    if (m_pStyle->isAttributeSet(SmMlAttributeValueType::MlMathvariant))
+    if (m_pStyle && m_pStyle->isAttributeSet(SmMlAttributeValueType::MlMathvariant))
         m_pElement->setAttribute(m_pStyle->getAttribute(SmMlAttributeValueType::MlMathvariant));
 }
 
