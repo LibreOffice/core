@@ -16,6 +16,8 @@ BLACK_LIST="python.exe"
 #
 # Same format as for BLACK_LIST above
 MOREPDBS_OKLIST="libcurl.dll
+libcrypto-1_1.dll
+libssl-1_1.dll
 freebl3.dll
 libeay32.dll
 nspr4.dll
