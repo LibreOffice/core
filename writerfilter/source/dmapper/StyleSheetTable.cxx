@@ -55,6 +55,7 @@ namespace writerfilter::dmapper
 StyleSheetEntry::StyleSheetEntry() :
         sStyleIdentifierD()
         ,bIsDefaultStyle(false)
+        ,bAssignedAsChapterNumbering(false)
         ,bInvalidHeight(false)
         ,bHasUPE(false)
         ,nStyleTypeCode(STYLE_TYPE_UNKNOWN)
@@ -937,6 +938,59 @@ void StyleSheetTable::ApplyNumberingStyleNameToParaStyles()
     catch( const uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("writerfilter", "Failed applying numbering style name to Paragraph styles");
+    }
+}
+
+/* Counteract the destructive tendencies of LibreOffice's Chapter Numbering
+ *
+ * Any assignment to Chapter Numbering will erase the numbering-like properties of inherited styles.
+ * So go through the list of styles and any that inherit from a Chapter Numbering style
+ * should have the Outline Level reapplied.
+ */
+void StyleSheetTable::ReApplyInheritedOutlineLevelFromChapterNumbering()
+{
+    try
+    {
+        uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier(m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW);
+        uno::Reference< lang::XMultiServiceFactory > xDocFactory(m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW);
+        uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
+        uno::Reference<container::XNameContainer> xParaStyles;
+        xStyleFamilies->getByName(getPropertyName(PROP_PARAGRAPH_STYLES)) >>= xParaStyles;
+
+        if (!xParaStyles.is())
+            return;
+
+        for (auto& pEntry : m_pImpl->m_aStyleSheetEntries)
+        {
+            if (pEntry->nStyleTypeCode != STYLE_TYPE_PARA || pEntry->sBaseStyleIdentifier.isEmpty())
+                continue;
+
+            sal_Int16 nOutlineLevel = pEntry->pProperties->GetOutlineLevel();
+            if (nOutlineLevel != -1)
+                continue;
+
+            StyleSheetEntryPtr pParent = FindStyleSheetByISTD(pEntry->sBaseStyleIdentifier);
+            if (!pParent || !pParent->bAssignedAsChapterNumbering)
+                continue;
+
+            nOutlineLevel = pParent->pProperties->GetOutlineLevel();
+            assert(nOutlineLevel >= WW_OUTLINE_MIN && nOutlineLevel < WW_OUTLINE_MAX);
+
+            // convert MS level to LO equivalent outline level
+            ++nOutlineLevel;
+
+            uno::Reference< style::XStyle > xStyle;
+            xParaStyles->getByName(pEntry->sConvertedStyleName) >>= xStyle;
+            if ( !xStyle.is() )
+                break;
+
+            uno::Reference<beans::XPropertySet> xPropertySet( xStyle, uno::UNO_QUERY_THROW );
+            xPropertySet->setPropertyValue(getPropertyName(PROP_OUTLINE_LEVEL), uno::makeAny(nOutlineLevel));
+        }
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("writerfilter", "Failed applying outlineLevel to Paragraph styles");
     }
 }
 

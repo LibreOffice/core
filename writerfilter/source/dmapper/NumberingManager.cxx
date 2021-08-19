@@ -610,6 +610,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                     xOutlines->getChapterNumberingRules( );
 
                 StyleSheetEntryPtr pParaStyle = pAbsLevel->GetParaStyle( );
+                pParaStyle->bAssignedAsChapterNumbering = true;
                 aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HEADING_STYLE_NAME), pParaStyle->sConvertedStyleName));
 
                 xOutlineRules->replaceByIndex(nLevel, uno::makeAny(comphelper::containerToSequence(aLvlProps)));
@@ -1206,6 +1207,7 @@ void ListsManager::CreateNumberingRules( )
     {
         rList->CreateNumberingRules(m_rDMapper, m_xFactory, nChosenAsChapterNumberingId);
     }
+    m_rDMapper.GetStyleSheetTable()->ReApplyInheritedOutlineLevelFromChapterNumbering();
     m_rDMapper.GetStyleSheetTable()->ApplyNumberingStyleNameToParaStyles();
 }
 

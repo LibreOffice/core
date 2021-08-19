@@ -349,7 +349,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf143692_outlineLevelTortureTest, "tdf143692_outli
 
     xPara.set(getParagraph(7, "InheritCN3"), uno::UNO_QUERY);
     // fixed Chapter Numbering cancelling inheritance
-    //CPPUNIT_ASSERT_EQUAL(sal_Int16(3), getProperty<sal_Int16>(xPara, "OutlineLevel"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(3), getProperty<sal_Int16>(xPara, "OutlineLevel"));
 
     xPara.set(getParagraph(8, "noInheritCN3"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xPara, "OutlineLevel"));
@@ -360,7 +360,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf143692_outlineLevelTortureTest, "tdf143692_outli
 
     xPara.set(getParagraph(10, "illegal 25"), uno::UNO_QUERY);
     // fixed illegal value is ignored, so inherit from List Level (Chapter Numbering)
-    //CPPUNIT_ASSERT_EQUAL(sal_Int16(3), getProperty<sal_Int16>(xPara, "OutlineLevel"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(3), getProperty<sal_Int16>(xPara, "OutlineLevel"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf132752, "tdf132752.docx")
