@@ -16,6 +16,24 @@
       "revId": "cc48aa1f852c72367b5f18d34f452629f03e4f20",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d946718_85078f2a",
+        "filename": "sc/source/ui/docshell/docsh.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1328,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-08-19T17:45:29Z",
+      "side": 0,
+      "message": "Yep you are right. I tried a test file using 1M rows and it took 2 mins to open it with the flag and \u003e10mins (I aborted it) without the flag. Should I insert some threshold, where this flag will be unset? I think about 1k rows. Or maybe do you have a different idea how to solve this issue?",
+      "parentUuid": "01662707_0cebb889",
+      "revId": "cc48aa1f852c72367b5f18d34f452629f03e4f20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
