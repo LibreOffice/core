@@ -77,8 +77,6 @@ public:
 
     virtual void                AfterAppInit() override;
 
-    std::shared_ptr<vcl::BackendCapabilities> GetBackendCapabilities() override;
-
     // dtrans implementation
     virtual css::uno::Reference< css::uno::XInterface >
         CreateClipboard( const css::uno::Sequence< css::uno::Any >& i_rArguments ) override;

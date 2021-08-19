@@ -55,8 +55,7 @@ void BitmapExTest::testGetPixelColor32()
 {
     // Check backend capabilities and return from the test successfully
     // if the backend doesn't support 32-bit bitmap
-    auto pBackendCapabilities = ImplGetSVData()->mpDefInst->GetBackendCapabilities();
-    if (!pBackendCapabilities->mbSupportsBitmap32)
+    if (!ImplGetSVData()->mpDefInst->supportsBitmap32())
         return;
 
     Bitmap aBitmap(Size(3, 3), vcl::PixelFormat::N32_BPP);

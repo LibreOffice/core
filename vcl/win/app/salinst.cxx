@@ -386,6 +386,10 @@ WinSalInstance::WinSalInstance()
     pSVData->maAppData.mxToolkitName = OUString("win");
 #if HAVE_FEATURE_SKIA
     WinSkiaSalGraphicsImpl::prepareSkia();
+#if SKIA_USE_BITMAP32
+    if (SkiaHelper::isVCLSkiaEnabled())
+        m_bSupportsBitmap32 = true;
+#endif
 #endif
 }
 
@@ -917,18 +921,6 @@ OUString WinSalInstance::getOSVersion()
     if (!bHaveVerFromKernel32 && !bHaveVerFromRtlGetVersion)
         aVer.append("unknown");
     return aVer.makeStringAndClear();
-}
-
-std::shared_ptr<vcl::BackendCapabilities> WinSalInstance::GetBackendCapabilities()
-{
-    auto pBackendCapabilities = SalInstance::GetBackendCapabilities();
-#if HAVE_FEATURE_SKIA
-#if SKIA_USE_BITMAP32
-    if( SkiaHelper::isVCLSkiaEnabled())
-        pBackendCapabilities->mbSupportsBitmap32 = true;
-#endif
-#endif
-    return pBackendCapabilities;
 }
 
 void WinSalInstance::BeforeAbort(const OUString&, bool)
