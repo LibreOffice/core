@@ -154,10 +154,10 @@ protected:
     bool bHaveToTakeRedoSet;
 
     // When assigning TextItems to a drawing object with text:
-    std::unique_ptr<OutlinerParaObject> pTextUndo;
+    std::optional<OutlinerParaObject> pTextUndo;
     // #i8508#
     // The text rescue mechanism needs also to be implemented for redo actions.
-    std::unique_ptr<OutlinerParaObject> pTextRedo;
+    std::optional<OutlinerParaObject> pTextRedo;
 
     // If we have a group object:
     std::unique_ptr<SdrUndoGroup> pUndoGroup;
