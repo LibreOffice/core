@@ -2388,5 +2388,24 @@ DECLARE_ODFEXPORT_TEST(tdf135942, "nestedTableInFooter.odt")
     }
 }
 
+DECLARE_ODFEXPORT_TEST(testShapesHyperlink, "shapes-hyperlink.odt")
+{
+    uno::Reference<beans::XPropertySet> const xPropSet1(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("http://libreoffice.org/"), getProperty<OUString>(xPropSet1, "Hyperlink"));
+
+    uno::Reference<beans::XPropertySet> const xPropSet2(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("http://libreoffice2.org/"), getProperty<OUString>(xPropSet2, "Hyperlink"));
+
+    uno::Reference<beans::XPropertySet> const xPropSet3(getShape(3), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("http://libreoffice3.org/"), getProperty<OUString>(xPropSet3, "Hyperlink"));
+
+    uno::Reference<beans::XPropertySet> const xPropSet4(getShape(4), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("http://libreoffice4.org/"), getProperty<OUString>(xPropSet4, "Hyperlink"));
+
+    uno::Reference<beans::XPropertySet> const xPropSet5(getShape(5), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("http://libreoffice5.org/"), getProperty<OUString>(xPropSet5, "Hyperlink"));
+}
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
