@@ -652,7 +652,7 @@ bool SvNumberFormatter::PutandConvertEntry(OUString& rString,
     bRes = PutEntry(rString, nCheckPos, nType, nKey, eLnge, bReplaceBooleanEquivalent);
     pFormatScanner->SetConvertMode(false);
 
-    if (bReplaceBooleanEquivalent && nType == SvNumFormatType::DEFINED && nCheckPos == 0
+    if (bReplaceBooleanEquivalent && nCheckPos == 0 && nType == SvNumFormatType::DEFINED
             && nKey != NUMBERFORMAT_ENTRY_NOT_FOUND)
     {
         // The boolean string formats are always "user defined" without any
