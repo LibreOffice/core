@@ -34,7 +34,7 @@
 class SfxMedium;
 class SmDocShell;
 
-class SmMlExportWrapper
+class SmMLExportWrapper
 {
 private:
     // Model
@@ -77,11 +77,12 @@ public:
     void setUseExportTag(bool bUseExportTag) { m_bUseExportTag = bUseExportTag; }
 
 public:
-    explicit SmMlExportWrapper(css::uno::Reference<css::frame::XModel> const& rRef)
+    explicit SmMLExportWrapper(css::uno::Reference<css::frame::XModel> const& rRef)
         : m_xModel(rRef)
         , m_bFlat(true)
         , m_bUseHTMLMLEntities(false)
         , m_pElementTree(nullptr)
+        , m_bUseExportTag(false)
     {
     }
 
@@ -101,7 +102,7 @@ protected:
                                  const css::uno::Reference<css::lang::XComponent>& xComponent,
                                  css::uno::Reference<css::uno::XComponentContext> const& rxContext,
                                  css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
-                                 const char16_t* pComponentName);
+                                 const char16_t* pComponentName, int_fast16_t nSyntaxVersion);
 
     /** export through an XML exporter component (storage version)
       */
@@ -110,7 +111,7 @@ protected:
                                 const char16_t* pStreamName,
                                 css::uno::Reference<css::uno::XComponentContext> const& rxContext,
                                 css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
-                                const char16_t* pComponentName);
+                                const char16_t* pComponentName, int_fast16_t nSyntaxVersion);
 
     /** export through an XML exporter component (memory stream version)
       */
@@ -120,7 +121,7 @@ protected:
                             css::uno::Reference<css::beans::XPropertySet> const& rPropSet);
 };
 
-class SmMlExport final : public SvXMLExport
+class SmMLExport final : public SvXMLExport
 {
 private:
     SmMlElement* m_pElementTree;
@@ -194,7 +195,7 @@ public:
 public:
     /** Constructor
      */
-    SmMlExport(const css::uno::Reference<css::uno::XComponentContext>& rContext,
+    SmMLExport(const css::uno::Reference<css::uno::XComponentContext>& rContext,
                OUString const& implementationName, SvXMLExportFlags nExportFlags);
 
 private:
