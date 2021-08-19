@@ -55,10 +55,10 @@ public:
     bool hasAuthority();
 
     /// @throws css::uno::RuntimeException
-    OUString getAuthority();
+    const OUString& getAuthority();
 
     /// @throws css::uno::RuntimeException
-    OUString getPath();
+    const OUString& getPath();
 
     /// @throws css::uno::RuntimeException
     bool hasRelativePath();
@@ -73,7 +73,7 @@ public:
     bool hasQuery();
 
     /// @throws css::uno::RuntimeException
-    OUString getQuery();
+    const OUString& getQuery();
 
     /// @throws css::uno::RuntimeException
     bool hasFragment();

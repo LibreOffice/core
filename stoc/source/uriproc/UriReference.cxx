@@ -71,41 +71,34 @@ bool UriReference::isAbsolute() const {
 
 OUString UriReference::getSchemeSpecificPart()
 {
-    std::lock_guard g(m_mutex);
     OUStringBuffer buf;
     appendSchemeSpecificPart(buf);
     return buf.makeStringAndClear();
 }
 
 bool UriReference::isHierarchical() {
-    std::lock_guard g(m_mutex);
     return m_scheme.isEmpty() || m_hasAuthority || m_path.startsWith("/");
 }
 
 bool UriReference::hasAuthority() {
-    std::lock_guard g(m_mutex);
     return m_hasAuthority;
 }
 
-OUString UriReference::getAuthority() {
-    std::lock_guard g(m_mutex);
+const OUString& UriReference::getAuthority() {
     return m_authority;
 }
 
-OUString UriReference::getPath() {
-    std::lock_guard g(m_mutex);
+const OUString& UriReference::getPath() {
     return m_path;
 }
 
 bool UriReference::hasRelativePath() {
-    std::lock_guard g(m_mutex);
     return !m_hasAuthority
         && (m_path.isEmpty() || m_path[0] != '/');
 }
 
 sal_Int32 UriReference::getPathSegmentCount()
 {
-    std::lock_guard g(m_mutex);
     if (m_path.isEmpty()) {
         return 0;
     } else {
@@ -123,7 +116,6 @@ sal_Int32 UriReference::getPathSegmentCount()
 
 OUString UriReference::getPathSegment(sal_Int32 index)
 {
-    std::lock_guard g(m_mutex);
     if (!m_path.isEmpty() && index >= 0) {
         for (sal_Int32 i = m_path[0] == '/' ? 1 : 0;; ++i) {
             if (index-- == 0) {
@@ -140,12 +132,10 @@ OUString UriReference::getPathSegment(sal_Int32 index)
 }
 
 bool UriReference::hasQuery() {
-    std::lock_guard g(m_mutex);
     return m_hasQuery;
 }
 
-OUString UriReference::getQuery() {
-    std::lock_guard g(m_mutex);
+const OUString& UriReference::getQuery() {
     return m_query;
 }
 
