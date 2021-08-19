@@ -1618,7 +1618,7 @@ void GraphicsRenderTests::run(bool storeResultBitmap)
     std::unordered_map<OUString, std::vector<OUString>> aTests;
     for (VclTestResult& tests : m_aTestResult)
     {
-        aTests[tests.getStatus()].push_back(tests.getTestName());
+        aTests[tests.getStatus()].push_back(tests.getName());
     }
     OUString writeResult = getResultString() + "\n---Name of the tests that failed---\n";
     if (static_cast<int>(aTests["FAILED"].size()) > 0)

@@ -8,8 +8,11 @@
  */
 #pragma once
 
+#include <osl/thread.h>
+
 #include <vcl/bitmapex.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
 #include <tools/link.hxx>
 #include <svx/FileExportedDialog.hxx>
@@ -35,6 +38,7 @@ public:
     GraphicTestEntry(weld::Container* pParent, weld::Dialog* pDialog, OUString aTestName,
                      OUString aTestStatus, Bitmap aTestBitmap);
     weld::Widget* get_widget() const { return m_xContainer.get(); }
+    void update_info(OUString& aTestName, OUString& aTestStatus, Bitmap& aBitmap);
 };
 
 class GraphicsTestsDialog : public weld::GenericDialogController
@@ -43,15 +47,18 @@ class GraphicsTestsDialog : public weld::GenericDialogController
     std::unique_ptr<weld::Button> m_xDownloadResults;
     std::unique_ptr<weld::Box> m_xContainerBox;
 
-    std::vector<std::unique_ptr<GraphicTestEntry>> m_xGraphicTestEntries;
-
     OUString m_xZipFileUrl;
     OUString m_xCreateFolderUrl;
 
     DECL_LINK(HandleDownloadRequest, weld::Button&, void);
     DECL_LINK(HandleResultViewRequest, weld::Button&, void);
+    DECL_LINK(updateTestLog, Timer*, void);
 
 public:
+    sal_Int32 m_nTestNumber = 0;
+    void* m_aTestsPointer = nullptr;
+    std::vector<Timer> m_aUpdateTimer;
+    std::vector<std::unique_ptr<GraphicTestEntry>> m_xGraphicTestEntries;
     GraphicsTestsDialog(weld::Container* pParent);
     ~GraphicsTestsDialog();
     virtual short run() override;
