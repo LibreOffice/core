@@ -74,6 +74,8 @@
 #include "rtfexport.hxx"
 #include <mathmlimport.hxx>
 #include <mathmlexport.hxx>
+#include <import.hxx>
+#include <export.hxx>
 #include <svx/svxids.hrc>
 #include <cursor.hxx>
 #include <tools/diagnose_ex.h>
@@ -696,8 +698,8 @@ bool SmDocShell::Save()
             ArrangeFormula();
 
         Reference<css::frame::XModel> xModel(GetModel());
-        SmXMLExportWrapper aEquation(xModel);
-        aEquation.SetFlat(false);
+        SmMLExportWrapper aEquation(xModel);
+        aEquation.setFlat(false);
         return aEquation.Export(*GetMedium());
     }
 
@@ -756,8 +758,8 @@ bool SmDocShell::SaveAs( SfxMedium& rMedium )
             ArrangeFormula();
 
         Reference<css::frame::XModel> xModel(GetModel());
-        SmXMLExportWrapper aEquation(xModel);
-        aEquation.SetFlat(false);
+        SmMLExportWrapper aEquation(xModel);
+        aEquation.setFlat(false);
         bRet = aEquation.Export(rMedium);
     }
     return bRet;
@@ -778,16 +780,16 @@ bool SmDocShell::ConvertTo( SfxMedium &rMedium )
         if(rFltName == STAROFFICE_XML)
         {
             Reference<css::frame::XModel> xModel(GetModel());
-            SmXMLExportWrapper aEquation(xModel);
-            aEquation.SetFlat(false);
+            SmMLExportWrapper aEquation(xModel);
+            aEquation.setFlat(false);
             bRet = aEquation.Export(rMedium);
         }
         else if(rFltName == MATHML_XML)
         {
             Reference<css::frame::XModel> xModel(GetModel());
-            SmXMLExportWrapper aEquation(xModel);
-            aEquation.SetFlat(true);
-            aEquation.SetUseHTMLMLEntities(true);
+            SmMLExportWrapper aEquation(xModel);
+            aEquation.setFlat(true);
+            aEquation.setUseHTMLMLEntities(true);
             bRet = aEquation.Export(rMedium);
         }
         else if (pFlt->GetFilterName() == "MathType 3.x")
