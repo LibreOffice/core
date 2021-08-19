@@ -475,7 +475,12 @@ void GeoStat::RecalcTan()
 
 tools::Polygon Rect2Poly(const tools::Rectangle& rRect, const GeoStat& rGeo)
 {
-    tools::Polygon aPol(rRect);
+    tools::Polygon aPol(5);
+    aPol[0]=rRect.TopLeft();
+    aPol[1]=rRect.TopRight();
+    aPol[2]=rRect.BottomRight();
+    aPol[3]=rRect.BottomLeft();
+    aPol[4]=rRect.TopLeft();
     if (rGeo.nShearAngle) ShearPoly(aPol,rRect.TopLeft(),rGeo.mfTanShearAngle);
     if (rGeo.nRotationAngle) RotatePoly(aPol,rRect.TopLeft(),rGeo.mfSinRotationAngle,rGeo.mfCosRotationAngle);
     return aPol;
