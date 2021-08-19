@@ -32,6 +32,7 @@
 #include "format.hxx"
 #include "parse.hxx"
 #include "smdllapi.hxx"
+#include "mathml/iterator.hxx"
 
 class SfxPrinter;
 class Printer;
@@ -82,6 +83,7 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
     OUString            maAccText;
     SvtLinguOptions     maLinguOptions;
     std::unique_ptr<SmTableNode> mpTree;
+    SmMlElement* m_pMlElementTree;
     rtl::Reference<SfxItemPool> mpEditEngineItemPool;
     std::unique_ptr<SmEditEngine> mpEditEngine;
     VclPtr<SfxPrinter>  mpPrinter;       //q.v. comment to SmPrinter Access!
@@ -171,6 +173,7 @@ public:
     AbstractSmParser* GetParser() { return maParser.get(); }
     const SmTableNode *GetFormulaTree() const  { return mpTree.get(); }
     void            SetFormulaTree(SmTableNode *pTree) { mpTree.reset(pTree); }
+
     sal_uInt16      GetSmSyntaxVersion() const { return mnSmSyntaxVersion; }
     void            SetSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion);
 
@@ -212,6 +215,12 @@ public:
     void readFormulaOoxml( oox::formulaimport::XmlStream& stream );
 
     void UpdateEditEngineDefaultFonts();
+
+    SmMlElement* GetMlElementTree()  { return m_pMlElementTree; }
+    void SetMlElementTree(SmMlElement* pMlElementTree) {
+        mathml::SmMlIteratorFree(m_pMlElementTree);
+        m_pMlElementTree = pMlElementTree;
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
