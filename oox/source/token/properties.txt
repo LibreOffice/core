@@ -54,6 +54,8 @@ CharBackColor
 CharCaseMap
 CharColor
 CharContoured
+CharColorTheme
+CharColorTintOrShade
 CharEscapement
 CharEscapementHeight
 CharFontCharSet
