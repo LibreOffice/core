@@ -50,6 +50,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,clucene,\
 	external/clucene/patches/heap-buffer-overflow.patch \
 	external/clucene/patches/c++20.patch \
 	external/clucene/patches/write-strings.patch \
+	external/clucene/patches/nullstring.patch \
 ))
 
 ifneq ($(OS),WNT)
