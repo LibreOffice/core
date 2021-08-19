@@ -1556,17 +1556,19 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         break;
     case NS_ooxml::LN_CT_PPrBase_outlineLvl:
         {
-            sal_Int16 nLvl = static_cast< sal_Int16 >( nIntValue );
+            if (nIntValue < WW_OUTLINE_MIN || nIntValue > WW_OUTLINE_MAX)
+                break; // invalid value is ignored by MS Word
+
             if( IsStyleSheetImport() )
             {
-
                 StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
                 if (pStyleSheetPropertyMap)
-                    pStyleSheetPropertyMap->SetOutlineLevel( nLvl );
+                    pStyleSheetPropertyMap->SetOutlineLevel(nIntValue);
             }
             else
             {
-                nLvl = nLvl >= WW_OUTLINE_MIN && nLvl < WW_OUTLINE_MAX? nLvl+1 : 0; //0 means no outline level set on
+                // convert MS body level (9) to LO body level (0) and equivalent outline levels
+                sal_Int16 nLvl = nIntValue == WW_OUTLINE_MAX ? 0 : nIntValue + 1;
                 rContext->Insert(PROP_OUTLINE_LEVEL, uno::makeAny ( nLvl ));
             }
         }
