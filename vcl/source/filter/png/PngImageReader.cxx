@@ -97,9 +97,8 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx,
     BitmapScopedWriteAccess pWriteAccessInstance;
     AlphaScopedWriteAccess pWriteAccessAlphaInstance;
     std::vector<std::vector<png_byte>> aRows;
-    auto pBackendCapabilities = ImplGetSVData()->mpDefInst->GetBackendCapabilities();
     const bool bFuzzing = utl::ConfigManager::IsFuzzing();
-    const bool bSupportsBitmap32 = pBackendCapabilities->mbSupportsBitmap32 || bFuzzing;
+    const bool bSupportsBitmap32 = bFuzzing || ImplGetSVData()->mpDefInst->supportsBitmap32();
     const bool bOnlyCreateBitmap
         = static_cast<bool>(nImportFlags & GraphicFilterImportFlags::OnlyCreateBitmap);
     const bool bUseExistingBitmap

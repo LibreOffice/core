@@ -74,6 +74,10 @@ X11SalInstance::X11SalInstance(std::unique_ptr<SalYieldMutex> pMutex)
     pSVData->maAppData.mxToolkitName = OUString("x11");
 #if HAVE_FEATURE_SKIA
     X11SkiaSalGraphicsImpl::prepareSkia();
+#if SKIA_USE_BITMAP32
+    if (SkiaHelper::isVCLSkiaEnabled())
+        m_bSupportsBitmap32 = true;
+#endif
 #endif
 }
 
@@ -232,18 +236,6 @@ void X11SalInstance::PostPrintersChanged()
 std::unique_ptr<GenPspGraphics> X11SalInstance::CreatePrintGraphics()
 {
     return std::make_unique<GenPspGraphics>();
-}
-
-std::shared_ptr<vcl::BackendCapabilities> X11SalInstance::GetBackendCapabilities()
-{
-    auto pBackendCapabilities = SalInstance::GetBackendCapabilities();
-#if HAVE_FEATURE_SKIA
-#if SKIA_USE_BITMAP32
-    if( SkiaHelper::isVCLSkiaEnabled())
-        pBackendCapabilities->mbSupportsBitmap32 = true;
-#endif
-#endif
-    return pBackendCapabilities;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
