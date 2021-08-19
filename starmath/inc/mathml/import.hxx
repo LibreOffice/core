@@ -57,27 +57,31 @@ public:
 
     /** read a component from input stream
      */
-    ErrCode ReadThroughComponent(const css::uno::Reference<css::io::XInputStream>& xInputStream,
-                                 const css::uno::Reference<css::lang::XComponent>& xModelComponent,
-                                 css::uno::Reference<css::uno::XComponentContext> const& rxContext,
-                                 css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
-                                 const char16_t* pFilterName, bool bEncrypted);
+    ErrCode
+    ReadThroughComponentIS(const css::uno::Reference<css::io::XInputStream>& xInputStream,
+                           const css::uno::Reference<css::lang::XComponent>& xModelComponent,
+                           css::uno::Reference<css::uno::XComponentContext> const& rxContext,
+                           css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
+                           const char16_t* pFilterName, bool bEncrypted, bool bUseHTMLMLEntities,
+                           int_fast16_t nSyntaxVersion);
 
     /** read a component from storage
      */
-    ErrCode ReadThroughComponent(const css::uno::Reference<css::embed::XStorage>& xStorage,
-                                 const css::uno::Reference<css::lang::XComponent>& xModelComponent,
-                                 const char16_t* pStreamName,
-                                 css::uno::Reference<css::uno::XComponentContext> const& rxContext,
-                                 css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
-                                 const char16_t* pFilterName);
+    ErrCode ReadThroughComponentS(const css::uno::Reference<css::embed::XStorage>& xStorage,
+                                  const css::uno::Reference<css::lang::XComponent>& xModelComponent,
+                                  const char16_t* pStreamName,
+                                  css::uno::Reference<css::uno::XComponentContext> const& rxContext,
+                                  css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
+                                  const char16_t* pFilterName, bool bUseHTMLMLEntities,
+                                  int_fast16_t nSyntaxVersion);
 
     /** read a component from text
      */
-    ErrCode ReadThroughComponent(std::u16string_view aText,
-                                 const css::uno::Reference<css::lang::XComponent>& xModelComponent,
-                                 css::uno::Reference<css::uno::XComponentContext> const& rxContext,
-                                 css::uno::Reference<css::beans::XPropertySet> const& rPropSet);
+    ErrCode
+    ReadThroughComponentMS(std::u16string_view aText,
+                           const css::uno::Reference<css::lang::XComponent>& xModelComponent,
+                           css::uno::Reference<css::uno::XComponentContext> const& rxContext,
+                           css::uno::Reference<css::beans::XPropertySet> const& rPropSet);
 };
 
 class SmMLImport : public SvXMLImport
