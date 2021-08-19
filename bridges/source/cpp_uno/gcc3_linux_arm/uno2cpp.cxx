@@ -251,7 +251,7 @@ void callVirtualMethod(
     {
         // 8-bytes aligned
         sal_uInt32 nStackBytes = ( ( nStack + 1 ) >> 1 ) * 8;
-        sal_uInt32 *stack = static_cast<sal_uInt32 *>(__builtin_alloca( nStackBytes * sizeof(sal_uInt32)));
+        sal_uInt32 *stack = static_cast<sal_uInt32 *>(__builtin_alloca( nStackBytes ));
         memcpy( stack, pStack, nStackBytes );
     }
 
