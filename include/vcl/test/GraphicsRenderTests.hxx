@@ -32,7 +32,7 @@ public:
         , m_aResultantBitmap(atestBitmap)
     {
     }
-    const OUString& getTestName() const { return m_aTestName; }
+    const OUString& getName() const { return m_aTestName; }
     const OUString& getStatus() const { return m_aTestStatus; }
     const Bitmap& getBitmap() const { return m_aResultantBitmap; }
 };
@@ -125,6 +125,8 @@ public:
     std::vector<VclTestResult>& getTestResults();
     OUString getResultString();
     void run(bool storeResultBitmap = false);
+    //Alter the below method when adding any new tests.
+    static int returnNumberOfTests() { return 106; }
 
     GraphicsRenderTests()
         : m_aStoreResultantBitmap(false)

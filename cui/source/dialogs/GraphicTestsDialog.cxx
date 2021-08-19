@@ -24,6 +24,13 @@ GraphicTestEntry::GraphicTestEntry(weld::Container* pParent, weld::Dialog* pDial
     , m_xResultBitmap(aTestBitmap)
 {
     m_xParentDialog = pDialog;
+    update_info(aTestName, aTestStatus, aTestBitmap);
+    m_xTestButton->connect_clicked(LINK(this, GraphicTestEntry, HandleResultViewRequest));
+    m_xContainer->show();
+}
+
+void GraphicTestEntry::update_info(OUString& aTestName, OUString& aTestStatus, Bitmap& aBitmap)
+{
     m_xTestLabel->set_label(aTestName);
     m_xTestButton->set_label(aTestStatus);
     m_xTestButton->set_tooltip_text(aTestName);
@@ -32,8 +39,7 @@ GraphicTestEntry::GraphicTestEntry(weld::Container* pParent, weld::Dialog* pDial
             ? COL_LIGHTGREEN
             : aTestStatus == "QUIRKY" ? COL_YELLOW
                                       : aTestStatus == "FAILED" ? COL_LIGHTRED : COL_LIGHTGRAY);
-    m_xTestButton->connect_clicked(LINK(this, GraphicTestEntry, HandleResultViewRequest));
-    m_xContainer->show();
+    m_xResultBitmap = aBitmap;
 }
 
 IMPL_LINK(GraphicTestEntry, HandleResultViewRequest, weld::Button&, rButton, void)
@@ -45,6 +51,14 @@ IMPL_LINK(GraphicTestEntry, HandleResultViewRequest, weld::Button&, rButton, voi
     ImageViewerDialog m_ImgVwDialog(m_xParentDialog, BitmapEx(m_xResultBitmap),
                                     rButton.get_tooltip_text());
     m_ImgVwDialog.run();
+}
+
+extern "C"
+{
+    static void runGraphicsTestsAndUpdateResults(void* pData)
+    {
+        static_cast<GraphicsRenderTests*>(pData)->run(true);
+    }
 }
 
 GraphicsTestsDialog::GraphicsTestsDialog(weld::Container* pParent)
@@ -60,21 +74,39 @@ GraphicsTestsDialog::GraphicsTestsDialog(weld::Container* pParent)
     m_xDownloadResults->connect_clicked(LINK(this, GraphicsTestsDialog, HandleDownloadRequest));
 }
 
+IMPL_LINK_NOARG(GraphicsTestsDialog, updateTestLog, Timer*, void)
+{
+    GraphicsRenderTests* ptrObj = static_cast<GraphicsRenderTests*>(m_aTestsPointer);
+    m_xResultLog->set_text(ptrObj->getResultString());
+    OUString aTestName = ptrObj->getTestResults()[m_nTestNumber].getName();
+    OUString aTestStatus = ptrObj->getTestResults()[m_nTestNumber].getStatus();
+    Bitmap aTestBitmap = ptrObj->getTestResults()[m_nTestNumber].getBitmap();
+    auto xGpTest = std::make_unique<GraphicTestEntry>(m_xContainerBox.get(), m_xDialog.get(),
+                                                      aTestName, aTestStatus, aTestBitmap);
+    m_xContainerBox->reorder_child(xGpTest->get_widget(), m_nTestNumber++);
+    m_xGraphicTestEntries.push_back(std::move(xGpTest));
+}
+
 short GraphicsTestsDialog::run()
 {
     GraphicsRenderTests aTestObject;
-    aTestObject.run(true);
-    OUString aResultLog = aTestObject.getResultString()
-                          + "\n(Click on any test to view its resultant bitmap image)";
-    m_xResultLog->set_text(aResultLog);
-    sal_Int32 nTestNumber = 0;
-    for (VclTestResult& test : aTestObject.getTestResults())
+    m_aTestsPointer = &aTestObject;
+    m_xResultLog->set_text("Running tests...");
+    oslThread aThread = osl_createThread(runGraphicsTestsAndUpdateResults, m_aTestsPointer);
+    osl_destroyThread(aThread);
+    for (int testNumber = 0; testNumber < GraphicsRenderTests::returnNumberOfTests(); testNumber++)
     {
-        auto xGpTest = std::make_unique<GraphicTestEntry>(m_xContainerBox.get(), m_xDialog.get(),
-                                                          test.getTestName(), test.getStatus(),
-                                                          test.getBitmap());
-        m_xContainerBox->reorder_child(xGpTest->get_widget(), nTestNumber++);
-        m_xGraphicTestEntries.push_back(std::move(xGpTest));
+        Timer aTimer;
+        aTimer.SetInvokeHandler(LINK(this, GraphicsTestsDialog, updateTestLog));
+        aTimer.SetPriority(TaskPriority::DEFAULT_IDLE);
+        m_aUpdateTimer.push_back(aTimer);
+    }
+    sal_Int32 nTimer = 5000;
+    for (Timer& aTimer : m_aUpdateTimer)
+    {
+        aTimer.SetTimeout(nTimer);
+        aTimer.Start();
+        nTimer += 100;
     }
     return GenericDialogController::run();
 }
