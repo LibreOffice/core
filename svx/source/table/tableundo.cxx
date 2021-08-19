@@ -61,10 +61,8 @@ void CellUndo::dispose()
     maUndoData.mpProperties = nullptr;
     delete maRedoData.mpProperties;
     maRedoData.mpProperties = nullptr;
-    delete maUndoData.mpOutlinerParaObject;
-    maUndoData.mpOutlinerParaObject = nullptr;
-    delete maRedoData.mpOutlinerParaObject;
-    maRedoData.mpOutlinerParaObject = nullptr;
+    maUndoData.mpOutlinerParaObject.reset();
+    maRedoData.mpOutlinerParaObject.reset();
 }
 
 void CellUndo::ObjectInDestruction(const SdrObject& )
@@ -136,9 +134,9 @@ void CellUndo::getDataFromCell( Data& rData )
         rData.mpProperties = mxCell->CloneProperties( *mxObjRef, *mxCell);
 
     if( mxCell->GetOutlinerParaObject() )
-        rData.mpOutlinerParaObject = new OutlinerParaObject(*mxCell->GetOutlinerParaObject());
+        rData.mpOutlinerParaObject = *mxCell->GetOutlinerParaObject();
     else
-        rData.mpOutlinerParaObject =  nullptr;
+        rData.mpOutlinerParaObject.reset();
 
     rData.msFormula = mxCell->msFormula;
     rData.mfValue = mxCell->mfValue;

@@ -279,7 +279,7 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSave
     {
         auto p = pObj->GetOutlinerParaObject();
         if(p)
-            pTextUndo.reset( new OutlinerParaObject(*p) );
+            pTextUndo = *p;
     }
 }
 
@@ -316,7 +316,7 @@ void SdrUndoAttrObj::Undo()
                 // #i8508#
                 auto p = pObj->GetOutlinerParaObject();
                 if(p)
-                    pTextRedo.reset( new OutlinerParaObject(*p) );
+                    pTextRedo = *p;
             }
         }
 

@@ -55,7 +55,7 @@ private:
     struct Data
     {
         sdr::properties::TextProperties* mpProperties;
-        OutlinerParaObject* mpOutlinerParaObject;
+        std::optional<OutlinerParaObject> mpOutlinerParaObject;
 
         OUString        msFormula;
         double          mfValue;
@@ -66,7 +66,6 @@ private:
 
         Data()
             : mpProperties(nullptr)
-            , mpOutlinerParaObject(nullptr)
             , mfValue(0)
             , mnError(0)
             , mbMerged(false)
