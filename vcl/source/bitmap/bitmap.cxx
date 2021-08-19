@@ -229,46 +229,6 @@ const BitmapPalette& Bitmap::GetGreyPalette( int nEntries )
     return GetGreyPalette(2);
 }
 
-bool BitmapPalette::IsGreyPaletteAny() const
-{
-    const int nEntryCount = GetEntryCount();
-    if( !nEntryCount ) // NOTE: an empty palette means 1:1 mapping
-        return true;
-    // See above: only certain entry values will result in a valid call to GetGreyPalette
-    if( nEntryCount == 2 || nEntryCount == 4 || nEntryCount == 16 || nEntryCount == 256 )
-    {
-        const BitmapPalette& rGreyPalette = Bitmap::GetGreyPalette( nEntryCount );
-        if( rGreyPalette == *this )
-            return true;
-    }
-
-    bool bRet = false;
-    // TODO: is it worth to compare the entries for the general case?
-    if (nEntryCount == 2)
-    {
-       const BitmapColor& rCol0(maBitmapColor[0]);
-       const BitmapColor& rCol1(maBitmapColor[1]);
-       bRet = rCol0.GetRed() == rCol0.GetGreen() && rCol0.GetRed() == rCol0.GetBlue() &&
-              rCol1.GetRed() == rCol1.GetGreen() && rCol1.GetRed() == rCol1.GetBlue();
-    }
-    return bRet;
-}
-
-bool BitmapPalette::IsGreyPalette8Bit() const
-{
-    const int nEntryCount = GetEntryCount();
-    if( !nEntryCount ) // NOTE: an empty palette means 1:1 mapping
-        return true;
-    if( nEntryCount != 256 )
-        return false;
-    for (sal_uInt16 i = 0; i < 256; ++i)
-    {
-        if( maBitmapColor[i] != BitmapColor(i, i, i))
-            return false;
-    }
-    return true;
-}
-
 Bitmap& Bitmap::operator=( const Bitmap& rBitmap )
 {
     if (this == &rBitmap)
