@@ -48,6 +48,86 @@ OUString GraphicsRenderTests::returnTestStatus(vcl::test::TestResult const resul
     return "SKIPPED";
 }
 
+GraphicsRenderTests::GraphicsRenderTests()
+{
+    m_aStoreResultantBitmap = false;
+    m_aTestVector = std::vector<std::function<void()>>{
+        [this]() { testDrawRectWithRectangle(); },
+        [this]() { testDrawRectWithPixel(); },
+        [this]() { testDrawRectWithLine(); },
+        [this]() { testDrawRectWithPolygon(); },
+        [this]() { testDrawRectWithPolyLine(); },
+        [this]() { testDrawRectWithPolyLineB2D(); },
+        [this]() { testDrawRectWithPolyPolygon(); },
+        [this]() { testDrawRectWithPolyPolygonB2D(); },
+        [this]() { testDrawRectAAWithRectangle(); },
+        [this]() { testDrawRectAAWithPixel(); },
+        [this]() { testDrawRectAAWithLine(); },
+        [this]() { testDrawRectAAWithPolygon(); },
+        [this]() { testDrawRectAAWithPolyLine(); },
+        [this]() { testDrawRectAAWithPolyLineB2D(); },
+        [this]() { testDrawRectAAWithPolyPolygon(); },
+        [this]() { testDrawRectAAWithPolyPolygonB2D(); },
+        [this]() { testDrawFilledRectWithRectangle(); },
+        [this]() { testDrawFilledRectWithRectangleWithAA(); },
+        [this]() { testDrawFilledRectWithPolygon(); },
+        [this]() { testDrawFilledRectWithPolygonWithAA(); },
+        [this]() { testDrawFilledRectWithPolyPolygon(); },
+        [this]() { testDrawFilledRectWithPolyPolygonWithAA(); },
+        [this]() { testDrawFilledRectWithPolyPolygon2D(); },
+        [this]() { testDrawFilledRectWithPolyPolygon2DWithAA(); },
+        [this]() { testDrawDiamondWithPolygon(); },
+        [this]() { testDrawDiamondWithLine(); },
+        [this]() { testDrawDiamondWithPolyline(); },
+        [this]() { testDrawDiamondWithPolylineB2D(); },
+        [this]() { testDrawInvertWithRectangle(); },
+        [this]() { testDrawInvertN50WithRectangle(); },
+        [this]() { testDrawInvertTrackFrameWithRectangle(); },
+        [this]() { testDrawBezierWithPolylineB2D(); },
+        [this]() { testDrawBezierAAWithPolylineB2D(); },
+        [this]() { testDrawBitmap(); },
+        [this]() { testDrawTransformedBitmap(); },
+        [this]() { testDrawBitmapExWithAlpha(); },
+        [this]() { testDrawMask(); },
+        [this]() { testDrawBlend(); },
+        [this]() { testDrawXor(); },
+        [this]() { testClipRectangle(); },
+        [this]() { testClipPolygon(); },
+        [this]() { testClipPolyPolygon(); },
+        [this]() { testClipB2DPolyPolygon(); },
+        [this]() { testDrawOutDev(); },
+        [this]() { testDashedLine(); },
+        [this]() { testLinearGradient(); },
+        [this]() { testLinearGradientAngled(); },
+        [this]() { testLinearGradientBorder(); },
+        [this]() { testLinearGradientIntensity(); },
+        [this]() { testLinearGradientSteps(); },
+        [this]() { testAxialGradient(); },
+        [this]() { testRadialGradient(); },
+        [this]() { testRadialGradientOfs(); },
+        [this]() { testLineJoinBevel(); },
+        [this]() { testLineJoinRound(); },
+        [this]() { testLineJoinMiter(); },
+        [this]() { testLineJoinNone(); },
+        [this]() { testLineCapRound(); },
+        [this]() { testLineCapSquare(); },
+        [this]() { testLineCapButt(); },
+        [this]() { testDrawDropShapeWithPolyline(); },
+        [this]() { testDrawDropShapeAAWithPolyline(); },
+        [this]() { testDrawDropShapeWithPolygon(); },
+        [this]() { testDrawDropShapeAAWithPolygon(); },
+        [this]() { testHalfEllipseWithPolyLine(); },
+        [this]() { testHalfEllipseAAWithPolyLine(); },
+        [this]() { testHalfEllipseWithPolyLineB2D(); },
+        [this]() { testHalfEllipseAAWithPolyLineB2D(); },
+        [this]() { testHalfEllipseWithPolygon(); },
+        [this]() { testHalfEllipseAAWithPolygon(); },
+        [this]() { testClosedBezierWithPolyline(); },
+        [this]() { testClosedBezierWithPolygon(); },
+        [this]() { testFilledAsymmetricalDropShape(); }
+    };
+}
+
 void GraphicsRenderTests::testDrawRectWithRectangle()
 {
     vcl::test::OutputDeviceTestRect aOutDevTest;
@@ -388,9 +468,20 @@ void GraphicsRenderTests::testDrawFilledRectWithRectangle()
         BitmapEx aBitmapEx(aBitmap);
         exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
-    aTestName += "WithAA";
-    aBitmap = aOutDevTest.setupFilledRectangle(true);
-    eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
+}
+
+void GraphicsRenderTests::testDrawFilledRectWithRectangleWithAA()
+{
+    vcl::test::OutputDeviceTestRect aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupFilledRectangle(true);
+    OUString aTestName = "testDrawFilledRectWithRectangleWithAA";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult
+        = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -419,9 +510,20 @@ void GraphicsRenderTests::testDrawFilledRectWithPolygon()
         BitmapEx aBitmapEx(aBitmap);
         exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
-    aTestName += "WithAA";
-    aBitmap = aOutDevTest.setupFilledRectangle(true);
-    eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
+}
+
+void GraphicsRenderTests::testDrawFilledRectWithPolygonWithAA()
+{
+    vcl::test::OutputDeviceTestPolygon aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupFilledRectangle(true);
+    OUString aTestName = "testDrawFilledRectWithPolygonWithAA";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult
+        = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -450,9 +552,20 @@ void GraphicsRenderTests::testDrawFilledRectWithPolyPolygon()
         BitmapEx aBitmapEx(aBitmap);
         exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
-    aTestName += "WithAA";
-    aBitmap = aOutDevTest.setupFilledRectangle(true);
-    eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
+}
+
+void GraphicsRenderTests::testDrawFilledRectWithPolyPolygonWithAA()
+{
+    vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupFilledRectangle(true);
+    OUString aTestName = "testDrawFilledRectWithPolyPolygonWithAA";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult
+        = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -483,7 +596,20 @@ void GraphicsRenderTests::testDrawFilledRectWithPolyPolygon2D()
     }
     aTestName += "WithAA";
     aBitmap = aOutDevTest.setupFilledRectangle(true);
-    eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
+}
+
+void GraphicsRenderTests::testDrawFilledRectWithPolyPolygon2DWithAA()
+{
+    vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupFilledRectangle(true);
+    OUString aTestName = "testDrawFilledRectWithPolyPolygon2DWithAA";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult
+        = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -1488,77 +1614,14 @@ void GraphicsRenderTests::testFilledAsymmetricalDropShape()
     }
 }
 
+int GraphicsRenderTests::getNumberOfTests() { return int(m_aTestVector.size()); }
+
 void GraphicsRenderTests::runALLTests()
 {
-    testDrawRectWithRectangle();
-    testDrawRectWithPixel();
-    testDrawRectWithLine();
-    testDrawRectWithPolygon();
-    testDrawRectWithPolyLine();
-    testDrawRectWithPolyLineB2D();
-    testDrawRectWithPolyPolygon();
-    testDrawRectWithPolyPolygonB2D();
-    testDrawRectAAWithRectangle();
-    testDrawRectAAWithPixel();
-    testDrawRectAAWithLine();
-    testDrawRectAAWithPolygon();
-    testDrawRectAAWithPolyLine();
-    testDrawRectAAWithPolyLineB2D();
-    testDrawRectAAWithPolyPolygon();
-    testDrawRectAAWithPolyPolygonB2D();
-    testDrawFilledRectWithRectangle();
-    testDrawFilledRectWithPolygon();
-    testDrawFilledRectWithPolyPolygon();
-    testDrawFilledRectWithPolyPolygon2D();
-    testDrawDiamondWithPolygon();
-    testDrawDiamondWithLine();
-    testDrawDiamondWithPolyline();
-    testDrawDiamondWithPolylineB2D();
-    testDrawInvertWithRectangle();
-    testDrawInvertN50WithRectangle();
-    testDrawInvertTrackFrameWithRectangle();
-    testDrawBezierWithPolylineB2D();
-    testDrawBezierAAWithPolylineB2D();
-    testDrawBitmap();
-    testDrawTransformedBitmap();
-    testDrawBitmapExWithAlpha();
-    testDrawMask();
-    testDrawBlend();
-    testDrawXor();
-    testClipRectangle();
-    testClipPolygon();
-    testClipPolyPolygon();
-    testClipB2DPolyPolygon();
-    testDrawOutDev();
-    testDashedLine();
-    testLinearGradient();
-    testLinearGradientAngled();
-    testLinearGradientBorder();
-    testLinearGradientIntensity();
-    testLinearGradientSteps();
-    testAxialGradient();
-    testRadialGradient();
-    testRadialGradientOfs();
-    testLineJoinBevel();
-    testLineJoinRound();
-    testLineJoinMiter();
-    testLineJoinNone();
-    testLineCapRound();
-    testLineCapSquare();
-    testLineCapButt();
-    testDrawDropShapeWithPolyline();
-    testDrawDropShapeAAWithPolyline();
-    testDrawDropShapeWithPolygon();
-    testDrawDropShapeAAWithPolygon();
-    testHalfEllipseWithPolyLine();
-    testHalfEllipseAAWithPolyLine();
-    testHalfEllipseWithPolyLineB2D();
-    testHalfEllipseAAWithPolyLineB2D();
-    testHalfEllipseWithPolygon();
-    testHalfEllipseAAWithPolygon();
-    testClosedBezierWithPolyline();
-    testClosedBezierWithPolygon();
-    testFilledAsymmetricalDropShape();
+    for (std::function<void()>& rTestFunction : m_aTestVector)
+    {
+        rTestFunction();
+    }
 }
 
 void GraphicsRenderTests::appendTestResult(OUString aTestName, OUString aTestStatus,
@@ -1618,7 +1681,7 @@ void GraphicsRenderTests::run(bool storeResultBitmap)
     std::unordered_map<OUString, std::vector<OUString>> aTests;
     for (VclTestResult& tests : m_aTestResult)
     {
-        aTests[tests.getStatus()].push_back(tests.getTestName());
+        aTests[tests.getStatus()].push_back(tests.getName());
     }
     OUString writeResult = getResultString() + "\n---Name of the tests that failed---\n";
     if (static_cast<int>(aTests["FAILED"].size()) > 0)
