@@ -1325,6 +1325,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 SetError(nWarn);
             }
             bSetColWidths = true;
+            bSetSimpleTextColWidths = true;
         }
         else if (aFltName == pFilterDBase)
         {
