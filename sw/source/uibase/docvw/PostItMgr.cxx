@@ -200,7 +200,6 @@ SwPostItMgr::SwPostItMgr(SwView* pView)
     , mbLayouting(false)
     , mbReadOnly(mpView->GetDocShell()->IsReadOnly())
     , mbDeleteNote(true)
-    , mpAnswer(nullptr)
     , mbIsShowAnchor( false )
 {
     if(!mpView->GetDrawView() )
@@ -742,9 +741,8 @@ void SwPostItMgr::LayoutPostIts()
                             if (mpAnswer)
                             {
                                 if (static_cast<bool>(pPostIt->CalcParent())) //do we really have another note in front of this one
-                                    pPostIt->InitAnswer(mpAnswer);
-                                delete mpAnswer;
-                                mpAnswer = nullptr;
+                                    pPostIt->InitAnswer(*mpAnswer);
+                                mpAnswer.reset();
                             }
                         }
 

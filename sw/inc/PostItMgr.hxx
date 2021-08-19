@@ -33,6 +33,7 @@
 #include <unotools/configitem.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include "SidebarWindowsTypes.hxx"
+#include <editeng/outlobj.hxx>
 #include <svl/lstner.hxx>
 #include <vcl/vclptr.hxx>
 
@@ -137,7 +138,7 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
         bool                            mbReadOnly;
         bool                            mbDeleteNote;
         FieldShadowState                mShadowState;
-        OutlinerParaObject*             mpAnswer;
+        std::optional<OutlinerParaObject> mpAnswer;
         OUString                        maAnswerText;
         bool                            mbIsShowAnchor;
 
@@ -251,8 +252,8 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
         static Color           GetColorLight(std::size_t aAuthorIndex);
         static Color           GetColorAnchor(std::size_t aAuthorIndex);
 
-        void                RegisterAnswer(OutlinerParaObject* pAnswer) { mpAnswer = pAnswer;}
-        OutlinerParaObject* IsAnswer() {return mpAnswer;}
+        void                RegisterAnswer(OutlinerParaObject* pAnswer) { if (pAnswer) mpAnswer =* pAnswer; else mpAnswer.reset(); }
+        OutlinerParaObject* IsAnswer() { return mpAnswer ? &*mpAnswer : nullptr; }
         void                RegisterAnswerText(const OUString& aAnswerText) { maAnswerText = aAnswerText; }
         const OUString&     GetAnswerText() const { return maAnswerText; }
         void CheckMetaText();

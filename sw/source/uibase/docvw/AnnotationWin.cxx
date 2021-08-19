@@ -397,7 +397,7 @@ sal_uInt32 SwAnnotationWin::CountFollowing()
     return aCount - 1;
 }
 
-void SwAnnotationWin::InitAnswer(OutlinerParaObject const * pText)
+void SwAnnotationWin::InitAnswer(OutlinerParaObject const & rText)
 {
     // If tiled annotations is off in lok case, skip adding additional reply text.
     if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isTiledAnnotations())
@@ -420,8 +420,8 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject const * pText)
 
     // insert old, selected text or "..."
     // TODO: iterate over all paragraphs, not only first one to find out if it is empty
-    if (!pText->GetTextObject().GetText(0).isEmpty())
-        GetOutlinerView()->GetEditView().InsertText(pText->GetTextObject());
+    if (!rText.GetTextObject().GetText(0).isEmpty())
+        GetOutlinerView()->GetEditView().InsertText(rText.GetTextObject());
     else
         GetOutlinerView()->InsertText("...");
     GetOutlinerView()->InsertText("\"\n");
