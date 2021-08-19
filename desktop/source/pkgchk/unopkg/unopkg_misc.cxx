@@ -161,7 +161,7 @@ bool readArgument(
 OUString const & getExecutableDir()
 {
     static const OUString EXEC =
-        [&]()
+        []()
         {
             OUString path;
             if (osl_getExecutableFile( &path.pData ) != osl_Process_E_None) {
@@ -176,7 +176,7 @@ OUString const & getExecutableDir()
 OUString const & getProcessWorkingDir()
 {
     static const OUString WORKING =
-        [&]()
+        []()
         {
             OUString workingDir;
             utl::Bootstrap::getProcessWorkingDir(workingDir);

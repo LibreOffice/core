@@ -1199,7 +1199,7 @@ struct {
 const char* GetOOXMLPresetGeometry( const char* sShapeType )
 {
     typedef std::unordered_map< const char*, const char*, rtl::CStringHash, rtl::CStringEqual> CustomShapeTypeTranslationHashMap;
-    static CustomShapeTypeTranslationHashMap aCustomShapeTypeTranslationHashMap = [&]()
+    static CustomShapeTypeTranslationHashMap aCustomShapeTypeTranslationHashMap = []()
     {
         CustomShapeTypeTranslationHashMap tmp;
         for(const msfilter::util::CustomShapeTypeTranslationTable& i : pCustomShapeTypeTranslationTable)
@@ -1216,7 +1216,7 @@ const char* GetOOXMLPresetGeometry( const char* sShapeType )
 MSO_SPT GETVMLShapeType(const OString& aType)
 {
     typedef std::unordered_map< const char*, MSO_SPT, rtl::CStringHash, rtl::CStringEqual> DMLToVMLTranslationHashMap;
-    static DMLToVMLTranslationHashMap aDMLToVMLMap = [&]()
+    static DMLToVMLTranslationHashMap aDMLToVMLMap = []()
     {
         DMLToVMLTranslationHashMap tmp;
         for (auto& i : pDMLToVMLTable)
