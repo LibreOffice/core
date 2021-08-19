@@ -173,7 +173,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrObj::embedToObje
     {
         const drawinglayer::primitive2d::Primitive2DReference xRef(
             new drawinglayer::primitive2d::ObjectInfoPrimitive2D(
-                aSource,
+                std::move(aSource),
                 GetSdrObject().GetName(),
                 GetSdrObject().GetTitle(),
                 GetSdrObject().GetDescription()));
@@ -181,7 +181,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrObj::embedToObje
         return drawinglayer::primitive2d::Primitive2DContainer { xRef };
     }
 
-    return aSource;
+    return std::move(aSource);
 }
 
 }
