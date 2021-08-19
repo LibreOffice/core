@@ -15,6 +15,7 @@
 #include <vcl/test/TestResult.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
+#include <atomic>
 #include <vector>
 
 class VCL_PLUGIN_PUBLIC VclTestResult
@@ -32,7 +33,7 @@ public:
         , m_aResultantBitmap(atestBitmap)
     {
     }
-    const OUString& getTestName() const { return m_aTestName; }
+    const OUString& getName() const { return m_aTestName; }
     const OUString& getStatus() const { return m_aTestStatus; }
     const Bitmap& getBitmap() const { return m_aResultantBitmap; }
 };
@@ -47,6 +48,11 @@ class VCL_PLUGIN_PUBLIC GraphicsRenderTests
     OUString m_aCurGraphicsBackend;
     //Location where the results should be stored.
     OUString m_aUserInstallPath;
+
+    std::vector<std::function<void()>> m_aTestVector;
+
+    //A thread-safe variable to determine test execution.
+    std::atomic<bool> m_xExecutionFlag;
 
     void testDrawRectWithRectangle();
     void testDrawRectWithPixel();
@@ -65,9 +71,13 @@ class VCL_PLUGIN_PUBLIC GraphicsRenderTests
     void testDrawRectAAWithPolyPolygon();
     void testDrawRectAAWithPolyPolygonB2D();
     void testDrawFilledRectWithRectangle();
+    void testDrawFilledRectWithRectangleWithAA();
     void testDrawFilledRectWithPolygon();
+    void testDrawFilledRectWithPolygonWithAA();
     void testDrawFilledRectWithPolyPolygon();
+    void testDrawFilledRectWithPolyPolygonWithAA();
     void testDrawFilledRectWithPolyPolygon2D();
+    void testDrawFilledRectWithPolyPolygon2DWithAA();
     void testDrawDiamondWithPolygon();
     void testDrawDiamondWithLine();
     void testDrawDiamondWithPolyline();
@@ -161,9 +171,9 @@ public:
     std::vector<VclTestResult>& getTestResults();
     OUString getResultString();
     void run(bool storeResultBitmap = false);
+    int getNumberOfTests();
 
-    GraphicsRenderTests()
-        : m_aStoreResultantBitmap(false)
-    {
-    }
+    void toggleTestExecution() { m_xExecutionFlag = !m_xExecutionFlag; }
+
+    GraphicsRenderTests();
 };
