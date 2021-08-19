@@ -1106,24 +1106,30 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
 
                     if (sType == "column-left")
                     {
-                        auto & rEntry = aTabCols.GetEntry(0);
-                        tools::Long nNewPosition = aTabCols.GetLeft() + tools::Long(nOffset);
-                        tools::Long nPosition = std::min(nNewPosition, rEntry.nPos - constDistanceOffset);
-                        aTabCols.SetLeft(nPosition);
+                        tools::Long nNewPosition = aTabCols.GetLeft() + nOffset;
+                        if(aTabCols.Count() > 0)
+                        {
+                            auto & rEntry = aTabCols.GetEntry(0);
+                            nNewPosition = std::min(nNewPosition, rEntry.nPos - constDistanceOffset);
+                        }
+                        aTabCols.SetLeft(nNewPosition);
                     }
                     else if (sType == "column-right")
                     {
-                        auto & rEntry = aTabCols.GetEntry(aTabCols.Count() - 1);
-                        tools::Long nNewPosition = aTabCols.GetRight() + tools::Long(nOffset);
-                        tools::Long nPosition = std::max(nNewPosition, rEntry.nPos + constDistanceOffset);
-                        aTabCols.SetRight(nPosition);
+                        tools::Long nNewPosition = aTabCols.GetRight() + nOffset;
+                        if(aTabCols.Count() > 0)
+                        {
+                            auto & rEntry = aTabCols.GetEntry(aTabCols.Count() - 1);
+                            nNewPosition = std::max(nNewPosition, rEntry.nPos + constDistanceOffset);
+                        }
+                        aTabCols.SetRight(nNewPosition);
                     }
                     else if (sType == "column-middle" && nIndex < aTabCols.Count())
                     {
                         auto & rEntry = aTabCols.GetEntry(nIndex);
-                        tools::Long nNewPosition = rEntry.nPos + tools::Long(nOffset);
-                        tools::Long nPosition = std::clamp(nNewPosition, rEntry.nMin, rEntry.nMax - constDistanceOffset);
-                        rEntry.nPos = nPosition;
+                        tools::Long nNewPosition = rEntry.nPos + nOffset;
+                        nNewPosition = std::clamp(nNewPosition, rEntry.nMin, rEntry.nMax - constDistanceOffset);
+                        rEntry.nPos = nNewPosition;
                     }
 
                     rSh.SetTabCols(aTabCols, false);
@@ -1136,23 +1142,26 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                     if (sType == "row-left")
                     {
                         auto & rEntry = aTabRows.GetEntry(0);
-                        tools::Long nNewPosition = aTabRows.GetLeft() + tools::Long(nOffset);
-                        tools::Long nPosition = std::min(nNewPosition, rEntry.nPos - constDistanceOffset);
-                        aTabRows.SetLeft(nPosition);
+                        tools::Long nNewPosition = aTabRows.GetLeft() + nOffset;
+                        nNewPosition = std::min(nNewPosition, rEntry.nPos - constDistanceOffset);
+                        aTabRows.SetLeft(nNewPosition);
                     }
                     else if (sType == "row-right")
                     {
-                        auto & rEntry = aTabRows.GetEntry(aTabRows.Count() - 1);
-                        tools::Long nNewPosition = aTabRows.GetRight() + tools::Long(nOffset);
-                        tools::Long nPosition = std::max(nNewPosition, rEntry.nPos + constDistanceOffset);
-                        aTabRows.SetRight(nPosition);
+                        tools::Long nNewPosition = aTabRows.GetRight() + nOffset;
+                        if(aTabRows.Count() > 0)
+                        {
+                            auto & rEntry = aTabRows.GetEntry(aTabRows.Count() - 1);
+                            nNewPosition = std::max(nNewPosition, rEntry.nPos + constDistanceOffset);
+                        }
+                        aTabRows.SetRight(nNewPosition);
                     }
                     else if (sType == "row-middle" && nIndex < aTabRows.Count())
                     {
                         auto & rEntry = aTabRows.GetEntry(nIndex);
-                        tools::Long nNewPosition = rEntry.nPos + tools::Long(nOffset);
-                        tools::Long nPosition = std::clamp(nNewPosition, rEntry.nMin, rEntry.nMax - constDistanceOffset);
-                        rEntry.nPos = nPosition;
+                        tools::Long nNewPosition = rEntry.nPos + nOffset;
+                        nNewPosition = std::clamp(nNewPosition, rEntry.nMin, rEntry.nMax - constDistanceOffset);
+                        rEntry.nPos = nNewPosition;
                     }
 
                     rSh.SetTabRows(aTabRows, false);
