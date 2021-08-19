@@ -22,7 +22,7 @@
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/cui/AsyncColorPicker.hpp>
+#include <com/sun/star/cui/AsynchronousColorPicker.hpp>
 #include <com/sun/star/cui/ColorPicker.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -113,7 +113,7 @@ void SvColorDialog::ExecuteAsync(weld::Window* pParent, const std::function<void
         if (pParent)
             xParent = pParent->GetXWindow();
 
-        mxDialog = css::cui::AsyncColorPicker::createWithParent(xContext, xParent);
+        mxDialog = css::cui::AsynchronousColorPicker::createWithParent(xContext, xParent);
         Reference< XPropertyAccess > xPropertyAccess( mxDialog, UNO_QUERY_THROW );
 
         Sequence< PropertyValue > props( 2 );
