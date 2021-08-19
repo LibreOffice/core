@@ -72,7 +72,7 @@ public:
                             bool bReadNewDoc, const SwAsciiOptions& rOpts );
 
     ErrCode CallParser();
-    const SwAsciiOptions& GetUsedAsciiOptions() {return m_usedAsciiOptions;};
+    const SwAsciiOptions& GetUsedAsciiOptions() const { return m_usedAsciiOptions; }
 };
 
 }

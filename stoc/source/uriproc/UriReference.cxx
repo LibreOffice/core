@@ -69,26 +69,26 @@ bool UriReference::isAbsolute() const {
 }
 
 
-OUString UriReference::getSchemeSpecificPart()
+OUString UriReference::getSchemeSpecificPart() const
 {
     OUStringBuffer buf;
     appendSchemeSpecificPart(buf);
     return buf.makeStringAndClear();
 }
 
-bool UriReference::isHierarchical() {
+bool UriReference::isHierarchical() const {
     return m_scheme.isEmpty() || m_hasAuthority || m_path.startsWith("/");
 }
 
-bool UriReference::hasAuthority() {
+bool UriReference::hasAuthority() const {
     return m_hasAuthority;
 }
 
-const OUString& UriReference::getAuthority() {
+const OUString& UriReference::getAuthority() const {
     return m_authority;
 }
 
-const OUString& UriReference::getPath() {
+const OUString& UriReference::getPath() const {
     return m_path;
 }
 
@@ -131,11 +131,11 @@ OUString UriReference::getPathSegment(sal_Int32 index)
     return OUString();
 }
 
-bool UriReference::hasQuery() {
+bool UriReference::hasQuery() const {
     return m_hasQuery;
 }
 
-const OUString& UriReference::getQuery() {
+const OUString& UriReference::getQuery() const {
     return m_query;
 }
 

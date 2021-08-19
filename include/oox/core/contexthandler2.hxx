@@ -214,7 +214,7 @@ protected:
     void                setMCEState( MCE_STATE aState ) { aMceState.back() = aState; }
     void                addMCEState( MCE_STATE aState ) { aMceState.push_back( aState ); }
     void                removeMCEState() { aMceState.pop_back(); }
-    bool                isMCEStateEmpty() { return aMceState.empty(); }
+    bool                isMCEStateEmpty() const { return aMceState.empty(); }
 
 private:
     ContextHandler2Helper& operator=( const ContextHandler2Helper& ) = delete;

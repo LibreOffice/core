@@ -2550,7 +2550,7 @@ Reference< XStyleSettings > SAL_CALL VCLXWindow::getStyleSettings()
     return mpImpl->getStyleSettings();
 }
 
-bool VCLXWindow::IsDisposed()
+bool VCLXWindow::IsDisposed() const
 {
     return mpImpl->mbDisposing;
 }

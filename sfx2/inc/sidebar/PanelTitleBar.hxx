@@ -48,7 +48,7 @@ public:
         return *mxExpander;
     }
 
-    OUString GetMoreOptionsCommand() { return msMoreOptionsCommand; }
+    const OUString& GetMoreOptionsCommand() const { return msMoreOptionsCommand; }
 
 private:
     virtual void HandleToolBoxItemClick() override;
