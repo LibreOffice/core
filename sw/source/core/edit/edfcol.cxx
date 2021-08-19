@@ -1182,7 +1182,7 @@ static void lcl_ApplyParagraphClassification(SwDoc* pDoc,
     // Ignore "PARAGRAPH" types
     aResults.erase(std::remove_if(aResults.begin(),
                                   aResults.end(),
-                                  [&](const svx::ClassificationResult& rResult)-> bool
+                                  [](const svx::ClassificationResult& rResult)-> bool
                                             { return rResult.meType == svx::ClassificationType::PARAGRAPH; }),
                                   aResults.end());
 

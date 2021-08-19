@@ -145,7 +145,7 @@ static bool lcl_IsNumFmtSet(SvxNumRule const * pNum, sal_uInt16 nLevelMask)
 
 static const vcl::Font& lcl_GetDefaultBulletFont()
 {
-    static vcl::Font aDefBulletFont = [&]()
+    static vcl::Font aDefBulletFont = []()
     {
         vcl::Font tmp("OpenSymbol", "", Size(0, 14));
         tmp.SetCharSet( RTL_TEXTENCODING_SYMBOL );

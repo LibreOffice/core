@@ -2635,7 +2635,7 @@ const std::vector<DbGridControlNavigationBarState>& FmXGridPeer::getSupportedGri
 
 Sequence< css::util::URL>& FmXGridPeer::getSupportedURLs()
 {
-    static Sequence< css::util::URL> aSupported = [&]()
+    static Sequence< css::util::URL> aSupported = []()
     {
         static const char* sSupported[] = {
             FMURL_RECORD_MOVEFIRST,

@@ -120,7 +120,7 @@ namespace {
 /// Root path of the help.
 OUString const & getHelpRootURL()
 {
-    static OUString const s_instURL = [&]()
+    static OUString const s_instURL = []()
     {
         OUString tmp = officecfg::Office::Common::Path::Current::Help::get(comphelper::getProcessComponentContext());
         if (tmp.isEmpty())

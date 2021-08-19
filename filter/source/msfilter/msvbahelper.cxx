@@ -673,7 +673,7 @@ KeyCodeEntry const aMSKeyCodesData[] = {
 
 awt::KeyEvent parseKeyEvent( const OUString& Key )
 {
-    static std::map< OUString, sal_uInt16 > s_KeyCodes = [&]()
+    static std::map< OUString, sal_uInt16 > s_KeyCodes = []()
     {
         std::map< OUString, sal_uInt16 > tmp;
         for (KeyCodeEntry const & i : aMSKeyCodesData)

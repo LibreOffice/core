@@ -2656,7 +2656,7 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
         };
 
     std::function<void(size_t, size_t)> aEmptyFunc =
-        [&](size_t /*nRow*/, size_t /*nCol*/)
+        [](size_t /*nRow*/, size_t /*nCol*/)
         {
             // Nothing. Concatenating an empty string to an existing string.
         };

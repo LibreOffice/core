@@ -1225,8 +1225,8 @@ struct LayoutDescriptor
 
 LayoutDescriptor::LayoutDescriptor( PresObjKind k0, PresObjKind k1, PresObjKind k2, PresObjKind k3, PresObjKind k4, PresObjKind k5, PresObjKind k6 )
 {
-    auto removeVertical = [&] (PresObjKind k) { return static_cast<PresObjKind>(static_cast<int>(k) & ~VERTICAL); };
-    auto isVertical = [&] (PresObjKind k) { return bool(static_cast<int>(k) & VERTICAL); };
+    auto removeVertical = [] (PresObjKind k) { return static_cast<PresObjKind>(static_cast<int>(k) & ~VERTICAL); };
+    auto isVertical = [] (PresObjKind k) { return bool(static_cast<int>(k) & VERTICAL); };
     meKind[0] = removeVertical(k0); mbVertical[0] = isVertical(k0);
     meKind[1] = removeVertical(k1); mbVertical[1] = isVertical(k1);
     meKind[2] = removeVertical(k2); mbVertical[2] = isVertical(k2);

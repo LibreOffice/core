@@ -1144,7 +1144,7 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                 {
                     // table style defines paragraph background color, use the correct property name
                     auto pFillStyleProp = std::find_if(rCellProperties.begin(), rCellProperties.end(),
-                        [&](const beans::PropertyValue& rProp) { return rProp.Name == "FillStyle"; });
+                        [](const beans::PropertyValue& rProp) { return rProp.Name == "FillStyle"; });
                     if ( pFillStyleProp != rCellProperties.end() &&
                          pFillStyleProp->Value == uno::makeAny(drawing::FillStyle_SOLID) )
                     {

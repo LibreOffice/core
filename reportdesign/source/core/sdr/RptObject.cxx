@@ -229,7 +229,7 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
     {
         case OBJ_RD_IMAGECONTROL:
             {
-                static TPropertyNamePair s_aNameMap = [&]()
+                static TPropertyNamePair s_aNameMap = []()
                 {
                     auto aNoConverter = std::make_shared<AnyConverter>();
                     TPropertyNamePair tmp;
@@ -243,7 +243,7 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
 
         case OBJ_RD_FIXEDTEXT:
             {
-                static TPropertyNamePair s_aNameMap = [&]()
+                static TPropertyNamePair s_aNameMap = []()
                 {
                     auto aNoConverter = std::make_shared<AnyConverter>();
                     TPropertyNamePair tmp;
@@ -265,7 +265,7 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
             }
         case OBJ_RD_FORMATTEDFIELD:
             {
-                static TPropertyNamePair s_aNameMap = [&]()
+                static TPropertyNamePair s_aNameMap = []()
                 {
                     auto aNoConverter = std::make_shared<AnyConverter>();
                     TPropertyNamePair tmp;
@@ -287,7 +287,7 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
 
         case OBJ_CUSTOMSHAPE:
             {
-                static TPropertyNamePair s_aNameMap = [&]()
+                static TPropertyNamePair s_aNameMap = []()
                 {
                     auto aNoConverter = std::make_shared<AnyConverter>();
                     TPropertyNamePair tmp;

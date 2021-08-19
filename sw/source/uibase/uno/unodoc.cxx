@@ -39,7 +39,7 @@ Writer_SwTextDocument_get_implementation(
     SolarMutexGuard aGuard;
     SwGlobals::ensure();
     css::uno::Reference<css::uno::XInterface> xInterface = sfx2::createSfxModelInstance(args,
-        [&](SfxModelFlags _nCreationFlags)
+        [](SfxModelFlags _nCreationFlags)
         {
             SfxObjectShell* pShell = new SwDocShell( _nCreationFlags );
             return pShell->GetModel();

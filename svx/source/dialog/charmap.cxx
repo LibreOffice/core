@@ -873,7 +873,7 @@ inline Subset::Subset(sal_UCS4 nMin, sal_UCS4 nMax, const OUString& rName)
 
 void SubsetMap::InitList()
 {
-    static SubsetVec s_aAllSubsets = [&]()
+    static SubsetVec s_aAllSubsets = []()
     {
         SubsetVec aAllSubsets;
         //I wish icu had a way to give me the block ranges

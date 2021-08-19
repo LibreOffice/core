@@ -2451,7 +2451,7 @@ ScFormatFilterPlugin* ScFilterCreate();
 typedef ScFormatFilterPlugin * (*FilterFn)();
 ScFormatFilterPlugin &ScFormatFilter::Get()
 {
-    static ScFormatFilterPlugin *plugin = [&]()
+    static ScFormatFilterPlugin *plugin = []()
     {
 #ifndef DISABLE_DYNLOADING
         OUString sFilterLib(SVLIBRARY("scfilt"));

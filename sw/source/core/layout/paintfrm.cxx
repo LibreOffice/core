@@ -7148,7 +7148,7 @@ Color SwPageFrame::GetDrawBackgroundColor() const
 /// create/return font used to paint the "empty page" string
 const vcl::Font& SwPageFrame::GetEmptyPageFont()
 {
-    static vcl::Font aEmptyPgFont = [&]()
+    static vcl::Font aEmptyPgFont = []()
     {
         vcl::Font tmp;
         tmp.SetFontSize( Size( 0, 80 * 20 )); // == 80 pt

@@ -1984,7 +1984,7 @@ sal_Int32 SvXMLImport::getTokenFromName( const OUString& rName )
 
 void SvXMLImport::initializeNamespaceMaps()
 {
-    auto mapTokenToNamespace = [&]( sal_Int32 nToken, sal_Int32 nPrefix, sal_Int32 nNamespace )
+    auto mapTokenToNamespace = []( sal_Int32 nToken, sal_Int32 nPrefix, sal_Int32 nNamespace )
     {
         if ( nToken >= 0 )
         {

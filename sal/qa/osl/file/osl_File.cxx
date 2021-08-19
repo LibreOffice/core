@@ -4683,7 +4683,7 @@ namespace osl_Directory
 
     static OUString const & get_test_path()
     {
-        static OUString test_path = [&]()
+        static OUString test_path = []()
         {
             OUString tmp;
             osl::FileBase::RC rc = osl::FileBase::getTempDirURL(tmp);

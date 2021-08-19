@@ -98,7 +98,7 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
                            const SwViewShell &rSh, const SwNoTextFrame *pFrame,
                            bool bDefect )
 {
-    static vcl::Font aFont = [&]()
+    static vcl::Font aFont = []()
     {
         vcl::Font tmp;
         tmp.SetWeight( WEIGHT_BOLD );
