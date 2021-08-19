@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_cui_AsyncColorPicker_idl__
-#define __com_sun_star_cui_AsyncColorPicker_idl__
+#ifndef __com_sun_star_cui_AsynchronousColorPicker_idl__
+#define __com_sun_star_cui_AsynchronousColorPicker_idl__
 
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.idl>
 #include <com/sun/star/awt/XWindow.idl>
@@ -26,9 +26,9 @@
 module com { module sun { module star { module cui {
 
 /**
-    @since LibreOffice 7.2
+    @since LibreOffice 7.3
  */
-service AsyncColorPicker : com::sun::star::ui::dialogs::XAsynchronousExecutableDialog
+service AsynchronousColorPicker : com::sun::star::ui::dialogs::XAsynchronousExecutableDialog
 {
     createWithParent([in] com::sun::star::awt::XWindow Parent);
 };

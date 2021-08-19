@@ -1286,7 +1286,7 @@ sal_Bool SAL_CALL ColorPicker::supportsService( const OUString& sServiceName )
 Sequence< OUString > SAL_CALL ColorPicker::getSupportedServiceNames(  )
 {
     return { "com.sun.star.ui.dialogs.ColorPicker",
-             "com.sun.star.ui.dialogs.AsyncColorPicker" };
+             "com.sun.star.ui.dialogs.AsynchronousColorPicker" };
 }
 
 // XPropertyAccess

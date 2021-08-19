@@ -23,8 +23,8 @@
     constructor="com_sun_star_cui_ColorPicker_get_implementation">
     <service name="com.sun.star.ui.dialogs.ColorPicker"/>
   </implementation>
-  <implementation name="com.sun.star.cui.AsyncColorPicker"
+  <implementation name="com.sun.star.cui.AsynchronousColorPicker"
     constructor="com_sun_star_cui_ColorPicker_get_implementation">
-    <service name="com.sun.star.ui.dialogs.AsyncColorPicker"/>
+    <service name="com.sun.star.ui.dialogs.AsynchronousColorPicker"/>
   </implementation>
 </component>
