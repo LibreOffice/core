@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c406ac7_dccf82da",
+        "filename": "sc/source/filter/excel/xeescher.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1554,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-19T09:42:33Z",
+      "side": 0,
+      "message": "We had this css::chart::XChartDocument reference obtained from then-active xShape; and stored the reference in mxChartDoc. Later, when we kept adding new XclExpChartObj parsing the document for saving, the number of objects in OLE cache got higher than the limit, and oldest objects started to get onloaded, which resulted in the mxChartDoc stopping produce e.g. proper css::chart2::XChartDocument reference when queried (in IsValidObject, or later when writing).\n\nUsing xShape again to access its SdrOle2Obj, and asking the model from it (using getXModel, which does the loading magic), makes it work as intended - but the question is: is it possible to have some algorithm in the original object pointed from css::chart::XChartDocument reference, and initiate the loading from there, to have it working truly automatically? When a code attempts to access the interface what was onloaded, it should indicate the need to load, right?",
+      "revId": "f58f35b2c8ca1efbacec642a8f3de5b0c499bc6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
