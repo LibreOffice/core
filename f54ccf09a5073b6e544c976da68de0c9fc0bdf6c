@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bae1ef52_8d5ef1b5",
+        "filename": "offapi/com/sun/star/cui/AsyncColorPicker.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-19T13:26:18Z",
+      "side": 1,
+      "message": "7.2 or 7.3?",
+      "range": {
+        "startLine": 29,
+        "startChar": 23,
+        "endLine": 29,
+        "endChar": 26
+      },
+      "revId": "f54ccf09a5073b6e544c976da68de0c9fc0bdf6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "614ae73d_5cd3dd27",
+        "filename": "offapi/com/sun/star/cui/AsyncColorPicker.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-19T13:26:18Z",
+      "side": 1,
+      "message": "as the corresponding XAsynchronousExecutableDialog spells out \"asynchronous\", wouldn\u0027t it be more consistent to do that here too and call the service \"AsynchronousColorPicker\"?",
+      "range": {
+        "startLine": 31,
+        "startChar": 8,
+        "endLine": 31,
+        "endChar": 13
+      },
+      "revId": "f54ccf09a5073b6e544c976da68de0c9fc0bdf6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
