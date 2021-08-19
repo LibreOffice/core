@@ -626,7 +626,7 @@ void ShapeGroupContext::popGroupAndPostProcess()
     }
 
     bool bSorted = std::is_sorted(maZOrderList.begin(), maZOrderList.end(),
-                       [&](const ZOrderHint& rLeft, const ZOrderHint& rRight)
+                       [](const ZOrderHint& rLeft, const ZOrderHint& rRight)
                        { return rLeft.nShould < rRight.nShould; } );
 
     if (bSorted)

@@ -60,7 +60,7 @@ void Qt5Clipboard::flushClipboard()
 {
     auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
     SolarMutexGuard g;
-    pSalInst->RunInMainThread([&, this]() {
+    pSalInst->RunInMainThread([this]() {
         if (!isOwner(m_aClipboardMode))
             return;
 

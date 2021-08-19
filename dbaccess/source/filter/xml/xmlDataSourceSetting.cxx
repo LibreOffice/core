@@ -55,7 +55,7 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
             case XML_DATA_SOURCE_SETTING_TYPE:
                 {
                     // needs to be translated into a css::uno::Type
-                    static std::map< OUString, css::uno::Type > s_aTypeNameMap = [&]()
+                    static std::map< OUString, css::uno::Type > s_aTypeNameMap = []()
                     {
                         std::map< OUString, css::uno::Type > tmp;
                         tmp[GetXMLToken( XML_BOOLEAN)]   = cppu::UnoType<bool>::get();

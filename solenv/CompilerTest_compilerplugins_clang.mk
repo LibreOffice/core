@@ -103,6 +103,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/unoquery \
     compilerplugins/clang/test/unreffun \
     compilerplugins/clang/test/unsignedcompare \
+    compilerplugins/clang/test/unusedcapturedefault \
     compilerplugins/clang/test/unusedenumconstants \
     compilerplugins/clang/test/unusedfields \
     compilerplugins/clang/test/unusedindex \

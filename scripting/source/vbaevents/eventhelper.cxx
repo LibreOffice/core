@@ -262,7 +262,7 @@ static TranslatePropMap aTranslatePropMap_Impl[] =
 
 static EventInfoHash& getEventTransInfo()
 {
-    static EventInfoHash eventTransInfo = [&]()
+    static EventInfoHash eventTransInfo = []()
     {
         EventInfoHash tmp;
         OUString sEventInfo;

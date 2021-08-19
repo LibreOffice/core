@@ -93,7 +93,7 @@ namespace xmloff
             for ( pEnd = aControlStyleProperties; pEnd->msApiName; ++pEnd)
                 ;
             assert( ::std::is_sorted(aControlStyleProperties, pEnd,
-                                    [&](const XMLPropertyMapEntry& _rLeft, const XMLPropertyMapEntry& _rRight)
+                                    [](const XMLPropertyMapEntry& _rLeft, const XMLPropertyMapEntry& _rRight)
                                     { return strcmp(_rLeft.msApiName, _rRight.msApiName) < 0; }) );
             bSorted = true;
         }

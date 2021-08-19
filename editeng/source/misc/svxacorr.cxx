@@ -242,7 +242,7 @@ static TransliterationWrapper& GetIgnoreTranslWrapper()
 }
 static CollatorWrapper& GetCollatorWrapper()
 {
-    static CollatorWrapper aCollWrp = [&]()
+    static CollatorWrapper aCollWrp = []()
     {
         CollatorWrapper tmp( ::comphelper::getProcessComponentContext() );
         tmp.loadDefaultCollator( GetAppLang().getLocale(), 0 );

@@ -38,7 +38,7 @@ sd_DrawingDocument_get_implementation(
     SdDLL::Init();
 
     css::uno::Reference<css::uno::XInterface> xInterface = sfx2::createSfxModelInstance(args,
-        [&](SfxModelFlags _nCreationFlags)
+        [](SfxModelFlags _nCreationFlags)
         {
             SfxObjectShell* pShell = new ::sd::GraphicDocShell( _nCreationFlags );
             return uno::Reference< uno::XInterface >( pShell->GetModel() );
@@ -59,7 +59,7 @@ sd_PresentationDocument_get_implementation(
     SdDLL::Init();
 
     css::uno::Reference<css::uno::XInterface> xInterface = sfx2::createSfxModelInstance(args,
-        [&](SfxModelFlags _nCreationFlags)
+        [](SfxModelFlags _nCreationFlags)
         {
             SfxObjectShell* pShell =
                 new ::sd::DrawDocShell(

@@ -1441,7 +1441,7 @@ void SAL_CALL Desktop::getFastPropertyValue( css::uno::Any& aValue  ,
 ::cppu::IPropertyArrayHelper& SAL_CALL Desktop::getInfoHelper()
 {
     static cppu::OPropertyArrayHelper HELPER =
-        [&] () {
+        [] () {
             return cppu::OPropertyArrayHelper {
                 {{"ActiveFrame", PropHandle::ActiveFrame,
                   cppu::UnoType<css::lang::XComponent>::get(),

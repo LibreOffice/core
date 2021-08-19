@@ -850,7 +850,7 @@ void TPGalleryThemeProperties::TakeFiles()
     {
         auto xTakeProgress = std::make_shared<TakeProgress>(GetFrameWeld(), this);
         xTakeProgress->LaunchThread();
-        weld::DialogController::runAsync(xTakeProgress, [=](sal_Int32 /*nResult*/) {
+        weld::DialogController::runAsync(xTakeProgress, [](sal_Int32 /*nResult*/) {
             /* no postprocessing needed, pTakeProgress
                will be disposed in TakeProgress::CleanupHdl */
         });

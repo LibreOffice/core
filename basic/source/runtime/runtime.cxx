@@ -1372,7 +1372,7 @@ void SbiRuntime::StepCompare( SbxOperator eOp )
     // I dumbly follow the pattern :-/
     if ( bVBAEnabled && ( p1->IsNull() || p2->IsNull() ) )
     {
-        static SbxVariable* pNULL = [&]() {
+        static SbxVariable* pNULL = []() {
             SbxVariable* p = new SbxVariable;
             p->PutNull();
             p->AddFirstRef();

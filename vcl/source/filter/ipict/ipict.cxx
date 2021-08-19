@@ -312,7 +312,7 @@ static void SetByte(sal_uInt16& nx, sal_uInt16 ny, vcl::bitmap::RawBitmap& rBitm
 
 //=================== methods of PictReader ==============================
 rtl_TextEncoding PictReader::GetTextEncoding (sal_uInt16 fId) {
-  static rtl_TextEncoding enc = [&]()
+  static rtl_TextEncoding enc = []()
   {
     rtl_TextEncoding def = osl_getThreadTextEncoding();
     // we keep osl_getThreadTextEncoding only if it is a mac encoding
