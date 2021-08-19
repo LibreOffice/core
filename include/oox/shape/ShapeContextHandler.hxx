@@ -91,7 +91,7 @@ public:
 
     void setRelationFragmentPath(const OUString & the_value);
 
-    sal_Int32 getStartToken();
+    sal_Int32 getStartToken() const;
     void setStartToken( sal_Int32 _starttoken );
 
     void setPosition(const css::awt::Point& rPosition);
@@ -102,7 +102,7 @@ public:
     void setGraphicMapper(css::uno::Reference<css::graphic::XGraphicMapper> const & rGraphicMapper);
 
     void setTheme(const oox::drawingml::ThemePtr& pTheme) { mpThemePtr = pTheme; }
-    const oox::drawingml::ThemePtr& getTheme() { return mpThemePtr; }
+    const oox::drawingml::ThemePtr& getTheme() const { return mpThemePtr; }
 
 private:
     ShapeContextHandler(ShapeContextHandler const &) = delete;

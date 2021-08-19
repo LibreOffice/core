@@ -531,7 +531,7 @@ void ShapeContextHandler::setRelationFragmentPath(const OUString & the_value)
     msRelationFragmentPath = the_value;
 }
 
-sal_Int32 ShapeContextHandler::getStartToken()
+sal_Int32 ShapeContextHandler::getStartToken() const
 {
     return mnStartToken;
 }

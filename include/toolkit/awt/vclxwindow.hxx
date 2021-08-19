@@ -137,7 +137,7 @@ public:
 
     void    notifyWindowRemoved( vcl::Window const & _rWindow );
 
-    bool IsDisposed();
+    bool IsDisposed() const;
 
     // css::lang::XUnoTunnel
     UNO3_GETIMPLEMENTATION_DECL(VCLXWindow)

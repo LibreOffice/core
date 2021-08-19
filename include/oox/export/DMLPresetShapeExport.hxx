@@ -97,19 +97,20 @@ private:
     typedef AdjustmentPointValueBase YAdjustmentValue;
 
     // Returns true, if the shape has adjusting points
-    bool HasHandleValue();
+    bool HasHandleValue() const;
 
     // Returns true if the shape flipped.
-    bool IsXFlipped() { return m_bIsFlipped.first; };
-    bool IsYFlipped() { return m_bIsFlipped.second; };
+    bool IsXFlipped() const { return m_bIsFlipped.first; };
+    bool IsYFlipped() const { return m_bIsFlipped.second; };
 
     // Returns with the shape type, like triangle for example
-    const OUString& GetShapeType();
+    const OUString& GetShapeType() const;
     // Returns with the handle points
-    const css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>& GetHandleValues();
+    const css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>&
+    GetHandleValues() const;
     // Returns with the adjustment values
     const css::uno::Sequence<css::drawing::EnhancedCustomShapeAdjustmentValue>&
-    GetAdjustmentValues();
+    GetAdjustmentValues() const;
     // Returns with the raw value of the given property of the shape geometry.
     css::uno::Any GetHandleValueOfModificationPoint(sal_Int32 nPoint, std::u16string_view sType);
     // Returns with the appropriate value of the handle point.

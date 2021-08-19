@@ -389,7 +389,7 @@ public:
 
     // Freemium view settings
     void setFreemiumView(bool isFreemium) { mbLOKIsFreemiumView = isFreemium; }
-    bool isFreemiumView() { return mbLOKIsFreemiumView; }
+    bool isFreemiumView() const { return mbLOKIsFreemiumView; }
 };
 
 

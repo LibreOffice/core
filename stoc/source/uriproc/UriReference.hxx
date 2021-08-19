@@ -46,19 +46,19 @@ public:
     const OUString& getScheme() const { return m_scheme;}
 
     /// @throws css::uno::RuntimeException
-    OUString getSchemeSpecificPart();
+    OUString getSchemeSpecificPart() const;
 
     /// @throws css::uno::RuntimeException
-    bool isHierarchical();
+    bool isHierarchical() const;
 
     /// @throws css::uno::RuntimeException
-    bool hasAuthority();
+    bool hasAuthority() const;
 
     /// @throws css::uno::RuntimeException
-    const OUString& getAuthority();
+    const OUString& getAuthority() const;
 
     /// @throws css::uno::RuntimeException
-    const OUString& getPath();
+    const OUString& getPath() const;
 
     /// @throws css::uno::RuntimeException
     bool hasRelativePath();
@@ -70,10 +70,10 @@ public:
     OUString getPathSegment(sal_Int32 index);
 
     /// @throws css::uno::RuntimeException
-    bool hasQuery();
+    bool hasQuery() const;
 
     /// @throws css::uno::RuntimeException
-    const OUString& getQuery();
+    const OUString& getQuery() const;
 
     /// @throws css::uno::RuntimeException
     bool hasFragment();

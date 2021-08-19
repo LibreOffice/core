@@ -94,7 +94,7 @@ public:
 
     /** Checks out if parse was a success
      */
-    bool getSuccess() { return m_bSuccess; }
+    bool getSuccess() const { return m_bSuccess; }
 
 public:
     /** Handles an error on the mathml structure

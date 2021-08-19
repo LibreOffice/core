@@ -86,7 +86,7 @@ public:
     // Return whether treeview is visible
     // It is used in StyleList's UpdateStyles_Hdl
     // It is used to defaultly set the hierarchical view
-    bool IsTreeView() { return m_xTreeBox->get_visible(); }
+    bool IsTreeView() const { return m_xTreeBox->get_visible(); }
 
     // Helper function: Access to the current family item
     // Used in Dialog's updateStyleHandler, Execute_Impl etc...

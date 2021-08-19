@@ -194,7 +194,7 @@ public:
 
     // This function return the value of bUpdate in Stylelist
     // This value is used in StyleList's Notify
-    bool GetNotifyUpdate() { return bUpdate; }
+    bool GetNotifyUpdate() const { return bUpdate; }
     // This function sets the value of bUpdate in Dialog
     // This function is used in StyleList's Notify to update the value of bUpdate when required
     void SetNotifyupdate(bool b) { bUpdate = b; }
