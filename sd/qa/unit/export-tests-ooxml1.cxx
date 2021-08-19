@@ -992,26 +992,26 @@ void SdOOXMLExportTest1::testTableCellBorder()
     sal_Int32 nLeftBorder = aBorderLine.LineWidth * 2;
     nLeftBorder = oox::drawingml::convertHmmToEmu( nLeftBorder );
     CPPUNIT_ASSERT(nLeftBorder);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xb0f0), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(Color(0xb0f0), aBorderLine.Color);
 
     xCellPropSet->getPropertyValue("RightBorder") >>= aBorderLine;
     sal_Int32 nRightBorder = aBorderLine.LineWidth * 2;
     nRightBorder = oox::drawingml::convertHmmToEmu( nRightBorder );
     CPPUNIT_ASSERT(nRightBorder);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aBorderLine.Color);
 
     xCellPropSet->getPropertyValue("TopBorder") >>= aBorderLine;
     sal_Int32 nTopBorder = aBorderLine.LineWidth * 2;
     nTopBorder = oox::drawingml::convertHmmToEmu( nTopBorder );
     CPPUNIT_ASSERT(nTopBorder);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xb0f0), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(Color(0xb0f0), aBorderLine.Color);
 
 
     xCellPropSet->getPropertyValue("BottomBorder") >>= aBorderLine;
     sal_Int32 nBottomBorder = aBorderLine.LineWidth * 2;
     nBottomBorder = oox::drawingml::convertHmmToEmu( nBottomBorder );
     CPPUNIT_ASSERT(nBottomBorder);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xb0f0), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(Color(0xb0f0), aBorderLine.Color);
 
     xDocShRef->DoClose();
 }
@@ -1139,8 +1139,8 @@ void SdOOXMLExportTest1::testTdf94238()
     // Without the accompanying fix in place, this test would have failed with
     // 'Expected: 0, Actual  : 10592673', i.e. the start color of the gradient
     // was incorrect.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x0), aGradient.StartColor);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x8B8B8B), aGradient.EndColor);
+    CPPUNIT_ASSERT_EQUAL(static_cast<Color>(0x0), aGradient.StartColor);
+    CPPUNIT_ASSERT_EQUAL(static_cast<Color>(0x8B8B8B), aGradient.EndColor);
 
     xDocShRef->DoClose();
 }
@@ -1436,8 +1436,8 @@ void SdOOXMLExportTest1::testTdf128345GradientAxial()
 
     awt::Gradient aTransparenceGradient;
     xShapePropSet->getPropertyValue("FillTransparenceGradient") >>= aTransparenceGradient;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x000000), aTransparenceGradient.StartColor);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), aTransparenceGradient.EndColor);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, aTransparenceGradient.StartColor);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aTransparenceGradient.EndColor);
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aTransparenceGradient.Style);
 
     xDocShRef->DoClose();
