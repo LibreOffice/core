@@ -26,8 +26,6 @@
 #include <vcl/salgtype.hxx>
 #include <vcl/vclenum.hxx>
 
-#include "backend/BackendCapabilities.hxx"
-
 #include "displayconnectiondispatch.hxx"
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -80,9 +78,16 @@ private:
     const std::unique_ptr<comphelper::SolarMutex> m_pYieldMutex;
     css::uno::Reference<css::uno::XInterface> m_clipboard;
 
+protected:
+    bool m_bSupportsBitmap32 = false;
+    bool m_bSupportsOpenGL = true;
+
 public:
     SalInstance(std::unique_ptr<comphelper::SolarMutex> pMutex);
     virtual ~SalInstance();
+
+    bool supportsBitmap32() const { return m_bSupportsBitmap32; }
+    bool supportsOpenGL() const { return m_bSupportsOpenGL; }
 
     //called directly after Application::Init
     virtual void            AfterAppInit() {}
@@ -128,11 +133,6 @@ public:
     virtual SalSystem*      CreateSalSystem() = 0;
     // SalBitmap
     virtual std::shared_ptr<SalBitmap> CreateSalBitmap() = 0;
-    // BackendCapabilities
-    virtual std::shared_ptr<vcl::BackendCapabilities> GetBackendCapabilities()
-    {
-        return std::make_shared<vcl::BackendCapabilities>();
-    }
 
     // YieldMutex
     comphelper::SolarMutex* GetYieldMutex();
@@ -158,7 +158,7 @@ public:
     // may return NULL to disable session management, only used by X11 backend
     virtual std::unique_ptr<SalSession> CreateSalSession();
 
-    virtual OpenGLContext*  CreateOpenGLContext() = 0;
+    virtual OpenGLContext*  CreateOpenGLContext();
 
     virtual weld::Builder* CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile);
     virtual weld::Builder* CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,

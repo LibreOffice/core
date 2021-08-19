@@ -144,8 +144,7 @@ void BitmapRenderTest::testDrawAlphaBitmapEx()
     aPngReader.read(aBitmapEx);
 
     // Check backend capabilities, if the backend support 32-bit bitmap
-    auto pBackendCapabilities = ImplGetSVData()->mpDefInst->GetBackendCapabilities();
-    if (pBackendCapabilities->mbSupportsBitmap32)
+    if (ImplGetSVData()->mpDefInst->supportsBitmap32())
     {
         CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N32_BPP, aBitmapEx.GetBitmap().getPixelFormat());
     }

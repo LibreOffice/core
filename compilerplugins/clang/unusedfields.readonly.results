@@ -686,8 +686,6 @@ unotools/source/config/pathoptions.cxx:85
     SvtPathOptions_Impl m_aEmptyString class rtl::OUString
 unotools/source/config/saveopt.cxx:83
     (anonymous namespace)::SvtSaveOptions_Impl bROUserAutoSave _Bool
-vcl/inc/backend/BackendCapabilities.hxx:17
-    vcl::BackendCapabilities mbSupportsBitmap32 _Bool
 vcl/inc/bitmap/BitmapFastScaleFilter.hxx:31
     BitmapFastScaleFilter maSize class Size
 vcl/inc/ppdparser.hxx:131
