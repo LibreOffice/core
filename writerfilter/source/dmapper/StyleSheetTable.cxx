@@ -1108,27 +1108,6 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                                     uno::makeAny( sal_Int16( pStyleSheetProperties->GetOutlineLevel( ) + 1 ) ),
                                     beans::PropertyState_DIRECT_VALUE );
                             aPropValues.push_back(aLvlVal);
-
-                            // tdf#95495 missing list level settings in custom styles in old DOCX: apply settings of the parent style
-                            if (pStyleSheetProperties->GetListLevel() == -1 && pStyleSheetProperties->GetOutlineLevel() == -1)
-                            {
-                                const beans::PropertyValues aPropGrabBag = pEntry->GetInteropGrabBagSeq();
-                                for (const auto& rVal : aPropGrabBag)
-                                {
-                                    if (rVal.Name == "customStyle" && rVal.Value == true)
-                                    {
-                                        OUString sBaseId = pEntry->sBaseStyleIdentifier;
-                                        auto findIt = m_pImpl->m_aStyleSheetEntriesMap.find(sBaseId);
-                                        if (findIt != m_pImpl->m_aStyleSheetEntriesMap.end())
-                                        {
-                                            const auto& aSheetProps  = findIt->second;
-                                            StyleSheetPropertyMap& rStyleSheetProps = *aSheetProps->pProperties;
-                                            pStyleSheetProperties->SetListLevel(rStyleSheetProps.GetListLevel());
-                                            pStyleSheetProperties->SetOutlineLevel(rStyleSheetProps.GetOutlineLevel());
-                                        }
-                                    }
-                                }
-                            }
                         }
 
                         uno::Reference< beans::XPropertyState >xState( xStyle, uno::UNO_QUERY_THROW );
