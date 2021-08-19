@@ -235,11 +235,7 @@ void Components::initGlobalBroadcaster(
     //TODO: Iterate only over roots w/ listeners:
     for (auto const& elemRoot : roots_)
     {
-        rtl::Reference< RootAccess > root;
-        if (elemRoot->acquireCounting() > 1) {
-            root.set(elemRoot); // must not throw
-        }
-        elemRoot->releaseNondeleting();
+        rtl::Reference< RootAccess > root(elemRoot);
         if (root.is()) {
             if (root != exclude) {
                 std::vector<OUString> path(root->getAbsolutePath());
