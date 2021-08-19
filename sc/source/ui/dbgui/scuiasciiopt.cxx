@@ -801,11 +801,10 @@ IMPL_LINK_NOARG(ScImportAsciiDlg, UpdateTextHdl, ScCsvTableBox&, void)
     // when the dialog wasn't already presented to the user.
     // As a side effect this has the benefit that the check is only done on the
     // first set of visible lines.
-    sal_Unicode cDetectSep = ((mbDetectSep && !mxRbFixed->get_active()
+    mbDetectSep = (mbDetectSep && !mxRbFixed->get_active()
                 && (!mxCkbTab->get_active() || !mxCkbSemicolon->get_active()
-                    || !mxCkbComma->get_active() || !mxCkbSpace->get_active())) ? 0 : 0xffff);
-    if (cDetectSep == 0xffff)
-        mbDetectSep = false;
+                    || !mxCkbComma->get_active() || !mxCkbSpace->get_active()));
+    sal_Unicode cDetectSep = (mbDetectSep ? 0 : 0xffff);
 
     sal_Int32 nBaseLine = mxTableBox->GetGrid().GetFirstVisLine();
     sal_Int32 nRead = mxTableBox->GetGrid().GetVisLineCount();
