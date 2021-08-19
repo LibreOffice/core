@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f75416e0_ca30fff5",
+        "filename": "sw/source/uibase/uiview/viewtab.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1119,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-19T13:25:53Z",
+      "side": 1,
+      "message": "The opening brace should be on the separate line, like line 1110, etc 😊",
+      "revId": "fcbee85072a23aa923345f4881097f14ff205e70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
