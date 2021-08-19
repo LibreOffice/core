@@ -121,14 +121,6 @@ bool isValidName(OUString const & name, bool setMember) {
 
 }
 
-oslInterlockedCount Access::acquireCounting() {
-    return osl_atomic_increment(&m_refCount);
-}
-
-void Access::releaseNondeleting() {
-    osl_atomic_decrement(&m_refCount);
-}
-
 bool Access::isValue() {
     rtl::Reference< Node > p(getNode());
     switch (p->kind()) {
@@ -159,7 +151,12 @@ void Access::markChildAsModified(rtl::Reference< ChildAccess > const & child) {
 }
 
 void Access::releaseChild(OUString const & name) {
-    cachedChildren_.erase(name);
+    auto it = cachedChildren_.find(name);
+    if (it != cachedChildren_.end())
+    {
+        it->second->clearParent();
+        cachedChildren_.erase(it);
+    }
 }
 
 void Access::initBroadcaster(
@@ -275,18 +272,24 @@ void Access::dispose() {
     Broadcaster bc;
     {
         osl::MutexGuard g(*lock_);
+        if (disposed_) {
+            return;
+        }
+        // set flag early to protect against re-entrance
+        disposed_ = true;
         checkLocalizedPropertyAccess();
         if (getParentAccess().is()) {
             throw css::uno::RuntimeException(
                 "configmgr dispose inappropriate Access",
                 static_cast< cppu::OWeakObject * >(this));
         }
-        if (disposed_) {
-            return;
-        }
         initDisposeBroadcaster(&bc);
         clearListeners();
-        disposed_ = true;
+        // prevent memory leaks because of the parent<->child references
+        modifiedChildren_.clear();
+        for (auto& rPair : cachedChildren_)
+            rPair.second->clearParent();
+        cachedChildren_.clear();
     }
     bc.send();
 }
@@ -1940,7 +1943,7 @@ rtl::Reference< ChildAccess > Access::createUnmodifiedChild(
 {
     rtl::Reference child(
         new ChildAccess(components_, getRootAccess(), this, name, node));
-    cachedChildren_[name] = child.get();
+    cachedChildren_[name] = child;
     return child;
 }
 
@@ -1952,17 +1955,11 @@ rtl::Reference< ChildAccess > Access::getUnmodifiedChild(
     if (!node.is()) {
         return rtl::Reference< ChildAccess >();
     }
-    WeakChildMap::iterator i(cachedChildren_.find(name));
+    ChildMap::iterator i(cachedChildren_.find(name));
     if (i != cachedChildren_.end()) {
-        rtl::Reference< ChildAccess > child;
-        if (i->second->acquireCounting() > 1) {
-            child.set(i->second); // must not throw
-        }
-        i->second->releaseNondeleting();
-        if (child.is()) {
-            child->setNode(node);
-            return child;
-        }
+        rtl::Reference< ChildAccess > child = i->second;
+        child->setNode(node);
+        return child;
     }
     return createUnmodifiedChild(name,node);
 }

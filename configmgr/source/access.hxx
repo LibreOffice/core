@@ -98,10 +98,6 @@ class Access:
     public css::lang::XSingleServiceFactory
 {
 public:
-    oslInterlockedCount acquireCounting();
-
-    void releaseNondeleting();
-
     bool isValue();
 
     void markChildAsModified(rtl::Reference< ChildAccess > const & child);
@@ -386,7 +382,7 @@ private:
 
     rtl::Reference< Access > getNotificationRoot();
 
-    typedef config_map< ChildAccess * > WeakChildMap;
+    typedef config_map< rtl::Reference<ChildAccess> > ChildMap;
 
     typedef
         std::multiset<
@@ -426,7 +422,7 @@ private:
 
     Components & components_;
     ModifiedChildren modifiedChildren_;
-    WeakChildMap cachedChildren_;
+    ChildMap cachedChildren_;
     DisposeListeners disposeListeners_;
     ContainerListeners containerListeners_;
     PropertyChangeListeners propertyChangeListeners_;

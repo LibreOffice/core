@@ -13,6 +13,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/NotInitializedException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -38,7 +39,7 @@ namespace {
 class Service:
     public cppu::WeakImplHelper<
         css::lang::XServiceInfo, css::lang::XInitialization,
-        css::configuration::XReadWriteAccess >
+        css::configuration::XReadWriteAccess, css::lang::XComponent >
 {
 public:
     explicit Service(
@@ -93,6 +94,16 @@ private:
         OUString const & aHierarchicalName) override
     { return getRoot()->hasPropertyByHierarchicalName(aHierarchicalName); }
 
+    virtual void SAL_CALL dispose() override;
+
+    virtual void SAL_CALL addEventListener(
+        css::uno::Reference< css::lang::XEventListener >
+            const & xListener) override;
+
+    virtual void SAL_CALL removeEventListener(
+        css::uno::Reference< css::lang::XEventListener >
+            const & aListener) override;
+
     rtl::Reference< RootAccess > getRoot();
 
     css::uno::Reference< css::uno::XComponentContext > context_;
@@ -127,6 +138,21 @@ rtl::Reference< RootAccess > Service::getRoot() {
             "not initialized", static_cast< cppu::OWeakObject * >(this));
     }
     return root_;
+}
+
+void Service::dispose() {
+    osl::MutexGuard g(mutex_);
+    root_.clear();
+}
+
+void Service::addEventListener(css::uno::Reference< css::lang::XEventListener > const &)
+{
+    //not supported
+}
+
+void Service::removeEventListener(css::uno::Reference< css::lang::XEventListener > const &)
+{
+    //not supported
 }
 
 }

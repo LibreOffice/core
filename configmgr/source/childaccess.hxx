@@ -110,6 +110,10 @@ public:
 
     void commitChanges(bool valid, Modifications * globalModifications);
 
+    virtual void SAL_CALL dispose() override;
+
+    void clearParent();
+
 private:
     virtual ~ChildAccess() override;
 

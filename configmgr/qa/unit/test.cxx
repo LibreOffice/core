@@ -57,6 +57,7 @@ namespace {
 class Test: public CppUnit::TestFixture {
 public:
     virtual void setUp() override;
+    virtual void tearDown() override;
 
     void testKeyFetch();
     void testKeySet();
@@ -198,6 +199,15 @@ void Test::setUp()
 {
     provider_ = css::configuration::theDefaultProvider::get(
                         comphelper::getProcessComponentContext() );
+}
+
+void Test::tearDown()
+{
+    if (provider_)
+    {
+        css::uno::Reference<css::lang::XComponent>(provider_, css::uno::UNO_QUERY_THROW)->dispose();
+        provider_.clear();
+    }
 }
 
 void Test::testKeyFetch()

@@ -158,6 +158,11 @@ void ChildAccess::setParent(css::uno::Reference< css::uno::XInterface > const &)
         "setParent", static_cast< cppu::OWeakObject * >(this));
 }
 
+void ChildAccess::clearParent()
+{
+    parent_.clear();
+}
+
 sal_Int64 ChildAccess::getSomething(
     css::uno::Sequence< sal_Int8 > const & aIdentifier)
 {
@@ -180,9 +185,11 @@ void ChildAccess::bind(
 }
 
 void ChildAccess::unbind() noexcept {
-    assert(parent_.is());
-    parent_->releaseChild(name_);
-    parent_.clear();
+    if (parent_)
+    {
+        parent_->releaseChild(name_);
+        parent_.clear();
+    }
     inTransaction_ = true;
 }
 
@@ -310,10 +317,6 @@ void ChildAccess::commitChanges(bool valid, Modifications * globalModifications)
 }
 
 ChildAccess::~ChildAccess() {
-    osl::MutexGuard g(*lock_);
-    if (parent_.is()) {
-        parent_->releaseChild(name_);
-    }
 }
 
 void ChildAccess::addTypes(std::vector< css::uno::Type > * types) const {
@@ -343,6 +346,19 @@ css::uno::Any ChildAccess::queryInterface(css::uno::Type const & aType)
         : cppu::queryInterface(
             aType, static_cast< css::container::XChild * >(this),
             static_cast< css::lang::XUnoTunnel * >(this));
+}
+
+void ChildAccess::dispose()
+{
+    // unusually, we need to dispose the parent first, because it will try to use the root_ and parent_ fields
+    Access::dispose();
+    {
+        osl::MutexGuard g(*lock_);
+        if (parent_.is())
+            parent_->releaseChild(name_);
+        root_.clear();
+        parent_.clear();
+    }
 }
 
 }
