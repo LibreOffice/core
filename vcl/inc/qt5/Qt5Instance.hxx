@@ -133,7 +133,10 @@ public:
     virtual bool DoYield(bool bWait, bool bHandleAllCurrentEvents) override;
     virtual bool AnyInput(VclInputFlags nType) override;
 
+// so we fall back to the default abort, instead of duplicating it...
+#ifndef EMSCRIPTEN
     virtual OpenGLContext* CreateOpenGLContext() override;
+#endif
 
     virtual OUString GetConnectionIdentifier() override;
 
