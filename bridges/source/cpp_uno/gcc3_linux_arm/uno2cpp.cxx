@@ -251,7 +251,7 @@ void callVirtualMethod(
     {
         // 8-bytes aligned
         sal_uInt32 nStackBytes = ( ( nStack + 1 ) >> 1 ) * 8;
-        sal_uInt32 *stack = static_cast<sal_uInt32 *>(__builtin_alloca( nStackBytes * sizeof(sal_uInt32)));
+        sal_uInt32 *stack = static_cast<sal_uInt32 *>(__builtin_alloca( nStackBytes ));
         memcpy( stack, pStack, nStackBytes );
     }
 
@@ -298,9 +298,9 @@ void callVirtualMethod(
 
 #define INSERT_INT32( pSV, nr, pGPR, pDS ) \
         if ( nr < arm::MAX_GPR_REGS ) \
-                pGPR[nr++] = reinterpret_cast<sal_uInt32>( pSV ); \
+                pGPR[nr++] = *reinterpret_cast<const sal_uInt32*>( pSV ); \
         else \
-                *pDS++ = reinterpret_cast<sal_uInt32>( pSV );
+                *pDS++ = *reinterpret_cast<const sal_uInt32*>( pSV );
 
 #ifdef __ARM_EABI__
 #define INSERT_INT64( pSV, nr, pGPR, pDS, pStart ) \
@@ -310,8 +310,8 @@ void callVirtualMethod(
         } \
         if ( nr < arm::MAX_GPR_REGS ) \
         { \
-                *reinterpret_cast<sal_uInt32 *>(pGPR[nr++]) = *static_cast<sal_uInt32 *>( pSV ); \
-                *reinterpret_cast<sal_uInt32 *>(pGPR[nr++]) = *(static_cast<sal_uInt32 *>( pSV ) + 1); \
+                pGPR[nr++] = *static_cast<const sal_uInt32 *>( pSV ); \
+                pGPR[nr++] = *(static_cast<const sal_uInt32 *>( pSV ) + 1); \
         } \
         else \
     { \
@@ -319,8 +319,8 @@ void callVirtualMethod(
                 { \
                     ++pDS; \
                 } \
-                *reinterpret_cast<sal_uInt32 *>(*pDS++) = static_cast<sal_uInt32 *>( pSV )[0]; \
-                *reinterpret_cast<sal_uInt32 *>(*pDS++) = static_cast<sal_uInt32 *>( pSV )[1]; \
+                *pDS++ = static_cast<sal_uInt32 *>( pSV )[0]; \
+                *pDS++ = static_cast<sal_uInt32 *>( pSV )[1]; \
     }
 #else
 #define INSERT_INT64( pSV, nr, pGPR, pDS, pStart ) \
