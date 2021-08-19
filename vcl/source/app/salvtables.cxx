@@ -123,6 +123,12 @@ void SalInstance::AcquireYieldMutex(sal_uInt32 nCount) { m_pYieldMutex->acquire(
 
 std::unique_ptr<SalSession> SalInstance::CreateSalSession() { return nullptr; }
 
+OpenGLContext* SalInstance::CreateOpenGLContext()
+{
+    assert(!m_bSupportsOpenGL);
+    std::abort();
+}
+
 std::unique_ptr<SalMenu> SalInstance::CreateMenu(bool, Menu*)
 {
     // default: no native menus

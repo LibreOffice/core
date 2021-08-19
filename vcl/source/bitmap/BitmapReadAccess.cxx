@@ -50,11 +50,7 @@ BitmapReadAccess::BitmapReadAccess(Bitmap& rBitmap, BitmapAccessMode nMode)
 
 BitmapReadAccess::~BitmapReadAccess() {}
 
-bool Bitmap32IsPreMultipled()
-{
-    auto pBackendCapabilities = ImplGetSVData()->mpDefInst->GetBackendCapabilities();
-    return pBackendCapabilities->mbSupportsBitmap32;
-}
+bool Bitmap32IsPreMultipled() { return ImplGetSVData()->mpDefInst->supportsBitmap32(); }
 
 FncGetPixel BitmapReadAccess::GetPixelFunction(ScanlineFormat nFormat)
 {

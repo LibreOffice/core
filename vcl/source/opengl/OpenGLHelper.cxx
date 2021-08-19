@@ -38,6 +38,8 @@
 #include <watchdog.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 #include <vcl/glxtestprocess.hxx>
+#include <salinst.hxx>
+#include <svdata.hxx>
 
 #if USING_X11
 #include <opengl/x11/X11DeviceInfo.hxx>
@@ -789,6 +791,8 @@ bool OpenGLHelper::isDeviceDenylisted()
 bool OpenGLHelper::supportsOpenGL()
 {
     if( getenv("SAL_DISABLEGL") != nullptr )
+        return false;
+    if (!ImplGetSVData()->mpDefInst->supportsOpenGL())
         return false;
     if( isDeviceDenylisted())
         return false;

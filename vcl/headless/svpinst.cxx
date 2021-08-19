@@ -35,9 +35,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/inputtypes.hxx>
 #include <vcl/lok.hxx>
-#if HAVE_FEATURE_UI
-# include <vcl/opengl/OpenGLContext.hxx>
-#endif
 
 #include <headless/svpinst.hxx>
 #include <headless/svpframe.hxx>
@@ -89,6 +86,8 @@ SvpSalInstance::SvpSalInstance( std::unique_ptr<SalYieldMutex> pMutex )
 #if !defined(ANDROID) && !defined(IOS)
     pthread_atfork(nullptr, nullptr, atfork_child);
 #endif
+
+    m_bSupportsOpenGL = false;
 }
 
 SvpSalInstance::~SvpSalInstance()
@@ -590,52 +589,6 @@ void SvpSalInstance::StartTimer( sal_uInt64 nMS )
 void SvpSalInstance::AddToRecentDocumentList(const OUString&, const OUString&, const OUString&)
 {
 }
-
-std::shared_ptr<vcl::BackendCapabilities> SvpSalInstance::GetBackendCapabilities()
-{
-    auto pBackendCapabilities = SalInstance::GetBackendCapabilities();
-#if 0 // LO code is not yet bitmap32-ready.
-#ifndef IOS
-    // Note: This code is used for iOS, too. Let's not use 32-bit bitmaps with included alpha on iOS for now.
-    pBackendCapabilities->mbSupportsBitmap32 = true;
-#endif
-#endif
-    return pBackendCapabilities;
-}
-
-//obviously doesn't actually do anything, it's just a nonfunctional stub
-
-#if HAVE_FEATURE_UI
-
-namespace {
-
-class SvpOpenGLContext : public OpenGLContext
-{
-    GLWindow m_aGLWin;
-private:
-    virtual const GLWindow& getOpenGLWindow() const override { return m_aGLWin; }
-    virtual GLWindow& getModifiableOpenGLWindow() override { return m_aGLWin; }
-};
-
-}
-
-OpenGLContext* SvpSalInstance::CreateOpenGLContext()
-{
-    return new SvpOpenGLContext;
-}
-
-#else
-
-class SvpOpenGLContext
-{
-};
-
-OpenGLContext* SvpSalInstance::CreateOpenGLContext()
-{
-    return nullptr;
-}
-
-#endif
 
 SvpSalTimer::~SvpSalTimer()
 {

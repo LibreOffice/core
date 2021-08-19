@@ -976,9 +976,6 @@ vcl/headless/svpgdi.cxx:598
 vcl/headless/svpgdi.cxx:1641
     SvpSalGraphics::drawPolyLine bDoDirectCairoStroke
     1
-vcl/inc/backend/BackendCapabilities.hxx:18
-    vcl::BackendCapabilities mbSupportsBitmap32
-    0
 vcl/inc/canvasbitmap.hxx:53
     vcl::unotools::VclCanvasBitmap m_nEndianness
     0
