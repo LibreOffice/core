@@ -8110,7 +8110,6 @@ sc/qa/unit/parallelism.cxx
 sc/qa/unit/range.cxx
 sc/qa/unit/rangelst_test.cxx
 sc/qa/unit/screenshots/screenshots.cxx
-sc/qa/unit/subsequent_export-test.cxx
 sc/qa/unit/subsequent_filters-test.cxx
 sc/qa/unit/tiledrendering/tiledrendering.cxx
 sc/qa/unit/ucalc.cxx
