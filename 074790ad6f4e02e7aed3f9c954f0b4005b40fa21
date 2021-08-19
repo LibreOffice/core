@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f02115b_e82c046d",
+        "filename": "stoc/source/uriproc/UriReference.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-19T10:39:28Z",
+      "side": 1,
+      "message": "This (and other similar) comment is obsolete now. (Interesting, why the method is not const?)",
+      "revId": "074790ad6f4e02e7aed3f9c954f0b4005b40fa21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
