@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7924c77a_0ca5d4a1",
+        "filename": "sw/inc/textboxhelper.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-08-19T17:06:26Z",
+      "side": 1,
+      "message": "third",
+      "range": {
+        "startLine": 59,
+        "startChar": 45,
+        "endLine": 59,
+        "endChar": 51
+      },
+      "revId": "e57eb0b6ef427868fd7c40322a2898d5025f8870",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dd6b7c0_79f22282",
+        "filename": "sw/inc/textboxhelper.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-08-19T17:06:26Z",
+      "side": 1,
+      "message": "could you document the new argument, please?",
+      "range": {
+        "startLine": 61,
+        "startChar": 46,
+        "endLine": 61,
+        "endChar": 65
+      },
+      "revId": "e57eb0b6ef427868fd7c40322a2898d5025f8870",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ab14dfa_896ec331",
+        "filename": "sw/inc/textboxhelper.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-08-19T17:06:26Z",
+      "side": 1,
+      "message": "could you document the new argument, please?",
+      "range": {
+        "startLine": 63,
+        "startChar": 58,
+        "endLine": 63,
+        "endChar": 65
+      },
+      "revId": "e57eb0b6ef427868fd7c40322a2898d5025f8870",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e417d8e5_a4013a4b",
+        "filename": "sw/inc/textboxhelper.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-08-19T17:06:26Z",
+      "side": 1,
+      "message": "could you add short comments to the class, please?",
+      "range": {
+        "startLine": 169,
+        "startChar": 0,
+        "endLine": 202,
+        "endChar": 2
+      },
+      "revId": "e57eb0b6ef427868fd7c40322a2898d5025f8870",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fe657a1_845204df",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-08-19T17:06:26Z",
+      "side": 1,
+      "message": "It\u0027s better to remove the dead code. If it\u0027s only commented out temporarily, a comment (with TODO/FIXME) could help the review, too.",
+      "range": {
+        "startLine": 219,
+        "startChar": 0,
+        "endLine": 220,
+        "endChar": 81
+      },
+      "revId": "e57eb0b6ef427868fd7c40322a2898d5025f8870",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3fe6598_83044236",
+        "filename": "sw/source/core/layout/atrfrm.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2559,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-08-19T17:06:26Z",
+      "side": 1,
+      "message": "maybe it\u0027s worth to use a local variable to avoid of the redundant call",
+      "range": {
+        "startLine": 2559,
+        "startChar": 46,
+        "endLine": 2559,
+        "endChar": 65
+      },
+      "revId": "e57eb0b6ef427868fd7c40322a2898d5025f8870",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72e19fea_fff742b6",
+        "filename": "sw/source/core/layout/atrfrm.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2561,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-08-19T17:06:26Z",
+      "side": 1,
+      "message": "delete format after deleting the last textbox",
+      "range": {
+        "startLine": 2561,
+        "startChar": 15,
+        "endLine": 2561,
+        "endChar": 69
+      },
+      "revId": "e57eb0b6ef427868fd7c40322a2898d5025f8870",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
