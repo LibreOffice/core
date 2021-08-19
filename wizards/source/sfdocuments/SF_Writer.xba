@@ -219,6 +219,7 @@ Public Function Methods() As Variant
 	Methods = Array( _
 					&quot;Activate&quot; _
 					, &quot;CloseDocument&quot; _
+					, &quot;ExportAsPDF&quot; _
 					, &quot;Forms&quot; _
 					, &quot;PrintOut&quot; _
 					, &quot;RunCommand&quot; _
@@ -490,6 +491,16 @@ REM ----------------------------------------------------------------------------
 Public Function CloseDocument(Optional ByVal SaveAsk As Variant) As Boolean
 	CloseDocument = [_Super].CloseDocument(SaveAsk)
 End Function   &apos;   SFDocuments.SF_Writer.CloseDocument
+
+REM -----------------------------------------------------------------------------
+Public Function ExportAsPDF(Optional ByVal FileName As Variant _
+							, Optional ByVal Overwrite As Variant _
+							, Optional ByVal Pages As Variant _
+							, Optional ByVal Password As Variant _
+							, Optional ByVal Watermark As Variant _
+							) As Boolean
+	ExportAsPDF = [_Super].ExportAsPDF(FileName, Overwrite, Pages, Password, Watermark)
+End Function   &apos;   SFDocuments.SF_Writer.ExportAsPDF
 
 REM -----------------------------------------------------------------------------
 Public Sub RunCommand(Optional ByVal Command As Variant)

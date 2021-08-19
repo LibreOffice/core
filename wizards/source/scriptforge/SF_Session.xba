@@ -319,6 +319,61 @@ Catch:
 End Function	&apos;	ScriptForge.SF_Session.ExecutePythonScript
 
 REM -----------------------------------------------------------------------------
+Public Function GetPDFExportOptions() As Variant
+&apos;&apos;&apos;	Return the actual values of the PDF export options
+&apos;&apos;&apos;	The PDF options are described on https://wiki.openoffice.org/wiki/API/Tutorials/PDF_export
+&apos;&apos;&apos;	PDF options are set at each use of the Export as ... PDF command by the user and kept
+&apos;&apos;&apos;	permanently until their reset by script or by a new export 
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A ScriptForge dictionary instance listing the 40+ properties and their value
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		Dim dict As Object
+&apos;&apos;&apos;		Set dict = session.GetPDFExportOptions()
+&apos;&apos;&apos;		MsgBox dict.Item(&quot;Quality&quot;)
+
+Dim vDict As Variant				&apos;	Returned value
+Dim oConfig As Object				&apos;	com.sun.star.configuration.ConfigurationProvider
+Dim oNodePath As Object				&apos;	com.sun.star.beans.PropertyValue
+Dim oOptions As Object				&apos;	configmgr.RootAccess
+Dim vOptionNames As Variant			&apos;	Array of PDF options names
+Dim vOptionValues As Variant		&apos;	Array of PDF options values
+Dim i As Long
+
+Const cstThisSub = &quot;Session.GetPDFExportOptions&quot;
+Const cstSubArgs = &quot;&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	Set vDict = Nothing
+
+Check:
+	SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
+
+Try:
+	&apos;	Get the (read-only) internal PDF options
+	Set oConfig = SF_Utils._GetUNOService(&quot;ConfigurationProvider&quot;)
+	Set oNodePath = SF_Utils._MakePropertyValue(&quot;nodepath&quot;, &quot;/org.openoffice.Office.Common/Filter/PDF/Export/&quot;)
+	Set oOptions = oConfig.createInstanceWithArguments(&quot;com.sun.star.configuration.ConfigurationAccess&quot;, Array(oNodePath))
+
+	&apos;	Copy the options into a ScriptForge dictionary
+	Set vDict = CreateScriptService(&quot;dictionary&quot;)
+	vOptionNames = oOptions.getElementNames()
+	vOptionValues = oOptions.getPropertyValues(vOptionNames)
+	&apos;
+	For i = 0 To UBound(vOptionNames)
+		vDict.Add(vOptionNames(i), vOptionValues(i))
+	Next i
+
+
+Finally:
+	GetPDFExportOptions = vDict
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	ScriptForge.SF_Session.GetPDFExportOptions
+
+REM -----------------------------------------------------------------------------
 Public Function GetProperty(Optional ByVal PropertyName As Variant) As Variant
 &apos;&apos;&apos;	Return the actual value of the given property
 &apos;&apos;&apos;	Args:
@@ -664,6 +719,64 @@ CatchMail:
 	SF_Exception.RaiseFatal(SENDMAILERROR)
 	GoTo Finally
 End Sub			&apos;	ScriptForge.SF_Session.SendMail
+
+REM -----------------------------------------------------------------------------
+Public Function SetPDFExportOptions(Optional ByRef PDFOptions As Variant) As Boolean
+&apos;&apos;&apos;	Modify the actual values of the PDF export options from an options dictionary
+&apos;&apos;&apos;	The PDF options are described on https://wiki.openoffice.org/wiki/API/Tutorials/PDF_export
+&apos;&apos;&apos;	PDF options are set at each use of the Export as ... PDF command by the user and kept
+&apos;&apos;&apos;	permanently until their reset by script (like this one) or by a new export
+&apos;&apos;&apos;	The changed options are applicable on any subsequent ExportToPDF user command or to any SaveAsPDF script execution
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		PDFOptions: a ScriptForge dictionary object
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		Dim dict As Object
+&apos;&apos;&apos;		Set dict = session.GetPDFExportOptions()
+&apos;&apos;&apos;		dict.ReplaceItem(&quot;Quality&quot;, 50)
+&apos;&apos;&apos;		session.SetPDFExportOptions(dict)
+
+Dim bSetPDF As Boolean				&apos;	Returned value
+Dim oConfig As Object				&apos;	com.sun.star.configuration.ConfigurationProvider
+Dim oNodePath As Object				&apos;	com.sun.star.beans.PropertyValue
+Dim oOptions As Object				&apos;	configmgr.RootAccess
+Dim vOptionNames As Variant			&apos;	Array of PDF options names
+Dim vOptionValues As Variant		&apos;	Array of PDF options values
+Dim oDict As Object					&apos;	Alias of PDFOptions
+Dim i As Long
+
+Const cstThisSub = &quot;Session.SetPDFExportOptions&quot;
+Const cstSubArgs = &quot;PDFOptions&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bSetPDF = False
+
+Check:
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._Validate(PDFOptions, &quot;PDFOptions&quot;, V_OBJECT, , , &quot;DICTIONARY&quot;) Then GoTo Finally
+	End If
+
+Try:
+	&apos;	Get the (updatable) internal PDF options
+	Set oConfig = SF_Utils._GetUNOService(&quot;ConfigurationProvider&quot;)
+	Set oNodePath = SF_Utils._MakePropertyValue(&quot;nodepath&quot;, &quot;/org.openoffice.Office.Common/Filter/PDF/Export/&quot;)
+	Set oOptions = oConfig.createInstanceWithArguments(&quot;com.sun.star.configuration.ConfigurationUpdateAccess&quot;, Array(oNodePath))
+
+	&apos;	Copy the options from the ScriptForge dictionary in argument to property values
+	Set oDict = PDFOptions
+	oOptions.setPropertyValues(oDict.Keys, oDict.Items)
+	oOptions.commitChanges()
+	
+	bSetPDF = True
+
+Finally:
+	SetPDFExportOptions = bSetPDF
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	ScriptForge.SF_Session.SetPDFExportOptions
 
 REM -----------------------------------------------------------------------------
 Public Function SetProperty(Optional ByVal PropertyName As Variant _
