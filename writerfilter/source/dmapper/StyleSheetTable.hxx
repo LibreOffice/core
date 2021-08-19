@@ -52,6 +52,7 @@ class StyleSheetEntry : public virtual SvRefBase
 public:
     OUString sStyleIdentifierD;   // WW8 name
     bool            bIsDefaultStyle;
+    bool            bAssignedAsChapterNumbering;
     bool            bInvalidHeight;
     bool            bHasUPE; //universal property expansion
     StyleType       nStyleTypeCode; //sgc
@@ -88,6 +89,7 @@ public:
     StyleSheetTable(DomainMapper& rDMapper, css::uno::Reference<css::text::XTextDocument> const& xTextDocument, bool bIsNewDoc);
     virtual ~StyleSheetTable() override;
 
+    void ReApplyInheritedOutlineLevelFromChapterNumbering();
     void ApplyNumberingStyleNameToParaStyles();
     void ApplyStyleSheets( const FontTablePtr& rFontTable );
     StyleSheetEntryPtr FindStyleSheetByISTD(const OUString& sIndex);
