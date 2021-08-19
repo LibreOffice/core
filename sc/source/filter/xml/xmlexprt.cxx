@@ -3458,7 +3458,7 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
             // needs it as if there were no hidden rows or columns. We manipulate the geometry
             // accordingly for writing xml markup and restore geometry later.
             bool bNeedsRestore = false;
-            SdrObject* pObj = GetSdrObjectFromXShape(rShape.xShape);
+            SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rShape.xShape);
             // Remember original geometry
             std::unique_ptr<SdrObjGeoData> pGeoData;
             if (pObj)

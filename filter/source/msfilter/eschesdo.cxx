@@ -250,7 +250,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                     aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );        // no fill
                     aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );        // no linestyle
-                    SdrObject* pObj = GetSdrObjectFromXShape( rObj.GetShapeRef() );
+                    SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rObj.GetShapeRef());
                     if ( pObj )
                     {
                         tools::Rectangle aBound = pObj->GetCurrentBoundRect();

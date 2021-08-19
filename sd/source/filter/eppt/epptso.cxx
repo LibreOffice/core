@@ -1746,7 +1746,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     if ( aPropOpt.CreateGraphicProperties( mXPropSet, "MetaFile", false ) )
                     {
                         aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
-                        SdrObject* pObj = GetSdrObjectFromXShape( mXShape );
+                        SdrObject* pObj = SdrObject::getSdrObjectFromXShape(mXShape);
                         if ( pObj )
                         {
                             ::tools::Rectangle aBound = pObj->GetCurrentBoundRect();
@@ -2458,7 +2458,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 {
                     if (ePageType == MASTER )
                     {
-                        SdrObject* pObj = GetSdrObjectFromXShape( mXShape );
+                        SdrObject* pObj = SdrObject::getSdrObjectFromXShape(mXShape);
                         if (pObj && pObj->IsNotVisibleAsMaster())
                             continue;
                     }

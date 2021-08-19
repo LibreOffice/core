@@ -1293,7 +1293,7 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia, 
 
 void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::drawing::XShape>& xShape)
 {
-    SdrMediaObj* pMediaObj = dynamic_cast<SdrMediaObj*>(GetSdrObjectFromXShape(xShape));
+    SdrMediaObj* pMediaObj = dynamic_cast<SdrMediaObj*>(SdrObject::getSdrObjectFromXShape(xShape));
     if (!pMediaObj)
         return;
 
@@ -1718,7 +1718,7 @@ namespace
 {
 bool IsTopGroupObj(const uno::Reference<drawing::XShape>& xShape)
 {
-    SdrObject* pObject = GetSdrObjectFromXShape(xShape);
+    SdrObject* pObject = SdrObject::getSdrObjectFromXShape(xShape);
     if (!pObject)
         return false;
 
@@ -1795,7 +1795,7 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
         aSize.Height = 1000;
     if (!bSuppressRotation)
     {
-        SdrObject* pShape = GetSdrObjectFromXShape( rXShape );
+        SdrObject* pShape = SdrObject::getSdrObjectFromXShape(rXShape);
         nRotation = pShape ? pShape->GetRotateAngle() : 0_deg100;
         if ( GetDocumentType() != DOCUMENT_DOCX )
         {
@@ -3401,7 +3401,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
             // tdf#112312: only custom shapes obey the TextAutoGrowHeight option
             bool bTextAutoGrowHeight = false;
             uno::Reference<drawing::XShape> xShape(rXIface, uno::UNO_QUERY);
-            auto pSdrObjCustomShape = xShape.is() ? dynamic_cast<SdrObjCustomShape*>(GetSdrObjectFromXShape(xShape)) : nullptr;
+            auto pSdrObjCustomShape = xShape.is() ? dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape)) : nullptr;
             if (pSdrObjCustomShape && GetProperty(rXPropSet, "TextAutoGrowHeight"))
             {
                 mAny >>= bTextAutoGrowHeight;
@@ -3453,7 +3453,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         return;
 
     uno::Reference<drawing::XShape> xShape(rXIface, uno::UNO_QUERY);
-    SdrObject* pSdrObject = xShape.is() ? GetSdrObjectFromXShape(xShape) : nullptr;
+    SdrObject* pSdrObject = xShape.is() ? SdrObject::getSdrObjectFromXShape(xShape) : nullptr;
     const SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>( pSdrObject );
     if (pTxtObj && mpTextExport)
     {

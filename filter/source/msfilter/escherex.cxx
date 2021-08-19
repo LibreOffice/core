@@ -581,7 +581,7 @@ void    EscherPropertyContainer::CreateFillProperties(
 {
     if ( rXShape.is() )
     {
-        SdrObject* pObj = GetSdrObjectFromXShape( rXShape );
+        SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rXShape);
         if ( pObj )
         {
             const SfxItemSet& aAttr( pObj->GetMergedItemSet() );
@@ -1338,7 +1338,7 @@ bool EscherPropertyContainer::CreateOLEGraphicProperties(const uno::Reference<dr
 
     if ( rXShape.is() )
     {
-        SdrObject* pObject = GetSdrObjectFromXShape(rXShape); // SJ: leaving unoapi, because currently there is
+        SdrObject* pObject = SdrObject::getSdrObjectFromXShape(rXShape); // SJ: leaving unoapi, because currently there is
         if (auto pOle2Obj = dynamic_cast<const SdrOle2Obj*>(pObject)) // no access to the native graphic object
         {
             const Graphic* pGraphic = pOle2Obj->GetGraphic();
@@ -1388,7 +1388,7 @@ bool EscherPropertyContainer::CreateMediaGraphicProperties(const uno::Reference<
     bool    bRetValue = false;
     if ( rXShape.is() )
     {
-        SdrObject* pSdrObject(GetSdrObjectFromXShape(rXShape));  // SJ: leaving unoapi, because currently there is
+        SdrObject* pSdrObject(SdrObject::getSdrObjectFromXShape(rXShape));  // SJ: leaving unoapi, because currently there is
         if (auto pSdrMediaObj = dynamic_cast<const SdrMediaObj*>(pSdrObject)) // no access to the native graphic object
         {
             GraphicObject aGraphicObject(pSdrMediaObj->getSnapshot());
@@ -2582,12 +2582,12 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
     if ( !aXPropSet.is() )
         return;
 
-    if(nullptr == dynamic_cast< SdrObjCustomShape* >(GetSdrObjectFromXShape(rXShape)))
+    if(nullptr == dynamic_cast< SdrObjCustomShape* >(SdrObject::getSdrObjectFromXShape(rXShape)))
     {
         return;
     }
 
-    SdrObjCustomShape& rSdrObjCustomShape(static_cast< SdrObjCustomShape& >(*GetSdrObjectFromXShape(rXShape)));
+    SdrObjCustomShape& rSdrObjCustomShape(static_cast< SdrObjCustomShape& >(*SdrObject::getSdrObjectFromXShape(rXShape)));
     uno::Any aGeoPropSet = aXPropSet->getPropertyValue( "CustomShapeGeometry" );
     uno::Sequence< beans::PropertyValue > aGeoPropSeq;
     if ( !(aGeoPropSet >>= aGeoPropSeq) )
@@ -3747,7 +3747,7 @@ MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawi
 bool EscherPropertyContainer::CreateBlipPropertiesforOLEControl(const uno::Reference<beans::XPropertySet> & rXPropSet,
                                                                 const uno::Reference<drawing::XShape> & rXShape)
 {
-    SdrObject* pShape = GetSdrObjectFromXShape( rXShape );
+    SdrObject* pShape = SdrObject::getSdrObjectFromXShape(rXShape);
     if ( pShape )
     {
         const Graphic aGraphic(SdrExchangeView::GetObjGraphic(*pShape));
@@ -4518,7 +4518,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
 
         if (aType == "drawing.Custom")
         {
-            if (auto pSdrObjCustomShape = dynamic_cast< SdrObjCustomShape* >(GetSdrObjectFromXShape(aXShape)))
+            if (auto pSdrObjCustomShape = dynamic_cast< SdrObjCustomShape* >(SdrObject::getSdrObjectFromXShape(aXShape)))
             {
                 const SdrCustomShapeGeometryItem& rGeometryItem =
                     pSdrObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );

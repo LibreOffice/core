@@ -194,7 +194,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
     }
     aStack.push( std::make_pair( pCurrXclObj, std::move(pCurrAppData) ) );
     pCurrAppData.reset( new XclEscherHostAppData );
-    SdrObject* pObj = GetSdrObjectFromXShape( rxShape );
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rxShape);
     //added for exporting OCX control
     sal_Int16 nMsCtlType = 0;
     if ( !pObj )
@@ -548,7 +548,7 @@ void ShapeInteractionHelper::PopulateShapeInteractionInfo(const XclExpObjectMana
         SvMemoryStream* pMemStrm = nullptr;
         OUString sHyperLink;
         OUString sMacro;
-        SdrObject* pObj = GetSdrObjectFromXShape(xShape);
+        SdrObject* pObj = SdrObject::getSdrObjectFromXShape(xShape);
         if (pObj)
             sHyperLink = pObj->getHyperlink();
         if (ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo(pObj))

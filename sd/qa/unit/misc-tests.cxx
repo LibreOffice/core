@@ -500,7 +500,7 @@ void SdMiscTest::testTextColumns()
         xShapes->add(xShape);
 
         // Set up columns
-        auto pTextObj = dynamic_cast<SdrTextObj*>(GetSdrObjectFromXShape(xShape));
+        auto pTextObj = dynamic_cast<SdrTextObj*>(SdrObject::getSdrObjectFromXShape(xShape));
         CPPUNIT_ASSERT(pTextObj);
         pTextObj->SetMergedItem(SfxInt16Item(SDRATTR_TEXTCOLUMNS_NUMBER, 2));
         pTextObj->SetMergedItem(SdrMetricItem(SDRATTR_TEXTCOLUMNS_SPACING, 1000));
@@ -511,7 +511,7 @@ void SdMiscTest::testTextColumns()
         uno::Reference<container::XIndexAccess> xIndexAccess(xDrawPage, uno::UNO_QUERY_THROW);
         uno::Reference<drawing::XShape> xShape(xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
 
-        auto pTextObj = dynamic_cast<SdrTextObj*>(GetSdrObjectFromXShape(xShape));
+        auto pTextObj = dynamic_cast<SdrTextObj*>(SdrObject::getSdrObjectFromXShape(xShape));
         CPPUNIT_ASSERT(pTextObj);
 
         CPPUNIT_ASSERT_EQUAL(sal_Int16(2), pTextObj->GetTextColumnsNumber());

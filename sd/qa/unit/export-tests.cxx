@@ -1661,7 +1661,7 @@ void SdExportTest::testColumnsODG()
         CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(700)),
                              xColProps->getPropertyValue("AutomaticDistance"));
 
-        auto pTextObj = dynamic_cast<SdrTextObj*>(GetSdrObjectFromXShape(xShape));
+        auto pTextObj = dynamic_cast<SdrTextObj*>(SdrObject::getSdrObjectFromXShape(xShape));
         CPPUNIT_ASSERT(pTextObj);
 
         CPPUNIT_ASSERT_EQUAL(sal_Int16(2), pTextObj->GetTextColumnsNumber());
@@ -1685,7 +1685,7 @@ void SdExportTest::testColumnsODG()
         CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(700)),
                              xColProps->getPropertyValue("AutomaticDistance"));
 
-        auto pTextObj = dynamic_cast<SdrTextObj*>(GetSdrObjectFromXShape(xShape));
+        auto pTextObj = dynamic_cast<SdrTextObj*>(SdrObject::getSdrObjectFromXShape(xShape));
         CPPUNIT_ASSERT(pTextObj);
 
         CPPUNIT_ASSERT_EQUAL(sal_Int16(2), pTextObj->GetTextColumnsNumber());

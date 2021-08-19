@@ -103,7 +103,7 @@ AccessibleShape::AccessibleShape (
       m_nIndexInParent(-1),
       mpParent (rShapeInfo.mpChildrenManager)
 {
-    m_pShape = GetSdrObjectFromXShape(mxShape);
+    m_pShape = SdrObject::getSdrObjectFromXShape(mxShape);
     UpdateNameAndDescription();
 }
 
@@ -149,7 +149,7 @@ void AccessibleShape::Init()
         return;
 
     // #107948# Determine whether shape text is empty
-    SdrObject* pSdrObject = GetSdrObjectFromXShape(mxShape);
+    SdrObject* pSdrObject = SdrObject::getSdrObjectFromXShape(mxShape);
     if( !pSdrObject )
         return;
 
@@ -1116,8 +1116,8 @@ struct XShapePosCompareHelper
     bool operator() ( const uno::Reference<drawing::XShape>& xshape1,
         const uno::Reference<drawing::XShape>& xshape2 ) const
     {
-        SdrObject* pObj1 = GetSdrObjectFromXShape(xshape1);
-        SdrObject* pObj2 = GetSdrObjectFromXShape(xshape2);
+        SdrObject* pObj1 = SdrObject::getSdrObjectFromXShape(xshape1);
+        SdrObject* pObj2 = SdrObject::getSdrObjectFromXShape(xshape2);
         if(pObj1 && pObj2)
             return pObj1->GetOrdNum() < pObj2->GetOrdNum();
         else
@@ -1146,7 +1146,7 @@ AccessibleShape::getGroupPosition( const uno::Any& )
     {
         return aRet;
     }
-    SdrObject *pObj = GetSdrObjectFromXShape(mxShape);
+    SdrObject *pObj = SdrObject::getSdrObjectFromXShape(mxShape);
 
 
     if(pObj == nullptr )
@@ -1227,7 +1227,7 @@ OUString AccessibleShape::getObjectLink( const uno::Any& )
 {
     OUString aRet;
 
-    SdrObject *pObj = GetSdrObjectFromXShape(mxShape);
+    SdrObject *pObj = SdrObject::getSdrObjectFromXShape(mxShape);
     if(pObj == nullptr )
     {
         return aRet;

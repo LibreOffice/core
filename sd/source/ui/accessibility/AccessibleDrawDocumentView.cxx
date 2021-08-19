@@ -67,8 +67,8 @@ struct XShapePosCompareHelper
         const uno::Reference<drawing::XShape>& xshape2 ) const
     {
         // modify the compare method to return the Z-Order, not layout order
-        SdrObject* pObj1 = GetSdrObjectFromXShape(xshape1);
-        SdrObject* pObj2 = GetSdrObjectFromXShape(xshape2);
+        SdrObject* pObj1 = SdrObject::getSdrObjectFromXShape(xshape1);
+        SdrObject* pObj2 = SdrObject::getSdrObjectFromXShape(xshape2);
         if(pObj1 && pObj2)
             return pObj1->GetOrdNum() < pObj2->GetOrdNum();
         else
@@ -462,7 +462,7 @@ uno::Sequence< sal_Int32 > SAL_CALL
         if ( xShape.is() )
         {
             //if the object is visible in the page, we add it into the group list.
-            SdrObject* pObj = GetSdrObjectFromXShape(xShape);
+            SdrObject* pObj = SdrObject::getSdrObjectFromXShape(xShape);
             if ( pObj && pPV && pSdView && pSdView->IsObjMarkable( pObj, pPV ) )
             {
                 vXShapes.push_back( xShape );
@@ -505,7 +505,7 @@ OUString AccessibleDrawDocumentView::getObjectLink( const uno::Any& rAny )
     {
         return aRet;
     }
-    SdrObject* pObj = GetSdrObjectFromXShape(xCurShape);
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape(xCurShape);
     if (pObj)
     {
         SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pObj);

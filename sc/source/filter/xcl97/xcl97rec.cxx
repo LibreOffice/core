@@ -1285,7 +1285,7 @@ void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
         return;
 
     // Do not output any of the detective shapes and validation circles.
-    SdrObject* pObject = GetSdrObjectFromXShape(mxShape);
+    SdrObject* pObject = SdrObject::getSdrObjectFromXShape(mxShape);
     if (pObject)
     {
         ScDocument& rDoc = rStrm.GetRoot().GetDoc();

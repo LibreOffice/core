@@ -139,7 +139,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf141021ExtrusionNorth)
     CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     uno::Reference<drawing::XShape> xShape(getShape(0));
     SdrObjCustomShape& rSdrCustomShape(
-        static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+        static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
 
     // Mark Object
     SfxViewShell* pViewShell = SfxViewShell::Current();
@@ -174,7 +174,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testResizeRotatedShape)
     // Change height and mirror vertical
     {
         SdrObjCustomShape& rSdrShape(
-            static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+            static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
         rSdrShape.NbcResize(rSdrShape.GetRelativePos(), Fraction(1.0), Fraction(-0.5));
         tools::Rectangle aSnapRect(rSdrShape.GetSnapRect());
         tools::Rectangle aBoundRect(rSdrShape.GetCurrentBoundRect());
@@ -184,7 +184,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testResizeRotatedShape)
     // Change height
     {
         SdrObjCustomShape& rSdrShape(
-            static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+            static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
         rSdrShape.NbcResize(rSdrShape.GetRelativePos(), Fraction(1.0), Fraction(2.0));
         tools::Rectangle aSnapRect(rSdrShape.GetSnapRect());
         tools::Rectangle aBoundRect(rSdrShape.GetCurrentBoundRect());
@@ -194,7 +194,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testResizeRotatedShape)
     // Change width
     {
         SdrObjCustomShape& rSdrShape(
-            static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+            static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
         rSdrShape.NbcResize(rSdrShape.GetRelativePos(), Fraction(2.0), Fraction(1.0));
         tools::Rectangle aSnapRect(rSdrShape.GetSnapRect());
         tools::Rectangle aBoundRect(rSdrShape.GetCurrentBoundRect());
@@ -204,7 +204,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testResizeRotatedShape)
     // Change width and mirror horizontal
     {
         SdrObjCustomShape& rSdrShape(
-            static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+            static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
         rSdrShape.NbcResize(rSdrShape.GetRelativePos(), Fraction(-0.5), Fraction(1.0));
         tools::Rectangle aSnapRect(rSdrShape.GetSnapRect());
         tools::Rectangle aBoundRect(rSdrShape.GetCurrentBoundRect());
@@ -384,7 +384,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf121845_two_commands_U)
     uno::Reference<drawing::XShape> xShape(getShape(0));
     // In case no line is drawn, two polygons are generated; with line only one polygon
     SdrObjCustomShape& rSdrObjCustomShape(
-        static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+        static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
     EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
     SdrPathObjUniquePtr pPathObj(
         static_cast<SdrPathObj*>(aCustomShape2d.CreateLineGeometry().release()));
@@ -406,7 +406,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf124212_handle_position)
     uno::Reference<drawing::XShape> xShape(getShape(0));
     // The shape has one, horizontal adjust handle.
     SdrObjCustomShape& rSdrObjCustomShape(
-        static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+        static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
     EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
     Point aInitialPosition;
     aCustomShape2d.GetHandlePosition(0, aInitialPosition);
@@ -451,7 +451,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf124740_handle_path_coordsystem)
     // shape edge, shape is 6cm from left . That results in a position
     // of 8cm from left page edge, which is 8000 in 1/100 mm unit.
     SdrObjCustomShape& rSdrObjCustomShape(
-        static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+        static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
     EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
     Point aPosition;
     aCustomShape2d.GetHandlePosition(0, aPosition);
@@ -479,7 +479,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf115813_OOXML_XY_handle)
     {
         uno::Reference<drawing::XShape> xShape(getShape(i));
         SdrObjCustomShape& rSdrObjCustomShape(
-            static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+            static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
         OUString sShapeType("non-primitive"); // default for ODF
         const SdrCustomShapeGeometryItem& rGeometryItem(
             rSdrObjCustomShape.GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY));
@@ -558,7 +558,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf126512_OOXML_handle_in_ODP)
     {
         uno::Reference<drawing::XShape> xShape(getShape(i));
         SdrObjCustomShape& rSdrObjCustomShape(
-            static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+            static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
         OUString sShapeType("non-primitive"); // only to initialize, value not used here
         const SdrCustomShapeGeometryItem& rGeometryItem(
             rSdrObjCustomShape.GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY));
@@ -644,7 +644,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf126060_3D_Z_Rotation)
 
     uno::Reference<drawing::XShape> xShape(getShape(0));
     SdrObjCustomShape& rSdrObjCustomShape(
-        static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+        static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong text camera Z rotation", 90.0,
                                  rSdrObjCustomShape.GetCameraZRotation());
@@ -748,7 +748,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf128413_tbrlOnOff)
     xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aOrigRect;
 
     SdrObjCustomShape& rSdrObjCustomShape(
-        static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+        static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
     rSdrObjCustomShape.SetVerticalWriting(true);
 
     awt::Rectangle aObservedRect;
@@ -813,7 +813,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf103474_commandT_CaseZeroHeight)
     // The end points of the straight line segment should have the same x-coordinate of left
     // of shape, and different y-coordinates, one top and the other bottom of the shape.
     SdrObjCustomShape& rSdrObjCustomShape(
-        static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+        static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
     EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
     SdrPathObjUniquePtr pPathObj(
         static_cast<SdrPathObj*>(aCustomShape2d.CreateLineGeometry().release()));
@@ -844,7 +844,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf103474_commandG_CaseZeroHeight)
     // The end points of the straight line segment should have the same x-coordinate of left
     // of shape, and different y-coordinates, one top and the other bottom of the shape.
     SdrObjCustomShape& rSdrObjCustomShape(
-        static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+        static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
     EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
     SdrPathObjUniquePtr pPathObj(
         static_cast<SdrPathObj*>(aCustomShape2d.CreateLineGeometry().release()));
@@ -875,7 +875,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf122323_largeSwingAngle)
     uno::Reference<drawing::XShape> xShape(getShape(0));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     SdrObjCustomShape& rSdrObjCustomShape(
-        static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+        static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
     EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
     SdrPathObjUniquePtr pPathObj(
         static_cast<SdrPathObj*>(aCustomShape2d.CreateLineGeometry().release()));
@@ -895,7 +895,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf141268)
     CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     uno::Reference<drawing::XShape> xShape(getShape(0));
     SdrObjCustomShape& rSdrCustomShape(
-        static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+        static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
 
     // Check left/bottom of bound rect. Without fix it would be left=6722, bottom=9483.
     tools::Rectangle aBoundRect(rSdrCustomShape.GetCurrentBoundRect());
@@ -916,7 +916,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf136176)
         // get shape
         uno::Reference<drawing::XShape> xShape(getShape(i));
         SdrObjCustomShape& rSdrObjCustomShape(
-            static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+            static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
         // apply shearing 20deg
         const Point aCenter = rSdrObjCustomShape.GetSnapRect().Center();
         rSdrObjCustomShape.Shear(aCenter, 2000_deg100, tan(basegfx::deg2rad(20.0)), false);
@@ -943,7 +943,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf136176)
         // Get shape
         const uno::Reference<drawing::XShape> xShape(getShape(i));
         const SdrObjCustomShape& rSdrObjCustomShape(
-            static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+            static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
         // Create polygon from shape and examine point 4 of the polygon
         const basegfx::B2DPolyPolygon aLineGeometry = rSdrObjCustomShape.GetLineGeometry(false);
         const basegfx::B2DPoint aPoint(aLineGeometry.getB2DPolygon(0).getB2DPoint(4));

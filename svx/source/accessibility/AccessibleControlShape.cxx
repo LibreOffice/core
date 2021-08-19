@@ -188,7 +188,7 @@ void AccessibleControlShape::Init()
 
         // get the control which belongs to our model (relative to our view)
         const vcl::Window* pViewWindow = maShapeTreeInfo.GetWindow();
-        SdrUnoObj* pUnoObjectImpl = dynamic_cast<SdrUnoObj*>( GetSdrObjectFromXShape(mxShape)  );
+        SdrUnoObj* pUnoObjectImpl = dynamic_cast<SdrUnoObj*>(SdrObject::getSdrObjectFromXShape(mxShape));
         SdrView* pView = maShapeTreeInfo.GetSdrView();
         OSL_ENSURE( pView && pViewWindow && pUnoObjectImpl, "AccessibleControlShape::Init: no view, or no view window, no SdrUnoObj!" );
 

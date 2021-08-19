@@ -1543,7 +1543,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape )
     case ClickAction_VERB:
     {
         // todo, better do it async?
-        SdrObject* pObj = GetSdrObjectFromXShape( xShape );
+        SdrObject* pObj = SdrObject::getSdrObjectFromXShape(xShape);
         SdrOle2Obj* pOleObject = dynamic_cast< SdrOle2Obj* >(pObj);
         if (pOleObject && mpViewShell )
             mpViewShell->ActivateObject(pOleObject, pEvent->mnVerb);
