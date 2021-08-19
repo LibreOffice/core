@@ -54,11 +54,15 @@ static inline void cloneElement(SmMlElement* aSmMlElement, void* aData)
 
 void SmMlIteratorFree(SmMlElement* pMlElementTree)
 {
+    if (pMlElementTree == nullptr)
+        return;
     SmMlIteratorBottomToTop(pMlElementTree, deleteElement, nullptr);
 }
 
 SmMlElement* SmMlIteratorCopy(SmMlElement* pMlElementTree)
 {
+    if (pMlElementTree == nullptr)
+        return nullptr;
     SmMlElement* aDummyElement = new SmMlElement();
     SmMlIteratorTopToBottom(pMlElementTree, cloneElement, &aDummyElement);
     SmMlElement* aResultElement = aDummyElement->getSubElement(0);
