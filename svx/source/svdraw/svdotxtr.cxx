@@ -239,20 +239,21 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
          std::abs(rRef1.X()-rRef2.X())==std::abs(rRef1.Y()-rRef2.Y()))) {
         bRotate90=maGeo.nRotationAngle.get() % 9000 ==0;
     }
-    tools::Polygon aPol(Rect2Poly(maRect,maGeo));
-    sal_uInt16 i;
-    sal_uInt16 nPointCount=aPol.GetSize();
-    for (i=0; i<nPointCount; i++) {
-         MirrorPoint(aPol[i],rRef1,rRef2);
+    if (!maRect.IsEmpty()) { // ofz#37370 an 'empty' rect creates a polygon with 0 points
+        tools::Polygon aPol(Rect2Poly(maRect,maGeo));
+        sal_uInt16 nPointCount = aPol.GetSize();
+        for (sal_uInt16 i = 0; i < nPointCount; ++i) {
+             MirrorPoint(aPol[i],rRef1,rRef2);
+        }
+        // turn polygon and move it a little
+        tools::Polygon aPol0(aPol);
+        aPol[0]=aPol0[1];
+        aPol[1]=aPol0[0];
+        aPol[2]=aPol0[3];
+        aPol[3]=aPol0[2];
+        aPol[4]=aPol0[1];
+        Poly2Rect(aPol,maRect,maGeo);
     }
-    // turn polygon and move it a little
-    tools::Polygon aPol0(aPol);
-    aPol[0]=aPol0[1];
-    aPol[1]=aPol0[0];
-    aPol[2]=aPol0[3];
-    aPol[3]=aPol0[2];
-    aPol[4]=aPol0[1];
-    Poly2Rect(aPol,maRect,maGeo);
 
     if (bRotate90) {
         bool bRota90=maGeo.nRotationAngle.get() % 9000 ==0;
