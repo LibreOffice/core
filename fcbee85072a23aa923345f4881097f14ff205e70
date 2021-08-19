@@ -16,6 +16,24 @@
       "revId": "fcbee85072a23aa923345f4881097f14ff205e70",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76f5a808_108668de",
+        "filename": "sw/source/uibase/uiview/viewtab.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1119,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2021-08-19T14:03:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f75416e0_ca30fff5",
+      "revId": "fcbee85072a23aa923345f4881097f14ff205e70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
