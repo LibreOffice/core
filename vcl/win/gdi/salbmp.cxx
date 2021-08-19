@@ -353,7 +353,7 @@ std::shared_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap(const Win
             *pA,
             aSalTwoRect,
             ScanlineFormat::N8BitPal,
-            &rTargetPalette);
+            rTargetPalette);
 
         pSalA->ReleaseBuffer(pA, BitmapAccessMode::Read);
         pA = pExtraA.get();
