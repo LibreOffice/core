@@ -23,6 +23,7 @@
 #include <cassert>
 #include <cstring>
 #include <numeric>
+#include <utility>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -691,7 +692,7 @@ bool AquaGraphicsBackend::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
     CGMutablePathRef xPath = CGPathCreateMutable();
     // tdf#120252 Use the correct, already transformed PolyPolygon (as long as
     // the transformation is not used here...)
-    for (auto const& rPolygon : aPolyPolygon)
+    for (auto const& rPolygon : std::as_const(aPolyPolygon))
     {
         AddPolygonToPath(xPath, rPolygon, true, !getAntiAlias(), mrShared.isPenVisible());
     }
