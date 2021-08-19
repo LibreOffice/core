@@ -230,7 +230,7 @@ std::unique_ptr<BitmapBuffer> X11SalBitmap::ImplCreateDIB(
         {
             const SalTwoRect        aTwoRect = { 0, 0, nWidth, nHeight, 0, 0, nWidth, nHeight };
             BitmapBuffer            aSrcBuf;
-            const BitmapPalette*    pDstPal = nullptr;
+            std::optional<BitmapPalette> pDstPal;
 
             aSrcBuf.mnFormat = ScanlineFormat::TopDown;
             aSrcBuf.mnWidth = nWidth;
@@ -292,15 +292,13 @@ std::unique_ptr<BitmapBuffer> X11SalBitmap::ImplCreateDIB(
             if( aSrcBuf.mnBitCount == 1 )
             {
                 rPal.SetEntryCount( 2 );
-                pDstPal = &rPal;
-
                 rPal[ 0 ] = COL_BLACK;
                 rPal[ 1 ] = COL_WHITE;
+                pDstPal = rPal;
             }
             else if( pImage->depth == 8 && bGrey )
             {
                 rPal.SetEntryCount( 256 );
-                pDstPal = &rPal;
 
                 for( sal_uInt16 i = 0; i < 256; i++ )
                 {
@@ -311,6 +309,7 @@ std::unique_ptr<BitmapBuffer> X11SalBitmap::ImplCreateDIB(
                     rBmpCol.SetBlue( i );
                 }
 
+                pDstPal = rPal;
             }
             else if( aSrcBuf.mnBitCount <= 8 )
             {
@@ -319,7 +318,6 @@ std::unique_ptr<BitmapBuffer> X11SalBitmap::ImplCreateDIB(
                                                   sal_uLong(1) << nDrawableDepth);
 
                 rPal.SetEntryCount( nCols );
-                pDstPal = &rPal;
 
                 for( sal_uInt16 i = 0; i < nCols; i++ )
                 {
@@ -330,6 +328,7 @@ std::unique_ptr<BitmapBuffer> X11SalBitmap::ImplCreateDIB(
                     rBmpCol.SetGreen( nColor.GetGreen() );
                     rBmpCol.SetBlue( nColor.GetBlue() );
                 }
+                pDstPal = rPal;
             }
 
             pDIB = StretchAndConvert( aSrcBuf, aTwoRect, aSrcBuf.mnFormat,
@@ -379,7 +378,7 @@ XImage* X11SalBitmap::ImplCreateXImage(
         {
             std::unique_ptr<BitmapBuffer> pDstBuf;
             ScanlineFormat       nDstFormat = ScanlineFormat::TopDown;
-            std::unique_ptr<BitmapPalette> xPal;
+            std::optional<BitmapPalette> xPal;
             std::unique_ptr<ColorMask> xMask;
 
             switch( pImage->bits_per_pixel )
@@ -424,13 +423,13 @@ XImage* X11SalBitmap::ImplCreateXImage(
 
             if( pImage->depth == 1 )
             {
-                xPal.reset(new BitmapPalette( 2 ));
+                xPal.emplace(2);
                 (*xPal)[ 0 ] = COL_BLACK;
                 (*xPal)[ 1 ] = COL_WHITE;
             }
             else if( pImage->depth == 8 && mbGrey )
             {
-                xPal.reset(new BitmapPalette( 256 ));
+                xPal.emplace(256);
 
                 for( sal_uInt16 i = 0; i < 256; i++ )
                 {
@@ -449,7 +448,7 @@ XImage* X11SalBitmap::ImplCreateXImage(
                                             , static_cast<sal_uLong>(1 << pImage->depth)
                                             );
 
-                xPal.reset(new BitmapPalette( nCols ));
+                xPal.emplace(nCols);
 
                 for( sal_uInt16 i = 0; i < nCols; i++ )
                 {
@@ -462,7 +461,7 @@ XImage* X11SalBitmap::ImplCreateXImage(
                 }
             }
 
-            pDstBuf = StretchAndConvert( *mpDIB, rTwoRect, nDstFormat, xPal.get(), xMask.get() );
+            pDstBuf = StretchAndConvert( *mpDIB, rTwoRect, nDstFormat, xPal, xMask.get() );
             xPal.reset();
             xMask.reset();
 

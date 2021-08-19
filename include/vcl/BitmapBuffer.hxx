@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <optional>
 
 #include <vcl/dllapi.h>
 #include <vcl/BitmapPalette.hxx>
@@ -46,7 +47,7 @@ struct VCL_DLLPUBLIC BitmapBuffer
 
 VCL_DLLPUBLIC std::unique_ptr<BitmapBuffer> StretchAndConvert(
     const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,
-    ScanlineFormat nDstBitmapFormat, const BitmapPalette* pDstPal = nullptr, const ColorMask* pDstMask = nullptr );
+    ScanlineFormat nDstBitmapFormat, std::optional<BitmapPalette> pDstPal = std::nullopt, const ColorMask* pDstMask = nullptr );
 
 #endif // INCLUDED_VCL_BITMAPBUFFER_HXX
 
