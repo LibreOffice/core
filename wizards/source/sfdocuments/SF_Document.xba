@@ -460,6 +460,102 @@ Catch:
 End Function   &apos;   SFDocuments.SF_Document.CloseDocument
 
 REM -----------------------------------------------------------------------------
+Public Function ExportAsPDF(Optional ByVal FileName As Variant _
+							, Optional ByVal Overwrite As Variant _
+							, Optional ByVal Pages As Variant _
+							, Optional ByVal Password As Variant _
+							, Optional ByVal Watermark As Variant _
+							) As Boolean
+&apos;&apos;&apos;	Store the document to the given file location in PDF format
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		FileName: Identifies the file where to save. It must follow the SF_FileSystem.FileNaming notation
+&apos;&apos;&apos;		Overwrite: True if the destination file may be overwritten (default = False)
+&apos;&apos;&apos;		Pages: the pages to print as a string, like in the user interface. Example: &quot;1-4;10;15-18&quot;. Default = all pages
+&apos;&apos;&apos;		Password: password to open the document
+&apos;&apos;&apos;		Watermark: the text for a watermark to be drawn on every page of the exported PDF file
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		False if the document could not be saved
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		DOCUMENTSAVEASERROR		The destination has its readonly attribute set or overwriting rejected
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		oDoc.ExportAsPDF(&quot;C:\Me\myDoc.pdf&quot;, Overwrite := True)
+
+Dim bSaved As Boolean				&apos;	return value
+Dim oSfa As Object					&apos;	com.sun.star.ucb.SimpleFileAccess
+Dim sFile As String					&apos;	Alias of FileName
+Dim sFilter As String				&apos;	One of the pdf filter names
+Dim vFilterData As Variant			&apos;	Array of com.sun.star.beans.PropertyValue
+Dim vProperties As Variant			&apos;	Array of com.sun.star.beans.PropertyValue
+Dim FSO As Object					&apos;	SF_FileSystem
+Const cstThisSub = &quot;SFDocuments.Document.ExportAsPDF&quot;
+Const cstSubArgs = &quot;FileName, [Overwrite=False], [Pages=&quot;&quot;&quot;&quot;], [Password=&quot;&quot;&quot;&quot;], [Watermark=&quot;&quot;&quot;&quot;]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo CatchError
+	bSaved = False
+
+Check:
+	If IsMissing(Overwrite) Or IsEmpty(Overwrite) Then Overwrite = False
+	If IsMissing(Pages) Or IsEmpty(Pages) Then Pages = &quot;&quot;
+	If IsMissing(Password) Or IsEmpty(Password) Then Password = &quot;&quot;
+	If IsMissing(Watermark) Or IsEmpty(Watermark) Then Watermark = &quot;&quot;
+
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If Not SF_Utils._ValidateFile(FileName, &quot;FileName&quot;) Then GoTo Finally
+		If Not SF_Utils._Validate(Overwrite, &quot;Overwrite&quot;, V_BOOLEAN) Then GoTo Finally
+		If Not SF_Utils._Validate(Pages, &quot;Pages&quot;, V_STRING) Then GoTo Finally
+		If Not SF_Utils._Validate(Password, &quot;Password&quot;, V_STRING) Then GoTo Finally
+		If Not SF_Utils._Validate(Watermark, &quot;Watermark&quot;, V_STRING) Then GoTo Finally
+	End If
+
+	&apos;	Check destination file overwriting
+	Set FSO = CreateScriptService(&quot;FileSystem&quot;)
+	sFile = FSO._ConvertToUrl(FileName)
+	If FSO.FileExists(FileName) Then
+		If Overwrite = False Then GoTo CatchError
+		Set oSfa = ScriptForge.SF_Utils._GetUNOService(&quot;FileAccess&quot;)
+		If oSfa.isReadonly(sFile) Then GoTo CatchError
+	End If
+
+Try:
+	&apos;	Setup arguments
+	sFilter = LCase(_DocumentType) &amp; &quot;_pdf_Export&quot;
+	&apos;	FilterData parameters are added only if they are meaningful
+	vFilterData = Array()
+	If Len(Pages) &gt; 0 Then
+		vFilterData = ScriptForge.SF_Array.Append(vFilterData _
+								, ScriptForge.SF_Utils._MakePropertyValue(&quot;PageRange&quot;, Pages))
+	End If
+	If Len(Password) &gt; 0 Then
+		vFilterData = ScriptForge.SF_Array.Append(vFilterData _
+								, ScriptForge.SF_Utils._MakePropertyValue(&quot;EncryptFile&quot;, True) _
+								, ScriptForge.SF_Utils._MakePropertyValue(&quot;DocumentOpenPassword&quot;, Password))
+	End If
+	If Len(Watermark) &gt; 0 Then
+		vFilterData = ScriptForge.SF_Array.Append(vFilterData _
+								, ScriptForge.SF_Utils._MakePropertyValue(&quot;Watermark&quot;, Watermark))
+	End If
+
+	&apos;	Finalize properties and export
+	vProperties = Array( _
+						ScriptForge.SF_Utils._MakePropertyValue(&quot;FilterName&quot;, sFilter) _
+						, ScriptForge.SF_Utils._MakePropertyValue(&quot;FilterData&quot;, vFilterData))
+	_Component.StoreToURL(sFile, vProperties)
+	bSaved = True
+
+Finally:
+	ExportAsPDF = bSaved
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+CatchError:
+	ScriptForge.SF_Exception.RaiseFatal(DOCUMENTSAVEASERROR, &quot;FileName&quot;, FileName, &quot;Overwrite&quot;, Overwrite _
+					, &quot;FilterName&quot;, &quot;PDF Export&quot;)
+	GoTo Finally
+End Function   &apos;   SFDocuments.SF_Document.ExportAsPDF
+
+REM -----------------------------------------------------------------------------
 Public Function GetProperty(Optional ByVal PropertyName As Variant) As Variant
 &apos;&apos;&apos;	Return the actual value of the given property
 &apos;&apos;&apos;	Args:
@@ -500,6 +596,7 @@ Public Function Methods() As Variant
 	Methods = Array( _
 					&quot;Activate&quot; _
 					, &quot;CloseDocument&quot; _
+					, &quot;ExportAsPDF&quot; _
 					, &quot;PrintOut&quot; _
 					, &quot;RunCommand&quot; _
 					, &quot;Save&quot; _
@@ -745,7 +842,7 @@ Try:
 								, ScriptForge.SF_Utils._MakePropertyValue(&quot;FilterOptions&quot;, FilterOptions) _
 							)
 		If Len(Password) &gt; 0 Then		&apos;	Password is to add only if &lt;&gt; &quot;&quot; !?
-			vProperties = ScriptForge.SF_Array.Append(vproperties _
+			vProperties = ScriptForge.SF_Array.Append(vProperties _
 								, ScriptForge.SF_Utils._MakePropertyValue(&quot;Password&quot;, Password))
 		End If
 	End If
@@ -844,7 +941,7 @@ Try:
 								, ScriptForge.SF_Utils._MakePropertyValue(&quot;FilterOptions&quot;, FilterOptions) _
 							)
 		If Len(Password) &gt; 0 Then		&apos;	Password is to add only if &lt;&gt; &quot;&quot; !?
-			vProperties = ScriptForge.SF_Array.Append(vproperties _
+			vProperties = ScriptForge.SF_Array.Append(vProperties _
 								, ScriptForge.SF_Utils._MakePropertyValue(&quot;Password&quot;, Password))
 		End If
 	End If

@@ -1762,6 +1762,9 @@ class SFDocuments:
         def CloseDocument(self, saveask = True):
             return self.ExecMethod(self.vbMethod, 'CloseDocument', saveask)
 
+        def ExportAsPDF(self, filename, overwrite = False, pages = '', password = '', watermark = ''):
+            return self.ExecMethod(self.vbMethod, 'ExportAsPDF', filename, overwrite, pages, password, watermark)
+
         def PrintOut(self, pages = '', copies = 1):
             return self.ExecMethod(self.vbMethod, 'PrintOut', pages, copies)
 
