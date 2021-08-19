@@ -46,10 +46,10 @@ public:
     const OUString& getScheme() const { return m_scheme;}
 
     /// @throws css::uno::RuntimeException
-    OUString getSchemeSpecificPart() const;
+    OUString getSchemeSpecificPart();
 
     /// @throws css::uno::RuntimeException
-    bool isHierarchical() const;
+    bool isHierarchical();
 
     /// @throws css::uno::RuntimeException
     bool hasAuthority() const;
@@ -58,7 +58,7 @@ public:
     const OUString& getAuthority() const;
 
     /// @throws css::uno::RuntimeException
-    const OUString& getPath() const;
+    OUString getPath();
 
     /// @throws css::uno::RuntimeException
     bool hasRelativePath();
@@ -88,20 +88,21 @@ public:
     void clearFragment();
 
     std::mutex m_mutex;
-    OUString m_scheme;
-    OUString m_authority;
     OUString m_path;
-    OUString m_query;
-    OUString m_fragment;
-    bool m_hasAuthority;
-    bool m_hasQuery;
-    bool m_hasFragment;
 
 private:
     UriReference(UriReference const &) = delete;
     void operator =(UriReference const &) = delete;
 
     void appendSchemeSpecificPart(OUStringBuffer & buffer) const;
+
+    OUString m_scheme;
+    OUString m_authority;
+    OUString m_query;
+    OUString m_fragment;
+    bool m_hasAuthority;
+    bool m_hasQuery;
+    bool m_hasFragment;
 };
 
 }
