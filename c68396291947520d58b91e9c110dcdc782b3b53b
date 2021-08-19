@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0f7aabbc_16eae4ea",
+        "filename": "oox/source/core/xmlfilterbase.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-08-19T06:28:06Z",
+      "side": 1,
+      "message": "Please indent this part.\n(You might also remove the else part and just convert always to UTC).",
+      "range": {
+        "startLine": 598,
+        "startChar": 4,
+        "endLine": 600,
+        "endChar": 56
+      },
+      "revId": "c68396291947520d58b91e9c110dcdc782b3b53b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
