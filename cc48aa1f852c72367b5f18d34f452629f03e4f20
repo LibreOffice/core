@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01662707_0cebb889",
+        "filename": "sc/source/ui/docshell/docsh.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1328,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-08-19T15:58:12Z",
+      "side": 0,
+      "message": "This is a bad idea. If bSetSimpleTextColWidths is not set then ScColumn::GetOptimalColWidth() determines the script type for each and every cell instead of taking the pParam-\u003embSimpleText path. Loading large CSV files now takes ages to display them.",
+      "revId": "cc48aa1f852c72367b5f18d34f452629f03e4f20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
