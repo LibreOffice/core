@@ -87,7 +87,7 @@ namespace
 {
 bool isTopGroupObj(const uno::Reference<drawing::XShape>& xShape)
 {
-    SdrObject* pObject = GetSdrObjectFromXShape(xShape);
+    SdrObject* pObject = SdrObject::getSdrObjectFromXShape(xShape);
     if (!pObject)
         return false;
 
@@ -920,7 +920,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         const bool bIsGroupOrLine = (xServiceInfo->supportsService("com.sun.star.drawing.GroupShape")
                             && !bIsDiagram && !bIsLockedCanvas)
                             || xServiceInfo->supportsService("com.sun.star.drawing.LineShape");
-                        SdrObject* pShape = GetSdrObjectFromXShape(m_xShape);
+                        SdrObject* pShape = SdrObject::getSdrObjectFromXShape(m_xShape);
                         if ((bIsGroupOrLine && !lcl_bHasGroupSlantedChild(pShape) && nOOXAngle == 0)
                             || !bIsGroupOrLine)
                         {

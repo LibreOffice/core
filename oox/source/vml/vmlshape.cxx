@@ -707,7 +707,7 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     }
 
     Reference< XShape > xShape = mrDrawing.createAndInsertXShape( maService, rxShapes, aShapeRect );
-    SdrObject* pShape = GetSdrObjectFromXShape( xShape );
+    SdrObject* pShape = SdrObject::getSdrObjectFromXShape(xShape);
     if( pShape && getShapeType() >= 0 )
     {
         OUString aShapeType = EnhancedCustomShapeTypeNames::Get( static_cast< MSO_SPT >(getShapeType()) );
@@ -1074,7 +1074,7 @@ namespace
     {
         if (!rTypeModel.maFlip.isEmpty())
         {
-            if (SdrObject* pShape = GetSdrObjectFromXShape(rxShape))
+            if (SdrObject* pShape = SdrObject::getSdrObjectFromXShape(rxShape))
             {
                 if (rTypeModel.maFlip.startsWith("x"))
                     doMirrorX(pShape);
@@ -1088,7 +1088,7 @@ namespace
     {
         if (!rTypeModel.maRotation.isEmpty())
         {
-            if (SdrObject* pShape = GetSdrObjectFromXShape(rxShape))
+            if (SdrObject* pShape = SdrObject::getSdrObjectFromXShape(rxShape))
             {
                 // The needed factor -1 for opposite direction and factor 100 for Degree100 is
                 // contained in method decodeRotation().

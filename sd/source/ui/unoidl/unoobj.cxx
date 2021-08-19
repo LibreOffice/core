@@ -604,7 +604,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const c
                 case WID_ANIMPATH:
                 {
                     uno::Reference< drawing::XShape > xShape( aValue, uno::UNO_QUERY );
-                    SdrPathObj* pObj2 = xShape.is() ? dynamic_cast< SdrPathObj* >( GetSdrObjectFromXShape( xShape ) ) : nullptr;
+                    SdrPathObj* pObj2 = xShape.is() ? dynamic_cast<SdrPathObj*>(SdrObject::getSdrObjectFromXShape(xShape)) : nullptr;
 
                     if( pObj2 == nullptr )
                         throw lang::IllegalArgumentException();

@@ -195,13 +195,13 @@ std::unique_ptr<SdrObject, SdrObjectFreeOp> EnhancedCustomShapeEngine::ImplForce
 
             // get the text bounds and set at text object
             tools::Rectangle aTextBounds(rSdrObjCustomShape.GetSnapRect());
-            const bool bIsSdrObjCustomShape(nullptr != dynamic_cast< SdrObjCustomShape* >(GetSdrObjectFromXShape(mxShape)));
+            const bool bIsSdrObjCustomShape(nullptr != dynamic_cast< SdrObjCustomShape* >(SdrObject::getSdrObjectFromXShape(mxShape)));
 
             if(bIsSdrObjCustomShape)
             {
                 SdrObjCustomShape& rSdrObjCustomShape2(
                     static_cast< SdrObjCustomShape& >(
-                        *GetSdrObjectFromXShape(mxShape)));
+                        *SdrObject::getSdrObjectFromXShape(mxShape)));
                 EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape2);
                 aTextBounds = aCustomShape2d.GetTextRect();
             }
@@ -263,7 +263,7 @@ void SetTemporary( uno::Reference< drawing::XShape > const & xShape )
 
 Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
 {
-    SdrObjCustomShape* pSdrObjCustomShape = dynamic_cast< SdrObjCustomShape* >(GetSdrObjectFromXShape(mxShape));
+    SdrObjCustomShape* pSdrObjCustomShape = dynamic_cast< SdrObjCustomShape* >(SdrObject::getSdrObjectFromXShape(mxShape));
 
     if(!pSdrObjCustomShape)
     {
@@ -366,7 +366,7 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
 awt::Rectangle SAL_CALL EnhancedCustomShapeEngine::getTextBounds()
 {
     awt::Rectangle aTextRect;
-    if (SdrObjCustomShape* pSdrObjCustomShape = dynamic_cast< SdrObjCustomShape* >(GetSdrObjectFromXShape(mxShape)))
+    if (SdrObjCustomShape* pSdrObjCustomShape = dynamic_cast< SdrObjCustomShape* >(SdrObject::getSdrObjectFromXShape(mxShape)))
     {
         uno::Reference< document::XActionLockable > xLockable( mxShape, uno::UNO_QUERY );
 
@@ -387,7 +387,7 @@ awt::Rectangle SAL_CALL EnhancedCustomShapeEngine::getTextBounds()
 drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeometry()
 {
     drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords;
-    SdrObjCustomShape* pSdrObjCustomShape = dynamic_cast< SdrObjCustomShape* >(GetSdrObjectFromXShape(mxShape));
+    SdrObjCustomShape* pSdrObjCustomShape = dynamic_cast< SdrObjCustomShape* >(SdrObject::getSdrObjectFromXShape(mxShape));
 
     if(pSdrObjCustomShape)
     {
@@ -463,7 +463,7 @@ drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeom
 Sequence< Reference< drawing::XCustomShapeHandle > > SAL_CALL EnhancedCustomShapeEngine::getInteraction()
 {
     sal_uInt32 i, nHdlCount = 0;
-    SdrObjCustomShape* pSdrObjCustomShape = dynamic_cast< SdrObjCustomShape* >(GetSdrObjectFromXShape(mxShape));
+    SdrObjCustomShape* pSdrObjCustomShape = dynamic_cast< SdrObjCustomShape* >(SdrObject::getSdrObjectFromXShape(mxShape));
 
     if(pSdrObjCustomShape)
     {

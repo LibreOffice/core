@@ -1613,7 +1613,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
         ::accessibility::AccessibleShape *pAccShape = rpShape.get();
         if (pAccShape)
         {
-            SdrObject *pObj = GetSdrObjectFromXShape(pAccShape->GetXShape());
+            SdrObject *pObj = SdrObject::getSdrObjectFromXShape(pAccShape->GetXShape());
             SwFrameFormat *pFrameFormat = pObj ? FindFrameFormat( pObj ) : nullptr;
             if (pFrameFormat)
             {
@@ -2084,7 +2084,7 @@ void SwAccessibleMap::AddGroupContext(const SdrObject *pParentObj, uno::Referenc
                     uno::Reference < drawing::XShape > xShape = pAccShape->GetXShape();
                     if (xShape.is())
                     {
-                        SdrObject* pObj = GetSdrObjectFromXShape(xShape);
+                        SdrObject* pObj = SdrObject::getSdrObjectFromXShape(xShape);
                         AddShapeContext(pObj, xChild);
                         AddGroupContext(pObj,xChild);
                     }

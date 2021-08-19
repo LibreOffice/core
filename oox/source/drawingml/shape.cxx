@@ -1695,7 +1695,7 @@ void Shape::keepDiagramCompatibilityInfo()
 
         if (mpDiagramData)
         {
-            if (SdrObject* pObj = GetSdrObjectFromXShape(mxShape))
+            if (SdrObject* pObj = SdrObject::getSdrObjectFromXShape(mxShape))
                 pObj->SetDiagramData(mpDiagramData);
         }
 

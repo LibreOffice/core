@@ -2184,7 +2184,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
                     Reference< drawing::XShape > xShape;
                     if( rValue >>= xShape )
                     {
-                        SdrObject* pNode = GetSdrObjectFromXShape( xShape );
+                        SdrObject* pNode = SdrObject::getSdrObjectFromXShape(xShape);
                         if( pNode )
                         {
                             pEdgeObj->ConnectToNode( pProperty->nWID == OWN_ATTR_EDGE_START_OBJ, pNode );
@@ -4014,13 +4014,6 @@ uno::Reference< drawing::XShape > GetXShapeForSdrObject( SdrObject* pObj ) noexc
 {
     uno::Reference< drawing::XShape > xShape( pObj->getUnoShape(), uno::UNO_QUERY );
     return xShape;
-}
-
-/** returns the SdrObject from the given StarOffice API wrapper */
-SdrObject* GetSdrObjectFromXShape( const uno::Reference< drawing::XShape >& xShape ) noexcept
-{
-    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
-    return pShape ? pShape->GetSdrObject() : nullptr;
 }
 
 

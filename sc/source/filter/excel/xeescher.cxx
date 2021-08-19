@@ -1842,7 +1842,7 @@ XclExpShapeObj::XclExpShapeObj( XclExpObjectManager& rRoot, css::uno::Reference<
     XclObjAny( rRoot, xShape, pDoc ),
     XclMacroHelper( rRoot )
 {
-    if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( xShape ) )
+    if (SdrObject* pSdrObj = SdrObject::getSdrObjectFromXShape(xShape))
     {
         ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pSdrObj );
         if ( pInfo && !pInfo->GetMacro().isEmpty() )

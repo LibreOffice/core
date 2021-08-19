@@ -68,7 +68,7 @@ css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL
 
     if(xShape.is())
     {
-        SdrObject* pSource = GetSdrObjectFromXShape(xShape);
+        SdrObject* pSource = SdrObject::getSdrObjectFromXShape(xShape);
 
         if(pSource)
         {

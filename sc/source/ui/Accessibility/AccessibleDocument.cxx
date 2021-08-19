@@ -933,7 +933,7 @@ bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
     SdrObject *pFocusedObj = nullptr;
     if( mnShapesSelected == 1 && aShapesList.size() == 1)
     {
-        pFocusedObj = GetSdrObjectFromXShape(aShapesList[0]->xShape);
+        pFocusedObj = SdrObject::getSdrObjectFromXShape(aShapesList[0]->xShape);
     }
     std::sort(aShapesList.begin(), aShapesList.end(), ScShapeDataLess());
     SortedShapes vecSelectedShapeAdd;

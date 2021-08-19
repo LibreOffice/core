@@ -389,7 +389,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
         OSL_ENSURE(m_xFormImpl, "Impossible");
         if (m_xFormImpl && m_xFormImpl->ReadOCXStream(xSrc1, &xRef))
         {
-            pRet = GetSdrObjectFromXShape(xRef);
+            pRet = SdrObject::getSdrObjectFromXShape(xRef);
             OSL_ENSURE(pRet, "Impossible");
             if (pRet)
                 pRet->SetLogicRect(aRect);

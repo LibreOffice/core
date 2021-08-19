@@ -1041,7 +1041,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                     "CustomShapeGeometry",
                     uno::makeAny(aCustomShapeGeometry.getAsConstPropertyValueList()));
             }
-            else if (SdrObject* pObject = GetSdrObjectFromXShape(xShape))
+            else if (SdrObject* pObject = SdrObject::getSdrObjectFromXShape(xShape))
             {
                 Point aRef1 = pObject->GetSnapRect().Center();
                 Point aRef2(aRef1);

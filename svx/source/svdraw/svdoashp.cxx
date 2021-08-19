@@ -411,7 +411,7 @@ const SdrObject* SdrObjCustomShape::GetSdrObjectFromCustomShape() const
             const_cast<SdrObjCustomShape*>(this)->mXRenderedCustomShape = xCustomShapeEngine->render();
     }
     SdrObject* pRenderedCustomShape = mXRenderedCustomShape.is()
-                ? GetSdrObjectFromXShape( mXRenderedCustomShape )
+                ? SdrObject::getSdrObjectFromXShape( mXRenderedCustomShape )
                 : nullptr;
     return pRenderedCustomShape;
 }
@@ -1324,7 +1324,7 @@ void SdrObjCustomShape::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     if ( !mXRenderedCustomShape.is() )
         return;
 
-    const SdrObject* pRenderedCustomShape = GetSdrObjectFromXShape( mXRenderedCustomShape );
+    const SdrObject* pRenderedCustomShape = SdrObject::getSdrObjectFromXShape( mXRenderedCustomShape );
     if ( !pRenderedCustomShape )
         return;
 
@@ -1477,7 +1477,7 @@ void SdrObjCustomShape::NbcMove( const Size& rSiz )
     SdrTextObj::NbcMove( rSiz );
     if ( mXRenderedCustomShape.is() )
     {
-        SdrObject* pRenderedCustomShape = GetSdrObjectFromXShape( mXRenderedCustomShape );
+        SdrObject* pRenderedCustomShape = SdrObject::getSdrObjectFromXShape(mXRenderedCustomShape);
         if ( pRenderedCustomShape )
         {
             // #i97149# the visualisation shape needs to be informed
@@ -2813,7 +2813,7 @@ SdrObjectUniquePtr SdrObjCustomShape::DoConvertToPolyObj(bool bBezier, bool bAdd
 
     if ( mXRenderedCustomShape.is() )
     {
-        pRenderedCustomShape = GetSdrObjectFromXShape( mXRenderedCustomShape );
+        pRenderedCustomShape = SdrObject::getSdrObjectFromXShape(mXRenderedCustomShape);
     }
 
     if ( pRenderedCustomShape )

@@ -839,7 +839,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
     if( mxAnnotationData->mxShape.is() && mxAnnotationData->mxShapes.is() )
     {
         OSL_ENSURE( mxAnnotationData->mxShapes.get() == xShapes.get(), "ScXMLTableRowCellContext::SetAnnotation - different drawing pages" );
-        SdrObject* pObject = ::GetSdrObjectFromXShape( mxAnnotationData->mxShape );
+        SdrObject* pObject = SdrObject::getSdrObjectFromXShape(mxAnnotationData->mxShape);
         OSL_ENSURE( pObject, "ScXMLTableRowCellContext::SetAnnotation - cannot get SdrObject from shape" );
 
         /*  Try to reuse the drawing object already created (but only if the
