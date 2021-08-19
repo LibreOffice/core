@@ -595,6 +595,7 @@ std::shared_ptr<vcl::BackendCapabilities> SvpSalInstance::GetBackendCapabilities
 {
     auto pBackendCapabilities = SalInstance::GetBackendCapabilities();
 #if 0 // LO code is not yet bitmap32-ready.
+      // See matching SvpSalGraphics::drawBitmap block
 #ifndef IOS
     // Note: This code is used for iOS, too. Let's not use 32-bit bitmaps with included alpha on iOS for now.
     pBackendCapabilities->mbSupportsBitmap32 = true;
