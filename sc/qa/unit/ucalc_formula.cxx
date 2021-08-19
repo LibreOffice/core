@@ -8760,12 +8760,16 @@ void TestFormula::testTdf97369()
     };
     columnTest(4, "=SUM(A$1:C$1)", lExpectedinE);
 
-    auto lExpectedinF = [=] (SCROW n) {
+    auto lExpectedinF = [
+#if defined _MSC_VER && !defined __clang__ && __cplusplus <= 201703L
+                         ROW_RANGE
+#endif
+                         ] (SCROW n) {
         return ((2*n + 1 - ROW_RANGE) * ROW_RANGE) / 2.0;
     };
     columnTest(5, "=SUM(A1:A10)", lExpectedinF);
 
-    auto lExpectedinG = [=] (SCROW n) {
+    auto lExpectedinG = [] (SCROW n) {
         return ((n + 1) * n) / 2.0;
     };
     columnTest(6, "=SUM(A$1:A10)", lExpectedinG);

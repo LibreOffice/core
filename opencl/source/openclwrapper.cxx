@@ -91,7 +91,7 @@ OString generateMD5(const void* pData, size_t length)
 
 OString const & getCacheFolder()
 {
-    static OString const aCacheFolder = [&]()
+    static OString const aCacheFolder = []()
     {
         OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/");
         rtl::Bootstrap::expandMacros(url);

@@ -91,7 +91,7 @@ namespace dbaui
     static const FeatureSet& lcl_getFeatureSet( const OUString& _rURL )
     {
         typedef std::map< OUString, FeatureSet > FeatureSets;
-        static FeatureSets s_aFeatureSets = [&]()
+        static FeatureSets s_aFeatureSets = []()
         {
             FeatureSets tmp;
             ::connectivity::DriversConfig aDriverConfig( ::comphelper::getProcessComponentContext() );
@@ -120,7 +120,7 @@ namespace dbaui
 
     static AuthenticationMode getAuthenticationMode( const OUString& _sURL )
     {
-        static std::map< OUString, FeatureSupport > s_aSupport = [&]()
+        static std::map< OUString, FeatureSupport > s_aSupport = []()
         {
             std::map< OUString, FeatureSupport > tmp;
             ::connectivity::DriversConfig aDriverConfig(::comphelper::getProcessComponentContext());

@@ -33,7 +33,7 @@ Calc_SpreadsheetDocument_get_implementation(
     SolarMutexGuard aGuard;
     ScDLL::Init();
     css::uno::Reference<css::uno::XInterface> xInterface = sfx2::createSfxModelInstance(args,
-        [&](SfxModelFlags _nCreationFlags)
+        [](SfxModelFlags _nCreationFlags)
         {
             SfxObjectShell* pShell = new ScDocShell( _nCreationFlags );
             return uno::Reference< uno::XInterface >( pShell->GetModel() );

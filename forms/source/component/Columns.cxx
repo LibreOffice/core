@@ -59,7 +59,7 @@ const sal_uInt16 COMPATIBLE_HIDDEN  = 0x0008;
 
 const css::uno::Sequence<OUString>& getColumnTypes()
 {
-    static css::uno::Sequence<OUString> aColumnTypes = [&]()
+    static css::uno::Sequence<OUString> aColumnTypes = []()
     {
         css::uno::Sequence<OUString> tmp(10);
         OUString* pNames = tmp.getArray();

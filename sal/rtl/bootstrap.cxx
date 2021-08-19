@@ -154,7 +154,7 @@ static bool getFromCommandLineArgs(
 {
     OSL_ASSERT(value);
 
-    static NameValueVector nameValueVector = [&]()
+    static NameValueVector nameValueVector = []()
     {
         NameValueVector tmp;
 

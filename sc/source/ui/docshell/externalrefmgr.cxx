@@ -840,7 +840,7 @@ void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRa
             {
                 pTabData->setCell(col + nCol1, row + nRow1, new formula::FormulaStringToken(val), 0, false);
             };
-            ScMatrix::EmptyOpFunction aEmptyFunc = [=](size_t /*row*/, size_t /*col*/) -> void
+            ScMatrix::EmptyOpFunction aEmptyFunc = [](size_t /*row*/, size_t /*col*/) -> void
             {
                 // Nothing. Empty cell.
             };

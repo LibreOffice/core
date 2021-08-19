@@ -51,7 +51,7 @@ Reference< XResultSet > OFlatDatabaseMetaData::impl_getTypeInfo_throw(  )
 
     rtl::Reference<::connectivity::ODatabaseMetaDataResultSet> pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);
 
-    static ODatabaseMetaDataResultSet::ORows aRows = [&]()
+    static ODatabaseMetaDataResultSet::ORows aRows = []()
     {
         ODatabaseMetaDataResultSet::ORows tmp(10);
         ODatabaseMetaDataResultSet::ORow aRow

@@ -276,7 +276,7 @@ INetContentType INetContentTypes::GetContentType(OUString const & rTypeName)
 //static
 OUString INetContentTypes::GetContentType(INetContentType eTypeID)
 {
-    static std::array<char const *, CONTENT_TYPE_LAST + 1> aMap = [&]()
+    static std::array<char const *, CONTENT_TYPE_LAST + 1> aMap = []()
     {
         std::array<char const *, CONTENT_TYPE_LAST + 1> tmp;
         for (std::size_t i = 0; i <= CONTENT_TYPE_LAST; ++i)
