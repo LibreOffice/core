@@ -2330,7 +2330,7 @@ bool SVGFilter::implCreateObjectsFromShape( const Reference< css::drawing::XDraw
     }
     else
     {
-        SdrObject*  pObj = GetSdrObjectFromXShape( rxShape );
+        SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rxShape);
 
         if( pObj )
         {

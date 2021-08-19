@@ -792,7 +792,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
             for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
             {
                 mxShapes->getByIndex( nIndex ) >>= xShape;
-                SdrObject* pObj = GetSdrObjectFromXShape( xShape );
+                SdrObject* pObj = SdrObject::getSdrObjectFromXShape(xShape);
                 if( pObj )
                     aShapes.push_back( pObj );
             }
@@ -800,7 +800,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
         else
         {
             // only one shape
-            SdrObject* pObj = GetSdrObjectFromXShape( mxShape );
+            SdrObject* pObj = SdrObject::getSdrObjectFromXShape(mxShape);
             if( pObj )
                 aShapes.push_back( pObj );
         }
@@ -1128,7 +1128,7 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
         // Step 2: try a shape
         if( mxShape.is() )
         {
-            if( nullptr == GetSdrObjectFromXShape( mxShape ) )
+            if (nullptr == SdrObject::getSdrObjectFromXShape(mxShape))
             {
                 // This is not a Draw shape, let's see if it's a Writer one.
                 uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
@@ -1194,7 +1194,7 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
             for( sal_Int32 nIndex = 1; bOk && ( nIndex < nCount ); nIndex++ )
             {
                 mxShapes->getByIndex( nIndex ) >>= xShape;
-                pObj = GetSdrObjectFromXShape( xShape );
+                pObj = SdrObject::getSdrObjectFromXShape(xShape);
                 bOk = pObj && pObj->getSdrPageFromSdrObject() == pPage;
             }
 

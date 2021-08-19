@@ -2995,7 +2995,7 @@ sal_uInt32 SwEscherEx::QueryTextID(
     const uno::Reference< drawing::XShape>& xXShapeRef, sal_uInt32 nShapeId )
 {
     sal_uInt32 nId = 0;
-    if (SdrObject* pObj = GetSdrObjectFromXShape(xXShapeRef))
+    if (SdrObject* pObj = SdrObject::getSdrObjectFromXShape(xXShapeRef))
     {
         pTextBxs->Append( *pObj, nShapeId );
         nId = pTextBxs->Count();

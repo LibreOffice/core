@@ -2454,7 +2454,7 @@ void CustomAnimationPane::onSelect()
         for( const CustomAnimationEffectPtr& pEffect : maListSelection )
         {
             Reference< XShape > xShape( pEffect->getTargetShape() );
-            SdrObject* pObj = GetSdrObjectFromXShape( xShape );
+            SdrObject* pObj = SdrObject::getSdrObjectFromXShape(xShape);
             if( pObj )
                 pView->MarkObj(pObj, pView->GetSdrPageView());
         }

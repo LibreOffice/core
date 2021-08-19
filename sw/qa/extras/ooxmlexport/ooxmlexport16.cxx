@@ -670,7 +670,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133473_shadowSize, "tdf133473.docx")
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);
 
-    SdrObject* pObj(GetSdrObjectFromXShape(xShape));
+    SdrObject* pObj(SdrObject::getSdrObjectFromXShape(xShape));
     const SfxItemSet& rSet = pObj->GetMergedItemSet();
     sal_Int32 nSize1 = rSet.Get(SDRATTR_SHADOWSIZEX).GetValue();
 

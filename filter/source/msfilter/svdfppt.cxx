@@ -1911,7 +1911,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( sal_uInt32 nOLEId,
                                     PPTConvertOCXControls aPPTConvertOCXControls( this, xModel, m_eCurrentPageKind );
                                     css::uno::Reference< css::drawing::XShape > xShape;
                                     if ( aPPTConvertOCXControls.ReadOCXStream( xObjStor, &xShape ) )
-                                        pRet = GetSdrObjectFromXShape( xShape );
+                                        pRet = SdrObject::getSdrObjectFromXShape(xShape);
 
                                 }
                                 if ( !pRet )

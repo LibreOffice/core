@@ -730,8 +730,8 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
 
     ShapeFlag nMirrorFlags = ShapeFlag::NONE;
     MSO_SPT eShapeType = EscherPropertyContainer::GetCustomShapeType( xShape, nMirrorFlags, sShapeType );
-    OSL_ENSURE(nullptr != dynamic_cast< SdrObjCustomShape* >(GetSdrObjectFromXShape(xShape)), "Not a SdrObjCustomShape (!)");
-    SdrObjCustomShape& rSdrObjCustomShape(static_cast< SdrObjCustomShape& >(*GetSdrObjectFromXShape(xShape)));
+    OSL_ENSURE(nullptr != dynamic_cast< SdrObjCustomShape* >(SdrObject::getSdrObjectFromXShape(xShape)), "Not a SdrObjCustomShape (!)");
+    SdrObjCustomShape& rSdrObjCustomShape(static_cast< SdrObjCustomShape& >(*SdrObject::getSdrObjectFromXShape(xShape)));
     const bool bIsDefaultObject(
         EscherPropertyContainer::IsDefaultObject(
             rSdrObjCustomShape,
@@ -2184,7 +2184,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
     mpFS->singleElementNS( mnXmlNamespace, XML_embed );
 
     // pic element
-    SdrObject* pSdrOLE2( GetSdrObjectFromXShape( xShape ) );
+    SdrObject* pSdrOLE2(SdrObject::getSdrObjectFromXShape(xShape));
     // The spec doesn't allow <p:pic> here, but PowerPoint requires it.
     bool bEcma = mpFB->getVersion() == oox::core::ECMA_DIALECT;
     if (bEcma)

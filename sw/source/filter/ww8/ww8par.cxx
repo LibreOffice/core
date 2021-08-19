@@ -536,7 +536,7 @@ SdrObject* SwMSDffManager::ImportOLE( sal_uInt32 nOLEId,
         if ( (!(rReader.m_bIsHeader || rReader.m_bIsFooter)) &&
             rReader.m_xFormImpl->ReadOCXStream(xSrc,&xShape,true))
         {
-            pRet = GetSdrObjectFromXShape(xShape);
+            pRet = SdrObject::getSdrObjectFromXShape(xShape);
         }
         else
         {

@@ -46,9 +46,6 @@ SVXCORE_DLLPUBLIC rtl::Reference<SvxShape> CreateSvxShapeByTypeAndInventor(sal_u
 /** Returns a StarOffice API wrapper for the given SdrObject */
 SVXCORE_DLLPUBLIC css::uno::Reference< css::drawing::XShape > GetXShapeForSdrObject( SdrObject* pObj ) noexcept;
 
-/** Returns the SdrObject from the given StarOffice API wrapper */
-SVXCORE_DLLPUBLIC SdrObject* GetSdrObjectFromXShape( const css::uno::Reference< css::drawing::XShape >& xShape ) noexcept ;
-
 /** Returns a StarOffice API wrapper for the given SdrPage */
 SVXCORE_DLLPUBLIC css::uno::Reference< css::drawing::XDrawPage > GetXDrawPageForSdrPage( SdrPage* pPage ) noexcept;
 
