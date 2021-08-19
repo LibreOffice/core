@@ -661,6 +661,21 @@ sal_Int16 Color::getTransparency() const
     return sal_Int16(std::round( (1.0 * (MAX_PERCENT - mnAlpha)) / PER_PERCENT) );
 }
 
+sal_Int16 Color::getSchemeIndex() const
+{
+    static std::map<OUString, sal_Int32> const aSchemeColorNameToIndex{
+        { "dk1", 0 },     { "lt1", 1 },     { "dk2", 2 },     { "lt2", 3 },
+        { "accent1", 4 }, { "accent2", 5 }, { "accent3", 6 }, { "accent4", 7 },
+        { "accent5", 8 }, { "accent6", 9 }, { "hlink", 10 },  { "folHlink", 11 }
+    };
+
+    auto aIt = aSchemeColorNameToIndex.find(msSchemeName);
+    if( aIt == aSchemeColorNameToIndex.end() )
+        return -1;
+    else
+        return aIt->second;
+}
+
 // private --------------------------------------------------------------------
 
 void Color::setResolvedRgb( ::Color nRgb ) const
