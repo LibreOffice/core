@@ -80,7 +80,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
 
         /// Calculate parent postit id of current annotation window
         sal_uInt32 CalcParent();
-        void       InitAnswer(OutlinerParaObject const * pText);
+        void       InitAnswer(OutlinerParaObject const & rText);
 
         bool IsProtected() const;
 
