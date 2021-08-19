@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "6f0be66e_f60c28d5",
+        "filename": "sw/source/uibase/uiview/viewtab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1101,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2021-08-19T13:23:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a87c4969_5e0489a0",
+      "revId": "baaee65aea3772a67d440c66845e38721a34ae4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "79105f82_ba9f4d80",
         "filename": "sw/source/uibase/uiview/viewtab.cxx",
         "patchSetId": 1
@@ -39,6 +57,30 @@
       "revId": "baaee65aea3772a67d440c66845e38721a34ae4a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f3af64a_1b4d06f6",
+        "filename": "sw/source/uibase/uiview/viewtab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1109,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2021-08-19T13:23:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79105f82_ba9f4d80",
+      "range": {
+        "startLine": 1109,
+        "startChar": 60,
+        "endLine": 1109,
+        "endChar": 71
+      },
+      "revId": "baaee65aea3772a67d440c66845e38721a34ae4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
