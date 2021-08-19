@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "540ef794_82932d22",
+        "filename": "sw/source/core/table/swtable.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-08-19T14:45:20Z",
+      "side": 1,
+      "message": "\u0026\u0026 pCNd-\u003eGetSwAttrSet().HasItem(RES_PARATR_LIST_AUTOFMT)",
+      "range": {
+        "startLine": 145,
+        "startChar": 8,
+        "endLine": 145,
+        "endChar": 35
+      },
+      "revId": "33df62dc45e0a59f36b3d3dfd0e1a97e2968e01d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
