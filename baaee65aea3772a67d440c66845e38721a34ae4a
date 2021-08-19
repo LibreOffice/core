@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a87c4969_5e0489a0",
+        "filename": "sw/source/uibase/uiview/viewtab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1101,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-19T12:53:16Z",
+      "side": 1,
+      "message": "Please don\u0027t introduce the variables out of the scope where they are used. Each time they are set and used inside the \"if\" blocks, and outside of those they are not used. But this is not obvious when reading the patch, and I spend some time trying to find out if there are cases where they are used without initialization, somewhere after the if blocks.\n\nAdditionally, you only need one of them - so you may write it like this:\n\n                    if (sType \u003d\u003d \"column-left\")\n                    {\n                        tools::Long nNewPosition \u003d aTabCols.GetLeft() + nOffset;\n                        if (aTabCols.Count() \u003e 0)\n                        {\n                            auto \u0026 rEntry \u003d aTabCols.GetEntry(0);\n                            nNewPosition \u003d std::min(nNewPosition, rEntry.nPos - constDistanceOffset);\n                        }\n                        aTabCols.SetLeft(nNewPosition);\n                    }\n\nThis even simplifies it by avoiding the inner \"else\" part.",
+      "revId": "baaee65aea3772a67d440c66845e38721a34ae4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79105f82_ba9f4d80",
+        "filename": "sw/source/uibase/uiview/viewtab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1109,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-19T12:53:16Z",
+      "side": 1,
+      "message": "Please don\u0027t cast explicitly. Adding sal_Int32 is OK without any cast :)",
+      "range": {
+        "startLine": 1109,
+        "startChar": 60,
+        "endLine": 1109,
+        "endChar": 71
+      },
+      "revId": "baaee65aea3772a67d440c66845e38721a34ae4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
