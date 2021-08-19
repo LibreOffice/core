@@ -1104,10 +1104,20 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
 
                         if ( pStyleSheetProperties )
                         {
-                            beans::PropertyValue aLvlVal( getPropertyName( PROP_OUTLINE_LEVEL ), 0,
-                                    uno::makeAny( sal_Int16( pStyleSheetProperties->GetOutlineLevel( ) + 1 ) ),
-                                    beans::PropertyState_DIRECT_VALUE );
-                            aPropValues.push_back(aLvlVal);
+                            sal_Int16 nLvl = pStyleSheetProperties->GetOutlineLevel();
+                            // convert MS body Level (9) to LO body level (0) and equivalent outline levels
+                            if (nLvl != -1)
+                            {
+                                if (nLvl == WW_OUTLINE_MAX)
+                                    nLvl = 0;
+                                else
+                                    ++nLvl;
+
+                                beans::PropertyValue aLvlVal(getPropertyName(PROP_OUTLINE_LEVEL), 0,
+                                                             uno::makeAny(nLvl),
+                                                             beans::PropertyState_DIRECT_VALUE);
+                                aPropValues.push_back(aLvlVal);
+                            }
                         }
 
                         uno::Reference< beans::XPropertyState >xState( xStyle, uno::UNO_QUERY_THROW );

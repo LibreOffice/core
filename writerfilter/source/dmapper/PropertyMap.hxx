@@ -541,7 +541,7 @@ public:
     void      SetListLevel( sal_Int16 nLevel ) { mnListLevel = nLevel; }
 
     sal_Int16 GetOutlineLevel() const             { return mnOutlineLevel; }
-    void      SetOutlineLevel( sal_Int16 nLevel ) { if ( nLevel < WW_OUTLINE_MAX ) mnOutlineLevel = nLevel; }
+    void SetOutlineLevel(sal_Int16 nLevel) { if (nLevel <= WW_OUTLINE_MAX) mnOutlineLevel = nLevel; }
 };
 
 class ParagraphPropertyMap

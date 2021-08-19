@@ -329,6 +329,40 @@ DECLARE_OOXMLEXPORT_TEST(testTdf141966_chapterNumberTortureTest, "tdf141966_chap
     CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf143692_outlineLevelTortureTest, "tdf143692_outlineLevelTortureTest.docx")
+{
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(1, "Head non Toc style"), uno::UNO_QUERY);
+    // fixed missing inherit from Heading 1
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getProperty<sal_Int16>(xPara, "OutlineLevel"));
+
+    xPara.set(getParagraph(2, "noInheritHeading1"), uno::UNO_QUERY);
+    // fixed body level not cancelling inherited level
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xPara, "OutlineLevel"));
+
+    xPara.set(getParagraph(4, "illegal -3"), uno::UNO_QUERY);
+    // illegal value is ignored, so inherit from Heading 1
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getProperty<sal_Int16>(xPara, "OutlineLevel"));
+
+    xPara.set(getParagraph(5, "Heading 1 with invalid direct -2"), uno::UNO_QUERY);
+    // fixed illegal does not mean body level, it means inherit from style.
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getProperty<sal_Int16>(xPara, "OutlineLevel"));
+
+    xPara.set(getParagraph(7, "InheritCN3"), uno::UNO_QUERY);
+    // fixed Chapter Numbering cancelling inheritance
+    //CPPUNIT_ASSERT_EQUAL(sal_Int16(3), getProperty<sal_Int16>(xPara, "OutlineLevel"));
+
+    xPara.set(getParagraph(8, "noInheritCN3"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xPara, "OutlineLevel"));
+
+    xPara.set(getParagraph(9, "override6CN3"), uno::UNO_QUERY);
+    // fixed body level not cancelling inherited level
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(6), getProperty<sal_Int16>(xPara, "OutlineLevel"));
+
+    xPara.set(getParagraph(10, "illegal 25"), uno::UNO_QUERY);
+    // fixed illegal value is ignored, so inherit from List Level (Chapter Numbering)
+    //CPPUNIT_ASSERT_EQUAL(sal_Int16(3), getProperty<sal_Int16>(xPara, "OutlineLevel"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf132752, "tdf132752.docx")
 {
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1801), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
