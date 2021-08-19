@@ -24,6 +24,14 @@ GraphicTestEntry::GraphicTestEntry(weld::Container* pParent, weld::Dialog* pDial
     , m_xResultBitmap(aTestBitmap)
 {
     m_xParentDialog = pDialog;
+    update_info(aTestName, aTestStatus, aTestBitmap);
+    m_xTestButton->connect_clicked(LINK(this, GraphicTestEntry, HandleResultViewRequest));
+    m_xContainer->show();
+}
+
+void GraphicTestEntry::update_info(const OUString& aTestName, const OUString& aTestStatus,
+                                   const Bitmap& aBitmap)
+{
     m_xTestLabel->set_label(aTestName);
     m_xTestButton->set_label(aTestStatus);
     m_xTestButton->set_tooltip_text(aTestName);
@@ -32,8 +40,7 @@ GraphicTestEntry::GraphicTestEntry(weld::Container* pParent, weld::Dialog* pDial
             ? COL_LIGHTGREEN
             : aTestStatus == "QUIRKY" ? COL_YELLOW
                                       : aTestStatus == "FAILED" ? COL_LIGHTRED : COL_LIGHTGRAY);
-    m_xTestButton->connect_clicked(LINK(this, GraphicTestEntry, HandleResultViewRequest));
-    m_xContainer->show();
+    m_xResultBitmap = aBitmap;
 }
 
 IMPL_LINK(GraphicTestEntry, HandleResultViewRequest, weld::Button&, rButton, void)
@@ -46,6 +53,8 @@ IMPL_LINK(GraphicTestEntry, HandleResultViewRequest, weld::Button&, rButton, voi
                                     rButton.get_tooltip_text());
     m_ImgVwDialog.run();
 }
+
+static void runGraphicsTests(void* pData) { static_cast<GraphicsRenderTests*>(pData)->run(true); }
 
 GraphicsTestsDialog::GraphicsTestsDialog(weld::Container* pParent)
     : GenericDialogController(pParent, "cui/ui/graphictestdlg.ui", "GraphicTestsDialog")
@@ -60,23 +69,44 @@ GraphicsTestsDialog::GraphicsTestsDialog(weld::Container* pParent)
     m_xDownloadResults->connect_clicked(LINK(this, GraphicsTestsDialog, HandleDownloadRequest));
 }
 
+IMPL_LINK_NOARG(GraphicsTestsDialog, updateTestLog, Timer*, void)
+{
+    GraphicsRenderTests* aTestPointer = static_cast<GraphicsRenderTests*>(m_aTestsPointer);
+    if (int(aTestPointer->getTestResults().size()) < aTestPointer->getNumberOfTests())
+    {
+        m_xUpdateTimer.SetTimeout(1000);
+        m_xUpdateTimer.Start();
+        m_xResultLog->set_text(aTestPointer->getResultString() + "[Running...]");
+    }
+    else
+    {
+        m_xResultLog->set_text(aTestPointer->getResultString()
+                               + "(Click on any test's status to view it's resultant bitmap.)");
+    }
+    while (m_nTestNumber < sal_Int32(aTestPointer->getTestResults().size()))
+    {
+        OUString aTestName = aTestPointer->getTestResults()[m_nTestNumber].getName();
+        OUString aTestStatus = aTestPointer->getTestResults()[m_nTestNumber].getStatus();
+        Bitmap aTestBitmap = aTestPointer->getTestResults()[m_nTestNumber].getBitmap();
+        auto xGpTest = std::make_unique<GraphicTestEntry>(m_xContainerBox.get(), m_xDialog.get(),
+                                                          aTestName, aTestStatus, aTestBitmap);
+        m_xContainerBox->reorder_child(xGpTest->get_widget(), m_nTestNumber++);
+        m_xGraphicTestEntries.push_back(std::move(xGpTest));
+    }
+}
+
 short GraphicsTestsDialog::run()
 {
     GraphicsRenderTests aTestObject;
-    aTestObject.run(true);
-    OUString aResultLog = aTestObject.getResultString()
-                          + "\n(Click on any test to view its resultant bitmap image)";
-    m_xResultLog->set_text(aResultLog);
-    sal_Int32 nTestNumber = 0;
-    for (VclTestResult& test : aTestObject.getTestResults())
-    {
-        auto xGpTest = std::make_unique<GraphicTestEntry>(m_xContainerBox.get(), m_xDialog.get(),
-                                                          test.getTestName(), test.getStatus(),
-                                                          test.getBitmap());
-        m_xContainerBox->reorder_child(xGpTest->get_widget(), nTestNumber++);
-        m_xGraphicTestEntries.push_back(std::move(xGpTest));
-    }
-    return GenericDialogController::run();
+    m_aTestsPointer = &aTestObject;
+    std::thread aTestRunner(runGraphicsTests, m_aTestsPointer);
+    m_xUpdateTimer.SetInvokeHandler(LINK(this, GraphicsTestsDialog, updateTestLog));
+    m_xUpdateTimer.SetPriority(TaskPriority::DEFAULT_IDLE);
+    m_xUpdateTimer.SetTimeout(1000);
+    m_xUpdateTimer.Start();
+    short aStatus = GenericDialogController::run();
+    aTestRunner.join();
+    return aStatus;
 }
 
 IMPL_LINK_NOARG(GraphicsTestsDialog, HandleDownloadRequest, weld::Button&, void)
