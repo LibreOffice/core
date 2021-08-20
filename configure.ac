@@ -885,6 +885,9 @@ linux-gnu*|k*bsd*-gnu*)
     build_skia=yes
     test_gdb_index=yes
     test_split_debug=yes
+    if test "$enable_fuzzers" = yes; then
+        test_system_freetype=no
+    fi
     _os=Linux
     ;;
 
@@ -9012,7 +9015,11 @@ if test "$with_system_zlib" = "auto"; then
         with_system_zlib="$with_system_libs"
         ;;
     *)
-        with_system_zlib=yes
+        if test "$enable_fuzzers" != "yes"; then
+            with_system_zlib=yes
+        else
+            with_system_zlib=no
+        fi
         ;;
     esac
 fi
