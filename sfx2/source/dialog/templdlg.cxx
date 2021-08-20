@@ -375,48 +375,6 @@ void SfxCommonTemplateDialog_Impl::EnableTreeDrag(bool bEnable)
     m_aStyleListEnableTreeDrag.Call(bEnable);
 }
 
-static OUString lcl_GetStyleFamilyName( SfxStyleFamily nFamily )
-{
-    if(nFamily == SfxStyleFamily::Char)
-        return "CharacterStyles" ;
-    if(nFamily == SfxStyleFamily::Para)
-        return "ParagraphStyles";
-    if(nFamily == SfxStyleFamily::Page)
-        return "PageStyles";
-    if(nFamily == SfxStyleFamily::Table)
-        return "TableStyles";
-    if (nFamily == SfxStyleFamily::Pseudo)
-        return "NumberingStyles";
-    return OUString();
-}
-
-OUString SfxCommonTemplateDialog_Impl::getDefaultStyleName( const SfxStyleFamily eFam, const StyleList& rStyleList )
-{
-    OUString sDefaultStyle;
-    OUString aFamilyName = lcl_GetStyleFamilyName(eFam);
-    if( aFamilyName == "TableStyles" )
-        sDefaultStyle = "Default Style";
-    else if(aFamilyName == "NumberingStyles")
-        sDefaultStyle = "No List";
-    else
-        sDefaultStyle = "Standard";
-    uno::Reference<style::XStyleFamiliesSupplier> xModel(rStyleList.GetObjectShell()->GetModel(), uno::UNO_QUERY);
-    OUString aUIName;
-    try
-    {
-        uno::Reference< container::XNameAccess > xStyles;
-        uno::Reference< container::XNameAccess > xCont = xModel->getStyleFamilies();
-        xCont->getByName( aFamilyName ) >>= xStyles;
-        uno::Reference< beans::XPropertySet > xInfo;
-        xStyles->getByName( sDefaultStyle ) >>= xInfo;
-        xInfo->getPropertyValue("DisplayName") >>= aUIName;
-    }
-    catch (const uno::Exception&)
-    {
-    }
-    return aUIName;
-}
-
 // Updated display: Watering the house
 void SfxCommonTemplateDialog_Impl::SetWaterCanState(const SfxBoolItem *pItem)
 {

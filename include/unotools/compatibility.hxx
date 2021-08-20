@@ -79,18 +79,6 @@ class SvtCompatibilityEntry
         static constexpr OUStringLiteral USER_ENTRY_NAME = u"_user";
         static constexpr OUStringLiteral DEFAULT_ENTRY_NAME = u"_default";
 
-        static Index getIndex( std::u16string_view rName )
-        {
-            for ( int i = static_cast<int>(Index::Name); i < static_cast<int>(Index::INVALID); ++i )
-                if ( getName( Index(i) ) == rName )
-                    return Index(i);
-
-            /* SvtCompatibilityEntry::getIndex() Undeclared compatibility property name */
-            assert(false);
-
-            return Index::INVALID;
-        }
-
         static size_t getElementCount()
         {
             return static_cast<size_t>(Index::INVALID);

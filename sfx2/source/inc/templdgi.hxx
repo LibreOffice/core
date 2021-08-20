@@ -63,7 +63,6 @@ private:
     friend class DeletionWatcher;
 
     DeletionWatcher* impl_setDeletionWatcher(DeletionWatcher* pNewWatcher);
-    static OUString getDefaultStyleName( const SfxStyleFamily eFam, const StyleList& rStyleList );
 
 protected:
 #define MAX_FAMILIES            6

@@ -142,8 +142,6 @@ public:
 
 DRAWINGLAYER_DLLPUBLIC ViewInformation2D
 createViewInformation2D(const css::uno::Sequence<css::beans::PropertyValue>& rViewParameters);
-DRAWINGLAYER_DLLPUBLIC css::uno::Sequence<css::beans::PropertyValue>
-createPropertyValues(const ViewInformation2D& rViewInformation2D);
 
 } // end of namespace drawinglayer::geometry
 

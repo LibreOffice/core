@@ -121,8 +121,6 @@ public:
     void FamilySelect(sal_uInt16 nEntry);
     void FilterSelect(sal_uInt16 nActFilter, bool bsetFilter);
 
-    void setVisible(bool b);
-
 private:
     void FillTreeBox(SfxStyleFamily eFam);
 

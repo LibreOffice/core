@@ -143,15 +143,6 @@ namespace drawinglayer::geometry
             /// for convenience, the linear combination of the above four transformations is offered
             const basegfx::B3DHomMatrix& getObjectToView() const;
 
-            /** Get the uno::Sequence< beans::PropertyValue > which contains all ViewInformation
-
-                Use this call if You need to extract all contained ViewInformation. The ones
-                directly supported for convenience will be added to the ones only available
-                as PropertyValues. This set completely describes this ViewInformation3D and
-                can be used for complete information transport over UNO API.
-            */
-            const css::uno::Sequence< css::beans::PropertyValue >& getViewInformationSequence() const;
-
             /** Get the uno::Sequence< beans::PropertyValue > which contains only ViewInformation
                 not offered directly
 
