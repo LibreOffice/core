@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <sax/tools/converter.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -95,6 +96,7 @@ XMLTextMarkImportContext::XMLTextMarkImportContext(
     : SvXMLImportContext(rImport)
     , m_rHelper(rHlp)
     , m_rxCrossRefHeadingBookmark(io_rxCrossRefHeadingBookmark)
+    , m_isHidden(false)
     , m_bHaveAbout(false)
 {
 }
@@ -166,9 +168,7 @@ void XMLTextMarkImportContext::startFastElement( sal_Int32 nElement,
 
     if ((nElement & TOKEN_MASK) == XML_BOOKMARK_START)
     {
-        const OUString sHidden    = xAttrList->getOptionalValue(XML_ELEMENT(LO_EXT, XML_HIDDEN));
-        const OUString sCondition = xAttrList->getOptionalValue(XML_ELEMENT(LO_EXT, XML_CONDITION));
-        m_rHelper.setBookmarkAttributes(m_sBookmarkName, sHidden == "true", sCondition);
+        m_rHelper.setBookmarkAttributes(m_sBookmarkName, m_isHidden, m_sCondition);
     }
 }
 
@@ -538,6 +538,12 @@ bool XMLTextMarkImportContext::FindName(
                 break;
             case XML_ELEMENT(FIELD, XML_TYPE):
                 m_sFieldName = sValue;
+                break;
+            case XML_ELEMENT(LO_EXT, XML_HIDDEN):
+                ::sax::Converter::convertBool(m_isHidden, sValue);
+                break;
+            case XML_ELEMENT(LO_EXT, XML_CONDITION):
+                m_sCondition = sValue;
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);
