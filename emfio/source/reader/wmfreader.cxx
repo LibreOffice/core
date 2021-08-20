@@ -20,6 +20,9 @@
 #include <wmfreader.hxx>
 #include <emfreader.hxx>
 
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#include <basegfx/range/b2drectangle.hxx>
 #include <cstdlib>
 #include <memory>
 #include <optional>
@@ -121,22 +124,22 @@
 
 namespace
 {
-    void GetWinExtMax(const Point& rSource, tools::Rectangle& rPlaceableBound, const sal_Int16 nMapMode)
+    void GetWinExtMax(const basegfx::B2DPoint& rSource, basegfx::B2DRectangle& rPlaceableBound, const sal_Int16 nMapMode)
     {
-        Point aSource(rSource);
+        basegfx::B2DPoint aSource(rSource);
         if (nMapMode == MM_HIMETRIC)
-            aSource.setY( -rSource.Y() );
-        if (aSource.X() < rPlaceableBound.Left())
-            rPlaceableBound.SetLeft( aSource.X() );
-        if (aSource.X() > rPlaceableBound.Right())
-            rPlaceableBound.SetRight( aSource.X() );
-        if (aSource.Y() < rPlaceableBound.Top())
-            rPlaceableBound.SetTop( aSource.Y() );
-        if (aSource.Y() > rPlaceableBound.Bottom())
-            rPlaceableBound.SetBottom( aSource.Y() );
+            aSource.setY( -rSource.getY() );
+        if (aSource.getX() < rPlaceableBound.getMinX())
+            rPlaceableBound.SetLeft( aSource.getX() );
+        if (aSource.getX() > rPlaceableBound.getMaxX())
+            rPlaceableBound.SetRight( aSource.getX() );
+        if (aSource.getY() < rPlaceableBound.getMinY())
+            rPlaceableBound.SetTop( aSource.getY() );
+        if (aSource.getY() > rPlaceableBound.getMaxY())
+            rPlaceableBound.SetBottom( aSource.getY() );
     }
 
-    void GetWinExtMax(const tools::Rectangle& rSource, tools::Rectangle& rPlaceableBound, const sal_Int16 nMapMode)
+    void GetWinExtMax(const basegfx::B2DRectangle& rSource, basegfx::B2DRectangle& rPlaceableBound, const sal_Int16 nMapMode)
     {
         GetWinExtMax(rSource.TopLeft(), rPlaceableBound, nMapMode);
         GetWinExtMax(rSource.BottomRight(), rPlaceableBound, nMapMode);
@@ -243,33 +246,28 @@ namespace
 
 namespace emfio
 {
-    inline Point WmfReader::ReadPoint()
+    inline basegfx::B2DPoint WmfReader::ReadPoint()
     {
         short nX = 0, nY = 0;
         mpInputStream->ReadInt16( nX ).ReadInt16( nY );
-        return Point( nX, nY );
+        return basegfx::B2DPoint( nX, nY );
     }
 
-    inline Point WmfReader::ReadYX()
+    inline basegfx::B2DPoint WmfReader::ReadYX()
     {
         short nX = 0, nY = 0;
         mpInputStream->ReadInt16( nY ).ReadInt16( nX );
-        return Point( nX, nY );
+        return basegfx::B2DPoint( nX, nY );
     }
 
-    tools::Rectangle WmfReader::ReadRectangle()
+    basegfx::B2DRectangle WmfReader::ReadRectangle()
     {
-        Point aBR, aTL;
+        basegfx::B2DPoint aBR, aTL;
         aBR = ReadYX();
         aTL = ReadYX();
         aBR.AdjustX( -1 );
         aBR.AdjustY( -1 );
-        if (aTL.X() > aBR.X() || aTL.Y() > aBR.Y())
-        {
-            SAL_WARN("emfio", "broken rectangle");
-            return tools::Rectangle::Justify(aTL, aBR);
-        }
-        return tools::Rectangle( aTL, aBR );
+        return basegfx::B2DRectangle( aTL, aBR );
     }
 
     Size WmfReader::ReadYXExt()
@@ -420,9 +418,9 @@ namespace emfio
 
             case W_META_ARC:
             {
-                Point aEnd( ReadYX() );
-                Point aStart( ReadYX() );
-                tools::Rectangle aRect( ReadRectangle() );
+                basegfx::B2DPoint aEnd( ReadYX() );
+                basegfx::B2DPoint aStart( ReadYX() );
+                basegfx::B2DRectangle aRect( ReadRectangle() );
                 aRect.Justify();
                 DrawArc( aRect, aStart, aEnd );
             }
@@ -430,9 +428,9 @@ namespace emfio
 
             case W_META_PIE:
             {
-                Point     aEnd( ReadYX() );
-                Point     aStart( ReadYX() );
-                tools::Rectangle aRect( ReadRectangle() );
+                basegfx::B2DPoint     aEnd( ReadYX() );
+                basegfx::B2DPoint     aStart( ReadYX() );
+                basegfx::B2DRectangle aRect( ReadRectangle() );
                 aRect.Justify();
 
                 // #i73608# OutputDevice deviates from WMF
@@ -446,9 +444,9 @@ namespace emfio
 
             case W_META_CHORD:
             {
-                Point aEnd( ReadYX() );
-                Point aStart( ReadYX() );
-                tools::Rectangle aRect( ReadRectangle() );
+                basegfx::B2DPoint aEnd( ReadYX() );
+                basegfx::B2DPoint aStart( ReadYX() );
+                basegfx::B2DRectangle aRect( ReadRectangle() );
                 aRect.Justify();
                 DrawChord( aRect, aStart, aEnd );
             }
@@ -501,7 +499,7 @@ namespace emfio
                     // Number of points of each polygon. Determine total number of points
                     std::unique_ptr<sal_uInt16[]> xPolygonPointCounts(new sal_uInt16[nPolyCount]);
                     sal_uInt16* pnPoints = xPolygonPointCounts.get();
-                    tools::PolyPolygon aPolyPoly(nPolyCount);
+                    basegfx::B2DPolyPolygon aPolyPoly(nPolyCount);
                     sal_uInt16 nPoints = 0;
                     for (sal_uInt16 a = 0; a < nPolyCount && mpInputStream->good(); ++a)
                     {
@@ -537,8 +535,8 @@ namespace emfio
                             break;
                         }
 
-                        std::unique_ptr<Point[]> xPolygonPoints(new Point[nPointCount]);
-                        Point* pPtAry = xPolygonPoints.get();
+                        std::unique_ptr<basegfx::B2DPoint[]> xPolygonPoints(new basegfx::B2DPoint[nPointCount]);
+                        basegfx::B2DPoint* pPtAry = xPolygonPoints.get();
 
                         for(sal_uInt16 b(0); b < nPointCount && mpInputStream->good(); ++b)
                         {
@@ -647,7 +645,7 @@ namespace emfio
                     std::vector<char> aChars(nStoredLength);
                     nLength = std::min<sal_uInt16>(nLength, mpInputStream->ReadBytes(aChars.data(), aChars.size()));
                     OUString aText(aChars.data(), nLength, GetCharSet());
-                    Point aPosition( ReadYX() );
+                    basegfx::B2DPoint aPosition( ReadYX() );
                     DrawText( aPosition, aText );
                 }
             }
@@ -666,11 +664,11 @@ namespace emfio
                 }
 
                 auto nRecordPos = mpInputStream->Tell() - 6;
-                Point aPosition = ReadYX();
+                basegfx::B2DPoint aPosition = ReadYX();
                 sal_uInt16 nLen = 0, nOptions = 0;
                 mpInputStream->ReadUInt16( nLen ).ReadUInt16( nOptions );
                 SAL_INFO( "emfio", "\t\t\t Pos: " << aPosition.getX() << ":" << aPosition.getY() << " String Length: " << nLen << " Options: " << nOptions );
-                tools::Rectangle aRect;
+                basegfx::B2DRectangle aRect;
                 if ( ( nOptions & ETO_CLIPPED ) || ( nOptions & ETO_OPAQUE ) )
                 {
                     nNonStringLen += 2 * sizeof(sal_uInt16);
@@ -680,9 +678,9 @@ namespace emfio
                         SAL_WARN("emfio", "W_META_TEXTOUT too short");
                         break;
                     }
-                    const Point aTopLeft = ReadPoint();
-                    const Point aBottomRight = ReadPoint();
-                    aRect = tools::Rectangle( aTopLeft, aBottomRight );
+                    const basegfx::B2DPoint aTopLeft = ReadPoint();
+                    const basegfx::B2DPoint aBottomRight = ReadPoint();
+                    aRect = basegfx::B2DRectangle( aTopLeft, aBottomRight );
                     if ( nOptions & ETO_OPAQUE )
                         DrawRectWithBGColor( aRect );
                     SAL_INFO( "emfio", "\t\t\t Rectangle : " << aTopLeft.getX() << ":" << aTopLeft.getY() << ", " << aBottomRight.getX() << ":" << aBottomRight.getY() );
@@ -822,7 +820,7 @@ namespace emfio
                 if ( bNoSourceBitmap )
                     mpInputStream->SeekRel( 2 ); // Skip Reserved 2 bytes (it must be ignored)
                 mpInputStream->ReadInt16( nSye ).ReadInt16( nSxe );
-                Point aPoint( ReadYX() ); // The upper-left corner of the destination rectangle.
+                basegfx::B2DPoint aPoint( ReadYX() ); // The upper-left corner of the destination rectangle.
                 mpInputStream->ReadInt16( nBitmapType ).ReadInt16( nWidth ).ReadInt16( nHeight ).ReadInt16( nBytesPerScan ).ReadUChar( nPlanes ).ReadUChar( nBitCount );
 
                 SAL_INFO("emfio", "\t\t Bitmap type:" << nBitmapType << " Width:" << nWidth << " Height:" << nHeight << " WidthBytes:" << nBytesPerScan << " Planes: " << static_cast< sal_uInt16 >( nPlanes ) << " BitCount: " << static_cast< sal_uInt16 >( nBitCount ) );
@@ -853,10 +851,10 @@ namespace emfio
                          ( nXSrc + nSxe <= nWidth ) &&
                          ( nYSrc + nSye <= nHeight ) )
                     {
-                        tools::Rectangle aCropRect( Point( nXSrc, nYSrc ), Size( nSxe, nSye ) );
+                        basegfx::B2DRectangle aCropRect( basegfx::B2DPoint( nXSrc, nYSrc ), Size( nSxe, nSye ) );
                         aBitmap.Crop( aCropRect );
                     }
-                    tools::Rectangle aDestRect( aPoint, Size( nSxe, nSye ) );
+                    basegfx::B2DRectangle aDestRect( aPoint, Size( nSxe, nSye ) );
                     maBmpSaveList.emplace_back(new BSaveStruct(aBitmap, aDestRect, nRasterOperation));
                 }
             }
@@ -892,7 +890,7 @@ namespace emfio
                 Size aDestSize( ReadYXExt() );
                 if ( aDestSize.Width() && aDestSize.Height() )  // #92623# do not try to read buggy bitmaps
                 {
-                    tools::Rectangle aDestRect( ReadYX(), aDestSize );
+                    basegfx::B2DRectangle aDestRect( ReadYX(), aDestSize );
                     if ( !bNoSourceBitmap )
                     {
                         // tdf#142625 Read the DIBHeader and check if bitmap is supported
@@ -918,7 +916,7 @@ namespace emfio
                             ( nXSrc + nSrcWidth <= aBmp.GetSizePixel().Width() ) &&
                             ( nYSrc + nSrcHeight <= aBmp.GetSizePixel().Height() ) )
                     {
-                        tools::Rectangle aCropRect( Point( nXSrc, nYSrc ), Size( nSrcWidth, nSrcHeight ) );
+                        basegfx::B2DRectangle aCropRect( basegfx::B2DPoint( nXSrc, nYSrc ), Size( nSrcWidth, nSrcHeight ) );
                         aBmp.Crop( aCropRect );
                     }
 
@@ -1174,7 +1172,7 @@ namespace emfio
                 mpInputStream->ReadUInt32( nROP );
                 Size aSize = ReadYXExt();
                 nOldROP = SetRasterOp( static_cast<WMFRasterOp>(nROP) );
-                DrawRect( tools::Rectangle( ReadYX(), aSize ), false );
+                DrawRect( basegfx::B2DRectangle( ReadYX(), aSize ), false );
                 SetRasterOp( nOldROP );
             }
             break;
@@ -1186,7 +1184,7 @@ namespace emfio
                 SAL_WARN( "emfio", "TODO: W_META_SELECTCLIPREGION is not implemented. Please fill the bug report" );
                 if ( !nObjIndex )
                 {
-                    tools::PolyPolygon aEmptyPolyPoly;
+                    basegfx::B2DPolyPolygon aEmptyPolyPoly;
                     SetClipPath( aEmptyPolyPoly, RGN_COPY, true );
                 }
             }
@@ -1255,7 +1253,7 @@ namespace emfio
                                                 // we will use text instead of polygons only if we have the correct font
                                                 if ( Application::GetDefaultDevice()->IsFontAvailable( GetFont().GetFamilyName() ) )
                                                 {
-                                                    Point  aPt;
+                                                    basegfx::B2DPoint  aPt;
                                                     sal_uInt32  nStringLen, nDXCount;
                                                     std::unique_ptr<tools::Long[]> pDXAry;
                                                     SvMemoryStream aMemoryStream( nEscLen );
@@ -1404,7 +1402,7 @@ namespace emfio
         if (!mpInputStream->good())
             return false;
 
-        tools::Rectangle aPlaceableBound;
+        basegfx::B2DRectangle aPlaceableBound;
 
         bool bPlaceable = nPlaceableMetaKey == 0x9ac6cdd7L;
 
@@ -1447,7 +1445,7 @@ namespace emfio
                 && (mpExternalHeader->mapMode == MM_ISOTROPIC || mpExternalHeader->mapMode == MM_ANISOTROPIC))
             {
                 // #n417818#: If we have an external header then overwrite the bounds!
-                tools::Rectangle aExtRect(0, 0,
+                basegfx::B2DRectangle aExtRect(0, 0,
                     o3tl::convert(mpExternalHeader->xExt, o3tl::Length::mm100, o3tl::Length::px),
                     o3tl::convert(mpExternalHeader->yExt, o3tl::Length::mm100, o3tl::Length::px));
                 aPlaceableBound = aExtRect;
@@ -1465,20 +1463,20 @@ namespace emfio
 
                 // The image size is not known so normalize the calculated bounds so that the
                 // resulting image is not too big
-                if (aPlaceableBound.GetWidth() > aMaxWidth)
+                if (aPlaceableBound.getWidth() > aMaxWidth)
                 {
                     const double fMaxWidth = static_cast<double>(aMaxWidth);
-                    double fRatio = aPlaceableBound.GetWidth() / fMaxWidth;
+                    double fRatio = aPlaceableBound.getWidth() / fMaxWidth;
 
-                    aPlaceableBound = tools::Rectangle(
-                        aPlaceableBound.Left() / fRatio,
-                        aPlaceableBound.Top() / fRatio,
-                        aPlaceableBound.Right() / fRatio,
-                        aPlaceableBound.Bottom() / fRatio);
+                    aPlaceableBound = basegfx::B2DRectangle(
+                        aPlaceableBound.getMinX() / fRatio,
+                        aPlaceableBound.getMinY() / fRatio,
+                        aPlaceableBound.getMaxX() / fRatio,
+                        aPlaceableBound.getMaxY() / fRatio);
 
                     SAL_INFO("emfio", "Placeable bounds "
-                        " left: " << aPlaceableBound.Left() << " top: " << aPlaceableBound.Top()
-                        << " right: " << aPlaceableBound.Right() << " bottom: " << aPlaceableBound.Bottom());
+                        " left: " << aPlaceableBound.getMinX() << " top: " << aPlaceableBound.getMinY()
+                        << " right: " << aPlaceableBound.getMaxX() << " bottom: " << aPlaceableBound.getMaxY());
                 }
             }
 
@@ -1487,7 +1485,7 @@ namespace emfio
 
         SetWinOrg( aPlaceableBound.TopLeft() );
         Size aWMFSize(
-            std::abs( aPlaceableBound.GetWidth() ), std::abs( aPlaceableBound.GetHeight() ) );
+            std::abs( aPlaceableBound.getWidth() ), std::abs( aPlaceableBound.GetHeight() ) );
         SetWinExt( aWMFSize );
 
         SAL_INFO("emfio", "WMF size  w: " << aWMFSize.Width()    << " h: " << aWMFSize.Height());
@@ -1496,7 +1494,7 @@ namespace emfio
         if( ( std::abs( aWMFSize.Width() ) > 1 ) && ( std::abs( aWMFSize.Height() ) > 1 ) )
         {
             const Fraction  aFrac( 1, mnUnitsPerInch);
-            MapMode         aWMFMap( MapUnit::MapInch, Point(), aFrac, aFrac );
+            MapMode         aWMFMap( MapUnit::MapInch, basegfx::B2DPoint(), aFrac, aFrac );
             Size            aSize100(OutputDevice::LogicToLogic(aWMFSize, aWMFMap, MapMode(MapUnit::Map100thMM)));
             aDevExt = Size( std::abs( aSize100.Width() ), std::abs( aSize100.Height() ) );
         }
@@ -1541,7 +1539,7 @@ namespace emfio
         mnEMFSize = 0;
 
         SetMapMode( MM_ANISOTROPIC );
-        SetWinOrg( Point() );
+        SetWinOrg( basegfx::B2DPoint() );
         SetWinExt( Size( 1, 1 ) );
         SetDevExt( Size( 10000, 10000 ) );
 
@@ -1607,7 +1605,7 @@ namespace emfio
                             if( bEMFAvailable )
                             {
                                 AddFromGDIMetaFile( aMeta );
-                                SetrclFrame( tools::Rectangle( Point(0, 0), aMeta.GetPrefSize()));
+                                SetrclFrame( basegfx::B2DRectangle( basegfx::B2DPoint(0, 0), aMeta.GetPrefSize()));
 
                                 // the stream needs to be set to the wmf end position,
                                 // otherwise the GfxLink that is created will be incorrect
@@ -1638,24 +1636,20 @@ namespace emfio
             mpInputStream->Seek( mnStartPos );
     }
 
-    void WmfReader::GetPlaceableBound( tools::Rectangle& rPlaceableBound, SvStream* pStm )
+    void WmfReader::GetPlaceableBound( basegfx::B2DRectangle& rPlaceableBound, SvStream* pStm )
     {
         bool bRet = true;
 
-        tools::Rectangle aBound;
-        aBound.SetLeft( RECT_MAX );
-        aBound.SetTop( RECT_MAX );
-        aBound.SetRight( RECT_MIN );
-        aBound.SetBottom( RECT_MIN );
+        basegfx::B2DRectangle aBound;
         bool bBoundsDetermined = false;
 
         auto nPos = pStm->Tell();
         auto nEnd = nPos + pStm->remainingSize();
 
-        Point aWinOrg(0,0);
+        basegfx::B2DPoint aWinOrg(0,0);
         std::optional<Size>  aWinExt;
 
-        Point aViewportOrg(0,0);
+        basegfx::B2DPoint aViewportOrg(0,0);
         std::optional<Size>  aViewportExt;
 
         if (nEnd - nPos)
@@ -1895,7 +1889,7 @@ namespace emfio
                     case W_META_EXTTEXTOUT:
                     {
                         sal_uInt16  nLen, nOptions;
-                        Point aPosition = ReadYX();
+                        basegfx::B2DPoint aPosition = ReadYX();
                         pStm->ReadUInt16( nLen ).ReadUInt16( nOptions );
                         // todo: we also have to take care of the text width
                         if( nLen )
@@ -1937,7 +1931,7 @@ namespace emfio
                         Size aDestSize( ReadYXExt() );
                         if ( aDestSize.Width() && aDestSize.Height() )  // #92623# do not try to read buggy bitmaps
                         {
-                            tools::Rectangle aDestRect( ReadYX(), aDestSize );
+                            basegfx::B2DRectangle aDestRect( ReadYX(), aDestSize );
                             GetWinExtMax( aDestRect, aBound, nMapMode );
                             bBoundsDetermined = true;
                         }
@@ -1949,7 +1943,7 @@ namespace emfio
                         sal_uInt32 nROP;
                         pStm->ReadUInt32( nROP );
                         Size aSize = ReadYXExt();
-                        GetWinExtMax( tools::Rectangle( ReadYX(), aSize ), aBound, nMapMode );
+                        GetWinExtMax( basegfx::B2DRectangle( ReadYX(), aSize ), aBound, nMapMode );
                         bBoundsDetermined = true;
                     }
                     break;
@@ -1980,14 +1974,14 @@ namespace emfio
 
         if (aWinExt)
         {
-            rPlaceableBound = tools::Rectangle(aWinOrg, *aWinExt);
+            rPlaceableBound = basegfx::B2DRectangle(aWinOrg, *aWinExt);
             SAL_INFO("emfio", "Window dimension "
                        " left: " << rPlaceableBound.Left()  << " top: " << rPlaceableBound.Top()
                     << " right: " << rPlaceableBound.Right() << " bottom: " << rPlaceableBound.Bottom());
         }
         else if (aViewportExt)
         {
-            rPlaceableBound = tools::Rectangle(aViewportOrg, *aViewportExt);
+            rPlaceableBound = basegfx::B2DRectangle(aViewportOrg, *aViewportExt);
             SAL_INFO("emfio", "Viewport dimension "
                        " left: " << rPlaceableBound.Left()  << " top: " << rPlaceableBound.Top()
                     << " right: " << rPlaceableBound.Right() << " bottom: " << rPlaceableBound.Bottom());

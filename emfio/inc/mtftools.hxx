@@ -22,6 +22,7 @@
 
 #include <config_options.h>
 #include <basegfx/utils/b2dclipstate.hxx>
+#include <basegfx/range/b2drectangle.hxx>
 #include <tools/poly.hxx>
 #include <vcl/font.hxx>
 #include <vcl/bitmapex.hxx>
@@ -292,7 +293,7 @@ namespace emfio
         };
     };
 
-    class WinMtfPathObj : public tools::PolyPolygon
+    class WinMtfPathObj : public basegfx::B2DPolyPolygon
     {
         bool    bClosed;
 
@@ -304,15 +305,15 @@ namespace emfio
 
         void        Init()
         {
-            Clear();
+            clear();
             bClosed = true;
         }
 
         void        ClosePath();
-        void        AddPoint(const Point& rPoint);
-        void        AddPolygon(const tools::Polygon& rPoly);
-        void        AddPolyLine(const tools::Polygon& rPoly);
-        void        AddPolyPolygon(const tools::PolyPolygon& rPolyPolygon);
+        void        AddPoint(const basegfx::B2DPoint& rPoint);
+        void        AddPolygon(const basegfx::B2DPolygon& rPoly);
+        void        AddPolyLine(const basegfx::B2DPolygon& rPoly);
+        void        AddPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon);
     };
 
     struct EMFIO_DLLPUBLIC GDIObj
@@ -452,7 +453,7 @@ namespace emfio
         sal_uInt32          nTextAlign;
         RasterOp            eRasterOp;
 
-        Point               aActPos;
+        basegfx::B2DPoint               aActPos;
         WinMtfPathObj       maPathObj;
         WinMtfClipPath      maClipPath;
         XForm               aXForm;
@@ -463,17 +464,17 @@ namespace emfio
     struct BSaveStruct
     {
         BitmapEx            aBmpEx;
-        tools::Rectangle    aOutRect;
+        basegfx::B2DRectangle    aOutRect;
         sal_uInt32          nWinRop;
         bool m_bForceAlpha = false;
 
-        BSaveStruct(const Bitmap& rBmp, const tools::Rectangle& rOutRect, sal_uInt32 nRop)
+        BSaveStruct(const Bitmap& rBmp, const basegfx::B2DRectangle& rOutRect, sal_uInt32 nRop)
             : aBmpEx(rBmp)
             , aOutRect(rOutRect)
             , nWinRop(nRop)
         {}
 
-        BSaveStruct(const BitmapEx& rBmpEx, const tools::Rectangle& rOutRect, sal_uInt32 nRop,
+        BSaveStruct(const BitmapEx& rBmpEx, const basegfx::B2DRectangle& rOutRect, sal_uInt32 nRop,
                     bool bForceAlpha = false)
             : aBmpEx(rBmpEx)
             , aOutRect(rOutRect)
@@ -533,7 +534,7 @@ namespace emfio
         RasterOp            meRasterOp;
 
         std::vector< std::unique_ptr<GDIObj> > mvGDIObj;
-        Point               maActPos;
+        basegfx::B2DPoint               maActPos;
         WMFRasterOp         mnRop;
         std::vector< std::shared_ptr<SaveStruct> > mvSaveStack;
 
@@ -554,8 +555,8 @@ namespace emfio
         sal_Int32           mnPixY;            // Reference Device in pixel
         sal_Int32           mnMillX;           // Reference Device in Mill
         sal_Int32           mnMillY;           // Reference Device in Mill
-        tools::Rectangle    mrclFrame;
-        tools::Rectangle    mrclBounds;
+        basegfx::B2DRectangle    mrclFrame;
+        basegfx::B2DRectangle    mrclBounds;
 
         GDIMetaFile*        mpGDIMetaFile;
 
@@ -577,35 +578,35 @@ namespace emfio
         void                UpdateLineStyle();
         void                UpdateFillStyle();
 
-        Point               ImplMap(const Point& rPt);
-        Point               ImplScale(const Point& rPt);
+        basegfx::B2DPoint               ImplMap(const basegfx::B2DPoint& rPt);
+        basegfx::B2DPoint               ImplScale(const basegfx::B2DPoint& rPt);
         Size                ImplMap(const Size& rSize, bool bDoWorldTransform = true);
-        tools::Rectangle    ImplMap(const tools::Rectangle& rRectangle);
+        basegfx::B2DRectangle    ImplMap(const basegfx::B2DRectangle& rRectangle);
         void                ImplMap(vcl::Font& rFont);
-        tools::Polygon&     ImplMap(tools::Polygon& rPolygon);
-        tools::PolyPolygon& ImplMap(tools::PolyPolygon& rPolyPolygon);
-        void                ImplScale(tools::Polygon& rPolygon);
-        tools::PolyPolygon& ImplScale(tools::PolyPolygon& rPolyPolygon);
+        basegfx::B2DPolygon&     ImplMap(basegfx::B2DPolygon& rPolygon);
+        basegfx::B2DPolyPolygon& ImplMap(basegfx::B2DPolyPolygon& rPolyPolygon);
+        void                ImplScale(basegfx::B2DPolygon& rPolygon);
+        basegfx::B2DPolyPolygon& ImplScale(basegfx::B2DPolyPolygon& rPolyPolygon);
         void                ImplResizeObjectArry(sal_uInt32 nNewEntry);
         void                ImplSetNonPersistentLineColorTransparenz();
-        void                ImplDrawClippedPolyPolygon(const tools::PolyPolygon& rPolyPoly);
-        void                ImplDrawBitmap(const Point& rPos, const Size& rSize, const BitmapEx& rBitmap);
+        void                ImplDrawClippedPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly);
+        void                ImplDrawBitmap(const basegfx::B2DPoint& rPos, const Size& rSize, const BitmapEx& rBitmap);
 
     public:
 
         void                SetDevByWin(); //Hack to set varying defaults for incompletely defined files.
-        void                SetDevOrg(const Point& rPoint);
+        void                SetDevOrg(const basegfx::B2DPoint& rPoint);
         void                SetDevOrgOffset(sal_Int32 nXAdd, sal_Int32 nYAdd);
         void                SetDevExt(const Size& rSize, bool regular = true);
         void                ScaleDevExt(double fX, double fY);
 
-        void                SetWinOrg(const Point& rPoint, bool bIsEMF = false);
+        void                SetWinOrg(const basegfx::B2DPoint& rPoint, bool bIsEMF = false);
         void                SetWinOrgOffset(sal_Int32 nX, sal_Int32 nY);
         void                SetWinExt(const Size& rSize, bool bIsEMF = false);
         void                ScaleWinExt(double fX, double fY);
 
-        void                SetrclBounds(const tools::Rectangle& rRect);
-        void                SetrclFrame(const tools::Rectangle& rRect);
+        void                SetrclBounds(const basegfx::B2DRectangle& rRect);
+        void                SetrclFrame(const basegfx::B2DRectangle& rRect);
         void                SetRefPix(const Size& rSize);
         void                SetRefMill(const Size& rSize);
 
@@ -638,42 +639,42 @@ namespace emfio
 
         void                ClearPath() { maPathObj.Init(); };
         void                ClosePath() { maPathObj.ClosePath(); };
-        const tools::PolyPolygon& GetPathObj() const { return maPathObj; };
+        const basegfx::B2DPolyPolygon& GetPathObj() const { return maPathObj; };
 
-        void                MoveTo(const Point& rPoint, bool bRecordPath = false);
-        void                LineTo(const Point& rPoint, bool bRecordPath = false);
-        void                DrawPixel(const Point& rSource, const Color& rColor);
-        void                DrawRect(const tools::Rectangle& rRect, bool bEdge = true);
-        void                DrawRectWithBGColor(const tools::Rectangle& rRect);
-        void                DrawRoundRect(const tools::Rectangle& rRect, const Size& rSize);
-        void                DrawEllipse(const tools::Rectangle& rRect);
+        void                MoveTo(const basegfx::B2DPoint& rPoint, bool bRecordPath = false);
+        void                LineTo(const basegfx::B2DPoint& rPoint, bool bRecordPath = false);
+        void                DrawPixel(const basegfx::B2DPoint& rSource, const Color& rColor);
+        void                DrawRect(const basegfx::B2DRectangle& rRect, bool bEdge = true);
+        void                DrawRectWithBGColor(const basegfx::B2DRectangle& rRect);
+        void                DrawRoundRect(const basegfx::B2DRectangle& rRect, const Size& rSize);
+        void                DrawEllipse(const basegfx::B2DRectangle& rRect);
         void                DrawArc(
-            const tools::Rectangle& rRect,
-            const Point& rStartAngle,
-            const Point& rEndAngle,
+            const basegfx::B2DRectangle& rRect,
+            const basegfx::B2DPoint& rStartAngle,
+            const basegfx::B2DPoint& rEndAngle,
             bool bDrawTo = false
         );
         void                DrawPie(
-            const tools::Rectangle& rRect,
-            const Point& rStartAngle,
-            const Point& rEndAngle
+            const basegfx::B2DRectangle& rRect,
+            const basegfx::B2DPoint& rStartAngle,
+            const basegfx::B2DPoint& rEndAngle
         );
         void                DrawChord(
-            const tools::Rectangle& rRect,
-            const Point& rStartAngle,
-            const Point& rEndAngle
+            const basegfx::B2DRectangle& rRect,
+            const basegfx::B2DPoint& rStartAngle,
+            const basegfx::B2DPoint& rEndAngle
         );
-        void                DrawPolygon(tools::Polygon rPolygon, bool bRecordPath);
-        void                DrawPolyPolygon(tools::PolyPolygon& rPolyPolygon, bool bRecordPath = false);
-        void                DrawPolyLine(tools::Polygon rPolygon,
+        void                DrawPolygon(basegfx::B2DPolygon rPolygon, bool bRecordPath);
+        void                DrawPolyPolygon(basegfx::B2DPolyPolygon& rPolyPolygon, bool bRecordPath = false);
+        void                DrawPolyLine(basegfx::B2DPolygon rPolygon,
             bool bDrawTo = false,
             bool bRecordPath = false
         );
-        void                DrawPolyBezier(tools::Polygon rPolygon,
+        void                DrawPolyBezier(basegfx::B2DPolygon rPolygon,
             bool bDrawTo,
             bool bRecordPath
         );
-        void                DrawText(Point& rPosition,
+        void                DrawText(basegfx::B2DPoint& rPosition,
             OUString const & rString,
             tools::Long* pDXArry = nullptr,
             tools::Long* pDYArry = nullptr,
@@ -682,11 +683,11 @@ namespace emfio
 
         void                ResolveBitmapActions(std::vector<std::unique_ptr<BSaveStruct>>& rSaveList);
 
-        void                IntersectClipRect(const tools::Rectangle& rRect);
-        void                ExcludeClipRect(const tools::Rectangle& rRect);
+        void                IntersectClipRect(const basegfx::B2DRectangle& rRect);
+        void                ExcludeClipRect(const basegfx::B2DRectangle& rRect);
         void                MoveClipRegion(const Size& rSize);
         void                SetClipPath(
-            const tools::PolyPolygon& rPolyPoly,
+            const basegfx::B2DPolyPolygon& rPolyPoly,
             sal_Int32 nClippingMode,
             bool bIsMapped
         );

@@ -18,6 +18,7 @@
  */
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#include <basegfx/range/b2drectangle.hxx>
 #include <emfreader.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -460,7 +461,7 @@ namespace emfio
 
     void EmfReader::ReadMultiformatsComment()
     {
-        tools::Rectangle aOutputRect = EmfReader::ReadRectangle();
+        basegfx::B2DRectangle aOutputRect = EmfReader::ReadRectangle();
 
         sal_uInt32 nCountFormats;
         mpInputStream->ReadUInt32(nCountFormats);
@@ -626,7 +627,7 @@ namespace emfio
      * skipFirst: if the first point read is the 0th point or the 1st point in the array.
      * */
     template <class T>
-    tools::Polygon EmfReader::ReadPolygonWithSkip(const bool skipFirst, sal_uInt32 nNextPos)
+    basegfx::B2DPolygon EmfReader::ReadPolygonWithSkip(const bool skipFirst, sal_uInt32 nNextPos)
     {
         sal_uInt32 nPoints(0), nStartIndex(0);
         mpInputStream->SeekRel( 16 );
@@ -648,14 +649,14 @@ namespace emfio
      * mpInputStream: the stream containing the polygons
      * */
     template <class T>
-    tools::Polygon EmfReader::ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints, sal_uInt32 nNextPos)
+    basegfx::B2DPolygon EmfReader::ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints, sal_uInt32 nNextPos)
     {
         SAL_INFO ("emfio", "\t\tPolygon:");
 
         bool bRecordOk = nPoints <= SAL_MAX_UINT16;
         SAL_WARN_IF(!bRecordOk, "emfio", "polygon record has more polygons than we can handle");
         if (!bRecordOk || !nPoints)
-            return tools::Polygon();
+            return basegfx::B2DPolygon();
 
         auto nRemainingSize = std::min(nNextPos - mpInputStream->Tell(), mpInputStream->remainingSize());
         auto nMaxPossiblePoints = nRemainingSize / (sizeof(T) * 2);
@@ -666,7 +667,7 @@ namespace emfio
             nPoints = nMaxPossiblePoints + nStartIndex;
         }
 
-        tools::Polygon aPolygon(nPoints);
+        basegfx::B2DPolygon aPolygon(nPoints);
         for (sal_uInt32 i = nStartIndex ; i < nPoints && mpInputStream->good(); i++ )
         {
             T nX, nY;
@@ -680,7 +681,7 @@ namespace emfio
                 aPolygon.SetSize(i);
                 break;
             }
-            aPolygon[ i ] = Point( nX, nY );
+            aPolygon[ i ] = basegfx::B2DPoint( nX, nY );
         }
 
         return aPolygon;
@@ -728,7 +729,7 @@ namespace emfio
         // Get polyline points:
         for ( sal_uInt32 i = 0; ( i < nNumberOfPolylines ) && mpInputStream->good(); i++ )
         {
-            tools::Polygon aPolygon = ReadPolygon<T>(0, pnPolylinePointCount[i], nNextPos);
+            basegfx::B2DPolygon aPolygon = ReadPolygon<T>(0, pnPolylinePointCount[i], nNextPos);
             DrawPolyLine(aPolygon, false, mbRecordPath);
         }
     }
@@ -755,7 +756,7 @@ namespace emfio
         if (!mpInputStream->good())
             return;
         //check against numeric overflowing
-        if (nGesPoints >= SAL_MAX_UINT32 / sizeof(Point))
+        if (nGesPoints >= SAL_MAX_UINT32 / sizeof(basegfx::B2DPoint))
             return;
         if (nPoly >= SAL_MAX_UINT32 / sizeof(sal_uInt16))
             return;
@@ -777,20 +778,20 @@ namespace emfio
         if ( mpInputStream->good() && ( nGesPoints * (sizeof(T)+sizeof(T)) ) <= ( nEndPos - mpInputStream->Tell() ) )
         {
             // Get polygon points
-            tools::PolyPolygon aPolyPoly(nPoly);
+            basegfx::B2DPolyPolygon aPolyPoly(nPoly);
             for (sal_uInt32 i = 0; i < nPoly && mpInputStream->good(); ++i)
             {
                 const sal_uInt16 nPointCount(aPoints[i]);
-                std::vector<Point> aPtAry(nPointCount);
+                std::vector<basegfx::B2DPoint> aPtAry(nPointCount);
                 for (sal_uInt16 j = 0; j < nPointCount && mpInputStream->good(); ++j)
                 {
                     T nX(0), nY(0);
                     *mpInputStream >> nX >> nY;
-                    aPtAry[j] = Point( nX, nY );
+                    aPtAry[j] = basegfx::B2DPoint( nX, nY );
                     ++nReadPoints;
                 }
 
-                aPolyPoly.Insert(tools::Polygon(aPtAry.size(), aPtAry.data()));
+                aPolyPoly.Insert(basegfx::B2DPolygon(aPtAry.size(), aPtAry.data()));
             }
 
             DrawPolyPolygon(aPolyPoly, mbRecordPath);
@@ -952,7 +953,7 @@ namespace emfio
                     {
                         mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 );
                         SAL_INFO("emfio", "\t\tPoint: (" << nX32 << ", " << nY32 << ")");
-                        SetWinOrg( Point( nX32, nY32 ), true);
+                        SetWinOrg( basegfx::B2DPoint( nX32, nY32 ), true);
                     }
                     break;
 
@@ -973,7 +974,7 @@ namespace emfio
                     {
                         mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 );
                         SAL_INFO("emfio", "\t\tPoint: (" << nX32 << ", " << nY32 << ")");
-                        SetDevOrg( Point( nX32, nY32 ) );
+                        SetDevOrg( basegfx::B2DPoint( nX32, nY32 ) );
                     }
                     break;
 
@@ -1009,7 +1010,7 @@ namespace emfio
                     {
                         mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 );
                         SAL_INFO("emfio", "\t\tPoint: (" << nX32 << ", " << nY32 << ")");
-                        DrawPixel( Point( nX32, nY32 ), ReadColor() );
+                        DrawPixel( basegfx::B2DPoint( nX32, nY32 ), ReadColor() );
                     }
                     break;
 
@@ -1080,7 +1081,7 @@ namespace emfio
                     {
                         mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 );
                         SAL_INFO("emfio", "\t\tPoint: (" << nX32 << ", " << nY32 << ")");
-                        MoveTo( Point( nX32, nY32 ), mbRecordPath);
+                        MoveTo( basegfx::B2DPoint( nX32, nY32 ), mbRecordPath);
                     }
                     break;
 
@@ -1348,8 +1349,8 @@ namespace emfio
                         {
                             tools::Long dw = w / 2;
                             tools::Long dh = h / 2;
-                            Point aCenter( nX32 + dw, nY32 + dh );
-                            tools::Polygon aPoly( aCenter, dw, dh );
+                            basegfx::B2DPoint aCenter( nX32 + dw, nY32 + dh );
+                            basegfx::B2DPolygon aPoly( aCenter, dw, dh );
                             DrawPolygon( aPoly, mbRecordPath );
                         }
                     }
@@ -1359,11 +1360,11 @@ namespace emfio
                     {
                         mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 );
                         SAL_INFO("emfio", "\t\t Rectangle, left: " << nX32 << ", top: " << nY32 << ", right: " << nx32 << ", bottom: " << ny32);
-                        Point aPoints[] { Point(nX32, nY32),
-                                          Point(nx32, nY32),
-                                          Point(nx32, ny32),
-                                          Point(nX32, ny32) };
-                        tools::Polygon aPoly(4, aPoints);
+                        basegfx::B2DPoint aPoints[] { basegfx::B2DPoint(nX32, nY32),
+                                          basegfx::B2DPoint(nx32, nY32),
+                                          basegfx::B2DPoint(nx32, ny32),
+                                          basegfx::B2DPoint(nX32, ny32) };
+                        basegfx::B2DPolygon aPoly(4, aPoints);
                         aPoly.Optimize( PolyOptimizeFlags::CLOSE );
                         DrawPolygon( aPoly, mbRecordPath );
                     }
@@ -1372,7 +1373,7 @@ namespace emfio
                     case EMR_ROUNDRECT :
                     {
                         mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 ).ReadUInt32( nW ).ReadUInt32( nH );
-                        tools::Polygon aRoundRectPoly( ReadRectangle( nX32, nY32, nx32, ny32 ), nW, nH );
+                        basegfx::B2DPolygon aRoundRectPoly( ReadRectangle( nX32, nY32, nx32, ny32 ), nW, nH );
                         DrawPolygon( aRoundRectPoly, mbRecordPath );
                     }
                     break;
@@ -1384,7 +1385,7 @@ namespace emfio
                         sal_Int32 nStartX, nStartY, nEndX, nEndY;
                         mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 ).ReadInt32( nStartX ).ReadInt32( nStartY ).ReadInt32( nEndX ).ReadInt32( nEndY );
                         SAL_INFO( "emfio", "\t\t Bounds: " << nX32 << ":" << nY32 << ", " << nx32 << ":" << ny32 << ", Start: " << nStartX << ":" << nStartY << ", End: " << nEndX << ":" << nEndY );
-                        tools::Polygon aPoly( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), PolyStyle::Arc );
+                        basegfx::B2DPolygon aPoly( ReadRectangle( nX32, nY32, nx32, ny32 ), basegfx::B2DPoint( nStartX, nStartY ), basegfx::B2DPoint( nEndX, nEndY ), PolyStyle::Arc );
                         if ( nRecType == EMR_CHORD )
                             DrawPolygon( aPoly, mbRecordPath );
                         else
@@ -1396,7 +1397,7 @@ namespace emfio
                     {
                         sal_Int32 nStartX, nStartY, nEndX, nEndY;
                         mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 ).ReadInt32( nStartX ).ReadInt32( nStartY ).ReadInt32( nEndX ).ReadInt32( nEndY );
-                        tools::Polygon aPoly( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), PolyStyle::Pie );
+                        basegfx::B2DPolygon aPoly( ReadRectangle( nX32, nY32, nx32, ny32 ), basegfx::B2DPoint( nStartX, nStartY ), basegfx::B2DPoint( nEndX, nEndY ), PolyStyle::Pie );
                         DrawPolygon( aPoly, mbRecordPath );
                     }
                     break;
@@ -1404,7 +1405,7 @@ namespace emfio
                     case EMR_LINETO :
                     {
                         mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 );
-                        LineTo( Point( nX32, nY32 ), mbRecordPath);
+                        LineTo( basegfx::B2DPoint( nX32, nY32 ), mbRecordPath);
                     }
                     break;
 
@@ -1469,7 +1470,7 @@ namespace emfio
                                 basegfx::B2DPolyPolygon aPolyPoly;
                                 if (cbRgnData)
                                     ImplReadRegion(aPolyPoly, *mpInputStream, nRemainingRecSize);
-                                const tools::PolyPolygon aPolyPolygon(aPolyPoly);
+                                const basegfx::B2DPolyPolygon aPolyPolygon(aPolyPoly);
                                 SetClipPath(aPolyPolygon, nClippingMode, false);
                             }
                         }
@@ -1503,7 +1504,7 @@ namespace emfio
                         }
                         else
                         {
-                            tools::Rectangle aRect(Point(xDest, yDest), Size(cxDest + 1, cyDest + 1));
+                            basegfx::B2DRectangle aRect(basegfx::B2DPoint(xDest, yDest), Size(cxDest + 1, cyDest + 1));
 
                             const sal_uInt32 nSourceSize = cbBmiSrc + cbBitsSrc + 14;
                             bool bSafeRead = nSourceSize <= (mnEndPos - mnStartPos);
@@ -1597,7 +1598,7 @@ namespace emfio
                                         if (!o3tl::checked_add(xSrc, cxSrc, xEndSrc) && xEndSrc < aBitmapEx.GetSizePixel().Width() &&
                                             !o3tl::checked_add(ySrc, cySrc, yEndSrc) && yEndSrc < aBitmapEx.GetSizePixel().Height())
                                         {
-                                            const tools::Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
+                                            const basegfx::B2DRectangle aCropRect( basegfx::B2DPoint( xSrc, ySrc ), Size( cxSrc, cySrc ) );
                                             aBitmapEx.Crop( aCropRect );
                                         }
                                     }
@@ -1640,7 +1641,7 @@ namespace emfio
                             cxSrc = cySrc = 0;
 
                         Bitmap      aBitmap;
-                        tools::Rectangle   aRect( Point( xDest, yDest ), Size( cxDest, cyDest ) );
+                        basegfx::B2DRectangle   aRect( basegfx::B2DPoint( xDest, yDest ), Size( cxDest, cyDest ) );
 
                         if (!mpInputStream->good() || (cbBitsSrc > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc))
                             bStatus = false;
@@ -1673,7 +1674,7 @@ namespace emfio
                                      (aBitmap.GetSizePixel().Height() >= cySrc) &&
                                      (ySrc <= aBitmap.GetSizePixel().Height() - cySrc) )
                                 {
-                                    tools::Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
+                                    basegfx::B2DRectangle aCropRect( basegfx::B2DPoint( xSrc, ySrc ), Size( cxSrc, cySrc ) );
                                     aBitmap.Crop( aCropRect );
                                 }
 
@@ -1714,8 +1715,8 @@ namespace emfio
                         else
                         {
                             Bitmap aBitmap;
-                            tools::Rectangle aRect(xDest, yDest);
-                            aRect.SaturatingSetSize(Size(cxDest, cyDest));
+                            basegfx::B2DRectangle aRect(xDest, yDest);
+                            aRect.SaturatingSetSize(‌basegfx:Size(cxDest, cyDest));
 
                             sal_uInt32 nSize = cbBmiSrc + cbBitsSrc + 14;
                             if ( nSize <= ( mnEndPos - mnStartPos ) )
@@ -1744,7 +1745,7 @@ namespace emfio
                                      (aBitmap.GetSizePixel().Height() >= cySrc) &&
                                      (ySrc <= aBitmap.GetSizePixel().Height() - cySrc) )
                                 {
-                                    tools::Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
+                                    basegfx::B2DRectangle aCropRect( basegfx::B2DPoint( xSrc, ySrc ), Size( cxSrc, cySrc ) );
                                     aBitmap.Crop( aCropRect );
                                 }
                                 maBmpSaveList.emplace_back(new BSaveStruct(aBitmap, aRect, dwRop));
@@ -1836,7 +1837,7 @@ namespace emfio
                         SAL_INFO("emfio", "\t\tReference: (" << ptlReferenceX << ", " << ptlReferenceY << ")");
 
                         mpInputStream->ReadInt32( nLeftRect ).ReadInt32( nTopRect ).ReadInt32( nRightRect ).ReadInt32( nBottomRect );
-                        const tools::Rectangle aRect( nLeftRect, nTopRect, nRightRect, nBottomRect );
+                        const basegfx::B2DRectangle aRect( nLeftRect, nTopRect, nRightRect, nBottomRect );
                         const BkMode mnBkModeBackup = mnBkMode;
                         if ( nOptions & ETO_NO_RECT ) // Don't draw the background rectangle and text background
                             mnBkMode = BkMode::Transparent;
@@ -1850,7 +1851,7 @@ namespace emfio
                         SetTextLayoutMode( nTextLayoutMode );
                         SAL_WARN_IF( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) != 0, "emfio", "SJ: ETO_PDY || ETO_GLYPH_INDEX in EMF" );
 
-                        Point aPos( ptlReferenceX, ptlReferenceY );
+                        basegfx::B2DPoint aPos( ptlReferenceX, ptlReferenceY );
                         bool bOffStringSane = nOffString <= mnEndPos - nCurPos;
                         if ( bOffStringSane )
                         {
@@ -1982,7 +1983,7 @@ namespace emfio
                             {
                                 Push();
                                 SelectObject( nIndex );
-                                tools::PolyPolygon aPolyPolygon(aPolyPoly);
+                                basegfx::B2DPolyPolygon aPolyPolygon(aPolyPoly);
                                 DrawPolyPolygon( aPolyPolygon );
                                 Pop();
                             }
@@ -2005,7 +2006,7 @@ namespace emfio
 
                             if (ImplReadRegion(aPolyPoly, *mpInputStream, nRemainingRecSize))
                             {
-                                tools::PolyPolygon aPolyPolygon(aPolyPoly);
+                                basegfx::B2DPolyPolygon aPolyPolygon(aPolyPoly);
                                 DrawPolyPolygon( aPolyPolygon );
                             }
                         }
@@ -2151,11 +2152,11 @@ namespace emfio
 
         // bound size (RectL object, see [MS-WMF] section 2.2.2.19)
         SAL_INFO("emfio", "\tBounding rectangle");
-        tools::Rectangle rclBounds = ReadRectangle(); // rectangle in logical units
+        basegfx::B2DRectangle rclBounds = ReadRectangle(); // rectangle in logical units
 
         // picture frame size (RectL object)
         SAL_INFO("emfio", "\tPicture frame");
-        tools::Rectangle rclFrame = ReadRectangle(); // rectangle in device units 1/100th mm
+        basegfx::B2DRectangle rclFrame = ReadRectangle(); // rectangle in device units 1/100th mm
 
         sal_uInt32 nSignature(0);
         mpInputStream->ReadUInt32(nSignature);
@@ -2242,7 +2243,7 @@ namespace emfio
         return checkSeek(*mpInputStream, mnStartPos + nHeaderSize);
     }
 
-    tools::Rectangle EmfReader::ReadRectangle()
+    basegfx::B2DRectangle EmfReader::ReadRectangle()
     {
         sal_Int32 nLeft, nTop, nRight, nBottom;
         mpInputStream->ReadInt32(nLeft);
@@ -2254,17 +2255,17 @@ namespace emfio
         if (nLeft > nRight || nTop > nBottom)
         {
             SAL_WARN("emfio", "broken rectangle");
-            return tools::Rectangle::Justify(Point(nLeft, nTop), Point(nRight, nBottom));
+            return basegfx::B2DRectangle(basegfx::B2DPoint(nLeft, nTop), basegfx::B2DPoint(nRight, nBottom));
         }
 
-        return tools::Rectangle(nLeft, nTop, nRight, nBottom);
+        return basegfx::B2DRectangle(nLeft, nTop, nRight, nBottom);
     }
 
-    tools::Rectangle EmfReader::ReadRectangle( sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32 y2 )
+    basegfx::B2DRectangle EmfReader::ReadRectangle( sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32 y2 )
     {
-        Point aTL(x1, y1);
-        Point aBR(o3tl::saturating_add<sal_Int32>(x2, -1), o3tl::saturating_add<sal_Int32>(y2, -1));
-        return tools::Rectangle(aTL, aBR);
+        basegfx::B2DPoint aTL(x1, y1);
+        basegfx::B2DPoint aBR(o3tl::saturating_add<sal_Int32>(x2, -1), o3tl::saturating_add<sal_Int32>(y2, -1));
+        return basegfx::B2DRectangle(aTL, aBR);
     }
 }
 

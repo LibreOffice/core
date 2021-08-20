@@ -23,6 +23,7 @@
 #include <memory>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/range/b2drectangle.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/graphictools.hxx>
 #include <vcl/BitmapTools.hxx>
@@ -116,48 +117,46 @@ namespace emfio
         return maClip.getClipPoly();
     }
 
-    void WinMtfPathObj::AddPoint( const Point& rPoint )
+    void WinMtfPathObj::AddPoint( const basegfx::B2DPoint& rPoint )
     {
         if ( bClosed )
-            Insert( tools::Polygon() );
-        tools::Polygon& rPoly = static_cast<tools::PolyPolygon&>(*this)[ Count() - 1 ];
-        rPoly.Insert( rPoly.GetSize(), rPoint );
+            append( basegfx::B2DPolygon() );
+        basegfx::B2DPolygon* rPoly = end();
+
+        rPoly->insert( rPoly->count(), rPoint );
         bClosed = false;
     }
 
-    void WinMtfPathObj::AddPolyLine( const tools::Polygon& rPolyLine )
+    void WinMtfPathObj::AddPolyLine( const basegfx::B2DPolygon& rPolyLine )
     {
         if ( bClosed )
-            Insert( tools::Polygon() );
-        tools::Polygon& rPoly = static_cast<tools::PolyPolygon&>(*this)[ Count() - 1 ];
-        rPoly.Insert( rPoly.GetSize(), rPolyLine );
+            append( basegfx::B2DPolygon() );
+        append( rPolyLine );
         bClosed = false;
     }
 
-    void WinMtfPathObj::AddPolygon( const tools::Polygon& rPoly )
+    void WinMtfPathObj::AddPolygon( const basegfx::B2DPolygon& rPoly )
     {
-        Insert( rPoly );
+        append( rPoly );
         bClosed = true;
     }
 
-    void WinMtfPathObj::AddPolyPolygon( const tools::PolyPolygon& rPolyPoly )
+    void WinMtfPathObj::AddPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly )
     {
-        sal_uInt16 i, nCount = rPolyPoly.Count();
-        for ( i = 0; i < nCount; i++ )
-            Insert( rPolyPoly[ i ] );
+        append( rPolyPoly );
         bClosed = true;
     }
 
     void WinMtfPathObj::ClosePath()
     {
-        if ( Count() )
+        if ( count() )
         {
-            tools::Polygon& rPoly = static_cast<tools::PolyPolygon&>(*this)[ Count() - 1 ];
-            if ( rPoly.GetSize() > 2 )
+            basegfx::B2DPolygon* rPoly = end();
+            if ( rPoly->count() > 2 )
             {
-                Point aFirst( rPoly[ 0 ] );
-                if ( aFirst != rPoly[ rPoly.GetSize() - 1 ] )
-                    rPoly.Insert( rPoly.GetSize(), aFirst );
+                basegfx::B2DPoint aFirst( rPoly->getB2DPoint(0) );
+                if ( aFirst != rPoly->getB2DPoint( rPoly->count() - 1 ) )
+                    rPoly->insert( rPoly->count(), aFirst );
             }
         }
         bClosed = true;
@@ -502,21 +501,21 @@ namespace emfio
         return aColor;
     };
 
-    Point MtfTools::ImplScale(const Point& rPoint) // Hack to set varying defaults for incompletely defined files.
+    basegfx::B2DPoint MtfTools::ImplScale(const basegfx::B2DPoint& rPoint) // Hack to set varying defaults for incompletely defined files.
     {
         if (!mbIsMapDevSet)
-            return Point(rPoint.X() * UNDOCUMENTED_WIN_RCL_RELATION - mrclFrame.Left(),
-                         rPoint.Y() * UNDOCUMENTED_WIN_RCL_RELATION - mrclFrame.Top());
+            return basegfx::B2DPoint(rPoint.getX() * UNDOCUMENTED_WIN_RCL_RELATION - mrclFrame.getMinX(),
+                         rPoint.getY() * UNDOCUMENTED_WIN_RCL_RELATION - mrclFrame.getMinY());
         else
             return rPoint;
     }
 
-    Point MtfTools::ImplMap( const Point& rPt )
+    basegfx::B2DPoint MtfTools::ImplMap( const basegfx::B2DPoint& rPt )
     {
         if ( mnWinExtX && mnWinExtY )
         {
-            double fX = rPt.X();
-            double fY = rPt.Y();
+            double fX = rPt.getX();
+            double fY = rPt.getY();
 
             double fX2 = fX * maXForm.eM11 + fY * maXForm.eM21 + maXForm.eDx;
             double fY2 = fX * maXForm.eM12 + fY * maXForm.eM22 + maXForm.eDy;
@@ -608,7 +607,7 @@ namespace emfio
                         if (mnPixX == 0 || mnPixY == 0)
                         {
                             SAL_WARN("emfio", "invalid scaling factor");
-                            return Point();
+                            return basegfx::B2DPoint();
                         }
                         else
                         {
@@ -629,13 +628,13 @@ namespace emfio
                     }
                     break;
                 }
-                fX2 -= mrclFrame.Left();
-                fY2 -= mrclFrame.Top();
+                fX2 -= mrclFrame.getMinX();
+                fY2 -= mrclFrame.getMinY();
             }
-            return Point(basegfx::fround(fX2), basegfx::fround(fY2));
+            return basegfx::B2DPoint(basegfx::fround(fX2), basegfx::fround(fY2));
         }
         else
-            return Point();
+            return basegfx::B2DPoint();
     };
 
     Size MtfTools::ImplMap(const Size& rSz, bool bDoWorldTransform)
@@ -727,10 +726,10 @@ namespace emfio
             return Size();
     }
 
-    tools::Rectangle MtfTools::ImplMap( const tools::Rectangle& rRect )
+    basegfx::B2DRectangle MtfTools::ImplMap( const basegfx::B2DRectangle& rRect )
     {
-        tools::Rectangle aRect;
-        aRect.SetPos(ImplMap(rRect.TopLeft()));
+        basegfx::B2DRectangle aRect(ImplMap(rRect.getMinX(),
+                                            rRect.getMinY()));
         aRect.SaturatingSetSize(ImplMap(rRect.GetSize()));
         return aRect;
     }
@@ -753,9 +752,9 @@ namespace emfio
             rFont.SetOrientation( 3600_deg10 - rFont.GetOrientation() );
     }
 
-    tools::Polygon& MtfTools::ImplMap( tools::Polygon& rPolygon )
+    basegfx::B2DPolygon& MtfTools::ImplMap( basegfx::B2DPolygon& rPolygon )
     {
-        sal_uInt16 nPoints = rPolygon.GetSize();
+        sal_uInt16 nPoints = rPolygon.count();
         for ( sal_uInt16 i = 0; i < nPoints; i++ )
         {
             rPolygon[ i ] = ImplMap( rPolygon[ i ] );
@@ -763,18 +762,18 @@ namespace emfio
         return rPolygon;
     }
 
-    void MtfTools::ImplScale( tools::Polygon& rPolygon )
+    void MtfTools::ImplScale( basegfx::B2DPolygon& rPolygon )
     {
-        sal_uInt16 nPoints = rPolygon.GetSize();
+        sal_uInt16 nPoints = rPolygon.count();
         for ( sal_uInt16 i = 0; i < nPoints; i++ )
         {
             rPolygon[ i ] = ImplScale( rPolygon[ i ] );
         }
     }
 
-    tools::PolyPolygon& MtfTools::ImplScale( tools::PolyPolygon& rPolyPolygon )
+    basegfx::B2DPolyPolygon& MtfTools::ImplScale( basegfx::B2DPolyPolygon& rPolyPolygon )
     {
-        sal_uInt16 nPolys = rPolyPolygon.Count();
+        sal_uInt16 nPolys = rPolyPolygon.count();
         for (sal_uInt16 i = 0; i < nPolys; ++i)
         {
             ImplScale(rPolyPolygon[i]);
@@ -782,9 +781,9 @@ namespace emfio
         return rPolyPolygon;
     }
 
-    tools::PolyPolygon& MtfTools::ImplMap( tools::PolyPolygon& rPolyPolygon )
+    basegfx::B2DPolyPolygon& MtfTools::ImplMap( basegfx::B2DPolyPolygon& rPolyPolygon )
     {
-        sal_uInt16 nPolys = rPolyPolygon.Count();
+        sal_uInt16 nPolys = rPolyPolygon.count();
         for ( sal_uInt16 i = 0; i < nPolys; ImplMap( rPolyPolygon[ i++ ] ) ) ;
         return rPolyPolygon;
     }
@@ -928,25 +927,25 @@ namespace emfio
         mvGDIObj.resize(nNewEntrys);
     }
 
-    void MtfTools::ImplDrawClippedPolyPolygon( const tools::PolyPolygon& rPolyPoly )
+    void MtfTools::ImplDrawClippedPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly )
     {
-        if ( !rPolyPoly.Count() )
+        if ( !rPolyPoly.count() )
             return;
 
         ImplSetNonPersistentLineColorTransparenz();
-        if ( rPolyPoly.Count() == 1 )
+        if ( rPolyPoly.count() == 1 )
         {
             if ( rPolyPoly.IsRect() )
                 mpGDIMetaFile->AddAction( new MetaRectAction( rPolyPoly.GetBoundRect() ) );
             else
             {
-                tools::Polygon aPoly( rPolyPoly[ 0 ] );
-                sal_uInt16 nCount = aPoly.GetSize();
+                basegfx::B2DPolygon *aPoly = rPolyPoly.begin();
+                sal_uInt16 nCount = aPoly->count();
                 if ( nCount )
                 {
-                    if ( aPoly[ nCount - 1 ] != aPoly[ 0 ] )
+                    if ( aPoly->getB2DPoint( nCount - 1 ) != aPoly->getB2DPoint( 0 ) )
                     {
-                        Point aPoint( aPoly[ 0 ] );
+                        basegfx::B2DPoint *aPoint =  aPoly->getB2DPoint( 0 ));
                         aPoly.Insert( nCount, aPoint );
                     }
                     mpGDIMetaFile->AddAction( new MetaPolygonAction( aPoly ) );
@@ -1042,27 +1041,27 @@ namespace emfio
         }
     }
 
-    void MtfTools::IntersectClipRect( const tools::Rectangle& rRect )
+    void MtfTools::IntersectClipRect( const basegfx::B2DRectangle& rRect )
     {
         if (utl::ConfigManager::IsFuzzing())
             return;
         mbClipNeedsUpdate=true;
-        if ((rRect.Left()-rRect.Right()==0) && (rRect.Top()-rRect.Bottom()==0))
+        if ((rRect.getMinX()-rRect.getMaxX()==0) && (rRect.getMaxY()-rRect.getMinY()==0))
         {
             return; // empty rectangles cause trouble
         }
-        tools::Polygon aPoly( rRect );
-        const tools::PolyPolygon aPolyPolyRect( ImplMap( aPoly ) );
-        maClipPath.intersectClip( aPolyPolyRect.getB2DPolyPolygon() );
+        basegfx::B2DPolygon aPoly( rRect );
+        const basegfx::B2DPolyPolygon aPolyPolyRect( ImplMap( aPoly ) );
+        maClipPath.intersectClip( aPolyPolyRect );
     }
 
-    void MtfTools::ExcludeClipRect( const tools::Rectangle& rRect )
+    void MtfTools::ExcludeClipRect( const basegfx::B2DRectangle& rRect )
     {
         if (utl::ConfigManager::IsFuzzing())
             return;
         mbClipNeedsUpdate=true;
-        tools::Polygon aPoly( rRect );
-        const tools::PolyPolygon aPolyPolyRect( ImplMap( aPoly ) );
+        basegfx::B2DPolygon aPoly( rRect );
+        const basegfx::B2DPolyPolygon aPolyPolyRect( ImplMap( aPoly ) );
         maClipPath.excludeClip( aPolyPolyRect.getB2DPolyPolygon() );
     }
 
@@ -1074,12 +1073,12 @@ namespace emfio
         maClipPath.moveClipRegion( ImplMap( rSize ) );
     }
 
-    void MtfTools::SetClipPath( const tools::PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode, bool bIsMapped )
+    void MtfTools::SetClipPath( const basegfx::B2DPolyPolygon& rPolyPolygon, sal_Int32 nClippingMode, bool bIsMapped )
     {
         if (utl::ConfigManager::IsFuzzing())
             return;
         mbClipNeedsUpdate = true;
-        tools::PolyPolygon aPolyPolygon(rPolyPolygon);
+        basegfx::B2DPolyPolygon aPolyPolygon(rPolyPolygon);
 
         if (!bIsMapped)
         {
@@ -1088,7 +1087,7 @@ namespace emfio
             else
                 aPolyPolygon = ImplMap(aPolyPolygon);
         }
-        maClipPath.setClipPath(aPolyPolygon.getB2DPolyPolygon(), nClippingMode);
+        maClipPath.setClipPath(aPolyPolygon, nClippingMode);
     }
 
     void MtfTools::SetDefaultClipPath()
@@ -1163,7 +1162,7 @@ namespace emfio
         }
 
         mnStartPos = mpInputStream->Tell();
-        SetDevOrg(Point());
+        SetDevOrg(basegfx::B2DPoint());
 
         mpGDIMetaFile->AddAction( new MetaPushAction( PushFlags::CLIPREGION ) ); // The original clipregion has to be on top
                                                                                  // of the stack so it can always be restored
@@ -1186,7 +1185,7 @@ namespace emfio
     {
         mpGDIMetaFile->AddAction( new MetaPopAction() );
         mpGDIMetaFile->SetPrefMapMode(MapMode(MapUnit::Map100thMM));
-        if ( mrclFrame.IsEmpty() )
+        if ( mrclFrame.isEmpty() )
             mpGDIMetaFile->SetPrefSize( Size( mnDevWidth, mnDevHeight ) );
         else
             mpGDIMetaFile->SetPrefSize( mrclFrame.GetSize() );
@@ -1322,7 +1321,7 @@ namespace emfio
                 mpGDIMetaFile->AddAction( new MetaPushAction( PushFlags::LINECOLOR ) );
                 mpGDIMetaFile->AddAction( new MetaLineColorAction( Color(), false ) );
             }
-            if ( maPathObj.Count() == 1 )
+            if ( maPathObj.count() == 1 )
                 mpGDIMetaFile->AddAction( new MetaPolygonAction( maPathObj.GetObject( 0 ) ) );
             else
                 mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( maPathObj ) );
@@ -1336,7 +1335,7 @@ namespace emfio
             // bFill is drawing hairstyle line. So we need to draw it only when the width is different than 0
             if ( !bFill || maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash ) )
             {
-                sal_uInt16 i, nCount = maPathObj.Count();
+                sal_uInt16 i, nCount = maPathObj.count();
                 for ( i = 0; i < nCount; i++ )
                     mpGDIMetaFile->AddAction( new MetaPolyLineAction( maPathObj[ i ], maLineStyle.aLineInfo ) );
             }
@@ -1344,29 +1343,29 @@ namespace emfio
         ClearPath();
     }
 
-    void MtfTools::DrawPixel( const Point& rSource, const Color& rColor )
+    void MtfTools::DrawPixel( const basegfx::B2DPoint& rSource, const Color& rColor )
     {
         mpGDIMetaFile->AddAction( new MetaPixelAction( ImplMap( rSource), rColor ) );
     }
 
-    void MtfTools::MoveTo( const Point& rPoint, bool bRecordPath )
+    void MtfTools::MoveTo( const basegfx::B2DPoint& rPoint, bool bRecordPath )
     {
-        Point aDest( ImplMap( rPoint ) );
+        basegfx::B2DPoint aDest( ImplMap( rPoint ) );
         if ( bRecordPath )
         {
             // fdo#57353 create new subpath for subsequent moves
-            if ( maPathObj.Count() )
-                if ( maPathObj[ maPathObj.Count() - 1 ].GetSize() )
-                    maPathObj.Insert( tools::Polygon() );
+            if ( maPathObj.count() )
+                if ( maPathObj[ maPathObj.count() - 1 ].GetSize() )
+                    maPathObj.Insert( basegfx::B2DPolygon() );
             maPathObj.AddPoint( aDest );
         }
         maActPos = aDest;
     }
 
-    void MtfTools::LineTo( const Point& rPoint, bool bRecordPath )
+    void MtfTools::LineTo( const basegfx::B2DPoint& rPoint, bool bRecordPath )
     {
         UpdateClipRegion();
-        Point aDest( ImplMap( rPoint ) );
+        basegfx::B2DPoint aDest( ImplMap( rPoint ) );
         if ( bRecordPath )
             maPathObj.AddPoint( aDest );
         else
@@ -1377,13 +1376,13 @@ namespace emfio
         maActPos = aDest;
     }
 
-    void MtfTools::DrawRectWithBGColor(const tools::Rectangle& rRect)
+    void MtfTools::DrawRectWithBGColor(const basegfx::B2DRectangle& rRect)
     {
         WinMtfFillStyle aFillStyleBackup = maFillStyle;
         bool            aTransparentBackup = maLineStyle.bTransparent;
         BkMode          mnBkModeBackup = mnBkMode;
 
-        const tools::Polygon aPoly( rRect );
+        const basegfx::B2DPolygon aPoly( rRect );
         maLineStyle.bTransparent = true;
         maFillStyle = maBkColor;
         mnBkMode = BkMode::OPAQUE;
@@ -1394,17 +1393,17 @@ namespace emfio
         maLineStyle.bTransparent = aTransparentBackup;
     }
 
-    void MtfTools::DrawRect( const tools::Rectangle& rRect, bool bEdge )
+    void MtfTools::DrawRect( const basegfx::B2DRectangle& rRect, bool bEdge )
     {
         UpdateClipRegion();
         UpdateFillStyle();
 
         if ( mbComplexClip )
         {
-            tools::Polygon aPoly( ImplMap( rRect ) );
-            tools::PolyPolygon aPolyPolyRect( aPoly );
-            tools::PolyPolygon aDest;
-            tools::PolyPolygon(maClipPath.getClipPath()).GetIntersection( aPolyPolyRect, aDest );
+            basegfx::B2DPolygon aPoly( ImplMap( rRect ) );
+            basegfx::B2DPolyPolygon aPolyPolyRect( aPoly );
+            basegfx::B2DPolyPolygon aDest;
+            basegfx::B2DPolyPolygon(maClipPath.getClipPath()).GetIntersection( aPolyPolyRect, aDest );
             ImplDrawClippedPolyPolygon( aDest );
         }
         else
@@ -1416,7 +1415,7 @@ namespace emfio
                     ImplSetNonPersistentLineColorTransparenz();
                     mpGDIMetaFile->AddAction( new MetaRectAction( ImplMap( rRect ) ) );
                     UpdateLineStyle();
-                    mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( ImplMap( rRect ) ),maLineStyle.aLineInfo ) );
+                    mpGDIMetaFile->AddAction( new MetaPolyLineAction( basegfx::B2DPolygon( ImplMap( rRect ) ),maLineStyle.aLineInfo ) );
                 }
                 else
                 {
@@ -1432,7 +1431,7 @@ namespace emfio
         }
     }
 
-    void MtfTools::DrawRoundRect( const tools::Rectangle& rRect, const Size& rSize )
+    void MtfTools::DrawRoundRect( const basegfx::B2DRectangle& rRect, const Size& rSize )
     {
         UpdateClipRegion();
         UpdateLineStyle();
@@ -1441,25 +1440,25 @@ namespace emfio
         // tdf#142139 Wrong line width during WMF import
         if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash ) )
         {
-            tools::Polygon aRoundRectPoly( rRect, rSize.Width(), rSize.Height() );
+            basegfx::B2DPolygon aRoundRectPoly( rRect, rSize.Width(), rSize.Height() );
             mpGDIMetaFile->AddAction( new MetaPolyLineAction( ImplMap( aRoundRectPoly ), maLineStyle.aLineInfo ) );
         }
     }
 
-    void MtfTools::DrawEllipse( const tools::Rectangle& rRect )
+    void MtfTools::DrawEllipse( const basegfx::B2DRectangle& rRect )
     {
         UpdateClipRegion();
         UpdateFillStyle();
 
         if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash ) )
         {
-            Point aCenter( ImplMap( rRect.Center() ) );
-            Size  aRad( ImplMap( Size( rRect.GetWidth() / 2, rRect.GetHeight() / 2 ) ) );
+            basegfx::B2DPoint aCenter( ImplMap( rRect.getCenter() ) );
+            Size  aRad( ImplMap( Size( rRect.getRange().getX() / 2, rRect.getRange().getY() / 2 ) ) );
 
             ImplSetNonPersistentLineColorTransparenz();
             mpGDIMetaFile->AddAction( new MetaEllipseAction( ImplMap( rRect ) ) );
             UpdateLineStyle();
-            mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( aCenter, aRad.Width(), aRad.Height() ), maLineStyle.aLineInfo ) );
+            mpGDIMetaFile->AddAction( new MetaPolyLineAction( basegfx::B2DPolygon( aCenter, aRad.getWidth(), aRad.getHeight() ), maLineStyle.aLineInfo ) );
         }
         else
         {
@@ -1468,27 +1467,27 @@ namespace emfio
         }
     }
 
-    void MtfTools::DrawArc( const tools::Rectangle& rRect, const Point& rStart, const Point& rEnd, bool bTo )
+    void MtfTools::DrawArc( const basegfx::B2DRectangle& rRect, const basegfx::B2DPoint& rStart, const basegfx::B2DPoint& rEnd, bool bTo )
     {
         UpdateClipRegion();
         UpdateLineStyle();
         UpdateFillStyle();
 
-        tools::Rectangle   aRect( ImplMap( rRect ) );
-        Point       aStart( ImplMap( rStart ) );
-        Point       aEnd( ImplMap( rEnd ) );
+        basegfx::B2DRectangle   aRect( ImplMap( rRect ) );
+        basegfx::B2DPoint       aStart( ImplMap( rStart ) );
+        basegfx::B2DPoint       aEnd( ImplMap( rEnd ) );
 
         if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash ) )
         {
             if ( aStart == aEnd )
             {   // SJ: #i53768# if start & end is identical, then we have to draw a full ellipse
-                Point aCenter( aRect.Center() );
+                basegfx::B2DPoint aCenter( aRect.Center() );
                 Size  aRad( aRect.GetWidth() / 2, aRect.GetHeight() / 2 );
 
-                mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( aCenter, aRad.Width(), aRad.Height() ), maLineStyle.aLineInfo ) );
+                mpGDIMetaFile->AddAction( new MetaPolyLineAction( basegfx::B2DPolygon( aCenter, aRad.Width(), aRad.Height() ), maLineStyle.aLineInfo ) );
             }
             else
-                mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( aRect, aStart, aEnd, PolyStyle::Arc ), maLineStyle.aLineInfo ) );
+                mpGDIMetaFile->AddAction( new MetaPolyLineAction( basegfx::B2DPolygon( aRect, aStart, aEnd, PolyStyle::Arc ), maLineStyle.aLineInfo ) );
         }
         else
             mpGDIMetaFile->AddAction( new MetaArcAction( aRect, aStart, aEnd ) );
@@ -1497,21 +1496,21 @@ namespace emfio
             maActPos = aEnd;
     }
 
-    void MtfTools::DrawPie( const tools::Rectangle& rRect, const Point& rStart, const Point& rEnd )
+    void MtfTools::DrawPie( const basegfx::B2DRectangle& rRect, const basegfx::B2DPoint& rStart, const basegfx::B2DPoint& rEnd )
     {
         UpdateClipRegion();
         UpdateFillStyle();
 
-        tools::Rectangle   aRect( ImplMap( rRect ) );
-        Point       aStart( ImplMap( rStart ) );
-        Point       aEnd( ImplMap( rEnd ) );
+        basegfx::B2DRectangle   aRect( ImplMap( rRect ) );
+        basegfx::B2DPoint       aStart( ImplMap( rStart ) );
+        basegfx::B2DPoint       aEnd( ImplMap( rEnd ) );
 
         if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash ) )
         {
             ImplSetNonPersistentLineColorTransparenz();
             mpGDIMetaFile->AddAction( new MetaPieAction( aRect, aStart, aEnd ) );
             UpdateLineStyle();
-            mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( aRect, aStart, aEnd, PolyStyle::Pie ), maLineStyle.aLineInfo ) );
+            mpGDIMetaFile->AddAction( new MetaPolyLineAction( basegfx::B2DPolygon( aRect, aStart, aEnd, PolyStyle::Pie ), maLineStyle.aLineInfo ) );
         }
         else
         {
@@ -1520,21 +1519,21 @@ namespace emfio
         }
     }
 
-    void MtfTools::DrawChord( const tools::Rectangle& rRect, const Point& rStart, const Point& rEnd )
+    void MtfTools::DrawChord( const basegfx::B2DRectangle& rRect, const basegfx::B2DPoint& rStart, const basegfx::B2DPoint& rEnd )
     {
         UpdateClipRegion();
         UpdateFillStyle();
 
-        tools::Rectangle   aRect( ImplMap( rRect ) );
-        Point       aStart( ImplMap( rStart ) );
-        Point       aEnd( ImplMap( rEnd ) );
+        basegfx::B2DRectangle   aRect( ImplMap( rRect ) );
+        basegfx::B2DPoint       aStart( ImplMap( rStart ) );
+        basegfx::B2DPoint       aEnd( ImplMap( rEnd ) );
 
         if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash ) )
         {
             ImplSetNonPersistentLineColorTransparenz();
             mpGDIMetaFile->AddAction( new MetaChordAction( aRect, aStart, aEnd ) );
             UpdateLineStyle();
-            mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( aRect, aStart, aEnd, PolyStyle::Chord ), maLineStyle.aLineInfo ) );
+            mpGDIMetaFile->AddAction( new MetaPolyLineAction( basegfx::B2DPolygon( aRect, aStart, aEnd, PolyStyle::Chord ), maLineStyle.aLineInfo ) );
         }
         else
         {
@@ -1543,7 +1542,7 @@ namespace emfio
         }
     }
 
-    void MtfTools::DrawPolygon( tools::Polygon rPolygon, bool bRecordPath )
+    void MtfTools::DrawPolygon( basegfx::B2DPolygon rPolygon, bool bRecordPath )
     {
         UpdateClipRegion();
         ImplMap( rPolygon );
@@ -1555,10 +1554,10 @@ namespace emfio
 
             if ( mbComplexClip )
             {
-                tools::PolyPolygon aPolyPoly( rPolygon );
+                basegfx::B2DPolyPolygon aPolyPoly( rPolygon );
                 auto tmp = maClipPath.getClip();
                 tmp.intersectPolyPolygon(aPolyPoly.getB2DPolyPolygon());
-                tools::PolyPolygon aDest(tmp.getClipPoly());
+                basegfx::B2DPolyPolygon aDest(tmp.getClipPoly());
                 ImplDrawClippedPolyPolygon( aDest );
             }
             else
@@ -1570,7 +1569,7 @@ namespace emfio
                     {
                         if ( rPolygon[ nCount - 1 ] != rPolygon[ 0 ] )
                         {
-                            Point aPoint( rPolygon[ 0 ] );
+                            basegfx::B2DPoint aPoint( rPolygon[ 0 ] );
                             rPolygon.Insert( nCount, aPoint );
                         }
                     }
@@ -1586,7 +1585,7 @@ namespace emfio
                     if (maLatestFillStyle.aType != WinMtfFillStyleType::Pattern)
                         mpGDIMetaFile->AddAction( new MetaPolygonAction( rPolygon ) );
                     else {
-                        SvtGraphicFill aFill( tools::PolyPolygon( rPolygon ),
+                        SvtGraphicFill aFill( basegfx::B2DPolyPolygon( rPolygon ),
                                               Color(),
                                               0.0,
                                               SvtGraphicFill::fillNonZero,
@@ -1616,7 +1615,7 @@ namespace emfio
         }
     }
 
-    void MtfTools::DrawPolyPolygon( tools::PolyPolygon& rPolyPolygon, bool bRecordPath )
+    void MtfTools::DrawPolyPolygon( basegfx::B2DPolyPolygon& rPolyPolygon, bool bRecordPath )
     {
         UpdateClipRegion();
 
@@ -1630,8 +1629,8 @@ namespace emfio
 
             if ( mbComplexClip )
             {
-                tools::PolyPolygon aDest;
-                tools::PolyPolygon(maClipPath.getClipPath()).GetIntersection( rPolyPolygon, aDest );
+                basegfx::B2DPolyPolygon aDest;
+                basegfx::B2DPolyPolygon(maClipPath.getClipPath()).GetIntersection( rPolyPolygon, aDest );
                 ImplDrawClippedPolyPolygon( aDest );
             }
             else
@@ -1640,7 +1639,7 @@ namespace emfio
                 mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( rPolyPolygon ) );
                 if (maLineStyle.aLineInfo.GetWidth() > 0 || maLineStyle.aLineInfo.GetStyle() == LineStyle::Dash)
                 {
-                    for (sal_uInt16 nPoly = 0; nPoly < rPolyPolygon.Count(); ++nPoly)
+                    for (sal_uInt16 nPoly = 0; nPoly < rPolyPolygon.count(); ++nPoly)
                     {
                         mpGDIMetaFile->AddAction(new MetaPolyLineAction(rPolyPolygon[nPoly], maLineStyle.aLineInfo));
                     }
@@ -1649,7 +1648,7 @@ namespace emfio
         }
     }
 
-    void MtfTools::DrawPolyLine( tools::Polygon rPolygon, bool bTo, bool bRecordPath )
+    void MtfTools::DrawPolyLine( basegfx::B2DPolygon rPolygon, bool bTo, bool bRecordPath )
     {
         UpdateClipRegion();
 
@@ -1672,7 +1671,7 @@ namespace emfio
         }
     }
 
-    void MtfTools::DrawPolyBezier( tools::Polygon rPolygon, bool bTo, bool bRecordPath )
+    void MtfTools::DrawPolyBezier( basegfx::B2DPolygon rPolygon, bool bTo, bool bRecordPath )
     {
         sal_uInt16 nPoints = rPolygon.GetSize();
         if ( ( nPoints < 4 ) || ( ( ( nPoints - 4 ) % 3 ) != 0 ) )
@@ -1702,7 +1701,7 @@ namespace emfio
         }
     }
 
-    void MtfTools::DrawText( Point& rPosition, OUString const & rText, tools::Long* pDXArry, tools::Long* pDYArry, bool bRecordPath, sal_Int32 nGfxMode )
+    void MtfTools::DrawText( basegfx::B2DPoint& rPosition, OUString const & rText, tools::Long* pDXArry, tools::Long* pDYArry, bool bRecordPath, sal_Int32 nGfxMode )
     {
         UpdateClipRegion();
         rPosition = ImplMap( rPosition );
@@ -1790,8 +1789,8 @@ namespace emfio
         if ( nGfxMode == GM_ADVANCED )
         {
             // check whether there is a font rotation applied via transformation
-            Point aP1( ImplMap( Point() ) );
-            Point aP2( ImplMap( Point( 0, 100 ) ) );
+            basegfx::B2DPoint aP1( ImplMap( basegfx::B2DPoint() ) );
+            basegfx::B2DPoint aP2( ImplMap( basegfx::B2DPoint( 0, 100 ) ) );
             aP2.AdjustX( -(aP1.X()) );
             aP2.AdjustY( -(aP1.Y()) );
             double fX = aP2.X();
@@ -1813,7 +1812,7 @@ namespace emfio
             SolarMutexGuard aGuard;
             ScopedVclPtrInstance< VirtualDevice > pVDev;
             sal_Int32 nTextWidth;
-            Point aActPosDelta;
+            basegfx::B2DPoint aActPosDelta;
             pVDev->SetMapMode( MapMode( MapUnit::Map100thMM ) );
             pVDev->SetFont( maFont );
             const sal_uInt32 nLen = pDXArry ? rText.getLength() : 0;
@@ -1840,14 +1839,14 @@ namespace emfio
 
             if ( mnTextAlign & TA_RIGHT_CENTER )
             {
-                Point aDisplacement( ( ( mnTextAlign & TA_RIGHT_CENTER ) == TA_RIGHT ) ? nTextWidth : nTextWidth >> 1, 0 );
-                Point().RotateAround(aDisplacement, maFont.GetOrientation());
+                basegfx::B2DPoint aDisplacement( ( ( mnTextAlign & TA_RIGHT_CENTER ) == TA_RIGHT ) ? nTextWidth : nTextWidth >> 1, 0 );
+                basegfx::B2DPoint().RotateAround(aDisplacement, maFont.GetOrientation());
                 rPosition -= aDisplacement;
             }
 
             if( mnTextAlign & TA_UPDATECP )
             {
-                Point().RotateAround(aActPosDelta, maFont.GetOrientation());
+                basegfx::B2DPoint().RotateAround(aActPosDelta, maFont.GetOrientation());
                 maActPos = rPosition + aActPosDelta;
             }
         }
@@ -1884,8 +1883,8 @@ namespace emfio
             {
                 for (sal_Int32 i = 0; i < rText.getLength(); ++i)
                 {
-                    Point aCharDisplacement( i ? pDXArry[i-1] : 0, i ? pDYArry[i-1] : 0 );
-                    Point().RotateAround(aCharDisplacement, maFont.GetOrientation());
+                    basegfx::B2DPoint aCharDisplacement( i ? pDXArry[i-1] : 0, i ? pDYArry[i-1] : 0 );
+                    basegfx::B2DPoint().RotateAround(aCharDisplacement, maFont.GetOrientation());
                     mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition + aCharDisplacement, OUString( rText[i] ), nullptr, 0, 1 ) );
                 }
             }
@@ -1915,7 +1914,9 @@ namespace emfio
                     pVDev->SetFont( maLatestFont );
                     pVDev->GetTextArray( rText, pDX, 0, rText.getLength());
                 }
-                mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition, rText, pDX, 0, rText.getLength() ) );
+                Point pos(::basegfx::fround( rPosition.getX() ),
+                        ::basegfx::fround( rPosition.getX() ));
+                mpGDIMetaFile->AddAction( new MetaTextArrayAction( pos, rText, pDX, 0, rText.getLength() ) );
                 if ( !pDXArry )     // this means we have created our own array
                     delete[] pDX;   // which must be deleted
             }
@@ -1923,18 +1924,20 @@ namespace emfio
         SetGfxMode( nOldGfxMode );
     }
 
-    void MtfTools::ImplDrawBitmap( const Point& rPos, const Size& rSize, const BitmapEx& rBitmap )
+    void MtfTools::ImplDrawBitmap( const basegfx::B2DPoint& rPos, const Size& rSize, const BitmapEx& rBitmap )
     {
         BitmapEx aBmpEx( rBitmap );
+        Point pos(::basegfx::fround( rPos.getX() ),
+                ::basegfx::fround( rPos.getX() ));
         if ( mbComplexClip )
         {
-            vcl::bitmap::DrawAndClipBitmap(rPos, rSize, rBitmap, aBmpEx, maClipPath.getClipPath());
+            vcl::bitmap::DrawAndClipBitmap(pos, rSize, rBitmap, aBmpEx, maClipPath.getClipPath());
         }
 
         if ( aBmpEx.IsAlpha() )
-            mpGDIMetaFile->AddAction( new MetaBmpExScaleAction( rPos, rSize, aBmpEx ) );
+            mpGDIMetaFile->AddAction( new MetaBmpExScaleAction( pos, rSize, aBmpEx ) );
         else
-            mpGDIMetaFile->AddAction( new MetaBmpScaleAction( rPos, rSize, aBmpEx.GetBitmap() ) );
+            mpGDIMetaFile->AddAction( new MetaBmpScaleAction( pos, rSize, aBmpEx.GetBitmap() ) );
     }
 
     void MtfTools::ResolveBitmapActions( std::vector<std::unique_ptr<BSaveStruct>>& rSaveList )
@@ -1951,7 +1954,7 @@ namespace emfio
             size_t          nObjectStartIndex = nObjects - nObjectsLeft;
 
             BSaveStruct*    pSave = rSaveList[nObjectStartIndex].get();
-            tools::Rectangle       aRect( pSave->aOutRect );
+            basegfx::B2DRectangle       aRect( pSave->aOutRect );
 
             for ( i = nObjectStartIndex; i < nObjects; )
             {
@@ -1963,7 +1966,7 @@ namespace emfio
                         break;
                 }
             }
-            Point   aPos( ImplMap( aRect.TopLeft() ) );
+            basegfx::B2DPoint   aPos( ImplMap( aRect.TopLeft() ) );
             Size    aSize( ImplMap( aRect.GetSize() ) );
 
             for ( i = nObjectStartIndex; i < ( nObjectStartIndex + nObjectsOfSameSize ); i++ )
@@ -2184,10 +2187,10 @@ namespace emfio
         rSaveList.clear();
     }
 
-    void MtfTools::SetDevOrg( const Point& rPoint )
+    void MtfTools::SetDevOrg( const basegfx::B2DPoint& rPoint )
     {
-        mnDevOrgX = rPoint.X();
-        mnDevOrgY = rPoint.Y();
+        mnDevOrgX = rPoint.getX();
+        mnDevOrgY = rPoint.getY();
     }
 
     void MtfTools::SetDevOrgOffset( sal_Int32 nXAdd, sal_Int32 nYAdd )
@@ -2222,10 +2225,10 @@ namespace emfio
         mnDevHeight = basegfx::fround(mnDevHeight * fY);
     }
 
-    void MtfTools::SetWinOrg( const Point& rPoint , bool bIsEMF)
+    void MtfTools::SetWinOrg( const basegfx::B2DPoint& rPoint , bool bIsEMF)
     {
-        mnWinOrgX = rPoint.X();
-        mnWinOrgY = rPoint.Y();
+        mnWinOrgX = rPoint.getX();
+        mnWinOrgY = rPoint.getY();
         if (bIsEMF)
         {
             SetDevByWin();
@@ -2281,12 +2284,12 @@ namespace emfio
         mnWinExtY = basegfx::fround(mnWinExtY * fY);
     }
 
-    void MtfTools::SetrclBounds( const tools::Rectangle& rRect )
+    void MtfTools::SetrclBounds( const basegfx::B2DRectangle& rRect )
     {
         mrclBounds = rRect;
     }
 
-    void MtfTools::SetrclFrame( const tools::Rectangle& rRect )
+    void MtfTools::SetrclFrame( const basegfx::B2DRectangle& rRect )
     {
         mrclFrame = rRect;
     }
@@ -2538,10 +2541,10 @@ namespace emfio
         SvMemoryStream mem;
         sal_Int32 nLeft, nRight, nTop, nBottom;
 
-        nLeft = mrclFrame.Left();
-        nTop = mrclFrame.Top();
-        nRight = mrclFrame.Right();
-        nBottom = mrclFrame.Bottom();
+        nLeft = mrclFrame.getMinX();
+        nTop = mrclFrame.getMinY();
+        nRight = mrclFrame.getMaxX();
+        nBottom = mrclFrame.getMaxY();
 
         // emf header info
         mem.WriteInt32( nLeft ).WriteInt32( nTop ).WriteInt32( nRight ).WriteInt32( nBottom );

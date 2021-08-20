@@ -59,11 +59,11 @@ namespace emfio
         // reads parameters of the record with the functionnumber nFunction.
         void            ReadRecordParams(sal_uInt32 nRecordSize, sal_uInt16 nFunction);
 
-        Point           ReadPoint();                // reads and converts a point (first X then Y)
-        Point           ReadYX();                   // reads and converts a point (first Y then X)
-        tools::Rectangle       ReadRectangle();            // reads and converts a rectangle
+        basegfx::B2DPoint           ReadPoint();                // reads and converts a point (first X then Y)
+        basegfx::B2DPoint           ReadYX();                   // reads and converts a point (first Y then X)
+        basegfx::B2DRectangle       ReadRectangle();            // reads and converts a rectangle
         Size            ReadYXExt();
-        void            GetPlaceableBound(tools::Rectangle& rSize, SvStream* pStrm);
+        void            GetPlaceableBound(basegfx::B2DRectangle& rSize, SvStream* pStrm);
 
     public:
         WmfReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile, const WmfExternal* pExternalHeader);

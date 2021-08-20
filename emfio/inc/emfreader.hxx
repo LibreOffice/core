@@ -39,7 +39,7 @@ namespace emfio
 
         bool        ReadHeader();
         // reads and converts the rectangle
-        static tools::Rectangle ReadRectangle(sal_Int32, sal_Int32, sal_Int32, sal_Int32);
+        static basegfx::B2DRectangle ReadRectangle(sal_Int32, sal_Int32, sal_Int32, sal_Int32);
 
     public:
         EmfReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile);
@@ -55,10 +55,10 @@ namespace emfio
     private:
         template <class T> void ReadAndDrawPolyPolygon(sal_uInt32 nNextPos);
         template <class T> void ReadAndDrawPolyLine(sal_uInt32 nNextPos);
-        template <class T> tools::Polygon ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints, sal_uInt32 nNextPos);
-        template <class T> tools::Polygon ReadPolygonWithSkip(const bool skipFirst, sal_uInt32 nNextPos);
+        template <class T> basegfx::B2DPolygon ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints, sal_uInt32 nNextPos);
+        template <class T> basegfx::B2DPolygon ReadPolygonWithSkip(const bool skipFirst, sal_uInt32 nNextPos);
 
-        tools::Rectangle ReadRectangle();
+        basegfx::B2DRectangle ReadRectangle();
         void ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC);
     };
 }
