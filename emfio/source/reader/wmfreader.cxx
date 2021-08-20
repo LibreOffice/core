@@ -39,6 +39,8 @@
 #include <vcl/BitmapTools.hxx>
 #include <osl/thread.h>
 
+#define META_PLACEABLE 0x9ac6cdd7L;
+
 // MS Windows defines
 #define W_META_SETBKCOLOR           0x0201
 #define W_META_SETBKMODE            0x0102
@@ -1406,7 +1408,7 @@ namespace emfio
 
         tools::Rectangle aPlaceableBound;
 
-        bool bPlaceable = nPlaceableMetaKey == 0x9ac6cdd7L;
+        bool bPlaceable = nPlaceableMetaKey == META_PLACEABLE;
 
         SAL_INFO("emfio", "Placeable: \"" << (bPlaceable ? "yes" : "no") << "\"");
 

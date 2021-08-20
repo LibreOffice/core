@@ -52,6 +52,9 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
+
+#include <tools/fract.hxx>
+
 #include <algorithm>
 
 namespace emfplushelper
@@ -1496,7 +1499,12 @@ namespace emfplushelper
                             if (image.type == ImageDataTypeBitmap)
                             {
                                 aSize = image.graphic.GetBitmapEx().GetSizePixel();
-                                SAL_INFO("drawinglayer.emf", "EMF+\t Bitmap size: " << aSize.Width()
+                            }
+                            else
+                            {
+                                aSize = image.graphic.GetGDIMetaFile().GetPrefSize();
+                            }
+                                SAL_INFO("drawinglayer.emf", "EMF+\t Image size: " << aSize.Width()
                                                                                     << "x"
                                                                                     << aSize.Height());
                                 if (sx < 0)
@@ -1522,26 +1530,48 @@ namespace emfplushelper
                                 }
                                 else if (sy + sh > aSize.Height())
                                     dh = ((aSize.Height() - sy) / sh) * dh;
-                            }
+                            /*}
                             else
                                 SAL_INFO(
                                     "drawinglayer.emf",
-                                    "EMF+\t TODO: Add support for SrcRect to ImageDataTypeMetafile");
+                                    "EMF+\t TODO: Add support for SrcRect to ImageDataTypeMetafile");*/
                             ::basegfx::B2DPoint aDstPoint(dx, dy);
                             ::basegfx::B2DSize aDstSize(dw, dh);
+                            double ratio = double(aSize.Width()) / double(aSize.Height()); // ratio 0.63
 
+//            case UnitTypeMillimeter: return aDPI / 25.4;
+  // 1/10 milimeter return aDPI / 2.54;
+  // 1/100 milimeter return aDPI / 0.254;
+
+                                    SAL_WARN("drawinglayer.emf", "EMF+\t bako mnMmX " << mnMmX << " mnPixX: "<< mnPixX << " width: " << aSize.Width());
+                            //mnMmX *= mfPageScale * getUnitToPixelMultiplier(UnitTypeMillimeter, mnHDPI);
+                            //mnMmY *= mfPageScale * getUnitToPixelMultiplier(UnitTypeMillimeter, mnVDPI);
                             const basegfx::B2DHomMatrix aTransformMatrix
-                                = maMapTransform
+                                //= maMapTransform
+
+        = basegfx::utils::createScaleTranslateB2DHomMatrix(2.22 * 100.0 * mnMmX / mnPixX, 100.0 * mnMmY / mnPixY,
+                                                                           double(-mnFrameLeft), double(-mnFrameTop))
                                 * basegfx::B2DHomMatrix(
                                     /* Row 0, Column 0 */ aDstSize.getX(),
+                                  //  /* Row 0, Column 0 */ aSize.Width() * 0.01* 0.01741 * aDstSize.getX(),
+                                  //  /* Row 0, Column 0 */ 2.22 * /*3.45 * ratio */ aDstSize.getX(), // dobre proporcje
+
                                     /* Row 0, Column 1 */ fShearX,
                                     /* Row 0, Column 2 */ aDstPoint.getX(),
                                     /* Row 1, Column 0 */ fShearY,
-                                    /* Row 1, Column 1 */ aDstSize.getY(),
+                                  // /* Row 1, Column 1 */  aDstSize.getY(),
+                                  //  /* Row 1, Column 1 */ aSize.Height() * 0.01* 0.01741 * aDstSize.getY(),
+                                     /* Row 1, Column 1 */ 3.45 * aDstSize.getY(), // dobre proporce
+
                                     /* Row 1, Column 2 */ aDstPoint.getY());
 
+                                    SAL_WARN("drawinglayer.emf", "EMF+\t bako Destination size " << dw
+                                                                                    << "x"
+                                                                                    << dh << " ratio: " << ratio);
                             if (image.type == ImageDataTypeBitmap)
                             {
+
+                                    SAL_WARN("drawinglayer.emf", "EMF+\t bako bitmapt");
                                 BitmapEx aBmp(image.graphic.GetBitmapEx());
                                 aBmp.Crop(aSource);
                                 aSize = aBmp.GetSizePixel();
@@ -1557,7 +1587,49 @@ namespace emfplushelper
                             else if (image.type == ImageDataTypeMetafile)
                             {
                                 GDIMetaFile aGDI(image.graphic.GetGDIMetaFile());
+                                MapMode mapmode = aGDI.GetPrefMapMode() ;
+                                const Point&  punkt=    mapmode.GetOrigin();
+                                const Fraction& rFrac = image.graphic.GetGDIMetaFile().GetPrefMapMode().GetScaleX();
+                                const Fraction& frakcjax = mapmode.GetScaleX();
+                                const Fraction& frakcjay = mapmode.GetScaleY();
+                                //Fraction& frakcjax = static_cast<Fraction>(mapmode.GetScaleX());
+
+
+           /* tools::Long nZoom = 100;
+            if (rFrac.IsValid())
+                nZoom = tools::Long(rFrac * 100);*/
+                               // double frakcjadoublex = double(mapmode.GetScaleX());
+                                //double frakcjadoubley = double(mapmode.GetScaleY());
+                                SAL_WARN("drawinglayer.emf", " BAKO GetOriginX " << punkt.getX() );
+                                SAL_WARN("drawinglayer.emf", " BAKO GetOriginY" << punkt.getY() );
+                                //tools::Long aMul = frakcjax.GetNumerator();
+SAL_WARN("drawinglayer.emf", " BAKO GetScaleX " << double((frakcjax)));
+
+                                SAL_WARN("drawinglayer.emf", " BAKO GetScaleX " << frakcjax.GetNumerator() << " / " << frakcjax.GetDenominator() );
+
+                                SAL_WARN("drawinglayer.emf", " BAKO GetScaleY " << frakcjay.GetNumerator() << " / " << frakcjay.GetDenominator() );
+                                //mapmode.SetMapUnit(MapUnit::MapPixel);
+                                //aGDI.SetPrefMapMode(mapmode) ;
                                 aGDI.Clip(aSource);
+
+                                //aGDI.Move(0, 0, 10., 10);
+                                //aGDI.Scale(20.0, 2.0 );
+                                SAL_WARN_IF(mapmode.GetMapUnit() == MapUnit::MapPixel, "drawinglayer.emf", "EMF+\t bako pixel" );
+                                SAL_WARN_IF(mapmode.GetMapUnit() == MapUnit::MapPoint, "drawinglayer.emf", "EMF+\t bako point" );
+                                SAL_WARN_IF(mapmode.GetMapUnit() == MapUnit::MapRelative, "drawinglayer.emf", "EMF+\t bako rel" );
+                                SAL_WARN_IF(mapmode.GetMapUnit() == MapUnit::MapSysFont, "drawinglayer.emf", "EMF+\t bako MapSysFont" );
+                                SAL_WARN_IF(mapmode.GetMapUnit() == MapUnit::MapTwip, "drawinglayer.emf", "EMF+\t bako MapTwip" );
+                                SAL_WARN_IF(mapmode.GetMapUnit() == MapUnit::Map1000thInch, "drawinglayer.emf", "EMF+\t bako Map1000thInch" );
+                                SAL_WARN_IF(mapmode.GetMapUnit() == MapUnit::Map100thInch, "drawinglayer.emf", "EMF+\t bako Map100thInch" );
+                                SAL_WARN_IF(mapmode.GetMapUnit() == MapUnit::Map100thMM, "drawinglayer.emf", "EMF+\t bako Map100thMM" );
+                                SAL_WARN_IF(mapmode.GetMapUnit() == MapUnit::Map10thInch, "drawinglayer.emf", "EMF+\t bako Map10thInch" );
+                                SAL_WARN_IF(mapmode.GetMapUnit() == MapUnit::Map10thMM, "drawinglayer.emf", "EMF+\t bako Map10thMM" );
+                                SAL_WARN_IF(mapmode.GetMapUnit() == MapUnit::MapAppFont, "drawinglayer.emf", "EMF+\t bako MapAppFont" );
+                                SAL_WARN_IF(mapmode.GetMapUnit() == MapUnit::MapCM, "drawinglayer.emf", "EMF+\t bako MapCM" );
+                                SAL_WARN_IF(mapmode.GetMapUnit() == MapUnit::MapInch, "drawinglayer.emf", "EMF+\t bako MapInch" );
+                                SAL_WARN_IF(mapmode.GetMapUnit() == MapUnit::MapMM, "drawinglayer.emf", "EMF+\t bako MapMM" );
+                              SAL_WARN("drawinglayer.emf", " BAKO maWorldTransform" << maWorldTransform<< " maMapTransform:" <<
+        maMapTransform << "maBaseTransform" <<maBaseTransform);
                                 mrTargetHolders.Current().append(
                                     new drawinglayer::primitive2d::MetafilePrimitive2D(aTransformMatrix,
                                                                                     aGDI));
