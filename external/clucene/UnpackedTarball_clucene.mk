@@ -34,6 +34,8 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,clucene,0))
 #  <https://sourceforge.net/p/clucene/mailman/message/36991067/>
 # c++20.patch was proposed upstream, see
 #  <https://sourceforge.net/p/clucene/mailman/message/37040362/>
+# nullstring.patch was proposed upstream, see
+#  <https://sourceforge.net/p/clucene/mailman/message/37338234/>
 $(eval $(call gb_UnpackedTarball_add_patches,clucene,\
 	external/clucene/patches/clucene-debug.patch \
 	external/clucene/patches/clucene-multimap-put.patch \
