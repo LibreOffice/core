@@ -25,6 +25,7 @@
 #include <basegfx/color/bcolor.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <tools/debug.hxx>
+#include <sal/log.hxx>
 
 namespace sdr::contact
 {
@@ -105,6 +106,9 @@ void ViewContact::RemoveViewObjectContact(ViewObjectContact& rVOContact)
 
     if (aFindResult != maViewObjectContactVector.end())
         maViewObjectContactVector.erase(aFindResult);
+
+    SAL_WARN_IF(aFindResult == maViewObjectContactVector.end(), "svx",
+                "ViewObjectContact address not found.  Possible memory leak");
 }
 
 // Test if this ViewContact has ViewObjectContacts at all. This can
