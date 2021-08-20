@@ -16,6 +16,7 @@
 
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/languagetagicu.hxx>
 
 #include <rtl/ustring.hxx>
 
@@ -33,10 +34,12 @@ public:
 
     void testAllTags();
     void testAllIsoLangEntries();
+    void testDisplayNames();
 
     CPPUNIT_TEST_SUITE(TestLanguageTag);
     CPPUNIT_TEST(testAllTags);
     CPPUNIT_TEST(testAllIsoLangEntries);
+    CPPUNIT_TEST(testDisplayNames);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -801,6 +804,78 @@ void TestLanguageTag::testAllIsoLangEntries()
 
     // Uncommenting this makes the test break and output SAL_WARN/INFO
     //CPPUNIT_ASSERT( true == false );
+}
+
+void TestLanguageTag::testDisplayNames()
+{
+    OUString aStr;
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("en-US"), LanguageTag("en-US"));
+    CPPUNIT_ASSERT_EQUAL( OUString("English (United States)"), aStr);
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("en-US"), LanguageTag("en"));
+    CPPUNIT_ASSERT_EQUAL( OUString("English (United States)"), aStr);
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("en"), LanguageTag("en"));
+    CPPUNIT_ASSERT_EQUAL( OUString("English"), aStr);
+
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("en-US"), LanguageTag("de-DE"));
+    CPPUNIT_ASSERT_EQUAL( OUString("Englisch (Vereinigte Staaten)"), aStr);
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("en-US"), LanguageTag("de"));
+    CPPUNIT_ASSERT_EQUAL( OUString("Englisch (Vereinigte Staaten)"), aStr);
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("en"), LanguageTag("de"));
+    CPPUNIT_ASSERT_EQUAL( OUString("Englisch"), aStr);
+
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("de-DE"), LanguageTag("en"));
+    CPPUNIT_ASSERT_EQUAL( OUString("German (Germany)"), aStr);
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("de"), LanguageTag("en"));
+    CPPUNIT_ASSERT_EQUAL( OUString("German"), aStr);
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("de-DE-1901"), LanguageTag("en"));
+    CPPUNIT_ASSERT_EQUAL( OUString("German (Germany, Traditional German orthography)"), aStr);
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("de-DE-1901"), LanguageTag("de-DE"));
+    CPPUNIT_ASSERT_EQUAL( OUString("Deutsch (Deutschland, Alte deutsche Rechtschreibung)"), aStr);
+
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("en-GB"), LanguageTag("en"));
+    CPPUNIT_ASSERT_EQUAL( OUString("English (United Kingdom)"), aStr);
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("en-GB-oxendict"), LanguageTag("en"));
+    CPPUNIT_ASSERT_EQUAL( OUString("English (United Kingdom, Oxford English Dictionary spelling)"), aStr);
+
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("ca-ES-valencia"), LanguageTag("en"));
+    CPPUNIT_ASSERT_EQUAL( OUString("Catalan (Spain, Valencian)"), aStr);
+
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("sr-Cyrl-RS"), LanguageTag("en"));
+    CPPUNIT_ASSERT_EQUAL( OUString("Serbian (Serbia)"), aStr);
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("sr-Latn-RS"), LanguageTag("en"));
+    CPPUNIT_ASSERT_EQUAL( OUString("Serbian (Latin, Serbia)"), aStr);
+
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("tlh"), LanguageTag("en"));
+    CPPUNIT_ASSERT_EQUAL( OUString("Klingon"), aStr);
+
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("und"), LanguageTag("en"));
+    CPPUNIT_ASSERT_EQUAL( OUString("Unknown language"), aStr);
+
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("zxx"), LanguageTag("en"));
+    CPPUNIT_ASSERT_EQUAL( OUString("No linguistic content"), aStr);
+
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("x-lala"), LanguageTag("en"));
+    CPPUNIT_ASSERT_EQUAL( OUString("Unknown language (Private-Use=lala)"), aStr);
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("x-lala"), LanguageTag("de"));
+    CPPUNIT_ASSERT_EQUAL( OUString("Unbekannte Sprache (Privatnutzung=lala)"), aStr);
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("en-GB"), LanguageTag("x-lala"));
+    CPPUNIT_ASSERT_EQUAL( OUString("en (GB)"), aStr);
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("en-GB-oxendict"), LanguageTag("x-lala"));
+    CPPUNIT_ASSERT_EQUAL( OUString("en (GB, OXENDICT)"), aStr);
+
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("unreg-and-bad"), LanguageTag("en"));
+    CPPUNIT_ASSERT_EQUAL( OUString("unreg (Andorra, BAD)"), aStr);  // a tad of a surprise..
+
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("en-029"), LanguageTag("en"));
+    CPPUNIT_ASSERT_EQUAL( OUString("English (Caribbean)"), aStr);
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("fr-015"), LanguageTag("en"));
+    CPPUNIT_ASSERT_EQUAL( OUString("French (Northern Africa)"), aStr);
+
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("qtz"), LanguageTag("en"));
+    CPPUNIT_ASSERT_EQUAL( OUString("qtz"), aStr);
+
+    aStr = LanguageTagIcu::getDisplayName( LanguageTag("*"), LanguageTag("en"));
+    CPPUNIT_ASSERT_EQUAL( OUString("*"), aStr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION( TestLanguageTag );
