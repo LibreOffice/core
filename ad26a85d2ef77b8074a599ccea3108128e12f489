@@ -16,6 +16,24 @@
       "revId": "ad26a85d2ef77b8074a599ccea3108128e12f489",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fc61ea9_e77e17bb",
+        "filename": "starmath/source/document.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-08-20T12:13:43Z",
+      "side": 1,
+      "message": "Allow me to tell you the whole history.\nStarmath isn\u0027t fully compatible with mathml.\nSo we are creating a \"starmath 6\" wich is compatible with it.\nIn order to do so we have introudced an SmMlElement type of node.\nAnd we have added a SmMLImport / SmMLExport.\nHohwever, given that starmath isn\u0027t fully compatible with mathml\nand the new version is, obviously the backguards compatibility fails.\nSo we can\u0027t update documents automatically (user manually).\nThere the need of the new SmMLExportWrapper / SmMLImportWrapper.\nThose will load and write the documents with they\u0027re specific version ( 5 or 6 ).\nSo this change won\u0027t have any effects on the old documents.\nThat functionality is blocked for the users by now.\nAnd if by interoperability you mean the other office editor\u0027s I heard that they use the mathml code in content.xml. So also is fine.\nI hope this answers your question.",
+      "parentUuid": "a7b96c91_d0961bd1",
+      "revId": "ad26a85d2ef77b8074a599ccea3108128e12f489",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
