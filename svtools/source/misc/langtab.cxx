@@ -29,8 +29,11 @@
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/languagetagicu.hxx>
 
 #include <sal/log.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/langtab.hxx>
 #include <unotools/syslocale.hxx>
@@ -156,16 +159,25 @@ OUString ApplyLreOrRleEmbedding( const OUString &rText )
     return aRes;
 }
 
-static OUString lcl_getDescription( std::u16string_view rBcp47 )
+static OUString lcl_getDescription( const LanguageTag& rTag )
 {
-    // Place in curly brackets, so all on-the-fly tags are grouped together at
-    // the top of a listbox (but behind the "[None]" entry), and not sprinkled
-    // all over, which alphabetically might make sense in an English UI only
-    // anyway. Also a visual indicator that it is a programmatical name, IMHO.
-    /* TODO: pulling descriptive names (language, script, country, subtags)
-     * from liblangtag or ISO databases might be nice, but those are English
-     * only. Maybe ICU, that has translations for language and country. */
-    return OUString::Concat("{") + rBcp47 + "}";
+    OUString aStr( LanguageTagIcu::getDisplayName( rTag, Application::GetSettings().GetUILanguageTag()));
+    if (aStr.isEmpty() || aStr == rTag.getBcp47())
+    {
+        // Place in curly brackets, so all on-the-fly tags without display name
+        // are grouped together at the top of a listbox (but behind the
+        // "[None]" entry), and not sprinkled all over, which alphabetically
+        // might make sense in an English UI only anyway. Also a visual
+        // indicator that it is a programmatical name, IMHO.
+        return OUString::Concat("{") + aStr + "}";
+    }
+    else
+    {
+        // The ICU display name might be identical to a predefined name or even
+        // to another tag's ICU name; clarify that this is a generated name and
+        // append the language tag in curly brackets to distinguish.
+        return aStr + " {" + rTag.getBcp47() + "}";
+    }
 }
 
 SvtLanguageTableImpl::SvtLanguageTableImpl()
@@ -193,7 +205,7 @@ SvtLanguageTableImpl::SvtLanguageTableImpl()
                 aLang.setScriptType(LanguageTag::ScriptType(nType));
             sal_uInt32 nPos = FindIndex(nLangType);
             if (nPos == RESARRAY_INDEX_NOTFOUND)
-                AddItem((aName.isEmpty() ? lcl_getDescription(rBcp47) : aName), nLangType);
+                AddItem((aName.isEmpty() ? lcl_getDescription(aLang) : aName), nLangType);
         }
     }
 }
@@ -219,8 +231,8 @@ OUString SvtLanguageTableImpl::GetString( const LanguageType eType ) const
     if ( RESARRAY_INDEX_NOTFOUND != nPos && nPos < GetEntryCount() )
         return m_aStrings[nPos].first;
 
-    //Rather than return a fairly useless "Unknown" name, return a geeky but usable-in-a-pinch lang-tag
-    OUString sLangTag( lcl_getDescription( LanguageTag::convertToBcp47(eType)));
+    // Obtain from ICU, or a geeky but usable-in-a-pinch lang-tag.
+    OUString sLangTag( lcl_getDescription( LanguageTag(eType)));
     SAL_WARN("svtools.misc", "Language: 0x"
         << std::hex << eType
         << " with unknown name, so returning lang-tag of: "
@@ -287,7 +299,7 @@ LanguageType SvtLanguageTable::GetLanguageTypeAtIndex( sal_uInt32 nIndex )
 
 sal_uInt32 SvtLanguageTable::AddLanguageTag( const LanguageTag& rLanguageTag )
 {
-    return theLanguageTable::get().AddItem( lcl_getDescription(rLanguageTag.getBcp47()),
+    return theLanguageTable::get().AddItem( lcl_getDescription(rLanguageTag),
             rLanguageTag.getLanguageType());
 }
 
