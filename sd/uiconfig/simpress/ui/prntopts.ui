@@ -297,7 +297,7 @@
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="hiddenpgcb-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|hiddenpgcb">Specifies whether to print the pages that are currently hidden from the presentation.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|hiddenpgcb">Specifies whether to print the pages that are hidden from the presentation.</property>
                       </object>
                     </child>
                   </object>
