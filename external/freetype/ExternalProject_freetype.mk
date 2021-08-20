@@ -23,7 +23,7 @@ $(call gb_ExternalProject_get_state_target,freetype,build) :
 			--without-harfbuzz \
 			--prefix=$(call gb_UnpackedTarball_get_dir,freetype/instdir) \
 			--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
-			CFLAGS="$(if $(debug),-g) $(gb_VISIBILITY_FLAGS)" \
+			CFLAGS="$(CFLAGS) $(if $(debug),-g) $(gb_VISIBILITY_FLAGS)" \
 		&& $(MAKE) install \
 		&& touch $@	)
 	$(call gb_Trace_EndRange,freetype,EXTERNAL)
