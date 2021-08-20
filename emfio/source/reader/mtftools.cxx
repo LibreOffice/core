@@ -1931,10 +1931,10 @@ namespace emfio
             vcl::bitmap::DrawAndClipBitmap(rPos, rSize, rBitmap, aBmpEx, maClipPath.getClipPath());
         }
 
-        if ( aBmpEx.IsAlpha() )
+        //if ( aBmpEx.IsAlpha() )
             mpGDIMetaFile->AddAction( new MetaBmpExScaleAction( rPos, rSize, aBmpEx ) );
-        else
-            mpGDIMetaFile->AddAction( new MetaBmpScaleAction( rPos, rSize, aBmpEx.GetBitmap() ) );
+        //else
+        //    mpGDIMetaFile->AddAction( new MetaBmpScaleAction( rPos, rSize, aBmpEx.GetBitmap() ) );
     }
 
     void MtfTools::ResolveBitmapActions( std::vector<std::unique_ptr<BSaveStruct>>& rSaveList )
@@ -2178,11 +2178,27 @@ namespace emfio
                                     aBitmap.Invert();
                                 if (pSave->m_bForceAlpha)
                                 {
-                                    ImplDrawBitmap(aPos, aSize, pSave->aBmpEx);
+
+                                    SAL_INFO("emfio", "\t\t Force alpha ");
+                                    basegfx::B2DHomMatrix aMatrix(maXForm.eM11, maXForm.eM12, 0,
+                                                                  maXForm.eM21, maXForm.eM22, 0);
+                                    BitmapEx aTransformedBmpEx = pSave->aBmpEx.getTransformed(aMatrix, basegfx::B2DRange(aPos.getX(), aSize.getHeight(), aPos.getY(), aSize.getWidth() ), 100.0 );
+
+                                    ImplDrawBitmap(aPos, aSize, aTransformedBmpEx);
                                 }
                                 else
                                 {
-                                    ImplDrawBitmap(aPos, aSize, BitmapEx(aBitmap));
+
+                                    SAL_INFO("emfio", "\t\t Not  Force alpha ");
+                                    basegfx::B2DHomMatrix aMatrix(maXForm.eM11, maXForm.eM12, 0,
+                                                                  maXForm.eM21, maXForm.eM22, 0);
+                                    //basegfx::B2DHomMatrix aMatrix;
+                                    aMatrix.identity();
+                                    //BitmapEx aTransformedBmpEx = BitmapEx(aBitmap).getTransformed(aMatrix, basegfx::B2DRange(), 100.0 );
+                                    BitmapEx aTransformedBmpEx = BitmapEx(aBitmap).TransformBitmapEx(aBitmap.GetSizePixel().Width(), aBitmap.GetSizePixel().Height(), aMatrix);
+                                    //BitmapEx aTransformedBmpEx = BitmapEx(aBitmap).getTransformed(aMatrix, basegfx::B2DRange(aPos.getX(), aSize.getHeight(), aPos.getY(), aSize.getWidth() ), 100.0 );
+
+                                    ImplDrawBitmap(aPos, aSize, aTransformedBmpEx);
                                 }
                             }
                             break;
