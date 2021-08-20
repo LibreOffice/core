@@ -52,8 +52,7 @@ class StyleList : public SfxListener
 
 public:
     // Constructor
-    StyleList(weld::Builder* pBuilder, std::optional<SfxStyleFamilies> xFamilies,
-              SfxBindings* pBindings, SfxCommonTemplateDialog_Impl* Parent, SfxModule* Module,
+    StyleList(weld::Builder* pBuilder, SfxBindings* pBindings, SfxCommonTemplateDialog_Impl* Parent,
               weld::Container* pC, OString treeviewname, OString flatviewname);
 
     // Destructor

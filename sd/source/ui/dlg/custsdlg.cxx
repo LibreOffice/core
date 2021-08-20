@@ -36,7 +36,6 @@ SdCustomShowDlg::SdCustomShowDlg(weld::Window* pWindow, SdDrawDocument& rDrawDoc
     : GenericDialogController(pWindow, "modules/simpress/ui/customslideshows.ui", "CustomSlideShows")
     , rDoc(rDrawDoc)
     , pCustomShowList(nullptr)
-    , bModified(false)
     , m_xLbCustomShows(m_xBuilder->weld_tree_view("customshowlist"))
     , m_xBtnNew(m_xBuilder->weld_button("new"))
     , m_xBtnEdit(m_xBuilder->weld_button("edit"))
@@ -125,9 +124,6 @@ void SdCustomShowDlg::SelectHdl(void const *p)
                 m_xLbCustomShows->append_text( pCustomShowTmp->GetName() );
                 m_xLbCustomShows->select_text( pCustomShowTmp->GetName() );
             }
-
-            if (aDlg.IsModified())
-                bModified = true;
         }
     }
     // edit CustomShow
@@ -146,8 +142,6 @@ void SdCustomShowDlg::SelectHdl(void const *p)
                 m_xLbCustomShows->remove(nPos);
                 m_xLbCustomShows->insert_text(nPos, pCustomShow->GetName());
                 m_xLbCustomShows->select(nPos);
-                if (aDlg.IsModified())
-                    bModified = true;
             }
         }
     }
@@ -160,7 +154,6 @@ void SdCustomShowDlg::SelectHdl(void const *p)
             pCustomShowList->erase( pCustomShowList->begin() + nPos );
             m_xLbCustomShows->remove(nPos);
             m_xLbCustomShows->select(nPos == 0 ? nPos : nPos - 1);
-            bModified = true;
         }
     }
     // copy CustomShow
@@ -219,8 +212,6 @@ void SdCustomShowDlg::SelectHdl(void const *p)
             pCustomShowList->Last();
             m_xLbCustomShows->append_text(pShowTmp->GetName());
             m_xLbCustomShows->select_text(pShowTmp->GetName());
-
-            bModified = true;
         }
     }
     else if( p == m_xLbCustomShows.get() )
@@ -228,8 +219,6 @@ void SdCustomShowDlg::SelectHdl(void const *p)
         int nPos = m_xLbCustomShows->get_selected_index();
         if (nPos != -1)
             pCustomShowList->Seek(nPos);
-
-        bModified = true;
     }
 
     CheckState();

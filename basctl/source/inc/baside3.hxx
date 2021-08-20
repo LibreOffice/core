@@ -51,7 +51,6 @@ private:
     DialogWindowLayout& m_rLayout;
     std::unique_ptr<DlgEditor> m_pEditor;
     std::unique_ptr<SfxUndoManager> m_pUndoMgr; // never nullptr
-    OUString            m_sCurPath;
     sal_uInt16          m_nControlSlotId;
 
 protected:

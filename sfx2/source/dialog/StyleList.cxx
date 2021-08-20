@@ -77,10 +77,9 @@ using namespace css::uno;
 
 // Constructor
 
-StyleList::StyleList(weld::Builder* pBuilder, std::optional<SfxStyleFamilies> xFamilies,
-                     SfxBindings* pBindings, SfxCommonTemplateDialog_Impl* Parent,
-                     SfxModule* Module, weld::Container* pC, OString treeviewname,
-                     OString flatviewname)
+StyleList::StyleList(weld::Builder* pBuilder, SfxBindings* pBindings,
+                     SfxCommonTemplateDialog_Impl* Parent, weld::Container* pC,
+                     OString treeviewname, OString flatviewname)
     : m_bHierarchical(false)
     , m_bAllowReParentDrop(false)
     , m_bNewByExampleDisabled(false)
@@ -97,13 +96,12 @@ StyleList::StyleList(weld::Builder* pBuilder, std::optional<SfxStyleFamilies> xF
     , m_nActFilter(0)
     , m_xFmtLb(pBuilder->weld_tree_view(flatviewname))
     , m_xTreeBox(pBuilder->weld_tree_view(treeviewname))
-    , m_xStyleFamilies(xFamilies)
     , m_pCurObjShell(nullptr)
     , m_nActFamily(0xffff)
     , m_nAppFilter(SfxStyleSearchBits::Auto)
     , m_pParentDialog(Parent)
     , m_pBindings(pBindings)
-    , m_Module(Module)
+    , m_Module(nullptr)
     , m_nModifier(0)
     , m_pContainer(pC)
 {
@@ -925,7 +923,6 @@ IMPL_LINK(StyleList, EnableTreeDrag, bool, m_bEnable, void)
         m_bAllowReParentDrop = pStyle && pStyle->HasParentSupport() && m_bEnable;
     }
     m_bTreeDrag = m_bEnable;
-    m_pParentDialog->SetEnableDrag(m_bTreeDrag);
 }
 
 // Fill the treeview

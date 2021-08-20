@@ -188,21 +188,18 @@ void SfxCommonTemplateDialog_Impl::connect_stylelist_set_water_can_state(
 SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl(SfxBindings* pB, weld::Container* pC, weld::Builder* pBuilder)
     : pBindings(pB)
     , mpContainer(pC)
-    , pModule(nullptr)
     , xModuleManager(frame::ModuleManager::create(::comphelper::getProcessComponentContext()))
     , m_pDeletionWatcher(nullptr)
-    , m_aStyleList(pBuilder, mxStyleFamilies, pB, this, pModule, pC, "treeview", "flatview")
+    , m_aStyleList(pBuilder, pB, this, pC, "treeview", "flatview")
     , mxPreviewCheckbox(pBuilder->weld_check_button("showpreview"))
     , mxFilterLb(pBuilder->weld_combo_box("filter"))
     , nActFamily(0xffff)
     , nActFilter(0)
     , bIsWater(false)
     , bUpdate(false)
-    , bUpdateFamily(false)
     , bWaterDisabled(false)
     , bNewByExampleDisabled(false)
     , bUpdateByExampleDisabled(false)
-    , bTreeDrag(true)
     , m_bWantHierarchical(false)
 {
     mxFilterLb->set_help_id(HID_TEMPLATE_FILTER);
@@ -454,9 +451,6 @@ void SfxCommonTemplateDialog_Impl::SetFamilyState( sal_uInt16 nSlotId, const Sfx
 {
     m_aStyleList.SetFamilyState(nSlotId, pItem);
     bUpdate = true;
-
-    // If used templates (how the hell you find this out??)
-    bUpdateFamily = true;
 }
 
 // Internal: Perform functions through the Dispatcher
@@ -905,16 +899,12 @@ void SfxCommonTemplateDialog_Impl::SetFamily(SfxStyleFamily const nFamily)
     {
         m_aStyleListSetFamily.Call(nId);
         nActFamily = nId;
-        if ( nId != 0xFFFF )
-            bUpdateFamily = true;
     }
 }
 
 IMPL_LINK(SfxCommonTemplateDialog_Impl, UpdateFamily_Hdl, StyleList&, rStyleList, void)
 {
-    bUpdateFamily = false;
     bWaterDisabled = false;
-    bTreeDrag = true;
     bUpdateByExampleDisabled = false;
 
     if (IsCheckedItem("watercan") &&
