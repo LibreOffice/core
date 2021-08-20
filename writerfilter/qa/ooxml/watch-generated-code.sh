@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if [ ! -e bin/get_config_variables ]; then
     cd ../../..
