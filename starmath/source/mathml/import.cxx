@@ -237,7 +237,7 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
                                         xInfoSet, u"com.sun.star.comp.Math.XMLSettingsImporter", 5);
 
         // Check if successful
-        if (nWarn == ERRCODE_IO_BROKENPACKAGE)
+        if (nWarn == ERRCODE_NONE)
         {
             if (xStatusIndicator.is())
                 xStatusIndicator->end();
@@ -443,6 +443,10 @@ ErrCode SmMLImportWrapper::ReadThroughComponentIS(
             else
             {
                 SAL_WARN("starmath", "Filter failed on file input");
+                // If it is nullptr most probably is of type OOo2OasisTransformer
+                // However this can not be included since it's not public
+                if (pXMlImport == nullptr)
+                    return ERRCODE_NONE;
                 return ERRCODE_SFX_DOLOADFAILED;
             }
         }
