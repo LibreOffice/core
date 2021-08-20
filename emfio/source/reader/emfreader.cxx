@@ -1817,9 +1817,10 @@ namespace emfio
 
                         nCurPos = mpInputStream->Tell() - 8;
 
-                        mpInputStream->ReadInt32( nLeft ).ReadInt32( nTop ).ReadInt32( nRight ).ReadInt32( nBottom )
-                           .ReadUInt32( nGfxMode ).ReadFloat( nXScale ).ReadFloat( nYScale );
+                        mpInputStream->ReadInt32(nLeft).ReadInt32(nTop).ReadInt32(nRight).ReadInt32(nBottom);
                         SAL_INFO("emfio", "\t\tBounds: " << nLeft << ", " << nTop << ", " << nRight << ", " << nBottom);
+
+                        mpInputStream->ReadUInt32(nGfxMode).ReadFloat(nXScale).ReadFloat(nYScale);
                         SAL_INFO("emfio", "\t\tiGraphicsMode: 0x" << std::hex << nGfxMode << std::dec);
                         SAL_INFO("emfio", "\t\t Scale: " << nXScale << " x " << nYScale);
                         if ( ( nRecType == EMR_POLYTEXTOUTA ) || ( nRecType == EMR_POLYTEXTOUTW ) )
@@ -2147,11 +2148,11 @@ namespace emfio
         // Start reading the EMR_HEADER Header object
 
         // bound size (RectL object, see [MS-WMF] section 2.2.2.19)
-        SAL_INFO("emfio", "\tBounding rectangle");
+        SAL_INFO("emfio", "\tBounding rectangle (logical unit)");
         tools::Rectangle rclBounds = ReadRectangle(); // rectangle in logical units
 
         // picture frame size (RectL object)
-        SAL_INFO("emfio", "\tPicture frame");
+        SAL_INFO("emfio", "\tPicture frame (1/100th mm)");
         tools::Rectangle rclFrame = ReadRectangle(); // rectangle in device units 1/100th mm
 
         sal_uInt32 nSignature(0);
