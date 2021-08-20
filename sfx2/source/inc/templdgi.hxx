@@ -74,9 +74,7 @@ protected:
     SfxBindings* pBindings;
 
     weld::Container* mpContainer;
-    SfxModule* pModule;
 
-    std::optional<SfxStyleFamilies> mxStyleFamilies;
     css::uno::Reference<css::frame::XModuleManager2> xModuleManager;
     DeletionWatcher* m_pDeletionWatcher;
 
@@ -89,11 +87,9 @@ protected:
 
     bool bIsWater :1;
     bool bUpdate :1;
-    bool bUpdateFamily :1;
     bool bWaterDisabled :1;
     bool bNewByExampleDisabled :1;
     bool bUpdateByExampleDisabled :1;
-    bool bTreeDrag :1;
     bool m_bWantHierarchical :1;
 
     Link<void*, size_t> m_aStyleListReadResource;
@@ -104,7 +100,6 @@ protected:
     Link<void*, bool> m_aStyleListWaterCan;
     Link<void*, bool> m_aStyleListHasSelectedStyle;
     Link<void*, void> m_aStyleListUpdateFamily;
-    Link<SfxHintId, void> m_aStyleListNotify;
     Link<void*, void> m_aStyleListUpdateStyleDependents;
     Link<bool, void> m_aStyleListEnableTreeDrag;
     Link<void*, void> m_aStyleListEnableDelete;
@@ -172,10 +167,6 @@ public:
 
     // Used in TreeDrag
     void EnableTreeDrag(bool b);
-    // Dialog and StyleList have their own copies of variable bTreeDrag.
-    // When TreeDrag is enabled in StyleList, the value of m_bTreeDrag is updated in StyleList
-    // This function updates the value of bTreeDrag here too.
-    void SetEnableDrag(bool treedrag) { bTreeDrag = treedrag; }
     // It comes into action when a style is created or updated or newmenu is created
     void EnableExample_Impl(sal_uInt16 nId, bool bEnable);
 
@@ -208,7 +199,6 @@ public:
     void connect_stylelist_has_selected_style(const Link<void*, bool>& rLink);
     void connect_stylelist_update_style_dependents(const Link<void*, void>& rLink);
     void connect_stylelist_enable_tree_drag(const Link<bool, void> rLink);
-    void connect_stylelist_notify(const Link<SfxHintId, void> rLink) { m_aStyleListNotify = rLink; }
     void connect_stylelist_enable_delete(const Link<void*, void> rLink);
     void connect_stylelist_set_water_can_state(const Link<const SfxBoolItem*, void> rLink);
     void connect_set_family(const Link<sal_uInt16, void> rLink) { m_aStyleListSetFamily = rLink; }

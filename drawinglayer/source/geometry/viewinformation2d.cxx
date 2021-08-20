@@ -77,13 +77,6 @@ protected:
 
     bool mbReducedDisplayQuality : 1;
 
-    // the complete PropertyValue representation (if already created)
-    uno::Sequence<beans::PropertyValue> mxViewInformation;
-
-    // the extra PropertyValues; not represented by ViewTransformation,
-    // Viewport, VisualizedPage or ViewTime
-    uno::Sequence<beans::PropertyValue> mxExtendedInformation;
-
 public:
     ImpViewInformation2D(const basegfx::B2DHomMatrix& rObjectTransformation,
                          const basegfx::B2DHomMatrix& rViewTransformation,

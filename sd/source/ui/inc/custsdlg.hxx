@@ -30,7 +30,6 @@ class SdCustomShowDlg : public weld::GenericDialogController
 private:
     SdDrawDocument& rDoc;
     SdCustomShowList* pCustomShowList;
-    bool            bModified;
 
     std::unique_ptr<weld::TreeView> m_xLbCustomShows;
     std::unique_ptr<weld::Button> m_xBtnNew;
