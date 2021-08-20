@@ -51,12 +51,7 @@ void ViewContact::deleteAllVOCs()
     // vector, simply copy and clear local vector.
     std::vector<ViewObjectContact*> aLocalVOCList;
     aLocalVOCList.swap(maViewObjectContactVector);
-
-    for (const auto& pCandidate : aLocalVOCList)
-        // ViewObjectContacts only make sense with View and Object contacts.
-        // When the contact to the SdrObject is deleted like in this case,
-        // all ViewObjectContacts can be deleted, too.
-        delete pCandidate;
+    aLocalVOCList.clear();
 
     // assert when there were new entries added during deletion
     DBG_ASSERT(maViewObjectContactVector.empty(), "Corrupted ViewObjectContactList in VC (!)");
