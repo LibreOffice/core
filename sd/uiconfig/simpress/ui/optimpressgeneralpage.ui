@@ -130,6 +130,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
+                <property name="halign">start</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
@@ -258,6 +259,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
+                <property name="halign">start</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
@@ -366,11 +368,12 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
+                <property name="halign">start</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="objalwymov-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|objalwymov">Specifies that you want to move an object with the Rotate tool enabled. If Object always moveable is not marked, the Rotate tool can only be used to rotate an object.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|objalwymov">Specifies that you want to move an object with the Rotate tool enabled. If Objects always moveable is not marked, the Rotate tool can only be used to rotate an object.</property>
                   </object>
                 </child>
               </object>
@@ -385,6 +388,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
+                <property name="halign">start</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
               </object>
@@ -399,6 +403,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
+                <property name="halign">start</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
@@ -454,6 +459,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
+                <property name="halign">start</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
@@ -655,13 +661,13 @@
                 <property name="has-entry">True</property>
                 <child internal-child="entry">
                   <object class="GtkEntry">
-                    <property name="truncate-multiline">True</property>
                     <property name="can-focus">False</property>
+                    <property name="truncate-multiline">True</property>
                   </object>
                 </child>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="scaleBox-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|scaleBox">Determines the drawing scale on the rulers.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|scaleBox">Determines the drawing scale on the status bar.</property>
                   </object>
                 </child>
               </object>
