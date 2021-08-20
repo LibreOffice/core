@@ -8662,6 +8662,17 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     while ((nGlyphs = rLayout.GetNextGlyphs(nTmpMaxGlyphs, pGlyphs, aGNGlyphPos, nIndex, pFallbackFonts)) != 0)
     {
         aCodeUnits.clear();
+
+        // AKDB-465 aCodeUnitsPerGlyph needs to be reset here, too, else the
+        // units per glyph from former texts *will* wrongly be reused.
+        // Experimented by not using aCodeUnits.data() & aCodeUnitsPerGlyph.data()
+        // for the call to registerGlyphs below directly, but adding a live-offset
+        // to these. That again would make it necessary to also grow aCodeUnits
+        // all the time and the offsets would be not the same for both.
+        // Went out to be too complicated. AFAIU the simple solution below does
+        // not loose needed infos, so go with it. ProoveOfConcept: it works.
+        aCodeUnitsPerGlyph.clear();
+
         for( int i = 0; i < nGlyphs; i++ )
         {
             // default case: 1 glyph is one unicode
