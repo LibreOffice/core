@@ -65,6 +65,8 @@ private:
 
     OUString m_sBookmarkName;
     OUString m_sFieldName;
+    bool m_isHidden;
+    OUString m_sCondition;
     OUString m_sXmlId;
     // RDFa
     bool m_bHaveAbout;
