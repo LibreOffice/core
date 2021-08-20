@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "867eb62f_7e9441c0",
+        "filename": "sw/inc/AnnotationWin.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2021-08-20T07:30:55Z",
+      "side": 1,
+      "message": "Let\u0027s get rid of this unnecessary change, please.",
+      "range": {
+        "startLine": 194,
+        "startChar": 8,
+        "endLine": 194,
+        "endChar": 63
+      },
+      "revId": "6ff574249e183f51c4332786174582ac0431ad3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
