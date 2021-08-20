@@ -194,10 +194,10 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
 
         // Read metadata
         // read a component from storage
-        ErrCode nWarn = ReadThroughComponent(rMedium.GetStorage(), xModelComp, u"meta.xml",
-                                             xContext, xInfoSet,
-                                             bOASIS ? u"com.sun.star.comp.Math.MLOasisMetaImporter"
-                                                    : u"com.sun.star.comp.Math.MLMetaImporter");
+        ErrCode nWarn = ReadThroughComponentS(rMedium.GetStorage(), xModelComp, u"meta.xml",
+                                              xContext, xInfoSet,
+                                              bOASIS ? u"com.sun.star.comp.Math.MLOasisMetaImporter"
+                                                     : u"com.sun.star.comp.Math.MLMetaImporter");
 
         // Check if successful
         if (nWarn != ERRCODE_NONE)
@@ -214,10 +214,10 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
 
         // Read settings
         // read a component from storage
-        nWarn = ReadThroughComponent(rMedium.GetStorage(), xModelComp, u"settings.xml", xContext,
-                                     xInfoSet,
-                                     bOASIS ? u"com.sun.star.comp.Math.MLOasisSettingsImporter"
-                                            : u"com.sun.star.comp.Math.MLSettingsImporter");
+        nWarn = ReadThroughComponentS(rMedium.GetStorage(), xModelComp, u"settings.xml", xContext,
+                                      xInfoSet,
+                                      bOASIS ? u"com.sun.star.comp.Math.MLOasisSettingsImporter"
+                                             : u"com.sun.star.comp.Math.MLSettingsImporter");
 
         // Check if successful
         if (nWarn != ERRCODE_NONE)
@@ -234,8 +234,8 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
 
         // Read document
         // read a component from storage
-        nWarn = ReadThroughComponent(rMedium.GetStorage(), xModelComp, u"content.xml", xContext,
-                                     xInfoSet, u"com.sun.star.comp.Math.MLImporter");
+        nWarn = ReadThroughComponentS(rMedium.GetStorage(), xModelComp, u"content.xml", xContext,
+                                      xInfoSet, u"com.sun.star.comp.Math.MLImporter");
         // Check if successful
         if (nWarn != ERRCODE_NONE)
         {
@@ -262,8 +262,8 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
 
         // Read data
         // read a component from input stream
-        ErrCode nError = ReadThroughComponent(xInputStream, xModelComp, xContext, xInfoSet,
-                                              u"com.sun.star.comp.Math.MLImporter", false);
+        ErrCode nError = ReadThroughComponentIS(xInputStream, xModelComp, xContext, xInfoSet,
+                                                u"com.sun.star.comp.Math.MLImporter", false);
 
         // Finish
         if (xStatusIndicator.is())
@@ -337,7 +337,7 @@ ErrCode SmMLImportWrapper::Import(std::u16string_view aSource)
 
     // Read data
     // read a component from text
-    ErrCode nError = ReadThroughComponent(aSource, xModelComp, xContext, xInfoSet);
+    ErrCode nError = ReadThroughComponentMS(aSource, xModelComp, xContext, xInfoSet);
 
     // Declare any error
     if (nError != ERRCODE_NONE)
@@ -350,11 +350,10 @@ ErrCode SmMLImportWrapper::Import(std::u16string_view aSource)
 }
 
 // read a component from input stream
-ErrCode SmMLImportWrapper::ReadThroughComponent(const Reference<io::XInputStream>& xInputStream,
-                                                const Reference<XComponent>& xModelComponent,
-                                                Reference<uno::XComponentContext> const& rxContext,
-                                                Reference<beans::XPropertySet> const& rPropSet,
-                                                const char16_t* pFilterName, bool bEncrypted)
+ErrCode SmMLImportWrapper::ReadThroughComponentIS(
+    const Reference<io::XInputStream>& xInputStream, const Reference<XComponent>& xModelComponent,
+    Reference<uno::XComponentContext> const& rxContext,
+    Reference<beans::XPropertySet> const& rPropSet, const char16_t* pFilterName, bool bEncrypted)
 {
     // Needs an input stream but checked by caller
     // Needs a context but checked by caller
@@ -475,12 +474,12 @@ ErrCode SmMLImportWrapper::ReadThroughComponent(const Reference<io::XInputStream
 }
 
 // read a component from storage
-ErrCode SmMLImportWrapper::ReadThroughComponent(const uno::Reference<embed::XStorage>& xStorage,
-                                                const Reference<XComponent>& xModelComponent,
-                                                const char16_t* pStreamName,
-                                                Reference<uno::XComponentContext> const& rxContext,
-                                                Reference<beans::XPropertySet> const& rPropSet,
-                                                const char16_t* pFilterName)
+ErrCode SmMLImportWrapper::ReadThroughComponentS(const uno::Reference<embed::XStorage>& xStorage,
+                                                 const Reference<XComponent>& xModelComponent,
+                                                 const char16_t* pStreamName,
+                                                 Reference<uno::XComponentContext> const& rxContext,
+                                                 Reference<beans::XPropertySet> const& rPropSet,
+                                                 const char16_t* pFilterName)
 {
     // Needs a storage but checked by caller
     // Needs a model but checked by caller
@@ -507,8 +506,8 @@ ErrCode SmMLImportWrapper::ReadThroughComponent(const uno::Reference<embed::XSto
         Reference<io::XInputStream> xStream = xEventsStream->getInputStream();
 
         // Execute read
-        return ReadThroughComponent(xStream, xModelComponent, rxContext, rPropSet, pFilterName,
-                                    bEncrypted);
+        return ReadThroughComponentIS(xStream, xModelComponent, rxContext, rPropSet, pFilterName,
+                                      bEncrypted);
     }
     catch (packages::WrongPasswordException&)
     {
@@ -528,7 +527,7 @@ ErrCode SmMLImportWrapper::ReadThroughComponent(const uno::Reference<embed::XSto
 }
 
 // read a component from text
-ErrCode SmMLImportWrapper::ReadThroughComponent(
+ErrCode SmMLImportWrapper::ReadThroughComponentMS(
     std::u16string_view aText, const css::uno::Reference<css::lang::XComponent>& xModelComponent,
     css::uno::Reference<css::uno::XComponentContext> const& rxContext,
     css::uno::Reference<css::beans::XPropertySet> const& rPropSet)
@@ -549,8 +548,8 @@ ErrCode SmMLImportWrapper::ReadThroughComponent(
         uno::Reference<io::XInputStream> xStream(new utl::OInputStreamWrapper(aMemoryStream));
 
         // Execute read
-        return ReadThroughComponent(xStream, xModelComponent, rxContext, rPropSet,
-                                    u"com.sun.star.comp.Math.MLImporter", false);
+        return ReadThroughComponentIS(xStream, xModelComponent, rxContext, rPropSet,
+                                      u"com.sun.star.comp.Math.MLImporter", false);
     }
     catch (packages::WrongPasswordException&)
     {
