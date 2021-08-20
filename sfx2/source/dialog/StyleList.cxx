@@ -1805,10 +1805,4 @@ IMPL_LINK(StyleList, PopupTreeMenuHdl, const CommandEvent&, rCEvt, bool)
     return true;
 }
 
-void StyleList::setVisible(bool b)
-{
-    m_xTreeBox->set_visible(b && m_bHierarchical);
-    m_xFmtLb->set_visible(b && !m_bHierarchical);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
