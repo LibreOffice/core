@@ -62,7 +62,8 @@ public:
                            const css::uno::Reference<css::lang::XComponent>& xModelComponent,
                            css::uno::Reference<css::uno::XComponentContext> const& rxContext,
                            css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
-                           const char16_t* pFilterName, bool bEncrypted);
+                           const char16_t* pFilterName, bool bEncrypted,
+                           int_fast16_t nSyntaxVersion);
 
     /** read a component from storage
      */
@@ -71,7 +72,7 @@ public:
                                   const char16_t* pStreamName,
                                   css::uno::Reference<css::uno::XComponentContext> const& rxContext,
                                   css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
-                                  const char16_t* pFilterName);
+                                  const char16_t* pFilterName, int_fast16_t nSyntaxVersion);
 
     /** read a component from text
      */

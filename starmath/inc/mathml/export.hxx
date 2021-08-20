@@ -82,6 +82,7 @@ public:
         , m_bFlat(true)
         , m_bUseHTMLMLEntities(false)
         , m_pElementTree(nullptr)
+        , m_bUseExportTag(false)
     {
     }
 
@@ -101,7 +102,7 @@ protected:
                                  const css::uno::Reference<css::lang::XComponent>& xComponent,
                                  css::uno::Reference<css::uno::XComponentContext> const& rxContext,
                                  css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
-                                 const char16_t* pComponentName);
+                                 const char16_t* pComponentName, int_fast16_t nSyntaxVersion);
 
     /** export through an XML exporter component (storage version)
       */
@@ -110,7 +111,7 @@ protected:
                                 const char16_t* pStreamName,
                                 css::uno::Reference<css::uno::XComponentContext> const& rxContext,
                                 css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
-                                const char16_t* pComponentName);
+                                const char16_t* pComponentName, int_fast16_t nSyntaxVersion);
 
     /** export through an XML exporter component (memory stream version)
       */
