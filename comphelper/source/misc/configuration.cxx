@@ -28,7 +28,6 @@
 #include <comphelper/solarmutex.hxx>
 #include <comphelper/configuration.hxx>
 #include <comphelper/configurationlistener.hxx>
-#include <rtl/instance.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -37,12 +36,11 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace {
 
-struct TheConfigurationWrapper:
-    public rtl::StaticWithArg<
-        comphelper::detail::ConfigurationWrapper,
-        css::uno::Reference< css::uno::XComponentContext >,
-        TheConfigurationWrapper >
-{};
+comphelper::detail::ConfigurationWrapper& GetTheConfigurationWrapper(const css::uno::Reference< css::uno::XComponentContext >& xContext)
+{
+    static comphelper::detail::ConfigurationWrapper WRAPPER(xContext);
+    return WRAPPER;
+}
 
 OUString getDefaultLocale(
     css::uno::Reference< css::uno::XComponentContext > const & context)
@@ -70,7 +68,7 @@ std::shared_ptr< comphelper::ConfigurationChanges >
 comphelper::ConfigurationChanges::create(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
-    return TheConfigurationWrapper::get(context).createChanges();
+    return GetTheConfigurationWrapper(context).createChanges();
 }
 
 comphelper::ConfigurationChanges::~ConfigurationChanges() {}
@@ -110,7 +108,7 @@ comphelper::detail::ConfigurationWrapper const &
 comphelper::detail::ConfigurationWrapper::get(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
-    return TheConfigurationWrapper::get(context);
+    return GetTheConfigurationWrapper(context);
 }
 
 comphelper::detail::ConfigurationWrapper::ConfigurationWrapper(

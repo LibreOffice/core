@@ -19,7 +19,6 @@
 
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
-#include <rtl/instance.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 
 #include <map>
@@ -43,24 +42,30 @@ typedef std::map< AccessibleEventNotifier::TClientId,
 typedef std::map<AccessibleEventNotifier::TClientId,
             AccessibleEventNotifier::TClientId> IntervalMap;
 
-struct lclMutex : public rtl::Static< ::osl::Mutex, lclMutex > {};
-
-struct Clients : public rtl::Static< ClientMap, Clients > {};
-
-struct FreeIntervals : public rtl::StaticWithInit<IntervalMap, FreeIntervals>
+::osl::Mutex& GetLocalMutex()
 {
-    IntervalMap operator() ()
+    static ::osl::Mutex MUTEX;
+    return MUTEX;
+}
+
+ClientMap gaClients;
+
+IntervalMap& GetFreeIntervals()
+{
+    static IntervalMap MAP =
+    []()
     {
         IntervalMap map;
         map.insert(std::make_pair(
             std::numeric_limits<AccessibleEventNotifier::TClientId>::max(), 1));
         return map;
-    }
-};
+    }();
+    return MAP;
+}
 
 void releaseId(AccessibleEventNotifier::TClientId const nId)
 {
-    IntervalMap & rFreeIntervals(FreeIntervals::get());
+    IntervalMap & rFreeIntervals(GetFreeIntervals());
     IntervalMap::iterator const upper(rFreeIntervals.upper_bound(nId));
     assert(upper != rFreeIntervals.end());
     assert(nId < upper->second); // second is start of the interval!
@@ -89,7 +94,7 @@ void releaseId(AccessibleEventNotifier::TClientId const nId)
 /// generates a new client id
 AccessibleEventNotifier::TClientId generateId()
 {
-    IntervalMap & rFreeIntervals(FreeIntervals::get());
+    IntervalMap & rFreeIntervals(GetFreeIntervals());
     assert(!rFreeIntervals.empty());
     IntervalMap::iterator const iter(rFreeIntervals.begin());
     AccessibleEventNotifier::TClientId const nFirst = iter->first;
@@ -104,7 +109,7 @@ AccessibleEventNotifier::TClientId generateId()
         rFreeIntervals.erase(iter); // remove 1-element interval
     }
 
-    assert(Clients::get().end() == Clients::get().find(nFreeId));
+    assert(gaClients.end() == gaClients.find(nFreeId));
 
     return nFreeId;
 }
@@ -129,7 +134,7 @@ bool implLookupClient(
         ClientMap::iterator& rPos )
 {
     // look up this client
-    ClientMap &rClients = Clients::get();
+    ClientMap &rClients = gaClients;
     rPos = rClients.find( nClient );
     assert( rClients.end() != rPos &&
         "AccessibleEventNotifier::implLookupClient: invalid client id "
@@ -144,21 +149,21 @@ namespace comphelper {
 
 AccessibleEventNotifier::TClientId AccessibleEventNotifier::registerClient()
 {
-    ::osl::MutexGuard aGuard( lclMutex::get() );
+    ::osl::MutexGuard aGuard( GetLocalMutex() );
 
     // generate a new client id
     TClientId nNewClientId = generateId( );
 
     // the event listeners for the new client
     ::comphelper::OInterfaceContainerHelper2 *const pNewListeners =
-        new ::comphelper::OInterfaceContainerHelper2( lclMutex::get() );
+        new ::comphelper::OInterfaceContainerHelper2( GetLocalMutex() );
         // note that we're using our own mutex here, so the listener containers for all
         // our clients share this same mutex.
         // this is a reminiscence to the days where the notifier was asynchronous. Today this is
         // completely nonsense, and potentially slowing down the Office me thinks...
 
     // add the client
-    Clients::get().emplace( nNewClientId, pNewListeners );
+    gaClients.emplace( nNewClientId, pNewListeners );
 
     // outta here
     return nNewClientId;
@@ -166,7 +171,7 @@ AccessibleEventNotifier::TClientId AccessibleEventNotifier::registerClient()
 
 void AccessibleEventNotifier::revokeClient( const TClientId _nClient )
 {
-    ::osl::MutexGuard aGuard( lclMutex::get() );
+    ::osl::MutexGuard aGuard( GetLocalMutex() );
 
     ClientMap::iterator aClientPos;
     if ( !implLookupClient( _nClient, aClientPos ) )
@@ -175,7 +180,7 @@ void AccessibleEventNotifier::revokeClient( const TClientId _nClient )
 
     // remove it from the clients map
     delete aClientPos->second;
-    Clients::get().erase( aClientPos );
+    gaClients.erase( aClientPos );
     releaseId(_nClient);
 }
 
@@ -186,7 +191,7 @@ void AccessibleEventNotifier::revokeClientNotifyDisposing(
 
     {
         // rhbz#1001768 drop the mutex before calling disposeAndClear
-        ::osl::MutexGuard aGuard( lclMutex::get() );
+        ::osl::MutexGuard aGuard( GetLocalMutex() );
 
         ClientMap::iterator aClientPos;
         if (!implLookupClient(_nClient, aClientPos))
@@ -200,7 +205,7 @@ void AccessibleEventNotifier::revokeClientNotifyDisposing(
         // (do this before actually notifying, because some client
         // implementations have re-entrance problems and call into
         // revokeClient while we are notifying from here)
-        Clients::get().erase(aClientPos);
+        gaClients.erase(aClientPos);
         releaseId(_nClient);
     }
 
@@ -215,7 +220,7 @@ void AccessibleEventNotifier::revokeClientNotifyDisposing(
 sal_Int32 AccessibleEventNotifier::addEventListener(
     const TClientId _nClient, const Reference< XAccessibleEventListener >& _rxListener )
 {
-    ::osl::MutexGuard aGuard( lclMutex::get() );
+    ::osl::MutexGuard aGuard( GetLocalMutex() );
 
     ClientMap::iterator aClientPos;
     if ( !implLookupClient( _nClient, aClientPos ) )
@@ -231,7 +236,7 @@ sal_Int32 AccessibleEventNotifier::addEventListener(
 sal_Int32 AccessibleEventNotifier::removeEventListener(
     const TClientId _nClient, const Reference< XAccessibleEventListener >& _rxListener )
 {
-    ::osl::MutexGuard aGuard( lclMutex::get() );
+    ::osl::MutexGuard aGuard( GetLocalMutex() );
 
     ClientMap::iterator aClientPos;
     if ( !implLookupClient( _nClient, aClientPos ) )
@@ -249,7 +254,7 @@ void AccessibleEventNotifier::addEvent( const TClientId _nClient, const Accessib
     std::vector< Reference< XInterface > > aListeners;
 
     {
-        ::osl::MutexGuard aGuard( lclMutex::get() );
+        ::osl::MutexGuard aGuard( GetLocalMutex() );
 
         ClientMap::iterator aClientPos;
         if ( !implLookupClient( _nClient, aClientPos ) )
