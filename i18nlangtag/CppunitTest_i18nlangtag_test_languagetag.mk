@@ -21,6 +21,8 @@ $(eval $(call gb_CppunitTest_use_libraries,i18nlangtag_test_languagetag,\
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,i18nlangtag_test_languagetag,\
+	icu_headers \
+	icuuc \
 	liblangtag \
 	libxml2 \
 ))
