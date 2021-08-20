@@ -23,6 +23,7 @@
 #include <calc.hxx>
 #include <doc.hxx>
 #include <IDocumentTimerAccess.hxx>
+#include <IMark.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <memory>
 
@@ -54,10 +55,11 @@ class SetGetExpField
         const SwTableBox* pTBox;
         const SwTextINetFormat* pTextINet;
         const SwFlyFrameFormat* pFlyFormat;
+        ::sw::mark::IBookmark const* pBookmark;
     } CNTNT;
     enum SetGetExpFieldType
         {
-            TEXTFIELD, TEXTTOXMARK, SECTIONNODE, CRSRPOS, TABLEBOX,
+            TEXTFIELD, TEXTTOXMARK, SECTIONNODE, BOOKMARK, CRSRPOS, TABLEBOX,
             TEXTINET, FLYFRAME
         } eSetGetExpFieldType;
 
@@ -69,6 +71,9 @@ public:
 
     SetGetExpField( const SwSectionNode& rSectNode,
                     const SwPosition* pPos = nullptr  );
+
+    SetGetExpField( ::sw::mark::IBookmark const& rBookmark,
+                    SwPosition const* pPos = nullptr );
 
     SetGetExpField( const SwTableBox& rTableBox  );
 
@@ -85,6 +90,8 @@ public:
         { return TEXTFIELD == eSetGetExpFieldType ? CNTNT.pTextField : nullptr; }
     const SwSection* GetSection() const
         { return SECTIONNODE == eSetGetExpFieldType ? CNTNT.pSection : nullptr; }
+    ::sw::mark::IBookmark const* GetBookmark() const
+        { return BOOKMARK == eSetGetExpFieldType ? CNTNT.pBookmark : nullptr; }
     const SwTextINetFormat* GetINetFormat() const
         { return TEXTINET == eSetGetExpFieldType ? CNTNT.pTextINet : nullptr; }
     const SwFlyFrameFormat* GetFlyFormat() const
@@ -145,7 +152,8 @@ class SwDocUpdateField
 
     void MakeFieldList_( SwDoc& pDoc, int eGetMode );
     void GetBodyNode( const SwTextField& , SwFieldIds nFieldWhich );
-    void GetBodyNode( const SwSectionNode&);
+    template<typename T>
+    void GetBodyNodeGeneric(SwNode const& rNode, T const&);
 
 public:
     SwDocUpdateField(SwDoc& rDocument);
