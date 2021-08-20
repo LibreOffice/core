@@ -15,6 +15,7 @@
 #include <string_view>
 
 #include <i18nlangtag/i18nlangtagdllapi.h>
+#include <rtl/ustring.hxx>
 #include <unicode/locid.h>
 
 class LanguageTag;
@@ -49,6 +50,22 @@ public:
         Always resolves an empty tag to the system locale.
      */
     static  icu::Locale     getIcuLocale( const LanguageTag & rLanguageTag, std::u16string_view rVariant, std::u16string_view rKeywords);
+
+    /** Obtain the display name for a language tag.
+
+        Gets a localized name from icu::Locale::getDisplayName(). Meant to be
+        used only with language tags that do not have a language list entry in
+        svtools/inc/langtab.hrc STR_ARR_SVT_LANGUAGE_TABLE, thus used by
+        SvtLanguageTable::GetLanguageString()
+
+        @param  rLanguageTag
+                The language tag for which the name is to be displayed.
+
+        @param  rDisplayLanguage
+                The language in which the name is to be displayed.
+                Usually Application::GetSettings().GetUILanguageTag().
+     */
+    static  OUString        getDisplayName( const LanguageTag & rLanguageTag, const LanguageTag & rDisplayLanguage );
 };
 
 #endif  // INCLUDED_I18NLANGTAG_LANGUAGETAGICU_HXX

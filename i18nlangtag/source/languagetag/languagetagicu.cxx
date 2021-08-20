@@ -46,4 +46,26 @@ icu::Locale LanguageTagIcu::getIcuLocale( const LanguageTag & rLanguageTag, std:
            );
 }
 
+// static
+OUString LanguageTagIcu::getDisplayName( const LanguageTag & rLanguageTag, const LanguageTag & rDisplayLanguage )
+{
+    // This will be initialized by the first call; as the UI language doesn't
+    // change the tag mostly stays the same, unless someone overrides it for a
+    // call here, and thus obtaining the UI icu::Locale has to be done only
+    // once.
+    static thread_local LanguageTag aUITag( LANGUAGE_SYSTEM);
+    static thread_local icu::Locale aUILocale;
+
+    if (aUITag != rDisplayLanguage)
+    {
+        aUITag = rDisplayLanguage;
+        aUILocale = getIcuLocale( rDisplayLanguage);
+    }
+
+    icu::Locale aLocale( getIcuLocale( rLanguageTag));
+    icu::UnicodeString aResult;
+    aLocale.getDisplayName( aUILocale, aResult);
+    return OUString( reinterpret_cast<const sal_Unicode*>(aResult.getBuffer()), aResult.length());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
