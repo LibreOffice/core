@@ -30,8 +30,18 @@ AbstractSmParser* starmathdatabase::GetDefaultSmParser()
         AbstractSmParser* aParser = new SmParser5();
         return aParser;
     }
+    case 6:
+    {
+        AbstractSmParser* aParser = new SmParser6();
+        return aParser;
+    }
     default:
-        throw std::range_error("parser version limit");
+        static char* aErrorData = new char[64];
+        if(aErrorData == nullptr)
+            aErrorData = new char[64];
+        int nVersion = SM_MOD()->GetConfig()->GetDefaultSmSyntaxVersion();
+        sprintf(aErrorData,"Parser version limit: %i", nVersion);
+        throw std::range_error(aErrorData);
     }
 }
 
@@ -44,8 +54,17 @@ AbstractSmParser* starmathdatabase::GetVersionSmParser(sal_uInt16 nVersion)
         AbstractSmParser* aParser = new SmParser5();
         return aParser;
     }
+    case 6:
+    {
+        AbstractSmParser* aParser = new SmParser6();
+        return aParser;
+    }
     default:
-        throw std::range_error("parser version limit");
+        static char* aErrorData = new char[64];
+        if(aErrorData == nullptr)
+            aErrorData = new char[64];
+        sprintf(aErrorData,"Parser version limit: %i",static_cast<int>(nVersion));
+        throw std::range_error(aErrorData);
     }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
