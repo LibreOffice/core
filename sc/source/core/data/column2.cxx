@@ -614,6 +614,45 @@ class MaxStrLenFinder
     OUString maMaxLenStr;
     sal_Int32 mnMaxLen;
 
+    // tdf#59820 - search for the longest substring in a multiline string
+    void checkLineBreak(const OUString& aStrVal)
+    {
+        sal_Int32 nMaxLen = 0;
+        sal_Int32 nFromIndex = 0;
+        sal_Int32 nToIndex = aStrVal.indexOf('\n', nFromIndex);
+        // if there is no line break, just take the length of the entire string
+        if (nToIndex == -1)
+        {
+            mnMaxLen = aStrVal.getLength();
+            maMaxLenStr = aStrVal;
+        }
+        else
+        {
+            // search for the longest substring in the multiline string
+            while (nToIndex != -1)
+            {
+                if (nMaxLen < nToIndex - nFromIndex)
+                {
+                    nMaxLen = nToIndex - nFromIndex;
+                }
+                nFromIndex = nToIndex + 1;
+                nToIndex = aStrVal.indexOf('\n', nFromIndex);
+            }
+            // take into consideration the last part of multiline string
+            nToIndex = aStrVal.getLength() - nFromIndex;
+            if (nMaxLen < nToIndex)
+            {
+                nMaxLen = nToIndex;
+            }
+            // assign new maximum including its substring
+            if (mnMaxLen < nMaxLen)
+            {
+                mnMaxLen = nMaxLen;
+                maMaxLenStr = aStrVal.subView(nFromIndex);
+            }
+        }
+    }
+
     void checkLength(const ScRefCellValue& rCell)
     {
         const Color* pColor;
@@ -623,8 +662,7 @@ class MaxStrLenFinder
 
         if (aValStr.getLength() > mnMaxLen)
         {
-            mnMaxLen = aValStr.getLength();
-            maMaxLenStr = aValStr;
+            checkLineBreak(aValStr);
         }
     }
 
@@ -642,8 +680,7 @@ public:
     {
         if (rSS.getLength() > mnMaxLen)
         {
-            mnMaxLen = rSS.getLength();
-            maMaxLenStr = rSS.getString();
+            checkLineBreak(rSS.getString());
         }
     }
 
