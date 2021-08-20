@@ -103,6 +103,11 @@ public:
     /** Parse rBuffer to formula subtree that constitutes an expression */
     std::unique_ptr<SmNode> ParseExpression(const OUString& rBuffer);
 
+    /** Parse rBuffer to formula tree */
+    SmMlElement* ParseML(const OUString&) { return nullptr; }
+    /** Parse rBuffer to formula subtree that constitutes an expression */
+    SmMlElement* ParseExpressionML(const OUString&) { return nullptr; }
+
     const OUString& GetText() const { return m_aBufferString; };
 
     bool IsImportSymbolNames() const { return m_bImportSymNames; }
