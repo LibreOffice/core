@@ -34,7 +34,7 @@
 class SfxMedium;
 class SmDocShell;
 
-class SmMlExportWrapper
+class SmMLExportWrapper
 {
 private:
     // Model
@@ -77,7 +77,7 @@ public:
     void setUseExportTag(bool bUseExportTag) { m_bUseExportTag = bUseExportTag; }
 
 public:
-    explicit SmMlExportWrapper(css::uno::Reference<css::frame::XModel> const& rRef)
+    explicit SmMLExportWrapper(css::uno::Reference<css::frame::XModel> const& rRef)
         : m_xModel(rRef)
         , m_bFlat(true)
         , m_bUseHTMLMLEntities(false)
@@ -120,7 +120,7 @@ protected:
                             css::uno::Reference<css::beans::XPropertySet> const& rPropSet);
 };
 
-class SmMlExport final : public SvXMLExport
+class SmMLExport final : public SvXMLExport
 {
 private:
     SmMlElement* m_pElementTree;
@@ -194,7 +194,7 @@ public:
 public:
     /** Constructor
      */
-    SmMlExport(const css::uno::Reference<css::uno::XComponentContext>& rContext,
+    SmMLExport(const css::uno::Reference<css::uno::XComponentContext>& rContext,
                OUString const& implementationName, SvXMLExportFlags nExportFlags);
 
 private:

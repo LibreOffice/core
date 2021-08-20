@@ -63,10 +63,10 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-// SmMlExportWrapper
+// SmMLExportWrapper
 /*************************************************************************************************/
 
-bool SmMlExportWrapper::Export(SfxMedium& rMedium)
+bool SmMLExportWrapper::Export(SfxMedium& rMedium)
 {
     bool bRet = true;
     uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
@@ -230,7 +230,7 @@ bool SmMlExportWrapper::Export(SfxMedium& rMedium)
     return bRet;
 }
 
-OUString SmMlExportWrapper::Export(SmMlElement* pElementTree)
+OUString SmMLExportWrapper::Export(SmMlElement* pElementTree)
 {
     uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
 
@@ -283,7 +283,7 @@ OUString SmMlExportWrapper::Export(SmMlElement* pElementTree)
 }
 
 // export through an XML exporter component (output stream version)
-bool SmMlExportWrapper::WriteThroughComponentOS(const Reference<io::XOutputStream>& xOutputStream,
+bool SmMLExportWrapper::WriteThroughComponentOS(const Reference<io::XOutputStream>& xOutputStream,
                                                 const Reference<XComponent>& xComponent,
                                                 Reference<uno::XComponentContext> const& rxContext,
                                                 Reference<beans::XPropertySet> const& rPropSet,
@@ -325,12 +325,12 @@ bool SmMlExportWrapper::WriteThroughComponentOS(const Reference<io::XOutputStrea
 
     // filter
     Reference<XFilter> xFilter(xExporter, UNO_QUERY);
-    SmMlExport* pFilter = comphelper::getUnoTunnelImplementation<SmMlExport>(xFilter);
+    SmMLExport* pFilter = comphelper::getUnoTunnelImplementation<SmMLExport>(xFilter);
 
     // Setup filter
     if (pFilter == nullptr)
     {
-        SAL_WARN("starmath", "Failed to fetch SmMlExport");
+        SAL_WARN("starmath", "Failed to fetch SmMLExport");
         return false;
     }
     pFilter->setUseExportTag(m_bUseExportTag);
@@ -343,7 +343,7 @@ bool SmMlExportWrapper::WriteThroughComponentOS(const Reference<io::XOutputStrea
 }
 
 // export through an XML exporter component (storage version)
-bool SmMlExportWrapper::WriteThroughComponentS(const Reference<embed::XStorage>& xStorage,
+bool SmMLExportWrapper::WriteThroughComponentS(const Reference<embed::XStorage>& xStorage,
                                                const Reference<XComponent>& xComponent,
                                                const char16_t* pStreamName,
                                                Reference<uno::XComponentContext> const& rxContext,
@@ -388,7 +388,7 @@ bool SmMlExportWrapper::WriteThroughComponentS(const Reference<embed::XStorage>&
 
 // export through an XML exporter component (memory stream version)
 OUString
-SmMlExportWrapper::WriteThroughComponentMS(const Reference<XComponent>& xComponent,
+SmMLExportWrapper::WriteThroughComponentMS(const Reference<XComponent>& xComponent,
                                            Reference<uno::XComponentContext> const& rxContext,
                                            Reference<beans::XPropertySet> const& rPropSet)
 {
@@ -419,27 +419,27 @@ SmMlExportWrapper::WriteThroughComponentMS(const Reference<XComponent>& xCompone
     return OStringToOUString(aString, RTL_TEXTENCODING_UTF8);
 }
 
-// SmMlExport technical
+// SmMLExport technical
 /*************************************************************************************************/
 
-sal_Int64 SAL_CALL SmMlExport::getSomething(const uno::Sequence<sal_Int8>& rId)
+sal_Int64 SAL_CALL SmMLExport::getSomething(const uno::Sequence<sal_Int8>& rId)
 {
-    if (isUnoTunnelId<SmMlExport>(rId))
+    if (isUnoTunnelId<SmMLExport>(rId))
         return reinterpret_cast<intptr_t>(this);
     return SvXMLExport::getSomething(rId);
 }
 
-const uno::Sequence<sal_Int8>& SmMlExport::getUnoTunnelId() noexcept
+const uno::Sequence<sal_Int8>& SmMLExport::getUnoTunnelId() noexcept
 {
-    static const UnoTunnelIdInit theSmMlExportUnoTunnelId;
-    return theSmMlExportUnoTunnelId.getSeq();
+    static const UnoTunnelIdInit theSmMLExportUnoTunnelId;
+    return theSmMLExportUnoTunnelId.getSeq();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_MLExporter_get_implementation(css::uno::XComponentContext* context,
                                    css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new SmMlExport(context, "com.sun.star.comp.Math.XMLExporter",
+    return cppu::acquire(new SmMLExport(context, "com.sun.star.comp.Math.XMLExporter",
                                         SvXMLExportFlags::OASIS | SvXMLExportFlags::ALL));
 }
 
@@ -448,14 +448,14 @@ Math_MLMetaExporter_get_implementation(css::uno::XComponentContext* context,
                                        css::uno::Sequence<css::uno::Any> const&)
 {
     return cppu::acquire(
-        new SmMlExport(context, "com.sun.star.comp.Math.XMLMetaExporter", SvXMLExportFlags::META));
+        new SmMLExport(context, "com.sun.star.comp.Math.XMLMetaExporter", SvXMLExportFlags::META));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_MLOasisMetaExporter_get_implementation(css::uno::XComponentContext* context,
                                             css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new SmMlExport(context, "com.sun.star.comp.Math.XMLOasisMetaExporter",
+    return cppu::acquire(new SmMLExport(context, "com.sun.star.comp.Math.XMLOasisMetaExporter",
                                         SvXMLExportFlags::OASIS | SvXMLExportFlags::META));
 }
 
@@ -463,7 +463,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_MLSettingsExporter_get_implementation(css::uno::XComponentContext* context,
                                            css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new SmMlExport(context, "com.sun.star.comp.Math.XMLSettingsExporter",
+    return cppu::acquire(new SmMLExport(context, "com.sun.star.comp.Math.XMLSettingsExporter",
                                         SvXMLExportFlags::SETTINGS));
 }
 
@@ -471,7 +471,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_MLOasisSettingsExporter_get_implementation(css::uno::XComponentContext* context,
                                                 css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new SmMlExport(context, "com.sun.star.comp.Math.XMLOasisSettingsExporter",
+    return cppu::acquire(new SmMLExport(context, "com.sun.star.comp.Math.XMLOasisSettingsExporter",
                                         SvXMLExportFlags::OASIS | SvXMLExportFlags::SETTINGS));
 }
 
@@ -479,11 +479,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_MLContentExporter_get_implementation(css::uno::XComponentContext* context,
                                           css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new SmMlExport(context, "com.sun.star.comp.Math.XMLContentExporter",
+    return cppu::acquire(new SmMLExport(context, "com.sun.star.comp.Math.XMLContentExporter",
                                         SvXMLExportFlags::OASIS | SvXMLExportFlags::CONTENT));
 }
 
-SmDocShell* SmMlExport::getSmDocShell()
+SmDocShell* SmMLExport::getSmDocShell()
 {
     SmModel* pModel = comphelper::getUnoTunnelImplementation<SmModel>(GetModel());
     if (pModel != nullptr)
@@ -491,7 +491,7 @@ SmDocShell* SmMlExport::getSmDocShell()
     return nullptr;
 }
 
-ErrCode SmMlExport::exportDoc(enum XMLTokenEnum eClass)
+ErrCode SmMLExport::exportDoc(enum XMLTokenEnum eClass)
 {
     if (!(getExportFlags() & SvXMLExportFlags::CONTENT))
     {
@@ -542,7 +542,7 @@ ErrCode SmMlExport::exportDoc(enum XMLTokenEnum eClass)
     return ERRCODE_NONE;
 }
 
-void SmMlExport::GetViewSettings(Sequence<PropertyValue>& aProps)
+void SmMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
 {
     // Get the document shell
     SmDocShell* pDocShell = getSmDocShell();
@@ -572,7 +572,7 @@ void SmMlExport::GetViewSettings(Sequence<PropertyValue>& aProps)
     pValue[3].Value <<= aRect.GetHeight();
 }
 
-void SmMlExport::GetConfigurationSettings(Sequence<PropertyValue>& rProps)
+void SmMLExport::GetConfigurationSettings(Sequence<PropertyValue>& rProps)
 {
     // Get model property set (settings)
     Reference<XPropertySet> xProps(GetModel(), UNO_QUERY);
@@ -609,7 +609,7 @@ void SmMlExport::GetConfigurationSettings(Sequence<PropertyValue>& rProps)
     }
 }
 
-SmMlExport::SmMlExport(const css::uno::Reference<css::uno::XComponentContext>& rContext,
+SmMLExport::SmMLExport(const css::uno::Reference<css::uno::XComponentContext>& rContext,
                        OUString const& implementationName, SvXMLExportFlags nExportFlags)
     : SvXMLExport(rContext, implementationName, util::MeasureUnit::INCH, XML_MATH, nExportFlags)
     , m_pElementTree(nullptr)
@@ -618,16 +618,16 @@ SmMlExport::SmMlExport(const css::uno::Reference<css::uno::XComponentContext>& r
 {
 }
 
-// SmMlExport
+// SmMLExport
 /*************************************************************************************************/
 
-void SmMlExport::declareMlError()
+void SmMLExport::declareMlError()
 {
     SAL_WARN("starmath", "Invalid use of mathml.");
     m_bSuccess = false;
 }
 
-void SmMlExport::exportMlAttributteLength(xmloff::token::XMLTokenEnum pAttribute,
+void SmMLExport::exportMlAttributteLength(xmloff::token::XMLTokenEnum pAttribute,
                                           const SmLengthValue& aLengthValue)
 {
     if (!aLengthValue.m_aOriginalText->isEmpty())
@@ -677,7 +677,7 @@ void SmMlExport::exportMlAttributteLength(xmloff::token::XMLTokenEnum pAttribute
     }
 }
 
-void SmMlExport::exportMlAttributtes(const SmMlElement* pMlElement)
+void SmMLExport::exportMlAttributtes(const SmMlElement* pMlElement)
 {
     size_t nAttributeCount = pMlElement->getAttributeCount();
     for (size_t i = 0; i < nAttributeCount; ++i)
@@ -1004,7 +1004,7 @@ void SmMlExport::exportMlAttributtes(const SmMlElement* pMlElement)
     }
 }
 
-SvXMLElementExport* SmMlExport::exportMlElement(const SmMlElement* pMlElement)
+SvXMLElementExport* SmMLExport::exportMlElement(const SmMlElement* pMlElement)
 {
     SvXMLElementExport* pElementExport;
     switch (pMlElement->getMlElementType())
@@ -1048,13 +1048,13 @@ namespace
 struct exportMlElementTreeExecData
 {
 private:
-    SmMlExport* m_pSmMlExport;
+    SmMLExport* m_pSmMLExport;
     std::vector<SvXMLElementExport*> m_aSvXMLElementExportList;
     size_t m_nDepth;
 
 public:
-    inline exportMlElementTreeExecData(SmMlExport* pSmMlExport)
-        : m_pSmMlExport(pSmMlExport)
+    inline exportMlElementTreeExecData(SmMLExport* pSmMLExport)
+        : m_pSmMLExport(pSmMLExport)
         , m_aSvXMLElementExportList(1024)
         , m_nDepth(0)
     {
@@ -1075,7 +1075,7 @@ public:
 
     inline void incrementDepth() { ++m_nDepth; }
 
-    inline SmMlExport* getSmMlExport() { return m_pSmMlExport; };
+    inline SmMLExport* getSmMLExport() { return m_pSmMLExport; };
 };
 
 } // end unnamed namespace
@@ -1084,7 +1084,7 @@ static inline void exportMlElementTreeExec(SmMlElement* aSmMlElement, void* aDat
 {
     // Prepare data
     exportMlElementTreeExecData* pData = static_cast<exportMlElementTreeExecData*>(aData);
-    pData->setDepthData(pData->getSmMlExport()->exportMlElement(aSmMlElement));
+    pData->setDepthData(pData->getSmMLExport()->exportMlElement(aSmMlElement));
 
     // Prepare for following
     // If it has sub elements, then it will be the next
@@ -1106,7 +1106,7 @@ static inline void exportMlElementTreeExec(SmMlElement* aSmMlElement, void* aDat
     }
 }
 
-void SmMlExport::exportMlElementTree()
+void SmMLExport::exportMlElementTree()
 {
     exportMlElementTreeExecData* aData = new exportMlElementTreeExecData(this);
     mathml::SmMlIteratorTopToBottom(m_pElementTree, exportMlElementTreeExec, aData);
