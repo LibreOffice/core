@@ -66,9 +66,6 @@ namespace drawinglayer::geometry
             // the point in time
             double                                      mfViewTime;
 
-            // the complete PropertyValue representation (if already created)
-            uno::Sequence< beans::PropertyValue >       mxViewInformation;
-
             // the extra PropertyValues; does not contain the transformations
             uno::Sequence< beans::PropertyValue >       mxExtendedInformation;
 
@@ -224,7 +221,6 @@ namespace drawinglayer::geometry
                 maProjection(rProjection),
                 maDeviceToView(rDeviceToView),
                 mfViewTime(fViewTime),
-                mxViewInformation(),
                 mxExtendedInformation()
             {
                 impInterpretPropertyValues(rExtendedParameters);
@@ -236,7 +232,6 @@ namespace drawinglayer::geometry
                 maProjection(),
                 maDeviceToView(),
                 mfViewTime(),
-                mxViewInformation(rViewParameters),
                 mxExtendedInformation()
             {
                 impInterpretPropertyValues(rViewParameters);
@@ -248,7 +243,6 @@ namespace drawinglayer::geometry
                 maProjection(),
                 maDeviceToView(),
                 mfViewTime(),
-                mxViewInformation(),
                 mxExtendedInformation()
             {
             }
