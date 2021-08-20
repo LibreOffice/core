@@ -1901,4 +1901,15 @@ public:
     virtual void popdown() override;
 };
 
+class SalInstanceBox : public SalInstanceContainer, public virtual weld::Box
+{
+private:
+    VclPtr<VclBox> m_xBox;
+
+public:
+    SalInstanceBox(VclBox* pContainer, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+    virtual void reorder_child(weld::Widget* pWidget, int nNewPosition) override;
+    virtual void sort_native_button_order() override;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
