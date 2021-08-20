@@ -458,7 +458,11 @@ int PDFOutDev::parseFont( long long nNewId, GfxFont* gfxFont, const GfxState* st
 
     aNewFont.isBold        = gfxFont->isBold();
     aNewFont.isItalic      = gfxFont->isItalic();
+#if POPPLER_CHECK_VERSION(0, 83, 0) // const added to getTransformedFontSize
     aNewFont.size          = state->getTransformedFontSize();
+#else
+    aNewFont.size          = const_cast<GfxState*>(state)->getTransformedFontSize();
+#endif
     aNewFont.isUnderline   = false;
 
     if( gfxFont->getType() == fontTrueType || gfxFont->getType() == fontType1 )
