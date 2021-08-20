@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
 #
 # This file is part of the LibreOffice project.
 #
@@ -26,6 +26,8 @@
 # <https://www.sslshopper.com/article-most-common-openssl-commands.html> for
 # the PKCS#12 export of self-signed certificates
 #
+
+set -e
 
 root="$PWD"
 algo="RSA"

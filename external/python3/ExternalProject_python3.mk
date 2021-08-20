@@ -154,7 +154,7 @@ $(call gb_ExternalProject_get_state_target,python3,fixscripts) : $(call gb_Exter
 		pydoc$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
 		python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)-config \
 	; do { rm "$$file" && $(gb_AWK) '\
-		BEGIN {print "#!/bin/bash\n\
+		BEGIN {print "#!/usr/bin/env bash\n\
 origpath=$$(pwd)\n\
 bindir=$$(cd $$(dirname \"$$0\") ; pwd)\n\
 cd \"$$origpath\"\n\

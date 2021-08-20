@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # finds undocumented classes in the current directory (recursive)
 
