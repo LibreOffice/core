@@ -451,7 +451,8 @@ namespace sw::mark
         if (m_sHideCondition != rHideCondition)
         {
             m_sHideCondition = rHideCondition;
-            InvalidateFrames();
+            // don't eval condition here yet - probably only needed for
+            // UI editing condition and that doesn't exist yet
         }
     }
 

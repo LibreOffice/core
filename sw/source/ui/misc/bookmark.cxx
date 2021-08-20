@@ -440,10 +440,10 @@ void BookmarkTable::InsertBookmark(sw::mark::IMark* pMark)
     else if (bPulling && !bPulledAll)
         sBookmarkNodeText = "..." + sBookmarkNodeText;
 
-    OUString sHidden = SwResId(STR_BOOKMARK_NO);
-    if (pBookmark->IsHidden())
-        sHidden = SwResId(STR_BOOKMARK_YES);
     const OUString& sHideCondition = pBookmark->GetHideCondition();
+    OUString sHidden = SwResId(STR_BOOKMARK_NO);
+    if (pBookmark->IsHidden() || !sHideCondition.isEmpty())
+        sHidden = SwResId(STR_BOOKMARK_YES);
     OUString sPageNum = OUString::number(SwPaM(pMark->GetMarkStart()).GetPageNum());
     int nRow = m_xControl->n_children();
     m_xControl->append(OUString::number(reinterpret_cast<sal_Int64>(pMark)), sPageNum);
