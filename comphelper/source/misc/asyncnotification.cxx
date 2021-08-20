@@ -20,7 +20,7 @@
 #include <comphelper/asyncnotification.hxx>
 #include <mutex>
 #include <condition_variable>
-#include <rtl/instance.hxx>
+#include <osl/mutex.hxx>
 
 #include <cassert>
 #include <stdexcept>
@@ -163,7 +163,11 @@ namespace comphelper
 
     namespace {
 
-    struct theNotifiersMutex : public rtl::Static<osl::Mutex, theNotifiersMutex> {};
+    osl::Mutex& GetTheNotifiersMutex()
+    {
+        static osl::Mutex MUTEX;
+        return MUTEX;
+    }
 
     }
 
@@ -173,7 +177,7 @@ namespace comphelper
     {
         std::vector<std::weak_ptr<AsyncEventNotifierAutoJoin>> notifiers;
         {
-            ::osl::MutexGuard g(theNotifiersMutex::get());
+            ::osl::MutexGuard g(GetTheNotifiersMutex());
             notifiers = g_Notifiers;
         }
         for (std::weak_ptr<AsyncEventNotifierAutoJoin> const& wNotifier : notifiers)
@@ -197,7 +201,7 @@ namespace comphelper
 
     AsyncEventNotifierAutoJoin::~AsyncEventNotifierAutoJoin()
     {
-        ::osl::MutexGuard g(theNotifiersMutex::get());
+        ::osl::MutexGuard g(GetTheNotifiersMutex());
         // note: this doesn't happen atomically with the refcount
         // hence it's possible this deletes > 1 or 0 elements
         g_Notifiers.erase(
@@ -213,7 +217,7 @@ namespace comphelper
     {
         std::shared_ptr<AsyncEventNotifierAutoJoin> const ret(
                 new AsyncEventNotifierAutoJoin(name));
-        ::osl::MutexGuard g(theNotifiersMutex::get());
+        ::osl::MutexGuard g(GetTheNotifiersMutex());
         g_Notifiers.push_back(ret);
         return ret;
     }

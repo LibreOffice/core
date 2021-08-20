@@ -11,7 +11,6 @@
  */
 
 #include <comphelper/random.hxx>
-#include <rtl/instance.hxx>
 #include <sal/log.hxx>
 #include <assert.h>
 #include <time.h>
@@ -74,16 +73,18 @@ struct RandomNumberGenerator
     }
 };
 
-class theRandomNumberGenerator : public rtl::Static<RandomNumberGenerator, theRandomNumberGenerator>
+RandomNumberGenerator& GetTheRandomNumberGenerator()
 {
-};
+    static RandomNumberGenerator RANDOM;
+    return RANDOM;
+}
 }
 
 // uniform ints [a,b] distribution
 int uniform_int_distribution(int a, int b)
 {
     std::uniform_int_distribution<int> dist(a, b);
-    auto& gen = theRandomNumberGenerator::get();
+    auto& gen = GetTheRandomNumberGenerator();
     std::scoped_lock<std::mutex> g(gen.mutex);
     return dist(gen.global_rng);
 }
@@ -92,7 +93,7 @@ int uniform_int_distribution(int a, int b)
 unsigned int uniform_uint_distribution(unsigned int a, unsigned int b)
 {
     std::uniform_int_distribution<unsigned int> dist(a, b);
-    auto& gen = theRandomNumberGenerator::get();
+    auto& gen = GetTheRandomNumberGenerator();
     std::scoped_lock<std::mutex> g(gen.mutex);
     return dist(gen.global_rng);
 }
@@ -101,7 +102,7 @@ unsigned int uniform_uint_distribution(unsigned int a, unsigned int b)
 size_t uniform_size_distribution(size_t a, size_t b)
 {
     std::uniform_int_distribution<size_t> dist(a, b);
-    auto& gen = theRandomNumberGenerator::get();
+    auto& gen = GetTheRandomNumberGenerator();
     std::scoped_lock<std::mutex> g(gen.mutex);
     return dist(gen.global_rng);
 }
@@ -111,7 +112,7 @@ double uniform_real_distribution(double a, double b)
 {
     assert(a < b);
     std::uniform_real_distribution<double> dist(a, b);
-    auto& gen = theRandomNumberGenerator::get();
+    auto& gen = GetTheRandomNumberGenerator();
     std::scoped_lock<std::mutex> g(gen.mutex);
     return dist(gen.global_rng);
 }

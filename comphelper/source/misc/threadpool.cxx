@@ -13,7 +13,6 @@
 #include <config_options.h>
 #include <sal/config.h>
 #include <sal/log.hxx>
-#include <rtl/instance.hxx>
 #include <salhelper/thread.hxx>
 #include <algorithm>
 #include <memory>
@@ -111,20 +110,22 @@ ThreadPool::~ThreadPool()
 
 namespace {
 
-struct ThreadPoolStatic : public rtl::StaticWithInit< std::shared_ptr< ThreadPool >,
-                                                      ThreadPoolStatic >
+std::shared_ptr< ThreadPool >& GetStaticThreadPool()
 {
-    std::shared_ptr< ThreadPool > operator () () {
+    static std::shared_ptr< ThreadPool > POOL =
+    []()
+    {
         const sal_Int32 nThreads = ThreadPool::getPreferredConcurrency();
         return std::make_shared< ThreadPool >( nThreads );
-    };
-};
+    }();
+    return POOL;
+}
 
 }
 
 ThreadPool& ThreadPool::getSharedOptimalPool()
 {
-    return *ThreadPoolStatic::get();
+    return *GetStaticThreadPool();
 }
 
 sal_Int32 ThreadPool::getPreferredConcurrency()
