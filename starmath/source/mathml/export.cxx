@@ -53,6 +53,9 @@
 #include <xparsmlbase.hxx>
 #include <starmathdatabase.hxx>
 
+// Old parser
+#include <mathmlexport.hxx>
+
 using namespace ::com::sun::star;
 using namespace xmloff::token;
 
@@ -113,7 +116,7 @@ bool SmMLExportWrapper::Export(SfxMedium& rMedium)
         if (pDocShell->GetMedium() != &rMedium)
         {
             SAL_WARN("starmath", "Input medium and sm document medium do not match");
-            return false;
+            //return false;
         }
 
         // Fetch progress bar
@@ -156,7 +159,6 @@ bool SmMLExportWrapper::Export(SfxMedium& rMedium)
             SAL_WARN("starmath", "Failed to fetch output storage");
             return false;
         }
-        bool bOASIS = SotStorage::GetVersion(xStg) > SOFFICE_FILEFORMAT_60;
 
         // TODO/LATER: handle the case of embedded links gracefully
         if (bEmbedded) //&& !pStg->IsRoot() )
@@ -177,8 +179,7 @@ bool SmMLExportWrapper::Export(SfxMedium& rMedium)
                 xStatusIndicator->setValue(1);
 
             bRet = WriteThroughComponentS(xStg, xModelComp, u"meta.xml", xContext, xInfoSet,
-                                          bOASIS ? u"com.sun.star.comp.Math.XMLOasisMetaExporter"
-                                                 : u"com.sun.star.comp.Math.XMLMetaExporter");
+                                          u"com.sun.star.comp.Math.MLOasisMetaExporter", 6);
         }
 
         // Write starmath formula
@@ -188,8 +189,12 @@ bool SmMLExportWrapper::Export(SfxMedium& rMedium)
             if (xStatusIndicator.is())
                 xStatusIndicator->setValue(2);
 
-            bRet = WriteThroughComponentS(xStg, xModelComp, u"content.xml", xContext, xInfoSet,
-                                          u"com.sun.star.comp.Math.XMLContentExporter");
+            if (pDocShell->GetSmSyntaxVersion() == 5)
+                bRet = WriteThroughComponentS(xStg, xModelComp, u"content.xml", xContext, xInfoSet,
+                                              u"com.sun.star.comp.Math.XMLContentExporter", 5);
+            else
+                bRet = WriteThroughComponentS(xStg, xModelComp, u"content.xml", xContext, xInfoSet,
+                                              u"com.sun.star.comp.Math.MLContentExporter", 6);
         }
 
         // Write starmath settings
@@ -199,10 +204,8 @@ bool SmMLExportWrapper::Export(SfxMedium& rMedium)
             if (xStatusIndicator.is())
                 xStatusIndicator->setValue(3);
 
-            bRet
-                = WriteThroughComponentS(xStg, xModelComp, u"settings.xml", xContext, xInfoSet,
-                                         bOASIS ? u"com.sun.star.comp.Math.XMLOasisSettingsExporter"
-                                                : u"com.sun.star.comp.Math.XMLSettingsExporter");
+            bRet = WriteThroughComponentS(xStg, xModelComp, u"settings.xml", xContext, xInfoSet,
+                                          u"com.sun.star.comp.Math.MLOasisSettingsExporter", 6);
         }
     }
     else
@@ -221,8 +224,12 @@ bool SmMLExportWrapper::Export(SfxMedium& rMedium)
 
         // Write everything in the same place
         // Note: export through an XML exporter component (output stream version)
-        bRet = WriteThroughComponentOS(xOut, xModelComp, xContext, xInfoSet,
-                                       u"com.sun.star.comp.Math.XMLContentExporter");
+        if (pDocShell->GetSmSyntaxVersion() == 5)
+            bRet = WriteThroughComponentOS(xOut, xModelComp, xContext, xInfoSet,
+                                           u"com.sun.star.comp.Math.XMLContentExporter", 5);
+        else
+            bRet = WriteThroughComponentOS(xOut, xModelComp, xContext, xInfoSet,
+                                           u"com.sun.star.comp.Math.MLContentExporter", 6);
     }
 
     if (xStatusIndicator.is())
@@ -287,7 +294,8 @@ bool SmMLExportWrapper::WriteThroughComponentOS(const Reference<io::XOutputStrea
                                                 const Reference<XComponent>& xComponent,
                                                 Reference<uno::XComponentContext> const& rxContext,
                                                 Reference<beans::XPropertySet> const& rPropSet,
-                                                const char16_t* pComponentName)
+                                                const char16_t* pComponentName,
+                                                int_fast16_t nSyntaxVersion)
 {
     // We need a output stream but it is already checked by caller
     // We need a component but it is already checked by caller
@@ -322,9 +330,23 @@ bool SmMLExportWrapper::WriteThroughComponentOS(const Reference<io::XOutputStrea
 
     // connect model and filter
     xExporter->setSourceDocument(xComponent);
+    Reference<XFilter> xFilter(xExporter, UNO_QUERY);
+    uno::Sequence<PropertyValue> aProps(0);
 
     // filter
-    Reference<XFilter> xFilter(xExporter, UNO_QUERY);
+    if (nSyntaxVersion == 5)
+    {
+        SmXMLExport* pFilter = comphelper::getUnoTunnelImplementation<SmXMLExport>(xFilter);
+        if (pFilter == nullptr)
+        {
+            SAL_WARN("starmath", "Failed to fetch SmMLExport");
+            return false;
+        }
+        xFilter->filter(aProps);
+        return pFilter->GetSuccess();
+    }
+
+    // filter
     SmMLExport* pFilter = comphelper::getUnoTunnelImplementation<SmMLExport>(xFilter);
 
     // Setup filter
@@ -337,7 +359,6 @@ bool SmMLExportWrapper::WriteThroughComponentOS(const Reference<io::XOutputStrea
     pFilter->setElementTree(m_pElementTree);
 
     // Execute operation
-    uno::Sequence<PropertyValue> aProps(0);
     xFilter->filter(aProps);
     return pFilter->getSuccess();
 }
@@ -348,7 +369,8 @@ bool SmMLExportWrapper::WriteThroughComponentS(const Reference<embed::XStorage>&
                                                const char16_t* pStreamName,
                                                Reference<uno::XComponentContext> const& rxContext,
                                                Reference<beans::XPropertySet> const& rPropSet,
-                                               const char16_t* pComponentName)
+                                               const char16_t* pComponentName,
+                                               int_fast16_t nSyntaxVersion)
 {
     // We need a storage name but it is already checked by caller
     // We need a component name but it is already checked by caller
@@ -383,7 +405,7 @@ bool SmMLExportWrapper::WriteThroughComponentS(const Reference<embed::XStorage>&
     // write the stuff
     // Note: export through an XML exporter component (output stream version)
     return WriteThroughComponentOS(xStream->getOutputStream(), xComponent, rxContext, rPropSet,
-                                   pComponentName);
+                                   pComponentName, nSyntaxVersion);
 }
 
 // export through an XML exporter component (memory stream version)
@@ -407,7 +429,7 @@ SmMLExportWrapper::WriteThroughComponentMS(const Reference<XComponent>& xCompone
     // write the stuff
     // Note: export through an XML exporter component (output stream version)
     bool bOk = WriteThroughComponentOS(xStream, xComponent, rxContext, rPropSet,
-                                       u"com.sun.star.comp.Math.XMLContentExporter");
+                                       u"com.sun.star.comp.Mathml.MLContentExporter", 6);
 
     // We don't want to read uninitialized data
     if (!bOk)
@@ -444,27 +466,11 @@ Math_MLExporter_get_implementation(css::uno::XComponentContext* context,
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Math_MLMetaExporter_get_implementation(css::uno::XComponentContext* context,
-                                       css::uno::Sequence<css::uno::Any> const&)
-{
-    return cppu::acquire(
-        new SmMLExport(context, "com.sun.star.comp.Math.XMLMetaExporter", SvXMLExportFlags::META));
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_MLOasisMetaExporter_get_implementation(css::uno::XComponentContext* context,
                                             css::uno::Sequence<css::uno::Any> const&)
 {
     return cppu::acquire(new SmMLExport(context, "com.sun.star.comp.Math.XMLOasisMetaExporter",
                                         SvXMLExportFlags::OASIS | SvXMLExportFlags::META));
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Math_MLSettingsExporter_get_implementation(css::uno::XComponentContext* context,
-                                           css::uno::Sequence<css::uno::Any> const&)
-{
-    return cppu::acquire(new SmMLExport(context, "com.sun.star.comp.Math.XMLSettingsExporter",
-                                        SvXMLExportFlags::SETTINGS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
@@ -500,24 +506,19 @@ ErrCode SmMLExport::exportDoc(enum XMLTokenEnum eClass)
         return ERRCODE_NONE;
     }
 
-    /* Needs to be commented out for now otherwise clang complains
-        // Checks if it has to export a particular tree
-        if (m_pElementTree == nullptr)
+    // Checks if it has to export a particular tree
+    if (m_pElementTree == nullptr)
+    {
+        // Set element tree
+        SmDocShell* pDocShell = getSmDocShell();
+        if (pDocShell != nullptr)
+            m_pElementTree = pDocShell->GetMlElementTree();
+        else
         {
-            // Set element tree
-            SmDocShell* pDocShell = getSmDocShell();
-            if (pDocShell != nullptr)
-            {
-                // TODO implement this when available
-                (void)pDocShell;
-            }
-            else
-            {
-                m_bSuccess = false;
-                return SVSTREAM_INVALID_PARAMETER;
-            }
+            m_bSuccess = false;
+            return SVSTREAM_INVALID_PARAMETER;
         }
-        */
+    }
 
     // Start document and encrypt if necessary
     GetDocHandler()->startDocument();
@@ -614,7 +615,7 @@ SmMLExport::SmMLExport(const css::uno::Reference<css::uno::XComponentContext>& r
     : SvXMLExport(rContext, implementationName, util::MeasureUnit::INCH, XML_MATH, nExportFlags)
     , m_pElementTree(nullptr)
     , m_bSuccess(true)
-    , m_bUseExportTag(false)
+    , m_bUseExportTag(true)
 {
 }
 
