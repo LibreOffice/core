@@ -421,7 +421,7 @@ Size Graphic::GetSizePixel( const OutputDevice* pRefDevice ) const
     return aRet;
 }
 
-sal_uLong Graphic::GetSizeBytes() const
+sal_uInt32 Graphic::GetSizeBytes() const
 {
     return mxImpGraphic->getSizeBytes();
 }
