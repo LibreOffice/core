@@ -39,7 +39,7 @@ namespace sdr::contact
         {
         }
 
-        void ViewObjectContactOfGroup::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DContainer& rContainer) const
+        void ViewObjectContactOfGroup::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
         {
             drawinglayer::primitive2d::Primitive2DContainer xRetval;
 
@@ -83,13 +83,13 @@ namespace sdr::contact
                     rDisplayInfo.SetGhostedDrawMode();
                 }
 
-                rContainer.append(xRetval);
+                rVisitor.append(xRetval);
             }
             else
             {
                 // draw replacement object for group. This will use ViewContactOfGroup::createViewIndependentPrimitive2DSequence
                 // which creates the replacement primitives for an empty group
-                ViewObjectContactOfSdrObj::getPrimitive2DSequenceHierarchy(rDisplayInfo, rContainer);
+                ViewObjectContactOfSdrObj::getPrimitive2DSequenceHierarchy(rDisplayInfo, rVisitor);
             }
         }
 

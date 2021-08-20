@@ -35,7 +35,7 @@ namespace sdr::contact
             virtual ~ViewObjectContactOfMasterPageDescriptor() override;
 
             virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const override;
-            virtual void getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DContainer& rContainer ) const override;
+            virtual void getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor ) const override;
         };
 
 } // end of namespace sdr::contact

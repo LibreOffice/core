@@ -404,7 +404,7 @@ bool ViewObjectContact::isPrimitiveGhosted(const DisplayInfo& rDisplayInfo) cons
     return (GetObjectContact().DoVisualizeEnteredGroup() && !GetObjectContact().isOutputToPrinter() && rDisplayInfo.IsGhostedDrawModeActive());
 }
 
-void ViewObjectContact::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DContainer& rContainer) const
+void ViewObjectContact::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     // check model-view visibility
     if(!isPrimitiveVisible(rDisplayInfo))
@@ -424,7 +424,7 @@ void ViewObjectContact::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInf
     if(!bVisible)
         return;
 
-    rContainer.append(xRetval);
+    rVisitor.append(xRetval);
 }
 
 drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::getPrimitive2DSequenceSubHierarchy(DisplayInfo& rDisplayInfo) const

@@ -29,6 +29,7 @@ namespace vcl { class Region; }
 namespace sdr::animation {
     class PrimitiveAnimation;
 }
+namespace drawinglayer::primitive2d { class Primitive2DDecompositionVisitor; }
 
 namespace sdr::contact {
 
@@ -120,7 +121,7 @@ public:
 
     // process this primitive: Eventually also recursively travel an existing hierarchy,
     // e.g. for group objects, scenes or pages. This method will test geometrical visibility.
-    virtual void getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DContainer& rContainer) const;
+    virtual void getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const;
 
     // just process the sub-hierarchy, used as tooling from getPrimitive2DSequenceHierarchy
     drawinglayer::primitive2d::Primitive2DContainer getPrimitive2DSequenceSubHierarchy(DisplayInfo& rDisplayInfo) const;
