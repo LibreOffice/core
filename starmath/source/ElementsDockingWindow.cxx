@@ -1038,6 +1038,7 @@ void SmElementsControl::build()
     switch(m_nSmSyntaxVersion)
     {
         case 5:
+        case 6:
         {
             for (sal_uInt16 n = 0; n < m_a5CategoriesSize; ++n)
             {
@@ -1051,7 +1052,6 @@ void SmElementsControl::build()
             }
             break;
         }
-        case 6:
         default:
             throw std::range_error("parser version limit");
     }

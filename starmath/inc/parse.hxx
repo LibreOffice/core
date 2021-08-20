@@ -24,6 +24,7 @@
 #pragma once
 
 #include "parse5.hxx"
+#include "parse6.hxx"
 
 namespace starmathdatabase
 {
