@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "500f331d_f5af5bcb",
+        "filename": "sc/source/core/data/column2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-08-20T08:04:54Z",
+      "side": 1,
+      "message": "Should I introduce a new var here in order to avoid the calcluation twice, or is the compiler smart enough to deal with such a construct?",
+      "revId": "55a9433dca70fad1d8897416419a46fa2105af84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
