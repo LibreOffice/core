@@ -1034,6 +1034,18 @@ std::unique_ptr<weld::Popover> JSInstanceBuilder::weld_popover(const OString& id
     return pWeldWidget;
 }
 
+std::unique_ptr<weld::Box> JSInstanceBuilder::weld_box(const OString& id)
+{
+    VclBox* pContainer = m_xBuilder->get<VclBox>(id);
+    auto pWeldWidget
+        = pContainer ? std::make_unique<JSBox>(this, pContainer, this, false) : nullptr;
+
+    if (pWeldWidget)
+        RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
 weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent,
                                                             VclMessageType eMessageType,
                                                             VclButtonsType eButtonType,
@@ -1650,6 +1662,12 @@ void JSMenuButton::set_active(bool bActive)
 JSPopover::JSPopover(JSDialogSender* pSender, DockingWindow* pDockingWindow,
                      SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : JSWidget<SalInstancePopover, DockingWindow>(pSender, pDockingWindow, pBuilder, bTakeOwnership)
+{
+}
+
+JSBox::JSBox(JSDialogSender* pSender, VclBox* pBox, SalInstanceBuilder* pBuilder,
+             bool bTakeOwnership)
+    : JSWidget<SalInstanceBox, VclBox>(pSender, pBox, pBuilder, bTakeOwnership)
 {
 }
 
