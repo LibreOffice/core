@@ -556,6 +556,7 @@ void SmDocShell::Repaint()
 
 SmDocShell::SmDocShell( SfxModelFlags i_nSfxCreationFlags )
     : SfxObjectShell(i_nSfxCreationFlags)
+    , m_pMlElementTree(nullptr)
     , mpPrinter(nullptr)
     , mpTmpPrinter(nullptr)
     , mnModifyCount(0)
@@ -587,6 +588,8 @@ SmDocShell::~SmDocShell()
     mpEditEngine.reset();
     mpEditEngineItemPool.clear();
     mpPrinter.disposeAndClear();
+
+    mathml::SmMlIteratorFree(m_pMlElementTree);
 }
 
 bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
