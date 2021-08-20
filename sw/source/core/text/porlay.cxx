@@ -2273,28 +2273,8 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTextNode& rNode, MultiSelect
         const sw::mark::IMark* pMark = pIndex->GetMark();
         const sw::mark::IBookmark* pBookmark = dynamic_cast<const sw::mark::IBookmark*>(pMark);
 
-        bool bHide = false;
+        // condition is evaluated in DocumentFieldsManager::UpdateExpFields()
         if (pBookmark && pBookmark->IsHidden())
-        {
-            // bookmark is marked as hidden
-            bHide = true;
-
-            // bookmark is marked as hidden with conditions
-            if (!pBookmark->GetHideCondition().isEmpty())
-            {
-                SwDoc& rDoc = *const_cast<SwDoc*>(rNode.GetDoc());
-                SwCalc aCalc(rDoc);
-                rDoc.getIDocumentFieldsAccess().FieldsToCalc(aCalc, rNode.GetIndex(), USHRT_MAX);
-
-                SwSbxValue aValue = aCalc.Calculate(pBookmark->GetHideCondition());
-                if(!aValue.IsVoidValue())
-                {
-                    bHide = aValue.GetBool();
-                }
-            }
-        }
-
-        if (bHide)
         {
             // intersect bookmark range with textnode range and add the intersection to rHiddenMulti
 

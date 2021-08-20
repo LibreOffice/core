@@ -31,6 +31,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <cntfrm.hxx>
@@ -112,6 +113,24 @@ SetGetExpField::SetGetExpField( const SwSectionNode& rSectNd,
     {
         nNode = rSectNd.GetIndex();
         nContent = 0;
+    }
+}
+
+SetGetExpField::SetGetExpField(::sw::mark::IBookmark const& rBookmark,
+                               SwPosition const*const pPos)
+{
+    eSetGetExpFieldType = BOOKMARK;
+    CNTNT.pBookmark = &rBookmark;
+
+    if (pPos)
+    {
+        nNode = pPos->nNode.GetIndex();
+        nContent = pPos->nContent.GetIndex();
+    }
+    else
+    {
+        nNode = rBookmark.GetMarkStart().nNode.GetIndex();
+        nContent = rBookmark.GetMarkStart().nContent.GetIndex();;
     }
 }
 
@@ -276,6 +295,10 @@ const SwNode* SetGetExpField::GetNodeFromContent() const
             pRet = CNTNT.pSection->GetFormat()->GetSectionNode();
             break;
 
+        case BOOKMARK:
+            pRet = &CNTNT.pBookmark->GetMarkStart().nNode.GetNode();
+            break;
+
         case CRSRPOS:
             pRet = &CNTNT.pPos->nNode.GetNode();
             break;
@@ -316,6 +339,9 @@ sal_Int32 SetGetExpField::GetCntPosFromContent() const
             break;
         case TEXTTOXMARK:
             nRet = CNTNT.pTextTOX->GetStart();
+            break;
+        case BOOKMARK:
+            nRet = CNTNT.pBookmark->GetMarkStart().nContent.GetIndex();
             break;
         case CRSRPOS:
             nRet =  CNTNT.pPos->nContent.GetIndex();
@@ -877,7 +903,20 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
         // add all to the list so that they are sorted
         for (const auto &nId : aTmpArr)
         {
-            GetBodyNode( *rDoc.GetNodes()[ nId ]->GetSectionNode() );
+            SwSectionNode const& rSectionNode(*rDoc.GetNodes()[ nId ]->GetSectionNode());
+            GetBodyNodeGeneric(rSectionNode, rSectionNode);
+        }
+
+        // bookmarks with hide conditions, handle similar to sections
+        auto const& rIDMA(*rDoc.getIDocumentMarkAccess());
+        for (auto it = rIDMA.getBookmarksBegin(); it != rIDMA.getBookmarksEnd(); ++it)
+        {
+            auto const pBookmark(dynamic_cast<::sw::mark::IBookmark const*>(it->get()));
+            assert(pBookmark);
+            if (!pBookmark->GetHideCondition().isEmpty())
+            {
+                GetBodyNodeGeneric((*it)->GetMarkStart().nNode.GetNode(), *pBookmark);
+            }
         }
     }
 
@@ -1060,19 +1099,22 @@ void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, SwFieldIds nFiel
             delete pNew;
 }
 
-void SwDocUpdateField::GetBodyNode( const SwSectionNode& rSectNd )
+template<typename T>
+void SwDocUpdateField::GetBodyNodeGeneric(SwNode const& rNode, T const& rCond)
 {
-    const SwDoc& rDoc = *rSectNd.GetDoc();
+    const SwDoc& rDoc = *rNode.GetDoc();
     SetGetExpField* pNew = nullptr;
 
-    if( rSectNd.GetIndex() < rDoc.GetNodes().GetEndOfExtras().GetIndex() )
+    if (rNode.GetIndex() < rDoc.GetNodes().GetEndOfExtras().GetIndex())
     {
         do {            // middle check loop
 
             // we need to get the anchor first
             // create index to determine the TextNode
-            SwPosition aPos( rSectNd );
-            SwContentNode* pCNd = rDoc.GetNodes().GoNext( &aPos.nNode ); // to the next ContentNode
+            SwPosition aPos(rNode);
+            SwContentNode const*const pCNd = rNode.IsSectionNode()
+                ? rDoc.GetNodes().GoNext(&aPos.nNode) // to the next ContentNode
+                : rNode.GetContentNode();
 
             if( !pCNd || !pCNd->IsTextNode() )
                 break;
@@ -1088,13 +1130,13 @@ void SwDocUpdateField::GetBodyNode( const SwSectionNode& rSectNd )
 
             bool const bResult = GetBodyTextNode( rDoc, aPos, *pFrame );
             OSL_ENSURE(bResult, "where is the Field");
-            pNew = new SetGetExpField( rSectNd, &aPos );
+            pNew = new SetGetExpField( rCond, &aPos );
 
         } while( false );
     }
 
     if( !pNew )
-        pNew = new SetGetExpField( rSectNd );
+        pNew = new SetGetExpField( rCond );
 
     if (!m_pFieldSortList->insert(pNew).second)
         delete pNew;

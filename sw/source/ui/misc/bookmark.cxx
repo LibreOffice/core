@@ -415,10 +415,10 @@ void BookmarkTable::InsertBookmark(sw::mark::IMark* pMark)
     else if (bPulling && !bPulledAll)
         sBookmarkNodeText = "..." + sBookmarkNodeText;
 
+    const OUString& sHideCondition = pBookmark->GetHideCondition();
     OUString sHidden = "No";
-    if (pBookmark->IsHidden())
+    if (pBookmark->IsHidden() || !sHideCondition.isEmpty())
         sHidden = "Yes";
-    OUString sHideCondition = pBookmark->GetHideCondition();
     OUString sPageNum = OUString::number(SwPaM(pMark->GetMarkStart()).GetPageNum());
     OUString sColumnData = sPageNum + "\t" + pBookmark->GetName() + "\t" + sBookmarkNodeText + "\t" + sHidden + "\t" + sHideCondition;
     InsertEntryToColumn(sColumnData, TREELIST_APPEND, 0xffff, pMark);
