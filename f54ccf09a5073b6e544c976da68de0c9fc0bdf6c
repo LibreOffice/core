@@ -45,6 +45,30 @@
       "revId": "f54ccf09a5073b6e544c976da68de0c9fc0bdf6c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b02d0b91_f54551b9",
+        "filename": "offapi/com/sun/star/cui/AsyncColorPicker.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-08-20T07:31:46Z",
+      "side": 1,
+      "message": "done in: https://gerrit.libreoffice.org/c/core/+/120735",
+      "parentUuid": "614ae73d_5cd3dd27",
+      "range": {
+        "startLine": 31,
+        "startChar": 8,
+        "endLine": 31,
+        "endChar": 13
+      },
+      "revId": "f54ccf09a5073b6e544c976da68de0c9fc0bdf6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
