@@ -1330,28 +1330,23 @@ void SalInstanceWidget::draw(OutputDevice& rOutput, const Point& rPos, const Siz
         m_xWidget->SetSizePixel(aOrigSize);
 }
 
+SalInstanceBox::SalInstanceBox(VclBox* pContainer, SalInstanceBuilder* pBuilder,
+                               bool bTakeOwnership)
+    : SalInstanceContainer(pContainer, pBuilder, bTakeOwnership)
+    , m_xBox(pContainer)
+{
+}
+void SalInstanceBox::reorder_child(weld::Widget* pWidget, int nNewPosition)
+{
+    SalInstanceWidget* pVclWidget = dynamic_cast<SalInstanceWidget*>(pWidget);
+    assert(pVclWidget);
+    pVclWidget->getWidget()->reorderWithinParent(nNewPosition);
+}
+
+void SalInstanceBox::sort_native_button_order() { ::sort_native_button_order(*m_xBox); }
+
 namespace
 {
-class SalInstanceBox : public SalInstanceContainer, public virtual weld::Box
-{
-private:
-    VclPtr<VclBox> m_xBox;
-
-public:
-    SalInstanceBox(VclBox* pContainer, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : SalInstanceContainer(pContainer, pBuilder, bTakeOwnership)
-        , m_xBox(pContainer)
-    {
-    }
-    virtual void reorder_child(weld::Widget* pWidget, int nNewPosition) override
-    {
-        SalInstanceWidget* pVclWidget = dynamic_cast<SalInstanceWidget*>(pWidget);
-        assert(pVclWidget);
-        pVclWidget->getWidget()->reorderWithinParent(nNewPosition);
-    }
-    virtual void sort_native_button_order() override { ::sort_native_button_order(*m_xBox); }
-};
-
 void CollectChildren(const vcl::Window& rCurrent, const basegfx::B2IPoint& rTopLeft,
                      weld::ScreenShotCollection& rControlDataCollection)
 {
