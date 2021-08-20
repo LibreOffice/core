@@ -368,7 +368,7 @@ ViewObjectContactOfPageHierarchy::~ViewObjectContactOfPageHierarchy()
 {
 }
 
-void ViewObjectContactOfPageHierarchy::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DContainer& rContainer) const
+void ViewObjectContactOfPageHierarchy::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     // process local sub-hierarchy
     const sal_uInt32 nSubHierarchyCount(GetViewContact().GetObjectCount());
@@ -391,7 +391,7 @@ void ViewObjectContactOfPageHierarchy::getPrimitive2DSequenceHierarchy(DisplayIn
         // not visible, release
         return;
 
-    rContainer.append(xRetval);
+    rVisitor.append(xRetval);
 }
 
 ViewObjectContactOfPageGrid::ViewObjectContactOfPageGrid(ObjectContact& rObjectContact, ViewContact& rViewContact)
@@ -578,7 +578,7 @@ ViewObjectContactOfSdrPage::~ViewObjectContactOfSdrPage()
 {
 }
 
-void ViewObjectContactOfSdrPage::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DContainer& rContainer) const
+void ViewObjectContactOfSdrPage::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
 {
     // process local sub-hierarchy
     const sal_uInt32 nSubHierarchyCount(GetViewContact().GetObjectCount());
@@ -619,7 +619,7 @@ void ViewObjectContactOfSdrPage::getPrimitive2DSequenceHierarchy(DisplayInfo& rD
         rDisplayInfo.SetGhostedDrawMode();
     }
 
-    rContainer.append(xRetval);
+    rVisitor.append(xRetval);
 }
 
 }

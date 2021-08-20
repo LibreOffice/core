@@ -32,7 +32,7 @@ namespace sdr::contact
             virtual ~ViewObjectContactOfGroup() override;
 
             // This method recursively paints the draw hierarchy.
-            virtual void getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DContainer& rContainer ) const override;
+            virtual void getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor ) const override;
 
         private:
             virtual bool isPrimitiveVisibleOnAnyLayer(const SdrLayerIDSet& aLayers) const override;

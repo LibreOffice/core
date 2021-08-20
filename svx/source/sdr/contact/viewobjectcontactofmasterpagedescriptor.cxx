@@ -54,7 +54,7 @@ namespace sdr::contact
             return true;
         }
 
-        void ViewObjectContactOfMasterPageDescriptor::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DContainer& rContainer) const
+        void ViewObjectContactOfMasterPageDescriptor::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const
         {
             drawinglayer::primitive2d::Primitive2DContainer xRetval;
             drawinglayer::primitive2d::Primitive2DContainer xMasterPageSequence;
@@ -129,7 +129,7 @@ namespace sdr::contact
             }
 
             // return grouped primitive
-            rContainer.append(xRetval);
+            rVisitor.append(xRetval);
         }
 } // end of namespace
 
