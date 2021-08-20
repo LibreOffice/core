@@ -737,7 +737,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTableTypes(  )
 {
     rtl::Reference<::connectivity::ODatabaseMetaDataResultSet> pResult = new ::connectivity::ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTableTypes);
 
-    static ODatabaseMetaDataResultSet::ORows aRows = [&]
+    static ODatabaseMetaDataResultSet::ORows aRows = []
     {
         static constexpr OUStringLiteral aTable = u"TABLE";
         ODatabaseMetaDataResultSet::ORows tmp;
@@ -755,7 +755,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTypeInfo(  )
 {
     rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTypeInfo);
 
-    static ODatabaseMetaDataResultSet::ORows aRows = [&]()
+    static ODatabaseMetaDataResultSet::ORows aRows = []()
     {
         ODatabaseMetaDataResultSet::ORows tmp;
         ODatabaseMetaDataResultSet::ORow aRow(19);
