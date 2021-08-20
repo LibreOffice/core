@@ -163,9 +163,9 @@ namespace comphelper
 
     namespace {
 
-    osl::Mutex& GetTheNotifiersMutex()
+    std::mutex& GetTheNotifiersMutex()
     {
-        static osl::Mutex MUTEX;
+        static std::mutex MUTEX;
         return MUTEX;
     }
 
@@ -177,7 +177,7 @@ namespace comphelper
     {
         std::vector<std::weak_ptr<AsyncEventNotifierAutoJoin>> notifiers;
         {
-            ::osl::MutexGuard g(GetTheNotifiersMutex());
+            std::scoped_lock g(GetTheNotifiersMutex());
             notifiers = g_Notifiers;
         }
         for (std::weak_ptr<AsyncEventNotifierAutoJoin> const& wNotifier : notifiers)
@@ -201,7 +201,7 @@ namespace comphelper
 
     AsyncEventNotifierAutoJoin::~AsyncEventNotifierAutoJoin()
     {
-        ::osl::MutexGuard g(GetTheNotifiersMutex());
+        std::scoped_lock g(GetTheNotifiersMutex());
         // note: this doesn't happen atomically with the refcount
         // hence it's possible this deletes > 1 or 0 elements
         g_Notifiers.erase(
@@ -217,7 +217,7 @@ namespace comphelper
     {
         std::shared_ptr<AsyncEventNotifierAutoJoin> const ret(
                 new AsyncEventNotifierAutoJoin(name));
-        ::osl::MutexGuard g(GetTheNotifiersMutex());
+        std::scoped_lock g(GetTheNotifiersMutex());
         g_Notifiers.push_back(ret);
         return ret;
     }
