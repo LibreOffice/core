@@ -589,6 +589,33 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf92623, "tdf92623.odt", "10-testing-addresses
     CPPUNIT_ASSERT_EQUAL(sal_Int32(10), countFieldMarks);
 }
 
+DECLARE_SHELL_MAILMERGE_TEST(testBookmarkCondition, "bookmarkcondition.fodt", "bookmarkcondition.ods", "data")
+{
+    executeMailMerge();
+
+    dumpMMLayout();
+    xmlDocUniquePtr pLayout(
+        xmlParseMemory(reinterpret_cast<const char*>(xmlBufferContent(mpXmlBuffer)),
+                       xmlBufferLength(mpXmlBuffer)));
+
+    // check that conditions on sections and bookmarks are evaluated the same
+    assertXPath(pLayout, "/root/page", 7);
+    assertXPath(pLayout, "/root/page[1]/body/section", 1);
+    assertXPath(pLayout, "/root/page[1]/body/section[1]/txt[1]/LineBreak", "Line", u"In den Bergen war es anstrengend.");
+    assertXPath(pLayout, "/root/page[1]/body/txt[5]/LineBreak", "Line", u"Mein Urlaub war anstrengend . ");
+    assertXPath(pLayout, "/root/page[3]/body/section", 1);
+    assertXPath(pLayout, "/root/page[3]/body/section[1]/txt[1]/LineBreak", "Line", u"In Barcelona war es schön.");
+    assertXPath(pLayout, "/root/page[3]/body/txt[5]/LineBreak", "Line", u"Mein Urlaub war schön . ");
+    assertXPath(pLayout, "/root/page[5]/body/section", 1);
+    assertXPath(pLayout, "/root/page[5]/body/section[1]/txt[1]/LineBreak", "Line", "In Paris war es erlebnisreich.");
+    assertXPath(pLayout, "/root/page[5]/body/txt[5]/LineBreak", "Line", u"Mein Urlaub war erlebnisreich . ");
+    assertXPath(pLayout, "/root/page[7]/body/section", 3);
+    assertXPath(pLayout, "/root/page[7]/body/section[1]/txt[1]/LineBreak", "Line", u"In den Bergen war es anstrengend.");
+    assertXPath(pLayout, "/root/page[7]/body/section[2]/txt[1]/LineBreak", "Line", u"In Barcelona war es schön.");
+    assertXPath(pLayout, "/root/page[7]/body/section[3]/txt[1]/LineBreak", "Line", u"In Paris war es erlebnisreich.");
+    assertXPath(pLayout, "/root/page[7]/body/txt[5]/LineBreak", "Line", u"Mein Urlaub war anstrengend schön erlebnisreich . ");
+}
+
 DECLARE_SHELL_MAILMERGE_TEST_SELECTION(testTdf95292, "linked-labels.odt", "10-testing-addresses.ods", "testing-addresses", 5)
 {
     // A document with two labels merged with 5 datasets should result in three pages

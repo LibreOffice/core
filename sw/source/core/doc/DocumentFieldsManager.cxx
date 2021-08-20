@@ -1039,6 +1039,17 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
             }
             continue;
         }
+        ::sw::mark::IBookmark *const pBookmark(
+                const_cast<::sw::mark::IBookmark *>(it->GetBookmark()));
+        if (pBookmark)
+        {
+            SwSbxValue const aValue(aCalc.Calculate(pBookmark->GetHideCondition()));
+            if (!aValue.IsVoidValue())
+            {
+                pBookmark->Hide(aValue.GetBool());
+            }
+            continue;
+        }
 
         SwTextField* pTextField = const_cast<SwTextField*>(it->GetTextField());
         if( !pTextField )

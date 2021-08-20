@@ -2619,28 +2619,8 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTextNode& rNode,
             }
         }
 
-        bool bHide = false;
+        // condition is evaluated in DocumentFieldsManager::UpdateExpFields()
         if (pBookmark && pBookmark->IsHidden())
-        {
-            // bookmark is marked as hidden
-            bHide = true;
-
-            // bookmark is marked as hidden with conditions
-            if (!pBookmark->GetHideCondition().isEmpty())
-            {
-                SwDoc& rDoc = const_cast<SwDoc&>(rNode.GetDoc());
-                SwCalc aCalc(rDoc);
-                rDoc.getIDocumentFieldsAccess().FieldsToCalc(aCalc, rNode.GetIndex(), SAL_MAX_INT32);
-
-                SwSbxValue aValue = aCalc.Calculate(pBookmark->GetHideCondition());
-                if(!aValue.IsVoidValue())
-                {
-                    bHide = aValue.GetBool();
-                }
-            }
-        }
-
-        if (bHide)
         {
             // intersect bookmark range with textnode range and add the intersection to rHiddenMulti
 
