@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7b96c91_d0961bd1",
+        "filename": "starmath/source/document.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-08-20T11:14:36Z",
+      "side": 1,
+      "message": "Isn\u0027t that changing the default export? I doubt old LO could handle the MathML import correct? And I guess it will convert on any Save op?\n\nAll this doesn\u0027t look like a good idea for LO interop. Am I missing something here?",
+      "revId": "ad26a85d2ef77b8074a599ccea3108128e12f489",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
