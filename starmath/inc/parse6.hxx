@@ -25,7 +25,7 @@
 
 #include "parsebase.hxx"
 
-class SmParser5 : public AbstractSmParser
+class SmParser6 : public AbstractSmParser
 {
     OUString m_aBufferString;
     SmToken m_aCurToken;
@@ -46,57 +46,12 @@ class SmParser5 : public AbstractSmParser
     // pointer to System locale's CharClass, which is alive inside SM_MOD()
     const CharClass* m_pSysCC;
 
-    SmParser5(const SmParser5&) = delete;
-    SmParser5& operator=(const SmParser5&) = delete;
-
-    // Moves between tokens inside starmath code.
-    void NextToken();
-    void NextTokenColor(SmTokenType dvipload);
-    void NextTokenFontSize();
-    sal_Int32 GetTokenIndex() const { return m_nTokenIndex; }
-    void Replace(sal_Int32 nPos, sal_Int32 nLen, const OUString& rText);
-
-    inline bool TokenInGroup(TG nGroup);
-
-    // grammar
-    std::unique_ptr<SmTableNode> DoTable();
-    std::unique_ptr<SmNode> DoLine();
-    std::unique_ptr<SmNode> DoExpression(bool bUseExtraSpaces = true);
-    std::unique_ptr<SmNode> DoRelation();
-    std::unique_ptr<SmNode> DoSum();
-    std::unique_ptr<SmNode> DoProduct();
-    std::unique_ptr<SmNode> DoSubSup(TG nActiveGroup, std::unique_ptr<SmNode> xGivenNode);
-    std::unique_ptr<SmNode> DoSubSupEvaluate(std::unique_ptr<SmNode> xGivenNode);
-    std::unique_ptr<SmNode> DoOpSubSup();
-    std::unique_ptr<SmNode> DoPower();
-    std::unique_ptr<SmBlankNode> DoBlank();
-    std::unique_ptr<SmNode> DoTerm(bool bGroupNumberIdent);
-    std::unique_ptr<SmNode> DoEscape();
-    std::unique_ptr<SmOperNode> DoOperator();
-    std::unique_ptr<SmNode> DoOper();
-    std::unique_ptr<SmStructureNode> DoUnOper();
-    std::unique_ptr<SmNode> DoAlign(bool bUseExtraSpaces = true);
-    std::unique_ptr<SmStructureNode> DoFontAttribute();
-    std::unique_ptr<SmStructureNode> DoAttribute();
-    std::unique_ptr<SmStructureNode> DoFont();
-    std::unique_ptr<SmStructureNode> DoFontSize();
-    std::unique_ptr<SmStructureNode> DoColor();
-    std::unique_ptr<SmStructureNode> DoBrace();
-    std::unique_ptr<SmBracebodyNode> DoBracebody(bool bIsLeftRight);
-    std::unique_ptr<SmNode> DoEvaluate();
-    std::unique_ptr<SmTextNode> DoFunction();
-    std::unique_ptr<SmTableNode> DoBinom();
-    std::unique_ptr<SmBinVerNode> DoFrac();
-    std::unique_ptr<SmStructureNode> DoStack();
-    std::unique_ptr<SmStructureNode> DoMatrix();
-    std::unique_ptr<SmSpecialNode> DoSpecial();
-    std::unique_ptr<SmGlyphSpecialNode> DoGlyphSpecial();
-    std::unique_ptr<SmExpressionNode> DoError(SmParseError Error);
-    // end of grammar
+    SmParser6(const SmParser6&) = delete;
+    SmParser6& operator=(const SmParser6&) = delete;
 
 public:
-    SmParser5();
-    virtual ~SmParser5();
+    SmParser6();
+    virtual ~SmParser6();
 
     /** Parse rBuffer to formula tree */
     std::unique_ptr<SmTableNode> Parse(const OUString& rBuffer);
@@ -104,9 +59,9 @@ public:
     std::unique_ptr<SmNode> ParseExpression(const OUString& rBuffer);
 
     /** Parse rBuffer to formula tree */
-    SmMlElement* ParseML(const OUString&) { return nullptr; }
+    SmMlElement* ParseML(const OUString& rBuffer);
     /** Parse rBuffer to formula subtree that constitutes an expression */
-    SmMlElement* ParseExpressionML(const OUString&) { return nullptr; }
+    SmMlElement* ParseExpressionML(const OUString& rBuffer);
 
     const OUString& GetText() const { return m_aBufferString; };
 
@@ -120,7 +75,5 @@ public:
     const SmErrorDesc* GetError() const;
     const std::set<OUString>& GetUsedSymbols() const { return m_aUsedSymbols; }
 };
-
-inline bool SmParser5::TokenInGroup(TG nGroup) { return bool(m_aCurToken.nGroup & nGroup); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

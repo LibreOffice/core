@@ -27,6 +27,7 @@
 #include <unotools/resmgr.hxx>
 
 #include "node.hxx"
+#include "mathml/element.hxx"
 
 #define DEPTH_LIMIT 1024
 
@@ -99,6 +100,11 @@ public:
     virtual std::unique_ptr<SmTableNode> Parse(const OUString& rBuffer) = 0;
     /** Parse rBuffer to formula subtree that constitutes an expression */
     virtual std::unique_ptr<SmNode> ParseExpression(const OUString& rBuffer) = 0;
+
+    /** Parse rBuffer to formula tree */
+    virtual SmMlElement* ParseML(const OUString& rBuffer) = 0;
+    /** Parse rBuffer to formula subtree that constitutes an expression */
+    virtual SmMlElement* ParseExpressionML(const OUString& rBuffer) = 0;
 
     virtual const OUString& GetText() const = 0;
 
