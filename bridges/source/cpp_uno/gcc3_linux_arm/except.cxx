@@ -27,7 +27,7 @@
 #include <sal/log.hxx>
 
 #include <com/sun/star/uno/genfunc.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
+#include "com/sun/star/uno/RuntimeException.hpp"
 #include <typelib/typedescription.hxx>
 #include <uno/any2.h>
 #include <unordered_map>
@@ -63,7 +63,7 @@ namespace CPPU_CURRENT_NAMESPACE
         while ('E' != *p)
         {
             // read chars count
-            long n = *p++ - '0';
+            long n = (*p++ - '0');
             while ('0' <= *p && '9' >= *p)
             {
                 n *= 10;
@@ -85,7 +85,6 @@ namespace CPPU_CURRENT_NAMESPACE
 #endif
     }
 
-namespace {
     class RTTI
     {
         typedef std::unordered_map< OUString, type_info * > t_rtti_map;
@@ -104,11 +103,10 @@ namespace {
 
         type_info * getRTTI(typelib_CompoundTypeDescription *);
     };
-}
 
     RTTI::RTTI()
 #ifndef ANDROID
-        : m_hApp( dlopen( nullptr, RTLD_LAZY ) )
+        : m_hApp( dlopen( 0, RTLD_LAZY ) )
 #endif
     {
     }
@@ -125,7 +123,7 @@ namespace {
     {
         type_info * rtti;
 
-        OUString const & unoName = *reinterpret_cast<OUString const *>(&pTypeDescr->aBase.pTypeName);
+        OUString const & unoName = *(OUString const *)&pTypeDescr->aBase.pTypeName;
 
         MutexGuard guard( m_mutex );
         t_rtti_map::const_iterator iFind( m_rttis.find( unoName ) );
@@ -147,7 +145,7 @@ namespace {
 
             OString symName( buf.makeStringAndClear() );
 #ifndef ANDROID
-            rtti = static_cast<type_info *>(dlsym( m_hApp, symName.getStr() ));
+            rtti = (type_info *)dlsym( m_hApp, symName.getStr() );
 #else
             rtti = (type_info *)dlsym( RTLD_DEFAULT, symName.getStr() );
 #endif
@@ -186,9 +184,10 @@ namespace {
                     if (pTypeDescr->pBaseTypeDescription)
                     {
                         // ensure availability of base
-                        type_info * base_rtti = getRTTI( pTypeDescr->pBaseTypeDescription );
+                        type_info * base_rtti = getRTTI(
+                            (typelib_CompoundTypeDescription *)pTypeDescr->pBaseTypeDescription );
                         rtti = new __si_class_type_info(
-                            strdup( rttiName ), static_cast<__class_type_info *>(base_rtti) );
+                            strdup( rttiName ), (__class_type_info *)base_rtti );
                     }
                     else
                     {
@@ -218,8 +217,8 @@ namespace {
 
     static void deleteException( void * pExc )
     {
-        __cxa_exception const * header = static_cast<__cxa_exception const *>(pExc) - 1;
-        typelib_TypeDescription * pTD = nullptr;
+        __cxa_exception const * header = ((__cxa_exception const *)pExc - 1);
+        typelib_TypeDescription * pTD = 0;
         OUString unoName( toUNOname( header->exceptionType->name() ) );
         ::typelib_typedescription_getByName( &pTD, unoName.pData );
         assert(pTD && "### unknown exception type! leaving out destruction => leaking!!!");
@@ -244,13 +243,13 @@ namespace {
 
         {
             // construct cpp exception object
-            typelib_TypeDescription * pTypeDescr = nullptr;
+            typelib_TypeDescription * pTypeDescr = 0;
             TYPELIB_DANGER_GET( &pTypeDescr, pUnoExc->pType );
             assert(pTypeDescr);
             if (! pTypeDescr)
             {
                 throw RuntimeException(
-                    "cannot get typedescription for type " +
+                    OUString("cannot get typedescription for type ") +
                     OUString::unacquired( &pUnoExc->pType->pTypeName ) );
             }
 
@@ -258,18 +257,18 @@ namespace {
             ::uno_copyAndConvertData( pCppExc, pUnoExc->pData, pTypeDescr, pUno2Cpp );
 
             // destruct uno exception
-            ::uno_any_destruct( pUnoExc, nullptr );
-            // avoiding locked counts
-            static RTTI rtti_data;
-            rtti = rtti_data.getRTTI(reinterpret_cast<typelib_CompoundTypeDescription*>(pTypeDescr));
-            TYPELIB_DANGER_RELEASE( pTypeDescr );
-            assert(rtti && "### no rtti for throwing exception!");
-            if (! rtti)
-            {
-                throw RuntimeException(
-                    "no rtti for type " +
-                    OUString::unacquired( &pUnoExc->pType->pTypeName ) );
-            }
+           ::uno_any_destruct( pUnoExc, 0 );
+           // avoiding locked counts
+           static RTTI rtti_data;
+           rtti = (type_info*)rtti_data.getRTTI((typelib_CompoundTypeDescription*)pTypeDescr);
+           TYPELIB_DANGER_RELEASE( pTypeDescr );
+           assert(rtti && "### no rtti for throwing exception!");
+           if (! rtti)
+           {
+               throw RuntimeException(
+                   OUString("no rtti for type ") +
+                   OUString::unacquired( &pUnoExc->pType->pTypeName ) );
+           }
         }
 
         __cxa_throw( pCppExc, rtti, deleteException );
@@ -278,7 +277,7 @@ namespace {
 #ifdef __ARM_EABI__
     static void* getAdjustedPtr(__cxa_exception* header)
     {
-        return reinterpret_cast<void*>(header->unwindHeader.barrier_cache.bitpattern[0]);
+        return (void*)header->unwindHeader.barrier_cache.bitpattern[0];
     }
 #else
     static void* getAdjustedPtr(__cxa_exception* header)
@@ -308,7 +307,7 @@ namespace {
         fprintf( stderr, "> c++ exception occurred: %s\n", cstr_unoName.getStr() );
 #endif
         typelib_typedescription_getByName( &pExcTypeDescr, unoName.pData );
-        if (nullptr == pExcTypeDescr)
+        if (0 == pExcTypeDescr)
         {
             RuntimeException aRE( "exception type not found: " + unoName );
             Type const & rType = cppu::UnoType<decltype(aRE)>::get();
