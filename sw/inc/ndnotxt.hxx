@@ -19,11 +19,11 @@
 #ifndef INCLUDED_SW_INC_NDNOTXT_HXX
 #define INCLUDED_SW_INC_NDNOTXT_HXX
 
-#include <memory>
+#include <optional>
+#include <tools/poly.hxx>
 #include "node.hxx"
 
 class Size;
-namespace tools { class PolyPolygon; }
 
 // SwNoTextNode
 
@@ -32,12 +32,12 @@ class SW_DLLPUBLIC SwNoTextNode : public SwContentNode
     friend class SwNodes;
     friend class SwNoTextFrame;
 
-    std::unique_ptr<tools::PolyPolygon> m_pContour;
+    mutable std::optional<tools::PolyPolygon> m_pContour;
     bool m_bAutomaticContour : 1; // automatic contour polygon, not manipulated
-    bool m_bContourMapModeValid : 1; // contour map mode is not the graphics's
+    mutable bool m_bContourMapModeValid : 1; // contour map mode is not the graphics's
                                    // preferred map mode, but either
                                       // MM100 or pixel
-    bool m_bPixelContour : 1;     // contour map mode is invalid and pixel.
+    mutable bool m_bPixelContour : 1;     // contour map mode is invalid and pixel.
 
     // Creates for all derivations an AttrSet with ranges for frame- and
     // graphics-attributes (only called by SwContentNode).
@@ -70,7 +70,7 @@ public:
     void               SetContour( const tools::PolyPolygon *pPoly,
                                    bool bAutomatic = false );
     const tools::PolyPolygon *HasContour() const;
-    bool               HasContour_() const { return m_pContour!=nullptr; };
+    bool               HasContour_() const { return bool(m_pContour); };
     void               GetContour( tools::PolyPolygon &rPoly ) const;
     void               CreateContour();
 

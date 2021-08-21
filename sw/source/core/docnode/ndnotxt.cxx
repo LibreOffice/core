@@ -85,7 +85,7 @@ bool SwNoTextNode::SavePersistentData()
 void SwNoTextNode::SetContour( const tools::PolyPolygon *pPoly, bool bAutomatic )
 {
     if ( pPoly )
-        m_pContour.reset( new tools::PolyPolygon( *pPoly ) );
+        m_pContour = *pPoly;
     else
         m_pContour.reset();
     m_bAutomaticContour = bAutomatic;
@@ -96,7 +96,7 @@ void SwNoTextNode::SetContour( const tools::PolyPolygon *pPoly, bool bAutomatic 
 void SwNoTextNode::CreateContour()
 {
     OSL_ENSURE( !m_pContour, "Contour available." );
-    m_pContour.reset( new tools::PolyPolygon(SvxContourDlg::CreateAutoContour(GetGraphic())) );
+    m_pContour = SvxContourDlg::CreateAutoContour(GetGraphic());
     m_bAutomaticContour = true;
     m_bContourMapModeValid = true;
     m_bPixelContour = false;
@@ -154,11 +154,11 @@ const tools::PolyPolygon *SwNoTextNode::HasContour() const
                 }
             }
         }
-        const_cast<SwNoTextNode *>(this)->m_bContourMapModeValid = true;
-        const_cast<SwNoTextNode *>(this)->m_bPixelContour = false;
+        m_bContourMapModeValid = true;
+        m_bPixelContour = false;
     }
 
-    return m_pContour.get();
+    return m_pContour ? &*m_pContour : nullptr;
 }
 
 void SwNoTextNode::GetContour( tools::PolyPolygon &rPoly ) const
@@ -170,7 +170,7 @@ void SwNoTextNode::GetContour( tools::PolyPolygon &rPoly ) const
 void SwNoTextNode::SetContourAPI( const tools::PolyPolygon *pPoly )
 {
     if ( pPoly )
-        m_pContour.reset( new tools::PolyPolygon( *pPoly ) );
+        m_pContour = *pPoly;
     else
         m_pContour.reset();
     m_bContourMapModeValid = false;
