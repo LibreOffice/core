@@ -20,9 +20,11 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 #include <svx/svdotext.hxx>
 #include <svx/svdglue.hxx>
 #include <svx/svxdllapi.h>
+#include <svx/xpoly.hxx>
 
 
 class SdrDragMethod;
@@ -112,7 +114,7 @@ class SdrEdgeObjGeoData final : public SdrTextObjGeoData
 public:
     SdrObjConnection            aCon1;  // connection status of the beginning of the line
     SdrObjConnection            aCon2;  // connection status of the end of the line
-    std::unique_ptr<XPolygon>   pEdgeTrack;
+    std::optional<XPolygon>     pEdgeTrack;
     bool                        bEdgeTrackDirty; // true -> connector track needs to be recalculated
     bool                        bEdgeTrackUserDefined;
     SdrEdgeInfoRec              aEdgeInfo;
@@ -139,7 +141,7 @@ private:
     SdrObjConnection            aCon1;  // Connection status of the beginning of the line
     SdrObjConnection            aCon2;  // Connection status of the end of the line
 
-    std::unique_ptr<XPolygon>   pEdgeTrack;
+    std::optional<XPolygon>     pEdgeTrack;
     sal_uInt16                  nNotifyingCount; // Locking
     SdrEdgeInfoRec              aEdgeInfo;
 

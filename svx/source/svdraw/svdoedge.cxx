@@ -166,7 +166,7 @@ SdrEdgeObj::SdrEdgeObj(SdrModel& rSdrModel)
 {
     m_bClosedObj=false;
     m_bIsEdge=true;
-    pEdgeTrack.reset(new XPolygon);
+    pEdgeTrack = XPolygon();
 }
 
 SdrEdgeObj::SdrEdgeObj(SdrModel& rSdrModel, SdrEdgeObj const & rSource)
@@ -181,7 +181,7 @@ SdrEdgeObj::SdrEdgeObj(SdrModel& rSdrModel, SdrEdgeObj const & rSource)
 {
     m_bClosedObj = false;
     m_bIsEdge = true;
-    pEdgeTrack.reset(new XPolygon(*rSource.pEdgeTrack));
+    pEdgeTrack = rSource.pEdgeTrack;
     bEdgeTrackDirty=rSource.bEdgeTrackDirty;
     aCon1          =rSource.aCon1;
     aCon2          =rSource.aCon2;
@@ -2469,7 +2469,7 @@ void SdrEdgeObj::NbcSetPoint(const Point& rPnt, sal_uInt32 i)
 }
 
 SdrEdgeObjGeoData::SdrEdgeObjGeoData()
-    : pEdgeTrack(new XPolygon)
+    : pEdgeTrack(std::in_place)
     , bEdgeTrackDirty(false)
     , bEdgeTrackUserDefined(false)
 {
