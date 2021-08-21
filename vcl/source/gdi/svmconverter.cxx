@@ -303,7 +303,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     }
 
     LineInfo            aLineInfo( LineStyle::NONE, 0 );
-    std::stack<std::unique_ptr<LineInfo>> aLIStack;
+    std::stack<LineInfo, std::vector<LineInfo>> aLIStack;
     ScopedVclPtrInstance< VirtualDevice > aFontVDev;
     rtl_TextEncoding    eActualCharSet = osl_getThreadTextEncoding();
     bool                bFatLine = false;
@@ -1003,7 +1003,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
             case GDI_PUSH_ACTION:
             {
-                aLIStack.push(std::make_unique<LineInfo>(aLineInfo));
+                aLIStack.push(aLineInfo);
                 rMtf.AddAction( new MetaPushAction( PushFlags::ALL ) );
 
                 // #106172# Track font relevant data in shadow VDev
@@ -1014,7 +1014,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             case GDI_POP_ACTION:
             {
 
-                std::unique_ptr<LineInfo> xLineInfo;
+                std::optional<LineInfo> xLineInfo;
                 if (!aLIStack.empty())
                 {
                     xLineInfo = std::move(aLIStack.top());
