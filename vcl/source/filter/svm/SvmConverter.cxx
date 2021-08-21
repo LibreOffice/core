@@ -17,25 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <algorithm>
-#include <string.h>
-
-#include <o3tl/safeint.hxx>
+#include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
-#include <vcl/dibtools.hxx>
-#include <vcl/filter/SvmReader.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/lineinfo.hxx>
-#include <vcl/metaact.hxx>
-#include <sal/log.hxx>
-#include <osl/diagnose.h>
+#include <o3tl/safeint.hxx>
 
 #include <vcl/TypeSerializer.hxx>
-#include <svmconverter.hxx>
+#include <vcl/dibtools.hxx>
+#include <vcl/filter/SvmReader.hxx>
+#include <vcl/lineinfo.hxx>
+#include <vcl/metaact.hxx>
+#include <vcl/virdev.hxx>
+
+#include "SvmConverter.hxx"
+
+#include <algorithm>
 #include <memory>
 #include <stack>
+#include <string.h>
 
 // Inlines
 static void ImplReadRect( SvStream& rIStm, tools::Rectangle& rRect )

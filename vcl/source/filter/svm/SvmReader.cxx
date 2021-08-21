@@ -17,17 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/filter/SvmReader.hxx>
 #include <sal/log.hxx>
 #include <osl/thread.h>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
-#include <vcl/dibtools.hxx>
+
+#include <vcl/filter/SvmReader.hxx>
 #include <vcl/TypeSerializer.hxx>
+#include <vcl/dibtools.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 
-#include <svmconverter.hxx>
+#include "SvmConverter.hxx"
 
 namespace
 {

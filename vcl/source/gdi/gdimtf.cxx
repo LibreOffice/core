@@ -38,7 +38,6 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/mtfxmldump.hxx>
 
-#include <svmconverter.hxx>
 #include <vcl/TypeSerializer.hxx>
 
 #include <com/sun/star/beans/XFastPropertySet.hpp>
