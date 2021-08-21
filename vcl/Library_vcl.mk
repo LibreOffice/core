@@ -253,7 +253,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/treelist/uiobject \
     vcl/source/gdi/configsettings \
     vcl/source/gdi/cvtgrf \
-    vcl/source/gdi/svmconverter \
     vcl/source/gdi/embeddedfontshelper \
     vcl/source/gdi/FileDefinitionWidgetDraw \
     vcl/source/gdi/WidgetDefinitionReader \
@@ -457,6 +456,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/filter/jpeg/JpegReader \
     vcl/source/filter/jpeg/JpegWriter \
     vcl/source/filter/jpeg/JpegTransform \
+    vcl/source/filter/svm/SvmConverter \
     vcl/source/filter/svm/SvmReader \
     vcl/source/filter/svm/SvmWriter \
     vcl/source/filter/wmf/emfwr \
