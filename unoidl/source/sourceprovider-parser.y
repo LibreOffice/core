@@ -10,7 +10,7 @@
 /*TODO: check Exception, RuntimeException, XInterface defns */
 
 %locations
-%pure-parser
+%define api.pure
 
 %{
 
