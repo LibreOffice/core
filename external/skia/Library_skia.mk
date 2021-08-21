@@ -62,7 +62,7 @@ $(eval $(call gb_Library_use_system_win32_libs,skia,\
 else ifeq ($(OS),MACOSX)
 
 $(eval $(call gb_Library_use_system_darwin_frameworks,skia,\
-    Carbon \
+    Cocoa \
 ))
 
 ifneq ($(SKIA_DISABLE_VMA_USE_STL_SHARED_MUTEX),)
@@ -905,9 +905,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/utils/mac/SkCreateCGImageRef \
 ))
 
-$(eval $(call gb_Library_add_generated_objcxxobjects,skia,\
-    UnpackedTarball/skia/tools/sk_app/mac/RasterWindowContext_mac \
-))
+# Not used, uses OpenGL - UnpackedTarball/skia/tools/sk_app/mac/RasterWindowContext_mac
 
 #    UnpackedTarball/skia/tools/sk_app/mac/VulkanWindowContext_mac \
 #    UnpackedTarball/skia/tools/sk_app/mac/MetalWindowContext_mac \
