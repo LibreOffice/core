@@ -77,7 +77,7 @@ void SvgDrawVisitor::visit(svgio::svgreader::SvgNode const& rNode)
                     aGradientInfo->x2 = pFillGradient->getX2().getNumber();
                     aGradientInfo->y2 = pFillGradient->getY2().getNumber();
 
-                    const basegfx::B2DHomMatrix* pGradientTransform
+                    std::optional<basegfx::B2DHomMatrix> pGradientTransform
                         = pFillGradient->getGradientTransform();
                     if (pGradientTransform)
                     {
