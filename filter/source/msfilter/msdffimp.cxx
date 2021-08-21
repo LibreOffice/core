@@ -5525,7 +5525,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             bool bOk = nElemSizeVert && (rSt.remainingSize() / nElemSizeVert >= nNumElemVert);
             if (bOk)
             {
-                pTextImpRec->pWrapPolygon.reset(new tools::Polygon(nNumElemVert));
+                pTextImpRec->pWrapPolygon = tools::Polygon(nNumElemVert);
                 for (sal_uInt16 i = 0; i < nNumElemVert; ++i)
                 {
                     sal_Int32 nX(0), nY(0);
@@ -7501,7 +7501,7 @@ SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
         pClientDataBuffer = nullptr;
 
     if (rCopy.pWrapPolygon)
-        pWrapPolygon.reset( new tools::Polygon(*rCopy.pWrapPolygon) );
+        pWrapPolygon = rCopy.pWrapPolygon;
 }
 
 SvxMSDffImportRec::~SvxMSDffImportRec()
