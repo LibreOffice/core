@@ -20,13 +20,13 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 #include <svx/svdotext.hxx>
+#include <svx/xpoly.hxx>
 #include <svx/svxdllapi.h>
 
 
 // Forward declaration
-class XPolygon;
-
 namespace sdr::properties {
     class RectangleProperties;
 }
@@ -46,7 +46,7 @@ protected:
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
     virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
 
-    std::unique_ptr<XPolygon> mpXPoly;
+    std::optional<XPolygon> mpXPoly;
 
 protected:
     XPolygon ImpCalcXPoly(const tools::Rectangle& rRect1, tools::Long nRad1) const;
