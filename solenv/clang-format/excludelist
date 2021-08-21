@@ -14525,7 +14525,6 @@ vcl/inc/spin.hxx
 vcl/inc/strhelper.hxx
 vcl/inc/svdata.hxx
 vcl/inc/svimpbox.hxx
-vcl/inc/svmconverter.hxx
 vcl/inc/test/outputdevice.hxx
 vcl/inc/textlayout.hxx
 vcl/inc/textlineinfo.hxx
@@ -14876,6 +14875,8 @@ vcl/source/edit/textview.cxx
 vcl/source/edit/txtattr.cxx
 vcl/source/edit/vclmedit.cxx
 vcl/source/edit/xtextedt.cxx
+vcl/source/filter/svm/SvmConverter.cxx
+vcl/source/filter/svm/SvmConverter.hxx
 vcl/source/filter/FilterConfigCache.cxx
 vcl/source/filter/FilterConfigCache.hxx
 vcl/source/filter/FilterConfigItem.cxx
@@ -14997,7 +14998,6 @@ vcl/source/gdi/salgdilayout.cxx
 vcl/source/gdi/sallayout.cxx
 vcl/source/gdi/salmisc.cxx
 vcl/source/gdi/scrptrun.cxx
-vcl/source/gdi/svmconverter.cxx
 vcl/source/gdi/textlayout.cxx
 vcl/source/gdi/vectorgraphicdata.cxx
 vcl/source/gdi/virdev.cxx
