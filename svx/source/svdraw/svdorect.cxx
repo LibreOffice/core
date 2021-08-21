@@ -61,10 +61,7 @@ SdrRectObj::SdrRectObj(SdrModel& rSdrModel, SdrRectObj const & rSource)
 :   SdrTextObj(rSdrModel, rSource)
 {
     m_bClosedObj=true;
-    if ( rSource.mpXPoly )
-        mpXPoly.reset( new XPolygon( *rSource.mpXPoly ) );
-    else
-        mpXPoly.reset();
+    mpXPoly = rSource.mpXPoly;
 }
 
 SdrRectObj::SdrRectObj(
@@ -133,7 +130,7 @@ XPolygon SdrRectObj::ImpCalcXPoly(const tools::Rectangle& rRect1, tools::Long nR
 
 void SdrRectObj::RecalcXPoly()
 {
-    mpXPoly.reset( new XPolygon(ImpCalcXPoly(maRect,GetEckenradius())) );
+    mpXPoly = ImpCalcXPoly(maRect,GetEckenradius());
 }
 
 const XPolygon& SdrRectObj::GetXPoly() const
