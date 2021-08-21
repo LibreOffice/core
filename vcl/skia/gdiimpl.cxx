@@ -361,29 +361,9 @@ void SkiaSalGraphicsImpl::createOffscreenSurface()
     // HACK: See isOffscreen().
     int width = std::max(1, GetWidth());
     int height = std::max(1, GetHeight());
-    switch (renderMethodToUse())
-    {
-        case RenderVulkan:
-        {
-            if (getSharedGrDirectContext())
-            {
-                mSurface = createSkSurface(width, height);
-                if (mSurface)
-                {
-                    mIsGPU = mSurface->getCanvas()->recordingContext() != nullptr;
-                    return;
-                }
-            }
-            break;
-        }
-        default:
-            break;
-    }
-    // Create raster surface as a fallback.
     mSurface = createSkSurface(width, height);
     assert(mSurface);
-    assert(!mSurface->getCanvas()->recordingContext()); // is not GPU-backed
-    mIsGPU = false;
+    mIsGPU = mSurface->getCanvas()->recordingContext() != nullptr;
 }
 
 void SkiaSalGraphicsImpl::destroySurface()
