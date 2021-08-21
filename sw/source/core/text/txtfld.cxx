@@ -656,7 +656,7 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
 
             if( SVX_NUM_CHAR_SPECIAL == rNumFormat.GetNumberingType() )
             {
-                const vcl::Font *pFormatFnt = rNumFormat.GetBulletFont();
+                const std::optional<vcl::Font> pFormatFnt = rNumFormat.GetBulletFont();
 
                 // Build a new bullet font basing on the current paragraph font:
                 std::unique_ptr<SwFont> pNumFnt(new SwFont( &rInf.GetCharAttr(), pIDSA ));

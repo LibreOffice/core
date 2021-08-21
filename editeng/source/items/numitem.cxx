@@ -233,10 +233,10 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
     rStream.ReadUInt16( hasBulletFont );
     if ( hasBulletFont )
     {
-        pBulletFont.reset( new vcl::Font() );
+        pBulletFont.emplace();
         ReadFont( rStream, *pBulletFont );
     }
-    else pBulletFont = nullptr;
+    else pBulletFont.reset();
 
     tools::GenericTypeSerializer aSerializer(rStream);
     aSerializer.readSize(aGraphicSize);
@@ -364,7 +364,7 @@ SvxNumberFormat& SvxNumberFormat::operator=( const SvxNumberFormat& rFormat )
     }
     pBulletFont.reset();
     if(rFormat.pBulletFont)
-        pBulletFont.reset( new vcl::Font(*rFormat.pBulletFont) );
+        pBulletFont = *rFormat.pBulletFont;
     return *this;
 }
 
@@ -454,7 +454,10 @@ sal_Int16    SvxNumberFormat::GetVertOrient() const
 
 void SvxNumberFormat::SetBulletFont(const vcl::Font* pFont)
 {
-    pBulletFont.reset( pFont ? new vcl::Font(*pFont): nullptr );
+    if (pFont)
+        pBulletFont = *pFont;
+    else
+        pBulletFont.reset();
 }
 
 void SvxNumberFormat::SetPositionAndSpaceMode( SvxNumPositionAndSpaceMode ePositionAndSpaceMode )

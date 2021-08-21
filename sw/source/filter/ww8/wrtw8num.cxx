@@ -467,7 +467,7 @@ void MSWordExportBase::NumberingLevel(
     OUString sNumStr;
     OUString sFontName;
     bool bWriteBullet = false;
-    const vcl::Font* pBulletFont=nullptr;
+    std::optional<vcl::Font> pBulletFont;
     rtl_TextEncoding eChrSet=0;
     FontFamily eFamily=FAMILY_DECORATIVE;
     if (SVX_NUM_CHAR_SPECIAL == rFormat.GetNumberingType() ||
@@ -519,7 +519,7 @@ void MSWordExportBase::NumberingLevel(
         pBulletFont = rFormat.GetBulletFont();
         if (!pBulletFont)
         {
-            pBulletFont = &numfunc::GetDefBulletFont();
+            pBulletFont = numfunc::GetDefBulletFont();
         }
 
         eChrSet = pBulletFont->GetCharSet();

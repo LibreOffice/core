@@ -1930,7 +1930,7 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl, weld::Button&, void)
     SvxCharacterMap aMap(GetFrameWeld(), nullptr, nullptr);
 
     sal_uInt16 nMask = 1;
-    const vcl::Font* pFmtFont = nullptr;
+    std::optional<vcl::Font> pFmtFont;
     bool bSameBullet = true;
     sal_UCS4 cBullet = 0;
     bool bFirst = true;

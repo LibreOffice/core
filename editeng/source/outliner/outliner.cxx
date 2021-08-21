@@ -829,7 +829,7 @@ vcl::Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
     }
 
     vcl::Font aBulletFont;
-    const vcl::Font *pSourceFont = nullptr;
+    std::optional<vcl::Font> pSourceFont;
     if ( pFmt->GetNumberingType() == SVX_NUM_CHAR_SPECIAL )
     {
         pSourceFont = pFmt->GetBulletFont();

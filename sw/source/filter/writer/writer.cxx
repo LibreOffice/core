@@ -350,7 +350,6 @@ void Writer::PutNumFormatFontsInAttrPool()
     SfxItemPool& rPool = m_pDoc->GetAttrPool();
     const SwNumRuleTable& rListTable = m_pDoc->GetNumRuleTable();
     const SwNumFormat* pFormat;
-    const vcl::Font* pFont;
     const vcl::Font* pDefFont = &numfunc::GetDefBulletFont();
     bool bCheck = false;
 
@@ -364,9 +363,9 @@ void Writer::PutNumFormatFontsInAttrPool()
                 if( SVX_NUM_CHAR_SPECIAL == (pFormat = &pRule->Get( nLvl ))->GetNumberingType() ||
                     SVX_NUM_BITMAP == pFormat->GetNumberingType() )
                 {
-                    pFont = pFormat->GetBulletFont();
-                    if( nullptr == pFont )
-                        pFont = pDefFont;
+                    std::optional<vcl::Font> pFont = pFormat->GetBulletFont();
+                    if( !pFont )
+                        pFont = *pDefFont;
 
                     if( bCheck )
                     {
