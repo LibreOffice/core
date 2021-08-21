@@ -60,7 +60,7 @@ namespace svgio::svgreader
 
                     if(!aMatrix.isIdentity())
                     {
-                        setTransform(&aMatrix);
+                        setTransform(aMatrix);
                     }
                     break;
                 }

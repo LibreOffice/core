@@ -169,7 +169,7 @@ namespace svgio::svgreader
 
                     if(!aMatrix.isIdentity())
                     {
-                        setPatternTransform(&aMatrix);
+                        setPatternTransform(aMatrix);
                     }
                     break;
                 }
@@ -450,11 +450,11 @@ namespace svgio::svgreader
             return nullptr;
         }
 
-        const basegfx::B2DHomMatrix* SvgPatternNode::getPatternTransform() const
+        std::optional<basegfx::B2DHomMatrix> SvgPatternNode::getPatternTransform() const
         {
             if(mpaPatternTransform)
             {
-                return mpaPatternTransform.get();
+                return mpaPatternTransform;
             }
 
             const_cast< SvgPatternNode* >(this)->tryToFindLink();
@@ -467,7 +467,7 @@ namespace svgio::svgreader
                 return ret;
             }
 
-            return nullptr;
+            return std::nullopt;
         }
 
 } // end of namespace svgio::svgreader

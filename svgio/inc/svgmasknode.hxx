@@ -37,7 +37,7 @@ namespace svgio::svgreader
             SvgNumber                   maY;
             SvgNumber                   maWidth;
             SvgNumber                   maHeight;
-            std::unique_ptr<basegfx::B2DHomMatrix>
+            std::optional<basegfx::B2DHomMatrix>
                                         mpaTransform;
             SvgUnits                    maMaskUnits;
             SvgUnits                    maMaskContentUnits;
@@ -55,7 +55,7 @@ namespace svgio::svgreader
             /// apply contained clipPath to given geometry #i124852# transform may be needed
             void apply(
                 drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-                const basegfx::B2DHomMatrix* pTransform) const;
+                const std::optional<basegfx::B2DHomMatrix>& pTransform) const;
 
             /// x content, set if found in current context
             const SvgNumber& getX() const { return maX; }
@@ -70,8 +70,8 @@ namespace svgio::svgreader
             const SvgNumber& getHeight() const { return maHeight; }
 
             /// transform content
-            const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform.get(); }
-            void setTransform(const basegfx::B2DHomMatrix* pMatrix) { mpaTransform.reset(); if(pMatrix) mpaTransform.reset( new basegfx::B2DHomMatrix(*pMatrix) ); }
+            const std::optional<basegfx::B2DHomMatrix>& getTransform() const { return mpaTransform; }
+            void setTransform(const std::optional<basegfx::B2DHomMatrix>& pMatrix) { mpaTransform = pMatrix; }
 
             /// MaskUnits content
             void setMaskUnits(const SvgUnits aMaskUnits) { maMaskUnits = aMaskUnits; }

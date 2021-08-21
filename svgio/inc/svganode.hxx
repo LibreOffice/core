@@ -33,7 +33,7 @@ namespace svgio::svgreader
             SvgStyleAttributes          maSvgStyleAttributes;
 
             /// variable scan values, dependent of given XAttributeList
-            std::unique_ptr<basegfx::B2DHomMatrix>      mpaTransform;
+            std::optional<basegfx::B2DHomMatrix>      mpaTransform;
 
         public:
             SvgANode(
@@ -46,8 +46,8 @@ namespace svgio::svgreader
             virtual void decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool bReferenced) const override;
 
             /// transform content
-            const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform.get(); }
-            void setTransform(const basegfx::B2DHomMatrix* pMatrix) { mpaTransform.reset(); if(pMatrix) mpaTransform.reset( new basegfx::B2DHomMatrix(*pMatrix) ); }
+            const std::optional<basegfx::B2DHomMatrix>& getTransform() const { return mpaTransform; }
+            void setTransform(const std::optional<basegfx::B2DHomMatrix>& pMatrix) { mpaTransform = pMatrix; }
         };
 
 } // end of namespace svgio::svgreader

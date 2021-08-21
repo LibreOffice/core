@@ -33,7 +33,7 @@ namespace svgio::svgreader
             SvgStyleAttributes          maSvgStyleAttributes;
 
             /// variable scan values, dependent of given XAttributeList
-            std::unique_ptr<basegfx::B2DHomMatrix>   mpaTransform;
+            std::optional<basegfx::B2DHomMatrix>   mpaTransform;
             SvgUnits                    maClipPathUnits;
 
         public:
@@ -49,15 +49,15 @@ namespace svgio::svgreader
             /// apply contained clipPath to given geometry #i124852# transform may be needed
             void apply(
                 drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-                const basegfx::B2DHomMatrix* pTransform) const;
+                const std::optional<basegfx::B2DHomMatrix>& pTransform) const;
 
             /// clipPathUnits content
             SvgUnits getClipPathUnits() const { return maClipPathUnits; }
             void setClipPathUnits(const SvgUnits aClipPathUnits) { maClipPathUnits = aClipPathUnits; }
 
             /// transform content
-            const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform.get(); }
-            void setTransform(const basegfx::B2DHomMatrix* pMatrix) { mpaTransform.reset(); if(pMatrix) mpaTransform.reset( new basegfx::B2DHomMatrix(*pMatrix) ); }
+            const std::optional<basegfx::B2DHomMatrix>& getTransform() const { return mpaTransform; }
+            void setTransform(const std::optional<basegfx::B2DHomMatrix>& pMatrix) { mpaTransform = pMatrix; }
         };
 
 } // end of namespace svgio::svgreader

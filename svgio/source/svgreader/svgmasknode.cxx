@@ -120,7 +120,7 @@ namespace svgio::svgreader
 
                     if(!aMatrix.isIdentity())
                     {
-                        setTransform(&aMatrix);
+                        setTransform(aMatrix);
                     }
                     break;
                 }
@@ -188,7 +188,7 @@ namespace svgio::svgreader
 
         void SvgMaskNode::apply(
             drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-            const basegfx::B2DHomMatrix* pTransform) const
+            const std::optional<basegfx::B2DHomMatrix>& pTransform) const
         {
             if(rTarget.empty() || Display::None == getDisplay())
                 return;

@@ -34,7 +34,7 @@ namespace svgio::svgreader
             SvgStyleAttributes      maSvgStyleAttributes;
 
             /// variable scan values, dependent of given XAttributeList
-            std::unique_ptr<basegfx::B2DHomMatrix>
+            std::optional<basegfx::B2DHomMatrix>
                                     mpaTransform;
             SvgTextPositions        maSvgTextPositions;
 
@@ -61,8 +61,8 @@ namespace svgio::svgreader
             virtual double getCurrentFontSize() const override;
 
             /// transform content, set if found in current context
-            const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform.get(); }
-            void setTransform(const basegfx::B2DHomMatrix* pMatrix) { mpaTransform.reset(); if(pMatrix) mpaTransform.reset( new basegfx::B2DHomMatrix(*pMatrix) ); }
+            const std::optional<basegfx::B2DHomMatrix>& getTransform() const { return mpaTransform; }
+            void setTransform(const std::optional<basegfx::B2DHomMatrix>& pMatrix) { mpaTransform = pMatrix; }
         };
 
 } // end of namespace svgio::svgreader

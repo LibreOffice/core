@@ -48,7 +48,7 @@ namespace svgio::svgreader
             /// variable scan values, dependent of given XAttributeList
             SvgUnits                    maGradientUnits;
             drawinglayer::primitive2d::SpreadMethod   maSpreadMethod;
-            std::unique_ptr<basegfx::B2DHomMatrix>    mpaGradientTransform;
+            std::optional<basegfx::B2DHomMatrix>    mpaGradientTransform;
 
             /// link to another gradient used as style. If maXLink
             /// is set, the node can be fetched on demand by using
@@ -109,8 +109,8 @@ namespace svgio::svgreader
             void setSpreadMethod(const drawinglayer::primitive2d::SpreadMethod aSpreadMethod) { maSpreadMethod = aSpreadMethod; }
 
             /// transform content, set if found in current context
-            const basegfx::B2DHomMatrix* getGradientTransform() const;
-            void setGradientTransform(const basegfx::B2DHomMatrix* pMatrix);
+            std::optional<basegfx::B2DHomMatrix> getGradientTransform() const;
+            void setGradientTransform(const std::optional<basegfx::B2DHomMatrix>& pMatrix) { mpaGradientTransform = pMatrix; }
         };
 
 } // end of namespace svgio::svgreader
