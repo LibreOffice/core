@@ -424,7 +424,7 @@ void Window::SetControlFont(const vcl::Font& rFont)
         *mpWindowImpl->mpControlFont = rFont;
     }
     else
-        mpWindowImpl->mpControlFont.reset( new vcl::Font(rFont) );
+        mpWindowImpl->mpControlFont = rFont;
 
     CompatStateChanged(StateChangedType::ControlFont);
 }

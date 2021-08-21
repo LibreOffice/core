@@ -70,7 +70,7 @@ SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn )
     , bIsLeftToRightDef( true)
     , bIsInReadStyleTab( false)
 {
-    pDfltFont.reset( new vcl::Font );
+    pDfltFont.emplace();
     mxDefaultColor = Color();
 
     // generate the correct WhichId table from the set WhichIds.
