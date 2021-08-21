@@ -62,7 +62,7 @@ $(eval $(call gb_Library_use_system_win32_libs,skia,\
 else ifeq ($(OS),MACOSX)
 
 $(eval $(call gb_Library_use_system_darwin_frameworks,skia,\
-    Carbon \
+    Cocoa \
 ))
 
 ifneq ($(SKIA_DISABLE_VMA_USE_STL_SHARED_MUTEX),)
