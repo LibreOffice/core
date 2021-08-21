@@ -54,7 +54,7 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,
     if( pLinePolyPolygon )
     {
         nCount = pLinePolyPolygon->count();
-        mpLinePolyPolygon.reset( new tools::PolyPolygon() );
+        mpLinePolyPolygon = tools::PolyPolygon(nCount);
 
         for(sal_uInt32 i(0); i < nCount; i++)
         {
@@ -64,7 +64,7 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,
         }
     }
     else
-        mpLinePolyPolygon = nullptr;
+        mpLinePolyPolygon.reset();
 }
 
 
@@ -647,7 +647,7 @@ std::deque<tools::Long>* TextRanger::GetTextRanges( const Range& rRange )
     SvxBoundArgs aArg( this, &(rngCache.results), rRange );
     aArg.Calc( maPolyPolygon );
     if( mpLinePolyPolygon )
-        aArg.Concat( mpLinePolyPolygon.get() );
+        aArg.Concat( &*mpLinePolyPolygon );
     //Add new result to the cache
     mRangeCache.push_back(std::move(rngCache));
     if (mRangeCache.size() > nCacheSize)

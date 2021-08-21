@@ -457,7 +457,7 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
     // Also for printers always use PolyPolygon, as not all printers
     // can print polygons on top of each other.
 
-    std::unique_ptr<tools::PolyPolygon> xPolyPoly;
+    std::optional<tools::PolyPolygon> xPolyPoly;
     tools::Rectangle       aRect;
     Point           aCenter;
     Color           aStartCol( rGradient.GetStartColor() );
@@ -476,7 +476,7 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
     rGradient.GetBoundRect( rRect, aRect, aCenter );
 
     if ( UsePolyPolygonForComplexGradient() )
-        xPolyPoly.reset(new tools::PolyPolygon( 2 ));
+        xPolyPoly = tools::PolyPolygon( 2 );
 
     tools::Long nStepCount = GetGradientSteps( rGradient, rRect, false/*bMtf*/, true/*bComplex*/ );
 
@@ -807,7 +807,7 @@ void OutputDevice::DrawComplexGradientToMetafile( const tools::Rectangle& rRect,
     // Also for printers always use PolyPolygon, as not all printers
     // can print polygons on top of each other.
 
-    std::unique_ptr<tools::PolyPolygon> xPolyPoly;
+    std::optional<tools::PolyPolygon> xPolyPoly;
     tools::Rectangle       aRect;
     Point           aCenter;
     Color           aStartCol( rGradient.GetStartColor() );
@@ -825,7 +825,7 @@ void OutputDevice::DrawComplexGradientToMetafile( const tools::Rectangle& rRect,
 
     rGradient.GetBoundRect( rRect, aRect, aCenter );
 
-    xPolyPoly.reset(new tools::PolyPolygon( 2 ));
+    xPolyPoly = tools::PolyPolygon( 2 );
 
     // last parameter - true if complex gradient, false if linear
     tools::Long nStepCount = GetGradientSteps( rGradient, rRect, true, true );
