@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cfb38995_53c4e5e5",
+        "filename": "sc/source/filter/oox/richstring.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-08-21T16:24:00Z",
+      "side": 1,
+      "message": "bFound is initially true here",
+      "revId": "2d5ba784a341aea1b7b2403842d2521d1548ea8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ba88239_dc555b15",
+        "filename": "sc/source/filter/oox/richstring.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-08-21T16:24:00Z",
+      "side": 1,
+      "message": "here coverity is reporting \"cid#1490403 Logically dead code\" here because bFound is always true ?",
+      "revId": "2d5ba784a341aea1b7b2403842d2521d1548ea8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
