@@ -8970,7 +8970,7 @@ class GtkInstanceButton : public GtkInstanceWidget, public virtual weld::Button
 private:
     GtkButton* m_pButton;
     gulong m_nSignalId;
-    std::unique_ptr<vcl::Font> m_xFont;
+    std::optional<vcl::Font> m_xFont;
     WidgetBackground m_aCustomBackground;
 
     static void signalClicked(GtkButton*, gpointer widget)
@@ -9029,7 +9029,7 @@ public:
 
     virtual void set_font(const vcl::Font& rFont) override
     {
-        m_xFont.reset(new vcl::Font(rFont));
+        m_xFont = rFont;
         GtkWidget* pChild = ::get_label_widget(GTK_WIDGET(m_pButton));
         ::set_font(GTK_LABEL(pChild), rFont);
     }
@@ -9497,7 +9497,7 @@ private:
     GtkWidget* m_pPopover;
 #if GTK_CHECK_VERSION(4, 0, 0)
     gulong m_nToggledSignalId;
-    std::unique_ptr<vcl::Font> m_xFont;
+    std::optional<vcl::Font> m_xFont;
     WidgetBackground m_aCustomBackground;
 #endif
 
@@ -12059,7 +12059,7 @@ protected:
     GtkEditable* m_pEditable;
     GtkWidget* m_pDelegate;
 private:
-    std::unique_ptr<vcl::Font> m_xFont;
+    std::optional<vcl::Font> m_xFont;
     gulong m_nChangedSignalId;
     gulong m_nInsertTextSignalId;
     gulong m_nCursorPosSignalId;
@@ -12308,7 +12308,7 @@ public:
 
     virtual void set_font(const vcl::Font& rFont) override
     {
-        m_xFont.reset(new vcl::Font(rFont));
+        m_xFont = rFont;
         PangoAttrList* pOrigList = get_attributes();
         PangoAttrList* pAttrList = pOrigList ? pango_attr_list_copy(pOrigList) : pango_attr_list_new();
         update_attr_list(pAttrList, rFont);
@@ -17419,7 +17419,7 @@ private:
     GtkEventController* m_pMenuKeyController;
     GtkEventController* m_pEntryFocusController;
 //    std::unique_ptr<CustomRenderMenuButtonHelper> m_xCustomMenuButtonHelper;
-    std::unique_ptr<vcl::Font> m_xFont;
+    std::optional<vcl::Font> m_xFont;
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
     vcl::QuickSelectionEngine m_aQuickSelectionEngine;
     std::vector<std::unique_ptr<GtkTreeRowReference, GtkTreeRowReferenceDeleter>> m_aSeparatorRows;
@@ -19162,7 +19162,7 @@ private:
     GtkWidget* m_pEntry;
     GtkCellView* m_pCellView;
     std::unique_ptr<CustomRenderMenuButtonHelper> m_xCustomMenuButtonHelper;
-    std::unique_ptr<vcl::Font> m_xFont;
+    std::optional<vcl::Font> m_xFont;
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
     vcl::QuickSelectionEngine m_aQuickSelectionEngine;
     std::vector<std::unique_ptr<GtkTreeRowReference, GtkTreeRowReferenceDeleter>> m_aSeparatorRows;
