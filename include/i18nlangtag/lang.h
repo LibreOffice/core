@@ -769,6 +769,7 @@ namespace o3tl
 #define LANGUAGE_USER_ENGLISH_DENMARK       LanguageType(0xB009)  /* makeLangID( 0x2C, getPrimaryLanguage( LANGUAGE_ENGLISH_UK)) */
 #define LANGUAGE_USER_SESOTHO_LESOTHO       LanguageType(0x8030)  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_SESOTHO)) */
 #define LANGUAGE_USER_YIDDISH_ISRAEL        LanguageType(0x843D)  /* makeLangID( 0x21, getPrimaryLanguage( LANGUAGE_YIDDISH)) */
+#define LANGUAGE_USER_KLINGON               LanguageType(0x06AC)
 
 
 /* XXX Add new user defined LCIDs ^^^ there.

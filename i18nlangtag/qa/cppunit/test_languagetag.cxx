@@ -69,7 +69,6 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT_EQUAL( OUString("tlh"), aLocale.Language );
         CPPUNIT_ASSERT( aLocale.Country.isEmpty() );
         CPPUNIT_ASSERT( aLocale.Variant.isEmpty() );
-        CPPUNIT_ASSERT( LanguageTag::isOnTheFlyID( klingon.getLanguageType()) );
         CPPUNIT_ASSERT( klingon.isValidBcp47() );
         CPPUNIT_ASSERT( klingon.isIsoLocale() );
         CPPUNIT_ASSERT( klingon.isIsoODF() );
