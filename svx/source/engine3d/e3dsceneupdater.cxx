@@ -49,9 +49,7 @@ E3DModifySceneSnapRectUpdater::E3DModifySceneSnapRectUpdater(const SdrObject* pO
     else
     {
         // secure current 3D transformation stack
-        mpViewInformation3D.reset(
-            new drawinglayer::geometry::ViewInformation3D(
-                rVCScene.getViewInformation3D(aAllContentRange)));
+        mpViewInformation3D = rVCScene.getViewInformation3D(aAllContentRange);
     }
 }
 
@@ -75,14 +73,13 @@ E3DModifySceneSnapRectUpdater::~E3DModifySceneSnapRectUpdater()
     {
         // If Yes, it needs to be updated since it's - for historical reasons -
         // part of the basic 3d transformation stack of the scene
-        drawinglayer::geometry::ViewInformation3D* pNew = new drawinglayer::geometry::ViewInformation3D(
+        mpViewInformation3D = drawinglayer::geometry::ViewInformation3D(
             mpScene->GetTransform(), // replace object transformation with new local transform
             mpViewInformation3D->getOrientation(),
             mpViewInformation3D->getProjection(),
             mpViewInformation3D->getDeviceToView(),
             mpViewInformation3D->getViewTime(),
             mpViewInformation3D->getExtendedInformationSequence());
-        mpViewInformation3D.reset(pNew);
     }
 
     // transform content range to scene-relative coordinates using old 3d transformation stack

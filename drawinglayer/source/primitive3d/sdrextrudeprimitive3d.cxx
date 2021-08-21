@@ -488,7 +488,7 @@ namespace drawinglayer::primitive3d
                     // new one and clear current decompositiopn
                     SdrExtrudePrimitive3D* pThat = const_cast< SdrExtrudePrimitive3D* >(this);
                     pThat->setBuffered3DDecomposition(Primitive3DContainer());
-                    pThat->mpLastRLGViewInformation.reset( new geometry::ViewInformation3D(rViewInformation) );
+                    pThat->mpLastRLGViewInformation = rViewInformation;
                 }
             }
 
