@@ -571,7 +571,7 @@ void SdrTextObj::AdaptTextMinSize()
 void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, tools::Rectangle const & rAnchorRect, bool bLineWidth ) const
 {
     basegfx::B2DPolyPolygon aXorPolyPolygon(TakeXorPoly());
-    std::unique_ptr<basegfx::B2DPolyPolygon> pContourPolyPolygon;
+    std::optional<basegfx::B2DPolyPolygon> pContourPolyPolygon;
     basegfx::B2DHomMatrix aMatrix(basegfx::utils::createTranslateB2DHomMatrix(
         -rAnchorRect.Left(), -rAnchorRect.Top()));
 
@@ -587,7 +587,7 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, tools::Rectangle 
     {
         // Take line width into account.
         // When doing the hit test, avoid this. (Performance!)
-        pContourPolyPolygon.reset(new basegfx::B2DPolyPolygon());
+        pContourPolyPolygon.emplace();
 
         // test if shadow needs to be avoided for TakeContour()
         const SfxItemSet& rSet = GetObjectItemSet();
@@ -622,7 +622,7 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, tools::Rectangle 
         pContourPolyPolygon->transform(aMatrix);
     }
 
-    rOutliner.SetPolygon(aXorPolyPolygon, pContourPolyPolygon.get());
+    rOutliner.SetPolygon(aXorPolyPolygon, pContourPolyPolygon ? &*pContourPolyPolygon : nullptr);
 }
 
 void SdrTextObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
