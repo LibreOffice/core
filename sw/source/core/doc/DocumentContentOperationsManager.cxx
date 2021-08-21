@@ -1215,7 +1215,7 @@ namespace //local functions originally from docfmt.cxx
         SwDoc& rDoc,
         const SwPaM &rRg)
     {
-        SwRedlineExtraData_FormatColl* pExtra = nullptr;
+        std::unique_ptr<SwRedlineExtraData_FormatColl> xExtra;
 
         // check existing redline on the same range, and use its extra data, if it exists
         SwRedlineTable::size_type nRedlPos = rDoc.getIDocumentRedlineAccess().GetRedlinePos(
@@ -1240,7 +1240,7 @@ namespace //local functions originally from docfmt.cxx
                         {
                             // Get the item set that holds all the changes properties
                             const SfxItemSet *pChangesSet = pFormattingChanges->GetItemSet();
-                            pExtra = new SwRedlineExtraData_FormatColl( "", USHRT_MAX, pChangesSet );
+                            xExtra.reset(new SwRedlineExtraData_FormatColl("", USHRT_MAX, pChangesSet));
                             break;
                         }
                     }
@@ -1254,7 +1254,7 @@ namespace //local functions originally from docfmt.cxx
         if (IDocumentRedlineAccess::AppendResult::IGNORED != result)
         {
             // no existing format redline in the range
-            if (!pExtra)
+            if (!xExtra)
             {
                 // Apply the first character's attributes to the ReplaceText
                 SfxItemSet aSet( rDoc.GetAttrPool(),
@@ -1269,14 +1269,12 @@ namespace //local functions originally from docfmt.cxx
                 aSet.ClearItem( RES_TXTATR_INETFMT );
                 aSet.ClearItem( RES_TXTATR_META );
                 aSet.ClearItem( RES_TXTATR_METAFIELD );
-                pExtra = new SwRedlineExtraData_FormatColl( "", USHRT_MAX, &aSet );
+                xExtra.reset(new SwRedlineExtraData_FormatColl("", USHRT_MAX, &aSet));
             }
 
-            if ( pExtra )
+            if (xExtra)
             {
-                std::unique_ptr<SwRedlineExtraData_FormatColl> xRedlineExtraData;
-                xRedlineExtraData.reset(pExtra);
-                pRedline->SetExtraData( xRedlineExtraData.get() );
+                pRedline->SetExtraData(xExtra.get() );
             }
         }
     }
