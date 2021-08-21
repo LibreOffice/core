@@ -584,6 +584,15 @@ void LineParser::readFont()
                 if (!aFontDescriptor.Name.isEmpty())
                 {
                     aResult.familyName = aFontDescriptor.Name;
+                    // tdf#143959: there are cases when the family name returned by font descriptor
+                    // is like "AAAAAA+TimesNewRoman,Bold". In this case, use the font name
+                    // determined by parseFontFamilyName instead, but still determine the font
+                    // attributes (bold italic etc) from the font descriptor.
+                    if (aResult.familyName.getLength() > 7 and aResult.familyName.indexOf(u"+", 6) == 6)
+                    {
+                        aResult.familyName = aResult.familyName.copy(7, aResult.familyName.getLength() - 7);
+                        parseFontFamilyName(aResult);
+                    }
                     aResult.isBold = (aFontDescriptor.Weight > 100.0);
                     aResult.isItalic = (aFontDescriptor.Slant == awt::FontSlant_OBLIQUE ||
                                         aFontDescriptor.Slant == awt::FontSlant_ITALIC);
