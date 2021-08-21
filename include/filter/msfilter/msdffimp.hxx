@@ -23,6 +23,7 @@
 #include <cstring>
 #include <map>
 #include <memory>
+#include <optional>
 #include <set>
 #include <utility>
 #include <vector>
@@ -44,6 +45,7 @@
 #include <tools/gen.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
+#include <tools/poly.hxx>
 #include <vcl/graph.hxx>
 
 class Color;
@@ -52,9 +54,6 @@ class SotStorage;
 class SvStream;
 class SdrObject;
 class SdrOle2Obj;
-namespace tools {
-    class Polygon;
-}
 class SdrModel;
 class SwFlyFrameFormat;
 
@@ -218,7 +217,7 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     static const int RELTO_DEFAULT = 2;
 
     SdrObject*      pObj;
-    std::unique_ptr<tools::Polygon>
+    std::optional<tools::Polygon>
                     pWrapPolygon;
     std::unique_ptr<char[]>
                     pClientAnchorBuffer;
