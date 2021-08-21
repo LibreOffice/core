@@ -187,11 +187,15 @@ static void MapReturn(sal_uInt32 r0, sal_uInt32 r1, typelib_TypeDescriptionRefer
 #if !defined(__ARM_PCS_VFP) && (defined(__ARM_EABI__) || defined(__SOFTFP__))
             pRegisterReturn[0] = r0;
 #else
+#if defined __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuninitialized"
+#endif
             register float fret asm("s0");
             *reinterpret_cast<float *>(pRegisterReturn) = fret;
+#if defined __clang__
 #pragma clang diagnostic pop
+#endif
 #endif
         break;
         case typelib_TypeClass_DOUBLE:
@@ -199,11 +203,15 @@ static void MapReturn(sal_uInt32 r0, sal_uInt32 r1, typelib_TypeDescriptionRefer
             pRegisterReturn[1] = r1;
             pRegisterReturn[0] = r0;
 #else
+#if defined __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuninitialized"
+#endif
             register double dret asm("d0");
             *reinterpret_cast<double *>(pRegisterReturn) = dret;
+#if defined __clang__
 #pragma clang diagnostic pop
+#endif
 #endif
             break;
         case typelib_TypeClass_STRUCT:
