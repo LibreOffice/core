@@ -322,7 +322,7 @@ void ImpEditView::SelectionChanged()
 }
 
 // This function is also called when a text's font || size is changed. Because its highlight rectangle must be updated.
-void ImpEditView::lokSelectionCallback(const std::unique_ptr<tools::PolyPolygon> &pPolyPoly, bool bStartHandleVisible, bool bEndHandleVisible) {
+void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &pPolyPoly, bool bStartHandleVisible, bool bEndHandleVisible) {
     VclPtr<vcl::Window> pParent = pOutWin->GetParentWithLOKNotifier();
     vcl::Region aRegion( *pPolyPoly );
 
@@ -487,7 +487,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
     bool bClipRegion = rTarget.IsClipRegion();
     vcl::Region aOldRegion = rTarget.GetClipRegion();
 
-    std::unique_ptr<tools::PolyPolygon> pPolyPoly;
+    std::optional<tools::PolyPolygon> pPolyPoly;
 
     if ( !pRegion && !comphelper::LibreOfficeKit::isActive())
     {
@@ -511,7 +511,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
     }
 
     if (comphelper::LibreOfficeKit::isActive() || pRegion)
-        pPolyPoly.reset(new tools::PolyPolygon);
+        pPolyPoly = tools::PolyPolygon();
 
     DBG_ASSERT( !pEditEngine->IsIdleFormatterActive(), "DrawSelectionXOR: Not formatted!" );
     aTmpSel.Adjust( pEditEngine->GetEditDoc() );
@@ -601,7 +601,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                 aTmpRect.SetRight(aLineXPosStartEnd.Max());
                 aTmpRect.Move(aLineOffset.Width(), 0);
                 ImplDrawHighlightRect(rTarget, aTmpRect.TopLeft(), aTmpRect.BottomRight(),
-                                      pPolyPoly.get());
+                                      pPolyPoly ? &*pPolyPoly : nullptr);
             }
             else
             {
@@ -627,7 +627,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                     aTmpRect.Move(aLineOffset.Width(), 0);
 
                     ImplDrawHighlightRect(rTarget, aTmpRect.TopLeft(), aTmpRect.BottomRight(),
-                                          pPolyPoly.get());
+                                          pPolyPoly ? &*pPolyPoly : nullptr);
                     nTmpStartIndex = nTmpEndIndex;
                 }
             }

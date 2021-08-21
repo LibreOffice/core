@@ -42,7 +42,7 @@ class EDITENG_DLLPUBLIC TextRanger
     };
     std::deque<RangeCacheItem> mRangeCache; //!< Cached range calculations.
     tools::PolyPolygon     maPolyPolygon; // Surface polygon
-    std::unique_ptr<tools::PolyPolygon> mpLinePolyPolygon; // Line polygon
+    std::optional<tools::PolyPolygon> mpLinePolyPolygon; // Line polygon
     mutable std::optional<tools::Rectangle> mxBound;  // Comprehensive rectangle
     sal_uInt16 nCacheSize;  // Cache-Size
     sal_uInt16 nRight;      // Distance Contour-Text
