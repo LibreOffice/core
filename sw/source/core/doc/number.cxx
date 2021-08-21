@@ -1182,7 +1182,7 @@ namespace numfunc
             sal_Unicode mnLevelChars[MAXLEVEL];
 
             // default bullet list font instance
-            std::unique_ptr<vcl::Font> mpFont;
+            std::optional<vcl::Font> mpFont;
     };
 
     }
@@ -1308,7 +1308,7 @@ namespace numfunc
 
     void SwDefBulletConfig::InitFont()
     {
-        mpFont.reset( new vcl::Font( msFontname, OUString(), Size( 0, 14 ) ) );
+        mpFont.emplace( msFontname, OUString(), Size( 0, 14 ) );
         mpFont->SetWeight( meFontWeight );
         mpFont->SetItalic( meFontItalic );
         mpFont->SetCharSet( RTL_TEXTENCODING_SYMBOL );

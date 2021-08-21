@@ -76,7 +76,7 @@ void OutputDevice::Push( PushFlags nFlags )
         rState.mpFillColor = maFillColor;
     }
     if ( nFlags & PushFlags::FONT )
-        rState.mpFont.reset( new vcl::Font( maFont ) );
+        rState.mpFont = maFont;
     if ( nFlags & PushFlags::TEXTCOLOR )
         rState.mpTextColor = GetTextColor();
     if (nFlags & PushFlags::TEXTFILLCOLOR && IsTextFillColor())
