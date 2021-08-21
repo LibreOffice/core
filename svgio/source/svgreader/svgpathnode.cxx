@@ -64,7 +64,7 @@ namespace svgio::svgreader
                     {
                         if(aPath.count())
                         {
-                            setPath(&aPath);
+                            setPath(aPath);
                         }
                     }
                     break;

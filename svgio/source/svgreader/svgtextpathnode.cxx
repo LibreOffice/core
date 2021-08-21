@@ -320,7 +320,7 @@ namespace svgio::svgreader
                 return false;
             }
 
-            const basegfx::B2DPolyPolygon* pPolyPolyPath = pSvgPathNode->getPath();
+            const std::optional<basegfx::B2DPolyPolygon>& pPolyPolyPath = pSvgPathNode->getPath();
 
             if(!pPolyPolyPath || !pPolyPolyPath->count())
             {
@@ -352,7 +352,7 @@ namespace svgio::svgreader
             if(!pSvgPathNode)
                 return;
 
-            const basegfx::B2DPolyPolygon* pPolyPolyPath = pSvgPathNode->getPath();
+            const std::optional<basegfx::B2DPolyPolygon>& pPolyPolyPath = pSvgPathNode->getPath();
 
             if(!(pPolyPolyPath && pPolyPolyPath->count()))
                 return;

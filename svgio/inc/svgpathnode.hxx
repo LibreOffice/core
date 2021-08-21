@@ -24,6 +24,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <optional>
 
 namespace svgio::svgreader
     {
@@ -34,7 +35,7 @@ namespace svgio::svgreader
             SvgStyleAttributes                  maSvgStyleAttributes;
 
             /// variable scan values, dependent of given XAttributeList
-            std::unique_ptr<basegfx::B2DPolyPolygon>  mpPolyPolygon;
+            std::optional<basegfx::B2DPolyPolygon>  mpPolyPolygon;
             std::unique_ptr<basegfx::B2DHomMatrix>    mpaTransform;
             SvgNumber                           maPathLength;
             basegfx::utils::PointIndexSet       maHelpPointIndices;
@@ -50,8 +51,8 @@ namespace svgio::svgreader
             virtual void decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool bReferenced) const override;
 
             /// path content, set if found in current context
-            const basegfx::B2DPolyPolygon* getPath() const { return mpPolyPolygon.get(); }
-            void setPath(const basegfx::B2DPolyPolygon* pPath) { mpPolyPolygon.reset(); if(pPath) mpPolyPolygon.reset(new basegfx::B2DPolyPolygon(*pPath)); }
+            const std::optional<basegfx::B2DPolyPolygon>& getPath() const { return mpPolyPolygon; }
+            void setPath(const std::optional<basegfx::B2DPolyPolygon>& pPath) { mpPolyPolygon = pPath; }
 
             /// transform content, set if found in current context
             const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform.get(); }
