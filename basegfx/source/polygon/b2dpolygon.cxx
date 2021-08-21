@@ -461,7 +461,7 @@ class ImplBufferedData : public basegfx::SystemDependentDataHolder
 {
 private:
     // Possibility to hold the last subdivision
-    std::unique_ptr< basegfx::B2DPolygon >  mpDefaultSubdivision;
+    std::optional< basegfx::B2DPolygon >  mpDefaultSubdivision;
 
     // Possibility to hold the last B2DRange calculation
     std::unique_ptr< basegfx::B2DRange >    mpB2DRange;
@@ -478,7 +478,7 @@ public:
     {
         if(!mpDefaultSubdivision)
         {
-            const_cast< ImplBufferedData* >(this)->mpDefaultSubdivision.reset(new basegfx::B2DPolygon(basegfx::utils::adaptiveSubdivideByAngle(rSource)));
+            const_cast< ImplBufferedData* >(this)->mpDefaultSubdivision = basegfx::utils::adaptiveSubdivideByAngle(rSource);
         }
 
         return *mpDefaultSubdivision;
