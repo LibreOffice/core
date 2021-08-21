@@ -216,7 +216,7 @@ namespace svgio::svgreader
 
                     if(!aMatrix.isIdentity())
                     {
-                        setGradientTransform(&aMatrix);
+                        setGradientTransform(aMatrix);
                     }
                     break;
                 }
@@ -490,11 +490,11 @@ namespace svgio::svgreader
             return nullptr;
         }
 
-        const basegfx::B2DHomMatrix* SvgGradientNode::getGradientTransform() const
+        std::optional<basegfx::B2DHomMatrix> SvgGradientNode::getGradientTransform() const
         {
             if(mpaGradientTransform)
             {
-                return mpaGradientTransform.get();
+                return mpaGradientTransform;
             }
 
             const_cast< SvgGradientNode* >(this)->tryToFindLink();
@@ -507,17 +507,7 @@ namespace svgio::svgreader
                 return ret;
             }
 
-            return nullptr;
-        }
-
-        void SvgGradientNode::setGradientTransform(const basegfx::B2DHomMatrix* pMatrix)
-        {
-            mpaGradientTransform.reset();
-
-            if(pMatrix)
-            {
-                mpaGradientTransform.reset(new basegfx::B2DHomMatrix(*pMatrix) );
-            }
+            return std::nullopt;
         }
 
 } // end of namespace svgio::svgreader

@@ -68,7 +68,7 @@ namespace svgio::svgreader
 
                     if(!aMatrix.isIdentity())
                     {
-                        setTransform(&aMatrix);
+                        setTransform(aMatrix);
                     }
                     break;
                 }
@@ -123,7 +123,7 @@ namespace svgio::svgreader
 
         void SvgClipPathNode::apply(
             drawinglayer::primitive2d::Primitive2DContainer& rContent,
-            const basegfx::B2DHomMatrix* pTransform) const
+            const std::optional<basegfx::B2DHomMatrix>& pTransform) const
         {
             if (rContent.empty() || Display::None == getDisplay())
                 return;

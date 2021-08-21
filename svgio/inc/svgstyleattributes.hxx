@@ -290,7 +290,7 @@ namespace svgio::svgreader
             void add_postProcess(
                 drawinglayer::primitive2d::Primitive2DContainer& rTarget,
                 const drawinglayer::primitive2d::Primitive2DContainer& rSource,
-                const basegfx::B2DHomMatrix* pTransform) const;
+                const std::optional<basegfx::B2DHomMatrix>& pTransform) const;
 
             /// helper to set mpCssStyleParent temporarily for CSS style hierarchies
             void setCssStyleParent(const SvgStyleAttributes* pNew) { mpCssStyleParent = pNew; }

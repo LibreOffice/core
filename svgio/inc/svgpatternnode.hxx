@@ -47,7 +47,7 @@ namespace svgio::svgreader
                                     mpPatternUnits;
             std::unique_ptr<SvgUnits>
                                     mpPatternContentUnits;
-            std::unique_ptr<basegfx::B2DHomMatrix>
+            std::optional<basegfx::B2DHomMatrix>
                                     mpaPatternTransform;
 
             /// link to another pattern used as style. If maXLink
@@ -106,8 +106,8 @@ namespace svgio::svgreader
             void setPatternContentUnits(const SvgUnits aPatternContentUnits) { mpPatternContentUnits.reset( new SvgUnits(aPatternContentUnits) ); }
 
             /// PatternTransform content
-            const basegfx::B2DHomMatrix* getPatternTransform() const;
-            void setPatternTransform(const basegfx::B2DHomMatrix* pMatrix) { mpaPatternTransform.reset(); if(pMatrix) mpaPatternTransform.reset(new basegfx::B2DHomMatrix(*pMatrix)); }
+            std::optional<basegfx::B2DHomMatrix> getPatternTransform() const;
+            void setPatternTransform(const std::optional<basegfx::B2DHomMatrix>& pMatrix) { mpaPatternTransform = pMatrix; }
 
         };
 
