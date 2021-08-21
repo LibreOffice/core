@@ -710,6 +710,39 @@ namespace
             assertXPath(pXmlDoc, xpath, "text-outline", "true");
         }
 
+        void testTdf143959_nameFromFontFile()
+        {
+            rtl::Reference<pdfi::PDFIRawAdaptor> xAdaptor(new pdfi::PDFIRawAdaptor(OUString(), getComponentContext()));
+            xAdaptor->setTreeVisitorFactory(createDrawTreeVisitorFactory());
+
+            OString aOutput;
+            CPPUNIT_ASSERT_MESSAGE("Converting PDF to ODF XML",
+                                   xAdaptor->odfConvert( m_directories.getURLFromSrc(u"/sdext/source/pdfimport/test/testdocs/testTdf143959.pdf"),
+                                                        new OutputWrapString(aOutput),
+                                                        nullptr ));
+
+            //std::cout << aOutput << std::endl;
+            xmlDocUniquePtr pXmlDoc(xmlParseDoc(reinterpret_cast<xmlChar const *>(aOutput.getStr())));
+
+            /* Test for the 1st text paragraph */
+            OUString styleName = getXPath(pXmlDoc, "//draw:frame[2]//text:span[1]", "style-name");
+            OString xpath = "//office:automatic-styles/style:style[@style:name=\"" +
+                OUStringToOString(styleName,  RTL_TEXTENCODING_UTF8) +
+                "\"]/style:text-properties";
+            CPPUNIT_ASSERT_EQUAL(OUString("TimesNewRoman"),
+                                 getXPath(pXmlDoc, xpath, "font-family").replaceAll(u" ", u""));
+
+            /* Test for the "TOTAL ESTA HOJA USD" paragraph" */
+            styleName = getXPath(pXmlDoc, "//draw:frame[last()-1]//text:span[1]", "style-name");
+            xpath = "//office:automatic-styles/style:style[@style:name=\"" +
+                OUStringToOString(styleName,  RTL_TEXTENCODING_UTF8) +
+                "\"]/style:text-properties";
+            CPPUNIT_ASSERT_EQUAL(OUString("TimesNewRoman"),
+                                 getXPath(pXmlDoc, xpath, "font-family").replaceAll(u" ", u""));
+            CPPUNIT_ASSERT_EQUAL(OUString("bold"),
+                                 getXPath(pXmlDoc, xpath, "font-weight"));
+        }
+
         CPPUNIT_TEST_SUITE(PDFITest);
         CPPUNIT_TEST(testXPDFParser);
         CPPUNIT_TEST(testOdfWriterExport);
@@ -719,6 +752,7 @@ namespace
         CPPUNIT_TEST(testTdf105536);
         CPPUNIT_TEST(testTdf141709);
         CPPUNIT_TEST(testFontFeatures);
+        CPPUNIT_TEST(testTdf143959_nameFromFontFile);
         CPPUNIT_TEST_SUITE_END();
     };
 
