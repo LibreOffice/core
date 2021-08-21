@@ -1413,7 +1413,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
             nINT16 = cBullet;
             aPropertyValues.push_back(comphelper::makePropertyValue("BulletId", nINT16));
 
-            const vcl::Font* pFont = rFormat.GetBulletFont();
+            std::optional<vcl::Font> pFont = rFormat.GetBulletFont();
 
             //BulletChar
             aUString = OUString(&cBullet, 1);

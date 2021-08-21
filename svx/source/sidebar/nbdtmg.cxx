@@ -308,7 +308,7 @@ void BulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
 
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
     sal_UCS4 cChar = aFmt.GetBulletChar();
-    const vcl::Font* pFont = aFmt.GetBulletFont();
+    std::optional<vcl::Font> pFont = aFmt.GetBulletFont();
     if ( nIndex >= DEFAULT_BULLET_TYPES )
         return;
 

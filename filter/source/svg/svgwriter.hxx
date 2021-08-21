@@ -78,14 +78,14 @@ struct SVGState
 struct PartialState
 {
     PushFlags                           meFlags;
-    ::std::unique_ptr<vcl::Font>        mupFont;
+    ::std::optional<vcl::Font>          mupFont;
     sal_Int32                           mnRegionClipPathId;
 
     const vcl::Font&        getFont( const vcl::Font& rDefaultFont ) const
                                 { return mupFont ? *mupFont : rDefaultFont; }
 
     void                    setFont( const vcl::Font& rFont )
-                                { mupFont.reset( new vcl::Font(rFont) ); }
+                                { mupFont = rFont; }
 
     PartialState()
         : meFlags( PushFlags::NONE )

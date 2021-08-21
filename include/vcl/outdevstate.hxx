@@ -22,6 +22,7 @@
 
 #include <vcl/mapmod.hxx>
 #include <vcl/vclenum.hxx>
+#include <vcl/font.hxx>
 
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
@@ -31,7 +32,6 @@
 #include <optional>
 #include <i18nlangtag/lang.h>
 
-namespace vcl { class Font; }
 namespace vcl { class Region; }
 
 // Flags for OutputDevice::Push() and OutDevState
@@ -86,7 +86,7 @@ struct OutDevState
     std::unique_ptr<vcl::Region>    mpClipRegion;
     std::optional<Color>          mpLineColor;
     std::optional<Color>          mpFillColor;
-    std::unique_ptr<vcl::Font>      mpFont;
+    std::optional<vcl::Font>      mpFont;
     std::optional<Color>          mpTextColor;
     std::optional<Color>          mpTextFillColor;
     std::optional<Color>          mpTextLineColor;

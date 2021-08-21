@@ -24,6 +24,7 @@
 #include <svtools/parrtf.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
+#include <vcl/font.hxx>
 
 #include <editeng/editengdllapi.h>
 
@@ -32,7 +33,6 @@
 #include <map>
 #include <memory>
 
-namespace vcl { class Font; }
 struct SvxRTFStyleType;
 class SvxRTFItemStackType;
 class SvxRTFItemStackList : public std::vector<std::unique_ptr<SvxRTFItemStackType>> {};
@@ -101,7 +101,7 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     std::optional<EditPosition> mxInsertPosition;
     SfxItemPool* pAttrPool;
     std::optional<Color>  mxDefaultColor;
-    std::unique_ptr<vcl::Font>   pDfltFont;
+    std::optional<vcl::Font>   pDfltFont;
     std::unique_ptr<SfxItemSet> pRTFDefaults;
 
     int     nDfltFont;

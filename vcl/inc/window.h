@@ -252,7 +252,7 @@ public:
     PointerStyle        maPointer;
     Fraction            maZoom;
     OUString            maText;
-    std::unique_ptr<vcl::Font>
+    std::optional<vcl::Font>
                         mpControlFont;
     Color               maControlForeground;
     Color               maControlBackground;

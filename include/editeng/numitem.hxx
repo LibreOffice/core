@@ -30,12 +30,12 @@
 #include <editeng/editengdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/vclenum.hxx>
+#include <vcl/font.hxx>
 #include <memory>
 #include <optional>
 #include <algorithm>
 
 class SvxBrushItem;
-namespace vcl { class Font; }
 class Graphic;
 class SvxNodeNum;
 namespace com::sun::star::text { class XNumberingFormatter; }
@@ -147,7 +147,7 @@ private:
     sal_Int16           eVertOrient;        // vertical alignment of a bitmap
 
     Size                aGraphicSize;       // Always! in 1/100 mm
-    std::unique_ptr<vcl::Font>
+    std::optional<vcl::Font>
                         pBulletFont;        // Pointer to the bullet font
 
     OUString            sCharStyleName;     // Character Style
@@ -181,7 +181,7 @@ public:
     virtual OUString        GetCharFormatName()const;
 
     void            SetBulletFont(const vcl::Font* pFont);
-    const vcl::Font* GetBulletFont() const {return pBulletFont.get();}
+    const std::optional<vcl::Font>& GetBulletFont() const { return pBulletFont; }
     void            SetBulletChar(sal_UCS4 cSet){cBullet = cSet;}
     sal_UCS4        GetBulletChar()const {return cBullet;}
     void            SetBulletRelSize(sal_uInt16 nSet) {nBulletRelSize = std::max(nSet,sal_uInt16(SVX_NUM_REL_SIZE_MIN));}
