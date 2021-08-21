@@ -2169,7 +2169,7 @@ void SvpSalGraphics::drawBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceB
     }
 
 #if 0 // LO code is not yet bitmap32-ready.
-      // if m_bSupportsBitmap32 becomes trye for Svp revisit this
+      // if m_bSupportsBitmap32 becomes true for Svp revisit this
     copyWithOperator(rTR, source, CAIRO_OPERATOR_OVER);
 #else
     copyWithOperator(rTR, source, CAIRO_OPERATOR_SOURCE);
