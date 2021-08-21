@@ -72,7 +72,7 @@ namespace svgio::svgreader
                                 aPath.setClosed(true);
                             }
 
-                            setPolygon(&aPath);
+                            setPolygon(aPath);
                         }
                     }
                     break;

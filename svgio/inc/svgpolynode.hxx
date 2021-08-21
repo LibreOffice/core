@@ -23,6 +23,7 @@
 #include "svgstyleattributes.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <optional>
 
 namespace svgio::svgreader
     {
@@ -33,7 +34,7 @@ namespace svgio::svgreader
             SvgStyleAttributes          maSvgStyleAttributes;
 
             /// variable scan values, dependent of given XAttributeList
-            std::unique_ptr<basegfx::B2DPolygon>    mpPolygon;
+            std::optional<basegfx::B2DPolygon>    mpPolygon;
             std::unique_ptr<basegfx::B2DHomMatrix>  mpaTransform;
 
             bool                        mbIsPolyline : 1; // true = polyline, false = polygon
@@ -50,7 +51,7 @@ namespace svgio::svgreader
             virtual void decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool bReferenced) const override;
 
             /// Polygon content, set if found in current context
-            void setPolygon(const basegfx::B2DPolygon* pPolygon) { mpPolygon.reset(); if(pPolygon) mpPolygon.reset(new basegfx::B2DPolygon(*pPolygon)); }
+            void setPolygon(const std::optional<basegfx::B2DPolygon>& pPolygon) { mpPolygon = pPolygon; }
 
             /// transform content, set if found in current context
             const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform.get(); }
