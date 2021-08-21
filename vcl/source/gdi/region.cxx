@@ -396,7 +396,7 @@ void vcl::Region::ImplCreatePolyPolyRegion( const tools::PolyPolygon& rPolyPoly 
     }
     else
     {
-        mpPolyPolygon = std::make_shared<tools::PolyPolygon>(rPolyPoly);
+        mpPolyPolygon = rPolyPoly;
     }
 
     mbIsNull = false;
@@ -406,7 +406,7 @@ void vcl::Region::ImplCreatePolyPolyRegion( const basegfx::B2DPolyPolygon& rPoly
 {
     if(rPolyPoly.count() && !rPolyPoly.getB2DRange().isEmpty())
     {
-        mpB2DPolyPolygon = std::make_shared<basegfx::B2DPolyPolygon>(rPolyPoly);
+        mpB2DPolyPolygon = rPolyPoly;
         mbIsNull = false;
     }
 }
@@ -430,7 +430,10 @@ void vcl::Region::Move( tools::Long nHorzMove, tools::Long nVertMove )
         basegfx::B2DPolyPolygon aPoly(*getB2DPolyPolygon());
 
         aPoly.transform(basegfx::utils::createTranslateB2DHomMatrix(nHorzMove, nVertMove));
-        mpB2DPolyPolygon.reset(aPoly.count() ? new basegfx::B2DPolyPolygon(aPoly) : nullptr);
+        if (aPoly.count())
+            mpB2DPolyPolygon = aPoly;
+        else
+            mpB2DPolyPolygon.reset();
         mpPolyPolygon.reset();
         mpRegionBand.reset();
     }
@@ -440,7 +443,10 @@ void vcl::Region::Move( tools::Long nHorzMove, tools::Long nVertMove )
 
         aPoly.Move(nHorzMove, nVertMove);
         mpB2DPolyPolygon.reset();
-        mpPolyPolygon.reset(aPoly.Count() ? new tools::PolyPolygon(aPoly) : nullptr);
+        if (aPoly.Count())
+            mpPolyPolygon = aPoly;
+        else
+            mpPolyPolygon.reset();
         mpRegionBand.reset();
     }
     else if(getRegionBand())
@@ -477,7 +483,10 @@ void vcl::Region::Scale( double fScaleX, double fScaleY )
         basegfx::B2DPolyPolygon aPoly(*getB2DPolyPolygon());
 
         aPoly.transform(basegfx::utils::createScaleB2DHomMatrix(fScaleX, fScaleY));
-        mpB2DPolyPolygon.reset(aPoly.count() ? new basegfx::B2DPolyPolygon(aPoly) : nullptr);
+        if (aPoly.count())
+            mpB2DPolyPolygon = aPoly;
+        else
+            mpB2DPolyPolygon.reset();
         mpPolyPolygon.reset();
         mpRegionBand.reset();
     }
@@ -487,7 +496,10 @@ void vcl::Region::Scale( double fScaleX, double fScaleY )
 
         aPoly.Scale(fScaleX, fScaleY);
         mpB2DPolyPolygon.reset();
-        mpPolyPolygon.reset(aPoly.Count() ? new tools::PolyPolygon(aPoly) : nullptr);
+        if (aPoly.Count())
+            mpPolyPolygon = aPoly;
+        else
+            mpPolyPolygon.reset();
         mpRegionBand.reset();
     }
     else if(getRegionBand())
@@ -619,7 +631,10 @@ void vcl::Region::Intersect( const tools::Rectangle& rRect )
                     true,
                     false));
 
-            mpB2DPolyPolygon.reset(aPoly.count() ? new basegfx::B2DPolyPolygon(aPoly) : nullptr);
+            if (aPoly.count())
+                mpB2DPolyPolygon = aPoly;
+            else
+                mpB2DPolyPolygon.reset();
             mpPolyPolygon.reset();
             mpRegionBand.reset();
         }
@@ -633,7 +648,10 @@ void vcl::Region::Intersect( const tools::Rectangle& rRect )
             aPoly.Clip(rRect);
 
             mpB2DPolyPolygon.reset();
-            mpPolyPolygon.reset(aPoly.Count() ? new tools::PolyPolygon(aPoly) : nullptr);
+            if (aPoly.Count())
+                mpPolyPolygon = aPoly;
+            else
+                mpPolyPolygon.reset();
             mpRegionBand.reset();
         }
 
@@ -1269,7 +1287,7 @@ tools::PolyPolygon vcl::Region::GetAsPolyPolygon() const
     {
         // the polygon needs to be converted, buffer the down conversion
         const tools::PolyPolygon aPolyPolgon(*getB2DPolyPolygon());
-        const_cast< vcl::Region* >(this)->mpPolyPolygon = std::make_shared<tools::PolyPolygon>(aPolyPolgon);
+        const_cast< vcl::Region* >(this)->mpPolyPolygon = aPolyPolgon;
 
         return *getPolyPolygon();
     }
@@ -1278,7 +1296,7 @@ tools::PolyPolygon vcl::Region::GetAsPolyPolygon() const
     {
         // the BandRegion needs to be converted, buffer the conversion
         const tools::PolyPolygon aPolyPolgon(ImplCreatePolyPolygonFromRegionBand());
-        const_cast< vcl::Region* >(this)->mpPolyPolygon = std::make_shared<tools::PolyPolygon>(aPolyPolgon);
+        const_cast< vcl::Region* >(this)->mpPolyPolygon = aPolyPolgon;
 
         return *getPolyPolygon();
     }
@@ -1297,7 +1315,7 @@ basegfx::B2DPolyPolygon vcl::Region::GetAsB2DPolyPolygon() const
     {
         // the polygon needs to be converted, buffer the up conversion. This will be preferred from now.
         const basegfx::B2DPolyPolygon aB2DPolyPolygon(getPolyPolygon()->getB2DPolyPolygon());
-        const_cast< vcl::Region* >(this)->mpB2DPolyPolygon = std::make_shared<basegfx::B2DPolyPolygon>(aB2DPolyPolygon);
+        const_cast< vcl::Region* >(this)->mpB2DPolyPolygon = aB2DPolyPolygon;
 
         return *getB2DPolyPolygon();
     }
@@ -1306,7 +1324,7 @@ basegfx::B2DPolyPolygon vcl::Region::GetAsB2DPolyPolygon() const
     {
         // the BandRegion needs to be converted, buffer the conversion
         const basegfx::B2DPolyPolygon aB2DPolyPolygon(ImplCreateB2DPolyPolygonFromRegionBand());
-        const_cast< vcl::Region* >(this)->mpB2DPolyPolygon = std::make_shared<basegfx::B2DPolyPolygon>(aB2DPolyPolygon);
+        const_cast< vcl::Region* >(this)->mpB2DPolyPolygon = aB2DPolyPolygon;
 
         return *getB2DPolyPolygon();
     }
@@ -1565,9 +1583,9 @@ SvStream& ReadRegion(SvStream& rIStrm, vcl::Region& rRegion)
 
                 if (bHasPolyPolygon)
                 {
-                    std::shared_ptr<tools::PolyPolygon> xNewPoly = std::make_shared<tools::PolyPolygon>();
-                    ReadPolyPolygon(rIStrm, *xNewPoly);
-                    rRegion.mpPolyPolygon = xNewPoly;
+                    tools::PolyPolygon aNewPoly;
+                    ReadPolyPolygon(rIStrm, aNewPoly);
+                    rRegion.mpPolyPolygon = aNewPoly;
                 }
             }
 

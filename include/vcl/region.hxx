@@ -21,16 +21,13 @@
 #define INCLUDED_VCL_REGION_HXX
 
 #include <tools/gen.hxx>
+#include <tools/poly.hxx>
 #include <vcl/dllapi.h>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <memory>
+#include <optional>
 
 class RegionBand;
-
-namespace tools {
-    class Polygon;
-    class PolyPolygon;
-}
 
 namespace vcl { class Window; }
 class OutputDevice;
@@ -48,9 +45,9 @@ private:
     friend class ::Bitmap;
 
     // possible contents
-    std::shared_ptr< basegfx::B2DPolyPolygon >
+    std::optional< basegfx::B2DPolyPolygon >
                                 mpB2DPolyPolygon;
-    std::shared_ptr< tools::PolyPolygon >
+    std::optional< tools::PolyPolygon >
                                 mpPolyPolygon;
     std::shared_ptr< RegionBand >
                                 mpRegionBand;
@@ -76,8 +73,8 @@ public:
     ~Region();
 
     // direct access to contents
-    const basegfx::B2DPolyPolygon* getB2DPolyPolygon() const { return mpB2DPolyPolygon.get(); }
-    const tools::PolyPolygon* getPolyPolygon() const { return mpPolyPolygon.get(); }
+    const std::optional<basegfx::B2DPolyPolygon>& getB2DPolyPolygon() const { return mpB2DPolyPolygon; }
+    const std::optional<tools::PolyPolygon>& getPolyPolygon() const { return mpPolyPolygon; }
     const RegionBand* getRegionBand() const { return mpRegionBand.get(); }
 
     // access with converters, the asked data will be created from the most
