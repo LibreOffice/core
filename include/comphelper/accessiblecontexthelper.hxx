@@ -24,9 +24,9 @@
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/accessibility/XAccessibleContext2.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
+#include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/solarmutex.hxx>
-#include <memory>
 
 
 namespace comphelper
@@ -36,7 +36,6 @@ namespace comphelper
     //= OAccessibleContextHelper
 
 
-    class OContextHelper_Impl;
     typedef ::cppu::WeakAggComponentImplHelper2 <   css::accessibility::XAccessibleContext2,
                                                     css::accessibility::XAccessibleEventBroadcaster
                                                 >   OAccessibleContextHelper_Base;
@@ -49,7 +48,8 @@ namespace comphelper
     {
         friend class OContextEntryGuard;
     private:
-        std::unique_ptr<OContextHelper_Impl>    m_pImpl;
+        css::uno::WeakReference< css::accessibility::XAccessible > m_aCreator;         // the XAccessible which created our XAccessibleContext
+        AccessibleEventNotifier::TClientId m_nClientId;
 
     protected:
         virtual ~OAccessibleContextHelper( ) override;
