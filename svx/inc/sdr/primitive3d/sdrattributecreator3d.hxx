@@ -20,23 +20,19 @@
 #ifndef INCLUDED_SVX_INC_SDR_PRIMITIVE3D_SDRATTRIBUTECREATOR3D_HXX
 #define INCLUDED_SVX_INC_SDR_PRIMITIVE3D_SDRATTRIBUTECREATOR3D_HXX
 
+#include <drawinglayer/attribute/sdrobjectattribute3d.hxx>
 
 // predefines
 class SfxItemSet;
-
-namespace drawinglayer::attribute {
-    class Sdr3DObjectAttribute;
-}
-
 namespace basegfx {
     class B2DRange;
 }
 
 
 namespace drawinglayer::primitive2d
-    {
+{
         // SdrAttribute creators
-        attribute::Sdr3DObjectAttribute* createNewSdr3DObjectAttribute(const SfxItemSet& rSet);
+        attribute::Sdr3DObjectAttribute createNewSdr3DObjectAttribute(const SfxItemSet& rSet);
 
         // helpers
 

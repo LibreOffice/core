@@ -49,7 +49,7 @@ namespace sdr::contact
             const basegfx::B2DPolyPolygon aPolyPolygon(GetE3dExtrudeObj().GetExtrudePolygon());
 
             // get 3D Object Attributes
-            std::unique_ptr<drawinglayer::attribute::Sdr3DObjectAttribute> pSdr3DObjectAttribute(drawinglayer::primitive2d::createNewSdr3DObjectAttribute(rItemSet));
+            drawinglayer::attribute::Sdr3DObjectAttribute aSdr3DObjectAttribute(drawinglayer::primitive2d::createNewSdr3DObjectAttribute(rItemSet));
 
             // calculate texture size; use size of top/bottom cap to get a perfect mapping
             // for the caps. The in-between geometry will get a stretched size with a
@@ -71,7 +71,7 @@ namespace sdr::contact
             const basegfx::B3DHomMatrix aWorldTransform;
             const drawinglayer::primitive3d::Primitive3DReference xReference(
                 new drawinglayer::primitive3d::SdrExtrudePrimitive3D(
-                    aWorldTransform, aTextureSize, aAttribute, *pSdr3DObjectAttribute,
+                    aWorldTransform, aTextureSize, aAttribute, aSdr3DObjectAttribute,
                     aPolyPolygon, fDepth, fDiagonal, fBackScale, bSmoothNormals, bSmoothLids,
                     bCharacterMode, bCloseFront, bCloseBack));
             xRetval = { xReference };

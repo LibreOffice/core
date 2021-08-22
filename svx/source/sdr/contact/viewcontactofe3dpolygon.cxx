@@ -97,7 +97,7 @@ namespace sdr::contact
             }
 
             // get 3D Object Attributes
-            std::unique_ptr<drawinglayer::attribute::Sdr3DObjectAttribute> pSdr3DObjectAttribute(drawinglayer::primitive2d::createNewSdr3DObjectAttribute(rItemSet));
+            drawinglayer::attribute::Sdr3DObjectAttribute aSdr3DObjectAttribute(drawinglayer::primitive2d::createNewSdr3DObjectAttribute(rItemSet));
 
             // calculate texture size
             basegfx::B2DVector aTextureSize(1.0, 1.0);
@@ -159,7 +159,7 @@ namespace sdr::contact
             const basegfx::B3DHomMatrix aWorldTransform;
             const drawinglayer::primitive3d::Primitive3DReference xReference(
                 new drawinglayer::primitive3d::SdrPolyPolygonPrimitive3D(
-                    aPolyPolygon3D, aWorldTransform, aTextureSize, aAttribute, *pSdr3DObjectAttribute));
+                    aPolyPolygon3D, aWorldTransform, aTextureSize, aAttribute, aSdr3DObjectAttribute));
             xRetval = { xReference };
 
             return xRetval;
