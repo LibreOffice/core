@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1b258e8c_b3d8ff52",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-08-22T22:44:06Z",
+      "side": 1,
+      "message": "Please remove \"(Episode 2: Endgame)\" from the commit title and description",
+      "revId": "4f4a0d7aeb4fb783739ef7f702e240ade8a2eacd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b74b6131_614cc48c",
+        "filename": "chart2/source/controller/inc/helpids.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-08-22T22:44:06Z",
+      "side": 1,
+      "message": "Please remove the extra spaces.",
+      "revId": "4f4a0d7aeb4fb783739ef7f702e240ade8a2eacd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
