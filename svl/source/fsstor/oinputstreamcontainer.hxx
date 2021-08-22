@@ -26,16 +26,16 @@
 
 
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <memory>
 
 class OFSInputStreamContainer : public cppu::WeakImplHelper < css::io::XInputStream
                                                             ,css::embed::XExtendedStorageStream >
                             , public css::io::XSeekable
 {
-    ::osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
 
     css::uno::Reference < css::io::XInputStream > m_xInputStream;
     css::uno::Reference < css::io::XSeekable > m_xSeekable;
@@ -44,7 +44,7 @@ class OFSInputStreamContainer : public cppu::WeakImplHelper < css::io::XInputStr
 
     bool m_bDisposed;
 
-    std::unique_ptr<::comphelper::OInterfaceContainerHelper2> m_pListenersContainer; // list of listeners
+    ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aListenersContainer; // list of listeners
 
 public:
     explicit OFSInputStreamContainer( const css::uno::Reference < css::io::XInputStream >& xStream );
