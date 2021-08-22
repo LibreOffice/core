@@ -110,16 +110,16 @@ void SfxTemplateControllerItem::StateChangedAtToolBoxControl( sal_uInt16 nSID, S
             break;
         }
         case SID_STYLE_EDIT:
-            rTemplateDlg.EnableEdit( SfxItemState::DISABLED != eState );
+            rTemplateDlg.EnableEdit( SfxItemState::DISABLED != eState, nullptr );
             break;
         case SID_STYLE_DELETE:
-            rTemplateDlg.EnableDel( SfxItemState::DISABLED != eState );
+            rTemplateDlg.EnableDel( SfxItemState::DISABLED != eState, nullptr );
             break;
         case SID_STYLE_HIDE:
-            rTemplateDlg.EnableHide( SfxItemState::DISABLED != eState );
+            rTemplateDlg.EnableHide( SfxItemState::DISABLED != eState, nullptr );
             break;
         case SID_STYLE_SHOW:
-            rTemplateDlg.EnableShow( SfxItemState::DISABLED != eState );
+            rTemplateDlg.EnableShow( SfxItemState::DISABLED != eState, nullptr );
             break;
         case SID_STYLE_NEW_BY_EXAMPLE:
 
@@ -132,7 +132,7 @@ void SfxTemplateControllerItem::StateChangedAtToolBoxControl( sal_uInt16 nSID, S
         }
         case SID_STYLE_NEW:
         {
-            rTemplateDlg.EnableNew( SfxItemState::DISABLED != eState );
+            rTemplateDlg.EnableNew( SfxItemState::DISABLED != eState, nullptr );
             break;
         }
         case SID_STYLE_DRAGHIERARCHIE:
