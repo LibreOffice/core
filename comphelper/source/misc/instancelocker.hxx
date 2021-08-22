@@ -24,14 +24,14 @@
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 #include <memory>
+#include <mutex>
 
 namespace com::sun::star::embed { class XActionsApproval; }
-namespace comphelper { class OInterfaceContainerHelper2; }
 
 
 class OLockListener;
@@ -42,11 +42,11 @@ class OInstanceLocker : public ::cppu::WeakImplHelper< css::lang::XComponent,
                                                        css::lang::XInitialization,
                                                        css::lang::XServiceInfo >
 {
-    ::osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
 
     rtl::Reference< OLockListener > m_xLockListener;
 
-    std::unique_ptr<::comphelper::OInterfaceContainerHelper2> m_pListenersContainer; // list of listeners
+    comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aListenersContainer; // list of listeners
 
     bool m_bDisposed;
     bool m_bInitialized;
