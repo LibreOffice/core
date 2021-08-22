@@ -34,6 +34,24 @@
       "revId": "bccd8e4ba7b9752ba1b19b5ae687b579ddfb1112",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cebd5cbe_c59c354f",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2021-08-22T16:22:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7519355f_f854648d",
+      "revId": "bccd8e4ba7b9752ba1b19b5ae687b579ddfb1112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
