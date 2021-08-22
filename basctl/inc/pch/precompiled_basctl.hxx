@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-05-14 22:14:43 using:
+ Generated on 2021-08-22 14:51:38 using:
  ./bin/update_pch basctl basctl --cutoff=3 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -44,12 +44,13 @@
 #include <map>
 #include <math.h>
 #include <memory>
+#include <mutex>
 #include <new>
 #include <numeric>
 #include <optional>
 #include <ostream>
-#include <set>
 #include <stddef.h>
+#include <stdexcept>
 #include <string.h>
 #include <string>
 #include <string_view>
@@ -58,7 +59,6 @@
 #include <unordered_set>
 #include <utility>
 #include <vector>
-#include <boost/functional/hash.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
@@ -187,6 +187,8 @@
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/range/b2irectangle.hxx>
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/tuple/Tuple2D.hxx>
+#include <basegfx/tuple/Tuple3D.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
@@ -269,6 +271,7 @@
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
+#include <com/sun/star/i18n/XNumberFormatCode.hpp>
 #include <com/sun/star/i18n/reservedWords.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
@@ -322,6 +325,7 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/multicontainer2.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propagg.hxx>
 #include <comphelper/proparrhlp.hxx>
@@ -350,7 +354,6 @@
 #include <cppuhelper/implbase_ex_post.hxx>
 #include <cppuhelper/implbase_ex_pre.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
@@ -369,6 +372,8 @@
 #include <editeng/flditem.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/outliner.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/overflowingtxt.hxx>
 #include <editeng/paragraphdata.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/svxfont.hxx>
@@ -396,6 +401,7 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dllapi.h>
+#include <sfx2/filedlghelper.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/groupid.hxx>
 #include <sfx2/minfitem.hxx>
@@ -418,6 +424,7 @@
 #include <svl/nfkeytab.hxx>
 #include <svl/ondemand.hxx>
 #include <svl/poolitem.hxx>
+#include <svl/setitem.hxx>
 #include <svl/srchdefs.hxx>
 #include <svl/stritem.hxx>
 #include <svl/style.hxx>
@@ -426,10 +433,11 @@
 #include <svl/typedwhich.hxx>
 #include <svl/undo.hxx>
 #include <svl/visitem.hxx>
+#include <svl/whichranges.hxx>
 #include <svl/whiter.hxx>
+#include <svl/zforlist.hxx>
 #include <svtools/borderline.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/statusbarcontroller.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/toolboxcontroller.hxx>
@@ -523,6 +531,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/nativenumberwrapper.hxx>
 #include <unotools/options.hxx>
+#include <unotools/resmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/unotoolsdllapi.h>
