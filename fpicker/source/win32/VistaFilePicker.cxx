@@ -462,7 +462,12 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
     }
     Request rRequest;
     if (bFileOpenDialog)
-        rRequest.setRequest (VistaFilePickerImpl::E_CREATE_OPEN_DIALOG);
+    {
+        if (!m_bFolderPicker)
+            rRequest.setRequest(VistaFilePickerImpl::E_CREATE_OPEN_DIALOG);
+        else
+            rRequest.setRequest(VistaFilePickerImpl::E_CREATE_FOLDER_PICKER);
+    }
     else
         rRequest.setRequest (VistaFilePickerImpl::E_CREATE_SAVE_DIALOG);
     rRequest.setArgument(PROP_FEATURES, nFeatures);
