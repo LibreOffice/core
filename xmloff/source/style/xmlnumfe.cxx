@@ -210,7 +210,8 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
             const uno::Reference< util::XNumberFormatsSupplier >& rSupp ) :
     rExport( rExp ),
     sPrefix( OUString("N") ),
-    pFormatter( nullptr )
+    pFormatter( nullptr ),
+    bHasText( false )
 {
     //  supplier must be SvNumberFormatsSupplierObj
     SvNumberFormatsSupplierObj* pObj =
@@ -242,7 +243,8 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
                        const OUString& rPrefix ) :
     rExport( rExp ),
     sPrefix( rPrefix ),
-    pFormatter( nullptr )
+    pFormatter( nullptr ),
+    bHasText( false )
 {
     //  supplier must be SvNumberFormatsSupplierObj
     SvNumberFormatsSupplierObj* pObj =
@@ -320,16 +322,21 @@ void SvXMLNumFmtExport::AddToTextElement_Impl( std::u16string_view rString )
     //  to avoid several text elements following each other
 
     sTextContent.append( rString );
+    // Also empty string leads to a number:text element as it may separate
+    // keywords of the same letter (e.g. MM""MMM) that otherwise would be
+    // concatenated when reading back in.
+    bHasText = true;
 }
 
 void SvXMLNumFmtExport::FinishTextElement_Impl(bool bUseExtensionNS)
 {
-    if ( !sTextContent.isEmpty() )
+    if ( bHasText )
     {
         sal_uInt16 nNS = bUseExtensionNS ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER;
         SvXMLElementExport aElem( rExport, nNS, XML_TEXT,
                                   true, false );
         rExport.Characters( sTextContent.makeStringAndClear() );
+        bHasText = false;
     }
 }
 
@@ -1415,6 +1422,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
             {
                 case 0:
                     bEnd = true;                // end of format reached
+                    if (bHasText && sTextContent.isEmpty())
+                        bHasText = false;       // don't write trailing empty text
                     break;
                 case NF_SYMBOLTYPE_STRING:
                 case NF_SYMBOLTYPE_DATESEP:
@@ -1463,6 +1472,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     break;
                 case NF_KEY_GENERAL :
                         WriteNumberElement_Impl( -1, -1, 1, OUString(), false, 0, aEmbeddedEntries );
+                        bAnyContent = true;
                     break;
                 case NF_KEY_CCC:
                     if (pElemStr)

@@ -145,6 +145,7 @@ private:
     bool            bAutoDec;       // set in AddNumber
     bool            bAutoInt;       // set in AddNumber
     bool            bHasExtraText;
+    bool            bHasTrailingEmptyText;
     OUStringBuffer aFormatCode{64};
     OUStringBuffer aConditions{32};
     bool            bHasLongDoW;
@@ -189,6 +190,7 @@ public:
 
     bool HasLongDoW() const                     { return bHasLongDoW; }
     void SetHasLongDoW(bool bSet)               { bHasLongDoW = bSet; }
+    void SetHasTrailingEmptyText(bool bSet)     { bHasTrailingEmptyText = bSet; }
 
     void UpdateCalendar( const OUString& rNewCalendar );
     ImplicitCalendar GetImplicitCalendarState() const { return eImplicitCalendar; }
