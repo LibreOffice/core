@@ -20,7 +20,7 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <rtl/instance.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 
 #include <map>
 #include <memory>
@@ -36,14 +36,14 @@ namespace {
 typedef std::pair< AccessibleEventNotifier::TClientId,
         AccessibleEventObject > ClientEvent;
 
-typedef std::map< AccessibleEventNotifier::TClientId,
-            ::comphelper::OInterfaceContainerHelper2* > ClientMap;
+typedef ::comphelper::OInterfaceContainerHelper4<XAccessibleEventListener> ListenerContainer;
+typedef std::map< AccessibleEventNotifier::TClientId, ListenerContainer* > ClientMap;
 
 /// key is the end of the interval, value is the start of the interval
 typedef std::map<AccessibleEventNotifier::TClientId,
             AccessibleEventNotifier::TClientId> IntervalMap;
 
-struct lclMutex : public rtl::Static< ::osl::Mutex, lclMutex > {};
+struct lclMutex : public rtl::Static< ::std::mutex, lclMutex > {};
 
 struct Clients : public rtl::Static< ClientMap, Clients > {};
 
@@ -144,19 +144,13 @@ namespace comphelper {
 
 AccessibleEventNotifier::TClientId AccessibleEventNotifier::registerClient()
 {
-    ::osl::MutexGuard aGuard( lclMutex::get() );
+    std::scoped_lock aGuard( lclMutex::get() );
 
     // generate a new client id
     TClientId nNewClientId = generateId( );
 
     // the event listeners for the new client
-    ::comphelper::OInterfaceContainerHelper2 *const pNewListeners =
-        new ::comphelper::OInterfaceContainerHelper2( lclMutex::get() );
-        // note that we're using our own mutex here, so the listener containers for all
-        // our clients share this same mutex.
-        // this is a reminiscence to the days where the notifier was asynchronous. Today this is
-        // completely nonsense, and potentially slowing down the Office me thinks...
-
+    ListenerContainer * pNewListeners = new ListenerContainer();
     // add the client
     Clients::get().emplace( nNewClientId, pNewListeners );
 
@@ -166,7 +160,7 @@ AccessibleEventNotifier::TClientId AccessibleEventNotifier::registerClient()
 
 void AccessibleEventNotifier::revokeClient( const TClientId _nClient )
 {
-    ::osl::MutexGuard aGuard( lclMutex::get() );
+    std::scoped_lock aGuard( lclMutex::get() );
 
     ClientMap::iterator aClientPos;
     if ( !implLookupClient( _nClient, aClientPos ) )
@@ -182,40 +176,35 @@ void AccessibleEventNotifier::revokeClient( const TClientId _nClient )
 void AccessibleEventNotifier::revokeClientNotifyDisposing(
     const TClientId _nClient, const Reference< XInterface >& _rxEventSource )
 {
-    std::unique_ptr<::comphelper::OInterfaceContainerHelper2> pListeners;
+    std::unique_lock aGuard( lclMutex::get() );
 
-    {
-        // rhbz#1001768 drop the mutex before calling disposeAndClear
-        ::osl::MutexGuard aGuard( lclMutex::get() );
+    ClientMap::iterator aClientPos;
+    if (!implLookupClient(_nClient, aClientPos))
+        // already asserted in implLookupClient
+        return;
 
-        ClientMap::iterator aClientPos;
-        if (!implLookupClient(_nClient, aClientPos))
-            // already asserted in implLookupClient
-            return;
+    // notify the listeners
+    std::unique_ptr<ListenerContainer> pListeners(aClientPos->second);
 
-        // notify the listeners
-        pListeners.reset(aClientPos->second);
-
-        // we do not need the entry in the clients map anymore
-        // (do this before actually notifying, because some client
-        // implementations have re-entrance problems and call into
-        // revokeClient while we are notifying from here)
-        Clients::get().erase(aClientPos);
-        releaseId(_nClient);
-    }
+    // we do not need the entry in the clients map anymore
+    // (do this before actually notifying, because some client
+    // implementations have re-entrance problems and call into
+    // revokeClient while we are notifying from here)
+    Clients::get().erase(aClientPos);
+    releaseId(_nClient);
 
     // notify the "disposing" event for this client
     EventObject aDisposalEvent;
     aDisposalEvent.Source = _rxEventSource;
 
     // now really do the notification
-    pListeners->disposeAndClear( aDisposalEvent );
+    pListeners->disposeAndClear( aGuard, aDisposalEvent );
 }
 
 sal_Int32 AccessibleEventNotifier::addEventListener(
     const TClientId _nClient, const Reference< XAccessibleEventListener >& _rxListener )
 {
-    ::osl::MutexGuard aGuard( lclMutex::get() );
+    std::scoped_lock aGuard( lclMutex::get() );
 
     ClientMap::iterator aClientPos;
     if ( !implLookupClient( _nClient, aClientPos ) )
@@ -231,7 +220,7 @@ sal_Int32 AccessibleEventNotifier::addEventListener(
 sal_Int32 AccessibleEventNotifier::removeEventListener(
     const TClientId _nClient, const Reference< XAccessibleEventListener >& _rxListener )
 {
-    ::osl::MutexGuard aGuard( lclMutex::get() );
+    std::scoped_lock aGuard( lclMutex::get() );
 
     ClientMap::iterator aClientPos;
     if ( !implLookupClient( _nClient, aClientPos ) )
@@ -246,10 +235,10 @@ sal_Int32 AccessibleEventNotifier::removeEventListener(
 
 void AccessibleEventNotifier::addEvent( const TClientId _nClient, const AccessibleEventObject& _rEvent )
 {
-    std::vector< Reference< XInterface > > aListeners;
+    std::vector< Reference< XAccessibleEventListener > > aListeners;
 
     {
-        ::osl::MutexGuard aGuard( lclMutex::get() );
+        std::scoped_lock aGuard( lclMutex::get() );
 
         ClientMap::iterator aClientPos;
         if ( !implLookupClient( _nClient, aClientPos ) )
@@ -265,7 +254,7 @@ void AccessibleEventNotifier::addEvent( const TClientId _nClient, const Accessib
     {
         try
         {
-            static_cast< XAccessibleEventListener* >( rListener.get() )->notifyEvent( _rEvent );
+            rListener->notifyEvent( _rEvent );
         }
         catch( const Exception& )
         {
