@@ -121,6 +121,10 @@ public:
     void FamilySelect(sal_uInt16 nEntry);
     void FilterSelect(sal_uInt16 nActFilter, bool bsetFilter);
 
+    void setVisible(bool b);
+
+    DECL_LINK(NewMenuExecuteAction, void*, void);
+
 private:
     void FillTreeBox(SfxStyleFamily eFam);
 
@@ -149,7 +153,6 @@ private:
     DECL_LINK(Clear, void*, void);
     DECL_LINK(Cleanup, void*, void);
     DECL_LINK(ExecuteDrop, const ExecuteDropEvent&, sal_Int8);
-    DECL_LINK(NewMenuExecuteAction, void*, void);
     DECL_LINK(IsSafeForWaterCan, void*, bool);
     DECL_LINK(HasSelectedStyle, void*, bool);
     DECL_LINK(UpdateStyleDependents, void*, void);
