@@ -9832,7 +9832,7 @@ public:
 
     virtual void set_font(const vcl::Font& rFont) override
     {
-        m_xFont.reset(new vcl::Font(rFont));
+        m_xFont = rFont;
         GtkWidget* pChild = ::get_label_widget(GTK_WIDGET(m_pMenuButton));
         ::set_font(GTK_LABEL(pChild), rFont);
     }
@@ -18832,7 +18832,7 @@ public:
 
     virtual void set_entry_font(const vcl::Font& rFont) override
     {
-        m_xFont.reset(new vcl::Font(rFont));
+        m_xFont = rFont;
         assert(m_pEntry);
         PangoAttrList* pOrigList = gtk_entry_get_attributes(GTK_ENTRY(m_pEntry));
         PangoAttrList* pAttrList = pOrigList ? pango_attr_list_copy(pOrigList) : pango_attr_list_new();
