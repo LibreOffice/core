@@ -99,9 +99,6 @@ struct LibraryContainerInfo
     {}
 };
 
-struct BasicManagerImpl;
-
-
 #define LIB_NOTFOUND    0xFFFF
 
 class BASIC_DLLPUBLIC BasicManager final : public SfxBroadcaster
@@ -118,9 +115,10 @@ private:
     OUString            maStorageName;
     bool                mbDocMgr;
 
-    std::unique_ptr<BasicManagerImpl>   mpImpl;
+    LibraryContainerInfo    maContainerInfo;
+    std::vector<std::unique_ptr<BasicLibInfo>> maLibs;
+    OUString         aBasicLibPath;
 
-    BASIC_DLLPRIVATE void Init();
     bool            ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage );
     void            ImpCreateStdLib( StarBASIC* pParentFromStdLib );
     void            ImpMgrNotLoaded(  const OUString& rStorageName  );
@@ -135,6 +133,7 @@ private:
 public:
                     BasicManager( SotStorage& rStorage, const OUString& rBaseURL, StarBASIC* pParentFromStdLib = nullptr, OUString const * pLibPath = nullptr, bool bDocMgr = false );
                     BasicManager( StarBASIC* pStdLib, OUString const * pLibPath = nullptr, bool bDocMgr = false );
+
     virtual ~BasicManager() override;
 
     void            SetStorageName( const OUString& rName )   { maStorageName = rName; }
@@ -208,6 +207,8 @@ private:
     BASIC_DLLPRIVATE StarBASIC* CreateLib( const OUString& rLibName );
     BASIC_DLLPRIVATE StarBASIC* CreateLib( const OUString& rLibName, const OUString& Password,
                                            const OUString& LinkTargetURL );
+    BasicManager& operator=(BasicManager const &) = delete; //MSVC2015 workaround
+    BasicManager( BasicManager const&) = delete; //MSVC2015 workaround
 };
 
 #endif // INCLUDED_BASIC_BASMGR_HXX
