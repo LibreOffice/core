@@ -1075,12 +1075,11 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     fLineWidth = (rObjectToDevice * basegfx::B2DVector(fLineWidth, 0)).getLength();
 
     // Transform to DeviceCoordinates, get DeviceLineWidth, execute PixelSnapHairline
-    basegfx::B2DPolyPolygon aPolyPolygonLine;
-    aPolyPolygonLine.append(rPolyLine);
-    aPolyPolygonLine.transform(rObjectToDevice);
+    basegfx::B2DPolygon aPolyLine(rPolyLine);
+    aPolyLine.transform(rObjectToDevice);
     if (bPixelSnapHairline)
     {
-        aPolyPolygonLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyPolygonLine);
+        aPolyLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyLine);
     }
 
     // Setup Line Join
@@ -1143,39 +1142,30 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     if (eLineJoin != basegfx::B2DLineJoin::NONE || fLineWidth <= 1.0)
     {
         SkPath aPath;
-        sal_uInt32 nPointCount = 0;
-        for (const auto& rPolygon : std::as_const(aPolyPolygonLine))
-            nPointCount += (rPolygon.count() + 1);
-        aPath.incReserve(nPointCount + 2);
-
+        aPath.incReserve(aPolyLine.count() + 2);
         aPath.setFillType(SkPathFillType::kEvenOdd);
-        for (const auto& rPolygon : std::as_const(aPolyPolygonLine))
-            addPolygonToPath(rPolygon, aPath);
+        addPolygonToPath(aPolyLine, aPath);
         aPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, nullptr);
         addUpdateRegion(aPath.getBounds());
         getDrawCanvas()->drawPath(aPath, aPaint);
     }
     else
     {
-        for (sal_uInt32 i = 0; i < aPolyPolygonLine.count(); ++i)
+        sal_uInt32 nPoints = aPolyLine.count();
+        bool bClosed = aPolyLine.isClosed();
+        for (sal_uInt32 j = 0; j < (bClosed ? nPoints : nPoints - 1); ++j)
         {
-            const basegfx::B2DPolygon& rPolygon = aPolyPolygonLine.getB2DPolygon(i);
-            sal_uInt32 nPoints = rPolygon.count();
-            bool bClosed = rPolygon.isClosed();
-            for (sal_uInt32 j = 0; j < (bClosed ? nPoints : nPoints - 1); ++j)
-            {
-                sal_uInt32 index1 = (j + 0) % nPoints;
-                sal_uInt32 index2 = (j + 1) % nPoints;
-                SkPath aPath;
-                aPath.moveTo(rPolygon.getB2DPoint(index1).getX(),
-                             rPolygon.getB2DPoint(index1).getY());
-                aPath.lineTo(rPolygon.getB2DPoint(index2).getX(),
-                             rPolygon.getB2DPoint(index2).getY());
+            sal_uInt32 index1 = (j + 0) % nPoints;
+            sal_uInt32 index2 = (j + 1) % nPoints;
+            SkPath aPath;
+            aPath.moveTo(aPolyLine.getB2DPoint(index1).getX(),
+                         aPolyLine.getB2DPoint(index1).getY());
+            aPath.lineTo(aPolyLine.getB2DPoint(index2).getX(),
+                         aPolyLine.getB2DPoint(index2).getY());
 
-                aPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, nullptr);
-                addUpdateRegion(aPath.getBounds());
-                getDrawCanvas()->drawPath(aPath, aPaint);
-            }
+            aPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, nullptr);
+            addUpdateRegion(aPath.getBounds());
+            getDrawCanvas()->drawPath(aPath, aPaint);
         }
     }
 
