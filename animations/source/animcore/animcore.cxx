@@ -48,15 +48,15 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakref.hxx>
 
 #include <cppuhelper/implbase.hxx>
 
-#include <osl/mutex.hxx>
 #include <sal/log.hxx>
 #include <array>
+#include <mutex>
 #include <vector>
 #include <algorithm>
 
@@ -65,8 +65,8 @@ namespace com::sun::star::beans { struct NamedValue; }
 
 using ::osl::Mutex;
 using ::osl::Guard;
-using ::comphelper::OInterfaceContainerHelper2;
-using ::comphelper::OInterfaceIteratorHelper2;
+using ::comphelper::OInterfaceContainerHelper4;
+using ::comphelper::OInterfaceIteratorHelper4;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::XInterface;
@@ -122,7 +122,7 @@ class AnimationNodeBase :   public XAnimateMotion,
 {
 public:
     // our first, last and only protection from multi-threads!
-    Mutex maMutex;
+    std::mutex maMutex;
 };
 
 class AnimationNode final : public AnimationNodeBase
@@ -296,10 +296,10 @@ public:
     virtual ::sal_Int64 SAL_CALL getSomething( const Sequence< ::sal_Int8 >& aIdentifier ) override;
 
     static const Sequence< sal_Int8 > & getUnoTunnelId();
-    void fireChangeListener();
+    void fireChangeListener(std::unique_lock<std::mutex>&);
 
 private:
-    OInterfaceContainerHelper2   maChangeListener;
+    comphelper::OInterfaceContainerHelper4<XChangesListener>  maChangeListener;
 
     static void initTypeProvider( sal_Int16 nNodeType ) noexcept;
 
@@ -417,7 +417,7 @@ Any SAL_CALL TimeContainerEnumeration::nextElement()
 std::array<Sequence< Type >*, 13> AnimationNode::mpTypes = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 
 AnimationNode::AnimationNode( sal_Int16 nNodeType )
-:   maChangeListener(maMutex),
+:   maChangeListener(),
     mnNodeType( nNodeType ),
     mnFill( AnimationFill::DEFAULT ),
     mnFillDefault( AnimationFill::INHERIT ),
@@ -451,7 +451,7 @@ AnimationNode::AnimationNode( sal_Int16 nNodeType )
 
 AnimationNode::AnimationNode( const AnimationNode& rNode )
 :   AnimationNodeBase(),
-    maChangeListener(maMutex),
+    maChangeListener(),
     mnNodeType( rNode.mnNodeType ),
 
     // attributes for the XAnimationNode interface implementation
@@ -926,7 +926,7 @@ Sequence< OUString > AnimationNode::getSupportedServiceNames()
 // XAnimationNode
 sal_Int16 SAL_CALL AnimationNode::getType()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return mnNodeType;
 }
 
@@ -934,7 +934,7 @@ sal_Int16 SAL_CALL AnimationNode::getType()
 // XAnimationNode
 Any SAL_CALL AnimationNode::getBegin()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maBegin;
 }
 
@@ -942,11 +942,11 @@ Any SAL_CALL AnimationNode::getBegin()
 // XAnimationNode
 void SAL_CALL AnimationNode::setBegin( const Any& _begin )
 {
-    Guard< Mutex > aGuard( maMutex );
-    if( _begin != maBegin )
+    std::unique_lock aGuard( maMutex );
+    if( _begin == maBegin )
     {
         maBegin = _begin;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -954,7 +954,7 @@ void SAL_CALL AnimationNode::setBegin( const Any& _begin )
 // XAnimationNode
 Any SAL_CALL AnimationNode::getDuration()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maDuration;
 }
 
@@ -962,11 +962,11 @@ Any SAL_CALL AnimationNode::getDuration()
 // XAnimationNode
 void SAL_CALL AnimationNode::setDuration( const Any& _duration )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _duration != maDuration )
     {
         maDuration = _duration;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -974,7 +974,7 @@ void SAL_CALL AnimationNode::setDuration( const Any& _duration )
 // XAnimationNode
 Any SAL_CALL AnimationNode::getEnd()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maEnd;
 }
 
@@ -982,11 +982,11 @@ Any SAL_CALL AnimationNode::getEnd()
 // XAnimationNode
 void SAL_CALL AnimationNode::setEnd( const Any& _end )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _end != maEnd )
     {
         maEnd = _end;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -994,7 +994,7 @@ void SAL_CALL AnimationNode::setEnd( const Any& _end )
 // XAnimationNode
 Any SAL_CALL AnimationNode::getEndSync()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maEndSync;
 }
 
@@ -1002,11 +1002,11 @@ Any SAL_CALL AnimationNode::getEndSync()
 // XAnimationNode
 void SAL_CALL AnimationNode::setEndSync( const Any& _endsync )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _endsync != maEndSync )
     {
         maEndSync = _endsync;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1014,7 +1014,7 @@ void SAL_CALL AnimationNode::setEndSync( const Any& _endsync )
 // XAnimationNode
 Any SAL_CALL AnimationNode::getRepeatCount()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maRepeatCount;
 }
 
@@ -1022,11 +1022,11 @@ Any SAL_CALL AnimationNode::getRepeatCount()
 // XAnimationNode
 void SAL_CALL AnimationNode::setRepeatCount( const Any& _repeatcount )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _repeatcount != maRepeatCount )
     {
         maRepeatCount = _repeatcount;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1034,7 +1034,7 @@ void SAL_CALL AnimationNode::setRepeatCount( const Any& _repeatcount )
 // XAnimationNode
 Any SAL_CALL AnimationNode::getRepeatDuration()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maRepeatDuration;
 }
 
@@ -1042,11 +1042,11 @@ Any SAL_CALL AnimationNode::getRepeatDuration()
 // XAnimationNode
 void SAL_CALL AnimationNode::setRepeatDuration( const Any& _repeatduration )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _repeatduration != maRepeatDuration )
     {
         maRepeatDuration = _repeatduration;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1054,7 +1054,7 @@ void SAL_CALL AnimationNode::setRepeatDuration( const Any& _repeatduration )
 // XAnimationNode
 sal_Int16 SAL_CALL AnimationNode::getFill()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return mnFill;
 }
 
@@ -1062,11 +1062,11 @@ sal_Int16 SAL_CALL AnimationNode::getFill()
 // XAnimationNode
 void SAL_CALL AnimationNode::setFill( sal_Int16 _fill )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _fill != mnFill )
     {
         mnFill = _fill;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1074,7 +1074,7 @@ void SAL_CALL AnimationNode::setFill( sal_Int16 _fill )
 // XAnimationNode
 sal_Int16 SAL_CALL AnimationNode::getFillDefault()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return mnFillDefault;
 }
 
@@ -1082,11 +1082,11 @@ sal_Int16 SAL_CALL AnimationNode::getFillDefault()
 // XAnimationNode
 void SAL_CALL AnimationNode::setFillDefault( sal_Int16 _filldefault )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _filldefault != mnFillDefault )
     {
         mnFillDefault = _filldefault;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1094,7 +1094,7 @@ void SAL_CALL AnimationNode::setFillDefault( sal_Int16 _filldefault )
 // XAnimationNode
 sal_Int16 SAL_CALL AnimationNode::getRestart()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return mnRestart;
 }
 
@@ -1102,11 +1102,11 @@ sal_Int16 SAL_CALL AnimationNode::getRestart()
 // XAnimationNode
 void SAL_CALL AnimationNode::setRestart( sal_Int16 _restart )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _restart != mnRestart )
     {
         mnRestart = _restart;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1114,7 +1114,7 @@ void SAL_CALL AnimationNode::setRestart( sal_Int16 _restart )
 // XAnimationNode
 sal_Int16 SAL_CALL AnimationNode::getRestartDefault()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return mnRestartDefault;
 }
 
@@ -1122,11 +1122,11 @@ sal_Int16 SAL_CALL AnimationNode::getRestartDefault()
 // XAnimationNode
 void SAL_CALL AnimationNode::setRestartDefault( sal_Int16 _restartdefault )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _restartdefault != mnRestartDefault )
     {
         mnRestartDefault = _restartdefault;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1134,7 +1134,7 @@ void SAL_CALL AnimationNode::setRestartDefault( sal_Int16 _restartdefault )
 // XAnimationNode
 double SAL_CALL AnimationNode::getAcceleration()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return mfAcceleration;
 }
 
@@ -1142,11 +1142,11 @@ double SAL_CALL AnimationNode::getAcceleration()
 // XAnimationNode
 void SAL_CALL AnimationNode::setAcceleration( double _acceleration )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _acceleration != mfAcceleration )
     {
         mfAcceleration = _acceleration;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1154,7 +1154,7 @@ void SAL_CALL AnimationNode::setAcceleration( double _acceleration )
 // XAnimationNode
 double SAL_CALL AnimationNode::getDecelerate()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return mfDecelerate;
 }
 
@@ -1162,11 +1162,11 @@ double SAL_CALL AnimationNode::getDecelerate()
 // XAnimationNode
 void SAL_CALL AnimationNode::setDecelerate( double _decelerate )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _decelerate != mfDecelerate )
     {
         mfDecelerate = _decelerate;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1174,7 +1174,7 @@ void SAL_CALL AnimationNode::setDecelerate( double _decelerate )
 // XAnimationNode
 sal_Bool SAL_CALL AnimationNode::getAutoReverse()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return mbAutoReverse;
 }
 
@@ -1182,34 +1182,34 @@ sal_Bool SAL_CALL AnimationNode::getAutoReverse()
 // XAnimationNode
 void SAL_CALL AnimationNode::setAutoReverse( sal_Bool _autoreverse )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( bool(_autoreverse) != mbAutoReverse )
     {
         mbAutoReverse = _autoreverse;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
 
 Sequence< NamedValue > SAL_CALL AnimationNode::getUserData()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maUserData;
 }
 
 
 void SAL_CALL AnimationNode::setUserData( const Sequence< NamedValue >& _userdata )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     maUserData = _userdata;
-    fireChangeListener();
+    fireChangeListener(aGuard);
 }
 
 
 // XChild
 Reference< XInterface > SAL_CALL AnimationNode::getParent()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return mxParent.get();
 }
 
@@ -1217,7 +1217,7 @@ Reference< XInterface > SAL_CALL AnimationNode::getParent()
 // XChild
 void SAL_CALL AnimationNode::setParent( const Reference< XInterface >& Parent )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( Parent != mxParent.get() )
     {
         mxParent = Parent;
@@ -1227,7 +1227,7 @@ void SAL_CALL AnimationNode::setParent( const Reference< XInterface >& Parent )
         if( xTunnel.is() )
             mpParent = reinterpret_cast< AnimationNode* >( sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething( getUnoTunnelId() )));
 
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1235,7 +1235,7 @@ void SAL_CALL AnimationNode::setParent( const Reference< XInterface >& Parent )
 // XCloneable
 Reference< XCloneable > SAL_CALL AnimationNode::createClone()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
 
     Reference< XCloneable > xNewNode;
     try
@@ -1276,7 +1276,7 @@ Reference< XCloneable > SAL_CALL AnimationNode::createClone()
 // XAnimate
 Any SAL_CALL AnimationNode::getTarget()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maTarget;
 }
 
@@ -1284,11 +1284,11 @@ Any SAL_CALL AnimationNode::getTarget()
 // XAnimate
 void SAL_CALL AnimationNode::setTarget( const Any& _target )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _target != maTarget )
     {
         maTarget= _target;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1296,7 +1296,7 @@ void SAL_CALL AnimationNode::setTarget( const Any& _target )
 // XAnimate
 OUString SAL_CALL AnimationNode::getAttributeName()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maAttributeName;
 }
 
@@ -1304,11 +1304,11 @@ OUString SAL_CALL AnimationNode::getAttributeName()
 // XAnimate
 void SAL_CALL AnimationNode::setAttributeName( const OUString& _attribute )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _attribute != maAttributeName )
     {
         maAttributeName = _attribute;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1316,7 +1316,7 @@ void SAL_CALL AnimationNode::setAttributeName( const OUString& _attribute )
 // XAnimate
 Sequence< Any > SAL_CALL AnimationNode::getValues()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maValues;
 }
 
@@ -1324,16 +1324,16 @@ Sequence< Any > SAL_CALL AnimationNode::getValues()
 // XAnimate
 void SAL_CALL AnimationNode::setValues( const Sequence< Any >& _values )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     maValues = _values;
-    fireChangeListener();
+    fireChangeListener(aGuard);
 }
 
 
 // XAnimate
 sal_Int16 SAL_CALL AnimationNode::getSubItem()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return mnSubItem;
 }
 
@@ -1341,11 +1341,11 @@ sal_Int16 SAL_CALL AnimationNode::getSubItem()
 // XAnimate
 void SAL_CALL AnimationNode::setSubItem( sal_Int16 _subitem )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _subitem != mnSubItem )
     {
         mnSubItem = _subitem;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1353,7 +1353,7 @@ void SAL_CALL AnimationNode::setSubItem( sal_Int16 _subitem )
 // XAnimate
 Sequence< double > SAL_CALL AnimationNode::getKeyTimes()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maKeyTimes;
 }
 
@@ -1361,27 +1361,27 @@ Sequence< double > SAL_CALL AnimationNode::getKeyTimes()
 // XAnimate
 void SAL_CALL AnimationNode::setKeyTimes( const Sequence< double >& _keytimes )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     maKeyTimes = _keytimes;
-    fireChangeListener();
+    fireChangeListener(aGuard);
 }
 
 
 // XAnimate
 sal_Int16 SAL_CALL AnimationNode::getValueType()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return mnValueType;
 }
 
 
 void SAL_CALL AnimationNode::setValueType( sal_Int16 _valuetype )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _valuetype != mnValueType )
     {
         mnValueType = _valuetype;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1389,7 +1389,7 @@ void SAL_CALL AnimationNode::setValueType( sal_Int16 _valuetype )
 // XAnimate
 sal_Int16 SAL_CALL AnimationNode::getCalcMode()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return mnCalcMode;
 }
 
@@ -1397,11 +1397,11 @@ sal_Int16 SAL_CALL AnimationNode::getCalcMode()
 // XAnimate
 void SAL_CALL AnimationNode::setCalcMode( sal_Int16 _calcmode )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _calcmode != mnCalcMode )
     {
         mnCalcMode = _calcmode;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1409,7 +1409,7 @@ void SAL_CALL AnimationNode::setCalcMode( sal_Int16 _calcmode )
 // XAnimate
 sal_Bool SAL_CALL AnimationNode::getAccumulate()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return mbAccumulate;
 }
 
@@ -1417,11 +1417,11 @@ sal_Bool SAL_CALL AnimationNode::getAccumulate()
 // XAnimate
 void SAL_CALL AnimationNode::setAccumulate( sal_Bool _accumulate )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( bool(_accumulate) != mbAccumulate )
     {
         mbAccumulate = _accumulate;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1429,7 +1429,7 @@ void SAL_CALL AnimationNode::setAccumulate( sal_Bool _accumulate )
 // XAnimate
 sal_Int16 SAL_CALL AnimationNode::getAdditive()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return mnAdditive;
 }
 
@@ -1437,11 +1437,11 @@ sal_Int16 SAL_CALL AnimationNode::getAdditive()
 // XAnimate
 void SAL_CALL AnimationNode::setAdditive( sal_Int16 _additive )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _additive != mnAdditive )
     {
         mnAdditive = _additive;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1449,7 +1449,7 @@ void SAL_CALL AnimationNode::setAdditive( sal_Int16 _additive )
 // XAnimate
 Any SAL_CALL AnimationNode::getFrom()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maFrom;
 }
 
@@ -1457,11 +1457,11 @@ Any SAL_CALL AnimationNode::getFrom()
 // XAnimate
 void SAL_CALL AnimationNode::setFrom( const Any& _from )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _from != maFrom )
     {
         maFrom = _from;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1469,7 +1469,7 @@ void SAL_CALL AnimationNode::setFrom( const Any& _from )
 // XAnimate
 Any SAL_CALL AnimationNode::getTo()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maTo;
 }
 
@@ -1477,11 +1477,11 @@ Any SAL_CALL AnimationNode::getTo()
 // XAnimate
 void SAL_CALL AnimationNode::setTo( const Any& _to )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _to != maTo )
     {
         maTo = _to;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1489,7 +1489,7 @@ void SAL_CALL AnimationNode::setTo( const Any& _to )
 // XAnimate
 Any SAL_CALL AnimationNode::getBy()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maBy;
 }
 
@@ -1497,11 +1497,11 @@ Any SAL_CALL AnimationNode::getBy()
 // XAnimate
 void SAL_CALL AnimationNode::setBy( const Any& _by )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _by != maBy )
     {
         maBy = _by;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1509,7 +1509,7 @@ void SAL_CALL AnimationNode::setBy( const Any& _by )
 // XAnimate
 Sequence< TimeFilterPair > SAL_CALL AnimationNode::getTimeFilter()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maTimeFilter;
 }
 
@@ -1517,26 +1517,26 @@ Sequence< TimeFilterPair > SAL_CALL AnimationNode::getTimeFilter()
 // XAnimate
 void SAL_CALL AnimationNode::setTimeFilter( const Sequence< TimeFilterPair >& _timefilter )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     maTimeFilter = _timefilter;
-    fireChangeListener();
+    fireChangeListener(aGuard);
 }
 
 
 OUString SAL_CALL AnimationNode::getFormula()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maFormula;
 }
 
 
 void SAL_CALL AnimationNode::setFormula( const OUString& _formula )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _formula != maFormula )
     {
         maFormula = _formula;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1544,7 +1544,7 @@ void SAL_CALL AnimationNode::setFormula( const OUString& _formula )
 // XAnimateColor
 sal_Int16 SAL_CALL AnimationNode::getColorInterpolation()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return mnColorSpace;
 }
 
@@ -1552,11 +1552,11 @@ sal_Int16 SAL_CALL AnimationNode::getColorInterpolation()
 // XAnimateColor
 void SAL_CALL AnimationNode::setColorInterpolation( sal_Int16 _colorspace )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _colorspace != mnColorSpace )
     {
         mnColorSpace = _colorspace;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1564,7 +1564,7 @@ void SAL_CALL AnimationNode::setColorInterpolation( sal_Int16 _colorspace )
 // XAnimateColor
 sal_Bool SAL_CALL AnimationNode::getDirection()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return mbDirection;
 }
 
@@ -1572,11 +1572,11 @@ sal_Bool SAL_CALL AnimationNode::getDirection()
 // XAnimateColor
 void SAL_CALL AnimationNode::setDirection( sal_Bool _direction )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( bool(_direction) != mbDirection )
     {
         mbDirection = _direction;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1584,7 +1584,7 @@ void SAL_CALL AnimationNode::setDirection( sal_Bool _direction )
 // XAnimateMotion
 Any SAL_CALL AnimationNode::getPath()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maPath;
 }
 
@@ -1592,16 +1592,16 @@ Any SAL_CALL AnimationNode::getPath()
 // XAnimateMotion
 void SAL_CALL AnimationNode::setPath( const Any& _path )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     maPath = _path;
-    fireChangeListener();
+    fireChangeListener(aGuard);
 }
 
 
 // XAnimateMotion
 Any SAL_CALL AnimationNode::getOrigin()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maOrigin;
 }
 
@@ -1609,15 +1609,15 @@ Any SAL_CALL AnimationNode::getOrigin()
 // XAnimateMotion
 void SAL_CALL AnimationNode::setOrigin( const Any& _origin )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     maOrigin = _origin;
-    fireChangeListener();
+    fireChangeListener(aGuard);
 }
 
 // XAnimatePhysics
 Any SAL_CALL AnimationNode::getStartVelocityX()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maStartVelocityX;
 }
 
@@ -1625,15 +1625,15 @@ Any SAL_CALL AnimationNode::getStartVelocityX()
 // XAnimatePhysics
 void SAL_CALL AnimationNode::setStartVelocityX( const Any& _startvelocityx )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     maStartVelocityX = _startvelocityx;
-    fireChangeListener();
+    fireChangeListener(aGuard);
 }
 
 // XAnimatePhysics
 Any SAL_CALL AnimationNode::getStartVelocityY()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maStartVelocityY;
 }
 
@@ -1641,16 +1641,16 @@ Any SAL_CALL AnimationNode::getStartVelocityY()
 // XAnimatePhysics
 void SAL_CALL AnimationNode::setStartVelocityY( const Any& _startvelocityy )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     maStartVelocityY = _startvelocityy;
-    fireChangeListener();
+    fireChangeListener(aGuard);
 }
 
 
 // XAnimatePhysics
 Any SAL_CALL AnimationNode::getDensity()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maDensity;
 }
 
@@ -1658,16 +1658,16 @@ Any SAL_CALL AnimationNode::getDensity()
 // XAnimatePhysics
 void SAL_CALL AnimationNode::setDensity( const Any& _density )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     maDensity = _density;
-    fireChangeListener();
+    fireChangeListener(aGuard);
 }
 
 
 // XAnimatePhysics
 Any SAL_CALL AnimationNode::getBounciness()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maBounciness;
 }
 
@@ -1675,16 +1675,16 @@ Any SAL_CALL AnimationNode::getBounciness()
 // XAnimatePhysics
 void SAL_CALL AnimationNode::setBounciness( const Any& _bounciness )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     maBounciness = _bounciness;
-    fireChangeListener();
+    fireChangeListener(aGuard);
 }
 
 
 // XAnimateTransform
 sal_Int16 SAL_CALL AnimationNode::getTransformType()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return mnTransformType;
 }
 
@@ -1692,11 +1692,11 @@ sal_Int16 SAL_CALL AnimationNode::getTransformType()
 // XAnimateTransform
 void SAL_CALL AnimationNode::setTransformType( sal_Int16 _transformtype )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _transformtype != mnTransformType )
     {
         mnTransformType = _transformtype;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1704,7 +1704,7 @@ void SAL_CALL AnimationNode::setTransformType( sal_Int16 _transformtype )
 // XTransitionFilter
 sal_Int16 SAL_CALL AnimationNode::getTransition()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return mnTransition;
 }
 
@@ -1712,11 +1712,11 @@ sal_Int16 SAL_CALL AnimationNode::getTransition()
 // XTransitionFilter
 void SAL_CALL AnimationNode::setTransition( sal_Int16 _transition )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _transition != mnTransition )
     {
         mnTransition = _transition;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1724,7 +1724,7 @@ void SAL_CALL AnimationNode::setTransition( sal_Int16 _transition )
 // XTransitionFilter
 sal_Int16 SAL_CALL AnimationNode::getSubtype()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return mnSubtype;
 }
 
@@ -1732,11 +1732,11 @@ sal_Int16 SAL_CALL AnimationNode::getSubtype()
 // XTransitionFilter
 void SAL_CALL AnimationNode::setSubtype( sal_Int16 _subtype )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _subtype != mnSubtype )
     {
         mnSubtype = _subtype;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1744,7 +1744,7 @@ void SAL_CALL AnimationNode::setSubtype( sal_Int16 _subtype )
 // XTransitionFilter
 sal_Bool SAL_CALL AnimationNode::getMode()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return mbMode;
 }
 
@@ -1752,11 +1752,11 @@ sal_Bool SAL_CALL AnimationNode::getMode()
 // XTransitionFilter
 void SAL_CALL AnimationNode::setMode( sal_Bool _mode )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( bool(_mode) != mbMode )
     {
         mbMode = _mode;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1764,7 +1764,7 @@ void SAL_CALL AnimationNode::setMode( sal_Bool _mode )
 // XTransitionFilter
 sal_Int32 SAL_CALL AnimationNode::getFadeColor()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return mnFadeColor;
 }
 
@@ -1772,11 +1772,11 @@ sal_Int32 SAL_CALL AnimationNode::getFadeColor()
 // XTransitionFilter
 void SAL_CALL AnimationNode::setFadeColor( sal_Int32 _fadecolor )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _fadecolor != mnFadeColor )
     {
         mnFadeColor = _fadecolor;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1784,7 +1784,7 @@ void SAL_CALL AnimationNode::setFadeColor( sal_Int32 _fadecolor )
 // XAudio
 Any SAL_CALL AnimationNode::getSource()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maTarget;
 }
 
@@ -1792,16 +1792,16 @@ Any SAL_CALL AnimationNode::getSource()
 // XAudio
 void SAL_CALL AnimationNode::setSource( const Any& _source )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     maTarget = _source;
-    fireChangeListener();
+    fireChangeListener(aGuard);
 }
 
 
 // XAudio
 double SAL_CALL AnimationNode::getVolume()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return mfVolume;
 }
 
@@ -1809,50 +1809,50 @@ double SAL_CALL AnimationNode::getVolume()
 // XAudio
 void SAL_CALL AnimationNode::setVolume( double _volume )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _volume != mfVolume )
     {
         mfVolume = _volume;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
 sal_Bool SAL_CALL AnimationNode::getHideDuringShow()
 {
-    osl::Guard<osl::Mutex> aGuard(maMutex);
+    std::scoped_lock aGuard( maMutex );
     return mbHideDuringShow;
 }
 
 void SAL_CALL AnimationNode::setHideDuringShow(sal_Bool bHideDuringShow)
 {
-    osl::Guard<osl::Mutex> aGuard(maMutex);
+    std::unique_lock aGuard( maMutex );
     if (static_cast<bool>(bHideDuringShow) != mbHideDuringShow)
     {
         mbHideDuringShow = bHideDuringShow;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
 sal_Bool SAL_CALL AnimationNode::getNarration()
 {
-    osl::Guard<osl::Mutex> aGuard(maMutex);
+    std::scoped_lock aGuard( maMutex );
     return mbNarration;
 }
 
 void SAL_CALL AnimationNode::setNarration(sal_Bool bNarration)
 {
-    osl::Guard<osl::Mutex> aGuard(maMutex);
+    std::unique_lock aGuard( maMutex );
     if (static_cast<bool>(bNarration) != mbNarration)
     {
         mbNarration = bNarration;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
 // XCommand
 sal_Int16 SAL_CALL AnimationNode::getCommand()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return mnCommand;
 }
 
@@ -1860,11 +1860,11 @@ sal_Int16 SAL_CALL AnimationNode::getCommand()
 // XCommand
 void SAL_CALL AnimationNode::setCommand( sal_Int16 _command )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _command != mnCommand )
     {
         mnCommand = _command;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -1872,7 +1872,7 @@ void SAL_CALL AnimationNode::setCommand( sal_Int16 _command )
 // XCommand
 Any SAL_CALL AnimationNode::getParameter()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maParameter;
 }
 
@@ -1880,9 +1880,9 @@ Any SAL_CALL AnimationNode::getParameter()
 // XCommand
 void SAL_CALL AnimationNode::setParameter( const Any& _parameter )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     maParameter = _parameter;
-    fireChangeListener();
+    fireChangeListener(aGuard);
 }
 
 
@@ -1896,7 +1896,7 @@ Type SAL_CALL AnimationNode::getElementType()
 // XElementAccess
 sal_Bool SAL_CALL AnimationNode::hasElements()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return !maChildren.empty();
 }
 
@@ -1904,7 +1904,7 @@ sal_Bool SAL_CALL AnimationNode::hasElements()
 // XEnumerationAccess
 Reference< XEnumeration > SAL_CALL AnimationNode::createEnumeration()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
 
     return new TimeContainerEnumeration( maChildren);
 }
@@ -1913,7 +1913,7 @@ Reference< XEnumeration > SAL_CALL AnimationNode::createEnumeration()
 // XTimeContainer
 Reference< XAnimationNode > SAL_CALL AnimationNode::insertBefore( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >& refChild )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
 
     if( !newChild.is() || !refChild.is() )
         throw IllegalArgumentException("no child", static_cast<cppu::OWeakObject*>(this), -1);
@@ -1937,7 +1937,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::insertBefore( const Referenc
 // XTimeContainer
 Reference< XAnimationNode > SAL_CALL AnimationNode::insertAfter( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >& refChild )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
 
     if( !newChild.is() || !refChild.is() )
         throw IllegalArgumentException("no child", static_cast<cppu::OWeakObject*>(this), -1);
@@ -1965,7 +1965,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::insertAfter( const Reference
 // XTimeContainer
 Reference< XAnimationNode > SAL_CALL AnimationNode::replaceChild( const Reference< XAnimationNode >& newChild, const Reference< XAnimationNode >& oldChild )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
 
     if( !newChild.is() || !oldChild.is() )
         throw IllegalArgumentException("no child", static_cast<cppu::OWeakObject*>(this), -1);
@@ -1991,7 +1991,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::replaceChild( const Referenc
 // XTimeContainer
 Reference< XAnimationNode > SAL_CALL AnimationNode::removeChild( const Reference< XAnimationNode >& oldChild )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
 
     if( !oldChild.is() )
         throw IllegalArgumentException("no child", static_cast<cppu::OWeakObject*>(this), 1);
@@ -2011,7 +2011,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::removeChild( const Reference
 // XTimeContainer
 Reference< XAnimationNode > SAL_CALL AnimationNode::appendChild( const Reference< XAnimationNode >& newChild )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
 
     if( !newChild.is() )
         throw IllegalArgumentException("no child", static_cast<cppu::OWeakObject*>(this), 1);
@@ -2027,7 +2027,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::appendChild( const Reference
 
     maChildren.push_back( newChild );
 
-    newChild->setParent( xThis );
+    dynamic_cast<AnimationNode&>(*newChild).mxParent = static_cast<cppu::OWeakObject*>(this);
 
     return newChild;
 }
@@ -2036,7 +2036,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::appendChild( const Reference
 // XIterateContainer
 sal_Int16 SAL_CALL AnimationNode::getIterateType()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return mnIterateType;
 }
 
@@ -2044,11 +2044,11 @@ sal_Int16 SAL_CALL AnimationNode::getIterateType()
 // XIterateContainer
 void SAL_CALL AnimationNode::setIterateType( sal_Int16 _iteratetype )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _iteratetype != mnIterateType )
     {
         mnIterateType = _iteratetype;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -2056,7 +2056,7 @@ void SAL_CALL AnimationNode::setIterateType( sal_Int16 _iteratetype )
 // XIterateContainer
 double SAL_CALL AnimationNode::getIterateInterval()
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return mfIterateInterval;
 }
 
@@ -2064,11 +2064,11 @@ double SAL_CALL AnimationNode::getIterateInterval()
 // XIterateContainer
 void SAL_CALL AnimationNode::setIterateInterval( double _iterateinterval )
 {
-    Guard< Mutex > aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     if( _iterateinterval != mfIterateInterval )
     {
         mfIterateInterval = _iterateinterval;
-        fireChangeListener();
+        fireChangeListener(aGuard);
     }
 }
 
@@ -2076,6 +2076,7 @@ void SAL_CALL AnimationNode::setIterateInterval( double _iterateinterval )
 // XChangesNotifier
 void SAL_CALL AnimationNode::addChangesListener( const Reference< XChangesListener >& aListener )
 {
+    std::scoped_lock aGuard( maMutex );
     maChangeListener.addInterface( aListener );
 }
 
@@ -2083,6 +2084,7 @@ void SAL_CALL AnimationNode::addChangesListener( const Reference< XChangesListen
 // XChangesNotifier
 void SAL_CALL AnimationNode::removeChangesListener( const Reference< XChangesListener >& aListener )
 {
+    std::scoped_lock aGuard( maMutex );
     maChangeListener.removeInterface(aListener);
 }
 
@@ -2108,30 +2110,35 @@ const css::uno::Sequence< sal_Int8 > & AnimationNode::getUnoTunnelId()
 }
 
 
-void AnimationNode::fireChangeListener()
+void AnimationNode::fireChangeListener(std::unique_lock<std::mutex>& rGuard)
 {
-    Guard< Mutex > aGuard( maMutex );
-
-    OInterfaceIteratorHelper2 aIterator( maChangeListener );
+    OInterfaceIteratorHelper4 aIterator( maChangeListener );
     if( aIterator.hasMoreElements() )
     {
         Reference< XInterface > xSource( static_cast<OWeakObject*>(this), UNO_QUERY );
         Sequence< ElementChange > aChanges;
         const ChangesEvent aEvent( xSource, Any( mxParent.get() ), aChanges );
+        rGuard.unlock();
         while( aIterator.hasMoreElements() )
         {
             Reference< XChangesListener > xListener( aIterator.next(), UNO_QUERY );
             if( xListener.is() )
                 xListener->changesOccurred( aEvent );
         }
+        rGuard.lock();
     }
 
     //fdo#69645 use WeakReference of mxParent to test if mpParent is still valid
     if (mpParent)
     {
+        auto pParent = mpParent;
         Reference<XInterface> xGuard(mxParent);
+        rGuard.unlock();
         if (xGuard.is())
-            mpParent->fireChangeListener();
+        {
+            std::unique_lock aGuard( pParent->maMutex );
+            pParent->fireChangeListener(aGuard);
+        }
     }
 }
 
