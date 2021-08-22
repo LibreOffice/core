@@ -24,7 +24,7 @@
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <svl/itemset.hxx>
-#include <memory>
+#include <optional>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -37,9 +37,9 @@ namespace drawinglayer::attribute
         private:
             basegfx::B2DRange                                                   maLastPaintRange;
             basegfx::B2DRange                                                   maLastDefineRange;
-            std::shared_ptr< drawinglayer::attribute::SdrFillAttribute >      maFillAttribute;
-            std::shared_ptr< drawinglayer::attribute::FillGradientAttribute > maFillGradientAttribute;
-            drawinglayer::primitive2d::Primitive2DContainer                      maPrimitives;
+            std::optional<drawinglayer::attribute::SdrFillAttribute>            maFillAttribute;
+            std::optional<drawinglayer::attribute::FillGradientAttribute>       maFillGradientAttribute;
+            drawinglayer::primitive2d::Primitive2DContainer                     maPrimitives;
 
             void createPrimitive2DSequence(
                 const basegfx::B2DRange& rPaintRange,

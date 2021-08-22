@@ -57,8 +57,7 @@ namespace drawinglayer::attribute
             maFillGradientAttribute(),
             maPrimitives()
         {
-            maFillAttribute =
-                std::make_shared<drawinglayer::attribute::SdrFillAttribute>(
+            maFillAttribute = drawinglayer::attribute::SdrFillAttribute(
                     0.0,
                     rColor.GetRGBColor().getBColor(),
                     drawinglayer::attribute::FillGradientAttribute(),
@@ -70,11 +69,9 @@ namespace drawinglayer::attribute
         :   maLastPaintRange(),
             maLastDefineRange(),
             maFillAttribute(
-                std::make_shared<drawinglayer::attribute::SdrFillAttribute>(
-                    drawinglayer::primitive2d::createNewSdrFillAttribute(rSet))),
+                    drawinglayer::primitive2d::createNewSdrFillAttribute(rSet)),
             maFillGradientAttribute(
-                std::make_shared<drawinglayer::attribute::FillGradientAttribute>(
-                    drawinglayer::primitive2d::createNewTransparenceGradientAttribute(rSet))),
+                    drawinglayer::primitive2d::createNewTransparenceGradientAttribute(rSet)),
             maPrimitives()
         {
         }
@@ -115,8 +112,7 @@ namespace drawinglayer::attribute
         {
             if(!maFillAttribute)
             {
-                const_cast< SdrAllFillAttributesHelper* >(this)->maFillAttribute =
-                    std::make_shared<drawinglayer::attribute::SdrFillAttribute>();
+                const_cast< SdrAllFillAttributesHelper* >(this)->maFillAttribute.emplace();
             }
 
             return *maFillAttribute;
@@ -126,8 +122,7 @@ namespace drawinglayer::attribute
         {
             if(!maFillGradientAttribute)
             {
-                const_cast< SdrAllFillAttributesHelper* >(this)->maFillGradientAttribute =
-                    std::make_shared<drawinglayer::attribute::FillGradientAttribute>();
+                const_cast< SdrAllFillAttributesHelper* >(this)->maFillGradientAttribute.emplace();
             }
 
             return *maFillGradientAttribute;
