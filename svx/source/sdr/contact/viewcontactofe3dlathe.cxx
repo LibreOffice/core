@@ -49,7 +49,7 @@ namespace sdr::contact
             const basegfx::B2DPolyPolygon aPolyPolygon(GetE3dLatheObj().GetPolyPoly2D());
 
             // get 3D Object Attributes
-            std::unique_ptr<drawinglayer::attribute::Sdr3DObjectAttribute> pSdr3DObjectAttribute(drawinglayer::primitive2d::createNewSdr3DObjectAttribute(rItemSet));
+            drawinglayer::attribute::Sdr3DObjectAttribute aSdr3DObjectAttribute(drawinglayer::primitive2d::createNewSdr3DObjectAttribute(rItemSet));
 
             // calculate texture size. Use the polygon length of the longest polygon for
             // height and the rotated radius for width (using polygon center) to get a good
@@ -83,7 +83,7 @@ namespace sdr::contact
             const basegfx::B3DHomMatrix aWorldTransform;
             const drawinglayer::primitive3d::Primitive3DReference xReference(
                 new drawinglayer::primitive3d::SdrLathePrimitive3D(
-                    aWorldTransform, aTextureSize, aAttribute, *pSdr3DObjectAttribute,
+                    aWorldTransform, aTextureSize, aAttribute, aSdr3DObjectAttribute,
                     aPolyPolygon, nHorizontalSegments, nVerticalSegments,
                     fDiagonal, fBackScale, fRotation,
                     bSmoothNormals, bSmoothLids, bCharacterMode, bCloseFront, bCloseBack));

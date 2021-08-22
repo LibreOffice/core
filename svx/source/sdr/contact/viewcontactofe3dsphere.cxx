@@ -54,7 +54,7 @@ namespace sdr::contact
             aWorldTransform.translate(aSpherePosition.getX(), aSpherePosition.getY(), aSpherePosition.getZ());
 
             // get 3D Object Attributes
-            std::unique_ptr<drawinglayer::attribute::Sdr3DObjectAttribute> pSdr3DObjectAttribute(drawinglayer::primitive2d::createNewSdr3DObjectAttribute(rItemSet));
+            drawinglayer::attribute::Sdr3DObjectAttribute aSdr3DObjectAttribute(drawinglayer::primitive2d::createNewSdr3DObjectAttribute(rItemSet));
 
             // get segment count
             const sal_uInt32 nHorizontalSegments(GetE3dSphereObj().GetHorizontalSegments());
@@ -69,7 +69,7 @@ namespace sdr::contact
             // create primitive and add
             const drawinglayer::primitive3d::Primitive3DReference xReference(
                 new drawinglayer::primitive3d::SdrSpherePrimitive3D(
-                    aWorldTransform, aTextureSize, aAttribute, *pSdr3DObjectAttribute,
+                    aWorldTransform, aTextureSize, aAttribute, aSdr3DObjectAttribute,
                     nHorizontalSegments, nVerticalSegments));
             xRetval = { xReference };
 

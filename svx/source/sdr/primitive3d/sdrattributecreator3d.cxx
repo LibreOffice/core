@@ -31,7 +31,7 @@
 
 namespace drawinglayer::primitive2d
 {
-        attribute::Sdr3DObjectAttribute* createNewSdr3DObjectAttribute(const SfxItemSet& rSet)
+        attribute::Sdr3DObjectAttribute createNewSdr3DObjectAttribute(const SfxItemSet& rSet)
         {
             // get NormalsKind
             css::drawing::NormalsKind aNormalsKind(css::drawing::NormalsKind_SPECIFIC);
@@ -135,7 +135,7 @@ namespace drawinglayer::primitive2d
             // prepare material
             attribute::MaterialAttribute3D aMaterial(aObjectColor, aSpecular, aEmission, nSpecularIntensity);
 
-            return new attribute::Sdr3DObjectAttribute(
+            return attribute::Sdr3DObjectAttribute(
                 aNormalsKind, aTextureProjectionX, aTextureProjectionY,
                 aTextureKind, aTextureMode, aMaterial,
                 bInvertNormals, bDoubleSided, bShadow3D, bTextureFilter, bReducedLineGeometry);
