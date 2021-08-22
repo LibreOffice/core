@@ -23,5 +23,5 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:RedactedExportWhite"/>
  <toolbar:toolbaritem xlink:href=".uno:RedactedExportBlack"/>
- <toolbar:toolbaritem xlink:href=".uno:ExportDirectToPDF"/>
+ <toolbar:toolbaritem xlink:href=".uno:RedactionPreviewExport"/>
 </toolbar:toolbar>
