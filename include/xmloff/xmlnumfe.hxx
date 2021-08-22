@@ -50,7 +50,8 @@ private:
     SvXMLExport&                rExport;
     OUString                    sPrefix;
     SvNumberFormatter*          pFormatter;
-    OUStringBuffer       sTextContent;
+    OUStringBuffer              sTextContent;
+    bool                        bHasText;
     std::unique_ptr<SvXMLNumUsedList_Impl>      pUsedList;
     std::unique_ptr<CharClass>                  pCharClass;
     std::unique_ptr<LocaleDataWrapper>          pLocaleData;
