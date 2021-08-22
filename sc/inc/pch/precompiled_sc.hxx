@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-11 19:48:12 using:
+ Generated on 2021-08-22 14:52:19 using:
  ./bin/update_pch sc sc --cutoff=12 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,6 +23,7 @@
 #include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <algorithm>
+#include <array>
 #include <atomic>
 #include <cassert>
 #include <chrono>
@@ -41,12 +42,14 @@
 #include <map>
 #include <math.h>
 #include <memory>
+#include <mutex>
 #include <new>
 #include <optional>
 #include <ostream>
 #include <set>
 #include <sstream>
 #include <stddef.h>
+#include <stdexcept>
 #include <string.h>
 #include <string>
 #include <string_view>
@@ -73,7 +76,7 @@
 #include <osl/module.hxx>
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
-#include <osl/security.h>
+#include <osl/process.h>
 #include <osl/security.hxx>
 #include <osl/thread.h>
 #include <osl/time.h>
@@ -83,7 +86,6 @@
 #include <rtl/crc.h>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
-#include <rtl/locale.h>
 #include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
@@ -167,6 +169,8 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/tuple/Tuple2D.hxx>
+#include <basegfx/tuple/Tuple3D.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
@@ -255,11 +259,14 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
+#include <com/sun/star/util/XAccounting.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/multicontainer2.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propagg.hxx>
 #include <comphelper/proparrhlp.hxx>
@@ -288,7 +295,6 @@
 #include <cppuhelper/implbase_ex_post.hxx>
 #include <cppuhelper/implbase_ex_pre.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
@@ -298,6 +304,7 @@
 #include <drawinglayer/primitive2d/CommonTypes.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
@@ -319,6 +326,8 @@
 #include <editeng/langitem.hxx>
 #include <editeng/lineitem.hxx>
 #include <editeng/outliner.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/overflowingtxt.hxx>
 #include <editeng/paragraphdata.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/svxenum.hxx>
@@ -334,6 +343,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/thread.hxx>
@@ -362,10 +372,12 @@
 #include <svl/eitem.hxx>
 #include <svl/hint.hxx>
 #include <svl/intitem.hxx>
+#include <svl/itempool.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/itemset.hxx>
 #include <svl/languageoptions.hxx>
 #include <svl/lstner.hxx>
+#include <svl/numformat.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <svl/stritem.hxx>
@@ -374,11 +386,11 @@
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <svl/undo.hxx>
+#include <svl/whichranges.hxx>
 #include <svl/whiter.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/toolboxcontroller.hxx>
 #include <svx/XPropertyEntry.hxx>
@@ -464,6 +476,8 @@
 #include <unotools/configitem.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/options.hxx>
+#include <unotools/resmgr.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <xmloff/dllapi.h>

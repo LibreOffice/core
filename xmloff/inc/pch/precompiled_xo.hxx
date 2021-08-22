@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-08 13:52:40 using:
+ Generated on 2021-08-22 14:50:18 using:
  ./bin/update_pch xmloff xo --cutoff=7 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,6 +23,7 @@
 #include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cmath>
 #include <cstddef>
@@ -30,12 +31,15 @@
 #include <float.h>
 #include <functional>
 #include <initializer_list>
+#include <iomanip>
 #include <limits.h>
 #include <limits>
 #include <map>
 #include <math.h>
 #include <memory>
 #include <new>
+#include <numeric>
+#include <optional>
 #include <ostream>
 #include <set>
 #include <stddef.h>
@@ -43,9 +47,9 @@
 #include <string>
 #include <string_view>
 #include <type_traits>
+#include <unordered_map>
 #include <utility>
 #include <vector>
-#include <boost/functional/hash.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
@@ -100,6 +104,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/tuple/Tuple2D.hxx>
+#include <basegfx/tuple/Tuple3D.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
@@ -180,11 +186,13 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <sax/tools/converter.hxx>
 #include <svl/svldllapi.h>
 #include <tools/color.hxx>
+#include <tools/date.hxx>
 #include <tools/debug.hxx>
 #include <tools/degree.hxx>
 #include <tools/diagnose_ex.h>
@@ -192,7 +200,9 @@
 #include <tools/link.hxx>
 #include <tools/long.hxx>
 #include <tools/mapunit.hxx>
+#include <tools/poly.hxx>
 #include <tools/solar.h>
+#include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>

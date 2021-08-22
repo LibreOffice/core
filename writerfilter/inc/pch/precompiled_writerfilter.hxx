@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-06 11:53:01 using:
+ Generated on 2021-08-22 14:50:51 using:
  ./bin/update_pch writerfilter writerfilter --cutoff=5 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -27,6 +27,8 @@
 #include <cstddef>
 #include <functional>
 #include <iomanip>
+#include <limits>
+#include <math.h>
 #include <memory>
 #include <ostream>
 #include <string_view>
@@ -46,14 +48,10 @@
 #include <rtl/locale.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/strbuf.h>
 #include <rtl/string.hxx>
-#include <rtl/stringconcat.hxx>
-#include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
 #include <rtl/uri.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <sal/macros.h>
@@ -61,6 +59,10 @@
 #include <vcl/dllapi.h>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
+#include <basegfx/basegfxdllapi.h>
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/tuple/b2dtuple.hxx>
+#include <basegfx/vector/b2dvector.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -95,11 +97,14 @@
 #include <cppuhelper/weak.hxx>
 #include <editeng/editengdllapi.h>
 #include <filter/msfilter/util.hxx>
+#include <o3tl/cow_wrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <oox/dllapi.h>
 #include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/token/tokens.hxx>
 #include <ooxml/resourceids.hxx>
 #include <sfx2/dllapi.h>
+#include <svx/svxdllapi.h>
 #include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/diagnose_ex.h>
