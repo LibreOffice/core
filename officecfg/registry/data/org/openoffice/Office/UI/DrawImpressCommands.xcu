@@ -2501,7 +2501,7 @@
       </node>
       <node oor:name=".uno:RedactedExportBlack" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Redacted Export (Black)</value>
+          <value xml:lang="en-US">Export Redacted PDF (Black)</value>
         </prop>
         <prop oor:name="TargetURL" oor:type="xs:string">
           <value>.uno:ExportDirectToPDF?IsRedactMode:bool=true&amp;RedactionStyle:string=Black</value>
@@ -2512,10 +2512,21 @@
       </node>
       <node oor:name=".uno:RedactedExportWhite" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Redacted Export (White)</value>
+          <value xml:lang="en-US">Export Redacted PDF (White)</value>
         </prop>
         <prop oor:name="TargetURL" oor:type="xs:string">
           <value>.uno:ExportDirectToPDF?IsRedactMode:bool=true&amp;RedactionStyle:string=White</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:RedactionPreviewExport" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Export Preview PDF</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:ExportDirectToPDF</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

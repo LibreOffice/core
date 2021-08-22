@@ -620,7 +620,7 @@
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:RedactedExportWhite"/>
           <menu:menuitem menu:id=".uno:RedactedExportBlack"/>
-          <menu:menuitem menu:id=".uno:ExportDirectToPDF"/>
+          <menu:menuitem menu:id=".uno:RedactionPreviewExport"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
