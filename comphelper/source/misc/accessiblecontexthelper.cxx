@@ -31,40 +31,9 @@ namespace comphelper
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::accessibility;
 
-    /** implementation class for OAccessibleContextHelper. No own thread safety!
-    */
-    class OContextHelper_Impl
-    {
-    private:
-        WeakReference< XAccessible >        m_aCreator;         // the XAccessible which created our XAccessibleContext
-
-        AccessibleEventNotifier::TClientId  m_nClientId;
-
-    public:
-        Reference< XAccessible >    getCreator( ) const                 { return m_aCreator; }
-        inline  void                        setCreator( const Reference< XAccessible >& _rAcc );
-
-        AccessibleEventNotifier::TClientId
-                                            getClientId() const                 { return m_nClientId; }
-        void                        setClientId( const AccessibleEventNotifier::TClientId _nId )
-                                                                                { m_nClientId = _nId; }
-
-    public:
-        OContextHelper_Impl()
-            :m_nClientId( 0 )
-        {
-        }
-    };
-
-
-    inline  void OContextHelper_Impl::setCreator( const Reference< XAccessible >& _rAcc )
-    {
-        m_aCreator = _rAcc;
-    }
-
     OAccessibleContextHelper::OAccessibleContextHelper( )
         :OAccessibleContextHelper_Base( GetMutex() )
-        ,m_pImpl(new OContextHelper_Impl)
+        ,m_nClientId( 0 )
     {
     }
 
@@ -84,10 +53,10 @@ namespace comphelper
         // do not lock m_Mutex because it may cause deadlock
         osl::Guard<SolarMutex> aGuard(SolarMutex::get());
 
-        if ( m_pImpl->getClientId( ) )
+        if ( m_nClientId )
         {
-            AccessibleEventNotifier::revokeClientNotifyDisposing( m_pImpl->getClientId( ), *this );
-            m_pImpl->setClientId( 0 );
+            AccessibleEventNotifier::revokeClientNotifyDisposing( m_nClientId, *this );
+            m_nClientId=0;
         }
     }
 
@@ -107,10 +76,10 @@ namespace comphelper
 
         if ( _rxListener.is() )
         {
-            if ( !m_pImpl->getClientId( ) )
-                m_pImpl->setClientId( AccessibleEventNotifier::registerClient( ) );
+            if ( !m_nClientId )
+                m_nClientId = AccessibleEventNotifier::registerClient( );
 
-            AccessibleEventNotifier::addEventListener( m_pImpl->getClientId( ), _rxListener );
+            AccessibleEventNotifier::addEventListener( m_nClientId, _rxListener );
         }
     }
 
@@ -124,18 +93,18 @@ namespace comphelper
         if ( !isAlive() )
             return;
 
-        if ( !(_rxListener.is() && m_pImpl->getClientId()) )
+        if ( !(_rxListener.is() && m_nClientId) )
             return;
 
-        sal_Int32 nListenerCount = AccessibleEventNotifier::removeEventListener( m_pImpl->getClientId( ), _rxListener );
+        sal_Int32 nListenerCount = AccessibleEventNotifier::removeEventListener( m_nClientId, _rxListener );
         if ( !nListenerCount )
         {
             // no listeners anymore
             // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
             // and at least to us not firing any events anymore, in case somebody calls
             // NotifyAccessibleEvent, again
-            AccessibleEventNotifier::revokeClient( m_pImpl->getClientId( ) );
-            m_pImpl->setClientId( 0 );
+            AccessibleEventNotifier::revokeClient( m_nClientId );
+            m_nClientId = 0;
         }
     }
 
@@ -143,7 +112,7 @@ namespace comphelper
     void OAccessibleContextHelper::NotifyAccessibleEvent( const sal_Int16 _nEventId,
         const Any& _rOldValue, const Any& _rNewValue )
     {
-        if ( !m_pImpl->getClientId( ) )
+        if ( !m_nClientId )
             // if we don't have a client id for the notifier, then we don't have listeners, then
             // we don't need to notify anything
             return;
@@ -156,7 +125,7 @@ namespace comphelper
         aEvent.NewValue = _rNewValue;
 
         // let the notifier handle this event
-        AccessibleEventNotifier::addEvent( m_pImpl->getClientId( ), aEvent );
+        AccessibleEventNotifier::addEvent( m_nClientId, aEvent );
     }
 
 
@@ -186,13 +155,13 @@ namespace comphelper
 
     void OAccessibleContextHelper::lateInit( const Reference< XAccessible >& _rxAccessible )
     {
-        m_pImpl->setCreator( _rxAccessible );
+        m_aCreator = _rxAccessible;
     }
 
 
     Reference< XAccessible > OAccessibleContextHelper::getAccessibleCreator( ) const
     {
-        return m_pImpl->getCreator();
+        return m_aCreator;
     }
 
 
@@ -218,7 +187,7 @@ namespace comphelper
             if ( xParentContext.is() )
             {
                 // our own XAccessible for comparing with the children of our parent
-                Reference< XAccessible > xCreator( m_pImpl->getCreator() );
+                Reference< XAccessible > xCreator( m_aCreator);
 
                 OSL_ENSURE( xCreator.is(), "OAccessibleContextHelper::getAccessibleIndexInParent: invalid creator!" );
                     // two ideas why this could be NULL:
