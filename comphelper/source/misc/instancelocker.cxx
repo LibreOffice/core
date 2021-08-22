@@ -66,19 +66,20 @@ OInstanceLocker::~OInstanceLocker()
 
 void SAL_CALL OInstanceLocker::dispose()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
 
     lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
-    if ( m_pListenersContainer )
-        m_pListenersContainer->disposeAndClear( aSource );
-
+    m_aListenersContainer.disposeAndClear( aGuard, aSource );
+    aGuard.lock();
     if ( m_xLockListener.is() )
     {
-        m_xLockListener->Dispose();
-        m_xLockListener.clear();
+        auto tmp = std::move(m_xLockListener);
+        aGuard.unlock();
+        tmp->Dispose();
+        aGuard.lock();
     }
 
     m_bDisposed = true;
@@ -87,29 +88,25 @@ void SAL_CALL OInstanceLocker::dispose()
 
 void SAL_CALL OInstanceLocker::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    if ( !m_pListenersContainer )
-        m_pListenersContainer.reset( new ::comphelper::OInterfaceContainerHelper2( m_aMutex ) );
-
-    m_pListenersContainer->addInterface( xListener );
+    m_aListenersContainer.addInterface( xListener );
 }
 
 
 void SAL_CALL OInstanceLocker::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    if ( m_pListenersContainer )
-        m_pListenersContainer->removeInterface( xListener );
+    std::scoped_lock aGuard( m_aMutex );
+    m_aListenersContainer.removeInterface( xListener );
 }
 
 // XInitialization
 
 void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArguments )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     if ( m_bInitialized )
         throw frame::DoubleInitializationException();
 
@@ -166,6 +163,7 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
     }
     catch( uno::Exception& )
     {
+        aGuard.unlock();
         dispose();
         throw;
     }
