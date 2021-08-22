@@ -24,7 +24,8 @@ $(call gb_Helper_abbreviate_dirs,\
 			--destdir $(GALLERY_BASEDIR) \
 			--name "$(GALLERY_NAME)" \
 			--path $(call gb_Gallery_get_workdir,$(2)) \
-			--filenames $(call gb_Helper_make_url,$$RESPONSEFILE),\
+			--filenames $(call gb_Helper_make_url,$$RESPONSEFILE) \
+			-env:UserInstallation=$(call gb_Helper_make_url,$(call gb_Gallery_get_workdir,$(2))/user),\
 		$@.log \
 	) && \
 	rm $$RESPONSEFILE && \
