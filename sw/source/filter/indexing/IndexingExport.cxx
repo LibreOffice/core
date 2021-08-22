@@ -69,18 +69,20 @@ public:
     void handleOLENode(SwOLENode* pOleNode)
     {
         auto pFrameFormat = pOleNode->GetFlyFormat();
-        m_rXmlWriter.startElement("ole");
+        m_rXmlWriter.startElement("object");
         m_rXmlWriter.attribute("alt", pOleNode->GetTitle());
         m_rXmlWriter.attribute("name", pFrameFormat->GetName());
+        m_rXmlWriter.attribute("type", "ole");
         m_rXmlWriter.endElement();
     }
 
     void handleGraphicNode(SwGrfNode* pGraphicNode)
     {
         auto pFrameFormat = pGraphicNode->GetFlyFormat();
-        m_rXmlWriter.startElement("graphic");
+        m_rXmlWriter.startElement("object");
         m_rXmlWriter.attribute("alt", pGraphicNode->GetTitle());
         m_rXmlWriter.attribute("name", pFrameFormat->GetName());
+        m_rXmlWriter.attribute("type", "graphic");
         m_rXmlWriter.endElement();
     }
 
@@ -93,6 +95,8 @@ public:
         }
         const OUString& rString
             = pTextNode->GetText().replaceAll(OUStringChar(CH_TXTATR_BREAKWORD), "");
+        if (rString.isEmpty())
+            return;
         m_rXmlWriter.startElement("paragraph");
         m_rXmlWriter.attribute("index", pTextNode->GetIndex());
         m_rXmlWriter.attribute("type", "1");
@@ -106,10 +110,14 @@ public:
     {
         if (pObject->GetName().isEmpty())
             return;
-        m_rXmlWriter.startElement("shape");
+
+        m_rXmlWriter.startElement("object");
         m_rXmlWriter.attribute("name", pObject->GetName());
         m_rXmlWriter.attribute("alt", pObject->GetTitle());
+        m_rXmlWriter.attribute("type", "shape");
         m_rXmlWriter.attribute("description", pObject->GetDescription());
+
+        m_rXmlWriter.endElement();
 
         SdrTextObj* pTextObject = dynamic_cast<SdrTextObj*>(pObject);
         if (pTextObject)
@@ -123,12 +131,11 @@ public:
                 m_rXmlWriter.startElement("paragraph");
                 m_rXmlWriter.attribute("index", nParagraph);
                 m_rXmlWriter.attribute("type", "2");
+                m_rXmlWriter.attribute("parent", pObject->GetName());
                 m_rXmlWriter.content(sText);
                 m_rXmlWriter.endElement();
             }
         }
-
-        m_rXmlWriter.endElement();
     }
 
     void handleTableNode(SwTableNode* pTableNode)
@@ -136,20 +143,22 @@ public:
         const SwTableFormat* pFormat = pTableNode->GetTable().GetFrameFormat();
         OUString sName = pFormat->GetName();
 
-        m_rXmlWriter.startElement("table");
+        m_rXmlWriter.startElement("object");
         m_rXmlWriter.attribute("index", pTableNode->GetIndex());
-        m_rXmlWriter.attribute("type", "1");
         m_rXmlWriter.attribute("name", sName);
+        m_rXmlWriter.attribute("type", "table");
+        m_rXmlWriter.endElement();
 
         maNodeStack.push_back(pTableNode);
     }
 
     void handleSectionNode(SwSectionNode* pSectionNode)
     {
-        m_rXmlWriter.startElement("section");
+        m_rXmlWriter.startElement("object");
         m_rXmlWriter.attribute("index", pSectionNode->GetIndex());
-        m_rXmlWriter.attribute("type", "1");
         m_rXmlWriter.attribute("name", pSectionNode->GetSection().GetSectionName());
+        m_rXmlWriter.attribute("type", "section");
+        m_rXmlWriter.endElement();
 
         maNodeStack.push_back(pSectionNode);
     }
@@ -159,7 +168,6 @@ public:
         if (!maNodeStack.empty() && pEndNode->StartOfSectionNode() == maNodeStack.back())
         {
             maNodeStack.pop_back();
-            m_rXmlWriter.endElement();
         }
     }
 };
