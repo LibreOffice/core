@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CHART_HELPIDS_H
-#define CHART_HELPIDS_H
+#pragma once
 
 #define HID_SCH_WIN_DOCUMENT                                "CHART2_HID_SCH_WIN_DOCUMENT"
 #define HID_SCH_ERROR_BARS_FROM_DATA                        "CHART2_SCH_ERROR_BARS_FROM_DATA"
@@ -29,6 +28,5 @@
 #define HID_SCH_DATA_SERIES_LABEL                           "CHART2_HID_SCH_DATA_SERIES_LABEL"
 
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
