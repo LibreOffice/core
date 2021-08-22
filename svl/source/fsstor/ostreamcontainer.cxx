@@ -137,7 +137,7 @@ uno::Sequence< uno::Type > SAL_CALL OFSStreamContainer::getTypes()
 {
     if ( !m_aTypes.hasElements() )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         if ( !m_aTypes.hasElements() )
         {
@@ -170,7 +170,7 @@ uno::Sequence< sal_Int8 > SAL_CALL OFSStreamContainer::getImplementationId()
 // XStream
 uno::Reference< io::XInputStream > SAL_CALL OFSStreamContainer::getInputStream()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -186,7 +186,7 @@ uno::Reference< io::XInputStream > SAL_CALL OFSStreamContainer::getInputStream()
 
 uno::Reference< io::XOutputStream > SAL_CALL OFSStreamContainer::getOutputStream()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -203,7 +203,7 @@ uno::Reference< io::XOutputStream > SAL_CALL OFSStreamContainer::getOutputStream
 // XComponent
 void SAL_CALL OFSStreamContainer::dispose()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -223,44 +223,37 @@ void SAL_CALL OFSStreamContainer::dispose()
         m_bOutputClosed = true;
     }
 
-    if ( m_pListenersContainer )
-    {
-        lang::EventObject aSource( static_cast< ::cppu::OWeakObject*>( this ) );
-        m_pListenersContainer->disposeAndClear( aSource );
-    }
-
+    lang::EventObject aSource( static_cast< ::cppu::OWeakObject*>( this ) );
+    m_aListenersContainer.disposeAndClear( aGuard, aSource );
+    aGuard.lock();
     m_bDisposed = true;
 }
 
 void SAL_CALL OFSStreamContainer::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
 
-    if ( !m_pListenersContainer )
-        m_pListenersContainer.reset(new ::comphelper::OInterfaceContainerHelper2( m_aMutex ));
-
-    m_pListenersContainer->addInterface( xListener );
+    m_aListenersContainer.addInterface( xListener );
 }
 
 void SAL_CALL OFSStreamContainer::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
 
-    if ( m_pListenersContainer )
-        m_pListenersContainer->removeInterface( xListener );
+    m_aListenersContainer.removeInterface( xListener );
 }
 
 
 // XSeekable
 void SAL_CALL OFSStreamContainer::seek( sal_Int64 location )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -273,7 +266,7 @@ void SAL_CALL OFSStreamContainer::seek( sal_Int64 location )
 
 sal_Int64 SAL_CALL OFSStreamContainer::getPosition()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -286,7 +279,7 @@ sal_Int64 SAL_CALL OFSStreamContainer::getPosition()
 
 sal_Int64 SAL_CALL OFSStreamContainer::getLength()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -301,7 +294,7 @@ sal_Int64 SAL_CALL OFSStreamContainer::getLength()
 // XInputStream
 sal_Int32 SAL_CALL OFSStreamContainer::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -314,7 +307,7 @@ sal_Int32 SAL_CALL OFSStreamContainer::readBytes( uno::Sequence< sal_Int8 >& aDa
 
 sal_Int32 SAL_CALL OFSStreamContainer::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -327,7 +320,7 @@ sal_Int32 SAL_CALL OFSStreamContainer::readSomeBytes( uno::Sequence< sal_Int8 >&
 
 void SAL_CALL OFSStreamContainer::skipBytes( sal_Int32 nBytesToSkip )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -340,7 +333,7 @@ void SAL_CALL OFSStreamContainer::skipBytes( sal_Int32 nBytesToSkip )
 
 sal_Int32 SAL_CALL OFSStreamContainer::available()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -353,28 +346,31 @@ sal_Int32 SAL_CALL OFSStreamContainer::available()
 
 void SAL_CALL OFSStreamContainer::closeInput()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    if ( m_bDisposed )
-        throw lang::DisposedException();
-
-    if ( !m_xStream.is() || !m_xInputStream.is() )
-        throw uno::RuntimeException();
-
-    if ( m_xInputStream.is() )
     {
-        m_xInputStream->closeInput();
-        m_bInputClosed = true;
+        std::scoped_lock aGuard( m_aMutex );
+
+        if ( m_bDisposed )
+            throw lang::DisposedException();
+
+        if ( !m_xStream.is() || !m_xInputStream.is() )
+            throw uno::RuntimeException();
+
+        if ( m_xInputStream.is() )
+        {
+            m_xInputStream->closeInput();
+            m_bInputClosed = true;
+        }
+        if ( !m_bOutputClosed )
+            return;
     }
 
-    if ( m_bOutputClosed )
-        dispose();
+    dispose();
 }
 
 // XOutputStream
 void SAL_CALL OFSStreamContainer::writeBytes( const uno::Sequence< sal_Int8 >& aData )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -387,7 +383,7 @@ void SAL_CALL OFSStreamContainer::writeBytes( const uno::Sequence< sal_Int8 >& a
 
 void SAL_CALL OFSStreamContainer::flush()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -400,29 +396,31 @@ void SAL_CALL OFSStreamContainer::flush()
 
 void SAL_CALL OFSStreamContainer::closeOutput()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    if ( m_bDisposed )
-        throw lang::DisposedException();
-
-    if ( !m_xStream.is() || !m_xOutputStream.is() )
-        throw uno::RuntimeException();
-
-    if ( m_xOutputStream.is() )
     {
-        m_xOutputStream->closeOutput();
-        m_bOutputClosed = true;
-    }
+        std::scoped_lock aGuard( m_aMutex );
 
-    if ( m_bInputClosed )
-        dispose();
+        if ( m_bDisposed )
+            throw lang::DisposedException();
+
+        if ( !m_xStream.is() || !m_xOutputStream.is() )
+            throw uno::RuntimeException();
+
+        if ( m_xOutputStream.is() )
+        {
+            m_xOutputStream->closeOutput();
+            m_bOutputClosed = true;
+        }
+        if ( !m_bInputClosed )
+            return;
+    }
+    dispose();
 }
 
 
 // XTruncate
 void SAL_CALL OFSStreamContainer::truncate()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -437,7 +435,7 @@ void SAL_CALL OFSStreamContainer::truncate()
 // XAsyncOutputMonitor
 void SAL_CALL OFSStreamContainer::waitForCompletion()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( m_bDisposed )
         throw lang::DisposedException();

@@ -29,8 +29,8 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XAsyncOutputMonitor.hpp>
 #include <cppuhelper/weak.hxx>
-#include <comphelper/interfacecontainer2.hxx>
-#include <osl/mutex.hxx>
+#include <comphelper/interfacecontainer4.hxx>
+#include <mutex>
 #include <memory>
 
 class OFSStreamContainer : public cppu::OWeakObject,
@@ -42,7 +42,7 @@ class OFSStreamContainer : public cppu::OWeakObject,
                      public css::io::XTruncate,
                      public css::io::XAsyncOutputMonitor
 {
-    ::osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
 
     css::uno::Reference< css::io::XStream >               m_xStream;
     css::uno::Reference< css::io::XSeekable >             m_xSeekable;
@@ -55,7 +55,7 @@ class OFSStreamContainer : public cppu::OWeakObject,
     bool m_bInputClosed;
     bool m_bOutputClosed;
 
-    std::unique_ptr<::comphelper::OInterfaceContainerHelper2> m_pListenersContainer; // list of listeners
+    ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aListenersContainer; // list of listeners
     css::uno::Sequence<css::uno::Type> m_aTypes;
 
 public:
