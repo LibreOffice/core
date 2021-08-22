@@ -28,6 +28,7 @@
 #include <sdr/primitive2d/sdrpathprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <unotools/configmgr.hxx>
 #include <vcl/canvastools.hxx>
 
 namespace sdr::contact
@@ -97,7 +98,7 @@ namespace sdr::contact
 
                 //But, see tdf#101187, only do this if our generous clip region
                 //would not over flow into a tiny clip region
-                if (nPageWidth < SAL_MAX_INT32/2 && nPageHeight < SAL_MAX_INT32/2)
+                if (nPageWidth < SAL_MAX_INT32/2 && nPageHeight < SAL_MAX_INT32/2 && !utl::ConfigManager::IsFuzzing())
                 {
                     //But, see tdf#97276, tdf#126184 and tdf#98366. Don't clip too much if the
                     //underlying page dimension is unknown or a paste document
