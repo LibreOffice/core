@@ -45,7 +45,7 @@ private:
     bool bExtendedTypeDeclarationOn;
 
 public:
-    CodeCompleteOptions();
+    BASIC_DLLPRIVATE CodeCompleteOptions();
 
     static bool IsCodeCompleteOn();
     static void SetCodeCompleteOn( bool b );
