@@ -99,9 +99,6 @@ struct LibraryContainerInfo
     {}
 };
 
-struct BasicManagerImpl;
-
-
 #define LIB_NOTFOUND    0xFFFF
 
 class BASIC_DLLPUBLIC BasicManager final : public SfxBroadcaster
@@ -118,9 +115,10 @@ private:
     OUString            maStorageName;
     bool                mbDocMgr;
 
-    std::unique_ptr<BasicManagerImpl>   mpImpl;
+    LibraryContainerInfo    maContainerInfo;
+    std::vector<std::unique_ptr<BasicLibInfo>> maLibs;
+    OUString         aBasicLibPath;
 
-    BASIC_DLLPRIVATE void Init();
     bool            ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage );
     void            ImpCreateStdLib( StarBASIC* pParentFromStdLib );
     void            ImpMgrNotLoaded(  const OUString& rStorageName  );
