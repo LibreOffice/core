@@ -133,7 +133,7 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const Bitmap& rMask ) :
     if (!maBitmap.IsEmpty() && maBitmap.GetSizePixel() != maAlphaMask.GetSizePixel())
     {
         OSL_ENSURE(false, "Mask size differs from Bitmap size, corrected Mask (!)");
-        maAlphaMask.Scale(maBitmap.GetSizePixel());
+        maAlphaMask.Scale(maBitmap.GetSizePixel(), BmpScaleFlag::Fast);
     }
 }
 
@@ -145,7 +145,7 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const AlphaMask& rAlphaMask ) :
     if (!maBitmap.IsEmpty() && !maAlphaMask.IsEmpty() && maBitmap.GetSizePixel() != maAlphaMask.GetSizePixel())
     {
         OSL_ENSURE(false, "Alpha size differs from Bitmap size, corrected Mask (!)");
-        maAlphaMask.Scale(rBmp.GetSizePixel());
+        maAlphaMask.Scale(rBmp.GetSizePixel(), BmpScaleFlag::Fast);
     }
 }
 
