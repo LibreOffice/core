@@ -117,9 +117,11 @@ sal_Int8 SfxCommonTemplateDialog_Impl::ExecuteDrop(const ExecuteDropEvent& rEvt)
     return DND_ACTION_NONE;
 }
 
-IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, OnAsyncExecuteDrop, void*, void)
+IMPL_LINK(SfxCommonTemplateDialog_Impl, OnAsyncExecuteDrop, void*, rStyleList, void)
 {
-    ActionSelect("new", m_aStyleList);
+    StyleList* rStyle = static_cast<StyleList*>(rStyleList);
+    if (rStyle == &m_aStyleList)
+        ActionSelect("new", m_aStyleList);
 }
 
 SfxTemplatePanelControl::SfxTemplatePanelControl(SfxBindings* pBindings, weld::Widget* pParent)
@@ -206,9 +208,9 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl(SfxBindings* pB, weld
     mxPreviewCheckbox->set_active(officecfg::Office::Common::StylesAndFormatting::Preview::get());
 }
 
-void SfxTemplateDialog_Impl::EnableEdit(bool bEnable)
+void SfxTemplateDialog_Impl::EnableEditing(bool bEnable)
 {
-    SfxCommonTemplateDialog_Impl::EnableEdit( bEnable );
+    SfxCommonTemplateDialog_Impl::EnableEdit( bEnable, &m_aStyleList );
     if( !bEnable || !bUpdateByExampleDisabled )
         EnableItem("update", bEnable);
 }
@@ -903,4 +905,29 @@ sal_Int8 SfxTemplateDialog_Impl::AcceptToolbarDrop(const AcceptDropEvent& rEvt, 
     return nReturn;
 }
 
+void SfxCommonTemplateDialog_Impl::EnableEdit(bool b, StyleList* rStyleList)
+{
+    if (rStyleList == &m_aStyleList)
+        m_aStyleList.Enableedit(b);
+}
+void SfxCommonTemplateDialog_Impl::EnableDel(bool b, StyleList* rStyleList)
+{
+    if (rStyleList == &m_aStyleList)
+        m_aStyleList.Enabledel(b);
+}
+void SfxCommonTemplateDialog_Impl::EnableNew(bool b, StyleList* rStyleList)
+{
+    if (rStyleList == &m_aStyleList)
+        m_aStyleList.Enablenew(b);
+}
+void SfxCommonTemplateDialog_Impl::EnableHide(bool b, StyleList* rStyleList)
+{
+    if (rStyleList == &m_aStyleList)
+        m_aStyleList.Enablehide(b);
+}
+void SfxCommonTemplateDialog_Impl::EnableShow(bool b, StyleList* rStyleList)
+{
+    if (rStyleList == &m_aStyleList)
+        m_aStyleList.Enableshow(b);
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
