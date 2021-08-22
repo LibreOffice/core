@@ -187,23 +187,39 @@ TextBoxContext::TextBoxContext( ContextHandler2Helper const & rParent, TextBox& 
         OUString remainingStr;
 
         ConversionHelper::separatePair( value, remainingStr, inset, ',' );
-        rTextBox.borderDistanceLeft = ConversionHelper::decodeMeasureToHmm( graphicHelper,
-            value.isEmpty() ? "0.1in" : value, 0, false, false );
+        rTextBox.borderDistanceLeft = 254;
+        if (!value.isEmpty())
+        {
+            rTextBox.borderDistanceLeft = ConversionHelper::decodeMeasureToHmm( graphicHelper,
+                value, 0, false, false, rTextBox.borderDistanceLeft );
+        }
 
         inset = remainingStr;
         ConversionHelper::separatePair( value, remainingStr, inset, ',' );
-        rTextBox.borderDistanceTop = ConversionHelper::decodeMeasureToHmm( graphicHelper,
-            value.isEmpty() ? "0.05in" : value, 0, false, false );
+        rTextBox.borderDistanceTop = 127;
+        if (!value.isEmpty())
+        {
+            rTextBox.borderDistanceTop = ConversionHelper::decodeMeasureToHmm( graphicHelper,
+                value, 0, false, false, rTextBox.borderDistanceTop );
+        }
 
         inset = remainingStr;
         ConversionHelper::separatePair( value, remainingStr, inset, ',' );
-        rTextBox.borderDistanceRight = ConversionHelper::decodeMeasureToHmm( graphicHelper,
-            value.isEmpty() ? "0.1in" : value, 0, false, false );
+        rTextBox.borderDistanceRight = 254;
+        if (!value.isEmpty())
+        {
+            rTextBox.borderDistanceRight = ConversionHelper::decodeMeasureToHmm( graphicHelper,
+                value, 0, false, false, rTextBox.borderDistanceRight );
+        }
 
         inset = remainingStr;
         ConversionHelper::separatePair( value, remainingStr, inset, ',' );
-        rTextBox.borderDistanceBottom = ConversionHelper::decodeMeasureToHmm( graphicHelper,
-            value.isEmpty() ? "0.05in" : value, 0, false, false );
+        rTextBox.borderDistanceBottom = 127;
+        if (!value.isEmpty())
+        {
+            rTextBox.borderDistanceBottom = ConversionHelper::decodeMeasureToHmm( graphicHelper,
+                value, 0, false, false, rTextBox.borderDistanceBottom );
+        }
 
         rTextBox.borderDistanceSet = true;
     }

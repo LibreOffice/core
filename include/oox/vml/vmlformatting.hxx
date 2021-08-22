@@ -122,13 +122,15 @@ namespace ConversionHelper
         @param nRefValue  See above.
         @param bPixelX  See above.
         @param bDefaultAsPixel  See above.
+        @param nDefaultOnOverflow value to return if decode fails
      */
     OOX_DLLPUBLIC sal_Int32    decodeMeasureToHmm(
                             const GraphicHelper& rGraphicHelper,
                             const OUString& rValue,
                             sal_Int32 nRefValue,
                             bool bPixelX,
-                            bool bDefaultAsPixel );
+                            bool bDefaultAsPixel,
+                            sal_Int32 nDefaultOnOverflow = 0);
 
     /** Converts VML color attributes to a DrawingML color.
 

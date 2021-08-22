@@ -185,6 +185,18 @@ inline sal_Int32 convertEmuToHmm( sal_Int64 nValue )
         SAL_MAX_INT32);
 }
 
+/** Converts the passed 64-bit integer value from EMUs to 1/100 mm.
+
+    Returns nDefault if intermediate multiplication overflows sal_Int64 (only for integral types).
+    On return, bOverflow indicates if overflow happened. nDefault is returned when overflow occurs.
+*/
+inline sal_Int32 convertEmuToHmm( sal_Int64 nValue, bool& bOverflow, sal_Int32 nDefault = 0 )
+{
+    return getLimitedValue<sal_Int32, sal_Int64>(
+        o3tl::convert(nValue, o3tl::Length::emu, o3tl::Length::mm100, bOverflow, nDefault),
+        SAL_MIN_INT32, SAL_MAX_INT32);
+}
+
 /** Converts the passed 64-bit integer value from EMUs to Points. */
 inline float convertEmuToPoints( sal_Int64 nValue )
 {

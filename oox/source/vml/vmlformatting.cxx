@@ -203,9 +203,14 @@ sal_Int64 ConversionHelper::decodeMeasureToEmu( const GraphicHelper& rGraphicHel
 }
 
 sal_Int32 ConversionHelper::decodeMeasureToHmm( const GraphicHelper& rGraphicHelper,
-        const OUString& rValue, sal_Int32 nRefValue, bool bPixelX, bool bDefaultAsPixel )
+        const OUString& rValue, sal_Int32 nRefValue, bool bPixelX, bool bDefaultAsPixel,
+        sal_Int32 nDefaultOnOverflow )
 {
-    return ::oox::drawingml::convertEmuToHmm( decodeMeasureToEmu( rGraphicHelper, rValue, nRefValue, bPixelX, bDefaultAsPixel ) );
+    auto nDecoded = decodeMeasureToEmu(rGraphicHelper, rValue, nRefValue, bPixelX, bDefaultAsPixel);
+    bool bOverflow = false;
+    auto nRet = ::oox::drawingml::convertEmuToHmm(nDecoded, bOverflow, nDefaultOnOverflow);
+    SAL_WARN_IF(bOverflow, "oox", "returning: " << nDefaultOnOverflow << " on overflow of decoding: " << rValue);
+    return nRet;
 }
 
 Color ConversionHelper::decodeColor( const GraphicHelper& rGraphicHelper,
@@ -870,9 +875,9 @@ void ShadowModel::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelper&
         OUString aOffsetX, aOffsetY;
         ConversionHelper::separatePair(aOffsetX, aOffsetY, moOffset.get(), ',');
         if (!aOffsetX.isEmpty())
-            nOffsetX = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, aOffsetX, 0, false, false );
+            nOffsetX = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, aOffsetX, 0, false, false, nOffsetX);
         if (!aOffsetY.isEmpty())
-            nOffsetY = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, aOffsetY, 0, false, false );
+            nOffsetY = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, aOffsetY, 0, false, false, nOffsetY);
     }
 
     table::ShadowFormat aFormat;
