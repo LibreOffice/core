@@ -571,7 +571,7 @@ TextAndReading SwTOXPara::GetText_Impl(SwRootFrame const*const pLayout) const
                             : ExpandMode(0)),
                     OUString());
         }
-        BOOST_FALLTHROUGH;
+        [[fallthrough]];
     case SwTOXElement::Template:
     case SwTOXElement::OutlineLevel:
         {

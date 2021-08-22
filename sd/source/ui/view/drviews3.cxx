@@ -123,7 +123,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 if (!bAllowFocusChange)
                     break;
             }
-            BOOST_FALLTHROUGH;
+            [[fallthrough]];
         default:
             if ( mpDrawView->IsTextEdit() )
             {
