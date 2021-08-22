@@ -878,6 +878,13 @@ void SvXMLNumFmtElementContext::endFastElement(sal_Int32 )
                 lcl_EnquoteIfNecessary( aContent, rParent );
                 rParent.AddToCode( aContent.makeStringAndClear() );
             }
+            else
+            {
+                // Quoted empty text may be significant to separate.
+                aContent.append("\"\"");
+                rParent.AddToCode( aContent.makeStringAndClear() );
+                rParent.SetHasTrailingEmptyText(true);  // *after* AddToCode()
+            }
             break;
 
         case SvXMLStyleTokens::Number:
@@ -1131,6 +1138,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     bAutoDec( false ),
     bAutoInt( false ),
     bHasExtraText( false ),
+    bHasTrailingEmptyText( false ),
     bHasLongDoW( false ),
     bHasDateTime( false ),
     bRemoveAfterUse( false ),
@@ -1267,6 +1275,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     bAutoDec( false ),
     bAutoInt( false ),
     bHasExtraText( false ),
+    bHasTrailingEmptyText( false ),
     bHasLongDoW( false ),
     bHasDateTime( false ),
     bRemoveAfterUse( false ),
@@ -1486,11 +1495,21 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
         }
     }
 
+    sal_Int32 nBufLen;
     if ( aFormatCode.isEmpty() )
     {
         //  insert empty format as empty string (with quotes)
         //  #93901# this check has to be done before inserting the conditions
         aFormatCode.append("\"\"");    // ""
+    }
+    else if (bHasTrailingEmptyText && (nBufLen = aFormatCode.getLength()) >= 3)
+    {
+        // Remove a trailing empty text. Earlier this may had been written to
+        // file, like in "General;General" written with elements for
+        // 'General"";General""' (whyever); when reading, empty text was
+        // ignored, which it isn't anymore, so get rid of those.
+        if (aFormatCode[nBufLen-1] == '"' && aFormatCode[nBufLen-2] == '"')
+            aFormatCode.truncate( nBufLen - 2);
     }
 
     aFormatCode.insert( 0, aConditions.makeStringAndClear() );
@@ -1631,6 +1650,7 @@ void SvXMLNumFormatContext::AddToCode( std::u16string_view rString )
 {
     aFormatCode.append( rString );
     bHasExtraText = true;
+    bHasTrailingEmptyText = false;  // is set by caller again if so
 }
 
 void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
