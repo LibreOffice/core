@@ -158,11 +158,11 @@ public:
 
     // Used in StyleList::SelectStyle, StyleList::Notify, IMPL_LINK(PopupFlatMenuHdl)
     // These functions are used when a style is edited, deleted, created etc..
-    virtual void EnableEdit(bool b) { m_aStyleList.Enableedit(b); }
-    void EnableDel(bool b) { m_aStyleList.Enabledel(b); }
-    void EnableNew(bool b) { m_aStyleList.Enablenew(b); }
-    void EnableHide(bool b) { m_aStyleList.Enablehide(b); }
-    void EnableShow(bool b) { m_aStyleList.Enableshow(b); }
+    virtual void EnableEdit(bool b, StyleList* rStyleList = nullptr);
+    void EnableDel(bool b, StyleList* rStyleList = nullptr);
+    void EnableNew(bool b, StyleList* rStyleList = nullptr);
+    void EnableHide(bool b, StyleList* rStyleList = nullptr);
+    void EnableShow(bool b, StyleList* rStyleList = nullptr);
 
     // Used in TreeDrag
     void EnableTreeDrag(bool b);
@@ -224,7 +224,7 @@ private:
     DECL_LINK(ToolBoxRSelect, const OString&, void);
     DECL_LINK(ToolMenuSelectHdl, const OString&, void);
 
-    virtual void EnableEdit( bool ) override;
+    virtual void EnableEditing( bool );
     virtual void EnableItem(const OString& rMesId, bool bCheck = true) override;
     virtual void CheckItem(const OString& rMesId, bool bCheck = true) override;
     virtual bool IsCheckedItem(const OString& rMesId) override;
