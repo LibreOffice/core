@@ -10,7 +10,9 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <map>
 #include <memory>
+#include <mutex>
 #include <string_view>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -111,6 +113,33 @@ comphelper::detail::ConfigurationWrapper::get(
     return GetTheConfigurationWrapper(context);
 }
 
+css::uno::Any comphelper::detail::ConfigurationWrapper::getPropertyValue(css::uno::Reference< css::uno::XComponentContext >  const & context,
+            OUString const & path)
+{
+    // Cache the configuration access, since some of the keys are used in hot code
+    static std::mutex gMutex;
+    static std::map<OUString, css::uno::Reference< css::container::XNameAccess >> gAccessMap;
+
+    sal_Int32 idx = path.lastIndexOf("/");
+    assert(idx!=-1);
+    OUString parentPath = path.copy(0, idx);
+    OUString childName = path.copy(idx+1);
+
+    std::scoped_lock aGuard(gMutex);
+    auto it = gAccessMap.find(parentPath);
+    if (it != gAccessMap.end())
+        return it->second->getByName(childName);
+
+    css::uno::Reference< css::lang::XMultiServiceFactory > provider = css::configuration::theDefaultProvider::get(
+                        context );
+    css::uno::Any arg(css::beans::NamedValue("nodepath", css::uno::Any(parentPath)));
+    css::uno::Reference< css::container::XNameAccess > access(provider->createInstanceWithArguments(
+        "com.sun.star.configuration.ConfigurationAccess",
+        { arg }), css::uno::UNO_QUERY_THROW);
+    gAccessMap.emplace(parentPath, access);
+    return access->getByName(childName);
+}
+
 comphelper::detail::ConfigurationWrapper::ConfigurationWrapper(
     css::uno::Reference< css::uno::XComponentContext > const & context):
     context_(context),
@@ -126,12 +155,6 @@ bool comphelper::detail::ConfigurationWrapper::isReadOnly(OUString const & path)
         (access_->getPropertyByHierarchicalName(path).Attributes
          & css::beans::PropertyAttribute::READONLY)
         != 0;
-}
-
-css::uno::Any comphelper::detail::ConfigurationWrapper::getPropertyValue(
-    OUString const & path) const
-{
-    return access_->getByHierarchicalName(path);
 }
 
 void comphelper::detail::ConfigurationWrapper::setPropertyValue(
