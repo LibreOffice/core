@@ -165,7 +165,7 @@ uno::Reference< io::XInputStream > SAL_CALL OInputCompStream::getInputStream()
         throw lang::DisposedException();
     }
 
-    return uno::Reference< io::XInputStream >( static_cast< io::XInputStream* >( this ), uno::UNO_QUERY );
+    return this;
 }
 
 uno::Reference< io::XOutputStream > SAL_CALL OInputCompStream::getOutputStream()

@@ -151,8 +151,7 @@ SlideSorterController::~SlideSorterController()
 {
     try
     {
-        uno::Reference<lang::XComponent> xComponent (
-            static_cast<XWeak*>(mpListener.get()), uno::UNO_QUERY);
+        uno::Reference<lang::XComponent> xComponent = mpListener;
         if (xComponent.is())
             xComponent->dispose();
     }

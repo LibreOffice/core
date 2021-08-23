@@ -160,7 +160,7 @@ void MenuBarManager::Destroy()
 // XComponent
 void SAL_CALL MenuBarManager::disposing()
 {
-    Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
+    Reference< XComponent > xThis( this );
 
     SolarMutexGuard g;
     Destroy();
@@ -170,8 +170,7 @@ void SAL_CALL MenuBarManager::disposing()
         try
         {
             m_xDocImageManager->removeConfigurationListener(
-                Reference< XUIConfigurationListener >(
-                    static_cast< OWeakObject* >( this ), UNO_QUERY ));
+                Reference< XUIConfigurationListener >(this) );
         }
         catch ( const Exception& )
         {
@@ -182,8 +181,7 @@ void SAL_CALL MenuBarManager::disposing()
         try
         {
             m_xModuleImageManager->removeConfigurationListener(
-                Reference< XUIConfigurationListener >(
-                    static_cast< OWeakObject* >( this ), UNO_QUERY ));
+                Reference< XUIConfigurationListener >(this) );
         }
         catch ( const Exception& )
         {
@@ -457,8 +455,7 @@ void MenuBarManager::RemoveListener()
     try
     {
         if ( m_xFrame.is() )
-            m_xFrame->removeFrameActionListener( Reference< XFrameActionListener >(
-                                                    static_cast< OWeakObject* >( this ), UNO_QUERY ));
+            m_xFrame->removeFrameActionListener( Reference< XFrameActionListener >(this) );
     }
     catch ( const Exception& )
     {
@@ -1225,8 +1222,7 @@ void MenuBarManager::RetrieveImageManagers()
                     Reference< XUIConfigurationManager > xDocUICfgMgr = xSupplier->getUIConfigurationManager();
                     m_xDocImageManager.set( xDocUICfgMgr->getImageManager(), UNO_QUERY );
                     m_xDocImageManager->addConfigurationListener(
-                                            Reference< XUIConfigurationListener >(
-                                                static_cast< OWeakObject* >( this ), UNO_QUERY ));
+                                            Reference< XUIConfigurationListener >(this) );
                 }
             }
         }
@@ -1238,8 +1234,7 @@ void MenuBarManager::RetrieveImageManagers()
             theModuleUIConfigurationManagerSupplier::get( m_xContext );
         Reference< XUIConfigurationManager > xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleIdentifier );
         m_xModuleImageManager.set( xUICfgMgr->getImageManager(), UNO_QUERY );
-        m_xModuleImageManager->addConfigurationListener( Reference< XUIConfigurationListener >(
-                                                            static_cast< OWeakObject* >( this ), UNO_QUERY ));
+        m_xModuleImageManager->addConfigurationListener( Reference< XUIConfigurationListener >(this) );
     }
 }
 
@@ -1474,7 +1469,7 @@ void MenuBarManager::SetItemContainer( const Reference< XIndexAccess >& rItemCon
         FillMenuManager( m_pVCLMenu, xFrame, xDispatchProvider, m_aModuleIdentifier, false );
 
         // add itself as frame action listener
-        m_xFrame->addFrameActionListener( Reference< XFrameActionListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
+        m_xFrame->addFrameActionListener( Reference< XFrameActionListener >(this) );
     }
 }
 
@@ -1521,7 +1516,7 @@ void MenuBarManager::GetPopupController( PopupControllerCache& rPopupController 
 
 void MenuBarManager::AddMenu(MenuBarManager* pSubMenuManager,const OUString& _sItemCommand,sal_uInt16 _nItemId)
 {
-    Reference< XStatusListener > xSubMenuManager( static_cast< OWeakObject *>( pSubMenuManager ), UNO_QUERY );
+    Reference< XStatusListener > xSubMenuManager( pSubMenuManager );
     m_xFrame->addFrameActionListener( Reference< XFrameActionListener >( xSubMenuManager, UNO_QUERY ));
 
     Reference< XDispatch > xDispatch;

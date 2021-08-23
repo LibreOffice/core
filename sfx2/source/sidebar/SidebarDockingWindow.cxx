@@ -67,7 +67,7 @@ SidebarDockingWindow::~SidebarDockingWindow()
 
 void SidebarDockingWindow::dispose()
 {
-    Reference<lang::XComponent> xComponent (static_cast<XWeak*>(mpSidebarController.get()), UNO_QUERY);
+    Reference<lang::XComponent> xComponent(mpSidebarController);
     mpSidebarController.clear();
     if (xComponent.is())
         xComponent->dispose();

@@ -580,7 +580,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL XFrameImpl::loadComponentF
 {
     checkDisposed();
 
-    css::uno::Reference< css::frame::XComponentLoader > xThis(static_cast< css::frame::XComponentLoader* >(this), css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XComponentLoader > xThis(this);
 
     utl::MediaDescriptor aDescriptor(lArguments);
     bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault("OnMainThread", false);
@@ -1242,7 +1242,7 @@ void SAL_CALL XFrameImpl::activate()
     // he is threadsafe himself and live if we live.
     css::uno::Reference< css::frame::XFrame >           xActiveChild    = m_aChildFrameContainer.getActive();
     css::uno::Reference< css::frame::XFramesSupplier >  xParent         = m_xParent;
-    css::uno::Reference< css::frame::XFrame >           xThis           ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+    css::uno::Reference< css::frame::XFrame >           xThis(this);
     EActiveState                                        eState          = m_eActiveState;
 
     aWriteLock.clear();
@@ -1320,7 +1320,7 @@ void SAL_CALL XFrameImpl::deactivate()
     // Copy necessary member and free the lock.
     css::uno::Reference< css::frame::XFrame > xActiveChild = m_aChildFrameContainer.getActive();
     css::uno::Reference< css::frame::XFramesSupplier > xParent = m_xParent;
-    css::uno::Reference< css::frame::XFrame > xThis ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+    css::uno::Reference< css::frame::XFrame > xThis(this);
     EActiveState eState = m_eActiveState;
 
     aWriteLock.clear();
@@ -2082,7 +2082,7 @@ void SAL_CALL XFrameImpl::disposing()
     // We should hold a reference to ourself ...
     // because our owner dispose us and release our reference ...
     // May be we will die before we could finish this method ...
-    css::uno::Reference< css::frame::XFrame > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+    css::uno::Reference< css::frame::XFrame > xThis(this);
 
     SAL_INFO("fwk.frame", "[Frame] " << m_sName << " send dispose event to listener");
 
@@ -3108,12 +3108,9 @@ void XFrameImpl::implts_startWindowListening()
     SolarMutexClearableGuard aReadLock;
     css::uno::Reference< css::awt::XWindow > xContainerWindow = m_xContainerWindow;
     css::uno::Reference< css::datatransfer::dnd::XDropTargetListener > xDragDropListener = m_xDropTargetListener;
-    css::uno::Reference< css::awt::XWindowListener > xWindowListener( static_cast< ::cppu::OWeakObject* >(this),
-                                                                      css::uno::UNO_QUERY );
-    css::uno::Reference< css::awt::XFocusListener > xFocusListener( static_cast< ::cppu::OWeakObject* >(this),
-                                                                    css::uno::UNO_QUERY );
-    css::uno::Reference< css::awt::XTopWindowListener > xTopWindowListener( static_cast< ::cppu::OWeakObject* >(this),
-                                                                            css::uno::UNO_QUERY );
+    css::uno::Reference< css::awt::XWindowListener > xWindowListener(this);
+    css::uno::Reference< css::awt::XFocusListener > xFocusListener(this);
+    css::uno::Reference< css::awt::XTopWindowListener > xTopWindowListener(this);
     aReadLock.clear();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
@@ -3147,12 +3144,9 @@ void XFrameImpl::implts_stopWindowListening()
     SolarMutexClearableGuard aReadLock;
     css::uno::Reference< css::awt::XWindow > xContainerWindow = m_xContainerWindow;
     css::uno::Reference< css::datatransfer::dnd::XDropTargetListener > xDragDropListener = m_xDropTargetListener;
-    css::uno::Reference< css::awt::XWindowListener > xWindowListener( static_cast< ::cppu::OWeakObject* >(this),
-                                                                      css::uno::UNO_QUERY );
-    css::uno::Reference< css::awt::XFocusListener > xFocusListener( static_cast< ::cppu::OWeakObject* >(this),
-                                                                    css::uno::UNO_QUERY );
-    css::uno::Reference< css::awt::XTopWindowListener > xTopWindowListener( static_cast< ::cppu::OWeakObject* >(this),
-                                                                            css::uno::UNO_QUERY );
+    css::uno::Reference< css::awt::XWindowListener > xWindowListener(this);
+    css::uno::Reference< css::awt::XFocusListener > xFocusListener(this);
+    css::uno::Reference< css::awt::XTopWindowListener > xTopWindowListener(this);
     aReadLock.clear();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 

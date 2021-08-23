@@ -190,14 +190,14 @@ void HeaderMenuController::fillPopupMenu( const Reference< css::frame::XModel >&
 // XEventListener
 void SAL_CALL HeaderMenuController::disposing( const EventObject& )
 {
-    Reference< css::awt::XMenuListener > xHolder(static_cast<OWeakObject *>(this), UNO_QUERY );
+    Reference< css::awt::XMenuListener > xHolder(this);
 
     osl::MutexGuard aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
 
     if ( m_xPopupMenu.is() )
-        m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(static_cast<OWeakObject *>(this), UNO_QUERY ));
+        m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(this) );
     m_xPopupMenu.clear();
 }
 

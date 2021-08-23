@@ -569,7 +569,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
     }
 
     Reference< XWindow >    xParent = getParentPeer();
-    Reference< XControl > xThis( static_cast<XAggregation*>(static_cast<cppu::OWeakAggObject*>(this)), UNO_QUERY );
+    Reference< XControl > xThis(this);
     // call createPeer via an interface got from queryInterface, so the aggregating class can intercept it
 
     DBG_ASSERT( !bNeedNewPeer || xParent.is(), "Need new peer, but don't have a parent!" );

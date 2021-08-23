@@ -1297,8 +1297,7 @@ namespace svxform
         m_xFrame = pBindings->GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface();
         DBG_ASSERT( m_xFrame.is(), "DataNavigatorWindow::LoadModels(): no frame" );
         // add frameaction listener
-        Reference< XFrameActionListener > xListener(
-            static_cast< XFrameActionListener* >( m_xDataListener.get() ), UNO_QUERY );
+        Reference< XFrameActionListener > xListener = m_xDataListener;
         m_xFrame->addFrameActionListener( xListener );
 
         // load xforms models of the current document
@@ -1307,8 +1306,7 @@ namespace svxform
 
     DataNavigatorWindow::~DataNavigatorWindow()
     {
-        Reference< XFrameActionListener > xListener(
-            static_cast< XFrameActionListener* >( m_xDataListener.get() ), UNO_QUERY );
+        Reference< XFrameActionListener > xListener = m_xDataListener;
         m_xFrame->removeFrameActionListener( xListener );
 
         SvtViewOptions aViewOpt( EViewType::TabDialog, CFGNAME_DATANAVIGATOR );
@@ -1951,8 +1949,7 @@ namespace svxform
 
     void DataNavigatorWindow::AddContainerBroadcaster( const css::uno::Reference< css::container::XContainer >& xContainer )
     {
-        Reference< XContainerListener > xListener(
-            static_cast< XContainerListener* >( m_xDataListener.get() ), UNO_QUERY );
+        Reference< XContainerListener > xListener = m_xDataListener;
         xContainer->addContainerListener( xListener );
         m_aContainerList.push_back( xContainer );
     }
@@ -1960,8 +1957,7 @@ namespace svxform
 
     void DataNavigatorWindow::AddEventBroadcaster( const css::uno::Reference< css::xml::dom::events::XEventTarget >& xTarget )
     {
-        Reference< XEventListener > xListener(
-            static_cast< XEventListener* >( m_xDataListener.get() ), UNO_QUERY );
+        Reference< XEventListener > xListener = m_xDataListener;
         xTarget->addEventListener( EVENTTYPE_CHARDATA, xListener, true );
         xTarget->addEventListener( EVENTTYPE_CHARDATA, xListener, false );
         xTarget->addEventListener( EVENTTYPE_ATTR, xListener, true );
@@ -1971,13 +1967,11 @@ namespace svxform
 
     void DataNavigatorWindow::RemoveBroadcaster()
     {
-        Reference< XContainerListener > xContainerListener(
-            static_cast< XContainerListener* >( m_xDataListener.get() ), UNO_QUERY );
+        Reference< XContainerListener > xContainerListener = m_xDataListener;
         sal_Int32 i, nCount = m_aContainerList.size();
         for ( i = 0; i < nCount; ++i )
             m_aContainerList[i]->removeContainerListener( xContainerListener );
-        Reference< XEventListener > xEventListener(
-            static_cast< XEventListener* >( m_xDataListener.get() ), UNO_QUERY );
+        Reference< XEventListener > xEventListener = m_xDataListener;
         nCount = m_aEventTargetList.size();
         for ( i = 0; i < nCount; ++i )
         {

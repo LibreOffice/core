@@ -71,7 +71,7 @@ void CacheUpdateListener::stopListening()
     if (!xNotifier.is())
         return;
 
-    css::uno::Reference< css::util::XChangesListener > xThis(static_cast< css::util::XChangesListener* >(this), css::uno::UNO_QUERY);
+    css::uno::Reference< css::util::XChangesListener > xThis(this);
     xNotifier->removeChangesListener(xThis);
 }
 

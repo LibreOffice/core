@@ -178,7 +178,7 @@ void SAL_CALL PopupMenuControllerBase::updatePopupMenu()
 void PopupMenuControllerBase::updateCommand( const OUString& rCommandURL )
 {
     osl::ClearableMutexGuard aLock( m_aMutex );
-    Reference< XStatusListener > xStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
+    Reference< XStatusListener > xStatusListener(this);
     Reference< XDispatch > xDispatch( m_xDispatch );
     URL aTargetURL;
     aTargetURL.Complete = rCommandURL;
@@ -342,7 +342,7 @@ void SAL_CALL PopupMenuControllerBase::setPopupMenu( const Reference< awt::XPopu
     SolarMutexGuard aSolarMutexGuard;
 
     m_xPopupMenu = xPopupMenu;
-    m_xPopupMenu->addMenuListener( Reference< awt::XMenuListener >( static_cast<OWeakObject*>(this), UNO_QUERY ));
+    m_xPopupMenu->addMenuListener( Reference< awt::XMenuListener >(this) );
 
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
 

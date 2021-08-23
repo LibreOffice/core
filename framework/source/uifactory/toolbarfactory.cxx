@@ -66,8 +66,7 @@ Reference< XUIElement > SAL_CALL ToolBarFactory::createUIElement(
     const OUString& ResourceURL,
     const Sequence< PropertyValue >& Args )
 {
-    Reference< css::ui::XUIElement > xToolBar(
-           static_cast<OWeakObject *>(new ToolBarWrapper(m_xContext)), UNO_QUERY);
+    Reference< css::ui::XUIElement > xToolBar = new ToolBarWrapper(m_xContext);
     CreateUIElement(ResourceURL, Args, u"private:resource/toolbar/", xToolBar, m_xContext);
     return xToolBar;
 }

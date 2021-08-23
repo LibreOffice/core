@@ -112,8 +112,7 @@ Reference<drawing::framework::XResourceFactory> PresenterViewFactory::Create (
     rtl::Reference<PresenterViewFactory> pFactory (
         new PresenterViewFactory(rxContext,rxController,rpPresenterController));
     pFactory->Register(rxController);
-    return Reference<drawing::framework::XResourceFactory>(
-        static_cast<XWeak*>(pFactory.get()), UNO_QUERY);
+    return Reference<drawing::framework::XResourceFactory>(pFactory);
 }
 
 void PresenterViewFactory::Register (const Reference<frame::XController>& rxController)

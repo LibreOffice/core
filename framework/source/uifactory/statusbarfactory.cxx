@@ -66,8 +66,7 @@ Reference< XUIElement > SAL_CALL StatusBarFactory::createUIElement(
     const OUString& ResourceURL,
     const Sequence< PropertyValue >& Args )
 {
-    Reference< css::ui::XUIElement > xStatusBar(
-            static_cast<OWeakObject *>(new StatusBarWrapper(m_xContext)), UNO_QUERY);
+    Reference< css::ui::XUIElement > xStatusBar = new StatusBarWrapper(m_xContext);
     MenuBarFactory::CreateUIElement(ResourceURL, Args, u"private:resource/statusbar/", xStatusBar, m_xContext);
     return xStatusBar;
 }

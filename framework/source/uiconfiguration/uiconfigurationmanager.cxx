@@ -349,9 +349,9 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
                             Reference< XIndexAccess > xContainer( aMenuCfg.CreateMenuBarConfigurationFromXML( xInputStream ));
                             auto pRootItemContainer = comphelper::getUnoTunnelImplementation<RootItemContainer>( xContainer );
                             if ( pRootItemContainer )
-                                aUIElementData.xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, true ) ), UNO_QUERY );
+                                aUIElementData.xSettings = new ConstItemContainer( pRootItemContainer, true );
                             else
-                                aUIElementData.xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( xContainer, true ) ), UNO_QUERY );
+                                aUIElementData.xSettings = new ConstItemContainer( xContainer, true );
                             return;
                         }
                         catch ( const css::lang::WrappedTargetException& )
@@ -364,10 +364,10 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
                     {
                         try
                         {
-                            Reference< XIndexContainer > xIndexContainer( static_cast< OWeakObject * >( new RootItemContainer() ), UNO_QUERY );
+                            Reference< XIndexContainer > xIndexContainer( new RootItemContainer() );
                             ToolBoxConfiguration::LoadToolBox( m_xContext, xInputStream, xIndexContainer );
                             auto pRootItemContainer = comphelper::getUnoTunnelImplementation<RootItemContainer>( xIndexContainer );
-                            aUIElementData.xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, true ) ), UNO_QUERY );
+                            aUIElementData.xSettings = new ConstItemContainer( pRootItemContainer, true );
                             return;
                         }
                         catch ( const css::lang::WrappedTargetException& )
@@ -381,10 +381,10 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
                     {
                         try
                         {
-                            Reference< XIndexContainer > xIndexContainer( static_cast< OWeakObject * >( new RootItemContainer() ), UNO_QUERY );
+                            Reference< XIndexContainer > xIndexContainer( new RootItemContainer() );
                             StatusBarConfiguration::LoadStatusBar( m_xContext, xInputStream, xIndexContainer );
                             auto pRootItemContainer = comphelper::getUnoTunnelImplementation<RootItemContainer>( xIndexContainer );
-                            aUIElementData.xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, true ) ), UNO_QUERY );
+                            aUIElementData.xSettings = new ConstItemContainer( pRootItemContainer, true );
                             return;
                         }
                         catch ( const css::lang::WrappedTargetException& )
@@ -416,7 +416,7 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
     }
 
     // At least we provide an empty settings container!
-    aUIElementData.xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer()), UNO_QUERY );
+    aUIElementData.xSettings = new ConstItemContainer();
 }
 
 UIConfigurationManager::UIElementData* UIConfigurationManager::impl_findUIElementData( const OUString& aResourceURL, sal_Int16 nElementType, bool bLoad )
@@ -534,7 +534,7 @@ void UIConfigurationManager::impl_resetElementTypeData(
 {
     UIElementDataHashMap& rHashMap          = rDocElementType.aElementsHashMap;
 
-    Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+    Reference< XUIConfigurationManager > xThis(this);
     Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
     // Make copies of the event structures to be thread-safe. We have to unlock our mutex before calling
@@ -573,7 +573,7 @@ void UIConfigurationManager::impl_reloadElementTypeData(
     UIElementDataHashMap& rHashMap          = rDocElementType.aElementsHashMap;
     Reference< XStorage > xElementStorage( rDocElementType.xStorage );
 
-    Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+    Reference< XUIConfigurationManager > xThis(this);
     Reference< XInterface > xIfac( xThis, UNO_QUERY );
     sal_Int16 nType = rDocElementType.nElementType;
 
@@ -683,7 +683,7 @@ UIConfigurationManager::UIConfigurationManager( const css::uno::Reference< css::
 // XComponent
 void SAL_CALL UIConfigurationManager::dispose()
 {
-    Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
+    Reference< XComponent > xThis(this);
 
     css::lang::EventObject aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
@@ -874,7 +874,7 @@ Reference< XIndexContainer > SAL_CALL UIConfigurationManager::createSettings()
         throw DisposedException();
 
     // Creates an empty item container which can be filled from outside
-    return Reference< XIndexContainer >( static_cast< OWeakObject * >( new RootItemContainer()), UNO_QUERY );
+    return Reference< XIndexContainer >( new RootItemContainer() );
 }
 
 sal_Bool SAL_CALL UIConfigurationManager::hasSettings( const OUString& ResourceURL )
@@ -909,7 +909,7 @@ Reference< XIndexAccess > SAL_CALL UIConfigurationManager::getSettings( const OU
     {
         // Create a copy of our data if someone wants to change the data.
         if ( bWriteable )
-            return Reference< XIndexAccess >( static_cast< OWeakObject * >( new RootItemContainer( pDataSettings->xSettings ) ), UNO_QUERY );
+            return Reference< XIndexAccess >( new RootItemContainer( pDataSettings->xSettings ) );
         else
             return pDataSettings->xSettings;
     }
@@ -942,7 +942,7 @@ void SAL_CALL UIConfigurationManager::replaceSettings( const OUString& ResourceU
         // Create a copy of the data if the container is not const
         Reference< XIndexReplace > xReplace( aNewData, UNO_QUERY );
         if ( xReplace.is() )
-            pDataSettings->xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( aNewData ) ), UNO_QUERY );
+            pDataSettings->xSettings = new ConstItemContainer( aNewData );
         else
             pDataSettings->xSettings = aNewData;
 
@@ -954,7 +954,7 @@ void SAL_CALL UIConfigurationManager::replaceSettings( const OUString& ResourceU
         UIElementType& rElementType = m_aUIElements[nElementType];
         rElementType.bModified = true;
 
-        Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+        Reference< XUIConfigurationManager > xThis(this);
         Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
         // Create event to notify listener about replaced element settings
@@ -1014,7 +1014,7 @@ void SAL_CALL UIConfigurationManager::removeSettings( const OUString& ResourceUR
             UIElementType& rElementType = m_aUIElements[nElementType];
             rElementType.bModified = true;
 
-            Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+            Reference< XUIConfigurationManager > xThis(this);
             Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
             // Create event to notify listener about removed element settings
@@ -1068,7 +1068,7 @@ void SAL_CALL UIConfigurationManager::insertSettings( const OUString& NewResourc
             // Create a copy of the data if the container is not const
             Reference< XIndexReplace > xReplace( aNewData, UNO_QUERY );
             if ( xReplace.is() )
-                pDataSettings->xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( aNewData ) ), UNO_QUERY );
+                pDataSettings->xSettings = new ConstItemContainer( aNewData );
             else
                 pDataSettings->xSettings = aNewData;
 
@@ -1087,7 +1087,7 @@ void SAL_CALL UIConfigurationManager::insertSettings( const OUString& NewResourc
             }
 
             Reference< XIndexAccess > xInsertSettings( aUIElementData.xSettings );
-            Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+            Reference< XUIConfigurationManager > xThis(this);
             Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
             // Create event to notify listener about removed element settings

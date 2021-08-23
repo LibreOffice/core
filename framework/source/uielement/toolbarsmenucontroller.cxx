@@ -470,7 +470,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
 // XEventListener
 void SAL_CALL ToolbarsMenuController::disposing( const EventObject& )
 {
-    Reference< css::awt::XMenuListener > xHolder(static_cast<OWeakObject *>(this), UNO_QUERY );
+    Reference< css::awt::XMenuListener > xHolder(this);
 
     osl::MutexGuard aLock( m_aMutex );
     m_xFrame.clear();
@@ -480,7 +480,7 @@ void SAL_CALL ToolbarsMenuController::disposing( const EventObject& )
     m_xContext.clear();
 
     if ( m_xPopupMenu.is() )
-        m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(static_cast<OWeakObject *>(this), UNO_QUERY ));
+        m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(this) );
     m_xPopupMenu.clear();
 }
 
@@ -748,7 +748,7 @@ void SAL_CALL ToolbarsMenuController::setPopupMenu( const Reference< css::awt::X
         SolarMutexGuard aSolarMutexGuard;
 
         m_xPopupMenu = xPopupMenu;
-        m_xPopupMenu->addMenuListener( Reference< css::awt::XMenuListener >( static_cast<OWeakObject*>(this), UNO_QUERY ));
+        m_xPopupMenu->addMenuListener( Reference< css::awt::XMenuListener >(this) );
         fillPopupMenu( m_xPopupMenu );
     }
 }

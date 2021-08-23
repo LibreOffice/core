@@ -69,7 +69,7 @@ css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecCon
 
     css::uno::Sequence<css::uno::Any> args(5);
     args[0] <<= OUString::number(nSecurityId);
-    args[1] <<= uno::Reference<xml::crypto::sax::XSecuritySAXEventKeeper>(static_cast<cppu::OWeakObject*>(m_xSAXEventKeeper.get()), uno::UNO_QUERY);
+    args[1] <<= uno::Reference<xml::crypto::sax::XSecuritySAXEventKeeper>(m_xSAXEventKeeper);
     args[2] <<= OUString::number(nIdOfSignatureElementCollector);
 
     //for nss, the internal module is used for signing, which needs to be improved later
@@ -377,7 +377,7 @@ bool XSecController::WriteSignature(
             /*
              * export the signature template
              */
-            css::uno::Reference<css::xml::sax::XDocumentHandler> xSEKHandler(static_cast<cppu::OWeakObject*>(m_xSAXEventKeeper.get()),css::uno::UNO_QUERY);
+            css::uno::Reference<css::xml::sax::XDocumentHandler> xSEKHandler(m_xSAXEventKeeper);
 
             int i;
             int sigNum = m_vInternalSignatureInformations.size();
@@ -426,7 +426,7 @@ bool XSecController::WriteOOXMLSignature(const uno::Reference<embed::XStorage>& 
         try
         {
             // Export the signature template.
-            css::uno::Reference<xml::sax::XDocumentHandler> xSEKHandler(static_cast<cppu::OWeakObject*>(m_xSAXEventKeeper.get()), uno::UNO_QUERY);
+            css::uno::Reference<xml::sax::XDocumentHandler> xSEKHandler(m_xSAXEventKeeper);
 
             for (InternalSignatureInformation & rInformation : m_vInternalSignatureInformations)
             {

@@ -178,8 +178,7 @@ public:
                                 , _nStartTime(0)
                             {
                                 osl_atomic_increment(&m_refCount);
-                                Reference< lang::XComponent > xComponent(
-                                    static_cast< ::cppu::OWeakObject* >(pController), uno::UNO_QUERY );
+                                Reference< lang::XComponent > xComponent = pController;
                                 if (xComponent.is())
                                     xComponent->addEventListener(this);
                                 osl_atomic_decrement(&m_refCount);

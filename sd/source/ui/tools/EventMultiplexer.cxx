@@ -204,9 +204,7 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
     mxFrameWeak = xFrame;
     if (xFrame.is())
     {
-        xFrame->addFrameActionListener (
-            Reference<frame::XFrameActionListener>(
-               static_cast<XWeak*>(this), UNO_QUERY));
+        xFrame->addFrameActionListener ( Reference<frame::XFrameActionListener>(this) );
         mbListeningToFrame = true;
     }
 
@@ -265,8 +263,7 @@ void EventMultiplexer::Implementation::ReleaseListeners()
         if (xFrame.is())
         {
             xFrame->removeFrameActionListener (
-                Reference<frame::XFrameActionListener>(
-                    static_cast<XWeak*>(this), UNO_QUERY));
+                Reference<frame::XFrameActionListener>(this) );
         }
     }
 

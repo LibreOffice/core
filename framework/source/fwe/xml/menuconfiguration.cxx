@@ -62,7 +62,7 @@ Reference< XIndexAccess > MenuConfiguration::CreateMenuBarConfigurationFromXML(
     aInputSource.aInputStream = rInputStream;
 
     // create menu bar
-    Reference< XIndexContainer > xItemContainer( static_cast< cppu::OWeakObject *>( new RootItemContainer()), UNO_QUERY );
+    Reference< XIndexContainer > xItemContainer( new RootItemContainer() );
 
     // create namespace filter and set menudocument handler inside to support xml namespaces
 

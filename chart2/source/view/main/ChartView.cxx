@@ -425,7 +425,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
     if( !xDiagram.is())
         return;
 
-    uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( static_cast< ::cppu::OWeakObject* >( &rChartModel ), uno::UNO_QUERY );
+    uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( &rChartModel );
     if( rChartModel.hasInternalDataProvider() && DiagramHelper::isSupportingDateAxis( xDiagram ) )
             m_nDefaultDateNumberFormat=DiagramHelper::getDateNumberFormat( xNumberFormatsSupplier );
 

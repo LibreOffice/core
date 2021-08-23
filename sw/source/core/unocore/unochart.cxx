@@ -1792,7 +1792,7 @@ SwChartDataSequence::SwChartDataSequence(
         const SwTable* pTable = SwTable::FindTable( &rTableFormat );
         if (pTable)
         {
-            uno::Reference< chart2::data::XDataSequence > xRef( static_cast< chart2::data::XDataSequence * >(this), uno::UNO_QUERY );
+            uno::Reference< chart2::data::XDataSequence > xRef(this);
             m_xDataProvider->AddDataSequence( *pTable, xRef );
             m_xDataProvider->addEventListener( static_cast< lang::XEventListener * >(this) );
         }
@@ -1841,7 +1841,7 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
         const SwTable* pTable = SwTable::FindTable( GetFrameFormat() );
         if (pTable)
         {
-            uno::Reference< chart2::data::XDataSequence > xRef( static_cast< chart2::data::XDataSequence * >(this), uno::UNO_QUERY );
+            uno::Reference< chart2::data::XDataSequence > xRef(this);
             m_xDataProvider->AddDataSequence( *pTable, xRef );
             m_xDataProvider->addEventListener( static_cast< lang::XEventListener * >(this) );
         }
@@ -2241,7 +2241,7 @@ void SAL_CALL SwChartDataSequence::dispose(  )
         const SwTable* pTable = SwTable::FindTable( GetFrameFormat() );
         if (pTable)
         {
-            uno::Reference< chart2::data::XDataSequence > xRef( static_cast< chart2::data::XDataSequence * >(this), uno::UNO_QUERY );
+            uno::Reference< chart2::data::XDataSequence > xRef(this);
             m_xDataProvider->RemoveDataSequence( *pTable, xRef );
         }
         else {
@@ -2534,8 +2534,8 @@ void SwChartLabeledDataSequence::SetDataSequence(
         uno::Reference< chart2::data::XDataSequence >& rxDest,
         const uno::Reference< chart2::data::XDataSequence >& rxSource)
 {
-    uno::Reference< util::XModifyListener >  xML( static_cast< util::XModifyListener* >(this), uno::UNO_QUERY );
-    uno::Reference< lang::XEventListener >   xEL( static_cast< lang::XEventListener* >(this), uno::UNO_QUERY );
+    uno::Reference< util::XModifyListener >  xML(this);
+    uno::Reference< lang::XEventListener >   xEL(this);
 
     // stop listening to old data-sequence
     uno::Reference< util::XModifyBroadcaster > xMB( rxDest, uno::UNO_QUERY );

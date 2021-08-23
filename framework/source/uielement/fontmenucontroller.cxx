@@ -124,7 +124,7 @@ void FontMenuController::fillPopupMenu( const Sequence< OUString >& rFontNameSeq
 // XEventListener
 void SAL_CALL FontMenuController::disposing( const EventObject& )
 {
-    Reference< css::awt::XMenuListener > xHolder(static_cast<OWeakObject *>(this), UNO_QUERY );
+    Reference< css::awt::XMenuListener > xHolder(this);
 
     osl::MutexGuard aLock( m_aMutex );
     m_xFrame.clear();
@@ -132,7 +132,7 @@ void SAL_CALL FontMenuController::disposing( const EventObject& )
     m_xFontListDispatch.clear();
 
     if ( m_xPopupMenu.is() )
-        m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(static_cast<OWeakObject *>(this), UNO_QUERY ));
+        m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(this) );
     m_xPopupMenu.clear();
 }
 

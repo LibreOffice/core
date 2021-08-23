@@ -251,9 +251,7 @@ void SAL_CALL ProgressBarWrapper::update()
 // XComponent
 void SAL_CALL ProgressBarWrapper::dispose()
 {
-    uno::Reference< lang::XComponent > xThis(
-        static_cast< cppu::OWeakObject* >(this),
-        uno::UNO_QUERY );
+    uno::Reference< lang::XComponent > xThis(this);
 
     {
         SolarMutexGuard g;
@@ -297,10 +295,7 @@ uno::Reference< uno::XInterface > SAL_CALL ProgressBarWrapper::getRealInterface(
         if ( !xComp.is() )
         {
             rtl::Reference<StatusIndicatorInterfaceWrapper> pWrapper =
-                new StatusIndicatorInterfaceWrapper(
-                    uno::Reference< lang::XComponent >(
-                        static_cast< cppu::OWeakObject* >( this ),
-                        uno::UNO_QUERY ));
+                new StatusIndicatorInterfaceWrapper( uno::Reference< lang::XComponent >(this) );
             xComp.set(static_cast< cppu::OWeakObject* >( pWrapper.get() ),
                         uno::UNO_QUERY );
             m_xProgressBarIfacWrapper = xComp;

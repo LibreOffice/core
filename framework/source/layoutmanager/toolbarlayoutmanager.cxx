@@ -482,10 +482,8 @@ bool ToolbarLayoutManager::createToolbar( const OUString& rResourceURL )
             {
                 try
                 {
-                    xDockWindow->addDockableWindowListener( uno::Reference< awt::XDockableWindowListener >(
-                        static_cast< OWeakObject * >( this ), uno::UNO_QUERY ));
-                    xWindow->addWindowListener( uno::Reference< awt::XWindowListener >(
-                        static_cast< OWeakObject * >( this ), uno::UNO_QUERY ));
+                    xDockWindow->addDockableWindowListener( uno::Reference< awt::XDockableWindowListener >(this) );
+                    xWindow->addWindowListener( uno::Reference< awt::XWindowListener >(this) );
                     xDockWindow->enableDocking( true );
                 }
                 catch (const uno::Exception&)
@@ -596,8 +594,7 @@ bool ToolbarLayoutManager::destroyToolbar( const OUString& rResourceURL )
             try
             {
                 if ( xWindow.is() )
-                    xWindow->removeWindowListener( uno::Reference< awt::XWindowListener >(
-                        static_cast< OWeakObject * >( this ), uno::UNO_QUERY ));
+                    xWindow->removeWindowListener( uno::Reference< awt::XWindowListener >(this) );
             }
             catch (const uno::Exception&)
             {
@@ -606,8 +603,7 @@ bool ToolbarLayoutManager::destroyToolbar( const OUString& rResourceURL )
             try
             {
                 if ( xDockWindow.is() )
-                    xDockWindow->removeDockableWindowListener( uno::Reference< awt::XDockableWindowListener >(
-                        static_cast< OWeakObject * >( this ), uno::UNO_QUERY ));
+                    xDockWindow->removeDockableWindowListener( uno::Reference< awt::XDockableWindowListener >(this) );
             }
             catch (const uno::Exception&)
             {
@@ -1111,11 +1107,11 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
                 {
                     try
                     {
-                        xDockWindow->addDockableWindowListener( uno::Reference< awt::XDockableWindowListener >( static_cast< OWeakObject * >( this ), uno::UNO_QUERY ));
+                        xDockWindow->addDockableWindowListener( uno::Reference< awt::XDockableWindowListener >(this) );
                         xDockWindow->enableDocking( true );
                         uno::Reference< awt::XWindow > xWindow( xDockWindow, uno::UNO_QUERY );
                         if ( xWindow.is() )
-                            xWindow->addWindowListener( uno::Reference< awt::XWindowListener >( static_cast< OWeakObject * >( this ), uno::UNO_QUERY ));
+                            xWindow->addWindowListener( uno::Reference< awt::XWindowListener >(this) );
                     }
                     catch (const uno::Exception&)
                     {

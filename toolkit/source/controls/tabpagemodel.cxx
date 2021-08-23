@@ -212,7 +212,7 @@ void UnoControlTabPage::createPeer( const Reference< XToolkit > & rxToolkit, con
     {
         if ( !m_bWindowListener )
         {
-            Reference< XWindowListener > xWL( static_cast< cppu::OWeakObject*>( this ), UNO_QUERY );
+            Reference< XWindowListener > xWL(this);
             addWindowListener( xWL );
             m_bWindowListener = true;
         }

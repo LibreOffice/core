@@ -2079,7 +2079,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         case WID_DOC_FORBIDDEN_CHARS:
         {
             GetPropertyHelper();
-            Reference<XForbiddenCharacters> xRet(static_cast<cppu::OWeakObject*>(mxPropertyHelper.get()), UNO_QUERY);
+            Reference<XForbiddenCharacters> xRet = mxPropertyHelper;
             aAny <<= xRet;
         }
         break;

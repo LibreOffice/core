@@ -810,8 +810,7 @@ void SAL_CALL ToolBarManager::disposing( const EventObject& Source )
         try
         {
             m_xDocImageManager->removeConfigurationListener(
-                Reference< XUIConfigurationListener >(
-                    static_cast< OWeakObject* >( this ), UNO_QUERY ));
+                Reference< XUIConfigurationListener >(this) );
         }
         catch (const Exception&)
         {
@@ -823,8 +822,7 @@ void SAL_CALL ToolBarManager::disposing( const EventObject& Source )
         try
         {
             m_xModuleImageManager->removeConfigurationListener(
-                Reference< XUIConfigurationListener >(
-                    static_cast< OWeakObject* >( this ), UNO_QUERY ));
+                Reference< XUIConfigurationListener >(this) );
         }
         catch (const Exception&)
         {
@@ -843,7 +841,7 @@ void SAL_CALL ToolBarManager::disposing( const EventObject& Source )
 // XComponent
 void SAL_CALL ToolBarManager::dispose()
 {
-    Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
+    Reference< XComponent > xThis(this);
 
     EventObject aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
@@ -863,8 +861,7 @@ void SAL_CALL ToolBarManager::dispose()
             try
             {
                 m_xDocImageManager->removeConfigurationListener(
-                    Reference< XUIConfigurationListener >(
-                        static_cast< OWeakObject* >( this ), UNO_QUERY ));
+                    Reference< XUIConfigurationListener >(this) );
             }
             catch (const Exception&)
             {
@@ -876,8 +873,7 @@ void SAL_CALL ToolBarManager::dispose()
             try
             {
                 m_xModuleImageManager->removeConfigurationListener(
-                    Reference< XUIConfigurationListener >(
-                        static_cast< OWeakObject* >( this ), UNO_QUERY ));
+                    Reference< XUIConfigurationListener >(this) );
             }
             catch (const Exception&)
             {
@@ -899,8 +895,7 @@ void SAL_CALL ToolBarManager::dispose()
         {
             try
             {
-                m_xFrame->removeFrameActionListener( Reference< XFrameActionListener >(
-                                                        static_cast< ::cppu::OWeakObject *>( this ), UNO_QUERY ));
+                m_xFrame->removeFrameActionListener( Reference< XFrameActionListener >(this) );
             }
             catch (const Exception&)
             {
@@ -1284,8 +1279,7 @@ void ToolBarManager::AddFrameActionListener()
     if ( !m_bFrameActionRegistered && m_xFrame.is() )
     {
         m_bFrameActionRegistered = true;
-        m_xFrame->addFrameActionListener( Reference< XFrameActionListener >(
-                                            static_cast< ::cppu::OWeakObject *>( this ), UNO_QUERY ));
+        m_xFrame->addFrameActionListener( Reference< XFrameActionListener >(this) );
     }
 }
 
@@ -1326,8 +1320,7 @@ void ToolBarManager::InitImageManager()
                 Reference< XUIConfigurationManager > xDocUICfgMgr = xSupplier->getUIConfigurationManager();
                 m_xDocImageManager.set( xDocUICfgMgr->getImageManager(), UNO_QUERY );
                 m_xDocImageManager->addConfigurationListener(
-                                        Reference< XUIConfigurationListener >(
-                                            static_cast< OWeakObject* >( this ), UNO_QUERY ));
+                                        Reference< XUIConfigurationListener >(this) );
             }
         }
     }
@@ -1346,8 +1339,7 @@ void ToolBarManager::InitImageManager()
             theModuleUIConfigurationManagerSupplier::get( m_xContext );
         Reference< XUIConfigurationManager > xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleIdentifier );
         m_xModuleImageManager.set( xUICfgMgr->getImageManager(), UNO_QUERY );
-        m_xModuleImageManager->addConfigurationListener( Reference< XUIConfigurationListener >(
-                                                            static_cast< OWeakObject* >( this ), UNO_QUERY ));
+        m_xModuleImageManager->addConfigurationListener( Reference< XUIConfigurationListener >(this) );
     }
 }
 
@@ -2325,7 +2317,7 @@ IMPL_LINK_NOARG(ToolBarManager, AsyncUpdateControllersHdl, Timer *, void)
 {
     // The guard must be in its own context as the we can get destroyed when our
     // own xInterface reference get destroyed!
-    Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
+    Reference< XComponent > xThis(this);
 
     SolarMutexGuard g;
 

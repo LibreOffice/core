@@ -1719,8 +1719,7 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
             }
 
             // Check if we and the given model have a common ancestor (up to the forms collection)
-            Reference<XChild> xCont(
-                static_cast<XWeak*>(this), css::uno::UNO_QUERY);
+            Reference<XChild> xCont(this);
             Reference< XInterface > xMyTopLevel = xCont->getParent();
             while (xMyTopLevel.is())
             {

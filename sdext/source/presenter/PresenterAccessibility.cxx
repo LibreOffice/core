@@ -1727,7 +1727,7 @@ void AccessibleNotes::SetTextView (
     // manager).
     for (const auto& rxChild : aChildren)
     {
-        Reference<lang::XComponent> xComponent (static_cast<XWeak*>(rxChild.get()), UNO_QUERY);
+        Reference<lang::XComponent> xComponent = rxChild;
         if (xComponent.is())
             xComponent->dispose();
     }

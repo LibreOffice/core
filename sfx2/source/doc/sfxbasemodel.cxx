@@ -3879,7 +3879,7 @@ void SfxBaseModel::impl_getPrintHelper()
         return;
     m_pData->m_xPrintable = new SfxPrintHelper();
     Reference < lang::XInitialization > xInit( m_pData->m_xPrintable, UNO_QUERY );
-    xInit->initialize( { Any(Reference < frame::XModel > (static_cast< frame::XModel* >(this), UNO_QUERY )) } );
+    xInit->initialize( { Any(Reference < frame::XModel > (this)) } );
     Reference < view::XPrintJobBroadcaster > xBrd( m_pData->m_xPrintable, UNO_QUERY );
     xBrd->addPrintJobListener( new SfxPrintHelperListener_Impl( m_pData.get() ) );
 }

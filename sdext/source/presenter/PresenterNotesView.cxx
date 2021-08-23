@@ -145,7 +145,7 @@ void SAL_CALL PresenterNotesView::disposing()
 
     // Dispose tool bar.
     {
-        Reference<XComponent> xComponent (static_cast<XWeak*>(mpToolBar.get()), UNO_QUERY);
+        Reference<XComponent> xComponent = mpToolBar;
         mpToolBar = nullptr;
         if (xComponent.is())
             xComponent->dispose();
@@ -165,7 +165,7 @@ void SAL_CALL PresenterNotesView::disposing()
 
     // Dispose close button
     {
-        Reference<XComponent> xComponent (static_cast<XWeak*>(mpCloseButton.get()), UNO_QUERY);
+        Reference<XComponent> xComponent = mpCloseButton;
         mpCloseButton = nullptr;
         if (xComponent.is())
             xComponent->dispose();

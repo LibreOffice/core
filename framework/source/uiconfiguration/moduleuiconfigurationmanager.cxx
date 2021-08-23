@@ -426,9 +426,9 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
                             Reference< XIndexAccess > xContainer( aMenuCfg.CreateMenuBarConfigurationFromXML( xInputStream ));
                             auto pRootItemContainer = comphelper::getUnoTunnelImplementation<RootItemContainer>( xContainer );
                             if ( pRootItemContainer )
-                                aUIElementData.xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, true ) ), UNO_QUERY );
+                                aUIElementData.xSettings = new ConstItemContainer( pRootItemContainer, true );
                             else
-                                aUIElementData.xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( xContainer, true ) ), UNO_QUERY );
+                                aUIElementData.xSettings = new ConstItemContainer( xContainer, true );
                             return;
                         }
                         catch ( const css::lang::WrappedTargetException& )
@@ -441,10 +441,10 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
                     {
                         try
                         {
-                            Reference< XIndexContainer > xIndexContainer( static_cast< OWeakObject * >( new RootItemContainer() ), UNO_QUERY );
+                            Reference< XIndexContainer > xIndexContainer( new RootItemContainer() );
                             ToolBoxConfiguration::LoadToolBox( m_xContext, xInputStream, xIndexContainer );
                             auto pRootItemContainer = comphelper::getUnoTunnelImplementation<RootItemContainer>( xIndexContainer );
-                            aUIElementData.xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, true ) ), UNO_QUERY );
+                            aUIElementData.xSettings = new ConstItemContainer( pRootItemContainer, true );
                             return;
                         }
                         catch ( const css::lang::WrappedTargetException& )
@@ -458,10 +458,10 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
                     {
                         try
                         {
-                            Reference< XIndexContainer > xIndexContainer( static_cast< OWeakObject * >( new RootItemContainer() ), UNO_QUERY );
+                            Reference< XIndexContainer > xIndexContainer( new RootItemContainer() );
                             StatusBarConfiguration::LoadStatusBar( m_xContext, xInputStream, xIndexContainer );
                             auto pRootItemContainer = comphelper::getUnoTunnelImplementation<RootItemContainer>( xIndexContainer );
-                            aUIElementData.xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, true ) ), UNO_QUERY );
+                            aUIElementData.xSettings = new ConstItemContainer( pRootItemContainer, true );
                             return;
                         }
                         catch ( const css::lang::WrappedTargetException& )
@@ -493,7 +493,7 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
     }
 
     // At least we provide an empty settings container!
-    aUIElementData.xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer() ), UNO_QUERY );
+    aUIElementData.xSettings = new ConstItemContainer();
 }
 
 ModuleUIConfigurationManager::UIElementData*  ModuleUIConfigurationManager::impl_findUIElementData( const OUString& aResourceURL, sal_Int16 nElementType, bool bLoad )
@@ -623,7 +623,7 @@ void ModuleUIConfigurationManager::impl_resetElementTypeData(
 {
     UIElementDataHashMap& rHashMap          = rUserElementType.aElementsHashMap;
 
-    Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+    Reference< XUIConfigurationManager > xThis(this);
     Reference< XInterface >  xIfac( xThis, UNO_QUERY );
     sal_Int16 nType = rUserElementType.nElementType;
 
@@ -685,7 +685,7 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
 {
     UIElementDataHashMap& rHashMap          = rUserElementType.aElementsHashMap;
 
-    Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+    Reference< XUIConfigurationManager > xThis(this);
     Reference< XInterface > xIfac( xThis, UNO_QUERY );
     sal_Int16 nType = rUserElementType.nElementType;
 
@@ -893,7 +893,7 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager(
 // XComponent
 void SAL_CALL ModuleUIConfigurationManager::dispose()
 {
-    Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
+    Reference< XComponent > xThis(this);
 
     css::lang::EventObject aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
@@ -1093,7 +1093,7 @@ Reference< XIndexContainer > SAL_CALL ModuleUIConfigurationManager::createSettin
         throw DisposedException();
 
     // Creates an empty item container which can be filled from outside
-    return Reference< XIndexContainer >( static_cast< OWeakObject * >( new RootItemContainer() ), UNO_QUERY );
+    return Reference< XIndexContainer >( new RootItemContainer() );
 }
 
 sal_Bool SAL_CALL ModuleUIConfigurationManager::hasSettings( const OUString& ResourceURL )
@@ -1134,7 +1134,7 @@ Reference< XIndexAccess > SAL_CALL ModuleUIConfigurationManager::getSettings( co
     {
         // Create a copy of our data if someone wants to change the data.
         if ( bWriteable )
-            return Reference< XIndexAccess >( static_cast< OWeakObject * >( new RootItemContainer( pDataSettings->xSettings ) ), UNO_QUERY );
+            return Reference< XIndexAccess >( new RootItemContainer( pDataSettings->xSettings ) );
         else
             return pDataSettings->xSettings;
     }
@@ -1169,7 +1169,7 @@ void SAL_CALL ModuleUIConfigurationManager::replaceSettings( const OUString& Res
             // Create a copy of the data if the container is not const
             Reference< XIndexReplace > xReplace( aNewData, UNO_QUERY );
             if ( xReplace.is() )
-                pDataSettings->xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( aNewData ) ), UNO_QUERY );
+                pDataSettings->xSettings = new ConstItemContainer( aNewData );
             else
                 pDataSettings->xSettings = aNewData;
             pDataSettings->bDefault  = false;
@@ -1180,7 +1180,7 @@ void SAL_CALL ModuleUIConfigurationManager::replaceSettings( const OUString& Res
             UIElementType& rElementType = m_aUIElements[LAYER_USERDEFINED][nElementType];
             rElementType.bModified = true;
 
-            Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+            Reference< XUIConfigurationManager > xThis(this);
             Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
             // Create event to notify listener about replaced element settings
@@ -1207,7 +1207,7 @@ void SAL_CALL ModuleUIConfigurationManager::replaceSettings( const OUString& Res
             // Create a copy of the data if the container is not const
             Reference< XIndexReplace > xReplace( aNewData, UNO_QUERY );
             if ( xReplace.is() )
-                aUIElementData.xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( aNewData ) ), UNO_QUERY );
+                aUIElementData.xSettings = new ConstItemContainer( aNewData );
             else
                 aUIElementData.xSettings = aNewData;
             aUIElementData.aName        = RetrieveNameFromResourceURL( ResourceURL ) + m_aXMLPostfix;
@@ -1228,7 +1228,7 @@ void SAL_CALL ModuleUIConfigurationManager::replaceSettings( const OUString& Res
             else
                 rElements.emplace( ResourceURL, aUIElementData );
 
-            Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+            Reference< XUIConfigurationManager > xThis(this);
             Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
             // Create event to notify listener about replaced element settings
@@ -1290,7 +1290,7 @@ void SAL_CALL ModuleUIConfigurationManager::removeSettings( const OUString& Reso
             UIElementType& rElementType = m_aUIElements[LAYER_USERDEFINED][nElementType];
             rElementType.bModified = true;
 
-            Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+            Reference< XUIConfigurationManager > xThis(this);
             Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
             // Check if we have settings in the default layer which replaces the user-defined one!
@@ -1356,7 +1356,7 @@ void SAL_CALL ModuleUIConfigurationManager::insertSettings( const OUString& NewR
         // Create a copy of the data if the container is not const
         Reference< XIndexReplace > xReplace( aNewData, UNO_QUERY );
         if ( xReplace.is() )
-            aUIElementData.xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( aNewData ) ), UNO_QUERY );
+            aUIElementData.xSettings = new ConstItemContainer( aNewData );
         else
             aUIElementData.xSettings = aNewData;
         aUIElementData.aName        = RetrieveNameFromResourceURL( NewResourceURL ) + m_aXMLPostfix;
@@ -1370,7 +1370,7 @@ void SAL_CALL ModuleUIConfigurationManager::insertSettings( const OUString& NewR
         rElements.emplace( NewResourceURL, aUIElementData );
 
         Reference< XIndexAccess > xInsertSettings( aUIElementData.xSettings );
-        Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+        Reference< XUIConfigurationManager > xThis(this);
 
         // Create event to notify listener about removed element settings
         ui::ConfigurationEvent aEvent;

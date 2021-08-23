@@ -325,8 +325,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     {
         mxScannerManager = scanner::ScannerManager::create( xContext );
 
-        mxScannerListener.set( static_cast< ::cppu::OWeakObject* >( new ScannerEventListener( this ) ),
-                               uno::UNO_QUERY );
+        mxScannerListener = new ScannerEventListener( this );
     }
     catch (Exception const &)
     {

@@ -67,14 +67,12 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
     }
     if ( ! xController.is())
     {
-        xController.set(
-            static_cast<XWeak*>(new framework::GenericToolbarController(
+        xController = new framework::GenericToolbarController(
                     ::comphelper::getProcessComponentContext(),
                     rxFrame,
                     pToolBox,
                     nItemId,
-                    rsCommandName)),
-            UNO_QUERY);
+                    rsCommandName);
     }
 
     // Initialize the controller with eg a service factory.
@@ -155,13 +153,11 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
 
     if (!xController.is())
     {
-        xController.set(
-            static_cast<XWeak*>(new framework::GenericToolbarController(
+        xController = new framework::GenericToolbarController(
                     ::comphelper::getProcessComponentContext(),
                     rxFrame,
                     rToolbar,
-                    rsCommandName)),
-            UNO_QUERY);
+                    rsCommandName);
     }
 
     if (xController.is())

@@ -53,7 +53,7 @@ AddonsToolBarWrapper::~AddonsToolBarWrapper()
 // XComponent
 void SAL_CALL AddonsToolBarWrapper::dispose()
 {
-    Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
+    Reference< XComponent > xThis(this);
 
     css::lang::EventObject aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
