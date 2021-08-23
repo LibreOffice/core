@@ -590,6 +590,26 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="DrawEdit-CloneTool">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:FormatPaintbrush</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="DrawEdit-ClearDirectFormatting">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:SetDefault</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="DrawEdit-Separator3">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="DrawEdit-ToggleObjectRotateMode">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -4621,6 +4641,93 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="VclOptionalBox" id="Text-Section-Format">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkSeparator" id="separator27">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
+                            <property name="orientation">vertical</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="padding">5</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="Section61">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkBox" id="box116">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <child>
+                                  <object class="sfxlo-NotebookbarToolBox" id="ExtBottom7">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="toolbar_style">icons</property>
+                                    <property name="show_arrow">False</property>
+                                    <child>
+                                      <object class="GtkToolButton" id="Text-Section-CloneTool">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="action_name">.uno:FormatPaintbrush</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="homogeneous">False</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkToolButton" id="Text-Section-ClearDirectFormatting">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="action_name">.uno:SetDefault</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="homogeneous">False</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <style>
+                          <class name="priority-5"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="VclOptionalBox" id="Text-Section-Paragraph">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -4772,7 +4879,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                     <child>
@@ -4914,7 +5021,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">3</property>
+                        <property name="position">4</property>
                       </packing>
                     </child>
                     <child>
@@ -5000,7 +5107,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">4</property>
+                        <property name="position">5</property>
                       </packing>
                     </child>
                     <child>
@@ -5133,7 +5240,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">5</property>
+                        <property name="position">6</property>
                       </packing>
                     </child>
                     <child>
@@ -5207,7 +5314,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">6</property>
+                        <property name="position">7</property>
                       </packing>
                     </child>
                     <child>
@@ -5321,7 +5428,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">7</property>
+                        <property name="position">8</property>
                       </packing>
                     </child>
                     <style>
@@ -6084,7 +6191,7 @@
                                   <object class="sfxlo-NotebookbarToolBox" id="ExtTop14">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="opacity">0.92156862745098034</property>
+                                    <property name="opacity">0.9215686274509803</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
                                     <child>
