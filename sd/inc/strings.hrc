@@ -84,7 +84,7 @@
 #define STR_UNDO_DELETEPAGES                            NC_("STR_UNDO_DELETEPAGES", "Delete slides")
 #define STR_UNDO_DELETEPAGES_DRAW                       NC_("STR_UNDO_DELETEPAGES_DRAW", "Delete pages")
 #define STR_UNDO_INSERTPAGES                            NC_("STR_UNDO_INSERTPAGES", "Insert slides")
-#define STR_ASK_DELETE_LAYER                            NC_("STR_ASK_DELETE_LAYER", "Are you sure you want to delete the level \"$\"?\nNote: All objects on this level will be deleted!")
+#define STR_ASK_DELETE_LAYER                            NC_("STR_ASK_DELETE_LAYER", "Are you sure you want to delete the layer \"$\"?\nNote: All objects on this layer will be deleted!")
 #define STR_ASK_DELETE_ALL_PICTURES                     NC_("STR_ASK_DELETE_ALL_PICTURES", "Do you really want to delete all images?")
 #define STR_UNDO_CHANGE_TITLE_AND_LAYOUT                NC_("STR_UNDO_CHANGE_TITLE_AND_LAYOUT", "Modify title and outline")
 #define STR_WAV_FILE                                    NC_("STR_WAV_FILE", "Audio")
