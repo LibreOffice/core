@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec913908_0deb1618",
+        "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-08-23T22:59:30Z",
+      "side": 1,
+      "message": "I would just use std::thread - it\u0027s much more standard and there is no need for oslThread.",
+      "range": {
+        "startLine": 95,
+        "startChar": 4,
+        "endLine": 95,
+        "endChar": 13
+      },
+      "revId": "c62662297cf7b0d7c9459e9e485aec1e36a1cedb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba6bf157_379f11f5",
+        "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-08-23T22:59:30Z",
+      "side": 1,
+      "message": "That would immediately destroy the thread.. wouldn\u0027t it?",
+      "range": {
+        "startLine": 96,
+        "startChar": 4,
+        "endLine": 96,
+        "endChar": 21
+      },
+      "revId": "c62662297cf7b0d7c9459e9e485aec1e36a1cedb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "469e5b5c_da1575c0",
+        "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-08-23T22:59:30Z",
+      "side": 1,
+      "message": "Not sure what you want to do here - you need a timer to check the status of tests and report it to the UI. You don\u0027t really know how long you need to do it - you determine in the callback of the timer if you start it again or not.",
+      "range": {
+        "startLine": 97,
+        "startChar": 4,
+        "endLine": 110,
+        "endChar": 5
+      },
+      "revId": "c62662297cf7b0d7c9459e9e485aec1e36a1cedb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6c86249_78b8dcd1",
+        "filename": "include/vcl/test/GraphicsRenderTests.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-08-23T22:59:30Z",
+      "side": 1,
+      "message": "This is kind-of ugly... I\u0027m sure somebody will forget to increase this. \nBetter option is to first add test functions into a vector, and then just iterate the vector and run each class.\n  \nSomething like:\n\nstd::vector\u003cstd::function\u003cvoid()\u003e\u003e m_aTestVector;\n\nin constructor for example - define the functions:\n\nm_aTestVector \u003d std::vector\u003cstd::function\u003cvoid()\u003e\u003e {\n    [this](){ test1(); },\n    [this](){ test2(); },\n    ...\n};\n\ngetNumberOfTests(): (returnNumberOfTests sounds weird)\n\nreturn m_aTestVector.size();\n\nrunAll():\n....\nfor (auto \u0026 rTestFunction : m_aTestVector)\n    rTestFunction();",
+      "range": {
+        "startLine": 129,
+        "startChar": 0,
+        "endLine": 129,
+        "endChar": 7
+      },
+      "revId": "c62662297cf7b0d7c9459e9e485aec1e36a1cedb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
