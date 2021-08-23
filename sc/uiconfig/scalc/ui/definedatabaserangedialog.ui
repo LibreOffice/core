@@ -355,7 +355,7 @@
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="ContainsColumnLabels-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="definedatabaserangedialog|extended_tip|ContainsColumnLabels">Selected cell ranges contains labels.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="definedatabaserangedialog|extended_tip|ContainsColumnLabels">Selected cell ranges contain labels.</property>
                           </object>
                         </child>
                       </object>
