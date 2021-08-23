@@ -26,7 +26,6 @@
 using namespace ::com::sun::star;
 
 ScDrawModelBroadcaster::ScDrawModelBroadcaster( SdrModel *pDrawModel ) :
-    maEventListeners( maListenerMutex ),
     mpDrawModel( pDrawModel )
 {
     if (mpDrawModel)
@@ -41,11 +40,13 @@ ScDrawModelBroadcaster::~ScDrawModelBroadcaster()
 
 void SAL_CALL ScDrawModelBroadcaster::addEventListener( const uno::Reference< document::XEventListener >& xListener )
 {
+    std::scoped_lock aGuard(maListenerMutex);
     maEventListeners.addInterface( xListener );
 }
 
 void SAL_CALL ScDrawModelBroadcaster::removeEventListener( const uno::Reference< document::XEventListener >& xListener )
 {
+    std::scoped_lock aGuard(maListenerMutex);
     maEventListeners.removeInterface( xListener );
 }
 
@@ -54,7 +55,7 @@ void SAL_CALL ScDrawModelBroadcaster::addShapeEventListener(
                 const uno::Reference< document::XShapeEventListener >& xListener )
 {
     assert(xShape.is() && "no shape?");
-    osl::MutexGuard aGuard(maListenerMutex);
+    std::scoped_lock aGuard(maListenerMutex);
     auto rv = maShapeListeners.emplace(xShape, xListener);
     assert(rv.second && "duplicate listener?");
     (void)rv;
@@ -64,7 +65,7 @@ void SAL_CALL ScDrawModelBroadcaster::removeShapeEventListener(
                 const css::uno::Reference< css::drawing::XShape >& xShape,
                 const uno::Reference< document::XShapeEventListener >& xListener )
 {
-    osl::MutexGuard aGuard(maListenerMutex);
+    std::scoped_lock aGuard(maListenerMutex);
     auto it = maShapeListeners.find(xShape);
     if (it != maShapeListeners.end())
     {
@@ -85,7 +86,9 @@ void ScDrawModelBroadcaster::Notify( SfxBroadcaster&,
     if( !SvxUnoDrawMSFactory::createEvent( mpDrawModel, pSdrHint, aEvent ) )
         return;
 
-    ::comphelper::OInterfaceIteratorHelper3 aIter( maEventListeners );
+    std::unique_lock aGuard(maListenerMutex);
+    ::comphelper::OInterfaceIteratorHelper4 aIter( maEventListeners );
+    aGuard.unlock();
     while( aIter.hasMoreElements() )
     {
         const uno::Reference < document::XEventListener >& xListener = aIter.next();
@@ -104,7 +107,7 @@ void ScDrawModelBroadcaster::Notify( SfxBroadcaster&,
     {
         auto pSdrObject = const_cast<SdrObject*>(pSdrHint->GetObject());
         uno::Reference<drawing::XShape> xShape(pSdrObject->getUnoShape(), uno::UNO_QUERY);
-        osl::MutexGuard aGuard(maListenerMutex);
+        aGuard.lock();
         auto it = maShapeListeners.find(xShape);
         if (it != maShapeListeners.end())
             it->second->notifyShapeEvent(aEvent);

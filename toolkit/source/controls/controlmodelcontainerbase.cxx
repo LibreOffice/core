@@ -1084,19 +1084,19 @@ void ResourceListener::startListening(
 {
     {
         // --- SAFE ---
-        ::osl::ResettableGuard < ::osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         bool bListening( m_bListening );
         bool bResourceSet( m_xResource.is() );
-        aGuard.clear();
+        aGuard.unlock();
         // --- SAFE ---
 
         if ( bListening && bResourceSet )
             stopListening();
 
         // --- SAFE ---
-        aGuard.reset();
+        aGuard.lock();
         m_xResource = rResource;
-        aGuard.clear();
+        aGuard.unlock();
         // --- SAFE ---
     }
 
@@ -1108,7 +1108,7 @@ void ResourceListener::startListening(
         rResource->addModifyListener( this );
 
         // --- SAFE ---
-        ::osl::ResettableGuard < ::osl::Mutex > aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         m_bListening = true;
         // --- SAFE ---
     }
@@ -1126,10 +1126,10 @@ void ResourceListener::stopListening()
     Reference< util::XModifyBroadcaster > xModifyBroadcaster;
 
     // --- SAFE ---
-    ::osl::ResettableGuard < ::osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     if ( m_bListening && m_xResource.is() )
         xModifyBroadcaster = m_xResource;
-    aGuard.clear();
+    aGuard.unlock();
     // --- SAFE ---
 
     if ( !xModifyBroadcaster.is() )
@@ -1138,10 +1138,10 @@ void ResourceListener::stopListening()
     try
     {
         // --- SAFE ---
-        aGuard.reset();
+        aGuard.lock();
         m_bListening = false;
         m_xResource.clear();
-        aGuard.clear();
+        aGuard.unlock();
         // --- SAFE ---
 
         xModifyBroadcaster->removeModifyListener( this );
@@ -1162,9 +1162,9 @@ void SAL_CALL ResourceListener::modified(
     Reference< util::XModifyListener > xListener;
 
     // --- SAFE ---
-    ::osl::ResettableGuard < ::osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     xListener = m_xListener;
-    aGuard.clear();
+    aGuard.unlock();
     // --- SAFE ---
 
     if ( !xListener.is() )
@@ -1191,21 +1191,21 @@ void SAL_CALL ResourceListener::disposing(
     Reference< resource::XStringResourceResolver > xResource;
 
     // --- SAFE ---
-    ::osl::ResettableGuard < ::osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     Reference< XInterface > xIfacRes( m_xResource, UNO_QUERY );
     Reference< XInterface > xIfacList( m_xListener, UNO_QUERY );
-    aGuard.clear();
+    aGuard.unlock();
     // --- SAFE ---
 
     if ( Source.Source == xIfacRes )
     {
         // --- SAFE ---
-        aGuard.reset();
+        aGuard.lock();
         m_bListening = false;
         xResource = m_xResource;
         xListener = m_xListener;
         m_xResource.clear();
-        aGuard.clear();
+        aGuard.unlock();
         // --- SAFE ---
 
         if ( xListener.is() )
@@ -1226,13 +1226,13 @@ void SAL_CALL ResourceListener::disposing(
     else if ( Source.Source == xIfacList )
     {
         // --- SAFE ---
-        aGuard.reset();
+        aGuard.lock();
         m_bListening = false;
         xListener = m_xListener;
         xResource = m_xResource;
         m_xResource.clear();
         m_xListener.clear();
-        aGuard.clear();
+        aGuard.unlock();
         // --- SAFE ---
 
         // Remove ourself as listener from resource resolver

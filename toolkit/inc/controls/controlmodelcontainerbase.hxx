@@ -37,6 +37,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/awt/tab/XTabPageModel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <mutex>
 #include <vector>
 
 namespace com::sun::star::resource { class XStringResourceResolver; }
@@ -181,8 +182,7 @@ protected:
 };
 
 class ResourceListener final : public css::util::XModifyListener,
-                         public ::cppu::OWeakObject,
-                         public ::cppu::BaseMutex
+                         public ::cppu::OWeakObject
 {
     public:
         ResourceListener( const css::uno::Reference< css::util::XModifyListener >& xListener );
@@ -203,6 +203,7 @@ class ResourceListener final : public css::util::XModifyListener,
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
     private:
+        std::mutex m_aMutex;
         css::uno::Reference< css::resource::XStringResourceResolver > m_xResource;
         css::uno::Reference< css::util::XModifyListener >             m_xListener;
         bool                                                                                    m_bListening;
