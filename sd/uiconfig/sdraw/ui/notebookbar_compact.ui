@@ -394,14 +394,12 @@
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-Open">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Open</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-OpenRemote">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:OpenRemote</property>
       </object>
@@ -428,28 +426,24 @@
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-AutoPilotMenu">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:AutoPilotMenu</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-OpenTemplate">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:OpenTemplate</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-SaveAsTemplate">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SaveAsTemplate</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-NewDoc">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:NewDoc</property>
       </object>
@@ -462,14 +456,12 @@
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-Reload">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Reload</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-VersionDialog">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:VersionDialog</property>
       </object>
@@ -503,14 +495,12 @@
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-SaveACopy">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SaveACopy</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-SaveAll">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SaveAll</property>
       </object>
@@ -523,21 +513,18 @@
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-CheckOut">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:CheckOut</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-CancelCheckOut">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:CancelCheckOut</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-CheckIn">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:CheckIn</property>
       </object>
@@ -564,7 +551,6 @@
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-ExportDirectToPDF">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ExportDirectToPDF</property>
       </object>
@@ -597,14 +583,12 @@
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-WebHtml">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:WebHtml</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-Print">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Print</property>
       </object>
@@ -12756,6 +12740,70 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="VclOptionalBox" id="MultiObject-Section-Format">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <child>
+                          <object class="GtkSeparator" id="separator43">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
+                            <property name="orientation">vertical</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="padding">5</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom66">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="valign">center</property>
+                            <property name="margin_top">4</property>
+                            <property name="margin_bottom">4</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="MultiObject-CloneTool">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:FormatPaintbrush</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="MultiObject-ClearDirectFormatting">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:SetDefault</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="VclOptionalBox" id="MultiObject-Section-Select">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -12816,7 +12864,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                     <child>
@@ -12868,7 +12916,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                     <child>
@@ -12908,7 +12956,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">3</property>
+                        <property name="position">4</property>
                       </packing>
                     </child>
                     <child>
@@ -12947,7 +12995,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">4</property>
+                        <property name="position">5</property>
                       </packing>
                     </child>
                     <child>
@@ -12985,7 +13033,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">5</property>
+                        <property name="position">6</property>
                       </packing>
                     </child>
                     <child>
@@ -13022,7 +13070,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">6</property>
+                        <property name="position">7</property>
                       </packing>
                     </child>
                     <child>
@@ -13058,7 +13106,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">7</property>
+                        <property name="position">8</property>
                       </packing>
                     </child>
                     <child>
@@ -13097,7 +13145,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">8</property>
+                        <property name="position">9</property>
                       </packing>
                     </child>
                     <child>
@@ -13136,7 +13184,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">9</property>
+                        <property name="position">10</property>
                       </packing>
                     </child>
                     <child>
@@ -13175,7 +13223,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">10</property>
+                        <property name="position">11</property>
                       </packing>
                     </child>
                     <child>
@@ -13213,7 +13261,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">11</property>
+                        <property name="position">12</property>
                       </packing>
                     </child>
                     <child>
@@ -13265,7 +13313,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">12</property>
+                        <property name="position">13</property>
                       </packing>
                     </child>
                     <child>
@@ -13315,7 +13363,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">13</property>
+                        <property name="position">14</property>
                       </packing>
                     </child>
                     <child>
@@ -13376,7 +13424,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">14</property>
+                        <property name="position">15</property>
                       </packing>
                     </child>
                     <child>
@@ -13428,7 +13476,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">15</property>
+                        <property name="position">16</property>
                       </packing>
                     </child>
                     <child>
@@ -13467,7 +13515,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">16</property>
+                        <property name="position">17</property>
                       </packing>
                     </child>
                     <child>
@@ -13517,7 +13565,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">17</property>
+                        <property name="position">18</property>
                       </packing>
                     </child>
                     <child>
@@ -13582,7 +13630,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">18</property>
+                        <property name="position">19</property>
                       </packing>
                     </child>
                     <child>
@@ -13621,7 +13669,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">19</property>
+                        <property name="position">20</property>
                       </packing>
                     </child>
                     <child>
@@ -13676,7 +13724,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">20</property>
+                        <property name="position">21</property>
                       </packing>
                     </child>
                     <child>
@@ -13741,7 +13789,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">21</property>
+                        <property name="position">22</property>
                       </packing>
                     </child>
                     <child>
@@ -13802,7 +13850,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">22</property>
+                        <property name="position">23</property>
                       </packing>
                     </child>
                     <child>
@@ -13838,7 +13886,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">23</property>
+                        <property name="position">24</property>
                       </packing>
                     </child>
                     <child>
@@ -13916,7 +13964,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">24</property>
+                        <property name="position">25</property>
                       </packing>
                     </child>
                     <child>
@@ -13994,7 +14042,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">25</property>
+                        <property name="position">26</property>
                       </packing>
                     </child>
                     <child>
@@ -14072,7 +14120,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">26</property>
+                        <property name="position">27</property>
                       </packing>
                     </child>
                     <child>
@@ -14129,7 +14177,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">27</property>
+                        <property name="position">28</property>
                       </packing>
                     </child>
                     <child>
@@ -14185,7 +14233,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">29</property>
+                        <property name="position">30</property>
                       </packing>
                     </child>
                     <child>
@@ -14235,7 +14283,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">30</property>
+                        <property name="position">31</property>
                       </packing>
                     </child>
                     <child>
@@ -14285,7 +14333,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">31</property>
+                        <property name="position">32</property>
                       </packing>
                     </child>
                     <child>
@@ -14341,7 +14389,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">32</property>
+                        <property name="position">33</property>
                       </packing>
                     </child>
                     <child>
@@ -14391,7 +14439,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">33</property>
+                        <property name="position">34</property>
                       </packing>
                     </child>
                     <child>
@@ -14441,7 +14489,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">34</property>
+                        <property name="position">35</property>
                       </packing>
                     </child>
                   </object>
@@ -16109,6 +16157,44 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="VclOptionalBox" id="Media-Section-LineDialog">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <child>
+                          <object class="sfxlo-NotebookbarToolBox" id="Draw12">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="valign">center</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="Media-FormatLine1">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="visible_horizontal">False</property>
+                                <property name="action_name">.uno:FormatLine</property>
+                                <property name="icon_name">sfx2/res/symphony/open_more.png</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">10</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="VclOptionalBox" id="Media-Section-ObjectAlign">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -16151,44 +16237,6 @@
                             <property name="expand">False</property>
                             <property name="fill">True</property>
                             <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">10</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="VclOptionalBox" id="Media-Section-LineDialog">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="valign">center</property>
-                        <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="Draw12">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="valign">center</property>
-                            <property name="show_arrow">False</property>
-                            <child>
-                              <object class="GtkToolButton" id="Media-FormatLine1">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="visible_horizontal">False</property>
-                                <property name="action_name">.uno:FormatLine</property>
-                                <property name="icon_name">sfx2/res/symphony/open_more.png</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="homogeneous">True</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
                           </packing>
                         </child>
                       </object>
@@ -16612,7 +16660,7 @@
                     </child>
                     <child>
                       <object class="VclOptionalBox" id="Media-Section-AVMediaToolBox">
-                        <property name="width_request">167</property>
+                        <property name="width-request">167</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
