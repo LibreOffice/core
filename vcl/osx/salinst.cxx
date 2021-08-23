@@ -73,7 +73,6 @@
 #include <apple_remote/RemoteControl.h>
 #include <postmac.h>
 
-#include <config_features.h>
 #if HAVE_FEATURE_SKIA
 #include <vcl/skia/SkiaHelper.hxx>
 #include <skia/salbmp.hxx>
