@@ -62,15 +62,16 @@ const CrashWatchdogTimingsValues& SkiaZone::getCrashWatchdogTimingsValues()
     switch (renderMethodToUse())
     {
         case RenderVulkan:
+        case RenderMetal:
         {
 #if defined(SK_RELEASE)
-            static const CrashWatchdogTimingsValues vulkanValues = { 6, 20 }; /* 1.5s,  5s */
+            static const CrashWatchdogTimingsValues gpuValues = { 6, 20 }; /* 1.5s,  5s */
 #elif defined(SK_DEBUG)
-            static const CrashWatchdogTimingsValues vulkanValues = { 60, 200 }; /* 15s,  50s */
+            static const CrashWatchdogTimingsValues gpuValues = { 60, 200 }; /* 15s,  50s */
 #else
 #error Unknown Skia debug/release setting.
 #endif
-            return vulkanValues;
+            return gpuValues;
         }
         case RenderRaster:
         {

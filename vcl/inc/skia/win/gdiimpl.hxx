@@ -15,6 +15,7 @@
 
 #include <vcl/dllapi.h>
 #include <skia/gdiimpl.hxx>
+#include <skia/utils.hxx>
 #include <win/salgdi.h>
 #include <win/wingdiimpl.hxx>
 #include <o3tl/lru_map.hxx>
@@ -42,6 +43,7 @@ private:
 
 public:
     WinSkiaSalGraphicsImpl(WinSalGraphics& rGraphics, SalGeometryProvider* mpProvider);
+    virtual ~WinSkiaSalGraphicsImpl() override;
 
     virtual void DeInit() override;
     virtual void freeResources() override;
@@ -60,7 +62,8 @@ public:
     static void prepareSkia();
 
 protected:
-    virtual void createWindowContext(bool forceRaster = false) override;
+    virtual void createWindowSurfaceInternal(bool forceRaster = false) override;
+    virtual void destroyWindowSurfaceInternal() override;
     virtual void performFlush() override;
     static sk_sp<SkTypeface> createDirectWriteTypeface(HDC hdc, HFONT hfont);
     static void initFontInfo();
@@ -69,6 +72,7 @@ protected:
     inline static sk_sp<SkFontMgr> dwriteFontMgr;
     inline static bool dwriteDone = false;
     static SkFont::Edging fontEdging;
+    std::unique_ptr<sk_app::WindowContext> mWindowContext;
 };
 
 typedef std::pair<ControlCacheKey, sk_sp<SkImage>> SkiaControlCachePair;

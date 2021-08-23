@@ -35,13 +35,15 @@ public:
     static void prepareSkia();
 
 private:
-    virtual void createWindowContext(bool forceRaster = false) override;
+    virtual void createWindowSurfaceInternal(bool forceRaster = false) override;
+    virtual void destroyWindowSurfaceInternal() override;
     virtual void performFlush() override;
     virtual bool avoidRecreateByResize() const override;
     static std::unique_ptr<sk_app::WindowContext>
     createWindowContext(Display* display, Drawable drawable, const XVisualInfo* visual, int width,
                         int height, SkiaHelper::RenderMethod renderMethod, bool temporary);
     friend std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext(bool);
+    std::unique_ptr<sk_app::WindowContext> mWindowContext;
 };
 
 #endif // INCLUDED_VCL_INC_SKIA_X11_GDIIMPL_HXX
