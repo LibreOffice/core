@@ -780,6 +780,16 @@ void AquaSalGraphics::FreeEmbedFontData( const void* pData, tools::Long /*nDataL
     SAL_WARN_IF( (pData==nullptr), "vcl", "AquaSalGraphics::FreeEmbedFontData() is not implemented");
 }
 
+void AquaSalGraphics::Flush()
+{
+    mpBackend->Flush();
+}
+
+void AquaSalGraphics::Flush( const tools::Rectangle& rRect )
+{
+    mpBackend->Flush( rRect );
+}
+
 #ifdef IOS
 
 bool AquaSharedAttributes::checkContext()

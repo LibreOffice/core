@@ -93,7 +93,9 @@ void AquaSkiaSalGraphicsImpl::destroyWindowSurfaceInternal()
     mSurface.reset();
 }
 
-//void AquaSkiaSalGraphicsImpl::Flush() { performFlush(); }
+void AquaSkiaSalGraphicsImpl::Flush() { performFlush(); }
+
+void AquaSkiaSalGraphicsImpl::Flush(const tools::Rectangle&) { performFlush(); }
 
 void AquaSkiaSalGraphicsImpl::performFlush()
 {
