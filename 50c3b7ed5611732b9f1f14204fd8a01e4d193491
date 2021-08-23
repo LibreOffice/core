@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "479ce1aa_e508fefa",
+        "filename": "vcl/inc/drawmode.hxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-08-23T03:47:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a66a329_bf1ee84d",
+      "revId": "50c3b7ed5611732b9f1f14204fd8a01e4d193491",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f559867_71420033",
         "filename": "vcl/source/rendercontext/drawmode.cxx",
         "patchSetId": 13
@@ -81,6 +99,30 @@
       "revId": "50c3b7ed5611732b9f1f14204fd8a01e4d193491",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4e01c9b_256d257d",
+        "filename": "vcl/source/rendercontext/drawmode.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-08-23T03:47:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a0bdfb0_bea530d5",
+      "range": {
+        "startLine": 272,
+        "startChar": 0,
+        "endLine": 280,
+        "endChar": 1
+      },
+      "revId": "50c3b7ed5611732b9f1f14204fd8a01e4d193491",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
