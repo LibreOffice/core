@@ -33,7 +33,7 @@ X11SkiaSalGraphicsImpl::X11SkiaSalGraphicsImpl(X11SalGraphics& rParent)
 {
 }
 
-X11SkiaSalGraphicsImpl::~X11SkiaSalGraphicsImpl() {}
+X11SkiaSalGraphicsImpl::~X11SkiaSalGraphicsImpl() { assert(!mWindowContext); }
 
 void X11SkiaSalGraphicsImpl::Init()
 {
@@ -44,6 +44,7 @@ void X11SkiaSalGraphicsImpl::Init()
 
 void X11SkiaSalGraphicsImpl::createWindowContext(bool forceRaster)
 {
+    assert(!mWindowContext);
     assert(mX11Parent.GetDrawable() != None);
     mWindowContext = createWindowContext(mX11Parent.GetXDisplay(), mX11Parent.GetDrawable(),
                                          &mX11Parent.GetVisual(), GetWidth(), GetHeight(),
@@ -103,6 +104,9 @@ X11SkiaSalGraphicsImpl::createWindowContext(Display* display, Drawable drawable,
             return sk_app::window_context_factory::MakeRasterForXlib(winInfo, displayParams);
         case RenderVulkan:
             return sk_app::window_context_factory::MakeVulkanForXlib(winInfo, displayParams);
+        case RenderVulkan:
+            abort();
+            break;
     }
     abort();
 }

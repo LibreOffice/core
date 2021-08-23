@@ -44,7 +44,8 @@ bool isVCLSkiaEnabled() { return false; }
 #include <GrDirectContext.h>
 #include <skia_compiler.hxx>
 #include <skia_opts.hxx>
-
+#include <tools/sk_app/VulkanWindowContext.h>
+#include <tools/sk_app/MetalWindowContext.h>
 #ifdef DBG_UTIL
 #include <fstream>
 #endif
@@ -138,6 +139,12 @@ static bool isVulkanDenylisted(const VkPhysicalDeviceProperties& props)
     return denylisted;
 }
 
+static void writeSkiaMetalInfo()
+{
+    SvFileStream logFile(getCacheFolder() + "/skia.log", StreamMode::WRITE | StreamMode::TRUNC);
+    writeToLog(logFile, "RenderMethod", "metal");
+}
+
 static void writeSkiaRasterInfo()
 {
     SvFileStream logFile(getCacheFolder() + "/skia.log", StreamMode::WRITE | StreamMode::TRUNC);
@@ -146,7 +153,7 @@ static void writeSkiaRasterInfo()
     writeToLog(logFile, "Compiler", skia_compiler_name());
 }
 
-static sk_app::VulkanWindowContext::SharedGrDirectContext getTemporaryGrDirectContext();
+static std::unique_ptr<sk_app::WindowContext> getTemporaryWindowContext();
 
 static void checkDeviceDenylisted(bool blockDisable = false)
 {
@@ -161,22 +168,24 @@ static void checkDeviceDenylisted(bool blockDisable = false)
         case RenderVulkan:
         {
             // First try if a GrDirectContext already exists.
-            sk_app::VulkanWindowContext::SharedGrDirectContext grDirectContext
+            std::unique_ptr<sk_app::WindowContext> temporaryWindowContext;
+            GrDirectContext* grDirectContext
                 = sk_app::VulkanWindowContext::getSharedGrDirectContext();
-            if (!grDirectContext.getGrDirectContext())
+            if (!grDirectContext)
             {
                 // This function is called from isVclSkiaEnabled(), which
                 // may be called when deciding which X11 visual to use,
                 // and that visual is normally needed when creating
                 // Skia's VulkanWindowContext, which is needed for the GrDirectContext.
-                // Avoid the loop by creating a temporary GrDirectContext
+                // Avoid the loop by creating a temporary WindowContext
                 // that will use the default X11 visual (that shouldn't matter
                 // for just finding out information about Vulkan) and destroying
                 // the temporary context will clean up again.
-                grDirectContext = getTemporaryGrDirectContext();
+                temporaryWindowContext = getTemporaryWindowContext();
+                grDirectContext = sk_app::VulkanWindowContext::getSharedGrDirectContext();
             }
             bool denylisted = true; // assume the worst
-            if (grDirectContext.getGrDirectContext()) // Vulkan was initialized properly
+            if (grDirectContext) // Vulkan was initialized properly
             {
                 denylisted
                     = isVulkanDenylisted(sk_app::VulkanWindowContext::getPhysDeviceProperties());
@@ -191,6 +200,12 @@ static void checkDeviceDenylisted(bool blockDisable = false)
             }
             break;
         }
+        case RenderMetal:
+            // Try to assume Metal always works, given that Mac doesn't have such as wide range of HW vendors as PC.
+            // If there turns out to be problems, handle it similarly to Vulkan.
+            SAL_INFO("vcl.skia", "Using Skia Metal mode");
+            writeSkiaMetalInfo();
+            return;
         case RenderRaster:
             SAL_INFO("vcl.skia", "Using Skia raster mode");
             writeSkiaRasterInfo();
@@ -298,11 +313,19 @@ static bool initRenderMethodToUse()
             methodToUse = RenderRaster;
             return true;
         }
+#ifdef MACOSX
+        if (strcmp(env, "metal") == 0)
+        {
+            methodToUse = RenderMetal;
+            return true;
+        }
+#else
         if (strcmp(env, "vulkan") == 0)
         {
             methodToUse = RenderVulkan;
             return true;
         }
+#endif
         SAL_WARN("vcl.skia", "Unrecognized value of SAL_SKIA");
         abort();
     }
@@ -311,7 +334,11 @@ static bool initRenderMethodToUse()
         methodToUse = RenderRaster;
         return true;
     }
+#ifdef MACOSX
+    methodToUse = RenderMetal;
+#else
     methodToUse = RenderVulkan;
+#endif
     return true;
 }
 
@@ -331,57 +358,62 @@ void disableRenderMethod(RenderMethod method)
     methodToUse = RenderRaster;
 }
 
-static sk_app::VulkanWindowContext::SharedGrDirectContext* sharedGrDirectContext;
+// If needed, we'll allocate one extra window context so that we have a valid GrDirectContext
+// from Vulkan/MetalWindowContext.
+static std::unique_ptr<sk_app::WindowContext> sharedWindowContext;
 
-static std::unique_ptr<sk_app::WindowContext> (*createVulkanWindowContextFunction)(bool) = nullptr;
-static void setCreateVulkanWindowContext(std::unique_ptr<sk_app::WindowContext> (*function)(bool))
+static std::unique_ptr<sk_app::WindowContext> (*createGpuWindowContextFunction)(bool) = nullptr;
+static void setCreateGpuWindowContext(std::unique_ptr<sk_app::WindowContext> (*function)(bool))
 {
-    createVulkanWindowContextFunction = function;
+    createGpuWindowContextFunction = function;
 }
 
 GrDirectContext* getSharedGrDirectContext()
 {
     SkiaZone zone;
-    assert(renderMethodToUse() == RenderVulkan);
-    if (sharedGrDirectContext)
-        return sharedGrDirectContext->getGrDirectContext();
+    assert(renderMethodToUse() != RenderRaster);
+    if (sharedWindowContext)
+        return sharedWindowContext->directContext();
     // TODO mutex?
-    // Set up the shared GrDirectContext from Skia's (patched) VulkanWindowContext, if it's been
+    // Set up the shared GrDirectContext from Skia's (patched) Vulkan/MetalWindowContext, if it's been
     // already set up.
-    sk_app::VulkanWindowContext::SharedGrDirectContext context
-        = sk_app::VulkanWindowContext::getSharedGrDirectContext();
-    GrDirectContext* grDirectContext = context.getGrDirectContext();
-    if (grDirectContext)
+    switch (renderMethodToUse())
     {
-        sharedGrDirectContext = new sk_app::VulkanWindowContext::SharedGrDirectContext(context);
-        return grDirectContext;
+        case RenderVulkan:
+            if (GrDirectContext* context = sk_app::VulkanWindowContext::getSharedGrDirectContext())
+                return context;
+            break;
+        case RenderMetal:
+            if (GrDirectContext* context = sk_app::getMetalSharedGrDirectContext())
+                return context;
+            break;
+        case RenderRaster:
+            abort();
     }
     static bool done = false;
     if (done)
         return nullptr;
     done = true;
-    if (createVulkanWindowContextFunction == nullptr)
+    if (createGpuWindowContextFunction == nullptr)
         return nullptr; // not initialized properly (e.g. used from a VCL backend with no Skia support)
-    std::unique_ptr<sk_app::WindowContext> tmpContext = createVulkanWindowContextFunction(false);
-    // Set up using the shared context created by the call above, if successful.
-    context = sk_app::VulkanWindowContext::getSharedGrDirectContext();
-    grDirectContext = context.getGrDirectContext();
+    sharedWindowContext = createGpuWindowContextFunction(false);
+    GrDirectContext* grDirectContext
+        = sharedWindowContext ? sharedWindowContext->directContext() : nullptr;
     if (grDirectContext)
-    {
-        sharedGrDirectContext = new sk_app::VulkanWindowContext::SharedGrDirectContext(context);
         return grDirectContext;
-    }
-    disableRenderMethod(RenderVulkan);
+    SAL_WARN_IF(renderMethodToUse() == RenderVulkan, "vcl.skia",
+                "Cannot create Vulkan GPU context, falling back to Raster");
+    SAL_WARN_IF(renderMethodToUse() == RenderMetal, "vcl.skia",
+                "Cannot create Metal GPU context, falling back to Raster");
+    disableRenderMethod(renderMethodToUse());
     return nullptr;
 }
 
-static sk_app::VulkanWindowContext::SharedGrDirectContext getTemporaryGrDirectContext()
+static std::unique_ptr<sk_app::WindowContext> getTemporaryWindowContext()
 {
-    if (createVulkanWindowContextFunction == nullptr)
-        return sk_app::VulkanWindowContext::SharedGrDirectContext();
-    std::unique_ptr<sk_app::WindowContext> tmpContext = createVulkanWindowContextFunction(true);
-    // Set up using the shared context created by the call above, if successful.
-    return sk_app::VulkanWindowContext::getSharedGrDirectContext();
+    if (createGpuWindowContextFunction == nullptr)
+        return nullptr;
+    return createGpuWindowContextFunction(true);
 }
 
 sk_sp<SkSurface> createSkSurface(int width, int height, SkColorType type, SkAlphaType alpha)
@@ -392,6 +424,7 @@ sk_sp<SkSurface> createSkSurface(int width, int height, SkColorType type, SkAlph
     switch (renderMethodToUse())
     {
         case RenderVulkan:
+        case RenderMetal:
         {
             if (GrDirectContext* grDirectContext = getSharedGrDirectContext())
             {
@@ -405,8 +438,10 @@ sk_sp<SkSurface> createSkSurface(int width, int height, SkColorType type, SkAlph
 #endif
                     return surface;
                 }
-                SAL_WARN("vcl.skia",
-                         "cannot create Vulkan GPU offscreen surface, falling back to Raster");
+                SAL_WARN_IF(renderMethodToUse() == RenderVulkan, "vcl.skia",
+                            "Cannot create Vulkan GPU offscreen surface, falling back to Raster");
+                SAL_WARN_IF(renderMethodToUse() == RenderMetal, "vcl.skia",
+                            "Cannot create Metal GPU offscreen surface, falling back to Raster");
             }
             break;
         }
@@ -435,6 +470,7 @@ sk_sp<SkImage> createSkImage(const SkBitmap& bitmap)
     switch (renderMethodToUse())
     {
         case RenderVulkan:
+        case RenderMetal:
         {
             if (GrDirectContext* grDirectContext = getSharedGrDirectContext())
             {
@@ -450,8 +486,10 @@ sk_sp<SkImage> createSkImage(const SkBitmap& bitmap)
                     return makeCheckedImageSnapshot(surface);
                 }
                 // Try to fall back in non-debug builds.
-                SAL_WARN("vcl.skia",
-                         "cannot create Vulkan GPU offscreen surface, falling back to Raster");
+                SAL_WARN_IF(renderMethodToUse() == RenderVulkan, "vcl.skia",
+                            "Cannot create Vulkan GPU offscreen surface, falling back to Raster");
+                SAL_WARN_IF(renderMethodToUse() == RenderMetal, "vcl.skia",
+                            "Cannot create Metal GPU offscreen surface, falling back to Raster");
             }
             break;
         }
@@ -559,8 +597,7 @@ tools::Long maxImageCacheSize()
 
 void cleanup()
 {
-    delete sharedGrDirectContext;
-    sharedGrDirectContext = nullptr;
+    sharedWindowContext.reset();
     imageCache.clear();
     imageCacheSize = 0;
 }
@@ -574,11 +611,11 @@ void setPixelGeometry(SkPixelGeometry pixelGeometry)
 }
 
 // Skia should not be used from VCL backends that do not actually support it, as there will be setup missing.
-// The code here (that is in the vcl lib) needs a function for creating Vulkan context that is
+// The code here (that is in the vcl lib) needs a function for creating Vulkan/Metal context that is
 // usually available only in the backend libs.
-void prepareSkia(std::unique_ptr<sk_app::WindowContext> (*createVulkanWindowContext)(bool))
+void prepareSkia(std::unique_ptr<sk_app::WindowContext> (*createGpuWindowContext)(bool))
 {
-    setCreateVulkanWindowContext(createVulkanWindowContext);
+    setCreateGpuWindowContext(createGpuWindowContext);
     skiaSupportedByBackend = true;
 }
 

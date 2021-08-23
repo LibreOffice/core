@@ -25,11 +25,12 @@
 #include <salgdiimpl.hxx>
 #include <salgeom.hxx>
 
+#include <premac.h>
 #include <SkSurface.h>
 #include <SkRegion.h>
+#include <postmac.h>
 
 #include <prewin.h>
-#include <tools/sk_app/WindowContext.h>
 #include <postwin.h>
 
 class SkiaFlushIdle;
@@ -238,7 +239,8 @@ protected:
     // Reimplemented for X11.
     virtual bool avoidRecreateByResize() const;
     void createWindowSurface(bool forceRaster = false);
-    virtual void createWindowContext(bool forceRaster = false) = 0;
+    virtual void createWindowSurfaceInternal(bool forceRaster = false) = 0;
+    virtual void destroyWindowSurfaceInternal() = 0;
     void createOffscreenSurface();
 
     void privateDrawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
@@ -317,7 +319,6 @@ protected:
     SalGraphics& mParent;
     /// Pointer to the SalFrame or SalVirtualDevice
     SalGeometryProvider* mProvider;
-    std::unique_ptr<sk_app::WindowContext> mWindowContext;
     // The Skia surface that is target of all the rendering.
     sk_sp<SkSurface> mSurface;
     bool mIsGPU; // whether the surface is GPU-backed
