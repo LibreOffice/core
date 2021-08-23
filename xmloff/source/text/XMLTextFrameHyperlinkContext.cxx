@@ -113,14 +113,23 @@ SvXMLImportContextRef XMLTextFrameHyperlinkContext::CreateChildContext(
     SvXMLImportContext *pContext = nullptr;
     XMLTextFrameContext *pTextFrameContext = nullptr;
 
-    if( XML_NAMESPACE_DRAW == nPrefix )
+    if( XML_NAMESPACE_DRAW == nPrefix || XML_NAMESPACE_DR3D == nPrefix)
     {
-        if( IsXMLToken( rLocalName, XML_FRAME ) )
+        if( XML_NAMESPACE_DRAW == nPrefix && IsXMLToken( rLocalName, XML_FRAME ) )
             pTextFrameContext = new XMLTextFrameContext( GetImport(), nPrefix,
                                                 rLocalName, xAttrList,
                                                 eDefaultAnchorType );
-        else if (IsXMLToken(rLocalName, XML_CUSTOM_SHAPE) || IsXMLToken(rLocalName, XML_PATH)
-                 || IsXMLToken(rLocalName, XML_ELLIPSE) || IsXMLToken(rLocalName, XML_LINE))
+        else if ((XML_NAMESPACE_DRAW == nPrefix && (
+                     IsXMLToken(rLocalName, XML_CUSTOM_SHAPE) || IsXMLToken(rLocalName, XML_PATH)
+                     || IsXMLToken(rLocalName, XML_ELLIPSE) || IsXMLToken(rLocalName, XML_LINE)
+                     || IsXMLToken(rLocalName, XML_RECT) || IsXMLToken(rLocalName, XML_CAPTION)
+                     || IsXMLToken(rLocalName, XML_POLYGON) || IsXMLToken(rLocalName, XML_POLYLINE)
+                     || IsXMLToken(rLocalName, XML_MEASURE) || IsXMLToken(rLocalName, XML_CIRCLE)
+                     || IsXMLToken(rLocalName, XML_CONNECTOR) || IsXMLToken(rLocalName, XML_CONTROL)
+                     || IsXMLToken(rLocalName, XML_PAGE_THUMBNAIL) || IsXMLToken(rLocalName, XML_G)
+                 ))
+                 || (XML_NAMESPACE_DR3D == nPrefix && IsXMLToken(rLocalName, XML_SCENE))
+             )
         {
             Reference<XShapes> xShapes;
             SvXMLShapeContext* pShapeContext
