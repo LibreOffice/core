@@ -988,6 +988,7 @@ void AquaSalFrame::Flush()
     // => fall back to synchronous painting
     if( ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
     {
+        mpGraphics->Flush();
         [mpNSView display];
     }
 }
@@ -1008,6 +1009,7 @@ void AquaSalFrame::Flush( const tools::Rectangle& rRect )
     // => fall back to synchronous painting
     if( ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
     {
+        mpGraphics->Flush( rRect );
         [mpNSView display];
     }
 }
