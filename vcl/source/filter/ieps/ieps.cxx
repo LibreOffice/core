@@ -635,11 +635,12 @@ bool ImportEpsGraphic( SvStream & rStream, Graphic & rGraphic)
         nPSSize = rStream.Seek( STREAM_SEEK_TO_END ) - nOrigPos;
     }
 
-    std::unique_ptr<sal_uInt8[]> pHeader( new sal_uInt8[ 22 ] );
+    std::vector<sal_uInt8> aHeader(22, 0);
     rStream.Seek( nPSStreamPos );
-    rStream.ReadBytes(pHeader.get(), 22); // check PostScript header
-    bool bOk = ImplSearchEntry(pHeader.get(), reinterpret_cast<sal_uInt8 const *>("%!PS-Adobe"), 10, 10) &&
-               ImplSearchEntry(&pHeader[ 15 ], reinterpret_cast<sal_uInt8 const *>("EPS"), 3, 3);
+    rStream.ReadBytes(aHeader.data(), 22); // check PostScript header
+    sal_uInt8* pHeader = aHeader.data();
+    bool bOk = ImplSearchEntry(pHeader, reinterpret_cast<sal_uInt8 const *>("%!PS-Adobe"), 10, 10) &&
+               ImplSearchEntry(pHeader + 15, reinterpret_cast<sal_uInt8 const *>("EPS"), 3, 3);
     if (bOk)
     {
         rStream.Seek(nPSStreamPos);
