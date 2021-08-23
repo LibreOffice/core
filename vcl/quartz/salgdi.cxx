@@ -200,6 +200,9 @@ AquaSalGraphics::AquaSalGraphics()
 #if HAVE_FEATURE_SKIA
     if(SkiaHelper::isVCLSkiaEnabled())
         mpBackend.reset(new AquaSkiaSalGraphicsImpl(*this, maShared));
+#else
+    if(false)
+        ;
 #endif
     else
         mpBackend.reset(new AquaGraphicsBackend(maShared));
