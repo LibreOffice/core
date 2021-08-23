@@ -338,8 +338,8 @@ tools::Rectangle SvxEditEngineForwarder::GetCharBounds( sal_Int32 nPara, sal_Int
 tools::Rectangle SvxEditEngineForwarder::GetParaBounds( sal_Int32 nPara ) const
 {
     const Point aPnt = rEditEngine.GetDocPosTopLeft( nPara );
-    sal_uLong nWidth;
-    sal_uLong nHeight;
+    sal_uInt32 nWidth;
+    sal_uInt32 nHeight;
 
     if( rEditEngine.IsEffectivelyVertical() )
     {
@@ -348,7 +348,7 @@ tools::Rectangle SvxEditEngineForwarder::GetParaBounds( sal_Int32 nPara ) const
         // don't rotate.
         nWidth = rEditEngine.GetTextHeight( nPara );
         nHeight = rEditEngine.GetTextHeight();
-        sal_uLong nTextWidth = rEditEngine.GetTextHeight();
+        sal_uInt32 nTextWidth = rEditEngine.GetTextHeight();
 
         return tools::Rectangle( nTextWidth - aPnt.Y() - nWidth, 0, nTextWidth - aPnt.Y(), nHeight );
     }
