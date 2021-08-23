@@ -221,6 +221,21 @@ template <typename N, typename U> constexpr auto convertSaturate(N n, U from, U 
     return detail::MulDivSaturate(n, detail::md(from, to), detail::md(to, from));
 }
 
+// Conversion with saturation (only for integral types), optimized for return types smaller than
+// sal_Int64. In this case, it's easier to clamp input values to known bounds, than to do some
+// preprocessing to handle too large input values, just to clamp the result anyway. Use it like:
+//   sal_Int32 n = convertSaturateNarrowing<sal_Int32>(m, o3tl::Length::mm100, o3tl::Length::emu);
+template <typename Out, typename N, typename U,
+          std::enable_if_t<
+              std::is_integral_v<N> && std::is_integral_v<Out> && sizeof(Out) < sizeof(sal_Int64),
+              int> = 0>
+constexpr Out convertSaturateNarrowing(N n, U from, U to)
+{
+    constexpr auto nMin = convertSaturate(std::numeric_limits<Out>::min(), to, from);
+    constexpr auto nMax = convertSaturate(std::numeric_limits<Out>::max(), to, from);
+    return convert(std::clamp<sal_Int64>(n, nMin, nMax), from, to);
+}
+
 // Return a pair { multiplier, divisor } for a given conversion
 template <typename U> constexpr std::pair<sal_Int64, sal_Int64> getConversionMulDiv(U from, U to)
 {
