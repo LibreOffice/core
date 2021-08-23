@@ -148,8 +148,8 @@ void addPolyPolygonToPath(const basegfx::B2DPolyPolygon& rPolyPolygon, SkPath& r
 
     sal_uInt32 nPointCount = 0;
     for (const auto& rPolygon : rPolyPolygon)
-        nPointCount += rPolygon.count();
-    rPath.incReserve(nPointCount * 2);
+        nPointCount += rPolygon.count() * 3; // because cubicTo is 3 elements
+    rPath.incReserve(nPointCount);
 
     for (const auto& rPolygon : rPolyPolygon)
     {
@@ -1142,7 +1142,7 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     if (eLineJoin != basegfx::B2DLineJoin::NONE || fLineWidth <= 1.0)
     {
         SkPath aPath;
-        aPath.incReserve(aPolyLine.count() + 2);
+        aPath.incReserve(aPolyLine.count() * 3); // because cubicTo is 3 elements
         aPath.setFillType(SkPathFillType::kEvenOdd);
         addPolygonToPath(aPolyLine, aPath);
         aPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, nullptr);
