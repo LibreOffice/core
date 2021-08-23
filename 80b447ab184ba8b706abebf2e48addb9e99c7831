@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0625057a_253e7249",
+        "filename": "comphelper/source/misc/configuration.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-23T13:52:40Z",
+      "side": 1,
+      "message": "\"could end up containing\"",
+      "range": {
+        "startLine": 138,
+        "startChar": 46,
+        "endLine": 138,
+        "endChar": 68
+      },
+      "revId": "80b447ab184ba8b706abebf2e48addb9e99c7831",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
