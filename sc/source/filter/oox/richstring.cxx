@@ -85,7 +85,7 @@ OUString lcl_unEscapeUnicodeChars(const OUString& rSrc)
         return rSrc;
 
     sal_Int32 nStart = 0;
-    bool bFound = true;
+    bool bFound = false;
     const OUString aPrefix = "_x";
     sal_Int32 nPrefixStart = rSrc.indexOf(aPrefix, nStart);
 
