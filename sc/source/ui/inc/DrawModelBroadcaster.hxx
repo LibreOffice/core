@@ -20,10 +20,11 @@
 #pragma once
 
 #include <svl/lstner.hxx>
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/document/XShapeEventBroadcaster.hpp>
+#include <mutex>
 #include <unordered_map>
 
 class SdrModel;
@@ -31,8 +32,8 @@ class SdrModel;
 class ScDrawModelBroadcaster : public SfxListener,
     public ::cppu::WeakImplHelper< css::document::XShapeEventBroadcaster >
 {
-    mutable ::osl::Mutex maListenerMutex;
-    ::comphelper::OInterfaceContainerHelper3<css::document::XEventListener> maEventListeners;
+    mutable std::mutex maListenerMutex;
+    ::comphelper::OInterfaceContainerHelper4<css::document::XEventListener> maEventListeners;
     std::unordered_map<css::uno::Reference< css::drawing::XShape >, css::uno::Reference< css::document::XShapeEventListener >> maShapeListeners;
     SdrModel *mpDrawModel;
 
