@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eeaee687_2e87ef07",
+        "filename": "compilerplugins/clang/plugin.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-23T13:28:27Z",
+      "side": 1,
+      "message": "debugging leftover?",
+      "revId": "8a54339fc83fe9abaaace6f9f374697e6923d684",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
