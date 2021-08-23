@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "447982cd_73d6e85b",
+        "filename": "vcl/inc/drawmode.hxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-08-23T01:25:36Z",
+      "side": 1,
+      "message": "I would put the function into vcl namespace to not pollute the top namespace. \n\nYou could even put it into vcl::drawmode namespace and have simpler vcl::drawmode::GetLineColor, vcl::drawmode::GetFillColor, ... function names.",
+      "revId": "50c3b7ed5611732b9f1f14204fd8a01e4d193491",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f559867_71420033",
+        "filename": "vcl/source/rendercontext/drawmode.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-08-23T01:25:36Z",
+      "side": 1,
+      "message": "I don\u0027t really like that this is in the same file as the functions. You have a plan for this in the future?",
+      "range": {
+        "startLine": 272,
+        "startChar": 0,
+        "endLine": 280,
+        "endChar": 1
+      },
+      "revId": "50c3b7ed5611732b9f1f14204fd8a01e4d193491",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
