@@ -33,6 +33,7 @@
 #else
 #include <CoreGraphics/CoreGraphics.h>
 #include <CoreText/CoreText.h>
+#include "salgeom.hxx"
 #endif
 #include <postmac.h>
 
