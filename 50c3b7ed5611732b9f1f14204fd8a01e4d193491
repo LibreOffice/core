@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a66a329_bf1ee84d",
+        "filename": "vcl/inc/drawmode.hxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-08-23T02:59:47Z",
+      "side": 1,
+      "message": "Good idea! will do.",
+      "parentUuid": "447982cd_73d6e85b",
+      "revId": "50c3b7ed5611732b9f1f14204fd8a01e4d193491",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7f559867_71420033",
         "filename": "vcl/source/rendercontext/drawmode.cxx",
         "patchSetId": 13
@@ -30,6 +48,30 @@
       "writtenOn": "2021-08-23T01:25:36Z",
       "side": 1,
       "message": "I don\u0027t really like that this is in the same file as the functions. You have a plan for this in the future?",
+      "range": {
+        "startLine": 272,
+        "startChar": 0,
+        "endLine": 280,
+        "endChar": 1
+      },
+      "revId": "50c3b7ed5611732b9f1f14204fd8a01e4d193491",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a0bdfb0_bea530d5",
+        "filename": "vcl/source/rendercontext/drawmode.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-08-23T02:59:47Z",
+      "side": 1,
+      "message": "I\u0027m going to migrate these from OutputDevice to RenderContext in a future commit, but can take this out for now.",
+      "parentUuid": "7f559867_71420033",
       "range": {
         "startLine": 272,
         "startChar": 0,
