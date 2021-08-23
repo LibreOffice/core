@@ -21,6 +21,7 @@ class GenPspGfxBackend final : public SalGraphicsImpl
 {
 private:
     psp::PrinterGfx* m_pPrinterGfx;
+    ::css::rendering::FillRule m_eFillRule;
 
 public:
     GenPspGfxBackend(psp::PrinterGfx* pPrinterGfx);
@@ -39,6 +40,8 @@ public:
 
     void SetLineColor() override;
     void SetLineColor(Color nColor) override;
+    void SetFillRule() override;
+    void SetFillRule(::css::rendering::FillRule eFillRule) override;
     void SetFillColor() override;
     void SetFillColor(Color nColor) override;
     void SetXORMode(bool bSet, bool bInvertOnly) override;

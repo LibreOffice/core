@@ -42,6 +42,12 @@ class OutputDevice;
 class SvStream;
 enum class DrawTextFlags;
 
+enum class PolyFillMode
+{
+    ALTERNATE = 0x01,
+    WINDING = 0x02,
+};
+
 struct ImplMetaReadData
 {
     rtl_TextEncoding meActualCharSet;
@@ -91,6 +97,8 @@ public:
     virtual bool        IsTransparent() const { return false; }
 
 protected:
+    static void         ReadFillMode(SvStream &rIStm, PolyFillMode &eFillMode);
+    static void         WriteFillMode(SvStream &rIStm, PolyFillMode eFillMode);
     static void         ReadColor(SvStream& rIStm, ::Color& rColor);
     static void         WriteColor(SvStream& rIStm, ::Color aColor);
 };
@@ -1266,6 +1274,35 @@ public:
     bool                IsSetting() const { return mbSet; }
     void                SetSetting(bool rSet) { mbSet = rSet; }
     void                SetColor(Color& rColor) { maColor = rColor; }
+
+};
+
+class VCL_DLLPUBLIC MetaFillModeAction final : public MetaAction
+{
+private:
+
+    PolyFillMode mePolyFillMode;
+    bool                mbSet;
+
+public:
+                        MetaFillModeAction();
+    MetaFillModeAction(MetaFillModeAction const &) = default;
+    MetaFillModeAction(MetaFillModeAction &&) = default;
+    MetaFillModeAction & operator =(MetaFillModeAction const &) = delete; // due to MetaAction
+    MetaFillModeAction & operator =(MetaFillModeAction &&) = delete; // due to MetaAction
+private:
+    virtual             ~MetaFillModeAction() override;
+public:
+    virtual void        Execute( OutputDevice* pOut ) override;
+    virtual rtl::Reference<MetaAction> Clone() const override;
+
+                        MetaFillModeAction( const PolyFillMode& rPolyFillMode,
+                                            bool bSet );
+
+    const PolyFillMode&     GetFillMode() const { return mePolyFillMode; }
+    bool                IsSetting() const { return mbSet; }
+    void                SetSetting(bool rSet) { mbSet = rSet; }
+    void                SetFillMode(PolyFillMode& rFillRule) { mePolyFillMode = rFillRule; }
 
 };
 

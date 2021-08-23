@@ -585,6 +585,18 @@ void SkiaSalGraphicsImpl::SetLineColor(Color nColor)
     mLineColor = nColor;
 }
 
+void SkiaSalGraphicsImpl::SetFillRule()
+{
+    checkPendingDrawing();
+    meFillRule = ::css::rendering::FillRule::FillRule_EVEN_ODD;
+}
+
+void SkiaSalGraphicsImpl::SetFillRule(css::rendering::FillRule eFillRule)
+{
+    checkPendingDrawing();
+    meFillRule = eFillRule;
+}
+
 void SkiaSalGraphicsImpl::SetFillColor()
 {
     checkPendingDrawing();

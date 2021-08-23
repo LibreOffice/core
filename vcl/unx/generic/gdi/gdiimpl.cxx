@@ -1030,6 +1030,22 @@ void X11SalGraphicsImpl::SetLineColor( Color nColor )
     }
 }
 
+void X11SalGraphicsImpl::SetFillRule()
+{
+    if(meFillRule != ::css::rendering::FillRule::FillRule_EVEN_ODD)
+    {
+        meFillRule = ::css::rendering::FillRule::FillRule_EVEN_ODD;
+    }
+}
+
+void X11SalGraphicsImpl::SetFillRule( css::rendering::FillRule eFillRule )
+{
+    if(meFillRule != eFillRule)
+    {
+        meFillRule = eFillRule;
+    }
+}
+
 void X11SalGraphicsImpl::SetFillColor()
 {
     if( mnBrushColor != SALCOLOR_NONE )
@@ -1383,6 +1399,7 @@ bool X11SalGraphicsImpl::drawEPS( tools::Long,tools::Long,tools::Long,tools::Lon
     return false;
 }
 
+// INFO: This is the main draw method for drawing the handwriting
 // draw a poly-polygon
 bool X11SalGraphicsImpl::drawPolyPolygon(
     const basegfx::B2DHomMatrix& rObjectToDevice,
