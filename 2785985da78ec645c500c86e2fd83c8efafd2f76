@@ -16,6 +16,24 @@
       "revId": "2785985da78ec645c500c86e2fd83c8efafd2f76",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29cd4aba_b77767fa",
+        "filename": "comphelper/source/misc/configuration.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-08-23T14:00:54Z",
+      "side": 1,
+      "message": "oops, cut and paste mistake. good catch!",
+      "parentUuid": "f617cfea_a4b013c4",
+      "revId": "2785985da78ec645c500c86e2fd83c8efafd2f76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
