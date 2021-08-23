@@ -1,3 +1,246 @@
+diff --git a/tools/sk_app/MetalWindowContext.h b/tools/sk_app/MetalWindowContext.h
+index e8c8392a15..fbf35c3c2b 100644
+--- a/tools/sk_app/MetalWindowContext.h
++++ b/tools/sk_app/MetalWindowContext.h
+@@ -13,13 +13,18 @@
+ 
+ #include "tools/sk_app/WindowContext.h"
+ 
++#ifdef __OBJC__
+ #import <Metal/Metal.h>
+ #import <QuartzCore/CAMetalLayer.h>
++#endif
+ 
+ namespace sk_app {
+ 
++#ifdef __OBJC__
+ class MetalWindowContext : public WindowContext {
+ public:
++    static GrDirectContext* getSharedGrDirectContext() { return fGlobalShared ? fGlobalShared->fContext.get() : nullptr; }
++
+     sk_sp<SkSurface> getBackbufferSurface() override;
+ 
+     bool isValid() override { return fValid; }
+@@ -45,16 +50,34 @@ protected:
+     void destroyContext();
+     virtual void onDestroyContext() = 0;
+ 
++    static void checkDestroyShared();
++
+     bool                        fValid;
++
++    // We need to use just one GrDirectContext, so share all the relevant data.
++    struct Shared : public SkRefCnt
++    {
+     sk_cfp<id<MTLDevice>>       fDevice;
+     sk_cfp<id<MTLCommandQueue>> fQueue;
+-    CAMetalLayer*               fMetalLayer;
+-    GrMTLHandle                 fDrawableHandle;
+ #if GR_METAL_SDK_VERSION >= 230
+     // wrapping this in sk_cfp throws up an availability warning, so we'll track lifetime manually
+     id<MTLBinaryArchive>        fPipelineArchive SK_API_AVAILABLE(macos(11.0), ios(14.0));
+ #endif
++
++    sk_sp<GrDirectContext> fContext;
++    };
++
++    sk_sp<Shared> fShared;
++
++    static sk_sp<Shared> fGlobalShared;
++
++    CAMetalLayer*               fMetalLayer;
++    GrMTLHandle                 fDrawableHandle;
+ };
++#endif // __OBJC__
++
++// Access function when header is used from C++ code that wouldn't handle ObjC++ headers.
++extern "C" SK_API GrDirectContext* getMetalSharedGrDirectContext();
+ 
+ }   // namespace sk_app
+ 
+diff --git a/tools/sk_app/MetalWindowContext.mm b/tools/sk_app/MetalWindowContext.mm
+index 5b623811ed..49dc77b74d 100644
+--- a/tools/sk_app/MetalWindowContext.mm
++++ b/tools/sk_app/MetalWindowContext.mm
+@@ -37,24 +37,30 @@
+ }
+ 
+ void MetalWindowContext::initializeContext() {
++    fShared = fGlobalShared;
++    if( !fShared )
++    {
++    // TODO do we need a mutex?
++
++    fGlobalShared = sk_make_sp<Shared>();
++    Shared* d = fGlobalShared.get(); // shorter variable name
++
+     SkASSERT(!fContext);
+ 
+-    fDevice.reset(MTLCreateSystemDefaultDevice());
+-    fQueue.reset([*fDevice newCommandQueue]);
++    d->fDevice.reset(MTLCreateSystemDefaultDevice());
++    d->fQueue.reset([*d->fDevice newCommandQueue]);
+ 
+     if (fDisplayParams.fMSAASampleCount > 1) {
+         if (@available(macOS 10.11, iOS 9.0, *)) {
+-            if (![*fDevice supportsTextureSampleCount:fDisplayParams.fMSAASampleCount]) {
++            if (![*d->fDevice supportsTextureSampleCount:fDisplayParams.fMSAASampleCount]) {
++                fGlobalShared.reset();
+                 return;
+             }
+         } else {
++            fGlobalShared.reset();
+             return;
+         }
+     }
+-    fSampleCount = fDisplayParams.fMSAASampleCount;
+-    fStencilBits = 8;
+-
+-    fValid = this->onInitializeContext();
+ 
+ #if GR_METAL_SDK_VERSION >= 230
+     if (fDisplayParams.fEnableBinaryArchive) {
+@@ -62,12 +68,12 @@
+             sk_cfp<MTLBinaryArchiveDescriptor*> desc([MTLBinaryArchiveDescriptor new]);
+             (*desc).url = CacheURL(); // try to load
+             NSError* error;
+-            fPipelineArchive = [*fDevice newBinaryArchiveWithDescriptor:*desc error:&error];
+-            if (!fPipelineArchive) {
++            d->fPipelineArchive = [*d->fDevice newBinaryArchiveWithDescriptor:*desc error:&error];
++            if (!d->fPipelineArchive) {
+                 (*desc).url = nil; // create new
+                 NSError* error;
+-                fPipelineArchive = [*fDevice newBinaryArchiveWithDescriptor:*desc error:&error];
+-                if (!fPipelineArchive) {
++                d->fPipelineArchive = [*d->fDevice newBinaryArchiveWithDescriptor:*desc error:&error];
++                if (!d->fPipelineArchive) {
+                     SkDebugf("Error creating MTLBinaryArchive:\n%s\n",
+                              error.debugDescription.UTF8String);
+                 }
+@@ -75,46 +81,75 @@
+         }
+     } else {
+         if (@available(macOS 11.0, iOS 14.0, *)) {
+-            fPipelineArchive = nil;
++            d->fPipelineArchive = nil;
+         }
+     }
+ #endif
+ 
+     GrMtlBackendContext backendContext = {};
+-    backendContext.fDevice.retain((GrMTLHandle)fDevice.get());
+-    backendContext.fQueue.retain((GrMTLHandle)fQueue.get());
++    backendContext.fDevice.retain((GrMTLHandle)d->fDevice.get());
++    backendContext.fQueue.retain((GrMTLHandle)d->fQueue.get());
+ #if GR_METAL_SDK_VERSION >= 230
+     if (@available(macOS 11.0, iOS 14.0, *)) {
+-        backendContext.fBinaryArchive.retain((__bridge GrMTLHandle)fPipelineArchive);
++        backendContext.fBinaryArchive.retain((__bridge GrMTLHandle)d->fPipelineArchive);
+     }
+ #endif
+-    fContext = GrDirectContext::MakeMetal(backendContext, fDisplayParams.fGrContextOptions);
+-    if (!fContext && fDisplayParams.fMSAASampleCount > 1) {
++    d->fContext = GrDirectContext::MakeMetal(backendContext, fDisplayParams.fGrContextOptions);
++    if (!d->fContext && fDisplayParams.fMSAASampleCount > 1) {
+         fDisplayParams.fMSAASampleCount /= 2;
++        fGlobalShared.reset();
+         this->initializeContext();
+         return;
+     }
++
++    fShared = fGlobalShared;
++    } // if( !fShared )
++
++    fContext = fShared->fContext;
++
++    fSampleCount = fDisplayParams.fMSAASampleCount;
++    fStencilBits = 8;
++
++    fValid = this->onInitializeContext();
+ }
+ 
+ void MetalWindowContext::destroyContext() {
+-    if (fContext) {
+-        // in case we have outstanding refs to this (lua?)
+-        fContext->abandonContext();
+-        fContext.reset();
+-    }
+-
+     this->onDestroyContext();
+ 
+     fMetalLayer = nil;
+     fValid = false;
+ 
++    fContext.reset();
++    fShared.reset();
++
++    checkDestroyShared();
++}
++
++void MetalWindowContext::checkDestroyShared()
++{
++    if(!fGlobalShared || !fGlobalShared->unique()) // TODO mutex?
++        return;
++#ifndef SK_TRACE_VK_RESOURCES
++    if(!fGlobalShared->fContext->unique())
++        return;
++#endif
++    SkASSERT(fGlobalShared->fContext->unique());
++
++    if (fGlobalShared->fContext) {
++        // in case we have outstanding refs to this (lua?)
++        fGlobalShared->fContext->abandonContext();
++        fGlobalShared->fContext.reset();
++    }
++
+ #if GR_METAL_SDK_VERSION >= 230
+     if (@available(macOS 11.0, iOS 14.0, *)) {
+-        [fPipelineArchive release];
++        [fGlobalShared->fPipelineArchive release];
+     }
+ #endif
+-    fQueue.reset();
+-    fDevice.reset();
++    fGlobalShared->fQueue.reset();
++    fGlobalShared->fDevice.reset();
++
++    fGlobalShared.reset();
+ }
+ 
+ sk_sp<SkSurface> MetalWindowContext::getBackbufferSurface() {
+@@ -155,7 +190,7 @@ GrBackendRenderTarget backendRT(fWidth,
+ void MetalWindowContext::swapBuffers() {
+     id<CAMetalDrawable> currentDrawable = (id<CAMetalDrawable>)fDrawableHandle;
+ 
+-    id<MTLCommandBuffer> commandBuffer([*fQueue commandBuffer]);
++    id<MTLCommandBuffer> commandBuffer([*fShared->fQueue commandBuffer]);
+     commandBuffer.label = @"Present";
+ 
+     [commandBuffer presentDrawable:currentDrawable];
+@@ -176,9 +211,9 @@ GrBackendRenderTarget backendRT(fWidth,
+     if (!isActive) {
+ #if GR_METAL_SDK_VERSION >= 230
+         if (@available(macOS 11.0, iOS 14.0, *)) {
+-            if (fPipelineArchive) {
++            if (fShared->fPipelineArchive) {
+                 NSError* error;
+-                [fPipelineArchive serializeToURL:CacheURL() error:&error];
++                [fShared->fPipelineArchive serializeToURL:CacheURL() error:&error];
+                 if (error) {
+                     SkDebugf("Error storing MTLBinaryArchive:\n%s\n",
+                              error.debugDescription.UTF8String);
+@@ -189,4 +224,11 @@ GrBackendRenderTarget backendRT(fWidth,
+     }
+ }
+ 
++SK_API sk_sp<MetalWindowContext::Shared> MetalWindowContext::fGlobalShared;
++
++GrDirectContext* getMetalSharedGrDirectContext()
++{
++    return MetalWindowContext::getSharedGrDirectContext();
++}
++
+ }   //namespace sk_app
 diff --git a/tools/sk_app/VulkanWindowContext.cpp b/tools/sk_app/VulkanWindowContext.cpp
 index d07d5a4274..2b36d60076 100644
 --- a/tools/sk_app/VulkanWindowContext.cpp
@@ -417,10 +660,10 @@ index d07d5a4274..2b36d60076 100644
 +
  }   //namespace sk_app
 diff --git a/tools/sk_app/VulkanWindowContext.h b/tools/sk_app/VulkanWindowContext.h
-index 580dba2733..16f6b3fd51 100644
+index 580dba2733..92bfba6dff 100644
 --- a/tools/sk_app/VulkanWindowContext.h
 +++ b/tools/sk_app/VulkanWindowContext.h
-@@ -19,18 +19,38 @@
+@@ -19,18 +19,22 @@
  #include "tools/gpu/vk/VkTestUtils.h"
  #include "tools/sk_app/WindowContext.h"
  
@@ -432,26 +675,10 @@ index 580dba2733..16f6b3fd51 100644
  
 -class VulkanWindowContext : public WindowContext {
 +class SK_API VulkanWindowContext : public WindowContext {
-+    struct Shared;
  public:
      ~VulkanWindowContext() override;
  
-+    class SharedGrDirectContext {
-+    public:
-+        SharedGrDirectContext() {}
-+        GrDirectContext* getGrDirectContext() { return shared ? shared->fContext.get() : nullptr; }
-+        ~SharedGrDirectContext() { shared.reset(); checkDestroyShared(); }
-+        SharedGrDirectContext(SharedGrDirectContext const &) = default;
-+        SharedGrDirectContext & operator =(SharedGrDirectContext const &) = default;
-+        bool operator!() const { return !shared; }
-+        void reset() { shared.reset(); }
-+    private:
-+        friend class VulkanWindowContext;
-+        SharedGrDirectContext(sk_sp<Shared>& sh ) : shared( sh ) {}
-+        sk_sp<Shared> shared;
-+    };
-+
-+    static SharedGrDirectContext getSharedGrDirectContext() { return SharedGrDirectContext( fGlobalShared ); }
++    static GrDirectContext* getSharedGrDirectContext() { return fGlobalShared ? fGlobalShared->fContext.get() : nullptr; }
 +
      sk_sp<SkSurface> getBackbufferSurface() override;
      void swapBuffers() override;
@@ -461,7 +688,7 @@ index 580dba2733..16f6b3fd51 100644
  
      void resize(int w, int h) override {
          this->createSwapchain(w, h, fDisplayParams);
-@@ -50,9 +70,15 @@ public:
+@@ -50,9 +54,15 @@ public:
      VulkanWindowContext(const DisplayParams&, CreateVkSurfaceFn, CanPresentFn,
                          PFN_vkGetInstanceProcAddr, PFN_vkGetDeviceProcAddr);
  
@@ -477,7 +704,7 @@ index 580dba2733..16f6b3fd51 100644
  
      struct BackbufferInfo {
          uint32_t        fImageIndex;          // image this is associated with
-@@ -64,11 +90,6 @@ private:
+@@ -64,11 +74,6 @@ private:
      bool createBuffers(VkFormat format, VkImageUsageFlags, SkColorType colorType, VkSharingMode);
      void destroyBuffers();
  
@@ -489,7 +716,7 @@ index 580dba2733..16f6b3fd51 100644
      // Create functions
      CreateVkSurfaceFn fCreateVkSurfaceFn;
      CanPresentFn      fCanPresentFn;
-@@ -90,20 +111,44 @@ private:
+@@ -90,20 +95,44 @@ private:
      PFN_vkAcquireNextImageKHR fAcquireNextImageKHR = nullptr;
      PFN_vkQueuePresentKHR fQueuePresentKHR = nullptr;
  
@@ -540,7 +767,7 @@ index 580dba2733..16f6b3fd51 100644
  
      uint32_t               fImageCount;
 diff --git a/tools/sk_app/WindowContext.h b/tools/sk_app/WindowContext.h
-index 0fec5e7366..1d62cea433 100644
+index f143dab013..68bb84b988 100644
 --- a/tools/sk_app/WindowContext.h
 +++ b/tools/sk_app/WindowContext.h
 @@ -10,9 +10,9 @@
@@ -554,6 +781,30 @@ index 0fec5e7366..1d62cea433 100644
  class SkSurface;
  
  namespace sk_app {
+diff --git a/tools/sk_app/mac/MetalWindowContext_mac.mm b/tools/sk_app/mac/MetalWindowContext_mac.mm
+index 5bea8578fa..058c3994be 100644
+--- a/tools/sk_app/mac/MetalWindowContext_mac.mm
++++ b/tools/sk_app/mac/MetalWindowContext_mac.mm
+@@ -49,6 +49,10 @@
+ }
+ 
+ bool MetalWindowContext_mac::onInitializeContext() {
++    // Allow creating just the shared context, without an associated window.
++    if(fMainView == nil)
++        return true;
++
+     SkASSERT(nil != fMainView);
+ 
+     fMetalLayer = [CAMetalLayer layer];
+@@ -56,7 +56,7 @@
+     SkASSERT(nil != fMainView);
+ 
+     fMetalLayer = [CAMetalLayer layer];
+-    fMetalLayer.device = fDevice.get();
++    fMetalLayer.device = fShared->fDevice.get();
+     fMetalLayer.pixelFormat = MTLPixelFormatBGRA8Unorm;
+ 
+     // resize ignores the passed values and uses the fMainView directly.
 diff --git a/tools/sk_app/unix/VulkanWindowContext_unix.cpp b/tools/sk_app/unix/VulkanWindowContext_unix.cpp
 index 34f6640c76..5478b75dac 100644
 --- a/tools/sk_app/unix/VulkanWindowContext_unix.cpp

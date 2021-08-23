@@ -43,11 +43,14 @@ public:
     virtual void drawTextLayout(const GenericSalLayout& layout) override;
 
 private:
-    virtual void createWindowContext(bool forceRaster = false) override;
+    virtual void createWindowSurfaceInternal(bool forceRaster = false) override;
+    virtual void destroyWindowSurfaceInternal() override;
     virtual void performFlush() override;
-    void flushToScreen(const SkIRect& rect);
-    friend std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext(bool);
+    void flushToScreenRaster(const SkIRect& rect);
+    void flushToScreenMetal(const SkIRect& rect);
     static inline sk_sp<SkFontMgr> fontManager;
+    // This one is used only for Metal, and only indirectly.
+    std::unique_ptr<sk_app::WindowContext> mWindowContext;
 };
 
 #endif // INCLUDED_VCL_INC_SKIA_OSX_GDIIMPL_HXX

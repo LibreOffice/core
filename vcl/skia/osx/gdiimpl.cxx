@@ -21,7 +21,7 @@
 #include <skia/utils.hxx>
 #include <skia/zone.hxx>
 
-#include <skia/osx/rastercontext.hxx>
+#include <tools/sk_app/mac/WindowContextFactory_mac.h>
 
 #include <quartz/ctfonts.hxx>
 
@@ -43,6 +43,7 @@ AquaSkiaSalGraphicsImpl::AquaSkiaSalGraphicsImpl(AquaSalGraphics& rParent,
 AquaSkiaSalGraphicsImpl::~AquaSkiaSalGraphicsImpl()
 {
     DeInit(); // mac code doesn't call DeInit()
+    assert(!mWindowContext);
 }
 
 void AquaSkiaSalGraphicsImpl::DeInit()
@@ -54,24 +55,42 @@ void AquaSkiaSalGraphicsImpl::DeInit()
 
 void AquaSkiaSalGraphicsImpl::freeResources() {}
 
-void AquaSkiaSalGraphicsImpl::createWindowContext(bool forceRaster)
+void AquaSkiaSalGraphicsImpl::createWindowSurfaceInternal(bool forceRaster)
 {
     SkiaZone zone;
     sk_app::DisplayParams displayParams;
     displayParams.fColorType = kN32_SkColorType;
-    forceRaster = true; // TODO
+    sk_app::window_context_factory::MacWindowInfo macWindow;
+    macWindow.fMainView = mrShared.mpFrame->mpNSView;
     RenderMethod renderMethod = forceRaster ? RenderRaster : renderMethodToUse();
     switch (renderMethod)
     {
         case RenderRaster:
-            displayParams.fColorType = kRGBA_8888_SkColorType; // TODO
-            mWindowContext.reset(
-                new AquaSkiaWindowContextRaster(GetWidth(), GetHeight(), displayParams));
+            // RasterWindowContext_mac uses OpenGL internally, which we don't want,
+            // so use our own surface and do blitting to the screen ourselves.
+            mSurface = createSkSurface(GetWidth(), GetHeight());
+            break;
+        case RenderMetal:
+            // It appears that Metal surfaces cannot be read from, which may break things
+            // like copyArea(). Additionally sk_app::MetalWindowContext requires
+            // a new call to getBackbufferSurface() after every swapBuffers(), which
+            // normally would also require reading contents of the previous surface,
+            // because we do not redraw the complete area for every draw call.
+            // Handle that by using an offscreen surface and blit to the onscreen surface as necessary.
+            mSurface = createSkSurface(GetWidth(), GetHeight());
+            mWindowContext
+                = sk_app::window_context_factory::MakeMetalForMac(macWindow, displayParams);
             break;
         case RenderVulkan:
             abort();
             break;
     }
+}
+
+void AquaSkiaSalGraphicsImpl::destroyWindowSurfaceInternal()
+{
+    mWindowContext.reset();
+    mSurface.reset();
 }
 
 //void AquaSkiaSalGraphicsImpl::Flush() { performFlush(); }
@@ -80,15 +99,38 @@ void AquaSkiaSalGraphicsImpl::performFlush()
 {
     SkiaZone zone;
     flushDrawing();
-    if (mWindowContext)
+    if (mSurface)
     {
         if (mDirtyRect.intersect(SkIRect::MakeWH(GetWidth(), GetHeight())))
-            flushToScreen(mDirtyRect);
+        {
+            if (isGPU())
+                flushToScreenMetal(mDirtyRect);
+            else
+                flushToScreenRaster(mDirtyRect);
+        }
         mDirtyRect.setEmpty();
     }
 }
 
-void AquaSkiaSalGraphicsImpl::flushToScreen(const SkIRect& rect)
+constexpr static uint32_t toCGBitmapType(SkColorType color, SkAlphaType alpha)
+{
+    if (alpha == kPremul_SkAlphaType)
+    {
+        return color == kBGRA_8888_SkColorType
+                   ? (kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Little)
+                   : (kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+    }
+    else
+    {
+        assert(alpha == kOpaque_SkAlphaType);
+        return color == kBGRA_8888_SkColorType
+                   ? (kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Little)
+                   : (kCGImageAlphaNoneSkipLast | kCGBitmapByteOrder32Big);
+    }
+}
+
+// For Raster we use our own screen blitting (see above).
+void AquaSkiaSalGraphicsImpl::flushToScreenRaster(const SkIRect& rect)
 {
     // Based on AquaGraphicsBackend::drawBitmap().
     if (!mrShared.checkContext())
@@ -105,8 +147,8 @@ void AquaSkiaSalGraphicsImpl::flushToScreen(const SkIRect& rect)
     // pixel lines will be read from correct positions.
     CGContextRef context
         = CGBitmapContextCreate(pixmap.writable_addr32(rect.left(), rect.top()), rect.width(),
-                                rect.height(), 8, pixmap.rowBytes(), // TODO
-                                GetSalData()->mxRGBSpace, kCGImageAlphaNoneSkipLast); // TODO
+                                rect.height(), 8, pixmap.rowBytes(), GetSalData()->mxRGBSpace,
+                                toCGBitmapType(image->colorType(), image->alphaType()));
     assert(context); // TODO
     CGImageRef screenImage = CGBitmapContextCreateImage(context);
     assert(screenImage); // TODO
@@ -131,6 +173,19 @@ void AquaSkiaSalGraphicsImpl::flushToScreen(const SkIRect& rect)
     mrShared.refreshRect(rect.left(), rect.top(), rect.width(), rect.height());
 }
 
+// For Metal we flush to the Metal surface and then swap buffers (see above).
+void AquaSkiaSalGraphicsImpl::flushToScreenMetal(const SkIRect&)
+{
+    // The rectangle argument is irrelevant, the whole surface must be used for Metal.
+    sk_sp<SkSurface> screenSurface = mWindowContext->getBackbufferSurface();
+    SkPaint paint;
+    paint.setBlendMode(SkBlendMode::kSrc); // copy as is
+    screenSurface->getCanvas()->drawImage(makeCheckedImageSnapshot(mSurface), 0, 0,
+                                          SkSamplingOptions(), &paint);
+    screenSurface->flushAndSubmit(); // Otherwise the window is not drawn sometimes.
+    mWindowContext->swapBuffers(nullptr);
+}
+
 bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart nPart,
                                                 const tools::Rectangle& rControlRegion,
                                                 ControlState nState, const ImplControlValue& aValue)
@@ -140,9 +195,9 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
     const size_t bytes = width * height * 4;
     std::unique_ptr<sal_uInt8[]> data(new sal_uInt8[bytes]);
     memset(data.get(), 0, bytes);
-    CGContextRef context
-        = CGBitmapContextCreate(data.get(), width, height, 8, width * 4, // TODO
-                                GetSalData()->mxRGBSpace, kCGImageAlphaPremultipliedLast); // TODO
+    CGContextRef context = CGBitmapContextCreate(
+        data.get(), width, height, 8, width * 4, GetSalData()->mxRGBSpace,
+        toCGBitmapType(mSurface->imageInfo().colorType(), kPremul_SkAlphaType));
     assert(context); // TODO
     // Flip upside down.
     CGContextTranslateCTM(context, 0, height);
@@ -156,9 +211,10 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
     if (bOK)
     {
         SkBitmap bitmap;
-        if (!bitmap.installPixels(
-                SkImageInfo::Make(width, height, kRGBA_8888_SkColorType, kPremul_SkAlphaType),
-                data.get(), width * 4))
+        if (!bitmap.installPixels(SkImageInfo::Make(width, height,
+                                                    mSurface->imageInfo().colorType(),
+                                                    kPremul_SkAlphaType),
+                                  data.get(), width * 4))
             abort();
 
         preDraw();
@@ -224,11 +280,14 @@ void AquaSkiaSalGraphicsImpl::drawTextLayout(const GenericSalLayout& rLayout)
     drawGenericLayout(rLayout, mrShared.maTextColor, font, verticalFont);
 }
 
-std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext(bool /*temporary*/)
+std::unique_ptr<sk_app::WindowContext> createMetalWindowContext(bool /*temporary*/)
 {
-    return nullptr;
+    sk_app::DisplayParams displayParams;
+    sk_app::window_context_factory::MacWindowInfo macWindow;
+    macWindow.fMainView = nullptr;
+    return sk_app::window_context_factory::MakeMetalForMac(macWindow, displayParams);
 }
 
-void AquaSkiaSalGraphicsImpl::prepareSkia() { SkiaHelper::prepareSkia(createVulkanWindowContext); }
+void AquaSkiaSalGraphicsImpl::prepareSkia() { SkiaHelper::prepareSkia(createMetalWindowContext); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

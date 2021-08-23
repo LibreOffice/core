@@ -24,7 +24,8 @@ VCL_DLLPUBLIC bool isVCLSkiaEnabled();
 enum RenderMethod
 {
     RenderRaster,
-    RenderVulkan
+    RenderVulkan,
+    RenderMetal
 };
 
 VCL_DLLPUBLIC RenderMethod renderMethodToUse();
