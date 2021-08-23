@@ -67,6 +67,10 @@ struct PngDestructor
     png_infop pInfo;
 };
 
+#if defined __GNUC__ && __GNUC__ == 8 && !defined __clang__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wclobbered"
+#endif
 bool reader(SvStream& rStream, BitmapEx& rBitmapEx,
             GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE,
             BitmapScopedWriteAccess* pAccess = nullptr,
@@ -439,6 +443,9 @@ std::unique_ptr<sal_uInt8[]> getMsGifChunk(SvStream& rStream, sal_Int32* chunkSi
             return nullptr;
     }
 }
+#if defined __GNUC__ && __GNUC__ == 8 && !defined __clang__
+#pragma GCC diagnostic pop
+#endif
 
 } // anonymous namespace
 
