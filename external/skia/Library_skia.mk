@@ -529,6 +529,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/xps/SkXPSDocument \
 ))
 
+ifneq ($(SKIA_GPU),)
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkGpuBlurUtils \
     UnpackedTarball/skia/src/gpu/ccpr/GrCCAtlas \
@@ -793,6 +794,10 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/image/SkImage_Gpu \
     UnpackedTarball/skia/src/image/SkImage_GpuYUVA \
     UnpackedTarball/skia/src/image/SkSurface_Gpu \
+))
+
+ifeq ($(SKIA_GPU),VULKAN)
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/vk/GrVkAMDMemoryAllocator \
     UnpackedTarball/skia/src/gpu/vk/GrVkAttachment \
     UnpackedTarball/skia/src/gpu/vk/GrVkBuffer \
@@ -832,6 +837,15 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/tools/gpu/vk/VkTestUtils \
+    UnpackedTarball/skia/tools/sk_app/VulkanWindowContext \
+    UnpackedTarball/skia/third_party/vulkanmemoryallocator/GrVulkanMemoryAllocator \
+))
+
+endif
+endif
+
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/ports/SkGlobalInitialization_default \
     UnpackedTarball/skia/src/ports/SkImageGenerator_none \
     UnpackedTarball/skia/src/ports/SkOSFile_stdio \
@@ -863,8 +877,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/tools/gpu/vk/VkTestUtils \
-    UnpackedTarball/skia/tools/sk_app/VulkanWindowContext \
     UnpackedTarball/skia/tools/sk_app/WindowContext \
 ))
 
@@ -889,8 +901,13 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/tools/sk_app/win/RasterWindowContext_win \
+))
+
+ifeq ($(SKIA_GPU),VULKAN)
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/tools/sk_app/win/VulkanWindowContext_win \
 ))
+endif
 
 else ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
@@ -907,6 +924,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/utils/mac/SkCreateCGImageRef \
 ))
 
+ifeq ($(SKIA_GPU),METAL)
 $(eval $(call gb_Library_add_generated_objcxxobjects,skia,\
     UnpackedTarball/skia/tools/sk_app/MetalWindowContext \
     UnpackedTarball/skia/tools/sk_app/mac/MetalWindowContext_mac \
@@ -938,6 +956,7 @@ $(eval $(call gb_Library_add_generated_objcxxobjects,skia,\
     UnpackedTarball/skia/src/image/SkSurface_GpuMtl \
     , -fobjc-arc \
 ))
+endif
 
 else
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
@@ -956,13 +975,14 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/tools/sk_app/unix/RasterWindowContext_unix \
+))
+ifeq ($(SKIA_GPU),VULKAN)
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/tools/sk_app/unix/VulkanWindowContext_unix \
 ))
 endif
 
-$(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/third_party/vulkanmemoryallocator/GrVulkanMemoryAllocator \
-))
+endif
 
 # Skcms code is used by png writer, which is used by SkiaHelper::dump(). Building
 # this without optimizations would mean having each pixel of saved images be
