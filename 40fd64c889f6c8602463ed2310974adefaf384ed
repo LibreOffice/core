@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ef823e5_a2868c38",
+        "filename": "comphelper/source/misc/configuration.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-23T12:46:44Z",
+      "side": 1,
+      "message": "is it really beneficial to cache the provider here?",
+      "range": {
+        "startLine": 121,
+        "startChar": 66,
+        "endLine": 121,
+        "endChar": 74
+      },
+      "revId": "40fd64c889f6c8602463ed2310974adefaf384ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3cb88ec_ce3f7668",
+        "filename": "comphelper/source/misc/configuration.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-23T12:46:44Z",
+      "side": 1,
+      "message": "* int -\u003e sal_Int32\n* I\u0027d add an explicit assert(idx !\u003d -1)",
+      "range": {
+        "startLine": 124,
+        "startChar": 4,
+        "endLine": 124,
+        "endChar": 7
+      },
+      "revId": "40fd64c889f6c8602463ed2310974adefaf384ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92aba34a_412a0e5a",
+        "filename": "comphelper/source/misc/configuration.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-23T12:46:44Z",
+      "side": 1,
+      "message": "just {arg}",
+      "range": {
+        "startLine": 136,
+        "startChar": 8,
+        "endLine": 136,
+        "endChar": 53
+      },
+      "revId": "40fd64c889f6c8602463ed2310974adefaf384ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7722cd96_f534e07c",
+        "filename": "include/comphelper/configuration.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-23T12:46:44Z",
+      "side": 1,
+      "message": "I think the original (non-static) getPropertyValue is no longer used now, and I would move this declaration to the place in the class definition where the original declaration was (i.e., grouped together with setPropertyValue)",
+      "revId": "40fd64c889f6c8602463ed2310974adefaf384ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
