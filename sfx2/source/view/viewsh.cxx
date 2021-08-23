@@ -219,7 +219,7 @@ void SAL_CALL SfxClipboardChangeListener::changedContents( const datatransfer::c
 sal_uInt32 SfxViewShell_Impl::m_nLastViewShellId = 0;
 
 SfxViewShell_Impl::SfxViewShell_Impl(SfxViewShellFlags const nFlags, ViewShellDocId nDocId)
-: aInterceptorContainer( aMutex )
+: aInterceptorContainer()
 ,   m_bHasPrintOptions(nFlags & SfxViewShellFlags::HAS_PRINTOPTIONS)
 ,   m_nFamily(0xFFFF)   // undefined, default set by TemplateDialog
 ,   m_pLibreOfficeKitViewCallback(nullptr)
@@ -1846,7 +1846,9 @@ bool SfxViewShell::TryContextMenuInterception( Menu& rIn, const OUString& rMenuI
     aEvent.Selection.set( GetController(), uno::UNO_QUERY );
 
     // call interceptors
-    ::comphelper::OInterfaceIteratorHelper2 aIt( pImpl->aInterceptorContainer );
+    std::unique_lock g(pImpl->aMutex);
+    ::comphelper::OInterfaceIteratorHelper4 aIt( pImpl->aInterceptorContainer );
+    g.unlock();
     while( aIt.hasMoreElements() )
     {
         try
@@ -1854,7 +1856,7 @@ bool SfxViewShell::TryContextMenuInterception( Menu& rIn, const OUString& rMenuI
             ui::ContextMenuInterceptorAction eAction;
             {
                 SolarMutexReleaser rel;
-                eAction = static_cast<ui::XContextMenuInterceptor*>(aIt.next())->notifyContextMenuExecute( aEvent );
+                eAction = aIt.next()->notifyContextMenuExecute( aEvent );
             }
             switch ( eAction )
             {
@@ -1908,7 +1910,9 @@ bool SfxViewShell::TryContextMenuInterception( Menu& rMenu, const OUString& rMen
     aEvent.Selection = css::uno::Reference< css::view::XSelectionSupplier >( GetController(), css::uno::UNO_QUERY );
 
     // call interceptors
-    ::comphelper::OInterfaceIteratorHelper2 aIt( pImpl->aInterceptorContainer );
+    std::unique_lock g(pImpl->aMutex);
+    ::comphelper::OInterfaceIteratorHelper4 aIt( pImpl->aInterceptorContainer );
+    g.unlock();
     while( aIt.hasMoreElements() )
     {
         try
@@ -1916,7 +1920,7 @@ bool SfxViewShell::TryContextMenuInterception( Menu& rMenu, const OUString& rMen
             css::ui::ContextMenuInterceptorAction eAction;
             {
                 SolarMutexReleaser rel;
-                eAction = static_cast< css::ui::XContextMenuInterceptor* >( aIt.next() )->notifyContextMenuExecute( aEvent );
+                eAction = aIt.next()->notifyContextMenuExecute( aEvent );
             }
             switch ( eAction )
             {
