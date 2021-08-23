@@ -55,8 +55,8 @@ bool isPng(SvStream& rStream)
 {
     // Check signature bytes
     sal_uInt8 aHeader[PNG_SIGNATURE_SIZE];
-    rStream.ReadBytes(aHeader, PNG_SIGNATURE_SIZE);
-
+    if (rStream.ReadBytes(aHeader, PNG_SIGNATURE_SIZE) != PNG_SIGNATURE_SIZE)
+        return false;
     return png_sig_cmp(aHeader, 0, PNG_SIGNATURE_SIZE) == 0;
 }
 
