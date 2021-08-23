@@ -1552,7 +1552,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
         else if (sApplyText == "Spelling")
         {
             SwRect aToFill;
-            uno::Reference< linguistic2::XSpellAlternatives >  xSpellAlt( rWrtSh.GetCorrection(nullptr, aToFill) );
+            uno::Reference<linguistic2::XSpellAlternatives>  xSpellAlt(rWrtSh.GetCorrection(nullptr, aToFill));
+            if (!xSpellAlt.is())
+                return;
             uno::Reference< linguistic2::XDictionary > xDictionary = LinguMgr::GetIgnoreAllList();
             OUString sWord(xSpellAlt->getWord());
             linguistic::DictionaryError nAddRes = linguistic::AddEntryToDic( xDictionary,
