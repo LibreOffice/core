@@ -856,11 +856,35 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
             {
                 if (pSdrView->GetMarkedObjectCount() != 1)
                     rSet.DisableItem(nWhich);
-                else if (nWhich == SID_OPEN_HYPERLINK || nWhich == SID_REMOVE_HYPERLINK
-                         || nWhich == SID_EDIT_HYPERLINK || nWhich == SID_COPY_HYPERLINK_LOCATION)
+
+                const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+                SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                sal_uInt16 nObjType = pObj->GetObjIdentifier();
+
+                // Only enable hyperlink for the following types
+                switch (nObjType)
                 {
-                    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-                    SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                    case OBJ_PATHFILL:
+                    case OBJ_SECT:
+                    case OBJ_LINE:
+                    case OBJ_CUSTOMSHAPE:
+                    case OBJ_TEXT:
+                    case OBJ_RECT:
+                    case OBJ_CAPTION:
+                    case OBJ_POLY:
+                    case OBJ_PLIN:
+                    case E3D_SCENE_ID:
+                    case OBJ_MEASURE:
+                    case OBJ_EDGE:
+                        break;
+                    default:
+                        rSet.DisableItem(nWhich);
+                        break;
+                }
+
+                if (nWhich == SID_OPEN_HYPERLINK || nWhich == SID_REMOVE_HYPERLINK
+                    || nWhich == SID_EDIT_HYPERLINK || nWhich == SID_COPY_HYPERLINK_LOCATION)
+                {
                     if (pObj->getHyperlink().isEmpty())
                         rSet.DisableItem(nWhich);
                 }
