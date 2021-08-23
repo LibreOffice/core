@@ -145,7 +145,7 @@ bool PBMReader::ImplReadHeader()
     bool    bFinished = false;
 
     mrPBM.ReadUChar( nID[ 0 ] ).ReadUChar( nID[ 1 ] );
-    if ( nID[ 0 ] != 'P' )
+    if (!mrPBM.good() || nID[0] != 'P')
         return false;
     mnMaxVal = mnWidth = mnHeight = 0;
     switch ( nID[ 1 ] )
