@@ -13,6 +13,8 @@
 
 #include <boost/property_tree/json_parser.hpp>
 
+#include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -2889,6 +2891,72 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf143918)
         CPPUNIT_ASSERT_EQUAL(OUString("Lorem "), xCursor->getString());
         // This was NORMAL (only underlining was removed)
         CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xCursor, "CharWeight"));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf143938)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf54819.fodt");
+
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // select first paragraph, add underline without change tracking
+    pWrtShell->EndPara(/*bSelect=*/true);
+    dispatchCommand(mxComponent, ".uno:Underline", {});
+
+    auto xText = getParagraph(1)->getText();
+    CPPUNIT_ASSERT(xText.is());
+    {
+        auto xCursor(xText->createTextCursorByRange(getRun(getParagraph(1), 1)));
+        CPPUNIT_ASSERT(xCursor.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum"), xCursor->getString());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontUnderline::SINGLE),
+                             getProperty<sal_Int16>(xCursor, "CharUnderline"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xCursor, "CharPosture"));
+    }
+
+    // turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // apply italic with change tracking
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 6, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, ".uno:Italic", {});
+
+    xText = getParagraph(1)->getText();
+    CPPUNIT_ASSERT(xText.is());
+    {
+        // (first empty run is associated to the redline)
+        auto xCursor(xText->createTextCursorByRange(getRun(getParagraph(1), 2)));
+        CPPUNIT_ASSERT(xCursor.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum"), xCursor->getString());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontUnderline::SINGLE),
+                             getProperty<sal_Int16>(xCursor, "CharUnderline"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
+                             getProperty<awt::FontSlant>(xCursor, "CharPosture"));
+    }
+
+    // reject tracked changes
+    dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
+
+    // no italic, but still underline direct formatting
+    xText = getParagraph(1)->getText();
+    CPPUNIT_ASSERT(xText.is());
+    {
+        auto xCursor(xText->createTextCursorByRange(getRun(getParagraph(1), 1)));
+        CPPUNIT_ASSERT(xCursor.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum"), xCursor->getString());
+        // This wasn't underlined (lost direct formatting)
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontUnderline::SINGLE),
+                             getProperty<sal_Int16>(xCursor, "CharUnderline"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xCursor, "CharPosture"));
     }
 }
 
