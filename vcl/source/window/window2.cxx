@@ -286,6 +286,7 @@ void Window::EndTracking( TrackingEventFlags nFlags )
     ReleaseMouse();
 
     // call EndTracking if required
+    if (mpWindowImpl && mpWindowImpl->mpFrameData)
     {
         Point           aMousePos( mpWindowImpl->mpFrameData->mnLastMouseX, mpWindowImpl->mpFrameData->mnLastMouseY );
         if( GetOutDev()->ImplIsAntiparallel() )
