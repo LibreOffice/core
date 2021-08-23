@@ -572,7 +572,7 @@ void SvRTFParser::ReadBitmapData()  { SkipGroup(); }
 
 SvParserState SvRTFParser::CallParser()
 {
-    char cFirstCh;
+    char cFirstCh(0);
     nNextChPos = rInput.Tell();
     rInput.ReadChar( cFirstCh );
     nNextCh = static_cast<unsigned char>(cFirstCh);
