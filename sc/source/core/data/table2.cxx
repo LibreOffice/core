@@ -3046,20 +3046,20 @@ bool ScTable::RemoveFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
 void ScTable::SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr )
 {
     if (ValidColRow(rPos.Col(),rPos.Row()))
-        aCol[rPos.Col()].SetPattern( rPos.Row(), rAttr );
+        CreateColumnIfNotExists(rPos.Col()).SetPattern(rPos.Row(), rAttr);
 }
 
 const ScPatternAttr* ScTable::SetPattern( SCCOL nCol, SCROW nRow, std::unique_ptr<ScPatternAttr> pAttr )
 {
     if (ValidColRow(nCol,nRow))
-        return aCol[nCol].SetPattern( nRow, std::move(pAttr) );
+        return CreateColumnIfNotExists(nCol).SetPattern(nRow, std::move(pAttr));
     return nullptr;
 }
 
 void ScTable::SetPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr )
 {
     if (ValidColRow(nCol,nRow))
-        aCol[nCol].SetPattern( nRow, rAttr );
+        CreateColumnIfNotExists(nCol).SetPattern(nRow, rAttr);
 }
 
 void ScTable::ApplyAttr( SCCOL nCol, SCROW nRow, const SfxPoolItem& rAttr )
