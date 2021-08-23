@@ -3127,7 +3127,9 @@ AC_SUBST(CCACHE_DEPEND_MODE)
 
 # skip on windows - sccache defaults are good enough
 if test "$CCACHE" != "" -a "$_os" != "WINNT"; then
-    ccache_size_msg=$([ccache -s | tail -n 1 | sed 's/^[^0-9]*//' | sed -e 's/\.[0-9]*//'])
+    # e.g. (/home/rene/.config/ccache/ccache.conf) max_size = 20.0G
+    # -p works with both 4.2 and 4.4
+    ccache_size_msg=$([ccache -p | $AWK /max_size/'{ print $4 }' | sed -e 's/\.[0-9]*//'])
     ccache_size=$(echo "$ccache_size_msg" | grep "G" | sed -e 's/G.*$//')
     if test "$ccache_size" = ""; then
         ccache_size=$(echo "$ccache_size_msg" | grep "M" | sed -e 's/\ M.*$//')
