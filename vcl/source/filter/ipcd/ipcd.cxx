@@ -162,7 +162,6 @@ bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
     return bStatus;
 }
 
-
 void PCDReader::CheckPCDImagePacFile()
 {
     char Buf[ 8 ];
@@ -170,10 +169,9 @@ void PCDReader::CheckPCDImagePacFile()
     m_rPCD.Seek( 2048 );
     m_rPCD.ReadBytes(Buf, 7);
     Buf[ 7 ] = 0;
-    if (Buf != std::string_view("PCD_IPI"))
+    if (!m_rPCD.good() || Buf != std::string_view("PCD_IPI"))
         bStatus = false;
 }
-
 
 void PCDReader::ReadOrientation()
 {
@@ -183,7 +181,6 @@ void PCDReader::ReadOrientation()
     m_rPCD.ReadUChar( nOrientation );
     nOrientation &= 0x03;
 }
-
 
 void PCDReader::ReadImage()
 {
