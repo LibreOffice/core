@@ -20,12 +20,13 @@
 #ifndef INCLUDED_SFX2_SOURCE_VIEW_VIEWIMP_HXX
 #define INCLUDED_SFX2_SOURCE_VIEW_VIEWIMP_HXX
 
+#include <com/sun/star/ui/XContextMenuInterceptor.hpp>
 #include <memory>
 #include <basic/sbxobj.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <osl/mutex.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <mutex>
+#include <comphelper/interfacecontainer4.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <svtools/acceleratorexecute.hxx>
 #include <rtl/ref.hxx>
@@ -39,8 +40,9 @@ class SfxClipboardChangeListener;
 
 struct SfxViewShell_Impl
 {
-    ::osl::Mutex aMutex;
-    ::comphelper::OInterfaceContainerHelper2 aInterceptorContainer;
+    std::mutex aMutex;
+    ::comphelper::OInterfaceContainerHelper4<css::ui::XContextMenuInterceptor>
+        aInterceptorContainer;
     SfxShellArr_Impl aArr;
     Size aMargin;
     bool const m_bHasPrintOptions;

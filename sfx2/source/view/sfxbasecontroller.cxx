@@ -44,6 +44,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <basic/sbstar.hxx>
 #include <uno/mapping.hxx>
