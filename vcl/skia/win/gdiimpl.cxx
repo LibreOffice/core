@@ -36,8 +36,12 @@ WinSkiaSalGraphicsImpl::WinSkiaSalGraphicsImpl(WinSalGraphics& rGraphics,
 {
 }
 
-void WinSkiaSalGraphicsImpl::createWindowContext(bool forceRaster)
+WinSkiaSalGraphicsImpl::~WinSkiaSalGraphicsImpl() { assert(!mWindowContext); }
+
+void WinSkiaSalGraphicsImpl::createWindowSurfaceInternal(bool forceRaster)
 {
+    assert(!mWindowContext);
+    assert(!mSurface);
     SkiaZone zone;
     sk_app::DisplayParams displayParams;
     assert(GetWidth() > 0 && GetHeight() > 0);
@@ -52,7 +56,18 @@ void WinSkiaSalGraphicsImpl::createWindowContext(bool forceRaster)
             mWindowContext = sk_app::window_context_factory::MakeVulkanForWin(mWinParent.gethWnd(),
                                                                               displayParams);
             break;
+        case RenderMetal:
+            abort();
+            break;
     }
+    if (mWindowContext)
+        mSurface = mWindowContext->getBackbufferSurface();
+}
+
+void WinSkiaSalGraphicsImpl::destroyWindowSurfaceInternal()
+{
+    mWindowContext.reset();
+    mSurface.reset();
 }
 
 void WinSkiaSalGraphicsImpl::DeInit()

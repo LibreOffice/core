@@ -30,7 +30,7 @@
 #include <premac.h>
 #include <SkRegion.h>
 #include <SkSurface.h>
-#include <tools/sk_app/VulkanWindowContext.h>
+#include <tools/sk_app/WindowContext.h>
 #include <postmac.h>
 
 namespace SkiaHelper
@@ -74,7 +74,7 @@ inline Size imageSize(const sk_sp<SkImage>& image) { return Size(image->width(),
 // Must be called in any VCL backend before any Skia functionality is used.
 // If not set, Skia will be disabled.
 VCL_DLLPUBLIC void
-    prepareSkia(std::unique_ptr<sk_app::WindowContext> (*createVulkanWindowContext)(bool));
+    prepareSkia(std::unique_ptr<sk_app::WindowContext> (*createGpuWindowContext)(bool));
 
 // Shared cache of images.
 void addCachedImage(const OString& key, sk_sp<SkImage> image);

@@ -33,7 +33,7 @@ X11SkiaSalGraphicsImpl::X11SkiaSalGraphicsImpl(X11SalGraphics& rParent)
 {
 }
 
-X11SkiaSalGraphicsImpl::~X11SkiaSalGraphicsImpl() {}
+X11SkiaSalGraphicsImpl::~X11SkiaSalGraphicsImpl() { assert(!mWindowContext); }
 
 void X11SkiaSalGraphicsImpl::Init()
 {
@@ -42,12 +42,22 @@ void X11SkiaSalGraphicsImpl::Init()
     SkiaSalGraphicsImpl::Init();
 }
 
-void X11SkiaSalGraphicsImpl::createWindowContext(bool forceRaster)
+void X11SkiaSalGraphicsImpl::createWindowSurfaceInternal(bool forceRaster)
 {
+    assert(!mWindowContext);
+    assert(!mSurface);
     assert(mX11Parent.GetDrawable() != None);
     mWindowContext = createWindowContext(mX11Parent.GetXDisplay(), mX11Parent.GetDrawable(),
                                          &mX11Parent.GetVisual(), GetWidth(), GetHeight(),
                                          forceRaster ? RenderRaster : renderMethodToUse(), false);
+    if (mWindowContext)
+        mSurface = mWindowContext->getBackbufferSurface();
+}
+
+void X11SkiaSalGraphicsImpl::destroyWindowSurfaceInternal()
+{
+    mWindowContext.reset();
+    mSurface.reset();
 }
 
 std::unique_ptr<sk_app::WindowContext>
@@ -103,6 +113,9 @@ X11SkiaSalGraphicsImpl::createWindowContext(Display* display, Drawable drawable,
             return sk_app::window_context_factory::MakeRasterForXlib(winInfo, displayParams);
         case RenderVulkan:
             return sk_app::window_context_factory::MakeVulkanForXlib(winInfo, displayParams);
+        case RenderMetal:
+            abort();
+            break;
     }
     abort();
 }

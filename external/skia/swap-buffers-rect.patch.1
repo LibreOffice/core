@@ -12,10 +12,10 @@ index c519903006..5dc5bcd180 100644
      void setDisplayParams(const DisplayParams& params) override;
  
 diff --git a/tools/sk_app/MetalWindowContext.h b/tools/sk_app/MetalWindowContext.h
-index e8c8392a15..0d8fd1df6e 100644
+index fbf35c3c2b..2194277922 100644
 --- a/tools/sk_app/MetalWindowContext.h
 +++ b/tools/sk_app/MetalWindowContext.h
-@@ -24,7 +24,7 @@ public:
+@@ -29,7 +29,7 @@ public:
  
      bool isValid() override { return fValid; }
  
@@ -25,10 +25,10 @@ index e8c8392a15..0d8fd1df6e 100644
      void setDisplayParams(const DisplayParams& params) override;
  
 diff --git a/tools/sk_app/MetalWindowContext.mm b/tools/sk_app/MetalWindowContext.mm
-index 5b623811ed..bae6b24138 100644
+index 49dc77b74d..ca1d74dc6c 100644
 --- a/tools/sk_app/MetalWindowContext.mm
 +++ b/tools/sk_app/MetalWindowContext.mm
-@@ -152,7 +152,7 @@ GrBackendRenderTarget backendRT(fWidth,
+@@ -187,7 +187,7 @@ GrBackendRenderTarget backendRT(fWidth,
      return surface;
  }
  
@@ -36,7 +36,7 @@ index 5b623811ed..bae6b24138 100644
 +void MetalWindowContext::swapBuffers(const SkIRect*) {
      id<CAMetalDrawable> currentDrawable = (id<CAMetalDrawable>)fDrawableHandle;
  
-     id<MTLCommandBuffer> commandBuffer([*fQueue commandBuffer]);
+     id<MTLCommandBuffer> commandBuffer([*fShared->fQueue commandBuffer]);
 diff --git a/tools/sk_app/VulkanWindowContext.cpp b/tools/sk_app/VulkanWindowContext.cpp
 index 2b36d60076..d73978c9e4 100644
 --- a/tools/sk_app/VulkanWindowContext.cpp
@@ -51,11 +51,11 @@ index 2b36d60076..d73978c9e4 100644
      BackbufferInfo* backbuffer = fBackbuffers + fCurrentBackbufferIndex;
      SkSurface* surface = fSurfaces[backbuffer->fImageIndex].get();
 diff --git a/tools/sk_app/VulkanWindowContext.h b/tools/sk_app/VulkanWindowContext.h
-index 16f6b3fd51..39b035215b 100644
+index 92bfba6dff..46f7fd97bd 100644
 --- a/tools/sk_app/VulkanWindowContext.h
 +++ b/tools/sk_app/VulkanWindowContext.h
-@@ -48,7 +48,7 @@ public:
-     static SharedGrDirectContext getSharedGrDirectContext() { return SharedGrDirectContext( fGlobalShared ); }
+@@ -32,7 +32,7 @@ public:
+     static GrDirectContext* getSharedGrDirectContext() { return fGlobalShared ? fGlobalShared->fContext.get() : nullptr; }
  
      sk_sp<SkSurface> getBackbufferSurface() override;
 -    void swapBuffers() override;

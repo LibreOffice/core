@@ -144,7 +144,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_osx,\
     $(if $(filter SKIA,$(BUILD_TYPE)), \
         vcl/skia/osx/bitmap \
         vcl/skia/osx/gdiimpl \
-        vcl/skia/osx/rastercontext \
         ) \
 ))
 

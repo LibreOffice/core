@@ -106,6 +106,7 @@
 #define SV_APP_UIRENDER                              NC_("SV_APP_UIRENDER", "UI render: ")
 #define SV_APP_GL                                    NC_("SV_APP_GL", "GL")
 #define SV_APP_SKIA_VULKAN                           NC_("SV_APP_SKIA_VULKAN", "Skia/Vulkan")
+#define SV_APP_SKIA_METAL                            NC_("SV_APP_SKIA_METAL", "Skia/Metal")
 #define SV_APP_SKIA_RASTER                           NC_("SV_APP_SKIA_RASTER", "Skia/Raster")
 #define SV_APP_DEFAULT                               NC_("SV_APP_DEFAULT", "default")
 
