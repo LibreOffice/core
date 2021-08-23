@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -11,33 +11,33 @@
     </columns>
   </object>
   <object class="GtkDialog" id="DefineDatabaseRangeDialog">
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
-    <property name="border_width">6</property>
+    <property name="border-width">6</property>
     <property name="title" translatable="yes" context="definedatabaserangedialog|DefineDatabaseRangeDialog">Define Database Range</property>
-    <property name="default_width">0</property>
-    <property name="default_height">0</property>
-    <property name="type_hint">dialog</property>
+    <property name="default-width">0</property>
+    <property name="default-height">0</property>
+    <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label" translatable="yes" context="stock">_OK</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="has-default">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="ok-atkobject">
@@ -55,8 +55,8 @@
               <object class="GtkButton" id="cancel">
                 <property name="label" translatable="yes" context="stock">_Cancel</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="cancel-atkobject">
@@ -74,8 +74,8 @@
               <object class="GtkButton" id="help">
                 <property name="label" translatable="yes" context="stock">_Help</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -89,14 +89,14 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox" id="box1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="orientation">vertical</property>
@@ -104,40 +104,40 @@
             <child>
               <object class="GtkFrame" id="NameFrame">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="label_xalign">0</property>
-                <property name="shadow_type">none</property>
+                <property name="label-xalign">0</property>
+                <property name="shadow-type">none</property>
                 <child>
-                  <!-- n-columns=1 n-rows=1 -->
+                  <!-- n-columns=1 n-rows=2 -->
                   <object class="GtkGrid" id="entrygrid">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="row_spacing">3</property>
+                    <property name="can-focus">False</property>
                     <property name="margin-start">12</property>
                     <property name="margin-top">6</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="row-spacing">3</property>
                     <child>
                       <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
-                        <property name="vscrollbar_policy">always</property>
-                        <property name="shadow_type">in</property>
+                        <property name="vscrollbar-policy">always</property>
+                        <property name="shadow-type">in</property>
                         <child>
                           <object class="GtkTreeView" id="entry-list">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
                             <property name="model">liststore1</property>
-                            <property name="headers_visible">False</property>
-                            <property name="headers_clickable">False</property>
-                            <property name="search_column">0</property>
-                            <property name="show_expanders">False</property>
+                            <property name="headers-visible">False</property>
+                            <property name="headers-clickable">False</property>
+                            <property name="search-column">0</property>
+                            <property name="show-expanders">False</property>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection" id="treeview-selection3"/>
                             </child>
@@ -155,16 +155,16 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkEntry" id="entry">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="can-focus">True</property>
                         <property name="hexpand">True</property>
-                        <property name="activates_default">True</property>
+                        <property name="activates-default">True</property>
                         <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="entry-atkobject">
@@ -173,8 +173,8 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                   </object>
@@ -182,7 +182,7 @@
                 <child type="label">
                   <object class="GtkLabel" id="Name">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="definedatabaserangedialog|Name">Name</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -199,24 +199,24 @@
             <child>
               <object class="GtkFrame" id="RangeFrame">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="label_xalign">0</property>
-                <property name="shadow_type">none</property>
+                <property name="label-xalign">0</property>
+                <property name="shadow-type">none</property>
                 <child>
                   <object class="GtkBox" id="box3">
-                    <property name="hexpand">True</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="spacing">12</property>
+                    <property name="can-focus">False</property>
                     <property name="margin-start">12</property>
                     <property name="margin-top">6</property>
+                    <property name="hexpand">True</property>
+                    <property name="spacing">12</property>
                     <child>
                       <object class="GtkEntry" id="assign">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="can-focus">True</property>
                         <property name="hexpand">True</property>
-                        <property name="activates_default">True</property>
+                        <property name="activates-default">True</property>
                         <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="assign-atkobject">
@@ -233,8 +233,8 @@
                     <child>
                       <object class="GtkButton" id="assignrb">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="receives_default">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="receives-default">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="assignrb-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="definedatabaserangedialog|extended_tip|assignrb">Click the Shrink icon to reduce the dialog to the size of the input field. It is then easier to mark the required reference in the sheet. The icons then automatically convert to the Maximize icon. Click it to restore the dialog to its original size.</property>
@@ -252,7 +252,7 @@
                 <child type="label">
                   <object class="GtkLabel" id="Range">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="definedatabaserangedialog|Range">Range</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -269,15 +269,15 @@
             <child>
               <object class="GtkButtonBox" id="buttonbox1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="spacing">6</property>
-                <property name="layout_style">start</property>
+                <property name="layout-style">start</property>
                 <child>
                   <object class="GtkButton" id="add">
                     <property name="label" translatable="yes" context="stock">_Add</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
                     <property name="use-underline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="add-atkobject">
@@ -294,10 +294,10 @@
                 <child>
                   <object class="GtkButton" id="modify">
                     <property name="label" translatable="yes" context="definedatabaserangedialog|modify">M_odify</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="use_underline">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="no-show-all">True</property>
+                    <property name="use-underline">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -309,8 +309,8 @@
                   <object class="GtkButton" id="delete">
                     <property name="label" translatable="yes" context="stock">_Delete</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
                     <property name="use-underline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="delete-atkobject">
@@ -334,25 +334,25 @@
             <child>
               <object class="GtkExpander" id="more">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="resize_toplevel">True</property>
+                <property name="can-focus">True</property>
+                <property name="resize-toplevel">True</property>
                 <child>
                   <object class="GtkBox" id="Options">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-top">6</property>
                     <property name="hexpand">True</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">3</property>
-                    <property name="margin-start">12</property>
-                    <property name="margin-top">6</property>
                     <child>
                       <object class="GtkCheckButton" id="ContainsColumnLabels">
                         <property name="label" translatable="yes" context="definedatabaserangedialog|ContainsColumnLabels">Co_ntains column labels</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="ContainsColumnLabels-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="definedatabaserangedialog|extended_tip|ContainsColumnLabels">Selected cell ranges contains labels.</property>
@@ -369,10 +369,10 @@
                       <object class="GtkCheckButton" id="ContainsTotalsRow">
                         <property name="label" translatable="yes" context="definedatabaserangedialog|ContainsTotalsRow">Contains _totals row</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -384,10 +384,10 @@
                       <object class="GtkCheckButton" id="InsertOrDeleteCells">
                         <property name="label" translatable="yes" context="definedatabaserangedialog|InsertOrDeleteCells">Insert or delete _cells</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="InsertOrDeleteCells-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="definedatabaserangedialog|extended_tip|InsertOrDeleteCells">Automatically inserts new rows and columns into the database range in your document when new records are added to the database.</property>
@@ -404,10 +404,10 @@
                       <object class="GtkCheckButton" id="KeepFormatting">
                         <property name="label" translatable="yes" context="definedatabaserangedialog|KeepFormatting">Keep _formatting</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="KeepFormatting-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="definedatabaserangedialog|extended_tip|KeepFormatting">Applies the existing cell format of headers and first data row to the whole database range.</property>
@@ -424,10 +424,10 @@
                       <object class="GtkCheckButton" id="DontSaveImportedData">
                         <property name="label" translatable="yes" context="definedatabaserangedialog|DontSaveImportedData">Don't save _imported data</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="DontSaveImportedData-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="definedatabaserangedialog|extended_tip|DontSaveImportedData">Only saves a reference to the database, and not the contents of the cells.</property>
@@ -443,7 +443,7 @@
                     <child>
                       <object class="GtkLabel" id="Source">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="definedatabaserangedialog|Source">Source:</property>
                         <property name="xalign">0</property>
                       </object>
@@ -456,7 +456,7 @@
                     <child>
                       <object class="GtkLabel" id="Operations">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="definedatabaserangedialog|Operations">Operations:</property>
                         <property name="xalign">0</property>
                       </object>
@@ -468,8 +468,8 @@
                     </child>
                     <child>
                       <object class="GtkLabel" id="invalid">
-                        <property name="can_focus">False</property>
-                        <property name="no_show_all">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="no-show-all">True</property>
                         <property name="label" translatable="yes" context="definedatabaserangedialog|invalid">Invalid range</property>
                         <property name="xalign">0</property>
                       </object>
@@ -484,7 +484,7 @@
                 <child type="label">
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="definedatabaserangedialog|label1">Options</property>
                   </object>
                 </child>
@@ -514,9 +514,6 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="DefineDatabaseRangeDialog-atkobject">
         <property name="AtkObject::accessible-description" translatable="yes" context="definedatabaserangedialog|extended_tip|DefineDatabaseRangeDialog">Defines a database range based on the selected cells in your sheet.</property>
