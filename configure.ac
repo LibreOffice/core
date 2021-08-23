@@ -14480,13 +14480,13 @@ $GNUMAKE check
 _EOF
 fi
 
-if test -f "$WARNINGS_FILE_FOR_BUILD"; then
+if test -s "$WARNINGS_FILE_FOR_BUILD"; then
     echo "BUILD / cross-toolset config, repeated ($WARNINGS_FILE_FOR_BUILD)"
     cat "$WARNINGS_FILE_FOR_BUILD"
     echo
 fi
 
-if test -f "$WARNINGS_FILE"; then
+if test -s "$WARNINGS_FILE"; then
     echo "HOST config ($WARNINGS_FILE)"
     cat "$WARNINGS_FILE"
 fi
