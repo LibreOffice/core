@@ -583,7 +583,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
     SAL_INFO( "fwk.desktop", "loadComponentFromURL" );
 
-    css::uno::Reference< css::frame::XComponentLoader > xThis(static_cast< css::frame::XComponentLoader* >(this), css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XComponentLoader > xThis(this);
 
     utl::MediaDescriptor aDescriptor(lArguments);
     bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault("OnMainThread", false);

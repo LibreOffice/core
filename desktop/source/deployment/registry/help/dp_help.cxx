@@ -389,7 +389,7 @@ void BackendImpl::implProcessHelp(
                 {
                     OUString aErrStr = DpResId( RID_STR_HELPPROCESSING_GENERAL_ERROR ) +
                         "No help folder";
-                    OWeakObject* oWeakThis = static_cast<OWeakObject *>(this);
+                    OWeakObject* oWeakThis = this;
                     throw deployment::DeploymentException( OUString(), oWeakThis,
                                                            makeAny( uno::Exception( aErrStr, oWeakThis ) ) );
                 }
@@ -536,7 +536,7 @@ void BackendImpl::implProcessHelp(
                                 }
                             }
 
-                            OWeakObject* oWeakThis = static_cast<OWeakObject *>(this);
+                            OWeakObject* oWeakThis = this;
                             throw deployment::DeploymentException( OUString(), oWeakThis,
                                                                    makeAny( uno::Exception( aErrStr, oWeakThis ) ) );
                         }

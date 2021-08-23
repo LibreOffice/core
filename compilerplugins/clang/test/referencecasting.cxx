@@ -13,8 +13,10 @@
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "com/sun/star/io/XStreamListener.hpp"
+#include "com/sun/star/io/XInputStream.hpp"
 #include "com/sun/star/lang/XTypeProvider.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
+#include "cppuhelper/implbase.hxx"
 #include "cppuhelper/weak.hxx"
 #include "rtl/ref.hxx"
 
@@ -190,6 +192,26 @@ void test14(css::uno::Sequence<css::uno::Reference<css::io::XStreamListener>> se
         // expected-error@+1 {{the source reference is already a subtype of the destination reference, just use = [loplugin:referencecasting]}}
         css::uno::Reference<css::io::XStreamListener> xDataSeries(seq[i], css::uno::UNO_QUERY);
     }
+}
+
+namespace test15
+{
+class Foo : public cppu::WeakImplHelper<css::lang::XComponent, css::io::XInputStream>
+{
+    virtual ~Foo();
+    css::uno::Reference<css::lang::XTypeProvider> bar()
+    {
+        // expected-error@+1 {{the source reference is already a subtype of the destination reference, just use = [loplugin:referencecasting]}}
+        return css::uno::Reference<css::lang::XTypeProvider>(
+            static_cast<css::lang::XTypeProvider*>(this), css::uno::UNO_QUERY);
+    }
+    css::uno::Reference<css::io::XInputStream> bar2()
+    {
+        // expected-error@+1 {{the source reference is already a subtype of the destination reference, just use = [loplugin:referencecasting]}}
+        return css::uno::Reference<css::io::XInputStream>(static_cast<css::io::XInputStream*>(this),
+                                                          css::uno::UNO_QUERY);
+    }
+};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

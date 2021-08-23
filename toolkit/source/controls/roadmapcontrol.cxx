@@ -276,7 +276,7 @@ static void lcl_throwIndexOutOfBoundsException( )
         maRoadmapItems.insert( maRoadmapItems.begin() + Index, xRoadmapItem);
         ContainerEvent aEvent = GetContainerEvent(Index, xRoadmapItem);
         maContainerListeners.elementInserted( aEvent );
-        Reference< XPropertySet > xPropertySet( static_cast<XAggregation*>(static_cast<cppu::OWeakAggObject*>(this)), UNO_QUERY );
+        Reference< XPropertySet > xPropertySet( this );
         sal_Int16 n_CurrentItemID = GetCurrentItemID( xPropertySet );
         if ( Index <= n_CurrentItemID )
         {
@@ -294,7 +294,7 @@ static void lcl_throwIndexOutOfBoundsException( )
         maRoadmapItems.erase( maRoadmapItems.begin() + Index );
         ContainerEvent aEvent = GetContainerEvent(Index, xRoadmapItem);
         maContainerListeners.elementRemoved( aEvent );
-        Reference< XPropertySet > xPropertySet( static_cast<XAggregation*>(static_cast<cppu::OWeakAggObject*>(this)), UNO_QUERY );
+        Reference< XPropertySet > xPropertySet( this );
         sal_Int16 n_CurrentItemID = GetCurrentItemID( xPropertySet );
         Any aAny;
         if ( Index > n_CurrentItemID )

@@ -239,7 +239,7 @@ FinalThreadManager::FinalThreadManager(css::uno::Reference< css::uno::XComponent
 void FinalThreadManager::registerAsListenerAtDesktop()
 {
     css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(m_xContext);
-    xDesktop->addTerminateListener( css::uno::Reference< css::frame::XTerminateListener >( static_cast< cppu::OWeakObject* >( this ), css::uno::UNO_QUERY ) );
+    xDesktop->addTerminateListener( css::uno::Reference< css::frame::XTerminateListener >( this ) );
 }
 
 FinalThreadManager::~FinalThreadManager()

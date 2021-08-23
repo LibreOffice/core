@@ -206,9 +206,7 @@ void GlobalSettings_Access::impl_initConfigAccess()
 
             css::uno::Reference< css::lang::XComponent >(
                 xConfigProvider, css::uno::UNO_QUERY_THROW )->addEventListener(
-                    css::uno::Reference< css::lang::XEventListener >(
-                        static_cast< cppu::OWeakObject* >( this ),
-                        css::uno::UNO_QUERY ));
+                    css::uno::Reference< css::lang::XEventListener >(this));
         }
     }
     catch ( const css::lang::WrappedTargetException& )

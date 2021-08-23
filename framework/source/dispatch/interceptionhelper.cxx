@@ -102,7 +102,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Inte
 void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
 {
     // reject incorrect calls of this interface method
-    css::uno::Reference< css::frame::XDispatchProvider > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XDispatchProvider > xThis(this);
     if (!xInterceptor.is())
         throw css::uno::RuntimeException("NULL references not allowed as in parameter", xThis);
 
@@ -165,7 +165,7 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
 void SAL_CALL InterceptionHelper::releaseDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
 {
     // reject wrong calling of this interface method
-    css::uno::Reference< css::frame::XDispatchProvider > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XDispatchProvider > xThis(this);
     if (!xInterceptor.is())
         throw css::uno::RuntimeException("NULL references not allowed as in parameter", xThis);
 

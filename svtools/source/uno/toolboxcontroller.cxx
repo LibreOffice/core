@@ -242,7 +242,7 @@ void SAL_CALL ToolboxController::update()
 // XComponent
 void SAL_CALL ToolboxController::dispose()
 {
-    Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
+    Reference< XComponent > xThis(this);
 
     {
         SolarMutexGuard aSolarMutexGuard;
@@ -254,7 +254,7 @@ void SAL_CALL ToolboxController::dispose()
     m_aListenerContainer.disposeAndClear( aEvent );
 
     SolarMutexGuard aSolarMutexGuard;
-    Reference< XStatusListener > xStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
+    Reference< XStatusListener > xStatusListener(this);
     for (auto const& listener : m_aListenerMap)
     {
         try
@@ -413,7 +413,7 @@ void ToolboxController::addStatusListener( const OUString& aCommandURL )
                     m_xUrlTransformer->parseStrict( aTargetURL );
                 xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 
-                xStatusListener.set( static_cast< OWeakObject* >( this ), UNO_QUERY );
+                xStatusListener = this;
                 URLToDispatchMap::iterator aIter = m_aListenerMap.find( aCommandURL );
                 if ( aIter != m_aListenerMap.end() )
                 {
@@ -455,7 +455,7 @@ void ToolboxController::removeStatusListener( const OUString& aCommandURL )
         return;
 
     Reference< XDispatch > xDispatch( pIter->second );
-    Reference< XStatusListener > xStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
+    Reference< XStatusListener > xStatusListener(this);
     m_aListenerMap.erase( pIter );
 
     try
@@ -488,7 +488,7 @@ void ToolboxController::bindListener()
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
         if ( m_xContext.is() && xDispatchProvider.is() )
         {
-            xStatusListener.set( static_cast< OWeakObject* >( this ), UNO_QUERY );
+            xStatusListener = this;
             for (auto & listener : m_aListenerMap)
             {
                 css::util::URL aTargetURL;
@@ -575,7 +575,7 @@ void ToolboxController::unbindListener()
     if ( !(m_xContext.is() && xDispatchProvider.is()) )
         return;
 
-    Reference< XStatusListener > xStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
+    Reference< XStatusListener > xStatusListener(this);
     for (auto & listener : m_aListenerMap)
     {
         css::util::URL aTargetURL;
@@ -619,7 +619,7 @@ void ToolboxController::updateStatus( const OUString& aCommandURL )
 
         // Try to find a dispatch object for the requested command URL
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-        xStatusListener.set( static_cast< OWeakObject* >( this ), UNO_QUERY );
+        xStatusListener = this;
         if ( m_xContext.is() && xDispatchProvider.is() )
         {
             aTargetURL.Complete = aCommandURL;

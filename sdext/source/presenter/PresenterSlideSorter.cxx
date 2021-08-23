@@ -362,16 +362,14 @@ void SAL_CALL PresenterSlideSorter::disposing()
 
     if (mpVerticalScrollBar.is())
     {
-        Reference<lang::XComponent> xComponent (
-            static_cast<XWeak*>(mpVerticalScrollBar.get()), UNO_QUERY);
+        Reference<lang::XComponent> xComponent = mpVerticalScrollBar;
         mpVerticalScrollBar = nullptr;
         if (xComponent.is())
             xComponent->dispose();
     }
     if (mpCloseButton.is())
     {
-        Reference<lang::XComponent> xComponent (
-            static_cast<XWeak*>(mpCloseButton.get()), UNO_QUERY);
+        Reference<lang::XComponent> xComponent = mpCloseButton;
         mpCloseButton = nullptr;
         if (xComponent.is())
             xComponent->dispose();

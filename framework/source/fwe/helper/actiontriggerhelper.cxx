@@ -269,7 +269,7 @@ static Reference< XPropertySet > CreateActionTrigger( sal_uInt16 nItemId, const 
             if ( !!aImage )
             {
                 // We use our own optimized XBitmap implementation
-                Reference< XBitmap > xBitmap( static_cast< cppu::OWeakObject* >( new ImageWrapper( aImage )), UNO_QUERY );
+                Reference< XBitmap > xBitmap = new ImageWrapper( aImage );
                 a <<= xBitmap;
                 xPropSet->setPropertyValue("Image", a );
             }

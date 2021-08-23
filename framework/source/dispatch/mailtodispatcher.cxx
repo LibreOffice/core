@@ -118,7 +118,7 @@ void SAL_CALL MailToDispatcher::dispatch( const css::util::URL&                 
 {
     // dispatch() is an [oneway] call ... and may our user release his reference to us immediately.
     // So we should hold us self alive till this call ends.
-    css::uno::Reference< css::frame::XNotifyingDispatch > xSelfHold(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XNotifyingDispatch > xSelfHold(this);
     implts_dispatch(aURL);
     // No notification for status listener!
 }
@@ -142,7 +142,7 @@ void SAL_CALL MailToDispatcher::dispatchWithNotification( const css::util::URL& 
     // This class was designed to die by reference. And if user release his reference to us immediately after calling this method
     // we can run into some problems. So we hold us self alive till this method ends.
     // Another reason: We can use this reference as source of sending event at the end too.
-    css::uno::Reference< css::frame::XNotifyingDispatch > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XNotifyingDispatch > xThis(this);
 
     bool bState = implts_dispatch(aURL);
     if (xListener.is())

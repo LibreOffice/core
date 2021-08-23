@@ -11,6 +11,7 @@
 
 #include "plugin.hxx"
 
+#include <iostream>
 #include <cassert>
 #include <cstddef>
 #include <string>
@@ -736,8 +737,19 @@ bool hasCLanguageLinkageType(FunctionDecl const * decl) {
 static const CXXRecordDecl* stripTypeSugar(QualType qt)
 {
     const clang::Type* t = qt.getTypePtr();
-    while (auto elaboratedType = dyn_cast<ElaboratedType>(t))
-        t = elaboratedType->desugar().getTypePtr();
+    do
+    {
+        if (auto elaboratedType = dyn_cast<ElaboratedType>(t))
+            t = elaboratedType->desugar().getTypePtr();
+        else if (auto tsType = dyn_cast<TemplateSpecializationType>(t))
+            t = tsType->desugar().getTypePtr();
+        else if (auto sttpType = dyn_cast<SubstTemplateTypeParmType>(t))
+            t = sttpType->desugar().getTypePtr();
+        else if (auto tdType = dyn_cast<TypedefType>(t))
+            t = tdType->desugar().getTypePtr();
+        else
+            break;
+    } while(true);
     auto recordType = dyn_cast<RecordType>(t);
     if (!recordType)
         return nullptr;

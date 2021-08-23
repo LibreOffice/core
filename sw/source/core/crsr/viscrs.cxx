@@ -511,7 +511,7 @@ void SwSelPaintRects::HighlightInputField()
             pCursorForInputTextField->GetMark()->nContent.Assign( pTextNode, *(pCurTextInputFieldAtCursor->End()) );
 
             pCursorForInputTextField->FillRects();
-            SwRects* pRects = static_cast<SwRects*>(pCursorForInputTextField.get());
+            SwRects* pRects = pCursorForInputTextField.get();
             for (const SwRect & rNextRect : *pRects)
             {
                 const tools::Rectangle aPntRect(rNextRect.SVRect());

@@ -477,9 +477,7 @@ Reference< XNumberFormatsSupplier > OFormattedModel::calcFormatsSupplier() const
 
 Reference<XNumberFormatsSupplier>  OFormattedModel::calcFormFormatsSupplier() const
 {
-    Reference<XChild> xMe(
-        static_cast<XWeak*>(const_cast<OFormattedModel*>(this)),
-        css::uno::UNO_QUERY);
+    Reference<XChild> xMe(const_cast<OFormattedModel*>(this));
     // By this we make sure that we get the right object even when aggregating
     DBG_ASSERT(xMe.is(), "OFormattedModel::calcFormFormatsSupplier : I should have a content interface !");
     // Iterate through until we reach a StartForm (starting with an own Parent)

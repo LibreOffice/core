@@ -264,7 +264,7 @@ void SAL_CALL UIConfigElementWrapperBase::setFastPropertyValue_NoBroadcast(   sa
                             Reference< XUIConfiguration > xUIConfig( m_xConfigSource, UNO_QUERY );
                             if ( xUIConfig.is() )
                             {
-                                xUIConfig->removeConfigurationListener( Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
+                                xUIConfig->removeConfigurationListener( Reference< XUIConfigurationListener >(this) );
                                 m_bConfigListening = false;
                             }
                         }
@@ -282,7 +282,7 @@ void SAL_CALL UIConfigElementWrapperBase::setFastPropertyValue_NoBroadcast(   sa
                             Reference< XUIConfiguration > xUIConfig( m_xConfigSource, UNO_QUERY );
                             if ( xUIConfig.is() )
                             {
-                                xUIConfig->addConfigurationListener( Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
+                                xUIConfig->addConfigurationListener( Reference< XUIConfigurationListener >(this) );
                                 m_bConfigListening = true;
                             }
                         }
@@ -419,7 +419,7 @@ void SAL_CALL UIConfigElementWrapperBase::setSettings( const Reference< XIndexAc
     // Create a copy of the data if the container is not const
     Reference< XIndexReplace > xReplace( xSettings, UNO_QUERY );
     if ( xReplace.is() )
-        m_xConfigData.set( static_cast< OWeakObject * >( new ConstItemContainer( xSettings ) ), UNO_QUERY );
+        m_xConfigData = new ConstItemContainer( xSettings );
     else
         m_xConfigData = xSettings;
 
@@ -452,7 +452,7 @@ Reference< XIndexAccess > SAL_CALL UIConfigElementWrapperBase::getSettings( sal_
     SolarMutexGuard g;
 
     if ( bWriteable )
-        return Reference< XIndexAccess >( static_cast< OWeakObject * >( new RootItemContainer( m_xConfigData ) ), UNO_QUERY );
+        return Reference< XIndexAccess >( new RootItemContainer( m_xConfigData ) );
 
     return m_xConfigData;
 }

@@ -93,7 +93,7 @@ namespace DOM
     {
         if (m_xEventListener.is() && m_pElement.is())
         {
-            Reference< XEventTarget > xTarget(static_cast<XElement*>(m_pElement.get()), UNO_QUERY);
+            Reference< XEventTarget > xTarget = m_pElement;
             assert(xTarget.is());
             if (!xTarget.is())
                 return;

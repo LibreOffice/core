@@ -86,8 +86,7 @@ void SAL_CALL PopupMenuDispatcher::initialize( const css::uno::Sequence< css::un
             m_xWeakFrame = xFrame;
 
             m_bActivateListener = true;
-            uno::Reference< css::frame::XFrameActionListener > xFrameActionListener(
-                static_cast<OWeakObject *>(this), css::uno::UNO_QUERY );
+            uno::Reference< css::frame::XFrameActionListener > xFrameActionListener(this);
             xFrame->addFrameActionListener( xFrameActionListener );
         }
     }
@@ -212,7 +211,7 @@ void SAL_CALL PopupMenuDispatcher::disposing( const EventObject& )
         uno::Reference< XFrame > xFrame( m_xWeakFrame.get(), UNO_QUERY );
         if ( xFrame.is() )
         {
-            xFrame->removeFrameActionListener( uno::Reference< XFrameActionListener >( static_cast<OWeakObject *>(this), UNO_QUERY ));
+            xFrame->removeFrameActionListener( uno::Reference< XFrameActionListener >(this) );
             m_bActivateListener = false;
         }
     }

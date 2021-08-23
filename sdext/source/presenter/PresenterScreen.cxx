@@ -175,8 +175,7 @@ PresenterScreenListener::PresenterScreenListener (
 
 void PresenterScreenListener::Initialize()
 {
-    Reference< document::XEventListener > xDocListener(
-        static_cast< document::XEventListener* >(this), UNO_QUERY);
+    Reference< document::XEventListener > xDocListener(this);
     Reference< document::XEventBroadcaster > xDocBroadcaster( mxModel, UNO_QUERY );
     if( xDocBroadcaster.is() )
         xDocBroadcaster->addEventListener(xDocListener);
@@ -187,8 +186,7 @@ void SAL_CALL PresenterScreenListener::disposing()
     Reference< document::XEventBroadcaster > xDocBroadcaster( mxModel, UNO_QUERY );
     if( xDocBroadcaster.is() )
         xDocBroadcaster->removeEventListener(
-            Reference<document::XEventListener>(
-                static_cast<document::XEventListener*>(this), UNO_QUERY));
+            Reference<document::XEventListener>(this) );
 
     if (mpPresenterScreen.is())
     {

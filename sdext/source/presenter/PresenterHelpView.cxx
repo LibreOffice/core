@@ -192,8 +192,7 @@ void SAL_CALL PresenterHelpView::disposing()
 
     if (mpCloseButton.is())
     {
-        Reference<lang::XComponent> xComponent (
-            static_cast<XWeak*>(mpCloseButton.get()), UNO_QUERY);
+        Reference<lang::XComponent> xComponent = mpCloseButton;
         mpCloseButton = nullptr;
         if (xComponent.is())
             xComponent->dispose();

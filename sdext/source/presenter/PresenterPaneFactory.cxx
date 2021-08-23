@@ -43,8 +43,7 @@ Reference<drawing::framework::XResourceFactory> PresenterPaneFactory::Create (
     rtl::Reference<PresenterPaneFactory> pFactory (
         new PresenterPaneFactory(rxContext,rpPresenterController));
     pFactory->Register(rxController);
-    return Reference<drawing::framework::XResourceFactory>(
-        static_cast<XWeak*>(pFactory.get()), UNO_QUERY);
+    return Reference<drawing::framework::XResourceFactory>(pFactory);
 }
 
 PresenterPaneFactory::PresenterPaneFactory (
@@ -250,8 +249,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
     aArguments[2] <<= rxParentPane->getCanvas();
     aArguments[3] <<= OUString();
     aArguments[4] <<= Reference<drawing::framework::XPaneBorderPainter>(
-        static_cast<XWeak*>(mpPresenterController->GetPaneBorderPainter().get()),
-        UNO_QUERY);
+        mpPresenterController->GetPaneBorderPainter());
     aArguments[5] <<= !bIsSpritePane;
     xPane->initialize(aArguments);
 

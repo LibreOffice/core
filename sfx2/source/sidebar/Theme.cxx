@@ -179,7 +179,7 @@ void SAL_CALL Theme::disposing()
 Reference<beans::XPropertySet> Theme::GetPropertySet()
 {
     if (SfxGetpApp())
-        return Reference<beans::XPropertySet>(static_cast<XWeak*>(&GetCurrentTheme()), UNO_QUERY);
+        return Reference<beans::XPropertySet>(&GetCurrentTheme());
     else
         return Reference<beans::XPropertySet>();
 }

@@ -55,8 +55,7 @@ Reference< XUIElement > SAL_CALL MenuBarFactory::createUIElement(
     const OUString& ResourceURL,
     const Sequence< PropertyValue >& Args )
 {
-    Reference< css::ui::XUIElement > xMenuBar(
-            static_cast<OWeakObject *>(new MenuBarWrapper(m_xContext)), UNO_QUERY);
+    Reference< css::ui::XUIElement > xMenuBar = new MenuBarWrapper(m_xContext);
     CreateUIElement(ResourceURL, Args, u"private:resource/menubar/", xMenuBar, m_xContext);
     return xMenuBar;
 }

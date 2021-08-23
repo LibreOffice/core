@@ -364,7 +364,7 @@ void UnoDialogControl::createPeer( const Reference< XToolkit > & rxToolkit, cons
 
     if ( !mbWindowListener )
     {
-        Reference< XWindowListener > xWL( static_cast< cppu::OWeakObject*>( this ), UNO_QUERY );
+        Reference< XWindowListener > xWL(this);
         addWindowListener( xWL );
         mbWindowListener = true;
     }

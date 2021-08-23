@@ -311,7 +311,7 @@ void LayoutManager::implts_reset( bool bAttached )
                     try
                     {
                         // Remove listener to old module ui configuration manager
-                        xModuleCfgMgr->removeConfigurationListener( Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
+                        xModuleCfgMgr->removeConfigurationListener( Reference< XUIConfigurationListener >(this) );
                     }
                     catch (const Exception&)
                     {
@@ -323,7 +323,7 @@ void LayoutManager::implts_reset( bool bAttached )
                     // Add listener to new module ui configuration manager
                     xModuleCfgMgr.set( xModuleCfgSupplier->getUIConfigurationManager( aModuleIdentifier ), UNO_QUERY );
                     if ( xModuleCfgMgr.is() )
-                        xModuleCfgMgr->addConfigurationListener( Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
+                        xModuleCfgMgr->addConfigurationListener( Reference< XUIConfigurationListener >(this) );
                 }
                 catch (const Exception&)
                 {
@@ -354,7 +354,7 @@ void LayoutManager::implts_reset( bool bAttached )
                         try
                         {
                             // Remove listener to old ui configuration manager
-                            xDocCfgMgr->removeConfigurationListener( Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
+                            xDocCfgMgr->removeConfigurationListener( Reference< XUIConfigurationListener >(this) );
                         }
                         catch (const Exception&)
                         {
@@ -365,7 +365,7 @@ void LayoutManager::implts_reset( bool bAttached )
                     {
                         xDocCfgMgr.set( xUIConfigurationManagerSupplier->getUIConfigurationManager(), UNO_QUERY );
                         if ( xDocCfgMgr.is() )
-                            xDocCfgMgr->addConfigurationListener( Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
+                            xDocCfgMgr->addConfigurationListener( Reference< XUIConfigurationListener >(this) );
                     }
                     catch (const Exception&)
                     {
@@ -381,7 +381,7 @@ void LayoutManager::implts_reset( bool bAttached )
                 try
                 {
                     xModuleCfgMgr->removeConfigurationListener(
-                        Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
+                        Reference< XUIConfigurationListener >(this) );
                 }
                 catch (const Exception&)
                 {
@@ -393,7 +393,7 @@ void LayoutManager::implts_reset( bool bAttached )
                 try
                 {
                     xDocCfgMgr->removeConfigurationListener(
-                        Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
+                        Reference< XUIConfigurationListener >(this) );
                 }
                 catch (const Exception&)
                 {
@@ -1281,7 +1281,7 @@ void SAL_CALL LayoutManager::setDockingAreaAcceptor( const Reference< ui::XDocki
     {
         Reference< awt::XWindow > xWindow( m_xDockingAreaAcceptor->getContainerWindow() );
         if ( xWindow.is() && ( m_xFrame->getContainerWindow() != m_xContainerWindow || !xDockingAreaAcceptor.is() ) )
-            xWindow->removeWindowListener( Reference< awt::XWindowListener >( static_cast< OWeakObject * >( this ), UNO_QUERY ));
+            xWindow->removeWindowListener( Reference< awt::XWindowListener >(this) );
 
         m_aDockingArea = awt::Rectangle();
         if ( pToolbarManager )
@@ -1298,11 +1298,11 @@ void SAL_CALL LayoutManager::setDockingAreaAcceptor( const Reference< ui::XDocki
         m_aDockingArea     = awt::Rectangle();
         m_xContainerWindow = m_xDockingAreaAcceptor->getContainerWindow();
         m_xContainerTopWindow.set( m_xContainerWindow, UNO_QUERY );
-        m_xContainerWindow->addWindowListener( Reference< awt::XWindowListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
+        m_xContainerWindow->addWindowListener( Reference< awt::XWindowListener >(this) );
 
         // we always must keep a connection to the window of our frame for resize events
         if ( m_xContainerWindow != m_xFrame->getContainerWindow() )
-            m_xFrame->getContainerWindow()->addWindowListener( Reference< awt::XWindowListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
+            m_xFrame->getContainerWindow()->addWindowListener( Reference< awt::XWindowListener >(this) );
 
         // #i37884# set initial visibility state - in the plugin case the container window is already shown
         // and we get no notification anymore
@@ -2762,8 +2762,7 @@ void SAL_CALL LayoutManager::disposing( const lang::EventObject& rEvent )
                 try
                 {
                     Reference<XUIConfiguration> xModuleCfgMgr(m_xModuleCfgMgr, UNO_QUERY);
-                    xModuleCfgMgr->removeConfigurationListener(Reference<XUIConfigurationListener>(
-                        static_cast<OWeakObject*>(this), UNO_QUERY));
+                    xModuleCfgMgr->removeConfigurationListener(Reference<XUIConfigurationListener>(this));
                 }
                 catch (const Exception&)
                 {
@@ -2775,8 +2774,7 @@ void SAL_CALL LayoutManager::disposing( const lang::EventObject& rEvent )
                 try
                 {
                     Reference<XUIConfiguration> xDocCfgMgr(m_xDocCfgMgr, UNO_QUERY);
-                    xDocCfgMgr->removeConfigurationListener(Reference<XUIConfigurationListener>(
-                        static_cast<OWeakObject*>(this), UNO_QUERY));
+                    xDocCfgMgr->removeConfigurationListener(Reference<XUIConfigurationListener>(this));
                 }
                 catch (const Exception&)
                 {
@@ -2823,7 +2821,7 @@ void SAL_CALL LayoutManager::disposing( const lang::EventObject& rEvent )
     if ( bDisposeAndClear )
     {
         // Send message to all listener and forget her references.
-        uno::Reference< frame::XLayoutManager > xThis( static_cast< ::cppu::OWeakObject* >(this), uno::UNO_QUERY );
+        uno::Reference< frame::XLayoutManager > xThis(this);
         lang::EventObject aEvent( xThis );
         m_aListenerContainer.disposeAndClear( aEvent );
     }

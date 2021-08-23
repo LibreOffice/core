@@ -2031,8 +2031,7 @@ void OStorage::MakeLinkToSubComponent_Impl( const uno::Reference< lang::XCompone
         m_pData->m_pSubElDispListener = new OChildDispListener_Impl( *this );
     }
 
-    xComponent->addEventListener( uno::Reference< lang::XEventListener >(
-        static_cast< ::cppu::OWeakObject* >(m_pData->m_pSubElDispListener.get()), uno::UNO_QUERY));
+    xComponent->addEventListener( m_pData->m_pSubElDispListener );
 
     m_pData->m_aOpenSubComponentsVector.emplace_back(xComponent );
 }

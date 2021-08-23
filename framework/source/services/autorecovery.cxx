@@ -2185,7 +2185,7 @@ void AutoRecovery::implts_startModifyListeningOnDoc(AutoRecovery::TDocumentInfo&
     css::uno::Reference< css::util::XModifyBroadcaster > xBroadcaster(rInfo.Document, css::uno::UNO_QUERY);
     if (xBroadcaster.is())
     {
-        css::uno::Reference< css::util::XModifyListener > xThis(static_cast< css::frame::XDispatch* >(this), css::uno::UNO_QUERY);
+        css::uno::Reference< css::util::XModifyListener > xThis(this);
         xBroadcaster->addModifyListener(xThis);
         rInfo.ListenForModify = true;
     }
@@ -2199,7 +2199,7 @@ void AutoRecovery::implts_stopModifyListeningOnDoc(AutoRecovery::TDocumentInfo& 
     css::uno::Reference< css::util::XModifyBroadcaster > xBroadcaster(rInfo.Document, css::uno::UNO_QUERY);
     if (xBroadcaster.is())
     {
-        css::uno::Reference< css::util::XModifyListener > xThis(static_cast< css::frame::XDispatch* >(this), css::uno::UNO_QUERY);
+        css::uno::Reference< css::util::XModifyListener > xThis(this);
         xBroadcaster->removeModifyListener(xThis);
         rInfo.ListenForModify = false;
     }

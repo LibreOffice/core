@@ -1263,8 +1263,7 @@ ControlContainerBase::ControlContainerBase( const Reference< XComponentContext >
 {
     maComponentInfos.nWidth = 280;
     maComponentInfos.nHeight = 400;
-    mxListener = new ResourceListener( Reference< util::XModifyListener >(
-                        static_cast< OWeakObject* >( this ), UNO_QUERY ));
+    mxListener = new ResourceListener( Reference< util::XModifyListener >(this) );
 }
 
 ControlContainerBase::~ControlContainerBase()
@@ -1589,7 +1588,7 @@ void ControlContainerBase::ImplModelPropertiesChanged( const Sequence< PropertyC
                 if ( !mbPosModified && !mbSizeModified )
                 {
                     // Don't set new pos/size if we get new values from window listener
-                    Reference< XControl > xThis( static_cast<XAggregation*>(static_cast<cppu::OWeakAggObject*>(this)), UNO_QUERY );
+                    Reference< XControl > xThis(this);
                     ImplSetPosSize( xThis );
                 }
             }

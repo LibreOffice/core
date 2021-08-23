@@ -81,7 +81,7 @@ uno::Any SAL_CALL ToolBarWrapper::queryInterface( const uno::Type & rType )
 // XComponent
 void SAL_CALL ToolBarWrapper::dispose()
 {
-    Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
+    Reference< XComponent > xThis(this);
 
     {
         SolarMutexGuard g;

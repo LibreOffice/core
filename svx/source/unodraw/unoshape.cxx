@@ -633,7 +633,7 @@ void SvxShape::ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet)
     if(HasSdrObject() && rPropSet.AreThereOwnUsrAnys())
     {
         SfxItemSet aSet( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>);
-        Reference< beans::XPropertySet > xShape( static_cast<OWeakObject*>(this), UNO_QUERY );
+        Reference< beans::XPropertySet > xShape(this);
         SvxItemPropertySet_ObtainSettingsFromPropertySet(rPropSet, aSet, xShape, &mpPropSet->getPropertyMap() );
 
         GetSdrObject()->SetMergedItemSetAndBroadcast(aSet);

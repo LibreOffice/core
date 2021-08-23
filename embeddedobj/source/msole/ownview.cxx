@@ -112,8 +112,7 @@ bool OwnView_Impl::CreateModelFromURL( const OUString& aFileURL )
             aArgs[1].Value <<= true;
 
             aArgs[2].Name = "InteractionHandler";
-            aArgs[2].Value <<= uno::Reference< task::XInteractionHandler >(
-                                static_cast< ::cppu::OWeakObject* >( new DummyHandler_Impl() ), uno::UNO_QUERY );
+            aArgs[2].Value <<= uno::Reference< task::XInteractionHandler >( new DummyHandler_Impl() );
 
             aArgs[3].Name = "DontEdit";
             aArgs[3].Value <<= true;
@@ -135,16 +134,12 @@ bool OwnView_Impl::CreateModelFromURL( const OUString& aFileURL )
             {
                 uno::Reference< document::XEventBroadcaster > xBroadCaster( xModel, uno::UNO_QUERY );
                 if ( xBroadCaster.is() )
-                    xBroadCaster->addEventListener( uno::Reference< document::XEventListener >(
-                                                            static_cast< ::cppu::OWeakObject* >( this ),
-                                                             uno::UNO_QUERY ) );
+                    xBroadCaster->addEventListener( uno::Reference< document::XEventListener >(this) );
 
                 uno::Reference< util::XCloseable > xCloseable( xModel, uno::UNO_QUERY );
                 if ( xCloseable.is() )
                 {
-                    xCloseable->addCloseListener( uno::Reference< util::XCloseListener >(
-                                                                    static_cast< ::cppu::OWeakObject* >( this ),
-                                                                      uno::UNO_QUERY ) );
+                    xCloseable->addCloseListener( uno::Reference< util::XCloseListener >(this) );
 
                     ::osl::MutexGuard aGuard( m_aMutex );
                     m_xModel = xModel;
@@ -544,16 +539,12 @@ void OwnView_Impl::Close()
     try {
         uno::Reference< document::XEventBroadcaster > xBroadCaster( xModel, uno::UNO_QUERY );
         if ( xBroadCaster.is() )
-            xBroadCaster->removeEventListener( uno::Reference< document::XEventListener >(
-                                                                    static_cast< ::cppu::OWeakObject* >( this ),
-                                                                     uno::UNO_QUERY ) );
+            xBroadCaster->removeEventListener( uno::Reference< document::XEventListener >( this ) );
 
         uno::Reference< util::XCloseable > xCloseable( xModel, uno::UNO_QUERY );
         if ( xCloseable.is() )
         {
-            xCloseable->removeCloseListener( uno::Reference< util::XCloseListener >(
-                                                                    static_cast< ::cppu::OWeakObject* >( this ),
-                                                                     uno::UNO_QUERY ) );
+            xCloseable->removeCloseListener( uno::Reference< util::XCloseListener >( this ) );
             xCloseable->close( true );
         }
     }
@@ -585,15 +576,11 @@ void SAL_CALL OwnView_Impl::notifyEvent( const document::EventObject& aEvent )
     try {
         uno::Reference< document::XEventBroadcaster > xBroadCaster( xModel, uno::UNO_QUERY );
         if ( xBroadCaster.is() )
-            xBroadCaster->removeEventListener( uno::Reference< document::XEventListener >(
-                                                                    static_cast< ::cppu::OWeakObject* >( this ),
-                                                                     uno::UNO_QUERY ) );
+            xBroadCaster->removeEventListener( uno::Reference< document::XEventListener >( this ) );
 
         uno::Reference< util::XCloseable > xCloseable( xModel, uno::UNO_QUERY );
         if ( xCloseable.is() )
-            xCloseable->removeCloseListener( uno::Reference< util::XCloseListener >(
-                                                                    static_cast< ::cppu::OWeakObject* >( this ),
-                                                                     uno::UNO_QUERY ) );
+            xCloseable->removeCloseListener( uno::Reference< util::XCloseListener >( this ) );
     }
     catch( uno::Exception& )
     {}

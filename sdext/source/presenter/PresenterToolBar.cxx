@@ -424,8 +424,7 @@ void SAL_CALL PresenterToolBar::disposing()
         {
             if (pElement)
             {
-                Reference<lang::XComponent> xComponent (
-                    static_cast<XWeak*>(pElement.get()), UNO_QUERY);
+                Reference<lang::XComponent> xComponent = pElement;
                 if (xComponent.is())
                     xComponent->dispose();
             }
@@ -1063,7 +1062,7 @@ PresenterToolBarView::~PresenterToolBarView()
 
 void SAL_CALL PresenterToolBarView::disposing()
 {
-    Reference<lang::XComponent> xComponent (static_cast<XWeak*>(mpToolBar.get()), UNO_QUERY);
+    Reference<lang::XComponent> xComponent = mpToolBar;
     mpToolBar = nullptr;
     if (xComponent.is())
         xComponent->dispose();
@@ -1121,7 +1120,7 @@ sal_Bool SAL_CALL PresenterToolBarView::isAnchorOnly()
 
 void SAL_CALL PresenterToolBarView::setCurrentPage (const Reference<drawing::XDrawPage>& rxSlide)
 {
-    Reference<drawing::XDrawView> xToolBar (static_cast<XWeak*>(mpToolBar.get()), UNO_QUERY);
+    Reference<drawing::XDrawView> xToolBar = mpToolBar;
     if (xToolBar.is())
         xToolBar->setCurrentPage(rxSlide);
 }

@@ -317,8 +317,7 @@ VclPtr<vcl::Window> SubToolBarController::createVclPopupWindow(vcl::Window* /*pP
             if ( xSubToolBar.is() )
             {
                 css::uno::Reference< css::awt::XDockableWindow > xDockWindow( xSubToolBar, css::uno::UNO_QUERY );
-                xDockWindow->addDockableWindowListener( css::uno::Reference< css::awt::XDockableWindowListener >(
-                                                        static_cast< OWeakObject * >( this ), css::uno::UNO_QUERY ) );
+                xDockWindow->addDockableWindowListener( css::uno::Reference< css::awt::XDockableWindowListener >(this) );
                 xDockWindow->enableDocking( true );
 
                 // keep reference to UIElement to avoid its destruction

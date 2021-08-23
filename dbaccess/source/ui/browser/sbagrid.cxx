@@ -1096,7 +1096,7 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos)
     try
     {
         OUString sCellText;
-        Reference< XGridFieldDataSupplier >  xFieldData(static_cast< XGridPeer* >(GetPeer()), UNO_QUERY);
+        Reference< XGridFieldDataSupplier >  xFieldData(GetPeer());
         Sequence<sal_Bool> aSupportingText = xFieldData->queryFieldDataType(cppu::UnoType<decltype(sCellText)>::get());
         if (aSupportingText.getConstArray()[nColumnPos])
         {
@@ -1197,7 +1197,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
             try
             {
                 // assume that text can be dropped into a field if the column has a css::awt::XTextComponent interface
-                Reference< XIndexAccess >  xColumnControls(static_cast<css::form::XGridPeer*>(GetPeer()), UNO_QUERY);
+                Reference< XIndexAccess >  xColumnControls(GetPeer());
                 if (xColumnControls.is())
                 {
                     Reference< css::awt::XTextComponent >  xColControl(

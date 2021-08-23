@@ -102,9 +102,7 @@ Listener::Listener (
         mxFrameWeak = xFrame;
         if (xFrame.is())
         {
-            xFrame->addFrameActionListener (
-                Reference<frame::XFrameActionListener>(
-                    static_cast<XWeak*>(this), UNO_QUERY));
+            xFrame->addFrameActionListener(Reference<frame::XFrameActionListener>(this));
             mbListeningToFrame = true;
         }
 
@@ -166,9 +164,7 @@ void Listener::ReleaseListeners()
         Reference<frame::XFrame> xFrame (mxFrameWeak);
         if (xFrame.is())
         {
-            xFrame->removeFrameActionListener (
-                Reference<frame::XFrameActionListener>(
-                    static_cast<XWeak*>(this), UNO_QUERY));
+            xFrame->removeFrameActionListener(Reference<frame::XFrameActionListener>(this));
             mbListeningToFrame = false;
         }
     }

@@ -268,7 +268,7 @@ bool XSecController::chainOn()
              */
             m_xSAXEventKeeper->setNextHandler( nullptr );
 
-            css::uno::Reference< css::xml::sax::XDocumentHandler > xSEKHandler(static_cast<cppu::OWeakObject*>(m_xSAXEventKeeper.get()), css::uno::UNO_QUERY);
+            css::uno::Reference< css::xml::sax::XDocumentHandler > xSEKHandler(m_xSAXEventKeeper);
 
             /*
              * connects the previous document handler on the SAX chain

@@ -212,8 +212,7 @@ void PresenterController::disposing()
         mxController = nullptr;
     }
 
-    Reference<XComponent> xWindowManagerComponent (
-        static_cast<XWeak*>(mpWindowManager.get()), UNO_QUERY);
+    Reference<XComponent> xWindowManagerComponent = mpWindowManager;
     mpWindowManager = nullptr;
     if (xWindowManagerComponent.is())
         xWindowManagerComponent->dispose();
@@ -228,8 +227,7 @@ void PresenterController::disposing()
     mxNextSlide = nullptr;
     mpTheme.reset();
     {
-        Reference<lang::XComponent> xComponent (
-            static_cast<XWeak*>(mpPaneBorderPainter.get()), UNO_QUERY);
+        Reference<lang::XComponent> xComponent = mpPaneBorderPainter;
         mpPaneBorderPainter = nullptr;
         if (xComponent.is())
             xComponent->dispose();

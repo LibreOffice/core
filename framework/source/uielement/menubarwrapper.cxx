@@ -121,7 +121,7 @@ MenuBarWrapper::~MenuBarWrapper()
 
 void SAL_CALL MenuBarWrapper::dispose()
 {
-    Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
+    Reference< XComponent > xThis(this);
 
     css::lang::EventObject aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );

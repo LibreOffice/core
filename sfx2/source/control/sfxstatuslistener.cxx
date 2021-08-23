@@ -71,7 +71,7 @@ void SfxStatusListener::UnBind()
 {
     if ( m_xDispatch.is() )
     {
-        Reference< XStatusListener > aStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
+        Reference< XStatusListener > aStatusListener(this);
         m_xDispatch->removeStatusListener( aStatusListener, m_aCommand );
         m_xDispatch.clear();
     }
@@ -79,7 +79,7 @@ void SfxStatusListener::UnBind()
 
 void SfxStatusListener::ReBind()
 {
-    Reference< XStatusListener > aStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
+    Reference< XStatusListener > aStatusListener(this);
     if ( m_xDispatch.is() )
         m_xDispatch->removeStatusListener( aStatusListener, m_aCommand );
     if ( m_xDispatchProvider.is() )
@@ -103,7 +103,7 @@ void SAL_CALL SfxStatusListener::dispose()
     {
         try
         {
-            Reference< XStatusListener > aStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
+            Reference< XStatusListener > aStatusListener(this);
             m_xDispatch->removeStatusListener( aStatusListener, m_aCommand );
         }
         catch ( Exception& )
