@@ -33,8 +33,7 @@ are the same.
 // GPU support (set by configure).
 #undef SK_SUPPORT_GPU
 // Vulkan support enabled (set by configure).
-// temporary override
-#define SK_VULKAN 1
+#undef SK_VULKAN
 // Metal support enabled (set by configure).
 #undef SK_METAL
 

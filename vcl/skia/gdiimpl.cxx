@@ -289,11 +289,7 @@ SkiaSalGraphicsImpl::SkiaSalGraphicsImpl(SalGraphics& rParent, SalGeometryProvid
 {
 }
 
-SkiaSalGraphicsImpl::~SkiaSalGraphicsImpl()
-{
-    assert(!mSurface);
-    assert(!mWindowContext);
-}
+SkiaSalGraphicsImpl::~SkiaSalGraphicsImpl() { assert(!mSurface); }
 
 void SkiaSalGraphicsImpl::Init() {}
 
@@ -318,10 +314,7 @@ void SkiaSalGraphicsImpl::createWindowSurface(bool forceRaster)
     SkiaZone zone;
     assert(!isOffscreen());
     assert(!mSurface);
-    assert(!mWindowContext);
-    createWindowContext(forceRaster);
-    if (mWindowContext)
-        mSurface = mWindowContext->getBackbufferSurface();
+    createWindowSurfaceInternal(forceRaster);
     if (!mSurface)
     {
         switch (renderMethodToUse())
@@ -329,6 +322,11 @@ void SkiaSalGraphicsImpl::createWindowSurface(bool forceRaster)
             case RenderVulkan:
                 SAL_WARN("vcl.skia",
                          "cannot create Vulkan GPU window surface, falling back to Raster");
+                destroySurface(); // destroys also WindowContext
+                return createWindowSurface(true); // try again
+            case RenderMetal:
+                SAL_WARN("vcl.skia",
+                         "cannot create Metal GPU window surface, falling back to Raster");
                 destroySurface(); // destroys also WindowContext
                 return createWindowSurface(true); // try again
             case RenderRaster:
@@ -357,7 +355,6 @@ void SkiaSalGraphicsImpl::createOffscreenSurface()
     SkiaZone zone;
     assert(isOffscreen());
     assert(!mSurface);
-    assert(!mWindowContext);
     // HACK: See isOffscreen().
     int width = std::max(1, GetWidth());
     int height = std::max(1, GetHeight());
@@ -385,8 +382,9 @@ void SkiaSalGraphicsImpl::destroySurface()
     // but work around it here.
     if (mSurface)
         mSurface->flushAndSubmit();
+    if (!isOffscreen())
+        destroyWindowSurfaceInternal();
     mSurface.reset();
-    mWindowContext.reset();
     mIsGPU = false;
 }
 

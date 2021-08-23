@@ -796,7 +796,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/image/SkSurface_Gpu \
 ))
 
-#ifeq ($(SKIA_GPU),VULKAN)
+ifeq ($(SKIA_GPU),VULKAN)
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/vk/GrVkAMDMemoryAllocator \
     UnpackedTarball/skia/src/gpu/vk/GrVkAttachment \
@@ -842,7 +842,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/third_party/vulkanmemoryallocator/GrVulkanMemoryAllocator \
 ))
 
-#endif
+endif
 endif
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
@@ -903,11 +903,11 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/tools/sk_app/win/RasterWindowContext_win \
 ))
 
-#ifeq ($(SKIA_GPU),VULKAN)
+ifeq ($(SKIA_GPU),VULKAN)
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/tools/sk_app/win/VulkanWindowContext_win \
 ))
-#endif
+endif
 
 else ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
@@ -976,11 +976,11 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/tools/sk_app/unix/RasterWindowContext_unix \
 ))
-#ifeq ($(SKIA_GPU),VULKAN)
+ifeq ($(SKIA_GPU),VULKAN)
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/tools/sk_app/unix/VulkanWindowContext_unix \
 ))
-#endif
+endif
 
 endif
 
