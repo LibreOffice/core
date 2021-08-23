@@ -180,9 +180,7 @@ inline sal_Int64 convertHmmToEmu( sal_Int32 nValue )
 /** Converts the passed 64-bit integer value from EMUs to 1/100 mm. */
 inline sal_Int32 convertEmuToHmm( sal_Int64 nValue )
 {
-    return getLimitedValue<sal_Int32, sal_Int64>(
-        o3tl::convertSaturate(nValue, o3tl::Length::emu, o3tl::Length::mm100), SAL_MIN_INT32,
-        SAL_MAX_INT32);
+    return o3tl::convertNarrowing<sal_Int32, o3tl::Length::emu, o3tl::Length::mm100>(nValue);
 }
 
 /** Converts the passed 64-bit integer value from EMUs to Points. */
