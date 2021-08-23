@@ -94,7 +94,7 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
 
     m_rRAS.SetEndian( SvStreamEndian::BIG );
     m_rRAS.ReadUInt32( nMagicNumber );
-    if ( nMagicNumber != SUNRASTER_MAGICNUMBER )
+    if (!m_rRAS.good() || nMagicNumber != SUNRASTER_MAGICNUMBER)
         return false;
 
     // Kopf einlesen:
