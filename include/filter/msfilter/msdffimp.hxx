@@ -29,7 +29,6 @@
 #include <vector>
 #include <unordered_map>
 
-#include <optional>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/stl_types.hxx>
