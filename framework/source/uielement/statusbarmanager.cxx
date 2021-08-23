@@ -175,8 +175,7 @@ void SAL_CALL StatusBarManager::disposing( const lang::EventObject& Source )
 // XComponent
 void SAL_CALL StatusBarManager::dispose()
 {
-    uno::Reference< lang::XComponent > xThis(
-        static_cast< OWeakObject* >(this), uno::UNO_QUERY );
+    uno::Reference< lang::XComponent > xThis(this );
 
     lang::EventObject aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
@@ -202,9 +201,7 @@ void SAL_CALL StatusBarManager::dispose()
         {
             try
             {
-                m_xFrame->removeFrameActionListener( uno::Reference< frame::XFrameActionListener >(
-                                                        static_cast< ::cppu::OWeakObject *>( this ),
-                                                        uno::UNO_QUERY ));
+                m_xFrame->removeFrameActionListener( uno::Reference< frame::XFrameActionListener >(this) );
             }
             catch ( const uno::Exception& )
             {
@@ -378,8 +375,7 @@ void StatusBarManager::CreateControllers()
     if ( !m_bFrameActionRegistered && m_xFrame.is() )
     {
         m_bFrameActionRegistered = true;
-        m_xFrame->addFrameActionListener( uno::Reference< frame::XFrameActionListener >(
-            static_cast< ::cppu::OWeakObject *>( this ), uno::UNO_QUERY ));
+        m_xFrame->addFrameActionListener( uno::Reference< frame::XFrameActionListener >(this) );
     }
 }
 

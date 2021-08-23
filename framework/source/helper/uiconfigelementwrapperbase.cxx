@@ -419,7 +419,7 @@ void SAL_CALL UIConfigElementWrapperBase::setSettings( const Reference< XIndexAc
     // Create a copy of the data if the container is not const
     Reference< XIndexReplace > xReplace( xSettings, UNO_QUERY );
     if ( xReplace.is() )
-        m_xConfigData.set( static_cast< OWeakObject * >( new ConstItemContainer( xSettings ) ), UNO_QUERY );
+        m_xConfigData = new ConstItemContainer( xSettings );
     else
         m_xConfigData = xSettings;
 

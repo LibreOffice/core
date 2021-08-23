@@ -175,7 +175,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
 
     // It's necessary to hold us self alive!
     // Otherwise we might die by ref count ...
-    css::uno::Reference< css::task::XJobListener > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+    css::uno::Reference< css::task::XJobListener > xThis(this);
 
     try
     {
@@ -495,7 +495,7 @@ void Job::impl_startListening()
         try
         {
             m_xDesktop = css::frame::Desktop::create( m_xContext );
-            css::uno::Reference< css::frame::XTerminateListener > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+            css::uno::Reference< css::frame::XTerminateListener > xThis(this);
             m_xDesktop->addTerminateListener(xThis);
             m_bListenOnDesktop = true;
         }
@@ -511,7 +511,7 @@ void Job::impl_startListening()
         try
         {
             css::uno::Reference< css::util::XCloseBroadcaster > xCloseable(m_xFrame                                 , css::uno::UNO_QUERY);
-            css::uno::Reference< css::util::XCloseListener >    xThis     (static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+            css::uno::Reference< css::util::XCloseListener >    xThis(this);
             if (xCloseable.is())
             {
                 xCloseable->addCloseListener(xThis);
@@ -531,7 +531,7 @@ void Job::impl_startListening()
     try
     {
         css::uno::Reference< css::util::XCloseBroadcaster > xCloseable(m_xModel                                 , css::uno::UNO_QUERY);
-        css::uno::Reference< css::util::XCloseListener >    xThis     (static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+        css::uno::Reference< css::util::XCloseListener >    xThis(this);
         if (xCloseable.is())
         {
             xCloseable->addCloseListener(xThis);
@@ -557,7 +557,7 @@ void Job::impl_stopListening()
     {
         try
         {
-            css::uno::Reference< css::frame::XTerminateListener > xThis(static_cast< ::cppu::OWeakObject* >(this)   , css::uno::UNO_QUERY);
+            css::uno::Reference< css::frame::XTerminateListener > xThis(this);
             m_xDesktop->removeTerminateListener(xThis);
             m_xDesktop.clear();
             m_bListenOnDesktop = false;
@@ -573,7 +573,7 @@ void Job::impl_stopListening()
         try
         {
             css::uno::Reference< css::util::XCloseBroadcaster > xCloseable(m_xFrame                                 , css::uno::UNO_QUERY);
-            css::uno::Reference< css::util::XCloseListener >    xThis     (static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+            css::uno::Reference< css::util::XCloseListener >    xThis(this);
             if (xCloseable.is())
             {
                 xCloseable->removeCloseListener(xThis);
@@ -592,7 +592,7 @@ void Job::impl_stopListening()
     try
     {
         css::uno::Reference< css::util::XCloseBroadcaster > xCloseable(m_xModel                                 , css::uno::UNO_QUERY);
-        css::uno::Reference< css::util::XCloseListener >    xThis     (static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+        css::uno::Reference< css::util::XCloseListener >    xThis(this);
         if (xCloseable.is())
         {
             xCloseable->removeCloseListener(xThis);

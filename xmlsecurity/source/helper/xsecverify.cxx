@@ -74,7 +74,7 @@ css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecCon
 
     css::uno::Sequence<css::uno::Any> args(5);
     args[0] <<= OUString::number(nSecurityId);
-    args[1] <<= uno::Reference<xml::crypto::sax::XSecuritySAXEventKeeper>(static_cast<cppu::OWeakObject*>(m_xSAXEventKeeper.get()), uno::UNO_QUERY);
+    args[1] <<= uno::Reference<xml::crypto::sax::XSecuritySAXEventKeeper>(m_xSAXEventKeeper);
     args[2] <<= OUString::number(nIdOfSignatureElementCollector);
     args[3] <<= m_xSecurityContext;
     args[4] <<= m_xXMLSignature;

@@ -72,7 +72,7 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const css::frame::FeatureStateE
     if ( !pCache )
         return;
 
-    css::uno::Reference< css::frame::XStatusListener >  xKeepAlive( static_cast<cppu::OWeakObject*>(this), css::uno::UNO_QUERY );
+    css::uno::Reference< css::frame::XStatusListener >  xKeepAlive(this);
     if ( aStatus.Requery )
         pCache->Invalidate( true );
     else

@@ -165,9 +165,7 @@ uno::Reference<XAccessible>
                 ShapeTypeHandler::Instance().CreateAccessibleObject (
                     aShapeInfo,
                     maShapeTreeInfo));
-            rChildDescriptor.mxAccessibleShape.set(
-                static_cast<uno::XWeak*>(pShape.get()),
-                uno::UNO_QUERY);
+            rChildDescriptor.mxAccessibleShape = pShape;
             if ( pShape.is() )
             {
                 pShape->Init();

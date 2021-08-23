@@ -165,8 +165,7 @@ void LayoutManagerListener::setFrame( const css::uno::Reference< css::frame::XFr
 
         if ( xLayoutManager.is() )
             xLayoutManager->addLayoutManagerEventListener(
-                css::uno::Reference< css::frame::XLayoutManagerListener >(
-                    static_cast< OWeakObject* >( this ), css::uno::UNO_QUERY ));
+                css::uno::Reference< css::frame::XLayoutManagerListener >(this) );
 
         xPropSet.set( xLayoutManager, UNO_QUERY );
         if ( xPropSet.is() )
@@ -229,8 +228,7 @@ void SAL_CALL LayoutManagerListener::dispose()
         // remove as listener from layout manager
         if ( xLayoutManager.is() )
             xLayoutManager->removeLayoutManagerEventListener(
-                css::uno::Reference< css::frame::XLayoutManagerListener >(
-                    static_cast< OWeakObject* >( this ), css::uno::UNO_QUERY ));
+                css::uno::Reference< css::frame::XLayoutManagerListener >(this) );
     }
     catch ( css::lang::DisposedException& )
     {

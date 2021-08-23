@@ -165,7 +165,7 @@ uno::Reference< io::XInputStream > SAL_CALL OFSInputStreamContainer::getInputStr
     if ( !m_xInputStream.is() )
         return uno::Reference< io::XInputStream >();
 
-    return uno::Reference< io::XInputStream >( static_cast< io::XInputStream* >( this ), uno::UNO_QUERY );
+    return this;
 }
 
 uno::Reference< io::XOutputStream > SAL_CALL OFSInputStreamContainer::getOutputStream()

@@ -144,10 +144,9 @@ void MediaWindowImpl::dispose()
 
     if (mxPlayerWindow.is())
     {
-        auto pEventsIf = static_cast<cppu::OWeakObject*>(mxEvents.get());
-        mxPlayerWindow->removeKeyListener( uno::Reference< awt::XKeyListener >( pEventsIf, uno::UNO_QUERY ) );
-        mxPlayerWindow->removeMouseListener( uno::Reference< awt::XMouseListener >( pEventsIf, uno::UNO_QUERY ) );
-        mxPlayerWindow->removeMouseMotionListener( uno::Reference< awt::XMouseMotionListener >( pEventsIf, uno::UNO_QUERY ) );
+        mxPlayerWindow->removeKeyListener( uno::Reference< awt::XKeyListener >( mxEvents ) );
+        mxPlayerWindow->removeMouseListener( uno::Reference< awt::XMouseListener >( mxEvents ) );
+        mxPlayerWindow->removeMouseMotionListener( uno::Reference< awt::XMouseMotionListener >( mxEvents ) );
         mxPlayerWindow->dispose();
         mxPlayerWindow.clear();
     }
@@ -443,11 +442,10 @@ void MediaWindowImpl::onURLChanged()
 
         if( xPlayerWindow.is() )
         {
-            auto pEventsIf = static_cast<cppu::OWeakObject*>(mxEvents.get());
-            xPlayerWindow->addKeyListener( uno::Reference< awt::XKeyListener >( pEventsIf, uno::UNO_QUERY ) );
-            xPlayerWindow->addMouseListener( uno::Reference< awt::XMouseListener >( pEventsIf, uno::UNO_QUERY ) );
-            xPlayerWindow->addMouseMotionListener( uno::Reference< awt::XMouseMotionListener >( pEventsIf, uno::UNO_QUERY ) );
-            xPlayerWindow->addFocusListener( uno::Reference< awt::XFocusListener >( pEventsIf, uno::UNO_QUERY ) );
+            xPlayerWindow->addKeyListener( uno::Reference< awt::XKeyListener >( mxEvents ) );
+            xPlayerWindow->addMouseListener( uno::Reference< awt::XMouseListener >( mxEvents ) );
+            xPlayerWindow->addMouseMotionListener( uno::Reference< awt::XMouseMotionListener >( mxEvents ) );
+            xPlayerWindow->addFocusListener( uno::Reference< awt::XFocusListener >( mxEvents ) );
         }
     }
     else
