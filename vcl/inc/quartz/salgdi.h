@@ -297,6 +297,8 @@ public:
                                    ControlState nState,
                                    const ImplControlValue &aValue) = 0;
     virtual void drawTextLayout(const GenericSalLayout& layout) = 0;
+    virtual void Flush() {}
+    virtual void Flush( const tools::Rectangle& ) {}
 protected:
     static bool performDrawNativeControl(ControlType nType,
                                          ControlPart nPart,
@@ -486,6 +488,9 @@ public:
 #else
     void                    RefreshRect( const CGRect& ) {}
 #endif
+
+    void                    Flush();
+    void                    Flush( const tools::Rectangle& );
 
     void                    UnsetState();
     // InvalidateContext does an UnsetState and sets mrContext to 0

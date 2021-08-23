@@ -42,6 +42,9 @@ public:
 
     virtual void drawTextLayout(const GenericSalLayout& layout) override;
 
+    virtual void Flush() override;
+    virtual void Flush(const tools::Rectangle&) override;
+
 private:
     virtual void createWindowSurfaceInternal(bool forceRaster = false) override;
     virtual void destroyWindowSurfaceInternal() override;
