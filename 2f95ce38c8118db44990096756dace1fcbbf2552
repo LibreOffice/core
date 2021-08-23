@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c8ab8e3_a02167f4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-23T13:23:46Z",
+      "side": 1,
+      "message": "\"...for access to only static parts of the configuration, implying that the introduced cache cannot become stale\" is what I meant would be worth pointing out here",
+      "revId": "2f95ce38c8118db44990096756dace1fcbbf2552",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
