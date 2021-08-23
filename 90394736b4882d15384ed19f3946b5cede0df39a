@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8739cbf8_3ec51ba6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-23T13:42:34Z",
+      "side": 1,
+      "message": "Please put a couple of words here in the commit message, to explain what you do and why.",
+      "revId": "90394736b4882d15384ed19f3946b5cede0df39a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
