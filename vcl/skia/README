@@ -15,6 +15,7 @@ Skia drawing methods:
 Skia supports several methods to draw:
 - Raster - CPU-based drawing (here primarily used for debugging)
 - Vulkan - Vulkan-based GPU drawing, this is the default
+- Metal - MACOSX GPU drawing, this is the Mac default
 
 There are more (OpenGL, Metal on Mac, etc.), but (as of now) they are not supported by VCL.
 

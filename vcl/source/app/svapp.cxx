@@ -1186,6 +1186,9 @@ OUString Application::GetHWOSConfInfo(const int bSelection, const bool bLocalize
                 case SkiaHelper::RenderVulkan:
                     appendDetails(u"", Localize(SV_APP_SKIA_VULKAN, bLocalize));
                     break;
+                case SkiaHelper::RenderMetal:
+                    appendDetails(u"", Localize(SV_APP_SKIA_METAL, bLocalize));
+                    break;
                 case SkiaHelper::RenderRaster:
                     appendDetails(u"", Localize(SV_APP_SKIA_RASTER, bLocalize));
                     break;
