@@ -22,6 +22,30 @@
       "revId": "5ab7e873dd4c3edf5f00d103f5611412ab22f047",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "044e5beb_2323b2c7",
+        "filename": "comphelper/source/misc/accessibleeventnotifier.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-08-23T10:43:31Z",
+      "side": 1,
+      "message": "removed, thanks",
+      "parentUuid": "67e6cfb0_eda07e4c",
+      "range": {
+        "startLine": 159,
+        "startChar": 8,
+        "endLine": 160,
+        "endChar": 45
+      },
+      "revId": "5ab7e873dd4c3edf5f00d103f5611412ab22f047",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
