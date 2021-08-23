@@ -256,14 +256,14 @@ bool GIFReader::ReadGlobalHeader()
     char    pBuf[ 7 ];
     bool    bRet = false;
 
-    rIStm.ReadBytes( pBuf, 6 );
-    if( NO_PENDING( rIStm ) )
+    auto nRead = rIStm.ReadBytes(pBuf, 6);
+    if (nRead == 6 && NO_PENDING(rIStm))
     {
         pBuf[ 6 ] = 0;
         if( !strcmp( pBuf, "GIF87a" ) || !strcmp( pBuf, "GIF89a" ) )
         {
-            rIStm.ReadBytes( pBuf, 7 );
-            if( NO_PENDING( rIStm ) )
+            nRead = rIStm.ReadBytes(pBuf, 7);
+            if (nRead == 7 && NO_PENDING(rIStm))
             {
                 sal_uInt8   nAspect;
                 sal_uInt8   nRF;
