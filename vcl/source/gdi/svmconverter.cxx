@@ -294,8 +294,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
     // check header-magic and version
     if( rIStm.GetError()
-        || ( memcmp( aCode, "SVGDI", sizeof( aCode ) ) != 0 )
-        || ( nVersion != 200 ) )
+        || ( nVersion != 200 )
+        || ( memcmp( aCode, "SVGDI", sizeof( aCode ) ) != 0 ) )
     {
         SAL_WARN("vcl.gdi", "svm: wrong check for header-magic and version");
         lcl_error(rIStm, nOldFormat, nPos);
