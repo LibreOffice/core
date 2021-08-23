@@ -279,7 +279,7 @@ void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
 }
 
 /// Translate absolute <-> relative twips: LOK wants absolute coordinates as output and gives absolute coordinates as input.
-static void lcl_translateTwips(vcl::Window const & rParent, vcl::Window& rChild)
+static void lcl_translateTwips(const OutputDevice& rParent, OutputDevice& rChild)
 {
     // Don't translate if we already have a non-zero origin.
     // This prevents multiple translate calls that negate
@@ -367,7 +367,7 @@ void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &
 
             if (parent)
             {
-                lcl_translateTwips(*parent, *pOutWin);
+                lcl_translateTwips(*parent->GetOutDev(), *pOutWin->GetOutDev());
             }
         }
 
