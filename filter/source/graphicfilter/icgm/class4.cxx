@@ -543,12 +543,18 @@ void CGM::ImplDoClass4()
 
                     if ( mbFigure )
                     {
-                        tools::Rectangle aBoundingBox(aCenter.X - aRadius.X, aCenter.Y - aRadius.X);
-                        aBoundingBox.SaturatingSetSize(Size(2 * aRadius.X, 2 * aRadius.X));
-                        tools::Polygon aPolygon( aBoundingBox,
-                            Point( static_cast<tools::Long>(vector[ 0 ]), static_cast<tools::Long>(vector[ 1 ]) ),
-                            Point( static_cast<tools::Long>(vector[ 2 ]), static_cast<tools::Long>(vector[ 3 ]) ), PolyStyle::Arc );
-                        mpOutAct->RegPolyLine( aPolygon );
+                        double fLeft = aCenter.X - aRadius.X;
+                        double fTop = aCenter.Y - aRadius.X;
+                        bUseless = useless(fLeft) || useless(fTop);
+                        if (!bUseless)
+                        {
+                            tools::Rectangle aBoundingBox(fLeft, fTop);
+                            aBoundingBox.SaturatingSetSize(Size(2 * aRadius.X, 2 * aRadius.X));
+                            tools::Polygon aPolygon( aBoundingBox,
+                                Point( static_cast<tools::Long>(vector[ 0 ]), static_cast<tools::Long>(vector[ 1 ]) ),
+                                Point( static_cast<tools::Long>(vector[ 2 ]), static_cast<tools::Long>(vector[ 3 ]) ), PolyStyle::Arc );
+                            mpOutAct->RegPolyLine( aPolygon );
+                        }
                     }
                     else
                     {
