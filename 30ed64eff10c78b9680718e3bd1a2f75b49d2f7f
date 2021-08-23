@@ -2,6 +2,63 @@
   "comments": [
     {
       "key": {
+        "uuid": "89ffc92c_dbf921f6",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-23T06:39:22Z",
+      "side": 1,
+      "message": "What is this empty line?",
+      "revId": "30ed64eff10c78b9680718e3bd1a2f75b49d2f7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "beacb62e_0e222b84",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-23T06:39:22Z",
+      "side": 1,
+      "message": "The argument has not a reference type: it\u0027s a void* (i.e., a pointer). It needs a \"p\" prefix (you still completely ignore everything I told you about prefixes).\n\nYou could do it like this:\n\n  IMPL_LINK(SfxCommonTemplateDialog_Impl, OnAsyncExecuteDrop, void*, pArg, void)\n  {\n     StyleList* pStyleList \u003d static_cast\u003cStyleList*\u003e(pArg);",
+      "range": {
+        "startLine": 120,
+        "startChar": 67,
+        "endLine": 120,
+        "endChar": 68
+      },
+      "revId": "30ed64eff10c78b9680718e3bd1a2f75b49d2f7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0950bc1_184c8468",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-23T06:39:22Z",
+      "side": 1,
+      "message": "Please avoid the default argument value here. Do you really need it?",
+      "revId": "30ed64eff10c78b9680718e3bd1a2f75b49d2f7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4ff33cab_ea14c8c9",
         "filename": "sfx2/source/inc/templdgi.hxx",
         "patchSetId": 7
