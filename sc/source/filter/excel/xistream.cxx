@@ -389,10 +389,10 @@ XclBiff XclImpStream::DetectBiffVersion( SvStream& rStrm )
     XclBiff eBiff = EXC_BIFF_UNKNOWN;
 
     rStrm.Seek( STREAM_SEEK_TO_BEGIN );
-    sal_uInt16 nBofId, nBofSize;
+    sal_uInt16 nBofId(0), nBofSize(0);
     rStrm.ReadUInt16( nBofId ).ReadUInt16( nBofSize );
 
-    if( (4 <= nBofSize) && (nBofSize <= 16) ) switch( nBofId )
+    if (rStrm.good() && 4 <= nBofSize && nBofSize <= 16) switch( nBofId )
     {
         case EXC_ID2_BOF:
             eBiff = EXC_BIFF2;
@@ -405,7 +405,7 @@ XclBiff XclImpStream::DetectBiffVersion( SvStream& rStrm )
         break;
         case EXC_ID5_BOF:
         {
-            sal_uInt16 nVersion;
+            sal_uInt16 nVersion(0);
             rStrm.ReadUInt16( nVersion );
             // #i23425# #i44031# #i62752# there are some *really* broken documents out there...
             switch( nVersion & 0xFF00 )
