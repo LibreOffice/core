@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ff33cab_ea14c8c9",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-23T06:31:49Z",
+      "side": 1,
+      "message": "This looks very strange. You had a function that was overriding the virtual function; and now you make it a different virtual function - so it will not be called when parent calls its virtual function.\n\nIt is likely because you didn\u0027t make related change in the overridden function following the change of the signature in the parent.",
+      "revId": "30ed64eff10c78b9680718e3bd1a2f75b49d2f7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
