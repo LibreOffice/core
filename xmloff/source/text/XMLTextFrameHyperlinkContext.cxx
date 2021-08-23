@@ -115,6 +115,17 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameHyperlinkC
         case XML_ELEMENT(DRAW, XML_PATH):
         case XML_ELEMENT(DRAW, XML_ELLIPSE):
         case XML_ELEMENT(DRAW, XML_LINE):
+        case XML_ELEMENT(DRAW, XML_RECT):
+        case XML_ELEMENT(DRAW, XML_CAPTION):
+        case XML_ELEMENT(DRAW, XML_POLYGON):
+        case XML_ELEMENT(DRAW, XML_POLYLINE):
+        case XML_ELEMENT(DRAW, XML_MEASURE):
+        case XML_ELEMENT(DRAW, XML_CIRCLE):
+        case XML_ELEMENT(DRAW, XML_CONNECTOR):
+        case XML_ELEMENT(DRAW, XML_CONTROL):
+        case XML_ELEMENT(DRAW, XML_PAGE_THUMBNAIL):
+        case XML_ELEMENT(DRAW, XML_G):
+        case XML_ELEMENT(DR3D, XML_SCENE):
         {
             Reference<XShapes> xShapes;
             SvXMLShapeContext* pShapeContext = XMLShapeImportHelper::CreateGroupChildContext(
