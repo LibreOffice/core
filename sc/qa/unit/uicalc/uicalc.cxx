@@ -1739,6 +1739,30 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126540_GridToggleModifiesTheDocument)
     CPPUNIT_ASSERT(pDocSh->IsModified());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf143979)
+{
+    ScModelObj* pModelObj = createDoc("tdf143979.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    goToCell("A5:B79");
+
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
+
+    goToCell("D5");
+
+    //Without the fix in place, this test would have crashed
+    dispatchCommand(mxComponent, ".uno:PasteTransposed", {});
+    Scheduler::ProcessEventsToIdle();
+
+    for (size_t i = 3; i < 76; ++i)
+    {
+        OUString sExpected = "A" + OUString::number(i + 2);
+        CPPUNIT_ASSERT_EQUAL(sExpected, pDoc->GetString(ScAddress(i, 4, 0)));
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126926)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
