@@ -22,7 +22,9 @@
 
 #include <com/sun/star/awt/XStyleSettings.hpp>
 
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <tools/link.hxx>
 
 #include <memory>
 
@@ -30,9 +32,11 @@ namespace osl
 {
     class Mutex;
 }
-
+class Color;
 class VCLXWindow;
-
+class VclWindowEvent;
+class StyleSettings;
+namespace vcl { class Font; }
 
 namespace toolkit
 {
@@ -40,7 +44,6 @@ namespace toolkit
 
     //= WindowStyleSettings
 
-    struct WindowStyleSettings_Data;
     typedef ::cppu::WeakImplHelper <   css::awt::XStyleSettings
                                     >   WindowStyleSettings_Base;
     class WindowStyleSettings : public WindowStyleSettings_Base
@@ -160,7 +163,15 @@ namespace toolkit
         virtual void SAL_CALL removeStyleChangeListener( const css::uno::Reference< css::awt::XStyleChangeListener >& Listener ) override;
 
     private:
-        std::unique_ptr< WindowStyleSettings_Data > m_pData;
+        void ImplSetStyleFont( void (StyleSettings::*i_pSetter)( vcl::Font const &),
+            vcl::Font const & (StyleSettings::*i_pGetter)() const, const css::awt::FontDescriptor& i_rFont );
+        void ImplSetStyleColor( void (StyleSettings::*i_pSetter)( Color const & ), sal_Int32 i_nColor );
+        sal_Int32 ImplGetStyleColor( Color const & (StyleSettings::*i_pGetter)() const );
+        css::awt::FontDescriptor ImplGetStyleFont( vcl::Font const & (StyleSettings::*i_pGetter)() const );
+        DECL_LINK( OnWindowEvent, VclWindowEvent&, void );
+
+        VCLXWindow*                                pOwningWindow;
+        ::comphelper::OInterfaceContainerHelper2   aStyleChangeListeners;
     };
 
 
