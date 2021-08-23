@@ -165,6 +165,9 @@ bool PSDReader::ImplReadHeader()
 
     m_rPSD.ReadUInt32( mpFileHeader->nSignature ).ReadUInt16( mpFileHeader->nVersion ).ReadUInt32( mpFileHeader->nPad1 ).        ReadUInt16( mpFileHeader->nPad2 ).ReadUInt16( mpFileHeader->nChannels ).ReadUInt32( mpFileHeader->nRows ).            ReadUInt32( mpFileHeader->nColumns ).ReadUInt16( mpFileHeader->nDepth ).ReadUInt16( mpFileHeader->nMode );
 
+    if (!m_rPSD.good())
+        return false;
+
     if ( ( mpFileHeader->nSignature != 0x38425053 ) || ( mpFileHeader->nVersion != 1 ) )
         return false;
 
