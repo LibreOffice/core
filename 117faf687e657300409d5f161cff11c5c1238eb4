@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e3de64c3_bcff993f",
+        "filename": "sw/inc/unotextrange.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2021-08-24T10:29:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f628aa65_f578b7bb",
+      "range": {
+        "startLine": 67,
+        "startChar": 64,
+        "endLine": 68,
+        "endChar": 47
+      },
+      "revId": "117faf687e657300409d5f161cff11c5c1238eb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fe060d70_4eaf07b5",
         "filename": "sw/source/core/unocore/unoobj2.cxx",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "117faf687e657300409d5f161cff11c5c1238eb4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b6643c2_b3ce77bd",
+        "filename": "sw/source/core/unocore/unoobj2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1130,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2021-08-24T10:29:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe060d70_4eaf07b5",
+      "range": {
+        "startLine": 1130,
+        "startChar": 8,
+        "endLine": 1130,
+        "endChar": 58
+      },
+      "revId": "117faf687e657300409d5f161cff11c5c1238eb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "604a0512_f0a21cc9",
+        "filename": "sw/source/core/unocore/unoobj2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1139,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2021-08-24T10:29:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87508a42_14323ced",
+      "range": {
+        "startLine": 1139,
+        "startChar": 48,
+        "endLine": 1139,
+        "endChar": 84
+      },
+      "revId": "117faf687e657300409d5f161cff11c5c1238eb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fba6a8f4_ce0c2a0a",
         "filename": "sw/source/core/unocore/unoobj2.cxx",
         "patchSetId": 2
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "c2345e2c_3e0b8c19",
+        "filename": "sw/source/core/unocore/unoobj2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1142,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2021-08-24T10:29:05Z",
+      "side": 1,
+      "message": "This way convertToTextFrame(..) will work differently, but with a PAM normalize, it seems to result the same.\nBecause of the gotoEnd, this cursor will also have a mark, not just a point.. before this change convertToTextFrame used only the point member of the 2 range perameters .. now it use the 1. range point and mark instead.",
+      "parentUuid": "fba6a8f4_ce0c2a0a",
+      "range": {
+        "startLine": 1142,
+        "startChar": 8,
+        "endLine": 1142,
+        "endChar": 59
+      },
+      "revId": "117faf687e657300409d5f161cff11c5c1238eb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8dbb3add_89de861c",
         "filename": "sw/source/core/unocore/unotext.cxx",
         "patchSetId": 2
@@ -114,6 +210,30 @@
       "revId": "117faf687e657300409d5f161cff11c5c1238eb4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2a665be_b4d9adfa",
+        "filename": "sw/source/core/unocore/unotext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1542,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2021-08-24T10:29:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8dbb3add_89de861c",
+      "range": {
+        "startLine": 1542,
+        "startChar": 13,
+        "endLine": 1542,
+        "endChar": 20
+      },
+      "revId": "117faf687e657300409d5f161cff11c5c1238eb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +283,54 @@
     },
     {
       "key": {
+        "uuid": "51bd0c5d_57216528",
+        "filename": "sw/source/core/unocore/unotext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1543,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2021-08-24T10:29:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "85afc75b_69f7b0a9",
+      "range": {
+        "startLine": 1543,
+        "startChar": 25,
+        "endLine": 1543,
+        "endChar": 26
+      },
+      "revId": "117faf687e657300409d5f161cff11c5c1238eb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "103bb97e_1b3fea6f",
+        "filename": "sw/source/core/unocore/unotext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1543,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2021-08-24T10:29:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "541fcba0_2b6f8e2e",
+      "range": {
+        "startLine": 1543,
+        "startChar": 83,
+        "endLine": 1543,
+        "endChar": 87
+      },
+      "revId": "117faf687e657300409d5f161cff11c5c1238eb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d05333f4_5e000976",
         "filename": "sw/source/core/unocore/unotext.cxx",
         "patchSetId": 2
@@ -206,6 +374,30 @@
       "revId": "117faf687e657300409d5f161cff11c5c1238eb4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b9b5d72_9e28f8c5",
+        "filename": "sw/source/core/unocore/unotext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1557,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2021-08-24T10:29:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3e25d4b_62b9e7dd",
+      "range": {
+        "startLine": 1556,
+        "startChar": 8,
+        "endLine": 1557,
+        "endChar": 56
+      },
+      "revId": "117faf687e657300409d5f161cff11c5c1238eb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
