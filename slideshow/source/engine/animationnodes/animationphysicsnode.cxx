@@ -35,7 +35,7 @@ void AnimationPhysicsNode::dispose()
 
 AnimationActivitySharedPtr AnimationPhysicsNode::createActivity() const
 {
-    double fDuration;
+    double fDuration(0.0);
     ENSURE_OR_THROW((mxPhysicsMotionNode->getDuration() >>= fDuration),
                     "Couldn't get the animation duration.");
 
