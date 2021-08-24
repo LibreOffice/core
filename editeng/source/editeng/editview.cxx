@@ -1157,14 +1157,8 @@ void EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
         xPopupMenu->remove("autocorrect");
         xPopupMenu->remove("autocorrectdlg");
 
-        // For mobile phones, send the context menu structure
-        const SfxViewShell* pViewShell = SfxViewShell::Current();
-        if (pViewShell && pViewShell->isLOKMobilePhone())
-        {
-            LOKSendSpellPopupMenu(*xPopupMenu, nGuessLangWord, nGuessLangPara, nWords);
-            return;
-        }
-        // note, there is special handling of this menu 'editviewspellmenu' by vcl's PopupMenu::ImplExecute
+        LOKSendSpellPopupMenu(*xPopupMenu, nGuessLangWord, nGuessLangPara, nWords);
+        return;
     }
 
     OString sId = xPopupMenu->popup_at_rect(pPopupParent, aTempRect);
