@@ -83,6 +83,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
+#include <com/sun/star/text/XTextColumns.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -202,6 +203,7 @@ public:
     void testInvalidNamedRange();
     void testTdf143220XLSX();
     void testTdf142264ManyChartsToXLSX();
+    void testTdf143929MultiColumnToODS();
 
     CPPUNIT_TEST_SUITE(ScExportTest2);
 
@@ -306,6 +308,7 @@ public:
     CPPUNIT_TEST(testInvalidNamedRange);
     CPPUNIT_TEST(testTdf143220XLSX);
     CPPUNIT_TEST(testTdf142264ManyChartsToXLSX);
+    CPPUNIT_TEST(testTdf143929MultiColumnToODS);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2562,6 +2565,77 @@ void ScExportTest2::testTdf142264ManyChartsToXLSX()
     }
 
     xDocSh->DoClose();
+}
+
+void ScExportTest2::testTdf143929MultiColumnToODS()
+{
+    ScDocShellRef xDocSh = loadDoc(u"two-col-shape.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh);
+
+    {
+        css::uno::Reference<css::drawing::XDrawPagesSupplier> xSupplier(xDocSh->GetModel(),
+                                                                        css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::drawing::XDrawPage> xPage(xSupplier->getDrawPages()->getByIndex(0),
+                                                           css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::container::XIndexAccess> xIndexAccess(xPage,
+                                                                       css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::drawing::XShape> xShape(xIndexAccess->getByIndex(0),
+                                                         css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::beans::XPropertySet> xProps(xShape, css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::text::XTextColumns> xCols(xProps->getPropertyValue("TextColumns"),
+                                                           css::uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCols->getColumnCount());
+        css::uno::Reference<css::beans::XPropertySet> xColProps(xCols, css::uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(css::uno::Any(sal_Int32(1000)),
+                             xColProps->getPropertyValue("AutomaticDistance"));
+    }
+
+    auto tempFile = exportTo(xDocSh.get(), FORMAT_ODS);
+    xDocSh = load(tempFile->GetURL(), FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh);
+
+    {
+        css::uno::Reference<css::drawing::XDrawPagesSupplier> xSupplier(xDocSh->GetModel(),
+                                                                        css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::drawing::XDrawPage> xPage(xSupplier->getDrawPages()->getByIndex(0),
+                                                           css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::container::XIndexAccess> xIndexAccess(xPage,
+                                                                       css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::drawing::XShape> xShape(xIndexAccess->getByIndex(0),
+                                                         css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::beans::XPropertySet> xProps(xShape, css::uno::UNO_QUERY_THROW);
+
+        // Without the fix in place, this would have failed with:
+        //   An uncaught exception of type com.sun.star.uno.RuntimeException
+        //   - unsatisfied query for interface of type com.sun.star.text.XTextColumns!
+        css::uno::Reference<css::text::XTextColumns> xCols(xProps->getPropertyValue("TextColumns"),
+                                                           css::uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCols->getColumnCount());
+        css::uno::Reference<css::beans::XPropertySet> xColProps(xCols, css::uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(css::uno::Any(sal_Int32(1000)),
+                             xColProps->getPropertyValue("AutomaticDistance"));
+    }
+
+    xDocSh->DoClose();
+
+    xmlDocUniquePtr pXmlDoc = XPathHelper::parseExport(tempFile, m_xSFactory, "content.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Without the fix in place, this would have failed with:
+    //   - Expected: 1
+    //   - Actual  : 0
+    //   - In <>, XPath '/office:document-content/office:automatic-styles/style:style[@style:family='graphic']/
+    //     style:graphic-properties/style:columns' number of nodes is incorrect
+    assertXPath(
+        pXmlDoc,
+        "/office:document-content/office:automatic-styles/style:style[@style:family='graphic']/"
+        "style:graphic-properties/style:columns",
+        "column-count", "2");
+    // Only test that "column-gap" attribute exists, not its value that depends on locale (cm, in)
+    getXPath(
+        pXmlDoc,
+        "/office:document-content/office:automatic-styles/style:style[@style:family='graphic']/"
+        "style:graphic-properties/style:columns",
+        "column-gap");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest2);
