@@ -201,14 +201,7 @@ sal_Int64 ConversionHelper::decodeMeasureToEmu( const GraphicHelper& rGraphicHel
         OSL_FAIL( "ConversionHelper::decodeMeasureToEmu - unknown measure unit" );
         fValue = nRefValue;
     }
-    fValue += 0.5;
-    if (!o3tl::convertsToAtMost(fValue, std::numeric_limits<sal_Int64>::max())) {
-        return std::numeric_limits<sal_Int64>::max();
-    }
-    if (!o3tl::convertsToAtLeast(fValue, std::numeric_limits<sal_Int64>::min())) {
-        return std::numeric_limits<sal_Int64>::min();
-    }
-    return static_cast< sal_Int64 >( fValue );
+    return o3tl::saturating_cast< sal_Int64 >( fValue + 0.5 );
 }
 
 sal_Int32 ConversionHelper::decodeMeasureToHmm( const GraphicHelper& rGraphicHelper,
