@@ -22,6 +22,30 @@
       "revId": "3e91f10ea2e0f3ea00d399faad4f8d4948cc4c10",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "634f07f5_f6997fab",
+        "filename": "vcl/source/rendercontext/OutDevState.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-08-24T10:40:43Z",
+      "side": 1,
+      "message": "Are you saying that you want a seperate functional change in this commit? These are already in vcl/source/outdev/outdevstate.cxx",
+      "parentUuid": "869babfa_dbe9d284",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 1
+      },
+      "revId": "3e91f10ea2e0f3ea00d399faad4f8d4948cc4c10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
