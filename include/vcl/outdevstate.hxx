@@ -17,22 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_OUTDEVSTATE_HXX
-#define INCLUDED_VCL_OUTDEVSTATE_HXX
-
-#include <vcl/mapmod.hxx>
-#include <vcl/vclenum.hxx>
-#include <vcl/font.hxx>
+#pragma once
 
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <tools/fontenum.hxx>
+#include <i18nlangtag/lang.h>
 #include <o3tl/typed_flags_set.hxx>
+
+#include <vcl/font.hxx>
+#include <vcl/mapmod.hxx>
+#include <vcl/region.hxx>
+#include <vcl/vclenum.hxx>
+
 #include <memory>
 #include <optional>
-#include <i18nlangtag/lang.h>
-
-namespace vcl { class Region; }
 
 // Flags for OutputDevice::Push() and OutDevState
 enum class PushFlags {
@@ -77,28 +76,25 @@ namespace o3tl {
 
 struct OutDevState
 {
-    OutDevState();
-    OutDevState(OutDevState&&);
-    ~OutDevState();
+    OutDevState() = default;
+    OutDevState(OutDevState&&) = default;
 
-    std::optional<MapMode>        mpMapMode;
-    bool            mbMapActive;
-    std::unique_ptr<vcl::Region>    mpClipRegion;
-    std::optional<Color>          mpLineColor;
-    std::optional<Color>          mpFillColor;
-    std::optional<vcl::Font>      mpFont;
-    std::optional<Color>          mpTextColor;
-    std::optional<Color>          mpTextFillColor;
-    std::optional<Color>          mpTextLineColor;
-    std::optional<Color>          mpOverlineColor;
-    std::optional<Point>          mpRefPoint;
-    TextAlign       meTextAlign;
-    RasterOp        meRasterOp;
-    ComplexTextLayoutFlags  mnTextLayoutMode;
-    LanguageType    meTextLanguage;
-    PushFlags       mnFlags;
+    std::optional<MapMode> mpMapMode;
+    bool mbMapActive = false;
+    std::unique_ptr<vcl::Region> mpClipRegion;
+    std::optional<Color> mpLineColor;
+    std::optional<Color> mpFillColor;
+    std::optional<vcl::Font> mpFont;
+    std::optional<Color> mpTextColor;
+    std::optional<Color> mpTextFillColor;
+    std::optional<Color> mpTextLineColor;
+    std::optional<Color> mpOverlineColor;
+    std::optional<Point> mpRefPoint;
+    TextAlign meTextAlign = ALIGN_TOP;
+    RasterOp meRasterOp = RasterOp::OverPaint;
+    ComplexTextLayoutFlags mnTextLayoutMode = ComplexTextLayoutFlags::Default;
+    LanguageType meTextLanguage = LANGUAGE_SYSTEM;
+    PushFlags mnFlags = PushFlags::NONE;
 };
-
-#endif // INCLUDED_VCL_OUTDEVSTATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
