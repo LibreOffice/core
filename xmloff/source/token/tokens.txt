@@ -2022,6 +2022,7 @@ wavyline-from-right
 wavyline-from-top
 week-of-year
 white
+window-font-color
 whole-page
 widows
 width
