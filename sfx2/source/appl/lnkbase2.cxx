@@ -41,26 +41,8 @@ namespace sfx2
 {
 
 namespace {
-
-class  ImplDdeItem;
-
+class ImplDdeItem;
 }
-
-struct BaseLink_Impl
-{
-    Link<SvBaseLink&,void> m_aEndEditLink;
-    LinkManager*        m_pLinkMgr;
-    weld::Window*       m_pParentWin;
-    std::unique_ptr<FileDialogHelper>
-                        m_pFileDlg;
-    bool                m_bIsConnect;
-
-    BaseLink_Impl() :
-          m_pLinkMgr( nullptr )
-        , m_pParentWin( nullptr )
-        , m_bIsConnect( false )
-        {}
-};
 
 // only for internal management
 struct ImplBaseLinkData
@@ -126,8 +108,10 @@ public:
 }
 
 SvBaseLink::SvBaseLink()
-    : pImpl ( new BaseLink_Impl ),
-      m_bIsReadOnly(false)
+    : m_pLinkMgr( nullptr )
+    , m_pParentWin( nullptr )
+    , m_bIsConnect( false )
+    , m_bIsReadOnly(false)
 {
     mnObjType = SvBaseLinkObjectType::ClientSo;
     pImplData.reset( new ImplBaseLinkData );
@@ -137,8 +121,10 @@ SvBaseLink::SvBaseLink()
 
 
 SvBaseLink::SvBaseLink( SfxLinkUpdateMode nUpdateMode, SotClipboardFormatId nContentType )
-   : pImpl( new BaseLink_Impl ),
-     m_bIsReadOnly(false)
+    : m_pLinkMgr( nullptr )
+    , m_pParentWin( nullptr )
+    , m_bIsConnect( false )
+    , m_bIsReadOnly(false)
 {
     mnObjType = SvBaseLinkObjectType::ClientSo;
     pImplData.reset( new ImplBaseLinkData );
@@ -184,7 +170,9 @@ static DdeTopic* FindTopic( const OUString & rLinkName, sal_uInt16* pItemStt )
 }
 
 SvBaseLink::SvBaseLink( const OUString& rLinkName, SvBaseLinkObjectType nObjectType, SvLinkSource* pObj )
-    : pImpl()
+    : m_pLinkMgr( nullptr )
+    , m_pParentWin( nullptr )
+    , m_bIsConnect( false )
     , m_bIsReadOnly(false)
 {
     bVisible = bSynchron = true;
@@ -241,7 +229,7 @@ IMPL_LINK( SvBaseLink, EndEditHdl, const OUString&, _rNewName, void )
     if ( !ExecuteEdit( sNewName ) )
         sNewName.clear();
     bWasLastEditOK = !sNewName.isEmpty();
-    pImpl->m_aEndEditLink.Call( *this );
+    m_aEndEditLink.Call( *this );
 }
 
 
@@ -364,7 +352,7 @@ SfxLinkUpdateMode SvBaseLink::GetUpdateMode() const
 
 void SvBaseLink::GetRealObject_( bool bConnect)
 {
-    if( !pImpl->m_pLinkMgr )
+    if( !m_pLinkMgr )
         return;
 
     DBG_ASSERT( !xObj.is(), "object already exist" );
@@ -414,17 +402,17 @@ void SvBaseLink::SetContentType( SotClipboardFormatId nType )
 
 LinkManager* SvBaseLink::GetLinkManager()
 {
-    return pImpl->m_pLinkMgr;
+    return m_pLinkMgr;
 }
 
 const LinkManager* SvBaseLink::GetLinkManager() const
 {
-    return pImpl->m_pLinkMgr;
+    return m_pLinkMgr;
 }
 
 void SvBaseLink::SetLinkManager( LinkManager* _pMgr )
 {
-    pImpl->m_pLinkMgr = _pMgr;
+    m_pLinkMgr = _pMgr;
 }
 
 void SvBaseLink::Disconnect()
@@ -449,10 +437,10 @@ SvBaseLink::UpdateResult SvBaseLink::DataChanged( const OUString &, const css::u
 
 void SvBaseLink::Edit(weld::Window* pParent, const Link<SvBaseLink&,void>& rEndEditHdl )
 {
-    pImpl->m_pParentWin = pParent;
-    pImpl->m_aEndEditLink = rEndEditHdl;
-    pImpl->m_bIsConnect = xObj.is();
-    if( !pImpl->m_bIsConnect )
+    m_pParentWin = pParent;
+    m_aEndEditLink = rEndEditHdl;
+    m_bIsConnect = xObj.is();
+    if( !m_bIsConnect )
         GetRealObject_( xObj.is() );
 
     bool bAsync = false;
@@ -460,7 +448,7 @@ void SvBaseLink::Edit(weld::Window* pParent, const Link<SvBaseLink&,void>& rEndE
 
     if( isClientType(mnObjType) && pImplData->ClientType.bIntrnlLnk )
     {
-        if( pImpl->m_pLinkMgr )
+        if( m_pLinkMgr )
         {
             SvLinkSourceRef ref = sfx2::LinkManager::CreateObj( this );
             if( ref.is() )
@@ -480,7 +468,7 @@ void SvBaseLink::Edit(weld::Window* pParent, const Link<SvBaseLink&,void>& rEndE
     {
         ExecuteEdit( OUString() );
         bWasLastEditOK = false;
-        pImpl->m_aEndEditLink.Call( *this );
+        m_aEndEditLink.Call( *this );
     }
 }
 
@@ -516,14 +504,14 @@ bool SvBaseLink::ExecuteEdit( const OUString& _rNewName )
             else
                 return false;
 
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pImpl->m_pParentWin,
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_pParentWin,
                                                                      VclMessageType::Warning, VclButtonsType::Ok, sError));
             xBox->run();
         }
     }
-    else if( !pImpl->m_bIsConnect )
+    else if( !m_bIsConnect )
         Disconnect();
-    pImpl->m_bIsConnect = false;
+    m_bIsConnect = false;
     return true;
 }
 
@@ -533,12 +521,12 @@ void SvBaseLink::Closed()
         xObj->RemoveAllDataAdvise( this );
 }
 
-FileDialogHelper & SvBaseLink::GetInsertFileDialog(const OUString& rFactory) const
+FileDialogHelper & SvBaseLink::GetInsertFileDialog(const OUString& rFactory)
 {
-    pImpl->m_pFileDlg.reset( new FileDialogHelper(
+    m_pFileDlg.reset( new FileDialogHelper(
             ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-            FileDialogFlags::Insert, rFactory, SfxFilterFlags::NONE, SfxFilterFlags::NONE, pImpl->m_pParentWin) );
-    return *pImpl->m_pFileDlg;
+            FileDialogFlags::Insert, rFactory, SfxFilterFlags::NONE, SfxFilterFlags::NONE, m_pParentWin) );
+    return *m_pFileDlg;
 }
 
 ImplDdeItem::~ImplDdeItem()
