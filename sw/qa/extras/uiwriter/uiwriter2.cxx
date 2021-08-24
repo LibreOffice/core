@@ -3005,6 +3005,159 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf143939)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf50447_keep_hints)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf50447.fodt");
+
+    // first paragraph (_Lorem_ /ipsum/)
+
+    auto xText = getParagraph(1)->getText();
+    CPPUNIT_ASSERT(xText.is());
+    {
+        auto xCursor(xText->createTextCursorByRange(getRun(getParagraph(1), 1)));
+        CPPUNIT_ASSERT(xCursor.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("Lorem"), xCursor->getString());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontUnderline::SINGLE),
+                             getProperty<sal_Int16>(xCursor, "CharUnderline"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xCursor, "CharPosture"));
+
+        xCursor = xText->createTextCursorByRange(getRun(getParagraph(1), 2));
+        CPPUNIT_ASSERT(xCursor.is());
+        CPPUNIT_ASSERT_EQUAL(OUString(" "), xCursor->getString());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontUnderline::NONE),
+                             getProperty<sal_Int16>(xCursor, "CharUnderline"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xCursor, "CharPosture"));
+
+        xCursor = xText->createTextCursorByRange(getRun(getParagraph(1), 3));
+        CPPUNIT_ASSERT(xCursor.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("ipsum"), xCursor->getString());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontUnderline::NONE),
+                             getProperty<sal_Int16>(xCursor, "CharUnderline"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
+                             getProperty<awt::FontSlant>(xCursor, "CharPosture"));
+    }
+
+    // second paragraph (_dolor_ sit /amet/.)
+
+    xText = getParagraph(2)->getText();
+    CPPUNIT_ASSERT(xText.is());
+    {
+        auto xCursor(xText->createTextCursorByRange(getRun(getParagraph(2), 1)));
+        CPPUNIT_ASSERT(xCursor.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("dolor"), xCursor->getString());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontUnderline::SINGLE),
+                             getProperty<sal_Int16>(xCursor, "CharUnderline"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xCursor, "CharPosture"));
+
+        xCursor = xText->createTextCursorByRange(getRun(getParagraph(2), 2));
+        CPPUNIT_ASSERT(xCursor.is());
+        CPPUNIT_ASSERT_EQUAL(OUString(" sit "), xCursor->getString());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontUnderline::NONE),
+                             getProperty<sal_Int16>(xCursor, "CharUnderline"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xCursor, "CharPosture"));
+
+        xCursor = xText->createTextCursorByRange(getRun(getParagraph(2), 3));
+        CPPUNIT_ASSERT(xCursor.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("amet"), xCursor->getString());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontUnderline::NONE),
+                             getProperty<sal_Int16>(xCursor, "CharUnderline"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
+                             getProperty<awt::FontSlant>(xCursor, "CharPosture"));
+    }
+
+    // turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // modify character formatting of the all the text
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:SuperScript", {});
+
+    // multiple format redlines for the multiple hints
+
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    // This was 1.
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(7), pEditShell->GetRedlineCount());
+
+    // reject tracked changes
+
+    dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
+
+    // all hints and text portions between them got back the original formattings
+
+    xText = getParagraph(1)->getText();
+    CPPUNIT_ASSERT(xText.is());
+    {
+        auto xCursor(xText->createTextCursorByRange(getRun(getParagraph(1), 1)));
+        CPPUNIT_ASSERT(xCursor.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("Lorem"), xCursor->getString());
+        // This was NONE
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontUnderline::SINGLE),
+                             getProperty<sal_Int16>(xCursor, "CharUnderline"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xCursor, "CharPosture"));
+
+        xCursor = xText->createTextCursorByRange(getRun(getParagraph(1), 2));
+        CPPUNIT_ASSERT(xCursor.is());
+        CPPUNIT_ASSERT_EQUAL(OUString(" "), xCursor->getString());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontUnderline::NONE),
+                             getProperty<sal_Int16>(xCursor, "CharUnderline"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xCursor, "CharPosture"));
+
+        xCursor = xText->createTextCursorByRange(getRun(getParagraph(1), 3));
+        CPPUNIT_ASSERT(xCursor.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("ipsum"), xCursor->getString());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontUnderline::NONE),
+                             getProperty<sal_Int16>(xCursor, "CharUnderline"));
+        // This was NONE
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
+                             getProperty<awt::FontSlant>(xCursor, "CharPosture"));
+    }
+
+    // second paragraph (_dolor_ sit /amet/.)
+
+    xText = getParagraph(2)->getText();
+    CPPUNIT_ASSERT(xText.is());
+    {
+        auto xCursor(xText->createTextCursorByRange(getRun(getParagraph(2), 1)));
+        CPPUNIT_ASSERT(xCursor.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("dolor"), xCursor->getString());
+        // This was NONE
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontUnderline::SINGLE),
+                             getProperty<sal_Int16>(xCursor, "CharUnderline"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xCursor, "CharPosture"));
+
+        xCursor = xText->createTextCursorByRange(getRun(getParagraph(2), 2));
+        CPPUNIT_ASSERT(xCursor.is());
+        CPPUNIT_ASSERT_EQUAL(OUString(" sit "), xCursor->getString());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontUnderline::NONE),
+                             getProperty<sal_Int16>(xCursor, "CharUnderline"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xCursor, "CharPosture"));
+
+        xCursor = xText->createTextCursorByRange(getRun(getParagraph(2), 3));
+        CPPUNIT_ASSERT(xCursor.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("amet"), xCursor->getString());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontUnderline::NONE),
+                             getProperty<sal_Int16>(xCursor, "CharUnderline"));
+        // This was NONE
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
+                             getProperty<awt::FontSlant>(xCursor, "CharPosture"));
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf101873)
 {
     SwDoc* pDoc = createSwDoc();
