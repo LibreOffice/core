@@ -2612,15 +2612,33 @@ void SwpHints::NoteInHistory( SwTextAttr *pAttr, const bool bNew )
 }
 
 namespace {
-typedef std::multimap< int, std::pair<SwTextAttr*, bool> > PortionMap;
+struct Portion {
+    sal_Int32 nKey;
+    bool isRsidOnlyAutoFormat;
+    SwTextAttr* pTextAttr;
+};
+bool operator<(const Portion& lhs, const Portion& rhs)
+{
+    if (lhs.nKey < rhs.nKey)
+        return true;
+    if (lhs.nKey > rhs.nKey)
+        return false;
+    if (lhs.pTextAttr < rhs.pTextAttr)
+        return true;
+    if (lhs.pTextAttr > rhs.pTextAttr)
+        return false;
+    return lhs.isRsidOnlyAutoFormat < rhs.isRsidOnlyAutoFormat;
+}
+
+typedef o3tl::sorted_vector< Portion > PortionMap;
 enum MergeResult { MATCH, DIFFER_ONLY_RSID, DIFFER };
 }
 
 static MergeResult lcl_Compare_Attributes(
         int i, int j,
-        const std::pair< PortionMap::iterator, PortionMap::iterator >& aRange1,
-        const std::pair< PortionMap::iterator, PortionMap::iterator >& aRange2,
-        std::unordered_map<int, bool>& RsidOnlyAutoFormatFlagMap);
+        const std::pair< PortionMap::const_iterator, PortionMap::const_iterator >& aRange1,
+        const std::pair< PortionMap::const_iterator, PortionMap::const_iterator >& aRange2,
+        std::vector<bool>& RsidOnlyAutoFormatFlagMap);
 
 bool SwpHints::MergePortions( SwTextNode& rNode )
 {
@@ -2632,9 +2650,10 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
 
     bool bRet = false;
     PortionMap aPortionMap;
-    std::unordered_map<int, bool> RsidOnlyAutoFormatFlagMap;
+    std::vector<bool> RsidOnlyAutoFormatFlagMap;
+    RsidOnlyAutoFormatFlagMap.resize(Count() + 1);
     sal_Int32 nLastPorStart = COMPLETE_STRING;
-    int nKey = 0;
+    sal_Int32 nKey = 0;
 
     // get portions by start position:
     for ( size_t i = 0; i < Count(); ++i )
@@ -2686,10 +2705,18 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
         if (nPorStart != nLastPorStart)
             ++nKey;
         nLastPorStart = nPorStart;
-        aPortionMap.insert(std::make_pair(nKey,
-                            std::make_pair(pHt, isRsidOnlyAutoFormat)));
+        aPortionMap.insert(Portion {nKey, isRsidOnlyAutoFormat, pHt});
         RsidOnlyAutoFormatFlagMap[nKey] = isRsidOnlyAutoFormat;
     }
+
+    auto equal_range = [&aPortionMap](sal_Int32 i)
+    {
+        Portion key1 { i, false, nullptr };
+        Portion key2 { i+1, false, nullptr };
+        auto it1 = aPortionMap.lower_bound(key1);
+        auto it2 = aPortionMap.lower_bound(key2);
+        return std::pair< PortionMap::const_iterator, PortionMap::const_iterator > { it1, it2 };
+    };
 
     // check if portion i can be merged with portion i+1:
     // note: need to include i=0 to set IgnoreStart and j=nKey+1 to reset
@@ -2698,8 +2725,8 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
     int j = i + 1;
     while ( i <= nKey )
     {
-        std::pair< PortionMap::iterator, PortionMap::iterator > aRange1 = aPortionMap.equal_range( i );
-        std::pair< PortionMap::iterator, PortionMap::iterator > aRange2 = aPortionMap.equal_range( j );
+        std::pair< PortionMap::const_iterator, PortionMap::const_iterator > aRange1 = equal_range( i );
+        std::pair< PortionMap::const_iterator, PortionMap::const_iterator > aRange2 = equal_range( j );
 
         MergeResult eMerge = lcl_Compare_Attributes(i, j, aRange1, aRange2, RsidOnlyAutoFormatFlagMap);
 
@@ -2711,7 +2738,7 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
             sal_Int32 nNewPortionEnd = 0;
             for ( auto aIter2 = aRange2.first; aIter2 != aRange2.second; ++aIter2 )
             {
-                SwTextAttr *const p2 = aIter2->second.first;
+                SwTextAttr *const p2 = aIter2->pTextAttr;
                 nNewPortionEnd = *p2->GetEnd();
 
                 const size_t nCountBeforeDelete = Count();
@@ -2725,10 +2752,10 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
             ++j;
 
             // change all attributes with key i
-            aRange1 = aPortionMap.equal_range( i );
+            aRange1 = equal_range( i );
             for ( auto aIter1 = aRange1.first; aIter1 != aRange1.second; ++aIter1 )
             {
-                SwTextAttr *const p1 = aIter1->second.first;
+                SwTextAttr *const p1 = aIter1->pTextAttr;
                 NoteInHistory( p1 );
                 p1->SetEnd(nNewPortionEnd);
                 NoteInHistory( p1, true );
@@ -2747,9 +2774,9 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
             bool const bSetIgnoreFlag(DIFFER_ONLY_RSID == eMerge);
             for (auto aIter1 = aRange1.first; aIter1 != aRange1.second; ++aIter1)
             {
-                if (!aIter1->second.second) // already set above, don't change
+                if (!aIter1->isRsidOnlyAutoFormat) // already set above, don't change
                 {
-                    SwTextAttr *const pCurrent(aIter1->second.first);
+                    SwTextAttr *const pCurrent(aIter1->pTextAttr);
                     if (pCurrent->IsFormatIgnoreEnd() != bSetIgnoreFlag)
                     {
                         NoteInHistory(pCurrent);
@@ -2760,9 +2787,9 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
             }
             for (auto aIter2 = aRange2.first; aIter2 != aRange2.second; ++aIter2)
             {
-                if (!aIter2->second.second) // already set above, don't change
+                if (!aIter2->isRsidOnlyAutoFormat) // already set above, don't change
                 {
-                    SwTextAttr *const pCurrent(aIter2->second.first);
+                    SwTextAttr *const pCurrent(aIter2->pTextAttr);
                     if (pCurrent->IsFormatIgnoreStart() != bSetIgnoreFlag)
                     {
                         NoteInHistory(pCurrent);
@@ -2782,17 +2809,17 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
 
 static MergeResult lcl_Compare_Attributes(
         int i, int j,
-        const std::pair< PortionMap::iterator, PortionMap::iterator >& aRange1,
-        const std::pair< PortionMap::iterator, PortionMap::iterator >& aRange2,
-        std::unordered_map<int, bool>& RsidOnlyAutoFormatFlagMap)
+        const std::pair< PortionMap::const_iterator, PortionMap::const_iterator >& aRange1,
+        const std::pair< PortionMap::const_iterator, PortionMap::const_iterator >& aRange2,
+        std::vector<bool>& RsidOnlyAutoFormatFlagMap)
 {
-    PortionMap::iterator aIter1 = aRange1.first;
-    PortionMap::iterator aIter2 = aRange2.first;
+    PortionMap::const_iterator aIter1 = aRange1.first;
+    PortionMap::const_iterator aIter2 = aRange2.first;
 
     size_t const nAttributesInPor1 = std::distance(aRange1.first, aRange1.second);
     size_t const nAttributesInPor2 = std::distance(aRange2.first, aRange2.second);
-    bool const isRsidOnlyAutoFormat1(RsidOnlyAutoFormatFlagMap[i]);
-    bool const isRsidOnlyAutoFormat2(RsidOnlyAutoFormatFlagMap[j]);
+    bool const isRsidOnlyAutoFormat1 = i < sal_Int32(RsidOnlyAutoFormatFlagMap.size()) && RsidOnlyAutoFormatFlagMap[i];
+    bool const isRsidOnlyAutoFormat2 = j < sal_Int32(RsidOnlyAutoFormatFlagMap.size()) && RsidOnlyAutoFormatFlagMap[j];
 
     // if both have one they could be equal, but not if only one has it
     bool const bSkipRsidOnlyAutoFormat(nAttributesInPor1 != nAttributesInPor2);
@@ -2816,13 +2843,13 @@ static MergeResult lcl_Compare_Attributes(
     {
         // first of all test if there's no gap (before skipping stuff!)
         if (aIter1 != aRange1.second && aIter2 != aRange2.second &&
-            *aIter1->second.first->End() < aIter2->second.first->GetStart())
+            *aIter1->pTextAttr->End() < aIter2->pTextAttr->GetStart())
         {
             return DIFFER;
         }
         // skip it - cannot be equal if bSkipRsidOnlyAutoFormat is set
         if (bSkipRsidOnlyAutoFormat
-            && aIter1 != aRange1.second && aIter1->second.second)
+            && aIter1 != aRange1.second && aIter1->isRsidOnlyAutoFormat)
         {
             assert(DIFFER != eMerge);
             eMerge = DIFFER_ONLY_RSID;
@@ -2830,7 +2857,7 @@ static MergeResult lcl_Compare_Attributes(
             continue;
         }
         if (bSkipRsidOnlyAutoFormat
-            && aIter2 != aRange2.second && aIter2->second.second)
+            && aIter2 != aRange2.second && aIter2->isRsidOnlyAutoFormat)
         {
             assert(DIFFER != eMerge);
             eMerge = DIFFER_ONLY_RSID;
@@ -2838,8 +2865,8 @@ static MergeResult lcl_Compare_Attributes(
             continue;
         }
         assert(aIter1 != aRange1.second && aIter2 != aRange2.second);
-        SwTextAttr const*const p1 = aIter1->second.first;
-        SwTextAttr const*const p2 = aIter2->second.first;
+        SwTextAttr const*const p1 = aIter1->pTextAttr;
+        SwTextAttr const*const p2 = aIter2->pTextAttr;
         if (p1->Which() != p2->Which())
         {
             return DIFFER;
