@@ -365,7 +365,7 @@ bool RASReader::ImplReadBody(vcl::bitmap::RawBitmap& rBitmap, std::vector<Color>
 
 sal_uInt8 RASReader::ImplGetByte()
 {
-    sal_uInt8 nRetVal;
+    sal_uInt8 nRetVal(0);
     if ( mnType != RAS_TYPE_BYTE_ENCODED )
     {
         m_rRAS.ReadUChar( nRetVal );
