@@ -25,13 +25,7 @@
 #include <salgdiimpl.hxx>
 #include <salgeom.hxx>
 
-#include <premac.h>
-#include <SkSurface.h>
-#include <SkRegion.h>
-#include <postmac.h>
-
-#include <prewin.h>
-#include <postwin.h>
+#include <skia/utils.hxx>
 
 class SkiaFlushIdle;
 class GenericSalLayout;
@@ -240,8 +234,8 @@ protected:
     virtual bool avoidRecreateByResize() const;
     void createWindowSurface(bool forceRaster = false);
     virtual void createWindowSurfaceInternal(bool forceRaster = false) = 0;
-    virtual void destroyWindowSurfaceInternal() = 0;
     void createOffscreenSurface();
+    void flushSurfaceToWindowContext(const SkIRect& rect);
 
     void privateDrawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
                               tools::Long nHeight, double nTransparency, bool blockAA = false);
@@ -321,6 +315,8 @@ protected:
     SalGeometryProvider* mProvider;
     // The Skia surface that is target of all the rendering.
     sk_sp<SkSurface> mSurface;
+    // Note that mSurface may be a proxy surface and not the one from the window context.
+    std::unique_ptr<sk_app::WindowContext> mWindowContext;
     bool mIsGPU; // whether the surface is GPU-backed
     SkIRect mDirtyRect; // the area that has been changed since the last performFlush()
     vcl::Region mClipRegion;

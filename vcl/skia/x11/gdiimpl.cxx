@@ -33,8 +33,6 @@ X11SkiaSalGraphicsImpl::X11SkiaSalGraphicsImpl(X11SalGraphics& rParent)
 {
 }
 
-X11SkiaSalGraphicsImpl::~X11SkiaSalGraphicsImpl() { assert(!mWindowContext); }
-
 void X11SkiaSalGraphicsImpl::Init()
 {
     // The m_pFrame and m_pVDev pointers are updated late in X11
@@ -47,17 +45,18 @@ void X11SkiaSalGraphicsImpl::createWindowSurfaceInternal(bool forceRaster)
     assert(!mWindowContext);
     assert(!mSurface);
     assert(mX11Parent.GetDrawable() != None);
+    RenderMethod renderMethod = forceRaster ? RenderRaster : renderMethodToUse();
     mWindowContext = createWindowContext(mX11Parent.GetXDisplay(), mX11Parent.GetDrawable(),
                                          &mX11Parent.GetVisual(), GetWidth(), GetHeight(),
-                                         forceRaster ? RenderRaster : renderMethodToUse(), false);
+                                         renderMethod, false);
     if (mWindowContext)
-        mSurface = mWindowContext->getBackbufferSurface();
-}
-
-void X11SkiaSalGraphicsImpl::destroyWindowSurfaceInternal()
-{
-    mWindowContext.reset();
-    mSurface.reset();
+    {
+        // See flushSurfaceToWindowContext().
+        if (renderMethod == RenderRaster)
+            mWindowContext->getBackbufferSurface();
+        else
+            mSurface = createSkSurface(GetWidth(), GetHeight());
+    }
 }
 
 std::unique_ptr<sk_app::WindowContext>
@@ -140,13 +139,6 @@ bool X11SkiaSalGraphicsImpl::avoidRecreateByResize() const
     return mSurface->width() == int(w) && mSurface->height() == int(h);
 }
 
-void X11SkiaSalGraphicsImpl::DeInit()
-{
-    SkiaZone zone;
-    SkiaSalGraphicsImpl::DeInit();
-    mWindowContext.reset();
-}
-
 void X11SkiaSalGraphicsImpl::freeResources() {}
 
 void X11SkiaSalGraphicsImpl::Flush() { performFlush(); }
@@ -159,7 +151,7 @@ void X11SkiaSalGraphicsImpl::performFlush()
     if (mWindowContext)
     {
         if (mDirtyRect.intersect(SkIRect::MakeWH(GetWidth(), GetHeight())))
-            mWindowContext->swapBuffers(&mDirtyRect);
+            flushSurfaceToWindowContext(mDirtyRect);
         mDirtyRect.setEmpty();
     }
 }
