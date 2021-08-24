@@ -900,6 +900,13 @@ DECLARE_WW8EXPORT_TEST(testTdf104239_sharedOutlineNumId, "tdf104239_sharedOutlin
     CPPUNIT_ASSERT_EQUAL(OUString("2.1."), getProperty<OUString>(xPara, "ListLabelString"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf129221_sharedListId, "tdf129221_sharedListId.doc")
+{
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(11, "SublvlD 1"), uno::UNO_QUERY);
+    if (!mbExported)
+        CPPUNIT_ASSERT_EQUAL(OUString("1."), getProperty<OUString>(xPara, "ListLabelString"));
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf120394, "tdf120394.doc")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
