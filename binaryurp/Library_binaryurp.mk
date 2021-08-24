@@ -9,6 +9,10 @@
 
 $(eval $(call gb_Library_Library,binaryurp))
 
+$(eval $(call gb_Library_add_defs,binaryurp,\
+    -DBINARYURP_DLLIMPLEMENTATION \
+))
+
 $(eval $(call gb_Library_set_componentfile,binaryurp,binaryurp/source/binaryurp))
 
 $(eval $(call gb_Library_use_udk_api,binaryurp))

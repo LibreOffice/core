@@ -24,6 +24,7 @@
 #include <cstddef>
 #include <limits>
 #include <memory>
+#include <optional>
 #include <vector>
 
 #include <com/sun/star/bridge/InvalidProtocolChangeException.hpp>
@@ -56,6 +57,7 @@
 #include <uno/dispatcher.hxx>
 #include <uno/environment.hxx>
 #include <uno/lbnames.h>
+#include <binaryurp/solarmutex.hxx>
 
 #include "binaryany.hxx"
 #include "bridge.hxx"
@@ -582,11 +584,45 @@ void Bridge::decrementActiveCalls() noexcept {
     }
 }
 
+/**
+Warning - giant hack ahead. So, to set the stage, we have the SolarMutex, an abomination before man and beast.
+If something holds it, then calls a remote UNO object, and that object calls back into LibreOffice and attempts
+to take the SolarMutex, we are royally stuffed.
+So..... we drop the SolarMutex when we are about to make a remote call.
+*/
+namespace
+{
+sal_uInt32 (*ReleaseSolarMutexFuncPtr)()  = nullptr;
+void (*AcquireSolarMutexFuncPtr)(sal_uInt32) = nullptr;
+
+// RAII object to do the release/re-acquire
+class SolarMutexReleaser
+{
+    sal_uInt32 mnReleased;
+public:
+    SolarMutexReleaser(): mnReleased(ReleaseSolarMutexFuncPtr()) {}
+    ~SolarMutexReleaser() { AcquireSolarMutexFuncPtr( mnReleased ); }
+};
+}
+
+/** used to pass function pointers down from VCL (which is technically a higher layer) */
+void SetMutexFunctions(
+    sal_uInt32 (*ReleaseSolarMutexFuncPtr_)(),
+    void (*AcquireSolarMutexFuncPtr_)(sal_uInt32))
+{
+    ReleaseSolarMutexFuncPtr = ReleaseSolarMutexFuncPtr_;
+    AcquireSolarMutexFuncPtr = AcquireSolarMutexFuncPtr_;
+}
+
+
 bool Bridge::makeCall(
     OUString const & oid, css::uno::TypeDescription const & member,
     bool setter, std::vector< BinaryAny > const & inArguments,
     BinaryAny * returnValue, std::vector< BinaryAny > * outArguments)
 {
+    std::optional<SolarMutexReleaser> aReleaser;
+    if (ReleaseSolarMutexFuncPtr)
+        aReleaser.emplace();
     std::unique_ptr< IncomingReply > resp;
     {
         uno_ThreadPool tp = getThreadPool();
