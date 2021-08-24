@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "520b1ed0_954686d3",
+        "filename": "sw/source/core/table/swtable.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-08-24T16:27:42Z",
+      "side": 1,
+      "message": "Because of the regression related to the pBox-\u003eGetSaveNumFormatColor() call inside this block, this condition needs to limit only the copy of the format. Sorry for my bad hint.",
+      "range": {
+        "startLine": 145,
+        "startChar": 34,
+        "endLine": 145,
+        "endChar": 91
+      },
+      "revId": "71240b9b411642ff54f02b7263ee22268db32b64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
