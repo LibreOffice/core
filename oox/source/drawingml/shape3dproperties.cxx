@@ -312,7 +312,7 @@ css::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getColorAtt
         const Color& rColor, const GraphicHelper& rGraphicHelper, ::Color rPhClr )
 {
     css::uno::Sequence<css::beans::PropertyValue> aSeq(2);
-    const OUString& sColorScheme = rColor.getSchemeName();
+    const OUString& sColorScheme = rColor.getSchemeColorName();
     if( sColorScheme.isEmpty() )
     {
         // RGB color and transparency value
