@@ -45,9 +45,6 @@ public:
     WinSkiaSalGraphicsImpl(WinSalGraphics& rGraphics, SalGeometryProvider* mpProvider);
     virtual ~WinSkiaSalGraphicsImpl() override;
 
-    virtual void DeInit() override;
-    virtual void freeResources() override;
-
     virtual bool UseRenderNativeControl() const override { return true; }
     virtual bool TryRenderCachedNativeControl(ControlCacheKey const& rControlCacheKey, int nX,
                                               int nY) override;
@@ -63,7 +60,6 @@ public:
 
 protected:
     virtual void createWindowSurfaceInternal(bool forceRaster = false) override;
-    virtual void destroyWindowSurfaceInternal() override;
     virtual void performFlush() override;
     static sk_sp<SkTypeface> createDirectWriteTypeface(HDC hdc, HFONT hfont);
     static void initFontInfo();
@@ -72,7 +68,6 @@ protected:
     inline static sk_sp<SkFontMgr> dwriteFontMgr;
     inline static bool dwriteDone = false;
     static SkFont::Edging fontEdging;
-    std::unique_ptr<sk_app::WindowContext> mWindowContext;
 };
 
 typedef std::pair<ControlCacheKey, sk_sp<SkImage>> SkiaControlCachePair;
