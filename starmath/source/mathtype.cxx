@@ -570,7 +570,7 @@ bool MathType::Parse(SvStream* pStream)
     pS->ReadUChar( nProdVersion );
     pS->ReadUChar( nProdSubVersion );
 
-    if (nVersion > 3)   // allow only supported versions of MathType to be parsed
+    if (!pS->good() || nVersion > 3)   // allow only supported versions of MathType to be parsed
         return false;
 
     bool bRet = HandleRecords(0);
@@ -637,7 +637,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
         return false;
 
     sal_uInt8 nTag,nRecord;
-    sal_uInt8 nTabType,nTabStops;
+    sal_uInt8 nTabType;
     sal_uInt16 nTabOffset;
     int i, newline=0;
     bool bSilent=false;
@@ -1688,6 +1688,8 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                 HandleEmblishments();
                 break;
             case RULER:
+            {
+                sal_uInt8 nTabStops(0);
                 pS->ReadUChar( nTabStops );
                 for (i=0;i<nTabStops;i++)
                 {
@@ -1696,6 +1698,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                 }
                 SAL_WARN("starmath", "Not seen in the wild Equation Ruler Field");
                 break;
+            }
             case FONT:
                 {
                     MathTypeFont aFont;
