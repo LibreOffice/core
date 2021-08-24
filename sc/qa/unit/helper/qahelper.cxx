@@ -629,20 +629,26 @@ ScDocShellRef ScBootstrapFixture::load(
     return load( false, rURL, rFilter, rUserData, rTypeName, nFilterFlags, nClipboardID,  nFilterVersion, pPassword );
 }
 
-ScDocShellRef ScBootstrapFixture::loadDoc(
-    std::u16string_view rFileName, sal_Int32 nFormat, bool bReadWrite )
+ScDocShellRef ScBootstrapFixture::load(const OUString& rURL, sal_Int32 nFormat, bool bReadWrite)
 {
-    OUString aFileExtension(aFileFormats[nFormat].pName, strlen(aFileFormats[nFormat].pName), RTL_TEXTENCODING_UTF8 );
     OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    OUString aFileName;
-    createFileURL( rFileName, aFileExtension, aFileName );
     OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
     SfxFilterFlags nFormatType = aFileFormats[nFormat].nFormatType;
     SotClipboardFormatId nClipboardId = SotClipboardFormatId::NONE;
     if (nFormatType != SfxFilterFlags::NONE)
         nClipboardId = SotClipboardFormatId::STARCALC_8;
 
-    return load(bReadWrite, aFileName, aFilterName, OUString(), aFilterType, nFormatType, nClipboardId, static_cast<sal_uIntPtr>(nFormatType));
+    return load(bReadWrite, rURL, aFilterName, OUString(), aFilterType, nFormatType, nClipboardId, static_cast<sal_uIntPtr>(nFormatType));
+}
+
+ScDocShellRef ScBootstrapFixture::loadDoc(
+    std::u16string_view rFileName, sal_Int32 nFormat, bool bReadWrite )
+{
+    OUString aFileExtension = OUString::fromUtf8(aFileFormats[nFormat].pName);
+    OUString aFileName;
+    createFileURL( rFileName, aFileExtension, aFileName );
+
+    return load(aFileName, nFormat, bReadWrite);
 }
 
 ScBootstrapFixture::ScBootstrapFixture( const OUString& rsBaseString ) : m_aBaseString( rsBaseString ) {}
