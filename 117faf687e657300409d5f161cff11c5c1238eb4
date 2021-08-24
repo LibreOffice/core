@@ -354,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "c1a17bad_c9e83589",
+        "filename": "sw/source/core/unocore/unotext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1552,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2021-08-24T10:30:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d05333f4_5e000976",
+      "range": {
+        "startLine": 1544,
+        "startChar": 0,
+        "endLine": 1552,
+        "endChar": 5
+      },
+      "revId": "117faf687e657300409d5f161cff11c5c1238eb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e3e25d4b_62b9e7dd",
         "filename": "sw/source/core/unocore/unotext.cxx",
         "patchSetId": 2
