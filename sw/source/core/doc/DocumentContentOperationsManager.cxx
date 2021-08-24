@@ -1296,6 +1296,77 @@ namespace //local functions originally from docfmt.cxx
         }
     }
 
+    // create format redline(s) for the given range:
+    // to track the original formatting stored in the
+    // hints, create redlines for all parts of the
+    // range partitioned by boundaries of the hints.
+    void lcl_SetRedlines(
+        SwDoc& rDoc,
+        const SwPaM &rRg)
+    {
+        SwNodeIndex aIdx( rRg.Start()->nNode );
+        const SwNodeIndex aEndNd( rRg.End()->nNode );
+        while( aIdx <= aEndNd )
+        {
+            SwTextNode *pNode = aIdx.GetNode().GetTextNode();
+            if( pNode )
+            {
+                const sal_Int32 nStart = aIdx == rRg.Start()->nNode
+                        ? rRg.Start()->nContent.GetIndex()
+                        : 0;
+                const sal_Int32 nEnd = aIdx < aEndNd
+                        ? pNode->GetText().getLength()
+                        : rRg.End()->nContent.GetIndex();
+
+                if( SwpHints *pHints = pNode->GetpSwpHints() )
+                {
+                    const size_t nCount = pHints->Count();
+                    sal_Int32 nRedEnd = nStart;
+                    for( size_t i = 0; i < nCount; ++i )
+                    {
+                        SwTextAttr *pAttr = pHints->Get( i );
+
+                        if ( pAttr->GetStart() > nEnd )
+                        {
+                            break; // after the range
+                        }
+
+                        if ( !pAttr->GetEnd() || *pAttr->GetEnd() < nStart )
+                        {
+                            continue; // before the range
+                        }
+
+                        // range part before the hint
+                        if ( nRedEnd < pAttr->GetStart() )
+                        {
+                            SwPaM aPam( *pNode, nRedEnd, *pNode, pAttr->GetStart() );
+                            lcl_SetRedline(rDoc, aPam);
+                        }
+
+                        // range part at the hint
+                        sal_Int32 nRedStart = std::max(pAttr->GetStart(), nStart);
+                        nRedEnd = std::min(*pAttr->GetEnd(), nEnd);
+                        SwPaM aPam2( *pNode, nRedStart, *pNode, nRedEnd );
+                        lcl_SetRedline(rDoc, aPam2);
+                    }
+
+                    // range part after the last hint
+                    if ( nRedEnd < nEnd )
+                    {
+                        SwPaM aPam( *pNode, nRedEnd, *pNode, nEnd );
+                        lcl_SetRedline(rDoc, aPam);
+                    }
+                }
+                else
+                {
+                    SwPaM aPam( *pNode, nStart, *pNode, nEnd );
+                    lcl_SetRedline(rDoc, aPam);
+                }
+            }
+            ++aIdx;
+        }
+    }
+
     /// Insert Hints according to content types;
     // Is used in SwDoc::Insert(..., SwFormatHint &rHt)
 
@@ -1708,7 +1779,7 @@ namespace //local functions originally from docfmt.cxx
                     if( pUndo )
                         pUndo->SaveRedlineData( aPam, false );
 
-                    lcl_SetRedline(rDoc, aPam);
+                    lcl_SetRedlines(rDoc, aPam);
                 }
 
                 // the SwRegHistory inserts the attribute into the TextNode!
@@ -1738,7 +1809,7 @@ namespace //local functions originally from docfmt.cxx
             if( pUndo )
                 pUndo->SaveRedlineData( rRg, false );
 
-            lcl_SetRedline(rDoc, rRg);
+            lcl_SetRedlines(rDoc, rRg);
         }
 
         /* now if range */
