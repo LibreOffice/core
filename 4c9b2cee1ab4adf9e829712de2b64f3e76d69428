@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0e1fc7_eac4f7d1",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 908,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-24T05:45:21Z",
+      "side": 1,
+      "message": "Thanks for removing the default argument. Now it\u0027s obvious that all calls in tplcitem.cxx will not work?",
+      "revId": "4c9b2cee1ab4adf9e829712de2b64f3e76d69428",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
