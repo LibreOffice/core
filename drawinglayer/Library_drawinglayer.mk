@@ -194,6 +194,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/texture/texture \
     drawinglayer/source/dumper/XShapeDumper \
     drawinglayer/source/dumper/EnhancedShapeDumper \
+    drawinglayer/source/tools/SvgWriter \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -38,6 +38,7 @@ $(eval $(call gb_CppunitTest_use_externals,drawinglayer_processors,\
 $(eval $(call gb_CppunitTest_add_exception_objects,drawinglayer_processors, \
 	drawinglayer/qa/unit/vclmetafileprocessor2d \
 	drawinglayer/qa/unit/vclpixelprocessor2d \
+	drawinglayer/qa/unit/SvgExportTest \
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,drawinglayer_processors))
