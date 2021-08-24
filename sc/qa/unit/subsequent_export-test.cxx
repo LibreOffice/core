@@ -4065,13 +4065,38 @@ void ScExportTest::testAutofilterColorsODF()
     ScDocShellRef xDocSh = loadDoc(u"autofilter-colors.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "content.xml", FORMAT_ODS);
+    xmlDocPtr pDoc
+        = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "content.xml", FORMAT_ODS);
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "//table:filter/table:filter-and/table:filter-condition[1]", "value", "#e8f2a1");
-    assertXPath(pDoc, "//table:filter/table:filter-and/table:filter-condition[1][@loext:data-type='background-color']");
-    assertXPath(pDoc, "//table:filter/table:filter-and/table:filter-condition[2]", "value", "#3465a4");
-    assertXPath(pDoc, "//table:filter/table:filter-and/table:filter-condition[2][@loext:data-type='text-color']");
+    assertXPath(pDoc,
+                "//table:database-ranges/table:database-range[1]/table:filter/table:filter-and/"
+                "table:filter-condition[1]",
+                "value", "#e8f2a1");
+    assertXPath(pDoc,
+                "//table:database-ranges/table:database-range[1]/table:filter/table:filter-and/"
+                "table:filter-condition[1][@loext:data-type='background-color']");
+    assertXPath(pDoc,
+                "//table:database-ranges/table:database-range[1]/table:filter/table:filter-and/"
+                "table:filter-condition[2]",
+                "value", "#3465a4");
+    assertXPath(pDoc, "//table:database-ranges/table:database-range[1]/table:filter/"
+                      "table:filter-and/table:filter-condition[2][@loext:data-type='text-color']");
+
+    // tdf#142965 Check "none" value when automatic text color / no fill was selected
+    assertXPath(pDoc, "//table:database-ranges/table:database-range[2]/table:filter/"
+                      "table:filter-and/"
+                      "table:filter-condition[1][@loext:data-type='background-color']");
+    assertXPath(pDoc,
+                "//table:database-ranges/table:database-range[2]/table:filter/table:filter-and/"
+                "table:filter-condition[1]",
+                "value", "transparent");
+    assertXPath(pDoc, "//table:database-ranges/table:database-range[3]/table:filter/"
+                      "table:filter-and/table:filter-condition[1][@loext:data-type='text-color']");
+    assertXPath(pDoc,
+                "//table:database-ranges/table:database-range[3]/table:filter/table:filter-and/"
+                "table:filter-condition[1]",
+                "value", "window-font-color");
 }
 
 void ScExportTest::testAutofilterColorsOOXML()
