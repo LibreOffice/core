@@ -429,6 +429,7 @@ struct WW8LFOInfo   // unordered, means ordered like in WW8 Stream
                                                      // (in Ctor use the list from LSTInfos first)
 
     sal_uInt32  nIdLst;          // WW8-Id of the relevant list
+    sal_uInt32 nSharedIdLstCache; // Optimization if numRule is sharing a common listId.
     sal_uInt8   nLfoLvl;             // count of levels whose format is overridden
     // yes we could include nLfoLvl (via :4) into the following byte,
     // but it probably would be a source of error once MS increases their Listformat
@@ -448,6 +449,7 @@ WW8LFOInfo::WW8LFOInfo(const WW8LFO& rLFO)
     , maOverrides(WW8ListManager::nMaxLevel)
     , pNumRule(rLFO.pNumRule)
     , nIdLst(rLFO.nIdLst)
+    , nSharedIdLstCache(SAL_MAX_UINT32)
     , nLfoLvl(rLFO.nLfoLvl)
     , bOverride(rLFO.nLfoLvl != 0)
     , bUsedInDoc(false)
@@ -486,6 +488,34 @@ WW8LSTInfo* WW8ListManager::GetLSTByListId( sal_uInt32 nIdLst ) const
     if (aResult == maLSTInfos.end())
         return nullptr;
     return aResult->get();
+}
+
+// The same numbering sequence (abstract list) might be referred to by multiple numbering styles.
+// If so, then the listId that they share can tie them together as a single RES_PARATR_LIST_ID.
+sal_uInt32 WW8ListManager::GetSharedListId(sal_uInt16 nLFO)
+{
+    if (nLFO >= m_LFOInfos.size())
+        return 0;
+
+    if (m_LFOInfos[nLFO]->nSharedIdLstCache != SAL_MAX_UINT32)
+        return m_LFOInfos[nLFO]->nSharedIdLstCache;
+
+    sal_uInt32 nRet = m_LFOInfos[nLFO]->nIdLst;
+    // if another LFO shares the same abstract list, then cache and return the listId
+    for (size_t n = 0; n < m_LFOInfos.size(); ++n)
+    {
+        if (n == nLFO || !m_LFOInfos[n]->bUsedInDoc)
+            continue;
+
+        if (m_LFOInfos[n]->nIdLst == nRet)
+        {
+            m_LFOInfos[nLFO]->nSharedIdLstCache = nRet;
+            return nRet;
+        }
+    }
+    // the listId is unique, so return nothing since it isn't shared
+    m_LFOInfos[nLFO]->nSharedIdLstCache = 0;
+    return 0;
 }
 
 static OUString sanitizeString(const OUString& rString)
@@ -1839,6 +1869,10 @@ void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nCurrentLFO,
         pTextNd->SetAttr(SwNumRuleItem(sName));
     }
     pTextNd->SetAttrListLevel(nCurrentLevel);
+
+    sal_Int32 nIdLst = m_xLstManager->GetSharedListId(nCurrentLFO);
+    if (nIdLst)
+        pTextNd->SetAttr(SfxStringItem(RES_PARATR_LIST_ID, OUString::number(nIdLst)));
 
     // <IsCounted()> state of text node has to be adjusted accordingly.
     if ( /*nCurrentLevel >= 0 &&*/ nCurrentLevel < MAXLEVEL )
