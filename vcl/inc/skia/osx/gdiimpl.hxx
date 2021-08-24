@@ -26,9 +26,7 @@ public:
     AquaSkiaSalGraphicsImpl(AquaSalGraphics& rParent, AquaSharedAttributes& rShared);
     virtual ~AquaSkiaSalGraphicsImpl() override;
 
-    virtual void DeInit() override;
     virtual void freeResources() override;
-    //    virtual void Flush() override;
 
     virtual void UpdateGeometryProvider(SalGeometryProvider* provider) override
     {
@@ -47,13 +45,9 @@ public:
 
 private:
     virtual void createWindowSurfaceInternal(bool forceRaster = false) override;
-    virtual void destroyWindowSurfaceInternal() override;
     virtual void performFlush() override;
-    void flushToScreenRaster(const SkIRect& rect);
-    void flushToScreenMetal(const SkIRect& rect);
+    void flushSurfaceToScreenCG(const SkIRect& rect);
     static inline sk_sp<SkFontMgr> fontManager;
-    // This one is used only for Metal, and only indirectly.
-    std::unique_ptr<sk_app::WindowContext> mWindowContext;
 };
 
 #endif // INCLUDED_VCL_INC_SKIA_OSX_GDIIMPL_HXX

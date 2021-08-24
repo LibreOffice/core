@@ -289,7 +289,11 @@ SkiaSalGraphicsImpl::SkiaSalGraphicsImpl(SalGraphics& rParent, SalGeometryProvid
 {
 }
 
-SkiaSalGraphicsImpl::~SkiaSalGraphicsImpl() { assert(!mSurface); }
+SkiaSalGraphicsImpl::~SkiaSalGraphicsImpl()
+{
+    assert(!mSurface);
+    assert(!mWindowContext);
+}
 
 void SkiaSalGraphicsImpl::Init() {}
 
@@ -382,10 +386,37 @@ void SkiaSalGraphicsImpl::destroySurface()
     // but work around it here.
     if (mSurface)
         mSurface->flushAndSubmit();
-    if (!isOffscreen())
-        destroyWindowSurfaceInternal();
     mSurface.reset();
+    mWindowContext.reset();
     mIsGPU = false;
+}
+
+void SkiaSalGraphicsImpl::flushSurfaceToWindowContext(const SkIRect& rect)
+{
+    sk_sp<SkSurface> screenSurface = mWindowContext->getBackbufferSurface();
+    if (screenSurface != mSurface)
+    {
+        // GPU-based window contexts require calling getBackbufferSurface()
+        // for every swapBuffers(), for this reason mSurface is an offscreen surface
+        // where we keep the contents (LO does not do full redraws).
+        // So here blit the surface to the window context surface and then swap it.
+        assert(isGPU()); // Raster should always draw directly to backbuffer to save copying
+        SkPaint paint;
+        paint.setBlendMode(SkBlendMode::kSrc); // copy as is
+        screenSurface->getCanvas()->drawImage(makeCheckedImageSnapshot(mSurface), 0, 0,
+                                              SkSamplingOptions(), &paint);
+        screenSurface->flushAndSubmit(); // Otherwise the window is not drawn sometimes.
+        mWindowContext->swapBuffers(nullptr); // Must swap the entire surface.
+    }
+    else
+    {
+        // For raster mode use directly the backbuffer surface, it's just a bitmap
+        // surface anyway, and for those there's no real requirement to call
+        // getBackbufferSurface() repeatedly. Using our own surface would duplicate
+        // memory and cost time copying pixels around.
+        assert(!isGPU());
+        mWindowContext->swapBuffers(&rect);
+    }
 }
 
 void SkiaSalGraphicsImpl::DeInit() { destroySurface(); }

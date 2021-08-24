@@ -43,20 +43,14 @@ AquaSkiaSalGraphicsImpl::AquaSkiaSalGraphicsImpl(AquaSalGraphics& rParent,
 AquaSkiaSalGraphicsImpl::~AquaSkiaSalGraphicsImpl()
 {
     DeInit(); // mac code doesn't call DeInit()
-    assert(!mWindowContext);
-}
-
-void AquaSkiaSalGraphicsImpl::DeInit()
-{
-    SkiaZone zone;
-    SkiaSalGraphicsImpl::DeInit();
-    mWindowContext.reset();
 }
 
 void AquaSkiaSalGraphicsImpl::freeResources() {}
 
 void AquaSkiaSalGraphicsImpl::createWindowSurfaceInternal(bool forceRaster)
 {
+    assert(!mWindowContext);
+    assert(!mSurface);
     SkiaZone zone;
     sk_app::DisplayParams displayParams;
     displayParams.fColorType = kN32_SkColorType;
@@ -71,26 +65,19 @@ void AquaSkiaSalGraphicsImpl::createWindowSurfaceInternal(bool forceRaster)
             mSurface = createSkSurface(GetWidth(), GetHeight());
             break;
         case RenderMetal:
-            // It appears that Metal surfaces cannot be read from, which may break things
-            // like copyArea(). Additionally sk_app::MetalWindowContext requires
-            // a new call to getBackbufferSurface() after every swapBuffers(), which
-            // normally would also require reading contents of the previous surface,
-            // because we do not redraw the complete area for every draw call.
-            // Handle that by using an offscreen surface and blit to the onscreen surface as necessary.
-            mSurface = createSkSurface(GetWidth(), GetHeight());
             mWindowContext
                 = sk_app::window_context_factory::MakeMetalForMac(macWindow, displayParams);
+            // Like with other GPU contexts, create a proxy offscreen surface (see
+            // flushSurfaceToWindowContext()). Here it's additionally needed because
+            // it appears that Metal surfaces cannot be read from, which would break things
+            // like copyArea().
+            if (mWindowContext)
+                mSurface = createSkSurface(GetWidth(), GetHeight());
             break;
         case RenderVulkan:
             abort();
             break;
     }
-}
-
-void AquaSkiaSalGraphicsImpl::destroyWindowSurfaceInternal()
-{
-    mWindowContext.reset();
-    mSurface.reset();
 }
 
 void AquaSkiaSalGraphicsImpl::Flush() { performFlush(); }
@@ -105,10 +92,10 @@ void AquaSkiaSalGraphicsImpl::performFlush()
     {
         if (mDirtyRect.intersect(SkIRect::MakeWH(GetWidth(), GetHeight())))
         {
-            if (isGPU())
-                flushToScreenMetal(mDirtyRect);
+            if (!isGPU())
+                flushSurfaceToScreenCG(mDirtyRect);
             else
-                flushToScreenRaster(mDirtyRect);
+                flushSurfaceToWindowContext(mDirtyRect);
         }
         mDirtyRect.setEmpty();
     }
@@ -132,7 +119,7 @@ constexpr static uint32_t toCGBitmapType(SkColorType color, SkAlphaType alpha)
 }
 
 // For Raster we use our own screen blitting (see above).
-void AquaSkiaSalGraphicsImpl::flushToScreenRaster(const SkIRect& rect)
+void AquaSkiaSalGraphicsImpl::flushSurfaceToScreenCG(const SkIRect& rect)
 {
     // Based on AquaGraphicsBackend::drawBitmap().
     if (!mrShared.checkContext())
@@ -173,19 +160,6 @@ void AquaSkiaSalGraphicsImpl::flushToScreenRaster(const SkIRect& rect)
     CGImageRelease(screenImage);
     CGContextRelease(context);
     mrShared.refreshRect(rect.left(), rect.top(), rect.width(), rect.height());
-}
-
-// For Metal we flush to the Metal surface and then swap buffers (see above).
-void AquaSkiaSalGraphicsImpl::flushToScreenMetal(const SkIRect&)
-{
-    // The rectangle argument is irrelevant, the whole surface must be used for Metal.
-    sk_sp<SkSurface> screenSurface = mWindowContext->getBackbufferSurface();
-    SkPaint paint;
-    paint.setBlendMode(SkBlendMode::kSrc); // copy as is
-    screenSurface->getCanvas()->drawImage(makeCheckedImageSnapshot(mSurface), 0, 0,
-                                          SkSamplingOptions(), &paint);
-    screenSurface->flushAndSubmit(); // Otherwise the window is not drawn sometimes.
-    mWindowContext->swapBuffers(nullptr);
 }
 
 bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart nPart,
