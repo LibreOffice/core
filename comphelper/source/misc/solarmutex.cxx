@@ -63,7 +63,7 @@ sal_uInt32 SolarMutex::doRelease( bool bUnlockAll )
     if ( !IsCurrentThread() )
         std::abort();
     if ( m_nCount == 0 )
-        std::abort();
+        return 0;
 
     const sal_uInt32 nCount = bUnlockAll ? m_nCount : 1;
     m_nCount -= nCount;
