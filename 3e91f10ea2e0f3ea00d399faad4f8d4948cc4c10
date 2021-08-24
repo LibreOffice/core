@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "869babfa_dbe9d284",
+        "filename": "vcl/source/rendercontext/OutDevState.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-08-24T10:21:56Z",
+      "side": 1,
+      "message": "All this could actually go into the header file.. there is no added value of having it here.\n\nAlso resetting the variables in the destructor seems kind-of pointless... They will be destroyed in the next step anyway.",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 1
+      },
+      "revId": "3e91f10ea2e0f3ea00d399faad4f8d4948cc4c10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
