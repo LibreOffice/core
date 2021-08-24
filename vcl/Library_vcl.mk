@@ -59,6 +59,7 @@ $(eval $(call gb_Library_use_custom_headers,vcl,\
 
 $(eval $(call gb_Library_use_libraries,vcl,\
     basegfx \
+    binaryurp \
     comphelper \
     cppu \
     cppuhelper \

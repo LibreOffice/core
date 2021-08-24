@@ -27,6 +27,7 @@
 
 #include <desktop/exithelper.h>
 
+#include <binaryurp/solarmutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/asyncnotification.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -382,6 +383,9 @@ bool InitVCL()
     // See https://bugs.freedesktop.org/show_bug.cgi?id=11375 for discussion
     unsetenv("DESKTOP_STARTUP_ID");
 #endif
+
+    // pass function pointers down so the binary URP layer can release the solar mutex
+    binaryurp::SetMutexFunctions(Application::ReleaseSolarMutex, Application::AcquireSolarMutex);
 
     return true;
 }
