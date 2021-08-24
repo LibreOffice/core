@@ -1064,7 +1064,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 // Store style-related properties to InteropGrabBag to be able to export them back
                 uno::Sequence<beans::PropertyValue> aProperties = comphelper::InitPropertySequence(
                 {
-                    {"SchemeClr", uno::makeAny(pLineRef->maPhClr.getSchemeName())},
+                    {"SchemeClr", uno::makeAny(pLineRef->maPhClr.getSchemeColorName())},
                     {"Idx", uno::makeAny(pLineRef->mnThemedIdx)},
                     {"Color", uno::makeAny(nLinePhClr)},
                     {"LineStyle", uno::makeAny(aLineProperties.getLineStyle())},
@@ -1082,7 +1082,7 @@ Reference< XShape > const & Shape::createAndInsert(
                     nFillPhClr = pFillRef->maPhClr.getColor(rGraphicHelper);
                 }
 
-                OUString sColorScheme = pFillRef->maPhClr.getSchemeName();
+                OUString sColorScheme = pFillRef->maPhClr.getSchemeColorName();
                 if( !sColorScheme.isEmpty() )
                 {
                     uno::Sequence<beans::PropertyValue> aProperties = comphelper::InitPropertySequence(
@@ -1104,7 +1104,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 // Store style-related properties to InteropGrabBag to be able to export them back
                 uno::Sequence<beans::PropertyValue> aProperties = comphelper::InitPropertySequence(
                 {
-                    {"SchemeClr", uno::makeAny(pEffectRef->maPhClr.getSchemeName())},
+                    {"SchemeClr", uno::makeAny(pEffectRef->maPhClr.getSchemeColorName())},
                     {"Idx", uno::makeAny(pEffectRef->mnThemedIdx)},
                     {"Transformations", uno::makeAny(pEffectRef->maPhClr.getTransformations())}
                 });
@@ -1356,13 +1356,13 @@ Reference< XShape > const & Shape::createAndInsert(
                 comphelper::makePropertyValue("OriginalSolidFillClr", aShapeProps.getProperty(PROP_FillColor)),
                 comphelper::makePropertyValue("OriginalLnSolidFillClr", aShapeProps.getProperty(PROP_LineColor))
             };
-            OUString sColorFillScheme = aFillProperties.maFillColor.getSchemeName();
+            OUString sColorFillScheme = aFillProperties.maFillColor.getSchemeColorName();
             if( !aFillProperties.maFillColor.isPlaceHolder() && !sColorFillScheme.isEmpty() )
             {
                 aProperties.push_back(comphelper::makePropertyValue("SpPrSolidFillSchemeClr", sColorFillScheme));
                 aProperties.push_back(comphelper::makePropertyValue("SpPrSolidFillSchemeClrTransformations", aFillProperties.maFillColor.getTransformations()));
             }
-            OUString sLnColorFillScheme = aLineProperties.maLineFill.maFillColor.getSchemeName();
+            OUString sLnColorFillScheme = aLineProperties.maLineFill.maFillColor.getSchemeColorName();
             if( !aLineProperties.maLineFill.maFillColor.isPlaceHolder() && !sLnColorFillScheme.isEmpty() )
             {
                 aProperties.push_back(comphelper::makePropertyValue("SpPrLnSolidFillSchemeClr", sLnColorFillScheme));
@@ -1388,7 +1388,7 @@ Reference< XShape > const & Shape::createAndInsert(
                         comphelper::makePropertyValue("Pos", rPos)
                     };
 
-                    OUString sStopColorScheme = rColor.getSchemeName();
+                    OUString sStopColorScheme = rColor.getSchemeColorName();
                     if( sStopColorScheme.isEmpty() )
                     {
                         // save RGB color
@@ -1433,7 +1433,7 @@ Reference< XShape > const & Shape::createAndInsert(
                         };
 
                         Color& aColor( it->moColor );
-                        OUString sColorScheme = aColor.getSchemeName();
+                        OUString sColorScheme = aColor.getSchemeColorName();
                         if( sColorScheme.isEmpty() )
                         {
                             // RGB color and transparency value

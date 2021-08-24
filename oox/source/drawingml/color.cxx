@@ -661,7 +661,7 @@ sal_Int16 Color::getTransparency() const
     return sal_Int16(std::round( (1.0 * (MAX_PERCENT - mnAlpha)) / PER_PERCENT) );
 }
 
-sal_Int16 Color::getSchemeIndex() const
+sal_Int16 Color::getSchemeColorIndex() const
 {
     static std::map<OUString, sal_Int32> const aSchemeColorNameToIndex{
         { "dk1", 0 },     { "lt1", 1 },     { "dk2", 2 },     { "lt2", 3 },

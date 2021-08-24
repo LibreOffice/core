@@ -97,8 +97,8 @@ public:
     sal_Int16           getTransparency() const;
 
     /** Returns the scheme name from the a:schemeClr element for interoperability purposes */
-    const OUString&     getSchemeName() const { return msSchemeName; }
-    sal_Int16           getSchemeIndex() const;
+    const OUString&     getSchemeColorName() const { return msSchemeName; }
+    sal_Int16           getSchemeColorIndex() const;
 
     /** Returns the unaltered list of transformations for interoperability purposes */
     const css::uno::Sequence< css::beans::PropertyValue >& getTransformations() const { return maInteropTransformations;}
