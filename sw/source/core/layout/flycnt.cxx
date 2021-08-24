@@ -148,7 +148,7 @@ void SwFlyAtContentFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rH
             SwSortedObjs &rObjs = *pContent->GetDrawObjs();
             for(SwAnchoredObject* rObj : rObjs)
             {
-                SwFlyFrame* pFlyFrame = dynamic_cast<SwFlyFrame*>(rObj);
+                SwFlyFrame* pFlyFrame = rObj->DynCastFlyFrame();
                 if (pFlyFrame &&
                      &(pFlyFrame->GetFrameFormat()) == pMyFlyFrameFormat)
                 {

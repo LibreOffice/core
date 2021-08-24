@@ -1804,7 +1804,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloatButtonSmallTable)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pAnchored->size());
     SwAnchoredObject* pAnchoredObj = (*pAnchored)[0];
 
-    SwFlyFrame* pFlyFrame = dynamic_cast<SwFlyFrame*>(pAnchoredObj);
+    SwFlyFrame* pFlyFrame = pAnchoredObj->DynCastFlyFrame();
     CPPUNIT_ASSERT(pFlyFrame);
     CPPUNIT_ASSERT(!pFlyFrame->IsShowUnfloatButton(pWrtShell));
 
@@ -1849,7 +1849,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloatButton)
         SwAnchoredObject* pAnchoredObj = (*pAnchored)[0];
 
         // The unfloat button is not visible until it gets selected
-        SwFlyFrame* pFlyFrame = dynamic_cast<SwFlyFrame*>(pAnchoredObj);
+        SwFlyFrame* pFlyFrame = pAnchoredObj->DynCastFlyFrame();
         CPPUNIT_ASSERT_MESSAGE(sFailureMessage.getStr(), pFlyFrame);
         CPPUNIT_ASSERT_MESSAGE(sFailureMessage.getStr(),
                                !pFlyFrame->IsShowUnfloatButton(pWrtShell));
@@ -1875,7 +1875,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloatButtonReadOnlyMode)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pAnchored->size());
     SwAnchoredObject* pAnchoredObj = (*pAnchored)[0];
 
-    SwFlyFrame* pFlyFrame = dynamic_cast<SwFlyFrame*>(pAnchoredObj);
+    SwFlyFrame* pFlyFrame = pAnchoredObj->DynCastFlyFrame();
     CPPUNIT_ASSERT(pFlyFrame);
     CPPUNIT_ASSERT(!pFlyFrame->IsShowUnfloatButton(pWrtShell));
 
@@ -1921,7 +1921,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloating)
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailureMessage.getStr(), static_cast<size_t>(1),
                                          pAnchored->size());
             SwAnchoredObject* pAnchoredObj = (*pAnchored)[0];
-            pFlyFrame = dynamic_cast<SwFlyFrame*>(pAnchoredObj);
+            pFlyFrame = pAnchoredObj->DynCastFlyFrame();
             CPPUNIT_ASSERT_MESSAGE(sFailureMessage.getStr(), pFlyFrame);
         }
 

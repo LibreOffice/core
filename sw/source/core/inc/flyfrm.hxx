@@ -301,6 +301,9 @@ public:
     // For testing only (see uiwriter)
     void ActiveUnfloatButton(SwWrtShell* pWrtSh);
 
+    virtual const SwFlyFrame* DynCastFlyFrame() const override;
+    virtual SwFlyFrame* DynCastFlyFrame() override;
+
 private:
     void UpdateUnfloatButton(SwWrtShell* pWrtSh, bool bShow) const;
     void PaintDecorators() const;

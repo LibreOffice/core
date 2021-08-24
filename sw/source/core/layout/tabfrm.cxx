@@ -258,7 +258,7 @@ static void lcl_InvalidateLowerObjs( SwLayoutFrame& _rLayoutFrame,
                 pAnchoredObj->UnlockPosition();
                 pAnchoredObj->InvalidateObjPos();
 
-                SwFlyFrame *pFly = dynamic_cast<SwFlyFrame*>(pAnchoredObj);
+                SwFlyFrame *pFly = pAnchoredObj->DynCastFlyFrame();
 
                 // move anchored object 'out of range'
                 if ( _bMoveObjsOutOfRange )
@@ -2777,7 +2777,7 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
         for ( size_t i = 0; i < pPage->GetSortedObjs()->size(); ++i )
         {
             SwAnchoredObject* pAnchoredObj = (*pPage->GetSortedObjs())[i];
-            if ( auto pFly = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
+            if ( auto pFly = pAnchoredObj->DynCastFlyFrame() )
             {
                 const SwRect aFlyRect = pFly->GetObjRectWithSpaces();
                 // #i26945# - correction of conditions,
@@ -5001,7 +5001,7 @@ static bool lcl_ArrangeLowers( SwLayoutFrame *pLay, tools::Long lYStart, bool bI
                             default: break;
                         }
                     }
-                    if ( auto pFly = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
+                    if ( auto pFly = pAnchoredObj->DynCastFlyFrame() )
                     {
 
                         // OD 2004-05-18 #i28701# - no direct move of objects,
@@ -5380,7 +5380,7 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
                     if ( bConsiderWrapOnObjPos || css::text::WrapTextMode_THROUGH != rSur.GetSurround() )
                     {
                         // frames, which the cell is a lower of, aren't relevant
-                        if ( auto pFly = dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) )
+                        if ( auto pFly = pAnchoredObj->DynCastFlyFrame() )
                         {
                             if ( pFly->IsAnLower( this ) )
                                 continue;

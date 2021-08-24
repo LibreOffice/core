@@ -379,7 +379,7 @@ void SwDrawView::MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
                                         nNewPos );
             pDrawPage->RecalcObjOrdNums();
             // adjustments for accessibility API
-            if ( auto pTmpFlyFrame = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
+            if ( auto pTmpFlyFrame = pAnchoredObj->DynCastFlyFrame() )
             {
                 m_rImp.DisposeAccessibleFrame( pTmpFlyFrame );
                 m_rImp.AddAccessibleFrame( pTmpFlyFrame );
@@ -412,7 +412,7 @@ void SwDrawView::MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
                                             nTmpNewPos );
                 pDrawPage->RecalcObjOrdNums();
                 // adjustments for accessibility API
-                if ( auto pTmpFlyFrame = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
+                if ( auto pTmpFlyFrame = pAnchoredObj->DynCastFlyFrame() )
                 {
                     m_rImp.DisposeAccessibleFrame( pTmpFlyFrame );
                     m_rImp.AddAccessibleFrame( pTmpFlyFrame );
@@ -515,7 +515,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, size_t nOldPos,
 
     // On move forward, assure that object is moved before its own children.
     // Only Writer fly frames can have children.
-    if ( dynamic_cast< const SwFlyFrame *>( pMovedAnchoredObj ) !=  nullptr &&
+    if ( pMovedAnchoredObj->DynCastFlyFrame() &&
          bMovedForward && nNewPos < nObjCount - 1 )
     {
         sal_uInt32 nMaxChildOrdNum =
@@ -586,7 +586,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, size_t nOldPos,
     std::vector< SdrObject* > aMovedChildObjs;
 
     // move 'children' accordingly
-    if ( auto pFlyFrame = dynamic_cast< SwFlyFrame *>( pMovedAnchoredObj ) )
+    if ( auto pFlyFrame = pMovedAnchoredObj->DynCastFlyFrame() )
     {
         // adjustments for accessibility API
         m_rImp.DisposeAccessibleFrame( pFlyFrame );

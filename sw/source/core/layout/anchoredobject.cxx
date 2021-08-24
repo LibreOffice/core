@@ -907,4 +907,14 @@ Point SwAnchoredObject::GetRelPosToLine() const
     return aRelPos;
 }
 
+const SwFlyFrame* SwAnchoredObject::DynCastFlyFrame() const
+{
+    return nullptr;
+}
+
+SwFlyFrame* SwAnchoredObject::DynCastFlyFrame()
+{
+    return nullptr;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1926,7 +1926,7 @@ bool SwTextFrame::FillSelection( SwSelectionList& rSelList, const SwRect& rRect 
         const SwSortedObjs &rObjs = *GetDrawObjs();
         for (SwAnchoredObject* pAnchoredObj : rObjs)
         {
-            const SwFlyFrame* pFly = dynamic_cast<const SwFlyFrame*>(pAnchoredObj);
+            const SwFlyFrame* pFly = pAnchoredObj->DynCastFlyFrame();
             if( !pFly )
                 continue;
             if( pFly->IsFlyInContentFrame() && pFly->FillSelection( rSelList, rRect ) )

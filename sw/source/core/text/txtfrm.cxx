@@ -2424,7 +2424,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                 for ( size_t i = 0; GetDrawObjs() && i < pObjs->size(); ++i )
                 {
                     SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
-                    if ( auto pFly = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
+                    if ( auto pFly = pAnchoredObj->DynCastFlyFrame() )
                     {
                         if( !pFly->IsFlyInContentFrame() )
                         {

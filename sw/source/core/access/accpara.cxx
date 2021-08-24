@@ -1557,9 +1557,9 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
                             break;
                         }
 
-                        if ( const SwFlyFrame* pFlyFrame = dynamic_cast<const SwFlyFrame*>(pUpperFrame) )
+                        if ( pUpperFrame->IsFlyFrame() )
                         {
-                            pUpperFrame = pFlyFrame->GetAnchorFrame();
+                            pUpperFrame = static_cast<const SwFlyFrame*>(pUpperFrame)->GetAnchorFrame();
                         }
                         else
                         {

@@ -1402,7 +1402,7 @@ static void lcl_SubtractFlys( const SwFrame *pFrame, const SwPageFrame *pPage,
         if (!pPage->GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId(pSdrObj->GetLayer()))
             continue;
 
-        const SwFlyFrame *pFly = dynamic_cast<const SwFlyFrame*>(pAnchoredObj);
+        const SwFlyFrame *pFly = pAnchoredObj->DynCastFlyFrame();
         if (!pFly)
             continue;
 
@@ -3970,7 +3970,7 @@ void SwFrame::SetDrawObjsAsDeleted( bool bDeleted )
     {
         for (SwAnchoredObject* pAnchoredObj : *pObjs)
         {
-            if ( auto pFly = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
+            if ( auto pFly = pAnchoredObj->DynCastFlyFrame() )
             {
                 pFly->SetDeleted(bDeleted);
             }
@@ -6571,7 +6571,7 @@ void SwLayoutFrame::RefreshLaySubsidiary( const SwPageFrame *pPage,
                 {
                     if ( pPage->GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId(
                                     pAnchoredObj->GetDrawObj()->GetLayer() ) )
-                        if (auto pFly = dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) )
+                        if (auto pFly = pAnchoredObj->DynCastFlyFrame() )
                         {
                             if ( pFly->IsFlyInContentFrame() && pFly->getFrameArea().IsOver( rRect ) )
                             {
@@ -7046,7 +7046,7 @@ void SwPageFrame::RefreshExtraData( const SwRect &rRect ) const
     if ( bLineInFly && GetSortedObjs() )
         for (SwAnchoredObject* pAnchoredObj : *GetSortedObjs())
         {
-            if ( auto pFly = dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) )
+            if ( auto pFly = pAnchoredObj->DynCastFlyFrame() )
             {
                 if ( pFly->getFrameArea().Top() <= aRect.Bottom() &&
                      pFly->getFrameArea().Bottom() >= aRect.Top() )
@@ -7078,7 +7078,7 @@ void SwLayoutFrame::RefreshExtraData( const SwRect &rRect ) const
         if ( bLineInFly && pCnt->GetDrawObjs() )
             for (SwAnchoredObject* pAnchoredObj : *pCnt->GetDrawObjs())
             {
-                if ( auto pFly = dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) )
+                if ( auto pFly = pAnchoredObj->DynCastFlyFrame() )
                 {
                     if ( pFly->IsFlyInContentFrame() &&
                          pFly->getFrameArea().Top() <= rRect.Bottom() &&

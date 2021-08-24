@@ -224,7 +224,7 @@ void SwObjectFormatter::FormatLayout_( SwLayoutFrame& _rLayoutFrame )
 */
 void SwObjectFormatter::FormatObjContent( SwAnchoredObject& _rAnchoredObj )
 {
-    if ( dynamic_cast<const SwFlyFrame*>( &_rAnchoredObj) ==  nullptr )
+    if ( !_rAnchoredObj.DynCastFlyFrame() )
     {
         // only Writer fly frames have content
         return;
@@ -268,7 +268,7 @@ void SwObjectFormatter::FormatObj_( SwAnchoredObject& _rAnchoredObj )
         mpPgNumAndTypeOfAnchors->Collect( _rAnchoredObj );
     }
 
-    if ( auto pFlyFrame = dynamic_cast<SwFlyFrame*>( &_rAnchoredObj) )
+    if ( auto pFlyFrame = _rAnchoredObj.DynCastFlyFrame() )
     {
         // --> #i34753# - reset flag, which prevents a positioning
         if ( pFlyFrame->IsFlyLayFrame() )

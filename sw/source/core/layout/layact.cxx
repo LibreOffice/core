@@ -919,7 +919,7 @@ static const SwFrame *lcl_FindFirstInvaContent( const SwLayoutFrame *pLay, tools
             const SwSortedObjs &rObjs = *pCnt->GetDrawObjs();
             for (SwAnchoredObject* pObj : rObjs)
             {
-                if ( auto pFly = dynamic_cast< const SwFlyFrame *>( pObj ) )
+                if ( auto pFly = pObj->DynCastFlyFrame() )
                 {
                     if ( pFly->IsFlyInContentFrame() )
                     {
@@ -953,7 +953,7 @@ static const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrame* _pPage,
 
     for (SwAnchoredObject* pObj : *_pPage->GetSortedObjs())
     {
-        if ( auto pFly = dynamic_cast< const SwFlyFrame *>( pObj )  )
+        if ( auto pFly = pObj->DynCastFlyFrame()  )
         {
             if ( pFly->getFrameArea().Top() <= _nBottom )
             {
@@ -2061,7 +2061,7 @@ bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob )
         const SwSortedObjs &rObjs = *pCnt->GetDrawObjs();
         for (SwAnchoredObject* pObj : rObjs)
         {
-            if ( auto pFly = dynamic_cast<SwFlyFrame *>( pObj ) )
+            if ( auto pFly = pObj->DynCastFlyFrame() )
             {
                 if ( pFly->IsFlyInContentFrame() )
                 {
@@ -2142,7 +2142,7 @@ bool SwLayIdle::DoIdleJob( IdleJobType eJob, bool bVisAreaOnly )
                                 i < pPage->GetSortedObjs()->size(); ++i )
             {
                 const SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
-                if ( auto pFly = dynamic_cast< const SwFlyFrame *>( pObj ) )
+                if ( auto pFly = pObj->DynCastFlyFrame() )
                 {
                     const SwContentFrame *pC = pFly->ContainsContent();
                     while( pC )

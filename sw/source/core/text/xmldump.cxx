@@ -406,7 +406,7 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
                 for (SwAnchoredObject const*const pObj : *pObjs)
                 {   // just print pointer, full details will be printed on its anchor frame
                     // this nonsense is needed because of multiple inheritance
-                    if (SwFlyFrame const*const pFly = dynamic_cast<SwFlyFrame const*>(pObj))
+                    if (SwFlyFrame const* pFly = pObj->DynCastFlyFrame())
                     {
                         (void)xmlTextWriterStartElement(writer, BAD_CAST("fly"));
                         (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("ptr"), "%p", pFly);
