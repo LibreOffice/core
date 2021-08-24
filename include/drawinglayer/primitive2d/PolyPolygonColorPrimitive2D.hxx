@@ -22,6 +22,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <drawinginterface/BasicPrimitive2D.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/color/bcolor.hxx>
 
@@ -33,7 +34,9 @@ namespace drawinglayer::primitive2d
     This is one of the non-decomposable primitives, so a renderer
     should process it.
  */
-class DRAWINGLAYER_DLLPUBLIC PolyPolygonColorPrimitive2D final : public BasePrimitive2D
+class DRAWINGLAYER_DLLPUBLIC PolyPolygonColorPrimitive2D final
+    : public BasePrimitive2D,
+      public drawinginterface::PolyPolygonBasicPrimitive
 {
 private:
     /// the tools::PolyPolygon geometry
