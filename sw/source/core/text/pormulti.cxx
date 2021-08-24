@@ -860,12 +860,14 @@ namespace sw {
         }
         if (m_pMerged)
         {
-            while (m_CurrentExtent < m_pMerged->extents.size())
+            const auto nExtentsSize = m_pMerged->extents.size();
+            while (m_CurrentExtent < nExtentsSize)
             {
                 sw::Extent const& rExtent(m_pMerged->extents[m_CurrentExtent]);
                 if (SwpHints const*const pHints = rExtent.pNode->GetpSwpHints())
                 {
-                    while (m_CurrentHint < pHints->Count())
+                    auto nHintsCount = pHints->Count();
+                    while (m_CurrentHint < nHintsCount)
                     {
                         SwTextAttr const*const pHint(pHints->Get(m_CurrentHint));
                         if (rExtent.nEnd < pHint->GetStart())
@@ -881,7 +883,7 @@ namespace sw {
                     }
                 }
                 ++m_CurrentExtent;
-                if (m_CurrentExtent < m_pMerged->extents.size() &&
+                if (m_CurrentExtent < nExtentsSize &&
                     rExtent.pNode != m_pMerged->extents[m_CurrentExtent].pNode)
                 {
                     m_CurrentHint = 0; // reset

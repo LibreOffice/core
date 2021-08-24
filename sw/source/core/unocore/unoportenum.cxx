@@ -710,7 +710,8 @@ lcl_ExportHints(
     //search for special text attributes - first some ends
     size_t nEndIndex = 0;
     sal_Int32 nNextEnd = 0;
-    while(nEndIndex < pHints->Count() &&
+    const auto nHintsCount = pHints->Count();
+    while(nEndIndex < nHintsCount &&
         (!pHints->GetSortedByEnd(nEndIndex)->GetEnd() ||
         nCurrentIndex >= (nNextEnd = (*pHints->GetSortedByEnd(nEndIndex)->GetEnd()))))
     {
@@ -791,7 +792,7 @@ lcl_ExportHints(
     // then some starts
     size_t nStartIndex = 0;
     sal_Int32 nNextStart = 0;
-    while(nStartIndex < pHints->Count() &&
+    while(nStartIndex < nHintsCount &&
         nCurrentIndex >= (nNextStart = pHints->Get(nStartIndex)->GetStart()))
     {
         SwTextAttr * const pAttr = pHints->Get(nStartIndex);
