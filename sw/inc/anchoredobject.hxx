@@ -28,7 +28,7 @@ class SdrObject;
 class SwFrame;
 class SwLayoutFrame;
 class SwTextFrame;
-
+class SwFlyFrame;
 class SwPageFrame;
 
 class SwFrameFormat;
@@ -488,6 +488,9 @@ class SW_DLLPUBLIC SwAnchoredObject
 
         /** The element name to show in the XML dump. */
         virtual const char* getElementName( ) const { return "SwAnchoredObject"; }
+
+        virtual const SwFlyFrame* DynCastFlyFrame() const;
+        virtual SwFlyFrame* DynCastFlyFrame();
 };
 
 /// Helper class for notify that positioning of an anchored object is in progress.

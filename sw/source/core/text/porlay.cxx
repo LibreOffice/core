@@ -669,7 +669,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                     for ( size_t i = 0; rInf.GetTextFrame()->GetDrawObjs() && i < pObjs->size(); ++i )
                     {
                         SwAnchoredObject* pAnchoredObj = (*rInf.GetTextFrame()->GetDrawObjs())[i];
-                        if ( auto pFly = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
+                        if ( auto pFly = pAnchoredObj->DynCastFlyFrame() )
                         {
                             bool bDeleted = false;
                             size_t nAuthor = std::string::npos;

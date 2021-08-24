@@ -865,7 +865,7 @@ void SwPageFrame::AppendFlyToPage( SwFlyFrame *pNew )
     SwSortedObjs &rObjs = *pNew->GetDrawObjs();
     for (SwAnchoredObject* pTmpObj : rObjs)
     {
-        if ( auto pTmpFly = dynamic_cast<SwFlyFrame*>( pTmpObj) )
+        if ( auto pTmpFly = pTmpObj->DynCastFlyFrame() )
         {
             // #i28701# - use new method <GetPageFrame()>
             if ( pTmpFly->IsFlyFreeFrame() && !pTmpFly->GetPageFrame() )
@@ -1009,7 +1009,7 @@ void SwPageFrame::MoveFly( SwFlyFrame *pToMove, SwPageFrame *pDest )
     SwSortedObjs &rObjs = *pToMove->GetDrawObjs();
     for (SwAnchoredObject* pObj : rObjs)
     {
-        if ( auto pFly = dynamic_cast<SwFlyFrame*>( pObj) )
+        if ( auto pFly = pObj->DynCastFlyFrame() )
         {
             if ( pFly->IsFlyFreeFrame() )
             {

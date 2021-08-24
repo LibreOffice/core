@@ -1910,7 +1910,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
             OSL_ENSURE( pBoss->IsPageFrame(), "Header/Footer out of page?" );
             for (SwAnchoredObject* pAnchoredObj : rObjs)
             {
-                if ( auto pFly = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
+                if ( auto pFly = pAnchoredObj->DynCastFlyFrame() )
                 {
                     OSL_ENSURE( !pFly->IsFlyInContentFrame(), "FlyInCnt at Page?" );
                     const SwFormatVertOrient &rVert =
@@ -2063,7 +2063,7 @@ void SwFrame::ValidateThisAndAllLowers( const sal_uInt16 nStage )
     const bool bOnlyObject = 1 == nStage;
     const bool bIncludeObjects = 1 <= nStage;
 
-    if ( !bOnlyObject || dynamic_cast< const SwFlyFrame *>( this ) !=  nullptr )
+    if ( !bOnlyObject || IsFlyFrame() )
     {
         setFrameAreaSizeValid(true);
         setFramePrintAreaValid(true);
@@ -2079,7 +2079,7 @@ void SwFrame::ValidateThisAndAllLowers( const sal_uInt16 nStage )
             for ( size_t i = 0; i < nCnt; ++i )
             {
                 SwAnchoredObject* pAnchObj = (*pObjs)[i];
-                if ( auto pFlyFrame = dynamic_cast<SwFlyFrame *>( pAnchObj ) )
+                if ( auto pFlyFrame = pAnchObj->DynCastFlyFrame() )
                     pFlyFrame->ValidateThisAndAllLowers( 2 );
                 else if ( auto pAnchoredDrawObj = dynamic_cast<SwAnchoredDrawObject *>( pAnchObj ) )
                     pAnchoredDrawObj->ValidateThis();
@@ -3532,7 +3532,7 @@ static void InvaPercentFlys( SwFrame *pFrame, SwTwips nDiff )
     OSL_ENSURE( pFrame->GetDrawObjs(), "Can't find any Objects" );
     for (SwAnchoredObject* pAnchoredObj : *pFrame->GetDrawObjs())
     {
-        if ( auto pFly = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
+        if ( auto pFly = pAnchoredObj->DynCastFlyFrame() )
         {
             const SwFormatFrameSize &rSz = pFly->GetFormat()->GetFrameSize();
             if ( rSz.GetWidthPercent() || rSz.GetHeightPercent() )
@@ -3663,7 +3663,7 @@ static bool lcl_IsFlyHeightClipped( SwLayoutFrame *pLay )
             for ( size_t i = 0; i < nCnt; ++i )
             {
                 SwAnchoredObject* pAnchoredObj = (*pFrame->GetDrawObjs())[i];
-                if ( auto pFly = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
+                if ( auto pFly = pAnchoredObj->DynCastFlyFrame() )
                 {
                     if ( pFly->IsHeightClipped() &&
                          ( !pFly->IsFlyFreeFrame() || pFly->GetPageFrame() ) )
@@ -3970,7 +3970,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
                     }
 
                     // #i68520#
-                    SwFlyFrame *pFlyFrame = dynamic_cast<SwFlyFrame*>(this);
+                    SwFlyFrame *pFlyFrame = IsFlyFrame() ? static_cast<SwFlyFrame*>(this) : nullptr;
                     if (pFlyFrame)
                     {
                         pFlyFrame->InvalidateObjRectWithSpaces();
@@ -4140,7 +4140,7 @@ static void lcl_InvalidateAllContent( SwContentFrame *pCnt, SwInvalidateFlags nI
     SwSortedObjs &rObjs = *pCnt->GetDrawObjs();
     for (SwAnchoredObject* pAnchoredObj : rObjs)
     {
-        if ( auto pFly = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
+        if ( auto pFly = pAnchoredObj->DynCastFlyFrame() )
         {
             if ( pFly->IsFlyInContentFrame() )
             {
@@ -4170,7 +4170,7 @@ void SwRootFrame::InvalidateAllContent( SwInvalidateFlags nInv )
             const SwSortedObjs &rObjs = *pPage->GetSortedObjs();
             for (SwAnchoredObject* pAnchoredObj : rObjs)
             {
-                if ( auto pFly = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
+                if ( auto pFly = pAnchoredObj->DynCastFlyFrame() )
                 {
                     ::lcl_InvalidateContent( pFly->ContainsContent(), nInv );
                     if ( nInv & SwInvalidateFlags::Direction )

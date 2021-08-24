@@ -717,7 +717,7 @@ static void lcl_CheckObjects(SwSortedObjs& rSortedObjs, const SwFrame* pFrame, t
         // #i28701# - consider changed type of <SwSortedObjs>
         // entries.
         tools::Long nTmp = 0;
-        if ( auto pFly = dynamic_cast<SwFlyFrame*>( pObj) )
+        if ( auto pFly = pObj->DynCastFlyFrame() )
         {
             if( pFly->getFrameArea().Top() != FAR_AWAY &&
                 ( pFrame->IsPageFrame() ? pFly->IsFlyLayFrame() :
@@ -1128,7 +1128,7 @@ void SwContentFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
                 // <SwSortedObjs> entries
                 SwAnchoredObject* pObj = (*GetDrawObjs())[i];
                 const SwFrameFormat& rFormat = pObj->GetFrameFormat();
-                const bool bFly = dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr;
+                const bool bFly = pObj->DynCastFlyFrame() !=  nullptr;
                 if ((bFly && (FAR_AWAY == pObj->GetObjRect().Width()))
                     || rFormat.GetFrameSize().GetWidthPercent())
                 {

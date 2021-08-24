@@ -322,7 +322,7 @@ void SwFlyFrame::DeleteCnt()
         while ( pFrame->GetDrawObjs() && pFrame->GetDrawObjs()->size() )
         {
             SwAnchoredObject *pAnchoredObj = (*pFrame->GetDrawObjs())[0];
-            if ( auto pFlyFrame = dynamic_cast<SwFlyFrame*>( pAnchoredObj) )
+            if ( auto pFlyFrame = pAnchoredObj->DynCastFlyFrame() )
             {
                 SwFrame::DestroyFrame(pFlyFrame);
             }
@@ -2392,7 +2392,7 @@ void SwFrame::InvalidateObjs( const bool _bNoInvaOfAsCharAnchoredObjs )
             pAnchoredObj->SetClearedEnvironment( false );
         }
         // distinguish between writer fly frames and drawing objects
-        if ( auto pFly = dynamic_cast<SwFlyFrame*>( pAnchoredObj) )
+        if ( auto pFly = pAnchoredObj->DynCastFlyFrame() )
         {
             pFly->Invalidate_();
             pFly->InvalidatePos_();
@@ -2426,7 +2426,7 @@ void SwLayoutFrame::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
         // for at-character/as-character anchored objects the anchor character
         // text frame is taken.
         const SwFrame* pAnchorFrame = pObj->GetAnchorFrameContainingAnchPos();
-        if ( auto pFly = dynamic_cast<SwFlyFrame*>( pObj) )
+        if ( auto pFly = pObj->DynCastFlyFrame() )
         {
             if ( pFly->getFrameArea().Left() == FAR_AWAY )
                 continue;
@@ -2927,7 +2927,7 @@ SwTwips SwFlyFrame::CalcContentHeight(const SwBorderAttrs *pAttrs, const SwTwips
             for ( size_t i = 0; i < nCnt; ++i )
             {
                 SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[i];
-                if ( auto pFly = dynamic_cast<SwFlyFrame*>( pAnchoredObj) )
+                if ( auto pFly = pAnchoredObj->DynCastFlyFrame() )
                 {
                     // consider only Writer fly frames, which follow the text flow.
                     if ( pFly->IsFlyLayFrame() &&
@@ -2957,4 +2957,15 @@ const SwFormatAnchor* SwFlyFrame::GetAnchorFromPoolItem(const SfxPoolItem& rItem
             return nullptr;
     }
 }
+
+const SwFlyFrame* SwFlyFrame::DynCastFlyFrame() const
+{
+    return this;
+}
+
+SwFlyFrame* SwFlyFrame::DynCastFlyFrame()
+{
+    return this;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

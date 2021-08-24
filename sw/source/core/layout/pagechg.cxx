@@ -977,7 +977,7 @@ void SwPageFrame::PrepareRegisterChg()
     for(SwAnchoredObject* pAnchoredObj : *GetSortedObjs())
     {
         // #i28701#
-        if ( auto pFly = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
+        if ( auto pFly = pAnchoredObj->DynCastFlyFrame() )
         {
             pFrame = pFly->ContainsContent();
             while ( pFrame )
@@ -1834,7 +1834,7 @@ void SwRootFrame::ImplCalcBrowseWidth()
                 // #i28701#
                 SwAnchoredObject* pAnchoredObj = (*pFrame->GetDrawObjs())[i];
                 const SwFrameFormat& rFormat = pAnchoredObj->GetFrameFormat();
-                const bool bFly = dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr;
+                const bool bFly = pAnchoredObj->DynCastFlyFrame() !=  nullptr;
                 if ((bFly && (FAR_AWAY == pAnchoredObj->GetObjRect().Width()))
                     || rFormat.GetFrameSize().GetWidthPercent())
                 {
@@ -2006,7 +2006,7 @@ static void lcl_MoveAllLowerObjs( SwFrame* pFrame, const Point& rOffset )
 
         SwObjPositioningInProgress aPosInProgress( *pAnchoredObj );
 
-        if ( auto pFlyFrame = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
+        if ( auto pFlyFrame = pAnchoredObj->DynCastFlyFrame() )
         {
             lcl_MoveAllLowers( pFlyFrame, rOffset );
             // tdf#138785 update position specific to as-char flys

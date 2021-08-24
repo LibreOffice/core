@@ -176,7 +176,7 @@ SwRect SwContourCache::CalcBoundRect( const SwAnchoredObject* pAnchoredObj,
     }
 
     if( bHandleContour &&
-        ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) ==  nullptr ||
+        ( pAnchoredObj->DynCastFlyFrame() ==  nullptr ||
           ( static_cast<const SwFlyFrame*>(pAnchoredObj)->Lower() &&
             static_cast<const SwFlyFrame*>(pAnchoredObj)->Lower()->IsNoTextFrame() ) ) )
     {
@@ -492,22 +492,21 @@ void SwTextFly::DrawTextOpaque( SwDrawTextInfo &rInf )
         {
             // #i68520#
             const SwAnchoredObject* pTmpAnchoredObj = (*mpAnchoredObjList)[i];
-            if( dynamic_cast<const SwFlyFrame*>(pTmpAnchoredObj) &&
-                mpCurrAnchoredObj != pTmpAnchoredObj )
+            const SwFlyFrame* pFly = pTmpAnchoredObj->DynCastFlyFrame();
+            if( pFly && mpCurrAnchoredObj != pTmpAnchoredObj )
             {
                 // #i68520#
-                const SwFlyFrame& rFly = dynamic_cast<const SwFlyFrame&>(*pTmpAnchoredObj);
-                if( aRegion.GetOrigin().IsOver( rFly.getFrameArea() ) )
+                if( aRegion.GetOrigin().IsOver( pFly->getFrameArea() ) )
                 {
-                    const SwFrameFormat *pFormat = rFly.GetFormat();
+                    const SwFrameFormat *pFormat = pFly->GetFormat();
                     const SwFormatSurround &rSur = pFormat->GetSurround();
                     const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
                     // Only the ones who are opaque and more to the top
-                    if( ! rFly.IsBackgroundTransparent() &&
+                    if( ! pFly->IsBackgroundTransparent() &&
                         css::text::WrapTextMode_THROUGH == rSur.GetSurround() &&
                         ( !rSur.IsAnchorOnly() ||
                           // #i68520#
-                          GetMaster() == rFly.GetAnchorFrame() ||
+                          GetMaster() == pFly->GetAnchorFrame() ||
                           ((RndStdIds::FLY_AT_PARA != rAnchor.GetAnchorId()) &&
                            (RndStdIds::FLY_AT_CHAR != rAnchor.GetAnchorId())
                           )
@@ -519,14 +518,14 @@ void SwTextFly::DrawTextOpaque( SwDrawTextInfo &rInf )
                     {
                         // Except for the content is transparent
                         const SwNoTextFrame *pNoText =
-                                rFly.Lower() && rFly.Lower()->IsNoTextFrame()
-                                                   ? static_cast<const SwNoTextFrame*>(rFly.Lower())
+                                pFly->Lower() && pFly->Lower()->IsNoTextFrame()
+                                                   ? static_cast<const SwNoTextFrame*>(pFly->Lower())
                                                    : nullptr;
                         if ( !pNoText ||
                              (!pNoText->IsTransparent() && !rSur.IsContour()) )
                         {
                             bOpaque = true;
-                            aRegion -= rFly.getFrameArea();
+                            aRegion -= pFly->getFrameArea();
                         }
                     }
                 }
@@ -582,7 +581,7 @@ void SwTextFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect )
                 continue;
 
             // #i68520#
-            const SwFlyFrame* pFly = dynamic_cast<const SwFlyFrame*>(pAnchoredObjTmp);
+            const SwFlyFrame* pFly = pAnchoredObjTmp->DynCastFlyFrame();
             if (pFly)
             {
                 // #i68520#
@@ -669,7 +668,7 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
         // bEvade: consider pNew, if we are not inside a fly
         //         consider pNew, if pNew is lower of <mpCurrAnchoredObj>
         bool bEvade = !mpCurrAnchoredObj ||
-                          Is_Lower_Of( dynamic_cast<const SwFlyFrame*>(mpCurrAnchoredObj), pNew);
+                          Is_Lower_Of( mpCurrAnchoredObj->DynCastFlyFrame(), pNew);
 
         if ( !bEvade )
         {

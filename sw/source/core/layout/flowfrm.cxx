@@ -376,7 +376,7 @@ sal_uInt8 SwFlowFrame::BwdMoveNecessary( const SwPageFrame *pPage, const SwRect 
                 if( m_rThis.IsLayoutFrame() && //Fly Lower of This?
                     Is_Lower_Of( &m_rThis, pObj->GetDrawObj() ) )
                     continue;
-                if( auto pFly = dynamic_cast<const SwFlyFrame*>(pObj) )
+                if( auto pFly = pObj->DynCastFlyFrame() )
                 {
                     if ( pFly->IsAnLower( &m_rThis ) )//This Lower of Fly?
                         continue;

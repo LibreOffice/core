@@ -665,7 +665,7 @@ static void DelFlys( const SwLayoutFrame& rFrame, SwPageFrame &rPage)
             i < rPage.GetSortedObjs()->size() )
     {
         SwAnchoredObject* pObj = (*rPage.GetSortedObjs())[i];
-        if (SwFlyFrame* pFlyFrame = dynamic_cast<SwFlyFrame*>(pObj))
+        if (SwFlyFrame* pFlyFrame = pObj->DynCastFlyFrame())
         {
             if (rFrame.IsAnLower(pFlyFrame))
             {

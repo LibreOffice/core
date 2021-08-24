@@ -389,7 +389,7 @@ bool SwPageFrame::FillSelection( SwSelectionList& rList, const SwRect& rRect ) c
             const SwSortedObjs &rObjs = *GetSortedObjs();
             for (SwAnchoredObject* pAnchoredObj : rObjs)
             {
-                const SwFlyFrame* pFly = dynamic_cast<const SwFlyFrame*>(pAnchoredObj);
+                const SwFlyFrame* pFly = pAnchoredObj->DynCastFlyFrame();
                 if( !pFly )
                     continue;
                 if( pFly->FillSelection( rList, rRect ) )
@@ -2569,7 +2569,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
             const SwSortedObjs &rObjs = *pPage->GetSortedObjs();
             for (SwAnchoredObject* pAnchoredObj : rObjs)
             {
-                const SwFlyFrame* pFly = dynamic_cast<const SwFlyFrame*>(pAnchoredObj);
+                const SwFlyFrame* pFly = pAnchoredObj->DynCastFlyFrame();
                 if ( !pFly )
                     continue;
                 const SwVirtFlyDrawObj* pObj = pFly->GetVirtDrawObj();

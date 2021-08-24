@@ -903,7 +903,7 @@ SwTwips SwAnchoredObjectPosition::CalcRelPosX(
     // it is horizontal positioned left or right, but not relative to character,
     // it has to be drawn aside another object, which have the same horizontal
     // position and lay below it.
-    if ( dynamic_cast<const SwFlyFrame*>( &GetAnchoredObj() ) !=  nullptr &&
+    if ( GetAnchoredObj().DynCastFlyFrame() &&
          ( mpContact->ObjAnchoredAtPara() || mpContact->ObjAnchoredAtChar() ) &&
          ( eHoriOrient == text::HoriOrientation::LEFT || eHoriOrient == text::HoriOrientation::RIGHT ) &&
          eRelOrient != text::RelOrientation::CHAR )

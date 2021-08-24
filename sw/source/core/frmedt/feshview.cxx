@@ -487,7 +487,7 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
                     Point aBest;
                     for(SwAnchoredObject* pAnchObj : *pPage->GetSortedObjs())
                     {
-                        if( auto pTmp = dynamic_cast<SwFlyFrame*>( pAnchObj) )
+                        if( auto pTmp = pAnchObj->DynCastFlyFrame() )
                         {
                             if( pTmp == pOld )
                                 bOld = true;
@@ -873,7 +873,7 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
         for ( size_t i = 0; i < nCount; ++i )
         {
             SwAnchoredObject* pAnchoredObj = (*pPage->GetSortedObjs())[i];
-            SwFlyFrame* pAct = dynamic_cast<SwFlyFrame*>(pAnchoredObj);
+            SwFlyFrame* pAct = pAnchoredObj->DynCastFlyFrame();
             if ( !pAct )
                 continue;
 

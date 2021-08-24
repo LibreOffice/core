@@ -287,7 +287,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
             SwSortedObjs &rObjs = *pPage->GetSortedObjs();
             for (SwAnchoredObject* pAnchoredObj : rObjs)
             {
-                if (SwFlyFrame *pFly = dynamic_cast<SwFlyFrame*>(pAnchoredObj))
+                if (SwFlyFrame *pFly = pAnchoredObj->DynCastFlyFrame())
                 {
                     if( pFly->getFrameArea().Left() != FAR_AWAY &&
                         !pFly->GetAnchorFrame()->FindFooterOrHeader() )
@@ -1001,7 +1001,7 @@ void SwLayHelper::CheckFlyCache_( SwPageFrame* pPage )
     o3tl::sorted_vector< const SdrObject*, SdrObjectCompare > aFlySet;
     for (SwAnchoredObject* pAnchoredObj : rObjs)
     {
-        if (SwFlyFrame *pFly = dynamic_cast<SwFlyFrame*>(pAnchoredObj))  // a text frame?
+        if (SwFlyFrame *pFly = pAnchoredObj->DynCastFlyFrame())  // a text frame?
         {
             if( pFly->GetAnchorFrame() &&
                 !pFly->GetAnchorFrame()->FindFooterOrHeader() )
