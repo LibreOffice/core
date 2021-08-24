@@ -78,6 +78,7 @@ ODatabaseImportExport::ODatabaseImportExport(const svx::ODataAccessDescriptor& _
                                              const Reference< XComponentContext >& _rM,
                                              const Reference< css::util::XNumberFormatter >& _rxNumberF)
     :m_bBookmarkSelection( false )
+    ,m_pStream(nullptr)
     ,m_xFormatter(_rxNumberF)
     ,m_xContext(_rM)
     ,m_nCommandType(CommandType::TABLE)
