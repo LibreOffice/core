@@ -268,9 +268,9 @@ void SdrObject::ActionChanged() const
 
 SdrPage* SdrObject::getSdrPageFromSdrObject() const
 {
-    if(getParentSdrObjListFromSdrObject())
+    if (SdrObjList* pParentList = getParentSdrObjListFromSdrObject())
     {
-        return getParentSdrObjListFromSdrObject()->getSdrPageFromSdrObjList();
+        return pParentList->getSdrPageFromSdrObjList();
     }
 
     return nullptr;
@@ -901,16 +901,15 @@ OUString SdrObject::GetDescription() const
 
 sal_uInt32 SdrObject::GetOrdNum() const
 {
-    if (nullptr != getParentSdrObjListFromSdrObject())
+    if (SdrObjList* pParentList = getParentSdrObjListFromSdrObject())
     {
-        if (getParentSdrObjListFromSdrObject()->IsObjOrdNumsDirty())
+        if (pParentList->IsObjOrdNumsDirty())
         {
-            getParentSdrObjListFromSdrObject()->RecalcObjOrdNums();
+            pParentList->RecalcObjOrdNums();
         }
     } else const_cast<SdrObject*>(this)->m_nOrdNum=0;
     return m_nOrdNum;
 }
-
 
 void SdrObject::SetOrdNum(sal_uInt32 nNum)
 {
