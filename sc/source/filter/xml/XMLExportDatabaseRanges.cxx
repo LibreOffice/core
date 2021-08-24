@@ -458,9 +458,20 @@ private:
                                               XML_BACKGROUND_COLOR);
                 }
 
-                OUStringBuffer buffer;
-                sax::Converter::convertColor(buffer, rItem.maColor);
-                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, buffer.makeStringAndClear());
+                OUString colorValue;
+                if (rItem.maColor == COL_AUTO) // tdf#142965
+                {
+                    colorValue = rItem.meType == ScQueryEntry::ByTextColor
+                                     ? GetXMLToken(XML_WINDOW_FONT_COLOR)
+                                     : GetXMLToken(XML_TRANSPARENT);
+                }
+                else
+                {
+                    OUStringBuffer buffer;
+                    sax::Converter::convertColor(buffer, rItem.maColor);
+                    colorValue = buffer.makeStringAndClear();
+                }
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, colorValue);
             }
             else
             {

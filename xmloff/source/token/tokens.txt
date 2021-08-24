@@ -2025,6 +2025,7 @@ white
 whole-page
 widows
 width
+window-font-color
 word
 word-count
 wrap
