@@ -20,19 +20,19 @@
 #ifndef INCLUDED_VCL_OUTDEVSTATE_HXX
 #define INCLUDED_VCL_OUTDEVSTATE_HXX
 
-#include <vcl/mapmod.hxx>
-#include <vcl/vclenum.hxx>
-#include <vcl/font.hxx>
-
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <tools/fontenum.hxx>
+#include <i18nlangtag/lang.h>
 #include <o3tl/typed_flags_set.hxx>
+
+#include <vcl/font.hxx>
+#include <vcl/mapmod.hxx>
+#include <vcl/region.hxx>
+#include <vcl/vclenum.hxx>
+
 #include <memory>
 #include <optional>
-#include <i18nlangtag/lang.h>
-
-namespace vcl { class Region; }
 
 // Flags for OutputDevice::Push() and OutDevState
 enum class PushFlags {
@@ -77,9 +77,14 @@ namespace o3tl {
 
 struct OutDevState
 {
-    OutDevState();
-    OutDevState(OutDevState&&);
-    ~OutDevState();
+    OutDevState()
+        : mbMapActive(false)
+        , meTextAlign(ALIGN_TOP)
+        , meRasterOp(RasterOp::OverPaint)
+        , mnTextLayoutMode(ComplexTextLayoutFlags::Default)
+        , meTextLanguage(0)
+        , mnFlags(PushFlags::NONE) {}
+    OutDevState(OutDevState&&) = default;
 
     std::optional<MapMode>        mpMapMode;
     bool            mbMapActive;
