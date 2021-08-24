@@ -1096,16 +1096,10 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
             aPopupMenu->RemoveItem(nAutoCorrId);
             aPopupMenu->RemoveItem(nAutoCorrectDlgId);
 
-            // For mobile phones, send the context menu structure
-            const SfxViewShell* pViewShell = SfxViewShell::Current();
-            if (pViewShell && pViewShell->isLOKMobilePhone())
-            {
-                LOKSendSpellPopupMenu(aPopupMenu, nGuessLangWord, nGuessLangPara, nWords);
-                return;
-            }
-            else // For desktop or tablet, we use the tunneled dialog
-                aPopupMenu->SetLOKNotifier(SfxViewShell::Current());
+            LOKSendSpellPopupMenu(aPopupMenu, nGuessLangWord, nGuessLangPara, nWords);
+            return;
         }
+
         sal_uInt16 nId = aPopupMenu->Execute(pImpEditView->GetWindow(), aTempRect, PopupMenuFlags::NoMouseUpClose);
 
         aPaM2 = pImpEditView->pEditEngine->pImpEditEngine->CreateEditPaM(aP2);
