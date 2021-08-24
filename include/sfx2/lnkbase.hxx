@@ -69,21 +69,25 @@ constexpr bool isClientFileType(SvBaseLinkObjectType t)
     return (static_cast<int>(t) & check) == check;
 }
 
-struct BaseLink_Impl;
-
 class SFX2_DLLPUBLIC SvBaseLink : public SvRefBase
 {
 private:
     friend class LinkManager;
     friend class SvLinkSource;
 
+    Link<SvBaseLink&,void>  m_aEndEditLink;
+    LinkManager*            m_pLinkMgr;
+    weld::Window*           m_pParentWin;
+    std::unique_ptr<FileDialogHelper>
+                            m_pFileDlg;
     SvLinkSourceRef         xObj;
     OUString                aLinkName;
-    std::unique_ptr<BaseLink_Impl>  pImpl;
+    std::unique_ptr<ImplBaseLinkData> pImplData;
     SvBaseLinkObjectType    mnObjType;
     bool                    bVisible : 1;
     bool                    bSynchron : 1;
     bool                    bWasLastEditOK : 1;
+    bool                    m_bIsConnect : 1;
 
     DECL_LINK( EndEditHdl, const OUString&, void );
 
@@ -94,8 +98,6 @@ protected:
 
     // Set LinkSourceName without action
     void            SetName( const OUString & rLn );
-
-    std::unique_ptr<ImplBaseLinkData> pImplData;
 
     bool            m_bIsReadOnly;
     css::uno::Reference<css::io::XInputStream>
@@ -169,7 +171,7 @@ public:
     void            clearStreamToLoadFrom();
 
     bool     WasLastEditOK() const       { return bWasLastEditOK; }
-    FileDialogHelper & GetInsertFileDialog(const OUString& rFactory) const;
+    FileDialogHelper & GetInsertFileDialog(const OUString& rFactory);
 };
 
 }
