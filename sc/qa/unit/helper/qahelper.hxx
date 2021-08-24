@@ -199,6 +199,8 @@ protected:
         const OUString& rTypeName, SfxFilterFlags nFilterFlags, SotClipboardFormatId nClipboardID,
         sal_uIntPtr nFilterVersion = SOFFICE_FILEFORMAT_CURRENT, const OUString* pPassword = nullptr );
 
+    ScDocShellRef load(const OUString& rURL, sal_Int32 nFormat, bool bReadWrite = false);
+
     ScDocShellRef loadDoc(
         std::u16string_view rFileName, sal_Int32 nFormat, bool bReadWrite = false );
 
