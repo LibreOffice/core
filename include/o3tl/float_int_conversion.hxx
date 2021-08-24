@@ -20,7 +20,7 @@ namespace o3tl
 // Return true iff `value` of floating-point type `F` converts to a value of integral type `I` no
 // smaller than `min`:
 template <typename F, typename I>
-std::enable_if_t<std::is_floating_point_v<F> && std::is_integral_v<I>, bool>
+constexpr std::enable_if_t<std::is_floating_point_v<F> && std::is_integral_v<I>, bool>
 convertsToAtLeast(F value, I min)
 {
     // If `F(min)`, `F(min) - F(1)` are too large in magnitude for `F`'s precision, then they either
@@ -33,7 +33,7 @@ convertsToAtLeast(F value, I min)
 // Return true iff `value` of floating-point type `F` converts to a value of integral type `I` no
 // larger than `max`:
 template <typename F, typename I>
-std::enable_if_t<std::is_floating_point_v<F> && std::is_integral_v<I>, bool>
+constexpr std::enable_if_t<std::is_floating_point_v<F> && std::is_integral_v<I>, bool>
 convertsToAtMost(F value, I max)
 {
     // If `F(max)`, `F(max) + F(1)` are too large in magnitude for `F`'s precision, then they either
@@ -41,6 +41,20 @@ convertsToAtMost(F value, I max)
     // bucket, or they are on the boundary of two adjacent buckets, in which case we should return
     // true if `value`represents the lower bucket containing `F(max)`:
     return value < F(max) + F(1);
+}
+
+// Casts a floating-point to an integer, avoiding overflow. Used like:
+//     sal_Int64 n = o3tl::saturating_cast<sal_Int64>(f);
+template <typename I, typename F>
+constexpr std::enable_if_t<std::is_floating_point_v<F> && std::is_integral_v<I>, I>
+saturating_cast(F f)
+{
+    if constexpr (std::is_signed_v<I>)
+        if (!convertsToAtLeast(f, std::numeric_limits<I>::min()))
+            return std::numeric_limits<I>::min();
+    if (!convertsToAtMost(f, std::numeric_limits<I>::max()))
+        return std::numeric_limits<I>::max();
+    return f;
 }
 
 // Return `value` of floating-point type `F` rounded to the nearest integer away from zero (which

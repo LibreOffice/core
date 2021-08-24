@@ -235,9 +235,7 @@ namespace pcr
         for ( sal_uInt16 d = 0; d < nDigits; ++d )
             n *= 10;
 
-        if ( !o3tl::convertsToAtMost(n, std::numeric_limits<int>::max()) )
-            return std::numeric_limits<int>::max();
-        return static_cast<int>(n);
+        return o3tl::saturating_cast<int>(n);
     }
 
     static double ImplCalcDoubleValue( int nValue, sal_uInt16 nDigits )
