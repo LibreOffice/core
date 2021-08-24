@@ -148,6 +148,11 @@
                     <property name="halign">start</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="viewpdf-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|viewpdf">Open the exported document in the system default PDF viewer.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -400,6 +405,11 @@
                     <property name="halign">start</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="watermark-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|watermark">Add a centered, vertical, light green watermark text to the page background. The watermark is not part of the source document.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -412,6 +422,11 @@
                     <property name="can-focus">True</property>
                     <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="watermarkentry-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|watermarkentry">Insert the text for the watermark signature.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -732,6 +747,11 @@
                     <property name="halign">start</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="pdfua-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|pdfua">Creates a universal accessibility-complying PDF file that follows the requirements of PDF/UA (ISO 14289) specifications.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -800,6 +820,11 @@
                     <property name="halign">start</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="exportplaceholders-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|exportplaceholders">Export the placeholders fields visual markings only. The exported placeholder is ineffective.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -855,6 +880,11 @@
                     <property name="halign">start</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="usereferencexobject-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|usereferencexobject">When the option is enabled, then the reference XObject markup is used:  viewers have to support this markup to show vector images. Otherwise a fallback bitmap is shown in the viewer.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -870,6 +900,11 @@
                     <property name="halign">start</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="hiddenpages-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|hiddenpages">Exports document hidden slides.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -885,6 +920,11 @@
                     <property name="halign">start</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="notes-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|notes">Export also the Notes pages view at the end of the exported PDF presentation document.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -901,6 +941,11 @@
                     <property name="margin-start">18</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="onlynotes-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|onlynotes">Exports only the Notes page views.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -916,6 +961,11 @@
                     <property name="halign">start</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="singlepagesheets-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|singlepagessheets">Ignores each sheet’s paper size, print ranges and shown/hidden status and puts every sheet (even hidden sheets) on exactly one page, which is exactly as small or large as needed to fit the whole contents of the sheet.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
