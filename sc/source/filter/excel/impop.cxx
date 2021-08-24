@@ -1093,20 +1093,15 @@ void ImportExcel::Defrowheight345()
 
 void ImportExcel::TableOp()
 {
-    sal_uInt16 nFirstRow, nLastRow;
-    sal_uInt8 nFirstCol, nLastCol;
-    sal_uInt16 nGrbit;
-    sal_uInt16 nInpRow, nInpCol, nInpRow2, nInpCol2;
-
-    nFirstRow = aIn.ReaduInt16();
-    nLastRow = aIn.ReaduInt16();
-    nFirstCol = aIn.ReaduInt8();
-    nLastCol = aIn.ReaduInt8();
-    nGrbit = aIn.ReaduInt16();
-    nInpRow = aIn.ReaduInt16();
-    nInpCol = aIn.ReaduInt16();
-    nInpRow2 = aIn.ReaduInt16();
-    nInpCol2 = aIn.ReaduInt16();
+    sal_uInt16 nFirstRow = aIn.ReaduInt16();
+    sal_uInt16 nLastRow = aIn.ReaduInt16();
+    sal_uInt8 nFirstCol = aIn.ReaduInt8();
+    sal_uInt8 nLastCol = aIn.ReaduInt8();
+    sal_uInt16 nGrbit = aIn.ReaduInt16();
+    sal_uInt16 nInpRow = aIn.ReaduInt16();
+    sal_uInt16 nInpCol = aIn.ReaduInt16();
+    sal_uInt16 nInpRow2 = aIn.ReaduInt16();
+    sal_uInt16 nInpCol2 = aIn.ReaduInt16();
 
     if (utl::ConfigManager::IsFuzzing())
     {
