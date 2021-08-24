@@ -1106,7 +1106,7 @@ void ImportExcel::TableOp()
     if (utl::ConfigManager::IsFuzzing())
     {
         //shrink to smallish arbitrary value to not timeout
-        nLastRow = std::min<sal_uInt16>(nLastRow, MAXROW_30);
+        nLastRow = std::min<sal_uInt16>(nLastRow, MAXROW_30 / 2);
     }
 
     if( GetRoot().GetDoc().ValidColRow( nLastCol, nLastRow ) )
