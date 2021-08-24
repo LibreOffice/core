@@ -1739,9 +1739,9 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126540_GridToggleModifiesTheDocument)
     CPPUNIT_ASSERT(pDocSh->IsModified());
 }
 
-CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf143979)
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144022)
 {
-    ScModelObj* pModelObj = createDoc("tdf143979.ods");
+    ScModelObj* pModelObj = createDoc("tdf144022.ods");
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
