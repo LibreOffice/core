@@ -932,8 +932,18 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
                 sal_Int32 nActive = -1;
                 for (auto& rColor : aColors)
                 {
-                    pColorMenu->InsertItem(i, OUString(), MenuItemBits::CHECKABLE);
-                    pColorMenu->SetItemColor(i, rColor);
+                    if (rColor == COL_AUTO)
+                    {
+                        OUString sText = eMode == AutoFilterMode::TextColor
+                                             ? ScResId(SCSTR_FILTER_AUTOMATIC_COLOR)
+                                             : ScResId(SCSTR_FILTER_NO_FILL);
+                        pColorMenu->InsertItem(i, sText, MenuItemBits::CHECKABLE);
+                    }
+                    else
+                    {
+                        pColorMenu->InsertItem(i, OUString(), MenuItemBits::CHECKABLE);
+                        pColorMenu->SetItemColor(i, rColor);
+                    }
                     auto aItem = pEntry->GetQueryItem();
                     if (aItem.maColor == rColor
                         && ((eMode == AutoFilterMode::TextColor

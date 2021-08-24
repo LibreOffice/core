@@ -2114,6 +2114,7 @@ namespace xmloff::token {
         XML_WHOLE_PAGE,
         XML_WIDOWS,
         XML_WIDTH,
+        XML_WINDOW_FONT_COLOR,
         XML_WORD,
         XML_WORD_COUNT,
         XML_WRAP,
