@@ -189,7 +189,7 @@ void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFor
     utl::TempFile aOutput;
     aOutput.EnableKillingFile();
     OUString aOutputFile = aOutput.GetFileName();
-    OUString aCommand = aValidator + " " + rPath + " > " + aOutputFile;
+    OUString aCommand = aValidator + " " + rPath + " > " + aOutputFile + " 2>&1";
 
 #if !defined _WIN32
     // For now, this is only needed by some Linux ASan builds, so keep it simply and disable it on
