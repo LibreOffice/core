@@ -3222,6 +3222,7 @@ bool SwpHints::TryInsertHint(
     else if ( !bNoHintAdjustMode &&
          !pHint->IsOverlapAllowedAttr() &&
          !rNode.GetDoc().IsInXMLImport() &&
+         !rNode.GetDoc().IsInWw8Import() &&
          ( RES_TXTATR_AUTOFMT == nWhich ||
            RES_TXTATR_CHARFMT == nWhich ) )
     {

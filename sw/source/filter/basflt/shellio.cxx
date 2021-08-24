@@ -110,6 +110,8 @@ ErrCode SwReader::Read( const Reader& rOptions )
             && (mpMedium->GetFilter()->GetUserData() == FILTER_RTF
                 || mpMedium->GetFilter()->GetUserData() == sRtfWH
                 || mpMedium->GetFilter()->GetUserData() == FILTER_DOCX));
+    mxDoc->SetInWw8Import(mpMedium && mpMedium->GetFilter()
+            && mpMedium->GetFilter()->GetUserData() == FILTER_WW8);
 
     SwPaM *pPam;
     if( mpCursor )
@@ -346,6 +348,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
     mxDoc->SetInReading( false );
     mxDoc->SetInXMLImport( false );
     mxDoc->SetInWriterfilterImport(false);
+    mxDoc->SetInWw8Import(false);
 
     mxDoc->InvalidateNumRules();
     mxDoc->UpdateNumRule();
