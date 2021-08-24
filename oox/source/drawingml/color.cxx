@@ -479,6 +479,22 @@ void Color::clearTransparence()
     mnAlpha = MAX_PERCENT;
 }
 
+sal_Int16 Color::getTintOrShade()
+{
+    for(auto const& aTransform : maTransforms)
+    {
+        switch(aTransform.mnToken)
+        {
+            case XML_tint:
+                // from 1000th percent to 100th percent...
+                return aTransform.mnValue/10;
+            case XML_shade:
+                // from 1000th percent to 100th percent...
+                return -aTransform.mnValue/10;
+        }
+    }
+    return 0;
+}
 ::Color Color::getColor( const GraphicHelper& rGraphicHelper, ::Color nPhClr ) const
 {
     const sal_Int32 nTempC1 = mnC1;

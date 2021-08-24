@@ -99,6 +99,7 @@ public:
     /** Returns the scheme name from the a:schemeClr element for interoperability purposes */
     const OUString&     getSchemeColorName() const { return msSchemeName; }
     sal_Int16           getSchemeColorIndex() const;
+    sal_Int16           getTintOrShade();
 
     /** Returns the unaltered list of transformations for interoperability purposes */
     const css::uno::Sequence< css::beans::PropertyValue >& getTransformations() const { return maInteropTransformations;}
