@@ -97,8 +97,7 @@ public:
 
     bool isReadOnly(OUString const & path) const;
 
-    static css::uno::Any getPropertyValue(css::uno::Reference< css::uno::XComponentContext >  const & context,
-            OUString const & path);
+    css::uno::Any getPropertyValue(OUString const & path) const;
 
     static void setPropertyValue(
         std::shared_ptr< ConfigurationChanges > const & batch,
@@ -211,7 +210,7 @@ template< typename T, typename U > struct ConfigurationProperty
         // Folding this into one statement causes a bogus error at least with
         // Red Hat GCC 4.6.2-1:
         css::uno::Any a(
-            detail::ConfigurationWrapper::getPropertyValue(context,
+            detail::ConfigurationWrapper::get(context).getPropertyValue(
                 T::path()));
         return detail::Convert< U >::fromAny(a);
     }

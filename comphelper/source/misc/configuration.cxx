@@ -15,7 +15,6 @@
 #include <mutex>
 #include <string_view>
 
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/configuration/ReadOnlyAccess.hpp>
 #include <com/sun/star/configuration/ReadWriteAccess.hpp>
@@ -131,8 +130,7 @@ bool comphelper::detail::ConfigurationWrapper::isReadOnly(OUString const & path)
         != 0;
 }
 
-css::uno::Any comphelper::detail::ConfigurationWrapper::getPropertyValue(css::uno::Reference< css::uno::XComponentContext >  const & context,
-            OUString const & path)
+css::uno::Any comphelper::detail::ConfigurationWrapper::getPropertyValue(OUString const& path) const
 {
     // Cache the configuration access, since some of the keys are used in hot code.
     // Note that this cache is only used by the officecfg:: auto-generated code, using it for anything
@@ -149,18 +147,14 @@ css::uno::Any comphelper::detail::ConfigurationWrapper::getPropertyValue(css::un
 
     // check cache
     auto it = gAccessMap.find(parentPath);
-    if (it != gAccessMap.end())
-        return it->second->getByName(childName);
-
-    // not in the cache, look it up
-    css::uno::Reference< css::lang::XMultiServiceFactory > provider = css::configuration::theDefaultProvider::get(
-                        context );
-    css::uno::Any arg(css::beans::NamedValue("nodepath", css::uno::Any(parentPath)));
-    css::uno::Reference< css::container::XNameAccess > access(provider->createInstanceWithArguments(
-        "com.sun.star.configuration.ConfigurationAccess",
-        { arg }), css::uno::UNO_QUERY_THROW);
-    gAccessMap.emplace(parentPath, access);
-    return access->getByName(childName);
+    if (it == gAccessMap.end())
+    {
+        // not in the cache, look it up
+        css::uno::Reference<css::container::XNameAccess> access(
+            access_->getByHierarchicalName(parentPath), css::uno::UNO_QUERY_THROW);
+        it = gAccessMap.emplace(parentPath, access).first;
+    }
+    return it->second->getByName(childName);
 }
 
 void comphelper::detail::ConfigurationWrapper::setPropertyValue(
