@@ -459,7 +459,10 @@ private:
                 }
 
                 OUStringBuffer buffer;
-                sax::Converter::convertColor(buffer, rItem.maColor);
+                if (rItem.maColor == COL_AUTO) // tdf#142965
+                    buffer = "none";
+                else
+                    sax::Converter::convertColor(buffer, rItem.maColor);
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, buffer.makeStringAndClear());
             }
             else
