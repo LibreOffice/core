@@ -921,6 +921,8 @@ void SvxRTFParser::BuildWhichTable()
     {
         sal_uInt16 nTrueWid = pAttrPool->GetTrueWhich(nWid, false);
         aPardMap[nWid] = nTrueWid;
+        if (nTrueWid == 0)
+            continue;
         aWhichMap = aWhichMap.MergeRange(nTrueWid, nTrueWid);
     }
 
@@ -943,6 +945,8 @@ void SvxRTFParser::BuildWhichTable()
     {
         sal_uInt16 nTrueWid = pAttrPool->GetTrueWhich(nWid, false);
         aPlainMap[nWid] = nTrueWid;
+        if (nTrueWid == 0)
+            continue;
         aWhichMap = aWhichMap.MergeRange(nTrueWid, nTrueWid);
     }
 }
