@@ -114,8 +114,6 @@ uno::Reference< uno::XInterface > ScPerfObj::init(const OUString& aFileName)
 
     mxComponent = loadFromDesktop(aFileURL);
 
-    CPPUNIT_ASSERT(mxComponent.is());
-
     return mxComponent;
 }
 

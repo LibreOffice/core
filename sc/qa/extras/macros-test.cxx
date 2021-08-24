@@ -1096,7 +1096,6 @@ void ScMacrosTest::testTdf90278()
     OUString aFileName;
     createFileURL(u"tdf90278.xls", aFileName);
     auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
-    CPPUNIT_ASSERT(xComponent);
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
     CPPUNIT_ASSERT(pFoundShell);
