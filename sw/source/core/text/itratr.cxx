@@ -260,6 +260,7 @@ void SwAttrIter::SeekFwd(const sal_Int32 nOldPos, const sal_Int32 nNewPos)
 {
     SwpHints const*const pHints(m_pTextNode->GetpSwpHints());
     SwTextAttr *pTextAttr;
+    const auto nHintsCount = pHints->Count();
 
     if ( m_nStartIndex ) // If attributes have been opened at all ...
     {
@@ -267,7 +268,7 @@ void SwAttrIter::SeekFwd(const sal_Int32 nOldPos, const sal_Int32 nNewPos)
 
         // As long as we've not yet reached the end of EndArray and the
         // TextAttribute ends before or at the new position ...
-        while ((m_nEndIndex < pHints->Count()) &&
+        while ((m_nEndIndex < nHintsCount) &&
                ((pTextAttr = pHints->GetSortedByEnd(m_nEndIndex))->GetAnyEnd() <= nNewPos))
         {
             // Close the TextAttributes, whose StartPos were before or at
@@ -278,7 +279,7 @@ void SwAttrIter::SeekFwd(const sal_Int32 nOldPos, const sal_Int32 nNewPos)
     }
     else // skip the not opened ends
     {
-        while ((m_nEndIndex < pHints->Count()) &&
+        while ((m_nEndIndex < nHintsCount) &&
                (pHints->GetSortedByEnd(m_nEndIndex)->GetAnyEnd() <= nNewPos))
         {
             m_nEndIndex++;
@@ -287,7 +288,7 @@ void SwAttrIter::SeekFwd(const sal_Int32 nOldPos, const sal_Int32 nNewPos)
 
     // As long as we've not yet reached the end of EndArray and the
     // TextAttribute ends before or at the new position...
-    while ((m_nStartIndex < pHints->Count()) &&
+    while ((m_nStartIndex < nHintsCount) &&
             ((pTextAttr = pHints->Get(m_nStartIndex))->GetStart() <= nNewPos))
     {
 
