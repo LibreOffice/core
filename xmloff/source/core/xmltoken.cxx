@@ -2120,6 +2120,7 @@ namespace xmloff::token {
         TOKEN( "whole-page",                      XML_WHOLE_PAGE ),
         TOKEN( "widows",                          XML_WIDOWS ),
         TOKEN( "width",                           XML_WIDTH ),
+        TOKEN( "window-font-color",               XML_WINDOW_FONT_COLOR ),
         TOKEN( "word",                            XML_WORD ),
         TOKEN( "word-count",                      XML_WORD_COUNT ),
         TOKEN( "wrap",                            XML_WRAP ),

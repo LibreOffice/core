@@ -432,7 +432,11 @@ void SAL_CALL ScXMLConditionContext::endFastElement( sal_Int32 /*nElement*/ )
         {
             rItem.meType = IsXMLToken(sDataType, XML_TEXT_COLOR) ? ScQueryEntry::ByTextColor
                                                                  : ScQueryEntry::ByBackgroundColor;
-            sax::Converter::convertColor(rItem.maColor, sConditionValue);
+            if (IsXMLToken(sConditionValue, XML_TRANSPARENT)
+                || IsXMLToken(sConditionValue, XML_WINDOW_FONT_COLOR))
+                rItem.maColor = COL_AUTO;
+            else
+                sax::Converter::convertColor(rItem.maColor, sConditionValue);
         }
         else
         {
