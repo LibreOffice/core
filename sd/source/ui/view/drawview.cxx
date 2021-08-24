@@ -342,7 +342,8 @@ void DrawView::SetMasterAttributes( SdrObject* pObject, const SdPage& rPage, Sfx
     }
     else if (eObjKind == OBJ_OUTLINETEXT)
     {
-        if (bMaster)
+        // tdf#127900: do not forget to apply master style to placeholders
+        if (!rSet.HasItem(EE_PARA_NUMBULLET) || bMaster)
         {
             // Presentation object outline
             for (sal_uInt16 nLevel = 9; nLevel > 0; nLevel--)
