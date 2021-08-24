@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <cstdlib>
+#include <limits>
 
 #include <oox/vml/vmlformatting.hxx>
 
@@ -29,6 +30,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <o3tl/float_int_conversion.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
@@ -199,7 +201,14 @@ sal_Int64 ConversionHelper::decodeMeasureToEmu( const GraphicHelper& rGraphicHel
         OSL_FAIL( "ConversionHelper::decodeMeasureToEmu - unknown measure unit" );
         fValue = nRefValue;
     }
-    return static_cast< sal_Int64 >( fValue + 0.5 );
+    fValue += 0.5;
+    if (!o3tl::convertsToAtMost(fValue, std::numeric_limits<sal_Int64>::max())) {
+        return std::numeric_limits<sal_Int64>::max();
+    }
+    if (!o3tl::convertsToAtLeast(fValue, std::numeric_limits<sal_Int64>::min())) {
+        return std::numeric_limits<sal_Int64>::min();
+    }
+    return static_cast< sal_Int64 >( fValue );
 }
 
 sal_Int32 ConversionHelper::decodeMeasureToHmm( const GraphicHelper& rGraphicHelper,
