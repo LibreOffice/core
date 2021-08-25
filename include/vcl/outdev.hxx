@@ -521,7 +521,7 @@ public:
     bool                        IsBackground() const { return mbBackground; }
 
     void                        SetFont( const vcl::Font& rNewFont );
-    const vcl::Font&            GetFont() const { return maFont; }
+    const vcl::Font&            GetFont() const;
 
 protected:
 
