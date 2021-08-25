@@ -31,6 +31,7 @@
 #include <comphelper/servicehelper.hxx>
 
 #include <cppuhelper/implbase.hxx>
+#include <editeng/unoipset.hxx>
 
 class SdDrawDocument;
 class SdrModel;
@@ -48,6 +49,7 @@ class SdUnoPageBackground final : public ::cppu::WeakImplHelper<
                             public SfxListener
 {
     const SvxItemPropertySet*  mpPropSet;
+    SvxItemPropertySetUsrAnys maUsrAnys;
     std::unique_ptr<SfxItemSet> mpSet;
     SdrModel*           mpDoc;
 
