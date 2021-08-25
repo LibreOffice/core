@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "038689bb_7076dd67",
+        "filename": "sw/source/uibase/shells/drwbassh.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 861,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2021-08-25T11:39:22Z",
+      "side": 1,
+      "message": "This line crash, when rMarkList is empty. (for me, it happens when i insert a line by drawing it slowly.. it happens even in an empty document)\nI think you just forget the else:\n\nelse {\n    const SdrMarkList\u0026 rMarkList \u003d pSdrView-\u003eGetMarkedObjectList();\n    SdrObject* pObj \u003d rMarkList.GetMark(0)-\u003eGetMarkedSdrObj();\n//...\n    {\n        if (pObj-\u003egetHyperlink().isEmpty())\n            rSet.DisableItem(nWhich);\n    }\n}",
+      "revId": "75cd2b0fa71c73ae815b80d8e42328024ea63555",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
