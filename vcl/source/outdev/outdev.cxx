@@ -297,6 +297,7 @@ void OutputDevice::SetRefPoint()
     if( mpAlphaVDev )
         mpAlphaVDev->SetRefPoint();
 }
+
 void OutputDevice::SetRefPoint( const Point& rRefPoint )
 {
     if ( mpMetaFile )
@@ -307,6 +308,27 @@ void OutputDevice::SetRefPoint( const Point& rRefPoint )
 
     if( mpAlphaVDev )
         mpAlphaVDev->SetRefPoint( rRefPoint );
+}
+
+void OutputDevice::SetRasterOp( RasterOp eRasterOp )
+{
+    if ( mpMetaFile )
+        mpMetaFile->AddAction( new MetaRasterOpAction( eRasterOp ) );
+
+    if ( meRasterOp != eRasterOp )
+    {
+        meRasterOp = eRasterOp;
+        mbInitLineColor = mbInitFillColor = true;
+
+        if( mpGraphics || AcquireGraphics() )
+        {
+            assert(mpGraphics);
+            mpGraphics->SetXORMode( (RasterOp::Invert == meRasterOp) || (RasterOp::Xor == meRasterOp), RasterOp::Invert == meRasterOp );
+        }
+    }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetRasterOp( eRasterOp );
 }
 
 sal_uInt16 OutputDevice::GetBitCount() const
