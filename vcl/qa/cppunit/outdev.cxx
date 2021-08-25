@@ -58,6 +58,7 @@ public:
     void testRefPoint();
     void testRasterOp();
     void testOutputFlag();
+    void testDrawMode();
     void testAntialias();
     void testSystemTextColor();
     void testShouldDrawWavePixelAsRect();
@@ -93,6 +94,7 @@ public:
     CPPUNIT_TEST(testRefPoint);
     CPPUNIT_TEST(testRasterOp);
     CPPUNIT_TEST(testAntialias);
+    CPPUNIT_TEST(testDrawMode);
     CPPUNIT_TEST(testOutputFlag);
     CPPUNIT_TEST(testSystemTextColor);
     CPPUNIT_TEST(testShouldDrawWavePixelAsRect);
@@ -812,6 +814,17 @@ void VclOutdevTest::testAntialias()
     pVDev->SetAntialiasing(AntialiasingFlags::Enable);
 
     CPPUNIT_ASSERT_EQUAL(AntialiasingFlags::Enable, pVDev->GetAntialiasing());
+}
+
+void VclOutdevTest::testDrawMode()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+
+    CPPUNIT_ASSERT_EQUAL(DrawModeFlags::Default, pVDev->GetDrawMode());
+
+    pVDev->SetDrawMode(DrawModeFlags::BlackLine);
+
+    CPPUNIT_ASSERT_EQUAL(DrawModeFlags::BlackLine, pVDev->GetDrawMode());
 }
 
 void VclOutdevTest::testSystemTextColor()
