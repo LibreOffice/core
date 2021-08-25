@@ -321,7 +321,7 @@ namespace oox::drawingml {
     if ( GETA(propName) ) \
         mAny >>= variable;
 
-ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, ShapeHashMap* pShapeMap, XmlFilterBase* pFB, DocumentType eDocumentType, DMLTextExport* pTextExport )
+ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, ShapeHashMap* pShapeMap, XmlFilterBase* pFB, DocumentType eDocumentType, DMLTextExport* pTextExport, bool bUserShapes )
     : DrawingML( std::move(pFS), pFB, eDocumentType, pTextExport )
     , m_nEmbeddedObjects(0)
     , mnShapeIdMax( 1 )
@@ -329,6 +329,7 @@ ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, ShapeHashMap
     , maMapModeSrc( MapUnit::Map100thMM )
     , maMapModeDest( MapUnit::MapInch, Point(), Fraction( 1, 576 ), Fraction( 1, 576 ) )
     , mpShapeMap( pShapeMap ? pShapeMap : &maShapeMap )
+    , mbUserShapes( bUserShapes )
 {
     mpURLTransformer = std::make_shared<URLTransformer>();
 }
@@ -1236,7 +1237,7 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
 
     if (xGraphic.is())
     {
-        WriteXGraphicBlip(xShapeProps, xGraphic, false);
+        WriteXGraphicBlip(xShapeProps, xGraphic, mbUserShapes);
     }
     else if (bHasMediaURL)
     {
@@ -1244,7 +1245,7 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
         if (xShapeProps->getPropertySetInfo()->hasPropertyByName("FallbackGraphic"))
             xShapeProps->getPropertyValue("FallbackGraphic") >>= xFallbackGraphic;
 
-        WriteXGraphicBlip(xShapeProps, xFallbackGraphic, false);
+        WriteXGraphicBlip(xShapeProps, xFallbackGraphic, mbUserShapes);
     }
 
     if (xGraphic.is())
