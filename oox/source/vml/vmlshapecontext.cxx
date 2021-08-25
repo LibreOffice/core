@@ -562,16 +562,63 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const Attri
     return ShapeTypeContext::onCreateContext( nElement, rAttribs );
 }
 
-void ShapeContext::setPoints( const OUString& rPoints )
+void ShapeContext::setPoints(const OUString& rPoints)
 {
     mrShapeModel.maPoints.clear();
     sal_Int32 nIndex = 0;
 
-    while( nIndex >= 0 )
+    while (nIndex >= 0)
     {
-        sal_Int32 nX = rPoints.getToken( 0, ',', nIndex ).toInt32();
-        sal_Int32 nY = rPoints.getToken( 0, ',', nIndex ).toInt32();
-        mrShapeModel.maPoints.emplace_back( nX, nY );
+        sal_Int32 nX = ConversionHelper::decodeMeasureToTwip(
+            mrShape.getDrawing().getFilter().getGraphicHelper(), rPoints.getToken(0, ',', nIndex),
+            0, true, true);
+        sal_Int32 nY = ConversionHelper::decodeMeasureToTwip(
+            mrShape.getDrawing().getFilter().getGraphicHelper(), rPoints.getToken(0, ',', nIndex),
+            0, false, true);
+        mrShapeModel.maPoints.emplace_back(nX, nY);
+    }
+    // VML polyline has no size in its style attribute. Word writes the size to attribute
+    // coordsize with values in twip but without unit. For others we get size from points.
+    if (mrShape.getTypeModel().maWidth.isEmpty() && mrShape.getTypeModel().maHeight.isEmpty())
+    {
+        if (mrShape.getTypeModel().moCoordSize.has())
+        {
+            double fWidth = mrShape.getTypeModel().moCoordSize.get().first;
+            fWidth = o3tl::convert(fWidth, o3tl::Length::twip, o3tl::Length::pt);
+            double fHeight = mrShape.getTypeModel().moCoordSize.get().second;
+            fHeight = o3tl::convert(fHeight, o3tl::Length::twip, o3tl::Length::pt);
+            mrShape.getTypeModel().maWidth = OUString::number(fWidth) + "pt";
+            mrShape.getTypeModel().maHeight = OUString::number(fHeight) + "pt";
+        }
+        else if (mrShapeModel.maPoints.size())
+        {
+            double fMinX = mrShapeModel.maPoints[0].X;
+            double fMaxX = mrShapeModel.maPoints[0].X;
+            double fMinY = mrShapeModel.maPoints[0].Y;
+            double fMaxY = mrShapeModel.maPoints[0].Y;
+            for (const auto& rPoint : mrShapeModel.maPoints)
+            {
+                if (rPoint.X < fMinX)
+                    fMinX = rPoint.X;
+                else if (rPoint.X > fMaxX)
+                    fMaxX = rPoint.X;
+                if (rPoint.Y < fMinY)
+                    fMinY = rPoint.Y;
+                else if (rPoint.Y > fMaxY)
+                    fMaxY = rPoint.Y;
+            }
+            mrShape.getTypeModel().maWidth
+                = OUString::number(
+                      o3tl::convert(fMaxX - fMinX, o3tl::Length::twip, o3tl::Length::pt))
+                  + "pt";
+            mrShape.getTypeModel().maHeight
+                = OUString::number(
+                      o3tl::convert(fMaxY - fMinY, o3tl::Length::twip, o3tl::Length::pt))
+                  + "pt";
+            // Set moCoordSize, otherwise default (1000,1000) is used.
+            mrShape.getTypeModel().moCoordSize.set(
+                Int32Pair(basegfx::fround(fMaxX - fMinX), basegfx::fround(fMaxY - fMinY)));
+        }
     }
 }
 
