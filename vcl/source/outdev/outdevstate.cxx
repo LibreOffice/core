@@ -198,15 +198,4 @@ void OutputDevice::ClearStack()
         Pop();
 }
 
-void OutputDevice::SetDigitLanguage( LanguageType eTextLanguage )
-{
-    if( mpMetaFile )
-        mpMetaFile->AddAction( new MetaTextLanguageAction( eTextLanguage ) );
-
-    meTextLanguage = eTextLanguage;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetDigitLanguage( eTextLanguage );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
