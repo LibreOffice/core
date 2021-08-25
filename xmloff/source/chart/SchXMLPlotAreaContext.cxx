@@ -617,7 +617,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLDataLabelParaCon
 }
 
 SchXMLDataLabelContext::SchXMLDataLabelContext(SvXMLImport& rImport,
-                                               ::std::vector<OUString>& rLabels,
+                                               CustomLabelsInfo& rLabels,
                                                DataRowPointStyle& rDataLabelStyle)
     : SvXMLImportContext(rImport)
     , mrLabels(rLabels)
@@ -630,7 +630,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLDataLabelContext
     const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     if ( nElement == XML_ELEMENT(TEXT, XML_P) )
-        return new SchXMLDataLabelParaContext(GetImport(), mrLabels);
+        return new SchXMLDataLabelParaContext(GetImport(), mrLabels.mLabels);
     else
         XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     return nullptr;
@@ -667,6 +667,19 @@ void SchXMLDataLabelContext::StartElement(const uno::Reference<xml::sax::XAttrib
             if (IsXMLToken(aLocalName, XML_STYLE_NAME))
             {
                 mrDataLabelStyle.msStyleName = sValue;
+            }
+        }
+        else if (nPrefix == XML_NAMESPACE_LO_EXT)
+        {
+            if (IsXMLToken(aLocalName, XML_DATA_LABEL_GUID))
+            {
+                mrLabels.msLabelGuid = sValue;
+                mrLabels.mbDataLabelsRange = true;
+            }
+            else if (IsXMLToken(aLocalName, XML_DATA_LABELS_CELL_RANGE))
+            {
+                mrLabels.msLabelsCellRange = sValue;
+                mrLabels.mbDataLabelsRange = true;
             }
         }
     }
@@ -744,7 +757,7 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
             if( IsXMLToken( aLocalName, XML_CUSTOM_LABEL_FIELD) && !mbHasLabelParagraph)
             {
                 sCustomLabelField = xAttrList->getValueByIndex( i );
-                mDataPoint.mCustomLabels.push_back(sCustomLabelField);
+                mDataPoint.mCustomLabels.mLabels.push_back(sCustomLabelField);
             }
             else if (IsXMLToken(aLocalName, XML_HIDE_LEGEND))
             {
@@ -779,7 +792,7 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
 
 void SchXMLDataPointContext::endFastElement(sal_Int32 )
 {
-    if(!mDataPoint.msStyleName.isEmpty() || mDataPoint.mCustomLabels.size() > 0)
+    if(!mDataPoint.msStyleName.isEmpty() || mDataPoint.mCustomLabels.mLabels.size() > 0)
     {
         mrStyleVector.push_back(mDataPoint);
     }

@@ -87,6 +87,10 @@ private:
         setFieldType( const css::chart2::DataPointCustomLabelFieldType FieldType ) override;
     virtual OUString SAL_CALL getGuid() override;
     void SAL_CALL setGuid( const OUString& guid ) override;
+    virtual sal_Bool SAL_CALL getDataLabelsRange() override;
+    virtual void SAL_CALL setDataLabelsRange( sal_Bool dataLabelsRange ) override;
+    virtual OUString SAL_CALL getCellRange() override;
+    virtual void SAL_CALL setCellRange( const OUString& cellRange ) override;
 
     // ____ OPropertySet ____
     virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const override;
@@ -127,6 +131,8 @@ private:
     // ____ XDataPointCustomLabelField ____
     css::chart2::DataPointCustomLabelFieldType m_aType;
     OUString m_aGuid;
+    OUString m_aCellRange;
+    bool m_bDataLabelsRange;
 
     css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
 };

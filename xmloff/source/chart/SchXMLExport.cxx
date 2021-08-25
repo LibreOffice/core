@@ -113,7 +113,18 @@ using ::std::vector;
 
 namespace
 {
-    using CustomLabelSeq = Sequence<Reference<chart2::XDataPointCustomLabelField>>;
+    struct CustomLabelData
+    {
+        CustomLabelData():
+            mbDataLabelsRange( false )
+        {
+        }
+
+        Sequence<Reference<chart2::XDataPointCustomLabelField>> maFields;
+        bool mbDataLabelsRange;
+        OUString maRange;
+        OUString maGuid;
+    };
 
     struct SchXMLDataPointStruct
     {
@@ -123,7 +134,7 @@ namespace
 
         // There is no internal equivalent for <chart:data-label>. It will be generated on the fly
         // on export. All about data label is hold in the data point.
-        CustomLabelSeq   mCustomLabelText; // <text:p> child element in <chart:data-label>
+        CustomLabelData   mCustomLabel; // <text:p> child element in <chart:data-label>
         OUString msDataLabelStyleName; // chart:style-name attribute in <chart:data-label>
 
         SchXMLDataPointStruct() : mnRepeat( 1 ) {}
@@ -282,30 +293,43 @@ public:
 
 namespace
 {
-CustomLabelSeq lcl_getCustomLabelField(SvXMLExport const& rExport,
+CustomLabelData lcl_getCustomLabelField(SvXMLExport const& rExport,
                                        sal_Int32 nDataPointIndex,
                                        const uno::Reference< chart2::XDataSeries >& rSeries)
 {
     if (!rSeries.is())
-        return CustomLabelSeq();
+        return CustomLabelData();
 
     // Custom data label text will be written to the <text:p> child element of a
     // <chart:data-label> element. That exists only since ODF 1.2.
     const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(
         rExport.getSaneDefaultVersion());
     if (nCurrentODFVersion < SvtSaveOptions::ODFSVER_012)
-        return CustomLabelSeq();
+        return CustomLabelData();
 
     if(Reference<beans::XPropertySet> xLabels = rSeries->getDataPointByIndex(nDataPointIndex); xLabels.is())
     {
         if(Any aAny = xLabels->getPropertyValue("CustomLabelFields"); aAny.hasValue())
         {
+            CustomLabelData aData;
             Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aCustomLabels;
             aAny >>= aCustomLabels;
-            return aCustomLabels;
+            for (auto& rField: aCustomLabels)
+            {
+                if (rField->getFieldType() == chart2::DataPointCustomLabelFieldType_CELLRANGE)
+                {
+                    if (rField->getDataLabelsRange())
+                        aData.mbDataLabelsRange = true;
+                    aData.maRange = rField->getCellRange();
+                    aData.maGuid = rField->getGuid();
+                }
+            }
+
+            aData.maFields = aCustomLabels;
+            return aData;
         }
     }
-    return CustomLabelSeq();
+    return CustomLabelData();
 }
 
 css::chart2::RelativePosition lcl_getCustomLabelPosition(
@@ -3466,7 +3490,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                             maAutoStyleNameQueue.pop();
                         }
                         if(bExportNumFmt)
-                            aPoint.mCustomLabelText = lcl_getCustomLabelField(mrExport, nElement, xSeries);
+                            aPoint.mCustomLabel = lcl_getCustomLabelField(mrExport, nElement, xSeries);
                         aPoint.mCustomLabelPos = lcl_getCustomLabelPosition(mrExport, nElement, xSeries);
 
                         aDataPointVector.push_back( aPoint );
@@ -3545,7 +3569,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                             aPoint.maStyleName = maAutoStyleNameQueue.front();
                             maAutoStyleNameQueue.pop();
                         }
-                        aPoint.mCustomLabelText = lcl_getCustomLabelField(mrExport, nCurrIndex, xSeries);
+                        aPoint.mCustomLabel = lcl_getCustomLabelField(mrExport, nCurrIndex, xSeries);
                         aPoint.mCustomLabelPos = lcl_getCustomLabelPosition(mrExport, nCurrIndex, xSeries);
                         if (!aDataLabelPropertyStates.empty())
                         {
@@ -3601,7 +3625,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
         aPoint = rPoint;
 
         if (aPoint.maStyleName == aLastPoint.maStyleName
-            && aLastPoint.mCustomLabelText.getLength() < 1
+            && aLastPoint.mCustomLabel.maFields.getLength() < 1
             && aLastPoint.mCustomLabelPos.Primary == 0.0
             && aLastPoint.mCustomLabelPos.Secondary == 0.0
             && aPoint.msDataLabelStyleName == aLastPoint.msDataLabelStyleName)
@@ -3658,15 +3682,22 @@ void SchXMLExportHelper_Impl::exportDataPoints(
 
 void SchXMLExportHelper_Impl::exportCustomLabel(const SchXMLDataPointStruct& rPoint)
 {
-    if (rPoint.mCustomLabelText.getLength() < 1 && rPoint.msDataLabelStyleName.isEmpty())
+    if (rPoint.mCustomLabel.maFields.getLength() < 1 && rPoint.msDataLabelStyleName.isEmpty())
         return; // nothing to export
 
     if (!rPoint.msDataLabelStyleName.isEmpty())
         mrExport.AddAttribute(XML_NAMESPACE_CHART, XML_STYLE_NAME, rPoint.msDataLabelStyleName);
+
+    if (rPoint.mCustomLabel.mbDataLabelsRange)
+    {
+        mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_DATA_LABELS_CELL_RANGE, rPoint.mCustomLabel.maRange);
+        mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_DATA_LABEL_GUID, rPoint.mCustomLabel.maGuid);
+    }
     // TODO svg:x and svg:y for <chart:data-label>
     SvXMLElementExport aLabelElem( mrExport, XML_NAMESPACE_CHART, XML_DATA_LABEL, true, true);
     SvXMLElementExport aPara( mrExport, XML_NAMESPACE_TEXT, XML_P, true, false );
-    for (const Reference<chart2::XDataPointCustomLabelField>& label : rPoint.mCustomLabelText)
+
+    for (const Reference<chart2::XDataPointCustomLabelField>& label : rPoint.mCustomLabel.maFields)
     {
         // TODO add style
         SvXMLElementExport aSpan( mrExport, XML_NAMESPACE_TEXT, XML_SPAN, true, false);
