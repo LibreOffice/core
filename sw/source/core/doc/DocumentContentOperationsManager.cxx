@@ -1269,6 +1269,12 @@ namespace //local functions originally from docfmt.cxx
                 aSet.ClearItem( RES_TXTATR_INETFMT );
                 aSet.ClearItem( RES_TXTATR_META );
                 aSet.ClearItem( RES_TXTATR_METAFIELD );
+
+                // After GetParaAttr aSet can contain INVALID_POOL_ITEM items, e.g. RES_TXTATR_CHARFMT
+                // and (a copy of) this SfxItemSet can be passed to MSWordExportBase::OutputItemSet
+                // which doesn't handle INVALID_POOL_ITEM items so clear InvalidItems here
+                aSet.ClearInvalidItems();
+
                 xExtra.reset(new SwRedlineExtraData_FormatColl("", USHRT_MAX, &aSet));
             }
 
