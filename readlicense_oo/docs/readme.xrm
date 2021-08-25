@@ -122,7 +122,7 @@
 
 		<div class="LINUX WIN" id="StartupProblems">
 			<h2 id="naso01" xml:lang="en-US">Problems During Program Startup</h2>
-			<p id="abcdef" xml:lang="en-US">Difficulties starting ${PRODUCTNAME} (e.g. applications hang) as well as problems with the screen display are often caused by the graphics card driver. If these problems occur, please update your graphics card driver or try using the graphics driver delivered with your operating system. Difficulties displaying 3D objects can often be solved by deactivating the option "Use OpenGL" under 'Tools - Options - ${PRODUCTNAME} - View - 3D view'.</p>
+			<p id="abcdef" xml:lang="en-US">Difficulties starting ${PRODUCTNAME} (e.g. applications hang) as well as problems with the screen display are often caused by the graphics card driver. If these problems occur, please update your graphics card driver or try using the graphics driver delivered with your operating system.</p>
 		</div>
 
 		<div class="WIN" id="Scroll">
@@ -134,11 +134,6 @@
 			<p class="code" id="naso4">SF = 0x10000000</p>
 			<p class="code" id="naso5">SF |= 0x00004000</p>
 			<p class="note" id="naso8" xml:lang="en-US">The location of the configuration file might vary on different versions of Windows.</p>
-		</div>
-
-		<div class="SOLSPARC SOLX86" id="NetscapeAdressBook">
-			<h2 id="sdfsd32asrc" xml:lang="en-US">Mozilla Address Book Driver</h2>
-			<p id="sdcc32asrc" xml:lang="en-US">The Mozilla address book driver requires the <tt>SUNWzlib</tt> package. This package is not part of the minimum Solaris operating system installation. If you require access to the Mozilla address book, then add this package to your Solaris operating system using the command "<tt>pkgadd</tt>" from the installation CD.</p>
 		</div>
 
 		<div id="Keyboard">
