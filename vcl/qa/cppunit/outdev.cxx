@@ -52,6 +52,8 @@ public:
     void testDefaultLineColor();
     void testTransparentLineColor();
     void testLineColor();
+    void testFont();
+    void testTransparentFont();
     void testSystemTextColor();
     void testShouldDrawWavePixelAsRect();
     void testGetWaveLineSize();
@@ -80,6 +82,8 @@ public:
     CPPUNIT_TEST(testDefaultLineColor);
     CPPUNIT_TEST(testTransparentLineColor);
     CPPUNIT_TEST(testLineColor);
+    CPPUNIT_TEST(testFont);
+    CPPUNIT_TEST(testTransparentFont);
     CPPUNIT_TEST(testSystemTextColor);
     CPPUNIT_TEST(testShouldDrawWavePixelAsRect);
     CPPUNIT_TEST(testGetWaveLineSize);
@@ -650,6 +654,75 @@ void VclOutdevTest::testLineColor()
     auto pLineAction = static_cast<MetaLineColorAction*>(pAction);
     const Color& rColor = pLineAction->GetColor();
     CPPUNIT_ASSERT_EQUAL(COL_RED, rColor);
+}
+
+void VclOutdevTest::testFont()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+
+    // Use Dejavu fonts, they are shipped with LO, so they should be ~always available.
+    // Use Sans variant for simpler glyph shapes (no serifs).
+    vcl::Font font("DejaVu Sans", "Book", Size(0, 36));
+    font.SetColor(COL_BLACK);
+    font.SetFillColor(COL_RED);
+
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    pVDev->SetFont(font);
+    bool bSameFont(font == pVDev->GetFont());
+    CPPUNIT_ASSERT_MESSAGE("Font is not the same", bSameFont);
+
+    // four actions:
+    // 1. Font action
+    // 2. Text alignment action
+    // 3. Text fill color action
+    // 4. As not COL_TRANSPARENT (means use system font color), font color action
+    size_t nActionsExpected = 4;
+    CPPUNIT_ASSERT_EQUAL(nActionsExpected, aMtf.GetActionSize());
+
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::FONT, pAction->GetType());
+    auto pFontAction = static_cast<MetaFontAction*>(pAction);
+    bool bSameMetaFont = (font == pFontAction->GetFont());
+    CPPUNIT_ASSERT_MESSAGE("Metafile font is not the same", bSameMetaFont);
+
+    pAction = aMtf.GetAction(1);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::TEXTALIGN, pAction->GetType());
+    auto pTextAlignAction = static_cast<MetaTextAlignAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL(font.GetAlignment(), pTextAlignAction->GetTextAlign());
+
+    pAction = aMtf.GetAction(2);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::TEXTFILLCOLOR, pAction->GetType());
+    auto pTextFillColorAction = static_cast<MetaTextFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL(COL_RED, pTextFillColorAction->GetColor());
+
+    pAction = aMtf.GetAction(3);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::TEXTCOLOR, pAction->GetType());
+    auto pTextColorAction = static_cast<MetaTextColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, pTextColorAction->GetColor());
+}
+
+void VclOutdevTest::testTransparentFont()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+
+    // Use Dejavu fonts, they are shipped with LO, so they should be ~always available.
+    // Use Sans variant for simpler glyph shapes (no serifs).
+    vcl::Font font("DejaVu Sans", "Book", Size(0, 36));
+    font.SetColor(COL_TRANSPARENT);
+
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    pVDev->SetFont(font);
+
+    // three actions as it sets the colour to the default system color (and doesn't add a text color action):
+    // 1. Font action
+    // 2. Text alignment action
+    // 3. Text fill color action
+    size_t nActionsExpected = 3;
+    CPPUNIT_ASSERT_EQUAL(nActionsExpected, aMtf.GetActionSize());
 }
 
 void VclOutdevTest::testSystemTextColor()
