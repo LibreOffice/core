@@ -22,7 +22,9 @@
 #include <string>
 #include <stdexcept>
 #include <type_traits>
+#include <prewin.h>
 #include <objbase.h>
+#include <postwin.h>
 
 namespace sal::systools
 {
