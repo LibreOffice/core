@@ -2620,7 +2620,7 @@ static MergeResult lcl_Compare_Attributes(
         int i, int j,
         const std::pair< PortionMap::iterator, PortionMap::iterator >& aRange1,
         const std::pair< PortionMap::iterator, PortionMap::iterator >& aRange2,
-        std::unordered_map<int, bool>& RsidOnlyAutoFormatFlagMap);
+        std::vector<bool>& RsidOnlyAutoFormatFlagMap);
 
 bool SwpHints::MergePortions( SwTextNode& rNode )
 {
@@ -2632,9 +2632,10 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
 
     bool bRet = false;
     PortionMap aPortionMap;
-    std::unordered_map<int, bool> RsidOnlyAutoFormatFlagMap;
+    std::vector<bool> RsidOnlyAutoFormatFlagMap;
+    RsidOnlyAutoFormatFlagMap.resize(Count() + 1);
     sal_Int32 nLastPorStart = COMPLETE_STRING;
-    int nKey = 0;
+    sal_Int32 nKey = 0;
 
     // get portions by start position:
     for ( size_t i = 0; i < Count(); ++i )
@@ -2784,15 +2785,15 @@ static MergeResult lcl_Compare_Attributes(
         int i, int j,
         const std::pair< PortionMap::iterator, PortionMap::iterator >& aRange1,
         const std::pair< PortionMap::iterator, PortionMap::iterator >& aRange2,
-        std::unordered_map<int, bool>& RsidOnlyAutoFormatFlagMap)
+        std::vector<bool>& RsidOnlyAutoFormatFlagMap)
 {
     PortionMap::iterator aIter1 = aRange1.first;
     PortionMap::iterator aIter2 = aRange2.first;
 
     size_t const nAttributesInPor1 = std::distance(aRange1.first, aRange1.second);
     size_t const nAttributesInPor2 = std::distance(aRange2.first, aRange2.second);
-    bool const isRsidOnlyAutoFormat1(RsidOnlyAutoFormatFlagMap[i]);
-    bool const isRsidOnlyAutoFormat2(RsidOnlyAutoFormatFlagMap[j]);
+    bool const isRsidOnlyAutoFormat1 = i < sal_Int32(RsidOnlyAutoFormatFlagMap.size()) && RsidOnlyAutoFormatFlagMap[i];
+    bool const isRsidOnlyAutoFormat2 = j < sal_Int32(RsidOnlyAutoFormatFlagMap.size()) && RsidOnlyAutoFormatFlagMap[j];
 
     // if both have one they could be equal, but not if only one has it
     bool const bSkipRsidOnlyAutoFormat(nAttributesInPor1 != nAttributesInPor2);
