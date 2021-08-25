@@ -17,6 +17,9 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 
+#include <tools/XmlWalker.hxx>
+#include <tools/stream.hxx>
+
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
 
@@ -78,6 +81,53 @@ LocationResult SearchResultLocator::find(std::vector<SearchIndexData> const& rSe
     LocationResult aResult;
     for (auto const& rSearchIndexData : rSearchIndexDataVector)
         findOne(aResult, rSearchIndexData);
+
+    return aResult;
+}
+
+LocationResult SearchResultLocator::findForPayload(const char* pPayload)
+{
+    LocationResult aResult;
+
+    const OString aPayloadString(pPayload);
+
+    SvMemoryStream aStream(const_cast<char*>(aPayloadString.getStr()), aPayloadString.getLength(),
+                           StreamMode::READ);
+    tools::XmlWalker aWalker;
+
+    if (!aWalker.open(&aStream))
+        return aResult;
+
+    if (aWalker.name() == "indexing")
+    {
+        std::vector<sw::search::SearchIndexData> aDataVector;
+        aWalker.children();
+        while (aWalker.isValid())
+        {
+            if (aWalker.name() == "paragraph")
+            {
+                OString sType = aWalker.attribute("type");
+                OString sIndex = aWalker.attribute("index");
+
+                if (!sType.isEmpty() && !sIndex.isEmpty())
+                {
+                    sw::search::SearchIndexData aData;
+                    aData.mnNodeIndex = sIndex.toInt32();
+                    aData.meType = sw::search::NodeType(sType.toInt32());
+
+                    aDataVector.push_back(aData);
+                }
+            }
+            aWalker.next();
+        }
+        aWalker.parent();
+
+        if (!aDataVector.empty())
+        {
+            for (auto const& rSearchIndexData : aDataVector)
+                findOne(aResult, rSearchIndexData);
+        }
+    }
 
     return aResult;
 }
