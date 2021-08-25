@@ -855,7 +855,10 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
             case SID_COPY_HYPERLINK_LOCATION:
             {
                 if (pSdrView->GetMarkedObjectCount() != 1)
+                {
                     rSet.DisableItem(nWhich);
+                    break;
+                }
 
                 const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                 SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
