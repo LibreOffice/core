@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb93d486_28a35714",
+        "filename": "editeng/source/uno/unofored.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-08-25T13:17:32Z",
+      "side": 1,
+      "message": "apparently EditEngine::GetTextHeight() returns sal_uInt32 so that should be sufficient for these variables",
+      "revId": "ae10e7f7c0e4a4eeb09aa5c63bd7425a7f6c16f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
