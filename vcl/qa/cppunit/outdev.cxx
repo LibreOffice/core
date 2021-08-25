@@ -54,6 +54,8 @@ public:
     void testLineColor();
     void testFont();
     void testTransparentFont();
+    void testDefaultRefPoint();
+    void testRefPoint();
     void testSystemTextColor();
     void testShouldDrawWavePixelAsRect();
     void testGetWaveLineSize();
@@ -84,6 +86,8 @@ public:
     CPPUNIT_TEST(testLineColor);
     CPPUNIT_TEST(testFont);
     CPPUNIT_TEST(testTransparentFont);
+    CPPUNIT_TEST(testDefaultRefPoint);
+    CPPUNIT_TEST(testRefPoint);
     CPPUNIT_TEST(testSystemTextColor);
     CPPUNIT_TEST(testShouldDrawWavePixelAsRect);
     CPPUNIT_TEST(testGetWaveLineSize);
@@ -723,6 +727,42 @@ void VclOutdevTest::testTransparentFont()
     // 3. Text fill color action
     size_t nActionsExpected = 3;
     CPPUNIT_ASSERT_EQUAL(nActionsExpected, aMtf.GetActionSize());
+}
+
+void VclOutdevTest::testDefaultRefPoint()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    pVDev->SetRefPoint();
+
+    CPPUNIT_ASSERT(!pVDev->IsRefPoint());
+    CPPUNIT_ASSERT_EQUAL(Point(), pVDev->GetRefPoint());
+
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::REFPOINT, pAction->GetType());
+    auto pRefPointAction = static_cast<MetaRefPointAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL(Point(), pRefPointAction->GetRefPoint());
+}
+
+void VclOutdevTest::testRefPoint()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    pVDev->SetRefPoint(Point(10, 20));
+
+    CPPUNIT_ASSERT(pVDev->IsRefPoint());
+    CPPUNIT_ASSERT_EQUAL(Point(10, 20), pVDev->GetRefPoint());
+
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::REFPOINT, pAction->GetType());
+    auto pRefPointAction = static_cast<MetaRefPointAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL(Point(10, 20), pRefPointAction->GetRefPoint());
 }
 
 void VclOutdevTest::testSystemTextColor()

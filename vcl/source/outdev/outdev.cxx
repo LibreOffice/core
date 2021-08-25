@@ -287,7 +287,6 @@ css::uno::Any OutputDevice::GetSystemGfxDataAny() const
 
 void OutputDevice::SetRefPoint()
 {
-
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaRefPointAction( Point(), false ) );
 
@@ -298,10 +297,8 @@ void OutputDevice::SetRefPoint()
     if( mpAlphaVDev )
         mpAlphaVDev->SetRefPoint();
 }
-
 void OutputDevice::SetRefPoint( const Point& rRefPoint )
 {
-
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaRefPointAction( rRefPoint, true ) );
 
