@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "19b1f8eb_a7604a92",
+        "filename": "vcl/source/window/scrwnd.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-25T06:53:03Z",
+      "side": 1,
+      "message": "But C/C++ long (with corresponding LONG_MIN/MAX) does in no way correspond to the UNOIDL LONG type.  (My guess would be that the use of LONG_MIN/MAX here is a leftover from when ImplWheelWindow::mnActDeltaX/Y used long rather than tools::Long.)",
+      "parentUuid": "ee356803_797d92bf",
+      "range": {
+        "startLine": 220,
+        "startChar": 12,
+        "endLine": 222,
+        "endChar": 66
+      },
+      "revId": "8307799db72e570f264add478ec8b5fb2fe89b05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ae96c247_092886d7",
         "filename": "vcl/source/window/window2.cxx",
         "patchSetId": 5
