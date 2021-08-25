@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "84aa2eef_efbf5eb2",
+        "filename": "vcl/source/window/scrwnd.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-25T06:58:01Z",
+      "side": 1,
+      "message": "I also think so. However, I see the LONG_MIN/MAX, and *those* were the constants used here, irrespective of the reasons why they appeared in the first place; and since I (possibly erroneously?) thought that those *constants* were related to the UNOIDL type limits, I chose that way to make sure that underlying type used for casting has the required limits \"by definition\".\n\nAnyway, do you think it\u0027s better to just drop the two changes related to this from this commit, and do it elsewhere? and what would be your suggestion for the type to use in that other patch - should I use tools::Long straight away?",
+      "parentUuid": "19b1f8eb_a7604a92",
+      "range": {
+        "startLine": 220,
+        "startChar": 12,
+        "endLine": 222,
+        "endChar": 66
+      },
+      "revId": "8307799db72e570f264add478ec8b5fb2fe89b05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ae96c247_092886d7",
         "filename": "vcl/source/window/window2.cxx",
         "patchSetId": 5
