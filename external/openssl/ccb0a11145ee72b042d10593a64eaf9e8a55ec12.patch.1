@@ -1,0 +1,56 @@
+From ccb0a11145ee72b042d10593a64eaf9e8a55ec12 Mon Sep 17 00:00:00 2001
+From: Matt Caswell <matt@openssl.org>
+Date: Tue, 17 Aug 2021 14:41:48 +0100
+Subject: [PATCH] Fix a read buffer overrun in X509_CERT_AUX_print()
+
+This is a backport of commit c5dc9ab965f to 1.0.2. That commit fixed
+the same bug but in master/1.1.1 it is in the function X509_aux_print().
+The original commit had the following description:
+
+Fix a read buffer overrun in X509_aux_print().
+
+The ASN1_STRING_get0_data(3) manual explitely cautions the reader
+that the data is not necessarily NUL-terminated, and the function
+X509_alias_set1(3) does not sanitize the data passed into it in any
+way either, so we must assume the return value from X509_alias_get0(3)
+is merely a byte array and not necessarily a string in the sense
+of the C language.
+
+I found this bug while writing manual pages for X509_print_ex(3)
+and related functions.  Theo Buehler <tb@openbsd.org> checked my
+patch to fix the same bug in LibreSSL, see
+
+http://cvsweb.openbsd.org/src/lib/libcrypto/asn1/t_x509a.c#rev1.9
+
+As an aside, note that the function still produces incomplete and
+misleading results when the data contains a NUL byte in the middle
+and that error handling is consistently absent throughout, even
+though the function provides an "int" return value obviously intended
+to be 1 for success and 0 for failure, and even though this function
+is called by another function that also wants to return 1 for success
+and 0 for failure and even does so in many of its code paths, though
+not in others.  But let's stay focussed.  Many things would be nice
+to have in the wide wild world, but a buffer overflow must not be
+allowed to remain in our backyard.
+
+CVE-2021-3712
+
+Reviewed-by: Paul Dale <pauli@openssl.org>
+---
+ crypto/asn1/t_x509a.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/crypto/asn1/t_x509a.c b/crypto/asn1/t_x509a.c
+index d1b897a469fd..b1bc9d0cd28b 100644
+--- a/crypto/asn1/t_x509a.c
++++ b/crypto/asn1/t_x509a.c
+@@ -104,7 +104,8 @@ int X509_CERT_AUX_print(BIO *out, X509_CERT_AUX *aux, int indent)
+     } else
+         BIO_printf(out, "%*sNo Rejected Uses.\n", indent, "");
+     if (aux->alias)
+-        BIO_printf(out, "%*sAlias: %s\n", indent, "", aux->alias->data);
++        BIO_printf(out, "%*sAlias: %.*s\n", indent, "", aux->alias->length,
++                   aux->alias->data);
+     if (aux->keyid) {
+         BIO_printf(out, "%*sKey Id: ", indent, "");
+         for (i = 0; i < aux->keyid->length; i++)
