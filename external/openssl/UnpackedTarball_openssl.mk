@@ -22,6 +22,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,openssl,\
 	external/openssl/openssl-3650-masm.patch.1 \
 	external/openssl/openssl-fixbuild.patch.1 \
 	external/openssl/openssl-1.0.2k-cve-2020-1971.patch.1 \
+	external/openssl/ccb0a11145ee72b042d10593a64eaf9e8a55ec12.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
