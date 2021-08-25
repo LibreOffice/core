@@ -1048,7 +1048,8 @@ void ChartExport::exportAdditionalShapes( const Reference< css::chart::XChartDoc
             pDrawing->startElement(FSNS(XML_c, XML_userShapes),
                 FSNS(XML_xmlns, XML_cdr), pFB->getNamespaceURL(OOX_NS(dmlChartDr)),
                 FSNS(XML_xmlns, XML_a), pFB->getNamespaceURL(OOX_NS(dml)),
-                FSNS(XML_xmlns, XML_c), pFB->getNamespaceURL(OOX_NS(dmlChart)));
+                FSNS(XML_xmlns, XML_c), pFB->getNamespaceURL(OOX_NS(dmlChart)),
+                FSNS(XML_xmlns, XML_r), pFB->getNamespaceURL(OOX_NS(officeRel)));
 
             const sal_Int32 nShapeCount(mxAdditionalShapes->getCount());
             for (sal_Int32 nShapeId = 0; nShapeId < nShapeCount; nShapeId++)
