@@ -2903,7 +2903,7 @@
       </node>
       <node oor:name=".uno:SidebarDeck.ScFunctionsDeck" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">ScFunctionsDeck</value>
+          <value xml:lang="en-US">Open the Functions Deck</value>
         </prop>
       </node>
     </node>

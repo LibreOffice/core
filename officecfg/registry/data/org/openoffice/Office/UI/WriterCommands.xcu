@@ -3829,12 +3829,12 @@
       </node>
       <node oor:name=".uno:SidebarDeck.WriterPageDeck" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">WriterPageDeck</value>
+          <value xml:lang="en-US">Open the Page Deck</value>
         </prop>
       </node>
       <node oor:name=".uno:SidebarDeck.InspectorDeck" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">InspectorDeck</value>
+          <value xml:lang="en-US">Open the Style Inspector Deck</value>
         </prop>
       </node>
     </node>

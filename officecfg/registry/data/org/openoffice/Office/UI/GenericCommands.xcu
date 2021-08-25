@@ -7380,22 +7380,22 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
       </node>
       <node oor:name=".uno:SidebarDeck.PropertyDeck" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">PropertyDeck</value>
+          <value xml:lang="en-US">Open the Properties Deck</value>
         </prop>
       </node>
       <node oor:name=".uno:SidebarDeck.StyleListDeck" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">StyleListDeck</value>
+          <value xml:lang="en-US">Open the Styles Deck</value>
         </prop>
       </node>
       <node oor:name=".uno:SidebarDeck.GalleryDeck" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">GalleryDeck</value>
+          <value xml:lang="en-US">Open the Gallery Deck</value>
         </prop>
       </node>
       <node oor:name=".uno:SidebarDeck.NavigatorDeck" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">NavigatorDeck</value>
+          <value xml:lang="en-US">Open the Navigator Deck</value>
         </prop>
       </node>
     </node>
