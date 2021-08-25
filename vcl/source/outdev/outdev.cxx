@@ -331,6 +331,14 @@ void OutputDevice::SetRasterOp( RasterOp eRasterOp )
         mpAlphaVDev->SetRasterOp( eRasterOp );
 }
 
+void OutputDevice::EnableOutput( bool bEnable )
+{
+    mbOutput = bEnable;
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->EnableOutput( bEnable );
+}
+
 sal_uInt16 OutputDevice::GetBitCount() const
 {
     // we need a graphics instance
