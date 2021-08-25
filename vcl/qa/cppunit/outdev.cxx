@@ -786,6 +786,18 @@ void VclOutdevTest::testRasterOp()
     CPPUNIT_ASSERT_EQUAL(RasterOp::Invert, pRasterOpAction->GetRasterOp());
 }
 
+void VclOutdevTest::testOutputFlag()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+
+    CPPUNIT_ASSERT(pVDev->IsOutputEnabled());
+    CPPUNIT_ASSERT(pVDev->IsDeviceOutputNecessary());
+
+    pVDev->EnableOutput(false);
+
+    CPPUNIT_ASSERT(!pVDev->IsOutputEnabled());
+    CPPUNIT_ASSERT(!pVDev->IsDeviceOutputNecessary());
+}
 
 void VclOutdevTest::testSystemTextColor()
 {
