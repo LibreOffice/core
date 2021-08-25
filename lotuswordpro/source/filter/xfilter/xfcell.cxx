@@ -157,7 +157,7 @@ OUString   XFCell::GetCellName()
     return name;
 }
 
-void    XFCell::ToXml(IXFStream *pStrm)
+void XFCell::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
