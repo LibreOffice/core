@@ -164,11 +164,11 @@ public:
 class SchXMLDataLabelContext: public SvXMLImportContext
 {
 private:
-    ::std::vector<OUString>& mrLabels;
+    CustomLabelsInfo& mrLabels;
     DataRowPointStyle& mrDataLabelStyle;
 public:
     SchXMLDataLabelContext(SvXMLImport& rImport,
-                            ::std::vector<OUString>& rLabels, DataRowPointStyle& rDataLabel);
+                            CustomLabelsInfo& rLabels, DataRowPointStyle& rDataLabel);
 
     virtual void SAL_CALL startFastElement(
         sal_Int32 nElement,
