@@ -168,6 +168,7 @@ public:
     void testXltxExport();
     void testRotatedImageODS();
     void testTdf128976();
+    void testTdf143979();
     void testTdf120502();
     void testTdf131372();
     void testTdf81470();
@@ -273,6 +274,7 @@ public:
     CPPUNIT_TEST(testXltxExport);
     CPPUNIT_TEST(testRotatedImageODS);
     CPPUNIT_TEST(testTdf128976);
+    CPPUNIT_TEST(testTdf143979);
     CPPUNIT_TEST(testTdf120502);
     CPPUNIT_TEST(testTdf131372);
     CPPUNIT_TEST(testTdf81470);
@@ -1655,6 +1657,58 @@ void ScExportTest2::testTdf128976()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(45), nColumn0Width);
 
     xDocSh->DoClose();
+}
+
+void ScExportTest2::testTdf143979()
+{
+    // Create an empty worksheet
+    css::uno::Reference<css::frame::XDesktop2> xDesktop
+        = css::frame::Desktop::create(comphelper::getProcessComponentContext());
+    CPPUNIT_ASSERT(xDesktop);
+
+    css::uno::Sequence<css::beans::PropertyValue> args(1);
+    args[0].Name = "Hidden";
+    args[0].Value <<= true;
+
+    css::uno::Reference<css::lang::XComponent> xComponent
+        = xDesktop->loadComponentFromURL("private:factory/scalc", "_blank", 0, args);
+    CPPUNIT_ASSERT(xComponent);
+
+    // Get the document model
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+
+    ScDocShellRef xShell = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(xShell);
+
+    ScDocument& rDoc = xShell->GetDocument();
+
+    OUString aCode = "YYYY-MM\"\"MMM-DDNN";
+    sal_Int32 nCheckPos;
+    SvNumFormatType nType;
+    sal_uInt32 nFormat;
+    SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
+    pFormatter->PutEntry(aCode, nCheckPos, nType, nFormat);
+
+    ScPatternAttr aNewAttrs(rDoc.GetPool());
+    SfxItemSet& rSet = aNewAttrs.GetItemSet();
+    rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+
+    rDoc.ApplyPattern(0, 0, 0, aNewAttrs);
+
+    rDoc.SetString(ScAddress(0, 0, 0), "08/30/2021");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("2021-08Aug-30Mon"), rDoc.GetString(ScAddress(0, 0, 0)));
+
+    ScDocShellRef pDocSh = saveAndReload(&(*xShell), FORMAT_ODS);
+    CPPUNIT_ASSERT(pDocSh.is());
+
+    ScDocument& rDoc2 = pDocSh->GetDocument();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 2021-08Aug-30Mon
+    // - Actual  : 2021-A-30Mon
+    CPPUNIT_ASSERT_EQUAL(OUString("2021-08Aug-30Mon"), rDoc2.GetString(ScAddress(0, 0, 0)));
 }
 
 void ScExportTest2::testTdf120502()
