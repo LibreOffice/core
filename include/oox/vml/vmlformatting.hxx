@@ -130,6 +130,18 @@ namespace ConversionHelper
                             bool bPixelX,
                             bool bDefaultAsPixel );
 
+/** Converts the passed VML measure string to Twip.
+
+        @param rGraphicHelper  See above.
+        @param rValue  See above.
+        @param nRefValue  See above.
+        @param bPixelX  See above.
+        @param bDefaultAsPixel  See above.
+     */
+OOX_DLLPUBLIC sal_Int32 decodeMeasureToTwip(const GraphicHelper& rGraphicHelper,
+                                            const OUString& rValue, sal_Int32 nRefValue,
+                                            bool bPixelX, bool bDefaultAsPixel);
+
     /** Converts VML color attributes to a DrawingML color.
 
         @param roVmlColor  The VML string representation of the color. If

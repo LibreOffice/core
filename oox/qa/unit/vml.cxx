@@ -16,6 +16,9 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/PointSequence.hpp>
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#include <com/sun/star/drawing/PolygonKind.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -57,6 +60,69 @@ void OoxVmlTest::load(std::u16string_view rFileName)
 {
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + rFileName;
     mxComponent = loadFromDesktop(aURL);
+}
+
+CPPUNIT_TEST_FIXTURE(OoxVmlTest, tdf112450_vml_polyline)
+{
+    // Load a document with v:polyline shapes. Error was, that the size was set to zero and the
+    // points were zero because of missing decode from length with unit.
+    load(u"tdf112450_vml_polyline.docx");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    {
+        // This tests a polyline shape which is not closed.
+        uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+        // Without fix in place, Geometry had 2 points, both 0|0.
+        drawing::PointSequenceSequence aGeometry;
+        xShapeProps->getPropertyValue("Geometry") >>= aGeometry;
+        drawing::PointSequence aPolygon = aGeometry[0];
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(6879), aPolygon[3].X, 1);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(487), aPolygon[3].Y, 1);
+        // Without fix in place, width and height were zero
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(6879), xShape->getSize().Width, 1);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1926), xShape->getSize().Height, 1);
+        // After the fix the shape has still to be PolygonKind_PLIN
+        drawing::PolygonKind ePolygonKind;
+        xShapeProps->getPropertyValue("PolygonKind") >>= ePolygonKind;
+        CPPUNIT_ASSERT_EQUAL(drawing::PolygonKind_PLIN, ePolygonKind);
+    }
+    {
+        uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+        // Without fix in place, Geometry had 2 points, both 0|0.
+        drawing::PointSequenceSequence aGeometry;
+        xShapeProps->getPropertyValue("Geometry") >>= aGeometry;
+        drawing::PointSequence aPolygon = aGeometry[0];
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(5062), aPolygon[2].X, 1);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(2247), aPolygon[2].Y, 1);
+        // Without fix in place, width and height were zero
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(6163), xShape->getSize().Width, 1);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(2247), xShape->getSize().Height, 1);
+        // Without fix in place the shape was not closed, it had PolygonKind_PLIN
+        drawing::PolygonKind ePolygonKind;
+        xShapeProps->getPropertyValue("PolygonKind") >>= ePolygonKind;
+        CPPUNIT_ASSERT_EQUAL(drawing::PolygonKind_POLY, ePolygonKind);
+    }
+    {
+        // This tests a filled shape where v:polyline does not have attribute coordsize
+        uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(2), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+        // Without fix in place, Geometry had 2 points, both 0|0.
+        drawing::PointSequenceSequence aGeometry;
+        xShapeProps->getPropertyValue("Geometry") >>= aGeometry;
+        drawing::PointSequence aPolygon = aGeometry[0];
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(2095), aPolygon[3].X, 1);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(608), aPolygon[3].Y, 1);
+        // Without fix in place, width and height were zero
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(5634), xShape->getSize().Width, 1);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(2485), xShape->getSize().Height, 1);
+        // Without fix in place the shape was not closed, it had PolygonKind_PLIN
+        drawing::PolygonKind ePolygonKind;
+        xShapeProps->getPropertyValue("PolygonKind") >>= ePolygonKind;
+        CPPUNIT_ASSERT_EQUAL(drawing::PolygonKind_POLY, ePolygonKind);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(OoxVmlTest, tdf137314_vml_rotation_unit_fd)
