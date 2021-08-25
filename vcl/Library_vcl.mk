@@ -215,7 +215,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/toolkit/morebtn \
     vcl/source/outdev/background \
     vcl/source/outdev/outdev \
-    vcl/source/outdev/outdevstate \
+    vcl/source/outdev/stack \
     vcl/source/outdev/clipping \
     vcl/source/outdev/fill \
     vcl/source/outdev/polygon \

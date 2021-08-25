@@ -62,6 +62,7 @@ public:
     void testDrawMode();
     void testLayoutMode();
     void testDigitLanguage();
+    void testStackFunctions();
     void testSystemTextColor();
     void testShouldDrawWavePixelAsRect();
     void testGetWaveLineSize();
@@ -100,6 +101,7 @@ public:
     CPPUNIT_TEST(testDrawMode);
     CPPUNIT_TEST(testLayoutMode);
     CPPUNIT_TEST(testDigitLanguage);
+    CPPUNIT_TEST(testStackFunctions);
     CPPUNIT_TEST(testSystemTextColor);
     CPPUNIT_TEST(testShouldDrawWavePixelAsRect);
     CPPUNIT_TEST(testGetWaveLineSize);
@@ -867,6 +869,50 @@ void VclOutdevTest::testDigitLanguage()
     CPPUNIT_ASSERT_EQUAL(MetaActionType::TEXTLANGUAGE, pAction->GetType());
     auto pTextLanguageAction = static_cast<MetaTextLanguageAction*>(pAction);
     CPPUNIT_ASSERT_EQUAL(LANGUAGE_GERMAN, pTextLanguageAction->GetTextLanguage());
+}
+
+void VclOutdevTest::testStackFunctions()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    vcl::Font font("DejaVu Sans", "Book", Size(0, 36));
+
+    pVDev->Push();
+
+    pVDev->SetLineColor(COL_RED);
+    pVDev->SetFillColor(COL_GREEN);
+    pVDev->SetFont(font);
+    pVDev->SetTextColor(COL_BROWN);
+    pVDev->SetTextFillColor(COL_BLUE);
+    pVDev->SetTextLineColor(COL_MAGENTA);
+    pVDev->SetOverlineColor(COL_YELLOW);
+    pVDev->SetTextAlign(TextAlign::ALIGN_TOP);
+    pVDev->SetLayoutMode(ComplexTextLayoutFlags::BiDiRtl);
+    pVDev->SetDigitLanguage(LANGUAGE_FRENCH);
+    pVDev->SetRasterOp(RasterOp::N0);
+    pVDev->SetMapMode(MapMode(MapUnit::MapTwip));
+    pVDev->SetRefPoint(Point(10, 10));
+
+    CPPUNIT_ASSERT_EQUAL(COL_BROWN, pVDev->GetTextColor());
+    CPPUNIT_ASSERT_EQUAL(COL_BLUE, pVDev->GetTextFillColor());
+    CPPUNIT_ASSERT_EQUAL(COL_MAGENTA, pVDev->GetTextLineColor());
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, pVDev->GetOverlineColor());
+    CPPUNIT_ASSERT_EQUAL(ComplexTextLayoutFlags::BiDiRtl, pVDev->GetLayoutMode());
+    CPPUNIT_ASSERT_EQUAL(LANGUAGE_FRENCH, pVDev->GetDigitLanguage());
+    CPPUNIT_ASSERT_EQUAL(RasterOp::N0, pVDev->GetRasterOp());
+    CPPUNIT_ASSERT_EQUAL(MapMode(MapUnit::MapTwip), pVDev->GetMapMode());
+    CPPUNIT_ASSERT_EQUAL(Point(10, 10), pVDev->GetRefPoint());
+
+    pVDev->Pop();
+
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, pVDev->GetTextColor());
+    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xFFFFFFFF), pVDev->GetTextFillColor());
+    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xFFFFFFFF), pVDev->GetTextLineColor());
+    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xFFFFFFFF), pVDev->GetOverlineColor());
+    CPPUNIT_ASSERT_EQUAL(ComplexTextLayoutFlags::Default, pVDev->GetLayoutMode());
+    CPPUNIT_ASSERT_EQUAL(LANGUAGE_SYSTEM, pVDev->GetDigitLanguage());
+    CPPUNIT_ASSERT_EQUAL(RasterOp::OverPaint, pVDev->GetRasterOp());
+    CPPUNIT_ASSERT_EQUAL(MapMode(MapUnit::MapPixel), pVDev->GetMapMode());
+    CPPUNIT_ASSERT_EQUAL(Point(0, 0), pVDev->GetRefPoint());
 }
 
 void VclOutdevTest::testSystemTextColor()
