@@ -50,6 +50,7 @@ public:
     void testDefaultRefPoint();
     void testRefPoint();
     void testRasterOp();
+    void testOutputFlag();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
@@ -73,6 +74,7 @@ public:
     CPPUNIT_TEST(testDefaultRefPoint);
     CPPUNIT_TEST(testRefPoint);
     CPPUNIT_TEST(testRasterOp);
+    CPPUNIT_TEST(testOutputFlag);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -563,6 +565,19 @@ void VclOutdevTest::testRasterOp()
     CPPUNIT_ASSERT_EQUAL(MetaActionType::RASTEROP, pAction->GetType());
     auto pRasterOpAction = static_cast<MetaRasterOpAction*>(pAction);
     CPPUNIT_ASSERT_EQUAL(RasterOp::Invert, pRasterOpAction->GetRasterOp());
+}
+
+void VclOutdevTest::testOutputFlag()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+
+    CPPUNIT_ASSERT(pVDev->IsOutputEnabled());
+    CPPUNIT_ASSERT(pVDev->IsDeviceOutputNecessary());
+
+    pVDev->EnableOutput(false);
+
+    CPPUNIT_ASSERT(!pVDev->IsOutputEnabled());
+    CPPUNIT_ASSERT(!pVDev->IsDeviceOutputNecessary());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclOutdevTest);
