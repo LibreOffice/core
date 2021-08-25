@@ -81,6 +81,30 @@ void    XFTable::SetColumnStyle(sal_Int32 col, const OUString& style)
     m_aColumns[col] = style;
 }
 
+bool XFTable::ContainsTable(const XFTable* pTable) const
+{
+    for (auto const& elem : m_aRows)
+    {
+        const XFRow *pRow = elem.second.get();
+
+        for (sal_Int32 i = 0; i < pRow->GetCellCount(); ++i)
+        {
+            const XFCell* pCell = pRow->GetCell(i + 1); //starts at 1, not 0
+            if (const XFTable* pSubTable = pCell->GetSubTable())
+            {
+                if (pSubTable == pTable)
+                    return true;
+                if (pTable->ContainsTable(pTable))
+                    return true;
+            }
+            if (pCell->HierarchyContains(pTable))
+                return true;
+        }
+    }
+
+    return false;
+}
+
 void XFTable::AddRow(rtl::Reference<XFRow> const & rRow)
 {
     assert(rRow);
@@ -88,8 +112,14 @@ void XFTable::AddRow(rtl::Reference<XFRow> const & rRow)
     for (sal_Int32 i = 0; i < rRow->GetCellCount(); ++i)
     {
         XFCell* pFirstCell = rRow->GetCell(i + 1); //starts at 1, not 0
-        if (pFirstCell->GetSubTable() == this || pFirstCell->HierarchyContains(this))
+        if (const XFTable* pSubTable = pFirstCell->GetSubTable())
+        {
+            if (pSubTable == this || pSubTable->ContainsTable(this))
+                throw std::runtime_error("table is a subtable of itself");
+        }
+        if (pFirstCell->HierarchyContains(this))
             throw std::runtime_error("table is a subtable of itself");
+
     }
 
     int row = rRow->GetRow();

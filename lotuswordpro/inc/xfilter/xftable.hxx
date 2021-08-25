@@ -115,6 +115,8 @@ private:
     OUString   m_strDefCellStyle;
     OUString   m_strDefRowStyle;
     OUString   m_strDefColStyle;
+
+    bool ContainsTable(const XFTable* pTable) const;
 };
 
 inline void XFTable::SetTableName(const OUString& name)
