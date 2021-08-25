@@ -255,26 +255,4 @@ void OutputDevice::SetDigitLanguage( LanguageType eTextLanguage )
         mpAlphaVDev->SetDigitLanguage( eTextLanguage );
 }
 
-void OutputDevice::SetRasterOp( RasterOp eRasterOp )
-{
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaRasterOpAction( eRasterOp ) );
-
-    if ( meRasterOp != eRasterOp )
-    {
-        meRasterOp = eRasterOp;
-        mbInitLineColor = mbInitFillColor = true;
-
-        if( mpGraphics || AcquireGraphics() )
-        {
-            assert(mpGraphics);
-            mpGraphics->SetXORMode( (RasterOp::Invert == meRasterOp) || (RasterOp::Xor == meRasterOp), RasterOp::Invert == meRasterOp );
-        }
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetRasterOp( eRasterOp );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
