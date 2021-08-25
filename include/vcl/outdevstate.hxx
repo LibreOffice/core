@@ -29,25 +29,12 @@
 #include <vcl/font.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/region.hxx>
+#include <vcl/rendercontext/ComplexTextLayoutFlags.hxx>
 #include <vcl/rendercontext/PushFlags.hxx>
 #include <vcl/vclenum.hxx>
 
 #include <memory>
 #include <optional>
-
-// Layout flags for Complex Text Layout
-// These are flag values, i.e they can be combined
-enum class ComplexTextLayoutFlags
-{
-    Default           = 0x0000,
-    BiDiRtl           = 0x0001,
-    BiDiStrong        = 0x0002,
-    TextOriginLeft    = 0x0004,
-    TextOriginRight   = 0x0008
-};
-namespace o3tl {
-    template<> struct typed_flags<ComplexTextLayoutFlags> : is_typed_flags<ComplexTextLayoutFlags, 0x000f> {};
-}
 
 struct OutDevState
 {
