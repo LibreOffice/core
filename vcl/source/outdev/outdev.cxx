@@ -339,6 +339,23 @@ void OutputDevice::EnableOutput( bool bEnable )
         mpAlphaVDev->EnableOutput( bEnable );
 }
 
+void OutputDevice::SetAntialiasing( AntialiasingFlags nMode )
+{
+    if ( mnAntialiasing != nMode )
+    {
+        mnAntialiasing = nMode;
+        mbInitFont = true;
+
+        if(mpGraphics)
+        {
+            mpGraphics->setAntiAlias(bool(mnAntialiasing & AntialiasingFlags::Enable));
+        }
+    }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetAntialiasing( nMode );
+}
+
 sal_uInt16 OutputDevice::GetBitCount() const
 {
     // we need a graphics instance
