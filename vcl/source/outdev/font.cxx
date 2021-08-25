@@ -17,32 +17,79 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <i18nlangtag/mslangid.hxx>
-#include <i18nlangtag/lang.h>
-
-#include <unotools/configmgr.hxx>
-#include <vcl/metric.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/print.hxx>
-#include <vcl/sysdata.hxx>
-#include <vcl/fontcharmap.hxx>
-#include <vcl/event.hxx>
-#include <font/FeatureCollector.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
+#include <i18nlangtag/mslangid.hxx>
+#include <i18nlangtag/lang.h>
+#include <unotools/configmgr.hxx>
 
-#include <sallayout.hxx>
-#include <salgdi.hxx>
-#include <svdata.hxx>
-#include <impglyphitem.hxx>
+#include <vcl/event.hxx>
+#include <vcl/fontcharmap.hxx>
+#include <vcl/metaact.hxx>
+#include <vcl/metric.hxx>
+#include <vcl/print.hxx>
+#include <vcl/sysdata.hxx>
+#include <vcl/virdev.hxx>
 
 #include <outdev.h>
 #include <window.h>
 
 #include <PhysicalFontCollection.hxx>
+#include <drawmode.hxx>
+#include <font/FeatureCollector.hxx>
+#include <impglyphitem.hxx>
+#include <sallayout.hxx>
+#include <salgdi.hxx>
+#include <svdata.hxx>
 
 #include <strings.hrc>
+
+void OutputDevice::SetFont( const vcl::Font& rNewFont )
+{
+    vcl::Font aFont = vcl::drawmode::GetFont(rNewFont, GetDrawMode(), GetSettings().GetStyleSettings());
+
+    if ( mpMetaFile )
+    {
+        mpMetaFile->AddAction( new MetaFontAction( aFont ) );
+        // the color and alignment actions don't belong here
+        // TODO: get rid of them without breaking anything...
+        mpMetaFile->AddAction( new MetaTextAlignAction( aFont.GetAlignment() ) );
+        mpMetaFile->AddAction( new MetaTextFillColorAction( aFont.GetFillColor(), !aFont.IsTransparent() ) );
+    }
+
+    if ( maFont.IsSameInstance( aFont ) )
+        return;
+
+    // Optimization MT/HDU: COL_TRANSPARENT means SetFont should ignore the font color,
+    // because SetTextColor() is used for this.
+    // #i28759# maTextColor might have been changed behind our back, commit then, too.
+    if( aFont.GetColor() != COL_TRANSPARENT
+    && (aFont.GetColor() != maFont.GetColor() || aFont.GetColor() != maTextColor ) )
+    {
+        maTextColor = aFont.GetColor();
+        mbInitTextColor = true;
+        if( mpMetaFile )
+            mpMetaFile->AddAction( new MetaTextColorAction( aFont.GetColor() ) );
+    }
+    maFont      = aFont;
+    mbNewFont   = true;
+
+    if( !mpAlphaVDev )
+        return;
+
+    // #i30463#
+    // Since SetFont might change the text color, apply that only
+    // selectively to alpha vdev (which normally paints opaque text
+    // with COL_BLACK)
+    if( aFont.GetColor() != COL_TRANSPARENT )
+    {
+        mpAlphaVDev->SetTextColor( COL_BLACK );
+        aFont.SetColor( COL_TRANSPARENT );
+    }
+
+    mpAlphaVDev->SetFont( aFont );
+}
 
 FontMetric OutputDevice::GetDevFont( int nDevFontIndex ) const
 {
