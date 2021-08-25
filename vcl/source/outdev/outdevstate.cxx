@@ -208,26 +208,4 @@ void OutputDevice::SetDrawMode(DrawModeFlags nDrawMode)
         mpAlphaVDev->SetDrawMode(nDrawMode);
 }
 
-void OutputDevice::SetLayoutMode( ComplexTextLayoutFlags nTextLayoutMode )
-{
-    if( mpMetaFile )
-        mpMetaFile->AddAction( new MetaLayoutModeAction( nTextLayoutMode ) );
-
-    mnTextLayoutMode = nTextLayoutMode;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetLayoutMode( nTextLayoutMode );
-}
-
-void OutputDevice::SetDigitLanguage( LanguageType eTextLanguage )
-{
-    if( mpMetaFile )
-        mpMetaFile->AddAction( new MetaTextLanguageAction( eTextLanguage ) );
-
-    meTextLanguage = eTextLanguage;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetDigitLanguage( eTextLanguage );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

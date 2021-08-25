@@ -52,6 +52,28 @@
 
 #define TEXT_DRAW_ELLIPSIS  (DrawTextFlags::EndEllipsis | DrawTextFlags::PathEllipsis | DrawTextFlags::NewsEllipsis)
 
+void OutputDevice::SetLayoutMode( ComplexTextLayoutFlags nTextLayoutMode )
+{
+    if( mpMetaFile )
+        mpMetaFile->AddAction( new MetaLayoutModeAction( nTextLayoutMode ) );
+
+    mnTextLayoutMode = nTextLayoutMode;
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetLayoutMode( nTextLayoutMode );
+}
+
+void OutputDevice::SetDigitLanguage( LanguageType eTextLanguage )
+{
+    if( mpMetaFile )
+        mpMetaFile->AddAction( new MetaTextLanguageAction( eTextLanguage ) );
+
+    meTextLanguage = eTextLanguage;
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetDigitLanguage( eTextLanguage );
+}
+
 ImplMultiTextLineInfo::ImplMultiTextLineInfo()
 {
 }
