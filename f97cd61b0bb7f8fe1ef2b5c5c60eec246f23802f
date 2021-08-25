@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "274c7db3_6174e2d0",
+        "filename": "sw/qa/uitest/writer_tests5/tdf142847.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-08-25T12:45:48Z",
+      "side": 1,
+      "message": "the textbox has fallen apart.",
+      "range": {
+        "startLine": 36,
+        "startChar": 14,
+        "endLine": 36,
+        "endChar": 39
+      },
+      "revId": "f97cd61b0bb7f8fe1ef2b5c5c60eec246f23802f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2342fce_a2d70372",
+        "filename": "sw/source/core/doc/docfmt.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-08-25T12:45:48Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 482,
+        "startChar": 58,
+        "endLine": 482,
+        "endChar": 72
+      },
+      "revId": "f97cd61b0bb7f8fe1ef2b5c5c60eec246f23802f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
