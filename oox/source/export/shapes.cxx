@@ -321,10 +321,11 @@ namespace oox::drawingml {
     if ( GETA(propName) ) \
         mAny >>= variable;
 
-ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, ShapeHashMap* pShapeMap, XmlFilterBase* pFB, DocumentType eDocumentType, DMLTextExport* pTextExport )
+ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, ShapeHashMap* pShapeMap, XmlFilterBase* pFB, DocumentType eDocumentType, DMLTextExport* pTextExport, bool bUserShapes )
     : DrawingML( std::move(pFS), pFB, eDocumentType, pTextExport )
     , m_nEmbeddedObjects(0)
     , mnShapeIdMax( 1 )
+    , mbUserShapes( bUserShapes )
     , mnXmlNamespace( nXmlNamespace )
     , maMapModeSrc( MapUnit::Map100thMM )
     , maMapModeDest( MapUnit::MapInch, Point(), Fraction( 1, 576 ), Fraction( 1, 576 ) )
@@ -398,11 +399,11 @@ ShapeExport& ShapeExport::WritePolyPolygonShape( const Reference< XShape >& xSha
     SAL_INFO("oox.shape", "write polypolygon shape");
 
     FSHelperPtr pFS = GetFS();
-    pFS->startElementNS(mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp));
+    pFS->startElementNS(mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes ? XML_sp : XML_wsp));
 
     awt::Point aPos = xShape->getPosition();
     // Position is relative to group for child elements in Word, but absolute in API.
-    if (GetDocumentType() == DOCUMENT_DOCX && m_xParent.is())
+    if (GetDocumentType() == DOCUMENT_DOCX && !mbUserShapes && m_xParent.is())
     {
         awt::Point aParentPos = m_xParent->getPosition();
         aPos.X -= aParentPos.X;
@@ -419,7 +420,7 @@ ShapeExport& ShapeExport::WritePolyPolygonShape( const Reference< XShape >& xSha
 #endif
 
     // non visual shape properties
-    if (GetDocumentType() != DOCUMENT_DOCX)
+    if (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes)
     {
         pFS->startElementNS(mnXmlNamespace, XML_nvSpPr);
         pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
@@ -427,7 +428,7 @@ ShapeExport& ShapeExport::WritePolyPolygonShape( const Reference< XShape >& xSha
                               XML_name, GetShapeName(xShape));
     }
     pFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr);
-    if (GetDocumentType() != DOCUMENT_DOCX)
+    if (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes)
     {
         WriteNonVisualProperties( xShape );
         pFS->endElementNS( mnXmlNamespace, XML_nvSpPr );
@@ -449,7 +450,7 @@ ShapeExport& ShapeExport::WritePolyPolygonShape( const Reference< XShape >& xSha
     // write text
     WriteTextBox( xShape, mnXmlNamespace );
 
-    pFS->endElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp) );
+    pFS->endElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes ? XML_sp : XML_wsp) );
 
     return *this;
 }
@@ -469,7 +470,7 @@ ShapeExport& ShapeExport::WriteGroupShape(const uno::Reference<drawing::XShape>&
     FSHelperPtr pFS = GetFS();
 
     sal_Int32 nGroupShapeToken = XML_grpSp;
-    if (GetDocumentType() == DOCUMENT_DOCX)
+    if (GetDocumentType() == DOCUMENT_DOCX && !mbUserShapes)
     {
         if (!m_xParent.is())
             nGroupShapeToken = XML_wgp; // toplevel
@@ -480,7 +481,7 @@ ShapeExport& ShapeExport::WriteGroupShape(const uno::Reference<drawing::XShape>&
     pFS->startElementNS(mnXmlNamespace, nGroupShapeToken);
 
     // non visual properties
-    if (GetDocumentType() != DOCUMENT_DOCX)
+    if (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes)
     {
         pFS->startElementNS(mnXmlNamespace, XML_nvGrpSpPr);
         pFS->singleElementNS(mnXmlNamespace, XML_cNvPr,
@@ -507,7 +508,7 @@ ShapeExport& ShapeExport::WriteGroupShape(const uno::Reference<drawing::XShape>&
         sal_Int32 nSavedNamespace = mnXmlNamespace;
 
         uno::Reference<lang::XServiceInfo> xServiceInfo(xChild, uno::UNO_QUERY_THROW);
-        if (GetDocumentType() == DOCUMENT_DOCX)
+        if (GetDocumentType() == DOCUMENT_DOCX && !mbUserShapes)
         {
             // tdf#128820: WriteGraphicObjectShapePart calls WriteTextShape for non-empty simple
             // text objects, which needs writing into wps::wsp element, so make sure to use wps
@@ -775,10 +776,10 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     }
 
     FSHelperPtr pFS = GetFS();
-    pFS->startElementNS(mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp));
+    pFS->startElementNS(mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes ? XML_sp : XML_wsp));
 
     // non visual shape properties
-    if (GetDocumentType() != DOCUMENT_DOCX)
+    if (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes)
     {
         bool isVisible = true ;
         if( GETA (Visible))
@@ -844,7 +845,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     // Let the custom shapes what has name and preset information in OOXML, to be written
     // as preset ones with parameters. Try that with this converter class.
     if (!sShapeType.startsWith("ooxml") && sShapeType != "non-primitive"
-        && GetDocumentType() == DOCUMENT_DOCX
+        && GetDocumentType() == DOCUMENT_DOCX && !mbUserShapes
         && xShape->getShapeType() == "com.sun.star.drawing.CustomShape")
     {
         DMLPresetShapeExporter aCustomShapeConverter(this, xShape);
@@ -1038,7 +1039,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     // write text
     WriteTextBox( xShape, mnXmlNamespace );
 
-    pFS->endElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp) );
+    pFS->endElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes ? XML_sp : XML_wsp) );
 
     return *this;
 }
@@ -1049,12 +1050,12 @@ ShapeExport& ShapeExport::WriteEllipseShape( const Reference< XShape >& xShape )
 
     FSHelperPtr pFS = GetFS();
 
-    pFS->startElementNS(mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp));
+    pFS->startElementNS(mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes ? XML_sp : XML_wsp));
 
     // TODO: connector ?
 
     // non visual shape properties
-    if (GetDocumentType() != DOCUMENT_DOCX)
+    if (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes)
     {
         pFS->startElementNS(mnXmlNamespace, XML_nvSpPr);
         pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
@@ -1133,7 +1134,7 @@ ShapeExport& ShapeExport::WriteEllipseShape( const Reference< XShape >& xShape )
     // write text
     WriteTextBox( xShape, mnXmlNamespace );
 
-    pFS->endElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp) );
+    pFS->endElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes ? XML_sp : XML_wsp) );
 
     return *this;
 }
@@ -1185,7 +1186,7 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
     FSHelperPtr pFS = GetFS();
     XmlFilterBase* pFB = GetFB();
 
-    if (GetDocumentType() != DOCUMENT_DOCX)
+    if (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes)
         pFS->startElementNS(mnXmlNamespace, XML_pic);
     else
         pFS->startElementNS(mnXmlNamespace, XML_pic,
@@ -1236,7 +1237,7 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
 
     if (xGraphic.is())
     {
-        WriteXGraphicBlip(xShapeProps, xGraphic, false);
+        WriteXGraphicBlip(xShapeProps, xGraphic, mbUserShapes);
     }
     else if (bHasMediaURL)
     {
@@ -1244,7 +1245,7 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
         if (xShapeProps->getPropertySetInfo()->hasPropertyByName("FallbackGraphic"))
             xShapeProps->getPropertyValue("FallbackGraphic") >>= xFallbackGraphic;
 
-        WriteXGraphicBlip(xShapeProps, xFallbackGraphic, false);
+        WriteXGraphicBlip(xShapeProps, xFallbackGraphic, mbUserShapes);
     }
 
     if (xGraphic.is())
@@ -1335,7 +1336,7 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
         GET( rXShapeB, EdgeEndConnection );
     }
     // Position is relative to group in Word, but relative to anchor of group in API.
-    if (GetDocumentType() == DOCUMENT_DOCX && m_xParent.is())
+    if (GetDocumentType() == DOCUMENT_DOCX && !mbUserShapes && m_xParent.is())
     {
         awt::Point aParentPos = m_xParent->getPosition();
         aStartPoint.X -= aParentPos.X;
@@ -1408,7 +1409,7 @@ ShapeExport& ShapeExport::WriteLineShape( const Reference< XShape >& xShape )
 
     FSHelperPtr pFS = GetFS();
 
-    pFS->startElementNS(mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp));
+    pFS->startElementNS(mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes ? XML_sp : XML_wsp));
 
     tools::PolyPolygon aPolyPolygon = EscherPropertyContainer::GetPolyPolygon( xShape );
     if( aPolyPolygon.Count() == 1 && aPolyPolygon[ 0 ].GetSize() == 2)
@@ -1420,7 +1421,7 @@ ShapeExport& ShapeExport::WriteLineShape( const Reference< XShape >& xShape )
     }
 
     // non visual shape properties
-    if (GetDocumentType() != DOCUMENT_DOCX)
+    if (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes)
     {
         pFS->startElementNS(mnXmlNamespace, XML_nvSpPr);
         pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
@@ -1428,7 +1429,7 @@ ShapeExport& ShapeExport::WriteLineShape( const Reference< XShape >& xShape )
                               XML_name, GetShapeName(xShape));
     }
     pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr );
-    if (GetDocumentType() != DOCUMENT_DOCX)
+    if (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes)
     {
         WriteNonVisualProperties( xShape );
         pFS->endElementNS( mnXmlNamespace, XML_nvSpPr );
@@ -1451,7 +1452,7 @@ ShapeExport& ShapeExport::WriteLineShape( const Reference< XShape >& xShape )
     // write text
     WriteTextBox( xShape, mnXmlNamespace );
 
-    pFS->endElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp) );
+    pFS->endElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes ? XML_sp : XML_wsp) );
 
     return *this;
 }
@@ -1477,7 +1478,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( const Reference< XShape >& xShape
 
     FSHelperPtr pFS = GetFS();
 
-    pFS->startElementNS(mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp));
+    pFS->startElementNS(mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes ? XML_sp : XML_wsp));
 
     sal_Int32 nRadius = 0;
 
@@ -1495,7 +1496,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( const Reference< XShape >& xShape
     // "rect" or "roundRect" preset shape below
 
     // non visual shape properties
-    if (GetDocumentType() == DOCUMENT_DOCX)
+    if (GetDocumentType() == DOCUMENT_DOCX && !mbUserShapes)
         pFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr);
     pFS->startElementNS(mnXmlNamespace, XML_nvSpPr);
     pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
@@ -1520,7 +1521,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( const Reference< XShape >& xShape
     // write text
     WriteTextBox( xShape, mnXmlNamespace );
 
-    pFS->endElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp) );
+    pFS->endElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes ? XML_sp : XML_wsp) );
 
     return *this;
 }
@@ -1584,7 +1585,7 @@ ShapeExport& ShapeExport::WriteShape( const Reference< XShape >& xShape )
 ShapeExport& ShapeExport::WriteTextBox( const Reference< XInterface >& xIface, sal_Int32 nXmlNamespace, bool bWritePropertiesAsLstStyles )
 {
     // In case this shape has an associated textbox, then export that, and we're done.
-    if (GetDocumentType() == DOCUMENT_DOCX && GetTextExport())
+    if (GetDocumentType() == DOCUMENT_DOCX && !mbUserShapes && GetTextExport())
     {
         uno::Reference<beans::XPropertySet> xPropertySet(xIface, uno::UNO_QUERY);
         if (xPropertySet.is())
@@ -1605,14 +1606,14 @@ ShapeExport& ShapeExport::WriteTextBox( const Reference< XInterface >& xIface, s
         FSHelperPtr pFS = GetFS();
 
         pFS->startElementNS(nXmlNamespace,
-                            (GetDocumentType() != DOCUMENT_DOCX ? XML_txBody : XML_txbx));
-        WriteText(xIface, /*bBodyPr=*/(GetDocumentType() != DOCUMENT_DOCX), /*bText=*/true,
+                            (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes ? XML_txBody : XML_txbx));
+        WriteText(xIface, /*bBodyPr=*/(GetDocumentType() != DOCUMENT_DOCX || mbUserShapes), /*bText=*/true,
                   /*nXmlNamespace=*/0, /*bWritePropertiesAsLstStyles=*/bWritePropertiesAsLstStyles);
-        pFS->endElementNS( nXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_txBody : XML_txbx) );
-        if (GetDocumentType() == DOCUMENT_DOCX)
+        pFS->endElementNS( nXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes ? XML_txBody : XML_txbx) );
+        if (GetDocumentType() == DOCUMENT_DOCX && !mbUserShapes)
             WriteText( xIface, /*bBodyPr=*/true, /*bText=*/false, /*nXmlNamespace=*/nXmlNamespace );
     }
-    else if (GetDocumentType() == DOCUMENT_DOCX)
+    else if (GetDocumentType() == DOCUMENT_DOCX && !mbUserShapes)
         mpFS->singleElementNS(nXmlNamespace, XML_bodyPr);
 
     return *this;
@@ -1908,10 +1909,10 @@ ShapeExport& ShapeExport::WriteTextShape( const Reference< XShape >& xShape )
     FSHelperPtr pFS = GetFS();
     Reference<XPropertySet> xShapeProps(xShape, UNO_QUERY);
 
-    pFS->startElementNS(mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp));
+    pFS->startElementNS(mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes ? XML_sp : XML_wsp));
 
     // non visual shape properties
-    if (GetDocumentType() != DOCUMENT_DOCX)
+    if (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes)
     {
         pFS->startElementNS(mnXmlNamespace, XML_nvSpPr);
         pFS->startElementNS(mnXmlNamespace, XML_cNvPr,
@@ -1933,7 +1934,7 @@ ShapeExport& ShapeExport::WriteTextShape( const Reference< XShape >& xShape )
         pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
     }
     pFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr, XML_txBox, "1");
-    if (GetDocumentType() != DOCUMENT_DOCX)
+    if (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes)
     {
         WriteNonVisualProperties( xShape );
         pFS->endElementNS( mnXmlNamespace, XML_nvSpPr );
@@ -1954,7 +1955,7 @@ ShapeExport& ShapeExport::WriteTextShape( const Reference< XShape >& xShape )
 
     WriteTextBox( xShape, mnXmlNamespace );
 
-    pFS->endElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp) );
+    pFS->endElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes ? XML_sp : XML_wsp) );
 
     return *this;
 }
