@@ -35,6 +35,12 @@ public:
     void testWindowBackgroundColor();
     void testGetReadableFontColorPrinter();
     void testGetReadableFontColorWindow();
+    void testDrawInvertedBitmap();
+    void testDrawBlackBitmap();
+    void testDrawWhiteBitmap();
+    void testDrawBitmap();
+    void testDrawScaleBitmap();
+    void testDrawScalePartBitmap();
     void testDrawTransformedBitmapEx();
     void testDrawTransformedBitmapExFlip();
     void testRTL();
@@ -45,6 +51,12 @@ public:
     CPPUNIT_TEST(testUseAfterDispose);
     CPPUNIT_TEST(testPrinterBackgroundColor);
     CPPUNIT_TEST(testWindowBackgroundColor);
+    CPPUNIT_TEST(testDrawInvertedBitmap);
+    CPPUNIT_TEST(testDrawBlackBitmap);
+    CPPUNIT_TEST(testDrawWhiteBitmap);
+    CPPUNIT_TEST(testDrawBitmap);
+    CPPUNIT_TEST(testDrawScaleBitmap);
+    CPPUNIT_TEST(testDrawScalePartBitmap);
     CPPUNIT_TEST(testGetReadableFontColorPrinter);
     CPPUNIT_TEST(testGetReadableFontColorWindow);
     CPPUNIT_TEST(testDrawTransformedBitmapEx);
@@ -152,6 +164,161 @@ void VclOutdevTest::testUseAfterDispose()
     pVDev->GetInverseViewTransformation();
 
     pVDev->GetViewTransformation();
+}
+
+void VclOutdevTest::testDrawInvertedBitmap()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N24_BPP);
+
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    pVDev->SetRasterOp(RasterOp::Invert);
+    pVDev->DrawBitmap(Point(0, 0), Size(10, 10), Point(0, 0), Size(10, 10), aBitmap,
+                      MetaActionType::BMP);
+
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::RASTEROP, pAction->GetType());
+    auto pRasterOpAction = static_cast<MetaRasterOpAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL(RasterOp::Invert, pRasterOpAction->GetRasterOp());
+
+    pAction = aMtf.GetAction(1);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::RECT, pAction->GetType());
+    auto pRectAction = static_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(0, 0), Size(10, 10)), pRectAction->GetRect());
+}
+
+void VclOutdevTest::testDrawBlackBitmap()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N24_BPP);
+
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    pVDev->SetDrawMode(DrawModeFlags::BlackBitmap);
+    pVDev->DrawBitmap(Point(0, 0), Size(10, 10), Point(0, 0), Size(10, 10), aBitmap,
+                      MetaActionType::BMP);
+
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::PUSH, pAction->GetType());
+    auto pPushAction = static_cast<MetaPushAction*>(pAction);
+    bool bLineFillFlag = ((PushFlags::LINECOLOR | PushFlags::FILLCOLOR) == pPushAction->GetFlags());
+    CPPUNIT_ASSERT_MESSAGE("Push flags not LINECOLOR | FILLCOLOR", bLineFillFlag);
+
+    pAction = aMtf.GetAction(1);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::LINECOLOR, pAction->GetType());
+    auto pLineColorAction = static_cast<MetaLineColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, pLineColorAction->GetColor());
+
+    pAction = aMtf.GetAction(2);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::FILLCOLOR, pAction->GetType());
+    auto pFillColorAction = static_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, pFillColorAction->GetColor());
+
+    pAction = aMtf.GetAction(3);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::RECT, pAction->GetType());
+    auto pRectAction = static_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(0, 0), Size(10, 10)), pRectAction->GetRect());
+
+    pAction = aMtf.GetAction(4);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::POP, pAction->GetType());
+}
+
+void VclOutdevTest::testDrawWhiteBitmap()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N24_BPP);
+
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    pVDev->SetDrawMode(DrawModeFlags::WhiteBitmap);
+    pVDev->DrawBitmap(Point(0, 0), Size(10, 10), Point(0, 0), Size(10, 10), aBitmap,
+                      MetaActionType::BMP);
+
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::PUSH, pAction->GetType());
+    auto pPushAction = static_cast<MetaPushAction*>(pAction);
+    bool bLineFillFlag = ((PushFlags::LINECOLOR | PushFlags::FILLCOLOR) == pPushAction->GetFlags());
+    CPPUNIT_ASSERT_MESSAGE("Push flags not LINECOLOR | FILLCOLOR", bLineFillFlag);
+
+    pAction = aMtf.GetAction(1);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::LINECOLOR, pAction->GetType());
+    auto pLineColorAction = static_cast<MetaLineColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pLineColorAction->GetColor());
+
+    pAction = aMtf.GetAction(2);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::FILLCOLOR, pAction->GetType());
+    auto pFillColorAction = static_cast<MetaFillColorAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, pFillColorAction->GetColor());
+
+    pAction = aMtf.GetAction(3);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::RECT, pAction->GetType());
+    auto pRectAction = static_cast<MetaRectAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(0, 0), Size(10, 10)), pRectAction->GetRect());
+
+    pAction = aMtf.GetAction(4);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::POP, pAction->GetType());
+}
+
+void VclOutdevTest::testDrawBitmap()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N24_BPP);
+
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    pVDev->DrawBitmap(Point(0, 0), Size(10, 10), Point(0, 0), Size(10, 10), aBitmap,
+                      MetaActionType::BMP);
+
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::BMP, pAction->GetType());
+    auto pBmpAction = static_cast<MetaBmpAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL(Size(16, 16), pBmpAction->GetBitmap().GetSizePixel());
+    CPPUNIT_ASSERT_EQUAL(Point(0, 0), pBmpAction->GetPoint());
+}
+
+void VclOutdevTest::testDrawScaleBitmap()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N24_BPP);
+
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    pVDev->DrawBitmap(Point(5, 5), Size(10, 10), Point(0, 0), Size(10, 10), aBitmap,
+                      MetaActionType::BMPSCALE);
+
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::BMPSCALE, pAction->GetType());
+    auto pBmpScaleAction = static_cast<MetaBmpScaleAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL(Size(16, 16), pBmpScaleAction->GetBitmap().GetSizePixel());
+    CPPUNIT_ASSERT_EQUAL(Point(5, 5), pBmpScaleAction->GetPoint());
+    CPPUNIT_ASSERT_EQUAL(Size(10, 10), pBmpScaleAction->GetSize());
+}
+
+void VclOutdevTest::testDrawScalePartBitmap()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N24_BPP);
+
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    pVDev->DrawBitmap(Point(0, 0), Size(10, 10), Point(5, 5), Size(10, 10), aBitmap,
+                      MetaActionType::BMPSCALEPART);
+
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::BMPSCALEPART, pAction->GetType());
+    auto pBmpScalePartAction = static_cast<MetaBmpScalePartAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL(Size(16, 16), pBmpScalePartAction->GetBitmap().GetSizePixel());
+    CPPUNIT_ASSERT_EQUAL(Point(5, 5), pBmpScalePartAction->GetSrcPoint());
+    CPPUNIT_ASSERT_EQUAL(Size(10, 10), pBmpScalePartAction->GetSrcSize());
+    CPPUNIT_ASSERT_EQUAL(Point(0, 0), pBmpScalePartAction->GetDestPoint());
+    CPPUNIT_ASSERT_EQUAL(Size(10, 10), pBmpScalePartAction->GetDestSize());
 }
 
 void VclOutdevTest::testDrawTransformedBitmapEx()

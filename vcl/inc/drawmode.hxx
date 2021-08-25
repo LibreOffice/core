@@ -44,8 +44,6 @@ VCL_DLLPUBLIC Color GetTextColor(Color const& rColor, DrawModeFlags nDrawMode,
 VCL_DLLPUBLIC vcl::Font GetFont(vcl::Font const& rFont, DrawModeFlags nDrawMode,
                                 StyleSettings const& rStyleSettings);
 
-VCL_DLLPUBLIC Bitmap GetBitmap(Bitmap const& rBitmap, DrawModeFlags nDrawMode);
-
 VCL_DLLPUBLIC BitmapEx GetBitmapEx(BitmapEx const& rBitmapEx, DrawModeFlags nDrawMode);
 };
 
