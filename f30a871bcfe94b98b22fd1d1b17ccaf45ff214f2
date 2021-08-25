@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "804143fe_dfff3250",
+        "filename": "include/vcl/outdevstate.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-25T12:52:49Z",
+      "side": 1,
+      "message": "I don\u0027t quite see why the includes are re-arranged *this* way. The end result is the includes still unsorted alphabetically, but in a different way.",
+      "revId": "f30a871bcfe94b98b22fd1d1b17ccaf45ff214f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6beed6fd_7f72be4b",
+        "filename": "include/vcl/outdevstate.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-25T12:52:49Z",
+      "side": 1,
+      "message": "Possibly it makes sense to move default initializers straight to the member declarations, and make this ctor also default?",
+      "revId": "f30a871bcfe94b98b22fd1d1b17ccaf45ff214f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
