@@ -98,11 +98,11 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet )
 
         mpSet = std::make_unique<SfxItemSet>( *rSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST> );
 
-        if( mpPropSet->AreThereOwnUsrAnys() )
+        if( maUsrAnys.AreThereOwnUsrAnys() )
         {
             for( const auto pProp : mpPropSet->getPropertyMap().getPropertyEntries() )
             {
-                uno::Any* pAny = mpPropSet->GetUsrAnyForID( *pProp );
+                uno::Any* pAny = maUsrAnys.GetUsrAnyForID( *pProp );
                 if( pAny )
                 {
                     const OUString & aPropertyName = pProp->aName;
@@ -235,7 +235,7 @@ void SAL_CALL SdUnoPageBackground::setPropertyValue( const OUString& aPropertyNa
     else
     {
         if(pEntry->nWID)
-            mpPropSet->setPropertyValue( pEntry, aValue );
+            SvxItemPropertySet::setPropertyValue( pEntry, aValue, maUsrAnys );
     }
 }
 
@@ -284,7 +284,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyValue( const OUString& Propert
     else
     {
         if(pEntry->nWID)
-            aAny = mpPropSet->getPropertyValue( pEntry );
+            aAny = mpPropSet->getPropertyValue( pEntry, maUsrAnys );
     }
     return aAny;
 }
@@ -333,7 +333,7 @@ beans::PropertyState SAL_CALL SdUnoPageBackground::getPropertyState( const OUStr
     }
     else
     {
-        if( nullptr == mpPropSet->GetUsrAnyForID(*pEntry) )
+        if( nullptr == maUsrAnys.GetUsrAnyForID(*pEntry) )
             return beans::PropertyState_DEFAULT_VALUE;
         else
             return beans::PropertyState_DIRECT_VALUE;

@@ -371,7 +371,7 @@ void SdOOXMLExportTest1::testBnc870233_2()
     {
         const SdrObjGroup *pObjGroup = dynamic_cast<SdrObjGroup *>(pPage->GetObj(0));
         CPPUNIT_ASSERT(pObjGroup);
-        const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>(pObjGroup->GetSubList()->GetObj(0));
+        const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>(pObjGroup->GetSubList()->GetObj(1));
         checkFontAttributes<Color, SvxColorItem>(pObj, Color(0x0000ff), EE_CHAR_COLOR);
     }
 
@@ -379,7 +379,7 @@ void SdOOXMLExportTest1::testBnc870233_2()
     {
         const SdrObjGroup *pObjGroup = dynamic_cast<SdrObjGroup *>(pPage->GetObj(1));
         CPPUNIT_ASSERT(pObjGroup);
-        const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>(pObjGroup->GetSubList()->GetObj(0));
+        const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>(pObjGroup->GetSubList()->GetObj(1));
         checkFontAttributes<Color, SvxColorItem>( pObj, Color(0x1F497D), EE_CHAR_COLOR );
     }
 
@@ -387,7 +387,7 @@ void SdOOXMLExportTest1::testBnc870233_2()
     {
         const SdrObjGroup *pObjGroup = dynamic_cast<SdrObjGroup *>(pPage->GetObj(2));
         CPPUNIT_ASSERT(pObjGroup);
-        const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>(pObjGroup->GetSubList()->GetObj(0));
+        const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>(pObjGroup->GetSubList()->GetObj(1));
         checkFontAttributes<Color, SvxColorItem>(pObj, Color(0xffffff), EE_CHAR_COLOR);
     }
 

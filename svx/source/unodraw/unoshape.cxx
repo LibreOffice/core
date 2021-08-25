@@ -580,10 +580,10 @@ void SvxShape::ForceMetricTo100th_mm(basegfx::B2DHomMatrix& rB2DHomMatrix) const
     }
 }
 
-static void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet,
+static void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet, SvxItemPropertySetUsrAnys& rAnys,
   SfxItemSet& rSet, const uno::Reference< beans::XPropertySet >& xSet, const SfxItemPropertyMap* pMap )
 {
-    if(!rPropSet.AreThereOwnUsrAnys())
+    if(!rAnys.AreThereOwnUsrAnys())
         return;
 
     const SfxItemPropertyMap& rSrc = rPropSet.getPropertyMap();
@@ -593,7 +593,7 @@ static void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemProper
         const sal_uInt16 nWID = pSrcProp->nWID;
         if(SfxItemPool::IsWhich(nWID)
                 && (nWID < OWN_ATTR_VALUE_START || nWID > OWN_ATTR_VALUE_END)
-                && rPropSet.GetUsrAnyForID(*pSrcProp))
+                && rAnys.GetUsrAnyForID(*pSrcProp))
             rSet.Put(rSet.GetPool()->GetDefaultItem(nWID));
     }
 
@@ -601,7 +601,7 @@ static void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemProper
     {
         if(pSrcProp->nWID)
         {
-            uno::Any* pUsrAny = rPropSet.GetUsrAnyForID(*pSrcProp);
+            uno::Any* pUsrAny = rAnys.GetUsrAnyForID(*pSrcProp);
             if(pUsrAny)
             {
                 // search for equivalent entry in pDst
@@ -623,18 +623,18 @@ static void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemProper
             }
         }
     }
-    const_cast< SvxItemPropertySet& >(rPropSet).ClearAllUsrAny();
+    rAnys.ClearAllUsrAny();
 }
 
 
 void SvxShape::ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet)
 {
     DBG_TESTSOLARMUTEX();
-    if(HasSdrObject() && rPropSet.AreThereOwnUsrAnys())
+    if(HasSdrObject() && maUrsAnys.AreThereOwnUsrAnys())
     {
         SfxItemSet aSet( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>);
         Reference< beans::XPropertySet > xShape(this);
-        SvxItemPropertySet_ObtainSettingsFromPropertySet(rPropSet, aSet, xShape, &mpPropSet->getPropertyMap() );
+        SvxItemPropertySet_ObtainSettingsFromPropertySet(rPropSet, maUrsAnys, aSet, xShape, &mpPropSet->getPropertyMap() );
 
         GetSdrObject()->SetMergedItemSetAndBroadcast(aSet);
 
@@ -1591,7 +1591,7 @@ void SvxShape::_setPropertyValue( const OUString& rPropertyName, const uno::Any&
             //        support additional properties that we don't know here we
             //        silently store *all* properties, even if they may be not
             //        supported after creation.
-            mpPropSet->setPropertyValue( pMap, rVal );
+            SvxItemPropertySet::setPropertyValue( pMap, rVal, maUrsAnys );
         }
 
         return;
@@ -1762,7 +1762,7 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
 
         if(pMap && pMap->nWID)
 //      FixMe: see setPropertyValue
-            aAny = mpPropSet->getPropertyValue( pMap );
+            aAny = mpPropSet->getPropertyValue( pMap, maUrsAnys );
 
     }
     return aAny;
