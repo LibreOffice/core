@@ -13,6 +13,7 @@
 #include <sal/config.h>
 
 #include <cmath>
+#include <limits>
 #include <type_traits>
 
 namespace o3tl
