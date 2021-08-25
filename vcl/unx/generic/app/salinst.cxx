@@ -27,6 +27,7 @@
 #include <unx/salframe.h>
 #include <unx/sm.hxx>
 #include <unx/i18n_im.hxx>
+#include <unx/salbmp.h>
 
 #include <vcl/inputtypes.hxx>
 
@@ -36,7 +37,9 @@
 #include <vcl/skia/SkiaHelper.hxx>
 #include <config_skia.h>
 #if HAVE_FEATURE_SKIA
+#include <vcl/skia/SkiaHelper.hxx>
 #include <skia/x11/gdiimpl.hxx>
+#include <skia/salbmp.hxx>
 #endif
 
 // plugin factory function
@@ -236,6 +239,16 @@ void X11SalInstance::PostPrintersChanged()
 std::unique_ptr<GenPspGraphics> X11SalInstance::CreatePrintGraphics()
 {
     return std::make_unique<GenPspGraphics>();
+}
+
+std::shared_ptr<SalBitmap> X11SalInstance::CreateSalBitmap()
+{
+#if HAVE_FEATURE_SKIA
+    if (SkiaHelper::isVCLSkiaEnabled())
+        return std::make_shared<SkiaSalBitmap>();
+    else
+#endif
+        return std::make_shared<X11SalBitmap>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

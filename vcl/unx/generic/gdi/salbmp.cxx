@@ -42,27 +42,12 @@
 #include <o3tl/safeint.hxx>
 
 #include <config_features.h>
-#if HAVE_FEATURE_SKIA
-#include <vcl/skia/SkiaHelper.hxx>
-#include <skia/salbmp.hxx>
-#endif
 
 #if defined HAVE_VALGRIND_HEADERS
 #include <valgrind/valgrind.h>
 #endif
 
 #include <memory>
-
-
-std::shared_ptr<SalBitmap> X11SalInstance::CreateSalBitmap()
-{
-#if HAVE_FEATURE_SKIA
-    if (SkiaHelper::isVCLSkiaEnabled())
-        return std::make_shared<SkiaSalBitmap>();
-    else
-#endif
-        return std::make_shared<X11SalBitmap>();
-}
 
 ImplSalBitmapCache* X11SalBitmap::mpCache = nullptr;
 unsigned int        X11SalBitmap::mnCacheInstCount = 0;
