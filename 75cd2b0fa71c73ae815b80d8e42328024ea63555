@@ -16,6 +16,24 @@
       "revId": "75cd2b0fa71c73ae815b80d8e42328024ea63555",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4cf66de_0d0e1330",
+        "filename": "sw/source/uibase/shells/drwbassh.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 861,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-08-25T12:16:06Z",
+      "side": 1,
+      "message": "Good spot, thx!\nShould be fixed with https://gerrit.libreoffice.org/c/core/+/121034",
+      "parentUuid": "038689bb_7076dd67",
+      "revId": "75cd2b0fa71c73ae815b80d8e42328024ea63555",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
