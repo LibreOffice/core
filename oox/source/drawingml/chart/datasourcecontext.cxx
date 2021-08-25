@@ -166,6 +166,7 @@ SvNumberFormatter* DoubleSequenceContext::getNumberFormatter()
 StringSequenceContext::StringSequenceContext( ContextHandler2Helper& rParent, DataSequenceModel& rModel )
     : DataSequenceContextBase( rParent, rModel )
     , mnPtIndex(-1)
+    , mbReadC15(false)
 {
 }
 
@@ -186,6 +187,16 @@ ContextHandlerRef StringSequenceContext::onCreateContext( sal_Int32 nElement, co
             }
         break;
 
+        case C15_TOKEN( datalabelsRange ):
+            mbReadC15 = true;
+            switch( nElement )
+            {
+                case C15_TOKEN( f ):
+                case C15_TOKEN( dlblRangeCache ):
+                    return this;
+            }
+        break;
+
         case C_TOKEN( strRef ):
             switch( nElement )
             {
@@ -197,6 +208,10 @@ ContextHandlerRef StringSequenceContext::onCreateContext( sal_Int32 nElement, co
 
         case C_TOKEN( strCache ):
         case C_TOKEN( strLit ):
+        case C15_TOKEN( dlblRangeCache ):
+            if (nElement == C15_TOKEN( dlblRangeCache ) && !mbReadC15)
+                break;
+
             switch( nElement )
             {
                 case C_TOKEN( ptCount ):
@@ -248,6 +263,10 @@ void StringSequenceContext::onCharacters( const OUString& rChars )
         case C_TOKEN( f ):
             mrModel.maFormula = rChars;
         break;
+        case C15_TOKEN( f ):
+            if (mbReadC15)
+                mrModel.maFormula = rChars;
+        break;
         case C_TOKEN( v ):
             if( mnPtIndex >= 0 )
                 mrModel.maData[ (mrModel.mnLevelCount-1) * mrModel.mnPointCount + mnPtIndex ] <<= rChars;
@@ -270,11 +289,13 @@ ContextHandlerRef DataSourceContext::onCreateContext( sal_Int32 nElement, const 
     {
         case C_TOKEN( cat ):
         case C_TOKEN( xVal ):
+        case C_TOKEN( ext ):
             switch( nElement )
             {
                 case C_TOKEN( multiLvlStrRef ):
                 case C_TOKEN( strLit ):
                 case C_TOKEN( strRef ):
+                case C15_TOKEN( datalabelsRange ):
                     OSL_ENSURE( !mrModel.mxDataSeq, "DataSourceContext::onCreateContext - multiple data sequences" );
                     return new StringSequenceContext( *this, mrModel.mxDataSeq.create() );
 

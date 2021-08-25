@@ -2719,4 +2719,16 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:element>
   </rng:define>
 
+  <!-- TODO no proposal -->
+  <rng:define name="chart-data-label-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:data-label-guid">
+        <rng:ref name="string"/>
+      </rng:attribute>
+      <rng:attribute name="loext:data-labels-cell-range">
+        <rng:ref name="cellRangeAddress"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
 </rng:grammar>
