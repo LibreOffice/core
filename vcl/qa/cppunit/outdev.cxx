@@ -57,6 +57,7 @@ public:
     void testTransparentFont();
     void testDefaultRefPoint();
     void testRefPoint();
+    void testRasterOp();
     void testSystemTextColor();
     void testShouldDrawWavePixelAsRect();
     void testGetWaveLineSize();
@@ -90,6 +91,7 @@ public:
     CPPUNIT_TEST(testTransparentFont);
     CPPUNIT_TEST(testDefaultRefPoint);
     CPPUNIT_TEST(testRefPoint);
+    CPPUNIT_TEST(testRasterOp);
     CPPUNIT_TEST(testSystemTextColor);
     CPPUNIT_TEST(testShouldDrawWavePixelAsRect);
     CPPUNIT_TEST(testGetWaveLineSize);
@@ -834,6 +836,25 @@ void VclOutdevTest::testRefPoint()
     CPPUNIT_ASSERT_EQUAL(MetaActionType::REFPOINT, pAction->GetType());
     auto pRefPointAction = static_cast<MetaRefPointAction*>(pAction);
     CPPUNIT_ASSERT_EQUAL(Point(10, 20), pRefPointAction->GetRefPoint());
+}
+
+void VclOutdevTest::testRasterOp()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    pVDev->SetRasterOp(RasterOp::Invert);
+
+    CPPUNIT_ASSERT_EQUAL(RasterOp::Invert, pVDev->GetRasterOp());
+    CPPUNIT_ASSERT(pVDev->IsLineColor());
+    CPPUNIT_ASSERT(pVDev->IsFillColor());
+
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::RASTEROP, pAction->GetType());
+    auto pRasterOpAction = static_cast<MetaRasterOpAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL(RasterOp::Invert, pRasterOpAction->GetRasterOp());
 }
 
 void VclOutdevTest::testSystemTextColor()
