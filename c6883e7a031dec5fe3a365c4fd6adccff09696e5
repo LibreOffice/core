@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "69dafc2a_a9d97c02",
+        "filename": "sw/source/core/txtnode/thints.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2636,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-25T12:27:02Z",
+      "side": 1,
+      "message": "Unlike reserve, resize may be avoided using a vector ctor taking initial size.",
+      "revId": "c6883e7a031dec5fe3a365c4fd6adccff09696e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
