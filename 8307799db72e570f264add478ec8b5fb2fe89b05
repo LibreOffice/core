@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "9cb9941a_b9cf032d",
+        "filename": "vcl/source/window/scrwnd.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-25T07:17:51Z",
+      "side": 1,
+      "message": "\u003e Anyway, do you think it\u0027s better to just drop the two changes related to this from this commit, and do it elsewhere? and what would be your suggestion for the type to use in that other patch - should I use tools::Long straight away?\n\nYes, that\u0027s exactly what I would do.  And mention in the commit message why the use of LONG_MIN/MAX had become wrong over time and the change to std::numeric_limits\u003ctools::Long\u003e::min/max() is correct:  For example for ImplWheelWindow::mnActDeltaX, it was of type long and used LONG_MIN/MAX back in \u003chttps://git.libreoffice.org/core/+/8ab086b6cc054501bfbf7ef6fa509c393691e860%5E!/\u003e \"initial import\", then changed to tools::Long in \u003chttps://git.libreoffice.org/core/+/3aef606f2758172a27718a06fea0ff9080e4d80f%5E!/\u003e \"use tools::Long in vcl\" but without adapting the uses of LONG_MIN/MAX.",
+      "parentUuid": "84aa2eef_efbf5eb2",
+      "range": {
+        "startLine": 220,
+        "startChar": 12,
+        "endLine": 222,
+        "endChar": 66
+      },
+      "revId": "8307799db72e570f264add478ec8b5fb2fe89b05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ae96c247_092886d7",
         "filename": "vcl/source/window/window2.cxx",
         "patchSetId": 5
