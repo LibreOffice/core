@@ -210,6 +210,15 @@ sal_Int32 ConversionHelper::decodeMeasureToHmm( const GraphicHelper& rGraphicHel
     return ::oox::drawingml::convertEmuToHmm( decodeMeasureToEmu( rGraphicHelper, rValue, nRefValue, bPixelX, bDefaultAsPixel ) );
 }
 
+sal_Int32 ConversionHelper::decodeMeasureToTwip(const GraphicHelper& rGraphicHelper,
+                                                const OUString& rValue, sal_Int32 nRefValue,
+                                                bool bPixelX, bool bDefaultAsPixel)
+{
+    return ::o3tl::convert(
+        decodeMeasureToEmu(rGraphicHelper, rValue, nRefValue, bPixelX, bDefaultAsPixel),
+        o3tl::Length::emu, o3tl::Length::twip);
+}
+
 Color ConversionHelper::decodeColor( const GraphicHelper& rGraphicHelper,
         const OptValue< OUString >& roVmlColor, const OptValue< double >& roVmlOpacity,
         ::Color nDefaultRgb, ::Color nPrimaryRgb )
