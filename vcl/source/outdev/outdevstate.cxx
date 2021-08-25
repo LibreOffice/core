@@ -198,14 +198,6 @@ void OutputDevice::ClearStack()
         Pop();
 }
 
-void OutputDevice::EnableOutput( bool bEnable )
-{
-    mbOutput = bEnable;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->EnableOutput( bEnable );
-}
-
 void OutputDevice::SetAntialiasing( AntialiasingFlags nMode )
 {
     if ( mnAntialiasing != nMode )
