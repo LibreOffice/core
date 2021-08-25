@@ -53,6 +53,7 @@ public:
     void testOutputFlag();
     void testAntialias();
     void testDrawMode();
+    void testLayoutMode();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
@@ -79,6 +80,7 @@ public:
     CPPUNIT_TEST(testOutputFlag);
     CPPUNIT_TEST(testAntialias);
     CPPUNIT_TEST(testDrawMode);
+    CPPUNIT_TEST(testLayoutMode);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -604,6 +606,25 @@ void VclOutdevTest::testDrawMode()
     pVDev->SetDrawMode(DrawModeFlags::BlackLine);
 
     CPPUNIT_ASSERT_EQUAL(DrawModeFlags::BlackLine, pVDev->GetDrawMode());
+}
+
+void VclOutdevTest::testLayoutMode()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    CPPUNIT_ASSERT_EQUAL(ComplexTextLayoutFlags::Default, pVDev->GetLayoutMode());
+
+    pVDev->SetLayoutMode(ComplexTextLayoutFlags::BiDiRtl);
+
+    CPPUNIT_ASSERT_EQUAL(ComplexTextLayoutFlags::BiDiRtl, pVDev->GetLayoutMode());
+
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::LAYOUTMODE, pAction->GetType());
+    auto pLayoutModeAction = static_cast<MetaLayoutModeAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL(ComplexTextLayoutFlags::BiDiRtl, pLayoutModeAction->GetLayoutMode());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclOutdevTest);

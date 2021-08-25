@@ -198,17 +198,6 @@ void OutputDevice::ClearStack()
         Pop();
 }
 
-void OutputDevice::SetLayoutMode( ComplexTextLayoutFlags nTextLayoutMode )
-{
-    if( mpMetaFile )
-        mpMetaFile->AddAction( new MetaLayoutModeAction( nTextLayoutMode ) );
-
-    mnTextLayoutMode = nTextLayoutMode;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetLayoutMode( nTextLayoutMode );
-}
-
 void OutputDevice::SetDigitLanguage( LanguageType eTextLanguage )
 {
     if( mpMetaFile )
