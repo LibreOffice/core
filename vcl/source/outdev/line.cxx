@@ -17,21 +17,92 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cassert>
-#include <numeric>
-
-#include <vcl/gdimtf.hxx>
-#include <vcl/lineinfo.hxx>
-#include <vcl/metaact.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/virdev.hxx>
-
-#include <salgdi.hxx>
-
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
+#include <tools/debug.hxx>
+
+#include <vcl/lineinfo.hxx>
+#include <vcl/metaact.hxx>
+#include <vcl/virdev.hxx>
+
+#include <drawmode.hxx>
+#include <salgdi.hxx>
+
+#include <cassert>
+#include <numeric>
+
+void OutputDevice::SetLineColor()
+{
+
+    if ( mpMetaFile )
+        mpMetaFile->AddAction( new MetaLineColorAction( Color(), false ) );
+
+    if ( mbLineColor )
+    {
+        mbInitLineColor = true;
+        mbLineColor = false;
+        maLineColor = COL_TRANSPARENT;
+    }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetLineColor();
+}
+
+void OutputDevice::SetLineColor( const Color& rColor )
+{
+
+    Color aColor = vcl::drawmode::GetLineColor(rColor, GetDrawMode(), GetSettings().GetStyleSettings());
+
+    if( mpMetaFile )
+        mpMetaFile->AddAction( new MetaLineColorAction( aColor, true ) );
+
+    if( aColor.IsTransparent() )
+    {
+        if ( mbLineColor )
+        {
+            mbInitLineColor = true;
+            mbLineColor = false;
+            maLineColor = COL_TRANSPARENT;
+        }
+    }
+    else
+    {
+        if( maLineColor != aColor )
+        {
+            mbInitLineColor = true;
+            mbLineColor = true;
+            maLineColor = aColor;
+        }
+    }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetLineColor( COL_BLACK );
+}
+
+void OutputDevice::InitLineColor()
+{
+    DBG_TESTSOLARMUTEX();
+
+    if( mbLineColor )
+    {
+        if( RasterOp::N0 == meRasterOp )
+            mpGraphics->SetROPLineColor( SalROPColor::N0 );
+        else if( RasterOp::N1 == meRasterOp )
+            mpGraphics->SetROPLineColor( SalROPColor::N1 );
+        else if( RasterOp::Invert == meRasterOp )
+            mpGraphics->SetROPLineColor( SalROPColor::Invert );
+        else
+            mpGraphics->SetLineColor( maLineColor );
+    }
+    else
+    {
+        mpGraphics->SetLineColor();
+    }
+
+    mbInitLineColor = false;
+}
 
 void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
                              const LineInfo& rLineInfo )

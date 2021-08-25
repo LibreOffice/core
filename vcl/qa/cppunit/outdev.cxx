@@ -48,6 +48,9 @@ public:
     void testDefaultFillColor();
     void testTransparentFillColor();
     void testFillColor();
+    void testDefaultLineColor();
+    void testTransparentLineColor();
+    void testLineColor();
     void testSystemTextColor();
     void testShouldDrawWavePixelAsRect();
     void testGetWaveLineSize();
@@ -72,6 +75,9 @@ public:
     CPPUNIT_TEST(testDefaultFillColor);
     CPPUNIT_TEST(testTransparentFillColor);
     CPPUNIT_TEST(testFillColor);
+    CPPUNIT_TEST(testDefaultLineColor);
+    CPPUNIT_TEST(testTransparentLineColor);
+    CPPUNIT_TEST(testLineColor);
     CPPUNIT_TEST(testSystemTextColor);
     CPPUNIT_TEST(testShouldDrawWavePixelAsRect);
     CPPUNIT_TEST(testGetWaveLineSize);
@@ -532,6 +538,69 @@ void VclOutdevTest::testFillColor()
     CPPUNIT_ASSERT_EQUAL(MetaActionType::FILLCOLOR, pAction->GetType());
     auto pFillAction = static_cast<MetaFillColorAction*>(pAction);
     const Color& rColor = pFillAction->GetColor();
+    CPPUNIT_ASSERT_EQUAL(COL_RED, rColor);
+}
+
+void VclOutdevTest::testDefaultLineColor()
+{
+    // Create a virtual device, and connect a metafile to it.
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    CPPUNIT_ASSERT(pVDev->IsLineColor());
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, pVDev->GetLineColor());
+
+    pVDev->SetLineColor();
+    CPPUNIT_ASSERT(!pVDev->IsLineColor());
+    CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, pVDev->GetLineColor());
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::LINECOLOR, pAction->GetType());
+    auto pLineAction = static_cast<MetaLineColorAction*>(pAction);
+    const Color& rColor = pLineAction->GetColor();
+    CPPUNIT_ASSERT_EQUAL(Color(), rColor);
+}
+
+void VclOutdevTest::testTransparentLineColor()
+{
+    // Create a virtual device, and connect a metafile to it.
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    CPPUNIT_ASSERT(pVDev->IsLineColor());
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, pVDev->GetLineColor());
+
+    pVDev->SetLineColor(COL_TRANSPARENT);
+    CPPUNIT_ASSERT(!pVDev->IsLineColor());
+    CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, pVDev->GetLineColor());
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::LINECOLOR, pAction->GetType());
+    auto pLineAction = static_cast<MetaLineColorAction*>(pAction);
+    const Color& rColor = pLineAction->GetColor();
+    CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, rColor);
+}
+
+void VclOutdevTest::testLineColor()
+{
+    // Create a virtual device, and connect a metafile to it.
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    CPPUNIT_ASSERT(pVDev->IsLineColor());
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, pVDev->GetLineColor());
+
+    pVDev->SetLineColor(COL_RED);
+    CPPUNIT_ASSERT(pVDev->IsLineColor());
+    CPPUNIT_ASSERT_EQUAL(COL_RED, pVDev->GetLineColor());
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::LINECOLOR, pAction->GetType());
+    auto pLineAction = static_cast<MetaLineColorAction*>(pAction);
+    const Color& rColor = pLineAction->GetColor();
     CPPUNIT_ASSERT_EQUAL(COL_RED, rColor);
 }
 
