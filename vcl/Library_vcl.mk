@@ -213,6 +213,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/toolkit/group \
     vcl/source/toolkit/morebtn \
     vcl/source/outdev/antialias \
+    vcl/source/outdev/drawmode \
     vcl/source/outdev/background \
     vcl/source/outdev/outdev \
     vcl/source/outdev/outdevstate \
