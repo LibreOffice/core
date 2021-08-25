@@ -59,6 +59,7 @@ public:
     void testRasterOp();
     void testOutputFlag();
     void testAntialias();
+    void testDrawMode();
     void testSystemTextColor();
     void testShouldDrawWavePixelAsRect();
     void testGetWaveLineSize();
@@ -92,8 +93,9 @@ public:
     CPPUNIT_TEST(testDefaultRefPoint);
     CPPUNIT_TEST(testRefPoint);
     CPPUNIT_TEST(testRasterOp);
-    CPPUNIT_TEST(testAntialias);
     CPPUNIT_TEST(testOutputFlag);
+    CPPUNIT_TEST(testAntialias);
+    CPPUNIT_TEST(testDrawMode);
     CPPUNIT_TEST(testSystemTextColor);
     CPPUNIT_TEST(testShouldDrawWavePixelAsRect);
     CPPUNIT_TEST(testGetWaveLineSize);
@@ -227,10 +229,6 @@ void VclOutdevTest::testDrawBlackBitmap()
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N24_BPP);
-    {
-        BitmapScopedWriteAccess pWriteAccess(aBitmap);
-        pWriteAccess->Erase(COL_RED);
-    }
 
     GDIMetaFile aMtf;
     aMtf.Record(pVDev.get());
@@ -262,12 +260,6 @@ void VclOutdevTest::testDrawBlackBitmap()
 
     pAction = aMtf.GetAction(4);
     CPPUNIT_ASSERT_EQUAL(MetaActionType::POP, pAction->GetType());
-
-    // test to see if the color is black
-    Bitmap aBlackBmp(pVDev->GetBitmap(Point(0, 0), Size(10, 10)));
-    Bitmap::ScopedReadAccess pReadAccess(aBlackBmp);
-    const BitmapColor& rColor = pReadAccess->GetColor(0, 0);
-    CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_BLACK), rColor);
 }
 
 void VclOutdevTest::testDrawWhiteBitmap()
@@ -305,12 +297,6 @@ void VclOutdevTest::testDrawWhiteBitmap()
 
     pAction = aMtf.GetAction(4);
     CPPUNIT_ASSERT_EQUAL(MetaActionType::POP, pAction->GetType());
-
-    // test to see if the color is white
-    Bitmap aWhiteBmp(pVDev->GetBitmap(Point(0, 0), Size(10, 10)));
-    Bitmap::ScopedReadAccess pReadAccess(aWhiteBmp);
-    const BitmapColor& rColor = pReadAccess->GetColor(0, 0);
-    CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_WHITE), rColor);
 }
 
 void VclOutdevTest::testDrawBitmap()
@@ -369,36 +355,6 @@ void VclOutdevTest::testDrawScalePartBitmap()
     CPPUNIT_ASSERT_EQUAL(Size(10, 10), pBmpScalePartAction->GetSrcSize());
     CPPUNIT_ASSERT_EQUAL(Point(0, 0), pBmpScalePartAction->GetDestPoint());
     CPPUNIT_ASSERT_EQUAL(Size(10, 10), pBmpScalePartAction->GetDestSize());
-}
-
-void VclOutdevTest::testDrawGrayBitmap()
-{
-    // draw a red 1x1 bitmap
-    Bitmap aBmp(Size(1, 1), vcl::PixelFormat::N24_BPP);
-    BitmapScopedWriteAccess pWriteAccess(aBmp);
-    pWriteAccess->Erase(COL_RED);
-
-    // check to ensure that the bitmap is red
-    {
-        Bitmap::ScopedReadAccess pReadAccess(aBmp);
-        const BitmapColor& rColor = pReadAccess->GetColor(0, 0);
-        CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_RED), rColor);
-    }
-
-    ScopedVclPtrInstance<VirtualDevice> pVDev;
-
-    pVDev->SetDrawMode(DrawModeFlags::GrayBitmap);
-    pVDev->DrawBitmap(Point(0, 0), Size(1, 1), Point(0, 0), Size(1, 1), aBmp, MetaActionType::BMP);
-
-    // should be a grey
-    Bitmap aVDevBmp(pVDev->GetBitmap(Point(), Size(1, 1)));
-    {
-        Bitmap::ScopedReadAccess pReadAccess(aVDevBmp);
-        const BitmapColor& rColor = pReadAccess->GetColor(0, 0);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x26), sal_Int32(rColor.GetRed()));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x26), sal_Int32(rColor.GetGreen()));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x26), sal_Int32(rColor.GetBlue()));
-    }
 }
 
 void VclOutdevTest::testDrawTransformedBitmapEx()
@@ -823,6 +779,25 @@ void VclOutdevTest::testDrawMode()
     pVDev->SetDrawMode(DrawModeFlags::BlackLine);
 
     CPPUNIT_ASSERT_EQUAL(DrawModeFlags::BlackLine, pVDev->GetDrawMode());
+}
+
+void VclOutdevTest::testLayoutMode()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    CPPUNIT_ASSERT_EQUAL(ComplexTextLayoutFlags::Default, pVDev->GetLayoutMode());
+
+    pVDev->SetLayoutMode(ComplexTextLayoutFlags::BiDiRtl);
+
+    CPPUNIT_ASSERT_EQUAL(ComplexTextLayoutFlags::BiDiRtl, pVDev->GetLayoutMode());
+
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::LAYOUTMODE, pAction->GetType());
+    auto pLayoutModeAction = static_cast<MetaLayoutModeAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL(ComplexTextLayoutFlags::BiDiRtl, pLayoutModeAction->GetLayoutMode());
 }
 
 void VclOutdevTest::testSystemTextColor()
