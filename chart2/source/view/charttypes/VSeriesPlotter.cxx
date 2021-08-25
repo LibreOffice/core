@@ -502,6 +502,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         Sequence< OUString > aTextList( nTextListLength );
 
         bool bUseCustomLabel = nCustomLabelsCount > 0;
+        size_t nVisibleFieldLen = 0;
         if( bUseCustomLabel )
         {
             nTextListLength = ( nCustomLabelsCount > 3 ) ? nCustomLabelsCount : 3;
@@ -509,6 +510,8 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             aTextList = Sequence< OUString >( nTextListLength );
             for( sal_uInt32 i = 0; i < nCustomLabelsCount; ++i )
             {
+                ++nVisibleFieldLen;
+                bool bPreserveContent = false;
                 switch( aCustomLabels[i]->getFieldType() )
                 {
                     case DataPointCustomLabelFieldType_VALUE:
@@ -541,8 +544,16 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                         aTextList[i] = getLabelTextForValue(rDataSeries, nPointIndex, fValue, true);
                         break;
                     }
-                    case DataPointCustomLabelFieldType_CELLREF:
                     case DataPointCustomLabelFieldType_CELLRANGE:
+                    {
+                        if (aCustomLabels[i]->getDataLabelsRange())
+                        {
+                            bPreserveContent = true;
+                            --nVisibleFieldLen;
+                        }
+                    }
+                    [[fallthrough]];
+                    case DataPointCustomLabelFieldType_CELLREF:
                     {
                         // TODO: for now doesn't show placeholder
                         aTextList[i] = OUString();
@@ -561,7 +572,8 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                     default:
                     break;
                 }
-                aCustomLabels[i]->setString( aTextList[i] );
+                if (!bPreserveContent)
+                    aCustomLabels[i]->setString( aTextList[i] );
             }
         }
         else
@@ -613,10 +625,13 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
 
         if( bUseCustomLabel )
         {
-            Sequence< uno::Reference< XFormattedString > > aFormattedLabels( aCustomLabels.getLength() );
-            for( int i = 0; i < aFormattedLabels.getLength(); i++ )
+            Sequence< uno::Reference< XFormattedString > > aFormattedLabels( nVisibleFieldLen );
+            int nFormattedIndex = 0;
+            for( int i = 0; i < aCustomLabels.getLength(); i++ )
             {
-                aFormattedLabels[i] = aCustomLabels[i];
+                if (aCustomLabels[i]->getFieldType() == DataPointCustomLabelFieldType_CELLRANGE && aCustomLabels[i]->getDataLabelsRange())
+                    continue;
+                aFormattedLabels[nFormattedIndex++] = aCustomLabels[i];
             }
 
             // create text shape

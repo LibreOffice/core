@@ -1220,15 +1220,20 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                 }
 
                 // Custom labels might be passed as property
-                if(auto nLabelCount = seriesStyle.mCustomLabels.size(); nLabelCount > 0)
+                if(const size_t nLabelCount = seriesStyle.mCustomLabels.mLabels.size(); nLabelCount > 0)
                 {
-                    Sequence< Reference<chart2::XDataPointCustomLabelField>> xLabels(nLabelCount);
+                    auto& rCustomLabels = seriesStyle.mCustomLabels;
+                    size_t nFields = nLabelCount;
+                    if (rCustomLabels.mbDataLabelsRange)
+                        ++nFields; // For appending CELLRANGE field.
+
+                    Sequence< Reference<chart2::XDataPointCustomLabelField>> xLabels(nFields);
                     Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
-                    for( auto j = 0; j< xLabels.getLength(); ++j )
+                    for( size_t j = 0; j < nLabelCount; ++j )
                     {
                         Reference< chart2::XDataPointCustomLabelField > xCustomLabel = chart2::DataPointCustomLabelField::create(xContext);
                         xLabels[j] = xCustomLabel;
-                        xCustomLabel->setString(seriesStyle.mCustomLabels[j]);
+                        xCustomLabel->setString(rCustomLabels.mLabels[j]);
                         xCustomLabel->setFieldType(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT);
 
                         // Restore character properties on the text span manually, till
@@ -1251,6 +1256,18 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                             }
                         }
                     }
+
+                    if (rCustomLabels.mbDataLabelsRange)
+                    {
+                        // append CELLRANGE field using the attributes of <chart:data-label>.
+                        Reference< chart2::XDataPointCustomLabelField > xCustomLabel = chart2::DataPointCustomLabelField::create(xContext);
+                        xCustomLabel->setDataLabelsRange(true);
+                        xCustomLabel->setFieldType(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_CELLRANGE);
+                        xCustomLabel->setString(rCustomLabels.msLabelsCellRange);
+                        xCustomLabel->setGuid(rCustomLabels.msLabelGuid);
+                        xLabels[nFields - 1] = xCustomLabel;
+                    }
+
                     xPointProp->setPropertyValue("CustomLabelFields", uno::Any(xLabels));
                     xPointProp->setPropertyValue("DataCaption", uno::Any(chart::ChartDataCaption::CUSTOM));
                 }
