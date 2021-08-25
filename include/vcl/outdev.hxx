@@ -480,7 +480,7 @@ public:
     AntialiasingFlags           GetAntialiasing() const { return mnAntialiasing; }
 
     void                        SetDrawMode( DrawModeFlags nDrawMode );
-    DrawModeFlags               GetDrawMode() const;
+    DrawModeFlags               GetDrawMode() const { return mnDrawMode; }
 
     void                        SetLayoutMode( ComplexTextLayoutFlags nTextLayoutMode );
     ComplexTextLayoutFlags       GetLayoutMode() const { return mnTextLayoutMode; }
