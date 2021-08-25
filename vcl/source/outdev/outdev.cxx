@@ -356,6 +356,14 @@ void OutputDevice::SetAntialiasing( AntialiasingFlags nMode )
         mpAlphaVDev->SetAntialiasing( nMode );
 }
 
+void OutputDevice::SetDrawMode(DrawModeFlags nDrawMode)
+{
+    mnDrawMode = nDrawMode;
+
+    if (mpAlphaVDev)
+        mpAlphaVDev->SetDrawMode(nDrawMode);
+}
+
 sal_uInt16 OutputDevice::GetBitCount() const
 {
     // we need a graphics instance
