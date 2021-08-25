@@ -29,6 +29,16 @@ interface XDataPointCustomLabelField : XFormattedString2
 
     void setGuid( [in] string guid );
 
+    /**
+        @since LibreOffice 7.3
+    */
+    boolean getDataLabelsRange();
+
+    /**
+        @since LibreOffice 7.3
+    */
+    void setDataLabelsRange( [in] boolean dataLabelsRange );
+
 };
 
 

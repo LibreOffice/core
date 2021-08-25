@@ -100,15 +100,37 @@ DataLabelContext::~DataLabelContext()
 
 ContextHandlerRef DataLabelContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    if( isRootElement() ) switch( nElement )
+    if( isRootElement() )
     {
-        case C_TOKEN( idx ):
-            mrModel.mnIndex = rAttribs.getInteger( XML_val, -1 );
-            return nullptr;
-        case C_TOKEN( layout ):
-            return new LayoutContext( *this, mrModel.mxLayout.create() );
-        case C_TOKEN( tx ):
-            return new TextContext( *this, mrModel.mxText.create() );
+        switch( nElement )
+        {
+            case C_TOKEN( idx ):
+                mrModel.mnIndex = rAttribs.getInteger( XML_val, -1 );
+                return nullptr;
+            case C_TOKEN( layout ):
+                return new LayoutContext( *this, mrModel.mxLayout.create() );
+            case C_TOKEN( tx ):
+                return new TextContext( *this, mrModel.mxText.create() );
+            case C_TOKEN( extLst ):
+                return this;
+        }
+    }
+    else
+    {
+        switch( getCurrentElement() )
+        {
+            case C_TOKEN( extLst ):
+                if ( nElement == C_TOKEN( ext ) )
+                    return this;
+            break;
+            case C_TOKEN( ext ):
+                if ( nElement == C15_TOKEN( showDataLabelsRange ) )
+                {
+                    mrModel.mobShowDataLabelsRange = rAttribs.getBool( XML_val );
+                    return nullptr;
+                }
+            break;
+        }
     }
     bool bMSO2007 = getFilter().isMSO2007Document();
     return lclDataLabelSharedCreateContext( *this, nElement, rAttribs, mrModel, bMSO2007 );
@@ -135,7 +157,7 @@ ContextHandlerRef DataLabelsContext::onCreateContext( sal_Int32 nElement, const 
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( dLbl ):
-            return new DataLabelContext( *this, mrModel.maPointLabels.create(bMSO2007Doc) );
+            return new DataLabelContext( *this, mrModel.maPointLabels.create(mrModel, bMSO2007Doc) );
         case C_TOKEN( leaderLines ):
             return new ShapePrWrapperContext( *this, mrModel.mxLeaderLines.create() );
         case C_TOKEN( showLeaderLines ):
@@ -390,6 +412,8 @@ ContextHandlerRef SeriesContextBase::onCreateContext( sal_Int32 nElement, const 
                     return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
                 case C_TOKEN( tx ):
                     return new TextContext( *this, mrModel.mxText.create() );
+                case C_TOKEN( extLst ):
+                    return this;
             }
         break;
 
@@ -406,6 +430,19 @@ ContextHandlerRef SeriesContextBase::onCreateContext( sal_Int32 nElement, const 
                     return nullptr;
             }
         break;
+
+        case C_TOKEN( extLst ):
+            switch( nElement )
+            {
+                case C_TOKEN( ext ):
+                    if (mrModel.maSources.has( SeriesModel::DATALABELS ))
+                        break;
+
+                    DataSourceModel& rLabelsSource = mrModel.maSources.create( SeriesModel::DATALABELS );
+                    if (mrModel.mxLabels.is())
+                        mrModel.mxLabels->mpLabelsSource = &rLabelsSource;
+                    return new DataSourceContext( *this, rLabelsSource );
+            }
     }
     return nullptr;
 }

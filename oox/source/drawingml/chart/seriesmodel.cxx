@@ -31,8 +31,9 @@ DataLabelModelBase::~DataLabelModelBase()
 {
 }
 
-DataLabelModel::DataLabelModel(bool bMSO2007Doc) :
+DataLabelModel::DataLabelModel(const DataLabelsModel& rParent, bool bMSO2007Doc) :
     DataLabelModelBase(bMSO2007Doc),
+    mrParent( rParent ),
     mnIndex( -1 )
 {
 }
@@ -43,6 +44,7 @@ DataLabelModel::~DataLabelModel()
 
 DataLabelsModel::DataLabelsModel(bool bMSO2007Doc) :
     DataLabelModelBase(bMSO2007Doc),
+    mpLabelsSource( nullptr ),
     mbShowLeaderLines( !bMSO2007Doc )
 {
 }

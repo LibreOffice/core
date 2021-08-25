@@ -491,9 +491,11 @@ data-bar
 data-bar-entry
 data-cell-range-address
 data-label
+data-label-guid
 data-label-number
 data-label-symbol
 data-label-text
+data-labels-cell-range
 data-pilot-source
 data-pilot-field
 data-pilot-grand-total

@@ -41,11 +41,17 @@ struct DataLabelModelBase
     OptValue< bool >    mobShowPercent;     /// True = show percentual value in pie/doughnut charts.
     OptValue< bool >    mobShowSerName;     /// True = show series name.
     OptValue< bool >    mobShowVal;         /// True = show data point value.
+
+    /// True = the value from the <c15:datalabelsRange> corresponding to the
+    /// index of this label is used as the label text.
+    OptValue< bool >    mobShowDataLabelsRange;
     bool                mbDeleted;          /// True = data label(s) deleted.
 
     explicit            DataLabelModelBase(bool bMSO2007Doc);
                         ~DataLabelModelBase();
 };
+
+struct DataLabelsModel;
 
 struct DataLabelModel : public DataLabelModelBase
 {
@@ -54,9 +60,10 @@ struct DataLabelModel : public DataLabelModelBase
 
     LayoutRef           mxLayout;           /// Layout/position of the data point label frame.
     TextRef             mxText;             /// Manual or linked text for this data point label.
+    const DataLabelsModel&    mrParent;     /// Reference to the labels container.
     sal_Int32           mnIndex;            /// Data point index for this data label.
 
-    explicit            DataLabelModel(bool bMSO2007Doc);
+    explicit            DataLabelModel(const DataLabelsModel& rParent, bool bMSO2007Doc);
                         ~DataLabelModel();
 };
 
@@ -67,6 +74,9 @@ struct DataLabelsModel : public DataLabelModelBase
 
     DataLabelVector     maPointLabels;      /// Settings for individual data point labels.
     ShapeRef            mxLeaderLines;      /// Formatting of connector lines between data points and labels.
+
+    /// Labels source (owned by SeriesModel's DataSourceMap)
+    const DataSourceModel*  mpLabelsSource;
     bool                mbShowLeaderLines;  /// True = show connector lines between data points and labels.
 
     explicit            DataLabelsModel(bool bMSO2007Doc);
@@ -171,7 +181,8 @@ struct SeriesModel
     {
         CATEGORIES,         /// Data point categories.
         VALUES,             /// Data point values.
-        POINTS              /// Data point size (e.g. bubble size in bubble charts).
+        POINTS,             /// Data point size (e.g. bubble size in bubble charts).
+        DATALABELS,         /// Data point labels.
     };
 
     typedef ModelMap< SourceType, DataSourceModel > DataSourceMap;

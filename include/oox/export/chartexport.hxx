@@ -90,6 +90,29 @@ struct AxisIdPair{
     {}
 };
 
+class DataLabelsRange
+{
+public:
+
+    typedef std::map<sal_Int32, OUString> LabelsRangeMap;
+
+    bool empty() const;
+    size_t count() const;
+    bool hasLabel(sal_Int32 nIndex) const;
+    OUString getRange() const;
+
+    void setRange(const OUString& rRange);
+    void setLabel(sal_Int32 nIndex, const OUString& rText);
+
+    LabelsRangeMap::const_iterator begin() const;
+    LabelsRangeMap::const_iterator end() const;
+
+private:
+    OUString         maRange;
+    LabelsRangeMap   maLabels;
+};
+
+
 class OOX_DLLPUBLIC ChartExport final : public DrawingML {
 
 public:
@@ -182,7 +205,8 @@ private:
     void exportDataPoints(
         const css::uno::Reference< css::beans::XPropertySet >& xSeriesProperties,
         sal_Int32 nSeriesLength, sal_Int32 eChartType );
-    void exportDataLabels( const css::uno::Reference<css::chart2::XDataSeries>& xSeries, sal_Int32 nSeriesLength, sal_Int32 eChartType );
+    void exportDataLabels( const css::uno::Reference<css::chart2::XDataSeries>& xSeries, sal_Int32 nSeriesLength,
+        sal_Int32 eChartType, DataLabelsRange& rDLblsRange );
     void exportGrouping( bool isBar = false );
     void exportTrendlines( const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
     void exportMarker( const css::uno::Reference< css::beans::XPropertySet >& xPropSet );

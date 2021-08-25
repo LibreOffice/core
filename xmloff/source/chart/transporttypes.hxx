@@ -146,6 +146,14 @@ struct RegressionStyle
     {}
 };
 
+struct CustomLabelsInfo
+{
+    ::std::vector<OUString> mLabels;
+    bool mbDataLabelsRange = false;
+    OUString msLabelGuid;
+    OUString msLabelsCellRange;
+};
+
 struct DataRowPointStyle
 {
     enum StyleType
@@ -171,7 +179,7 @@ struct DataRowPointStyle
     sal_Int32 m_nPointRepeat;
     OUString msStyleName;
     OUString msStyleNameOfParent; // e.g. target of line and fill styles of data-labels
-    ::std::vector<OUString> mCustomLabels;
+    CustomLabelsInfo mCustomLabels;
     double mCustomLabelPos[2] = { 0.0, 0.0 };
     // for svg:x and svg:y attribute (in core unit), of element <chart:data-label>
     std::optional<sal_Int32> mo_nLabelAbsolutePosX;

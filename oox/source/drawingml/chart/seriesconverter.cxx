@@ -318,9 +318,47 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
             if( nParagraphs > 1 )
                 nSequenceSize += nParagraphs - 1;
 
+            OptValue< OUString > oaLabelText;
+            OptValue< OUString > oaCellRange;
+            if (mrModel.mobShowDataLabelsRange.get(false))
+            {
+                const DataSourceModel* pLabelSource = mrModel.mrParent.mpLabelsSource;
+                if (pLabelSource && pLabelSource->mxDataSeq.is())
+                {
+                    oaCellRange = pLabelSource->mxDataSeq->maFormula;
+                    const auto& rLabelMap = pLabelSource->mxDataSeq->maData;
+                    const auto& rKV = rLabelMap.find(mrModel.mnIndex);
+                    if (rKV != rLabelMap.end())
+                        rKV->second >>= oaLabelText.use();
+                }
+            }
+
+            if (oaLabelText.has())
+                ++nSequenceSize;
+
             aSequence.realloc( nSequenceSize );
 
             int nPos = 0;
+            if (oaLabelText.has())
+            {
+                // Insert a "text" custom label field with the text found in the labels data source.
+                css::uno::Reference< XDataPointCustomLabelField > xCustomLabelText = DataPointCustomLabelField::create( xContext );
+
+                // Store properties
+                oox::PropertySet aPropertySet( xCustomLabelText );
+                convertTextProperty( aPropertySet, getFormatter(), mrModel.mxText->mxTextBody );
+                if (nParagraphs && rParagraphs[0])
+                {
+                    auto& pRuns = rParagraphs[0]->getRuns();
+                    if (pRuns.size())
+                        pRuns[0]->getTextCharacterProperties().pushToPropSet( aPropertySet, getFilter() );
+                }
+                xCustomLabelText->setString(oaLabelText.get());
+                xCustomLabelText->setFieldType( DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT );
+
+                aSequence[ nPos++ ] = xCustomLabelText;
+            }
+
             for( auto& pParagraph : rParagraphs )
             {
                 for( auto& pRun : pParagraph->getRuns() )
@@ -335,8 +373,17 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
                     TextField* pField = nullptr;
                     if( ( pField = dynamic_cast< TextField* >( pRun.get() ) ) )
                     {
-                        xCustomLabel->setString( pField->getText() );
-                        xCustomLabel->setFieldType( lcl_ConvertFieldNameToFieldEnum( pField->getType() ) );
+                        DataPointCustomLabelFieldType eType = lcl_ConvertFieldNameToFieldEnum( pField->getType() );
+
+                        if (eType == DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_CELLRANGE && oaCellRange.has())
+                        {
+                            xCustomLabel->setString( oaCellRange.get() );
+                            xCustomLabel->setDataLabelsRange( true );
+                        }
+                        else
+                            xCustomLabel->setString( pField->getText() );
+
+                        xCustomLabel->setFieldType( eType );
                         xCustomLabel->setGuid( pField->getUuid() );
                     }
                     else if( pRun )

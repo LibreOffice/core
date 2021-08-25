@@ -163,11 +163,11 @@ public:
 class SchXMLDataLabelContext: public SvXMLImportContext
 {
 private:
-    ::std::vector<OUString>& mrLabels;
+    CustomLabelsInfo& mrLabels;
     DataRowPointStyle& mrDataLabelStyle;
 public:
     SchXMLDataLabelContext(SvXMLImport& rImport,
-                            ::std::vector<OUString>& rLabels, DataRowPointStyle& rDataLabel);
+                            CustomLabelsInfo& rLabels, DataRowPointStyle& rDataLabel);
 
     virtual void StartElement(const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) override;
 
