@@ -33,6 +33,24 @@
       "revId": "f30a871bcfe94b98b22fd1d1b17ccaf45ff214f2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "203a176b_50efa9a6",
+        "filename": "include/vcl/outdevstate.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-08-25T13:36:13Z",
+      "side": 1,
+      "message": "Absolutely! I didn\u0027t know you could do that, now that you can that\u0027s a total no-brainer - will do soon.",
+      "parentUuid": "6beed6fd_7f72be4b",
+      "revId": "f30a871bcfe94b98b22fd1d1b17ccaf45ff214f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
