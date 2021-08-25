@@ -1088,7 +1088,8 @@ void ChartExport::exportAdditionalShapes( const Reference< css::chart::XChartDoc
             pDrawing->startElement(FSNS(XML_c, XML_userShapes),
                 FSNS(XML_xmlns, XML_cdr), pFB->getNamespaceURL(OOX_NS(dmlChartDr)),
                 FSNS(XML_xmlns, XML_a), pFB->getNamespaceURL(OOX_NS(dml)),
-                FSNS(XML_xmlns, XML_c), pFB->getNamespaceURL(OOX_NS(dmlChart)));
+                FSNS(XML_xmlns, XML_c), pFB->getNamespaceURL(OOX_NS(dmlChart)),
+                FSNS(XML_xmlns, XML_r), pFB->getNamespaceURL(OOX_NS(officeRel)));
 
             const sal_Int32 nShapeCount(mxAdditionalShapes->getCount());
             for (sal_Int32 nShapeId = 0; nShapeId < nShapeCount; nShapeId++)
@@ -1108,7 +1109,7 @@ void ChartExport::exportAdditionalShapes( const Reference< css::chart::XChartDoc
                     awt::Size aPageSize = xVisObject->getVisualAreaSize(embed::Aspects::MSOLE_CONTENT);
                     WriteFromTo( xShape, aPageSize, pDrawing );
 
-                    ShapeExport aExport(XML_cdr, pDrawing, nullptr, GetFB(), GetDocumentType());
+                    ShapeExport aExport(XML_cdr, pDrawing, nullptr, GetFB(), GetDocumentType(), nullptr, true);
                     aExport.WriteShape(xShape);
                 }
                 pDrawing->endElement(FSNS(XML_cdr, XML_relSizeAnchor));

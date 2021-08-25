@@ -87,6 +87,7 @@ public:
 
 protected:
     sal_Int32           mnShapeIdMax;
+    bool                mbUserShapes; // for chart's embedded usershapes
 
     void WriteGraphicObjectShapePart( const css::uno::Reference< css::drawing::XShape >& xShape, const Graphic *pGraphic=nullptr );
 
@@ -107,7 +108,8 @@ public:
     ShapeExport( sal_Int32 nXmlNamespace, ::sax_fastparser::FSHelperPtr pFS,
                  ShapeHashMap* pShapeMap, ::oox::core::XmlFilterBase* pFB,
                  DocumentType eDocumentType = DOCUMENT_PPTX,
-                 DMLTextExport* pTextExport = nullptr );
+                 DMLTextExport* pTextExport = nullptr,
+                 bool bUserShapes = false );
     virtual ~ShapeExport() {}
 
     void SetURLTranslator(const std::shared_ptr<URLTransformer>& pTransformer);
