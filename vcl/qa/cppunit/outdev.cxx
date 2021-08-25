@@ -61,6 +61,7 @@ public:
     void testAntialias();
     void testDrawMode();
     void testLayoutMode();
+    void testDigitLanguage();
     void testSystemTextColor();
     void testShouldDrawWavePixelAsRect();
     void testGetWaveLineSize();
@@ -98,6 +99,7 @@ public:
     CPPUNIT_TEST(testAntialias);
     CPPUNIT_TEST(testDrawMode);
     CPPUNIT_TEST(testLayoutMode);
+    CPPUNIT_TEST(testDigitLanguage);
     CPPUNIT_TEST(testSystemTextColor);
     CPPUNIT_TEST(testShouldDrawWavePixelAsRect);
     CPPUNIT_TEST(testGetWaveLineSize);
@@ -846,6 +848,25 @@ void VclOutdevTest::testLayoutMode()
     CPPUNIT_ASSERT_EQUAL(MetaActionType::LAYOUTMODE, pAction->GetType());
     auto pLayoutModeAction = static_cast<MetaLayoutModeAction*>(pAction);
     CPPUNIT_ASSERT_EQUAL(ComplexTextLayoutFlags::BiDiRtl, pLayoutModeAction->GetLayoutMode());
+}
+
+void VclOutdevTest::testDigitLanguage()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    CPPUNIT_ASSERT_EQUAL(LANGUAGE_SYSTEM, pVDev->GetDigitLanguage());
+
+    pVDev->SetDigitLanguage(LANGUAGE_GERMAN);
+
+    CPPUNIT_ASSERT_EQUAL(LANGUAGE_GERMAN, pVDev->GetDigitLanguage());
+
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::TEXTLANGUAGE, pAction->GetType());
+    auto pTextLanguageAction = static_cast<MetaTextLanguageAction*>(pAction);
+    CPPUNIT_ASSERT_EQUAL(LANGUAGE_GERMAN, pTextLanguageAction->GetTextLanguage());
 }
 
 void VclOutdevTest::testSystemTextColor()
