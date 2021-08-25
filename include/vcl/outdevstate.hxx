@@ -25,6 +25,7 @@
 #include <i18nlangtag/lang.h>
 #include <o3tl/typed_flags_set.hxx>
 
+#include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/font.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/region.hxx>
