@@ -27,10 +27,12 @@ private:
 
 public:
     void testSearchResultLocator();
+    void testSearchResultLocatorUsingPayload();
     void testSearchResultLocatorForSdrObjects();
 
     CPPUNIT_TEST_SUITE(SearchResultLocatorTest);
     CPPUNIT_TEST(testSearchResultLocator);
+    CPPUNIT_TEST(testSearchResultLocatorUsingPayload);
     CPPUNIT_TEST(testSearchResultLocatorForSdrObjects);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -60,6 +62,34 @@ void SearchResultLocatorTest::testSearchResultLocator()
     aDataVector.emplace_back(sw::search::NodeType::WriterNode, 14);
 
     sw::search::LocationResult aResult = aLocator.find(aDataVector);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aResult.maRectangles.size());
+
+    // skip asserting exact values for macOS and Windows because of
+    // inconsistent results
+#if !defined(_WIN32) && !defined(MACOSX)
+    auto aRectangle = aResult.maRectangles[0];
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1418.0, aRectangle.getMinX(), 1e-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(4444.0, aRectangle.getMinY(), 1e-4);
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(9638.0, aRectangle.getWidth(), 1e-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(276.0, aRectangle.getHeight(), 1e-4);
+#endif
+}
+
+void SearchResultLocatorTest::testSearchResultLocatorUsingPayload()
+{
+    if (!IsDefaultDPI())
+        return;
+
+    SwDoc* pDoc = createDoc("IndexingExport_VariousParagraphs.odt");
+    CPPUNIT_ASSERT(pDoc);
+
+    sw::search::SearchResultLocator aLocator(pDoc);
+    OString payload = "<indexing>"
+                      "<paragraph type=\"1\" index=\"14\" />"
+                      "</indexing>";
+
+    sw::search::LocationResult aResult = aLocator.findForPayload(payload.getStr());
     CPPUNIT_ASSERT_EQUAL(size_t(1), aResult.maRectangles.size());
 
     // skip asserting exact values for macOS and Windows because of
