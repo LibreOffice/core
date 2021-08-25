@@ -473,8 +473,8 @@ public:
     void                        ClearStack();
 
     void                        EnableOutput( bool bEnable = true );
-    bool                        IsOutputEnabled() const { return mbOutput; }
-    bool                        IsDeviceOutputNecessary() const { return (mbOutput && mbDevOutput); }
+    bool                        IsOutputEnabled() const;
+    bool                        IsDeviceOutputNecessary() const;
 
     void                        SetAntialiasing( AntialiasingFlags nMode );
     AntialiasingFlags           GetAntialiasing() const { return mnAntialiasing; }
