@@ -474,7 +474,7 @@ public:
 
     void                        EnableOutput( bool bEnable = true );
     bool                        IsOutputEnabled() const { return mbOutput; }
-    bool                        IsDeviceOutputNecessary() const { return (mbOutput && mbDevOutput); }
+    bool                        IsDeviceOutputNecessary() const { return (mbOutput && mnDevOutput); }
 
     void                        SetAntialiasing( AntialiasingFlags nMode );
     AntialiasingFlags           GetAntialiasing() const { return mnAntialiasing; }
