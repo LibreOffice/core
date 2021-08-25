@@ -285,33 +285,6 @@ css::uno::Any OutputDevice::GetSystemGfxDataAny() const
     return css::uno::makeAny(aSeq);
 }
 
-void OutputDevice::SetRefPoint()
-{
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaRefPointAction( Point(), false ) );
-
-    mbRefPoint = false;
-    maRefPoint.setX(0);
-    maRefPoint.setY(0);
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetRefPoint();
-}
-
-void OutputDevice::SetRefPoint( const Point& rRefPoint )
-{
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaRefPointAction( rRefPoint, true ) );
-
-    mbRefPoint = true;
-    maRefPoint = rRefPoint;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetRefPoint( rRefPoint );
-}
-
 sal_uInt16 OutputDevice::GetBitCount() const
 {
     // we need a graphics instance
