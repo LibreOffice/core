@@ -19,8 +19,8 @@
 
 #include <sal/config.h>
 #include <sal/log.hxx>
-
 #include <tools/debug.hxx>
+
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/outdevstate.hxx>
@@ -31,11 +31,10 @@
 #include <drawmode.hxx>
 #include <salgdi.hxx>
 
-void OutputDevice::Push( PushFlags nFlags )
+void OutputDevice::Push(PushFlags nFlags)
 {
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaPushAction( nFlags ) );
+    if (mpMetaFile)
+        mpMetaFile->AddAction(new MetaPushAction(nFlags));
 
     maOutDevStateStack.emplace_back();
     OutDevState& rState = maOutDevStateStack.back();
@@ -43,58 +42,56 @@ void OutputDevice::Push( PushFlags nFlags )
     rState.mnFlags = nFlags;
 
     if (nFlags & PushFlags::LINECOLOR && mbLineColor)
-    {
         rState.mpLineColor = maLineColor;
-    }
+
     if (nFlags & PushFlags::FILLCOLOR && mbFillColor)
-    {
         rState.mpFillColor = maFillColor;
-    }
-    if ( nFlags & PushFlags::FONT )
+
+    if (nFlags & PushFlags::FONT)
         rState.mpFont = maFont;
-    if ( nFlags & PushFlags::TEXTCOLOR )
+
+    if (nFlags & PushFlags::TEXTCOLOR)
         rState.mpTextColor = GetTextColor();
+
     if (nFlags & PushFlags::TEXTFILLCOLOR && IsTextFillColor())
-    {
         rState.mpTextFillColor = GetTextFillColor();
-    }
+
     if (nFlags & PushFlags::TEXTLINECOLOR && IsTextLineColor())
-    {
         rState.mpTextLineColor = GetTextLineColor();
-    }
+
     if (nFlags & PushFlags::OVERLINECOLOR && IsOverlineColor())
-    {
         rState.mpOverlineColor = GetOverlineColor();
-    }
-    if ( nFlags & PushFlags::TEXTALIGN )
+
+    if (nFlags & PushFlags::TEXTALIGN)
         rState.meTextAlign = GetTextAlign();
-    if( nFlags & PushFlags::TEXTLAYOUTMODE )
+
+    if (nFlags & PushFlags::TEXTLAYOUTMODE)
         rState.mnTextLayoutMode = GetLayoutMode();
-    if( nFlags & PushFlags::TEXTLANGUAGE )
+
+    if (nFlags & PushFlags::TEXTLANGUAGE)
         rState.meTextLanguage = GetDigitLanguage();
-    if ( nFlags & PushFlags::RASTEROP )
+
+    if (nFlags & PushFlags::RASTEROP)
         rState.meRasterOp = GetRasterOp();
-    if ( nFlags & PushFlags::MAPMODE )
+
+    if (nFlags & PushFlags::MAPMODE)
     {
         rState.mpMapMode = maMapMode;
         rState.mbMapActive = mbMap;
     }
-    if (nFlags & PushFlags::CLIPREGION && mbClipRegion)
-    {
-        rState.mpClipRegion.reset( new vcl::Region( maRegion ) );
-    }
-    if (nFlags & PushFlags::REFPOINT && mbRefPoint)
-    {
-        rState.mpRefPoint = maRefPoint;
-    }
 
-    if( mpAlphaVDev )
+    if (nFlags & PushFlags::CLIPREGION && mbClipRegion)
+        rState.mpClipRegion.reset(new vcl::Region(maRegion));
+
+    if (nFlags & PushFlags::REFPOINT && mbRefPoint)
+        rState.mpRefPoint = maRefPoint;
+
+    if (mpAlphaVDev)
         mpAlphaVDev->Push();
 }
 
 void OutputDevice::Pop()
 {
-
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaPopAction() );
 
