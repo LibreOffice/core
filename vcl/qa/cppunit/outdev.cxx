@@ -57,6 +57,7 @@ public:
     void testDefaultRefPoint();
     void testRefPoint();
     void testRasterOp();
+    void testOutputFlag();
     void testSystemTextColor();
     void testShouldDrawWavePixelAsRect();
     void testGetWaveLineSize();
@@ -90,6 +91,7 @@ public:
     CPPUNIT_TEST(testDefaultRefPoint);
     CPPUNIT_TEST(testRefPoint);
     CPPUNIT_TEST(testRasterOp);
+    CPPUNIT_TEST(testOutputFlag);
     CPPUNIT_TEST(testSystemTextColor);
     CPPUNIT_TEST(testShouldDrawWavePixelAsRect);
     CPPUNIT_TEST(testGetWaveLineSize);
@@ -784,6 +786,19 @@ void VclOutdevTest::testRasterOp()
     CPPUNIT_ASSERT_EQUAL(MetaActionType::RASTEROP, pAction->GetType());
     auto pRasterOpAction = static_cast<MetaRasterOpAction*>(pAction);
     CPPUNIT_ASSERT_EQUAL(RasterOp::Invert, pRasterOpAction->GetRasterOp());
+}
+
+void VclOutdevTest::testOutputFlag()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+
+    CPPUNIT_ASSERT(pVDev->IsOutputEnabled());
+    CPPUNIT_ASSERT(pVDev->IsDeviceOutputNecessary());
+
+    pVDev->EnableOutput(false);
+
+    CPPUNIT_ASSERT(!pVDev->IsOutputEnabled());
+    CPPUNIT_ASSERT(!pVDev->IsDeviceOutputNecessary());
 }
 
 void VclOutdevTest::testSystemTextColor()
