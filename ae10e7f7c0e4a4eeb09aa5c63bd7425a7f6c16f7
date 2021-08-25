@@ -16,6 +16,24 @@
       "revId": "ae10e7f7c0e4a4eeb09aa5c63bd7425a7f6c16f7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b9cfb7b_6ab1c0a6",
+        "filename": "editeng/source/uno/unofored.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2021-08-25T15:38:16Z",
+      "side": 1,
+      "message": "Ok! Will change them to sal_uLong32 then.",
+      "parentUuid": "bb93d486_28a35714",
+      "revId": "ae10e7f7c0e4a4eeb09aa5c63bd7425a7f6c16f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
