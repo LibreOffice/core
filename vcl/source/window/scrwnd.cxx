@@ -217,19 +217,8 @@ void ImplWheelWindow::ImplRecalcScrollValues()
             double fValX = static_cast<double>(mnActDeltaX) * nMult;
             double fValY = static_cast<double>(mnActDeltaY) * nMult;
 
-            if( !o3tl::convertsToAtMost(fValX, LONG_MAX) )
-                mnActDeltaX = LONG_MAX;
-            else if( !o3tl::convertsToAtLeast(fValX, LONG_MIN) )
-                mnActDeltaX = LONG_MIN;
-            else
-                mnActDeltaX = static_cast<tools::Long>(fValX);
-
-            if( !o3tl::convertsToAtMost(fValY, LONG_MAX) )
-                mnActDeltaY = LONG_MAX;
-            else if( !o3tl::convertsToAtLeast(fValY, LONG_MIN) )
-                mnActDeltaY = LONG_MIN;
-            else
-                mnActDeltaY = static_cast<tools::Long>(fValY);
+            mnActDeltaX = o3tl::saturating_cast<tools::Long>(fValX);
+            mnActDeltaY = o3tl::saturating_cast<tools::Long>(fValY);
         }
     }
 }

@@ -588,12 +588,7 @@ static void lcl_HandleScrollHelper( ScrollBar* pScrl, double nN, bool isMultiply
 
         const double fVal = nNewPos - nN;
 
-        if ( !o3tl::convertsToAtLeast(fVal, LONG_MIN) )
-            nNewPos = LONG_MIN;
-        else if ( !o3tl::convertsToAtMost(fVal, LONG_MAX) )
-            nNewPos = LONG_MAX;
-        else
-            nNewPos = static_cast<tools::Long>(fVal);
+        nNewPos = o3tl::saturating_cast<tools::Long>(fVal);
     }
 
     pScrl->DoScroll( nNewPos );
