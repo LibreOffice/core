@@ -51,6 +51,7 @@ public:
     void testRefPoint();
     void testRasterOp();
     void testOutputFlag();
+    void testAntialias();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
@@ -75,6 +76,7 @@ public:
     CPPUNIT_TEST(testRefPoint);
     CPPUNIT_TEST(testRasterOp);
     CPPUNIT_TEST(testOutputFlag);
+    CPPUNIT_TEST(testAntialias);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -578,6 +580,17 @@ void VclOutdevTest::testOutputFlag()
 
     CPPUNIT_ASSERT(!pVDev->IsOutputEnabled());
     CPPUNIT_ASSERT(!pVDev->IsDeviceOutputNecessary());
+}
+
+void VclOutdevTest::testAntialias()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+
+    CPPUNIT_ASSERT_EQUAL(AntialiasingFlags::NONE, pVDev->GetAntialiasing());
+
+    pVDev->SetAntialiasing(AntialiasingFlags::Enable);
+
+    CPPUNIT_ASSERT_EQUAL(AntialiasingFlags::Enable, pVDev->GetAntialiasing());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclOutdevTest);
