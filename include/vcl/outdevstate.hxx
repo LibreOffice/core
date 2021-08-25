@@ -31,6 +31,7 @@
 #include <vcl/region.hxx>
 #include <vcl/rendercontext/ComplexTextLayoutFlags.hxx>
 #include <vcl/rendercontext/PushFlags.hxx>
+#include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/vclenum.hxx>
 
 #include <memory>

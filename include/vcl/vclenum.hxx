@@ -189,8 +189,6 @@ enum class LineStyle
     FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 };
 
-enum class RasterOp { OverPaint, Xor, N0, N1, Invert };
-
 typedef sal_uInt32 sal_UCS4;    // TODO: this should be moved to rtl
 
 enum class OutDevSupportType { TransparentRect, B2DDraw };
