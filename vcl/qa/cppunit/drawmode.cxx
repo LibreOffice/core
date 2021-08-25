@@ -32,7 +32,6 @@ public:
     void testDrawModeHatchColor();
     void testDrawModeTextColor();
     void testDrawModeFontColor();
-    void testDrawModeBitmap();
     void testDrawModeBitmapEx();
 
     CPPUNIT_TEST_SUITE(VclDrawModeTest);
@@ -42,7 +41,6 @@ public:
     CPPUNIT_TEST(testDrawModeHatchColor);
     CPPUNIT_TEST(testDrawModeTextColor);
     CPPUNIT_TEST(testDrawModeFontColor);
-    CPPUNIT_TEST(testDrawModeBitmap);
     CPPUNIT_TEST(testDrawModeBitmapEx);
 
     CPPUNIT_TEST_SUITE_END();
@@ -328,36 +326,6 @@ void VclDrawModeTest::testDrawModeFontColor()
         aFont, DrawModeFlags::SettingsText | DrawModeFlags::SettingsFill, aStyleSettings);
     CPPUNIT_ASSERT_EQUAL(aStyleSettings.GetFontColor(), aTestFont.GetColor());
     CPPUNIT_ASSERT_EQUAL(COL_RED, aTestFont.GetFillColor());
-}
-
-void VclDrawModeTest::testDrawModeBitmap()
-{
-    const StyleSettings aStyleSettings;
-
-    Bitmap aBmp(Size(1, 1), vcl::PixelFormat::N24_BPP);
-    BitmapWriteAccess aBmpAccess(aBmp);
-    aBmpAccess.SetPixel(0, 0, BitmapColor(COL_RED));
-
-    {
-        Bitmap aResultBitmap(vcl::drawmode::GetBitmap(aBmp, DrawModeFlags::GrayBitmap));
-        Bitmap::ScopedReadAccess pReadAccess(aResultBitmap);
-
-        const BitmapColor& rColor = pReadAccess->GetColor(0, 0);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x26), sal_Int32(rColor.GetRed()));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x26), sal_Int32(rColor.GetGreen()));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x26), sal_Int32(rColor.GetBlue()));
-    }
-
-    // any other operation other than DrawModeFlags::GrayBitmap is a noop
-    {
-        Bitmap aResultBitmap(vcl::drawmode::GetBitmap(aBmp, DrawModeFlags::NoFill));
-        Bitmap::ScopedReadAccess pReadAccess(aResultBitmap);
-
-        const BitmapColor& rColor = pReadAccess->GetColor(0, 0);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x80), sal_Int32(rColor.GetRed()));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00), sal_Int32(rColor.GetGreen()));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00), sal_Int32(rColor.GetBlue()));
-    }
 }
 
 void VclDrawModeTest::testDrawModeBitmapEx()
