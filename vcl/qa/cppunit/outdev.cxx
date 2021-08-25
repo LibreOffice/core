@@ -57,6 +57,7 @@ public:
     void testRefPoint();
     void testRasterOp();
     void testOutputFlag();
+    void testAntialias();
     void testSystemTextColor();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
@@ -88,6 +89,8 @@ public:
     CPPUNIT_TEST(testRefPoint);
     CPPUNIT_TEST(testSystemTextColor);
     CPPUNIT_TEST(testRasterOp);
+    CPPUNIT_TEST(testAntialias);
+    CPPUNIT_TEST(testOutputFlag);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -746,6 +749,17 @@ void VclOutdevTest::testOutputFlag()
 
     CPPUNIT_ASSERT(!pVDev->IsOutputEnabled());
     CPPUNIT_ASSERT(!pVDev->IsDeviceOutputNecessary());
+}
+
+void VclOutdevTest::testAntialias()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+
+    CPPUNIT_ASSERT_EQUAL(AntialiasingFlags::NONE, pVDev->GetAntialiasing());
+
+    pVDev->SetAntialiasing(AntialiasingFlags::Enable);
+
+    CPPUNIT_ASSERT_EQUAL(AntialiasingFlags::Enable, pVDev->GetAntialiasing());
 }
 
 void VclOutdevTest::testSystemTextColor()

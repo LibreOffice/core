@@ -477,7 +477,7 @@ public:
     bool                        IsDeviceOutputNecessary() const;
 
     void                        SetAntialiasing( AntialiasingFlags nMode );
-    AntialiasingFlags           GetAntialiasing() const { return mnAntialiasing; }
+    AntialiasingFlags           GetAntialiasing() const;
 
     void                        SetDrawMode( DrawModeFlags nDrawMode );
     DrawModeFlags               GetDrawMode() const;
