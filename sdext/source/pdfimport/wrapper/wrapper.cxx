@@ -567,52 +567,29 @@ void LineParser::readFont()
         uno::Sequence<sal_Int8> aFontFile(nFileLen);
         readBinaryData(aFontFile);  // Read fontFile.
 
-        uno::Sequence<uno::Any> aArgs(1);
-        awt::FontDescriptor aFontDescriptor;
-        aArgs[0] <<= aFontFile;
-
-        try
+        vcl::Font aFontReadResult = vcl::Font::identifyFont(aFontFile.getArray(), nFileLen);
+        SAL_WARN("sdext.pdfimport", "familyName: " << aFontReadResult.GetFamilyName());
+        if (!aFontReadResult.GetFamilyName().isEmpty())
         {
-            uno::Reference<beans::XMaterialHolder> xHolder(
-                m_parser.m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                    "com.sun.star.awt.FontIdentificator", aArgs, m_parser.m_xContext),
-                uno::UNO_QUERY);
-            if (xHolder.is())
+            aResult.familyName = aFontReadResult.GetFamilyName();
+
+            // tdf#143959: there are cases when the family name returned by font descriptor
+            // is like "AAAAAA+TimesNewRoman,Bold". In this case, use the font name
+            // determined by parseFontFamilyName instead, but still determine the font
+            // attributes (bold italic etc) from the font descriptor.
+            if (aResult.familyName.getLength() > 7 and aResult.familyName.indexOf(u"+", 6) == 6)
             {
-                uno::Any aFontReadResult(xHolder->getMaterial());
-                aFontReadResult >>= aFontDescriptor;
-                if (!aFontDescriptor.Name.isEmpty())
-                {
-                    aResult.familyName = aFontDescriptor.Name;
-                    // tdf#143959: there are cases when the family name returned by font descriptor
-                    // is like "AAAAAA+TimesNewRoman,Bold". In this case, use the font name
-                    // determined by parseFontFamilyName instead, but still determine the font
-                    // attributes (bold italic etc) from the font descriptor.
-                    if (aResult.familyName.getLength() > 7 and aResult.familyName.indexOf(u"+", 6) == 6)
-                    {
-                        aResult.familyName = aResult.familyName.copy(7, aResult.familyName.getLength() - 7);
-                        parseFontFamilyName(aResult);
-                    }
-                    aResult.isBold = (aFontDescriptor.Weight > 100.0);
-                    aResult.isItalic = (aFontDescriptor.Slant == awt::FontSlant_OBLIQUE ||
-                                        aFontDescriptor.Slant == awt::FontSlant_ITALIC);
-                } else
-                {
-                    SAL_WARN("sdext.pdfimport",
-                        "Font detection from fontFile returned empty result.\
-                        Guessing font info from font name.");
-                    parseFontFamilyName(aResult);
-                }
-            } else
-            {
-                SAL_WARN("sdext.pdfimport",
-                    "Failed to run FontIdentificator service.\
-                    Guessing font info from font name.");
+                aResult.familyName = aResult.familyName.copy(7, aResult.familyName.getLength() - 7);
                 parseFontFamilyName(aResult);
             }
-        } catch (uno::Exception&)
+
+            aResult.isBold = (aFontReadResult.GetWeight() == WEIGHT_BOLD);
+            aResult.isItalic = (aFontReadResult.GetItalic() == ITALIC_OBLIQUE ||
+                                 aFontReadResult.GetItalic() == ITALIC_NORMAL);
+        } else
         {
-            TOOLS_WARN_EXCEPTION("sdext.pdfimport", "Exception when trying to read font file.");
+            SAL_WARN("sdext.pdfimport",
+                "Font detection from fontFile returned empty result. Guessing font info from font name.");
             parseFontFamilyName(aResult);
         }
     } else
