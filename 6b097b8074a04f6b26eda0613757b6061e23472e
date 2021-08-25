@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00901caa_265b55e7",
+        "filename": "offapi/com/sun/star/awt/XDialog.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-25T11:26:41Z",
+      "side": 1,
+      "message": "👍🏼",
+      "revId": "6b097b8074a04f6b26eda0613757b6061e23472e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
