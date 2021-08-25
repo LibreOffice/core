@@ -300,7 +300,7 @@ public:
     void                        SetRefPoint();
     void                        SetRefPoint( const Point& rRefPoint );
     const Point&                GetRefPoint() const { return maRefPoint; }
-    bool                        IsRefPoint() const { return mbRefPoint; }
+    bool                        IsRefPoint() const { return mnRefPoint; }
 
     virtual bool                IsScreenComp() const { return true; }
 
