@@ -483,7 +483,7 @@ public:
     DrawModeFlags               GetDrawMode() const { return mnDrawMode; }
 
     void                        SetLayoutMode( ComplexTextLayoutFlags nTextLayoutMode );
-    ComplexTextLayoutFlags       GetLayoutMode() const { return mnTextLayoutMode; }
+    ComplexTextLayoutFlags      GetLayoutMode() const { return mnTextLayoutMode; }
 
     void                        SetDigitLanguage( LanguageType );
     LanguageType                GetDigitLanguage() const { return meTextLanguage; }
