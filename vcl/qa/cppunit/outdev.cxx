@@ -62,6 +62,7 @@ public:
     void testDrawMode();
     void testLayoutMode();
     void testDigitLanguage();
+    void testStackFunctions();
     void testSystemTextColor();
     void testShouldDrawWavePixelAsRect();
     void testGetWaveLineSize();
@@ -100,6 +101,7 @@ public:
     CPPUNIT_TEST(testDrawMode);
     CPPUNIT_TEST(testLayoutMode);
     CPPUNIT_TEST(testDigitLanguage);
+    CPPUNIT_TEST(testStackFunctions);
     CPPUNIT_TEST(testSystemTextColor);
     CPPUNIT_TEST(testShouldDrawWavePixelAsRect);
     CPPUNIT_TEST(testGetWaveLineSize);
@@ -867,6 +869,63 @@ void VclOutdevTest::testDigitLanguage()
     CPPUNIT_ASSERT_EQUAL(MetaActionType::TEXTLANGUAGE, pAction->GetType());
     auto pTextLanguageAction = static_cast<MetaTextLanguageAction*>(pAction);
     CPPUNIT_ASSERT_EQUAL(LANGUAGE_GERMAN, pTextLanguageAction->GetTextLanguage());
+}
+
+void VclOutdevTest::testStackFunctions()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    pVDev->Push();
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Push action", MetaActionType::PUSH, pAction->GetType());
+
+    pVDev->SetLineColor(COL_RED);
+    pVDev->SetFillColor(COL_GREEN);
+    pVDev->SetTextColor(COL_BROWN);
+    pVDev->SetTextFillColor(COL_BLUE);
+    pVDev->SetTextLineColor(COL_MAGENTA);
+    pVDev->SetOverlineColor(COL_YELLOW);
+    pVDev->SetTextAlign(TextAlign::ALIGN_TOP);
+    pVDev->SetLayoutMode(ComplexTextLayoutFlags::BiDiRtl);
+    pVDev->SetDigitLanguage(LANGUAGE_FRENCH);
+    pVDev->SetRasterOp(RasterOp::N0);
+    pVDev->SetMapMode(MapMode(MapUnit::MapTwip));
+    pVDev->SetRefPoint(Point(10, 10));
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Text color", COL_BROWN, pVDev->GetTextColor());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Text fill color", COL_BLUE, pVDev->GetTextFillColor());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Text line color", COL_MAGENTA, pVDev->GetTextLineColor());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Text overline color", COL_YELLOW, pVDev->GetOverlineColor());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Layout mode", ComplexTextLayoutFlags::BiDiRtl,
+                                 pVDev->GetLayoutMode());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Language", LANGUAGE_FRENCH, pVDev->GetDigitLanguage());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Raster operation", RasterOp::N0, pVDev->GetRasterOp());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Map mode", MapMode(MapUnit::MapTwip), pVDev->GetMapMode());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Ref point", Point(10, 10), pVDev->GetRefPoint());
+
+    pVDev->Pop();
+    pAction = aMtf.GetAction(13);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Pop action", MetaActionType::POP, pAction->GetType());
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Default line color", COL_BLACK, pVDev->GetLineColor());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Default fill color", COL_WHITE, pVDev->GetFillColor());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Default text color", COL_BLACK, pVDev->GetTextColor());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Default text fill color", Color(ColorTransparency, 0xFFFFFFFF),
+                                 pVDev->GetTextFillColor());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Default text line color", Color(ColorTransparency, 0xFFFFFFFF),
+                                 pVDev->GetTextLineColor());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Default overline color", Color(ColorTransparency, 0xFFFFFFFF),
+                                 pVDev->GetOverlineColor());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Default layout mode", ComplexTextLayoutFlags::Default,
+                                 pVDev->GetLayoutMode());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Default language", LANGUAGE_SYSTEM, pVDev->GetDigitLanguage());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Default raster operation", RasterOp::OverPaint,
+                                 pVDev->GetRasterOp());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Default map mode", MapMode(MapUnit::MapPixel),
+                                 pVDev->GetMapMode());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Default ref point", Point(0, 0), pVDev->GetRefPoint());
 }
 
 void VclOutdevTest::testSystemTextColor()
