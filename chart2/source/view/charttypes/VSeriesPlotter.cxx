@@ -540,8 +540,15 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                         aTextList[i] = getLabelTextForValue(rDataSeries, nPointIndex, fValue, true);
                         break;
                     }
-                    case DataPointCustomLabelFieldType_CELLREF:
                     case DataPointCustomLabelFieldType_CELLRANGE:
+                    {
+                        if (aCustomLabels[i]->getDataLabelsRange())
+                            aTextList[i] = aCustomLabels[i]->getString();
+                        else
+                            aTextList[i] = OUString();
+                        break;
+                    }
+                    case DataPointCustomLabelFieldType_CELLREF:
                     {
                         // TODO: for now doesn't show placeholder
                         aTextList[i] = OUString();

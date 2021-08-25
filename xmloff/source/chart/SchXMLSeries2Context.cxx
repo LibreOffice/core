@@ -1214,16 +1214,28 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                 }
 
                 // Custom labels might be passed as property
-                if(auto nLabelCount = seriesStyle.mCustomLabels.size(); nLabelCount > 0)
+                if(const size_t nLabelCount = seriesStyle.mCustomLabels.mLabels.size(); nLabelCount > 0)
                 {
+                    auto& rCustomLabels = seriesStyle.mCustomLabels;
+
                     Sequence< Reference<chart2::XDataPointCustomLabelField>> xLabels(nLabelCount);
                     Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
-                    for( auto j = 0; j< xLabels.getLength(); ++j )
+                    for( size_t j = 0; j < nLabelCount; ++j )
                     {
                         Reference< chart2::XDataPointCustomLabelField > xCustomLabel = chart2::DataPointCustomLabelField::create(xContext);
                         xLabels[j] = xCustomLabel;
-                        xCustomLabel->setString(seriesStyle.mCustomLabels[j]);
-                        xCustomLabel->setFieldType(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT);
+                        xCustomLabel->setString(rCustomLabels.mLabels[j]);
+                        if ( j == 0 && rCustomLabels.mbDataLabelsRange)
+                        {
+                            xCustomLabel->setFieldType(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_CELLRANGE);
+                            xCustomLabel->setGuid(rCustomLabels.msLabelGuid);
+                            xCustomLabel->setCellRange(rCustomLabels.msLabelsCellRange);
+                            xCustomLabel->setDataLabelsRange(true);
+                        }
+                        else
+                        {
+                            xCustomLabel->setFieldType(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT);
+                        }
 
                         // Restore character properties on the text span manually, till
                         // SchXMLExportHelper_Impl::exportCustomLabel() does not write the style.
@@ -1245,6 +1257,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                             }
                         }
                     }
+
                     xPointProp->setPropertyValue("CustomLabelFields", uno::Any(xLabels));
                     xPointProp->setPropertyValue("DataCaption", uno::Any(chart::ChartDataCaption::CUSTOM));
                 }

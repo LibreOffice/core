@@ -69,6 +69,7 @@ public:
 
 private:
     sal_Int32           mnPtIndex;          /// Current data point index.
+    bool                mbReadC15;          /// Allow reading extension tags data under c15 namespace.
 };
 
 

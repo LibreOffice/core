@@ -485,6 +485,46 @@ static sal_Int32 lcl_getAlphaFromTransparenceGradient(const awt::Gradient& rGrad
     return (255 - nRed) * oox::drawingml::MAX_PERCENT / 255;
 }
 
+bool DataLabelsRange::empty() const
+{
+    return maLabels.empty();
+}
+
+size_t DataLabelsRange::count() const
+{
+    return maLabels.size();
+}
+
+bool DataLabelsRange::hasLabel(sal_Int32 nIndex) const
+{
+    return maLabels.find(nIndex) != maLabels.end();
+}
+
+OUString DataLabelsRange::getRange() const
+{
+    return maRange;
+}
+
+void DataLabelsRange::setRange(const OUString& rRange)
+{
+    maRange = rRange;
+}
+
+void DataLabelsRange::setLabel(sal_Int32 nIndex, const OUString& rText)
+{
+    maLabels.emplace(nIndex, rText);
+}
+
+DataLabelsRange::LabelsRangeMap::const_iterator DataLabelsRange::begin() const
+{
+    return maLabels.begin();
+}
+
+DataLabelsRange::LabelsRangeMap::const_iterator DataLabelsRange::end() const
+{
+    return maLabels.end();
+}
+
 ChartExport::ChartExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, Reference< frame::XModel > const & xModel, XmlFilterBase* pFB, DocumentType eDocumentType )
     : DrawingML( std::move(pFS), pFB, eDocumentType )
     , mnXmlNamespace( nXmlNamespace )
@@ -2183,6 +2223,43 @@ void ChartExport::exportDoughnutChart( const Reference< chart2::XChartType >& xC
     pFS->endElement( FSNS( XML_c, XML_doughnutChart ) );
 }
 
+namespace {
+
+void writeDataLabelsRange(FSHelperPtr& pFS, XmlFilterBase* pFB, DataLabelsRange& rDLblsRange)
+{
+    if (rDLblsRange.empty())
+        return;
+
+    pFS->startElement(FSNS(XML_c, XML_extLst));
+    pFS->startElement(FSNS(XML_c, XML_ext), XML_uri, "{02D57815-91ED-43cb-92C2-25804820EDAC}", FSNS(XML_xmlns, XML_c15), pFB->getNamespaceURL(OOX_NS(c15)));
+    pFS->startElement(FSNS(XML_c15, XML_datalabelsRange));
+
+    // Write cell range.
+    pFS->startElement(FSNS(XML_c15, XML_f));
+    pFS->writeEscaped(rDLblsRange.getRange());
+    pFS->endElement(FSNS(XML_c15, XML_f));
+
+    // Write all labels.
+    pFS->startElement(FSNS(XML_c15, XML_dlblRangeCache));
+    pFS->singleElement(FSNS(XML_c, XML_ptCount), XML_val, OString::number(rDLblsRange.count()));
+    for (const auto& rLabelKV: rDLblsRange)
+    {
+        pFS->startElement(FSNS(XML_c, XML_pt), XML_idx, OString::number(rLabelKV.first));
+        pFS->startElement(FSNS(XML_c, XML_v));
+        pFS->writeEscaped(rLabelKV.second);
+        pFS->endElement(FSNS( XML_c, XML_v ));
+        pFS->endElement(FSNS(XML_c, XML_pt));
+    }
+
+    pFS->endElement(FSNS(XML_c15, XML_dlblRangeCache));
+
+    pFS->endElement(FSNS(XML_c15, XML_datalabelsRange));
+    pFS->endElement(FSNS(XML_c, XML_ext));
+    pFS->endElement(FSNS(XML_c, XML_extLst));
+}
+
+}
+
 void ChartExport::exportLineChart( const Reference< chart2::XChartType >& xChartType )
 {
     FSHelperPtr pFS = GetFS();
@@ -2570,8 +2647,9 @@ void ChartExport::exportSeries( const Reference<chart2::XChartType>& xChartType,
                     // export data points
                     exportDataPoints( uno::Reference< beans::XPropertySet >( rSeries, uno::UNO_QUERY ), nSeriesLength, eChartType );
 
+                    DataLabelsRange aDLblsRange;
                     // export data labels
-                    exportDataLabels(rSeries, nSeriesLength, eChartType);
+                    exportDataLabels(rSeries, nSeriesLength, eChartType, aDLblsRange);
 
                     exportTrendlines( rSeries );
 
@@ -2643,6 +2721,9 @@ void ChartExport::exportSeries( const Reference<chart2::XChartType>& xChartType,
                     // tdf103988: "corrupted" files with Bubble chart opening in MSO
                     if( eChartType == chart::TYPEID_BUBBLE )
                         pFS->singleElement(FSNS(XML_c, XML_bubble3D), XML_val, "0");
+
+                    if (!aDLblsRange.empty())
+                        writeDataLabelsRange(pFS, GetFB(), aDLblsRange);
 
                     pFS->endElement( FSNS( XML_c, XML_ser ) );
                 }
@@ -3560,7 +3641,8 @@ void writeRunProperties( ChartExport* pChartExport, Reference<XPropertySet> cons
 }
 
 void writeCustomLabel( const FSHelperPtr& pFS, ChartExport* pChartExport,
-                       const Sequence<Reference<chart2::XDataPointCustomLabelField>>& rCustomLabelFields )
+                       const Sequence<Reference<chart2::XDataPointCustomLabelField>>& rCustomLabelFields,
+                       sal_Int32 nLabelIndex, DataLabelsRange& rDLblsRange )
 {
     pFS->startElement(FSNS(XML_c, XML_tx));
     pFS->startElement(FSNS(XML_c, XML_rich));
@@ -3569,6 +3651,7 @@ void writeCustomLabel( const FSHelperPtr& pFS, ChartExport* pChartExport,
     pFS->singleElement(FSNS(XML_a, XML_bodyPr));
 
     OUString sFieldType;
+    OUString sContent;
     pFS->startElement(FSNS(XML_a, XML_p));
 
     for (auto& rField : rCustomLabelFields)
@@ -3576,7 +3659,24 @@ void writeCustomLabel( const FSHelperPtr& pFS, ChartExport* pChartExport,
         Reference<XPropertySet> xPropertySet(rField, UNO_QUERY);
         chart2::DataPointCustomLabelFieldType aType = rField->getFieldType();
         sFieldType.clear();
+        sContent.clear();
         bool bNewParagraph = false;
+
+        if (aType == chart2::DataPointCustomLabelFieldType_CELLRANGE &&
+            rField->getDataLabelsRange())
+        {
+            if (rDLblsRange.getRange().isEmpty())
+                rDLblsRange.setRange(rField->getCellRange());
+
+            if (!rDLblsRange.hasLabel(nLabelIndex))
+                rDLblsRange.setLabel(nLabelIndex, rField->getString());
+
+            sContent = "[CELLRANGE]";
+        }
+        else
+        {
+            sContent = rField->getString();
+        }
 
         if (aType == chart2::DataPointCustomLabelFieldType_NEWLINE)
             bNewParagraph = true;
@@ -3597,7 +3697,7 @@ void writeCustomLabel( const FSHelperPtr& pFS, ChartExport* pChartExport,
             writeRunProperties(pChartExport, xPropertySet);
 
             pFS->startElement(FSNS(XML_a, XML_t));
-            pFS->writeEscaped(rField->getString());
+            pFS->writeEscaped(sContent);
             pFS->endElement(FSNS(XML_a, XML_t));
 
             pFS->endElement(FSNS(XML_a, XML_r));
@@ -3610,7 +3710,7 @@ void writeCustomLabel( const FSHelperPtr& pFS, ChartExport* pChartExport,
             writeRunProperties(pChartExport, xPropertySet);
 
             pFS->startElement(FSNS(XML_a, XML_t));
-            pFS->writeEscaped(rField->getString());
+            pFS->writeEscaped(sContent);
             pFS->endElement(FSNS(XML_a, XML_t));
 
             pFS->endElement(FSNS(XML_a, XML_fld));
@@ -3623,7 +3723,8 @@ void writeCustomLabel( const FSHelperPtr& pFS, ChartExport* pChartExport,
 }
 
 void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
-    const uno::Reference<beans::XPropertySet>& xPropSet, const LabelPlacementParam& rLabelParam )
+    const uno::Reference<beans::XPropertySet>& xPropSet, const LabelPlacementParam& rLabelParam,
+    sal_Int32 nLabelIndex, DataLabelsRange& rDLblsRange )
 {
     if (!xPropSet.is())
         return;
@@ -3678,7 +3779,7 @@ void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
     pChartExport->exportTextProps(xPropSet);
 
     if (aCustomLabelFields.hasElements())
-        writeCustomLabel(pFS, pChartExport, aCustomLabelFields);
+        writeCustomLabel(pFS, pChartExport, aCustomLabelFields, nLabelIndex, rDLblsRange);
 
     if (rLabelParam.mbExport)
     {
@@ -3707,12 +3808,26 @@ void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
         pFS->writeEscaped( nLabelSeparator );
         pFS->endElement( FSNS( XML_c, XML_separator ) );
     }
+
+    if (rDLblsRange.hasLabel(nLabelIndex))
+    {
+        pFS->startElement(FSNS(XML_c, XML_extLst));
+        pFS->startElement(FSNS(XML_c, XML_ext), XML_uri,
+            "{CE6537A1-D6FC-4f65-9D91-7224C49458BB}", FSNS(XML_xmlns, XML_c15),
+            pChartExport->GetFB()->getNamespaceURL(OOX_NS(c15)));
+
+        pFS->singleElement(FSNS(XML_c15, XML_showDataLabelsRange), XML_val, "1");
+
+        pFS->endElement(FSNS(XML_c, XML_ext));
+        pFS->endElement(FSNS(XML_c, XML_extLst));
+    }
 }
 
 }
 
 void ChartExport::exportDataLabels(
-    const uno::Reference<chart2::XDataSeries> & xSeries, sal_Int32 nSeriesLength, sal_Int32 eChartType )
+    const uno::Reference<chart2::XDataSeries> & xSeries, sal_Int32 nSeriesLength, sal_Int32 eChartType,
+    DataLabelsRange& rDLblsRange)
 {
     if (!xSeries.is() || nSeriesLength <= 0)
         return;
@@ -3843,12 +3958,12 @@ void ChartExport::exportDataLabels(
         }
 
         // Individual label property that overwrites the baseline.
-        writeLabelProperties(pFS, this, xLabelPropSet, aParam);
+        writeLabelProperties(pFS, this, xLabelPropSet, aParam, nIdx, rDLblsRange);
         pFS->endElement(FSNS(XML_c, XML_dLbl));
     }
 
     // Baseline label properties for all labels.
-    writeLabelProperties(pFS, this, xPropSet, aParam);
+    writeLabelProperties(pFS, this, xPropSet, aParam, -1, rDLblsRange);
 
     bool bShowLeaderLines = false;
     xPropSet->getPropertyValue("ShowCustomLeaderLines") >>= bShowLeaderLines;
