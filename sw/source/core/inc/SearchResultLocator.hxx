@@ -58,6 +58,8 @@ public:
     }
 
     LocationResult find(std::vector<SearchIndexData> const& rSearchIndexDataVector);
+
+    LocationResult findForPayload(const char* pPayload);
 };
 
 } // end sw namespace

@@ -164,7 +164,6 @@
 
 #include <IDocumentOutlineNodes.hxx>
 #include <SearchResultLocator.hxx>
-#include <tools/XmlWalker.hxx>
 
 #define TWIPS_PER_PIXEL 15
 
@@ -3395,55 +3394,17 @@ void SwXTextDocument::executeFromFieldEvent(const StringMap& aArguments)
 std::vector<basegfx::B2DRange>
 SwXTextDocument::getSearchResultRectangles(const char* pPayload)
 {
-    std::vector<basegfx::B2DRange> aRectangles;
+    SwDoc* pDoc = m_pDocShell->GetDoc();
+    if (!pDoc)
+        return std::vector<basegfx::B2DRange>();
 
-    const OString aPayloadString(pPayload);
-
-    SvMemoryStream aStream(const_cast<char *>(aPayloadString.getStr()), aPayloadString.getLength(), StreamMode::READ);
-    tools::XmlWalker aWalker;
-    if (!aWalker.open(&aStream))
-        return aRectangles;
-
-    if (aWalker.name() == "indexing")
+    sw::search::SearchResultLocator aLocator(pDoc);
+    sw::search::LocationResult aResult = aLocator.findForPayload(pPayload);
+    if (aResult.mbFound)
     {
-        SwDoc* pDoc = m_pDocShell->GetDoc();
-
-        std::vector<sw::search::SearchIndexData> aDataVector;
-        aWalker.children();
-        while (aWalker.isValid())
-        {
-            if (aWalker.name() == "paragraph")
-            {
-                OString sType = aWalker.attribute("type");
-                OString sIndex = aWalker.attribute("index");
-
-                if (!sType.isEmpty() && !sIndex.isEmpty())
-                {
-                    sw::search::SearchIndexData aData;
-                    aData.mnNodeIndex = sIndex.toInt32();
-                    aData.meType = sw::search::NodeType(sType.toInt32());
-
-                    aDataVector.push_back(aData);
-                }
-            }
-            aWalker.next();
-        }
-        aWalker.parent();
-
-
-        if (!aDataVector.empty())
-        {
-            sw::search::SearchResultLocator aLocator(pDoc);
-            sw::search::LocationResult aResult = aLocator.find(aDataVector);
-            if (aResult.mbFound)
-            {
-                for (auto const & rRect : aResult.maRectangles)
-                    aRectangles.push_back(rRect);
-            }
-        }
+        return aResult.maRectangles;
     }
-
-    return aRectangles;
+    return std::vector<basegfx::B2DRange>();
 }
 
 int SwXTextDocument::getPart()
