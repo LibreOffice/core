@@ -4006,7 +4006,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137737_FindReplace)
 {
     createSwDoc(DATA_DIRECTORY, "tdf137737_FindReplace.docx");
 
-    // Replace staight quotes with something (opening quotes in real life, but X is adequate here)
+    // Replace straight quotes with something (opening quotes in real life, but X is adequate here)
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
         { "SearchItem.SearchString", uno::makeAny(OUString("^\"")) },
         { "SearchItem.ReplaceString", uno::makeAny(OUString("X")) },
@@ -4019,7 +4019,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137737_FindReplace)
     // Replace the first match.
     dispatchCommand(mxComponent, ".uno:ExecuteSearch", aArgs);
 
-    // Replace staight quotes with something (closing quotes in real life)
+    // Replace straight quotes with something (closing quotes in real life)
     aArgs[0].Value <<= OUString("\"$");
     dispatchCommand(mxComponent, ".uno:ExecuteSearch", aArgs);
     dispatchCommand(mxComponent, ".uno:ExecuteSearch", aArgs);

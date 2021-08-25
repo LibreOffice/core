@@ -43,7 +43,7 @@ published interface XDialog: com::sun::star::uno::XInterface
 
 
     /** runs the dialog modally: shows it, and waits for the execution to end.
-        Returns an exit code (e.g., indicatting the button that was used to end the execution).
+        Returns an exit code (e.g., indicating the button that was used to end the execution).
      */
     short execute();
 
