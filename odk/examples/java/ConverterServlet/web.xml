@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <!--
  * This file is part of the LibreOffice project.
  *
@@ -16,61 +16,25 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
-<project name="MinimalComponent" basedir="." default="all">
 
-  <target name="init">
-        <!--
-         In this target you have to change all parts, so that the properties
-         fit to your odk installation and to your service
-         -->
-         <property name="ODKPATH" value="D:/cvs/api/odk"/>
-         <property name="OUTPUTPATH" value="D:/cvs/api/odk/WINexample.out"/>
-         <property name="PACKAGE_NAME" value="org.OpenOffice."/>
-         <property name="JAR_FILE_NAME" value="MinimalComponent"/>
-         <property name="INTERFACE_NAME" value="MinimalComponent"/>
-         <property name="RDB_NAME" value="MinimalComponent.rdb"/>
-   </target>
-   <target depends="init" name="unoidl">
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
 
-       <exec dir="${ODKPATH}/WINexample.out/misc/" executable="${ODKPATH}/windows/bin/idlc.exe" timeout="600">
-             <arg line="-I. -I${ODKPATH}/idl ${ODKPATH}/examples/java/MinimalComponent/${INTERFACE_NAME}.idl"/>
-       </exec>
+<web-app>
+    <display-name>Conversion</display-name>
+    <description>
+      Converter servlet demo of the SDK.
+    </description>
 
-       <exec dir="." executable="${ODKPATH}/windows/bin/regmerge.exe" timeout="600">
-             <arg line="./${RDB_NAME} /UCR ./${INTERFACE_NAME}.urd"/>
-       </exec>
+    <servlet>
+        <servlet-name>ConverterServlet</servlet-name>
+        <servlet-class>ConverterServlet</servlet-class>
+    </servlet>
 
-       <exec dir="." executable="${ODKPATH}/windows/bin/regmerge.exe" timeout="600">
-             <arg line="./${RDB_NAME} / ${ODKPATH}/windows/bin/applicat.rdb"/>
-       </exec>
+    <servlet-mapping>
+        <servlet-name>ConverterServlet</servlet-name>
+        <url-pattern>/servlet/*</url-pattern>
+    </servlet-mapping>
 
-       <exec dir="." executable="${ODKPATH}/windows/bin/javamaker.exe" timeout="600">
-             <arg line="-O${OUTPUTPATH}/class/${INTERFACE_NAME} -nD ./${RDB_NAME}"/>
-<!--
-             <arg line="-T${PACKAGE_NAME}${INTERFACE_NAME} -O${OUTPUTPATH}/class/${INTERFACE_NAME} -nD ./${INTERFACE_NAME}.urd"/>
- -->
-       </exec>
-
-   </target>
-
-   <target depends="init,unoidl" name="compile">
-       <mkdir dir="classes"/>
-       <javac debug="on" destdir="./classes" srcdir="." >
-               <classpath>
-                   <fileset dir="${ODKPATH}/classes/">
-                           <include name="**/*.jar"/>
-                   </fileset>
-                   <pathelement location="./classes"/>
-               </classpath>
-         </javac>
-    </target>
-
-     <target depends="compile,init" name="jar">
-        <jar basedir="./classes" compress="true" jarfile="${JAR_FILE_NAME}.jar" manifest="Manifest">
-        </jar>
-     </target>
-
-    <target depends="compile,init,jar" name="all">
-        <!-- WRITEME -->
-    </target>
-</project>
+</web-app>
