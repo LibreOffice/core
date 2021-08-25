@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2bb42d5f_cf4e21a5",
+        "filename": "libreofficekit/qa/gtktiledviewer/gtv-signal-handlers.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-25T12:35:54Z",
+      "side": 1,
+      "message": "This doesn\u0027t make sense, given that the following code unconditionally uses all three elements of unoParam.  Either pIt must be guaranteed not to be null for the three iterations through the loop, or else the following code must take into account that unoParam may be partially uninitialized.  (Depending on optimization level, some GCC emit a -Werror\u003dmaybe-uninitialized.)",
+      "range": {
+        "startLine": 185,
+        "startChar": 4,
+        "endLine": 189,
+        "endChar": 5
+      },
+      "revId": "f059293344ba93d76fcc6e64015923dfa639c4bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
