@@ -98,6 +98,7 @@ namespace chart
 FormattedString::FormattedString() :
         ::property::OPropertySet( m_aMutex ),
     m_aType(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT),
+    m_bDataLabelsRange(false),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 
@@ -107,6 +108,7 @@ FormattedString::FormattedString( const FormattedString & rOther ) :
     m_aString( rOther.m_aString ),
     m_aType(rOther.m_aType),
     m_aGuid(rOther.m_aGuid),
+    m_bDataLabelsRange(rOther.m_bDataLabelsRange),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 
@@ -170,6 +172,38 @@ void SAL_CALL FormattedString::setGuid( const OUString& guid )
     //don't keep the mutex locked while calling out
     fireModifyEvent();
 
+}
+
+sal_Bool SAL_CALL FormattedString::getDataLabelsRange()
+{
+    MutexGuard aGuard( m_aMutex);
+    return m_bDataLabelsRange;
+}
+
+void SAL_CALL FormattedString::setDataLabelsRange( sal_Bool dataLabelsRange )
+{
+    {
+        MutexGuard aGuard( m_aMutex);
+        m_bDataLabelsRange = dataLabelsRange;
+    }
+    //don't keep the mutex locked while calling out
+    fireModifyEvent();
+}
+
+OUString SAL_CALL FormattedString::getCellRange()
+{
+    MutexGuard aGuard( m_aMutex);
+    return m_aCellRange;
+}
+
+void SAL_CALL FormattedString::setCellRange( const OUString& cellRange )
+{
+    {
+        MutexGuard aGuard( m_aMutex);
+        m_aCellRange = cellRange;
+    }
+    //don't keep the mutex locked while calling out
+    fireModifyEvent();
 }
 
 // ____ XModifyBroadcaster ____

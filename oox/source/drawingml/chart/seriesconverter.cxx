@@ -319,9 +319,25 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
             if( nParagraphs > 1 )
                 nSequenceSize += nParagraphs - 1;
 
+            OptValue< OUString > oaLabelText;
+            OptValue< OUString > oaCellRange;
+            if (mrModel.mobShowDataLabelsRange.get(false))
+            {
+                const DataSourceModel* pLabelSource = mrModel.mrParent.mpLabelsSource;
+                if (pLabelSource && pLabelSource->mxDataSeq.is())
+                {
+                    oaCellRange = pLabelSource->mxDataSeq->maFormula;
+                    const auto& rLabelMap = pLabelSource->mxDataSeq->maData;
+                    const auto& rKV = rLabelMap.find(mrModel.mnIndex);
+                    if (rKV != rLabelMap.end())
+                        rKV->second >>= oaLabelText.use();
+                }
+            }
+
             aSequence.realloc( nSequenceSize );
 
             int nPos = 0;
+
             for( auto& pParagraph : rParagraphs )
             {
                 for( auto& pRun : pParagraph->getRuns() )
@@ -336,8 +352,18 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
                     TextField* pField = nullptr;
                     if( ( pField = dynamic_cast< TextField* >( pRun.get() ) ) )
                     {
-                        xCustomLabel->setString( pField->getText() );
-                        xCustomLabel->setFieldType( lcl_ConvertFieldNameToFieldEnum( pField->getType() ) );
+                        DataPointCustomLabelFieldType eType = lcl_ConvertFieldNameToFieldEnum( pField->getType() );
+
+                        if (eType == DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_CELLRANGE && oaCellRange.has())
+                        {
+                            xCustomLabel->setCellRange( oaCellRange.get() );
+                            xCustomLabel->setString( oaLabelText.get() );
+                            xCustomLabel->setDataLabelsRange( true );
+                        }
+                        else
+                            xCustomLabel->setString( pField->getText() );
+
+                        xCustomLabel->setFieldType( eType );
                         xCustomLabel->setGuid( pField->getUuid() );
                     }
                     else if( pRun )

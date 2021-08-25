@@ -145,6 +145,24 @@ struct RegressionStyle
     {}
 };
 
+/**
+ * Used to store text content of a data point custom-label's fields and also
+ * the helper members that indicates whether this label's contents are sourced
+ * from a cell[range] and the address of the cell[range] with GUID of
+ * the CELLRANGE field.
+ */
+struct CustomLabelsInfo
+{
+    /// Text content of each field.
+    ::std::vector<OUString> mLabels;
+    /// Are label's contents sourced from a cell[range] ?
+    bool mbDataLabelsRange = false;
+    /// GUID of the CELLRANGE field.
+    OUString msLabelGuid;
+    /// cell[range] from which label's contents are sourced.
+    OUString msLabelsCellRange;
+};
+
 struct DataRowPointStyle
 {
     enum StyleType
@@ -170,7 +188,7 @@ struct DataRowPointStyle
     sal_Int32 m_nPointRepeat;
     OUString msStyleName;
     OUString msStyleNameOfParent; // e.g. target of line and fill styles of data-labels
-    ::std::vector<OUString> mCustomLabels;
+    CustomLabelsInfo mCustomLabels;
     double mCustomLabelPos[2] = { 0.0, 0.0 };
     // for svg:x and svg:y attribute (in core unit), of element <chart:data-label>
     std::optional<sal_Int32> mo_nLabelAbsolutePosX;
