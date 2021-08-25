@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d5006547_acec6f41",
+        "filename": "i18npool/source/search/textsearch.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-25T14:58:33Z",
+      "side": 1,
+      "message": "This looks odd.\n\nThe thing that you are trying to skip is intended to use enough of the *paragraph* for the search.\n\nWithout it, the search is limited by some *part of the paragraph*, delimited by startPos and endPos, somewhere in the middle of the paragraph.\n\nE.g., let\u0027s have a lore ipsum paragraph:\n\n\n  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum consequat mi quis pretium semper. Proin luctus orci ac neque venenatis, quis commodo dolor posuere. Curabitur dignissim sapien quis cursus egestas. Donec blandit auctor arcu, nec pellentesque eros molestie eget. In consectetur aliquam hendrerit. Sed cursus mauris vitae ligula pellentesque, non pellentesque urna aliquet. Fusce placerat mauris enim, nec rutrum purus semper vel. Praesent tincidunt neque eu pellentesque pharetra. Fusce pellentesque est orci.\n\nLet\u0027s consider a search string like \"^\\w\", and have startPos \u003d 14 and endPos \u003d 20. The search engine will get this text: \"lor sit\", and will match \"l\" as \"a word character at the start of the text\" happily, despite we used not the whole text, but just some part of it - and the \"l\" was in the middle of the text.",
+      "revId": "a511bffd67a9cebfdc878766581ac08c79d7ff51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
