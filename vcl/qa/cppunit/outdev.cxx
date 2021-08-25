@@ -814,6 +814,17 @@ void VclOutdevTest::testAntialias()
     CPPUNIT_ASSERT_EQUAL(AntialiasingFlags::Enable, pVDev->GetAntialiasing());
 }
 
+void VclOutdevTest::testDrawMode()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+
+    CPPUNIT_ASSERT_EQUAL(DrawModeFlags::Default, pVDev->GetDrawMode());
+
+    pVDev->SetDrawMode(DrawModeFlags::BlackLine);
+
+    CPPUNIT_ASSERT_EQUAL(DrawModeFlags::BlackLine, pVDev->GetDrawMode());
+}
+
 void VclOutdevTest::testSystemTextColor()
 {
     {

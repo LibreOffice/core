@@ -198,16 +198,6 @@ void OutputDevice::ClearStack()
         Pop();
 }
 
-DrawModeFlags OutputDevice::GetDrawMode() const { return mnDrawMode; }
-
-void OutputDevice::SetDrawMode(DrawModeFlags nDrawMode)
-{
-    mnDrawMode = nDrawMode;
-
-    if (mpAlphaVDev)
-        mpAlphaVDev->SetDrawMode(nDrawMode);
-}
-
 void OutputDevice::SetLayoutMode( ComplexTextLayoutFlags nTextLayoutMode )
 {
     if( mpMetaFile )
