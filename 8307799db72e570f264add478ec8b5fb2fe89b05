@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ee356803_797d92bf",
+        "filename": "vcl/source/window/scrwnd.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-25T06:47:14Z",
+      "side": 1,
+      "message": "\u003e Why would you start to use sal_Int32 here (where ImplWheelWindow::mnActDeltaX/Y are of type tools::Long)?\n\n:) Obviously (as evident from the comment) because I took old limits (LONG_MAX/LONG_MIN, corresponding to UNO long type, which is sal_Int32 in core) into account, but was unsure if those old limits were sane :) so changing the code without introducing functional changes, but making it clear that it might need further modifications.",
+      "parentUuid": "00d199c1_7636f4e7",
+      "range": {
+        "startLine": 220,
+        "startChar": 12,
+        "endLine": 222,
+        "endChar": 66
+      },
+      "revId": "8307799db72e570f264add478ec8b5fb2fe89b05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ae96c247_092886d7",
         "filename": "vcl/source/window/window2.cxx",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2021-08-25T06:34:38Z",
       "side": 1,
       "message": "Why would you start to use sal_Int32 here (where nNewPos is of type tools::Long)?  (And in any case, I would move such a questionable change into a commit of its own.)",
+      "range": {
+        "startLine": 591,
+        "startChar": 8,
+        "endLine": 592,
+        "endChar": 57
+      },
+      "revId": "8307799db72e570f264add478ec8b5fb2fe89b05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd26e32e_6d067432",
+        "filename": "vcl/source/window/window2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-25T06:47:14Z",
+      "side": 1,
+      "message": "Same here :)",
+      "parentUuid": "ae96c247_092886d7",
       "range": {
         "startLine": 591,
         "startChar": 8,
