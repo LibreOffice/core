@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "54a7c148_86b784fb",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 41
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-25T06:42:00Z",
+      "side": 0,
+      "message": "Please revert the whitespace-only change on this line. It will make it clear that the change only adds following functional lines, without changing this line functionally.\n\nAs usual: a line that is not otherwise changes should *not* be re-formatted.",
+      "revId": "ed31f9818d1c1e6ba44fa8695d215697ad27713c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

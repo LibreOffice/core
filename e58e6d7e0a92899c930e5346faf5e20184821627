@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "06d2b118_d1bb27a6",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 41
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-25T06:42:00Z",
+      "side": 1,
+      "message": "This rename is undesirable. These \"Para\" controls are not dedicated to paragraphs; they represent the primary controls, and only the second one is specific to character styles. Please do not rename anything related to the primary set of controls and their functions, and only add \"Char\" to respective secondary members.",
+      "revId": "e58e6d7e0a92899c930e5346faf5e20184821627",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
