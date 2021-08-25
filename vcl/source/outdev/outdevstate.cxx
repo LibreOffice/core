@@ -277,54 +277,6 @@ void OutputDevice::SetRasterOp( RasterOp eRasterOp )
         mpAlphaVDev->SetRasterOp( eRasterOp );
 }
 
-void OutputDevice::SetLineColor()
-{
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaLineColorAction( Color(), false ) );
-
-    if ( mbLineColor )
-    {
-        mbInitLineColor = true;
-        mbLineColor = false;
-        maLineColor = COL_TRANSPARENT;
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetLineColor();
-}
-
-void OutputDevice::SetLineColor( const Color& rColor )
-{
-
-    Color aColor = vcl::drawmode::GetLineColor(rColor, GetDrawMode(), GetSettings().GetStyleSettings());
-
-    if( mpMetaFile )
-        mpMetaFile->AddAction( new MetaLineColorAction( aColor, true ) );
-
-    if( aColor.IsTransparent() )
-    {
-        if ( mbLineColor )
-        {
-            mbInitLineColor = true;
-            mbLineColor = false;
-            maLineColor = COL_TRANSPARENT;
-        }
-    }
-    else
-    {
-        if( maLineColor != aColor )
-        {
-            mbInitLineColor = true;
-            mbLineColor = true;
-            maLineColor = aColor;
-        }
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetLineColor( COL_BLACK );
-}
-
 void OutputDevice::SetFont( const vcl::Font& rNewFont )
 {
     vcl::Font aFont = vcl::drawmode::GetFont(rNewFont, GetDrawMode(), GetSettings().GetStyleSettings());
@@ -369,28 +321,6 @@ void OutputDevice::SetFont( const vcl::Font& rNewFont )
     }
 
     mpAlphaVDev->SetFont( aFont );
-}
-
-
-void OutputDevice::InitLineColor()
-{
-    DBG_TESTSOLARMUTEX();
-
-    if( mbLineColor )
-    {
-        if( RasterOp::N0 == meRasterOp )
-            mpGraphics->SetROPLineColor( SalROPColor::N0 );
-        else if( RasterOp::N1 == meRasterOp )
-            mpGraphics->SetROPLineColor( SalROPColor::N1 );
-        else if( RasterOp::Invert == meRasterOp )
-            mpGraphics->SetROPLineColor( SalROPColor::Invert );
-        else
-            mpGraphics->SetLineColor( maLineColor );
-    }
-    else
-        mpGraphics->SetLineColor();
-
-    mbInitLineColor = false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

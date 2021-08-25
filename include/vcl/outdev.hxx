@@ -502,8 +502,8 @@ public:
 
     void                        SetLineColor();
     void                        SetLineColor( const Color& rColor );
-    const Color&                GetLineColor() const { return maLineColor; }
-    bool                        IsLineColor() const { return mbLineColor; }
+    const Color&                GetLineColor() const;
+    bool                        IsLineColor() const;
 
     void                        SetFillColor();
     void                        SetFillColor( const Color& rColor );
