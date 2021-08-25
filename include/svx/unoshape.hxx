@@ -125,6 +125,7 @@ protected:
     friend class SdXShape;
 
     const SvxItemPropertySet* mpPropSet;
+    SvxItemPropertySetUsrAnys maUrsAnys;
     const SfxItemPropertyMapEntry* maPropMapEntries;
 
 private:

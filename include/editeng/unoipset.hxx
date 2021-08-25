@@ -28,13 +28,12 @@
 namespace com::sun::star::beans { class XPropertySetInfo; }
 
 class SfxItemSet;
-struct SvxIDPropertyCombine;
+class SvxItemPropertySetUsrAnys;
 
 class EDITENG_DLLPUBLIC SvxItemPropertySet
 {
     SfxItemPropertyMap          m_aPropertyMap;
     mutable css::uno::Reference<css::beans::XPropertySetInfo> m_xInfo;
-    ::std::vector< SvxIDPropertyCombine > aCombineList;
     SfxItemPool&                    mrItemPool;
 
 public:
@@ -49,17 +48,33 @@ public:
     static void setPropertyValue( const SfxItemPropertyMapEntry* pMap, const css::uno::Any& rVal, SfxItemSet& rSet, bool bDontConvertNegativeValues );
 
     // Methods that use Any instead
-    css::uno::Any getPropertyValue( const SfxItemPropertyMapEntry* pMap ) const;
-    void setPropertyValue( const SfxItemPropertyMapEntry* pMap, const css::uno::Any& rVal ) const;
-
-    bool AreThereOwnUsrAnys() const { return ! aCombineList.empty(); }
-    css::uno::Any* GetUsrAnyForID(SfxItemPropertyMapEntry const & entry) const;
-    void AddUsrAnyForID(const css::uno::Any& rAny, SfxItemPropertyMapEntry const & entry);
-    void ClearAllUsrAny();
+    css::uno::Any getPropertyValue( const SfxItemPropertyMapEntry* pMap, SvxItemPropertySetUsrAnys& rAnys ) const;
+    static void setPropertyValue( const SfxItemPropertyMapEntry* pMap, const css::uno::Any& rVal, SvxItemPropertySetUsrAnys& rAnys );
 
     css::uno::Reference< css::beans::XPropertySetInfo > const & getPropertySetInfo() const;
     const SfxItemPropertyMap& getPropertyMap() const { return m_aPropertyMap;}
     const SfxItemPropertyMapEntry* getPropertyMapEntry(std::u16string_view rName) const;
+};
+
+struct SvxIDPropertyCombine
+{
+    sal_uInt16  nWID;
+    sal_uInt8   memberId;
+    css::uno::Any    aAny;
+};
+
+
+class EDITENG_DLLPUBLIC SvxItemPropertySetUsrAnys
+{
+    ::std::vector< SvxIDPropertyCombine > aCombineList;
+
+public:
+    SvxItemPropertySetUsrAnys();
+    ~SvxItemPropertySetUsrAnys();
+    bool AreThereOwnUsrAnys() const { return ! aCombineList.empty(); }
+    css::uno::Any* GetUsrAnyForID(SfxItemPropertyMapEntry const & entry) const;
+    void AddUsrAnyForID(const css::uno::Any& rAny, SfxItemPropertyMapEntry const & entry);
+    void ClearAllUsrAny();
 };
 
 /** converts the given any with a metric to 100th/mm if needed */

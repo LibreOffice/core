@@ -980,14 +980,6 @@ Reference< XShape > const & Shape::createAndInsert(
     if ( !mxShape.is() )
     {
         mxShape.set( xServiceFact->createInstance( aServiceName ), UNO_QUERY_THROW );
-        if (aServiceName == "com.sun.star.drawing.GroupShape")
-        {
-            // TODO why is this necessary? A newly created group shape should have an empty
-            // grab-bag.
-            uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
-            beans::PropertyValues aVals;
-            xPropertySet->setPropertyValue("InteropGrabBag", uno::makeAny(aVals));
-        }
     }
 
     Reference< XPropertySet > xSet( mxShape, UNO_QUERY );

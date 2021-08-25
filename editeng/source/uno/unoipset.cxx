@@ -31,14 +31,6 @@
 using namespace ::com::sun::star;
 
 
-struct SvxIDPropertyCombine
-{
-    sal_uInt16  nWID;
-    sal_uInt8   memberId;
-    uno::Any    aAny;
-};
-
-
 SvxItemPropertySet::SvxItemPropertySet( const SfxItemPropertyMapEntry* pMap, SfxItemPool& rItemPool )
 :   m_aPropertyMap( pMap ),
     mrItemPool( rItemPool )
@@ -48,35 +40,6 @@ SvxItemPropertySet::SvxItemPropertySet( const SfxItemPropertyMapEntry* pMap, Sfx
 
 SvxItemPropertySet::~SvxItemPropertySet()
 {
-    ClearAllUsrAny();
-}
-
-
-uno::Any* SvxItemPropertySet::GetUsrAnyForID(SfxItemPropertyMapEntry const & entry) const
-{
-    for (auto const & rActual : aCombineList)
-    {
-        if( rActual.nWID == entry.nWID && rActual.memberId == entry.nMemberId )
-            return const_cast<uno::Any*>(&rActual.aAny);
-    }
-    return nullptr;
-}
-
-
-void SvxItemPropertySet::AddUsrAnyForID(
-    const uno::Any& rAny, SfxItemPropertyMapEntry const & entry)
-{
-    SvxIDPropertyCombine aNew;
-    aNew.nWID = entry.nWID;
-    aNew.memberId = entry.nMemberId;
-    aNew.aAny = rAny;
-    aCombineList.push_back( std::move(aNew) );
-}
-
-
-void SvxItemPropertySet::ClearAllUsrAny()
-{
-    aCombineList.clear();
 }
 
 
@@ -184,10 +147,10 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertyMapEntry* pMap, 
 }
 
 
-uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntry* pMap ) const
+uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntry* pMap, SvxItemPropertySetUsrAnys& rAnys ) const
 {
     // Already entered a value? Then finish quickly
-    uno::Any* pUsrAny = GetUsrAnyForID(*pMap);
+    uno::Any* pUsrAny = rAnys.GetUsrAnyForID(*pMap);
     if(pUsrAny)
         return *pUsrAny;
 
@@ -213,7 +176,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntry* pM
         if(eState >= SfxItemState::DEFAULT && pItem)
         {
             pItem->QueryValue( aVal, nMemberId );
-            const_cast<SvxItemPropertySet*>(this)->AddUsrAnyForID(aVal, *pMap);
+            rAnys.AddUsrAnyForID(aVal, *pMap);
         }
     }
 
@@ -236,11 +199,11 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntry* pM
 }
 
 
-void SvxItemPropertySet::setPropertyValue( const SfxItemPropertyMapEntry* pMap, const uno::Any& rVal ) const
+void SvxItemPropertySet::setPropertyValue( const SfxItemPropertyMapEntry* pMap, const uno::Any& rVal, SvxItemPropertySetUsrAnys& rAnys )
 {
-    uno::Any* pUsrAny = GetUsrAnyForID(*pMap);
+    uno::Any* pUsrAny = rAnys.GetUsrAnyForID(*pMap);
     if(!pUsrAny)
-        const_cast<SvxItemPropertySet*>(this)->AddUsrAnyForID(rVal, *pMap);
+        rAnys.AddUsrAnyForID(rVal, *pMap);
     else
         *pUsrAny = rVal;
 }
@@ -333,6 +296,38 @@ void SvxUnoConvertFromMM( const MapUnit eDestinationMapUnit, uno::Any & rMetric 
             OSL_FAIL("AW: Missing unit translation to PoolMetrics!");
         }
     }
+}
+
+SvxItemPropertySetUsrAnys::SvxItemPropertySetUsrAnys() = default;
+
+SvxItemPropertySetUsrAnys::~SvxItemPropertySetUsrAnys()
+{
+    ClearAllUsrAny();
+}
+
+uno::Any* SvxItemPropertySetUsrAnys::GetUsrAnyForID(SfxItemPropertyMapEntry const & entry) const
+{
+    for (auto const & rActual : aCombineList)
+    {
+        if( rActual.nWID == entry.nWID && rActual.memberId == entry.nMemberId )
+            return const_cast<uno::Any*>(&rActual.aAny);
+    }
+    return nullptr;
+}
+
+void SvxItemPropertySetUsrAnys::AddUsrAnyForID(
+    const uno::Any& rAny, SfxItemPropertyMapEntry const & entry)
+{
+    SvxIDPropertyCombine aNew;
+    aNew.nWID = entry.nWID;
+    aNew.memberId = entry.nMemberId;
+    aNew.aAny = rAny;
+    aCombineList.push_back( std::move(aNew) );
+}
+
+void SvxItemPropertySetUsrAnys::ClearAllUsrAny()
+{
+    aCombineList.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
