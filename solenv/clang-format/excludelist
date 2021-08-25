@@ -15039,7 +15039,7 @@ vcl/source/outdev/map.cxx
 vcl/source/outdev/mask.cxx
 vcl/source/outdev/nativecontrols.cxx
 vcl/source/outdev/outdev.cxx
-vcl/source/outdev/outdevstate.cxx
+vcl/source/outdev/stack.cxx
 vcl/source/outdev/pixel.cxx
 vcl/source/outdev/polygon.cxx
 vcl/source/outdev/polyline.cxx
