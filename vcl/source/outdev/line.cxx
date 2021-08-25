@@ -371,5 +371,4 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
     mpMetaFile = pOldMetaFile;
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
