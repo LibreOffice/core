@@ -216,7 +216,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/outdev/drawmode \
     vcl/source/outdev/background \
     vcl/source/outdev/outdev \
-    vcl/source/outdev/outdevstate \
+    vcl/source/outdev/stack \
     vcl/source/outdev/output \
     vcl/source/outdev/rasterop \
     vcl/source/outdev/refpoint \
