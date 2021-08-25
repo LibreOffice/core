@@ -296,8 +296,8 @@ public:
 
     void                        SetRefPoint();
     void                        SetRefPoint( const Point& rRefPoint );
-    const Point&                GetRefPoint() const { return maRefPoint; }
-    bool                        IsRefPoint() const { return mbRefPoint; }
+    const Point&                GetRefPoint() const;
+    bool                        IsRefPoint() const;
 
     virtual bool                IsScreenComp() const { return true; }
 
@@ -518,7 +518,7 @@ public:
     bool                        IsBackground() const { return mbBackground; }
 
     void                        SetFont( const vcl::Font& rNewFont );
-    const vcl::Font&            GetFont() const { return maFont; }
+    const vcl::Font&            GetFont() const;
 
 protected:
 
