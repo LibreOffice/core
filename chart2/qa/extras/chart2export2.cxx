@@ -98,6 +98,7 @@ public:
     void testCustomShapeText();
     void testuserShapesXLSX();
     void testNameRangeXLSX();
+    void testTdf143942();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest2);
     CPPUNIT_TEST(testSetSeriesToSecondaryAxisXLSX);
@@ -159,6 +160,7 @@ public:
     CPPUNIT_TEST(testCustomShapeText);
     CPPUNIT_TEST(testuserShapesXLSX);
     CPPUNIT_TEST(testNameRangeXLSX);
+    CPPUNIT_TEST(testTdf143942);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1334,22 +1336,60 @@ void Chart2ExportTest2::testTdf138204()
         "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:dLbls/c:dLbl/c:tx/c:rich/a:p/a:fld",
         "type", "CELLRANGE");
 
+    assertXPath(
+        pXmlDoc,
+        "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[2]/c:dLbls/c:dLbl/c:tx/c:rich/a:p/a:fld",
+        "type", "CELLRANGE");
+
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
     CPPUNIT_ASSERT(xChartDoc.is());
 
-    uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 1));
-    CPPUNIT_ASSERT(xDataSeries.is());
+    struct CustomLabelsTestData
+    {
+        sal_Int32 nSeriesIdx;
+        sal_Int32 nNumFields;
+        // First field attributes.
+        chart2::DataPointCustomLabelFieldType eFieldType;
+        OUString aCellRange;
+        OUString aString;
+    };
 
-    uno::Reference<beans::XPropertySet> xPropertySet;
-    uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aFields;
-    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
-    xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aFields.getLength());
+    const CustomLabelsTestData aTestEntries[2] = {
+        {
+            // series id of c:ser[1] is 0.
+            0, // nSeriesIdx
+            1, // nNumFields
+            chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_CELLRANGE,
+            "Munka1!$F$9", // aCellRange
+            "67,5%", // aString
+        },
+        {
 
-    CPPUNIT_ASSERT_EQUAL(
-        chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_CELLRANGE,
-        aFields[0]->getFieldType());
-    //CPPUNIT_ASSERT_EQUAL(OUString("67.5%"), aFields[0]->getString()); TODO: Not implemented yet
+            // series id of c:ser[2] is 1.
+            1, // nSeriesIdx
+            1, // nNumFields
+            chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_CELLRANGE,
+            "Munka1!$G$9", // aCellRange
+            "32,3%", // aString
+        },
+    };
+
+    for (const auto& aTestEntry : aTestEntries)
+    {
+        uno::Reference<chart2::XDataSeries> xDataSeries(
+            getDataSeriesFromDoc(xChartDoc, aTestEntry.nSeriesIdx));
+        CPPUNIT_ASSERT(xDataSeries.is());
+
+        uno::Reference<beans::XPropertySet> xPropertySet;
+        uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aFields;
+        xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
+        xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
+        CPPUNIT_ASSERT_EQUAL(aTestEntry.nNumFields, aFields.getLength());
+
+        CPPUNIT_ASSERT_EQUAL(aTestEntry.eFieldType, aFields[0]->getFieldType());
+        CPPUNIT_ASSERT_EQUAL(aTestEntry.aCellRange, aFields[0]->getCellRange());
+        CPPUNIT_ASSERT_EQUAL(aTestEntry.aString, aFields[0]->getString());
+    }
 }
 
 void Chart2ExportTest2::testTdf138181()
@@ -1435,6 +1475,69 @@ void Chart2ExportTest2::testNameRangeXLSX()
     assertXPathContent(pXmlDoc,
                        "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:val/c:numRef/c:f",
                        "[0]!series1");
+}
+
+void Chart2ExportTest2::testTdf143942()
+{
+    load(u"/chart2/qa/extras/data/xlsx/", "tdf143942.xlsx");
+    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    constexpr size_t nLabels = 4;
+    OUString aCellRange = "Sheet1!$A$2:$A$5";
+    OUString aLabels[nLabels] = {
+        "Test1",
+        "Test2",
+        "Tes3",
+        "Test4",
+    };
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[1]/c:extLst/c:ext",
+                "uri", "{02D57815-91ED-43cb-92C2-25804820EDAC}");
+    assertXPath(pXmlDoc,
+                "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[1]/c:extLst/c:ext/"
+                "c15:datalabelsRange/c15:dlblRangeCache/c:ptCount",
+                "val", "4");
+    assertXPathContent(pXmlDoc,
+                       "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[1]/c:extLst/c:ext/"
+                       "c15:datalabelsRange/c15:f",
+                       aCellRange);
+    for (size_t i = 0; i < nLabels; ++i)
+    {
+        assertXPath(pXmlDoc,
+                    "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[1]/c:dLbls/c:dLbl["
+                        + OString::number(i + 1) + "]/c:tx/c:rich/a:p/a:fld",
+                    "type", "CELLRANGE");
+        assertXPath(pXmlDoc,
+                    "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[1]/c:dLbls/c:dLbl["
+                        + OString::number(i + 1) + "]/c:extLst/c:ext/c15:showDataLabelsRange",
+                    "val", "1");
+        // Check if the actual label is stored under c15:datalabelsRange
+        assertXPathContent(pXmlDoc,
+                           "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[1]/c:extLst/"
+                           "c:ext/c15:datalabelsRange/c15:dlblRangeCache/c:pt["
+                               + OString::number(i + 1) + "]/c:v",
+                           aLabels[i]);
+    }
+
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+    CPPUNIT_ASSERT(xDataSeries.is());
+
+    uno::Reference<beans::XPropertySet> xPropertySet;
+    uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aFields;
+    for (size_t i = 0; i < nLabels; ++i)
+    {
+        xPropertySet.set(xDataSeries->getDataPointByIndex(i), uno::UNO_SET_THROW);
+        xPropertySet->getPropertyValue("CustomLabelFields") >>= aFields;
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aFields.getLength());
+        CPPUNIT_ASSERT_EQUAL(
+            chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_CELLRANGE,
+            aFields[0]->getFieldType());
+        CPPUNIT_ASSERT_EQUAL(aCellRange, aFields[0]->getCellRange());
+        CPPUNIT_ASSERT_EQUAL(aLabels[i], aFields[0]->getString());
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest2);
