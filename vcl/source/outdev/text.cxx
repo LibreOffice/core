@@ -64,6 +64,19 @@ void OutputDevice::SetLayoutMode( ComplexTextLayoutFlags nTextLayoutMode )
         mpAlphaVDev->SetLayoutMode( nTextLayoutMode );
 }
 
+LanguageType OutputDevice::GetDigitLanguage() const { return meTextLanguage; }
+
+void OutputDevice::SetDigitLanguage( LanguageType eTextLanguage )
+{
+    if( mpMetaFile )
+        mpMetaFile->AddAction( new MetaTextLanguageAction( eTextLanguage ) );
+
+    meTextLanguage = eTextLanguage;
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetDigitLanguage( eTextLanguage );
+}
+
 ImplMultiTextLineInfo::ImplMultiTextLineInfo()
 {
 }

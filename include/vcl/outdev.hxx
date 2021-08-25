@@ -486,7 +486,7 @@ public:
     ComplexTextLayoutFlags      GetLayoutMode() const;
 
     void                        SetDigitLanguage( LanguageType );
-    LanguageType                GetDigitLanguage() const { return meTextLanguage; }
+    LanguageType                GetDigitLanguage() const;
 
     void                        SetRasterOp( RasterOp eRasterOp );
     RasterOp                    GetRasterOp() const;
