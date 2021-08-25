@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "0757256d_ae106d15",
+        "filename": "sc/source/core/data/column2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-08-25T19:53:39Z",
+      "side": 1,
+      "message": "nMaxLen declaration and initialization can be moved to the else block.",
+      "range": {
+        "startLine": 620,
+        "startChar": 8,
+        "endLine": 620,
+        "endChar": 30
+      },
+      "revId": "55a9433dca70fad1d8897416419a46fa2105af84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "500f331d_f5af5bcb",
         "filename": "sc/source/core/data/column2.cxx",
         "patchSetId": 1
@@ -13,6 +36,41 @@
       "writtenOn": "2021-08-20T08:04:54Z",
       "side": 1,
       "message": "Should I introduce a new var here in order to avoid the calcluation twice, or is the compiler smart enough to deal with such a construct?",
+      "revId": "55a9433dca70fad1d8897416419a46fa2105af84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7117547a_91a2487d",
+        "filename": "sc/source/core/data/column2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-08-25T19:53:39Z",
+      "side": 1,
+      "message": "Nah, compiler should be smart enough for such a simple one time repetition.",
+      "parentUuid": "500f331d_f5af5bcb",
+      "revId": "55a9433dca70fad1d8897416419a46fa2105af84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "78d8d70b_2a2f1d84",
+        "filename": "sc/source/core/data/column2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-08-25T19:53:39Z",
+      "side": 1,
+      "message": "I wonder if it would make sense to limit checkLineBreak() to non-numeric cells only; formatted numeric values will not have line breaks. On the other hand checking a quite short numeric output string for a line break isn\u0027t that expensive, so it might be micro-optimizing.\n\nFormula results however already have a multiline indicator, ScFormulaCell::IsMultilineResult(), that could be used.\n\nAnd if already differentiating based on ScRefCellValue then checking non-numeric cells only comes at almost no cost. i.e. no check for CELLTYPE_NONE and CELLTYPE_VALUE, for CELLTYPE_FORMULA ask ScFormulaCell::IsMultilineResult() and process if so, and only CELLTYPE_STRING and CELLTYPE_EDIT would need to always check the formatted string.",
       "revId": "55a9433dca70fad1d8897416419a46fa2105af84",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
