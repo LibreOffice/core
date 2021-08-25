@@ -516,7 +516,7 @@ namespace svt::table
             ColumnPositions::const_reverse_iterator loop = m_aColumnWidths.rbegin();
             do
             {
-                aArea.SetRight( loop->getEnd() - nScrolledOutLeft + m_nRowHeaderWidthPixel );
+                aArea.SetRight(loop->getEnd() - nScrolledOutLeft);
                 ++loop;
             }
             while ( (   loop != m_aColumnWidths.rend() )
