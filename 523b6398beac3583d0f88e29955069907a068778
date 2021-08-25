@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "61704ec7_23955ca8",
+        "filename": "oox/source/core/xmlfilterbase.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-25T11:21:33Z",
+      "side": 1,
+      "message": "This code is not specific for DOCX, so the comment is misleading - the reference to DOCX should likely be replaced by OOXML (which is redundant in oox, which is already about OOXML).",
+      "revId": "523b6398beac3583d0f88e29955069907a068778",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f619bdce_f2d8abdc",
+        "filename": "oox/source/core/xmlfilterbase.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-25T11:21:33Z",
+      "side": 1,
+      "message": "What does \"c\" prefix stands here for? Usually we use \"a\" for \"object\":\n\n    DateTime aTime(rTime);",
+      "revId": "523b6398beac3583d0f88e29955069907a068778",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e293795e_6437620e",
+        "filename": "oox/source/core/xmlfilterbase.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-25T11:21:33Z",
+      "side": 1,
+      "message": "This introduces a code duplication. I would suggest you to create a copy DateTime unconditionally, and only conditionally do ConvertToUTC() on it if it\u0027s not yet. Then you would not need two copies of snprintf.",
+      "revId": "523b6398beac3583d0f88e29955069907a068778",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
