@@ -299,8 +299,8 @@ public:
 
     void                        SetRefPoint();
     void                        SetRefPoint( const Point& rRefPoint );
-    const Point&                GetRefPoint() const { return maRefPoint; }
-    bool                        IsRefPoint() const { return mbRefPoint; }
+    const Point&                GetRefPoint() const;
+    bool                        IsRefPoint() const;
 
     virtual bool                IsScreenComp() const { return true; }
 
