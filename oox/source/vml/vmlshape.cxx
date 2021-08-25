@@ -29,6 +29,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#include <com/sun/star/drawing/PolygonKind.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
@@ -1036,14 +1037,27 @@ PolyLineShape::PolyLineShape( Drawing& rDrawing ) :
 
 Reference< XShape > PolyLineShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect ) const
 {
-    Reference< XShape > xShape = SimpleShape::implConvertAndInsert( rxShapes, rShapeRect );
-    // polygon path
+    ::std::vector<awt::Point> aAbsPoints;
     awt::Rectangle aCoordSys = getCoordSystem();
-    if( !maShapeModel.maPoints.empty() && (aCoordSys.Width > 0) && (aCoordSys.Height > 0) )
+    if (!maShapeModel.maPoints.empty() && (aCoordSys.Width > 0) && (aCoordSys.Height > 0))
     {
-        ::std::vector< awt::Point > aAbsPoints;
         for (auto const& point : maShapeModel.maPoints)
-            aAbsPoints.push_back( lclGetAbsPoint( point, rShapeRect, aCoordSys ) );
+            aAbsPoints.push_back(lclGetAbsPoint(point, rShapeRect, aCoordSys));
+        // A polyline cannot be filled but only a polygon. We treat first point == last point as
+        // indicator for beeing closed. In that case we force to type PolyPolygonShape.
+        if (aAbsPoints.size() > 2 && aAbsPoints.front().X == aAbsPoints.back().X
+            && aAbsPoints.front().Y == aAbsPoints.back().Y)
+        {
+            const_cast<PolyLineShape*>(this)->setService("com.sun.star.drawing.PolyPolygonShape");
+        }
+    }
+
+    Reference<XShape> xShape = SimpleShape::implConvertAndInsert(rxShapes, rShapeRect);
+
+    // polygon path
+
+    if (!aAbsPoints.empty())
+    {
         PointSequenceSequence aPointSeq( 1 );
         aPointSeq[ 0 ] = ContainerHelper::vectorToSequence( aAbsPoints );
         PropertySet aPropSet( xShape );
