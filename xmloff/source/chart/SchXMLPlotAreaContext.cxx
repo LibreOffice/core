@@ -617,7 +617,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLDataLabelParaCon
 }
 
 SchXMLDataLabelContext::SchXMLDataLabelContext(SvXMLImport& rImport,
-                                               ::std::vector<OUString>& rLabels,
+                                               CustomLabelsInfo& rLabels,
                                                DataRowPointStyle& rDataLabelStyle)
     : SvXMLImportContext(rImport)
     , mrLabels(rLabels)
@@ -630,7 +630,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLDataLabelContext
     const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     if ( nElement == XML_ELEMENT(TEXT, XML_P) )
-        return new SchXMLDataLabelParaContext(GetImport(), mrLabels);
+        return new SchXMLDataLabelParaContext(GetImport(), mrLabels.mLabels);
     else
         XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     return nullptr;
@@ -662,6 +662,14 @@ void SchXMLDataLabelContext::startFastElement(
             }
             case XML_ELEMENT(CHART, XML_STYLE_NAME):
                 mrDataLabelStyle.msStyleName = aIter.toString();
+                break;
+            case XML_ELEMENT(LO_EXT, XML_DATA_LABEL_GUID):
+                mrLabels.msLabelGuid = aIter.toString();
+                mrLabels.mbDataLabelsRange = true;
+                break;
+            case XML_ELEMENT(LO_EXT, XML_DATA_LABELS_CELL_RANGE):
+                mrLabels.msLabelsCellRange = aIter.toString();
+                mrLabels.mbDataLabelsRange = true;
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);
@@ -737,7 +745,7 @@ void SchXMLDataPointContext::startFastElement (sal_Int32 /*Element*/,
                 if (!mbHasLabelParagraph)
                 {
                     sCustomLabelField = aIter.toString();
-                    mDataPoint.mCustomLabels.push_back(sCustomLabelField);
+                    mDataPoint.mCustomLabels.mLabels.push_back(sCustomLabelField);
                 }
                 break;
             case XML_ELEMENT(LO_EXT, XML_HIDE_LEGEND):
@@ -778,7 +786,7 @@ void SchXMLDataPointContext::startFastElement (sal_Int32 /*Element*/,
 
 void SchXMLDataPointContext::endFastElement(sal_Int32 )
 {
-    if(!mDataPoint.msStyleName.isEmpty() || mDataPoint.mCustomLabels.size() > 0)
+    if(!mDataPoint.msStyleName.isEmpty() || mDataPoint.mCustomLabels.mLabels.size() > 0)
     {
         mrStyleVector.push_back(mDataPoint);
     }

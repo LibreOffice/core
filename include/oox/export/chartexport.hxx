@@ -91,6 +91,43 @@ struct AxisIdPair{
     {}
 };
 
+/**
+ A helper container class to collect the chart data point labels and the address
+ of the cell[range] from which the labels are sourced if that is the case. This
+ is then used to write the label texts under the extension tag <c15:datalabelsRange>.
+
+ @since LibreOffice 7.3.0
+ */
+class DataLabelsRange
+{
+public:
+
+    /// type of the internal container that stores the indexed label text.
+    typedef std::map<sal_Int32, OUString> LabelsRangeMap;
+
+    /// Returns whether the container is empty or not.
+    bool empty() const;
+    /// Returns the count of labels stored.
+    size_t count() const;
+    /// Indicates whether the container has a label with index specified by nIndex.
+    bool hasLabel(sal_Int32 nIndex) const;
+    /// Returns the address of the cell[range] from which label contents are sourced.
+    OUString getRange() const;
+
+    /// Sets the address of the cell[range] from which label contents are sourced.
+    void setRange(const OUString& rRange);
+    /// Adds a new indexed label text.
+    void setLabel(sal_Int32 nIndex, const OUString& rText);
+
+    LabelsRangeMap::const_iterator begin() const;
+    LabelsRangeMap::const_iterator end() const;
+
+private:
+    OUString         maRange;
+    LabelsRangeMap   maLabels;
+};
+
+
 class OOX_DLLPUBLIC ChartExport final : public DrawingML {
 
 public:
@@ -184,7 +221,8 @@ private:
     void exportDataPoints(
         const css::uno::Reference< css::beans::XPropertySet >& xSeriesProperties,
         sal_Int32 nSeriesLength, sal_Int32 eChartType );
-    void exportDataLabels( const css::uno::Reference<css::chart2::XDataSeries>& xSeries, sal_Int32 nSeriesLength, sal_Int32 eChartType );
+    void exportDataLabels( const css::uno::Reference<css::chart2::XDataSeries>& xSeries, sal_Int32 nSeriesLength,
+        sal_Int32 eChartType, DataLabelsRange& rDLblsRange );
     void exportGrouping( bool isBar = false );
     void exportTrendlines( const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
     void exportMarker( const css::uno::Reference< css::beans::XPropertySet >& xPropSet );

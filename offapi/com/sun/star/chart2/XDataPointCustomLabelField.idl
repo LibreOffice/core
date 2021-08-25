@@ -29,6 +29,34 @@ interface XDataPointCustomLabelField : XFormattedString2
 
     void setGuid( [in] string guid );
 
+    /**
+        Indicates whether the label field's content is sourced from a cell[range] or not.
+
+        @since LibreOffice 7.3
+    */
+    boolean getDataLabelsRange();
+
+    /**
+        Sets whether the label field's content is sourced from a cell[range] or not.
+
+        @since LibreOffice 7.3
+    */
+    void setDataLabelsRange( [in] boolean dataLabelsRange );
+
+    /**
+        Returns the address of the cell[range] from which the content of this field is sourced.
+
+        @since LibreOffice 7.3
+    */
+    string getCellRange();
+
+    /**
+        Sets the address of the cell[range] from which the content of this field is sourced.
+
+        @since LibreOffice 7.3
+    */
+    void setCellRange( [in] string cellRange );
+
 };
 
 
