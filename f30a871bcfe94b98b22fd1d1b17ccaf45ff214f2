@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f03ef062_dbe4714c",
+        "filename": "include/vcl/outdevstate.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-08-25T15:58:15Z",
+      "side": 1,
+      "message": "I\u0027m trying to keep this in module dependency order, I find it helpful when I\u0027m groking the source.",
+      "parentUuid": "804143fe_dfff3250",
+      "revId": "f30a871bcfe94b98b22fd1d1b17ccaf45ff214f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6beed6fd_7f72be4b",
         "filename": "include/vcl/outdevstate.hxx",
         "patchSetId": 16
@@ -47,6 +65,24 @@
       "writtenOn": "2021-08-25T13:36:13Z",
       "side": 1,
       "message": "Absolutely! I didn\u0027t know you could do that, now that you can that\u0027s a total no-brainer - will do soon.",
+      "parentUuid": "6beed6fd_7f72be4b",
+      "revId": "f30a871bcfe94b98b22fd1d1b17ccaf45ff214f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b220250e_90c903c8",
+        "filename": "include/vcl/outdevstate.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-08-25T15:58:15Z",
+      "side": 1,
+      "message": "Ack",
       "parentUuid": "6beed6fd_7f72be4b",
       "revId": "f30a871bcfe94b98b22fd1d1b17ccaf45ff214f2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
