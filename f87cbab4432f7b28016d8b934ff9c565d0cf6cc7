@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3eddb54f_3b8ee0be",
+        "filename": "compilerplugins/clang/store/bodynotinblock.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-08-26T12:01:13Z",
+      "side": 0,
+      "message": "You should also remove this line, and similar lines in other files.",
+      "revId": "f87cbab4432f7b28016d8b934ff9c565d0cf6cc7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "214267c8_f7bd56df",
+        "filename": "compilerplugins/clang/store/bodynotinblock.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-08-26T12:01:13Z",
+      "side": 0,
+      "message": "You should remove this extra line in all the files you have changed.",
+      "revId": "f87cbab4432f7b28016d8b934ff9c565d0cf6cc7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
