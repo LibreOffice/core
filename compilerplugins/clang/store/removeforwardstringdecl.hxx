@@ -9,8 +9,7 @@
  *
  */
 
-#ifndef REMOVEFORWARDSTRINGDECL_H
-#define REMOVEFORWARDSTRINGDECL_H
+#pragma once
 
 #include "plugin.hxx"
 
@@ -29,7 +28,5 @@ class RemoveForwardStringDecl
     };
 
 } // namespace
-
-#endif // REMOVEFORWARDSTRINGDECL_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
