@@ -115,6 +115,7 @@
 
 #include <vcl/BitmapTools.hxx>
 #include <comphelper/lok.hxx>
+#include <vcl/GraphicLoader.hxx>
 
 #define COL_NOTES_SIDEPANE                  Color(230,230,230)
 #define COL_NOTES_SIDEPANE_BORDER           Color(200,200,200)
@@ -1689,6 +1690,13 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, vcl::RenderContext &rOu
     }
 
     GraphicObject *pGrf = const_cast<GraphicObject*>(rBrush.GetGraphicObject());
+
+    OUString aOriginURL = pGrf->GetGraphic().getOriginURL();
+    if (pGrf->GetGraphic().GetType() == GraphicType::Default && !aOriginURL.isEmpty())
+    {
+        Graphic aGraphic = vcl::graphic::loadFromURL(aOriginURL);
+        pGrf->SetGraphic(aGraphic);
+    }
 
     // Outsource drawing of background with a background color
     ::lcl_DrawGraphicBackground( rBrush, rOutDev, aAlignedGrfRect, *pGrf, bGrfNum, properties, bBackgrdAlreadyDrawn );
