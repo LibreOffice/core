@@ -118,10 +118,6 @@
 #include <svtools/optionsdrawinglayer.hxx>
 #include <vcl/GraphicLoader.hxx>
 
-#define COL_NOTES_SIDEPANE                  Color(230,230,230)
-#define COL_NOTES_SIDEPANE_BORDER           Color(200,200,200)
-#define COL_NOTES_SIDEPANE_SCROLLAREA       Color(230,230,220)
-
 using namespace ::editeng;
 using namespace ::com::sun::star;
 
@@ -6079,23 +6075,23 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     _pViewShell->GetOut()->SetLineColor();
     if (!bRight)
     {
-        _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE_BORDER);
+        _pViewShell->GetOut()->SetFillColor(SwViewOption::GetObjectBoundariesColor());
         _pViewShell->GetOut()->DrawRect(tools::Rectangle(Point(aPageRect.Left()-pMgr->GetSidebarBorderWidth(),aPageRect.Top()),Size(pMgr->GetSidebarBorderWidth(),aPageRect.Height())))    ;
         if (Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
             _pViewShell->GetOut()->SetFillColor(COL_BLACK);
         else
-            _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE);
+            _pViewShell->GetOut()->SetFillColor(SwViewOption::GetSectionBoundColor());
         _pViewShell->GetOut()->DrawRect(tools::Rectangle(Point(aPageRect.Left()-pMgr->GetSidebarWidth()-pMgr->GetSidebarBorderWidth(),aPageRect.Top()),Size(pMgr->GetSidebarWidth(),aPageRect.Height())))  ;
     }
     else
     {
-        _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE_BORDER);
+        _pViewShell->GetOut()->SetFillColor(SwViewOption::GetObjectBoundariesColor());
         SwRect aSidebarBorder(aPageRect.TopRight(),Size(pMgr->GetSidebarBorderWidth(),aPageRect.Height()));
         _pViewShell->GetOut()->DrawRect(aSidebarBorder.SVRect());
         if (Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
             _pViewShell->GetOut()->SetFillColor(COL_BLACK);
         else
-            _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE);
+            _pViewShell->GetOut()->SetFillColor(SwViewOption::GetSectionBoundColor());
         SwRect aSidebar(Point(aPageRect.Right()+pMgr->GetSidebarBorderWidth(),aPageRect.Top()),Size(pMgr->GetSidebarWidth(),aPageRect.Height()));
         _pViewShell->GetOut()->DrawRect(aSidebar.SVRect());
     }
@@ -6124,7 +6120,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
         else
         {
             _pViewShell->GetOut()->SetLineColor(COL_BLACK);
-            _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE_SCROLLAREA);
+            _pViewShell->GetOut()->SetFillColor(COL_LIGHTGRAY);
         }
         _pViewShell->GetOut()->DrawRect(aRectBottom);
         _pViewShell->GetOut()->DrawLine(aPointBottom + Point(pMgr->GetSidebarWidth()/3,0), aPointBottom + Point(pMgr->GetSidebarWidth()/3 , _pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()));
@@ -6145,7 +6141,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     else
     {
         _pViewShell->GetOut()->SetLineColor(COL_BLACK);
-        _pViewShell->GetOut()->SetFillColor(COL_NOTES_SIDEPANE_SCROLLAREA);
+        _pViewShell->GetOut()->SetFillColor(COL_LIGHTGRAY);
     }
     _pViewShell->GetOut()->DrawRect(aRectTop);
     _pViewShell->GetOut()->DrawLine(aPointTop + Point(pMgr->GetSidebarWidth()/3*2,0), aPointTop + Point(pMgr->GetSidebarWidth()/3*2 , _pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()));
