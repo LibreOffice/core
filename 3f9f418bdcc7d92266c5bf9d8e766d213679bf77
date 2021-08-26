@@ -22,6 +22,30 @@
       "revId": "3f9f418bdcc7d92266c5bf9d8e766d213679bf77",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b262ae31_1fc0d935",
+        "filename": "sc/source/filter/xml/xmlexprt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 868,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-08-26T17:56:02Z",
+      "side": 0,
+      "message": "Just moved it down in the call, for consistency with this fix",
+      "parentUuid": "ea5d7e4e_d17efcd4",
+      "range": {
+        "startLine": 868,
+        "startChar": 8,
+        "endLine": 868,
+        "endChar": 18
+      },
+      "revId": "3f9f418bdcc7d92266c5bf9d8e766d213679bf77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
