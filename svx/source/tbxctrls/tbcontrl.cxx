@@ -2172,8 +2172,8 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld:
     /*
      *  1       2        3         4            5
      *  ------------------------------------------------------
-     *  NONE    LEFT     RIGHT     LEFTRIGHT    DIAGONALLEFT
-     *  TOP     BOTTOM   TOPBOTTOM OUTER        DIAGONALRIGHT
+     *  NONE    LEFT     RIGHT     LEFTRIGHT    DIAGONALDOWN
+     *  TOP     BOTTOM   TOPBOTTOM OUTER        DIAGONALUP
      *  ------------------------------------------------------
      *  HOR     HORINNER VERINNER   ALL         CRISSCROSS      <- can be switched of via bParagraphMode
      */
@@ -2224,13 +2224,13 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
     SvxBorderLine       theDefLine;
 
-    // diagonal left border
-    SvxBorderLine       dLeftBorderLine( nullptr, 1 );
-    SvxLineItem         dLeftLineItem( SID_ATTR_BORDER_DIAG_TLBR );
+    // diagonal down border
+    SvxBorderLine       dDownBorderLine( nullptr, 1 );
+    SvxLineItem         dDownLineItem( SID_ATTR_BORDER_DIAG_TLBR );
 
-    // diagonal right border
-    SvxBorderLine       dRightBorderLine( nullptr, 1 );
-    SvxLineItem         dRightLineItem( SID_ATTR_BORDER_DIAG_BLTR );
+    // diagonal up border
+    SvxBorderLine       dUpBorderLine( nullptr, 1 );
+    SvxLineItem         dUpLineItem( SID_ATTR_BORDER_DIAG_BLTR );
 
     SvxBorderLine       *pLeft = nullptr,
                         *pRight = nullptr,
@@ -2246,8 +2246,8 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     {
         case 1: nValidFlags |= FrmValidFlags::AllMask;
                 // set nullptr to remove diagonal lines
-                dLeftLineItem.SetLine(nullptr);
-                dRightLineItem.SetLine(nullptr);
+                dDownLineItem.SetLine(nullptr);
+                dUpLineItem.SetLine(nullptr);
         break;  // NONE
         case 2: pLeft = &theDefLine;
                 nValidFlags |= FrmValidFlags::Left;
@@ -2258,8 +2258,8 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
         case 4: pLeft = pRight = &theDefLine;
                 nValidFlags |=  FrmValidFlags::Right|FrmValidFlags::Left;
         break;  // LEFTRIGHT
-        case 5: dLeftLineItem.SetLine(&dLeftBorderLine);
-        break;  // DIAGONAL LEFT
+        case 5: dDownLineItem.SetLine(&dDownBorderLine);
+        break;  // DIAGONAL DOWN
         case 6: pTop = &theDefLine;
                 nValidFlags |= FrmValidFlags::Top;
         break;  // TOP
@@ -2273,8 +2273,8 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
                 nValidFlags |= FrmValidFlags::Left | FrmValidFlags::Right | FrmValidFlags::Top | FrmValidFlags::Bottom;
         break;  // OUTER
         case 10:
-                dRightLineItem.SetLine(&dRightBorderLine);
-        break;  // DIAGONAL RIGHT
+                dUpLineItem.SetLine(&dUpBorderLine);
+        break;  // DIAGONAL UP
 
         // Inner Table:
         case 11: // HOR
@@ -2307,8 +2307,8 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
 
         case 15:
             // set both diagonal lines to draw criss-cross line
-            dLeftLineItem.SetLine(&dLeftBorderLine);
-            dRightLineItem.SetLine(&dRightBorderLine);
+            dDownLineItem.SetLine(&dDownBorderLine);
+            dUpLineItem.SetLine(&dUpBorderLine);
             break;  // CRISS-CROSS
 
         default:
@@ -2317,22 +2317,22 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
 
     if (nSel == 5)
     {
-        // apply diagonal left border
+        // apply diagonal down border
         Any a;
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = "BorderTLBR";
-        dLeftLineItem.QueryValue( a );
+        dDownLineItem.QueryValue( a );
         aArgs[0].Value = a;
 
         mxControl->dispatchCommand( ".uno:BorderTLBR", aArgs );
     }
     else if (nSel == 10)
     {
-        // apply diagonal right border
+        // apply diagonal up border
         Any a;
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = "BorderBLTR";
-        dRightLineItem.QueryValue( a );
+        dUpLineItem.QueryValue( a );
         aArgs[0].Value = a;
 
         mxControl->dispatchCommand( ".uno:BorderBLTR", aArgs );
@@ -2340,22 +2340,22 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     else if (nSel == 15)
     {
         // to draw criss-cross line,
-        // we need to set diagonal left and
-        // diagonal right border together
+        // we need to set diagonal down and
+        // diagonal up border together
 
-        // apply diagonal left border (TLBR)
-        Any aLeft;
+        // apply diagonal down border (TLBR)
+        Any aDown;
         Sequence< PropertyValue > aArgsTLBR( 1 );
         aArgsTLBR[0].Name = "BorderTLBR";
-        dLeftLineItem.QueryValue( aLeft );
-        aArgsTLBR[0].Value = aLeft;
+        dDownLineItem.QueryValue( aDown );
+        aArgsTLBR[0].Value = aDown;
 
-        // apply diagonal right border (BLTR)
-        Any aRight;
+        // apply diagonal up border (BLTR)
+        Any aUp;
         Sequence< PropertyValue > aArgsBLTR( 1 );
         aArgsBLTR[0].Name = "BorderBLTR";
-        dRightLineItem.QueryValue( aRight );
-        aArgsBLTR[0].Value = aRight;
+        dUpLineItem.QueryValue( aUp );
+        aArgsBLTR[0].Value = aUp;
 
         // execute dispatchCommand for both of them
         mxControl->dispatchCommand( ".uno:BorderTLBR", aArgsTLBR );
@@ -2381,27 +2381,27 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
 
         // if nSel == 1, we should remove all lines from the cell.
         // additionally, we should remove diagonal borders here,
-        // because diagonal left and right borders are NOT
+        // because diagonal down and up borders are NOT
         // the member of aBorderOuter and aBorderInner.
         if (nSel == 1)
         {
-            // remove left diagonal line
+            // remove diagonal down line
             {
                 Any a;
                 Sequence< PropertyValue > aArgs( 1 );
                 aArgs[0].Name = "BorderTLBR";
-                dLeftLineItem.QueryValue( a );
+                dDownLineItem.QueryValue( a );
                 aArgs[0].Value = a;
 
                 mxControl->dispatchCommand( ".uno:BorderTLBR", aArgs );
             }
 
-            // remove right diagonal line
+            // remove diagonal up line
             {
                 Any a;
                 Sequence< PropertyValue > aArgs( 1 );
                 aArgs[0].Name = "BorderBLTR";
-                dRightLineItem.QueryValue( a );
+                dUpLineItem.QueryValue( a );
                 aArgs[0].Value = a;
 
                 mxControl->dispatchCommand( ".uno:BorderBLTR", aArgs );
@@ -2484,13 +2484,13 @@ void SvxFrameWindow_Impl::InitImageList()
         {BitmapEx(RID_SVXBMP_FRAME2), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYLEFT)},
         {BitmapEx(RID_SVXBMP_FRAME3), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYRIGHT)},
         {BitmapEx(RID_SVXBMP_FRAME4), SvxResId(RID_SVXSTR_PARA_PRESET_LEFTRIGHT)},
-        {BitmapEx(RID_SVXBMP_FRAME14), SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALLEFT)}, // diagonal left border
+        {BitmapEx(RID_SVXBMP_FRAME14), SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALDOWN)}, // diagonal down border
 
         {BitmapEx(RID_SVXBMP_FRAME5), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYTOP)},
         {BitmapEx(RID_SVXBMP_FRAME6), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYTBOTTOM)},
         {BitmapEx(RID_SVXBMP_FRAME7), SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOM)},
         {BitmapEx(RID_SVXBMP_FRAME8), SvxResId(RID_SVXSTR_TABLE_PRESET_ONLYOUTER)},
-        {BitmapEx(RID_SVXBMP_FRAME13), SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALRIGHT)}, // diagonal right border
+        {BitmapEx(RID_SVXBMP_FRAME13), SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALUP)}, // diagonal up border
 
         {BitmapEx(RID_SVXBMP_FRAME9), SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOMHORI)},
         {BitmapEx(RID_SVXBMP_FRAME10), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERHORI)},
