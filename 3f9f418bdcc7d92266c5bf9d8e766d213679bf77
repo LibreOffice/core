@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea5d7e4e_d17efcd4",
+        "filename": "sc/source/filter/xml/xmlexprt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 868,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-08-26T17:38:01Z",
+      "side": 0,
+      "message": "Why removing this if ?",
+      "range": {
+        "startLine": 868,
+        "startChar": 8,
+        "endLine": 868,
+        "endChar": 18
+      },
+      "revId": "3f9f418bdcc7d92266c5bf9d8e766d213679bf77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
