@@ -70,6 +70,24 @@
     },
     {
       "key": {
+        "uuid": "4b390431_27345165",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 44
+      },
+      "lineNbr": 1038,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-08-26T09:09:06Z",
+      "side": 1,
+      "message": "For this, we have to make another isVisible function in StyleList?",
+      "parentUuid": "0fad7d6e_5c5631dd",
+      "revId": "694b6795002d7538aa51e803b42f1c6972cd4efd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ceb0a338_389cf0ed",
         "filename": "sfx2/source/dialog/templdlg.cxx",
         "patchSetId": 44
