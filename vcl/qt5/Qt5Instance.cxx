@@ -285,13 +285,21 @@ void Qt5Instance::deleteObjectLater(QObject* pObject) { pObject->deleteLater(); 
 
 SalFrame* Qt5Instance::CreateChildFrame(SystemParentData* /*pParent*/, SalFrameStyleFlags nStyle)
 {
-    return new Qt5Frame(nullptr, nStyle, m_bUseCairo);
+    SalFrame* pRet(nullptr);
+    RunInMainThread([&, this]() { pRet = new Qt5Frame(nullptr, nStyle, useCairo()); });
+    assert(pRet);
+    return pRet;
 }
 
 SalFrame* Qt5Instance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle)
 {
     assert(!pParent || dynamic_cast<Qt5Frame*>(pParent));
-    return new Qt5Frame(static_cast<Qt5Frame*>(pParent), nStyle, m_bUseCairo);
+
+    SalFrame* pRet(nullptr);
+    RunInMainThread(
+        [&, this]() { pRet = new Qt5Frame(static_cast<Qt5Frame*>(pParent), nStyle, useCairo()); });
+    assert(pRet);
+    return pRet;
 }
 
 void Qt5Instance::DestroyFrame(SalFrame* pFrame)
@@ -306,7 +314,11 @@ void Qt5Instance::DestroyFrame(SalFrame* pFrame)
 SalObject* Qt5Instance::CreateObject(SalFrame* pParent, SystemWindowData*, bool bShow)
 {
     assert(!pParent || dynamic_cast<Qt5Frame*>(pParent));
-    return new Qt5Object(static_cast<Qt5Frame*>(pParent), bShow);
+
+    SalObject* pRet(nullptr);
+    RunInMainThread([&]() { pRet = new Qt5Object(static_cast<Qt5Frame*>(pParent), bShow); });
+    assert(pRet);
+    return pRet;
 }
 
 void Qt5Instance::DestroyObject(SalObject* pObject)
