@@ -2668,8 +2668,8 @@ Size Edit::CalcSize(sal_Int32 nChars) const
 {
     // width for N characters, independent from content.
     // works only correct for fixed fonts, average otherwise
-    Size aSz( GetTextWidth( "x" ), GetTextHeight() );
-    aSz.setWidth( aSz.Width() * nChars );
+    float fUnitWidth = std::max(approximate_char_width(), approximate_digit_width());
+    Size aSz(fUnitWidth * nChars, GetTextHeight());
     aSz.AdjustWidth(ImplGetExtraXOffset() * 2 );
     aSz = CalcWindowSize( aSz );
     return aSz;
@@ -2679,8 +2679,8 @@ sal_Int32 Edit::GetMaxVisChars() const
 {
     const vcl::Window* pW = mpSubEdit ? mpSubEdit : this;
     sal_Int32 nOutWidth = pW->GetOutputSizePixel().Width();
-    sal_Int32 nCharWidth = GetTextWidth( "x" );
-    return nCharWidth ? nOutWidth/nCharWidth : 0;
+    float fUnitWidth = std::max(approximate_char_width(), approximate_digit_width());
+    return nOutWidth / fUnitWidth;
 }
 
 namespace vcl
