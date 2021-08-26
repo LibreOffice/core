@@ -88,6 +88,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
     mnHID_SelectionChange( 0 ),
     bVersionWidthUnset( false ),
     mbPreviewState( false ),
+    mbInitialized(false),
     mHID_Preview( 0 ),
     m_pPreview( nullptr ),
     m_pPseudoFilter( nullptr )
@@ -899,6 +900,13 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute()
 {
     SolarMutexGuard g;
 
+    if (!mbInitialized)
+    {
+        // tdf#144084 if not initialized default to FILEOPEN_SIMPLE
+        impl_initialize(nullptr, FILEOPEN_SIMPLE);
+        assert(mbInitialized);
+    }
+
     OSL_ASSERT( m_pDialog != nullptr );
 
     sal_Int16 retVal = 0;
@@ -1644,7 +1652,12 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
     sal_Int16 templateId = -1;
     aAny >>= templateId;
 
-    m_pParentWidget = GetParentWidget(aArguments);
+    impl_initialize(GetParentWidget(aArguments), templateId);
+}
+
+void SalGtkFilePicker::impl_initialize(GtkWidget* pParentWidget, sal_Int16 templateId)
+{
+    m_pParentWidget = pParentWidget;
 
     GtkFileChooserAction eAction = GTK_FILE_CHOOSER_ACTION_OPEN;
     OString sOpen = getOpenText();
@@ -1792,6 +1805,8 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
             gtk_widget_show( m_pHBoxs[ nTVIndex ] );
         }
     }
+
+    mbInitialized = true;
 }
 
 void SalGtkFilePicker::preview_toggled_cb( GObject *cb, SalGtkFilePicker* pobjFP )
