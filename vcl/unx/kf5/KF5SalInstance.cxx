@@ -42,13 +42,22 @@ KF5SalInstance::KF5SalInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCa
 
 SalFrame* KF5SalInstance::CreateChildFrame(SystemParentData* /*pParent*/, SalFrameStyleFlags nStyle)
 {
-    return new KF5SalFrame(nullptr, nStyle, useCairo());
+    SalFrame* pRet(nullptr);
+    RunInMainThread([&, this]() { pRet = new KF5SalFrame(nullptr, nStyle, useCairo()); });
+    assert(pRet);
+    return pRet;
 }
 
-SalFrame* KF5SalInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nState)
+SalFrame* KF5SalInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle)
 {
     assert(!pParent || dynamic_cast<KF5SalFrame*>(pParent));
-    return new KF5SalFrame(static_cast<KF5SalFrame*>(pParent), nState, useCairo());
+
+    SalFrame* pRet(nullptr);
+    RunInMainThread([&, this]() {
+        pRet = new KF5SalFrame(static_cast<KF5SalFrame*>(pParent), nStyle, useCairo());
+    });
+    assert(pRet);
+    return pRet;
 }
 
 bool KF5SalInstance::hasNativeFileSelection() const
