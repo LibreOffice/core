@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "914fe683_0358de88",
+        "filename": "include/tools/cpuid.hxx",
+        "patchSetId": 28
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-08-26T11:57:28Z",
+      "side": 1,
+      "message": "Correction here:\nhttps://gerrit.libreoffice.org/c/core/+/121090",
+      "parentUuid": "19c16657_84b41991",
+      "range": {
+        "startLine": 30,
+        "startChar": 14,
+        "endLine": 30,
+        "endChar": 19
+      },
+      "revId": "5b9cf5881ef53fac5f1d8376f687dbadf9d3cf2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b9706704_77c91904",
         "filename": "include/tools/cpuid.hxx",
         "patchSetId": 28
@@ -45,6 +69,30 @@
       "revId": "5b9cf5881ef53fac5f1d8376f687dbadf9d3cf2b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "719f5688_5970d13a",
+        "filename": "include/tools/cpuid.hxx",
+        "patchSetId": 28
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-08-26T11:57:28Z",
+      "side": 1,
+      "message": "Correction here:\nhttps://gerrit.libreoffice.org/c/core/+/121090",
+      "parentUuid": "b9706704_77c91904",
+      "range": {
+        "startLine": 36,
+        "startChar": 107,
+        "endLine": 36,
+        "endChar": 112
+      },
+      "revId": "5b9cf5881ef53fac5f1d8376f687dbadf9d3cf2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
