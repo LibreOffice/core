@@ -571,7 +571,8 @@ public:
     friend inline tools::Rectangle operator + ( const tools::Rectangle& rRect, const Point& rPt );
     friend inline tools::Rectangle operator - ( const tools::Rectangle& rRect, const Point& rPt );
 
-    // ONE
+    tools::Long         getX() const { return nLeft; }
+    tools::Long         getY() const { return nTop; }
     /// Returns the difference between right and left, assuming the range includes one end, but not the other.
     tools::Long getWidth() const { return Right() - Left(); }
     /// Returns the difference between bottom and top, assuming the range includes one end, but not the other.
@@ -745,7 +746,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
         return stream << "EMPTY";
     else
         return stream << rectangle.GetWidth() << 'x' << rectangle.GetHeight()
-                      << "@(" << rectangle.Left() << ',' << rectangle.Top() << ")";
+                      << "@(" << rectangle.getX() << ',' << rectangle.getY() << ")";
 }
 }
 
