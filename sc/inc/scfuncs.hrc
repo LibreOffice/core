@@ -3742,13 +3742,13 @@ const TranslateId SC_OPCODE_REPLACE_ARY[] =
 // -=*# Resource for function FIXED #*=-
 const TranslateId SC_OPCODE_FIXED_ARY[] =
 {
-    NC_("SC_OPCODE_FIXED", "Formats a number with a fixed number of places after the decimal point and thousands separator."),
+    NC_("SC_OPCODE_FIXED", "Converts a number to text formatted with a specified number of decimal places and optional thousands separators, using locale-specific settings."),
     NC_("SC_OPCODE_FIXED", "Number"),
-    NC_("SC_OPCODE_FIXED", "The number to be formatted."),
+    NC_("SC_OPCODE_FIXED", "The number is rounded to Decimals places (after the decimal separator)."),
     NC_("SC_OPCODE_FIXED", "Decimals"),
-    NC_("SC_OPCODE_FIXED", "Decimal places. The number of fixed decimal places that are to be displayed."),
+    NC_("SC_OPCODE_FIXED", "Refers to the number of decimal places to be displayed. If Decimals is negative, Number is rounded to ABS(Decimals) places to the left from the decimal point. If Decimals is a fraction, it is truncated actually ignoring what is the closest integer."),
     NC_("SC_OPCODE_FIXED", "No thousands separators"),
-    NC_("SC_OPCODE_FIXED", "Thousands separator. If 0 or omitted the locale group separator is used else the separator is suppressed.")
+    NC_("SC_OPCODE_FIXED", "Determines whether the thousands separator is used. If it is TRUE or non-zero, then group separators are omitted from the resulting string. If the parameter is equal to 0 or if it is missing altogether, the thousands separators of your current locale setting are displayed.")
 };
 
 // -=*# Resource for function LEN #*=-
