@@ -527,8 +527,10 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
 
     ScSplitMode eExHSplitMode = eHSplitMode;
     ScSplitMode eExVSplitMode = eVSplitMode;
+    //cell adress
     SCCOL nExFixPosX = nFixPosX;
     SCROW nExFixPosY = nFixPosY;
+    //pixel
     long nExHSplitPos = nHSplitPos;
     long nExVSplitPos = nVSplitPos;
 
@@ -543,20 +545,26 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
     pSettings[SC_CURSOR_X].Value <<= sal_Int32(nCurX);
     pSettings[SC_CURSOR_Y].Name = SC_CURSORPOSITIONY;
     pSettings[SC_CURSOR_Y].Value <<= sal_Int32(nCurY);
-    pSettings[SC_HORIZONTAL_SPLIT_MODE].Name = SC_HORIZONTALSPLITMODE;
-    pSettings[SC_HORIZONTAL_SPLIT_MODE].Value <<= sal_Int16(eExHSplitMode);
-    pSettings[SC_VERTICAL_SPLIT_MODE].Name = SC_VERTICALSPLITMODE;
-    pSettings[SC_VERTICAL_SPLIT_MODE].Value <<= sal_Int16(eExVSplitMode);
-    pSettings[SC_HORIZONTAL_SPLIT_POSITION].Name = SC_HORIZONTALSPLITPOSITION;
-    if (eExHSplitMode == SC_SPLIT_FIX)
-        pSettings[SC_HORIZONTAL_SPLIT_POSITION].Value <<= sal_Int32(nExFixPosX);
-    else
-        pSettings[SC_HORIZONTAL_SPLIT_POSITION].Value <<= sal_Int32(nExHSplitPos);
-    pSettings[SC_VERTICAL_SPLIT_POSITION].Name = SC_VERTICALSPLITPOSITION;
-    if (eExVSplitMode == SC_SPLIT_FIX)
-        pSettings[SC_VERTICAL_SPLIT_POSITION].Value <<= sal_Int32(nExFixPosY);
-    else
-        pSettings[SC_VERTICAL_SPLIT_POSITION].Value <<= sal_Int32(nExVSplitPos);
+
+    // Write freezepan data only when freeze pans are set
+    if(nExFixPosX != 0 || nExFixPosY != 0 || nExHSplitPos != 0 || nExVSplitPos != 0)
+    {
+        pSettings[SC_HORIZONTAL_SPLIT_MODE].Name = SC_HORIZONTALSPLITMODE;
+        pSettings[SC_HORIZONTAL_SPLIT_MODE].Value <<= sal_Int16(eExHSplitMode);
+        pSettings[SC_VERTICAL_SPLIT_MODE].Name = SC_VERTICALSPLITMODE;
+        pSettings[SC_VERTICAL_SPLIT_MODE].Value <<= sal_Int16(eExVSplitMode);
+        pSettings[SC_HORIZONTAL_SPLIT_POSITION].Name = SC_HORIZONTALSPLITPOSITION;
+        if (eExHSplitMode == SC_SPLIT_FIX)
+            pSettings[SC_HORIZONTAL_SPLIT_POSITION].Value <<= sal_Int32(nExFixPosX);
+        else
+            pSettings[SC_HORIZONTAL_SPLIT_POSITION].Value <<= sal_Int32(nExHSplitPos);
+        pSettings[SC_VERTICAL_SPLIT_POSITION].Name = SC_VERTICALSPLITPOSITION;
+        if (eExVSplitMode == SC_SPLIT_FIX)
+            pSettings[SC_VERTICAL_SPLIT_POSITION].Value <<= sal_Int32(nExFixPosY);
+        else
+            pSettings[SC_VERTICAL_SPLIT_POSITION].Value <<= sal_Int32(nExVSplitPos);
+    }
+
     // Prevent writing odd settings that would make crash versions that
     // don't apply SanitizeWhichActive() when reading the settings.
     // See tdf#117093
@@ -4245,7 +4253,6 @@ void ScViewData::OverrideWithLOKFreeze(ScSplitMode& eExHSplitMode, ScSplitMode& 
         if (eExHSplitMode == SC_SPLIT_FIX)
         {
             nExFixPosX = nFreezeCol;
-            pThisTab->nPosX[SC_SPLIT_RIGHT] = nFreezeCol;
         }
         else
             bConvertToScrPosX = true;
@@ -4259,7 +4266,6 @@ void ScViewData::OverrideWithLOKFreeze(ScSplitMode& eExHSplitMode, ScSplitMode& 
         if (eExVSplitMode == SC_SPLIT_FIX)
         {
             nExFixPosY = nFreezeRow;
-            pThisTab->nPosY[SC_SPLIT_BOTTOM] = nFreezeRow;
         }
         else
             bConvertToScrPosY = true;
