@@ -24,6 +24,7 @@
 #include "elements.hxx"
 #include "outact.hxx"
 
+#include <o3tl/float_int_conversion.hxx>
 #include <o3tl/safeint.hxx>
 
 #include <memory>
@@ -545,11 +546,24 @@ void CGM::ImplDoClass4()
                     {
                         double fLeft = aCenter.X - aRadius.X;
                         double fTop = aCenter.Y - aRadius.X;
-                        bUseless = useless(fLeft) || useless(fTop);
+                        double fRight = fLeft + (2 * aRadius.X);
+                        double fBottom = fTop + (2 * aRadius.X);
+                        bUseless = useless(fLeft) || useless(fTop) || useless(fRight) || useless(fBottom);
                         if (!bUseless)
                         {
-                            tools::Rectangle aBoundingBox(fLeft, fTop);
-                            aBoundingBox.SaturatingSetSize(Size(2 * aRadius.X, 2 * aRadius.X));
+                            double fWidth = fLeft + fRight;
+                            bUseless = !o3tl::convertsToAtLeast(fWidth, std::numeric_limits<tools::Long>::min()) ||
+                                       !o3tl::convertsToAtMost(fWidth, std::numeric_limits<tools::Long>::max());
+                        }
+                        if (!bUseless)
+                        {
+                            double fHeight = fTop + fBottom;
+                            bUseless = !o3tl::convertsToAtLeast(fHeight, std::numeric_limits<tools::Long>::min()) ||
+                                       !o3tl::convertsToAtMost(fHeight, std::numeric_limits<tools::Long>::max());
+                        }
+                        if (!bUseless)
+                        {
+                            tools::Rectangle aBoundingBox(fLeft, fTop, fRight, fBottom);
                             tools::Polygon aPolygon( aBoundingBox,
                                 Point( static_cast<tools::Long>(vector[ 0 ]), static_cast<tools::Long>(vector[ 1 ]) ),
                                 Point( static_cast<tools::Long>(vector[ 2 ]), static_cast<tools::Long>(vector[ 3 ]) ), PolyStyle::Arc );
