@@ -17,6 +17,7 @@
 #include <tools/UnitConversion.hxx>
 #endif
 
+#include <pdf/PdfConfig.hxx>
 #include <vcl/graph.hxx>
 #include <bitmapwriteaccess.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -132,27 +133,12 @@ VectorGraphicDataArray createVectorGraphicDataArray(SvStream& rStream)
 
 namespace vcl
 {
-/// Get the default PDF rendering resolution in DPI.
-static double getDefaultPdfResolutionDpi()
-{
-    // If an overriding default is set, use it.
-    const char* envar = ::getenv("PDFIMPORT_RESOLUTION_DPI");
-    if (envar)
-    {
-        const double dpi = atof(envar);
-        if (dpi > 0)
-            return dpi;
-    }
-
-    // Fallback to a sensible default.
-    return 96.;
-}
-
 size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& rBitmaps,
                         const size_t nFirstPage, int nPages, const basegfx::B2DTuple* pSizeHint)
 {
 #if HAVE_FEATURE_PDFIUM
-    static const double fResolutionDPI = getDefaultPdfResolutionDpi();
+    static const double fResolutionDPI = vcl::pdf::getDefaultPdfResolutionDpi();
+
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
 
     // Load the buffer using pdfium.
