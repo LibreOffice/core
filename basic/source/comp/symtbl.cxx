@@ -103,7 +103,7 @@ short SbiStringPool::Add(double n, SbxDataType t)
     }
 
     // tdf#143707 - add the content of the buffer to the string pool inclding its calculated length
-    return Add(OUString::createFromAscii(std::string_view(buf, size)));
+    return Add(OUString::fromUtf8(std::string_view(buf, size)));
 }
 
 SbiSymPool::SbiSymPool( SbiStringPool& r, SbiSymScope s, SbiParser* pP ) :
