@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb51a845_95b81c6f",
+        "filename": "vcl/source/control/imp_listbox.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-26T14:04:35Z",
+      "side": 1,
+      "message": "Not only \"not CJK\". In fact, any character outside of pure ASCII would be longer than 1 byte in UTF-8; Cyrillic, Greek, Arabic, ...",
+      "revId": "74b5c20ff1855b117b5abadd8a9fdae817fb689e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
