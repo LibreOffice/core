@@ -461,6 +461,9 @@ private:
     void CalcSizeValueSet();
     DECL_LINK( SelectHdl, ValueSet*, void );
 
+    void SetDiagonalDownBorder(const SvxLineItem& dDownLineItem);
+    void SetDiagonalUpBorder(const SvxLineItem& dUpLineItem);
+
 public:
     SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld::Widget* pParent);
     virtual void GrabFocus() override
@@ -2171,8 +2174,8 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld:
     /*
      *  1       2        3         4            5
      *  ------------------------------------------------------
-     *  NONE    LEFT     RIGHT     LEFTRIGHT    DIAGONALLEFT
-     *  TOP     BOTTOM   TOPBOTTOM OUTER        DIAGONALRIGHT
+     *  NONE    LEFT     RIGHT     LEFTRIGHT    DIAGONALDOWN
+     *  TOP     BOTTOM   TOPBOTTOM OUTER        DIAGONALUP
      *  ------------------------------------------------------
      *  HOR     HORINNER VERINNER   ALL         CRISSCROSS      <- can be switched of via bParagraphMode
      */
@@ -2223,13 +2226,15 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
     SvxBorderLine       theDefLine;
 
-    // diagonal left border
-    SvxBorderLine       dLeftBorderLine( nullptr, 1 );
-    SvxLineItem         dLeftLineItem( SID_ATTR_BORDER_DIAG_TLBR );
+    // diagonal down border
+    SvxBorderLine       dDownBorderLine(nullptr, 1);
+    SvxLineItem         dDownLineItem(SID_ATTR_BORDER_DIAG_TLBR);
 
-    // diagonal right border
-    SvxBorderLine       dRightBorderLine( nullptr, 1 );
-    SvxLineItem         dRightLineItem( SID_ATTR_BORDER_DIAG_BLTR );
+    // diagonal up border
+    SvxBorderLine       dUpBorderLine(nullptr, 1);
+    SvxLineItem         dUpLineItem(SID_ATTR_BORDER_DIAG_BLTR);
+
+    bool                bIsDiagonalBorder = false;
 
     SvxBorderLine       *pLeft = nullptr,
                         *pRight = nullptr,
@@ -2245,8 +2250,10 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     {
         case 1: nValidFlags |= FrmValidFlags::AllMask;
                 // set nullptr to remove diagonal lines
-                dLeftLineItem.SetLine(nullptr);
-                dRightLineItem.SetLine(nullptr);
+                dDownLineItem.SetLine(nullptr);
+                dUpLineItem.SetLine(nullptr);
+                SetDiagonalDownBorder(dDownLineItem);
+                SetDiagonalUpBorder(dUpLineItem);
         break;  // NONE
         case 2: pLeft = &theDefLine;
                 nValidFlags |= FrmValidFlags::Left;
@@ -2257,8 +2264,10 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
         case 4: pLeft = pRight = &theDefLine;
                 nValidFlags |=  FrmValidFlags::Right|FrmValidFlags::Left;
         break;  // LEFTRIGHT
-        case 5: dLeftLineItem.SetLine(&dLeftBorderLine);
-        break;  // DIAGONAL LEFT
+        case 5: dDownLineItem.SetLine(&dDownBorderLine);
+                SetDiagonalDownBorder(dDownLineItem);
+                bIsDiagonalBorder = true;
+        break;  // DIAGONAL DOWN
         case 6: pTop = &theDefLine;
                 nValidFlags |= FrmValidFlags::Top;
         break;  // TOP
@@ -2272,8 +2281,10 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
                 nValidFlags |= FrmValidFlags::Left | FrmValidFlags::Right | FrmValidFlags::Top | FrmValidFlags::Bottom;
         break;  // OUTER
         case 10:
-                dRightLineItem.SetLine(&dRightBorderLine);
-        break;  // DIAGONAL RIGHT
+                dUpLineItem.SetLine(&dUpBorderLine);
+                SetDiagonalUpBorder(dUpLineItem);
+                bIsDiagonalBorder = true;
+        break;  // DIAGONAL UP
 
         // Inner Table:
         case 11: // HOR
@@ -2306,61 +2317,21 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
 
         case 15:
             // set both diagonal lines to draw criss-cross line
-            dLeftLineItem.SetLine(&dLeftBorderLine);
-            dRightLineItem.SetLine(&dRightBorderLine);
-            break;  // CRISS-CROSS
+            dDownLineItem.SetLine(&dDownBorderLine);
+            dUpLineItem.SetLine(&dUpBorderLine);
+
+            SetDiagonalDownBorder(dDownLineItem);
+            SetDiagonalUpBorder(dUpLineItem);
+            bIsDiagonalBorder = true;
+            break; // CRISS-CROSS
 
         default:
         break;
     }
 
-    if (nSel == 5)
-    {
-        // apply diagonal left border
-        Any a;
-        Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = "BorderTLBR";
-        dLeftLineItem.QueryValue( a );
-        aArgs[0].Value = a;
-
-        mxControl->dispatchCommand( ".uno:BorderTLBR", aArgs );
-    }
-    else if (nSel == 10)
-    {
-        // apply diagonal right border
-        Any a;
-        Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = "BorderBLTR";
-        dRightLineItem.QueryValue( a );
-        aArgs[0].Value = a;
-
-        mxControl->dispatchCommand( ".uno:BorderBLTR", aArgs );
-    }
-    else if (nSel == 15)
-    {
-        // to draw criss-cross line,
-        // we need to set diagonal left and
-        // diagonal right border together
-
-        // apply diagonal left border (TLBR)
-        Any aLeft;
-        Sequence< PropertyValue > aArgsTLBR( 1 );
-        aArgsTLBR[0].Name = "BorderTLBR";
-        dLeftLineItem.QueryValue( aLeft );
-        aArgsTLBR[0].Value = aLeft;
-
-        // apply diagonal right border (BLTR)
-        Any aRight;
-        Sequence< PropertyValue > aArgsBLTR( 1 );
-        aArgsBLTR[0].Name = "BorderBLTR";
-        dRightLineItem.QueryValue( aRight );
-        aArgsBLTR[0].Value = aRight;
-
-        // execute dispatchCommand for both of them
-        mxControl->dispatchCommand( ".uno:BorderTLBR", aArgsTLBR );
-        mxControl->dispatchCommand( ".uno:BorderBLTR", aArgsBLTR );
-    }
-    else
+    // if diagonal borders selected,
+    // no need to execute this block
+    if (!bIsDiagonalBorder)
     {
         aBorderOuter.SetLine( pLeft, SvxBoxItemLine::LEFT );
         aBorderOuter.SetLine( pRight, SvxBoxItemLine::RIGHT );
@@ -2377,35 +2348,6 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
         aBorderInner.SetValid( SvxBoxInfoItemValidFlags::VERT,      bool(nValidFlags&FrmValidFlags::VInner));
         aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISTANCE );
         aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISABLE,   false );
-
-        // if nSel == 1, we should remove all lines from the cell.
-        // additionally, we should remove diagonal borders here,
-        // because diagonal left and right borders are NOT
-        // the member of aBorderOuter and aBorderInner.
-        if (nSel == 1)
-        {
-            // remove left diagonal line
-            {
-                Any a;
-                Sequence< PropertyValue > aArgs( 1 );
-                aArgs[0].Name = "BorderTLBR";
-                dLeftLineItem.QueryValue( a );
-                aArgs[0].Value = a;
-
-                mxControl->dispatchCommand( ".uno:BorderTLBR", aArgs );
-            }
-
-            // remove right diagonal line
-            {
-                Any a;
-                Sequence< PropertyValue > aArgs( 1 );
-                aArgs[0].Name = "BorderBLTR";
-                dRightLineItem.QueryValue( a );
-                aArgs[0].Value = a;
-
-                mxControl->dispatchCommand( ".uno:BorderBLTR", aArgs );
-            }
-        }
 
         Any a;
         Sequence< PropertyValue > aArgs( 2 );
@@ -2428,6 +2370,30 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     }
 
     mxControl->EndPopupMode();
+}
+
+void SvxFrameWindow_Impl::SetDiagonalDownBorder(const SvxLineItem& dDownLineItem)
+{
+    // apply diagonal down border
+    Any a;
+    Sequence<PropertyValue> aArgs(1);
+    aArgs[0].Name = "BorderTLBR";
+    dDownLineItem.QueryValue(a);
+    aArgs[0].Value = a;
+
+    mxControl->dispatchCommand(".uno:BorderTLBR", aArgs);
+}
+
+void SvxFrameWindow_Impl::SetDiagonalUpBorder(const SvxLineItem& dUpLineItem)
+{
+    // apply diagonal up border
+    Any a;
+    Sequence<PropertyValue> aArgs(1);
+    aArgs[0].Name = "BorderBLTR";
+    dUpLineItem.QueryValue(a);
+    aArgs[0].Value = a;
+
+    mxControl->dispatchCommand(".uno:BorderBLTR", aArgs);
 }
 
 void SvxFrameWindow_Impl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
@@ -2483,13 +2449,13 @@ void SvxFrameWindow_Impl::InitImageList()
         {BitmapEx(RID_SVXBMP_FRAME2), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYLEFT)},
         {BitmapEx(RID_SVXBMP_FRAME3), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYRIGHT)},
         {BitmapEx(RID_SVXBMP_FRAME4), SvxResId(RID_SVXSTR_PARA_PRESET_LEFTRIGHT)},
-        {BitmapEx(RID_SVXBMP_FRAME14), SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALLEFT)}, // diagonal left border
+        {BitmapEx(RID_SVXBMP_FRAME14), SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALDOWN)}, // diagonal down border
 
         {BitmapEx(RID_SVXBMP_FRAME5), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYTOP)},
         {BitmapEx(RID_SVXBMP_FRAME6), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYTBOTTOM)},
         {BitmapEx(RID_SVXBMP_FRAME7), SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOM)},
         {BitmapEx(RID_SVXBMP_FRAME8), SvxResId(RID_SVXSTR_TABLE_PRESET_ONLYOUTER)},
-        {BitmapEx(RID_SVXBMP_FRAME13), SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALRIGHT)}, // diagonal right border
+        {BitmapEx(RID_SVXBMP_FRAME13), SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALUP)}, // diagonal up border
 
         {BitmapEx(RID_SVXBMP_FRAME9), SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOMHORI)},
         {BitmapEx(RID_SVXBMP_FRAME10), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERHORI)},

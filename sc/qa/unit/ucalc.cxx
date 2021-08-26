@@ -5920,39 +5920,39 @@ void Test::testDiagonalBorders()
     const editeng::SvxBorderLine* pLine;
     const ScPatternAttr* pPat;
 
-    // diagonal left border
-    ::editeng::SvxBorderLine dLeftBorderLine( nullptr, 1 );
-    SvxLineItem dLeftLineItem( ATTR_BORDER_TLBR );
-    dLeftLineItem.SetLine(&dLeftBorderLine);
+    // diagonal down border
+    ::editeng::SvxBorderLine dDownBorderLine(nullptr, 1);
+    SvxLineItem dDownLineItem(ATTR_BORDER_TLBR);
+    dDownLineItem.SetLine(&dDownBorderLine);
 
-    // set diagonal left border to cell(A1)
-    m_pDoc->ApplyAttr(0, 0, 0, dLeftLineItem);
+    // set diagonal down border to cell(A1)
+    m_pDoc->ApplyAttr(0, 0, 0, dDownLineItem);
 
     aPos = { 0, 0, 0 };
     pPat = m_pDoc->GetPattern(aPos);
     CPPUNIT_ASSERT(pPat);
 
     pLine = pPat->GetItem(ATTR_BORDER_TLBR).GetLine();
-    CPPUNIT_ASSERT_MESSAGE("Diagonal left border was expected, but not found!", pLine);
+    CPPUNIT_ASSERT_MESSAGE("Diagonal down border was expected, but not found!", pLine);
 
-    // diagonal right border
-    ::editeng::SvxBorderLine dRightBorderLine( nullptr, 1 );
-    SvxLineItem dRightLineItem( ATTR_BORDER_BLTR );
-    dRightLineItem.SetLine(&dRightBorderLine);
+    // diagonal up border
+    ::editeng::SvxBorderLine dUpBorderLine(nullptr, 1);
+    SvxLineItem dUpLineItem(ATTR_BORDER_BLTR);
+    dUpLineItem.SetLine(&dUpBorderLine);
 
-    // set diagonal right border to cell(A2)
-    m_pDoc->ApplyAttr(0, 1, 0, dRightLineItem);
+    // set diagonal up border to cell(A2)
+    m_pDoc->ApplyAttr(0, 1, 0, dUpLineItem);
 
     aPos = { 0, 1, 0 };
     pPat = m_pDoc->GetPattern(aPos);
     CPPUNIT_ASSERT(pPat);
 
     pLine = pPat->GetItem(ATTR_BORDER_BLTR).GetLine();
-    CPPUNIT_ASSERT_MESSAGE("Diagonal right border was expected, but not found!", pLine);
+    CPPUNIT_ASSERT_MESSAGE("Diagonal up border was expected, but not found!", pLine);
 
-    // diagonal left and right border in the same cell (A5)
-    m_pDoc->ApplyAttr(0, 4, 0, dLeftLineItem);
-    m_pDoc->ApplyAttr(0, 4, 0, dRightLineItem);
+    // diagonal down and up border in the same cell (A5)
+    m_pDoc->ApplyAttr(0, 4, 0, dDownLineItem);
+    m_pDoc->ApplyAttr(0, 4, 0, dUpLineItem);
 
     // test if both borders are applied successfully in the same cell (A5)
     aPos = { 0, 4, 0 };
@@ -5960,25 +5960,25 @@ void Test::testDiagonalBorders()
     CPPUNIT_ASSERT(pPat);
 
     pLine = pPat->GetItem(ATTR_BORDER_TLBR).GetLine();
-    CPPUNIT_ASSERT_MESSAGE("Diagonal left border was expected, but not found!", pLine);
+    CPPUNIT_ASSERT_MESSAGE("Diagonal down border was expected, but not found!", pLine);
     pLine = pPat->GetItem(ATTR_BORDER_BLTR).GetLine();
-    CPPUNIT_ASSERT_MESSAGE("Diagonal right border was expected, but not found!", pLine);
+    CPPUNIT_ASSERT_MESSAGE("Diagonal up border was expected, but not found!", pLine);
 
     // test if both borders are removed successfully
-    dLeftLineItem.SetLine(nullptr);
-    dRightLineItem.SetLine(nullptr);
+    dDownLineItem.SetLine(nullptr);
+    dUpLineItem.SetLine(nullptr);
 
     // SetLine(nullptr) should remove the lines from (A5)
-    m_pDoc->ApplyAttr(0, 4, 0, dLeftLineItem);
-    m_pDoc->ApplyAttr(0, 4, 0, dRightLineItem);
+    m_pDoc->ApplyAttr(0, 4, 0, dDownLineItem);
+    m_pDoc->ApplyAttr(0, 4, 0, dUpLineItem);
 
     pPat = m_pDoc->GetPattern(aPos);
     CPPUNIT_ASSERT(pPat);
 
     pLine = pPat->GetItem(ATTR_BORDER_TLBR).GetLine();
-    CPPUNIT_ASSERT_MESSAGE("Diagonal left border was not expected, but is found!", !pLine);
+    CPPUNIT_ASSERT_MESSAGE("Diagonal down border was not expected, but is found!", !pLine);
     pLine = pPat->GetItem(ATTR_BORDER_BLTR).GetLine();
-    CPPUNIT_ASSERT_MESSAGE("Diagonal right border was not expected, but is found!", !pLine);
+    CPPUNIT_ASSERT_MESSAGE("Diagonal up border was not expected, but is found!", !pLine);
 
     m_pDoc->DeleteTab(0);
 }
