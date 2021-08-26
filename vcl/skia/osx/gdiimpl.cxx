@@ -135,7 +135,7 @@ void AquaSkiaSalGraphicsImpl::flushSurfaceToScreenCG(const SkIRect& rect)
     // the first pixel of rect.topLeft(), and using pixmap.rowBytes() ensures the following
     // pixel lines will be read from correct positions.
     CGContextRef context
-        = CGBitmapContextCreate(pixmap.writable_addr32(rect.left(), rect.top()), rect.width(),
+        = CGBitmapContextCreate(pixmap.writable_addr32(rect.x(), rect.y()), rect.width(),
                                 rect.height(), 8, pixmap.rowBytes(), GetSalData()->mxRGBSpace,
                                 toCGBitmapType(image->colorType(), image->alphaType()));
     assert(context); // TODO
@@ -143,7 +143,7 @@ void AquaSkiaSalGraphicsImpl::flushSurfaceToScreenCG(const SkIRect& rect)
     assert(screenImage); // TODO
     if (mrShared.isFlipped())
     {
-        const CGRect screenRect = CGRectMake(rect.left(), GetHeight() - rect.top() - rect.height(),
+        const CGRect screenRect = CGRectMake(rect.x(), GetHeight() - rect.y() - rect.height(),
                                              rect.width(), rect.height());
         mrShared.maContextHolder.saveState();
         CGContextTranslateCTM(mrShared.maContextHolder.get(), 0, pixmap.height());
@@ -153,13 +153,13 @@ void AquaSkiaSalGraphicsImpl::flushSurfaceToScreenCG(const SkIRect& rect)
     }
     else
     {
-        const CGRect screenRect = CGRectMake(rect.left(), rect.top(), rect.width(), rect.height());
+        const CGRect screenRect = CGRectMake(rect.x(), rect.y(), rect.width(), rect.height());
         CGContextDrawImage(mrShared.maContextHolder.get(), screenRect, screenImage);
     }
 
     CGImageRelease(screenImage);
     CGContextRelease(context);
-    mrShared.refreshRect(rect.left(), rect.top(), rect.width(), rect.height());
+    mrShared.refreshRect(rect.x(), rect.y(), rect.width(), rect.height());
 }
 
 bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart nPart,
@@ -201,9 +201,9 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
         // as in AquaGraphicsBackend::drawNativeControl().
         if (nType == ControlType::WindowBackground)
             updateRect.Intersection(mClipRegion.GetBoundRect());
-        addUpdateRegion(SkRect::MakeXYWH(updateRect.Left(), updateRect.Top(), updateRect.GetWidth(),
-                                         updateRect.GetHeight()));
-        getDrawCanvas()->drawImage(bitmap.asImage(), rControlRegion.Left(), rControlRegion.Top());
+        addUpdateRegion(SkRect::MakeXYWH(updateRect.getX(), updateRect.getY(),
+                                         updateRect.GetWidth(), updateRect.GetHeight()));
+        getDrawCanvas()->drawImage(bitmap.asImage(), rControlRegion.getX(), rControlRegion.getY());
         ++mPendingOperationsToFlush; // tdf#136369
         postDraw();
     }

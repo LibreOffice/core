@@ -571,7 +571,7 @@ void SkiaSalGraphicsImpl::setCanvasClipRegion(SkCanvas* canvas, const vcl::Regio
     region.GetRegionRectangles(rectangles);
     path.incReserve(rectangles.size() + 1);
     for (const tools::Rectangle& rectangle : rectangles)
-        path.addRect(SkRect::MakeXYWH(rectangle.Left(), rectangle.Top(), rectangle.GetWidth(),
+        path.addRect(SkRect::MakeXYWH(rectangle.getX(), rectangle.getY(), rectangle.GetWidth(),
                                       rectangle.GetHeight()));
     path.setFillType(SkPathFillType::kEvenOdd);
     canvas->clipPath(path);
@@ -1971,7 +1971,7 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygon,
     if (rPolyPolygon.IsRect())
     {
         // Rect->Polygon conversion loses the right and bottom edge, fix that.
-        path.addRect(SkRect::MakeXYWH(boundRect.Left(), boundRect.Top(), boundRect.GetWidth(),
+        path.addRect(SkRect::MakeXYWH(boundRect.getX(), boundRect.getY(), boundRect.GetWidth(),
                                       boundRect.GetHeight()));
         boundRect.AdjustRight(1);
         boundRect.AdjustBottom(1);
