@@ -35,25 +35,9 @@
       <style:paragraph-properties style:shadow="none"/>
       <style:text-properties fo:font-weight="normal" officeooo:rsid="0013f2a7" officeooo:paragraph-rsid="00157aba"/>
     </style:style>
-    <style:style style:name="P8" style:family="paragraph" style:parent-style-name="Text_20_body" style:list-style-name="L1">
-      <style:paragraph-properties style:shadow="none"/>
-      <style:text-properties officeooo:rsid="0013f2a7" officeooo:paragraph-rsid="0013f2a7"/>
-    </style:style>
-    <style:style style:name="P9" style:family="paragraph" style:parent-style-name="Text_20_body" style:list-style-name="L2">
+    <style:style style:name="P9" style:family="paragraph" style:parent-style-name="Text_20_body" style:list-style-name="L1">
       <style:paragraph-properties style:shadow="none"/>
       <style:text-properties officeooo:paragraph-rsid="0017273a"/>
-    </style:style>
-    <style:style style:name="P10" style:family="paragraph" style:parent-style-name="Text_20_body" style:list-style-name="L2">
-      <style:paragraph-properties style:shadow="none"/>
-      <style:text-properties officeooo:rsid="001f5746" officeooo:paragraph-rsid="001f5746"/>
-    </style:style>
-    <style:style style:name="P11" style:family="paragraph" style:parent-style-name="Text_20_body" style:list-style-name="L1">
-      <style:paragraph-properties style:shadow="none"/>
-      <style:text-properties fo:font-weight="normal" officeooo:rsid="0013f2a7" officeooo:paragraph-rsid="00157aba"/>
-    </style:style>
-    <style:style style:name="P12" style:family="paragraph" style:parent-style-name="Text_20_body">
-      <style:paragraph-properties style:shadow="none"/>
-      <style:text-properties fo:color="#666666" fo:font-weight="bold" officeooo:rsid="0013023f" officeooo:paragraph-rsid="0013023f"/>
     </style:style>
     <style:style style:name="P13" style:family="paragraph" style:parent-style-name="Text_20_body">
       <style:paragraph-properties fo:margin-left="0in" fo:margin-right="0in" fo:text-indent="0in" style:auto-text-indent="false" style:shadow="none"/>
@@ -73,9 +57,6 @@
       <style:paragraph-properties fo:padding="0.0201in" fo:border-left="none" fo:border-right="none" fo:border-top="0.06pt solid #000000" fo:border-bottom="0.06pt solid #000000" style:shadow="none"/>
       <style:text-properties officeooo:rsid="0020bee8" officeooo:paragraph-rsid="0020bee8"/>
     </style:style>
-    <style:style style:name="T1" style:family="text">
-      <style:text-properties officeooo:rsid="0013023f"/>
-    </style:style>
     <style:style style:name="T2" style:family="text">
       <style:text-properties fo:font-weight="normal" officeooo:rsid="0013f2a7"/>
     </style:style>
@@ -88,12 +69,6 @@
     <style:style style:name="T5" style:family="text">
       <style:text-properties officeooo:rsid="0017273a"/>
     </style:style>
-    <style:style style:name="T6" style:family="text">
-      <style:text-properties fo:font-weight="normal"/>
-    </style:style>
-    <style:style style:name="T7" style:family="text">
-      <style:text-properties fo:font-weight="normal" officeooo:rsid="0017273a"/>
-    </style:style>
     <style:style style:name="T8" style:family="text">
       <style:text-properties fo:font-weight="normal" officeooo:rsid="00157aba"/>
     </style:style>
@@ -103,17 +78,8 @@
     <style:style style:name="T10" style:family="text">
       <style:text-properties fo:font-weight="normal" officeooo:rsid="0013f2a7"/>
     </style:style>
-    <style:style style:name="T11" style:family="text">
-      <style:text-properties fo:font-weight="normal" officeooo:rsid="0020bee8"/>
-    </style:style>
     <style:style style:name="T12" style:family="text">
       <style:text-properties fo:font-style="normal" fo:font-weight="normal" officeooo:rsid="0017273a"/>
-    </style:style>
-    <style:style style:name="T13" style:family="text">
-      <style:text-properties style:text-underline-style="none" fo:font-weight="bold" officeooo:rsid="00157aba"/>
-    </style:style>
-    <style:style style:name="T14" style:family="text">
-      <style:text-properties style:text-underline-style="none" fo:font-weight="bold" officeooo:rsid="0013f2a7"/>
     </style:style>
     <style:style style:name="T15" style:family="text">
       <style:text-properties fo:font-weight="bold" officeooo:rsid="0013f2a7"/>
@@ -186,58 +152,6 @@
         </style:list-level-properties>
       </text:list-level-style-bullet>
     </text:list-style>
-    <text:list-style style:name="L2">
-      <text:list-level-style-bullet text:level="1" text:style-name="Bullet_20_Symbols" text:bullet-char="•">
-        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
-          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="0.5in" fo:text-indent="-0.25in" fo:margin-left="0.5in"/>
-        </style:list-level-properties>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="2" text:style-name="Bullet_20_Symbols" text:bullet-char="◦">
-        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
-          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="0.75in" fo:text-indent="-0.25in" fo:margin-left="0.75in"/>
-        </style:list-level-properties>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="3" text:style-name="Bullet_20_Symbols" text:bullet-char="▪">
-        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
-          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="1in" fo:text-indent="-0.25in" fo:margin-left="1in"/>
-        </style:list-level-properties>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="4" text:style-name="Bullet_20_Symbols" text:bullet-char="•">
-        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
-          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="1.25in" fo:text-indent="-0.25in" fo:margin-left="1.25in"/>
-        </style:list-level-properties>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="5" text:style-name="Bullet_20_Symbols" text:bullet-char="◦">
-        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
-          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="1.5in" fo:text-indent="-0.25in" fo:margin-left="1.5in"/>
-        </style:list-level-properties>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="6" text:style-name="Bullet_20_Symbols" text:bullet-char="▪">
-        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
-          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="1.75in" fo:text-indent="-0.25in" fo:margin-left="1.75in"/>
-        </style:list-level-properties>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="7" text:style-name="Bullet_20_Symbols" text:bullet-char="•">
-        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
-          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="2in" fo:text-indent="-0.25in" fo:margin-left="2in"/>
-        </style:list-level-properties>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="8" text:style-name="Bullet_20_Symbols" text:bullet-char="◦">
-        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
-          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="2.25in" fo:text-indent="-0.25in" fo:margin-left="2.25in"/>
-        </style:list-level-properties>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="9" text:style-name="Bullet_20_Symbols" text:bullet-char="▪">
-        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
-          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="2.5in" fo:text-indent="-0.25in" fo:margin-left="2.5in"/>
-        </style:list-level-properties>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="10" text:style-name="Bullet_20_Symbols" text:bullet-char="•">
-        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
-          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="2.75in" fo:text-indent="-0.25in" fo:margin-left="2.75in"/>
-        </style:list-level-properties>
-      </text:list-level-style-bullet>
-    </text:list-style>
   </office:automatic-styles>
   <office:body>
     <office:text>
@@ -252,17 +166,13 @@
       <text:p text:style-name="P4">(000) 000 000<text:line-break/>(000) 000 000<text:line-break/>(000) 000 000</text:p>
       <text:p text:style-name="P4">you@example.com<text:line-break/>webpage.url</text:p>
       <text:h text:style-name="P15" text:outline-level="3">Education</text:h>
-      <text:p text:style-name="P13">
-        <text:span text:style-name="T15">PhD in Egg Engineering<text:line-break/></text:span>
-        <text:span text:style-name="T10">University of Eggington, May 2010<text:line-break/></text:span>
-        <text:span text:style-name="T12">Cumulative GPA: 2.89</text:span>
+      <text:p text:style-name="P5">
+        <text:span text:style-name="T5">PhD in Egg Engineering</text:span>
+        <text:span text:style-name="T3"><text:line-break/>University of Eggington, May 2010<text:line-break/>Cumulative GPA: 2.89</text:span>
       </text:p>
       <text:p text:style-name="P5">
         <text:span text:style-name="T5">BS in Hamology</text:span>
-        <text:span text:style-name="T3">
-          <text:line-break/>
-        </text:span>
-        <text:span text:style-name="T7">Hammsworth College, May 2007<text:line-break/>Cumulative GPA: 3.26</text:span>
+        <text:span text:style-name="T3"><text:line-break/>Hammsworth College, May 2007<text:line-break/>Cumulative GPA: 3.26</text:span>
       </text:p>
       <text:h text:style-name="P17" text:outline-level="3">Experience</text:h>
       <text:section text:style-name="Sect1" text:name="Section1">
@@ -279,7 +189,7 @@
           <text:p text:style-name="P6"/>
         </text:list-item>
         <text:list-item>
-          <text:p text:style-name="P8"/>
+          <text:p text:style-name="P6"/>
         </text:list-item>
       </text:list>
       <text:section text:style-name="Sect1" text:name="Section2">
@@ -293,7 +203,7 @@
       </text:section>
       <text:list xml:id="list3621681738151" text:continue-numbering="true" text:style-name="L1">
         <text:list-item>
-          <text:p text:style-name="P11">
+          <text:p text:style-name="P7">
             <text:s/>
           </text:p>
         </text:list-item>
@@ -306,7 +216,7 @@
       </text:list>
       <text:h text:style-name="P16" text:outline-level="3">Skills</text:h>
       <text:section text:style-name="Sect2" text:name="Section3">
-        <text:list xml:id="list3294719333560076527" text:style-name="L2">
+        <text:list xml:id="list3294719333560076527" text:style-name="L1">
           <text:list-item>
             <text:p text:style-name="P9"/>
           </text:list-item>
@@ -314,7 +224,7 @@
             <text:p text:style-name="P9"/>
           </text:list-item>
           <text:list-item>
-            <text:p text:style-name="P10"/>
+            <text:p text:style-name="P9"/>
           </text:list-item>
           <text:list-item>
             <text:p text:style-name="P9"/>
