@@ -55,7 +55,7 @@
                 <property name="show_arrow">False</property>
                 <property name="icon_size">2</property>
                 <child>
-                  <object class="GtkToggleToolButton" id=".uno:LeftPara">
+                  <object class="GtkToolButton" id=".uno:LeftPara">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="use_underline">True</property>
@@ -66,7 +66,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToggleToolButton" id=".uno:CenterPara">
+                  <object class="GtkToolButton" id=".uno:CenterPara">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="use_underline">True</property>
@@ -77,7 +77,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToggleToolButton" id=".uno:RightPara">
+                  <object class="GtkToolButton" id=".uno:RightPara">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="use_underline">True</property>
@@ -88,7 +88,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToggleToolButton" id=".uno:JustifyPara">
+                  <object class="GtkToolButton" id=".uno:JustifyPara">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="use_underline">True</property>
@@ -115,7 +115,7 @@
                 <property name="show_arrow">False</property>
                 <property name="icon_size">2</property>
                 <child>
-                  <object class="GtkToggleToolButton" id=".uno:ParaLeftToRight">
+                  <object class="GtkToolButton" id=".uno:ParaLeftToRight">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="use_underline">True</property>
@@ -126,7 +126,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToggleToolButton" id=".uno:ParaRightToLeft">
+                  <object class="GtkToolButton" id=".uno:ParaRightToLeft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="use_underline">True</property>
@@ -152,7 +152,7 @@
                 <property name="show_arrow">False</property>
                 <property name="icon_size">2</property>
                 <child>
-                  <object class="GtkToggleToolButton" id=".uno:CellVertTop">
+                  <object class="GtkToolButton" id=".uno:CellVertTop">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="use_underline">True</property>
@@ -163,7 +163,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToggleToolButton" id=".uno:CellVertCenter">
+                  <object class="GtkToolButton" id=".uno:CellVertCenter">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="use_underline">True</property>
@@ -174,7 +174,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToggleToolButton" id=".uno:CellVertBottom">
+                  <object class="GtkToolButton" id=".uno:CellVertBottom">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="use_underline">True</property>
