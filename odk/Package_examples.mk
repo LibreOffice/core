@@ -483,7 +483,6 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     java/Inspector/images/properties_16.png \
     java/Inspector/images/services_16.png \
     java/Inspector/manifest.mf \
-    java/MinimalComponent/BuildMinimalComponent.xml \
     java/MinimalComponent/Makefile \
     java/MinimalComponent/MinimalComponent.components \
     java/MinimalComponent/MinimalComponent.idl \
