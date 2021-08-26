@@ -27,13 +27,13 @@ enum class InstructionSetFlags
     SSE42 = 0x10,
     AVX   = 0x20,
     AVX2  = 0x40,
-    AVX512F = 0x100
+    AVX512F = 0x80
 };
 
 } // end cpuid
 
 namespace o3tl {
-    template<> struct typed_flags<cpuid::InstructionSetFlags> : is_typed_flags<cpuid::InstructionSetFlags, 0x07f> {};
+    template<> struct typed_flags<cpuid::InstructionSetFlags> : is_typed_flags<cpuid::InstructionSetFlags, 0x0ff> {};
 }
 
 namespace cpuid {
