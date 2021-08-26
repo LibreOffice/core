@@ -88,6 +88,24 @@
     },
     {
       "key": {
+        "uuid": "1ff641dd_579a4811",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 44
+      },
+      "lineNbr": 1038,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-26T09:25:51Z",
+      "side": 1,
+      "message": "Or alternatively, it could take current mode into account (the dialog knows in which mode which control is visible) ... but actually, it would also be wrong: the action should not depend on \"what is visible\", but rather on \"from where the event originated\". When you want to create a new style, you press a button on a toolbox, and you would not expect that *two* styles get created (one for each visible style list controls).",
+      "parentUuid": "4b390431_27345165",
+      "revId": "694b6795002d7538aa51e803b42f1c6972cd4efd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ceb0a338_389cf0ed",
         "filename": "sfx2/source/dialog/templdlg.cxx",
         "patchSetId": 44
