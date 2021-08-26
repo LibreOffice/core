@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b0ce151_c1e26f00",
+        "filename": "compilerplugins/clang/store/bodynotinblock.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-08-26T12:23:41Z",
+      "side": 1,
+      "message": "There should be exactly 1 blank line here.",
+      "revId": "c49633d0793039df947153043950284ab5dae2f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
