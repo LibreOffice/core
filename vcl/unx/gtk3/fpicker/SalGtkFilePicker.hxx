@@ -142,6 +142,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         void impl_fileSelectionChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
         void impl_directoryChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
         void impl_controlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
+        void impl_initialize(GtkWidget* pParentWidget, sal_Int16 templateId);
 
     private:
         css::uno::Reference< css::ui::dialogs::XFilePickerListener >
@@ -195,6 +196,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
 
         bool bVersionWidthUnset;
         bool mbPreviewState;
+        bool mbInitialized;
         gulong mHID_Preview;
         GtkWidget* m_pPreview;
         GtkFileFilter* m_pPseudoFilter;
