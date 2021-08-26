@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "761c3c77_9ed10c2a",
+        "filename": "sc/inc/scfuncs.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3745,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-26T11:53:12Z",
+      "side": 1,
+      "message": "It doesn\u0027t return a number. It returns a text.\nSo it could be \"Converts a number to text formatted with a specified number of ...\"",
+      "range": {
+        "startLine": 3745,
+        "startChar": 28,
+        "endLine": 3745,
+        "endChar": 129
+      },
+      "revId": "3b57c1901d426edcfd9139815945f6c752839501",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3904e57e_828e8814",
+        "filename": "sc/inc/scfuncs.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3747,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-26T11:53:12Z",
+      "side": 1,
+      "message": "Why do you need this here? The explanation of Decimals should describe related bits; the part about locale-specific settings needs to be in the function description itself.",
+      "revId": "3b57c1901d426edcfd9139815945f6c752839501",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85e4e2b1_47e2aa2e",
+        "filename": "sc/inc/scfuncs.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3749,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-26T11:53:12Z",
+      "side": 1,
+      "message": "\"Truncated\" already tells that it is truncation, not rounding.",
+      "range": {
+        "startLine": 3749,
+        "startChar": 230,
+        "endLine": 3749,
+        "endChar": 275
+      },
+      "revId": "3b57c1901d426edcfd9139815945f6c752839501",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
