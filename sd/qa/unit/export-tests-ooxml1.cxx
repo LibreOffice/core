@@ -954,10 +954,10 @@ void SdOOXMLExportTest1::testCellLeftAndRightMargin()
     uno::Reference< beans::XPropertySet > xCellPropSet(xCell, uno::UNO_QUERY_THROW);
 
     uno::Any aLeftMargin = xCellPropSet->getPropertyValue("TextLeftDistance");
-    aLeftMargin >>= nLeftMargin ;
+    CPPUNIT_ASSERT(aLeftMargin >>= nLeftMargin);
 
     uno::Any aRightMargin = xCellPropSet->getPropertyValue("TextRightDistance");
-    aRightMargin >>= nRightMargin ;
+    CPPUNIT_ASSERT(aRightMargin >>= nRightMargin);
 
     // Convert values to EMU
     nLeftMargin  =  oox::drawingml::convertHmmToEmu( nLeftMargin );
