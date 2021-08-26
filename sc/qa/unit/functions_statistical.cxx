@@ -1,5 +1,7 @@
 #include "functions_test.hxx"
 #include <arraysumfunctor.hxx>
+#include <ctime>
+#include <cmath>
 
 class StatisticalFunctionsTest : public FunctionsTest
 {
@@ -8,10 +10,12 @@ public:
 
     void testStatisticalFormulasFODS();
     void testIntrinsicSums();
+    void testIntrinsicSumsPerformance();
 
     CPPUNIT_TEST_SUITE(StatisticalFunctionsTest);
     CPPUNIT_TEST(testStatisticalFormulasFODS);
     CPPUNIT_TEST(testIntrinsicSums);
+    CPPUNIT_TEST(testIntrinsicSumsPerformance);
     CPPUNIT_TEST_SUITE_END();
 
 };
@@ -32,7 +36,7 @@ StatisticalFunctionsTest::StatisticalFunctionsTest():
 void StatisticalFunctionsTest::testIntrinsicSums()
 {
     // Checkout SSE2, AVX and AVX512 opperations
-        // Needs exactly 9 terms
+    // Needs exactly 9 terms
     double summands[9] = { 0, 1, 2, 3, 4, 10, 20, 2, -1 };
     double* pCurrent = summands;
     size_t i = 0;
@@ -47,6 +51,85 @@ void StatisticalFunctionsTest::testIntrinsicSums()
     i = 0;
     CPPUNIT_ASSERT_EQUAL(42.0, sc::op::executeUnrolled(i, 9, pCurrent).get());
 }
+
+void StatisticalFunctionsTest::testIntrinsicSumsPerformance()
+{
+    // Checkout SSE2, AVX and AVX512 opperations
+    constexpr size_t nSize = 100000000;
+    std::vector<double> aSummands(nSize);
+    for(size_t i = 0; i < nSize; ++i)
+        aSummands[i] = static_cast<double>(rand()) / static_cast<double>(RAND_MAX);
+
+    size_t i;
+    clock_t nStart;
+    clock_t nEnd;
+    KahanSum aSum[4];
+
+    // Without any boost
+    i = 0;
+    sc::op::executeUnrolled(i, nSize, aSummands.data()); // warm up
+    nStart = clock();
+    i = 0;
+    aSum[3] = sc::op::executeUnrolled(i, nSize, aSummands.data());
+    i = 0;
+    aSum[3] += sc::op::executeUnrolled(i, nSize, aSummands.data());
+    i = 0;
+    aSum[3] += sc::op::executeUnrolled(i, nSize, aSummands.data());
+    nEnd = clock();
+    OString s = "Clocks for sum with NONE: " + OString::number(static_cast<double>(nEnd - nStart));
+
+    if (sc::op::hasAVX512F)
+    {
+        i = 0;
+        sc::op::executeAVX512F(i, nSize, aSummands.data()); // warm up
+        nStart = clock();
+        i = 0;
+        aSum[0] = sc::op::executeAVX512F(i, nSize, aSummands.data());
+        i = 0;
+        aSum[0] += sc::op::executeAVX512F(i, nSize, aSummands.data());
+        i = 0;
+        aSum[0] += sc::op::executeAVX512F(i, nSize, aSummands.data());
+        nEnd = clock();
+        s += "\nClocks for sum with AVX512: " + OString::number(static_cast<double>(nEnd - nStart));
+        CPPUNIT_ASSERT_EQUAL(aSum[0].get(), aSum[3].get());
+    }
+
+    if (sc::op::hasAVX)
+    {
+        i = 0;
+        sc::op::executeAVX(i, nSize, aSummands.data()); // warm up
+        nStart = clock();
+        i = 0;
+        aSum[1] = sc::op::executeAVX(i, nSize, aSummands.data());
+        i = 0;
+        aSum[1] += sc::op::executeAVX(i, nSize, aSummands.data());
+        i = 0;
+        aSum[1] += sc::op::executeAVX(i, nSize, aSummands.data());
+        nEnd = clock();
+        s += "\nClocks for sum with AVX: " + OString::number(static_cast<double>(nEnd - nStart));
+        CPPUNIT_ASSERT_EQUAL(aSum[1].get(), aSum[3].get());
+    }
+
+    // Original code
+    if (sc::op::hasSSE2)
+    {
+        i = 0;
+        sc::op::executeSSE2(i, nSize, aSummands.data()); // warm up
+        nStart = clock();
+        i = 0;
+        aSum[2] = sc::op::executeSSE2(i, nSize, aSummands.data());
+        i = 0;
+        aSum[2] += sc::op::executeSSE2(i, nSize, aSummands.data());
+        i = 0;
+        aSum[2] += sc::op::executeSSE2(i, nSize, aSummands.data());
+        nEnd = clock();
+        s += "\nClocks for sum with SSE2: " + OString::number(static_cast<double>(nEnd - nStart));
+        CPPUNIT_ASSERT_EQUAL(aSum[2].get(), aSum[3].get());
+    }
+
+    CPPUNIT_ASSERT_MESSAGE(s.getStr(), false); // report
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(StatisticalFunctionsTest);
 
