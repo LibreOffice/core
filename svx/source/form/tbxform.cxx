@@ -36,6 +36,8 @@ SvxFmAbsRecWin::SvxFmAbsRecWin(vcl::Window* pParent, SfxToolBoxControl* pControl
     : RecordItemWindow(pParent)
     , m_pController(pController)
 {
+    m_xWidget->set_width_chars(6);
+    SetSizePixel(m_xWidget->get_preferred_size());
 }
 
 void SvxFmAbsRecWin::PositionFired(sal_Int64 nRecord)
