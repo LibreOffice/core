@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cdcfdcd2_a421510d",
+        "filename": "compilerplugins/clang/store/bodynotinblock.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-08-26T12:03:43Z",
+      "side": 1,
+      "message": "Please remove this extra blank line.",
+      "revId": "5b0d2fbe1fb98bf5673e3182a93572478aa0f8ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
