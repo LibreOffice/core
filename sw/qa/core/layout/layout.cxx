@@ -13,6 +13,7 @@
 
 #include <vcl/gdimtf.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/unopage.hxx>
 
 #include <wrtsh.hxx>
 #include <docsh.hxx>
@@ -503,6 +504,26 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testVerticallyMergedCellBorder)
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testCrashRemoveFromLayout)
 {
     load(DATA_DIRECTORY, "tdf122894-4.doc");
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testLinkedBullet)
+{
+    // Given a document with a graphic bullet, where the image is a linked one:
+    load(DATA_DIRECTORY, "linked-bullet.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pShell = pTextDoc->GetDocShell();
+
+    // When rendering that document:
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+
+    // Then make sure the render result contains exactly one bitmap:
+    MetafileXmlDump aDumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the bullet's bitmap was lost.
+    assertXPath(pXmlDoc, "//bmpexscale", 1);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
