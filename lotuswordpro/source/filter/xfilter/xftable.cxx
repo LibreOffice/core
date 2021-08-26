@@ -94,7 +94,7 @@ bool XFTable::ContainsTable(const XFTable* pTable) const
             {
                 if (pSubTable == pTable)
                     return true;
-                if (pTable->ContainsTable(pTable))
+                if (pSubTable->ContainsTable(pTable))
                     return true;
             }
             if (pCell->HierarchyContains(pTable))
