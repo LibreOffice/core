@@ -14,6 +14,19 @@ In general the layering is done like this:
     breeze
     colibre
 
+## Icon naming convention
+
+sc_* icons are 16x16 px (small)
+lc_* icons are 24x24 px (large)
+There is also an 32px folder at cmd/ with 32 px icons
+
+16x16 px icons are used in the menus
+24x24 px icons are used in toolbars and sidebar
+Notebook bar use 24x24 px icons when there is only one icon, and 16x16 px everywhere else
+
+sc_ and lc_ icon are followed by the .uno:CommandName (see below)
+
+
 ## How to Add a New Image Set
 
 - Create a directory for it here (let's call it e.g. `new_set`)
