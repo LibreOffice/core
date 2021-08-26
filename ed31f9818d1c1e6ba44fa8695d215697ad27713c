@@ -16,6 +16,57 @@
       "revId": "ed31f9818d1c1e6ba44fa8695d215697ad27713c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c974359_41537654",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 44
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-26T05:28:57Z",
+      "side": 0,
+      "message": "Why this whitespace change? (I already asked about whitespace-only changes in previous comment, but it seems I need to point each place manually, and you only look at what I point to, not doing \"I was told to not do whitespace-only changes - let me look through the code to find other places myself\" homework).",
+      "revId": "ed31f9818d1c1e6ba44fa8695d215697ad27713c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "234b8ffe_b5870606",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 44
+      },
+      "lineNbr": 782,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-26T05:28:57Z",
+      "side": 0,
+      "message": "Why this whitespace-only change in a function that is even untouched?",
+      "revId": "ed31f9818d1c1e6ba44fa8695d215697ad27713c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f7c19f4_917042fb",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 44
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-26T05:28:57Z",
+      "side": 0,
+      "message": "Why this whitespace change?",
+      "revId": "ed31f9818d1c1e6ba44fa8695d215697ad27713c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }

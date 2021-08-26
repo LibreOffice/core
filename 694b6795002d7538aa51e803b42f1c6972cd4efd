@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3145d61a_eb48f1c4",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 44
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-26T05:28:57Z",
+      "side": 1,
+      "message": "It would be better to use\n\n    if (\u0026rStyleList \u003d\u003d \u0026m_aCharStyleList)\n        nActCharFilter \u003d 0xffff;\n    else\n        nActFilter \u003d 0xffff;\n\nbecause this specifically checks a special case, and *everything else* (including e.g. nullptr) is considered the main default \"m_aStyleList\" case.",
+      "revId": "694b6795002d7538aa51e803b42f1c6972cd4efd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "821f0b5d_d8369df9",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 44
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-26T05:28:57Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "694b6795002d7538aa51e803b42f1c6972cd4efd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eced7109_d1bf933c",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 44
+      },
+      "lineNbr": 994,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-26T05:28:57Z",
+      "side": 1,
+      "message": "Why this formatting change?",
+      "revId": "694b6795002d7538aa51e803b42f1c6972cd4efd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fad7d6e_5c5631dd",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 44
+      },
+      "lineNbr": 1038,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-26T05:28:57Z",
+      "side": 1,
+      "message": "This looks to execute this unconditional for both controls - even when the second one is invisible, and when the action is for one but not the other.",
+      "revId": "694b6795002d7538aa51e803b42f1c6972cd4efd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ceb0a338_389cf0ed",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 44
+      },
+      "lineNbr": 1065,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-26T05:28:57Z",
+      "side": 1,
+      "message": "This looks to execute this unconditional for both controls - even when the second one is invisible, and when the action is for one but not the other.",
+      "revId": "694b6795002d7538aa51e803b42f1c6972cd4efd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97807954_d4fc2119",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 44
+      },
+      "lineNbr": 1098,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-26T05:28:57Z",
+      "side": 1,
+      "message": "Why this whitespace change?",
+      "revId": "694b6795002d7538aa51e803b42f1c6972cd4efd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
