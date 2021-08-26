@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "4b3c08d4_77ad9c3b",
+        "filename": "vcl/source/control/imp_listbox.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-26T14:09:37Z",
+      "side": 1,
+      "message": "Why do you need a getStr, when OUStringToOString already returns a OString? This way, you just double some work: the original string returned from OUStringToOString (and its memory allocation) will be destroyed after the operation, while construction of the strA will include counting characters in the zero-terminated string, allocating memory, copying, etc.",
+      "range": {
+        "startLine": 130,
+        "startChar": 78,
+        "endLine": 130,
+        "endChar": 86
+      },
+      "revId": "74b5c20ff1855b117b5abadd8a9fdae817fb689e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fb51a845_95b81c6f",
         "filename": "vcl/source/control/imp_listbox.cxx",
         "patchSetId": 4
@@ -13,6 +36,23 @@
       "writtenOn": "2021-08-26T14:04:35Z",
       "side": 1,
       "message": "Not only \"not CJK\". In fact, any character outside of pure ASCII would be longer than 1 byte in UTF-8; Cyrillic, Greek, Arabic, ...",
+      "revId": "74b5c20ff1855b117b5abadd8a9fdae817fb689e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cdab7ce_6157fcb8",
+        "filename": "vcl/source/control/imp_listbox.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-26T14:09:37Z",
+      "side": 1,
+      "message": "So this would make any multibyte UTF-8 character \"greater than\" any other multibyte character, including itself?",
       "revId": "74b5c20ff1855b117b5abadd8a9fdae817fb689e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
