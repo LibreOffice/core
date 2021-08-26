@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7479fa9a_bf2cd117",
+        "filename": "compilerplugins/clang/store/bodynotinblock.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-08-26T12:48:00Z",
+      "side": 1,
+      "message": "There should be 1 blank line before this line.",
+      "revId": "86e63336d0ad8910ccef4a86b77bb544810f23ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af2aead3_3a10f610",
+        "filename": "compilerplugins/clang/store/cascadingassignop.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-08-26T12:48:00Z",
+      "side": 1,
+      "message": "There should be a blank line before this line.",
+      "revId": "86e63336d0ad8910ccef4a86b77bb544810f23ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "816eb6b7_aa284d68",
+        "filename": "compilerplugins/clang/store/cascadingcondop.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-08-26T12:48:00Z",
+      "side": 1,
+      "message": "There should be one blank line before this.",
+      "revId": "86e63336d0ad8910ccef4a86b77bb544810f23ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
