@@ -68,6 +68,8 @@
 #include <bcaslot.hxx>
 #include <reordermap.hxx>
 #include <drwlayer.hxx>
+#include <conditio.hxx>
+#include <colorscale.hxx>
 
 #include <svl/sharedstringpool.hxx>
 
@@ -2715,8 +2717,31 @@ public:
                                                    const ScQueryEntry::Item& rItem)
     {
         ScAddress aPos(nCol, nRow, nTab);
-        const SvxBrushItem* pBrush = mrDoc.GetAttr(aPos, ATTR_BACKGROUND);
-        Color color = pBrush->GetColor();
+        Color color;
+        // Background color can be set via conditional formatting - check that first
+        ScConditionalFormat* pCondFormat = mrDoc.GetCondFormat(nCol, nRow, nTab);
+        bool bHasConditionalColor = false;
+        if (pCondFormat)
+        {
+            for (size_t i = 0; i < pCondFormat->size(); i++)
+            {
+                auto aEntry = pCondFormat->GetEntry(i);
+                if (aEntry->GetType() == ScFormatEntry::Type::Colorscale)
+                {
+                    const ScColorScaleFormat* pColFormat
+                        = static_cast<const ScColorScaleFormat*>(aEntry);
+                    color = *(pColFormat->GetColor(aPos));
+                    bHasConditionalColor = true;
+                }
+            }
+        }
+
+        if (!bHasConditionalColor)
+        {
+            const SvxBrushItem* pBrush = mrDoc.GetAttr(aPos, ATTR_BACKGROUND);
+            color = pBrush->GetColor();
+        }
+
         bool bMatch = rItem.maColor == color;
         return std::pair<bool, bool>(bMatch, false);
     }
