@@ -89,6 +89,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
     mnHID_SelectionChange( 0 ),
     bVersionWidthUnset( false ),
     mbPreviewState( false ),
+    mbInitialized(false),
     mHID_Preview( 0 ),
     m_pPreview( nullptr ),
     m_pPseudoFilter( nullptr )
@@ -899,6 +900,13 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute()
 {
     SolarMutexGuard g;
 
+    if (!mbInitialized)
+    {
+        // tdf#144084 if not initialized default to FILEOPEN_SIMPLE
+        impl_initialize(nullptr, FILEOPEN_SIMPLE);
+        assert(mbInitialized);
+    }
+
     OSL_ASSERT( m_pDialog != nullptr );
 
     sal_Int16 retVal = 0;
@@ -1610,6 +1618,8 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
     sal_Int16 templateId = -1;
     aAny >>= templateId;
 
+    GtkWidget* pParentWidget = nullptr;
+
     css::uno::Reference<css::awt::XWindow> xParentWindow;
     if (aArguments.getLength() > 1)
     {
@@ -1619,7 +1629,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
     if (xParentWindow.is())
     {
         if (SalGtkXWindow* pGtkXWindow = dynamic_cast<SalGtkXWindow*>(xParentWindow.get()))
-            m_pParentWidget = pGtkXWindow->getGtkWidget();
+            pParentWidget = pGtkXWindow->getGtkWidget();
         else
         {
             css::uno::Reference<css::awt::XSystemDependentWindowPeer> xSysDepWin(xParentWindow, css::uno::UNO_QUERY);
@@ -1630,10 +1640,17 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
                 aAny = xSysDepWin->getWindowHandle(aProcessIdent, css::lang::SystemDependent::SYSTEM_XWINDOW);
                 css::awt::SystemDependentXWindow tmp;
                 aAny >>= tmp;
-                m_pParentWidget = GetGtkSalData()->GetGtkDisplay()->findGtkWidgetForNativeHandle(tmp.WindowHandle);
+                pParentWidget = GetGtkSalData()->GetGtkDisplay()->findGtkWidgetForNativeHandle(tmp.WindowHandle);
             }
         }
     }
+
+    impl_initialize(pParentWidget, templateId);
+}
+
+void SalGtkFilePicker::impl_initialize(GtkWidget* pParentWidget, sal_Int16 templateId)
+{
+    m_pParentWidget = pParentWidget;
 
     GtkFileChooserAction eAction = GTK_FILE_CHOOSER_ACTION_OPEN;
     OString sOpen = getOpenText();
@@ -1781,6 +1798,8 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
             gtk_widget_show( m_pHBoxs[ nTVIndex ] );
         }
     }
+
+    mbInitialized = true;
 }
 
 void SalGtkFilePicker::preview_toggled_cb( GObject *cb, SalGtkFilePicker* pobjFP )
