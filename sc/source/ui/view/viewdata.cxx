@@ -543,6 +543,10 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
     pSettings[SC_CURSOR_X].Value <<= sal_Int32(nCurX);
     pSettings[SC_CURSOR_Y].Name = SC_CURSORPOSITIONY;
     pSettings[SC_CURSOR_Y].Value <<= sal_Int32(nCurY);
+
+    // Write freezepan data only when freeze pans are set
+    if(nExFixPosX != 0 || nExFixPosY != 0 || nExHSplitPos != 0 || nExVSplitPos != 0)
+    {
     pSettings[SC_HORIZONTAL_SPLIT_MODE].Name = SC_HORIZONTALSPLITMODE;
     pSettings[SC_HORIZONTAL_SPLIT_MODE].Value <<= sal_Int16(eExHSplitMode);
     pSettings[SC_VERTICAL_SPLIT_MODE].Name = SC_VERTICALSPLITMODE;
@@ -557,6 +561,8 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
         pSettings[SC_VERTICAL_SPLIT_POSITION].Value <<= sal_Int32(nExFixPosY);
     else
         pSettings[SC_VERTICAL_SPLIT_POSITION].Value <<= sal_Int32(nExVSplitPos);
+    }
+
     // Prevent writing odd settings that would make crash versions that
     // don't apply SanitizeWhichActive() when reading the settings.
     // See tdf#117093
