@@ -9,7 +9,7 @@
  *
  */
 
-#ifndef TUTORIAL2_H
+#pragma once
 #define TUTORIAL2_H
 
 #include "plugin.hxx"
@@ -33,6 +33,5 @@ class Tutorial2
 
 } // namespace
 
-#endif // POSTFIXINCREMENTFIX_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

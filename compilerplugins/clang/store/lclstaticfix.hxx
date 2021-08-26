@@ -9,7 +9,7 @@
  *
  */
 
-#ifndef LCLSTATICFIX_H
+#pragma once
 #define LCLSTATICFIX_H
 
 #include "plugin.hxx"
@@ -28,6 +28,5 @@ class LclStaticFix
 
 } // namespace
 
-#endif // POSTFIXINCREMENTFIX_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

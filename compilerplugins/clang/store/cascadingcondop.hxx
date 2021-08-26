@@ -8,8 +8,8 @@
  * License. See LICENSE.TXT for details.
  *
  */
+#pragma once
 
-#ifndef CASCADINGCONDOP_H
 #define CASCADINGCONDOP_H
 
 #include "plugin.hxx"
@@ -33,6 +33,5 @@ class CascadingCondOp
 
 } // namespace loplugin
 
-#endif // CASCADINGCONDOP_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

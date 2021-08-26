@@ -9,7 +9,7 @@
  *
  */
 
-#ifndef POSTFIXINCREMENTFIX_H
+#pragma once
 #define POSTFIXINCREMENTFIX_H
 
 #include "plugin.hxx"
@@ -33,6 +33,5 @@ class PostfixIncrementFix
 
 } // namespace
 
-#endif // POSTFIXINCREMENTFIX_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

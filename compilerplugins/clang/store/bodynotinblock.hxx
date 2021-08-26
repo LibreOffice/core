@@ -8,8 +8,8 @@
  * License. See LICENSE.TXT for details.
  *
  */
+#pragma once
 
-#ifndef BODYNOTINBLOCK_H
 #define BODYNOTINBLOCK_H
 
 #include "plugin.hxx"
@@ -33,6 +33,5 @@ class BodyNotInBlock
 
 } // namespace
 
-#endif // BODYNOTINBLOCK_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
