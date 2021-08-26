@@ -28,6 +28,7 @@
 #include <o3tl/safeint.hxx>
 #include <tools/json_writer.hxx>
 #include <unotools/streamwrap.hxx>
+#include <sfx2/linkmgr.hxx>
 
 #include <fmtinfmt.hxx>
 #include <view.hxx>
@@ -38,6 +39,9 @@
 #include <dcontact.hxx>
 #include <svx/svdpage.hxx>
 #include <ndtxt.hxx>
+#include <txtfld.hxx>
+#include <IDocumentFieldsAccess.hxx>
+#include <IDocumentLinksAdministration.hxx>
 #include <IDocumentRedlineAccess.hxx>
 
 namespace
@@ -2613,6 +2617,75 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf136740)
     //     - Actual  : <Any: (long) 1251>
     // i.e., pasting RTF would reset the modified default tab stop distance to hardcoded default
     CPPUNIT_ASSERT_EQUAL(aNewCorrected, xTextDefaults->getPropertyValue("TabStopDistance"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128106)
+{
+    SwWrtShell* pWrtShell
+        = createSwDoc(DATA_DIRECTORY, "cross_reference_demo_bmk.odt")->GetDocShell()->GetWrtShell();
+
+    utl::TempFile tempDir(nullptr, true);
+
+    const auto aPropertyValues = comphelper::InitPropertySequence(
+        { { "FileName", css::uno::Any(tempDir.GetURL() + "/test.odm") } });
+    dispatchCommand(mxComponent, ".uno:NewGlobalDoc", aPropertyValues);
+
+    // new document now!
+    mxComponent.set(pWrtShell->GetDoc()->GetDocShell()->GetModel());
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    SwDoc* const pMasterDoc(pWrtShell->GetDoc());
+    CPPUNIT_ASSERT_EQUAL(
+        size_t(2),
+        pMasterDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks().size());
+    // no way to set SwDocShell::m_nUpdateDocMode away from NO_UPDATE ?
+    // pMasterDoc->getIDocumentLinksAdministration().UpdateLinks();
+    pMasterDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false, false,
+                                                                                  nullptr);
+    // note: this has called SwGetRefFieldType::UpdateGetReferences()
+    SwFieldType const* const pType(
+        pMasterDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetRef));
+    std::vector<SwFormatField*> fields;
+    pType->GatherFields(fields);
+    CPPUNIT_ASSERT_EQUAL(size_t(6), fields.size());
+    std::sort(fields.begin(), fields.end(), [](auto const* const pA, auto const* const pB) {
+        SwTextField const* const pHintA(pA->GetTextField());
+        SwTextField const* const pHintB(pB->GetTextField());
+        // in this document: only 1 field per node
+        CPPUNIT_ASSERT(pA == pB || &pHintA->GetTextNode() != &pHintB->GetTextNode());
+        return pHintA->GetTextNode().GetIndex() < pHintB->GetTextNode().GetIndex();
+    });
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK), fields[0]->GetField()->GetSubType());
+    CPPUNIT_ASSERT_EQUAL(OUString("bookmarkchapter1_text"),
+                         static_cast<SwGetRefField const*>(fields[0]->GetField())->GetSetRefName());
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"),
+                         static_cast<SwGetRefField const*>(fields[0]->GetField())
+                             ->GetExpandedTextOfReferencedTextNode(*pWrtShell->GetLayout()));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK), fields[1]->GetField()->GetSubType());
+    CPPUNIT_ASSERT(
+        static_cast<SwGetRefField const*>(fields[1]->GetField())->IsRefToHeadingCrossRefBookmark());
+    //    CPPUNIT_ASSERT_EQUAL(OUString("Chapter 2"), static_cast<SwGetRefField const*>(fields[1]->GetField())->GetPar2());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK), fields[2]->GetField()->GetSubType());
+    CPPUNIT_ASSERT_EQUAL(OUString("Bookmarkchapter1"),
+                         static_cast<SwGetRefField const*>(fields[2]->GetField())->GetSetRefName());
+    CPPUNIT_ASSERT_EQUAL(OUString("Chapter 1"),
+                         static_cast<SwGetRefField const*>(fields[2]->GetField())->GetPar2());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK), fields[3]->GetField()->GetSubType());
+    CPPUNIT_ASSERT_EQUAL(OUString("bookmarkchapter1_text"),
+                         static_cast<SwGetRefField const*>(fields[3]->GetField())->GetSetRefName());
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"),
+                         static_cast<SwGetRefField const*>(fields[3]->GetField())->GetPar2());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK), fields[4]->GetField()->GetSubType());
+    CPPUNIT_ASSERT(
+        static_cast<SwGetRefField const*>(fields[4]->GetField())->IsRefToHeadingCrossRefBookmark());
+    CPPUNIT_ASSERT_EQUAL(OUString("Chapter 1.1"),
+                         static_cast<SwGetRefField const*>(fields[4]->GetField())->GetPar2());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK), fields[5]->GetField()->GetSubType());
+    CPPUNIT_ASSERT(
+        static_cast<SwGetRefField const*>(fields[5]->GetField())->IsRefToHeadingCrossRefBookmark());
+    //    CPPUNIT_ASSERT_EQUAL(OUString("Chapter 2"), static_cast<SwGetRefField const*>(fields[5]->GetField())->GetPar2());
+
+    tempDir.EnableKillingFile();
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
