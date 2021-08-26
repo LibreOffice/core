@@ -44,6 +44,8 @@
 #include <sharedformula.hxx>
 #include <listenercontext.hxx>
 #include <filterentries.hxx>
+#include <conditio.hxx>
+#include <colorscale.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
 
@@ -2437,10 +2439,29 @@ class FilterEntriesHandler
         if (textColor != COL_AUTO)
             mrFilterEntries.addTextColor(textColor);
 
-        const SvxBrushItem* pBrush = rColumn.GetDoc().GetAttr(aPos, ATTR_BACKGROUND);
-        Color backgroundColor = pBrush->GetColor();
-        if (backgroundColor != COL_AUTO)
-            mrFilterEntries.addBackgroundColor(backgroundColor);
+        // Background color can be set via conditional formatting - check that first
+        Color backgroundColor;
+        bool bHasConditionalColor = false;
+        ScConditionalFormat* pCondFormat
+            = rColumn.GetDoc().GetCondFormat(aPos.Col(), aPos.Row(), aPos.Tab());
+        for (size_t i = 0; i < pCondFormat->size(); i++)
+        {
+            auto aEntry = pCondFormat->GetEntry(i);
+            if (aEntry->GetType() == ScFormatEntry::Type::Colorscale)
+            {
+                const ScColorScaleFormat* pColFormat
+                    = static_cast<const ScColorScaleFormat*>(aEntry);
+                std::optional<Color> col = pColFormat->GetColor(aPos);
+                backgroundColor = col.value();
+                bHasConditionalColor = true;
+            }
+        }
+        if (!bHasConditionalColor)
+        {
+            const SvxBrushItem* pBrush = rColumn.GetDoc().GetAttr(aPos, ATTR_BACKGROUND);
+            backgroundColor = pBrush->GetColor();
+        }
+        mrFilterEntries.addBackgroundColor(backgroundColor);
 
         if (rCell.hasString())
         {
