@@ -182,7 +182,7 @@ void Qt5Widget::mousePressEvent(QMouseEvent* pEvent)
 {
     handleMousePressEvent(m_rFrame, pEvent);
     if (m_rFrame.isPopup()
-        || !geometry().translated(geometry().topLeft() * -1).contains(pEvent->pos()))
+        && !geometry().translated(geometry().topLeft() * -1).contains(pEvent->pos()))
         closePopup();
 }
 
