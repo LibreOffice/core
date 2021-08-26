@@ -13,8 +13,6 @@
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <comphelper/scopeguard.hxx>
-#include <unotools/syslocaleoptions.hxx>
-#include <i18nlangtag/languagetag.hxx>
 #include <vcl/event.hxx>
 #include <vcl/scheduler.hxx>
 #include <editeng/lrspitem.hxx>
@@ -40,7 +38,6 @@
 #include <ndtxt.hxx>
 #include <frmatr.hxx>
 #include <IDocumentSettingAccess.hxx>
-#include <config_features.h>
 #include <unotxdoc.hxx>
 #include <rootfrm.hxx>
 #include <docsh.hxx>
