@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d5acf443_6109a023",
+        "filename": "vcl/source/control/imp_listbox.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-08-26T02:08:10Z",
+      "side": 1,
+      "message": "Typo: “another fonts” → “other fonts”",
+      "range": {
+        "startLine": 125,
+        "startChar": 25,
+        "endLine": 125,
+        "endChar": 32
+      },
+      "revId": "a21efa3b66fab77c641c4112ac3b384cacab9ecb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
