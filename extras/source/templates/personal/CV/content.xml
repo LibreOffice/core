@@ -6,16 +6,16 @@
     <style:font-face style:name="Liberation Sans" svg:font-family="'Liberation Sans'" style:font-adornments="Standard" style:font-family-generic="swiss" style:font-pitch="variable"/>
   </office:font-face-decls>
   <office:automatic-styles>
-    <style:style style:name="Tabelle1" style:family="table">
+    <style:style style:name="Table1" style:family="table">
       <style:table-properties style:width="17cm" table:align="margins"/>
     </style:style>
-    <style:style style:name="Tabelle1.A" style:family="table-column">
+    <style:style style:name="Table1.A" style:family="table-column">
       <style:table-column-properties style:column-width="4.824cm" style:rel-column-width="18597*"/>
     </style:style>
-    <style:style style:name="Tabelle1.B" style:family="table-column">
+    <style:style style:name="Table1.B" style:family="table-column">
       <style:table-column-properties style:column-width="12.176cm" style:rel-column-width="46938*"/>
     </style:style>
-    <style:style style:name="Tabelle1.A1" style:family="table-cell">
+    <style:style style:name="Table1.A1" style:family="table-cell">
       <style:table-cell-properties fo:padding="0cm" fo:border="none"/>
     </style:style>
   </office:automatic-styles>
@@ -32,224 +32,224 @@
       <text:p text:style-name="Standard">
         <text:s/>
       </text:p>
-      <table:table table:name="Tabelle1" table:style-name="Tabelle1">
-        <table:table-column table:style-name="Tabelle1.A"/>
-        <table:table-column table:style-name="Tabelle1.B"/>
+      <table:table table:name="Table1" table:style-name="Table1">
+        <table:table-column table:style-name="Table1.A"/>
+        <table:table-column table:style-name="Table1.B"/>
         <table:table-row>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard">
               <text:span text:style-name="Strong_20_Emphasis">About me</text:span>
             </text:p>
           </table:table-cell>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Table_20_Contents"/>
           </table:table-cell>
         </table:table-row>
         <table:table-row>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Table_20_Contents">Name</text:p>
           </table:table-cell>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Table_20_Contents">Joe Bloggs</text:p>
           </table:table-cell>
         </table:table-row>
         <table:table-row>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Table_20_Contents">Address</text:p>
           </table:table-cell>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Table_20_Contents">42 Main Street</text:p>
           </table:table-cell>
         </table:table-row>
         <table:table-row>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Table_20_Contents"/>
           </table:table-cell>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Table_20_Contents">258348 Anytown</text:p>
           </table:table-cell>
         </table:table-row>
         <table:table-row>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Table_20_Contents">Phone</text:p>
           </table:table-cell>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Table_20_Contents">3208578573</text:p>
           </table:table-cell>
         </table:table-row>
         <table:table-row>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Table_20_Contents">Email</text:p>
           </table:table-cell>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Table_20_Contents">j.bloggs@localhost.com</text:p>
           </table:table-cell>
         </table:table-row>
         <table:table-row>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Table_20_Contents">Date of Birth</text:p>
           </table:table-cell>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Table_20_Contents">15th August 1991</text:p>
           </table:table-cell>
         </table:table-row>
         <table:table-row>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Table_20_Contents">Nationality</text:p>
           </table:table-cell>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Table_20_Contents">British</text:p>
           </table:table-cell>
         </table:table-row>
         <table:table-row>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Table_20_Contents"/>
           </table:table-cell>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Table_20_Contents"/>
           </table:table-cell>
         </table:table-row>
         <table:table-row>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard">
               <text:span text:style-name="Strong_20_Emphasis">Experience</text:span>
             </text:p>
           </table:table-cell>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Table_20_Contents"/>
           </table:table-cell>
         </table:table-row>
         <table:table-row>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard">Jun. 2008 -present</text:p>
           </table:table-cell>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt</text:p>
           </table:table-cell>
         </table:table-row>
         <table:table-row>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard">Feb. 2004 – Nov. 2006</text:p>
           </table:table-cell>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard">At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</text:p>
           </table:table-cell>
         </table:table-row>
         <table:table-row>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard"/>
           </table:table-cell>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard"/>
           </table:table-cell>
         </table:table-row>
         <table:table-row>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard">
               <text:span text:style-name="Strong_20_Emphasis">Education</text:span>
             </text:p>
           </table:table-cell>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Table_20_Contents"/>
           </table:table-cell>
         </table:table-row>
         <table:table-row>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard">2010 - present</text:p>
           </table:table-cell>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard">Msc. Lorem Ipsum at LID University of Applied Sciences</text:p>
           </table:table-cell>
         </table:table-row>
         <table:table-row>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard">2007 - 2010</text:p>
           </table:table-cell>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam, 97%</text:p>
           </table:table-cell>
         </table:table-row>
         <table:table-row>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard">2005 – 2007</text:p>
           </table:table-cell>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard">Hec prodere movens adipiscur esse</text:p>
           </table:table-cell>
         </table:table-row>
         <table:table-row>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard"/>
           </table:table-cell>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard"/>
           </table:table-cell>
         </table:table-row>
         <table:table-row>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard">
               <text:span text:style-name="Strong_20_Emphasis">Skills</text:span>
             </text:p>
           </table:table-cell>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard"/>
           </table:table-cell>
         </table:table-row>
         <table:table-row>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard">Software</text:p>
           </table:table-cell>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard">LibreOffice, LaTeX, Git</text:p>
           </table:table-cell>
         </table:table-row>
         <table:table-row>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard">Programming</text:p>
           </table:table-cell>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard">C, C++</text:p>
           </table:table-cell>
         </table:table-row>
         <table:table-row>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard"/>
           </table:table-cell>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard"/>
           </table:table-cell>
         </table:table-row>
         <table:table-row>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard">
               <text:span text:style-name="Strong_20_Emphasis">Languages</text:span>
             </text:p>
           </table:table-cell>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard"/>
           </table:table-cell>
         </table:table-row>
         <table:table-row>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard">English</text:p>
           </table:table-cell>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard">Mother tongue</text:p>
           </table:table-cell>
         </table:table-row>
         <table:table-row>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard">French</text:p>
           </table:table-cell>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard">Fluent (DELF 2010)</text:p>
           </table:table-cell>
         </table:table-row>
         <table:table-row>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard">Japanese</text:p>
           </table:table-cell>
-          <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
             <text:p text:style-name="Standard">Fair</text:p>
           </table:table-cell>
         </table:table-row>
