@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "19c16657_84b41991",
+        "filename": "include/tools/cpuid.hxx",
+        "patchSetId": 28
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-08-26T10:30:17Z",
+      "side": 1,
+      "message": "isn\u0027t the next flag 0x80?",
+      "range": {
+        "startLine": 30,
+        "startChar": 14,
+        "endLine": 30,
+        "endChar": 19
+      },
+      "revId": "5b9cf5881ef53fac5f1d8376f687dbadf9d3cf2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9706704_77c91904",
+        "filename": "include/tools/cpuid.hxx",
+        "patchSetId": 28
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-08-26T10:30:17Z",
+      "side": 1,
+      "message": "This flag needs to be update too..",
+      "range": {
+        "startLine": 36,
+        "startChar": 107,
+        "endLine": 36,
+        "endChar": 112
+      },
+      "revId": "5b9cf5881ef53fac5f1d8376f687dbadf9d3cf2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
