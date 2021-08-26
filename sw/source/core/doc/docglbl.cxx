@@ -307,19 +307,14 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
 
                     SwNodeRange aRg( *pStartNd, 0, aEndIdx.GetNode() );
                     SwNodeIndex aTmpIdx( pDoc->GetNodes().GetEndOfContent() );
-                    GetNodes().Copy_( aRg, aTmpIdx, false );
+                    GetDocumentContentOperationsManager().CopyWithFlyInFly(
+                            aRg, aTmpIdx, nullptr, false, false);
 
                     // Delete the initial TextNode
                     SwNodeIndex aIdx( pDoc->GetNodes().GetEndOfExtras(), 2 );
                     if( aIdx.GetIndex() + 1 !=
                         pDoc->GetNodes().GetEndOfContent().GetIndex() )
                         pDoc->GetNodes().Delete( aIdx );
-
-                    // All Flys in the section
-                    GetDocumentContentOperationsManager().CopyFlyInFlyImpl(aRg, nullptr, aIdx);
-
-                    // And what's with all the Bookmarks?
-                    // ?????
 
                     utl::TempFile aTempFile2(sLeading, true, &sExt, &sPath);
                     sFileName = aTempFile2.GetURL();
