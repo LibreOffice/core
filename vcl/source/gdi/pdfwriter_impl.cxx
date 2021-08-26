@@ -77,6 +77,7 @@
 #include <impglyphitem.hxx>
 #include <pdf/XmpMetadata.hxx>
 #include <pdf/objectcopier.hxx>
+#include <pdf/PdfConfig.hxx>
 #include <o3tl/sorted_vector.hxx>
 
 #include "pdfwriter_impl.hxx"
@@ -8407,11 +8408,14 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
         return;
 
     // Count /Matrix and /BBox.
-    // vcl::ImportPDF() works with 96 DPI so use the same values here, too.
+    // vcl::ImportPDF() uses getDefaultPdfResolutionDpi to set the desired
+    // rendering DPI so we have to take into account that here too.
+    static const double fResolutionDPI = vcl::pdf::getDefaultPdfResolutionDpi();
+
     sal_Int32 nOldDPIX = GetDPIX();
-    SetDPIX(96);
     sal_Int32 nOldDPIY = GetDPIY();
-    SetDPIY(96);
+    SetDPIX(fResolutionDPI);
+    SetDPIY(fResolutionDPI);
     Size aSize = PixelToLogic(rEmit.m_aPixelSize, MapMode(m_aMapMode.GetMapUnit()));
     SetDPIX(nOldDPIX);
     SetDPIY(nOldDPIY);
