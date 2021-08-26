@@ -737,7 +737,9 @@ void ScXMLExport::WriteSingleColumn(const sal_Int32 nRepeatColumns, const sal_In
     const sal_Int32 nIndex, const bool bIsAutoStyle, const bool bIsVisible)
 {
     CheckAttrList();
-    AddAttribute(sAttrStyleName, pColumnStyles->GetStyleNameByIndex(nStyleIndex));
+    // tdf#138466
+    if (nStyleIndex != -1)
+        AddAttribute(sAttrStyleName, pColumnStyles->GetStyleNameByIndex(nStyleIndex));
     if (!bIsVisible)
         AddAttribute(XML_NAMESPACE_TABLE, XML_VISIBILITY, XML_COLLAPSE);
     if (nRepeatColumns > 1)
@@ -870,9 +872,7 @@ void ScXMLExport::ExportColumns(const sal_Int32 nTable, const ScRange& aColumnHe
             nColsRepeated = 1;
         }
     }
-    // tdf#138466
-    if (nPrevIndex != -1)
-        WriteColumn(nPrevColumn, nColsRepeated, nPrevIndex, bPrevIsVisible);
+    WriteColumn(nPrevColumn, nColsRepeated, nPrevIndex, bPrevIsVisible);
     if (!bIsClosed)
         CloseHeaderColumn();
     if (pGroupColumns->IsGroupEnd(nColumn - 1))
@@ -1351,7 +1351,9 @@ void ScXMLExport::WriteRowStartTag(
     const sal_Int32 nIndex, const sal_Int32 nEqualRows,
     bool bHidden, bool bFiltered)
 {
-    AddAttribute(sAttrStyleName, pRowStyles->GetStyleNameByIndex(nIndex));
+    // tdf#143940
+    if (nIndex != -1)
+        AddAttribute(sAttrStyleName, pRowStyles->GetStyleNameByIndex(nIndex));
     if (bHidden)
     {
         if (bFiltered)
