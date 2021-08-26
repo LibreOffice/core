@@ -71,7 +71,6 @@ svx/uiconfig/ui/optgridpage.ui://GtkLabel[@id='label4'] orphan-label
 svx/uiconfig/ui/optgridpage.ui://GtkLabel[@id='label5'] orphan-label
 svx/uiconfig/ui/paralinespacingcontrol.ui://GtkSpinButton[@id='percent_box'] no-labelled-by
 svx/uiconfig/ui/paralinespacingcontrol.ui://GtkSpinButton[@id='metric_box'] no-labelled-by
-svx/uiconfig/ui/profileexporteddialog.ui://GtkLabel[@id='label'] orphan-label
 svx/uiconfig/ui/redlinefilterpage.ui://GtkCheckButton[@id='comment'] missing-labelled-by
 svx/uiconfig/ui/redlinefilterpage.ui://GtkComboBoxText[@id='actionlist'] missing-label-for
 svx/uiconfig/ui/redlinefilterpage.ui://GtkComboBoxText[@id='authorlist'] missing-label-for
