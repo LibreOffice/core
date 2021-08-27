@@ -69,7 +69,13 @@ sal_Int32 TextRun::insertAt(
         Any aOldFontFamily = xState->getPropertyDefault("CharFontFamily");
 
         TextCharacterProperties aTextCharacterProps( rTextCharacterStyle );
-        aTextCharacterProps.assignUsed( maTextCharacterProperties );
+
+        // If no text color specified lets anyway initialize it as default:
+        // this will help to recover after hyperlink
+        if (!aTextCharacterProps.maFillProperties.maFillColor.isUsed())
+            aTextCharacterProps.maFillProperties.moFillType = XML_solidFill;
+
+        aTextCharacterProps.assignUsed(maTextCharacterProperties);
         if ( aTextCharacterProps.moHeight.has() )
             nCharHeight = aTextCharacterProps.moHeight.get();
         else
