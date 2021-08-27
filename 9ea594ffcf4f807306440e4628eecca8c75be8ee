@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1d34f431_765a2ca3",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1332,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-08-27T12:34:37Z",
+      "side": 1,
+      "message": "This should not include nIntValue 9.  That means \"body level\" in DOCX. There is no equivalent in LO (where it means level 9 instead).",
+      "range": {
+        "startLine": 1332,
+        "startChar": 87,
+        "endLine": 1332,
+        "endChar": 96
+      },
+      "revId": "9ea594ffcf4f807306440e4628eecca8c75be8ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b234791_2edac217",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1568,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-08-27T12:34:37Z",
+      "side": 1,
+      "message": "This confuses me. There really is no link between outlineLvl and listLevel (numbering level). Did you need this to avoid unit test breakage? (Although I can\u0027t imagine anything would break.)",
+      "range": {
+        "startLine": 1568,
+        "startChar": 32,
+        "endLine": 1568,
+        "endChar": 52
+      },
+      "revId": "9ea594ffcf4f807306440e4628eecca8c75be8ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
