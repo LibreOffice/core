@@ -80,10 +80,10 @@ void XFRow::AddCell(rtl::Reference<XFCell> const & rCell)
 {
     if (!rCell)
         return;
-    sal_Int32 col = m_aCells.size()+1;
+    sal_Int32 col = m_aCells.size() + 1;
     rCell->SetCol(col);
     rCell->SetOwnerRow(this);
-    m_aCells[col] = rCell;
+    m_aCells.push_back(rCell);
 }
 
 sal_Int32 XFRow::GetCellCount() const
@@ -91,12 +91,14 @@ sal_Int32 XFRow::GetCellCount() const
     return m_aCells.size();
 }
 
+// 1 based
 XFCell* XFRow::GetCell(sal_Int32 col) const
 {
-    if( m_aCells.find(col) == m_aCells.end() )
-        return nullptr;
-    else
-        return m_aCells.find(col)->second.get();
+    assert(col > 0);
+    size_t nIndex = col - 1;
+    if (nIndex < m_aCells.size())
+        return m_aCells[nIndex].get();
+    return nullptr;
 }
 
 void    XFRow::ToXml(IXFStream *pStrm)
@@ -111,12 +113,12 @@ void    XFRow::ToXml(IXFStream *pStrm)
         pAttrList->AddAttribute( "table:number-rows-repeated", OUString::number(m_nRepeat) );
     pStrm->StartElement( "table:table-row" );
 
-    for (auto const& cell : m_aCells)
+    for (size_t nIndex = 0, nCount = m_aCells.size(); nIndex < nCount; ++nIndex)
     {
-        int col = cell.first;
-        XFCell *pCell = cell.second.get();
-        if( !pCell )
+        XFCell *pCell = m_aCells[nIndex].get();
+        if (!pCell)
             continue;
+        int col = nIndex + 1;
         if( col>lastCol+1 )
         {
             XFCell *pNULLCell = new XFCell();
