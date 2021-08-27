@@ -384,7 +384,7 @@ void LwpRowLayout::ConvertCommonRow(rtl::Reference<XFTable> const & pXFTable, sa
 
     sal_uInt8 nCellStartCol,nCellEndCol;
 
-    for (sal_uInt8 i = nStartCol; i < nEndCol ; i++)
+    for (sal_uInt16 i = nStartCol; i < nEndCol; i++)
     {
         // add row to table
         LwpObjectID *pCellID= &GetChildHead();
