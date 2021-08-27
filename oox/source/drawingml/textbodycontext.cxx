@@ -29,6 +29,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <sax/fastattribs.hxx>
+#include "hyperlinkcontext.hxx"
 
 #include <oox/mathml/import.hxx>
 
@@ -104,6 +105,16 @@ ContextHandlerRef TextParagraphContext::onCreateContext( sal_Int32 aElementToken
             return this;
         case OOX_TOKEN(a14, m):
             return CreateLazyMathBufferingContext(*this, mrParagraph);
+        case W_TOKEN( hyperlink ):
+        {
+            TextRunPtr pRun = std::make_shared<TextRun>();
+            mrParagraph.addRun(pRun);
+            // parse hyperlink attributes: use HyperLinkContext for that
+            rtl::Reference<HyperLinkContext> pContext(new HyperLinkContext(
+                *this, rAttribs, pRun->getTextCharacterProperties().maHyperlinkPropertyMap));
+            // but create text run context because HyperLinkContext can't process internal w:r, w:t, etc
+            return new RegularTextRunContext(*this, pRun);
+        }
         default:
             SAL_WARN("oox", "TextParagraphContext::onCreateContext: unhandled element: " << getBaseToken(aElementToken));
     }
