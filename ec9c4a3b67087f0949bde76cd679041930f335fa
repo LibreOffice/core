@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6cc81814_d0a5fb3f",
+        "filename": "cui/uiconfig/ui/password.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-08-27T10:54:06Z",
+      "side": 1,
+      "message": "We should keep the explicit translatable\u003d\"no\" here. I can take care of that.",
+      "revId": "ec9c4a3b67087f0949bde76cd679041930f335fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

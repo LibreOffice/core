@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c67362f3_ff24c320",
+        "filename": "cui/uiconfig/ui/bulletandposition.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-08-27T10:54:06Z",
+      "side": 0,
+      "message": "menubutton needs to keep this line, I can take care of that",
+      "revId": "8d8e5ab9193785acc4e1cb05e0db7f97afde1e2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8930d5bb_582c311f",
+        "filename": "cui/uiconfig/ui/menuassignpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-08-27T10:54:06Z",
+      "side": 0,
+      "message": "I\u0027d keep this simple mnemonic-widget and instead drop the more complex label-for, labelled-by which is unnecessary for the usual simple case of a label which has a mnemonic widget. Like was done for pageformatpage.ui#458 (unless I\u0027m missing something)",
+      "revId": "8d8e5ab9193785acc4e1cb05e0db7f97afde1e2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6750306_7e7986b8",
+        "filename": "cui/uiconfig/ui/pageformatpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-08-27T10:54:06Z",
+      "side": 0,
+      "message": "looks good, fixes the mnemonic-widget and with a mnemonic-widget set there\u0027s no need for explicit a11y relations for labels of things",
+      "revId": "8d8e5ab9193785acc4e1cb05e0db7f97afde1e2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
