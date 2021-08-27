@@ -455,11 +455,8 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="pageformatpage|labelGutterMargin">Gutter:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">spinMargBot</property>
+                    <property name="mnemonic_widget">spinMargGut</property>
                     <property name="xalign">0</property>
-                    <accessibility>
-                      <relation type="label-for" target="spinMargGut"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -472,9 +469,6 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="truncate_multiline">True</property>
-                    <accessibility>
-                      <relation type="labelled-by" target="labelGutterMargin"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
