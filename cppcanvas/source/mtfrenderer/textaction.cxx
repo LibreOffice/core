@@ -643,7 +643,6 @@ namespace cppcanvas::internal
                 mxFont( rState.xFont ),
                 maStringContext( rString, nStartPos, nLen ),
                 mpCanvas( rCanvas ),
-                maState(),
                 maTextDirection( rState.textDirection )
             {
                 init( maState, mxFont,
@@ -664,7 +663,6 @@ namespace cppcanvas::internal
                 mxFont( rState.xFont ),
                 maStringContext( rString, nStartPos, nLen ),
                 mpCanvas( rCanvas ),
-                maState(),
                 maTextDirection( rState.textDirection )
             {
                 init( maState, mxFont,
@@ -831,10 +829,7 @@ namespace cppcanvas::internal
                 mxFont( rState.xFont ),
                 maStringContext( rText, nStartPos, nLen ),
                 mpCanvas( rCanvas ),
-                maState(),
                 maTextLineInfo( tools::createTextLineInfo( rVDev, rState ) ),
-                maLinesOverallSize(),
-                mxTextLines(),
                 maReliefOffset( rReliefOffset ),
                 maReliefColor( rReliefColor ),
                 maShadowOffset( rShadowOffset ),
@@ -873,10 +868,7 @@ namespace cppcanvas::internal
                 mxFont( rState.xFont ),
                 maStringContext( rText, nStartPos, nLen ),
                 mpCanvas( rCanvas ),
-                maState(),
                 maTextLineInfo( tools::createTextLineInfo( rVDev, rState ) ),
-                maLinesOverallSize(),
-                mxTextLines(),
                 maReliefOffset( rReliefOffset ),
                 maReliefColor( rReliefColor ),
                 maShadowOffset( rShadowOffset ),
@@ -1071,9 +1063,7 @@ namespace cppcanvas::internal
                                               const uno::Sequence< double >&    rOffsets,
                                               const CanvasSharedPtr&            rCanvas,
                                               const OutDevState&                rState ) :
-                mxTextLayout(),
-                mpCanvas( rCanvas ),
-                maState()
+                mpCanvas( rCanvas )
             {
                 initLayoutWidth(mnLayoutWidth, rOffsets);
 
@@ -1096,9 +1086,7 @@ namespace cppcanvas::internal
                                               const CanvasSharedPtr&            rCanvas,
                                               const OutDevState&                rState,
                                               const ::basegfx::B2DHomMatrix&    rTextTransform ) :
-                mxTextLayout(),
-                mpCanvas( rCanvas ),
-                maState()
+                mpCanvas( rCanvas )
             {
                 initLayoutWidth(mnLayoutWidth, rOffsets);
 
@@ -1288,9 +1276,7 @@ namespace cppcanvas::internal
                                                           VirtualDevice const &             rVDev,
                                                           const CanvasSharedPtr&            rCanvas,
                                                           const OutDevState&                rState  ) :
-                mxTextLayout(),
                 mpCanvas( rCanvas ),
-                maState(),
                 maTextLineInfo( tools::createTextLineInfo( rVDev, rState ) ),
                 maTextLinesHelper(mpCanvas, rState),
                 maReliefOffset( rReliefOffset ),
@@ -1328,9 +1314,7 @@ namespace cppcanvas::internal
                                                           const CanvasSharedPtr&            rCanvas,
                                                           const OutDevState&                rState,
                                                           const ::basegfx::B2DHomMatrix&    rTextTransform ) :
-                mxTextLayout(),
                 mpCanvas( rCanvas ),
-                maState(),
                 maTextLineInfo( tools::createTextLineInfo( rVDev, rState ) ),
                 maTextLinesHelper(mpCanvas, rState),
                 maReliefOffset( rReliefOffset ),
@@ -1677,16 +1661,13 @@ namespace cppcanvas::internal
                 mxTextPoly( rTextPoly ),
                 maOffsets( rOffsets ),
                 mpCanvas( rCanvas ),
-                maState(),
                 mnOutlineWidth( calcOutlineWidth(rState,rVDev) ),
                 maFillColor(
                     vcl::unotools::colorToDoubleSequence(
                         COL_WHITE,
                         rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() )),
                 maTextLineInfo( tools::createTextLineInfo( rVDev, rState ) ),
-                maLinesOverallSize(),
                 maOutlineBounds( rOutlineBounds ),
-                mxTextLines(),
                 maReliefOffset( rReliefOffset ),
                 maReliefColor( rReliefColor ),
                 maShadowOffset( rShadowOffset ),
@@ -1723,16 +1704,13 @@ namespace cppcanvas::internal
                 mxTextPoly( rTextPoly ),
                 maOffsets( rOffsets ),
                 mpCanvas( rCanvas ),
-                maState(),
                 mnOutlineWidth( calcOutlineWidth(rState,rVDev) ),
                 maFillColor(
                     vcl::unotools::colorToDoubleSequence(
                         COL_WHITE,
                         rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() )),
                 maTextLineInfo( tools::createTextLineInfo( rVDev, rState ) ),
-                maLinesOverallSize(),
                 maOutlineBounds( rOutlineBounds ),
-                mxTextLines(),
                 maReliefOffset( rReliefOffset ),
                 maReliefColor( rReliefColor ),
                 maShadowOffset( rShadowOffset ),

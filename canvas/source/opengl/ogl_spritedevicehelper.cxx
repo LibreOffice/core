@@ -74,8 +74,6 @@ namespace oglcanvas
 
     SpriteDeviceHelper::SpriteDeviceHelper() :
         mpSpriteCanvas(nullptr),
-        maActiveSprites(),
-        maLastUpdate(),
         mpTextureCache(std::make_shared<TextureCache>()),
         mnLinearTwoColorGradientProgram(0),
         mnLinearMultiColorGradientProgram(0),

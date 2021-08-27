@@ -33,7 +33,6 @@ namespace canvas
                       const ::basegfx::B2ISize&    rSize ) :
         mpColorBuffer(rColorBuffer),
         mpPageManager(rPageManager),
-        mpFragment(),
         maSourceOffset(rPos),
         maSize(rSize),
         mbIsDirty(true)

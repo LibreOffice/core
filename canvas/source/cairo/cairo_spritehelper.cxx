@@ -38,8 +38,6 @@ using namespace ::com::sun::star;
 namespace cairocanvas
 {
     SpriteHelper::SpriteHelper() :
-        mpSpriteCanvas(),
-        mpBufferSurface(),
         mbTextureDirty(true)
     {}
 

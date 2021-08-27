@@ -105,7 +105,6 @@ namespace comphelper
             ,m_aValueType( _source.m_aValueType )
             ,m_pKeyCompare( _source.m_pKeyCompare )
             ,m_bMutable( false )
-            ,m_aModListeners()
         {
             m_pValues.emplace( *_source.m_pValues );
         }

@@ -29,9 +29,6 @@ constexpr OUStringLiteral ERRMSG_INVALID_COMPONENT_PARAM = u"NULL as component r
 
 NumberedCollection::NumberedCollection()
     : ::cppu::BaseMutex ()
-    , m_sUntitledPrefix ()
-    , m_lComponents     ()
-    , m_xOwner          ()
 {
 }
 

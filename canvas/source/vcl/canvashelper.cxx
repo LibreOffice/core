@@ -104,9 +104,6 @@ namespace vclcanvas
 
     CanvasHelper::CanvasHelper() :
         mpDevice(),
-        mpProtectedOutDevProvider(),
-        mpOutDevProvider(),
-        mp2ndOutDevProvider(),
         mbHaveAlpha( false )
     {
     }

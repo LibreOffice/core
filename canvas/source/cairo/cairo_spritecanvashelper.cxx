@@ -91,8 +91,6 @@ namespace cairocanvas
     SpriteCanvasHelper::SpriteCanvasHelper() :
         mpRedrawManager( nullptr ),
         mpOwningSpriteCanvas( nullptr ),
-        mpCompositingSurface(),
-        maCompositingSurfaceSize(),
         mbCompositingSurfaceDirty(true)
     {
     }

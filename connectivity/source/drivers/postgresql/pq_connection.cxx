@@ -330,7 +330,7 @@ class cstr_vector
     std::vector<char*> values;
     std::vector<bool>  acquired;
 public:
-    cstr_vector () : values(), acquired() { values.reserve(8); acquired.reserve(8); }
+    cstr_vector ()  { values.reserve(8); acquired.reserve(8); }
     ~cstr_vector ()
     {
         OSL_ENSURE(values.size() == acquired.size(), "pq_connection: cstr_vector values and acquired size mismatch");

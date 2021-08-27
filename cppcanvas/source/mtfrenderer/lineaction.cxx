@@ -74,8 +74,7 @@ namespace cppcanvas::internal
                                     const OutDevState&         rState ) :
                 maStartPoint( rStartPoint ),
                 maEndPoint( rEndPoint ),
-                mpCanvas( rCanvas ),
-                maState()
+                mpCanvas( rCanvas )
             {
                 tools::initRenderState(maState,rState);
                 maState.DeviceColor = rState.lineColor;

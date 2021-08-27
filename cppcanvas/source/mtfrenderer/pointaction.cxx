@@ -75,8 +75,7 @@ namespace cppcanvas::internal
                                       const CanvasSharedPtr&     rCanvas,
                                       const OutDevState&         rState ) :
                 maPoint( rPoint ),
-                mpCanvas( rCanvas ),
-                maState()
+                mpCanvas( rCanvas )
             {
                 tools::initRenderState(maState,rState);
                 maState.DeviceColor = rState.lineColor;
@@ -87,8 +86,7 @@ namespace cppcanvas::internal
                                       const OutDevState&         rState,
                                       const ::Color&             rAltColor ) :
                 maPoint( rPoint ),
-                mpCanvas( rCanvas ),
-                maState()
+                mpCanvas( rCanvas )
             {
                 tools::initRenderState(maState,rState);
                 maState.DeviceColor = vcl::unotools::colorToDoubleSequence(
