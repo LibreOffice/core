@@ -1739,6 +1739,29 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126540_GridToggleModifiesTheDocument)
     CPPUNIT_ASSERT(pDocSh->IsModified());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf143940)
+{
+    ScModelObj* pModelObj = createDoc("tdf143940.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    goToCell("A828");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("One Onza"), pDoc->GetString(ScAddress(0, 827, 0)));
+
+    dispatchCommand(mxComponent, ".uno:InsertRowsBefore", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 827, 0)));
+
+    // Without the fix in place, this test would have crashed
+    pModelObj = saveAndReload(mxComponent, "calc8");
+    pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 827, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144022)
 {
     ScModelObj* pModelObj = createDoc("tdf144022.ods");
