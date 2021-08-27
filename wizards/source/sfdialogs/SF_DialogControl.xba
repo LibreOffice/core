@@ -23,11 +23,15 @@ Option Explicit
 &apos;&apos;&apos;		Essentially a single property &quot;Value&quot; maps many alternative UNO properties depending each on
 &apos;&apos;&apos;		the control type.
 &apos;&apos;&apos;
-&apos;&apos;&apos;		A special attention is given to controls with type TreeControl.
-&apos;&apos;&apos;		It is easy with the API proposed in the current class to populate a tree, either
-&apos;&apos;&apos;			- branch by branch (CreateRoot and AddSubNode), or
-&apos;&apos;&apos;			- with a set of branches at once (AddSubtree)
-&apos;&apos;&apos;		Additionally populating a TreeControl can be done statically or dynamically
+&apos;&apos;&apos;		A special attention is given to controls with types TreeControl and TableControl
+&apos;&apos;&apos;			It is easy with the API proposed in the current class to populate a tree, either
+&apos;&apos;&apos;				- branch by branch (CreateRoot and AddSubNode), or
+&apos;&apos;&apos;				- with a set of branches at once (AddSubtree)
+&apos;&apos;&apos;			Additionally populating a TreeControl can be done statically or dynamically
+&apos;&apos;&apos;
+&apos;&apos;&apos;			With the method SetTableData(), feed a tablecontrol with a sortable and selectable
+&apos;&apos;&apos;			array of data. Columns and rows may receive a header. Column widths are adjusted manually by the user or
+&apos;&apos;&apos;			with the same method. Alignments can be set as well by script.
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Service invocation:
 &apos;&apos;&apos;			Dim myDialog As Object, myControl As Object
@@ -64,6 +68,8 @@ Private _DialogName			As String		&apos; Parent dialog name
 Private _ControlModel		As Object		&apos; com.sun.star.awt.XControlModel
 Private _ControlView		As Object		&apos; com.sun.star.awt.XControl - stardiv.Toolkit.UnoDialogControl
 Private _TreeDataModel		As Object		&apos; com.sun.star.awt.tree.MutableTreeDataModel
+Private _GridColumnModel	As Object		&apos; com.sun.star.awt.grid.XGridColumnModel
+Private _GridDataModel		As Object		&apos; com.sun.star.awt.grid.XGridDataModel
 
 &apos;	Control attributes
 Private	_ImplementationName	As String
@@ -75,6 +81,9 @@ Private _OnNodeSelected		As String		&apos; Script to invoke when a node is selec
 Private _OnNodeExpanded		As String		&apos; Script to invoke when a node is expanded
 Private _SelectListener		As Object		&apos; com.sun.star.view.XSelectionChangeListener
 Private _ExpandListener		As Object		&apos; com.sun.star.awt.tree.XTreeExpansionListener
+
+&apos;	Table control attributes
+Private _ColumnWidths		As Variant		&apos; Array of column widths
 
 REM ============================================================ MODULE CONSTANTS
 
@@ -95,6 +104,7 @@ Private Const CTLPATTERNFIELD	= &quot;PatternField&quot;
 Private Const CTLPROGRESSBAR	= &quot;ProgressBar&quot;
 Private Const CTLRADIOBUTTON	= &quot;RadioButton&quot;
 Private Const CTLSCROLLBAR		= &quot;ScrollBar&quot;
+Private Const CTLTABLECONTROL	= &quot;TableControl&quot;
 Private Const CTLTEXTFIELD		= &quot;TextField&quot;
 Private Const CTLTIMEFIELD		= &quot;TimeField&quot;
 Private Const CTLTREECONTROL	= &quot;TreeControl&quot;
@@ -113,12 +123,15 @@ Private Sub Class_Initialize()
 	Set _ControlModel = Nothing
 	Set _ControlView = Nothing
 	Set _TreeDataModel = Nothing
+	Set _GridColumnModel = Nothing
+	Set _GridDataModel = Nothing
 	_ImplementationName = &quot;&quot;
 	_ControlType = &quot;&quot;
 	_OnNodeSelected = &quot;&quot;
 	_OnNodeExpanded = &quot;&quot;
 	Set _SelectListener = Nothing
 	Set _ExpandListener = Nothing
+	_ColumnWidths = Array()
 End Sub		&apos;	SFDialogs.SF_DialogControl Constructor
 
 REM -----------------------------------------------------------------------------
@@ -491,6 +504,18 @@ Property Get XControlView() As Object
 &apos;&apos;&apos;	The XControlView property returns the view UNO object of the control
 	XControlView = _PropertyGet(&quot;XControlView&quot;, Nothing)
 End Property	&apos;	SFDialogs.SF_DialogControl.XControlView (get)
+
+REM -----------------------------------------------------------------------------
+Property Get XGridColumnModel() As Object
+&apos;&apos;&apos;	The XGridColumnModel property returns the mutable data model UNO object of the tree control
+	XGridColumnModel = _PropertyGet(&quot;XGridColumnModel&quot;, Nothing)
+End Property	&apos;	SFDialogs.SF_DialogControl.XGridColumnModel (get)
+
+REM -----------------------------------------------------------------------------
+Property Get XGridDataModel() As Object
+&apos;&apos;&apos;	The XGridDataModel property returns the mutable data model UNO object of the tree control
+	XGridDataModel = _PropertyGet(&quot;XGridDataModel&quot;, Nothing)
+End Property	&apos;	SFDialogs.SF_DialogControl.XGridDataModel (get)
 
 REM -----------------------------------------------------------------------------
 Property Get XTreeDataModel() As Object
@@ -895,6 +920,8 @@ Public Function Properties() As Variant
 					, &quot;Visible&quot; _
 					, &quot;XControlModel&quot; _
 					, &quot;XControlView&quot; _
+					, &quot;XGridColumnModel&quot; _
+					, &quot;XGridDataModel&quot; _
 					, &quot;XTreeDataModel&quot; _
 					)
 
@@ -970,6 +997,216 @@ Finally:
 Catch:
 	GoTo Finally
 End Function	&apos;	SFDialogs.SF_DialogControl.SetProperty
+
+REM -----------------------------------------------------------------------------
+Public Function SetTableData(Optional ByRef DataArray As Variant _
+								, Optional ByRef Widths As Variant _
+								, Optional ByRef Alignments As Variant _
+								) As Boolean
+&apos;&apos;&apos;	Fill a table control with the given data. Preexisting data is erased
+&apos;&apos;&apos;	The Basic IDE allows to define if the control has a row and/or a column header
+&apos;&apos;&apos;	When it is the case, the array in argument should contain those headers resp. in the first
+&apos;&apos;&apos;	column and/or in the first row
+&apos;&apos;&apos;	A column in the control shall be sortable when the data (headers excluded) in that column
+&apos;&apos;&apos;	is homogeneously filled either with numbers or with strings
+&apos;&apos;&apos;	Columns containing strings will be left-aligned, those with numbers will be right-aligned
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		DataArray: the set of data to display in the table control, including optional column/row headers
+&apos;&apos;&apos;			Is a 2D array in Basic, is a tuple of tuples when called from Python
+&apos;&apos;&apos;		Widths: the column&apos;s relative widths as a 1D array, each element corresponding with a column
+&apos;&apos;&apos;				If the array is shorter than the number of columns, the last value is kept for the next columns.
+&apos;&apos;&apos;				Example:
+&apos;&apos;&apos;					Widths := Array(1, 2)
+&apos;&apos;&apos;				means that the first column is half as wide as all the other columns
+&apos;&apos;&apos;				When the argument is absent, the columns are evenly spreaded over the control
+&apos;&apos;&apos;		Alignments: the column&apos;s horizontal alignment as a string with length = number of columns.
+&apos;&apos;&apos;				Possible characters are:
+&apos;&apos;&apos;					L(EFT), C(ENTER), R(IGHT) or space (default behaviour)
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		Dim myTable As Object, bSet As Boolean, vData As Variant
+&apos;&apos;&apos;			Set myTable = myDialog.Controls(&quot;myTableControl&quot;)	&apos;	This control has only column headers
+&apos;&apos;&apos;			vData = Array(&quot;Col1&quot;, &quot;Col2&quot;, &quot;Col3&quot;)
+&apos;&apos;&apos;			vData = SF_Array.AppendRow(vData, Array(1, 2, 3))
+&apos;&apos;&apos;			vData = SF_Array.AppendRow(vData, Array(4, 5, 6))
+&apos;&apos;&apos;			vData = SF_Array.AppendRow(vData, Array(7, 8, 9))
+&apos;&apos;&apos;			bSet = myTable.SetTableData(vData, Alignments := &quot; C &quot;)
+
+Dim bData As Boolean			&apos;	Return value
+Dim iDims As Integer			&apos;	Number of dimensions of DataArray
+Dim lMin1 As Long				&apos;	LBound1 of input array
+Dim lMax1 As Long				&apos;	UBound1 of input array
+Dim lMin2 As Long				&apos;	LBound2 of input array
+Dim lMax2 As Long				&apos;	UBound2 of input array
+Dim lControlWidth As Long		&apos;	Width of the table control
+Dim lMinW As Long				&apos;	lBound of Widths
+Dim lMaxW As Long				&apos;	UBound of vWidths
+Dim lMinRow As Long				&apos;	Row index of effective data subarray
+Dim lMinCol As Long				&apos;	Column index of effective data subarray
+Dim vRowHeaders As Variant		&apos;	Array of row headers
+Dim sRowHeader As String		&apos;	A single row header
+Dim vColHeaders As Variant		&apos;	Array of column headers
+Dim oColumn As Object			&apos;	com.sun.star.awt.grid.XGridColumn
+Dim dWidth As Double			&apos;	A single item of Widths
+Dim dRelativeWidth As Double	&apos;	Sum of Widths up to the number of columns
+Dim dWidthFactor As Double		&apos;	Factor to apply to relative widths to get absolute column widths
+Dim vDataRow As Variant			&apos;	A single row content in the tablecontrol
+Dim vDataItem As Variant		&apos;	A single DataArray item
+Dim sAlign As String			&apos;	Column&apos;s hprizontal alignments (single chars: L, C, R, space)
+Dim lAlign As Long				&apos;	com.sun.star.style.HorizontalAlignment.XXX
+Dim i As Long, j As Long, k As Long
+
+Const cstRowHdrWidth = 12	&apos;	Estimated width of the row header
+
+Const cstThisSub = &quot;SFDialogs.DialogControl.SetTableData&quot;
+Const cstSubArgs = &quot;DataArray, [Widths=Array(1)], [Alignments=&quot;&quot;&quot;&quot;]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bData = False
+
+Check:
+	If IsMissing(Widths) Or IsEmpty(Widths) Then Widths = Array(1)
+	If IsMissing(Alignments) Or IsEmpty(Alignments) Then Alignments = &quot;&quot;
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If _ControlType &lt;&gt; CTLTABLECONTROL Then GoTo CatchType
+		If Not ScriptForge.SF_Utils._ValidateArray(DataArray, &quot;DataArray&quot;) Then GoTo Catch		&apos;	Dimensions are checked below
+		If Not ScriptForge.SF_Utils._ValidateArray(Widths, &quot;Widths&quot;, 1, ScriptForge.V_NUMERIC, True) Then GoTo Catch
+		If Not ScriptForge.SF_Utils._Validate(Alignments, &quot;Alignments&quot;, V_STRING) Then GoTo Catch
+	End If
+
+Try:
+	&apos;	Erase any pre-existing data and columns
+	_GridDataModel.removeAllRows()
+	For i = _GridColumnModel.ColumnCount - 1 To 0 Step -1
+		_GridColumnModel.removeColumn(i)
+	Next i
+
+	&apos;	LBounds, UBounds - Basic or Pytho
+	iDims = ScriptForge.SF_Array.CountDims(DataArray)
+	Select Case iDims
+		Case -1, 0		:	GoTo Catch
+		Case 1					&apos;	Called probably from Python
+			lMin1 = LBound(DataArray, 1)			:	lMax1 = UBound(DataArray, 1)
+			If Not IsArray(DataArray(0)) Then GoTo Catch
+			If UBound(DataArray(0)) &lt; LBound(DataArray(0)) Then GoTo Catch	&apos;	No columns
+			lMin2 = LBound(DataArray(0))			:	lMax2 = UBound(DataArray(0))
+		Case 2
+			lMin1 = LBound(DataArray, 1)	:	lMax1 = UBound(DataArray, 1)
+			lMin2 = LBound(DataArray, 2)	:	lMax2 = UBound(DataArray, 2)
+		Case Else	:	GoTo Catch
+	End Select
+
+	&apos;	Extract headers from data array
+	lMinW = LBound(Widths)			:	lMaxW = UBound(Widths)
+	With _ControlModel
+		If .ShowColumnHeader Then
+			lMinRow = lMin1 + 1
+			If iDims = 1 Then
+				vColHeaders = DataArray(lMin1)
+			Else
+				vColHeaders = ScriptForge.SF_Array.ExtractRow(DataArray, lMin1)
+			End If
+		Else
+			lMinRow = lMin1
+			vColHeaders = Array()
+		End If
+		If .ShowRowHeader Then
+			lMinCol = lMin2 + 1
+			If iDims = 1 Then
+				vRowHeaders = Array()
+				ReDim vRowHeaders(lMin1 To lMax1)
+				For i = lMin1 To lMax1
+					vRowHeaders(i) = DataArray(i)(lMin2)
+				Next i
+			Else
+				vRowHeaders = ScriptForge.SF_Array.ExtractColumn(DataArray, lMin2)
+			End If
+		Else
+			lMinCol = lMin2
+			vRowHeaders = Array()
+		End If
+	End With
+
+	&apos;	Create the columns
+	For j = lMinCol To lMax2
+		Set oColumn = _GridColumnModel.createColumn()
+		If _ControlModel.ShowColumnHeader Then oColumn.Title = vColHeaders(j)
+		_GridColumnModel.addColumn(oColumn)
+	Next j
+	&apos;	Size the columns. Column sizing cannot be done before all the columns are added
+	If lMaxW &gt;= lMinW Then		&apos;	There must be at least 1 width given as argument
+		&apos;	Size the columns proportionally with their relative widths
+		dRelativeWidth = 0.0
+		i = lMinW - 1
+		&apos;	Compute the sum of the relative widths
+		For j = 0 To lMax2 - lMinCol
+			i = i + 1
+			If i &gt;= lMinW And i &lt;= lMaxW Then dRelativeWidth = dRelativeWidth + Widths(i) Else dRelativeWidth = dRelativeWidth + Widths(lMaxW)
+		Next j
+		&apos;	Set absolute widths
+		If dRelativeWidth &gt; 0.0 Then dWidthFactor = CDbl((_ControlModel.Width - cstRowHdrWidth) / dRelativeWidth) Else dWidthFactor = 1.0
+		i = lMinW - 1
+		For j = 0 To lMax2 - lMinCol
+			i = i + 1
+			If i &gt;= lMinW And i &lt;= lMaxW Then dWidth = CDbl(Widths(i)) Else dWidth = CDbl(Widths(lMaxW))
+			_GridColumnModel.Columns(j).ColumnWidth = CLng(dWidthFactor * dWidth)
+		Next j
+	Else
+		&apos;	Size all columns evenly
+		For j = 0 To lMax2 - lMinCol
+			_GridColumnModel.Columns(j).ColumnWidth = (_ControlModel.Width - cstRowHdrWidth) / (lMax2 - lMonCol + 1)
+		Next j
+	End If
+
+	&apos;	Initialize the column alignment
+	If Len(Alignments) &gt;= lMax2 - lMinCol + 1 Then sAlign = Alignments Else sAlign = Alignments &amp; Space(lMax2 - lMinCol + 1 - Len(Alignments))
+
+	&apos;	Feed the table with data and define/confirm the column alignment
+	vDataRow = Array()
+	For i = lMinRow To lMax1
+		ReDim vDataRow(0 To lMax2 - lMinCol)	
+		For j = lMinCol To lMax2
+			If iDims = 1 Then vDataItem = DataArray(i)(j) Else vDataItem = DataArray(i, j)
+			If VarType(vDataItem) = V_STRING Then
+			ElseIf ScriptForge.SF_Utils._VarTypeExt(vDataItem) = ScriptForge.V_NUMERIC Then
+			Else
+				vDataItem = ScriptForge.SF_String.Represent(vDataItem)
+			End If
+			vDataRow(j - lMinCol) = vDataItem
+			&apos;	Store alignment while processing the first row of the array
+			If i = lMinRow Then
+				k = j - lMinCol + 1
+				If Mid(sAlign, k, 1) = &quot; &quot; Then Mid(sAlign, k, 1) = Iif(VarType(vDataItem) = V_STRING, &quot;L&quot;, &quot;R&quot;)
+			End If
+		Next j
+		If _ControlModel.ShowRowHeader Then sRowHeader = vRowHeaders(i) Else sRowHeader = &quot;&quot;
+		_GridDataModel.addRow(sRowHeader, vDataRow)
+	Next i
+
+	&apos;	Determine alignments of each column
+	For j = 0 To lMax2 - lMinCol
+		Select Case Mid(sAlign, j + 1, 1)
+			Case &quot;L&quot;, &quot; &quot;	:	lAlign = com.sun.star.style.HorizontalAlignment.LEFT
+			Case &quot;R&quot;		:	lAlign = com.sun.star.style.HorizontalAlignment.RIGHT
+			Case &quot;C&quot;		:	lAlign = com.sun.star.style.HorizontalAlignment.CENTER
+			Case Else
+		End Select
+		_GridColumnModel.Columns(j).HorizontalAlign = lAlign
+	Next j
+
+	bData = True
+
+Finally:
+	SetTableData = bData
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+CatchType:
+	ScriptForge.SF_Exception.RaiseFatal(CONTROLTYPEERROR, _Name, _DialogName, _ControlType, &quot;SetTableData&quot;)
+	GoTo Finally
+End Function	&apos;	SFDialogs.SF_DialogControl.SetTableData
 
 REM -----------------------------------------------------------------------------
 Public Function WriteLine(Optional ByVal Line As Variant) As Boolean
@@ -1204,7 +1441,11 @@ Try:
 			&apos;	Initialize the data model
 			_ControlType = CTLTREECONTROL
 			Set _ControlModel.DataModel = ScriptForge.SF_Utils._GetUNOService(&quot;TreeDataModel&quot;)
-			_TreeDataModel = _ControlModel.DataModel
+			Set _TreeDataModel = _ControlModel.DataModel
+		Case &quot;UnoControlGridModel&quot;
+			_ControlType = CTLTABLECONTROL
+			Set _GridColumnModel = _ControlModel.ColumnModel
+			Set _GridDataModel = _ControlModel.GridDataModel
 		Case Else					:	_ControlType = sType
 	End Select
 
@@ -1305,6 +1546,8 @@ Const cstSubArgs = &quot;&quot;
 			Select Case _ControlType
 				Case CTLCOMBOBOX, CTLLISTBOX
 					If oSession.HasUNOProperty(_ControlModel, &quot;StringItemList&quot;) Then _PropertyGet = UBound(_ControlModel.StringItemList) + 1
+				Case CTLTABLECONTROL	&apos;	Returns zero when no table data yet
+					If oSession.HasUNOProperty(_GridDataModel, &quot;RowCount&quot;) Then _PropertyGet = _GridDataModel.RowCount
 				Case Else	:	GoTo CatchType
 			End Select
 		Case UCase(&quot;ListIndex&quot;)
@@ -1319,6 +1562,19 @@ Const cstSubArgs = &quot;&quot;
 					If oSession.HasUNOProperty(_ControlModel, &quot;SelectedItems&quot;) And oSession.HasUNOProperty(_ControlModel, &quot;StringItemList&quot;) Then
 						vSelection = _ControlModel.SelectedItems
 						If UBound(vSelection) &gt;= 0 Then _PropertyGet = vSelection(0)
+					End If
+				Case CTLTABLECONTROL
+					_PropertyGet = -1	&apos;	No row selected, no data, multiselection
+					If oSession.HasUNOProperty(_ControlModel, &quot;SelectionModel&quot;) _
+							And oSession.HasUNOProperty(_ControlView, &quot;CurrentRow&quot;) Then
+						&apos;	Other selection types (multi, range) not supported
+						If _ControlModel.SelectionModel = com.sun.star.view.SelectionType.SINGLE Then 
+							lIndex = _ControlView.CurrentRow
+							If lIndex &lt; 0 And oSession.HasUNOProperty(_ControlView, &quot;SelectedRows&quot;) Then
+								If UBound(_ControlView.SelectedRows) &gt;= 0 Then lIndex = _ControlView.SelectedRows(0)
+							End If
+							_PropertyGet = lIndex
+						End If
 					End If
 				Case Else	:	GoTo CatchType
 			End Select
@@ -1456,6 +1712,19 @@ Const cstSubArgs = &quot;&quot;
 					If oSession.HasUnoProperty(_ControlModel, &quot;State&quot;) Then vGet = ( _ControlModel.State = 1 ) Else vGet = False
 				Case CTLSCROLLBAR		&apos;Numeric
 					If oSession.HasUnoProperty(_ControlModel, &quot;ScrollValue&quot;) Then vGet = _ControlModel.ScrollValue Else vGet = 0
+				Case CTLTABLECONTROL
+					vGet = Array()	&apos;	Default value when no row selected, no data, multiselection
+					If oSession.HasUNOProperty(_ControlModel, &quot;SelectionModel&quot;) _
+							And oSession.HasUNOProperty(_ControlView, &quot;CurrentRow&quot;) Then
+						&apos;	Other selection types (multi, range) not supported
+						If _ControlModel.SelectionModel = com.sun.star.view.SelectionType.SINGLE Then
+							lIndex = _ControlView.CurrentRow
+							If lIndex &lt; 0 And oSession.HasUNOProperty(_ControlView, &quot;SelectedRows&quot;) Then
+								If UBound(_ControlView.SelectedRows) &gt;= 0 Then lIndex = _ControlView.SelectedRows(0)
+							End If
+							If lIndex &gt;= 0 Then vGet = _GridDataModel.getRowData(lIndex)
+						End If
+					End If					
 				Case CTLTIMEFIELD
 					vGet = CDate(0)
 					If oSession.HasUnoProperty(_ControlModel, &quot;Time&quot;) Then
@@ -1473,6 +1742,10 @@ Const cstSubArgs = &quot;&quot;
 			Set _PropertyGet = _ControlModel
 		Case UCase(&quot;XControlView&quot;)
 			Set _PropertyGet = _ControlView
+		Case UCase(&quot;XGridColumnModel&quot;)
+			Set _PropertyGet = _GridColumnModel
+		Case UCase(&quot;XGridDataModel&quot;)
+			Set _PropertyGet = _GridDataModel
 		Case UCase(&quot;XTreeDataModel&quot;)
 			Set _PropertyGet = _TreeDataModel
 		Case Else
@@ -1587,6 +1860,15 @@ Const cstSubArgs = &quot;Value&quot;
 					End If
 				Case CTLLISTBOX
 					If oSession.HasUNOProperty(_ControlModel, &quot;SelectedItems&quot;) Then _ControlModel.SelectedItems = Array(CInt(pvValue))
+				Case CTLTABLECONTROL
+					If oSession.HasUNOProperty(_ControlModel, &quot;SelectionModel&quot;) _
+							And oSession.HasUNOMethod(_ControlView, &quot;selectRow&quot;) Then
+						&apos;	Other selection types (multi, range) not supported
+						If _ControlModel.SelectionModel = com.sun.star.view.SelectionType.SINGLE _
+								And pvValue &gt;= 0 And pvValue &lt;= _GridDataModel.RowCount - 1 Then
+							 _ControlView.selectRow(pvValue)
+						End If
+					End If
 				Case Else	:	GoTo CatchType
 			End Select
 		Case UCase(&quot;Locked&quot;)
@@ -1768,7 +2050,9 @@ Const cstSubArgs = &quot;Value&quot;
 		Case UCase(&quot;Visible&quot;)
 			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Visible&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
 			If oSession.HasUnoMethod(_ControlView, &quot;setVisible&quot;) Then
-				If pvValue Then _ControlModel.EnableVisible = True
+				If pvValue Then
+					If oSession.HasUnoProperty(_ControlModel, &quot;EnableVisible&quot;) Then _ControlModel.EnableVisible = True
+				End If
 				_ControlView.setVisible(pvValue)
 			End If
 		Case Else

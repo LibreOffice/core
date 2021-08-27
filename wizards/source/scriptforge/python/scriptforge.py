@@ -1687,7 +1687,8 @@ class SFDialogs:
                                  OnTextChanged = False, Page = True, Parent = False, Picture = True,
                                  RootNode = False, RowSource = True, Text = False, TipText = True,
                                  TripleState = True, Value = True, Visible = True,
-                                 XControlModel = False, XControlView = False, XTreeDataModel = False)
+                                 XControlModel = False, XControlView = False, XGridColumnModel = False,
+                                 XGridDataModel = False, XTreeDataModel = False)
 
         # Root related properties do not start with X and, nevertheless, return a UNO object
         @property
@@ -1712,6 +1713,9 @@ class SFDialogs:
 
         def SetFocus(self):
             return self.ExecMethod(self.vbMethod, 'SetFocus')
+
+        def SetTableData(self, dataarray, widths = (1,), alignments = ''):
+            return self.ExecMethod(self.vbMethod + self.flgArrayArg, 'SetTableData', dataarray, widths, alignments)
 
         def WriteLine(self, line = ''):
             return self.ExecMethod(self.vbMethod, 'WriteLine', line)
