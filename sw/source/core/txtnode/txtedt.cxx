@@ -1699,6 +1699,9 @@ void SwTextNode::TransliterateText(
     if (nStt >= nEnd)
         return;
 
+    const sal_Int32 selStart = nStt;
+    const sal_Int32 selEnd = nEnd;
+
     // since we don't use Hiragana/Katakana or half-width/full-width transliterations here
     // it is fine to use ANYWORD_IGNOREWHITESPACES. (ANY_WORD btw is broken and will
     // occasionally miss words in consecutive sentences). Also with ANYWORD_IGNOREWHITESPACES
@@ -1790,10 +1793,7 @@ void SwTextNode::TransliterateText(
                 GetText(), nLastStart,
                 g_pBreakIt->GetLocale( GetLang( nLastStart ) ) );
 
-        // extend nStt, nEnd to the current sentence boundaries
-        sal_Int32 nCurrentStart = g_pBreakIt->GetBreakIter()->beginOfSentence(
-                GetText(), nStt,
-                g_pBreakIt->GetLocale( GetLang( nStt ) ) );
+        sal_Int32 nCurrentStart = nStt;
         sal_Int32 nCurrentEnd = g_pBreakIt->GetBreakIter()->endOfSentence(
                 GetText(), nCurrentStart,
                 g_pBreakIt->GetLocale( GetLang( nCurrentStart ) ) );
@@ -1835,6 +1835,12 @@ void SwTextNode::TransliterateText(
             if (nCurrentEnd > nLastEnd)
                 nCurrentEnd = nLastEnd;
         }
+
+        // Prevent going outside of the user's selection
+        nCurrentStart = std::max(selStart, nCurrentStart);
+        nCurrentEnd = std::min(selEnd, nCurrentEnd);
+        nLastStart = std::max(selStart, nLastStart);
+        nLastEnd = std::min(selEnd, nLastEnd);
 
         while (nCurrentStart < nLastEnd)
         {
@@ -1924,6 +1930,7 @@ void SwTextNode::TransliterateText(
         // call to ReplaceTextOnly
         swTransliterationChgData & rData =
             aChanges[ aChanges.size() - 1 - i ];
+
         nSum += rData.sChanged.getLength() - rData.nLen;
         if (nSum > o3tl::make_unsigned(GetSpaceLeft()))
         {
