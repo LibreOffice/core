@@ -62,6 +62,7 @@ MSFILTER_DLLPUBLIC sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cBullet,
  * @param rColor color to convert
  */
 MSFILTER_DLLPUBLIC OString ConvertColor( const Color &rColor );
+MSFILTER_DLLPUBLIC OUString ConvertColorOU( const Color &rColor );
 
 
 /** Paper size in 1/100 millimeters. */

@@ -125,23 +125,42 @@ sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cChar,
 
 OString ConvertColor( const Color &rColor )
 {
-    OString color( "auto" );
+    static constexpr OStringLiteral AUTO( "auto" );
 
-    if ( rColor != COL_AUTO )
-    {
-        const char pHexDigits[] = "0123456789ABCDEF";
-        char pBuffer[] = "000000";
+    if ( rColor == COL_AUTO )
+        return AUTO;
 
-        pBuffer[0] = pHexDigits[ ( rColor.GetRed()   >> 4 ) & 0x0F ];
-        pBuffer[1] = pHexDigits[   rColor.GetRed()          & 0x0F ];
-        pBuffer[2] = pHexDigits[ ( rColor.GetGreen() >> 4 ) & 0x0F ];
-        pBuffer[3] = pHexDigits[   rColor.GetGreen()        & 0x0F ];
-        pBuffer[4] = pHexDigits[ ( rColor.GetBlue()  >> 4 ) & 0x0F ];
-        pBuffer[5] = pHexDigits[   rColor.GetBlue()         & 0x0F ];
+    const char pHexDigits[] = "0123456789ABCDEF";
+    char pBuffer[] = "000000";
 
-        color = OString( pBuffer );
-    }
-    return color;
+    pBuffer[0] = pHexDigits[ ( rColor.GetRed()   >> 4 ) & 0x0F ];
+    pBuffer[1] = pHexDigits[   rColor.GetRed()          & 0x0F ];
+    pBuffer[2] = pHexDigits[ ( rColor.GetGreen() >> 4 ) & 0x0F ];
+    pBuffer[3] = pHexDigits[   rColor.GetGreen()        & 0x0F ];
+    pBuffer[4] = pHexDigits[ ( rColor.GetBlue()  >> 4 ) & 0x0F ];
+    pBuffer[5] = pHexDigits[   rColor.GetBlue()         & 0x0F ];
+
+    return OString( pBuffer );
+}
+
+OUString ConvertColorOU( const Color &rColor )
+{
+    static constexpr OUStringLiteral AUTO( u"auto" );
+
+    if ( rColor == COL_AUTO )
+        return AUTO;
+
+    const char pHexDigits[] = "0123456789ABCDEF";
+    sal_Unicode pBuffer[] = u"000000";
+
+    pBuffer[0] = pHexDigits[ ( rColor.GetRed()   >> 4 ) & 0x0F ];
+    pBuffer[1] = pHexDigits[   rColor.GetRed()          & 0x0F ];
+    pBuffer[2] = pHexDigits[ ( rColor.GetGreen() >> 4 ) & 0x0F ];
+    pBuffer[3] = pHexDigits[   rColor.GetGreen()        & 0x0F ];
+    pBuffer[4] = pHexDigits[ ( rColor.GetBlue()  >> 4 ) & 0x0F ];
+    pBuffer[5] = pHexDigits[   rColor.GetBlue()         & 0x0F ];
+
+    return OUString( pBuffer );
 }
 
 #define IN2MM100( v )    static_cast< sal_Int32 >( (v) * 2540.0 + 0.5 )
