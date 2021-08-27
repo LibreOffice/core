@@ -246,11 +246,9 @@ IMPLEMENT_SERVICE_INFO(java_sql_Connection,"com.sun.star.sdbcx.JConnection","com
 jclass java_sql_Connection::theClass = nullptr;
 
 java_sql_Connection::java_sql_Connection( const java_sql_Driver& _rDriver )
-    :java_lang_Object()
-    ,m_xContext( _rDriver.getContext() )
+    :m_xContext( _rDriver.getContext() )
     ,m_pDriver( &_rDriver )
     ,m_pDriverobject(nullptr)
-    ,m_pDriverClassLoader()
     ,m_Driver_theClass(nullptr)
     ,m_aLogger( _rDriver.getLogger() )
     ,m_bIgnoreDriverPrivileges(true)

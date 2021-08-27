@@ -45,8 +45,6 @@ namespace cppcanvas::internal
                                rendering::PathCapType::ROUND,
                                rendering::PathCapType::ROUND,
                                rendering::PathJoinType::ROUND ),
-            maFillColor(),
-            maStrokeColor(),
             mbFillColorSet( false ),
             mbStrokeColorSet( false )
         {

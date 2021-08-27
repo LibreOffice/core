@@ -35,8 +35,6 @@ namespace cairocanvas
 
     SpriteDeviceHelper::SpriteDeviceHelper() :
         mpSpriteCanvas( nullptr ),
-        mpBufferSurface(),
-        maSize(),
         mbFullScreen( false )
     {}
 

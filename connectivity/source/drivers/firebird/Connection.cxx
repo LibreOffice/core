@@ -80,8 +80,6 @@ constexpr OUStringLiteral our_sFBKLocation( u"firebird.fbk" );
 
 Connection::Connection()
     : Connection_BASE(m_aMutex)
-    , m_sConnectionURL()
-    , m_sFirebirdURL()
     , m_bIsEmbedded(false)
     , m_bIsFile(false)
     , m_bIsAutoCommit(true)
@@ -96,7 +94,6 @@ Connection::Connection()
 #endif
     , m_xCatalog(nullptr)
     , m_xMetaData(nullptr)
-    , m_aStatements()
 {
 }
 

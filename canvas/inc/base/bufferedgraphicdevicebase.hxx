@@ -80,8 +80,6 @@ namespace canvas
         typedef Mutex MutexType;
 
         BufferedGraphicDeviceBase() :
-            mxWindow(),
-            maBounds(),
             mbIsVisible( false ),
             mbIsTopLevel( false )
         {

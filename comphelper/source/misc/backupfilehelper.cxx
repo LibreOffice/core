@@ -217,8 +217,7 @@ namespace
 
     public:
         ExtensionInfoEntry()
-        :   maName(),
-            maRepository(USER),
+        :   maRepository(USER),
             mbEnabled(false)
         {
         }
@@ -364,7 +363,6 @@ namespace
 
     public:
         ExtensionInfo()
-            : maEntries()
         {
         }
 
@@ -1024,7 +1022,6 @@ namespace
             mnPackFileSize(0),
             mnOffset(0),
             mnCrc32(0),
-            maFile(),
             mbDoCompress(false)
         {
         }
@@ -1161,7 +1158,6 @@ namespace
     public:
         PackedFile(const OUString& rURL)
         :   maURL(rURL),
-            maPackedFileEntryVector(),
             mbChanged(false)
         {
             FileSharedPtr aSourceFile = std::make_shared<osl::File>(rURL);
@@ -1533,9 +1529,7 @@ namespace comphelper
     }
 
     BackupFileHelper::BackupFileHelper()
-    :   maDirs(),
-        maFiles(),
-        mnNumBackups(2),
+    :   mnNumBackups(2),
         mnMode(1),
         mbActive(false),
         mbExtensions(true),

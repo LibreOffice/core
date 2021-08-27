@@ -33,8 +33,7 @@ using namespace ::com::sun::star;
 
 namespace vclcanvas
 {
-    DeviceHelper::DeviceHelper() :
-        mpOutDev()
+    DeviceHelper::DeviceHelper()
     {}
 
     void DeviceHelper::init( const OutDevProviderSharedPtr& rOutDev )

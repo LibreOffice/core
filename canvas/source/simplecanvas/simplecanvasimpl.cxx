@@ -91,8 +91,7 @@ namespace
         explicit SimpleRenderState( uno::Reference<rendering::XGraphicDevice> const& xDevice ) :
             m_aPenColor( &color2Sequence),
             m_aFillColor( &color2Sequence ),
-            m_aRectClip( [&xDevice](geometry::RealRectangle2D const& rRect) { return rect2Poly(xDevice, rRect); } ),
-            m_aTransformation()
+            m_aRectClip( [&xDevice](geometry::RealRectangle2D const& rRect) { return rect2Poly(xDevice, rRect); } )
         {
             tools::setIdentityAffineMatrix2D( m_aTransformation );
         }
@@ -158,7 +157,6 @@ namespace
                    return mxCanvas->createFont(rFontRequest,
                                                uno::Sequence< beans::PropertyValue >(),
                                                geometry::Matrix2D()); } ),
-            maViewState(),
             maRenderState( mxCanvas->getDevice() )
         {
             tools::initViewState(maViewState);

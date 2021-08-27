@@ -112,8 +112,7 @@ public:
     /** Dummy copy constructor.  Set the reference count to zero.
     */
     OWeakObject( const OWeakObject & )
-        : css::uno::XWeak()
-        , m_refCount( 0 )
+        : m_refCount( 0 )
         , m_pWeakConnectionPoint( NULL )
         , m_pReserved(NULL)
         {}

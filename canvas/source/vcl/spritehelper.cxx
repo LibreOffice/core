@@ -46,9 +46,6 @@ using namespace ::com::sun::star;
 namespace vclcanvas
 {
     SpriteHelper::SpriteHelper() :
-        mpBackBuffer(),
-        mpBackBufferMask(),
-        maContent(),
         mbShowSpriteBounds(false)
     {
     }
