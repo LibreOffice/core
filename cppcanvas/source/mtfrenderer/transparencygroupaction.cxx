@@ -144,10 +144,7 @@ namespace cppcanvas::internal
                 mpGroupMtf( std::move(rGroupMtf) ),
                 mpAlphaGradient( std::move(rAlphaGradient) ),
                 maDstSize( rDstSize ),
-                mxBufferBitmap(),
-                maLastTransformation(),
-                mpCanvas( rCanvas ),
-                maState()
+                mpCanvas( rCanvas )
             {
                 tools::initRenderState(maState,rState);
                 implSetupTransform( maState, rDstPoint );

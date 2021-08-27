@@ -39,8 +39,7 @@ namespace cairocanvas
 {
     DeviceHelper::DeviceHelper() :
         mpSurfaceProvider( nullptr ),
-        mpRefDevice( nullptr ),
-        mpSurface()
+        mpRefDevice( nullptr )
     {
     }
 

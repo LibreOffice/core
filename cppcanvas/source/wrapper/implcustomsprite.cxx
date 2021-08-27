@@ -33,7 +33,6 @@ namespace cppcanvas::internal
             ImplSprite( rParentCanvas,
                         rSprite,
                         rTransformArbiter ),
-            mpLastCanvas(),
             mxCustomSprite( rSprite )
         {
             OSL_ENSURE( rParentCanvas.is(), "ImplCustomSprite::ImplCustomSprite(): Invalid canvas" );

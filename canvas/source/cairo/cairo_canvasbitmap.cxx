@@ -39,8 +39,6 @@ namespace cairocanvas
                                 rendering::XGraphicDevice* pDevice,
                                 bool                       bHasAlpha ) :
         mpSurfaceProvider( rSurfaceProvider ),
-        mpBufferSurface(),
-        mpBufferCairo(),
         maSize(rSize),
         mbHasAlpha(bHasAlpha)
     {

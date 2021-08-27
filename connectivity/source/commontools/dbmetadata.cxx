@@ -75,11 +75,7 @@ namespace dbtools
         ::std::optional< OUString >    sCachedCatalogSeparator;
 
         DatabaseMetaData_Impl()
-            :xConnection()
-            ,xConnectionMetaData()
-            ,aDriverConfig( ::comphelper::getProcessComponentContext() )
-            ,sCachedIdentifierQuoteString()
-            ,sCachedCatalogSeparator()
+            : aDriverConfig( ::comphelper::getProcessComponentContext() )
         {
         }
     };

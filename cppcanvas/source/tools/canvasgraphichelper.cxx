@@ -34,7 +34,6 @@ using namespace ::com::sun::star;
 namespace cppcanvas::internal
 {
         CanvasGraphicHelper::CanvasGraphicHelper( const CanvasSharedPtr& rParentCanvas ) :
-            maClipPolyPolygon(),
             mpCanvas( rParentCanvas )
         {
             OSL_ENSURE( mpCanvas && mpCanvas->getUNOCanvas().is(),
