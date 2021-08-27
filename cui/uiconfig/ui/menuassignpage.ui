@@ -307,7 +307,6 @@
             <property name="valign">start</property>
             <property name="label" translatable="yes" context="menuassignpage|label33">D_escription</property>
             <property name="use_underline">True</property>
-            <property name="mnemonic_widget">desc</property>
             <accessibility>
               <relation type="label-for" target="desc"/>
             </accessibility>

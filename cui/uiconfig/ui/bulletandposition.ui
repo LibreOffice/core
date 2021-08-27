@@ -396,7 +396,6 @@
                                 <property name="receives-default">False</property>
                                 <property name="xalign">0</property>
                                 <property name="draw-indicator">True</property>
-                                <property name="label" translatable="no"></property>
                                 <child>
                                   <placeholder/>
                                 </child>
@@ -917,6 +916,7 @@
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="label" translatable="yes" context="bulletandposition|ALlabel">Alignment:</property>
+                            <property name="mnemonic-widget">left</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
