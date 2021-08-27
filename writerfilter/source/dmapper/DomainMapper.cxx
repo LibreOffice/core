@@ -1329,8 +1329,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 if (pStyleSheetPropertyMap)
                     pStyleSheetPropertyMap->SetListLevel( static_cast<sal_Int16>(nIntValue) );
             }
-            else
-                rContext->Insert( PROP_NUMBERING_LEVEL, uno::makeAny( static_cast<sal_Int16>(nIntValue) ));
+            rContext->Insert(PROP_NUMBERING_LEVEL, uno::makeAny(static_cast<sal_Int16>(nIntValue)));
         break;
     case NS_ooxml::LN_CT_NumPr_numId:
         {
@@ -1564,6 +1563,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
                 if (pStyleSheetPropertyMap)
                     pStyleSheetPropertyMap->SetOutlineLevel(nIntValue);
+
+                // Prefer outline levels over numbering levels.
+                rContext->Erase(PROP_NUMBERING_LEVEL);
             }
             else
             {

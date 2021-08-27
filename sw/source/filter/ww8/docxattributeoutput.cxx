@@ -8829,6 +8829,19 @@ void DocxAttributeOutput::ParaNumRule_Impl( const SwTextNode* pTextNd, sal_Int32
         return;
     }
 
+    if (!pTextNd && nLvl == 0)
+    {
+        // This is a paragraph style and the level would be zero. Then see if the importer set a
+        // custom numbering level.
+        const SfxItemSet* pSet = m_rExport.m_pISet;
+        if (pSet && pSet->HasItem(RES_PARATR_LIST_LEVEL))
+        {
+            // It did, so use that level.
+            const SfxPoolItem* pItem = pSet->GetItem(RES_PARATR_LIST_LEVEL);
+            nLvl = pItem->StaticWhichCast(RES_PARATR_LIST_LEVEL).GetValue();
+        }
+    }
+
     m_pSerializer->startElementNS(XML_w, XML_numPr);
     m_pSerializer->singleElementNS(XML_w, XML_ilvl, FSNS(XML_w, XML_val), OString::number(nLvl));
     m_pSerializer->singleElementNS(XML_w, XML_numId, FSNS(XML_w, XML_val), OString::number(nNumId));

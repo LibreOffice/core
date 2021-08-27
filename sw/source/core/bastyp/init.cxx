@@ -148,6 +148,7 @@ WhichRangesContainer const aBreakSetRange(svl::Items<
 WhichRangesContainer const aTextFormatCollSetRange(svl::Items<
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_PARATR_BEGIN, RES_PARATR_END-1,
+    RES_PARATR_LIST_LEVEL, RES_PARATR_LIST_LEVEL,
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
 
