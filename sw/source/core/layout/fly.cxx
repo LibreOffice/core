@@ -1263,8 +1263,8 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
 
         setFrameAreaSizeValid(true);
 
-        const SwTwips nUL = pAttrs->CalcTopLine()  + pAttrs->CalcBottomLine();
-        const SwTwips nLR = pAttrs->CalcLeftLine() + pAttrs->CalcRightLine();
+        const SwTwips nUL = pAttrs->CalcTopLine(mbVertical)  + pAttrs->CalcBottomLine(mbVertical);
+        const SwTwips nLR = pAttrs->CalcLeftLine(mbVertical) + pAttrs->CalcRightLine(mbVertical);
         const SwFormatFrameSize &rFrameSz = GetFormat()->GetFrameSize();
         Size aRelSize( CalcRel( rFrameSz ) );
 
@@ -1757,10 +1757,10 @@ void SwFlyFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
 
         // consider vertical layout
         SwRectFnSet aRectFnSet(this);
-        aRectFnSet.SetXMargins( *this, rAttrs.CalcLeftLine(),
-                                        rAttrs.CalcRightLine() );
-        aRectFnSet.SetYMargins( *this, rAttrs.CalcTopLine(),
-                                        rAttrs.CalcBottomLine() );
+        aRectFnSet.SetXMargins( *this, rAttrs.CalcLeftLine(mbVertical),
+                                        rAttrs.CalcRightLine(mbVertical) );
+        aRectFnSet.SetYMargins( *this, rAttrs.CalcTopLine(mbVertical),
+                                        rAttrs.CalcBottomLine(mbVertical) );
     }
 }
 
