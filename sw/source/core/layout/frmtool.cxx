@@ -2219,6 +2219,8 @@ SwBorderAttrs::SwBorderAttrs(const sw::BorderCacheOwner* pOwner, const SwFrame* 
     // and <m_bJoinedWithNext>, which aren't initialized by default.
     m_bCachedJoinedWithPrev = false;
     m_bCachedJoinedWithNext = false;
+
+    m_bBorderDist = true;
 }
 
 SwBorderAttrs::~SwBorderAttrs()
@@ -2260,12 +2262,15 @@ tools::Long SwBorderAttrs::CalcRight( const SwFrame* pCaller ) const
     tools::Long nRight=0;
 
     if (!pCaller->IsTextFrame() || !static_cast<const SwTextFrame*>(pCaller)->GetDoc().GetDocumentSettingManager().get(DocumentSettingId::INVERT_BORDER_SPACING)) {
+
+        bool bVert = pCaller->IsVertical();
+
     // OD 23.01.2003 #106895# - for cell frame in R2L text direction the left
     // and right border are painted on the right respectively left.
-    if ( pCaller->IsCellFrame() && pCaller->IsRightToLeft() )
-        nRight = CalcLeftLine();
-    else
-        nRight = CalcRightLine();
+        if ( pCaller->IsCellFrame() && pCaller->IsRightToLeft() )
+            nRight = CalcLeftLine(bVert);
+        else
+            nRight = CalcRightLine(bVert);
 
     }
     // for paragraphs, "left" is "before text" and "right" is "after text"
@@ -2323,12 +2328,14 @@ tools::Long SwBorderAttrs::CalcLeft( const SwFrame *pCaller ) const
 
     if (!pCaller->IsTextFrame() || !static_cast<const SwTextFrame*>(pCaller)->GetDoc().GetDocumentSettingManager().get(DocumentSettingId::INVERT_BORDER_SPACING))
     {
+        bool bVert = pCaller->IsVertical();
+
     // OD 23.01.2003 #106895# - for cell frame in R2L text direction the left
     // and right border are painted on the right respectively left.
-    if ( pCaller->IsCellFrame() && pCaller->IsRightToLeft() )
-        nLeft = CalcRightLine();
-    else
-        nLeft = CalcLeftLine();
+        if ( pCaller->IsCellFrame() && pCaller->IsRightToLeft() )
+            nLeft = CalcRightLine(bVert);
+        else
+            nLeft = CalcLeftLine(bVert);
     }
 
     // for paragraphs, "left" is "before text" and "right" is "after text"
@@ -2382,31 +2389,31 @@ tools::Long SwBorderAttrs::CalcLeft( const SwFrame *pCaller ) const
  * considered here and not by the attribute (e.g. bBorderDist for cells).
  */
 
-void SwBorderAttrs::CalcTopLine_()
+void SwBorderAttrs::CalcTopLine_(bool bVert)
 {
-    m_nTopLine = m_rBox.CalcLineSpace( SvxBoxItemLine::TOP, /*bEvenIfNoLine*/true );
-    m_nTopLine = m_nTopLine + m_rShadow.CalcShadowSpace(SvxShadowItemSide::TOP);
+    m_nTopLine = m_rBox.CalcLineSpace( bVert ? SvxBoxItemLine::LEFT : SvxBoxItemLine::TOP, /*bEvenIfNoLine*/m_bBorderDist );
+    m_nTopLine = m_nTopLine + m_rShadow.CalcShadowSpace(bVert ? SvxShadowItemSide::LEFT : SvxShadowItemSide::TOP);
     m_bTopLine = false;
 }
 
-void SwBorderAttrs::CalcBottomLine_()
+void SwBorderAttrs::CalcBottomLine_(bool bVert)
 {
-    m_nBottomLine = m_rBox.CalcLineSpace( SvxBoxItemLine::BOTTOM, true );
-    m_nBottomLine = m_nBottomLine + m_rShadow.CalcShadowSpace(SvxShadowItemSide::BOTTOM);
+    m_nBottomLine = m_rBox.CalcLineSpace( bVert ? SvxBoxItemLine::RIGHT : SvxBoxItemLine::BOTTOM, m_bBorderDist );
+    m_nBottomLine = m_nBottomLine + m_rShadow.CalcShadowSpace(bVert ? SvxShadowItemSide::RIGHT : SvxShadowItemSide::BOTTOM);
     m_bBottomLine = false;
 }
 
-void SwBorderAttrs::CalcLeftLine_()
+void SwBorderAttrs::CalcLeftLine_(bool bVert)
 {
-    m_nLeftLine = m_rBox.CalcLineSpace( SvxBoxItemLine::LEFT, true);
-    m_nLeftLine = m_nLeftLine + m_rShadow.CalcShadowSpace(SvxShadowItemSide::LEFT);
+    m_nLeftLine = m_rBox.CalcLineSpace( bVert ? SvxBoxItemLine::TOP : SvxBoxItemLine::LEFT, m_bBorderDist );
+    m_nLeftLine = m_nLeftLine + m_rShadow.CalcShadowSpace(bVert ? SvxShadowItemSide::TOP : SvxShadowItemSide::LEFT);
     m_bLeftLine = false;
 }
 
-void SwBorderAttrs::CalcRightLine_()
+void SwBorderAttrs::CalcRightLine_(bool bVert)
 {
-    m_nRightLine = m_rBox.CalcLineSpace( SvxBoxItemLine::RIGHT, true );
-    m_nRightLine = m_nRightLine + m_rShadow.CalcShadowSpace(SvxShadowItemSide::RIGHT);
+    m_nRightLine = m_rBox.CalcLineSpace( bVert ? SvxBoxItemLine::BOTTOM : SvxBoxItemLine::RIGHT, m_bBorderDist );
+    m_nRightLine = m_nRightLine + m_rShadow.CalcShadowSpace(bVert ? SvxShadowItemSide::BOTTOM : SvxShadowItemSide::RIGHT);
     m_bRightLine = false;
 }
 

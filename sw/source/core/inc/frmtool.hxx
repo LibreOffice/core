@@ -306,6 +306,9 @@ class SwBorderAttrs final : public SwCacheObj
     const SvxShadowItem  &m_rShadow;
     const Size            m_aFrameSize;
 
+    // Is it a frame that can have a margin without a border?
+    bool m_bBorderDist  : 1;
+
     // the following bool values set the cached values to INVALID - until they
     // are calculated for the first time
     bool m_bTopLine     : 1;
@@ -343,10 +346,10 @@ class SwBorderAttrs final : public SwCacheObj
            m_nLineSpacing;
 
     // only calculate lines and shadow
-    void CalcTopLine_();
-    void CalcBottomLine_();
-    void CalcLeftLine_();
-    void CalcRightLine_();
+    void CalcTopLine_(bool bVert = false);
+    void CalcBottomLine_(bool bVert = false);
+    void CalcLeftLine_(bool bVert = false);
+    void CalcRightLine_(bool bVert = false);
 
     // lines + shadow + margin
     void CalcTop_();
@@ -388,10 +391,10 @@ public:
     const SvxBoxItem     &GetBox()     const { return m_rBox;      }
     const SvxShadowItem  &GetShadow()  const { return m_rShadow;   }
 
-    inline sal_uInt16 CalcTopLine() const;
-    inline sal_uInt16 CalcBottomLine() const;
-    inline sal_uInt16 CalcLeftLine() const;
-    inline sal_uInt16 CalcRightLine() const;
+    inline sal_uInt16 CalcTopLine(bool) const;
+    inline sal_uInt16 CalcBottomLine(bool) const;
+    inline sal_uInt16 CalcLeftLine(bool) const;
+    inline sal_uInt16 CalcRightLine(bool) const;
     inline sal_uInt16 CalcTop() const;
     inline sal_uInt16 CalcBottom() const;
     inline sal_uInt16 CalcLineSpacing() const;
@@ -401,6 +404,8 @@ public:
     inline bool IsLine() const;
 
     const Size &GetSize()     const { return m_aFrameSize; }
+
+    bool IsBorderDist() const { return m_bBorderDist; }
 
     // Should upper (or lower) border be evaluated for this frame?
     // #i25029# - If <_pPrevFrame> is set, its value is taken for testing, if
@@ -498,28 +503,28 @@ inline void SwBorderAttrs::SetGetCacheLine( bool bNew ) const
     m_bCachedJoinedWithNext = false;
 }
 
-inline sal_uInt16 SwBorderAttrs::CalcTopLine() const
+inline sal_uInt16 SwBorderAttrs::CalcTopLine(bool bVert = false) const
 {
     if ( m_bTopLine )
-        const_cast<SwBorderAttrs*>(this)->CalcTopLine_();
+        const_cast<SwBorderAttrs*>(this)->CalcTopLine_(bVert);
     return m_nTopLine;
 }
-inline sal_uInt16 SwBorderAttrs::CalcBottomLine() const
+inline sal_uInt16 SwBorderAttrs::CalcBottomLine(bool bVert = false) const
 {
     if ( m_bBottomLine )
-        const_cast<SwBorderAttrs*>(this)->CalcBottomLine_();
+        const_cast<SwBorderAttrs*>(this)->CalcBottomLine_(bVert);
     return m_nBottomLine;
 }
-inline sal_uInt16 SwBorderAttrs::CalcLeftLine() const
+inline sal_uInt16 SwBorderAttrs::CalcLeftLine(bool bVert = false) const
 {
     if ( m_bLeftLine )
-        const_cast<SwBorderAttrs*>(this)->CalcLeftLine_();
+        const_cast<SwBorderAttrs*>(this)->CalcLeftLine_(bVert);
     return m_nLeftLine;
 }
-inline sal_uInt16 SwBorderAttrs::CalcRightLine() const
+inline sal_uInt16 SwBorderAttrs::CalcRightLine(bool bVert = false) const
 {
     if ( m_bRightLine )
-        const_cast<SwBorderAttrs*>(this)->CalcRightLine_();
+        const_cast<SwBorderAttrs*>(this)->CalcRightLine_(bVert);
     return m_nRightLine;
 }
 inline sal_uInt16 SwBorderAttrs::CalcTop() const
