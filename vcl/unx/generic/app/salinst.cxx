@@ -37,7 +37,6 @@
 #include <vcl/skia/SkiaHelper.hxx>
 #include <config_skia.h>
 #if HAVE_FEATURE_SKIA
-#include <vcl/skia/SkiaHelper.hxx>
 #include <skia/x11/gdiimpl.hxx>
 #include <skia/salbmp.hxx>
 #endif
