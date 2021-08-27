@@ -106,15 +106,16 @@ constexpr static uint32_t toCGBitmapType(SkColorType color, SkAlphaType alpha)
     if (alpha == kPremul_SkAlphaType)
     {
         return color == kBGRA_8888_SkColorType
-                   ? (kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Little)
-                   : (kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+                   ? (uint32_t(kCGImageAlphaPremultipliedFirst)
+                      | uint32_t(kCGBitmapByteOrder32Little))
+                   : (uint32_t(kCGImageAlphaPremultipliedLast) | uint32_t(kCGBitmapByteOrder32Big));
     }
     else
     {
         assert(alpha == kOpaque_SkAlphaType);
         return color == kBGRA_8888_SkColorType
-                   ? (kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Little)
-                   : (kCGImageAlphaNoneSkipLast | kCGBitmapByteOrder32Big);
+                   ? (uint32_t(kCGImageAlphaNoneSkipFirst) | uint32_t(kCGBitmapByteOrder32Little))
+                   : (uint32_t(kCGImageAlphaNoneSkipLast) | uint32_t(kCGBitmapByteOrder32Big));
     }
 }
 
