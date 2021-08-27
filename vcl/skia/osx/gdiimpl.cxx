@@ -257,12 +257,15 @@ void AquaSkiaSalGraphicsImpl::drawTextLayout(const GenericSalLayout& rLayout)
     drawGenericLayout(rLayout, mrShared.maTextColor, font, verticalFont);
 }
 
+namespace
+{
 std::unique_ptr<sk_app::WindowContext> createMetalWindowContext(bool /*temporary*/)
 {
     sk_app::DisplayParams displayParams;
     sk_app::window_context_factory::MacWindowInfo macWindow;
     macWindow.fMainView = nullptr;
     return sk_app::window_context_factory::MakeMetalForMac(macWindow, displayParams);
+}
 }
 
 void AquaSkiaSalGraphicsImpl::prepareSkia() { SkiaHelper::prepareSkia(createMetalWindowContext); }
