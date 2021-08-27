@@ -1686,6 +1686,43 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130629)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf116315)
+{
+    SwDoc* const pDoc = createSwDoc();
+    SwWrtShell* const pWrtSh = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtSh);
+
+    pWrtSh->Insert("This is a test");
+    pWrtSh->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 4, /*bBasicCall=*/false);
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    for (sal_Int32 i = 0; i < 5; ++i)
+    {
+        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_F3);
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT_EQUAL(OUString("This is a Test"), getParagraph(1)->getString());
+
+        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_F3);
+        Scheduler::ProcessEventsToIdle();
+
+        // Without the fix in place, this test would have failed with
+        // - Expected: This is a test
+        // - Actual  : This is a TEST
+        CPPUNIT_ASSERT_EQUAL(OUString("This is a test"), getParagraph(1)->getString());
+
+        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_F3);
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT_EQUAL(OUString("This is a TEST"), getParagraph(1)->getString());
+
+        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_F3);
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT_EQUAL(OUString("This is a test"), getParagraph(1)->getString());
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf141613)
 {
     SwDoc* const pDoc = createSwDoc();
