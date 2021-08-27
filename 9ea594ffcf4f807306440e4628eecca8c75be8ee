@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "44874363_9e4b076e",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1332,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-08-27T13:12:10Z",
+      "side": 1,
+      "message": "\u003e This should not include nIntValue 9.  That means \"body level\" in DOCX. There is no equivalent in LO\n\nThe bugdoc just has 1 and 2, so a more strict upper limit is fine. (Style1, Style2 and Style3 has ilvl\u003d0, 1 and 2.) I don\u0027t have a sample with ilvl\u003d9, is that something you have?\n\n\u003e This suggests that LO needs to change their internal levels from 0-9 into 1-10 (same as OutlineLevel) and leave 0 for no/cancelled level.\n\nMy understanding is that NumberingLevel\u003d0 already means \"no numbering\" in the direct formatting case, so reusing that in the style case is OK. Or did I miss something? Perhaps I do, you spent a lot of time on numberings just recently. :-)",
+      "parentUuid": "be8f04ab_b525c30d",
+      "range": {
+        "startLine": 1332,
+        "startChar": 87,
+        "endLine": 1332,
+        "endChar": 96
+      },
+      "revId": "9ea594ffcf4f807306440e4628eecca8c75be8ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9b234791_2edac217",
         "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
         "patchSetId": 2
@@ -60,6 +84,30 @@
       "writtenOn": "2021-08-27T12:34:37Z",
       "side": 1,
       "message": "This confuses me. There really is no link between outlineLvl and listLevel (numbering level). Did you need this to avoid unit test breakage? (Although I can\u0027t imagine anything would break.)",
+      "range": {
+        "startLine": 1568,
+        "startChar": 32,
+        "endLine": 1568,
+        "endChar": 52
+      },
+      "revId": "9ea594ffcf4f807306440e4628eecca8c75be8ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a95628a_89d573ec",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1568,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-08-27T13:12:10Z",
+      "side": 1,
+      "message": "Yes, I just wanted to scope the change, so I don\u0027t change anything in case outline numbering is involved. Otherwise your nice CppunitTest_sw_ooxmlexport16 breaks in testTdf141966_chapterNumberTortureTest, so I left the outline numbering behavior unchanged.",
+      "parentUuid": "9b234791_2edac217",
       "range": {
         "startLine": 1568,
         "startChar": 32,
