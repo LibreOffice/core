@@ -42,6 +42,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135164_cancelledNumbering, "tdf135164_cancelledN
     CPPUNIT_ASSERT_EQUAL(OUString("i"), getProperty<OUString>(xPara, "ListLabelString"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testParaStyleNumLevel)
+{
+    loadAndSave("para-style-num-level.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/styles.xml");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. a custom list level in a para style was lost on import+export.
+    assertXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='Mystyle']/w:pPr/w:numPr/w:ilvl", "val", "1");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -438,6 +438,7 @@
                     { u"" UNO_NAME_PARA_HYPHENATION_MAX_TRAILING_CHARS, RES_PARATR_HYPHENZONE,        cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_TRAIL  },\
                     { u"" UNO_NAME_PARA_HYPHENATION_MAX_HYPHENS, RES_PARATR_HYPHENZONE,       cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_MAX_HYPHENS},\
                     { u"" UNO_NAME_NUMBERING_STYLE_NAME, RES_PARATR_NUMRULE,  cppu::UnoType<OUString>::get(),         PropertyAttribute::MAYBEVOID,   0},\
+                    { u"" UNO_NAME_NUMBERING_LEVEL, RES_PARATR_LIST_LEVEL,    cppu::UnoType<sal_Int16>::get(),        PropertyAttribute::MAYBEVOID,   0},\
                     { u"" UNO_NAME_PARA_USER_DEFINED_ATTRIBUTES, RES_UNKNOWNATR_CONTAINER, cppu::UnoType<css::container::XNameContainer>::get(), PropertyAttribute::MAYBEVOID, 0 },\
                     { u"" UNO_NAME_PARA_SHADOW_FORMAT, RES_SHADOW,    cppu::UnoType<css::table::ShadowFormat>::get(),   PROPERTY_NONE, CONVERT_TWIPS},\
                     { u"" UNO_NAME_CHAR_COMBINE_IS_ON, RES_CHRATR_TWO_LINES,          cppu::UnoType<bool>::get(),     PROPERTY_NONE, MID_TWOLINES},\
