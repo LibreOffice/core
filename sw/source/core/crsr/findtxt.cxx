@@ -275,7 +275,7 @@ lcl_CleanStr(const SwTextNode& rNd,
                 switch (pNextHint->Which())
                 {
                 case RES_TXTATR_FLYCNT:
-                case RES_TXTATR_FTN:
+//                case RES_TXTATR_FTN:
                 case RES_TXTATR_FIELD:
                 case RES_TXTATR_REFMARK:
                 case RES_TXTATR_TOXMARK:
@@ -1153,9 +1153,6 @@ std::optional<OUString> ReplaceBackReferences(const i18nutil::SearchOptions2& rS
             }
             else
             {
-                OUString const aStr(pLayout
-                    ? pFrame->GetText()
-                    : pTextNode->GetTextNode()->GetText());
                 AmbiguousIndex nStart;
                 AmbiguousIndex nEnd;
                 if (pLayout)
@@ -1168,6 +1165,9 @@ std::optional<OUString> ReplaceBackReferences(const i18nutil::SearchOptions2& rS
                     nStart.SetModelIndex(pPam->Start()->nContent.GetIndex());
                     nEnd.SetModelIndex(pPam->End()->nContent.GetIndex());
                 }
+                std::vector<AmbiguousIndex> aFltArr;
+                OUString const aStr = lcl_CleanStr(*pTextNode->GetTextNode(), pFrame, pLayout,
+                                                   nStart, nEnd, aFltArr, false, false);
                 if (aSText.SearchForward(aStr, &nStart.GetAnyIndex(), &nEnd.GetAnyIndex(), &aResult))
                 {
                     aSText.ReplaceBackReferences( aReplaceStr, aStr, aResult );
