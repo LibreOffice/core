@@ -107,9 +107,9 @@ oslModule SAL_CALL osl_loadModuleAscii(const char *pModuleName, sal_Int32 )
 }
 
 oslModule osl_loadModuleRelativeAscii(
-    oslGenericFunction, char const * relativePath, sal_Int32 mode)
+    oslGenericFunction baseModule, char const * relativePath, sal_Int32 mode)
 {
-    return osl_loadModuleAscii(relativePath, mode); //TODO: FIXME
+    return osl_loadModuleRelative(baseModule, OUString::createFromAscii(relativePath).pData, mode);
 }
 
 sal_Bool SAL_CALL
