@@ -1018,7 +1018,7 @@ Public Function SetTableData(Optional ByRef DataArray As Variant _
 &apos;&apos;&apos;				Example:
 &apos;&apos;&apos;					Widths := Array(1, 2)
 &apos;&apos;&apos;				means that the first column is half as wide as all the other columns
-&apos;&apos;&apos;				When the argument is absent, the columns are evenly spreaded over the control
+&apos;&apos;&apos;				When the argument is absent, the columns are evenly spread over the control
 &apos;&apos;&apos;		Alignments: the column&apos;s horizontal alignment as a string with length = number of columns.
 &apos;&apos;&apos;				Possible characters are:
 &apos;&apos;&apos;					L(EFT), C(ENTER), R(IGHT) or space (default behaviour)
@@ -1053,7 +1053,7 @@ Dim dRelativeWidth As Double	&apos;	Sum of Widths up to the number of columns
 Dim dWidthFactor As Double		&apos;	Factor to apply to relative widths to get absolute column widths
 Dim vDataRow As Variant			&apos;	A single row content in the tablecontrol
 Dim vDataItem As Variant		&apos;	A single DataArray item
-Dim sAlign As String			&apos;	Column&apos;s hprizontal alignments (single chars: L, C, R, space)
+Dim sAlign As String			&apos;	Column&apos;s horizontal alignments (single chars: L, C, R, space)
 Dim lAlign As Long				&apos;	com.sun.star.style.HorizontalAlignment.XXX
 Dim i As Long, j As Long, k As Long
 

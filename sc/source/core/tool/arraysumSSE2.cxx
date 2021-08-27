@@ -31,7 +31,7 @@ static inline void sumSSE2(__m128d& sum, __m128d& err, const __m128d& value)
     __m128d asum = _mm_and_pd(sum, ANNULATE_SIGN_BIT);
     // Absolute value of the value to add
     __m128d avalue = _mm_and_pd(value, ANNULATE_SIGN_BIT);
-    // Comaprate the absolute values sum >= value
+    // Compare the absolute values sum >= value
     __m128d mask = _mm_cmpge_pd(asum, avalue);
     // The following code has this form ( a - t + b)
     // Case 1: a = sum b = value
@@ -53,7 +53,7 @@ KahanSum executeSSE2(size_t& i, size_t nSize, const double* pCurrent)
     // Make sure we don't fall out of bounds.
     // This works by sums of 8 terms.
     // So the 8'th term is i+7
-    // If we iterate untill nSize won't fall out of bounds
+    // If we iterate until nSize won't fall out of bounds
     if (nSize > i + 7)
     {
         // Setup sums and errors as 0
