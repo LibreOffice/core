@@ -182,15 +182,6 @@ osl_getAsciiFunctionSymbol( oslModule Module, const char *pSymbol )
 
 sal_Bool SAL_CALL osl_getModuleURLFromAddress( void *pv, rtl_uString **pustrURL )
 {
-    static HMODULE hModPsapi = LoadLibraryW( L"PSAPI.DLL" );
-    static auto lpfnEnumProcessModules = reinterpret_cast<decltype(EnumProcessModules)*>(
-        hModPsapi ? GetProcAddress(hModPsapi, "EnumProcessModules") : nullptr);
-    static auto lpfnGetModuleInformation = reinterpret_cast<decltype(GetModuleInformation)*>(
-        hModPsapi ? GetProcAddress(hModPsapi, "GetModuleInformation") : nullptr);
-
-    if (!lpfnEnumProcessModules || !lpfnGetModuleInformation)
-        return false;
-
     bool bSuccess    = false;    /* Assume failure */
     DWORD cbNeeded = 0;
     HMODULE* lpModules = nullptr;
@@ -198,16 +189,16 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress( void *pv, rtl_uString **pustrURL 
     UINT iModule = 0;
     MODULEINFO modinfo;
 
-    lpfnEnumProcessModules(GetCurrentProcess(), nullptr, 0, &cbNeeded);
+    EnumProcessModules(GetCurrentProcess(), nullptr, 0, &cbNeeded);
 
     lpModules = static_cast<HMODULE*>(_alloca(cbNeeded));
-    lpfnEnumProcessModules(GetCurrentProcess(), lpModules, cbNeeded, &cbNeeded);
+    EnumProcessModules(GetCurrentProcess(), lpModules, cbNeeded, &cbNeeded);
 
     nModules = cbNeeded / sizeof(HMODULE);
 
     for (iModule = 0; !bSuccess && iModule < nModules; iModule++)
     {
-        lpfnGetModuleInformation(GetCurrentProcess(), lpModules[iModule], &modinfo,
+        GetModuleInformation(GetCurrentProcess(), lpModules[iModule], &modinfo,
                                  sizeof(modinfo));
 
         if (static_cast<BYTE*>(pv) >= static_cast<BYTE*>(modinfo.lpBaseOfDll)
