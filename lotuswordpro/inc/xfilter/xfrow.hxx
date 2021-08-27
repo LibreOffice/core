@@ -94,7 +94,7 @@ public:
 
 private:
     XFTable     *m_pOwnerTable;
-    std::map<sal_Int32, rtl::Reference<XFCell>> m_aCells;
+    std::vector<rtl::Reference<XFCell>> m_aCells;
     sal_Int32   m_nRepeat;
     sal_Int32   m_nRow;
 };
