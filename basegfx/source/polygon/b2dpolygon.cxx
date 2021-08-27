@@ -250,8 +250,7 @@ public:
     {}
 
     ControlVectorArray2D(const ControlVectorArray2D& rOriginal, sal_uInt32 nIndex, sal_uInt32 nCount)
-    :   maVector(),
-        mnUsedVectors(0)
+    :   mnUsedVectors(0)
     {
         ControlVectorPair2DVector::const_iterator aStart(rOriginal.maVector.begin());
         aStart += nIndex;
@@ -468,9 +467,6 @@ private:
 
 public:
     ImplBufferedData()
-    :   basegfx::SystemDependentDataHolder(),
-        mpDefaultSubdivision(),
-        mpB2DRange()
     {
     }
 
@@ -600,15 +596,11 @@ public:
 
     ImplB2DPolygon()
     :   maPoints(0),
-        mpControlVector(),
-        mpBufferedData(),
         mbIsClosed(false)
     {}
 
     ImplB2DPolygon(const ImplB2DPolygon& rToBeCopied)
     :   maPoints(rToBeCopied.maPoints),
-        mpControlVector(),
-        mpBufferedData(),
         mbIsClosed(rToBeCopied.mbIsClosed)
     {
         // complete initialization using copy
@@ -620,8 +612,6 @@ public:
 
     ImplB2DPolygon(const ImplB2DPolygon& rToBeCopied, sal_uInt32 nIndex, sal_uInt32 nCount)
     :   maPoints(rToBeCopied.maPoints, nIndex, nCount),
-        mpControlVector(),
-        mpBufferedData(),
         mbIsClosed(rToBeCopied.mbIsClosed)
     {
         // complete initialization using partly copy
@@ -1130,7 +1120,6 @@ namespace basegfx
     B2DPolygon::B2DPolygon() = default;
 
     B2DPolygon::B2DPolygon(std::initializer_list<basegfx::B2DPoint> aPoints)
-        : mpPolygon()
     {
         for (const basegfx::B2DPoint& rPoint : aPoints)
         {

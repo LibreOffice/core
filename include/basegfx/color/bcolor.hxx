@@ -45,7 +45,6 @@ namespace basegfx
             The color is initialized to (0.0, 0.0, 0.0)
         */
         BColor()
-        :   B3DTuple()
         {}
 
         /** Create a 3D Color

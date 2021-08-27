@@ -37,7 +37,6 @@ class CoordinateData3D
 
 public:
     CoordinateData3D()
-    :   maPoint()
     {
     }
 
@@ -251,8 +250,7 @@ public:
     }
 
     BColorArray(const BColorArray& rOriginal, sal_uInt32 nIndex, sal_uInt32 nCount)
-    :   maVector(),
-        mnUsedEntries(0)
+    :   mnUsedEntries(0)
     {
         BColorDataVector::const_iterator aStart(rOriginal.maVector.begin());
         aStart += nIndex;
@@ -393,8 +391,7 @@ public:
     }
 
     NormalsArray3D(const NormalsArray3D& rOriginal, sal_uInt32 nIndex, sal_uInt32 nCount)
-    :   maVector(),
-        mnUsedEntries(0)
+    :   mnUsedEntries(0)
     {
         NormalsData3DVector::const_iterator aStart(rOriginal.maVector.begin());
         aStart += nIndex;
@@ -542,8 +539,7 @@ public:
     }
 
     TextureCoordinate2D(const TextureCoordinate2D& rOriginal, sal_uInt32 nIndex, sal_uInt32 nCount)
-    :   maVector(),
-        mnUsedEntries(0)
+    :   mnUsedEntries(0)
     {
         TextureData2DVector::const_iterator aStart(rOriginal.maVector.begin());
         aStart += nIndex;

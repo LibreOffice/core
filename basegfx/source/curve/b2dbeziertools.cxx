@@ -24,8 +24,7 @@
 namespace basegfx
 {
     B2DCubicBezierHelper::B2DCubicBezierHelper(const B2DCubicBezier& rBase, sal_uInt32 nDivisions)
-    :   maLengthArray(),
-        mnEdgeCount(0)
+    :   mnEdgeCount(0)
     {
         const bool bIsBezier(rBase.isBezier());
 

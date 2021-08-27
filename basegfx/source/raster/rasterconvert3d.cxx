@@ -48,8 +48,6 @@ namespace basegfx
     }
 
     RasterConverter3D::RasterConverter3D()
-    :   InterpolatorProvider3D(),
-        maLineEntries()
     {}
 
     RasterConverter3D::~RasterConverter3D()

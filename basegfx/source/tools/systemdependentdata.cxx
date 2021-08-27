@@ -96,7 +96,6 @@ namespace basegfx
 namespace basegfx
 {
     SystemDependentDataHolder::SystemDependentDataHolder()
-    :   maSystemDependentReferences()
     {
     }
 

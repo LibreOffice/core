@@ -41,7 +41,6 @@ namespace basegfx
             The point is initialized to (0, 0)
         */
         B2IPoint()
-        :   B2ITuple()
         {}
 
         /** Create a 2D Point
