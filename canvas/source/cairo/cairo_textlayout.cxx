@@ -77,7 +77,6 @@ namespace cairocanvas
                             const SurfaceProviderRef&           rRefDevice ) :
         TextLayout_Base( m_aMutex ),
         maText( aText ),
-        maLogicalAdvancements(),
         mpFont( rFont ),
         mpRefDevice( rRefDevice ),
         mnTextDirection( nDirection )

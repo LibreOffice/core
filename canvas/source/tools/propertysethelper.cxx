@@ -57,9 +57,7 @@ namespace canvas
         };
     }
 
-    PropertySetHelper::PropertySetHelper() :
-        mpMap(),
-        maMapEntries()
+    PropertySetHelper::PropertySetHelper()
     {
     }
 

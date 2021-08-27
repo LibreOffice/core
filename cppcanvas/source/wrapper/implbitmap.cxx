@@ -32,8 +32,7 @@ namespace cppcanvas::internal
         ImplBitmap::ImplBitmap( const CanvasSharedPtr&                      rParentCanvas,
                                 const uno::Reference< rendering::XBitmap >& rBitmap ) :
             CanvasGraphicHelper( rParentCanvas ),
-            mxBitmap( rBitmap ),
-            mpBitmapCanvas()
+            mxBitmap( rBitmap )
         {
             OSL_ENSURE( mxBitmap.is(), "ImplBitmap::ImplBitmap: no valid bitmap" );
 

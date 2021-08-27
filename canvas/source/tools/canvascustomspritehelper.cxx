@@ -146,12 +146,6 @@ namespace canvas
     }
 
     CanvasCustomSpriteHelper::CanvasCustomSpriteHelper() :
-        mpSpriteCanvas(),
-        maCurrClipBounds(),
-        maPosition(),
-        maSize(),
-        maTransform(),
-        mxClipPoly(),
         mfPriority(0.0),
         mfAlpha(0.0),
         mbActive(false),

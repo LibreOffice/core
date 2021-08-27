@@ -31,7 +31,6 @@ namespace canvas
     SurfaceProxy::SurfaceProxy( const std::shared_ptr<canvas::IColorBuffer>& pBuffer,
                                 const PageManagerSharedPtr&          pPageManager ) :
         mpPageManager( pPageManager ),
-        maSurfaceList(),
         mpBuffer( pBuffer )
     {
         const ::basegfx::B2ISize aImageSize(mpBuffer->getWidth(),mpBuffer->getHeight());

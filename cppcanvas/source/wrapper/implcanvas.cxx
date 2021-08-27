@@ -35,8 +35,6 @@ namespace cppcanvas::internal
 {
 
         ImplCanvas::ImplCanvas( const uno::Reference< rendering::XCanvas >& xCanvas ) :
-            maViewState(),
-            maClipPolyPolygon(),
             mxCanvas( xCanvas )
         {
             OSL_ENSURE( mxCanvas.is(), "Canvas::Canvas() invalid XCanvas" );

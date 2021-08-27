@@ -33,9 +33,6 @@ namespace oglcanvas
                                             SpriteDeviceHelper&                           rDeviceHelper ) :
         mpSpriteCanvas( rRefDevice ),
         maSize(rSpriteSize),
-        mxClip(),
-        maTransformation(),
-        maPosition(),
         mfAlpha(0.0),
         mfPriority(0.0)
     {

@@ -24,7 +24,6 @@ namespace oglcanvas
                             const CanvasFont::ImplRef&          rFont ) :
         TextLayoutBaseT( m_aMutex ),
         maText( aText ),
-        maLogicalAdvancements(),
         mpFont( rFont ),
         mnTextDirection( nDirection )
     {

@@ -89,9 +89,7 @@ namespace cppcanvas::internal
                 CachedPrimitiveBase( rCanvas, false ),
                 mxPolyPoly( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
                 maBounds( ::basegfx::utils::getRange(rPolyPoly) ),
-                mpCanvas( rCanvas ),
-                maState(),
-                maFillColor()
+                mpCanvas( rCanvas )
             {
                 tools::initRenderState(maState,rState);
 
@@ -111,9 +109,7 @@ namespace cppcanvas::internal
                 CachedPrimitiveBase( rCanvas, false ),
                 mxPolyPoly( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
                 maBounds( ::basegfx::utils::getRange(rPolyPoly) ),
-                mpCanvas( rCanvas ),
-                maState(),
-                maFillColor()
+                mpCanvas( rCanvas )
             {
                 tools::initRenderState(maState,rState);
 
@@ -263,7 +259,6 @@ namespace cppcanvas::internal
                 mxPolyPoly( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
                 maBounds( ::basegfx::utils::getRange(rPolyPoly) ),
                 mpCanvas( rCanvas ),
-                maState(),
                 maTexture( rTexture )
             {
                 tools::initRenderState(maState,rState);
@@ -373,7 +368,6 @@ namespace cppcanvas::internal
                 mxPolyPoly( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
                 maBounds( ::basegfx::utils::getRange(rPolyPoly) ),
                 mpCanvas( rCanvas ),
-                maState(),
                 maStrokeAttributes( rStrokeAttributes )
             {
                 tools::initRenderState(maState,rState);
