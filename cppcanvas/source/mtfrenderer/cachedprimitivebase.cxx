@@ -34,8 +34,6 @@ namespace cppcanvas::internal
         CachedPrimitiveBase::CachedPrimitiveBase( const CanvasSharedPtr& rCanvas,
                                                   bool                   bOnlyRedrawWithSameTransform ) :
             mpCanvas( rCanvas ),
-            mxCachedPrimitive(),
-            maLastTransformation(),
             mbOnlyRedrawWithSameTransform( bOnlyRedrawWithSameTransform )
         {
             // TODO(F2): also store last view transform, and refuse to

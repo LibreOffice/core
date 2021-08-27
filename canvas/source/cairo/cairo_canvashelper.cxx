@@ -64,11 +64,7 @@ namespace cairocanvas
     CanvasHelper::CanvasHelper() :
         mpSurfaceProvider(nullptr),
         mpDevice(nullptr),
-        mpVirtualDevice(),
-        mbHaveAlpha(),
-        mpCairo(),
-        mpSurface(),
-        maSize()
+        mbHaveAlpha()
     {
     }
 

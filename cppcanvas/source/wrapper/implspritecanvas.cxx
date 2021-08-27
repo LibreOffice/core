@@ -29,8 +29,7 @@ using namespace ::com::sun::star;
 
 namespace cppcanvas::internal
 {
-        ImplSpriteCanvas::TransformationArbiter::TransformationArbiter() :
-            maTransformation()
+        ImplSpriteCanvas::TransformationArbiter::TransformationArbiter()
         {
         }
 
@@ -49,8 +48,6 @@ namespace cppcanvas::internal
         }
 
         ImplSpriteCanvas::ImplSpriteCanvas(const ImplSpriteCanvas& rOrig) :
-            Canvas(),
-            SpriteCanvas(),
             ImplCanvas( rOrig ),
             mxSpriteCanvas( rOrig.getUNOSpriteCanvas() ),
             mpTransformArbiter( std::make_shared<TransformationArbiter>() )

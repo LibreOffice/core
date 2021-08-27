@@ -34,9 +34,7 @@ using namespace ::com::sun::star;
 
 namespace vclcanvas
 {
-    CanvasBitmapHelper::CanvasBitmapHelper() :
-        mpBackBuffer(),
-        mpOutDevReference()
+    CanvasBitmapHelper::CanvasBitmapHelper()
     {
     }
 

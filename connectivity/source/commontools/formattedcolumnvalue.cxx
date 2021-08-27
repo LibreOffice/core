@@ -76,14 +76,11 @@ namespace dbtools
         Reference< XColumnUpdate >      m_xColumnUpdate;
 
         FormattedColumnValue_Data()
-            :m_xFormatter()
-            ,m_aNullDate( DBTypeConversion::getStandardDate() )
+            :m_aNullDate( DBTypeConversion::getStandardDate() )
             ,m_nFormatKey( 0 )
             ,m_nFieldType( DataType::OTHER )
             ,m_nKeyType( NumberFormat::UNDEFINED )
             ,m_bNumericField( false )
-            ,m_xColumn()
-            ,m_xColumnUpdate()
         {
         }
     };
