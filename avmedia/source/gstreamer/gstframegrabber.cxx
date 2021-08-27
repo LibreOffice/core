@@ -48,8 +48,7 @@ void FrameGrabber::disposePipeline()
     }
 }
 
-FrameGrabber::FrameGrabber( std::u16string_view rURL ) :
-    FrameGrabber_BASE()
+FrameGrabber::FrameGrabber( std::u16string_view rURL )
 {
     gchar *pPipelineStr;
     pPipelineStr = g_strdup_printf(

@@ -4196,8 +4196,7 @@ public:
 }
 
 ModuleInvocationProxy::ModuleInvocationProxy( std::u16string_view  aPrefix, SbxObjectRef const & xScopeObj )
-    : m_aMutex()
-    , m_aPrefix( OUString::Concat(aPrefix) + "_" )
+    : m_aPrefix( OUString::Concat(aPrefix) + "_" )
     , m_xScopeObj( xScopeObj )
     , m_aListeners( m_aMutex )
 {

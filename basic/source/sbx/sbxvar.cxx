@@ -36,7 +36,7 @@ using namespace com::sun::star::uno;
 
 // SbxVariable
 
-SbxVariable::SbxVariable() : SbxValue()
+SbxVariable::SbxVariable()
 {
 }
 
@@ -539,7 +539,7 @@ bool SbxVariable::StoreData( SvStream& rStrm ) const
 // SbxInfo
 
 SbxInfo::SbxInfo()
-        : aHelpFile(), nHelpId(0)
+        :  nHelpId(0)
 {}
 
 SbxInfo::SbxInfo( const OUString& r, sal_uInt32 n )

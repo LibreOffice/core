@@ -31,7 +31,7 @@ class ImplB3DPolyPolygon
     PolygonVector                                   maPolygons;
 
 public:
-    ImplB3DPolyPolygon() : maPolygons()
+    ImplB3DPolyPolygon()
     {
     }
 

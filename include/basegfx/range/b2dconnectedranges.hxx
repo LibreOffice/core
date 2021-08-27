@@ -77,8 +77,7 @@ namespace basegfx
 
         /// Create the range calculator
         B2DConnectedRanges() :
-            maDisjunctAggregatesList(),
-            maTotalBounds()
+            maDisjunctAggregatesList()
         {
         }
 

@@ -71,8 +71,6 @@ namespace basegfx
 
     public:
         ip_double()
-        :   maX(),
-            maY()
         {}
 
         ip_double(double fXVal, double fXInc, double fYVal, double fYInc)
@@ -95,9 +93,6 @@ namespace basegfx
 
     public:
         ip_triple()
-        :   maX(),
-            maY(),
-            maZ()
         {}
 
         ip_triple(double fXVal, double fXInc, double fYVal, double fYInc, double fZVal, double fZInc)

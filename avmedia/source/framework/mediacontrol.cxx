@@ -35,7 +35,6 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
                                    OUString("svx/ui/mediawindow.ui") :
                                    OUString("svx/ui/medialine.ui"),
                                "MediaWindow"),
-    MediaControlBase(),
     maIdle( "avmedia MediaControl Idle" ),
     maChangeTimeIdle( "avmedia MediaControl Change Time Idle" ),
     maItem( 0, AVMediaSetMask::ALL ),

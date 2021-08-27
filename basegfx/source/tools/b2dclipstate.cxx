@@ -36,15 +36,10 @@ namespace basegfx::utils
         enum Operation {UNION, INTERSECT, XOR, SUBTRACT};
 
         ImplB2DClipState() :
-            maPendingPolygons(),
-            maPendingRanges(),
-            maClipPoly(),
             mePendingOps(UNION)
         {}
 
         explicit ImplB2DClipState( const B2DPolyPolygon& rPoly ) :
-            maPendingPolygons(),
-            maPendingRanges(),
             maClipPoly(rPoly),
             mePendingOps(UNION)
         {}

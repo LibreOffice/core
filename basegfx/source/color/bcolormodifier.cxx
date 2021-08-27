@@ -148,8 +148,7 @@ namespace basegfx
     }
 
     BColorModifier_gamma::BColorModifier_gamma(double fValue)
-    :   BColorModifier(),
-        mfValue(fValue),
+    :   mfValue(fValue),
         mfInvValue(fValue),
         mbUseIt(!basegfx::fTools::equal(fValue, 1.0) && basegfx::fTools::more(fValue, 0.0) && basegfx::fTools::lessOrEqual(fValue, 10.0))
     {
@@ -195,8 +194,7 @@ namespace basegfx
     }
 
     BColorModifier_RGBLuminanceContrast::BColorModifier_RGBLuminanceContrast(double fRed, double fGreen, double fBlue, double fLuminance, double fContrast)
-    :   BColorModifier(),
-        mfRed(std::clamp(fRed, -1.0, 1.0)),
+    :   mfRed(std::clamp(fRed, -1.0, 1.0)),
         mfGreen(std::clamp(fGreen, -1.0, 1.0)),
         mfBlue(std::clamp(fBlue, -1.0, 1.0)),
         mfLuminance(std::clamp(fLuminance, -1.0, 1.0)),
