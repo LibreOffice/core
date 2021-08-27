@@ -251,10 +251,21 @@ namespace sw
             const SwPosition& rMarkEnd = pMark->GetMarkEnd();
             // only include marks that are in the range and not touching both start and end
             // - not for annotation or checkbox marks.
+            bool const isIncludeStart(
+                   (rStt.nContent.GetIndex() == 0 // paragraph start selected?
+                    // also: only if inserting at the start - cross reference
+                    // marks require index to be 0, and there could be one
+                    // on the target node already
+                    && rCpyPam.nContent.GetIndex() == 0)
+                || rMarkStart != rStt);
+            bool const isIncludeEnd(
+                   (rEnd.nNode.GetNode().IsTextNode() // paragraph end selected?
+                    && rEnd.nContent.GetIndex() == rEnd.nNode.GetNode().GetTextNode()->Len())
+                || rMarkEnd != rEnd);
             const bool bIsNotOnBoundary =
                 pMark->IsExpanded()
-                ? (rMarkStart != rStt || rMarkEnd != rEnd)  // rMarkStart != rMarkEnd
-                : (rMarkStart != rStt && rMarkEnd != rEnd); // rMarkStart == rMarkEnd
+                ? (isIncludeStart || isIncludeEnd)  // rMarkStart != rMarkEnd
+                : (isIncludeStart && isIncludeEnd); // rMarkStart == rMarkEnd
             const IDocumentMarkAccess::MarkType aMarkType = IDocumentMarkAccess::GetType(*pMark);
             if ( rMarkStart >= rStt && rMarkEnd <= rEnd
                  && ( bIsNotOnBoundary

@@ -2626,7 +2626,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128106)
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK), fields[1]->GetField()->GetSubType());
     CPPUNIT_ASSERT(
         static_cast<SwGetRefField const*>(fields[1]->GetField())->IsRefToHeadingCrossRefBookmark());
-    //    CPPUNIT_ASSERT_EQUAL(OUString("Chapter 2"), static_cast<SwGetRefField const*>(fields[1]->GetField())->GetPar2());
+    CPPUNIT_ASSERT_EQUAL(OUString("Chapter 2"),
+                         static_cast<SwGetRefField const*>(fields[1]->GetField())->GetPar2());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK), fields[2]->GetField()->GetSubType());
     CPPUNIT_ASSERT_EQUAL(OUString("Bookmarkchapter1"),
                          static_cast<SwGetRefField const*>(fields[2]->GetField())->GetSetRefName());
@@ -2645,7 +2646,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128106)
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK), fields[5]->GetField()->GetSubType());
     CPPUNIT_ASSERT(
         static_cast<SwGetRefField const*>(fields[5]->GetField())->IsRefToHeadingCrossRefBookmark());
-    //    CPPUNIT_ASSERT_EQUAL(OUString("Chapter 2"), static_cast<SwGetRefField const*>(fields[5]->GetField())->GetPar2());
+    CPPUNIT_ASSERT_EQUAL(OUString("Chapter 2"),
+                         static_cast<SwGetRefField const*>(fields[5]->GetField())->GetPar2());
 
     tempDir.EnableKillingFile();
 }
