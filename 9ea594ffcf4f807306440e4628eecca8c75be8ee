@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "be8f04ab_b525c30d",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1332,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-08-27T12:50:17Z",
+      "side": 1,
+      "message": "Well, I can see how at the moment you might want to round-trip it, but a comment should note that this is a \"hack\" that needs to be worked around when numbering level is implemented in LO.\n\nThis suggests that LO needs to change their internal levels from 0-9 into 1-10 (same as OutlineLevel) and leave 0 for no/cancelled level.",
+      "parentUuid": "1d34f431_765a2ca3",
+      "range": {
+        "startLine": 1332,
+        "startChar": 87,
+        "endLine": 1332,
+        "endChar": 96
+      },
+      "revId": "9ea594ffcf4f807306440e4628eecca8c75be8ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9b234791_2edac217",
         "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
         "patchSetId": 2
