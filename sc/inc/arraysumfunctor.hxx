@@ -69,7 +69,7 @@ static inline KahanSum executeUnrolled(size_t& i, size_t nSize, const double* pC
     return 0.0;
 }
 
-/* Available methos */
+/* Available methods */
 SC_DLLPUBLIC KahanSum executeAVX512F(size_t& i, size_t nSize, const double* pCurrent);
 SC_DLLPUBLIC KahanSum executeAVX(size_t& i, size_t nSize, const double* pCurrent);
 SC_DLLPUBLIC KahanSum executeSSE2(size_t& i, size_t nSize, const double* pCurrent);

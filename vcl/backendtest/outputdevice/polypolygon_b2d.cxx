@@ -80,10 +80,10 @@ Bitmap OutputDeviceTestPolyPolygonB2D::setupIntersectingRectangles()
 
     /*
         The intersection between different rectangles has been
-        acheived by stacking them on top of each other and decreasing and
+        achieved by stacking them on top of each other and decreasing and
         increasing the top and bottom offset accordingly to the rectangle
         keeping the left and the right offset intact which in turn coalesced
-        them to each other helping in acheiving multiple intersecting rectangles.
+        them to each other helping in achieving multiple intersecting rectangles.
         The desired color fill pattern is then achieved by setting the fill
         color which in turn would fill the shape with the provided color
         in accordance to the even-odd filling rule.

@@ -29,7 +29,7 @@ static inline void sumAVX(__m256d& sum, __m256d& err, const __m256d& value)
     __m256d asum = _mm256_and_pd(sum, ANNULATE_SIGN_BIT);
     // Absolute value of the value to add
     __m256d avalue = _mm256_and_pd(value, ANNULATE_SIGN_BIT);
-    // Comaprate the absolute values sum >= value
+    // Compare the absolute values sum >= value
     __m256d mask = _mm256_cmp_pd(asum, avalue, _CMP_GE_OQ);
     // The following code has this form ( a - t + b)
     // Case 1: a = sum b = value
@@ -51,7 +51,7 @@ KahanSum executeAVX(size_t& i, size_t nSize, const double* pCurrent)
     // Make sure we don't fall out of bounds.
     // This works by sums of 8 terms.
     // So the 8'th term is i+7
-    // If we iterate untill nSize won't fall out of bounds
+    // If we iterate until nSize won't fall out of bounds
     if (nSize > i + 7)
     {
         // Setup sums and errors as 0

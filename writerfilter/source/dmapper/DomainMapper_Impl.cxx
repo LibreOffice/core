@@ -2745,7 +2745,7 @@ void DomainMapper_Impl::ConvertHeaderFooterToTextFrame(bool bDynamicHeightTop, b
             // tdf#143384 If the header/footer started with a table, convertToTextFrame could not
             // convert the table, because it used createTextCursor() -which ignore tables-
             // to set the conversion range.
-            // This dummy property is set to make convertToTextFrame to use an other CreateTextCursor
+            // This dummy property is set to make convertToTextFrame to use another CreateTextCursor
             // method that can be parameterized to not ignore tables.
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_CURSOR_NOT_IGNORE_TABLES_IN_HF), true));
 

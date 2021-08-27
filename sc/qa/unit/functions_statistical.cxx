@@ -31,7 +31,7 @@ StatisticalFunctionsTest::StatisticalFunctionsTest():
 
 void StatisticalFunctionsTest::testIntrinsicSums()
 {
-    // Checkout SSE2, AVX and AVX512 opperations
+    // Checkout SSE2, AVX and AVX512 operations
         // Needs exactly 9 terms
     double summands[9] = { 0, 1, 2, 3, 4, 10, 20, 2, -1 };
     double* pCurrent = summands;

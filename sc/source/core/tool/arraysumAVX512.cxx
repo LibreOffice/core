@@ -43,7 +43,7 @@ static inline void sumAVX512(__m512d& sum, __m512d& err, const __m512d& value)
     __m512d asum = _mm512_abs_pd(sum);
     // Absolute value of the value to add
     __m512d avalue = _mm512_abs_pd(value);
-    // Comaprate the absolute values sum >= value
+    // Compare the absolute values sum >= value
     __mmask8 mask = _mm512_cmp_pd_mask(avalue, asum, _CMP_GE_OQ);
     // The following code has this form ( a - t + b)
     // Case 1: a = sum b = value
@@ -65,7 +65,7 @@ KahanSum executeAVX512F(size_t& i, size_t nSize, const double* pCurrent)
     // Make sure we don't fall out of bounds.
     // This works by sums of 8 terms.
     // So the 8'th term is i+7
-    // If we iterate untill nSize won't fall out of bounds
+    // If we iterate until nSize won't fall out of bounds
     if (nSize > i + 7)
     {
         // Setup sums and errors as 0
