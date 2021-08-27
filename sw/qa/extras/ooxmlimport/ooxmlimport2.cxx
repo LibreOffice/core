@@ -19,6 +19,7 @@
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <xmloff/odffields.hxx>
 #include <IDocumentMarkAccess.hxx>
@@ -580,6 +581,37 @@ DECLARE_OOXMLIMPORT_TEST(testTdf129912, "tdf129912.docx")
         CPPUNIT_ASSERT_EQUAL(sFootnoteLabels[nCount], sNumStr);
         pWrtShell->GotoPrevFootnoteAnchor();
         nCount--;
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf126426)
+{
+    load(mpTestDocumentPath, "tdf126426.docx");
+
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xGroup->getCount());
+
+    // get second shape in group
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xGroup->getByIndex(1),
+                                                                  uno::UNO_QUERY_THROW);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+
+    uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xPara, uno::UNO_QUERY_THROW);
+
+    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+    {
+        // Text before: was before this bugfix
+        uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(OUString("Some text "), xRun->getString());
+    }
+    {
+        // Link and this content was completely missong before
+        uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(OUString("Link"), xRun->getString());
+        auto xURLField = getProperty<uno::Reference<text::XTextField>>(xRun, "TextField");
+        auto aURL = getProperty<OUString>(xURLField, "URL");
+        CPPUNIT_ASSERT_EQUAL(OUString("http://libreoffice.org/"), aURL);
     }
 }
 
