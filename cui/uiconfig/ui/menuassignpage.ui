@@ -283,9 +283,6 @@
                 <property name="wrap_mode">word</property>
                 <property name="cursor_visible">False</property>
                 <property name="accepts_tab">False</property>
-                <accessibility>
-                  <relation type="labelled-by" target="descriptionlabel"/>
-                </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="desc-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="menuassignpage|extended_tip|desc">The text box contains a short description of the selected command.</property>
@@ -308,9 +305,6 @@
             <property name="label" translatable="yes" context="menuassignpage|label33">D_escription</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">desc</property>
-            <accessibility>
-              <relation type="label-for" target="desc"/>
-            </accessibility>
           </object>
           <packing>
             <property name="left_attach">0</property>
