@@ -185,7 +185,7 @@ public:
 
     weld::Widget& GetBody()
     {
-        return *m_xGrid;
+        return *m_xBox;
     }
 
     void AdjustExtraWidths(int nTextWidth);
@@ -240,7 +240,7 @@ private:
 private:
     weld::Window* m_pTopLevel;
     std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Container> m_xGrid;
+    std::unique_ptr<weld::Box> m_xBox;
     std::unique_ptr<weld::Widget> m_xWidget1;
     std::unique_ptr<weld::Widget> m_xWidget2;
 
@@ -364,7 +364,7 @@ void ColorConfigWindow_Impl::Entry::ColorChanged(ExtendedColorConfigValue& rValu
 ColorConfigWindow_Impl::ColorConfigWindow_Impl(weld::Window* pTopLevel, weld::Container* pParent)
     : m_pTopLevel(pTopLevel)
     , m_xBuilder(Application::CreateBuilder(pParent, "cui/ui/colorconfigwin.ui"))
-    , m_xGrid(m_xBuilder->weld_container("ColorConfigWindow"))
+    , m_xBox(m_xBuilder->weld_box("ColorConfigWindow"))
     , m_xWidget1(m_xBuilder->weld_widget("doccolor"))
     , m_xWidget2(m_xBuilder->weld_widget("doccolor_lb"))
 {
@@ -418,30 +418,24 @@ void ColorConfigWindow_Impl::CreateEntries()
     if (!nExtGroupCount)
         return;
 
-    size_t nLineNum = vChapters.size() + vEntries.size() + 1;
     for (unsigned j = 0; j != nExtGroupCount; ++j)
     {
-        vExtBuilders.emplace_back(Application::CreateBuilder(m_xGrid.get(), "cui/ui/chapterfragment.ui"));
-        vExtContainers.emplace_back(vExtBuilders.back()->weld_container("ChapterFragment"));
-
-        vExtContainers.back()->set_grid_width(3);
-        vExtContainers.back()->set_grid_left_attach(0);
-        vExtContainers.back()->set_grid_top_attach(nLineNum);
+        vExtBuilders.emplace_back(Application::CreateBuilder(m_xBox.get(), "cui/ui/chapterfragment.ui"));
+        vExtContainers.emplace_back(vExtBuilders.back()->weld_frame("ChapterFragment"));
 
         OUString const sComponentName = aExtConfig.GetComponentName(j);
         vChapters.push_back(std::make_shared<Chapter>(
             *vExtBuilders.back(), "chapter", true));
         vChapters.back()->SetText(aExtConfig.GetComponentDisplayName(sComponentName));
-        ++nLineNum;
+
+        vExtContainers.emplace_back(vExtBuilders.back()->weld_box("contents"));
+        weld::Container* pChapterBox = vExtContainers.back().get();
+
         unsigned nColorCount = aExtConfig.GetComponentColorCount(sComponentName);
         for (unsigned i = 0; i != nColorCount; ++i)
         {
-            vExtBuilders.emplace_back(Application::CreateBuilder(m_xGrid.get(), "cui/ui/colorfragment.ui"));
+            vExtBuilders.emplace_back(Application::CreateBuilder(pChapterBox, "cui/ui/colorfragment.ui"));
             vExtContainers.emplace_back(vExtBuilders.back()->weld_container("ColorFragment"));
-
-            vExtContainers.back()->set_grid_width(3);
-            vExtContainers.back()->set_grid_left_attach(0);
-            vExtContainers.back()->set_grid_top_attach(nLineNum);
 
             ExtendedColorConfigValue const aColorEntry =
                 aExtConfig.GetComponentColorConfigValue(sComponentName, i);
@@ -449,7 +443,6 @@ void ColorConfigWindow_Impl::CreateEntries()
                 "label", "button", aColorEntry.getDefaultColor(),
                 nCheckBoxLabelOffset, false, true));
             vEntries.back()->SetText(aColorEntry.getDisplayName());
-            ++nLineNum;
         }
     }
 }
