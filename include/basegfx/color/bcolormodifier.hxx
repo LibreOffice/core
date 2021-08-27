@@ -88,7 +88,6 @@ namespace basegfx
     {
     public:
         BColorModifier_gray()
-        :   BColorModifier()
         {
         }
 
@@ -109,7 +108,6 @@ namespace basegfx
     {
     public:
         BColorModifier_invert()
-        :   BColorModifier()
         {
         }
 
@@ -134,7 +132,6 @@ namespace basegfx
     {
     public:
         BColorModifier_luminance_to_alpha()
-        :   BColorModifier()
         {
         }
 
@@ -160,8 +157,7 @@ namespace basegfx
 
     public:
         BColorModifier_replace(const ::basegfx::BColor& rBColor)
-        :   BColorModifier(),
-            maBColor(rBColor)
+        :   maBColor(rBColor)
         {
         }
 
@@ -192,8 +188,7 @@ namespace basegfx
 
     public:
         BColorModifier_interpolate(const ::basegfx::BColor& rBColor, double fValue)
-        :   BColorModifier(),
-            maBColor(rBColor),
+        :   maBColor(rBColor),
             mfValue(fValue)
         {
         }
@@ -219,8 +214,7 @@ namespace basegfx
 
     public:
         BColorModifier_black_and_white(double fValue)
-        :   BColorModifier(),
-            mfValue(fValue)
+        :   mfValue(fValue)
         {
         }
 

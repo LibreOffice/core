@@ -157,9 +157,7 @@ namespace basegfx::utils
 
         public:
             B2DHomMatrixBufferedDecompose(const B2DHomMatrix& rB2DHomMatrix = B2DHomMatrix())
-            :   maScale(),
-                maTranslate(),
-                mfRotate(0.0),
+            :   mfRotate(0.0),
                 mfShearX(0.0)
             {
                 rB2DHomMatrix.decompose(maScale, maTranslate, mfRotate, mfShearX);
@@ -201,8 +199,6 @@ namespace basegfx::utils
         public:
             B2DHomMatrixBufferedOnDemandDecompose(const B2DHomMatrix& rB2DHomMatrix = B2DHomMatrix())
             :   maB2DHomMatrix(rB2DHomMatrix),
-                maScale(),
-                maTranslate(),
                 mfRotate(0.0),
                 mfShearX(0.0),
                 mbDecomposed(false)

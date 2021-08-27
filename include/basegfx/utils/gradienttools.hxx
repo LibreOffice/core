@@ -66,9 +66,7 @@ namespace basegfx
 
     public:
         ODFGradientInfo()
-        :   maTextureTransform(),
-            maBackTextureTransform(),
-            mfAspectRatio(1.0),
+        :   mfAspectRatio(1.0),
             mnSteps(0)
         {
         }
@@ -78,7 +76,6 @@ namespace basegfx
             double fAspectRatio,
             sal_uInt32 nSteps)
         :   maTextureTransform(rTextureTransform),
-            maBackTextureTransform(),
             mfAspectRatio(fAspectRatio),
             mnSteps(nSteps)
         {

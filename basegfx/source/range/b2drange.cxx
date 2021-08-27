@@ -23,9 +23,7 @@
 
 namespace basegfx
 {
-    B2DRange::B2DRange( const B2IRange& rRange ) :
-        maRangeX(),
-        maRangeY()
+    B2DRange::B2DRange( const B2IRange& rRange )
     {
         if( !rRange.isEmpty() )
         {

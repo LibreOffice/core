@@ -31,10 +31,7 @@ namespace basegfx
     class ImplB2DPolyRange
     {
     public:
-        ImplB2DPolyRange() :
-            maBounds(),
-            maRanges(),
-            maOrient()
+        ImplB2DPolyRange()
         {}
 
         bool operator==(const ImplB2DPolyRange& rRHS) const

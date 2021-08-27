@@ -30,20 +30,16 @@ class ImplB2DPolyPolygon
 
 public:
     ImplB2DPolyPolygon()
-    :   maPolygons(),
-        mpSystemDependentDataHolder()
     {
     }
 
     explicit ImplB2DPolyPolygon(const ImplB2DPolyPolygon& rSource)
-    :   maPolygons(rSource.maPolygons),
-        mpSystemDependentDataHolder()
+    :   maPolygons(rSource.maPolygons)
     {
     }
 
     explicit ImplB2DPolyPolygon(const basegfx::B2DPolygon& rToBeCopied)
-    :   maPolygons(1,rToBeCopied),
-        mpSystemDependentDataHolder()
+    :   maPolygons(1,rToBeCopied)
     {
     }
 

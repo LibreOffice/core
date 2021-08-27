@@ -42,7 +42,6 @@ namespace basegfx
     B2DHomMatrix::~B2DHomMatrix() = default;
 
     B2DHomMatrix::B2DHomMatrix(double f_0x0, double f_0x1, double f_0x2, double f_1x0, double f_1x1, double f_1x2)
-        :   mpImpl() // identity
     {
         mpImpl->set(0, 0, f_0x0);
         mpImpl->set(0, 1, f_0x1);

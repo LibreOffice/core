@@ -42,7 +42,6 @@ namespace basegfx
             The vector is initialized to (0.0, 0.0, 0.0)
         */
         B3DVector()
-        :   B3DTuple()
         {}
 
         /** Create a 3D Vector
