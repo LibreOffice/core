@@ -2661,7 +2661,13 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
     aSel.Adjust( aEditDoc );
 
     if ( !aSel.HasRange() )
-        aSel = SelectWord( aSel );
+    {
+        /* Cursor is inside of a word */
+        if (nTransliterationMode == TransliterationFlags::SENTENCE_CASE)
+            aSel = SelectSentence( aSel );
+        else
+            aSel = SelectWord( aSel );
+    }
 
     // tdf#107176: if there's still no range, just return aSel
     if ( !aSel.HasRange() )
@@ -2825,6 +2831,12 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 if (nCurrentEnd > nLastEnd)
                     nCurrentEnd = nLastEnd;
             }
+
+            // prevent making any change outside of the user's selection
+            nCurrentStart = std::max(aSel.Min().GetIndex(), nCurrentStart);
+            nCurrentEnd = std::min(aSel.Max().GetIndex(), nCurrentEnd);
+            nLastStart = std::max(aSel.Min().GetIndex(), nLastStart);
+            nLastEnd = std::min(aSel.Max().GetIndex(), nLastEnd);
 
             while (nCurrentStart < nLastEnd)
             {
