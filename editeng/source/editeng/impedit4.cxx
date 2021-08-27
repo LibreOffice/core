@@ -76,6 +76,7 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
+#include <algorithm>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -2781,13 +2782,9 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                     aNodeStr, nLastStart,
                     GetLocale( EditPaM( pNode, nLastStart + 1 ) ) );
 
-            // extend nCurrentStart, nCurrentEnd to the current sentence boundaries
-            nCurrentStart = _xBI->beginOfSentence(
-                    aNodeStr, nStartPos,
-                    GetLocale( EditPaM( pNode, nStartPos + 1 ) ) );
-            nCurrentEnd = _xBI->endOfSentence(
-                    aNodeStr, nCurrentStart,
-                    GetLocale( EditPaM( pNode, nCurrentStart + 1 ) ) );
+            // Avoid going outside of the user's selection
+            nLastStart = std::max(aSel.Min().GetIndex(), nLastStart);
+            nLastEnd = std::min(aSel.Max().GetIndex(), nLastEnd);
 
             // prevent backtracking to the previous sentence if selection starts at end of a sentence
             if (nCurrentEnd <= nStartPos)
