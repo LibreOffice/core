@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "aef75c38_15ada1db",
+        "filename": "cui/uiconfig/ui/menuassignpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-08-27T13:34:16Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "8930d5bb_582c311f",
+      "revId": "8d8e5ab9193785acc4e1cb05e0db7f97afde1e2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a6750306_7e7986b8",
         "filename": "cui/uiconfig/ui/pageformatpage.ui",
         "patchSetId": 1
