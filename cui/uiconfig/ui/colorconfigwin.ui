@@ -67,6 +67,9 @@
                 <property name="receives-default">False</property>
                 <property name="margin-start">6</property>
                 <property name="draw-indicator">True</property>
+                <accessibility>
+                  <relation type="label-for" target="docboundaries_lb"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -85,6 +88,9 @@
                 <child>
                   <placeholder/>
                 </child>
+                <accessibility>
+                  <relation type="labelled-by" target="docboundaries"/>
+                </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="docboundaries_lb-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="colorconfigwin|docboundaries_lb">Text boundaries color</property>
@@ -137,6 +143,9 @@
                 <property name="receives-default">False</property>
                 <property name="margin-start">6</property>
                 <property name="draw-indicator">True</property>
+                <accessibility>
+                  <relation type="label-for" target="objboundaries_lb"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -155,6 +164,9 @@
                 <child>
                   <placeholder/>
                 </child>
+                <accessibility>
+                  <relation type="labelled-by" target="objboundaries"/>
+                </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="objboundaries_lb-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="colorconfigwin|objboundaries_lb">Object boundaries color</property>
@@ -174,6 +186,9 @@
                 <property name="receives-default">False</property>
                 <property name="margin-start">6</property>
                 <property name="draw-indicator">True</property>
+                <accessibility>
+                  <relation type="label-for" target="tblboundaries_lb"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -192,6 +207,9 @@
                 <child>
                   <placeholder/>
                 </child>
+                <accessibility>
+                  <relation type="labelled-by" target="tblboundaries"/>
+                </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="tblboundaries_lb-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="colorconfigwin|tblboundaries_lb">Table boundaries color</property>
@@ -244,6 +262,9 @@
                 <property name="receives-default">False</property>
                 <property name="margin-start">6</property>
                 <property name="draw-indicator">True</property>
+                <accessibility>
+                  <relation type="label-for" target="unvisitedlinks_lb"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -262,6 +283,9 @@
                 <child>
                   <placeholder/>
                 </child>
+                <accessibility>
+                  <relation type="labelled-by" target="unvisitedlinks"/>
+                </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="unvisitedlinks_lb-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="colorconfigwin|unvisitedlinks_lb">Unvisited links color</property>
@@ -281,6 +305,9 @@
                 <property name="receives-default">False</property>
                 <property name="margin-start">6</property>
                 <property name="draw-indicator">True</property>
+                <accessibility>
+                  <relation type="label-for" target="visitedlinks_lb"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -299,6 +326,9 @@
                 <child>
                   <placeholder/>
                 </child>
+                <accessibility>
+                  <relation type="labelled-by" target="visitedlinks"/>
+                </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="visitedlinks_lb-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="colorconfigwin|visitedlinks_lb">Visited links color</property>
@@ -385,6 +415,9 @@
                 <property name="receives-default">False</property>
                 <property name="margin-start">6</property>
                 <property name="draw-indicator">True</property>
+                <accessibility>
+                  <relation type="label-for" target="shadows_lb"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -403,6 +436,9 @@
                 <child>
                   <placeholder/>
                 </child>
+                <accessibility>
+                  <relation type="labelled-by" target="shadows"/>
+                </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="shadows_lb-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="colorconfigwin|shadows_lb">Shadows color</property>
@@ -490,6 +526,9 @@
                 <property name="receives-default">False</property>
                 <property name="margin-start">6</property>
                 <property name="draw-indicator">True</property>
+                <accessibility>
+                  <relation type="label-for" target="field_lb"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -508,6 +547,9 @@
                 <child>
                   <placeholder/>
                 </child>
+                <accessibility>
+                  <relation type="labelled-by" target="field"/>
+                </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="field_lb-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="colorconfigwin|field_lb">Field shadings color</property>
@@ -527,6 +569,9 @@
                 <property name="receives-default">False</property>
                 <property name="margin-start">6</property>
                 <property name="draw-indicator">True</property>
+                <accessibility>
+                  <relation type="label-for" target="index_lb"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -545,6 +590,9 @@
                 <child>
                   <placeholder/>
                 </child>
+                <accessibility>
+                  <relation type="labelled-by" target="index"/>
+                </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="index_lb-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="colorconfigwin|index_lb">Index and table shadings color</property>
@@ -597,6 +645,9 @@
                 <property name="receives-default">False</property>
                 <property name="margin-start">6</property>
                 <property name="draw-indicator">True</property>
+                <accessibility>
+                  <relation type="label-for" target="section_lb"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -615,6 +666,9 @@
                 <child>
                   <placeholder/>
                 </child>
+                <accessibility>
+                  <relation type="labelled-by" target="section"/>
+                </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="section_lb-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="colorconfigwin|section_lb">Section boundaries color</property>
