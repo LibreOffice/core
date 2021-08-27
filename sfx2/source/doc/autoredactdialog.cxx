@@ -323,6 +323,12 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, EditHdl, weld::Button&, void)
     m_xTargetsBox->setRowData(nSelectedRow, pTarget);
 }
 
+IMPL_LINK_NOARG(SfxAutoRedactDialog, DoubleClickEditHdl, weld::TreeView&, bool)
+{
+    IMPL_LINK_NOARG(SfxAutoRedactDialog, EditHdl, weld::Button&, void);
+    return true;
+}
+
 IMPL_LINK_NOARG(SfxAutoRedactDialog, DeleteHdl, weld::Button&, void)
 {
     std::vector<int> aSelectedRows = m_xTargetsBox->get_selected_rows();
