@@ -35,12 +35,12 @@
 
 ///////////////////////////// constructors
 
-SbxValue::SbxValue() : SbxBase()
+SbxValue::SbxValue()
 {
     aData.eType = SbxEMPTY;
 }
 
-SbxValue::SbxValue( SbxDataType t ) : SbxBase()
+SbxValue::SbxValue( SbxDataType t )
 {
     int n = t & 0x0FFF;
 

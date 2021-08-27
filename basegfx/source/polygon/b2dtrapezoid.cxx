@@ -482,9 +482,6 @@ namespace basegfx::trapezoidhelper
         public:
             explicit TrapezoidSubdivider(
                 const B2DPolyPolygon& rSourcePolyPolygon)
-            :   maTrDeEdgeEntries(),
-                maPoints(),
-                maNewPoints()
             {
                 B2DPolyPolygon aSource(rSourcePolyPolygon);
                 TrDeSimpleEdges aTrDeSimpleEdges;

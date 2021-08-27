@@ -42,7 +42,6 @@ namespace basegfx
             The point is initialized to (0.0, 0.0, 0.0)
         */
         B3DPoint()
-        :   B3DTuple()
         {}
 
         /** Create a 3D Point

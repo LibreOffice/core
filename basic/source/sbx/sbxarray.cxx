@@ -35,7 +35,7 @@ struct SbxVarEntry
 
 //  SbxArray
 
-SbxArray::SbxArray( SbxDataType t ) : SbxBase()
+SbxArray::SbxArray( SbxDataType t )
 {
     eType = t;
     if( t != SbxVARIANT )

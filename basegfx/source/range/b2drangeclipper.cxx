@@ -226,7 +226,6 @@ namespace basegfx
             ImplPolygon() :
                 mpLeadingRightEdge(nullptr),
                 mnIdx(-1),
-                maPoints(),
                 mbIsFinished(false)
             {
                 // completely ad-hoc. but what the hell.

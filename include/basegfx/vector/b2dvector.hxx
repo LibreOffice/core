@@ -44,7 +44,6 @@ namespace basegfx
             The vector is initialized to (0.0, 0.0)
         */
         B2DVector()
-        :   B2DTuple()
         {}
 
         /** Create a 2D Vector
