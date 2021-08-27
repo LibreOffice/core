@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79df7649_616440d3",
+        "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-08-27T23:24:31Z",
+      "side": 1,
+      "message": "Why are you detaching the thread and not joining at the end.. instead of sleeping - like I described.",
+      "range": {
+        "startLine": 105,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 3
+      },
+      "revId": "412a8436bdc3f178735c172b4c1eeefddfeb506e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
