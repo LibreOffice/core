@@ -2919,10 +2919,9 @@ void DocumentContentOperationsManager::TransliterateText(
     sal_Int32 nEndCnt = pEnd->nContent.GetIndex();
 
     SwTextNode* pTNd = pStt->nNode.GetNode().GetTextNode();
-    if( pStt == pEnd && pTNd )  // no selection?
+    if( (pStt == pEnd) && pTNd )  // no selection?
     {
         // set current word as 'area of effect'
-
         assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
         Boundary aBndry = g_pBreakIt->GetBreakIter()->getWordBoundary(
                             pTNd->GetText(), nSttCnt,
@@ -2930,7 +2929,7 @@ void DocumentContentOperationsManager::TransliterateText(
                             WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/,
                             true);
 
-        if( aBndry.startPos < nSttCnt && nSttCnt < aBndry.endPos )
+        if( aBndry.startPos <= nSttCnt && nSttCnt <= aBndry.endPos )
         {
             nSttCnt = aBndry.startPos;
             nEndCnt = aBndry.endPos;
@@ -2977,7 +2976,7 @@ void DocumentContentOperationsManager::TransliterateText(
 
     if( nSttNd != nEndNd )  // is more than one text node involved?
     {
-        // iterate over all effected text nodes, the first and the last one
+        // iterate over all affected text nodes, the first and the last one
         // may be incomplete because the selection starts and/or ends there
 
         SwNodeIndex aIdx( pStt->nNode );
