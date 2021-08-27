@@ -89,13 +89,9 @@ class DemoRenderer
                       uno::Reference< rendering::XCanvas > xCanvas,
                       Size aSize ) :
             maSize(aSize),
-            maBox(),
-            maViewState(),
-            maRenderState(),
             maColorBlack( vcl::unotools::colorToStdColorSpaceSequence( COL_BLACK) ),
             maColorRed( vcl::unotools::colorToStdColorSpaceSequence( COL_RED) ),
             mxCanvas(xCanvas),
-            mxDefaultFont(),
             mxDevice( xDevice )
         {
             // Geometry init

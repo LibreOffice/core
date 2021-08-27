@@ -116,7 +116,6 @@ namespace canvas
 
         GraphicDeviceBase() :
             maDeviceHelper(),
-            maPropHelper(),
             mbDumpScreenContent(false)
         {
             maPropHelper.initProperties( PropertySetHelper::MakeMap

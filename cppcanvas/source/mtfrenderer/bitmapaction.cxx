@@ -82,8 +82,7 @@ namespace cppcanvas::internal
                                         const OutDevState&         rState ) :
                 CachedPrimitiveBase( rCanvas, true ),
                 mxBitmap( vcl::unotools::xBitmapFromBitmapEx( rBmpEx ) ),
-                mpCanvas( rCanvas ),
-                maState()
+                mpCanvas( rCanvas )
             {
                 tools::initRenderState(maState,rState);
 
@@ -109,8 +108,7 @@ namespace cppcanvas::internal
                                         const OutDevState&          rState      ) :
                 CachedPrimitiveBase( rCanvas, true ),
                 mxBitmap( vcl::unotools::xBitmapFromBitmapEx( rBmpEx ) ),
-                mpCanvas( rCanvas ),
-                maState()
+                mpCanvas( rCanvas )
             {
                 tools::initRenderState(maState,rState);
 

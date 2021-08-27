@@ -2654,8 +2654,7 @@ namespace cppcanvas::internal
             {
             public:
                 explicit AreaQuery( const ::basegfx::B2DHomMatrix& rTransformation ) :
-                    maTransformation( rTransformation ),
-                    maBounds()
+                    maTransformation( rTransformation )
                 {
                 }
 
@@ -2841,7 +2840,6 @@ namespace cppcanvas::internal
                                     const GDIMetaFile&      rMtf,
                                     const Parameters&       rParams )
             : CanvasGraphicHelper(rCanvas)
-            , maActions()
             , nFrameLeft(0)
             , nFrameTop(0)
             , nFrameRight(0)

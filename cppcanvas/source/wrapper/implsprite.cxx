@@ -33,7 +33,6 @@ namespace cppcanvas::internal
         ImplSprite::ImplSprite( const uno::Reference< rendering::XSpriteCanvas >&       rParentCanvas,
                                 const uno::Reference< rendering::XSprite >&             rSprite,
                                 const ImplSpriteCanvas::TransformationArbiterSharedPtr& rTransformArbiter ) :
-            mxGraphicDevice(),
             mxSprite( rSprite ),
             mpTransformArbiter( rTransformArbiter )
         {

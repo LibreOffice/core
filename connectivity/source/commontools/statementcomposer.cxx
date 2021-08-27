@@ -69,9 +69,6 @@ namespace dbtools
 
         explicit StatementComposer_Data( const Reference< XConnection >& _rxConnection )
             :xConnection( _rxConnection )
-            ,sCommand()
-            ,sFilter()
-            ,sOrder()
             ,nCommandType( CommandType::COMMAND )
             ,bEscapeProcessing( true )
             ,bComposerDirty( true )

@@ -120,7 +120,6 @@ namespace vclcanvas
         mpRedrawManager( nullptr ),
         mpOwningSpriteCanvas( nullptr ),
         maVDev(VclPtr<VirtualDevice>::Create()),
-        maLastUpdate(),
         mbShowFrameInfo( false ),
         mbShowSpriteBounds( false ),
         mbIsUnsafeScrolling( false )

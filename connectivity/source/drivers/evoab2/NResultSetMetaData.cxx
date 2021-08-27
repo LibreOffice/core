@@ -28,8 +28,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 
 OEvoabResultSetMetaData::OEvoabResultSetMetaData(const OUString& _aTableName)
-    : m_aTableName(_aTableName),
-      m_aEvoabFields()
+    : m_aTableName(_aTableName)
 {
 
 }

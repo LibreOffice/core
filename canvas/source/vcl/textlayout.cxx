@@ -81,7 +81,6 @@ namespace vclcanvas
                             const OutDevProviderSharedPtr&                   rOutDev ) :
         TextLayout_Base( m_aMutex ),
         maText( aText ),
-        maLogicalAdvancements(),
         mpFont( rFont ),
         mxDevice( xDevice ),
         mpOutDevProvider( rOutDev ),

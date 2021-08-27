@@ -108,13 +108,7 @@ public:
 };
 
 CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
-    m_mutex(),
     m_xContext(xContext),
-    m_xCanvasConfigNameAccess(),
-    m_aAvailableImplementations(),
-    m_aAcceleratedImplementations(),
-    m_aAAImplementations(),
-    m_aCachedImplementations(),
     m_bCacheHasForcedLastImpl(),
     m_bCacheHasUseAcceleratedEntry(),
     m_bCacheHasUseAAEntry()

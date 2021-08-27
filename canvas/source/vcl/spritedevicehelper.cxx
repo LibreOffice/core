@@ -31,8 +31,7 @@ using namespace ::com::sun::star;
 
 namespace vclcanvas
 {
-    SpriteDeviceHelper::SpriteDeviceHelper() :
-        mpBackBuffer()
+    SpriteDeviceHelper::SpriteDeviceHelper()
     {
     }
 

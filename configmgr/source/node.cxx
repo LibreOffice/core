@@ -69,7 +69,7 @@ rtl::Reference< Node > Node::getMember(OUString const & name) {
 Node::Node(int layer): layer_(layer), finalized_(Data::NO_LAYER) {}
 
 Node::Node(const Node & other):
-    SimpleReferenceObject(), layer_(other.layer_), finalized_(other.finalized_)
+     layer_(other.layer_), finalized_(other.finalized_)
 {}
 
 Node::~Node() {}

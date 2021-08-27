@@ -342,8 +342,7 @@ namespace oglcanvas
 
     CanvasHelper::CanvasHelper() :
         mpDevice( nullptr ),
-        mpDeviceHelper( nullptr ),
-        mpRecordedActions()
+        mpDeviceHelper( nullptr )
     {}
 
     CanvasHelper::~CanvasHelper()

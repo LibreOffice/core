@@ -40,8 +40,6 @@ IMPLEMENT_SERVICE_INFO(OEvoabPreparedStatement,"com.sun.star.sdbcx.evoab.Prepare
 
 OEvoabPreparedStatement::OEvoabPreparedStatement( OEvoabConnection* _pConnection )
     :OCommonStatement(_pConnection)
-    ,m_sSqlStatement()
-    ,m_xMetaData()
 {
 }
 

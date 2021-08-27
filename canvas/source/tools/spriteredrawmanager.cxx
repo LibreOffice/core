@@ -45,8 +45,6 @@ namespace canvas
         public:
             explicit SpriteTracer( const Sprite::Reference& rAffectedSprite ) :
                 mpAffectedSprite(rAffectedSprite),
-                maMoveStartArea(),
-                maMoveEndArea(),
                 mbIsMove( false ),
                 mbIsGenericUpdate( false )
             {
@@ -425,9 +423,7 @@ namespace canvas
                                 { return cp.second.needsUpdate(); } );
     }
 
-    SpriteRedrawManager::SpriteRedrawManager() :
-        maSprites(),
-        maChangeRecords()
+    SpriteRedrawManager::SpriteRedrawManager()
     {
     }
 
