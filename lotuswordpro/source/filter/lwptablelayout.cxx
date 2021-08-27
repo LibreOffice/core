@@ -942,12 +942,11 @@ void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable, rtl::Reference<XFTable>
     rtl::Reference<XFCell> xXFCell2(new XFCell);
     rtl::Reference<XFTable> xSubTable1(new XFTable);
     rtl::Reference<XFTable> xSubTable2(new XFTable);
-    XFRow* pOldRow;
     rtl::Reference<XFCell> xNewCell;
 
     for (i=1;i<=nRowNum;i++)
     {
-        pOldRow = pTmpTable->GetRow(i);
+        XFRow* pOldRow = pTmpTable->GetRow(i);
         rtl::Reference<XFRow> xNewRow(new XFRow);
         xNewRow->SetStyleName(pOldRow->GetStyleName());
         for (sal_uInt8 j=1;j<=pCellMark[i];j++)
@@ -965,7 +964,7 @@ void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable, rtl::Reference<XFTable>
 
     for (i=1;i<=nRowNum;i++)
     {
-        pOldRow = pTmpTable->GetRow(i);
+        XFRow* pOldRow = pTmpTable->GetRow(i);
         rtl::Reference<XFRow> xNewRow(new XFRow);
         xNewRow->SetStyleName(pOldRow->GetStyleName());
         for(sal_Int32 j=pCellMark[i]+1;j<=pOldRow->GetCellCount();j++)
@@ -986,9 +985,6 @@ void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable, rtl::Reference<XFTable>
     //remove tmp table
     for (i=1;i<=nRowNum;i++)
     {
-        pOldRow = pTmpTable->GetRow(i);
-        for(sal_Int32 j=1;j<=pOldRow->GetCellCount();j++)
-            pOldRow->RemoveCell(j);
         pTmpTable->RemoveRow(i);
     }
 }

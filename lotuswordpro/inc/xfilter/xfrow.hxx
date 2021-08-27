@@ -57,8 +57,7 @@
  * @file
  * Table row object. A table is consist by rows.
  ************************************************************************/
-#ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFROW_HXX
-#define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFROW_HXX
+#pragma once
 
 #include <xfilter/xfcell.hxx>
 #include <xfilter/xfcontent.hxx>
@@ -93,8 +92,6 @@ public:
 
     virtual void    ToXml(IXFStream *pStrm) override;
 
-    void        RemoveCell(sal_Int32 cell);
-
 private:
     XFTable     *m_pOwnerTable;
     std::map<sal_Int32, rtl::Reference<XFCell>> m_aCells;
@@ -127,10 +124,4 @@ inline XFTable* XFRow::GetOwnerTable()
     return m_pOwnerTable;
 }
 
-inline void XFRow::RemoveCell(sal_Int32 cell)
-{
-    m_aCells.erase(cell);
-}
-
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
