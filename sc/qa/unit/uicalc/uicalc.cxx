@@ -2538,6 +2538,31 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testFillHandleDnD)
     CPPUNIT_ASSERT_EQUAL(u"6"_ustr, pDoc->GetString(ScAddress(0, 5, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf143940)
+{
+    createScDoc("tdf143940.ods");
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    goToCell(u"A828"_ustr);
+
+    CPPUNIT_ASSERT_EQUAL(u"One Onza"_ustr, pDoc->GetString(ScAddress(0, 827, 0)));
+
+    dispatchCommand(mxComponent, u".uno:InsertRowsBefore"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(0, 827, 0)));
+
+    // Without the fix in place, this test would have crashed
+    // FIXME: Error: uncompleted content model. expecting: <covered-table-cell>,<table-cell>
+    skipValidation();
+    saveAndReload(u"calc8"_ustr);
+    pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(0, 827, 0)));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
