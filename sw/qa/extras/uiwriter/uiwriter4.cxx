@@ -139,6 +139,7 @@
 #include <unotxdoc.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rootfrm.hxx>
+#include <unotools/transliterationwrapper.hxx>
 
 namespace
 {
@@ -164,6 +165,7 @@ class SwUiWriterTest4 : public SwModelTestBase, public HtmlTestTools
 {
 public:
     void testTdf96515();
+    void testTdf49033();
     void testTdf96943();
     void testTdf96536();
     void testTdf96479();
@@ -284,6 +286,7 @@ public:
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest4);
     CPPUNIT_TEST(testTdf96515);
+    CPPUNIT_TEST(testTdf49033);
     CPPUNIT_TEST(testTdf96943);
     CPPUNIT_TEST(testTdf96536);
     CPPUNIT_TEST(testTdf96479);
@@ -427,6 +430,166 @@ void SwUiWriterTest4::testTdf96515()
 
     // This was 2, a new page was created for the new paragraph.
     CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
+static OUString lcl_translitTest(SwDoc& rDoc, const SwPaM& rPaM, TransliterationFlags const nType)
+{
+    utl::TransliterationWrapper aTrans(::comphelper::getProcessComponentContext(), nType);
+    rDoc.getIDocumentContentOperations().TransliterateText(rPaM, aTrans);
+    //SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    return rPaM.GetNode(false).GetTextNode()->GetText();
+}
+
+void SwUiWriterTest4::testTdf49033()
+{
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // Insert the test text at the end of the document.
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->Insert("Mary Jones met joe Smith. Time Passed.");
+    pWrtShell->StartOfSection();
+    SwShellCursor* pCursor = pWrtShell->getShellCursor(false);
+
+    using TF = TransliterationFlags;
+
+    /* -- Test behavior when there is no selection -- */
+
+    /* Move cursor between the 't' and the ' ' after 'met', nothing should change */
+    for (int i = 0; i < 14; i++)
+        pCursor->Move(fnMoveForward);
+
+    CPPUNIT_ASSERT_EQUAL(false, pCursor->HasMark());
+    CPPUNIT_ASSERT_EQUAL(false, pWrtShell->IsSelection());
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
+
+    /* Move cursor between the 'h' and the '.' after 'Smith', nothing should change */
+    for (int i = 0; i < 10; i++)
+        pCursor->Move(fnMoveForward);
+
+    CPPUNIT_ASSERT_EQUAL(false, pCursor->HasMark());
+    CPPUNIT_ASSERT_EQUAL(false, pWrtShell->IsSelection());
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
+
+    /* Move cursor between the 'm' and the 'e' in 'met' */
+    for (int i = 0; i < 12; i++)
+        pCursor->Move(fnMoveBackward);
+
+    CPPUNIT_ASSERT_EQUAL(false, pCursor->HasMark());
+    CPPUNIT_ASSERT_EQUAL(false, pWrtShell->IsSelection());
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary jones met joe smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
+
+    /* Undo the sentence case change to reset for the following tests */
+    pDoc->GetIDocumentUndoRedo().Undo();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones Met joe Smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones MET joe Smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
+
+    /* -- Test behavior when there is a selection that does not cross a word boundary -- */
+    pCursor->Move(fnMoveBackward);
+    pWrtShell->SelWrd();
+    CPPUNIT_ASSERT_EQUAL(true, pCursor->HasMark());
+    CPPUNIT_ASSERT_EQUAL(true, pWrtShell->IsSelection());
+
+    OUString currentSelectedText;
+    pWrtShell->GetSelectedText(currentSelectedText);
+    CPPUNIT_ASSERT_EQUAL(OUString("met"), currentSelectedText);
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones Met joe Smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones Met joe Smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones MET joe Smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
+
+    /* -- Test behavior when there is a selection that crosses a word boundary -- */
+    for (int i = 0; i < 7; i++)
+        pCursor->Move(fnMoveBackward);
+    pCursor->SetMark();
+    for (int i = 0; i < 14; i++)
+        pCursor->Move(fnMoveForward);
+
+    pWrtShell->GetSelectedText(currentSelectedText);
+    CPPUNIT_ASSERT_EQUAL(OUString("nes met joe Sm"), currentSelectedText);
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary JoNes met joe smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones Met Joe Smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary JoNES MET JOE SMith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
+
+    /* Reset the 's' to upper-case for the next test */
+    for (int i = 0; i < 2; i++)
+        pCursor->Move(fnMoveBackward);
+    pCursor->SetMark();
+    pCursor->Move(fnMoveForward);
+    pDoc->getIDocumentContentOperations().ReplaceRange(*pCursor, OUString('S'), false);
+
+    /* -- Test behavior when there is a selection that crosses a sentence boundary -- */
+    for (int i = 0; i < 4; i++)
+        pCursor->Move(fnMoveBackward);
+    pCursor->SetMark();
+    for (int i = 0; i < 22; i++)
+        pCursor->Move(fnMoveForward);
+    pWrtShell->GetSelectedText(currentSelectedText);
+    CPPUNIT_ASSERT_EQUAL(OUString("joe Smith. Time Passed"), currentSelectedText);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met Joe smith. Time passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
+
+    /* Undo the sentence case change to reset for the following tests */
+    pDoc->GetIDocumentUndoRedo().Undo();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met Joe Smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met JOE SMITH. TIME PASSED."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe smith. time passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
+
+    /* Undo the previous changes to reset for the following tests */
+    pDoc->GetIDocumentUndoRedo().Undo();
+    pDoc->GetIDocumentUndoRedo().Undo();
+    pDoc->GetIDocumentUndoRedo().Undo();
+
+    /* -- Test behavior when there is a selection that does not reach end of sentence -- */
+    for (int i = 0; i < 37; i++)
+        pCursor->Move(fnMoveBackward);
+    pCursor->SetMark();
+    for (int i = 0; i < 10; i++)
+        pCursor->Move(fnMoveForward);
+    pWrtShell->GetSelectedText(currentSelectedText);
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones"), currentSelectedText);
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary jones met joe Smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("MARY JONES met joe Smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("mary jones met joe Smith. Time Passed."),
+                         lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
 }
 
 void SwUiWriterTest4::testTdf96943()
