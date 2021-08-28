@@ -57,6 +57,7 @@
 #include <strings.hrc>
 #include <fntcap.hxx>
 #include <vcl/outdev/ScopedStates.hxx>
+#include <o3tl/hash_combine.hxx>
 
 using namespace ::com::sun::star;
 
@@ -73,7 +74,7 @@ MapMode* SwFntObj::s_pPixMap = nullptr;
 static vcl::DeleteOnDeinit< VclPtr<OutputDevice> > s_pFntObjPixOut {};
 
 /**
- * Defines a substring on a given output device, to be used as an std::map<>
+ * Defines a substring on a given output device, to be used as an std::unordered_map<>
  * key.
  */
 struct SwTextGlyphsKey
@@ -82,9 +83,29 @@ struct SwTextGlyphsKey
     OUString m_aText;
     sal_Int32 m_nIndex;
     sal_Int32 m_nLength;
+    size_t mnHashCode;
 
+    SwTextGlyphsKey(VclPtr<OutputDevice> const& pOutputDevice, const OUString & sText, sal_Int32 nIndex, sal_Int32 nLength)
+        : m_pOutputDevice(pOutputDevice), m_aText(sText), m_nIndex(nIndex), m_nLength(nLength)
+    {
+        mnHashCode = 0;
+        o3tl::hash_combine(mnHashCode, pOutputDevice.get());
+        o3tl::hash_combine(mnHashCode, m_nIndex);
+        o3tl::hash_combine(mnHashCode, m_nLength);
+        if (m_nLength >= 0 && m_nIndex >= 0 && m_nIndex + m_nLength <= m_aText.getLength())
+            o3tl::hash_combine(mnHashCode, m_aText.getStr() + m_nIndex, m_nLength * sizeof(sal_Unicode));
+    }
+
+    bool operator==(SwTextGlyphsKey const & rhs) const
+    {
+        return m_pOutputDevice == rhs.m_pOutputDevice && m_aText == rhs.m_aText && m_nIndex == rhs.m_nIndex && m_nLength == rhs.m_nLength;
+    }
 };
 
+size_t SwTextGlyphsKeyHash::operator()(SwTextGlyphsKey const & rKey) const
+{
+    return rKey.mnHashCode;
+}
 /**
  * Glyphs and text width for the given SwTextGlyphsKey.
  */
@@ -220,7 +241,7 @@ void SwFntObj::CreatePrtFont( const OutputDevice& rPrt )
  * Pre-calculates glyph items for the rendered subset of rKey's text, assuming
  * outdev state does not change between the outdev calls.
  */
-static SalLayoutGlyphs* lcl_CreateLayout(const SwTextGlyphsKey& rKey, std::map<SwTextGlyphsKey, SwTextGlyphsData>::iterator it)
+static SalLayoutGlyphs* lcl_CreateLayout(const SwTextGlyphsKey& rKey, std::unordered_map<SwTextGlyphsKey, SwTextGlyphsData>::iterator it)
 {
     assert (!it->second.m_aTextGlyphs.IsValid());
 
@@ -243,7 +264,7 @@ static SalLayoutGlyphs* lcl_CreateLayout(const SwTextGlyphsKey& rKey, std::map<S
 
 SalLayoutGlyphs* SwFntObj::GetCachedSalLayoutGlyphs(const SwTextGlyphsKey& key)
 {
-    std::map<SwTextGlyphsKey, SwTextGlyphsData>::iterator it = m_aTextGlyphs.find(key);
+    std::unordered_map<SwTextGlyphsKey, SwTextGlyphsData>::iterator it = m_aTextGlyphs.find(key);
     if(it != m_aTextGlyphs.end())
     {
         if( it->second.m_aTextGlyphs.IsValid())
@@ -259,7 +280,7 @@ SalLayoutGlyphs* SwFntObj::GetCachedSalLayoutGlyphs(const SwTextGlyphsKey& key)
 
 tools::Long SwFntObj::GetCachedTextWidth(const SwTextGlyphsKey& key, const vcl::TextLayoutCache* vclCache)
 {
-    std::map<SwTextGlyphsKey, SwTextGlyphsData>::iterator it = m_aTextGlyphs.find(key);
+    std::unordered_map<SwTextGlyphsKey, SwTextGlyphsData>::iterator it = m_aTextGlyphs.find(key);
     if(it != m_aTextGlyphs.end() && it->second.m_nTextWidth >= 0)
         return it->second.m_nTextWidth;
     if(it == m_aTextGlyphs.end())
