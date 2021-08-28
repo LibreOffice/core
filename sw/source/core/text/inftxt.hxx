@@ -145,7 +145,7 @@ protected:
     // performance hack - this is only used by SwTextFormatInfo but
     // because it's not even possible to dynamic_cast these things
     // currently it has to be stored here
-    std::shared_ptr<vcl::TextLayoutCache> m_pCachedVclData;
+    std::shared_ptr<vcl::text::TextLayoutCache> m_pCachedVclData;
 
     SwFont *m_pFnt;
     SwUnderlineFont *m_pUnderFnt; // Font for underlining
@@ -251,7 +251,7 @@ public:
     void GetTextSize( const SwScriptInfo* pSI, TextFrameIndex nIdx,
                       TextFrameIndex nLen, const sal_uInt16 nComp,
                       sal_uInt16& nMinSize, sal_uInt16& nMaxSizeDiff,
-                      vcl::TextLayoutCache const* = nullptr) const;
+                      vcl::text::TextLayoutCache const* = nullptr) const;
     inline SwPosSize GetTextSize(const SwScriptInfo* pSI, TextFrameIndex nIdx,
                                  TextFrameIndex nLen) const;
     inline SwPosSize GetTextSize( const OUString &rText ) const;
@@ -259,12 +259,12 @@ public:
     TextFrameIndex GetTextBreak( const tools::Long nLineWidth,
                             const TextFrameIndex nMaxLen,
                             const sal_uInt16 nComp,
-                            vcl::TextLayoutCache const*) const;
+                            vcl::text::TextLayoutCache const*) const;
     TextFrameIndex GetTextBreak( const tools::Long nLineWidth,
                             const TextFrameIndex nMaxLen,
                             const sal_uInt16 nComp,
                             TextFrameIndex& rExtraCharPos,
-                            vcl::TextLayoutCache const*) const;
+                            vcl::text::TextLayoutCache const*) const;
 
     sal_uInt16 GetAscent() const;
 
@@ -325,11 +325,11 @@ public:
         { return ( m_pKanaComp && m_nKanaIdx < m_pKanaComp->size() )
                    ? (*m_pKanaComp)[m_nKanaIdx] : 0; }
 
-    const std::shared_ptr<vcl::TextLayoutCache>& GetCachedVclData() const
+    const std::shared_ptr<vcl::text::TextLayoutCache>& GetCachedVclData() const
     {
         return m_pCachedVclData;
     }
-    void SetCachedVclData(std::shared_ptr<vcl::TextLayoutCache> const& pCachedVclData)
+    void SetCachedVclData(std::shared_ptr<vcl::text::TextLayoutCache> const& pCachedVclData)
     {
         m_pCachedVclData = pCachedVclData;
     }
@@ -673,7 +673,7 @@ public:
 class SwTextSlot final
 {
     OUString aText;
-    std::shared_ptr<vcl::TextLayoutCache> m_pOldCachedVclData;
+    std::shared_ptr<vcl::text::TextLayoutCache> m_pOldCachedVclData;
     const OUString *pOldText;
     sw::WrongListIterator * m_pOldSmartTagList;
     sw::WrongListIterator * m_pOldGrammarCheckList;

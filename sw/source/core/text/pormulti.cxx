@@ -1996,7 +1996,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
     // save some values
     const OUString* pOldText = &(rInf.GetText());
     const SwTwips nOldPaintOfst = rInf.GetPaintOfst();
-    std::shared_ptr<vcl::TextLayoutCache> const pOldCachedVclData(rInf.GetCachedVclData());
+    std::shared_ptr<vcl::text::TextLayoutCache> const pOldCachedVclData(rInf.GetCachedVclData());
     rInf.SetCachedVclData(nullptr);
 
     OUString const aMultiStr( rInf.GetText().copy(0, sal_Int32(nMultiLen + rInf.GetIdx())) );

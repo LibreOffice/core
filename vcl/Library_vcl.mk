@@ -235,6 +235,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/outdev/vclreferencebase \
     vcl/source/outdev/nativecontrols \
     vcl/source/outdev/map \
+    vcl/source/text/TextLayoutCache \
     vcl/source/treelist/headbar \
     vcl/source/treelist/iconview \
     vcl/source/treelist/iconviewimpl \

@@ -64,7 +64,7 @@ const Wallpaper& Window::GetBackground() const { return GetOutDev()->GetBackgrou
 bool Window::IsBackground() const { return GetOutDev()->IsBackground(); }
 tools::Long Window::GetTextHeight() const { return GetOutDev()->GetTextHeight(); }
 tools::Long Window::GetTextWidth(const OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen,
-                                 vcl::TextLayoutCache const* pCache,
+                                 vcl::text::TextLayoutCache const* pCache,
                                  SalLayoutGlyphs const* const pLayoutCache) const
 {
     return GetOutDev()->GetTextWidth(rStr, nIndex, nLen, pCache, pLayoutCache);

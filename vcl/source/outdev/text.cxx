@@ -836,7 +836,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
 }
 
 tools::Long OutputDevice::GetTextWidth( const OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen,
-     vcl::TextLayoutCache const*const pLayoutCache,
+     vcl::text::TextLayoutCache const*const pLayoutCache,
      SalLayoutGlyphs const*const pSalLayoutCache) const
 {
 
@@ -908,7 +908,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
 
 tools::Long OutputDevice::GetTextArray( const OUString& rStr, tools::Long* pDXAry,
                                  sal_Int32 nIndex, sal_Int32 nLen,
-                                 vcl::TextLayoutCache const*const pLayoutCache,
+                                 vcl::text::TextLayoutCache const*const pLayoutCache,
                                  SalLayoutGlyphs const*const pSalLayoutCache) const
 {
     if( nIndex >= rStr.getLength() )
@@ -1101,7 +1101,7 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
                                                     const sal_Int32 nMinIndex, const sal_Int32 nLen,
                                                     DeviceCoordinate nPixelWidth, const DeviceCoordinate* pDXArray,
                                                     SalLayoutFlags nLayoutFlags,
-         vcl::TextLayoutCache const*const pLayoutCache) const
+         vcl::text::TextLayoutCache const*const pLayoutCache) const
 {
     assert(nMinIndex >= 0);
     assert(nLen >= 0);
@@ -1201,7 +1201,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
                                     sal_Int32 nMinIndex, sal_Int32 nLen,
                                     const Point& rLogicalPos, tools::Long nLogicalWidth,
                                     const tools::Long* pDXArray, SalLayoutFlags flags,
-         vcl::TextLayoutCache const* pLayoutCache,
+         vcl::text::TextLayoutCache const* pLayoutCache,
          const SalLayoutGlyphs* pGlyphs) const
 {
     if (pGlyphs && !pGlyphs->IsValid())
@@ -1313,7 +1313,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
     return pSalLayout;
 }
 
-std::shared_ptr<vcl::TextLayoutCache> OutputDevice::CreateTextLayoutCache(
+std::shared_ptr<vcl::text::TextLayoutCache> OutputDevice::CreateTextLayoutCache(
         OUString const& rString)
 {
     return GenericSalLayout::CreateTextLayoutCache(rString);
@@ -1333,7 +1333,7 @@ bool OutputDevice::GetTextIsRTL( const OUString& rString, sal_Int32 nIndex, sal_
 sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWidth,
                                        sal_Int32 nIndex, sal_Int32 nLen,
                                        tools::Long nCharExtra,
-         vcl::TextLayoutCache const*const pLayoutCache,
+         vcl::text::TextLayoutCache const*const pLayoutCache,
          const SalLayoutGlyphs* pGlyphs) const
 {
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout( rStr, nIndex, nLen,
@@ -1365,7 +1365,7 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWid
                                        sal_Unicode nHyphenChar, sal_Int32& rHyphenPos,
                                        sal_Int32 nIndex, sal_Int32 nLen,
                                        tools::Long nCharExtra,
-         vcl::TextLayoutCache const*const pLayoutCache) const
+         vcl::text::TextLayoutCache const*const pLayoutCache) const
 {
     rHyphenPos = -1;
 

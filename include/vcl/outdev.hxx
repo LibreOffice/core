@@ -101,11 +101,14 @@ namespace vcl
     class ExtOutDevData;
     class ITextLayout;
     struct FontCapabilities;
-    class TextLayoutCache;
     class Window;
     class WindowOutputDevice;
     namespace font {
         struct Feature;
+    }
+
+    namespace text {
+        class TextLayoutCache;
     }
 }
 
@@ -1027,7 +1030,7 @@ public:
         See also GetTextBoundRect() for more explanation + code examples.
     */
     tools::Long                        GetTextWidth( const OUString& rStr, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                  vcl::TextLayoutCache const* = nullptr,
+                                  vcl::text::TextLayoutCache const* = nullptr,
                                   SalLayoutGlyphs const*const pLayoutCache = nullptr) const;
 
     /** Height where any character of the current font fits; in logic coordinates.
@@ -1045,7 +1048,7 @@ public:
                                                const SalLayoutGlyphs* pLayoutCache = nullptr);
     tools::Long                        GetTextArray( const OUString& rStr, tools::Long* pDXAry,
                                               sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                              vcl::TextLayoutCache const* = nullptr,
+                                              vcl::text::TextLayoutCache const* = nullptr,
                                               SalLayoutGlyphs const*const pLayoutCache = nullptr) const;
 
     void                        GetCaretPositions( const OUString&, tools::Long* pCaretXArray,
@@ -1057,14 +1060,14 @@ public:
     sal_Int32                   GetTextBreak( const OUString& rStr, tools::Long nTextWidth,
                                               sal_Int32 nIndex, sal_Int32 nLen = -1,
                                               tools::Long nCharExtra = 0,
-                                              vcl::TextLayoutCache const* = nullptr,
+                                              vcl::text::TextLayoutCache const* = nullptr,
                                               const SalLayoutGlyphs* pGlyphs = nullptr) const;
     sal_Int32                   GetTextBreak( const OUString& rStr, tools::Long nTextWidth,
                                               sal_Unicode nExtraChar, sal_Int32& rExtraCharPos,
                                               sal_Int32 nIndex, sal_Int32 nLen,
                                               tools::Long nCharExtra,
-                                              vcl::TextLayoutCache const* = nullptr) const;
-    static std::shared_ptr<vcl::TextLayoutCache> CreateTextLayoutCache(OUString const&);
+                                              vcl::text::TextLayoutCache const* = nullptr) const;
+    static std::shared_ptr<vcl::text::TextLayoutCache> CreateTextLayoutCache(OUString const&);
 
 protected:
     SAL_DLLPRIVATE void         ImplInitTextLineSize();
@@ -1214,12 +1217,12 @@ public:
                                 ImplLayout( const OUString&, sal_Int32 nIndex, sal_Int32 nLen,
                                             const Point& rLogicPos = Point(0,0), tools::Long nLogicWidth=0,
                                             const tools::Long* pLogicDXArray=nullptr, SalLayoutFlags flags = SalLayoutFlags::NONE,
-                                            vcl::TextLayoutCache const* = nullptr,
+                                            vcl::text::TextLayoutCache const* = nullptr,
                                             const SalLayoutGlyphs* pGlyphs = nullptr) const;
     SAL_DLLPRIVATE ImplLayoutArgs ImplPrepareLayoutArgs( OUString&, const sal_Int32 nIndex, const sal_Int32 nLen,
                                                          DeviceCoordinate nPixelWidth, const DeviceCoordinate* pPixelDXArray,
                                                          SalLayoutFlags flags = SalLayoutFlags::NONE,
-                                                         vcl::TextLayoutCache const* = nullptr) const;
+                                                         vcl::text::TextLayoutCache const* = nullptr) const;
     SAL_DLLPRIVATE std::unique_ptr<SalLayout>
                                 ImplGlyphFallbackLayout( std::unique_ptr<SalLayout>,
                                                          ImplLayoutArgs&,

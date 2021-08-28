@@ -116,7 +116,7 @@ public:
     sal_uInt16   GetPropWidth() const { return m_nPropWidth; }
     bool     IsSymbol() const { return m_bSymbol; }
 
-    tools::Long GetCachedTextWidth(const SwTextGlyphsKey& key, const vcl::TextLayoutCache* vclCache);
+    tools::Long GetCachedTextWidth(const SwTextGlyphsKey& key, const vcl::text::TextLayoutCache* vclCache);
     SalLayoutGlyphs* GetCachedSalLayoutGlyphs(const SwTextGlyphsKey& key);
     void ClearCachedTextGlyphs();
 

@@ -387,7 +387,7 @@ bool ImplLayoutRuns::GetRun( int* nMinRunPos, int* nEndRunPos, bool* bRightToLef
 
 ImplLayoutArgs::ImplLayoutArgs(const OUString& rStr,
     int nMinCharPos, int nEndCharPos, SalLayoutFlags nFlags, const LanguageTag& rLanguageTag,
-    vcl::TextLayoutCache const*const pLayoutCache)
+    vcl::text::TextLayoutCache const*const pLayoutCache)
 :
     maLanguageTag( rLanguageTag ),
     mnFlags( nFlags ),

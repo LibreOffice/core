@@ -137,7 +137,7 @@ namespace {
  */
 class SwFieldSlot
 {
-    std::shared_ptr<vcl::TextLayoutCache> m_pOldCachedVclData;
+    std::shared_ptr<vcl::text::TextLayoutCache> m_pOldCachedVclData;
     const OUString *pOldText;
     OUString aText;
     TextFrameIndex nIdx;
