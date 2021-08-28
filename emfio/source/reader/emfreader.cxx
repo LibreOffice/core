@@ -1383,12 +1383,17 @@ namespace emfio
                     {
                         sal_Int32 nStartX, nStartY, nEndX, nEndY;
                         mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 ).ReadInt32( nStartX ).ReadInt32( nStartY ).ReadInt32( nEndX ).ReadInt32( nEndY );
-                        SAL_INFO( "emfio", "\t\t Bounds: " << nX32 << ":" << nY32 << ", " << nx32 << ":" << ny32 << ", Start: " << nStartX << ":" << nStartY << ", End: " << nEndX << ":" << nEndY );
-                        tools::Polygon aPoly( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), PolyStyle::Arc );
-                        if ( nRecType == EMR_CHORD )
-                            DrawPolygon( aPoly, mbRecordPath );
+                        if (!mpInputStream->good())
+                            bStatus = false;
                         else
-                            DrawPolyLine( aPoly, nRecType == EMR_ARCTO, mbRecordPath );
+                        {
+                            SAL_INFO( "emfio", "\t\t Bounds: " << nX32 << ":" << nY32 << ", " << nx32 << ":" << ny32 << ", Start: " << nStartX << ":" << nStartY << ", End: " << nEndX << ":" << nEndY );
+                            tools::Polygon aPoly( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), PolyStyle::Arc );
+                            if ( nRecType == EMR_CHORD )
+                                DrawPolygon( aPoly, mbRecordPath );
+                            else
+                                DrawPolyLine( aPoly, nRecType == EMR_ARCTO, mbRecordPath );
+                        }
                     }
                     break;
 
