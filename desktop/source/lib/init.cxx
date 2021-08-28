@@ -4543,7 +4543,7 @@ static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, cons
 
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"AnchorType", uno::makeAny(static_cast<sal_uInt16>(text::TextContentAnchorType_AS_CHARACTER))},
+        {"AnchorType", uno::makeAny(static_cast<sal_uInt16>(css::text::TextContentAnchorType_AS_CHARACTER))},
         {"IgnoreComments", uno::makeAny(true)},
     }));
     if (!comphelper::dispatchCommand(".uno:Paste", aPropertyValues))

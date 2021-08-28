@@ -150,9 +150,9 @@ namespace {
 
 } // namespace
 
-std::shared_ptr<vcl::TextLayoutCache> GenericSalLayout::CreateTextLayoutCache(OUString const& rString)
+std::shared_ptr<vcl::text::TextLayoutCache> GenericSalLayout::CreateTextLayoutCache(OUString const& rString)
 {
-    return std::make_shared<vcl::TextLayoutCache>(rString.getStr(), rString.getLength());
+    return std::make_shared<vcl::text::TextLayoutCache>(rString.getStr(), rString.getLength());
 }
 
 SalLayoutGlyphs GenericSalLayout::GetGlyphs() const
@@ -278,15 +278,15 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphsIm
     const int nLength = rArgs.mrStr.getLength();
     const sal_Unicode *pStr = rArgs.mrStr.getStr();
 
-    std::unique_ptr<vcl::TextLayoutCache> pNewScriptRun;
-    vcl::TextLayoutCache const* pTextLayout;
+    std::unique_ptr<vcl::text::TextLayoutCache> pNewScriptRun;
+    vcl::text::TextLayoutCache const* pTextLayout;
     if (rArgs.m_pTextLayoutCache)
     {
         pTextLayout = rArgs.m_pTextLayoutCache; // use cache!
     }
     else
     {
-        pNewScriptRun.reset(new vcl::TextLayoutCache(pStr, rArgs.mnEndCharPos));
+        pNewScriptRun.reset(new vcl::text::TextLayoutCache(pStr, rArgs.mnEndCharPos));
         pTextLayout = pNewScriptRun.get();
     }
 
@@ -342,7 +342,7 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphsIm
         size_t k = 0;
         for (; k < pTextLayout->runs.size(); ++k)
         {
-            vcl::Run const& rRun(pTextLayout->runs[k]);
+            vcl::text::Run const& rRun(pTextLayout->runs[k]);
             if (rRun.nStart <= nCurrentPos && nCurrentPos < rRun.nEnd)
             {
                 break;
