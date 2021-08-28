@@ -127,6 +127,14 @@ struct ScXMLConditionParseResult
     OUString            maOperand1;         /// First operand of the token or comparison value.
     OUString            maOperand2;         /// Second operand of 'between' conditions.
     sal_Int32           mnEndIndex;         /// Index of first character following the condition.
+
+    ScXMLConditionParseResult()
+        : meToken(XML_COND_INVALID)
+        , meValidation(css::sheet::ValidationType_ANY)
+        , meOperator(css::sheet::ConditionOperator_NONE)
+        , mnEndIndex(-1)
+    {
+    }
 };
 
 namespace ScXMLConditionHelper
