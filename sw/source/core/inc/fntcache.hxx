@@ -23,7 +23,7 @@
 #include <sal/config.h>
 
 #include <cstdint>
-#include <map>
+#include <unordered_map>
 
 #include <vcl/font.hxx>
 #include <vcl/vclptr.hxx>
@@ -61,7 +61,10 @@ extern SwFntCache *pFntCache;
 extern SwFntObj *pLastFont;
 
 struct SwTextGlyphsKey;
-bool operator<(const SwTextGlyphsKey& l, const SwTextGlyphsKey& r);
+struct SwTextGlyphsKeyHash
+{
+    size_t operator()(SwTextGlyphsKey const &) const;
+};
 struct SwTextGlyphsData;
 
 class SwFntObj final : public SwCacheObj
@@ -86,7 +89,7 @@ class SwFntObj final : public SwCacheObj
     bool m_bPaintBlank : 1;
 
     /// Cache of already calculated layout glyphs and text widths.
-    std::map<SwTextGlyphsKey, SwTextGlyphsData> m_aTextGlyphs;
+    std::unordered_map<SwTextGlyphsKey, SwTextGlyphsData, SwTextGlyphsKeyHash> m_aTextGlyphs;
 
     static tools::Long s_nPixWidth;
     static MapMode *s_pPixMap;
