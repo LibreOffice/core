@@ -23,7 +23,7 @@
 #include <sal/config.h>
 
 #include <cstdint>
-#include <map>
+#include <unordered_map>
 
 #include <vcl/font.hxx>
 #include <vcl/vclptr.hxx>
@@ -60,9 +60,34 @@ void SwClearFntCacheTextGlyphs();
 extern SwFntCache *pFntCache;
 extern SwFntObj *pLastFont;
 
-struct SwTextGlyphsKey;
-bool operator<(const SwTextGlyphsKey& l, const SwTextGlyphsKey& r);
-struct SwTextGlyphsData;
+/**
+ * Defines a substring on a given output device, to be used as an std::unordered_map<>
+ * key.
+ */
+struct SwTextGlyphsKey
+{
+    VclPtr<OutputDevice> m_pOutputDevice;
+    OUString m_aText;
+    sal_Int32 m_nIndex;
+    sal_Int32 m_nLength;
+    size_t mnHashCode;
+
+    SwTextGlyphsKey(VclPtr<OutputDevice> const& pOutputDevice, const OUString & sText, sal_Int32 nIndex, sal_Int32 nLength);
+    bool operator==(SwTextGlyphsKey const & rhs) const;
+};
+struct SwTextGlyphsKeyHash
+{
+    size_t operator()(SwTextGlyphsKey const & rKey) const { return rKey.mnHashCode; }
+};
+/**
+ * Glyphs and text width for the given SwTextGlyphsKey.
+ */
+struct SwTextGlyphsData
+{
+    SalLayoutGlyphs m_aTextGlyphs;
+    tools::Long m_nTextWidth = -1; // -1 = not computed yet
+};
+typedef std::unordered_map<SwTextGlyphsKey, SwTextGlyphsData, SwTextGlyphsKeyHash> SwTextGlyphsMap;
 
 class SwFntObj final : public SwCacheObj
 {
@@ -86,7 +111,7 @@ class SwFntObj final : public SwCacheObj
     bool m_bPaintBlank : 1;
 
     /// Cache of already calculated layout glyphs and text widths.
-    std::map<SwTextGlyphsKey, SwTextGlyphsData> m_aTextGlyphs;
+    SwTextGlyphsMap m_aTextGlyphs;
 
     static tools::Long s_nPixWidth;
     static MapMode *s_pPixMap;
