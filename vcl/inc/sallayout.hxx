@@ -20,27 +20,28 @@
 #ifndef INCLUDED_VCL_INC_SALLAYOUT_HXX
 #define INCLUDED_VCL_INC_SALLAYOUT_HXX
 
-#include <iostream>
-#include <memory>
-#include <vector>
-
-#include <hb.h>
-
-#include <com/sun/star/i18n/XBreakIterator.hpp>
-
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <i18nlangtag/languagetag.hxx>
 #include <tools/gen.hxx>
 #include <tools/degree.hxx>
+#include <i18nlangtag/languagetag.hxx>
+
 #include <vcl/dllapi.h>
 #include <vcl/vclenum.hxx> // for typedef sal_UCS4
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/vcllayout.hxx>
 
+#include "ImplLayoutRuns.hxx"
 #include "impglyphitem.hxx"
 
-#define MAX_FALLBACK 16
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 
+#include <hb.h>
+
+#include <iostream>
+#include <memory>
+#include <vector>
+
+#define MAX_FALLBACK 16
 
 class SalGraphics;
 class PhysicalFontFace;
@@ -49,29 +50,6 @@ enum class SalLayoutFlags;
 namespace vcl {
     class TextLayoutCache;
 }
-
-// used for managing runs e.g. for BiDi, glyph and script fallback
-class ImplLayoutRuns
-{
-private:
-    int                 mnRunIndex;
-    std::vector<int>    maRuns;
-
-public:
-            ImplLayoutRuns() { mnRunIndex = 0; maRuns.reserve(8); }
-
-    void    Clear()             { maRuns.clear(); }
-    void    AddPos( int nCharPos, bool bRTL );
-    void    AddRun( int nMinRunPos, int nEndRunPos, bool bRTL );
-
-    bool    IsEmpty() const     { return maRuns.empty(); }
-    void    ResetPos()          { mnRunIndex = 0; }
-    void    NextRun()           { mnRunIndex += 2; }
-    bool    GetRun( int* nMinRunPos, int* nEndRunPos, bool* bRTL ) const;
-    bool    GetNextPos( int* nCharPos, bool* bRTL );
-    bool    PosIsInRun( int nCharPos ) const;
-    bool    PosIsInAnyRun( int nCharPos ) const;
-};
 
 class VCL_DLLPUBLIC ImplLayoutArgs
 {
