@@ -1359,12 +1359,17 @@ namespace emfio
                     {
                         sal_uInt32 nStartX, nStartY, nEndX, nEndY;
                         mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 ).ReadUInt32( nStartX ).ReadUInt32( nStartY ).ReadUInt32( nEndX ).ReadUInt32( nEndY );
-                        tools::Polygon aPoly( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), PolyStyle::Arc );
-                        aPoly.Optimize( PolyOptimizeFlags::EDGES );
-                        if ( nRecType == EMR_CHORD )
-                            DrawPolygon( aPoly, mbRecordPath );
+                        if (!mpInputStream->good())
+                            bStatus = false;
                         else
-                            DrawPolyLine( aPoly, nRecType == EMR_ARCTO, mbRecordPath );
+                        {
+                            tools::Polygon aPoly( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), PolyStyle::Arc );
+                            aPoly.Optimize( PolyOptimizeFlags::EDGES );
+                            if ( nRecType == EMR_CHORD )
+                                DrawPolygon( aPoly, mbRecordPath );
+                            else
+                                DrawPolyLine( aPoly, nRecType == EMR_ARCTO, mbRecordPath );
+                        }
                     }
                     break;
 
