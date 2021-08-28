@@ -614,16 +614,16 @@ static void lcl_AppendDummyTerm(OUStringBuffer &rRet)
 
 void MathType::HandleNudge()
 {
-    sal_uInt8 nXNudge;
-    pS->ReadUChar( nXNudge );
-    sal_uInt8 nYNudge;
-    pS->ReadUChar( nYNudge );
+    sal_uInt8 nXNudge(0);
+    pS->ReadUChar(nXNudge);
+    sal_uInt8 nYNudge(0);
+    pS->ReadUChar(nYNudge);
     if (nXNudge == 128 && nYNudge == 128)
     {
-        sal_uInt16 nXLongNudge;
-        sal_uInt16 nYLongNudge;
-        pS->ReadUInt16( nXLongNudge );
-        pS->ReadUInt16( nYLongNudge );
+        sal_uInt16 nXLongNudge(0);
+        sal_uInt16 nYLongNudge(0);
+        pS->ReadUInt16(nXLongNudge);
+        pS->ReadUInt16(nYLongNudge);
     }
 }
 
