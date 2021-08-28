@@ -390,7 +390,10 @@ export LIBREPOSITORY_JAR=@LIBREPOSITORY_JAR@
 export LIBSERIALIZER_JAR=@LIBSERIALIZER_JAR@
 export LIBTOMMATH_CFLAGS=@LIBTOMMATH_CFLAGS@
 export LIBTOMMATH_LIBS=@LIBTOMMATH_LIBS@
-export LIBTOOL=@LIBTOOL@
+ifneq (@LIBTOOL@,)
+export LIBTOOL=@LIBTOOL@                                                                                                             else
+unexport LIBTOOL
+endif
 export LIBXML_CFLAGS=$(gb_SPACE)@LIBXML_CFLAGS@
 export LIBXML_JAR=@LIBXML_JAR@
 export LIBXML_LIBS=$(gb_SPACE)@LIBXML_LIBS@
