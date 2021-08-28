@@ -46,7 +46,7 @@ class SalGraphics;
 class PhysicalFontFace;
 class GenericSalLayout;
 enum class SalLayoutFlags;
-namespace vcl {
+namespace vcl::text {
     class TextLayoutCache;
 }
 
@@ -84,7 +84,7 @@ public:
     int                 mnEndCharPos;
 
     // performance hack
-    vcl::TextLayoutCache const* m_pTextLayoutCache;
+    vcl::text::TextLayoutCache const* m_pTextLayoutCache;
 
     // positioning related inputs
     const DeviceCoordinate* mpDXArray;     // in pixel units
@@ -98,7 +98,7 @@ public:
                 ImplLayoutArgs( const OUString& rStr,
                                 int nMinCharPos, int nEndCharPos, SalLayoutFlags nFlags,
                                 const LanguageTag& rLanguageTag,
-                                vcl::TextLayoutCache const* pLayoutCache);
+                                vcl::text::TextLayoutCache const* pLayoutCache);
 
     void        SetLayoutWidth( DeviceCoordinate nWidth )       { mnLayoutWidth = nWidth; }
     void        SetDXArray( const DeviceCoordinate* pDXArray )  { mpDXArray = pDXArray; }
@@ -171,7 +171,7 @@ public:
     void            AdjustLayout(ImplLayoutArgs&) final override;
     bool            LayoutText(ImplLayoutArgs&, const SalLayoutGlyphsImpl*) final override;
     void            DrawText(SalGraphics&) const final override;
-    static std::shared_ptr<vcl::TextLayoutCache> CreateTextLayoutCache(OUString const&);
+    static std::shared_ptr<vcl::text::TextLayoutCache> CreateTextLayoutCache(OUString const&);
     SalLayoutGlyphs GetGlyphs() const final override;
 
     bool            IsKashidaPosValid(int nCharPos) const final override;

@@ -17,37 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
-
-#include <sal/types.h>
-
-#include <vcl/dllapi.h>
-
-#include <hb-icu.h>
-
-#include <vector>
+#include <scrptrun.h>
+#include <TextLayoutCache.hxx>
 
 namespace vcl::text
 {
-struct Run
+TextLayoutCache::TextLayoutCache(sal_Unicode const* pStr, sal_Int32 const nEnd)
 {
-    int32_t nStart;
-    int32_t nEnd;
-    UScriptCode nCode;
-    Run(int32_t nStart_, int32_t nEnd_, UScriptCode nCode_)
-        : nStart(nStart_)
-        , nEnd(nEnd_)
-        , nCode(nCode_)
+    vcl::ScriptRun aScriptRun(reinterpret_cast<const UChar*>(pStr), nEnd);
+    while (aScriptRun.next())
     {
+        runs.emplace_back(aScriptRun.getScriptStart(), aScriptRun.getScriptEnd(),
+                          aScriptRun.getScriptCode());
     }
-};
-
-class VCL_DLLPUBLIC TextLayoutCache
-{
-public:
-    std::vector<vcl::text::Run> runs;
-    TextLayoutCache(sal_Unicode const* pStr, sal_Int32 const nEnd);
-};
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
