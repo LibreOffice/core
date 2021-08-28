@@ -1100,6 +1100,7 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
             }
         }
 
+        m_HiddenChg.reserve( aHiddenMulti.GetRangeCount() * 2 );
         for (sal_Int32 i = 0; i < aHiddenMulti.GetRangeCount(); ++i)
         {
             const Range& rRange = aHiddenMulti.GetRange( i );
