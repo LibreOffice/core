@@ -46,6 +46,30 @@
       "revId": "412a8436bdc3f178735c172b4c1eeefddfeb506e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ef14ad9_4b785654",
+        "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-08-28T11:35:56Z",
+      "side": 1,
+      "message": "Obviously you don\u0027t create a thread and call join just right after that. You need to call join after you call GenericDialogController::run(); I tried this and it worked fine.\n\nHowever, there are issues because you have to hold a SolarMutex (with SolarMutexGuard) everytime you work with VirtualDevice and other UI calls, which is a pain and I didn\u0027t manage to get it working, so let\u0027s forget this for now. \n\nI like the introduction of m_aTestVector, so can you change this patch, which just introduces that...",
+      "parentUuid": "976722ff_81d420d6",
+      "range": {
+        "startLine": 105,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 3
+      },
+      "revId": "412a8436bdc3f178735c172b4c1eeefddfeb506e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
