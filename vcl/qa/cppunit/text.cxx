@@ -10,7 +10,6 @@
 #include <test/bootstrapfixture.hxx>
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
-#include <i18nlangtag/languagetag.hxx>
 
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -47,6 +46,10 @@ public:
     void testSimpleText();
     void testVerticalText();
     void testTextLayoutCache();
+    void testImplLayoutRuns_AddPos();
+    void testImplLayoutRuns_AddRuns();
+    void testImplLayoutRuns_PosIsInRun();
+    void testImplLayoutRuns_PosIsInAnyRun();
     void testImplLayoutArgsBiDiStrong();
     void testImplLayoutArgsBiDiRtl();
     void testImplLayoutArgsRightAlign();
@@ -56,6 +59,10 @@ public:
     CPPUNIT_TEST(testSimpleText);
     CPPUNIT_TEST(testVerticalText);
     CPPUNIT_TEST(testTextLayoutCache);
+    CPPUNIT_TEST(testImplLayoutRuns_AddPos);
+    CPPUNIT_TEST(testImplLayoutRuns_AddRuns);
+    CPPUNIT_TEST(testImplLayoutRuns_PosIsInRun);
+    CPPUNIT_TEST(testImplLayoutRuns_PosIsInAnyRun);
     CPPUNIT_TEST(testImplLayoutArgsBiDiStrong);
     CPPUNIT_TEST(testImplLayoutArgsBiDiRtl);
     CPPUNIT_TEST(testImplLayoutArgsRightAlign);
@@ -405,6 +412,187 @@ void VclTextTest::testTextLayoutCache()
     CPPUNIT_ASSERT_EQUAL(USCRIPT_ARABIC, run2.nCode);
     CPPUNIT_ASSERT_EQUAL(45, run2.nStart);
     CPPUNIT_ASSERT_EQUAL(51, run2.nEnd);
+}
+
+void VclTextTest::testImplLayoutRuns_AddPos()
+{
+    ImplLayoutRuns aRuns;
+    aRuns.AddPos(1, false);
+    aRuns.AddPos(2, false);
+    aRuns.AddPos(3, false);
+    aRuns.AddPos(4, true); // add RTL marker glyph
+    aRuns.AddPos(5, false);
+    aRuns.AddPos(6, true); // add RTL marker glyph
+    aRuns.AddPos(7, false);
+
+    int* pCharPos = new int(0);
+    bool* pRightToLeftMarker = new bool(false);
+
+    CPPUNIT_ASSERT(aRuns.GetNextPos(pCharPos, pRightToLeftMarker));
+    CPPUNIT_ASSERT_EQUAL(1, *pCharPos);
+    CPPUNIT_ASSERT(!*pRightToLeftMarker);
+
+    CPPUNIT_ASSERT(aRuns.GetNextPos(pCharPos, pRightToLeftMarker));
+    CPPUNIT_ASSERT_EQUAL(2, *pCharPos);
+    CPPUNIT_ASSERT(!*pRightToLeftMarker);
+
+    CPPUNIT_ASSERT(aRuns.GetNextPos(pCharPos, pRightToLeftMarker));
+    CPPUNIT_ASSERT_EQUAL(3, *pCharPos);
+    CPPUNIT_ASSERT(!*pRightToLeftMarker);
+
+    CPPUNIT_ASSERT(aRuns.GetNextPos(pCharPos, pRightToLeftMarker));
+    CPPUNIT_ASSERT_EQUAL(4, *pCharPos);
+    CPPUNIT_ASSERT(*pRightToLeftMarker);
+
+    CPPUNIT_ASSERT(aRuns.GetNextPos(pCharPos, pRightToLeftMarker));
+    CPPUNIT_ASSERT_EQUAL(5, *pCharPos);
+    CPPUNIT_ASSERT(!*pRightToLeftMarker);
+
+    CPPUNIT_ASSERT(aRuns.GetNextPos(pCharPos, pRightToLeftMarker));
+    CPPUNIT_ASSERT_EQUAL(6, *pCharPos);
+    CPPUNIT_ASSERT(*pRightToLeftMarker);
+
+    CPPUNIT_ASSERT(aRuns.GetNextPos(pCharPos, pRightToLeftMarker));
+    CPPUNIT_ASSERT_EQUAL(7, *pCharPos);
+    CPPUNIT_ASSERT(!*pRightToLeftMarker);
+
+    // no next position, we are running off the end
+    CPPUNIT_ASSERT(!aRuns.GetNextPos(pCharPos, pRightToLeftMarker));
+
+    aRuns.ResetPos();
+
+    int nMinRunPos, nEndRunPos;
+    bool* pRightToLeft = new bool(false);
+
+    CPPUNIT_ASSERT(aRuns.GetRun(&nMinRunPos, &nEndRunPos, pRightToLeft));
+    CPPUNIT_ASSERT_EQUAL(1, nMinRunPos);
+    CPPUNIT_ASSERT_EQUAL(4, nEndRunPos);
+    CPPUNIT_ASSERT(!*pRightToLeft);
+
+    aRuns.NextRun();
+    CPPUNIT_ASSERT(aRuns.GetRun(&nMinRunPos, &nEndRunPos, pRightToLeft));
+    CPPUNIT_ASSERT_EQUAL(4, nMinRunPos);
+    CPPUNIT_ASSERT_EQUAL(5, nEndRunPos);
+    CPPUNIT_ASSERT(*pRightToLeft);
+
+    aRuns.NextRun();
+    CPPUNIT_ASSERT(aRuns.GetRun(&nMinRunPos, &nEndRunPos, pRightToLeft));
+    CPPUNIT_ASSERT_EQUAL(5, nMinRunPos);
+    CPPUNIT_ASSERT_EQUAL(6, nEndRunPos);
+    CPPUNIT_ASSERT(!*pRightToLeft);
+
+    aRuns.NextRun();
+    CPPUNIT_ASSERT(aRuns.GetRun(&nMinRunPos, &nEndRunPos, pRightToLeft));
+    CPPUNIT_ASSERT_EQUAL(6, nMinRunPos);
+    CPPUNIT_ASSERT_EQUAL(7, nEndRunPos);
+    CPPUNIT_ASSERT(*pRightToLeft);
+
+    // test clear
+    aRuns.Clear();
+    CPPUNIT_ASSERT(aRuns.IsEmpty());
+}
+
+void VclTextTest::testImplLayoutRuns_AddRuns()
+{
+    ImplLayoutRuns aRuns;
+    aRuns.AddRun(1, 4, false);
+    aRuns.AddRun(5, 4, true);
+    aRuns.AddRun(5, 6, false);
+    aRuns.AddRun(6, 7, true);
+
+    int* pCharPos = new int(0);
+    bool* pRightToLeftMarker = new bool(false);
+
+    CPPUNIT_ASSERT(aRuns.GetNextPos(pCharPos, pRightToLeftMarker));
+    CPPUNIT_ASSERT_EQUAL(1, *pCharPos);
+    CPPUNIT_ASSERT(!*pRightToLeftMarker);
+
+    CPPUNIT_ASSERT(aRuns.GetNextPos(pCharPos, pRightToLeftMarker));
+    CPPUNIT_ASSERT_EQUAL(2, *pCharPos);
+    CPPUNIT_ASSERT(!*pRightToLeftMarker);
+
+    CPPUNIT_ASSERT(aRuns.GetNextPos(pCharPos, pRightToLeftMarker));
+    CPPUNIT_ASSERT_EQUAL(3, *pCharPos);
+    CPPUNIT_ASSERT(!*pRightToLeftMarker);
+
+    CPPUNIT_ASSERT(aRuns.GetNextPos(pCharPos, pRightToLeftMarker));
+    CPPUNIT_ASSERT_EQUAL(4, *pCharPos);
+    CPPUNIT_ASSERT(*pRightToLeftMarker);
+
+    CPPUNIT_ASSERT(aRuns.GetNextPos(pCharPos, pRightToLeftMarker));
+    CPPUNIT_ASSERT_EQUAL(5, *pCharPos);
+    CPPUNIT_ASSERT(!*pRightToLeftMarker);
+
+    CPPUNIT_ASSERT(aRuns.GetNextPos(pCharPos, pRightToLeftMarker));
+    CPPUNIT_ASSERT_EQUAL(6, *pCharPos);
+    CPPUNIT_ASSERT(*pRightToLeftMarker);
+
+    // no next position, we are running off the end
+    CPPUNIT_ASSERT(!aRuns.GetNextPos(pCharPos, pRightToLeftMarker));
+
+    aRuns.ResetPos();
+
+    int nMinRunPos, nEndRunPos;
+    bool* pRightToLeft = new bool(false);
+
+    CPPUNIT_ASSERT(aRuns.GetRun(&nMinRunPos, &nEndRunPos, pRightToLeft));
+    CPPUNIT_ASSERT_EQUAL(1, nMinRunPos);
+    CPPUNIT_ASSERT_EQUAL(4, nEndRunPos);
+    CPPUNIT_ASSERT(!*pRightToLeft);
+
+    aRuns.NextRun();
+    CPPUNIT_ASSERT(aRuns.GetRun(&nMinRunPos, &nEndRunPos, pRightToLeft));
+    CPPUNIT_ASSERT_EQUAL(4, nMinRunPos);
+    CPPUNIT_ASSERT_EQUAL(5, nEndRunPos);
+    CPPUNIT_ASSERT(*pRightToLeft);
+
+    aRuns.NextRun();
+    CPPUNIT_ASSERT(aRuns.GetRun(&nMinRunPos, &nEndRunPos, pRightToLeft));
+    CPPUNIT_ASSERT_EQUAL(5, nMinRunPos);
+    CPPUNIT_ASSERT_EQUAL(6, nEndRunPos);
+    CPPUNIT_ASSERT(!*pRightToLeft);
+
+    aRuns.NextRun();
+    CPPUNIT_ASSERT(aRuns.GetRun(&nMinRunPos, &nEndRunPos, pRightToLeft));
+    CPPUNIT_ASSERT_EQUAL(6, nMinRunPos);
+    CPPUNIT_ASSERT_EQUAL(7, nEndRunPos);
+    CPPUNIT_ASSERT(*pRightToLeft);
+}
+
+void VclTextTest::testImplLayoutRuns_PosIsInRun()
+{
+    ImplLayoutRuns aRuns;
+    aRuns.AddRun(1, 4, false);
+    aRuns.AddRun(4, 5, true);
+    aRuns.AddRun(5, 6, false);
+    aRuns.AddRun(6, 7, true);
+
+    CPPUNIT_ASSERT(aRuns.PosIsInRun(1));
+    CPPUNIT_ASSERT(aRuns.PosIsInRun(2));
+    CPPUNIT_ASSERT(aRuns.PosIsInRun(3));
+
+    aRuns.NextRun();
+    CPPUNIT_ASSERT(aRuns.PosIsInRun(4));
+
+    aRuns.NextRun();
+    CPPUNIT_ASSERT(aRuns.PosIsInRun(5));
+
+    aRuns.NextRun();
+    CPPUNIT_ASSERT(aRuns.PosIsInRun(6));
+
+    CPPUNIT_ASSERT(!aRuns.PosIsInRun(7));
+}
+
+void VclTextTest::testImplLayoutRuns_PosIsInAnyRun()
+{
+    ImplLayoutRuns aRuns;
+    aRuns.AddRun(1, 4, false);
+    aRuns.AddRun(4, 5, true);
+    aRuns.AddRun(5, 6, false);
+    aRuns.AddRun(6, 7, true);
+
+    CPPUNIT_ASSERT(aRuns.PosIsInAnyRun(1));
+    CPPUNIT_ASSERT(!aRuns.PosIsInAnyRun(7));
 }
 
 void VclTextTest::testImplLayoutArgsBiDiStrong()
