@@ -2812,8 +2812,8 @@ void MathType::HandleEmblishments()
 
 void MathType::HandleSetSize()
 {
-    sal_uInt8 nTemp;
-    pS->ReadUChar( nTemp );
+    sal_uInt8 nTemp(0);
+    pS->ReadUChar(nTemp);
     switch (nTemp)
     {
         case 101:
