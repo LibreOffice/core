@@ -69,6 +69,9 @@ void ImportLotus::Bof()
     Skip( 1 );
     Read( nFlags );
 
+    if (!pIn->good())
+        return;
+
     if( nFileSub == 0x0004 )
     {
         if( nFileCode == 0x1000 )
@@ -84,7 +87,7 @@ void ImportLotus::Bof()
 
 bool ImportLotus::BofFm3()
 {
-    sal_uInt16  nFileCode, nFileSub;
+    sal_uInt16 nFileCode(0), nFileSub(0);
 
     Read( nFileCode );
     Read( nFileSub );
