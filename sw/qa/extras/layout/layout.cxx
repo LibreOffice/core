@@ -64,6 +64,7 @@ protected:
 void SwLayoutWriter::CheckRedlineFootnotesHidden()
 {
     discardDumpedLayout();
+    Scheduler::ProcessEventsToIdle();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/merged", "paraPropsNodeIndex", "24");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Special[1]", "nType", "PortionType::Footnote");
@@ -91,6 +92,7 @@ void SwLayoutWriter::CheckRedlineFootnotesHidden()
 void SwLayoutWriter::CheckRedlineSectionsHidden()
 {
     discardDumpedLayout();
+    Scheduler::ProcessEventsToIdle();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/merged", "paraPropsNodeIndex", "12");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "nType", "PortionType::Para");
@@ -104,6 +106,7 @@ void SwLayoutWriter::CheckRedlineSectionsHidden()
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFootnotes)
 {
     createSwDoc(DATA_DIRECTORY, "redline_footnotes.odt");
+    Scheduler::ProcessEventsToIdle();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
@@ -111,11 +114,15 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFootnotes)
     CPPUNIT_ASSERT(pLayout->IsHideRedlines());
 
     // verify after load
+    Scheduler::ProcessEventsToIdle();
     CheckRedlineFootnotesHidden();
+    Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
     discardDumpedLayout();
+    Scheduler::ProcessEventsToIdle();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // show: nothing is merged
@@ -191,9 +198,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFootnotes)
     assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[5]/txt[1]/Text[3]", "Portion", "o");
 
     // verify after hide
+    Scheduler::ProcessEventsToIdle();
     dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(pLayout->IsHideRedlines());
+    Scheduler::ProcessEventsToIdle();
     discardDumpedLayout();
+    Scheduler::ProcessEventsToIdle();
     CheckRedlineFootnotesHidden();
 }
 
