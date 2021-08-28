@@ -27,8 +27,6 @@ OUString collectPushFlags(PushFlags nFlags)
         return "PushAll";
     else if ((nFlags & PUSH_ALLFONT) == PUSH_ALLFONT)
         return "PushAllFont";
-    else if ((nFlags & PUSH_ALLTEXT) == PUSH_ALLTEXT)
-        return "PushAllText";
 
     std::vector<OUString> aStrings;
 
