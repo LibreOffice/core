@@ -57,8 +57,7 @@ namespace o3tl
 {
     template<> struct typed_flags<PushFlags> : is_typed_flags<PushFlags, 0xFFFF> {};
 }
-#define PUSH_ALLTEXT  (PushFlags::TEXTCOLOR | PushFlags::TEXTFILLCOLOR | PushFlags::TEXTLINECOLOR | PushFlags::OVERLINECOLOR | PushFlags::TEXTALIGN | PushFlags::TEXTLAYOUTMODE | PushFlags::TEXTLANGUAGE)
-#define PUSH_ALLFONT  (PUSH_ALLTEXT | PushFlags::FONT)
+#define PUSH_ALLFONT  (PushFlags::TEXTCOLOR | PushFlags::TEXTFILLCOLOR | PushFlags::TEXTLINECOLOR | PushFlags::OVERLINECOLOR | PushFlags::TEXTALIGN | PushFlags::TEXTLAYOUTMODE | PushFlags::TEXTLANGUAGE | PushFlags::FONT)
 
 // Layout flags for Complex Text Layout
 // These are flag values, i.e they can be combined
