@@ -36,6 +36,9 @@ class SwModify;
 class SwFormat;
 class SfxPoolItem;
 class SwAttrSet;
+class SwCellFrame;
+class SwTabFrame;
+class SwRowFrame;
 
 /*
     SwModify and SwClient cooperate in propagating attribute changes.
@@ -118,6 +121,9 @@ namespace sw
             virtual void SwClientNotify( const SwModify&, const SfxHint& rHint) =0;
         public:
             bool IsLast() const { return !m_pLeft && !m_pRight; }
+            virtual const SwCellFrame* DynCastCellFrame() const { return nullptr; }
+            virtual const SwTabFrame* DynCastTabFrame() const { return nullptr; }
+            virtual const SwRowFrame* DynCastRowFrame() const { return nullptr; }
     };
     enum class IteratorMode { Exact, UnwrapMulti };
 }
@@ -313,6 +319,32 @@ namespace sw
     };
 }
 
+namespace sw::detail
+{
+    // Dynamic casting can be expensive when used a lot, so for certain type combinations,
+    // we have faster routines.
+    template<typename CastDest>
+    inline const CastDest * internal_dyn_cast(const sw::WriterListener * pSource)
+    {
+        return dynamic_cast<const CastDest *>(pSource);
+    }
+    template<>
+    inline const SwCellFrame* internal_dyn_cast(const sw::WriterListener * pSource)
+    {
+        return pSource->DynCastCellFrame();
+    }
+    template<>
+    inline const SwTabFrame* internal_dyn_cast(const sw::WriterListener * pSource)
+    {
+        return pSource->DynCastTabFrame();
+    }
+    template<>
+    inline const SwRowFrame* internal_dyn_cast(const sw::WriterListener * pSource)
+    {
+        return pSource->DynCastRowFrame();
+    }
+} // namespace sw::detail
+
 template<typename TElementType, typename TSource,
         sw::IteratorMode eMode = sw::IteratorMode::Exact> class SwIterator final
     : private sw::ClientIteratorBase
@@ -344,7 +376,7 @@ public:
                     pCurrent = pLE->m_pToTell;
                 }
             }
-            if (dynamic_cast<const TElementType *>(pCurrent) == nullptr)
+            if (sw::detail::internal_dyn_cast<TElementType>(pCurrent) == nullptr)
             {
                 m_pPosition = GetRightOfPos();
                 pCurrent = m_pPosition;
