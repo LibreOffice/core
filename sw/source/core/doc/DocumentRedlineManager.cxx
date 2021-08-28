@@ -2620,19 +2620,45 @@ bool DocumentRedlineManager::DeleteRedline( const SwStartNode& rNode, bool bSave
 SwRedlineTable::size_type DocumentRedlineManager::GetRedlinePos( const SwNode& rNd, RedlineType nType ) const
 {
     const sal_uLong nNdIdx = rNd.GetIndex();
-    for( SwRedlineTable::size_type n = 0; n < maRedlineTable.size() ; ++n )
+    // if the table only contains good data, we can do a binary search
+    if (!maRedlineTable.HasOverlappingElements())
     {
-        const SwRangeRedline* pTmp = maRedlineTable[ n ];
-        sal_uLong nPt = pTmp->GetPoint()->nNode.GetIndex(),
-              nMk = pTmp->GetMark()->nNode.GetIndex();
-        if( nPt < nMk ) { tools::Long nTmp = nMk; nMk = nPt; nPt = nTmp; }
+        // first, binary search to the first redline with start >= the needle
+        auto it = std::lower_bound(maRedlineTable.begin(), maRedlineTable.end(), rNd,
+            [&nNdIdx](const SwRangeRedline* lhs, const SwNode& /*rhs*/)
+            {
+                return lhs->Start()->nNode.GetIndex() < nNdIdx;
+            });
+        for( ; it != maRedlineTable.end(); ++it)
+        {
+            const SwRangeRedline* pTmp = *it;
+            sal_uLong nStart = pTmp->Start()->nNode.GetIndex(),
+                      nEnd = pTmp->End()->nNode.GetIndex();
 
-        if( ( RedlineType::Any == nType || nType == pTmp->GetType()) &&
-            nMk <= nNdIdx && nNdIdx <= nPt )
-            return n;
+            if( ( RedlineType::Any == nType || nType == pTmp->GetType()) &&
+                nStart <= nNdIdx && nNdIdx <= nEnd )
+                return std::distance(maRedlineTable.begin(), it);
 
-        if( nMk > nNdIdx )
-            break;
+            if( nStart > nNdIdx )
+                break;
+        }
+    }
+    else
+    {
+        for( SwRedlineTable::size_type n = 0; n < maRedlineTable.size() ; ++n )
+        {
+            const SwRangeRedline* pTmp = maRedlineTable[ n ];
+            sal_uLong nPt = pTmp->GetPoint()->nNode.GetIndex(),
+                  nMk = pTmp->GetMark()->nNode.GetIndex();
+            if( nPt < nMk ) { tools::Long nTmp = nMk; nMk = nPt; nPt = nTmp; }
+
+            if( ( RedlineType::Any == nType || nType == pTmp->GetType()) &&
+                nMk <= nNdIdx && nNdIdx <= nPt )
+                return n;
+
+            if( nMk > nNdIdx )
+                break;
+        }
     }
     return SwRedlineTable::npos;
 
