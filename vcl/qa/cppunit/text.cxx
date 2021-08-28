@@ -382,10 +382,10 @@ void VclTextTest::testVerticalText()
 void VclTextTest::testTextLayoutCache()
 {
     OUString sTestString = u"The quick brown fox\n jumped over the lazy dogالعاشر";
-    vcl::TextLayoutCache cache(sTestString.getStr(), sTestString.getLength());
+    vcl::text::TextLayoutCache cache(sTestString.getStr(), sTestString.getLength());
 
-    vcl::Run run1 = cache.runs[0];
-    vcl::Run run2 = cache.runs[1];
+    vcl::text::Run run1 = cache.runs[0];
+    vcl::text::Run run2 = cache.runs[1];
 
     bool bCorrectRuns = (cache.runs.size() == 2);
     CPPUNIT_ASSERT_MESSAGE("Wrong number of runs", bCorrectRuns);

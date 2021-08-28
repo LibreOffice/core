@@ -33,7 +33,9 @@ namespace sw { class WrongListIterator; }
 class SwFont;
 namespace vcl {
     class Font;
-    class TextLayoutCache;
+    namespace text {
+        class TextLayoutCache;
+    }
     typedef OutputDevice RenderContext;
 }
 class SwUnderlineFont;
@@ -46,7 +48,7 @@ class SW_DLLPUBLIC SwDrawTextInfo
     SwViewShell const * m_pSh;
     const SwScriptInfo* m_pScriptInfo;
     Point m_aPos;
-    vcl::TextLayoutCache const* m_pCachedVclData;
+    vcl::text::TextLayoutCache const* m_pCachedVclData;
     OUString m_aText;
     sw::WrongListIterator* m_pWrong;
     sw::WrongListIterator* m_pGrammarCheck;
@@ -113,7 +115,7 @@ public:
     SwDrawTextInfo( SwViewShell const *pSh, OutputDevice &rOut, const SwScriptInfo* pSI,
                     const OUString &rText, TextFrameIndex const nIdx, TextFrameIndex const nLen,
                     sal_uInt16 nWidth = 0, bool bBullet = false,
-                    vcl::TextLayoutCache const*const pCachedVclData = nullptr)
+                    vcl::text::TextLayoutCache const*const pCachedVclData = nullptr)
         : m_pCachedVclData(pCachedVclData)
     {
         m_pFrame = nullptr;
@@ -208,7 +210,7 @@ public:
         return m_pHyphPos;
     }
 
-    vcl::TextLayoutCache const* GetVclCache() const
+    vcl::text::TextLayoutCache const* GetVclCache() const
     {
         return m_pCachedVclData;
     }
