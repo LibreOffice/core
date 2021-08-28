@@ -1589,8 +1589,8 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                      pFrame->FindPageFrame() != nullptr)
                 {
                     pViewShell->InvalidateAccessibleParaFlowRelation(
-                        dynamic_cast<SwTextFrame*>(pFrame->FindNextCnt( true )),
-                        dynamic_cast<SwTextFrame*>(pFrame->FindPrevCnt()) );
+                        pFrame->FindNextCnt( true )->DynCastTextFrame(),
+                        pFrame->FindPrevCnt()->DynCastTextFrame() );
                     // #i68958#
                     // The information flags of the text frame are validated
                     // in methods <FindNextCnt(..)> and <FindPrevCnt(..)>.
@@ -1675,8 +1675,8 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                      pFrame->FindPageFrame() != nullptr)
                 {
                     pViewShell->InvalidateAccessibleParaFlowRelation(
-                            dynamic_cast<SwTextFrame*>(pFrame->FindNextCnt( true )),
-                            dynamic_cast<SwTextFrame*>(pFrame->FindPrevCnt()) );
+                            pFrame->FindNextCnt( true )->DynCastTextFrame(),
+                            pFrame->FindPrevCnt()->DynCastTextFrame() );
                 }
             }
             if ( bObjsDirect && !pTable->empty() )
@@ -1787,8 +1787,8 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                          pFrame->FindPageFrame() != nullptr)
                     {
                         pViewShell->InvalidateAccessibleParaFlowRelation(
-                            dynamic_cast<SwTextFrame*>(pFrame->FindNextCnt( true )),
-                            dynamic_cast<SwTextFrame*>(pFrame->FindPrevCnt()) );
+                            pFrame->FindNextCnt( true )->DynCastTextFrame(),
+                            pFrame->FindPrevCnt()->DynCastTextFrame() );
                     }
                 }
                 pFrame->CheckDirChange();
@@ -2195,7 +2195,7 @@ SwBorderAttrs::SwBorderAttrs(const sw::BorderCacheOwner* pOwner, const SwFrame* 
     , m_nLineSpacing(0)
 {
     // #i96772#
-    const SwTextFrame* pTextFrame = dynamic_cast<const SwTextFrame*>(pConstructor);
+    const SwTextFrame* pTextFrame = pConstructor->DynCastTextFrame();
     if ( pTextFrame )
     {
         pTextFrame->GetTextNodeForParaProps()->ClearLRSpaceItemDueToListLevelIndents( m_rLR );

@@ -65,6 +65,7 @@ class SwSortedObjs;
 class SwAnchoredObject;
 enum class SvxFrameDirection;
 class IDocumentDrawModelAccess;
+class SwTextFrame;
 
 // Each FrameType is represented here as a bit.
 // The bits must be set in a way that it can be determined with masking of
@@ -866,6 +867,8 @@ public:
     inline bool IsCellFrame() const;
     inline bool IsContentFrame() const;
     inline bool IsTextFrame() const;
+    SwTextFrame* DynCastTextFrame();
+    const SwTextFrame* DynCastTextFrame() const;
     inline bool IsNoTextFrame() const;
     // Frames where its PrtArea depends on their neighbors and that are
     // positioned in the content flow

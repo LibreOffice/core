@@ -2433,8 +2433,8 @@ void SwTableNode::MakeOwnFrames(SwNodeIndex* pIdxBehind)
                  pViewShell->GetLayout()->IsAnyShellAccessible() )
             {
                 pViewShell->InvalidateAccessibleParaFlowRelation(
-                            dynamic_cast<SwTextFrame*>(pNew->FindNextCnt( true )),
-                            dynamic_cast<SwTextFrame*>(pNew->FindPrevCnt()) );
+                            pNew->FindNextCnt( true )->DynCastTextFrame(),
+                            pNew->FindPrevCnt()->DynCastTextFrame() );
             }
         }
         pNew->RegistFlys();
@@ -2468,8 +2468,8 @@ void SwTableNode::DelFrames(SwRootFrame const*const pLayout)
                          pViewShell->GetLayout()->IsAnyShellAccessible() )
                     {
                         pViewShell->InvalidateAccessibleParaFlowRelation(
-                            dynamic_cast<SwTextFrame*>(pFrame->FindNextCnt( true )),
-                            dynamic_cast<SwTextFrame*>(pFrame->FindPrevCnt()) );
+                            pFrame->FindNextCnt( true )->DynCastTextFrame(),
+                            pFrame->FindPrevCnt()->DynCastTextFrame() );
                     }
                 }
                 pFrame->Cut();

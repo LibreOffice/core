@@ -3419,8 +3419,7 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
                                 static_cast<SwAccessibleContext*>( xAcc.get() ) );
                     if ( xAccImpl.is() && xAccImpl->GetFrame() )
                     {
-                        const SwTextFrame* pTextFrame(
-                            dynamic_cast<const SwTextFrame*>(xAccImpl->GetFrame()) );
+                        const SwTextFrame* pTextFrame = xAccImpl->GetFrame()->DynCastTextFrame();
                         OSL_ENSURE( pTextFrame,
                                 "<SwAccessibleMap::_SubmitTextSelectionChangedEvents()> - unexpected type of frame" );
                         if ( pTextFrame )
@@ -3448,8 +3447,7 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
                         static_cast<SwAccessibleContext*>( xAcc.get() ) );
             if ( xAccImpl.is() && xAccImpl->GetFrame() )
             {
-                const SwTextFrame* pTextFrame(
-                        dynamic_cast<const SwTextFrame*>(xAccImpl->GetFrame()) );
+                const SwTextFrame* pTextFrame = xAccImpl->GetFrame()->DynCastTextFrame();
                 OSL_ENSURE( pTextFrame,
                         "<SwAccessibleMap::_SubmitTextSelectionChangedEvents()> - unexpected type of frame" );
                 if ( pTextFrame )

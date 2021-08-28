@@ -669,7 +669,7 @@ SwContentFrame *SwTextFrame::JoinFrame()
              pViewShell->GetLayout()->IsAnyShellAccessible() )
         {
             pViewShell->InvalidateAccessibleParaFlowRelation(
-                            dynamic_cast<SwTextFrame*>(pFoll->FindNextCnt( true )),
+                            pFoll->FindNextCnt( true )->DynCastTextFrame(),
                             this );
         }
     }
@@ -703,7 +703,7 @@ void SwTextFrame::SplitFrame(TextFrameIndex const nTextPos)
              pViewShell->GetLayout()->IsAnyShellAccessible() )
         {
             pViewShell->InvalidateAccessibleParaFlowRelation(
-                            dynamic_cast<SwTextFrame*>(pNew->FindNextCnt( true )),
+                            pNew->FindNextCnt( true )->DynCastTextFrame(),
                             this );
         }
     }

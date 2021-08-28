@@ -571,7 +571,7 @@ void SwAnchoredDrawObject::InvalidateObjPos()
     // anchored object, because its positioned by the format of its anchor frame.
     // --> #i44559# - assure, that text hint is already
     // existing in the text frame
-    if ( dynamic_cast< const SwTextFrame* >(GetAnchorFrame()) !=  nullptr &&
+    if ( GetAnchorFrame()->DynCastTextFrame() != nullptr &&
          (GetFrameFormat().GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR) )
     {
         SwTextFrame* pAnchorTextFrame( static_cast<SwTextFrame*>(AnchorFrame()) );

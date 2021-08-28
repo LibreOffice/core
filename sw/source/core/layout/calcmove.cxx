@@ -1304,7 +1304,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
          HasFollow() && !GetFollow()->IsDeleteForbidden() &&
          &GetFollow()->GetFrame() == GetNext() )
     {
-        dynamic_cast<SwTextFrame&>(*this).JoinFrame();
+        static_cast<SwTextFrame&>(*this).JoinFrame();
     }
 
     // #i28701# - move master forward, if it has to move,

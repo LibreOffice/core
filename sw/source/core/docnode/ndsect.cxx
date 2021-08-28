@@ -1122,8 +1122,8 @@ void SwSectionNode::MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx)
                          pViewShell->GetLayout()->IsAnyShellAccessible() )
                     {
                         pViewShell->InvalidateAccessibleParaFlowRelation(
-                            dynamic_cast<SwTextFrame*>(pNew->FindNextCnt( true )),
-                            dynamic_cast<SwTextFrame*>(pNew->FindPrevCnt()) );
+                            pNew->FindNextCnt( true )->DynCastTextFrame(),
+                            pNew->FindPrevCnt()->DynCastTextFrame() );
                     }
                 }
                 pNew = pSct;
@@ -1148,8 +1148,8 @@ void SwSectionNode::MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx)
                      pViewShell->GetLayout()->IsAnyShellAccessible() )
                 {
                     pViewShell->InvalidateAccessibleParaFlowRelation(
-                        dynamic_cast<SwTextFrame*>(pNew->FindNextCnt( true )),
-                        dynamic_cast<SwTextFrame*>(pNew->FindPrevCnt()) );
+                        pNew->FindNextCnt( true )->DynCastTextFrame(),
+                        pNew->FindPrevCnt()->DynCastTextFrame() );
                 }
             }
             if ( bInitNewSect )
