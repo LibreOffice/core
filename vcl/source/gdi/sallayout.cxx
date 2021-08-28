@@ -297,7 +297,7 @@ SalLayout::SalLayout()
 SalLayout::~SalLayout()
 {}
 
-void SalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
+void SalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
 {
     mnMinCharPos  = rArgs.mnMinCharPos;
     mnEndCharPos  = rArgs.mnEndCharPos;
@@ -775,7 +775,7 @@ void MultiSalLayout::AddFallback( std::unique_ptr<SalLayout> pFallback,
     ++mnLevel;
 }
 
-bool MultiSalLayout::LayoutText( ImplLayoutArgs& rArgs, const SalLayoutGlyphsImpl* )
+bool MultiSalLayout::LayoutText( vcl::text::ImplLayoutArgs& rArgs, const SalLayoutGlyphsImpl* )
 {
     if( mnLevel <= 1 )
         return false;
@@ -784,10 +784,10 @@ bool MultiSalLayout::LayoutText( ImplLayoutArgs& rArgs, const SalLayoutGlyphsImp
     return true;
 }
 
-void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
+void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
 {
     SalLayout::AdjustLayout( rArgs );
-    ImplLayoutArgs aMultiArgs = rArgs;
+    vcl::text::ImplLayoutArgs aMultiArgs = rArgs;
     std::unique_ptr<DeviceCoordinate[]> pJustificationArray;
 
     if( !rArgs.mpDXArray && rArgs.mnLayoutWidth )

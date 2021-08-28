@@ -134,7 +134,7 @@ void VclComplexTextTest::testKashida()
     CPPUNIT_ASSERT(aGlyphs.Impl(0) != nullptr);
 
     // Now lay it out using the cached glyph list.
-    ImplLayoutArgs aLayoutArgs(aText, 0, aText.getLength(), SalLayoutFlags::NONE,
+    vcl::text::ImplLayoutArgs aLayoutArgs(aText, 0, aText.getLength(), SalLayoutFlags::NONE,
                                pOutputDevice->GetFont().GetLanguageTag(), nullptr);
     pLayout = pOutputDevice->GetGraphics()->GetTextLayout(0);
     CPPUNIT_ASSERT(pLayout->LayoutText(aLayoutArgs, aGlyphs.Impl(0)));

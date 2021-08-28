@@ -91,8 +91,8 @@ public:
     void            AddFallback(std::unique_ptr<SalLayout> pFallbackLayout, ImplLayoutRuns const &);
     // give up ownership of the initial pBaseLayout taken by the ctor
     std::unique_ptr<SalLayout>  ReleaseBaseLayout();
-    bool            LayoutText(ImplLayoutArgs&, const SalLayoutGlyphsImpl*) override;
-    void            AdjustLayout(ImplLayoutArgs&) override;
+    bool            LayoutText(vcl::text::ImplLayoutArgs&, const SalLayoutGlyphsImpl*) override;
+    void            AdjustLayout(vcl::text::ImplLayoutArgs&) override;
     void            InitFont() const override;
 
     void SetIncomplete(bool bIncomplete);
@@ -112,14 +112,14 @@ private:
 
 class VCL_DLLPUBLIC GenericSalLayout : public SalLayout
 {
-    friend void MultiSalLayout::AdjustLayout(ImplLayoutArgs&);
+    friend void MultiSalLayout::AdjustLayout(vcl::text::ImplLayoutArgs&);
 
 public:
                     GenericSalLayout(LogicalFontInstance&);
                     ~GenericSalLayout() override;
 
-    void            AdjustLayout(ImplLayoutArgs&) final override;
-    bool            LayoutText(ImplLayoutArgs&, const SalLayoutGlyphsImpl*) final override;
+    void            AdjustLayout(vcl::text::ImplLayoutArgs&) final override;
+    bool            LayoutText(vcl::text::ImplLayoutArgs&, const SalLayoutGlyphsImpl*) final override;
     void            DrawText(SalGraphics&) const final override;
     static std::shared_ptr<vcl::text::TextLayoutCache> CreateTextLayoutCache(OUString const&);
     SalLayoutGlyphs GetGlyphs() const final override;
@@ -150,13 +150,13 @@ private:
                     GenericSalLayout( const GenericSalLayout& ) = delete;
                     GenericSalLayout& operator=( const GenericSalLayout& ) = delete;
 
-    void            ApplyDXArray(const ImplLayoutArgs&);
+    void            ApplyDXArray(const vcl::text::ImplLayoutArgs&);
     void            Justify(DeviceCoordinate nNewWidth);
     void            ApplyAsianKerning(const OUString& rStr);
 
     void            GetCharWidths(DeviceCoordinate* pCharWidths) const;
 
-    void            SetNeedFallback(ImplLayoutArgs&, sal_Int32, bool);
+    void            SetNeedFallback(vcl::text::ImplLayoutArgs&, sal_Int32, bool);
 
     bool            HasVerticalAlternate(sal_UCS4 aChar, sal_UCS4 aNextChar);
 

@@ -25,6 +25,8 @@
 #include <algorithm>
 #include <memory>
 
+namespace vcl::text
+{
 ImplLayoutArgs::ImplLayoutArgs(const OUString& rStr, int nMinCharPos, int nEndCharPos,
                                SalLayoutFlags nFlags, const LanguageTag& rLanguageTag,
                                vcl::text::TextLayoutCache const* const pLayoutCache)
@@ -238,8 +240,9 @@ bool ImplLayoutArgs::GetNextRun(int* nMinRunPos, int* nEndRunPos, bool* bRTL)
     maRuns.NextRun();
     return bValid;
 }
+}
 
-std::ostream& operator<<(std::ostream& s, ImplLayoutArgs const& rArgs)
+std::ostream& operator<<(std::ostream& s, vcl::text::ImplLayoutArgs const& rArgs)
 {
 #ifndef SAL_LOG_INFO
     (void)rArgs;

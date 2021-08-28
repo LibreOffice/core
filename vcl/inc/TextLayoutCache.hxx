@@ -42,7 +42,7 @@ struct Run
     }
 };
 
-class TextLayoutCache
+class VCL_DLLPUBLIC TextLayoutCache
 {
 public:
     std::vector<vcl::text::Run> runs;
