@@ -417,7 +417,7 @@ SwPosSize SwTextSizeInfo::GetTextSize() const
 void SwTextSizeInfo::GetTextSize( const SwScriptInfo* pSI, const TextFrameIndex nIndex,
                                 const TextFrameIndex nLength, const sal_uInt16 nComp,
                                 sal_uInt16& nMinSize, sal_uInt16& nMaxSizeDiff,
-                                vcl::TextLayoutCache const*const pCache) const
+                                vcl::text::TextLayoutCache const*const pCache) const
 {
     SwDrawTextInfo aDrawInf( m_pVsh, *m_pOut, pSI, *m_pText, nIndex, nLength,
             0, false, pCache);
@@ -433,7 +433,7 @@ void SwTextSizeInfo::GetTextSize( const SwScriptInfo* pSI, const TextFrameIndex 
 TextFrameIndex SwTextSizeInfo::GetTextBreak( const tools::Long nLineWidth,
                                        const TextFrameIndex nMaxLen,
                                        const sal_uInt16 nComp,
-                                       vcl::TextLayoutCache const*const pCache) const
+                                       vcl::text::TextLayoutCache const*const pCache) const
 {
     const SwScriptInfo& rScriptInfo =
                      const_cast<SwParaPortion*>(GetParaPortion())->GetScriptInfo();
@@ -454,7 +454,7 @@ TextFrameIndex SwTextSizeInfo::GetTextBreak( const tools::Long nLineWidth,
                                        const TextFrameIndex nMaxLen,
                                        const sal_uInt16 nComp,
                                        TextFrameIndex& rExtraCharPos,
-                                       vcl::TextLayoutCache const*const pCache) const
+                                       vcl::text::TextLayoutCache const*const pCache) const
 {
     const SwScriptInfo& rScriptInfo =
                      const_cast<SwParaPortion*>(GetParaPortion())->GetScriptInfo();

@@ -257,7 +257,7 @@ SalLayoutGlyphs* SwFntObj::GetCachedSalLayoutGlyphs(const SwTextGlyphsKey& key)
     return lcl_CreateLayout(key, it);
 }
 
-tools::Long SwFntObj::GetCachedTextWidth(const SwTextGlyphsKey& key, const vcl::TextLayoutCache* vclCache)
+tools::Long SwFntObj::GetCachedTextWidth(const SwTextGlyphsKey& key, const vcl::text::TextLayoutCache* vclCache)
 {
     std::map<SwTextGlyphsKey, SwTextGlyphsData>::iterator it = m_aTextGlyphs.find(key);
     if(it != m_aTextGlyphs.end() && it->second.m_nTextWidth >= 0)
