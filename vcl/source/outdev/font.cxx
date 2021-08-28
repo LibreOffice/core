@@ -1206,7 +1206,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
 
 std::unique_ptr<SalLayout> OutputDevice::getFallbackLayout(
     LogicalFontInstance* pLogicalFont, int nFallbackLevel,
-    ImplLayoutArgs& rLayoutArgs, const SalLayoutGlyphs* pGlyphs) const
+    vcl::text::ImplLayoutArgs& rLayoutArgs, const SalLayoutGlyphs* pGlyphs) const
 {
     // we need a graphics
     if (!mpGraphics && !AcquireGraphics())
@@ -1231,7 +1231,7 @@ std::unique_ptr<SalLayout> OutputDevice::getFallbackLayout(
 }
 
 std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_ptr<SalLayout> pSalLayout,
-    ImplLayoutArgs& rLayoutArgs, const SalLayoutGlyphs* pGlyphs ) const
+    vcl::text::ImplLayoutArgs& rLayoutArgs, const SalLayoutGlyphs* pGlyphs ) const
 {
     // This function relies on a valid mpFontInstance, if it doesn't exist bail out
     // - we'd have crashed later on anyway. At least here we can catch the error in debug

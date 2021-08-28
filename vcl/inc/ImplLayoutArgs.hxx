@@ -19,6 +19,8 @@
 
 #include "sallayout.hxx"
 
+namespace vcl::text
+{
 class VCL_DLLPUBLIC ImplLayoutArgs
 {
 public:
@@ -30,7 +32,7 @@ public:
     int mnEndCharPos;
 
     // performance hack
-    vcl::TextLayoutCache const* m_pTextLayoutCache;
+    vcl::text::TextLayoutCache const* m_pTextLayoutCache;
 
     // positioning related inputs
     const DeviceCoordinate* mpDXArray; // in pixel units
@@ -42,7 +44,7 @@ public:
     ImplLayoutRuns maFallbackRuns;
 
     ImplLayoutArgs(OUString const& rStr, int nMinCharPos, int nEndCharPos, SalLayoutFlags nFlags,
-                   LanguageTag const& rLanguageTag, vcl::TextLayoutCache const* pLayoutCache);
+                   LanguageTag const& rLanguageTag, vcl::text::TextLayoutCache const* pLayoutCache);
 
     void SetLayoutWidth(DeviceCoordinate nWidth);
     void SetDXArray(const DeviceCoordinate* pDXArray);
@@ -59,8 +61,9 @@ public:
 private:
     void AddRun(int nMinCharPos, int nEndCharPos, bool bRTL);
 };
+}
 
 // For nice SAL_INFO logging of ImplLayoutArgs values
-std::ostream& operator<<(std::ostream& s, ImplLayoutArgs const& rArgs);
+std::ostream& operator<<(std::ostream& s, vcl::text::ImplLayoutArgs const& rArgs);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

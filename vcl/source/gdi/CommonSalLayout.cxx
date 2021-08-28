@@ -163,7 +163,7 @@ SalLayoutGlyphs GenericSalLayout::GetGlyphs() const
     return glyphs;
 }
 
-void GenericSalLayout::SetNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nCharPos, bool bRightToLeft)
+void GenericSalLayout::SetNeedFallback(vcl::text::ImplLayoutArgs& rArgs, sal_Int32 nCharPos, bool bRightToLeft)
 {
     if (nCharPos < 0 || mbFuzzing)
         return;
@@ -191,7 +191,7 @@ void GenericSalLayout::SetNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nCharPos
     rArgs.NeedFallback(nGraphemeStartPos, nGraphemeEndPos, bRightToLeft);
 }
 
-void GenericSalLayout::AdjustLayout(ImplLayoutArgs& rArgs)
+void GenericSalLayout::AdjustLayout(vcl::text::ImplLayoutArgs& rArgs)
 {
     SalLayout::AdjustLayout(rArgs);
 
@@ -252,7 +252,7 @@ bool GenericSalLayout::HasVerticalAlternate(sal_UCS4 aChar, sal_UCS4 aVariationS
     return hb_set_has(mpVertGlyphs, nGlyphIndex) != 0;
 }
 
-bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphsImpl* pGlyphs)
+bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLayoutGlyphsImpl* pGlyphs)
 {
     // No need to touch m_GlyphItems at all for an empty string.
     if (rArgs.mnEndCharPos - rArgs.mnMinCharPos <= 0)
@@ -343,7 +343,7 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphsIm
         size_t k = 0;
         for (; k < pTextLayout->runs.size(); ++k)
         {
-            vcl::Run const& rRun(pTextLayout->runs[k]);
+            vcl::text::Run const& rRun(pTextLayout->runs[k]);
             if (rRun.nStart <= nCurrentPos && nCurrentPos < rRun.nEnd)
             {
                 break;
@@ -634,7 +634,7 @@ void GenericSalLayout::GetCharWidths(DeviceCoordinate* pCharWidths) const
 //   * For any RTL glyph that has DX adjustment, insert enough Kashidas to
 //     fill in the added space.
 
-void GenericSalLayout::ApplyDXArray(const ImplLayoutArgs& rArgs)
+void GenericSalLayout::ApplyDXArray(const vcl::text::ImplLayoutArgs& rArgs)
 {
     if (rArgs.mpDXArray == nullptr)
         return;
