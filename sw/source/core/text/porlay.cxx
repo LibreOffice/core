@@ -185,18 +185,15 @@ void SwLineLayout::DeleteNext()
 {
     if (!m_pNext)
         return;
-    std::vector<SwLineLayout*> aNexts;
     SwLineLayout* pNext = m_pNext;
     do
     {
-        aNexts.push_back(pNext);
         SwLineLayout* pLastNext = pNext;
         pNext = pNext->GetNext();
         pLastNext->SetNext(nullptr);
+        delete pLastNext;
     }
     while (pNext);
-    for (auto a : aNexts)
-        delete a;
 }
 
 void SwLineLayout::Height(const sal_uInt32 nNew, const bool bText)
