@@ -1536,7 +1536,7 @@ public:
         See also GetTextBoundRect() for more explanation + code examples.
     */
     tools::Long                 GetTextWidth( const OUString& rStr, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                    vcl::TextLayoutCache const* = nullptr,
+                                    vcl::text::TextLayoutCache const* = nullptr,
                                     SalLayoutGlyphs const*const pLayoutCache = nullptr) const;
 
     /** Height where any character of the current font fits; in logic coordinates.
