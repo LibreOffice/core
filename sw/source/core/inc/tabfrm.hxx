@@ -124,6 +124,7 @@ class SwTabFrame final: public SwLayoutFrame, public SwFlowFrame
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
     // only changes the Framesize, not the PrtArea size
     virtual SwTwips GrowFrame  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
+    virtual const SwTabFrame* DynCastTabFrame() const override { return this; }
 
 public:
     SwTabFrame( SwTable &, SwFrame* );  // calling RegistFlys always after creation _and_pasting!

@@ -36,6 +36,7 @@ class SwCellFrame final : public SwLayoutFrame
 
     virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
+    virtual const SwCellFrame* DynCastCellFrame() const override { return this; }
 
 public:
     SwCellFrame( const SwTableBox &, SwFrame*, bool bInsertContent );

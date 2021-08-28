@@ -52,6 +52,7 @@ class SwRowFrame final : public SwLayoutFrame
 
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
+    virtual const SwRowFrame* DynCastRowFrame() const override { return this; }
 
 public:
     SwRowFrame(const SwTableLine&, SwFrame*, bool bInsertContent = true);
