@@ -938,7 +938,7 @@ SwTwips SwAnchoredObjectPosition::AdjustHoriRelPosForDrawAside(
                                           ) const
 {
     // #i26791#
-    if ( dynamic_cast<const SwTextFrame*>( &GetAnchorFrame() ) ==  nullptr ||
+    if ( GetAnchorFrame().DynCastTextFrame() ==  nullptr ||
          dynamic_cast<const SwFlyAtContentFrame*>( &GetAnchoredObj() ) ==  nullptr )
     {
         OSL_FAIL( "<SwAnchoredObjectPosition::AdjustHoriRelPosForDrawAside(..) - usage for wrong anchor type" );

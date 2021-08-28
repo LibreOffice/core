@@ -1838,4 +1838,14 @@ const SwFrame* SwLayoutFrame::GetLastLower() const
     return pRet;
 }
 
+SwTextFrame* SwFrame::DynCastTextFrame()
+{
+    return IsTextFrame() ? static_cast<SwTextFrame*>(this) : nullptr;
+}
+
+const SwTextFrame* SwFrame::DynCastTextFrame() const
+{
+    return IsTextFrame() ? static_cast<const SwTextFrame*>(this) : nullptr;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -982,7 +982,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             // <pFrame>, which is the anchor frame or the proposed anchor frame,
             // doesn't have to be a text frame (e.g. edit a to-page anchored
             // fly frame). Thus, assure this.
-            const SwTextFrame* pTextFrame( dynamic_cast<const SwTextFrame*>(pFrame) );
+            const SwTextFrame* pTextFrame = pFrame->DynCastTextFrame();
             if ( pTextFrame &&
                  (_nAnchorId == RndStdIds::FLY_AT_CHAR) &&
                  ( _eVertRelOrient == text::RelOrientation::CHAR ||

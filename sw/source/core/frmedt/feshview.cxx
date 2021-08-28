@@ -1450,8 +1450,7 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
                     {
                         if ( pContentFrame->UnionFrame().IsInside( rPt ) )
                         {
-                            const SwTextFrame* pTextFrame =
-                                    dynamic_cast<const SwTextFrame*>(pContentFrame);
+                            const SwTextFrame* pTextFrame = pContentFrame->DynCastTextFrame();
                             if ( pTextFrame )
                             {
                                 SwPosition aPos(GetDoc()->GetNodes());

@@ -718,7 +718,7 @@ lang::Locale SAL_CALL SwAccessibleParagraph::getLocale()
 {
     SolarMutexGuard aGuard;
 
-    const SwTextFrame *pTextFrame = dynamic_cast<const SwTextFrame*>( GetFrame()  );
+    const SwTextFrame *pTextFrame = GetFrame()->DynCastTextFrame();
     if( !pTextFrame )
     {
         throw uno::RuntimeException("no SwTextFrame", static_cast<cppu::OWeakObject*>(this));
@@ -738,7 +738,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleParagraph::getAccess
 
     rtl::Reference<utl::AccessibleRelationSetHelper> pHelper = new utl::AccessibleRelationSetHelper();
 
-    const SwTextFrame* pTextFrame = dynamic_cast<const SwTextFrame*>(GetFrame());
+    const SwTextFrame* pTextFrame = GetFrame()->DynCastTextFrame();
     OSL_ENSURE( pTextFrame,
             "<SwAccessibleParagraph::getAccessibleRelationSet()> - missing text frame");
     if ( pTextFrame )
