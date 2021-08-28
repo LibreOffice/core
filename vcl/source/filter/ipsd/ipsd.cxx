@@ -616,7 +616,7 @@ bool PSDReader::ImplReadBody()
             if (mpFileHeader->nMode == PSD_CMYK && m_rPSD.good())
             {
                 sal_uInt32  nBlack, nBlackMax = 0;
-                std::unique_ptr<sal_uInt8[]> pBlack(new sal_uInt8[ mpFileHeader->nRows * mpFileHeader->nColumns ]);
+                std::vector<sal_uInt8> aBlack(mpFileHeader->nRows * mpFileHeader->nColumns, 0);
                 nY = 0;
                 while (nY < mpFileHeader->nRows && m_rPSD.good())
                 {
@@ -645,7 +645,7 @@ bool PSDReader::ImplReadBody()
                             nBlack = mpBitmap->GetPixel( nY, nX ).GetBlue() + nDat;
                             if ( nBlack > nBlackMax )
                                 nBlackMax = nBlack;
-                            pBlack[ nX + nY * mpFileHeader->nColumns ] = nDat ^ 0xff;
+                            aBlack[ nX + nY * mpFileHeader->nColumns ] = nDat ^ 0xff;
                             if ( ++nX == mpFileHeader->nColumns )
                             {
                                 nX = 0;
@@ -672,7 +672,7 @@ bool PSDReader::ImplReadBody()
                             nBlack = mpBitmap->GetPixel( nY, nX ).GetBlue() + nDat;
                             if ( nBlack > nBlackMax )
                                 nBlackMax = nBlack;
-                            pBlack[ nX + nY * mpFileHeader->nColumns ] = nDat ^ 0xff;
+                            aBlack[ nX + nY * mpFileHeader->nColumns ] = nDat ^ 0xff;
                             if ( ++nX == mpFileHeader->nColumns )
                             {
                                 nX = 0;
@@ -688,7 +688,7 @@ bool PSDReader::ImplReadBody()
                 {
                     for ( nX = 0; nX < mpFileHeader->nColumns; nX++ )
                     {
-                        sal_Int32 nDAT = pBlack[ nX + nY * mpFileHeader->nColumns ] * ( nBlackMax - 256 ) / 0x1ff;
+                        sal_Int32 nDAT = aBlack[ nX + nY * mpFileHeader->nColumns ] * ( nBlackMax - 256 ) / 0x1ff;
 
                         aBitmapColor = mpBitmap->GetPixel( nY, nX );
                         sal_uInt8 cR = static_cast<sal_uInt8>(MinMax( aBitmapColor.GetRed() - nDAT, 0, 255L ));
