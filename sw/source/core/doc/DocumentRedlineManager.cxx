@@ -2589,19 +2589,25 @@ bool DocumentRedlineManager::DeleteRedline( const SwStartNode& rNode, bool bSave
 
 SwRedlineTable::size_type DocumentRedlineManager::GetRedlinePos( const SwNode& rNd, RedlineType nType ) const
 {
+    assert(std::is_sorted(mpRedlineTable->begin(), mpRedlineTable->end(), CompareSwRedlineTable()));
     const sal_uLong nNdIdx = rNd.GetIndex();
-    for( SwRedlineTable::size_type n = 0; n < mpRedlineTable->size() ; ++n )
+    // first, binary search to the beginning of the right region
+    auto it = std::lower_bound(mpRedlineTable->begin(), mpRedlineTable->end(), rNd,
+        [&nNdIdx](const SwRangeRedline* lhs, const SwNode& /*rhs*/)
+        {
+            return lhs->Start()->nNode.GetIndex() < nNdIdx;
+        });
+    for( ; it != mpRedlineTable->end(); ++it)
     {
-        const SwRangeRedline* pTmp = (*mpRedlineTable)[ n ];
-        sal_uLong nPt = pTmp->GetPoint()->nNode.GetIndex(),
-              nMk = pTmp->GetMark()->nNode.GetIndex();
-        if( nPt < nMk ) { tools::Long nTmp = nMk; nMk = nPt; nPt = nTmp; }
+        const SwRangeRedline* pTmp = *it;
+        sal_uLong nStart = pTmp->Start()->nNode.GetIndex(),
+                  nEnd = pTmp->End()->nNode.GetIndex();
 
         if( ( RedlineType::Any == nType || nType == pTmp->GetType()) &&
-            nMk <= nNdIdx && nNdIdx <= nPt )
-            return n;
+            nStart <= nNdIdx && nNdIdx <= nEnd )
+            return std::distance(mpRedlineTable->begin(), it);
 
-        if( nMk > nNdIdx )
+        if( nStart > nNdIdx )
             break;
     }
     return SwRedlineTable::npos;
