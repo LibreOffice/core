@@ -12,7 +12,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,pixman,pixman))
 $(eval $(call gb_ExternalPackage_use_external_project,pixman,pixman))
 
 ifneq ($(DISABLE_DYNLOADING),TRUE)
-$(eval $(call gb_ExternalPackage_add_file,pixman,$(LIBO_LIB_FOLDER)/libpixman-1.so.0,pixman/.libs/libpixman-1.so.0.34.0))
+$(eval $(call gb_ExternalPackage_add_file,pixman,$(LIBO_LIB_FOLDER)/libpixman-1.so.0,pixman/.libs/libpixman-1.so.0.40.0))
 endif
 
 # vim: set noet sw=4 ts=4:
