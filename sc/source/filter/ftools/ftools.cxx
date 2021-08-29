@@ -38,13 +38,15 @@
 
 // ScFilterTools::ReadLongDouble()
 
-double ScfTools::ReadLongDouble( SvStream& rStrm )
+void ScfTools::ReadLongDouble(SvStream& rStrm, double& fResult)
 
 #ifdef __SIMPLE_FUNC                // for <=VC 1.5
 {
     long double fRet;
-    rStrm.Read( &fRet, 10 );
-    return static_cast< double >( fRet );
+    bool bOk = 10 == rStrm.Read(&fRet, 10);
+    if (!bOk)
+        return;
+    fResult = static_cast<double>(fRet);
 }
 #undef __SIMPLE_FUNC
 
@@ -67,7 +69,9 @@ SEEEEEEE EEEEEEEE IMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM
     long double lfFactor = 256.0;
     sal_uInt8 pDouble10[ 10 ];
 
-    rStrm.ReadBytes(pDouble10, 10);            // Intel-10 in pDouble10
+    bool bOk = 10 == rStrm.ReadBytes(pDouble10, 10);            // Intel-10 in pDouble10
+    if (!bOk)
+        return;
 
     lfDouble  = static_cast< long double >( pDouble10[ 7 ] );   // Byte 7
     lfDouble *= lfFactor;
@@ -102,7 +106,7 @@ SEEEEEEE EEEEEEEE IMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM
     if( pDouble10[ 9 ] & 0x80 )
         lfDouble *= static_cast< long double >( -1.0 );
 
-    return static_cast< double >( lfDouble );
+    fResult = static_cast<double>(lfDouble);
 }
 #endif
 

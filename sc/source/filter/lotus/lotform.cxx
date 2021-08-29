@@ -626,14 +626,15 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
             }
                 break;
             case FT_Const10Float:
-                    if ( bWK123 )
-                    {
-                            double fValue;
-                            Read( fValue );
-                            aStack << aPool.Store( fValue );
-                    }
-                    else aStack << aPool.Store( ScfTools::ReadLongDouble( aIn ) );
-                    break;
+            {
+                double fValue;
+                if (bWK123)
+                    Read(fValue);
+                else
+                    ScfTools::ReadLongDouble(aIn, fValue);
+                aStack << aPool.Store(fValue);
+                break;
+            }
             case FT_Snum:
                 if ( bWK123 )
                 {
