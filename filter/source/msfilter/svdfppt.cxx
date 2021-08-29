@@ -585,6 +585,11 @@ void SdrEscherImport::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd,
         r = rs;
         b = bs;
     }
+    if (!rSt.good())
+    {
+        SAL_WARN("filter.ms", "ProcessClientAnchor2: short read");
+        return;
+    }
     Scale( l );
     Scale( t );
     Scale( r );
