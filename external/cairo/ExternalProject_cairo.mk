@@ -42,9 +42,6 @@ $(eval $(call gb_ExternalProject_register_targets,cairo,\
 # cairo's configure.  And pixman_LIBS happens to offer that.  (The -Wc is necessary so that libtool
 # does not throw away the -rtlib=compiler-rt which it does not understand.)
 
-# overwrite src/cairo-version.h because that is just a dummy file and included
-# from cairo.h in non-overridable way
-
 $(call gb_ExternalProject_get_state_target,cairo,build) :
 	$(call gb_Trace_StartRange,cairo,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
@@ -77,7 +74,6 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 		$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 		$(if $(filter INTEL ARM,$(CPUNAME)),ac_cv_c_bigendian=no ax_cv_c_float_words_bigendian=no)) \
 		$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
-	&& cp cairo-version.h src/cairo-version.h \
 	&& cd src && $(MAKE) \
 	)
 	$(call gb_Trace_EndRange,cairo,EXTERNAL)
