@@ -64,6 +64,12 @@ public:
     // set the line color to a specific color
     virtual void SetLineColor(Color nColor) override;
 
+    // set the fill rule to default (= FillRule_NON_ZERO)
+    virtual void SetFillRule() override;
+
+    // set the fill rule to specific rule (FillRule_NON_ZERO OR FillRule_EVEN_ODD)
+    virtual void SetFillRule(PolyFillMode eFillRule) override;
+
     // set the fill color to transparent (= don't fill)
     virtual void SetFillColor() override;
 
@@ -322,6 +328,7 @@ protected:
     vcl::Region mClipRegion;
     Color mLineColor;
     Color mFillColor;
+    PolyFillMode meFillRule;
     bool mXorMode;
     SkBitmap mXorBitmap;
     std::unique_ptr<SkCanvas> mXorCanvas;

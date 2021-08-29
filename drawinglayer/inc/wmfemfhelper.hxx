@@ -27,6 +27,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <memory>
+#include <vcl/metaact.hxx>
 
 // predefines
 namespace drawinglayer::geometry { class ViewInformation2D; }
@@ -94,6 +95,8 @@ namespace wmfemfhelper
         basegfx::BColor         maTextLineColor;
         basegfx::BColor         maOverlineColor;
 
+        PolyFillMode            meFillMode;
+
         /// clipping
         basegfx::B2DPolyPolygon maClipPolyPolygon;
 
@@ -106,6 +109,7 @@ namespace wmfemfhelper
 
         /// contains all active markers
         bool                    mbLineColor : 1;
+        bool                    mbFillMode  : 1;
         bool                    mbFillColor : 1;
         bool                    mbTextColor : 1;
         bool                    mbTextFillColor : 1;
@@ -127,6 +131,11 @@ namespace wmfemfhelper
         void setLineColor(const basegfx::BColor& rNew) { if (rNew != maLineColor) maLineColor = rNew; }
         bool getLineColorActive() const { return mbLineColor; }
         void setLineColorActive(bool bNew) { if (bNew != mbLineColor) mbLineColor = bNew; }
+
+        const PolyFillMode& getFillMode() const { return meFillMode; }
+        void setFillMode(const PolyFillMode& rNew) { if (rNew != meFillMode) meFillMode = rNew; }
+        bool getFillModeActive() const { return mbFillMode; }
+        void setFillModeActive(bool bNew) { if (bNew != mbFillMode) mbFillMode = bNew; }
 
         const basegfx::BColor& getFillColor() const { return maFillColor; }
         void setFillColor(const basegfx::BColor& rNew) { if (rNew != maFillColor) maFillColor = rNew; }
