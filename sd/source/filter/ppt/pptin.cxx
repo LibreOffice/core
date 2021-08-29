@@ -252,7 +252,7 @@ bool ImplSdPPTImport::Import()
     {
         PropItem aPropItem;
 
-        sal_uInt32 nType, nPropCount;
+        sal_uInt32 nType(0), nPropCount(0);
 
         pDInfoSec2->Read();
 
