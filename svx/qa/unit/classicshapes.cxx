@@ -75,7 +75,6 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf98584ShearVertical)
     // not consider the additional scaling (tdf#98565).
     const OUString sURL(m_directories.getURLFromSrc(sDataDirectory) + "tdf98584_ShearVertical.odg");
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
 
     OUString sErrors; // sErrors collects the errors and should be empty in case all is OK.
     // All tests have a small tolerance for to avoid failing because of rounding errors.
@@ -151,7 +150,6 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf98583ShearHorizontal)
     const OUString sURL(m_directories.getURLFromSrc(sDataDirectory)
                         + "tdf98583_ShearHorizontal.odp");
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.presentation.PresentationDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
 
     OUString sErrors; // sErrors collects the errors and should be empty in case all is OK.
     // All tests have a small tolerance for to avoid failing because of rounding errors.
