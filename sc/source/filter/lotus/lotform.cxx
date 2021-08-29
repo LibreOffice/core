@@ -481,7 +481,7 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
                 break;
             case FT_Variable:
             {
-                sal_uInt16  nCol, nRow;
+                sal_uInt16 nCol(0), nRow(0);
                 Read( nCol );
                 Read( nRow );
 
@@ -505,7 +505,7 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
                 break;
             case FT_Range:
             {
-                sal_uInt16  nColS, nRowS, nColE, nRowE;
+                sal_uInt16 nColS(0), nRowS(0), nColE(0), nRowE(0);
                 Read( nColS );
                 Read( nRowS );
                 Read( nColE );
