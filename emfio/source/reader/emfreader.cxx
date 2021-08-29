@@ -1121,8 +1121,8 @@ namespace emfio
 
                     case EMR_MODIFYWORLDTRANSFORM :
                     {
-                        sal_uInt32  nMode;
-                        XForm   aTempXForm;
+                        sal_uInt32 nMode(0);
+                        XForm aTempXForm;
                         *mpInputStream >> aTempXForm;
                         mpInputStream->ReadUInt32( nMode );
                         ModifyWorldTransform( aTempXForm, nMode );
