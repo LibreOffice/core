@@ -246,7 +246,6 @@ void ScShapeTest::testTdf140252_DragCreateFormControl()
     OUString aFileURL;
     createFileURL(u"ManualColWidthRowHeight.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
 
     // Get ScTabViewShell
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
@@ -297,7 +296,6 @@ void ScShapeTest::testTdf134355_DragCreateCustomShape()
     OUString aFileURL;
     createFileURL(u"ManualColWidthRowHeight.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
 
     // Get ScTabView
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);

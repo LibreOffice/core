@@ -136,7 +136,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf141021ExtrusionNorth)
     // Load document and get shape. It is a custom shape in 3D mode.
     OUString aURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf141021_ExtrusionNorth.odp";
     mxComponent = loadFromDesktop(aURL, "com.sun.star.comp.presentation.PresentationDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     uno::Reference<drawing::XShape> xShape(getShape(0));
     SdrObjCustomShape& rSdrCustomShape(
         static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
@@ -168,7 +167,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testResizeRotatedShape)
     OUString aURL
         = m_directories.getURLFromSrc(sDataDirectory) + "tdf138945_resizeRotatedShape.odg";
     mxComponent = loadFromDesktop(aURL, "com.sun.star.comp.presentation.PresentationDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     uno::Reference<drawing::XShape> xShape(getShape(0));
 
     // Change height and mirror vertical
@@ -219,7 +217,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testViewBoxLeftTop)
     OUString aURL
         = m_directories.getURLFromSrc(sDataDirectory) + "viewBox_positive_twolines_strict.odp";
     mxComponent = loadFromDesktop(aURL, "com.sun.star.comp.presentation.PresentationDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     // Get the shape "leftright". Error was, that the identifier "left" was always set to zero, thus
     // the path was outside the frame rectangle for a viewBox having a positive "left" value.
     uno::Reference<drawing::XShape> xShapeLR(getShape(0));
@@ -253,7 +250,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testAccuracyCommandX)
     OUString aURL
         = m_directories.getURLFromSrc(sDataDirectory) + "tdf121761_Accuracy_command_X.odp";
     mxComponent = loadFromDesktop(aURL, "com.sun.star.comp.presentation.PresentationDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     // Get the shape "arc_45deg_rotated". Error was, that a Bezier curve with bad parameters
     // was used, thus the segment height was obviously smaller than for a true circle.
     // Math: segment height approx 10000 * ( 1 - sqrt(0.5)) + line width
@@ -276,7 +272,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testToggleCommandXY)
     OUString aURL
         = m_directories.getURLFromSrc(sDataDirectory) + "tdf121952_Toggle_direction_command_X.odp";
     mxComponent = loadFromDesktop(aURL, "com.sun.star.comp.presentation.PresentationDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     // Error was, that the second segment was drawn with same direction as first one. If drawn
     // correctly, the bounding box height of the segments together is about twice the single
     // segment height. Math: segment height approx 10000 * ( 1 - sqrt(0.5)) + line width
@@ -296,7 +291,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testMultipleMoveTo)
     // Load a document with path "M 0 0 5 10 10 0 N"
     OUString aURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf122964_MultipleMoveTo.odg";
     mxComponent = loadFromDesktop(aURL, "com.sun.star.comp.drawing.DrawingDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     // Error was, that the second and further parameter pairs were treated as moveTo,
     // and so the generated path was empty, resulting in zero width and height of the
     // bounding box. It has to be treated same as "M 0 0 L 5 10 10 0 N".
@@ -317,7 +311,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testWidthOrientationCommandU)
     const OUString sURL
         = m_directories.getURLFromSrc(sDataDirectory) + "tdf121845_WidthOrientation_command_U.odg";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     // Error was, that the width and height of the ellipse was halved and that the ellipse
     // was not drawn clockwise but counter clockwise.
     uno::Reference<drawing::XShape> xShape(getShape(0));
@@ -341,7 +334,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testHalfEllipseVML)
     const OUString sURL
         = m_directories.getURLFromSrc(sDataDirectory) + "tdf121845_HalfEllipseVML.doc";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.text.TextDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     // Error was, that a full circle instead of the half circle was draw.
     uno::Reference<drawing::XShape> xShape(getShape(0));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
@@ -361,7 +353,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testLargeSwingAngleVML)
     const OUString sURL
         = m_directories.getURLFromSrc(sDataDirectory) + "tdf121845_start40_swing480.doc";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.text.TextDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     // Error was, that only the 120 deg segment was drawn.
     uno::Reference<drawing::XShape> xShape(getShape(0));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
@@ -380,7 +371,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf121845_two_commands_U)
     // thus a line from first to second segment was drawn.
     OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf121845_Two_commands_U.odg";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     uno::Reference<drawing::XShape> xShape(getShape(0));
     // In case no line is drawn, two polygons are generated; with line only one polygon
     SdrObjCustomShape& rSdrObjCustomShape(
@@ -402,7 +392,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf124212_handle_position)
     // does not reflect the movement.
     OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf124212_handle_position.odg";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     uno::Reference<drawing::XShape> xShape(getShape(0));
     // The shape has one, horizontal adjust handle.
     SdrObjCustomShape& rSdrObjCustomShape(
@@ -426,7 +415,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf124029_arc_position)
     // LibreOffice has used the underlying ellipse.
     OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf124029_Arc_position.doc";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.text.TextDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     uno::Reference<drawing::XShape> xShape(getShape(0));
     // The visual wrong position is due to a wrong shape width.
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
@@ -445,7 +433,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf124740_handle_path_coordsystem)
     OUString sURL
         = m_directories.getURLFromSrc(sDataDirectory) + "tdf124740_HandleInOOXMLUserShape.pptx";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     uno::Reference<drawing::XShape> xShape(getShape(0));
     // The shape has one, horizontal adjust handle. It is about 1/5 of 10cm from left
     // shape edge, shape is 6cm from left . That results in a position
@@ -471,7 +458,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf115813_OOXML_XY_handle)
     OUString sURL = m_directories.getURLFromSrc(sDataDirectory)
                     + "tdf115813_HandleMovementOOXMLPresetShapes.pptx";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
 
     OUString sErrors;
     // values in vector InteractionsHandles are in 1/100 mm and refer to page
@@ -530,7 +516,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testQuadraticCurveTo)
     const OUString sURL
         = m_directories.getURLFromSrc(sDataDirectory) + "tdf125782_QuadraticCurveTo.odg";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     uno::Reference<drawing::XShape> xShape(getShape(0));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("Could not get the shape properties", xShapeProps.is());
@@ -551,7 +536,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf126512_OOXML_handle_in_ODP)
     OUString sURL
         = m_directories.getURLFromSrc(sDataDirectory) + "tdf126512_OOXMLHandleMovementInODF.odp";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
 
     OUString sErrors; // sErrors collects shape type and handle index for failing cases
     for (sal_uInt8 i = 0; i < countShapes(); i++)
@@ -598,7 +582,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_Mirror)
     // text frame but the frame rectangle for their text.
     OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf127785_Mirror.odp";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     OUString sErrors; // sErrors collects the errors and should be empty in case all is OK.
 
     uno::Reference<drawing::XShape> xShapeV(getShape(0));
@@ -640,7 +623,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf126060_3D_Z_Rotation)
 
     OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf126060_3D_Z_Rotation.pptx";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
 
     uno::Reference<drawing::XShape> xShape(getShape(0));
     SdrObjCustomShape& rSdrObjCustomShape(
@@ -677,7 +659,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_Asymmetric)
     OUString sURL
         = m_directories.getURLFromSrc(sDataDirectory) + "tdf127785_asymmetricTextBoxFlipV.odg";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     OUString sErrors; // sErrors collects the errors and should be empty in case all is OK.
 
     uno::Reference<drawing::XShape> xShape(getShape(0));
@@ -710,7 +691,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_TextRotateAngle)
     // flip were not made to the text box position but to the text matrix.
     OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf127785_TextRotateAngle.odp";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     OUString sErrors; // sErrors collects the errors and should be empty in case all is OK.
 
     uno::Reference<drawing::XShape> xShape(getShape(0));
@@ -769,7 +749,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf129532_MatrixFlipV)
     // The rectangle was only shifted.
     OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf129532_MatrixFlipV.odg";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     OUString sErrors; // sErrors collects the errors and should be empty in case all is OK.
 
     uno::Reference<drawing::XShape> xShape0(getShape(0));
@@ -808,7 +787,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf103474_commandT_CaseZeroHeight)
     OUString sURL
         = m_directories.getURLFromSrc(sDataDirectory) + "tdf103474_commandT_CaseZeroHeight.odp";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.presentation.PresentationDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     uno::Reference<drawing::XShape> xShape(getShape(0));
     // The end points of the straight line segment should have the same x-coordinate of left
     // of shape, and different y-coordinates, one top and the other bottom of the shape.
@@ -839,7 +817,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf103474_commandG_CaseZeroHeight)
     OUString sURL
         = m_directories.getURLFromSrc(sDataDirectory) + "tdf103474_commandG_CaseZeroHeight.odp";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.presentation.PresentationDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     uno::Reference<drawing::XShape> xShape(getShape(0));
     // The end points of the straight line segment should have the same x-coordinate of left
     // of shape, and different y-coordinates, one top and the other bottom of the shape.
@@ -871,7 +848,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf122323_largeSwingAngle)
     OUString sURL
         = m_directories.getURLFromSrc(sDataDirectory) + "tdf122323_swingAngle_larger360deg.pptx";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.presentation.PresentationDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     uno::Reference<drawing::XShape> xShape(getShape(0));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     SdrObjCustomShape& rSdrObjCustomShape(
@@ -892,7 +868,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf141268)
 {
     OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf141268.odp";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.presentation.PresentationDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     uno::Reference<drawing::XShape> xShape(getShape(0));
     SdrObjCustomShape& rSdrCustomShape(
         static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
@@ -909,7 +884,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf136176)
     // The problem becomes visible after save and reload.
     OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf136176_rot30_flip.odg";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
 
     for (sal_uInt16 i = 0; i < 3; i++)
     {

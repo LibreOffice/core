@@ -125,10 +125,8 @@ void ScStyleFamiliesObj::setUp()
     CalcUnoApiTest::setUp();
     // create a calc document
     m_xComponent = loadFromDesktop("private:factory/scalc");
-    CPPUNIT_ASSERT_MESSAGE("no component", m_xComponent.is());
 
     m_xSrcComponent = loadFromDesktop(getTestURL());
-    CPPUNIT_ASSERT_MESSAGE("no src component", m_xSrcComponent.is());
 }
 
 void ScStyleFamiliesObj::tearDown()
