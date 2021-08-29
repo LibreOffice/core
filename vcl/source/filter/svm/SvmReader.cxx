@@ -79,7 +79,7 @@ SvStream& SvmReader::Read(GDIMetaFile& rMetaFile, ImplMetaReadData* pData)
         aId[0] = 0;
         aId[6] = 0;
         mrStream.ReadBytes(aId, 6);
-        if (!strcmp(aId, "VCLMTF"))
+        if (mrStream.good() && !strcmp(aId, "VCLMTF"))
         {
             // new format
             sal_uInt32 nStmCompressMode = 0;
