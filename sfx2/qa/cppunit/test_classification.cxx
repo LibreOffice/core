@@ -112,7 +112,6 @@ void ClassificationTest::testWriter()
 {
     // Test SID_CLASSIFICATION_APPLY handling in SwDocShell::Execute().
     mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
-    CPPUNIT_ASSERT(mxComponent.is());
     // This resulted in a beans::UnknownPropertyException when the request wasn't handled.
     testClassification();
 }
@@ -121,7 +120,6 @@ void ClassificationTest::testCalc()
 {
     // Test SID_CLASSIFICATION_APPLY handling in ScFormatShell::ExecuteStyle().
     mxComponent = loadFromDesktop("private:factory/scalc", "com.sun.star.sheet.SpreadsheetDocument");
-    CPPUNIT_ASSERT(mxComponent.is());
     // This resulted in a beans::UnknownPropertyException when the request wasn't handled.
     testClassification();
 }
@@ -130,7 +128,6 @@ void ClassificationTest::testImpress()
 {
     // Test SID_CLASSIFICATION_APPLY handling in sd::DrawViewShell::FuTemporary().
     mxComponent = loadFromDesktop("private:factory/simpress", "com.sun.star.presentation.PresentationDocument");
-    CPPUNIT_ASSERT(mxComponent.is());
     // This resulted in a beans::UnknownPropertyException when the request wasn't handled.
     testClassification();
 }
