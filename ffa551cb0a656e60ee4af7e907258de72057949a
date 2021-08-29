@@ -104,6 +104,24 @@
       "revId": "ffa551cb0a656e60ee4af7e907258de72057949a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06cff3bf_89197bb6",
+        "filename": "include/vcl/rendercontext/DrawFlags.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-29T08:31:43Z",
+      "side": 1,
+      "message": "That they were before the change doesn\u0027t change things.\nThat the specific name is already used just means that a different name is needed - even if it would be longish and verbose. But just \"DrawFlags\" is not telling, and while it may be ~OK when used completely inside a single CXX, it becomes bad when you move it to a header, and use in some virtual API.",
+      "parentUuid": "79e979cd_e71491fa",
+      "revId": "ffa551cb0a656e60ee4af7e907258de72057949a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
