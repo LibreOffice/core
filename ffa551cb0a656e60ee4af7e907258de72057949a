@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "c2c339ff_1cfa9cfe",
+        "filename": "include/vcl/print.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-08-29T08:30:10Z",
+      "side": 1,
+      "message": "The problem is that we use it in VclMultiLineEdit::Draw(), and the behaviour is different between a Printer, as opposed to any other OutputDevice. The only real way of getting around this is to create this function in the base OutputDevice class and override it in Printer. It\u0027s not as clean as I\u0027d like it, true, but it\u0027s better than checking on the eOutDevType enum in derived classes.",
+      "parentUuid": "f169aeca_95b80c4f",
+      "revId": "ffa551cb0a656e60ee4af7e907258de72057949a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "30a3984f_f2137082",
         "filename": "include/vcl/rendercontext/DrawFlags.hxx",
         "patchSetId": 14
