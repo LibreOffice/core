@@ -189,7 +189,7 @@ do { \
 
 ConvErr QProToSc::Convert( const ScDocument& rDoc, std::unique_ptr<ScTokenArray>& pArray )
 {
-    sal_uInt8 nFmla[ nBufSize ];
+    sal_uInt8 nFmla[ nBufSize ] = {0};
     sal_uInt8 nArgArray[ nBufSize ] = {0};
     sal_Int8 nCol, nPage;
     sal_uInt16 nIntCount = 0, nStringCount = 0, nFloatCount = 0, nDLLCount = 0, nArgCount = 0;
@@ -214,7 +214,6 @@ ConvErr QProToSc::Convert( const ScDocument& rDoc, std::unique_ptr<ScTokenArray>
     {
         for( sal_uInt16 i=0; i < nRef; i++)
         {
-            nFmla[i] = 0;
             maIn.ReadUChar( nFmla[i] );
 
             if( nFmla[ i ] == 0x05 )
@@ -338,9 +337,8 @@ ConvErr QProToSc::Convert( const ScDocument& rDoc, std::unique_ptr<ScTokenArray>
                 break;
 
             case FT_FuncVar:{ // Sum of a sequence of numbers
-                sal_uInt8 nArgs;
                 i++;
-                nArgs = nFmla[ i ];
+                sal_uInt8 nArgs = nFmla[ i ];
                 DoFunc( eOc, nArgs, nullptr );
                 }
                 break;
