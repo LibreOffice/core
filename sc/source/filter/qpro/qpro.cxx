@@ -87,6 +87,11 @@ ErrCode ScQProReader::readSheet( SCTAB nTab, ScDocument& rDoc, ScQProStyle *pSty
             case 0x000e:{ // Floating point cell
                 double nValue;
                 mpStream->ReadUChar( nCol ).ReadUChar( nDummy ).ReadUInt16( nRow ).ReadUInt16( nStyle ).ReadDouble( nValue );
+                if (!mpStream->good())
+                {
+                    eRet = SCERR_IMPORT_FORMAT;
+                    break;
+                }
                 nStyle = nStyle >> 3;
                 pStyle->SetFormat( &rDoc, nCol, nRow, nTab, nStyle );
                 rDoc.EnsureTable(nTab);
