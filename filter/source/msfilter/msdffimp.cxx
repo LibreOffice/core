@@ -4209,7 +4209,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     aObjData.bShapeType = maShapeRecords.SeekToContent( rSt, DFF_msofbtSp );
     if ( aObjData.bShapeType )
     {
-        sal_uInt32 temp;
+        sal_uInt32 temp(0);
         rSt.ReadUInt32( aObjData.nShapeId )
            .ReadUInt32( temp );
         aObjData.nSpFlags = ShapeFlag(temp);
