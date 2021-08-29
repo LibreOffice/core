@@ -2555,7 +2555,6 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
         case EndGrfObjMagic: {
             SvStream * pSave;
             sal_uInt16 nOrderID, nOrderLen;
-            sal_uInt8 nbyte;
 
             if (!xOrdFile)
                 break;
@@ -2571,6 +2570,7 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
             pOS2MET->Seek(0);
 
             // "Segment header":
+            sal_uInt8 nbyte(0);
             pOS2MET->ReadUChar( nbyte );
             if (nbyte==0x70) { // header exists
                 pOS2MET->SeekRel(15); // but we don't need it
