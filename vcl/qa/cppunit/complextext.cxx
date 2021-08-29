@@ -59,9 +59,7 @@ public:
 void VclComplexTextTest::testArabic()
 {
 #if HAVE_MORE_FONTS
-    OUString aOneTwoThree(
-        u"\u0648\u0627\u062d\u0650\u062f\u0652 \u0625\u062b\u064d\u0646\u064a\u0646"
-        " \u062b\u0644\u0627\u062b\u0629\u064c" );
+    OUString aOneTwoThree(u"واحِدْ إثٍنين ثلاثةٌ");
     ScopedVclPtrInstance<WorkWindow> pWin(static_cast<vcl::Window *>(nullptr));
     CPPUNIT_ASSERT( pWin );
 
@@ -123,7 +121,7 @@ void VclComplexTextTest::testKashida()
     // Cache the glyph list of some Arabic text.
     ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
     auto aText
-        = OUString(u"ﻊﻨﺻﺭ ﺎﻠﻓﻮﺴﻓﻭﺭ ﻊﻨﺻﺭ ﻒﻟﺰﻳ ﺺﻠﺑ. ﺖﺘﻛﻮﻧ ﺎﻟﺩﻭﺭﺓ ﺎﻟﺭﺎﺒﻋﺓ ﻢﻧ ١٥ ﻊﻨﺻﺭﺍ.");
+        = OUString(u"عنصر الفوسفور عنصر فلزي صلب. تتكون الدورة الرابعة من 15 عنصرا.");
     std::unique_ptr<SalLayout> pLayout = pOutputDevice->ImplLayout(
         aText, 0, aText.getLength(), Point(0, 0), 0, nullptr, SalLayoutFlags::GlyphItemsOnly);
     SalLayoutGlyphs aGlyphs = pLayout->GetGlyphs();
