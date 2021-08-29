@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "1bc1a501_80ab43f2",
+        "filename": "include/vcl/print.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-29T08:33:20Z",
+      "side": 1,
+      "message": "What specifically are you answering here? That this prevents you from writing here:\n\n    void                        SetSystemTextColor(DrawFlags nFlags, bool bEnabled \u003d false) override;\n\n?",
+      "parentUuid": "c2c339ff_1cfa9cfe",
+      "revId": "ffa551cb0a656e60ee4af7e907258de72057949a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "30a3984f_f2137082",
         "filename": "include/vcl/rendercontext/DrawFlags.hxx",
         "patchSetId": 14
