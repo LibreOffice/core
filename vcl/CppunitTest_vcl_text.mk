@@ -23,8 +23,17 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_text, \
 $(eval $(call gb_CppunitTest_use_externals,vcl_text,\
 	boost_headers \
 	harfbuzz \
-	icu_headers \
 ))
+
+ifeq ($(SYSTEM_ICU),TRUE)
+$(eval $(call gb_CppunitTest_use_externals,vcl_text,\
+	icuuc \
+))
+else
+$(eval $(call gb_CppunitTest_use_externals,vcl_text,\
+        icu_headers \
+))
+endif
 
 $(eval $(call gb_CppunitTest_use_libraries,vcl_text, \
 	comphelper \
