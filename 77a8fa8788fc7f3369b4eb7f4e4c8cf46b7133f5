@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d16400f_b6d6960c",
+        "filename": "include/vcl/outdev.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1009,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-08-29T10:46:38Z",
+      "side": 1,
+      "message": "Before you set the enum variable, add:\n\nif (mpMetaFile)\n    mpMetaFile-\u003eAddAction(new MetaFillModeAction(meFillMode, true));",
+      "revId": "77a8fa8788fc7f3369b4eb7f4e4c8cf46b7133f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
