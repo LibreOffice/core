@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "78767809_484c6f30",
+        "filename": "include/vcl/rendercontext/SystemTextColorFlags.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-08-29T09:24:27Z",
+      "side": 1,
+      "message": "I have renamed the enum from DrawFlags to SystemTextColorFlags - this has meant quite a few small changes to files throughout a few other modules.",
+      "revId": "474ee0fc7a5fe82d45763af7c3e838a1a6ddf394",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16e79286_bf30a6a1",
+        "filename": "vcl/qa/cppunit/outdev.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-08-29T09:24:27Z",
+      "side": 1,
+      "message": "I\u0027ve added a unit test for this function.",
+      "revId": "474ee0fc7a5fe82d45763af7c3e838a1a6ddf394",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36c2bb09_14d7247d",
+        "filename": "vcl/source/outdev/text.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 2414,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-08-29T09:24:27Z",
+      "side": 1,
+      "message": "Notice I removed the else statement - it just set the color to the current color... which makes no sense. Basically, same as a noop.",
+      "revId": "474ee0fc7a5fe82d45763af7c3e838a1a6ddf394",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
