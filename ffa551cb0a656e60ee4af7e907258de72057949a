@@ -158,6 +158,24 @@
       "revId": "ffa551cb0a656e60ee4af7e907258de72057949a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ccf0be41_d4b9fab5",
+        "filename": "include/vcl/rendercontext/DrawFlags.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-08-29T08:36:00Z",
+      "side": 1,
+      "message": "Oh... TextDrawFlags, as opposed to DrawTextFlags...sorry, misread this.",
+      "parentUuid": "06cff3bf_89197bb6",
+      "revId": "ffa551cb0a656e60ee4af7e907258de72057949a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
