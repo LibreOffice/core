@@ -16,6 +16,23 @@
       "revId": "77a8fa8788fc7f3369b4eb7f4e4c8cf46b7133f5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff48a0ef_785331b9",
+        "filename": "vcl/unx/generic/gdi/gdiimpl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-08-29T14:19:27Z",
+      "side": 1,
+      "message": "this is not necessary...",
+      "revId": "77a8fa8788fc7f3369b4eb7f4e4c8cf46b7133f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
