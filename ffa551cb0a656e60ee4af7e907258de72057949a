@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "f169aeca_95b80c4f",
+        "filename": "include/vcl/print.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-29T08:22:14Z",
+      "side": 1,
+      "message": "It might be just me, but I suppose it\u0027s better to use as similar declaration of an overridden method as in base one; even though the arguments are unused in the implementation, it would look more clear in declaration to use names for the arguments.",
+      "revId": "ffa551cb0a656e60ee4af7e907258de72057949a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "30a3984f_f2137082",
         "filename": "include/vcl/rendercontext/DrawFlags.hxx",
         "patchSetId": 14
