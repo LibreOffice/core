@@ -1308,6 +1308,12 @@ void SlideshowImpl::registerShapeEvents( Reference< XShapes > const & xShapes )
 
 void SlideshowImpl::displayCurrentSlide (const bool bSkipAllMainSequenceEffects)
 {
+    const ShowWindowMode eMode = mpShowWindow->GetShowWindowMode();
+    if( (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK) || (eMode == SHOWWINDOWMODE_END) )
+    {
+        mpShowWindow->RestartShow();
+    }
+
     stopSound();
     removeShapeEvents();
 
