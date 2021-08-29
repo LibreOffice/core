@@ -1,0 +1,122 @@
+diff -ru cairo-1.17.4.orig/build/Makefile.win32.features cairo-1.17.4/build/Makefile.win32.features
+--- misc/cairo-1.17.4.orig/build/Makefile.win32.features	2021-08-29 19:43:27.093430425 +0100
++++ misc/build/cairo-1.17.4/build/Makefile.win32.features	2021-08-29 19:43:47.496506785 +0100
+@@ -30,7 +30,7 @@
+ CAIRO_HAS_FC_FONT=0
+ CAIRO_HAS_PS_SURFACE=1
+ CAIRO_HAS_PDF_SURFACE=1
+-CAIRO_HAS_SVG_SURFACE=1
++CAIRO_HAS_SVG_SURFACE=0
+ CAIRO_HAS_TEST_SURFACES=0
+ CAIRO_HAS_TEE_SURFACE=0
+ CAIRO_HAS_XML_SURFACE=0
+diff -ru cairo-1.17.4.orig/configure cairo-1.17.4/configure
+--- misc/cairo-1.17.4.orig/configure	2021-08-29 19:43:26.966436173 +0100
++++ misc/build/cairo-1.17.4/configure	2021-08-29 19:43:47.500506604 +0100
+@@ -21080,61 +21080,12 @@
+ rm -f confcache
+ 
+ 
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for compress in -lz" >&5
+-$as_echo_n "checking for compress in -lz... " >&6; }
+-if ${ac_cv_lib_z_compress+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lz  $LIBS"
+-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-/* Override any GCC internal prototype to avoid an error.
+-   Use char because int might match the return type of a GCC
+-   builtin and then its argument prototype would still apply.  */
+-#ifdef __cplusplus
+-extern "C"
+-#endif
+-char compress ();
+-int
+-main ()
+-{
+-return compress ();
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_link "$LINENO"; then :
+-  ac_cv_lib_z_compress=yes
+-else
+-  ac_cv_lib_z_compress=no
+-fi
+-rm -f core conftest.err conftest.$ac_objext \
+-    conftest$ac_exeext conftest.$ac_ext
+-LIBS=$ac_check_lib_save_LIBS
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_z_compress" >&5
+-$as_echo "$ac_cv_lib_z_compress" >&6; }
+-if test "x$ac_cv_lib_z_compress" = xyes; then :
+-  ac_fn_c_check_header_mongrel "$LINENO" "zlib.h" "ac_cv_header_zlib_h" "$ac_includes_default"
+-if test "x$ac_cv_header_zlib_h" = xyes; then :
+ 
+ 	  have_libz=yes
+ 
+ $as_echo "#define HAVE_ZLIB 1" >>confdefs.h
+ 
+ 
+-else
+-  have_libz="no (requires zlib http://www.gzip.org/zlib/)"
+-fi
+-
+-
+-else
+-  have_libz="no (requires zlib http://www.gzip.org/zlib/)"
+-fi
+-
+-
+ save_LIBS="$LIBS"
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for lzo2a_decompress in -llzo2" >&5
+ $as_echo_n "checking for lzo2a_decompress in -llzo2... " >&6; }
+@@ -30670,7 +30621,7 @@
+     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $FREETYPE_VERSION - OK" >&5
+ $as_echo "$FREETYPE_VERSION - OK" >&6; }
+ 			   ft_NONPKGCONFIG_CFLAGS=`$FREETYPE_CONFIG --cflags`
+-			   ft_NONPKGCONFIG_LIBS=`$FREETYPE_CONFIG --libs`
++			   ft_NONPKGCONFIG_LIBS=`$FREETYPE_CONFIG --libs | $SED -e 's/-lz//g'`
+     else { $as_echo "$as_me:${as_lineno-$LINENO}: result: $FREETYPE_VERSION - Too old" >&5
+ $as_echo "$FREETYPE_VERSION - Too old" >&6; }
+ 			   use_ft="no ($FREETYPE_VERSION found; version $FREETYPE_MIN_VERSION from release $FREETYPE_MIN_RELEASE required)"
+@@ -30680,7 +30631,7 @@
+     fi
+ 
+   ft_CFLAGS="$FREETYPE_CFLAGS"
+-  ft_LIBS="$FREETYPE_LIBS"
++  ft_LIBS=`echo "$FREETYPE_LIBS" | $SED -e 's/-lz//g'`
+ 
+ 
+ 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether cairo's FreeType font backend feature could be enabled" >&5
+@@ -31321,7 +31272,7 @@
+ 
+     # The ps backend requires zlib.
+     use_ps=$have_libz
+-    ps_NONPKGCONFIG_LIBS=-lz
++    ps_NONPKGCONFIG_LIBS=$ZLIB3RDLIB
+ 
+ 
+ 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether cairo's PostScript surface backend feature could be enabled" >&5
+@@ -31718,7 +31669,7 @@
+ 
+     # The pdf backend requires zlib.
+     use_pdf=$have_libz
+-    pdf_NONPKGCONFIG_LIBS=-lz
++    pdf_NONPKGCONFIG_LIBS=$ZLIB3RDLIB
+ 
+ 
+ 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether cairo's PDF surface backend feature could be enabled" >&5
+@@ -33610,7 +33561,7 @@
+ 
+ 
+     use_xml=$have_libz
+-    xml_NONPKGCONFIG_LIBS=-lz
++    xml_NONPKGCONFIG_LIBS=$ZLIB3RDLIB
+ 
+ 
+ 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether cairo's xml surface backend feature could be enabled" >&5
