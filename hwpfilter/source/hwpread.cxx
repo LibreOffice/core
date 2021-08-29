@@ -502,8 +502,6 @@ bool Picture::Read(HWPFile & hwpf)
                 ishyper = true;
             }
         }
-        else
-            fprintf(stderr, "arse\n");
     }
 
     if( pictype != 3 )

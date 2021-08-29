@@ -156,6 +156,9 @@ size_t gz_read(gz_stream * file, voidp buf, unsigned len)
     if (s == nullptr)
         return 0;
 
+    if (s->z_eof)
+        return 0;
+
     if (s->z_err == Z_DATA_ERROR || s->z_err == Z_ERRNO)
         return 0;
     if (s->z_err == Z_STREAM_END)
