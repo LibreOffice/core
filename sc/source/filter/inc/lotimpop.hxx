@@ -120,7 +120,7 @@ inline void ImportLotus::Read( sal_Int16& r )
 
 inline void ImportLotus::Read( double& r )
 {
-    r = ScfTools::ReadLongDouble( *pIn );
+    ScfTools::ReadLongDouble(*pIn, r);
 }
 
 inline void ImportLotus::Read( LotAttrWK3& r )

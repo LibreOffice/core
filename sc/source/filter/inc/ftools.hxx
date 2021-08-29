@@ -128,7 +128,7 @@ public:
 // *** common methods *** -----------------------------------------------------
 
     /** Reads a 10-byte-long-double and converts it to double. */
-    static double       ReadLongDouble( SvStream& rStrm );
+    static void ReadLongDouble(SvStream& rStrm, double& fResult);
     /** Returns system text encoding for byte string conversion. */
     static rtl_TextEncoding GetSystemTextEncoding();
     /** Returns a string representing the hexadecimal value of nValue. */
