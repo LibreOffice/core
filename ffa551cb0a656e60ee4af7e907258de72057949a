@@ -176,6 +176,24 @@
       "revId": "ffa551cb0a656e60ee4af7e907258de72057949a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd1a101d_ac988a99",
+        "filename": "include/vcl/rendercontext/DrawFlags.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-29T08:38:36Z",
+      "side": 1,
+      "message": "\u003e TextDrawFlags, as opposed to DrawTextFlags...\n\nI suppose you are right that these two would still be confusing - what would one think about their difference? Maybe call it \"SystemTextColorFlags\"",
+      "parentUuid": "ccf0be41_d4b9fab5",
+      "revId": "ffa551cb0a656e60ee4af7e907258de72057949a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
