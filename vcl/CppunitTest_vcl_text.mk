@@ -23,7 +23,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_text, \
 $(eval $(call gb_CppunitTest_use_externals,vcl_text,\
 	boost_headers \
 	harfbuzz \
-	icu_headers \
+	icuuc \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,vcl_text, \
