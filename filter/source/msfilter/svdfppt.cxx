@@ -3853,7 +3853,7 @@ PPTCharSheet::PPTCharSheet( TSS_Type nInstance )
 void PPTCharSheet::Read( SvStream& rIn, sal_uInt32 nLevel)
 {
     // character attributes
-    sal_uInt32 nCMask;
+    sal_uInt32 nCMask(0);
     sal_uInt16 nVal16;
     rIn.ReadUInt32( nCMask );
 
