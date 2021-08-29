@@ -47,6 +47,7 @@
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/outdevstate.hxx>
 #include <vcl/vclreferencebase.hxx>
+#include <vcl/metaact.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/vector/b2enums.hxx>
@@ -220,6 +221,7 @@ private:
     Color                           maLineColor;
     Color                           maFillColor;
     vcl::Font                       maFont;
+    PolyFillMode                    meFillMode;
     Color                           maTextColor;
     Color                           maTextLineColor;
     Color                           maOverlineColor;
@@ -1003,6 +1005,10 @@ public:
 
     void                        SetTextColor( const Color& rColor );
     const Color&                GetTextColor() const { return maTextColor; }
+
+    void                        SetFillMode() { meFillMode = PolyFillMode::EVEN_ODD_RULE_ALTERNATE;   };
+    void                        SetFillMode( const PolyFillMode& rFillMode) { meFillMode = rFillMode; }
+    const PolyFillMode&         GetFillMode() const { return meFillMode; }
 
     void                        SetTextFillColor();
     void                        SetTextFillColor( const Color& rColor );

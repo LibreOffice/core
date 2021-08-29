@@ -712,6 +712,9 @@ namespace basegfx::trapezoidhelper
                         continue;
                     }
 
+                    // FIXME: checking for line intersction, important
+                    // for changing fill style
+
                     // check if the edges self-intersect. This can only happen when
                     // start and end point are different
                     bool bRangesSet(false);
@@ -835,6 +838,9 @@ namespace basegfx::trapezoidhelper
                             continue;
                         }
                     }
+
+                    // END: checking for line intersction, important
+                    // for changing fill style
 
                     // when we get here, the intended trapezoid can be used. It needs to
                     // be corrected possibly (if prepared); but this is no reason not to

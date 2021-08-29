@@ -243,6 +243,11 @@ void PDFWriter::SetLineColor( const Color& rColor )
     xImplementation->setLineColor( rColor );
 }
 
+void PDFWriter::SetFillMode( const PolyFillMode& rFillMode )
+{
+    xImplementation->SetFillMode( rFillMode );
+}
+
 void PDFWriter::SetFillColor( const Color& rColor )
 {
     xImplementation->setFillColor( rColor );
