@@ -1,0 +1,104 @@
+diff -ru cairo-1.17.4.orig/src/cairo.h cairo-1.17.4/src/cairo.h
+--- misc/cairo-1.17.4.orig/src/cairo.h	2021-08-29 19:43:26.976435721 +0100
++++ misc/build/cairo-1.17.4/src/cairo.h	2021-08-29 19:47:41.373919330 +0100
+@@ -407,6 +407,8 @@
+  * @CAIRO_FORMAT_RGB30: like RGB24 but with 10bpc. (Since 1.12)
+  * @CAIRO_FORMAT_RGB96F: 3 floats, R, G, B. (Since 1.17.2)
+  * @CAIRO_FORMAT_RGBA128F: 4 floats, R, G, B, A. (Since 1.17.2)
++ * @CAIRO_FORMAT_RGB24_888: each pixel is a 24-bit quantity,
++ *   with Red, Green, Blue taking 8-bits each, in that order. (Since 1.1x)
+  *
+  * #cairo_format_t is used to identify the memory format of
+  * image data.
+@@ -424,9 +426,16 @@
+     CAIRO_FORMAT_RGB16_565 = 4,
+     CAIRO_FORMAT_RGB30     = 5,
+     CAIRO_FORMAT_RGB96F    = 6,
+-    CAIRO_FORMAT_RGBA128F  = 7
++    CAIRO_FORMAT_RGBA128F  = 7,
++    CAIRO_FORMAT_RGB24_888 = 8
+ } cairo_format_t;
+ 
++/**
++ * Need this until CAIRO_FORMAT_RGB24_888 is in some official release.
++ * Otherwise we can't reliably check if this is available or we should
++ * convert from 24-bit RGB to 32-bit RGB before passing to Cairo.
++ **/
++#define HAVE_CAIRO_FORMAT_RGB24_888
+ 
+ /**
+  * cairo_write_func_t:
+diff -ru cairo-1.17.4.orig/src/cairo-image-source.c cairo-1.17.4/src/cairo-image-source.c
+--- misc/cairo-1.17.4.orig/src/cairo-image-source.c	2021-08-29 19:43:26.979435585 +0100
++++ misc/build/cairo-1.17.4/src/cairo-image-source.c	2021-08-29 19:43:47.501506559 +0100
+@@ -509,6 +509,19 @@
+ 	color.blue = expand_channel(pixel & 0x3fff, 10);
+ 	return pixman_image_create_solid_fill (&color);
+ 
++    case CAIRO_FORMAT_RGB24_888:
++	pixel = *(uint32_t *) (image->data + y * image->stride + 3 * x);
++	pixel &= 0x00ffffff; /* ignore next pixel bits */
++	if (pixel == 0)
++	    return _pixman_black_image ();
++	if (pixel == 0x00ffffff)
++	    return _pixman_white_image ();
++
++	color.red = (pixel >> 16 & 0xff) | (pixel >> 8 & 0xff00);
++	color.green = (pixel >> 8 & 0xff) | (pixel & 0xff00);
++	color.blue = (pixel & 0xff) | (pixel << 8 & 0xff00);
++	return pixman_image_create_solid_fill (&color);
++
+     case CAIRO_FORMAT_ARGB32:
+     case CAIRO_FORMAT_RGB24:
+ 	pixel = *(uint32_t *) (image->data + y * image->stride + 4 * x);
+diff -ru cairo-1.17.4.orig/src/cairo-image-surface.c cairo-1.17.4/src/cairo-image-surface.c
+--- misc/cairo-1.17.4.orig/src/cairo-image-surface.c	2021-08-29 19:43:26.982435449 +0100
++++ misc/build/cairo-1.17.4/src/cairo-image-surface.c	2021-08-29 19:43:47.501506559 +0100
+@@ -109,13 +109,15 @@
+ 	return CAIRO_FORMAT_A1;
+     case PIXMAN_r5g6b5:
+ 	return CAIRO_FORMAT_RGB16_565;
++	case PIXMAN_r8g8b8:
++	return CAIRO_FORMAT_RGB24_888;
+ #if PIXMAN_VERSION >= PIXMAN_VERSION_ENCODE(0,22,0)
+     case PIXMAN_r8g8b8a8: case PIXMAN_r8g8b8x8:
+ #endif
+ #if PIXMAN_VERSION >= PIXMAN_VERSION_ENCODE(0,27,2)
+     case PIXMAN_a8r8g8b8_sRGB:
+ #endif
+-    case PIXMAN_a8b8g8r8: case PIXMAN_x8b8g8r8: case PIXMAN_r8g8b8:
++	case PIXMAN_a8b8g8r8: case PIXMAN_x8b8g8r8:
+     case PIXMAN_b8g8r8:   case PIXMAN_b5g6r5:
+     case PIXMAN_a1r5g5b5: case PIXMAN_x1r5g5b5: case PIXMAN_a1b5g5r5:
+     case PIXMAN_x1b5g5r5: case PIXMAN_a4r4g4b4: case PIXMAN_x4r4g4b4:
+@@ -332,6 +334,9 @@
+     case CAIRO_FORMAT_RGBA128F:
+ 	ret = PIXMAN_rgba_float;
+ 	break;
++	case CAIRO_FORMAT_RGB24_888:
++	ret = PIXMAN_r8g8b8;
++	break;
+     case CAIRO_FORMAT_ARGB32:
+     case CAIRO_FORMAT_INVALID:
+     default:
+@@ -736,6 +741,8 @@
+     case CAIRO_FORMAT_RGB30:
+     case CAIRO_FORMAT_RGB24:
+ 	return 32;
++	case CAIRO_FORMAT_RGB24_888:
++	return 24;
+     case CAIRO_FORMAT_RGB16_565:
+ 	return 16;
+     case CAIRO_FORMAT_A8:
+diff -ru cairo-1.17.4.orig/src/cairoint.h cairo-1.17.4/src/cairoint.h
+--- misc/cairo-1.17.4.orig/src/cairoint.h	2021-08-29 19:43:26.973435857 +0100
++++ misc/build/cairo-1.17.4/src/cairoint.h	2021-08-29 19:48:08.396696027 +0100
+@@ -1539,7 +1539,7 @@
+  * in cairo-xlib-surface.c--again see -Wswitch-enum).
+  */
+ #define CAIRO_FORMAT_VALID(format) ((format) >= CAIRO_FORMAT_ARGB32 &&		\
+-                                    (format) <= CAIRO_FORMAT_RGBA128F)
++                                    (format) <= CAIRO_FORMAT_RGB24_888)
+ 
+ /* pixman-required stride alignment in bytes. */
+ #define CAIRO_STRIDE_ALIGNMENT (sizeof (uint32_t))
