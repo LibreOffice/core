@@ -381,14 +381,6 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatNa
     if (nFromRow != 1)
         mxNfRow->set_value(nFromRow);
 
-    if ( bIsTSV )
-        mxCkbTab->set_active(true);
-    else
-        SetSeparators(); // Set Separators in the dialog from maFieldSeparators (empty are not set)
-
-    // Get Separators from the dialog (empty are set from default)
-    maFieldSeparators = GetSeparators();
-
     // Clipboard is always Unicode, else detect.
     rtl_TextEncoding ePreselectUnicode = (meCall == SC_IMPORTFILE ?
             RTL_TEXTENCODING_DONTKNOW : RTL_TEXTENCODING_UNICODE);
@@ -437,6 +429,40 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatNa
 
         mnStreamPos = mpDatStream->Tell();
     }
+
+    if (bIsTSV)
+        SetSeparators('\t');
+    else
+    {
+        // Some MS-Excel convention is the first line containing the field
+        // separator as "sep=|" (without quotes and any field separator
+        // character). The second possibility seems to be it is present *with*
+        // quotes so it shows up as cell content *including* the separator and
+        // can be preserved during round trips. Check for an exact match of
+        // any such and set separator.
+        /* TODO: it is debatable whether the unquoted form should rather be
+         * treated special to actually include the separator in the field data.
+         * Currently it does not. */
+        sal_Unicode cSep = 0;
+        OUString aLine;
+        // Try to read one more character, if more than 7 it can't be an exact
+        // match of any.
+        mpDatStream->ReadUniOrByteStringLine( aLine, mpDatStream->GetStreamCharSet(), 8);
+        mpDatStream->Seek(mnStreamPos);
+        if (aLine.getLength() == 8)
+            ;   // nothing
+        else if (aLine.getLength() == 5 && aLine.startsWithIgnoreAsciiCase("sep="))
+            cSep = aLine[4];
+        else if (aLine.getLength() == 7 && aLine[6] == '"' && aLine.startsWithIgnoreAsciiCase("\"sep="))
+            cSep = aLine[5];
+
+        // Set Separators in the dialog from maFieldSeparators (empty are not
+        // set) or an optionally defined by file content field separator.
+        SetSeparators(cSep);
+    }
+
+    // Get Separators from the dialog (empty are set from default)
+    maFieldSeparators = GetSeparators();
 
     mxNfRow->connect_value_changed( LINK( this, ScImportAsciiDlg, FirstRowHdl ) );
 
@@ -650,19 +676,46 @@ void ScImportAsciiDlg::SaveParameters()
                      mxCkbSkipEmptyCells->get_active(), mxCkbRemoveSpace->get_active(), meCall );
 }
 
-void ScImportAsciiDlg::SetSeparators()
+void ScImportAsciiDlg::SetSeparators( sal_Unicode cSep )
 {
-    for (sal_Int32 i = 0; i < maFieldSeparators.getLength(); ++i)
+    if (cSep)
     {
-        switch (maFieldSeparators[i])
+        // Exclusively set a separator, maFieldSeparators needs not be
+        // modified, it's obtained by GetSeparators() after this call.
+        constexpr sal_Unicode aSeps[] = { '\t', ';', ',', ' ' };
+        for (const sal_Unicode c : aSeps)
         {
-            case '\t':  mxCkbTab->set_active(true);        break;
-            case ';':   mxCkbSemicolon->set_active(true);  break;
-            case ',':   mxCkbComma->set_active(true);      break;
-            case ' ':   mxCkbSpace->set_active(true);      break;
-            default:
-                mxCkbOther->set_active(true);
-                mxEdOther->set_text(mxEdOther->get_text() + OUStringChar(maFieldSeparators[i]));
+            const bool bSet = (c == cSep);
+            switch (c)
+            {
+                case '\t':  mxCkbTab->set_active(bSet);        break;
+                case ';':   mxCkbSemicolon->set_active(bSet);  break;
+                case ',':   mxCkbComma->set_active(bSet);      break;
+                case ' ':   mxCkbSpace->set_active(bSet);      break;
+            }
+            if (bSet)
+                cSep = 0;
+        }
+        if (cSep)
+        {
+            mxCkbOther->set_active(true);
+            mxEdOther->set_text(OUStringChar(cSep));
+        }
+    }
+    else
+    {
+        for (sal_Int32 i = 0; i < maFieldSeparators.getLength(); ++i)
+        {
+            switch (maFieldSeparators[i])
+            {
+                case '\t':  mxCkbTab->set_active(true);        break;
+                case ';':   mxCkbSemicolon->set_active(true);  break;
+                case ',':   mxCkbComma->set_active(true);      break;
+                case ' ':   mxCkbSpace->set_active(true);      break;
+                default:
+                            mxCkbOther->set_active(true);
+                            mxEdOther->set_text(mxEdOther->get_text() + OUStringChar(maFieldSeparators[i]));
+            }
         }
     }
 }

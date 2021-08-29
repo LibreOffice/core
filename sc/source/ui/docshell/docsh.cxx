@@ -1968,6 +1968,49 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
 
     SCCOL nCol;
     SCROW nRow;
+
+    // Treat the top left cell separator "sep=" special.
+    // Here nStartRow == 0 && nStartCol == 0
+    if (!bFixedWidth && cDelim != 0)
+    {
+        // First row iterator.
+        ScHorizontalCellIterator aIter( m_aDocument, nTab, nStartCol, nStartRow, nEndCol, nStartRow);
+        ScRefCellValue* pCell;
+        // Must be first column and all following cells on this row must be
+        // empty to fiddle with "sep=".
+        if ((pCell = aIter.GetNext( nCol, nRow)) != nullptr && nCol == nStartCol && !aIter.GetNext( nCol, nRow))
+        {
+            if (pCell->meType == CELLTYPE_STRING)
+            {
+                aString = pCell->mpString->getString();
+                if (aString.getLength() <= 5 && aString.startsWithIgnoreAsciiCase("sep="))
+                {
+                    // Cell content is /^sep=.?$/ so write current separator.
+                    // Force the quote character to '"' regardless what is set
+                    // for export because that is the only one recognized on
+                    // import.
+                    aString = "sep=" + OUStringChar(cDelim);
+                    if (cStrDelim != 0)
+                        rStream.WriteUniOrByteChar( '"', eCharSet);
+                    if (eCharSet == RTL_TEXTENCODING_UNICODE)
+                    {
+                        write_uInt16s_FromOUString( rStream, aString);
+                    }
+                    else
+                    {
+                        OString aStrEnc = OUStringToOString( aString, eCharSet);
+                        // write byte encoded
+                        rStream.WriteBytes( aStrEnc.getStr(), aStrEnc.getLength());
+                    }
+                    if (cStrDelim != 0)
+                        rStream.WriteUniOrByteChar( '"', eCharSet);
+                    endlub( rStream );
+                    ++nStartRow;
+                }
+            }
+        }
+    }
+
     SCCOL nNextCol = nStartCol;
     SCROW nNextRow = nStartRow;
     SCCOL nEmptyCol;

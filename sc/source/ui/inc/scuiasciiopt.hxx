@@ -91,8 +91,9 @@ public:
 private:
     /** Sets the selected char set data to meCharSet and mbCharSetSystem. */
     void                        SetSelectedCharSet();
-    /** Set separators in ui from maFieldSeparators    */
-    void                        SetSeparators();
+    /** Set separators in ui from maFieldSeparators or an optionally defined
+        separator. */
+    void                        SetSeparators( sal_Unicode cSep );
     /** Returns all separator characters in a string. */
     OUString                    GetSeparators() const;
 
