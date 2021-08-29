@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
 # Search for unused constants in header files.
 #
@@ -98,13 +98,21 @@ def in_exclusion_set( a ):
             return True;
     return False;
 
+
+# Hack to turn off unicode decoding errors, which sometimes happens in the output and I really don't
+# care
+import codecs
+def strict_handler(exception):
+    return u"", exception.end
+codecs.register_error("strict", strict_handler)
+
 # find defines, excluding the externals folder
-a = subprocess.Popen("git grep -hP '^#define\\s+\\w\\w\\w\\w+\\s*' -- \"[!e][!x][!t]*\" | sort -u", stdout=subprocess.PIPE, shell=True)
+a = subprocess.Popen("git grep -hP '^#define\\s+\\w\\w\\w\\w+\\s*' -- \"[!e][!x][!t]*\" | sort -u", stdout=subprocess.PIPE, shell=True, encoding='UTF-8')
 
 name_re = re.compile(r"#define\s+(\w+)")
 with a.stdout as txt:
     for line in txt:
-        idName = name_re.match(line).group(1)
+        idName = name_re.match(str(line)).group(1)
         if idName.startswith("INCLUDED_"): continue
         # the various _START and _END constants are normally unused outside of the .hrc and .src files, and that's fine
         if idName.endswith("_START"): continue
@@ -115,7 +123,7 @@ with a.stdout as txt:
         if idName.startswith("__com"): continue # these are the include/header macros for the UNO stuff
         if in_exclusion_set(idName): continue
         # search for the constant
-        b = subprocess.Popen(["git", "grep", "-w", idName], stdout=subprocess.PIPE)
+        b = subprocess.Popen(["git", "grep", "-w", idName], stdout=subprocess.PIPE, encoding='UTF-8')
         found_reason_to_exclude = False
         with b.stdout as txt2:
             cnt = 0
