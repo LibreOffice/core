@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ecee79b1_720a5e63",
+        "filename": "include/vcl/outdev.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1006,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-29T08:15:11Z",
+      "side": 1,
+      "message": "Please avoid default values for arguments where it\u0027s not required, *especially* in virtual methods.\n\nIt might be reasonable to have default values in some cases. E.g., in ctors may allow to reduce ctor count (having default ctor taking an argument having a default value). In existing API, we may want default values for new arguments to avoid massive changes in existing use places. In new functions, we may use some predominant value, and having a default value may make use of longish train of arguments a bit more neat.\n\nBut none of these applies here. This method doesn\u0027t have too long train of arguments, and only used with explicitly set value of the argument.",
+      "revId": "ffa551cb0a656e60ee4af7e907258de72057949a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
