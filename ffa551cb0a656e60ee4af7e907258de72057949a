@@ -68,6 +68,24 @@
       "revId": "ffa551cb0a656e60ee4af7e907258de72057949a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79e979cd_e71491fa",
+        "filename": "include/vcl/rendercontext/DrawFlags.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-08-29T08:24:57Z",
+      "side": 1,
+      "message": "We already have a DrawTextFlags enum, so this can\u0027t be done. Not that DrawFlags and DrawTextFlags were in the code before my change.",
+      "parentUuid": "f059e38d_c7554203",
+      "revId": "ffa551cb0a656e60ee4af7e907258de72057949a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
