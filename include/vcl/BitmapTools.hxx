@@ -20,6 +20,7 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <o3tl/safeint.hxx>
 #include <array>
+#include <limits>
 
 class SvStream;
 namespace basegfx { class B2DHomMatrix; }
@@ -51,6 +52,10 @@ public:
           mnBitCount(nBitCount)
     {
         assert(nBitCount == 24 || nBitCount == 32);
+        if (rSize.getWidth() > std::numeric_limits<sal_Int32>::max() || rSize.getWidth() < 0)
+            throw std::bad_alloc();
+        if (rSize.getHeight() > std::numeric_limits<sal_Int32>::max() || rSize.getHeight() < 0)
+            throw std::bad_alloc();
         sal_Int32 nRowSize, nDataSize;
         if (o3tl::checked_multiply<sal_Int32>(rSize.getWidth(), nBitCount/8, nRowSize) ||
             o3tl::checked_multiply<sal_Int32>(nRowSize, rSize.getHeight(), nDataSize) ||
