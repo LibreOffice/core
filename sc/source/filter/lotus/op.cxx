@@ -205,7 +205,7 @@ void OP_NamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
     if (!r.good())
         return;
 
-    if (!(rContext.rDoc.ValidColRow( static_cast<SCCOL>(nColSt), nRowSt) && rContext.rDoc.ValidColRow( static_cast<SCCOL>(nColEnd), nRowEnd)))
+    if (!rContext.rDoc.ValidColRow(static_cast<SCCOL>(nColSt), nRowSt) || !rContext.rDoc.ValidColRow(static_cast<SCCOL>(nColEnd), nRowEnd))
         return;
 
     std::unique_ptr<LotusRange> pRange;
