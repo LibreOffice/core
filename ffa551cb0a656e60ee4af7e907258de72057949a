@@ -16,6 +16,23 @@
       "revId": "ffa551cb0a656e60ee4af7e907258de72057949a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30a3984f_f2137082",
+        "filename": "include/vcl/rendercontext/DrawFlags.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-29T08:18:43Z",
+      "side": 1,
+      "message": "This name looks too vague. It relates to text, not to generic drawing, right? It might be better to name it \"TextDrawFlags\" or something like that.",
+      "revId": "ffa551cb0a656e60ee4af7e907258de72057949a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
