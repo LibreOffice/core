@@ -76,6 +76,7 @@ LwpSilverBullet::LwpSilverBullet(LwpObjectHeader const & objHdr, LwpSvStream* pS
     , m_nUseCount(0)
     , m_pAtomHolder(new LwpAtomHolder)
 {
+    memset(m_pHideLevels, 0, sizeof(m_pHideLevels));
 }
 
 LwpSilverBullet::~LwpSilverBullet()
