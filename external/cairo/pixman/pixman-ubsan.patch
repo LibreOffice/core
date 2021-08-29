@@ -1,16 +1,32 @@
---- misc/pixman/pixman/pixman.h
-+++ misc/build/pixman/pixman/pixman.h
-@@ -127,7 +127,7 @@
- #define pixman_fixed_1_minus_e		(pixman_fixed_1 - pixman_fixed_e)
- #define pixman_fixed_minus_1		(pixman_int_to_fixed(-1))
- #define pixman_fixed_to_int(f)		((int) ((f) >> 16))
--#define pixman_int_to_fixed(i)		((pixman_fixed_t) ((i) << 16))
-+#define pixman_int_to_fixed(i)		((pixman_fixed_t) ((i) * (1 << 16)))
- #define pixman_fixed_to_double(f)	(double) ((f) / (double) pixman_fixed_1)
- #define pixman_double_to_fixed(d)	((pixman_fixed_t) ((d) * 65536.0))
- #define pixman_fixed_frac(f)		((f) & pixman_fixed_1_minus_e)
---- misc/pixman/pixman/pixman-fast-path.c
-+++ misc/build/pixman/pixman/pixman-fast-path.c
+diff -ru pixman-0.40.0.orig/pixman/pixman-bits-image.c pixman-0.40.0/pixman/pixman-bits-image.c
+--- misc/pixman-0.40.0.orig/pixman/pixman-bits-image.c	2021-08-29 20:02:33.714515016 +0100
++++ misc/build/pixman-0.40.0/pixman/pixman-bits-image.c	2021-08-29 20:05:43.304930185 +0100
+@@ -351,8 +351,8 @@
+      * positioned relative to a particular phase (and not relative to whatever
+      * exact fraction we happen to get here).
+      */
+-    x = ((x >> x_phase_shift) << x_phase_shift) + ((1 << x_phase_shift) >> 1);
+-    y = ((y >> y_phase_shift) << y_phase_shift) + ((1 << y_phase_shift) >> 1);
++    x = ((uint32_t)(x >> x_phase_shift) << x_phase_shift) + ((1 << x_phase_shift) >> 1);
++    y = ((uint32_t)(y >> y_phase_shift) << y_phase_shift) + ((1 << y_phase_shift) >> 1);
+ 
+     px = (x & 0xffff) >> x_phase_shift;
+     py = (y & 0xffff) >> y_phase_shift;
+diff -ru pixman-0.40.0.orig/pixman/pixman-combine32.c pixman-0.40.0/pixman/pixman-combine32.c
+--- misc/pixman-0.40.0.orig/pixman/pixman-combine32.c	2021-08-29 20:02:33.715514970 +0100
++++ misc/build/pixman-0.40.0/pixman/pixman-combine32.c	2021-08-29 20:05:43.304930185 +0100
+@@ -589,7 +589,7 @@
+ 	    rg = DIV_ONE_UN8 (rg);					\
+ 	    rb = DIV_ONE_UN8 (rb);					\
+ 									\
+-	    *(dest + i) = ra << 24 | rr << 16 | rg << 8 | rb;		\
++	    *(dest + i) = (uint32_t)ra << 24 | rr << 16 | rg << 8 | rb;		\
+ 	}								\
+     }									\
+     									\
+diff -ru pixman-0.40.0.orig/pixman/pixman-fast-path.c pixman-0.40.0/pixman/pixman-fast-path.c
+--- misc/pixman-0.40.0.orig/pixman/pixman-fast-path.c	2021-08-29 20:02:33.716514925 +0100
++++ misc/build/pixman-0.40.0/pixman/pixman-fast-path.c	2021-08-29 20:05:43.303930231 +0100
 @@ -2758,8 +2758,8 @@
  	 * positioned relative to a particular phase (and not relative to whatever
  	 * exact fraction we happen to get here).
@@ -31,102 +47,10 @@
  
      next:
  	vx += ux;
-@@ -3086,7 +3086,7 @@
- static force_inline uint32_t
- convert_a8 (const uint8_t *row, int x)
- {
--    return *(row + x) << 24;
-+    return (uint32_t)*(row + x) << 24;
- }
- 
- static force_inline uint32_t
---- misc/pixman/pixman/pixman-access.c
-+++ misc/build/pixman/pixman/pixman-access.c
-@@ -100,7 +100,7 @@
- 	uint32_t  *__d = ((uint32_t *)(l)) + ((o) >> 5);		\
- 	uint32_t __m, __v;						\
- 									\
--	__m = 1 << ((o) & 0x1f);					\
-+	__m = (uint32_t)1 << ((o) & 0x1f);					\
- 	__v = (v)? __m : 0;						\
- 									\
- 	WRITE((img), __d, (READ((img), __d) & ~__m) | __v);		\
---- misc/pixman/pixman/pixman-bits-image.c
-+++ misc/build/pixman/pixman/pixman-bits-image.c
-@@ -243,8 +243,8 @@
-      * positioned relative to a particular phase (and not relative to whatever
-      * exact fraction we happen to get here).
-      */
--    x = ((x >> x_phase_shift) << x_phase_shift) + ((1 << x_phase_shift) >> 1);
--    y = ((y >> y_phase_shift) << y_phase_shift) + ((1 << y_phase_shift) >> 1);
-+    x = ((uint32_t)(x >> x_phase_shift) << x_phase_shift) + ((1 << x_phase_shift) >> 1);
-+    y = ((uint32_t)(y >> y_phase_shift) << y_phase_shift) + ((1 << y_phase_shift) >> 1);
- 
-     px = (x & 0xffff) >> x_phase_shift;
-     py = (y & 0xffff) >> y_phase_shift;
-@@ -306,7 +306,7 @@
-     sgtot = CLIP (sgtot, 0, 0xff);
-     sbtot = CLIP (sbtot, 0, 0xff);
- 
--    return ((satot << 24) | (srtot << 16) | (sgtot <<  8) | (sbtot));
-+    return (((uint32_t)satot << 24) | (srtot << 16) | (sgtot <<  8) | (sbtot));
- }
- 
- static force_inline uint32_t
---- misc/pixman/pixman/pixman-combine32.c
-+++ misc/build/pixman/pixman/pixman-combine32.c
-@@ -589,7 +589,7 @@
- 	    rg = DIV_ONE_UN8 (rg);					\
- 	    rb = DIV_ONE_UN8 (rb);					\
- 									\
--	    *(dest + i) = ra << 24 | rr << 16 | rg << 8 | rb;		\
-+	    *(dest + i) = (uint32_t)ra << 24 | rr << 16 | rg << 8 | rb;		\
- 	}								\
-     }									\
-     									\
---- misc/pixman/pixman/pixman-gradient-walker.c
-+++ misc/build/pixman/pixman/pixman-gradient-walker.c
-@@ -193,7 +193,7 @@
-     g8 = g + 0.5f;
-     b8 = b + 0.5f;
- 
--    v = ((a8 << 24) & 0xff000000) |
-+    v = (((uint32_t)a8 << 24) & 0xff000000) |
-         ((r8 << 16) & 0x00ff0000) |
-         ((g8 <<  8) & 0x0000ff00) |
-         ((b8 >>  0) & 0x000000ff);
---- misc/pixman/pixman/pixman-sse2.c
-+++ misc/build/pixman/pixman/pixman-sse2.c
-@@ -516,9 +516,13 @@
- }
- 
- static force_inline uint32_t
--combine1 (const uint32_t *ps, const uint32_t *pm)
-+combine1 (const void *ps, const uint32_t *pm)
- {
--    uint32_t s = *ps;
-+#ifdef WORDS_BIGENDIAN
-+    uint32_t s = (uint32_t)((const uint8_t *)ps)[3] | ((uint32_t)((const uint8_t *)ps)[2] << 8) | ((uint32_t)((const uint8_t *)ps)[1] << 16) | ((uint32_t)((const uint8_t *)ps)[0] << 24);
-+#else
-+    uint32_t s = (uint32_t)((const uint8_t *)ps)[0] | ((uint32_t)((const uint8_t *)ps)[1] << 8) | ((uint32_t)((const uint8_t *)ps)[2] << 16) | ((uint32_t)((const uint8_t *)ps)[3] << 24);
-+#endif
- 
-     if (pm)
-     {
-@@ -3256,7 +3260,11 @@
- 
- 	while (w >= 4)
- 	{
--	    m = *((uint32_t*)mask);
-+#ifdef WORDS_BIGENDIAN
-+	    m = (uint32_t)mask[3] | ((uint32_t)mask[2] << 8) | ((uint32_t)mask[1] << 16) | ((uint32_t)mask[0] << 24);
-+#else
-+	    m = (uint32_t)mask[0] | ((uint32_t)mask[1] << 8) | ((uint32_t)mask[2] << 16) | ((uint32_t)mask[3] << 24);
-+#endif
- 
- 	    if (srca == 0xff && m == 0xffffffff)
- 	    {
-@@ -3343,7 +3351,7 @@
+diff -ru pixman-0.40.0.orig/pixman/pixman-sse2.c pixman-0.40.0/pixman/pixman-sse2.c
+--- misc/pixman-0.40.0.orig/pixman/pixman-sse2.c	2021-08-29 20:02:33.716514925 +0100
++++ misc/build/pixman-0.40.0/pixman/pixman-sse2.c	2021-08-29 20:05:43.306930095 +0100
+@@ -3344,7 +3344,7 @@
  
  	b = filler & 0xff;
  	w = (b << 8) | b;
@@ -135,57 +59,10 @@
      }
      else if (bpp == 16)
      {
-@@ -3528,7 +3536,11 @@
- 
- 	while (w >= 4)
- 	{
--	    m = *((uint32_t*)mask);
-+#ifdef WORDS_BIGENDIAN
-+	    m = (uint32_t)mask[3] | ((uint32_t)mask[2] << 8) | ((uint32_t)mask[1] << 16) | ((uint32_t)mask[0] << 24);
-+#else
-+	    m = (uint32_t)mask[0] | ((uint32_t)mask[1] << 8) | ((uint32_t)mask[2] << 16) | ((uint32_t)mask[3] << 24);
-+#endif
- 
- 	    if (srca == 0xff && m == 0xffffffff)
- 	    {
-@@ -5016,7 +5028,11 @@
- 
-         while (w >= 4)
-         {
--            m = *(uint32_t *) mask;
-+#ifdef WORDS_BIGENDIAN
-+            m = (uint32_t)mask[3] | ((uint32_t)mask[2] << 8) | ((uint32_t)mask[1] << 16) | ((uint32_t)mask[0] << 24);
-+#else
-+            m = (uint32_t)mask[0] | ((uint32_t)mask[1] << 8) | ((uint32_t)mask[2] << 16) | ((uint32_t)mask[3] << 24);
-+#endif
- 
- 	    if (m)
- 	    {
-@@ -5970,7 +5986,11 @@
- 	__m128i xmm_dst, xmm_dst_lo, xmm_dst_hi;
- 	__m128i xmm_mask, xmm_mask_lo, xmm_mask_hi;
- 
--	m = *(uint32_t*)mask;
-+#ifdef WORDS_BIGENDIAN
-+	m = (uint32_t)mask[3] | ((uint32_t)mask[2] << 8) | ((uint32_t)mask[1] << 16) | ((uint32_t)mask[0] << 24);
-+#else // TODO:big endian
-+	m = (uint32_t)mask[0] | ((uint32_t)mask[1] << 8) | ((uint32_t)mask[2] << 16) | ((uint32_t)mask[3] << 24);
-+#endif
- 
- 	if (m)
- 	{
-@@ -6437,7 +6457,7 @@
- 
-     while (w)
-     {
--	*dst++ = *(src++) << 24;
-+	*dst++ = (uint32_t)*(src++) << 24;
- 	w--;
-     }
- 
---- misc/pixman/pixman/pixman-utils.c
-+++ misc/build/pixman/pixman/pixman-utils.c
-@@ -214,7 +214,7 @@
+diff -ru pixman-0.40.0.orig/pixman/pixman-utils.c pixman-0.40.0/pixman/pixman-utils.c
+--- misc/pixman-0.40.0.orig/pixman/pixman-utils.c	2021-08-29 20:02:33.715514970 +0100
++++ misc/build/pixman-0.40.0/pixman/pixman-utils.c	2021-08-29 20:05:43.306930095 +0100
+@@ -213,7 +213,7 @@
  	g = float_to_unorm (src[i].g, 8);
  	b = float_to_unorm (src[i].b, 8);
  
