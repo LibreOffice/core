@@ -1681,7 +1681,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         }
         case GOrdSClPth: {
             SAL_INFO("filter.os2met","GOrdSClPth");
-            sal_uInt32 nID;
+            sal_uInt32 nID(0);
             OSPath * p=pPathList;
             pOS2MET->SeekRel(2);
             pOS2MET->ReadUInt32( nID );
