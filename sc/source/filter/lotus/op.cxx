@@ -244,6 +244,9 @@ void OP_SymphNamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
 
     r.ReadUInt16( nColSt ).ReadUInt16( nRowSt ).ReadUInt16( nColEnd ).ReadUInt16( nRowEnd ).ReadUChar( nType );
 
+    if (!r.good())
+        return;
+
     if (!rContext.rDoc.ValidColRow(static_cast<SCCOL>(nColSt), nRowSt) || !rContext.rDoc.ValidColRow(static_cast<SCCOL>(nColEnd), nRowEnd))
         return;
 
