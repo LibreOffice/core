@@ -22,6 +22,40 @@
       },
       "revId": "bd555ee0ebc94bfffa41ac5d5eede580f330a7f7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3735760d_89b45ca8",
+        "filename": "lotuswordpro/source/filter/lwprowlayout.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-08-30T09:19:26Z",
+      "side": 1,
+      "message": "at i of 2 we get nNumCols of 254 here",
+      "revId": "bd555ee0ebc94bfffa41ac5d5eede580f330a7f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2846e5e3_1aef1aab",
+        "filename": "lotuswordpro/source/filter/lwprowlayout.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-08-30T09:19:26Z",
+      "side": 1,
+      "message": "so nCellEndCol of 255 and then i of 255 which wraps back to 0 on the outer for i++ so I threw my hat at it and bumped i from sal_uInt8 to sal_uInt16",
+      "revId": "bd555ee0ebc94bfffa41ac5d5eede580f330a7f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
