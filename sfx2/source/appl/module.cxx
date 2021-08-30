@@ -35,7 +35,6 @@
 
 #define ShellClass_SfxModule
 #include <sfxslots.hxx>
-#include <ctrlfactoryimpl.hxx>
 #include <optional>
 
 class SfxModule_Impl
@@ -43,7 +42,7 @@ class SfxModule_Impl
 public:
 
     std::optional<SfxSlotPool>              pSlotPool;
-    std::optional<SfxTbxCtrlFactArr_Impl>   pTbxCtrlFac;
+    std::vector<SfxTbxCtrlFactory>          maTbxCtrlFactories;
     std::vector<SfxStbCtrlFactory>          maStbCtrlFactories;
     std::vector<SfxChildWinFactory>         maFactories;
     OString                     maResName;
@@ -59,7 +58,7 @@ SfxModule_Impl::SfxModule_Impl()
 SfxModule_Impl::~SfxModule_Impl()
 {
     pSlotPool.reset();
-    pTbxCtrlFac.reset();
+    maTbxCtrlFactories.clear();
     maStbCtrlFactories.clear();
 }
 
@@ -126,13 +125,10 @@ void SfxModule::RegisterChildWindow(const SfxChildWinFactory& rFact)
 
 void SfxModule::RegisterToolBoxControl( const SfxTbxCtrlFactory& rFact )
 {
-    if (!pImpl->pTbxCtrlFac)
-        pImpl->pTbxCtrlFac.emplace();
-
 #ifdef DBG_UTIL
-    for ( size_t n=0; n<pImpl->pTbxCtrlFac->size(); n++ )
+    for ( size_t n=0; n<pImpl->maTbxCtrlFactories.size(); n++ )
     {
-        SfxTbxCtrlFactory *pF = &(*pImpl->pTbxCtrlFac)[n];
+        SfxTbxCtrlFactory *pF = &pImpl->maTbxCtrlFactories[n];
         if ( pF->nTypeId == rFact.nTypeId &&
             (pF->nSlotId == rFact.nSlotId || pF->nSlotId == 0) )
         {
@@ -141,7 +137,7 @@ void SfxModule::RegisterToolBoxControl( const SfxTbxCtrlFactory& rFact )
     }
 #endif
 
-    pImpl->pTbxCtrlFac->push_back( rFact );
+    pImpl->maTbxCtrlFactories.push_back( rFact );
 }
 
 
@@ -163,9 +159,20 @@ void SfxModule::RegisterStatusBarControl( const SfxStbCtrlFactory& rFact )
 }
 
 
-SfxTbxCtrlFactArr_Impl*  SfxModule::GetTbxCtrlFactories_Impl() const
+SfxTbxCtrlFactory* SfxModule::GetTbxCtrlFactory(const std::type_info& rSlotType, sal_uInt16 nSlotID) const
 {
-    return pImpl->pTbxCtrlFac ? &*pImpl->pTbxCtrlFac : nullptr;
+    // search for a factory with the given slot id
+    for (auto& rFactory : pImpl->maTbxCtrlFactories)
+        if( rFactory.nTypeId == rSlotType && rFactory.nSlotId == nSlotID )
+            return &rFactory;
+
+    // if no factory exists for the given slot id, see if we
+    // have a generic factory with the correct slot type and slot id == 0
+    for (auto& rFactory : pImpl->maTbxCtrlFactories)
+        if( rFactory.nTypeId == rSlotType && rFactory.nSlotId == 0 )
+            return &rFactory;
+
+    return nullptr;
 }
 
 

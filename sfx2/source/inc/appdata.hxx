@@ -94,8 +94,8 @@ public:
     sal_uInt16                              nDocModalMode;              // counts documents in modal mode
     sal_uInt16                              nRescheduleLocks;
 
-    std::unique_ptr<SfxTbxCtrlFactArr_Impl>
-                                pTbxCtrlFac;
+    std::vector<SfxTbxCtrlFactory>
+                                maTbxCtrlFactories;
     std::vector<SfxStbCtrlFactory>
                                 maStbCtrlFactories;
     std::unique_ptr<SfxViewFrameArr_Impl>

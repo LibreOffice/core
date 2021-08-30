@@ -349,9 +349,20 @@ weld::Window* SfxApplication::GetTopWindow() const
     return pWindow->GetFrameWeld();
 }
 
-SfxTbxCtrlFactArr_Impl&     SfxApplication::GetTbxCtrlFactories_Impl() const
+SfxTbxCtrlFactory* SfxApplication::GetTbxCtrlFactory(const std::type_info& rSlotType, sal_uInt16 nSlotID) const
 {
-    return *pImpl->pTbxCtrlFac;
+    // search for a factory with the given slot id
+    for (auto& rFactory : pImpl->maTbxCtrlFactories)
+        if( rFactory.nTypeId == rSlotType && rFactory.nSlotId == nSlotID )
+            return &rFactory;
+
+    // if no factory exists for the given slot id, see if we
+    // have a generic factory with the correct slot type and slot id == 0
+    for (auto& rFactory : pImpl->maTbxCtrlFactories)
+        if( rFactory.nTypeId == rSlotType && rFactory.nSlotId == 0 )
+            return &rFactory;
+
+    return nullptr;
 }
 
 SfxStbCtrlFactory* SfxApplication::GetStbCtrlFactory(const std::type_info& rSlotType, sal_uInt16 nSlotID) const
