@@ -1120,7 +1120,7 @@ void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const Reference< XShape >& 
             // MSO changes the anchor positions at these angles and that does an extra 90 degrees
             // rotation on our shapes, so we output it in such position that MSO
             // can draw this shape correctly.
-            if ((nRotation >= 4500_deg100 && nRotation < 13500_deg100) || (nRotation >= 22500_deg100 && nRotation < 31500_deg100))
+            if ((nRotation > 4500_deg100 && nRotation <= 13500_deg100) || (nRotation > 22500_deg100 && nRotation <= 31500_deg100))
             {
                 aTopLeft.X = aTopLeft.X - nHalfHeight + nHalfWidth;
                 aTopLeft.Y = aTopLeft.Y - nHalfWidth + nHalfHeight;
