@@ -37,6 +37,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d4020766_14bac043",
+        "filename": "vcl/inc/salgdi.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-08-30T13:38:35Z",
+      "side": 1,
+      "message": "Typo ?",
+      "range": {
+        "startLine": 725,
+        "startChar": 26,
+        "endLine": 725,
+        "endChar": 31
+      },
+      "revId": "77a8fa8788fc7f3369b4eb7f4e4c8cf46b7133f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ff48a0ef_785331b9",
         "filename": "vcl/unx/generic/gdi/gdiimpl.cxx",
         "patchSetId": 6
@@ -48,6 +71,29 @@
       "writtenOn": "2021-08-29T14:19:27Z",
       "side": 1,
       "message": "this is not necessary...",
+      "revId": "77a8fa8788fc7f3369b4eb7f4e4c8cf46b7133f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95ddebfb_2a24b735",
+        "filename": "vcl/unx/generic/gdi/gdiimpl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1039,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-08-30T13:38:35Z",
+      "side": 1,
+      "message": "That makes no sense to me. PolyFillMode has two possible values. So if it is not EVEN_ODD_RULE_ALTERNATE then it is already NON_ZERO_RULE_WINDING.",
+      "range": {
+        "startLine": 1036,
+        "startChar": 4,
+        "endLine": 1039,
+        "endChar": 5
+      },
       "revId": "77a8fa8788fc7f3369b4eb7f4e4c8cf46b7133f5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
