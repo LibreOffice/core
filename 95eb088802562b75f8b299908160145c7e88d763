@@ -36,6 +36,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec881ae9_c20a23df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 44
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-30T15:17:59Z",
+      "side": 1,
+      "message": "No, my gut feeling is that it\u0027s not necessary to incompatibly remove the published flag from these two (rather trivial) exception types, and that it\u0027s better to leave things as they are now.",
+      "parentUuid": "b8e2ed56_ea419b5a",
+      "revId": "95eb088802562b75f8b299908160145c7e88d763",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c12c5010_ada14bff",
