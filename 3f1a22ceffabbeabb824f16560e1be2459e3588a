@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd2579ed_562ec380",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-08-30T16:16:40Z",
+      "side": 1,
+      "message": "@Attila: thanks for the clean-up and replacing the ODT file!",
+      "revId": "3f1a22ceffabbeabb824f16560e1be2459e3588a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
