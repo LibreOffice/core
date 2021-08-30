@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34d0ed4b_6eaa1911",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-08-30T14:23:57Z",
+      "side": 1,
+      "message": "I imagine this was turned off in the past to have faster builds, do we know what is the cost of adding it back? Can we afford it? This gerrit_windows build was 1h13m. My last gerrit_windows build was 54m. But that might be a tb72 vs tb88 difference as well...",
+      "revId": "97a3f587dd8562beacea7a3a2d0172c4064c5856",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
