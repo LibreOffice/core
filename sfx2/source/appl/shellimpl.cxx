@@ -54,40 +54,4 @@ size_t SfxObjectShellArr_Impl::size() const
     return maData.size();
 }
 
-
-SfxViewShellArr_Impl::iterator SfxViewShellArr_Impl::begin()
-{
-    return maData.begin();
-}
-
-SfxViewShellArr_Impl::iterator SfxViewShellArr_Impl::end()
-{
-    return maData.end();
-}
-
-const SfxViewShell* SfxViewShellArr_Impl::operator[] ( size_t i ) const
-{
-    return maData[i];
-}
-
-SfxViewShell* SfxViewShellArr_Impl::operator[] ( size_t i )
-{
-    return maData[i];
-}
-
-void SfxViewShellArr_Impl::erase( const iterator& it )
-{
-    maData.erase(it);
-}
-
-void SfxViewShellArr_Impl::push_back( SfxViewShell* p )
-{
-    maData.push_back(p);
-}
-
-size_t SfxViewShellArr_Impl::size() const
-{
-    return maData.size();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

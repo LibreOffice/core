@@ -48,27 +48,6 @@ public:
     size_t size() const;
 };
 
-class SfxViewShellArr_Impl
-{
-    typedef std::vector<SfxViewShell*> DataType;
-    DataType maData;
-
-public:
-    typedef DataType::iterator iterator;
-
-    iterator begin();
-    iterator end();
-
-    const SfxViewShell* operator[](size_t i) const;
-    SfxViewShell* operator[](size_t i);
-
-    void erase(const iterator& it);
-
-    void push_back(SfxViewShell* p);
-
-    size_t size() const;
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

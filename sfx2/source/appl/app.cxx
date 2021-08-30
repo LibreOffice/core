@@ -379,9 +379,9 @@ std::vector<SfxViewFrame*>& SfxApplication::GetViewFrames_Impl() const
     return pImpl->maViewFrames;
 }
 
-SfxViewShellArr_Impl&       SfxApplication::GetViewShells_Impl() const
+std::vector<SfxViewShell*>& SfxApplication::GetViewShells_Impl() const
 {
-    return *pImpl->pViewShells;
+    return pImpl->maViewShells;
 }
 
 SfxObjectShellArr_Impl&     SfxApplication::GetObjectShells_Impl() const
