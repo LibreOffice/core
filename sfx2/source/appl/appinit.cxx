@@ -201,7 +201,7 @@ void SfxApplication::Initialize_Impl()
         SolarMutexGuard aGuard;
         //ensure instantiation of listener that manages the internal recently-used
         //list
-        pImpl->mxAppPickList.reset(new SfxPickList(*this));
+        pImpl->mxAppPickList.emplace(*this);
     }
 
     DBG_ASSERT( !pImpl->pAppDispat, "AppDispatcher already exists" );

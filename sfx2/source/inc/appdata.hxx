@@ -28,13 +28,13 @@
 #include <sfx2/app.hxx>
 #include <sfx2/doctempl.hxx>
 #include <o3tl/enumarray.hxx>
+#include "sfxpicklist.hxx"
 
 #include <bitset.hxx>
 #include <memory>
 #include <vector>
 
 class SfxApplication;
-class SfxPickList;
 class SfxProgress;
 class SfxDdeDocTopic_Impl;
 class DdeService;
@@ -82,7 +82,7 @@ public:
     std::unique_ptr<SfxErrorHandler>    m_pSbxErrorHdl;
 #endif
     rtl::Reference<SfxStatusDispatcher> mxAppDispatch;
-    std::unique_ptr<SfxPickList>        mxAppPickList;
+    std::optional<SfxPickList>          mxAppPickList;
     std::optional<SfxDocumentTemplates> pTemplates;
 
     // global pointers
