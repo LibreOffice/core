@@ -480,7 +480,7 @@ namespace emfio
 
     Color MtfTools::ReadColor()
     {
-        sal_uInt32 nColor;
+        sal_uInt32 nColor(0);
         mpInputStream->ReadUInt32( nColor );
         Color aColor( COL_BLACK );
         if ( ( nColor & 0xFFFF0000 ) == 0x01000000 )
