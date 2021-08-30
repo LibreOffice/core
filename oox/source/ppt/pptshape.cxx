@@ -426,7 +426,7 @@ void PPTShape::addShape(
 
             Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, bClearText, bool(mpPlaceholder), aTransformation, getFillProperties() ) );
             // if exists and not duplicated, try to use the title text as slide name to help its re-use on UI
-            if (!rSlidePersist.isMasterPage() && rSlidePersist.getPage().is() && mnSubType == XML_title)
+            if (!rSlidePersist.isMasterPage() && rSlidePersist.getPage().is() && (mnSubType == XML_title || mnSubType == XML_ctrTitle))
             {
                 try
                 {
