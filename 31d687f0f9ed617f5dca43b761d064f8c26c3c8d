@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3d1587c_a4a5520b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-08-30T07:40:22Z",
+      "side": 1,
+      "message": "The sidebar control uses \"Diagonal Down Border\" defined in sc/uiconfig/scalc/ui/floatingborderstyle.ui, meaning you have to define strings but how about making it identical?\n\nI wonder how to handle the diagonal borders in Writer tables. The widget shows the options but cannot set it.",
+      "revId": "31d687f0f9ed617f5dca43b761d064f8c26c3c8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
