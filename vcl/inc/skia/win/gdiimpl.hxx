@@ -60,7 +60,6 @@ public:
 
 protected:
     virtual void createWindowSurfaceInternal(bool forceRaster = false) override;
-    virtual void performFlush() override;
     static sk_sp<SkTypeface> createDirectWriteTypeface(HDC hdc, HFONT hfont);
     static void initFontInfo();
     inline static sal::systools::COMReference<IDWriteFactory> dwriteFactory;

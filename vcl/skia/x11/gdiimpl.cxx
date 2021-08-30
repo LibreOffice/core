@@ -143,19 +143,6 @@ void X11SkiaSalGraphicsImpl::freeResources() {}
 
 void X11SkiaSalGraphicsImpl::Flush() { performFlush(); }
 
-void X11SkiaSalGraphicsImpl::performFlush()
-{
-    SkiaZone zone;
-    flushDrawing();
-    // TODO XPutImage() is somewhat inefficient, XShmPutImage() should be preferred.
-    if (mWindowContext)
-    {
-        if (mDirtyRect.intersect(SkIRect::MakeWH(GetWidth(), GetHeight())))
-            flushSurfaceToWindowContext(mDirtyRect);
-        mDirtyRect.setEmpty();
-    }
-}
-
 std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext(bool temporary)
 {
     SalDisplay* salDisplay = vcl_sal::getSalDisplay(GetGenericUnixSalData());
