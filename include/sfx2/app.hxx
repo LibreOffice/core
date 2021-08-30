@@ -46,7 +46,6 @@ class SfxObjectShellLock;
 class SfxProgress;
 class SfxSlotPool;
 class SfxViewFrame;
-class SfxViewFrameArr_Impl;
 class SfxViewShellArr_Impl;
 class StarBASIC;
 class SfxWorkWindow;
@@ -174,7 +173,7 @@ public:
     SAL_DLLPRIVATE SfxTbxCtrlFactory* GetTbxCtrlFactory(const std::type_info& rSlotType, sal_uInt16 nSlotID) const;
     SAL_DLLPRIVATE SfxStbCtrlFactory* GetStbCtrlFactory(const std::type_info& rSlotType, sal_uInt16 nSlotID) const;
     SAL_DLLPRIVATE SfxChildWinFactory* GetChildWinFactoryById(sal_uInt16 nId) const;
-    SAL_DLLPRIVATE SfxViewFrameArr_Impl& GetViewFrames_Impl() const;
+    SAL_DLLPRIVATE std::vector<SfxViewFrame*>& GetViewFrames_Impl() const;
     SAL_DLLPRIVATE SfxViewShellArr_Impl& GetViewShells_Impl() const;
     SAL_DLLPRIVATE SfxObjectShellArr_Impl& GetObjectShells_Impl() const;
     SAL_DLLPRIVATE void         SetViewFrame_Impl(SfxViewFrame *pViewFrame);

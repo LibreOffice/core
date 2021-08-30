@@ -54,40 +54,6 @@ size_t SfxObjectShellArr_Impl::size() const
     return maData.size();
 }
 
-SfxViewFrameArr_Impl::iterator SfxViewFrameArr_Impl::begin()
-{
-    return maData.begin();
-}
-
-SfxViewFrameArr_Impl::iterator SfxViewFrameArr_Impl::end()
-{
-    return maData.end();
-}
-
-const SfxViewFrame* SfxViewFrameArr_Impl::operator[] ( size_t i ) const
-{
-    return maData[i];
-}
-
-SfxViewFrame* SfxViewFrameArr_Impl::operator[] ( size_t i )
-{
-    return maData[i];
-}
-
-void SfxViewFrameArr_Impl::erase( const iterator& it )
-{
-    maData.erase(it);
-}
-
-void SfxViewFrameArr_Impl::push_back( SfxViewFrame* p )
-{
-    maData.push_back(p);
-}
-
-size_t SfxViewFrameArr_Impl::size() const
-{
-    return maData.size();
-}
 
 SfxViewShellArr_Impl::iterator SfxViewShellArr_Impl::begin()
 {

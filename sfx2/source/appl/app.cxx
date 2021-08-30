@@ -374,9 +374,9 @@ SfxStbCtrlFactory* SfxApplication::GetStbCtrlFactory(const std::type_info& rSlot
     return nullptr;
 }
 
-SfxViewFrameArr_Impl&       SfxApplication::GetViewFrames_Impl() const
+std::vector<SfxViewFrame*>& SfxApplication::GetViewFrames_Impl() const
 {
-    return *pImpl->pViewFrames;
+    return pImpl->maViewFrames;
 }
 
 SfxViewShellArr_Impl&       SfxApplication::GetViewShells_Impl() const

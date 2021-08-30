@@ -1325,7 +1325,7 @@ SfxViewShell* SfxViewShell::GetFirst
 {
     // search for a SfxViewShell of the specified type
     SfxViewShellArr_Impl &rShells = SfxGetpApp()->GetViewShells_Impl();
-    SfxViewFrameArr_Impl &rFrames = SfxGetpApp()->GetViewFrames_Impl();
+    auto &rFrames = SfxGetpApp()->GetViewFrames_Impl();
     for (SfxViewShell* pShell : rShells)
     {
         if ( pShell )
@@ -1360,7 +1360,7 @@ SfxViewShell* SfxViewShell::GetNext
 )
 {
     SfxViewShellArr_Impl &rShells = SfxGetpApp()->GetViewShells_Impl();
-    SfxViewFrameArr_Impl &rFrames = SfxGetpApp()->GetViewFrames_Impl();
+    auto &rFrames = SfxGetpApp()->GetViewFrames_Impl();
     size_t nPos;
     for ( nPos = 0; nPos < rShells.size(); ++nPos )
         if ( rShells[nPos] == &rPrev )
@@ -1402,7 +1402,7 @@ void SfxViewShell::Notify( SfxBroadcaster& rBC,
         return;
 
     // avoid access to dangling ViewShells
-    SfxViewFrameArr_Impl &rFrames = SfxGetpApp()->GetViewFrames_Impl();
+    auto &rFrames = SfxGetpApp()->GetViewFrames_Impl();
     for (SfxViewFrame* frame : rFrames)
     {
         if ( frame == GetViewFrame() && &rBC == GetObjectShell() )
