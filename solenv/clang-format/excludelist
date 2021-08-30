@@ -14488,6 +14488,8 @@ vcl/inc/osx/salsys.h
 vcl/inc/osx/saltimer.h
 vcl/inc/osx/vclnsapp.h
 vcl/inc/outdev.h
+vcl/inc/pdf/pdffontcache.hxx
+vcl/inc/pdf/pdfwriter_impl.hxx
 vcl/inc/ppdparser.hxx
 vcl/inc/print.h
 vcl/inc/printdlg.hxx
@@ -14982,10 +14984,8 @@ vcl/source/gdi/mtfxmldump.cxx
 vcl/source/gdi/oldprintadaptor.cxx
 vcl/source/gdi/pdfextoutdevdata.cxx
 vcl/source/gdi/pdffontcache.cxx
-vcl/source/gdi/pdffontcache.hxx
 vcl/source/gdi/pdfwriter.cxx
 vcl/source/gdi/pdfwriter_impl.cxx
-vcl/source/gdi/pdfwriter_impl.hxx
 vcl/source/gdi/pdfwriter_impl2.cxx
 vcl/source/gdi/print.cxx
 vcl/source/gdi/print2.cxx
