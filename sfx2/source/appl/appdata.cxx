@@ -108,10 +108,10 @@ SfxAppData_Impl::~SfxAppData_Impl()
 SfxDocumentTemplates* SfxAppData_Impl::GetDocumentTemplates()
 {
     if ( !pTemplates )
-        pTemplates.reset(new SfxDocumentTemplates);
+        pTemplates.emplace();
     else
         pTemplates->ReInitFromComponent();
-    return pTemplates.get();
+    return &*pTemplates;
 }
 
 void SfxAppData_Impl::OnApplicationBasicManagerCreated( BasicManager& _rBasicManager )
