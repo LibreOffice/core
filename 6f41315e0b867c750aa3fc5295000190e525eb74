@@ -16,6 +16,23 @@
       "message": "I\u0027ll push this once Jenkins will be ok.\nOf course if I wrongly understood the comments of the bugtracker, don\u0027t hesitate to tell! :-)\nAnyway at worst, it can be reverted and it\u0027ll be only for master branch since string freeze is finished for 7.2 branch.",
       "revId": "6f41315e0b867c750aa3fc5295000190e525eb74",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2321e23e_0d80e251",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2021-08-30T19:55:47Z",
+      "side": 1,
+      "message": "DBMS \u003d DataBase Management System \u003d e.g. PostgreSQL, MySQL, HSQLDB, Oracle, Microsoft SQL Server, ...\nDB \u003d A database created with a DBMS",
+      "revId": "6f41315e0b867c750aa3fc5295000190e525eb74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
