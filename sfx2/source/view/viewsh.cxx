@@ -1076,7 +1076,7 @@ SfxViewShell::SfxViewShell
     StartListening(*pViewFrame->GetObjectShell());
 
     // Insert into list
-    SfxViewShellArr_Impl &rViewArr = SfxGetpApp()->GetViewShells_Impl();
+    std::vector<SfxViewShell*> &rViewArr = SfxGetpApp()->GetViewShells_Impl();
     rViewArr.push_back(this);
 
     if (comphelper::LibreOfficeKit::isActive())
@@ -1097,8 +1097,8 @@ SfxViewShell::~SfxViewShell()
 {
     // Remove from list
     const SfxViewShell *pThis = this;
-    SfxViewShellArr_Impl &rViewArr = SfxGetpApp()->GetViewShells_Impl();
-    SfxViewShellArr_Impl::iterator it = std::find( rViewArr.begin(), rViewArr.end(), pThis );
+    std::vector<SfxViewShell*> &rViewArr = SfxGetpApp()->GetViewShells_Impl();
+    auto it = std::find( rViewArr.begin(), rViewArr.end(), pThis );
     rViewArr.erase( it );
 
     if ( pImpl->xClipboardListener.is() )
@@ -1324,7 +1324,7 @@ SfxViewShell* SfxViewShell::GetFirst
 )
 {
     // search for a SfxViewShell of the specified type
-    SfxViewShellArr_Impl &rShells = SfxGetpApp()->GetViewShells_Impl();
+    std::vector<SfxViewShell*> &rShells = SfxGetpApp()->GetViewShells_Impl();
     auto &rFrames = SfxGetpApp()->GetViewFrames_Impl();
     for (SfxViewShell* pShell : rShells)
     {
@@ -1359,7 +1359,7 @@ SfxViewShell* SfxViewShell::GetNext
     const std::function<bool ( const SfxViewShell* )>& isViewShell
 )
 {
-    SfxViewShellArr_Impl &rShells = SfxGetpApp()->GetViewShells_Impl();
+    std::vector<SfxViewShell*> &rShells = SfxGetpApp()->GetViewShells_Impl();
     auto &rFrames = SfxGetpApp()->GetViewFrames_Impl();
     size_t nPos;
     for ( nPos = 0; nPos < rShells.size(); ++nPos )

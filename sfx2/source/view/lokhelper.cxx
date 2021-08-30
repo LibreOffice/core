@@ -133,7 +133,7 @@ void SfxLokHelper::destroyView(int nId)
         return;
 
     const ViewShellId nViewShellId(nId);
-    SfxViewShellArr_Impl& rViewArr = pApp->GetViewShells_Impl();
+    std::vector<SfxViewShell*>& rViewArr = pApp->GetViewShells_Impl();
 
     for (const SfxViewShell* pViewShell : rViewArr)
     {
@@ -154,7 +154,7 @@ void SfxLokHelper::setView(int nId)
         return;
 
     const ViewShellId nViewShellId(nId);
-    SfxViewShellArr_Impl& rViewArr = pApp->GetViewShells_Impl();
+    std::vector<SfxViewShell*>& rViewArr = pApp->GetViewShells_Impl();
 
     for (const SfxViewShell* pViewShell : rViewArr)
     {
@@ -189,7 +189,7 @@ SfxViewShell* SfxLokHelper::getViewOfId(int nId)
         return nullptr;
 
     const ViewShellId nViewShellId(nId);
-    SfxViewShellArr_Impl& rViewArr = pApp->GetViewShells_Impl();
+    std::vector<SfxViewShell*>& rViewArr = pApp->GetViewShells_Impl();
     for (SfxViewShell* pViewShell : rViewArr)
     {
         if (pViewShell->GetViewShellId() == nViewShellId)
@@ -283,7 +283,7 @@ void SfxLokHelper::setDefaultLanguage(const OUString& rBcp47LanguageTag)
 
 void SfxLokHelper::setViewLanguage(int nId, const OUString& rBcp47LanguageTag)
 {
-    SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
+    std::vector<SfxViewShell*>& rViewArr = SfxGetpApp()->GetViewShells_Impl();
 
     for (SfxViewShell* pViewShell : rViewArr)
     {
@@ -297,7 +297,7 @@ void SfxLokHelper::setViewLanguage(int nId, const OUString& rBcp47LanguageTag)
 
 void SfxLokHelper::setViewLocale(int nId, const OUString& rBcp47LanguageTag)
 {
-    SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
+    std::vector<SfxViewShell*>& rViewArr = SfxGetpApp()->GetViewShells_Impl();
 
     for (SfxViewShell* pViewShell : rViewArr)
     {

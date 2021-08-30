@@ -99,8 +99,7 @@ public:
     std::vector<SfxStbCtrlFactory>
                                 maStbCtrlFactories;
     std::vector<SfxViewFrame*>  maViewFrames;
-    std::unique_ptr<SfxViewShellArr_Impl>
-                                pViewShells;
+    std::vector<SfxViewShell*>  maViewShells;
     std::unique_ptr<SfxObjectShellArr_Impl>
                                 pObjShells;
     std::unique_ptr<SfxBasicManagerHolder>
