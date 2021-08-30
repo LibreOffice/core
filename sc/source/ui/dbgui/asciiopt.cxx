@@ -32,6 +32,7 @@ ScAsciiOptions::ScAsciiOptions() :
     bRemoveSpace    ( false ),
     bQuotedFieldAsText(false),
     bDetectSpecialNumber(false),
+    bEvaluateFormulas(true),
     bSkipEmptyCells(false),
     bSaveAsShown(true),
     bSaveFormulas(false),
@@ -176,14 +177,19 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
         bRemoveSpace = false;
 
     // Token 11: sheet to export for --convert-to csv
-    // Does not need to be evaluated here but may be present, so in case
-    // there'll be yet another token 12 then do some dummy like
-#if 0
+    // Does not need to be evaluated here but may be present.
     if (nPos >= 0)
     {
         rString.getToken(0, ',', nPos);
     }
-#endif
+
+    // Token 12: evaluate formulas.
+    if (nPos >= 0)
+    {
+        bEvaluateFormulas = rString.getToken(0, ',', nPos) == "true";
+    }
+    else
+        bEvaluateFormulas = true;   // default of versions that didn't add the parameter
 }
 
 OUString ScAsciiOptions::WriteToString() const
@@ -238,20 +244,22 @@ OUString ScAsciiOptions::WriteToString() const
     // Always keep in sync with ScImportOptions.
 
     aOutStr.append("," +
-               //Token 5: Language
+               // Token 5: Language
                OUString::number(static_cast<sal_uInt16>(eLang)) + "," +
-               //Token 6: Import quoted field as text.
+               // Token 6: Import quoted field as text.
                OUString::boolean( bQuotedFieldAsText ) + "," +
-               //Token 7: Detect special numbers.
+               // Token 7: Detect special numbers.
                OUString::boolean( bDetectSpecialNumber ) + "," +
                // Token 8: used for "Save as shown" in export options
                OUString::boolean( bSaveAsShown ) +"," +
                // Token 9: used for "Save cell formulas" in export options
                OUString::boolean( bSaveFormulas ) + "," +
-               //Token 10: Trim Space
+               // Token 10: Trim Space
                OUString::boolean( bRemoveSpace ) +
-               //Token 11: sheet to export, always 0 for current sheet
-               ",0"
+               // Token 11: sheet to export, always 0 for current sheet
+               ",0," +
+               // Token 12: evaluate formulas in import
+               OUString::boolean( bEvaluateFormulas )
             );
     return aOutStr.makeStringAndClear();
 }
