@@ -3132,7 +3132,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
             nUCode = nBCode;
         }
 
-        if (m_pStrm->GetError())
+        if (!m_pStrm->good())
         {
             rPos = WW8_CP_MAX-10; // -> eof or other error
             return true;
