@@ -125,7 +125,7 @@ out.pln/cpputypes.cppumaker.flag: | out.pln
 
 out.pln/types.cppumaker.flag: out.pln/types.rdb | out.pln
 	LD_LIBRARY_PATH=$(URE_HOME)/program $(SDK_HOME)/bin/cppumaker \
-            -O./out.pln/include/types $< -X$(URE_HOME)/program/types.rdb
+            -O./out.pln/include/types ./$< -X$(URE_HOME)/program/types.rdb
 	touch $@
 
 
@@ -243,7 +243,7 @@ out.pln/types.mf: types.mf.template | out.pln
 out.pln/types.javamaker.flag: out.pln/types.rdb | out.pln out.pln/class
 	rm -rf out.pln/class/types
 	LD_LIBRARY_PATH=$(URE_HOME)/program $(SDK_HOME)/bin/javamaker \
-            -O./out.pln/class/types $< -X$(URE_HOME)/program/types.rdb
+            -O./out.pln/class/types ./$< -X$(URE_HOME)/program/types.rdb
 	touch $@
 
 

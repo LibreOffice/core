@@ -145,7 +145,7 @@ out.sdk/cpputypes.cppumaker.flag: | out.sdk
 	touch $@
 
 out.sdk/types.cppumaker.flag: out.sdk/types.rdb | out.sdk
-	$(CPPUMAKER) -O./out.sdk/include/types $< "-X$(URE_TYPES)"
+	$(CPPUMAKER) -O./out.sdk/include/types ./$< "-X$(URE_TYPES)"
 	touch $@
 
 
@@ -262,7 +262,7 @@ out.sdk/types.mf: types.mf.template | out.sdk
 
 out.sdk/types.javamaker.flag: out.sdk/types.rdb | out.sdk out.sdk/class
 	- $(DELRECURSIVE) $(subst /,$(PS),out.sdk/class/types)
-	$(JAVAMAKER) -O./out.sdk/class/types $< "-X$(URE_TYPES)"
+	$(JAVAMAKER) -O./out.sdk/class/types ./$< "-X$(URE_TYPES)"
 	touch $@
 
 
