@@ -56,6 +56,24 @@
       "message": "so nCellEndCol of 255 and then i of 255 which wraps back to 0 on the outer for i++ so I threw my hat at it and bumped i from sal_uInt8 to sal_uInt16",
       "revId": "bd555ee0ebc94bfffa41ac5d5eede580f330a7f7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7862f7e0_7c25ce09",
+        "filename": "lotuswordpro/source/filter/lwprowlayout.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-30T09:23:48Z",
+      "side": 1,
+      "message": "thanks, I missed that update of i",
+      "parentUuid": "2846e5e3_1aef1aab",
+      "revId": "bd555ee0ebc94bfffa41ac5d5eede580f330a7f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
