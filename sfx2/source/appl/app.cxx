@@ -243,7 +243,7 @@ void SfxApplication::ResetLastDir()
 
 SfxDispatcher* SfxApplication::GetDispatcher_Impl()
 {
-    return pImpl->pViewFrame ? pImpl->pViewFrame->GetDispatcher() : pImpl->pAppDispat.get();
+    return pImpl->pViewFrame ? pImpl->pViewFrame->GetDispatcher() : &*pImpl->pAppDispat;
 }
 
 
