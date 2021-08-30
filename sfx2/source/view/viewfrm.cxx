@@ -1724,8 +1724,7 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
         m_pDispatcher->Flush();
     }
 
-    SfxViewFrameArr_Impl &rViewArr = SfxGetpApp()->GetViewFrames_Impl();
-    rViewArr.push_back( this );
+    SfxGetpApp()->GetViewFrames_Impl().push_back(this);
 }
 
 /*  [Description]
@@ -1779,8 +1778,8 @@ SfxViewFrame::~SfxViewFrame()
     SfxApplication *pSfxApp = SfxApplication::Get();
     if (pSfxApp)
     {
-        SfxViewFrameArr_Impl &rFrames = pSfxApp->GetViewFrames_Impl();
-        SfxViewFrameArr_Impl::iterator it = std::find( rFrames.begin(), rFrames.end(), this );
+        auto &rFrames = pSfxApp->GetViewFrames_Impl();
+        auto it = std::find( rFrames.begin(), rFrames.end(), this );
         rFrames.erase( it );
     }
 
@@ -1828,10 +1827,8 @@ SfxViewFrame* SfxViewFrame::GetFirst
     if (!pSfxApp)
         return nullptr;
 
-    SfxViewFrameArr_Impl &rFrames = pSfxApp->GetViewFrames_Impl();
-
     // search for a SfxDocument of the specified type
-    for (SfxViewFrame* pFrame : rFrames)
+    for (SfxViewFrame* pFrame : pSfxApp->GetViewFrames_Impl())
     {
         if  (   ( !pDoc || pDoc == pFrame->GetObjectShell() )
             &&  ( !bOnlyIfVisible || pFrame->IsVisible() )
@@ -1854,7 +1851,7 @@ SfxViewFrame* SfxViewFrame::GetNext
     if (!pSfxApp)
         return nullptr;
 
-    SfxViewFrameArr_Impl &rFrames = pSfxApp->GetViewFrames_Impl();
+    auto &rFrames = pSfxApp->GetViewFrames_Impl();
 
     // refind the specified predecessor
     size_t nPos;
