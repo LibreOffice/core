@@ -34,6 +34,24 @@
       "parentUuid": "e3d1587c_a4a5520b",
       "revId": "31d687f0f9ed617f5dca43b761d064f8c26c3c8d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "965b6789_2101ec22",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-08-30T11:45:55Z",
+      "side": 1,
+      "message": "My take: Less is more, drop the \"Set\". But changing the sidebar is also okay since you don\u0027t toggle but always set.",
+      "parentUuid": "ca49985c_ac32d0a2",
+      "revId": "31d687f0f9ed617f5dca43b761d064f8c26c3c8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
