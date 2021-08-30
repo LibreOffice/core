@@ -116,16 +116,16 @@ void OP_Label(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 
     n -= std::min<sal_uInt16>(n, 5);
 
-    std::unique_ptr<char[]> pText(new char[n + 1]);
-    r.ReadBytes(pText.get(), n);
-    pText[n] = 0;
+    std::vector<char> aText(n + 1);
+    n = r.ReadBytes(aText.data(), n);
+    aText[n] = 0;
 
     if (rContext.rDoc.ValidColRow(nCol, nRow))
     {
         nFormat &= 0x80;    // don't change Bit 7
         nFormat |= 0x75;    // protected does not matter, special-text is set
 
-        PutFormString(rContext, nCol, nRow, 0, pText.get());
+        PutFormString(rContext, nCol, nRow, 0, aText.data());
 
         SetFormat(rContext, nCol, nRow, 0, nFormat, nFractionalStd);
     }
