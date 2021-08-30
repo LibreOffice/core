@@ -1673,14 +1673,14 @@ namespace emfio
                     bRet = false;
                     break;
                 }
-                else if ( nRSize==3 && nFunction==0 )
-                {
-                    break;
-                }
-                else if ( nRSize < 3 || pStm->eof() )
+                else if (pStm->eof() || nRSize < 3)
                 {
                     pStm->SetError( SVSTREAM_FILEFORMAT_ERROR );
                     bRet = false;
+                    break;
+                }
+                else if ( nRSize==3 && nFunction==0 )
+                {
                     break;
                 }
                 switch( nFunction )
