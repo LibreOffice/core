@@ -1,6 +1,24 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "af7fab43_c8f19498",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-08-30T08:13:35Z",
+      "side": 1,
+      "message": "Could you please take a look? I need help to implement the new MetaFillModeAction and make the underlying backends aware that the FillRule has changed.",
+      "revId": "77a8fa8788fc7f3369b4eb7f4e4c8cf46b7133f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "2d16400f_b6d6960c",
         "filename": "include/vcl/outdev.hxx",
@@ -14,10 +32,10 @@
       "side": 1,
       "message": "Before you set the enum variable, add:\n\nif (mpMetaFile)\n    mpMetaFile-\u003eAddAction(new MetaFillModeAction(meFillMode, true));",
       "revId": "77a8fa8788fc7f3369b4eb7f4e4c8cf46b7133f5",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": true
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "ff48a0ef_785331b9",
         "filename": "vcl/unx/generic/gdi/gdiimpl.cxx",
@@ -31,8 +49,7 @@
       "side": 1,
       "message": "this is not necessary...",
       "revId": "77a8fa8788fc7f3369b4eb7f4e4c8cf46b7133f5",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": true
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
