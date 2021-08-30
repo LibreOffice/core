@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a5518d5_87ef3163",
+        "filename": "svtools/source/control/tabbar.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1662,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-30T14:38:33Z",
+      "side": 0,
+      "message": "Looks like erasing is lost here?",
+      "revId": "3823e81c25ba6f0f9b6a67d77e585426905e1b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
