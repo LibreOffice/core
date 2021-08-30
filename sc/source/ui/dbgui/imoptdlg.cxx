@@ -45,6 +45,7 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
     bSaveFormulas = false;
     bRemoveSpace = false;
     nSheetToExport = 0;
+    bEvaluateFormulas = true;
     sal_Int32 nTokenCount = comphelper::string::getTokenCount(rStr, ',');
     if ( nTokenCount < 3 )
         return;
@@ -89,6 +90,8 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
             else
                 nSheetToExport = -23;   // invalid, force error
         }
+        if ( nTokenCount >= 13 )
+            bEvaluateFormulas = rStr.getToken(0, ',', nIdx) == "true";
     }
 }
 
@@ -113,7 +116,9 @@ OUString ScImportOptions::BuildString() const
             "," +
             OUString::boolean( bRemoveSpace ) +  // same as "Remove space" in ScAsciiOptions
             "," +
-            OUString::number(nSheetToExport) ;  // Only available for command line --convert-to
+            OUString::number(nSheetToExport) +  // Only available for command line --convert-to
+            "," +
+            OUString::boolean( bEvaluateFormulas ) ;  // same as "Evaluate formulas" in ScAsciiOptions
 
     return aResult;
 }

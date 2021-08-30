@@ -71,6 +71,7 @@ class ScImportAsciiDlg : public weld::GenericDialogController
 
     std::unique_ptr<weld::CheckButton> mxCkbQuotedAsText;
     std::unique_ptr<weld::CheckButton> mxCkbDetectNumber;
+    std::unique_ptr<weld::CheckButton> mxCkbEvaluateFormulas;
     std::unique_ptr<weld::CheckButton> mxCkbSkipEmptyCells;
 
     std::unique_ptr<weld::Label> mxFtType;

@@ -1119,6 +1119,13 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="EvaluateFormulas" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, formula expressions are evaluated, else set as text cell content.</desc>
+            <label>EvaluateFormulas</label>
+          </info>
+          <value>false</value>
+        </prop>
         <prop oor:name="QuotedFieldAsText" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>If true, quoted field is always imported as text with no exception.</desc>
@@ -1200,6 +1207,13 @@
             <label>RemoveSpace</label>
           </info>
           <value>false</value>
+        </prop>
+        <prop oor:name="EvaluateFormulas" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, formula expressions are evaluated, else set as text cell content.</desc>
+            <label>EvaluateFormulas</label>
+          </info>
+          <value>true</value>
         </prop>
         <prop oor:name="QuotedFieldAsText" oor:type="xs:boolean" oor:nillable="false">
           <info>
@@ -1289,6 +1303,13 @@
             <label>RemoveSpace</label>
           </info>
           <value>false</value>
+        </prop>
+        <prop oor:name="EvaluateFormulas" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>If true, formula expressions are evaluated, else set as text cell content.</desc>
+            <label>EvaluateFormulas</label>
+          </info>
+          <value>true</value>
         </prop>
         <prop oor:name="Separators" oor:type="xs:string" oor:nillable="false">
           <info>

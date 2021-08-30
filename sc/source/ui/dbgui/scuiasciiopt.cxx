@@ -57,6 +57,7 @@ using namespace com::sun::star::uno;
 namespace {
 
 // Defines - CSV Import Preserve Options
+// For usage of index order see lcl_CreatePropertiesNames() below.
 enum CSVImportOptionsIndex
 {
     CSVIO_MergeDelimiters = 0,
@@ -64,17 +65,24 @@ enum CSVImportOptionsIndex
     CSVIO_TextSeparators,
     CSVIO_FixedWidth,
     CSVIO_RemoveSpace,
+    CSVIO_EvaluateFormulas,
+    // Settings for *all* dialog invocations above.
+    // Settings not for SC_TEXTTOCOLUMNS below.
     CSVIO_FromRow,
     CSVIO_Text2ColSkipEmptyCells = CSVIO_FromRow,
     CSVIO_CharSet,
     CSVIO_QuotedAsText,
     CSVIO_DetectSpecialNum,
     CSVIO_Language,
+    // Plus one not for SC_IMPORTFILE.
     CSVIO_PasteSkipEmptyCells
 };
 
 }
 
+// Config items for all three paths are defined in
+// officecfg/registry/schema/org/openoffice/Office/Calc.xcs
+// If not, options are neither loaded nor saved.
 const ::std::vector<OUString> CSVImportOptionNames =
 {
     "MergeDelimiters",
@@ -82,6 +90,7 @@ const ::std::vector<OUString> CSVImportOptionNames =
     "TextSeparators",
     "FixedWidth",
     "RemoveSpace",
+    "EvaluateFormulas",
     "FromRow",
     "CharSet",
     "QuotedFieldAsText",
@@ -164,16 +173,16 @@ static void lcl_CreatePropertiesNames ( OUString& rSepPath, Sequence<OUString>& 
     {
         case SC_IMPORTFILE:
             rSepPath = aSep_Path;
-            nProperties = 10;
+            nProperties = 11;
             break;
         case SC_PASTETEXT:
             rSepPath = aSep_Path_Clpbrd;
-            nProperties = 11;
+            nProperties = 12;
             break;
         case SC_TEXTTOCOLUMNS:
         default:
             rSepPath = aSep_Path_Text2Col;
-            nProperties = 6;
+            nProperties = 7;
             break;
     }
     rNames.realloc( nProperties );
@@ -183,6 +192,7 @@ static void lcl_CreatePropertiesNames ( OUString& rSepPath, Sequence<OUString>& 
     pNames[ CSVIO_TextSeparators ] =    CSVImportOptionNames[ CSVIO_TextSeparators ];
     pNames[ CSVIO_FixedWidth ] =        CSVImportOptionNames[ CSVIO_FixedWidth ];
     pNames[ CSVIO_RemoveSpace ] =       CSVImportOptionNames[ CSVIO_RemoveSpace ];
+    pNames[ CSVIO_EvaluateFormulas ] =  CSVImportOptionNames[ CSVIO_EvaluateFormulas ];
     if (eCall != SC_TEXTTOCOLUMNS)
     {
         pNames[ CSVIO_FromRow ] =       CSVImportOptionNames[ CSVIO_FromRow ];
@@ -202,7 +212,8 @@ static void lcl_CreatePropertiesNames ( OUString& rSepPath, Sequence<OUString>& 
 static void lcl_LoadSeparators( OUString& rFieldSeparators, OUString& rTextSeparators,
                              bool& rMergeDelimiters, bool& rQuotedAsText, bool& rDetectSpecialNum,
                              bool& rFixedWidth, sal_Int32& rFromRow, sal_Int32& rCharSet,
-                             sal_Int32& rLanguage, bool& rSkipEmptyCells, bool& rRemoveSpace, ScImportAsciiCall eCall )
+                             sal_Int32& rLanguage, bool& rSkipEmptyCells, bool& rRemoveSpace,
+                             bool& rEvaluateFormulas, ScImportAsciiCall eCall )
 {
     Sequence<Any>aValues;
     const Any *pProperties;
@@ -227,6 +238,9 @@ static void lcl_LoadSeparators( OUString& rFieldSeparators, OUString& rTextSepar
 
     if( pProperties[ CSVIO_FixedWidth ].hasValue() )
         rFixedWidth = ScUnoHelpFunctions::GetBoolFromAny( pProperties[ CSVIO_FixedWidth ] );
+
+    if( pProperties[ CSVIO_EvaluateFormulas ].hasValue() )
+        rEvaluateFormulas = ScUnoHelpFunctions::GetBoolFromAny( pProperties[ CSVIO_EvaluateFormulas ] );
 
     if (eCall != SC_TEXTTOCOLUMNS)
     {
@@ -257,7 +271,8 @@ static void lcl_LoadSeparators( OUString& rFieldSeparators, OUString& rTextSepar
 static void lcl_SaveSeparators(
     const OUString& sFieldSeparators, const OUString& sTextSeparators, bool bMergeDelimiters, bool bQuotedAsText,
     bool bDetectSpecialNum, bool bFixedWidth, sal_Int32 nFromRow,
-    sal_Int32 nCharSet, sal_Int32 nLanguage, bool bSkipEmptyCells, bool bRemoveSpace, ScImportAsciiCall eCall )
+    sal_Int32 nCharSet, sal_Int32 nLanguage, bool bSkipEmptyCells, bool bRemoveSpace, bool bEvaluateFormulas,
+    ScImportAsciiCall eCall )
 {
     Sequence<Any> aValues;
     Any *pProperties;
@@ -273,6 +288,7 @@ static void lcl_SaveSeparators(
     pProperties[ CSVIO_Separators ] <<= sFieldSeparators;
     pProperties[ CSVIO_TextSeparators ] <<= sTextSeparators;
     pProperties[ CSVIO_FixedWidth ] <<= bFixedWidth;
+    pProperties[ CSVIO_EvaluateFormulas ] <<= bEvaluateFormulas;
     if (eCall != SC_TEXTTOCOLUMNS)
     {
         pProperties[ CSVIO_FromRow ] <<= nFromRow;
@@ -322,6 +338,7 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatNa
     , mxCbTextSep(m_xBuilder->weld_combo_box("textdelimiter"))
     , mxCkbQuotedAsText(m_xBuilder->weld_check_button("quotedfieldastext"))
     , mxCkbDetectNumber(m_xBuilder->weld_check_button("detectspecialnumbers"))
+    , mxCkbEvaluateFormulas(m_xBuilder->weld_check_button("evaluateformulas"))
     , mxCkbSkipEmptyCells(m_xBuilder->weld_check_button("skipemptycells"))
     , mxFtType(m_xBuilder->weld_label("textcolumntype"))
     , mxLbType(m_xBuilder->weld_combo_box("columntype"))
@@ -355,6 +372,7 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatNa
     bool bFixedWidth = false;
     bool bQuotedFieldAsText = false;
     bool bDetectSpecialNum = true;
+    bool bEvaluateFormulas = (meCall != SC_IMPORTFILE);
     bool bSkipEmptyCells = true;
     bool bRemoveSpace = false;
     sal_Int32 nFromRow = 1;
@@ -362,7 +380,7 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatNa
     sal_Int32 nLanguage = 0;
     lcl_LoadSeparators (sFieldSeparators, sTextSeparators, bMergeDelimiters,
                          bQuotedFieldAsText, bDetectSpecialNum, bFixedWidth, nFromRow,
-                         nCharSet, nLanguage, bSkipEmptyCells, bRemoveSpace, meCall);
+                         nCharSet, nLanguage, bSkipEmptyCells, bRemoveSpace, bEvaluateFormulas, meCall);
     // load from saved settings
     maFieldSeparators = sFieldSeparators;
 
@@ -374,6 +392,8 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatNa
         mxCkbRemoveSpace->set_active(true);
     if (bDetectSpecialNum)
         mxCkbDetectNumber->set_active(true);
+    if (bEvaluateFormulas)
+        mxCkbEvaluateFormulas->set_active(true);
     if (bSkipEmptyCells)
         mxCkbSkipEmptyCells->set_active(true);
     if (bFixedWidth && !bIsTSV)
@@ -480,6 +500,7 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatNa
     mxCkbAsOnce->connect_toggled( aSeparatorClickHdl );
     mxCkbQuotedAsText->connect_toggled( aSeparatorClickHdl );
     mxCkbDetectNumber->connect_toggled( aSeparatorClickHdl );
+    mxCkbEvaluateFormulas->connect_toggled( aSeparatorClickHdl );
     mxCkbSkipEmptyCells->connect_toggled( aSeparatorClickHdl );
     mxCkbSpace->connect_toggled( aSeparatorClickHdl );
     mxCkbRemoveSpace->connect_toggled( aSeparatorClickHdl );
@@ -662,6 +683,7 @@ void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
 
     rOpt.SetQuotedAsText(mxCkbQuotedAsText->get_active());
     rOpt.SetDetectSpecialNumber(mxCkbDetectNumber->get_active());
+    rOpt.SetEvaluateFormulas(mxCkbEvaluateFormulas->get_active());
     rOpt.SetSkipEmptyCells(mxCkbSkipEmptyCells->get_active());
 }
 
@@ -673,7 +695,8 @@ void ScImportAsciiDlg::SaveParameters()
                      mxNfRow->get_value(),
                      mxLbCharSet->get_active(),
                      static_cast<sal_uInt16>(mxLbCustomLang->get_active_id()),
-                     mxCkbSkipEmptyCells->get_active(), mxCkbRemoveSpace->get_active(), meCall );
+                     mxCkbSkipEmptyCells->get_active(), mxCkbRemoveSpace->get_active(),
+                     mxCkbEvaluateFormulas->get_active(), meCall );
 }
 
 void ScImportAsciiDlg::SetSeparators( sal_Unicode cSep )

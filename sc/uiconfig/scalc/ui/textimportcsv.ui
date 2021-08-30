@@ -579,64 +579,95 @@
                     <property name="spacing">6</property>
                     <property name="homogeneous">True</property>
                     <child>
-                      <object class="GtkCheckButton" id="quotedfieldastext">
-                        <property name="label" translatable="yes" context="textimportcsv|quotedfieldastext">F_ormat quoted field as text</property>
+                      <!-- n-columns=2 n-rows=2 -->
+                      <object class="GtkGrid" id="grid5">
                         <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="quotedfieldastext-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|quotedfieldastext">When this option is enabled, fields or cells whose values are quoted in their entirety (the first and last characters of the value equal the text delimiter) are imported as text.</property>
+                        <property name="can-focus">False</property>
+                        <property name="row-spacing">6</property>
+                        <property name="column-spacing">12</property>
+                        <child>
+                          <object class="GtkCheckButton" id="quotedfieldastext">
+                            <property name="label" translatable="yes" context="textimportcsv|quotedfieldastext">F_ormat quoted field as text</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
+                            <property name="use-underline">True</property>
+                            <property name="draw-indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="quotedfieldastext-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|quotedfieldastext">When this option is enabled, fields or cells whose values are quoted in their entirety (the first and last characters of the value equal the text delimiter) are imported as text.</property>
+                              </object>
+                            </child>
                           </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="detectspecialnumbers">
+                            <property name="label" translatable="yes" context="textimportcsv|detectspecialnumbers">Detect special _numbers</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
+                            <property name="use-underline">True</property>
+                            <property name="draw-indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="detectspecialnumbers-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|detectspecialnumbers">When this option is enabled, Calc will automatically detect all number formats, including special number formats such as dates, time, and scientific notation.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="evaluateformulas">
+                            <property name="label" translatable="yes" context="textimportcsv|evaluateformulas">E_valuate formulas</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
+                            <property name="tooltip-text" translatable="yes" context="textimportcsv|evaluateformulas">If enabled, blank cells in source will not override the target.</property>
+                            <property name="use-underline">True</property>
+                            <property name="draw-indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="evaluateformulas-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|evaluateformulas">When this option is enabled, cell content starting with an '=' equal sign is evaluated as formula expression. Otherwise, content is imported as text.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="skipemptycells">
+                            <property name="label" translatable="yes" context="textimportcsv|skipemptycells">S_kip empty cells</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
+                            <property name="tooltip-text" translatable="yes" context="textimportcsv|skipemptycells">If enabled, blank cells in source will not override the target.</property>
+                            <property name="use-underline">True</property>
+                            <property name="draw-indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="skipemptycells-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|skipemptycells">When this option is enabled, Calc preserves previous content of cells when pasting empty ones. Otherwise, Calc deletes content of previous cells.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">1</property>
+                          </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="detectspecialnumbers">
-                        <property name="label" translatable="yes" context="textimportcsv|detectspecialnumbers">Detect special _numbers</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="detectspecialnumbers-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|detectspecialnumbers">When this option is enabled, Calc will automatically detect all number formats, including special number formats such as dates, time, and scientific notation.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="skipemptycells">
-                        <property name="label" translatable="yes" context="textimportcsv|skipemptycells">S_kip empty cells</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="tooltip-text" translatable="yes" context="textimportcsv|skipemptycells">If enabled, blank cells in source will not override the target.</property>
-                        <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="skipemptycells-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|skipemptycells">When this option is enabled, Calc preserves previous content of cells when pasting empty ones. Otherwise, Calc deletes content of previous cells.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
                       </packing>
                     </child>
                   </object>
