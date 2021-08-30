@@ -5854,9 +5854,6 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset):
         // above bit-field member initializations can be moved to the class definition
 {
     // See [MS-DOC] 2.5.15 "How to read the FIB".
-    sal_uInt8 aBits1;
-    sal_uInt8 aBits2;
-    sal_uInt8 aVer8Bits1;    // only used starting with WinWord 8
     rSt.Seek( nOffset );
     /*
         note desired number, identify file version number
@@ -5915,13 +5912,16 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset):
     rSt.ReadUInt16(nTmpLid);
     m_lid = LanguageType(nTmpLid);
     rSt.ReadInt16( m_pnNext );
+    sal_uInt8 aBits1(0);
     rSt.ReadUChar( aBits1 );
+    sal_uInt8 aBits2(0);
     rSt.ReadUChar( aBits2 );
     rSt.ReadUInt16( m_nFibBack );
     rSt.ReadUInt16( m_nHash );
     rSt.ReadUInt16( m_nKey );
     rSt.ReadUChar( m_envr );
-    rSt.ReadUChar( aVer8Bits1 );      // only have an empty reserve field under Ver67
+    sal_uInt8 aVer8Bits1(0);     // only used starting with WinWord 8
+    rSt.ReadUChar( aVer8Bits1 ); // only have an empty reserve field under Ver67
                             // content from aVer8Bits1
 
                             // sal_uInt8 fMac              :1;
