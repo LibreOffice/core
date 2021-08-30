@@ -400,6 +400,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
         primary(LANGUAGE_TELUGU              ),
         primary(LANGUAGE_THAI                ),
         primary(LANGUAGE_TIBETAN             ),  // also LANGUAGE_DZONGKHA
+        primary(LANGUAGE_TIGRIGNA_ETHIOPIA   ),
         primary(LANGUAGE_UIGHUR_CHINA        ),
         primary(LANGUAGE_URDU_INDIA          ),
         primary(LANGUAGE_USER_BODO_INDIA     ),
