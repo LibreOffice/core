@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:body>
+    <office:text>
+      <table:table>
+        <table:table-column table:style-name="Table1.A"/>
+        <table:table-row>
+          <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+            <text:p>A<office:annotation office:name="0"><text:p>x</text:p></office:annotation>b</text:p>
+          </table:table-cell>
+        </table:table-row>
+      </table:table>
+      <text:p>b<office:annotation-end office:name="0"/><text:span>Z</text:span></text:p>
+    </office:text>
+  </office:body>
+</office:document>

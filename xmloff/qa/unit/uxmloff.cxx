@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 #include <test/bootstrapfixture.hxx>
+#include <unotest/macros_test.hxx>
 
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -18,11 +19,14 @@
 #include "impastpl.hxx"
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/util/MeasureUnit.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 
 using namespace ::xmloff::token;
 using namespace ::com::sun::star;
 
-class Test : public test::BootstrapFixture {
+const OUString DATA_DIRECTORY = "/xmloff/qa/unit/data/";
+
+class Test : public test::BootstrapFixture, public unotest::MacrosTest {
 public:
     Test();
 
@@ -30,12 +34,16 @@ public:
     virtual void tearDown() override;
 
     void testAutoStylePool();
+    void testCommentTableBorder();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testAutoStylePool);
+    CPPUNIT_TEST(testCommentTableBorder);
     CPPUNIT_TEST_SUITE_END();
 private:
     SvXMLExport *pExport;
+protected:
+    uno::Reference< lang::XComponent > mxComponent;
 };
 
 Test::Test()
@@ -50,12 +58,17 @@ void Test::setUp()
     pExport = new SchXMLExport(
         comphelper::getProcessComponentContext(), "SchXMLExport.Compact",
         SvXMLExportFlags::ALL);
+
+    mxDesktop.set(css::frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
 }
 
 void Test::tearDown()
 {
     delete pExport;
     BootstrapFixture::tearDown();
+
+    if (mxComponent.is())
+        mxComponent->dispose();
 }
 
 void Test::testAutoStylePool()
@@ -85,6 +98,17 @@ void Test::testAutoStylePool()
     // find ourselves again:
     OUString aSameName = xPool->Find( XML_STYLE_FAMILY_TEXT_PARAGRAPH, "", aProperties );
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "same style not found", aName, aSameName );
+}
+
+void Test::testCommentTableBorder()
+{
+//    uno::Reference<lang::XComponent> mxComponent;
+    if (mxComponent.is())
+       mxComponent->dispose();
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "comment-table-border.fodt";
+    // Without the accompanying fix in place, this failed to load, as a comment that started in a
+    // table and ended outside a table aborted the whole importer.
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

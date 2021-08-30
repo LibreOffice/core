@@ -65,7 +65,7 @@
 #include <rtl/math.hxx>
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
-
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -3423,9 +3423,20 @@ void XMLAnnotationImportContext::EndElement()
                 uno::Reference<text::XText> xText = GetImportHelper().GetText();
                 uno::Reference<text::XTextCursor> xCursor =
                     xText->createTextCursorByRange(GetImportHelper().GetCursorAsRange());
-                xCursor->gotoRange(xPrevField->getAnchor(), true);
-                uno::Reference<text::XTextRange> xTextRange(xCursor, uno::UNO_QUERY);
+                try
+                {
+                    xCursor->gotoRange(xPrevField->getAnchor(), true);
+                }
+                catch (const uno::RuntimeException&)
+                {
+                    // Loosing the start of the anchor is better than not opening the document at
+                    // all.
+                    SAL_WARN(
+                        "xmloff.text",
+                        "XMLAnnotationImportContext::endFastElement: gotoRange() failed: ");
+                }
 
+                uno::Reference<text::XTextRange> xTextRange(xCursor, uno::UNO_QUERY);
                 xText->insertTextContent(xTextRange, xPrevField, !xCursor->isCollapsed());
             }
         }
