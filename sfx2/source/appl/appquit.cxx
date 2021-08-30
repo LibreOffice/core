@@ -35,7 +35,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 #include <appbaslib.hxx>
-#include <shellimpl.hxx>
 #include <basic/basicmanagerrepository.hxx>
 
 using ::basic::BasicManagerRepository;
@@ -90,7 +89,7 @@ void SfxApplication::Deinitialize()
     pImpl->maStbCtrlFactories.clear();
     pImpl->maViewFrames.clear();
     pImpl->maViewShells.clear();
-    pImpl->pObjShells.reset();
+    pImpl->maObjShells.clear();
 
     //TODO/CLEANUP
     //ReleaseArgs could be used instead!

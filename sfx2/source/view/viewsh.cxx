@@ -83,7 +83,6 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <openuriexternally.hxx>
-#include <shellimpl.hxx>
 
 #include <vector>
 #include <libxml/xmlwriter.h>
