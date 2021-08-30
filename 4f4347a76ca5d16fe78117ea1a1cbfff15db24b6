@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dec28906_acde8cc4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-08-30T14:00:21Z",
+      "side": 1,
+      "message": "Hi Vasily,\nThe sample file used in the unittest is a bit big in size, would it be possible to have a minimized version of it ?",
+      "revId": "4f4347a76ca5d16fe78117ea1a1cbfff15db24b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
