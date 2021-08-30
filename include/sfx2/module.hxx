@@ -37,7 +37,6 @@ struct SfxStbCtrlFactory;
 struct SfxTbxCtrlFactory;
 class SfxTabPage;
 class SfxTbxCtrlFactArr_Impl;
-class SfxStbCtrlFactArr_Impl;
 
 namespace com::sun::star::frame {
     class XFrame;
@@ -96,7 +95,7 @@ public:
     FieldUnit                   GetFieldUnit() const;
 
     SAL_DLLPRIVATE SfxTbxCtrlFactArr_Impl* GetTbxCtrlFactories_Impl() const;
-    SAL_DLLPRIVATE SfxStbCtrlFactArr_Impl* GetStbCtrlFactories_Impl() const;
+    SAL_DLLPRIVATE SfxStbCtrlFactory* GetStbCtrlFactory(const std::type_info& rSlotType, sal_uInt16 nSlotID) const;
     SAL_DLLPRIVATE SfxChildWinFactory* GetChildWinFactoryById(sal_uInt16 nId) const;
 };
 

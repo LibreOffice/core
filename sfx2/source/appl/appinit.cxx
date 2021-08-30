@@ -210,7 +210,6 @@ void SfxApplication::Initialize_Impl()
     pImpl->pAppDispat.reset(new SfxDispatcher);
     pImpl->pSlotPool.reset(new SfxSlotPool);
     pImpl->pTbxCtrlFac.reset(new SfxTbxCtrlFactArr_Impl);
-    pImpl->pStbCtrlFac.reset(new SfxStbCtrlFactArr_Impl);
     pImpl->pViewFrames.reset(new SfxViewFrameArr_Impl);
     pImpl->pViewShells.reset(new SfxViewShellArr_Impl);
     pImpl->pObjShells.reset(new SfxObjectShellArr_Impl);

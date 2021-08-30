@@ -96,8 +96,8 @@ public:
 
     std::unique_ptr<SfxTbxCtrlFactArr_Impl>
                                 pTbxCtrlFac;
-    std::unique_ptr<SfxStbCtrlFactArr_Impl>
-                                pStbCtrlFac;
+    std::vector<SfxStbCtrlFactory>
+                                maStbCtrlFactories;
     std::unique_ptr<SfxViewFrameArr_Impl>
                                 pViewFrames;
     std::unique_ptr<SfxViewShellArr_Impl>

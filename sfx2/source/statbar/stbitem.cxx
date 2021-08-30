@@ -538,24 +538,14 @@ rtl::Reference<SfxStatusBarControl> SfxStatusBarControl::CreateControl
     {
         if ( pMod )
         {
-            SfxStbCtrlFactArr_Impl *pFactories = pMod->GetStbCtrlFactories_Impl();
-            if ( pFactories )
-            {
-                SfxStbCtrlFactArr_Impl &rFactories = *pFactories;
-                for ( size_t nFactory = 0; nFactory < rFactories.size(); ++nFactory )
-                if ( rFactories[nFactory].nTypeId == *aSlotType &&
-                     ( ( rFactories[nFactory].nSlotId == 0 ) ||
-                     ( rFactories[nFactory].nSlotId == nSlotID) ) )
-                    return rFactories[nFactory].pCtor( nSlotID, nStbId, *pBar );
-            }
+            SfxStbCtrlFactory *pFact = pMod->GetStbCtrlFactory(*aSlotType, nSlotID);
+            if ( pFact )
+                return pFact->pCtor( nSlotID, nStbId, *pBar );
         }
 
-        SfxStbCtrlFactArr_Impl &rFactories = pApp->GetStbCtrlFactories_Impl();
-        for ( size_t nFactory = 0; nFactory < rFactories.size(); ++nFactory )
-        if ( rFactories[nFactory].nTypeId == *aSlotType &&
-             ( ( rFactories[nFactory].nSlotId == 0 ) ||
-             ( rFactories[nFactory].nSlotId == nSlotID) ) )
-            return rFactories[nFactory].pCtor( nSlotID, nStbId, *pBar );
+        SfxStbCtrlFactory* pFact = pApp->GetStbCtrlFactory(*aSlotType, nSlotID);
+        if (pFact)
+            return pFact->pCtor( nSlotID, nStbId, *pBar );
     }
 
     return nullptr;

@@ -354,9 +354,13 @@ SfxTbxCtrlFactArr_Impl&     SfxApplication::GetTbxCtrlFactories_Impl() const
     return *pImpl->pTbxCtrlFac;
 }
 
-SfxStbCtrlFactArr_Impl&     SfxApplication::GetStbCtrlFactories_Impl() const
+SfxStbCtrlFactory* SfxApplication::GetStbCtrlFactory(const std::type_info& rSlotType, sal_uInt16 nSlotID) const
 {
-    return *pImpl->pStbCtrlFac;
+    for (auto& rFactory : pImpl->maStbCtrlFactories)
+        if ( rFactory.nTypeId == rSlotType &&
+             ( rFactory.nSlotId == 0 || rFactory.nSlotId == nSlotID ) )
+            return &rFactory;
+    return nullptr;
 }
 
 SfxViewFrameArr_Impl&       SfxApplication::GetViewFrames_Impl() const
