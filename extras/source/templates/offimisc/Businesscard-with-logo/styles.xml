@@ -22,97 +22,23 @@
       <style:table-row-properties fo:keep-together="auto"/>
     </style:default-style>
     <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
-    <style:style style:name="Text_20_body" style:display-name="Text body" style:family="paragraph" style:parent-style-name="Standard" style:class="text">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.212cm" loext:contextual-spacing="false"/>
-    </style:style>
-    <style:style style:name="Heading" style:family="paragraph" style:parent-style-name="Standard" style:next-style-name="Text_20_body" style:class="text">
-      <style:paragraph-properties fo:margin-top="0.423cm" fo:margin-bottom="0.212cm" loext:contextual-spacing="false" fo:keep-with-next="always"/>
-      <style:text-properties style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="14pt"/>
-    </style:style>
-    <style:style style:name="List" style:family="paragraph" style:parent-style-name="Text_20_body" style:class="list"/>
-    <style:style style:name="Header" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
-      <style:paragraph-properties text:number-lines="false" text:line-number="0">
-        <style:tab-stops>
-          <style:tab-stop style:position="9.25cm" style:type="center"/>
-          <style:tab-stop style:position="18.5cm" style:type="right"/>
-        </style:tab-stops>
-      </style:paragraph-properties>
-    </style:style>
-    <style:style style:name="Frame_20_contents" style:display-name="Frame contents" style:family="paragraph" style:parent-style-name="Text_20_body" style:class="extra"/>
-    <style:style style:name="Index" style:family="paragraph" style:parent-style-name="Standard" style:class="index">
-      <style:paragraph-properties text:number-lines="false" text:line-number="0"/>
-    </style:style>
-    <style:style style:name="Title" style:family="paragraph" style:parent-style-name="Standard" style:next-style-name="Text_20_body" style:class="chapter">
-      <style:paragraph-properties fo:margin-top="0.423cm" fo:margin-bottom="0.212cm" loext:contextual-spacing="false" fo:keep-with-next="always"/>
-      <style:text-properties fo:font-size="14pt"/>
-    </style:style>
-    <style:style style:name="Subtitle" style:family="paragraph" style:parent-style-name="Title" style:next-style-name="Text_20_body" style:class="chapter">
-      <style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/>
-      <style:text-properties fo:font-size="14pt" fo:font-style="italic"/>
-    </style:style>
-    <style:style style:name="Frame" style:family="graphic">
-      <style:graphic-properties text:anchor-type="paragraph" svg:x="0cm" svg:y="0cm" fo:margin-left="0.2cm" fo:margin-right="0.2cm" fo:margin-top="0.2cm" fo:margin-bottom="0.2cm" style:wrap="parallel" style:number-wrapped-paragraphs="no-limit" style:wrap-contour="false" style:vertical-pos="top" style:vertical-rel="paragraph-content" style:horizontal-pos="center" style:horizontal-rel="paragraph-content" fo:padding="0.15cm" fo:border="0.06pt solid #000000"/>
+    <style:style style:name="Table_20_Contents" style:display-name="Table Contents" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+      <style:paragraph-properties fo:orphans="0" fo:widows="0" text:number-lines="false" text:line-number="0"/>
+      <style:text-properties fo:font-size="8pt"/>
     </style:style>
     <style:style style:name="Graphics" style:family="graphic">
-      <style:graphic-properties text:anchor-type="paragraph" svg:x="0cm" svg:y="0cm" style:wrap="none" style:vertical-pos="top" style:vertical-rel="paragraph" style:horizontal-pos="center" style:horizontal-rel="paragraph"/>
+      <style:graphic-properties text:anchor-type="page" svg:x="0cm" svg:y="0cm" style:wrap="none" style:vertical-pos="top" style:vertical-rel="page" style:horizontal-pos="center" style:horizontal-rel="page"/>
     </style:style>
     <style:style style:name="Labels" style:family="graphic" style:auto-update="true">
-      <style:graphic-properties svg:width="9cm" svg:height="5.2cm" text:anchor-type="as-char" svg:y="0cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" style:protect="size position" style:vertical-pos="top" style:vertical-rel="baseline"/>
+      <style:graphic-properties text:anchor-type="as-char" svg:y="0cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" style:protect="size position" style:vertical-pos="from-top" style:vertical-rel="page" style:horizontal-pos="center" style:horizontal-rel="paragraph"/>
     </style:style>
-    <text:outline-style style:name="Outline">
-      <text:outline-level-style text:level="1" style:num-format="">
-        <style:list-level-properties/>
-      </text:outline-level-style>
-      <text:outline-level-style text:level="2" style:num-format="">
-        <style:list-level-properties/>
-      </text:outline-level-style>
-      <text:outline-level-style text:level="3" style:num-format="">
-        <style:list-level-properties/>
-      </text:outline-level-style>
-      <text:outline-level-style text:level="4" style:num-format="">
-        <style:list-level-properties/>
-      </text:outline-level-style>
-      <text:outline-level-style text:level="5" style:num-format="">
-        <style:list-level-properties/>
-      </text:outline-level-style>
-      <text:outline-level-style text:level="6" style:num-format="">
-        <style:list-level-properties/>
-      </text:outline-level-style>
-      <text:outline-level-style text:level="7" style:num-format="">
-        <style:list-level-properties/>
-      </text:outline-level-style>
-      <text:outline-level-style text:level="8" style:num-format="">
-        <style:list-level-properties/>
-      </text:outline-level-style>
-      <text:outline-level-style text:level="9" style:num-format="">
-        <style:list-level-properties/>
-      </text:outline-level-style>
-      <text:outline-level-style text:level="10" style:num-format="">
-        <style:list-level-properties/>
-      </text:outline-level-style>
-    </text:outline-style>
-    <text:notes-configuration text:note-class="footnote" text:citation-style-name="Footnote_20_Symbol" style:num-format="1" text:start-value="0" text:footnotes-position="page" text:start-numbering-at="page"/>
-    <text:notes-configuration text:note-class="endnote" text:citation-style-name="Endnote_20_Symbol" text:master-page-name="Endnote" style:num-format="1" text:start-value="0"/>
-    <text:linenumbering-configuration text:number-lines="false" text:offset="0.5cm" style:num-format="1" text:number-position="left" text:increment="5"/>
   </office:styles>
   <office:automatic-styles>
     <style:page-layout style:name="Mpm1">
-      <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm" style:num-format="" style:print-orientation="portrait" fo:margin-top="1.5cm" fo:margin-bottom="1cm" fo:margin-left="1.5cm" fo:margin-right="1cm" style:writing-mode="lr-tb" style:footnote-max-height="0cm">
-        <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.1cm" style:distance-after-sep="0.1cm" style:line-style="none" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
-      </style:page-layout-properties>
-      <style:header-style/>
-      <style:footer-style/>
-    </style:page-layout>
-    <style:page-layout style:name="Mpm2">
-      <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm" style:writing-mode="lr-tb" style:footnote-max-height="0cm">
-        <style:footnote-sep style:line-style="none" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
-      </style:page-layout-properties>
-      <style:header-style/>
-      <style:footer-style/>
+      <style:page-layout-properties style:num-format="" style:print-orientation="portrait" fo:margin-top="1cm" fo:margin-bottom="0.5cm" fo:margin-left="1.5cm" fo:margin-right="1cm" style:writing-mode="lr-tb" style:footnote-max-height="0cm"/>
     </style:page-layout>
   </office:automatic-styles>
   <office:master-styles>
     <style:master-page style:name="Standard" style:page-layout-name="Mpm1"/>
-    <style:master-page style:name="Endnote" style:page-layout-name="Mpm2"/>
   </office:master-styles>
 </office:document-styles>
