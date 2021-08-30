@@ -201,11 +201,6 @@ SwSection::SwSection(
     SwSection *const pParentSect = GetParent();
     if( pParentSect )
     {
-        if( pParentSect->IsHiddenFlag() )
-        {
-            SetHidden();
-        }
-
         m_Data.SetProtectFlag( pParentSect->IsProtectFlag() );
         // edit in readonly sections
         m_Data.SetEditInReadonlyFlag( pParentSect->IsEditInReadonlyFlag() );
