@@ -153,6 +153,14 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBibliographyLocalUrl)
     CPPUNIT_ASSERT_EQUAL(OUString("file:///home/me/test.pdf"), aActual);
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCommentTableBorder)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "comment-table-border.fodt";
+    // Without the accompanying fix in place, this failed to load, as a comment that started in a
+    // table and ended outside a table aborted the whole importer.
+    getComponent() = loadFromDesktop(aURL);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
