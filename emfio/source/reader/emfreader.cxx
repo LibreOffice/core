@@ -1543,7 +1543,13 @@ namespace emfio
 
                                 // copy DIBInfoHeader from source (cbBmiSrc bytes)
                                 mpInputStream->Seek( nStart + offBmiSrc );
-                                mpInputStream->ReadBytes(pBuf + 14, cbBmiSrc);
+                                char* pWritePos = pBuf + 14;
+                                auto nRead = mpInputStream->ReadBytes(pWritePos, cbBmiSrc);
+                                if (nRead != cbBmiSrc)
+                                {
+                                    // zero remainder if short read
+                                    memset(pWritePos + nRead, 0, cbBmiSrc - nRead);
+                                }
 
                                 if (bReadAlpha)
                                 {
@@ -1555,7 +1561,14 @@ namespace emfio
 
                                 // copy bitmap data from source (offBitsSrc bytes)
                                 mpInputStream->Seek( nStart + offBitsSrc );
-                                mpInputStream->ReadBytes(pBuf + 14 + nDeltaToDIB5HeaderSize + cbBmiSrc, cbBitsSrc);
+                                pWritePos = pBuf + 14 + nDeltaToDIB5HeaderSize + cbBmiSrc;
+                                nRead = mpInputStream->ReadBytes(pWritePos, cbBitsSrc);
+                                if (nRead != cbBitsSrc)
+                                {
+                                    // zero remainder if short read
+                                    memset(pWritePos + nRead, 0, cbBitsSrc - nRead);
+                                }
+
                                 aTmp.Seek( 0 );
 
                                 // prepare to read and fill BitmapEx
