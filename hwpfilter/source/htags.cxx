@@ -32,6 +32,8 @@ bool HyperText::Read(HWPFile& hwpf)
     nRead += hwpf.ReadBlock(macro, 325);
     if (hwpf.Read1b(type))
         ++nRead;
+    else
+        type = 0;
     nRead += hwpf.ReadBlock(reserve, 3);
     if( type == 2 )
     {
