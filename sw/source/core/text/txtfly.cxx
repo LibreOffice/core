@@ -794,8 +794,7 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             if (m_pCurrFrame->GetNext() != pTmp &&
                  (IsFrameInSameContext( pTmp, m_pCurrFrame ) ||
                    // #i13832#, #i24135# wrap around objects in page header
-                   ( !pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) &&
-                     nullptr != ( pHeader = pTmp->FindFooterOrHeader() ) &&
+                   ( nullptr != ( pHeader = pTmp->FindFooterOrHeader() ) &&
                      m_pCurrFrame->IsInDocBody())))
             {
                 if( pHeader || RndStdIds::FLY_AT_FLY == rNewA.GetAnchorId() )

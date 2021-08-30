@@ -143,7 +143,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbAddParaSpacingToTableCells        = false;
         mbAddParaLineSpacingToTableCells    = false;
         mbUseFormerObjectPos                = false;
-        mbUseFormerTextWrapping             = false;
+        mbUseFormerTextWrapping             = true;
         mbConsiderWrapOnObjPos              = false;
         mbDoNotJustifyLinesWithManualBreak  = true;
         mbProtectForm                       = false;

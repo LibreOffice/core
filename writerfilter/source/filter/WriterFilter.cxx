@@ -313,7 +313,7 @@ void WriterFilter::setTargetDocument(const uno::Reference<lang::XComponent>& xDo
     xSettings->setPropertyValue("AddParaLineSpacingToTableCells", uno::makeAny(true));
     xSettings->setPropertyValue("UseFormerObjectPositioning", uno::makeAny(false));
     xSettings->setPropertyValue("ConsiderTextWrapOnObjPos", uno::makeAny(true));
-    xSettings->setPropertyValue("UseFormerTextWrapping", uno::makeAny(false));
+    xSettings->setPropertyValue("UseFormerTextWrapping", uno::makeAny(true));
     xSettings->setPropertyValue("TableRowKeep", uno::makeAny(true));
     xSettings->setPropertyValue("IgnoreTabsAndBlanksForLineCalculation", uno::makeAny(true));
     xSettings->setPropertyValue("InvertBorderSpacing", uno::makeAny(true));
