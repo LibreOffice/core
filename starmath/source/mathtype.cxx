@@ -2660,6 +2660,8 @@ bool MathType::HandleMatrix(int nLevel, sal_uInt8 nSelector, sal_uInt8 nVariatio
     pS->ReadUChar( nV_just );
     pS->ReadUChar( nRows );
     pS->ReadUChar( nCols );
+    if (!pS->good())
+        return false;
     int nBytes = ((nRows+1)*2)/8;
     if (((nRows+1)*2)%8)
         nBytes++;
