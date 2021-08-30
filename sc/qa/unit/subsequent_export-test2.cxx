@@ -155,6 +155,7 @@ public:
     void testTdf115159();
     void testTdf112567();
     void testTdf122191();
+    void testTdf142881();
     void testTdf112567b();
     void testTdf123645XLSX();
     void testTdf125173XLSX();
@@ -261,6 +262,7 @@ public:
     CPPUNIT_TEST(testTdf115159);
     CPPUNIT_TEST(testTdf112567);
     CPPUNIT_TEST(testTdf122191);
+    CPPUNIT_TEST(testTdf142881);
     CPPUNIT_TEST(testTdf112567b);
     CPPUNIT_TEST(testTdf123645XLSX);
     CPPUNIT_TEST(testTdf125173XLSX);
@@ -1403,6 +1405,41 @@ void ScExportTest2::testTdf122191()
     // - Expected: IGAZ
     // - Actual  : BOOL00AN
     CPPUNIT_ASSERT_EQUAL(OUString("IGAZ"), rDoc2.GetString(0, 0, 0));
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest2::testTdf142881()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf142881.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf142881.xlsx", xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+    xmlDocUniquePtr pDrawing1
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
+    CPPUNIT_ASSERT(pDrawing1);
+
+    // Verify that the shapes are rotated and positioned in the expected way
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:from/xdr:col", "11");
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:from/xdr:row", "0");
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:to/xdr:col", "12");
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:to/xdr:row", "19");
+
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:from/xdr:col", "2");
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:from/xdr:row", "8");
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:to/xdr:col", "7");
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:to/xdr:row", "10");
+
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[3]/xdr:from/xdr:col", "10");
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[3]/xdr:from/xdr:row", "9");
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[3]/xdr:to/xdr:col", "11");
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[3]/xdr:to/xdr:row", "26");
+
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[4]/xdr:from/xdr:col", "2");
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[4]/xdr:from/xdr:row", "17");
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[4]/xdr:to/xdr:col", "8");
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[4]/xdr:to/xdr:row", "19");
 
     xDocSh->DoClose();
 }
