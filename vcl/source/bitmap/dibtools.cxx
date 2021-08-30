@@ -1771,7 +1771,7 @@ bool ReadDIBBitmapEx(
                         tools::GenericTypeSerializer aSerializer(rIStm);
                         aSerializer.readColor(aTransparentColor);
 
-                        bRetval = !rIStm.GetError();
+                        bRetval = rIStm.good();
 
                         if(bRetval)
                         {
