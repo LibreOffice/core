@@ -107,9 +107,7 @@ void LwpIndexManager::Read(LwpSvStream* pStrm)
         {
             //Read leaf
             sal_Int64 nPos = m_ChildIndex[k]+LwpSvStream::LWP_STREAM_BASE;
-            sal_Int64 nActualPos = pStrm->Seek(nPos);
-
-            if (nPos != nActualPos)
+            if (!pStrm->CheckSeek(nPos))
                 throw BadSeek();
 
             //Old Code
