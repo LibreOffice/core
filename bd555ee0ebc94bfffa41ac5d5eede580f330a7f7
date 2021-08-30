@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "793dce32_77ec9f5e",
+        "filename": "lotuswordpro/source/filter/lwprowlayout.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-30T08:58:50Z",
+      "side": 1,
+      "message": "But nStartCol and nEndCol are both sal_uInt8, too, so it\u0027s not obvious to me how this change fixes an infinite loop.  (I was puzzled that loplugin:loopvartoosmall would not have found this earlier, only to find that the loop variable appears not to have been too small after all.)",
+      "range": {
+        "startLine": 387,
+        "startChar": 17,
+        "endLine": 387,
+        "endChar": 19
+      },
+      "revId": "bd555ee0ebc94bfffa41ac5d5eede580f330a7f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
