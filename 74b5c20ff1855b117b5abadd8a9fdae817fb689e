@@ -1,6 +1,24 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c03d05e3_f48f3660",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003180
+      },
+      "writtenOn": "2021-08-30T01:54:50Z",
+      "side": 1,
+      "message": "\u003e Patch Set 4:\n\u003e \n\u003e \u003e Patch Set 4:\n\u003e \u003e \n\u003e \u003e Roman makes a good point. This change makes a user-visible behavior change; it needs some justification, in form of a bug report/enhancement request which describes its need, possibly with the UX discussion. (Besides its technical problems; the latter need a use of Unicode character classes, presumably ICU).\n\u003e \n\u003e For example, there is a tdf#91130 and UX team proposal bout font listing https://design.blog.documentfoundation.org/2018/02/18/improvements-font-listing/\n\u003e \n\u003e I think would be really better for all people just realize that proposal\n\nSo it seems tdf#114764 will be a related issue for this commit I think. :-)",
+      "revId": "74b5c20ff1855b117b5abadd8a9fdae817fb689e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "4b3c08d4_77ad9c3b",
         "filename": "vcl/source/control/imp_listbox.cxx",
@@ -20,10 +38,10 @@
         "endChar": 86
       },
       "revId": "74b5c20ff1855b117b5abadd8a9fdae817fb689e",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": true
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "fb51a845_95b81c6f",
         "filename": "vcl/source/control/imp_listbox.cxx",
@@ -37,10 +55,10 @@
       "side": 1,
       "message": "Not only \"not CJK\". In fact, any character outside of pure ASCII would be longer than 1 byte in UTF-8; Cyrillic, Greek, Arabic, ...",
       "revId": "74b5c20ff1855b117b5abadd8a9fdae817fb689e",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": true
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "1cdab7ce_6157fcb8",
         "filename": "vcl/source/control/imp_listbox.cxx",
@@ -54,8 +72,7 @@
       "side": 1,
       "message": "So this would make any multibyte UTF-8 character \"greater than\" any other multibyte character, including itself?",
       "revId": "74b5c20ff1855b117b5abadd8a9fdae817fb689e",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": true
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
