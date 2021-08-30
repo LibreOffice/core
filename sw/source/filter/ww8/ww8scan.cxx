@@ -6966,7 +6966,10 @@ WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
 std::unique_ptr<WW8_STD> WW8Style::Read1STDFixed(sal_uInt16& rSkip)
 {
     if (m_rStream.remainingSize() < 2)
+    {
+        rSkip = 0;
         return nullptr;
+    }
 
     std::unique_ptr<WW8_STD> pStd;
 
