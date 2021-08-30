@@ -2174,7 +2174,7 @@ void OS2METReader::ReadDsc(sal_uInt16 nDscID)
 {
     switch (nDscID) {
         case 0x00f7: { // 'Specify GVM Subset'
-            sal_uInt8 nbyte;
+            sal_uInt8 nbyte(0);
             pOS2MET->SeekRel(6);
             pOS2MET->ReadUChar( nbyte );
             if      (nbyte==0x05) bCoord32=true;
@@ -2189,7 +2189,7 @@ void OS2METReader::ReadDsc(sal_uInt16 nDscID)
         {
             // 'Set Picture Descriptor'
             bool b32;
-            sal_uInt8 nbyte,nUnitType;
+            sal_uInt8 nbyte(0), nUnitType(0);
 
             pOS2MET->SeekRel(2);
             pOS2MET->ReadUChar( nbyte );
@@ -2275,7 +2275,7 @@ void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
             break;
 
         case 0x0096: { // Image IDE-Size
-            sal_uInt8 nbyte;
+            sal_uInt8 nbyte(0);
             pOS2MET->ReadUChar( nbyte ); p->nBitsPerPixel=nbyte;
             break;
         }
