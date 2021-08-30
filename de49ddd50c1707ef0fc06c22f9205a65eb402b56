@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68fd7dda_16678a0f",
+        "filename": "vcl/source/gdi/print.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1761,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-08-30T23:19:53Z",
+      "side": 1,
+      "message": "And this should be:\n\nif (mbLineColor || mbInitLineColor)\n{\n    mpGraphics-\u003eSetLineColor();\n    mbInitLineColor \u003d true;\n}\nmpGraphics-\u003eSetFillColor( rColor );\nmbInitFillColor \u003d true;\n\nI think...",
+      "range": {
+        "startLine": 1760,
+        "startChar": 4,
+        "endLine": 1761,
+        "endChar": 27
+      },
+      "revId": "de49ddd50c1707ef0fc06c22f9205a65eb402b56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ada50a96_fa48e32e",
+        "filename": "vcl/source/gdi/print.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1766,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-08-30T23:19:53Z",
+      "side": 1,
+      "message": "So this should be ..\n\nreturn Size(nLineWidth, ((nLineWidth*mnDPIX)+(mnDPIY/2))/mnDPIY);",
+      "range": {
+        "startLine": 1766,
+        "startChar": 11,
+        "endLine": 1766,
+        "endChar": 22
+      },
+      "revId": "de49ddd50c1707ef0fc06c22f9205a65eb402b56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
