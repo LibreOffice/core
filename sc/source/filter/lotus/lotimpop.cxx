@@ -99,9 +99,9 @@ void ImportLotus::Columnwidth( sal_uInt16 nRecLen )
 {
     SAL_WARN_IF( nRecLen < 4, "sc.filter", "*ImportLotus::Columnwidth(): Record too short!" );
 
-    sal_uInt8    nLTab, nWindow2;
-    sal_uInt16    nCnt = (nRecLen < 4) ? 0 : ( nRecLen - 4 ) / 2;
+    sal_uInt16 nCnt = (nRecLen < 4) ? 0 : ( nRecLen - 4 ) / 2;
 
+    sal_uInt8 nLTab(0), nWindow2(0);
     Read( nLTab );
     Read( nWindow2 );
 
@@ -113,10 +113,9 @@ void ImportLotus::Columnwidth( sal_uInt16 nRecLen )
 
     Skip( 2 );
 
-    sal_uInt8   nCol, nSpaces;
-
-    while( nCnt )
+    while (nCnt && !pIn->good())
     {
+        sal_uInt8 nCol(0), nSpaces(0);
         Read( nCol );
         Read( nSpaces );
         // Attention: ambiguous Correction factor!
@@ -124,15 +123,17 @@ void ImportLotus::Columnwidth( sal_uInt16 nRecLen )
 
         nCnt--;
     }
+
+    SAL_WARN_IF(!pIn->good(), "sc.filter", "*ImportLotus::Columnwidth(): short read");
 }
 
 void ImportLotus::Hiddencolumn( sal_uInt16 nRecLen )
 {
     SAL_WARN_IF( nRecLen < 4, "sc.filter", "*ImportLotus::Hiddencolumn(): Record too short!" );
 
-    sal_uInt8    nLTab, nWindow2;
-    sal_uInt16    nCnt = (nRecLen < 4) ? 0 : ( nRecLen - 4 ) / 2;
+    sal_uInt16 nCnt = (nRecLen < 4) ? 0 : ( nRecLen - 4 ) / 2;
 
+    sal_uInt8 nLTab(0), nWindow2(0);
     Read( nLTab );
     Read( nWindow2 );
 
@@ -141,15 +142,16 @@ void ImportLotus::Hiddencolumn( sal_uInt16 nRecLen )
 
     Skip( 2 );
 
-    sal_uInt8   nCol;
-
-    while( nCnt )
+    while (nCnt && !pIn->good())
     {
+        sal_uInt8 nCol(0);
         Read( nCol );
 
         rD.SetColHidden(static_cast<SCCOL>(nCol), static_cast<SCCOL>(nCol), static_cast<SCTAB>(nLTab), true);
         nCnt--;
     }
+
+    SAL_WARN_IF(!pIn->good(), "sc.filter", "*ImportLotus::Hiddencolumn(): short read");
 }
 
 void ImportLotus::Userrange()
