@@ -904,7 +904,6 @@ bool CCIDecompressor::Read1DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nBitsTo
 {
     sal_uInt16 nTargetBits = nBitsToRead;
     sal_uInt16 nCode,nCodeBits,nDataBits,nTgtFreeByteBits;
-    sal_uInt8 nByte;
     sal_uInt8 nBlackOrWhite; // is 0xff for black or 0x00 for white
     bool bTerminatingCode;
 
@@ -920,6 +919,7 @@ bool CCIDecompressor::Read1DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nBitsTo
         // fetch next 13 bits into nCodem but don't remove them from
         // the input buffer:
         while (nInputBitsBufSize<13) {
+            sal_uInt8 nByte(0);
             pIStream->ReadUChar( nByte );
             if ( nOptions & CCI_OPTION_INVERSEBITORDER )
                 nByte = pByteSwap[ nByte ];
