@@ -26,8 +26,10 @@
 #include <svl/svdde.hxx>
 #include <svtools/ehdl.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/doctempl.hxx>
 #include <sfx2/fcontnr.hxx>
+#include <sfx2/msgpool.hxx>
 #include <o3tl/enumarray.hxx>
 #include "sfxpicklist.hxx"
 
@@ -46,8 +48,6 @@ class SfxStatusDispatcher;
 class SfxDdeTriggerTopic_Impl;
 class SfxFrame;
 class SfxViewFrame;
-class SfxSlotPool;
-class SfxDispatcher;
 class SfxInterface;
 class BasicManager;
 class SfxBasicManagerHolder;
@@ -76,10 +76,10 @@ public:
 
     // application members
     std::optional<SfxFilterMatcher>     pMatcher;
-    std::unique_ptr<SfxErrorHandler>    m_pToolsErrorHdl;
-    std::unique_ptr<SfxErrorHandler>    m_pSoErrorHdl;
+    std::optional<SfxErrorHandler>    m_pToolsErrorHdl;
+    std::optional<SfxErrorHandler>    m_pSoErrorHdl;
 #if HAVE_FEATURE_SCRIPTING
-    std::unique_ptr<SfxErrorHandler>    m_pSbxErrorHdl;
+    std::optional<SfxErrorHandler>    m_pSbxErrorHdl;
 #endif
     rtl::Reference<SfxStatusDispatcher> mxAppDispatch;
     std::optional<SfxPickList>          mxAppPickList;
@@ -107,9 +107,8 @@ public:
     std::unique_ptr<SfxBasicManagerCreationListener>
                                 pBasMgrListener;
     SfxViewFrame*               pViewFrame;
-    std::unique_ptr<SfxSlotPool>
-                                pSlotPool;
-    std::unique_ptr<SfxDispatcher>
+    std::optional<SfxSlotPool>  pSlotPool;
+    std::optional<SfxDispatcher>
                                 pAppDispat;     // Dispatcher if no document
     ::rtl::Reference<sfx2::sidebar::Theme> m_pSidebarTheme;
 

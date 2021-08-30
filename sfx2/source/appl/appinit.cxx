@@ -186,14 +186,14 @@ void SfxApplication::Initialize_Impl()
     Help::EnableContextHelp();
     Help::EnableExtHelp();
 
-    pImpl->m_pToolsErrorHdl.reset(new SfxErrorHandler(
-        RID_ERRHDL, ErrCodeArea::Io, ErrCodeArea::Vcl));
+    pImpl->m_pToolsErrorHdl.emplace(
+        RID_ERRHDL, ErrCodeArea::Io, ErrCodeArea::Vcl);
 
-    pImpl->m_pSoErrorHdl.reset(new SfxErrorHandler(
-        RID_SO_ERROR_HANDLER, ErrCodeArea::So, ErrCodeArea::So, SvtResLocale()));
+    pImpl->m_pSoErrorHdl.emplace(
+        RID_SO_ERROR_HANDLER, ErrCodeArea::So, ErrCodeArea::So, SvtResLocale());
 #if HAVE_FEATURE_SCRIPTING
-    pImpl->m_pSbxErrorHdl.reset(new SfxErrorHandler(
-        RID_BASIC_START, ErrCodeArea::Sbx, ErrCodeArea::Sbx, BasResLocale()));
+    pImpl->m_pSbxErrorHdl.emplace(
+        RID_BASIC_START, ErrCodeArea::Sbx, ErrCodeArea::Sbx, BasResLocale());
 #endif
 
     if (!utl::ConfigManager::IsFuzzing())
@@ -205,8 +205,8 @@ void SfxApplication::Initialize_Impl()
     }
 
     DBG_ASSERT( !pImpl->pAppDispat, "AppDispatcher already exists" );
-    pImpl->pAppDispat.reset(new SfxDispatcher);
-    pImpl->pSlotPool.reset(new SfxSlotPool);
+    pImpl->pAppDispat.emplace();
+    pImpl->pSlotPool.emplace();
 
     Registrations_Impl();
 
