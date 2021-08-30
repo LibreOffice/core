@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45a8ada0_d052adb2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-08-30T16:20:08Z",
+      "side": 1,
+      "message": "This is going to fail with Assertion `nIndex \u003e\u003d 0 \u0026\u0026 \"coverity#1438402. Abandoning",
+      "revId": "3798270e5e4f5b0a81700c97d7fb8788a962cc15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
