@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d82a636a_bcbbcead",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003332
+      },
+      "writtenOn": "2021-08-30T14:20:37Z",
+      "side": 1,
+      "message": "Hi, could you review this submission for the easyHack Bug 139734 - Drop redundant asserts after MacrosTest::loadFromDesktop",
+      "revId": "40c8f50dffd5d7e9b2c416c890cc7c358c3798d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
