@@ -10416,7 +10416,6 @@ sfx2/source/bastyp/sfxhtml.cxx
 sfx2/source/config/evntconf.cxx
 sfx2/source/control/bindings.cxx
 sfx2/source/control/charmapcontrol.cxx
-sfx2/source/control/ctrlfactoryimpl.cxx
 sfx2/source/control/ctrlitem.cxx
 sfx2/source/control/dispatch.cxx
 sfx2/source/control/emojicontrol.cxx

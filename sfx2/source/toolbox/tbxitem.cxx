@@ -55,7 +55,6 @@
 #include <sfx2/app.hxx>
 #include <sidebar/ControllerFactory.hxx>
 #include <unoctitm.hxx>
-#include <ctrlfactoryimpl.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -185,60 +184,16 @@ rtl::Reference<SfxToolBoxControl> SfxToolBoxControl::CreateControl( sal_uInt16 n
     const std::type_info* aSlotType = pSlotPool->GetSlotType( nSlotId );
     if ( aSlotType )
     {
-        rtl::Reference<SfxToolBoxControl> pCtrl;
         if ( pMod )
         {
-            SfxTbxCtrlFactArr_Impl *pFactories = pMod->GetTbxCtrlFactories_Impl();
-            if ( pFactories )
-            {
-                SfxTbxCtrlFactArr_Impl &rFactories = *pFactories;
-                sal_uInt16 nFactory;
-                const sal_uInt16 nCount = rFactories.size();
-
-                // search for a factory with the given slot id
-                for( nFactory = 0; nFactory < nCount; ++nFactory )
-                    if( (rFactories[nFactory].nTypeId == *aSlotType) && (rFactories[nFactory].nSlotId == nSlotId) )
-                        break;
-
-                if( nFactory == nCount )
-                {
-                    // if no factory exists for the given slot id, see if we
-                    // have a generic factory with the correct slot type and slot id == 0
-                    for ( nFactory = 0; nFactory < nCount; ++nFactory )
-                        if( (rFactories[nFactory].nTypeId == *aSlotType) && (rFactories[nFactory].nSlotId == 0) )
-                            break;
-                }
-
-                if( nFactory < nCount )
-                {
-                    pCtrl = rFactories[nFactory].pCtor( nSlotId, nTbxId, *pBox );
-                    return pCtrl;
-                }
-            }
+            SfxTbxCtrlFactory *pFact = pMod->GetTbxCtrlFactory(*aSlotType, nSlotId);
+            if ( pFact )
+                return pFact->pCtor( nSlotId, nTbxId, *pBox );
         }
 
-        SfxTbxCtrlFactArr_Impl &rFactories = pApp->GetTbxCtrlFactories_Impl();
-        sal_uInt16 nFactory;
-        const sal_uInt16 nCount = rFactories.size();
-
-        for( nFactory = 0; nFactory < nCount; ++nFactory )
-            if( (rFactories[nFactory].nTypeId == *aSlotType) && (rFactories[nFactory].nSlotId == nSlotId) )
-                break;
-
-        if( nFactory == nCount )
-        {
-            // if no factory exists for the given slot id, see if we
-            // have a generic factory with the correct slot type and slot id == 0
-            for( nFactory = 0; nFactory < nCount; ++nFactory )
-                if( (rFactories[nFactory].nTypeId == *aSlotType) && (rFactories[nFactory].nSlotId == 0) )
-                    break;
-        }
-
-        if( nFactory < nCount )
-        {
-            pCtrl = rFactories[nFactory].pCtor( nSlotId, nTbxId, *pBox );
-            return pCtrl;
-        }
+        SfxTbxCtrlFactory* pFact = pApp->GetTbxCtrlFactory(*aSlotType, nSlotId);
+        if (pFact)
+            return pFact->pCtor( nSlotId, nTbxId, *pBox );
     }
 
     return nullptr;

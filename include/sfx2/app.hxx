@@ -45,7 +45,6 @@ class SfxObjectShellArr_Impl;
 class SfxObjectShellLock;
 class SfxProgress;
 class SfxSlotPool;
-class SfxTbxCtrlFactArr_Impl;
 class SfxViewFrame;
 class SfxViewFrameArr_Impl;
 class SfxViewShellArr_Impl;
@@ -172,7 +171,7 @@ public:
     SAL_DLLPRIVATE void         RegisterChildWindow_Impl(SfxModule*, const SfxChildWinFactory&);
     SAL_DLLPRIVATE void         RegisterStatusBarControl_Impl(SfxModule*, const SfxStbCtrlFactory&);
     SAL_DLLPRIVATE void         RegisterToolBoxControl_Impl( SfxModule*, const SfxTbxCtrlFactory&);
-    SAL_DLLPRIVATE SfxTbxCtrlFactArr_Impl& GetTbxCtrlFactories_Impl() const;
+    SAL_DLLPRIVATE SfxTbxCtrlFactory* GetTbxCtrlFactory(const std::type_info& rSlotType, sal_uInt16 nSlotID) const;
     SAL_DLLPRIVATE SfxStbCtrlFactory* GetStbCtrlFactory(const std::type_info& rSlotType, sal_uInt16 nSlotID) const;
     SAL_DLLPRIVATE SfxChildWinFactory* GetChildWinFactoryById(sal_uInt16 nId) const;
     SAL_DLLPRIVATE SfxViewFrameArr_Impl& GetViewFrames_Impl() const;

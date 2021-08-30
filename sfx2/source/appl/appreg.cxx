@@ -31,7 +31,6 @@
 #include <partwnd.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <recfloat.hxx>
-#include <ctrlfactoryimpl.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 
@@ -66,9 +65,9 @@ void SfxApplication::RegisterToolBoxControl_Impl( SfxModule *pMod, const SfxTbxC
     }
 
 #ifdef DBG_UTIL
-    for ( size_t n=0; n<pImpl->pTbxCtrlFac->size(); n++ )
+    for ( size_t n=0; n<pImpl->maTbxCtrlFactories.size(); n++ )
     {
-        SfxTbxCtrlFactory *pF = &(*pImpl->pTbxCtrlFac)[n];
+        SfxTbxCtrlFactory *pF = &pImpl->maTbxCtrlFactories[n];
         if ( pF->nTypeId == rFact.nTypeId &&
             (pF->nSlotId == rFact.nSlotId || pF->nSlotId == 0) )
         {
@@ -77,7 +76,7 @@ void SfxApplication::RegisterToolBoxControl_Impl( SfxModule *pMod, const SfxTbxC
     }
 #endif
 
-    pImpl->pTbxCtrlFac->push_back( rFact );
+    pImpl->maTbxCtrlFactories.push_back( rFact );
 }
 
 

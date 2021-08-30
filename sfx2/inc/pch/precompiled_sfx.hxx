@@ -388,7 +388,6 @@
 #include <appdata.hxx>
 #include <appopen.hxx>
 #include <asyncfunc.hxx>
-#include <ctrlfactoryimpl.hxx>
 #include <eventsupplier.hxx>
 #include <helper.hxx>
 #include <helpids.h>
