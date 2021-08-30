@@ -90,9 +90,9 @@ void SfxApplication::RegisterStatusBarControl_Impl( SfxModule *pMod, const SfxSt
     }
 
 #ifdef DBG_UTIL
-    for ( size_t n=0; n<pImpl->pStbCtrlFac->size(); n++ )
+    for ( size_t n=0; n<pImpl->maStbCtrlFactories.size(); n++ )
     {
-        SfxStbCtrlFactory *pF = &(*pImpl->pStbCtrlFac)[n];
+        SfxStbCtrlFactory *pF = &pImpl->maStbCtrlFactories[n];
         if ( pF->nTypeId == rFact.nTypeId &&
             (pF->nSlotId == rFact.nSlotId || pF->nSlotId == 0) )
         {
@@ -101,7 +101,7 @@ void SfxApplication::RegisterStatusBarControl_Impl( SfxModule *pMod, const SfxSt
     }
 #endif
 
-    pImpl->pStbCtrlFac->push_back( rFact );
+    pImpl->maStbCtrlFactories.push_back( rFact );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

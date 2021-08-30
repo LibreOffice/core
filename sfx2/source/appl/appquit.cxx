@@ -86,7 +86,7 @@ void SfxApplication::Deinitialize()
     pImpl->maFactories.clear();
 
     pImpl->pTbxCtrlFac.reset();
-    pImpl->pStbCtrlFac.reset();
+    pImpl->maStbCtrlFactories.clear();
     pImpl->pViewFrames.reset();
     pImpl->pViewShells.reset();
     pImpl->pObjShells.reset();

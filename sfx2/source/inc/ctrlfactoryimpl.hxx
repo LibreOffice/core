@@ -25,20 +25,6 @@
 
 #include <vector>
 
-class SfxStbCtrlFactArr_Impl
-{
-    typedef std::vector<SfxStbCtrlFactory> DataType;
-    DataType maData;
-
-public:
-    const SfxStbCtrlFactory& operator[](size_t i) const;
-    SfxStbCtrlFactory& operator[](size_t i);
-
-    void push_back(const SfxStbCtrlFactory&);
-
-    size_t size() const;
-};
-
 class SfxTbxCtrlFactArr_Impl
 {
     typedef std::vector<SfxTbxCtrlFactory> DataType;

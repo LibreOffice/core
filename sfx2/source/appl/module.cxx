@@ -44,7 +44,7 @@ public:
 
     std::optional<SfxSlotPool>              pSlotPool;
     std::optional<SfxTbxCtrlFactArr_Impl>   pTbxCtrlFac;
-    std::optional<SfxStbCtrlFactArr_Impl>   pStbCtrlFac;
+    std::vector<SfxStbCtrlFactory>          maStbCtrlFactories;
     std::vector<SfxChildWinFactory>         maFactories;
     OString                     maResName;
 
@@ -60,7 +60,7 @@ SfxModule_Impl::~SfxModule_Impl()
 {
     pSlotPool.reset();
     pTbxCtrlFac.reset();
-    pStbCtrlFac.reset();
+    maStbCtrlFactories.clear();
 }
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxModule, SfxShell)
@@ -147,13 +147,10 @@ void SfxModule::RegisterToolBoxControl( const SfxTbxCtrlFactory& rFact )
 
 void SfxModule::RegisterStatusBarControl( const SfxStbCtrlFactory& rFact )
 {
-    if (!pImpl->pStbCtrlFac)
-        pImpl->pStbCtrlFac.emplace();
-
 #ifdef DBG_UTIL
-    for ( size_t n=0; n<pImpl->pStbCtrlFac->size(); n++ )
+    for ( size_t n=0; n<pImpl->maStbCtrlFactories.size(); n++ )
     {
-        SfxStbCtrlFactory *pF = &(*pImpl->pStbCtrlFac)[n];
+        SfxStbCtrlFactory *pF = &pImpl->maStbCtrlFactories[n];
         if ( pF->nTypeId == rFact.nTypeId &&
             (pF->nSlotId == rFact.nSlotId || pF->nSlotId == 0) )
         {
@@ -162,7 +159,7 @@ void SfxModule::RegisterStatusBarControl( const SfxStbCtrlFactory& rFact )
     }
 #endif
 
-    pImpl->pStbCtrlFac->push_back( rFact );
+    pImpl->maStbCtrlFactories.push_back( rFact );
 }
 
 
@@ -172,9 +169,13 @@ SfxTbxCtrlFactArr_Impl*  SfxModule::GetTbxCtrlFactories_Impl() const
 }
 
 
-SfxStbCtrlFactArr_Impl*  SfxModule::GetStbCtrlFactories_Impl() const
+SfxStbCtrlFactory* SfxModule::GetStbCtrlFactory(const std::type_info& rSlotType, sal_uInt16 nSlotID) const
 {
-    return pImpl->pStbCtrlFac ? &*pImpl->pStbCtrlFac : nullptr;
+    for (auto& rFactory : pImpl->maStbCtrlFactories)
+        if ( rFactory.nTypeId == rSlotType &&
+             ( rFactory.nSlotId == 0 || rFactory.nSlotId == nSlotID ) )
+            return &rFactory;
+    return nullptr;
 }
 
 SfxChildWinFactory* SfxModule::GetChildWinFactoryById(sal_uInt16 nId) const
