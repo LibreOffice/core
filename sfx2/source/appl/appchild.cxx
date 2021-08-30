@@ -24,7 +24,6 @@
 #include <sfx2/app.hxx>
 #include <appdata.hxx>
 #include <workwin.hxx>
-#include <childwinimpl.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -38,23 +37,23 @@ void SfxApplication::RegisterChildWindow_Impl( SfxModule *pMod, const SfxChildWi
         return;
     }
 
-    if (!pImpl->pFactArr)
-        pImpl->pFactArr.reset(new SfxChildWinFactArr_Impl);
-
-    for (size_t nFactory=0; nFactory<pImpl->pFactArr->size(); ++nFactory)
+    for (size_t nFactory=0; nFactory<pImpl->maFactories.size(); ++nFactory)
     {
-        if (rFact.nId == (*pImpl->pFactArr)[nFactory].nId)
+        if (rFact.nId == pImpl->maFactories[nFactory].nId)
         {
-            pImpl->pFactArr->erase( pImpl->pFactArr->begin() + nFactory );
+            pImpl->maFactories.erase( pImpl->maFactories.begin() + nFactory );
         }
     }
 
-    pImpl->pFactArr->push_back( rFact );
+    pImpl->maFactories.push_back( rFact );
 }
 
-SfxChildWinFactArr_Impl& SfxApplication::GetChildWinFactories_Impl() const
+SfxChildWinFactory* SfxApplication::GetChildWinFactoryById(sal_uInt16 nId) const
 {
-    return ( *(pImpl->pFactArr));
+    for (auto& rFactory : pImpl->maFactories)
+        if (rFactory.nId == nId)
+            return &rFactory;
+    return nullptr;
 }
 
 SfxWorkWindow* SfxApplication::GetWorkWindow_Impl(const SfxViewFrame *pFrame) const

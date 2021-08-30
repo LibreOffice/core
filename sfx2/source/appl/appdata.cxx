@@ -21,6 +21,7 @@
 
 #include <appdata.hxx>
 #include <sfxpicklist.hxx>
+#include <sfx2/childwin.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/doctempl.hxx>
 #include <sfx2/fcontnr.hxx>
@@ -29,7 +30,6 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/objsh.hxx>
 #include <appbaslib.hxx>
-#include <childwinimpl.hxx>
 #include <ctrlfactoryimpl.hxx>
 #include <shellimpl.hxx>
 #include <unoctitm.hxx>

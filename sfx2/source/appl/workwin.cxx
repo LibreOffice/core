@@ -34,7 +34,6 @@
 #include <sfx2/dockwin.hxx>
 #include <sfx2/viewsh.hxx>
 #include <splitwin.hxx>
-#include <childwinimpl.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/toolbarids.hxx>
 #include <vcl/taskpanelist.hxx>
@@ -2136,42 +2135,8 @@ void SfxWorkWindow::InitializeChild_Impl(SfxChildWin_Impl *pCW)
     SfxChildWinFactory* pFact=nullptr;
     SfxApplication *pApp = SfxGetpApp();
     {
-        SfxChildWinFactArr_Impl &rFactories = pApp->GetChildWinFactories_Impl();
-        for ( size_t nFactory = 0; nFactory < rFactories.size(); ++nFactory )
-        {
-            pFact = &rFactories[nFactory];
-            if ( pFact->nId == pCW->nSaveId )
-            {
-                pCW->aInfo   = pFact->aInfo;
-                pCW->aInfo.aModule = sModule;
-                SfxChildWindow::InitializeChildWinFactory_Impl(
-                                            pCW->nSaveId, pCW->aInfo);
-                pCW->bCreate = pCW->aInfo.bVisible;
-                SfxChildWindowFlags nFlags = pFact->aInfo.nFlags;
-                if ( nFlags & SfxChildWindowFlags::TASK )
-                    pCW->aInfo.nFlags |= SfxChildWindowFlags::TASK;
-                if ( nFlags & SfxChildWindowFlags::CANTGETFOCUS )
-                    pCW->aInfo.nFlags |= SfxChildWindowFlags::CANTGETFOCUS;
-                if ( nFlags & SfxChildWindowFlags::FORCEDOCK )
-                    pCW->aInfo.nFlags |= SfxChildWindowFlags::FORCEDOCK;
-                pFact->aInfo = pCW->aInfo;
-                return;
-            }
-        }
-    }
-
-    if ( !pMod )
-        return;
-
-    SfxChildWinFactArr_Impl *pFactories = pMod->GetChildWinFactories_Impl();
-    if ( !pFactories )
-        return;
-
-    SfxChildWinFactArr_Impl &rFactories = *pFactories;
-    for ( size_t nFactory = 0; nFactory < rFactories.size(); ++nFactory )
-    {
-        pFact = &rFactories[nFactory];
-        if ( pFact->nId == pCW->nSaveId )
+        pFact = pApp->GetChildWinFactoryById(pCW->nSaveId);
+        if ( pFact )
         {
             pCW->aInfo   = pFact->aInfo;
             pCW->aInfo.aModule = sModule;
@@ -2185,11 +2150,32 @@ void SfxWorkWindow::InitializeChild_Impl(SfxChildWin_Impl *pCW)
                 pCW->aInfo.nFlags |= SfxChildWindowFlags::CANTGETFOCUS;
             if ( nFlags & SfxChildWindowFlags::FORCEDOCK )
                 pCW->aInfo.nFlags |= SfxChildWindowFlags::FORCEDOCK;
-            if ( nFlags & SfxChildWindowFlags::ALWAYSAVAILABLE )
-                pCW->aInfo.nFlags |= SfxChildWindowFlags::ALWAYSAVAILABLE;
             pFact->aInfo = pCW->aInfo;
             return;
         }
+    }
+
+    if ( !pMod )
+        return;
+
+    pFact = pMod->GetChildWinFactoryById(pCW->nSaveId);
+    if ( pFact )
+    {
+        pCW->aInfo   = pFact->aInfo;
+        pCW->aInfo.aModule = sModule;
+        SfxChildWindow::InitializeChildWinFactory_Impl(
+                                    pCW->nSaveId, pCW->aInfo);
+        pCW->bCreate = pCW->aInfo.bVisible;
+        SfxChildWindowFlags nFlags = pFact->aInfo.nFlags;
+        if ( nFlags & SfxChildWindowFlags::TASK )
+            pCW->aInfo.nFlags |= SfxChildWindowFlags::TASK;
+        if ( nFlags & SfxChildWindowFlags::CANTGETFOCUS )
+            pCW->aInfo.nFlags |= SfxChildWindowFlags::CANTGETFOCUS;
+        if ( nFlags & SfxChildWindowFlags::FORCEDOCK )
+            pCW->aInfo.nFlags |= SfxChildWindowFlags::FORCEDOCK;
+        if ( nFlags & SfxChildWindowFlags::ALWAYSAVAILABLE )
+            pCW->aInfo.nFlags |= SfxChildWindowFlags::ALWAYSAVAILABLE;
+        pFact->aInfo = pCW->aInfo;
     }
 }
 
