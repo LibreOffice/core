@@ -16,6 +16,24 @@
       "message": "The sidebar control uses \"Diagonal Down Border\" defined in sc/uiconfig/scalc/ui/floatingborderstyle.ui, meaning you have to define strings but how about making it identical?\n\nI wonder how to handle the diagonal borders in Writer tables. The widget shows the options but cannot set it.",
       "revId": "31d687f0f9ed617f5dca43b761d064f8c26c3c8d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca49985c_ac32d0a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002869
+      },
+      "writtenOn": "2021-08-30T10:39:20Z",
+      "side": 1,
+      "message": "- So, should I change \"Set Diagonal Down Border\" to \"Diagonal Down Border\" or change all strings in sidebar control as in Border tab?\n\n-  Calc and Writer use the same \u0027Borders\u0027 widget. Therefore if we change something on Borders widget, it affects both Calc and Writer. Also, diagonal borders in Writer-tables should be implemented from scratch, so there are a lot work to do. I\u0027m working on it here: (WIP) https://gerrit.libreoffice.org/c/core/+/120262 .",
+      "parentUuid": "e3d1587c_a4a5520b",
+      "revId": "31d687f0f9ed617f5dca43b761d064f8c26c3c8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
