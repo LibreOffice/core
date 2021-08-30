@@ -53,7 +53,7 @@ void X11SkiaSalGraphicsImpl::createWindowSurfaceInternal(bool forceRaster)
     {
         // See flushSurfaceToWindowContext().
         if (renderMethod == RenderRaster)
-            mWindowContext->getBackbufferSurface();
+            mSurface = mWindowContext->getBackbufferSurface();
         else
             mSurface = createSkSurface(GetWidth(), GetHeight());
     }
