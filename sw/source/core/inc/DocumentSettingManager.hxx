@@ -63,7 +63,7 @@ class DocumentSettingManager final :
     // mbOldLineSpacing                      def = false
     // mbAddParaSpacingToTableCells          def = true
     // mbUseFormerObjectPos                  def = false
-    // mbUseFormerTextWrapping               def = false
+    // mbUseFormerTextWrapping               def = true
     // mbConsiderWrapOnObjPos                def = false
     //
     // SO8pp1:

@@ -59,7 +59,7 @@ SvtCompatibilityEntry::SvtCompatibilityEntry()
     setValue<bool>( Index::UseLineSpacing, false );
     setValue<bool>( Index::AddTableSpacing, false );
     setValue<bool>( Index::UseObjectPositioning, false );
-    setValue<bool>( Index::UseOurTextWrapping, false );
+    setValue<bool>( Index::UseOurTextWrapping, true );
     setValue<bool>( Index::ConsiderWrappingStyle, false );
     setValue<bool>( Index::ExpandWordSpace, true );
     setValue<bool>( Index::ProtectForm, false );
