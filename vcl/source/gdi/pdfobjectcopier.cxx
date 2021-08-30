@@ -7,17 +7,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <pdf/objectcopier.hxx>
-
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
+#include <rtl/strbuf.hxx>
 #include <tools/stream.hxx>
 #include <tools/zcodec.hxx>
+
 #include <vcl/filter/pdfdocument.hxx>
 #include <vcl/filter/pdfobjectcontainer.hxx>
 
-#include "pdfwriter_impl.hxx"
+#include <pdf/objectcopier.hxx>
+#include <pdf/pdfwriter_impl.hxx>
 
 namespace vcl
 {

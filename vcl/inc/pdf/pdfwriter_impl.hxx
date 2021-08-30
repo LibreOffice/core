@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VCL_SOURCE_GDI_PDFWRITER_IMPL_HXX
-#define INCLUDED_VCL_SOURCE_GDI_PDFWRITER_IMPL_HXX
+
+#pragma once
 
 #include <map>
 #include <list>
@@ -54,8 +54,8 @@
 
 #include <vcl/filter/pdfobjectcontainer.hxx>
 #include <pdf/ExternalPDFStreams.hxx>
-#include "pdffontcache.hxx"
-#include "pdfbuildin_fonts.hxx"
+#include <pdf/pdfbuildin_fonts.hxx>
+#include <pdf/pdffontcache.hxx>
 
 class StyleSettings;
 class FontSelectPattern;
@@ -1273,7 +1273,5 @@ public:
 };
 
 } // namespace vcl
-
-#endif //_VCL_PDFEXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
