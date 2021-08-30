@@ -81,20 +81,20 @@ void WmfTest::testNonPlaceableWmf()
 
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "/metafile/polyline[1]/point[1]", "x", "16798");
-    assertXPath(pDoc, "/metafile/polyline[1]/point[1]", "y", "1003");
+    assertXPath(pDoc, "/metafile/polyline[1]/point[1]", "x", "16813");
+    assertXPath(pDoc, "/metafile/polyline[1]/point[1]", "y", "1004");
 
-    assertXPath(pDoc, "/metafile/polyline[1]/point[2]", "x", "16798");
-    assertXPath(pDoc, "/metafile/polyline[1]/point[2]", "y", "7507");
+    assertXPath(pDoc, "/metafile/polyline[1]/point[2]", "x", "16813");
+    assertXPath(pDoc, "/metafile/polyline[1]/point[2]", "y", "7514");
 
-    assertXPath(pDoc, "/metafile/polyline[1]/point[3]", "x", "26090");
-    assertXPath(pDoc, "/metafile/polyline[1]/point[3]", "y", "7507");
+    assertXPath(pDoc, "/metafile/polyline[1]/point[3]", "x", "26112");
+    assertXPath(pDoc, "/metafile/polyline[1]/point[3]", "y", "7514");
 
-    assertXPath(pDoc, "/metafile/polyline[1]/point[4]", "x", "26090");
-    assertXPath(pDoc, "/metafile/polyline[1]/point[4]", "y", "1003");
+    assertXPath(pDoc, "/metafile/polyline[1]/point[4]", "x", "26112");
+    assertXPath(pDoc, "/metafile/polyline[1]/point[4]", "y", "1004");
 
-    assertXPath(pDoc, "/metafile/polyline[1]/point[5]", "x", "16798");
-    assertXPath(pDoc, "/metafile/polyline[1]/point[5]", "y", "1003");
+    assertXPath(pDoc, "/metafile/polyline[1]/point[5]", "x", "16813");
+    assertXPath(pDoc, "/metafile/polyline[1]/point[5]", "y", "1004");
 }
 
 void WmfTest::testSine()
