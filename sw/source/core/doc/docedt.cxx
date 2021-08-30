@@ -243,7 +243,7 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                 // Position could have been moved!
                 if (i > rTable.size())
                     i = rTable.size();
-                else if (pFormat != rTable[i])
+                else if (i == rTable.size() || pFormat != rTable[i])
                     i = std::distance(rTable.begin(), rTable.find( pFormat ));
             }
 
