@@ -668,7 +668,7 @@ bool GraphicFormatDetector::checkXBM()
     std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[nSize]);
 
     mrStream.Seek(mnStreamPosition);
-    mrStream.ReadBytes(pBuffer.get(), nSize);
+    nSize = mrStream.ReadBytes(pBuffer.get(), nSize);
 
     const char* pBufferAsCharArray = reinterpret_cast<char*>(pBuffer.get());
 
