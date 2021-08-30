@@ -76,7 +76,7 @@ void WinSkiaSalGraphicsImpl::performFlush()
     if (mWindowContext)
     {
         if (mDirtyRect.intersect(SkIRect::MakeWH(GetWidth(), GetHeight())))
-            mWindowContext->swapBuffers(&mDirtyRect);
+            flushSurfaceToWindowContext(mDirtyRect);
         mDirtyRect.setEmpty();
     }
 }
