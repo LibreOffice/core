@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72883144_617b38be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2021-08-30T12:20:30Z",
+      "side": 1,
+      "message": "Set abandon, because related patch with unit test is here:\nhttps://gerrit.libreoffice.org/c/core/+/121307",
+      "revId": "fae34835d280bd5eb7f12f1475a1a72091ea1393",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
