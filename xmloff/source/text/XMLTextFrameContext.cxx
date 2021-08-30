@@ -891,8 +891,8 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             if( aIter.toView().find( '%' ) != std::string_view::npos )
             {
                 sal_Int32 nTmp;
-                ::sax::Converter::convertPercent( nTmp, aIter.toView() );
-                nRelWidth = static_cast<sal_Int16>(nTmp);
+                if (::sax::Converter::convertPercent(nTmp, aIter.toView()))
+                    nRelWidth = static_cast<sal_Int16>(nTmp);
             }
             else
             {
@@ -917,8 +917,8 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             if( aIter.toView().find( '%' ) != std::string_view::npos )
             {
                 sal_Int32 nTmp;
-                ::sax::Converter::convertPercent( nTmp, aIter.toView() );
-                nRelWidth = static_cast<sal_Int16>(nTmp);
+                if (::sax::Converter::convertPercent(nTmp, aIter.toView()))
+                    nRelWidth = static_cast<sal_Int16>(nTmp);
             }
             else
             {
@@ -933,8 +933,8 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             if( aIter.toView().find( '%' ) != std::string_view::npos )
             {
                 sal_Int32 nTmp;
-                ::sax::Converter::convertPercent( nTmp, aIter.toView() );
-                nRelHeight = static_cast<sal_Int16>(nTmp);
+                if (::sax::Converter::convertPercent(nTmp, aIter.toView()))
+                    nRelHeight = static_cast<sal_Int16>(nTmp);
             }
             else
             {
@@ -964,8 +964,8 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             if( aIter.toView().find( '%' ) != std::string_view::npos )
             {
                 sal_Int32 nTmp;
-                ::sax::Converter::convertPercent( nTmp, aIter.toView() );
-                nRelHeight = static_cast<sal_Int16>(nTmp);
+                if (::sax::Converter::convertPercent(nTmp, aIter.toView()))
+                    nRelHeight = static_cast<sal_Int16>(nTmp);
             }
             else
             {
