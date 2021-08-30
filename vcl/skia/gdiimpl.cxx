@@ -1442,13 +1442,11 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
     // in drawing errors. Work that around by fetching the relevant part of the surface
     // and drawing using CPU.
     bool rasterHack = (isGPU() && getVendor() == DriverBlocklist::VendorIntel && !mXorMode);
-#if defined LINUX
     // BackendTest::testDrawInvertTrackFrameWithRectangle() also has a problem
-    // with SkBlendMode::kDifference on AMD/Linux, leading to crashes or even
+    // with SkBlendMode::kDifference on AMD, leading to crashes or even
     // driver instability. Also work around by drawing using CPU.
     if (isGPU() && getVendor() == DriverBlocklist::VendorAMD && !mXorMode)
         rasterHack = true;
-#endif
     SkPath aPath;
     aPath.incReserve(rPoly.count());
     addPolygonToPath(rPoly, aPath);
