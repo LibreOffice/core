@@ -32,7 +32,6 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/objsh.hxx>
 #include <appbaslib.hxx>
-#include <shellimpl.hxx>
 #include <unoctitm.hxx>
 #include <svl/svdde.hxx>
 

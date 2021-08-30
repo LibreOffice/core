@@ -75,7 +75,6 @@
 #include <appbaslib.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/sfxuno.hxx>
-#include <shellimpl.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <sfx2/infobar.hxx>
 
@@ -230,7 +229,7 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,m_bAllowModifiedBackAfterSigning( false )
 {
     SfxObjectShell* pDoc = &_rDocShell;
-    SfxObjectShellArr_Impl &rArr = SfxGetpApp()->GetObjectShells_Impl();
+    std::vector<SfxObjectShell*> &rArr = SfxGetpApp()->GetObjectShells_Impl();
     rArr.push_back( pDoc );
 }
 
@@ -389,8 +388,8 @@ bool SfxObjectShell::CloseInternal()
             SfxApplication *pSfxApp = SfxApplication::Get();
             if(pSfxApp)
             {
-                SfxObjectShellArr_Impl &rDocs = pSfxApp->GetObjectShells_Impl();
-                SfxObjectShellArr_Impl::iterator it = std::find( rDocs.begin(), rDocs.end(), this );
+                std::vector<SfxObjectShell*> &rDocs = pSfxApp->GetObjectShells_Impl();
+                auto it = std::find( rDocs.begin(), rDocs.end(), this );
                 if ( it != rDocs.end() )
                     rDocs.erase( it );
             }
@@ -427,7 +426,7 @@ SfxObjectShell* SfxObjectShell::GetFirst
     bool          bOnlyVisible
 )
 {
-    SfxObjectShellArr_Impl &rDocs = SfxGetpApp()->GetObjectShells_Impl();
+    std::vector<SfxObjectShell*> &rDocs = SfxGetpApp()->GetObjectShells_Impl();
 
     // search for a SfxDocument of the specified type
     for (SfxObjectShell* pSh : rDocs)
@@ -453,7 +452,7 @@ SfxObjectShell* SfxObjectShell::GetNext
     bool                    bOnlyVisible
 )
 {
-    SfxObjectShellArr_Impl &rDocs = SfxGetpApp()->GetObjectShells_Impl();
+    std::vector<SfxObjectShell*> &rDocs = SfxGetpApp()->GetObjectShells_Impl();
 
     // refind the specified predecessor
     size_t nPos;

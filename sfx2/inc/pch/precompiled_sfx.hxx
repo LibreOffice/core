@@ -469,7 +469,6 @@
 #include <sfxpicklist.hxx>
 #include <sfxtypes.hxx>
 #include <sfxurlrelocator.hxx>
-#include <shellimpl.hxx>
 #include <splitwin.hxx>
 #include <statcach.hxx>
 #include <workwin.hxx>

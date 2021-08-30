@@ -50,7 +50,6 @@
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/stbitem.hxx>
 #include <sfx2/dockwin.hxx>
-#include <shellimpl.hxx>
 #include <sidebar/ControllerFactory.hxx>
 
 #include <officecfg/Office/Common.hxx>
@@ -384,9 +383,9 @@ std::vector<SfxViewShell*>& SfxApplication::GetViewShells_Impl() const
     return pImpl->maViewShells;
 }
 
-SfxObjectShellArr_Impl&     SfxApplication::GetObjectShells_Impl() const
+std::vector<SfxObjectShell*>& SfxApplication::GetObjectShells_Impl() const
 {
-    return *pImpl->pObjShells;
+    return pImpl->maObjShells;
 }
 
 void SfxApplication::Invalidate( sal_uInt16 nId )

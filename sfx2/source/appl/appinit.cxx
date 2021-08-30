@@ -46,7 +46,6 @@
 #include <sfx2/msgpool.hxx>
 #include <nochaos.hxx>
 #include <sfxpicklist.hxx>
-#include <shellimpl.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -208,7 +207,6 @@ void SfxApplication::Initialize_Impl()
     DBG_ASSERT( !pImpl->pAppDispat, "AppDispatcher already exists" );
     pImpl->pAppDispat.reset(new SfxDispatcher);
     pImpl->pSlotPool.reset(new SfxSlotPool);
-    pImpl->pObjShells.reset(new SfxObjectShellArr_Impl);
 
     Registrations_Impl();
 

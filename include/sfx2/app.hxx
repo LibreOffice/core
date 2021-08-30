@@ -41,7 +41,6 @@ class SfxDispatcher;
 class SfxEventHint;
 class SfxItemSet;
 class SfxObjectShell;
-class SfxObjectShellArr_Impl;
 class SfxObjectShellLock;
 class SfxProgress;
 class SfxSlotPool;
@@ -174,7 +173,7 @@ public:
     SAL_DLLPRIVATE SfxChildWinFactory* GetChildWinFactoryById(sal_uInt16 nId) const;
     SAL_DLLPRIVATE std::vector<SfxViewFrame*>& GetViewFrames_Impl() const;
     SAL_DLLPRIVATE std::vector<SfxViewShell*>& GetViewShells_Impl() const;
-    SAL_DLLPRIVATE SfxObjectShellArr_Impl& GetObjectShells_Impl() const;
+    SAL_DLLPRIVATE std::vector<SfxObjectShell*>& GetObjectShells_Impl() const;
     SAL_DLLPRIVATE void         SetViewFrame_Impl(SfxViewFrame *pViewFrame);
 
     // Slot Methods
