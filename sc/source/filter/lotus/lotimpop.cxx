@@ -113,7 +113,7 @@ void ImportLotus::Columnwidth( sal_uInt16 nRecLen )
 
     Skip( 2 );
 
-    while (nCnt && !pIn->good())
+    while (nCnt && pIn->good())
     {
         sal_uInt8 nCol(0), nSpaces(0);
         Read( nCol );
@@ -142,7 +142,7 @@ void ImportLotus::Hiddencolumn( sal_uInt16 nRecLen )
 
     Skip( 2 );
 
-    while (nCnt && !pIn->good())
+    while (nCnt && pIn->good())
     {
         sal_uInt8 nCol(0);
         Read( nCol );
