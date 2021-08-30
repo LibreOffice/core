@@ -10374,7 +10374,6 @@ sfx2/source/appl/appreg.cxx
 sfx2/source/appl/appserv.cxx
 sfx2/source/appl/appuno.cxx
 sfx2/source/appl/childwin.cxx
-sfx2/source/appl/childwinimpl.cxx
 sfx2/source/appl/fileobj.cxx
 sfx2/source/appl/fileobj.hxx
 sfx2/source/appl/flatpak.cxx

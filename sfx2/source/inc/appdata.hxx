@@ -71,8 +71,7 @@ public:
     std::unique_ptr<DdeService>              pDdeService2;
 
     // single instance classes
-    std::unique_ptr<SfxChildWinFactArr_Impl>
-                                        pFactArr;
+    std::vector<SfxChildWinFactory>     maFactories;
     std::vector<SfxFrame*>              vTopFrames;
 
     // application members

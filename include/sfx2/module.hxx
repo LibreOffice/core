@@ -38,7 +38,6 @@ struct SfxTbxCtrlFactory;
 class SfxTabPage;
 class SfxTbxCtrlFactArr_Impl;
 class SfxStbCtrlFactArr_Impl;
-class SfxChildWinFactArr_Impl;
 
 namespace com::sun::star::frame {
     class XFrame;
@@ -98,7 +97,7 @@ public:
 
     SAL_DLLPRIVATE SfxTbxCtrlFactArr_Impl* GetTbxCtrlFactories_Impl() const;
     SAL_DLLPRIVATE SfxStbCtrlFactArr_Impl* GetStbCtrlFactories_Impl() const;
-    SAL_DLLPRIVATE SfxChildWinFactArr_Impl* GetChildWinFactories_Impl() const;
+    SAL_DLLPRIVATE SfxChildWinFactory* GetChildWinFactoryById(sal_uInt16 nId) const;
 };
 
 #endif

@@ -35,7 +35,6 @@
 
 #define ShellClass_SfxModule
 #include <sfxslots.hxx>
-#include <childwinimpl.hxx>
 #include <ctrlfactoryimpl.hxx>
 #include <optional>
 
@@ -46,7 +45,7 @@ public:
     std::optional<SfxSlotPool>              pSlotPool;
     std::optional<SfxTbxCtrlFactArr_Impl>   pTbxCtrlFac;
     std::optional<SfxStbCtrlFactArr_Impl>   pStbCtrlFac;
-    SfxChildWinFactArr_Impl     aFactArr;
+    std::vector<SfxChildWinFactory>         maFactories;
     OString                     maResName;
 
                                 SfxModule_Impl();
@@ -111,17 +110,17 @@ void SfxModule::RegisterChildWindow(const SfxChildWinFactory& rFact)
 {
     DBG_ASSERT( pImpl, "No real Module!" );
 
-    for (size_t nFactory=0; nFactory<pImpl->aFactArr.size(); ++nFactory)
+    for (size_t nFactory=0; nFactory<pImpl->maFactories.size(); ++nFactory)
     {
-        if (rFact.nId == pImpl->aFactArr[nFactory].nId)
+        if (rFact.nId == pImpl->maFactories[nFactory].nId)
         {
-            pImpl->aFactArr.erase( pImpl->aFactArr.begin() + nFactory );
+            pImpl->maFactories.erase( pImpl->maFactories.begin() + nFactory );
             SAL_WARN("sfx.appl", "ChildWindow registered multiple times!");
             return;
         }
     }
 
-    pImpl->aFactArr.push_back( rFact );
+    pImpl->maFactories.push_back( rFact );
 }
 
 
@@ -178,9 +177,12 @@ SfxStbCtrlFactArr_Impl*  SfxModule::GetStbCtrlFactories_Impl() const
     return pImpl->pStbCtrlFac ? &*pImpl->pStbCtrlFac : nullptr;
 }
 
-SfxChildWinFactArr_Impl* SfxModule::GetChildWinFactories_Impl() const
+SfxChildWinFactory* SfxModule::GetChildWinFactoryById(sal_uInt16 nId) const
 {
-    return &pImpl->aFactArr;
+    for (auto& rFactory : pImpl->maFactories)
+        if (rFactory.nId == nId)
+            return &rFactory;
+    return nullptr;
 }
 
 std::unique_ptr<SfxTabPage> SfxModule::CreateTabPage(sal_uInt16, weld::Container*, weld::DialogController*, const SfxItemSet&)

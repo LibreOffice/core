@@ -37,7 +37,6 @@
 #include <sfx2/dockwin.hxx>
 #include <sfx2/dispatch.hxx>
 #include <workwin.hxx>
-#include <childwinimpl.hxx>
 
 const sal_uInt16 nVersion = 2;
 
@@ -208,26 +207,20 @@ std::unique_ptr<SfxChildWindow> SfxChildWindow::CreateChildWindow( sal_uInt16 nI
     // by using ChildWindowContext
     SfxApplication *pApp = SfxGetpApp();
     {
-        SfxChildWinFactArr_Impl &rFactories = pApp->GetChildWinFactories_Impl();
-        for ( size_t nFactory = 0; nFactory < rFactories.size(); ++nFactory )
+        pFact = pApp->GetChildWinFactoryById(nId);
+        if ( pFact )
         {
-            pFact = &rFactories[nFactory];
-            if ( pFact->nId == nId )
+            SfxChildWinInfo& rFactInfo = pFact->aInfo;
+            if ( rInfo.bVisible )
             {
-                SfxChildWinInfo& rFactInfo = pFact->aInfo;
-                if ( rInfo.bVisible )
-                {
-                    if ( pBindings )
-                        pBindings->ENTERREGISTRATIONS();
-                    SfxChildWinInfo aInfo = rFactInfo;
-                    Application::SetSystemWindowMode( SystemWindowFlags::NOAUTOMODE );
-                    pChild = pFact->pCtor( pParent, nId, pBindings, &aInfo );
-                    Application::SetSystemWindowMode( nOldMode );
-                    if ( pBindings )
-                        pBindings->LEAVEREGISTRATIONS();
-                }
-
-                break;
+                if ( pBindings )
+                    pBindings->ENTERREGISTRATIONS();
+                SfxChildWinInfo aInfo = rFactInfo;
+                Application::SetSystemWindowMode( SystemWindowFlags::NOAUTOMODE );
+                pChild = pFact->pCtor( pParent, nId, pBindings, &aInfo );
+                Application::SetSystemWindowMode( nOldMode );
+                if ( pBindings )
+                    pBindings->LEAVEREGISTRATIONS();
             }
         }
     }
@@ -236,30 +229,20 @@ std::unique_ptr<SfxChildWindow> SfxChildWindow::CreateChildWindow( sal_uInt16 nI
     SfxModule *pMod = pDisp ? SfxModule::GetActiveModule( pDisp->GetFrame() ) : nullptr;
     if (!pChild && pMod)
     {
-        SfxChildWinFactArr_Impl *pFactories = pMod->GetChildWinFactories_Impl();
-        if ( pFactories )
+        pFact = pMod->GetChildWinFactoryById(nId);
+        if ( pFact )
         {
-            SfxChildWinFactArr_Impl &rFactories = *pFactories;
-            for ( size_t nFactory = 0; nFactory < rFactories.size(); ++nFactory )
+            SfxChildWinInfo& rFactInfo = pFact->aInfo;
+            if ( rInfo.bVisible )
             {
-                pFact = &rFactories[nFactory];
-                if ( pFact->nId == nId )
-                {
-                    SfxChildWinInfo& rFactInfo = pFact->aInfo;
-                    if ( rInfo.bVisible )
-                    {
-                        if ( pBindings )
-                            pBindings->ENTERREGISTRATIONS();
-                        SfxChildWinInfo aInfo = rFactInfo;
-                        Application::SetSystemWindowMode( SystemWindowFlags::NOAUTOMODE );
-                        pChild = pFact->pCtor( pParent, nId, pBindings, &aInfo );
-                        Application::SetSystemWindowMode( nOldMode );
-                        if ( pBindings )
-                            pBindings->LEAVEREGISTRATIONS();
-                    }
-
-                    break;
-                }
+                if ( pBindings )
+                    pBindings->ENTERREGISTRATIONS();
+                SfxChildWinInfo aInfo = rFactInfo;
+                Application::SetSystemWindowMode( SystemWindowFlags::NOAUTOMODE );
+                pChild = pFact->pCtor( pParent, nId, pBindings, &aInfo );
+                Application::SetSystemWindowMode( nOldMode );
+                if ( pBindings )
+                    pBindings->LEAVEREGISTRATIONS();
             }
         }
     }

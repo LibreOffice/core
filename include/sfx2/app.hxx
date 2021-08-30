@@ -37,7 +37,6 @@ namespace weld { class Window; }
 class BasicManager;
 class DdeService;
 class SfxAppData_Impl;
-class SfxChildWinFactArr_Impl;
 class SfxDispatcher;
 class SfxEventHint;
 class SfxItemSet;
@@ -176,7 +175,7 @@ public:
     SAL_DLLPRIVATE void         RegisterToolBoxControl_Impl( SfxModule*, const SfxTbxCtrlFactory&);
     SAL_DLLPRIVATE SfxTbxCtrlFactArr_Impl& GetTbxCtrlFactories_Impl() const;
     SAL_DLLPRIVATE SfxStbCtrlFactArr_Impl& GetStbCtrlFactories_Impl() const;
-    SAL_DLLPRIVATE SfxChildWinFactArr_Impl& GetChildWinFactories_Impl() const;
+    SAL_DLLPRIVATE SfxChildWinFactory* GetChildWinFactoryById(sal_uInt16 nId) const;
     SAL_DLLPRIVATE SfxViewFrameArr_Impl& GetViewFrames_Impl() const;
     SAL_DLLPRIVATE SfxViewShellArr_Impl& GetViewShells_Impl() const;
     SAL_DLLPRIVATE SfxObjectShellArr_Impl& GetObjectShells_Impl() const;

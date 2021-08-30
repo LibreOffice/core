@@ -24,6 +24,7 @@
 
 #include <sfx2/app.hxx>
 #include <appdata.hxx>
+#include <sfx2/childwin.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/fcontnr.hxx>
@@ -32,7 +33,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 #include <appbaslib.hxx>
-#include <childwinimpl.hxx>
 #include <ctrlfactoryimpl.hxx>
 #include <shellimpl.hxx>
 #include <basic/basicmanagerrepository.hxx>
@@ -83,7 +83,7 @@ void SfxApplication::Deinitialize()
     pImpl->pMatcher.reset();
 
     pImpl->pSlotPool.reset();
-    pImpl->pFactArr.reset();
+    pImpl->maFactories.clear();
 
     pImpl->pTbxCtrlFac.reset();
     pImpl->pStbCtrlFac.reset();
