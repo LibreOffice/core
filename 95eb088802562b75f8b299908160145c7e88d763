@@ -1,6 +1,24 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "70b40d58_3905bbff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 44
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-30T11:22:14Z",
+      "side": 1,
+      "message": "Was there a specific reason to add the ReadOnlyOpenRequest and ReloadEditableRequest exceptions as published?  (Usually, we allow new UNOIDL entities to mature for a few releases before we publish them, or often lazily never publish them at all.)  Sorry, I only notice that now that LO 7.2 has already been published (so I guess we\u0027ll just keep them published anyway).",
+      "revId": "95eb088802562b75f8b299908160145c7e88d763",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "c12c5010_ada14bff",
         "filename": "offapi/com/sun/star/document/ReloadEditableRequest.idl",
@@ -14,10 +32,10 @@
       "side": 1,
       "message": "\u003chttps://gerrit.libreoffice.org/c/core/+/111641/1/offapi/com/sun/star/document/ReloadEditableRequest.idl#1\u003e has not been addressed here (and elsewhere in this change)",
       "revId": "95eb088802562b75f8b299908160145c7e88d763",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": true
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "5ee51abf_0438e181",
         "filename": "sfx2/source/doc/docfile.cxx",
@@ -31,10 +49,10 @@
       "side": 1,
       "message": "This loop modifies the container, so it can\u0027t use range-based for loop - rather it must be some index-based loop (e.g., using a vector of map keys), or it must operate on a copy of the container. Specifically, this crashes ATM.",
       "revId": "95eb088802562b75f8b299908160145c7e88d763",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": true
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "2decf126_6c9a843c",
         "filename": "uui/source/reloadeditable.cxx",
@@ -48,10 +66,10 @@
       "side": 1,
       "message": "\u003chttps://gerrit.libreoffice.org/c/core/+/111641/1/uui/source/reloadeditable.cxx#18\u003e has not been addressed here (and elsewhere in this change)",
       "revId": "95eb088802562b75f8b299908160145c7e88d763",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": true
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "a344c5c9_58640f01",
         "filename": "uui/source/reloadeditable.hxx",
@@ -65,8 +83,7 @@
       "side": 1,
       "message": "\u003chttps://gerrit.libreoffice.org/c/core/+/111641/1/uui/source/reloadeditable.hxx#18\u003e has not been addressed here (and elsewhere in this change)",
       "revId": "95eb088802562b75f8b299908160145c7e88d763",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": true
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
