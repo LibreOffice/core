@@ -16,6 +16,24 @@
       "message": "Hi Vasily,\nThe sample file used in the unittest is a bit big in size, would it be possible to have a minimized version of it ?",
       "revId": "4f4347a76ca5d16fe78117ea1a1cbfff15db24b6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d446494_f725388d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2021-08-30T14:23:43Z",
+      "side": 1,
+      "message": "Yeah, makes sense. I\u0027ve already removed unnecessary images from it. But even existing can be replaced by smth lightweight. Done in follow-up patchset.",
+      "parentUuid": "dec28906_acde8cc4",
+      "revId": "4f4347a76ca5d16fe78117ea1a1cbfff15db24b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
