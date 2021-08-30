@@ -336,7 +336,7 @@
 #define STR_ORACLE_DATABASE_NAME                    NC_("STR_ORACLE_DATABASE_NAME", "Name of the Oracle database")
 #define STR_MSACCESS_MDB_FILE                       NC_("STR_MSACCESS_MDB_FILE", "Microsoft Access database file")
 #define STR_NO_ADDITIONAL_SETTINGS                  NC_("STR_NO_ADDITIONAL_SETTINGS", "No more settings are necessary. To verify that the connection is working, click the '%test' button.")
-#define STR_COMMONURL                               NC_("STR_COMMONURL", "Datasource URL (e.g. host=$host:$port dbname=$database)" )
+#define STR_COMMONURL                               NC_("STR_COMMONURL", "Enter the DBMS/driver-specific connection string here" )
 #define STR_HOSTNAME                                NC_("STR_HOSTNAME", "~Host name")
 #define STR_MOZILLA_PROFILE_NAME                    NC_("STR_MOZILLA_PROFILE_NAME", "~Mozilla profile name")
 #define STR_THUNDERBIRD_PROFILE_NAME                NC_("STR_THUNDERBIRD_PROFILE_NAME", "~Thunderbird profile name")
