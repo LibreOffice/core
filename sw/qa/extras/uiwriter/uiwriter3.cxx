@@ -2690,6 +2690,34 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128106)
     tempDir.EnableKillingFile();
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf103612)
+{
+    SwDoc* const pGlobalDoc = createSwDoc(DATA_DIRECTORY, "DUMMY.odm");
+    CPPUNIT_ASSERT_EQUAL(
+        size_t(1),
+        pGlobalDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks().size());
+    pGlobalDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false, false,
+                                                                                  nullptr);
+
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+
+    assertXPath(pLayout, "/root/page[1]/body/section[1]/txt[1]/LineBreak[1]", "Line",
+                "Text before section");
+    // the inner section and its content was hidden
+    assertXPath(pLayout, "/root/page[1]/body/section[2]/txt[1]/LineBreak[1]", "Line",
+                "Text inside section before ToC");
+    assertXPath(pLayout, "/root/page[1]/body/section[3]/txt[1]/LineBreak[1]", "Line",
+                "Table of Contents");
+    assertXPath(pLayout, "/root/page[1]/body/section[4]/txt[1]/LineBreak[1]", "Line",
+                "First header*1");
+    assertXPath(pLayout, "/root/page[1]/body/section[4]/txt[2]/LineBreak[1]", "Line",
+                "Second header*1");
+    assertXPath(pLayout, "/root/page[1]/body/section[5]/txt[2]/LineBreak[1]", "Line",
+                "Text inside section after ToC");
+    assertXPath(pLayout, "/root/page[1]/body/section[6]/txt[1]/LineBreak[1]", "Line",
+                "Text after section");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

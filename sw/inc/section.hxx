@@ -62,7 +62,7 @@ private:
     SectionType m_eType;
 
     OUString m_sSectionName;
-    OUString m_sCondition;
+    OUString m_sCondition; ///< Hide condition
     OUString m_sLinkFileName;
     OUString m_sLinkFilePassword; // Must be changed to Sequence.
     css::uno::Sequence <sal_Int8> m_Password;
@@ -77,8 +77,8 @@ private:
     // Edit in readonly sections.
     bool m_bEditInReadonlyFlag  : 1;
 
-    bool m_bHidden              : 1; // All paragraphs hidden?
-    bool m_bCondHiddenFlag      : 1; // Hiddenflag for condition.
+    bool m_bHidden              : 1; ///< Section is hidden, unless condition evalutes `false'
+    bool m_bCondHiddenFlag      : 1; ///< Hide condition evaluated `true'
     bool m_bConnectFlag         : 1; // Connected to server?
 
 public:

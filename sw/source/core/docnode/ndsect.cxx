@@ -915,7 +915,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
 
     // We could optimize this, by not removing already contained Frames and recreating them,
     // but by simply rewiring them
-    bool bInsFrame = bCreateFrames && !pSectNd->GetSection().IsHidden() &&
+    bool bInsFrame = bCreateFrames && !pSectNd->GetSection().IsHiddenFlag() &&
                    GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell();
     SwNode2LayoutSaveUpperFrames *pNode2Layout = nullptr;
     if( bInsFrame )
@@ -1052,7 +1052,7 @@ void SwSectionNode::MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx)
     if( !(rNds.IsDocNodes() && rNds.GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell()) )
         return;
 
-    if( GetSection().IsHidden() || IsContentHidden() )
+    if (GetSection().IsHiddenFlag() || IsContentHidden())
     {
         SwNodeIndex aIdx( *EndOfSectionNode() );
         SwContentNode* pCNd = rNds.GoNextSection( &aIdx, true, false );
