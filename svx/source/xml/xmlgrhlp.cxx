@@ -28,6 +28,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
+#include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 #include <comphelper/fileformat.h>
 #include <comphelper/graphicmimetype.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -450,20 +451,41 @@ SvxGraphicHelperStream_Impl SvXMLGraphicHelper::ImplGetGraphicStream( const OUSt
     SvxGraphicHelperStream_Impl aRet;
     aRet.xStorage = ImplGetGraphicStorage( rPictureStorageName );
 
-    if( aRet.xStorage.is() )
+    sal_Int32 nMode = embed::ElementModes::READ;
+    if (SvXMLGraphicHelperMode::Write == meCreateMode)
     {
-        sal_Int32 nMode = embed::ElementModes::READ;
-        if ( SvXMLGraphicHelperMode::Write == meCreateMode )
-        {
-            nMode = embed::ElementModes::READWRITE;
-        }
+        nMode = embed::ElementModes::READWRITE;
+    }
 
+    if (aRet.xStorage.is())
+    {
         aRet.xStream = aRet.xStorage->openStreamElement( rPictureStreamName, nMode );
-        if( aRet.xStream.is() && ( SvXMLGraphicHelperMode::Write == meCreateMode ) )
+    }
+    else if (rPictureStorageName.indexOf('/') != -1)
+    {
+        uno::Reference<embed::XHierarchicalStorageAccess> xHierRootStorage(mxRootStorage,
+                                                                           uno::UNO_QUERY);
+        if (xHierRootStorage.is())
         {
-            uno::Reference < beans::XPropertySet > xProps( aRet.xStream, uno::UNO_QUERY );
-            xProps->setPropertyValue( "UseCommonStoragePasswordEncryption", uno::makeAny( true) );
+            try
+            {
+                aRet.xStream = xHierRootStorage->openStreamElementByHierarchicalName(
+                    rPictureStorageName + "/" + rPictureStreamName, nMode);
+                aRet.xStorage = mxRootStorage;
+            }
+            catch (const uno::Exception&)
+            {
+                TOOLS_WARN_EXCEPTION("svx",
+                                     "SvXMLGraphicHelper::ImplGetGraphicStream: failed to open "
+                                         << rPictureStreamName);
+            }
         }
+    }
+
+    if (aRet.xStream.is() && (SvXMLGraphicHelperMode::Write == meCreateMode))
+    {
+        uno::Reference<beans::XPropertySet> xProps(aRet.xStream, uno::UNO_QUERY);
+        xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::makeAny(true));
     }
 
     return aRet;
