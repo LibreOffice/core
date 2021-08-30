@@ -1068,6 +1068,7 @@ void AddressMultiLineEdit::EndDropTarget()
 {
     if (m_xDropTarget.is())
     {
+        m_xEditEngine->RemoveView(m_xEditView.get());
         auto xRealDropTarget = GetDrawingArea()->get_drop_target();
         uno::Reference<css::datatransfer::dnd::XDropTargetListener> xListener(m_xDropTarget, uno::UNO_QUERY);
         xRealDropTarget->removeDropTargetListener(xListener);
