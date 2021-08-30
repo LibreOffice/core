@@ -237,7 +237,7 @@ public:
         auto cxxConstruct = dyn_cast<CXXConstructExpr>(compat::IgnoreImplicit(expr->getSubExpr()));
         if (!cxxConstruct)
             return false;
-        auto const lambda = dyn_cast<LambdaExpr>(cxxConstruct->getArg(0));
+        auto const lambda = dyn_cast<LambdaExpr>(cxxConstruct->getArg(0)->IgnoreImplicit());
         if (!lambda)
             return false;
         if (deduced)
