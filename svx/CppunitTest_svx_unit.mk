@@ -30,6 +30,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,svx_unit, \
 	svx/qa/unit/svdraw \
 	svx/qa/unit/unodraw \
 	svx/qa/unit/xoutdev \
+	svx/qa/unit/xml \
 	svx/qa/unit/XTableImportExportTest \
 ))
 
