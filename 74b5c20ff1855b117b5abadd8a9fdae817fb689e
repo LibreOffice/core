@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "444e71dc_05669bca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001965
+      },
+      "writtenOn": "2021-08-30T06:47:11Z",
+      "side": 1,
+      "message": "A nice catch! So please update the description by adding tdf#114764 to its start. And please rework the patch CJK fonts will be before other fonts only if CJK locale was selected. Thank you",
+      "parentUuid": "c03d05e3_f48f3660",
+      "revId": "74b5c20ff1855b117b5abadd8a9fdae817fb689e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b3c08d4_77ad9c3b",
