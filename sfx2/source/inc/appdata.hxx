@@ -26,6 +26,7 @@
 #include <svl/svdde.hxx>
 #include <svtools/ehdl.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/doctempl.hxx>
 #include <o3tl/enumarray.hxx>
 
 #include <bitset.hxx>
@@ -43,7 +44,6 @@ class ISfxTemplateCommon;
 class SfxFilterMatcher;
 class SfxStatusDispatcher;
 class SfxDdeTriggerTopic_Impl;
-class SfxDocumentTemplates;
 class SfxFrame;
 class SfxViewFrame;
 class SfxSlotPool;
@@ -83,7 +83,7 @@ public:
 #endif
     rtl::Reference<SfxStatusDispatcher> mxAppDispatch;
     std::unique_ptr<SfxPickList>        mxAppPickList;
-    std::unique_ptr<SfxDocumentTemplates> pTemplates;
+    std::optional<SfxDocumentTemplates> pTemplates;
 
     // global pointers
     SfxItemPool*                        pPool;
