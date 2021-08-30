@@ -424,7 +424,7 @@ void SdOOXMLExportTest1::testBnc870233_2()
         const SdrObjGroup *pObjGroup = dynamic_cast<SdrObjGroup *>(pPage->GetObj(1));
         CPPUNIT_ASSERT(pObjGroup);
         const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>(pObjGroup->GetSubList()->GetObj(1));
-        checkFontAttributes<Color, SvxColorItem>( pObj, Color(0x1F497D), EE_CHAR_COLOR );
+        checkFontAttributes<Color, SvxColorItem>( pObj, Color(0x1f497d), EE_CHAR_COLOR );
     }
 
     // Third smart art has white font color (style)
@@ -1052,26 +1052,26 @@ void SdOOXMLExportTest1::testTableCellBorder()
     sal_Int32 nLeftBorder = aBorderLine.LineWidth * 2;
     nLeftBorder = oox::drawingml::convertHmmToEmu( nLeftBorder );
     CPPUNIT_ASSERT(nLeftBorder);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xb0f0), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(Color(0x00b0f0), Color(ColorTransparency, aBorderLine.Color));
 
     xCellPropSet->getPropertyValue("RightBorder") >>= aBorderLine;
     sal_Int32 nRightBorder = aBorderLine.LineWidth * 2;
     nRightBorder = oox::drawingml::convertHmmToEmu( nRightBorder );
     CPPUNIT_ASSERT(nRightBorder);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(ColorTransparency, aBorderLine.Color));
 
     xCellPropSet->getPropertyValue("TopBorder") >>= aBorderLine;
     sal_Int32 nTopBorder = aBorderLine.LineWidth * 2;
     nTopBorder = oox::drawingml::convertHmmToEmu( nTopBorder );
     CPPUNIT_ASSERT(nTopBorder);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xb0f0), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(Color(0x00b0f0), Color(ColorTransparency, aBorderLine.Color));
 
 
     xCellPropSet->getPropertyValue("BottomBorder") >>= aBorderLine;
     sal_Int32 nBottomBorder = aBorderLine.LineWidth * 2;
     nBottomBorder = oox::drawingml::convertHmmToEmu( nBottomBorder );
     CPPUNIT_ASSERT(nBottomBorder);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xb0f0), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(Color(0x00b0f0), Color(ColorTransparency, aBorderLine.Color));
 
     xDocShRef->DoClose();
 }
@@ -1496,8 +1496,8 @@ void SdOOXMLExportTest1::testTdf128345GradientAxial()
 
     awt::Gradient aTransparenceGradient;
     xShapePropSet->getPropertyValue("FillTransparenceGradient") >>= aTransparenceGradient;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x000000), aTransparenceGradient.StartColor);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), aTransparenceGradient.EndColor);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(ColorTransparency, aTransparenceGradient.StartColor));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(ColorTransparency, aTransparenceGradient.EndColor));
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aTransparenceGradient.Style);
 
     xDocShRef->DoClose();
