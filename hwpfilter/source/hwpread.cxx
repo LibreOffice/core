@@ -70,16 +70,19 @@ bool FieldCode::Read(HWPFile & hwpf)
     uint len3;       /* Length of hchar type string DATA #3 */
     uint binlen;     /* Length of any binary data format */
 
-    hwpf.Read4b(&size, 1);
-    hwpf.Read2b(&dummy, 1);
+    hwpf.Read4b(size);
+    hwpf.Read2b(dummy);
     hwpf.ReadBlock(&type, 2);
     hwpf.Read4b(reserved1.data(), 1);
-    hwpf.Read2b(&location_info, 1);
+    hwpf.Read2b(location_info);
     hwpf.ReadBlock(reserved2.data(), 22);
-    hwpf.Read4b(&len1, 1);
-    hwpf.Read4b(&len2, 1);
-    hwpf.Read4b(&len3, 1);
-    hwpf.Read4b(&binlen, 1);
+    hwpf.Read4b(len1);
+    hwpf.Read4b(len2);
+    hwpf.Read4b(len3);
+    bool bSuccess = hwpf.Read4b(binlen);
+
+    if (!bSuccess)
+        return false;
 
     uint const len1_ = std::min<uint>(len1, 1024) / sizeof(hchar);
     uint const len2_ = std::min<uint>(len2, 1024) / sizeof(hchar);
@@ -95,7 +98,8 @@ bool FieldCode::Read(HWPFile & hwpf)
     hwpf.Read2b(str2.get(), len2_);
     hwpf.SkipBlock(len2 - (len2_ * sizeof(hchar)));
     str2[len2_ ? (len2_ - 1) : 0] = 0;
-    hwpf.Read2b(str3.get(), len3_);
+    if (hwpf.Read2b(str3.get(), len3_) != len3_)
+        return false;
     hwpf.SkipBlock(len3 - (len3_ * sizeof(hchar)));
     str3[len3_ ? (len3_ - 1) : 0] = 0;
 
