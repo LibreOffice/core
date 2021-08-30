@@ -78,10 +78,9 @@
 #include <impglyphitem.hxx>
 #include <pdf/XmpMetadata.hxx>
 #include <pdf/objectcopier.hxx>
+#include <pdf/pdfwriter_impl.hxx>
 #include <pdf/PdfConfig.hxx>
 #include <o3tl/sorted_vector.hxx>
-
-#include "pdfwriter_impl.hxx"
 
 #include <config_eot.h>
 

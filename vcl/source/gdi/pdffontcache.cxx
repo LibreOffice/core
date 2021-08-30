@@ -17,14 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <typeinfo>
-
 #include <sal/types.h>
 
 #include <PhysicalFontFace.hxx>
+#include <pdf/pdffontcache.hxx>
 #include <salgdi.hxx>
 
-#include "pdffontcache.hxx"
+#include <typeinfo>
 
 using namespace vcl;
 
