@@ -686,9 +686,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf89802)
     uno::Reference<container::XIndexAccess> const xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     uno::Reference<beans::XPropertySet> const xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    sal_Int32 nValue(0);
+    Color nValue(0);
     xFrame->getPropertyValue("BackColor") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x3f004586), nValue);
+    CPPUNIT_ASSERT_EQUAL(Color(0x3f004586), nValue);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo37606)
@@ -846,9 +846,9 @@ CPPUNIT_TEST_FIXTURE(Test, fdo81223)
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    sal_Int32 nValue(0);
+    Color nValue(0);
     xFrame->getPropertyValue("BackColor") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffffff), nValue);
+    CPPUNIT_ASSERT_EQUAL(Color(0xffffffff), nValue);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, fdo90130_1)
@@ -857,9 +857,9 @@ CPPUNIT_TEST_FIXTURE(Test, fdo90130_1)
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    sal_Int32 nValue(0);
+    Color nValue(0);
     xFrame->getPropertyValue("BackColor") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00ff3333), nValue);
+    CPPUNIT_ASSERT_EQUAL(Color(0x00ff3333), nValue);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, fdo90130_2)
