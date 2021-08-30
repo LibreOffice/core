@@ -1470,11 +1470,8 @@ namespace emfio
                     const double fMaxWidth = static_cast<double>(aMaxWidth);
                     double fRatio = aPlaceableBound.GetWidth() / fMaxWidth;
 
-                    aPlaceableBound = tools::Rectangle(
-                        aPlaceableBound.Left() / fRatio,
-                        aPlaceableBound.Top() / fRatio,
-                        aPlaceableBound.Right() / fRatio,
-                        aPlaceableBound.Bottom() / fRatio);
+                    // changing mnUnitsPerInch as a tool to scale wmf
+                    mnUnitsPerInch *= fRatio;
 
                     SAL_INFO("emfio", "Placeable bounds "
                         " left: " << aPlaceableBound.Left() << " top: " << aPlaceableBound.Top()
