@@ -1434,12 +1434,18 @@ namespace emfio
             // reserved
             mpInputStream->SeekRel( 4 );
 
+            aPlaceableBound = tools::Rectangle(
+                aPlaceableBound.Left() * 1440 / mnUnitsPerInch,
+                aPlaceableBound.Top() * 1440 / mnUnitsPerInch,
+                aPlaceableBound.Right() * 1440 / mnUnitsPerInch,
+                aPlaceableBound.Bottom() * 1440 / mnUnitsPerInch);
+
             // Skip and don't check the checksum
             mpInputStream->SeekRel( 2 );
         }
         else
         {
-            mnUnitsPerInch = 96;
+            mnUnitsPerInch = 1440;
 
             if (mpExternalHeader != nullptr
                 && mpExternalHeader->xExt > 0
@@ -1463,22 +1469,14 @@ namespace emfio
                 mpInputStream->Seek(nStrmPos + 18);    // set the streampos to the start of the metaactions
                 GetPlaceableBound(aPlaceableBound, mpInputStream);
 
-                // The image size is not known so normalize the calculated bounds so that the
-                // resulting image is not too big
+                // If the image is bigger than the maximum size, use the
+                // mnUnitsPerInch to make sure the resulting image is not
+                // too big
                 if (aPlaceableBound.GetWidth() > aMaxWidth)
                 {
                     const double fMaxWidth = static_cast<double>(aMaxWidth);
                     double fRatio = aPlaceableBound.GetWidth() / fMaxWidth;
-
-                    aPlaceableBound = tools::Rectangle(
-                        aPlaceableBound.Left() / fRatio,
-                        aPlaceableBound.Top() / fRatio,
-                        aPlaceableBound.Right() / fRatio,
-                        aPlaceableBound.Bottom() / fRatio);
-
-                    SAL_INFO("emfio", "Placeable bounds "
-                        " left: " << aPlaceableBound.Left() << " top: " << aPlaceableBound.Top()
-                        << " right: " << aPlaceableBound.Right() << " bottom: " << aPlaceableBound.Bottom());
+//                    mnUnitsPerInch = 1440 * fRatio;
                 }
             }
 
