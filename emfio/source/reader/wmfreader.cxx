@@ -898,13 +898,13 @@ namespace emfio
                         // tdf#142625 Read the DIBHeader and check if bitmap is supported
                         // If bitmap is not supported don't run ReadDIB, as it will interrupt image processing
                         const auto nOldPos(mpInputStream->Tell());
-                        sal_uInt32  nHeaderSize;
-                        sal_uInt16  nBitCount;
+                        sal_uInt32 nHeaderSize(0);
                         mpInputStream->ReadUInt32( nHeaderSize );
                         if ( nHeaderSize == 0xC ) // BitmapCoreHeader
                             mpInputStream->SeekRel( 6 ); // skip Width (16), Height (16), Planes (16)
                         else
                             mpInputStream->SeekRel( 10 ); // skip Width (32), Height (32), Planes (16)
+                        sal_uInt16 nBitCount(0);
                         mpInputStream->ReadUInt16( nBitCount );
                         if ( nBitCount == 0 ) // TODO Undefined BitCount (JPEG/PNG), which are not supported
                             break;
