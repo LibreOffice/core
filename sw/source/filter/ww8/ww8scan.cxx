@@ -2313,8 +2313,15 @@ void WW8PLCF::ReadPLCF(SvStream& rSt, WW8_FC nFilePos, sal_uInt32 nPLCF)
     if (bValid)
     {
         // Pointer to Pos-array
-        pPLCF_PosArray.reset( new WW8_CP[ ( nPLCF + 3 ) / 4 ] );
+        const size_t nEntries = (nPLCF + 3) / 4;
+        pPLCF_PosArray.reset(new WW8_CP[nEntries]);
         bValid = checkRead(rSt, pPLCF_PosArray.get(), nPLCF);
+        size_t nBytesAllocated = nEntries * sizeof(WW8_CP);
+        if (bValid && nPLCF != nBytesAllocated)
+        {
+            sal_uInt8* pStartBlock = reinterpret_cast<sal_uInt8*>(pPLCF_PosArray.get());
+            memset(pStartBlock + nPLCF, 0, nBytesAllocated - nPLCF);
+        }
     }
 
     if (bValid)
