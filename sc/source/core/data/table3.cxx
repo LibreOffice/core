@@ -2707,8 +2707,28 @@ public:
                                              const ScQueryEntry::Item& rItem)
     {
         ScAddress aPos(nCol, nRow, nTab);
-        const SvxColorItem* pColor = mrDoc.GetAttr(aPos, ATTR_FONT_COLOR);
-        Color color = pColor->GetValue();
+        Color color;
+        bool bHasConditionalColor = false;
+        // Text color can be set via conditional formatting - check that first
+        const ScPatternAttr* pPattern = mrDoc.GetPattern(nCol, nRow, nTab);
+        if (pPattern)
+        {
+            if (!pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData().empty())
+            {
+                const SfxItemSet* pCondSet
+                    = mrDoc.GetCondResult(nCol, nRow, nTab);
+                const SvxColorItem* pColor = &pPattern->GetItem(ATTR_FONT_COLOR, pCondSet);
+                color = pColor->GetValue();
+                bHasConditionalColor = true;
+            }
+        }
+
+        if (!bHasConditionalColor)
+        {
+            const SvxColorItem* pColor = mrDoc.GetAttr(aPos, ATTR_FONT_COLOR);
+            color = pColor->GetValue();
+        }
+
         bool bMatch = rItem.maColor == color;
         return std::pair<bool, bool>(bMatch, false);
     }

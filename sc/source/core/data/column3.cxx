@@ -46,6 +46,7 @@
 #include <filterentries.hxx>
 #include <conditio.hxx>
 #include <colorscale.hxx>
+#include <stlpool.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
 
@@ -2434,13 +2435,33 @@ class FilterEntriesHandler
 
         // Colors
         ScAddress aPos(rColumn.GetCol(), nRow, rColumn.GetTab());
-        const SvxColorItem* pColor = rColumn.GetDoc().GetAttr(aPos, ATTR_FONT_COLOR);
-        Color textColor = pColor->GetValue();
+
+        // Text color
+        Color textColor;
+        bool bHasConditionalTextColor = false;
+        const ScPatternAttr* pPattern
+            = mrColumn.GetDoc().GetPattern(aPos.Col(), aPos.Row(), aPos.Tab());
+        if (pPattern)
+        {
+            if (!pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData().empty())
+            {
+                const SfxItemSet* pCondSet
+                    = mrColumn.GetDoc().GetCondResult(aPos.Col(), aPos.Row(), aPos.Tab());
+                const SvxColorItem* pColor = &pPattern->GetItem(ATTR_FONT_COLOR, pCondSet);
+                textColor = pColor->GetValue();
+                bHasConditionalTextColor = true;
+            }
+        }
+        if (!bHasConditionalTextColor)
+        {
+            const SvxColorItem* pColor = rColumn.GetDoc().GetAttr(aPos, ATTR_FONT_COLOR);
+            textColor = pColor->GetValue();
+        }
         mrFilterEntries.addTextColor(textColor);
 
-        // Background color can be set via conditional formatting - check that first
+        // Background color
         Color backgroundColor;
-        bool bHasConditionalColor = false;
+        bool bHasConditionalBackgroundColor = false;
         ScConditionalFormat* pCondFormat
             = rColumn.GetDoc().GetCondFormat(aPos.Col(), aPos.Row(), aPos.Tab());
         if (pCondFormat)
@@ -2453,12 +2474,11 @@ class FilterEntriesHandler
                     const ScColorScaleFormat* pColFormat
                         = static_cast<const ScColorScaleFormat*>(aEntry);
                     backgroundColor = *(pColFormat->GetColor(aPos));
-                    bHasConditionalColor = true;
+                    bHasConditionalBackgroundColor = true;
                 }
             }
         }
-
-        if (!bHasConditionalColor)
+        if (!bHasConditionalBackgroundColor)
         {
             const SvxBrushItem* pBrush = rColumn.GetDoc().GetAttr(aPos, ATTR_BACKGROUND);
             backgroundColor = pBrush->GetColor();
