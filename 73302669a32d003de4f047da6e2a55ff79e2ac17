@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c903515_e19d337f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-08-30T15:50:56Z",
+      "side": 1,
+      "message": "I supposed you meant:\"Removed executables bits on docx file\"",
+      "revId": "73302669a32d003de4f047da6e2a55ff79e2ac17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
