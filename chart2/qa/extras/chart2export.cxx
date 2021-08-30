@@ -905,7 +905,7 @@ void Chart2ExportTest::testDataLabelBordersDOCX()
     {
         sal_Int32 mnIndex;
         css::drawing::LineStyle meStyle;
-        sal_Int32 mnColor;
+        Color mnColor;
     };
 
     struct
@@ -952,7 +952,7 @@ void Chart2ExportTest::testDataLabelBordersDOCX()
                 xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_WIDTH) >>= nWidth;
                 CPPUNIT_ASSERT(nWidth > 0);
 
-                sal_Int32 nColor = -1;
+                Color nColor;
                 xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_COLOR) >>= nColor;
                 CPPUNIT_ASSERT_EQUAL_MESSAGE("Border color is wrong.", aDataPoints[i].mnColor, nColor);
             }
@@ -979,9 +979,9 @@ void Chart2ExportTest::testDataLabelBordersDOCX()
             xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_WIDTH) >>= nWidth;
             CPPUNIT_ASSERT(nWidth > 0);
 
-            sal_Int32 nColor = -1;
+            Color nColor;
             xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_COLOR) >>= nColor;
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("Border color should be green.", sal_Int32(0x0000FF00), nColor);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Border color should be green.", COL_LIGHTGREEN, nColor);
         }
 
     } aTest;
