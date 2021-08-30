@@ -2343,7 +2343,6 @@ void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
 
 void OS2METReader::ReadFont(sal_uInt16 nFieldSize)
 {
-    sal_uInt8 nByte, nTripType, nTripType2;
     OSFont * pF=new OSFont;
     pF->pSucc=pFontList; pFontList=pF;
     pF->nID=0;
@@ -2353,17 +2352,21 @@ void OS2METReader::ReadFont(sal_uInt16 nFieldSize)
     auto nPos=pOS2MET->Tell();
     auto nMaxPos = nPos + nFieldSize;
     pOS2MET->SeekRel(2); nPos+=2;
-    while (nPos<nMaxPos && pOS2MET->GetError()==ERRCODE_NONE) {
-        pOS2MET->ReadUChar( nByte );
+    while (nPos<nMaxPos && pOS2MET->good()) {
+        sal_uInt8 nByte(0);
+        pOS2MET->ReadUChar(nByte);
         sal_uInt16 nLen = static_cast<sal_uInt16>(nByte) & 0x00ff;
         if (nLen == 0)
         {
             pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
             ErrorCode=4;
         }
+        sal_uInt8 nTripType(0);
         pOS2MET->ReadUChar( nTripType );
         switch (nTripType) {
             case 0x02:
+            {
+                sal_uInt8 nTripType2(0);
                 pOS2MET->ReadUChar( nTripType2 );
                 switch (nTripType2) {
                     case 0x84:   // Font name
@@ -2381,7 +2384,10 @@ void OS2METReader::ReadFont(sal_uInt16 nFieldSize)
                     }
                 }
                 break;
+            }
             case 0x24:   // Icid
+            {
+                sal_uInt8 nTripType2(0);
                 pOS2MET->ReadUChar( nTripType2 );
                 switch (nTripType2) {
                     case 0x05:   //Icid
@@ -2390,6 +2396,7 @@ void OS2METReader::ReadFont(sal_uInt16 nFieldSize)
                         break;
                 }
                 break;
+            }
             case 0x20:   // Font Binary GCID
                 break;
             case 0x1f: { // Font Attributes
