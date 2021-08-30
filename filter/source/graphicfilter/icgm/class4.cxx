@@ -422,13 +422,32 @@ void CGM::ImplDoClass4()
 
                     if ( mbFigure )
                     {
-                        tools::Rectangle aBoundingBox(aCenterPoint.X - fRadius, aCenterPoint.Y - fRadius);
-                        aBoundingBox.SaturatingSetSize(Size(2 * fRadius, 2 * fRadius));
-                        tools::Polygon aPolygon( aBoundingBox, Point( static_cast<tools::Long>(aStartingPoint.X), static_cast<tools::Long>(aStartingPoint.Y) ) ,Point( static_cast<tools::Long>(aEndingPoint.X), static_cast<tools::Long>(aEndingPoint.Y) ), PolyStyle::Arc );
-                        if ( nSwitch )
-                            mpOutAct->RegPolyLine( aPolygon, true );
-                        else
-                            mpOutAct->RegPolyLine( aPolygon );
+                        double fLeft = aCenterPoint.X - fRadius;
+                        double fTop = aCenterPoint.Y - fRadius;
+                        double fRight = fLeft + (2 * fRadius);
+                        double fBottom = fTop + (2 * fRadius);
+                        bUseless = useless(fLeft) || useless(fTop) || useless(fRight) || useless(fBottom);
+                        if (!bUseless)
+                        {
+                            double fWidth = fLeft + fRight;
+                            bUseless = !o3tl::convertsToAtLeast(fWidth, std::numeric_limits<tools::Long>::min()) ||
+                                       !o3tl::convertsToAtMost(fWidth, std::numeric_limits<tools::Long>::max());
+                        }
+                        if (!bUseless)
+                        {
+                            double fHeight = fTop + fBottom;
+                            bUseless = !o3tl::convertsToAtLeast(fHeight, std::numeric_limits<tools::Long>::min()) ||
+                                       !o3tl::convertsToAtMost(fHeight, std::numeric_limits<tools::Long>::max());
+                        }
+                        if (!bUseless)
+                        {
+                            tools::Rectangle aBoundingBox(fLeft, fTop, fRight, fBottom);
+                            tools::Polygon aPolygon( aBoundingBox, Point( static_cast<tools::Long>(aStartingPoint.X), static_cast<tools::Long>(aStartingPoint.Y) ) ,Point( static_cast<tools::Long>(aEndingPoint.X), static_cast<tools::Long>(aEndingPoint.Y) ), PolyStyle::Arc );
+                            if ( nSwitch )
+                                mpOutAct->RegPolyLine( aPolygon, true );
+                            else
+                                mpOutAct->RegPolyLine( aPolygon );
+                        }
                     }
                     else
                     {
