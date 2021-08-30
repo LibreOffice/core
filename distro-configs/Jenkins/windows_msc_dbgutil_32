@@ -1,6 +1,5 @@
 --host=i686-pc-cygwin
 --enable-dbgutil
---disable-symbols
 --disable-dependency-tracking
 --enable-odk
 --disable-online-update
