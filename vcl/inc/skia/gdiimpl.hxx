@@ -235,7 +235,7 @@ protected:
     void createWindowSurface(bool forceRaster = false);
     virtual void createWindowSurfaceInternal(bool forceRaster = false) = 0;
     void createOffscreenSurface();
-    void flushSurfaceToWindowContext(const SkIRect& rect);
+    virtual void flushSurfaceToWindowContext();
 
     void privateDrawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
                               tools::Long nHeight, double nTransparency, bool blockAA = false);
@@ -248,7 +248,7 @@ protected:
     void invert(basegfx::B2DPolygon const& rPoly, SalInvert eFlags);
 
     // Called by SkiaFlushIdle.
-    virtual void performFlush() = 0;
+    void performFlush();
     void scheduleFlush();
     friend class SkiaFlushIdle;
 

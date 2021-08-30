@@ -33,7 +33,6 @@ public:
 
 private:
     virtual void createWindowSurfaceInternal(bool forceRaster = false) override;
-    virtual void performFlush() override;
     virtual bool avoidRecreateByResize() const override;
     static std::unique_ptr<sk_app::WindowContext>
     createWindowContext(Display* display, Drawable drawable, const XVisualInfo* visual, int width,

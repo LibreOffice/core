@@ -45,8 +45,8 @@ public:
 
 private:
     virtual void createWindowSurfaceInternal(bool forceRaster = false) override;
-    virtual void performFlush() override;
-    void flushSurfaceToScreenCG(const SkIRect& rect);
+    virtual void flushSurfaceToWindowContext() override;
+    void flushSurfaceToScreenCG();
     static inline sk_sp<SkFontMgr> fontManager;
 };
 

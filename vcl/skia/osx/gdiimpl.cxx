@@ -84,21 +84,12 @@ void AquaSkiaSalGraphicsImpl::Flush() { performFlush(); }
 
 void AquaSkiaSalGraphicsImpl::Flush(const tools::Rectangle&) { performFlush(); }
 
-void AquaSkiaSalGraphicsImpl::performFlush()
+void AquaSkiaSalGraphicsImpl::flushSurfaceToWindowContext()
 {
-    SkiaZone zone;
-    flushDrawing();
-    if (mSurface)
-    {
-        if (mDirtyRect.intersect(SkIRect::MakeWH(GetWidth(), GetHeight())))
-        {
-            if (!isGPU())
-                flushSurfaceToScreenCG(mDirtyRect);
-            else
-                flushSurfaceToWindowContext(mDirtyRect);
-        }
-        mDirtyRect.setEmpty();
-    }
+    if (!isGPU())
+        flushSurfaceToScreenCG();
+    else
+        SkiaSalGraphicsImpl::flushSurfaceToWindowContext();
 }
 
 constexpr static uint32_t toCGBitmapType(SkColorType color, SkAlphaType alpha)
@@ -120,7 +111,7 @@ constexpr static uint32_t toCGBitmapType(SkColorType color, SkAlphaType alpha)
 }
 
 // For Raster we use our own screen blitting (see above).
-void AquaSkiaSalGraphicsImpl::flushSurfaceToScreenCG(const SkIRect& rect)
+void AquaSkiaSalGraphicsImpl::flushSurfaceToScreenCG()
 {
     // Based on AquaGraphicsBackend::drawBitmap().
     if (!mrShared.checkContext())
@@ -133,19 +124,20 @@ void AquaSkiaSalGraphicsImpl::flushSurfaceToScreenCG(const SkIRect& rect)
     if (!image->peekPixels(&pixmap))
         abort();
     // This creates the bitmap context from the cropped part, writable_addr32() will get
-    // the first pixel of rect.topLeft(), and using pixmap.rowBytes() ensures the following
+    // the first pixel of mDirtyRect.topLeft(), and using pixmap.rowBytes() ensures the following
     // pixel lines will be read from correct positions.
-    CGContextRef context
-        = CGBitmapContextCreate(pixmap.writable_addr32(rect.x(), rect.y()), rect.width(),
-                                rect.height(), 8, pixmap.rowBytes(), GetSalData()->mxRGBSpace,
-                                toCGBitmapType(image->colorType(), image->alphaType()));
+    CGContextRef context = CGBitmapContextCreate(
+        pixmap.writable_addr32(mDirtyRect.x(), mDirtyRect.y()), mDirtyRect.width(),
+        mDirtyRect.height(), 8, pixmap.rowBytes(), GetSalData()->mxRGBSpace,
+        toCGBitmapType(image->colorType(), image->alphaType()));
     assert(context); // TODO
     CGImageRef screenImage = CGBitmapContextCreateImage(context);
     assert(screenImage); // TODO
     if (mrShared.isFlipped())
     {
-        const CGRect screenRect = CGRectMake(rect.x(), GetHeight() - rect.y() - rect.height(),
-                                             rect.width(), rect.height());
+        const CGRect screenRect
+            = CGRectMake(mDirtyRect.x(), GetHeight() - mDirtyRect.y() - mDirtyRect.height(),
+                         mDirtyRect.width(), mDirtyRect.height());
         mrShared.maContextHolder.saveState();
         CGContextTranslateCTM(mrShared.maContextHolder.get(), 0, pixmap.height());
         CGContextScaleCTM(mrShared.maContextHolder.get(), 1, -1);
@@ -154,13 +146,14 @@ void AquaSkiaSalGraphicsImpl::flushSurfaceToScreenCG(const SkIRect& rect)
     }
     else
     {
-        const CGRect screenRect = CGRectMake(rect.x(), rect.y(), rect.width(), rect.height());
+        const CGRect screenRect
+            = CGRectMake(mDirtyRect.x(), mDirtyRect.y(), mDirtyRect.width(), mDirtyRect.height());
         CGContextDrawImage(mrShared.maContextHolder.get(), screenRect, screenImage);
     }
 
     CGImageRelease(screenImage);
     CGContextRelease(context);
-    mrShared.refreshRect(rect.x(), rect.y(), rect.width(), rect.height());
+    mrShared.refreshRect(mDirtyRect.x(), mDirtyRect.y(), mDirtyRect.width(), mDirtyRect.height());
 }
 
 bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart nPart,

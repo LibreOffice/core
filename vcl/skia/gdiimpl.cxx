@@ -391,7 +391,19 @@ void SkiaSalGraphicsImpl::destroySurface()
     mIsGPU = false;
 }
 
-void SkiaSalGraphicsImpl::flushSurfaceToWindowContext(const SkIRect& rect)
+void SkiaSalGraphicsImpl::performFlush()
+{
+    SkiaZone zone;
+    flushDrawing();
+    if (mWindowContext)
+    {
+        if (mDirtyRect.intersect(SkIRect::MakeWH(GetWidth(), GetHeight())))
+            flushSurfaceToWindowContext();
+        mDirtyRect.setEmpty();
+    }
+}
+
+void SkiaSalGraphicsImpl::flushSurfaceToWindowContext()
 {
     sk_sp<SkSurface> screenSurface = mWindowContext->getBackbufferSurface();
     if (screenSurface != mSurface)
@@ -415,7 +427,7 @@ void SkiaSalGraphicsImpl::flushSurfaceToWindowContext(const SkIRect& rect)
         // getBackbufferSurface() repeatedly. Using our own surface would duplicate
         // memory and cost time copying pixels around.
         assert(!isGPU());
-        mWindowContext->swapBuffers(&rect);
+        mWindowContext->swapBuffers(&mDirtyRect);
     }
 }
 
