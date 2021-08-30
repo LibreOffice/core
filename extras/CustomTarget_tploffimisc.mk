@@ -19,7 +19,6 @@ extras_OFFIMISC_XMLFILES := \
 	Businesscard-with-logo/META-INF/manifest.xml \
 	Businesscard-with-logo/meta.xml \
 	Businesscard-with-logo/Pictures/10000201000001F4000000A0108F3F06.png \
-	Businesscard-with-logo/settings.xml \
 	Businesscard-with-logo/styles.xml \
 	Businesscard-with-logo/Thumbnails/thumbnail.png \
 
