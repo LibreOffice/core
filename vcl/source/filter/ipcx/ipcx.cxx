@@ -215,11 +215,11 @@ void PCXReader::ImplReadBody()
     std::unique_ptr<sal_uInt8[]> pPlane[ 4 ];
     sal_uInt8   * pDest;
     sal_uInt32   i, ny, nLastPercent = 0, nPercent;
-    sal_uInt16 nCount, nx, np;
+    sal_uInt16 nCount, nx;
     sal_uInt8   nDat = 0, nCol = 0;
 
-    for( np = 0; np < nPlanes; np++ )
-        pPlane[ np ].reset(new sal_uInt8[ nBytesPerPlaneLin ]);
+    for (sal_uInt16 np = 0; np < nPlanes; ++np)
+        pPlane[np].reset(new sal_uInt8[nBytesPerPlaneLin]());
 
     nCount = 0;
     for ( ny = 0; ny < nHeight; ny++ )
@@ -234,7 +234,7 @@ void PCXReader::ImplReadBody()
         {
             nLastPercent = nPercent;
         }
-        for ( np = 0; np < nPlanes; np++)
+        for (sal_uInt16 np = 0; np < nPlanes; ++np)
         {
             if ( nEncoding == 0)
                 m_rPCX.ReadBytes( static_cast<void *>(pPlane[ np ].get()), nBytesPerPlaneLin );
