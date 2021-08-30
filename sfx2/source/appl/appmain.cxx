@@ -28,9 +28,9 @@ SfxFilterMatcher& SfxApplication::GetFilterMatcher()
 {
     if( !pImpl->pMatcher )
     {
-        pImpl->pMatcher.reset(new SfxFilterMatcher());
+        pImpl->pMatcher.emplace();
         URIHelper::SetMaybeFileHdl( LINK(
-            pImpl->pMatcher.get(), SfxFilterMatcher, MaybeFileHdl_Impl ) );
+            &*pImpl->pMatcher, SfxFilterMatcher, MaybeFileHdl_Impl ) );
     }
     return *pImpl->pMatcher;
 }

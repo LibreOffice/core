@@ -27,6 +27,7 @@
 #include <svtools/ehdl.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/doctempl.hxx>
+#include <sfx2/fcontnr.hxx>
 #include <o3tl/enumarray.hxx>
 #include "sfxpicklist.hxx"
 
@@ -41,7 +42,6 @@ class DdeService;
 class SfxItemPool;
 class SfxFilterMatcher;
 class ISfxTemplateCommon;
-class SfxFilterMatcher;
 class SfxStatusDispatcher;
 class SfxDdeTriggerTopic_Impl;
 class SfxFrame;
@@ -75,7 +75,7 @@ public:
     std::vector<SfxFrame*>              vTopFrames;
 
     // application members
-    std::unique_ptr<SfxFilterMatcher>   pMatcher;
+    std::optional<SfxFilterMatcher>     pMatcher;
     std::unique_ptr<SfxErrorHandler>    m_pToolsErrorHdl;
     std::unique_ptr<SfxErrorHandler>    m_pSoErrorHdl;
 #if HAVE_FEATURE_SCRIPTING
