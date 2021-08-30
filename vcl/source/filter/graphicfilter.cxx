@@ -924,7 +924,7 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 size
                 if (nStatus == ERRCODE_NONE)
                 {
                     rIStream.Seek(nStreamBegin);
-                    rIStream.ReadBytes(pGraphicContent.get(), nGraphicContentSize);
+                    nGraphicContentSize = rIStream.ReadBytes(pGraphicContent.get(), nGraphicContentSize);
                 }
             }
         }

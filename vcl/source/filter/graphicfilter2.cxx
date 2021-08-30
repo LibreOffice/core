@@ -593,7 +593,7 @@ bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
                     // read up to the start of the image
                     rStm.ReadUInt32( nLen32 );
                     rStm.ReadUInt32( nTemp32 );
-                    while( ( nTemp32 != 0x49444154 ) && rStm.good() )
+                    while (rStm.good() && nTemp32 != 0x49444154)
                     {
                         if ( nTemp32 == 0x70485973 ) // physical pixel dimensions
                         {
