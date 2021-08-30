@@ -1659,6 +1659,7 @@ void TabBar::MovePage(sal_uInt16 nPageId, sal_uInt16 nNewPos)
     auto it = mpImpl->maItemList.begin();
     it += nPos;
     ImplTabBarItem aItem = std::move(*it);
+    mpImpl->maItemList.erase(it);
     if (nNewPos < mpImpl->maItemList.size())
     {
         it = mpImpl->maItemList.begin();
