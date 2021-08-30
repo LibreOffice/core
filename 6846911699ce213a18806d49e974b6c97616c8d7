@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d77dc80d_d6171c32",
+        "filename": "vcl/source/outdev/textline.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-08-30T23:15:39Z",
+      "side": 0,
+      "message": "The if statement above means, we will always set this variables, if using the printer. But you set the \"else\" variables for printer. Or am I seeing this wrong?",
+      "range": {
+        "startLine": 181,
+        "startChar": 11,
+        "endLine": 190,
+        "endChar": 70
+      },
+      "revId": "6846911699ce213a18806d49e974b6c97616c8d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
