@@ -16,6 +16,24 @@
       "message": "\u003e Patch Set 2:\n\u003e \n\u003e \u003e Patch Set 1:\n\u003e \u003e \n\u003e \u003e Hi Samuel, nice to see you working on improving the color filter.\n\u003e \u003e \n\u003e \u003e I have concerns about the value \"none\" in XMLExportDatabaseRanges.cxx and xmlfilti.cxx. The proposal in https://issues.oasis-open.org/browse/OFFICE-4107 has \"window-font-color\" for type text-color and \"transparent\" for type background-color. \"window-font-color\" would be new, but keyword \"transparent\" is already specified in ODF 1.2 as value for background-color.\n\u003e \n\u003e \"transparent\" makes sense for background color filter. Even more precise would be \"no-fill\", since in fact it filters by cells which have no background color at all, not a transparent color.\n\u003e \n\u003e Regarding text color filter, I cannot see how \"window-font-color\" fits here. If anything, the keyword should be \"automatic\". The color is chosen automatically based on the current background color and has nothing to do with a \"window font color\" (whatever that is).\n\u003e So that choice should probably be rethought in the proposal.\n\n@Michael: Any thoughts on the terminology here?",
       "revId": "ecb9c8b8601996300e6f0c5bc96cb9b982ad12a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "974777ef_d4f34134",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-08-30T17:06:02Z",
+      "side": 1,
+      "message": "yes, that is exactly what \"window-font-color\" is.\n\nhttps://docs.oasis-open.org/office/OpenDocument/v1.3/os/part3-schema/OpenDocument-v1.3-os-part3-schema.html#__RefHeading__1420234_253892949\n\nunfortunately i don\u0027t know either why it has this utterly confusing name.",
+      "parentUuid": "bb0a5b3b_331fac99",
+      "revId": "ecb9c8b8601996300e6f0c5bc96cb9b982ad12a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
