@@ -158,7 +158,7 @@ static void writeSkiaRasterInfo()
     writeToLog(logFile, "Compiler", skia_compiler_name());
 }
 
-#ifdef SK_VULKAN
+#if defined(SK_VULKAN) || defined(SK_METAL)
 static std::unique_ptr<sk_app::WindowContext> getTemporaryWindowContext();
 #endif
 
@@ -170,6 +170,7 @@ static void checkDeviceDenylisted(bool blockDisable = false)
 
     SkiaZone zone;
 
+    bool useRaster = false;
     switch (renderMethodToUse())
     {
         case RenderVulkan:
@@ -204,31 +205,56 @@ static void checkDeviceDenylisted(bool blockDisable = false)
             if (denylisted && !blockDisable)
             {
                 disableRenderMethod(RenderVulkan);
-                writeSkiaRasterInfo();
+                useRaster = true;
             }
-            break;
 #else
             SAL_WARN("vcl.skia", "Vulkan support not built in");
             (void)blockDisable;
-            [[fallthrough]];
+            useRaster = true;
 #endif
+            break;
         }
         case RenderMetal:
+        {
 #ifdef SK_METAL
-            // Try to assume Metal always works, given that Mac doesn't have such as wide range of HW vendors as PC.
-            // If there turns out to be problems, handle it similarly to Vulkan.
-            SAL_INFO("vcl.skia", "Using Skia Metal mode");
-            writeSkiaMetalInfo();
-            break;
+            // First try if a GrDirectContext already exists.
+            std::unique_ptr<sk_app::WindowContext> temporaryWindowContext;
+            GrDirectContext* grDirectContext = sk_app::getMetalSharedGrDirectContext();
+            if (!grDirectContext)
+            {
+                // Create a temporary window context just to get the GrDirectContext,
+                // as an initial test of Metal functionality.
+                temporaryWindowContext = getTemporaryWindowContext();
+                grDirectContext = sk_app::getMetalSharedGrDirectContext();
+            }
+            if (grDirectContext) // Metal was initialized properly
+            {
+                // Try to assume Metal always works, given that Mac doesn't have such as wide range of HW vendors as PC.
+                // If there turns out to be problems, handle it similarly to Vulkan.
+                SAL_INFO("vcl.skia", "Using Skia Metal mode");
+                writeSkiaMetalInfo();
+            }
+            else
+            {
+                SAL_INFO("vcl.skia", "Metal could not be initialized");
+                disableRenderMethod(RenderMetal);
+                useRaster = true;
+            }
 #else
             SAL_WARN("vcl.skia", "Metal support not built in");
-            [[fallthrough]];
+            useRaster = true;
 #endif
-        case RenderRaster:
-            SAL_INFO("vcl.skia", "Using Skia raster mode");
-            // software, never denylisted
-            writeSkiaRasterInfo();
             break;
+        }
+        case RenderRaster:
+            useRaster = true;
+            break;
+    }
+    if (useRaster)
+    {
+        SAL_INFO("vcl.skia", "Using Skia raster mode");
+        // software, never denylisted
+        writeSkiaRasterInfo();
     }
     done = true;
 }
@@ -431,7 +457,7 @@ GrDirectContext* getSharedGrDirectContext()
     return nullptr;
 }
 
-#ifdef SK_VULKAN
+#if defined(SK_VULKAN) || defined(SK_METAL)
 static std::unique_ptr<sk_app::WindowContext> getTemporaryWindowContext()
 {
     if (createGpuWindowContextFunction == nullptr)
