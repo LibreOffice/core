@@ -34,12 +34,12 @@ class SfxViewFrame;
 class SW_DLLPUBLIC SwGlossaryHdl
 {
 
-    SwGlossaries&   rStatGlossaries;
-    OUString        aCurGrp;
-    SfxViewFrame*   pViewFrame;
-    SwWrtShell*     pWrtShell;
+    SwGlossaries&   m_rStatGlossaries;
+    OUString        m_aCurGrp;
+    SfxViewFrame*   m_pViewFrame;
+    SwWrtShell*     m_pWrtShell;
     std::unique_ptr<SwTextBlocks>
-                    pCurGrp;
+                    m_pCurGrp;
 
     SAL_DLLPRIVATE bool  Expand(weld::Window* pParent, const OUString& rShortName,
                     SwGlossaries* pGlossaries,
