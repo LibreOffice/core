@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "729f9579_16e3db74",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-08-31T18:03:43Z",
+      "side": 1,
+      "message": "Hi! I lately tackled a unicode bug and discovered this function. Could this be a viable solution? It removes the local implementation of the BOM detection and uses the stream\u0027s implementation of it.",
+      "revId": "c8167bdd2a2083bb99d49af4e8fd8d176d10a79d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
