@@ -1275,6 +1275,12 @@ void SwDocShell::UpdateLinks()
     SwTextFootnote::SetUniqueSeqRefNo( *GetDoc() );
     SwNodeIndex aTmp( GetDoc()->GetNodes() );
     GetDoc()->GetFootnoteIdxs().UpdateFootnote( aTmp );
+
+    if (!GetDoc()->getIDocumentRedlineAccess().IsIgnoreRedline()
+        && !GetDoc()->getIDocumentRedlineAccess().GetRedlineTable().empty())
+    {
+        GetDoc()->getIDocumentRedlineAccess().CompressRedlines();
+    }
 }
 
 uno::Reference< frame::XController >
