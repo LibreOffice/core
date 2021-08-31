@@ -65,6 +65,8 @@ void OFlatTable::fillColumns(const css::lang::Locale& _aLocale)
 {
     m_bNeedToReadLine = true; // we overwrite m_aCurrentLine, seek the stream, ...
     m_pFileStream->Seek(0);
+    // tdf#123055 - start to read unicode text in order to avoid the BOM
+    m_pFileStream->StartReadingUnicodeText(RTL_TEXTENCODING_DONTKNOW);
     m_aCurrentLine = QuotedTokenizedString();
     bool bRead = true;
 
@@ -72,7 +74,7 @@ void OFlatTable::fillColumns(const css::lang::Locale& _aLocale)
     const bool bHasHeaderLine = pConnection->isHeaderLine();
 
     QuotedTokenizedString aHeaderLine;
-    TRowPositionInFile rowPos(0, 0);
+    TRowPositionInFile rowPos(static_cast<sal_Int32>(m_pFileStream->Tell()), 0);
     sal_Int32 rowNum(0);
     if ( bHasHeaderLine )
     {
