@@ -786,13 +786,10 @@ extern "C" void SAL_CALL uno_dumpEnvironmentByName(
 
 namespace
 {
-    class makeOIdPart
-    {
-    private:
-        OUString m_sOidPart;
-    public:
-        makeOIdPart()
-        {
+
+const OUString & unoenv_getStaticOIdPart()
+{
+    static auto const theStaticOIdPart = [] {
             OUStringBuffer aRet( 64 );
             aRet.append( "];" );
             // pid
@@ -814,15 +811,9 @@ namespace
             for (unsigned char i : ar)
                 aRet.append( static_cast<sal_Int32>(i), 16 );
 
-            m_sOidPart = aRet.makeStringAndClear();
-        }
-        const OUString& getOIdPart() const { return m_sOidPart; }
-    };
-
-const OUString & unoenv_getStaticOIdPart()
-{
-    static makeOIdPart theStaticOIdPart;
-    return theStaticOIdPart.getOIdPart();
+            return aRet.makeStringAndClear();
+        }();
+    return theStaticOIdPart;
 }
 
 }
