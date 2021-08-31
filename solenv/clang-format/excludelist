@@ -14986,9 +14986,6 @@ vcl/source/gdi/pdffontcache.cxx
 vcl/source/gdi/pdfwriter.cxx
 vcl/source/gdi/pdfwriter_impl.cxx
 vcl/source/gdi/pdfwriter_impl2.cxx
-vcl/source/gdi/print.cxx
-vcl/source/gdi/print2.cxx
-vcl/source/gdi/print3.cxx
 vcl/source/gdi/regband.cxx
 vcl/source/gdi/region.cxx
 vcl/source/gdi/regionband.cxx
@@ -15049,6 +15046,7 @@ vcl/source/outdev/textline.cxx
 vcl/source/outdev/transparent.cxx
 vcl/source/outdev/vclreferencebase.cxx
 vcl/source/outdev/wallpaper.cxx
+vcl/source/printer/Printer.cxx
 vcl/source/printer/PrinterController.cxx
 vcl/source/printer/PrinterOptions.cxx
 vcl/source/printer/PrinterOptionsHelper.cxx

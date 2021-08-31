@@ -102,6 +102,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/animate/AnimationBitmap \
     vcl/source/cnttype/mcnttfactory \
     vcl/source/cnttype/mcnttype \
+    vcl/source/printer/Printer \
     vcl/source/printer/PrinterController \
     vcl/source/printer/PrinterOptions \
     vcl/source/printer/PrinterOptionsHelper \
@@ -288,7 +289,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/pdfwriter_impl2 \
     vcl/source/gdi/pdfwriter_impl \
     vcl/source/gdi/pdfobjectcopier \
-    vcl/source/gdi/print \
     vcl/source/gdi/regband \
     vcl/source/gdi/region \
     vcl/source/gdi/regionband \
