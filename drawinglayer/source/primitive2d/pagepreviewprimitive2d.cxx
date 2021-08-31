@@ -106,8 +106,7 @@ namespace drawinglayer::primitive2d
             double fContentWidth,
             double fContentHeight,
             const Primitive2DContainer& rPageContent)
-        :   BufferedDecompositionPrimitive2D(),
-            mxDrawPage(rxDrawPage),
+        :   mxDrawPage(rxDrawPage),
             maPageContent(rPageContent),
             maTransform(rTransform),
             mfContentWidth(fContentWidth),

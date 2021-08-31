@@ -1475,7 +1475,6 @@ VclProcessor2D::VclProcessor2D(const geometry::ViewInformation2D& rViewInformati
     : BaseProcessor2D(rViewInformation)
     , mpOutputDevice(&rOutDev)
     , maBColorModifierStack(rInitStack)
-    , maCurrentTransformation()
     , mnPolygonStrokePrimitive2D(0)
     , mpObjectInfoPrimitive2D(nullptr)
 {

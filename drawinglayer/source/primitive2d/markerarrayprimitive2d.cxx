@@ -72,8 +72,7 @@ namespace drawinglayer::primitive2d
         MarkerArrayPrimitive2D::MarkerArrayPrimitive2D(
             const std::vector< basegfx::B2DPoint >& rPositions,
             const BitmapEx& rMarker)
-        :   BufferedDecompositionPrimitive2D(),
-            maPositions(rPositions),
+        :   maPositions(rPositions),
             maMarker(rMarker)
         {
         }

@@ -726,7 +726,6 @@ using namespace com::sun::star;
             double fDegreeStepWidth,
             double fMiterMinimumAngle)
         :   PolygonHairlinePrimitive3D(rPolygon, rBColor),
-            maLast3DDecomposition(),
             mfRadius(fRadius),
             mfDegreeStepWidth(fDegreeStepWidth),
             mfMiterMinimumAngle(fMiterMinimumAngle),

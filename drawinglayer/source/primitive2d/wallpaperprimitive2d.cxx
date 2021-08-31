@@ -221,8 +221,7 @@ namespace drawinglayer::primitive2d
             const basegfx::B2DRange& rObjectRange,
             const BitmapEx& rBitmapEx,
             WallpaperStyle eWallpaperStyle)
-        :   ViewTransformationDependentPrimitive2D(),
-            maObjectRange(rObjectRange),
+        :   maObjectRange(rObjectRange),
             maBitmapEx(rBitmapEx),
             meWallpaperStyle(eWallpaperStyle)
         {

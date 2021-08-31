@@ -53,11 +53,7 @@ namespace drawinglayer::attribute
             }
 
             ImpSdrFillAttribute()
-            :   mfTransparence(0.0),
-                maColor(basegfx::BColor()),
-                maGradient(FillGradientAttribute()),
-                maHatch(FillHatchAttribute()),
-                maFillGraphic(SdrFillGraphicAttribute())
+            :   mfTransparence(0.0)
             {
             }
 

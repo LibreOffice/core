@@ -42,8 +42,6 @@ namespace drawinglayer::attribute
             }
 
             ImpSdrLightingAttribute()
-            :   maAmbientLight(basegfx::BColor()),
-                maLightVector(std::vector< Sdr3DLightAttribute >())
             {
             }
 

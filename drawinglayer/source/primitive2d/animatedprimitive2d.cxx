@@ -126,8 +126,7 @@ namespace drawinglayer::primitive2d
             const std::vector< basegfx::B2DHomMatrix >& rmMatrixStack,
             const animation::AnimationEntry& rAnimationEntry,
             const Primitive2DContainer& rChildren)
-        :   AnimatedSwitchPrimitive2D(rAnimationEntry, rChildren, true/*bIsTextAnimation*/),
-            maMatrixStack()
+        :   AnimatedSwitchPrimitive2D(rAnimationEntry, rChildren, true/*bIsTextAnimation*/)
         {
             // copy matrices to locally pre-decomposed matrix stack
             const sal_uInt32 nCount(rmMatrixStack.size());

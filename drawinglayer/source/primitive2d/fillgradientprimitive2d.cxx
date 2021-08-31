@@ -287,8 +287,7 @@ namespace drawinglayer::primitive2d
         FillGradientPrimitive2D::FillGradientPrimitive2D(
             const basegfx::B2DRange& rOutputRange,
             const attribute::FillGradientAttribute& rFillGradient)
-        :   BufferedDecompositionPrimitive2D(),
-            maOutputRange(rOutputRange),
+        :   maOutputRange(rOutputRange),
             maDefinitionRange(rOutputRange),
             maFillGradient(rFillGradient)
         {
@@ -298,8 +297,7 @@ namespace drawinglayer::primitive2d
             const basegfx::B2DRange& rOutputRange,
             const basegfx::B2DRange& rDefinitionRange,
             const attribute::FillGradientAttribute& rFillGradient)
-        :   BufferedDecompositionPrimitive2D(),
-            maOutputRange(rOutputRange),
+        :   maOutputRange(rOutputRange),
             maDefinitionRange(rDefinitionRange),
             maFillGradient(rFillGradient)
         {

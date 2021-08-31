@@ -27,8 +27,7 @@ using namespace com::sun::star;
 namespace drawinglayer::primitive3d
 {
         GroupPrimitive3D::GroupPrimitive3D( const Primitive3DContainer& rChildren )
-        :   BasePrimitive3D(),
-            maChildren(rChildren)
+        :   maChildren(rChildren)
         {
         }
 

@@ -61,9 +61,7 @@ namespace drawinglayer::attribute
             }
 
             ImpFillGraphicAttribute()
-            :   maGraphic(Graphic()),
-                maGraphicRange(basegfx::B2DRange()),
-                mbTiling(false),
+            :   mbTiling(false),
                 mfOffsetX(0.0),
                 mfOffsetY(0.0)
             {

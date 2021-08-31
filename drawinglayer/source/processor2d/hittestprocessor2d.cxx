@@ -42,9 +42,7 @@ namespace drawinglayer::processor2d
             double fLogicHitTolerance,
             bool bHitTextOnly)
         :   BaseProcessor2D(rViewInformation),
-            maDiscreteHitPosition(),
             mfDiscreteHitTolerance(0.0),
-            maHitStack(),
             mbCollectHitStack(false),
             mbHit(false),
             mbHitTextOnly(bHitTextOnly)

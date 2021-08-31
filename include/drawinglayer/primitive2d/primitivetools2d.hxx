@@ -46,8 +46,7 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             DiscreteMetricDependentPrimitive2D()
-            :   BufferedDecompositionPrimitive2D(),
-                mfDiscreteUnit(0.0)
+            :   mfDiscreteUnit(0.0)
             {
             }
 
@@ -77,8 +76,6 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             ViewportDependentPrimitive2D()
-            :   BufferedDecompositionPrimitive2D(),
-                maViewport()
             {
             }
 
@@ -108,8 +105,6 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             ViewTransformationDependentPrimitive2D()
-            :   BufferedDecompositionPrimitive2D(),
-                maViewTransformation()
             {
             }
 
@@ -141,9 +136,6 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             ObjectAndViewTransformationDependentPrimitive2D()
-            :   BufferedDecompositionPrimitive2D(),
-                maViewTransformation(),
-                maObjectTransformation()
             {
             }
 

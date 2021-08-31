@@ -95,8 +95,7 @@ namespace drawinglayer::primitive2d
             const FieldType& rFieldType,
             const std::vector< std::pair< OUString, OUString>>* pNameValue)
         :   GroupPrimitive2D(rChildren),
-            meType(rFieldType),
-            meNameValue()
+            meType(rFieldType)
         {
             if (nullptr != pNameValue)
             {

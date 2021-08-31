@@ -350,7 +350,6 @@ namespace drawinglayer::primitive2d
         :   maGradientTransform(rGradientTransform),
             maPolyPolygon(rPolyPolygon),
             maGradientEntries(rGradientEntries),
-            maMirroredGradientEntries(),
             maStart(rStart),
             maSpreadMethod(aSpreadMethod),
             mbPreconditionsChecked(false),
@@ -567,8 +566,7 @@ namespace drawinglayer::primitive2d
             const basegfx::B2DPoint& rEnd,
             bool bUseUnitCoordinates,
             SpreadMethod aSpreadMethod)
-        :   BufferedDecompositionPrimitive2D(),
-            SvgGradientHelper(rGradientTransform, rPolyPolygon, rGradientEntries, rStart, bUseUnitCoordinates, aSpreadMethod),
+        :   SvgGradientHelper(rGradientTransform, rPolyPolygon, rGradientEntries, rStart, bUseUnitCoordinates, aSpreadMethod),
             maEnd(rEnd)
         {
         }
@@ -795,8 +793,7 @@ namespace drawinglayer::primitive2d
             bool bUseUnitCoordinates,
             SpreadMethod aSpreadMethod,
             const basegfx::B2DPoint* pFocal)
-        :   BufferedDecompositionPrimitive2D(),
-            SvgGradientHelper(rGradientTransform, rPolyPolygon, rGradientEntries, rStart, bUseUnitCoordinates, aSpreadMethod),
+        :   SvgGradientHelper(rGradientTransform, rPolyPolygon, rGradientEntries, rStart, bUseUnitCoordinates, aSpreadMethod),
             mfRadius(fRadius),
             maFocal(rStart),
             maFocalVector(0.0, 0.0),
@@ -914,8 +911,7 @@ namespace drawinglayer::primitive2d
         SvgLinearAtomPrimitive2D::SvgLinearAtomPrimitive2D(
             const basegfx::BColor& aColorA, double fOffsetA,
             const basegfx::BColor& aColorB, double fOffsetB)
-        :   DiscreteMetricDependentPrimitive2D(),
-            maColorA(aColorA),
+        :   maColorA(aColorA),
             maColorB(aColorB),
             mfOffsetA(fOffsetA),
             mfOffsetB(fOffsetB)
@@ -1010,8 +1006,7 @@ namespace drawinglayer::primitive2d
         SvgRadialAtomPrimitive2D::SvgRadialAtomPrimitive2D(
             const basegfx::BColor& aColorA, double fScaleA, const basegfx::B2DVector& rTranslateA,
             const basegfx::BColor& aColorB, double fScaleB, const basegfx::B2DVector& rTranslateB)
-        :   DiscreteMetricDependentPrimitive2D(),
-            maColorA(aColorA),
+        :   maColorA(aColorA),
             maColorB(aColorB),
             mfScaleA(fScaleA),
             mfScaleB(fScaleB)
@@ -1042,8 +1037,7 @@ namespace drawinglayer::primitive2d
         SvgRadialAtomPrimitive2D::SvgRadialAtomPrimitive2D(
             const basegfx::BColor& aColorA, double fScaleA,
             const basegfx::BColor& aColorB, double fScaleB)
-        :   DiscreteMetricDependentPrimitive2D(),
-            maColorA(aColorA),
+        :   maColorA(aColorA),
             maColorB(aColorB),
             mfScaleA(fScaleA),
             mfScaleB(fScaleB)

@@ -49,8 +49,7 @@ namespace drawinglayer::attribute
             }
 
             ImpLineAttribute()
-            :   maColor(basegfx::BColor()),
-                mfWidth(0.0),
+            :   mfWidth(0.0),
                 meLineJoin(basegfx::B2DLineJoin::Round),
                 meLineCap(css::drawing::LineCap_BUTT),
                 mfMiterMinimumAngle(basegfx::deg2rad(15.0))

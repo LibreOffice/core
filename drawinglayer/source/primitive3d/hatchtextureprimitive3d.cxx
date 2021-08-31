@@ -273,8 +273,7 @@ namespace drawinglayer::primitive3d
             bool bModulate,
             bool bFilter)
         :   TexturePrimitive3D(rChildren, rTextureSize, bModulate, bFilter),
-            maHatch(rHatch),
-            maBuffered3DDecomposition()
+            maHatch(rHatch)
         {
         }
 

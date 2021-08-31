@@ -264,8 +264,7 @@ namespace drawinglayer::primitive2d
             const basegfx::B2DPolyPolygon& rMask,
             const Primitive2DContainer& rChildren,
             const basegfx::B2DRange& rReferenceRange)
-        :   BufferedDecompositionPrimitive2D(),
-            maMask(rMask),
+        :   maMask(rMask),
             maChildren(rChildren),
             maReferenceRange(rReferenceRange),
             mnDiscreteWidth(0),

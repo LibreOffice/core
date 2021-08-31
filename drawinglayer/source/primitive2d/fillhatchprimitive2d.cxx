@@ -131,8 +131,7 @@ namespace drawinglayer::primitive2d
             const basegfx::B2DRange& rOutputRange,
             const basegfx::BColor& rBColor,
             const attribute::FillHatchAttribute& rFillHatch)
-        :   DiscreteMetricDependentPrimitive2D(),
-            maOutputRange(rOutputRange),
+        :   maOutputRange(rOutputRange),
             maDefinitionRange(rOutputRange),
             maFillHatch(rFillHatch),
             maBColor(rBColor)
@@ -144,8 +143,7 @@ namespace drawinglayer::primitive2d
             const basegfx::B2DRange& rDefinitionRange,
             const basegfx::BColor& rBColor,
             const attribute::FillHatchAttribute& rFillHatch)
-        :   DiscreteMetricDependentPrimitive2D(),
-            maOutputRange(rOutputRange),
+        :   maOutputRange(rOutputRange),
             maDefinitionRange(rDefinitionRange),
             maFillHatch(rFillHatch),
             maBColor(rBColor)

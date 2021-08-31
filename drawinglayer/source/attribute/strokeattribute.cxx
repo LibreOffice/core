@@ -40,8 +40,7 @@ namespace drawinglayer::attribute
             }
 
             ImpStrokeAttribute()
-            :   maDotDashArray(std::vector< double >()),
-                mfFullDotDashLen(0.0)
+            :   mfFullDotDashLen(0.0)
             {
             }
 

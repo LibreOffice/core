@@ -61,7 +61,6 @@ namespace drawinglayer::texture
             const BitmapEx& rBitmapEx,
             const basegfx::B2DRange& rRange)
         :   maBitmapEx(rBitmapEx),
-            maTransparence(),
             maTopLeft(rRange.getMinimum()),
             maSize(rRange.getRange()),
             mfMulX(0.0),

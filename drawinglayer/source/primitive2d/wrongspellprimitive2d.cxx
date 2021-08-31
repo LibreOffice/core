@@ -72,8 +72,7 @@ namespace drawinglayer::primitive2d
             double fStart,
             double fStop,
             const basegfx::BColor& rColor)
-        :   BufferedDecompositionPrimitive2D(),
-            maTransformation(rTransformation),
+        :   maTransformation(rTransformation),
             mfStart(fStart),
             mfStop(fStop),
             maColor(rColor)

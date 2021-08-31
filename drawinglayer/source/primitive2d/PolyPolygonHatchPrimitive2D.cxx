@@ -47,8 +47,7 @@ void PolyPolygonHatchPrimitive2D::create2DDecomposition(
 PolyPolygonHatchPrimitive2D::PolyPolygonHatchPrimitive2D(
     const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::BColor& rBackgroundColor,
     const attribute::FillHatchAttribute& rFillHatch)
-    : BufferedDecompositionPrimitive2D()
-    , maPolyPolygon(rPolyPolygon)
+    : maPolyPolygon(rPolyPolygon)
     , maDefinitionRange(rPolyPolygon.getB2DRange())
     , maBackgroundColor(rBackgroundColor)
     , maFillHatch(rFillHatch)
@@ -58,8 +57,7 @@ PolyPolygonHatchPrimitive2D::PolyPolygonHatchPrimitive2D(
 PolyPolygonHatchPrimitive2D::PolyPolygonHatchPrimitive2D(
     const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DRange& rDefinitionRange,
     const basegfx::BColor& rBackgroundColor, const attribute::FillHatchAttribute& rFillHatch)
-    : BufferedDecompositionPrimitive2D()
-    , maPolyPolygon(rPolyPolygon)
+    : maPolyPolygon(rPolyPolygon)
     , maDefinitionRange(rDefinitionRange)
     , maBackgroundColor(rBackgroundColor)
     , maFillHatch(rFillHatch)

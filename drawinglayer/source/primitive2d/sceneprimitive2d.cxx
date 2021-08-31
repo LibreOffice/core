@@ -570,18 +570,14 @@ namespace drawinglayer::primitive2d
             const attribute::SdrLightingAttribute& rSdrLightingAttribute,
             const basegfx::B2DHomMatrix& rObjectTransformation,
             const geometry::ViewInformation3D& rViewInformation3D)
-        :   BufferedDecompositionPrimitive2D(),
-            mxChildren3D(rxChildren3D),
+        :   mxChildren3D(rxChildren3D),
             maSdrSceneAttribute(rSdrSceneAttribute),
             maSdrLightingAttribute(rSdrLightingAttribute),
             maObjectTransformation(rObjectTransformation),
             maViewInformation3D(rViewInformation3D),
-            maShadowPrimitives(),
             mbShadow3DChecked(false),
             mfOldDiscreteSizeX(0.0),
-            mfOldDiscreteSizeY(0.0),
-            maOldUnitVisiblePart(),
-            maOldRenderedBitmap()
+            mfOldDiscreteSizeY(0.0)
         {
         }
 

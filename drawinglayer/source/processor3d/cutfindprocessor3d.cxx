@@ -37,8 +37,6 @@ namespace drawinglayer::processor3d
         :   BaseProcessor3D(rViewInformation),
             maFront(rFront),
             maBack(rBack),
-            maResult(),
-            maCombinedTransform(),
             mbAnyHit(bAnyHit)
         {
         }

@@ -253,8 +253,7 @@ namespace drawinglayer::primitive2d
             double fHeight,
             TextLine eTextLine,
             const basegfx::BColor& rLineColor)
-        :   BufferedDecompositionPrimitive2D(),
-            maObjectTransformation(rObjectTransformation),
+        :   maObjectTransformation(rObjectTransformation),
             mfWidth(fWidth),
             mfOffset(fOffset),
             mfHeight(fHeight),

@@ -47,8 +47,7 @@ void PolyPolygonMarkerPrimitive2D::create2DDecomposition(
 PolyPolygonMarkerPrimitive2D::PolyPolygonMarkerPrimitive2D(
     const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::BColor& rRGBColorA,
     const basegfx::BColor& rRGBColorB, double fDiscreteDashLength)
-    : BufferedDecompositionPrimitive2D()
-    , maPolyPolygon(rPolyPolygon)
+    : maPolyPolygon(rPolyPolygon)
     , maRGBColorA(rRGBColorA)
     , maRGBColorB(rRGBColorB)
     , mfDiscreteDashLength(fDiscreteDashLength)

@@ -27,8 +27,7 @@ using namespace com::sun::star;
 namespace drawinglayer::primitive2d
 {
         GroupPrimitive2D::GroupPrimitive2D( const Primitive2DContainer& rChildren )
-        :   BasePrimitive2D(),
-            maChildren(rChildren)
+        :   maChildren(rChildren)
         {
         }
 

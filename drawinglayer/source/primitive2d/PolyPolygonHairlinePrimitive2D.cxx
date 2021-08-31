@@ -45,8 +45,7 @@ void PolyPolygonHairlinePrimitive2D::create2DDecomposition(
 
 PolyPolygonHairlinePrimitive2D::PolyPolygonHairlinePrimitive2D(
     const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::BColor& rBColor)
-    : BufferedDecompositionPrimitive2D()
-    , maPolyPolygon(rPolyPolygon)
+    : maPolyPolygon(rPolyPolygon)
     , maBColor(rBColor)
 {
 }

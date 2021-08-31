@@ -30,9 +30,6 @@ namespace drawinglayer::primitive2d
 {
         TextBreakupHelper::TextBreakupHelper(const TextSimplePortionPrimitive2D& rSource)
         :   mrSource(rSource),
-            mxResult(),
-            maTextLayouter(),
-            maDecTrans(),
             mbNoDXArray(false)
         {
             maDecTrans = mrSource.getTextTransform();

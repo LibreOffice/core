@@ -96,8 +96,7 @@ namespace drawinglayer::primitive2d
             const basegfx::BColor& rBackgroundColor,
             sal_uInt32 nDiscreteBorder,
             const Graphic &rSnapshot)
-        :   BufferedDecompositionPrimitive2D(),
-            maTransform(rTransform),
+        :   maTransform(rTransform),
             maURL(rURL),
             maBackgroundColor(rBackgroundColor),
             mnDiscreteBorder(nDiscreteBorder),

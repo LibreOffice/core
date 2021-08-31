@@ -42,10 +42,8 @@ namespace drawinglayer::primitive2d
         BackgroundColorPrimitive2D::BackgroundColorPrimitive2D(
             const basegfx::BColor& rBColor,
             double fTransparency)
-        :   BufferedDecompositionPrimitive2D(),
-            maBColor(rBColor),
-            mfTransparency(fTransparency),
-            maLastViewport()
+        :   maBColor(rBColor),
+            mfTransparency(fTransparency)
         {
         }
 

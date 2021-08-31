@@ -88,8 +88,7 @@ namespace drawinglayer::primitive2d
         MetafilePrimitive2D::MetafilePrimitive2D(
             const basegfx::B2DHomMatrix& rMetaFileTransform,
             const GDIMetaFile& rMetaFile)
-        :   BufferedDecompositionPrimitive2D(),
-            maMetaFileTransform(rMetaFileTransform),
+        :   maMetaFileTransform(rMetaFileTransform),
             maMetaFile(rMetaFile)
         {
         }

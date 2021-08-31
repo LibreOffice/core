@@ -93,8 +93,7 @@ namespace drawinglayer::primitive2d
         FillGraphicPrimitive2D::FillGraphicPrimitive2D(
             const basegfx::B2DHomMatrix& rTransformation,
             const attribute::FillGraphicAttribute& rFillGraphic)
-        :   BufferedDecompositionPrimitive2D(),
-            maTransformation(rTransformation),
+        :   maTransformation(rTransformation),
             maFillGraphic(rFillGraphic)
         {
         }

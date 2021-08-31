@@ -29,10 +29,8 @@ namespace drawinglayer::primitive2d
         PointArrayPrimitive2D::PointArrayPrimitive2D(
             const std::vector< basegfx::B2DPoint >& rPositions,
             const basegfx::BColor& rRGBColor)
-        :   BasePrimitive2D(),
-            maPositions(rPositions),
-            maRGBColor(rRGBColor),
-            maB2DRange()
+        :   maPositions(rPositions),
+            maRGBColor(rRGBColor)
         {
         }
 

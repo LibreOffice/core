@@ -56,9 +56,7 @@ public:
     }
 
     ImpFontAttribute()
-        : maFamilyName()
-        , maStyleName()
-        , mnWeight(0)
+        : mnWeight(0)
         , mbSymbol(false)
         , mbVertical(false)
         , mbItalic(false)

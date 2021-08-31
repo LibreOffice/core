@@ -29,15 +29,7 @@
 namespace drawinglayer::primitive2d
 {
         DiscreteShadow::DiscreteShadow(const BitmapEx& rBitmapEx)
-        :   maBitmapEx(rBitmapEx),
-            maTopLeft(),
-            maTop(),
-            maTopRight(),
-            maRight(),
-            maBottomRight(),
-            maBottom(),
-            maBottomLeft(),
-            maLeft()
+        :   maBitmapEx(rBitmapEx)
         {
             const Size& rBitmapSize = getBitmapEx().GetSizePixel();
 
@@ -265,8 +257,7 @@ namespace drawinglayer::primitive2d
         DiscreteShadowPrimitive2D::DiscreteShadowPrimitive2D(
             const basegfx::B2DHomMatrix& rTransform,
             const DiscreteShadow& rDiscreteShadow)
-        :   DiscreteMetricDependentPrimitive2D(),
-            maTransform(rTransform),
+        :   maTransform(rTransform),
             maDiscreteShadow(rDiscreteShadow)
         {
         }

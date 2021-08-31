@@ -76,8 +76,6 @@ public:
 
 VDevBuffer::VDevBuffer()
     : Timer("VDevBuffer timer")
-    , maFreeBuffers()
-    , maUsedBuffers()
 {
     SetTimeout(10L * 1000L); // ten seconds
     SetDebugName("drawinglayer::VDevBuffer via Invoke()");

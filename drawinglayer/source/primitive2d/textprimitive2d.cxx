@@ -204,8 +204,7 @@ TextSimplePortionPrimitive2D::TextSimplePortionPrimitive2D(
     const attribute::FontAttribute& rFontAttribute, const css::lang::Locale& rLocale,
     const basegfx::BColor& rFontColor, bool bFilled, tools::Long nWidthToFill,
     const Color& rTextFillColor)
-    : BufferedDecompositionPrimitive2D()
-    , maTextTransform(rNewTransform)
+    : maTextTransform(rNewTransform)
     , maText(rText)
     , mnTextPosition(nTextPosition)
     , mnTextLength(nTextLength)
@@ -216,7 +215,6 @@ TextSimplePortionPrimitive2D::TextSimplePortionPrimitive2D(
     , mbFilled(bFilled)
     , mnWidthToFill(nWidthToFill)
     , maTextFillColor(rTextFillColor)
-    , maB2DRange()
 {
 #if OSL_DEBUG_LEVEL > 0
     const sal_Int32 aStringLength(getText().getLength());
