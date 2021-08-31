@@ -22,6 +22,7 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <vcl/print.hxx>
+#include <vcl/printer/OptionsHelper.hxx>
 #include <sfx2/objsh.hxx>
 
 #include <o3tl/sorted_vector.hxx>
@@ -169,7 +170,7 @@ public:
     virtual void doSetModified () {}
 };
 
-class SwPrintUIOptions final : public vcl::PrinterOptionsHelper
+class SwPrintUIOptions final : public vcl::printer::OptionsHelper
 {
     VclPtr< OutputDevice > m_pLast;
     const SwPrintData & m_rDefaultPrintData;

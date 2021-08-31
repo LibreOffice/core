@@ -25,6 +25,7 @@
 #include <sfx2/sfxbasemodel.hxx>
 #include <comphelper/propertysethelper.hxx>
 #include <vcl/print.hxx>
+#include <vcl/printer/OptionsHelper.hxx>
 #include <oox/mathml/export.hxx>
 #include <oox/mathml/import.hxx>
 
@@ -34,7 +35,7 @@
 #define PRTUIOPT_PRINT_FORMAT       "PrintFormat"
 #define PRTUIOPT_PRINT_SCALE        "PrintScale"
 
-class SmPrintUIOptions : public vcl::PrinterOptionsHelper
+class SmPrintUIOptions : public vcl::printer::OptionsHelper
 {
 public:
     SmPrintUIOptions();

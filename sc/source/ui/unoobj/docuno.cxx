@@ -44,6 +44,7 @@
 #include <svx/unopage.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/print.hxx>
+#include <vcl/printer/OptionsHelper.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/json_writer.hxx>
 #include <tools/multisel.hxx>
@@ -235,7 +236,7 @@ SC_SIMPLE_SERVICE_INFO( ScTableColumnsObj, "ScTableColumnsObj", "com.sun.star.ta
 SC_SIMPLE_SERVICE_INFO( ScTableRowsObj, "ScTableRowsObj", "com.sun.star.table.TableRows" )
 SC_SIMPLE_SERVICE_INFO( ScTableSheetsObj, "ScTableSheetsObj", "com.sun.star.sheet.Spreadsheets" )
 
-class ScPrintUIOptions : public vcl::PrinterOptionsHelper
+class ScPrintUIOptions : public vcl::printer::OptionsHelper
 {
 public:
     ScPrintUIOptions();
@@ -271,7 +272,7 @@ ScPrintUIOptions::ScPrintUIOptions()
                                                   "IsSuppressEmptyPages",
                                                   bSuppress);
     // show Subgroup for print content
-    vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
+    vcl::printer::OptionsHelper::UIControlOptions aPrintRangeOpt;
     aPrintRangeOpt.maGroupHint = "PrintRange";
     m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("printrange", ScResId( SCSTR_PRINTOPT_PAGES ),
                                                       OUString(),
@@ -312,12 +313,12 @@ ScPrintUIOptions::ScPrintUIOptions()
                                                     0 );
 
     // create an Edit dependent on "Pages" selected
-    vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, true );
+    vcl::printer::OptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, true );
     m_aUIProperties[nIdx++].Value = setEditControlOpt("pagerange", OUString(),
                                                       ".HelpID:vcl:PrintDialog:PageRange:Edit",
                                                       "PageRange", OUString(), aPageRangeOpt);
 
-    vcl::PrinterOptionsHelper::UIControlOptions aEvenOddOpt(aPrintRangeName, 0, true);
+    vcl::printer::OptionsHelper::UIControlOptions aEvenOddOpt(aPrintRangeName, 0, true);
     m_aUIProperties[ nIdx++ ].Value = setChoiceListControlOpt("evenoddbox",
                                                            OUString(),
                                                            uno::Sequence<OUString>(),
