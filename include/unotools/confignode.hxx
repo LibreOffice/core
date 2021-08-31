@@ -198,7 +198,7 @@ namespace utl
         /** default ctor<p/>
             The object constructed here is invalid (i.e. <method>isValid</method> will return sal_False).
         */
-        OConfigurationTreeRoot() :OConfigurationNode() { }
+        OConfigurationTreeRoot() {}
 
         /** creates a configuration tree for the given path in the given mode
         */

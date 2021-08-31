@@ -281,8 +281,7 @@ void XRMResParser::Error( const OString &rError )
 
 XRMResExport::XRMResExport(
     const OString &rOutputFile, const OString &rFilePath )
-                : XRMResParser(),
-                sPath( rFilePath )
+                : sPath( rFilePath )
 {
     pOutputStream.open( rOutputFile, PoOfstream::APP );
     if (!pOutputStream.isOpen())
@@ -353,8 +352,7 @@ void XRMResExport::EndOfText(
 XRMResMerge::XRMResMerge(
     const OString &rMergeSource, const OString &rOutputFile,
     const OString &rFilename )
-                : XRMResParser(),
-                sFilename( rFilename )
+                : sFilename( rFilename )
 {
     if (!rMergeSource.isEmpty() && sLanguage.equalsIgnoreAsciiCase("ALL"))
     {

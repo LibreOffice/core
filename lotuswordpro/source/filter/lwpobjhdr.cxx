@@ -64,7 +64,6 @@
 
 LwpObjectHeader::LwpObjectHeader()
     : m_nTag(0)
-    , m_ID()
     , m_nSize(0)
     , m_bCompressed(false)
 {

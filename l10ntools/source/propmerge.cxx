@@ -88,8 +88,7 @@ namespace
 PropParser::PropParser(
     const OString& rInputFile, const OString& rLang,
     const bool bMergeMode )
-    : m_vLines( std::vector<OString>() )
-    , m_sSource( rInputFile )
+    : m_sSource( rInputFile )
     , m_sLang( rLang )
     , m_bIsInitialized( false )
 {

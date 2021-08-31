@@ -61,7 +61,6 @@ sal_Unicode* getDataArea_zh();
 #endif
 
 xdictionary::xdictionary(const char *lang) :
-    boundary(),
     japaneseWordBreak( false )
 {
 

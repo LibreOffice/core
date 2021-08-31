@@ -151,8 +151,7 @@ class SVXCORE_DLLPUBLIC SdrMarkList final
 
 public:
     SdrMarkList()
-    :   maList(),
-        mbPointNameOk(false),
+    :   mbPointNameOk(false),
         mbGluePointNameOk(false),
         mbNameOk(false),
         mbSorted(true)
@@ -160,7 +159,6 @@ public:
     }
 
     SdrMarkList(const SdrMarkList& rLst)
-    :   maList()
     {
         *this = rLst;
     }

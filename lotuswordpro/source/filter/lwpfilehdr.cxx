@@ -64,7 +64,6 @@ LwpFileHeader::LwpFileHeader()
     , m_nAppReleaseNo(0)
     , m_nRequiredAppRevision(0)
     , m_nRequiredFileRevision(0)
-    , m_cDocumentID()
     , m_nRootIndexOffset(0)
 {
 }

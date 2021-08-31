@@ -635,7 +635,6 @@ The following structure describes the permissions used in PDF security
                 FirstPageLeft( false ),
                 InitialPage( 1 ),
                 OpenBookmarkLevels( -1 ),
-                Encryption(),
                 SignPDF( false ),
                 DPIx( 0 ),
                 DPIy( 0 ),
