@@ -29,6 +29,20 @@ class Tdf142395(UITestCase):
         xTextDelimiter.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
         xTextDelimiter.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
 
+        xTab = xDialog.getChild("tab")
+        if get_state_as_dict(xTab)['Selected'] == 'false':
+            xTab.executeAction("CLICK", tuple())
+        self.assertEqual('true', get_state_as_dict(xTab)['Selected'])
+        xComma = xDialog.getChild("comma")
+        if get_state_as_dict(xComma)['Selected'] == 'false':
+            xComma.executeAction("CLICK", tuple())
+        self.assertEqual('true', get_state_as_dict(xComma)['Selected'])
+        xSemicolon = xDialog.getChild("semicolon")
+        if get_state_as_dict(xSemicolon)['Selected'] == 'false':
+            xSemicolon.executeAction("CLICK", tuple())
+        self.assertEqual('true', get_state_as_dict(xSemicolon)['Selected'])
+        self.assertEqual('1', get_state_as_dict(xDialog.getChild("fromrow"))['Text'])
+
         xOK = xDialog.getChild('ok')
         with self.ui_test.wait_until_component_loaded():
             self.ui_test.close_dialog_through_button(xOK)

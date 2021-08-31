@@ -20,6 +20,19 @@ class Tdf96561(UITestCase):
             xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("tdf96561.csv")}))
 
         xDialog = self.ui_test.wait_for_top_focus_window('TextImportCsvDialog')
+        xTab = xDialog.getChild("tab")
+        if get_state_as_dict(xTab)['Selected'] == 'false':
+            xTab.executeAction("CLICK", tuple())
+        self.assertEqual('true', get_state_as_dict(xTab)['Selected'])
+        xComma = xDialog.getChild("comma")
+        if get_state_as_dict(xComma)['Selected'] == 'false':
+            xComma.executeAction("CLICK", tuple())
+        self.assertEqual('true', get_state_as_dict(xComma)['Selected'])
+        xSemicolon = xDialog.getChild("semicolon")
+        if get_state_as_dict(xSemicolon)['Selected'] == 'false':
+            xSemicolon.executeAction("CLICK", tuple())
+        self.assertEqual('true', get_state_as_dict(xSemicolon)['Selected'])
+        self.assertEqual('1', get_state_as_dict(xDialog.getChild("fromrow"))['Text'])
 
         # Set text delimiter in case it's changed by another test
         xSeparatedBy = xDialog.getChild("toseparatedby")
