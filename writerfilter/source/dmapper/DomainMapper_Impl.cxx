@@ -1457,7 +1457,11 @@ sal_Int16 DomainMapper_Impl::GetListLevel(const StyleSheetEntryPtr& pEntry,
     sal_Int16 nListLevel = -1;
     if (pParaContext)
     {
-        GetAnyProperty(PROP_NUMBERING_LEVEL, pParaContext) >>= nListLevel;
+        // Deliberately ignore inherited PROP_NUMBERING_LEVEL. Only trust StyleSheetEntry for that.
+        std::optional<PropertyMap::Property> aLvl = pParaContext->getProperty(PROP_NUMBERING_LEVEL);
+        if (aLvl)
+            aLvl->second >>= nListLevel;
+
         if (nListLevel != -1)
             return nListLevel;
     }
