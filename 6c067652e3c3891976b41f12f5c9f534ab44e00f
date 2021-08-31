@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8aff625_54d16994",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2021-08-31T11:08:55Z",
+      "side": 1,
+      "message": "Resolved these in patchset 3. Thanks!",
+      "revId": "6c067652e3c3891976b41f12f5c9f534ab44e00f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "46946051_af98b946",
@@ -31,6 +48,24 @@
       "writtenOn": "2021-08-31T07:38:49Z",
       "side": 1,
       "message": "This is a new class, could you please add a one-liner doxygen comment on what it does? See https://wiki.documentfoundation.org/Development/Doxygen",
+      "revId": "6c067652e3c3891976b41f12f5c9f534ab44e00f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1de5a35b_705467e2",
+        "filename": "include/oox/export/chartexport.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2021-08-31T11:08:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46946051_af98b946",
       "revId": "6c067652e3c3891976b41f12f5c9f534ab44e00f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -52,6 +87,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1fd54c1_a3876262",
+        "filename": "offapi/com/sun/star/chart2/XDataPointCustomLabelField.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2021-08-31T11:08:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a89c645_ebbbf98e",
+      "revId": "6c067652e3c3891976b41f12f5c9f534ab44e00f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ecc09b7b_d0105c4a",
@@ -65,6 +118,24 @@
       "writtenOn": "2021-08-31T07:38:49Z",
       "side": 1,
       "message": "Same here, could you add a one-liner comment to explain what a CustomLabelData is?",
+      "revId": "6c067652e3c3891976b41f12f5c9f534ab44e00f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "934d9fea_f0c9af43",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2021-08-31T11:08:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ecc09b7b_d0105c4a",
       "revId": "6c067652e3c3891976b41f12f5c9f534ab44e00f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -86,6 +157,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e2bbfa8_8382cbe6",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2021-08-31T11:08:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "716b6b0a_34c7de4f",
+      "revId": "6c067652e3c3891976b41f12f5c9f534ab44e00f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d2f7cdd_78a23bd4",
@@ -99,6 +188,24 @@
       "writtenOn": "2021-08-31T07:38:49Z",
       "side": 1,
       "message": "Could you add a one-liner comment on what is a CustomLabelsInfo?",
+      "revId": "6c067652e3c3891976b41f12f5c9f534ab44e00f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4992d5b_489fb730",
+        "filename": "xmloff/source/chart/transporttypes.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2021-08-31T11:08:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d2f7cdd_78a23bd4",
       "revId": "6c067652e3c3891976b41f12f5c9f534ab44e00f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
