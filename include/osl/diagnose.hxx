@@ -93,7 +93,7 @@ typedef ::std::unordered_set<void const*, VoidPtrHash > VoidPointerSet;
 
 struct ObjectRegistryData {
     ObjectRegistryData( ::std::type_info const& rTypeInfo )
-        : m_pName(rTypeInfo.name()), m_nCount(0), m_addresses(),
+        : m_pName(rTypeInfo.name()), m_nCount(0),
           m_bStoreAddresses(osl_detail_ObjectRegistry_storeAddresses(m_pName)) {}
 
     char const* const m_pName;

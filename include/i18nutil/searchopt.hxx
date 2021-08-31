@@ -60,9 +60,6 @@ struct SAL_WARN_UNUSED SearchOptions {
     SearchOptions()
         : algorithmType(::css::util::SearchAlgorithms_ABSOLUTE)
         , searchFlag(0)
-        , searchString()
-        , replaceString()
-        , Locale()
         , changedChars(0)
         , deletedChars(0)
         , insertedChars(0)
@@ -117,8 +114,7 @@ struct SAL_WARN_UNUSED SearchOptions2 : public SearchOptions {
     }
 
     SearchOptions2()
-        : SearchOptions()
-        , AlgorithmType2(0)
+        : AlgorithmType2(0)
         , WildcardEscapeCharacter(0)
     {}
 

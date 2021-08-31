@@ -36,7 +36,6 @@ public:
 
     SvxIMapInfo(const SvxIMapInfo& rIMapInfo)
         : SdrObjUserData(SdrInventor::StarDrawUserData, SVX_IMAPINFO_ID)
-        , SfxListener()
         , aImageMap(rIMapInfo.aImageMap){};
 
     virtual std::unique_ptr<SdrObjUserData> Clone(SdrObject*) const override

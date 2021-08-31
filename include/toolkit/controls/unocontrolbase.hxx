@@ -32,9 +32,9 @@
 class UnoControlBase : public UnoControl
 {
 protected:
-    UnoControlBase() :UnoControl() {}
+    UnoControlBase() {}
 
-    bool                    ImplHasProperty( sal_uInt16 nProp );
+    bool                        ImplHasProperty( sal_uInt16 nProp );
     bool                    ImplHasProperty( const OUString& aPropertyName );
     void                        ImplSetPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue, bool bUpdateThis );
     void                        ImplSetPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues, bool bUpdateThis );

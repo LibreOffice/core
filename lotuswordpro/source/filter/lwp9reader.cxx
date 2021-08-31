@@ -67,7 +67,6 @@ Lwp9Reader::Lwp9Reader(LwpSvStream* pInputStream, IXFStream* pStream)
     : m_pDocStream(pInputStream)
     , m_pStream(pStream)
     , m_pObjMgr(nullptr)
-    , m_LwpFileHdr()
 {
 }
 

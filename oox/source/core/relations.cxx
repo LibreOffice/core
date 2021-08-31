@@ -53,8 +53,7 @@ OUString createOfficeDocRelationTypeStrict(std::u16string_view rType)
 }
 
 Relations::Relations( const OUString& rFragmentPath )
-    : maMap()
-    , maFragmentPath( rFragmentPath )
+    : maFragmentPath( rFragmentPath )
 {
 }
 

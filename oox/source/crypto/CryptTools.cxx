@@ -349,7 +349,6 @@ Crypto::~Crypto()
 // DECRYPT
 
 Decrypt::Decrypt(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, CryptoType type)
-    : Crypto()
 {
 #if USE_TLS_OPENSSL + USE_TLS_NSS == 0
     (void)key;
@@ -403,7 +402,6 @@ sal_uInt32 Decrypt::aes128ecb(std::vector<sal_uInt8>& output, std::vector<sal_uI
 // ENCRYPT
 
 Encrypt::Encrypt(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, CryptoType type)
-    : Crypto()
 {
 #if USE_TLS_OPENSSL + USE_TLS_NSS == 0
     (void)key;
@@ -460,8 +458,7 @@ sal_Int32 getSizeForHashType(CryptoHashType eType)
 } // end anonymous namespace
 
 CryptoHash::CryptoHash(std::vector<sal_uInt8>& rKey, CryptoHashType eType)
-    : Crypto()
-    , mnHashSize(getSizeForHashType(eType))
+    : mnHashSize(getSizeForHashType(eType))
 {
 #if USE_TLS_OPENSSL
     mpImpl->setupCryptoHashContext(rKey, eType);

@@ -892,11 +892,7 @@ std::unique_ptr<JavaInfo> CNodeJavaInfo::makeJavaInfo() const
 
 
 MergedSettings::MergedSettings():
-    m_bEnabled(false),
-    m_sClassPath(),
-    m_vmParams(),
-    m_JRELocations(),
-    m_javaInfo()
+    m_bEnabled(false)
 {
     NodeJava settings(NodeJava::USER);
     settings.load();

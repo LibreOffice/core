@@ -67,8 +67,7 @@ public:
     OUString msIdentifier;
 
     ClassificationField(ClassificationType eType, OUString const & sDescription, OUString const & sFullClassName, OUString const & sIdentifier)
-        : SvxFieldData()
-        , meType(eType)
+        : meType(eType)
         , msDescription(sDescription)
         , msFullClassName(sFullClassName)
         , msIdentifier(sIdentifier)
