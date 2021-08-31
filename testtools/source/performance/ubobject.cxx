@@ -183,13 +183,13 @@ public:
         {}
     virtual void SAL_CALL sync() throw(css::uno::RuntimeException)
         {}
-    virtual ComplexTypes SAL_CALL complex_in( const css::test::performance::ComplexTypes& aVal ) throw(css::uno::RuntimeException)
+    virtual ComplexTypes SAL_CALL complexIn( const css::test::performance::ComplexTypes& aVal ) throw(css::uno::RuntimeException)
         { return aVal; }
-    virtual ComplexTypes SAL_CALL complex_inout( css::test::performance::ComplexTypes& aVal ) throw(css::uno::RuntimeException)
+    virtual ComplexTypes SAL_CALL complexInout( css::test::performance::ComplexTypes& aVal ) throw(css::uno::RuntimeException)
         { return aVal; }
-    virtual void SAL_CALL complex_oneway( const css::test::performance::ComplexTypes& aVal ) throw(css::uno::RuntimeException)
+    virtual void SAL_CALL complexOneway( const css::test::performance::ComplexTypes& aVal ) throw(css::uno::RuntimeException)
         {}
-    virtual void SAL_CALL complex_noreturn( const css::test::performance::ComplexTypes& aVal ) throw(css::uno::RuntimeException)
+    virtual void SAL_CALL complexNoreturn( const css::test::performance::ComplexTypes& aVal ) throw(css::uno::RuntimeException)
         {}
     virtual Reference< XPerformanceTest > SAL_CALL createObject() throw(css::uno::RuntimeException)
         { return new ServiceImpl(); }

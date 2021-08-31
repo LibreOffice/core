@@ -161,18 +161,18 @@ public class TestComponent {
         public void sync(  ) throws com.sun.star.uno.RuntimeException {
         }
 
-        public ComplexTypes complex_in( /*IN*/ComplexTypes aVal ) throws com.sun.star.uno.RuntimeException {
+        public ComplexTypes complexIn( /*IN*/ComplexTypes aVal ) throws com.sun.star.uno.RuntimeException {
             return aVal;
         }
 
-        public ComplexTypes complex_inout( /*INOUT*/ComplexTypes[] aVal ) throws com.sun.star.uno.RuntimeException {
+        public ComplexTypes complexInout( /*INOUT*/ComplexTypes[] aVal ) throws com.sun.star.uno.RuntimeException {
             return aVal[0];
         }
 
-        public void complex_oneway( /*IN*/ComplexTypes aVal ) throws com.sun.star.uno.RuntimeException {
+        public void complexOneway( /*IN*/ComplexTypes aVal ) throws com.sun.star.uno.RuntimeException {
         }
 
-        public void complex_noreturn( /*IN*/ComplexTypes aVal ) throws com.sun.star.uno.RuntimeException {
+        public void complexNoreturn( /*IN*/ComplexTypes aVal ) throws com.sun.star.uno.RuntimeException {
         }
 
         public XPerformanceTest createObject(  ) throws com.sun.star.uno.RuntimeException {

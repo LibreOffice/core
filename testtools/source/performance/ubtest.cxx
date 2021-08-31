@@ -626,28 +626,28 @@ static void benchmark(
     i = nLoop;
     tStart = getSystemTicks();
     while (i--)
-        xBench->complex_in( aDummyStruct );
+        xBench->complexIn( aDummyStruct );
     tEnd = getSystemTicks();
-    rSheet.insert( "4a: complex_in() calls (in struct; return struct)", nLoop, tEnd - tStart );
+    rSheet.insert( "4a: complexIn() calls (in struct; return struct)", nLoop, tEnd - tStart );
     i = nLoop;
     tStart = getSystemTicks();
     while (i--)
-        xBench->complex_inout( aDummyStruct );
+        xBench->complexInout( aDummyStruct );
     tEnd = getSystemTicks();
-    rSheet.insert( "4b: complex_inout() calls (inout struct; return struct)", nLoop, tEnd - tStart );
+    rSheet.insert( "4b: complexInout() calls (inout struct; return struct)", nLoop, tEnd - tStart );
 
     i = nLoop;
     tStart = getSystemTicks();
     while (i--)
-        xBench->complex_oneway( aDummyStruct );
+        xBench->complexOneway( aDummyStruct );
     tEnd = getSystemTicks();
-    rSheet.insert( "4c: complex_oneway() oneway calls (in struct)", nLoop, tEnd - tStart );
+    rSheet.insert( "4c: complexOneway() oneway calls (in struct)", nLoop, tEnd - tStart );
     i = nLoop;
     tStart = getSystemTicks();
     while (i--)
-        xBench->complex_noreturn( aDummyStruct );
+        xBench->complexNoreturn( aDummyStruct );
     tEnd = getSystemTicks();
-    rSheet.insert( "4d: complex_noreturn() calls (in struct)", nLoop, tEnd - tStart );
+    rSheet.insert( "4d: complexNoreturn() calls (in struct)", nLoop, tEnd - tStart );
 
     // attributes, get() methods
     i = nLoop;
