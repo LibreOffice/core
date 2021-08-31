@@ -1042,10 +1042,13 @@ static bool lcl_PutString(
     {
         double fDummy;
         sal_uInt32 nIndex = 0;
-        if (bForceFormulaText || pFormatter->IsNumberFormat(rStr, nIndex, fDummy))
+        if (bForceFormulaText || rDoc.GetFormatTable()->IsNumberFormat(rStr, nIndex, fDummy))
         {
             // Set the format of this cell to Text.
-            sal_uInt32 nFormat = pFormatter->GetStandardFormat(SvNumFormatType::TEXT);
+            /* TODO: is this even necessary as ScSetStringParam should take
+             * care of it and we're doing this twice? Investigate all paths
+             * taken below. */
+            sal_uInt32 nFormat = rDoc.GetFormatTable()->GetStandardFormat(SvNumFormatType::TEXT);
             ScPatternAttr aNewAttrs(rDoc.GetPool());
             SfxItemSet& rSet = aNewAttrs.GetItemSet();
             rSet.Put( SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat) );
