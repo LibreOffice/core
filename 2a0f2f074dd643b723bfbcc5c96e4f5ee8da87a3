@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43ae0478_a013f4a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-31T08:08:30Z",
+      "side": 1,
+      "message": "eb37b1e346f5651ce8e6848e51103a8986a57c36 is likely a typo or something - https://git.libreoffice.org/core/+/eb37b1e346f5651ce8e6848e51103a8986a57c36 fives 404 :)",
+      "revId": "2a0f2f074dd643b723bfbcc5c96e4f5ee8da87a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
