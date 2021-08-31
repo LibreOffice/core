@@ -83,6 +83,7 @@ static const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
         {u"" SC_UNO_LOADREADONLY, 0,  cppu::UnoType<bool>::get(),              0, 0},
         {u"" SC_UNO_SHAREDOC,     0,  cppu::UnoType<bool>::get(),              0, 0},
         {u"" SC_UNO_MODIFYPASSWORDINFO, 0,  cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(),              0, 0},
+        {u"" SC_UNO_MODIFYPASSWORDHASH, 0,  cppu::UnoType<sal_Int32>::get(),   0, 0},
         {u"" SC_UNO_EMBED_FONTS,               0,  cppu::UnoType<bool>::get(), 0, 0},
         {u"" SC_UNO_EMBED_ONLY_USED_FONTS,     0,  cppu::UnoType<bool>::get(), 0, 0},
         {u"" SC_UNO_EMBED_FONT_SCRIPT_LATIN,   0,  cppu::UnoType<bool>::get(), 0, 0},
@@ -337,6 +338,16 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             throw beans::PropertyVetoException(
                 "The hash is not allowed to be changed now!" );
     }
+    else if (aPropertyName == SC_UNO_MODIFYPASSWORDHASH)
+    {
+        sal_Int32 nHash;
+        if (!(aValue >>= nHash))
+            throw lang::IllegalArgumentException("Value of type sal_Int32 expected!",
+                                                 uno::Reference<uno::XInterface>(), 2);
+
+        if (!pDocShell->SetModifyPasswordHash(nHash))
+            throw beans::PropertyVetoException("The hash is not allowed to be changed now!");
+    }
     else if (aPropertyName == SC_UNO_EMBED_FONTS)
     {
         bool bVal = aValue.has<bool>() && aValue.get<bool>();
@@ -537,6 +548,8 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
     }
     else if ( aPropertyName == SC_UNO_MODIFYPASSWORDINFO )
         aRet <<= pDocShell->GetModifyPasswordInfo();
+    else if (aPropertyName == SC_UNO_MODIFYPASSWORDHASH)
+        aRet <<= pDocShell->GetModifyPasswordHash();
     else if (aPropertyName == SC_UNO_EMBED_FONTS)
         aRet <<= rDoc.IsEmbedFonts();
     else if (aPropertyName == SC_UNO_EMBED_ONLY_USED_FONTS)

@@ -806,7 +806,11 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS( pDocShell->GetModel(), uno::UNO_QUERY_THROW );
     uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
 
-    rStrm.exportDocumentProperties(xDocProps, pDocShell->IsSecurityOptOpenReadOnly());
+    sal_uInt32 nWriteProtHash = pDocShell->GetModifyPasswordHash();
+    OUString sUserName = GetUserName();
+    bool bHasPassword = nWriteProtHash && !sUserName.isEmpty();
+    rStrm.exportDocumentProperties(xDocProps,
+                                   pDocShell->IsSecurityOptOpenReadOnly() && !bHasPassword);
     rStrm.exportCustomFragments();
 
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
@@ -820,6 +824,11 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_lowestEdited
             // OOXTODO: XML_rupBuild
     );
+
+    if (bHasPassword)
+        rWorkbook->singleElement(XML_fileSharing,
+                XML_userName, sUserName,
+                XML_reservationPassword, OString::number(nWriteProtHash, 16).getStr());
 
     if( !maTableList.IsEmpty() )
     {
