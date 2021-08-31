@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd7efc5b_4d509082",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-08-31T17:50:34Z",
+      "side": 1,
+      "message": "Hi! I have seen that lately you put a lot of effort into the CSV import mechanism. Maybe you could review this small patch?",
+      "revId": "81a698fe084f6fc91a16cc5ff8e2f9a63e7b35cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
