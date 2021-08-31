@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e128ce00_61534f29",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-08-31T08:42:05Z",
+      "side": 1,
+      "message": "Tomaz: could you please take a look? Thanks.\n\nI don\u0027t really see how this worked in the past, so I just fixed the problem. :-) It seemed like doing a debug build of that old version would be a waste of time.",
+      "revId": "a843c98743f4dc19e34991bad998d161124f876b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
