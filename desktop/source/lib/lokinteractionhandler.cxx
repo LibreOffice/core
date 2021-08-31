@@ -49,6 +49,8 @@
 #include <sfx2/viewsh.hxx>
 #include <vcl/svapp.hxx>
 
+#include <tools/json_writer.hxx>
+
 using namespace com::sun::star;
 
 LOKInteractionHandler::LOKInteractionHandler(
@@ -99,7 +101,7 @@ void SAL_CALL LOKInteractionHandler::handle(
 
 void LOKInteractionHandler::postError(css::task::InteractionClassification classif, const char* kind, ErrCode code, const OUString &message)
 {
-    const char *classification = "error";
+    std::string classification = "error";
     switch (classif)
     {
         case task::InteractionClassification_ERROR: break;
@@ -110,21 +112,18 @@ void LOKInteractionHandler::postError(css::task::InteractionClassification class
     }
 
     // create the JSON representation
-    boost::property_tree::ptree aTree;
-    aTree.put("classification", classification);
-    aTree.put("cmd", m_command.getStr());
-    aTree.put("kind", kind);
-    aTree.put("code", code);
-    aTree.put("message", message.toUtf8());
-
-    std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aTree);
+    tools::JsonWriter aJson;
+    aJson.put("classification", classification);
+    aJson.put("cmd", m_command.getStr());
+    aJson.put("kind", kind);
+    aJson.put("code", static_cast<sal_uInt32>(code));
+    aJson.put("message", message.toUtf8());
 
     std::size_t nView = SfxViewShell::Current() ? SfxLokHelper::getView() : 0;
     if (m_pLOKDocument && m_pLOKDocument->mpCallbackFlushHandlers.count(nView))
-        m_pLOKDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_ERROR, aStream.str().c_str());
+        m_pLOKDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_ERROR, aJson.extractAsOString().getStr());
     else if (m_pLOKit->mpCallback)
-        m_pLOKit->mpCallback(LOK_CALLBACK_ERROR, aStream.str().c_str(), m_pLOKit->mpCallbackData);
+        m_pLOKit->mpCallback(LOK_CALLBACK_ERROR, aJson.extractAsOString().getStr(), m_pLOKit->mpCallbackData);
 }
 
 namespace {
