@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4828f08_1f535e80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-08-31T14:45:13Z",
+      "side": 1,
+      "message": "@Balázs: very nice and useful fix!\n\nThe only problem is the cat picture in the test file, because it\u0027s huge and proprietary:\n\nhttps://www.shutterstock.com/hu/image-photo/adorable-scottish-straight-cat-peeking-behind-1120211927\n\nSo we must replace it with a few byte image.",
+      "revId": "09591c7d620236cb827fe695dbd64483970e0187",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
