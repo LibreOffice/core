@@ -129,7 +129,7 @@ public:
 
 }
 
-class vcl::ImplPrinterControllerData
+class vcl::print::ImplPrinterControllerData
 {
 public:
     struct ControlDependency
@@ -221,12 +221,12 @@ public:
             return maMultiPage.aPaperSize;
         return i_rPageSize;
     }
-    PrinterController::PageSize modifyJobSetup( const css::uno::Sequence< css::beans::PropertyValue >& i_rProps );
+    ::vcl::PrinterController::PageSize modifyJobSetup( const css::uno::Sequence< css::beans::PropertyValue >& i_rProps );
     void resetPaperToLastConfigured();
 };
 
 PrinterController::PrinterController(const VclPtr<Printer>& i_xPrinter, weld::Window* i_pWindow)
-    : mpImplData( new ImplPrinterControllerData )
+    : mpImplData( new vcl::print::ImplPrinterControllerData )
 {
     mpImplData->mxPrinter = i_xPrinter;
     mpImplData->mpWindow = i_pWindow;
@@ -904,9 +904,9 @@ void PrinterController::setupPrinter( weld::Window* i_pParent )
     xPrinter->Pop();
 }
 
-PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( const css::uno::Sequence< css::beans::PropertyValue >& i_rProps )
+PrinterController::PageSize vcl::print::ImplPrinterControllerData::modifyJobSetup( const css::uno::Sequence< css::beans::PropertyValue >& i_rProps )
 {
-    PrinterController::PageSize aPageSize;
+    vcl::PrinterController::PageSize aPageSize;
     aPageSize.aSize = mxPrinter->GetPaperSize();
     css::awt::Size aSetSize, aIsSize;
     sal_Int32 nPaperBin = mnDefaultPaperBin;
@@ -974,7 +974,7 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
 //auto accept document paper size mode and end up overwriting the original
 //paper size setting for file->printer_settings just by pressing "ok" in the
 //print dialog
-void vcl::ImplPrinterControllerData::resetPaperToLastConfigured()
+void vcl::print::ImplPrinterControllerData::resetPaperToLastConfigured()
 {
     mxPrinter->Push();
     mxPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
@@ -1547,7 +1547,7 @@ void PrinterController::setUIOptions( const css::uno::Sequence< css::beans::Prop
         bool bIsEnabled = true;
         bool bHaveProperty = false;
         OUString aPropName;
-        vcl::ImplPrinterControllerData::ControlDependency aDep;
+        vcl::print::ImplPrinterControllerData::ControlDependency aDep;
         css::uno::Sequence< sal_Bool > aChoicesDisabled;
         for( const css::beans::PropertyValue& rEntry : std::as_const(aOptProp) )
         {
@@ -1582,7 +1582,7 @@ void PrinterController::setUIOptions( const css::uno::Sequence< css::beans::Prop
         }
         if( bHaveProperty )
         {
-            vcl::ImplPrinterControllerData::PropertyToIndexMap::const_iterator it =
+            vcl::print::ImplPrinterControllerData::PropertyToIndexMap::const_iterator it =
                 mpImplData->maPropertyToIndex.find( aPropName );
             // sanity check
             if( it != mpImplData->maPropertyToIndex.end() )
@@ -1609,7 +1609,7 @@ bool PrinterController::isUIOptionEnabled( const OUString& i_rProperty ) const
         if( bEnabled )
         {
             // check control dependencies
-            vcl::ImplPrinterControllerData::ControlDependencyMap::const_iterator it =
+            vcl::print::ImplPrinterControllerData::ControlDependencyMap::const_iterator it =
                 mpImplData->maControlDependencies.find( i_rProperty );
             if( it != mpImplData->maControlDependencies.end() )
             {
@@ -1654,7 +1654,7 @@ bool PrinterController::isUIOptionEnabled( const OUString& i_rProperty ) const
 bool PrinterController::isUIChoiceEnabled( const OUString& i_rProperty, sal_Int32 i_nValue ) const
 {
     bool bEnabled = true;
-    ImplPrinterControllerData::ChoiceDisableMap::const_iterator it =
+    print::ImplPrinterControllerData::ChoiceDisableMap::const_iterator it =
         mpImplData->maChoiceDisableMap.find( i_rProperty );
     if(it != mpImplData->maChoiceDisableMap.end() )
     {
@@ -1669,7 +1669,7 @@ OUString PrinterController::makeEnabled( const OUString& i_rProperty )
 {
     OUString aDependency;
 
-    vcl::ImplPrinterControllerData::ControlDependencyMap::const_iterator it =
+    vcl::print::ImplPrinterControllerData::ControlDependencyMap::const_iterator it =
         mpImplData->maControlDependencies.find( i_rProperty );
     if( it != mpImplData->maControlDependencies.end() )
     {
