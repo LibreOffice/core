@@ -1708,7 +1708,16 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   OUString&                   rURL
 
     SfxSaveGuard aSaveGuard(this, m_pData.get());
 
-    impl_store( rURL, rArgs, false );
+    utl::MediaDescriptor aDescriptor(rArgs);
+    bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault("OnMainThread", false);
+    if (bOnMainThread)
+    {
+        vcl::solarthread::syncExecute([this, rURL, rArgs]() { impl_store(rURL, rArgs, false); });
+    }
+    else
+    {
+        impl_store(rURL, rArgs, false);
+    }
 
     Sequence< beans::PropertyValue > aSequence ;
     TransformItems( SID_OPENDOC, *m_pData->m_pObjectShell->GetMedium()->GetItemSet(), aSequence );
