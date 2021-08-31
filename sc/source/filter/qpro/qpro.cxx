@@ -70,6 +70,11 @@ ErrCode ScQProReader::readSheet( SCTAB nTab, ScDocument& rDoc, ScQProStyle *pSty
 
             case 0x000c: // Blank cell
                 mpStream->ReadUChar( nCol ).ReadUChar( nDummy ).ReadUInt16( nRow ).ReadUInt16( nStyle );
+                if (!mpStream->good())
+                {
+                    eRet = SCERR_IMPORT_FORMAT;
+                    break;
+                }
                 nStyle = nStyle >> 3;
                 pStyle->SetFormat( &rDoc, nCol, nRow, nTab, nStyle );
                 break;
@@ -77,6 +82,11 @@ ErrCode ScQProReader::readSheet( SCTAB nTab, ScDocument& rDoc, ScQProStyle *pSty
             case 0x000d:{ // Integer cell
                 sal_Int16 nValue;
                 mpStream->ReadUChar( nCol ).ReadUChar( nDummy ).ReadUInt16( nRow ).ReadUInt16( nStyle ).ReadInt16( nValue );
+                if (!mpStream->good())
+                {
+                    eRet = SCERR_IMPORT_FORMAT;
+                    break;
+                }
                 nStyle = nStyle >> 3;
                 pStyle->SetFormat( &rDoc, nCol, nRow, nTab, nStyle );
                 rDoc.EnsureTable(nTab);
