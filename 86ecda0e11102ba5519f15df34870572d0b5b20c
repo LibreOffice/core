@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "563bca5e_6c958ef6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-08-31T08:54:09Z",
+      "side": 1,
+      "message": "The field shading color is now applied for dark backgrounds too. But this color is not (neither was before) taken into account for the color adjustment of the font in SwDrawTextInfo::ApplyAutoColor() and a black document canvas with white field shadings results in a white font color when set to automatic.",
+      "revId": "86ecda0e11102ba5519f15df34870572d0b5b20c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
