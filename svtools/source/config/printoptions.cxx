@@ -19,6 +19,7 @@
 
 #include <svtools/printoptions.hxx>
 #include <vcl/print.hxx>
+#include <vcl/printer/Options.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sal/macros.h>
 #include <tools/diagnose_ex.h>
@@ -33,19 +34,19 @@ using namespace ::com::sun::star::uno;
 namespace svtools
 {
 
-void GetPrinterOptions( PrinterOptions& rOptions, bool bFile )
+void GetPrinterOptions( vcl::printer::Options& rOptions, bool bFile )
 {
     if (bFile)
     {
         rOptions.SetReduceTransparency( officecfg::Office::Common::Print::Option::File::ReduceTransparency::get() );
-        rOptions.SetReducedTransparencyMode( static_cast<PrinterTransparencyMode>(
+        rOptions.SetReducedTransparencyMode( static_cast<vcl::printer::TransparencyMode>(
                 officecfg::Office::Common::Print::Option::File::ReducedTransparencyMode::get() ) );
         rOptions.SetReduceGradients( officecfg::Office::Common::Print::Option::File::ReduceGradients::get() );
-        rOptions.SetReducedGradientMode( static_cast<PrinterGradientMode>(
+        rOptions.SetReducedGradientMode( static_cast<vcl::printer::GradientMode>(
                 officecfg::Office::Common::Print::Option::File::ReducedGradientMode::get()) );
         rOptions.SetReducedGradientStepCount( officecfg::Office::Common::Print::Option::File::ReducedGradientStepCount::get() );
         rOptions.SetReduceBitmaps( officecfg::Office::Common::Print::Option::File::ReduceBitmaps::get() );
-        rOptions.SetReducedBitmapMode( static_cast<PrinterBitmapMode>(
+        rOptions.SetReducedBitmapMode( static_cast<vcl::printer::BitmapMode>(
                 officecfg::Office::Common::Print::Option::File::ReducedBitmapMode::get()) );
         rOptions.SetReducedBitmapResolution( aDPIArray[ std::min( static_cast<sal_uInt16>(
                 officecfg::Office::Common::Print::Option::File::ReducedBitmapResolution::get()), sal_uInt16( DPI_COUNT - 1 ) ) ] );
@@ -57,14 +58,14 @@ void GetPrinterOptions( PrinterOptions& rOptions, bool bFile )
     else
     {
         rOptions.SetReduceTransparency( officecfg::Office::Common::Print::Option::Printer::ReduceTransparency::get() );
-        rOptions.SetReducedTransparencyMode( static_cast<PrinterTransparencyMode>(
+        rOptions.SetReducedTransparencyMode( static_cast<vcl::printer::TransparencyMode>(
                 officecfg::Office::Common::Print::Option::Printer::ReducedTransparencyMode::get() ) );
         rOptions.SetReduceGradients( officecfg::Office::Common::Print::Option::Printer::ReduceGradients::get() );
-        rOptions.SetReducedGradientMode( static_cast<PrinterGradientMode>(
+        rOptions.SetReducedGradientMode( static_cast<vcl::printer::GradientMode>(
                 officecfg::Office::Common::Print::Option::Printer::ReducedGradientMode::get()) );
         rOptions.SetReducedGradientStepCount( officecfg::Office::Common::Print::Option::Printer::ReducedGradientStepCount::get() );
         rOptions.SetReduceBitmaps( officecfg::Office::Common::Print::Option::Printer::ReduceBitmaps::get() );
-        rOptions.SetReducedBitmapMode( static_cast<PrinterBitmapMode>(
+        rOptions.SetReducedBitmapMode( static_cast<vcl::printer::BitmapMode>(
                 officecfg::Office::Common::Print::Option::Printer::ReducedBitmapMode::get()) );
         rOptions.SetReducedBitmapResolution( aDPIArray[ std::min( static_cast<sal_uInt16>(
                 officecfg::Office::Common::Print::Option::Printer::ReducedBitmapResolution::get()), sal_uInt16( DPI_COUNT - 1 ) ) ] );
@@ -75,7 +76,7 @@ void GetPrinterOptions( PrinterOptions& rOptions, bool bFile )
     }
 }
 
-void SetPrinterOptions( const PrinterOptions& rOptions, bool bFile )
+void SetPrinterOptions( const vcl::printer::Options& rOptions, bool bFile )
 {
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
     if (bFile)

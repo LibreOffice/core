@@ -25,7 +25,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <sal/types.h>
 #include <vcl/print.hxx>
-
+#include <vcl/printer/Options.hxx>
 
 class SFX2_DLLPUBLIC SfxCommonPrintOptionsTabPage final : public SfxTabPage
 {
@@ -54,8 +54,8 @@ private:
 
 private:
 
-    PrinterOptions      maPrinterOptions;
-    PrinterOptions      maPrintFileOptions;
+    vcl::printer::Options      maPrinterOptions;
+    vcl::printer::Options      maPrintFileOptions;
 
                         DECL_DLLPRIVATE_LINK( ToggleOutputPrinterRBHdl, weld::Toggleable&, void );
                         DECL_DLLPRIVATE_LINK( ToggleOutputPrintFileRBHdl, weld::Toggleable&, void);
@@ -67,8 +67,8 @@ private:
                         DECL_DLLPRIVATE_LINK( ToggleReduceGradientsStripesRBHdl, weld::Toggleable&, void );
                         DECL_DLLPRIVATE_LINK( ToggleReduceBitmapsResolutionRBHdl, weld::Toggleable&, void );
 
-    SAL_DLLPRIVATE void ImplUpdateControls( const PrinterOptions* pCurrentOptions );
-    SAL_DLLPRIVATE void ImplSaveControls( PrinterOptions* pCurrentOptions );
+    SAL_DLLPRIVATE void ImplUpdateControls( const vcl::printer::Options* pCurrentOptions );
+    SAL_DLLPRIVATE void ImplSaveControls( vcl::printer::Options* pCurrentOptions );
 
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 

@@ -23,12 +23,12 @@
 #include <svtools/svtdllapi.h>
 #include <sal/types.h>
 
-class PrinterOptions;
+namespace vcl::printer { class Options; }
 
 namespace svtools
 {
-    SVT_DLLPUBLIC void GetPrinterOptions( PrinterOptions& rOptions, bool bFile );
-    SVT_DLLPUBLIC void SetPrinterOptions( const PrinterOptions& rOptions, bool bFile );
+    SVT_DLLPUBLIC void GetPrinterOptions( vcl::printer::Options& rOptions, bool bFile );
+    SVT_DLLPUBLIC void SetPrinterOptions( const vcl::printer::Options& rOptions, bool bFile );
 };
 
 
