@@ -73,10 +73,10 @@ public class PerformanceTestObject : ServiceBase, XPerformanceTest
     // Methods
     public void async() {}
     public void sync(  ) {}
-    public ComplexTypes complex_in( /*IN*/ComplexTypes aVal ) { return aVal; }
-    public ComplexTypes complex_inout( /*INOUT*/ref ComplexTypes aVal ) { return aVal; }
-    public void complex_oneway( /*IN*/ComplexTypes aVal ) {}
-    public void complex_noreturn( /*IN*/ComplexTypes aVal ) {}
+    public ComplexTypes complexIn( /*IN*/ComplexTypes aVal ) { return aVal; }
+    public ComplexTypes complexInout( /*INOUT*/ref ComplexTypes aVal ) { return aVal; }
+    public void complexOneway( /*IN*/ComplexTypes aVal ) {}
+    public void complexNoreturn( /*IN*/ComplexTypes aVal ) {}
     public XPerformanceTest createObject(  ) { return new PerformanceTestObject(); }
     public int getLong() { return _long; }
     public void setLong(/*IN*/int n) { _long = n; }
