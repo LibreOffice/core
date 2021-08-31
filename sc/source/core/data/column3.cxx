@@ -2435,9 +2435,12 @@ class FilterEntriesHandler
         // Colors
         ScAddress aPos(rColumn.GetCol(), nRow, rColumn.GetTab());
 
-        // Text color
+        Color backgroundColor;
+        bool bHasConditionalBackgroundColor = false;
+
         Color textColor;
         bool bHasConditionalTextColor = false;
+        // Check text & background color from cond. formatting
         const ScPatternAttr* pPattern
             = mrColumn.GetDoc().GetPattern(aPos.Col(), aPos.Row(), aPos.Tab());
         if (pPattern)
@@ -2449,8 +2452,13 @@ class FilterEntriesHandler
                 const SvxColorItem* pColor = &pPattern->GetItem(ATTR_FONT_COLOR, pCondSet);
                 textColor = pColor->GetValue();
                 bHasConditionalTextColor = true;
+
+                const SvxBrushItem* pBackgroundColor = &pPattern->GetItem(ATTR_BACKGROUND, pCondSet);
+                backgroundColor = pBackgroundColor->GetColor();
+                bHasConditionalBackgroundColor = true;
             }
         }
+
         if (!bHasConditionalTextColor)
         {
             const SvxColorItem* pColor = rColumn.GetDoc().GetAttr(aPos, ATTR_FONT_COLOR);
@@ -2458,9 +2466,7 @@ class FilterEntriesHandler
         }
         mrFilterEntries.addTextColor(textColor);
 
-        // Background color
-        Color backgroundColor;
-        bool bHasConditionalBackgroundColor = false;
+        // Color scale needs a different handling
         ScConditionalFormat* pCondFormat
             = rColumn.GetDoc().GetCondFormat(aPos.Col(), aPos.Row(), aPos.Tab());
         if (pCondFormat)
