@@ -46,6 +46,7 @@ Deck::Deck(const DeckDescriptor& rDeckDescriptor, SidebarDockingWindow* pParentW
     : InterimItemWindow(pParentWindow, "sfx/ui/deck.ui", "Deck")
     , msId(rDeckDescriptor.msId)
     , mnMinimalWidth(0)
+    , mnScrolledWindowExtraWidth(0)
     , mnMinimalHeight(0)
     , maPanels()
     , mxParentWindow(pParentWindow)
@@ -59,6 +60,15 @@ Deck::Deck(const DeckDescriptor& rDeckDescriptor, SidebarDockingWindow* pParentW
 
     mxVerticalScrollBar->vadjustment_set_step_increment(10);
     mxVerticalScrollBar->vadjustment_set_page_increment(100);
+
+    // tdf#142458 Measure the preferred width of an empty ScrolledWindow
+    // to add to the width of the union of panel widths when calculating
+    // the minimal width of the deck
+    mxVerticalScrollBar->set_hpolicy(VclPolicyType::NEVER);
+    mxVerticalScrollBar->set_vpolicy(VclPolicyType::NEVER);
+    mnScrolledWindowExtraWidth = mxVerticalScrollBar->get_preferred_size().Width();
+    mxVerticalScrollBar->set_hpolicy(VclPolicyType::AUTOMATIC);
+    mxVerticalScrollBar->set_vpolicy(VclPolicyType::AUTOMATIC);
 }
 
 Deck::~Deck()
@@ -192,6 +202,14 @@ void Deck::RequestLayoutInternal()
     DeckLayouter::LayoutDeck(mxParentWindow.get(), GetContentArea(),
                              mnMinimalWidth, mnMinimalHeight, maPanels,
                              *GetTitleBar(), *mxVerticalScrollBar);
+
+    if (mnMinimalWidth)
+    {
+        // tdf#142458 at this point mnMinimalWidth contains the width required
+        // by the panels, but extra space may be needed by the scrolledwindow
+        // that will contain the panels
+        mnMinimalWidth += mnScrolledWindowExtraWidth;
+    }
 }
 
 void Deck::RequestLayout()
