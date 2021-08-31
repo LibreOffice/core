@@ -34,10 +34,14 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/document/XEventsSupplier.hpp>
+#include <com/sun/star/container/XNameReplace.hpp>
+#include <com/sun/star/presentation/ClickAction.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <sal/log.hxx>
 #include <oox/ppt/slidepersist.hxx>
 #include <oox/token/tokens.hxx>
+#include <oox/token/properties.hxx>
 
 using namespace ::oox::core;
 using namespace ::oox::drawingml;
@@ -47,6 +51,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::presentation;
 
 namespace oox::ppt {
 
@@ -530,6 +537,79 @@ void PPTShape::addShape(
             {
                 keepDiagramCompatibilityInfo();
                 syncDiagramFontHeights();
+            }
+
+            if (getShapeProperties().hasProperty(PROP_URL))
+            {
+                Reference<XEventsSupplier> xEventsSupplier(xShape, UNO_QUERY);
+                if (!xEventsSupplier.is())
+                    return;
+
+                Reference<XNameReplace> xEvents(xEventsSupplier->getEvents());
+                if (!xEvents.is())
+                    return;
+
+                OUString sURL;
+                OUString sAPIEventName;
+                sal_Int32 nPropertyCount = 2;
+                css::presentation::ClickAction meClickAction;
+                uno::Sequence<beans::PropertyValue> aProperties;
+
+                std::map<OUString, css::presentation::ClickAction> ActionMap = {
+                    { "#action?jump=nextslide", ClickAction_NEXTPAGE },
+                    { "#action?jump=previousslide", ClickAction_PREVPAGE },
+                    { "#action?jump=firstslide", ClickAction_FIRSTPAGE },
+                    { "#action?jump=lastslide", ClickAction_LASTPAGE },
+                    { "#action?jump=endshow", ClickAction_STOPPRESENTATION },
+                };
+
+                getShapeProperties().getProperty(PROP_URL) >>= sURL;
+                std::map<OUString, css::presentation::ClickAction>::const_iterator aIt
+                    = ActionMap.find(sURL);
+                aIt != ActionMap.end() ? meClickAction = aIt->second
+                                       : meClickAction = ClickAction_BOOKMARK;
+
+                // ClickAction_BOOKMARK and ClickAction_DOCUMENT share the same event
+                // so check here if it's a bookmark or a document
+                if (meClickAction == ClickAction_BOOKMARK)
+                {
+                    if (!sURL.startsWith("#"))
+                        meClickAction = ClickAction_DOCUMENT;
+                    else
+                        sURL = sURL.copy(1);
+                    nPropertyCount += 1;
+                }
+
+                aProperties.realloc(nPropertyCount);
+                beans::PropertyValue* pProperties = aProperties.getArray();
+
+                pProperties->Name = "EventType";
+                pProperties->Handle = -1;
+                pProperties->Value <<= OUString("Presentation");
+                pProperties->State = beans::PropertyState_DIRECT_VALUE;
+                pProperties++;
+
+                pProperties->Name = "ClickAction";
+                pProperties->Handle = -1;
+                pProperties->Value <<= meClickAction;
+                pProperties->State = beans::PropertyState_DIRECT_VALUE;
+                pProperties++;
+
+                switch (meClickAction)
+                {
+                    case ClickAction_BOOKMARK:
+                    case ClickAction_DOCUMENT:
+                        pProperties->Name = "Bookmark";
+                        pProperties->Handle = -1;
+                        pProperties->Value <<= sURL;
+                        pProperties->State = beans::PropertyState_DIRECT_VALUE;
+                        break;
+                    default:
+                        break;
+                }
+
+                sAPIEventName = "OnClick";
+                xEvents->replaceByName(sAPIEventName, uno::Any(aProperties));
             }
         }
     }
