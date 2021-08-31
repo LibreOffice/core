@@ -71,7 +71,6 @@ OFieldDescControl::OFieldDescControl(weld::Container* pPage, OTableDesignHelpBar
     , m_pHelp( pHelpBar )
     , m_pLastFocusWindow(nullptr)
     , m_pActFocusWindow(nullptr)
-    , m_pPreviousType()
     , m_nPos(-1)
     , aYes(DBA_RES(STR_VALUE_YES))
     , aNo(DBA_RES(STR_VALUE_NO))

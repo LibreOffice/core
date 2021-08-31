@@ -117,8 +117,7 @@ static sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::
 
         TableInfo( const OUString& _catalog, const OUString& _schema, const OUString& _name,
             const OUString& _type )
-            :sComposedName()
-            ,sType( _type )
+            :sType( _type )
             ,sCatalog( _catalog )
             ,sSchema( _schema )
             ,sName( _name )

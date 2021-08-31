@@ -110,7 +110,6 @@ Sequence< OUString> OTableController::getSupportedServiceNames()
 
 OTableController::OTableController(const Reference< XComponentContext >& _rM) : OTableController_BASE(_rM)
     ,m_sTypeNames(DBA_RES(STR_TABLEDESIGN_DBFIELDTYPES))
-    ,m_pTypeInfo()
     ,m_bAllowAutoIncrementValue(false)
     ,m_bNew(true)
 {
