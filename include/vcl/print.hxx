@@ -48,96 +48,12 @@ enum class SalPrinterError;
 
 namespace vcl {
     class PrinterController;
+    namespace print {
+        class PrinterOptions;
+    }
 }
 
 namespace weld { class Window; }
-
-enum class PrinterTransparencyMode
-{
-    Auto = 0,
-    NONE = 1
-};
-
-
-enum class PrinterGradientMode
-{
-    Stripes  = 0,
-    Color    = 1
-};
-
-
-enum class PrinterBitmapMode
-{
-    Optimal    = 0,
-    Normal     = 1,
-    Resolution = 2
-};
-
-
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) PrinterOptions
-{
-private:
-
-    bool                        mbReduceTransparency;
-    PrinterTransparencyMode     meReducedTransparencyMode;
-    bool                        mbReduceGradients;
-    PrinterGradientMode         meReducedGradientsMode;
-    sal_uInt16                  mnReducedGradientStepCount;
-    bool                        mbReduceBitmaps;
-    PrinterBitmapMode           meReducedBitmapMode;
-    sal_uInt16                  mnReducedBitmapResolution;
-    bool                        mbReducedBitmapsIncludeTransparency;
-    bool                        mbConvertToGreyscales;
-    bool                        mbPDFAsStandardPrintJobFormat;
-
-public:
-                                PrinterOptions();
-
-    bool                        IsReduceTransparency() const { return mbReduceTransparency; }
-    void                        SetReduceTransparency( bool bSet ) { mbReduceTransparency = bSet; }
-
-    PrinterTransparencyMode     GetReducedTransparencyMode() const { return meReducedTransparencyMode; }
-    void                        SetReducedTransparencyMode( PrinterTransparencyMode eMode )
-                                    { meReducedTransparencyMode = eMode; }
-
-    bool                        IsReduceGradients() const { return mbReduceGradients; }
-    void                        SetReduceGradients( bool bSet ) { mbReduceGradients = bSet; }
-
-    PrinterGradientMode         GetReducedGradientMode() const { return meReducedGradientsMode; }
-    void                        SetReducedGradientMode( PrinterGradientMode eMode ) { meReducedGradientsMode = eMode; }
-
-    sal_uInt16                  GetReducedGradientStepCount() const { return mnReducedGradientStepCount; }
-    void                        SetReducedGradientStepCount( sal_uInt16 nStepCount )
-                                    { mnReducedGradientStepCount = nStepCount; }
-
-    bool                        IsReduceBitmaps() const { return mbReduceBitmaps; }
-    void                        SetReduceBitmaps( bool bSet ) { mbReduceBitmaps = bSet; }
-
-    PrinterBitmapMode           GetReducedBitmapMode() const { return meReducedBitmapMode; }
-    void                        SetReducedBitmapMode( PrinterBitmapMode eMode ) { meReducedBitmapMode = eMode; }
-
-    sal_uInt16                  GetReducedBitmapResolution() const { return mnReducedBitmapResolution; }
-    void                        SetReducedBitmapResolution( sal_uInt16 nResolution )
-                                    { mnReducedBitmapResolution = nResolution; }
-
-    bool                        IsReducedBitmapIncludesTransparency() const { return mbReducedBitmapsIncludeTransparency; }
-    void                        SetReducedBitmapIncludesTransparency( bool bSet )
-                                    { mbReducedBitmapsIncludeTransparency = bSet; }
-
-    bool                        IsConvertToGreyscales() const { return mbConvertToGreyscales; }
-    void                        SetConvertToGreyscales( bool bSet ) { mbConvertToGreyscales = bSet; }
-
-    bool                        IsPDFAsStandardPrintJobFormat() const { return mbPDFAsStandardPrintJobFormat; }
-    void                        SetPDFAsStandardPrintJobFormat( bool bSet ) { mbPDFAsStandardPrintJobFormat = bSet; }
-
-    /** Read printer options from configuration
-
-        parameter decides whether the set for
-        print "to printer" or "to file" should be read.
-    */
-    void                        ReadFromConfig( bool bFile );
-};
-
 
 class VCL_DLLPUBLIC Printer : public OutputDevice
 {
@@ -150,7 +66,7 @@ private:
     VclPtr<Printer>             mpPrev;
     VclPtr<Printer>             mpNext;
     VclPtr<VirtualDevice>       mpDisplayDev;
-    std::unique_ptr<PrinterOptions> mpPrinterOptions;
+    std::unique_ptr<vcl::print::PrinterOptions> mpPrinterOptions;
     OUString                    maPrinterName;
     OUString                    maDriver;
     OUString                    maPrintFile;
@@ -289,8 +205,8 @@ public:
         should the need arise to set the printer options outside vcl, also a method would have to be devised
         to not override these again internally
     */
-    VCL_DLLPRIVATE void         SetPrinterOptions( const PrinterOptions& rOptions );
-    const PrinterOptions&       GetPrinterOptions() const { return( *mpPrinterOptions ); }
+    VCL_DLLPRIVATE void         SetPrinterOptions( const vcl::print::PrinterOptions& rOptions );
+    const vcl::print::PrinterOptions& GetPrinterOptions() const { return( *mpPrinterOptions ); }
 
     bool                        SetOrientation( Orientation eOrient );
     Orientation                 GetOrientation() const;

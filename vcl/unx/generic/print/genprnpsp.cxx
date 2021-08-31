@@ -49,6 +49,7 @@
 #include <vcl/print.hxx>
 #include <vcl/QueueInfo.hxx>
 #include <vcl/pdfwriter.hxx>
+#include <vcl/printer/PrinterOptions.hxx>
 #include <printerinfomanager.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
