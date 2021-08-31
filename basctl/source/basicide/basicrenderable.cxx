@@ -40,7 +40,7 @@ Renderable::Renderable (BaseWindow* pWin)
     m_aUIProperties.resize( 4 );
 
     // show Subgroup for print range
-    vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
+    vcl::print::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
     aPrintRangeOpt.maGroupHint = "PrintRange" ;
     aPrintRangeOpt.mbInternalOnly = true;
 
@@ -60,12 +60,12 @@ Renderable::Renderable (BaseWindow* pWin)
                                                    aChoices, 0);
 
     // create an Edit dependent on "Pages" selected
-    vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt(aPrintContentName, 1, true);
+    vcl::print::PrinterOptionsHelper::UIControlOptions aPageRangeOpt(aPrintContentName, 1, true);
     m_aUIProperties[2].Value = setEditControlOpt("pagerange", OUString(),
                                                  OUString(), "PageRange",
                                                  OUString(), aPageRangeOpt);
 
-    vcl::PrinterOptionsHelper::UIControlOptions aEvenOddOpt(aPrintContentName, 0, true);
+    vcl::print::PrinterOptionsHelper::UIControlOptions aEvenOddOpt(aPrintContentName, 0, true);
     m_aUIProperties[3].Value = setChoiceListControlOpt("evenoddbox",
                                                         OUString(),
                                                         uno::Sequence<OUString>(),

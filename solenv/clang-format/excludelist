@@ -15049,7 +15049,8 @@ vcl/source/outdev/textline.cxx
 vcl/source/outdev/transparent.cxx
 vcl/source/outdev/vclreferencebase.cxx
 vcl/source/outdev/wallpaper.cxx
-vcl/source/print/PrinterOptions.cxx
+vcl/source/printer/PrinterOptions.cxx
+vcl/source/printer/PrinterOptionsHelper.cxx
 vcl/source/toolkit/group.cxx
 vcl/source/toolkit/morebtn.cxx
 vcl/source/treelist/headbar.cxx

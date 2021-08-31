@@ -30,7 +30,7 @@ class BaseWindow;
 
 class Renderable :
     public cppu::WeakComponentImplHelper< css::view::XRenderable >,
-    public vcl::PrinterOptionsHelper
+    public vcl::print::PrinterOptionsHelper
 {
     VclPtr<BaseWindow>      mpWindow;
     osl::Mutex              maMutex;
