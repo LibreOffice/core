@@ -21,17 +21,18 @@
 
 #include <vcl/metaact.hxx>
 #include <vcl/print.hxx>
+#include <vcl/printer/Options.hxx>
 
 #include <utility>
 #include <vector>
 
 void Printer::DrawGradientEx( OutputDevice* pOut, const tools::Rectangle& rRect, const Gradient& rGradient )
 {
-    const PrinterOptions& rPrinterOptions = GetPrinterOptions();
+    const vcl::printer::Options& rPrinterOptions = GetPrinterOptions();
 
     if( rPrinterOptions.IsReduceGradients() )
     {
-        if( PrinterGradientMode::Stripes == rPrinterOptions.GetReducedGradientMode() )
+        if( vcl::printer::GradientMode::Stripes == rPrinterOptions.GetReducedGradientMode() )
         {
             if( !rGradient.GetSteps() || ( rGradient.GetSteps() > rPrinterOptions.GetReducedGradientStepCount() ) )
             {
