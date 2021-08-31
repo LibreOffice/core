@@ -25,8 +25,7 @@
 using namespace dbaui;
 
 OQueryTableConnectionData::OQueryTableConnectionData()
-    : OTableConnectionData()
-    , m_nFromEntryIndex(0)
+    : m_nFromEntryIndex(0)
     , m_nDestEntryIndex(0)
     , m_eJoinType (INNER_JOIN)
     , m_bNatural(false)

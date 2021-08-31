@@ -39,7 +39,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 
 OColumnControl::OColumnControl(const Reference<XComponentContext>& rxContext)
-    :UnoControl(), m_xContext(rxContext)
+    : m_xContext(rxContext)
 {
 }
 

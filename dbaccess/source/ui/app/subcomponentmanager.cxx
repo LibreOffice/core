@@ -88,12 +88,8 @@ namespace dbaui
             Reference< XPropertySet >       xDocumentDefinitionProperties;
 
             SubComponentDescriptor()
-                :sName()
-                ,nComponentType( -1 )
+                :nComponentType( -1 )
                 ,eOpenMode( E_OPEN_NORMAL )
-                ,xFrame()
-                ,xController()
-                ,xModel()
             {
             }
 

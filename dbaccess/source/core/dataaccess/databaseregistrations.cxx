@@ -144,7 +144,6 @@ namespace dbaccess
     // DatabaseRegistrations - implementation
     DatabaseRegistrations::DatabaseRegistrations( const Reference<XComponentContext> & _rxContext )
         :m_aContext( _rxContext )
-        ,m_aConfigurationRoot()
         ,m_aRegistrationListeners( m_aMutex )
     {
         m_aConfigurationRoot = ::utl::OConfigurationTreeRoot::createWithComponentContext(

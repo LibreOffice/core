@@ -41,8 +41,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 ORelationTableConnectionData::ORelationTableConnectionData()
-    :OTableConnectionData()
-    ,m_nUpdateRules(KeyRule::NO_ACTION)
+    :m_nUpdateRules(KeyRule::NO_ACTION)
     ,m_nDeleteRules(KeyRule::NO_ACTION)
     ,m_nCardinality(Cardinality::Undefined)
 {
