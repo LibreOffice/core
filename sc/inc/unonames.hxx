@@ -666,6 +666,7 @@
 // Security options
 #define SC_UNO_LOADREADONLY         "LoadReadonly"
 #define SC_UNO_MODIFYPASSWORDINFO   "ModifyPasswordInfo"
+#define SC_UNO_MODIFYPASSWORDHASH   "ModifyPasswordHash"
 
 // FormulaParser
 #define SC_UNO_COMPILEENGLISH       "CompileEnglish"
