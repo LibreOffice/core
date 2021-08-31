@@ -52,7 +52,6 @@ DatabaseDataProvider::DatabaseDataProvider(uno::Reference< uno::XComponentContex
     ::cppu::PropertySetMixin< chart2::data::XDatabaseDataProvider >(
         context, IMPLEMENTS_PROPERTY_SET, uno::Sequence< OUString >()),
     m_aParameterManager( m_aMutex, context ),
-    m_aFilterManager(),
     m_xContext(context),
     m_CommandType(sdb::CommandType::COMMAND), // #i94114
     m_RowLimit(0),
@@ -597,8 +596,7 @@ namespace
         sal_Int32       nDataType;
 
         ColumnDescription()
-            :sName()
-            ,nResultSetPosition( 0 )
+            :nResultSetPosition( 0 )
             ,nDataType( sdbc::DataType::VARCHAR )
         {
         }

@@ -54,7 +54,6 @@ namespace dbaui
             const OUString& _rComponentURL )
         :m_xORB             ( _rxORB            )
         ,m_xParentFrame     ( _rxParentFrame    )
-        ,m_xFrameLoader     (                   )
         ,m_xApplication     ( _rxApplication    )
         ,m_sComponentURL    ( _rComponentURL    )
     {

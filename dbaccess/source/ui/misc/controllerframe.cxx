@@ -104,9 +104,6 @@ namespace dbaui
     {
         explicit ControllerFrame_Data( IController& _rController )
             :m_rController( _rController )
-            ,m_xFrame()
-            ,m_xDocEventBroadcaster()
-            ,m_pListener()
             ,m_bActive( false )
             ,m_bIsTopLevelDocumentWindow( false )
         {
