@@ -289,9 +289,13 @@ public:
                                     const JobSetup& i_rInitSetup );
 };
 
-namespace vcl
+namespace vcl::print
 {
 class ImplPrinterControllerData;
+}
+
+namespace vcl
+{
 
 enum class NupOrderType
 {
@@ -300,7 +304,7 @@ enum class NupOrderType
 
 class VCL_DLLPUBLIC PrinterController
 {
-    std::unique_ptr<ImplPrinterControllerData>
+    std::unique_ptr<print::ImplPrinterControllerData>
                                         mpImplData;
 protected:
     PrinterController(const VclPtr<Printer>&, weld::Window* pDialogParent);
