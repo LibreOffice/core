@@ -5268,8 +5268,8 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
     else if( aTextHd.nRecType == PPT_PST_TextBytesAtom )
     {
         std::unique_ptr<char[]> pBuf(new char[ nMaxLen + 1 ]);
+        nMaxLen = rIn.ReadBytes(pBuf.get(), nMaxLen);
         pBuf[ nMaxLen ] = 0;
-        rIn.ReadBytes(pBuf.get(), nMaxLen);
         char* pPtr = pBuf.get();
         for (;;)
         {
