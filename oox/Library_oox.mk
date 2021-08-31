@@ -266,6 +266,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/ppt/layoutfragmenthandler \
     oox/source/ppt/pptfilterhelpers \
     oox/source/ppt/pptgraphicshapecontext \
+    oox/source/ppt/ppthyperlinkcontext \
     oox/source/ppt/pptimport \
     oox/source/ppt/pptshapecontext \
     oox/source/ppt/pptshape \

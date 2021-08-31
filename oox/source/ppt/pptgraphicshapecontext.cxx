@@ -21,6 +21,7 @@
 #include <oox/ppt/pptgraphicshapecontext.hxx>
 #include <oox/ppt/pptshapepropertiescontext.hxx>
 #include <oox/ppt/slidepersist.hxx>
+#include <oox/ppt/ppthyperlinkcontext.hxx>
 #include <drawingml/shapestylecontext.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <drawingml/textbodycontext.hxx>
@@ -52,6 +53,7 @@ ContextHandlerRef PPTGraphicShapeContext::onCreateContext( sal_Int32 aElementTok
     case PPT_TOKEN(cNvPr):
         mpShapePtr->setId( rAttribs.getString( XML_id ).get() );
         mpShapePtr->setName( rAttribs.getString( XML_name ).get() );
+        return new PPTHyperLinkContext(*this, rAttribs, getShape()->getShapeProperties());
         break;
     case PPT_TOKEN(ph):
     {
