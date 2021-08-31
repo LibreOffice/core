@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a23db7fa_3fd281bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-08-31T07:38:49Z",
+      "side": 1,
+      "message": "Looks good to me in general, found a few places which could use brief documentation and a C++ nit. Could you please address those? Thanks.",
+      "revId": "6c067652e3c3891976b41f12f5c9f534ab44e00f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46946051_af98b946",
+        "filename": "include/oox/export/chartexport.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-08-31T07:38:49Z",
+      "side": 1,
+      "message": "This is a new class, could you please add a one-liner doxygen comment on what it does? See https://wiki.documentfoundation.org/Development/Doxygen",
+      "revId": "6c067652e3c3891976b41f12f5c9f534ab44e00f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a89c645_ebbbf98e",
+        "filename": "offapi/com/sun/star/chart2/XDataPointCustomLabelField.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-08-31T07:38:49Z",
+      "side": 1,
+      "message": "Similar here, could you add a one-liner comment to describe what is a DataLabelRange and a CellRange?",
+      "revId": "6c067652e3c3891976b41f12f5c9f534ab44e00f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecc09b7b_d0105c4a",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-08-31T07:38:49Z",
+      "side": 1,
+      "message": "Same here, could you add a one-liner comment to explain what a CustomLabelData is?",
+      "revId": "6c067652e3c3891976b41f12f5c9f534ab44e00f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "716b6b0a_34c7de4f",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-08-31T07:38:49Z",
+      "side": 1,
+      "message": "Did you consider const auto\u0026 here? You don\u0027t seem to modify rField, so a copy is not needed.",
+      "revId": "6c067652e3c3891976b41f12f5c9f534ab44e00f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d2f7cdd_78a23bd4",
+        "filename": "xmloff/source/chart/transporttypes.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-08-31T07:38:49Z",
+      "side": 1,
+      "message": "Could you add a one-liner comment on what is a CustomLabelsInfo?",
+      "revId": "6c067652e3c3891976b41f12f5c9f534ab44e00f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
