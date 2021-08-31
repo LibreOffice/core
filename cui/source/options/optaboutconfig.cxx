@@ -137,7 +137,6 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage(weld::Window* pParent)
     , m_xSearchEdit(m_xBuilder->weld_entry("searchEntry"))
     , m_xPrefBox(m_xBuilder->weld_tree_view("preferences"))
     , m_xScratchIter(m_xPrefBox->make_iterator())
-    , m_vectorOfModified()
     , m_bSorted(false)
 {
     m_xPrefBox->set_size_request(m_xPrefBox->get_approximate_digit_width() * 100,

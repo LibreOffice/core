@@ -200,9 +200,7 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
 :   mpParentWindow(pParent),
     mrParentDialog(rParentDialog),
     mxVirtualBufferDevice(nullptr),
-    maAllChildren(),
     mpHilighted(nullptr),
-    maSelected(),
     maPicture(this),
     maSaveAsText(CuiResId(RID_SVXSTR_SAVE_SCREENSHOT_AS))
 {

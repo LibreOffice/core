@@ -120,8 +120,7 @@ public:
 };
 
 SplashScreenWindow::SplashScreenWindow(SplashScreen *pSplash)
-    : IntroWindow()
-    , pSpl( pSplash )
+    : pSpl( pSplash )
     , _vdev(VclPtr<VirtualDevice>::Create(*GetOutDev()))
 {
     _vdev->EnableRTL(IsRTLEnabled());
