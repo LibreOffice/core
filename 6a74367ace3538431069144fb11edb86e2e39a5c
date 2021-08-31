@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fe42cfa_e9efa2cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-08-31T15:15:33Z",
+      "side": 1,
+      "message": "And CAIRO_FORMAT_RGB24_888 is purely an invention of our own IIRC \"to save memory\" for the online case. I would expect that to be not upstreamable in practice as incompatible with cairo\u0027s philosophy.",
+      "revId": "6a74367ace3538431069144fb11edb86e2e39a5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
