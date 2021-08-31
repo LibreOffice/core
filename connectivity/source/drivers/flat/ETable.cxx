@@ -65,6 +65,8 @@ void OFlatTable::fillColumns(const css::lang::Locale& _aLocale)
 {
     m_bNeedToReadLine = true; // we overwrite m_aCurrentLine, seek the stream, ...
     m_pFileStream->Seek(0);
+    // tdf#123055 - start to read unicode text in order to avoid the BOM
+    m_pFileStream->StartReadingUnicodeText(RTL_TEXTENCODING_DONTKNOW);
     m_aCurrentLine = QuotedTokenizedString();
     bool bRead = true;
 
