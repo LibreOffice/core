@@ -49,6 +49,20 @@ DECLARE_ODFEXPORT_TEST(testTdf104254_noHeaderWrapping, "tdf104254_noHeaderWrappi
     CPPUNIT_ASSERT_MESSAGE("Paragraph should fit on a single line", nParaHeight < 600);
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf143793_noBodyWrapping, "tdf143793_noBodyWrapping.odt")
+{
+    // Preserve old document wrapping. Compat "Use OOo 1.1 text wrapping around objects"
+    // Originally, the body text did not wrap around spill-over header images
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Fits on one page", 1, getPages() );
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    sal_Int32 nParaHeight = getXPath(pXmlDoc, "//page[1]/header/txt[1]/infos/bounds", "height").toInt32();
+    // The header text should wrap around the header image in OOo 1.1 and prior,
+    // thus taking up two lines instead of one. One line is 276. It should be 552.
+    CPPUNIT_ASSERT_MESSAGE("Header text should fill two lines", nParaHeight > 400);
+}
+
 DECLARE_ODFEXPORT_TEST(testTdf137199, "tdf137199.docx")
 {
     CPPUNIT_ASSERT_EQUAL(OUString(">1<"), getProperty<OUString>(getParagraph(1), "ListLabelString"));
