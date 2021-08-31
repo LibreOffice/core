@@ -305,13 +305,13 @@ bool TGAReader::ImplReadBody()
                         if ( nRunCount & 0x80 )     // a run length packet
                         {
                             m_rTGA.ReadUInt16( nRGB16 );
+                            if (!m_rTGA.good())
+                                return false;
                             if ( nRGB16 >= mpFileHeader->nColorMapLength )
                                 return false;
                             nRed = static_cast<sal_uInt8>( mpColorMap[ nRGB16 ] >> 16 );
                             nGreen = static_cast<sal_uInt8>( mpColorMap[ nRGB16 ] >> 8 );
                             nBlue = static_cast<sal_uInt8>( mpColorMap[ nRGB16 ] );
-                            if ( !m_rTGA.good())
-                                return false;
                             for ( sal_uInt16 i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                             {
                                 mpBitmap->SetPixel( nY, nX, Color( nRed, nGreen, nBlue ) );
@@ -396,7 +396,6 @@ bool TGAReader::ImplReadBody()
                         {
                             for ( sal_uInt16 i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                             {
-
                                 m_rTGA.ReadUChar( nDummy );
                                 if ( !m_rTGA.good())
                                     return false;
