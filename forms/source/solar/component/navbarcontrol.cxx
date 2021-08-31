@@ -56,7 +56,7 @@ namespace frm
     }
 
     ONavigationBarControl::ONavigationBarControl( const Reference< XComponentContext >& _rxORB)
-        :UnoControl(), m_xContext(_rxORB)
+        : m_xContext(_rxORB)
     {
     }
 

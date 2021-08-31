@@ -53,7 +53,6 @@ namespace frm
     using namespace ::com::sun::star::frame;
 
     ORichTextControl::ORichTextControl()
-        :UnoEditControl()
     {
     }
 

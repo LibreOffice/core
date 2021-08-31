@@ -35,8 +35,6 @@ namespace framework
 {
 
 PropertySetContainer::PropertySetContainer()
-        :   OWeakObject()
-
 {
 }
 

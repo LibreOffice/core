@@ -51,11 +51,7 @@ namespace framework{
 TitleHelper::TitleHelper(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
     : ::cppu::BaseMutex ()
     , m_xContext        (rxContext)
-    , m_xOwner          ()
-    , m_xUntitledNumbers()
-    , m_xSubTitle       ()
     , m_bExternalTitle  (false)
-    , m_sTitle          ()
     , m_nLeasedNumber   (css::frame::UntitledNumbersConst::INVALID_NUMBER)
     , m_aListener       (m_aMutex)
 {

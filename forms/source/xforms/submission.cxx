@@ -71,21 +71,10 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::dom;
 
 Submission::Submission() :
-    msID(),
-    msBind(),
-    maRef(),
-    msAction(),
-    msMethod(),
-    msVersion(),
     mbIndent(),
-    msMediaType(),
-    msEncoding(),
     mbOmitXmlDeclaration(),
     mbStandalone(),
-    msCDataSectionElement(),
-    msReplace( "none" ),
-    msSeparator(),
-    msIncludeNamespacePrefixes()
+    msReplace( "none" )
 {
     initializePropertySet();
 }

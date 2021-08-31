@@ -16,8 +16,7 @@ PlacesListBox::PlacesListBox(std::unique_ptr<weld::TreeView> xControl,
                              std::unique_ptr<weld::Button> xAdd,
                              std::unique_ptr<weld::Button> xDel,
                              SvtFileDialog* pFileDlg)
-    : maPlaces( )
-    , mpDlg(pFileDlg)
+    : mpDlg(pFileDlg)
     , mxImpl(std::move(xControl))
     , mxAddBtn(std::move(xAdd))
     , mxDelBtn(std::move(xDel))

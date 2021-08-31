@@ -456,21 +456,14 @@ XFrameImpl::XFrameImpl( const css::uno::Reference< css::uno::XComponentContext >
         //  init member
         , m_xContext                  ( xContext )
         , m_aListenerContainer        ( m_aMutex )
-        , m_xParent                   ()
-        , m_xContainerWindow          ()
-        , m_xComponentWindow          ()
-        , m_xController               ()
         , m_eActiveState              ( E_INACTIVE )
-        , m_sName                     ()
         , m_bIsFrameTop               ( true ) // I think we are top without a parent ... and there is no parent yet!
         , m_bConnected                ( false ) // There exist no component inside of use => sal_False, we are not connected!
         , m_nExternalLockCount        ( 0 )
         , m_bSelfClose                ( false ) // Important!
         , m_bIsHidden                 ( true )
-        , m_xTitleHelper              ()
         , m_lSimpleChangeListener     ( m_aMutex )
         , m_lVetoChangeListener       ( m_aMutex )
-        , m_aChildFrameContainer      ()
 {
 }
 

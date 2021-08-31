@@ -44,10 +44,8 @@ namespace xforms
 {
 
 ComputedExpression::ComputedExpression()
-    : msExpression(),
-      mbIsEmpty( true ),
-      mbIsSimple( true ),
-      mxResult()
+    : mbIsEmpty( true ),
+      mbIsSimple( true )
 {
 }
 

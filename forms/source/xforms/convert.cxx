@@ -39,7 +39,6 @@ using namespace std;
 using namespace utl;
 
 Convert::Convert()
-    : maMap()
 {
     init();
 }

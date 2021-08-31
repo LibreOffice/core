@@ -83,8 +83,8 @@ namespace framework
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( LayoutManager, LayoutManager_Base, LayoutManager_PBase )
 IMPLEMENT_FORWARD_XINTERFACE2( LayoutManager, LayoutManager_Base, LayoutManager_PBase )
 
-LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) : LayoutManager_Base()
-        , ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >(m_aMutex)
+LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
+         ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >(m_aMutex)
         , LayoutManager_PBase( *static_cast< ::cppu::OBroadcastHelper* >(this) )
         , m_xContext( xContext )
         , m_xURLTransformer( URLTransformer::create(xContext) )

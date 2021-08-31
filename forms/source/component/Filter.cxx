@@ -78,8 +78,7 @@ namespace frm
     using namespace ::connectivity;
 
     OFilterControl::OFilterControl( const Reference< XComponentContext >& _rxORB )
-        :UnoControl()
-        ,m_aTextListeners( *this )
+        :m_aTextListeners( *this )
         ,m_xContext( _rxORB )
         ,m_nControlClass( FormComponentType::TEXTFIELD )
         ,m_bFilterList( false )

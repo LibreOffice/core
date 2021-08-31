@@ -43,7 +43,6 @@ const ::sal_Int32 DEFAULT_ICON_ID =  0;
 
 TitleBarUpdate::TitleBarUpdate(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : m_xContext              (xContext                     )
-    , m_xFrame                (                             )
 {
 }
 

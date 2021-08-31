@@ -131,8 +131,6 @@ OImageControlModel::OImageControlModel(const Reference<XComponentContext>& _rxFa
                     // use the old control name for compytibility reasons
     ,m_bExternalGraphic( true )
     ,m_bReadOnly( false )
-    ,m_sImageURL()
-    ,m_xGraphicObject()
 {
     m_nClassId = FormComponentType::IMAGECONTROL;
     initOwnValueProperty( PROPERTY_IMAGE_URL );

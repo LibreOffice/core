@@ -100,11 +100,7 @@ class PathSettings : private cppu::BaseMutex
         public:
 
             PathInfo()
-                : sPathName     ()
-                , lInternalPaths()
-                , lUserPaths    ()
-                , sWritePath    ()
-                , bIsSinglePath (false)
+                : bIsSinglePath (false)
                 , bIsReadonly   (false)
             {}
 

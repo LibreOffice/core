@@ -44,8 +44,7 @@ static Sequence< sal_Int8 > const & impl_getStaticIdentifier()
 }
 
 RootActionTriggerContainer::RootActionTriggerContainer( const Menu* pMenu, const OUString* pMenuIdentifier ) :
-    PropertySetContainer()
-    ,   m_bContainerCreated( false )
+        m_bContainerCreated( false )
     ,   m_pMenu( pMenu )
     ,   m_pMenuIdentifier( pMenuIdentifier )
 {
