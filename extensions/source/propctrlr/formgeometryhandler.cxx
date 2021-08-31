@@ -134,7 +134,6 @@ namespace pcr
         ShapeGeometryChangeNotifier( ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rParentMutex, const Reference< XShape >& _shape )
             :BroadcastHelperBase( _rParentMutex )
             ,ShapeGeometryChangeNotifier_CBase( BroadcastHelperBase::getBroadcastHelper(), ::comphelper::ComponentBase::NoInitializationNeeded() )
-            ,ShapeGeometryChangeNotifier_IBase()
             ,m_rParent( _rParent )
             ,m_aPropertyChangeListeners( _rParentMutex )
             ,m_xShape( _shape )

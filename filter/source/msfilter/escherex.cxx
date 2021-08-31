@@ -4853,7 +4853,7 @@ protected:
     virtual void FlushData() override {}
 
 public:
-    SvNullStream() : SvStream() {}
+    SvNullStream()  {}
 };
 
 }

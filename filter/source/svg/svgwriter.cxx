@@ -463,12 +463,6 @@ SVGTextWriter::SVGTextWriter(SVGExport& rExport, SVGAttributeWriter& rAttributeW
   mrActionWriter(rActionWriter),
   mpVDev( nullptr ),
   mbIsTextShapeStarted( false ),
-  mrTextShape(),
-  msShapeId(),
-  mrParagraphEnumeration(),
-  mrCurrentTextParagraph(),
-  mrTextPortionEnumeration(),
-  mrCurrentTextPortion(),
   mpTextEmbeddedBitmapMtf( nullptr ),
   mpTargetMapMode( nullptr ),
   mnLeftTextPortionLength( 0 ),
@@ -478,14 +472,10 @@ SVGTextWriter::SVGTextWriter(SVGExport& rExport, SVGAttributeWriter& rAttributeW
   mbIsNewListItem( false ),
   meNumberingType(0),
   mcBulletChar(0),
-  maBulletListItemMap(),
   mbIsListLevelStyleImage( false ),
   mbLineBreak( false ),
   mbIsURLField( false ),
-  msUrl(),
-  mbIsPlaceholderShape( false ),
-  maCurrentFont(),
-  maParentFont()
+  mbIsPlaceholderShape( false )
 {
 }
 
@@ -1786,7 +1776,6 @@ SVGActionWriter::SVGActionWriter( SVGExport& rExport, SVGFontExport& rFontExport
     mnCurMaskId( 1 ),
     mnCurPatternId( 1 ),
     mnCurClipPathId( 1 ),
-    mpCurrentClipRegionElem(),
     mrExport( rExport ),
     maContextHandler(),
     mrCurrentState( maContextHandler.getCurrentState() ),

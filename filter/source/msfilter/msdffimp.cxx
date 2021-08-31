@@ -7425,7 +7425,6 @@ SvxMSDffImportRec::SvxMSDffImportRec()
       nCropFromBottom( 0 ),
       nCropFromLeft( 0 ),
       nCropFromRight( 0 ),
-      aTextId(),
       nNextShapeId( 0 ),
       nShapeId( 0 ),
       eShapeType( mso_sptNil ),

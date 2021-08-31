@@ -154,7 +154,6 @@ GridWindow::GridWindow()
     , m_BmOffX(0)
     , m_BmOffY(0)
     , m_bCutValues(false)
-    , m_aHandles()
     , m_nDragIndex(npos)
 {
 }

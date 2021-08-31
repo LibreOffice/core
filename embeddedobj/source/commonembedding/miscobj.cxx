@@ -61,7 +61,6 @@ OCommonEmbeddedObject::OCommonEmbeddedObject( const uno::Reference< uno::XCompon
 , m_bIsLinkURL( false )
 , m_bLinkTempFileChanged( false )
 , m_bLinkHasPassword( false )
-, m_aLinkTempFile( )
 , m_bHasClonedSize( false )
 , m_nClonedMapUnit( 0 )
 {
@@ -88,7 +87,6 @@ OCommonEmbeddedObject::OCommonEmbeddedObject(
 , m_bIsLinkURL( true )
 , m_bLinkTempFileChanged( false )
 , m_bLinkHasPassword( false )
-, m_aLinkTempFile( )
 , m_bHasClonedSize( false )
 , m_nClonedMapUnit( 0 )
 {

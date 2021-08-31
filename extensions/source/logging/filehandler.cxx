@@ -130,8 +130,6 @@ namespace logging
         :FileHandler_Base( m_aMutex )
         ,m_xContext( context )
         ,m_aHandlerHelper( context, m_aMutex, rBHelper )
-        ,m_sFileURL( )
-        ,m_pFile( )
         ,m_eFileValidity( eUnknown )
     {
         ::osl::MutexGuard aGuard( m_aMutex );

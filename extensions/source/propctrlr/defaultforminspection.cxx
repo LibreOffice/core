@@ -44,8 +44,7 @@ namespace pcr
     using ::com::sun::star::lang::IllegalArgumentException;
 
     DefaultFormComponentInspectorModel::DefaultFormComponentInspectorModel( bool _bUseFormFormComponentHandlers )
-        :ImplInspectorModel()
-        ,m_bUseFormComponentHandlers( _bUseFormFormComponentHandlers )
+        :m_bUseFormComponentHandlers( _bUseFormFormComponentHandlers )
         ,m_bConstructed( false )
         ,m_pInfoService( new OPropertyInfoService )
     {
