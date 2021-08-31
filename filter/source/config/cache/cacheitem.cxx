@@ -33,7 +33,6 @@
 namespace filter::config{
 
 CacheItem::CacheItem()
-    : SequenceAsHashMap()
 {
 }
 

@@ -34,7 +34,6 @@ namespace filter::config{
 
 BaseContainer::BaseContainer()
     : BaseLock     (       )
-    , m_pFlushCache()
     , m_eType()
     , m_lListener  (m_aLock)
 {

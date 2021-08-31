@@ -1505,7 +1505,6 @@ IMPL_LINK_NOARG(ImplErrorDialog, SelectHdl, weld::TreeView&, void)
 /// The digital signatures tab page
 ImpPDFTabSigningPage::ImpPDFTabSigningPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
     : SfxTabPage(pPage, pController, "filter/ui/pdfsignpage.ui", "PdfSignPage", &rCoreSet)
-    , maSignCertificate()
     , mxEdSignCert(m_xBuilder->weld_entry("cert"))
     , mxPbSignCertSelect(m_xBuilder->weld_button("select"))
     , mxPbSignCertClear(m_xBuilder->weld_button("clear"))

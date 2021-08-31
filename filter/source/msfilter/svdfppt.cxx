@@ -4460,7 +4460,6 @@ PPTParaPropSet& PPTParaPropSet::operator=( const PPTParaPropSet& rParaPropSet )
 PPTCharPropSet::PPTCharPropSet(sal_uInt32 nParagraph)
     : mnOriginalTextPos(0)
     , mnParagraph(nParagraph)
-    , mpImplPPTCharPropSet()
 {
     mnHylinkOrigColor = 0;
     mbIsHyperlink = false;
