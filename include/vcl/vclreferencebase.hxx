@@ -21,12 +21,15 @@
 
 #include <vcl/dllapi.h>
 #include <osl/interlck.h>
+#include <atomic>
 
 class VclBuilder;
 
 class VCL_DLLPUBLIC VclReferenceBase
 {
     mutable oslInterlockedCount mnRefCnt;
+    std::atomic<bool> mbDisposed;
+
 
     template<typename T> friend class VclPtr;
     friend class ::VclBuilder; // needed by ::delete_by_window(vcl::Window *pWindow)
@@ -52,8 +55,6 @@ public:
 private:
     VclReferenceBase(const VclReferenceBase&) = delete;
     VclReferenceBase& operator=(const VclReferenceBase&) = delete;
-
-    bool                        mbDisposed : 1;
 
 protected:
                                 VclReferenceBase();

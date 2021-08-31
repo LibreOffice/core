@@ -32,9 +32,11 @@ VclReferenceBase::~VclReferenceBase()
 
 void VclReferenceBase::disposeOnce()
 {
-    if ( mbDisposed )
+    // We should probably not be calling disposeOnce on anything except the main thread, but.... stuff happens...
+    // And hopefully this will fix some windows unit-test crashes
+    bool expected = false;
+    if ( !mbDisposed.compare_exchange_strong(expected, true) )
         return;
-    mbDisposed = true;
     dispose();
 }
 
