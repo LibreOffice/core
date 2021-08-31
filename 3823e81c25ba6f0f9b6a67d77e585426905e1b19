@@ -16,6 +16,24 @@
       "message": "Looks like erasing is lost here?",
       "revId": "3823e81c25ba6f0f9b6a67d77e585426905e1b19",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2f12e4c_565a425c",
+        "filename": "svtools/source/control/tabbar.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1662,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-31T02:45:03Z",
+      "side": 0,
+      "message": "Resolved by https://gerrit.libreoffice.org/c/core/+/121282",
+      "parentUuid": "1a5518d5_87ef3163",
+      "revId": "3823e81c25ba6f0f9b6a67d77e585426905e1b19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
