@@ -22,6 +22,30 @@
       },
       "revId": "6846911699ce213a18806d49e974b6c97616c8d7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64297db7_650fb2b6",
+        "filename": "vcl/source/outdev/textline.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-08-31T10:25:53Z",
+      "side": 0,
+      "message": "If the outdev is a printer OR the linewidth is \u003e 1, then set the fill color and mbInitColor. \nIf the outdev is a printer OR the linewdith is \u003e 1, draw the wave pixels as a rect, otherwise do not. \nIf the outdev is a printer OR the linewidth is \u003e 1 set the size as per the DPI/linewidth calculation.\n\nThis still is correct to me.",
+      "parentUuid": "d77dc80d_d6171c32",
+      "range": {
+        "startLine": 181,
+        "startChar": 11,
+        "endLine": 190,
+        "endChar": 70
+      },
+      "revId": "6846911699ce213a18806d49e974b6c97616c8d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
