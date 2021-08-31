@@ -1392,9 +1392,11 @@ void SwContentNode::MakeFramesForAdjacentContentNode(SwContentNode& rNode)
             if ( pViewShell && pViewShell->GetLayout() &&
                  pViewShell->GetLayout()->IsAnyShellAccessible() )
             {
+                auto pNext = pNew->FindNextCnt( true );
+                auto pPrev = pNew->FindPrevCnt();
                 pViewShell->InvalidateAccessibleParaFlowRelation(
-                            pNew->FindNextCnt( true )->DynCastTextFrame(),
-                            pNew->FindPrevCnt()->DynCastTextFrame() );
+                            pNext ? pNext->DynCastTextFrame() : nullptr,
+                            pPrev ? pPrev->DynCastTextFrame() : nullptr );
             }
         }
     }
