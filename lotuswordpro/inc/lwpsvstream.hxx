@@ -75,6 +75,7 @@ public:
     sal_uInt64 remainingSize();
     sal_Int64 Seek(sal_Int64 pos);
     bool CheckSeek(sal_Int64 pos);
+    bool good() const;
 
     LwpSvStream& ReadUInt8(sal_uInt8& rUInt8);
     LwpSvStream& ReadUInt16(sal_uInt16& rUInt16);

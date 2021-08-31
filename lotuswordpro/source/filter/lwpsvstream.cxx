@@ -90,6 +90,8 @@ LwpSvStream& LwpSvStream::ReadUInt32(sal_uInt32& rUInt32)
     return *this;
 }
 
+bool LwpSvStream::good() const { return m_pStream->good(); }
+
 /**
  * @descr       SeekRel in stream
 */
