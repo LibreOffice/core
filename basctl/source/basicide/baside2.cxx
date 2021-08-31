@@ -190,17 +190,6 @@ void lcl_ConvertTabsToSpaces( OUString& rLine )
     rLine = aResult.makeStringAndClear();
 }
 
-void DetectUTF8BOMCharset(SvStream& pStream)
-{
-    sal_uInt8 pBuf[3];
-    sal_Int32 nRead = pStream.ReadBytes(pBuf, 3);
-    unsigned char const BOM[3] = { 0xEF, 0xBB, 0xBF };
-    if (nRead == 3 && memcmp(pBuf, BOM, 3) == 0)
-        pStream.SetStreamCharSet(RTL_TEXTENCODING_UTF8);
-    else
-        pStream.Seek(0);
-}
-
 } // namespace
 
 ModulWindow::ModulWindow (ModulWindowLayout* pParent, ScriptDocument const& rDocument,
@@ -447,7 +436,9 @@ void ModulWindow::LoadBasic()
         GetEditorWindow().CreateProgress( IDEResId(RID_STR_GENERATESOURCE), nLines*4 );
         GetEditEngine()->SetUpdateMode( false );
         // tdf#139196 - import macros using either default or utf-8 text encoding
-        DetectUTF8BOMCharset(*pStream);
+        pStream->StartReadingUnicodeText(RTL_TEXTENCODING_UTF8);
+        if (pStream->Tell() == 3)
+            pStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);
         GetEditView()->Read( *pStream );
         GetEditEngine()->SetUpdateMode( true );
         GetEditorWindow().PaintImmediately();
