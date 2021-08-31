@@ -25,6 +25,8 @@
 #include <osl/diagnose.h>
 #include <tools/long.hxx>
 
+#include <vcl/printer/PrinterController.hxx>
+
 #include <osx/salinst.h>
 #include <osx/salprn.h>
 #include <osx/printview.h>
@@ -331,7 +333,7 @@ void AquaSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
     }
 }
 
-static Size getPageSize( vcl::PrinterController const & i_rController, sal_Int32 i_nPage )
+static Size getPageSize( vcl::print::PrinterController const & i_rController, sal_Int32 i_nPage )
 {
     Size aPageSize;
     uno::Sequence< PropertyValue > const aPageParms( i_rController.getPageParameters( i_nPage ) );
@@ -352,7 +354,7 @@ static Size getPageSize( vcl::PrinterController const & i_rController, sal_Int32
 bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
                                    const OUString& i_rJobName,
                                    ImplJobSetup* i_pSetupData,
-                                   vcl::PrinterController& i_rController
+                                   vcl::print::PrinterController& i_rController
                                    )
 {
     if( mbJob )
@@ -570,7 +572,7 @@ bool AquaSalPrinter::StartJob( const OUString* i_pFileName,
                                const OUString& i_rJobName,
                                const OUString&,
                                ImplJobSetup* i_pSetupData,
-                               vcl::PrinterController& i_rController )
+                               vcl::print::PrinterController& i_rController )
 {
     return mpInfoPrinter->StartJob( i_pFileName, i_rJobName, i_pSetupData, i_rController );
 }

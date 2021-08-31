@@ -27,6 +27,7 @@
 
 #include <vcl/metaact.hxx>
 #include <vcl/print.hxx>
+#include <vcl/printer/PrinterController.hxx>
 #include <vcl/printer/PrinterOptions.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>

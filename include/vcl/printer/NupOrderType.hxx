@@ -17,40 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_OLDPRINTADAPTOR_HXX
-#define INCLUDED_VCL_OLDPRINTADAPTOR_HXX
+#pragma once
 
-#include <config_options.h>
-
-#include <vcl/print.hxx>
-#include <vcl/printer/PrinterController.hxx>
-
-#include <memory>
-
-namespace weld
+namespace vcl::print
 {
-    class Window;
-}
-
-namespace vcl
+enum class NupOrderType
 {
-    struct ImplOldStyleAdaptorData;
-    class UNLESS_MERGELIBS(VCL_DLLPUBLIC) OldStylePrintAdaptor final : public print::PrinterController
-    {
-        std::unique_ptr<ImplOldStyleAdaptorData>  mpData;
-    public:
-        OldStylePrintAdaptor(const VclPtr<Printer>&, weld::Window*);
-        virtual ~OldStylePrintAdaptor() override;
-
-        void StartPage();
-        void EndPage();
-
-        virtual int  getPageCount() const override;
-        virtual css::uno::Sequence< css::beans::PropertyValue > getPageParameters( int i_nPage ) const override;
-        virtual void printPage( int i_nPage ) const override;
-    };
+    LRTB,
+    TBLR,
+    TBRL,
+    RLTB
+};
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

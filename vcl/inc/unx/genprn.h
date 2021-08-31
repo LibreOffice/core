@@ -83,7 +83,7 @@ public:
                                               const OUString&,
                                               const OUString&,
                                               ImplJobSetup*,
-                                              vcl::PrinterController& i_rController ) override;
+                                              vcl::print::PrinterController& i_rController ) override;
     virtual bool                    EndJob() override;
     virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, bool bNewJobData ) override;
     virtual void                    EndPage() override;
