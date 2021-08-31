@@ -255,7 +255,7 @@ SwPrintUIOptions::SwPrintUIOptions(
 
     // create a bool option for paper tray
     bDefaultVal = rDefaultPrintData.IsPaperFromSetup();
-    vcl::PrinterOptionsHelper::UIControlOptions aPaperTrayOpt;
+    vcl::printer::OptionsHelper::UIControlOptions aPaperTrayOpt;
     aPaperTrayOpt.maGroupHint = "OptionsPageOptGroup";
     m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt("printpaperfromsetup", SwResId( STR_PRINTOPTUI_ONLY_PAPER),
                                                         ".HelpID:vcl:PrintDialog:PrintPaperFromSetup:CheckBox",
@@ -264,7 +264,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                         aPaperTrayOpt);
 
     // print range selection
-    vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
+    vcl::printer::OptionsHelper::UIControlOptions aPrintRangeOpt;
     aPrintRangeOpt.maGroupHint = "PrintRange";
     aPrintRangeOpt.mbInternalOnly = true;
     m_aUIProperties[nIdx++].Value = setSubgroupControlOpt( "printrange",
@@ -297,14 +297,14 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                         aChoicesDisabled);
 
     // show an Edit dependent on "Pages" selected
-    vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, true );
+    vcl::printer::OptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, true );
     m_aUIProperties[nIdx++].Value = setEditControlOpt("pagerange", OUString(),
                                                       ".HelpID:vcl:PrintDialog:PageRange:Edit",
                                                       "PageRange",
                                                       OUString::number( nCurrentPage ) /* set text box to current page number */,
                                                       aPageRangeOpt);
 
-    vcl::PrinterOptionsHelper::UIControlOptions aEvenOddOpt(aPrintRangeName, -1, true);
+    vcl::printer::OptionsHelper::UIControlOptions aEvenOddOpt(aPrintRangeName, -1, true);
     m_aUIProperties[ nIdx++ ].Value = setChoiceListControlOpt("evenoddbox",
                                                            OUString(),
                                                            uno::Sequence<OUString>(),
@@ -325,7 +325,7 @@ SwPrintUIOptions::SwPrintUIOptions(
     aHelpIds.realloc( 2 );
     aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintAnnotationMode:FixedText";
     aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintAnnotationMode:ListBox";
-    vcl::PrinterOptionsHelper::UIControlOptions aAnnotOpt( "PrintProspect", 0, false );
+    vcl::printer::OptionsHelper::UIControlOptions aAnnotOpt( "PrintProspect", 0, false );
     aAnnotOpt.mbEnabled = bHasPostIts;
     m_aUIProperties[ nIdx++ ].Value = setChoiceListControlOpt("writercomments",
                                                            SwResId( STR_PRINTOPTUI_COMMENTS),
@@ -337,7 +337,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                            aAnnotOpt);
 
     // create subsection for Page settings
-    vcl::PrinterOptionsHelper::UIControlOptions aPageSetOpt;
+    vcl::printer::OptionsHelper::UIControlOptions aPageSetOpt;
     aPageSetOpt.maGroupHint = "LayoutPage";
 
     // create a bool option for brochure
@@ -355,7 +355,7 @@ SwPrintUIOptions::SwPrintUIOptions(
         uno::Sequence< OUString > aBRTLChoices( 2 );
         aBRTLChoices[0] = SwResId( STR_PRINTOPTUI_LEFT_SCRIPT);
         aBRTLChoices[1] = SwResId( STR_PRINTOPTUI_RIGHT_SCRIPT);
-        vcl::PrinterOptionsHelper::UIControlOptions aBrochureRTLOpt( aBrochurePropertyName, -1, true );
+        vcl::printer::OptionsHelper::UIControlOptions aBrochureRTLOpt( aBrochurePropertyName, -1, true );
         uno::Sequence<OUString> aBRTLHelpIds { ".HelpID:vcl:PrintDialog:PrintProspectRTL:ListBox" };
         aBrochureRTLOpt.maGroupHint = "LayoutPage";
         // RTL brochure choices
