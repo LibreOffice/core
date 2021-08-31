@@ -137,18 +137,18 @@ DeactivateRC SfxCommonPrintOptionsTabPage::DeactivatePage( SfxItemSet* pItemSet 
     return DeactivateRC::LeavePage;
 }
 
-void SfxCommonPrintOptionsTabPage::ImplUpdateControls( const PrinterOptions* pCurrentOptions )
+void SfxCommonPrintOptionsTabPage::ImplUpdateControls( const vcl::print::PrinterOptions* pCurrentOptions )
 {
     m_xReduceTransparencyCB->set_active( pCurrentOptions->IsReduceTransparency() );
 
-    if( pCurrentOptions->GetReducedTransparencyMode() == PrinterTransparencyMode::Auto )
+    if( pCurrentOptions->GetReducedTransparencyMode() == vcl::print::PrinterTransparencyMode::Auto )
         m_xReduceTransparencyAutoRB->set_active(true);
     else
         m_xReduceTransparencyNoneRB->set_active(true);
 
     m_xReduceGradientsCB->set_active( pCurrentOptions->IsReduceGradients() );
 
-    if( pCurrentOptions->GetReducedGradientMode() == PrinterGradientMode::Stripes )
+    if( pCurrentOptions->GetReducedGradientMode() == vcl::print::PrinterGradientMode::Stripes )
         m_xReduceGradientsStripesRB->set_active(true);
     else
         m_xReduceGradientsColorRB->set_active(true);
@@ -157,9 +157,9 @@ void SfxCommonPrintOptionsTabPage::ImplUpdateControls( const PrinterOptions* pCu
 
     m_xReduceBitmapsCB->set_active( pCurrentOptions->IsReduceBitmaps() );
 
-    if( pCurrentOptions->GetReducedBitmapMode() == PrinterBitmapMode::Optimal )
+    if( pCurrentOptions->GetReducedBitmapMode() == vcl::print::PrinterBitmapMode::Optimal )
         m_xReduceBitmapsOptimalRB->set_active(true);
-    else if( pCurrentOptions->GetReducedBitmapMode() == PrinterBitmapMode::Normal )
+    else if( pCurrentOptions->GetReducedBitmapMode() == vcl::print::PrinterBitmapMode::Normal )
         m_xReduceBitmapsNormalRB->set_active(true);
     else
         m_xReduceBitmapsResolutionRB->set_active(true);
@@ -189,16 +189,16 @@ void SfxCommonPrintOptionsTabPage::ImplUpdateControls( const PrinterOptions* pCu
     ClickReduceBitmapsCBHdl(*m_xReduceBitmapsCB);
 }
 
-void SfxCommonPrintOptionsTabPage::ImplSaveControls( PrinterOptions* pCurrentOptions )
+void SfxCommonPrintOptionsTabPage::ImplSaveControls( vcl::print::PrinterOptions* pCurrentOptions )
 {
     pCurrentOptions->SetReduceTransparency( m_xReduceTransparencyCB->get_active() );
-    pCurrentOptions->SetReducedTransparencyMode( m_xReduceTransparencyAutoRB->get_active() ? PrinterTransparencyMode::Auto : PrinterTransparencyMode::NONE );
+    pCurrentOptions->SetReducedTransparencyMode( m_xReduceTransparencyAutoRB->get_active() ? vcl::print::PrinterTransparencyMode::Auto : vcl::print::PrinterTransparencyMode::NONE );
     pCurrentOptions->SetReduceGradients( m_xReduceGradientsCB->get_active() );
-    pCurrentOptions->SetReducedGradientMode( m_xReduceGradientsStripesRB->get_active() ? PrinterGradientMode::Stripes : PrinterGradientMode::Color  );
+    pCurrentOptions->SetReducedGradientMode( m_xReduceGradientsStripesRB->get_active() ? vcl::print::PrinterGradientMode::Stripes : vcl::print::PrinterGradientMode::Color  );
     pCurrentOptions->SetReducedGradientStepCount(m_xReduceGradientsStepCountNF->get_value());
     pCurrentOptions->SetReduceBitmaps( m_xReduceBitmapsCB->get_active() );
-    pCurrentOptions->SetReducedBitmapMode( m_xReduceBitmapsOptimalRB->get_active() ? PrinterBitmapMode::Optimal :
-                                           ( m_xReduceBitmapsNormalRB->get_active() ? PrinterBitmapMode::Normal : PrinterBitmapMode::Resolution ) );
+    pCurrentOptions->SetReducedBitmapMode( m_xReduceBitmapsOptimalRB->get_active() ? vcl::print::PrinterBitmapMode::Optimal :
+                                           ( m_xReduceBitmapsNormalRB->get_active() ? vcl::print::PrinterBitmapMode::Normal : vcl::print::PrinterBitmapMode::Resolution ) );
     pCurrentOptions->SetReducedBitmapResolution( aDPIArray[ std::min<sal_uInt16>( m_xReduceBitmapsResolutionLB->get_active(),
                                                                    SAL_N_ELEMENTS(aDPIArray) - 1 ) ] );
     pCurrentOptions->SetReducedBitmapIncludesTransparency( m_xReduceBitmapsTransparencyCB->get_active() );
