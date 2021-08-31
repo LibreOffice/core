@@ -29,7 +29,6 @@ using namespace ::com::sun::star::chart2;
 
 PlotterBase::PlotterBase( sal_Int32 nDimensionCount )
         : m_pShapeFactory(nullptr)
-        , m_aCID()
         , m_nDimension(nDimensionCount)
         , m_pPosHelper(nullptr)
 {

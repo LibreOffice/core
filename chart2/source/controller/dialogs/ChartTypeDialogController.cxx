@@ -367,7 +367,6 @@ void ChartTypeDialogController::setTemplateProperties( const uno::Reference< bea
 }
 
 ColumnOrBarChartDialogController_Base::ColumnOrBarChartDialogController_Base()
-                                        : ChartTypeDialogController()
 {
 }
 ColumnOrBarChartDialogController_Base::~ColumnOrBarChartDialogController_Base()

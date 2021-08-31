@@ -1040,12 +1040,8 @@ const uno::Sequence<sal_Int8>& ExplicitValueProvider::getUnoTunnelId()
 ChartView::ChartView(
         uno::Reference<uno::XComponentContext> const & xContext,
         ChartModel& rModel)
-    : m_aMutex()
-    , m_xCC(xContext)
+    : m_xCC(xContext)
     , mrChartModel(rModel)
-    , m_xShapeFactory()
-    , m_xDrawPage()
-    , m_pDrawModelWrapper()
     , m_aListenerContainer( m_aMutex )
     , m_bViewDirty(true)
     , m_bInViewUpdate(false)

@@ -144,22 +144,15 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     , m_fLogicZPos(0.0)
     , m_xDataSeries(xDataSeries)
     , m_nPointCount(0)
-
     , m_pValueSequenceForDataLabelNumberFormatDetection(&m_aValues_Y)
-
     , m_fXMeanValue(std::numeric_limits<double>::quiet_NaN())
     , m_fYMeanValue(std::numeric_limits<double>::quiet_NaN())
-
-    , m_aAttributedDataPointIndexList()
-
     , m_eStackingDirection(StackingDirection_NO_STACKING)
     , m_nAxisIndex(0)
     , m_bConnectBars(false)
     , m_bGroupBarsPerAxis(true)
     , m_nStartingAngle(90)
-
     , m_nGlobalSeriesIndex(0)
-
     , m_nCurrentAttributedPoint(-1)
     , m_nMissingValueTreatment(css::chart::MissingValueTreatment::LEAVE_GAP)
     , m_bAllowPercentValueInDataLabel(false)

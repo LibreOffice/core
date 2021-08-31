@@ -39,9 +39,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 PlottingPositionHelper::PlottingPositionHelper()
-        : m_aScales()
-        , m_aMatrixScreenToScene()
-        , m_bSwapXAndY( false )
+        : m_bSwapXAndY( false )
         , m_nXResolution( 1000 )
         , m_nYResolution( 1000 )
         , m_nZResolution( 1000 )
@@ -316,7 +314,6 @@ drawing::Direction3D PlottingPositionHelper::getScaledLogicWidth() const
 PolarPlottingPositionHelper::PolarPlottingPositionHelper()
     : m_fRadiusOffset(0.0)
     , m_fAngleDegreeOffset(90.0)
-    , m_aUnitCartesianToScene()
 {
     m_bMaySkipPointsInRegressionCalculation = false;
 }

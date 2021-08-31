@@ -67,7 +67,6 @@ struct LightSourceInfo
 
 LightSourceInfo::LightSourceInfo()
     : pButton(nullptr)
-    , aLightSource()
 {
     aLightSource.nDiffuseColor = Color(0xffffff); // white
     aLightSource.aDirection = drawing::Direction3D(1,1,1);

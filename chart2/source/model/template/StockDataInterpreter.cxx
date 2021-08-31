@@ -36,7 +36,6 @@ namespace chart
 // explicit
 StockDataInterpreter::StockDataInterpreter(
     StockChartTypeTemplate::StockVariant eVariant ) :
-        DataInterpreter(),
         m_eStockVariant( eVariant )
 {}
 

@@ -50,7 +50,6 @@ DragMethod_RotateDiagram::DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWr
     , m_pScene(nullptr)
     , m_aReferenceRect(100,100,100,100)
     , m_aStartPos(0,0)
-    , m_aWireframePolyPolygon()
     , m_fInitialXAngleRad(0.0)
     , m_fInitialYAngleRad(0.0)
     , m_fInitialZAngleRad(0.0)

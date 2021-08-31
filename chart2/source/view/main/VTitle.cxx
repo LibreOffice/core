@@ -32,7 +32,6 @@ using namespace ::com::sun::star::chart2;
 
 VTitle::VTitle( const uno::Reference< XTitle > & xTitle )
                 : m_xTitle(xTitle)
-                , m_aCID()
                 , m_fRotationAngleDegree(0.0)
                 , m_nXPos(0)
                 , m_nYPos(0)

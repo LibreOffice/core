@@ -54,7 +54,6 @@ namespace chart
                 ,m_rParent( i_parent )
                 ,m_rMutex( i_mutex )
                 ,m_bDisposed( false )
-                ,m_aUndoManager()
                 ,m_aUndoHelper( *this )
             {
                 m_aUndoManager.SetMaxUndoActionCount(

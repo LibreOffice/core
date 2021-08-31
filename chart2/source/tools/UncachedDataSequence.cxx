@@ -83,9 +83,7 @@ UncachedDataSequence::UncachedDataSequence(
 }
 
 UncachedDataSequence::UncachedDataSequence( const UncachedDataSequence & rSource )
-        : ::comphelper::OMutexAndBroadcastHelper(),
-          OPropertyContainer( GetBroadcastHelper()),
-          ::comphelper::OPropertyArrayUsageHelper< UncachedDataSequence >(),
+        : OPropertyContainer( GetBroadcastHelper()),
           UncachedDataSequence_Base( GetMutex()),
           m_nNumberFormatKey( rSource.m_nNumberFormatKey ),
           m_sRole( rSource.m_sRole ),

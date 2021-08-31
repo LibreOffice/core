@@ -64,7 +64,6 @@ ExplicitScaleData::ExplicitScaleData()
     , Maximum(10.0)
     , Origin(0.0)
     , Orientation(css::chart2::AxisOrientation_MATHEMATICAL)
-    , Scaling()
     , AxisType(css::chart2::AxisType::REALNUMBER)
     , ShiftedCategoryPosition(false)
     , TimeResolution(css::chart::TimeUnit::DAY)
@@ -84,7 +83,6 @@ ExplicitIncrementData::ExplicitIncrementData()
     , Distance(1.0)
     , PostEquidistant(true)
     , BaseValue(0.0)
-    , SubIncrements()
 {
 }
 

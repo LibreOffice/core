@@ -64,7 +64,6 @@ RangeChooserTabPage::RangeChooserTabPage(weld::Container* pPage, weld::DialogCon
     : OWizardPage(pPage, pController, "modules/schart/ui/tp_RangeChooser.ui", "tp_RangeChooser")
     , m_nChangingControlCalls(0)
     , m_bIsDirty(false)
-    , m_aLastValidRangeString()
     , m_pTemplateProvider(pTemplateProvider)
     , m_rDialogModel( rDialogModel )
     , m_pTabPageNotifiable(dynamic_cast<TabPageNotifiable*>(pController))

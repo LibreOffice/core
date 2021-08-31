@@ -47,7 +47,6 @@ VDiagram::VDiagram(
     , m_nDimensionCount(nDimension)
     , m_xDiagram(xDiagram)
     , m_aPreferredAspectRatio(rPreferredAspectRatio)
-    , m_xAspectRatio3D()
     , m_fXAnglePi(0)
     , m_fYAnglePi(0)
     , m_fZAnglePi(0)

@@ -37,7 +37,6 @@ UndoGuard::UndoGuard( const OUString& i_undoString, const uno::Reference< docume
                                const ModelFacet i_facet )
     :m_xChartModel( i_undoManager->getParent(), uno::UNO_QUERY_THROW )
     ,m_xUndoManager( i_undoManager )
-    ,m_pDocumentSnapshot()
     ,m_aUndoString( i_undoString )
     ,m_bActionPosted( false )
 {

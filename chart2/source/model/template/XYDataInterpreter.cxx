@@ -36,8 +36,7 @@ using ::com::sun::star::uno::Sequence;
 namespace chart
 {
 
-XYDataInterpreter::XYDataInterpreter() :
-        DataInterpreter()
+XYDataInterpreter::XYDataInterpreter()
 {
 }
 

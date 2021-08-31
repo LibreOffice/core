@@ -82,7 +82,6 @@ ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const OUString
         : m_aObjectCID( rObjectCID )
         , m_eObjectType( ObjectIdentifier::getObjectType( m_aObjectCID ) )
         , m_bAffectsMultipleObjects(false)
-        , m_aLocalizedName()
         , m_bHasGeometryProperties(false)
         , m_bHasStatisticProperties(false)
         , m_bProvidesSecondaryYAxis(false)
@@ -100,7 +99,6 @@ ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const OUString
         , m_bShowAxisOrigin(false)
         , m_bIsCrossingAxisIsCategoryAxis(false)
         , m_bSupportingCategoryPositioning(false)
-        , m_aCategories()
         , m_bComplexCategoriesAxis( false )
         , m_nNbPoints( 0 )
 {

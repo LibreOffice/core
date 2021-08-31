@@ -48,7 +48,6 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const Reference< chart2:
     : m_bDirty(true)
     , m_xCooSysModel( xCooSysModel )
     , mrModel(rModel)
-    , m_xOriginalCategories()
     , m_bIsExplicitCategoriesInited(false)
     , m_bIsDateAxis(false)
     , m_bIsAutoDate(false)

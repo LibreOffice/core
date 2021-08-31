@@ -110,8 +110,7 @@ namespace {
 struct lcl_AllOperator : public lcl_Operator
 {
     explicit lcl_AllOperator( const Reference< XChartData >& xDataToApply )
-        : lcl_Operator()
-        , m_xDataToApply( xDataToApply )
+        : m_xDataToApply( xDataToApply )
     {
     }
 
@@ -157,8 +156,7 @@ struct lcl_AllOperator : public lcl_Operator
 struct lcl_DataOperator : public lcl_Operator
 {
     explicit lcl_DataOperator( const Sequence< Sequence< double > >& rData )
-        : lcl_Operator()
-        , m_rData( rData )
+        : m_rData( rData )
     {
     }
 
@@ -175,8 +173,7 @@ struct lcl_RowDescriptionsOperator : public lcl_Operator
 {
     lcl_RowDescriptionsOperator( const Sequence< OUString >& rRowDescriptions
         , const Reference< chart2::XChartDocument >& xChartDoc )
-        : lcl_Operator()
-        , m_rRowDescriptions( rRowDescriptions )
+        : m_rRowDescriptions( rRowDescriptions )
         , m_xChartDoc(xChartDoc)
         , m_bDataInColumns(true)
     {
@@ -207,8 +204,7 @@ struct lcl_ComplexRowDescriptionsOperator : public lcl_Operator
 {
     lcl_ComplexRowDescriptionsOperator( const Sequence< Sequence< OUString > >& rComplexRowDescriptions
         , const Reference< chart2::XChartDocument >& xChartDoc )
-        : lcl_Operator()
-        , m_rComplexRowDescriptions( rComplexRowDescriptions )
+        : m_rComplexRowDescriptions( rComplexRowDescriptions )
         , m_xChartDoc(xChartDoc)
         , m_bDataInColumns(true)
     {
@@ -238,8 +234,7 @@ struct lcl_ComplexRowDescriptionsOperator : public lcl_Operator
 struct lcl_AnyRowDescriptionsOperator : public lcl_Operator
 {
     explicit lcl_AnyRowDescriptionsOperator( const Sequence< Sequence< uno::Any > >& rAnyRowDescriptions )
-        : lcl_Operator()
-        , m_rAnyRowDescriptions( rAnyRowDescriptions )
+        : m_rAnyRowDescriptions( rAnyRowDescriptions )
     {
     }
 
@@ -261,8 +256,7 @@ struct lcl_ColumnDescriptionsOperator : public lcl_Operator
 {
     lcl_ColumnDescriptionsOperator( const Sequence< OUString >& rColumnDescriptions
         , const Reference< chart2::XChartDocument >& xChartDoc )
-        : lcl_Operator()
-        , m_rColumnDescriptions( rColumnDescriptions )
+        : m_rColumnDescriptions( rColumnDescriptions )
         , m_xChartDoc(xChartDoc)
         , m_bDataInColumns(true)
     {
@@ -293,8 +287,7 @@ struct lcl_ComplexColumnDescriptionsOperator : public lcl_Operator
 {
     lcl_ComplexColumnDescriptionsOperator( const Sequence< Sequence< OUString > >& rComplexColumnDescriptions
         , const Reference< chart2::XChartDocument >& xChartDoc )
-        : lcl_Operator()
-        , m_rComplexColumnDescriptions( rComplexColumnDescriptions )
+        : m_rComplexColumnDescriptions( rComplexColumnDescriptions )
         , m_xChartDoc(xChartDoc)
         , m_bDataInColumns(true)
     {
@@ -324,8 +317,7 @@ struct lcl_ComplexColumnDescriptionsOperator : public lcl_Operator
 struct lcl_AnyColumnDescriptionsOperator : public lcl_Operator
 {
     explicit lcl_AnyColumnDescriptionsOperator( const Sequence< Sequence< uno::Any > >& rAnyColumnDescriptions )
-        : lcl_Operator()
-        , m_rAnyColumnDescriptions( rAnyColumnDescriptions )
+        : m_rAnyColumnDescriptions( rAnyColumnDescriptions )
     {
     }
 
@@ -346,8 +338,7 @@ struct lcl_AnyColumnDescriptionsOperator : public lcl_Operator
 struct lcl_DateCategoriesOperator : public lcl_Operator
 {
     explicit lcl_DateCategoriesOperator( const Sequence< double >& rDates )
-        : lcl_Operator()
-        , m_rDates( rDates )
+        : m_rDates( rDates )
     {
     }
 

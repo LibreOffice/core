@@ -219,7 +219,6 @@ DataPointItemConverter::DataPointItemConverter(
         m_nSpecialFillColor(ColorTransparency, nSpecialFillColor),
         m_nNumberFormat(nNumberFormat),
         m_nPercentNumberFormat(nPercentNumberFormat),
-        m_aAvailableLabelPlacements(),
         m_bForbidPercentValue(true),
         m_bHideLegendEntry(false),
         m_nPointIndex(nPointIndex),
