@@ -47,7 +47,6 @@ namespace dbaui
             ,rParent( i_parent )
             ,rMutex( i_mutex )
             ,bDisposed( false )
-            ,aUndoManager()
             ,aUndoHelper( *this )
         {
         }

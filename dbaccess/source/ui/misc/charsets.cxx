@@ -30,8 +30,7 @@ namespace dbaui
 
     // OCharsetDisplay
     OCharsetDisplay::OCharsetDisplay()
-        : OCharsetMap()
-        , m_aSystemDisplayName(DBA_RES( STR_RSC_CHARSETS ))
+        : m_aSystemDisplayName(DBA_RES( STR_RSC_CHARSETS ))
     {
     }
 

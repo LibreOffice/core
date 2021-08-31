@@ -31,7 +31,6 @@ OConnectionLineData::OConnectionLineData( const OUString& rSourceFieldName, cons
 }
 
 OConnectionLineData::OConnectionLineData( const OConnectionLineData& rConnLineData )
-    : ::salhelper::SimpleReferenceObject()
 {
     *this = rConnLineData;
 }

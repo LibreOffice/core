@@ -141,8 +141,7 @@ namespace dbaui
         bool                            m_bNotAttached;
 
         explicit DBSubComponentController_Impl(osl::Mutex& i_rMutex)
-            :m_aDocScriptSupport()
-            ,m_aModifyListeners( i_rMutex )
+            :m_aModifyListeners( i_rMutex )
             ,m_nDocStartNumber(0)
             ,m_bSuspended( false )
             ,m_bEditable(true)

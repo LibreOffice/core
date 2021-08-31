@@ -95,7 +95,6 @@ void ODataSettings::registerPropertiesFor(ODataSettings_Base* _pItem)
 
 ODataSettings::ODataSettings(OBroadcastHelper& _rBHelper,bool _bQuery)
     :OPropertyStateContainer(_rBHelper)
-    ,ODataSettings_Base()
     ,m_bQuery(_bQuery)
 {
 }

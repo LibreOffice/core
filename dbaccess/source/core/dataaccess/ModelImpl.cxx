@@ -353,14 +353,11 @@ void SAL_CALL DocumentStorageAccess::disposing( const css::lang::EventObject& So
 // ODatabaseModelImpl
 
 ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XComponentContext >& _rxContext, ODatabaseContext& _rDBContext )
-            :m_xModel()
-            ,m_xDataSource()
-            ,m_aContainer(4)
+            :m_aContainer(4)
             ,m_aMacroMode( *this )
             ,m_nImposedMacroExecMode( MacroExecMode::NEVER_EXECUTE )
             ,m_rDBContext( _rDBContext )
             ,m_refCount(0)
-            ,m_aEmbeddedMacros()
             ,m_bModificationLock( false )
             ,m_bDocumentInitialized( false )
             ,m_nScriptingSignatureState(SignatureState::UNKNOWN)
@@ -387,14 +384,11 @@ ODatabaseModelImpl::ODatabaseModelImpl(
                     const Reference< XComponentContext >& _rxContext,
                     ODatabaseContext& _rDBContext
                     )
-            :m_xModel()
-            ,m_xDataSource()
-            ,m_aContainer(4)
+            :m_aContainer(4)
             ,m_aMacroMode( *this )
             ,m_nImposedMacroExecMode( MacroExecMode::NEVER_EXECUTE )
             ,m_rDBContext( _rDBContext )
             ,m_refCount(0)
-            ,m_aEmbeddedMacros()
             ,m_bModificationLock( false )
             ,m_bDocumentInitialized( false )
             ,m_nScriptingSignatureState(SignatureState::UNKNOWN)

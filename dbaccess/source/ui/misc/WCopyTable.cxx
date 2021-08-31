@@ -252,7 +252,6 @@ NamedTableCopySource::NamedTableCopySource( const Reference< XConnection >& _rxC
     :m_xConnection( _rxConnection, UNO_SET_THROW )
     ,m_xMetaData( _rxConnection->getMetaData(), UNO_SET_THROW )
     ,m_sTableName( _rTableName )
-    ,m_aColumnInfo()
 {
     ::dbtools::qualifiedNameComponents( m_xMetaData, m_sTableName, m_sTableCatalog, m_sTableSchema, m_sTableBareName, ::dbtools::EComposeRule::Complete );
     impl_ensureColumnInfo_throw();

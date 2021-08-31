@@ -24,8 +24,6 @@
 using namespace dbaui;
 OAsynchronousLink::OAsynchronousLink(const Link<void*, void>& _rHandler)
     : m_aHandler(_rHandler)
-    , m_aEventSafety()
-    , m_aDestructionSafety()
     , m_nEventId(nullptr)
 {
 }

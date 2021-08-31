@@ -32,7 +32,7 @@ ORelationTableConnection::ORelationTableConnection( ORelationTableView* pContain
 }
 
 ORelationTableConnection::ORelationTableConnection( const ORelationTableConnection& rConn )
-    : VclReferenceBase(), OTableConnection( rConn )
+    :  OTableConnection( rConn )
 {
     // no own members, thus the base class functionality is enough
 }

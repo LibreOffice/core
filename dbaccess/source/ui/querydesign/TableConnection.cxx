@@ -40,8 +40,7 @@ namespace dbaui
     }
 
     OTableConnection::OTableConnection( const OTableConnection& _rConn )
-        : VclReferenceBase()
-         ,Window(_rConn.m_pParent.get())
+        : Window(_rConn.m_pParent.get())
          ,m_pData(_rConn.GetData()->NewInstance())
          ,m_pParent(nullptr)
     {

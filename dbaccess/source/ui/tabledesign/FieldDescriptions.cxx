@@ -38,8 +38,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 
 OFieldDescription::OFieldDescription()
-    :m_pType()
-    ,m_nType(DataType::VARCHAR)
+    :m_nType(DataType::VARCHAR)
     ,m_nPrecision(0)
     ,m_nScale(0)
     ,m_nIsNullable(ColumnValue::NULLABLE)
@@ -81,8 +80,7 @@ OFieldDescription::~OFieldDescription()
 }
 
 OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedCol,bool _bUseAsDest)
-    :m_pType()
-    ,m_nType(DataType::VARCHAR)
+    :m_nType(DataType::VARCHAR)
     ,m_nPrecision(0)
     ,m_nScale(0)
     ,m_nIsNullable(ColumnValue::NULLABLE)

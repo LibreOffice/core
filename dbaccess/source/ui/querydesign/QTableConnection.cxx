@@ -30,8 +30,7 @@ OQueryTableConnection::OQueryTableConnection(OQueryTableView* pContainer, const 
 }
 
 OQueryTableConnection::OQueryTableConnection(const OQueryTableConnection& rConn)
-    : VclReferenceBase(),
-      OTableConnection( rConn )
+    : OTableConnection( rConn )
     , m_bVisited(false)
 {
     // no own members, so base class functionality is sufficient

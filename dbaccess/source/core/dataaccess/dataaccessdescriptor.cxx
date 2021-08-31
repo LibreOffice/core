@@ -116,26 +116,10 @@ namespace
     registerProperty( PROPERTY_##propname, PROPERTY_ID_##propname, PropertyAttribute::BOUND, &member, cppu::UnoType<decltype(member)>::get() )
 
     DataAccessDescriptor::DataAccessDescriptor()
-        :DataAccessDescriptor_MutexBase()
-        ,DataAccessDescriptor_TypeBase()
-        ,DataAccessDescriptor_PropertyBase( m_aBHelper )
-        ,m_sDataSourceName()
-        ,m_sDatabaseLocation()
-        ,m_sConnectionResource()
-        ,m_aConnectionInfo()
-        ,m_xActiveConnection()
-        ,m_sCommand()
+        :DataAccessDescriptor_PropertyBase( m_aBHelper )
         ,m_nCommandType( CommandType::COMMAND )
-        ,m_sFilter()
-        ,m_sOrder()
-        ,m_sHavingClause()
-        ,m_sGroupBy()
         ,m_bEscapeProcessing( true )
-        ,m_xResultSet()
-        ,m_aSelection()
         ,m_bBookmarkSelection( true )
-        ,m_sColumnName()
-        ,m_xColumn()
     {
         REGISTER_PROPERTY( DATASOURCENAME,      m_sDataSourceName );
         REGISTER_PROPERTY( DATABASE_LOCATION,   m_sDatabaseLocation );
