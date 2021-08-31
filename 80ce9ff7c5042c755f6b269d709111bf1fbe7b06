@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cb3cf05_850ea949",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-08-31T05:15:34Z",
+      "side": 1,
+      "message": "Thank you Lionel for your feedback.\nLet\u0027s push this one now Jenkins is ok and after your change.",
+      "revId": "80ce9ff7c5042c755f6b269d709111bf1fbe7b06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
