@@ -74,7 +74,7 @@ namespace vcl
 
         class ShowNupOrderWindow final : public weld::CustomWidgetController
         {
-            NupOrderType mnOrderMode;
+            print::NupOrderType mnOrderMode;
             int mnRows;
             int mnColumns;
         public:
@@ -84,7 +84,7 @@ namespace vcl
 
             virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
 
-            void setValues( NupOrderType i_nOrderMode, int i_nColumns, int i_nRows )
+            void setValues( print::NupOrderType i_nOrderMode, int i_nColumns, int i_nRows )
             {
                 mnOrderMode = i_nOrderMode;
                 mnRows = i_nRows;
