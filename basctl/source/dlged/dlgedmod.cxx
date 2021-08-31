@@ -22,10 +22,7 @@
 
 namespace basctl
 {
-DlgEdModel::DlgEdModel()
-    : SdrModel()
-{
-}
+DlgEdModel::DlgEdModel() {}
 
 DlgEdModel::~DlgEdModel() {}
 

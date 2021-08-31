@@ -728,8 +728,7 @@ void SvxTabStop::dumpAsXml(xmlTextWriterPtr pWriter) const
 // class SvxTabStopItem --------------------------------------------------
 
 SvxTabStopItem::SvxTabStopItem( sal_uInt16 _nWhich ) :
-    SfxPoolItem( _nWhich ),
-    maTabStops()
+    SfxPoolItem( _nWhich )
 {
     const sal_uInt16 nTabs = SVX_TAB_DEFCOUNT, nDist = SVX_TAB_DEFDIST;
     const SvxTabAdjust eAdjst= SvxTabAdjust::Default;
@@ -746,8 +745,7 @@ SvxTabStopItem::SvxTabStopItem( const sal_uInt16 nTabs,
                                 const sal_uInt16 nDist,
                                 const SvxTabAdjust eAdjst,
                                 sal_uInt16 _nWhich ) :
-    SfxPoolItem( _nWhich ),
-    maTabStops()
+    SfxPoolItem( _nWhich )
 {
     for ( sal_uInt16 i = 0; i < nTabs; ++i )
     {

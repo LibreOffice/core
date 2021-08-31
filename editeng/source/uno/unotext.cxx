@@ -231,16 +231,7 @@ SvxUnoTextRangeBase::SvxUnoTextRangeBase(const SvxEditSource* pSource, const Svx
 }
 
 SvxUnoTextRangeBase::SvxUnoTextRangeBase(const SvxUnoTextRangeBase& rRange)
-:   text::XTextRange()
-,   beans::XPropertySet()
-,   beans::XMultiPropertySet()
-,   beans::XMultiPropertyStates()
-,   beans::XPropertyState()
-,   lang::XServiceInfo()
-,   text::XTextRangeCompare()
-,   lang::XUnoTunnel()
-,   osl::DebugBase<SvxUnoTextRangeBase>()
-,   mpPropSet(rRange.getPropertySet())
+:  mpPropSet(rRange.getPropertySet())
 {
     SolarMutexGuard aGuard;
 
@@ -1598,11 +1589,6 @@ SvxUnoTextBase::SvxUnoTextBase(const SvxEditSource* pSource, const SvxItemProper
 
 SvxUnoTextBase::SvxUnoTextBase(const SvxUnoTextBase& rText)
 :   SvxUnoTextRangeBase( rText )
-, text::XTextAppend()
-,   text::XTextCopy()
-,   container::XEnumerationAccess()
-,   text::XTextRangeMover()
-,   lang::XTypeProvider()
 {
     xParentText = rText.xParentText;
 }
@@ -2163,7 +2149,6 @@ SvxUnoText::SvxUnoText( const SvxEditSource* pSource, const SvxItemPropertySet* 
 
 SvxUnoText::SvxUnoText( const SvxUnoText& rText ) noexcept
 : SvxUnoTextBase( rText )
-, cppu::OWeakAggObject()
 {
 }
 
