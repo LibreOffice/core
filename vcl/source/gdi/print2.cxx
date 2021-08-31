@@ -17,22 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <utility>
-#include <list>
-#include <vector>
-
-#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <sal/log.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <officecfg/Office/Common.hxx>
 
-#include <vcl/virdev.hxx>
-#include <vcl/metaact.hxx>
-#include <vcl/gdimtf.hxx>
-#include <vcl/print.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/BitmapReadAccess.hxx>
+#include <vcl/metaact.hxx>
+#include <vcl/print.hxx>
+#include <vcl/printer/PrinterOptions.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
 
 #include "pdfwriter_impl.hxx"
+
+#include <list>
+#include <utility>
+#include <vector>
 
 #define MAX_TILE_WIDTH  1024
 #define MAX_TILE_HEIGHT 1024
@@ -1252,11 +1252,11 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
 void Printer::DrawGradientEx( OutputDevice* pOut, const tools::Rectangle& rRect, const Gradient& rGradient )
 {
-    const PrinterOptions& rPrinterOptions = GetPrinterOptions();
+    const vcl::print::PrinterOptions& rPrinterOptions = GetPrinterOptions();
 
     if( rPrinterOptions.IsReduceGradients() )
     {
-        if( PrinterGradientMode::Stripes == rPrinterOptions.GetReducedGradientMode() )
+        if( vcl::print::PrinterGradientMode::Stripes == rPrinterOptions.GetReducedGradientMode() )
         {
             if( !rGradient.GetSteps() || ( rGradient.GetSteps() > rPrinterOptions.GetReducedGradientStepCount() ) )
             {
