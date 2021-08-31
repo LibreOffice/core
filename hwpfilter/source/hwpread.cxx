@@ -38,20 +38,19 @@ static int lnnumber = 0;
 
 bool HBox::Read(HWPFile & )
 {
-// already read
+    // already read
     return true;
 }
 
-
 // skip block
-
 bool SkipData::Read(HWPFile & hwpf)
 {
     uint data_block_len;
     hwpf.Read4b(&data_block_len, 1);
 
     hchar dummy;
-    hwpf.Read2b(&dummy, 1);
+    if (!hwpf.Read2b(dummy))
+        return hwpf.SetState(HWP_InvalidFileFormat);
 
     if (!(IS_SP_SKIP_BLOCK(hh) && (hh == dummy))){
         return hwpf.SetState(HWP_InvalidFileFormat);
