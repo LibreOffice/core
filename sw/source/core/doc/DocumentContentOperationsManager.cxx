@@ -2142,7 +2142,7 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
                         pNd->StartOfSectionIndex();
     sal_uInt32 nNodeDiff = rEnd.nNode.GetIndex() - rStt.nNode.GetIndex();
 
-    if ( nSectDiff-2 <= nNodeDiff || m_rDoc.getIDocumentRedlineAccess().IsRedlineOn() ||
+    if ( nSectDiff-2 <= nNodeDiff || //m_rDoc.getIDocumentRedlineAccess().IsRedlineOn() ||
          /* #i9185# Prevent getting the node after the end node (see below) */
         rEnd.nNode.GetIndex() + 1 == m_rDoc.GetNodes().Count() )
     {
@@ -2287,6 +2287,7 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
         m_rDoc.GetNodes().Delete( aRg.aStart, nNodeDiff+1 );
     }
     m_rDoc.getIDocumentState().SetModified();
+    m_rDoc.getIDocumentRedlineAccess().CompressRedlines();
 
     return true;
 }
