@@ -521,39 +521,6 @@ SwTextPaintInfo::SwTextPaintInfo( SwTextFrame *pFrame, const SwRect &rPaint )
     CtorInitTextPaintInfo( pFrame->getRootFrame()->GetCurrShell()->GetOut(), pFrame, rPaint );
 }
 
-/// Returns if the current background color is dark.
-static bool lcl_IsDarkBackground( const SwTextPaintInfo& rInf )
-{
-    std::optional<Color> pCol = rInf.GetFont()->GetBackColor();
-    if( ! pCol || COL_TRANSPARENT == *pCol )
-    {
-        const SvxBrushItem* pItem;
-        SwRect aOrigBackRect;
-        drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
-
-        // Consider, that [GetBackgroundBrush(...)] can set <pCol>
-        // See implementation in /core/layout/paintfrm.cxx
-        // There is a background color, if there is a background brush and
-        // its color is *not* "no fill"/"auto fill".
-        if( rInf.GetTextFrame()->GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, false, /*bConsiderTextBox=*/false ) )
-        {
-            if ( !pCol )
-                pCol = pItem->GetColor();
-
-            // Determined color <pCol> can be <COL_TRANSPARENT>. Thus, check it.
-            if ( *pCol == COL_TRANSPARENT)
-                pCol.reset();
-        }
-        else
-            pCol.reset();
-    }
-
-    if( !pCol )
-        pCol = aGlobalRetoucheColor;
-
-    return pCol->IsDark();
-}
-
 namespace
 {
 /**
@@ -1137,20 +1104,12 @@ void SwTextPaintInfo::DrawBackground( const SwLinePortion &rPor, const Color *pC
     OutputDevice* pOut = const_cast<OutputDevice*>(GetOut());
     pOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
 
-    // For dark background we do not want to have a filled rectangle
-    if ( GetVsh() && GetVsh()->GetWin() && lcl_IsDarkBackground( *this ) )
-    {
-        pOut->SetLineColor( SwViewOption::GetFontColor() );
-    }
+    if ( pColor )
+        pOut->SetFillColor( *pColor );
     else
-    {
-        if ( pColor )
-            pOut->SetFillColor( *pColor );
-        else
-            pOut->SetFillColor( SwViewOption::GetFieldShadingsColor() );
+        pOut->SetFillColor( SwViewOption::GetFieldShadingsColor() );
 
-        pOut->SetLineColor();
-    }
+    pOut->SetLineColor();
 
     DrawRect( aIntersect, true );
     pOut->Pop();
