@@ -326,6 +326,12 @@ void LotusToSc::ReadSRD( const ScDocument& rDoc, ScSingleRefData& rSRD, sal_uInt
     Read( nTab );
     Read( nCol );
 
+    if (!aIn.good())
+    {
+        SAL_WARN("sc.filter", "LotusToSc::ReadSRD short read");
+        return;
+    }
+
     bool b3D = (static_cast<SCTAB>(nTab) != aEingPos.Tab());
 
     rSRD.SetColRel( ( nRelBit & 0x01 ) != 0 );
