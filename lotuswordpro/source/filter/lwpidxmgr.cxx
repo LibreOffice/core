@@ -88,7 +88,8 @@ void LwpIndexManager::Read(LwpSvStream* pStrm)
 {
     //Read index obj
     LwpObjectHeader ObjHdr;
-    ObjHdr.Read(*pStrm);
+    if (!ObjHdr.Read(*pStrm))
+        throw BadRead();
     std::unique_ptr<LwpObjectStream> xObjStrm(new LwpObjectStream(pStrm, ObjHdr.IsCompressed(),
             static_cast<sal_uInt16>(ObjHdr.GetSize())));
 
@@ -224,9 +225,9 @@ void LwpIndexManager::ReadObjIndexData(LwpObjectStream* pObjStrm)
  */
 void LwpIndexManager::ReadObjIndex( LwpSvStream *pStrm )
 {
-
     LwpObjectHeader ObjHdr;
-    ObjHdr.Read(*pStrm);
+    if (!ObjHdr.Read(*pStrm))
+        throw BadRead();
     LwpObjectStream aObjStrm(pStrm, ObjHdr.IsCompressed(),
             static_cast<sal_uInt16>(ObjHdr.GetSize()) );
 
@@ -246,7 +247,8 @@ void LwpIndexManager::ReadObjIndex( LwpSvStream *pStrm )
 void LwpIndexManager::ReadLeafIndex( LwpSvStream *pStrm )
 {
     LwpObjectHeader ObjHdr;
-    ObjHdr.Read(*pStrm);
+    if (!ObjHdr.Read(*pStrm))
+        throw BadRead();
     LwpObjectStream aObjStrm( pStrm, ObjHdr.IsCompressed(),
             static_cast<sal_uInt16>(ObjHdr.GetSize()) );
 

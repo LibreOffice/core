@@ -195,7 +195,7 @@ bool LwpObjectHeader::Read(LwpSvStream& rStrm)
         }
     }
     sal_Int64 nEndPos = rStrm.Tell();
-    return (nStartPos + nHeaderSize == nEndPos);
+    return rStrm.good() && (nStartPos + nHeaderSize == nEndPos);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
