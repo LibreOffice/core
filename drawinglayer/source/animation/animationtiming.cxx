@@ -263,8 +263,7 @@ namespace drawinglayer::animation
 
 
         AnimationEntryLoop::AnimationEntryLoop(sal_uInt32 nRepeat)
-        :   AnimationEntryList(),
-            mnRepeat(nRepeat)
+        :   mnRepeat(nRepeat)
         {
         }
 

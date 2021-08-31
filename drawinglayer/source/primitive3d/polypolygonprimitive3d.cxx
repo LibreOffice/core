@@ -31,8 +31,7 @@ namespace drawinglayer::primitive3d
             const basegfx::B3DPolyPolygon& rPolyPolygon,
             const attribute::MaterialAttribute3D& rMaterial,
             bool bDoubleSided)
-        :   BasePrimitive3D(),
-            maPolyPolygon(rPolyPolygon),
+        :   maPolyPolygon(rPolyPolygon),
             maMaterial(rMaterial),
             mbDoubleSided(bDoubleSided)
         {

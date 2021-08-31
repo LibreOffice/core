@@ -220,30 +220,19 @@ namespace drawinglayer::geometry
                 maOrientation(rOrientation),
                 maProjection(rProjection),
                 maDeviceToView(rDeviceToView),
-                mfViewTime(fViewTime),
-                mxExtendedInformation()
+                mfViewTime(fViewTime)
             {
                 impInterpretPropertyValues(rExtendedParameters);
             }
 
             explicit ImpViewInformation3D(const uno::Sequence< beans::PropertyValue >& rViewParameters)
-            :   maObjectTransformation(),
-                maOrientation(),
-                maProjection(),
-                maDeviceToView(),
-                mfViewTime(),
-                mxExtendedInformation()
+            :   mfViewTime()
             {
                 impInterpretPropertyValues(rViewParameters);
             }
 
             ImpViewInformation3D()
-            :   maObjectTransformation(),
-                maOrientation(),
-                maProjection(),
-                maDeviceToView(),
-                mfViewTime(),
-                mxExtendedInformation()
+            :   mfViewTime()
             {
             }
 

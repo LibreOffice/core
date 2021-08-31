@@ -39,7 +39,6 @@ namespace drawinglayer::processor2d
             const geometry::ViewInformation2D& rViewInformation,
             bool bExtractFillOnly)
         :   BaseProcessor2D(rViewInformation),
-            maExtractedContour(),
             mbExtractFillOnly(bExtractFillOnly)
         {
         }

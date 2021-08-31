@@ -29,7 +29,6 @@ namespace emfplushelper
 EMFPImageAttributes::EMFPImageAttributes()
     : EMFPObject()
     , wrapMode(0)
-    , clampColor(Color())
     , objectClamp(0)
 {
 }

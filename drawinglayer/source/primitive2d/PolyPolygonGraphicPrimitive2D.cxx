@@ -98,8 +98,7 @@ void PolyPolygonGraphicPrimitive2D::create2DDecomposition(
 PolyPolygonGraphicPrimitive2D::PolyPolygonGraphicPrimitive2D(
     const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DRange& rDefinitionRange,
     const attribute::FillGraphicAttribute& rFillGraphic)
-    : BufferedDecompositionPrimitive2D()
-    , maPolyPolygon(rPolyPolygon)
+    : maPolyPolygon(rPolyPolygon)
     , maDefinitionRange(rDefinitionRange)
     , maFillGraphic(rFillGraphic)
 {

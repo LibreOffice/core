@@ -46,7 +46,6 @@ namespace drawinglayer::attribute
 
             ImpLineStartEndAttribute()
             :   mfWidth(0.0),
-                maPolyPolygon(basegfx::B2DPolyPolygon()),
                 mbCentered(false)
             {
             }

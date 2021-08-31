@@ -72,8 +72,7 @@ void PolyPolygonSelectionPrimitive2D::create2DDecomposition(
 PolyPolygonSelectionPrimitive2D::PolyPolygonSelectionPrimitive2D(
     const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::BColor& rColor,
     double fTransparence, double fDiscreteGrow, bool bFill)
-    : DiscreteMetricDependentPrimitive2D()
-    , maPolyPolygon(rPolyPolygon)
+    : maPolyPolygon(rPolyPolygon)
     , maColor(rColor)
     , mfTransparence(fTransparence)
     , mfDiscreteGrow(fabs(fDiscreteGrow))

@@ -74,9 +74,7 @@ namespace drawinglayer::texture
             const basegfx::BColor& rStart,
             const basegfx::BColor& rEnd,
             double fBorder)
-        :   GeoTexSvx(),
-            maGradientInfo(),
-            maDefinitionRange(rDefinitionRange),
+        :   maDefinitionRange(rDefinitionRange),
             maStart(rStart),
             maEnd(rEnd),
             mfBorder(fBorder)
@@ -512,8 +510,6 @@ namespace drawinglayer::texture
             double fDistance,
             double fAngle)
         :   maOutputRange(rOutputRange),
-            maTextureTransform(),
-            maBackTextureTransform(),
             mfDistance(0.1),
             mfAngle(fAngle),
             mnSteps(10),

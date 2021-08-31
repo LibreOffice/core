@@ -71,8 +71,6 @@ namespace drawinglayer::primitive3d
         }
 
         BufferedDecompositionPrimitive3D::BufferedDecompositionPrimitive3D()
-        :   BasePrimitive3D(),
-            maBuffered3DDecomposition()
         {
         }
 

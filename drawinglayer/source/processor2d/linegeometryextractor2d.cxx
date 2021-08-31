@@ -31,8 +31,6 @@ namespace drawinglayer::processor2d
 {
         LineGeometryExtractor2D::LineGeometryExtractor2D(const geometry::ViewInformation2D& rViewInformation)
         :   BaseProcessor2D(rViewInformation),
-            maExtractedHairlines(),
-            maExtractedLineFills(),
             mbInLineGeometry(false)
         {
         }

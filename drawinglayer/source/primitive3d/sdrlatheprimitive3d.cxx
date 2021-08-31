@@ -252,8 +252,6 @@ namespace drawinglayer::primitive3d
             bool bCloseFront,
             bool bCloseBack)
         :   SdrPrimitive3D(rTransform, rTextureSize, rSdrLFSAttribute, rSdr3DObjectAttribute),
-            maCorrectedPolyPolygon(),
-            maSlices(),
             maPolyPolygon(rPolyPolygon),
             mnHorizontalSegments(nHorizontalSegments),
             mnVerticalSegments(nVerticalSegments),

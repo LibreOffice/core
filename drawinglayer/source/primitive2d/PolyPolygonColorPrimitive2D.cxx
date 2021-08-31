@@ -28,8 +28,7 @@ namespace drawinglayer::primitive2d
 {
 PolyPolygonColorPrimitive2D::PolyPolygonColorPrimitive2D(
     const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::BColor& rBColor)
-    : BasePrimitive2D()
-    , maPolyPolygon(rPolyPolygon)
+    : maPolyPolygon(rPolyPolygon)
     , maBColor(rBColor)
 {
 }

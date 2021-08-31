@@ -259,8 +259,7 @@ namespace drawinglayer::primitive2d
             sal_uInt32 nSubdivisionsY,
             const basegfx::BColor& rBColor,
             const BitmapEx& rCrossMarker)
-        :   BufferedDecompositionPrimitive2D(),
-            maTransform(rTransform),
+        :   maTransform(rTransform),
             mfWidth(fWidth),
             mfHeight(fHeight),
             mfSmallestViewDistance(fSmallestViewDistance),
@@ -268,9 +267,7 @@ namespace drawinglayer::primitive2d
             mnSubdivisionsX(nSubdivisionsX),
             mnSubdivisionsY(nSubdivisionsY),
             maBColor(rBColor),
-            maCrossMarker(rCrossMarker),
-            maLastObjectToViewTransformation(),
-            maLastViewport()
+            maCrossMarker(rCrossMarker)
         {
         }
 

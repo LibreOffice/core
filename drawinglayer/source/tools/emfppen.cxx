@@ -53,8 +53,7 @@ namespace emfplushelper
     }
 
     EMFPPen::EMFPPen()
-        : EMFPBrush()
-        , penDataFlags(0)
+        : penDataFlags(0)
         , penUnit(0)
         , penWidth(0.0)
         , startCap(0)

@@ -155,8 +155,7 @@ void releaseGlobalVirtualDevice()
 } // end of anonymous namespace
 
 TextLayouterDevice::TextLayouterDevice()
-    : maSolarGuard()
-    , mrDevice(acquireGlobalVirtualDevice())
+    : mrDevice(acquireGlobalVirtualDevice())
 {
 }
 

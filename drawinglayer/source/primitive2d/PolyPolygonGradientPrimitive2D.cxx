@@ -47,8 +47,7 @@ void PolyPolygonGradientPrimitive2D::create2DDecomposition(
 PolyPolygonGradientPrimitive2D::PolyPolygonGradientPrimitive2D(
     const basegfx::B2DPolyPolygon& rPolyPolygon,
     const attribute::FillGradientAttribute& rFillGradient)
-    : BufferedDecompositionPrimitive2D()
-    , maPolyPolygon(rPolyPolygon)
+    : maPolyPolygon(rPolyPolygon)
     , maDefinitionRange(rPolyPolygon.getB2DRange())
     , maFillGradient(rFillGradient)
 {
@@ -57,8 +56,7 @@ PolyPolygonGradientPrimitive2D::PolyPolygonGradientPrimitive2D(
 PolyPolygonGradientPrimitive2D::PolyPolygonGradientPrimitive2D(
     const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DRange& rDefinitionRange,
     const attribute::FillGradientAttribute& rFillGradient)
-    : BufferedDecompositionPrimitive2D()
-    , maPolyPolygon(rPolyPolygon)
+    : maPolyPolygon(rPolyPolygon)
     , maDefinitionRange(rDefinitionRange)
     , maFillGradient(rFillGradient)
 {

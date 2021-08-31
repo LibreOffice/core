@@ -44,16 +44,12 @@ namespace drawinglayer::attribute
             explicit ImpMaterialAttribute3D(const basegfx::BColor& rColor)
             :   maColor(rColor),
                 maSpecular(1.0, 1.0, 1.0),
-                maEmission(),
                 mnSpecularIntensity(15)
             {
             }
 
             ImpMaterialAttribute3D()
-            :   maColor(basegfx::BColor()),
-                maSpecular(basegfx::BColor()),
-                maEmission(basegfx::BColor()),
-                mnSpecularIntensity(0)
+            :   mnSpecularIntensity(0)
             {
             }
 

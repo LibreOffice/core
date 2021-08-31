@@ -369,8 +369,6 @@ namespace drawinglayer::primitive2d
             maVirtualDevice(*Application::GetDefaultDevice()),
             maVirtualDeviceMask(*Application::GetDefaultDevice()),
             mnNextFrameToPrepare(SAL_MAX_UINT32),
-            maBufferedFirstFrame(),
-            maBufferedPrimitives(),
             mbBufferingAllowed(false),
             mbHugeSize(false)
         {

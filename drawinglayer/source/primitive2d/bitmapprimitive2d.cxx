@@ -27,8 +27,7 @@ namespace drawinglayer::primitive2d
 {
 BitmapPrimitive2D::BitmapPrimitive2D(const css::uno::Reference<css::awt::XBitmap>& rXBitmap,
                                      const basegfx::B2DHomMatrix& rTransform)
-    : BasePrimitive2D()
-    , maXBitmap(rXBitmap)
+    : maXBitmap(rXBitmap)
     , maTransform(rTransform)
 {
 }

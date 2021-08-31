@@ -56,7 +56,6 @@ namespace drawinglayer::attribute
             :   meStyle(HatchStyle::Single),
                 mfDistance(0.0),
                 mfAngle(0.0),
-                maColor(basegfx::BColor()),
                 mnMinimalDiscreteDistance(3), // same as VCL
                 mbFillBackground(false)
             {

@@ -243,11 +243,8 @@ namespace drawinglayer::primitive2d
         ControlPrimitive2D::ControlPrimitive2D(
             const basegfx::B2DHomMatrix& rTransform,
             const uno::Reference< awt::XControlModel >& rxControlModel)
-        :   BufferedDecompositionPrimitive2D(),
-            maTransform(rTransform),
-            mxControlModel(rxControlModel),
-            mxXControl(),
-            maLastViewScaling()
+        :   maTransform(rTransform),
+            mxControlModel(rxControlModel)
         {
         }
 
@@ -255,11 +252,9 @@ namespace drawinglayer::primitive2d
             const basegfx::B2DHomMatrix& rTransform,
             const uno::Reference< awt::XControlModel >& rxControlModel,
             const uno::Reference< awt::XControl >& rxXControl)
-        :   BufferedDecompositionPrimitive2D(),
-            maTransform(rTransform),
+        :   maTransform(rTransform),
             mxControlModel(rxControlModel),
-            mxXControl(rxXControl),
-            maLastViewScaling()
+            mxXControl(rxXControl)
         {
         }
 

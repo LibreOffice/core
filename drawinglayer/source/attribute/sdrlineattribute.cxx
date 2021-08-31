@@ -58,9 +58,7 @@ namespace drawinglayer::attribute
             :   meJoin(basegfx::B2DLineJoin::Round),
                 mfWidth(0.0),
                 mfTransparence(0.0),
-                maColor(basegfx::BColor()),
                 meCap(css::drawing::LineCap_BUTT),
-                maDotDashArray(std::vector< double >()),
                 mfFullDotDashLen(0.0)
             {
             }

@@ -79,8 +79,7 @@ namespace drawinglayer::primitive3d
             const basegfx::B2DVector& rTextureSize,
             const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute,
             const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute)
-        :   BufferedDecompositionPrimitive3D(),
-            maTransform(rTransform),
+        :   maTransform(rTransform),
             maTextureSize(rTextureSize),
             maSdrLFSAttribute(rSdrLFSAttribute),
             maSdr3DObjectAttribute(rSdr3DObjectAttribute)

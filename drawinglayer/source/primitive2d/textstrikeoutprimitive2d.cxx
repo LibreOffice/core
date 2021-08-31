@@ -35,8 +35,7 @@ namespace drawinglayer::primitive2d
             const basegfx::B2DHomMatrix& rObjectTransformation,
             double fWidth,
             const basegfx::BColor& rFontColor)
-        :   BufferedDecompositionPrimitive2D(),
-            maObjectTransformation(rObjectTransformation),
+        :   maObjectTransformation(rObjectTransformation),
             mfWidth(fWidth),
             maFontColor(rFontColor)
         {

@@ -50,11 +50,8 @@ namespace drawinglayer::attribute
             }
 
             ImpSdrShadowAttribute()
-            :   maOffset(basegfx::B2DVector()),
-                maSize(basegfx::B2DVector()),
-                mfTransparence(0.0),
-                mnBlur(0),
-                maColor(basegfx::BColor())
+            :   mfTransparence(0.0),
+                mnBlur(0)
             {
             }
 

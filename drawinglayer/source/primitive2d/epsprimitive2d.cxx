@@ -44,8 +44,7 @@ namespace drawinglayer::primitive2d
             const basegfx::B2DHomMatrix& rEpsTransform,
             const GfxLink& rGfxLink,
             const GDIMetaFile& rMetaFile)
-        :   BufferedDecompositionPrimitive2D(),
-            maEpsTransform(rEpsTransform),
+        :   maEpsTransform(rEpsTransform),
             maGfxLink(rGfxLink),
             maMetaFile(rMetaFile)
         {

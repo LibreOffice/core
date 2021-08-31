@@ -46,8 +46,7 @@ void PolyPolygonStrokePrimitive2D::create2DDecomposition(
 PolyPolygonStrokePrimitive2D::PolyPolygonStrokePrimitive2D(
     const basegfx::B2DPolyPolygon& rPolyPolygon, const attribute::LineAttribute& rLineAttribute,
     const attribute::StrokeAttribute& rStrokeAttribute)
-    : BufferedDecompositionPrimitive2D()
-    , maPolyPolygon(rPolyPolygon)
+    : maPolyPolygon(rPolyPolygon)
     , maLineAttribute(rLineAttribute)
     , maStrokeAttribute(rStrokeAttribute)
 {
@@ -55,10 +54,8 @@ PolyPolygonStrokePrimitive2D::PolyPolygonStrokePrimitive2D(
 
 PolyPolygonStrokePrimitive2D::PolyPolygonStrokePrimitive2D(
     const basegfx::B2DPolyPolygon& rPolyPolygon, const attribute::LineAttribute& rLineAttribute)
-    : BufferedDecompositionPrimitive2D()
-    , maPolyPolygon(rPolyPolygon)
+    : maPolyPolygon(rPolyPolygon)
     , maLineAttribute(rLineAttribute)
-    , maStrokeAttribute()
 {
 }
 

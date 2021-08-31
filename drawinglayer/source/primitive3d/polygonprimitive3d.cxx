@@ -32,8 +32,7 @@ namespace drawinglayer::primitive3d
         PolygonHairlinePrimitive3D::PolygonHairlinePrimitive3D(
             const basegfx::B3DPolygon& rPolygon,
             const basegfx::BColor& rBColor)
-        :   BasePrimitive3D(),
-            maPolygon(rPolygon),
+        :   maPolygon(rPolygon),
             maBColor(rBColor)
         {
         }
@@ -121,8 +120,7 @@ namespace drawinglayer::primitive3d
             const basegfx::B3DPolygon& rPolygon,
             const attribute::LineAttribute& rLineAttribute,
             const attribute::StrokeAttribute& rStrokeAttribute)
-        :   BufferedDecompositionPrimitive3D(),
-            maPolygon(rPolygon),
+        :   maPolygon(rPolygon),
             maLineAttribute(rLineAttribute),
             maStrokeAttribute(rStrokeAttribute)
         {

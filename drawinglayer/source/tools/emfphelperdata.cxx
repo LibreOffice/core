@@ -954,11 +954,7 @@ namespace emfplushelper
         SvMemoryStream& rMS,
         wmfemfhelper::TargetHolders& rTargetHolders,
         wmfemfhelper::PropertyHolders& rPropertyHolders)
-    :   maBaseTransform(),
-        maWorldTransform(),
-        maMapTransform(),
-        maEMFPObjects(),
-        mfPageScale(0.0),
+    :   mfPageScale(0.0),
         mnOriginX(0),
         mnOriginY(0),
         mnHDPI(0),
@@ -975,7 +971,6 @@ namespace emfplushelper
         mnMmY(0),
         mbMultipart(false),
         mMFlags(0),
-        mMStream(),
         mrTargetHolders(rTargetHolders),
         mrPropertyHolders(rPropertyHolders),
         bIsGetDCProcessing(false)

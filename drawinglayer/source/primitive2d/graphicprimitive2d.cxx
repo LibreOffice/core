@@ -172,8 +172,7 @@ void GraphicPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer,
 GraphicPrimitive2D::GraphicPrimitive2D(const basegfx::B2DHomMatrix& rTransform,
                                        const GraphicObject& rGraphicObject,
                                        const GraphicAttr& rGraphicAttr)
-    : BufferedDecompositionPrimitive2D()
-    , maTransform(rTransform)
+    : maTransform(rTransform)
     , maGraphicObject(rGraphicObject)
     , maGraphicAttr(rGraphicAttr)
 {
@@ -181,10 +180,8 @@ GraphicPrimitive2D::GraphicPrimitive2D(const basegfx::B2DHomMatrix& rTransform,
 
 GraphicPrimitive2D::GraphicPrimitive2D(const basegfx::B2DHomMatrix& rTransform,
                                        const GraphicObject& rGraphicObject)
-    : BufferedDecompositionPrimitive2D()
-    , maTransform(rTransform)
+    : maTransform(rTransform)
     , maGraphicObject(rGraphicObject)
-    , maGraphicAttr()
 {
 }
 

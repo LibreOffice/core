@@ -59,9 +59,7 @@ namespace drawinglayer::attribute
             }
 
             ImpSdrLineStartEndAttribute()
-            :   maStartPolyPolygon(basegfx::B2DPolyPolygon()),
-                maEndPolyPolygon(basegfx::B2DPolyPolygon()),
-                mfStartWidth(0.0),
+            :   mfStartWidth(0.0),
                 mfEndWidth(0.0),
                 mbStartActive(false),
                 mbEndActive(false),

@@ -27,11 +27,7 @@
 
 namespace drawinglayer::primitive2d
 {
-BufferedDecompositionPrimitive2D::BufferedDecompositionPrimitive2D()
-    : BasePrimitive2D()
-    , maBuffered2DDecomposition()
-{
-}
+BufferedDecompositionPrimitive2D::BufferedDecompositionPrimitive2D() {}
 
 void BufferedDecompositionPrimitive2D::get2DDecomposition(
     Primitive2DDecompositionVisitor& rVisitor,

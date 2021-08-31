@@ -267,8 +267,7 @@ namespace drawinglayer::primitive2d
             const basegfx::B2DPoint& rEnd,
             const std::vector< BorderLine >& rBorderLines,
             const drawinglayer::attribute::StrokeAttribute& rStrokeAttribute)
-        :   BufferedDecompositionPrimitive2D(),
-            maStart(rStart),
+        :   maStart(rStart),
             maEnd(rEnd),
             maBorderLines(rBorderLines),
             maStrokeAttribute(rStrokeAttribute)

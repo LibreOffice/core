@@ -63,8 +63,6 @@ namespace drawinglayer::attribute
                 mfOffsetX(0.0),
                 mfOffsetY(0.0),
                 mfAngle(0.0),
-                maStartColor(basegfx::BColor()),
-                maEndColor(basegfx::BColor()),
                 mnSteps(0)
             {
             }

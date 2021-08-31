@@ -143,7 +143,6 @@ namespace drawinglayer::processor3d
             const geometry::ViewInformation3D& rViewInformation,
             const basegfx::B2DHomMatrix& rObjectTransformation)
         :   BaseProcessor3D(rViewInformation),
-            maPrimitive2DSequence(),
             maObjectTransformation(rObjectTransformation),
             maBColorModifierStack()
         {

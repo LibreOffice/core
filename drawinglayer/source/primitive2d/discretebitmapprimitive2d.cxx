@@ -73,8 +73,7 @@ namespace drawinglayer::primitive2d
         DiscreteBitmapPrimitive2D::DiscreteBitmapPrimitive2D(
             const BitmapEx& rBitmapEx,
             const basegfx::B2DPoint& rTopLeft)
-        :   ObjectAndViewTransformationDependentPrimitive2D(),
-            maBitmapEx(rBitmapEx),
+        :   maBitmapEx(rBitmapEx),
             maTopLeft(rTopLeft)
         {
         }

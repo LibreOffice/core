@@ -76,15 +76,12 @@ namespace drawinglayer::primitive2d
             const basegfx::B3DVector& rLightNormal,
             double fShadowSlant,
             const basegfx::B3DRange& rScene3DRange)
-        :   BufferedDecompositionPrimitive2D(),
-            mxChildren3D(rxChildren3D),
+        :   mxChildren3D(rxChildren3D),
             maObjectTransformation(rObjectTransformation),
             maViewInformation3D(rViewInformation3D),
             maLightNormal(rLightNormal),
             mfShadowSlant(fShadowSlant),
             maScene3DRange(rScene3DRange),
-            maShadowPrimitives(),
-            maB2DRange(),
             mbShadow3DChecked(false)
         {
             maLightNormal.normalize();

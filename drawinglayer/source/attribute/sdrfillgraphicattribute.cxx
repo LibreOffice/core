@@ -67,13 +67,7 @@ namespace drawinglayer::attribute
             }
 
             ImpSdrFillGraphicAttribute()
-            :   maFillGraphic(Graphic()),
-                maGraphicLogicSize(basegfx::B2DVector()),
-                maSize(basegfx::B2DVector()),
-                maOffset(basegfx::B2DVector()),
-                maOffsetPosition(basegfx::B2DVector()),
-                maRectPoint(basegfx::B2DVector()),
-                mbTiling(false),
+            :   mbTiling(false),
                 mbStretch(false),
                 mbLogSize(false)
             {

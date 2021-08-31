@@ -111,16 +111,8 @@ namespace wmfemfhelper
         interpretation of the MetaFile action flow.
     */
     PropertyHolder::PropertyHolder()
-    :   maTransformation(),
-        maMapUnit(MapUnit::Map100thMM),
-        maLineColor(),
-        maFillColor(),
+    :   maMapUnit(MapUnit::Map100thMM),
         maTextColor(sal_uInt32(COL_BLACK)),
-        maTextFillColor(),
-        maTextLineColor(),
-        maOverlineColor(),
-        maClipPolyPolygon(),
-        maFont(),
         maRasterOp(RasterOp::OverPaint),
         mnLayoutMode(ComplexTextLayoutFlags::Default),
         maLanguageType(0),
@@ -318,7 +310,6 @@ namespace wmfemfhelper
         data.
     */
     TargetHolder::TargetHolder()
-    :   aTargets()
     {
     }
 

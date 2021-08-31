@@ -164,8 +164,7 @@ TextEffectPrimitive2D::TextEffectPrimitive2D(const Primitive2DContainer& rTextCo
                                              const basegfx::B2DPoint& rRotationCenter,
                                              double fDirection,
                                              TextEffectStyle2D eTextEffectStyle2D)
-    : BufferedDecompositionPrimitive2D()
-    , maTextContent(rTextContent)
+    : maTextContent(rTextContent)
     , maRotationCenter(rRotationCenter)
     , mfDirection(fDirection)
     , meTextEffectStyle2D(eTextEffectStyle2D)

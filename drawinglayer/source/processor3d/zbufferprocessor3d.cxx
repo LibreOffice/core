@@ -247,14 +247,8 @@ private:
 
 public:
     ZBufferRasterConverter3D(basegfx::BZPixelRaster& rBuffer, const drawinglayer::processor3d::ZBufferProcessor3D& rProcessor)
-    :   basegfx::RasterConverter3D(),
-        mrProcessor(rProcessor),
+    :   mrProcessor(rProcessor),
         mrBuffer(rBuffer),
-        maIntZ(),
-        maIntColor(),
-        maIntNormal(),
-        maIntTexture(),
-        maIntInvTexture(),
         mpCurrentMaterial(nullptr),
         mbModifyColor(false),
         mbUseTex(false),
@@ -512,7 +506,6 @@ namespace drawinglayer::processor3d
             sal_uInt32 nStartLine,
             sal_uInt32 nStopLine)
         :   DefaultProcessor3D(rViewInformation3D, rSdrSceneAttribute, rSdrLightingAttribute),
-            maInvEyeToView(),
             mnAntiAlialize(nAntiAlialize),
             mnStartLine(nStartLine),
             mnStopLine(nStopLine)

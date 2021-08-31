@@ -127,15 +127,12 @@ namespace drawinglayer::primitive2d
             const basegfx::BColor& rRGBColA,
             const basegfx::BColor& rRGBColB,
             double fDiscreteDashLength)
-        :   BufferedDecompositionPrimitive2D(),
-            maPosition(rPosition),
+        :   maPosition(rPosition),
             maDirection(rDirection),
             meStyle(eStyle),
             maRGBColA(rRGBColA),
             maRGBColB(rRGBColB),
-            mfDiscreteDashLength(fDiscreteDashLength),
-            maLastObjectToViewTransformation(),
-            maLastViewport()
+            mfDiscreteDashLength(fDiscreteDashLength)
         {
         }
 
