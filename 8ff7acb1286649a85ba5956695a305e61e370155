@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e1ef17c_9dd2ab1c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-08-31T12:18:09Z",
+      "side": 1,
+      "message": "Hey guys, please note that I may have uncovered a bug. We support hairlines, which is what a zero line width implies...but printers don\u0027t support this. \n\nFor now, I\u0027m keeping the semantics the same, but if this is an issue I will followup with a patch. ",
+      "revId": "8ff7acb1286649a85ba5956695a305e61e370155",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
