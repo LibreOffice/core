@@ -292,15 +292,16 @@ public:
 namespace vcl::print
 {
 class ImplPrinterControllerData;
-}
-
-namespace vcl
-{
 
 enum class NupOrderType
 {
     LRTB, TBLR, TBRL, RLTB
 };
+
+}
+
+namespace vcl
+{
 
 class VCL_DLLPUBLIC PrinterController
 {
@@ -322,7 +323,7 @@ public:
         tools::Long                            nHorizontalSpacing;
         tools::Long                            nVerticalSpacing;
         bool                            bDrawBorder;
-        NupOrderType                    nOrder;
+        print::NupOrderType                    nOrder;
 
         MultiPageSetup()
              : nRows( 1 ), nColumns( 1 ), aPaperSize( 21000, 29700 )
@@ -330,7 +331,7 @@ public:
              , nRightMargin( 0 ), nBottomMargin( 0 )
              , nHorizontalSpacing( 0 ), nVerticalSpacing( 0 )
              , bDrawBorder( false )
-             , nOrder( NupOrderType::LRTB ) {}
+             , nOrder( print::NupOrderType::LRTB ) {}
     };
 
     struct PageSize

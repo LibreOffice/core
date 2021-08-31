@@ -443,7 +443,7 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
 }
 
 PrintDialog::ShowNupOrderWindow::ShowNupOrderWindow()
-    : mnOrderMode( NupOrderType::LRTB )
+    : mnOrderMode( print::NupOrderType::LRTB )
     , mnRows( 1 )
     , mnColumns( 1 )
 {
@@ -487,19 +487,19 @@ void PrintDialog::ShowNupOrderWindow::Paint(vcl::RenderContext& rRenderContext, 
         int nX = 0, nY = 0;
         switch (mnOrderMode)
         {
-        case NupOrderType::LRTB:
+            case print::NupOrderType::LRTB:
             nX = (i % mnColumns);
             nY = (i / mnColumns);
             break;
-        case NupOrderType::TBLR:
+            case print::NupOrderType::TBLR:
             nX = (i / mnRows);
             nY = (i % mnRows);
             break;
-        case NupOrderType::RLTB:
+            case print::NupOrderType::RLTB:
             nX = mnColumns - 1 - (i % mnColumns);
             nY = (i / mnColumns);
             break;
-        case NupOrderType::TBRL:
+            case print::NupOrderType::TBRL:
             nX = mnColumns - 1 - (i / mnRows);
             nY = (i % mnRows);
             break;
@@ -1150,7 +1150,7 @@ void PrintDialog::updateNup( bool i_bMayUseCache )
 
     aMPS.bDrawBorder        = mxBorderCB->get_active();
 
-    aMPS.nOrder = static_cast<NupOrderType>(mxNupOrderBox->get_active());
+    aMPS.nOrder = static_cast<print::NupOrderType>(mxNupOrderBox->get_active());
 
     int nOrientationMode = mxOrientationBox->get_active();
     if( nOrientationMode == ORIENTATION_LANDSCAPE )
