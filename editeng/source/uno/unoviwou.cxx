@@ -24,7 +24,7 @@
 #include <editeng/outliner.hxx>
 
 SvxDrawOutlinerViewForwarder::SvxDrawOutlinerViewForwarder( OutlinerView& rOutl ) :
-    mrOutlinerView ( rOutl ), maTextShapeTopLeft()
+    mrOutlinerView ( rOutl )
 {
 }
 

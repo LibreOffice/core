@@ -483,7 +483,6 @@ ExtraPortionInfo::ExtraPortionInfo()
 , nAsianCompressionTypes(AsianCompressionFlags::Normal)
 , bFirstCharIsRightPunktuation(false)
 , bCompressed(false)
-, lineBreaksList()
 {
 }
 
@@ -2717,9 +2716,7 @@ struct LessByStart
 }
 
 CharAttribList::CharAttribList()
-: aAttribs()
-, aDefFont()
-, bHasEmptyAttribs(false)
+: bHasEmptyAttribs(false)
 {
 }
 

@@ -47,9 +47,7 @@ AccessibleContextBase::AccessibleContextBase (
         const sal_Int16 aRole)
     :   WeakComponentImplHelper(MutexOwner::maMutex),
         mxParent(rxParent),
-        msDescription(),
         meDescriptionOrigin(NotSet),
-        msName(),
         meNameOrigin(NotSet),
         mnClientId(0),
         maRole(aRole)
