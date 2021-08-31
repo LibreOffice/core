@@ -1401,8 +1401,13 @@ namespace emfio
                     {
                         sal_Int32 nStartX, nStartY, nEndX, nEndY;
                         mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 ).ReadInt32( nStartX ).ReadInt32( nStartY ).ReadInt32( nEndX ).ReadInt32( nEndY );
-                        tools::Polygon aPoly( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), PolyStyle::Pie );
-                        DrawPolygon( aPoly, mbRecordPath );
+                        if (!mpInputStream->good())
+                            bStatus = false;
+                        else
+                        {
+                            tools::Polygon aPoly( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), PolyStyle::Pie );
+                            DrawPolygon( aPoly, mbRecordPath );
+                        }
                     }
                     break;
 
