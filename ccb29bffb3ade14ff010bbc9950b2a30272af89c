@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "159641f1_cf7dc51e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002314
+      },
+      "writtenOn": "2021-08-31T12:54:04Z",
+      "side": 1,
+      "message": "Hello,\n\nThis patch is for making more use of new JsonWriter structure.\nMay you review the patch when you have time:)\n\nThank you.",
+      "revId": "ccb29bffb3ade14ff010bbc9950b2a30272af89c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
