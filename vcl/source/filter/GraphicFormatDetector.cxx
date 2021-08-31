@@ -769,9 +769,8 @@ bool GraphicFormatDetector::checkTGA()
 
         mrStream.Seek(STREAM_SEEK_TO_END);
         mrStream.SeekRel(-18);
-        mrStream.ReadBytes(sFooterBytes, 18);
-
-        if (memcmp(sFooterBytes, "TRUEVISION-XFILE.", SAL_N_ELEMENTS(sFooterBytes)) == 0)
+        if (mrStream.ReadBytes(sFooterBytes, 18) == 18
+            && memcmp(sFooterBytes, "TRUEVISION-XFILE.", SAL_N_ELEMENTS(sFooterBytes)) == 0)
         {
             msDetectedFormat = "TGA";
             return true;
