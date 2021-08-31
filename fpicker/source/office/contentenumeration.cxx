@@ -81,7 +81,6 @@ namespace svt
         ,m_xCommandEnv           ( _rxCommandEnv   )
         ,m_pResultHandler        ( nullptr            )
         ,m_bCancelled            ( false           )
-        ,m_rDenyList            ( css::uno::Sequence< OUString >() )
     {
     }
 

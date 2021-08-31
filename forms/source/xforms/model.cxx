@@ -87,7 +87,6 @@ void Model::ensureAtLeastOneInstance()
 
 /** Model default constructor; create empty model */
 Model::Model() :
-    msID(),
     mxInstances( new InstanceCollection ),
     mxNamespaces( new NameContainer<OUString>() ),
     mbInitialized( false ),

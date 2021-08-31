@@ -70,7 +70,6 @@ class ContinuationFilterSelect : public comphelper::OInteraction< css::document:
 // initialize continuation with right start values
 
 ContinuationFilterSelect::ContinuationFilterSelect()
-    : m_sFilter( OUString() )
 {
 }
 

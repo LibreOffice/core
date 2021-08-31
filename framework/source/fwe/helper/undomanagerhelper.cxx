@@ -89,8 +89,7 @@ namespace framework
     }
 
     UndoActionWrapper::UndoActionWrapper( Reference< XUndoAction > const& i_undoAction )
-        :SfxUndoAction()
-        ,m_xUndoAction( i_undoAction )
+        : m_xUndoAction( i_undoAction )
     {
         ENSURE_OR_THROW( m_xUndoAction.is(), "illegal undo action" );
     }
@@ -147,8 +146,6 @@ namespace framework
     public:
         explicit UndoManagerRequest( ::std::function<void ()> const& i_request )
             :m_request( i_request )
-            ,m_caughtException()
-            ,m_finishCondition()
         {
             m_finishCondition.reset();
         }
@@ -221,9 +218,7 @@ namespace framework
 
     public:
         explicit UndoManagerHelper_Impl( IUndoManagerImplementation& i_undoManagerImpl )
-            :m_aMutex()
-            ,m_aQueueMutex()
-            ,m_bAPIActionRunning( false )
+            :m_bAPIActionRunning( false )
             ,m_bProcessingEvents( false )
             ,m_nLockCount( 0 )
             ,m_aUndoListeners( m_aMutex )

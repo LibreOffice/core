@@ -112,7 +112,6 @@ OComboBoxModel::OComboBoxModel(const Reference<XComponentContext>& _rxFactory)
      // use the old control name for compatibility reasons
     ,OEntryListHelper( static_cast<OControlModel&>(*this) )
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
-    ,m_aListRowSet()
     ,m_eListSourceType(ListSourceType_TABLE)
     ,m_bEmptyIsNull(true)
 {
@@ -125,7 +124,6 @@ OComboBoxModel::OComboBoxModel( const OComboBoxModel* _pOriginal, const Referenc
     :OBoundControlModel( _pOriginal, _rxFactory )
     ,OEntryListHelper( *_pOriginal, static_cast<OControlModel&>(*this) )
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
-    ,m_aListRowSet()
     ,m_aListSource( _pOriginal->m_aListSource )
     ,m_aDefaultText( _pOriginal->m_aDefaultText )
     ,m_eListSourceType( _pOriginal->m_eListSourceType )

@@ -448,7 +448,6 @@ namespace frm
             const OUString& rDefault )
         :OControlModel( _rxFactory, _rUnoControlModelTypeName, rDefault )
         ,OPropertyChangeListener(m_aMutex)
-        ,m_xGraphicObject()
         ,m_bDispatchUrlInternal(false)
         ,m_bProdStarted(false)
     {

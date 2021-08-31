@@ -112,16 +112,11 @@ using com::sun::star::xsd::XDataType;
 
 
 Binding::Binding() :
-    mxModel(),
-    msBindingID(),
-    maBindingExpression(),
-    maReadonly(),
     mxNamespaces( new NameContainer<OUString>() ),
     mbInCalculate( false ),
     mnDeferModifyNotifications( 0 ),
     mbValueModified( false ),
     mbBindingModified( false )
-
 {
     initializePropertySet();
 }

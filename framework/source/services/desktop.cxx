@@ -147,20 +147,9 @@ Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xCon
     , m_bIsShutdown(false)   // see dispose() for further information!
         ,   m_bSession              ( false                                         )
         ,   m_xContext              ( xContext                                      )
-        ,   m_aChildTaskContainer   (                                               )
         ,   m_aListenerContainer    ( m_aMutex )
-        ,   m_xFramesHelper         (                                               )
-        ,   m_xDispatchHelper       (                                               )
         ,   m_eLoadState            ( E_NOTSET                                      )
         ,   m_bSuspendQuickstartVeto( false                                     )
-        ,   m_sName                 (                                               )
-        ,   m_sTitle                (                                               )
-        ,   m_xDispatchRecorderSupplier(                                            )
-        ,   m_xPipeTerminator       (                                               )
-        ,   m_xQuickLauncher        (                                               )
-        ,   m_xSWThreadManager      (                                               )
-        ,   m_xSfxTerminator        (                                               )
-        ,   m_xTitleNumberGenerator (                                               )
 {
 }
 

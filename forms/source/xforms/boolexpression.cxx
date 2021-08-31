@@ -27,10 +27,7 @@ namespace xforms
  * As this class has no virtual methods, it should never be used
  * polymorphically. */
 
-BoolExpression::BoolExpression()
-    : ComputedExpression()
-{
-}
+BoolExpression::BoolExpression() {}
 
 BoolExpression::~BoolExpression() {}
 

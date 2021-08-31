@@ -57,8 +57,6 @@ struct TSharedStorages final
         StorageHolder m_lStoragesUser;
 
         TSharedStorages()
-            : m_lStoragesShare()
-            , m_lStoragesUser ()
         {};
 };
 
@@ -73,7 +71,6 @@ struct SharedStorages: public rtl::Static<TSharedStorages, SharedStorages> {};
 PresetHandler::PresetHandler(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : m_xContext(xContext)
     , m_eConfigType(E_GLOBAL)
-    , m_lDocumentStorages()
 {
 }
 

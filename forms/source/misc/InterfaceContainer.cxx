@@ -173,8 +173,7 @@ OInterfaceContainer::OInterfaceContainer(
                 const Reference<XComponentContext>& _rxContext,
                 ::osl::Mutex& _rMutex,
                 const Type& _rElementType)
-    :OInterfaceContainer_BASE()
-    ,m_rMutex(_rMutex)
+    :m_rMutex(_rMutex)
     ,m_aContainerListeners(_rMutex)
     ,m_aElementType(_rElementType)
     ,m_xContext(_rxContext)
@@ -184,8 +183,7 @@ OInterfaceContainer::OInterfaceContainer(
 
 
 OInterfaceContainer::OInterfaceContainer( ::osl::Mutex& _rMutex, const OInterfaceContainer& _cloneSource )
-    :OInterfaceContainer_BASE()
-    ,m_rMutex( _rMutex )
+    :m_rMutex( _rMutex )
     ,m_aContainerListeners( _rMutex )
     ,m_aElementType( _cloneSource.m_aElementType )
     ,m_xContext( _cloneSource.m_xContext )
@@ -1261,7 +1259,6 @@ Sequence<Type> SAL_CALL OFormComponents::getTypes()
 OFormComponents::OFormComponents(const Reference<XComponentContext>& _rxFactory)
     : ::cppu::OComponentHelper( m_aMutex )
     ,OInterfaceContainer( _rxFactory, m_aMutex, cppu::UnoType<XFormComponent>::get() )
-    ,OFormComponents_BASE()
 {
 }
 
@@ -1269,7 +1266,6 @@ OFormComponents::OFormComponents(const Reference<XComponentContext>& _rxFactory)
 OFormComponents::OFormComponents( const OFormComponents& _cloneSource )
     : ::cppu::OComponentHelper( m_aMutex )
     ,OInterfaceContainer( m_aMutex, _cloneSource )
-    ,OFormComponents_BASE()
 {
 }
 

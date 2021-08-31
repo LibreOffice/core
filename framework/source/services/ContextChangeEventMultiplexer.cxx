@@ -106,8 +106,7 @@ public:
 };
 
 ContextChangeEventMultiplexer::ContextChangeEventMultiplexer()
-    : ContextChangeEventMultiplexerInterfaceBase(m_aMutex),
-      maListeners()
+    : ContextChangeEventMultiplexerInterfaceBase(m_aMutex)
 {
 }
 

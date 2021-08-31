@@ -92,8 +92,7 @@ protected:
 
 WeakReference< XNumberFormatsSupplier > StandardFormatsSupplier::s_xDefaultFormatsSupplier;
 StandardFormatsSupplier::StandardFormatsSupplier(const Reference< XComponentContext > & _rxContext,LanguageType _eSysLanguage)
-    :SvNumberFormatsSupplierObj()
-    ,m_pMyPrivateFormatter(new SvNumberFormatter(_rxContext, _eSysLanguage))
+    :m_pMyPrivateFormatter(new SvNumberFormatter(_rxContext, _eSysLanguage))
 {
     SetNumberFormatter(m_pMyPrivateFormatter.get());
     // #i29147#

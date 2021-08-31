@@ -45,7 +45,6 @@ ButtonToolbarController::ButtonToolbarController(
     const uno::Reference< uno::XComponentContext >& rxContext,
     ToolBox*                                            pToolBar,
     const OUString&                                aCommand ) :
-    cppu::OWeakObject(),
     m_bInitialized( false ),
     m_bDisposed( false ),
     m_aCommandURL( aCommand ),

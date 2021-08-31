@@ -49,14 +49,12 @@ Sequence<Type> SAL_CALL OFormsCollection::getTypes()
 OFormsCollection::OFormsCollection(const Reference<XComponentContext>& _rxFactory)
     : ::cppu::OComponentHelper( m_aMutex )
     ,OInterfaceContainer( _rxFactory, m_aMutex, cppu::UnoType<XForm>::get() )
-    ,OFormsCollection_BASE()
 {
 }
 
 OFormsCollection::OFormsCollection( const OFormsCollection& _cloneSource )
     : ::cppu::OComponentHelper( m_aMutex )
     ,OInterfaceContainer( m_aMutex, _cloneSource )
-    ,OFormsCollection_BASE()
 {
 }
 
