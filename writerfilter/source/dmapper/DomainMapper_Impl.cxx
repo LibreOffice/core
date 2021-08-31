@@ -1457,7 +1457,11 @@ sal_Int16 DomainMapper_Impl::GetListLevel(const StyleSheetEntryPtr& pEntry,
     sal_Int16 nListLevel = -1;
     if (pParaContext)
     {
-        GetAnyProperty(PROP_NUMBERING_LEVEL, pParaContext) >>= nListLevel;
+        // Deliberately ignore inherited PROP_NUMBERING_LEVEL. Only trust StyleSheetEntry for that.
+        std::optional<PropertyMap::Property> aLvl = pParaContext->getProperty(PROP_NUMBERING_LEVEL);
+        if (aLvl)
+            aLvl->second >>= nListLevel;
+
         if (nListLevel != -1)
             return nListLevel;
     }
@@ -1521,6 +1525,7 @@ void DomainMapper_Impl::ValidateListLevel(const OUString& sStyleIdentifierD)
         // This level is already used by another style, so prevent numbering via this style
         // by setting to body level (9).
         pMyStyle->pProperties->SetListLevel(WW_OUTLINE_MAX);
+        // WARNING: PROP_NUMBERING_LEVEL is now out of sync with GetListLevel()
     }
 }
 
