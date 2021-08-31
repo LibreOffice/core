@@ -1079,6 +1079,11 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, lo
             pVirtDev->SetOutputSizePixel( Size( nWordLength, nWaveHeight * 2 ), false );
             pVirtDev->SetLineColor( GetLineColor() );
             pVirtDev->SetBackground( Wallpaper( COL_TRANSPARENT ) );
+#ifdef IOS
+            // Stopgap workaround for some bug in the iOS-specific vcl code.
+            pVirtDev->SetFillColor( COL_WHITE );
+            pVirtDev->DrawRect( tools::Rectangle( 0, 0, pVirtDev->GetOutputSize().Width(), pVirtDev->GetOutputSize().Height() ) );
+#endif
             pVirtDev->ImplDrawWaveLineBezier( 0, 0, nWordLength, 0, nWaveHeight, fOrientation, nLineWidth );
             rLineCache.insert( pVirtDev->GetBitmapEx( Point( 0, 0 ), pVirtDev->GetOutputSize() ), GetLineColor(), nLineWidth, nWaveHeight, nWordLength, aWavylinebmp );
         }
