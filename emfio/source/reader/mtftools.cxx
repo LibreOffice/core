@@ -300,10 +300,6 @@ namespace emfio
 
     // tdf#127471
     ScaledFontDetectCorrectHelper::ScaledFontDetectCorrectHelper()
-    :   maCurrentMetaFontAction(),
-        maAlternativeFontScales(),
-        maPositiveIdentifiedCases(),
-        maNegativeIdentifiedCases()
     {
     }
 
@@ -1098,21 +1094,8 @@ namespace emfio
     }
 
     MtfTools::MtfTools( GDIMetaFile& rGDIMetaFile, SvStream& rStreamWMF)
-    :   maPathObj(),
-        maClipPath(),
-        maLatestLineStyle(),
-        maLineStyle(),
-        maNopLineStyle(),
-        maLatestFillStyle(),
-        maFillStyle(),
-        maNopFillStyle(),
-        maPalette(),
-        maLatestFont(),
-        maFont(),
-        mnLatestTextAlign(90),
+    :   mnLatestTextAlign(90),
         mnTextAlign(TA_LEFT | TA_TOP | TA_NOUPDATECP),
-        maLatestTextColor(),
-        maTextColor(),
         maLatestBkColor(ColorTransparency, 0x12345678),
         maBkColor(COL_WHITE),
         mnLatestTextLayoutMode(ComplexTextLayoutFlags::Default),
@@ -1121,13 +1104,9 @@ namespace emfio
         mnBkMode(BkMode::OPAQUE),
         meLatestRasterOp(RasterOp::Invert),
         meRasterOp(RasterOp::OverPaint),
-        mvGDIObj(),
-        maActPos(),
         mnRop(),
-        mvSaveStack(),
         mnGfxMode(GM_COMPATIBLE),
         mnMapMode(MM_TEXT),
-        maXForm(),
         mnDevOrgX(0),
         mnDevOrgY(0),
         mnDevWidth(1),
@@ -1140,14 +1119,10 @@ namespace emfio
         mnPixY(100),
         mnMillX(1),
         mnMillY(1),
-        mrclFrame(),
-        mrclBounds(),
         mpGDIMetaFile(&rGDIMetaFile),
         mpInputStream(&rStreamWMF),
         mnStartPos(0),
         mnEndPos(0),
-        maBmpSaveList(),
-        maScaledFontHelper(),
         mbNopMode(false),
         mbFillStyleSelected(false),
         mbClipNeedsUpdate(true),

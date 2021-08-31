@@ -79,7 +79,6 @@ namespace pcr
     //= ObjectInspectorModel
 
     ObjectInspectorModel::ObjectInspectorModel()
-        :ImplInspectorModel()
     {
     }
 

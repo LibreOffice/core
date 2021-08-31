@@ -75,18 +75,12 @@ SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
     mbSinglePage( false ),
     mnVisiblePage( -1 ),
     mpObjects( nullptr ),
-    mxSrcDoc(),
-    mxDstDoc(),
-    maShapeSelection(),
     mbExportShapeSelection(false),
-    maFilterData(),
-    mxDefaultPage(),
     mbWriterFilter(false),
     mbCalcFilter(false),
     mbImpressFilter(false),
     mpDefaultSdrPage( nullptr ),
-    mbPresentation( false ),
-    maOldFieldHdl()
+    mbPresentation( false )
 {
 }
 
@@ -721,7 +715,6 @@ public:
     SVGFileInfo(
         const uno::Reference<io::XInputStream>& xInput)
     :   mxInput(xInput),
-        mnFirstBytes(),
         mnFirstBytesSize(2048),
         mnFirstRead(0),
         mbProcessed(false),
