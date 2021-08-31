@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09b0dadb_a3fab302",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-08-31T15:52:24Z",
+      "side": 1,
+      "message": "@Tünde: I\u0027ve got some questions about this patch. \n\nThe unit test document is opened by Excel without asking any password. So is this a feature only for LibreOffice users?\n\nSaving the unit test document in Calc removes the password protection for editing. Maybe this is not a problem, if we want to limit overwriting the document in the original place for the users with permission, so this could be a nice feature. Is this the aim of the original bug report?\n\nHow did you create the unit test document in Calc? I wasn\u0027t able to reproduce it (the Save dialog doesn\u0027t contain the checkbox mentioned in the issue.)\n\nThe test documents attached to the bug report work differently. Opening them, Calc asks password immediately. Is this intended? How does Excel handle them?\n\nOtherwise, it seems to be a nice progress in this area.",
+      "revId": "494a699cbabef3528edb4598ec71c1624f02f061",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
