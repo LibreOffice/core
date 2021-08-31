@@ -17,31 +17,31 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <printdlg.hxx>
-#include <svdata.hxx>
-#include <strings.hrc>
-#include <bitmaps.hlst>
-#include <officecfg/Office/Common.hxx>
-#include <vcl/windowstate.hxx>
-
-#include <vcl/QueueInfo.hxx>
-#include <vcl/commandevent.hxx>
-#include <vcl/naturalsort.hxx>
-#include <vcl/print.hxx>
-#include <vcl/wall.hxx>
-#include <vcl/decoview.hxx>
-#include <configsettings.hxx>
-#include <vcl/help.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/weldutils.hxx>
-
-#include <unotools/localedatawrapper.hxx>
-
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
+#include <unotools/localedatawrapper.hxx>
+#include <officecfg/Office/Common.hxx>
+
+#include <vcl/QueueInfo.hxx>
+#include <vcl/commandevent.hxx>
+#include <vcl/decoview.hxx>
+#include <vcl/help.hxx>
+#include <vcl/naturalsort.hxx>
+#include <vcl/print.hxx>
+#include <vcl/printer/Options.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/wall.hxx>
+#include <vcl/weldutils.hxx>
+#include <vcl/windowstate.hxx>
+
+#include <bitmaps.hlst>
+#include <configsettings.hxx>
+#include <printdlg.hxx>
+#include <strings.hrc>
+#include <svdata.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
