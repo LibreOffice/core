@@ -1040,23 +1040,22 @@ static bool lcl_PutString(
     const bool bForceFormulaText = (!bEvaluateFormulas && rStr[0] == '=');
     if (nColFormat == SC_COL_TEXT || bForceFormulaText)
     {
-        double fDummy;
-        sal_uInt32 nIndex = 0;
-        if (bForceFormulaText || rDoc.GetFormatTable()->IsNumberFormat(rStr, nIndex, fDummy))
-        {
-            // Set the format of this cell to Text.
-            /* TODO: is this even necessary as ScSetStringParam should take
-             * care of it and we're doing this twice? Investigate all paths
-             * taken below. */
-            sal_uInt32 nFormat = rDoc.GetFormatTable()->GetStandardFormat(SvNumFormatType::TEXT);
-            ScPatternAttr aNewAttrs(rDoc.GetPool());
-            SfxItemSet& rSet = aNewAttrs.GetItemSet();
-            rSet.Put( SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat) );
-            rDoc.ApplyPattern(nCol, nRow, nTab, aNewAttrs);
-        }
         if ( bUseDocImport )
         {
-            if(ScStringUtil::isMultiline(rStr))
+            double fDummy;
+            sal_uInt32 nIndex = 0;
+            if (bForceFormulaText || rDoc.GetFormatTable()->IsNumberFormat(rStr, nIndex, fDummy))
+            {
+                // Set the format of this cell to Text.
+                // This is only necessary for ScDocumentImport,
+                // ScDocument::SetTextCell() forces it by ScSetStringParam.
+                sal_uInt32 nFormat = rDoc.GetFormatTable()->GetStandardFormat(SvNumFormatType::TEXT);
+                ScPatternAttr aNewAttrs(rDoc.GetPool());
+                SfxItemSet& rSet = aNewAttrs.GetItemSet();
+                rSet.Put( SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat) );
+                rDoc.ApplyPattern(nCol, nRow, nTab, aNewAttrs);
+            }
+            if (ScStringUtil::isMultiline(rStr))
             {
                 ScFieldEditEngine& rEngine = rDoc.GetEditEngine();
                 rEngine.SetTextCurrentDefaults(rStr);
@@ -1068,7 +1067,8 @@ static bool lcl_PutString(
                 rDocImport.setStringCell(ScAddress(nCol, nRow, nTab), rStr);
                 return false;
             }
-        } else
+        }
+        else
         {
             rDoc.SetTextCell(ScAddress(nCol, nRow, nTab), rStr);
             return bMultiLine;
