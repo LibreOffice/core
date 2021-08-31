@@ -1,6 +1,24 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d8447ab_4ba634c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-08-31T12:03:25Z",
+      "side": 1,
+      "message": "Sorry to delay. I had a cold that prevented the brain from functioning adequately.",
+      "revId": "9ea594ffcf4f807306440e4628eecca8c75be8ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "1d34f431_765a2ca3",
         "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
@@ -20,10 +38,10 @@
         "endChar": 96
       },
       "revId": "9ea594ffcf4f807306440e4628eecca8c75be8ee",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": true
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "be8f04ab_b525c30d",
         "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
@@ -44,10 +62,10 @@
         "endChar": 96
       },
       "revId": "9ea594ffcf4f807306440e4628eecca8c75be8ee",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": true
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "44874363_9e4b076e",
         "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
@@ -68,10 +86,34 @@
         "endChar": 96
       },
       "revId": "9ea594ffcf4f807306440e4628eecca8c75be8ee",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": true
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce50e001_6c03516c",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1332,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-08-31T12:03:25Z",
+      "side": 1,
+      "message": "\u003e I don\u0027t have a sample with ilvl\u003d9, is that something you have?\n\nThe torture test has several varieties of it. It is fine for now I think. I\u0027ll see if I can whip up a comment to explain the pitfalls if LO gets this native (at which point level 10 would be exported specifically as \"not numbered\").\n\n\u003e My understanding is that NumberingLevel\u003d0 already means \"no numbering\" in the direct formatting case, so reusing that in the style case is OK. Or did I miss something? \nUnfortunately, NumberingLevel\u003d0 means first level, not no numbering. LO natively cannot turn off numbering using the \"NumberingLevel\" property.\n\nThis is going to be a huge pain I expect if LO ever gains native support for NumberingLevel-in-styles. I guess we would need to use -1 for that purpose or some similar expansion of the valid values (or limit native numbering to 9 levels and repurpose level 10 as body level).",
+      "parentUuid": "44874363_9e4b076e",
+      "range": {
+        "startLine": 1332,
+        "startChar": 87,
+        "endLine": 1332,
+        "endChar": 96
+      },
+      "revId": "9ea594ffcf4f807306440e4628eecca8c75be8ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "9b234791_2edac217",
         "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
@@ -91,10 +133,10 @@
         "endChar": 52
       },
       "revId": "9ea594ffcf4f807306440e4628eecca8c75be8ee",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": true
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "4a95628a_89d573ec",
         "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
@@ -115,8 +157,31 @@
         "endChar": 52
       },
       "revId": "9ea594ffcf4f807306440e4628eecca8c75be8ee",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": true
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a37b7c3d_e35b2e56",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1568,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-08-31T12:03:25Z",
+      "side": 1,
+      "message": "Ahh, you hit the ValidateListLevel where SetListLevel changes the value. Dealt with in https://gerrit.libreoffice.org/c/core/+/121368",
+      "parentUuid": "4a95628a_89d573ec",
+      "range": {
+        "startLine": 1568,
+        "startChar": 32,
+        "endLine": 1568,
+        "endChar": 52
+      },
+      "revId": "9ea594ffcf4f807306440e4628eecca8c75be8ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
