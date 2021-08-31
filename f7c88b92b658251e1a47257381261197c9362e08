@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "678af0e8_fdc6c560",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-08-31T13:08:21Z",
+      "side": 1,
+      "message": "Hi Dániel - here is a unit test that your change would break.",
+      "revId": "f7c88b92b658251e1a47257381261197c9362e08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
