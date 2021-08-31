@@ -7,6 +7,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call sc_subsequent_test,filters-test))
+$(eval $(call sc_subsequent_test,export_test2))
 
 # vim: set noet sw=4 ts=4:
