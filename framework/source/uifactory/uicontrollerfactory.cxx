@@ -77,7 +77,6 @@ UIControllerFactory::UIControllerFactory(
     : UIControllerFactory_BASE(m_aMutex)
     , m_bConfigRead( false )
     , m_xContext( xContext )
-    , m_pConfigAccess()
 {
     m_pConfigAccess = new ConfigurationAccess_ControllerFactory(m_xContext,
             OUString::Concat("/org.openoffice.Office.UI.Controller/Registered/")

@@ -34,7 +34,6 @@
 namespace framework{
 
 QuietInteraction::QuietInteraction()
-    : m_aRequest         (                               )
 {
 }
 

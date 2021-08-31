@@ -52,7 +52,6 @@ namespace framework
 ActionTriggerSeparatorPropertySet::ActionTriggerSeparatorPropertySet()
         :   OBroadcastHelper        ( m_aMutex )
         ,   OPropertySetHelper      ( *static_cast< OBroadcastHelper * >(this) )
-        ,   OWeakObject             ()
         ,   m_nSeparatorType( 0 )
 {
 }

@@ -148,7 +148,6 @@ namespace frm
         // use the old control name for compatibility reasons
         ,OEntryListHelper( static_cast<OControlModel&>(*this) )
         ,OErrorBroadcaster( OComponentHelper::rBHelper )
-        ,m_aListRowSet()
         ,m_nConvertedBoundValuesType(0)
         ,m_nNULLPos(-1)
         ,m_nBoundColumnType( DataType::SQLNULL )
@@ -167,7 +166,6 @@ namespace frm
         :OBoundControlModel( _pOriginal, _rxFactory )
         ,OEntryListHelper( *_pOriginal, static_cast<OControlModel&>(*this) )
         ,OErrorBroadcaster( OComponentHelper::rBHelper )
-        ,m_aListRowSet()
         ,m_eListSourceType( _pOriginal->m_eListSourceType )
         ,m_aBoundColumn( _pOriginal->m_aBoundColumn )
         ,m_aListSourceValues( _pOriginal->m_aListSourceValues )

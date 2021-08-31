@@ -32,8 +32,7 @@ using namespace com::sun::star::container;
 namespace framework
 {
 
-ActionTriggerContainer::ActionTriggerContainer() :
-    PropertySetContainer()
+ActionTriggerContainer::ActionTriggerContainer()
 {
 }
 

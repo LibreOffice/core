@@ -47,7 +47,6 @@ GenericStatusbarController::GenericStatusbarController(
     , m_bEnabled( false )
     , m_bOwnerDraw( false )
     , m_pItemData( pItemData )
-    , m_xGraphic()
 {
     m_xStatusbarItem = rxItem;
     if ( m_xStatusbarItem.is() )

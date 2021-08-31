@@ -57,9 +57,7 @@ namespace frm
         bool                            bStatementDirty;
 
         CachedRowSet_Data()
-            :sCommand()
-            ,bEscapeProcessing( false )
-            ,xConnection()
+            :bEscapeProcessing( false )
             ,bStatementDirty( true )
         {
         }

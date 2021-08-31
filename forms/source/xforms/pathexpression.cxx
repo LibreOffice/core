@@ -40,8 +40,6 @@ namespace xforms
 {
 
 PathExpression::PathExpression()
-    : ComputedExpression(),
-      maNodes()
 {
 }
 
