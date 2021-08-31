@@ -17,31 +17,33 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/weld.hxx>
-#include <vcl/print.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/metaact.hxx>
-#include <configsettings.hxx>
-#include <tools/urlobj.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/sequence.hxx>
 #include <sal/types.h>
 #include <sal/log.hxx>
-#include <tools/debug.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/debug.hxx>
+#include <tools/urlobj.hxx>
 
+#include <vcl/metaact.hxx>
+#include <vcl/print.hxx>
+#include <vcl/printer/Options.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
+
+#include <configsettings.hxx>
 #include <printdlg.hxx>
-#include <svdata.hxx>
 #include <salinst.hxx>
 #include <salprn.hxx>
 #include <strings.hrc>
+#include <svdata.hxx>
 
-#include <com/sun/star/ui/dialogs/FilePicker.hpp>
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/view/DuplexMode.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/ui/dialogs/FilePicker.hpp>
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/view/DuplexMode.hpp>
 
 #include <unordered_map>
 #include <unordered_set>
@@ -827,7 +829,7 @@ void PrinterController::setPrinter( const VclPtr<Printer>& i_rPrinter )
 
 void PrinterController::resetPrinterOptions( bool i_bFileOutput )
 {
-    PrinterOptions aOpt;
+    vcl::printer::Options aOpt;
     aOpt.ReadFromConfig( i_bFileOutput );
     mpImplData->mxPrinter->SetPrinterOptions( aOpt );
 }
@@ -1254,7 +1256,7 @@ DrawModeFlags PrinterController::removeTransparencies( GDIMetaFile const & i_rIn
     sal_Int32 nMaxBmpDPIX = mpImplData->mxPrinter->GetDPIX();
     sal_Int32 nMaxBmpDPIY = mpImplData->mxPrinter->GetDPIY();
 
-    const PrinterOptions&   rPrinterOptions = mpImplData->mxPrinter->GetPrinterOptions();
+    const vcl::printer::Options& rPrinterOptions = mpImplData->mxPrinter->GetPrinterOptions();
 
     static const sal_Int32 OPTIMAL_BMP_RESOLUTION = 300;
     static const sal_Int32 NORMAL_BMP_RESOLUTION  = 200;
@@ -1262,12 +1264,12 @@ DrawModeFlags PrinterController::removeTransparencies( GDIMetaFile const & i_rIn
     if( rPrinterOptions.IsReduceBitmaps() )
     {
         // calculate maximum resolution for bitmap graphics
-        if( PrinterBitmapMode::Optimal == rPrinterOptions.GetReducedBitmapMode() )
+        if( printer::BitmapMode::Optimal == rPrinterOptions.GetReducedBitmapMode() )
         {
             nMaxBmpDPIX = std::min( sal_Int32(OPTIMAL_BMP_RESOLUTION), nMaxBmpDPIX );
             nMaxBmpDPIY = std::min( sal_Int32(OPTIMAL_BMP_RESOLUTION), nMaxBmpDPIY );
         }
-        else if( PrinterBitmapMode::Normal == rPrinterOptions.GetReducedBitmapMode() )
+        else if( printer::BitmapMode::Normal == rPrinterOptions.GetReducedBitmapMode() )
         {
             nMaxBmpDPIX = std::min( sal_Int32(NORMAL_BMP_RESOLUTION), nMaxBmpDPIX );
             nMaxBmpDPIY = std::min( sal_Int32(NORMAL_BMP_RESOLUTION), nMaxBmpDPIY );
@@ -1288,7 +1290,7 @@ DrawModeFlags PrinterController::removeTransparencies( GDIMetaFile const & i_rIn
     }
 
     // disable transparency output
-    if( rPrinterOptions.IsReduceTransparency() && ( PrinterTransparencyMode::NONE == rPrinterOptions.GetReducedTransparencyMode() ) )
+    if( rPrinterOptions.IsReduceTransparency() && ( vcl::printer::TransparencyMode::NONE == rPrinterOptions.GetReducedTransparencyMode() ) )
     {
         mpImplData->mxPrinter->SetDrawMode( mpImplData->mxPrinter->GetDrawMode() | DrawModeFlags::NoTransparency );
     }
@@ -1303,7 +1305,7 @@ DrawModeFlags PrinterController::removeTransparencies( GDIMetaFile const & i_rIn
     }
     mpImplData->mxPrinter->RemoveTransparenciesFromMetaFile( i_rIn, o_rOut, nMaxBmpDPIX, nMaxBmpDPIY,
                                                              rPrinterOptions.IsReduceTransparency(),
-                                                             rPrinterOptions.GetReducedTransparencyMode() == PrinterTransparencyMode::Auto,
+                                                             rPrinterOptions.GetReducedTransparencyMode() == vcl::printer::TransparencyMode::Auto,
                                                              rPrinterOptions.IsReduceBitmaps() && rPrinterOptions.IsReducedBitmapIncludesTransparency(),
                                                              aBg
                                                              );

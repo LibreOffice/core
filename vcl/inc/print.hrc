@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_PRINT_HRC
 #define INCLUDED_VCL_INC_PRINT_HRC
 
+#include <unotools/resmgr.hxx>
+
 #define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 const TranslateId RID_STR_PAPERNAMES[] =
