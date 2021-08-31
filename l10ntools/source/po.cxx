@@ -116,14 +116,7 @@ namespace
 }
 
 GenPoEntry::GenPoEntry()
-    : m_sExtractCom()
-    , m_sReferences( std::vector<OString>() )
-    , m_sMsgCtxt( OString() )
-    , m_sMsgId( OString() )
-    , m_sMsgIdPlural( OString() )
-    , m_sMsgStr( OString() )
-    , m_sMsgStrPlural( std::vector<OString>() )
-    , m_bFuzzy( false )
+    : m_bFuzzy( false )
     , m_bCFormat( false )
     , m_bNull( false )
 {
@@ -479,14 +472,12 @@ PoHeader::~PoHeader()
 }
 
 PoOfstream::PoOfstream()
-    : m_aOutPut()
-    , m_bIsAfterHeader( false )
+    : m_bIsAfterHeader( false )
 {
 }
 
 PoOfstream::PoOfstream(const OString& rFileName, OpenMode aMode )
-    : m_aOutPut()
-    , m_bIsAfterHeader( false )
+    : m_bIsAfterHeader( false )
 {
     open( rFileName, aMode );
 }
@@ -552,14 +543,12 @@ bool lcl_CheckInputEntry(const GenPoEntry& rEntry)
 }
 
 PoIfstream::PoIfstream()
-    : m_aInPut()
-    , m_bEof( false )
+    : m_bEof( false )
 {
 }
 
 PoIfstream::PoIfstream(const OString& rFileName)
-    : m_aInPut()
-    , m_bEof( false )
+    : m_bEof( false )
 {
     open( rFileName );
 }

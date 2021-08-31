@@ -33,8 +33,7 @@ namespace i18npool {
 /**
  * Constructor.
  */
-BreakIterator_th::BreakIterator_th() :
-    cachedText()
+BreakIterator_th::BreakIterator_th()
 {
     cBreakIterator = "com.sun.star.i18n.BreakIterator_th";
     // to improve performance, alloc big enough memory in construct.

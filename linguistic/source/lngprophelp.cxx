@@ -61,7 +61,6 @@ PropertyChgHelper::PropertyChgHelper(
         const Reference< XInterface > &rxSource,
         Reference< XLinguProperties > const &rxPropSet,
         int nAllowedEvents ) :
-    PropertyChgHelperBase(),
     aPropNames          (nCHCount),
     xMyEvtObj           (rxSource),
     aLngSvcEvtListeners (GetLinguMutex()),

@@ -742,8 +742,8 @@ private:
     ::std::map< sal_Int64, ItemFormat > maMap;
 
 public:
-    ItemFormatMap() : maMap() {}
-    explicit     ItemFormatMap( const NameListRef& rxNameList ) { insertFormats( rxNameList ); }
+    ItemFormatMap() {}
+    explicit ItemFormatMap( const NameListRef& rxNameList ) { insertFormats( rxNameList ); }
 
     ::std::map< sal_Int64, ItemFormat >::const_iterator end() const { return maMap.end(); }
     ::std::map< sal_Int64, ItemFormat >::const_iterator find(sal_Int64 nId) const
