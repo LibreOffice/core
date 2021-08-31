@@ -2738,9 +2738,23 @@ public:
     {
         ScAddress aPos(nCol, nRow, nTab);
         Color color;
+
         // Background color can be set via conditional formatting - check that first
-        ScConditionalFormat* pCondFormat = mrDoc.GetCondFormat(nCol, nRow, nTab);
         bool bHasConditionalColor = false;
+        const ScPatternAttr* pPattern = mrDoc.GetPattern(nCol, nRow, nTab);
+        if (pPattern)
+        {
+            if (!pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData().empty())
+            {
+                const SfxItemSet* pCondSet
+                    = mrDoc.GetCondResult(nCol, nRow, nTab);
+                const SvxBrushItem* pBackgroundColor = &pPattern->GetItem(ATTR_BACKGROUND, pCondSet);
+                color = pBackgroundColor->GetColor();
+                bHasConditionalColor = true;
+            }
+        }
+
+        ScConditionalFormat* pCondFormat = mrDoc.GetCondFormat(nCol, nRow, nTab);
         if (pCondFormat)
         {
             for (size_t i = 0; i < pCondFormat->size(); i++)
