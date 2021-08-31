@@ -33,6 +33,24 @@
       "message": "I\u0027d like to upgrade the internal cairo, which I\u0027m using for the oss-fuzz builds, with a contemporary  version. A lot of the ubsan patch no longer applied, and at least much of what didn\u0027t apply seems to be fixed upstream in similar ways.",
       "revId": "6a74367ace3538431069144fb11edb86e2e39a5c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f82f306e_e73dbbd8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-31T15:33:59Z",
+      "side": 1,
+      "message": "Just go ahead, I\u0027ll do a local ASan+UBSan build afterwards and fix whatever fallout, if any.",
+      "parentUuid": "a9cff4b6_9d5ef53a",
+      "revId": "6a74367ace3538431069144fb11edb86e2e39a5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
