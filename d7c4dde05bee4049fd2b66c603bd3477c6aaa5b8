@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a398b50c_b7065a03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-08-31T16:35:55Z",
+      "side": 1,
+      "message": "before rebasing, I need to verify that a round-trip still opens this way in Word 2016/2003.",
+      "revId": "d7c4dde05bee4049fd2b66c603bd3477c6aaa5b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
