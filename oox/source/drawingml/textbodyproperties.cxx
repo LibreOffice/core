@@ -31,7 +31,6 @@ namespace oox::drawingml {
 TextBodyProperties::TextBodyProperties()
     : mbAnchorCtr(false)
     , meVA( TextVerticalAdjust_TOP )
-    , msPrst()
 {
 }
 

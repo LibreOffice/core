@@ -274,7 +274,6 @@ css::uno::Any SAL_CALL LngXStringKeyMap::getValueByIndex(::sal_Int32 nIndex)
 
 GrammarCheckingIterator::GrammarCheckingIterator() :
     m_bEnd( false ),
-    m_aCurCheckedDocId(),
     m_bGCServicesChecked( false ),
     m_nDocIdCounter( 0 ),
     m_thread(nullptr),

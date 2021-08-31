@@ -55,7 +55,6 @@ struct PDFExtOutDevBookmarkEntry
     PDFExtOutDevBookmarkEntry()
         :nLinkId( -1 )
         ,nDestId( -1 )
-        ,aBookmark()
     {
     }
 };

@@ -101,7 +101,6 @@ DiagramQStylesFragmentHandler::DiagramQStylesFragmentHandler( XmlFilterBase& rFi
                                                               const OUString& rFragmentPath,
                                                               DiagramQStyleMap& rStylesMap ) :
     FragmentHandler2( rFilter, rFragmentPath ),
-    maStyleName(),
     maStyleEntry(),
     mrStylesMap( rStylesMap )
 {}
@@ -173,7 +172,6 @@ ColorFragmentHandler::ColorFragmentHandler( ::oox::core::XmlFilterBase& rFilter,
                                             const OUString& rFragmentPath,
                                             DiagramColorMap& rColorsMap ) :
     FragmentHandler2(rFilter,rFragmentPath),
-    maColorName(),
     maColorEntry(),
     mrColorsMap(rColorsMap)
 {}

@@ -296,7 +296,7 @@ class SVXCORE_DLLPUBLIC SdrPageGridFrameList final
     SdrPageGridFrame* GetObject(sal_uInt16 i) const { return aList[i]; }
 
 public:
-    SdrPageGridFrameList(): aList()                                    {}
+    SdrPageGridFrameList()                                    {}
     ~SdrPageGridFrameList()                                            { Clear(); }
     void           Clear();
     sal_uInt16     GetCount() const                                    { return sal_uInt16(aList.size()); }
