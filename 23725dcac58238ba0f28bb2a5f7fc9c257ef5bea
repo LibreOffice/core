@@ -16,6 +16,23 @@
       "message": "Once again I\u0027m not quite sure what I\u0027m doing, but this seems to get the job done. The last change (disregarding USE_FORMER_TEXT_WRAPPING) is intended to keep body text and header/footer content apart no matter what, avoiding a regression in testTdf122878.",
       "revId": "23725dcac58238ba0f28bb2a5f7fc9c257ef5bea",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce98eb3e_a63e880a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-08-31T11:12:00Z",
+      "side": 1,
+      "message": "I reversed that suggestion in tdf#143793. The scope is too wide. You break old ODT documents when you do that. ESC would need to give approval before allowing a major breakage like this.",
+      "revId": "23725dcac58238ba0f28bb2a5f7fc9c257ef5bea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
