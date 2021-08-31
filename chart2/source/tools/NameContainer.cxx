@@ -39,7 +39,6 @@ NameContainer::NameContainer( const css::uno::Type& rType, const OUString& rServ
     : m_aType( rType )
     , m_aServicename( rServicename )
     , m_aImplementationName( rImplementationName )
-    , m_aMap()
 {
 }
 

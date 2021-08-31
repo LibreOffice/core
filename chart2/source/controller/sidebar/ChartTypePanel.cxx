@@ -41,7 +41,6 @@ namespace chart::sidebar
 {
 ChartTypePanel::ChartTypePanel(weld::Widget* pParent, ::chart::ChartController* pController)
     : PanelLayout(pParent, "ChartTypePanel", "modules/schart/ui/sidebartype.ui")
-    , maContext()
     , mxModel(pController->getModel())
     , mxListener(new ChartSidebarModifyListener(this))
     , mbModelValid(true)

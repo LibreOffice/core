@@ -99,12 +99,8 @@ using ::com::sun::star::uno::Sequence;
 ChartController::ChartController(uno::Reference<uno::XComponentContext> const & xContext) :
     m_aLifeTimeManager( nullptr ),
     m_bSuspended( false ),
-    m_xCC(xContext), //@todo is it allowed to hold this context??
-    m_aModelMutex(),
+    m_xCC(xContext),
     m_aModel( nullptr, m_aModelMutex ),
-    m_xViewWindow(),
-    m_xChartView(),
-    m_pDrawModelWrapper(),
     m_eDragMode(SdrDragMode::Move),
     m_bWaitingForDoubleClick(false),
     m_bWaitingForMouseUp(false),

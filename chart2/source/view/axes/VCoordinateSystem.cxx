@@ -66,11 +66,9 @@ std::unique_ptr<VCoordinateSystem> VCoordinateSystem::createCoordinateSystem(
 
 VCoordinateSystem::VCoordinateSystem( const Reference< XCoordinateSystem >& xCooSys )
     : m_xCooSysModel(xCooSys)
-    , m_aMatrixSceneToScreen()
     , m_eLeftWallPos(CuboidPlanePosition_Left)
     , m_eBackWallPos(CuboidPlanePosition_Back)
     , m_eBottomPos(CuboidPlanePosition_Bottom)
-    , m_aMergedMinMaxSupplier()
     , m_aExplicitScales(3)
     , m_aExplicitIncrements(3)
 {

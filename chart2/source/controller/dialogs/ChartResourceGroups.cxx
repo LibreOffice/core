@@ -29,8 +29,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 Dim3DLookResourceGroup::Dim3DLookResourceGroup(weld::Builder* pBuilder)
-    : ChangingResource()
-    , m_xCB_3DLook(pBuilder->weld_check_button("3dlook"))
+    : m_xCB_3DLook(pBuilder->weld_check_button("3dlook"))
     , m_xLB_Scheme(pBuilder->weld_combo_box("3dscheme"))
 {
     m_xCB_3DLook->connect_toggled(LINK(this, Dim3DLookResourceGroup, Dim3DLookCheckHdl));
@@ -88,8 +87,7 @@ IMPL_LINK_NOARG(Dim3DLookResourceGroup, SelectSchemeHdl, weld::ComboBox&, void)
 }
 
 SortByXValuesResourceGroup::SortByXValuesResourceGroup(weld::Builder* pBuilder)
-    : ChangingResource()
-    , m_xCB_XValueSorting(pBuilder->weld_check_button("sort"))
+    : m_xCB_XValueSorting(pBuilder->weld_check_button("sort"))
 {
     m_xCB_XValueSorting->connect_toggled(
         LINK(this, SortByXValuesResourceGroup, SortByXValuesCheckHdl));
@@ -117,8 +115,7 @@ IMPL_LINK_NOARG(SortByXValuesResourceGroup, SortByXValuesCheckHdl, weld::Togglea
 }
 
 StackingResourceGroup::StackingResourceGroup(weld::Builder* pBuilder)
-    : ChangingResource()
-    , m_xCB_Stacked(pBuilder->weld_check_button("stack"))
+    : m_xCB_Stacked(pBuilder->weld_check_button("stack"))
     , m_xRB_Stack_Y(pBuilder->weld_radio_button("ontop"))
     , m_xRB_Stack_Y_Percent(pBuilder->weld_radio_button("percent"))
     , m_xRB_Stack_Z(pBuilder->weld_radio_button("deep"))
@@ -200,8 +197,7 @@ IMPL_LINK_NOARG(StackingResourceGroup, StackingEnableHdl, weld::Toggleable&, voi
 }
 
 SplineResourceGroup::SplineResourceGroup(weld::Builder* pBuilder, weld::Window* pParent)
-    : ChangingResource()
-    , m_pParent(pParent)
+    : m_pParent(pParent)
     , m_xFT_LineType(pBuilder->weld_label("linetypeft"))
     , m_xLB_LineType(pBuilder->weld_combo_box("linetype"))
     , m_xPB_DetailsDialog(pBuilder->weld_button("properties"))
@@ -332,8 +328,7 @@ IMPL_LINK_NOARG(SplineResourceGroup, SteppedDetailsDialogHdl, weld::Button&, voi
 }
 
 GeometryResourceGroup::GeometryResourceGroup(weld::Builder* pBuilder)
-    : ChangingResource()
-    , m_aGeometryResources(pBuilder)
+    : m_aGeometryResources(pBuilder)
 {
     m_aGeometryResources.connect_changed(LINK(this, GeometryResourceGroup, GeometryChangeHdl));
 }

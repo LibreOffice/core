@@ -35,8 +35,7 @@ using ::com::sun::star::uno::Sequence;
 namespace chart
 {
 
-BubbleDataInterpreter::BubbleDataInterpreter() :
-        DataInterpreter()
+BubbleDataInterpreter::BubbleDataInterpreter()
 {
 }
 

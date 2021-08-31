@@ -1118,7 +1118,6 @@ private: //member
 WrappedDataRowSourceProperty::WrappedDataRowSourceProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
             : WrappedProperty("DataRowSource",OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
-            , m_aOuterValue()
 {
     m_aOuterValue = WrappedDataRowSourceProperty::getPropertyDefault( nullptr );
 }
@@ -1217,7 +1216,6 @@ WrappedStackingProperty::WrappedStackingProperty(StackMode eStackMode, const std
             : WrappedProperty(OUString(),OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
             , m_eStackMode( eStackMode )
-            , m_aOuterValue()
 {
     switch( m_eStackMode )
     {
@@ -1315,7 +1313,6 @@ private: //member
 WrappedDim3DProperty::WrappedDim3DProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
             : WrappedProperty("Dim3D",OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
-            , m_aOuterValue()
 {
     m_aOuterValue = WrappedDim3DProperty::getPropertyDefault( nullptr );
 }
@@ -1379,7 +1376,6 @@ private: //member
 WrappedVerticalProperty::WrappedVerticalProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
             : WrappedProperty("Vertical",OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
-            , m_aOuterValue()
 {
     m_aOuterValue = WrappedVerticalProperty::getPropertyDefault( nullptr );
 }
@@ -1595,7 +1591,6 @@ private: //member
 WrappedAttributedDataPointsProperty::WrappedAttributedDataPointsProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
             : WrappedProperty("AttributedDataPoints",OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
-            , m_aOuterValue()
 {
     m_aOuterValue = WrappedAttributedDataPointsProperty::getPropertyDefault( nullptr );
 }
@@ -1700,7 +1695,6 @@ private: //member
 WrappedSolidTypeProperty::WrappedSolidTypeProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
             : WrappedProperty( "SolidType", OUString() )
             , m_spChart2ModelContact( spChart2ModelContact )
-            , m_aOuterValue()
 {
     m_aOuterValue = WrappedSolidTypeProperty::getPropertyDefault( nullptr );
 }

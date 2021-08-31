@@ -168,9 +168,6 @@ AxisProperties::AxisProperties( const uno::Reference< XAxis >& xAxisModel
     , m_nNumberFormatKey(0)
     , m_nMajorTickmarks(1)
     , m_nMinorTickmarks(1)
-    , m_aTickmarkPropertiesList()
-    , m_aLineProperties()
-    //for category axes
     , m_nAxisType(AxisType::REALNUMBER)
     , m_bComplexCategories(false)
     , m_pExplicitCategoriesProvider(pExplicitCategoriesProvider)

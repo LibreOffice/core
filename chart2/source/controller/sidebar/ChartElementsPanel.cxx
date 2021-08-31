@@ -326,7 +326,6 @@ ChartElementsPanel::ChartElementsPanel(
     , mxLBGrid(m_xBuilder->weld_label("label_gri"))
     , mxLBLegendPosition(m_xBuilder->weld_combo_box("comboboxtext_legend"))
     , mxBoxLegend(m_xBuilder->weld_widget("box_legend"))
-    , maContext()
     , mxModel(pController->getModel())
     , mxListener(new ChartSidebarModifyListener(this))
     , mbModelValid(true)

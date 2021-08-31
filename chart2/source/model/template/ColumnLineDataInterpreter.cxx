@@ -35,7 +35,6 @@ namespace chart
 // explicit
 ColumnLineDataInterpreter::ColumnLineDataInterpreter(
     sal_Int32 nNumberOfLines ) :
-        DataInterpreter(),
         m_nNumberOfLines( nNumberOfLines )
 {}
 

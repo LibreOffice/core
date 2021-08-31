@@ -97,9 +97,7 @@ namespace chart
 
 FormattedString::FormattedString() :
         ::property::OPropertySet( m_aMutex ),
-    m_aString(),
     m_aType(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT),
-    m_aGuid(),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 

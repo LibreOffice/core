@@ -325,9 +325,7 @@ Axis::Axis() :
         ::property::OPropertySet( m_aMutex ),
         m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
         m_aScaleData( AxisHelper::createDefaultScale() ),
-        m_xGrid( new GridProperties() ),
-        m_aSubGridProperties(),
-        m_xTitle()
+        m_xGrid( new GridProperties() )
 {
     osl_atomic_increment(&m_refCount);
     setFastPropertyValue_NoBroadcast(

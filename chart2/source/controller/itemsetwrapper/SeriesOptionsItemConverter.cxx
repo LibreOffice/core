@@ -60,7 +60,6 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         , m_bSupportingStartingAngle(false)
         , m_nStartingAngle(90)
         , m_bClockwise(false)
-        , m_aSupportedMissingValueTreatments()
         , m_nMissingValueTreatment(0)
         , m_bSupportingPlottingOfHiddenCells(false)
         , m_bIncludeHiddenCells(true)

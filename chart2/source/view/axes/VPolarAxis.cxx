@@ -41,7 +41,6 @@ VPolarAxis::VPolarAxis( const AxisProperties& rAxisProperties
             , sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount )
             : VAxisBase( nDimensionIndex, nDimensionCount, rAxisProperties, xNumberFormatsSupplier )
             , m_pPosHelper( new PolarPlottingPositionHelper() )
-            , m_aIncrements()
 {
     PlotterBase::m_pPosHelper = m_pPosHelper.get();
 }

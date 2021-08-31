@@ -242,7 +242,6 @@ void lcl_getDiagramAndCooSys( const OUString& rObjectCID
 } //anonymous namespace
 
 ObjectIdentifier::ObjectIdentifier()
-    :m_aObjectCID( OUString() )
 {
 }
 
@@ -252,13 +251,11 @@ ObjectIdentifier::ObjectIdentifier( const OUString& rObjectCID )
 }
 
 ObjectIdentifier::ObjectIdentifier( const Reference< drawing::XShape >& rxShape )
-    :m_aObjectCID( OUString() )
-    ,m_xAdditionalShape( rxShape )
+    : m_xAdditionalShape( rxShape )
 {
 }
 
 ObjectIdentifier::ObjectIdentifier( const Any& rAny )
-    :m_aObjectCID( OUString() )
 {
     const uno::Type& rType = rAny.getValueType();
     if ( rType == cppu::UnoType<OUString>::get() )

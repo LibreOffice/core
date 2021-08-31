@@ -104,7 +104,6 @@ VDataSeriesGroup::VDataSeriesGroup( std::unique_ptr<VDataSeries> pSeries )
         : m_aSeriesVector(1)
         , m_bMaxPointCountDirty(true)
         , m_nMaxPointCount(0)
-        , m_aListOfCachedYValues()
 {
     m_aSeriesVector[0] = std::move(pSeries);
 }
@@ -144,11 +143,9 @@ VSeriesPlotter::VSeriesPlotter( const uno::Reference<XChartType>& xChartTypeMode
         , m_pMainPosHelper( nullptr )
         , m_xChartTypeModel(xChartTypeModel)
         , m_xChartTypeModelProps( uno::Reference< beans::XPropertySet >::query( xChartTypeModel ))
-        , m_aZSlots()
         , m_bCategoryXAxis(bCategoryXAxis)
         , m_nTimeResolution(css::chart::TimeUnit::DAY)
         , m_aNullDate(30,12,1899)
-        , m_xColorScheme()
         , m_pExplicitCategoriesProvider(nullptr)
         , m_bPointsWereSkipped(false)
         , m_bPieLabelsAllowToMove(false)

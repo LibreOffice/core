@@ -36,7 +36,6 @@ AxisPositionsTabPage::AxisPositionsTabPage(weld::Container* pPage, weld::DialogC
     : SfxTabPage(pPage, pController, "modules/schart/ui/tp_AxisPositions.ui", "tp_AxisPositions", &rInAttrs)
     , m_pNumFormatter(nullptr)
     , m_bCrossingAxisIsCategoryAxis(false)
-    , m_aCategories()
     , m_bSupportAxisPositioning(false)
     , m_bSupportCategoryPositioning(false)
     , m_xFL_AxisLine(m_xBuilder->weld_frame("FL_AXIS_LINE"))

@@ -42,7 +42,6 @@ VPolarGrid::VPolarGrid( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
             : VAxisOrGridBase( nDimensionIndex, nDimensionCount )
             , m_aGridPropertiesList( rGridPropertiesList )
             , m_pPosHelper( new PolarPlottingPositionHelper() )
-            , m_aIncrements()
 {
     PlotterBase::m_pPosHelper = m_pPosHelper.get();
 }

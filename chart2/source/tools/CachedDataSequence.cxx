@@ -83,9 +83,7 @@ CachedDataSequence::CachedDataSequence( const OUString & rSingleText )
 }
 
 CachedDataSequence::CachedDataSequence( const CachedDataSequence & rSource )
-        : OMutexAndBroadcastHelper(),
-          OPropertyContainer( GetBroadcastHelper()),
-          OPropertyArrayUsageHelper< CachedDataSequence >(),
+        : OPropertyContainer( GetBroadcastHelper()),
           CachedDataSequence_Base( GetMutex()),
           m_nNumberFormatKey( rSource.m_nNumberFormatKey ),
           m_sRole( rSource.m_sRole ),

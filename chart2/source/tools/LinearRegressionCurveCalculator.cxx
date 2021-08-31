@@ -24,8 +24,7 @@ using namespace ::com::sun::star;
 namespace chart
 {
 
-LinearRegressionCurveCalculator::LinearRegressionCurveCalculator() :
-    PolynomialRegressionCurveCalculator()
+LinearRegressionCurveCalculator::LinearRegressionCurveCalculator()
 {}
 
 LinearRegressionCurveCalculator::~LinearRegressionCurveCalculator()
