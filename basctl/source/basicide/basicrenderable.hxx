@@ -22,6 +22,7 @@
 #include <cppuhelper/compbase.hxx>
 
 #include <vcl/print.hxx>
+#include <vcl/printer/OptionsHelper.hxx>
 
 namespace basctl
 {
@@ -30,7 +31,7 @@ class BaseWindow;
 
 class Renderable :
     public cppu::WeakComponentImplHelper< css::view::XRenderable >,
-    public vcl::PrinterOptionsHelper
+    public vcl::printer::OptionsHelper
 {
     VclPtr<BaseWindow>      mpWindow;
     osl::Mutex              maMutex;

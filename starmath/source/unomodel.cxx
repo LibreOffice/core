@@ -30,6 +30,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/print.hxx>
+#include <vcl/printer/OptionsHelper.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/formula/SymbolDescriptor.hpp>
@@ -134,7 +135,7 @@ SmPrintUIOptions::SmPrintUIOptions()
                                                     );
 
     // create a numeric box for scale dependent on PrintFormat = "Scaling" (matches to SID_PRINTZOOM)
-    vcl::PrinterOptionsHelper::UIControlOptions aRangeOpt( aPrintFormatProp, 2, true );
+    vcl::printer::OptionsHelper::UIControlOptions aRangeOpt( aPrintFormatProp, 2, true );
     m_aUIProperties[nIdx++].Value = setRangeControlOpt("scalingspin", OUString(),
                                                      ".HelpID:vcl:PrintDialog:PrintScale:NumericField",
                                                      PRTUIOPT_PRINT_SCALE,
