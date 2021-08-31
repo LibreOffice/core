@@ -136,6 +136,11 @@
                             <property name="use-underline">True</property>
                             <property name="image-position">top</property>
                             <property name="always-show-image">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="values-only-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|paste_values_only">Pastes numbers, text, dates and the results of formulas.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -154,6 +159,11 @@
                             <property name="use-underline">True</property>
                             <property name="image-position">top</property>
                             <property name="always-show-image">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="values-formats-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|paste_values_formats">Pastes cell values, formula results and formats applied to cells.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -172,6 +182,11 @@
                             <property name="use-underline">True</property>
                             <property name="image-position">top</property>
                             <property name="always-show-image">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="formats-only-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|paste_formats">Pastes only the formats from the source range without changing the values in the destination range.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -190,6 +205,11 @@
                             <property name="use-underline">True</property>
                             <property name="image-position">top</property>
                             <property name="always-show-image">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="paste-transpose-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|paste_transpose">Pastes cell contents transposed, hence columns are converted to rows.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -213,6 +233,11 @@
                         <property name="use-underline">True</property>
                         <property name="active">True</property>
                         <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="immediately-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|cbImmediately">Check this option to run the preset immediately. Uncheck it to manipulate the options before clicking OK.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">True</property>
