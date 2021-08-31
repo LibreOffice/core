@@ -1313,7 +1313,7 @@ void SwXFrame::setName(const OUString& rName)
         pFormat->GetDoc()->SetFlyName(static_cast<SwFlyFrameFormat&>(*pFormat), rName);
         if(pFormat->GetName() != rName)
         {
-            throw uno::RuntimeException();
+            throw uno::RuntimeException("SwXFrame::setName(): Illegal object name. Duplicate name?",*const_cast< SwXFrame* >( this ));
         }
     }
     else if(m_bIsDescriptor)
