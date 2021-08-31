@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e99097da_66def254",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-08-31T12:32:00Z",
+      "side": 1,
+      "message": "Should be a nice and simple one, I don\u0027t know why an OutputDevice function was in print2.cxx, but I have now moved it. ",
+      "revId": "bb9943d057fb1a814725fb85d1d9f26546dd18c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
