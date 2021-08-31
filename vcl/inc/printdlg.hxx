@@ -30,6 +30,10 @@
 
 namespace vcl {
     class PrintDialog;
+
+    namespace print {
+        class PrinterController;
+    }
 }
 
 namespace vcl
@@ -93,7 +97,7 @@ namespace vcl
             }
         };
 
-        PrintDialog(weld::Window*, const std::shared_ptr<PrinterController>&);
+        PrintDialog(weld::Window*, const std::shared_ptr<print::PrinterController>&);
         virtual ~PrintDialog() override;
 
         bool isPrintToFile() const;
@@ -111,7 +115,7 @@ namespace vcl
 
         std::unique_ptr<weld::Builder>          mxCustomOptionsUIBuilder;
 
-        std::shared_ptr<PrinterController>      maPController;
+        std::shared_ptr<print::PrinterController>      maPController;
 
         std::unique_ptr<weld::Notebook>         mxTabCtrl;
         std::unique_ptr<weld::ScrolledWindow>   mxScrolledWindow;
@@ -241,7 +245,7 @@ namespace vcl
         void checkOptionalControlDependencies();
         void makeEnabled( weld::Widget* );
         void updateWindowFromProperty( const OUString& );
-        void initFromMultiPageSetup( const vcl::PrinterController::MultiPageSetup& );
+        void initFromMultiPageSetup( const vcl::print::PrinterController::MultiPageSetup& );
         void showAdvancedControls( bool );
         void updateNup( bool i_bMayUseCache = true );
         void updateNupFromPages( bool i_bMayUseCache = true );

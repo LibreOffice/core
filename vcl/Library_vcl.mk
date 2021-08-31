@@ -1,4 +1,5 @@
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+
 #
 # This file is part of the LibreOffice project.
 #
@@ -101,6 +102,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/animate/AnimationBitmap \
     vcl/source/cnttype/mcnttfactory \
     vcl/source/cnttype/mcnttype \
+    vcl/source/printer/PrinterController \
     vcl/source/printer/PrinterOptions \
     vcl/source/printer/PrinterOptionsHelper \
     vcl/source/printer/QueueInfo \

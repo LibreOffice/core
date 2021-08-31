@@ -22,6 +22,7 @@
 #include <config_options.h>
 
 #include <vcl/dllapi.h>
+#include <vcl/printer/NupOrderType.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -34,23 +35,11 @@ namespace weld
 class Window;
 }
 
-namespace vcl
-{
-class PrinterController;
-}
-
 namespace vcl::print
 {
+class PrinterController;
 class PrinterOptions;
 class ImplPrinterControllerData;
-
-enum class NupOrderType
-{
-    LRTB,
-    TBLR,
-    TBRL,
-    RLTB
-};
 
 class VCL_DLLPUBLIC PrinterOptionsHelper
 {

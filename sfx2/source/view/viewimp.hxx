@@ -46,7 +46,7 @@ struct SfxViewShell_Impl
     ::rtl::Reference<SfxBaseController> m_pController;
     std::unique_ptr<::svt::AcceleratorExecute> m_xAccExec;
     ::rtl::Reference<SfxClipboardChangeListener> xClipboardListener;
-    std::shared_ptr<vcl::PrinterController> m_xPrinterController;
+    std::shared_ptr<vcl::print::PrinterController> m_xPrinterController;
 
     mutable std::vector<SfxInPlaceClient*> maIPClients;
 

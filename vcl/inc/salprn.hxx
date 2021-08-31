@@ -31,7 +31,7 @@
 class SalGraphics;
 class SalFrame;
 class ImplJobSetup;
-namespace vcl { class PrinterController; }
+namespace vcl::print { class PrinterController; }
 namespace weld { class Window; }
 
 struct VCL_PLUGIN_PUBLIC SalPrinterQueueInfo
@@ -108,7 +108,7 @@ public:
                                               const OUString& rJobName,
                                               const OUString& rAppName,
                                               ImplJobSetup* pSetupData,
-                                              vcl::PrinterController& rController );
+                                              vcl::print::PrinterController& rController );
 
     virtual bool                    EndJob() = 0;
     virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, bool bNewJobData ) = 0;

@@ -29,6 +29,7 @@
 #include <vcl/help.hxx>
 #include <vcl/naturalsort.hxx>
 #include <vcl/print.hxx>
+#include <vcl/printer/PrinterController.hxx>
 #include <vcl/printer/PrinterOptions.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -522,14 +523,14 @@ Size const & PrintDialog::getJobPageSize()
         GDIMetaFile aMtf;
         if( maPController->getPageCountProtected() > 0 )
         {
-            PrinterController::PageSize aPageSize = maPController->getPageFile( 0, aMtf, true );
+            print::PrinterController::PageSize aPageSize = maPController->getPageFile( 0, aMtf, true );
             maFirstPageSize = aPageSize.aSize;
         }
     }
     return maFirstPageSize;
 }
 
-PrintDialog::PrintDialog(weld::Window* i_pWindow, const std::shared_ptr<PrinterController>& i_rController)
+PrintDialog::PrintDialog(weld::Window* i_pWindow, const std::shared_ptr<print::PrinterController>& i_rController)
     : GenericDialogController(i_pWindow, "vcl/ui/printdialog.ui", "PrintDialog")
     , maPController( i_rController )
     , mxTabCtrl(m_xBuilder->weld_notebook("tabcontrol"))
@@ -973,7 +974,7 @@ void PrintDialog::preparePreview( bool i_bMayUseCache )
     const MapMode aMapMode( MapUnit::Map100thMM );
     if( nPages > 0 )
     {
-        PrinterController::PageSize aPageSize =
+        print::PrinterController::PageSize aPageSize =
             maPController->getFilteredPageFile( mnCurPage, aMtf, i_bMayUseCache );
         if( ! aPageSize.bFullPaper )
         {
@@ -1093,7 +1094,7 @@ void PrintDialog::checkOptionalControlDependencies()
     }
 }
 
-void PrintDialog::initFromMultiPageSetup( const vcl::PrinterController::MultiPageSetup& i_rMPS )
+void PrintDialog::initFromMultiPageSetup( const vcl::print::PrinterController::MultiPageSetup& i_rMPS )
 {
     mxNupOrderWin->show();
     mxPagesBtn->set_active(true);
@@ -1137,7 +1138,7 @@ void PrintDialog::updateNup( bool i_bMayUseCache )
     tools::Long nPageMargin  = mxPageMarginEdt->denormalize(mxPageMarginEdt->get_value( FieldUnit::MM_100TH ));
     tools::Long nSheetMargin = mxSheetMarginEdt->denormalize(mxSheetMarginEdt->get_value( FieldUnit::MM_100TH ));
 
-    PrinterController::MultiPageSetup aMPS;
+    print::PrinterController::MultiPageSetup aMPS;
     aMPS.nRows         = nRows;
     aMPS.nColumns      = nCols;
     aMPS.nLeftMargin   =

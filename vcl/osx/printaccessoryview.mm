@@ -23,6 +23,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/print.hxx>
+#include <vcl/printer/PrinterController.hxx>
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
@@ -68,16 +69,16 @@ class ControllerProperties;
 @interface AquaPrintPanelAccessoryController : NSViewController< NSPrintPanelAccessorizing >
 {
     NSPrintOperation *mpPrintOperation;
-    vcl::PrinterController *mpPrinterController;
+    vcl::print::PrinterController *mpPrinterController;
     PrintAccessoryViewState *mpViewState;
 }
 
 -(void)forPrintOperation:(NSPrintOperation*)pPrintOp;
--(void)withPrinterController:(vcl::PrinterController*)pController;
+-(void)withPrinterController:(vcl::print::PrinterController*)pController;
 -(void)withViewState:(PrintAccessoryViewState*)pState;
 
 -(NSPrintOperation*)printOperation;
--(vcl::PrinterController*)printerController;
+-(vcl::print::PrinterController*)printerController;
 -(PrintAccessoryViewState*)viewState;
 
 -(NSSet*)keyPathsForValuesAffectingPreview;
@@ -92,7 +93,7 @@ class ControllerProperties;
 -(void)forPrintOperation:(NSPrintOperation*)pPrintOp
     { mpPrintOperation = pPrintOp; }
 
--(void)withPrinterController:(vcl::PrinterController*)pController
+-(void)withPrinterController:(vcl::print::PrinterController*)pController
     { mpPrinterController = pController; }
 
 -(void)withViewState:(PrintAccessoryViewState*)pState
@@ -101,7 +102,7 @@ class ControllerProperties;
 -(NSPrintOperation*)printOperation
     { return mpPrintOperation; }
 
--(vcl::PrinterController*)printerController
+-(vcl::print::PrinterController*)printerController
     { return mpPrinterController; }
 
 -(PrintAccessoryViewState*)viewState
@@ -228,7 +229,7 @@ public:
         std::map< int, sal_Int32 >::const_iterator value_it = maTagToValueInt.find( i_nTag );
         if( name_it != maTagToPropertyName.end() && value_it != maTagToValueInt.end() )
         {
-            vcl::PrinterController * mpController = [mpAccessoryController printerController];
+            vcl::print::PrinterController * mpController = [mpAccessoryController printerController];
             PropertyValue* pVal = mpController->getValue( name_it->second );
             if( pVal )
             {
@@ -243,7 +244,7 @@ public:
         std::map< int, OUString >::const_iterator name_it = maTagToPropertyName.find( i_nTag );
         if( name_it != maTagToPropertyName.end() )
         {
-            vcl::PrinterController * mpController = [mpAccessoryController printerController];
+            vcl::print::PrinterController * mpController = [mpAccessoryController printerController];
             PropertyValue* pVal = mpController->getValue( name_it->second );
             if( pVal )
             {
@@ -258,7 +259,7 @@ public:
         std::map< int, OUString >::const_iterator name_it = maTagToPropertyName.find( i_nTag );
         if( name_it != maTagToPropertyName.end() )
         {
-            vcl::PrinterController * mpController = [mpAccessoryController printerController];
+            vcl::print::PrinterController * mpController = [mpAccessoryController printerController];
             PropertyValue* pVal = mpController->getValue( name_it->second );
             if( pVal )
             {
@@ -278,7 +279,7 @@ public:
         std::map< int, OUString >::const_iterator name_it = maTagToPropertyName.find( i_nTag );
         if( name_it != maTagToPropertyName.end() )
         {
-            vcl::PrinterController * mpController = [mpAccessoryController printerController];
+            vcl::print::PrinterController * mpController = [mpAccessoryController printerController];
             PropertyValue* pVal = mpController->getValue( name_it->second );
             if( pVal )
             {
@@ -307,7 +308,7 @@ public:
             std::map< int, OUString >::const_iterator name_it = maTagToPropertyName.find( nTag );
             if( name_it != maTagToPropertyName.end() && name_it->second != "PrintContent" )
             {
-                vcl::PrinterController * mpController = [mpAccessoryController printerController];
+                vcl::print::PrinterController * mpController = [mpAccessoryController printerController];
                 bool bEnabled = mpController->isUIOptionEnabled( name_it->second ) ? YES : NO;
                 if( pCtrl )
                 {
@@ -972,7 +973,7 @@ static void addEdit( NSView* pCurParent, CGFloat rCurX, CGFloat& rCurY, CGFloat 
 @implementation AquaPrintAccessoryView
 
 +(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp
-               withController: (vcl::PrinterController*)pController
+               withController: (vcl::print::PrinterController*)pController
                     withState: (PrintAccessoryViewState*)pState
 {
     const Sequence< PropertyValue >& rOptions( pController->getUIOptions() );

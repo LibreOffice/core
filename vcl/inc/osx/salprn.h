@@ -93,7 +93,7 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     bool                        StartJob( const OUString* i_pFileName,
                                           const OUString& rJobName,
                                           ImplJobSetup* i_pSetupData,
-                                          vcl::PrinterController& i_rController );
+                                          vcl::print::PrinterController& i_rController );
     bool                        EndJob();
     bool                        AbortJob();
     SalGraphics*                StartPage( ImplJobSetup* i_pSetupData, bool i_bNewJobData );
@@ -134,7 +134,7 @@ class AquaSalPrinter : public SalPrinter
                                               const OUString& rJobName,
                                               const OUString& i_rAppName,
                                               ImplJobSetup* i_pSetupData,
-                                              vcl::PrinterController& i_rListener ) override;
+                                              vcl::print::PrinterController& i_rListener ) override;
 
     virtual bool                    EndJob() override;
     virtual SalGraphics*            StartPage( ImplJobSetup* i_pSetupData, bool i_bNewJobData ) override;

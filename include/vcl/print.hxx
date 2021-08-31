@@ -47,11 +47,9 @@ class SalPrinter;
 class VirtualDevice;
 enum class SalPrinterError;
 
-namespace vcl {
+namespace vcl::print {
     class PrinterController;
-    namespace print {
-        class PrinterOptions;
-    }
+    class PrinterOptions;
 }
 
 namespace weld { class Window; }
@@ -95,7 +93,7 @@ private:
     VCL_DLLPRIVATE void         ImplUpdateFontList();
     VCL_DLLPRIVATE void         ImplFindPaperFormatForUserSize( JobSetup& );
 
-    VCL_DLLPRIVATE bool         StartJob( const OUString& rJobName, std::shared_ptr<vcl::PrinterController> const & );
+    VCL_DLLPRIVATE bool         StartJob( const OUString& rJobName, std::shared_ptr<vcl::print::PrinterController> const & );
 
     static VCL_DLLPRIVATE ErrCode
                                 ImplSalPrinterErrorCodeToVCL( SalPrinterError nError );
@@ -258,7 +256,7 @@ public:
 
         starts a print job asynchronously that is will return
     */
-    static void                 PrintJob( const std::shared_ptr<vcl::PrinterController>& i_pController,
+    static void                 PrintJob( const std::shared_ptr<vcl::print::PrinterController>& i_pController,
                                     const JobSetup& i_rInitSetup );
 
     virtual bool                HasMirroredGraphics() const override;
@@ -277,204 +275,18 @@ public:
 
     // These 3 together are more modular PrintJob(), allowing printing more documents as one print job
     // by repeated calls to ExecutePrintJob(). Used by mailmerge.
-    static bool                 PreparePrintJob( std::shared_ptr<vcl::PrinterController> i_pController,
+    static bool                 PreparePrintJob( std::shared_ptr<vcl::print::PrinterController> i_pController,
                                     const JobSetup& i_rInitSetup );
-    static bool ExecutePrintJob(const std::shared_ptr<vcl::PrinterController>& i_pController);
-    static void                 FinishPrintJob( const std::shared_ptr<vcl::PrinterController>& i_pController );
+    static bool ExecutePrintJob(const std::shared_ptr<vcl::print::PrinterController>& i_pController);
+    static void                 FinishPrintJob( const std::shared_ptr<vcl::print::PrinterController>& i_pController );
 
     /** Implementation detail of PrintJob being asynchronous
 
         not exported, not usable outside vcl
     */
-    static void VCL_DLLPRIVATE  ImplPrintJob( const std::shared_ptr<vcl::PrinterController>& i_pController,
+    static void VCL_DLLPRIVATE  ImplPrintJob( const std::shared_ptr<vcl::print::PrinterController>& i_pController,
                                     const JobSetup& i_rInitSetup );
 };
-
-namespace vcl::print
-{
-class ImplPrinterControllerData;
-}
-
-namespace vcl
-{
-
-class VCL_DLLPUBLIC PrinterController
-{
-    std::unique_ptr<print::ImplPrinterControllerData>
-                                        mpImplData;
-protected:
-    PrinterController(const VclPtr<Printer>&, weld::Window* pDialogParent);
-public:
-    struct MultiPageSetup
-    {
-        // all metrics in 100th mm
-        int                             nRows;
-        int                             nColumns;
-        Size                            aPaperSize;
-        tools::Long                            nLeftMargin;
-        tools::Long                            nTopMargin;
-        tools::Long                            nRightMargin;
-        tools::Long                            nBottomMargin;
-        tools::Long                            nHorizontalSpacing;
-        tools::Long                            nVerticalSpacing;
-        bool                            bDrawBorder;
-        print::NupOrderType                    nOrder;
-
-        MultiPageSetup()
-             : nRows( 1 ), nColumns( 1 ), aPaperSize( 21000, 29700 )
-             , nLeftMargin( 0 ), nTopMargin( 0 )
-             , nRightMargin( 0 ), nBottomMargin( 0 )
-             , nHorizontalSpacing( 0 ), nVerticalSpacing( 0 )
-             , bDrawBorder( false )
-             , nOrder( print::NupOrderType::LRTB ) {}
-    };
-
-    struct PageSize
-    {
-        /// In 100th mm
-        Size                            aSize;
-
-        /// Full paper, not only imageable area is printed
-        bool                            bFullPaper;
-
-                                        PageSize( const Size& i_rSize = Size( 21000, 29700 ),
-                                            bool i_bFullPaper = false)
-                                            : aSize( i_rSize ), bFullPaper( i_bFullPaper ) {}
-    };
-
-    virtual ~PrinterController();
-
-    const VclPtr<Printer>&              getPrinter() const;
-    weld::Window*                       getWindow() const;
-
-    /** For implementations: get current job properties as changed by e.g. print dialog
-
-        this gets the current set of properties initially told to Printer::PrintJob
-
-        For convenience a second sequence will be merged in to get a combined sequence.
-        In case of duplicate property names, the value of i_MergeList wins.
-    */
-    css::uno::Sequence< css::beans::PropertyValue >
-                                        getJobProperties(const css::uno::Sequence< css::beans::PropertyValue >& i_rMergeList ) const;
-
-    /// Get the PropertyValue of a Property
-    css::beans::PropertyValue*          getValue( const OUString& i_rPropertyName );
-    const css::beans::PropertyValue*    getValue( const OUString& i_rPropertyName ) const;
-
-    /** Get a bool property
-
-        in case the property is unknown or not convertible to bool, i_bFallback is returned
-    */
-    bool                                getBoolProperty( const OUString& i_rPropertyName, bool i_bFallback ) const;
-
-    /** Get an int property
-
-        in case the property is unknown or not convertible to bool, i_nFallback is returned
-    */
-    sal_Int32                           getIntProperty( const OUString& i_rPropertyName, sal_Int32 i_nFallback ) const;
-
-    /// Set a property value - can also be used to add another UI property
-    void                                setValue( const OUString& i_rPropertyName, const css::uno::Any& i_rValue );
-    void                                setValue( const css::beans::PropertyValue& i_rValue );
-
-    /** @return The currently active UI options. These are the same that were passed to setUIOptions. */
-    const css::uno::Sequence< css::beans::PropertyValue >&
-                                        getUIOptions() const;
-
-    /** Set possible UI options.
-
-        should only be done once before passing the PrinterListener to Printer::PrintJob
-    */
-    void                                setUIOptions( const css::uno::Sequence< css::beans::PropertyValue >& );
-
-    /// Enable/disable an option; this can be used to implement dialog logic.
-    bool                                isUIOptionEnabled( const OUString& rPropName ) const;
-    bool                                isUIChoiceEnabled( const OUString& rPropName, sal_Int32 nChoice ) const;
-
-    /** MakeEnabled will change the property rPropName depends on to the value
-
-        that makes rPropName enabled. If the dependency itself is also disabled,
-        no action will be performed.
-
-        @return The property name rPropName depends on or an empty string if no change was made.
-    */
-    OUString                            makeEnabled( const OUString& rPropName );
-
-    /// App must override this
-    virtual int                         getPageCount() const = 0;
-
-    /** Get the page parameters
-
-        namely the jobsetup that should be active for the page
-        (describing among others the physical page size) and the "page size". In writer
-        case this would probably be the same as the JobSetup since writer sets the page size
-        draw/impress for example print their page on the paper set on the printer,
-        possibly adjusting the page size to fit. That means the page size can be different from
-        the paper size.
-
-        App must override this
-
-        @return Page size in 1/100th mm
-    */
-    virtual css::uno::Sequence< css::beans::PropertyValue >
-                                        getPageParameters( int i_nPage ) const = 0;
-    /// App must override this
-    virtual void                        printPage(int i_nPage) const = 0;
-
-    /// Will be called after a possible dialog has been shown and the real printjob starts
-    virtual void                        jobStarted();
-    virtual void                        jobFinished( css::view::PrintableState );
-
-    css::view::PrintableState           getJobState() const;
-
-    void                                abortJob();
-
-    bool                                isShowDialogs() const;
-    bool                                isDirectPrint() const;
-
-    void                                dialogsParentClosing();
-
-    // implementation details, not usable outside vcl
-    // don't use outside vcl. Some of these are exported for
-    // the benefit of vcl's plugins.
-    // Still: DO NOT USE OUTSIDE VCL
-                      int               getFilteredPageCount() const;
-    VCL_DLLPRIVATE    PageSize          getPageFile( int i_inUnfilteredPage, GDIMetaFile& rMtf,
-                                            bool i_bMayUseCache = false );
-                      PageSize          getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf,
-                                            bool i_bMayUseCache = false );
-                      void              printFilteredPage( int i_nPage );
-    VCL_DLLPRIVATE    void              setPrinter( const VclPtr<Printer>& );
-                      void              createProgressDialog();
-                      bool              isProgressCanceled() const;
-    VCL_DLLPRIVATE    void              setMultipage( const MultiPageSetup& );
-    VCL_DLLPRIVATE    const MultiPageSetup&
-                                        getMultipage() const;
-                      void              setLastPage( bool i_bLastPage );
-    VCL_DLLPRIVATE    void              setReversePrint( bool i_bReverse );
-    VCL_DLLPRIVATE    void              setPapersizeFromSetup( bool i_bPapersizeFromSetup );
-    VCL_DLLPRIVATE    bool              getPapersizeFromSetup() const;
-    VCL_DLLPRIVATE    Size&             getPaperSizeSetup() const;
-    VCL_DLLPRIVATE    void              setPaperSizeFromUser( Size i_aUserSize );
-    VCL_DLLPRIVATE    Size&             getPaperSizeFromUser() const;
-    VCL_DLLPRIVATE    bool              isPaperSizeFromUser() const;
-                      void              setPrinterModified( bool i_bPapersizeFromSetup );
-                      bool              getPrinterModified() const;
-    VCL_DLLPRIVATE    void              pushPropertiesToPrinter();
-    VCL_DLLPRIVATE    void              resetPaperToLastConfigured();
-                      void              setJobState( css::view::PrintableState );
-    VCL_DLLPRIVATE    void              setupPrinter( weld::Window* i_pDlgParent );
-
-    VCL_DLLPRIVATE    int               getPageCountProtected() const;
-    VCL_DLLPRIVATE    css::uno::Sequence< css::beans::PropertyValue >
-                                        getPageParametersProtected( int i_nPage ) const;
-
-    VCL_DLLPRIVATE    DrawModeFlags     removeTransparencies( GDIMetaFile const & i_rIn, GDIMetaFile& o_rOut );
-    VCL_DLLPRIVATE    void              resetPrinterOptions( bool i_bFileOutput );
-};
-
-} // namespace vcl
-
 
 #endif // INCLUDED_VCL_PRINT_HXX
 

@@ -55,7 +55,7 @@ class SfxPrinter;
 class Menu;
 class NotifyEvent;
 class SfxInPlaceClient;
-namespace vcl { class PrinterController; }
+namespace vcl::print { class PrinterController; }
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::datatransfer::clipboard { class XClipboardListener; }
@@ -302,7 +302,7 @@ public:
     void                        ExecPrint( const css::uno::Sequence < css::beans::PropertyValue >&, bool, bool );
     // Like ExecPrint(), but only sets up for printing. Use Printer::ExecutePrintJob() and Printer::FinishPrintJob() afterwards.
     void                        StartPrint( const css::uno::Sequence < css::beans::PropertyValue >&, bool, bool );
-    const std::shared_ptr< vcl::PrinterController >& GetPrinterController() const;
+    const std::shared_ptr< vcl::print::PrinterController >& GetPrinterController() const;
 
     void                        AddRemoveClipboardListener( const css::uno::Reference < css::datatransfer::clipboard::XClipboardListener>&, bool );
     css::uno::Reference< css::datatransfer::clipboard::XClipboardNotifier > GetClipboardNotifier() const;

@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vcl/print.hxx>
+#include <vcl/printer/PrinterController.hxx>
 
 #include <osx/printview.h>
 #include <osx/salprn.h>
 
 @implementation AquaPrintView
 
--(id)initWithController: (vcl::PrinterController*)pController
+-(id)initWithController: (vcl::print::PrinterController*)pController
         withInfoPrinter: (AquaSalInfoPrinter*)pInfoPrinter
 {
     NSRect aRect = { NSZeroPoint, [pInfoPrinter->getPrintInfo() paperSize] };

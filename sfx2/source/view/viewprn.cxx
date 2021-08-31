@@ -27,6 +27,7 @@
 #include <svl/itempool.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/printer/PrinterController.hxx>
 #include <svtools/prnsetup.hxx>
 #include <svl/flagitem.hxx>
 #include <svl/stritem.hxx>
@@ -58,7 +59,7 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-class SfxPrinterController : public vcl::PrinterController, public SfxListener
+class SfxPrinterController : public vcl::print::PrinterController, public SfxListener
 {
     Any                                     maCompleteSelection;
     Any                                     maSelection;
@@ -106,7 +107,7 @@ SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
                                             SfxViewShell* pView,
                                             const uno::Sequence< beans::PropertyValue >& rProps
                                           )
-    : PrinterController(i_rPrinter, pView ? pView->GetFrameWeld() : nullptr)
+    : vcl::print::PrinterController(i_rPrinter, pView ? pView->GetFrameWeld() : nullptr)
     , maCompleteSelection( i_rComplete )
     , maSelection( i_rSelection )
     , mxRenderable( i_xRender )
@@ -595,7 +596,7 @@ void SfxViewShell::StartPrint( const uno::Sequence < beans::PropertyValue >& rPr
         aPrt.reset( VclPtr<Printer>::Create( aPrinterName ) );
     }
 
-    std::shared_ptr<vcl::PrinterController> xNewController(std::make_shared<SfxPrinterController>(
+    std::shared_ptr<vcl::print::PrinterController> xNewController(std::make_shared<SfxPrinterController>(
                                                                                aPrt,
                                                                                aComplete,
                                                                                aSelection,
@@ -623,7 +624,7 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
     Printer::PrintJob( GetPrinterController(), aJobSetup );
 }
 
-const std::shared_ptr< vcl::PrinterController >& SfxViewShell::GetPrinterController() const
+const std::shared_ptr< vcl::print::PrinterController >& SfxViewShell::GetPrinterController() const
 {
     return pImpl->m_xPrinterController;
 }
