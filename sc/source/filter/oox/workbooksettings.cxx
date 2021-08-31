@@ -210,15 +210,8 @@ void WorkbookSettings::finalizeImport()
         if (maFileSharing.mbRecommendReadOnly || !maFileSharing.maHashValue.isEmpty())
             aSettingsProp.setProperty( PROP_LoadReadonly, true );
 
-        /* TODO: setting ModifyPasswordHash was commented out with commit
-         * 1a842832cd174d5ccfd832fdb94c93ae42e8eacc of which the filter
-         * fragment parts meanwhile contain PASSWORDTOMODIFY again, also for
-         * calc_OOXML.xcu, but setting the property doesn't raise a dialog. If
-         * it worked, a Sequence<PropertyValue> should be used for
-         * algorithmName,hashValue,... see also
-         * SfxObjectShell::SetModifyPasswordInfo() */
-//        if( maFileSharing.mnPasswordHash != 0 )
-//            aSettingsProp.setProperty( PROP_ModifyPasswordHash, static_cast< sal_Int32 >( maFileSharing.mnPasswordHash ) );
+        if( maFileSharing.mnPasswordHash != 0 )
+            aSettingsProp.setProperty( PROP_ModifyPasswordHash, static_cast< sal_Int32 >( maFileSharing.mnPasswordHash ) );
     }
     catch( Exception& )
     {

@@ -352,6 +352,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
             StreamMode nOpenMode;
             bool bNeedsReload = false;
+            bool bPasswordEntered = false;
             if ( !pSh->IsReadOnly() )
             {
                 // Save and reload Readonly
@@ -388,6 +389,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     }
 
                     pSh->SetModifyPasswordEntered();
+                    bPasswordEntered = true;
                 }
 
                 nOpenMode = pSh->IsOriginallyReadOnlyMedium() ? SFX_STREAM_READONLY : SFX_STREAM_READWRITE;
@@ -439,8 +441,11 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                                                                          aPhysObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             bool bIsWebDAV = aMedObj.isAnyKnownWebDAVScheme();
 
+            // tdf#118938 Reload the document when the user enters the editing password,
+            //            even if the physical name isn't different to the logical name.
             if ( ( !bNeedsReload && ( ( aMedObj.GetProtocol() == INetProtocol::File &&
-                                        aMedObj.getFSysPath( FSysStyle::Detect ) != aPhysObj.getFSysPath( FSysStyle::Detect ) &&
+                                        ( aMedObj.getFSysPath( FSysStyle::Detect ) != aPhysObj.getFSysPath( FSysStyle::Detect )
+                                          || bPasswordEntered ) &&
                                         !bPhysObjIsYounger )
                                       || ( bIsWebDAV && !bPhysObjIsYounger )
                                       || ( pMed->IsRemote() && !bIsWebDAV ) ) )
