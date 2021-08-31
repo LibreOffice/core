@@ -70,6 +70,30 @@
       },
       "revId": "6846911699ce213a18806d49e974b6c97616c8d7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3077373_54b70361",
+        "filename": "vcl/source/outdev/textline.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-08-31T12:20:45Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "8a9b2bb9_1499472f",
+      "range": {
+        "startLine": 181,
+        "startChar": 11,
+        "endLine": 190,
+        "endChar": 70
+      },
+      "revId": "6846911699ce213a18806d49e974b6c97616c8d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
