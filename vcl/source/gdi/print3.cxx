@@ -49,6 +49,7 @@
 #include <unordered_set>
 
 using namespace vcl;
+using namespace vcl::printer::detail;
 
 namespace {
 
@@ -129,7 +130,9 @@ public:
 
 }
 
-class vcl::printer::detail::ControllerData
+namespace vcl::printer::detail
+{
+class ControllerData
 {
 public:
     struct ControlDependency
@@ -224,9 +227,10 @@ public:
     ::vcl::PrinterController::PageSize modifyJobSetup( const css::uno::Sequence< css::beans::PropertyValue >& i_rProps );
     void resetPaperToLastConfigured();
 };
+}
 
 PrinterController::PrinterController(const VclPtr<Printer>& i_xPrinter, weld::Window* i_pWindow)
-    : mpImplData( new vcl::printer::detail::ControllerData )
+    : mpImplData( new ControllerData )
 {
     mpImplData->mxPrinter = i_xPrinter;
     mpImplData->mpWindow = i_pWindow;
@@ -904,7 +908,7 @@ void PrinterController::setupPrinter( weld::Window* i_pParent )
     xPrinter->Pop();
 }
 
-PrinterController::PageSize vcl::printer::detail::ControllerData::modifyJobSetup( const css::uno::Sequence< css::beans::PropertyValue >& i_rProps )
+PrinterController::PageSize ControllerData::modifyJobSetup( const css::uno::Sequence< css::beans::PropertyValue >& i_rProps )
 {
     vcl::PrinterController::PageSize aPageSize;
     aPageSize.aSize = mxPrinter->GetPaperSize();
@@ -974,7 +978,7 @@ PrinterController::PageSize vcl::printer::detail::ControllerData::modifyJobSetup
 //auto accept document paper size mode and end up overwriting the original
 //paper size setting for file->printer_settings just by pressing "ok" in the
 //print dialog
-void vcl::printer::detail::ControllerData::resetPaperToLastConfigured()
+void ControllerData::resetPaperToLastConfigured()
 {
     mxPrinter->Push();
     mxPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
@@ -1547,7 +1551,7 @@ void PrinterController::setUIOptions( const css::uno::Sequence< css::beans::Prop
         bool bIsEnabled = true;
         bool bHaveProperty = false;
         OUString aPropName;
-        vcl::printer::detail::ControllerData::ControlDependency aDep;
+        ControllerData::ControlDependency aDep;
         css::uno::Sequence< sal_Bool > aChoicesDisabled;
         for( const css::beans::PropertyValue& rEntry : std::as_const(aOptProp) )
         {
@@ -1582,7 +1586,7 @@ void PrinterController::setUIOptions( const css::uno::Sequence< css::beans::Prop
         }
         if( bHaveProperty )
         {
-            vcl::printer::detail::ControllerData::PropertyToIndexMap::const_iterator it =
+            ControllerData::PropertyToIndexMap::const_iterator it =
                 mpImplData->maPropertyToIndex.find( aPropName );
             // sanity check
             if( it != mpImplData->maPropertyToIndex.end() )
@@ -1609,7 +1613,7 @@ bool PrinterController::isUIOptionEnabled( const OUString& i_rProperty ) const
         if( bEnabled )
         {
             // check control dependencies
-            vcl::printer::detail::ControllerData::ControlDependencyMap::const_iterator it =
+            ControllerData::ControlDependencyMap::const_iterator it =
                 mpImplData->maControlDependencies.find( i_rProperty );
             if( it != mpImplData->maControlDependencies.end() )
             {
@@ -1669,7 +1673,7 @@ OUString PrinterController::makeEnabled( const OUString& i_rProperty )
 {
     OUString aDependency;
 
-    vcl::printer::detail::ControllerData::ControlDependencyMap::const_iterator it =
+    ControllerData::ControlDependencyMap::const_iterator it =
         mpImplData->maControlDependencies.find( i_rProperty );
     if( it != mpImplData->maControlDependencies.end() )
     {

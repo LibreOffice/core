@@ -46,6 +46,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 using namespace vcl;
+using namespace vcl::printer::detail;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -487,19 +488,19 @@ void PrintDialog::ShowNupOrderWindow::Paint(vcl::RenderContext& rRenderContext, 
         int nX = 0, nY = 0;
         switch (mnOrderMode)
         {
-        case NupOrderType::LRTB:
+            case NupOrderType::LRTB:
             nX = (i % mnColumns);
             nY = (i / mnColumns);
             break;
-        case NupOrderType::TBLR:
+            case NupOrderType::TBLR:
             nX = (i / mnRows);
             nY = (i % mnRows);
             break;
-        case NupOrderType::RLTB:
+            case NupOrderType::RLTB:
             nX = mnColumns - 1 - (i % mnColumns);
             nY = (i / mnColumns);
             break;
-        case NupOrderType::TBRL:
+            case NupOrderType::TBRL:
             nX = mnColumns - 1 - (i / mnRows);
             nY = (i % mnRows);
             break;

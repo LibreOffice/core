@@ -31,6 +31,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/PrinterSupport.hxx>
 #include <vcl/errcode.hxx>
+#include <vcl/dllapi.h>
 #include <vcl/outdev.hxx>
 #include <vcl/prntypes.hxx>
 #include <vcl/region.hxx>
@@ -302,16 +303,14 @@ public:
 namespace vcl::printer::detail
 {
 class ControllerData;
-}
-
-namespace vcl
-{
-
 enum class NupOrderType
 {
     LRTB, TBLR, TBRL, RLTB
 };
+}
 
+namespace vcl
+{
 class VCL_DLLPUBLIC PrinterController
 {
     std::unique_ptr<printer::detail::ControllerData>
@@ -325,14 +324,14 @@ public:
         int                             nRows;
         int                             nColumns;
         Size                            aPaperSize;
-        tools::Long                            nLeftMargin;
-        tools::Long                            nTopMargin;
-        tools::Long                            nRightMargin;
-        tools::Long                            nBottomMargin;
-        tools::Long                            nHorizontalSpacing;
-        tools::Long                            nVerticalSpacing;
+        tools::Long                     nLeftMargin;
+        tools::Long                     nTopMargin;
+        tools::Long                     nRightMargin;
+        tools::Long                     nBottomMargin;
+        tools::Long                     nHorizontalSpacing;
+        tools::Long                     nVerticalSpacing;
         bool                            bDrawBorder;
-        NupOrderType                    nOrder;
+        printer::detail::NupOrderType   nOrder;
 
         MultiPageSetup()
              : nRows( 1 ), nColumns( 1 ), aPaperSize( 21000, 29700 )
@@ -340,7 +339,7 @@ public:
              , nRightMargin( 0 ), nBottomMargin( 0 )
              , nHorizontalSpacing( 0 ), nVerticalSpacing( 0 )
              , bDrawBorder( false )
-             , nOrder( NupOrderType::LRTB ) {}
+             , nOrder( printer::detail::NupOrderType::LRTB ) {}
     };
 
     struct PageSize
