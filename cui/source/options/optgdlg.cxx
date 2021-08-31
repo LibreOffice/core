@@ -371,7 +371,6 @@ private:
 };
 
 CanvasSettings::CanvasSettings() :
-    mxForceFlagNameAccess(),
     mbHWAccelAvailable(false),
     mbHWAccelChecked(false)
 {

@@ -178,8 +178,7 @@ namespace accessibility
 
 
     AccessibleStaticTextBase_Impl::AccessibleStaticTextBase_Impl() :
-        mxTextParagraph( new AccessibleEditableTextPara(nullptr) ),
-        maEditSource()
+        mxTextParagraph( new AccessibleEditableTextPara(nullptr) )
     {
 
         // TODO: this is still somewhat of a hack, all the more since

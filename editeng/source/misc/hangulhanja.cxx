@@ -234,8 +234,7 @@ namespace editeng
                                                             sal_Int32 _nOptions,
                                                             bool _bIsInteractive,
                                                             HangulHanjaConversion* _pAntiImpl )
-        : m_pConversionDialog()
-        , m_pUIParent( pUIParent )
+        : m_pUIParent( pUIParent )
         , m_xContext( rxContext )
         , m_aSourceLocale( _rSourceLocale )
         , m_nSourceLang( LanguageTag::convertToLanguageType( _rSourceLocale ) )

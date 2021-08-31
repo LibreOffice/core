@@ -20,8 +20,7 @@ namespace editeng
 {
 
 CustomPropertyField::CustomPropertyField(OUString const & rName, OUString const & rCurrentPresentation)
-    : SvxFieldData()
-    , msName(rName)
+    : msName(rName)
     , msCurrentPresentation(rCurrentPresentation)
 {}
 

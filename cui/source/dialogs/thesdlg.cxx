@@ -240,7 +240,6 @@ SvxThesaurusDialog::SvxThesaurusDialog(
     LanguageType nLanguage)
     : SfxDialogController(pParent, "cui/ui/thesaurus.ui", "ThesaurusDialog")
     , m_aModifyIdle("cui SvxThesaurusDialog LookUp Modify")
-    , aLookUpText()
     , nLookUpLanguage(LANGUAGE_NONE)
     , m_bWordFound(false)
     , m_xLeftBtn(m_xBuilder->weld_button("left"))
