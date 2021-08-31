@@ -584,46 +584,11 @@ void DomainMapper_Impl::RemoveLastParagraph( )
         }
         else
             xCursor = m_aTextAppendStack.top().xCursor;
-        uno::Reference<container::XEnumerationAccess> xEnumerationAccess(xCursor, uno::UNO_QUERY);
-        // Keep the character properties of the last but one paragraph, even if
-        // it's empty. This works for headers/footers, and maybe in other cases
-        // as well, but surely not in textboxes.
-        // fdo#58327: also do this at the end of the document: when pasting,
-        // a table before the cursor position would be deleted
-        // (but only for paste/insert, not load; otherwise it can happen that
-        // flys anchored at the disposed paragraph are deleted (fdo47036.rtf))
-        bool const bEndOfDocument(m_aTextAppendStack.size() == 1);
-        if ((IsInHeaderFooter() || (bEndOfDocument && !m_bIsNewDoc))
-            && xEnumerationAccess.is())
-        {
-            uno::Reference<container::XEnumeration> xEnumeration = xEnumerationAccess->createEnumeration();
-            uno::Reference<lang::XComponent> xParagraph(xEnumeration->nextElement(), uno::UNO_QUERY);
-            xParagraph->dispose();
-        }
-        else if (xCursor.is())
-        {
-            xCursor->goLeft( 1, true );
-            // If this is a text on a shape, possibly the text has the trailing
-            // newline removed already.
-            if (xCursor->getString() == SAL_NEWLINE_STRING ||
-                    // tdf#105444 comments need an exception, if SAL_NEWLINE_STRING defined as "\r\n"
-                    (sizeof(SAL_NEWLINE_STRING)-1 == 2 && xCursor->getString() == "\n"))
-            {
-                uno::Reference<beans::XPropertySet> xDocProps(GetTextDocument(), uno::UNO_QUERY);
-                static const OUStringLiteral aRecordChanges(u"RecordChanges");
-                uno::Any aPreviousValue(xDocProps->getPropertyValue(aRecordChanges));
 
-                // disable redlining for this operation, otherwise we might
-                // end up with an unwanted recorded deletion
-                xDocProps->setPropertyValue(aRecordChanges, uno::Any(false));
-
-                // delete
-                xCursor->setString(OUString());
-
-                // restore again
-                xDocProps->setPropertyValue(aRecordChanges, aPreviousValue);
-            }
-        }
+        uno::Reference<container::XEnumerationAccess> xEnumerationAccess(xCursor, uno::UNO_QUERY_THROW);
+        uno::Reference<container::XEnumeration> xEnumeration = xEnumerationAccess->createEnumeration();
+        uno::Reference<lang::XComponent> xParagraph(xEnumeration->nextElement(), uno::UNO_QUERY_THROW);
+        xParagraph->dispose();
     }
     catch( const uno::Exception& )
     {

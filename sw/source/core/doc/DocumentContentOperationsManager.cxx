@@ -2146,7 +2146,7 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
          /* #i9185# Prevent getting the node after the end node (see below) */
         rEnd.nNode.GetIndex() + 1 == m_rDoc.GetNodes().Count() )
     {
-        return false;
+        //return false;
     }
 
     {
