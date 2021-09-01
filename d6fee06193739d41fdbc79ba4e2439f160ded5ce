@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76be876a_a910a28b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-09-01T20:10:40Z",
+      "side": 1,
+      "message": "Thank you. 😊\nNow I have mentioned the bug number in a comment above the two tests, and say that the numbers come from a change to fix the bug.",
+      "parentUuid": "e9485c39_f27df6f5",
+      "revId": "d6fee06193739d41fdbc79ba4e2439f160ded5ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7d25a12b_4aa1fa76",
@@ -35,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1963686_308eea18",
+        "filename": "emfio/source/reader/wmfreader.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1465,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-09-01T20:10:40Z",
+      "side": 1,
+      "message": "Done. That\u0027s because of the Gerrit web UI. Good thing is that I\u0027ve enabled the Gerrit option to see these trailing spaces.",
+      "parentUuid": "7d25a12b_4aa1fa76",
+      "revId": "d6fee06193739d41fdbc79ba4e2439f160ded5ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "70973165_4cab4a0b",
@@ -48,6 +84,24 @@
       "writtenOn": "2021-09-01T12:52:54Z",
       "side": 1,
       "message": "Same here.",
+      "revId": "d6fee06193739d41fdbc79ba4e2439f160ded5ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "223c7bc8_1e98afb4",
+        "filename": "emfio/source/reader/wmfreader.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1479,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-09-01T20:10:40Z",
+      "side": 1,
+      "message": "This is also done.",
+      "parentUuid": "70973165_4cab4a0b",
       "revId": "d6fee06193739d41fdbc79ba4e2439f160ded5ce",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
