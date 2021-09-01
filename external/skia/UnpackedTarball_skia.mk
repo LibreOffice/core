@@ -36,6 +36,7 @@ skia_patches := \
     skia_sk_cpu_sse_level_0_by_default.patch.1 \
     fix-warnings.patch.1 \
     disable-freetype-colrv1.1 \
+    windows-libraries-system32.patch.1 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
