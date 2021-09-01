@@ -2374,8 +2374,7 @@ void OS2METReader::ReadFont(sal_uInt16 nFieldSize)
                     case 0x08: { // Font Typeface
                         char str[33];
                         pOS2MET->SeekRel(1);
-                        pOS2MET->ReadBytes( &str, 32 );
-                        str[ 32 ] = 0;
+                        str[pOS2MET->ReadBytes(str, 32)] = 0;
                         OUString aStr( str, strlen(str), osl_getThreadTextEncoding() );
                         if ( aStr.equalsIgnoreAsciiCase( "Helv" ) )
                             aStr = "Helvetica";
