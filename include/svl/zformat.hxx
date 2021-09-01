@@ -272,10 +272,15 @@ public:
         { return NumFor[nIx].Info().nCntPre; }
 
     /** Count of hidden integer digits with thousands divisor:
-     * formats like "0," to show only thousands
+        formats like "0," to show only thousands.
+
+        Works only with SvNumFormatType::NUMBER and SvNumFormatType::CURRENCY,
+        returns 0 otherwise.
+
+        Returns SvNumberFormatter::UNLIMITED_PRECISION for formats that contain
+        the General keyword.
      */
-    sal_uInt16 GetThousandDivisorPrecision( sal_uInt16 nIx = 0 ) const
-        { return NumFor[nIx].Info().nThousand * 3; }
+    sal_uInt16 GetThousandDivisorPrecision( sal_uInt16 nIx = 0 ) const;
 
     //! Read/write access on a special sal_uInt16 component, may only be used on the
     //! standard format 0, 10000, ... and only by the number formatter!

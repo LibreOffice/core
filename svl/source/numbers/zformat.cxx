@@ -5947,6 +5947,22 @@ OUString SvNumberformat::GetFormatStringForTimePrecision( int nPrecision ) const
     return sString.makeStringAndClear();
 }
 
+sal_uInt16 SvNumberformat::GetThousandDivisorPrecision( sal_uInt16 nIx ) const
+{
+    if (nIx >= 4)
+        return 0;
+
+    const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
+
+    if (rInfo.eScannedType != SvNumFormatType::NUMBER && rInfo.eScannedType != SvNumFormatType::CURRENCY)
+        return 0;
+
+    if (rInfo.nThousand == FLAG_STANDARD_IN_FORMAT)
+        return SvNumberFormatter::UNLIMITED_PRECISION;
+
+    return rInfo.nThousand * 3;
+}
+
 const CharClass& SvNumberformat::rChrCls() const
 {
     return rScan.GetChrCls();

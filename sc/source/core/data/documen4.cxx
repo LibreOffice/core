@@ -641,8 +641,12 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat, const ScI
     SvNumFormatType nType = pFormat->GetMaskedType();
     if (nType != SvNumFormatType::DATE && nType != SvNumFormatType::TIME && nType != SvNumFormatType::DATETIME )
     {
-        short nPrecision;
-        if ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
+        // MSVC doesn't recognize all paths init nPrecision and wails about
+        // "potentially uninitialized local variable 'nPrecision' used"
+        // so init to some random sensible value preserving all decimals.
+        short nPrecision = 20;
+        bool bStdPrecision = ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0);
+        if (!bStdPrecision)
         {
             sal_uInt16 nIdx = pFormat->GetSubformatIndex( fVal );
             nPrecision = static_cast<short>(pFormat->GetFormatPrecision( nIdx ));
@@ -679,13 +683,18 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat, const ScI
                 case SvNumFormatType::NUMBER:
                 case SvNumFormatType::CURRENCY:
                 {   // tdf#106253 Thousands divisors for format "0,"
-                    nPrecision -=  pFormat->GetThousandDivisorPrecision( nIdx );
+                    const sal_uInt16 nTD = pFormat->GetThousandDivisorPrecision( nIdx );
+                    if (nTD == SvNumberFormatter::UNLIMITED_PRECISION)
+                        // Format contains General keyword, handled below.
+                        bStdPrecision = true;
+                    else
+                        nPrecision -= nTD;
                     break;
                 }
                 default: break;
             }
         }
-        else
+        if (bStdPrecision)
         {
             nPrecision = static_cast<short>(GetDocOptions().GetStdPrecision());
             // #i115512# no rounding for automatic decimals
