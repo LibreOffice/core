@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d23a2fa4_a720c4ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-01T20:33:27Z",
+      "side": 1,
+      "message": "I have changed DrawWavePixelAsRect() to shouldDrawWavePixelAsRect().",
+      "revId": "48cd008e48d32484fa78ccc5b134e4221bac83dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
