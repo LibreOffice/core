@@ -579,10 +579,11 @@ OUString OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT
     else if (aSqlType == SQL_VARYING)
     {
         // First 2 bytes are a short containing the length of the string
-        // No idea if sqllen is still valid here?
+        // Under unclear conditions, it may be wrong and greater than sqllen.
         sal_uInt16 aLength = *reinterpret_cast<sal_uInt16*>(m_pSqlda->sqlvar[nColumnIndex-1].sqldata);
+        // Use greater signed type sal_Int32 to get the minimum of two 16-bit values
         return OUString(m_pSqlda->sqlvar[nColumnIndex-1].sqldata + 2,
-                        aLength,
+                        std::min<sal_Int32>(aLength, m_pSqlda->sqlvar[nColumnIndex-1].sqllen),
                         RTL_TEXTENCODING_UTF8);
     }
     else if ((aSqlType == SQL_SHORT || aSqlType == SQL_LONG ||
