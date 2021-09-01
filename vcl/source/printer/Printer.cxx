@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/types.h>
-#include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
 #include <tools/helpers.hxx>
@@ -28,13 +25,10 @@
 
 #include <vcl/QueueInfo.hxx>
 #include <vcl/event.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/print.hxx>
 #include <vcl/printer/PrinterController.hxx>
 #include <vcl/printer/PrinterOptions.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/weld.hxx>
 
 #include <jobset.h>
 #include <outdev.h>
@@ -45,26 +39,16 @@
 #include <printdlg.hxx>
 #include <salgdi.hxx>
 #include <salinst.hxx>
-#include <salprn.hxx>
-#include <salptype.hxx>
 #include <salvd.hxx>
 #include <strings.hrc>
 #include <svdata.hxx>
 
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/configuration/theDefaultProvider.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/view/DuplexMode.hpp>
 
 #include <unordered_map>
-#include <unordered_set>
 #include <utility>
 #include <vector>
 
