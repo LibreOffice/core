@@ -33,7 +33,6 @@ class tdf143574(UITestCase):
             # At this point the Writer crashed here before the fix.
             self.xUITest.executeCommand(".uno:AddTextBox");
 
-            #follow up commit will introduce:
-            #self.assertEqual(True, document.DrawPage.getByIndex(0).getByIndex(2).TextBox)
+            self.assertEqual(True, document.DrawPage.getByIndex(0).getByIndex(2).TextBox)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

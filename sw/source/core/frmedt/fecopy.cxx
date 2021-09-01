@@ -400,9 +400,9 @@ bool SwFEShell::CopyDrawSel( SwFEShell& rDestShell, const Point& rSttPt,
                         if (SwDrawFrameFormat *pDrawFormat = dynamic_cast<SwDrawFrameFormat*>(pFormat))
                             pDrawFormat->PosAttrSet();
                     }
-                    if (SwTextBoxHelper::getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT))
+                    if (SwTextBoxHelper::getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT, pObj))
                     {
-                        SwTextBoxHelper::syncFlyFrameAttr(*pFormat, pFormat->GetAttrSet());
+                        SwTextBoxHelper::syncFlyFrameAttr(*pFormat, pFormat->GetAttrSet(), pObj);
                     }
 
                     if( bSelectInsert )

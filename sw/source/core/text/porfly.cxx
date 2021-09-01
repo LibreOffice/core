@@ -375,8 +375,7 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
             // of the textbox accordingly.
             // Both rectangles are absolute, SwFormatHori/VertOrient's position
             // is relative to the print area of the anchor text frame.
-            tools::Rectangle aTextRectangle = SwTextBoxHelper::getTextRectangle(pShape);
-            tools::Long nXoffs  = SwTextBoxHelper::getTextRectangle(pShape, false).Left();
+            tools::Rectangle aTextRectangle = SwTextBoxHelper::getTextRectangle(pSdrObj);
 
             const auto aPos(pShape->GetAnchor().GetContentAnchor());
             SwFormatVertOrient aVert(pTextBox->GetVertOrient());
@@ -385,7 +384,13 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
             // tdf#138598 Replace vertical alignment of As_char textboxes in footer
             // tdf#140158 Remove horizontal positioning of As_char textboxes, because
             // the anchor moving does the same for it.
-            if (!aPos->nNode.GetNode().FindFooterStartNode())
+            const bool bIsInHeaderFooter = aPos->nNode.GetNode().FindFooterStartNode();
+            // TODO: Find solution for Group Shapes in Header/Footer.
+            tools::Long nXoffs
+                = SwTextBoxHelper::getTextRectangle(
+                      bIsInHeaderFooter ? pShape->FindRealSdrObject() : pSdrObj, false)
+                      .Left();
+            if (!bIsInHeaderFooter)
             {
                 aVert.SetVertOrient(css::text::VertOrientation::NONE);
                 aVert.SetRelationOrient(css::text::RelOrientation::FRAME);
@@ -396,7 +401,7 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
             else
             {
                 aVert.SetVertOrient(css::text::VertOrientation::NONE);
-                aVert.SetPos(SwTextBoxHelper::getTextRectangle(pShape, false).Top());
+                aVert.SetPos(SwTextBoxHelper::getTextRectangle(pShape->FindRealSdrObject(), false).Top());
             }
 
             SwFormatAnchor aNewTxBxAnchor(pTextBox->GetAnchor());
