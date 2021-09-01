@@ -624,7 +624,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     // No mbIsGlobalDoc
     // No mbGlblDocSaveLinks
     // No mbIsLabelDoc
-    // No mbPurgeOLE
+    mbPurgeOLE = rSource.mbPurgeOLE;
     mbKernAsianPunctuation = rSource.mbKernAsianPunctuation;
     mbParaSpaceMax = rSource.mbParaSpaceMax;
     mbParaSpaceMaxAtPages = rSource.mbParaSpaceMaxAtPages;
