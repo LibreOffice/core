@@ -36,7 +36,6 @@
 
 
 ScMarkData::ScMarkData(const ScSheetLimits& rSheetLimits) :
-    maTabMarked(),
     aMultiSel(rSheetLimits),
     mrSheetLimits(rSheetLimits)
 {

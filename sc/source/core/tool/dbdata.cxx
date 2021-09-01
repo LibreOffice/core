@@ -88,8 +88,6 @@ ScDBData::ScDBData( const OUString& rName,
 }
 
 ScDBData::ScDBData( const ScDBData& rData ) :
-    // Listeners are to be setup by the "parent" container.
-    SvtListener         (),
     ScRefreshTimer      ( rData ),
     mpSortParam(new ScSortParam(*rData.mpSortParam)),
     mpQueryParam(new ScQueryParam(*rData.mpQueryParam)),
@@ -122,8 +120,6 @@ ScDBData::ScDBData( const ScDBData& rData ) :
 }
 
 ScDBData::ScDBData( const OUString& rName, const ScDBData& rData ) :
-    // Listeners are to be setup by the "parent" container.
-    SvtListener         (),
     ScRefreshTimer      ( rData ),
     mpSortParam(new ScSortParam(*rData.mpSortParam)),
     mpQueryParam(new ScQueryParam(*rData.mpQueryParam)),

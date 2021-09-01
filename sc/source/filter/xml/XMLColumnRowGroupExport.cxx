@@ -47,9 +47,7 @@ bool ScMyColumnRowGroup::operator<(const ScMyColumnRowGroup& rGroup) const
 
 ScMyOpenCloseColumnRowGroup::ScMyOpenCloseColumnRowGroup(ScXMLExport& rTempExport, sal_uInt32 nToken)
     : rExport(rTempExport),
-    rName(rExport.GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, GetXMLToken(XMLTokenEnum(nToken)))),
-    aTableStart(),
-    aTableEnd()
+    rName(rExport.GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, GetXMLToken(XMLTokenEnum(nToken))))
 {
 }
 

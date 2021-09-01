@@ -65,7 +65,7 @@ enum ScVObjType
 class ScGridOptions : public SvxOptionsGrid
 {
 public:
-                ScGridOptions() : SvxOptionsGrid() {}
+                ScGridOptions()  {}
                 ScGridOptions( const SvxOptionsGrid& rOpt ) : SvxOptionsGrid( rOpt ) {}
 
     void                    SetDefaults();

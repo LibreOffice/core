@@ -126,7 +126,7 @@ static bool lcl_isExternalRefCache(const OUString& rName, OUString& rUrl, OUStri
 }
 
 ScXMLExternalTabData::ScXMLExternalTabData() :
-    mpCacheTable(), mnRow(0), mnCol(0), mnFileId(0)
+     mnRow(0), mnCol(0), mnFileId(0)
 {
 }
 

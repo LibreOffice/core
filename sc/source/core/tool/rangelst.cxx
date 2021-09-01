@@ -1052,7 +1052,6 @@ ScRangeList::ScRangeList( const ScRangeList& rList ) :
 }
 
 ScRangeList::ScRangeList(ScRangeList&& rList) noexcept :
-    SvRefBase(),
     maRanges(std::move(rList.maRanges)),
     mnMaxRowUsed(rList.mnMaxRowUsed)
 {

@@ -1176,7 +1176,6 @@ void XclExpDateFormat::SaveXml( XclExpXmlStream& rStrm )
 }
 
 XclExpCfvo::XclExpCfvo(const XclExpRoot& rRoot, const ScColorScaleEntry& rEntry, const ScAddress& rAddr, bool bFirst):
-    XclExpRecord(),
     XclExpRoot( rRoot ),
     mrEntry(rEntry),
     maSrcPos(rAddr),
@@ -1238,7 +1237,6 @@ void XclExpCfvo::SaveXml( XclExpXmlStream& rStrm )
 }
 
 XclExpColScaleCol::XclExpColScaleCol( const XclExpRoot& rRoot, const Color& rColor ):
-    XclExpRecord(),
     XclExpRoot( rRoot ),
     mrColor( rColor )
 {
@@ -1436,7 +1434,6 @@ void XclExpCondfmt::SaveXml( XclExpXmlStream& rStrm )
 }
 
 XclExpColorScale::XclExpColorScale( const XclExpRoot& rRoot, const ScColorScaleFormat& rFormat, sal_Int32 nPriority ):
-    XclExpRecord(),
     XclExpRoot( rRoot ),
     mnPriority( nPriority )
 {
@@ -1472,7 +1469,6 @@ void XclExpColorScale::SaveXml( XclExpXmlStream& rStrm )
 }
 
 XclExpDataBar::XclExpDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, sal_Int32 nPriority, const OString& rGUID):
-    XclExpRecord(),
     XclExpRoot( rRoot ),
     mrFormat( rFormat ),
     mnPriority( nPriority ),
@@ -1525,7 +1521,6 @@ void XclExpDataBar::SaveXml( XclExpXmlStream& rStrm )
 }
 
 XclExpIconSet::XclExpIconSet( const XclExpRoot& rRoot, const ScIconSetFormat& rFormat, sal_Int32 nPriority ):
-    XclExpRecord(),
     XclExpRoot( rRoot ),
     mrFormat( rFormat ),
     mnPriority( nPriority )

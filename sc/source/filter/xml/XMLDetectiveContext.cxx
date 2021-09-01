@@ -30,7 +30,6 @@ using namespace ::com::sun::star;
 using namespace xmloff::token;
 
 ScMyImpDetectiveObj::ScMyImpDetectiveObj() :
-    aSourceRange(),
     eObjType( SC_DETOBJ_NONE ),
     bHasError( false )
 {
@@ -94,7 +93,6 @@ ScXMLDetectiveHighlightedContext::ScXMLDetectiveHighlightedContext(
         ScMyImpDetectiveObjVec* pNewDetectiveObjVec ):
     ScXMLImportContext( rImport ),
     pDetectiveObjVec( pNewDetectiveObjVec ),
-    aDetectiveObj(),
     bValid( false )
 {
     if ( !rAttrList.is() )
@@ -155,7 +153,6 @@ ScXMLDetectiveOperationContext::ScXMLDetectiveOperationContext(
         ScXMLImport& rImport,
         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ) :
     ScXMLImportContext( rImport ),
-    aDetectiveOp(),
     bHasType( false )
 {
     if ( rAttrList.is() )

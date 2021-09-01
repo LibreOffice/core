@@ -207,11 +207,6 @@ ScZoomSlider::ScZoomSlider(const css::uno::Reference< css::frame::XDispatchProvi
     : mnCurrentZoom( nCurrentZoom ),
       mnMinZoom( 10 ),
       mnMaxZoom( 400 ),
-      maSnappingPointOffsets(),
-      maSnappingPointZooms(),
-      maSliderButton(),
-      maIncreaseButton(),
-      maDecreaseButton(),
       mbOmitPaint( false ),
       m_xDispatchProvider(rDispatchProvider)
 {

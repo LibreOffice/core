@@ -793,8 +793,7 @@ ScInputHandler::ScInputHandler()
         aScaleX( 1,1 ),
         aScaleY( 1,1 ),
         pRefViewSh( nullptr ),
-        pLastPattern( nullptr ),
-        maFormulaChar()
+        pLastPattern( nullptr )
 {
     //  The InputHandler is constructed with the view, so SfxViewShell::Current
     //  doesn't have the right view yet. pActiveViewSh is updated in NotifyChange.

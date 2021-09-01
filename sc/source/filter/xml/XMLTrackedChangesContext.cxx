@@ -648,7 +648,6 @@ ScXMLChangeTextPContext::ScXMLChangeTextPContext( ScXMLImport& rImport,
     ScXMLImportContext( rImport ),
     mxAttrList(xAttrList),
     mnElement(nElement),
-    sText(),
     pChangeCellContext(pTempChangeCellContext)
 {
     // here are no attributes
