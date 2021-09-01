@@ -123,7 +123,7 @@
         { u"" UNO_NAME_CHAR_CASE_MAP,                       RES_CHRATR_CASEMAP,            cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, 0                                      }, \
         { u"" UNO_NAME_CHAR_COLOR,                          RES_CHRATR_COLOR,              cppu::UnoType<sal_Int32>::get(),         PropertyAttribute::MAYBEVOID, MID_COLOR_RGB }, \
         { u"" UNO_NAME_CHAR_TRANSPARENCE,                   RES_CHRATR_COLOR,              cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_COLOR_ALPHA }, \
-        { u"" UNO_NAME_CHAR_COLOR_THEME,                    RES_CHRATR_COLOR,              cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_COLOR_THEME_INDEX }, \
+        { u"" UNO_NAME_CHAR_COLOR_THEME_COLOR_INDEX,        RES_CHRATR_COLOR,              cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_COLOR_THEME_INDEX }, \
         { u"" UNO_NAME_CHAR_COLOR_TINT_OR_SHADE,            RES_CHRATR_COLOR,              cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_COLOR_TINT_OR_SHADE }, \
         { u"" UNO_NAME_CHAR_STRIKEOUT,                      RES_CHRATR_CROSSEDOUT,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_CROSS_OUT                          }, \
         { u"" UNO_NAME_CHAR_CROSSED_OUT,                    RES_CHRATR_CROSSEDOUT,         cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, MID_CROSSED_OUT                        }, \
@@ -367,7 +367,7 @@
                     { u"" UNO_NAME_CHAR_CASE_MAP, RES_CHRATR_CASEMAP,     cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE, 0},\
                     { u"" UNO_NAME_CHAR_COLOR,        RES_CHRATR_COLOR,      cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE, MID_COLOR_RGB }, \
                     { u"" UNO_NAME_CHAR_TRANSPARENCE, RES_CHRATR_COLOR,      cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE, MID_COLOR_ALPHA},\
-                    { u"" UNO_NAME_CHAR_COLOR_THEME,  RES_CHRATR_COLOR,      cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE, MID_COLOR_THEME_INDEX }, \
+                    { u"" UNO_NAME_CHAR_COLOR_THEME_COLOR_INDEX,  RES_CHRATR_COLOR,      cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE, MID_COLOR_THEME_INDEX }, \
                     { u"" UNO_NAME_CHAR_COLOR_TINT_OR_SHADE, RES_CHRATR_COLOR, cppu::UnoType<sal_Int16>::get(),         PROPERTY_NONE, MID_COLOR_TINT_OR_SHADE }, \
                     { u"" UNO_NAME_CHAR_STRIKEOUT, RES_CHRATR_CROSSEDOUT,  cppu::UnoType<sal_Int16>::get(),                  PropertyAttribute::MAYBEVOID, MID_CROSS_OUT},\
                     { u"" UNO_NAME_CHAR_CROSSED_OUT, RES_CHRATR_CROSSEDOUT,  cppu::UnoType<bool>::get()  ,        PROPERTY_NONE, 0},\
@@ -474,7 +474,7 @@
                     { u"" UNO_NAME_CHAR_BACK_COLOR, RES_CHRATR_BACKGROUND,    cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_BACK_COLOR        }, \
                     { u"" UNO_NAME_CHAR_COLOR,        RES_CHRATR_COLOR,      cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE, MID_COLOR_RGB },  \
                     { u"" UNO_NAME_CHAR_TRANSPARENCE, RES_CHRATR_COLOR,      cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE, MID_COLOR_ALPHA },  \
-                    { u"" UNO_NAME_CHAR_COLOR_THEME,  RES_CHRATR_COLOR,      cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE, MID_COLOR_THEME_INDEX }, \
+                    { u"" UNO_NAME_CHAR_COLOR_THEME_COLOR_INDEX,  RES_CHRATR_COLOR,      cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE, MID_COLOR_THEME_INDEX }, \
                     { u"" UNO_NAME_CHAR_COLOR_TINT_OR_SHADE, RES_CHRATR_COLOR, cppu::UnoType<sal_Int16>::get(),         PROPERTY_NONE, MID_COLOR_TINT_OR_SHADE }, \
                     { u"" UNO_NAME_CHAR_CONTOURED, RES_CHRATR_CONTOUR,    cppu::UnoType<bool>::get()  ,       PROPERTY_NONE, 0},  \
                     { u"" UNO_NAME_CHAR_EMPHASIS, RES_CHRATR_EMPHASIS_MARK,           cppu::UnoType<sal_Int16>::get(),   PROPERTY_NONE, MID_EMPHASIS},   \

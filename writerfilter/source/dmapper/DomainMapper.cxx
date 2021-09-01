@@ -992,7 +992,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             if (m_pImpl->GetTopContext())
             {
                 sal_Int16 nIndex = TDefTableHandler::getThemeColorTypeIndex(nIntValue);
-                m_pImpl->GetTopContext()->Insert(PROP_CHAR_COLOR_THEME_INDEX, uno::makeAny(nIndex));
+                m_pImpl->GetTopContext()->Insert(PROP_CHAR_COLOR_THEME_COLOR_INDEX, uno::makeAny(nIndex));
             }
             m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "themeColor", TDefTableHandler::getThemeColorTypeString(nIntValue));
         break;

@@ -54,7 +54,7 @@ CharBackColor
 CharCaseMap
 CharColor
 CharContoured
-CharColorTheme
+CharColorThemeColorIndex
 CharColorTintOrShade
 CharEscapement
 CharEscapementHeight
