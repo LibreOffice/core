@@ -16,6 +16,24 @@
       "message": "\u003e Patch Set 9:\n\u003e \n\u003e What was the reason to replace underscore with dash in CppunitTest_sc_subsequent_filters_test.mk? I think that we use dashes predominantly, and now I need to remember that in very few cases, I need to use dashes somewhere...\n\nAddressed in https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d521d91bce3a88dfaf529216f19e133dea7bb5af4",
       "revId": "d09ba873adb58ca76b02fe852b31b6a8ca9591a4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b962a52_ad05e40c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-01T09:32:50Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "de253fd0_f9766012",
+      "revId": "d09ba873adb58ca76b02fe852b31b6a8ca9591a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
