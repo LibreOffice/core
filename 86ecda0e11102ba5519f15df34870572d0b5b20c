@@ -16,6 +16,23 @@
       "message": "The field shading color is now applied for dark backgrounds too. But this color is not (neither was before) taken into account for the color adjustment of the font in SwDrawTextInfo::ApplyAutoColor() and a black document canvas with white field shadings results in a white font color when set to automatic.",
       "revId": "86ecda0e11102ba5519f15df34870572d0b5b20c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f69b4d2b_8947f869",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-01T07:21:00Z",
+      "side": 1,
+      "message": "Word seems to also draw a filled rectangle for dark background, so this improves consistency.",
+      "revId": "86ecda0e11102ba5519f15df34870572d0b5b20c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
