@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7a88a1f_9da03801",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-09-01T08:31:49Z",
+      "side": 1,
+      "message": "Balázs: thanks for the clean-up and the nice fix!",
+      "revId": "3598f65495f12e3aea8771e6cc7025371663f5ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
