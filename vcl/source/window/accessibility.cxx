@@ -410,6 +410,8 @@ OUString Window::getDefaultAccessibleName() const
                 aAccessibleName = pLabel->GetText();
             if (aAccessibleName.isEmpty())
                 aAccessibleName = GetQuickHelpText();
+            if (aAccessibleName.isEmpty())
+                aAccessibleName = GetText();
         }
         break;
 
