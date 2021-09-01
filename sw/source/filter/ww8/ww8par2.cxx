@@ -4138,10 +4138,19 @@ Word2CHPX ReadWord2Chpx(SvStream &rSt, std::size_t nOffset, sal_uInt8 nSize)
 {
     Word2CHPX aChpx;
 
-    if (!nSize)
+    if (!nSize || !checkSeek(rSt, nOffset))
         return aChpx;
 
-    rSt.Seek(nOffset);
+    const size_t nMaxByteCount = rSt.remainingSize();
+    if (!nMaxByteCount)
+        return aChpx;
+
+    if (nSize > nMaxByteCount)
+    {
+        SAL_WARN("sw.ww8", "ReadWord2Chpx: truncating out of range "
+            << nSize << " to " << nMaxByteCount);
+        nSize = nMaxByteCount;
+    }
 
     sal_uInt8 nCount=0;
 
