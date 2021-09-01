@@ -16167,7 +16167,10 @@ public:
             return;
         m_bSyncingValue = true;
         disable_notify_events();
-        gtk_spin_button_set_value(m_pButton, m_pFormatter->GetValue());
+        // tdf#138519 use gtk_adjustment_set_value instead of gtk_spin_button_set_value because the
+        // latter doesn't change the value if the new value is less than an EPSILON diff of 1e-10
+        // from the old value
+        gtk_adjustment_set_value(gtk_spin_button_get_adjustment(m_pButton), m_pFormatter->GetValue());
         enable_notify_events();
         m_bSyncingValue = false;
     }
