@@ -103,6 +103,17 @@
  		_cairo_box_from_rectangle (&limits, &extents->unbounded);
  		_cairo_polygon_init (&polygon, &limits, 1);
  	    }
+--- src/cairo-surface.c
++++ src/cairo-surface.c
+@@ -2849,7 +2849,7 @@
+ 
+     if (_cairo_scaled_font_has_color_glyphs (scaled_font)) {
+         utf8_copy = malloc (sizeof (char) * utf8_len);
+-        memcpy (utf8_copy, utf8, sizeof (char) * utf8_len);
++        if (utf8_len != 0) memcpy (utf8_copy, utf8, sizeof (char) * utf8_len);
+         utf8 = utf8_copy;
+ 
+         status = composite_color_glyphs (surface, op,
 --- src/cairo-tor-scan-converter.c
 +++ src/cairo-tor-scan-converter.c
 @@ -253,7 +253,7 @@
