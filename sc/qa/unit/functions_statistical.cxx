@@ -77,7 +77,7 @@ void StatisticalFunctionsTest::testIntrinsicSumsPerformance()
     aSum[3] += sc::op::executeUnrolled(i, nSize, pSummands);
     nEnd = clock();
     aClocks[3] = nEnd - nStart;
-    printf("Clocks for sum with NONE: %f",static_cast<double>(nEnd-nStart));
+    printf("\nClocks for sum with NONE: %f\n",static_cast<double>(nEnd-nStart) / CLOCKS_PER_SEC);
 
     if (sc::op::hasAVX512F)
     {
@@ -90,7 +90,7 @@ void StatisticalFunctionsTest::testIntrinsicSumsPerformance()
         aSum[0] += sc::op::executeAVX512F(i, nSize, pSummands);
         nEnd = clock();
         aClocks[0] = nEnd - nStart;
-        printf("Clocks for sum with AVX512: %f",static_cast<double>(nEnd-nStart));
+        printf("\nClocks for sum with AVX512: %f\n",static_cast<double>(nEnd-nStart) / CLOCKS_PER_SEC);
         CPPUNIT_ASSERT_EQUAL(aSum[0].get(), aSum[3].get());
     }
 
@@ -105,7 +105,7 @@ void StatisticalFunctionsTest::testIntrinsicSumsPerformance()
         aSum[1] += sc::op::executeAVX(i, nSize, pSummands);
         nEnd = clock();
         aClocks[1] = nEnd - nStart;
-        printf("Clocks for sum with AVX: %f",static_cast<double>(nEnd-nStart));
+        printf("\nClocks for sum with AVX: %f\n",static_cast<double>(nEnd-nStart) / CLOCKS_PER_SEC);
         CPPUNIT_ASSERT_EQUAL(aSum[1].get(), aSum[3].get());
     }
 
@@ -121,7 +121,7 @@ void StatisticalFunctionsTest::testIntrinsicSumsPerformance()
         aSum[2] += sc::op::executeSSE2(i, nSize, pSummands);
         nEnd = clock();
         aClocks[2] = nEnd - nStart;
-        printf("Clocks for sum with SSE2: %f",static_cast<double>(nEnd-nStart));
+        printf("\nClocks for sum with SSE2: %f\n",static_cast<double>(nEnd-nStart) / CLOCKS_PER_SEC);
         CPPUNIT_ASSERT_EQUAL(aSum[2].get(), aSum[3].get());
     }
 
