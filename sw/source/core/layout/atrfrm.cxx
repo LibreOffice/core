@@ -90,6 +90,7 @@
 #include <hints.hxx>
 #include <frameformats.hxx>
 #include <unoprnms.hxx>
+#include <svx/svdpage.hxx>
 
 #include <ndtxt.hxx>
 
@@ -2558,13 +2559,15 @@ SwFrameFormat::~SwFrameFormat()
             // This is a fly-frame-format just del this
             // textbox entry from the draw-frame-format.
             m_pOtherTextBoxFormat->DelTextBox(pObj);
-
-            // delete format after deleting the last textbox
-            if (!m_pOtherTextBoxFormat->GetTextBoxCount())
-                delete m_pOtherTextBoxFormat;
         }
 
-        m_pOtherTextBoxFormat = nullptr;
+        if (Which() == RES_DRAWFRMFMT)
+        {
+            // This format is the owner shape, so its time
+            // to del the textbox node.
+            delete m_pOtherTextBoxFormat;
+            m_pOtherTextBoxFormat = nullptr;
+        }
     }
 }
 

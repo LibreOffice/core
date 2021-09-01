@@ -41,6 +41,7 @@
 #include <frameformats.hxx>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <svx/svdobj.hxx>
+#include <svx/svdpage.hxx>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
@@ -463,38 +464,64 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         pDest->MakeFrames();
 
     // If the draw format has a TextBox, then copy its fly format as well.
-    if (SwFrameFormat* pSourceTextBox = SwTextBoxHelper::getOtherTextBoxFormat(&rSource, RES_DRAWFRMFMT))
+    if (rSource.Which() == RES_DRAWFRMFMT && rSource.GetOtherTextBoxFormat())
     {
-        SwFormatAnchor boxAnchor(rNewAnchor);
-        if (RndStdIds::FLY_AS_CHAR == boxAnchor.GetAnchorId())
+        auto pObj = rSource.FindRealSdrObject();
+        auto pTextBoxNd = new SwTextBoxNode(pDest);
+        pDest->SetOtherTextBoxFormat(pTextBoxNd);
+
+        if (pObj)
         {
-            // AS_CHAR *must not* be set on textbox fly-frame
-            boxAnchor.SetType(RndStdIds::FLY_AT_CHAR);
+            const bool bIsGroupObj = pObj->getChildrenOfSdrObject();
+            for (size_t it = 0;
+                 it < (bIsGroupObj ? pObj->getChildrenOfSdrObject()->GetObjCount() : 1); it++)
+            {
+                auto pChild = bIsGroupObj ? pObj->getChildrenOfSdrObject()->GetObj(it)
+                                          : const_cast<SdrObject*>(pObj);
+                if (auto pSourceTextBox
+                    = SwTextBoxHelper::getOtherTextBoxFormat(&rSource, RES_DRAWFRMFMT, pChild))
+                {
+                    SwFormatAnchor boxAnchor(rNewAnchor);
+                    if (RndStdIds::FLY_AS_CHAR == boxAnchor.GetAnchorId())
+                    {
+                        // AS_CHAR *must not* be set on textbox fly-frame
+                        boxAnchor.SetType(RndStdIds::FLY_AT_CHAR);
+                    }
+                    // presumably these anchors are supported though not sure
+                    assert(RndStdIds::FLY_AT_CHAR == boxAnchor.GetAnchorId()
+                           || RndStdIds::FLY_AT_PARA == boxAnchor.GetAnchorId()
+                           || boxAnchor.GetAnchorId() == RndStdIds::FLY_AT_PAGE);
+
+                    if (!bMakeFrames && rNewAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+                    {
+                        // If the draw format is as-char, then it will be copied with bMakeFrames=false, but
+                        // doing the same for the fly format would result in not making fly frames at all.
+                        bMakeFrames = true;
+                    }
+                    SwFrameFormat* pDestTextBox
+                        = CopyLayoutFormat(*pSourceTextBox, boxAnchor, bSetTextFlyAtt, bMakeFrames);
+
+                    SwAttrSet aSet(pDest->GetAttrSet());
+                    SwFormatContent aContent(
+                        pDestTextBox->GetContent().GetContentIdx()->GetNode().GetStartNode());
+                    aSet.Put(aContent);
+                    pDest->SetFormatAttr(aSet);
+
+                    // Link FLY and DRAW formats, so it becomes a text box
+                    SdrObject* pNewObj = pDest->FindRealSdrObject();
+                    if (bIsGroupObj && pDest && pDest->FindRealSdrObject()
+                        && pDest->FindRealSdrObject()->getChildrenOfSdrObject()
+                        && (pDest->FindRealSdrObject()->getChildrenOfSdrObject()->GetObjCount() > it)
+                        && pDest->FindRealSdrObject()->getChildrenOfSdrObject()->GetObj(it))
+                        pNewObj = pDest->FindRealSdrObject()->getChildrenOfSdrObject()->GetObj(it);
+                    pTextBoxNd->AddTextBox(pNewObj, pDestTextBox);
+                    pDestTextBox->SetOtherTextBoxFormat(pTextBoxNd);
+                }
+
+                if (!bIsGroupObj)
+                    break;
+            }
         }
-        // presumably these anchors are supported though not sure
-        assert(RndStdIds::FLY_AT_CHAR == boxAnchor.GetAnchorId() || RndStdIds::FLY_AT_PARA == boxAnchor.GetAnchorId()
-        || boxAnchor.GetAnchorId() == RndStdIds::FLY_AT_PAGE);
-
-        if (!bMakeFrames && rNewAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
-        {
-            // If the draw format is as-char, then it will be copied with bMakeFrames=false, but
-            // doing the same for the fly format would result in not making fly frames at all.
-            bMakeFrames = true;
-        }
-
-        SwFrameFormat* pDestTextBox = CopyLayoutFormat(*pSourceTextBox,
-                boxAnchor, bSetTextFlyAtt, bMakeFrames);
-        SwAttrSet aSet(pDest->GetAttrSet());
-        SwFormatContent aContent(pDestTextBox->GetContent().GetContentIdx()->GetNode().GetStartNode());
-        aSet.Put(aContent);
-        pDest->SetFormatAttr(aSet);
-
-        // Link FLY and DRAW formats, so it becomes a text box
-        auto pTextBox = new SwTextBoxNode(pDest);
-        pTextBox->AddTextBox(pDest->FindRealSdrObject(), pDestTextBox);
-
-        pDest->SetOtherTextBoxFormat(pTextBox);
-        pDestTextBox->SetOtherTextBoxFormat(pTextBox);
     }
 
     if (pDest->GetName().isEmpty())
