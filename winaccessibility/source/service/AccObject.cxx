@@ -146,7 +146,7 @@ const short ROLE_TABLE[][2] =
         {DOCUMENT_PRESENTATION,     ROLE_SYSTEM_DOCUMENT },
         {DOCUMENT_SPREADSHEET,      ROLE_SYSTEM_DOCUMENT },
         {DOCUMENT_TEXT,             ROLE_SYSTEM_DOCUMENT },
-        {STATIC,                    IA2_ROLE_TEXT_FRAME }
+        {STATIC,                    ROLE_SYSTEM_STATICTEXT }
     };
 
 
