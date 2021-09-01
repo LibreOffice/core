@@ -16,6 +16,23 @@
       "message": "Hey guys, any chance someone can review this one?",
       "revId": "a112edd6a23cb0b61ea9a1fffc99aa0e0918c167",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3aec9e70_8fcf4113",
+        "filename": "include/vcl/outdev.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-01T16:19:19Z",
+      "side": 1,
+      "message": "Do we really need to move the simple inlined getters into a unit, so that every use of those will generate a function call instead of simple memory access?",
+      "revId": "a112edd6a23cb0b61ea9a1fffc99aa0e0918c167",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
