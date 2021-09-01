@@ -112,8 +112,6 @@
 #define SCSTR_PRINTOPT_FROMWHICH                    NC_("SCSTR_PRINTOPT_FROMWHICH", "From which:")
 #define SCSTR_PRINTOPT_PRINTALLPAGES                NC_("SCSTR_PRINTOPT_PRINTALLPAGES", "All ~Pages")
 #define SCSTR_PRINTOPT_PRINTPAGES                   NC_("SCSTR_PRINTOPT_PRINTPAGES", "Pa~ges:")
-#define SCSTR_PRINTOPT_PRINTEVENPAGES               NC_("SCSTR_PRINTOPT_PRINTEVENPAGES", "~Even pages")
-#define SCSTR_PRINTOPT_PRINTODDPAGES                NC_("SCSTR_PRINTOPT_PRINTODDPAGES", "~Odd pages")
 #define SCSTR_PRINTOPT_PRODNAME                     NC_("SCSTR_PRINTOPT_PRODNAME", "%PRODUCTNAME %s")
 #define SCSTR_DDEDOC_NOT_LOADED                     NC_("SCSTR_DDEDOC_NOT_LOADED", "The following DDE source could not be updated possibly because the source document was not open. Please launch the source document and try again." )
 #define SCSTR_EXTDOC_NOT_LOADED                     NC_("SCSTR_EXTDOC_NOT_LOADED", "The following external file could not be loaded. Data linked from this file did not get updated." )
@@ -178,8 +176,6 @@
 #define SCSTR_QHELP_EXPAND_FORMULA                  NC_("SCSTR_QHELP_EXPAND_FORMULA", "Expand Formula Bar")
 #define SCSTR_QHELP_COLLAPSE_FORMULA                NC_("SCSTR_QHELP_COLLAPSE_FORMULA", "Collapse Formula Bar")
 
-#define STR_TITLE_AUTHOR                            NC_("STR_TITLE_AUTHOR", "Author")
-#define STR_TITLE_DATE                              NC_("STR_TITLE_DATE", "Date")
 #define STR_UNKNOWN_USER_CONFLICT                   NC_("STR_UNKNOWN_USER_CONFLICT", "Unknown User")
 
 #define STR_CHG_INSERT_COLS                         NC_("STR_CHG_INSERT_COLS", "Column inserted")

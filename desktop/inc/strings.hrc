@@ -165,8 +165,6 @@
 #define STR_BOOTSTRAP_ERR_NO_CFG_SERVICE                    NC_("STR_BOOTSTRAP_ERR_NO_CFG_SERVICE", "The configuration service is not available.")
 #define STR_ASK_START_SETUP_MANUALLY                        NC_("STR_ASK_START_SETUP_MANUALLY", "Start the setup application to repair the installation from the CD or the folder containing the installation packages.")
 #define STR_CONFIG_ERR_ACCESS_GENERAL                       NC_("STR_CONFIG_ERR_ACCESS_GENERAL", "A general error occurred while accessing your central configuration. ")
-#define STR_BOOTSTRAP_ERR_CFG_DATAACCESS                    NC_("STR_BOOTSTRAP_ERR_CFG_DATAACCESS", "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator." )
-#define STR_INTERNAL_ERRMSG                                 NC_("STR_INTERNAL_ERRMSG", "The following internal error has occurred: " )
 #define STR_LO_MUST_BE_RESTARTED                            NC_("STR_LO_MUST_BE_RESTARTED", "%PRODUCTNAME must unfortunately be manually restarted once after installation or update." )
 #define STR_QUERY_USERDATALOCKED                            NC_("STR_QUERY_USERDATALOCKED", "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?")
 #define STR_TITLE_USERDATALOCKED                            NC_("STR_TITLE_USERDATALOCKED", "%PRODUCTNAME %PRODUCTVERSION")
