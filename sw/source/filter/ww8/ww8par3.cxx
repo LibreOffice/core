@@ -2102,10 +2102,10 @@ bool SwWW8ImplReader::ImportFormulaControl(WW8FormulaControl &aFormula,
 
     sal_uLong nOldPos = m_pDataStream->Tell();
     WW8_PIC aPic;
-    m_pDataStream->Seek( nOffset);
-    PicRead( m_pDataStream, &aPic, m_bVer67);
+    bool bValid = checkSeek(*m_pDataStream, nOffset) &&
+                  PicRead(m_pDataStream, &aPic, m_bVer67);
 
-    if((aPic.lcb > 0x3A) && !m_pDataStream->GetError() )
+    if (bValid && aPic.lcb > 0x3A)
     {
         aFormula.FormulaRead(nWhich,m_pDataStream);
         bRet = true;
