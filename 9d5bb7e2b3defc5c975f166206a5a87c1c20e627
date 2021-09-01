@@ -16,6 +16,23 @@
       "message": "pls write your commit messages in an impersonal style :)",
       "revId": "9d5bb7e2b3defc5c975f166206a5a87c1c20e627",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aebcc367_1875aea4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001300
+      },
+      "writtenOn": "2021-09-01T07:35:58Z",
+      "side": 1,
+      "message": "@Jayme:\n\nIs it okay now?\n\nThanks!",
+      "revId": "9d5bb7e2b3defc5c975f166206a5a87c1c20e627",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
