@@ -1897,7 +1897,7 @@ public:     // really private, but can only be done public
     const SwFormat* GetStyleWithOrgWWName( std::u16string_view rName ) const ;
 
     static bool GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc);
-    static void PicRead( SvStream *pDataStream, WW8_PIC *pPic, bool bVer67);
+    SAL_WARN_UNUSED_RESULT static bool PicRead(SvStream *pDataStream, WW8_PIC *pPic, bool bVer67);
     static bool ImportOleWMF(const tools::SvRef<SotStorage>& xSrc1, GDIMetaFile& rWMF, tools::Long& rX,
                              tools::Long& rY);
     static Color GetCol(sal_uInt8 nIco);
