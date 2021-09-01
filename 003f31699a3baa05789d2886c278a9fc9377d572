@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56eda0a5_25e82b23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-01T17:48:00Z",
+      "side": 1,
+      "message": "As I was writing up the promised documentation, I couldn\u0027t find any way to explain why a style could validly hold a level 10 when the UI use of that style will really cause user confusion.\n\nChapterNumberingTortureTest is a good example file if you want to play with this. Heading 3 specifies ilvl\u003d9.\n\nBut I don\u0027t really understand SW\u0027s behaviour. It seems like it\n-takes the existing listlevel\n-applies the numbering with that level\n-then applies the new level.\n\nBut a little experimentation shows I\u0027m missing some things, and this isn\u0027t accurate or else it has other missing pieces. Although it is really outside of my experience, I think I\u0027ll try to investigate this tomorrow.\n\nAnnoyingly the style inspector doesn\u0027t match up with the visual results when things to weird.",
+      "revId": "003f31699a3baa05789d2886c278a9fc9377d572",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
