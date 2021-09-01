@@ -207,8 +207,7 @@ public:
 }
 
 NavigatorTree::NavigatorTree(std::unique_ptr<weld::TreeView> xTreeView, OReportController& rController)
-    : comphelper::OSelectionChangeListener()
-    , OPropertyChangeListener(m_aMutex)
+    : OPropertyChangeListener(m_aMutex)
     , m_xTreeView(std::move(xTreeView))
     , m_rController(rController)
 {

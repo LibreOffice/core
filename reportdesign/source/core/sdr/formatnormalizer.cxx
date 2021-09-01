@@ -58,7 +58,6 @@ namespace rptui
 
     FormatNormalizer::FormatNormalizer( const OReportModel& _rModel )
         :m_rModel( _rModel )
-        ,m_xReportDefinition( )
         ,m_bFieldListDirty( true )
     {
     }

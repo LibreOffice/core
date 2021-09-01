@@ -76,8 +76,6 @@ struct ObjectInfo
     Reference< XPropertySet >   xPropertyIntrospection;
 
     ObjectInfo()
-        :aProperties()
-        ,xPropertyIntrospection()
     {
     }
 };
@@ -108,7 +106,6 @@ public:
 
 OXUndoEnvironmentImpl::OXUndoEnvironmentImpl(OReportModel& _rModel) : m_rModel(_rModel)
         ,m_aFormatNormalizer( _rModel )
-        ,m_aConditionUpdater()
         ,m_nLocks(0)
         ,m_bReadOnly(false)
         ,m_bIsUndo(false)

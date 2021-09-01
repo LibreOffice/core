@@ -407,7 +407,6 @@ ParserData::ParserData()
 Entity::Entity(const ParserData& rData)
     : ParserData(rData)
     , mnProducedEventsSize(0)
-    , mxProducedEvents()
     , mbEnableThreads(false)
     , mpParser(nullptr)
 {

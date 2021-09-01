@@ -92,11 +92,9 @@ struct StorInternalData_Impl
     StorInternalData_Impl( const rtl::Reference<comphelper::RefCountedMutex>& rMutexRef, bool bRoot, sal_Int32 nStorageType, bool bReadOnlyWrap )
     : m_xSharedMutex( rMutexRef )
     , m_aListenersContainer( rMutexRef->GetMutex() )
-    , m_pTypeCollection()
     , m_bIsRoot( bRoot )
     , m_nStorageType( nStorageType )
     , m_bReadOnlyWrap( bReadOnlyWrap )
-    , m_pSubElDispListener()
     {}
 };
 

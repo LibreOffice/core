@@ -73,7 +73,6 @@ struct WSInternalData_Impl
     // the mutex reference MUST NOT be empty
     WSInternalData_Impl( const rtl::Reference<comphelper::RefCountedMutex>& rMutexRef, sal_Int32 nStorageType )
     : m_xSharedMutex( rMutexRef )
-    , m_pTypeCollection()
     , m_aListenersContainer( rMutexRef->GetMutex() )
     , m_nStorageType( nStorageType )
     {}
