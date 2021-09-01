@@ -1660,10 +1660,10 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             OSPath* p=pPathList;
             pOS2MET->SeekRel(2);
             pOS2MET->ReadUInt32( nID );
-            while (p!=nullptr && p->nID!=nID)
-                p=p->pSucc;
+            while (p && pOS2MET->good() && p->nID != nID)
+                p = p->pSucc;
 
-            if( p!=nullptr )
+            if (p)
             {
                 SetPen( aAttr.aLinCol, aAttr.nStrLinWidth, aAttr.eLinStyle );
                 SetRasterOp(aAttr.eLinMix);
