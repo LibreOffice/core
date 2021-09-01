@@ -94,7 +94,6 @@ class fillStructState
 public:
     fillStructState()
         : used (PyDict_New())
-        , initialised ()
         , nPosConsumed (0)
     {
         if ( ! used )

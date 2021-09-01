@@ -55,9 +55,7 @@ const char sXmlHeader[] = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\
 
 namespace sax_fastparser {
     FastSaxSerializer::FastSaxSerializer( const css::uno::Reference< css::io::XOutputStream >& xOutputStream )
-        : maCachedOutputStream()
-        , maMarkStack()
-        , mbMarkStackEmpty(true)
+        : mbMarkStackEmpty(true)
         , mpDoubleStr(nullptr)
         , mnDoubleStrCapacity(RTL_STR_MAX_VALUEOFDOUBLE)
         , mbXescape(true)

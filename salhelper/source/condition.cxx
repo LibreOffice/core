@@ -32,8 +32,7 @@ using namespace salhelper;
  ******************************************************************/
 
 Condition::Condition(osl::Mutex& aMutex)
-    : m_aMutex(aMutex),
-      m_aCondition()
+    : m_aMutex(aMutex)
 {
 }
 
