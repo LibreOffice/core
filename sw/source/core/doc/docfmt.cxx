@@ -483,8 +483,11 @@ void SwDoc::SetAttr( const SfxItemSet& rSet, SwFormat& rFormat )
     auto pShapeFormat = dynamic_cast<SwFrameFormat*>(&rFormat);
     if (pShapeFormat && SwTextBoxHelper::isTextBox(pShapeFormat, RES_DRAWFRMFMT))
     {
-        SwTextBoxHelper::syncFlyFrameAttr(*pShapeFormat, rSet);
-        SwTextBoxHelper::changeAnchor(pShapeFormat);
+        if (auto pObj = pShapeFormat->FindRealSdrObject())
+        {
+            SwTextBoxHelper::syncFlyFrameAttr(*pShapeFormat, rSet, pObj);
+            SwTextBoxHelper::changeAnchor(pShapeFormat, pObj);
+        }
     }
 
     getIDocumentState().SetModified();

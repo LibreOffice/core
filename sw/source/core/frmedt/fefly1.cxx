@@ -614,7 +614,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
                         rFormat.GetDoc()->SetAttr( aAnch, rFormat );
                         if (SwTextBoxHelper::getOtherTextBoxFormat(&rFormat, RES_DRAWFRMFMT))
                         {
-                            SwTextBoxHelper::syncFlyFrameAttr(rFormat, rFormat.GetAttrSet());
+                            SwTextBoxHelper::syncFlyFrameAttr(rFormat, rFormat.GetAttrSet(), pObj);
                         }
                     }
                     // #i28701# - no call of method

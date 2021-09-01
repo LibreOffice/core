@@ -577,7 +577,7 @@ bool SwDoc::SetFlyFrameAttr( SwFrameFormat& rFlyFormat, SfxItemSet& rSet )
 
     getIDocumentState().SetModified();
 
-    SwTextBoxHelper::syncFlyFrameAttr(rFlyFormat, rSet);
+    //SwTextBoxHelper::syncFlyFrameAttr(rFlyFormat, rSet);
 
     return bRet;
 }
@@ -924,7 +924,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                                                                RES_DRAWFRMFMT))
                     {
                         SwTextBoxHelper::syncFlyFrameAttr(*pContact->GetFormat(),
-                                                          pContact->GetFormat()->GetAttrSet());
+                                                          pContact->GetFormat()->GetAttrSet(), pObj);
                     }
                 }
                 break;

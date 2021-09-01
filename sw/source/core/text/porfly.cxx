@@ -375,8 +375,8 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
             // of the textbox accordingly.
             // Both rectangles are absolute, SwFormatHori/VertOrient's position
             // is relative to the print area of the anchor text frame.
-            tools::Rectangle aTextRectangle = SwTextBoxHelper::getTextRectangle(pShape);
-            tools::Long nXoffs  = SwTextBoxHelper::getTextRectangle(pShape, false).Left();
+            tools::Rectangle aTextRectangle = SwTextBoxHelper::getTextRectangle(pSdrObj);
+            tools::Long nXoffs  = SwTextBoxHelper::getTextRectangle(pSdrObj, false).Left();
 
             const auto aPos(pShape->GetAnchor().GetContentAnchor());
             SwFormatVertOrient aVert(pTextBox->GetVertOrient());
@@ -396,7 +396,7 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
             else
             {
                 aVert.SetVertOrient(css::text::VertOrientation::NONE);
-                aVert.SetPos(SwTextBoxHelper::getTextRectangle(pShape, false).Top());
+                aVert.SetPos(SwTextBoxHelper::getTextRectangle(pSdrObj, false).Top());
             }
 
             SwFormatAnchor aNewTxBxAnchor(pTextBox->GetAnchor());
