@@ -20,12 +20,12 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
+#include <comphelper/DirectoryHelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <rtl/ustring.hxx>
-#include <osl/file.hxx>
 #include <ucbhelper/content.hxx>
 #include <vector>
 
@@ -83,54 +83,8 @@ css::uno::Sequence < OUString > LocalFileHelper::GetFolderContents( const OUStri
 }
 
 void removeTree(OUString const & url) {
-    osl::Directory dir(url);
-    osl::FileBase::RC rc = dir.open();
-    switch (rc) {
-    case osl::FileBase::E_None:
-        break;
-    case osl::FileBase::E_NOENT:
-        return; //TODO: SAL_WARN if recursive
-    default:
-        SAL_WARN("desktop.app", "cannot open directory " << dir.getURL() << ": " << +rc);
-        return;
-    }
-    for (;;) {
-        osl::DirectoryItem i;
-        rc = dir.getNextItem(i, SAL_MAX_UINT32);
-        if (rc == osl::FileBase::E_NOENT) {
-            break;
-        }
-        if (rc != osl::FileBase::E_None) {
-            SAL_WARN( "desktop.app", "cannot iterate directory " << dir.getURL() << ": " << +rc);
-            break;
-        }
-        osl::FileStatus stat(
-            osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName |
-            osl_FileStatus_Mask_FileURL);
-        rc = i.getFileStatus(stat);
-        if (rc != osl::FileBase::E_None) {
-            SAL_WARN( "desktop.app", "cannot stat in directory " << dir.getURL() << ": " << +rc);
-            continue;
-        }
-        if (stat.getFileType() == osl::FileStatus::Directory) { //TODO: symlinks
-            removeTree(stat.getFileURL());
-        } else {
-            rc = osl::File::remove(stat.getFileURL());
-            SAL_WARN_IF(
-                rc != osl::FileBase::E_None, "desktop.app",
-                "cannot remove file " << stat.getFileURL() << ": " << +rc);
-        }
-    }
-    if (dir.isOpen()) {
-        rc = dir.close();
-        SAL_WARN_IF(
-            rc != osl::FileBase::E_None, "desktop.app",
-            "cannot close directory " << dir.getURL() << ": " << +rc);
-    }
-    rc = osl::Directory::remove(url);
-    SAL_WARN_IF(
-        rc != osl::FileBase::E_None, "desktop.app",
-        "cannot remove directory " << url << ": " << +rc);
+    const bool bError = comphelper::DirectoryHelper::deleteDirRecursively(url);
+    SAL_WARN_IF(bError, "desktop.app", "error removing directory " << url);
 }
 
 }
