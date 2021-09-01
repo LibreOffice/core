@@ -602,7 +602,7 @@ void SdrMeasureObj::UndirtyText() const
         rOutliner.SetText(*pOutlinerParaObject);
     }
 
-    rOutliner.SetUpdateMode(true);
+    rOutliner.SetUpdateLayout(true);
     rOutliner.UpdateFields();
     Size aSiz(rOutliner.CalcTextSize());
     rOutliner.Clear();

@@ -1496,9 +1496,9 @@ void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
             OBJ_TEXT);
 
         pOutl->UpdateFields();
-        pOutl->SetUpdateMode( true );
+        pOutl->SetUpdateLayout( true );
         Size aSize(pOutl->CalcTextSize());
-        pOutl->SetUpdateMode( false );
+        pOutl->SetUpdateLayout( false );
 
         Point aPos;
         ::tools::Rectangle aRect(aPos, GetActiveWindow()->GetOutputSizePixel() );

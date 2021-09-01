@@ -403,7 +403,7 @@ handle_r1c1:
 
                 if (!nCount)
                 {
-                    mpEditEngine->SetUpdateMode( false );
+                    mpEditEngine->SetUpdateLayout( false );
                     pRangeFindList.reset(new ScRangeFindList( pDocSh->GetTitle() ));
                 }
 
@@ -424,7 +424,7 @@ handle_r1c1:
 
     if (nCount)
     {
-        mpEditEngine->SetUpdateMode( true );
+        mpEditEngine->SetUpdateLayout( true );
 
         pDocSh->Broadcast( SfxHint( SfxHintId::ScShowRangeFinder ) );
     }
@@ -2326,11 +2326,11 @@ void ScInputHandler::RemoveAdjust()
 void ScInputHandler::RemoveRangeFinder()
 {
     // Delete pRangeFindList and colors
-    mpEditEngine->SetUpdateMode(false);
+    mpEditEngine->SetUpdateLayout(false);
     sal_Int32 nCount = mpEditEngine->GetParagraphCount(); // Could just have been inserted
     for (sal_Int32 i=0; i<nCount; i++)
         mpEditEngine->RemoveCharAttribs( i, EE_CHAR_COLOR );
-    mpEditEngine->SetUpdateMode(true);
+    mpEditEngine->SetUpdateLayout(true);
 
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     pActiveView->ShowCursor( false );
@@ -2401,7 +2401,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
         if (bStartInputMode)
         {
             // UpdateMode is enabled again in ScViewData::SetEditEngine (and not needed otherwise)
-            mpEditEngine->SetUpdateMode( false );
+            mpEditEngine->SetUpdateLayout( false );
 
             // Take over attributes in EditEngine
             const ScPatternAttr* pPattern = rDoc.GetPattern( aCursorPos.Col(),
@@ -2582,7 +2582,7 @@ void ScInputHandler::SyncViews( const EditView* pSourceView )
 IMPL_LINK_NOARG(ScInputHandler, ModifyHdl, LinkParamNone*, void)
 {
     if ( !bInOwnChange && ( eMode==SC_INPUT_TYPE || eMode==SC_INPUT_TABLE ) &&
-         mpEditEngine && mpEditEngine->GetUpdateMode() && pInputWin )
+         mpEditEngine && mpEditEngine->IsUpdateLayout() && pInputWin )
     {
         // Update input line from ModifyHdl for changes that are not
         // wrapped by DataChanging/DataChanged calls (like Drag&Drop)
@@ -2890,12 +2890,12 @@ void ScInputHandler::SetMode( ScInputMode eNewMode, const OUString* pInitText, S
     if (eMode==SC_INPUT_TABLE || eMode==SC_INPUT_TYPE)
     {
         if (pTableView)
-            pTableView->SetEditEngineUpdateMode(true);
+            pTableView->SetEditEngineUpdateLayout(true);
     }
     else
     {
         if (pTopView)
-            pTopView->SetEditEngineUpdateMode(true);
+            pTopView->SetEditEngineUpdateLayout(true);
     }
 
     if (eNewMode != eOldMode)
@@ -3058,9 +3058,9 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
     }
 
     //  After RemoveAdjust, the EditView must not be repainted (has wrong font size etc).
-    //  SetUpdateMode must come after CompleteOnlineSpelling.
+    //  SetUpdateLayout must come after CompleteOnlineSpelling.
     //  The view is hidden in any case below (Broadcast).
-    mpEditEngine->SetUpdateMode( false );
+    mpEditEngine->SetUpdateLayout( false );
 
     if ( bModified && !bForget ) // What is being entered (text/object)?
     {
@@ -4429,10 +4429,10 @@ void ScInputHandler::InputReplaceSelection( const OUString& rStr )
     EditView* pView = GetFuncEditView();
     if (pView)
     {
-        pView->SetEditEngineUpdateMode( false );
+        pView->SetEditEngineUpdateLayout( false );
         pView->GetEditEngine()->SetText( aFormText );
         pView->SetSelection( ESelection(0,nFormSelStart, 0,nFormSelEnd) );
-        pView->SetEditEngineUpdateMode( true );
+        pView->SetEditEngineUpdateLayout( true );
     }
     bModified = true;
 }

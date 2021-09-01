@@ -458,7 +458,7 @@ void Cell::mergeContent( const CellRef& xSourceCell )
         return;
 
     SdrOutliner& rOutliner=rTableObj.ImpGetDrawOutliner();
-    rOutliner.SetUpdateMode(true);
+    rOutliner.SetUpdateLayout(true);
 
     if( hasText() )
     {
@@ -700,7 +700,7 @@ sal_Int32 Cell::calcPreferredWidth( const Size aSize )
 
     Outliner& rOutliner=static_cast< SdrTableObj& >( GetObject() ).ImpGetDrawOutliner();
     rOutliner.SetPaperSize(aSize);
-    rOutliner.SetUpdateMode(true);
+    rOutliner.SetUpdateLayout(true);
     ForceOutlinerParaObject( OutlinerMode::TextObject );
 
     if( GetOutlinerParaObject() )
@@ -741,7 +741,7 @@ sal_Int32 Cell::getMinimumHeight()
     {
         Outliner& rOutliner=rTableObj.ImpGetDrawOutliner();
         rOutliner.SetPaperSize(aSize);
-        rOutliner.SetUpdateMode(true);
+        rOutliner.SetUpdateLayout(true);
         ForceOutlinerParaObject( OutlinerMode::TextObject );
 
         if( GetOutlinerParaObject() )

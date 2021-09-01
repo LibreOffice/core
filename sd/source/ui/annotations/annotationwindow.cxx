@@ -249,7 +249,7 @@ void AnnotationWindow::InitControls()
 
     mpOutliner.reset( new ::Outliner(GetAnnotationPool(),OutlinerMode::TextObject) );
     SdDrawDocument::SetCalcFieldValueHdl( mpOutliner.get() );
-    mpOutliner->SetUpdateMode( true );
+    mpOutliner->SetUpdateLayout( true );
 
     if (OutputDevice* pDev = mpDoc->GetRefDevice())
         mpOutliner->SetRefDevice( pDev );

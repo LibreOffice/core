@@ -1539,7 +1539,7 @@ void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, too
             if( bHitTest ) // #i33696# take back fix #i27510#
                 rOutliner.SetTextObj( this );
 
-            rOutliner.SetUpdateMode(true);
+            rOutliner.SetUpdateLayout(true);
             rOutliner.SetText(*pPara);
         }
     }
@@ -1548,7 +1548,7 @@ void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, too
         rOutliner.SetTextObj( nullptr );
     }
 
-    rOutliner.SetUpdateMode(true);
+    rOutliner.SetUpdateLayout(true);
     rOutliner.SetControlWord(nStat0);
 
     Point aTextPos(aAnkRect.TopLeft());
@@ -1817,8 +1817,7 @@ bool SdrTableObj::BegTextEdit(SdrOutliner& rOutl)
     rOutl.Init( OutlinerMode::TextObject );
     rOutl.SetRefDevice(getSdrModelFromSdrObject().GetRefDevice());
 
-    bool bUpdateMode=rOutl.GetUpdateMode();
-    if (bUpdateMode) rOutl.SetUpdateMode(false);
+    bool bUpdateMode = rOutl.SetUpdateLayout(false);
     Size aPaperMin;
     Size aPaperMax;
     tools::Rectangle aEditArea;
@@ -1828,7 +1827,7 @@ bool SdrTableObj::BegTextEdit(SdrOutliner& rOutl)
     rOutl.SetMaxAutoPaperSize(aPaperMax);
     rOutl.SetPaperSize(aPaperMax);
 
-    if (bUpdateMode) rOutl.SetUpdateMode(true);
+    if (bUpdateMode) rOutl.SetUpdateLayout(true);
 
     EEControlBits nStat=rOutl.GetControlWord();
     nStat   |= EEControlBits::AUTOPAGESIZE;

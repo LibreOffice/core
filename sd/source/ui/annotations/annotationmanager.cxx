@@ -563,7 +563,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
     ::Outliner aOutliner( GetAnnotationPool(),OutlinerMode::TextObject );
 
     SdDrawDocument::SetCalcFieldValueHdl( &aOutliner );
-    aOutliner.SetUpdateMode( true );
+    aOutliner.SetUpdateLayout( true );
 
     OUString aStr(SdResId(STR_ANNOTATION_REPLY));
     OUString sAuthor( xAnnotation->getAuthor() );

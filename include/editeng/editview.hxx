@@ -283,8 +283,9 @@ public:
     css::uno::Reference<css::datatransfer::XTransferable> GetTransferable() const;
 
     // An EditView, so that when TRUE the update will be free from flickering:
-    void            SetEditEngineUpdateMode( bool bUpdate );
-    void            ForceUpdate();
+    // @return the previous bUpdateLayout state
+    bool            SetEditEngineUpdateLayout( bool bUpdate );
+    void            ForceLayoutCalculation();
 
     const SfxStyleSheet* GetStyleSheet() const;
     SfxStyleSheet* GetStyleSheet();

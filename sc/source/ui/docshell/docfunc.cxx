@@ -1165,9 +1165,7 @@ void ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, 
         // EditEngine isn't accessed again.
         bool bLoseContent = rDoc.IsImportingXML();
 
-        bool bUpdateMode(rEngine.GetUpdateMode());
-        if (bUpdateMode)
-            rEngine.SetUpdateMode(false);
+        const bool bUpdateMode = rEngine.SetUpdateLayout(false);
 
         std::vector<std::unique_ptr<ScMyRememberItem>> aRememberItems;
 
@@ -1201,7 +1199,7 @@ void ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, 
 
         // #i61702# if the content isn't accessed, there's no need to set the UpdateMode again
         if ( bUpdateMode && !bLoseContent )
-            rEngine.SetUpdateMode(true);
+            rEngine.SetUpdateLayout(true);
     }
     else
     {

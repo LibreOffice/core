@@ -1644,7 +1644,7 @@ ScEditEngineDefaulter* ScXMLImport::GetEditEngine()
         mpEditEngine.reset(new ScEditEngineDefaulter(pDoc->GetEnginePool()));
         mpEditEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
         mpEditEngine->SetEditTextObjectPool(pDoc->GetEditPool());
-        mpEditEngine->SetUpdateMode(false);
+        mpEditEngine->SetUpdateLayout(false);
         mpEditEngine->EnableUndo(false);
         mpEditEngine->SetControlWord(mpEditEngine->GetControlWord() & ~EEControlBits::ALLOWBIGOBJS);
     }

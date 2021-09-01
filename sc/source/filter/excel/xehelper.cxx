@@ -573,8 +573,7 @@ XclExpStringRef XclExpStringHelper::CreateCellString(
 
     // formatted cell
     ScEditEngineDefaulter& rEE = rRoot.GetEditEngine();
-    bool bOldUpdateMode = rEE.GetUpdateMode();
-    rEE.SetUpdateMode( true );
+    bool bOldUpdateMode = rEE.SetUpdateLayout( true );
 
     // default items
     const SfxItemSet& rItemSet = pCellAttr ? pCellAttr->GetItemSet() : rRoot.GetDoc().GetDefPattern()->GetItemSet();
@@ -585,7 +584,7 @@ XclExpStringRef XclExpStringHelper::CreateCellString(
     // create the string
     rEE.SetTextCurrentDefaults(rEditText);
     xString = lclCreateFormattedString( rRoot, rEE, &rLinkHelper, nFlags, nMaxLen );
-    rEE.SetUpdateMode( bOldUpdateMode );
+    rEE.SetUpdateLayout( bOldUpdateMode );
 
     return xString;
 }
@@ -598,12 +597,11 @@ XclExpStringRef XclExpStringHelper::CreateString(
     if( const OutlinerParaObject* pParaObj = rTextObj.GetOutlinerParaObject() )
     {
         EditEngine& rEE = rRoot.GetDrawEditEngine();
-        bool bOldUpdateMode = rEE.GetUpdateMode();
-        rEE.SetUpdateMode( true );
+        bool bOldUpdateMode = rEE.SetUpdateLayout( true );
         // create the string
         rEE.SetText( pParaObj->GetTextObject() );
         xString = lclCreateFormattedString( rRoot, rEE, nullptr, nFlags, EXC_STR_MAXLEN );
-        rEE.SetUpdateMode( bOldUpdateMode );
+        rEE.SetUpdateLayout( bOldUpdateMode );
         // limit formats - TODO: BIFF dependent
         if( !xString->IsEmpty() )
         {
@@ -626,11 +624,10 @@ XclExpStringRef XclExpStringHelper::CreateString(
 {
     XclExpStringRef xString;
     EditEngine& rEE = rRoot.GetDrawEditEngine();
-    bool bOldUpdateMode = rEE.GetUpdateMode();
-    rEE.SetUpdateMode( true );
+    bool bOldUpdateMode = rEE.SetUpdateLayout( true );
     rEE.SetText( rEditObj );
     xString = lclCreateFormattedString( rRoot, rEE, nullptr, nFlags, EXC_STR_MAXLEN );
-    rEE.SetUpdateMode( bOldUpdateMode );
+    rEE.SetUpdateLayout( bOldUpdateMode );
     // limit formats - TODO: BIFF dependent
     if( !xString->IsEmpty() )
     {
@@ -685,8 +682,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
     SfxItemSet aItemSet( *GetDoc().GetPool(), svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END> );
 
     // edit engine
-    bool bOldUpdateMode = mrEE.GetUpdateMode();
-    mrEE.SetUpdateMode( true );
+    bool bOldUpdateMode = mrEE.SetUpdateLayout( true );
     mrEE.SetText( *pTextObj );
 
     // font information
@@ -874,7 +870,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
         nHeight += nParaHeight;
     }
 
-    mrEE.SetUpdateMode( bOldUpdateMode );
+    mrEE.SetUpdateLayout( bOldUpdateMode );
 
     if( !aText.isEmpty() )
     {

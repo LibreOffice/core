@@ -1504,7 +1504,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             {
                 ScViewData& rViewData = mpViewShell->GetViewData();
                 const EditEngine* pEditEng = rViewData.GetEditView(meSplitPos)->GetEditEngine();
-                if (pEditEng && pEditEng->GetUpdateMode())
+                if (pEditEng && pEditEng->IsUpdateLayout())
                 {
                     mpTempAccEdit = new ScAccessibleEditObject(this, rViewData.GetEditView(meSplitPos),
                         mpViewShell->GetWindowByPos(meSplitPos), GetCurrentCellName(),

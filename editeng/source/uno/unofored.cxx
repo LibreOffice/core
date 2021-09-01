@@ -148,7 +148,7 @@ bool SvxEditEngineForwarder::IsValid() const
 {
     // cannot reliably query EditEngine state
     // while in the middle of an update
-    return rEditEngine.GetUpdateMode();
+    return rEditEngine.IsUpdateLayout();
 }
 
 OUString SvxEditEngineForwarder::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, std::optional<Color>& rpTxtColor, std::optional<Color>& rpFldColor )

@@ -193,7 +193,7 @@ void ChartController::executeDispatch_InsertSpecialCharacter()
 
     // prevent flicker
     pOutlinerView->HideCursor();
-    pOutliner->SetUpdateMode(false);
+    pOutliner->SetUpdateLayout(false);
 
     // delete current selection by inserting empty String, so current
     // attributes become unique (sel. has to be erased anyway)
@@ -207,7 +207,7 @@ void ChartController::executeDispatch_InsertSpecialCharacter()
     pOutlinerView->SetSelection(aSel);
 
     // show changes
-    pOutliner->SetUpdateMode(true);
+    pOutliner->SetUpdateLayout(true);
     pOutlinerView->ShowCursor();
 }
 

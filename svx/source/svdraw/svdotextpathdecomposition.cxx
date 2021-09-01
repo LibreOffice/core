@@ -657,7 +657,7 @@ void SdrTextObj::impDecomposePathTextPrimitive(
 
     // prepare outliner
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
-    rOutliner.SetUpdateMode(true);
+    rOutliner.SetUpdateLayout(true);
     rOutliner.Clear();
     rOutliner.SetPaperSize(Size(LONG_MAX,LONG_MAX));
     rOutliner.SetText(rSdrPathTextPrimitive.getOutlinerParaObject());

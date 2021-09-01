@@ -550,16 +550,14 @@ void ScEditEngineDefaulter::SetDefaults( const SfxItemSet& rSet, bool bRememberC
     const SfxItemSet& rNewSet = bRememberCopy ? *pDefaults : rSet;
     bool bUndo = IsUndoEnabled();
     EnableUndo( false );
-    bool bUpdateMode = GetUpdateMode();
-    if ( bUpdateMode )
-        SetUpdateMode( false );
+    bool bUpdateMode = SetUpdateLayout( false );
     sal_Int32 nPara = GetParagraphCount();
     for ( sal_Int32 j=0; j<nPara; j++ )
     {
         SetParaAttribs( j, rNewSet );
     }
     if ( bUpdateMode )
-        SetUpdateMode( true );
+        SetUpdateLayout( true );
     if ( bUndo )
         EnableUndo( true );
 }
@@ -597,74 +595,62 @@ const SfxItemSet& ScEditEngineDefaulter::GetDefaults()
 
 void ScEditEngineDefaulter::SetTextCurrentDefaults( const EditTextObject& rTextObject )
 {
-    bool bUpdateMode = GetUpdateMode();
-    if ( bUpdateMode )
-        SetUpdateMode( false );
+    bool bUpdateMode = SetUpdateLayout( false );
     SetText( rTextObject );
     if ( pDefaults )
         SetDefaults( *pDefaults, false );
     if ( bUpdateMode )
-        SetUpdateMode( true );
+        SetUpdateLayout( true );
 }
 
 void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObject,
             const SfxItemSet& rSet, bool bRememberCopy )
 {
-    bool bUpdateMode = GetUpdateMode();
-    if ( bUpdateMode )
-        SetUpdateMode( false );
+    bool bUpdateMode = SetUpdateLayout( false );
     SetText( rTextObject );
     SetDefaults( rSet, bRememberCopy );
     if ( bUpdateMode )
-        SetUpdateMode( true );
+        SetUpdateLayout( true );
 }
 
 void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObject,
             std::unique_ptr<SfxItemSet> pSet )
 {
-    bool bUpdateMode = GetUpdateMode();
-    if ( bUpdateMode )
-        SetUpdateMode( false );
+    bool bUpdateMode = SetUpdateLayout( false );
     SetText( rTextObject );
     SetDefaults( std::move(pSet) );
     if ( bUpdateMode )
-        SetUpdateMode( true );
+        SetUpdateLayout( true );
 }
 
 void ScEditEngineDefaulter::SetTextCurrentDefaults( const OUString& rText )
 {
-    bool bUpdateMode = GetUpdateMode();
-    if ( bUpdateMode )
-        SetUpdateMode( false );
+    bool bUpdateMode = SetUpdateLayout( false );
     SetText( rText );
     if ( pDefaults )
         SetDefaults( *pDefaults, false );
     if ( bUpdateMode )
-        SetUpdateMode( true );
+        SetUpdateLayout( true );
 }
 
 void ScEditEngineDefaulter::SetTextNewDefaults( const OUString& rText,
             const SfxItemSet& rSet )
 {
-    bool bUpdateMode = GetUpdateMode();
-    if ( bUpdateMode )
-        SetUpdateMode( false );
+    bool bUpdateMode = SetUpdateLayout( false );
     SetText( rText );
     SetDefaults( rSet );
     if ( bUpdateMode )
-        SetUpdateMode( true );
+        SetUpdateLayout( true );
 }
 
 void ScEditEngineDefaulter::SetTextNewDefaults( const OUString& rText,
             std::unique_ptr<SfxItemSet> pSet )
 {
-    bool bUpdateMode = GetUpdateMode();
-    if ( bUpdateMode )
-        SetUpdateMode( false );
+    bool bUpdateMode = SetUpdateLayout( false );
     SetText( rText );
     SetDefaults( std::move(pSet) );
     if ( bUpdateMode )
-        SetUpdateMode( true );
+        SetUpdateLayout( true );
 }
 
 void ScEditEngineDefaulter::RepeatDefaults()
@@ -680,9 +666,7 @@ void ScEditEngineDefaulter::RepeatDefaults()
 void ScEditEngineDefaulter::RemoveParaAttribs()
 {
     std::optional<SfxItemSet> pCharItems;
-    bool bUpdateMode = GetUpdateMode();
-    if ( bUpdateMode )
-        SetUpdateMode( false );
+    bool bUpdateMode = SetUpdateLayout( false );
     sal_Int32 nParCount = GetParagraphCount();
     for (sal_Int32 nPar=0; nPar<nParCount; nPar++)
     {
@@ -746,7 +730,7 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
         }
     }
     if ( bUpdateMode )
-        SetUpdateMode( true );
+        SetUpdateLayout( true );
 }
 
 ScTabEditEngine::ScTabEditEngine( ScDocument* pDoc )

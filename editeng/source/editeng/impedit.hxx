@@ -590,7 +590,7 @@ private:
     bool            bFormatted:1;
     bool            bInSelection:1;
     bool            bIsInUndo:1;
-    bool            bUpdate:1;
+    bool            bUpdateLayout:1;
     bool            bUndoEnabled:1;
     bool            bDowning:1;
     bool            bUseAutoColor:1;
@@ -787,7 +787,7 @@ private:
 
     tools::Long Calc1ColumnTextHeight(tools::Long* pHeightNTP);
 
-    void IdleFormatAndUpdate(EditView* pCurView) { aIdleFormatter.DoIdleFormat(pCurView); }
+    void IdleFormatAndLayout(EditView* pCurView) { aIdleFormatter.DoIdleFormat(pCurView); }
 
 protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
@@ -800,8 +800,9 @@ public:
     inline EditUndoManager& GetUndoManager();
     inline SfxUndoManager* SetUndoManager(SfxUndoManager* pNew);
 
-    void                    SetUpdateMode( bool bUp, EditView* pCurView = nullptr, bool bForceUpdate = false );
-    bool                    GetUpdateMode() const   { return bUpdate; }
+    // @return the previous bUpdateLayout state
+    bool                    SetUpdateLayout( bool bUpdate, EditView* pCurView = nullptr, bool bForceUpdate = false );
+    bool                    IsUpdateLayout() const   { return bUpdateLayout; }
 
     ViewsType& GetEditViews() { return aEditViews; }
     const ViewsType& GetEditViews() const { return aEditViews; }
@@ -954,7 +955,7 @@ public:
     void            SetNotifyHdl( const Link<EENotify&,void>& rLink )     { aNotifyHdl = rLink; }
     const Link<EENotify&,void>&   GetNotifyHdl() const            { return aNotifyHdl; }
 
-    void            FormatAndUpdate( EditView* pCurView = nullptr, bool bCalledFromUndo = false );
+    void            FormatAndLayout( EditView* pCurView = nullptr, bool bCalledFromUndo = false );
 
     const svtools::ColorConfig& GetColorConfig() const { return maColorConfig; }
     bool            IsVisualCursorTravelingEnabled();

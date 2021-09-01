@@ -1272,8 +1272,7 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
     }
     if ( bFields )
     {
-        bool bOldUpdateMode = rEngine.GetUpdateMode();
-        rEngine.SetUpdateMode( true );      // no portions if not formatted
+        bool bOldUpdateMode = rEngine.SetUpdateLayout( true );      // no portions if not formatted
         for ( sal_Int32 nPar=0; nPar < nParas; nPar++ )
         {
             if ( nPar > 0 )
@@ -1309,7 +1308,7 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
                 nStart = nEnd;
             }
         }
-        rEngine.SetUpdateMode( bOldUpdateMode );
+        rEngine.SetUpdateLayout( bOldUpdateMode );
     }
     return bFields;
 }

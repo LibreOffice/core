@@ -41,7 +41,7 @@ void SdrOutliner::SetTextObj( const SdrTextObj* pObj )
 {
     if( pObj && pObj != mpTextObj.get() )
     {
-        SetUpdateMode(false);
+        SetUpdateLayout(false);
         OutlinerMode nOutlinerMode2 = OutlinerMode::OutlineObject;
         if ( !pObj->IsOutlText() )
             nOutlinerMode2 = OutlinerMode::TextObject;

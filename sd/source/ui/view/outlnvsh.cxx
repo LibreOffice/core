@@ -147,7 +147,7 @@ void OutlineViewShell::Construct()
     ReadFrameViewData(mpFrameView);
 
     ::Outliner& rOutl = pOlView->GetOutliner();
-    rOutl.SetUpdateMode(true);
+    rOutl.SetUpdateLayout(true);
 
     if (!bModified)
     {

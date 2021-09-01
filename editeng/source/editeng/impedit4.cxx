@@ -85,8 +85,7 @@ using namespace ::com::sun::star::linguistic2;
 
 EditPaM ImpEditEngine::Read(SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, const EditSelection& rSel, SvKeyValueIterator* pHTTPHeaderAttrs)
 {
-    bool _bUpdate = GetUpdateMode();
-    SetUpdateMode( false );
+    bool _bUpdate = SetUpdateLayout( false );
     EditPaM aPaM;
     if ( eFormat == EETextFormat::Text )
         aPaM = ReadText( rInput, rSel );
@@ -102,7 +101,7 @@ EditPaM ImpEditEngine::Read(SvStream& rInput, const OUString& rBaseURL, EETextFo
     }
 
     FormatFullDoc();        // perhaps a simple format is enough?
-    SetUpdateMode( _bUpdate );
+    SetUpdateLayout( _bUpdate );
 
     return aPaM;
 }
@@ -277,7 +276,7 @@ void ImpEditEngine::WriteXML(SvStream& rOutput, const EditSelection& rSel)
 
 ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
 {
-    DBG_ASSERT( GetUpdateMode(), "WriteRTF for UpdateMode = sal_False!" );
+    DBG_ASSERT( IsUpdateLayout(), "WriteRTF for UpdateMode = sal_False!" );
     CheckIdleFormatter();
     if ( !IsFormatted() )
         FormatDoc();
@@ -1085,7 +1084,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
 
     // Remember the portions info in case of large text objects:
     // sleeper set up when Olli paragraphs not hacked!
-    if ( bAllowBigObjects && bOnlyFullParagraphs && IsFormatted() && GetUpdateMode() && ( nTextPortions >= nBigObjectStart ) )
+    if ( bAllowBigObjects && bOnlyFullParagraphs && IsFormatted() && IsUpdateLayout() && ( nTextPortions >= nBigObjectStart ) )
     {
         XParaPortionList* pXList = new XParaPortionList( GetRefDevice(), GetColumnWidth(aPaperSize), nStretchX, nStretchY );
         pTxtObj->SetPortionInfo(std::unique_ptr<XParaPortionList>(pXList));
@@ -1134,13 +1133,13 @@ void ImpEditEngine::SetText( const EditTextObject& rTextObject )
 {
     // Since setting a text object is not undo-able!
     ResetUndoManager();
-    bool _bUpdate = GetUpdateMode();
+    bool _bUpdate = IsUpdateLayout();
     bool _bUndo = IsUndoEnabled();
 
     SetText( OUString() );
     EditPaM aPaM = aEditDoc.GetStartPaM();
 
-    SetUpdateMode( false );
+    SetUpdateLayout( false );
     EnableUndo( false );
 
     InsertText( rTextObject, EditSelection( aPaM, aPaM ) );
@@ -1148,7 +1147,7 @@ void ImpEditEngine::SetText( const EditTextObject& rTextObject )
     SetRotation(rTextObject.GetRotation());
 
     DBG_ASSERT( !HasUndoManager() || !GetUndoManager().GetUndoActionCount(), "From where comes the Undo in SetText ?!" );
-    SetUpdateMode( _bUpdate );
+    SetUpdateLayout( _bUpdate );
     EnableUndo( _bUndo );
 }
 
@@ -2169,7 +2168,7 @@ void ImpEditEngine::ApplyChangedSentence(EditView const & rEditView,
     }
     rEditView.pImpEditView->SetEditSelection( aNext );
 
-    FormatAndUpdate();
+    FormatAndLayout();
     aEditDoc.SetModified(true);
 }
 
@@ -2497,7 +2496,7 @@ sal_Int32 ImpEditEngine::StartSearchAndReplace( EditView* pEditView, const SvxSe
             if ( aNewPaM.GetIndex() > aNewPaM.GetNode()->Len() )
                 aNewPaM.SetIndex( aNewPaM.GetNode()->Len() );
             pEditView->pImpEditView->SetEditSelection( aNewPaM );
-            FormatAndUpdate( pEditView );
+            FormatAndLayout( pEditView );
             UndoActionEnd();
         }
         else
@@ -2955,7 +2954,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
         SetModifyFlag( true );
         if ( bLenChanged )
             UpdateSelections();
-        FormatAndUpdate();
+        FormatAndLayout();
     }
 
     return aNewSel;

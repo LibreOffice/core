@@ -290,7 +290,7 @@ void SdrObjEditView::ModelHasChanged()
             {
                 aTextEditArea = aEditArea1;
                 aMinTextEditArea = aMinArea1;
-                pTextEditOutliner->SetUpdateMode(false);
+                pTextEditOutliner->SetUpdateLayout(false);
                 pTextEditOutliner->SetMinAutoPaperSize(aPaperMin1);
                 pTextEditOutliner->SetMaxAutoPaperSize(aPaperMax1);
                 pTextEditOutliner->SetPaperSize(Size(0, 0)); // re-format Outliner
@@ -323,7 +323,7 @@ void SdrObjEditView::ModelHasChanged()
                     if (nStat != nStat0)
                         pOLV->SetControlWord(nStat);
                 }
-                pTextEditOutliner->SetUpdateMode(true);
+                pTextEditOutliner->SetUpdateLayout(true);
                 bAreaChg = true;
             }
         }
@@ -759,7 +759,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const tools::
     if (!comphelper::LibreOfficeKit::isActive() || !rRect.IsEmpty())
         aBlankRect.Intersection(rRect);
 
-    rOutlView.GetOutliner()->SetUpdateMode(true); // Bugfix #22596#
+    rOutlView.GetOutliner()->SetUpdateLayout(true); // Bugfix #22596#
     rOutlView.Paint(aBlankRect, &rTargetDevice);
 
     if (!bModified)
@@ -858,7 +858,7 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, OutlinerVie
     bool bContourFrame = pText != nullptr && pText->IsContourTextFrame();
     // create OutlinerView
     OutlinerView* pOutlView = pGivenView;
-    pTextEditOutliner->SetUpdateMode(false);
+    pTextEditOutliner->SetUpdateLayout(false);
 
     if (pOutlView == nullptr)
     {
@@ -898,7 +898,7 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, OutlinerVie
             pText->GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT).GetValue());
     }
     // do update before setting output area so that aTextEditArea can be recalculated
-    pTextEditOutliner->SetUpdateMode(true);
+    pTextEditOutliner->SetUpdateLayout(true);
     pOutlView->SetOutputArea(aTextEditArea);
     ImpInvalidateOutlinerView(*pOutlView);
     return pOutlView;
