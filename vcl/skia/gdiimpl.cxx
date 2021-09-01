@@ -395,7 +395,7 @@ void SkiaSalGraphicsImpl::performFlush()
 {
     SkiaZone zone;
     flushDrawing();
-    if (mWindowContext)
+    if (mSurface)
     {
         if (mDirtyRect.intersect(SkIRect::MakeWH(GetWidth(), GetHeight())))
             flushSurfaceToWindowContext();
