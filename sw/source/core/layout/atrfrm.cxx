@@ -90,6 +90,7 @@
 #include <hints.hxx>
 #include <frameformats.hxx>
 #include <unoprnms.hxx>
+#include <svx/svdpage.hxx>
 
 #include <ndtxt.hxx>
 
