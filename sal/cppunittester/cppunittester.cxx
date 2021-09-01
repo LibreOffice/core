@@ -34,6 +34,7 @@
 #include <sys/resource.h>
 #endif
 
+#include <stdlib.h>
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -47,6 +48,7 @@
 #include <rtl/process.h>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
+#include <rtl/strbuf.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/ustring.hxx>
 #include <sal/main.h>
@@ -121,8 +123,6 @@ private:
     sal_uInt32 m_nStartTime;
 };
 
-#ifdef UNX
-#include <stdlib.h>
 // Setup an env variable so that temp file (or other) can
 // have a useful value to identify the source
 class EyecatcherListener
@@ -134,26 +134,26 @@ public:
     EyecatcherListener& operator=(const EyecatcherListener&) = delete;
     void startTest( CppUnit::Test* test) override
     {
-        std::unique_ptr<char[]> tn(new char [ test->getName().length() + 2 ]);
-        strcpy(tn.get(), test->getName().c_str());
-        int len = strlen(tn.get());
-        for(int i = 0; i < len; i++)
+        rtl::OStringBuffer tn = OString::Concat("LO_TESTNAME=") + std::string_view(test->getName());
+        for(int i = 12; i < tn.getLength(); i++)
         {
             if(!rtl::isAsciiAlphanumeric(static_cast<unsigned char>(tn[i])))
             {
                 tn[i] = '_';
             }
         }
-        tn[len] = '_';
-        tn[len + 1] = 0;
-        setenv("LO_TESTNAME", tn.get(), true);
+        tn.append('_');
+#ifdef UNX
+        putenv(tn.getStr());
+#else
+        _putenv(tn.getStr());
+#endif
     }
 
     void endTest( CppUnit::Test* /* test */ ) override
     {
     }
 };
-#endif
 
 class LogFailuresAsTheyHappen : public CppUnit::TestListener
 {
@@ -298,14 +298,13 @@ public:
             TimingListener timer;
             result.addListener(&timer);
 
-#ifdef UNX
             EyecatcherListener eye;
             result.addListener(&eye);
+#ifdef UNX
             // set this to track down files created before first test method
-            std::string lib(testlib.substr(testlib.rfind('/')+1));
-            setenv("LO_TESTNAME", lib.c_str(), true);
+            OString lib = OString::Concat("LO_TESTNAME=") + testlib.substr(testlib.rfind('/')+1).c_str();
+            putenv(lib.getStr());
 #endif
-
             const char* pVal = getenv("CPPUNIT_TEST_NAME");
 
             CppUnit::TestRunner runner;
