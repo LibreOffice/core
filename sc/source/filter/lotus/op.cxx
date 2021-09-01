@@ -290,15 +290,12 @@ void OP_Margins(LotusContext& /*rContext*/, SvStream& r, sal_uInt16 n)
 
 void OP_HiddenCols(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
 {
-    sal_uInt16      nByte, nBit;
-    SCCOL       nCount;
-    sal_uInt8       nCurrent;
-    nCount = 0;
-
-    for( nByte = 0 ; nByte < 32 ; nByte++ ) // 32 Bytes with ...
+    SCCOL nCount = 0;
+    for (sal_uInt16 nByte = 0; nByte < 32; ++nByte) // 32 Bytes with ...
     {
-        r.ReadUChar( nCurrent );
-        for( nBit = 0 ; nBit < 8 ; nBit++ ) // ...each 8 Bits = 256 Bits
+        sal_uInt8 nCurrent(0);
+        r.ReadUChar(nCurrent);
+        for (sal_uInt16 nBit = 0; nBit < 8; ++nBit) // ...each 8 Bits = 256 Bits
         {
             if( nCurrent & 0x01 )   // is lowest Bit set?
             {
