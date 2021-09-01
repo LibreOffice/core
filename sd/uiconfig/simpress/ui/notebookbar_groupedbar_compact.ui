@@ -2322,10 +2322,10 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuSettings-ToolbarMode">
+      <object class="GtkMenuItem" id="MenuSettings-ToolbarModeUI">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:ToolbarMode</property>
+        <property name="action_name">.uno:ToolbarModeUI</property>
       </object>
     </child>
     <child>

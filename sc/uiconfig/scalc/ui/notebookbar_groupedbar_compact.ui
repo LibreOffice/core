@@ -230,7 +230,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="MenuDraw-separator2">
+      <object class="GtkSeparatorMenuItem" id="MenuDraw-separator2">https://opengrok.libreoffice.org/xref/core/sd/uiconfig/simpress/ui/notebookbar_groupedbar_compact.ui
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -1937,10 +1937,10 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuSettings-ToolbarMode">
+      <object class="GtkMenuItem" id="MenuSettings-ToolbarModeUI">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:ToolbarMode</property>
+        <property name="action_name">.uno:ToolbarModeUI</property>
       </object>
     </child>
     <child>
