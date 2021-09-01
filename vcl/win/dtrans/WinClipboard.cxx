@@ -328,13 +328,13 @@ uno::Sequence<OUString> SAL_CALL CWinClipboard::getSupportedServiceNames()
 }
 
 // We run unit tests in parallel, which is a problem when touching a shared resource
-// the system clipboard, so rather use the dummy GenericClipboard.
-const bool bRunningUnitTest = getenv("LO_TESTNAME");
-
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 dtrans_CWinClipboard_get_implementation(css::uno::XComponentContext* context,
                                         css::uno::Sequence<css::uno::Any> const& args)
 {
+    // the system clipboard, so rather use the dummy GenericClipboard.
+    static const bool bRunningUnitTest = getenv("LO_TESTNAME");
+
     if (bRunningUnitTest)
     {
         SolarMutexGuard aGuard;
