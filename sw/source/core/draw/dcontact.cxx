@@ -1092,7 +1092,7 @@ static void lcl_textBoxSizeNotify(SwFrameFormat* pFormat)
         SfxItemSet aResizeSet(pFormat->GetDoc()->GetAttrPool(), svl::Items<RES_FRM_SIZE, RES_FRM_SIZE>);
         SwFormatFrameSize aSize;
         aResizeSet.Put(aSize);
-        SwTextBoxHelper::syncFlyFrameAttr(*pFormat, aResizeSet);
+        SwTextBoxHelper::syncFlyFrameAttr(*pFormat, aResizeSet, pFormat->FindRealSdrObject());
     }
 }
 
@@ -1250,6 +1250,12 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                     }
                     // use geometry of drawing object
                     aObjRect = pGroupObj->GetSnapRect();
+
+                    for (size_t i = 0; i < pGroupObj->getChildrenOfSdrObject()->GetObjCount(); ++i )
+                    {
+                        SwTextBoxHelper::doTextBoxPositioning(GetFormat(), pGroupObj->getChildrenOfSdrObject()->GetObj(i));
+                    }
+
                 }
                 SwTwips nXPosDiff(0);
                 SwTwips nYPosDiff(0);
@@ -1339,7 +1345,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
             // tdf#135198: keep text box together with its shape
             SwRect aObjRect(rObj.GetSnapRect());
             const SwPageFrame* rPageFrame = pAnchoredDrawObj->GetPageFrame();
-            if (rPageFrame && rPageFrame->isFrameAreaPositionValid())
+            if (rPageFrame && rPageFrame->isFrameAreaPositionValid() && !rObj.getChildrenOfSdrObject())
             {
                 SwDoc* const pDoc = GetFormat()->GetDoc();
 
@@ -1357,7 +1363,20 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                                                 text::RelOrientation::PAGE_FRAME));
                 aSyncSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_PAGE, pAnchoredDrawObj->GetPageFrame()->GetPhyPageNum()));
 
-                SwTextBoxHelper::syncFlyFrameAttr(*GetFormat(), aSyncSet);
+                auto pSdrObj = const_cast<SdrObject*>(&rObj);
+                if (pSdrObj != GetFormat()->FindRealSdrObject())
+                {
+                    SfxItemSet aSet(
+                        pDoc->GetAttrPool(),
+                        svl::Items<RES_FRM_SIZE, RES_FRM_SIZE>);
+
+                    aSet.Put(aSyncSet);
+                    aSet.Put(pSdrObj->GetMergedItem(RES_FRM_SIZE));
+                    SwTextBoxHelper::syncFlyFrameAttr(*GetFormat(), aSet, pSdrObj);
+                    SwTextBoxHelper::changeAnchor(GetFormat(), pSdrObj);
+                }
+                else
+                    SwTextBoxHelper::syncFlyFrameAttr(*GetFormat(), aSyncSet, GetFormat()->FindRealSdrObject());
 
                 pDoc->getIDocumentState().SetEnableSetModified(bEnableSetModified);
             }
