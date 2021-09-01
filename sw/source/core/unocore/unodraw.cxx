@@ -960,6 +960,7 @@ void SwXShape::AddExistingShapeToFormat( SdrObject const & _rObj )
 SwXShape::~SwXShape()
 {
     SolarMutexGuard aGuard;
+
     if (m_xShapeAgg.is())
     {
         uno::Reference< uno::XInterface >  xRef;
@@ -1516,7 +1517,11 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                 }
                 else if (pEntry->nWID == FN_TEXT_BOX)
                 {
-                    bool bValue = SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT);
+                    auto pSvxShape = GetSvxShape();
+                    bool bValue = SwTextBoxHelper::isTextBox(
+                        pFormat, RES_DRAWFRMFMT,
+                        ((pSvxShape && pSvxShape->GetSdrObject()) ? pSvxShape->GetSdrObject()
+                                                                  : pFormat->FindRealSdrObject()));
                     aRet <<= bValue;
                 }
                 else if (pEntry->nWID == RES_CHAIN)
