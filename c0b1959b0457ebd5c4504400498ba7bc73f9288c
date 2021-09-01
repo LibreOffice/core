@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bec9fe99_191e501e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-01T21:00:25Z",
+      "side": 1,
+      "message": "Per the advise from Mike, I am making these inline class functions again.",
+      "revId": "c0b1959b0457ebd5c4504400498ba7bc73f9288c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
