@@ -162,11 +162,16 @@ void ImportLotus::Userrange()
     Read( nRangeType );
 
     char aBuffer[ 17 ];
-    pIn->ReadBytes(aBuffer, 16);
-    aBuffer[ 16 ] = 0;
-    OUString      aName( aBuffer, strlen(aBuffer), eQuellChar );
+    aBuffer[pIn->ReadBytes(aBuffer, 16)] = 0;
+    OUString aName(aBuffer, strlen(aBuffer), eQuellChar);
 
-    Read( aScRange );
+    Read(aScRange);
+
+    if (!pIn->good())
+    {
+        SAL_WARN("sc.filter", "invalid range");
+        return;
+    }
 
     LotusContext &rContext = aConv.getContext();
     rContext.pRngNmBffWK3->Add( rContext.rDoc, aName, aScRange );
