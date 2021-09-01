@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a073695c_a108bab5",
+        "filename": "accessibility/source/standard/accessiblemenuitemcomponent.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2021-09-01T06:33:27Z",
+      "side": 1,
+      "message": "Since MouseSettings::GetMenuDelay returns sal_Int32 and MouseSettings::SetMenuDelay takes a sal_Int32 param, I suggest using that type instead.",
+      "range": {
+        "startLine": 134,
+        "startChar": 4,
+        "endLine": 134,
+        "endChar": 14
+      },
+      "revId": "657de436edec9448c42ab3453d86317f53387585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
