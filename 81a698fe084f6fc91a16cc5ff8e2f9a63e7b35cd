@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2589e12_a0b24cb1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-01T23:05:47Z",
+      "side": 1,
+      "message": "It\u0027s easier to discuss such things inline in code, I\u0027ll continue there.",
+      "parentUuid": "f808bb0b_87b83c47",
+      "revId": "81a698fe084f6fc91a16cc5ff8e2f9a63e7b35cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2ac1f6c4_f93de1fc",
@@ -48,6 +66,30 @@
       "writtenOn": "2021-08-31T22:33:44Z",
       "side": 1,
       "message": "Looks like this rowPos needs to be adjusted to the stream position after having read the BOM.",
+      "range": {
+        "startLine": 77,
+        "startChar": 23,
+        "endLine": 77,
+        "endChar": 29
+      },
+      "revId": "81a698fe084f6fc91a16cc5ff8e2f9a63e7b35cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "375db633_bf30ff19",
+        "filename": "connectivity/source/drivers/flat/ETable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-01T23:05:47Z",
+      "side": 1,
+      "message": "So yes, rowPos is set in readLine(), but if bHasHeaderLine\u003d\u003dfalse then the setRowPos() in line 85 below sets the rowPos(0,0) initialized.",
+      "parentUuid": "2ac1f6c4_f93de1fc",
       "range": {
         "startLine": 77,
         "startChar": 23,
