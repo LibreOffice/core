@@ -41,6 +41,7 @@
 #include <dcontact.hxx>
 #include <viewsh.hxx>
 #include <frameformats.hxx>
+#include <textboxhelper.hxx>
 
 struct SwUndoGroupObjImpl
 {
@@ -196,6 +197,22 @@ void SwUndoDrawGroup::UndoImpl(::sw::UndoRedoContext &)
     auto pObj = m_pObjArray[0].pObj;
     pObj->SetUserCall(nullptr);
 
+    // This will store the textboxes what were owned by this group
+    std::vector<std::pair<SdrObject*, SwFrameFormat*>> vTextBoxes;
+    if (auto pOldTextBoxNode = pFormat->GetOtherTextBoxFormat())
+    {
+        if (auto pChildren = pObj->getChildrenOfSdrObject())
+        {
+            for (size_t idx = 0; idx < pChildren->GetObjCount(); idx++)
+            {
+                auto pChild = pChildren->GetObj(idx);
+
+                if (auto pTextBox = pOldTextBoxNode->GetTextBox(pChild))
+                    vTextBoxes.push_back(std::pair(pChild, pTextBox));
+            }
+        }
+    }
+
     ::lcl_SaveAnchor( pFormat, m_pObjArray[0].nNodeIdx );
 
     pFormat->RemoveAllUnos();
@@ -219,6 +236,18 @@ void SwUndoDrawGroup::UndoImpl(::sw::UndoRedoContext &)
         // #i45718# - follow-up of #i35635# move object to visible layer
         pContact->MoveObjToVisibleLayer( pObj );
 
+        for (auto& rElem : vTextBoxes)
+        {
+            if (rElem.first == pObj)
+            {
+                auto pNewTextBoxNode = new SwTextBoxNode(rSave.pFormat);
+                rSave.pFormat->SetOtherTextBoxFormat(pNewTextBoxNode);
+                pNewTextBoxNode->AddTextBox(rElem.first, rElem.second);
+                rElem.second->SetOtherTextBoxFormat(pNewTextBoxNode);
+                break;
+            }
+        }
+
         SwDrawFrameFormat* pDrawFrameFormat = rSave.pFormat;
 
         // #i45952# - notify that position attributes are already set
@@ -237,6 +266,9 @@ void SwUndoDrawGroup::RedoImpl(::sw::UndoRedoContext &)
     SwDoc* pDoc = m_pObjArray[0].pFormat->GetDoc();
     SwFrameFormats& rFlyFormats = *pDoc->GetSpzFrameFormats();
 
+    // This will store the textboxes from the ex-group-shapes
+    std::vector<std::pair<SdrObject*, SwFrameFormat*>> vTextBoxes;
+
     for( sal_uInt16 n = 1; n < m_nSize; ++n )
     {
         SwUndoGroupObjImpl& rSave = m_pObjArray[n];
@@ -244,6 +276,13 @@ void SwUndoDrawGroup::RedoImpl(::sw::UndoRedoContext &)
         SdrObject* pObj = rSave.pObj;
 
         SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
+
+        // Save the textboxes
+        if (auto pOldTextBoxNode = rSave.pFormat->GetOtherTextBoxFormat())
+        {
+            if (auto pTextBox = pOldTextBoxNode->GetTextBox(pObj))
+                vTextBoxes.push_back(std::pair(pObj, pTextBox));
+        }
 
         // object will destroy itself
         pContact->Changed( *pObj, SdrUserCallType::Delete, pObj->GetLastBoundRect() );
@@ -267,6 +306,18 @@ void SwUndoDrawGroup::RedoImpl(::sw::UndoRedoContext &)
     pContact->MoveObjToVisibleLayer( m_pObjArray[0].pObj );
 
     SwDrawFrameFormat* pDrawFrameFormat = m_pObjArray[0].pFormat;
+
+    // Restore the textboxes
+    if (vTextBoxes.size())
+    {
+        auto pNewTextBoxNode = new SwTextBoxNode(m_pObjArray[0].pFormat);
+        for (auto& rElem : vTextBoxes)
+        {
+            pNewTextBoxNode->AddTextBox(rElem.first, rElem.second);
+            rElem.second->SetOtherTextBoxFormat(pNewTextBoxNode);
+        }
+        m_pObjArray[0].pFormat->SetOtherTextBoxFormat(pNewTextBoxNode);
+    }
 
     // #i45952# - notify that position attributes are already set
     OSL_ENSURE(pDrawFrameFormat,
@@ -339,12 +390,32 @@ void SwUndoDrawUnGroup::UndoImpl(::sw::UndoRedoContext & rContext)
     SwDoc *const pDoc = & rContext.GetDoc();
     SwFrameFormats& rFlyFormats = *pDoc->GetSpzFrameFormats();
 
+    // This will store the textboxes what were owned by this group
+    std::vector<std::pair<SdrObject*, SwFrameFormat*>> vTextBoxes;
+
     // remove from array
     for( sal_uInt16 n = 1; n < m_nSize; ++n )
     {
         SwUndoGroupObjImpl& rSave = m_pObjArray[n];
 
         ::lcl_SaveAnchor( rSave.pFormat, rSave.nNodeIdx );
+
+        // copy the textboxes for later use to this vector
+        if (auto pTxBxNd = rSave.pFormat->GetOtherTextBoxFormat())
+        {
+            if (auto pGroupObj = m_pObjArray[0].pObj)
+            {
+                if (auto pChildren = pGroupObj->getChildrenOfSdrObject())
+                {
+                    for (size_t idx = 0; idx < pChildren->GetObjCount(); idx++)
+                    {
+                        auto pChild = pChildren->GetObj(idx);
+                        if (auto pTextBox = pTxBxNd->GetTextBox(pChild))
+                            vTextBoxes.push_back(std::pair(pChild, pTextBox));
+                    }
+                }
+            }
+        }
 
         rSave.pFormat->RemoveAllUnos();
 
@@ -361,6 +432,19 @@ void SwUndoDrawUnGroup::UndoImpl(::sw::UndoRedoContext & rContext)
     pContact->MoveObjToVisibleLayer( m_pObjArray[0].pObj );
 
     SwDrawFrameFormat* pDrawFrameFormat = m_pObjArray[0].pFormat;
+
+    // Restore the vector content for the new formats
+    if (vTextBoxes.size())
+    {
+        auto pNewTxBxNd = new SwTextBoxNode(m_pObjArray[0].pFormat);
+        for (auto& rElem : vTextBoxes)
+        {
+            pNewTxBxNd->AddTextBox(rElem.first, rElem.second);
+            rElem.second->SetOtherTextBoxFormat(pNewTxBxNd);
+        }
+        m_pObjArray[0].pFormat->SetOtherTextBoxFormat(pNewTxBxNd);
+    }
+
 
     // #i45952# - notify that position attributes are already set
     OSL_ENSURE(pDrawFrameFormat,
@@ -380,6 +464,19 @@ void SwUndoDrawUnGroup::RedoImpl(::sw::UndoRedoContext &)
 
     ::lcl_SaveAnchor( pFormat, m_pObjArray[0].nNodeIdx );
 
+    // Store the textboxes in this vector for later use.
+    std::vector<std::pair<SdrObject*, SwFrameFormat*>> vTextBoxes;
+    if (auto pTextBoxNode = pFormat->GetOtherTextBoxFormat())
+    {
+        auto pMasterObj = m_pObjArray[0].pObj;
+
+        if (auto pObjList = pMasterObj->getChildrenOfSdrObject())
+            for (size_t idx = 0; idx < pObjList->GetObjCount(); idx++)
+            {
+                vTextBoxes.push_back(std::pair(pObjList->GetObj(idx), pTextBoxNode->GetTextBox(pObjList->GetObj(idx))));
+            }
+    }
+
     pFormat->RemoveAllUnos();
 
     // remove from array
@@ -395,6 +492,19 @@ void SwUndoDrawUnGroup::RedoImpl(::sw::UndoRedoContext &)
         rFlyFormats.push_back( rSave.pFormat );
 
         SwDrawFrameFormat* pDrawFrameFormat = rSave.pFormat;
+
+        // Restore the textboxes for the restored group shape.
+        for (auto& pElem : vTextBoxes)
+        {
+            if (pElem.first == rSave.pObj)
+            {
+                auto pTmpTxBxNd = new SwTextBoxNode(rSave.pFormat);
+                pTmpTxBxNd->AddTextBox(rSave.pObj, pElem.second);
+                pFormat->SetOtherTextBoxFormat(pTmpTxBxNd);
+                pElem.second->SetOtherTextBoxFormat(pTmpTxBxNd);
+                break;
+            }
+        }
 
         // #i45952# - notify that position attributes are already set
         OSL_ENSURE(pDrawFrameFormat,
