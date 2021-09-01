@@ -62,6 +62,8 @@ FirebirdDriver::FirebirdDriver(const css::uno::Reference< css::uno::XComponentCo
     // ::utl::TempFile uses a unique temporary directory (subdirectory of
     // /tmp or other user specific tmp directory) per instance in which
     // we can create directories for firebird at will.
+    m_firebirdTMPDirectory.EnableKillingFile(true);
+    m_firebirdLockDirectory.EnableKillingFile(true);
 
     // Overrides firebird's default of /tmp or c:\temp
     osl_setEnvironment(OUString(our_sFirebirdTmpVar).pData, m_firebirdTMPDirectory.GetFileName().pData);
@@ -89,11 +91,7 @@ FirebirdDriver::FirebirdDriver(const css::uno::Reference< css::uno::XComponentCo
 #endif /*!SYSTEM_FIREBIRD*/
 }
 
-FirebirdDriver::~FirebirdDriver()
-{
-    utl::removeTree(m_firebirdTMPDirectory.GetURL());
-    utl::removeTree(m_firebirdLockDirectory.GetURL());
-}
+FirebirdDriver::~FirebirdDriver() = default;
 
 void FirebirdDriver::disposing()
 {
