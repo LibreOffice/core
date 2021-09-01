@@ -58,6 +58,7 @@
 #include <o3tl/hash_combine.hxx>
 #include <cstdint>
 #include <memory>
+#include <tools/stream.hxx>
 
 using namespace ::com::sun::star;
 
@@ -86,17 +87,21 @@ SwTextGlyphsKey::SwTextGlyphsKey(VclPtr<OutputDevice> const& pOutputDevice, cons
     o3tl::hash_combine(mnHashCode, m_nLength);
     if(m_nLength >= 0 && m_nIndex >= 0 && m_nIndex + m_nLength <= m_aText.getLength())
         o3tl::hash_combine(mnHashCode, m_aText.getStr() + m_nIndex, m_nLength);
+    else
+    {
+        // clamp dodgy data
+        m_nIndex = 0;
+        m_nLength = 0;
+    }
+    // in case someone changed the font on the OutputDevice
+    SvMemoryStream stream;
+    WriteFont( stream, pOutputDevice->GetFont());
+    o3tl::hash_combine( mnHashCode, static_cast<const char*>(stream.GetData()), stream.GetSize());
 }
 bool SwTextGlyphsKey::operator==(SwTextGlyphsKey const & rhs) const
 {
-    bool b = m_pOutputDevice.get() == rhs.m_pOutputDevice.get()
-            && m_nIndex == rhs.m_nIndex
-            && m_nLength == rhs.m_nLength;
-    if (!b)
-        return false;
-    if(m_nLength >= 0 && m_nIndex >= 0 && m_nIndex + m_nLength <= m_aText.getLength())
-        return m_aText.subView(m_nIndex,m_nLength) == rhs.m_aText.subView(m_nIndex, m_nLength);
-    return m_aText == rhs.m_aText;
+    return m_pOutputDevice.get() == rhs.m_pOutputDevice.get()
+        && m_aText.subView(m_nIndex,m_nLength) == rhs.m_aText.subView(rhs.m_nIndex, rhs.m_nLength);
 }
 
 
@@ -202,11 +207,8 @@ const SalLayoutFlags eGlyphItemsOnlyLayout = SalLayoutFlags::GlyphItemsOnly | Sa
  */
 static SalLayoutGlyphs* lcl_CreateLayout(const SwTextGlyphsKey& rKey, SwTextGlyphsMap::iterator it)
 {
-    assert (!it->second.m_aTextGlyphs.IsValid());
-
-    if (rKey.m_nIndex >= rKey.m_aText.getLength())
-        // Same as in OutputDevice::GetTextArray().
-        return nullptr;
+    assert(rKey.m_nLength != 0);
+    assert(!it->second.m_aTextGlyphs.IsValid());
 
     // Calculate glyph items.
     std::unique_ptr<SalLayout> pLayout
@@ -223,6 +225,9 @@ static SalLayoutGlyphs* lcl_CreateLayout(const SwTextGlyphsKey& rKey, SwTextGlyp
 
 SalLayoutGlyphs* SwFntObj::GetCachedSalLayoutGlyphs(const SwTextGlyphsKey& key)
 {
+    if (key.m_nLength == 0) // ignore dodgy data
+        return nullptr;
+
     SwTextGlyphsMap::iterator it = m_aTextGlyphs.find(key);
     if(it != m_aTextGlyphs.end())
     {
@@ -239,6 +244,9 @@ SalLayoutGlyphs* SwFntObj::GetCachedSalLayoutGlyphs(const SwTextGlyphsKey& key)
 
 tools::Long SwFntObj::GetCachedTextWidth(const SwTextGlyphsKey& key, const vcl::text::TextLayoutCache* vclCache)
 {
+    if (key.m_nLength == 0) // ignore dodgy data
+        return 0;
+
     SwTextGlyphsMap::iterator it = m_aTextGlyphs.find(key);
     if(it != m_aTextGlyphs.end() && it->second.m_nTextWidth >= 0)
         return it->second.m_nTextWidth;
