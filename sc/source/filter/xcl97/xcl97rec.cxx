@@ -1363,7 +1363,6 @@ ExcBundlesheet8::ExcBundlesheet8( const RootData& rRootData, SCTAB _nTab ) :
 }
 
 ExcBundlesheet8::ExcBundlesheet8( const OUString& rString ) :
-    ExcBundlesheetBase(),
     sUnicodeName( rString )
 {
 }

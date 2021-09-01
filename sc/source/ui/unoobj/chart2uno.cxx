@@ -2884,7 +2884,6 @@ IMPL_LINK( ScChart2DataSequence, ValueListenerHdl, const SfxHint&, rHint, void )
 
 ScChart2DataSequence::ExternalRefListener::ExternalRefListener(
     ScChart2DataSequence& rParent, ScDocument* pDoc) :
-    ScExternalRefManager::LinkListener(),
     mrParent(rParent),
     mpDoc(pDoc)
 {

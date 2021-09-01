@@ -1864,7 +1864,6 @@ bool ScTokenArray::IsValidReference( ScRange& rRange, const ScAddress& rPos ) co
 }
 
 ScTokenArray::ScTokenArray(const ScDocument& rDoc) :
-    FormulaTokenArray(),
     mxSheetLimits(&rDoc.GetSheetLimits()),
     mnHashValue(0)
 {
@@ -1872,7 +1871,6 @@ ScTokenArray::ScTokenArray(const ScDocument& rDoc) :
 }
 
 ScTokenArray::ScTokenArray(ScSheetLimits& rLimits) :
-    FormulaTokenArray(),
     mxSheetLimits(&rLimits),
     mnHashValue(0)
 {

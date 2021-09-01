@@ -98,7 +98,6 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     mbInnerBorder(false),
     mbDiagTLBR(false),
     mbDiagBLTR(false),
-    maContext(),
     mpBindings(pBindings)
 {
     Initialize();

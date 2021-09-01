@@ -36,12 +36,12 @@ ColumnBlockPosition* StartListeningContext::getBlockPosition(SCTAB nTab, SCCOL n
 }
 
 EndListeningContext::EndListeningContext(ScDocument& rDoc, ScTokenArray* pOldCode) :
-    mrDoc(rDoc), maSet(), mpPosSet(std::make_shared<ColumnBlockPositionSet>(rDoc)),
+    mrDoc(rDoc),  mpPosSet(std::make_shared<ColumnBlockPositionSet>(rDoc)),
     mpOldCode(pOldCode), maPosDelta(0,0,0) {}
 
 EndListeningContext::EndListeningContext(
     ScDocument& rDoc, const std::shared_ptr<ColumnBlockPositionSet>& pSet, ScTokenArray* pOldCode) :
-    mrDoc(rDoc), maSet(), mpPosSet(pSet),
+    mrDoc(rDoc),  mpPosSet(pSet),
     mpOldCode(pOldCode), maPosDelta(0,0,0) {}
 
 void EndListeningContext::setPositionDelta( const ScAddress& rDelta )

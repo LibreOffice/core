@@ -416,7 +416,6 @@ void XMLTableStyleContext::SetAttribute( sal_Int32 nElement,
 XMLTableStyleContext::XMLTableStyleContext( ScXMLImport& rImport,
         SvXMLStylesContext& rStyles, XmlStyleFamily nFamily, bool bDefaultStyle ) :
     XMLPropStyleContext( rImport, rStyles, nFamily, bDefaultStyle ),
-    sDataStyleName(),
     pStyles(&rStyles),
     nNumberFormat(-1),
     nLastSheet(-1),

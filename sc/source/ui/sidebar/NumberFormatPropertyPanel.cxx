@@ -50,7 +50,6 @@ NumberFormatPropertyPanel::NumberFormatPropertyPanel(
     , maNumFormatControl(SID_NUMBER_TYPE_FORMAT, *pBindings, *this)
     , maFormatControl(SID_NUMBER_FORMAT, *pBindings, *this)
     , mnCategorySelected(0)
-    , maContext()
     , mpBindings(pBindings)
 {
     Initialize();

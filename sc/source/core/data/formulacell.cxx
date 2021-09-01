@@ -802,7 +802,6 @@ ScFormulaCell::ScFormulaCell(
 }
 
 ScFormulaCell::ScFormulaCell(const ScFormulaCell& rCell, ScDocument& rDoc, const ScAddress& rPos, ScCloneFlags nCloneFlags) :
-    SvtListener(),
     bDirty( rCell.bDirty ),
     bTableOpDirty( false ),
     bChanged( rCell.bChanged ),

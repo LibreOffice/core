@@ -58,7 +58,6 @@ inline bool ScMyShape::operator<(const ScMyShape& aShape) const
 }
 
 ScMyShapesContainer::ScMyShapesContainer()
-    : aShapeList()
 {
 }
 
@@ -114,7 +113,6 @@ inline bool ScMyNoteShape::operator<(const ScMyNoteShape& aNote) const
 }
 
 ScMyNoteShapesContainer::ScMyNoteShapesContainer()
-    : aNoteShapeList()
 {
 }
 
@@ -163,7 +161,6 @@ inline bool ScMyMergedRange::operator<(const ScMyMergedRange& aRange) const
 }
 
 ScMyMergedRangesContainer::ScMyMergedRangesContainer()
-    : aRangeList()
 {
 }
 
@@ -256,8 +253,7 @@ inline bool ScMyAreaLink::operator<(const ScMyAreaLink& rAreaLink ) const
     return aDestRange.aStart.lessThanByRow( rAreaLink.aDestRange.aStart );
 }
 
-ScMyAreaLinksContainer::ScMyAreaLinksContainer() :
-    aAreaLinkList()
+ScMyAreaLinksContainer::ScMyAreaLinksContainer()
 {
 }
 
@@ -315,7 +311,6 @@ void ScMyAreaLinksContainer::Sort()
 }
 
 ScMyEmptyDatabaseRangesContainer::ScMyEmptyDatabaseRangesContainer()
-    : aDatabaseList()
 {
 }
 
@@ -382,8 +377,7 @@ inline bool ScMyDetectiveObj::operator<( const ScMyDetectiveObj& rDetObj) const
     return aPosition.lessThanByRow( rDetObj.aPosition );
 }
 
-ScMyDetectiveObjContainer::ScMyDetectiveObjContainer() :
-    aDetectiveObjList()
+ScMyDetectiveObjContainer::ScMyDetectiveObjContainer()
 {
 }
 
@@ -464,8 +458,7 @@ inline bool ScMyDetectiveOp::operator<( const ScMyDetectiveOp& rDetOp) const
     return aPosition.lessThanByRow( rDetOp.aPosition );
 }
 
-ScMyDetectiveOpContainer::ScMyDetectiveOpContainer() :
-    aDetectiveOpList()
+ScMyDetectiveOpContainer::ScMyDetectiveOpContainer()
 {
 }
 
@@ -519,8 +512,6 @@ void ScMyDetectiveOpContainer::Sort()
 }
 
 ScMyCell::ScMyCell() :
-    aShapeList(),
-    aDetectiveObjVec(),
     pNote(nullptr),
     nValidationIndex(-1),
     nStyleIndex(-1),

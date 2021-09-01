@@ -305,8 +305,6 @@ ScQueryParamTable::~ScQueryParamTable()
 }
 
 ScQueryParam::ScQueryParam() :
-    ScQueryParamBase(),
-    ScQueryParamTable(),
     bDestPers(true),
     nDestTab(0),
     nDestCol(0),
@@ -422,7 +420,6 @@ void ScQueryParam::MoveToDest()
 }
 
 ScDBQueryParamBase::ScDBQueryParamBase(DataType eType) :
-    ScQueryParamBase(),
     mnField(-1),
     mbSkipString(true),
     meType(eType)
@@ -434,8 +431,7 @@ ScDBQueryParamBase::~ScDBQueryParamBase()
 }
 
 ScDBQueryParamInternal::ScDBQueryParamInternal() :
-    ScDBQueryParamBase(ScDBQueryParamBase::INTERNAL),
-    ScQueryParamTable()
+    ScDBQueryParamBase(ScDBQueryParamBase::INTERNAL)
 {
 }
 

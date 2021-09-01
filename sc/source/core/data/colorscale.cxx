@@ -182,7 +182,6 @@ ScColorScaleEntry::ScColorScaleEntry(const ScColorScaleEntry& rEntry):
 
 ScColorScaleEntry::ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& rEntry):
     mnVal(rEntry.mnVal),
-    mpCell(),
     mpFormat(rEntry.mpFormat),
     maColor(rEntry.maColor),
     meType(rEntry.meType)

@@ -245,7 +245,7 @@ public:
         std::vector<SdrObject*> maDrawObjects;
         const ScPatternAttr* mpPattern;
 
-        Cell() : mpAttr(nullptr), mpNote(nullptr), maDrawObjects(), mpPattern(nullptr) {}
+        Cell() : mpAttr(nullptr), mpNote(nullptr),  mpPattern(nullptr) {}
     };
 
     struct Row
@@ -553,7 +553,6 @@ struct SortedColumn
         maCellTextAttrs(nTopEmptyRows),
         maBroadcasters(nTopEmptyRows),
         maCellNotes(nTopEmptyRows),
-        maCellDrawObjects(),
         maPatterns(0, rSheetLimits.GetMaxRowCount(), nullptr),
         miPatternPos(maPatterns.begin()) {}
 

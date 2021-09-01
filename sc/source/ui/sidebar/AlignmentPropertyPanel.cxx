@@ -68,7 +68,6 @@ AlignmentPropertyPanel::AlignmentPropertyPanel(
     , maVrtStackControl(SID_ATTR_ALIGN_STACKED, *pBindings, *this)
     , maRefEdgeControl(SID_ATTR_ALIGN_LOCKPOS, *pBindings, *this)
     , mbMultiDisable(false)
-    , maContext()
     , mpBindings(pBindings)
 {
     Initialize();

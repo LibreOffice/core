@@ -34,10 +34,6 @@ using namespace xmloff::token;
 ScXMLTableSourceContext::ScXMLTableSourceContext( ScXMLImport& rImport,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ) :
     ScXMLImportContext( rImport ),
-    sLink(),
-    sTableName(),
-    sFilterName(),
-    sFilterOptions(),
     nRefresh(0),
     nMode(sheet::SheetLinkMode_NORMAL)
 {

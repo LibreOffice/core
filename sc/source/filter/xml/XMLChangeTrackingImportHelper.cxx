@@ -78,9 +78,7 @@ const ScCellValue& ScMyCellInfo::CreateCell(ScDocument& rDoc)
 }
 
 ScMyBaseAction::ScMyBaseAction(const ScChangeActionType nTempActionType)
-    : aDependencies(),
-    aDeletedList(),
-    nActionNumber(0),
+    : nActionNumber(0),
     nRejectingNumber(0),
     nPreviousAction(0),
     nActionType(nTempActionType),
@@ -103,8 +101,6 @@ ScMyInsAction::~ScMyInsAction()
 
 ScMyDelAction::ScMyDelAction(const ScChangeActionType nActionTypeP)
     : ScMyBaseAction(nActionTypeP),
-    aGeneratedList(),
-    aMoveCutOffs(),
     nD(0)
 {
 }
@@ -114,8 +110,7 @@ ScMyDelAction::~ScMyDelAction()
 }
 
 ScMyMoveAction::ScMyMoveAction()
-    : ScMyBaseAction(SC_CAT_MOVE),
-    aGeneratedList()
+    : ScMyBaseAction(SC_CAT_MOVE)
 {
 }
 
@@ -142,7 +137,6 @@ ScMyRejAction::~ScMyRejAction()
 }
 
 ScXMLChangeTrackingImportHelper::ScXMLChangeTrackingImportHelper() :
-    aActions(),
     pTrack(nullptr),
     nMultiSpanned(0),
     nMultiSpannedSlaveCount(0)

@@ -20,8 +20,7 @@
 #include <formdata.hxx>
 
 ScFormEditData::ScFormEditData()
-    : formula::FormEditData()
-    , pInputHandler(nullptr)
+    : pInputHandler(nullptr)
     , pScDocShell(nullptr)
 {
     Reset();

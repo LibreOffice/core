@@ -797,7 +797,6 @@ ScXMLAutoStylePoolP::~ScXMLAutoStylePoolP()
 }
 
 XMLScPropHdlFactory::XMLScPropHdlFactory()
-    : XMLPropertyHandlerFactory()
 {
 }
 

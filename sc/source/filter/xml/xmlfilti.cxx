@@ -480,7 +480,6 @@ ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
                                       ScXMLDataPilotTableContext* pTempDataPilotTableContext) :
     ScXMLImportContext( rImport ),
     pDataPilotTable(pTempDataPilotTableContext),
-    aFilterFields(),
     eSearchType(utl::SearchParam::SearchType::Normal),
     nFilterFieldCount(0),
     bSkipDuplicates(false),
