@@ -67,7 +67,7 @@ void SmEditEngine::executeZoom(EditView* pEditView)
         updateZoom();
         if (pEditView)
         {
-            FormatAndUpdate(pEditView);
+            FormatAndLayout(pEditView);
             pEditView->SetSelection(pEditView->GetSelection());
         }
     }

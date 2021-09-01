@@ -278,7 +278,7 @@ static bool lcl_ConnectToPrev( sal_Unicode cCh, sal_Unicode cPrevCh )  // For Ka
 
 void ImpEditEngine::UpdateViews( EditView* pCurView )
 {
-    if ( !GetUpdateMode() || IsFormatting() || aInvalidRect.IsEmpty() )
+    if ( !IsUpdateLayout() || IsFormatting() || aInvalidRect.IsEmpty() )
         return;
 
     DBG_ASSERT( IsFormatted(), "UpdateViews: Doc not formatted!" );
@@ -315,7 +315,7 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
 
 IMPL_LINK_NOARG(ImpEditEngine, OnlineSpellHdl, Timer *, void)
 {
-    if ( !Application::AnyInput( VclInputFlags::KEYBOARD ) && GetUpdateMode() && IsFormatted() )
+    if ( !Application::AnyInput( VclInputFlags::KEYBOARD ) && IsUpdateLayout() && IsFormatted() )
         DoOnlineSpelling();
     else
         aOnlineSpellTimer.Start();
@@ -333,7 +333,7 @@ IMPL_LINK_NOARG(ImpEditEngine, IdleFormatHdl, Timer *, void)
     {
         if( aEditView == pView )
         {
-            FormatAndUpdate( pView );
+            FormatAndLayout( pView );
             break;
         }
     }
@@ -362,7 +362,7 @@ void ImpEditEngine::FormatFullDoc()
 
 void ImpEditEngine::FormatDoc()
 {
-    if (!GetUpdateMode() || IsFormatting())
+    if (!IsUpdateLayout() || IsFormatting())
         return;
 
     bIsFormatting = true;
@@ -2598,7 +2598,7 @@ void ImpEditEngine::SetTextRanger( std::unique_ptr<TextRanger> pRanger )
 
     FormatFullDoc();
     UpdateViews( GetActiveView() );
-    if ( GetUpdateMode() && GetActiveView() )
+    if ( IsUpdateLayout() && GetActiveView() )
         pActiveView->ShowCursor(false, false);
 }
 
@@ -3090,7 +3090,7 @@ Point ImpEditEngine::MoveToNextLine(
 
 void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Point aStartPos, bool bStripOnly, Degree10 nOrientation )
 {
-    if ( !GetUpdateMode() && !bStripOnly )
+    if ( !IsUpdateLayout() && !bStripOnly )
         return;
 
     if ( !IsFormatted() )
@@ -3835,7 +3835,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
 
 void ImpEditEngine::Paint( ImpEditView* pView, const tools::Rectangle& rRect, OutputDevice* pTargetDevice )
 {
-    if ( !GetUpdateMode() || IsInUndo() )
+    if ( !IsUpdateLayout() || IsInUndo() )
         return;
 
     assert( pView && "No View - No Paint!" );
@@ -3915,9 +3915,10 @@ EditPaM ImpEditEngine::ConnectContents( sal_Int32 nLeftNode, bool bBackward )
     return ImpConnectParagraphs( pLeftNode, pRightNode, bBackward );
 }
 
-void ImpEditEngine::SetUpdateMode( bool bUp, EditView* pCurView, bool bForceUpdate )
+bool ImpEditEngine::SetUpdateLayout( bool bUp, EditView* pCurView, bool bForceUpdate )
 {
-    const bool bChanged = (GetUpdateMode() != bUp);
+    const bool bPrevUpdateLayout = bUpdateLayout;
+    const bool bChanged = (bUpdateLayout != bUp);
 
     // When switching from true to false, all selections were visible,
     // => paint over
@@ -3925,9 +3926,10 @@ void ImpEditEngine::SetUpdateMode( bool bUp, EditView* pCurView, bool bForceUpda
     // If !bFormatted, e.g. after SetText, then if UpdateMode=true
     // formatting is not needed immediately, probably because more text is coming.
     // At latest it is formatted at a Paint/CalcTextWidth.
-    bUpdate = bUp;
-    if ( bUpdate && ( bChanged || bForceUpdate ) )
-        FormatAndUpdate( pCurView );
+    bUpdateLayout = bUp;
+    if ( bUpdateLayout && ( bChanged || bForceUpdate ) )
+        FormatAndLayout( pCurView );
+    return bPrevUpdateLayout;
 }
 
 void ImpEditEngine::ShowParagraph( sal_Int32 nParagraph, bool bShow )
@@ -3970,7 +3972,7 @@ void ImpEditEngine::ShowParagraph( sal_Int32 nParagraph, bool bShow )
     }
 
     pPPortion->SetMustRepaint( true );
-    if ( GetUpdateMode() && !IsInUndo() && !GetTextRanger() )
+    if ( IsUpdateLayout() && !IsInUndo() && !GetTextRanger() )
     {
         aInvalidRect = tools::Rectangle(    Point( 0, GetParaPortions().GetYOffset( pPPortion ) ),
                                     Point( GetPaperSize().Width(), nCurTextHeight ) );
@@ -3993,7 +3995,7 @@ EditSelection ImpEditEngine::MoveParagraphs( Range aOldPositions, sal_Int32 nNew
     // Where the paragraph was inserted it has to be properly redrawn:
     // Where the paragraph was removed it has to be properly redrawn:
     // ( and correspondingly in between as well...)
-    if ( pCurView && GetUpdateMode() )
+    if ( pCurView && IsUpdateLayout() )
     {
         // in this case one can redraw directly without invalidating the
         // Portions
@@ -4176,13 +4178,13 @@ std::unique_ptr<EditSelection> ImpEditEngine::SelectParagraph( sal_Int32 nPara )
     return pSel;
 }
 
-void ImpEditEngine::FormatAndUpdate( EditView* pCurView, bool bCalledFromUndo )
+void ImpEditEngine::FormatAndLayout( EditView* pCurView, bool bCalledFromUndo )
 {
     if ( bDowning )
         return ;
 
     if ( IsInUndo() )
-        IdleFormatAndUpdate( pCurView );
+        IdleFormatAndLayout( pCurView );
     else
     {
         if (bCalledFromUndo)

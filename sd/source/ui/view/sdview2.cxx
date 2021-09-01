@@ -289,9 +289,7 @@ void View::DoPaste (::sd::Window* pWindow)
                 // remove all hard linebreaks from the title
                 if (pOutliner->GetParagraphCount() > 1)
                 {
-                    bool bOldUpdateMode = pOutliner->GetUpdateMode();
-
-                    pOutliner->SetUpdateMode( false );
+                    bool bOldUpdateMode = pOutliner->SetUpdateLayout( false );
 
                     const EditEngine& rEdit = pOutliner->GetEditEngine();
                     const sal_Int32 nParaCount = rEdit.GetParagraphCount();
@@ -304,7 +302,7 @@ void View::DoPaste (::sd::Window* pWindow)
                     }
 
                     DBG_ASSERT( rEdit.GetParagraphCount() <= 1, "Titleobject contains hard line breaks" );
-                    pOutliner->SetUpdateMode(bOldUpdateMode);
+                    pOutliner->SetUpdateLayout(bOldUpdateMode);
                 }
             }
 

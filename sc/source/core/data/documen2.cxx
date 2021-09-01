@@ -459,7 +459,7 @@ ScFieldEditEngine& ScDocument::GetEditEngine()
     if ( !mpEditEngine )
     {
         mpEditEngine.reset( new ScFieldEditEngine(this, GetEnginePool(), GetEditPool()) );
-        mpEditEngine->SetUpdateMode( false );
+        mpEditEngine->SetUpdateLayout( false );
         mpEditEngine->EnableUndo( false );
         mpEditEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
         ApplyAsianEditSettings( *mpEditEngine );
@@ -473,7 +473,7 @@ ScNoteEditEngine& ScDocument::GetNoteEngine()
     {
         ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
         mpNoteEngine.reset( new ScNoteEditEngine( GetEnginePool(), GetEditPool() ) );
-        mpNoteEngine->SetUpdateMode( false );
+        mpNoteEngine->SetUpdateLayout( false );
         mpNoteEngine->EnableUndo( false );
         mpNoteEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
         ApplyAsianEditSettings( *mpNoteEngine );
@@ -1133,8 +1133,7 @@ std::unique_ptr<ScFieldEditEngine> ScDocument::CreateFieldEditEngine()
         {
             // #i66209# previous use might not have restored update mode,
             // ensure same state as for a new EditEngine (UpdateMode = true)
-            if ( !pCacheFieldEditEngine->GetUpdateMode() )
-                pCacheFieldEditEngine->SetUpdateMode(true);
+            pCacheFieldEditEngine->SetUpdateLayout(true);
         }
 
         pNewEditEngine = std::move(pCacheFieldEditEngine);

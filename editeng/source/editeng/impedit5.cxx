@@ -50,13 +50,12 @@ void ImpEditEngine::SetStyleSheet( EditSelection aSel, SfxStyleSheet* pStyle )
     sal_Int32 nStartPara = aEditDoc.GetPos( aSel.Min().GetNode() );
     sal_Int32 nEndPara = aEditDoc.GetPos( aSel.Max().GetNode() );
 
-    bool _bUpdate = GetUpdateMode();
-    SetUpdateMode( false );
+    bool _bUpdate = SetUpdateLayout( false );
 
     for ( sal_Int32 n = nStartPara; n <= nEndPara; n++ )
         SetStyleSheet( n, pStyle );
 
-    SetUpdateMode( _bUpdate );
+    SetUpdateLayout( _bUpdate );
 }
 
 void ImpEditEngine::SetStyleSheet( sal_Int32 nPara, SfxStyleSheet* pStyle )
@@ -89,7 +88,7 @@ void ImpEditEngine::SetStyleSheet( sal_Int32 nPara, SfxStyleSheet* pStyle )
             StartListening(*pStyle, DuplicateHandling::Prevent);
         ParaAttribsChanged( pNode );
     }
-    FormatAndUpdate();
+    FormatAndLayout();
 }
 
 void ImpEditEngine::UpdateParagraphsWithStyleSheet( SfxStyleSheet* pStyle )
@@ -115,7 +114,7 @@ void ImpEditEngine::UpdateParagraphsWithStyleSheet( SfxStyleSheet* pStyle )
     if ( bUsed )
     {
         GetEditEnginePtr()->StyleSheetChanged( pStyle );
-        FormatAndUpdate();
+        FormatAndLayout();
     }
 }
 
@@ -130,7 +129,7 @@ void ImpEditEngine::RemoveStyleFromParagraphs( SfxStyleSheet const * pStyle )
             ParaAttribsChanged( pNode );
         }
     }
-    FormatAndUpdate();
+    FormatAndLayout();
 }
 
 void ImpEditEngine::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )

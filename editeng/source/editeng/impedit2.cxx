@@ -111,7 +111,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     bFormatted(false),
     bInSelection(false),
     bIsInUndo(false),
-    bUpdate(true),
+    bUpdateLayout(true),
     bUndoEnabled(true),
     bDowning(false),
     bUseAutoColor(true),
@@ -172,7 +172,7 @@ ImpEditEngine::~ImpEditEngine()
     // when a parent template is destroyed.
     // And this after the destruction of the data!
     bDowning = true;
-    SetUpdateMode( false );
+    SetUpdateLayout( false );
 
     Dispose();
     // it's only legal to delete the pUndoManager if it was created by
@@ -385,7 +385,7 @@ bool ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
 
             mpIMEInfos.reset();
 
-            FormatAndUpdate( pView );
+            FormatAndLayout( pView );
 
             pView->SetInsertMode( !bWasCursorOverwrite );
         }
@@ -446,7 +446,7 @@ bool ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
 
                 ParaPortion& rPortion = FindParaPortion( mpIMEInfos->aPos.GetNode() );
                 rPortion.MarkSelectionInvalid( mpIMEInfos->aPos.GetIndex() );
-                FormatAndUpdate( pView );
+                FormatAndLayout( pView );
             }
 
             EditSelection aNewSel = EditPaM( mpIMEInfos->aPos.GetNode(), mpIMEInfos->aPos.GetIndex()+pData->GetCursorPos() );
@@ -706,7 +706,7 @@ void ImpEditEngine::SetText(const OUString& rText)
         pView->pImpEditView->SetEditSelection( EditSelection( aPaM, aPaM ) );
         //  If no text then also no Format&Update
         // => The text remains.
-        if (rText.isEmpty() && GetUpdateMode())
+        if (rText.isEmpty() && IsUpdateLayout())
         {
             tools::Rectangle aTmpRect( pView->GetOutputArea().TopLeft(),
                                 Size( aPaperSize.Width(), nCurTextHeight ) );
@@ -3066,7 +3066,7 @@ tools::Rectangle ImpEditEngine::GetEditCursor(const ParaPortion* pPortion, const
 
 tools::Rectangle ImpEditEngine::PaMtoEditCursor( EditPaM aPaM, GetCursorFlags nFlags )
 {
-    OSL_ENSURE( GetUpdateMode(), "Must not be reached when Update=FALSE: PaMtoEditCursor" );
+    OSL_ENSURE( IsUpdateLayout(), "Must not be reached when Update=FALSE: PaMtoEditCursor" );
 
     tools::Rectangle aEditCursor;
     const sal_Int32 nIndex = aPaM.GetIndex();
@@ -3235,7 +3235,7 @@ ImpEditEngine::GetPortionAndLine(Point aDocPos)
 
 EditPaM ImpEditEngine::GetPaM( Point aDocPos, bool bSmart )
 {
-    OSL_ENSURE( GetUpdateMode(), "Must not be reached when Update=FALSE: GetPaM" );
+    OSL_ENSURE( IsUpdateLayout(), "Must not be reached when Update=FALSE: GetPaM" );
 
     if (const auto& [pPortion, pLine, nLineStartX] = GetPortionAndLine(aDocPos); pPortion)
     {
@@ -3268,7 +3268,7 @@ bool ImpEditEngine::IsTextPos(const Point& rDocPos, sal_uInt16 nBorder)
 
 sal_uInt32 ImpEditEngine::GetTextHeight() const
 {
-    OSL_ENSURE( GetUpdateMode(), "Should not be used for Update=FALSE: GetTextHeight" );
+    OSL_ENSURE( IsUpdateLayout(), "Should not be used for Update=FALSE: GetTextHeight" );
     OSL_ENSURE( IsFormatted() || IsFormatting(), "GetTextHeight: Not formatted" );
     return nCurTextHeight;
 }
@@ -3402,7 +3402,7 @@ sal_uInt32 ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine,
 
 sal_uInt32 ImpEditEngine::GetTextHeightNTP() const
 {
-    DBG_ASSERT( GetUpdateMode(), "Should not be used for Update=FALSE: GetTextHeight" );
+    DBG_ASSERT( IsUpdateLayout(), "Should not be used for Update=FALSE: GetTextHeight" );
     DBG_ASSERT( IsFormatted() || IsFormatting(), "GetTextHeight: Not formatted" );
     return nCurTextHeightNTP;
 }
@@ -3432,7 +3432,7 @@ tools::Long ImpEditEngine::Calc1ColumnTextHeight(tools::Long* pHeightNTP)
 
 tools::Long ImpEditEngine::CalcTextHeight(tools::Long* pHeightNTP)
 {
-    OSL_ENSURE( GetUpdateMode(), "Should not be used when Update=FALSE: CalcTextHeight" );
+    OSL_ENSURE( IsUpdateLayout(), "Should not be used when Update=FALSE: CalcTextHeight" );
 
     if (mnColumns <= 1)
         return Calc1ColumnTextHeight(pHeightNTP); // All text fits into a single column - done!

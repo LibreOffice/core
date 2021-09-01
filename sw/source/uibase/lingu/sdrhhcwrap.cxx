@@ -81,7 +81,7 @@ SdrHHCWrapper::~SdrHHCWrapper()
         SdrView *pSdrView = pView->GetWrtShell().GetDrawView();
         OSL_ENSURE( pSdrView, "SdrHHCWrapper without DrawView?" );
         pSdrView->SdrEndTextEdit( true );
-        SetUpdateMode(false);
+        SetUpdateLayout(false);
         pOutlView->SetOutputArea( tools::Rectangle( Point(), Size(1, 1) ) );
     }
     RemoveView( pOutlView.get() );
@@ -102,7 +102,7 @@ bool SdrHHCWrapper::ConvertNextDocument()
         SdrView *pSdrView = pView->GetWrtShell().GetDrawView();
         OSL_ENSURE( pSdrView, "SdrHHCWrapper without DrawView?" );
         pSdrView->SdrEndTextEdit( true );
-        SetUpdateMode(false);
+        SetUpdateLayout(false);
         pOutlView->SetOutputArea( tools::Rectangle( Point(), Size(1, 1) ) );
         SetPaperSize( Size(1, 1) );
         Clear();
@@ -131,7 +131,7 @@ bool SdrHHCWrapper::ConvertNextDocument()
                 //!! work correctly because the document may not be properly
                 //!! formatted when some information is accessed, and thus
                 //!! incorrect results get returned.
-                SetUpdateMode(true);
+                SetUpdateLayout(true);
                 if (HasConvertibleTextPortion( nSourceLang ))
                 {
                     SdrView *pSdrView = pView->GetWrtShell().GetDrawView();
@@ -141,13 +141,13 @@ bool SdrHHCWrapper::ConvertNextDocument()
                     bNextDoc = true;
                     pOutlView->SetOutputArea( tools::Rectangle( Point(), Size(1,1)));
                     SetPaperSize( pTextObj->GetLogicRect().GetSize() );
-                    SetUpdateMode(true);
+                    SetUpdateLayout(true);
                     pView->GetWrtShell().MakeVisible(SwRect(pTextObj->GetLogicRect()));
 
                     pSdrView->SdrBeginTextEdit(pTextObj, pPV, &pView->GetEditWin(), false, this, pOutlView.get(), true, true);
                 }
                 else
-                    SetUpdateMode(false);
+                    SetUpdateLayout(false);
             }
 
             if ( !bNextDoc )

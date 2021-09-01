@@ -692,7 +692,7 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
     const Size aNullSize;
     rOutliner.SetPaperSize(aNullSize);
     rOutliner.SetPolygon(aPolyPolygon);
-    rOutliner.SetUpdateMode(true);
+    rOutliner.SetUpdateLayout(true);
     rOutliner.SetText(rSdrContourTextPrimitive.getOutlinerParaObject());
 
     // set visualizing page at Outliner; needed e.g. for PageNumberField decomposition
@@ -780,7 +780,7 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     }
 
     rOutliner.SetPaperSize(aNullSize);
-    rOutliner.SetUpdateMode(true);
+    rOutliner.SetUpdateLayout(true);
     rOutliner.SetText(*pOutlinerParaObject);
     ImpAutoFitText(rOutliner,aAnchorTextSize,bVerticalWriting);
 
@@ -972,7 +972,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
         }
 
         rOutliner.SetPaperSize(aAnchorTextSize);
-        rOutliner.SetUpdateMode(true);
+        rOutliner.SetUpdateLayout(true);
         rOutliner.SetText(rSdrBlockTextPrimitive.getOutlinerParaObject());
     }
     else
@@ -1029,7 +1029,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
         }
 
         rOutliner.SetPaperSize(aNullSize);
-        rOutliner.SetUpdateMode(true);
+        rOutliner.SetUpdateLayout(true);
         rOutliner.SetText(rSdrBlockTextPrimitive.getOutlinerParaObject());
     }
 
@@ -1179,7 +1179,7 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
     rOutliner.SetMinAutoPaperSize(aNullSize);
     rOutliner.SetMaxAutoPaperSize(Size(1000000,1000000));
     rOutliner.SetPaperSize(aNullSize);
-    rOutliner.SetUpdateMode(true);
+    rOutliner.SetUpdateLayout(true);
     rOutliner.SetText(rSdrStretchTextPrimitive.getOutlinerParaObject());
 
     // set visualizing page at Outliner; needed e.g. for PageNumberField decomposition
@@ -1512,7 +1512,7 @@ void SdrTextObj::impHandleChainingEventsDuringDecomposition(SdrOutliner &rOutlin
         // Initialize Chaining Outliner
         SdrOutliner &rChainingOutl(getSdrModelFromSdrObject().GetChainingOutliner(this));
         ImpInitDrawOutliner( rChainingOutl );
-        rChainingOutl.SetUpdateMode(true);
+        rChainingOutl.SetUpdateLayout(true);
         // We must pass the chaining outliner otherwise we would mess up decomposition
         aTxtChainFlow.ExecuteOverflow(&rOutliner, &rChainingOutl);
     }
@@ -1579,7 +1579,7 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     }
 
     rOutliner.SetPaperSize(aNullSize);
-    rOutliner.SetUpdateMode(true);
+    rOutliner.SetUpdateLayout(true);
     // Sets original text
     rOutliner.SetText(*pOutlinerParaObject);
 

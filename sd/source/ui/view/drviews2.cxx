@@ -509,9 +509,9 @@ public:
 
         // Calculate to outliner text size
         pOutliner->UpdateFields();
-        pOutliner->SetUpdateMode(true);
+        pOutliner->SetUpdateLayout(true);
         Size aTextSize(pOutliner->CalcTextSize());
-        pOutliner->SetUpdateMode(false);
+        pOutliner->SetUpdateLayout(false);
 
         // Create objects, apply the outliner and add them (objects) to all master pages
         const sal_uInt16 nCount = m_rDrawViewShell.GetDoc()->GetMasterSdPageCount(PageKind::Standard);
@@ -2498,10 +2498,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 pRectObj->SetMergedItem(makeSdrTextAutoGrowWidthItem(true));
 
                 pOutl->UpdateFields();
-                pOutl->SetUpdateMode( true );
+                pOutl->SetUpdateLayout( true );
                 Size aSize( pOutl->CalcTextSize() );
                 aSize.setWidth( aSize.Width() * nMul );
-                pOutl->SetUpdateMode( false );
+                pOutl->SetUpdateLayout( false );
 
                 Point aPos;
                 ::tools::Rectangle aRect( aPos, GetActiveWindow()->GetOutputSizePixel() );

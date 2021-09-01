@@ -362,7 +362,7 @@ ScEditEngineDefaulter& XclRoot::GetEditEngine() const
         ScEditEngineDefaulter& rEE = *mrData.mxEditEngine;
         rEE.SetRefMapMode(MapMode(MapUnit::Map100thMM));
         rEE.SetEditTextObjectPool( GetDoc().GetEditPool() );
-        rEE.SetUpdateMode( false );
+        rEE.SetUpdateLayout( false );
         rEE.EnableUndo( false );
         rEE.SetControlWord( rEE.GetControlWord() & ~EEControlBits::ALLOWBIGOBJS );
     }
@@ -376,7 +376,7 @@ ScHeaderEditEngine& XclRoot::GetHFEditEngine() const
         mrData.mxHFEditEngine = std::make_shared<ScHeaderEditEngine>( EditEngine::CreatePool().get() );
         ScHeaderEditEngine& rEE = *mrData.mxHFEditEngine;
         rEE.SetRefMapMode(MapMode(MapUnit::MapTwip)); // headers/footers use twips as default metric
-        rEE.SetUpdateMode( false );
+        rEE.SetUpdateLayout( false );
         rEE.EnableUndo( false );
         rEE.SetControlWord( rEE.GetControlWord() & ~EEControlBits::ALLOWBIGOBJS );
 
@@ -400,7 +400,7 @@ EditEngine& XclRoot::GetDrawEditEngine() const
         mrData.mxDrawEditEng = std::make_shared<EditEngine>( &GetDoc().GetDrawLayer()->GetItemPool() );
         EditEngine& rEE = *mrData.mxDrawEditEng;
         rEE.SetRefMapMode(MapMode(MapUnit::Map100thMM));
-        rEE.SetUpdateMode( false );
+        rEE.SetUpdateLayout( false );
         rEE.EnableUndo( false );
         rEE.SetControlWord( rEE.GetControlWord() & ~EEControlBits::ALLOWBIGOBJS );
     }

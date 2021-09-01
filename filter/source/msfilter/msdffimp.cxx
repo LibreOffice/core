@@ -3619,8 +3619,7 @@ void SvxMSDffManager::ReadObjText( const OUString& rText, SdrObject* pObj )
     SdrOutliner& rOutliner = pText->ImpGetDrawOutliner();
     rOutliner.Init( OutlinerMode::TextObject );
 
-    bool bOldUpdateMode = rOutliner.GetUpdateMode();
-    rOutliner.SetUpdateMode( false );
+    bool bOldUpdateMode = rOutliner.SetUpdateLayout( false );
     rOutliner.SetVertical( pText->IsVerticalWriting() );
 
     sal_Int32 nParaIndex = 0;
@@ -3666,7 +3665,7 @@ void SvxMSDffManager::ReadObjText( const OUString& rText, SdrObject* pObj )
     }
     std::optional<OutlinerParaObject> pNewText = rOutliner.CreateParaObject();
     rOutliner.Clear();
-    rOutliner.SetUpdateMode( bOldUpdateMode );
+    rOutliner.SetUpdateLayout( bOldUpdateMode );
     pText->SetOutlinerParaObject( std::move(pNewText) );
     // tdf#143315: restore stylesheet applied to Outliner's nodes when SdrTextObj initializes
     // its attributes, but removed by Outliner::Init, which calls Outliner::Clear.
@@ -4471,9 +4470,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         if ( pParaObj )
                         {
                             SdrOutliner& rOutliner = static_cast<SdrObjCustomShape*>(pRet)->ImpGetDrawOutliner();
-                            bool bOldUpdateMode = rOutliner.GetUpdateMode();
                             rOutliner.SetStyleSheetPool(static_cast< SfxStyleSheetPool* >(pRet->getSdrModelFromSdrObject().GetStyleSheetPool()));
-                            rOutliner.SetUpdateMode( false );
+                            bool bOldUpdateMode = rOutliner.SetUpdateLayout( false );
                             rOutliner.SetText( *pParaObj );
                             ScopedVclPtrInstance< VirtualDevice > pVirDev(DeviceFormat::DEFAULT);
                             pVirDev->SetMapMode(MapMode(MapUnit::Map100thMM));
@@ -4501,7 +4499,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 }
                             }
                             rOutliner.Clear();
-                            rOutliner.SetUpdateMode( bOldUpdateMode );
+                            rOutliner.SetUpdateLayout( bOldUpdateMode );
                         }
                     }
 

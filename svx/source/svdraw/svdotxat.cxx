@@ -143,7 +143,7 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt,
     {
         Outliner& rOutliner = ImpGetDrawOutliner();
         rOutliner.SetPaperSize(aNewSize);
-        rOutliner.SetUpdateMode(true);
+        rOutliner.SetUpdateLayout(true);
         // TODO: add the optimization with bPortionInfoChecked etc. here
         OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
         if (pOutlinerParaObject)

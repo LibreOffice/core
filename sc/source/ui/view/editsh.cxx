@@ -129,8 +129,7 @@ static void lcl_RemoveAttribs( EditView& rEditView )
 {
     ScEditEngineDefaulter* pEngine = static_cast<ScEditEngineDefaulter*>(rEditView.GetEditEngine());
 
-    bool bOld = pEngine->GetUpdateMode();
-    pEngine->SetUpdateMode(false);
+    bool bOld = pEngine->SetUpdateLayout(false);
 
     OUString aName = ScResId( STR_UNDO_DELETECONTENTS );
     ViewShellId nViewShellId(-1);
@@ -143,7 +142,7 @@ static void lcl_RemoveAttribs( EditView& rEditView )
 
     pEngine->GetUndoManager().LeaveListAction();
 
-    pEngine->SetUpdateMode(bOld);
+    pEngine->SetUpdateLayout(bOld);
 }
 
 static void lclInsertCharacter( EditView* pTableView, EditView* pTopView, sal_Unicode cChar )
@@ -1153,12 +1152,11 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
     // apply
 
     EditEngine* pEngine = pEditView->GetEditEngine();
-    bool bOld = pEngine->GetUpdateMode();
-    pEngine->SetUpdateMode(false);
+    bool bOld = pEngine->SetUpdateLayout(false);
 
     pEditView->SetAttribs( aSet );
 
-    pEngine->SetUpdateMode(bOld);
+    pEngine->SetUpdateLayout(bOld);
     pEditView->Invalidate();
 
     ScInputHandler* pHdl = GetMyInputHdl();

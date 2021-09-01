@@ -1401,8 +1401,7 @@ OUString HtmlExport::ParagraphToHTMLString( SdrOutliner const * pOutliner, sal_I
 
     // TODO: MALTE!!!
     EditEngine& rEditEngine = *const_cast<EditEngine*>(&pOutliner->GetEditEngine());
-    bool bOldUpdateMode = rEditEngine.GetUpdateMode();
-    rEditEngine.SetUpdateMode(true);
+    bool bOldUpdateMode = rEditEngine.SetUpdateLayout(true);
 
     Paragraph* pPara = pOutliner->GetParagraph(nPara);
     if(nullptr == pPara)
@@ -1427,7 +1426,7 @@ OUString HtmlExport::ParagraphToHTMLString( SdrOutliner const * pOutliner, sal_I
         nPos1 = nPos2;
     }
     aStr.append(aState.Flush());
-    rEditEngine.SetUpdateMode(bOldUpdateMode);
+    rEditEngine.SetUpdateLayout(bOldUpdateMode);
 
     return aStr.makeStringAndClear();
 }

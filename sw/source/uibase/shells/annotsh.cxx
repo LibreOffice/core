@@ -1769,7 +1769,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
     // do not flicker
     pOLV->HideCursor();
     Outliner * pOutliner = pOLV->GetOutliner();
-    pOutliner->SetUpdateMode(false);
+    pOutliner->SetUpdateLayout(false);
 
     SfxItemSet aOldSet( pOLV->GetAttribs() );
     SfxItemSet aFontSet(
@@ -1813,7 +1813,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
     pOLV->SetAttribs( aFontSet );
 
     // From now on show it again
-    pOutliner->SetUpdateMode(true);
+    pOutliner->SetUpdateLayout(true);
     pOLV->ShowCursor();
 
     rReq.AppendItem( SfxStringItem( GetPool().GetWhich(SID_CHARMAP), sSym ) );

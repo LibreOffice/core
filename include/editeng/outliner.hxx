@@ -697,8 +697,9 @@ public:
     void            SetMaxDepth( sal_Int16 nDepth );
     sal_Int16       GetMaxDepth() const { return nMaxDepth; }
 
-    void            SetUpdateMode( bool bUpdate );
-    bool            GetUpdateMode() const;
+    /// @return previous value of bUpdateLayout state
+    bool            SetUpdateLayout( bool bUpdate );
+    bool            IsUpdateLayout() const;
 
     void            Clear();
 

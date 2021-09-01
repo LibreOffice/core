@@ -2375,13 +2375,12 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
         pOutl->SetEditTextObjectPool(pPool);
         pOutl->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(getSdrModelFromSdrPage().GetStyleSheetPool()));
         pOutl->EnableUndo(false);
-        pOutl->SetUpdateMode( false );
+        pOutl->SetUpdateLayout( false );
     }
 
     OutlinerMode nOutlMode = pOutl->GetOutlinerMode();
     Size aPaperSize = pOutl->GetPaperSize();
-    bool bUpdateMode = pOutl->GetUpdateMode();
-    pOutl->SetUpdateMode(false);
+    bool bUpdateMode = pOutl->SetUpdateLayout(false);
     pOutl->SetParaAttribs( 0, pOutl->GetEmptyItemSet() );
 
     // Always set the object's StyleSheet at the Outliner to
@@ -2481,7 +2480,7 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
         // restore the outliner
         pOutl->Init( nOutlMode );
         pOutl->SetParaAttribs( 0, pOutl->GetEmptyItemSet() );
-        pOutl->SetUpdateMode( bUpdateMode );
+        pOutl->SetUpdateLayout( bUpdateMode );
         pOutl->SetPaperSize( aPaperSize );
     }
 }

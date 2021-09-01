@@ -1787,7 +1787,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
             pEditView[eWhich]->SetLOKSpecialVisArea(aVisPTwips);
         //  UpdateMode has been disabled in ScInputHandler::StartTable
         //  must be enabled before EditGrowY (GetTextHeight)
-        pNewEngine->SetUpdateMode( true );
+        pNewEngine->SetUpdateLayout( true );
 
         pNewEngine->SetStatusEventHdl( LINK( this, ScViewData, EditEngineHdl ) );
 

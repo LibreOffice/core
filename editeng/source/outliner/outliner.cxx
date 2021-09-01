@@ -91,8 +91,7 @@ Paragraph* Outliner::Insert(const OUString& rText, sal_Int32 nAbsPos, sal_Int16 
     }
     else
     {
-        bool bUpdate = pEditEngine->GetUpdateMode();
-        pEditEngine->SetUpdateMode( false );
+        bool bUpdate = pEditEngine->SetUpdateLayout( false );
         ImplBlockInsertionCallbacks( true );
         pPara = new Paragraph( nDepth );
         pParaList->Insert( std::unique_ptr<Paragraph>(pPara), nAbsPos );
@@ -103,7 +102,7 @@ Paragraph* Outliner::Insert(const OUString& rText, sal_Int32 nAbsPos, sal_Int16 
         pPara->nFlags |= ParaFlag::HOLDDEPTH;
         SetText( rText, pPara );
         ImplBlockInsertionCallbacks( false );
-        pEditEngine->SetUpdateMode( bUpdate );
+        pEditEngine->SetUpdateLayout( bUpdate );
     }
     bFirstParaIsEmpty = false;
     DBG_ASSERT(pEditEngine->GetParagraphCount()==pParaList->GetParagraphCount(),"SetText failed");
@@ -406,8 +405,7 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
         return;
     }
 
-    const bool bUpdate = pEditEngine->GetUpdateMode();
-    pEditEngine->SetUpdateMode( false );
+    const bool bUpdate = pEditEngine->SetUpdateLayout( false );
     ImplBlockInsertionCallbacks( true );
 
     if (rText.isEmpty())
@@ -481,7 +479,7 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
     bFirstParaIsEmpty = false;
     ImplBlockInsertionCallbacks( false );
     // Restore the update mode.
-    pEditEngine->SetUpdateMode(bUpdate, /*bRestoring=*/true);
+    pEditEngine->SetUpdateLayout(bUpdate, /*bRestoring=*/true);
 }
 
 // pView == 0 -> Ignore tabs
@@ -559,9 +557,7 @@ bool Outliner::ImpConvertEdtToOut( sal_Int32 nPara )
 
 void Outliner::SetText( const OutlinerParaObject& rPObj )
 {
-
-    bool bUpdate = pEditEngine->GetUpdateMode();
-    pEditEngine->SetUpdateMode( false );
+    bool bUpdate = pEditEngine->SetUpdateLayout( false );
 
     bool bUndo = pEditEngine->IsUndoEnabled();
     EnableUndo( false );
@@ -587,7 +583,7 @@ void Outliner::SetText( const OutlinerParaObject& rPObj )
 
     EnableUndo( bUndo );
     ImplBlockInsertionCallbacks( false );
-    pEditEngine->SetUpdateMode( bUpdate );
+    pEditEngine->SetUpdateLayout( bUpdate );
 
     DBG_ASSERT( pParaList->GetParagraphCount()==rPObj.Count(),"SetText failed");
     DBG_ASSERT( pEditEngine->GetParagraphCount()==rPObj.Count(),"SetText failed");
@@ -595,9 +591,7 @@ void Outliner::SetText( const OutlinerParaObject& rPObj )
 
 void Outliner::AddText( const OutlinerParaObject& rPObj, bool bAppend )
 {
-
-    bool bUpdate = pEditEngine->GetUpdateMode();
-    pEditEngine->SetUpdateMode( false );
+    bool bUpdate = pEditEngine->SetUpdateLayout( false );
 
     ImplBlockInsertionCallbacks( true );
     sal_Int32 nPara;
@@ -636,7 +630,7 @@ void Outliner::AddText( const OutlinerParaObject& rPObj, bool bAppend )
     ImplCheckParagraphs( nPara, pParaList->GetParagraphCount() );
 
     ImplBlockInsertionCallbacks( false );
-    pEditEngine->SetUpdateMode( bUpdate );
+    pEditEngine->SetUpdateLayout( bUpdate );
 }
 
 OUString Outliner::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, std::optional<Color>& rpTxtColor, std::optional<Color>& rpFldColor )
@@ -729,8 +723,7 @@ void Outliner::ImplInitDepth( sal_Int32 nPara, sal_Int16 nDepth, bool bCreateUnd
     if( IsInUndo() )
         return;
 
-    bool bUpdate = pEditEngine->GetUpdateMode();
-    pEditEngine->SetUpdateMode( false );
+    bool bUpdate = pEditEngine->SetUpdateLayout( false );
 
     bool bUndo = bCreateUndo && IsUndoEnabled();
 
@@ -745,7 +738,7 @@ void Outliner::ImplInitDepth( sal_Int32 nPara, sal_Int16 nDepth, bool bCreateUnd
         InsertUndo( std::make_unique<OutlinerUndoChangeDepth>( this, nPara, nOldDepth, nDepth ) );
     }
 
-    pEditEngine->SetUpdateMode( bUpdate );
+    pEditEngine->SetUpdateLayout( bUpdate );
 }
 
 void Outliner::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
@@ -1108,8 +1101,7 @@ ErrCode Outliner::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat
     bool bOldUndo = pEditEngine->IsUndoEnabled();
     EnableUndo( false );
 
-    bool bUpdate = pEditEngine->GetUpdateMode();
-    pEditEngine->SetUpdateMode( false );
+    bool bUpdate = pEditEngine->SetUpdateLayout( false );
 
     Clear();
 
@@ -1129,7 +1121,7 @@ ErrCode Outliner::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat
     ImpFilterIndents( 0, nParas-1 );
 
     ImplBlockInsertionCallbacks( false );
-    pEditEngine->SetUpdateMode( bUpdate );
+    pEditEngine->SetUpdateLayout( bUpdate );
     EnableUndo( bOldUndo );
 
     return nRet;
@@ -1138,9 +1130,7 @@ ErrCode Outliner::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat
 
 void Outliner::ImpFilterIndents( sal_Int32 nFirstPara, sal_Int32 nLastPara )
 {
-
-    bool bUpdate = pEditEngine->GetUpdateMode();
-    pEditEngine->SetUpdateMode( false );
+    bool bUpdate = pEditEngine->SetUpdateLayout( false );
 
     Paragraph* pLastConverted = nullptr;
     for( sal_Int32 nPara = nFirstPara; nPara <= nLastPara; nPara++ )
@@ -1162,7 +1152,7 @@ void Outliner::ImpFilterIndents( sal_Int32 nFirstPara, sal_Int32 nLastPara )
         }
     }
 
-    pEditEngine->SetUpdateMode( bUpdate );
+    pEditEngine->SetUpdateLayout( bUpdate );
 }
 
 SfxUndoManager& Outliner::GetUndoManager()
@@ -1177,9 +1167,7 @@ SfxUndoManager* Outliner::SetUndoManager(SfxUndoManager* pNew)
 
 void Outliner::ImpTextPasted( sal_Int32 nStartPara, sal_Int32 nCount )
 {
-
-    bool bUpdate = pEditEngine->GetUpdateMode();
-    pEditEngine->SetUpdateMode( false );
+    bool bUpdate = pEditEngine->SetUpdateLayout( false );
 
     const sal_Int32 nStart = nStartPara;
 
@@ -1219,7 +1207,7 @@ void Outliner::ImpTextPasted( sal_Int32 nStartPara, sal_Int32 nCount )
         pPara = pParaList->GetParagraph( nStartPara );
     }
 
-    pEditEngine->SetUpdateMode( bUpdate );
+    pEditEngine->SetUpdateLayout( bUpdate );
 
     DBG_ASSERT(pParaList->GetParagraphCount()==pEditEngine->GetParagraphCount(),"ImpTextPasted failed");
 }

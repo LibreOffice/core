@@ -2155,7 +2155,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
 std::unique_ptr<ScFieldEditEngine> ScOutputData::CreateOutputEditEngine()
 {
     std::unique_ptr<ScFieldEditEngine> pEngine(new ScFieldEditEngine(mpDoc, mpDoc->GetEnginePool()));
-    pEngine->SetUpdateMode( false );
+    pEngine->SetUpdateLayout( false );
     // a RefDevice always has to be set, otherwise EditEngine would create a VirtualDevice
     pEngine->SetRefDevice( pFmtDevice );
     EEControlBits nCtrl = pEngine->GetControlWord();
@@ -2176,7 +2176,7 @@ std::unique_ptr<ScFieldEditEngine> ScOutputData::CreateOutputEditEngine()
 
 static void lcl_ClearEdit( EditEngine& rEngine )       // text and attributes
 {
-    rEngine.SetUpdateMode( false );
+    rEngine.SetUpdateLayout( false );
 
     rEngine.SetText(EMPTY_OUSTRING);
     // do not keep any para-attributes
@@ -2209,9 +2209,7 @@ static bool lcl_SafeIsValue( ScRefCellValue& rCell )
 
 static void lcl_ScaleFonts( EditEngine& rEngine, tools::Long nPercent )
 {
-    bool bUpdateMode = rEngine.GetUpdateMode();
-    if ( bUpdateMode )
-        rEngine.SetUpdateMode( false );
+    bool bUpdateMode = rEngine.SetUpdateLayout( false );
 
     sal_Int32 nParCount = rEngine.GetParagraphCount();
     for (sal_Int32 nPar=0; nPar<nParCount; nPar++)
@@ -2244,7 +2242,7 @@ static void lcl_ScaleFonts( EditEngine& rEngine, tools::Long nPercent )
     }
 
     if ( bUpdateMode )
-        rEngine.SetUpdateMode( true );
+        rEngine.SetUpdateLayout( true );
 }
 
 static tools::Long lcl_GetEditSize( EditEngine& rEngine, bool bWidth, bool bSwap, Degree100 nAttrRotate )
@@ -2718,9 +2716,9 @@ bool ScOutputData::DrawEditParam::adjustHorAlignment(ScFieldEditEngine* pEngine)
         SvxAdjust eEditAdjust = (meHorJustResult == SvxCellHorJustify::Center) ?
             SvxAdjust::Center : SvxAdjust::Right;
 
-        pEngine->SetUpdateMode(false);
+        pEngine->SetUpdateLayout(false);
         pEngine->SetDefaultItem( SvxAdjustItem(eEditAdjust, EE_PARA_JUST) );
-        pEngine->SetUpdateMode(true);
+        pEngine->SetUpdateLayout(true);
         return true;
     }
     return false;
@@ -2952,7 +2950,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
     else if ( mbUseStyleColor && mbForceAutoColor )
         lcl_SetEditColor( *rParam.mpEngine, COL_AUTO );     //! or have a flag at EditEngine
 
-    rParam.mpEngine->SetUpdateMode( true );     // after SetText, before CalcTextWidth/GetTextHeight
+    rParam.mpEngine->SetUpdateLayout( true );     // after SetText, before CalcTextWidth/GetTextHeight
 
     //  Get final output area using the calculated width
 
@@ -3330,7 +3328,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
     else if ( mbUseStyleColor && mbForceAutoColor )
         lcl_SetEditColor( *rParam.mpEngine, COL_AUTO );     //! or have a flag at EditEngine
 
-    rParam.mpEngine->SetUpdateMode( true );     // after SetText, before CalcTextWidth/GetTextHeight
+    rParam.mpEngine->SetUpdateLayout( true );     // after SetText, before CalcTextWidth/GetTextHeight
 
     //  Get final output area using the calculated width
 
@@ -3573,7 +3571,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
     else if ( mbUseStyleColor && mbForceAutoColor )
         lcl_SetEditColor( *rParam.mpEngine, COL_AUTO );     //! or have a flag at EditEngine
 
-    rParam.mpEngine->SetUpdateMode( true );     // after SetText, before CalcTextWidth/GetTextHeight
+    rParam.mpEngine->SetUpdateLayout( true );     // after SetText, before CalcTextWidth/GetTextHeight
 
     //  Get final output area using the calculated width
 
@@ -3830,7 +3828,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
     else if ( mbUseStyleColor && mbForceAutoColor )
         lcl_SetEditColor( *rParam.mpEngine, COL_AUTO );     //! or have a flag at EditEngine
 
-    rParam.mpEngine->SetUpdateMode( true );     // after SetText, before CalcTextWidth/GetTextHeight
+    rParam.mpEngine->SetUpdateLayout( true );     // after SetText, before CalcTextWidth/GetTextHeight
 
     //  Get final output area using the calculated width
 
@@ -4129,7 +4127,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
     else if ( mbUseStyleColor && mbForceAutoColor )
         lcl_SetEditColor( *rParam.mpEngine, COL_AUTO );     //! or have a flag at EditEngine
 
-    rParam.mpEngine->SetUpdateMode( true );     // after SetText, before CalcTextWidth/GetTextHeight
+    rParam.mpEngine->SetUpdateLayout( true );     // after SetText, before CalcTextWidth/GetTextHeight
 
     //  Get final output area using the calculated width
 
@@ -4762,7 +4760,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                             else if ( mbUseStyleColor && mbForceAutoColor )
                                 lcl_SetEditColor( *pEngine, COL_AUTO );     //! or have a flag at EditEngine
 
-                            pEngine->SetUpdateMode( true );     // after SetText, before CalcTextWidth/GetTextHeight
+                            pEngine->SetUpdateLayout( true );     // after SetText, before CalcTextWidth/GetTextHeight
 
                             tools::Long nEngineWidth  = static_cast<tools::Long>(pEngine->CalcTextWidth());
                             tools::Long nEngineHeight = pEngine->GetTextHeight();
@@ -4978,7 +4976,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                         if (eHorJust==SvxCellHorJustify::Right ||
                                             eHorJust==SvxCellHorJustify::Center)
                                         {
-                                            pEngine->SetUpdateMode( false );
+                                            pEngine->SetUpdateLayout( false );
 
                                             SvxAdjust eSvxAdjust =
                                                 (eHorJust==SvxCellHorJustify::Right) ?
@@ -4992,7 +4990,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                             else
                                                 pEngine->SetPaperSize(aPaperSize);
 
-                                            pEngine->SetUpdateMode( true );
+                                            pEngine->SetUpdateLayout( true );
                                         }
                                     }
                                     else

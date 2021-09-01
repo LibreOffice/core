@@ -963,7 +963,7 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
 
     mbHasOnlineSpellErrors = false;
     SdOutliner* pOutl = GetInternalOutliner();
-    pOutl->SetUpdateMode(true);
+    pOutl->SetUpdateLayout(true);
     Link<EditStatus&,void> aEvtHdl = pOutl->GetStatusEventHdl();
     pOutl->SetStatusEventHdl(LINK(this, SdDrawDocument, OnlineSpellEventHdl));
 
@@ -1003,7 +1003,7 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
     }
 
     pOutl->SetStatusEventHdl(aEvtHdl);
-    pOutl->SetUpdateMode(false);
+    pOutl->SetUpdateLayout(false);
     pOutl->Init( nOldOutlMode );
     mbHasOnlineSpellErrors = false;
 }

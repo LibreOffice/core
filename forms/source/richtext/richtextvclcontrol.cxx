@@ -88,12 +88,12 @@ namespace frm
         if ( HasChildPathFocus() )
             getView().HideCursor();
 
-        bool bOldUpdateMode = getEngine().GetUpdateMode();   // TODO: guard?
-        getEngine().SetUpdateMode( false );
+        // TODO: guard?
+        bool bOldUpdateMode = getEngine().SetUpdateLayout( false );
 
         getView().SetAttribs( _rAttributesToApply );
 
-        getEngine().SetUpdateMode( bOldUpdateMode );
+        getEngine().SetUpdateLayout( bOldUpdateMode );
         getView().Invalidate();
 
         if ( HasChildPathFocus() )

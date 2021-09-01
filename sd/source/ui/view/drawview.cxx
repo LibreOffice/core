@@ -181,7 +181,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                     OutlinerView* pOV   = GetTextEditOutlinerView();
                     ::Outliner* pOutliner = pOV->GetOutliner();
 
-                    pOutliner->SetUpdateMode(false);
+                    pOutliner->SetUpdateLayout(false);
                     mpDocSh->SetWaitCursor( true );
 
                     // replace placeholder by template name
@@ -256,7 +256,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                     }
 
                     mpDocSh->SetWaitCursor( false );
-                    pOV->GetOutliner()->SetUpdateMode(true);
+                    pOV->GetOutliner()->SetUpdateLayout(true);
 
                     mpDocSh->GetUndoManager()->LeaveListAction();
 

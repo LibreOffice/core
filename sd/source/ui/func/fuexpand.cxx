@@ -88,7 +88,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
         return;
 
     SdOutliner aOutliner( mpDoc, OutlinerMode::OutlineObject );
-    aOutliner.SetUpdateMode(false);
+    aOutliner.SetUpdateLayout(false);
     aOutliner.EnableUndo(false);
 
     if (mpDocSh)

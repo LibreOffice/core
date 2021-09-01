@@ -214,8 +214,9 @@ public:
     /// bRestoring is used for LOK to update cursor visibility, specifically,
     /// when true, it means we are restoring the update mode after internally
     /// disabling it (f.e. during SetText to set/delete default text in Impress).
-    void            SetUpdateMode(bool bUpdate, bool bRestoring = false);
-    bool            GetUpdateMode() const;
+    /// @return previous value of update
+    bool            SetUpdateLayout(bool bUpdate, bool bRestoring = false);
+    bool            IsUpdateLayout() const;
 
     void            SetBackgroundColor( const Color& rColor );
     Color const &   GetBackgroundColor() const;
@@ -620,7 +621,7 @@ public:
     const ViewsType& GetEditViews() const;
 
     void SetUndoMode(bool b);
-    void FormatAndUpdate(EditView* pCurView, bool bCalledFromUndo = false);
+    void FormatAndLayout(EditView* pCurView, bool bCalledFromUndo = false);
 
     void Undo(EditView* pView);
     void Redo(EditView* pView);

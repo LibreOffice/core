@@ -412,7 +412,7 @@ void EditEngine::SetPaperSize( const Size& rNewSize )
 
         pImpEditEngine->UpdateViews( pImpEditEngine->GetActiveView() );
 
-        if ( pImpEditEngine->GetUpdateMode() && pImpEditEngine->GetActiveView() )
+        if ( pImpEditEngine->IsUpdateLayout() && pImpEditEngine->GetActiveView() )
             pImpEditEngine->pActiveView->ShowCursor( false, false );
     }
 }
@@ -795,9 +795,9 @@ void EditEngine::SetUndoMode(bool b)
     pImpEditEngine->SetUndoMode(b);
 }
 
-void EditEngine::FormatAndUpdate(EditView* pCurView, bool bCalledFromUndo)
+void EditEngine::FormatAndLayout(EditView* pCurView, bool bCalledFromUndo)
 {
-    pImpEditEngine->FormatAndUpdate(pCurView, bCalledFromUndo);
+    pImpEditEngine->FormatAndLayout(pCurView, bCalledFromUndo);
 }
 
 void EditEngine::Undo(EditView* pView)
@@ -1177,7 +1177,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                             // (not painting a numbering in the list may cause the following
                             // numberings to have different numbers than before and thus the
                             // length may have changed as well )
-                            pImpEditEngine->FormatAndUpdate( pImpEditEngine->GetActiveView() );
+                            pImpEditEngine->FormatAndLayout( pImpEditEngine->GetActiveView() );
 
                             break;
                         }
@@ -1421,9 +1421,9 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
         // Idle-Formatter only when AnyInput.
         if ( bAllowIdle && pImpEditEngine->GetStatus().UseIdleFormatter()
                 && Application::AnyInput( VclInputFlags::KEYBOARD) )
-            pImpEditEngine->IdleFormatAndUpdate( pEditView );
+            pImpEditEngine->IdleFormatAndLayout( pEditView );
         else
-            pImpEditEngine->FormatAndUpdate( pEditView );
+            pImpEditEngine->FormatAndLayout( pEditView );
     }
     else if ( bMoved )
     {
@@ -1467,19 +1467,20 @@ sal_uInt32 EditEngine::CalcTextWidth()
     return nWidth;
 }
 
-void EditEngine::SetUpdateMode(bool bUpdate, bool bRestoring)
+bool EditEngine::SetUpdateLayout(bool bUpdate, bool bRestoring)
 {
-    pImpEditEngine->SetUpdateMode( bUpdate );
+    bool bPrevUpdateLayout = pImpEditEngine->SetUpdateLayout( bUpdate );
     if (pImpEditEngine->pActiveView)
     {
         // Not an activation if we are restoring the previous update mode.
         pImpEditEngine->pActiveView->ShowCursor(false, false, /*bActivate=*/!bRestoring);
     }
+    return bPrevUpdateLayout;
 }
 
-bool EditEngine::GetUpdateMode() const
+bool EditEngine::IsUpdateLayout() const
 {
-    return pImpEditEngine->GetUpdateMode();
+    return pImpEditEngine->IsUpdateLayout();
 }
 
 void EditEngine::Clear()
@@ -1490,8 +1491,8 @@ void EditEngine::Clear()
 void EditEngine::SetText( const OUString& rText )
 {
     pImpEditEngine->SetText( rText );
-    if ( !rText.isEmpty() && pImpEditEngine->GetUpdateMode() )
-        pImpEditEngine->FormatAndUpdate();
+    if ( !rText.isEmpty() && pImpEditEngine->IsUpdateLayout() )
+        pImpEditEngine->FormatAndLayout();
 }
 
 ErrCode EditEngine::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs /* = NULL */ )
@@ -1532,7 +1533,7 @@ std::unique_ptr<EditTextObject> EditEngine::GetEmptyTextObject() const
 void EditEngine::SetText( const EditTextObject& rTextObject )
 {
     pImpEditEngine->SetText( rTextObject );
-    pImpEditEngine->FormatAndUpdate();
+    pImpEditEngine->FormatAndLayout();
 }
 
 void EditEngine::ShowParagraph( sal_Int32 nParagraph, bool bShow )
@@ -1636,7 +1637,7 @@ void EditEngine::RemoveParagraph( sal_Int32 nPara )
         pImpEditEngine->ImpRemoveParagraph( nPara );
         pImpEditEngine->InvalidateFromParagraph( nPara );
         pImpEditEngine->UpdateSelections();
-        pImpEditEngine->FormatAndUpdate();
+        pImpEditEngine->FormatAndLayout();
     }
 }
 
@@ -1711,7 +1712,7 @@ void EditEngine::InsertParagraph( sal_Int32 nPara, const EditTextObject& rTxtObj
 
     pImpEditEngine->UndoActionEnd();
 
-    pImpEditEngine->FormatAndUpdate();
+    pImpEditEngine->FormatAndLayout();
 }
 
 void EditEngine::InsertParagraph(sal_Int32 nPara, const OUString& rTxt)
@@ -1729,7 +1730,7 @@ void EditEngine::InsertParagraph(sal_Int32 nPara, const OUString& rTxt)
     pImpEditEngine->RemoveCharAttribs( nPara );
     pImpEditEngine->UndoActionEnd();
     pImpEditEngine->ImpInsertText( EditSelection( aPaM, aPaM ), rTxt );
-    pImpEditEngine->FormatAndUpdate();
+    pImpEditEngine->FormatAndLayout();
 }
 
 void EditEngine::SetText(sal_Int32 nPara, const OUString& rTxt)
@@ -1740,15 +1741,15 @@ void EditEngine::SetText(sal_Int32 nPara, const OUString& rTxt)
         pImpEditEngine->UndoActionStart( EDITUNDO_INSERT );
         pImpEditEngine->ImpInsertText( *pSel, rTxt );
         pImpEditEngine->UndoActionEnd();
-        pImpEditEngine->FormatAndUpdate();
+        pImpEditEngine->FormatAndLayout();
     }
 }
 
 void EditEngine::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
 {
     pImpEditEngine->SetParaAttribs( nPara, rSet );
-    if ( pImpEditEngine->GetUpdateMode() )
-        pImpEditEngine->FormatAndUpdate();
+    if ( pImpEditEngine->IsUpdateLayout() )
+        pImpEditEngine->FormatAndLayout();
 }
 
 const SfxItemSet& EditEngine::GetParaAttribs( sal_Int32 nPara ) const
@@ -1772,7 +1773,7 @@ void EditEngine::SetCharAttribs(sal_Int32 nPara, const SfxItemSet& rSet)
     // This is called by sd::View::OnBeginPasteOrDrop(), updating the cursor position on undo is not
     // wanted.
     pImpEditEngine->SetAttribs(aSel, rSet, /*nSpecial=*/SetAttribsMode::NONE, /*bSetSelection=*/false);
-    pImpEditEngine->FormatAndUpdate();
+    pImpEditEngine->FormatAndLayout();
 }
 
 void EditEngine::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const
@@ -1802,7 +1803,7 @@ void EditEngine::RemoveAttribs( const ESelection& rSelection, bool bRemoveParaAt
     EditSelection aSel( pImpEditEngine->ConvertSelection( rSelection.nStartPara, rSelection.nStartPos, rSelection.nEndPara, rSelection.nEndPos ) );
     pImpEditEngine->RemoveCharAttribs( aSel, eMode, nWhich  );
     pImpEditEngine->UndoActionEnd();
-    pImpEditEngine->FormatAndUpdate();
+    pImpEditEngine->FormatAndLayout();
 }
 
 vcl::Font EditEngine::GetStandardFont( sal_Int32 nPara )
@@ -1988,7 +1989,7 @@ Point EditEngine::GetDocPosTopLeft( sal_Int32 nParagraph )
         // If someone calls GetLineHeight() with an empty Engine.
         DBG_ASSERT( pImpEditEngine->IsFormatted() || !pImpEditEngine->IsFormatting(), "GetDocPosTopLeft: Doc not formatted - unable to format!" );
         if ( !pImpEditEngine->IsFormatted() )
-            pImpEditEngine->FormatAndUpdate();
+            pImpEditEngine->FormatAndLayout();
         if ( pPPortion->GetLines().Count() )
         {
             // Correct it if large Bullet.
@@ -2327,7 +2328,7 @@ bool EditEngine::UpdateFields()
 {
     bool bChanges = pImpEditEngine->UpdateFields();
     if ( bChanges )
-        pImpEditEngine->FormatAndUpdate();
+        pImpEditEngine->FormatAndLayout();
     return bChanges;
 }
 
@@ -2380,7 +2381,7 @@ void EditEngine::CompleteOnlineSpelling()
     if ( pImpEditEngine->GetStatus().DoOnlineSpelling() )
     {
         if( !pImpEditEngine->IsFormatted() )
-            pImpEditEngine->FormatAndUpdate();
+            pImpEditEngine->FormatAndLayout();
 
         pImpEditEngine->StopOnlineSpellTimer();
         pImpEditEngine->DoOnlineSpelling( nullptr, true, false );

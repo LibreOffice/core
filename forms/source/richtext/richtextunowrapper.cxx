@@ -103,7 +103,7 @@ namespace frm
         {
             EditView* pView = m_rEngine.GetView( view );
             if ( pView )
-                pView->ForceUpdate();
+                pView->ForceLayoutCalculation();
         }
 
         if ( m_pTextChangeListener )

@@ -65,13 +65,13 @@ void TextChainFlow::impSetFlowOutlinerParams(SdrOutliner *, SdrOutliner *)
 */
 void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *pParamOutl)
 {
-    bool bOldUpdateMode = pFlowOutl->GetUpdateMode();
+    bool bOldUpdateMode = pFlowOutl->IsUpdateLayout();
 
     // XXX: This could be reorganized moving most of this stuff inside EditingTextChainFlow
     if (pParamOutl != nullptr)
     {
         // We need this since it's required to check overflow
-        pFlowOutl->SetUpdateMode(true);
+        pFlowOutl->SetUpdateLayout(true);
 
         // XXX: does this work if you do it before setting the text? Seems so.
         impSetFlowOutlinerParams(pFlowOutl, pParamOutl);
@@ -103,7 +103,7 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
 
     // Reset update mode // Reset it here because we use WriteRTF (needing updatemode = true) in the two constructors above
     if (!bOldUpdateMode) // Reset only if the old value was false
-        pFlowOutl->SetUpdateMode(bOldUpdateMode);
+        pFlowOutl->SetUpdateLayout(bOldUpdateMode);
 
     // NOTE: Must be called after mp*ChText abd b*flow have been set but before mbOFisUFinduced is reset
     impUpdateCursorInfo();

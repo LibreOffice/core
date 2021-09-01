@@ -218,7 +218,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     SfxItemSet*     pSet            = nullptr;
     SfxItemSet*     pHFSet          = nullptr;
     ScEditEngineDefaulter aEdEngine( EditEngine::CreatePool().get(), true );
-    aEdEngine.SetUpdateMode( false );
+    aEdEngine.SetUpdateLayout( false );
     std::unique_ptr<EditTextObject> pEmptyTxtObj = aEdEngine.CreateTextObject();
     std::unique_ptr<EditTextObject> pTxtObj;
     ScPageHFItem aHeaderItem( ATTR_PAGE_HEADERRIGHT );

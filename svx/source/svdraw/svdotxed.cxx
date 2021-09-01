@@ -339,8 +339,7 @@ void SdrTextObj::ImpSetTextEditParams() const
     if (mpEditingOutliner==nullptr)
         return;
 
-    bool bUpdBuf=mpEditingOutliner->GetUpdateMode();
-    if (bUpdBuf) mpEditingOutliner->SetUpdateMode(false);
+    bool bUpdBuf=mpEditingOutliner->SetUpdateLayout(false);
     Size aPaperMin;
     Size aPaperMax;
     tools::Rectangle aEditArea;
@@ -355,7 +354,7 @@ void SdrTextObj::ImpSetTextEditParams() const
         TakeTextAnchorRect(aAnchorRect);
         ImpSetContourPolygon(*mpEditingOutliner,aAnchorRect, true);
     }
-    if (bUpdBuf) mpEditingOutliner->SetUpdateMode(true);
+    if (bUpdBuf) mpEditingOutliner->SetUpdateLayout(true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
