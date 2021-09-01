@@ -1511,7 +1511,9 @@ namespace emfio
                         mpInputStream->ReadUInt32( BkColorSrc ).ReadUInt32( iUsageSrc ).ReadUInt32( offBmiSrc ).ReadUInt32( cbBmiSrc )
                                    .ReadUInt32( offBitsSrc ).ReadUInt32( cbBitsSrc ).ReadInt32( cxSrc ).ReadInt32( cySrc ) ;
 
-                        if ( (cbBitsSrc > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc) ||
+                        if ( !mpInputStream->good() ||
+                             (cbBitsSrc > (SAL_MAX_UINT32 - 14)) ||
+                             ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc) ||
                              cxDest == SAL_MAX_INT32 || cyDest == SAL_MAX_INT32 )
                         {
                             bStatus = false;
