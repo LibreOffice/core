@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34daf0d7_a9b90b67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-09-01T07:19:40Z",
+      "side": 1,
+      "message": "pls write your commit messages in an impersonal style :)",
+      "revId": "9d5bb7e2b3defc5c975f166206a5a87c1c20e627",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
