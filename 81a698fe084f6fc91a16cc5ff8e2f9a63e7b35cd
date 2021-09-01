@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f808bb0b_87b83c47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-01T17:18:22Z",
+      "side": 1,
+      "message": "Isn\u0027t the startpos set in [1]? \n\n[1] https://opengrok.libreoffice.org/xref/core/connectivity/source/drivers/flat/ETable.cxx?r\u003ddffe9495#873",
+      "revId": "81a698fe084f6fc91a16cc5ff8e2f9a63e7b35cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2ac1f6c4_f93de1fc",
