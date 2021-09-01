@@ -36,7 +36,16 @@ skia_patches := \
     c++20.patch.0 \
     constexpr-debug-std-max.patch.1 \
     swap-buffers-rect.patch.1 \
+<<<<<<< HEAD   (fb8159 Warn harder about unknown constructors and factories on iOS )
     ubsan.patch.0
+=======
+    ubsan.patch.0 \
+    fast-png-write.patch.1 \
+    skia_sk_cpu_sse_level_0_by_default.patch.1 \
+    fix-warnings.patch.1 \
+    disable-freetype-colrv1.1 \
+    windows-libraries-system32.patch.1 \
+>>>>>>> CHANGE (e7d2ed patch Skia to search only system32/ for libraries)
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
