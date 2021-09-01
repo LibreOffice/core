@@ -391,9 +391,7 @@ typedef DefTokenId ( FuncType2 ) ( sal_uInt8 );
 void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest )
 {
     sal_uInt8               nOc;
-    sal_uInt8               nCnt;
     sal_uInt8               nRelBits;
-    sal_uInt16              nStrLen;
     sal_uInt16              nRngIndex;
     FUNC_TYPE           eType = FT_NOP;
     TokenId             nBuf0;
@@ -465,10 +463,13 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
             case FT_FuncFix2:   DoFunc( eOc, 2, pExtName ); break;
             case FT_FuncFix3:   DoFunc( eOc, 3, pExtName ); break;
             case FT_FuncFix4:   DoFunc( eOc, 4, pExtName ); break;
-                case FT_FuncVar:
+            case FT_FuncVar:
+            {
+                sal_uInt8 nCnt(0);
                 Read( nCnt );
                 DoFunc( eOc, nCnt, pExtName );
                 break;
+            }
             case FT_Neg:
                 aPool << ocOpen << ocNegSub << aStack << ocClose;
                 aPool >> aStack;
@@ -607,7 +608,9 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
                 break;
             case FT_Splfunc:
             {
+                sal_uInt8 nCnt(0);
                 Read( nCnt );
+                sal_uInt16 nStrLen(0);
                 Read( nStrLen );
 
                 const size_t nMaxEntries = aIn.remainingSize();
@@ -629,8 +632,8 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
                 }
                 else
                     DoFunc( ocNoName, nCnt, nullptr );
-            }
                 break;
+            }
             case FT_Const10Float:
             {
                 double fValue;
