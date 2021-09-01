@@ -1,0 +1,13 @@
+diff --git a/src/ports/SkOSLibrary_win.cpp b/src/ports/SkOSLibrary_win.cpp
+index d2dcbe0af6..c288bbf177 100644
+--- a/src/ports/SkOSLibrary_win.cpp
++++ b/src/ports/SkOSLibrary_win.cpp
+@@ -11,7 +11,7 @@
+ #include "src/ports/SkOSLibrary.h"
+ 
+ void* SkLoadDynamicLibrary(const char* libraryName) {
+-    return LoadLibraryA(libraryName);
++    return LoadLibraryExA(libraryName, nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
+ }
+ 
+ void* SkGetProcedureAddress(void* library, const char* functionName) {
