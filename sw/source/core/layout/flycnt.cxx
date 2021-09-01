@@ -535,7 +535,7 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
     {
         // get the text area of the shape
         const tools::Rectangle aTextRectangle
-            = SwTextBoxHelper::getTextRectangle(pShapeFormat, false);
+            = SwTextBoxHelper::getTextRectangle(pShapeFormat->FindRealSdrObject(), false);
         // get the original textframe position
         SwFormatHoriOrient aHOri = pShapeFormat->GetHoriOrient();
         SwFormatVertOrient aVOri = pShapeFormat->GetVertOrient();
