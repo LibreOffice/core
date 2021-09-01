@@ -306,7 +306,7 @@ void GtkInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUStri
 }
 
 SalInfoPrinter* GtkInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
-    ImplJobSetup* pSetupData )
+    vcl::print::ImplJobSetup* pSetupData )
 {
     EnsureInit();
     mbPrinterInit = true;

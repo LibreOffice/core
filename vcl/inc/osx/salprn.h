@@ -72,18 +72,18 @@ class AquaSalInfoPrinter : public SalInfoPrinter
 
     virtual SalGraphics*        AcquireGraphics() override;
     virtual void                ReleaseGraphics( SalGraphics* i_pGraphics ) override;
-    virtual bool                Setup( weld::Window* i_pFrame, ImplJobSetup* i_pSetupData ) override;
-    virtual bool                SetPrinterData( ImplJobSetup* pSetupData ) override;
-    virtual bool                SetData( JobSetFlags i_nFlags, ImplJobSetup* i_pSetupData ) override;
-    virtual void                GetPageInfo( const ImplJobSetup* i_pSetupData,
+    virtual bool                Setup( weld::Window* i_pFrame, vcl::print::ImplJobSetup* i_pSetupData ) override;
+    virtual bool                SetPrinterData( vcl::print::ImplJobSetup* pSetupData ) override;
+    virtual bool                SetData( JobSetFlags i_nFlags, vcl::print::ImplJobSetup* i_pSetupData ) override;
+    virtual void                GetPageInfo( const vcl::print::ImplJobSetup* i_pSetupData,
                                              tools::Long& o_rOutWidth, tools::Long& o_rOutHeight,
                                              Point& rPageOffset,
                                              Size& rPaperSize ) override;
-    virtual sal_uInt32          GetCapabilities( const ImplJobSetup* i_pSetupData, PrinterCapType i_nType ) override;
-    virtual sal_uInt16          GetPaperBinCount( const ImplJobSetup* i_pSetupData ) override;
-    virtual OUString            GetPaperBinName( const ImplJobSetup* i_pSetupData, sal_uInt16 i_nPaperBin ) override;
-    virtual void                InitPaperFormats( const ImplJobSetup* i_pSetupData ) override;
-    virtual int                 GetLandscapeAngle( const ImplJobSetup* i_pSetupData ) override;
+    virtual sal_uInt32          GetCapabilities( const vcl::print::ImplJobSetup* i_pSetupData, PrinterCapType i_nType ) override;
+    virtual sal_uInt16          GetPaperBinCount( const vcl::print::ImplJobSetup* i_pSetupData ) override;
+    virtual OUString            GetPaperBinName( const vcl::print::ImplJobSetup* i_pSetupData, sal_uInt16 i_nPaperBin ) override;
+    virtual void                InitPaperFormats( const vcl::print::ImplJobSetup* i_pSetupData ) override;
+    virtual int                 GetLandscapeAngle( const vcl::print::ImplJobSetup* i_pSetupData ) override;
 
     // the artificial separation between InfoPrinter and Printer
     // is not really useful for us
@@ -92,11 +92,11 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     // implement pull model print system
     bool                        StartJob( const OUString* i_pFileName,
                                           const OUString& rJobName,
-                                          ImplJobSetup* i_pSetupData,
+                                          vcl::print::ImplJobSetup* i_pSetupData,
                                           vcl::print::PrinterController& i_rController );
     bool                        EndJob();
     bool                        AbortJob();
-    SalGraphics*                StartPage( ImplJobSetup* i_pSetupData, bool i_bNewJobData );
+    SalGraphics*                StartPage( vcl::print::ImplJobSetup* i_pSetupData, bool i_bNewJobData );
     bool                        EndPage();
 
     NSPrintInfo* getPrintInfo() const { return mpPrintInfo; }
@@ -128,16 +128,16 @@ class AquaSalPrinter : public SalPrinter
                                               sal_uInt32 i_nCopies,
                                               bool i_bCollate,
                                               bool i_bDirect,
-                                              ImplJobSetup* i_pSetupData ) override;
+                                              vcl::print::ImplJobSetup* i_pSetupData ) override;
     // implement pull model print system
     virtual bool                    StartJob( const OUString* i_pFileName,
                                               const OUString& rJobName,
                                               const OUString& i_rAppName,
-                                              ImplJobSetup* i_pSetupData,
+                                              vcl::print::ImplJobSetup* i_pSetupData,
                                               vcl::print::PrinterController& i_rListener ) override;
 
     virtual bool                    EndJob() override;
-    virtual SalGraphics*            StartPage( ImplJobSetup* i_pSetupData, bool i_bNewJobData ) override;
+    virtual SalGraphics*            StartPage( vcl::print::ImplJobSetup* i_pSetupData, bool i_bNewJobData ) override;
     virtual void                    EndPage() override;
 
     private:

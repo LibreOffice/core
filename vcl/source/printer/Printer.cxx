@@ -30,9 +30,9 @@
 #include <vcl/printer/PrinterOptions.hxx>
 #include <vcl/virdev.hxx>
 
-#include <jobset.h>
 #include <outdev.h>
 #include <print.h>
+#include <printer/ImplJobSetup.hxx>
 #include <PhysicalFontCollection.hxx>
 #include <configsettings.hxx>
 #include <print.hrc>
@@ -72,7 +72,7 @@ namespace
 
 void ImplUpdateJobSetupPaper( JobSetup& rJobSetup )
 {
-    const ImplJobSetup& rConstData = rJobSetup.ImplGetConstData();
+    const vcl::print::ImplJobSetup& rConstData = rJobSetup.ImplGetConstData();
 
     if ( !rConstData.GetPaperWidth() || !rConstData.GetPaperHeight() )
     {
@@ -80,7 +80,7 @@ void ImplUpdateJobSetupPaper( JobSetup& rJobSetup )
         {
             PaperInfo aInfo(rConstData.GetPaperFormat());
 
-            ImplJobSetup& rData = rJobSetup.ImplGetData();
+            vcl::print::ImplJobSetup& rData = rJobSetup.ImplGetData();
             rData.SetPaperWidth( aInfo.getWidth() );
             rData.SetPaperHeight( aInfo.getHeight() );
         }
@@ -627,7 +627,7 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
     pSVData->mpDefInst->GetPrinterQueueState( pInfo );
 
     // Test whether the driver actually matches the JobSetup
-    ImplJobSetup& rData = maJobSetup.ImplGetData();
+    vcl::print::ImplJobSetup& rData = maJobSetup.ImplGetData();
     if ( rData.GetDriverData() )
     {
         if ( rData.GetPrinterName() != pInfo->maPrinterName ||
@@ -863,7 +863,7 @@ Printer::Printer( const JobSetup& rJobSetup )
     , maJobSetup(rJobSetup)
 {
     ImplInitData();
-    const ImplJobSetup& rConstData = rJobSetup.ImplGetConstData();
+    const vcl::print::ImplJobSetup& rConstData = rJobSetup.ImplGetConstData();
     OUString aDriver = rConstData.GetDriver();
     SalPrinterQueueInfo* pInfo = ImplGetQueueInfo( rConstData.GetPrinterName(),
                                                    &aDriver );
@@ -1018,7 +1018,7 @@ bool Printer::Setup(weld::Window* pWindow, PrinterSetupMode eMode)
         return false;
 
     JobSetup aJobSetup = maJobSetup;
-    ImplJobSetup& rData = aJobSetup.ImplGetData();
+    vcl::print::ImplJobSetup& rData = aJobSetup.ImplGetData();
     rData.SetPrinterSetupMode( eMode );
     // TODO: orig page size
 
@@ -1135,7 +1135,7 @@ bool Printer::SetOrientation( Orientation eOrientation )
     if ( maJobSetup.ImplGetConstData().GetOrientation() != eOrientation )
     {
         JobSetup      aJobSetup = maJobSetup;
-        ImplJobSetup& rData = aJobSetup.ImplGetData();
+        vcl::print::ImplJobSetup& rData = aJobSetup.ImplGetData();
 
         rData.SetOrientation(eOrientation);
 
@@ -1177,7 +1177,7 @@ bool Printer::SetPaperBin( sal_uInt16 nPaperBin )
          nPaperBin < GetPaperBinCount() )
     {
         JobSetup      aJobSetup = maJobSetup;
-        ImplJobSetup& rData = aJobSetup.ImplGetData();
+        vcl::print::ImplJobSetup& rData = aJobSetup.ImplGetData();
         rData.SetPaperBin(nPaperBin);
 
         if ( IsDisplayPrinter() )
@@ -1221,7 +1221,7 @@ void Printer::SetPrinterSettingsPreferred( bool bPaperSizeFromSetup)
     if ( maJobSetup.ImplGetConstData().GetPapersizeFromSetup() != bPaperSizeFromSetup )
     {
         JobSetup      aJobSetup = maJobSetup;
-        ImplJobSetup& rData = aJobSetup.ImplGetData();
+        vcl::print::ImplJobSetup& rData = aJobSetup.ImplGetData();
         rData.SetPapersizeFromSetup(bPaperSizeFromSetup);
 
         mbNewJobSetup = true;
@@ -1232,7 +1232,7 @@ void Printer::SetPrinterSettingsPreferred( bool bPaperSizeFromSetup)
 // Map user paper format to an available printer paper format
 void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup )
 {
-    ImplJobSetup& rData = aJobSetup.ImplGetData();
+    vcl::print::ImplJobSetup& rData = aJobSetup.ImplGetData();
 
     // The angle that a landscape page will be turned counterclockwise wrt to portrait.
     int     nLandscapeAngle = mpInfoPrinter ? mpInfoPrinter->GetLandscapeAngle( &maJobSetup.ImplGetConstData() ) : 900;
@@ -1290,7 +1290,7 @@ void Printer::SetPaper( Paper ePaper )
         return;
 
     JobSetup      aJobSetup = maJobSetup;
-    ImplJobSetup& rData = aJobSetup.ImplGetData();
+    vcl::print::ImplJobSetup& rData = aJobSetup.ImplGetData();
 
     rData.SetPaperFormat( ePaper );
     if ( ePaper != PAPER_USER )
@@ -1346,7 +1346,7 @@ bool Printer::SetPaperSizeUser( const Size& rSize )
     if(bNeedToChange)
     {
         JobSetup      aJobSetup = maJobSetup;
-        ImplJobSetup& rData = aJobSetup.ImplGetData();
+        vcl::print::ImplJobSetup& rData = aJobSetup.ImplGetData();
         rData.SetPaperFormat( PAPER_USER );
         rData.SetPaperWidth( aPageSize.Width() );
         rData.SetPaperHeight( aPageSize.Height() );
@@ -1443,7 +1443,7 @@ void Printer::SetDuplexMode( DuplexMode eDuplex )
         return;
 
     JobSetup      aJobSetup = maJobSetup;
-    ImplJobSetup& rData = aJobSetup.ImplGetData();
+    vcl::print::ImplJobSetup& rData = aJobSetup.ImplGetData();
 
     rData.SetDuplexMode( eDuplex );
 

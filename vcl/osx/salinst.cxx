@@ -789,7 +789,7 @@ OUString AquaSalInstance::GetDefaultPrinter()
 }
 
 SalInfoPrinter* AquaSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
-                                                    ImplJobSetup* pSetupData )
+                                                    vcl::print::ImplJobSetup* pSetupData )
 {
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();

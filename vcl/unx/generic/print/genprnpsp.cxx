@@ -60,7 +60,7 @@
 #include <unx/geninst.h>
 #include <unx/genpspgraphics.h>
 
-#include <jobset.h>
+#include <printer/ImplJobSetup.hxx>
 #include <print.h>
 #include "prtsetup.hxx"
 #include <salptype.hxx>
@@ -144,7 +144,7 @@ static int PtTo10Mu( int nPoints ) { return static_cast<int>((static_cast<double
 
 static int TenMuToPt( int nUnits ) { return static_cast<int>((static_cast<double>(nUnits)/35.27777778)+0.5); }
 
-static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
+static void copyJobDataToJobSetup( vcl::print::ImplJobSetup* pJobSetup, JobData& rData )
 {
     pJobSetup->SetOrientation( rData.m_eOrientation == orientation::Landscape ?
         Orientation::Landscape : Orientation::Portrait );
@@ -354,7 +354,7 @@ static bool createPdf( std::u16string_view rToFile, const OUString& rFromFile, c
  */
 
 void SalGenericInstance::configurePspInfoPrinter(PspSalInfoPrinter *pPrinter,
-    SalPrinterQueueInfo const * pQueueInfo, ImplJobSetup* pJobSetup)
+    SalPrinterQueueInfo const * pQueueInfo, vcl::print::ImplJobSetup* pJobSetup)
 {
     if( !pJobSetup )
         return;
@@ -375,7 +375,7 @@ void SalGenericInstance::configurePspInfoPrinter(PspSalInfoPrinter *pPrinter,
 }
 
 SalInfoPrinter* SalGenericInstance::CreateInfoPrinter( SalPrinterQueueInfo*    pQueueInfo,
-                                                       ImplJobSetup*           pJobSetup )
+                                                       vcl::print::ImplJobSetup*           pJobSetup )
 {
     mbPrinterInit = true;
     // create and initialize SalInfoPrinter
@@ -450,7 +450,7 @@ PspSalInfoPrinter::~PspSalInfoPrinter()
 {
 }
 
-void PspSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
+void PspSalInfoPrinter::InitPaperFormats( const vcl::print::ImplJobSetup* )
 {
     m_aPaperFormats.clear();
     m_bPapersInit = true;
@@ -473,7 +473,7 @@ void PspSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
     }
 }
 
-int PspSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* )
+int PspSalInfoPrinter::GetLandscapeAngle( const vcl::print::ImplJobSetup* )
 {
     return 900;
 }
@@ -502,7 +502,7 @@ void PspSalInfoPrinter::ReleaseGraphics( SalGraphics* pGraphics )
     }
 }
 
-bool PspSalInfoPrinter::Setup( weld::Window* pFrame, ImplJobSetup* pJobSetup )
+bool PspSalInfoPrinter::Setup( weld::Window* pFrame, vcl::print::ImplJobSetup* pJobSetup )
 {
     if( ! pFrame || ! pJobSetup )
         return false;
@@ -543,7 +543,7 @@ bool PspSalInfoPrinter::Setup( weld::Window* pFrame, ImplJobSetup* pJobSetup )
 // data should be merged into the driver data
 // If pJobSetup->GetDriverData() IS NULL, then the driver defaults
 // should be merged into the independent data
-bool PspSalInfoPrinter::SetPrinterData( ImplJobSetup* pJobSetup )
+bool PspSalInfoPrinter::SetPrinterData( vcl::print::ImplJobSetup* pJobSetup )
 {
     if( pJobSetup->GetDriverData() )
         return SetData( JobSetFlags::ALL, pJobSetup );
@@ -559,7 +559,7 @@ bool PspSalInfoPrinter::SetPrinterData( ImplJobSetup* pJobSetup )
 // in nGetDataFlags is set
 bool PspSalInfoPrinter::SetData(
     JobSetFlags nSetDataFlags,
-    ImplJobSetup* pJobSetup )
+    vcl::print::ImplJobSetup* pJobSetup )
 {
     JobData aData;
     JobData::constructFromStreamBuffer( pJobSetup->GetDriverData(), pJobSetup->GetDriverDataLen(), aData );
@@ -664,7 +664,7 @@ bool PspSalInfoPrinter::SetData(
 }
 
 void PspSalInfoPrinter::GetPageInfo(
-    const ImplJobSetup* pJobSetup,
+    const vcl::print::ImplJobSetup* pJobSetup,
     tools::Long& rOutWidth, tools::Long& rOutHeight,
     Point& rPageOffset,
     Size& rPaperSize )
@@ -705,7 +705,7 @@ void PspSalInfoPrinter::GetPageInfo(
 
 }
 
-sal_uInt16 PspSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pJobSetup )
+sal_uInt16 PspSalInfoPrinter::GetPaperBinCount( const vcl::print::ImplJobSetup* pJobSetup )
 {
     if( ! pJobSetup )
         return 0;
@@ -717,7 +717,7 @@ sal_uInt16 PspSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pJobSetup )
     return pKey ? pKey->countValues() : 0;
 }
 
-OUString PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, sal_uInt16 nPaperBin )
+OUString PspSalInfoPrinter::GetPaperBinName( const vcl::print::ImplJobSetup* pJobSetup, sal_uInt16 nPaperBin )
 {
     JobData aData;
     JobData::constructFromStreamBuffer( pJobSetup->GetDriverData(), pJobSetup->GetDriverDataLen(), aData );
@@ -735,7 +735,7 @@ OUString PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, sal_
     return OUString();
 }
 
-sal_uInt32 PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, PrinterCapType nType )
+sal_uInt32 PspSalInfoPrinter::GetCapabilities( const vcl::print::ImplJobSetup* pJobSetup, PrinterCapType nType )
 {
     switch( nType )
     {
@@ -827,7 +827,7 @@ bool PspSalPrinter::StartJob(
     sal_uInt32 nCopies,
     bool bCollate,
     bool bDirect,
-    ImplJobSetup* pJobSetup )
+    vcl::print::ImplJobSetup* pJobSetup )
 {
     SAL_INFO( "vcl.unx.print", "PspSalPrinter::StartJob");
     GetSalData()->m_pInstance->jobStartedPrinterUpdate();
@@ -887,7 +887,7 @@ bool PspSalPrinter::EndJob()
     return bSuccess;
 }
 
-SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, bool )
+SalGraphics* PspSalPrinter::StartPage( vcl::print::ImplJobSetup* pJobSetup, bool )
 {
     SAL_INFO( "vcl.unx.print", "PspSalPrinter::StartPage");
 
@@ -957,7 +957,7 @@ struct PDFPrintFile
 }
 
 bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJobName, const OUString& i_rAppName,
-                              ImplJobSetup* i_pSetupData, vcl::PrinterController& i_rController )
+                              vcl::print::ImplJobSetup* i_pSetupData, vcl::PrinterController& i_rController )
 {
     SAL_INFO( "vcl.unx.print", "StartJob with controller: pFilename = " << (i_pFileName ? *i_pFileName : "<nil>") );
     // mark for endjob

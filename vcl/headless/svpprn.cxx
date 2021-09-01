@@ -19,22 +19,20 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/QueueInfo.hxx>
-#include <printerinfomanager.hxx>
 
-#include <jobset.h>
 #include <print.h>
-#include <salptype.hxx>
-#include <saldatabasic.hxx>
-
-#include <unx/genpspgraphics.h>
-
 #include <headless/svpprn.hxx>
 #include <headless/svpinst.hxx>
+#include <printer/ImplJobSetup.hxx>
+#include <printerinfomanager.hxx>
+#include <saldatabasic.hxx>
+#include <salptype.hxx>
+#include <unx/genpspgraphics.h>
+
+#include <string_view>
 
 using namespace psp;
 
@@ -66,7 +64,7 @@ static OUString getPdfDir( const PrinterInfo& rInfo )
 
 static int PtTo10Mu( int nPoints ) { return static_cast<int>((static_cast<double>(nPoints)*35.27777778)+0.5); }
 
-static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
+static void copyJobDataToJobSetup( vcl::print::ImplJobSetup* pJobSetup, JobData& rData )
 {
     pJobSetup->SetOrientation( rData.m_eOrientation == orientation::Landscape ? Orientation::Landscape : Orientation::Portrait );
 
@@ -166,7 +164,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 // SalInstance
 
 SalInfoPrinter* SvpSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
-                                                   ImplJobSetup*        pJobSetup )
+                                                   vcl::print::ImplJobSetup*        pJobSetup )
 {
     // create and initialize SalInfoPrinter
     SvpSalInfoPrinter* pPrinter = new SvpSalInfoPrinter;
@@ -264,7 +262,7 @@ std::unique_ptr<GenPspGraphics> SvpSalInstance::CreatePrintGraphics()
     return std::make_unique<GenPspGraphics>();
 }
 
-bool SvpSalInfoPrinter::Setup( weld::Window*, ImplJobSetup* )
+bool SvpSalInfoPrinter::Setup( weld::Window*, vcl::print::ImplJobSetup* )
 {
     return false;
 }

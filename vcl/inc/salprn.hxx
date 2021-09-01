@@ -30,8 +30,11 @@
 
 class SalGraphics;
 class SalFrame;
-class ImplJobSetup;
-namespace vcl::print { class PrinterController; }
+namespace vcl::print
+{
+    class ImplJobSetup;
+    class PrinterController;
+}
 namespace weld { class Window; }
 
 struct VCL_PLUGIN_PUBLIC SalPrinterQueueInfo
@@ -62,27 +65,27 @@ public:
     virtual SalGraphics*            AcquireGraphics() = 0;
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) = 0;
 
-    virtual bool                    Setup(weld::Window* pFrame, ImplJobSetup* pSetupData) = 0;
+    virtual bool                    Setup(weld::Window* pFrame, vcl::print::ImplJobSetup* pSetupData) = 0;
     // This function set the driver data and
     // set the new indepen data in pSetupData
-    virtual bool                    SetPrinterData( ImplJobSetup* pSetupData ) = 0;
+    virtual bool                    SetPrinterData( vcl::print::ImplJobSetup* pSetupData ) = 0;
     // This function merged the indepen driver data
     // and set the new indepen data in pSetupData
     // Only the data must changed, where the bit
     // in nFlags is set
-    virtual bool                    SetData( JobSetFlags nFlags, ImplJobSetup* pSetupData ) = 0;
+    virtual bool                    SetData( JobSetFlags nFlags, vcl::print::ImplJobSetup* pSetupData ) = 0;
 
-    virtual void                    GetPageInfo( const ImplJobSetup* pSetupData,
+    virtual void                    GetPageInfo( const vcl::print::ImplJobSetup* pSetupData,
                                                  tools::Long& rOutWidth, tools::Long& rOutHeight,
                                                  Point& rPageOffset,
                                                  Size& rPaperSize ) = 0;
-    virtual sal_uInt32              GetCapabilities( const ImplJobSetup* pSetupData, PrinterCapType nType ) = 0;
-    virtual sal_uInt16              GetPaperBinCount( const ImplJobSetup* pSetupData ) = 0;
-    virtual OUString                GetPaperBinName( const ImplJobSetup* pSetupData, sal_uInt16 nPaperBin ) = 0;
+    virtual sal_uInt32              GetCapabilities( const vcl::print::ImplJobSetup* pSetupData, PrinterCapType nType ) = 0;
+    virtual sal_uInt16              GetPaperBinCount( const vcl::print::ImplJobSetup* pSetupData ) = 0;
+    virtual OUString                GetPaperBinName( const vcl::print::ImplJobSetup* pSetupData, sal_uInt16 nPaperBin ) = 0;
     // fills m_aPaperFormats and sets m_bPapersInit to true
-    virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData ) = 0;
+    virtual void                    InitPaperFormats( const vcl::print::ImplJobSetup* pSetupData ) = 0;
     // returns angle that a landscape page will be turned counterclockwise wrt to portrait
-    virtual int                     GetLandscapeAngle( const ImplJobSetup* pSetupData ) = 0;
+    virtual int                     GetLandscapeAngle( const vcl::print::ImplJobSetup* pSetupData ) = 0;
 };
 
 class VCL_PLUGIN_PUBLIC SalPrinter
@@ -100,18 +103,18 @@ public:
                                               sal_uInt32 nCopies,
                                               bool bCollate,
                                               bool bDirect,
-                                              ImplJobSetup* pSetupData ) = 0;
+                                              vcl::print::ImplJobSetup* pSetupData ) = 0;
 
     // implement for pull model print systems only,
     // default implementations (see salvtables.cxx) just returns false
     virtual bool                    StartJob( const OUString* pFileName,
                                               const OUString& rJobName,
                                               const OUString& rAppName,
-                                              ImplJobSetup* pSetupData,
+                                              vcl::print::ImplJobSetup* pSetupData,
                                               vcl::print::PrinterController& rController );
 
     virtual bool                    EndJob() = 0;
-    virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, bool bNewJobData ) = 0;
+    virtual SalGraphics*            StartPage( vcl::print::ImplJobSetup* pSetupData, bool bNewJobData ) = 0;
     virtual void                    EndPage() = 0;
     virtual SalPrinterError         GetErrorCode() { return SalPrinterError::NONE; }
 

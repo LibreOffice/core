@@ -17,12 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
+
 #include <vcl/jobset.hxx>
-#include <jobset.h>
+
+#include <printer/ImplJobSetup.hxx>
+
 #include <memory>
 
 #define JOBSET_FILE364_SYSTEM   (sal_uInt16(0xFFFF))
@@ -52,140 +55,9 @@ struct Impl364JobSetupData
 
 }
 
-ImplJobSetup::ImplJobSetup()
-{
-    mnSystem            = 0;
-    meOrientation       = Orientation::Portrait;
-    meDuplexMode        = DuplexMode::Unknown;
-    mnPaperBin          = 0;
-    mePaperFormat       = PAPER_USER;
-    mnPaperWidth        = 0;
-    mnPaperHeight       = 0;
-    mnDriverDataLen     = 0;
-    mpDriverData        = nullptr;
-    mbPapersizeFromSetup = false;
-    meSetupMode         = PrinterSetupMode::DocumentGlobal;
-}
-
-ImplJobSetup::ImplJobSetup( const ImplJobSetup& rJobSetup ) :
-    mnSystem( rJobSetup.GetSystem() ),
-    maPrinterName( rJobSetup.GetPrinterName() ),
-    maDriver( rJobSetup.GetDriver() ),
-    meOrientation( rJobSetup.GetOrientation() ),
-    meDuplexMode( rJobSetup.GetDuplexMode() ),
-    mnPaperBin( rJobSetup.GetPaperBin() ),
-    mePaperFormat( rJobSetup.GetPaperFormat() ),
-    mnPaperWidth( rJobSetup.GetPaperWidth() ),
-    mnPaperHeight( rJobSetup.GetPaperHeight() ),
-    mnDriverDataLen( rJobSetup.GetDriverDataLen() ),
-    mbPapersizeFromSetup( rJobSetup.GetPapersizeFromSetup() ),
-    meSetupMode( rJobSetup.GetPrinterSetupMode() ),
-    maValueMap( rJobSetup.GetValueMap() )
- {
-    if ( rJobSetup.GetDriverData() )
-    {
-        mpDriverData = static_cast<sal_uInt8*>(std::malloc( mnDriverDataLen ));
-        memcpy( mpDriverData, rJobSetup.GetDriverData(), mnDriverDataLen );
-    }
-    else
-        mpDriverData = nullptr;
-}
-
-ImplJobSetup::~ImplJobSetup()
-{
-    std::free( mpDriverData );
-}
-
-void ImplJobSetup::SetSystem(sal_uInt16 nSystem)
-{
-    mnSystem = nSystem;
-}
-
-void ImplJobSetup::SetPrinterName(const OUString& rPrinterName)
-{
-    maPrinterName = rPrinterName;
-}
-
-void ImplJobSetup::SetDriver(const OUString& rDriver)
-{
-    maDriver = rDriver;
-}
-
-void ImplJobSetup::SetOrientation(Orientation eOrientation)
-{
-    meOrientation = eOrientation;
-}
-
-void ImplJobSetup::SetDuplexMode(DuplexMode eDuplexMode)
-{
-    meDuplexMode = eDuplexMode;
-}
-
-void ImplJobSetup::SetPaperBin(sal_uInt16 nPaperBin)
-{
-    mnPaperBin = nPaperBin;
-}
-
-void ImplJobSetup::SetPaperFormat(Paper ePaperFormat)
-{
-    mePaperFormat = ePaperFormat;
-}
-
-void ImplJobSetup::SetPaperWidth(tools::Long nPaperWidth)
-{
-    mnPaperWidth = nPaperWidth;
-}
-
-void ImplJobSetup::SetPaperHeight(tools::Long nPaperHeight)
-{
-    mnPaperHeight = nPaperHeight;
-}
-
-void ImplJobSetup::SetDriverDataLen(sal_uInt32 nDriverDataLen)
-{
-    mnDriverDataLen = nDriverDataLen;
-}
-
-void ImplJobSetup::SetDriverData(sal_uInt8* pDriverData)
-{
-    mpDriverData = pDriverData;
-}
-
-void ImplJobSetup::SetPapersizeFromSetup(bool bPapersizeFromSetup)
-{
-    mbPapersizeFromSetup = bPapersizeFromSetup;
-}
-
-void ImplJobSetup::SetPrinterSetupMode(PrinterSetupMode eMode)
-{
-    meSetupMode = eMode;
-}
-
-void ImplJobSetup::SetValueMap( const OUString& rKey, const OUString& rValue )
-{
-    maValueMap [ rKey ] = rValue;
-}
-
 JobSetup& JobSetup::operator=( const JobSetup& ) = default;
 
 JobSetup& JobSetup::operator=( JobSetup&& ) = default;
-
-bool ImplJobSetup::operator==( const ImplJobSetup& rImplJobSetup ) const
-{
-    return mnSystem          == rImplJobSetup.mnSystem        &&
-         maPrinterName     == rImplJobSetup.maPrinterName   &&
-         maDriver          == rImplJobSetup.maDriver        &&
-         meOrientation     == rImplJobSetup.meOrientation   &&
-         meDuplexMode      == rImplJobSetup.meDuplexMode    &&
-         mnPaperBin        == rImplJobSetup.mnPaperBin      &&
-         mePaperFormat     == rImplJobSetup.mePaperFormat   &&
-         mnPaperWidth      == rImplJobSetup.mnPaperWidth    &&
-         mnPaperHeight     == rImplJobSetup.mnPaperHeight   &&
-         mbPapersizeFromSetup == rImplJobSetup.mbPapersizeFromSetup &&
-         mnDriverDataLen   == rImplJobSetup.mnDriverDataLen &&
-         maValueMap        == rImplJobSetup.maValueMap      &&
-         memcmp( mpDriverData, rImplJobSetup.mpDriverData, mnDriverDataLen ) == 0;
-}
 
 namespace
 {
@@ -209,12 +81,12 @@ bool JobSetup::operator==( const JobSetup& rJobSetup ) const
     return mpData == rJobSetup.mpData;
 }
 
-const ImplJobSetup& JobSetup::ImplGetConstData() const
+const vcl::print::ImplJobSetup& JobSetup::ImplGetConstData() const
 {
     return *mpData;
 }
 
-ImplJobSetup& JobSetup::ImplGetData()
+vcl::print::ImplJobSetup& JobSetup::ImplGetData()
 {
     return *mpData;
 }
@@ -257,7 +129,7 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
             if( nSystem == JOBSET_FILE364_SYSTEM )
                 aStreamEncoding = rIStream.GetStreamCharSet();
 
-            ImplJobSetup& rJobData = rJobSetup.ImplGetData();
+            vcl::print::ImplJobSetup& rJobData = rJobSetup.ImplGetData();
 
             pData->cPrinterName[SAL_N_ELEMENTS(pData->cPrinterName) - 1] = 0;
             rJobData.SetPrinterName( OStringToOUString(pData->cPrinterName, aStreamEncoding) );
@@ -349,7 +221,7 @@ SvStream& WriteJobSetup( SvStream& rOStream, const JobSetup& rJobSetup )
             rOStream.WriteUInt16( nLen );
         else
         {
-            const ImplJobSetup& rJobData = rJobSetup.ImplGetConstData();
+            const vcl::print::ImplJobSetup& rJobData = rJobSetup.ImplGetConstData();
             Impl364JobSetupData aOldJobData;
             sal_uInt16 nOldJobDataSize = sizeof( aOldJobData );
             ShortToSVBT16( nOldJobDataSize, aOldJobData.nSize );

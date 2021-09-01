@@ -38,6 +38,7 @@ namespace com::sun::star::awt {
 }
 namespace comphelper { class SolarMutex; }
 namespace vcl { class Window; }
+namespace vcl::print { class ImplJobSetup; }
 namespace weld {
     class Builder;
     class MessageDialog;
@@ -47,7 +48,6 @@ namespace weld {
 class SystemChildWindow;
 struct SystemParentData;
 struct SalPrinterQueueInfo;
-class ImplJobSetup;
 class OpenGLContext;
 class SalGraphics;
 class SalFrame;
@@ -119,7 +119,7 @@ public:
     // pSetupData must be updated with the current
     // JobSetup
     virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
-                                               ImplJobSetup* pSetupData ) = 0;
+                                               vcl::print::ImplJobSetup* pSetupData ) = 0;
     virtual void            DestroyInfoPrinter( SalInfoPrinter* pPrinter ) = 0;
     virtual std::unique_ptr<SalPrinter> CreatePrinter( SalInfoPrinter* pInfoPrinter ) = 0;
 

@@ -43,7 +43,7 @@
 
 #include <salptype.hxx>
 #include <print.h>
-#include <jobset.h>
+#include <print/ImplJobSetup.hxx>
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
@@ -90,7 +90,7 @@ using namespace com::sun::star::ui::dialogs;
 const wchar_t aImplWindows[] = L"windows";
 const wchar_t aImplDevice[]  = L"device";
 
-static DEVMODEW const * SAL_DEVMODE_W( const ImplJobSetup* pSetupData )
+static DEVMODEW const * SAL_DEVMODE_W( const vcl::print::ImplJobSetup* pSetupData )
 {
     DEVMODEW const * pRet = nullptr;
     SalDriverData const * pDrv = reinterpret_cast<SalDriverData const *>(pSetupData->GetDriverData());
@@ -251,7 +251,7 @@ OUString WinSalInstance::GetDefaultPrinter()
 }
 
 static DWORD ImplDeviceCaps( WinSalInfoPrinter const * pPrinter, WORD nCaps,
-                             BYTE* pOutput, const ImplJobSetup* pSetupData )
+                             BYTE* pOutput, const vcl::print::ImplJobSetup* pSetupData )
 {
     DEVMODEW const * pDevMode;
     if ( !pSetupData || !pSetupData->GetDriverData() )
@@ -265,7 +265,7 @@ static DWORD ImplDeviceCaps( WinSalInfoPrinter const * pPrinter, WORD nCaps,
 }
 
 static bool ImplTestSalJobSetup( WinSalInfoPrinter const * pPrinter,
-                                 ImplJobSetup* pSetupData, bool bDelete )
+                                 vcl::print::ImplJobSetup* pSetupData, bool bDelete )
 {
     if ( pSetupData && pSetupData->GetDriverData() )
     {
@@ -347,7 +347,7 @@ static bool ImplTestSalJobSetup( WinSalInfoPrinter const * pPrinter,
     return false;
 }
 
-static bool ImplUpdateSalJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSetup* pSetupData,
+static bool ImplUpdateSalJobSetup( WinSalInfoPrinter const * pPrinter, vcl::print::ImplJobSetup* pSetupData,
                                    bool bIn, weld::Window* pVisibleDlgParent )
 {
     HANDLE hPrn;
@@ -440,7 +440,7 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSe
     return true;
 }
 
-static void ImplDevModeToJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSetup* pSetupData, JobSetFlags nFlags )
+static void ImplDevModeToJobSetup( WinSalInfoPrinter const * pPrinter, vcl::print::ImplJobSetup* pSetupData, JobSetFlags nFlags )
 {
     if ( !pSetupData || !pSetupData->GetDriverData() )
         return;
@@ -708,7 +708,7 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSe
     }
 }
 
-static void ImplJobSetupToDevMode( WinSalInfoPrinter const * pPrinter, const ImplJobSetup* pSetupData, JobSetFlags nFlags )
+static void ImplJobSetupToDevMode( WinSalInfoPrinter const * pPrinter, const vcl::print::ImplJobSetup* pSetupData, JobSetFlags nFlags )
 {
     if ( !pSetupData || !pSetupData->GetDriverData() )
         return;
@@ -1003,7 +1003,7 @@ static HDC ImplCreateICW_WithCatch( LPWSTR pDriver,
     return hDC;
 }
 
-static HDC ImplCreateSalPrnIC( WinSalInfoPrinter const * pPrinter, const ImplJobSetup* pSetupData )
+static HDC ImplCreateSalPrnIC( WinSalInfoPrinter const * pPrinter, const vcl::print::ImplJobSetup* pSetupData )
 {
     HDC hDC = nullptr;
     DEVMODEW const * pDevMode;
@@ -1036,7 +1036,7 @@ static WinSalGraphics* ImplCreateSalPrnGraphics( HDC hDC )
     return pGraphics;
 }
 
-static bool ImplUpdateSalPrnIC( WinSalInfoPrinter* pPrinter, const ImplJobSetup* pSetupData )
+static bool ImplUpdateSalPrnIC( WinSalInfoPrinter* pPrinter, const vcl::print::ImplJobSetup* pSetupData )
 {
     HDC hNewDC = ImplCreateSalPrnIC( pPrinter, pSetupData );
     if ( !hNewDC )
@@ -1057,7 +1057,7 @@ static bool ImplUpdateSalPrnIC( WinSalInfoPrinter* pPrinter, const ImplJobSetup*
 
 
 SalInfoPrinter* WinSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
-                                                   ImplJobSetup* pSetupData )
+                                                   vcl::print::ImplJobSetup* pSetupData )
 {
     WinSalInfoPrinter* pPrinter = new WinSalInfoPrinter;
     if( ! pQueueInfo->mpPortName )
@@ -1110,7 +1110,7 @@ WinSalInfoPrinter::~WinSalInfoPrinter()
     }
 }
 
-void WinSalInfoPrinter::InitPaperFormats( const ImplJobSetup* pSetupData )
+void WinSalInfoPrinter::InitPaperFormats( const vcl::print::ImplJobSetup* pSetupData )
 {
     m_aPaperFormats.clear();
 
@@ -1137,7 +1137,7 @@ void WinSalInfoPrinter::InitPaperFormats( const ImplJobSetup* pSetupData )
     m_bPapersInit = true;
 }
 
-int WinSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* pSetupData )
+int WinSalInfoPrinter::GetLandscapeAngle( const vcl::print::ImplJobSetup* pSetupData )
 {
     const DWORD nRet = ImplDeviceCaps( this, DC_ORIENTATION, nullptr, pSetupData );
 
@@ -1162,7 +1162,7 @@ void WinSalInfoPrinter::ReleaseGraphics( SalGraphics* )
     mbGraphics = false;
 }
 
-bool WinSalInfoPrinter::Setup(weld::Window* pFrame, ImplJobSetup* pSetupData)
+bool WinSalInfoPrinter::Setup(weld::Window* pFrame, vcl::print::ImplJobSetup* pSetupData)
 {
     if ( ImplUpdateSalJobSetup(this, pSetupData, true, pFrame))
     {
@@ -1173,14 +1173,14 @@ bool WinSalInfoPrinter::Setup(weld::Window* pFrame, ImplJobSetup* pSetupData)
     return false;
 }
 
-bool WinSalInfoPrinter::SetPrinterData( ImplJobSetup* pSetupData )
+bool WinSalInfoPrinter::SetPrinterData( vcl::print::ImplJobSetup* pSetupData )
 {
     if ( !ImplTestSalJobSetup( this, pSetupData, false ) )
         return false;
     return ImplUpdateSalPrnIC( this, pSetupData );
 }
 
-bool WinSalInfoPrinter::SetData( JobSetFlags nFlags, ImplJobSetup* pSetupData )
+bool WinSalInfoPrinter::SetData( JobSetFlags nFlags, vcl::print::ImplJobSetup* pSetupData )
 {
     ImplJobSetupToDevMode( this, pSetupData, nFlags );
     if ( ImplUpdateSalJobSetup( this, pSetupData, true, nullptr ) )
@@ -1192,7 +1192,7 @@ bool WinSalInfoPrinter::SetData( JobSetFlags nFlags, ImplJobSetup* pSetupData )
     return false;
 }
 
-sal_uInt16 WinSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pSetupData )
+sal_uInt16 WinSalInfoPrinter::GetPaperBinCount( const vcl::print::ImplJobSetup* pSetupData )
 {
     DWORD nRet = ImplDeviceCaps( this, DC_BINS, nullptr, pSetupData );
     if ( nRet && (nRet != GDI_ERROR) )
@@ -1201,7 +1201,7 @@ sal_uInt16 WinSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pSetupData )
         return 0;
 }
 
-OUString WinSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pSetupData, sal_uInt16 nPaperBin )
+OUString WinSalInfoPrinter::GetPaperBinName( const vcl::print::ImplJobSetup* pSetupData, sal_uInt16 nPaperBin )
 {
     OUString aPaperBinName;
 
@@ -1217,7 +1217,7 @@ OUString WinSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pSetupData, sal
     return aPaperBinName;
 }
 
-sal_uInt32 WinSalInfoPrinter::GetCapabilities( const ImplJobSetup* pSetupData, PrinterCapType nType )
+sal_uInt32 WinSalInfoPrinter::GetCapabilities( const vcl::print::ImplJobSetup* pSetupData, PrinterCapType nType )
 {
     DWORD nRet;
 
@@ -1260,7 +1260,7 @@ sal_uInt32 WinSalInfoPrinter::GetCapabilities( const ImplJobSetup* pSetupData, P
     return 0;
 }
 
-void WinSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
+void WinSalInfoPrinter::GetPageInfo( const vcl::print::ImplJobSetup*,
                                   tools::Long& rOutWidth, tools::Long& rOutHeight,
                                   Point& rPageOffset,
                                   Size& rPaperSize )
@@ -1416,7 +1416,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
                            sal_uInt32 nCopies,
                            bool bCollate,
                            bool /*bDirect*/,
-                           ImplJobSetup* pSetupData )
+                           vcl::print::ImplJobSetup* pSetupData )
 {
     mnError     = SalPrinterError::NONE;
     mbAbort     = false;
@@ -1557,7 +1557,7 @@ bool WinSalPrinter::EndJob()
     return true;
 }
 
-SalGraphics* WinSalPrinter::StartPage( ImplJobSetup* pSetupData, bool bNewJobData )
+SalGraphics* WinSalPrinter::StartPage( vcl::print::ImplJobSetup* pSetupData, bool bNewJobData )
 {
     if( ! isValid() || mhDC == nullptr )
         return nullptr;

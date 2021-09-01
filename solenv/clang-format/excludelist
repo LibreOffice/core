@@ -15046,6 +15046,7 @@ vcl/source/outdev/textline.cxx
 vcl/source/outdev/transparent.cxx
 vcl/source/outdev/vclreferencebase.cxx
 vcl/source/outdev/wallpaper.cxx
+vcl/source/printer/ImplJobSetup.cxx
 vcl/source/printer/Printer.cxx
 vcl/source/printer/PrinterController.cxx
 vcl/source/printer/PrinterOptions.cxx

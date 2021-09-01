@@ -17,13 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <officecfg/Office/Common.hxx>
-
 #include <vcl/gdimtf.hxx>
 #include <vcl/print.hxx>
 #include <sal/macros.h>
 #include <osl/diagnose.h>
 #include <tools/long.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <vcl/printer/PrinterController.hxx>
 
@@ -31,10 +30,10 @@
 #include <osx/salprn.h>
 #include <osx/printview.h>
 #include <quartz/salgdi.h>
-#include <osx/saldata.hxx>
 #include <quartz/utils.h>
+#include <osx/saldata.hxx>
 
-#include <jobset.h>
+#include <printer/ImplJobSetup.hxx>
 #include <salptype.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -152,12 +151,12 @@ void AquaSalInfoPrinter::ReleaseGraphics( SalGraphics* )
     mbGraphics = false;
 }
 
-bool AquaSalInfoPrinter::Setup( weld::Window*, ImplJobSetup* )
+bool AquaSalInfoPrinter::Setup( weld::Window*, vcl::print::ImplJobSetup* )
 {
     return false;
 }
 
-bool AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
+bool AquaSalInfoPrinter::SetPrinterData( vcl::print::ImplJobSetup* io_pSetupData )
 {
     // FIXME: implement driver data
     if( io_pSetupData && io_pSetupData->GetDriverData() )
@@ -221,7 +220,7 @@ void AquaSalInfoPrinter::setPaperSize( tools::Long i_nWidth, tools::Long i_nHeig
     mePageOrientation = i_eSetOrientation;
 }
 
-bool AquaSalInfoPrinter::SetData( JobSetFlags i_nFlags, ImplJobSetup* io_pSetupData )
+bool AquaSalInfoPrinter::SetData( JobSetFlags i_nFlags, vcl::print::ImplJobSetup* io_pSetupData )
 {
     if( ! io_pSetupData || io_pSetupData->GetSystem() != JOBSETUP_SYSTEM_MAC )
         return false;
@@ -258,17 +257,17 @@ bool AquaSalInfoPrinter::SetData( JobSetFlags i_nFlags, ImplJobSetup* io_pSetupD
     return mpPrintInfo != nil;
 }
 
-sal_uInt16 AquaSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* )
+sal_uInt16 AquaSalInfoPrinter::GetPaperBinCount( const vcl::print::ImplJobSetup* )
 {
     return 0;
 }
 
-OUString AquaSalInfoPrinter::GetPaperBinName( const ImplJobSetup*, sal_uInt16 )
+OUString AquaSalInfoPrinter::GetPaperBinName( const vcl::print::ImplJobSetup*, sal_uInt16 )
 {
     return OUString();
 }
 
-sal_uInt32 AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup*, PrinterCapType i_nType )
+sal_uInt32 AquaSalInfoPrinter::GetCapabilities( const vcl::print::ImplJobSetup*, PrinterCapType i_nType )
 {
     switch( i_nType )
     {
@@ -296,7 +295,7 @@ sal_uInt32 AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup*, PrinterCapT
     return 0;
 }
 
-void AquaSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
+void AquaSalInfoPrinter::GetPageInfo( const vcl::print::ImplJobSetup*,
                                   tools::Long& o_rOutWidth, tools::Long& o_rOutHeight,
                                   Point& rPageOffset,
                                   Size& rPaperSize )
@@ -353,7 +352,7 @@ static Size getPageSize( vcl::print::PrinterController const & i_rController, sa
 
 bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
                                    const OUString& i_rJobName,
-                                   ImplJobSetup* i_pSetupData,
+                                   vcl::print::ImplJobSetup* i_pSetupData,
                                    vcl::print::PrinterController& i_rController
                                    )
 {
@@ -541,7 +540,7 @@ bool AquaSalInfoPrinter::AbortJob()
     return false;
 }
 
-SalGraphics* AquaSalInfoPrinter::StartPage( ImplJobSetup* i_pSetupData, bool i_bNewJobData )
+SalGraphics* AquaSalInfoPrinter::StartPage( vcl::print::ImplJobSetup* i_pSetupData, bool i_bNewJobData )
 {
     if( i_bNewJobData && i_pSetupData )
         SetPrinterData( i_pSetupData );
@@ -571,7 +570,7 @@ AquaSalPrinter::~AquaSalPrinter()
 bool AquaSalPrinter::StartJob( const OUString* i_pFileName,
                                const OUString& i_rJobName,
                                const OUString&,
-                               ImplJobSetup* i_pSetupData,
+                               vcl::print::ImplJobSetup* i_pSetupData,
                                vcl::print::PrinterController& i_rController )
 {
     return mpInfoPrinter->StartJob( i_pFileName, i_rJobName, i_pSetupData, i_rController );
@@ -583,7 +582,7 @@ bool AquaSalPrinter::StartJob( const OUString* /*i_pFileName*/,
                                sal_uInt32 /*i_nCopies*/,
                                bool /*i_bCollate*/,
                                bool /*i_bDirect*/,
-                               ImplJobSetup* )
+                               vcl::print::ImplJobSetup* )
 {
     OSL_FAIL( "should never be called" );
     return false;
@@ -594,7 +593,7 @@ bool AquaSalPrinter::EndJob()
     return mpInfoPrinter->EndJob();
 }
 
-SalGraphics* AquaSalPrinter::StartPage( ImplJobSetup* i_pSetupData, bool i_bNewJobData )
+SalGraphics* AquaSalPrinter::StartPage( vcl::print::ImplJobSetup* i_pSetupData, bool i_bNewJobData )
 {
     return mpInfoPrinter->StartPage( i_pSetupData, i_bNewJobData );
 }
@@ -604,7 +603,7 @@ void AquaSalPrinter::EndPage()
     mpInfoPrinter->EndPage();
 }
 
-void AquaSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
+void AquaSalInfoPrinter::InitPaperFormats( const vcl::print::ImplJobSetup* )
 {
     m_aPaperFormats.clear();
     m_bPapersInit = true;
@@ -672,7 +671,7 @@ const PaperInfo* AquaSalInfoPrinter::matchPaper( tools::Long i_nWidth, tools::Lo
     return pMatch;
 }
 
-int AquaSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* )
+int AquaSalInfoPrinter::GetLandscapeAngle( const vcl::print::ImplJobSetup* )
 {
     return 900;
 }

@@ -65,7 +65,7 @@ static OUString getPdfDir(const PrinterInfo& rInfo)
 }
 
 SalInfoPrinter* Qt5Instance::CreateInfoPrinter(SalPrinterQueueInfo* pQueueInfo,
-                                               ImplJobSetup* pJobSetup)
+                                               vcl::print::ImplJobSetup* pJobSetup)
 {
     // create and initialize SalInfoPrinter
     PspSalInfoPrinter* pPrinter = new PspSalInfoPrinter;

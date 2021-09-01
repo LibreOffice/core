@@ -102,6 +102,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/animate/AnimationBitmap \
     vcl/source/cnttype/mcnttfactory \
     vcl/source/cnttype/mcnttype \
+    vcl/source/printer/ImplJobSetup \
     vcl/source/printer/Printer \
     vcl/source/printer/PrinterController \
     vcl/source/printer/PrinterOptions \

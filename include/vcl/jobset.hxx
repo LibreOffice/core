@@ -21,11 +21,13 @@
 #define INCLUDED_VCL_JOBSET_HXX
 
 #include <rtl/ustring.hxx>
-#include <vcl/dllapi.h>
 #include <o3tl/cow_wrapper.hxx>
 
+#include <vcl/dllapi.h>
+
 class SvStream;
-class ImplJobSetup;
+
+namespace vcl::print { class ImplJobSetup; }
 
 class VCL_DLLPUBLIC JobSetup
 {
@@ -43,8 +45,8 @@ public:
     bool                operator!=( const JobSetup& rJobSetup ) const
                             { return !(JobSetup::operator==( rJobSetup )); }
 
-    SAL_DLLPRIVATE ImplJobSetup&        ImplGetData();
-    SAL_DLLPRIVATE const ImplJobSetup&  ImplGetConstData() const;
+    SAL_DLLPRIVATE vcl::print::ImplJobSetup&        ImplGetData();
+    SAL_DLLPRIVATE const vcl::print::ImplJobSetup&  ImplGetConstData() const;
 
     OUString const &      GetPrinterName() const;
     bool                  IsDefault() const;
@@ -52,7 +54,7 @@ public:
     friend VCL_DLLPUBLIC SvStream&  ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup );
     friend VCL_DLLPUBLIC SvStream&  WriteJobSetup( SvStream& rOStream, const JobSetup& rJobSetup );
 
-    typedef o3tl::cow_wrapper< ImplJobSetup > ImplType;
+    typedef o3tl::cow_wrapper< vcl::print::ImplJobSetup > ImplType;
 
 private:
     ImplType        mpData;

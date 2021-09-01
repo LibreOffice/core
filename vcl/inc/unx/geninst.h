@@ -50,7 +50,7 @@ public:
 
     // Printing
     virtual SalInfoPrinter*     CreateInfoPrinter      ( SalPrinterQueueInfo* pQueueInfo,
-                                                         ImplJobSetup* pSetupData ) override;
+                                                         vcl::print::ImplJobSetup* pSetupData ) override;
     virtual void                DestroyInfoPrinter     ( SalInfoPrinter* pPrinter ) override;
     virtual std::unique_ptr<SalPrinter> CreatePrinter  ( SalInfoPrinter* pInfoPrinter ) override;
     virtual void                GetPrinterQueueInfo    ( ImplPrnQueueList* pList ) override;
@@ -71,7 +71,7 @@ public:
 protected:
     static void configurePspInfoPrinter( PspSalInfoPrinter* pInfoPrinter,
                                          SalPrinterQueueInfo const * pQueueInfo,
-                                         ImplJobSetup* pSetupData );
+                                         vcl::print::ImplJobSetup* pSetupData );
 };
 
 inline SalGenericInstance *GetGenericInstance()
