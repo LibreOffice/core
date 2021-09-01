@@ -37,7 +37,6 @@ ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
                                       ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
     ScXMLImportContext( rImport ),
     pDatabaseRangeContext(pTempDatabaseRangeContext),
-    sAlgorithm(),
     nUserListIndex(0),
     bCopyOutputData(false),
     bBindFormatsToContent(true),

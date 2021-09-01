@@ -39,7 +39,6 @@ using ::std::vector;
 
 ScMyOLEFixer::ScMyOLEFixer(ScXMLImport& rTempImport)
     : rImport(rTempImport),
-    aShapes(),
     pCollection(nullptr)
 {
 }

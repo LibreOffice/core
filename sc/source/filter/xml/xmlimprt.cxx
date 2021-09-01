@@ -359,8 +359,6 @@ ScXMLImport::ScXMLImport(
     pDoc( nullptr ),
     mpPostProcessData(nullptr),
     aTables(*this),
-    sPrevStyleName(),
-    sPrevCurrency(),
     nSolarMutexLocked(0),
     nProgressCount(0),
     nPrevCellType(0),

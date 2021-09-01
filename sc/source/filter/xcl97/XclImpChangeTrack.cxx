@@ -37,7 +37,6 @@
 XclImpChangeTrack::XclImpChangeTrack( const XclImpRoot& rRoot, const XclImpStream& rBookStrm ) :
     XclImpRoot( rRoot ),
     aRecHeader(),
-    sOldUsername(),
     nTabIdCount( 0 ),
     bGlobExit( false ),
     eNestedMode( nmBase )

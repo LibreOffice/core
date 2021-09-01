@@ -126,8 +126,6 @@ namespace
 }
 
 ScAfVersions::ScAfVersions()
-:   AutoFormatVersions(),
-    swVersions()
 {
 }
 
@@ -154,9 +152,6 @@ void ScAfVersions::Write(SvStream& rStream, sal_uInt16 fileVersion)
 }
 
 ScAutoFormatDataField::ScAutoFormatDataField()
-:   AutoFormatBase(),
-    m_swFields(),
-    aNumFormat()
 {
     // need to set default instances for base class AutoFormatBase here
     // due to resource defines (e.g. ATTR_FONT) which are not available
@@ -195,7 +190,7 @@ ScAutoFormatDataField::ScAutoFormatDataField()
 
 ScAutoFormatDataField::ScAutoFormatDataField( const ScAutoFormatDataField& rCopy )
 :   AutoFormatBase(rCopy),
-    m_swFields(), // was not copied in original, needed?
+     // m_swFields was not copied in original, needed?
     aNumFormat( rCopy.aNumFormat )
 {
 }

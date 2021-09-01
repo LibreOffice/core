@@ -9162,8 +9162,7 @@ struct ScUniqueFormatsOrder
 }
 
 ScUniqueCellFormatsObj::ScUniqueCellFormatsObj(ScDocShell* pDocSh, const ScRange& rTotalRange) :
-    pDocShell( pDocSh ),
-    aRangeLists()
+    pDocShell( pDocSh )
 {
     pDocShell->GetDocument().AddUnoObject(*this);
 

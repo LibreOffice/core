@@ -348,8 +348,7 @@ bool ScDBQueryDataIterator::IsQueryValid(
 }
 
 ScDBQueryDataIterator::DataAccessInternal::DataAccessInternal(ScDBQueryParamInternal* pParam, ScDocument& rDoc, const ScInterpreterContext& rContext)
-    : DataAccess()
-    , mpCells(nullptr)
+    : mpCells(nullptr)
     , mpParam(pParam)
     , mrDoc(rDoc)
     , mrContext(rContext)
@@ -529,8 +528,7 @@ void ScDBQueryDataIterator::DataAccessInternal::incPos()
 }
 
 ScDBQueryDataIterator::DataAccessMatrix::DataAccessMatrix(ScDBQueryParamMatrix* pParam)
-    : DataAccess()
-    , mpParam(pParam)
+    : mpParam(pParam)
     , mnCurRow(0)
 {
     SCSIZE nC, nR;

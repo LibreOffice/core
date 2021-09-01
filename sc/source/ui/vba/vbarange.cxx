@@ -903,7 +903,7 @@ private:
     ScDocument& m_rDoc;
     formula::FormulaGrammar::Grammar m_eGrammar;
 public:
-    CellFormulaValueGetter(ScDocument& rDoc, formula::FormulaGrammar::Grammar eGram ) : CellValueGetter( ), m_rDoc( rDoc ), m_eGrammar( eGram ) {}
+    CellFormulaValueGetter(ScDocument& rDoc, formula::FormulaGrammar::Grammar eGram ) :  m_rDoc( rDoc ), m_eGrammar( eGram ) {}
     virtual void visitNode( sal_Int32 /*x*/, sal_Int32 /*y*/, const uno::Reference< table::XCell >& xCell ) override
     {
         uno::Any aValue;

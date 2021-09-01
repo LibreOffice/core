@@ -43,7 +43,6 @@
 
 
 ScRedlinData::ScRedlinData()
-    :RedlinData()
 {
     nInfo=RD_SPECIAL_NONE;
     nActionNo=0;

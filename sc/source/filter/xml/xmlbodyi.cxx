@@ -59,7 +59,6 @@ using namespace xmloff::token;
 ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
                                     const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ) :
     ScXMLImportContext( rImport ),
-    sPassword(),
     meHash1(PASSHASH_SHA1),
     meHash2(PASSHASH_UNSPECIFIED),
     bProtected(false),

@@ -1385,7 +1385,6 @@ void EndXmlElement::SaveXml( XclExpXmlStream& rStrm )
 
 XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
-    aActionStack(),
     pTabIdBuffer( nullptr )
 {
     OSL_ENSURE( GetOldRoot().pTabId, "XclExpChangeTrack::XclExpChangeTrack - root data incomplete" );

@@ -55,11 +55,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDELinksContext::c
 
 ScXMLDDELinkContext::ScXMLDDELinkContext( ScXMLImport& rImport ) :
     ScXMLImportContext( rImport ),
-    aDDELinkTable(),
-    aDDELinkRow(),
-    sApplication(),
-    sTopic(),
-    sItem(),
     nPosition(-1),
     nColumns(0),
     nRows(0),
@@ -311,7 +306,6 @@ ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLDDELinkContext* pTempDDELink) :
     ScXMLImportContext( rImport ),
-    sValue(),
     fValue(),
     nCells(1),
     bString(true),

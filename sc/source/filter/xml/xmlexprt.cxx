@@ -352,7 +352,6 @@ ScXMLExport::ScXMLExport(
         rContext, implementationName, GetMeasureUnit(), XML_SPREADSHEET, nExportFlag ),
     pDoc(nullptr),
     nSourceStreamPos(0),
-    aTableStyles(),
     pCurrentCell(nullptr),
     nOpenRow(-1),
     nProgressCount(0),

@@ -88,8 +88,6 @@ ScPreview::ScPreview( vcl::Window* pParent, ScDocShell* pDocSh, ScPreviewShell* 
     nZoom( 100 ),
     nTabCount( 0 ),
     nTabsTested( 0 ),
-    nPages(),
-    nFirstAttr(),
     nTab( 0 ),
     nTabPage( 0 ),
     nTabStart( 0 ),

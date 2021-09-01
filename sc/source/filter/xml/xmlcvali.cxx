@@ -412,8 +412,6 @@ ScXMLHelpMessageContext::ScXMLHelpMessageContext( ScXMLImport& rImport,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLContentValidationContext* pTempValidationContext) :
     ScXMLImportContext( rImport ),
-    sTitle(),
-    sMessage(),
     nParagraphCount(0),
     bDisplay(false)
 {
@@ -465,9 +463,6 @@ ScXMLErrorMessageContext::ScXMLErrorMessageContext( ScXMLImport& rImport,
                                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLContentValidationContext* pTempValidationContext) :
     ScXMLImportContext( rImport ),
-    sTitle(),
-    sMessage(),
-    sMessageType(),
     nParagraphCount(0),
     bDisplay(false)
 {

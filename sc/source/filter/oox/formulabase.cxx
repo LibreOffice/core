@@ -126,7 +126,6 @@ void BinComplexRef2d::readBiff12Data( SequenceInputStream& rStrm, bool bRelative
 // token vector, sequence =====================================================
 
 ApiTokenVector::ApiTokenVector()
-    : mvTokens()
 {
 }
 

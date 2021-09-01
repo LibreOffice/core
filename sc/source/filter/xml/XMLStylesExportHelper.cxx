@@ -41,14 +41,7 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 
 ScMyValidation::ScMyValidation()
-    : sName(),
-    sErrorMessage(),
-    sErrorTitle(),
-    sInputMessage(),
-    sInputTitle(),
-    sFormula1(),
-    sFormula2(),
-    aAlertStyle(sheet::ValidationAlertStyle_STOP),
+    : aAlertStyle(sheet::ValidationAlertStyle_STOP),
     aValidationType(sheet::ValidationType_ANY),
     aOperator(sheet::ConditionOperator_NONE),
     nShowList(0),
@@ -87,7 +80,6 @@ constexpr OUStringLiteral gsERRTITLE(u"" SC_UNONAME_ERRTITLE);
 constexpr OUStringLiteral gsERRMESS(u"" SC_UNONAME_ERRMESS);
 
 ScMyValidationsContainer::ScMyValidationsContainer()
-    : aValidationVec()
 {
 }
 
@@ -500,8 +492,7 @@ bool ScMyRowFormatRange::operator< (const ScMyRowFormatRange& rRange) const
 }
 
 ScRowFormatRanges::ScRowFormatRanges()
-    : aRowFormatRanges(),
-    pColDefaults(nullptr),
+    : pColDefaults(nullptr),
     nSize(0)
 {
 }
@@ -669,10 +660,7 @@ bool ScMyFormatRange::operator<(const ScMyFormatRange& rRange) const
 }
 
 ScFormatRangeStyles::ScFormatRangeStyles()
-    : aTables(),
-    aStyleNames(),
-    aAutoStyleNames(),
-    pColDefaults(nullptr)
+    : pColDefaults(nullptr)
 {
 }
 
@@ -922,7 +910,6 @@ void ScFormatRangeStyles::Sort()
 }
 
 ScColumnRowStylesBase::ScColumnRowStylesBase()
-    : aStyleNames()
 {
 }
 
@@ -967,8 +954,6 @@ OUString& ScColumnRowStylesBase::GetStyleNameByIndex(const sal_Int32 nIndex)
 }
 
 ScColumnStyles::ScColumnStyles()
-    : ScColumnRowStylesBase(),
-    aTables()
 {
 }
 
@@ -1025,7 +1010,6 @@ bool ScRowStyles::Cache::hasCache(sal_Int32 nTable, sal_Int32 nField) const
 }
 
 ScRowStyles::ScRowStyles()
-    : ScColumnRowStylesBase()
 {
 }
 

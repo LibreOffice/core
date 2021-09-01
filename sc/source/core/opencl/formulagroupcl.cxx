@@ -4138,8 +4138,7 @@ const DynamicKernelArgument* SymbolTable::DeclRefArg(const ScCalcConfig& config,
     }
 }
 
-FormulaGroupInterpreterOpenCL::FormulaGroupInterpreterOpenCL() :
-    FormulaGroupInterpreter() {}
+FormulaGroupInterpreterOpenCL::FormulaGroupInterpreterOpenCL() {}
 
 FormulaGroupInterpreterOpenCL::~FormulaGroupInterpreterOpenCL() {}
 

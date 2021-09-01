@@ -18,7 +18,6 @@ EditTextIterator::EditTextIterator( const ScDocument& rDoc, SCTAB nTab ) :
     mrTable(*rDoc.maTabs.at(nTab)),
     mnCol(0),
     mpCells(nullptr),
-    maPos(sc::CellStoreType::const_position_type()),
     miEnd(maPos.first)
 {
     init();

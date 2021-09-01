@@ -39,7 +39,6 @@ void CALLTYPE ScAddInAsyncCallBack( double& nHandle, void* pData )
 }
 
 ScAddInAsync::ScAddInAsync(sal_uLong nHandleP, LegacyFuncData* pFuncData, ScDocument* pDoc) :
-    SvtBroadcaster(),
     pStr( nullptr ),
     mpFuncData(pFuncData),
     nHandle( nHandleP ),

@@ -31,8 +31,6 @@ ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
     aSelection( rStatus ),
     pDocSh( pD ),
     nTotalPages( 0 ),
-    nPages(),
-    nFirstAttr(),
     bLocInitialized( false )
 {
     //  page count uses the stored cell widths for the printer anyway,
