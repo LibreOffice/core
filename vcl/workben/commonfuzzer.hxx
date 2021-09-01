@@ -89,6 +89,7 @@ void CommonInitialize(int *argc, char ***argv)
 {
     setenv("SAL_USE_VCLPLUGIN", "svp", 1);
     setenv("JPEGMEM", "768M", 1);
+    setenv("JSIMD_FORCENONE", "1", 1); // https://github.com/libjpeg-turbo/libjpeg-turbo/issues/253
     setenv("SC_MAX_MATRIX_ELEMENTS", "60000000", 1);
     setenv("SC_NO_THREADED_CALCULATION", "1", 1);
     setenv("SAL_DISABLE_PRINTERLIST", "1", 1);
