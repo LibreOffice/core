@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a705675c_3f6ac1a7",
+        "filename": "external/skia/windows-libraries-system32.patch.1",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-09-01T11:12:30Z",
+      "side": 1,
+      "message": "doesn\u0027t LoadLibraryExA take three args where the 2nd one has to be NULL",
+      "revId": "1a21b3963470f468d56aa4c70ab0a57c9cac4cb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
