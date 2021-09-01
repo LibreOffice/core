@@ -97,8 +97,6 @@
 #define RID_STR_PRINTDLG_PAGES              NC_("RID_STR_PRINTDLG_PAGES", "Pages:")
 #define RID_STR_PRINTDLG_PRINTALLPAGES      NC_("RID_STR_PRINTDLG_PRINTALLPAGES", "All ~Pages")
 #define RID_STR_PRINTDLG_PRINTPAGES         NC_("RID_STR_PRINTDLG_PRINTPAGES", "Pa~ges:")
-#define RID_STR_PRINTDLG_PRINTEVENPAGES     NC_("RID_STR_PRINTDLG_PRINTEVENPAGES", "~Even pages")
-#define RID_STR_PRINTDLG_PRINTODDPAGES      NC_("RID_STR_PRINTDLG_PRINTODDPAGES", "~Odd pages")
 #define RID_STR_CHOOSE                      NC_("RID_STR_CHOOSE", "Choose")
 #define RID_STR_RUN                         NC_("RID_STR_RUN", "Run")
 #define RID_STR_RECORD                      NC_("RID_STR_RECORD", "~Save")

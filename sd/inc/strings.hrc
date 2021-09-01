@@ -387,7 +387,6 @@
 #define SID_SD_A11Y_P_HANDOUT_N                         NC_("SID_SD_A11Y_P_HANDOUT_N", "Handout")
 #define SID_SD_A11Y_P_UNKNOWN_N                         NC_("SID_SD_A11Y_P_UNKNOWN_N", "UnknownAccessiblePresentationShape")
 #define SID_SD_A11Y_P_FOOTER_N                          NC_("SID_SD_A11Y_P_FOOTER_N", "PresentationFooter")
-#define SID_SD_A11Y_P_FOOTER_D                          NC_("SID_SD_A11Y_P_FOOTER_D", "PresentationFooterShape")
 #define SID_SD_A11Y_P_HEADER_N                          NC_("SID_SD_A11Y_P_HEADER_N", "PresentationHeader")
 #define SID_SD_A11Y_P_DATE_N                            NC_("SID_SD_A11Y_P_DATE_N", "PresentationDateAndTime")
 #define SID_SD_A11Y_P_NUMBER_N                          NC_("SID_SD_A11Y_P_NUMBER_N", "PresentationPageNumber")
