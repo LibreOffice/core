@@ -22,6 +22,30 @@
       },
       "revId": "fc878b828f7205e6a1eb49378dc94240825e2eae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34c17c64_bfbd4b9c",
+        "filename": "vcl/source/outdev/textline.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-01T09:55:44Z",
+      "side": 1,
+      "message": "That\u0027s a fair comment, I\u0027ll rename the function.",
+      "parentUuid": "aa792ba2_f47498f0",
+      "range": {
+        "startLine": 128,
+        "startChar": 8,
+        "endLine": 128,
+        "endChar": 27
+      },
+      "revId": "fc878b828f7205e6a1eb49378dc94240825e2eae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
