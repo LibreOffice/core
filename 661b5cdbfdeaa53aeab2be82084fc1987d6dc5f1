@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7aebc13e_25ff5a97",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-09-01T09:28:58Z",
+      "side": 1,
+      "message": "@Tünde: very nice fix, thanks for the explanation! I\u0027ve extended the description to help the review for the others, too. Note: tt seems, encoding is not perfect the encryption, e.g. using the password \"árvíztűrő\", I was able to edit the document only in Calc, but not in Office 365. It\u0027s worth to file this problem to avoid the potential future regressions.",
+      "revId": "661b5cdbfdeaa53aeab2be82084fc1987d6dc5f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
