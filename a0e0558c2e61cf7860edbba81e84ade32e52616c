@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "485b1bb9_686035e6",
+        "filename": "sw/source/core/doc/docedt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-09-01T08:56:19Z",
+      "side": 1,
+      "message": "hmm ... apprarently the plan is that i will be decremented on the next iteration so why not change this to \"i \u003e\u003d rTable.size()\"",
+      "revId": "a0e0558c2e61cf7860edbba81e84ade32e52616c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c39f266_715afb3f",
+        "filename": "sw/source/core/doc/docedt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-09-01T08:56:19Z",
+      "side": 1,
+      "message": "although, if pFormat isn\u0027t found the result will be rTable.size() too so i guess it doesn\u0027t matter in practice",
+      "revId": "a0e0558c2e61cf7860edbba81e84ade32e52616c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
