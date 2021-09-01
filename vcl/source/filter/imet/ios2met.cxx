@@ -364,7 +364,7 @@ private:
     OSAttr   aAttr;
     OSAttr   * pAttrStack;
 
-    std::unique_ptr<SvStream> xOrdFile;
+    std::unique_ptr<SvMemoryStream> xOrdFile;
 
     void AddPointsToPath(const tools::Polygon & rPoly);
     void AddPointsToArea(const tools::Polygon & rPoly);
@@ -2560,10 +2560,11 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
         case BegGrfObjMagic:
             break;
         case EndGrfObjMagic: {
-            SvStream * pSave;
-            sal_uInt16 nOrderID, nOrderLen;
-
             if (!xOrdFile)
+                break;
+
+            auto nMaxPos = xOrdFile->Tell();
+            if (!nMaxPos)
                 break;
 
             // In xOrdFile all "DatGrfObj" fields were collected so that the
@@ -2571,10 +2572,35 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
             // To read them from the memory stream without having any trouble,
             // we use a  little trick:
 
-            pSave=pOS2MET;
+            SvStream *pSave = pOS2MET;
             pOS2MET=xOrdFile.get(); //(!)
-            auto nMaxPos = pOS2MET->Tell();
             pOS2MET->Seek(0);
+
+            // in a sane world this block is just: pOS2MET->SetStreamSize(nMaxPos);
+            if (nMaxPos)
+            {
+#ifndef NDEBUG
+                const sal_uInt8 nLastByte = static_cast<const sal_uInt8*>(xOrdFile->GetData())[nMaxPos-1];
+#endif
+                pOS2MET->SetStreamSize(nMaxPos); // shrink stream to written portion
+                assert(pOS2MET->remainingSize() == nMaxPos || pOS2MET->remainingSize() == nMaxPos - 1);
+                SAL_WARN_IF(pOS2MET->remainingSize() == nMaxPos, "filter.os2met", "this SetStreamSize workaround is no longer needed");
+                // The shrink case of SvMemoryStream::ReAllocateMemory, i.e. nEndOfData = nNewSize - 1, looks buggy to me, workaround
+                // it by using Seek to move the nEndOfData to the sane position
+                if (pOS2MET->remainingSize() < nMaxPos)
+                {
+                    pOS2MET->Seek(nMaxPos);
+                    pOS2MET->Seek(0);
+                }
+
+                assert(nLastByte == static_cast<const sal_uInt8*>(xOrdFile->GetData())[nMaxPos-1]);
+            }
+
+            assert(pOS2MET->remainingSize() == nMaxPos);
+
+            // disable stream growing past its current size
+            xOrdFile->SetResizeOffset(0);
+
 
             // "Segment header":
             sal_uInt8 nbyte(0);
@@ -2586,11 +2612,13 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
 
             // loop through Order:
             while (pOS2MET->Tell()<nMaxPos && pOS2MET->GetError()==ERRCODE_NONE) {
-                pOS2MET->ReadUChar( nbyte ); nOrderID=static_cast<sal_uInt16>(nbyte) & 0x00ff;
+                pOS2MET->ReadUChar( nbyte );
+                sal_uInt16 nOrderID = static_cast<sal_uInt16>(nbyte) & 0x00ff;
                 if (nOrderID==0x00fe) {
                     pOS2MET->ReadUChar( nbyte );
                     nOrderID=(nOrderID << 8) | (static_cast<sal_uInt16>(nbyte) & 0x00ff);
                 }
+                sal_uInt16 nOrderLen;
                 if (nOrderID>0x00ff || nOrderID==GOrdPolygn) {
                     // ooo: As written in OS2 documentation, the order length should now
                     // be written as big endian word. (Quote: "Highorder byte precedes loworder byte").
