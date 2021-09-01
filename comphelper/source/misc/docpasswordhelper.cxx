@@ -116,8 +116,7 @@ bool DocPasswordHelper::IsModifyPasswordCorrect( std::u16string_view aPassword, 
     if ( !aPassword.empty() && aInfo.hasElements() )
     {
         OUString sAlgorithm;
-        uno::Sequence< sal_Int8 > aSalt;
-        uno::Sequence< sal_Int8 > aHash;
+        uno::Any aSalt, aHash;
         sal_Int32 nCount = 0;
 
         for ( const auto & prop : aInfo )
@@ -125,20 +124,43 @@ bool DocPasswordHelper::IsModifyPasswordCorrect( std::u16string_view aPassword, 
             if ( prop.Name == "algorithm-name" )
                 prop.Value >>= sAlgorithm;
             else if ( prop.Name == "salt" )
-                prop.Value >>= aSalt;
+                aSalt = prop.Value;
             else if ( prop.Name == "iteration-count" )
                 prop.Value >>= nCount;
             else if ( prop.Name == "hash" )
-                prop.Value >>= aHash;
+                aHash = prop.Value;
         }
 
-        if ( sAlgorithm == "PBKDF2" && aSalt.hasElements() && nCount > 0 && aHash.hasElements() )
+        if ( sAlgorithm == "PBKDF2" )
         {
-            uno::Sequence< sal_Int8 > aNewHash = GeneratePBKDF2Hash( aPassword, aSalt, nCount, aHash.getLength() );
-            for ( sal_Int32 nInd = 0; nInd < aNewHash.getLength() && nInd < aHash.getLength() && aNewHash[nInd] == aHash[nInd]; nInd ++ )
+            uno::Sequence<sal_Int8> aIntSalt, aIntHash;
+            aSalt >>= aIntSalt;
+            aHash >>= aIntHash;
+            if (aIntSalt.hasElements() && nCount > 0 && aIntHash.hasElements())
             {
-                if ( nInd == aNewHash.getLength() - 1 && nInd == aHash.getLength() - 1 )
-                    bResult = true;
+                uno::Sequence<sal_Int8> aNewHash
+                    = GeneratePBKDF2Hash(aPassword, aIntSalt, nCount, aIntHash.getLength());
+                for (sal_Int32 nInd = 0; nInd < aNewHash.getLength() && nInd < aIntHash.getLength()
+                                         && aNewHash[nInd] == aIntHash[nInd];
+                     nInd++)
+                {
+                    if (nInd == aNewHash.getLength() - 1 && nInd == aIntHash.getLength() - 1)
+                        bResult = true;
+                }
+            }
+        }
+        else if (nCount > 0)
+        {
+            OUString sSalt, sHash;
+            aSalt >>= sSalt;
+            aHash >>= sHash;
+            if (!sSalt.isEmpty() && !sHash.isEmpty())
+            {
+                const OUString aNewHash(GetOoxHashAsBase64(OUString(aPassword), sSalt, nCount,
+                                                           comphelper::Hash::IterCount::APPEND,
+                                                           sAlgorithm));
+                if (!aNewHash.isEmpty())
+                    bResult = aNewHash == sHash;
             }
         }
     }

@@ -337,6 +337,7 @@ MirroredY
 MissingValueTreatment
 Model
 ModifyPasswordHash
+ModifyPasswordInfo
 MoveProtect
 MovingAveragePeriod
 MultiLine
