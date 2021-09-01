@@ -182,6 +182,30 @@
       },
       "revId": "9ea594ffcf4f807306440e4628eecca8c75be8ee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e59a503_cabd6303",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1568,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-01T12:54:09Z",
+      "side": 1,
+      "message": "Thanks, indeed looks cleaner if that way will work. :-)",
+      "parentUuid": "a37b7c3d_e35b2e56",
+      "range": {
+        "startLine": 1568,
+        "startChar": 32,
+        "endLine": 1568,
+        "endChar": 52
+      },
+      "revId": "9ea594ffcf4f807306440e4628eecca8c75be8ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
