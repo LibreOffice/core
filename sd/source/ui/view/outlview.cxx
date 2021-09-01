@@ -99,7 +99,7 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineVie
 
     mpOutlinerViews[0].reset( new OutlinerView(&mrOutliner, pWindow) );
     mpOutlinerViews[0]->SetOutputArea(::tools::Rectangle());
-    mrOutliner.SetUpdateMode(false);
+    mrOutliner.SetUpdateLayout(false);
     mrOutliner.InsertView(mpOutlinerViews[0].get(), EE_APPEND);
 
     onUpdateStyleSettings( true );
@@ -152,7 +152,7 @@ OutlineView::~OutlineView()
         // uninitialize Outliner: enable color display
         ResetLinks();
         EEControlBits nCntrl = mrOutliner.GetControlWord();
-        mrOutliner.SetUpdateMode(false); // otherwise there will be drawn on SetControlWord
+        mrOutliner.SetUpdateLayout(false); // otherwise there will be drawn on SetControlWord
         mrOutliner.SetControlWord(nCntrl & ~EEControlBits::NOCOLORS);
         SvtAccessibilityOptions aOptions;
         mrOutliner.ForceAutoColor( aOptions.GetIsAutomaticFontColor() );
@@ -1003,7 +1003,7 @@ void OutlineView::FillOutliner()
     mrOutliner.GetUndoManager().Clear();
     mrOutliner.EnableUndo(false);
     ResetLinks();
-    mrOutliner.SetUpdateMode(false);
+    mrOutliner.SetUpdateLayout(false);
 
     Paragraph* pTitleToSelect = nullptr;
     sal_uInt16 nPageCount = mrDoc.GetSdPageCount(PageKind::Standard);
@@ -1098,7 +1098,7 @@ void OutlineView::FillOutliner()
 
     mrOutliner.EnableUndo(true);
 
-    mrOutliner.SetUpdateMode(true);
+    mrOutliner.SetUpdateLayout(true);
 }
 
 /**

@@ -594,7 +594,7 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
     aSel.Adjust();
     sal_Int32 nNewEnd = aSel.nEndPos;
 
-    bool bUpdate = pOutliner->GetUpdateMode();
+    bool bUpdate = pOutliner->IsUpdateLayout();
     bool bChanged = false;
 
     //! GetPortions and GetAttribs should be const!
@@ -624,7 +624,7 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
                         if (!bChanged)
                         {
                             if (bUpdate)
-                                pOutliner->SetUpdateMode( false );
+                                pOutliner->SetUpdateLayout( false );
                             OUString aName = ScResId( STR_UNDO_DELETECONTENTS );
                             ViewShellId nViewShellId(-1);
                             if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
@@ -648,7 +648,7 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
     if (bUpdate && bChanged)
     {
         pOutliner->GetUndoManager().LeaveListAction();
-        pOutliner->SetUpdateMode( true );
+        pOutliner->SetUpdateLayout( true );
     }
 
     if ( aOldSel == aSel )          // aSel is adjusted

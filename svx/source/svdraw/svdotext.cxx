@@ -222,7 +222,7 @@ void SdrTextObj::FitFrameToTextSize()
 
     SdrOutliner& rOutliner=ImpGetDrawOutliner();
     rOutliner.SetPaperSize(Size(maRect.Right()-maRect.Left(),maRect.Bottom()-maRect.Top()));
-    rOutliner.SetUpdateMode(true);
+    rOutliner.SetUpdateLayout(true);
     rOutliner.SetText(*pText->GetOutlinerParaObject());
     Size aNewSize(rOutliner.CalcTextSize());
     rOutliner.Clear();
@@ -262,7 +262,7 @@ void SdrTextObj::NbcSetText(SvStream& rInput, const OUString& rBaseURL, EETextFo
     rOutliner.SetStyleSheet( 0, GetStyleSheet());
     rOutliner.Read(rInput,rBaseURL,eFormat);
     std::optional<OutlinerParaObject> pNewText=rOutliner.CreateParaObject();
-    rOutliner.SetUpdateMode(true);
+    rOutliner.SetUpdateLayout(true);
     Size aSize(rOutliner.CalcTextSize());
     rOutliner.Clear();
     NbcSetOutlinerParaObject(std::move(pNewText));
@@ -289,7 +289,7 @@ const Size& SdrTextObj::GetTextSize() const
         {
             SdrOutliner& rOutliner=ImpGetDrawOutliner();
             rOutliner.SetText(*pText->GetOutlinerParaObject());
-            rOutliner.SetUpdateMode(true);
+            rOutliner.SetUpdateLayout(true);
             aSiz=rOutliner.CalcTextSize();
             rOutliner.Clear();
         }
@@ -789,7 +789,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
                 rOutliner.SetFixedCellHeight(GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT).GetValue());
             }
 
-            rOutliner.SetUpdateMode(true);
+            rOutliner.SetUpdateLayout(true);
             rOutliner.SetText(*pPara);
         }
     }
@@ -798,7 +798,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
         rOutliner.SetTextObj( nullptr );
     }
 
-    rOutliner.SetUpdateMode(true);
+    rOutliner.SetUpdateLayout(true);
     rOutliner.SetControlWord(nStat0);
 
     if( pText )
@@ -1144,7 +1144,7 @@ Point SdrTextObj::GetSnapPoint(sal_uInt32 i) const
 // Extracted from ImpGetDrawOutliner()
 void SdrTextObj::ImpInitDrawOutliner( SdrOutliner& rOutl ) const
 {
-    rOutl.SetUpdateMode(false);
+    rOutl.SetUpdateLayout(false);
     OutlinerMode nOutlinerMode = OutlinerMode::OutlineObject;
     if ( !IsOutlText() )
         nOutlinerMode = OutlinerMode::TextObject;

@@ -316,7 +316,7 @@ void SwAnnotationWin::InitControls()
     SwDocShell* aShell = mrView.GetDocShell();
     mpOutliner.reset(new Outliner(&aShell->GetPool(),OutlinerMode::TextObject));
     aShell->GetDoc()->SetCalcFieldValueHdl( mpOutliner.get() );
-    mpOutliner->SetUpdateMode( true );
+    mpOutliner->SetUpdateLayout( true );
 
     mpOutlinerView.reset(new OutlinerView(mpOutliner.get(), nullptr));
     mpOutliner->InsertView(mpOutlinerView.get());

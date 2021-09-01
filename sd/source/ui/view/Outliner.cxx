@@ -315,7 +315,7 @@ void SdOutliner::EndSpelling()
             mpImpl->ReleaseOutlinerView();
         }
 
-        SetUpdateMode(true);
+        SetUpdateLayout(true);
     }
 
     // Before clearing the modify flag use it as a hint that
@@ -965,7 +965,7 @@ void SdOutliner::DetectChange()
         if (pPageView != nullptr)
             mpView->UnmarkAllObj (pPageView);
         mpView->SdrEndTextEdit();
-        SetUpdateMode(false);
+        SetUpdateLayout(false);
         OutlinerView* pOutlinerView = getOutlinerView();
         if (pOutlinerView != nullptr)
             pOutlinerView->SetOutputArea( ::tools::Rectangle( Point(), Size(1, 1) ) );
@@ -1187,7 +1187,7 @@ void SdOutliner::ProvideNextTextObject()
     {
         DBG_UNHANDLED_EXCEPTION("sd.view");
     }
-    SetUpdateMode(false);
+    SetUpdateLayout(false);
     OutlinerView* pOutlinerView = getOutlinerView();
     if (pOutlinerView != nullptr)
         pOutlinerView->SetOutputArea( ::tools::Rectangle( Point(), Size(1, 1) ) );
@@ -1642,7 +1642,7 @@ void SdOutliner::EnterEditMode (bool bGrabFocus)
     mpView->SdrBeginTextEdit(mpSearchSpellTextObj, pPV, mpWindow, true, this,
                             pOutlinerView, true, true, bGrabFocus);
 
-    SetUpdateMode(true);
+    SetUpdateLayout(true);
     mbFoundObject = true;
 }
 
@@ -1804,10 +1804,10 @@ void SdOutliner::StartConversion( LanguageType nSourceLanguage,  LanguageType nT
 */
 void SdOutliner::PrepareConversion()
 {
-    SetUpdateMode(true);
+    SetUpdateLayout(true);
     if( HasConvertibleTextPortion( mnConversionLanguage ) )
     {
-        SetUpdateMode(false);
+        SetUpdateLayout(false);
         mbStringFound = true;
         mbMatchMayExist = true;
 
@@ -1819,7 +1819,7 @@ void SdOutliner::PrepareConversion()
     }
     else
     {
-        SetUpdateMode(false);
+        SetUpdateLayout(false);
     }
 }
 
@@ -1996,7 +1996,7 @@ void SdOutliner::Implementation::ProvideOutlinerView (
             if (bInsert)
                 rOutliner.InsertView( mpOutlineView );
 
-            rOutliner.SetUpdateMode(false);
+            rOutliner.SetUpdateLayout(false);
             mpOutlineView->SetOutputArea (::tools::Rectangle (Point(), Size(1, 1)));
             rOutliner.SetPaperSize( Size(1, 1) );
             rOutliner.SetText(OUString(), rOutliner.GetParagraph(0));

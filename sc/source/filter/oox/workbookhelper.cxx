@@ -586,7 +586,7 @@ void WorkbookGlobals::initialize()
     mxEditEngine.reset( new ScEditEngineDefaulter( rDoc.GetEnginePool() ) );
     mxEditEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
     mxEditEngine->SetEditTextObjectPool( rDoc.GetEditPool() );
-    mxEditEngine->SetUpdateMode( false );
+    mxEditEngine->SetUpdateLayout( false );
     mxEditEngine->EnableUndo( false );
     mxEditEngine->SetControlWord( mxEditEngine->GetControlWord() & ~EEControlBits::ALLOWBIGOBJS );
 

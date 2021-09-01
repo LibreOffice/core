@@ -41,15 +41,15 @@ using namespace ::com::sun::star::linguistic2;
 // ======================   Simple pass-through   =======================
 
 
-void Outliner::SetUpdateMode( bool bUpdate )
+bool Outliner::SetUpdateLayout( bool bUpdate )
 {
-    pEditEngine->SetUpdateMode( bUpdate );
+    return pEditEngine->SetUpdateLayout( bUpdate );
 }
 
 
-bool Outliner::GetUpdateMode() const
+bool Outliner::IsUpdateLayout() const
 {
-    return pEditEngine->GetUpdateMode();
+    return pEditEngine->IsUpdateLayout();
 }
 
 const SfxItemSet& Outliner::GetEmptyItemSet() const

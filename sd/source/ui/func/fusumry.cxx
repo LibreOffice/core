@@ -160,7 +160,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                     pNotesPage->setHeaderFooterSettings(pActualNotesPage->getHeaderFooterSettings());
 
                     pOutl.reset(new SdOutliner( mpDoc, OutlinerMode::OutlineObject ));
-                    pOutl->SetUpdateMode(false);
+                    pOutl->SetUpdateLayout(false);
                     pOutl->EnableUndo(false);
 
                     if (mpDocSh)

@@ -1121,12 +1121,12 @@ namespace {
             const ::tools::Rectangle aOutRect (rPrinter.GetPageOffset(), rPrinter.GetOutputSize());
             Outliner* pOutliner = rDocument.GetInternalOutliner();
             const OutlinerMode nSavedOutlMode (pOutliner->GetOutlinerMode());
-            const bool bSavedUpdateMode (pOutliner->GetUpdateMode());
+            const bool bSavedUpdateMode (pOutliner->IsUpdateLayout());
             const Size aSavedPaperSize (pOutliner->GetPaperSize());
 
             pOutliner->Init(OutlinerMode::OutlineView);
             pOutliner->SetPaperSize(aOutRect.GetSize());
-            pOutliner->SetUpdateMode(true);
+            pOutliner->SetUpdateLayout(true);
             pOutliner->Clear();
             pOutliner->SetText(*mpParaObject);
 
@@ -1139,7 +1139,7 @@ namespace {
 
             // Restore outliner and printer.
             pOutliner->Clear();
-            pOutliner->SetUpdateMode(bSavedUpdateMode);
+            pOutliner->SetUpdateLayout(bSavedUpdateMode);
             pOutliner->SetPaperSize(aSavedPaperSize);
             pOutliner->Init(nSavedOutlMode);
         }
@@ -1626,11 +1626,11 @@ private:
         Outliner* pOutliner = mrBase.GetDocument()->GetInternalOutliner();
         pOutliner->Init(OutlinerMode::OutlineView);
         const OutlinerMode nSavedOutlMode (pOutliner->GetOutlinerMode());
-        const bool bSavedUpdateMode (pOutliner->GetUpdateMode());
+        const bool bSavedUpdateMode (pOutliner->IsUpdateLayout());
         const Size aSavedPaperSize (pOutliner->GetPaperSize());
         const MapMode aSavedMapMode (pOutliner->GetRefMapMode());
         pOutliner->SetPaperSize(aOutRect.GetSize());
-        pOutliner->SetUpdateMode(true);
+        pOutliner->SetUpdateLayout(true);
 
         ::tools::Long nPageH = aOutRect.GetHeight();
 
@@ -1751,7 +1751,7 @@ private:
         }
 
         pOutliner->SetRefMapMode(aSavedMapMode);
-        pOutliner->SetUpdateMode(bSavedUpdateMode);
+        pOutliner->SetUpdateLayout(bSavedUpdateMode);
         pOutliner->SetPaperSize(aSavedPaperSize);
         pOutliner->Init(nSavedOutlMode);
     }

@@ -387,8 +387,7 @@ void OutlinerView::Select( Paragraph const * pParagraph, bool bSelect )
 
 void OutlinerView::SetAttribs( const SfxItemSet& rAttrs )
 {
-    bool bUpdate = pOwner->pEditEngine->GetUpdateMode();
-    pOwner->pEditEngine->SetUpdateMode( false );
+    bool bUpdate = pOwner->pEditEngine->SetUpdateLayout( false );
 
     if( !pOwner->IsInUndo() && pOwner->IsUndoEnabled() )
         pOwner->UndoActionStart( OLUNDO_ATTR );
@@ -410,7 +409,7 @@ void OutlinerView::SetAttribs( const SfxItemSet& rAttrs )
     if( !pOwner->IsInUndo() && pOwner->IsUndoEnabled() )
         pOwner->UndoActionEnd();
 
-    pEditView->SetEditEngineUpdateMode( bUpdate );
+    pEditView->SetEditEngineUpdateLayout( bUpdate );
 }
 
 ParaRange OutlinerView::ImpGetSelectedParagraphs( bool bIncludeHiddenChildren )
@@ -441,8 +440,7 @@ void OutlinerView::Indent( short nDiff )
         return;
 
     const bool bOutlinerView = bool(pOwner->pEditEngine->GetControlWord() & EEControlBits::OUTLINER);
-    bool bUpdate = pOwner->pEditEngine->GetUpdateMode();
-    pOwner->pEditEngine->SetUpdateMode( false );
+    bool bUpdate = pOwner->pEditEngine->SetUpdateLayout( false );
 
     bool bUndo = !pOwner->IsInUndo() && pOwner->IsUndoEnabled();
 
@@ -558,7 +556,7 @@ void OutlinerView::Indent( short nDiff )
 
     if ( bUpdate )
     {
-        pEditView->SetEditEngineUpdateMode( true );
+        pEditView->SetEditEngineUpdateLayout( true );
         pEditView->ShowCursor();
     }
 
@@ -603,8 +601,7 @@ void OutlinerView::CollapseAll()
 
 void OutlinerView::ImplExpandOrCollaps( sal_Int32 nStartPara, sal_Int32 nEndPara, bool bExpand )
 {
-    bool bUpdate = pOwner->GetUpdateMode();
-    pOwner->SetUpdateMode( false );
+    bool bUpdate = pOwner->SetUpdateLayout( false );
 
     bool bUndo = !pOwner->IsInUndo() && pOwner->IsUndoEnabled();
     if( bUndo )
@@ -626,7 +623,7 @@ void OutlinerView::ImplExpandOrCollaps( sal_Int32 nStartPara, sal_Int32 nEndPara
 
     if ( bUpdate )
     {
-        pOwner->SetUpdateMode( true );
+        pOwner->SetUpdateLayout( true );
         pEditView->ShowCursor();
     }
 }
@@ -647,13 +644,13 @@ void OutlinerView::InsertText( const OutlinerParaObject& rParaObj )
 
     pOwner->UndoActionStart( OLUNDO_INSERT );
 
-    pOwner->pEditEngine->SetUpdateMode( false );
+    pOwner->pEditEngine->SetUpdateLayout( false );
     sal_Int32 nStart, nParaCount;
     nParaCount = pOwner->pEditEngine->GetParagraphCount();
     sal_uInt16 nSize = ImpInitPaste( nStart );
     pEditView->InsertText( rParaObj.GetTextObject() );
     ImpPasted( nStart, nParaCount, nSize);
-    pEditView->SetEditEngineUpdateMode( true );
+    pEditView->SetEditEngineUpdateLayout( true );
 
     pOwner->UndoActionEnd();
 
@@ -682,7 +679,7 @@ void OutlinerView::Paste( bool bUseSpecial )
 
     pOwner->UndoActionStart( OLUNDO_INSERT );
 
-    pOwner->pEditEngine->SetUpdateMode( false );
+    pOwner->pEditEngine->SetUpdateLayout( false );
     pOwner->bPasting = true;
 
     if ( bUseSpecial )
@@ -698,7 +695,7 @@ void OutlinerView::Paste( bool bUseSpecial )
             pOwner->ImplSetLevelDependentStyleSheet( nPara );
     }
 
-    pEditView->SetEditEngineUpdateMode( true );
+    pEditView->SetEditEngineUpdateLayout( true );
     pOwner->UndoActionEnd();
     pEditView->ShowCursor();
 
@@ -828,8 +825,7 @@ void OutlinerView::ToggleBullets()
     ESelection aSel( pEditView->GetSelection() );
     aSel.Adjust();
 
-    const bool bUpdate = pOwner->pEditEngine->GetUpdateMode();
-    pOwner->pEditEngine->SetUpdateMode( false );
+    const bool bUpdate = pOwner->pEditEngine->SetUpdateLayout( false );
 
     sal_Int16 nNewDepth = -2;
     const SvxNumRule* pDefaultBulletNumRule = nullptr;
@@ -892,7 +888,7 @@ void OutlinerView::ToggleBullets()
     sal_Int32 nEndPara = (nParaCount > 0) ? nParaCount-1 : nParaCount;
     pOwner->pEditEngine->QuickMarkInvalid( ESelection( aSel.nStartPara, 0, nEndPara, 0 ) );
 
-    pOwner->pEditEngine->SetUpdateMode( bUpdate );
+    pOwner->pEditEngine->SetUpdateLayout( bUpdate );
 
     pOwner->UndoActionEnd();
 }
@@ -947,8 +943,7 @@ void OutlinerView::ApplyBulletsNumbering(
     }
 
     pOwner->UndoActionStart(OLUNDO_DEPTH);
-    const bool bUpdate = pOwner->pEditEngine->GetUpdateMode();
-    pOwner->pEditEngine->SetUpdateMode(false);
+    const bool bUpdate = pOwner->pEditEngine->SetUpdateLayout(false);
 
     sal_Int32 nStartPara = 0;
     sal_Int32 nEndPara = 0;
@@ -1061,7 +1056,7 @@ void OutlinerView::ApplyBulletsNumbering(
     pOwner->ImplCheckParagraphs( nStartPara, nParaCount );
     pOwner->pEditEngine->QuickMarkInvalid( ESelection( nStartPara, 0, nParaCount, 0 ) );
 
-    pOwner->pEditEngine->SetUpdateMode( bUpdate );
+    pOwner->pEditEngine->SetUpdateLayout( bUpdate );
 
     pOwner->UndoActionEnd();
 }
@@ -1086,8 +1081,7 @@ void OutlinerView::SwitchOffBulletsNumbering(
     }
 
     pOwner->UndoActionStart( OLUNDO_DEPTH );
-    const bool bUpdate = pOwner->pEditEngine->GetUpdateMode();
-    pOwner->pEditEngine->SetUpdateMode( false );
+    const bool bUpdate = pOwner->pEditEngine->SetUpdateLayout( false );
 
     for ( sal_Int32 nPara = nStartPara; nPara <= nEndPara; ++nPara )
     {
@@ -1112,7 +1106,7 @@ void OutlinerView::SwitchOffBulletsNumbering(
     pOwner->ImplCheckParagraphs( nStartPara, nParaCount );
     pOwner->pEditEngine->QuickMarkInvalid( ESelection( nStartPara, 0, nParaCount, 0 ) );
 
-    pOwner->pEditEngine->SetUpdateMode( bUpdate );
+    pOwner->pEditEngine->SetUpdateLayout( bUpdate );
     pOwner->UndoActionEnd();
 }
 
@@ -1124,8 +1118,7 @@ void OutlinerView::RemoveAttribsKeepLanguages( bool bRemoveParaAttribs )
 
 void OutlinerView::RemoveAttribs( bool bRemoveParaAttribs, bool bKeepLanguages )
 {
-    bool bUpdate = pOwner->GetUpdateMode();
-    pOwner->SetUpdateMode( false );
+    bool bUpdate = pOwner->SetUpdateLayout( false );
     pOwner->UndoActionStart( OLUNDO_ATTR );
     if (bKeepLanguages)
         pEditView->RemoveAttribsKeepLanguages( bRemoveParaAttribs );
@@ -1143,7 +1136,7 @@ void OutlinerView::RemoveAttribs( bool bRemoveParaAttribs, bool bKeepLanguages )
         }
     }
     pOwner->UndoActionEnd();
-    pOwner->SetUpdateMode( bUpdate );
+    pOwner->SetUpdateLayout( bUpdate );
 }
 
 

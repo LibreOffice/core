@@ -414,7 +414,7 @@ void ScInputWindow::Select()
                 pView->SetSelection( ESelection(0, nStartPos, 0, nEndPos) );
                 pScMod->InputChanged(pView);
                 SetOkCancelMode();
-                pView->SetEditEngineUpdateMode(true);
+                pView->SetEditEngineUpdateLayout(true);
             }
         }
     }
@@ -584,7 +584,7 @@ void ScInputWindow::SetFuncString( const OUString& rString, bool bDoEdit )
     if ( bDoEdit )
         SetOkCancelMode(); // Not the case if immediately followed by Enter/Cancel
 
-    pView->SetEditEngineUpdateMode(true);
+    pView->SetEditEngineUpdateLayout(true);
 }
 
 void ScInputWindow::SetPosString( const OUString& rStr )
@@ -1534,7 +1534,7 @@ void ScTextWnd::InitEditEngine()
     m_xEditEngine = std::move(pNew);
 
     Size barSize = GetOutputSizePixel();
-    m_xEditEngine->SetUpdateMode( false );
+    m_xEditEngine->SetUpdateLayout( false );
     m_xEditEngine->SetPaperSize( GetDrawingArea()->get_ref_device().PixelToLogic(Size(barSize.Width(),10000)) );
     m_xEditEngine->SetWordDelimiters(
                     ScEditUtil::ModifyDelimiters( m_xEditEngine->GetWordDelimiters() ) );
@@ -1560,7 +1560,7 @@ void ScTextWnd::InitEditEngine()
     if ( pHdl ) //! Test if it's the right InputHdl?
         bFilled = pHdl->GetTextAndFields(static_cast<ScEditEngineDefaulter&>(*m_xEditEngine));
 
-    m_xEditEngine->SetUpdateMode( true );
+    m_xEditEngine->SetUpdateLayout( true );
 
     // aString is the truth ...
     if (bFilled && m_xEditEngine->GetText() == aString)
@@ -1651,7 +1651,7 @@ bool ScTextWnd::MouseButtonDown( const MouseEvent& rMEvt )
     bool bClickOnSelection = false;
     if (m_xEditView)
     {
-        m_xEditView->SetEditEngineUpdateMode( true );
+        m_xEditView->SetEditEngineUpdateLayout( true );
         bClickOnSelection = m_xEditView->IsSelectionAtPoint(rMEvt.GetPosPixel());
     }
     if (!bClickOnSelection)
@@ -2036,7 +2036,7 @@ void ScTextWnd::MakeDialogEditView()
     pNew->SetExecuteURL( false );
     m_xEditEngine = std::move(pNew);
 
-    m_xEditEngine->SetUpdateMode( false );
+    m_xEditEngine->SetUpdateLayout( false );
     m_xEditEngine->SetWordDelimiters( m_xEditEngine->GetWordDelimiters() + "=" );
     m_xEditEngine->SetPaperSize( Size( bIsRTL ? USHRT_MAX : THESIZE, 300 ) );
 
@@ -2046,7 +2046,7 @@ void ScTextWnd::MakeDialogEditView()
     if ( bIsRTL )
         lcl_ModifyRTLDefaults( *pSet );
     static_cast<ScEditEngineDefaulter*>(m_xEditEngine.get())->SetDefaults( std::move(pSet) );
-    m_xEditEngine->SetUpdateMode( true );
+    m_xEditEngine->SetUpdateLayout( true );
 
     m_xEditView = std::make_unique<EditView>(m_xEditEngine.get(), nullptr);
     m_xEditView->setEditViewCallbacks(this);

@@ -491,7 +491,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
 
     if ( !pRegion && !comphelper::LibreOfficeKit::isActive())
     {
-        if ( !pEditEngine->pImpEditEngine->GetUpdateMode() )
+        if ( !pEditEngine->pImpEditEngine->IsUpdateLayout() )
             return;
         if ( pEditEngine->pImpEditEngine->IsInUndo() )
             return;
@@ -893,7 +893,7 @@ void ImpEditView::ResetOutputArea( const tools::Rectangle& rRect )
     SetOutputArea(rRect);
 
     // invalidate surrounding areas if update is true
-    if(aOldArea.IsEmpty() || !pEditEngine->pImpEditEngine->GetUpdateMode())
+    if(aOldArea.IsEmpty() || !pEditEngine->pImpEditEngine->IsUpdateLayout())
         return;
 
     // #i119885# use grown area if needed; do when getting bigger OR smaller
@@ -1169,7 +1169,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
     // is initialized in Paint, because no SetPool();
     if ( pEditEngine->pImpEditEngine->IsFormatting() )
         return;
-    if ( !pEditEngine->pImpEditEngine->GetUpdateMode() )
+    if ( !pEditEngine->pImpEditEngine->IsUpdateLayout() )
         return;
     if ( pEditEngine->pImpEditEngine->IsInUndo() )
         return;
@@ -1812,7 +1812,7 @@ void ImpEditView::DeleteSelected()
 
     DrawSelectionXOR();
 
-    pEditEngine->pImpEditEngine->FormatAndUpdate( GetEditViewPtr() );
+    pEditEngine->pImpEditEngine->FormatAndLayout( GetEditViewPtr() );
     ShowCursor( DoAutoScroll(), true );
 }
 
@@ -1989,7 +1989,7 @@ void ImpEditView::Paste( css::uno::Reference< css::datatransfer::clipboard::XCli
     pEditEngine->pImpEditEngine->UndoActionEnd();
     SetEditSelection( aSel );
     pEditEngine->pImpEditEngine->UpdateSelections();
-    pEditEngine->pImpEditEngine->FormatAndUpdate( GetEditViewPtr() );
+    pEditEngine->pImpEditEngine->FormatAndLayout( GetEditViewPtr() );
     ShowCursor( DoAutoScroll(), true );
 }
 
@@ -2344,7 +2344,7 @@ void ImpEditView::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent
                 DBG_ASSERT( !pEditEngine->pImpEditEngine->CreateSel( aNewSel ).DbgIsBuggy(pEditEngine->GetEditDoc()), "Bad" );
                 SetEditSelection( pEditEngine->pImpEditEngine->CreateSel( aNewSel ) );
             }
-            pEditEngine->pImpEditEngine->FormatAndUpdate( pEditEngine->pImpEditEngine->GetActiveView() );
+            pEditEngine->pImpEditEngine->FormatAndLayout( pEditEngine->pImpEditEngine->GetActiveView() );
             DrawSelectionXOR();
         }
         else
@@ -2410,7 +2410,7 @@ void ImpEditView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE
             pEditEngine->HandleEndPasteOrDrop(aPasteOrDropInfos);
 
             SetEditSelection( aNewSel );
-            pEditEngine->pImpEditEngine->FormatAndUpdate( pEditEngine->pImpEditEngine->GetActiveView() );
+            pEditEngine->pImpEditEngine->FormatAndLayout( pEditEngine->pImpEditEngine->GetActiveView() );
             if ( pDragAndDropInfo->bStarterOfDD )
             {
                 // Only set if the same engine!

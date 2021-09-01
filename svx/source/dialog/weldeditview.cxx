@@ -910,7 +910,7 @@ IMPL_LINK(WeldTextForwarder, NotifyHdl, EENotify&, rNotify, void)
     if (EditEngine* pEditEngine = m_rEditAcc.GetEditEngine())
     {
         if (rNotify.eNotificationType == EE_NOTIFY_PROCESSNOTIFICATIONS
-            && !pEditEngine->GetUpdateMode())
+            && !pEditEngine->IsUpdateLayout())
         {
             // tdf#143088 an UpdateMode of false will just to on to cause
             // AccessibleTextHelper_Impl::GetTextForwarder to throw an
@@ -1055,7 +1055,7 @@ bool WeldTextForwarder::IsValid() const
     EditEngine* pEditEngine = m_rEditAcc.GetEditEngine();
     // cannot reliably query EditEngine state
     // while in the middle of an update
-    return pEditEngine && pEditEngine->GetUpdateMode();
+    return pEditEngine && pEditEngine->IsUpdateLayout();
 }
 
 OUString WeldTextForwarder::CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara,

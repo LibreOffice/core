@@ -454,7 +454,7 @@ void EditView::InsertText( const OUString& rStr, bool bSelect, bool bLOKShowSele
         pImpEditView->SetEditSelection( EditSelection( aPaM2, aPaM2 ) );
 
     if (bLOKShowSelect)
-        pEE->FormatAndUpdate( this );
+        pEE->FormatAndLayout( this );
 }
 
 bool EditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window const * pFrameWin )
@@ -555,7 +555,7 @@ void EditView::SetAttribs( const SfxItemSet& rSet )
 
     pImpEditView->DrawSelectionXOR();
     pImpEditView->pEditEngine->SetAttribs( pImpEditView->GetEditSelection(), rSet, SetAttribsMode::WholeWord );
-    pImpEditView->pEditEngine->FormatAndUpdate( this );
+    pImpEditView->pEditEngine->FormatAndLayout( this );
 }
 
 void EditView::RemoveAttribsKeepLanguages( bool bRemoveParaAttribs )
@@ -575,7 +575,7 @@ void EditView::RemoveAttribsKeepLanguages( bool bRemoveParaAttribs )
     }
 
     pImpEditView->pEditEngine->UndoActionEnd();
-    pImpEditView->pEditEngine->FormatAndUpdate( this );
+    pImpEditView->pEditEngine->FormatAndLayout( this );
 }
 
 void EditView::RemoveAttribs( bool bRemoveParaAttribs, sal_uInt16 nWhich )
@@ -590,7 +590,7 @@ void EditView::RemoveAttribs( EERemoveParaAttribsMode eMode, sal_uInt16 nWhich )
     pImpEditView->pEditEngine->UndoActionStart( EDITUNDO_RESETATTRIBS );
     pImpEditView->pEditEngine->RemoveCharAttribs( pImpEditView->GetEditSelection(), eMode, nWhich  );
     pImpEditView->pEditEngine->UndoActionEnd();
-    pImpEditView->pEditEngine->FormatAndUpdate( this );
+    pImpEditView->pEditEngine->FormatAndLayout( this );
 }
 
 void EditView::RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich )
@@ -598,7 +598,7 @@ void EditView::RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich )
     pImpEditView->pEditEngine->UndoActionStart( EDITUNDO_RESETATTRIBS );
     pImpEditView->pEditEngine->RemoveCharAttribs( nPara, nWhich );
     pImpEditView->pEditEngine->UndoActionEnd();
-    pImpEditView->pEditEngine->FormatAndUpdate( this );
+    pImpEditView->pEditEngine->FormatAndLayout( this );
 }
 
 SfxItemSet EditView::GetAttribs()
@@ -749,7 +749,7 @@ void EditView::InsertText( const EditTextObject& rTextObject )
 
     aTextSel.Min() = aTextSel.Max();    // Selection not retained.
     pImpEditView->SetEditSelection( aTextSel );
-    pImpEditView->pEditEngine->FormatAndUpdate( this );
+    pImpEditView->pEditEngine->FormatAndLayout( this );
 }
 
 void EditView::InsertText( css::uno::Reference< css::datatransfer::XTransferable > const & xDataObj, const OUString& rBaseURL, bool bUseSpecial )
@@ -762,17 +762,17 @@ void EditView::InsertText( css::uno::Reference< css::datatransfer::XTransferable
 
     aTextSel.Min() = aTextSel.Max();    // Selection not retained.
     pImpEditView->SetEditSelection( aTextSel );
-    pImpEditView->pEditEngine->FormatAndUpdate( this );
+    pImpEditView->pEditEngine->FormatAndLayout( this );
 }
 
-void EditView::SetEditEngineUpdateMode( bool bUpdate )
+bool EditView::SetEditEngineUpdateLayout( bool bUpdate )
 {
-    pImpEditView->pEditEngine->pImpEditEngine->SetUpdateMode( bUpdate, this );
+    return pImpEditView->pEditEngine->pImpEditEngine->SetUpdateLayout( bUpdate, this );
 }
 
-void EditView::ForceUpdate()
+void EditView::ForceLayoutCalculation()
 {
-    pImpEditView->pEditEngine->pImpEditEngine->SetUpdateMode( true, this, true );
+    pImpEditView->pEditEngine->pImpEditEngine->SetUpdateLayout( true, this, true );
 }
 
 SfxStyleSheet* EditView::GetStyleSheet()
@@ -840,7 +840,7 @@ void EditView::CompleteAutoCorrect( vcl::Window const * pFrameWin )
         aSel = pImpEditView->pEditEngine->pImpEditEngine->AutoCorrect( aSel, 0, !IsInsertMode(), pFrameWin );
         pImpEditView->SetEditSelection( aSel );
         if ( pImpEditView->pEditEngine->IsModified() )
-            pImpEditView->pEditEngine->FormatAndUpdate( this );
+            pImpEditView->pEditEngine->FormatAndLayout( this );
     }
 }
 
@@ -1285,7 +1285,7 @@ void EditView::InsertParaBreak()
     EditPaM aPaM(pImpEditView->pEditEngine->InsertParaBreak(pImpEditView->GetEditSelection()));
     pImpEditView->pEditEngine->UndoActionEnd();
     pImpEditView->SetEditSelection(EditSelection(aPaM, aPaM));
-    pImpEditView->pEditEngine->FormatAndUpdate(this);
+    pImpEditView->pEditEngine->FormatAndLayout(this);
 }
 
 void EditView::InsertField( const SvxFieldItem& rFld )
@@ -1297,7 +1297,7 @@ void EditView::InsertField( const SvxFieldItem& rFld )
     pEE->UndoActionEnd();
     pImpEditView->SetEditSelection( EditSelection( aPaM, aPaM ) );
     pEE->UpdateFields();
-    pEE->FormatAndUpdate( this );
+    pEE->FormatAndLayout( this );
 }
 
 const SvxFieldItem* EditView::GetFieldUnderMousePointer() const

@@ -123,7 +123,7 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
 
     // prevent flickering
     pOV->HideCursor();
-    pOL->SetUpdateMode(false);
+    pOL->SetUpdateLayout(false);
 
     // remove old selected text
     pOV->InsertText( "" );
@@ -145,7 +145,7 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
     rUndoMgr.LeaveListAction();
 
     // restart repainting
-    pOL->SetUpdateMode(true);
+    pOL->SetUpdateLayout(true);
     pOV->ShowCursor();
 }
 
@@ -230,7 +230,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
 
     // prevent flicker
     pOV->HideCursor();
-    pOL->SetUpdateMode(false);
+    pOL->SetUpdateLayout(false);
 
     /* remember old attributes:
        To do that, remove selected area before (it has to go anyway).
@@ -272,7 +272,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
     rUndoMgr.LeaveListAction();
 
     // show it again
-    pOL->SetUpdateMode(true);
+    pOL->SetUpdateLayout(true);
     pOV->ShowCursor();
 }
 

@@ -230,7 +230,7 @@ bool SvxOutlinerForwarder::IsValid() const
 {
     // cannot reliably query outliner state
     // while in the middle of an update
-    return rOutliner.GetUpdateMode();
+    return rOutliner.IsUpdateLayout();
 }
 
 SfxItemState SvxOutlinerForwarder::GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const
