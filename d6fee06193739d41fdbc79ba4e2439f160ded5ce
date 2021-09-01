@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9485c39_f27df6f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-01T12:52:54Z",
+      "side": 1,
+      "message": "Did you consider covering this change with a test?\n\nAlso: I assume that you did test that fdo#74336 fix still works, but it would be good to make that explicit in the commit message, since that fix sadly doesn\u0027t have a matching test.\n\nOther than these, looks promising. :-)",
+      "revId": "d6fee06193739d41fdbc79ba4e2439f160ded5ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d25a12b_4aa1fa76",
+        "filename": "emfio/source/reader/wmfreader.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1465,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-01T12:52:54Z",
+      "side": 1,
+      "message": "Could you remove this not needed trailing space?",
+      "revId": "d6fee06193739d41fdbc79ba4e2439f160ded5ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70973165_4cab4a0b",
+        "filename": "emfio/source/reader/wmfreader.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1479,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-01T12:52:54Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "d6fee06193739d41fdbc79ba4e2439f160ded5ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
