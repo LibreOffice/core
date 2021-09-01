@@ -16,6 +16,23 @@
       "message": "It seems there is a disconformance between our strings and the unicode standar character descriptions.\nCould you please merge this for me?",
       "revId": "5e3b587a851059f9bc76973b8ba8a762b941f112",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46d14423_64d0e199",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2021-09-01T18:48:31Z",
+      "side": 1,
+      "message": "@Dante, OK but maybe get the  \"There does not exist\" for RID_NOTEXISTS_HELP def on line 143 while you\u0027re here?",
+      "revId": "5e3b587a851059f9bc76973b8ba8a762b941f112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
