@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b6e7af1_68aa6a7e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-09-01T18:45:15Z",
+      "side": 1,
+      "message": "It seems there is a disconformance between our strings and the unicode standar character descriptions.\nCould you please merge this for me?",
+      "revId": "5e3b587a851059f9bc76973b8ba8a762b941f112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
