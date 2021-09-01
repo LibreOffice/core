@@ -440,7 +440,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf1(WW8_PIC const & rPic, SvStream* pSt,
     return pRet;
 }
 
-void SwWW8ImplReader::PicRead(SvStream *pDataStream, WW8_PIC *pPic,
+bool SwWW8ImplReader::PicRead(SvStream *pDataStream, WW8_PIC *pPic,
     bool bVer67)
 {
     //Only the first 0x2e bytes are the same between version 6/7 and 8+
@@ -451,8 +451,10 @@ void SwWW8ImplReader::PicRead(SvStream *pDataStream, WW8_PIC *pPic,
         pDataStream->ReadBytes(&i, bVer67 ? 2 : 4);
     pDataStream->ReadInt16( pPic->dxaOrigin );
     pDataStream->ReadInt16( pPic->dyaOrigin );
+    bool bOk = pDataStream->good();
     if (!bVer67)
         pDataStream->SeekRel(2);  //cProps
+    return bOk;
 }
 
 namespace
@@ -491,14 +493,12 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
      */
     auto nOldPos = m_pDataStream->Tell();
     WW8_PIC aPic;
-    bool bValid = checkSeek(*m_pDataStream, m_nPicLocFc);
-
-    if (bValid)
-        PicRead( m_pDataStream, &aPic, m_bVer67);
+    bool bValid = checkSeek(*m_pDataStream, m_nPicLocFc) &&
+                  PicRead(m_pDataStream, &aPic, m_bVer67);
 
     // Sanity check is needed because for example check boxes in field results
     // contain a WMF-like struct
-    if (bValid && m_pDataStream->good() && (aPic.lcb >= 58))
+    if (bValid && aPic.lcb >= 58)
     {
         if( m_pFlyFormatOfJustInsertedGraphic )
         {
