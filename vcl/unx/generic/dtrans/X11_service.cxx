@@ -46,11 +46,12 @@ Sequence< OUString > x11::Xdnd_dropTarget_getSupportedServiceNames()
 
 // We run unit tests in parallel, which is a problem when touching a shared resource
 // the system clipboard, so rather use the dummy GenericClipboard.
-const bool bRunningUnitTest = getenv("LO_TESTNAME");
+// Note, cannot make this a global variable, because it might be initialised BEFORE the putenv() call in cppunittester.
+static bool IsRunningUnitTest() { return getenv("LO_TESTNAME") != nullptr; }
 
 css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& arguments )
 {
-    if ( bRunningUnitTest )
+    if ( IsRunningUnitTest() )
         return SalInstance::CreateClipboard( arguments );
 
     SelectionManager& rManager = SelectionManager::get();
@@ -80,7 +81,7 @@ css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequenc
 
 css::uno::Reference< XInterface > X11SalInstance::CreateDragSource()
 {
-    if ( bRunningUnitTest )
+    if ( IsRunningUnitTest() )
         return SalInstance::CreateDragSource();
 
     return css::uno::Reference < XInterface >( static_cast<OWeakObject *>(new SelectionManagerHolder()) );
@@ -88,7 +89,7 @@ css::uno::Reference< XInterface > X11SalInstance::CreateDragSource()
 
 css::uno::Reference< XInterface > X11SalInstance::CreateDropTarget()
 {
-    if ( bRunningUnitTest )
+    if ( IsRunningUnitTest() )
         return SalInstance::CreateDropTarget();
 
     return css::uno::Reference < XInterface >( static_cast<OWeakObject *>(new DropTarget()) );
