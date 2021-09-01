@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c65f4fd9_4ffa9b90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-09-01T07:48:55Z",
+      "side": 1,
+      "message": "@Attila: thanks for the clean-up and this very nice improvement! (I\u0027ve found and fixed a typo in the the Python file, but that is was only in the comment.)",
+      "revId": "a39bfdeca4f9ff4a8eda53920c58fd7104efaa42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
