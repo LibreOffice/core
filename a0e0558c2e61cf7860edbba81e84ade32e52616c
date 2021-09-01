@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "067414d7_2be9dade",
+        "filename": "sw/source/core/doc/docedt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-09-01T09:11:45Z",
+      "side": 1,
+      "message": "That was my first thought, but in the specific html test case attached i is equal to size(), lets say 8, and before this change rTable[i] is a use of uninitialized data but evaluates pFormat !\u003d rTable[i] to true and so searches for pFormat and actually finds pFormat as index 7. So if I change to \u003e\u003d rTable.size() this changes the result for i to 8 instead of to 7 and I don\u0027t know if that\u0027s a change we want to risk making",
+      "parentUuid": "485b1bb9_686035e6",
+      "revId": "a0e0558c2e61cf7860edbba81e84ade32e52616c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2c39f266_715afb3f",
         "filename": "sw/source/core/doc/docedt.cxx",
         "patchSetId": 1
