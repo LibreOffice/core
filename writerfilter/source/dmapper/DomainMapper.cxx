@@ -1316,7 +1316,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         rContext->Insert(PROP_BREAK_TYPE, uno::makeAny(nIntValue ? style::BreakType_PAGE_BEFORE : style::BreakType_NONE), /*bOverwrite=*/bool(nIntValue));
     break;
     case NS_ooxml::LN_CT_NumPr_ilvl:
-            if (nIntValue < 0 || 10 <= nIntValue) // Writer can't do everything
+            if (nIntValue < 0 || 10 <= nIntValue)
             {
                 SAL_INFO("writerfilter",
                         "unsupported numbering level " << nIntValue);
@@ -1329,7 +1329,13 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 if (pStyleSheetPropertyMap)
                     pStyleSheetPropertyMap->SetListLevel( static_cast<sal_Int16>(nIntValue) );
             }
-            rContext->Insert(PROP_NUMBERING_LEVEL, uno::makeAny(static_cast<sal_Int16>(nIntValue)));
+            // 0-8 are the 9 levels that Microsoft supports. (LO supports 10 levels).
+            // 9 indicates "no numbering", for which LO has no corresponding concept,
+            // and so it will be treated as the 10th level.
+            // finishParagraph() will convert the 9 into "no numbering" for direct formating.
+            // (Styles only use this PROP for round-tripping and UI, but cannot trust it for import)
+            if (!IsStyleSheetImport() || nIntValue != 9)
+                rContext->Insert(PROP_NUMBERING_LEVEL, uno::makeAny(static_cast<sal_Int16>(nIntValue)));
         break;
     case NS_ooxml::LN_CT_NumPr_numId:
         {
