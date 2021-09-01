@@ -178,7 +178,7 @@ void ImportLotus::Errcell()
 
     Read( aA );
 
-    if (!rD.ValidAddress(aA))
+    if (!pIn->good() || !rD.ValidAddress(aA))
     {
         SAL_WARN("sc.filter", "invalid address");
         return;
@@ -197,7 +197,7 @@ void ImportLotus::Nacell()
 
     Read( aA );
 
-    if (!rD.ValidAddress(aA))
+    if (!pIn->good() || !rD.ValidAddress(aA))
     {
         SAL_WARN("sc.filter", "invalid address");
         return;
@@ -220,7 +220,7 @@ void ImportLotus::Labelcell()
     Read( cAlign );
     Read( aLabel );
 
-    if (!rD.ValidAddress(aA))
+    if (!pIn->good() || !rD.ValidAddress(aA))
     {
         SAL_WARN("sc.filter", "invalid address");
         return;
@@ -241,7 +241,7 @@ void ImportLotus::Numbercell()
     Read( aAddr );
     Read( fVal );
 
-    if (!rD.ValidAddress(aAddr))
+    if (!pIn->good() || !rD.ValidAddress(aAddr))
     {
         SAL_WARN("sc.filter", "invalid address");
         return;
@@ -260,7 +260,7 @@ void ImportLotus::Smallnumcell()
     Read( aAddr );
     Read( nVal );
 
-    if (!rD.ValidAddress(aAddr))
+    if (!pIn->good() || !rD.ValidAddress(aAddr))
     {
         SAL_WARN("sc.filter", "invalid address");
         return;
@@ -291,7 +291,7 @@ void ImportLotus::Formulacell( sal_uInt16 n )
     if (!aConv.good())
         return;
 
-    if (!rD.ValidAddress(aAddr))
+    if (!pIn->good() || !rD.ValidAddress(aAddr))
     {
         SAL_WARN("sc.filter", "invalid address");
         return;
