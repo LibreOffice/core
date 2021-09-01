@@ -61,7 +61,6 @@
 #define STR_ACTION_REFRESH                      NC_("STR_ACTION_REFRESH", "~Refresh")
 #define STR_CATEGORY_NEW                        NC_("STR_CATEGORY_NEW", "~New Category")
 #define STR_CATEGORY_DELETE                     NC_("STR_CATEGORY_DELETE", "~Delete Category")
-#define STR_CATEGORY_SELECT                     NC_("STR_CATEGORY_SELECT", "Select Category")
 #define STR_MSG_EXPORT_SUCCESS                  NC_("STR_MSG_EXPORT_SUCCESS", "$1 templates successfully exported.")
 #define STR_MSG_QUERY_COPY                      NC_("STR_MSG_QUERY_COPY", "$1 could not be moved to the category \"$2\". Do you want to copy the template instead?")
 #define STR_CREATE_ERROR                        NC_("STR_CREATE_ERROR", "Cannot create category: $1")
@@ -189,13 +188,6 @@
 #define STR_REDACTION_TARGET_TYPE_REGEX         NC_("STR_REDACTION_TARGET_TYPE_REGEX", "Regular expression")
 #define STR_REDACTION_TARGET_TYPE_PREDEF        NC_("STR_REDACTION_TARGET_TYPE_PREDEF", "Predefined")
 #define STR_REDACTION_TARGET_TYPE_UNKNOWN       NC_("STR_REDACTION_TARGET_TYPE_UNKNOWN", "Unknown")
-
-// Translators: Column headers in Auto-redaction dialog's targets list
-#define STR_REDACTION_TARGET_NAME               NC_("STR_REDACTION_TARGET_NAME", "Target Name")
-#define STR_REDACTION_TYPE                      NC_("STR_REDACTION_TYPE", "Type")
-#define STR_REDACTION_CONTENT                   NC_("STR_REDACTION_CONTENT", "Content")
-#define STR_REDACTION_CASE_SENSITIVE            NC_("STR_REDACTION_CASE_SENSITIVE", "Case Sensitive")
-#define STR_REDACTION_WHOLE_WORDS               NC_("STR_REDACTION_WHOLE_WORDS", "Whole Words")
 
 // Translators: Values for the Case Sensitive and the Whole Words columns in Auto-redaction dialog
 #define STR_REDACTION_YES                       NC_("STR_REDACTION_YES", "Yes")

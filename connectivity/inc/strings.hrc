@@ -46,7 +46,6 @@
 #define STR_QUERY_LIKE_WILDCARD_MANY            NC_("STR_QUERY_LIKE_WILDCARD_MANY", "The query can not be executed. The 'LIKE' condition contains too many wildcards.")
 #define STR_INVALID_COLUMNNAME                  NC_("STR_INVALID_COLUMNNAME", "The column name '$columnname$' is not valid.")
 #define STR_INVALID_COLUMN_SELECTION            NC_("STR_INVALID_COLUMN_SELECTION", "The statement contains an invalid selection of columns.")
-#define STR_COLUMN_NOT_UPDATEABLE               NC_("STR_COLUMN_NOT_UPDATEABLE", "The column at position '$position$' could not be updated.")
 #define STR_COULD_NOT_LOAD_FILE                 NC_("STR_COULD_NOT_LOAD_FILE", "The file $filename$ could not be loaded.")
 #define STR_LOAD_FILE_ERROR_MESSAGE             NC_("STR_LOAD_FILE_ERROR_MESSAGE", "The attempt to load the file resulted in the following error message ($exception_type$):\n\n$error_message$")
 // = the ado driver's resource strings

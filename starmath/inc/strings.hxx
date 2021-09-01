@@ -229,7 +229,6 @@
 #define RID_SLRLINEX            "left lline <?> right rline "
 #define RID_SLRDLINEX           "left ldline <?> right rdline "
 #define RID_SLMRANGLEXY         "left langle <?> mline <?> right rangle "
-#define RID_XEVALUATEDATY       "left none {<?>} right rline_{<?>} "
 #define RID_XOVERBRACEY         "{<?>} overbrace {<?>} "
 #define RID_XUNDERBRACEY        "{<?>} underbrace {<?>} "
 #define RID_EVALX               "evaluate <?> "

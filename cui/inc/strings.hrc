@@ -63,7 +63,6 @@
 #define RID_SVXSTR_CONFIRM_TOOLBAR_RESET            NC_("RID_SVXSTR_CONFIRM_TOOLBAR_RESET", "The toolbar configuration for %SAVE IN SELECTION% will be reset to the default settings. Do you want to continue?")
 #define RID_SVXSTR_CONFIRM_RESTORE_DEFAULT          NC_("RID_SVXSTR_CONFIRM_RESTORE_DEFAULT", "This will delete all changes previously made to this toolbar. Do you really want to reset the toolbar?")
 #define RID_SVXSTR_CONFIRM_RESTORE_DEFAULT_MENU     NC_("RID_SVXSTR_CONFIRM_RESTORE_DEFAULT_MENU", "This will delete all changes previously made to this context menu. Do you really want to reset?")
-#define RID_SVXSTR_MNUCFG_ALREADY_INCLUDED          NC_("RID_SVXSTR_MNUCFG_ALREADY_INCLUDED", "Function is already included in this popup.")
 #define RID_SVXSTR_LABEL_NEW_NAME                   NC_("RID_SVXSTR_LABEL_NEW_NAME", "~New name")
 #define RID_SVXSTR_RENAME_MENU                      NC_("RID_SVXSTR_RENAME_MENU", "Rename Menu")
 #define RID_SVXSTR_RENAME_TOOLBAR                   NC_("RID_SVXSTR_RENAME_TOOLBAR", "Rename Toolbar")

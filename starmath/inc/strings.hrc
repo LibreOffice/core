@@ -237,7 +237,6 @@
 #define RID_SLRLINEX_HELP                   NC_("RID_SLRLINEX_HELP", "Single Lines (Scalable)" )
 #define RID_SLRDLINEX_HELP                  NC_("RID_SLRDLINEX_HELP", "Double Lines (Scalable)" )
 #define RID_SLMRANGLEXY_HELP                NC_("RID_SLMRANGLEXY_HELP", "Operator Brackets (Scalable)" )
-#define RID_XEVALUATEDATY_HELP              NC_("RID_XEVALUATEDATY_HELP", "Evaluated At" )
 #define RID_XOVERBRACEY_HELP                NC_("RID_XOVERBRACEY_HELP", "Braces Top (Scalable)" )
 #define RID_XUNDERBRACEY_HELP               NC_("RID_XUNDERBRACEY_HELP", "Braces Bottom (Scalable)" )
 #define RID_EVALUATEX_HELP                  NC_("RID_EVALUATEX_HELP", "Evaluate" )

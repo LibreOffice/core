@@ -1138,7 +1138,6 @@
 #define RID_SVXSTR_UNDO_APPLY_EXTRUSION_SURFACE             NC_("RID_SVXSTR_UNDO_APPLY_EXTRUSION_SURFACE", "Change Extrusion Surface")
 #define RID_SVXSTR_UNDO_APPLY_EXTRUSION_COLOR               NC_("RID_SVXSTR_UNDO_APPLY_EXTRUSION_COLOR", "Change Extrusion Color")
 
-#define RID_SVXFLOAT3D_FAVORITE                             NC_("RID_SVXFLOAT3D_FAVORITE", "Favorite")
 #define RID_SVXFLOAT3D_FIX_R                                NC_("RID_SVXFLOAT3D_FIX_R", "R:")
 #define RID_SVXFLOAT3D_FIX_G                                NC_("RID_SVXFLOAT3D_FIX_G", "G:")
 #define RID_SVXFLOAT3D_FIX_B                                NC_("RID_SVXFLOAT3D_FIX_B", "B:")
