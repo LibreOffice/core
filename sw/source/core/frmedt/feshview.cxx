@@ -1102,7 +1102,7 @@ void SwFEShell::SelectionToTop( bool bTop )
                         pPage->SetObjectOrdNum(pObj->GetOrdNum(), pObj->GetOrdNum() + nShift);
                     }
                 // The shape is on the right level, correct the layer of the frame
-                SwTextBoxHelper::DoTextBoxZOrderCorrection(pFormat);
+                SwTextBoxHelper::DoTextBoxZOrderCorrection(pFormat, pObj);
             }
 
     GetDoc()->getIDocumentState().SetModified();
@@ -1152,7 +1152,7 @@ void SwFEShell::SelectionToBottom( bool bBottom )
                         }
                     }
                 // And set correct layer for the selected textbox.
-                SwTextBoxHelper::DoTextBoxZOrderCorrection(pFormat);
+                SwTextBoxHelper::DoTextBoxZOrderCorrection(pFormat, pObj);
             }
 
     GetDoc()->getIDocumentState().SetModified();
@@ -1220,7 +1220,7 @@ void SwFEShell::ChangeOpaque( SdrLayerID nLayerId )
                 pFormat->SetFormatAttr( aOpa );
                 // If pObj has textframe, put its textframe to the right level
                 if (auto pTextBx = FindFrameFormat(pObj))
-                    SwTextBoxHelper::DoTextBoxZOrderCorrection(pTextBx);
+                    SwTextBoxHelper::DoTextBoxZOrderCorrection(pTextBx, pObj);
             }
         }
     }

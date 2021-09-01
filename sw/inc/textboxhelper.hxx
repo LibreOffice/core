@@ -69,10 +69,10 @@ public:
 
     /// Sync property of TextBox with the one of the shape.
     static void syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID,
-                             const css::uno::Any& rValue);
+                             const css::uno::Any& rValue, SdrObject* pObj = nullptr);
     /// Does the same, but works on properties which lack an sw-specific WID / MemberID.
     static void syncProperty(SwFrameFormat* pShape, std::u16string_view rPropertyName,
-                             const css::uno::Any& rValue);
+                             const css::uno::Any& rValue, SdrObject* pObj = nullptr);
     /// Get a property of the underlying TextFrame.
     static void getProperty(SwFrameFormat const* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID,
                             css::uno::Any& rValue);
@@ -83,7 +83,7 @@ public:
     static css::text::TextContentAnchorType mapAnchorType(const RndStdIds& rAnchorID);
 
     /// Similar to syncProperty(), but used by the internal API (e.g. for UI purposes).
-    static void syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& rSet);
+    static void syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& rSet, SdrObject* pObj);
 
     /// Copy shape attributes to the text frame
     static void updateTextBoxMargin(SdrObject* pObj);
@@ -94,11 +94,11 @@ public:
 
     /// Sets the anchor of the associated textframe of the given shape, and
     /// returns true on success.
-    static bool changeAnchor(SwFrameFormat* pShape);
+    static bool changeAnchor(SwFrameFormat* pShape, SdrObject* pObj);
 
     /// Does the positioning for the associated textframe of the shape, and
     /// returns true on success.
-    static bool doTextBoxPositioning(SwFrameFormat* pShape);
+    static bool doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pObj);
 
     /// Returns true if the anchor different for the  given shape, and the
     /// associated textframe of the given shape.
@@ -112,7 +112,7 @@ public:
 
     // Returns true on success. Synchronize z-order of the text frame of the given textbox
     // by setting it one level higher than the z-order of the shape of the textbox.
-    static bool DoTextBoxZOrderCorrection(SwFrameFormat* pShape);
+    static bool DoTextBoxZOrderCorrection(SwFrameFormat* pShape, SdrObject* pObj);
 
     /**
      * If we have an associated TextFrame, then return that.
@@ -134,7 +134,7 @@ public:
     static css::uno::Reference<css::text::XTextFrame>
     getUnoTextFrame(css::uno::Reference<css::drawing::XShape> const& xShape);
     /// Return the textbox rectangle of a draw shape (in twips).
-    static tools::Rectangle getTextRectangle(SwFrameFormat* pShape, bool bAbsolute = true);
+    static tools::Rectangle getTextRectangle(SdrObject* pShape, bool bAbsolute = true);
 
     /**
      * Is the frame format a text box?

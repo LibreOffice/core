@@ -446,7 +446,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
     bool bTextBox = false;
     if (rFormat.Which() == RES_DRAWFRMFMT)
     {
-        bTextBox = SwTextBoxHelper::isTextBox(&rFormat, RES_DRAWFRMFMT);
+        bTextBox = SwTextBoxHelper::isTextBox(&rFormat, RES_DRAWFRMFMT, pObj);
     }
 
     SwFlyFrame* pFly = nullptr;
@@ -471,8 +471,9 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
     }
     else if (bTextBox)
     {
-        auto pFlyFormat = dynamic_cast<const SwFlyFrameFormat*>(
-            SwTextBoxHelper::getOtherTextBoxFormat(&rFormat, RES_DRAWFRMFMT));
+        auto pFlyFormat
+            = dynamic_cast<const SwFlyFrameFormat*>(SwTextBoxHelper::getOtherTextBoxFormat(
+                &rFormat, RES_DRAWFRMFMT, pObj ? pObj : rFormat.FindRealSdrObject()));
         if (pFlyFormat)
         {
             pFly = pFlyFormat->GetFrame();
@@ -612,9 +613,20 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
                                 new SwHandleAnchorNodeChg( *pFlyFrameFormat, aAnch ));
                         }
                         rFormat.GetDoc()->SetAttr( aAnch, rFormat );
-                        if (SwTextBoxHelper::getOtherTextBoxFormat(&rFormat, RES_DRAWFRMFMT))
+                        if (SwTextBoxHelper::getOtherTextBoxFormat(&rFormat, RES_DRAWFRMFMT,
+                            pObj ? pObj : rFormat.FindRealSdrObject()))
                         {
-                            SwTextBoxHelper::syncFlyFrameAttr(rFormat, rFormat.GetAttrSet());
+                            if (pObj->getChildrenOfSdrObject())
+                            {
+                                for (size_t i = 0;
+                                     i < pObj->getChildrenOfSdrObject()->GetObjCount(); ++i)
+                                    SwTextBoxHelper::changeAnchor(
+                                        &rFormat, pObj->getChildrenOfSdrObject()->GetObj(i));
+                            }
+                            else
+                                SwTextBoxHelper::syncFlyFrameAttr(
+                                    rFormat, rFormat.GetAttrSet(),
+                                    pObj ? pObj : rFormat.FindRealSdrObject());
                         }
                     }
                     // #i28701# - no call of method

@@ -208,6 +208,8 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
                 static_cast<SwAnchoredDrawObject*>(pMyContact->GetAnchoredObj( pObj ));
             bGroupMembersNotPositioned = pAnchoredDrawObj->NotYetPositioned();
         }
+
+        std::vector<std::pair<SwFrameFormat*, SdrObject*>> vSavedTextBoxes;
         // Destroy ContactObjects and formats.
         for( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
@@ -221,6 +223,9 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
             OSL_ENSURE( bGroupMembersNotPositioned == pAnchoredDrawObj->NotYetPositioned(),
                     "<SwDoc::GroupSelection(..)> - group members have different positioning status!" );
 #endif
+            // Before the format will be killed, save its textbox for later use.
+            if (auto pTextBox = SwTextBoxHelper::getOtherTextBoxFormat(pContact->GetFormat(), RES_DRAWFRMFMT, pObj))
+                vSavedTextBoxes.push_back(std::pair<SwFrameFormat*, SdrObject*>(pTextBox, pObj));
 
             pFormat = static_cast<SwDrawFrameFormat*>(pContact->GetFormat());
             // Deletes itself!
@@ -246,6 +251,16 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
         // #i36010# - set layout direction of the position
         pFormat->SetPositionLayoutDir(
             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
+
+        // Add the saved textboxes to the new format.
+        auto pTextBoxNode = new SwTextBoxNode(pFormat);
+        for (auto& pTextBoxEntry : vSavedTextBoxes)
+        {
+            pTextBoxNode->AddTextBox(pTextBoxEntry.second, pTextBoxEntry.first);
+            pTextBoxEntry.first->SetOtherTextBoxFormat(pTextBoxNode);
+        }
+        pFormat->SetOtherTextBoxFormat(pTextBoxNode);
+        vSavedTextBoxes.clear();
 
         rDrawView.GroupMarked();
         OSL_ENSURE( rMrkList.GetMarkCount() == 1, "GroupMarked more or none groups." );
@@ -311,6 +326,11 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                 if ( auto pObjGroup = dynamic_cast<SdrObjGroup*>(pObj) )
                 {
                     SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
+
+                    SwTextBoxNode* pTextBoxNode = nullptr;
+                    if (auto pGroupFormat = pContact->GetFormat())
+                        pTextBoxNode = pGroupFormat->GetOtherTextBoxFormat();
+
                     SwFormatAnchor aAnch( pContact->GetFormat()->GetAnchor() );
                     SdrObjList *pLst = pObjGroup->GetSubList();
 
@@ -327,6 +347,16 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                         SwDrawFrameFormat *pFormat = MakeDrawFrameFormat( GetUniqueShapeName(),
                                                             GetDfltFrameFormat() );
                         pFormat->SetFormatAttr( aAnch );
+
+                        if (pTextBoxNode)
+                            if (auto pTextBoxFormat = pTextBoxNode->GetTextBox(pSubObj))
+                            {
+                                auto pNewTextBoxNode = new SwTextBoxNode(pFormat);
+                                pNewTextBoxNode->AddTextBox(pSubObj, pTextBoxFormat);
+                                pFormat->SetOtherTextBoxFormat(pNewTextBoxNode);
+                                pTextBoxFormat->SetOtherTextBoxFormat(pNewTextBoxNode);
+                            }
+
                         // #i36010# - set layout direction of the position
                         pFormat->SetPositionLayoutDir(
                             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
