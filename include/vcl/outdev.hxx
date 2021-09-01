@@ -507,8 +507,8 @@ public:
 
     void                        SetFillColor();
     void                        SetFillColor( const Color& rColor );
-    const Color&                GetFillColor() const;
-    bool                        IsFillColor() const;
+    const Color&                GetFillColor() const { return maFillColor; }
+    bool                        IsFillColor() const { return mbFillColor; }
 
     void                        SetBackground();
     void                        SetBackground( const Wallpaper& rBackground );

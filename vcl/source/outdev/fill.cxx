@@ -26,10 +26,6 @@
 #include <drawmode.hxx>
 #include <salgdi.hxx>
 
-Color const& OutputDevice::GetFillColor() const { return maFillColor; }
-
-bool OutputDevice::IsFillColor() const { return mbFillColor; }
-
 void OutputDevice::SetFillColor()
 {
 
