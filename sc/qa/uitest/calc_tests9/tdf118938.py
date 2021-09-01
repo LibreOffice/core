@@ -11,39 +11,44 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 #Bug 118938 - FILESAVE to Microsoft Excel 2007-2013 XML (.xlsx) files as read-only
 #             with additional password protection for editing not working (Calc)
 
-class tdf118938(UITestCase):
-    def test_tdf118938(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf118938.xlsx")):
-            #The document was created in Calc after this fix.
-            calcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = calcDoc.getChild("grid_window")
+#Bug 115933 - XLSX <fileSharing> password protected with algorithmName, hashValue, saltValue and spinCount
 
-            incorrectPass = False;
+class passwordToModify(UITestCase):
+    def test_password_to_modify_XLSX(self):
+        #tdf118938.xlsx was created in Calc after commit c082158018148be01476d5bc82c1cd71ea6541df.
+        #tdf115933.xlsx was created in Excel.
+        files = ["tdf118938.xlsx", "tdf115933.xlsx"]
+        for i in files:
+            with self.ui_test.load_file(get_url_for_data_file(i)):
+                calcDoc = self.xUITest.getTopFocusWindow()
+                gridwin = calcDoc.getChild("grid_window")
 
-            try:
-                self.xUITest.executeDialog(".uno:EditDoc")
-                xDialog = self.xUITest.getTopFocusWindow();
-                xPassword = xDialog.getChild("newpassEntry")
-                xPassword.executeAction("TYPE", mkPropertyValues({"TEXT": "a"}))
-                xOKBtn = xDialog.getChild("ok")
-                self.ui_test.close_dialog_through_button(xOKBtn)
+                incorrectPass = False;
 
                 try:
-                    xWarnDialog = self.xUITest.getTopFocusWindow()
-                    xOK = xWarnDialog.getChild("ok")
-                    self.ui_test.close_dialog_through_button(xOK)
+                    self.xUITest.executeDialog(".uno:EditDoc")
+                    xDialog = self.xUITest.getTopFocusWindow();
+                    xPassword = xDialog.getChild("newpassEntry")
+                    xPassword.executeAction("TYPE", mkPropertyValues({"TEXT": "a"}))
+                    xOKBtn = xDialog.getChild("ok")
+                    self.ui_test.close_dialog_through_button(xOKBtn)
 
-                    xDialog2 = self.xUITest.getTopFocusWindow();
-                    xCancelBtn = xDialog2.getChild("cancel")
-                    self.ui_test.close_dialog_through_button(xCancelBtn)
+                    try:
+                        xWarnDialog = self.xUITest.getTopFocusWindow()
+                        xOK = xWarnDialog.getChild("ok")
+                        self.ui_test.close_dialog_through_button(xOK)
 
-                    incorrectPass = True;
+                        xDialog2 = self.xUITest.getTopFocusWindow();
+                        xCancelBtn = xDialog2.getChild("cancel")
+                        self.ui_test.close_dialog_through_button(xCancelBtn)
+
+                        incorrectPass = True;
+                    except:
+                        pass
                 except:
-                    pass
-            except:
-                assert False, "The password dialog hasn't appeared."
+                    assert False, i + ": The password dialog hasn't appeared."
 
-            if incorrectPass:
-                assert False, "Incorrect password."
+                if incorrectPass:
+                    assert False, i + ": Incorrect password."
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
