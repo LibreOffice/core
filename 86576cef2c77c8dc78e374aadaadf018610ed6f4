@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c143d233_7e247797",
+        "filename": "vcl/win/dtrans/WinClipboard.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1002852
+      },
+      "writtenOn": "2021-09-01T23:03:59Z",
+      "side": 0,
+      "message": "Shouldn\u0027t this comment line be moved with the rest as well?",
+      "range": {
+        "startLine": 330,
+        "startChar": 0,
+        "endLine": 330,
+        "endChar": 84
+      },
+      "revId": "86576cef2c77c8dc78e374aadaadf018610ed6f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
