@@ -2112,10 +2112,25 @@ namespace emfio
                                         .WriteUInt16( 0 )
                                         .WriteUInt16( 0 )
                                         .WriteUInt32( cbBmi + 14 );
+
                                     mpInputStream->Seek( nStart + offBmi );
-                                    mpInputStream->ReadBytes(pBuf + 14, cbBmi);
+                                    char* pWritePos = pBuf + 14;
+                                    auto nRead = mpInputStream->ReadBytes(pWritePos, cbBmi);
+                                    if (nRead != cbBmi)
+                                    {
+                                        // zero remainder if short read
+                                        memset(pWritePos + nRead, 0, cbBmi - nRead);
+                                    }
+
                                     mpInputStream->Seek( nStart + offBits );
-                                    mpInputStream->ReadBytes(pBuf + 14 + cbBmi, cbBits);
+                                    pWritePos = pBuf + 14 + cbBmi;
+                                    nRead = mpInputStream->ReadBytes(pWritePos, cbBits);
+                                    if (nRead != cbBits)
+                                    {
+                                        // zero remainder if short read
+                                        memset(pWritePos + nRead, 0, cbBits - nRead);
+                                    }
+
                                     aTmp.Seek( 0 );
                                     ReadDIB(aBitmap, aTmp, true);
                                 }
