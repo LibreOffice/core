@@ -1600,7 +1600,10 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
         {
             // ListLevel 9 means Body Level/no numbering.
             if (bNoNumbering || nListLevel == 9)
+            {
                 pParaContext->Insert(PROP_NUMBERING_STYLE_NAME, uno::makeAny(OUString()), true);
+                pParaContext->Erase(PROP_NUMBERING_LEVEL);
+            }
             else if ( !isNumberingViaRule )
             {
                 isNumberingViaStyle = true;
