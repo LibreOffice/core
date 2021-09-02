@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "557f2c2b_d96ff81d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-02T19:41:58Z",
+      "side": 1,
+      "message": "Ah! please ignore me then.",
+      "parentUuid": "1d043379_f21fca4b",
+      "revId": "38f28f3324d6ea7c475421b68493d1676a38b38c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac153c2c_0a653a83",
@@ -65,6 +83,46 @@
       "writtenOn": "2021-09-02T19:35:11Z",
       "side": 1,
       "message": "I don\u0027t know this SvtSysLocale class, and actually I would prefer the way you used in https://gerrit.libreoffice.org/c/core/+/115540. But maybe Eike or Stephan have some advise which way to prefer to access the locale data?",
+      "revId": "38f28f3324d6ea7c475421b68493d1676a38b38c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5118d7aa_361cbb7b",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2072,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-02T19:41:58Z",
+      "side": 1,
+      "message": "OUString aName \u003d aSysLocale.GetCharClass().uppercase(rName);",
+      "range": {
+        "startLine": 2071,
+        "startChar": 12,
+        "endLine": 2072,
+        "endChar": 63
+      },
+      "revId": "38f28f3324d6ea7c475421b68493d1676a38b38c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39ddb1fe_868b90ea",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2074,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-02T19:41:58Z",
+      "side": 1,
+      "message": "if (aName \u003d\u003d aVarName)",
       "revId": "38f28f3324d6ea7c475421b68493d1676a38b38c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
