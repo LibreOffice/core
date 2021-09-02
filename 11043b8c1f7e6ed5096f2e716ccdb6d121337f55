@@ -41,6 +41,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "272dba67_c565526e",
+        "filename": "sc/uiconfig/scalc/ui/pastespecial.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2021-09-02T14:36:17Z",
+      "side": 1,
+      "message": "I did not know about this behavior for formulas. Fixed.",
+      "parentUuid": "62946d94_7cf94be7",
+      "range": {
+        "startLine": 140,
+        "startChar": 156,
+        "endLine": 140,
+        "endChar": 216
+      },
+      "revId": "11043b8c1f7e6ed5096f2e716ccdb6d121337f55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bc8fc0e9_7cff2537",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-09-01T06:22:29Z",
       "side": 1,
       "message": "\"Pastes numbers, text, dates and keeps the formula with a reference to the new range.\" Needs to be tested; has no effect here right now.",
+      "range": {
+        "startLine": 163,
+        "startChar": 159,
+        "endLine": 163,
+        "endChar": 209
+      },
+      "revId": "11043b8c1f7e6ed5096f2e716ccdb6d121337f55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4d3ef2a_dd5e0ab0",
+        "filename": "sc/uiconfig/scalc/ui/pastespecial.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2021-09-02T14:36:17Z",
+      "side": 1,
+      "message": "I tested it and could not get this reference behavior to work. This only pastes values, formula results and formats.",
+      "parentUuid": "bc8fc0e9_7cff2537",
       "range": {
         "startLine": 163,
         "startChar": 159,
@@ -89,6 +137,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4365d519_1035af21",
+        "filename": "sc/uiconfig/scalc/ui/pastespecial.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2021-09-02T14:36:17Z",
+      "side": 1,
+      "message": "Is this a new feature that will be added? Because ATM I could not make this work. When I select this option, it does not check the \"Formulas\" option. This only pastes the formats.\n\nI\u0027ll leave as is for now.",
+      "parentUuid": "05d57927_5933db8c",
+      "range": {
+        "startLine": 186,
+        "startChar": 152,
+        "endLine": 186,
+        "endChar": 188
+      },
+      "revId": "11043b8c1f7e6ed5096f2e716ccdb6d121337f55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6328b00f_1c6d0f6b",
         "filename": "sc/uiconfig/scalc/ui/pastespecial.ui",
         "patchSetId": 2
@@ -100,6 +172,30 @@
       "writtenOn": "2021-09-01T06:22:29Z",
       "side": 1,
       "message": "\"Pastes all cell content and transposes it, meaning columns will become rows and vertical content is pasted horizontally.\"",
+      "range": {
+        "startLine": 209,
+        "startChar": 154,
+        "endLine": 209,
+        "endChar": 211
+      },
+      "revId": "11043b8c1f7e6ed5096f2e716ccdb6d121337f55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7efa539_4927afa2",
+        "filename": "sc/uiconfig/scalc/ui/pastespecial.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2021-09-02T14:36:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6328b00f_1c6d0f6b",
       "range": {
         "startLine": 209,
         "startChar": 154,
@@ -123,6 +219,30 @@
       "writtenOn": "2021-09-01T06:22:29Z",
       "side": 1,
       "message": "\"Check this option to run the preset immediately. Otherwise you can manipulate the option and have to execute per Ok.\"",
+      "range": {
+        "startLine": 237,
+        "startChar": 148,
+        "endLine": 237,
+        "endChar": 210
+      },
+      "revId": "11043b8c1f7e6ed5096f2e716ccdb6d121337f55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba9ef6f7_94133641",
+        "filename": "sc/uiconfig/scalc/ui/pastespecial.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2021-09-02T14:36:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed1e59bf_1d777b61",
       "range": {
         "startLine": 237,
         "startChar": 148,

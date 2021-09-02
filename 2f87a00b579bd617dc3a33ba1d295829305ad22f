@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d7c83da_3e42bfed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2021-09-02T14:36:17Z",
+      "side": 1,
+      "message": "Hi Heiko. Thanks for the feedback. I rewrote some of the tooltips.",
+      "revId": "2f87a00b579bd617dc3a33ba1d295829305ad22f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
