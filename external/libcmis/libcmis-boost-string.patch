@@ -1,0 +1,11 @@
+--- a/src/libcmis/oauth2-handler.cxx
++++ b/src/libcmis/oauth2-handler.cxx
+@@ -26,6 +26,8 @@
+  * instead of those above.
+  */
+ 
++#include <boost/algorithm/string.hpp>
++
+ #include "oauth2-handler.hxx"
+ 
+ #include <libcmis/session-factory.hxx>
