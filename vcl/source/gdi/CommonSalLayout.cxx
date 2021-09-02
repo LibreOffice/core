@@ -610,7 +610,7 @@ void GenericSalLayout::GetCharWidths(DeviceCoordinate* pCharWidths) const
     for (auto const& aGlyphItem : m_GlyphItems)
     {
         const int nIndex = aGlyphItem.charPos() - mnMinCharPos;
-        if (nIndex >= nCharCount)
+        if (nIndex > nCharCount)
             continue;
         pCharWidths[nIndex] += aGlyphItem.m_nNewWidth;
     }
