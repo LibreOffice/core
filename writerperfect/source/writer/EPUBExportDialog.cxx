@@ -13,7 +13,7 @@
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <comphelper/sequenceashashmap.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/opengrf.hxx>

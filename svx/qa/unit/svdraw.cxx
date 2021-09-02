@@ -30,7 +30,6 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/unopage.hxx>
-#include <svx/unoapi.hxx>
 #include <svx/svdview.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnstwit.hxx>
