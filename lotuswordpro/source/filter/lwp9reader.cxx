@@ -111,7 +111,9 @@ bool Lwp9Reader::ReadFileHeader()
     LwpFileHeader::m_nFileRevision = 0;
 
     LwpObjectHeader objHdr;
-    objHdr.Read(*m_pDocStream);
+    if (!objHdr.Read(*m_pDocStream))
+        return false;
+
     sal_Int64 pos = m_pDocStream->Tell();
     m_LwpFileHdr.Read(m_pDocStream);
     return m_pDocStream->CheckSeek(pos + objHdr.GetSize());
