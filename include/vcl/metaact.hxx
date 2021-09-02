@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_METAACT_HXX
 #define INCLUDED_VCL_METAACT_HXX
 
+#include <sal/config.h>
+
 #include <config_options.h>
 
 #include <rtl/ref.hxx>
@@ -27,6 +29,7 @@
 #include <tools/poly.hxx>
 
 #include <vcl/dllapi.h>
+#include <vcl/rendercontext/State.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/font.hxx>
 #include <vcl/gdimtf.hxx>
@@ -35,7 +38,6 @@
 #include <vcl/hatch.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/metaactiontypes.hxx>
-#include <vcl/outdevstate.hxx>
 #include <vcl/region.hxx>
 #include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/wall.hxx>

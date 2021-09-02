@@ -23,7 +23,7 @@
 
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
-#include <vcl/outdevstate.hxx>
+#include <vcl/rendercontext/State.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
 
@@ -37,7 +37,7 @@ void OutputDevice::Push(PushFlags nFlags)
         mpMetaFile->AddAction(new MetaPushAction(nFlags));
 
     maOutDevStateStack.emplace_back();
-    OutDevState& rState = maOutDevStateStack.back();
+    State& rState = maOutDevStateStack.back();
 
     rState.mnFlags = nFlags;
 
@@ -103,7 +103,7 @@ void OutputDevice::Pop()
         SAL_WARN( "vcl.gdi", "OutputDevice::Pop() without OutputDevice::Push()" );
         return;
     }
-    const OutDevState& rState = maOutDevStateStack.back();
+    const State& rState = maOutDevStateStack.back();
 
     if( mpAlphaVDev )
         mpAlphaVDev->Pop();
