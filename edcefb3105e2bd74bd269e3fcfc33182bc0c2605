@@ -16,6 +16,24 @@
       "message": "How do we progress here?",
       "revId": "edcefb3105e2bd74bd269e3fcfc33182bc0c2605",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db5eea64_2aab00ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 45
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-09-02T23:28:35Z",
+      "side": 1,
+      "message": "Hiii.. IMPL_LINK(SfxTemplateDialog_Impl, ToolBoxRSelect, const OString\u0026, rEntry, void) triggers on clicking on the \u0027Fill Format Mode\u0027 and \u0027Style Actions\u0027 on the Styles deck toolbar. Since we have to change the whole of it, I think this patch should be merged. In the next patch, where Fill Foramt Mode and StyleActions are handled, we can have a look at what @Mike pointed out :)",
+      "parentUuid": "db522622_097157e0",
+      "revId": "edcefb3105e2bd74bd269e3fcfc33182bc0c2605",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
