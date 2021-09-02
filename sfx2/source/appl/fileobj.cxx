@@ -47,7 +47,6 @@ enum class SvFileObjectType
 
 SvFileObject::SvFileObject()
     : nPostUserEventId(nullptr)
-    , mxDelMed()
     , nType(SvFileObjectType::Text)
     , bLoadAgain(true)
     , bSynchron(false)

@@ -95,7 +95,7 @@ private:
     std::vector<std::unique_ptr<SvLinkSource_Entry_Impl>> mvData;
 
 public:
-    SvLinkSource_Array_Impl() : mvData() {}
+    SvLinkSource_Array_Impl() {}
 
     size_t size() const { return mvData.size(); }
     SvLinkSource_Entry_Impl *operator[](size_t idx) const { return mvData[idx].get(); }

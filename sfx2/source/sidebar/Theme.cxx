@@ -38,17 +38,8 @@ Theme& Theme::GetCurrentTheme()
 
 Theme::Theme()
     : ThemeInterfaceBase(m_aMutex),
-      maColors(),
-      maIntegers(),
-      maBooleans(),
       mbIsHighContrastMode(Application::GetSettings().GetStyleSettings().GetHighContrastMode()),
-      mbIsHighContrastModeSetManually(false),
-      maPropertyNameToIdMap(),
-      maPropertyIdToNameMap(),
-      maRawValues(),
-      maChangeListeners(),
-      maVetoableListeners()
-
+      mbIsHighContrastModeSetManually(false)
 {
     SetupPropertyMaps();
 }

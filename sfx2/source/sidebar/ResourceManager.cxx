@@ -98,9 +98,6 @@ css::uno::Sequence<OUString> BuildContextList (const ContextList& rContextList)
 } //end anonymous namespace
 
 ResourceManager::ResourceManager()
-    : maDecks(),
-      maPanels(),
-      maProcessedApplications()
 {
     ReadDeckList();
     ReadPanelList();

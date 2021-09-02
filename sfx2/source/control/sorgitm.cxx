@@ -25,10 +25,7 @@
 SfxPoolItem* SfxScriptOrganizerItem::CreateDefault() { return new SfxScriptOrganizerItem; }
 
 
-SfxScriptOrganizerItem::SfxScriptOrganizerItem() :
-
-    SfxStringItem()
-
+SfxScriptOrganizerItem::SfxScriptOrganizerItem()
 {
 }
 

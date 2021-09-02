@@ -47,7 +47,6 @@ ThumbnailViewItem::ThumbnailViewItem(ThumbnailViewBase &rView, sal_uInt16 nId)
     , mbBorder(true)
     , mbSelected(false)
     , mbHover(false)
-    , mxAcc()
 {
 }
 

@@ -35,7 +35,6 @@ namespace sfx2
     //= TitledDockingWindow
     TitledDockingWindow::TitledDockingWindow( SfxBindings* i_pBindings, SfxChildWindow* i_pChildWindow, vcl::Window* i_pParent )
         :SfxDockingWindow( i_pBindings, i_pChildWindow, i_pParent, WB_MOVEABLE|WB_CLOSEABLE|WB_DOCKABLE|WB_HIDE|WB_3DLOOK )
-        ,m_sTitle()
         ,m_aToolbox( VclPtr<ToolBox>::Create(this) )
         ,m_aContentWindow( VclPtr<vcl::Window>::Create(this, WB_DIALOGCONTROL) )
         ,m_aBorder( 3, 1, 3, 3 )

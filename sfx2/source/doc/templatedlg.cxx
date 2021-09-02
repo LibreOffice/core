@@ -1276,7 +1276,6 @@ static std::vector<OUString> lcl_getAllFactoryURLs ()
 
 SfxTemplateCategoryDialog::SfxTemplateCategoryDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "sfx/ui/templatecategorydlg.ui", "TemplatesCategoryDialog")
-    , msSelectedCategory(OUString())
     , mbIsNewCategory(false)
     , mxLBCategory(m_xBuilder->weld_tree_view("categorylb"))
     , mxSelectLabel(m_xBuilder->weld_label("select_label"))
@@ -1342,7 +1341,6 @@ void SfxTemplateCategoryDialog::SetCategoryLBEntries(std::vector<OUString> aFold
 
 SfxTemplateSelectionDlg::SfxTemplateSelectionDlg(weld::Window* pParent)
     : SfxTemplateManagerDlg(pParent)
-    , msTemplatePath(OUString())
 {
     mxCBApp->set_active(MNI_IMPRESS);
     mxCBFolder->set_active(0);

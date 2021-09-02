@@ -49,8 +49,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::configuration;
 
-CmdMailSuppl::CmdMailSuppl( const Reference< XComponentContext >& xContext ) :
-    WeakImplHelper< XSimpleMailClientSupplier, XSimpleMailClient, XServiceInfo >()
+CmdMailSuppl::CmdMailSuppl( const Reference< XComponentContext >& xContext )
 {
     m_xConfigurationProvider = theDefaultProvider::get(xContext);
 }

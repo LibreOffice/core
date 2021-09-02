@@ -33,8 +33,7 @@ using namespace css::uno;
 namespace sfx2::sidebar {
 
 ContextChangeBroadcaster::ContextChangeBroadcaster()
-    : msContextName(),
-      mbIsBroadcasterEnabled(true)
+    : mbIsBroadcasterEnabled(true)
 {
 }
 

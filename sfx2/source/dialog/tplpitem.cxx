@@ -23,8 +23,7 @@
 SfxPoolItem* SfxTemplateItem::CreateDefault() { return new SfxTemplateItem; }
 
 
-SfxTemplateItem::SfxTemplateItem() :
-    SfxFlagItem()
+SfxTemplateItem::SfxTemplateItem()
 {
 }
 

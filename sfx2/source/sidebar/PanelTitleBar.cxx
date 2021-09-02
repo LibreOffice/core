@@ -36,8 +36,7 @@ PanelTitleBar::PanelTitleBar(const OUString& rsTitle,
     : TitleBar(rBuilder, Theme::Color_PanelTitleBarBackground),
       mxExpander(rBuilder.weld_expander("expander")),
       mpPanel(pPanel),
-      msIdent("button"),
-      msMoreOptionsCommand()
+      msIdent("button")
 {
     mxExpander->set_label(rsTitle);
     mxExpander->connect_expanded(LINK(this, PanelTitleBar, ExpandHdl));

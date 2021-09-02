@@ -22,7 +22,6 @@
 namespace sfx2::sidebar {
 
 ContextList::ContextList()
-    : maEntries()
 {
 }
 

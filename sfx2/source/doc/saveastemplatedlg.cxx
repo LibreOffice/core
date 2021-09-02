@@ -38,8 +38,6 @@ SfxSaveAsTemplateDialog::SfxSaveAsTemplateDialog(weld::Window* pParent, const un
     , m_xCBXDefault(m_xBuilder->weld_check_button("defaultcb"))
     , m_xTemplateNameEdit(m_xBuilder->weld_entry("name_entry"))
     , m_xOKButton(m_xBuilder->weld_button("ok"))
-    , msSelectedCategory(OUString())
-    , msTemplateName(OUString())
     , mnRegionPos(0)
     , m_xModel(rModel)
 {

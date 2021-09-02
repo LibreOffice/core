@@ -22,14 +22,7 @@
 namespace sfx2::sidebar {
 
 PanelDescriptor::PanelDescriptor()
-    : msTitle(),
-      mbIsTitleBarOptional(false),
-      msId(),
-      msDeckId(),
-      msTitleBarIconURL(),
-      msHighContrastTitleBarIconURL(),
-      maContextList(),
-      msImplementationURL(),
+    : mbIsTitleBarOptional(false),
       mnOrderIndex(10000), // Default value as defined in Sidebar.xcs
       mbShowForReadOnlyDocuments(false),
       mbWantsCanvas(false),
