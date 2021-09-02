@@ -699,13 +699,13 @@ void PictReader::DrawingMethod(PictDrawingMethod eMethod)
 
 sal_uInt64 PictReader::ReadAndDrawText()
 {
-    char        nByteLen;
-    sal_uInt32  nLen, nDataLen;
     char        sText[256];
 
-    pPict->ReadChar( nByteLen ); nLen=static_cast<sal_uInt32>(nByteLen)&0x000000ff;
-    nDataLen = nLen + 1;
-    pPict->ReadBytes(&sText, nLen);
+    char nByteLen(0);
+    pPict->ReadChar(nByteLen);
+    sal_uInt32 nLen = static_cast<sal_uInt32>(nByteLen)&0x000000ff;
+    sal_uInt32 nDataLen = nLen + 1;
+    nLen = pPict->ReadBytes(&sText, nLen);
 
     if (IsInvisible( PictDrawingMethod::TEXT )) return nDataLen;
     DrawingMethod( PictDrawingMethod::TEXT );
