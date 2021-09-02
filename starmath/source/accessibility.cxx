@@ -487,12 +487,11 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
             weld::DrawingArea* pDrawingArea = pWin->GetDrawingArea();
             OutputDevice& rDevice = pDrawingArea->get_ref_device();
 
-            std::unique_ptr<tools::Long[]> pXAry(new tools::Long[ aNodeText.getLength() ]);
+            std::vector<tools::Long> aXAry;
             rDevice.SetFont( pNode->GetFont() );
-            rDevice.GetTextArray( aNodeText, pXAry.get(), 0, aNodeText.getLength() );
-            aTLPos.AdjustX(nNodeIndex > 0 ? pXAry[nNodeIndex - 1] : 0 );
-            aSize.setWidth( nNodeIndex > 0 ? pXAry[nNodeIndex] - pXAry[nNodeIndex - 1] : pXAry[nNodeIndex] );
-            pXAry.reset();
+            rDevice.GetTextArray( aNodeText, &aXAry, 0, aNodeText.getLength() );
+            aTLPos.AdjustX(nNodeIndex > 0 ? aXAry[nNodeIndex - 1] : 0 );
+            aSize.setWidth( nNodeIndex > 0 ? aXAry[nNodeIndex] - aXAry[nNodeIndex - 1] : aXAry[nNodeIndex] );
 
             aTLPos = rDevice.LogicToPixel( aTLPos );
             aSize  = rDevice.LogicToPixel( aSize );
@@ -560,15 +559,14 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
 
                 tools::Long nNodeX = pNode->GetLeft();
 
-                std::unique_ptr<tools::Long[]> pXAry(new tools::Long[ aTxt.getLength() ]);
+                std::vector<tools::Long> aXAry;
                 rDevice.SetFont( pNode->GetFont() );
-                rDevice.GetTextArray( aTxt, pXAry.get(), 0, aTxt.getLength() );
+                rDevice.GetTextArray( aTxt, &aXAry, 0, aTxt.getLength() );
                 for (sal_Int32 i = 0;  i < aTxt.getLength()  &&  nRes == -1;  ++i)
                 {
-                    if (pXAry[i] + nNodeX > aPos.X())
+                    if (aXAry[i] + nNodeX > aPos.X())
                         nRes = i;
                 }
-                pXAry.reset();
                 OSL_ENSURE( nRes >= 0  &&  nRes < aTxt.getLength(), "index out of range" );
                 OSL_ENSURE( pNode->GetAccessibleIndex() >= 0,
                         "invalid accessible index" );

@@ -309,7 +309,7 @@ std::vector<double> TextLayouterDevice::getTextArray(const OUString& rText, sal_
     {
         aRetval.reserve(nTextLength);
         std::vector<tools::Long> aArray(nTextLength);
-        mrDevice.GetTextArray(rText, aArray.data(), nIndex, nLength);
+        mrDevice.GetTextArray(rText, &aArray, nIndex, nLength);
         aRetval.assign(aArray.begin(), aArray.end());
     }
 

@@ -98,7 +98,7 @@ public:
                         const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32, const tools::Long* pDXArray = nullptr ) const;
 
     Size QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
-                         const sal_Int32 nIdx, const sal_Int32 nLen, tools::Long* pDXArray = nullptr ) const;
+                         const sal_Int32 nIdx, const sal_Int32 nLen, std::vector<tools::Long>* pDXArray = nullptr ) const;
 
     void DrawPrev( OutputDevice* pOut, Printer* pPrinter,
                    const Point &rPos, const OUString &rTxt,

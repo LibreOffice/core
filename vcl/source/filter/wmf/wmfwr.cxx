@@ -1197,8 +1197,8 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 pVirDev->SetFont( aSrcFont );
                 const sal_Int32 nLen = aTemp.getLength();
-                std::unique_ptr<tools::Long[]> pDXAry(nLen ? new tools::Long[ nLen ] : nullptr);
-                const sal_Int32 nNormSize = pVirDev->GetTextArray( aTemp, pDXAry.get() );
+                std::vector<tools::Long> aDXAry;
+                const sal_Int32 nNormSize = pVirDev->GetTextArray( aTemp, nLen ? &aDXAry : nullptr );
                 if (nLen && nNormSize == 0)
                 {
                     OSL_FAIL("Impossible div by 0 action: MetaStretchTextAction!");
@@ -1206,13 +1206,13 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 else
                 {
                     for ( sal_Int32 i = 0; i < ( nLen - 1 ); i++ )
-                        pDXAry[ i ] = pDXAry[ i ] * static_cast<sal_Int32>(pA->GetWidth()) / nNormSize;
+                        aDXAry[ i ] = aDXAry[ i ] * static_cast<sal_Int32>(pA->GetWidth()) / nNormSize;
                     if ( ( nLen <= 1 ) || ( static_cast<sal_Int32>(pA->GetWidth()) == nNormSize ) )
-                        pDXAry.reset();
+                        aDXAry.clear();
                     aSrcLineInfo = LineInfo();
                     SetAllAttr();
-                    if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, pDXAry.get() ) )
-                        WMFRecord_ExtTextOut( pA->GetPoint(), aTemp, pDXAry.get() );
+                    if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, aDXAry.empty() ? nullptr : aDXAry.data() ) )
+                        WMFRecord_ExtTextOut( pA->GetPoint(), aTemp, aDXAry.empty() ? nullptr : aDXAry.data() );
                 }
             }
             break;

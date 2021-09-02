@@ -1869,6 +1869,7 @@ namespace emfio
                 /* because text without dx array is badly scaled, we
                    will create such an array if necessary */
                 tools::Long* pDX = pDXArry;
+                std::vector<tools::Long> aMyDXArray;
                 if (pDXArry)
                 {
                     // only useful when we have an imported DXArray
@@ -1885,14 +1886,12 @@ namespace emfio
                     // #i117968# VirtualDevice is not thread safe, but filter is used in multithreading
                     SolarMutexGuard aGuard;
                     ScopedVclPtrInstance< VirtualDevice > pVDev;
-                    pDX = new tools::Long[ rText.getLength() ];
                     pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
                     pVDev->SetFont( maLatestFont );
-                    pVDev->GetTextArray( rText, pDX, 0, rText.getLength());
+                    pVDev->GetTextArray( rText, &aMyDXArray, 0, rText.getLength());
+                    pDX = aMyDXArray.data();
                 }
                 mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition, rText, pDX, 0, rText.getLength() ) );
-                if ( !pDXArry )     // this means we have created our own array
-                    delete[] pDX;   // which must be deleted
             }
         }
         SetGfxMode( nOldGfxMode );
