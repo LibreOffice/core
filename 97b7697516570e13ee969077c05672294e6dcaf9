@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "317accb2_00c537f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-02T07:05:16Z",
+      "side": 1,
+      "message": "I believe that you don\u0027t need to change writeElement (for now); instead, you need to make sure to pass UTC dates to it *when needed*. Specifically, if the data that you care about is XML_dcterms, you need to grep for XML_dcterms, find where it is written, and make sure that the dates *there* at the place of passing the dates are converted to UTC. Or maybe even where those dates are generated.",
+      "revId": "97b7697516570e13ee969077c05672294e6dcaf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
