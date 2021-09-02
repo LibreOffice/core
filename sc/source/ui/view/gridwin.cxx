@@ -6263,7 +6263,7 @@ void ScGridWindow::UpdateCursorOverlay()
 
             if (xOverlayManager.is())
             {
-                Color aCursorColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
+                Color aCursorColor = GetSettings().GetStyleSettings().GetHighlightColor();
                 if (mrViewData.GetActivePart() != eWhich)
                     // non-active pane uses a different color.
                     aCursorColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor;
@@ -6272,7 +6272,9 @@ void ScGridWindow::UpdateCursorOverlay()
 
                 for(const tools::Rectangle & rRA : aPixelRects)
                 {
-                    basegfx::B2DRange aRB(rRA.Left(), rRA.Top(), rRA.Right() + 1, rRA.Bottom() + 1);
+                    double fZoom(mrViewData.GetZoomX() * 0.75);
+                    basegfx::B2DRange aRB(rRA.Left() - 0.5 - fZoom, rRA.Top() - 0.5 - fZoom,
+                                          rRA.Right() + 0.5 + fZoom, rRA.Bottom() + 0.5 + fZoom);
                     aRB.transform(aTransform);
                     aRanges.push_back(aRB);
                 }

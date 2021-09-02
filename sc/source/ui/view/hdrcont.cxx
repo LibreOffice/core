@@ -242,7 +242,10 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
         SetTextColor((bBoldSet && !bHighContrast) ? aSelTextColor : aTextColor);
 
     Color aSelLineColor = rStyleSettings.GetHighlightColor();
-    aSelLineColor.Merge( COL_BLACK, 0xe0 );        // darken just a little bit
+    if (aSelLineColor.IsDark())
+       aSelLineColor.Merge( COL_BLACK, 0xa0 );        // darken just a little bit
+    else
+       aSelLineColor.Merge( COL_WHITE, 0xa0 );        // lighten just a little bit
 
     bool bLayoutRTL = IsLayoutRTL();
     tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
