@@ -50,6 +50,24 @@
       "message": "This looks reasonable to me.\n\nIn addition to this, I\u0027ll double-check that getPropertyState() works properly for the NumberingLevel para style property. It should return DEFAULT_VALUE (and not DIRECT_VALUE) when there was no value specified explicitly (i.e. \"DEFAULT\" and \"DIRECT + value of 0\" are separate cases). I\u0027ll get to that as/when I will import/export this from/to ODT.",
       "revId": "003f31699a3baa05789d2886c278a9fc9377d572",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7b16912_29f4090e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-02T13:26:15Z",
+      "side": 1,
+      "message": "I just double-checked this. When I have a 2-levels numbering in Word, it uses \u003cw:ilvl w:val\u003d\"0\"/\u003e and \u003cw:numId w:val\u003d\"1\"/\u003e and our NumberingLevel property is also 0 and 1 (speaking of direct formatting). So my concern that we need to +1 / -1 somewhere in import/export is not a problem after all.",
+      "parentUuid": "1f65c3a0_a3917d9a",
+      "revId": "003f31699a3baa05789d2886c278a9fc9377d572",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
