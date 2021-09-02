@@ -47,6 +47,9 @@
 #include <memory>
 #include <unordered_map>
 
+#include <unotools/syslocale.hxx>
+#include <unotools/charclass.hxx>
+
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
 
@@ -2058,14 +2061,21 @@ sal_Int32 BasicCollection::implGetIndexForName(std::u16string_view rName)
     sal_Int32 nIndex = -1;
     sal_Int32 nCount = xItemArray->Count();
     sal_Int32 nNameHash = MakeHashCode( rName );
+    const SvtSysLocale aSysLocale;
     for( sal_Int32 i = 0 ; i < nCount ; i++ )
     {
         SbxVariable* pVar = xItemArray->Get(i);
-        if( pVar->GetHashCode() == nNameHash &&
-            pVar->GetName().equalsIgnoreAsciiCase( rName ) )
+        if (pVar->GetHashCode() == nNameHash)
         {
-            nIndex = i;
-            break;
+            // tdf#144245 - case-insensitive operation for non-ASCII characters
+            OUString aName(rName);
+            aName = aSysLocale.GetCharClass().uppercase(aName);
+            const OUString aVarName(aSysLocale.GetCharClass().uppercase(pVar->GetName()));
+            if (aName.getLength() == aVarName.getLength() && aName.indexOf(aVarName) == 0)
+            {
+                nIndex = i;
+                break;
+            }
         }
     }
     return nIndex;
