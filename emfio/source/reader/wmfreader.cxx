@@ -1413,7 +1413,7 @@ namespace emfio
         if (bPlaceable)
         {
             //TODO do some real error handling here
-            sal_Int16 nVal;
+            sal_Int16 nVal(0);
 
             // Skip reserved bytes
             mpInputStream->SeekRel(2);
