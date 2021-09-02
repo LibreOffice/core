@@ -15,6 +15,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <dbdata.hxx>
 #include <document.hxx>
 #include <docuno.hxx>
 #include <tabvwsh.hxx>
