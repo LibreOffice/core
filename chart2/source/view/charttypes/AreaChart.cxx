@@ -694,6 +694,8 @@ void AreaChart::createShapes()
                 uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeFrontChild(pSeries.get(), m_xSeriesTarget);
 
                 sal_Int32 nAttachedAxisIndex = pSeries->getAttachedAxisIndex();
+                double fXMin, fXMax;
+                pSeries->getMinMaxXValue(fXMin, fXMax);
                 PlottingPositionHelper& rPosHelper = getPlottingPositionHelper(nAttachedAxisIndex);
                 m_pPosHelper = &rPosHelper;
 
@@ -714,7 +716,7 @@ void AreaChart::createShapes()
                     double fLogicX = pSeries->getXValue(nIndex);
                     if (bDateCategory)
                     {
-                        if (std::isnan(fLogicX))
+                        if (std::isnan(fLogicX) || (fLogicX < fXMin || fLogicX > fXMax))
                             continue;
 
                         fLogicX = DateHelper::RasterizeDateValue( fLogicX, m_aNullDate, m_nTimeResolution );

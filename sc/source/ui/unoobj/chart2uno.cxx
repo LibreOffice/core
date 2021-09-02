@@ -2008,7 +2008,8 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL
 
 uno::Reference<chart2::data::XDataSequence> SAL_CALL
 ScChart2DataProvider::createDataSequenceByValueArray(
-    const OUString& /*aRole*/, const OUString& /*aRangeRepresentation*/ )
+    const OUString& /*aRole*/, const OUString& /*aRangeRepresentation*/,
+    const OUString& /*aRoleQualifier*/ )
 {
     return uno::Reference<chart2::data::XDataSequence>();
 }
