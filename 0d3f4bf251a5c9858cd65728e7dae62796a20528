@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d4ccc5f_578b9492",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-09-02T09:02:23Z",
+      "side": 1,
+      "message": "+2 is up to Andreas (or Rafael himself)",
+      "revId": "0d3f4bf251a5c9858cd65728e7dae62796a20528",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
