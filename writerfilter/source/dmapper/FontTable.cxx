@@ -23,7 +23,7 @@
 #include <vector>
 #include <sal/log.hxx>
 #include <rtl/tencinfo.h>
-#include <vcl/embeddedfontshelper.hxx>
+#include <vcl/font/EmbeddedFontsHelper.hxx>
 #include <unotools/fontdefs.hxx>
 
 using namespace com::sun::star;
@@ -33,7 +33,7 @@ namespace writerfilter::dmapper
 
 struct FontTable_Impl
 {
-    std::unique_ptr<EmbeddedFontsHelper, o3tl::default_delete<EmbeddedFontsHelper>> xEmbeddedFontHelper;
+    std::unique_ptr<vcl::font::EmbeddedFontsHelper, o3tl::default_delete<vcl::font::EmbeddedFontsHelper>> xEmbeddedFontHelper;
     std::vector< FontEntry::Pointer_t > aFontEntries;
     FontEntry::Pointer_t pCurrentEntry;
     FontTable_Impl() {}
@@ -229,7 +229,7 @@ void FontTable::addEmbeddedFont(const css::uno::Reference<css::io::XInputStream>
                                 std::vector<unsigned char> const & key)
 {
     if (!m_pImpl->xEmbeddedFontHelper)
-        m_pImpl->xEmbeddedFontHelper.reset(new EmbeddedFontsHelper);
+        m_pImpl->xEmbeddedFontHelper.reset(new vcl::font::EmbeddedFontsHelper);
     m_pImpl->xEmbeddedFontHelper->addEmbeddedFont(stream, fontName, extra, key);
 }
 

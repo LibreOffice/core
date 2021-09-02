@@ -24,7 +24,7 @@
 #include <sal/log.hxx>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <tools/urlobj.hxx>
-#include <vcl/embeddedfontshelper.hxx>
+#include <vcl/font/EmbeddedFontsHelper.hxx>
 #include <vcl/graph.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/namespacemap.hxx>
@@ -463,7 +463,7 @@ bool SvXMLImport::addEmbeddedFont(const css::uno::Reference< css::io::XInputStre
                                   std::vector<unsigned char> const & key, bool eot)
 {
     if (!mxEmbeddedFontHelper)
-        mxEmbeddedFontHelper.reset(new EmbeddedFontsHelper);
+        mxEmbeddedFontHelper.reset(new vcl::font::EmbeddedFontsHelper);
     return mxEmbeddedFontHelper->addEmbeddedFont(stream, fontName, extra, key, eot);
 }
 

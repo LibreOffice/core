@@ -25,7 +25,7 @@
 #include "fonthdl.hxx"
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/XMLFontAutoStylePool.hxx>
-#include <vcl/embeddedfontshelper.hxx>
+#include <vcl/font/EmbeddedFontsHelper.hxx>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
@@ -472,10 +472,10 @@ void XMLFontAutoStylePool::exportXML()
             {
                 // Embed font if at least viewing is allowed (in which case the opening app must check
                 // the font license rights too and open either read-only or not use the font for editing).
-                OUString sFileUrl = EmbeddedFontsHelper::fontFileUrl(
+                OUString sFileUrl = vcl::font::EmbeddedFontsHelper::fontFileUrl(
                                         pEntry->GetFamilyName(), pEntry->GetFamily(),
                                         aCombinationPair.second, aCombinationPair.first, pEntry->GetPitch(),
-                                        EmbeddedFontsHelper::FontRights::ViewingAllowed);
+                                        vcl::font::EmbeddedFontsHelper::FontRights::ViewingAllowed);
                 if (sFileUrl.isEmpty())
                     continue;
 
