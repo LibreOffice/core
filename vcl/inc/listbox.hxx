@@ -21,17 +21,17 @@
 #define INCLUDED_VCL_INC_LISTBOX_HXX
 
 #include <sal/config.h>
-
 #include <o3tl/safeint.hxx>
+
+#include <vcl/glyphitem.hxx>
+#include <vcl/quickselectionengine.hxx>
+#include <vcl/sal/SalLayout.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/floatwin.hxx>
-#include <vcl/quickselectionengine.hxx>
-#include <vcl/glyphitem.hxx>
-#include <vcl/vcllayout.hxx>
 
+#include <memory>
 #include <set>
 #include <vector>
-#include <memory>
 
 class ScrollBar;
 class ScrollBarBox;

@@ -54,7 +54,7 @@
 #include <vcl/wmf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/vcllayout.hxx>
+#include <vcl/sal/SalLayout.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

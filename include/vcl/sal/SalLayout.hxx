@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_VCLLAYOUT_HXX
-#define INCLUDED_VCL_VCLLAYOUT_HXX
+#pragma once
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <tools/gen.hxx>
@@ -65,32 +64,34 @@ class GlyphItem;
 class VCL_DLLPUBLIC SalLayout
 {
 public:
-    virtual         ~SalLayout();
+    virtual ~SalLayout();
     // used by upper layers
-    Point&          DrawBase()                              { return maDrawBase; }
-    const Point&    DrawBase() const                        { return maDrawBase; }
-    Point&          DrawOffset()                            { return maDrawOffset; }
-    const Point&    DrawOffset() const                      { return maDrawOffset; }
-    Point           GetDrawPosition( const Point& rRelative = Point(0,0) ) const;
+    Point& DrawBase() { return maDrawBase; }
+    const Point& DrawBase() const { return maDrawBase; }
+    Point& DrawOffset() { return maDrawOffset; }
+    const Point& DrawOffset() const { return maDrawOffset; }
+    Point GetDrawPosition(const Point& rRelative = Point(0, 0)) const;
 
-    virtual bool    LayoutText( ImplLayoutArgs&, const SalLayoutGlyphsImpl* ) = 0;  // first step of layouting
-    virtual void    AdjustLayout( ImplLayoutArgs& );    // adjusting after fallback etc.
-    virtual void    InitFont() const {}
-    virtual void    DrawText( SalGraphics& ) const = 0;
+    virtual bool LayoutText(ImplLayoutArgs&, const SalLayoutGlyphsImpl*)
+        = 0; // first step of layouting
+    virtual void AdjustLayout(ImplLayoutArgs&); // adjusting after fallback etc.
+    virtual void InitFont() const {}
+    virtual void DrawText(SalGraphics&) const = 0;
 
-    int             GetUnitsPerPixel() const                { return mnUnitsPerPixel; }
-    Degree10        GetOrientation() const                  { return mnOrientation; }
+    int GetUnitsPerPixel() const { return mnUnitsPerPixel; }
+    Degree10 GetOrientation() const { return mnOrientation; }
 
     // methods using string indexing
-    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const = 0;
-    virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const = 0;
-    virtual DeviceCoordinate GetTextWidth() const { return FillDXArray( nullptr ); }
-    virtual void    GetCaretPositions( int nArraySize, tools::Long* pCaretXArray ) const = 0;
-    virtual bool    IsKashidaPosValid ( int /*nCharPos*/ ) const { return true; } // i60594
+    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra,
+                                   int nFactor) const = 0;
+    virtual DeviceCoordinate FillDXArray(DeviceCoordinate* pDXArray) const = 0;
+    virtual DeviceCoordinate GetTextWidth() const { return FillDXArray(nullptr); }
+    virtual void GetCaretPositions(int nArraySize, tools::Long* pCaretXArray) const = 0;
+    virtual bool IsKashidaPosValid(int /*nCharPos*/) const { return true; } // i60594
 
     // methods using glyph indexing
-    virtual bool    GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int& nStart,
-                                 const PhysicalFontFace** pFallbackFont = nullptr) const = 0;
+    virtual bool GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int& nStart,
+                              const PhysicalFontFace** pFallbackFont = nullptr) const = 0;
     virtual bool GetOutline(basegfx::B2DPolyPolygonVector&) const;
     bool GetBoundRect(tools::Rectangle&) const;
 
@@ -105,16 +106,14 @@ private:
     SalLayout& operator=(const SalLayout&) = delete;
 
 protected:
-    int             mnMinCharPos;
-    int             mnEndCharPos;
+    int mnMinCharPos;
+    int mnEndCharPos;
 
-    int             mnUnitsPerPixel;
-    Degree10        mnOrientation;
+    int mnUnitsPerPixel;
+    Degree10 mnOrientation;
 
-    mutable Point   maDrawOffset;
-    Point           maDrawBase;
+    mutable Point maDrawOffset;
+    Point maDrawBase;
 };
-
-#endif // INCLUDED_VCL_VCLLAYOUT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,16 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "menuitemlist.hxx"
+#include <vcl/i18nhelp.hxx>
+#include <vcl/sal/SalLayout.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/window.hxx>
 
 #include <salframe.hxx>
 #include <salinst.hxx>
 #include <salmenu.hxx>
 #include <svdata.hxx>
-#include <vcl/i18nhelp.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/vcllayout.hxx>
-#include <vcl/window.hxx>
+
+#include "menuitemlist.hxx"
 
 using namespace css;
 using namespace vcl;

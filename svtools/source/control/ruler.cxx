@@ -17,19 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/poly.hxx>
 #include <vcl/event.hxx>
+#include <vcl/sal/SalLayout.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/vcllayout.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <sal/log.hxx>
 
-#include <svtools/ruler.hxx>
-#include <svtools/svtresid.hxx>
-#include <svtools/strings.hrc>
 #include <svtools/colorcfg.hxx>
+#include <svtools/ruler.hxx>
+#include <svtools/strings.hrc>
+#include <svtools/svtresid.hxx>
+
 #include "accessibleruler.hxx"
 
 #include <memory>
