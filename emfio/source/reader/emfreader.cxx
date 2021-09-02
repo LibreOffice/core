@@ -519,7 +519,7 @@ namespace emfio
         aGraphic.getVectorGraphicData()->setSizeHint(maSizeHint);
 
         maBmpSaveList.emplace_back(
-            new BSaveStruct(aGraphic.GetBitmapEx(), aOutputRect, SRCCOPY, /*bForceAlpha=*/true));
+            aGraphic.GetBitmapEx(), aOutputRect, SRCCOPY, /*bForceAlpha=*/true);
         const std::shared_ptr<VectorGraphicData> pVectorGraphicData
             = aGraphic.getVectorGraphicData();
         if (!pVectorGraphicData)
@@ -1640,7 +1640,7 @@ namespace emfio
                                         aPNGWriter.Write(aNew);
                                     }
     #endif
-                                    maBmpSaveList.emplace_back(new BSaveStruct(aBitmapEx, aRect, SRCAND|SRCINVERT));
+                                    maBmpSaveList.emplace_back(aBitmapEx, aRect, SRCAND|SRCINVERT);
                                 }
                             }
                         }
@@ -1720,7 +1720,7 @@ namespace emfio
                                     aBitmap.Crop( aCropRect );
                                 }
 
-                                maBmpSaveList.emplace_back(new BSaveStruct(aBitmap, aRect, dwRop));
+                                maBmpSaveList.emplace_back(aBitmap, aRect, dwRop);
                             }
                         }
                     }
@@ -1805,7 +1805,7 @@ namespace emfio
                                     tools::Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
                                     aBitmap.Crop( aCropRect );
                                 }
-                                maBmpSaveList.emplace_back(new BSaveStruct(aBitmap, aRect, dwRop));
+                                maBmpSaveList.emplace_back(aBitmap, aRect, dwRop);
                             }
                         }
                     }
