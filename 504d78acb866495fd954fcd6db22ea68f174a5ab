@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85059f53_d1d69ac8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-09-02T13:45:48Z",
+      "side": 1,
+      "message": "oss-fuzz is generating documents which leak SwTextBoxNode since this landed and I can\u0027t figure out how the ownership should work so I fixed a bug https://bugs.documentfoundation.org/show_bug.cgi?id\u003d144271 with some of the examples it has created",
+      "revId": "504d78acb866495fd954fcd6db22ea68f174a5ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
