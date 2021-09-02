@@ -20,12 +20,15 @@
 #pragma once
 
 #include <sal/config.h>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <vcl/font.hxx>
+
 #include <rtl/ref.hxx>
-#include <vcl/outdevstate.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <vcl/font.hxx>
+#include <vcl/rendercontext/State.hxx>
+
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+
 #include <memory>
 
 // predefines
