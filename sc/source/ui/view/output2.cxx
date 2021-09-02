@@ -2103,7 +2103,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                                 if (aDX.size() < nLen)
                                     aDX.resize(nLen, 0);
 
-                                pFmtDevice->GetTextArray(aShort, aDX.data());
+                                pFmtDevice->GetTextArray(aShort, &aDX);
 
                                 if ( !mpRefDevice->GetConnectMetaFile() ||
                                         mpRefDevice->GetOutDevType() == OUTDEV_PRINTER )

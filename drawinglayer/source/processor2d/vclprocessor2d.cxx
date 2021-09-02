@@ -286,8 +286,8 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
             sal_Int32 nPos = rTextCandidate.getTextPosition();
             sal_Int32 nLen = rTextCandidate.getTextLength();
 
-            tools::Long* pDXArray
-                = !aTransformedDXArray.empty() ? aTransformedDXArray.data() : nullptr;
+            std::vector<tools::Long>* pDXArray
+                = !aTransformedDXArray.empty() ? &aTransformedDXArray : nullptr;
 
             if (rTextCandidate.isFilled())
             {
@@ -314,7 +314,8 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
 
             if (!aTransformedDXArray.empty())
             {
-                mpOutputDevice->DrawTextArray(aStartPoint, aText, pDXArray, nPos, nLen);
+                mpOutputDevice->DrawTextArray(aStartPoint, aText,
+                                              pDXArray ? pDXArray->data() : nullptr, nPos, nLen);
             }
             else
             {

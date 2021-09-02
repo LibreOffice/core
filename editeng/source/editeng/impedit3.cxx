@@ -753,7 +753,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
     ImplInitLayoutMode(*GetRefDevice(), nPara, nIndex);
 
-    std::unique_ptr<tools::Long[]> pBuf(new tools::Long[ pNode->Len() ]);
+    std::vector<tools::Long> aBuf( pNode->Len() );
 
     bool bSameLineAgain = false;    // For TextRanger, if the height changes.
     TabInfo aCurrentTab;
@@ -1040,9 +1040,8 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
                         OUString aFieldValue = static_cast<const EditCharAttribField*>(pNextFeature)->GetFieldValue();
                         // get size, but also DXArray to allow length information in line breaking below
-                        const sal_Int32 nLength(aFieldValue.getLength());
-                        std::unique_ptr<tools::Long[]> pTmpDXArray(new tools::Long[nLength]);
-                        pPortion->GetSize() = aTmpFont.QuickGetTextSize(GetRefDevice(), aFieldValue, 0, aFieldValue.getLength(), pTmpDXArray.get());
+                        std::vector<tools::Long> aTmpDXArray;
+                        pPortion->GetSize() = aTmpFont.QuickGetTextSize(GetRefDevice(), aFieldValue, 0, aFieldValue.getLength(), &aTmpDXArray);
 
                         // So no scrolling for oversized fields
                         if ( pPortion->GetSize().Width() > nXWidth )
@@ -1086,7 +1085,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                                 if(a == nNextCellBreak)
                                 {
                                     // check width
-                                    if(pTmpDXArray[a] - nLineStartX > nXWidth)
+                                    if(aTmpDXArray[a] - nLineStartX > nXWidth)
                                     {
                                         // new CellBreak does not fit in current line, need to
                                         // create a break at LastCellBreak - but do not add 1st
@@ -1097,7 +1096,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                                         }
 
                                         // moveLineStart forward in X
-                                        nLineStartX = pTmpDXArray[nLastCellBreak];
+                                        nLineStartX = aTmpDXArray[nLastCellBreak];
                                     }
 
                                     // update CellBreak iteration values
@@ -1147,7 +1146,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 if (bContinueLastPortion)
                 {
                      Size aSize( aTmpFont.QuickGetTextSize( GetRefDevice(),
-                            rParaPortion.GetNode()->GetString(), nTmpPos, nPortionLen, pBuf.get() ));
+                            rParaPortion.GetNode()->GetString(), nTmpPos, nPortionLen, &aBuf ));
                      pPortion->GetSize().AdjustWidth(aSize.Width() );
                      if (pPortion->GetSize().Height() < aSize.Height())
                          pPortion->GetSize().setHeight( aSize.Height() );
@@ -1155,7 +1154,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 else
                 {
                     pPortion->GetSize() = aTmpFont.QuickGetTextSize( GetRefDevice(),
-                            rParaPortion.GetNode()->GetString(), nTmpPos, nPortionLen, pBuf.get() );
+                            rParaPortion.GetNode()->GetString(), nTmpPos, nPortionLen, &aBuf );
                 }
 
                 // #i9050# Do Kerning also behind portions...
@@ -1167,7 +1166,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 // => Always simply quick inserts.
                 size_t nPos = nTmpPos - pLine->GetStart();
                 EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
-                rArray.insert( rArray.begin() + nPos, pBuf.get(), pBuf.get() + nPortionLen);
+                rArray.insert( rArray.begin() + nPos, aBuf.data(), aBuf.data() + nPortionLen);
 
                 // And now check for Compression:
                 if ( !bContinueLastPortion && nPortionLen && GetAsianCompressionMode() != CharCompressType::NONE )
@@ -1649,8 +1648,6 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
     if ( bLineBreak )
         CreateAndInsertEmptyLine( &rParaPortion );
-
-    pBuf.reset();
 
     bool bHeightChanged = FinishCreateLines( &rParaPortion );
 
@@ -3262,7 +3259,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                 sal_Int32 nTextStart = 0;
                                 sal_Int32 nTextLen = 0;
                                 const tools::Long* pDXArray = nullptr;
-                                std::unique_ptr<tools::Long[]> pTmpDXArray;
+                                std::vector<tools::Long> aTmpDXArray;
 
                                 if ( rTextPortion.GetKind() == PortionKind::TEXT )
                                 {
@@ -3392,10 +3389,9 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                         }
                                     }
 
-                                    pTmpDXArray.reset(new tools::Long[ aText.getLength() ]);
-                                    pDXArray = pTmpDXArray.get();
                                     aTmpFont.SetPhysFont(*GetRefDevice());
-                                    aTmpFont.QuickGetTextSize( GetRefDevice(), aText, nTextStart, nTextLen, pTmpDXArray.get() );
+                                    aTmpFont.QuickGetTextSize( GetRefDevice(), aText, nTextStart, nTextLen, &aTmpDXArray );
+                                    pDXArray = aTmpDXArray.data();
 
                                     // add a meta file comment if we record to a metafile
                                     if( bMetafileValid )
@@ -3419,10 +3415,9 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     nTextLen = aText.getLength();
 
                                     // crash when accessing 0 pointer in pDXArray
-                                    pTmpDXArray.reset(new tools::Long[ aText.getLength() ]);
-                                    pDXArray = pTmpDXArray.get();
                                     aTmpFont.SetPhysFont(*GetRefDevice());
-                                    aTmpFont.QuickGetTextSize( GetRefDevice(), aText, 0, aText.getLength(), pTmpDXArray.get() );
+                                    aTmpFont.QuickGetTextSize( GetRefDevice(), aText, 0, aText.getLength(), &aTmpDXArray );
+                                    pDXArray = aTmpDXArray.data();
                                 }
 
                                 tools::Long nTxtWidth = rTextPortion.GetSize().Width();
@@ -3680,8 +3675,6 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                 }
 
                                 rOutDev.Pop();
-
-                                pTmpDXArray.reset();
 
                                 if ( rTextPortion.GetKind() == PortionKind::FIELD )
                                 {

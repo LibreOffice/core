@@ -669,10 +669,10 @@ SalLayoutGlyphs SalLayout::GetGlyphs() const
     return SalLayoutGlyphs(); // invalid
 }
 
-DeviceCoordinate GenericSalLayout::FillDXArray( DeviceCoordinate* pCharWidths ) const
+DeviceCoordinate GenericSalLayout::FillDXArray( std::vector<DeviceCoordinate>* pCharWidths ) const
 {
     if (pCharWidths)
-        GetCharWidths(pCharWidths);
+        GetCharWidths(*pCharWidths);
 
     return GetTextWidth();
 }
@@ -899,14 +899,13 @@ void GenericSalLayout::GetCaretPositions( int nMaxIndex, tools::Long* pCaretXArr
 
 sal_Int32 GenericSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor ) const
 {
-    int nCharCapacity = mnEndCharPos - mnMinCharPos;
-    std::unique_ptr<DeviceCoordinate[]> const pCharWidths(new DeviceCoordinate[nCharCapacity]);
-    GetCharWidths(pCharWidths.get());
+    std::vector<DeviceCoordinate> aCharWidths;
+    GetCharWidths(aCharWidths);
 
     DeviceCoordinate nWidth = 0;
     for( int i = mnMinCharPos; i < mnEndCharPos; ++i )
     {
-        nWidth += pCharWidths[ i - mnMinCharPos ] * nFactor;
+        nWidth += aCharWidths[ i - mnMinCharPos ] * nFactor;
         if( nWidth > nMaxWidth )
             return i;
         nWidth += nCharExtra;
@@ -1061,7 +1060,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
     SalLayout::AdjustLayout( rArgs );
     ImplLayoutArgs aMultiArgs = rArgs;
-    std::unique_ptr<DeviceCoordinate[]> pJustificationArray;
+    std::vector<DeviceCoordinate> aJustificationArray;
 
     if( !rArgs.mpDXArray && rArgs.mnLayoutWidth )
     {
@@ -1076,8 +1075,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             mpLayouts[n]->SalLayout::AdjustLayout( aMultiArgs );
         // then we can measure the unmodified metrics
         int nCharCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
-        pJustificationArray.reset(new DeviceCoordinate[nCharCount]);
-        FillDXArray( pJustificationArray.get() );
+        FillDXArray( &aJustificationArray );
         // #i17359# multilayout is not simplified yet, so calculating the
         // unjustified width needs handholding; also count the number of
         // stretchable virtual char widths
@@ -1086,8 +1084,8 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         for( int i = 0; i < nCharCount; ++i )
         {
             // convert array from widths to sum of widths
-            nOrigWidth += pJustificationArray[i];
-            if( pJustificationArray[i] > 0 )
+            nOrigWidth += aJustificationArray[i];
+            if( aJustificationArray[i] > 0 )
                 ++nStretchable;
         }
 
@@ -1098,7 +1096,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             DeviceCoordinate nWidthSum = 0;
             for( int i = 0; i < nCharCount; ++i )
             {
-                DeviceCoordinate nJustWidth = pJustificationArray[i];
+                DeviceCoordinate nJustWidth = aJustificationArray[i];
                 if( (nJustWidth > 0) && (nStretchable > 0) )
                 {
                     DeviceCoordinate nDeltaWidth = nDiffWidth / nStretchable;
@@ -1107,10 +1105,10 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
                     --nStretchable;
                 }
                 nWidthSum += nJustWidth;
-                pJustificationArray[i] = nWidthSum;
+                aJustificationArray[i] = nWidthSum;
             }
             if( nWidthSum != nTargetWidth )
-                pJustificationArray[ nCharCount-1 ] = nTargetWidth;
+                aJustificationArray[ nCharCount-1 ] = nTargetWidth;
 
             // the justification array is still in base level units
             // => convert it to pixel units
@@ -1118,14 +1116,14 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             {
                 for( int i = 0; i < nCharCount; ++i )
                 {
-                    DeviceCoordinate nVal = pJustificationArray[ i ];
+                    DeviceCoordinate nVal = aJustificationArray[ i ];
                     nVal += (mnUnitsPerPixel + 1) / 2;
-                    pJustificationArray[ i ] = nVal / mnUnitsPerPixel;
+                    aJustificationArray[ i ] = nVal / mnUnitsPerPixel;
                 }
             }
 
             // change the mpDXArray temporarily (just for the justification)
-            aMultiArgs.mpDXArray = pJustificationArray.get();
+            aMultiArgs.mpDXArray = aJustificationArray.data();
         }
     }
 
@@ -1429,23 +1427,23 @@ sal_Int32 MultiSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordi
         return mpLayouts[0]->GetTextBreak( nMaxWidth, nCharExtra, nFactor );
 
     int nCharCount = mnEndCharPos - mnMinCharPos;
-    std::unique_ptr<DeviceCoordinate[]> const pCharWidths(new DeviceCoordinate[nCharCount]);
-    std::unique_ptr<DeviceCoordinate[]> const pFallbackCharWidths(new DeviceCoordinate[nCharCount]);
-    mpLayouts[0]->FillDXArray( pCharWidths.get() );
+    std::vector<DeviceCoordinate> aCharWidths;
+    std::vector<DeviceCoordinate> aFallbackCharWidths;
+    mpLayouts[0]->FillDXArray( &aCharWidths );
 
     for( int n = 1; n < mnLevel; ++n )
     {
         SalLayout& rLayout = *mpLayouts[ n ];
-        rLayout.FillDXArray( pFallbackCharWidths.get() );
+        rLayout.FillDXArray( &aFallbackCharWidths );
         double fUnitMul = mnUnitsPerPixel;
         fUnitMul /= rLayout.GetUnitsPerPixel();
         for( int i = 0; i < nCharCount; ++i )
         {
-            if( pCharWidths[ i ] == 0 )
+            if( aCharWidths[ i ] == 0 )
             {
-                DeviceCoordinate w = pFallbackCharWidths[i];
+                DeviceCoordinate w = aFallbackCharWidths[i];
                 w = static_cast<DeviceCoordinate>(w * fUnitMul + 0.5);
-                pCharWidths[ i ] = w;
+                aCharWidths[ i ] = w;
             }
         }
     }
@@ -1453,7 +1451,7 @@ sal_Int32 MultiSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordi
     DeviceCoordinate nWidth = 0;
     for( int i = 0; i < nCharCount; ++i )
     {
-        nWidth += pCharWidths[ i ] * nFactor;
+        nWidth += aCharWidths[ i ] * nFactor;
         if( nWidth > nMaxWidth )
             return (i + mnMinCharPos);
         nWidth += nCharExtra;
@@ -1462,24 +1460,23 @@ sal_Int32 MultiSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordi
     return -1;
 }
 
-DeviceCoordinate MultiSalLayout::FillDXArray( DeviceCoordinate* pCharWidths ) const
+DeviceCoordinate MultiSalLayout::FillDXArray( std::vector<DeviceCoordinate>* pCharWidths ) const
 {
     DeviceCoordinate nMaxWidth = 0;
 
     // prepare merging of fallback levels
-    std::unique_ptr<DeviceCoordinate[]> pTempWidths;
+    std::vector<DeviceCoordinate> aTempWidths;
     const int nCharCount = mnEndCharPos - mnMinCharPos;
     if( pCharWidths )
     {
-        for( int i = 0; i < nCharCount; ++i )
-            pCharWidths[i] = 0;
-        pTempWidths.reset(new DeviceCoordinate[nCharCount]);
+        pCharWidths->clear();
+        pCharWidths->resize(nCharCount, 0);
     }
 
     for( int n = mnLevel; --n >= 0; )
     {
         // query every fallback level
-        DeviceCoordinate nTextWidth = mpLayouts[n]->FillDXArray( pTempWidths.get() );
+        DeviceCoordinate nTextWidth = mpLayouts[n]->FillDXArray( &aTempWidths );
         if( !nTextWidth )
             continue;
         // merge results from current level
@@ -1495,13 +1492,13 @@ DeviceCoordinate MultiSalLayout::FillDXArray( DeviceCoordinate* pCharWidths ) co
         {
             // #i17359# restriction:
             // one char cannot be resolved from different fallbacks
-            if( pCharWidths[i] != 0 )
+            if( (*pCharWidths)[i] != 0 )
                 continue;
-            DeviceCoordinate nCharWidth = pTempWidths[i];
+            DeviceCoordinate nCharWidth = aTempWidths[i];
             if( !nCharWidth )
                 continue;
             nCharWidth = static_cast<DeviceCoordinate>(nCharWidth * fUnitMul + 0.5);
-            pCharWidths[i] = nCharWidth;
+            (*pCharWidths)[i] = nCharWidth;
         }
     }
 
