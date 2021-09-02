@@ -88,7 +88,7 @@ namespace tools {
 class LineInfo;
 class AlphaMask;
 class FontCharMap;
-class SalLayout;
+namespace vcl::sal { class SalLayout; }
 class ImplLayoutArgs;
 class VirtualDevice;
 struct SalTwoRect;
@@ -128,6 +128,8 @@ namespace com::sun::star::rendering {
     class XCanvas;
     class XSpriteCanvas;
 }
+
+using namespace vcl::sal;
 
 #if defined UNX
 #define GLYPH_FONT_HEIGHT   128

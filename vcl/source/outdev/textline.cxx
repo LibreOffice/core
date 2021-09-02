@@ -669,7 +669,7 @@ void OutputDevice::ImplDrawStrikeoutChar( tools::Long nBaseX, tools::Long nBaseY
 
     // calculate approximation of strikeout atom size
     tools::Long nStrikeoutWidth = 0;
-    std::unique_ptr<SalLayout> pLayout = ImplLayout( aStrikeoutTest, 0, nTestStrLen );
+    std::unique_ptr<vcl::sal::SalLayout> pLayout = ImplLayout( aStrikeoutTest, 0, nTestStrLen );
     if( pLayout )
     {
         nStrikeoutWidth = pLayout->GetTextWidth() / (nTestStrLen * pLayout->GetUnitsPerPixel());
@@ -804,7 +804,7 @@ void OutputDevice::ImplDrawTextLine( tools::Long nX, tools::Long nY,
         ImplDrawStrikeoutLine( nX, nY, nDistX, 0, nWidth, eStrikeout, aStrikeoutColor );
 }
 
-void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStrikeout,
+void OutputDevice::ImplDrawTextLines( vcl::sal::SalLayout& rSalLayout, FontStrikeout eStrikeout,
                                       FontLineStyle eUnderline, FontLineStyle eOverline,
                                       bool bWordLine, bool bUnderlineAbove )
 {

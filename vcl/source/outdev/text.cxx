@@ -139,7 +139,7 @@ void OutputDevice::ImplDrawTextRect( tools::Long nBaseX, tools::Long nBaseY,
 
 }
 
-void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
+void OutputDevice::ImplDrawTextBackground( const vcl::sal::SalLayout& rSalLayout )
 {
     const tools::Long nWidth = rSalLayout.GetTextWidth() / rSalLayout.GetUnitsPerPixel();
     const Point aBase = rSalLayout.DrawBase();
@@ -159,7 +159,7 @@ void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
                       mpFontInstance->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent );
 }
 
-tools::Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout )
+tools::Rectangle OutputDevice::ImplGetTextBoundRect( const vcl::sal::SalLayout& rSalLayout )
 {
     Point aPoint = rSalLayout.GetDrawPosition();
     tools::Long nX = aPoint.X();
@@ -197,7 +197,7 @@ tools::Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout
     return tools::Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) );
 }
 
-bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
+bool OutputDevice::ImplDrawRotateText( vcl::sal::SalLayout& rSalLayout )
 {
     tools::Long nX = rSalLayout.DrawBase().X();
     tools::Long nY = rSalLayout.DrawBase().Y();
@@ -269,7 +269,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     return true;
 }
 
-void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
+void OutputDevice::ImplDrawTextDirect( vcl::sal::SalLayout& rSalLayout,
                                        bool bTextLines)
 {
     if( mpFontInstance->mnOwnOrientation )
@@ -312,7 +312,7 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
         ImplDrawEmphasisMarks( rSalLayout );
 }
 
-void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
+void OutputDevice::ImplDrawSpecialText( vcl::sal::SalLayout& rSalLayout )
 {
     Color       aOldColor           = GetTextColor();
     Color       aOldTextLineColor   = GetTextLineColor();
@@ -432,7 +432,7 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
     }
 }
 
-void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
+void OutputDevice::ImplDrawText( vcl::sal::SalLayout& rSalLayout )
 {
 
     if( mbInitClipRegion )
@@ -825,7 +825,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
         if(mpFontInstance->mpConversion)
             pLayoutCache = nullptr;
 
-    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, nullptr, eDefaultLayout, nullptr, pLayoutCache);
+    std::unique_ptr<vcl::sal::SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, nullptr, eDefaultLayout, nullptr, pLayoutCache);
     if(pSalLayout)
     {
         ImplDrawText( *pSalLayout );
@@ -896,7 +896,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
     if( mbOutputClipped )
         return;
 
-    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, pDXAry, flags, nullptr, pSalLayoutCache);
+    std::unique_ptr<vcl::sal::SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, pDXAry, flags, nullptr, pSalLayoutCache);
     if( pSalLayout )
     {
         ImplDrawText( *pSalLayout );
@@ -920,7 +920,7 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, tools::Long* pDXAr
     }
 
     // do layout
-    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen,
+    std::unique_ptr<vcl::sal::SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen,
             Point(0,0), 0, nullptr, eDefaultLayout, pLayoutCache, pSalLayoutCache);
     if( !pSalLayout )
     {

@@ -52,7 +52,7 @@
 #include <doc.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <vcl/glyphitem.hxx>
-#include <vcl/vcllayout.hxx>
+#include <vcl/sal/SalLayout.hxx>
 #include <docsh.hxx>
 #include <strings.hrc>
 #include <fntcap.hxx>

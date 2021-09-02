@@ -1616,7 +1616,7 @@ bool PDFWriterImpl::writeBuffer( const void* pBuffer, sal_uInt64 nBytes )
     {
         m_aOutputStreams.front().m_pStream->Seek( STREAM_SEEK_TO_END );
         m_aOutputStreams.front().m_pStream->WriteBytes(
-                pBuffer, sal::static_int_cast<std::size_t>(nBytes));
+                pBuffer, ::sal::static_int_cast<std::size_t>(nBytes));
         return true;
     }
 
@@ -5719,7 +5719,7 @@ void PDFWriterImpl::registerGlyph(const GlyphItem* pGlyph,
         // copy font id
         nMappedFontObject = rSubset.m_aSubsets.back().m_nFontID;
         // create new glyph in subset
-        sal_uInt8 nNewId = sal::static_int_cast<sal_uInt8>(rSubset.m_aSubsets.back().m_aMapping.size()+1);
+        sal_uInt8 nNewId = ::sal::static_int_cast<sal_uInt8>(rSubset.m_aSubsets.back().m_aMapping.size()+1);
         nMappedGlyph = nNewId;
 
         // add new glyph to emitted font subset

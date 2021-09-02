@@ -17,20 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include <sal/log.hxx>
 #include <comphelper/string.hxx>
-#include <vcl/event.hxx>
+
 #include <vcl/decoview.hxx>
-#include <vcl/svapp.hxx>
+#include <vcl/event.hxx>
 #include <vcl/help.hxx>
-#include <vcl/vcllayout.hxx>
-#include <vcl/status.hxx>
-#include <vcl/virdev.hxx>
+#include <vcl/sal/SalLayout.hxx>
 #include <vcl/settings.hxx>
-#include <config_features.h>
-#include <svdata.hxx>
+#include <vcl/status.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
+
 #include <window.h>
+#include <svdata.hxx>
 
 #define STATUSBAR_OFFSET_X      STATUSBAR_OFFSET
 #define STATUSBAR_OFFSET_Y      2

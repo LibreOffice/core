@@ -117,7 +117,7 @@ namespace vcl::unotools
         /// Convert [0,1] double value to [0,255] int
         inline sal_Int8 toByteColor( double val )
         {
-            return sal::static_int_cast<sal_Int8>(
+            return ::sal::static_int_cast<sal_Int8>(
                 basegfx::fround(val*255.0));
         }
 

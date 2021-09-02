@@ -6495,7 +6495,6 @@ include/vcl/unohelp.hxx
 include/vcl/unohelp2.hxx
 include/vcl/vclenum.hxx
 include/vcl/vclevent.hxx
-include/vcl/vcllayout.hxx
 include/vcl/vclptr.hxx
 include/vcl/vclreferencebase.hxx
 include/vcl/vectorgraphicdata.hxx

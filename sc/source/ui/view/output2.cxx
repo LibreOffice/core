@@ -53,7 +53,7 @@
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/glyphitem.hxx>
-#include <vcl/vcllayout.hxx>
+#include <vcl/sal/SalLayout.hxx>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
 #include <osl/diagnose.h>

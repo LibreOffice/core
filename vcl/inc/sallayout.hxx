@@ -20,35 +20,35 @@
 #ifndef INCLUDED_VCL_INC_SALLAYOUT_HXX
 #define INCLUDED_VCL_INC_SALLAYOUT_HXX
 
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <tools/degree.hxx>
+#include <tools/gen.hxx>
+#include <i18nlangtag/languagetag.hxx>
+
+#include <vcl/dllapi.h>
+#include <vcl/devicecoordinate.hxx>
+#include <vcl/sal/SalLayout.hxx>
+#include <vcl/vclenum.hxx> // for typedef sal_UCS4
+
+#include "impglyphitem.hxx"
+
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+
+#include <hb.h>
+
 #include <iostream>
 #include <memory>
 #include <vector>
 
-#include <hb.h>
-
-#include <com/sun/star/i18n/XBreakIterator.hpp>
-
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <i18nlangtag/languagetag.hxx>
-#include <tools/gen.hxx>
-#include <tools/degree.hxx>
-#include <vcl/dllapi.h>
-#include <vcl/vclenum.hxx> // for typedef sal_UCS4
-#include <vcl/devicecoordinate.hxx>
-#include <vcl/vcllayout.hxx>
-
-#include "impglyphitem.hxx"
-
 #define MAX_FALLBACK 16
-
 
 class SalGraphics;
 class PhysicalFontFace;
 class GenericSalLayout;
 enum class SalLayoutFlags;
-namespace vcl::text {
-    class TextLayoutCache;
-}
+namespace vcl::text { class TextLayoutCache; }
+
+using namespace vcl::sal;
 
 // used for managing runs e.g. for BiDi, glyph and script fallback
 class ImplLayoutRuns
@@ -123,7 +123,7 @@ private:
 // For nice SAL_INFO logging of ImplLayoutArgs values
 std::ostream &operator <<(std::ostream& s, ImplLayoutArgs const &rArgs);
 
-class MultiSalLayout final : public SalLayout
+class MultiSalLayout final : public vcl::sal::SalLayout
 {
 public:
     void            DrawText(SalGraphics&) const override;
@@ -160,7 +160,7 @@ private:
     bool            mbIncomplete;
 };
 
-class VCL_DLLPUBLIC GenericSalLayout : public SalLayout
+class VCL_DLLPUBLIC GenericSalLayout : public vcl::sal::SalLayout
 {
     friend void MultiSalLayout::AdjustLayout(ImplLayoutArgs&);
 

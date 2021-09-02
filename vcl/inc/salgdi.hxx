@@ -39,7 +39,7 @@ class SalBitmap;
 class FontSelectPattern;
 class FontAttributes;
 class PhysicalFontFace;
-class SalLayout;
+namespace vcl::sal { class SalLayout; }
 class ImplLayoutArgs;
 namespace tools { class Rectangle; }
 class FontSubsetInfo;

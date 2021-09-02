@@ -94,9 +94,10 @@ $(eval $(call gb_Library_use_externals,vcl,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/source/sal/SalLayout \
+    vcl/source/rendercontext/ImplMapRes \
     vcl/source/rendercontext/drawmode \
     vcl/skia/SkiaHelper \
-    vcl/source/rendercontext/ImplMapRes \
     vcl/source/animate/Animation \
     vcl/source/animate/AnimationBitmap \
     vcl/source/cnttype/mcnttfactory \

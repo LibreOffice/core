@@ -27,7 +27,7 @@
 
 #include <vcl/font.hxx>
 #include <vcl/vclptr.hxx>
-#include <vcl/vcllayout.hxx>
+#include <vcl/sal/SalLayout.hxx>
 #include <vcl/outdev.hxx>
 #include "swcache.hxx"
 #include "TextFrameIndex.hxx"

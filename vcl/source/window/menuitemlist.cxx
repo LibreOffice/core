@@ -17,16 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "menuitemlist.hxx"
+#include <vcl/i18nhelp.hxx>
+#include <vcl/sal/SalLayout.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/window.hxx>
 
 #include <salframe.hxx>
 #include <salinst.hxx>
 #include <salmenu.hxx>
 #include <svdata.hxx>
-#include <vcl/i18nhelp.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/vcllayout.hxx>
-#include <vcl/window.hxx>
+
+#include "menuitemlist.hxx"
 
 using namespace css;
 using namespace vcl;
@@ -46,7 +47,7 @@ SalLayoutGlyphs* MenuItemData::GetTextGlyphs(const OutputDevice* pOutputDevice)
         return &aTextGlyphs;
 
     OUString aNonMnemonicString = OutputDevice::GetNonMnemonicString(aText);
-    std::unique_ptr<SalLayout> pLayout
+    std::unique_ptr<vcl::sal::SalLayout> pLayout
         = pOutputDevice->ImplLayout(aNonMnemonicString, 0, aNonMnemonicString.getLength(),
                                     Point(0, 0), 0, nullptr, SalLayoutFlags::GlyphItemsOnly);
     if (!pLayout)
@@ -208,7 +209,7 @@ MenuItemData* MenuItemList::SearchItem(
     {
         char ascii = 0;
         if( aKeyCode.GetCode() >= KEY_A && aKeyCode.GetCode() <= KEY_Z )
-            ascii = sal::static_int_cast<char>('A' + (aKeyCode.GetCode() - KEY_A));
+            ascii = ::sal::static_int_cast<char>('A' + (aKeyCode.GetCode() - KEY_A));
 
         MenuItemData* pFirstMatch = nullptr;
         size_t nFirstPos(0);
@@ -279,7 +280,7 @@ size_t MenuItemList::GetItemCount( KeyCode aKeyCode ) const
     const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
     char ascii = 0;
     if( aKeyCode.GetCode() >= KEY_A && aKeyCode.GetCode() <= KEY_Z )
-        ascii = sal::static_int_cast<char>('A' + (aKeyCode.GetCode() - KEY_A));
+        ascii = ::sal::static_int_cast<char>('A' + (aKeyCode.GetCode() - KEY_A));
 
     size_t nItems = 0;
     for ( size_t nPos = maItemList.size(); nPos; )
