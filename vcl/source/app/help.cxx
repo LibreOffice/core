@@ -264,8 +264,8 @@ HelpTextWindow::HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal
 
     if( mnStyle & QuickHelpFlags::BiDiRtl )
     {
-        ComplexTextLayoutFlags nLayoutMode = GetOutDev()->GetLayoutMode();
-        nLayoutMode |= ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft;
+        vcl::text::ComplexTextLayoutFlags nLayoutMode = GetOutDev()->GetLayoutMode();
+        nLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiRtl | vcl::text::ComplexTextLayoutFlags::TextOriginLeft;
         GetOutDev()->SetLayoutMode( nLayoutMode );
     }
     SetHelpText( rText );

@@ -55,7 +55,7 @@ void ScTabSplitter::SetFixed(bool bSet)
 
 void ScTabSplitter::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect )
 {
-    rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+    rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
     if (IsHorizontal())

@@ -1490,27 +1490,27 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 {
                     aDstLineInfo = pAt->aLineInfo;
                     aDstLineColor = pAt->aLineColor;
-                    if ( pAt->nFlags & PushFlags::LINECOLOR )
+                    if ( pAt->nFlags & vcl::PushFlags::LINECOLOR )
                         aSrcLineColor = pAt->aLineColor;
                     aDstFillColor = pAt->aFillColor;
-                    if ( pAt->nFlags & PushFlags::FILLCOLOR )
+                    if ( pAt->nFlags & vcl::PushFlags::FILLCOLOR )
                         aSrcFillColor = pAt->aFillColor;
                     eDstROP2 = pAt->eRasterOp;
-                    if ( pAt->nFlags & PushFlags::RASTEROP )
+                    if ( pAt->nFlags & vcl::PushFlags::RASTEROP )
                         eSrcRasterOp = pAt->eRasterOp;
                     aDstFont = pAt->aFont;
-                    if ( pAt->nFlags & PushFlags::FONT )
+                    if ( pAt->nFlags & vcl::PushFlags::FONT )
                         aSrcFont = pAt->aFont;
                     eDstTextAlign = pAt->eTextAlign;
-                    if ( pAt->nFlags & ( PushFlags::FONT | PushFlags::TEXTALIGN ) )
+                    if ( pAt->nFlags & ( vcl::PushFlags::FONT | vcl::PushFlags::TEXTALIGN ) )
                         eSrcTextAlign = pAt->eTextAlign;
                     aDstTextColor = pAt->aTextColor;
-                    if ( pAt->nFlags & ( PushFlags::FONT | PushFlags::TEXTCOLOR ) )
+                    if ( pAt->nFlags & ( vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR ) )
                         aSrcTextColor = pAt->aTextColor;
-                    if ( pAt->nFlags & PushFlags::MAPMODE )
+                    if ( pAt->nFlags & vcl::PushFlags::MAPMODE )
                         aSrcMapMode = pAt->aMapMode;
                     aDstClipRegion = pAt->aClipRegion;
-                    if ( pAt->nFlags & PushFlags::CLIPREGION )
+                    if ( pAt->nFlags & vcl::PushFlags::CLIPREGION )
                         aSrcClipRegion = pAt->aClipRegion;
 
                     WMFRecord_RestoreDC();
@@ -1589,15 +1589,15 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
             case MetaActionType::LAYOUTMODE:
             {
-                ComplexTextLayoutFlags nLayoutMode = static_cast<const MetaLayoutModeAction*>(pMA)->GetLayoutMode();
+                vcl::text::ComplexTextLayoutFlags nLayoutMode = static_cast<const MetaLayoutModeAction*>(pMA)->GetLayoutMode();
                 eSrcHorTextAlign = 0; // TA_LEFT
-                if ((nLayoutMode & ComplexTextLayoutFlags::BiDiRtl) != ComplexTextLayoutFlags::Default)
+                if ((nLayoutMode & vcl::text::ComplexTextLayoutFlags::BiDiRtl) != vcl::text::ComplexTextLayoutFlags::Default)
                 {
                     eSrcHorTextAlign = W_TA_RIGHT | W_TA_RTLREADING;
                 }
-                if ((nLayoutMode & ComplexTextLayoutFlags::TextOriginRight) != ComplexTextLayoutFlags::Default)
+                if ((nLayoutMode & vcl::text::ComplexTextLayoutFlags::TextOriginRight) != vcl::text::ComplexTextLayoutFlags::Default)
                     eSrcHorTextAlign |= W_TA_RIGHT;
-                else if ((nLayoutMode & ComplexTextLayoutFlags::TextOriginLeft) != ComplexTextLayoutFlags::Default)
+                else if ((nLayoutMode & vcl::text::ComplexTextLayoutFlags::TextOriginLeft) != vcl::text::ComplexTextLayoutFlags::Default)
                     eSrcHorTextAlign &= ~W_TA_RIGHT;
                 break;
             }

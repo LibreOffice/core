@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-08-22 14:51:38 using:
+ Generated on 2021-09-12 11:50:54 using:
  ./bin/update_pch basctl basctl --cutoff=3 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -136,7 +136,6 @@
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/outdevstate.hxx>
 #include <vcl/prntypes.hxx>
 #include <vcl/region.hxx>
 #include <vcl/rendercontext/AddFontSubstituteFlags.hxx>
@@ -148,7 +147,10 @@
 #include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/rendercontext/ImplMapRes.hxx>
 #include <vcl/rendercontext/InvertFlags.hxx>
+#include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/rendercontext/SalLayoutFlags.hxx>
+#include <vcl/rendercontext/State.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/salgtype.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
@@ -322,6 +324,7 @@
 #include <com/sun/star/view/PrintableState.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
+#include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/interfacecontainer2.hxx>

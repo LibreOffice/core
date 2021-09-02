@@ -94,7 +94,7 @@ void SwLinePortion::PrePaint( const SwTextPaintInfo& rInf,
     SwTextPaintInfo aInf( rInf );
 
     const bool bBidiPor = rInf.GetTextFrame()->IsRightToLeft() !=
-                          bool( ComplexTextLayoutFlags::BiDiRtl & rInf.GetOut()->GetLayoutMode() );
+                          bool( vcl::text::ComplexTextLayoutFlags::BiDiRtl & rInf.GetOut()->GetLayoutMode() );
 
     Degree10 nDir = bBidiPor ?
                   1800_deg10 :

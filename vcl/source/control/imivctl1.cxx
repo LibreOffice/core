@@ -545,7 +545,7 @@ void SvxIconChoiceCtrl_Impl::Paint(vcl::RenderContext& rRenderContext, const too
     if (!nCount)
         return;
 
-    rRenderContext.Push(PushFlags::CLIPREGION);
+    rRenderContext.Push(vcl::PushFlags::CLIPREGION);
     rRenderContext.SetClipRegion(vcl::Region(rRect));
 
     std::vector< SvxIconChoiceCtrlEntry* > aNewZOrderList;
@@ -1399,7 +1399,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
     if (eSelectionMode != SelectionMode::NONE)
         bSelected = pEntry->IsSelected();
 
-    rRenderContext.Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
+    rRenderContext.Push(vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR);
 
     OUString aEntryText(SvtIconChoiceCtrl::GetEntryText(pEntry));
     tools::Rectangle aTextRect(CalcTextRect(pEntry, &rPos, &aEntryText));

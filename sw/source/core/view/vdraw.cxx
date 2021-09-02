@@ -137,7 +137,7 @@ void SwViewShellImp::PaintLayer( const SdrLayerID _nLayerID,
         GetDrawView()->GetModel()->GetDrawOutliner().SetDefaultHorizontalTextDirection( aEEHoriTextDirOfPage );
     }
 
-    pOutDev->Push( PushFlags::LINECOLOR );
+    pOutDev->Push( vcl::PushFlags::LINECOLOR );
     if (pPrintData)
     {
         // hide drawings but not form controls (form controls are handled elsewhere)

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-05-14 22:16:51 using:
+ Generated on 2021-09-12 11:52:19 using:
  ./bin/update_pch starmath sm --cutoff=5 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -30,7 +30,6 @@
 #include <functional>
 #include <limits.h>
 #include <limits>
-#include <map>
 #include <memory>
 #include <new>
 #include <optional>
@@ -48,7 +47,6 @@
 #include <osl/mutex.hxx>
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
-#include <rtl/instance.hxx>
 #include <rtl/locale.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
@@ -60,7 +58,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
-#include <rtl/uuid.h>
 #include <sal/log.hxx>
 #include <sal/types.h>
 #include <vcl/bitmap.hxx>
@@ -74,7 +71,6 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/outdevstate.hxx>
 #include <vcl/region.hxx>
 #include <vcl/rendercontext/AddFontSubstituteFlags.hxx>
 #include <vcl/rendercontext/AntialiasingFlags.hxx>
@@ -85,7 +81,10 @@
 #include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/rendercontext/ImplMapRes.hxx>
 #include <vcl/rendercontext/InvertFlags.hxx>
+#include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/rendercontext/SalLayoutFlags.hxx>
+#include <vcl/rendercontext/State.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -101,21 +100,28 @@
 #include <basegfx/vector/b2enums.hxx>
 #include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/i18n/WordType.hpp>
+#include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/fileformat.h>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/propertysetinfo.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editengdllapi.h>
+#include <editeng/editobj.hxx>
 #include <editeng/editstat.hxx>
+#include <editeng/eedata.hxx>
+#include <editeng/macros.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
-#include <o3tl/sorted_vector.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/unit_conversion.hxx>
@@ -130,6 +136,7 @@
 #include <svl/languageoptions.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/stritem.hxx>
+#include <svl/style.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <svx/svxdllapi.h>
@@ -145,9 +152,9 @@
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/toolsdllapi.h>
-#include <unotools/configitem.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/options.hxx>
+#include <unotools/streamwrap.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <xmloff/dllapi.h>
 #endif // PCH_LEVEL >= 3
@@ -164,6 +171,7 @@
 #include <utility.hxx>
 #include <view.hxx>
 #include <visitors.hxx>
+#include <xparsmlbase.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -200,7 +200,7 @@ void OutputDevice::DrawInvisiblePolygon( const tools::PolyPolygon& rPolyPoly )
         return;
 
     // we assume that the border is NOT to be drawn transparently???
-    Push( PushFlags::FILLCOLOR );
+    Push( vcl::PushFlags::FILLCOLOR );
     SetFillColor();
     DrawPolyPolygon( rPolyPoly );
     Pop();
@@ -505,7 +505,7 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
 
                     if( mbLineColor )
                     {
-                        Push( PushFlags::FILLCOLOR );
+                        Push( vcl::PushFlags::FILLCOLOR );
                         SetFillColor();
                         DrawPolyPolygon( rPolyPoly );
                         Pop();
@@ -818,7 +818,7 @@ void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
         // #i10613# Respect transparency for draw color
         if (nTransparency)
         {
-            o_rMtf.AddAction(new MetaPushAction(PushFlags::LINECOLOR|PushFlags::FILLCOLOR));
+            o_rMtf.AddAction(new MetaPushAction(vcl::PushFlags::LINECOLOR|vcl::PushFlags::FILLCOLOR));
 
             // assume white background for alpha blending
             Color aLineColor(rStateOutDev.GetLineColor());
@@ -1754,7 +1754,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                         ScopedVclPtrInstance<VirtualDevice> aPaintVDev; // into this one, we render.
                         aPaintVDev->SetBackground( aBackgroundComponent.aBgColor );
 
-                        rOutMtf.AddAction( new MetaPushAction( PushFlags::MAPMODE ) );
+                        rOutMtf.AddAction( new MetaPushAction( vcl::PushFlags::MAPMODE ) );
                         rOutMtf.AddAction( new MetaMapModeAction() );
 
                         aPaintVDev->SetDrawMode( GetDrawMode() );

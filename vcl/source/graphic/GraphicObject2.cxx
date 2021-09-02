@@ -360,7 +360,7 @@ bool GraphicObject::ImplDrawTiled(OutputDevice& rOut, const tools::Rectangle& rA
         const Point aOutStart( aOutOrigin.X() + nInvisibleTilesX*rSizePixel.Width(),
                                aOutOrigin.Y() + nInvisibleTilesY*rSizePixel.Height() );
 
-        rOut.Push( PushFlags::CLIPREGION );
+        rOut.Push( vcl::PushFlags::CLIPREGION );
         rOut.IntersectClipRegion( rArea );
 
         // Paint all tiles

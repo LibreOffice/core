@@ -967,9 +967,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     const bool bSwitchH2VLRBT = rInf.GetFrame() && rInf.GetFrame()->IsVertLRBT();
     const bool bSwitchL2R = rInf.GetFrame() && rInf.GetFrame()->IsRightToLeft() &&
                             ! rInf.IsIgnoreFrameRTL();
-    const ComplexTextLayoutFlags nMode = rInf.GetOut().GetLayoutMode();
+    const vcl::text::ComplexTextLayoutFlags nMode = rInf.GetOut().GetLayoutMode();
     const bool bBidiPor = ( bSwitchL2R !=
-                            ( ComplexTextLayoutFlags::Default != ( ComplexTextLayoutFlags::BiDiRtl & nMode ) ) );
+                            ( vcl::text::ComplexTextLayoutFlags::Default != ( vcl::text::ComplexTextLayoutFlags::BiDiRtl & nMode ) ) );
 
     // be sure to have the correct layout mode at the printer
     if ( m_pPrinter )
@@ -1422,7 +1422,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                                         sal_Int32(rInf.GetIdx()) + j, i - j);
                         j = i + 1;
                         SwTwips nAdd = aKernArray[ i ] + nKernSum;
-                        if ( ( ComplexTextLayoutFlags::BiDiStrong | ComplexTextLayoutFlags::BiDiRtl ) == nMode )
+                        if ( ( vcl::text::ComplexTextLayoutFlags::BiDiStrong | vcl::text::ComplexTextLayoutFlags::BiDiRtl ) == nMode )
                             nAdd *= -1;
                         aTmpPos.setX( aTextOriginPos.X() + nAdd );
                     }

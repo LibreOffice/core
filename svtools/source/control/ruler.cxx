@@ -2686,7 +2686,7 @@ void Ruler::DrawTab(vcl::RenderContext& rRenderContext, const Color &rFillColor,
     Point aPos(rPos);
     sal_uInt16 nTabStyle = nStyle & (RULER_TAB_STYLE | RULER_TAB_RTL);
 
-    rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
+    rRenderContext.Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
     rRenderContext.SetLineColor();
     rRenderContext.SetFillColor(rFillColor);
     ImplCenterTabPos(aPos, nTabStyle);

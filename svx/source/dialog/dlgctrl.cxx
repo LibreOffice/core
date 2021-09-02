@@ -1238,7 +1238,7 @@ void SvxXShadowPreview::SetShadowPosition(const Point& rPos)
 
 void SvxXShadowPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    rRenderContext.Push(PushFlags::MAPMODE);
+    rRenderContext.Push(vcl::PushFlags::MAPMODE);
     rRenderContext.SetMapMode(MapMode(MapUnit::Map100thMM));
 
     LocalPrePaint(rRenderContext);
@@ -1403,7 +1403,7 @@ void SvxXRectPreview::SetAttributes(const SfxItemSet& rItemSet)
 
 void SvxXRectPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    rRenderContext.Push(PushFlags::MAPMODE);
+    rRenderContext.Push(vcl::PushFlags::MAPMODE);
     rRenderContext.SetMapMode(MapMode(MapUnit::Map100thMM));
     LocalPrePaint(rRenderContext);
 

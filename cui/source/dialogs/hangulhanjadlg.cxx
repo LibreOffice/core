@@ -69,7 +69,7 @@ namespace svx
             FontSwitch( OutputDevice& _rDev, const vcl::Font& _rTemporaryFont )
                 :m_rDev( _rDev )
             {
-                m_rDev.Push( PushFlags::FONT );
+                m_rDev.Push( vcl::PushFlags::FONT );
                 m_rDev.SetFont( _rTemporaryFont );
             }
             ~FontSwitch() COVERITY_NOEXCEPT_FALSE
