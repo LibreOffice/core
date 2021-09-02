@@ -299,13 +299,17 @@ bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen)
         rStream.ReadInt16(y1).ReadInt16(x1).ReadInt16(y2).ReadInt16(x2);
         rStream.SetEndian(oldNumberFormat); // reset format
 
+        // read version op
+        rStream.ReadBytes(sBuf, 3);
+
+        if (!rStream.good())
+            break;
+
         if (x1 > x2 || y1 > y2 || // bad bdbox
             (x1 == x2 && y1 == y2) || // 1 pixel picture
             x2 - x1 > 2048 || y2 - y1 > 2048) // picture abnormally big
             bdBoxOk = false;
 
-        // read version op
-        rStream.ReadBytes(sBuf, 3);
         // see http://developer.apple.com/legacy/mac/library/documentation/mac/pdf/Imaging_With_QuickDraw/Appendix_A.pdf
         // normal version 2 - page A23 and A24
         if (sBuf[0] == 0x00 && sBuf[1] == 0x11 && sBuf[2] == 0x02)
