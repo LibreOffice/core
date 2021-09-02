@@ -2193,19 +2193,17 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                     // in "Show changes" mode, too. All removed paragraphs
                     // get the style of the first (partially deleted) paragraph
                     // to avoid text insertion with bad style in the deleted
-                    // area later.
+                    // area later (except paragraphs of the removed tables).
 
                     SwContentNode* pDelNd = pStt->nNode.GetNode().GetContentNode();
+                    // start copying the style of the first paragraph from the end of the range
                     SwContentNode* pTextNd = pEnd->nNode.GetNode().GetContentNode();
-                    SwTextNode* pDelNode = pStt->nNode.GetNode().GetTextNode();
-                    SwTextNode* pTextNode;
                     SwNodeIndex aIdx( pEnd->nNode.GetNode() );
                     bool bFirst = true;
 
-                    while (pDelNode != nullptr && pTextNd != nullptr && pDelNd->GetIndex() < pTextNd->GetIndex())
+                    while (pTextNd != nullptr && pDelNd->GetIndex() < pTextNd->GetIndex())
                     {
-                        pTextNode = pTextNd->GetTextNode();
-                        if (pTextNode && pDelNode != pTextNode )
+                        if( pTextNd->IsTextNode() )
                         {
                             SwPosition aPos(aIdx);
 
@@ -2251,10 +2249,41 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                             // modify paragraph formatting
                             lcl_CopyStyle(*pStt, aPos);
                         }
-                        pTextNd = SwNodes::GoPrevious( &aIdx );
 
                         if (bFirst)
                             bFirst = false;
+
+                        // Jump to the previous paragraph and if needed, skip paragraphs of
+                        // the removed table(s) in the range to avoid leaving empty tables
+                        // because of the non-continuous redline range over the table.
+                        // FIXME: this is not enough for tables with inner redlines, where
+                        // tracked deletion of the text containing such a table leaves an
+                        // empty table at the place of the table (a problem inherited from OOo).
+                        pTextNd = nullptr;
+                        while( --aIdx && pDelNd->GetIndex() < aIdx.GetIndex() &&
+                                !aIdx.GetNode().IsContentNode() )
+                        {
+                            // possible table end
+                            if( aIdx.GetNode().IsEndNode() && aIdx.GetNode().FindTableNode() )
+                            {
+                                SwNodeIndex aIdx2 = aIdx;
+                                // search table start and skip table paragraphs
+                                while ( pDelNd->GetIndex() < aIdx2.GetIndex() )
+                                {
+                                    SwTableNode* pTable = aIdx2.GetNode().GetTableNode();
+                                    if( pTable &&
+                                        pTable->EndOfSectionNode()->GetIndex() == aIdx.GetIndex() )
+                                    {
+                                       aIdx = aIdx2;
+                                       break;
+                                    }
+                                    --aIdx2;
+                                }
+                            }
+                        }
+
+                        if (aIdx.GetNode().IsContentNode())
+                            pTextNd = aIdx.GetNode().GetContentNode();
                     }
                 }
             }

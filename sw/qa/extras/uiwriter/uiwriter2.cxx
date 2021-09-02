@@ -1200,6 +1200,42 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119571)
                          getProperty<OUString>(getParagraph(2), "ParaStyleName"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf144058)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf144058.fodt");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
+                         getProperty<OUString>(getParagraph(1), "ParaStyleName"));
+
+    //turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // join first and last but one paragraphs by removing the end of the first paragraph
+    // with paragraph break, and by removing two tables of the selected range completely
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Down(/*bSelect=*/true);
+    pWrtShell->Down(/*bSelect=*/true);
+    pWrtShell->Down(/*bSelect=*/true);
+    rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
+    pTransfer->Cut();
+
+    // accept all: tables are deleted
+    dispatchCommand(mxComponent, ".uno:AcceptAllTrackedChanges", {});
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    // This was 2 (remaining empty tables)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119019)
 {
     // check handling of overlapping redlines
