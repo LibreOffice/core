@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "767c0079_48470cd6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-02T19:02:52Z",
+      "side": 1,
+      "message": "Hi! Thanks for pointing me to this bug. May you have a look on this change, since I have seen so many non ASCII comparisions lately that I am a little bit confused about the vast majority to solve such a task. I will add a unit test after the implementation is fine. Thank you!",
+      "revId": "38f28f3324d6ea7c475421b68493d1676a38b38c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
