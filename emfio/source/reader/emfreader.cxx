@@ -470,28 +470,28 @@ namespace emfio
         }
 
         // Read the first EmrFormat.
-        sal_uInt32 nSignature;
+        sal_uInt32 nSignature(0);
         mpInputStream->ReadUInt32(nSignature);
         if (nSignature != PDF_SIGNATURE)
         {
             return;
         }
 
-        sal_uInt32 nVersion;
+        sal_uInt32 nVersion(0);
         mpInputStream->ReadUInt32(nVersion);
         if (nVersion != 1)
         {
             return;
         }
 
-        sal_uInt32 nSizeData;
+        sal_uInt32 nSizeData(0);
         mpInputStream->ReadUInt32(nSizeData);
         if (!nSizeData || nSizeData > mpInputStream->remainingSize())
         {
             return;
         }
 
-        sal_uInt32 nOffData;
+        sal_uInt32 nOffData(0);
         mpInputStream->ReadUInt32(nOffData);
         if (!nOffData)
         {
