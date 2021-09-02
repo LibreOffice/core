@@ -87,6 +87,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e76f4683_a00a991c",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2064,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-02T22:22:18Z",
+      "side": 1,
+      "message": "SvtSysLocale is perfect, it always holds an instance of CharClass and LocaleDataWrapper. See include/unotools/syslocale.hxx\n\nIn https://gerrit.libreoffice.org/c/core/+/115540 a temporary is unnecessarily created, that should be replaced by using SvtSysLocale.",
+      "parentUuid": "9b4454d0_dac381b0",
+      "revId": "38f28f3324d6ea7c475421b68493d1676a38b38c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5118d7aa_361cbb7b",
@@ -105,6 +123,29 @@
         "startChar": 12,
         "endLine": 2072,
         "endChar": 63
+      },
+      "revId": "38f28f3324d6ea7c475421b68493d1676a38b38c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54c7b8c1_018c57b0",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2073,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-02T22:22:18Z",
+      "side": 1,
+      "message": "Instead of obtaining aSysLocale.GetCharClass() for each hash match obtain aSysLocale.GetCharClassPtr() once before the loop and use that CharClass*.",
+      "range": {
+        "startLine": 2073,
+        "startChar": 36,
+        "endLine": 2073,
+        "endChar": 59
       },
       "revId": "38f28f3324d6ea7c475421b68493d1676a38b38c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
