@@ -36,8 +36,6 @@ FocusManager::FocusLocation::FocusLocation (const PanelComponent eComponent, con
 
 FocusManager::FocusManager(const std::function<void(const Panel&)>& rShowPanelFunctor)
     : mpDeckTitleBar(nullptr),
-      maPanels(),
-      maButtons(),
       maShowPanelFunctor(rShowPanelFunctor)
 {
 }

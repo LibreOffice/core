@@ -137,8 +137,7 @@ SfxStatusBarControl::SfxStatusBarControl
     for which no specific ones have been registered.
 */
 
-:   svt::StatusbarController(),
-    nSlotId( nSlotID ),
+:   nSlotId( nSlotID ),
     nId( nCtrlID ),
     pBar( &rBar )
 {

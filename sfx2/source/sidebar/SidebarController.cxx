@@ -111,7 +111,6 @@ SidebarController::SidebarController (
     SidebarDockingWindow* pParentWindow,
     const SfxViewFrame* pViewFrame)
     : SidebarControllerInterfaceBase(m_aMutex),
-      mpCurrentDeck(),
       mpParentWindow(pParentWindow),
       mpViewFrame(pViewFrame),
       mxFrame(pViewFrame->GetFrame().GetFrameInterface()),
@@ -123,23 +122,18 @@ SidebarController::SidebarController (
                      const ::std::vector<TabBar::DeckMenuData>& rMenuData) { return this->ShowPopupMenu(rMainMenu, rSubMenu, rMenuData); },
               this)),
       maCurrentContext(OUString(), OUString()),
-      maRequestedContext(),
       mnRequestedForceFlags(SwitchFlag_NoForce),
       mnMaximumSidebarWidth(officecfg::Office::UI::Sidebar::General::MaximumWidth::get()),
       mbMinimumSidebarWidth(officecfg::Office::UI::Sidebar::General::MinimumWidth::get()),
       msCurrentDeckId(gsDefaultDeckId),
       maPropertyChangeForwarder([this](){ return this->BroadcastPropertyChange(); }),
       maContextChangeUpdate([this](){ return this->UpdateConfigurations(); }),
-      mbIsDeckRequestedOpen(),
-      mbIsDeckOpen(),
       mbFloatingDeckClosed(!pParentWindow->IsFloatingMode()),
       mnSavedSidebarWidth(pParentWindow->GetSizePixel().Width()),
       maFocusManager([this](const Panel& rPanel){ return this->ShowPanel(rPanel); }),
-      mxReadOnlyModeDispatch(),
       mbIsDocumentReadOnly(false),
       mpSplitWindow(nullptr),
-      mnWidthOnSplitterButtonDown(0),
-      mpResourceManager()
+      mnWidthOnSplitterButtonDown(0)
 {
     // Decks and panel collections for this sidebar
     mpResourceManager = std::make_unique<ResourceManager>();

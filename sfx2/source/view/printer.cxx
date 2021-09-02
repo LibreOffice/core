@@ -101,7 +101,6 @@ SfxPrinter::SfxPrinter( std::unique_ptr<SfxItemSet>&& pTheOptions,
 
 
 SfxPrinter::SfxPrinter( const SfxPrinter& rPrinter ) :
-    VclReferenceBase(),
     Printer( rPrinter.GetName() ),
     pOptions( rPrinter.GetOptions().Clone() ),
     bKnown( rPrinter.IsKnown() )

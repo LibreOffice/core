@@ -126,7 +126,7 @@ private:
 
 public:
     explicit SfxHeaderAttributes_Impl( SfxObjectShell* pSh ) :
-        SvKeyValueIterator(), pDoc( pSh ),
+         pDoc( pSh ),
         xIter( pSh->GetMedium()->GetHeaderAttributes_Impl() ),
         bAlert( false ) {}
 
