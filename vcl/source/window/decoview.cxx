@@ -172,7 +172,7 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
             aTriangle.SetPoint(Point(nRect.Left(), aCenter.Y()), 1);
             aTriangle.SetPoint(Point(nRect.Left() + n2, aCenter.Y() + n2), 2);
 
-            pDev->Push(PushFlags::LINECOLOR);
+            pDev->Push(vcl::PushFlags::LINECOLOR);
             pDev->SetLineColor();
             pDev->DrawPolygon(aTriangle);
             pDev->Pop();
@@ -198,7 +198,7 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
             aTriangle.SetPoint(Point(nRect.Right(), aCenter.Y()), 1);
             aTriangle.SetPoint(Point(nRect.Right() - n2, aCenter.Y() + n2), 2);
 
-            pDev->Push(PushFlags::LINECOLOR);
+            pDev->Push(vcl::PushFlags::LINECOLOR);
             pDev->SetLineColor();
             pDev->DrawPolygon(aTriangle);
             pDev->Pop();
@@ -1009,7 +1009,7 @@ void DecorationView::DrawSeparator( const Point& rStart, const Point& rStop, boo
             return;
     }
 
-    mpOutDev->Push( PushFlags::LINECOLOR );
+    mpOutDev->Push( vcl::PushFlags::LINECOLOR );
     if ( rStyleSettings.GetOptions() & StyleSettingsOptions::Mono )
         mpOutDev->SetLineColor( COL_BLACK );
     else

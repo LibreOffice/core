@@ -135,7 +135,7 @@ namespace sfx2
 
         SfxDockingWindow::Paint(rRenderContext, i_rArea);
 
-        rRenderContext.Push(PushFlags::FONT | PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+        rRenderContext.Push(vcl::PushFlags::FONT | vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
 
         rRenderContext.SetFillColor(rStyleSettings.GetDialogColor());
         rRenderContext.SetLineColor();

@@ -352,7 +352,7 @@ void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &
     }
     else
     {
-        pOutWin->GetOutDev()->Push(PushFlags::MAPMODE);
+        pOutWin->GetOutDev()->Push(vcl::PushFlags::MAPMODE);
         if (pOutWin->GetMapMode().GetMapUnit() == MapUnit::MapTwip)
         {
             // Find the parent that is not right
@@ -725,7 +725,7 @@ void ImpEditView::ImplDrawHighlightRect( OutputDevice& rTarget, const Point& rDo
         }
         else
         {
-            rTarget.Push(PushFlags::LINECOLOR|PushFlags::FILLCOLOR|PushFlags::RASTEROP);
+            rTarget.Push(vcl::PushFlags::LINECOLOR|vcl::PushFlags::FILLCOLOR|vcl::PushFlags::RASTEROP);
             rTarget.SetLineColor();
             rTarget.SetFillColor(COL_BLACK);
             rTarget.SetRasterOp(RasterOp::Invert);

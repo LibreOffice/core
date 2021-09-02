@@ -1114,7 +1114,7 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& r
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     ImplGetColors(rStyleSettings, aFaceColor, aFaceTextColor, aSelectColor, aSelectTextColor);
 
-    rRenderContext.Push(PushFlags::FONT | PushFlags::CLIPREGION);
+    rRenderContext.Push(vcl::PushFlags::FONT | vcl::PushFlags::CLIPREGION);
     rRenderContext.SetClipRegion(vcl::Region(GetPageArea()));
 
     // select font

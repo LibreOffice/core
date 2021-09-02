@@ -46,19 +46,19 @@ namespace cairocanvas
                               sal_Int8      nTextDirection )
         {
             // TODO(P3): avoid if already correctly set
-            ComplexTextLayoutFlags nLayoutMode = ComplexTextLayoutFlags::Default;
+            vcl::text::ComplexTextLayoutFlags nLayoutMode = vcl::text::ComplexTextLayoutFlags::Default;
             switch( nTextDirection )
             {
                 case rendering::TextDirection::WEAK_LEFT_TO_RIGHT:
                     break;
                 case rendering::TextDirection::STRONG_LEFT_TO_RIGHT:
-                    nLayoutMode = ComplexTextLayoutFlags::BiDiStrong;
+                    nLayoutMode = vcl::text::ComplexTextLayoutFlags::BiDiStrong;
                     break;
                 case rendering::TextDirection::WEAK_RIGHT_TO_LEFT:
-                    nLayoutMode = ComplexTextLayoutFlags::BiDiRtl;
+                    nLayoutMode = vcl::text::ComplexTextLayoutFlags::BiDiRtl;
                     break;
                 case rendering::TextDirection::STRONG_RIGHT_TO_LEFT:
-                    nLayoutMode = ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::BiDiStrong;
+                    nLayoutMode = vcl::text::ComplexTextLayoutFlags::BiDiRtl | vcl::text::ComplexTextLayoutFlags::BiDiStrong;
                     break;
                 default:
                     break;
@@ -66,7 +66,7 @@ namespace cairocanvas
 
             // set calculated layout mode. Origin is always the left edge,
             // as required at the API spec
-            rOutDev.SetLayoutMode( nLayoutMode | ComplexTextLayoutFlags::TextOriginLeft );
+            rOutDev.SetLayoutMode( nLayoutMode | vcl::text::ComplexTextLayoutFlags::TextOriginLeft );
         }
     }
 

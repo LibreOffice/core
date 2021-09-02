@@ -321,7 +321,7 @@ void AutoFormatPreview::DrawBackground(vcl::RenderContext& rRenderContext)
             SvxBrushItem aBrushItem(
                 maCurrentData.GetBoxFormat(GetFormatIndex(nCol, nRow)).GetBackground());
 
-            rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
+            rRenderContext.Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
             rRenderContext.SetLineColor();
             rRenderContext.SetFillColor(aBrushItem.GetColor());
             const basegfx::B2DRange aCellRange(maArray.GetCellRange(nCol, nRow, true));
@@ -428,7 +428,7 @@ void AutoFormatPreview::NotifyChange(const SwTableAutoFormat& rNewData)
 
 void AutoFormatPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    rRenderContext.Push(PushFlags::ALL);
+    rRenderContext.Push(vcl::PushFlags::ALL);
 
     DrawModeFlags nOldDrawMode = rRenderContext.GetDrawMode();
     if (rRenderContext.GetSettings().GetStyleSettings().GetHighContrastMode())

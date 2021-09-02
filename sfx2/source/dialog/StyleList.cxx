@@ -1573,7 +1573,7 @@ IMPL_LINK(StyleList, CustomRenderHdl, weld::TreeView::render_args, aPayload, voi
     bool bSelected = std::get<2>(aPayload);
     const OUString& rId = std::get<3>(aPayload);
 
-    rRenderContext.Push(PushFlags::TEXTCOLOR);
+    rRenderContext.Push(vcl::PushFlags::TEXTCOLOR);
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     if (bSelected)
         rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
@@ -1592,7 +1592,7 @@ IMPL_LINK(StyleList, CustomRenderHdl, weld::TreeView::render_args, aPayload, voi
 
         if (pStyleSheet)
         {
-            rRenderContext.Push(PushFlags::ALL);
+            rRenderContext.Push(vcl::PushFlags::ALL);
             sal_Int32 nSize = aRect.GetHeight();
             std::unique_ptr<sfx2::StylePreviewRenderer> pStylePreviewRenderer(
                 pStyleManager->CreateStylePreviewRenderer(rRenderContext, pStyleSheet, nSize));

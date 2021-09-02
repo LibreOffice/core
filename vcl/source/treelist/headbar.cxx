@@ -444,7 +444,7 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
     {
         if (aSelectionTextColor != COL_TRANSPARENT)
         {
-            rRenderContext.Push(PushFlags::TEXTCOLOR);
+            rRenderContext.Push(vcl::PushFlags::TEXTCOLOR);
             rRenderContext.SetTextColor(aSelectionTextColor);
         }
         if (IsEnabled())

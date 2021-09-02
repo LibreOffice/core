@@ -306,7 +306,7 @@ IMPL_LINK_NOARG(MaskData, ExecHdl, weld::Button&, void)
 
 void BmpColorWindow::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& /*Rect*/)
 {
-    rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
+    rRenderContext.Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
     rRenderContext.SetLineColor(aColor);
     rRenderContext.SetFillColor(aColor);
     rRenderContext.DrawRect(tools::Rectangle(Point(), GetOutputSizePixel()));

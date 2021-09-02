@@ -300,9 +300,9 @@ void SwDoDrawCapital::DrawSpace( Point &rPos )
     if ( bSwitchL2R )
        m_rInf.GetFrame()->SwitchLTRtoRTL( aPos );
 
-    const ComplexTextLayoutFlags nMode = m_rInf.GetpOut()->GetLayoutMode();
+    const vcl::text::ComplexTextLayoutFlags nMode = m_rInf.GetpOut()->GetLayoutMode();
     const bool bBidiPor = ( bSwitchL2R !=
-                            ( ComplexTextLayoutFlags::Default != ( ComplexTextLayoutFlags::BiDiRtl & nMode ) ) );
+                            ( vcl::text::ComplexTextLayoutFlags::Default != ( vcl::text::ComplexTextLayoutFlags::BiDiRtl & nMode ) ) );
 
     if ( bBidiPor )
         nDiff = -nDiff;

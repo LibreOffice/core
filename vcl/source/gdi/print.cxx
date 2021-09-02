@@ -259,7 +259,7 @@ void Printer::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
         default:    nMove = 0; break;
     }
 
-    Push( PushFlags::CLIPREGION | PushFlags::LINECOLOR );
+    Push( vcl::PushFlags::CLIPREGION | vcl::PushFlags::LINECOLOR );
     IntersectClipRegion(vcl::Region(rPolyPoly));
     SetLineColor( GetFillColor() );
     const bool bOldMap = mbMap;
@@ -735,7 +735,7 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
 
     mpMetaFile = nullptr;
     mbMap = false;
-    Push( PushFlags::FILLCOLOR | PushFlags::LINECOLOR );
+    Push( vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR );
     SetLineColor( rMaskColor );
     SetFillColor( rMaskColor );
     InitLineColor();
@@ -1621,7 +1621,7 @@ void Printer::ClipAndDrawGradientMetafile ( const Gradient &rGradient, const too
 {
     const tools::Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
 
-    Push( PushFlags::CLIPREGION );
+    Push( vcl::PushFlags::CLIPREGION );
     IntersectClipRegion(vcl::Region(rPolyPoly));
     DrawGradient( aBoundRect, rGradient );
     Pop();

@@ -361,7 +361,7 @@ void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext& rContext, bool
 
     rContext.SetMapMode( MapMode(MapUnit::Map100thMM) );
     rContext.SetDrawMode( DrawModeFlags::Default );
-    rContext.SetLayoutMode( ComplexTextLayoutFlags::Default );
+    rContext.SetLayoutMode( vcl::text::ComplexTextLayoutFlags::Default );
     rContext.SetDigitLanguage( LANGUAGE_ENGLISH );
     if (bDraw)
     {
@@ -456,7 +456,7 @@ void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext& rContext, bool
             {
                 if (pCurrentElement == element)
                 {
-                    rContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+                    rContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
                     const StyleSettings& rStyleSettings = rContext.GetSettings().GetStyleSettings();
                     rContext.SetLineColor(rStyleSettings.GetHighlightColor());
                     rContext.SetFillColor(COL_TRANSPARENT);
@@ -854,7 +854,7 @@ void SmElementsControl::addElement(const OUString& aElementVisual, const OUStrin
     auto pNode = maParser->ParseExpression(aElementVisual);
 
     OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
-    rDevice.Push(PushFlags::MAPMODE);
+    rDevice.Push(vcl::PushFlags::MAPMODE);
     rDevice.SetMapMode( MapMode(MapUnit::Map100thMM) );
 
     pNode->Prepare(maFormat, *mpDocShell, 0);

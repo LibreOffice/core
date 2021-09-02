@@ -366,7 +366,7 @@ void ScAutoFmtPreview::DrawBackground(vcl::RenderContext& rRenderContext)
             const SvxBrushItem* pItem =
                 pCurData->GetItem( GetFormatIndex( nCol, nRow ), ATTR_BACKGROUND );
 
-            rRenderContext.Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
+            rRenderContext.Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
             rRenderContext.SetLineColor();
             rRenderContext.SetFillColor( pItem->GetColor() );
 
@@ -492,7 +492,7 @@ void ScAutoFmtPreview::NotifyChange( ScAutoFormatData* pNewData )
 
 void ScAutoFmtPreview::DoPaint(vcl::RenderContext& rRenderContext)
 {
-    rRenderContext.Push(PushFlags::ALL);
+    rRenderContext.Push(vcl::PushFlags::ALL);
     DrawModeFlags nOldDrawMode = aVD->GetDrawMode();
 
     Size aWndSize(GetOutputSizePixel());

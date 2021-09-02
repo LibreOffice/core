@@ -458,7 +458,7 @@ namespace
                 if ( pViewShell->getPrePostMapMode() == mpOutDev->GetMapMode() )
                     return;
 
-                mpOutDev->Push(PushFlags::MAPMODE);
+                mpOutDev->Push(vcl::PushFlags::MAPMODE);
 
                 GDIMetaFile* pMetaFile = mpOutDev->GetConnectMetaFile();
                 if ( pMetaFile &&
