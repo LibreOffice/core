@@ -936,6 +936,12 @@ void OS2METReader::ReadBox(bool bGivenPos)
     sal_Int32 nHRound = ReadCoord(bCoord32);
     sal_Int32 nVRound = ReadCoord(bCoord32);
 
+    if (!pOS2MET->good())
+    {
+        SAL_WARN("filter.os2met", "OS2METReader::ReadBox: short read");
+        return;
+    }
+
     tools::Rectangle aBoxRect( P0, aAttr.aCurPos );
 
     if ( pAreaStack )
