@@ -98,7 +98,6 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    void randomTest();
     void testTableAutoFormats();
     void testPageDescName();
     void testFileNameFields();
@@ -137,7 +136,6 @@ public:
     CPPUNIT_TEST_SUITE(SwDocTest);
 
     CPPUNIT_TEST(testTransliterate);
-    CPPUNIT_TEST(randomTest);
     CPPUNIT_TEST(testTableAutoFormats);
     CPPUNIT_TEST(testPageDescName);
     CPPUNIT_TEST(testFileNameFields);
@@ -1019,178 +1017,6 @@ void SwDocTest::testGraphicAnchorDeletion()
     //Now, if instead we swap RndStdIds::FLY_AS_CHAR (inline graphic) to RndStdIds::FLY_AT_CHAR (anchored to character)
     //and repeat the above, graphic is *not* deleted, i.e. it belongs to the paragraph, not the
     //range to which its anchored, which is annoying.
-}
-
-static int
-getRand(int modulus)
-{
-    if (modulus <= 0)
-        return 0;
-    return comphelper::rng::uniform_int_distribution(0, modulus-1);
-}
-
-static OUString
-getRandString()
-{
-    OUString aText("AAAAA BBBB CCC DD E \n");
-    int s = getRand(aText.getLength());
-    int j = getRand(aText.getLength() - s);
-    OUString aRet(aText.copy(s, j));
-    if (!getRand(5))
-        aRet += "\n";
-//    fprintf (stderr, "rand string '%s'\n", OUStringToOString(aRet, RTL_TEXTENCODING_UTF8).getStr());
-    return aRet;
-}
-
-static SwPosition
-getRandomPosition(SwDoc *pDoc, int /* nOffset */)
-{
-    const SwPosition aPos(pDoc->GetNodes().GetEndOfContent());
-    size_t nNodes = aPos.nNode.GetNode().GetIndex() - aPos.nNode.GetNode().StartOfSectionIndex();
-    // exclude body start/end node
-    size_t n = comphelper::rng::uniform_size_distribution(1, nNodes - 1);
-    SwPaM pam(aPos);
-    for (sal_uLong i = 0; i < n; ++i)
-    {
-        pam.Move(fnMoveBackward, GoInNode);
-    }
-    SwTextNode *const pTextNode(pam.GetPoint()->nNode.GetNode().GetTextNode());
-    assert(pTextNode);
-    int n2 = comphelper::rng::uniform_int_distribution(0, pTextNode->Len());
-    for (sal_Int32 i = 0; i < n2; ++i)
-    {
-        pam.Move(fnMoveBackward, GoInContent);
-    }
-    return *pam.GetPoint();
-}
-
-void SwDocTest::randomTest()
-{
-    OUString aEnvKey("SAL_RAND_REPEATABLE");
-    OUString aEnvValue("1");
-    osl_setEnvironment(aEnvKey.pData, aEnvValue.pData);
-
-    CPPUNIT_ASSERT_MESSAGE("SwDoc::IsRedlineOn()", !m_pDoc->getIDocumentRedlineAccess().IsRedlineOn());
-    RedlineFlags modes[] = {
-        RedlineFlags::On,
-        RedlineFlags::ShowMask,
-        RedlineFlags::NONE,
-        RedlineFlags::On | RedlineFlags::ShowMask,
-        RedlineFlags::On | RedlineFlags::Ignore,
-        RedlineFlags::On | RedlineFlags::ShowInsert,
-        RedlineFlags::On | RedlineFlags::ShowDelete
-    };
-    static const char *authors[] = {
-        "Jim", "Bob", "JimBobina", "Helga", "Gertrude", "Spagna", "Hurtleweed"
-    };
-
-    for( size_t rlm = 0; rlm < SAL_N_ELEMENTS(modes); rlm++ )
-    {
-        m_pDoc->GetIDocumentUndoRedo().DoUndo(true);
-        m_pDoc->ClearDoc();
-
-        // setup redlining
-        m_pDoc->getIDocumentRedlineAccess().SetRedlineFlags(modes[rlm]);
-        SW_MOD()->SetRedlineAuthor(OUString::createFromAscii(authors[0]));
-
-        for( int i = 0; i < 2000; i++ )
-        {
-            std::shared_ptr<SwUnoCursor> pCrs(
-                m_pDoc->CreateUnoCursor(getRandomPosition(m_pDoc, i/20)));
-
-            switch (getRand (i < 50 ? 3 : 6)) {
-            // insert ops first
-            case 0: {
-                OUString const tmp(getRandString());
-                sal_Int32 current(0);
-                sal_Int32 nextBreak(tmp.indexOf('\n'));
-                do
-                {
-                    sal_Int32 const len((nextBreak == -1 ? tmp.getLength() : nextBreak - current));
-                    if (0 < len)
-                    {
-                        m_pDoc->getIDocumentContentOperations().InsertString(
-                            *pCrs, tmp.copy(current, len));
-                    }
-                    if (nextBreak != -1)
-                    {
-                        m_pDoc->getIDocumentContentOperations().SplitNode(*pCrs->GetPoint(), false);
-                        current = nextBreak + 1;
-                        nextBreak = tmp.indexOf('\n', current);
-                    }
-                }
-                while (nextBreak != -1);
-                break;
-            }
-            case 1:
-                break;
-            case 2: { // switch author
-                int a = getRand(SAL_N_ELEMENTS(authors));
-                SW_MOD()->SetRedlineAuthor(OUString::createFromAscii(authors[a]));
-                break;
-            }
-
-            // movement / deletion ops later
-            case 3: // deletion
-                pCrs->SetMark();
-                switch (getRand(6)) {
-                case 0:
-                    *pCrs->GetMark() = getRandomPosition(m_pDoc, 42);
-                    m_pDoc->getIDocumentContentOperations().DelFullPara(*pCrs);
-                    break;
-                case 1:
-                    *pCrs->GetMark() = getRandomPosition(m_pDoc, 42);
-                    m_pDoc->getIDocumentContentOperations().DeleteRange(*pCrs);
-                    break;
-                case 2:
-                    *pCrs->GetMark() = getRandomPosition(m_pDoc, 42);
-                    m_pDoc->getIDocumentContentOperations().DeleteAndJoin(*pCrs, !!getRand(1));
-                    break;
-                case 3:
-                default:
-                    OUString const tmp(getRandString());
-                    if (tmp.getLength())
-                    {
-                        m_pDoc->getIDocumentContentOperations().Overwrite(*pCrs, tmp);
-                    }
-                    break;
-                }
-                break;
-            case 4: { // movement
-                SwMoveFlags nFlags =
-                         getRand(1) // FIXME: puterb this more ?
-                         ? SwMoveFlags::DEFAULT
-                         : SwMoveFlags::CREATEUNDOOBJ |
-                           SwMoveFlags::REDLINES |
-                           SwMoveFlags::NO_DELFRMS;
-                SwPosition aTo(getRandomPosition(m_pDoc, i/10));
-                m_pDoc->getIDocumentContentOperations().MoveRange(*pCrs, aTo, nFlags);
-                break;
-            }
-
-            case 5:
-                break;
-
-            // undo / redo ?
-            default:
-                break;
-            }
-        }
-
-// Debug / verify the produced document has real content
-#if 0
-        OStringBuffer aBuffer("nodes-");
-        aBuffer.append(sal_Int32(rlm));
-        aBuffer.append(".xml");
-
-        xmlTextWriterPtr writer;
-        writer = xmlNewTextWriterFilename( aBuffer.makeStringAndClear().getStr(), 0 );
-        (void)xmlTextWriterStartDocument( writer, NULL, NULL, NULL );
-        m_pDoc->dumpAsXml(writer);
-        (void)xmlTextWriterEndDocument( writer );
-        xmlFreeTextWriter( writer );
-#endif
-    }
 }
 
 void SwDocTest::testTableAutoFormats()
