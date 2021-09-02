@@ -459,7 +459,7 @@ protected:
 
     ::std::vector< PPTOleEntry > aOleObjectList;
 
-    std::unique_ptr<std::vector<std::unique_ptr<PptFontEntityAtom>>> m_pFonts;
+    std::optional<std::vector<PptFontEntityAtom>> m_xFonts;
 
     sal_uInt32          nStreamLen;
 
@@ -476,7 +476,7 @@ public:
     virtual             ~SdrEscherImport() override;
     virtual bool        GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) const override;
     virtual bool        SeekToShape( SvStream& rSt, SvxMSDffClientData* pClientData, sal_uInt32 nId ) const override;
-    PptFontEntityAtom*  GetFontEnityAtom( sal_uInt32 nNum ) const;
+    const PptFontEntityAtom*  GetFontEnityAtom( sal_uInt32 nNum ) const;
     void                RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic& rGraph );
     virtual SdrObject*  ReadObjText( PPTTextObj* pTextObj, SdrObject* pObj, SdPageCapsule pPage ) const;
     virtual SdrObject*  ProcessObj( SvStream& rSt, DffObjData& rData, SvxMSDffClientData& rClientData, tools::Rectangle& rTextRect, SdrObject* pObj ) override;
