@@ -70,17 +70,17 @@ bool FieldCode::Read(HWPFile & hwpf)
     uint binlen;     /* Length of any binary data format */
 
     hwpf.Read4b(size);
-    hwpf.Read2b(dummy);
+    if (!hwpf.Read2b(dummy))
+        return false;
     hwpf.ReadBlock(&type, 2);
     hwpf.Read4b(reserved1.data(), 1);
-    hwpf.Read2b(location_info);
+    if (!hwpf.Read2b(location_info))
+        return false;
     hwpf.ReadBlock(reserved2.data(), 22);
     hwpf.Read4b(len1);
     hwpf.Read4b(len2);
     hwpf.Read4b(len3);
-    bool bSuccess = hwpf.Read4b(binlen);
-
-    if (!bSuccess)
+    if (!hwpf.Read4b(binlen))
         return false;
 
     uint const len1_ = std::min<uint>(len1, 1024) / sizeof(hchar);
