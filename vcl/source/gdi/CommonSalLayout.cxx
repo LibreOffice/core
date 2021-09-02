@@ -600,19 +600,19 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphsIm
     return true;
 }
 
-void GenericSalLayout::GetCharWidths(DeviceCoordinate* pCharWidths) const
+void GenericSalLayout::GetCharWidths(std::vector<DeviceCoordinate>& rCharWidths) const
 {
     const int nCharCount = mnEndCharPos - mnMinCharPos;
 
-    for (int i = 0; i < nCharCount; ++i)
-        pCharWidths[i] = 0;
+    rCharWidths.clear();
+    rCharWidths.resize(nCharCount, 0);
 
     for (auto const& aGlyphItem : m_GlyphItems)
     {
         const int nIndex = aGlyphItem.charPos() - mnMinCharPos;
         if (nIndex >= nCharCount)
             continue;
-        pCharWidths[nIndex] += aGlyphItem.m_nNewWidth;
+        rCharWidths[nIndex] += aGlyphItem.m_nNewWidth;
     }
 }
 
@@ -636,11 +636,11 @@ void GenericSalLayout::GetCharWidths(DeviceCoordinate* pCharWidths) const
 void GenericSalLayout::ApplyDXArray(const DeviceCoordinate* pDXArray, SalLayoutFlags nLayoutFlags)
 {
     int nCharCount = mnEndCharPos - mnMinCharPos;
-    std::unique_ptr<DeviceCoordinate[]> const pOldCharWidths(new DeviceCoordinate[nCharCount]);
+    std::vector<DeviceCoordinate> aOldCharWidths;
     std::unique_ptr<DeviceCoordinate[]> const pNewCharWidths(new DeviceCoordinate[nCharCount]);
 
     // Get the natural character widths (i.e. before applying DX adjustments).
-    GetCharWidths(pOldCharWidths.get());
+    GetCharWidths(aOldCharWidths);
 
     // Calculate the character widths after DX adjustments.
     for (int i = 0; i < nCharCount; ++i)
@@ -679,7 +679,7 @@ void GenericSalLayout::ApplyDXArray(const DeviceCoordinate* pDXArray, SalLayoutF
         int nCharPos = m_GlyphItems[i].charPos() - mnMinCharPos;
         DeviceCoordinate nDiff = 0;
         for (int j = 0; j < m_GlyphItems[i].charCount(); j++)
-            nDiff += pNewCharWidths[nCharPos + j] - pOldCharWidths[nCharPos + j];
+            nDiff += pNewCharWidths[nCharPos + j] - aOldCharWidths[nCharPos + j];
 
         if (!m_GlyphItems[i].IsRTLGlyph())
         {

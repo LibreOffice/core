@@ -312,7 +312,6 @@ static void GetTextAreaOutline(
 
             const SvxCharScaleWidthItem& rCharScaleWidthItem = rSdrObjCustomShape.GetMergedItem( EE_CHAR_FONTWIDTH );
             sal_uInt16 nCharScaleWidth = rCharScaleWidthItem.GetValue();
-            std::unique_ptr<tools::Long[]> pDXArry;
             sal_Int32 nWidth = 0;
 
             // VERTICAL
@@ -326,7 +325,7 @@ static void GetTextAreaOutline(
                 {
                     FWCharacterData aCharacterData;
                     OUString aCharText( rText[ i ] );
-                    if ( pVirDev->GetTextOutlines( aCharacterData.vOutlines, aCharText, 0, 0, -1, nWidth, pDXArry.get() ) )
+                    if ( pVirDev->GetTextOutlines( aCharacterData.vOutlines, aCharText, 0, 0, -1, nWidth, nullptr ) )
                     {
                         sal_Int32 nTextWidth = pVirDev->GetTextWidth( aCharText);
                         if ( aCharacterData.vOutlines.empty() )
@@ -363,16 +362,16 @@ static void GetTextAreaOutline(
             }
             else
             {
+                std::vector<tools::Long> aDXArry;
                 if ( ( nCharScaleWidth != 100 ) && nCharScaleWidth )
                 {   // applying character spacing
-                    pDXArry.reset(new tools::Long[ rText.getLength() ]);
-                    pVirDev->GetTextArray( rText, pDXArry.get());
+                    pVirDev->GetTextArray( rText, &aDXArry);
                     FontMetric aFontMetric( pVirDev->GetFontMetric() );
                     aFont.SetAverageFontWidth( static_cast<sal_Int32>( static_cast<double>(aFontMetric.GetAverageFontWidth()) * ( double(100) / static_cast<double>(nCharScaleWidth) ) ) );
                     pVirDev->SetFont( aFont );
                 }
                 FWCharacterData aCharacterData;
-                if ( pVirDev->GetTextOutlines( aCharacterData.vOutlines, rText, 0, 0, -1, nWidth, pDXArry.get() ) )
+                if ( pVirDev->GetTextOutlines( aCharacterData.vOutlines, rText, 0, 0, -1, nWidth, aDXArry.empty() ? nullptr : aDXArry.data() ) )
                 {
                     rParagraph.vCharacters.push_back( aCharacterData );
                 }

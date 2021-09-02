@@ -452,7 +452,7 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut )
 }
 
 Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
-                         const sal_Int32 nIdx, const sal_Int32 nLen, tools::Long* pDXArray ) const
+                         const sal_Int32 nIdx, const sal_Int32 nLen, std::vector<tools::Long>* pDXArray ) const
 {
     if ( !IsCaseMap() && !IsKern() )
         return Size( pOut->GetTextArray( rTxt, pDXArray, nIdx, nLen ),
@@ -473,9 +473,9 @@ Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
         if ( pDXArray )
         {
             for ( sal_Int32 i = 0; i < nLen; i++ )
-                pDXArray[i] += ( (i+1) * tools::Long( nKern ) );
+                (*pDXArray)[i] += ( (i+1) * tools::Long( nKern ) );
             // The last one is a nKern too big:
-            pDXArray[nLen-1] -= nKern;
+            (*pDXArray)[nLen-1] -= nKern;
         }
     }
     return aTxtSize;

@@ -2567,15 +2567,15 @@ namespace cppcanvas::internal
                         // generating a DX array, and uniformly
                         // distributing the excess/insufficient width
                         // to every logical character.
-                        std::unique_ptr< ::tools::Long []> pDXArray( new ::tools::Long[nLen] );
+                        std::vector<::tools::Long> aDXArray;
 
-                        rVDev.GetTextArray( pAct->GetText(), pDXArray.get(),
+                        rVDev.GetTextArray( pAct->GetText(), &aDXArray,
                                             pAct->GetIndex(), pAct->GetLen() );
 
-                        const sal_Int32 nWidthDifference( pAct->GetWidth() - pDXArray[ nLen-1 ] );
+                        const sal_Int32 nWidthDifference( pAct->GetWidth() - aDXArray[ nLen-1 ] );
 
                         // Last entry of pDXArray contains total width of the text
-                        ::tools::Long* p = pDXArray.get();
+                        ::tools::Long* p = aDXArray.data();
                         for (sal_Int32 i = 1; i <= nLen; ++i)
                         {
                             // calc ratio for every array entry, to
@@ -2592,7 +2592,7 @@ namespace cppcanvas::internal
                             sText,
                             pAct->GetIndex(),
                             nLen,
-                            pDXArray.get(),
+                            aDXArray.data(),
                             rFactoryParms,
                             bSubsettableActions );
                     }
