@@ -499,6 +499,98 @@ Catch:
 End Function	&apos;	SFDialogs.SF_Dialog.GetProperty
 
 REM -----------------------------------------------------------------------------
+Public Function GetTextsFromL10N(Optional ByRef L10N As Variant) As Boolean
+&apos;&apos;&apos; Replace all fixed text strings of a dialog by their localized version
+&apos;&apos;&apos;	Replaced texts are:
+&apos;&apos;&apos;		- the title of the dialog
+&apos;&apos;&apos;		- the caption associated with next control types: Button, CheckBox, FixedLine, FixedText, GroupBox and RadioButton
+&apos;&apos;&apos;		- the content of list- and comboboxes
+&apos;&apos;&apos;		- the tip- or helptext displayed when the mouse is hovering the control
+&apos;&apos;&apos;	The current method has a twin method ScriptForge.SF_L10N.AddTextsFromDialog
+&apos;&apos;&apos;	The current method is probably run before the Execute() method
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		L10N : a &quot;L10N&quot; service instance created with CreateScriptService(&quot;L10N&quot;)
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		Dim myPO As Object, oDlg As Object
+&apos;&apos;&apos;		Set oDlg = CreateScriptService(&quot;Dialog&quot;, &quot;GlobalScope&quot;, &quot;XrayTool&quot;, &quot;DlgXray&quot;)
+&apos;&apos;&apos;		Set myPO = CreateScriptService(&quot;L10N&quot;, &quot;C:\myPOFiles\&quot;, &quot;fr-BE&quot;)
+&apos;&apos;&apos;		oDlg.GetTextsFromL10N(myPO)
+
+Dim bGet As Boolean					&apos;	Return value
+Dim vControls As Variant			&apos;	Array of control names
+Dim sControl As String				&apos;	A single control name
+Dim oControl As Object				&apos;	SFDialogs.DialogControl
+Dim sText As String					&apos;	The text found in the dialog
+Dim sTranslation As String			&apos;	The translated text got from the dictionary
+Dim vSource As Variant				&apos;	RowSource property of dialog control as an array
+Dim bChanged As Boolean				&apos;	True when at least 1 item of a RowSource is modified
+Dim i As Long
+
+Const cstThisSub = &quot;SFDialogs.Dialog.GetTextsFromL10N&quot;
+Const cstSubArgs = &quot;L10N&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bGet = False
+
+Check:
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._Validate(L10N, &quot;L10N&quot;, V_OBJECT, , , &quot;L10N&quot;) Then GoTo Finally
+	End If
+
+Try:
+	&apos;	Get the dialog title
+	sText = Caption
+	If Len(sText) &gt; 0 Then
+		sTranslation = L10N._(sText)
+		If sText &lt;&gt; sTranslation Then Caption = sTranslation
+	End If
+	&apos;	Scan all controls
+	vControls = Controls()
+	For Each sControl In vControls
+		Set oControl = Controls(sControl)
+		With oControl
+			&apos;	Extract fixed texts
+			sText = .Caption
+			If Len(sText) &gt; 0 Then
+				sTranslation = L10N._(sText)
+				If sText &lt;&gt; sTranslation Then .Caption = sTranslation
+			End If
+			vSource = .RowSource	&apos;	List and comboboxes only
+			If IsArray(vSource) Then
+				bChanged = False
+				For i = 0 To UBound(vSource)
+					If Len(vSource(i)) &gt; 0 Then
+						sTranslation = L10N._(vSource(i))
+						If sTranslation &lt;&gt; vSource(i) Then
+							bChanged = True
+							vSource(i) = sTranslation
+						End If
+					End If
+				Next i
+				&apos;	Rewrite if at least 1 item has been modified by the translation process
+				If bChanged Then .RowSource = vSource
+			End If
+			sText = .TipText
+			If Len(sText) &gt; 0 Then
+				sTranslation = L10N._(sText)
+				If sText &lt;&gt; sTranslation Then .TipText = sTranslation
+			End If
+		End With
+	Next sControl
+
+	bGet = True
+
+Finally:
+	GetTextsFromL10N = bGet
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function    &apos;   SFDialogs.SF_Dialog.GetTextsFromL10N
+
+REM -----------------------------------------------------------------------------
 Public Function Methods() As Variant
 &apos;&apos;&apos;	Return the list of public methods of the Model service as an array
 
@@ -507,6 +599,7 @@ Public Function Methods() As Variant
 					, &quot;Controls&quot; _
 					, &quot;EndExecute&quot; _
 					, &quot;Execute&quot; _
+					, &quot;GetTextsFromL10N&quot; _
 					, &quot;Terminate&quot; _
 					)
 
