@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a0ea923_a6b2ac92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-02T15:33:30Z",
+      "side": 1,
+      "message": "For some reason, neither of these two have a numRule which throws out the idea of GetDefaultListId. Plus, LFO29 is not marked in use yet before 28 searches for it. So the whole thing needs to be redesigned.",
+      "revId": "97603d8783708ed37bb5353aa2feffa5659fd88e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
