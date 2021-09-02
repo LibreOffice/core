@@ -1997,7 +1997,7 @@ TaskManager::copy_recursive( const OUString& srcUnqPath,
     else if( TypeToCopy == FileUrlType::Folder )
     {
         osl::Directory aDir( srcUnqPath );
-        aDir.open();
+        (void)aDir.open();
 
         err = osl::Directory::create( dstUnqPath );
         osl::FileBase::RC next = err;
