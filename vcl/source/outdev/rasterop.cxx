@@ -22,8 +22,6 @@
 
 #include <salgdi.hxx>
 
-RasterOp OutputDevice::GetRasterOp() const { return meRasterOp; }
-
 void OutputDevice::SetRasterOp(RasterOp eRasterOp)
 {
     if (mpMetaFile)

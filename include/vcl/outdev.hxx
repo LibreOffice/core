@@ -489,7 +489,7 @@ public:
     LanguageType                GetDigitLanguage() const { return meTextLanguage; }
 
     void                        SetRasterOp( RasterOp eRasterOp );
-    RasterOp                    GetRasterOp() const;
+    RasterOp                    GetRasterOp() const { return meRasterOp; }
 
     /**
     If this OutputDevice is used for displaying a Print Preview
