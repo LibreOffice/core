@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db522622_097157e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 45
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-09-02T08:59:50Z",
+      "side": 1,
+      "message": "How do we progress here?",
+      "revId": "edcefb3105e2bd74bd269e3fcfc33182bc0c2605",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
