@@ -33,6 +33,23 @@
       "message": "NOTE TO SELF: I thought I might be wrong about no support for NO-LEVEL because:\n\nsal_uInt8 GetNumLevel() @return values can be: NO_NUMBERING, 0..MAXLEVEL-1 where NO_NUMBERING \u003d\u003d MAXLEVEL \u003d\u003d 10\n\nSetting the value to 10 doesn\u0027t crash, but starting numbering with NumberingLevel 10 does.\n\nnumber.cxx:81: const SwNumFormat\u0026 SwNumRule::Get(sal_uInt16) const: Assertion `i \u003c MAXLEVEL \u0026\u0026 meRuleType \u003c RULE_END\u0027 failed.",
       "revId": "003f31699a3baa05789d2886c278a9fc9377d572",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f65c3a0_a3917d9a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-02T07:07:52Z",
+      "side": 1,
+      "message": "This looks reasonable to me.\n\nIn addition to this, I\u0027ll double-check that getPropertyState() works properly for the NumberingLevel para style property. It should return DEFAULT_VALUE (and not DIRECT_VALUE) when there was no value specified explicitly (i.e. \"DEFAULT\" and \"DIRECT + value of 0\" are separate cases). I\u0027ll get to that as/when I will import/export this from/to ODT.",
+      "revId": "003f31699a3baa05789d2886c278a9fc9377d572",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
