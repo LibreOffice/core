@@ -915,11 +915,7 @@ void Connection::disposing()
 
     cppu::WeakComponentImplHelperBase::disposing();
 
-    if (m_pDatabaseFileDir)
-    {
-        ::utl::removeTree(m_pDatabaseFileDir->GetURL());
-        m_pDatabaseFileDir.reset();
-    }
+    m_pDatabaseFileDir.reset();
 }
 
 void Connection::disposeStatements()
