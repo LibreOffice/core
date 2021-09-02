@@ -16,6 +16,23 @@
       "message": "Hello Tünde, László,\nConsidering tdf#36383 is a low/minor issue inherited from OOo, I would like to revert its fix until a better solution is found without introduced performance regressions.\nI\u0027d appreciate your feedback on this.",
       "revId": "321ab66953a8f45bb09dcdff08fff7a74a0dd965",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba2c4d1c_8421b5dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-09-02T13:44:48Z",
+      "side": 1,
+      "message": "@Xisco: thanks for the performance fix!",
+      "revId": "321ab66953a8f45bb09dcdff08fff7a74a0dd965",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
