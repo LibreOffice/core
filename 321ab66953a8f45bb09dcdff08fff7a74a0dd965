@@ -33,6 +33,24 @@
       "message": "@Xisco: thanks for the performance fix!",
       "revId": "321ab66953a8f45bb09dcdff08fff7a74a0dd965",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43f13c72_adff9309",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-09-02T13:46:49Z",
+      "side": 1,
+      "message": "Hi László,\nbe aware this is just a revert, not a fix per se",
+      "parentUuid": "ba2c4d1c_8421b5dc",
+      "revId": "321ab66953a8f45bb09dcdff08fff7a74a0dd965",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
