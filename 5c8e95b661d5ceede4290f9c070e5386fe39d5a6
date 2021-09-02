@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a009301b_a1075967",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-02T06:49:56Z",
+      "side": 1,
+      "message": "building on my machine\n\nwithout symbols\n\n   real    76m25.997s\n   user    0m0.015s\n   sys     0m0.030s\n\nwith symbols\n\n   real    78m51.398s\n   user    0m0.015s\n   sys     0m0.015s\n\nso not much difference",
+      "revId": "5c8e95b661d5ceede4290f9c070e5386fe39d5a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
