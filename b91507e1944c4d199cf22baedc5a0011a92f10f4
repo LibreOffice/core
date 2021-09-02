@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a030f519_723562b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-09-02T08:57:24Z",
+      "side": 1,
+      "message": "Quite some changes. No objection if the result looks similar to the state before, as it seems acc. the thumbnail.",
+      "revId": "b91507e1944c4d199cf22baedc5a0011a92f10f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
