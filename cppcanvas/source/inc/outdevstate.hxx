@@ -30,8 +30,7 @@
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <vcl/fntstyle.hxx>
-#include <vcl/outdevstate.hxx>
-
+#include <vcl/rendercontext/State.hxx>
 
 namespace cppcanvas::internal
     {
