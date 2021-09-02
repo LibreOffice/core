@@ -446,14 +446,11 @@ Color PictReader::ReadRGBColor()
     return Color( static_cast<sal_uInt8>( nR >> 8 ), static_cast<sal_uInt8>( nG >> 8 ), static_cast<sal_uInt8>( nB >> 8 ) );
 }
 
-
 void PictReader::ReadRectangle(tools::Rectangle & rRect)
 {
-    Point aTopLeft, aBottomRight;
-
-    aTopLeft=ReadPoint();
-    aBottomRight=ReadPoint();
-    if (aTopLeft.X() > aBottomRight.X() || aTopLeft.Y() > aBottomRight.Y())
+    Point aTopLeft = ReadPoint();
+    Point aBottomRight = ReadPoint();
+    if (!pPict->good() || aTopLeft.X() > aBottomRight.X() || aTopLeft.Y() > aBottomRight.Y())
     {
         SAL_WARN("filter.pict", "broken rectangle");
         pPict->SetError( SVSTREAM_FILEFORMAT_ERROR );
@@ -595,10 +592,9 @@ sal_uInt8 PictReader::ReadAndDrawArc(PictDrawingMethod eMethod)
 sal_uInt8 PictReader::ReadAndDrawSameArc(PictDrawingMethod eMethod)
 {
     short nstartAngle, narcAngle;
-    double fAng1, fAng2;
 
     pPict->ReadInt16( nstartAngle ).ReadInt16( narcAngle );
-    if (IsInvisible(eMethod)) return 4;
+    if (!pPict->good() || IsInvisible(eMethod)) return 4;
     DrawingMethod(eMethod);
 
     if (narcAngle<0) {
@@ -606,8 +602,8 @@ sal_uInt8 PictReader::ReadAndDrawSameArc(PictDrawingMethod eMethod)
         narcAngle=-narcAngle;
     }
     const double pi = 2 * acos(0.0);
-    fAng1 = static_cast<double>(nstartAngle) * pi / 180.0;
-    fAng2 = static_cast<double>(nstartAngle + narcAngle) * pi / 180.0;
+    double fAng1 = static_cast<double>(nstartAngle) * pi / 180.0;
+    double fAng2 = static_cast<double>(nstartAngle + narcAngle) * pi / 180.0;
     PictReaderShape::drawArc( pVirDev, eMethod == PictDrawingMethod::FRAME, aLastArcRect, fAng1, fAng2, nActPenSize );
     return 4;
 }
