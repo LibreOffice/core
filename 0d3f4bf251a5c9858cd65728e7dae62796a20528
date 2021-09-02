@@ -16,6 +16,24 @@
       "message": "+2 is up to Andreas (or Rafael himself)",
       "revId": "0d3f4bf251a5c9858cd65728e7dae62796a20528",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "034592ee_d9fde270",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2021-09-02T15:00:59Z",
+      "side": 1,
+      "message": "Because this is my first patch for these notebookbar implementations, I\u0027d rather have Andreas take a look first.",
+      "parentUuid": "4d4ccc5f_578b9492",
+      "revId": "0d3f4bf251a5c9858cd65728e7dae62796a20528",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
