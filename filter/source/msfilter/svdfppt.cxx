@@ -3998,7 +3998,7 @@ void PPTParaSheet::Read( SdrPowerPointImport const &
         {
             // number of tabulators
             rIn.ReadUInt16( nVal16 );
-            if (rIn.remainingSize() / sizeof(nVal32) < nVal16)
+            if (!rIn.good() || rIn.remainingSize() / sizeof(nVal32) < nVal16)
                 return;
             for ( i = 0; i < nVal16; i++ )
                 rIn.ReadUInt32( nVal32 );      // reading the tabulators
