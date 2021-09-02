@@ -507,7 +507,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
     if (mbForceControlBackground && IsControlBackground())
     {
         // check if we need to set ControlBackground even in NWF case
-        rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+        rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
         rRenderContext.SetLineColor();
         rRenderContext.SetFillColor(GetControlBackground());
         rRenderContext.DrawRect(tools::Rectangle(aPos, Size(GetOutputSizePixel().Width() - 2 * mnXOffset, GetOutputSizePixel().Height())));
@@ -2192,12 +2192,12 @@ void Edit::StateChanged( StateChangedType nType )
             if (GetParent()->GetStyle() & WB_LEFT)
                 mnAlign = EDIT_ALIGN_RIGHT;
             if (nType == StateChangedType::Mirroring)
-                GetOutDev()->SetLayoutMode(ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft);
+                GetOutDev()->SetLayoutMode(vcl::text::ComplexTextLayoutFlags::BiDiRtl | vcl::text::ComplexTextLayoutFlags::TextOriginLeft);
         }
         else if (mbIsSubEdit && !GetParent()->IsRTLEnabled())
         {
             if (nType == StateChangedType::Mirroring)
-                GetOutDev()->SetLayoutMode(ComplexTextLayoutFlags::TextOriginLeft);
+                GetOutDev()->SetLayoutMode(vcl::text::ComplexTextLayoutFlags::TextOriginLeft);
         }
 
         if (nStyle & WB_RIGHT)

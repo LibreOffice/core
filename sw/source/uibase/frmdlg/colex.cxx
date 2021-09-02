@@ -330,7 +330,7 @@ SwColumnOnlyExample::SwColumnOnlyExample()
 
 void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
-    rRenderContext.Push(PushFlags::MAPMODE);
+    rRenderContext.Push(vcl::PushFlags::MAPMODE);
 
     Fraction aScale(m_aWinSize.Height(), m_aFrameSize.Height());
     MapMode aMapMode(MapUnit::MapTwip);
@@ -481,7 +481,7 @@ void SwColumnOnlyExample::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 void SwColumnOnlyExample::Resize()
 {
     OutputDevice& rRefDevice = GetDrawingArea()->get_ref_device();
-    rRefDevice.Push(PushFlags::MAPMODE);
+    rRefDevice.Push(vcl::PushFlags::MAPMODE);
     rRefDevice.SetMapMode(MapMode(MapUnit::MapTwip));
     m_aWinSize = GetOutputSizePixel();
     m_aWinSize.AdjustHeight( -4 );

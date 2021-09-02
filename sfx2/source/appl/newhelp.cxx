@@ -431,7 +431,7 @@ IMPL_LINK(IndexTabPage_Impl, CustomRenderHdl, weld::TreeView::render_args, aPayl
     bool bSelected = std::get<2>(aPayload);
     const OUString& rId = std::get<3>(aPayload);
 
-    rRenderContext.Push(PushFlags::TEXTCOLOR);
+    rRenderContext.Push(vcl::PushFlags::TEXTCOLOR);
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     if (bSelected)
         rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());

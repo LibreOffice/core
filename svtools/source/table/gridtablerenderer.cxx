@@ -219,7 +219,7 @@ namespace svt::table
     {
         OSL_PRECOND(_bIsColHeaderArea || _bIsRowHeaderArea, "GridTableRenderer::PaintHeaderArea: invalid area flags!");
 
-        rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+        rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
 
         Color const background = lcl_getEffectiveColor(m_pImpl->rModel.getHeaderBackgroundColor(),
                                                        _rStyle, &StyleSettings::GetDialogColor);
@@ -244,7 +244,7 @@ namespace svt::table
         vcl::RenderContext& rRenderContext,
         const tools::Rectangle& _rArea, const StyleSettings& _rStyle)
     {
-        rRenderContext.Push(PushFlags::LINECOLOR);
+        rRenderContext.Push(vcl::PushFlags::LINECOLOR);
 
         OUString sHeaderText;
         PColumnModel const pColumn = m_pImpl->rModel.getColumnModel( _nCol );
@@ -305,7 +305,7 @@ namespace svt::table
         // remember the row for subsequent calls to the other ->ITableRenderer methods
         m_pImpl->nCurrentRow = _nRow;
 
-        rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+        rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
 
         Color backgroundColor = _rStyle.GetFieldColor();
 
@@ -363,7 +363,7 @@ namespace svt::table
     void GridTableRenderer::PaintRowHeader(vcl::RenderContext& rRenderContext,
                                            const tools::Rectangle& _rArea, const StyleSettings& _rStyle)
     {
-        rRenderContext.Push( PushFlags::LINECOLOR | PushFlags::TEXTCOLOR );
+        rRenderContext.Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::TEXTCOLOR );
 
         std::optional<Color> const aLineColor( m_pImpl->rModel.getLineColor() );
         Color const lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
@@ -415,7 +415,7 @@ namespace svt::table
     void GridTableRenderer::PaintCell(ColPos const i_column, bool _bSelected, bool i_hasControlFocus,
                                       vcl::RenderContext& rRenderContext, const tools::Rectangle& _rArea, const StyleSettings& _rStyle)
     {
-        rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
+        rRenderContext.Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
 
         tools::Rectangle const aContentArea(lcl_getContentArea(*m_pImpl, _rArea));
         CellRenderContext const aCellRenderContext(rRenderContext, aContentArea, _rStyle, i_column, _bSelected, i_hasControlFocus);

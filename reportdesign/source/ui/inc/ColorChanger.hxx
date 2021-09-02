@@ -34,7 +34,7 @@ namespace rptui
         ColorChanger( OutputDevice* _pDev, const Color& _rNewLineColor, const Color& _rNewFillColor )
             :m_pDev( _pDev )
         {
-            m_pDev->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
+            m_pDev->Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
             m_pDev->SetLineColor( _rNewLineColor );
             m_pDev->SetFillColor( _rNewFillColor );
         }

@@ -1662,13 +1662,13 @@ void MetaFontAction::Scale( double fScaleX, double fScaleY )
 
 MetaPushAction::MetaPushAction() :
     MetaAction  ( MetaActionType::PUSH ),
-    mnFlags     ( PushFlags::NONE )
+    mnFlags     ( vcl::PushFlags::NONE )
 {}
 
 MetaPushAction::~MetaPushAction()
 {}
 
-MetaPushAction::MetaPushAction( PushFlags nFlags ) :
+MetaPushAction::MetaPushAction( vcl::PushFlags nFlags ) :
     MetaAction  ( MetaActionType::PUSH ),
     mnFlags     ( nFlags )
 {}
@@ -2038,13 +2038,13 @@ void MetaCommentAction::Scale( double fXScale, double fYScale )
 
 MetaLayoutModeAction::MetaLayoutModeAction() :
     MetaAction  ( MetaActionType::LAYOUTMODE ),
-    mnLayoutMode( ComplexTextLayoutFlags::Default )
+    mnLayoutMode( vcl::text::ComplexTextLayoutFlags::Default )
 {}
 
 MetaLayoutModeAction::~MetaLayoutModeAction()
 {}
 
-MetaLayoutModeAction::MetaLayoutModeAction( ComplexTextLayoutFlags nLayoutMode ) :
+MetaLayoutModeAction::MetaLayoutModeAction( vcl::text::ComplexTextLayoutFlags nLayoutMode ) :
     MetaAction  ( MetaActionType::LAYOUTMODE ),
     mnLayoutMode( nLayoutMode )
 {}

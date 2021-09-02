@@ -51,7 +51,7 @@ void SvxXMeasurePreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 void SvxXMeasurePreview::ResizeImpl(const Size& rSize)
 {
     OutputDevice& rRefDevice = GetDrawingArea()->get_ref_device();
-    rRefDevice.Push(PushFlags::MAPMODE);
+    rRefDevice.Push(vcl::PushFlags::MAPMODE);
 
     rRefDevice.SetMapMode(m_aMapMode);
 
@@ -78,7 +78,7 @@ void SvxXMeasurePreview::Paint(vcl::RenderContext& rRenderContext, const tools::
     rRenderContext.SetBackground(rRenderContext.GetSettings().GetStyleSettings().GetWindowColor());
     rRenderContext.Erase();
 
-    rRenderContext.Push(PushFlags::MAPMODE);
+    rRenderContext.Push(vcl::PushFlags::MAPMODE);
     rRenderContext.SetMapMode(m_aMapMode);
 
     bool bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
@@ -132,7 +132,7 @@ bool SvxXMeasurePreview::MouseButtonDown(const MouseEvent& rMEvt)
             m_aMapMode.SetScaleY(aYFrac);
 
             OutputDevice& rRefDevice = GetDrawingArea()->get_ref_device();
-            rRefDevice.Push(PushFlags::MAPMODE);
+            rRefDevice.Push(vcl::PushFlags::MAPMODE);
             rRefDevice.SetMapMode(m_aMapMode);
             Size aOutSize(rRefDevice.PixelToLogic(GetOutputSizePixel()));
             rRefDevice.Pop();

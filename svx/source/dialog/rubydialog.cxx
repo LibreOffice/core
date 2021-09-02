@@ -691,7 +691,7 @@ RubyPreview::~RubyPreview() {}
 
 void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
-    rRenderContext.Push(PushFlags::ALL);
+    rRenderContext.Push(vcl::PushFlags::ALL);
 
     rRenderContext.SetMapMode(MapMode(MapUnit::MapTwip));
 

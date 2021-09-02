@@ -21,42 +21,42 @@
 namespace
 {
 
-OUString collectPushFlags(PushFlags nFlags)
+OUString collectPushFlags(vcl::PushFlags nFlags)
 {
-    if ((nFlags & PushFlags::ALL) == PushFlags::ALL)
+    if ((nFlags & vcl::PushFlags::ALL) == vcl::PushFlags::ALL)
         return "PushAll";
     else if ((nFlags & PUSH_ALLFONT) == PUSH_ALLFONT)
         return "PushAllFont";
 
     std::vector<OUString> aStrings;
 
-    if (nFlags & PushFlags::LINECOLOR)
+    if (nFlags & vcl::PushFlags::LINECOLOR)
         aStrings.emplace_back("PushLineColor");
-    if (nFlags & PushFlags::FILLCOLOR)
+    if (nFlags & vcl::PushFlags::FILLCOLOR)
         aStrings.emplace_back("PushFillColor");
-    if (nFlags & PushFlags::FONT)
+    if (nFlags & vcl::PushFlags::FONT)
         aStrings.emplace_back("PushFont");
-    if (nFlags & PushFlags::TEXTCOLOR)
+    if (nFlags & vcl::PushFlags::TEXTCOLOR)
         aStrings.emplace_back("PushTextColor");
-    if (nFlags & PushFlags::MAPMODE)
+    if (nFlags & vcl::PushFlags::MAPMODE)
         aStrings.emplace_back("PushMapMode");
-    if (nFlags & PushFlags::CLIPREGION)
+    if (nFlags & vcl::PushFlags::CLIPREGION)
         aStrings.emplace_back("PushClipRegion");
-    if (nFlags & PushFlags::RASTEROP)
+    if (nFlags & vcl::PushFlags::RASTEROP)
         aStrings.emplace_back("PushRasterOp");
-    if (nFlags & PushFlags::TEXTFILLCOLOR)
+    if (nFlags & vcl::PushFlags::TEXTFILLCOLOR)
         aStrings.emplace_back("PushTextFillColor");
-    if (nFlags & PushFlags::TEXTALIGN)
+    if (nFlags & vcl::PushFlags::TEXTALIGN)
         aStrings.emplace_back("PushTextAlign");
-    if (nFlags & PushFlags::REFPOINT)
+    if (nFlags & vcl::PushFlags::REFPOINT)
         aStrings.emplace_back("PushRefPoint");
-    if (nFlags & PushFlags::TEXTLINECOLOR)
+    if (nFlags & vcl::PushFlags::TEXTLINECOLOR)
         aStrings.emplace_back("PushTextLineColor");
-    if (nFlags & PushFlags::TEXTLAYOUTMODE)
+    if (nFlags & vcl::PushFlags::TEXTLAYOUTMODE)
         aStrings.emplace_back("PushTextLayoutMode");
-    if (nFlags & PushFlags::TEXTLANGUAGE)
+    if (nFlags & vcl::PushFlags::TEXTLANGUAGE)
         aStrings.emplace_back("PushTextLanguage");
-    if (nFlags & PushFlags::OVERLINECOLOR)
+    if (nFlags & vcl::PushFlags::OVERLINECOLOR)
         aStrings.emplace_back("PushOverlineColor");
 
     OUString aString;
@@ -437,16 +437,16 @@ OUString convertPixelFormatToString(vcl::PixelFormat ePixelFormat)
     return OUString();
 }
 
-OUString convertComplexTestLayoutFlags(ComplexTextLayoutFlags eComplexTestLayoutFlags)
+OUString convertComplexTestLayoutFlags(vcl::text::ComplexTextLayoutFlags eComplexTestLayoutFlags)
 {
     switch(eComplexTestLayoutFlags)
     {
         default:
-        case ComplexTextLayoutFlags::Default: return "#0000";
-        case ComplexTextLayoutFlags::BiDiRtl: return "#0001";
-        case ComplexTextLayoutFlags::BiDiStrong: return "#0002";
-        case ComplexTextLayoutFlags::TextOriginLeft: return "#0004";
-        case ComplexTextLayoutFlags::TextOriginRight: return "#0008";
+        case vcl::text::ComplexTextLayoutFlags::Default: return "#0000";
+        case vcl::text::ComplexTextLayoutFlags::BiDiRtl: return "#0001";
+        case vcl::text::ComplexTextLayoutFlags::BiDiStrong: return "#0002";
+        case vcl::text::ComplexTextLayoutFlags::TextOriginLeft: return "#0004";
+        case vcl::text::ComplexTextLayoutFlags::TextOriginRight: return "#0008";
     }
 }
 

@@ -2090,7 +2090,7 @@ void SmMathSymbolNode::AdaptToY(OutputDevice &rDev, sal_uLong nHeight)
     // to determine the font width in order to keep it
     if (aFntSize.Width() == 0)
     {
-        rDev.Push(PushFlags::FONT | PushFlags::MAPMODE);
+        rDev.Push(vcl::PushFlags::FONT | vcl::PushFlags::MAPMODE);
         rDev.SetFont(GetFont());
         aFntSize.setWidth( rDev.GetFontMetric().GetFontSize().Width() );
         rDev.Pop();

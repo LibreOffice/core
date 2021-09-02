@@ -974,7 +974,7 @@ void SwPostItMgr::PaintTile(OutputDevice& rRenderContext)
 
         bool bEnableMapMode = !mpEditWin->IsMapModeEnabled();
         mpEditWin->EnableMapMode();
-        rRenderContext.Push(PushFlags::MAPMODE);
+        rRenderContext.Push(vcl::PushFlags::MAPMODE);
         Point aOffset(mpEditWin->PixelToLogic(pPostIt->GetPosPixel()));
         MapMode aMapMode(rRenderContext.GetMapMode());
         aMapMode.SetOrigin(aMapMode.GetOrigin() + aOffset);

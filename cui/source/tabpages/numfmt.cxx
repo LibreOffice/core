@@ -132,7 +132,7 @@ void SvxNumberPreview::NotifyChange( const OUString& rPrevStr,
 
 void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
 {
-    rRenderContext.Push(PushFlags::ALL);
+    rRenderContext.Push(vcl::PushFlags::ALL);
 
     svtools::ColorConfig aColorConfig;
     rRenderContext.SetTextColor(aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor);

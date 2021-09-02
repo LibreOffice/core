@@ -67,7 +67,7 @@ static void drawBitmapScaledAndCentered(tools::Rectangle const & rRect, Bitmap a
 
 static void drawBackgroundRect(tools::Rectangle const & rRect, Color aColor, vcl::RenderContext& rRenderContext)
 {
-    rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
+    rRenderContext.Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
     rRenderContext.SetFillColor(aColor);
     rRenderContext.SetLineColor(aColor);
     rRenderContext.DrawRect(rRect);

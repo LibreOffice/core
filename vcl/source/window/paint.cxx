@@ -65,22 +65,22 @@ PaintBufferGuard::PaintBufferGuard(ImplFrameData* pFrameData, vcl::Window* pWind
     //else
         //SAL_WARN("vcl.window", "the root of the double-buffering hierarchy should not have a transparent background");
 
-    PushFlags nFlags = PushFlags::NONE;
-    nFlags |= PushFlags::CLIPREGION;
-    nFlags |= PushFlags::FILLCOLOR;
-    nFlags |= PushFlags::FONT;
-    nFlags |= PushFlags::LINECOLOR;
-    nFlags |= PushFlags::MAPMODE;
+    vcl::PushFlags nFlags = vcl::PushFlags::NONE;
+    nFlags |= vcl::PushFlags::CLIPREGION;
+    nFlags |= vcl::PushFlags::FILLCOLOR;
+    nFlags |= vcl::PushFlags::FONT;
+    nFlags |= vcl::PushFlags::LINECOLOR;
+    nFlags |= vcl::PushFlags::MAPMODE;
     maSettings = pFrameData->mpBuffer->GetSettings();
-    nFlags |= PushFlags::REFPOINT;
-    nFlags |= PushFlags::TEXTCOLOR;
-    nFlags |= PushFlags::TEXTLINECOLOR;
-    nFlags |= PushFlags::OVERLINECOLOR;
-    nFlags |= PushFlags::TEXTFILLCOLOR;
-    nFlags |= PushFlags::TEXTALIGN;
-    nFlags |= PushFlags::RASTEROP;
-    nFlags |= PushFlags::TEXTLAYOUTMODE;
-    nFlags |= PushFlags::TEXTLANGUAGE;
+    nFlags |= vcl::PushFlags::REFPOINT;
+    nFlags |= vcl::PushFlags::TEXTCOLOR;
+    nFlags |= vcl::PushFlags::TEXTLINECOLOR;
+    nFlags |= vcl::PushFlags::OVERLINECOLOR;
+    nFlags |= vcl::PushFlags::TEXTFILLCOLOR;
+    nFlags |= vcl::PushFlags::TEXTALIGN;
+    nFlags |= vcl::PushFlags::RASTEROP;
+    nFlags |= vcl::PushFlags::TEXTLAYOUTMODE;
+    nFlags |= vcl::PushFlags::TEXTLANGUAGE;
     pFrameData->mpBuffer->Push(nFlags);
     auto& rDev = *pWindow->GetOutDev();
     pFrameData->mpBuffer->SetClipRegion(rDev.GetClipRegion());
@@ -370,7 +370,7 @@ void RenderTools::DrawSelectionBackground(vcl::RenderContext& rRenderContext, vc
         aRect.AdjustRight(1 );
         aRect.AdjustBottom(1 );
     }
-    rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+    rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
 
     if (bDrawBorder)
         rRenderContext.SetLineColor(bDark ? COL_WHITE : (bBright ? COL_BLACK : aSelectionBorderColor));
