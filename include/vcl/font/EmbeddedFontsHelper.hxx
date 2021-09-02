@@ -7,20 +7,26 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_EMBEDDEDFONTSHELPER_HXX
-#define INCLUDED_VCL_EMBEDDEDFONTSHELPER_HXX
+#pragma once
 
-#include <vcl/dllapi.h>
-
+#include <sal/config.h>
 #include <rtl/ustring.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/long.hxx>
+
+#include <vcl/dllapi.h>
 
 #include <string_view>
 #include <vector>
 
 namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::uno { template <typename > class Reference; }
+
+namespace vcl
+{
+
+namespace font
+{
 
 /**
  Helper functions for handling embedded fonts in documents.
@@ -105,6 +111,8 @@ public:
     }
 };
 
-#endif
+}
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
