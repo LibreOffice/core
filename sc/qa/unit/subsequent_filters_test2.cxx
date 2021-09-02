@@ -145,6 +145,7 @@ public:
     void testTdf136364();
     void testTdf103734();
     void testTdf126116();
+    void testTdf144209();
     void testTdf98844();
     void testTdf100458();
     void testTdf118561();
@@ -251,6 +252,7 @@ public:
     CPPUNIT_TEST(testTdf136364);
     CPPUNIT_TEST(testTdf103734);
     CPPUNIT_TEST(testTdf126116);
+    CPPUNIT_TEST(testTdf144209);
     CPPUNIT_TEST(testTdf98844);
     CPPUNIT_TEST(testTdf100458);
     CPPUNIT_TEST(testTdf118561);
@@ -1367,6 +1369,24 @@ void ScFiltersTest2::testTdf126116()
     // - Expected: 03/03/21
     // - Actual  : 03/03/2021
     CPPUNIT_ASSERT_EQUAL(OUString("03/03/21"), rDoc.GetString(ScAddress(0, 0, 0)));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest2::testTdf144209()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf144209.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("AA 0"), rDoc.GetString(ScAddress(0, 0, 0)));
+
+    xDocSh->DoHardRecalc();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: AA 33263342642.5385
+    // - Actual  : AA 0
+    CPPUNIT_ASSERT_EQUAL(OUString("AA 33263342642.5385"), rDoc.GetString(ScAddress(0, 0, 0)));
 
     xDocSh->DoClose();
 }
