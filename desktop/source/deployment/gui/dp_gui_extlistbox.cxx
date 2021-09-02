@@ -504,7 +504,7 @@ void ExtensionBox_Impl::DrawRow(vcl::RenderContext& rRenderContext, const tools:
     {
         aPos = rRect.TopLeft() + Point( ICON_OFFSET + nMaxTitleWidth + (2*SPACE_BETWEEN), TOP_OFFSET );
 
-        rRenderContext.Push(PushFlags::FONT | PushFlags::TEXTCOLOR | PushFlags::TEXTFILLCOLOR);
+        rRenderContext.Push(vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR | vcl::PushFlags::TEXTFILLCOLOR);
         rRenderContext.SetTextColor(rStyleSettings.GetLinkColor());
         rRenderContext.SetTextFillColor(rStyleSettings.GetFieldColor());
         vcl::Font aFont = rRenderContext.GetFont();

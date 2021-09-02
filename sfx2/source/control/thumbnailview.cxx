@@ -878,7 +878,7 @@ void ThumbnailView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
 void ThumbnailView::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& /*rRect*/)
 {
-    rRenderContext.Push(PushFlags::ALL);
+    rRenderContext.Push(vcl::PushFlags::ALL);
 
     rRenderContext.SetTextFillColor();
     rRenderContext.SetBackground(maFillColor);

@@ -250,7 +250,8 @@ void VclOutdevTest::testDrawBlackBitmap()
     MetaAction* pAction = aMtf.GetAction(0);
     CPPUNIT_ASSERT_EQUAL(MetaActionType::PUSH, pAction->GetType());
     auto pPushAction = static_cast<MetaPushAction*>(pAction);
-    bool bLineFillFlag = ((PushFlags::LINECOLOR | PushFlags::FILLCOLOR) == pPushAction->GetFlags());
+    bool bLineFillFlag
+        = ((vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR) == pPushAction->GetFlags());
     CPPUNIT_ASSERT_MESSAGE("Push flags not LINECOLOR | FILLCOLOR", bLineFillFlag);
 
     pAction = aMtf.GetAction(1);
@@ -293,7 +294,8 @@ void VclOutdevTest::testDrawWhiteBitmap()
     MetaAction* pAction = aMtf.GetAction(0);
     CPPUNIT_ASSERT_EQUAL(MetaActionType::PUSH, pAction->GetType());
     auto pPushAction = static_cast<MetaPushAction*>(pAction);
-    bool bLineFillFlag = ((PushFlags::LINECOLOR | PushFlags::FILLCOLOR) == pPushAction->GetFlags());
+    bool bLineFillFlag
+        = ((vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR) == pPushAction->GetFlags());
     CPPUNIT_ASSERT_MESSAGE("Push flags not LINECOLOR | FILLCOLOR", bLineFillFlag);
 
     pAction = aMtf.GetAction(1);
@@ -840,16 +842,17 @@ void VclOutdevTest::testLayoutMode()
     GDIMetaFile aMtf;
     aMtf.Record(pVDev.get());
 
-    CPPUNIT_ASSERT_EQUAL(ComplexTextLayoutFlags::Default, pVDev->GetLayoutMode());
+    CPPUNIT_ASSERT_EQUAL(vcl::text::ComplexTextLayoutFlags::Default, pVDev->GetLayoutMode());
 
-    pVDev->SetLayoutMode(ComplexTextLayoutFlags::BiDiRtl);
+    pVDev->SetLayoutMode(vcl::text::ComplexTextLayoutFlags::BiDiRtl);
 
-    CPPUNIT_ASSERT_EQUAL(ComplexTextLayoutFlags::BiDiRtl, pVDev->GetLayoutMode());
+    CPPUNIT_ASSERT_EQUAL(vcl::text::ComplexTextLayoutFlags::BiDiRtl, pVDev->GetLayoutMode());
 
     MetaAction* pAction = aMtf.GetAction(0);
     CPPUNIT_ASSERT_EQUAL(MetaActionType::LAYOUTMODE, pAction->GetType());
     auto pLayoutModeAction = static_cast<MetaLayoutModeAction*>(pAction);
-    CPPUNIT_ASSERT_EQUAL(ComplexTextLayoutFlags::BiDiRtl, pLayoutModeAction->GetLayoutMode());
+    CPPUNIT_ASSERT_EQUAL(vcl::text::ComplexTextLayoutFlags::BiDiRtl,
+                         pLayoutModeAction->GetLayoutMode());
 }
 
 void VclOutdevTest::testDigitLanguage()
@@ -888,7 +891,7 @@ void VclOutdevTest::testStackFunctions()
     pVDev->SetTextLineColor(COL_MAGENTA);
     pVDev->SetOverlineColor(COL_YELLOW);
     pVDev->SetTextAlign(TextAlign::ALIGN_TOP);
-    pVDev->SetLayoutMode(ComplexTextLayoutFlags::BiDiRtl);
+    pVDev->SetLayoutMode(vcl::text::ComplexTextLayoutFlags::BiDiRtl);
     pVDev->SetDigitLanguage(LANGUAGE_FRENCH);
     pVDev->SetRasterOp(RasterOp::N0);
     pVDev->SetMapMode(MapMode(MapUnit::MapTwip));
@@ -898,7 +901,7 @@ void VclOutdevTest::testStackFunctions()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Text fill color", COL_BLUE, pVDev->GetTextFillColor());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Text line color", COL_MAGENTA, pVDev->GetTextLineColor());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Text overline color", COL_YELLOW, pVDev->GetOverlineColor());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Layout mode", ComplexTextLayoutFlags::BiDiRtl,
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Layout mode", vcl::text::ComplexTextLayoutFlags::BiDiRtl,
                                  pVDev->GetLayoutMode());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Language", LANGUAGE_FRENCH, pVDev->GetDigitLanguage());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Raster operation", RasterOp::N0, pVDev->GetRasterOp());
@@ -918,7 +921,7 @@ void VclOutdevTest::testStackFunctions()
                                  pVDev->GetTextLineColor());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Default overline color", Color(ColorTransparency, 0xFFFFFFFF),
                                  pVDev->GetOverlineColor());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Default layout mode", ComplexTextLayoutFlags::Default,
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Default layout mode", vcl::text::ComplexTextLayoutFlags::Default,
                                  pVDev->GetLayoutMode());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Default language", LANGUAGE_SYSTEM, pVDev->GetDigitLanguage());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Default raster operation", RasterOp::OverPaint,

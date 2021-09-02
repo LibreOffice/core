@@ -115,7 +115,7 @@ public:
         // Resizes the virtual device so to contain the entries context
         rDevice.SetOutputSizePixel(aOutputSize);
 
-        rDevice.Push(PushFlags::MAPMODE);
+        rDevice.Push(vcl::PushFlags::MAPMODE);
         MapMode aDeviceMapMode(rDevice.GetMapMode());
 
         const Fraction scale = conversionFract(o3tl::Length::px, o3tl::Length::mm100);

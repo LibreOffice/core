@@ -60,7 +60,7 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
         {
             Color aColor = GetSingleColorGradientFill();
 
-            Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
+            Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
             SetLineColor( aColor );
             SetFillColor( aColor );
             DrawPolyPolygon( rPolyPoly );
@@ -97,7 +97,7 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
                     return;
 
                 // secure clip region
-                Push( PushFlags::CLIPREGION );
+                Push( vcl::PushFlags::CLIPREGION );
                 IntersectClipRegion( aBoundRect );
 
                 if (mbInitClipRegion)
@@ -160,7 +160,7 @@ void OutputDevice::ClipAndDrawGradientMetafile ( const Gradient &rGradient, cons
     const bool  bOldOutput = IsOutputEnabled();
 
     EnableOutput( false );
-    Push( PushFlags::RASTEROP );
+    Push( vcl::PushFlags::RASTEROP );
     SetRasterOp( RasterOp::Xor );
     DrawGradient( aBoundRect, rGradient );
     SetFillColor( COL_BLACK );
@@ -1000,7 +1000,7 @@ void OutputDevice::AddGradientActions( const tools::Rectangle& rRect, const Grad
     GDIMetaFile*    pOldMtf = mpMetaFile;
 
     mpMetaFile = &rMtf;
-    mpMetaFile->AddAction( new MetaPushAction( PushFlags::ALL ) );
+    mpMetaFile->AddAction( new MetaPushAction( vcl::PushFlags::ALL ) );
     mpMetaFile->AddAction( new MetaISectRectClipRegionAction( aRect ) );
     mpMetaFile->AddAction( new MetaLineColorAction( Color(), false ) );
 

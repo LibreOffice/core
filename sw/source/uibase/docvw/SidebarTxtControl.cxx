@@ -212,7 +212,7 @@ void SidebarTextControl::DrawForPage(OutputDevice* pDev, const Point& rPt)
     if ( mrSidebarWin.GetLayoutStatus()!=SwPostItHelper::DELETED )
         return;
 
-    pDev->Push(PushFlags::LINECOLOR);
+    pDev->Push(vcl::PushFlags::LINECOLOR);
 
     pDev->SetLineColor(mrSidebarWin.GetChangeColor());
     Point aBottomRight(rPt);

@@ -979,7 +979,7 @@ public:
             for (int i = 0; i < 2; ++i)
             {
                 sal_uInt16 nHue = 0;
-                rDev.Push(PushFlags::CLIPREGION);
+                rDev.Push(vcl::PushFlags::CLIPREGION);
                 tools::Rectangle aOuter = aRegions[i];
                 tools::Rectangle aInner = aOuter;
                 while (aInner.GetWidth() > nLimits[i] && aInner.GetHeight() > nLimits[i])
@@ -999,7 +999,7 @@ public:
                 std::vector<tools::Rectangle> aPieces(DemoRenderer::partition(aOuter, 2, 2));
                 for (int j = 0; j < std::min(aOuter.GetWidth(), aOuter.GetHeight())/5; ++j)
                 {
-                    rDev.Push(PushFlags::CLIPREGION);
+                    rDev.Push(vcl::PushFlags::CLIPREGION);
 
                     vcl::Region aClipRegion;
                     for (int i = 0; i < 4; ++i)
@@ -1025,7 +1025,7 @@ public:
                 bool bDone = false;
                 for (int j = 0; !bDone; ++j)
                 {
-                    rDev.Push(PushFlags::CLIPREGION);
+                    rDev.Push(vcl::PushFlags::CLIPREGION);
 
                     for (int i = 0; i < 4; ++i)
                     {
@@ -1979,7 +1979,7 @@ public:
 
         Wallpaper aWallpaper(COL_GREEN);
 
-        rRenderContext.Push(PushFlags::CLIPREGION);
+        rRenderContext.Push(vcl::PushFlags::CLIPREGION);
         rRenderContext.IntersectClipRegion(aClip);
         rRenderContext.DrawWallpaper(aWholeSize, aWallpaper);
         rRenderContext.Pop();

@@ -67,7 +67,7 @@ SvxPageWindow::~SvxPageWindow()
 
 void SvxPageWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    rRenderContext.Push(PushFlags::MAPMODE);
+    rRenderContext.Push(vcl::PushFlags::MAPMODE);
     rRenderContext.SetMapMode(MapMode(MapUnit::MapTwip));
 
     Fraction aXScale(aWinSize.Width(), std::max(aSize.Width() * 2 + aSize.Width() / 8, tools::Long(1)));
@@ -381,7 +381,7 @@ void SvxPageWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
     OutputDevice& rRefDevice = pDrawingArea->get_ref_device();
     // Count in Twips by default
-    rRefDevice.Push(PushFlags::MAPMODE);
+    rRefDevice.Push(vcl::PushFlags::MAPMODE);
     rRefDevice.SetMapMode(MapMode(MapUnit::MapTwip));
     aWinSize = rRefDevice.LogicToPixel(Size(75, 46), MapMode(MapUnit::MapAppFont));
     pDrawingArea->set_size_request(aWinSize.Width(), aWinSize.Height());

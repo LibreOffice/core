@@ -202,7 +202,7 @@ void OutputDevice::DrawBitmapWallpaper( tools::Long nX, tools::Long nY,
 
     mpMetaFile = nullptr;
     EnableMapMode( false );
-    Push( PushFlags::CLIPREGION );
+    Push( vcl::PushFlags::CLIPREGION );
     IntersectClipRegion( tools::Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
 
     switch( eStyle )
@@ -376,7 +376,7 @@ void OutputDevice::DrawGradientWallpaper( tools::Long nX, tools::Long nY,
 
     mpMetaFile = nullptr;
     EnableMapMode( false );
-    Push( PushFlags::CLIPREGION );
+    Push( vcl::PushFlags::CLIPREGION );
     IntersectClipRegion( tools::Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
 
     DrawGradient( aBound, rWallpaper.GetGradient() );

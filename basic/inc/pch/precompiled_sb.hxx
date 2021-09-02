@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-05-14 22:14:54 using:
+ Generated on 2021-09-12 11:49:52 using:
  ./bin/update_pch basic sb --cutoff=2 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -40,10 +40,12 @@
 #include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/character.hxx>
+#include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/string.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <sal/saldllapi.h>
@@ -58,7 +60,6 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/outdevstate.hxx>
 #include <vcl/region.hxx>
 #include <vcl/rendercontext/AddFontSubstituteFlags.hxx>
 #include <vcl/rendercontext/AntialiasingFlags.hxx>
@@ -69,7 +70,10 @@
 #include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/rendercontext/ImplMapRes.hxx>
 #include <vcl/rendercontext/InvertFlags.hxx>
+#include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/rendercontext/SalLayoutFlags.hxx>
+#include <vcl/rendercontext/State.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -84,6 +88,7 @@
 #include <basegfx/vector/b2enums.hxx>
 #include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
+#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
@@ -97,6 +102,7 @@
 #include <o3tl/float_int_conversion.hxx>
 #include <o3tl/safeint.hxx>
 #include <svl/SfxBroadcaster.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>

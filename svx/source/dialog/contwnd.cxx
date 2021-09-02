@@ -233,7 +233,7 @@ void ContourWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     OutputDevice& rTarget = pPaintWindow->GetTargetOutputDevice();
 
     const Graphic& rGraphic = GetGraphic();
-    rTarget.Push(PushFlags::LINECOLOR |PushFlags::FILLCOLOR);
+    rTarget.Push(vcl::PushFlags::LINECOLOR |vcl::PushFlags::FILLCOLOR);
     rTarget.SetLineColor(COL_BLACK);
     rTarget.SetFillColor(COL_WHITE);
     rTarget.DrawRect( tools::Rectangle( Point(), GetGraphicSize() ) );
@@ -245,7 +245,7 @@ void ContourWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     if (aWorkRect.Left() != aWorkRect.Right() && aWorkRect.Top() != aWorkRect.Bottom())
     {
         tools::PolyPolygon _aPolyPoly(2);
-        rTarget.Push(PushFlags::FILLCOLOR);
+        rTarget.Push(vcl::PushFlags::FILLCOLOR);
         _aPolyPoly.Insert(tools::Rectangle(Point(), GetGraphicSize()));
         _aPolyPoly.Insert(aWorkRect);
         rTarget.SetFillColor(COL_LIGHTRED);

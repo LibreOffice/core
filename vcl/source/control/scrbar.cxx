@@ -843,7 +843,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
     if (!IsMapModeEnabled() && GetMapMode().GetMapUnit() == MapUnit::MapTwip)
     {
         // rMEvt coordinates are in twips.
-        GetOutDev()->Push(PushFlags::MAPMODE);
+        GetOutDev()->Push(vcl::PushFlags::MAPMODE);
         EnableMapMode();
         MapMode aMapMode = GetMapMode();
         aMapMode.SetOrigin(Point(0, 0));
@@ -1016,7 +1016,7 @@ void ScrollBar::Tracking( const TrackingEvent& rTEvt )
         if (!IsMapModeEnabled() && GetMapMode().GetMapUnit() == MapUnit::MapTwip)
         {
             // rTEvt coordinates are in twips.
-            GetOutDev()->Push(PushFlags::MAPMODE);
+            GetOutDev()->Push(vcl::PushFlags::MAPMODE);
             EnableMapMode();
             MapMode aMapMode = GetMapMode();
             aMapMode.SetOrigin(Point(0, 0));

@@ -268,14 +268,14 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                 maBColorModifierStack.getModifiedColor(rTextCandidate.getFontColor()));
             const basegfx::B2DPoint aPoint(aLocalTransform * basegfx::B2DPoint(0.0, 0.0));
             const Point aStartPoint(basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY()));
-            const ComplexTextLayoutFlags nOldLayoutMode(mpOutputDevice->GetLayoutMode());
+            const vcl::text::ComplexTextLayoutFlags nOldLayoutMode(mpOutputDevice->GetLayoutMode());
 
             if (rTextCandidate.getFontAttribute().getRTL())
             {
-                ComplexTextLayoutFlags nRTLLayoutMode(nOldLayoutMode
-                                                      & ~ComplexTextLayoutFlags::BiDiStrong);
-                nRTLLayoutMode
-                    |= ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft;
+                vcl::text::ComplexTextLayoutFlags nRTLLayoutMode(
+                    nOldLayoutMode & ~vcl::text::ComplexTextLayoutFlags::BiDiStrong);
+                nRTLLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiRtl
+                                  | vcl::text::ComplexTextLayoutFlags::TextOriginLeft;
                 mpOutputDevice->SetLayoutMode(nRTLLayoutMode);
             }
 
@@ -771,7 +771,7 @@ void VclProcessor2D::RenderMaskPrimitive2DPixel(const primitive2d::MaskPrimitive
     // Unless smooth edges are needed, simply use clipping.
     if (basegfx::utils::isRectangle(aMask) || !SvtOptionsDrawinglayer::IsAntiAliasing())
     {
-        mpOutputDevice->Push(PushFlags::CLIPREGION);
+        mpOutputDevice->Push(vcl::PushFlags::CLIPREGION);
         mpOutputDevice->IntersectClipRegion(vcl::Region(aMask));
         process(rMaskCandidate.getChildren());
         mpOutputDevice->Pop();
