@@ -556,12 +556,11 @@ bool SdrEscherImport::SeekToShape( SvStream& /*rSt*/, SvxMSDffClientData* /*pCli
     return false;
 }
 
-PptFontEntityAtom* SdrEscherImport::GetFontEnityAtom( sal_uInt32 nNum ) const
+const PptFontEntityAtom* SdrEscherImport::GetFontEnityAtom( sal_uInt32 nNum ) const
 {
-    PptFontEntityAtom* pRetValue = nullptr;
-    if (m_pFonts && (nNum < m_pFonts->size()))
-        pRetValue = (*m_pFonts)[ nNum ].get();
-    return pRetValue;
+    if (m_xFonts && nNum < m_xFonts->size())
+        return &(*m_xFonts)[ nNum ];
+    return nullptr;
 }
 
 SdrObject* SdrEscherImport::ReadObjText( PPTTextObj* /*pTextObj*/, SdrObject* pObj, SdPageCapsule /*pPage*/) const
@@ -1461,7 +1460,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
 
         if ( m_bOk )
         {
-            if (!m_pFonts)
+            if (!m_xFonts)
                 ReadFontCollection();
 
             // reading TxPF, TxSI
@@ -2181,33 +2180,33 @@ bool SdrPowerPointImport::ReadFontCollection()
             while ( SeekToRec( rStCtrl, PPT_PST_FontEntityAtom, aListHd.GetRecEndFilePos() ) )
             {
                 bRet = true;
-                if (!m_pFonts)
-                    m_pFonts.reset( new std::vector<std::unique_ptr<PptFontEntityAtom>> );
-                std::unique_ptr<PptFontEntityAtom> pFont(new PptFontEntityAtom);
-                ReadPptFontEntityAtom( rStCtrl, *pFont );
+                if (!m_xFonts)
+                    m_xFonts.emplace();
+                PptFontEntityAtom aFontAtom;
+                ReadPptFontEntityAtom( rStCtrl, aFontAtom );
 
                 vcl::Font aFont;
-                aFont.SetCharSet( pFont->eCharSet );
-                aFont.SetFamilyName( pFont->aName );
-                aFont.SetFamily( pFont->eFamily );
-                aFont.SetPitch( pFont->ePitch );
+                aFont.SetCharSet( aFontAtom.eCharSet );
+                aFont.SetFamilyName( aFontAtom.aName );
+                aFont.SetFamily( aFontAtom.eFamily );
+                aFont.SetPitch( aFontAtom.ePitch );
                 aFont.SetFontHeight( 100 );
 
                 // following block is necessary, because our old PowerPoint export did not set the
                 // correct charset
-                if ( pFont->aName.equalsIgnoreAsciiCase( "Wingdings" ) ||
-                     pFont->aName.equalsIgnoreAsciiCase( "Wingdings 2" ) ||
-                     pFont->aName.equalsIgnoreAsciiCase( "Wingdings 3" ) ||
-                     pFont->aName.equalsIgnoreAsciiCase( "Monotype Sorts" ) ||
-                     pFont->aName.equalsIgnoreAsciiCase( "Monotype Sorts 2" ) ||
-                     pFont->aName.equalsIgnoreAsciiCase( "Webdings" ) ||
-                     pFont->aName.equalsIgnoreAsciiCase( "StarBats" ) ||
-                     pFont->aName.equalsIgnoreAsciiCase( "StarMath" ) ||
-                     pFont->aName.equalsIgnoreAsciiCase( "ZapfDingbats" ) )
+                if ( aFontAtom.aName.equalsIgnoreAsciiCase( "Wingdings" ) ||
+                     aFontAtom.aName.equalsIgnoreAsciiCase( "Wingdings 2" ) ||
+                     aFontAtom.aName.equalsIgnoreAsciiCase( "Wingdings 3" ) ||
+                     aFontAtom.aName.equalsIgnoreAsciiCase( "Monotype Sorts" ) ||
+                     aFontAtom.aName.equalsIgnoreAsciiCase( "Monotype Sorts 2" ) ||
+                     aFontAtom.aName.equalsIgnoreAsciiCase( "Webdings" ) ||
+                     aFontAtom.aName.equalsIgnoreAsciiCase( "StarBats" ) ||
+                     aFontAtom.aName.equalsIgnoreAsciiCase( "StarMath" ) ||
+                     aFontAtom.aName.equalsIgnoreAsciiCase( "ZapfDingbats" ) )
                 {
-                    pFont->eCharSet = RTL_TEXTENCODING_SYMBOL;
+                    aFontAtom.eCharSet = RTL_TEXTENCODING_SYMBOL;
                 };
-                m_pFonts->insert(m_pFonts->begin() + nCount2++, std::move(pFont));
+                m_xFonts->insert(m_xFonts->begin() + nCount2++, std::move(aFontAtom));
             }
         }
         rStCtrl.Seek( nOldFPos ); // restore FilePos
@@ -2290,7 +2289,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
 
                         sal_uInt32 nFont;
                         pPortion->GetAttrib( PPT_CharAttr_Font, nFont, pTextObj->GetInstance() );
-                        PptFontEntityAtom* pFontEnityAtom = GetFontEnityAtom( nFont );
+                        const PptFontEntityAtom* pFontEnityAtom = GetFontEnityAtom( nFont );
                         if ( pFontEnityAtom && ( pFontEnityAtom->eCharSet == RTL_TEXTENCODING_SYMBOL ) )
                         {
                             sal_Unicode nUnicode;
@@ -3701,7 +3700,7 @@ void PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport const & rManag
         case SVX_NUM_CHARS_LOWER_LETTER_N :
         {
             sal_uInt32 nFont = rCharLevel.mnFont;
-            PptFontEntityAtom* pFontEnityAtom = rManager.GetFontEnityAtom( nFont );
+            const PptFontEntityAtom* pFontEnityAtom = rManager.GetFontEnityAtom( nFont );
             if ( pFontEnityAtom )
             {
                 vcl::Font aFont;
@@ -3759,7 +3758,7 @@ bool PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport const & rManag
                 {
                     sal_uInt32 nFont;
                     pPtr->GetAttrib( PPT_CharAttr_Font, nFont, nDestinationInstance );
-                    PptFontEntityAtom* pFontEnityAtom = rManager.GetFontEnityAtom( nFont );
+                    const PptFontEntityAtom* pFontEnityAtom = rManager.GetFontEnityAtom( nFont );
                     if ( pFontEnityAtom )
                     {
                         vcl::Font aFont;
@@ -3781,7 +3780,7 @@ bool PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport const & rManag
 void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport const & rManager, SvxNumberFormat& rNumberFormat )
 {
     vcl::Font aFont;
-    PptFontEntityAtom* pAtom = rManager.GetFontEnityAtom( nBulletFont );
+    const PptFontEntityAtom* pAtom = rManager.GetFontEnityAtom( nBulletFont );
     if ( pAtom )
     {
         rtl_TextEncoding eCharSet( pAtom->eCharSet );
@@ -5608,7 +5607,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, T
     {
         if ( nAsianFontId != 0xffff )
         {
-            PptFontEntityAtom* pFontEnityAtom = rManager.GetFontEnityAtom( nAsianFontId );
+            const PptFontEntityAtom* pFontEnityAtom = rManager.GetFontEnityAtom( nAsianFontId );
             if ( pFontEnityAtom )
             {
                 rSet.Put( SvxFontItem( pFontEnityAtom->eFamily, pFontEnityAtom->aName,
@@ -5620,7 +5619,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, T
     }
     if ( GetAttrib( PPT_CharAttr_Font, nVal, nDestinationInstance ) )
     {
-        PptFontEntityAtom* pFontEnityAtom = rManager.GetFontEnityAtom( nVal );
+        const PptFontEntityAtom* pFontEnityAtom = rManager.GetFontEnityAtom( nVal );
         if ( pFontEnityAtom )
         {
             rSet.Put( SvxFontItem( pFontEnityAtom->eFamily, pFontEnityAtom->aName, OUString(), pFontEnityAtom->ePitch, pFontEnityAtom->eCharSet, EE_CHAR_FONTINFO ) );
