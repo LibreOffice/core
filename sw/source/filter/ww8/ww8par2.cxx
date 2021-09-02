@@ -2749,7 +2749,16 @@ void WW8TabDesc::FinishSwTable()
 {
     m_pIo->m_xRedlineStack->closeall(*m_pIo->m_pPaM->GetPoint());
     m_pIo->m_aFrameRedlines.emplace(std::move(m_pIo->m_xRedlineStack));
+
+    // ofz#38011 drop m_pLastAnchorPos during RedlineStack dtor and restore it afterwards to the same
+    // place, or somewhere close if that place got destroyed
+    std::shared_ptr<SwUnoCursor> xLastAnchorCursor(m_pIo->m_pLastAnchorPos ? m_pIo->m_rDoc.CreateUnoCursor(*m_pIo->m_pLastAnchorPos) : nullptr);
+    m_pIo->m_pLastAnchorPos.reset();
+
     m_pIo->m_xRedlineStack = std::move(mxOldRedlineStack);
+
+    if (xLastAnchorCursor)
+        m_pIo->m_pLastAnchorPos.reset(new SwPosition(*xLastAnchorCursor->GetPoint()));
 
     WW8DupProperties aDup(m_pIo->m_rDoc,m_pIo->m_xCtrlStck.get());
     m_pIo->m_xCtrlStck->SetAttr( *m_pIo->m_pPaM->GetPoint(), 0, false);
