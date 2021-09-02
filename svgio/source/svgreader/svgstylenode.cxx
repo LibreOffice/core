@@ -27,7 +27,6 @@ namespace svgio::svgreader
             SvgDocument& rDocument,
             SvgNode* pParent)
         :   SvgNode(SVGToken::Style, rDocument, pParent),
-            maSvgStyleAttributes(),
             mbTextCss(false)
         {
         }

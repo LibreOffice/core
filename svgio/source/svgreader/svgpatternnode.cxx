@@ -34,15 +34,8 @@ namespace svgio::svgreader
             SvgDocument& rDocument,
             SvgNode* pParent)
         :   SvgNode(SVGToken::Pattern, rDocument, pParent),
-            aPrimitives(),
             maSvgStyleAttributes(*this),
-            maSvgAspectRatio(),
-            maX(),
-            maY(),
-            maWidth(),
-            maHeight(),
             mbResolvingLink(false),
-            maXLink(),
             mpXLink(nullptr)
         {
         }

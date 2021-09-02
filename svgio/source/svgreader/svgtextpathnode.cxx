@@ -120,7 +120,6 @@ namespace svgio::svgreader
             mrTextStart(rTextStart),
             mnMaxIndex(rPolygon.isClosed() ? rPolygon.count() : rPolygon.count() - 1),
             mnIndex(0),
-            maCurrentSegment(),
             mfCurrentSegmentLength(0.0),
             mfSegmentStartPosition(0.0)
         {
@@ -242,9 +241,7 @@ namespace svgio::svgreader
             SvgDocument& rDocument,
             SvgNode* pParent)
         :   SvgNode(SVGToken::TextPath, rDocument, pParent),
-            maSvgStyleAttributes(*this),
-            maXLink(),
-            maStartOffset()
+            maSvgStyleAttributes(*this)
         {
         }
 

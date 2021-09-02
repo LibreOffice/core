@@ -27,8 +27,7 @@ namespace svgio::svgreader
             SVGToken aType,
             SvgDocument& rDocument,
             SvgNode* pParent)
-        :   SvgNode(aType, rDocument, pParent),
-            maText()
+        :   SvgNode(aType, rDocument, pParent)
         {
             OSL_ENSURE(aType == SVGToken::Title || aType == SVGToken::Desc, "SvgTitleDescNode should only be used for Title and Desc (!)");
         }

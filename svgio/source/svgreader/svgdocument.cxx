@@ -22,10 +22,7 @@
 namespace svgio::svgreader
 {
         SvgDocument::SvgDocument(const OUString& rAbsolutePath)
-        :   maNodes(),
-            maAbsolutePath(rAbsolutePath),
-            maIdTokenMapperList(),
-            maIdStyleTokenMapperList()
+        : maAbsolutePath(rAbsolutePath)
         {
         }
 

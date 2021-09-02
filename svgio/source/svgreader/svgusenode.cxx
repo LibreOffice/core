@@ -28,11 +28,6 @@ namespace svgio::svgreader
             SvgNode* pParent)
         :   SvgNode(SVGToken::Use, rDocument, pParent),
             maSvgStyleAttributes(*this),
-            maX(),
-            maY(),
-            maWidth(),
-            maHeight(),
-            maXLink(),
             mbDecomposingSvgNode(false)
         {
         }

@@ -1440,7 +1440,6 @@ UCBStorage_Impl::UCBStorage_Impl( const ::ucbhelper::Content& rContent, const OU
     , m_bIsLinked( true )
     , m_bListCreated( false )
     , m_nFormat( SotClipboardFormatId::NONE )
-    , m_aClassId( SvGlobalName() )
     , m_bRepairPackage( bIsRepair )
     , m_xProgressHandler( xProgressHandler )
 {
@@ -1469,7 +1468,6 @@ UCBStorage_Impl::UCBStorage_Impl( const OUString& rName, StreamMode nMode, UCBSt
     , m_bIsLinked( false )
     , m_bListCreated( false )
     , m_nFormat( SotClipboardFormatId::NONE )
-    , m_aClassId( SvGlobalName() )
     , m_bRepairPackage( bIsRepair )
     , m_xProgressHandler( xProgressHandler )
 {
@@ -1515,7 +1513,6 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, bool 
     , m_bIsLinked( false )
     , m_bListCreated( false )
     , m_nFormat( SotClipboardFormatId::NONE )
-    , m_aClassId( SvGlobalName() )
     , m_bRepairPackage( false )
 {
     // opening in direct mode is too fuzzy because the data is transferred to the stream in the Commit() call,

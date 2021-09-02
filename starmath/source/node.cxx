@@ -1716,7 +1716,6 @@ void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 SmPolyLineNode::SmPolyLineNode(const SmToken &rNodeToken)
     : SmGraphicNode(SmNodeType::PolyLine, rNodeToken)
     , maPoly(2)
-    , maToSize()
     , mnWidth(0)
 {
 }

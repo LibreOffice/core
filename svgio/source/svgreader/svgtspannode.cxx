@@ -25,8 +25,7 @@ namespace svgio::svgreader
             SvgDocument& rDocument,
             SvgNode* pParent)
         :   SvgNode(SVGToken::Tspan, rDocument, pParent),
-            maSvgStyleAttributes(*this),
-            maSvgTextPositions()
+            maSvgStyleAttributes(*this)
         {
         }
 

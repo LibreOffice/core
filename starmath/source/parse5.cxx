@@ -2686,8 +2686,7 @@ std::unique_ptr<SmExpressionNode> SmParser5::DoError(SmParseError eError)
 // end grammar
 
 SmParser5::SmParser5()
-    : AbstractSmParser()
-    , m_nCurError(0)
+    : m_nCurError(0)
     , m_nBufferIndex(0)
     , m_nTokenIndex(0)
     , m_nRow(0)
