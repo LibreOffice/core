@@ -72,6 +72,7 @@ public:
     {
         // need a temp dir, because there's an image exported too
         TempFile aTempDir(nullptr, true);
+        aTempDir.EnableKillingFile();
         OUString const url(aTempDir.GetURL());
         TempFile aTempFile(&url, false);
 
@@ -93,8 +94,6 @@ public:
         CPPUNIT_ASSERT (pDoc);
         assertXPath(pDoc, "/html/body", 1);
         assertXPath(pDoc, "/html/body/table/tr/td/img", 0);
-
-        utl::removeTree(aTempDir.GetURL());
     }
 
     CPPUNIT_TEST_SUITE(ScHTMLExportTest);

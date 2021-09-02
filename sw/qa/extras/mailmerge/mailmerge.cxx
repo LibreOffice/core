@@ -84,6 +84,7 @@ public:
         preTest(filename);
 
         utl::TempFile aTempDir(nullptr, true);
+        aTempDir.EnableKillingFile();
         const OUString aWorkDir = aTempDir.GetURL();
         const OUString aURI( m_directories.getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(datasource) );
         const OUString aPrefix = column ? OUString::createFromAscii( column ) : "LOMM_";
@@ -93,7 +94,6 @@ public:
         verify();
         finish();
 
-        ::utl::removeTree(aWorkDir);
         mnCurOutputType = 0;
     }
 

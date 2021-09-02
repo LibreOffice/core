@@ -2657,6 +2657,7 @@ void SwUiWriterTest4::testTdf115013()
     const OUString sColumnName("Name with spaces, \"quotes\" and \\backslashes");
 
     utl::TempFile aTempDir(nullptr, true);
+    aTempDir.EnableKillingFile();
     const OUString aWorkDir = aTempDir.GetURL();
 
     //create new writer document
@@ -2701,8 +2702,6 @@ void SwUiWriterTest4::testTdf115013()
     OUString sColumn = static_cast<SwDBFieldType*>(pField->GetTyp())->GetColumnName();
     // The column name must come correct after round trip
     CPPUNIT_ASSERT_EQUAL(sColumnName, sColumn);
-
-    utl::removeTree(aWorkDir);
 }
 
 void SwUiWriterTest4::testTdf115065()
