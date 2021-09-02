@@ -47,6 +47,9 @@
 #include <memory>
 #include <unordered_map>
 
+#include <global.hxx>
+#include <unotools/transliterationwrapper.hxx>
+
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
 
@@ -2058,11 +2061,15 @@ sal_Int32 BasicCollection::implGetIndexForName(std::u16string_view rName)
     sal_Int32 nIndex = -1;
     sal_Int32 nCount = xItemArray->Count();
     sal_Int32 nNameHash = MakeHashCode( rName );
+
+    // tdf#144245 - case-insensitive operation for non-ASCII characters
+    utl::TransliterationWrapper& rTransliteration = SbGlobal::GetTransliteration();
+
     for( sal_Int32 i = 0 ; i < nCount ; i++ )
     {
         SbxVariable* pVar = xItemArray->Get(i);
-        if( pVar->GetHashCode() == nNameHash &&
-            pVar->GetName().equalsIgnoreAsciiCase( rName ) )
+        if (pVar->GetHashCode() == nNameHash
+            && rTransliteration.isEqual(pVar->GetName(), OUString(rName)))
         {
             nIndex = i;
             break;
