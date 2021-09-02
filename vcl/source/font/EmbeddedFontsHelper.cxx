@@ -7,22 +7,20 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <memory>
 #include <config_folders.h>
 #include <config_eot.h>
 
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
-#include <sal/log.hxx>
+
+#include <vcl/font/EmbeddedFontsHelper.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/embeddedfontshelper.hxx>
-#include <com/sun/star/io/XInputStream.hpp>
 
 #include <outdev.h>
 #include <PhysicalFontCollection.hxx>
 #include <salgdi.hxx>
-#include <sft.hxx>
 
+#include <com/sun/star/io/XInputStream.hpp>
 
 #if ENABLE_EOT
 extern "C"
@@ -33,6 +31,8 @@ namespace libeot
 } // namespace libeot
 } // extern "C"
 #endif
+
+#include <memory>
 
 using namespace com::sun::star;
 using namespace vcl;
@@ -53,6 +53,9 @@ static void clearDir( const OUString& path )
         }
     }
 }
+
+namespace vcl::font
+{
 
 void EmbeddedFontsHelper::clearTemporaryFontFiles()
 {
@@ -160,6 +163,8 @@ bool EmbeddedFontsHelper::addEmbeddedFont( const uno::Reference< io::XInputStrea
     return true;
 }
 
+}
+
 namespace
 {
     struct UpdateFontsGuard
@@ -175,6 +180,9 @@ namespace
         }
     };
 }
+
+namespace vcl::font
+{
 
 void EmbeddedFontsHelper::activateFonts()
 {
@@ -327,6 +335,8 @@ OUString EmbeddedFontsHelper::fontFileUrl( std::u16string_view familyName, FontF
         }
     }
     return ok ? url : "";
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

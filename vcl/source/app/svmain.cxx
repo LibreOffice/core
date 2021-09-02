@@ -44,7 +44,7 @@
 #include <vcl/toolkit/unowrap.hxx>
 #include <configsettings.hxx>
 #include <vcl/lazydelete.hxx>
-#include <vcl/embeddedfontshelper.hxx>
+#include <vcl/font/EmbeddedFontsHelper.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/virdev.hxx>
@@ -301,7 +301,7 @@ bool InitVCL()
     if( pExceptionHandler != nullptr )
         return false;
 
-    EmbeddedFontsHelper::clearTemporaryFontFiles();
+    vcl::font::EmbeddedFontsHelper::clearTemporaryFontFiles();
 
     if( !ImplGetSVData()->mpApp )
     {
@@ -608,7 +608,7 @@ void DeInitVCL()
         pOwnSvApp = nullptr;
     }
 
-    EmbeddedFontsHelper::clearTemporaryFontFiles();
+    vcl::font::EmbeddedFontsHelper::clearTemporaryFontFiles();
 }
 
 namespace {
