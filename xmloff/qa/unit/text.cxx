@@ -15,6 +15,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/BibliographyDataType.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -159,6 +160,27 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCommentTableBorder)
     // Without the accompanying fix in place, this failed to load, as a comment that started in a
     // table and ended outside a table aborted the whole importer.
     getComponent() = loadFromDesktop(aURL);
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testParaStyleListLevel)
+{
+    // Given a document with style:list-level="...":
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "para-style-list-level.fodt";
+
+    // When loading that document:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure we map that to the paragraph style's numbering level:
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(getComponent(),
+                                                                         uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies
+        = xStyleFamiliesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xStyleFamily(
+        xStyleFamilies->getByName("ParagraphStyles"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName("mystyle"), uno::UNO_QUERY);
+    sal_Int16 nNumberingLevel{};
+    CPPUNIT_ASSERT(xStyle->getPropertyValue("NumberingLevel") >>= nNumberingLevel);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2), nNumberingLevel);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

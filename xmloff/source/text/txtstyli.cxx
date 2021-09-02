@@ -115,6 +115,15 @@ void XMLTextStyleContext::SetAttribute( sal_Int32 nElement,
             }
             break;
         }
+        case XML_ELEMENT(STYLE, XML_LIST_LEVEL):
+        {
+            sal_Int32 nTmp;
+            if (sax::Converter::convertNumber(nTmp, rValue) && nTmp >= 0 && nTmp <= 10)
+            {
+                m_aListLevel.emplace(nTmp);
+            }
+            break;
+        }
         default:
             XMLPropStyleContext::SetAttribute( nElement, rValue );
     }
@@ -317,6 +326,11 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
                 {
                     xPropSet->setPropertyValue( sNumberingStyleName, Any(sDisplayListStyleName) );
                 }
+            }
+
+            if (m_aListLevel.has_value())
+            {
+                xPropSet->setPropertyValue("NumberingLevel", uno::Any(*m_aListLevel));
             }
         }
     }
