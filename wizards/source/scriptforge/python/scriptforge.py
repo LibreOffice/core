@@ -1179,6 +1179,10 @@ class SFScriptForge:
         def AddText(self, context = '', msgid = '', comment = ''):
             return self.ExecMethod(self.vbMethod, 'AddText', context, msgid, comment)
 
+        def AddTextsFromDialog(self, dialog):
+            dialogobj = dialog.objectreference if isinstance(dialog, SFDialogs.SF_Dialog) else dialog
+            return self.ExecMethod(self.vbMethod + self.flgObject, 'AddTextsFromDialog', dialogobj)
+
         def ExportToPOTFile(self, filename, header = '', encoding= 'UTF-8'):
             return self.ExecMethod(self.vbMethod, 'ExportToPOTFile', filename, header, encoding)
 
@@ -1658,6 +1662,10 @@ class SFDialogs:
 
         def Execute(self, modal = True):
             return self.ExecMethod(self.vbMethod, 'Execute', modal)
+
+        def GetTextsFromL10N(self, l10n):
+            l10nobj = l10n.objectreference if isinstance(l10n, SFScriptForge.SF_L10N) else l10n
+            return self.ExecMethod(self.vbMethod + self.flgObject, 'GetTextsFromL10N', l10nobj)
 
         def Terminate(self):
             return self.ExecMethod(self.vbMethod, 'Terminate')
