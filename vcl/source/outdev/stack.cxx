@@ -23,7 +23,7 @@
 
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
-#include <vcl/outdevstate.hxx>
+#include <vcl/rendercontext/State.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
 
@@ -36,8 +36,8 @@ void OutputDevice::Push(PushFlags nFlags)
     if (mpMetaFile)
         mpMetaFile->AddAction(new MetaPushAction(nFlags));
 
-    maOutDevStateStack.emplace_back();
-    OutDevState& rState = maOutDevStateStack.back();
+    maStackStack.emplace_back();
+    Stack& rState = maStackStack.back();
 
     rState.mnFlags = nFlags;
 
@@ -98,12 +98,12 @@ void OutputDevice::Pop()
     GDIMetaFile* pOldMetaFile = mpMetaFile;
     mpMetaFile = nullptr;
 
-    if ( maOutDevStateStack.empty() )
+    if ( maStackStack.empty() )
     {
         SAL_WARN( "vcl.gdi", "OutputDevice::Pop() without OutputDevice::Push()" );
         return;
     }
-    const OutDevState& rState = maOutDevStateStack.back();
+    const Stack& rState = maStackStack.back();
 
     if( mpAlphaVDev )
         mpAlphaVDev->Pop();
@@ -186,14 +186,14 @@ void OutputDevice::Pop()
             SetRefPoint();
     }
 
-    maOutDevStateStack.pop_back();
+    maStackStack.pop_back();
 
     mpMetaFile = pOldMetaFile;
 }
 
 void OutputDevice::ClearStack()
 {
-    sal_uInt32 nCount = maOutDevStateStack.size();
+    sal_uInt32 nCount = maStackStack.size();
     while( nCount-- )
         Pop();
 }
