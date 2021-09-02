@@ -19,6 +19,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libcmis, \
 	external/libcmis/libcmis_onedrive.patch \
 	external/libcmis/libcmis_oauth_pw_as_refreshtoken.patch.1 \
 	external/libcmis/libcmis_gdrive.patch.1 \
+	external/libcmis/libcmis-boost-string.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
