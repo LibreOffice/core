@@ -77,7 +77,7 @@ struct SVGState
 
 struct PartialState
 {
-    PushFlags                           meFlags;
+    vcl::PushFlags                           meFlags;
     ::std::optional<vcl::Font>          mupFont;
     sal_Int32                           mnRegionClipPathId;
 
@@ -88,7 +88,7 @@ struct PartialState
                                 { mupFont = rFont; }
 
     PartialState()
-        : meFlags( PushFlags::NONE )
+        : meFlags( vcl::PushFlags::NONE )
         , mupFont()
         , mnRegionClipPathId( 0 )
     {}
@@ -98,7 +98,7 @@ struct PartialState
         , mupFont( std::move( aPartialState.mupFont ) )
         , mnRegionClipPathId( aPartialState.mnRegionClipPathId )
     {
-        aPartialState.meFlags = PushFlags::NONE;
+        aPartialState.meFlags = vcl::PushFlags::NONE;
         aPartialState.mnRegionClipPathId = 0;
     }
 };
@@ -113,9 +113,9 @@ private:
     SVGState maCurrentState;
 
 public:
-    PushFlags getPushFlags() const;
+    vcl::PushFlags getPushFlags() const;
     SVGState& getCurrentState();
-    void pushState( PushFlags eFlags );
+    void pushState( vcl::PushFlags eFlags );
     void popState();
 };
 

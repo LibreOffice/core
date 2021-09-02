@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-05-14 22:17:12 using:
+ Generated on 2021-09-28 05:48:51 using:
  ./bin/update_pch sw msword --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -45,6 +45,7 @@
 #include <map>
 #include <math.h>
 #include <memory>
+#include <mutex>
 #include <new>
 #include <optional>
 #include <ostream>
@@ -138,8 +139,6 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/outdevstate.hxx>
-#include <vcl/ptrstyle.hxx>
 #include <vcl/region.hxx>
 #include <vcl/rendercontext/AddFontSubstituteFlags.hxx>
 #include <vcl/rendercontext/AntialiasingFlags.hxx>
@@ -150,7 +149,10 @@
 #include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/rendercontext/ImplMapRes.hxx>
 #include <vcl/rendercontext/InvertFlags.hxx>
+#include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/rendercontext/SalLayoutFlags.hxx>
+#include <vcl/rendercontext/State.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/settings.hxx>
@@ -178,6 +180,8 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/tuple/Tuple2D.hxx>
+#include <basegfx/tuple/Tuple3D.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
@@ -206,12 +210,12 @@
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/document/EventObject.hpp>
@@ -235,27 +239,29 @@
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <com/sun/star/i18n/Calendar2.hpp>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
+#include <com/sun/star/i18n/DirectionProperty.hpp>
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
+#include <com/sun/star/i18n/KCharacterType.hpp>
 #include <com/sun/star/i18n/LanguageCountryInfo.hpp>
 #include <com/sun/star/i18n/LocaleDataItem2.hpp>
 #include <com/sun/star/i18n/LocaleItem.hpp>
 #include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
+#include <com/sun/star/i18n/ParseResult.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
+#include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/reservedWords.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
-#include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/TabAlign.hpp>
@@ -275,7 +281,6 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hdl>
 #include <com/sun/star/uno/XAggregation.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/uno/genfunc.h>
@@ -341,6 +346,7 @@
 #include <editeng/opaqitem.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
+#include <editeng/overflowingtxt.hxx>
 #include <editeng/paragraphdata.hxx>
 #include <editeng/paravertalignitem.hxx>
 #include <editeng/pgrditem.hxx>
@@ -369,8 +375,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <o3tl/unit_conversion.hxx>
-#include <ooo/vba/XHelperInterface.hpp>
-#include <ooo/vba/word/XParagraphFormat.hpp>
+#include <ooo/vba/word/WdSaveFormat.hpp>
 #include <oox/dllapi.h>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/export/utils.hxx>
@@ -411,12 +416,14 @@
 #include <svl/typedwhich.hxx>
 #include <svl/undo.hxx>
 #include <svl/urihelper.hxx>
+#include <svl/whichranges.hxx>
 #include <svl/whiter.hxx>
+#include <svl/zforlist.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/svtdllapi.h>
 #include <svx/DiagramDataInterface.hxx>
 #include <svx/XPropertyEntry.hxx>
+#include <svx/flagsdef.hxx>
 #include <svx/ipolypolygoneditorcontroller.hxx>
 #include <svx/itextprovider.hxx>
 #include <svx/msdffdef.hxx>
@@ -507,20 +514,18 @@
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <unotools/calendarwrapper.hxx>
-#include <unotools/configitem.hxx>
+#include <unotools/charclass.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/nativenumberwrapper.hxx>
 #include <unotools/options.hxx>
+#include <unotools/resmgr.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/unotoolsdllapi.h>
-#include <vbahelper/vbadllapi.h>
-#include <vbahelper/vbahelper.hxx>
-#include <vbahelper/vbahelperinterface.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <BorderCacheOwner.hxx>

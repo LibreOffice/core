@@ -1015,7 +1015,7 @@ void SvImpLBox::DrawNet(vcl::RenderContext& rRenderContext)
 
     DBG_ASSERT(pFirstDynamicTab,"No Tree!");
 
-    rRenderContext.Push(PushFlags::LINECOLOR);
+    rRenderContext.Push(vcl::PushFlags::LINECOLOR);
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     Color aCol = rStyleSettings.GetFaceColor();

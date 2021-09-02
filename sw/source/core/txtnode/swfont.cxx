@@ -1444,7 +1444,7 @@ void SwDrawTextInfo::Shift( Degree10 nDir )
 #endif
 
     const bool bBidiPor = ( GetFrame() && GetFrame()->IsRightToLeft() ) !=
-                          ( ComplexTextLayoutFlags::Default != ( ComplexTextLayoutFlags::BiDiRtl & GetpOut()->GetLayoutMode() ) );
+                          ( vcl::text::ComplexTextLayoutFlags::Default != ( vcl::text::ComplexTextLayoutFlags::BiDiRtl & GetpOut()->GetLayoutMode() ) );
 
     bool bVert = false;
     bool bVertLRBT = false;

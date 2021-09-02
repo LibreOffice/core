@@ -171,7 +171,7 @@ void WeldEditView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 
 void WeldEditView::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-    rRenderContext.Push(PushFlags::ALL);
+    rRenderContext.Push(vcl::PushFlags::ALL);
     rRenderContext.SetClipRegion();
 
     std::vector<tools::Rectangle> aLogicRects;

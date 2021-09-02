@@ -41,7 +41,7 @@ struct WMFWriterAttrStackMember
     vcl::Font aFont;
     MapMode aMapMode;
     vcl::Region aClipRegion;
-    PushFlags nFlags;
+    vcl::PushFlags nFlags;
 };
 
 class StarSymbolToMSMultiFont;

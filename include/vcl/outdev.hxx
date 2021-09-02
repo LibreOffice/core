@@ -44,11 +44,11 @@
 #include <vcl/rendercontext/InvertFlags.hxx>
 #include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/rendercontext/SalLayoutFlags.hxx>
+#include <vcl/rendercontext/State.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/salnativewidgets.hxx>
-#include <vcl/outdevstate.hxx>
 #include <vcl/vclreferencebase.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
@@ -185,7 +185,7 @@ private:
     mutable rtl::Reference<LogicalFontInstance> mpFontInstance;
     mutable std::unique_ptr<vcl::font::PhysicalFontFaceCollection>  mpFontFaceCollection;
     mutable std::unique_ptr<ImplDeviceFontSizeList> mpDeviceFontSizeList;
-    std::vector<OutDevState>        maOutDevStateStack;
+    std::vector<vcl::State>        maOutDevStateStack;
     std::unique_ptr<ImplOutDevData> mpOutDevData;
     std::vector< VCLXGraphics* >*   mpUnoGraphicsList;
     vcl::ExtOutDevData*             mpExtOutDevData;
@@ -218,7 +218,7 @@ private:
     mutable tools::Long                    mnEmphasisAscent;
     mutable tools::Long                    mnEmphasisDescent;
     DrawModeFlags                   mnDrawMode;
-    ComplexTextLayoutFlags           mnTextLayoutMode;
+    vcl::text::ComplexTextLayoutFlags mnTextLayoutMode;
     ImplMapRes                      maMapRes;
     const OutDevType                meOutDevType;
     OutDevViewType                  meOutDevViewType;
@@ -469,7 +469,7 @@ private:
 
 public:
 
-    void                        Push( PushFlags nFlags = PushFlags::ALL );
+    void                        Push( vcl::PushFlags nFlags = vcl::PushFlags::ALL );
     void                        Pop();
     void                        ClearStack();
 
@@ -483,8 +483,8 @@ public:
     void                        SetDrawMode( DrawModeFlags nDrawMode );
     DrawModeFlags               GetDrawMode() const { return mnDrawMode; }
 
-    void                        SetLayoutMode( ComplexTextLayoutFlags nTextLayoutMode );
-    ComplexTextLayoutFlags      GetLayoutMode() const { return mnTextLayoutMode; }
+    void                        SetLayoutMode( vcl::text::ComplexTextLayoutFlags nTextLayoutMode );
+    vcl::text::ComplexTextLayoutFlags GetLayoutMode() const { return mnTextLayoutMode; }
 
     void                        SetDigitLanguage( LanguageType );
     LanguageType                GetDigitLanguage() const { return meTextLanguage; }

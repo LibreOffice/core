@@ -930,7 +930,7 @@ IMPL_STATIC_LINK(FmFilterNavigator, CustomGetSizeHdl, weld::TreeView::get_size_a
 
     if (FmFilterItem* pItem = dynamic_cast<FmFilterItem*>(pData))
     {
-        rRenderContext.Push(PushFlags::FONT);
+        rRenderContext.Push(vcl::PushFlags::FONT);
         vcl::Font aFont(rRenderContext.GetFont());
         aFont.SetWeight(WEIGHT_BOLD);
         rRenderContext.SetFont(aFont);
@@ -960,7 +960,7 @@ IMPL_STATIC_LINK(FmFilterNavigator, CustomRenderHdl, weld::TreeView::render_args
     bool bSelected = std::get<2>(aPayload);
     const OUString& rId = std::get<3>(aPayload);
 
-    rRenderContext.Push(PushFlags::TEXTCOLOR);
+    rRenderContext.Push(vcl::PushFlags::TEXTCOLOR);
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     if (bSelected)
         rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
@@ -976,7 +976,7 @@ IMPL_STATIC_LINK(FmFilterNavigator, CustomRenderHdl, weld::TreeView::render_args
         vcl::Font aFont(rRenderContext.GetFont());
         aFont.SetWeight(WEIGHT_BOLD);
 
-        rRenderContext.Push(PushFlags::FONT);
+        rRenderContext.Push(vcl::PushFlags::FONT);
         rRenderContext.SetFont(aFont);
 
         OUString sName = pFilter->GetFieldName() + ": ";
@@ -996,7 +996,7 @@ IMPL_STATIC_LINK(FmFilterNavigator, CustomRenderHdl, weld::TreeView::render_args
         const bool bIsCurrentFilter = pForm->GetChildren()[ pForm->GetFilterController()->getActiveTerm() ].get() == pRow;
         if (bIsCurrentFilter)
         {
-            rRenderContext.Push(PushFlags::LINECOLOR);
+            rRenderContext.Push(vcl::PushFlags::LINECOLOR);
             rRenderContext.SetLineColor(rRenderContext.GetTextColor());
 
             Point aFirst(aPos.X(), aRect.Bottom() - 6);

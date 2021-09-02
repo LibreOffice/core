@@ -105,7 +105,7 @@ void SvtScriptedTextHelper_Impl::CalculateSizes()
 {
     maTextSize.setWidth(0);
     maTextSize.setHeight(0);
-    mrOutDevice.Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
+    mrOutDevice.Push(vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR);
 
     // calculate text portion widths and total width
     maWidthVec.clear();
@@ -247,7 +247,7 @@ void SvtScriptedTextHelper_Impl::DrawText( const Point& _rPos )
     DBG_ASSERT( maPosVec.size() - 1 == maScriptVec.size(), "SvtScriptedTextHelper_Impl::DrawText - invalid vectors" );
     DBG_ASSERT( maScriptVec.size() == maWidthVec.size(), "SvtScriptedTextHelper_Impl::DrawText - invalid vectors" );
 
-    mrOutDevice.Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
+    mrOutDevice.Push(vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR);
 
     Point aCurrPos( _rPos );
     sal_Int32 nThisPos = maPosVec[ 0 ];

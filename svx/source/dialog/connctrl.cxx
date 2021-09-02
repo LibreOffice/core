@@ -194,7 +194,7 @@ void SvxXConnectionPreview::Construct()
 
 void SvxXConnectionPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    rRenderContext.Push(PushFlags::ALL);
+    rRenderContext.Push(vcl::PushFlags::ALL);
 
     rRenderContext.SetMapMode(GetMapMode());
 

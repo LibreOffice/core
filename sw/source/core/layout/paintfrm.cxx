@@ -897,7 +897,7 @@ void SwLineRects::PaintLines( OutputDevice *pOut, SwPaintProperties const &prope
     // #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, nullptr, *pOut );
 
-    pOut->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
+    pOut->Push( vcl::PushFlags::FILLCOLOR|vcl::PushFlags::LINECOLOR );
     pOut->SetFillColor();
     pOut->SetLineColor();
     ConnectEdges( pOut, properties );
@@ -1071,7 +1071,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
     if (m_aLineRects.empty())
         return;
 
-    pOut->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
+    pOut->Push( vcl::PushFlags::FILLCOLOR|vcl::PushFlags::LINECOLOR );
     pOut->SetLineColor();
 
     // Reset draw mode in high contrast mode in order to get fill color
@@ -1682,7 +1682,7 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, vcl::RenderContext &rOu
     const bool bNotInside = !rOut.Contains( aAlignedGrfRect );
     if ( bNotInside )
     {
-        rOutDev.Push( PushFlags::CLIPREGION );
+        rOutDev.Push( vcl::PushFlags::CLIPREGION );
         rOutDev.IntersectClipRegion( rOut.SVRect() );
     }
 
@@ -1925,7 +1925,7 @@ void DrawGraphic(
             // area, from which the background brush is determined.
             aGrf.Pos() = rOrg.Pos();
             // setup clipping at output device
-            rOutDev.Push( PushFlags::CLIPREGION );
+            rOutDev.Push( vcl::PushFlags::CLIPREGION );
             rOutDev.IntersectClipRegion( rOut.SVRect() );
             // use new method <GraphicObject::DrawTiled(::)>
             {
@@ -1982,7 +1982,7 @@ void DrawGraphic(
     bool bGrfBackgrdAlreadyDrawn = false;
     if ( bRetouche )
     {
-        rOutDev.Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
+        rOutDev.Push( vcl::PushFlags::FILLCOLOR|vcl::PushFlags::LINECOLOR );
         rOutDev.SetLineColor();
 
         // check, if an existing background graphic (not filling the complete
@@ -4006,7 +4006,7 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
     SwRect aRect( rRect );
     aRect.Intersection_( getFrameArea() );
 
-    rRenderContext.Push( PushFlags::CLIPREGION );
+    rRenderContext.Push( vcl::PushFlags::CLIPREGION );
     rRenderContext.SetClipRegion();
     const SwPageFrame* pPage = FindPageFrame();
 
@@ -4109,7 +4109,7 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
             //receives the original Rect but PaintSwFrameBackground only the limited
             //one.
 
-            rRenderContext.Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
+            rRenderContext.Push( vcl::PushFlags::FILLCOLOR|vcl::PushFlags::LINECOLOR );
             rRenderContext.SetLineColor();
 
             pPage = FindPageFrame();
@@ -6235,7 +6235,7 @@ void SwFrame::PaintBaBo( const SwRect& rRect, const SwPageFrame *pPage,
     // #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, nullptr, *pOut );
 
-    pOut->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
+    pOut->Push( vcl::PushFlags::FILLCOLOR|vcl::PushFlags::LINECOLOR );
     pOut->SetLineColor();
 
     SwBorderAttrAccess aAccess( SwFrame::GetCache(), this );

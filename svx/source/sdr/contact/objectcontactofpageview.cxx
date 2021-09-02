@@ -150,7 +150,7 @@ namespace sdr::contact
             if(!rRedrawArea.IsEmpty() && !comphelper::LibreOfficeKit::isActive())
             {
                 bClipRegionPushed = true;
-                pOutDev->Push(PushFlags::CLIPREGION);
+                pOutDev->Push(vcl::PushFlags::CLIPREGION);
                 pOutDev->IntersectClipRegion(rRedrawArea);
             }
 
@@ -223,7 +223,7 @@ namespace sdr::contact
 
             // prepare OutputDevice (historical stuff, maybe soon removed)
             rDisplayInfo.ClearGhostedDrawMode(); // reset, else the VCL-paint with the processor will not do the right thing
-            pOutDev->SetLayoutMode(ComplexTextLayoutFlags::Default); // reset, default is no BiDi/RTL
+            pOutDev->SetLayoutMode(vcl::text::ComplexTextLayoutFlags::Default); // reset, default is no BiDi/RTL
 
             // create renderer
             std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(

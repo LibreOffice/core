@@ -23,7 +23,7 @@
 
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
-#include <vcl/outdevstate.hxx>
+#include <vcl/rendercontext/State.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
 
@@ -31,59 +31,59 @@
 #include <drawmode.hxx>
 #include <salgdi.hxx>
 
-void OutputDevice::Push(PushFlags nFlags)
+void OutputDevice::Push(vcl::PushFlags nFlags)
 {
     if (mpMetaFile)
         mpMetaFile->AddAction(new MetaPushAction(nFlags));
 
     maOutDevStateStack.emplace_back();
-    OutDevState& rState = maOutDevStateStack.back();
+    vcl::State& rState = maOutDevStateStack.back();
 
     rState.mnFlags = nFlags;
 
-    if (nFlags & PushFlags::LINECOLOR && mbLineColor)
+    if (nFlags & vcl::PushFlags::LINECOLOR && mbLineColor)
         rState.mpLineColor = maLineColor;
 
-    if (nFlags & PushFlags::FILLCOLOR && mbFillColor)
+    if (nFlags & vcl::PushFlags::FILLCOLOR && mbFillColor)
         rState.mpFillColor = maFillColor;
 
-    if (nFlags & PushFlags::FONT)
+    if (nFlags & vcl::PushFlags::FONT)
         rState.mpFont = maFont;
 
-    if (nFlags & PushFlags::TEXTCOLOR)
+    if (nFlags & vcl::PushFlags::TEXTCOLOR)
         rState.mpTextColor = GetTextColor();
 
-    if (nFlags & PushFlags::TEXTFILLCOLOR && IsTextFillColor())
+    if (nFlags & vcl::PushFlags::TEXTFILLCOLOR && IsTextFillColor())
         rState.mpTextFillColor = GetTextFillColor();
 
-    if (nFlags & PushFlags::TEXTLINECOLOR && IsTextLineColor())
+    if (nFlags & vcl::PushFlags::TEXTLINECOLOR && IsTextLineColor())
         rState.mpTextLineColor = GetTextLineColor();
 
-    if (nFlags & PushFlags::OVERLINECOLOR && IsOverlineColor())
+    if (nFlags & vcl::PushFlags::OVERLINECOLOR && IsOverlineColor())
         rState.mpOverlineColor = GetOverlineColor();
 
-    if (nFlags & PushFlags::TEXTALIGN)
+    if (nFlags & vcl::PushFlags::TEXTALIGN)
         rState.meTextAlign = GetTextAlign();
 
-    if (nFlags & PushFlags::TEXTLAYOUTMODE)
+    if (nFlags & vcl::PushFlags::TEXTLAYOUTMODE)
         rState.mnTextLayoutMode = GetLayoutMode();
 
-    if (nFlags & PushFlags::TEXTLANGUAGE)
+    if (nFlags & vcl::PushFlags::TEXTLANGUAGE)
         rState.meTextLanguage = GetDigitLanguage();
 
-    if (nFlags & PushFlags::RASTEROP)
+    if (nFlags & vcl::PushFlags::RASTEROP)
         rState.meRasterOp = GetRasterOp();
 
-    if (nFlags & PushFlags::MAPMODE)
+    if (nFlags & vcl::PushFlags::MAPMODE)
     {
         rState.mpMapMode = maMapMode;
         rState.mbMapActive = mbMap;
     }
 
-    if (nFlags & PushFlags::CLIPREGION && mbClipRegion)
+    if (nFlags & vcl::PushFlags::CLIPREGION && mbClipRegion)
         rState.mpClipRegion.reset(new vcl::Region(maRegion));
 
-    if (nFlags & PushFlags::REFPOINT && mbRefPoint)
+    if (nFlags & vcl::PushFlags::REFPOINT && mbRefPoint)
         rState.mpRefPoint = maRefPoint;
 
     if (mpAlphaVDev)
@@ -103,12 +103,12 @@ void OutputDevice::Pop()
         SAL_WARN( "vcl.gdi", "OutputDevice::Pop() without OutputDevice::Push()" );
         return;
     }
-    const OutDevState& rState = maOutDevStateStack.back();
+    const vcl::State& rState = maOutDevStateStack.back();
 
     if( mpAlphaVDev )
         mpAlphaVDev->Pop();
 
-    if ( rState.mnFlags & PushFlags::LINECOLOR )
+    if ( rState.mnFlags & vcl::PushFlags::LINECOLOR )
     {
         if ( rState.mpLineColor )
             SetLineColor( *rState.mpLineColor );
@@ -116,7 +116,7 @@ void OutputDevice::Pop()
             SetLineColor();
     }
 
-    if ( rState.mnFlags & PushFlags::FILLCOLOR )
+    if ( rState.mnFlags & vcl::PushFlags::FILLCOLOR )
     {
         if ( rState.mpFillColor )
             SetFillColor( *rState.mpFillColor );
@@ -124,13 +124,13 @@ void OutputDevice::Pop()
             SetFillColor();
     }
 
-    if ( rState.mnFlags & PushFlags::FONT )
+    if ( rState.mnFlags & vcl::PushFlags::FONT )
         SetFont( *rState.mpFont );
 
-    if ( rState.mnFlags & PushFlags::TEXTCOLOR )
+    if ( rState.mnFlags & vcl::PushFlags::TEXTCOLOR )
         SetTextColor( *rState.mpTextColor );
 
-    if ( rState.mnFlags & PushFlags::TEXTFILLCOLOR )
+    if ( rState.mnFlags & vcl::PushFlags::TEXTFILLCOLOR )
     {
         if ( rState.mpTextFillColor )
             SetTextFillColor( *rState.mpTextFillColor );
@@ -138,7 +138,7 @@ void OutputDevice::Pop()
             SetTextFillColor();
     }
 
-    if ( rState.mnFlags & PushFlags::TEXTLINECOLOR )
+    if ( rState.mnFlags & vcl::PushFlags::TEXTLINECOLOR )
     {
         if ( rState.mpTextLineColor )
             SetTextLineColor( *rState.mpTextLineColor );
@@ -146,7 +146,7 @@ void OutputDevice::Pop()
             SetTextLineColor();
     }
 
-    if ( rState.mnFlags & PushFlags::OVERLINECOLOR )
+    if ( rState.mnFlags & vcl::PushFlags::OVERLINECOLOR )
     {
         if ( rState.mpOverlineColor )
             SetOverlineColor( *rState.mpOverlineColor );
@@ -154,19 +154,19 @@ void OutputDevice::Pop()
             SetOverlineColor();
     }
 
-    if ( rState.mnFlags & PushFlags::TEXTALIGN )
+    if ( rState.mnFlags & vcl::PushFlags::TEXTALIGN )
         SetTextAlign( rState.meTextAlign );
 
-    if( rState.mnFlags & PushFlags::TEXTLAYOUTMODE )
+    if( rState.mnFlags & vcl::PushFlags::TEXTLAYOUTMODE )
         SetLayoutMode( rState.mnTextLayoutMode );
 
-    if( rState.mnFlags & PushFlags::TEXTLANGUAGE )
+    if( rState.mnFlags & vcl::PushFlags::TEXTLANGUAGE )
         SetDigitLanguage( rState.meTextLanguage );
 
-    if ( rState.mnFlags & PushFlags::RASTEROP )
+    if ( rState.mnFlags & vcl::PushFlags::RASTEROP )
         SetRasterOp( rState.meRasterOp );
 
-    if ( rState.mnFlags & PushFlags::MAPMODE )
+    if ( rState.mnFlags & vcl::PushFlags::MAPMODE )
     {
         if ( rState.mpMapMode )
             SetMapMode( *rState.mpMapMode );
@@ -175,10 +175,10 @@ void OutputDevice::Pop()
         mbMap = rState.mbMapActive;
     }
 
-    if ( rState.mnFlags & PushFlags::CLIPREGION )
+    if ( rState.mnFlags & vcl::PushFlags::CLIPREGION )
         SetDeviceClipRegion( rState.mpClipRegion.get() );
 
-    if ( rState.mnFlags & PushFlags::REFPOINT )
+    if ( rState.mnFlags & vcl::PushFlags::REFPOINT )
     {
         if ( rState.mpRefPoint )
             SetRefPoint( *rState.mpRefPoint );

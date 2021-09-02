@@ -1286,7 +1286,7 @@ IMPL_LINK(SvxStyleBox_Base, CustomRenderHdl, weld::ComboBox::render_args, aPaylo
 
     OUString aStyleName(m_xWidget->get_text(nIndex));
 
-    rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::FONT | PushFlags::TEXTCOLOR);
+    rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR);
 
     SetupEntry(rRenderContext, nIndex, rRect, aStyleName, !bSelected);
 
@@ -1318,7 +1318,7 @@ void SvxStyleBox_Base::CalcOptimalExtraUserWidth(vcl::RenderContext& rRenderCont
     {
         OUString sStyleName(get_text(i));
 
-        rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::FONT | PushFlags::TEXTCOLOR);
+        rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR);
         SetupEntry(rRenderContext, i, tools::Rectangle(0, 0, RECT_MAX, ITEM_HEIGHT), sStyleName, true);
         tools::Rectangle aTextRectForActualFont;
         rRenderContext.GetTextBoundRect(aTextRectForActualFont, sStyleName);

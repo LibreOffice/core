@@ -54,7 +54,7 @@
 
 #define TEXT_DRAW_ELLIPSIS  (DrawTextFlags::EndEllipsis | DrawTextFlags::PathEllipsis | DrawTextFlags::NewsEllipsis)
 
-void OutputDevice::SetLayoutMode( ComplexTextLayoutFlags nTextLayoutMode )
+void OutputDevice::SetLayoutMode( vcl::text::ComplexTextLayoutFlags nTextLayoutMode )
 {
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaLayoutModeAction( nTextLayoutMode ) );
@@ -1138,11 +1138,11 @@ vcl::text::ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
     if( nEndIndex < nMinIndex )
         nEndIndex = nMinIndex;
 
-    if( mnTextLayoutMode & ComplexTextLayoutFlags::BiDiRtl )
+    if( mnTextLayoutMode & vcl::text::ComplexTextLayoutFlags::BiDiRtl )
         nLayoutFlags |= SalLayoutFlags::BiDiRtl;
-    if( mnTextLayoutMode & ComplexTextLayoutFlags::BiDiStrong )
+    if( mnTextLayoutMode & vcl::text::ComplexTextLayoutFlags::BiDiStrong )
         nLayoutFlags |= SalLayoutFlags::BiDiStrong;
-    else if( !(mnTextLayoutMode & ComplexTextLayoutFlags::BiDiRtl) )
+    else if( !(mnTextLayoutMode & vcl::text::ComplexTextLayoutFlags::BiDiRtl) )
     {
         // Disable Bidi if no RTL hint and only known LTR codes used.
         bool bAllLtr = true;
@@ -1168,7 +1168,7 @@ vcl::text::ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
     if( maFont.IsVertical() )
         nLayoutFlags |= SalLayoutFlags::Vertical;
 
-    if( meTextLanguage ) //TODO: (mnTextLayoutMode & ComplexTextLayoutFlags::SubstituteDigits)
+    if( meTextLanguage ) //TODO: (mnTextLayoutMode & vcl::text::ComplexTextLayoutFlags::SubstituteDigits)
     {
         // disable character localization when no digits used
         const sal_Unicode* pBase = rStr.getStr();
@@ -1196,10 +1196,10 @@ vcl::text::ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
     }
 
     // right align for RTL text, DRAWPOS_REVERSED, RTL window style
-    bool bRightAlign = bool(mnTextLayoutMode & ComplexTextLayoutFlags::BiDiRtl);
-    if( mnTextLayoutMode & ComplexTextLayoutFlags::TextOriginLeft )
+    bool bRightAlign = bool(mnTextLayoutMode & vcl::text::ComplexTextLayoutFlags::BiDiRtl);
+    if( mnTextLayoutMode & vcl::text::ComplexTextLayoutFlags::TextOriginLeft )
         bRightAlign = false;
-    else if ( mnTextLayoutMode & ComplexTextLayoutFlags::TextOriginRight )
+    else if ( mnTextLayoutMode & vcl::text::ComplexTextLayoutFlags::TextOriginRight )
         bRightAlign = true;
     // SSA: hack for western office, ie text get right aligned
     //      for debugging purposes of mirrored UI
@@ -1556,7 +1556,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
             // Set clipping
             if ( nStyle & DrawTextFlags::Clip )
             {
-                rTargetDevice.Push( PushFlags::CLIPREGION );
+                rTargetDevice.Push( vcl::PushFlags::CLIPREGION );
                 rTargetDevice.IntersectClipRegion( rRect );
             }
 
@@ -1673,7 +1673,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
 
         if ( nStyle & DrawTextFlags::Clip )
         {
-            rTargetDevice.Push( PushFlags::CLIPREGION );
+            rTargetDevice.Push( vcl::PushFlags::CLIPREGION );
             rTargetDevice.IntersectClipRegion( rRect );
             _rLayout.DrawText( aPos, aStr, 0, aStr.getLength(), pVector, pDisplayText );
             if ( bDrawMnemonics && nMnemonicPos != -1 )

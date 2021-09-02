@@ -2390,7 +2390,7 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
     OSL_ENSURE(pOut, "Impossible");
     if (pOut)
     {
-        pOut->Push( PushFlags::FONT | PushFlags::MAPMODE );
+        pOut->Push( vcl::PushFlags::FONT | vcl::PushFlags::MAPMODE );
         pOut->SetMapMode( MapMode( MapUnit::Map100thMM ));
         pOut->SetFont( aFont );
         aRet.Width  = pOut->GetTextWidth(rString);

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-05-14 22:15:48 using:
+ Generated on 2021-09-28 05:36:23 using:
  ./bin/update_pch framework fwk --cutoff=7 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -79,7 +79,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
-#include <rtl/uuid.h>
 #include <sal/detail/log.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
@@ -102,7 +101,6 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metaactiontypes.hxx>
-#include <vcl/outdevstate.hxx>
 #include <vcl/region.hxx>
 #include <vcl/rendercontext/AddFontSubstituteFlags.hxx>
 #include <vcl/rendercontext/AntialiasingFlags.hxx>
@@ -113,7 +111,10 @@
 #include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/rendercontext/ImplMapRes.hxx>
 #include <vcl/rendercontext/InvertFlags.hxx>
+#include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/rendercontext/SalLayoutFlags.hxx>
+#include <vcl/rendercontext/State.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/settings.hxx>
@@ -137,6 +138,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/tuple/Tuple2D.hxx>
+#include <basegfx/tuple/Tuple3D.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
@@ -189,7 +192,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
-#include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationListener.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
@@ -219,11 +221,14 @@
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/multicontainer2.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -231,7 +236,6 @@
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>

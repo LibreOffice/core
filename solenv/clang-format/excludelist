@@ -6417,7 +6417,6 @@ include/vcl/oldprintadaptor.hxx
 include/vcl/opengl/OpenGLContext.hxx
 include/vcl/opengl/OpenGLHelper.hxx
 include/vcl/outdev.hxx
-include/vcl/outdevstate.hxx
 include/vcl/pdfextoutdevdata.hxx
 include/vcl/pdfwriter.hxx
 include/vcl/pngwrite.hxx
