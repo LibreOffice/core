@@ -188,14 +188,12 @@ void EventMultiplexer::MultiplexEvent(
 EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
     : MutexOwner(),
       EventMultiplexerImplementationInterfaceBase(maMutex),
-      SfxListener(),
       mrBase (rBase),
       mbListeningToController (false),
       mbListeningToFrame (false),
       mxControllerWeak(nullptr),
       mxFrameWeak(nullptr),
-      mpDocument(nullptr),
-      mxConfigurationControllerWeak()
+      mpDocument(nullptr)
 {
     // Connect to the frame to listen for controllers being exchanged.
     // Listen to changes of certain properties.

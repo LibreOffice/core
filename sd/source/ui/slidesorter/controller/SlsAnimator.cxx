@@ -61,9 +61,6 @@ Animator::Animator (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
       maIdle("sd slidesorter controller Animator"),
       mbIsDisposed(false),
-      maAnimations(),
-      maElapsedTime(),
-      mpDrawLock(),
       mnNextAnimationId(0)
 {
     maIdle.SetPriority(TaskPriority::REPAINT);

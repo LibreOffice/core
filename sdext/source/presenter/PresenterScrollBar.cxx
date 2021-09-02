@@ -72,9 +72,6 @@ PresenterScrollBar::PresenterScrollBar (
     const ::std::function<void (double)>& rThumbMotionListener)
     : PresenterScrollBarInterfaceBase(m_aMutex),
       mxComponentContext(rxComponentContext),
-      mxWindow(),
-      mxCanvas(),
-      mxPresenterHelper(),
       mpPaintManager(rpPaintManager),
       mnThumbPosition(0),
       mnTotalSize(0),
@@ -85,17 +82,7 @@ PresenterScrollBar::PresenterScrollBar (
       meButtonDownArea(None),
       meMouseMoveArea(None),
       mbIsNotificationActive(false),
-      mpBitmaps(),
-      mpPrevButtonDescriptor(),
-      mpNextButtonDescriptor(),
-      mpPagerStartDescriptor(),
-      mpPagerCenterDescriptor(),
-      mpPagerEndDescriptor(),
-      mpThumbStartDescriptor(),
-      mpThumbCenterDescriptor(),
-      mpThumbEndDescriptor(),
       mpMousePressRepeater(std::make_shared<MousePressRepeater>(this)),
-      mpBackgroundBitmap(),
       mpCanvasHelper(new PresenterCanvasHelper())
 {
     try

@@ -168,9 +168,7 @@ InsertAnimator::Implementation::Implementation (SlideSorter& rSlideSorter)
     : mrModel(rSlideSorter.GetModel()),
       mrView(rSlideSorter.GetView()),
       mrSlideSorter(rSlideSorter),
-      mpAnimator(rSlideSorter.GetController().GetAnimator()),
-      maRuns(),
-      maInsertPosition()
+      mpAnimator(rSlideSorter.GetController().GetAnimator())
 {
 }
 
@@ -301,8 +299,6 @@ PageObjectRun::PageObjectRun (
       mnLocalInsertIndex(-1),
       mnStartIndex(nStartIndex),
       mnEndIndex(nEndIndex),
-      maStartOffset(),
-      maEndOffset(),
       mnStartTime(-1),
       mnAnimationId(controller::Animator::NotAnAnimationId),
       mrAnimatorAccess(rAnimatorAccess),

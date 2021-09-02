@@ -61,7 +61,6 @@ ViewTabBar::ViewTabBar (
     : ViewTabBarInterfaceBase(maMutex),
       mpTabControl(VclPtr<TabBarControl>::Create(GetAnchorWindow(rxViewTabBarId,rxController), this)),
       mxController(rxController),
-      maTabBarButtons(),
       mxViewTabBarId(rxViewTabBarId),
       mpViewShellBase(nullptr),
       mnNoteBookWidthPadding(0)

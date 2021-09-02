@@ -94,7 +94,6 @@ MasterPageContainerQueue::MasterPageContainerQueue (
     const std::weak_ptr<ContainerAdapter>& rpContainer)
     : mpWeakContainer(rpContainer),
       mpRequestQueue(new RequestQueue()),
-      maDelayedPreviewCreationTimer(),
       mnRequestsServedCount(0)
 {
 }

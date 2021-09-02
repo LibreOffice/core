@@ -106,10 +106,6 @@ SlideSorter::SlideSorter (
     ScrollBar* pVerticalScrollBar,
     ScrollBarBox* pScrollBarBox)
     : mbIsValid(false),
-      mpSlideSorterController(),
-      mpSlideSorterModel(),
-      mpSlideSorterView(),
-      mxControllerWeak(),
       mpViewShell(&rViewShell),
       mpViewShellBase(&rViewShell.GetViewShellBase()),
       mpContentWindow(pContentWindow),
@@ -125,10 +121,6 @@ SlideSorter::SlideSorter (
     ViewShellBase& rBase,
     vcl::Window& rParentWindow)
     : mbIsValid(false),
-      mpSlideSorterController(),
-      mpSlideSorterModel(),
-      mpSlideSorterView(),
-      mxControllerWeak(),
       mpViewShell(nullptr),
       mpViewShellBase(&rBase),
       mpContentWindow(VclPtr<ContentWindow>::Create(rParentWindow,*this )),
@@ -406,8 +398,7 @@ ContentWindow::ContentWindow(
     vcl::Window& rParent,
     SlideSorter& rSlideSorter)
     : ::sd::Window(&rParent),
-    mrSlideSorter(rSlideSorter),
-    mpCurrentFunction()
+    mrSlideSorter(rSlideSorter)
 {
     SetDialogControlFlags(GetDialogControlFlags() & ~DialogControlFlags::WantFocus);
     SetStyle(GetStyle() | WB_NOPOINTERFOCUS);

@@ -40,9 +40,7 @@ namespace sd::framework {
 
 ShellStackGuard::ShellStackGuard (Reference<frame::XController> const & rxController)
     : ShellStackGuardInterfaceBase(m_aMutex),
-      mxConfigurationController(),
       mpBase(nullptr),
-      mpUpdateLock(),
       maPrinterPollingIdle("sd ShellStackGuard PrinterPollingIdle")
 {
     Reference<XControllerManager> xControllerManager (rxController, UNO_QUERY);

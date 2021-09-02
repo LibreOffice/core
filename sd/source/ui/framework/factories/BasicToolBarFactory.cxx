@@ -38,9 +38,7 @@ namespace sd::framework {
 //===== BasicToolBarFactory ===================================================
 
 BasicToolBarFactory::BasicToolBarFactory ()
-    : BasicToolBarFactoryInterfaceBase(m_aMutex),
-      mxConfigurationController(),
-      mxController()
+    : BasicToolBarFactoryInterfaceBase(m_aMutex)
 {
 }
 

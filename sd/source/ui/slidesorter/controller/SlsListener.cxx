@@ -62,10 +62,7 @@ Listener::Listener (
       mbListeningToUNODocument (false),
       mbListeningToController (false),
       mbListeningToFrame (false),
-      mbIsMainViewChangePending(false),
-      mxControllerWeak(),
-      mxFrameWeak(),
-      mpModelChangeLock()
+      mbIsMainViewChangePending(false)
 {
     StartListening(*mrSlideSorter.GetModel().GetDocument());
     StartListening(*mrSlideSorter.GetModel().GetDocument()->GetDocSh());

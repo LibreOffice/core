@@ -223,7 +223,6 @@ ViewShellBase::ViewShellBase (
     SfxViewFrame* _pFrame,
     SfxViewShell*)
     : SfxViewShell (_pFrame, SfxViewShellFlags::HAS_PRINTOPTIONS),
-      mpImpl(),
       mpDocShell (nullptr),
       mpDocument (nullptr)
 {
@@ -1024,15 +1023,7 @@ void ViewShellBase::NotifyCursor(SfxViewShell* pOtherShell) const
 //===== ViewShellBase::Implementation =========================================
 
 ViewShellBase::Implementation::Implementation (ViewShellBase& rBase)
-    : mpController(),
-      mpViewTabBar(),
-      maClientArea(),
-      mbIsClosing(false),
-      mpViewWindow(),
-      mpToolBarManager(),
-      mpViewShellManager(),
-      mpEventMultiplexer(),
-      mpFormShellManager(),
+    : mbIsClosing(false),
       mrBase(rBase),
       mbUserWantsTabBar(false),
       mbTabBarShouldBeVisible(true),

@@ -31,17 +31,14 @@ BufferedStreamSocket::BufferedStreamSocket( const osl::StreamSocket &aSocket ):
     StreamSocket( aSocket ),
     aRet( 0 ),
     aRead( 0 ),
-    aBuffer(),
     mSocket( 0 ),
     usingCSocket( false )
 {
 }
 
 BufferedStreamSocket::BufferedStreamSocket( int aSocket ):
-    StreamSocket(),
     aRet( 0 ),
     aRead( 0 ),
-    aBuffer(),
     mSocket( aSocket ),
     usingCSocket( true )
 {

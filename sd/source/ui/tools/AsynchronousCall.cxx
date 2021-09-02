@@ -23,8 +23,6 @@
 namespace sd::tools
 {
 AsynchronousCall::AsynchronousCall()
-    : maTimer()
-    , mpFunction()
 {
     maTimer.SetInvokeHandler(LINK(this, AsynchronousCall, TimerCallback));
 }

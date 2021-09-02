@@ -127,7 +127,6 @@ SlideSorterViewShell::SlideSorterViewShell (
     vcl::Window* pParentWindow,
     FrameView* pFrameViewArgument)
     : ViewShell (pParentWindow, rViewShellBase),
-      mpSlideSorter(),
       mbIsArrangeGUIElementsPending(true)
 {
     GetContentWindow()->set_id("slidesorter");

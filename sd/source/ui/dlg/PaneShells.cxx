@@ -42,7 +42,6 @@ void LeftImpressPaneShell::InitInterface_Impl()
 
 
 LeftImpressPaneShell::LeftImpressPaneShell()
-    : SfxShell()
 {
     SetName("LeftImpressPane");
 }
@@ -67,7 +66,6 @@ void LeftDrawPaneShell::InitInterface_Impl()
 
 
 LeftDrawPaneShell::LeftDrawPaneShell()
-    : SfxShell()
 {
     SetName("LeftDrawPane");
 }

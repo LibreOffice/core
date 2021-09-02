@@ -39,7 +39,6 @@ PresenterBitmapContainer::PresenterBitmapContainer (
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
     const css::uno::Reference<css::drawing::XPresenterHelper>& rxPresenterHelper)
     : mpParentContainer(rpParentContainer),
-      maIconContainer(),
       mxCanvas(rxCanvas),
       mxPresenterHelper(rxPresenterHelper)
 {
@@ -64,7 +63,6 @@ PresenterBitmapContainer::PresenterBitmapContainer (
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
     const css::uno::Reference<css::drawing::XPresenterHelper>& rxPresenterHelper)
     : mpParentContainer(rpParentContainer),
-      maIconContainer(),
       mxCanvas(rxCanvas),
       mxPresenterHelper(rxPresenterHelper)
 {
@@ -288,12 +286,7 @@ PresenterBitmapContainer::BitmapDescriptor::BitmapDescriptor()
       mnYHotSpot(0),
       maReplacementColor(0x00000000),
       meHorizontalTexturingMode(Once),
-      meVerticalTexturingMode(Once),
-      mxNormalBitmap(),
-      mxMouseOverBitmap(),
-      mxButtonDownBitmap(),
-      mxDisabledBitmap(),
-      mxMaskBitmap()
+      meVerticalTexturingMode(Once)
 {
 }
 
@@ -307,12 +300,7 @@ PresenterBitmapContainer::BitmapDescriptor::BitmapDescriptor (
       mnYHotSpot(0),
       maReplacementColor(0x00000000),
       meHorizontalTexturingMode(Once),
-      meVerticalTexturingMode(Once),
-      mxNormalBitmap(),
-      mxMouseOverBitmap(),
-      mxButtonDownBitmap(),
-      mxDisabledBitmap(),
-      mxMaskBitmap()
+      meVerticalTexturingMode(Once)
 {
     if (rpDefault == nullptr)
         return;

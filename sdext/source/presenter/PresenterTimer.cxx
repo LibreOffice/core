@@ -197,10 +197,6 @@ std::shared_ptr<TimerScheduler> TimerScheduler::Instance(
 
 TimerScheduler::TimerScheduler(
         uno::Reference<uno::XComponentContext> const& xContext)
-    : maTaskContainerMutex(),
-      maScheduledTasks(),
-      maCurrentTaskMutex(),
-      mpCurrentTask()
 {
     uno::Reference<frame::XDesktop> const xDesktop(
             frame::Desktop::create(xContext));
@@ -439,12 +435,10 @@ TimerTask::TimerTask (
 
 PresenterClockTimer::PresenterClockTimer (const Reference<XComponentContext>& rxContext)
     : PresenterClockTimerInterfaceBase(m_aMutex),
-      maListeners(),
       maDateTime(),
       mnTimerTaskId(PresenterTimer::NotAValidTaskId),
       mbIsCallbackPending(false),
-      mxRequestCallback()
-    , m_xContext(rxContext)
+      m_xContext(rxContext)
 {
     assert(m_xContext.is());
     Reference<lang::XMultiComponentFactory> xFactory =

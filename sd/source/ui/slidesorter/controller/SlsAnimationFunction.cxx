@@ -71,7 +71,6 @@ double AnimationBezierFunction::EvaluateComponent (
 //===== AnimationParametricFunction ===========================================
 
 AnimationParametricFunction::AnimationParametricFunction (const ParametricFunction& rFunction)
-    : maY()
 {
     const sal_Int32 nSampleCount (64);
 

@@ -65,14 +65,11 @@ ConfigurationUpdater::ConfigurationUpdater (
     const std::shared_ptr<ConfigurationControllerBroadcaster>& rpBroadcaster,
     const std::shared_ptr<ConfigurationControllerResourceManager>& rpResourceManager,
     const Reference<XControllerManager>& rxControllerManager)
-    : mxControllerManager(),
-      mpBroadcaster(rpBroadcaster),
+    : mpBroadcaster(rpBroadcaster),
       mxCurrentConfiguration(Reference<XConfiguration>(new Configuration(nullptr, false))),
-      mxRequestedConfiguration(),
       mbUpdatePending(false),
       mbUpdateBeingProcessed(false),
       mnLockCount(0),
-      maUpdateTimer(),
       mnFailedUpdateCount(0),
       mpResourceManager(rpResourceManager)
 {

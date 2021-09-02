@@ -119,13 +119,11 @@ typedef ::std::vector<
 //=====  BitmapCache  =========================================================
 
 BitmapCache::BitmapCache ()
-    : maMutex(),
-      mpBitmapContainer(new CacheBitmapContainer()),
+    : mpBitmapContainer(new CacheBitmapContainer()),
       mnNormalCacheSize(0),
       mnPreciousCacheSize(0),
       mnCurrentAccessTime(0),
       mnMaximalNormalCacheSize(MAXIMAL_CACHE_SIZE),
-      mpCacheCompactor(),
       mbIsFull(false)
 {
     Any aCacheSize (CacheConfiguration::Instance()->GetValue("CacheSize"));
@@ -447,9 +445,7 @@ void BitmapCache::UpdateCacheSize (const CacheEntry& rEntry, CacheOperation eOpe
 BitmapCache::CacheEntry::CacheEntry(
     sal_Int32 nLastAccessTime,
     bool bIsPrecious)
-    : maPreview(),
-      maMarkedPreview(),
-      mbIsUpToDate(true),
+    : mbIsUpToDate(true),
       mnLastAccessTime(nLastAccessTime),
       mbIsPrecious(bIsPrecious)
 {
@@ -460,7 +456,6 @@ BitmapCache::CacheEntry::CacheEntry(
     sal_Int32 nLastAccessTime,
     bool bIsPrecious)
     : maPreview(rPreview),
-      maMarkedPreview(),
       mbIsUpToDate(true),
       mnLastAccessTime(nLastAccessTime),
       mbIsPrecious(bIsPrecious)

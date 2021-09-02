@@ -36,15 +36,6 @@ PresenterPaneBase::PresenterPaneBase (
     const ::rtl::Reference<PresenterController>& rpPresenterController)
     : PresenterPaneBaseInterfaceBase(m_aMutex),
       mpPresenterController(rpPresenterController),
-      mxParentWindow(),
-      mxBorderWindow(),
-      mxBorderCanvas(),
-      mxContentWindow(),
-      mxContentCanvas(),
-      mxPaneId(),
-      mxBorderPainter(),
-      mxPresenterHelper(),
-      msTitle(),
       mxComponentContext(rxContext)
 {
     if (mpPresenterController)

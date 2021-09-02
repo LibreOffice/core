@@ -117,9 +117,7 @@ void collectUIInformation(const OUString& num, const OUString& rAction)
 }
 
 SlideSorterModel::SlideSorterModel (SlideSorter& rSlideSorter)
-    : maMutex(),
-      mrSlideSorter(rSlideSorter),
-      mxSlides(),
+    : mrSlideSorter(rSlideSorter),
       meEditMode(EditMode::Page),
       maPageDescriptors(0)
 {

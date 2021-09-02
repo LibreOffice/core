@@ -1047,7 +1047,7 @@ struct PDFFileImplData
 }
 
 PDFFile::PDFFile()
-   : PDFContainer(), m_nMajor( 0 ), m_nMinor( 0 )
+   :  m_nMajor( 0 ), m_nMinor( 0 )
 {
 }
 

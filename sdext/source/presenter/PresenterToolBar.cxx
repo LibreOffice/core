@@ -355,16 +355,11 @@ PresenterToolBar::PresenterToolBar (
     const Anchor eAnchor)
     : PresenterToolBarInterfaceBase(m_aMutex),
       mxComponentContext(rxContext),
-      maElementContainer(),
-      mpCurrentContainerPart(),
       mxWindow(rxWindow),
       mxCanvas(rxCanvas),
-      mxSlideShowController(),
-      mxCurrentSlide(),
       mpPresenterController(rpPresenterController),
       mbIsLayoutPending(false),
-      meAnchor(eAnchor),
-      maMinimalSize()
+      meAnchor(eAnchor)
 {
 }
 
@@ -1014,12 +1009,8 @@ PresenterToolBarView::PresenterToolBarView (
     const Reference<frame::XController>& rxController,
     const ::rtl::Reference<PresenterController>& rpPresenterController)
     : PresenterToolBarViewInterfaceBase(m_aMutex),
-      mxPane(),
       mxViewId(rxViewId),
-      mxWindow(),
-      mxCanvas(),
-      mpPresenterController(rpPresenterController),
-      mpToolBar()
+      mpPresenterController(rpPresenterController)
 {
     try
     {
@@ -1138,14 +1129,6 @@ Element::Element (
     const ::rtl::Reference<PresenterToolBar>& rpToolBar)
     : ElementInterfaceBase(m_aMutex),
       mpToolBar(rpToolBar),
-      maLocation(),
-      maSize(),
-      mpNormal(),
-      mpMouseOver(),
-      mpSelected(),
-      mpDisabled(),
-      mpMouseOverSelected(),
-      mpMode(),
       mbIsOver(false),
       mbIsPressed(false),
       mbIsSelected(false),
@@ -1335,9 +1318,6 @@ void SAL_CALL Element::statusChanged (const css::frame::FeatureStateEvent& rEven
 namespace {
 
 ElementMode::ElementMode()
-    : mpIcon(),
-      msAction(),
-      maText()
 {
 }
 
@@ -1619,8 +1599,6 @@ bool Label::SetState (const bool, const bool)
 namespace {
 
 Text::Text()
-    : msText(),
-      mpFont()
 {
 }
 
@@ -1740,8 +1718,7 @@ OUString TimeFormatter::FormatTime (const oslDateTime& rTime)
 //===== TimeLabel =============================================================
 
 TimeLabel::TimeLabel (const ::rtl::Reference<PresenterToolBar>& rpToolBar)
-    : Label(rpToolBar),
-      mpListener()
+    : Label(rpToolBar)
 {
 }
 

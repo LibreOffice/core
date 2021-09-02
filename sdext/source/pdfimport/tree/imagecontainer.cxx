@@ -100,8 +100,7 @@ OUString encodeBase64( const sal_Int8* i_pBuffer, const sal_uInt32 i_nBufferLeng
 
 } // namespace
 
-ImageContainer::ImageContainer() :
-    m_aImages()
+ImageContainer::ImageContainer()
 {}
 
 ImageId ImageContainer::addImage( const uno::Sequence<beans::PropertyValue>& xBitmap )

@@ -537,8 +537,7 @@ OutlineToImpressFinalizer::OutlineToImpressFinalizer (
     SdDrawDocument& rDocument,
     SvLockBytes const & rBytes)
     : mrBase(rBase),
-      mrDocument(rDocument),
-      mpStream()
+      mrDocument(rDocument)
 {
     // The given stream has a lifetime shorter than this new
     // OutlineToImpressFinalizer object.  Therefore a local copy of the

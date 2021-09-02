@@ -92,18 +92,12 @@ PresenterButton::PresenterButton (
     : PresenterButtonInterfaceBase(m_aMutex),
       mpPresenterController(rpPresenterController),
       mpTheme(rpTheme),
-      mxWindow(),
-      mxCanvas(),
-      mxPresenterHelper(),
       msText(rsText),
       mpFont(rpFont),
       mpMouseOverFont(rpMouseOverFont),
       msAction(rsAction),
-      maCenter(),
       maButtonSize(-1,-1),
-      meState(PresenterBitmapDescriptor::Normal),
-      mxNormalBitmap(),
-      mxMouseOverBitmap()
+      meState(PresenterBitmapDescriptor::Normal)
 {
     try
     {

@@ -50,13 +50,7 @@ namespace pdfi
     m_pCurPage(nullptr),
     m_pCurElement(nullptr),
     m_nNextFontId( 1 ),
-    m_aIdToFont(),
-    m_aFontToId(),
-    m_aGCStack(),
     m_nNextGCId( 1 ),
-    m_aIdToGC(),
-    m_aGCToId(),
-    m_aImages(),
     m_nPages(0),
     m_nNextZOrder( 1 ),
     m_xStatusIndicator( xStat )

@@ -103,7 +103,6 @@ ConfigurationController::Lock::~Lock()
 
 ConfigurationController::ConfigurationController() noexcept
     : ConfigurationControllerInterfaceBase(MutexOwner::maMutex)
-    , mpImplementation()
     , mbIsDisposed(false)
 {
 }
@@ -522,7 +521,6 @@ ConfigurationController::Implementation::Implementation (
       mpConfigurationUpdater(
           std::make_shared<ConfigurationUpdater>(mpBroadcaster, mpResourceManager,mxControllerManager)),
       mpQueueProcessor(new ChangeRequestQueueProcessor(mpConfigurationUpdater)),
-      mpConfigurationUpdaterLock(),
       mnLockCount(0)
 {
     mpQueueProcessor->SetConfiguration(mxRequestedConfiguration);

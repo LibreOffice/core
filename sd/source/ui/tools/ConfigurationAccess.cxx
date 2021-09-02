@@ -37,7 +37,6 @@ ConfigurationAccess::ConfigurationAccess (
     const Reference<XComponentContext>& rxContext,
     const OUString& rsRootName,
     const WriteMode eMode)
-    : mxRoot()
 {
     Reference<lang::XMultiServiceFactory> xProvider =
            configuration::theDefaultProvider::get( rxContext );
@@ -47,7 +46,6 @@ ConfigurationAccess::ConfigurationAccess (
 ConfigurationAccess::ConfigurationAccess (
     const OUString& rsRootName,
     const WriteMode eMode)
-    : mxRoot()
 {
     Reference<lang::XMultiServiceFactory> xProvider =
         configuration::theDefaultProvider::get( ::comphelper::getProcessComponentContext() );

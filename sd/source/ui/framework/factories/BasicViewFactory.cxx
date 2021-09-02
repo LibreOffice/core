@@ -83,7 +83,6 @@ public:
 
 BasicViewFactory::BasicViewFactory ()
     : BasicViewFactoryInterfaceBase(MutexOwner::maMutex),
-      mxConfigurationController(),
       mpViewShellContainer(new ViewShellContainer()),
       mpBase(nullptr),
       mpFrameView(nullptr),

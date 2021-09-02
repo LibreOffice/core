@@ -52,8 +52,7 @@ public:
 
 OdfEmitter::OdfEmitter( const uno::Reference<io::XOutputStream>& xOutput ) :
     m_xOutput( xOutput ),
-    m_aLineFeed(1),
-    m_aBuf()
+    m_aLineFeed(1)
 {
     OSL_PRECOND(m_xOutput.is(), "OdfEmitter(): invalid output stream");
     m_aLineFeed[0] = '\n';

@@ -16,11 +16,7 @@ using namespace sd;
 
 Transmitter::Transmitter( IBluetoothSocket* aSocket )
   : pStreamSocket( aSocket ),
-    mProcessingRequired(),
-    mMutex(),
-    mFinishRequested( false ),
-    mLowPriority(),
-    mHighPriority()
+    mFinishRequested( false )
 {
 }
 

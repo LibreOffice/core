@@ -34,7 +34,6 @@ PageDescriptor::PageDescriptor (
       mxPage(rxPage),
       mpMasterPage(nullptr),
       mnIndex(nIndex),
-      maBoundingBox(),
       maVisualState(nIndex),
       mbIsSelected(false),
       mbWasSelected(false),

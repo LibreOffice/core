@@ -31,9 +31,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 namespace sdext::presenter {
 
 PresenterSprite::PresenterSprite()
-    : mxSpriteFactory(),
-      mxSprite(),
-      maSize(0,0),
+    : maSize(0,0),
       maLocation(0,0),
       mbIsVisible(false)
 {

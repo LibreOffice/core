@@ -101,8 +101,6 @@ FramePainter::OffsetBitmap::OffsetBitmap (
     const BitmapEx& rBitmap,
     const sal_Int32 nHorizontalPosition,
     const sal_Int32 nVerticalPosition)
-    : maBitmap(),
-      maOffset()
 {
     OSL_ASSERT(nHorizontalPosition>=-1 && nHorizontalPosition<=+1);
     OSL_ASSERT(nVerticalPosition>=-1 && nVerticalPosition<=+1);

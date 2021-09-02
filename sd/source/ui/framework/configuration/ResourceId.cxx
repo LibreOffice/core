@@ -47,26 +47,20 @@ namespace sd::framework {
 WeakReference<util::XURLTransformer> ResourceId::mxURLTransformerWeak;
 
 ResourceId::ResourceId()
-    : ResourceIdInterfaceBase(),
-      maResourceURLs(0),
-      mpURL()
+    : maResourceURLs(0)
 {
 }
 
 ResourceId::ResourceId (
     const std::vector<OUString>& rResourceURLs)
-    : ResourceIdInterfaceBase(),
-      maResourceURLs(rResourceURLs),
-      mpURL()
+    : maResourceURLs(rResourceURLs)
 {
     ParseResourceURL();
 }
 
 ResourceId::ResourceId (
     const OUString& rsResourceURL)
-    : ResourceIdInterfaceBase(),
-      maResourceURLs(1, rsResourceURL),
-      mpURL()
+    : maResourceURLs(1, rsResourceURL)
 {
     // Handle the special case of an empty resource URL.
     if (rsResourceURL.isEmpty())
@@ -77,9 +71,7 @@ ResourceId::ResourceId (
 ResourceId::ResourceId (
     const OUString& rsResourceURL,
     const OUString& rsAnchorURL)
-    : ResourceIdInterfaceBase(),
-      maResourceURLs(2),
-      mpURL()
+    : maResourceURLs(2)
 {
     maResourceURLs[0] = rsResourceURL;
     maResourceURLs[1] = rsAnchorURL;
@@ -90,9 +82,7 @@ ResourceId::ResourceId (
     const OUString& rsResourceURL,
     const OUString& rsFirstAnchorURL,
     const Sequence<OUString>& rAnchorURLs)
-    : ResourceIdInterfaceBase(),
-      maResourceURLs(2+rAnchorURLs.getLength()),
-      mpURL()
+    : maResourceURLs(2+rAnchorURLs.getLength())
 {
     maResourceURLs[0] = rsResourceURL;
     maResourceURLs[1] = rsFirstAnchorURL;

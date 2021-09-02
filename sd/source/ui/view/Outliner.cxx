@@ -134,7 +134,6 @@ SdOutliner::SdOutliner( SdDrawDocument* pDoc, OutlinerMode nMode )
       mpImpl(new Implementation()),
       meMode(SEARCH),
       mpView(nullptr),
-      mpWeakViewShell(),
       mpWindow(nullptr),
       mpDrawDocument(pDoc),
       mnConversionLanguage(LANGUAGE_NONE),
@@ -146,7 +145,6 @@ SdOutliner::SdOutliner( SdDrawDocument* pDoc, OutlinerMode nMode )
       mbFoundObject(false),
       mbDirectionIsForward(true),
       mbRestrictSearchToSelection(false),
-      maMarkListCopy(),
       mpObj(nullptr),
       mpFirstObj(nullptr),
       mpSearchSpellTextObj(nullptr),
@@ -156,12 +154,7 @@ SdOutliner::SdOutliner( SdDrawDocument* pDoc, OutlinerMode nMode )
       meStartEditMode(EditMode::Page),
       mnStartPageIndex(sal_uInt16(-1)),
       mpStartEditedObject(nullptr),
-      maStartSelection(),
       mpSearchItem(nullptr),
-      maObjectIterator(),
-      maCurrentPosition(),
-      maSearchStartPosition(),
-      maLastValidPosition(),
       mbPrepareSpellingPending(true)
 {
     SetStyleSheetPool(static_cast<SfxStyleSheetPool*>( mpDrawDocument->GetStyleSheetPool() ));

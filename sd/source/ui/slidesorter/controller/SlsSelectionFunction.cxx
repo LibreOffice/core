@@ -714,8 +714,6 @@ SelectionFunction::EventDescriptor::EventDescriptor (
     const MouseEvent& rEvent,
     SlideSorter const & rSlideSorter)
     : maMousePosition(rEvent.GetPosPixel()),
-      maMouseModelPosition(),
-      mpHitDescriptor(),
       mpHitPage(),
       mnEventCode(nEventType),
       meDragMode(InsertionIndicatorHandler::MoveMode),
@@ -745,8 +743,6 @@ SelectionFunction::EventDescriptor::EventDescriptor (
     const sal_Int8 nDragAction,
     SlideSorter const & rSlideSorter)
     : maMousePosition(rEvent.maPosPixel),
-      maMouseModelPosition(),
-      mpHitDescriptor(),
       mpHitPage(),
       mnEventCode(nEventType),
       meDragMode(InsertionIndicatorHandler::GetModeFromDndAction(nDragAction)),
@@ -965,8 +961,7 @@ void SelectionFunction::ModeHandler::StartDrag (
 NormalModeHandler::NormalModeHandler (
     SlideSorter& rSlideSorter,
     SelectionFunction& rSelectionFunction)
-    : ModeHandler(rSlideSorter, rSelectionFunction, true),
-      maButtonDownLocation()
+    : ModeHandler(rSlideSorter, rSelectionFunction, true)
 {
 }
 

@@ -238,7 +238,6 @@ public:
 
 CustomAnimationListEntryItem::CustomAnimationListEntryItem(const OUString& aDescription, const CustomAnimationEffectPtr& pEffect)
     : msDescription(aDescription)
-    , msEffectName(OUString())
     , mpEffect(pEffect)
 {
     if (!mpEffect)

@@ -49,10 +49,8 @@ SlideSorterModule::SlideSorterModule (
     const Reference<frame::XController>& rxController,
     const OUString& rsLeftPaneURL)
     : SlideSorterModuleBase(MutexOwner::maMutex),
-      mxConfigurationController(),
       mxResourceId(FrameworkHelper::CreateResourceId(FrameworkHelper::msSlideSorterURL, rsLeftPaneURL)),
       mxMainViewAnchorId(FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL)),
-      msCurrentMainViewURL(),
       mxViewTabBarId(FrameworkHelper::CreateResourceId(
           FrameworkHelper::msViewTabBarURL,
           FrameworkHelper::msCenterPaneURL)),

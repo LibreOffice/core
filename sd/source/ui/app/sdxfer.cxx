@@ -88,7 +88,6 @@ SdTransferable::SdTransferable( SdDrawDocument* pSrcDoc, ::sd::View* pWorkView, 
 ,   mbLateInit( bInitOnGetData )
 ,   mbPageTransferable( false )
 ,   mbPageTransferablePersistent( false )
-,   maUserData()
 {
     if( mpSourceDoc )
         StartListening( *mpSourceDoc );

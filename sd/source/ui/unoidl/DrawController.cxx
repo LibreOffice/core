@@ -66,14 +66,10 @@ DrawController::DrawController (ViewShellBase& rBase) noexcept
       m_aSelectionTypeIdentifier(
         cppu::UnoType<view::XSelectionChangeListener>::get()),
       mpBase(&rBase),
-      maLastVisArea(),
       mpCurrentPage(nullptr),
       mbMasterPageMode(false),
       mbLayerMode(false),
-      mbDisposing(false),
-      mxSubController(),
-      mxConfigurationController(),
-      mxModuleController()
+      mbDisposing(false)
 {
     ProvideFrameworkControllers();
 }

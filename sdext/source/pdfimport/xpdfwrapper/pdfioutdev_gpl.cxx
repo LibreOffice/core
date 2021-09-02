@@ -533,7 +533,6 @@ void PDFOutDev::printPath( GfxPath* pPath )
 
 PDFOutDev::PDFOutDev( PDFDoc* pDoc ) :
     m_pDoc( pDoc ),
-    m_aFontMap(),
     m_pUtf8Map( new UnicodeMap("UTF-8", true, &mapUTF8) ),
     m_bSkipImages(false)
 {

@@ -272,12 +272,9 @@ namespace {
             const bool bPrintMarkedOnly)
             : mpPrinter(pPrinter),
               mnDrawMode(DrawModeFlags::Default),
-              msTimeDate(),
-              msPageString(),
               maPrintSize(0,0),
               maPageSize(0,0),
               meOrientation(Orientation::Portrait),
-              maMap(),
               mbPrintMarkedOnly(bPrintMarkedOnly)
         {}
 
@@ -1164,9 +1161,6 @@ public:
         , mrBase(rBase)
         , mbIsDisposed(false)
         , mpPrinter(nullptr)
-        , mpOptions()
-        , maPrinterPages()
-        , mpPrintView()
         , mbHasOrientationWarningBeenShown(false)
     {
         DialogCreator aCreator( mrBase, mrBase.GetDocShell()->GetDocumentType() == DocumentType::Impress, GetCurrentPageIndex() );

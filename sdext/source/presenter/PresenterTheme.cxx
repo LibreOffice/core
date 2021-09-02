@@ -244,7 +244,6 @@ PresenterTheme::PresenterTheme (
     const css::uno::Reference<css::uno::XComponentContext>& rxContext,
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas)
     : mxContext(rxContext),
-      mpTheme(),
       mxCanvas(rxCanvas)
 {
     mpTheme = ReadTheme();
@@ -465,9 +464,7 @@ PresenterTheme::SharedFontDescriptor PresenterTheme::GetFont (
 
 PresenterTheme::FontDescriptor::FontDescriptor (
     const std::shared_ptr<FontDescriptor>& rpDescriptor)
-    : msFamilyName(),
-      msStyleName(),
-      mnSize(12),
+    : mnSize(12),
       mnColor(0x00000000),
       msAnchor(OUString("Left")),
       mnXOffset(0),
@@ -558,12 +555,10 @@ PresenterTheme::Theme::Theme (
     const Reference<container::XHierarchicalNameAccess>& rxThemeRoot,
     const OUString& rsNodeName)
     : msConfigurationNodeName(rsNodeName),
-      mpParentTheme(),
       maPaneStyles(),
       maViewStyles(),
       maStyleAssociations(),
-      mxThemeRoot(rxThemeRoot),
-      mpIconContainer()
+      mxThemeRoot(rxThemeRoot)
 {
 }
 
@@ -654,8 +649,7 @@ ReadContext::ReadContext (
     const css::uno::Reference<css::uno::XComponentContext>& rxContext,
     const Reference<rendering::XCanvas>& rxCanvas)
     : mxComponentContext(rxContext),
-      mxCanvas(rxCanvas),
-      mxPresenterHelper()
+      mxCanvas(rxCanvas)
 {
     Reference<lang::XMultiComponentFactory> xFactory (rxContext->getServiceManager());
     if (xFactory.is())
@@ -883,12 +877,6 @@ SharedPaneStyle PaneStyleContainer::GetPaneStyle (const OUString& rsStyleName) c
 //===== PaneStyle =============================================================
 
 PaneStyle::PaneStyle()
-    : msStyleName(),
-      mpParentStyle(),
-      mpFont(),
-      maInnerBorderSize(),
-      maOuterBorderSize(),
-      mpBitmaps()
 {
 }
 
@@ -997,10 +985,6 @@ SharedViewStyle ViewStyleContainer::GetViewStyle (const OUString& rsStyleName) c
 //===== ViewStyle =============================================================
 
 ViewStyle::ViewStyle()
-    : msStyleName(),
-      mpParentStyle(),
-      mpFont(),
-      mpBackground()
 {
 }
 

@@ -90,8 +90,7 @@ private:
 
 // PresenterTextView
 PresenterTextView::PresenterTextView ()
-    : PresenterTextViewInterfaceBase(),
-      mpImplementation(new Implementation())
+    : mpImplementation(new Implementation())
 {
 }
 
@@ -206,12 +205,9 @@ void PresenterTextView::ThrowIfDisposed()
 
 // PresenterTextView::Implementation
 PresenterTextView::Implementation::Implementation()
-    : mxBitmap(),
-      mpCanvas(),
-      mpOutputDevice(VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::DEFAULT)),
+    : mpOutputDevice(VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::DEFAULT)),
       mpEditEngineItemPool(EditEngine::CreatePool()),
       maSize(100,100),
-      msText(),
       mnTop(0),
       mnTotalHeight(-1)
 {

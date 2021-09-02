@@ -373,7 +373,6 @@ ShapeExport& PowerPointShapeExport::WriteUnknownShape(const Reference< XShape >&
 
 PowerPointExport::PowerPointExport(const Reference< XComponentContext >& rContext, const uno::Sequence<uno::Any>& rArguments)
     : XmlFilterBase(rContext)
-    , PPTWriterBase()
     , mnLayoutFileIdMax(1)
     , mnSlideIdMax(1 << 8)
     , mnSlideMasterIdMax(1U << 31)

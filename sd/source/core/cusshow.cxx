@@ -31,7 +31,6 @@ using namespace ::com::sun::star;
 |*
 \************************************************************************/
 SdCustomShow::SdCustomShow()
-  : maPages()
 {
 }
 
@@ -47,8 +46,7 @@ SdCustomShow::SdCustomShow( const SdCustomShow& rShow )
 }
 
 SdCustomShow::SdCustomShow(css::uno::Reference< css::uno::XInterface > const & xShow )
-  : maPages(),
-  mxUnoCustomShow( xShow )
+  : mxUnoCustomShow( xShow )
 {
 }
 

@@ -94,23 +94,13 @@ PresenterController::PresenterController (
       mxScreen(rxScreen),
       mxComponentContext(rxContext),
       mxController(rxController),
-      mxConfigurationController(),
       mxSlideShowController(rxSlideShowController),
       mxMainPaneId(rxMainPaneId),
       mpPaneContainer(rpPaneContainer),
       mnCurrentSlideIndex(-1),
-      mxCurrentSlide(),
-      mxNextSlide(),
       mpWindowManager(new PresenterWindowManager(rxContext,mpPaneContainer,this)),
-      mpTheme(),
-      mxMainWindow(),
-      mpPaneBorderPainter(),
       mpCanvasHelper(std::make_shared<PresenterCanvasHelper>()),
-      mxPresenterHelper(),
-      mpPaintManager(),
       mnPendingSlideNumber(-1),
-      mxUrlTransformer(),
-      mpAccessibleObject(),
       mbIsAccessibilityActive(false)
 {
     OSL_ASSERT(mxController.is());

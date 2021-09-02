@@ -84,8 +84,6 @@ TimerBasedTaskExecution::TimerBasedTaskExecution (
     sal_uInt32 nMillisecondsBetweenSteps,
     sal_uInt32 nMaxTimePerStep)
     : mpTask(rpTask),
-      maTimer(),
-      mpSelf(),
       mnMaxTimePerStep(nMaxTimePerStep)
 {
     maTimer.SetInvokeHandler( LINK(this,TimerBasedTaskExecution,TimerCallback) );

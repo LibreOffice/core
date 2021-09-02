@@ -348,7 +348,6 @@ HtmlExport::HtmlExport(
     :   maPath( aPath ),
         mpDoc(pExpDoc),
         mpDocSh( pDocShell ),
-        meEC(),
         meMode( PUBLISH_SINGLE_DOCUMENT ),
         mbContentsPage(false),
         mnButtonThema(-1),

@@ -43,9 +43,7 @@ namespace sd::framework {
 ToolBarModule::ToolBarModule (
     const Reference<frame::XController>& rxController)
     : ToolBarModuleInterfaceBase(m_aMutex),
-      mxConfigurationController(),
       mpBase(nullptr),
-      mpToolBarManagerLock(),
       mbMainViewSwitchUpdatePending(false)
 {
     // Tunnel through the controller to obtain a ViewShellBase.

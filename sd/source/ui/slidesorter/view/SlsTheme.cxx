@@ -57,10 +57,7 @@ static Color HGBAdapt (
 }
 
 Theme::Theme (const std::shared_ptr<controller::Properties>& rpProperties)
-    : maBackgroundColor(rpProperties->GetBackgroundColor()),
-      maGradients(),
-      maIcons(),
-      maColor()
+    : maBackgroundColor(rpProperties->GetBackgroundColor())
 {
     maColor.resize(ColorType_Size_);
     maColor[Color_Background] = maBackgroundColor;

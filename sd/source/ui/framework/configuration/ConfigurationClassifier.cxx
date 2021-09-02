@@ -33,9 +33,7 @@ ConfigurationClassifier::ConfigurationClassifier (
     const Reference<XConfiguration>& rxConfiguration1,
     const Reference<XConfiguration>& rxConfiguration2)
     : mxConfiguration1(rxConfiguration1),
-      mxConfiguration2(rxConfiguration2),
-      maC1minusC2(),
-      maC2minusC1()
+      mxConfiguration2(rxConfiguration2)
 {
 }
 

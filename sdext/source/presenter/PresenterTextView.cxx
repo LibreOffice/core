@@ -67,12 +67,8 @@ PresenterTextView::PresenterTextView (
     const Reference<rendering::XCanvas>& rxCanvas,
     const ::std::function<void (const css::awt::Rectangle&)>& rInvalidator)
     : mxCanvas(rxCanvas),
-      mxBreakIterator(),
-      mxScriptTypeDetector(),
       maLocation(0,0),
       maSize(0,0),
-      mpFont(),
-      maParagraphs(),
       mpCaret(std::make_shared<PresenterTextCaret>(
           rxContext,
           [this] (sal_Int32 const nParagraphIndex, sal_Int32 const nCharacterIndex)
@@ -80,8 +76,7 @@ PresenterTextView::PresenterTextView (
           rInvalidator)),
       mnLeftOffset(0),
       mnTopOffset(0),
-      mbIsFormatPending(false),
-      maTextChangeBroadcaster()
+      mbIsFormatPending(false)
 {
     Reference<lang::XMultiComponentFactory> xFactory =
         rxContext->getServiceManager();
@@ -438,12 +433,10 @@ PresenterTextParagraph::PresenterTextParagraph (
     const Reference<i18n::XScriptTypeDetector>& rxScriptTypeDetector,
     const Reference<text::XTextRange>& rxTextRange,
     const SharedPresenterTextCaret& rpCaret)
-    : msParagraphText(),
-      mnParagraphIndex(nParagraphIndex),
+    : mnParagraphIndex(nParagraphIndex),
       mpCaret(rpCaret),
       mxBreakIterator(rxBreakIterator),
       mxScriptTypeDetector(rxScriptTypeDetector),
-      maLines(),
       mnVerticalOffset(0),
       mnXOrigin(0),
       mnYOrigin(0),
@@ -452,8 +445,7 @@ PresenterTextParagraph::PresenterTextParagraph (
       mnDescent(0),
       mnLineHeight(-1),
       mnWritingMode (text::WritingMode2::LR_TB),
-      mnCharacterOffset(0),
-      maCells()
+      mnCharacterOffset(0)
 {
     if (!rxTextRange.is())
         return;
@@ -1045,9 +1037,7 @@ PresenterTextCaret::PresenterTextCaret (
       mnCaretBlinkTaskId(0),
       mbIsCaretVisible(false),
       maCharacterBoundsAccess(rCharacterBoundsAccess),
-      maInvalidator(rInvalidator),
-      maBroadcaster(),
-      maCaretBounds()
+      maInvalidator(rInvalidator)
 {
 }
 
@@ -1161,9 +1151,7 @@ PresenterTextParagraph::Line::Line (
     : mnLineStartCharacterIndex(nLineStartCharacterIndex),
       mnLineEndCharacterIndex(nLineEndCharacterIndex),
       mnLineStartCellIndex(-1), mnLineEndCellIndex(-1),
-      mxLayoutedLine(),
-      mnBaseLine(0), mnWidth(0),
-      maCellBoxes()
+      mnBaseLine(0), mnWidth(0)
 {
 }
 
