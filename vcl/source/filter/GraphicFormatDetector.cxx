@@ -535,7 +535,7 @@ bool GraphicFormatDetector::checkPCD()
         return false;
     char sBuffer[8];
     mrStream.Seek(mnStreamPosition + 2048);
-    mrStream.ReadBytes(sBuffer, 7);
+    sBuffer[mrStream.ReadBytes(sBuffer, 7)] = 0;
 
     if (strncmp(sBuffer, "PCD_IPI", 7) == 0)
     {
