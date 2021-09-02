@@ -18,12 +18,14 @@
  */
 
 #include <oox/drawingml/chart/datasourcemodel.hxx>
+#include <svl/zforlist.hxx>
 
 namespace oox::drawingml::chart {
 
 DataSequenceModel::DataSequenceModel() :
     mnPointCount( -1 ),
-    mnLevelCount( 1 )
+    mnLevelCount( 1 ),
+    meFormatType( SvNumFormatType::UNDEFINED )
 {
 }
 

@@ -84,7 +84,8 @@ public:
     virtual css::uno::Reference<css::chart2::data::XDataSequence>
         createDataSequence(
             const css::uno::Reference<css::chart2::data::XDataProvider>& rxDataProvider,
-            const DataSequenceModel& rDataSeq, const OUString& rRole );
+            const DataSequenceModel& rDataSeq, const OUString& rRole,
+            const OUString& aRoleQualifier );
 
 private:
                         ChartConverter( const ChartConverter& ) = delete;
