@@ -98,7 +98,7 @@ void DoubleSequenceContext::onCharacters( const OUString& rChars )
             if( mnPtIndex >= 0 )
             {
                 /* Import categories as String even though it could
-                 * be values.
+                 * be values except when the format code indicates that they are dates.
                  * n#810508: xVal needs to be imported as double
                  * TODO: NumberFormat conversion, remove the check then.
                  */
@@ -117,6 +117,8 @@ void DoubleSequenceContext::onCharacters( const OUString& rChars )
                             SvNumFormatType nType;
                             pNumFrmt->PutEntry( aFormatCode, nCheckPos, nType, nKey );
                             bNoKey = (nCheckPos != 0);
+                            if (!bNoKey)
+                                mrModel.meFormatType = nType;
                         }
                         if( bNoKey )
                         {
@@ -125,13 +127,18 @@ void DoubleSequenceContext::onCharacters( const OUString& rChars )
                         else
                         {
                             double fValue = rChars.toDouble();
-                            const ::Color* pColor = nullptr;
-                            OUString aFormattedValue;
-                            // tdf#91250: use UNLIMITED_PRECISION in case of GENERAL Number Format of category axis labels
-                            if( pNumFrmt->GetStandardPrec() != SvNumberFormatter::UNLIMITED_PRECISION )
-                                pNumFrmt->ChangeStandardPrec(SvNumberFormatter::UNLIMITED_PRECISION);
-                            pNumFrmt->GetOutputString( fValue, nKey, aFormattedValue, &pColor );
-                            mrModel.maData[ mnPtIndex ] <<= aFormattedValue;
+                            if (mrModel.meFormatType == SvNumFormatType::DATE)
+                                mrModel.maData[ mnPtIndex ] <<= fValue;
+                            else
+                            {
+                                const ::Color* pColor = nullptr;
+                                OUString aFormattedValue;
+                                // tdf#91250: use UNLIMITED_PRECISION in case of GENERAL Number Format of category axis labels
+                                if( pNumFrmt->GetStandardPrec() != SvNumberFormatter::UNLIMITED_PRECISION )
+                                    pNumFrmt->ChangeStandardPrec(SvNumberFormatter::UNLIMITED_PRECISION);
+                                pNumFrmt->GetOutputString( fValue, nKey, aFormattedValue, &pColor );
+                                mrModel.maData[ mnPtIndex ] <<= aFormattedValue;
+                            }
                         }
                     }
                     else
