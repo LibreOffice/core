@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc5e20af_5442b297",
+        "filename": "offapi/com/sun/star/chart2/data/XDataProvider.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-09-02T17:43:13Z",
+      "side": 1,
+      "message": "this changes an existing UNO interface, so please put \"[API CHANGE]\" into the commit message (and consider if it\u0027s likely that an extension or macro could be using this interface...)",
+      "revId": "33c6ebc4787ebc48244ba07c898aac8908987db1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
