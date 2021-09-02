@@ -1459,15 +1459,15 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case MetaActionType::LAYOUTMODE:
             {
-                ComplexTextLayoutFlags nLayoutMode = static_cast<const MetaLayoutModeAction*>(pAction)->GetLayoutMode();
+                vcl::text::ComplexTextLayoutFlags nLayoutMode = static_cast<const MetaLayoutModeAction*>(pAction)->GetLayoutMode();
                 mnHorTextAlign = 0;
-                if ((nLayoutMode & ComplexTextLayoutFlags::BiDiRtl) != ComplexTextLayoutFlags::Default)
+                if ((nLayoutMode & vcl::text::ComplexTextLayoutFlags::BiDiRtl) != vcl::text::ComplexTextLayoutFlags::Default)
                 {
                     mnHorTextAlign = TA_RIGHT | TA_RTLREADING;
                 }
-                if ((nLayoutMode & ComplexTextLayoutFlags::TextOriginRight) != ComplexTextLayoutFlags::Default)
+                if ((nLayoutMode & vcl::text::ComplexTextLayoutFlags::TextOriginRight) != vcl::text::ComplexTextLayoutFlags::Default)
                     mnHorTextAlign |= TA_RIGHT;
-                else if ((nLayoutMode & ComplexTextLayoutFlags::TextOriginLeft) != ComplexTextLayoutFlags::Default)
+                else if ((nLayoutMode & vcl::text::ComplexTextLayoutFlags::TextOriginLeft) != vcl::text::ComplexTextLayoutFlags::Default)
                     mnHorTextAlign &= ~TA_RIGHT;
                 break;
             }

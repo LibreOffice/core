@@ -703,7 +703,7 @@ void SvxCropExample::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
 void SvxCropExample::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
 {
-    rRenderContext.Push(PushFlags::MAPMODE);
+    rRenderContext.Push(vcl::PushFlags::MAPMODE);
     rRenderContext.SetMapMode(m_aMapMode);
 
     // Win BG

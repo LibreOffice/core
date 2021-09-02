@@ -2829,9 +2829,9 @@ tools::Long TextEngine::ImpGetPortionXOffset( sal_uInt32 nPara, TextLine const *
 
 void TextEngine::ImpInitLayoutMode( OutputDevice* pOutDev )
 {
-    ComplexTextLayoutFlags nLayoutMode = pOutDev->GetLayoutMode();
+    vcl::text::ComplexTextLayoutFlags nLayoutMode = pOutDev->GetLayoutMode();
 
-    nLayoutMode &= ~ComplexTextLayoutFlags(ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::BiDiStrong );
+    nLayoutMode &= ~vcl::text::ComplexTextLayoutFlags(vcl::text::ComplexTextLayoutFlags::BiDiRtl | vcl::text::ComplexTextLayoutFlags::BiDiStrong );
 
     pOutDev->SetLayoutMode( nLayoutMode );
 }

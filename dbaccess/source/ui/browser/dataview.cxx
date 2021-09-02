@@ -70,7 +70,7 @@ namespace dbaui
     {
         // draw the background
         {
-            rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
+            rRenderContext.Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
             rRenderContext.SetLineColor(COL_TRANSPARENT);
             rRenderContext.SetFillColor(GetSettings().GetStyleSettings().GetFaceColor());
             rRenderContext.DrawRect(_rRect);

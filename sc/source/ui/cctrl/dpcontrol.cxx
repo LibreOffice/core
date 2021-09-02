@@ -127,7 +127,7 @@ void ScDPFieldButton::draw()
         aTextPos.setX(maPos.getX() + 2); // 2 = Margin
         aTextPos.setY(maPos.getY() + (maSize.Height()-nTHeight)/2);
 
-        mpOutDev->Push(PushFlags::CLIPREGION);
+        mpOutDev->Push(vcl::PushFlags::CLIPREGION);
         mpOutDev->IntersectClipRegion(aRect);
         mpOutDev->DrawText(aTextPos, maText);
         mpOutDev->Pop();

@@ -486,7 +486,7 @@ void ToolBox::ImplDrawBackground(vcl::RenderContext& rRenderContext, const tools
     if (IsInPaint())
         aPaintRegion.Intersect(GetOutDev()->GetActiveClipRegion());
 
-    rRenderContext.Push(PushFlags::CLIPREGION);
+    rRenderContext.Push(vcl::PushFlags::CLIPREGION);
     rRenderContext.IntersectClipRegion( aPaintRegion );
 
     if (!pWrapper)
@@ -534,7 +534,7 @@ void ToolBox::ImplErase(vcl::RenderContext& rRenderContext, const tools::Rectang
     {
         if (GetStyle() & WB_3DLOOK)
         {
-            rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
+            rRenderContext.Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
             rRenderContext.SetLineColor();
             if (bHasOpenPopup)
                 // choose the same color as the popup will use
@@ -2446,7 +2446,7 @@ void ToolBox::ImplDrawMenuButton(vcl::RenderContext& rRenderContext, bool bHighl
     // execute pending paint requests
     ImplCheckUpdate();
 
-    rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+    rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
 
     // draw the 'more' indicator / button (>>)
     ImplErase(rRenderContext, mpData->maMenubuttonItem.maRect, bHighlight);

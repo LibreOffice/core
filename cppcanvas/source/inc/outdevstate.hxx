@@ -30,8 +30,7 @@
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <vcl/fntstyle.hxx>
-#include <vcl/outdevstate.hxx>
-
+#include <vcl/rendercontext/State.hxx>
 
 namespace cppcanvas::internal
     {
@@ -55,7 +54,7 @@ namespace cppcanvas::internal
                 fontRotation(0.0),
 
                 textEmphasisMark(FontEmphasisMark::NONE),
-                pushFlags(PushFlags::ALL),
+                pushFlags(vcl::PushFlags::ALL),
                 textDirection(css::rendering::TextDirection::WEAK_LEFT_TO_RIGHT),
                 textAlignment(0), // TODO(Q2): Synchronize with implrenderer
                                   // and possibly new rendering::TextAlignment
@@ -99,7 +98,7 @@ namespace cppcanvas::internal
             double                                                                   fontRotation;
 
             FontEmphasisMark                                                         textEmphasisMark;
-            PushFlags                                                                pushFlags;
+            vcl::PushFlags                                                                pushFlags;
             sal_Int8                                                                 textDirection;
             sal_Int8                                                                 textAlignment;
             FontRelief                                                               textReliefStyle;

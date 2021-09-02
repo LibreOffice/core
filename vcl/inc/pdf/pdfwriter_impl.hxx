@@ -603,7 +603,7 @@ struct GraphicsState
     Color                            m_aOverlineColor;
     basegfx::B2DPolyPolygon          m_aClipRegion;
     bool                             m_bClipRegion;
-    ComplexTextLayoutFlags            m_nLayoutMode;
+    vcl::text::ComplexTextLayoutFlags m_nLayoutMode;
     LanguageType                     m_aDigitLanguage;
     PushFlags                        m_nFlags;
     GraphicsStateUpdateFlags         m_nUpdateFlags;
@@ -614,7 +614,7 @@ struct GraphicsState
             m_aTextLineColor( COL_TRANSPARENT ),
             m_aOverlineColor( COL_TRANSPARENT ),
             m_bClipRegion( false ),
-            m_nLayoutMode( ComplexTextLayoutFlags::Default ),
+            m_nLayoutMode( vcl::text::ComplexTextLayoutFlags::Default ),
             m_aDigitLanguage( 0 ),
             m_nFlags( PushFlags::ALL ),
             m_nUpdateFlags( GraphicsStateUpdateFlags::All )
@@ -1156,7 +1156,7 @@ public:
 
     void intersectClipRegion( const basegfx::B2DPolyPolygon& rRegion );
 
-    void setLayoutMode( ComplexTextLayoutFlags nLayoutMode )
+    void setLayoutMode( vcl::text::ComplexTextLayoutFlags nLayoutMode )
     {
         m_aGraphicsStack.front().m_nLayoutMode = nLayoutMode;
         m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::LayoutMode;

@@ -360,7 +360,7 @@ void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     }
 
     // No recent files to be shown yet. Show a welcome screen.
-    rRenderContext.Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
+    rRenderContext.Push(vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR);
     SetMessageFont(rRenderContext);
     rRenderContext.SetTextColor(maTextColor);
 

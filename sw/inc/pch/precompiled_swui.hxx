@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-05-14 22:17:26 using:
+ Generated on 2021-09-28 05:49:06 using:
  ./bin/update_pch sw swui --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -42,6 +42,7 @@
 #include <map>
 #include <math.h>
 #include <memory>
+#include <mutex>
 #include <new>
 #include <numeric>
 #include <optional>
@@ -131,7 +132,6 @@
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/outdevstate.hxx>
 #include <vcl/print.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/region.hxx>
@@ -144,7 +144,10 @@
 #include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/rendercontext/ImplMapRes.hxx>
 #include <vcl/rendercontext/InvertFlags.hxx>
+#include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/rendercontext/SalLayoutFlags.hxx>
+#include <vcl/rendercontext/State.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/settings.hxx>
@@ -176,6 +179,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/tuple/Tuple2D.hxx>
+#include <basegfx/tuple/Tuple3D.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
@@ -194,6 +199,7 @@
 #include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -272,9 +278,7 @@
 #include <com/sun/star/script/XStarBasicAccess.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
-#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/PositionLayoutDir.hpp>
@@ -365,6 +369,7 @@
 #include <editeng/numitem.hxx>
 #include <editeng/orphitem.hxx>
 #include <editeng/outliner.hxx>
+#include <editeng/overflowingtxt.hxx>
 #include <editeng/paperinf.hxx>
 #include <editeng/paragraphdata.hxx>
 #include <editeng/paravertalignitem.hxx>
@@ -394,7 +399,7 @@
 #include <o3tl/unit_conversion.hxx>
 #include <officecfg/Office/Writer.hxx>
 #include <ooo/vba/XHelperInterface.hpp>
-#include <ooo/vba/word/XParagraphFormat.hpp>
+#include <ooo/vba/word/WdSaveFormat.hpp>
 #include <ooo/vba/word/XSection.hpp>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
@@ -435,6 +440,7 @@
 #include <svl/lstner.hxx>
 #include <svl/macitem.hxx>
 #include <svl/nfkeytab.hxx>
+#include <svl/numformat.hxx>
 #include <svl/ondemand.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/stritem.hxx>
@@ -443,6 +449,7 @@
 #include <svl/typedwhich.hxx>
 #include <svl/undo.hxx>
 #include <svl/urihelper.hxx>
+#include <svl/whichranges.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svtools/borderline.hxx>
@@ -536,6 +543,7 @@
 #include <column.hxx>
 #include <dbmgr.hxx>
 #include <doc.hxx>
+#include <docary.hxx>
 #include <docsh.hxx>
 #include <docstyle.hxx>
 #include <docufld.hxx>
@@ -606,6 +614,7 @@
 #include <tablemgr.hxx>
 #include <tblafmt.hxx>
 #include <tblenum.hxx>
+#include <textboxhelper.hxx>
 #include <tgrditem.hxx>
 #include <tox.hxx>
 #include <toxe.hxx>

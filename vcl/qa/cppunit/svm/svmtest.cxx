@@ -1969,7 +1969,7 @@ void SvmTest::testPushPop()
     pVirtualDev->Push();
     pVirtualDev->SetLineColor(COL_RED);
     pVirtualDev->DrawLine(Point(4,4), Point(6,6));
-    pVirtualDev->Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+    pVirtualDev->Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
     pVirtualDev->SetLineColor(COL_LIGHTRED);
     pVirtualDev->DrawLine(Point(5,5), Point(7,7));
     pVirtualDev->Pop();
@@ -2267,8 +2267,8 @@ void SvmTest::testLayoutMode()
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
     setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
-    pVirtualDev->SetLayoutMode(ComplexTextLayoutFlags::TextOriginLeft);
-    pVirtualDev->SetLayoutMode(ComplexTextLayoutFlags::BiDiRtl);
+    pVirtualDev->SetLayoutMode(vcl::text::ComplexTextLayoutFlags::TextOriginLeft);
+    pVirtualDev->SetLayoutMode(vcl::text::ComplexTextLayoutFlags::BiDiRtl);
 
     checkLayoutMode(writeAndReadStream(aGDIMetaFile));
     checkLayoutMode(readFile(u"layoutmode.svm"));

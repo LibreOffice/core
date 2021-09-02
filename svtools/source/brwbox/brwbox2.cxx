@@ -606,7 +606,7 @@ void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
         }
         else
         {
-            rRenderContext.Push(PushFlags::FILLCOLOR);
+            rRenderContext.Push(vcl::PushFlags::FILLCOLOR);
             rRenderContext.SetFillColor(COL_BLACK);
             rRenderContext.DrawRect(tools::Rectangle(Point(nX, 0), Size(pCol->Width(), GetTitleHeight() - 1)));
             rRenderContext.Pop();
@@ -621,7 +621,7 @@ void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     {
         const StyleSettings &rSettings = rRenderContext.GetSettings().GetStyleSettings();
         Color aColFace(rSettings.GetFaceColor());
-        rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+        rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
         rRenderContext.SetFillColor(aColFace);
         rRenderContext.SetLineColor(aColFace);
         rRenderContext.DrawRect(tools::Rectangle(Point(nX, 0),
@@ -724,7 +724,7 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlag
                 pFirstCol->Title(), !IsEnabled());
             aButtonFrame.Draw( *pDev );
 
-            pDev->Push( PushFlags::LINECOLOR );
+            pDev->Push( vcl::PushFlags::LINECOLOR );
             pDev->SetLineColor( COL_BLACK );
 
             pDev->DrawLine( Point( aRealPos.X(), aRealPos.Y() + nTitleHeight-1 ),
@@ -932,7 +932,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
         {
             // draw horizontal delimitation lines
             _rOut.SetClipRegion();
-            _rOut.Push( PushFlags::LINECOLOR );
+            _rOut.Push( vcl::PushFlags::LINECOLOR );
             _rOut.SetLineColor( aDelimiterLineColor );
             tools::Long nY = aPos.Y() + nDataRowHeigt - 1;
             if (nY <= aOverallAreaBRPos.Y())

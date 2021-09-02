@@ -273,7 +273,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
     GDIMetaFile aTarget;
     bool bChanged(false);
     std::vector< basegfx::B2DPolyPolygon > aClips;
-    std::vector< PushFlags > aPushFlags;
+    std::vector< vcl::PushFlags > aPushFlags;
     std::vector< MapMode > aMapModes;
 
     // start with empty region
@@ -368,16 +368,16 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
             case MetaActionType::PUSH :
             {
                 const MetaPushAction* pA = static_cast< const MetaPushAction* >(pAction);
-                const PushFlags nFlags(pA->GetFlags());
+                const vcl::PushFlags nFlags(pA->GetFlags());
 
                 aPushFlags.push_back(nFlags);
 
-                if(nFlags & PushFlags::CLIPREGION)
+                if(nFlags & vcl::PushFlags::CLIPREGION)
                 {
                     aClips.push_back(aClips.back());
                 }
 
-                if(nFlags & PushFlags::MAPMODE)
+                if(nFlags & vcl::PushFlags::MAPMODE)
                 {
                     aMapModes.push_back(aMapModes.back());
                 }
@@ -389,10 +389,10 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
 
                 if(!aPushFlags.empty())
                 {
-                    const PushFlags nFlags(aPushFlags.back());
+                    const vcl::PushFlags nFlags(aPushFlags.back());
                     aPushFlags.pop_back();
 
-                    if(nFlags & PushFlags::CLIPREGION)
+                    if(nFlags & vcl::PushFlags::CLIPREGION)
                     {
                         if(aClips.size() > 1)
                         {
@@ -404,7 +404,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                         }
                     }
 
-                    if(nFlags & PushFlags::MAPMODE)
+                    if(nFlags & vcl::PushFlags::MAPMODE)
                     {
                         if(aMapModes.size() > 1)
                         {

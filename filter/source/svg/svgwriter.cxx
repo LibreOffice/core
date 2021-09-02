@@ -88,10 +88,10 @@ const char   aXMLAttrStrokeLinejoin[] = "stroke-linejoin";
 const char   aXMLAttrStrokeLinecap[] = "stroke-linecap";
 
 
-PushFlags SVGContextHandler::getPushFlags() const
+vcl::PushFlags SVGContextHandler::getPushFlags() const
 {
     if (maStateStack.empty())
-        return PushFlags::NONE;
+        return vcl::PushFlags::NONE;
 
     const PartialState& rPartialState = maStateStack.top();
     return rPartialState.meFlags;
@@ -102,17 +102,17 @@ SVGState& SVGContextHandler::getCurrentState()
     return maCurrentState;
 }
 
-void SVGContextHandler::pushState( PushFlags eFlags )
+void SVGContextHandler::pushState( vcl::PushFlags eFlags )
 {
     PartialState aPartialState;
     aPartialState.meFlags = eFlags;
 
-    if (eFlags & PushFlags::FONT)
+    if (eFlags & vcl::PushFlags::FONT)
     {
         aPartialState.setFont( maCurrentState.aFont );
     }
 
-    if (eFlags & PushFlags::CLIPREGION)
+    if (eFlags & vcl::PushFlags::CLIPREGION)
     {
         aPartialState.mnRegionClipPathId = maCurrentState.nRegionClipPathId;
     }
@@ -126,14 +126,14 @@ void SVGContextHandler::popState()
         return;
 
     const PartialState& rPartialState = maStateStack.top();
-    PushFlags eFlags = rPartialState.meFlags;
+    vcl::PushFlags eFlags = rPartialState.meFlags;
 
-    if (eFlags & PushFlags::FONT)
+    if (eFlags & vcl::PushFlags::FONT)
     {
         maCurrentState.aFont = rPartialState.getFont( vcl::Font() );
     }
 
-    if (eFlags & PushFlags::CLIPREGION)
+    if (eFlags & vcl::PushFlags::CLIPREGION)
     {
         maCurrentState.nRegionClipPathId = rPartialState.mnRegionClipPathId;
     }
@@ -3858,7 +3858,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             case MetaActionType::PUSH:
             {
                 const MetaPushAction*  pA = static_cast<const MetaPushAction*>(pAction);
-                PushFlags mnFlags = pA->GetFlags();
+                vcl::PushFlags mnFlags = pA->GetFlags();
 
                 const_cast<MetaAction*>(pAction)->Execute( mpVDev );
 
@@ -3870,11 +3870,11 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 const_cast<MetaAction*>(pAction)->Execute( mpVDev );
 
-                PushFlags mnFlags = maContextHandler.getPushFlags();
+                vcl::PushFlags mnFlags = maContextHandler.getPushFlags();
 
                 maContextHandler.popState();
 
-                if( mnFlags & PushFlags::CLIPREGION )
+                if( mnFlags & vcl::PushFlags::CLIPREGION )
                 {
                     ImplEndClipRegion();
                     ImplStartClipRegion( mrCurrentState.nRegionClipPathId );

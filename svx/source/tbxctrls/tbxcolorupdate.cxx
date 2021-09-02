@@ -177,7 +177,7 @@ namespace svx
         else
             maUpdRect = tools::Rectangle(Point( maBmpSize.Height() + 2, 2), Point(maBmpSize.Width() - 3, maBmpSize.Height() - 3));
 
-        pVirDev->Push(PushFlags::CLIPREGION);
+        pVirDev->Push(vcl::PushFlags::CLIPREGION);
 
         // tdf#135121 don't include the part of the image which we will
         // overwrite with the target color so that for the transparent color

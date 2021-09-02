@@ -504,7 +504,7 @@ void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, cons
                                                 InvalidateFlags::Transparent);
                 pEraseWindow->PaintImmediately();
             }
-            rRenderContext.Push(PushFlags::CLIPREGION);
+            rRenderContext.Push(vcl::PushFlags::CLIPREGION);
             rRenderContext.IntersectClipRegion(rFramePosSize);
         }
 
@@ -695,7 +695,7 @@ void StatusBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
 
     if (mbProgressMode)
     {
-        rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+        rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
 
         const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
         Color aProgressColor = rStyleSettings.GetHighlightColor();

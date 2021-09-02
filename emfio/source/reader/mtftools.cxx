@@ -894,7 +894,7 @@ namespace emfio
         }
     }
 
-    void MtfTools::SetTextLayoutMode( ComplexTextLayoutFlags nTextLayoutMode )
+    void MtfTools::SetTextLayoutMode( vcl::text::ComplexTextLayoutFlags nTextLayoutMode )
     {
         mnTextLayoutMode = nTextLayoutMode;
     }
@@ -1098,8 +1098,8 @@ namespace emfio
         mnTextAlign(TA_LEFT | TA_TOP | TA_NOUPDATECP),
         maLatestBkColor(ColorTransparency, 0x12345678),
         maBkColor(COL_WHITE),
-        mnLatestTextLayoutMode(ComplexTextLayoutFlags::Default),
-        mnTextLayoutMode(ComplexTextLayoutFlags::Default),
+        mnLatestTextLayoutMode(vcl::text::ComplexTextLayoutFlags::Default),
+        mnTextLayoutMode(vcl::text::ComplexTextLayoutFlags::Default),
         mnLatestBkMode(BkMode::NONE),
         mnBkMode(BkMode::OPAQUE),
         meLatestRasterOp(RasterOp::Invert),
@@ -1140,7 +1140,7 @@ namespace emfio
         mnStartPos = mpInputStream->Tell();
         SetDevOrg(Point());
 
-        mpGDIMetaFile->AddAction( new MetaPushAction( PushFlags::CLIPREGION ) ); // The original clipregion has to be on top
+        mpGDIMetaFile->AddAction( new MetaPushAction( vcl::PushFlags::CLIPREGION ) ); // The original clipregion has to be on top
                                                                                  // of the stack so it can always be restored
                                                                                  // this is necessary to be able to support
                                                                                  // SetClipRgn( NULL ) and similar ClipRgn actions (SJ)
@@ -1176,7 +1176,7 @@ namespace emfio
         mbComplexClip = false;
 
         mpGDIMetaFile->AddAction( new MetaPopAction() );                    // taking the original clipregion
-        mpGDIMetaFile->AddAction( new MetaPushAction( PushFlags::CLIPREGION ) );
+        mpGDIMetaFile->AddAction( new MetaPushAction( vcl::PushFlags::CLIPREGION ) );
 
         // skip for 'no clipping at all' case
         if( maClipPath.isEmpty() )
@@ -1294,7 +1294,7 @@ namespace emfio
         {
             if ( !bStroke )
             {
-                mpGDIMetaFile->AddAction( new MetaPushAction( PushFlags::LINECOLOR ) );
+                mpGDIMetaFile->AddAction( new MetaPushAction( vcl::PushFlags::LINECOLOR ) );
                 mpGDIMetaFile->AddAction( new MetaLineColorAction( Color(), false ) );
             }
             if ( maPathObj.Count() == 1 )

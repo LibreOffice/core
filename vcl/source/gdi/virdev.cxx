@@ -342,7 +342,7 @@ void VirtualDevice::ImplFillOpaqueRectangle( const tools::Rectangle& rRect )
     // Set line and fill color to black (->opaque),
     // fill rect with that (linecolor, too, because of
     // those pesky missing pixel problems)
-    Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
+    Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
     SetLineColor( COL_BLACK );
     SetFillColor( COL_BLACK );
     DrawRect( rRect );

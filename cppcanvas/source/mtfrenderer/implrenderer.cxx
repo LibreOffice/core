@@ -250,7 +250,7 @@ namespace cppcanvas::internal
             return m_aStates.back();
         }
 
-        void VectorOfOutDevStates::pushState(PushFlags nFlags)
+        void VectorOfOutDevStates::pushState(vcl::PushFlags nFlags)
         {
             m_aStates.push_back( getState() );
             getState().pushFlags = nFlags;
@@ -258,7 +258,7 @@ namespace cppcanvas::internal
 
         void VectorOfOutDevStates::popState()
         {
-            if( getState().pushFlags != PushFlags::ALL )
+            if( getState().pushFlags != vcl::PushFlags::ALL )
             {
                 // a state is pushed which is incomplete, i.e. does not
                 // restore everything to the previous stack level when
@@ -277,19 +277,19 @@ namespace cppcanvas::internal
 
                 const OutDevState& rNewState( getState() );
 
-                if( aCalculatedNewState.pushFlags & PushFlags::LINECOLOR )
+                if( aCalculatedNewState.pushFlags & vcl::PushFlags::LINECOLOR )
                 {
                     aCalculatedNewState.lineColor      = rNewState.lineColor;
                     aCalculatedNewState.isLineColorSet = rNewState.isLineColorSet;
                 }
 
-                if( aCalculatedNewState.pushFlags & PushFlags::FILLCOLOR )
+                if( aCalculatedNewState.pushFlags & vcl::PushFlags::FILLCOLOR )
                 {
                     aCalculatedNewState.fillColor      = rNewState.fillColor;
                     aCalculatedNewState.isFillColorSet = rNewState.isFillColorSet;
                 }
 
-                if( aCalculatedNewState.pushFlags & PushFlags::FONT )
+                if( aCalculatedNewState.pushFlags & vcl::PushFlags::FONT )
                 {
                     aCalculatedNewState.xFont                   = rNewState.xFont;
                     aCalculatedNewState.fontRotation            = rNewState.fontRotation;
@@ -303,17 +303,17 @@ namespace cppcanvas::internal
                     aCalculatedNewState.isTextOutlineModeSet    = rNewState.isTextOutlineModeSet;
                 }
 
-                if( aCalculatedNewState.pushFlags & PushFlags::TEXTCOLOR )
+                if( aCalculatedNewState.pushFlags & vcl::PushFlags::TEXTCOLOR )
                 {
                     aCalculatedNewState.textColor = rNewState.textColor;
                 }
 
-                if( aCalculatedNewState.pushFlags & PushFlags::MAPMODE )
+                if( aCalculatedNewState.pushFlags & vcl::PushFlags::MAPMODE )
                 {
                     aCalculatedNewState.mapModeTransform = rNewState.mapModeTransform;
                 }
 
-                if( aCalculatedNewState.pushFlags & PushFlags::CLIPREGION )
+                if( aCalculatedNewState.pushFlags & vcl::PushFlags::CLIPREGION )
                 {
                     aCalculatedNewState.clip        = rNewState.clip;
                     aCalculatedNewState.clipRect    = rNewState.clipRect;
@@ -321,46 +321,46 @@ namespace cppcanvas::internal
                 }
 
                 // TODO(F2): Raster ops NYI
-                // if( (aCalculatedNewState.pushFlags & PushFlags::RASTEROP) )
+                // if( (aCalculatedNewState.pushFlags & vcl::PushFlags::RASTEROP) )
                 // {
                 // }
 
-                if( aCalculatedNewState.pushFlags & PushFlags::TEXTFILLCOLOR )
+                if( aCalculatedNewState.pushFlags & vcl::PushFlags::TEXTFILLCOLOR )
                 {
                     aCalculatedNewState.textFillColor      = rNewState.textFillColor;
                     aCalculatedNewState.isTextFillColorSet = rNewState.isTextFillColorSet;
                 }
 
-                if( aCalculatedNewState.pushFlags & PushFlags::TEXTALIGN )
+                if( aCalculatedNewState.pushFlags & vcl::PushFlags::TEXTALIGN )
                 {
                     aCalculatedNewState.textReferencePoint = rNewState.textReferencePoint;
                 }
 
                 // TODO(F1): Refpoint handling NYI
-                // if( (aCalculatedNewState.pushFlags & PushFlags::REFPOINT) )
+                // if( (aCalculatedNewState.pushFlags & vcl::PushFlags::REFPOINT) )
                 // {
                 // }
 
-                if( aCalculatedNewState.pushFlags & PushFlags::TEXTLINECOLOR )
+                if( aCalculatedNewState.pushFlags & vcl::PushFlags::TEXTLINECOLOR )
                 {
                     aCalculatedNewState.textLineColor      = rNewState.textLineColor;
                     aCalculatedNewState.isTextLineColorSet = rNewState.isTextLineColorSet;
                 }
 
-                if( aCalculatedNewState.pushFlags & PushFlags::OVERLINECOLOR )
+                if( aCalculatedNewState.pushFlags & vcl::PushFlags::OVERLINECOLOR )
                 {
                     aCalculatedNewState.textOverlineColor = rNewState.textOverlineColor;
                     aCalculatedNewState.isTextOverlineColorSet = rNewState.isTextOverlineColorSet;
                 }
 
-                if( aCalculatedNewState.pushFlags & PushFlags::TEXTLAYOUTMODE )
+                if( aCalculatedNewState.pushFlags & vcl::PushFlags::TEXTLAYOUTMODE )
                 {
                     aCalculatedNewState.textAlignment = rNewState.textAlignment;
                     aCalculatedNewState.textDirection = rNewState.textDirection;
                 }
 
                 // TODO(F2): Text language handling NYI
-                // if( (aCalculatedNewState.pushFlags & PushFlags::TEXTLANGUAGE) )
+                // if( (aCalculatedNewState.pushFlags & vcl::PushFlags::TEXTLANGUAGE) )
                 // {
                 // }
 
@@ -715,7 +715,7 @@ namespace cppcanvas::internal
             // cannot currently use native canvas gradients, as a
             // finite step size is given (this funny feature is not
             // supported by the XCanvas API)
-            rParms.mrStates.pushState(PushFlags::ALL);
+            rParms.mrStates.pushState(vcl::PushFlags::ALL);
 
             if( !bIsPolygonRectangle )
             {
@@ -1521,22 +1521,22 @@ namespace cppcanvas::internal
                     case MetaActionType::LAYOUTMODE:
                     {
                         // TODO(F2): A lot is missing here
-                        ComplexTextLayoutFlags nLayoutMode = static_cast<MetaLayoutModeAction*>(pCurrAct)->GetLayoutMode();
+                        vcl::text::ComplexTextLayoutFlags nLayoutMode = static_cast<MetaLayoutModeAction*>(pCurrAct)->GetLayoutMode();
                         ::cppcanvas::internal::OutDevState& rState = rStates.getState();
 
-                        ComplexTextLayoutFlags nBidiLayoutMode = nLayoutMode & (ComplexTextLayoutFlags::BiDiRtl|ComplexTextLayoutFlags::BiDiStrong);
-                        if( nBidiLayoutMode == ComplexTextLayoutFlags::Default)
+                        vcl::text::ComplexTextLayoutFlags nBidiLayoutMode = nLayoutMode & (vcl::text::ComplexTextLayoutFlags::BiDiRtl|vcl::text::ComplexTextLayoutFlags::BiDiStrong);
+                        if( nBidiLayoutMode == vcl::text::ComplexTextLayoutFlags::Default)
                                 rState.textDirection = rendering::TextDirection::WEAK_LEFT_TO_RIGHT;
-                        else if( nBidiLayoutMode == ComplexTextLayoutFlags::BiDiStrong)
+                        else if( nBidiLayoutMode == vcl::text::ComplexTextLayoutFlags::BiDiStrong)
                                 rState.textDirection = rendering::TextDirection::STRONG_LEFT_TO_RIGHT;
-                        else if( nBidiLayoutMode == ComplexTextLayoutFlags::BiDiRtl)
+                        else if( nBidiLayoutMode == vcl::text::ComplexTextLayoutFlags::BiDiRtl)
                                 rState.textDirection = rendering::TextDirection::WEAK_RIGHT_TO_LEFT;
-                        else if( nBidiLayoutMode == (ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::BiDiStrong))
+                        else if( nBidiLayoutMode == (vcl::text::ComplexTextLayoutFlags::BiDiRtl | vcl::text::ComplexTextLayoutFlags::BiDiStrong))
                                 rState.textDirection = rendering::TextDirection::STRONG_RIGHT_TO_LEFT;
 
                         rState.textAlignment = 0; // TODO(F2): rendering::TextAlignment::LEFT_ALIGNED;
-                        if( (nLayoutMode & (ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginRight) )
-                            && !(nLayoutMode & ComplexTextLayoutFlags::TextOriginLeft ) )
+                        if( (nLayoutMode & (vcl::text::ComplexTextLayoutFlags::BiDiRtl | vcl::text::ComplexTextLayoutFlags::TextOriginRight) )
+                            && !(nLayoutMode & vcl::text::ComplexTextLayoutFlags::TextOriginLeft ) )
                         {
                             rState.textAlignment = 1; // TODO(F2): rendering::TextAlignment::RIGHT_ALIGNED;
                         }
@@ -1595,7 +1595,7 @@ namespace cppcanvas::internal
                         // Setup local transform, such that the
                         // metafile renders itself into the given
                         // output rectangle
-                        rStates.pushState(PushFlags::ALL);
+                        rStates.pushState(vcl::PushFlags::ALL);
 
                         rVDev.Push();
                         rVDev.SetMapMode( rSubstitute.GetPrefMapMode() );
@@ -2529,7 +2529,7 @@ namespace cppcanvas::internal
                     {
                         MetaTextRectAction* pAct = static_cast<MetaTextRectAction*>(pCurrAct);
 
-                        rStates.pushState(PushFlags::ALL);
+                        rStates.pushState(vcl::PushFlags::ALL);
 
                         // use the VDev to break up the text rect
                         // action into readily formatted lines

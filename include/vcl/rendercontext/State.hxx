@@ -34,50 +34,70 @@
 #include <memory>
 #include <optional>
 
-// Flags for OutputDevice::Push() and OutDevState
-enum class PushFlags {
-    NONE            = 0x0000,
-    LINECOLOR       = 0x0001,
-    FILLCOLOR       = 0x0002,
-    FONT            = 0x0004,
-    TEXTCOLOR       = 0x0008,
-    MAPMODE         = 0x0010,
-    CLIPREGION      = 0x0020,
-    RASTEROP        = 0x0040,
-    TEXTFILLCOLOR   = 0x0080,
-    TEXTALIGN       = 0x0100,
-    REFPOINT        = 0x0200,
-    TEXTLINECOLOR   = 0x0400,
-    TEXTLAYOUTMODE  = 0x0800,
-    TEXTLANGUAGE    = 0x1000,
-    OVERLINECOLOR   = 0x2000,
-    ALL             = 0xFFFF
+namespace vcl
+{
+// Flags for OutputDevice::Push() and State
+enum class PushFlags
+{
+    NONE = 0x0000,
+    LINECOLOR = 0x0001,
+    FILLCOLOR = 0x0002,
+    FONT = 0x0004,
+    TEXTCOLOR = 0x0008,
+    MAPMODE = 0x0010,
+    CLIPREGION = 0x0020,
+    RASTEROP = 0x0040,
+    TEXTFILLCOLOR = 0x0080,
+    TEXTALIGN = 0x0100,
+    REFPOINT = 0x0200,
+    TEXTLINECOLOR = 0x0400,
+    TEXTLAYOUTMODE = 0x0800,
+    TEXTLANGUAGE = 0x1000,
+    OVERLINECOLOR = 0x2000,
+    ALL = 0xFFFF
 };
+}
 
 namespace o3tl
 {
-    template<> struct typed_flags<PushFlags> : is_typed_flags<PushFlags, 0xFFFF> {};
+template <> struct typed_flags<vcl::PushFlags> : is_typed_flags<vcl::PushFlags, 0xFFFF>
+{
+};
 }
-#define PUSH_ALLFONT  (PushFlags::TEXTCOLOR | PushFlags::TEXTFILLCOLOR | PushFlags::TEXTLINECOLOR | PushFlags::OVERLINECOLOR | PushFlags::TEXTALIGN | PushFlags::TEXTLAYOUTMODE | PushFlags::TEXTLANGUAGE | PushFlags::FONT)
+#define PUSH_ALLFONT                                                                               \
+    (vcl::PushFlags::TEXTCOLOR | vcl::PushFlags::TEXTFILLCOLOR | vcl::PushFlags::TEXTLINECOLOR     \
+     | vcl::PushFlags::OVERLINECOLOR | vcl::PushFlags::TEXTALIGN | vcl::PushFlags::TEXTLAYOUTMODE  \
+     | vcl::PushFlags::TEXTLANGUAGE | vcl::PushFlags::FONT)
 
+namespace vcl::text
+{
 // Layout flags for Complex Text Layout
 // These are flag values, i.e they can be combined
 enum class ComplexTextLayoutFlags
 {
-    Default           = 0x0000,
-    BiDiRtl           = 0x0001,
-    BiDiStrong        = 0x0002,
-    TextOriginLeft    = 0x0004,
-    TextOriginRight   = 0x0008
+    Default = 0x0000,
+    BiDiRtl = 0x0001,
+    BiDiStrong = 0x0002,
+    TextOriginLeft = 0x0004,
+    TextOriginRight = 0x0008
 };
-namespace o3tl {
-    template<> struct typed_flags<ComplexTextLayoutFlags> : is_typed_flags<ComplexTextLayoutFlags, 0x000f> {};
 }
 
-struct OutDevState
+namespace o3tl
 {
-    OutDevState() = default;
-    OutDevState(OutDevState&&) = default;
+template <>
+struct typed_flags<vcl::text::ComplexTextLayoutFlags>
+    : is_typed_flags<vcl::text::ComplexTextLayoutFlags, 0x000f>
+{
+};
+}
+
+namespace vcl
+{
+struct State
+{
+    State() = default;
+    State(State&&) = default;
 
     std::unique_ptr<vcl::Region> mpClipRegion;
     std::optional<MapMode> mpMapMode;
@@ -91,10 +111,11 @@ struct OutDevState
     std::optional<Color> mpOverlineColor;
     TextAlign meTextAlign = ALIGN_TOP;
     RasterOp meRasterOp = RasterOp::OverPaint;
-    ComplexTextLayoutFlags mnTextLayoutMode = ComplexTextLayoutFlags::Default;
+    text::ComplexTextLayoutFlags mnTextLayoutMode = text::ComplexTextLayoutFlags::Default;
     LanguageType meTextLanguage = LANGUAGE_SYSTEM;
     PushFlags mnFlags = PushFlags::NONE;
     bool mbMapActive = false;
 };
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

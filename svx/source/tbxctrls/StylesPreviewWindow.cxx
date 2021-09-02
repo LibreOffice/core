@@ -110,7 +110,8 @@ StyleItemController::StyleItemController(const std::pair<OUString, OUString>& aS
 
 void StyleItemController::Paint(vcl::RenderContext& rRenderContext)
 {
-    rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::FONT | PushFlags::TEXTCOLOR);
+    rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::FONT
+                        | vcl::PushFlags::TEXTCOLOR);
 
     DrawEntry(rRenderContext);
 
