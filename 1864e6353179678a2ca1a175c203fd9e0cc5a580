@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a64657f_de42dbcb",
+        "filename": "sw/source/core/text/txtfly.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 797,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-02T08:25:20Z",
+      "side": 0,
+      "message": "I expect that the proper solution will be to create a new compatibility setting and use it everywhere you find USE_FORMER_TEXT_WRAPPING _except_ for this place.\n\nBut I\u0027m not very expert on these compat settings. I started some documentation about it at https://wiki.documentfoundation.org/Documentation/CompatibilityFlags",
+      "range": {
+        "startLine": 797,
+        "startChar": 52,
+        "endLine": 797,
+        "endChar": 76
+      },
+      "revId": "1864e6353179678a2ca1a175c203fd9e0cc5a580",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

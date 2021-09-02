@@ -33,6 +33,23 @@
       "message": "I reversed that suggestion in tdf#143793. The scope is too wide. You break old ODT documents when you do that. ESC would need to give approval before allowing a major breakage like this.",
       "revId": "23725dcac58238ba0f28bb2a5f7fc9c257ef5bea",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a339e2cc_933dc006",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-02T08:25:20Z",
+      "side": 1,
+      "message": "Since re-using the old setting won\u0027t work, a new setting will be necessary.",
+      "revId": "23725dcac58238ba0f28bb2a5f7fc9c257ef5bea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
