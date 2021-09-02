@@ -34,11 +34,12 @@ Option Explicit
 &apos;&apos;&apos;		Being independent text files, one per language to support, the programmer may give away
 &apos;&apos;&apos;		pristine PO template files (known as POT-files) for a translator to process.
 &apos;&apos;&apos;
-&apos;&apos;&apos;		This class implements mainly 3 mechanisms:
-&apos;&apos;&apos;			- AddText:	for the programmer to build a set of words or sentences
+&apos;&apos;&apos;		This class implements mainly 4 mechanisms:
+&apos;&apos;&apos;			1. AddText:	for the programmer to build a set of words or sentences
 &apos;&apos;&apos;						meant for being translated later
-&apos;&apos;&apos;			- ExportToPOTFile:	All the above texts are exported into a pristine POT-file
-&apos;&apos;&apos;			- GetText:	At runtime get the text in the user language
+&apos;&apos;&apos;			2. AddTextsFromDialog:	to automatically execute AddText() on each fixed text of a dialog
+&apos;&apos;&apos;			3. ExportToPOTFile:	All the above texts are exported into a pristine POT-file
+&apos;&apos;&apos;			4. GetText:	At runtime get the text in the user language
 &apos;&apos;&apos;		Note that the first two are optional: POT and PO-files may be built with a simple text editor
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Several instances of the L10N class may coexist
@@ -52,7 +53,7 @@ Option Explicit
 &apos;&apos;&apos;				Locale: in the form la-CO (language-COUNTRY)
 &apos;&apos;&apos;		Service invocation examples:
 &apos;&apos;&apos;			Dim myPO As Variant
-&apos;&apos;&apos;			myPO = CreateScriptService(&quot;L10N&quot;)	&apos;	AddText and ExportToPOTFile are allowed
+&apos;&apos;&apos;			myPO = CreateScriptService(&quot;L10N&quot;)	&apos;	AddText, AddTextsFromDialogt and ExportToPOTFile are allowed
 &apos;&apos;&apos;			myPO = CreateScriptService(&quot;L10N&quot;, &quot;C:\myPOFiles\&quot;, &quot;fr-BE&quot;)
 &apos;&apos;&apos;				&apos;All functionalities are available
 &apos;&apos;&apos;
@@ -229,6 +230,91 @@ CatchDuplicate:
 End Function    &apos;   ScriptForge.SF_L10N.AddText
 
 REM -----------------------------------------------------------------------------
+Public Function AddTextsFromDialog(Optional ByRef Dialog As Variant) As Boolean
+&apos;&apos;&apos; Add all fixed text strings of a dialog to the list of localizable text strings
+&apos;&apos;&apos;	Added texts are:
+&apos;&apos;&apos;		- the title of the dialog
+&apos;&apos;&apos;		- the caption associated with next control types: Button, CheckBox, FixedLine, FixedText, GroupBox and RadioButton
+&apos;&apos;&apos;		- the content of list- and comboboxes
+&apos;&apos;&apos;		- the tip- or helptext displayed when the mouse is hovering the control
+&apos;&apos;&apos;	The current method has method SFDialogs.SF_Dialog.GetTextsFromL10N as counterpart
+&apos;&apos;&apos;	The targeted dialog must not be open when the current method is run
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Dialog: a SFDialogs.Dialog service instance
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		Dim myDialog As Object
+&apos;&apos;&apos;		Set myDialog = CreateScriptService(&quot;SFDialogs.Dialog&quot;, &quot;GlobalScope&quot;, &quot;XrayTool&quot;, &quot;DlgXray&quot;)
+&apos;&apos;&apos;		myPO.AddTextsFromDialog(myDialog)
+
+Dim bAdd As Boolean					&apos;	Return value
+Dim vControls As Variant			&apos;	Array of control names
+Dim sControl As String				&apos;	A single control name
+Dim oControl As Object				&apos;	SFDialogs.DialogControl
+Dim sText As String					&apos;	The text to insert in the dictionary
+Dim sDialogComment As String		&apos;	The prefix in the comment to insert in the dictionary for the dialog
+Dim sControlComment As String		&apos;	The prefix in the comment to insert in the dictionary for a control
+Dim vSource As Variant				&apos;	RowSource property of dialog control as an array
+Dim i As Long
+
+Const cstThisSub = &quot;L10N.AddTextsFromDialog&quot;
+Const cstSubArgs = &quot;Dialog&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bAdd = False
+
+Check:
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._Validate(Dialog, &quot;Dialog&quot;, V_OBJECT, , , &quot;DIALOG&quot;) Then GoTo Finally
+	End If
+
+Try:
+	With Dialog
+		&apos;	Store the title of the dialog
+		sDialogComment = &quot;Dialog =&gt; &quot; &amp; ._Container &amp; &quot; : &quot; &amp; ._Library &amp; &quot; : &quot; &amp; ._Name &amp; &quot; : &quot;
+		stext = .Caption
+		If Len(sText) &gt; 0 Then
+			If Not _ReplaceText(&quot;&quot;, sText, sDialogComment &amp; &quot;Caption&quot;) Then GoTo Catch
+		End If
+		&apos;	Scan all controls
+		vControls = .Controls()
+		For Each sControl In vControls
+			Set oControl = .Controls(sControl)
+			sControlComment = sDialogComment &amp; sControl &amp; &quot;.&quot;
+			With oControl
+				&apos;	Extract fixed texts
+				sText = .Caption
+				If Len(sText) &gt; 0 Then
+					If Not _ReplaceText(&quot;&quot;, sText, sControlComment &amp; &quot;Caption&quot;) Then GoTo Catch
+				End If
+				vSource = .RowSource	&apos;	List and comboboxes only
+				If IsArray(vSource) Then
+					For i = 0 To UBound(vSource)
+						If Len(vSource(i)) &gt; 0 Then
+							If Not _ReplaceText(&quot;&quot;, vSource(i), sControlComment &amp; &quot;RowSource[&quot; &amp; i &amp; &quot;]&quot;) Then GoTo Catch
+						End If
+					Next i
+				End If
+				sText = .TipText
+				If Len(sText) &gt; 0 Then
+					If Not _ReplaceText(&quot;&quot;, sText, sControlComment &amp; &quot;TipText&quot;) Then GoTo Catch
+				End If
+			End With
+		Next sControl
+	End With
+
+	bAdd = True
+
+Finally:
+	AddTextsFromDialog = bAdd
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function    &apos;   ScriptForge.SF_L10N.AddTextsFromDialog
+
+REM -----------------------------------------------------------------------------
 Public Function ExportToPOTFile(Optional ByVal FileName As Variant _
 									, Optional ByVal Header As Variant _
 									, Optional ByVal Encoding As Variant _
@@ -267,8 +353,8 @@ Const cstSubArgs = &quot;FileName, [Header=&quot;&quot;&quot;&quot;], [Encoding=
 	bExport = False
 
 Check:
-	If IsMissing(Header) Or IsMissing(Header) Then Header = &quot;&quot;
-	If IsMissing(Encoding) Or IsMissing(Encoding) Then Encoding = &quot;UTF-8&quot;
+	If IsMissing(Header) Or IsEmpty(Header) Then Header = &quot;&quot;
+	If IsMissing(Encoding) Or IsEmpty(Encoding) Then Encoding = &quot;UTF-8&quot;
 	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not SF_Utils._ValidateFile(FileName, &quot;FileName&quot;) Then GoTo Finally
 		If Not SF_Utils._Validate(Header, &quot;Header&quot;, V_STRING) Then GoTo Finally
@@ -506,6 +592,7 @@ Public Function Methods() As Variant
 					&quot;AddText&quot; _
 					, &quot;ExportToPOTFile&quot; _
 					, &quot;GetText&quot; _
+					, &quot;AddTextsFromDialog&quot; _
 					, &quot;_&quot; _
 					)
 
@@ -684,6 +771,40 @@ Finally:
 	SF_Utils._ExitFunction(cstThisSub)
 	Exit Function
 End Function	&apos;	ScriptForge.SF_L10N._PropertyGet
+
+REM -----------------------------------------------------------------------------
+Private Function _ReplaceText(ByVal psContext As String _
+								, ByVal psMsgId As String _
+								, ByVal psComment As String _
+								) As Boolean
+&apos;&apos;&apos;	When the entry in the dictionary does not yet exist, equivalent to AddText
+&apos;&apos;&apos;	When it exists already, extend the existing comment with the psComment argument
+&apos;&apos;&apos;	Used from AddTextsFromDialog to manage identical strings without raising errors,
+&apos;&apos;&apos;	e.g. when multiple dialogs have the same &quot;Close&quot; button
+
+Dim bAdd As Boolean					&apos;	Return value
+Dim sKey As String					&apos;	The key part of an entry in the dictionary
+Dim vItem As POEntry				&apos;	The item part of the new entry in the dictionary
+
+Try:
+	bAdd = False
+	If Len(psContext) &gt; 0 Then sKey = psContext Else sKey = psMsgId
+	If _Dictionary.Exists(sKey) Then
+		&apos;	Load the entry, adapt comment and rewrite
+		vItem = _Dictionary.Item(sKey)
+		If Len(vItem.Comment) = 0 Then vItem.Comment = psComment Else vItem.Comment = vItem.Comment &amp; &quot;\n&quot; &amp; psComment
+		bAdd = _Dictionary.ReplaceItem(sKey, vItem)
+	Else
+		&apos;	Add a new entry as usual
+		bAdd = AddText(psContext, psMsgId, psComment)
+	End If
+
+Finally:
+	_ReplaceText = bAdd
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	ScriptForge.SF_L10N._ReplaceText
 
 REM -----------------------------------------------------------------------------
 Private Function _Repr() As String

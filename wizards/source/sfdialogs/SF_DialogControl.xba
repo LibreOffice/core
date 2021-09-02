@@ -1440,7 +1440,7 @@ Try:
 		Case &quot;TreeControlModel&quot;
 			&apos;	Initialize the data model
 			_ControlType = CTLTREECONTROL
-			Set _ControlModel.DataModel = ScriptForge.SF_Utils._GetUNOService(&quot;TreeDataModel&quot;)
+			Set _ControlModel.DataModel = CreateUnoService(&quot;com.sun.star.awt.tree.MutableTreeDataModel&quot;)
 			Set _TreeDataModel = _ControlModel.DataModel
 		Case &quot;UnoControlGridModel&quot;
 			_ControlType = CTLTABLECONTROL
