@@ -44,7 +44,6 @@ namespace sfx2::sidebar {
 SidebarDockingWindow::SidebarDockingWindow(SfxBindings* pSfxBindings, SidebarChildWindow& rChildWindow,
                                            vcl::Window* pParentWindow, WinBits nBits)
     : SfxDockingWindow(pSfxBindings, &rChildWindow, pParentWindow, nBits)
-    , mpSidebarController()
     , mbIsReadyToDrag(false)
 {
     // Get the XFrame from the bindings.

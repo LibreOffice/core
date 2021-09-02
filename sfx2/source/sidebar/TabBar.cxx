@@ -54,7 +54,6 @@ TabBar::TabBar(vcl::Window* pParentWindow,
     , mxMainMenu(mxAuxBuilder->weld_menu("mainmenu"))
     , mxSubMenu(mxAuxBuilder->weld_menu("submenu"))
     , mxMeasureBox(mxAuxBuilder->weld_widget("measure"))
-    , maItems()
     , maDeckActivationFunctor(rDeckActivationFunctor)
     , maPopupMenuProvider(rPopupMenuProvider)
     , pParentSidebarController(rParentSidebarController)

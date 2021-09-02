@@ -65,7 +65,6 @@ namespace
 }
 
 ShellExec::ShellExec( const Reference< XComponentContext >& xContext ) :
-    WeakImplHelper< XSystemShellExecute, XServiceInfo >(),
     m_xContext(xContext)
 {
 }

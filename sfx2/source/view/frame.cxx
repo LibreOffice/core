@@ -478,8 +478,6 @@ bool SfxUnoAnyItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/
 }
 
 SfxUnoFrameItem::SfxUnoFrameItem()
-    : SfxPoolItem()
-    , m_xFrame()
 {
 }
 

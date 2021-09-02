@@ -22,18 +22,9 @@
 namespace sfx2::sidebar {
 
 DeckDescriptor::DeckDescriptor()
-    : msTitle(),
-      msId(),
-      msIconURL(),
-      msHighContrastIconURL(),
-      msTitleBarIconURL(),
-      msHighContrastTitleBarIconURL(),
-      msHelpText(),
-      maContextList(),
-      mbIsEnabled(true),
+    : mbIsEnabled(true),
       mnOrderIndex(10000), // Default value as defined in Sidebar.xcs
-      mbExperimental(false),
-      mpDeck()
+      mbExperimental(false)
 {
 }
 

@@ -450,8 +450,7 @@ typedef std::unordered_map< const Metadatable*,
 
 struct XmlIdRegistryDocument::XmlIdRegistry_Impl
 {
-    XmlIdRegistry_Impl()
-        : m_XmlIdMap(), m_XmlIdReverseMap() { }
+    XmlIdRegistry_Impl() {}
 
     bool TryInsertMetadatable(Metadatable& i_xObject,
         std::u16string_view i_rStream, const OUString & i_rIdref);
@@ -892,7 +891,7 @@ namespace {
 
 struct RMapEntry
 {
-    RMapEntry() : m_xLink() { }
+    RMapEntry() {}
     RMapEntry(OUString const& i_rStream,
             OUString const& i_rXmlId,
             std::shared_ptr<MetadatableClipboard> const& i_pLink
@@ -920,8 +919,7 @@ typedef std::unordered_map< OUString,
 
 struct XmlIdRegistryClipboard::XmlIdRegistry_Impl
 {
-    XmlIdRegistry_Impl()
-        : m_XmlIdMap(), m_XmlIdReverseMap() { }
+    XmlIdRegistry_Impl() {}
 
     bool TryInsertMetadatable(Metadatable& i_xObject,
         std::u16string_view i_rStream, const OUString & i_rIdref);

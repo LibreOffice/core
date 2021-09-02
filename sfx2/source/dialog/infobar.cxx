@@ -200,7 +200,6 @@ SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, const OUString& sId,
     , m_xSecondaryMessage(m_xBuilder->weld_text_view("secondary"))
     , m_xButtonBox(m_xBuilder->weld_container("buttonbox"))
     , m_xCloseBtn(m_xBuilder->weld_toolbar("closebar"))
-    , m_aActionBtns()
 {
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
 
@@ -348,7 +347,6 @@ IMPL_LINK_NOARG(SfxInfoBarWindow, CloseHandler, const OString&, void)
 SfxInfoBarContainerWindow::SfxInfoBarContainerWindow(SfxInfoBarContainerChild* pChildWin)
     : Window(pChildWin->GetParent(), WB_DIALOGCONTROL)
     , m_pChildWin(pChildWin)
-    , m_pInfoBars()
     , m_bResizing(false)
 {
     m_aLayoutIdle.SetPriority(TaskPriority::HIGHEST);

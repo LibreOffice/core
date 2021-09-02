@@ -27,9 +27,7 @@ using namespace ::sfx2::sidebar;
 SfxUnoPanel::SfxUnoPanel(const uno::Reference<frame::XFrame>& rFrame, const OUString& panelId, const OUString& deckId):
 xFrame(rFrame),
 mPanelId(panelId),
-mDeckId(deckId),
-mpDeck(),
-mxPanel()
+mDeckId(deckId)
 {
     SidebarController* pSidebarController = getSidebarController();
 

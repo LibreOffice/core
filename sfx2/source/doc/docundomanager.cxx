@@ -168,7 +168,6 @@ namespace sfx2
     public:
         explicit UndoManagerGuard( DocumentUndoManager& i_undoManager )
             :m_guard( i_undoManager )
-            ,m_solarMutexFacade()
         {
         }
 

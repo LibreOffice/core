@@ -56,8 +56,6 @@ Panel::Panel(const PanelDescriptor& rPanelDescriptor,
     , msTitle(rPanelDescriptor.msTitle)
     , mbIsTitleBarOptional(rPanelDescriptor.mbIsTitleBarOptional)
     , mbWantsAWT(rPanelDescriptor.mbWantsAWT)
-    , mxElement()
-    , mxPanelComponent()
     , mbIsExpanded(bIsInitiallyExpanded)
     , mbLurking(false)
     , maContextAccess(rContextAccess)

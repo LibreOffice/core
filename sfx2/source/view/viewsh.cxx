@@ -218,8 +218,7 @@ void SAL_CALL SfxClipboardChangeListener::changedContents( const datatransfer::c
 sal_uInt32 SfxViewShell_Impl::m_nLastViewShellId = 0;
 
 SfxViewShell_Impl::SfxViewShell_Impl(SfxViewShellFlags const nFlags, ViewShellDocId nDocId)
-: aInterceptorContainer()
-,   m_bHasPrintOptions(nFlags & SfxViewShellFlags::HAS_PRINTOPTIONS)
+:   m_bHasPrintOptions(nFlags & SfxViewShellFlags::HAS_PRINTOPTIONS)
 ,   m_nFamily(0xFFFF)   // undefined, default set by TemplateDialog
 ,   m_pLibreOfficeKitViewCallback(nullptr)
 ,   m_pLibreOfficeKitViewData(nullptr)

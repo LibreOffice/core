@@ -126,7 +126,6 @@ RecentDocsView::RecentDocsView(std::unique_ptr<weld::ScrolledWindow> xWindow, st
     : ThumbnailView(std::move(xWindow), std::move(xMenu))
     , mnFileTypes(ApplicationType::TYPE_NONE)
     , mnLastMouseDownItem(THUMBNAILVIEW_ITEM_NOTFOUND)
-    , maWelcomeImage()
     , maWelcomeLine1(SfxResId(STR_WELCOME_LINE1))
     , maWelcomeLine2(SfxResId(STR_WELCOME_LINE2))
     , mpLoadRecentFile(nullptr)

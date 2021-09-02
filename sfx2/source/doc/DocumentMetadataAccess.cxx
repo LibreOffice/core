@@ -224,9 +224,6 @@ struct DocumentMetadataAccess_Impl
             SfxObjectShell const & i_rRegistrySupplier)
       : m_xContext(i_xContext)
       , m_rXmlIdRegistrySupplier(i_rRegistrySupplier)
-      , m_xBaseURI()
-      , m_xRepository()
-      , m_xManifest()
     {
         OSL_ENSURE(m_xContext.is(), "context null");
     }
