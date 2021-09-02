@@ -16,6 +16,23 @@
       "message": "For some reason, neither of these two have a numRule which throws out the idea of GetDefaultListId. Plus, LFO29 is not marked in use yet before 28 searches for it. So the whole thing needs to be redesigned.",
       "revId": "97603d8783708ed37bb5353aa2feffa5659fd88e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adae4391_b234731a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-02T17:16:26Z",
+      "side": 1,
+      "message": "simply using nIdLst all the time caused a mysterious problem with the TortureTest. One of the two Heading3 styles gets invisible numbering applied? It is too bizarre.",
+      "revId": "97603d8783708ed37bb5353aa2feffa5659fd88e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
