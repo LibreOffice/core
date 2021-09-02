@@ -921,17 +921,19 @@ void Test::TestExtTextOutOpaqueAndClipWMF()
     // On some operating systems (Linux on LO Jenkins CI), the `/mask/` string is not added to XPath
     // As a result tests are failing. On my Ubuntu 20.04 the `/mask/` string was added
     // I would leave this test case for macOS to make sure there is no regression at least on one platform.
+
+    // These values come from the fix for tdf#88163
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor", 5);
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[1]/polypolygon", "path",
-                "m7219 1825h319v3608h-319z");
+                "m7257 1836h320v3628h-320z");
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[1]", "color", "#ff0000");
 
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[2]/polypolygon", "path",
-                "m7219 5942h319v318h-319z");
+                "m7257 5976h320v321h-320z");
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[2]", "color", "#00ff00");
 
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[3]/polypolygon", "path",
-                "m10149 5942h319v318h-319z");
+                "m10203 5976h320v321h-320z");
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[3]", "color", "#8080ff");
 
     assertXPath(pDocument, aXPathPrefix + "mask/group", 5);
@@ -948,7 +950,7 @@ void Test::TestExtTextOutOpaqueAndClipWMF()
     assertXPath(pDocument, aXPathPrefix + "mask/group[3]/mask/group/polypolygoncolor", "color",
                 "#ff8000");
     assertXPath(pDocument, aXPathPrefix + "mask/group[3]/mask/group/polypolygoncolor/polypolygon",
-                "path", "m1062 1061h1270v473h-1270z");
+                "path", "m1067 1067h1270v473h-1270z");
     assertXPath(pDocument, aXPathPrefix + "mask/group[3]/mask/group/textsimpleportion", "text",
                 "OOOO");
     assertXPath(pDocument, aXPathPrefix + "mask/group[3]/mask/group/textsimpleportion", "fontcolor",
