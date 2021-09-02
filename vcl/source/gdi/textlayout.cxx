@@ -244,9 +244,9 @@ namespace vcl
             return tools::Rectangle();
 
         // determine text layout mode from the RTL-ness of the control whose text we render
-        ComplexTextLayoutFlags nTextLayoutMode = m_bRTLEnabled ? ComplexTextLayoutFlags::BiDiRtl : ComplexTextLayoutFlags::Default;
+        text::ComplexTextLayoutFlags nTextLayoutMode = m_bRTLEnabled ? text::ComplexTextLayoutFlags::BiDiRtl : text::ComplexTextLayoutFlags::Default;
         m_rReferenceDevice.SetLayoutMode( nTextLayoutMode );
-        m_rTargetDevice.SetLayoutMode( nTextLayoutMode | ComplexTextLayoutFlags::TextOriginLeft );
+        m_rTargetDevice.SetLayoutMode( nTextLayoutMode | text::ComplexTextLayoutFlags::TextOriginLeft );
 
         // ComplexTextLayoutFlags::TextOriginLeft is because when we do actually draw the text (in DrawText( Point, ... )), then
         // our caller gives us the left border of the draw position, regardless of script type, text layout,
@@ -298,9 +298,9 @@ namespace vcl
             return tools::Rectangle();
 
         // determine text layout mode from the RTL-ness of the control whose text we render
-        ComplexTextLayoutFlags nTextLayoutMode = m_bRTLEnabled ? ComplexTextLayoutFlags::BiDiRtl : ComplexTextLayoutFlags::Default;
+        text::ComplexTextLayoutFlags nTextLayoutMode = m_bRTLEnabled ? text::ComplexTextLayoutFlags::BiDiRtl : text::ComplexTextLayoutFlags::Default;
         m_rReferenceDevice.SetLayoutMode( nTextLayoutMode );
-        m_rTargetDevice.SetLayoutMode( nTextLayoutMode | ComplexTextLayoutFlags::TextOriginLeft );
+        m_rTargetDevice.SetLayoutMode( nTextLayoutMode | text::ComplexTextLayoutFlags::TextOriginLeft );
 
         // ComplexTextLayoutFlags::TextOriginLeft is because when we do actually draw the text (in DrawText( Point, ... )), then
         // our caller gives us the left border of the draw position, regardless of script type, text layout,

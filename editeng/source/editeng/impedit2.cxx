@@ -3353,7 +3353,7 @@ sal_uInt32 ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine,
 
     // #114278# Saving both layout mode and language (since I'm
     // potentially changing both)
-    GetRefDevice()->Push( PushFlags::TEXTLAYOUTMODE|PushFlags::TEXTLANGUAGE );
+    GetRefDevice()->Push( vcl::PushFlags::TEXTLAYOUTMODE|vcl::PushFlags::TEXTLANGUAGE );
 
     ImplInitLayoutMode(*GetRefDevice(), nPara, -1);
 

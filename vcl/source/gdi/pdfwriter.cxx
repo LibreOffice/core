@@ -274,7 +274,7 @@ void PDFWriter::IntersectClipRegion( const tools::Rectangle& rRect )
     xImplementation->intersectClipRegion( rRect );
 }
 
-void PDFWriter::SetLayoutMode( ComplexTextLayoutFlags nMode )
+void PDFWriter::SetLayoutMode( vcl::text::ComplexTextLayoutFlags nMode )
 {
     xImplementation->setLayoutMode( nMode );
 }

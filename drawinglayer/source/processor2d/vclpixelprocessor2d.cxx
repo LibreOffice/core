@@ -91,7 +91,7 @@ VclPixelProcessor2D::VclPixelProcessor2D(const geometry::ViewInformation2D& rVie
     maCurrentTransformation = rViewInformation.getObjectToViewTransformation();
 
     // prepare output directly to pixels
-    mpOutputDevice->Push(PushFlags::MAPMODE);
+    mpOutputDevice->Push(vcl::PushFlags::MAPMODE);
     mpOutputDevice->SetMapMode();
 
     // react on AntiAliasing settings
@@ -1234,7 +1234,7 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
         std::floor(aFullRange.getMinX()), std::floor(aFullRange.getMinY()),
         std::ceil(aFullRange.getMaxX()), std::ceil(aFullRange.getMaxY()));
 
-    mpOutputDevice->Push(PushFlags::CLIPREGION);
+    mpOutputDevice->Push(vcl::PushFlags::CLIPREGION);
     mpOutputDevice->IntersectClipRegion(aOutputRectangle);
     mpOutputDevice->DrawGradient(aFullRectangle, aGradient);
     mpOutputDevice->Pop();
@@ -1265,7 +1265,7 @@ void VclPixelProcessor2D::processPatternFillPrimitive2D(
     // Unless smooth edges are needed, simply use clipping.
     if (basegfx::utils::isRectangle(aMask) || !SvtOptionsDrawinglayer::IsAntiAliasing())
     {
-        mpOutputDevice->Push(PushFlags::CLIPREGION);
+        mpOutputDevice->Push(vcl::PushFlags::CLIPREGION);
         mpOutputDevice->IntersectClipRegion(vcl::Region(aMask));
         mpOutputDevice->DrawWallpaper(aMaskRect, Wallpaper(aTileImage));
         mpOutputDevice->Pop();

@@ -170,7 +170,7 @@ SmCaretDrawingVisitor::SmCaretDrawingVisitor( OutputDevice& rDevice,
         return;
 
     //Save device state
-    mrDev.Push( PushFlags::FONT | PushFlags::MAPMODE | PushFlags::LINECOLOR | PushFlags::FILLCOLOR | PushFlags::TEXTCOLOR );
+    mrDev.Push( vcl::PushFlags::FONT | vcl::PushFlags::MAPMODE | vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR | vcl::PushFlags::TEXTCOLOR );
 
     maPos.pSelectedNode->Accept( this );
     //Restore device state
@@ -242,7 +242,7 @@ void SmCaretDrawingVisitor::DefaultVisit( SmNode* pNode )
 void SmCaretPos2LineVisitor::Visit( SmTextNode* pNode )
 {
     //Save device state
-    mpDev->Push( PushFlags::FONT | PushFlags::TEXTCOLOR );
+    mpDev->Push( vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR );
 
     tools::Long i = maPos.nIndex;
 
@@ -1879,7 +1879,7 @@ SmSelectionDrawingVisitor::SmSelectionDrawingVisitor( OutputDevice& rDevice, SmN
     maSelectionArea.Move( rOffset.X( ), rOffset.Y( ) );
 
     //Save device state
-    mrDev.Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
+    mrDev.Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
     //Change colors
     mrDev.SetLineColor( );
     mrDev.SetFillColor( COL_LIGHTGRAY );
@@ -1924,7 +1924,7 @@ void SmSelectionDrawingVisitor::Visit( SmTextNode* pNode )
     if( !pNode->IsSelected())
         return;
 
-    mrDev.Push( PushFlags::TEXTCOLOR | PushFlags::FONT );
+    mrDev.Push( vcl::PushFlags::TEXTCOLOR | vcl::PushFlags::FONT );
 
     mrDev.SetFont( pNode->GetFont( ) );
     Point Position = pNode->GetTopLeft( );

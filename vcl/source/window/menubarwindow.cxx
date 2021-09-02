@@ -610,7 +610,7 @@ void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16
             {
                 // #107747# give menuitems the height of the menubar
                 tools::Rectangle aRect(Point(nX, 1), Size(pData->aSz.Width(), aOutputSize.Height() - 2));
-                rRenderContext.Push(PushFlags::CLIPREGION);
+                rRenderContext.Push(vcl::PushFlags::CLIPREGION);
                 rRenderContext.IntersectClipRegion(aRect);
                 bool bRollover, bHighlight;
                 if (!ImplGetSVData()->maNWFData.mbRolloverMenubar)
@@ -903,7 +903,7 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     if (!rRenderContext.IsNativeControlSupported( ControlType::Menubar, ControlPart::Entire) &&
         rStyleSettings.GetHighContrastMode())
     {
-        pBuffer->Push(PushFlags::LINECOLOR | PushFlags::MAPMODE);
+        pBuffer->Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::MAPMODE);
         pBuffer->SetLineColor(COL_WHITE);
         pBuffer->SetMapMode(MapMode(MapUnit::MapPixel));
         Size aSize = GetSizePixel();

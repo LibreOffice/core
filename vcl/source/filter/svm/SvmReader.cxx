@@ -1270,7 +1270,7 @@ rtl::Reference<MetaAction> SvmReader::PushHandler()
     sal_uInt16 nTmp(0);
     mrStream.ReadUInt16(nTmp);
 
-    pAction->SetPushFlags(static_cast<PushFlags>(nTmp));
+    pAction->SetPushFlags(static_cast<vcl::PushFlags>(nTmp));
 
     return pAction;
 }
@@ -1424,7 +1424,7 @@ rtl::Reference<MetaAction> SvmReader::LayoutModeHandler()
     sal_uInt32 tmp(0);
     mrStream.ReadUInt32(tmp);
 
-    pAction->SetLayoutMode(static_cast<ComplexTextLayoutFlags>(tmp));
+    pAction->SetLayoutMode(static_cast<vcl::text::ComplexTextLayoutFlags>(tmp));
 
     return pAction;
 }
