@@ -226,10 +226,14 @@ void PCDReader::ReadImage()
     m_rPCD.Seek( nImagePos );
 
     // next pair of rows := first pair of rows:
-    m_rPCD.ReadBytes( pL0N, nWidth );
-    m_rPCD.ReadBytes( pL1N, nWidth );
-    m_rPCD.ReadBytes( pCbN, nW2 );
-    m_rPCD.ReadBytes( pCrN, nW2 );
+    if (m_rPCD.ReadBytes(pL0N, nWidth) != nWidth ||
+        m_rPCD.ReadBytes(pL1N, nWidth) != nWidth ||
+        m_rPCD.ReadBytes(pCbN, nW2) != nW2 ||
+        m_rPCD.ReadBytes(pCrN, nW2) != nW2)
+    {
+        bStatus = false;
+        return;
+    }
     pCbN[ nW2 ] = pCbN[ nW2 - 1 ];
     pCrN[ nW2 ] = pCrN[ nW2 - 1 ];
 
