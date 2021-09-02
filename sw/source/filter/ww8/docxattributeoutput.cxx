@@ -141,7 +141,7 @@
 #include <o3tl/unit_conversion.hxx>
 #include <osl/file.hxx>
 #include <utility>
-#include <vcl/embeddedfontshelper.hxx>
+#include <vcl/font/EmbeddedFontsHelper.hxx>
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
@@ -7224,8 +7224,8 @@ void DocxAttributeOutput::EmbedFontStyle( std::u16string_view name, int tag, Fon
 {
     // Embed font if at least viewing is allowed (in which case the opening app must check
     // the font license rights too and open either read-only or not use the font for editing).
-    OUString fontUrl = EmbeddedFontsHelper::fontFileUrl( name, family, italic, weight, pitch,
-        EmbeddedFontsHelper::FontRights::ViewingAllowed );
+    OUString fontUrl = vcl::font::EmbeddedFontsHelper::fontFileUrl( name, family, italic, weight, pitch,
+        vcl::font::EmbeddedFontsHelper::FontRights::ViewingAllowed );
     if( fontUrl.isEmpty())
         return;
     // TODO IDocumentSettingAccess::EMBED_SYSTEM_FONTS

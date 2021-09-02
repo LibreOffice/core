@@ -77,7 +77,7 @@ namespace xmloff {
 namespace xmloff::token {
     class FastTokenHandler;
 }
-class EmbeddedFontsHelper;
+namespace vcl::font { class EmbeddedFontsHelper; }
 class ProgressBarHelper;
 class SvXMLNamespaceMap;
 class SvXMLImport_Impl;
@@ -251,7 +251,7 @@ private:
 
     // tdf#69060 & tdf#137643 import embedded fonts and activate them in a
     // batch in EmbeddedFontsHelper's dtor
-    std::unique_ptr<EmbeddedFontsHelper, o3tl::default_delete<EmbeddedFontsHelper>> mxEmbeddedFontHelper;
+    std::unique_ptr<vcl::font::EmbeddedFontsHelper, o3tl::default_delete<vcl::font::EmbeddedFontsHelper>> mxEmbeddedFontHelper;
 
 protected:
     bool                        mbIsFormsSupported;
