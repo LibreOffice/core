@@ -224,6 +224,8 @@ public:
                    // sfx2/source/doc/docfile.cxx, warning about map's key
                 || name == "gaFramesArr_Impl"
                    // sfx2/source/view/frame.cxx, vector of pointer, so not a problem, nothing is going to happen on shutdown
+                || name == "g_pOLELRU_Cache" || name == "s_aTableColumnsMap"
+                   // TODO
                ) // these variables appear unproblematic
             {
                 return true;
