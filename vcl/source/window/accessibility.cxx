@@ -250,8 +250,7 @@ sal_uInt16 Window::getDefaultAccessibleRole() const
         case WindowType::CANCELBUTTON:
         case WindowType::HELPBUTTON:
         case WindowType::IMAGEBUTTON:
-        case WindowType::MOREBUTTON:
-        case WindowType::SPINBUTTON: nRole = accessibility::AccessibleRole::PUSH_BUTTON; break;
+        case WindowType::MOREBUTTON: nRole = accessibility::AccessibleRole::PUSH_BUTTON; break;
         case WindowType::MENUBUTTON: nRole = accessibility::AccessibleRole::BUTTON_MENU; break;
 
         case WindowType::RADIOBUTTON: nRole = accessibility::AccessibleRole::RADIO_BUTTON; break;
@@ -299,6 +298,7 @@ sal_uInt16 Window::getDefaultAccessibleRole() const
 
         case WindowType::METRICFIELD:
         case WindowType::CURRENCYFIELD:
+        case WindowType::SPINBUTTON:
         case WindowType::SPINFIELD:
         case WindowType::FORMATTEDFIELD: nRole = accessibility::AccessibleRole::SPIN_BOX; break;
 
