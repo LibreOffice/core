@@ -26,8 +26,7 @@ namespace svgio::svgreader
             SvgDocument& rDocument,
             SvgNode* pParent)
         :   SvgNode(SVGToken::Tref, rDocument, pParent),
-            maSvgStyleAttributes(*this),
-            maXLink()
+            maSvgStyleAttributes(*this)
         {
         }
 

@@ -26,8 +26,7 @@ namespace svgio::svgreader
             SvgDocument& rDocument,
             SvgNode* pParent)
         :   SvgNode(SVGToken::Path, rDocument, pParent),
-            maSvgStyleAttributes(*this),
-            maPathLength()
+            maSvgStyleAttributes(*this)
         {
         }
 

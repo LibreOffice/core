@@ -136,7 +136,6 @@ namespace
         SvgDocHdl::SvgDocHdl(const OUString& aAbsolutePath)
         :   maDocument(aAbsolutePath),
             mpTarget(nullptr),
-            maCssContents(),
             bSkip(false)
         {
         }

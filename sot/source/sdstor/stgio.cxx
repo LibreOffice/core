@@ -33,7 +33,7 @@
 
 // This class holds the storage header and all internal streams.
 
-StgIo::StgIo() : StgCache()
+StgIo::StgIo()
 {
     m_pTOC      = nullptr;
     m_pDataFAT  = nullptr;

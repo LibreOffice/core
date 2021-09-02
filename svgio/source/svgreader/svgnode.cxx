@@ -267,10 +267,8 @@ namespace svgio::svgreader
             mrDocument(rDocument),
             mpParent(pParent),
             mpAlternativeParent(nullptr),
-            maChildren(),
             maXmlSpace(XmlSpace::NotSet),
             maDisplay(Display::Inline),
-            maCssStyleVector(),
             mbDecomposing(false),
             mbCssStyleVectorBuilt(false)
         {

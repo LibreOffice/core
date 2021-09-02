@@ -28,13 +28,7 @@
 namespace svgio::svgreader
 {
         SvgTextPositions::SvgTextPositions()
-        :   maX(),
-            maY(),
-            maDx(),
-            maDy(),
-            maRotate(),
-            maTextLength(),
-            mbLengthAdjust(true)
+        :  mbLengthAdjust(true)
         {
         }
 
@@ -563,11 +557,8 @@ namespace svgio::svgreader
             const InfoProvider& rInfoProvider,
             const SvgTextPositions& rSvgTextPositions)
         :   mpParent(pParent),
-            maX(), // computed below
-            maY(), // computed below
             maRotate(solveSvgNumberVector(rSvgTextPositions.getRotate(), rInfoProvider)),
             mfTextLength(0.0),
-            maPosition(), // computed below
             mnRotationIndex(0),
             mbLengthAdjust(rSvgTextPositions.getLengthAdjust()),
             mbAbsoluteX(false)

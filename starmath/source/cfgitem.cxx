@@ -340,10 +340,6 @@ OUString SmFontFormatList::GetNewFontFormatId() const
 
 SmMathConfig::SmMathConfig() :
     ConfigItem("Office.Math")
-    , pFormat()
-    , pOther()
-    , pFontFormatList()
-    , pSymbolMgr()
     , bIsOtherModified(false)
     , bIsFormatModified(false)
 {

@@ -25,9 +25,7 @@ namespace svgio::svgreader
             SvgDocument& rDocument,
             SvgNode* pParent)
         :   SvgNode(SVGToken::Marker, rDocument, pParent),
-            aPrimitives(),
             maSvgStyleAttributes(*this),
-            maSvgAspectRatio(),
             maRefX(0),
             maRefY(0),
             maMarkerUnits(MarkerUnits::strokeWidth),

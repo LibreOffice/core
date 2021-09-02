@@ -43,9 +43,7 @@ const sal_uInt32 OStoreLockBytes::m_nTypeId(0x94190310);
  * OStoreLockBytes.
  */
 OStoreLockBytes::OStoreLockBytes()
-    : m_xManager   (),
-      m_xNode      (),
-      m_bWriteable (false)
+    : m_bWriteable (false)
 {
 }
 

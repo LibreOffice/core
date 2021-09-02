@@ -37,19 +37,9 @@ namespace svgio::svgreader
             SvgNode* pParent)
         :   SvgNode(aType, rDocument, pParent),
             maSvgStyleAttributes(*this),
-            maX1(),
-            maY1(),
-            maX2(),
-            maY2(),
-            maCx(),
-            maCy(),
-            maR(),
-            maFx(),
-            maFy(),
             maGradientUnits(SvgUnits::objectBoundingBox),
             maSpreadMethod(drawinglayer::primitive2d::SpreadMethod::Pad),
             mbResolvingLink(false),
-            maXLink(),
             mpXLink(nullptr)
         {
             OSL_ENSURE(aType == SVGToken::LinearGradient || aType == SVGToken::RadialGradient, "SvgGradientNode should only be used for Linear and Radial gradient (!)");

@@ -25,8 +25,7 @@ namespace svgio::svgreader
             SvgDocument& rDocument,
             SvgNode* pParent)
         :   SvgNode(SVGToken::Stop, rDocument, pParent),
-            maSvgStyleAttributes(*this),
-            maOffset()
+            maSvgStyleAttributes(*this)
         {
         }
 

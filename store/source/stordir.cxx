@@ -69,8 +69,7 @@ const sal_uInt32 OStoreDirectory_Impl::m_nTypeId(0x89191107);
  * OStoreDirectory_Impl.
  */
 OStoreDirectory_Impl::OStoreDirectory_Impl()
-    : m_xManager (),
-      m_aDescr   (0, 0, 0),
+    : m_aDescr   (0, 0, 0),
       m_nPath    (0),
       m_hTextCvt (nullptr)
 {}

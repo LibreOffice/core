@@ -45,14 +45,14 @@
 // Problem of implementation: No hierarchical commits. Therefore only
 // overall transaction-oriented or direct.
 
-StgDirEntry::StgDirEntry( const void* pBuffer, sal_uInt32 nBufferLen, sal_uInt64 nUnderlyingStreamSize, bool * pbOk ) : StgAvlNode()
+StgDirEntry::StgDirEntry( const void* pBuffer, sal_uInt32 nBufferLen, sal_uInt64 nUnderlyingStreamSize, bool * pbOk )
 {
     *pbOk = m_aEntry.Load( pBuffer, nBufferLen, nUnderlyingStreamSize );
 
     InitMembers();
 }
 
-StgDirEntry::StgDirEntry( const StgEntry& r ) : StgAvlNode(), m_aEntry( r )
+StgDirEntry::StgDirEntry( const StgEntry& r ) :  m_aEntry( r )
 {
     InitMembers();
 }

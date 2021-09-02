@@ -322,7 +322,7 @@ protected:
 } // namespace store
 
 FileLockBytes::FileLockBytes (FileHandle const & rFile)
-    : m_hFile (rFile.m_handle), m_nSize (SAL_MAX_UINT32), m_xAllocator()
+    : m_hFile (rFile.m_handle), m_nSize (SAL_MAX_UINT32)
 {
 }
 
@@ -695,7 +695,7 @@ protected:
 } // namespace store
 
 MemoryLockBytes::MemoryLockBytes()
-    : m_pData (nullptr), m_nSize (0), m_xAllocator()
+    : m_pData (nullptr), m_nSize (0)
 {}
 
 MemoryLockBytes::~MemoryLockBytes()
