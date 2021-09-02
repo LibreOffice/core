@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90061382_1852b741",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002869
+      },
+      "writtenOn": "2021-09-02T10:09:49Z",
+      "side": 1,
+      "message": "(Also, criss-cross border icon already replaced with a new one by Rizal: https://gerrit.libreoffice.org/c/core/+/121188 , on current master)\n\nThis commit is ready for review.",
+      "revId": "98ade548426cb2097e3918d1e08bc819274a71db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

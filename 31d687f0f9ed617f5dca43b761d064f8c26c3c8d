@@ -69,6 +69,24 @@
       "message": "+2 needed",
       "revId": "31d687f0f9ed617f5dca43b761d064f8c26c3c8d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11230d93_ef8168cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002869
+      },
+      "writtenOn": "2021-09-02T10:09:49Z",
+      "side": 1,
+      "message": "Done. All \"Set\" words removed.",
+      "parentUuid": "965b6789_2101ec22",
+      "revId": "31d687f0f9ed617f5dca43b761d064f8c26c3c8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
