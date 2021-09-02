@@ -22,6 +22,30 @@
       },
       "revId": "1864e6353179678a2ca1a175c203fd9e0cc5a580",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb5cbbd9_697ccb36",
+        "filename": "sw/source/core/text/txtfly.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 797,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-09-02T08:50:01Z",
+      "side": 0,
+      "message": "@Justin, many thanks for the hint!\n\n@Dani: git log shows the last commit which extended DocumentSettingId, which likely the proposed way to implement a new compatibility setting.\n\n\u003e Patch Set 6:\n\u003e \n\u003e @Dani: see\n\u003e \n\u003e enum class DocumentSettingId\n\u003e {\n\u003e     // COMPATIBILITY FLAGS START\n\u003e     PARA_SPACE_MAX,\n\u003e     PARA_SPACE_MAX_AT_PAGES,\n\u003e ...\n\u003e \n\u003e in sw/inc/IDocumentSettingAccess.hxx, and the related commits in git log.\n\nFor example, here is Justin\u0027s patch:\n\ncommit a2d8a737f41cbb0ed8a51a99b1c233b25e433d1c\nAuthor: Justin Luth \u003cjustin_luth@sil.org\u003e\nDate:   Thu Jun 3 13:38:33 2021 +0200\n\n    tdf#142404 DOCX c15: add compat flag TabOverSpacing",
+      "parentUuid": "2a64657f_de42dbcb",
+      "range": {
+        "startLine": 797,
+        "startChar": 52,
+        "endLine": 797,
+        "endChar": 76
+      },
+      "revId": "1864e6353179678a2ca1a175c203fd9e0cc5a580",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
