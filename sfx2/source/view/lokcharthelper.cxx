@@ -214,7 +214,7 @@ void LokChartHelper::PaintTile(VirtualDevice& rRenderContext, const tools::Recta
     bool bRenderContextEnableMapMode = !rRenderContext.IsMapModeEnabled();
     rRenderContext.EnableMapMode();
 
-    rRenderContext.Push(PushFlags::MAPMODE);
+    rRenderContext.Push(vcl::PushFlags::MAPMODE);
 
     MapMode aCWMapMode = pChartWindow->GetMapMode();
     aCWMapMode.SetScaleX(rRenderContext.GetMapMode().GetScaleX());
@@ -244,7 +244,7 @@ void LokChartHelper::PaintAllChartsOnTile(VirtualDevice& rDevice,
     // Resizes the virtual device so to contain the entries context
     rDevice.SetOutputSizePixel(Size(nOutputWidth, nOutputHeight));
 
-    rDevice.Push(PushFlags::MAPMODE);
+    rDevice.Push(vcl::PushFlags::MAPMODE);
     MapMode aMapMode(rDevice.GetMapMode());
 
     // Scaling. Must convert from pixels to twips. We know

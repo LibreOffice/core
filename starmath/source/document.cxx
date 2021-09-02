@@ -275,8 +275,8 @@ void SmDocShell::ArrangeFormula()
 
     // format/draw formulas always from left to right,
     // and numbers should not be converted
-    ComplexTextLayoutFlags nLayoutMode = pOutDev->GetLayoutMode();
-    pOutDev->SetLayoutMode( ComplexTextLayoutFlags::Default );
+    vcl::text::ComplexTextLayoutFlags nLayoutMode = pOutDev->GetLayoutMode();
+    pOutDev->SetLayoutMode( vcl::text::ComplexTextLayoutFlags::Default );
     LanguageType nDigitLang = pOutDev->GetDigitLanguage();
     pOutDev->SetDigitLanguage( LANGUAGE_ENGLISH );
 
@@ -351,8 +351,8 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
 
     // format/draw formulas always from left to right
     // and numbers should not be converted
-    ComplexTextLayoutFlags nLayoutMode = rDev.GetLayoutMode();
-    rDev.SetLayoutMode( ComplexTextLayoutFlags::Default );
+    vcl::text::ComplexTextLayoutFlags nLayoutMode = rDev.GetLayoutMode();
+    rDev.SetLayoutMode( vcl::text::ComplexTextLayoutFlags::Default );
     LanguageType nDigitLang = rDev.GetDigitLanguage();
     rDev.SetDigitLanguage( LANGUAGE_ENGLISH );
 
@@ -417,7 +417,7 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
     pPrinter = rDocShell.GetPrt();
     if ( pPrinter )
     {
-        pPrinter->Push( PushFlags::MAPMODE );
+        pPrinter->Push( vcl::PushFlags::MAPMODE );
         if ( SfxObjectCreateMode::EMBEDDED == rDocShell.GetCreateMode() )
         {
             // if it is an embedded object (without its own printer)
@@ -444,7 +444,7 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
     if ( !pRefDev || pPrinter.get() == pRefDev.get() )
         return;
 
-    pRefDev->Push( PushFlags::MAPMODE );
+    pRefDev->Push( vcl::PushFlags::MAPMODE );
     if ( SfxObjectCreateMode::EMBEDDED != rDocShell.GetCreateMode() )
         return;
 

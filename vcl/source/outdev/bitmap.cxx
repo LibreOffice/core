@@ -80,7 +80,7 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
                 cCmpVal = 255;
 
             Color aCol( cCmpVal, cCmpVal, cCmpVal );
-            Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
+            Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
             SetLineColor( aCol );
             SetFillColor( aCol );
             DrawRect( tools::Rectangle( rDestPt, rDestSize ) );

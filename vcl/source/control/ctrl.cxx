@@ -64,8 +64,8 @@ void Control::dispose()
 void Control::EnableRTL( bool bEnable )
 {
     // convenience: for controls also switch layout mode
-    GetOutDev()->SetLayoutMode( bEnable ? ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft :
-                                ComplexTextLayoutFlags::TextOriginLeft );
+    GetOutDev()->SetLayoutMode( bEnable ? vcl::text::ComplexTextLayoutFlags::BiDiRtl | vcl::text::ComplexTextLayoutFlags::TextOriginLeft :
+                                vcl::text::ComplexTextLayoutFlags::TextOriginLeft );
     CompatStateChanged( StateChangedType::Mirroring );
     Window::EnableRTL(bEnable);
 }

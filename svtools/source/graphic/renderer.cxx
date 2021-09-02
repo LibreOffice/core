@@ -106,8 +106,8 @@ uno::Any SAL_CALL GraphicRendererVCL::queryAggregation( const uno::Type & rType 
         aAny <<= uno::Reference< beans::XPropertyState >(this);
     else if( rType == cppu::UnoType<beans::XMultiPropertySet>::get())
         aAny <<= uno::Reference< beans::XMultiPropertySet >(this);
-    else if( rType == cppu::UnoType<graphic::XGraphicRenderer>::get())
-        aAny <<= uno::Reference< graphic::XGraphicRenderer >(this);
+    else if( rType == cppu::UnoType<css::graphic::XGraphicRenderer>::get())
+        aAny <<= uno::Reference< css::graphic::XGraphicRenderer >(this);
     else
         aAny = OWeakAggObject::queryAggregation( rType );
 
@@ -161,7 +161,7 @@ uno::Sequence< uno::Type > SAL_CALL GraphicRendererVCL::getTypes()
         cppu::UnoType<beans::XPropertySet>::get(),
         cppu::UnoType<beans::XPropertyState>::get(),
         cppu::UnoType<beans::XMultiPropertySet>::get(),
-        cppu::UnoType<graphic::XGraphicRenderer>::get() };
+        cppu::UnoType<css::graphic::XGraphicRenderer>::get() };
     return aTypes;
 }
 
@@ -271,7 +271,7 @@ void GraphicRendererVCL::_getPropertyValues( const comphelper::PropertyMapEntry*
     }
 }
 
-void SAL_CALL GraphicRendererVCL::render( const uno::Reference< graphic::XGraphic >& rxGraphic )
+void SAL_CALL GraphicRendererVCL::render( const uno::Reference< css::graphic::XGraphic >& rxGraphic )
 {
     if( mpOutDev && mxDevice.is() && rxGraphic.is() )
     {

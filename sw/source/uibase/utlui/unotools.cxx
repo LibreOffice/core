@@ -155,7 +155,7 @@ void SwOneExampleFrame::Paint(vcl::RenderContext& rRenderContext, const tools::R
 
         double fZoom = 100.0 / nZoom;
 
-        m_xVirDev->Push(PushFlags::ALL);
+        m_xVirDev->Push(vcl::PushFlags::ALL);
         m_xVirDev->SetMapMode(MapMode(MapUnit::MapTwip));
         SwDoc *pDoc = pCursor->GetDoc();
         SwDocShell* pShell = pDoc->GetDocShell();

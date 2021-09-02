@@ -114,9 +114,9 @@ namespace wmfemfhelper
     :   maMapUnit(MapUnit::Map100thMM),
         maTextColor(sal_uInt32(COL_BLACK)),
         maRasterOp(RasterOp::OverPaint),
-        mnLayoutMode(ComplexTextLayoutFlags::Default),
+        mnLayoutMode(vcl::text::ComplexTextLayoutFlags::Default),
         maLanguageType(0),
-        mnPushFlags(PushFlags::NONE),
+        mnPushFlags(vcl::PushFlags::NONE),
         mbLineColor(false),
         mbFillColor(false),
         mbTextColor(true),
@@ -150,7 +150,7 @@ namespace wmfemfhelper
         maPropertyHolders.push_back(pNew);
     }
 
-    void PropertyHolders::Push(PushFlags nPushFlags)
+    void PropertyHolders::Push(vcl::PushFlags nPushFlags)
     {
         if (bool(nPushFlags))
         {
@@ -173,56 +173,56 @@ namespace wmfemfhelper
             return;
 
         const PropertyHolder* pTip = maPropertyHolders.back();
-        const PushFlags nPushFlags(pTip->getPushFlags());
+        const vcl::PushFlags nPushFlags(pTip->getPushFlags());
 
-        if (nPushFlags != PushFlags::NONE)
+        if (nPushFlags != vcl::PushFlags::NONE)
         {
             if (nSize > 1)
             {
                 // copy back content for all non-set flags
                 PropertyHolder* pLast = maPropertyHolders[nSize - 2];
 
-                if (PushFlags::ALL != nPushFlags)
+                if (vcl::PushFlags::ALL != nPushFlags)
                 {
-                    if (!(nPushFlags & PushFlags::LINECOLOR))
+                    if (!(nPushFlags & vcl::PushFlags::LINECOLOR))
                     {
                         pLast->setLineColor(pTip->getLineColor());
                         pLast->setLineColorActive(pTip->getLineColorActive());
                     }
-                    if (!(nPushFlags & PushFlags::FILLCOLOR))
+                    if (!(nPushFlags & vcl::PushFlags::FILLCOLOR))
                     {
                         pLast->setFillColor(pTip->getFillColor());
                         pLast->setFillColorActive(pTip->getFillColorActive());
                     }
-                    if (!(nPushFlags & PushFlags::FONT))
+                    if (!(nPushFlags & vcl::PushFlags::FONT))
                     {
                         pLast->setFont(pTip->getFont());
                     }
-                    if (!(nPushFlags & PushFlags::TEXTCOLOR))
+                    if (!(nPushFlags & vcl::PushFlags::TEXTCOLOR))
                     {
                         pLast->setTextColor(pTip->getTextColor());
                         pLast->setTextColorActive(pTip->getTextColorActive());
                     }
-                    if (!(nPushFlags & PushFlags::MAPMODE))
+                    if (!(nPushFlags & vcl::PushFlags::MAPMODE))
                     {
                         pLast->setTransformation(pTip->getTransformation());
                         pLast->setMapUnit(pTip->getMapUnit());
                     }
-                    if (!(nPushFlags & PushFlags::CLIPREGION))
+                    if (!(nPushFlags & vcl::PushFlags::CLIPREGION))
                     {
                         pLast->setClipPolyPolygon(pTip->getClipPolyPolygon());
                         pLast->setClipPolyPolygonActive(pTip->getClipPolyPolygonActive());
                     }
-                    if (!(nPushFlags & PushFlags::RASTEROP))
+                    if (!(nPushFlags & vcl::PushFlags::RASTEROP))
                     {
                         pLast->setRasterOp(pTip->getRasterOp());
                     }
-                    if (!(nPushFlags & PushFlags::TEXTFILLCOLOR))
+                    if (!(nPushFlags & vcl::PushFlags::TEXTFILLCOLOR))
                     {
                         pLast->setTextFillColor(pTip->getTextFillColor());
                         pLast->setTextFillColorActive(pTip->getTextFillColorActive());
                     }
-                    if (!(nPushFlags & PushFlags::TEXTALIGN))
+                    if (!(nPushFlags & vcl::PushFlags::TEXTALIGN))
                     {
                         if (pLast->getFont().GetAlignment() != pTip->getFont().GetAlignment())
                         {
@@ -231,24 +231,24 @@ namespace wmfemfhelper
                             pLast->setFont(aFont);
                         }
                     }
-                    if (!(nPushFlags & PushFlags::REFPOINT))
+                    if (!(nPushFlags & vcl::PushFlags::REFPOINT))
                     {
                         // not supported
                     }
-                    if (!(nPushFlags & PushFlags::TEXTLINECOLOR))
+                    if (!(nPushFlags & vcl::PushFlags::TEXTLINECOLOR))
                     {
                         pLast->setTextLineColor(pTip->getTextLineColor());
                         pLast->setTextLineColorActive(pTip->getTextLineColorActive());
                     }
-                    if (!(nPushFlags & PushFlags::TEXTLAYOUTMODE))
+                    if (!(nPushFlags & vcl::PushFlags::TEXTLAYOUTMODE))
                     {
                         pLast->setLayoutMode(pTip->getLayoutMode());
                     }
-                    if (!(nPushFlags & PushFlags::TEXTLANGUAGE))
+                    if (!(nPushFlags & vcl::PushFlags::TEXTLANGUAGE))
                     {
                         pLast->setLanguageType(pTip->getLanguageType());
                     }
-                    if (!(nPushFlags & PushFlags::OVERLINECOLOR))
+                    if (!(nPushFlags & vcl::PushFlags::OVERLINECOLOR))
                     {
                         pLast->setOverlineColor(pTip->getOverlineColor());
                         pLast->setOverlineColorActive(pTip->getOverlineColorActive());
@@ -1061,8 +1061,8 @@ namespace wmfemfhelper
         rFontAttribute = drawinglayer::primitive2d::getFontAttributeFromVclFont(
                             aFontScaling,
                             rFont,
-                            bool(rProperty.getLayoutMode() & ComplexTextLayoutFlags::BiDiRtl),
-                            bool(rProperty.getLayoutMode() & ComplexTextLayoutFlags::BiDiStrong));
+                            bool(rProperty.getLayoutMode() & vcl::text::ComplexTextLayoutFlags::BiDiRtl),
+                            bool(rProperty.getLayoutMode() & vcl::text::ComplexTextLayoutFlags::BiDiStrong));
 
         // add FontScaling
         rTextTransform.scale(aFontScaling.getX(), aFontScaling.getY());
@@ -2600,8 +2600,8 @@ namespace wmfemfhelper
                 case MetaActionType::POP :
                 {
                     /** CHECKED, WORKS WELL */
-                    const bool bRegionMayChange(rPropertyHolders.Current().getPushFlags() & PushFlags::CLIPREGION);
-                    const bool bRasterOpMayChange(rPropertyHolders.Current().getPushFlags() & PushFlags::RASTEROP);
+                    const bool bRegionMayChange(rPropertyHolders.Current().getPushFlags() & vcl::PushFlags::CLIPREGION);
+                    const bool bRasterOpMayChange(rPropertyHolders.Current().getPushFlags() & vcl::PushFlags::RASTEROP);
 
                     if(bRegionMayChange && rPropertyHolders.Current().getClipPolyPolygonActive())
                     {
