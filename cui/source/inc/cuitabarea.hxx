@@ -675,6 +675,7 @@ private:
     std::unique_ptr<weld::Button> m_xBtnAdd;
     std::unique_ptr<weld::Button> m_xBtnDelete;
     std::unique_ptr<weld::Button> m_xBtnWorkOn;
+    std::unique_ptr<weld::Button> m_xMoreColors;
     std::unique_ptr<weld::CustomWeld> m_xCtlPreviewOld;
     std::unique_ptr<weld::CustomWeld> m_xCtlPreviewNew;
     std::unique_ptr<weld::CustomWeld> m_xValSetColorListWin;
@@ -692,6 +693,7 @@ private:
     DECL_LINK(ClickAddHdl_Impl, weld::Button&, void);
     DECL_LINK(ClickWorkOnHdl_Impl, weld::Button&, void);
     DECL_LINK(ClickDeleteHdl_Impl, weld::Button&, void);
+    DECL_STATIC_LINK(SvxColorTabPage, OnMoreColorsClick, weld::Button&, void);
 
     DECL_LINK(SelectPaletteLBHdl, weld::ComboBox&, void);
     DECL_LINK( SelectValSetHdl_Impl, ValueSet*, void );
