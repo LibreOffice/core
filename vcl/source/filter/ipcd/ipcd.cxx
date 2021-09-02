@@ -184,29 +184,27 @@ void PCDReader::ReadOrientation()
 
 void PCDReader::ReadImage()
 {
-    sal_uInt32  nx,ny,nW2,nH2,nYPair,ndy,nXPair;
-    tools::Long   nL,nCb,nCr,nRed,nGreen,nBlue;
-    sal_uInt8 * pt;
-    sal_uInt8 * pL0; // luminance for each pixel of the 1st row of the current pair of rows
-    sal_uInt8 * pL1; // luminance for each pixel of the 2nd row of the current pair of rows
-    sal_uInt8 * pCb; // blue chrominance for each 2x2 pixel of the current pair of rows
-    sal_uInt8 * pCr; // red chrominance for each 2x2 pixel of the current pair of rows
-    sal_uInt8 * pL0N, * pL1N, * pCbN, * pCrN; // like above, but for the next pair of rows
+    tools::Long   nL,nCb,nCr;
 
     if ( !bStatus )
         return;
 
-    nW2=nWidth>>1;
-    nH2=nHeight>>1;
+    sal_uInt32 nW2 = nWidth>>1;
+    sal_uInt32 nH2 = nHeight>>1;
 
-    pL0 =static_cast<sal_uInt8*>(std::malloc( nWidth ));
-    pL1 =static_cast<sal_uInt8*>(std::malloc( nWidth ));
-    pCb =static_cast<sal_uInt8*>(std::malloc( nW2+1 ));
-    pCr =static_cast<sal_uInt8*>(std::malloc( nW2+1 ));
-    pL0N=static_cast<sal_uInt8*>(std::malloc( nWidth ));
-    pL1N=static_cast<sal_uInt8*>(std::malloc( nWidth ));
-    pCbN=static_cast<sal_uInt8*>(std::malloc( nW2+1 ));
-    pCrN=static_cast<sal_uInt8*>(std::malloc( nW2+1 ));
+    // luminance for each pixel of the 1st row of the current pair of rows
+    sal_uInt8* pL0 = static_cast<sal_uInt8*>(std::malloc( nWidth ));
+    // luminance for each pixel of the 2nd row of the current pair of rows
+    sal_uInt8* pL1 = static_cast<sal_uInt8*>(std::malloc( nWidth ));
+    // blue chrominance for each 2x2 pixel of the current pair of rows
+    sal_uInt8* pCb = static_cast<sal_uInt8*>(std::malloc( nW2+1 ));
+    // red chrominance for each 2x2 pixel of the current pair of rows
+    sal_uInt8* pCr = static_cast<sal_uInt8*>(std::malloc( nW2+1 ));
+    // like above, but for the next pair of rows
+    sal_uInt8* pL0N = static_cast<sal_uInt8*>(std::malloc( nWidth ));
+    sal_uInt8* pL1N = static_cast<sal_uInt8*>(std::malloc( nWidth ));
+    sal_uInt8* pCbN = static_cast<sal_uInt8*>(std::malloc( nW2+1 ));
+    sal_uInt8* pCrN = static_cast<sal_uInt8*>(std::malloc( nW2+1 ));
 
     if ( pL0 == nullptr || pL1 == nullptr || pCb == nullptr || pCr == nullptr ||
         pL0N == nullptr || pL1N == nullptr || pCbN == nullptr || pCrN == nullptr)
@@ -237,8 +235,9 @@ void PCDReader::ReadImage()
     pCbN[ nW2 ] = pCbN[ nW2 - 1 ];
     pCrN[ nW2 ] = pCrN[ nW2 - 1 ];
 
-    for ( nYPair = 0; nYPair < nH2; nYPair++ )
+    for (sal_uInt32 nYPair = 0; nYPair < nH2; ++nYPair)
     {
+        sal_uInt8 * pt;
         // current pair of rows := next pair of rows:
         pt=pL0; pL0=pL0N; pL0N=pt;
         pt=pL1; pL1=pL1N; pL1N=pt;
@@ -257,7 +256,7 @@ void PCDReader::ReadImage()
         }
         else
         {
-            for ( nXPair = 0; nXPair < nW2; nXPair++ )
+            for (sal_uInt32 nXPair = 0; nXPair < nW2; ++nXPair)
             {
                 pCbN[ nXPair ] = pCb[ nXPair ];
                 pCrN[ nXPair ] = pCr[ nXPair ];
@@ -265,15 +264,15 @@ void PCDReader::ReadImage()
         }
 
         // loop through both rows of the pair of rows:
-        for ( ndy = 0; ndy < 2; ndy++ )
+        for (sal_uInt32 ndy = 0; ndy < 2; ++ndy)
         {
-            ny = ( nYPair << 1 ) + ndy;
+            sal_uInt32 ny = ( nYPair << 1 ) + ndy;
 
             // loop through X:
-            for ( nx = 0; nx < nWidth; nx++ )
+            for (sal_uInt32 nx = 0; nx < nWidth; ++nx)
             {
                 // get/calculate nL,nCb,nCr for the pixel nx,ny:
-                nXPair = nx >> 1;
+                sal_uInt32 nXPair = nx >> 1;
                 if ( ndy == 0 )
                 {
                     nL = static_cast<tools::Long>(pL0[ nx ]);
@@ -307,17 +306,17 @@ void PCDReader::ReadImage()
                 nL *= 89024;
                 nCb -= 156;
                 nCr -= 137;
-                nRed = ( nL + nCr * 119374 + 0x8000 ) >> 16;
+                tools::Long nRed = ( nL + nCr * 119374 + 0x8000 ) >> 16;
                 if ( nRed < 0 )
                     nRed = 0;
                 if ( nRed > 255)
                     nRed = 255;
-                nGreen = ( nL - nCb * 28198 - nCr * 60761 + 0x8000 ) >> 16;
+                tools::Long nGreen = ( nL - nCb * 28198 - nCr * 60761 + 0x8000 ) >> 16;
                 if ( nGreen < 0 )
                     nGreen = 0;
                 if ( nGreen > 255 )
                     nGreen = 255;
-                nBlue = ( nL + nCb * 145352 + 0x8000 ) >> 16;
+                tools::Long nBlue = ( nL + nCb * 145352 + 0x8000 ) >> 16;
                 if ( nBlue < 0 )
                     nBlue = 0;
                 if ( nBlue > 255 )
