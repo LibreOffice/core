@@ -153,6 +153,7 @@ private:
     bool                mbIs3DChart;
     bool                mbStacked;
     bool                mbPercent;
+    bool                mbHasDateCategories;
 
     std::set<sal_Int32> maExportedAxis;
 

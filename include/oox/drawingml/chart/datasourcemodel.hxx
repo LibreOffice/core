@@ -27,6 +27,8 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
+enum class SvNumFormatType : sal_Int16;
+
 namespace oox::drawingml::chart {
 
 
@@ -39,6 +41,7 @@ struct DataSequenceModel
     OUString     maFormatCode;       /// Number format for double values.
     sal_Int32           mnPointCount;       /// Number of points in this series source.
     sal_Int32           mnLevelCount;       /// Number of category levels.
+    SvNumFormatType     meFormatType;       /// Type of number format in maFormatCode.
 
     explicit            DataSequenceModel();
                         ~DataSequenceModel();

@@ -155,7 +155,7 @@ public:
 
     virtual css::uno::Reference<css::chart2::data::XDataSequence>
         SAL_CALL createDataSequenceByValueArray(
-            const OUString& aRole, const OUString& aRangeRepresentation ) override;
+            const OUString& aRole, const OUString& aRangeRepresentation, const OUString& aRoleQualifier ) override;
 
     // XRangeXMLConversion
     virtual OUString SAL_CALL convertRangeToXML( const OUString& aRangeRepresentation ) override;

@@ -38,7 +38,8 @@ public:
     virtual css::uno::Reference<css::chart2::data::XDataSequence>
         createDataSequence(
             const css::uno::Reference<css::chart2::data::XDataProvider>& rxDataProvider,
-            const oox::drawingml::chart::DataSequenceModel& rDataSeq, const OUString& rRole ) override;
+            const oox::drawingml::chart::DataSequenceModel& rDataSeq, const OUString& rRole,
+            const OUString& aRoleQualifier ) override;
 };
 
 } // namespace oox::xls

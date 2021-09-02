@@ -654,7 +654,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
             nDaysPerInterval = 1.0;
         }
 
-        nNumer = static_cast<sal_Int32>( rtl::math::approxCeil( nIntervalDays/nDaysPerInterval ) );
+        nNumer = static_cast<sal_Int32>( rtl::math::approxFloor( nIntervalDays/nDaysPerInterval ) );
         if(nNumer<=0)
             nNumer=1;
         if( rExplicitIncrement.MajorTimeInterval.TimeUnit == DAY )
@@ -665,7 +665,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
             {
                 rExplicitIncrement.MajorTimeInterval.TimeUnit = MONTH;
                 nDaysPerInterval = 31.0;
-                nNumer = static_cast<sal_Int32>( rtl::math::approxCeil( nIntervalDays/nDaysPerInterval ) );
+                nNumer = static_cast<sal_Int32>( rtl::math::approxFloor( nIntervalDays/nDaysPerInterval ) );
                 if(nNumer<=0)
                     nNumer=1;
             }
