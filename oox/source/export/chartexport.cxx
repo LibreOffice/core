@@ -158,8 +158,9 @@ private:
 
 }
 
-static Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Reference< chart2::XDiagram > & xDiagram )
+static Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Reference< chart2::XDiagram > & xDiagram, bool& bHasDateCategories )
 {
+    bHasDateCategories = false;
     Reference< chart2::data::XLabeledDataSequence >  xResult;
     try
     {
@@ -182,6 +183,7 @@ static Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const 
                         chart2::ScaleData aScaleData = xAxis->getScaleData();
                         if( aScaleData.Categories.is())
                         {
+                            bHasDateCategories = aScaleData.AxisType == chart2::AxisType::DATE;
                             xResult.set( aScaleData.Categories );
                             break;
                         }
@@ -220,7 +222,8 @@ static bool lcl_hasCategoryLabels( const Reference< chart2::XChartDocument >& xC
 {
     //categories are always the first sequence
     Reference< chart2::XDiagram > xDiagram( xChartDoc->getFirstDiagram());
-    Reference< chart2::data::XLabeledDataSequence > xCategories( lcl_getCategories( xDiagram ) );
+    bool bDateCategories;
+    Reference< chart2::data::XLabeledDataSequence > xCategories( lcl_getCategories( xDiagram, bDateCategories ) );
     return xCategories.is();
 }
 
@@ -2861,7 +2864,26 @@ void ChartExport::exportSeriesCategory( const Reference< chart2::data::XDataSequ
     else
     {
         // export single category axis labels
-        pFS->startElement(FSNS(XML_c, XML_strRef));
+        bool bWriteDateCategories = mbHasDateCategories && (nValueType == XML_cat);
+        OUString aNumberFormatString;
+        if (bWriteDateCategories)
+        {
+            Reference< css::chart::XAxisXSupplier > xAxisXSupp( mxDiagram, uno::UNO_QUERY );
+            if( xAxisXSupp.is())
+            {
+                Reference< XPropertySet > xAxisProp = xAxisXSupp->getXAxis();
+                if (GetProperty(xAxisProp, "NumberFormat"))
+                {
+                    sal_Int32 nKey = 0;
+                    mAny >>= nKey;
+                    aNumberFormatString = getNumberFormatCode(nKey);
+                }
+            }
+            if (aNumberFormatString.isEmpty())
+                bWriteDateCategories = false;
+        }
+
+        pFS->startElement(FSNS(XML_c, bWriteDateCategories ? XML_numRef : XML_strRef));
 
         pFS->startElement(FSNS(XML_c, XML_f));
         pFS->writeEscaped(aCellRange);
@@ -2870,7 +2892,14 @@ void ChartExport::exportSeriesCategory( const Reference< chart2::data::XDataSequ
         ::std::vector< OUString > aCategories;
         lcl_fillCategoriesIntoStringVector(xValueSeq, aCategories);
         sal_Int32 ptCount = aCategories.size();
-        pFS->startElement(FSNS(XML_c, XML_strCache));
+        pFS->startElement(FSNS(XML_c, bWriteDateCategories ? XML_numCache : XML_strCache));
+        if (bWriteDateCategories)
+        {
+            pFS->startElement(FSNS(XML_c, XML_formatCode));
+            pFS->writeEscaped(aNumberFormatString);
+            pFS->endElement(FSNS(XML_c, XML_formatCode));
+        }
+
         pFS->singleElement(FSNS(XML_c, XML_ptCount), XML_val, OString::number(ptCount));
         for (sal_Int32 i = 0; i < ptCount; i++)
         {
@@ -2881,8 +2910,8 @@ void ChartExport::exportSeriesCategory( const Reference< chart2::data::XDataSequ
             pFS->endElement(FSNS(XML_c, XML_pt));
         }
 
-        pFS->endElement(FSNS(XML_c, XML_strCache));
-        pFS->endElement(FSNS(XML_c, XML_strRef));
+        pFS->endElement(FSNS(XML_c, bWriteDateCategories ? XML_numCache : XML_strCache));
+        pFS->endElement(FSNS(XML_c, bWriteDateCategories ? XML_numRef : XML_strRef));
     }
 
     pFS->endElement( FSNS( XML_c, nValueType ) );
@@ -3025,7 +3054,7 @@ void ChartExport::InitPlotArea( )
 
     if( mbHasCategoryLabels && mxNewDiagram.is())
     {
-        Reference< chart2::data::XLabeledDataSequence > xCategories( lcl_getCategories( mxNewDiagram ) );
+        Reference< chart2::data::XLabeledDataSequence > xCategories( lcl_getCategories( mxNewDiagram, mbHasDateCategories ) );
         if( xCategories.is() )
         {
             mxCategoriesValues.set( xCategories->getValues() );

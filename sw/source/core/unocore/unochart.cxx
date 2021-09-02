@@ -1351,7 +1351,8 @@ uno::Reference< sheet::XRangeSelection > SAL_CALL SwChartDataProvider::getRangeS
 
 uno::Reference<css::chart2::data::XDataSequence> SAL_CALL
     SwChartDataProvider::createDataSequenceByValueArray(
-        const OUString& /*aRole*/, const OUString& /*aRangeRepresentation*/ )
+        const OUString& /*aRole*/, const OUString& /*aRangeRepresentation*/,
+        const OUString& /*aRoleQualifier*/ )
 {
     return uno::Reference<css::chart2::data::XDataSequence>();
 }

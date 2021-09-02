@@ -34,6 +34,7 @@
 #include <rtl/math.hxx>
 #include <svx/charthelper.hxx>
 
+#include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
@@ -45,12 +46,15 @@
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
+#include <com/sun/star/chart2/XInternalDataProvider.hpp>
+#include <com/sun/star/chart/XDateCategories.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 
 #include <unonames.hxx>
 
@@ -121,6 +125,7 @@ public:
     uno::Reference<chart::XChartDocument> getChartDocFromDrawImpress( sal_Int32 nPage, sal_Int32 nShape );
 
     uno::Reference<chart::XChartDocument> getChartDocFromWriter( sal_Int32 nShape );
+    Sequence< OUString > getFormattedDateCategories( const Reference<chart2::XChartDocument>& xChartDoc );
     awt::Size getPageSize( const Reference< chart2::XChartDocument > & xChartDoc );
     awt::Size getSize(css::uno::Reference<chart2::XDiagram> xDiagram, const awt::Size& rPageSize);
 
@@ -633,6 +638,38 @@ sal_Int16 getNumberFormatType( const Reference<chart2::XChartDocument>& xChartDo
     xNumPS->getPropertyValue("Type") >>= nType;
 
     return nType;
+}
+
+Sequence< double > getDateCategories(const Reference<chart2::XChartDocument>& xChartDoc)
+{
+    CPPUNIT_ASSERT(xChartDoc->hasInternalDataProvider());
+    uno::Reference< chart2::XInternalDataProvider > xDataProvider( xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW );
+    uno::Reference< chart::XDateCategories > xDateCategories( xDataProvider, uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT(xDateCategories.is());
+    return xDateCategories->getDateCategories();
+}
+
+Sequence< OUString > ChartTest::getFormattedDateCategories( const Reference<chart2::XChartDocument>& xChartDoc )
+{
+    Reference<util::XNumberFormatsSupplier> xNFS(xChartDoc, uno::UNO_QUERY_THROW);
+    Reference< util::XNumberFormatter > xNumFormatter(
+        util::NumberFormatter::create(comphelper::getComponentContext(m_xSFactory)), uno::UNO_QUERY_THROW );
+    xNumFormatter->attachNumberFormatsSupplier(xNFS);
+
+    Reference<chart2::XAxis> xAxisX = getAxisFromDoc(xChartDoc, 0, 0, 0);
+    chart2::ScaleData aScaleData = xAxisX->getScaleData();
+    CPPUNIT_ASSERT_EQUAL(chart2::AxisType::DATE, aScaleData.AxisType);
+
+    sal_Int32 nNumFmt = getNumberFormatFromAxis(xAxisX);
+
+    Sequence<double> aDateSeq = getDateCategories(xChartDoc);
+    const sal_Int32 nNumCategories = aDateSeq.getLength();
+    Sequence<OUString> aFormattedDates(nNumCategories);
+
+    for (sal_Int32 nIdx = 0; nIdx < nNumCategories; ++nIdx)
+        aFormattedDates[nIdx] = xNumFormatter->convertNumberToString(nNumFmt, aDateSeq[nIdx]);
+
+    return aFormattedDates;
 }
 
 awt::Size ChartTest::getPageSize( const Reference< chart2::XChartDocument > & xChartDoc )

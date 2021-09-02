@@ -102,6 +102,7 @@ public:
     void testGraphicBlipXLSX();
     void testNameRangeXLSX();
     void testTdf143942();
+    void testDateCategoriesPPTX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest2);
     CPPUNIT_TEST(testSetSeriesToSecondaryAxisXLSX);
@@ -166,6 +167,7 @@ public:
     CPPUNIT_TEST(testGraphicBlipXLSX);
     CPPUNIT_TEST(testNameRangeXLSX);
     CPPUNIT_TEST(testTdf143942);
+    CPPUNIT_TEST(testDateCategoriesPPTX);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1598,6 +1600,43 @@ void Chart2ExportTest2::testTdf143942()
             aFields[0]->getFieldType());
         CPPUNIT_ASSERT_EQUAL(aCellRange, aFields[0]->getCellRange());
         CPPUNIT_ASSERT_EQUAL(aLabels[i], aFields[0]->getString());
+    }
+}
+
+void Chart2ExportTest2::testDateCategoriesPPTX()
+{
+    load(u"/chart2/qa/extras/data/pptx/", "bnc889755.pptx");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/charts/chart", "Impress Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    constexpr size_t nCats = 16;
+    double aDates[nCats] = {
+        41183, 41214, 41244, 41275, 41306, 41334, 41365, 41395,
+        41426, 41456, 41487, 41518, 41548, 41579, 41609, 41640,
+    };
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:cat");
+    assertXPathContent(pXmlDoc,
+                       "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:cat/c:numRef/"
+                       "c:numCache/c:formatCode",
+                       "mmm\\-yy");
+    assertXPath(
+        pXmlDoc,
+        "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:cat/c:numRef/c:numCache/c:ptCount",
+        "val", OUString::number(nCats));
+
+    for (size_t i = 0; i < nCats; ++i)
+    {
+        assertXPath(
+            pXmlDoc,
+            "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:cat/c:numRef/c:numCache/c:pt["
+                + OString::number(i + 1) + "]",
+            "idx", OUString::number(i));
+        assertXPathContent(
+            pXmlDoc,
+            "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:cat/c:numRef/c:numCache/c:pt["
+                + OString::number(i + 1) + "]/c:v",
+            OUString::number(aDates[i]));
     }
 }
 
