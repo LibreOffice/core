@@ -56,6 +56,7 @@
 #include <oox/ppt/pptfilterhelpers.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
 
@@ -1376,6 +1377,12 @@ void AnimationImporter::importAnimateColorContainer( const Atom* pAtom, const Re
             mrStCtrl.ReadInt32( nByMode ).ReadInt32( nByA ).ReadInt32( nByB ).ReadInt32( nByC );
             mrStCtrl.ReadInt32( nFromMode ).ReadInt32( nFromA ).ReadInt32( nFromB ).ReadInt32( nFromC );
             mrStCtrl.ReadInt32( nToMode ).ReadInt32( nToA ).ReadInt32( nToB ).ReadInt32( nToC );
+
+            if (!mrStCtrl.good())
+            {
+                SAL_WARN("filter.ms", "DFF_msofbtAnimateColorData: short read");
+                break;
+            }
 
             if( nBits & 1 )
             {
