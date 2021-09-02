@@ -98,6 +98,8 @@ void LwpSilverBullet::Read()
     for (sal_uInt16 nC = 0; nC < nNumPos; nC++)
         m_pResetPositionFlags[nC] = m_pObjStrm->QuickReaduInt8();
 
+    memset(m_pResetPositionFlags + nNumPos, 0, SAL_N_ELEMENTS(m_pResetPositionFlags) - nNumPos);
+
     m_nUseCount = m_pObjStrm->QuickReaduInt32();
 
     m_pAtomHolder->Read(m_pObjStrm.get());
