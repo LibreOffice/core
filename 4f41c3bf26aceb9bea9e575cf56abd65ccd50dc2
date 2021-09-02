@@ -16,6 +16,23 @@
       "message": "All the suggested changes are done.",
       "revId": "4f41c3bf26aceb9bea9e575cf56abd65ccd50dc2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd1dc3d9_cf692ac2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-02T06:34:22Z",
+      "side": 1,
+      "message": "Thanks. Two remaining points:\n\n\u003e Did you consider covering this change with a test?\n\nand:\n\n\u003e I assume that you did test that fdo#74336 fix still works, but it would be good to make that explicit in the commit message\n\nCould you please address these?",
+      "revId": "4f41c3bf26aceb9bea9e575cf56abd65ccd50dc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
