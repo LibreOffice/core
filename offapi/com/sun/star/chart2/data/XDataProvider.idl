@@ -126,7 +126,28 @@ interface XDataProvider  : ::com::sun::star::uno::XInterface
         [in] string aRangeRepresentation )
         raises( com::sun::star::lang::IllegalArgumentException );
 
-    XDataSequence createDataSequenceByValueArray( [in] string aRole, [in] string aValueArray )
+    /** Creates a single data sequence from the string value array representation
+
+        @param aRole
+            The role of the sequence inside a data series. This may be any
+            string. However some strings are predefined and should always
+            be used in the same way.
+
+        @param aValueArray
+            is a string that contains the value representation of the
+            sequence to be created.
+
+        @param aRoleQualifier
+            is a string that describes the role of the sequence.
+            This may be any string. However some strings are predefined
+            and should always be used in the same way.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the given value array does not contain a valid value array
+            representation.
+     */
+    XDataSequence createDataSequenceByValueArray( [in] string aRole, [in] string aValueArray,
+        [in] string aRoleQualifier )
         raises( com::sun::star::lang::IllegalArgumentException );
 
     /** Returns a component that is able to change a given range

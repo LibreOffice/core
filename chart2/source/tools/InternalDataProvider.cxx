@@ -486,7 +486,7 @@ void InternalDataProvider::decreaseMapReferences(
 Reference< chart2::data::XDataSequence > InternalDataProvider::createDataSequenceAndAddToMap(
     const OUString & rRangeRepresentation )
 {
-    Reference<chart2::data::XDataSequence> xSeq = createDataSequenceFromArray(rRangeRepresentation, OUString());
+    Reference<chart2::data::XDataSequence> xSeq = createDataSequenceFromArray(rRangeRepresentation, OUString(), OUString());
     if (xSeq.is())
         return xSeq;
 
@@ -496,7 +496,7 @@ Reference< chart2::data::XDataSequence > InternalDataProvider::createDataSequenc
 }
 
 uno::Reference<chart2::data::XDataSequence>
-InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, const OUString& rRole )
+InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, const OUString& rRole, const OUString& rRoleQualifier )
 {
     if (rArrayStr.indexOf('{') != 0 || rArrayStr[rArrayStr.getLength()-1] != '}')
     {
@@ -623,9 +623,19 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
     {
         // Category labels.
 
+        // Store date categories as numbers.
+        bool bStoreNumeric = rRoleQualifier == "date";
+        double fValue;
         for (size_t i = 0; i < aRawElems.size(); ++i)
         {
-            std::vector<uno::Any> aLabels(1, uno::Any(aRawElems[i]));
+            if (bStoreNumeric)
+            {
+                bool bGetDouble = bAllNumeric && !aRawElems[i].isEmpty();
+                fValue = bGetDouble ? aRawElems[i].toDouble() :
+                    std::numeric_limits<double>::quiet_NaN();
+            }
+            std::vector<uno::Any> aLabels(1,
+                bStoreNumeric ? uno::Any(fValue) : uno::Any(aRawElems[i]));
             m_aInternalData.setComplexRowLabel(i, aLabels);
         }
 
@@ -834,9 +844,9 @@ Reference< chart2::data::XDataSequence > SAL_CALL InternalDataProvider::createDa
 
 Reference<chart2::data::XDataSequence> SAL_CALL
 InternalDataProvider::createDataSequenceByValueArray(
-    const OUString& aRole, const OUString& aRangeRepresentation )
+    const OUString& aRole, const OUString& aRangeRepresentation, const OUString& aRoleQualifier )
 {
-    return createDataSequenceFromArray(aRangeRepresentation, aRole);
+    return createDataSequenceFromArray(aRangeRepresentation, aRole, aRoleQualifier);
 }
 
 Reference< sheet::XRangeSelection > SAL_CALL InternalDataProvider::getRangeSelection()
