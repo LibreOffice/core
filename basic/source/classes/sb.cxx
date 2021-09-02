@@ -47,6 +47,12 @@
 #include <memory>
 #include <unordered_map>
 
+// include search util
+#include <com/sun/star/util/SearchFlags.hpp>
+#include <com/sun/star/util/SearchAlgorithms2.hpp>
+#include <i18nutil/searchopt.hxx>
+#include <unotools/textsearch.hxx>
+
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
 
@@ -2056,16 +2062,31 @@ sal_Int32 BasicCollection::implGetIndex( SbxVariable const * pIndexVar )
 sal_Int32 BasicCollection::implGetIndexForName(std::u16string_view rName)
 {
     sal_Int32 nIndex = -1;
+    sal_Int32 nStart = 0;
+    sal_Int32 nEnd = 0;
     sal_Int32 nCount = xItemArray->Count();
     sal_Int32 nNameHash = MakeHashCode( rName );
+
+    // tdf#144245 - case-insensitive operation for non-ASCII characters
+    i18nutil::SearchOptions2 aSearchOptions;
+    aSearchOptions.searchString = rName;
+    aSearchOptions.AlgorithmType2 = util::SearchAlgorithms2::ABSOLUTE;
+    aSearchOptions.transliterateFlags |= TransliterationFlags::IGNORE_CASE;
+    utl::TextSearch textSearch(aSearchOptions);
+
     for( sal_Int32 i = 0 ; i < nCount ; i++ )
     {
         SbxVariable* pVar = xItemArray->Get(i);
-        if( pVar->GetHashCode() == nNameHash &&
-            pVar->GetName().equalsIgnoreAsciiCase( rName ) )
+        if (pVar->GetHashCode() == nNameHash)
         {
-            nIndex = i;
-            break;
+            const OUString aVarName = pVar->GetName();
+            nStart = 0;
+            nEnd = aVarName.getLength();
+            if (textSearch.SearchForward(aVarName, &nStart, &nEnd) && nStart == 0 && nEnd == aVarName.getLength())
+            {
+                nIndex = i;
+                break;
+            }
         }
     }
     return nIndex;
