@@ -2129,13 +2129,13 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
     OUString aFormula;
 
     pIter = pAtom->findFirstChildAtom(DFF_msofbtAnimKeyTime);
-    sal_Int32 nTemp;
     bool bToNormalize = false;
     for( int nKeyTime = 0; (nKeyTime < nKeyTimes) && pIter; nKeyTime++ )
     {
         if( pIter->seekToContent() )
         {
-            mrStCtrl.ReadInt32( nTemp );
+            sal_Int32 nTemp(0);
+            mrStCtrl.ReadInt32(nTemp);
             double fTemp = static_cast<double>(nTemp) / 1000.0;
             aKeyTimes[nKeyTime] = fTemp;
             if( fTemp == -1 )
