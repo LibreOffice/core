@@ -20,6 +20,9 @@
 #define INCLUDED_XMLOFF_TXTSTYLI_HXX
 
 #include <sal/config.h>
+
+#include <optional>
+
 #include <xmloff/dllapi.h>
 #include <xmloff/prstylei.hxx>
 
@@ -44,6 +47,9 @@ class XMLOFF_DLLPUBLIC XMLTextStyleContext : public XMLPropStyleContext
     bool        m_bListStyleSet : 1;
 
     rtl::Reference<XMLEventsImportContext> m_xEventContext;
+
+    /// Reads <style:style style:list-level="...">.
+    std::optional<sal_Int16> m_aListLevel;
 
 protected:
 
