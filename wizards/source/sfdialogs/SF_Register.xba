@@ -220,7 +220,7 @@ End Function	&apos;	SFDialogs.SF_Register._FindDialogInCache
 REM -----------------------------------------------------------------------------
 Public Function _NewDialog(Optional ByVal pvArgs As Variant) As Object
 &apos;&apos;&apos;	Create a new instance of the SF_Dialog class
-&apos;	Args:
+&apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		Container: either &quot;GlobalScope&quot; or a WindowName. Default = the active window
 &apos;&apos;&apos;					see the definition of WindowName in the description of the UI service
 &apos;&apos;&apos;		Library: the name of the library hosting the dialog. Default = &quot;Standard&quot;
