@@ -43,11 +43,11 @@
 #include <vcl/rendercontext/InvertFlags.hxx>
 #include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/rendercontext/SalLayoutFlags.hxx>
+#include <vcl/rendercontext/State.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/salnativewidgets.hxx>
-#include <vcl/outdevstate.hxx>
 #include <vcl/vclreferencebase.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
@@ -184,7 +184,7 @@ private:
     mutable rtl::Reference<LogicalFontInstance> mpFontInstance;
     mutable std::unique_ptr<ImplDeviceFontList>     mpDeviceFontList;
     mutable std::unique_ptr<ImplDeviceFontSizeList> mpDeviceFontSizeList;
-    std::vector<OutDevState>        maOutDevStateStack;
+    std::vector<State>        maOutDevStateStack;
     std::unique_ptr<ImplOutDevData> mpOutDevData;
     std::vector< VCLXGraphics* >*   mpUnoGraphicsList;
     vcl::ExtOutDevData*             mpExtOutDevData;

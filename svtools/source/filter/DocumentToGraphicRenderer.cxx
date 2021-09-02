@@ -304,10 +304,10 @@ sal_Int32 DocumentToGraphicRenderer::getPageCount()
 
 sal_Int32 DocumentToGraphicRenderer::getCurrentPageWriter()
 {
-    Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(mxModel->getCurrentController(), UNO_QUERY);
+    Reference<css::text::XTextViewCursorSupplier> xTextViewCursorSupplier(mxModel->getCurrentController(), UNO_QUERY);
     if (!xTextViewCursorSupplier.is())
         return 1;
-    Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), UNO_QUERY);
+    Reference<css::text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), UNO_QUERY);
     return xCursor.is() ? xCursor->getPage() : 1;
 }
 

@@ -39,6 +39,8 @@
 #include <PhysicalFontCollection.hxx>
 #include <sft.hxx>
 
+using namespace vcl;
+
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_GLYPH_H

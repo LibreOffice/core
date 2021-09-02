@@ -17,17 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMFIO_INC_MTFTOOLS_HXX
-#define INCLUDED_EMFIO_INC_MTFTOOLS_HXX
+#pragma once
+
+#include <sal/config.h>
 
 #include <config_options.h>
+
+#include <rtl/ref.hxx>
 #include <basegfx/utils/b2dclipstate.hxx>
 #include <tools/poly.hxx>
+
 #include <vcl/font.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/lineinfo.hxx>
-#include <vcl/outdevstate.hxx>
-#include <rtl/ref.hxx>
+#include <vcl/rendercontext/State.hxx>
 
 #include "emfiodllapi.h"
 
@@ -703,7 +706,5 @@ namespace emfio
         ~MtfTools() COVERITY_NOEXCEPT_FALSE;
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
