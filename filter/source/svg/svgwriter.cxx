@@ -2644,18 +2644,18 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
 
     ImplMap( rPos, aPos );
 
-    std::unique_ptr<tools::Long[]> xTmpArray(new tools::Long[nLen]);
+    std::vector<tools::Long> aTmpArray(nLen);
     // get text sizes
     if( pDXArray )
     {
         aNormSize = Size( mpVDev->GetTextWidth( rText ), 0 );
-        memcpy(xTmpArray.get(), pDXArray, nLen * sizeof(tools::Long));
+        memcpy(aTmpArray.data(), pDXArray, nLen * sizeof(tools::Long));
     }
     else
     {
-        aNormSize = Size( mpVDev->GetTextArray( rText, xTmpArray.get() ), 0 );
+        aNormSize = Size( mpVDev->GetTextArray( rText, &aTmpArray ), 0 );
     }
-    tools::Long* pDX = xTmpArray.get();
+    tools::Long* pDX = aTmpArray.data();
 
     // if text is rotated, set transform matrix at new g element
     if( rFont.GetOrientation() )

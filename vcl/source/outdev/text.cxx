@@ -906,7 +906,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
         mpAlphaVDev->DrawTextArray( rStartPt, rStr, pDXAry, nIndex, nLen, flags );
 }
 
-tools::Long OutputDevice::GetTextArray( const OUString& rStr, tools::Long* pDXAry,
+tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<tools::Long>* pDXAry,
                                  sal_Int32 nIndex, sal_Int32 nLen,
                                  vcl::text::TextLayoutCache const*const pLayoutCache,
                                  SalLayoutGlyphs const*const pSalLayoutCache) const
@@ -931,9 +931,7 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, tools::Long* pDXAr
         // element init in the happy case will still be found by tools,
         // and hope that is sufficient.
         if (pDXAry)
-        {
-            memset(pDXAry, 0, nLen * sizeof(*pDXAry));
-        }
+            std::fill(pDXAry->begin(), pDXAry->end(), 0);
         return 0;
     }
 
@@ -993,14 +991,14 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, tools::Long* pDXAr
     // convert virtual char widths to virtual absolute positions
     if( pDXAry )
         for( int i = 1; i < nLen; ++i )
-            pDXAry[ i ] += pDXAry[ i-1 ];
+            (*pDXAry)[ i ] += (*pDXAry)[ i-1 ];
 
     // convert from font units to logical units
     if( mbMap )
     {
         if( pDXAry )
             for( int i = 0; i < nLen; ++i )
-                pDXAry[i] = ImplDevicePixelToLogicWidth( pDXAry[i] );
+                (*pDXAry)[i] = ImplDevicePixelToLogicWidth( (*pDXAry)[i] );
         nWidth = ImplDevicePixelToLogicWidth( nWidth );
     }
 
@@ -1008,7 +1006,7 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, tools::Long* pDXAr
     {
         if( pDXAry )
             for( int i = 0; i < nLen; ++i )
-                pDXAry[i] /= nWidthFactor;
+                (*pDXAry)[i] /= nWidthFactor;
         nWidth /= nWidthFactor;
     }
     return nWidth;

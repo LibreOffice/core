@@ -186,12 +186,11 @@ namespace cppcanvas::internal
             {
                 // no external DX array given, create one from given
                 // string
-                std::unique_ptr< ::tools::Long []> pCharWidths( new ::tools::Long[nLen] );
+                std::vector<::tools::Long> aCharWidths;
 
-                rVDev.GetTextArray( rText, pCharWidths.get(),
-                                    nStartPos, nLen );
+                rVDev.GetTextArray( rText, &aCharWidths, nStartPos, nLen );
 
-                return setupDXArray( pCharWidths.get(), nLen, rState );
+                return setupDXArray( aCharWidths.data(), nLen, rState );
             }
 
             ::basegfx::B2DPoint adaptStartPoint( const ::basegfx::B2DPoint&     rStartPoint,
