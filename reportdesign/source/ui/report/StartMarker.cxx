@@ -97,7 +97,7 @@ sal_Int32 OStartMarker::getMinHeight() const
 
 void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
-    rRenderContext.Push(PushFlags::TEXTCOLOR);
+    rRenderContext.Push(vcl::PushFlags::TEXTCOLOR);
 
     Size aSize(GetOutputSizePixel());
     const tools::Long nCornerWidth = tools::Long(CORNER_SPACE * double(GetMapMode().GetScaleX()));
@@ -135,7 +135,7 @@ void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
         rRenderContext.DrawGradient(PixelToLogic(aPoly) ,aGradient);
     }
 
-    rRenderContext.Push(PushFlags::MAPMODE);
+    rRenderContext.Push(vcl::PushFlags::MAPMODE);
     rRenderContext.SetMapMode();
 
     rRenderContext.DrawImage(m_aImageRect.TopLeft(), m_aImageRect.GetSize(), m_aImage);

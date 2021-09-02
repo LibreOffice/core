@@ -703,7 +703,7 @@ void SwTextInputFieldPortion::Paint( const SwTextPaintInfo &rInf ) const
             && !rInf.GetOpt().IsPagePreview())
         {
             OutputDevice* pOut = const_cast<OutputDevice*>(rInf.GetOut());
-            pOut->Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
+            pOut->Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
             pOut->SetFillColor(SwViewOption::GetFieldShadingsColor());
             pOut->SetLineColor();
             pOut->DrawRect(aIntersect.SVRect());

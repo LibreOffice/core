@@ -330,7 +330,7 @@ void CustomAnimationListEntryItem::PaintTrigger(vcl::RenderContext& rRenderConte
 
 void CustomAnimationListEntryItem::PaintEffect(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect, bool bSelected)
 {
-    rRenderContext.Push(PushFlags::TEXTCOLOR);
+    rRenderContext.Push(vcl::PushFlags::TEXTCOLOR);
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     if (bSelected)
         rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());

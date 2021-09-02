@@ -226,21 +226,21 @@ namespace cairocanvas
                 return uno::Reference< rendering::XCachedPrimitive >(nullptr); // no output necessary
 
                 // change text direction and layout mode
-            ComplexTextLayoutFlags nLayoutMode(ComplexTextLayoutFlags::Default);
+            vcl::text::ComplexTextLayoutFlags nLayoutMode(vcl::text::ComplexTextLayoutFlags::Default);
             switch( textDirection )
             {
                 case rendering::TextDirection::WEAK_LEFT_TO_RIGHT:
                 case rendering::TextDirection::STRONG_LEFT_TO_RIGHT:
-                    nLayoutMode |= ComplexTextLayoutFlags::BiDiStrong;
-                    nLayoutMode |= ComplexTextLayoutFlags::TextOriginLeft;
+                    nLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiStrong;
+                    nLayoutMode |= vcl::text::ComplexTextLayoutFlags::TextOriginLeft;
                     break;
 
                 case rendering::TextDirection::WEAK_RIGHT_TO_LEFT:
-                    nLayoutMode |= ComplexTextLayoutFlags::BiDiRtl;
+                    nLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiRtl;
                     [[fallthrough]];
                 case rendering::TextDirection::STRONG_RIGHT_TO_LEFT:
-                    nLayoutMode |= ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::BiDiStrong;
-                    nLayoutMode |= ComplexTextLayoutFlags::TextOriginRight;
+                    nLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiRtl | vcl::text::ComplexTextLayoutFlags::BiDiStrong;
+                    nLayoutMode |= vcl::text::ComplexTextLayoutFlags::TextOriginRight;
                     break;
             }
 

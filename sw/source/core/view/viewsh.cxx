@@ -1562,7 +1562,7 @@ void SwViewShell::PaintDesktop(vcl::RenderContext& rRenderContext, const SwRect 
 void SwViewShell::PaintDesktop_(const SwRegionRects &rRegion)
 {
     // OD 2004-04-23 #116347#
-    GetOut()->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
+    GetOut()->Push( vcl::PushFlags::FILLCOLOR|vcl::PushFlags::LINECOLOR );
     GetOut()->SetLineColor();
 
     for ( auto &rRgn : rRegion )
@@ -1882,7 +1882,7 @@ void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
             const vcl::Region aDLRegion(rRect);
             DLPrePaint2(aDLRegion);
 
-            rRenderContext.Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
+            rRenderContext.Push( vcl::PushFlags::FILLCOLOR|vcl::PushFlags::LINECOLOR );
             rRenderContext.SetFillColor( Imp()->GetRetoucheColor() );
             rRenderContext.SetLineColor();
             rRenderContext.DrawRect( rRect );

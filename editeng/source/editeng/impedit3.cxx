@@ -685,7 +685,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     }
 
     // Saving both layout mode and language (since I'm potentially changing both)
-    GetRefDevice()->Push( PushFlags::TEXTLAYOUTMODE|PushFlags::TEXTLANGUAGE );
+    GetRefDevice()->Push( vcl::PushFlags::TEXTLAYOUTMODE|vcl::PushFlags::TEXTLANGUAGE );
 
     ImplInitLayoutMode(*GetRefDevice(), nPara, -1);
 
@@ -2359,7 +2359,7 @@ sal_Int32 ImpEditEngine::SplitTextPortion( ParaPortion* pPortion, sal_Int32 nPos
             SvxFont aTmpFont( pPortion->GetNode()->GetCharAttribs().GetDefFont() );
             SeekCursor( pPortion->GetNode(), nTxtPortionStart+1, aTmpFont );
             aTmpFont.SetPhysFont(*GetRefDevice());
-            GetRefDevice()->Push( PushFlags::TEXTLANGUAGE );
+            GetRefDevice()->Push( vcl::PushFlags::TEXTLANGUAGE );
             ImplInitDigitMode(*GetRefDevice(), aTmpFont.GetLanguage());
             Size aSz = aTmpFont.QuickGetTextSize( GetRefDevice(), pPortion->GetNode()->GetString(), nTxtPortionStart, pTextPortion->GetLen() );
             GetRefDevice()->Pop();
@@ -3251,7 +3251,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
 
                                 // #114278# Saving both layout mode and language (since I'm
                                 // potentially changing both)
-                                rOutDev.Push( PushFlags::TEXTLAYOUTMODE|PushFlags::TEXTLANGUAGE );
+                                rOutDev.Push( vcl::PushFlags::TEXTLAYOUTMODE|vcl::PushFlags::TEXTLANGUAGE );
                                 ImplInitLayoutMode(rOutDev, n, nIndex);
                                 ImplInitDigitMode(rOutDev, aTmpFont.GetLanguage());
 
@@ -3302,8 +3302,8 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                                 adjustXDirectionAware(aBottomRightRectPos, 2 * nHalfBlankWidth);
                                                 adjustYDirectionAware(aBottomRightRectPos, pLine->GetHeight());
 
-                                                rOutDev.Push( PushFlags::FILLCOLOR );
-                                                rOutDev.Push( PushFlags::LINECOLOR );
+                                                rOutDev.Push( vcl::PushFlags::FILLCOLOR );
+                                                rOutDev.Push( vcl::PushFlags::LINECOLOR );
                                                 rOutDev.SetFillColor( COL_LIGHTGRAY );
                                                 rOutDev.SetLineColor( COL_LIGHTGRAY );
 
@@ -4353,24 +4353,24 @@ void ImpEditEngine::ImplInitLayoutMode(OutputDevice& rOutDev, sal_Int32 nPara, s
         // it also works for issue 55927
     }
 
-    ComplexTextLayoutFlags nLayoutMode = rOutDev.GetLayoutMode();
+    vcl::text::ComplexTextLayoutFlags nLayoutMode = rOutDev.GetLayoutMode();
 
     // We always use the left position for DrawText()
-    nLayoutMode &= ~ComplexTextLayoutFlags::BiDiRtl;
+    nLayoutMode &= ~vcl::text::ComplexTextLayoutFlags::BiDiRtl;
 
     if ( !bCTL && !bR2L)
     {
         // No Bidi checking necessary
-        nLayoutMode |= ComplexTextLayoutFlags::BiDiStrong;
+        nLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiStrong;
     }
     else
     {
         // Bidi checking necessary
         // Don't use BIDI_STRONG, VCL must do some checks.
-        nLayoutMode &= ~ComplexTextLayoutFlags::BiDiStrong;
+        nLayoutMode &= ~vcl::text::ComplexTextLayoutFlags::BiDiStrong;
 
         if ( bR2L )
-            nLayoutMode |= ComplexTextLayoutFlags::BiDiRtl|ComplexTextLayoutFlags::TextOriginLeft;
+            nLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiRtl|vcl::text::ComplexTextLayoutFlags::TextOriginLeft;
     }
 
     rOutDev.SetLayoutMode( nLayoutMode );

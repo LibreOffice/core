@@ -79,7 +79,7 @@ void SdDisplay::SetBitmapEx( BitmapEx const * pBmpEx )
 
 void SdDisplay::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
 {
-    rRenderContext.Push(PushFlags::MAPMODE);
+    rRenderContext.Push(vcl::PushFlags::MAPMODE);
 
     rRenderContext.SetMapMode(MapMode(MapUnit::MapPixel));
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();

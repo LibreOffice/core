@@ -346,9 +346,9 @@ const BitmapEx& Graphic::GetBitmapExRef() const
     return mxImpGraphic->getBitmapExRef();
 }
 
-uno::Reference<graphic::XGraphic> Graphic::GetXGraphic() const
+uno::Reference<css::graphic::XGraphic> Graphic::GetXGraphic() const
 {
-    uno::Reference<graphic::XGraphic> xGraphic;
+    uno::Reference<css::graphic::XGraphic> xGraphic;
 
     if (GetType() != GraphicType::NONE)
     {

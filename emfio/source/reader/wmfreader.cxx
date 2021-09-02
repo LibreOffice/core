@@ -688,9 +688,9 @@ namespace emfio
                     SAL_INFO( "emfio", "\t\t\t Rectangle : " << aTopLeft.getX() << ":" << aTopLeft.getY() << ", " << aBottomRight.getX() << ":" << aBottomRight.getY() );
                 }
 
-                ComplexTextLayoutFlags nTextLayoutMode = ComplexTextLayoutFlags::Default;
+                vcl::text::ComplexTextLayoutFlags nTextLayoutMode = vcl::text::ComplexTextLayoutFlags::Default;
                 if ( nOptions & ETO_RTLREADING )
-                    nTextLayoutMode = ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft;
+                    nTextLayoutMode = vcl::text::ComplexTextLayoutFlags::BiDiRtl | vcl::text::ComplexTextLayoutFlags::TextOriginLeft;
                 SetTextLayoutMode( nTextLayoutMode );
                 SAL_WARN_IF( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) != 0, "emfio", "SJ: ETO_PDY || ETO_GLYPH_INDEX in WMF" );
 

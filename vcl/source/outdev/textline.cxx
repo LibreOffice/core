@@ -697,8 +697,8 @@ void OutputDevice::ImplDrawStrikeoutChar( tools::Long nBaseX, tools::Long nBaseY
     nBaseY += nDistY;
 
     // strikeout text has to be left aligned
-    ComplexTextLayoutFlags nOrigTLM = mnTextLayoutMode;
-    mnTextLayoutMode = ComplexTextLayoutFlags::BiDiStrong;
+    vcl::text::ComplexTextLayoutFlags nOrigTLM = mnTextLayoutMode;
+    mnTextLayoutMode = vcl::text::ComplexTextLayoutFlags::BiDiStrong;
     pLayout = ImplLayout( aStrikeoutText, 0, aStrikeoutText.getLength() );
     mnTextLayoutMode = nOrigTLM;
 
@@ -725,7 +725,7 @@ void OutputDevice::ImplDrawStrikeoutChar( tools::Long nBaseX, tools::Long nBaseY
         aPixelRect = aPoly.GetBoundRect();
     }
 
-    Push( PushFlags::CLIPREGION );
+    Push( vcl::PushFlags::CLIPREGION );
     IntersectClipRegion( PixelToLogic(aPixelRect) );
     if( mbInitClipRegion )
         InitClipRegion();

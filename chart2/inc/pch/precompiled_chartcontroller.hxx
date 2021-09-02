@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-07-28 20:46:09 using:
+ Generated on 2021-09-12 11:51:11 using:
  ./bin/update_pch chart2 chartcontroller --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -46,6 +46,7 @@
 #include <ostream>
 #include <set>
 #include <stddef.h>
+#include <stdexcept>
 #include <string.h>
 #include <string>
 #include <string_view>
@@ -123,7 +124,6 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/outdevstate.hxx>
 #include <vcl/region.hxx>
 #include <vcl/rendercontext/AddFontSubstituteFlags.hxx>
 #include <vcl/rendercontext/AntialiasingFlags.hxx>
@@ -134,7 +134,10 @@
 #include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/rendercontext/ImplMapRes.hxx>
 #include <vcl/rendercontext/InvertFlags.hxx>
+#include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/rendercontext/SalLayoutFlags.hxx>
+#include <vcl/rendercontext/State.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/settings.hxx>
@@ -267,6 +270,7 @@
 #include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
@@ -274,6 +278,7 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/multicontainer2.hxx>
 #include <comphelper/propagg.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
@@ -294,7 +299,6 @@
 #include <cppuhelper/implbase_ex_post.hxx>
 #include <cppuhelper/implbase_ex_pre.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
@@ -315,6 +319,8 @@
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/macros.hxx>
 #include <editeng/outliner.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/overflowingtxt.hxx>
 #include <editeng/paragraphdata.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/svxfont.hxx>
@@ -348,6 +354,8 @@
 #include <svl/itemset.hxx>
 #include <svl/languageoptions.hxx>
 #include <svl/lstner.hxx>
+#include <svl/nfkeytab.hxx>
+#include <svl/ondemand.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/setitem.hxx>
 #include <svl/stritem.hxx>
@@ -445,6 +453,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/nativenumberwrapper.hxx>
 #include <unotools/options.hxx>
+#include <unotools/resmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/unotoolsdllapi.h>

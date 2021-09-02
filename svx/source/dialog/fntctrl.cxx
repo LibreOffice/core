@@ -606,7 +606,7 @@ void SvxFontPrevWindow::SetOverlineColor(const Color &rColor)
 
 void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    rRenderContext.Push(PushFlags::ALL);
+    rRenderContext.Push(vcl::PushFlags::ALL);
     rRenderContext.SetMapMode(MapMode(MapUnit::MapTwip));
 
     ApplySettings(rRenderContext);

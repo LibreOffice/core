@@ -713,13 +713,13 @@ SwLayoutModeModifier::~SwLayoutModeModifier()
 void SwLayoutModeModifier::Modify( bool bChgToRTL )
 {
     const_cast<OutputDevice&>(m_rOut).SetLayoutMode( bChgToRTL ?
-                                         ComplexTextLayoutFlags::BiDiStrong | ComplexTextLayoutFlags::BiDiRtl :
-                                         ComplexTextLayoutFlags::BiDiStrong );
+                                         vcl::text::ComplexTextLayoutFlags::BiDiStrong | vcl::text::ComplexTextLayoutFlags::BiDiRtl :
+                                         vcl::text::ComplexTextLayoutFlags::BiDiStrong );
 }
 
 void SwLayoutModeModifier::SetAuto()
 {
-    const ComplexTextLayoutFlags nNewLayoutMode = m_nOldLayoutMode & ~ComplexTextLayoutFlags::BiDiStrong;
+    const vcl::text::ComplexTextLayoutFlags nNewLayoutMode = m_nOldLayoutMode & ~vcl::text::ComplexTextLayoutFlags::BiDiStrong;
     const_cast<OutputDevice&>(m_rOut).SetLayoutMode( nNewLayoutMode );
 }
 

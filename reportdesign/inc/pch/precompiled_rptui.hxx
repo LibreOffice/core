@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-05-14 22:16:21 using:
+ Generated on 2021-09-12 11:51:58 using:
  ./bin/update_pch reportdesign rptui --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -42,12 +42,14 @@
 #include <map>
 #include <math.h>
 #include <memory>
+#include <mutex>
 #include <new>
 #include <numeric>
 #include <optional>
 #include <ostream>
 #include <sstream>
 #include <stddef.h>
+#include <stdexcept>
 #include <string.h>
 #include <string>
 #include <string_view>
@@ -130,7 +132,6 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/outdevstate.hxx>
 #include <vcl/region.hxx>
 #include <vcl/rendercontext/AddFontSubstituteFlags.hxx>
 #include <vcl/rendercontext/AntialiasingFlags.hxx>
@@ -141,7 +142,10 @@
 #include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/rendercontext/ImplMapRes.hxx>
 #include <vcl/rendercontext/InvertFlags.hxx>
+#include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/rendercontext/SalLayoutFlags.hxx>
+#include <vcl/rendercontext/State.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/settings.hxx>
@@ -173,6 +177,8 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/tuple/Tuple2D.hxx>
+#include <basegfx/tuple/Tuple3D.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
@@ -191,6 +197,7 @@
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -233,6 +240,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/report/XReportComponent.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/XStyle.hpp>
@@ -261,6 +269,7 @@
 #include <com/sun/star/util/Time.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/multicontainer2.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/sequence.hxx>
@@ -279,7 +288,6 @@
 #include <cppuhelper/implbase_ex_post.hxx>
 #include <cppuhelper/implbase_ex_pre.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
@@ -299,6 +307,8 @@
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/macros.hxx>
 #include <editeng/outliner.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/overflowingtxt.hxx>
 #include <editeng/paragraphdata.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/svxfont.hxx>
@@ -341,6 +351,7 @@
 #include <svl/languageoptions.hxx>
 #include <svl/lstner.hxx>
 #include <svl/poolitem.hxx>
+#include <svl/setitem.hxx>
 #include <svl/sharedstring.hxx>
 #include <svl/stritem.hxx>
 #include <svl/style.hxx>
@@ -348,10 +359,10 @@
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <svl/undo.hxx>
+#include <svl/whichranges.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/extcolorcfg.hxx>
-#include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/statusbarcontroller.hxx>
 #include <svtools/svtdllapi.h>
 #include <svx/DiagramDataInterface.hxx>
@@ -438,16 +449,17 @@
 #include <uno/any2.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
-#include <unotools/configitem.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/options.hxx>
+#include <unotools/resmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <AddField.hxx>
 #include <DesignView.hxx>
+#include <IReportControllerObserver.hxx>
 #include <ReportController.hxx>
 #include <ReportSection.hxx>
 #include <ReportWindow.hxx>

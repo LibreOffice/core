@@ -280,14 +280,14 @@ void SwTextSizeInfo::CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextF
     // Set default layout mode ( LTR or RTL ).
     if ( m_pFrame->IsRightToLeft() )
     {
-        m_pOut->SetLayoutMode( ComplexTextLayoutFlags::BiDiStrong | ComplexTextLayoutFlags::BiDiRtl );
-        m_pRef->SetLayoutMode( ComplexTextLayoutFlags::BiDiStrong | ComplexTextLayoutFlags::BiDiRtl );
+        m_pOut->SetLayoutMode( vcl::text::ComplexTextLayoutFlags::BiDiStrong | vcl::text::ComplexTextLayoutFlags::BiDiRtl );
+        m_pRef->SetLayoutMode( vcl::text::ComplexTextLayoutFlags::BiDiStrong | vcl::text::ComplexTextLayoutFlags::BiDiRtl );
         m_nDirection = DIR_RIGHT2LEFT;
     }
     else
     {
-        m_pOut->SetLayoutMode( ComplexTextLayoutFlags::BiDiStrong );
-        m_pRef->SetLayoutMode( ComplexTextLayoutFlags::BiDiStrong );
+        m_pOut->SetLayoutMode( vcl::text::ComplexTextLayoutFlags::BiDiStrong );
+        m_pRef->SetLayoutMode( vcl::text::ComplexTextLayoutFlags::BiDiStrong );
         m_nDirection = DIR_LEFT2RIGHT;
     }
 
@@ -1071,7 +1071,7 @@ void SwTextPaintInfo::DrawCheckBox(const SwFieldFormCheckboxPortion &rPor, bool 
             !GetOpt().IsPagePreview())
     {
         OutputDevice* pOut = const_cast<OutputDevice*>(GetOut());
-        pOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
+        pOut->Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
         pOut->SetFillColor( SwViewOption::GetFieldShadingsColor() );
         pOut->SetLineColor();
         pOut->DrawRect( aIntersect.SVRect() );
@@ -1079,7 +1079,7 @@ void SwTextPaintInfo::DrawCheckBox(const SwFieldFormCheckboxPortion &rPor, bool 
     }
     const int delta=10;
     tools::Rectangle r(aIntersect.Left()+delta, aIntersect.Top()+delta, aIntersect.Right()-delta, aIntersect.Bottom()-delta);
-    m_pOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
+    m_pOut->Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
     m_pOut->SetLineColor( Color(0, 0, 0));
     m_pOut->SetFillColor();
     m_pOut->DrawRect( r );
@@ -1102,7 +1102,7 @@ void SwTextPaintInfo::DrawBackground( const SwLinePortion &rPor, const Color *pC
         return;
 
     OutputDevice* pOut = const_cast<OutputDevice*>(GetOut());
-    pOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
+    pOut->Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
 
     if ( pColor )
         pOut->SetFillColor( *pColor );
@@ -1137,7 +1137,7 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
                     !GetOpt().IsPagePreview())
             {
                 OutputDevice* pOutDev = const_cast<OutputDevice*>(GetOut());
-                pOutDev->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
+                pOutDev->Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
                 pOutDev->SetFillColor( SwViewOption::GetFieldShadingsColor() );
                 pOutDev->SetLineColor( );
                 pOutDev->DrawRect( aIntersect.SVRect() );
@@ -1252,7 +1252,7 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
         }
     }
 
-    pTmpOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
+    pTmpOut->Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
 
     pTmpOut->SetFillColor(aFillColor);
     pTmpOut->SetLineColor();
