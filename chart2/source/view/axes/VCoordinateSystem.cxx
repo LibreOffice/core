@@ -341,7 +341,8 @@ void VCoordinateSystem::updateScalesAndIncrementsOnAxes()
 
 void VCoordinateSystem::prepareAutomaticAxisScaling( ScaleAutomatism& rScaleAutomatism, sal_Int32 nDimIndex, sal_Int32 nAxisIndex )
 {
-    if( rScaleAutomatism.getScale().AxisType==AxisType::DATE && nDimIndex==0 )
+    bool bDateAxisX = (rScaleAutomatism.getScale().AxisType == AxisType::DATE) && (nDimIndex == 0);
+    if( bDateAxisX )
     {
         // This is a date X dimension.  Determine proper time resolution.
         sal_Int32 nTimeResolution = css::chart::TimeUnit::MONTH;
@@ -383,6 +384,9 @@ void VCoordinateSystem::prepareAutomaticAxisScaling( ScaleAutomatism& rScaleAuto
         m_aMergedMinMaxSupplier.isExpandIfValuesCloseToBorder( nDimIndex ),
         m_aMergedMinMaxSupplier.isExpandWideValuesToZero( nDimIndex ),
         m_aMergedMinMaxSupplier.isExpandNarrowValuesTowardZero( nDimIndex ) );
+
+    if (bDateAxisX)
+        return;
 
     VAxisBase* pVAxis = getVAxis(nDimIndex, nAxisIndex);
     if( pVAxis )

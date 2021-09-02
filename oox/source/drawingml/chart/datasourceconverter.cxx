@@ -23,6 +23,7 @@
 #include <oox/drawingml/chart/chartconverter.hxx>
 #include <oox/drawingml/chart/datasourcemodel.hxx>
 #include <oox/token/properties.hxx>
+#include <svl/zforlist.hxx>
 
 namespace oox::drawingml::chart {
 
@@ -69,7 +70,10 @@ Reference< XDataSequence > DataSequenceConverter::createDataSequence( const OUSt
             mrModel.maData.insert(std::make_pair<sal_Int32, Any>(0, Any(aTitle.makeStringAndClear())));
         }
     }
-    xDataSeq = getChartConverter().createDataSequence(getChartDocument()->getDataProvider(), mrModel, rRole);
+
+    bool bDateCategories = (mrModel.meFormatType == SvNumFormatType::DATE) && (rRole == "categories");
+    xDataSeq = getChartConverter().createDataSequence(getChartDocument()->getDataProvider(), mrModel,
+        rRole, bDateCategories ? OUString("date") : OUString(""));
 
     // set sequence role
     PropertySet aSeqProp( xDataSeq );

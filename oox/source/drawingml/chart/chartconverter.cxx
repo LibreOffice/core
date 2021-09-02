@@ -116,7 +116,7 @@ void ChartConverter::createDataProvider( const Reference< XChartDocument >& rxCh
 
 Reference< XDataSequence > ChartConverter::createDataSequence(
     const Reference< XDataProvider >& rxDataProvider, const DataSequenceModel& rDataSeq,
-    const OUString& rRole )
+    const OUString& rRole, const OUString& rRoleQualifier )
 {
     Reference< XDataSequence > xDataSeq;
     if( rxDataProvider.is() )
@@ -137,7 +137,7 @@ Reference< XDataSequence > ChartConverter::createDataSequence(
                 if (!aRangeRep.isEmpty())
                 {
                     // create or add a new level to the data sequence
-                    xDataSeq = rxDataProvider->createDataSequenceByValueArray(rRole, aRangeRep);
+                    xDataSeq = rxDataProvider->createDataSequenceByValueArray(rRole, aRangeRep, rRoleQualifier);
                     if (i == 0)
                         return xDataSeq;
                 }

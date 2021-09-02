@@ -29,7 +29,9 @@
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
+#include <com/sun/star/chart/XDateCategories.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 #include <iterator>
 
 #include <com/sun/star/util/Color.hpp>
@@ -767,26 +769,20 @@ void Chart2ImportTest::testBnc889755()
     uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 5), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xChartDoc->hasInternalDataProvider());
 
-    uno::Reference< chart2::XInternalDataProvider > xDataProvider( xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW );
-    uno::Reference< chart::XChartDataArray > xChartDataArray(xDataProvider, uno::UNO_QUERY_THROW);
-    uno::Sequence< OUString > aRowLabels = xChartDataArray->getRowDescriptions();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(16), aRowLabels.getLength());
-    CPPUNIT_ASSERT_EQUAL(OUString("Oct-12"), aRowLabels[0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Nov-12"), aRowLabels[1]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Dec-12"), aRowLabels[2]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Jan-13"), aRowLabels[3]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Feb-13"), aRowLabels[4]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Mar-13"), aRowLabels[5]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Apr-13"), aRowLabels[6]);
-    CPPUNIT_ASSERT_EQUAL(OUString("May-13"), aRowLabels[7]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Jun-13"), aRowLabels[8]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Jul-13"), aRowLabels[9]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Aug-13"), aRowLabels[10]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Sep-13"), aRowLabels[11]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Oct-13"), aRowLabels[12]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Nov-13"), aRowLabels[13]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Dec-13"), aRowLabels[14]);
-    CPPUNIT_ASSERT_EQUAL(OUString("Jan-14"), aRowLabels[15]);
+    constexpr sal_Int32 nNumCategories = 16;
+    Sequence<OUString> aDateSeq = getFormattedDateCategories(xChartDoc);
+
+    CPPUNIT_ASSERT_EQUAL(nNumCategories, aDateSeq.getLength());
+
+    const OUString aExpectedDateCategories[nNumCategories] = {
+        "Oct-12", "Nov-12", "Dec-12", "Jan-13",
+        "Feb-13", "Mar-13", "Apr-13", "May-13",
+        "Jun-13", "Jul-13", "Aug-13", "Sep-13",
+        "Oct-13", "Nov-13", "Dec-13", "Jan-14",
+    };
+
+    for (size_t nIdx = 0; nIdx < nNumCategories; ++nIdx)
+        CPPUNIT_ASSERT_EQUAL(aExpectedDateCategories[nIdx], aDateSeq[nIdx]);
 
     //tdf#139940 - the title's gradient was lost and was filled with solid blue, instead of a "blue underline".
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
@@ -1724,7 +1720,7 @@ void Chart2ImportTest::testInternalDataProvider() {
     const uno::Reference< chart2::data::XDataProvider >& rxDataProvider = xChartDoc->getDataProvider();
 
     // Parse 42 array
-    Reference<chart2::data::XDataSequence> xDataSeq = rxDataProvider->createDataSequenceByValueArray("values-y", "{42;42;42;42}");
+    Reference<chart2::data::XDataSequence> xDataSeq = rxDataProvider->createDataSequenceByValueArray("values-y", "{42;42;42;42}", "");
     Sequence<Any> xSequence = xDataSeq->getData();
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[0]);
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[1]);
@@ -1732,7 +1728,7 @@ void Chart2ImportTest::testInternalDataProvider() {
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[3]);
 
     // Parse empty first and last
-    xDataSeq = rxDataProvider->createDataSequenceByValueArray("values-y", "{\"\";42;42;\"\"}");
+    xDataSeq = rxDataProvider->createDataSequenceByValueArray("values-y", "{\"\";42;42;\"\"}", "");
     xSequence = xDataSeq->getData();
     CPPUNIT_ASSERT( std::isnan( *static_cast<const double*>(xSequence[0].getValue())));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[1]);
@@ -1740,7 +1736,7 @@ void Chart2ImportTest::testInternalDataProvider() {
     CPPUNIT_ASSERT( std::isnan( *static_cast<const double*>(xSequence[3].getValue())));
 
     // Parse empty middle
-    xDataSeq = rxDataProvider->createDataSequenceByValueArray("values-y", "{42;\"\";\"\";42}");
+    xDataSeq = rxDataProvider->createDataSequenceByValueArray("values-y", "{42;\"\";\"\";42}", "");
     xSequence = xDataSeq->getData();
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[0]);
     CPPUNIT_ASSERT( std::isnan( *static_cast<const double*>(xSequence[1].getValue())) );
@@ -1748,7 +1744,7 @@ void Chart2ImportTest::testInternalDataProvider() {
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[3]);
 
     // Parse mixed types, numeric only role
-    xDataSeq = rxDataProvider->createDataSequenceByValueArray("values-y", "{42;\"hello\";0;\"world\"}");
+    xDataSeq = rxDataProvider->createDataSequenceByValueArray("values-y", "{42;\"hello\";0;\"world\"}", "");
     xSequence = xDataSeq->getData();
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[0]);
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(0)),  xSequence[1]);
@@ -1756,7 +1752,7 @@ void Chart2ImportTest::testInternalDataProvider() {
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(0)),  xSequence[3]);
 
     // Parse mixed types, mixed role
-    xDataSeq = rxDataProvider->createDataSequenceByValueArray("categories", "{42;\"hello\";0;\"world\"}");
+    xDataSeq = rxDataProvider->createDataSequenceByValueArray("categories", "{42;\"hello\";0;\"world\"}", "");
     xSequence = xDataSeq->getData();
     CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Row 1 42")), xSequence[0]);
     CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Row 2 hello")), xSequence[1]);
