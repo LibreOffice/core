@@ -3950,11 +3950,11 @@ void PPTParaSheet::Read( SdrPowerPointImport const &
                     , sal_uInt32 nLevel, bool bFirst )
 {
     // paragraph attributes
-    sal_uInt16  nVal16, i, nMask16;
-    sal_uInt32  nVal32, nPMask;
-    rIn.ReadUInt32( nPMask );
+    sal_uInt16  nVal16;
+    sal_uInt32 nPMask(0);
+    rIn.ReadUInt32(nPMask);
 
-    nMask16 = static_cast<sal_uInt16>(nPMask) & 0xf;
+    sal_uInt16 nMask16 = static_cast<sal_uInt16>(nPMask) & 0xf;
     if ( nMask16 )
     {
         rIn.ReadUInt16( nVal16 );
@@ -3973,7 +3973,8 @@ void PPTParaSheet::Read( SdrPowerPointImport const &
     }
     if ( nPMask & 0x0020 )
     {
-        rIn.ReadUInt32( nVal32 );
+        sal_uInt32 nVal32(0);
+        rIn.ReadUInt32(nVal32);
         maParaLevel[ nLevel ].mnBulletColor = nVal32;
     }
     if ( bFirst )
@@ -3997,11 +3998,12 @@ void PPTParaSheet::Read( SdrPowerPointImport const &
             rIn.ReadUInt16( maParaLevel[ nLevel ].mnDefaultTab );
         if ( nPMask & 0x200000 )
         {
+            sal_uInt32 nVal32;
             // number of tabulators
             rIn.ReadUInt16( nVal16 );
             if (rIn.remainingSize() / sizeof(nVal32) < nVal16)
                 return;
-            for ( i = 0; i < nVal16; i++ )
+            for (sal_uInt16 i = 0; i < nVal16; ++i)
                 rIn.ReadUInt32( nVal32 );      // reading the tabulators
         }
         if ( nPMask & 0x40000 )
@@ -4047,9 +4049,10 @@ void PPTParaSheet::Read( SdrPowerPointImport const &
         }
         if ( nPMask & 0x100000 )
         {
+            sal_uInt32 nVal32;
             // number of tabulators
             rIn.ReadUInt16( nVal16 );
-            for ( i = 0; i < nVal16; i++ )
+            for (sal_uInt16 i = 0; i < nVal16; ++i)
                 rIn.ReadUInt32( nVal32 );      // reading the tabulators
         }
         if ( nPMask & 0x200000 )
