@@ -630,14 +630,14 @@ public:
                 }
 
                 // DX array rendering
-                std::unique_ptr<tools::Long[]> pItems(new tools::Long[aText.getLength()+10]);
-                rDev.GetTextArray(aText, pItems.get());
+                std::vector<tools::Long> aItems;
+                rDev.GetTextArray(aText, &aItems);
                 for (tools::Long j = 0; j < aText.getLength(); ++j)
                 {
                     Point aTop = aTextRect.TopLeft();
                     Point aBottom = aTop;
-                    aTop.Move(pItems[j], 0);
-                    aBottom.Move(pItems[j], aTextRect.GetHeight());
+                    aTop.Move(aItems[j], 0);
+                    aBottom.Move(aItems[j], aTextRect.GetHeight());
                     rDev.SetLineColor(COL_RED);
                     rDev.SetRasterOp(RasterOp::Xor);
                     rDev.DrawLine(aTop,aBottom);
