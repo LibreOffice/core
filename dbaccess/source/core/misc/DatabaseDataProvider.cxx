@@ -275,7 +275,7 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL DatabaseDataProvider::cre
 
 uno::Reference<chart2::data::XDataSequence>
 SAL_CALL DatabaseDataProvider::createDataSequenceByValueArray(
-    const OUString& /*aRole*/, const OUString& /*aRangeRepresentation*/ )
+    const OUString& /*aRole*/, const OUString& /*aRangeRepresentation*/, const OUString& /*aRoleQualifier*/ )
 {
     return uno::Reference<chart2::data::XDataSequence>();
 }

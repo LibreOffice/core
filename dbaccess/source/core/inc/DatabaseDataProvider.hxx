@@ -73,7 +73,7 @@ private:
 
     virtual css::uno::Reference<css::chart2::data::XDataSequence> SAL_CALL
         createDataSequenceByValueArray(
-            const OUString& aRole, const OUString & aRangeRepresentation) override;
+            const OUString& aRole, const OUString & aRangeRepresentation, const OUString& aRoleQualifier) override;
 
     virtual css::uno::Reference< css::sheet::XRangeSelection > SAL_CALL getRangeSelection() override;
 

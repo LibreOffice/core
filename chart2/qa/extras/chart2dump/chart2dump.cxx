@@ -616,6 +616,7 @@ DECLARE_DUMP_TEST(AxisLabelTest, Chart2DumpTest, false)
         "formated_axis_labels.odp",
         "percent_stacked_column_chart.odp",
         "tdf118150.xlsx",
+        "date-categories.pptx",
     };
 
     for (const OUString& sTestFile : aTestFiles)
