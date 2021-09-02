@@ -562,7 +562,7 @@ namespace emfio
         SvStream*           mpInputStream;               // the WMF/EMF file to be read
         sal_uInt32          mnStartPos;
         sal_uInt32          mnEndPos;
-        std::vector<std::unique_ptr<BSaveStruct>>    maBmpSaveList;
+        std::vector<BSaveStruct> maBmpSaveList;
 
         // tdf#127471 always try to detect - only used with ScaledText
         ScaledFontDetectCorrectHelper maScaledFontHelper;
@@ -680,7 +680,7 @@ namespace emfio
             bool bRecordPath = false,
             sal_Int32 nGraphicsMode = GM_COMPATIBLE);
 
-        void                ResolveBitmapActions(std::vector<std::unique_ptr<BSaveStruct>>& rSaveList);
+        void                ResolveBitmapActions(std::vector<BSaveStruct>& rSaveList);
 
         void                IntersectClipRect(const tools::Rectangle& rRect);
         void                ExcludeClipRect(const tools::Rectangle& rRect);

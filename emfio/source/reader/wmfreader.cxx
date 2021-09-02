@@ -857,7 +857,7 @@ namespace emfio
                         aBitmap.Crop( aCropRect );
                     }
                     tools::Rectangle aDestRect( aPoint, Size( nSxe, nSye ) );
-                    maBmpSaveList.emplace_back(new BSaveStruct(aBitmap, aDestRect, nRasterOperation));
+                    maBmpSaveList.emplace_back(aBitmap, aDestRect, nRasterOperation);
                 }
             }
             break;
@@ -922,7 +922,7 @@ namespace emfio
                         aBmp.Crop( aCropRect );
                     }
 
-                    maBmpSaveList.emplace_back(new BSaveStruct(aBmp, aDestRect, nRasterOperation));
+                    maBmpSaveList.emplace_back(aBmp, aDestRect, nRasterOperation);
                 }
             }
             break;

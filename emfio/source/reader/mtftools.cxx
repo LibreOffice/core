@@ -1912,7 +1912,7 @@ namespace emfio
             mpGDIMetaFile->AddAction( new MetaBmpScaleAction( rPos, rSize, aBmpEx.GetBitmap() ) );
     }
 
-    void MtfTools::ResolveBitmapActions( std::vector<std::unique_ptr<BSaveStruct>>& rSaveList )
+    void MtfTools::ResolveBitmapActions( std::vector<BSaveStruct>& rSaveList )
     {
         UpdateClipRegion();
 
@@ -1925,7 +1925,7 @@ namespace emfio
             size_t          nObjectsOfSameSize = 0;
             size_t          nObjectStartIndex = nObjects - nObjectsLeft;
 
-            BSaveStruct*    pSave = rSaveList[nObjectStartIndex].get();
+            BSaveStruct*    pSave = &rSaveList[nObjectStartIndex];
             tools::Rectangle       aRect( pSave->aOutRect );
 
             for ( i = nObjectStartIndex; i < nObjects; )
@@ -1933,7 +1933,7 @@ namespace emfio
                 nObjectsOfSameSize++;
                 if ( ++i < nObjects )
                 {
-                    pSave = rSaveList[i].get();
+                    pSave = &rSaveList[i];
                     if ( pSave->aOutRect != aRect )
                         break;
                 }
@@ -1943,7 +1943,7 @@ namespace emfio
 
             for ( i = nObjectStartIndex; i < ( nObjectStartIndex + nObjectsOfSameSize ); i++ )
             {
-                pSave = rSaveList[i].get();
+                pSave = &rSaveList[i];
 
                 sal_uInt32  nWinRop = pSave->nWinRop;
                 sal_uInt8   nRasterOperation = static_cast<sal_uInt8>( nWinRop >> 16 );
@@ -1971,7 +1971,7 @@ namespace emfio
                     {
                         if ( nObjectsOfSameSize == 2 )
                         {
-                            BSaveStruct* pSave2 = rSaveList[i + 1].get();
+                            BSaveStruct* pSave2 = &rSaveList[i + 1];
                             if ( ( pSave->aBmpEx.GetPrefSize() == pSave2->aBmpEx.GetPrefSize() ) &&
                                  ( pSave->aBmpEx.GetPrefMapMode() == pSave2->aBmpEx.GetPrefMapMode() ) )
                             {
