@@ -1560,6 +1560,9 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         aPenPosition=ReadDeltaV(aPenPosition);
         nDataSize=2;
 
+        if (!pPict->good())
+            break;
+
         if (IsInvisible( PictDrawingMethod::FRAME )) break;
         DrawingMethod( PictDrawingMethod::FRAME );
         PictReaderShape::drawLine(pVirDev, aPoint,aPenPosition, nActPenSize);
