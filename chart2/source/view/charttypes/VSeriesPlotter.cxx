@@ -1970,7 +1970,7 @@ class PerXMinMaxCalculator
 {
     typedef std::pair<double, double> MinMaxType;
     typedef std::map<size_t, MinMaxType> SeriesMinMaxType;
-    typedef std::map<double, std::unique_ptr<SeriesMinMaxType>> GroupMinMaxType;
+    typedef std::map<double, SeriesMinMaxType> GroupMinMaxType;
     typedef std::unordered_map<double, MinMaxType> TotalStoreType;
     GroupMinMaxType m_SeriesGroup;
     size_t mnCurSeries;
@@ -2042,7 +2042,7 @@ private:
         {
             double fX = it.first;
 
-            const SeriesMinMaxType& rSeries = *it.second;
+            const SeriesMinMaxType& rSeries = it.second;
             for (auto const& series : rSeries)
             {
                 double fYMin = series.second.first, fYMax = series.second.second;
@@ -2069,7 +2069,7 @@ private:
         if (it == m_SeriesGroup.end())
         {
             std::pair<GroupMinMaxType::iterator,bool> r =
-                m_SeriesGroup.insert(std::make_pair(fX, std::make_unique<SeriesMinMaxType>()));
+                m_SeriesGroup.insert(std::make_pair(fX, SeriesMinMaxType{}));
 
             if (!r.second)
                 // insertion failed.
@@ -2078,7 +2078,7 @@ private:
             it = r.first;
         }
 
-        return it->second.get();
+        return &it->second;
     }
 };
 
