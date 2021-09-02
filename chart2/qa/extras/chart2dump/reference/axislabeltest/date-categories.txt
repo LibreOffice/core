@@ -1,0 +1,180 @@
+/// CID/D=0:CS=0:Axis=0,0
+// nAxisLabelsCount
+22
+// xLabel->getString()
+15/Jun/21
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+17/Jun/21
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+19/Jun/21
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+21/Jun/21
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+23/Jun/21
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+25/Jun/21
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+27/Jun/21
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+29/Jun/21
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+1/Jul/21
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+3/Jul/21
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+5/Jul/21
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+7/Jul/21
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+9/Jul/21
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+11/Jul/21
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+13/Jul/21
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+15/Jul/21
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+17/Jul/21
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+19/Jul/21
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+21/Jul/21
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+23/Jul/21
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+25/Jul/21
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+27/Jul/21
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+/// CID/D=0:CS=0:Axis=1,0
+// nAxisLabelsCount
+7
+// xLabel->getString()
+0
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+20
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+40
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+60
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+80
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+100
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
+// xLabel->getString()
+120
+// static_cast<sal_Int32>(aLabelFontColor)
+5855577
+// fLabelFontHeight
+9
