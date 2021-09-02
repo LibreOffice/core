@@ -89,10 +89,10 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
     mnEmphasisAscent                = 0;
     mnEmphasisDescent               = 0;
     mnDrawMode                      = DrawModeFlags::Default;
-    mnTextLayoutMode                = ComplexTextLayoutFlags::Default;
+    mnTextLayoutMode                = vcl::text::ComplexTextLayoutFlags::Default;
 
     if( AllSettings::GetLayoutRTL() ) //#i84553# tip BiDi preference to RTL
-        mnTextLayoutMode            = ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft;
+        mnTextLayoutMode            = vcl::text::ComplexTextLayoutFlags::BiDiRtl | vcl::text::ComplexTextLayoutFlags::TextOriginLeft;
 
     meOutDevViewType                = OutDevViewType::DontKnow;
     mbMap                           = false;

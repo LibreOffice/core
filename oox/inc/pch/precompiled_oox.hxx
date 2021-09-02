@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-05-14 22:15:59 using:
+ Generated on 2021-09-28 05:37:38 using:
  ./bin/update_pch oox oox --cutoff=6 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -36,13 +36,13 @@
 #include <math.h>
 #include <memory>
 #include <new>
-#include <numeric>
 #include <optional>
 #include <ostream>
 #include <set>
 #include <string.h>
 #include <string_view>
 #include <type_traits>
+#include <unordered_map>
 #include <unordered_set>
 #include <utility>
 #include <vector>
@@ -76,9 +76,9 @@
 #include <rtl/textenc.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
-#include <sal/macros.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <vcl/bitmap.hxx>
@@ -90,7 +90,6 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/outdevstate.hxx>
 #include <vcl/region.hxx>
 #include <vcl/rendercontext/AddFontSubstituteFlags.hxx>
 #include <vcl/rendercontext/AntialiasingFlags.hxx>
@@ -101,7 +100,10 @@
 #include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/rendercontext/ImplMapRes.hxx>
 #include <vcl/rendercontext/InvertFlags.hxx>
+#include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/rendercontext/SalLayoutFlags.hxx>
+#include <vcl/rendercontext/State.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/vclreferencebase.hxx>
 #include <vcl/wall.hxx>
@@ -122,9 +124,11 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -198,6 +202,7 @@
 #include <o3tl/safeint.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <sax/fastattribs.hxx>
 #include <sax/fshelper.hxx>
 #include <sax/saxdllapi.h>
 #include <svl/poolitem.hxx>
@@ -226,6 +231,8 @@
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <unotools/fontdefs.hxx>
+#include <unotools/resmgr.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
@@ -242,10 +249,11 @@
 #include <oox/drawingml/clrscheme.hxx>
 #include <oox/drawingml/color.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/drawingml/graphicshapecontext.hxx>
 #include <oox/drawingml/shape.hxx>
-#include <oox/drawingml/shapecontext.hxx>
 #include <oox/drawingml/shapepropertymap.hxx>
 #include <oox/drawingml/theme.hxx>
+#include <oox/export/utils.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/binaryoutputstream.hxx>
@@ -263,7 +271,6 @@
 #include <oox/ole/olestorage.hxx>
 #include <oox/ppt/comments.hxx>
 #include <oox/ppt/headerfooter.hxx>
-#include <oox/ppt/pptimport.hxx>
 #include <oox/ppt/pptshape.hxx>
 #include <oox/ppt/slidepersist.hxx>
 #include <oox/token/namespaces.hxx>

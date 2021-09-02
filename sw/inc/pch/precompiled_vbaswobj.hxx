@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-05-14 22:17:35 using:
+ Generated on 2021-09-12 11:53:02 using:
  ./bin/update_pch sw vbaswobj --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -39,6 +39,7 @@
 #include <initializer_list>
 #include <iomanip>
 #include <iostream>
+#include <iterator>
 #include <limits.h>
 #include <limits>
 #include <list>
@@ -49,6 +50,7 @@
 #include <numeric>
 #include <optional>
 #include <ostream>
+#include <set>
 #include <stack>
 #include <stddef.h>
 #include <string.h>
@@ -116,7 +118,6 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/outdevstate.hxx>
 #include <vcl/region.hxx>
 #include <vcl/rendercontext/AddFontSubstituteFlags.hxx>
 #include <vcl/rendercontext/AntialiasingFlags.hxx>
@@ -127,7 +128,10 @@
 #include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/rendercontext/ImplMapRes.hxx>
 #include <vcl/rendercontext/InvertFlags.hxx>
+#include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/rendercontext/SalLayoutFlags.hxx>
+#include <vcl/rendercontext/State.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/svapp.hxx>
@@ -152,6 +156,8 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/tuple/Tuple2D.hxx>
+#include <basegfx/tuple/Tuple3D.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
@@ -167,6 +173,7 @@
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -191,9 +198,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
-#include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
-#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
@@ -259,6 +264,7 @@
 #include <editeng/widwitem.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/enumarray.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/strong_int.hxx>
@@ -267,7 +273,7 @@
 #include <o3tl/unit_conversion.hxx>
 #include <ooo/vba/XCollection.hpp>
 #include <ooo/vba/XHelperInterface.hpp>
-#include <ooo/vba/word/XParagraphFormat.hpp>
+#include <ooo/vba/word/WdSaveFormat.hpp>
 #include <ooo/vba/word/XSection.hpp>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
@@ -293,7 +299,10 @@
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <svl/undo.hxx>
+#include <svl/whichranges.hxx>
+#include <svx/flagsdef.hxx>
 #include <svx/svxdllapi.h>
+#include <svx/swframetypes.hxx>
 #include <svx/xdef.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
@@ -322,6 +331,8 @@
 #include <unotools/fontcvt.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/options.hxx>
+#include <unotools/resmgr.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <vbahelper/vbadllapi.h>
 #include <vbahelper/vbahelper.hxx>
@@ -368,6 +379,7 @@
 #include <swundo.hxx>
 #include <tblenum.hxx>
 #include <tblsel.hxx>
+#include <textboxhelper.hxx>
 #include <tox.hxx>
 #include <toxe.hxx>
 #include <undobj.hxx>

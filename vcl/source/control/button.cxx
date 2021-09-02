@@ -795,7 +795,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice *pDev, SystemTextColorFl
     if (aInRect.Right() < aInRect.Left() || aInRect.Bottom() < aInRect.Top())
         return;
 
-    pDev->Push(PushFlags::CLIPREGION);
+    pDev->Push(vcl::PushFlags::CLIPREGION);
     pDev->IntersectClipRegion(aInRect);
 
     if (nSystemTextColorFlags & SystemTextColorFlags::Mono)
@@ -2093,7 +2093,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, SystemTextColorFlags nSystemText
     WinBits                 nWinStyle = GetStyle();
     OUString                aText( GetText() );
 
-    pDev->Push( PushFlags::CLIPREGION );
+    pDev->Push( vcl::PushFlags::CLIPREGION );
     pDev->IntersectClipRegion( tools::Rectangle( rPos, rSize ) );
 
     // no image radio button
@@ -2849,7 +2849,7 @@ Image RadioButton::GetRadioImage( const AllSettings& rSettings, DrawButtonFlags 
 
 void RadioButton::ImplAdjustNWFSizes()
 {
-    GetOutDev()->Push( PushFlags::MAPMODE );
+    GetOutDev()->Push( vcl::PushFlags::MAPMODE );
     SetMapMode(MapMode(MapUnit::MapPixel));
 
     ImplControlValue aControlValue;
@@ -3093,7 +3093,7 @@ void CheckBox::ImplDraw( OutputDevice* pDev, SystemTextColorFlags nSystemTextCol
     WinBits                 nWinStyle = GetStyle();
     OUString                aText( GetText() );
 
-    pDev->Push( PushFlags::CLIPREGION | PushFlags::LINECOLOR );
+    pDev->Push( vcl::PushFlags::CLIPREGION | vcl::PushFlags::LINECOLOR );
     pDev->IntersectClipRegion( tools::Rectangle( rPos, rSize ) );
 
     if (!aText.isEmpty() || HasImage())
@@ -3651,7 +3651,7 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, DrawButtonFlags nFl
 
 void CheckBox::ImplAdjustNWFSizes()
 {
-    GetOutDev()->Push( PushFlags::MAPMODE );
+    GetOutDev()->Push( vcl::PushFlags::MAPMODE );
     SetMapMode(MapMode(MapUnit::MapPixel));
 
     ImplControlValue aControlValue;

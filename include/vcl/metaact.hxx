@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_METAACT_HXX
 #define INCLUDED_VCL_METAACT_HXX
 
+#include <sal/config.h>
+
 #include <config_options.h>
 
 #include <rtl/ref.hxx>
@@ -27,6 +29,7 @@
 #include <tools/poly.hxx>
 
 #include <vcl/dllapi.h>
+#include <vcl/rendercontext/State.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/font.hxx>
 #include <vcl/gdimtf.hxx>
@@ -35,7 +38,6 @@
 #include <vcl/hatch.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/metaactiontypes.hxx>
-#include <vcl/outdevstate.hxx>
 #include <vcl/region.hxx>
 #include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/wall.hxx>
@@ -1468,7 +1470,7 @@ class VCL_DLLPUBLIC MetaPushAction final : public MetaAction
 {
 private:
 
-    PushFlags           mnFlags;
+    vcl::PushFlags           mnFlags;
 
 public:
                         MetaPushAction();
@@ -1482,10 +1484,10 @@ public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual rtl::Reference<MetaAction> Clone() const override;
 
-    explicit            MetaPushAction( PushFlags nFlags );
+    explicit            MetaPushAction( vcl::PushFlags nFlags );
 
-    PushFlags           GetFlags() const { return mnFlags; }
-    void                SetPushFlags(const PushFlags nFlags) { mnFlags = nFlags; }
+    vcl::PushFlags           GetFlags() const { return mnFlags; }
+    void                SetPushFlags(const vcl::PushFlags nFlags) { mnFlags = nFlags; }
 };
 
 class VCL_DLLPUBLIC MetaPopAction final : public MetaAction
@@ -1702,7 +1704,7 @@ class VCL_DLLPUBLIC MetaLayoutModeAction final : public MetaAction
 {
 private:
 
-    ComplexTextLayoutFlags  mnLayoutMode;
+    vcl::text::ComplexTextLayoutFlags  mnLayoutMode;
 
 public:
                         MetaLayoutModeAction();
@@ -1716,10 +1718,10 @@ public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual rtl::Reference<MetaAction> Clone() const override;
 
-    explicit            MetaLayoutModeAction( ComplexTextLayoutFlags nLayoutMode );
+    explicit            MetaLayoutModeAction( vcl::text::ComplexTextLayoutFlags nLayoutMode );
 
-    ComplexTextLayoutFlags  GetLayoutMode() const { return mnLayoutMode; }
-    void                SetLayoutMode(const ComplexTextLayoutFlags nLayoutMode) { mnLayoutMode = nLayoutMode; }
+    vcl::text::ComplexTextLayoutFlags  GetLayoutMode() const { return mnLayoutMode; }
+    void                SetLayoutMode(const vcl::text::ComplexTextLayoutFlags nLayoutMode) { mnLayoutMode = nLayoutMode; }
 };
 
 class VCL_DLLPUBLIC MetaTextLanguageAction final : public MetaAction

@@ -132,9 +132,9 @@ void SwAnnotationWin::PaintTile(vcl::RenderContext& rRenderContext, const tools:
     if (mpTextRangeOverlay)
         pProcessor->process(mpTextRangeOverlay->getOverlayObjectPrimitive2DSequence());
 
-    rRenderContext.Push(PushFlags::NONE);
+    rRenderContext.Push(vcl::PushFlags::NONE);
     pProcessor.reset();
-    rRenderContext.Push(PushFlags::NONE);
+    rRenderContext.Push(vcl::PushFlags::NONE);
 
     if (bMenuButtonVisible)
         mxMenuButton->show();
@@ -173,7 +173,7 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
         Point aPos(rPt + PixelToLogic(Point(x, y)));
         Size aSize(PixelToLogic(Size(width, height)));
 
-        pDev->Push(PushFlags::CLIPREGION);
+        pDev->Push(vcl::PushFlags::CLIPREGION);
         pDev->IntersectClipRegion(tools::Rectangle(aPos, aSize));
         pDev->DrawText(aPos, mxMetadataAuthor->get_label());
         pDev->Pop();
@@ -188,7 +188,7 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
         Point aPos(rPt + PixelToLogic(Point(x, y)));
         Size aSize(PixelToLogic(Size(width, height)));
 
-        pDev->Push(PushFlags::CLIPREGION);
+        pDev->Push(vcl::PushFlags::CLIPREGION);
         pDev->IntersectClipRegion(tools::Rectangle(aPos, aSize));
         pDev->DrawText(aPos, mxMetadataDate->get_label());
         pDev->Pop();
@@ -201,7 +201,7 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
         Point aPos(rPt + PixelToLogic(Point(x, y)));
         Size aSize(PixelToLogic(Size(width, height)));
 
-        pDev->Push(PushFlags::CLIPREGION);
+        pDev->Push(vcl::PushFlags::CLIPREGION);
         pDev->IntersectClipRegion(tools::Rectangle(aPos, aSize));
         pDev->DrawText(aPos, mxMetadataResolved->get_label());
         pDev->Pop();

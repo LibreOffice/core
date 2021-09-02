@@ -78,7 +78,7 @@ void SvRTLInputBox::PositionDialog(tools::Long nXTwips, tools::Long nYTwips)
     {
         Point aDlgPosApp( nXTwips, nYTwips );
         OutputDevice* pDefaultDevice = Application::GetDefaultDevice();
-        pDefaultDevice->Push(PushFlags::MAPMODE);
+        pDefaultDevice->Push(vcl::PushFlags::MAPMODE);
         pDefaultDevice->SetMapMode(MapMode( MapUnit::MapAppFont));
         aDlgPosApp = pDefaultDevice->LogicToPixel(aDlgPosApp, MapMode(MapUnit::MapTwip));
         pDefaultDevice->Pop();

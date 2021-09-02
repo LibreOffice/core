@@ -56,7 +56,7 @@ void Printer::DrawGradientEx( OutputDevice* pOut, const tools::Rectangle& rRect,
                                    ( static_cast<tools::Long>(rEndColor.GetBlue()) * rGradient.GetEndIntensity() ) / 100 ) >> 1;
             const Color     aColor( static_cast<sal_uInt8>(nR), static_cast<sal_uInt8>(nG), static_cast<sal_uInt8>(nB) );
 
-            pOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
+            pOut->Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
             pOut->SetLineColor( aColor );
             pOut->SetFillColor( aColor );
             pOut->DrawRect( rRect );

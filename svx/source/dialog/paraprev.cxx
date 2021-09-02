@@ -52,7 +52,7 @@ void SvxParaPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
 void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
 {
     // Count in Twips by default
-    rRenderContext.Push(PushFlags::MAPMODE);
+    rRenderContext.Push(vcl::PushFlags::MAPMODE);
     rRenderContext.SetMapMode(MapMode(MapUnit::MapTwip));
 
     Size aWinSize(GetOutputSizePixel());

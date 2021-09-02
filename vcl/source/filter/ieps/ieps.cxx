@@ -479,7 +479,7 @@ static void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
 
     aFont.SetColor( COL_LIGHTRED );
 
-    pVDev->Push( PushFlags::FONT );
+    pVDev->Push( vcl::PushFlags::FONT );
     pVDev->SetFont( aFont );
 
     tools::Rectangle aRect( Point( 1, 1 ), Size( nWidth - 2, nHeight - 2 ) );

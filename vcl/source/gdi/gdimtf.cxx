@@ -356,8 +356,8 @@ void GDIMetaFile::Play(OutputDevice& rOut, size_t nPos)
     // This is necessary, since old metafiles don't even know of these
     // recent add-ons. Newer metafiles must of course explicitly set
     // those states.
-    rOut.Push(PushFlags::TEXTLAYOUTMODE|PushFlags::TEXTLANGUAGE);
-    rOut.SetLayoutMode(ComplexTextLayoutFlags::Default);
+    rOut.Push(vcl::PushFlags::TEXTLAYOUTMODE|vcl::PushFlags::TEXTLANGUAGE);
+    rOut.SetLayoutMode(vcl::text::ComplexTextLayoutFlags::Default);
     rOut.SetDigitLanguage(LANGUAGE_SYSTEM);
 
     SAL_INFO( "vcl.gdi", "GDIMetaFile::Play on device of size: " << rOut.GetOutputSizePixel().Width() << " " << rOut.GetOutputSizePixel().Height());
@@ -506,7 +506,7 @@ void GDIMetaFile::Play(OutputDevice& rOut, const Point& rPos,
     // This is necessary, since old metafiles don't even know of these
     // recent add-ons. Newer metafiles must of course explicitly set
     // those states.
-    rOut.SetLayoutMode(ComplexTextLayoutFlags::Default);
+    rOut.SetLayoutMode(vcl::text::ComplexTextLayoutFlags::Default);
     rOut.SetDigitLanguage(LANGUAGE_SYSTEM);
 
     Play(rOut);
@@ -1308,7 +1308,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
     aMapVDev->SetMapMode( GetPrefMapMode() );
 
     std::vector<tools::Rectangle> aClipStack( 1, tools::Rectangle() );
-    std::vector<PushFlags> aPushFlagStack;
+    std::vector<vcl::PushFlags> aPushFlagStack;
 
     tools::Rectangle aBound;
 
@@ -1695,7 +1695,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
                 {
                     MetaPushAction* pAct = static_cast<MetaPushAction*>(pAction);
                     aPushFlagStack.push_back( pAct->GetFlags() );
-                    if( aPushFlagStack.back() & PushFlags::CLIPREGION )
+                    if( aPushFlagStack.back() & vcl::PushFlags::CLIPREGION )
                     {
                         tools::Rectangle aRect( aClipStack.back() );
                         aClipStack.push_back( aRect );
@@ -1706,7 +1706,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
                     // sanity check
                     if( ! aPushFlagStack.empty() )
                     {
-                        if( aPushFlagStack.back() & PushFlags::CLIPREGION )
+                        if( aPushFlagStack.back() & vcl::PushFlags::CLIPREGION )
                         {
                             if( aClipStack.size() > 1 )
                                 aClipStack.pop_back();

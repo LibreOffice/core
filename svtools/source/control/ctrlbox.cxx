@@ -568,7 +568,7 @@ IMPL_LINK_NOARG(FontNameBox, UpdateHdl, Timer*, void)
 
 static void DrawPreview(const FontMetric& rFontMetric, const Point& rTopLeft, OutputDevice& rDevice, bool bSelected)
 {
-    rDevice.Push(PushFlags::TEXTCOLOR);
+    rDevice.Push(vcl::PushFlags::TEXTCOLOR);
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     if (bSelected)
@@ -1618,7 +1618,7 @@ void SvtLineListBox::UpdatePreview()
         Image aImage(m_xLineSet->GetItemImage(m_xLineSet->GetSelectedItemId()));
         m_xControl->set_label("");
         const auto nPos = (aVirDev->GetOutputSizePixel().Height() - aImage.GetSizePixel().Height()) / 2;
-        aVirDev->Push(PushFlags::MAPMODE);
+        aVirDev->Push(vcl::PushFlags::MAPMODE);
         aVirDev->SetMapMode(MapMode(MapUnit::MapPixel));
         aVirDev->Erase();
         aVirDev->DrawImage(Point(0, nPos), aImage);

@@ -256,9 +256,9 @@ const unsigned char* FreetypeFontInfo::GetTable( const char* pTag, sal_uLong* pL
     unsigned nFormat = GetUInt( pBuffer );
 
     const unsigned char* p = pBuffer + 12;
-    if( nFormat == T_ttcf )         // TTC_MAGIC
+    if( nFormat == ::T_ttcf )         // TTC_MAGIC
         p += GetUInt( p + 4 * mnFaceNum );
-    else if( nFormat != 0x00010000 && nFormat != T_true && nFormat != T_otto) // TTF_MAGIC and Apple TTF Magic and PS-OpenType font
+    else if( nFormat != 0x00010000 && nFormat != ::T_true && nFormat != ::T_otto) // TTF_MAGIC and Apple TTF Magic and PS-OpenType font
         return nullptr;
 
     // walk table directory until match
