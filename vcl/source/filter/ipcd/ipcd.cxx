@@ -193,33 +193,27 @@ void PCDReader::ReadImage()
     sal_uInt32 nH2 = nHeight>>1;
 
     // luminance for each pixel of the 1st row of the current pair of rows
-    sal_uInt8* pL0 = static_cast<sal_uInt8*>(std::malloc( nWidth ));
+    std::vector<sal_uInt8> aL0(nWidth);
     // luminance for each pixel of the 2nd row of the current pair of rows
-    sal_uInt8* pL1 = static_cast<sal_uInt8*>(std::malloc( nWidth ));
+    std::vector<sal_uInt8> aL1(nWidth);
     // blue chrominance for each 2x2 pixel of the current pair of rows
-    sal_uInt8* pCb = static_cast<sal_uInt8*>(std::malloc( nW2+1 ));
+    std::vector<sal_uInt8> aCb(nW2 + 1);
     // red chrominance for each 2x2 pixel of the current pair of rows
-    sal_uInt8* pCr = static_cast<sal_uInt8*>(std::malloc( nW2+1 ));
+    std::vector<sal_uInt8> aCr(nW2 + 1);
     // like above, but for the next pair of rows
-    sal_uInt8* pL0N = static_cast<sal_uInt8*>(std::malloc( nWidth ));
-    sal_uInt8* pL1N = static_cast<sal_uInt8*>(std::malloc( nWidth ));
-    sal_uInt8* pCbN = static_cast<sal_uInt8*>(std::malloc( nW2+1 ));
-    sal_uInt8* pCrN = static_cast<sal_uInt8*>(std::malloc( nW2+1 ));
+    std::vector<sal_uInt8> aL0N(nWidth);
+    std::vector<sal_uInt8> aL1N(nWidth);
+    std::vector<sal_uInt8> aCbN(nW2 + 1);
+    std::vector<sal_uInt8> aCrN(nW2 + 1);
 
-    if ( pL0 == nullptr || pL1 == nullptr || pCb == nullptr || pCr == nullptr ||
-        pL0N == nullptr || pL1N == nullptr || pCbN == nullptr || pCrN == nullptr)
-    {
-        std::free(static_cast<void*>(pL0) );
-        std::free(static_cast<void*>(pL1) );
-        std::free(static_cast<void*>(pCb) );
-        std::free(static_cast<void*>(pCr) );
-        std::free(static_cast<void*>(pL0N));
-        std::free(static_cast<void*>(pL1N));
-        std::free(static_cast<void*>(pCbN));
-        std::free(static_cast<void*>(pCrN));
-        bStatus = false;
-        return;
-    }
+    sal_uInt8* pL0 = aL0.data();
+    sal_uInt8* pL1 = aL1.data();
+    sal_uInt8* pCb = aCb.data();
+    sal_uInt8* pCr = aCr.data();
+    sal_uInt8* pL0N = aL0N.data();
+    sal_uInt8* pL1N = aL1N.data();
+    sal_uInt8* pCbN = aCbN.data();
+    sal_uInt8* pCrN = aCrN.data();
 
     m_rPCD.Seek( nImagePos );
 
@@ -345,14 +339,6 @@ void PCDReader::ReadImage()
         if ( !bStatus )
             break;
     }
-    std::free(static_cast<void*>(pL0) );
-    std::free(static_cast<void*>(pL1) );
-    std::free(static_cast<void*>(pCb) );
-    std::free(static_cast<void*>(pCr) );
-    std::free(static_cast<void*>(pL0N));
-    std::free(static_cast<void*>(pL1N));
-    std::free(static_cast<void*>(pCbN));
-    std::free(static_cast<void*>(pCrN));
 }
 
 //================== GraphicImport - the exported Function ================
