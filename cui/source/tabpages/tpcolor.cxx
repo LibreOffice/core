@@ -35,6 +35,7 @@
 #include <svx/strings.hrc>
 #include <officecfg/Office/Common.hxx>
 #include <osl/diagnose.h>
+#include <comphelper/dispatchcommand.hxx>
 
 using namespace com::sun::star;
 
@@ -75,6 +76,7 @@ SvxColorTabPage::SvxColorTabPage(weld::Container* pPage, weld::DialogController*
     , m_xBtnAdd(m_xBuilder->weld_button("add"))
     , m_xBtnDelete(m_xBuilder->weld_button("delete"))
     , m_xBtnWorkOn(m_xBuilder->weld_button("edit"))
+    , m_xMoreColors(m_xBuilder->weld_button("btnMoreColors"))
     , m_xCtlPreviewOld(new weld::CustomWeld(*m_xBuilder, "oldpreview", m_aCtlPreviewOld))
     , m_xCtlPreviewNew(new weld::CustomWeld(*m_xBuilder, "newpreview", m_aCtlPreviewNew))
     , m_xValSetColorListWin(new weld::CustomWeld(*m_xBuilder, "colorset", *m_xValSetColorList))
@@ -127,6 +129,9 @@ SvxColorTabPage::SvxColorTabPage(weld::Container* pPage, weld::DialogController*
     // Color palettes can't be modified
     m_xBtnDelete->set_sensitive(false);
     m_xBtnDelete->set_tooltip_text( SvxResId(RID_SVXSTR_DELETEUSERCOLOR1) );
+
+    m_xMoreColors->set_from_icon_name("cmd/sc_additionsdialog.png");
+    m_xMoreColors->connect_clicked(LINK(this, SvxColorTabPage, OnMoreColorsClick));
 
     // disable preset color values
     m_xRGBpreset->set_sensitive(false);
@@ -534,6 +539,15 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectColorModeHdl_Impl, weld::Toggleable&, voi
         eCM = ColorModel::CMYK;
     ChangeColorModel();
     UpdateColorValues();
+}
+
+
+IMPL_STATIC_LINK_NOARG(SvxColorTabPage, OnMoreColorsClick, weld::Button&, void)
+{
+    css::uno::Sequence<css::beans::PropertyValue> aArgs(1);
+    aArgs[0].Name = "AdditionsTag";
+    aArgs[0].Value <<= OUString("Color Palette");
+    comphelper::dispatchCommand(".uno:AdditionsDialog", aArgs);
 }
 
 void SvxColorTabPage::ChangeColor(const Color &rNewColor, bool bUpdatePreset )
