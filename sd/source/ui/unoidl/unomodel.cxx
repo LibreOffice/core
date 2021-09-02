@@ -1512,8 +1512,7 @@ public:
 }
 
 ImplRenderPaintProc::ImplRenderPaintProc( const SdrLayerAdmin& rLA, SdrPageView* pView, vcl::PDFExtOutDevData* pData )
-:   ViewObjectContactRedirector(),
-    rLayerAdmin         ( rLA ),
+:   rLayerAdmin         ( rLA ),
     pSdrPageView        ( pView ),
     pPDFExtOutDevData   ( pData )
 {

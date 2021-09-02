@@ -33,8 +33,7 @@ namespace sdext::presenter {
 PresenterPane::PresenterPane (
     const Reference<XComponentContext>& rxContext,
         const ::rtl::Reference<PresenterController>& rpPresenterController)
-    : PresenterPaneBase(rxContext, rpPresenterController),
-      maBoundingBox()
+    : PresenterPaneBase(rxContext, rpPresenterController)
 {
     Reference<lang::XMultiComponentFactory> xFactory (
         mxComponentContext->getServiceManager(), UNO_SET_THROW);

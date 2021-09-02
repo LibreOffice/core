@@ -51,9 +51,7 @@ PresenterPaneFactory::PresenterPaneFactory (
     const ::rtl::Reference<PresenterController>& rpPresenterController)
     : PresenterPaneFactoryInterfaceBase(m_aMutex),
       mxComponentContextWeak(rxContext),
-      mxConfigurationControllerWeak(),
-      mpPresenterController(rpPresenterController),
-      mpResourceCache()
+      mpPresenterController(rpPresenterController)
 {
 }
 

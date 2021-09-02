@@ -125,14 +125,9 @@ SlideBackground::SlideBackground(
     maMetricController(SID_ATTR_METRIC, *pBindings, *this),
     maCloseMasterController(SID_CLOSE_MASTER_VIEW, *pBindings, *this),
     mpPageItem( new SvxPageItem(SID_ATTR_PAGE) ),
-    mpColorItem(),
-    mpGradientItem(),
-    mpHatchItem(),
-    mpBitmapItem(),
     mbSwitchModeToNormal(false),
     mbSwitchModeToMaster(false),
     mxFrame(rxFrame),
-    maContext(),
     maDrawOtherContext(vcl::EnumContext::Application::Draw, vcl::EnumContext::Context::DrawPage),
     maDrawMasterContext(vcl::EnumContext::Application::Draw, vcl::EnumContext::Context::MasterPage),
     maImpressOtherContext(vcl::EnumContext::Application::Impress, vcl::EnumContext::Context::DrawPage),
@@ -147,7 +142,6 @@ SlideBackground::SlideBackground(
     m_nPageTopMargin(0),
     m_nPageBottomMargin(0),
     meFUnit(GetModuleFieldUnit()),
-    maCustomEntry(),
     mpBindings(pBindings)
 {
     //let the listbox shrink to any size so the sidebar isn't forced to grow to

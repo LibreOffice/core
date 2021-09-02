@@ -136,9 +136,6 @@ Clipboard::Clipboard (SlideSorter& rSlideSorter)
     : ViewClipboard(rSlideSorter.GetView()),
       mrSlideSorter(rSlideSorter),
       mrController(mrSlideSorter.GetController()),
-      maPagesToRemove(),
-      mxUndoContext(),
-      mxSelectionObserverContext(),
       mnDragFinishedUserEventId(nullptr)
 {
 }

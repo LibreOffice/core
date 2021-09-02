@@ -33,8 +33,7 @@ namespace sd::framework {
 
 ConfigurationControllerBroadcaster::ConfigurationControllerBroadcaster (
     const Reference<XConfigurationController>& rxController)
-    : mxConfigurationController(rxController),
-    maListenerMap()
+    : mxConfigurationController(rxController)
 {
 }
 

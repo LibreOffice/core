@@ -109,13 +109,7 @@ class TemplateScanner::FolderDescriptorList
 
 TemplateScanner::TemplateScanner()
     : meState(INITIALIZE_SCANNING),
-      maFolderContent(),
-      mpFolderDescriptors(new FolderDescriptorList),
-      mxTemplateRoot(),
-      mxFolderEnvironment(),
-      mxEntryEnvironment(),
-      mxFolderResultSet(),
-      mxEntryResultSet()
+      mpFolderDescriptors(new FolderDescriptorList)
 {
     //  empty;
 }

@@ -445,7 +445,6 @@ Layouter::Implementation::Implementation (
       mnMaxColumnCount(0),
       mnMaxRowCount(0),
       maPageObjectSize(1,1),
-      mpPageObjectLayouter(),
       mpTheme(rpTheme)
 {
 }
@@ -467,7 +466,6 @@ Layouter::Implementation::Implementation (const Implementation& rImplementation)
       mnMaxColumnCount(rImplementation.mnMaxColumnCount),
       mnMaxRowCount(rImplementation.mnMaxRowCount),
       maPageObjectSize(rImplementation.maPageObjectSize),
-      mpPageObjectLayouter(),
       mpTheme(rImplementation.mpTheme)
 {
 }

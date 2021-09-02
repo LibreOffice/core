@@ -353,9 +353,6 @@ void ViewShellManager::UnlockUpdate()
 ViewShellManager::Implementation::Implementation (
     ViewShellBase& rBase)
     : mrBase(rBase),
-      maMutex(),
-      maShellFactories(),
-      maActiveViewShells(),
       mnUpdateLockCount(0),
       mbShellStackIsUpToDate(true),
       mpFormShell(nullptr),
@@ -1143,7 +1140,6 @@ namespace {
 ShellDescriptor::ShellDescriptor()
     : mpShell(nullptr),
       mnId(ToolbarId::None),
-      mpFactory(),
       mbIsListenerAddedToWindow(false)
 {
 }
@@ -1152,7 +1148,6 @@ ShellDescriptor::ShellDescriptor (
     ShellId nId)
     : mpShell(nullptr),
       mnId(nId),
-      mpFactory(),
       mbIsListenerAddedToWindow(false)
 {
 }

@@ -145,9 +145,7 @@ private:
 PresenterPaneBorderPainter::PresenterPaneBorderPainter (
     const Reference<XComponentContext>& rxContext)
     : PresenterPaneBorderPainterInterfaceBase(m_aMutex),
-      mxContext(rxContext),
-      mpTheme(),
-      mpRenderer()
+      mxContext(rxContext)
 {
 }
 
@@ -368,13 +366,8 @@ PresenterPaneBorderPainter::Renderer::Renderer (
     const Reference<XComponentContext>& rxContext,
     const std::shared_ptr<PresenterTheme>& rpTheme)
     : mpTheme(rpTheme),
-      maRendererPaneStyles(),
-      mxCanvas(),
-      mxPresenterHelper(),
       maViewState(geometry::AffineMatrix2D(1,0,0, 0,1,0), nullptr),
-      mxViewStateClip(),
-      mbHasCallout(false),
-      maCalloutAnchor()
+      mbHasCallout(false)
 {
     Reference<lang::XMultiComponentFactory> xFactory (rxContext->getServiceManager());
     if (xFactory.is())
@@ -736,23 +729,10 @@ BorderSize::BorderSize()
 RendererPaneStyle::RendererPaneStyle (
     const std::shared_ptr<PresenterTheme>& rpTheme,
     const OUString& rsStyleName)
-    : mpTopLeft(),
-      mpTop(),
-      mpTopRight(),
-      mpLeft(),
-      mpRight(),
-      mpBottomLeft(),
-      mpBottom(),
-      mpBottomRight(),
-      mpBottomCallout(),
-      mpEmpty(std::make_shared<PresenterBitmapDescriptor>()),
-      mpFont(),
+    : mpEmpty(std::make_shared<PresenterBitmapDescriptor>()),
       mnFontXOffset(0),
       mnFontYOffset(0),
-      meFontAnchor(Anchor::Center),
-      maInnerBorderSize(),
-      maOuterBorderSize(),
-      maTotalBorderSize()
+      meFontAnchor(Anchor::Center)
 {
     if (rpTheme == nullptr)
         return;

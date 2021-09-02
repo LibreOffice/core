@@ -188,11 +188,8 @@ void PresenterPreviewCache::ThrowIfDisposed()
 //===== PresenterPreviewCache::PresenterCacheContext ==========================
 
 PresenterPreviewCache::PresenterCacheContext::PresenterCacheContext()
-    : mxSlides(),
-      mxDocument(),
-      mnFirstVisibleSlideIndex(-1),
-      mnLastVisibleSlideIndex(-1),
-      maListeners()
+    : mnFirstVisibleSlideIndex(-1),
+      mnLastVisibleSlideIndex(-1)
 {
 }
 

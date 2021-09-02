@@ -89,7 +89,6 @@ public:
     PathDragMove(SdrDragView& rNewView,
         const rtl::Reference <MotionPathTag >& xTag)
     :   SdrDragMove(rNewView),
-        maPathPolyPolygon(),
         mxTag( xTag )
     {}
 
@@ -156,7 +155,6 @@ public:
     PathDragResize(SdrDragView& rNewView,
         const rtl::Reference <MotionPathTag >& xTag)
     :   SdrDragResize(rNewView),
-        maPathPolyPolygon(),
         mxTag( xTag )
     {}
 
@@ -215,8 +213,7 @@ public:
     {}
 
     explicit PathDragObjOwn(SdrDragView& rNewView)
-    :   SdrDragObjOwn(rNewView),
-        maPathPolyPolygon()
+    :   SdrDragObjOwn(rNewView)
     {}
 
     virtual bool EndSdrDrag(bool bCopy) override;

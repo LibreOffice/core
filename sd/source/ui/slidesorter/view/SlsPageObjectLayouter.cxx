@@ -42,10 +42,6 @@ PageObjectLayouter::PageObjectLayouter (
     sd::Window *pWindow,
     const sal_Int32 nPageCount)
     : mpWindow(pWindow),
-      maPageObjectBoundingBox(),
-      maPageNumberAreaBoundingBox(),
-      maPreviewBoundingBox(),
-      maTransitionEffectBoundingBox(),
       maTransitionEffectIcon(IconCache::Instance().GetIcon(BMP_FADE_EFFECT_INDICATOR)),
       maCustomAnimationEffectIcon(IconCache::Instance().GetIcon(BMP_CUSTOM_ANIMATION_INDICATOR)),
       mpPageNumberFont(Theme::GetFont(Theme::Font_PageNumber, *pWindow->GetOutDev()))

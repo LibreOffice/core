@@ -394,13 +394,11 @@ SlideTransitionPane::SlideTransitionPane(
     weld::Widget* pParent,
     ViewShellBase & rBase) :
         PanelLayout( pParent, "SlideTransitionsPanel", "modules/simpress/ui/slidetransitionspanel.ui" ),
-
         mrBase( rBase ),
         mpDrawDoc( rBase.GetDocShell() ? rBase.GetDocShell()->GetDoc() : nullptr ),
         mbHasSelection( false ),
         mbUpdatingControls( false ),
-        mbIsMainViewChangePending( false ),
-        maLateInitTimer()
+        mbIsMainViewChangePending( false )
 {
     Initialize(mpDrawDoc);
 }

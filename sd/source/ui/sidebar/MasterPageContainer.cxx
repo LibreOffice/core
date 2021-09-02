@@ -468,19 +468,9 @@ bool MasterPageContainer::RequestPreview (Token aToken)
 //==== Implementation ================================================
 
 MasterPageContainer::Implementation::Implementation()
-    : maMutex(),
-      maContainer(),
-      meInitializationState(InitializationState::NotInitialized),
+    : meInitializationState(InitializationState::NotInitialized),
       mpDocument(nullptr),
-      maPreviewRenderer(),
-      mbFirstPageObjectSeen(false),
-      maLargePreviewBeingCreated(),
-      maSmallPreviewBeingCreated(),
-      maLargePreviewNotAvailable(),
-      maSmallPreviewNotAvailable(),
-      maChangeListeners(),
-      maSmallPreviewSizePixel(),
-      maLargePreviewSizePixel()
+      mbFirstPageObjectSeen(false)
 {
     UpdatePreviewSizePixel();
 }

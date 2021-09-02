@@ -35,9 +35,7 @@ namespace sd::slidesorter::controller {
 
 InsertionIndicatorHandler::InsertionIndicatorHandler (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
-      mpInsertAnimator(),
       mpInsertionIndicatorOverlay(std::make_shared<view::InsertionIndicatorOverlay>(rSlideSorter)),
-      maInsertPosition(),
       meMode(MoveMode),
       mbIsInsertionTrivial(false),
       mbIsActive(false),

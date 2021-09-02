@@ -32,8 +32,7 @@ namespace sd::presenter {
 //===== SlideRenderer ==========================================================
 
 SlideRenderer::SlideRenderer ()
-    : SlideRendererInterfaceBase(m_aMutex),
-      maPreviewRenderer()
+    : SlideRendererInterfaceBase(m_aMutex)
 {
 }
 

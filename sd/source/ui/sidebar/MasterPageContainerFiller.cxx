@@ -31,7 +31,6 @@ namespace sd::sidebar {
 MasterPageContainerFiller::MasterPageContainerFiller (ContainerAdapter& rpAdapter)
     : mrContainerAdapter(rpAdapter),
       meState(INITIALIZE_TEMPLATE_SCANNER),
-      mpScannerTask(),
       mpLastAddedEntry(nullptr),
       mnIndex(1)
 {

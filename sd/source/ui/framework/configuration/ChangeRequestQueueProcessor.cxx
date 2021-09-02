@@ -51,10 +51,7 @@ namespace sd::framework {
 
 ChangeRequestQueueProcessor::ChangeRequestQueueProcessor (
     const std::shared_ptr<ConfigurationUpdater>& rpConfigurationUpdater)
-    : maMutex(),
-      maQueue(),
-      mnUserEventId(nullptr),
-      mxConfiguration(),
+    : mnUserEventId(nullptr),
       mpConfigurationUpdater(rpConfigurationUpdater)
 {
 }

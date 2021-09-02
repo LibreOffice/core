@@ -50,8 +50,6 @@ namespace {
 
 VisibleAreaManager::VisibleAreaManager (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
-      maVisibleRequests(),
-      maRequestedVisibleTopLeft(),
       mbIsCurrentSlideTrackingActive(true),
       mnDisableCount(0)
 {

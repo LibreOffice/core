@@ -342,7 +342,6 @@ std::shared_ptr<ToolBarManager> ToolBarManager::Create (
 }
 
 ToolBarManager::ToolBarManager()
-        : mpImpl()
 {
 }
 
@@ -500,18 +499,12 @@ ToolBarManager::Implementation::Implementation (
     const std::shared_ptr<sd::tools::EventMultiplexer>& rpMultiplexer,
     const std::shared_ptr<ViewShellManager>& rpViewShellManager,
     const std::shared_ptr<ToolBarManager>& rpToolBarManager)
-    : maMutex(),
-      mrBase(rBase),
+    : mrBase(rBase),
       mpEventMultiplexer(rpMultiplexer),
       mbIsValid(false),
-      maToolBarList(),
-      maToolBarShellList(),
       mnLockCount(0),
       mbPreUpdatePending(false),
       mbPostUpdatePending(false),
-      mpSynchronousLayouterLock(),
-      mpAsynchronousLayouterLock(),
-      mpViewShellManagerLock(),
       mnPendingUpdateCall(nullptr),
       mnPendingSetValidCall(nullptr),
       maToolBarRules(rpToolBarManager,rpViewShellManager)
@@ -1176,8 +1169,6 @@ void ToolBarRules::SubShellRemoved (
 //===== ToolBarList ===========================================================
 
 ToolBarList::ToolBarList()
-    : maGroups(),
-      maActiveToolBars()
 {
 }
 
@@ -1294,8 +1285,6 @@ ToolBarShellList::ShellDescriptor::ShellDescriptor (
 }
 
 ToolBarShellList::ToolBarShellList()
-: maNewList()
-, maCurrentList()
 {
 }
 

@@ -48,8 +48,6 @@ MasterPageDescriptor::MasterPageDescriptor (
       mbIsPrecious(bIsPrecious),
       mpMasterPage(nullptr),
       mpSlide(nullptr),
-      maSmallPreview(),
-      maLargePreview(),
       mpPreviewProvider(rpPreviewProvider),
       mpPageObjectProvider(rpPageObjectProvider),
       mnTemplateIndex(nTemplateIndex),

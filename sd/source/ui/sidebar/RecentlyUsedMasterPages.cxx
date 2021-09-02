@@ -80,9 +80,7 @@ RecentlyUsedMasterPages&  RecentlyUsedMasterPages::Instance()
 constexpr size_t gnMaxListSize(8);
 
 RecentlyUsedMasterPages::RecentlyUsedMasterPages()
-    : maListeners(),
-      mvMasterPages(),
-      mpContainer(std::make_shared<MasterPageContainer>())
+    : mpContainer(std::make_shared<MasterPageContainer>())
 {
 }
 

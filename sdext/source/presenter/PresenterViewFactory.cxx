@@ -97,10 +97,8 @@ PresenterViewFactory::PresenterViewFactory (
     const ::rtl::Reference<PresenterController>& rpPresenterController)
     : PresenterViewFactoryInterfaceBase(m_aMutex),
       mxComponentContext(rxContext),
-      mxConfigurationController(),
       mxControllerWeak(rxController),
-      mpPresenterController(rpPresenterController),
-      mpResourceCache()
+      mpPresenterController(rpPresenterController)
 {
 }
 

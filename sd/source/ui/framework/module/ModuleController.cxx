@@ -66,7 +66,6 @@ Reference<XModuleController> ModuleController::CreateInstance (
 
 ModuleController::ModuleController (const Reference<XComponentContext>& rxContext)
     : ModuleControllerInterfaceBase(MutexOwner::maMutex),
-      mxController(),
       mpResourceToFactoryMap(new ResourceToFactoryMap()),
       mpLoadedFactories(new LoadedFactoryContainer())
 {

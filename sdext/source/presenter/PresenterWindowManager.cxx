@@ -53,22 +53,13 @@ PresenterWindowManager::PresenterWindowManager (
     : PresenterWindowManagerInterfaceBase(m_aMutex),
       mxComponentContext(rxContext),
       mpPresenterController(rpPresenterController),
-      mxParentWindow(),
-      mxParentCanvas(),
-      mxPaneBorderManager(),
-      mpPaneBorderPainter(),
       mpPaneContainer(rpPaneContainer),
       mbIsLayoutPending(true),
       mbIsLayouting(false),
-      mpTheme(),
-      mpBackgroundBitmap(),
-      mxScaledBackgroundBitmap(),
-      mxClipPolygon(),
       meLayoutMode(LM_Generic),
       mbIsSlideSorterActive(false),
       mbIsHelpViewActive(false),
       mbisPaused(false),
-      maLayoutListeners(),
       mbIsMouseClickPending(false)
 {
 

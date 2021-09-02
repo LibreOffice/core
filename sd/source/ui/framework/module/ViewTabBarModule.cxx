@@ -49,7 +49,6 @@ ViewTabBarModule::ViewTabBarModule (
     const Reference<frame::XController>& rxController,
     const Reference<XResourceId>& rxViewTabBarId)
     : ViewTabBarModuleInterfaceBase(MutexOwner::maMutex),
-      mxConfigurationController(),
       mxViewTabBarId(rxViewTabBarId)
 {
     Reference<XControllerManager> xControllerManager (rxController, UNO_QUERY);

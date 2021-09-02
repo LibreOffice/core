@@ -232,24 +232,13 @@ PresenterSlideSorter::PresenterSlideSorter (
     : PresenterSlideSorterInterfaceBase(m_aMutex),
       mxComponentContext(rxContext),
       mxViewId(rxViewId),
-      mxPane(),
-      mxCanvas(),
-      mxWindow(),
       mpPresenterController(rpPresenterController),
       mxSlideShowController(mpPresenterController->GetSlideShowController()),
-      mxPreviewCache(),
       mbIsLayoutPending(true),
-      mpLayout(),
-      mpVerticalScrollBar(),
-      mpCloseButton(),
-      mpMouseOverManager(),
       mnSlideIndexMousePressed(-1),
       mnCurrentSlideIndex(-1),
       mnSeparatorY(0),
-      maSeparatorColor(0x00ffffff),
-      maCurrentSlideFrameBoundingBox(),
-      mpCurrentSlideFrameRenderer(),
-      mxPreviewFrame()
+      maSeparatorColor(0x00ffffff)
 {
     if ( ! rxContext.is()
         || ! rxViewId.is()
@@ -1061,9 +1050,7 @@ void PresenterSlideSorter::ThrowIfDisposed()
 
 PresenterSlideSorter::Layout::Layout (
     const ::rtl::Reference<PresenterScrollBar>& rpVerticalScrollBar)
-    : maBoundingBox(),
-      maPreviewSize(),
-      mnHorizontalOffset(0),
+    : mnHorizontalOffset(0),
       mnVerticalOffset(0),
       mnHorizontalGap(0),
       mnVerticalGap(0),
@@ -1417,14 +1404,8 @@ PresenterSlideSorter::MouseOverManager::MouseOverManager (
     const std::shared_ptr<PresenterTheme>& rpTheme,
     const Reference<awt::XWindow>& rxInvalidateTarget,
     const std::shared_ptr<PresenterPaintManager>& rpPaintManager)
-    : mxCanvas(),
-      mxSlides(rxSlides),
-      mpLeftLabelBitmap(),
-      mpCenterLabelBitmap(),
-      mpRightLabelBitmap(),
-      mpFont(),
+    : mxSlides(rxSlides),
       mnSlideIndex(-1),
-      maSlideBoundingBox(),
       mxInvalidateTarget(rxInvalidateTarget),
       mpPaintManager(rpPaintManager)
 {
@@ -1703,15 +1684,7 @@ void PresenterSlideSorter::MouseOverManager::Invalidate()
 PresenterSlideSorter::CurrentSlideFrameRenderer::CurrentSlideFrameRenderer (
     const css::uno::Reference<css::uno::XComponentContext>& rxContext,
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas)
-    : mpTopLeft(),
-      mpTop(),
-      mpTopRight(),
-      mpLeft(),
-      mpRight(),
-      mpBottomLeft(),
-      mpBottom(),
-      mpBottomRight(),
-      mnTopFrameSize(0),
+    : mnTopFrameSize(0),
       mnLeftFrameSize(0),
       mnRightFrameSize(0),
       mnBottomFrameSize(0)

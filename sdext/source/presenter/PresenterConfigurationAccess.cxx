@@ -37,8 +37,6 @@ PresenterConfigurationAccess::PresenterConfigurationAccess (
     const Reference<XComponentContext>& rxContext,
     const OUString& rsRootName,
     WriteMode eMode)
-    : mxRoot(),
-      maNode()
 {
     try
     {

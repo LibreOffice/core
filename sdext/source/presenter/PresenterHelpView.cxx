@@ -125,13 +125,7 @@ PresenterHelpView::PresenterHelpView (
     : PresenterHelpViewInterfaceBase(m_aMutex),
       mxComponentContext(rxContext),
       mxViewId(rxViewId),
-      mxPane(),
-      mxWindow(),
-      mxCanvas(),
       mpPresenterController(rpPresenterController),
-      mpFont(),
-      mpTextContainer(),
-      mpCloseButton(),
       mnSeparatorY(0),
       mnMaximalWidth(0)
 {
@@ -496,8 +490,7 @@ void PresenterHelpView::ThrowIfDisposed()
 namespace {
 
 LineDescriptor::LineDescriptor()
-    : msLine(),
-      maSize(0,0),
+    : maSize(0,0),
       mnVerticalOffset(0)
 {
 }

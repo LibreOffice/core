@@ -32,9 +32,7 @@ GenericPageCache::GenericPageCache (
     const Size& rPreviewSize,
     const bool bDoSuperSampling,
     const SharedCacheContext& rpCacheContext)
-    : mpBitmapCache(),
-      maRequestQueue(rpCacheContext),
-      mpQueueProcessor(),
+    : maRequestQueue(rpCacheContext),
       mpCacheContext(rpCacheContext),
       maPreviewSize(rPreviewSize),
       mbDoSuperSampling(bDoSuperSampling)

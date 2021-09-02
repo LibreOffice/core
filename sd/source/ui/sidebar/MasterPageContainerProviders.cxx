@@ -99,8 +99,7 @@ bool TemplatePreviewProvider::NeedsPageObject()
 //===== TemplatePageObjectProvider =============================================
 
 TemplatePageObjectProvider::TemplatePageObjectProvider (const OUString& rsURL)
-    : msURL(rsURL),
-      mxDocumentShell()
+    : msURL(rsURL)
 {
 }
 

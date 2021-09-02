@@ -57,27 +57,12 @@ PresenterSlideShowView::PresenterSlideShowView (
       mxViewId(rxViewId),
       mxController(rxController),
       mxSlideShowController(PresenterHelper::GetSlideShowController(rxController)),
-      mxSlideShow(),
-      mxCanvas(),
-      mxViewCanvas(),
-      mxPointer(),
-      mxWindow(),
-      mxViewWindow(),
-      mxTopPane(),
-      mxPresenterHelper(),
-      mxBackgroundPolygon1(),
-      mxBackgroundPolygon2(),
       mbIsViewAdded(false),
       mnPageAspectRatio(28.0/21.0),
       maBroadcaster(m_aMutex),
-      mpBackground(),
       mbIsForcedPaintPending(false),
       mbIsPaintPending(true),
-      msClickToExitPresentationText(),
-      msClickToExitPresentationTitle(),
-      msTitleTemplate(),
-      mbIsEndSlideVisible(false),
-      mxCurrentSlide()
+      mbIsEndSlideVisible(false)
 {
     if (mpPresenterController)
     {

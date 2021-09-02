@@ -338,8 +338,7 @@ sal_Int32 OutlinerContainer::GetPageIndex (
 IteratorImplBase::IteratorImplBase(SdDrawDocument* pDocument,
     const std::weak_ptr<ViewShell>& rpViewShellWeak,
     bool bDirectionIsForward)
-:   maPosition()
-,   mpDocument (pDocument)
+:   mpDocument (pDocument)
 ,   mpViewShellWeak (rpViewShellWeak)
 ,   mbDirectionIsForward (bDirectionIsForward)
 {
@@ -362,8 +361,7 @@ IteratorImplBase::IteratorImplBase(SdDrawDocument* pDocument,
 IteratorImplBase::IteratorImplBase( SdDrawDocument* pDocument,
     const std::weak_ptr<ViewShell>& rpViewShellWeak,
     bool bDirectionIsForward, PageKind ePageKind, EditMode eEditMode)
-: maPosition()
-, mpDocument (pDocument)
+: mpDocument (pDocument)
 , mpViewShellWeak (rpViewShellWeak)
 , mbDirectionIsForward (bDirectionIsForward)
 {

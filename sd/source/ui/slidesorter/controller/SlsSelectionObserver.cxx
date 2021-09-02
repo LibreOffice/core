@@ -57,7 +57,6 @@ SelectionObserver::SelectionObserver(SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter)
     , mbIsObservationActive(false)
     , mbPageEventOccurred(false)
-    , maInsertedPages()
 {
 }
 

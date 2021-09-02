@@ -48,12 +48,7 @@ PresenterSlidePreview::PresenterSlidePreview (
     : PresenterSlidePreviewInterfaceBase(m_aMutex),
       mpPresenterController(rpPresenterController),
       mxViewId(rxViewId),
-      mxPreviewRenderer(),
-      mxPreview(),
-      mxCurrentSlide(),
-      mnSlideAspectRatio(28.0 / 21.0),
-      mxWindow(),
-      mxCanvas()
+      mnSlideAspectRatio(28.0 / 21.0)
 {
     if ( ! rxContext.is()
         || ! rxViewId.is()

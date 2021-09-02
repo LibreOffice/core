@@ -31,7 +31,6 @@ namespace sdext::presenter {
 PresenterSpritePane::PresenterSpritePane (const Reference<XComponentContext>& rxContext,
         const ::rtl::Reference<PresenterController>& rpPresenterController)
     : PresenterPaneBase(rxContext, rpPresenterController),
-      mxParentCanvas(),
       mpSprite(std::make_shared<PresenterSprite>())
 {
     Reference<lang::XMultiComponentFactory> xFactory (

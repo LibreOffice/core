@@ -53,7 +53,6 @@ FormShellManager::FormShellManager (ViewShellBase& rBase)
     : mrBase(rBase),
       mpFormShell(nullptr),
       mbFormShellAboveViewShell(false),
-      mpSubShellFactory(),
       mbIsMainViewChangePending(false),
       mpMainViewShellWindow(nullptr)
 {

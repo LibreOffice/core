@@ -64,9 +64,7 @@ namespace sd {
 }
 
 RemoteServer::RemoteServer() :
-    Thread( "RemoteServerThread" ),
-    mSocket(),
-    mAvailableClients()
+    Thread( "RemoteServerThread" )
 {
     SAL_INFO( "sdremote", "Instantiated RemoteServer" );
 }

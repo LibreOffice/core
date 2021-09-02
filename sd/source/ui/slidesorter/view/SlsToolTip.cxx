@@ -35,10 +35,7 @@ namespace sd::slidesorter::view {
 
 ToolTip::ToolTip (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
-      msCurrentHelpText(),
-      mnHelpWindowHandle(nullptr),
-      maShowTimer(),
-      maHiddenTimer()
+      mnHelpWindowHandle(nullptr)
 {
     maShowTimer.SetDebugName("sd::slidesorter::view::ToolTip maShowTimer");
     maShowTimer.SetTimeout(HelpSettings::GetTipDelay());

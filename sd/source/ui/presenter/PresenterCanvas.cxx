@@ -108,7 +108,6 @@ PresenterCanvas::PresenterCanvas (
       mxSharedCanvas(rxSharedCanvas),
       mxSharedWindow(rxSharedWindow),
       mxWindow(rxWindow),
-      maOffset(),
       mbOffsetUpdatePending(true)
 {
     if (mxWindow.is())

@@ -168,8 +168,7 @@ PresenterScreenListener::PresenterScreenListener (
     const css::uno::Reference<css::frame::XModel2>& rxModel)
     : PresenterScreenListenerInterfaceBase(m_aMutex),
       mxModel(rxModel),
-      mxComponentContext(rxContext),
-      mpPresenterScreen()
+      mxComponentContext(rxContext)
 {
 }
 
@@ -242,15 +241,7 @@ PresenterScreen::PresenterScreen (
     const css::uno::Reference<css::frame::XModel2>& rxModel)
     : PresenterScreenInterfaceBase(m_aMutex),
       mxModel(rxModel),
-      mxController(),
-      mxConfigurationControllerWeak(),
-      mxContextWeak(rxContext),
-      mpPresenterController(),
-      mxSavedConfiguration(),
-      mpPaneContainer(),
-      mxPaneFactory(),
-      mxViewFactory(),
-      maViewDescriptors()
+      mxContextWeak(rxContext)
 {
 }
 

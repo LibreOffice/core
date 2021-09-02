@@ -335,10 +335,7 @@ void FrameworkHelper::ReleaseInstance (const ViewShellBase& rBase)
 }
 
 FrameworkHelper::FrameworkHelper (ViewShellBase& rBase)
-    : mrBase(rBase),
-      mxConfigurationController(),
-      mxDisposeListener()
-
+    : mrBase(rBase)
 {
     Reference<XControllerManager> xControllerManager (rBase.GetController(), UNO_QUERY);
     if (xControllerManager.is())
@@ -815,7 +812,6 @@ CallbackCaller::CallbackCaller (
     const ::sd::framework::FrameworkHelper::Callback& rCallback)
     : CallbackCallerInterfaceBase(MutexOwner::maMutex),
       msEventType(rsEventType),
-      mxConfigurationController(),
       maFilter(rFilter),
       maCallback(rCallback)
 {

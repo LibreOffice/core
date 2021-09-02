@@ -38,11 +38,7 @@ using namespace ::com::sun::star::drawing::framework;
 namespace sd::framework {
 
 ResourceFactoryManager::ResourceFactoryManager (const Reference<XControllerManager>& rxManager)
-    : maMutex(),
-      maFactoryMap(),
-      maFactoryPatternList(),
-      mxControllerManager(rxManager),
-      mxURLTransformer()
+    : mxControllerManager(rxManager)
 {
     // Create the URL transformer.
     Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());

@@ -352,7 +352,6 @@ PresenterProtocolHandler::Dispatch::Dispatch (
       msURLPath(rsURLPath),
       mpCommand(CreateCommand(rsURLPath, rpPresenterController)),
       mpPresenterController(rpPresenterController),
-      maStatusListenerContainer(),
       mbIsListeningToWindowManager(false)
 {
     if (mpCommand != nullptr)

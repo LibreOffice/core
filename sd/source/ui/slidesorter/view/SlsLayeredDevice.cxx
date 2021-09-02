@@ -133,7 +133,7 @@ typedef std::shared_ptr<Layer> SharedLayer;
 class LayeredDevice::LayerContainer
 {
 public:
-    LayerContainer() : mvLayers() {}
+    LayerContainer()  {}
 
     bool empty() const { return mvLayers.empty(); }
 
@@ -374,9 +374,6 @@ bool LayeredDevice::HandleMapModeChange()
 //===== Layer =================================================================
 
 Layer::Layer()
-    : mpLayerDevice(),
-      maPainters(),
-      maInvalidationRegion()
 {
 }
 

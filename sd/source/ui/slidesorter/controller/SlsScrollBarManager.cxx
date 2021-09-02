@@ -46,11 +46,9 @@ ScrollBarManager::ScrollBarManager (SlideSorter& rSlideSorter)
       mnVerticalPosition (0),
       maScrollBorder (20,20),
       mpScrollBarFiller(mrSlideSorter.GetScrollBarFiller()),
-      maAutoScrollTimer(),
       maAutoScrollOffset(0,0),
       mbIsAutoScrollActive(false),
-      mpContentWindow(mrSlideSorter.GetContentWindow()),
-      maAutoScrollFunctor()
+      mpContentWindow(mrSlideSorter.GetContentWindow())
 {
     // Hide the scroll bars by default to prevent display errors while
     // switching between view shells:  In the short time between initiating

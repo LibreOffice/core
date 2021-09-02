@@ -28,9 +28,7 @@ namespace sdext::presenter {
 
 PresenterPaneContainer::PresenterPaneContainer (
     const Reference<XComponentContext>& rxContext)
-    : PresenterPaneContainerInterfaceBase(m_aMutex),
-      maPanes(),
-      mxPresenterHelper()
+    : PresenterPaneContainerInterfaceBase(m_aMutex)
 {
     Reference<lang::XMultiComponentFactory> xFactory (rxContext->getServiceManager());
     if (xFactory.is())

@@ -61,15 +61,11 @@ MasterPagesSelector::MasterPagesSelector (
     const OUString& rUIFileName,
     const OString& rValueSetName)
     : PanelLayout( pParent, "MasterPagePanel", rUIFileName ),
-      maMutex(),
       mpContainer(rpContainer),
       mxPreviewValueSet(new PreviewValueSet),
       mxPreviewValueSetWin(new weld::CustomWeld(*m_xBuilder, rValueSetName, *mxPreviewValueSet)),
       mrDocument(rDocument),
       mrBase(rBase),
-      maCurrentItemList(),
-      maTokenToValueSetIndex(),
-      maLockedMasterPages(),
       mxSidebar(rxSidebar)
 {
     mxPreviewValueSet->SetSelectHdl (

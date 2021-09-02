@@ -78,10 +78,7 @@ FileEmitContext::FileEmitContext( const OUString&                            rOr
                                   const pdfparse::PDFContainer*                   pTop ) :
     pdfparse::EmitContext( pTop ),
     m_aReadHandle(nullptr),
-    m_nReadLen(0),
-    m_xContextStream(),
-    m_xSeek(),
-    m_xOut()
+    m_nReadLen(0)
 {
     m_xContextStream.set( io::TempFile::create(xContext), uno::UNO_QUERY_THROW );
     m_xOut = m_xContextStream->getOutputStream();

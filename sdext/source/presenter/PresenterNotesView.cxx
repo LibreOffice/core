@@ -58,20 +58,9 @@ PresenterNotesView::PresenterNotesView (
     : PresenterNotesViewInterfaceBase(m_aMutex),
       mxViewId(rxViewId),
       mpPresenterController(rpPresenterController),
-      mxCanvas(),
-      mxCurrentNotesPage(),
-      mpScrollBar(),
-      mxToolBarWindow(),
-      mxToolBarCanvas(),
-      mpToolBar(),
-      mpCloseButton(),
       maSeparatorColor(0xffffff),
       mnSeparatorYLocation(0),
-      maTextBoundingBox(),
-      mpBackground(),
-      mnTop(0),
-      mpFont(),
-      mpTextView()
+      mnTop(0)
 {
     try
     {

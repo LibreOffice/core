@@ -59,7 +59,7 @@ class StringEmitContext : public EmitContext
 {
     OStringBuffer m_aBuf;
     public:
-    StringEmitContext() : EmitContext(), m_aBuf(256) {}
+    StringEmitContext() :  m_aBuf(256) {}
 
     virtual bool write( const void* pBuf, unsigned int nLen ) noexcept override
     {

@@ -628,7 +628,6 @@ AccessibleSlideSorterView::Implementation::Implementation (
     vcl::Window* pWindow)
     : mrAccessibleSlideSorter(rAccessibleSlideSorter),
       mrSlideSorter(rSlideSorter),
-      maPageObjects(),
       mnFirstVisibleChild(0),
       mnLastVisibleChild(-1),
       mbListeningToDocument(false),

@@ -648,10 +648,7 @@ PortionObj& PortionObj::operator=( const PortionObj& rPortionObj )
 
 ParagraphObj::ParagraphObj(const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
     PPTExBulletProvider* pProv)
-    : PropStateValue()
-    , SOParagraph()
-    , mvPortions()
-    , mnTextSize(0)
+    : mnTextSize(0)
     , mbFirstParagraph(false)
     , mbLastParagraph(false)
     , mnTextAdjust(0)
@@ -676,10 +673,7 @@ ParagraphObj::ParagraphObj(const css::uno::Reference< css::beans::XPropertySet >
 
 ParagraphObj::ParagraphObj(css::uno::Reference< css::text::XTextContent > const & rXTextContent,
     ParaFlags aParaFlags, FontCollection& rFontCollection, PPTExBulletProvider& rProv )
-    : PropStateValue()
-    , SOParagraph()
-    , mvPortions()
-    , mnTextSize(0)
+    : mnTextSize(0)
     , mbIsBullet(false)
     , mbFirstParagraph( aParaFlags.bFirstParagraph )
     , mbLastParagraph( aParaFlags.bLastParagraph )
@@ -1260,7 +1254,6 @@ struct ImplTextObj
 ImplTextObj::ImplTextObj( int nInstance )
   : mnTextSize(0),
     mnInstance(nInstance),
-    maList(),
     mbHasExtendedBullets(false)
 {
 }

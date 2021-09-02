@@ -121,19 +121,15 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
       mbIsDisposed(false),
       mpLayouter (new Layouter(rSlideSorter.GetContentWindow(), rSlideSorter.GetTheme())),
       mbPageObjectVisibilitiesValid (false),
-      mpPreviewCache(),
       mpLayeredDevice(std::make_shared<LayeredDevice>(rSlideSorter.GetContentWindow())),
       maVisiblePageRange(-1,-1),
       maPreviewSize(0,0),
       mbPreciousFlagUpdatePending(true),
       meOrientation(Layouter::GRID),
-      mpPageUnderMouse(),
-      mpPageObjectPainter(),
       mpBackgroundPainter(
           std::make_shared<BackgroundPainter>(mrSlideSorter.GetTheme()->GetColor(Theme::Color_Background))),
       mpToolTip(new ToolTip(mrSlideSorter)),
-      mbIsRearrangePending(true),
-      maVisibilityChangeListeners()
+      mbIsRearrangePending(true)
 {
     // Hide the page that contains the page objects.
     SetPageVisible (false);

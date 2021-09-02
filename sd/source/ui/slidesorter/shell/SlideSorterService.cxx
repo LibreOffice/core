@@ -40,9 +40,7 @@ namespace sd::slidesorter {
 //===== SlideSorterService ==========================================================
 
 SlideSorterService::SlideSorterService()
-    : SlideSorterServiceInterfaceBase(m_aMutex),
-      mpSlideSorter(),
-      mxParentWindow()
+    : SlideSorterServiceInterfaceBase(m_aMutex)
 {
 }
 

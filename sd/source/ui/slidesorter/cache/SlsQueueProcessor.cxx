@@ -35,14 +35,11 @@ QueueProcessor::QueueProcessor (
     const Size& rPreviewSize,
     const bool bDoSuperSampling,
     const SharedCacheContext& rpCacheContext)
-    : maMutex(),
-      maTimer(),
-      maPreviewSize(rPreviewSize),
+    : maPreviewSize(rPreviewSize),
       mbDoSuperSampling(bDoSuperSampling),
       mpCacheContext(rpCacheContext),
       mrQueue(rQueue),
       mpCache(rpCache),
-      maBitmapFactory(),
       mbIsPaused(false)
 {
     maTimer.SetInvokeHandler (LINK(this,QueueProcessor,ProcessRequestHdl));

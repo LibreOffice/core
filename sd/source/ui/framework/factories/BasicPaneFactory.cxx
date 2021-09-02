@@ -86,7 +86,6 @@ BasicPaneFactory::BasicPaneFactory (
     const Reference<XComponentContext>& rxContext)
     : BasicPaneFactoryInterfaceBase(m_aMutex),
       mxComponentContext(rxContext),
-      mxConfigurationControllerWeak(),
       mpViewShellBase(nullptr),
       mpPaneContainer(new PaneContainer)
 {

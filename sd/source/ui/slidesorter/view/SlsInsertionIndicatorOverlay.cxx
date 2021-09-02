@@ -64,9 +64,6 @@ const sal_Int32 gnLayerIndex = 2;
 InsertionIndicatorOverlay::InsertionIndicatorOverlay (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
       mbIsVisible(false),
-      mpLayerInvalidator(),
-      maLocation(),
-      maIcon(),
       mpShadowPainter(
           new FramePainter(mrSlideSorter.GetTheme()->GetIcon(Theme::Icon_RawInsertShadow)))
 {

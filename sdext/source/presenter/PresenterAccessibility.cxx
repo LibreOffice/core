@@ -472,16 +472,7 @@ PresenterAccessible::PresenterAccessible (
     : PresenterAccessibleInterfaceBase(m_aMutex),
       mxComponentContext(rxContext),
       mpPresenterController(rpPresenterController),
-      mxMainPane(rxMainPane, UNO_QUERY),
-      mxMainWindow(),
-      mxPreviewContentWindow(),
-      mxPreviewBorderWindow(),
-      mxNotesContentWindow(),
-      mxNotesBorderWindow(),
-      mpAccessibleConsole(),
-      mpAccessiblePreview(),
-      mpAccessibleNotes(),
-      mxAccessibleParent()
+      mxMainPane(rxMainPane, UNO_QUERY)
 {
     if (mxMainPane.is())
         mxMainPane->setAccessible(this);
@@ -726,15 +717,10 @@ PresenterAccessible::AccessibleObject::AccessibleObject (
     const OUString& rsName)
     : PresenterAccessibleObjectInterfaceBase(m_aMutex),
       msName(rsName),
-      mxContentWindow(),
-      mxBorderWindow(),
       maLocale(rLocale),
       mnRole(nRole),
       mnStateSet(0),
-      mbIsFocused(false),
-      mxParentAccessible(),
-      maChildren(),
-      maListeners()
+      mbIsFocused(false)
 {
 }
 
@@ -1282,8 +1268,7 @@ css::uno::Sequence<sal_Int16> SAL_CALL AccessibleStateSet::getStates()
 //===== AccessibleRelationSet =================================================
 
 AccessibleRelationSet::AccessibleRelationSet()
-    : AccessibleRelationSetInterfaceBase(m_aMutex),
-      maRelations()
+    : AccessibleRelationSetInterfaceBase(m_aMutex)
 {
 }
 
@@ -1652,8 +1637,7 @@ bool PresenterAccessible::AccessibleParagraph::GetWindowState (const sal_Int16 n
 AccessibleNotes::AccessibleNotes (
     const css::lang::Locale& rLocale,
     const OUString& rsName)
-    : AccessibleObject(rLocale,AccessibleRole::PANEL,rsName),
-      mpTextView()
+    : AccessibleObject(rLocale,AccessibleRole::PANEL,rsName)
 {
 }
 
