@@ -48,7 +48,6 @@
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/text/SizeType.hpp>
-#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>

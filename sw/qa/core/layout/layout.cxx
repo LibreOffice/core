@@ -13,7 +13,6 @@
 
 #include <vcl/gdimtf.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/unopage.hxx>
 
 #include <wrtsh.hxx>
 #include <docsh.hxx>

@@ -44,7 +44,6 @@
 #include <oox/drawingml/shapepropertymap.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <svx/unoapi.hxx>
 #include <svx/svdobj.hxx>
 #include <tools/UnitConversion.hxx>
 
