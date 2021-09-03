@@ -176,6 +176,12 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf115088)
     CPPUNIT_ASSERT_EQUAL(OUString("1\n"), aActual.replaceAll("\r", "\n"));
 }
 
+CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf70423)
+{
+    load(mpTestDocumentPath, "longtext.txt");
+    CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
