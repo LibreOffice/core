@@ -441,7 +441,7 @@ void CGM::ImplDoClass4()
                         }
                         if (!bUseless)
                         {
-                            tools::Rectangle aBoundingBox(fLeft, fTop, fRight, fBottom);
+                            tools::Rectangle aBoundingBox(Point(fLeft, fTop), Size(2 * fRadius, 2 * fRadius));
                             tools::Polygon aPolygon( aBoundingBox, Point( static_cast<tools::Long>(aStartingPoint.X), static_cast<tools::Long>(aStartingPoint.Y) ) ,Point( static_cast<tools::Long>(aEndingPoint.X), static_cast<tools::Long>(aEndingPoint.Y) ), PolyStyle::Arc );
                             if ( nSwitch )
                                 mpOutAct->RegPolyLine( aPolygon, true );
@@ -582,7 +582,7 @@ void CGM::ImplDoClass4()
                         }
                         if (!bUseless)
                         {
-                            tools::Rectangle aBoundingBox(fLeft, fTop, fRight, fBottom);
+                            tools::Rectangle aBoundingBox(Point(fLeft, fTop), Size(2 * aRadius.X, 2 * aRadius.X));
                             tools::Polygon aPolygon( aBoundingBox,
                                 Point( static_cast<tools::Long>(vector[ 0 ]), static_cast<tools::Long>(vector[ 1 ]) ),
                                 Point( static_cast<tools::Long>(vector[ 2 ]), static_cast<tools::Long>(vector[ 3 ]) ), PolyStyle::Arc );
