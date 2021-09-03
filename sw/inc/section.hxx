@@ -77,7 +77,7 @@ private:
     // Edit in readonly sections.
     bool m_bEditInReadonlyFlag  : 1;
 
-    bool m_bHidden              : 1; ///< Section is hidden, unless condition evalutes `false'
+    bool m_bHidden              : 1; ///< Section is hidden, unless condition evaluates `false'
     bool m_bCondHiddenFlag      : 1; ///< Hide condition evaluated `true'
     bool m_bConnectFlag         : 1; // Connected to server?
 

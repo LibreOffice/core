@@ -641,7 +641,7 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat, const ScI
     SvNumFormatType nType = pFormat->GetMaskedType();
     if (nType != SvNumFormatType::DATE && nType != SvNumFormatType::TIME && nType != SvNumFormatType::DATETIME )
     {
-        // MSVC doesn't recognize all paths init nPrecision and wails about
+        // MSVC doesn't recognize all paths init nPrecision and waits about
         // "potentially uninitialized local variable 'nPrecision' used"
         // so init to some random sensible value preserving all decimals.
         short nPrecision = 20;
