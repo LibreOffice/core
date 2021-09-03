@@ -1404,6 +1404,11 @@ void SwView::Execute(SfxRequest &rReq)
                 const sal_uLong newPosY = newPosYTwips->GetValue();
                 const Point mPoint(newPosX, newPosY);
                 const SdrHdl* handle = pSdrView->GetHdlList().GetHdl(handleNum);
+                if (!handle)
+                {
+                    break;
+                }
+
                 if (handle->GetKind() == SdrHdlKind::Anchor || handle->GetKind() == SdrHdlKind::Anchor_TR)
                     m_pWrtShell->FindAnchorPos(mPoint, /*bMoveIt=*/true);
                 else
