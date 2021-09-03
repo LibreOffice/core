@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88e14f32_fb17fb07",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-09-03T10:09:30Z",
+      "side": 1,
+      "message": "Coverity (presumably) only began warning about the unchecked osl::Directory::open() here because some critical % of other checks of osl::Directory::open() want past some tipping point it uses. Here I presumed its ok to continue ignoring the ret value.",
+      "revId": "d260e5ee47d3a689ad72e274874c68e61dfd65e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
