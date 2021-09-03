@@ -22,6 +22,30 @@
       },
       "revId": "872b77f6e8997b663fd01c9df655cd35a31ce39e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75b2b28f_f7955085",
+        "filename": "external/firebird/ExternalProject_firebird.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-03T06:39:58Z",
+      "side": 1,
+      "message": "Obviously no: https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/95987/consoleFull shows that the initial change that only added the DBGUTIL for non-Windows case triggered the change for clang-dbgutil build :)",
+      "parentUuid": "d96117bf_6e6ccccd",
+      "range": {
+        "startLine": 86,
+        "startChar": 8,
+        "endLine": 86,
+        "endChar": 40
+      },
+      "revId": "872b77f6e8997b663fd01c9df655cd35a31ce39e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
