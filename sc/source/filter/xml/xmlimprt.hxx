@@ -144,7 +144,7 @@ class ScXMLImport: public SvXMLImport
     SheetNamedExpMap m_SheetNamedExpressions;
 
     ScMyLabelRanges            maMyLabelRanges;
-    std::unique_ptr<ScMyImportValidations>  pValidations;
+    ScMyImportValidations      maValidations;
     std::unique_ptr<ScMyImpDetectiveOpArray>    pDetectiveOpArray;
     std::unique_ptr<SolarMutexGuard>        pSolarMutexGuard;
 
@@ -235,10 +235,7 @@ public:
         maMyLabelRanges.push_back(std::move(pMyLabelRange));
     }
 
-    void AddValidation(const ScMyImportValidation& rValidation) {
-        if (!pValidations)
-            pValidations.reset(new ScMyImportValidations);
-        pValidations->push_back(rValidation); }
+    void AddValidation(const ScMyImportValidation& rValidation) { maValidations.push_back(rValidation); }
     bool GetValidation(const OUString& sName, ScMyImportValidation& aValidation);
 
     ScMyImpDetectiveOpArray* GetDetectiveOpArray();
