@@ -51,7 +51,9 @@ ErrCode ScQProReader::readSheet( SCTAB nTab, ScDocument& rDoc, ScQProStyle *pSty
             case 0x000f:{ // Label cell
                 mpStream->ReadUChar( nCol ).ReadUChar( nDummy ).ReadUInt16( nRow ).ReadUInt16( nStyle ).ReadUChar( nDummy );
                 sal_uInt16 nLen = getLength();
-                if (nLen >= 7)
+                if (!mpStream->good() || nLen < 7)
+                    eRet = SCERR_IMPORT_FORMAT;
+                else
                 {
                     OUString aLabel(readString(nLen - 7));
                     nStyle = nStyle >> 3;
@@ -59,8 +61,6 @@ ErrCode ScQProReader::readSheet( SCTAB nTab, ScDocument& rDoc, ScQProStyle *pSty
                     rDoc.EnsureTable(nTab);
                     rDoc.SetTextCell(ScAddress(nCol,nRow,nTab), aLabel);
                 }
-                else
-                    eRet = SCERR_IMPORT_FORMAT;
                 }
                 break;
 
