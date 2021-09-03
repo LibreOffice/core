@@ -73,6 +73,23 @@
       "message": "Hey folks, are you OK with this one? Trying to cleanup our vcl namespace. No unit tests for this one, it\u0027s a straight accessor class, almost no logic to it at all. ",
       "revId": "9887277bdd1a1a1c3efc6350b268fe28e651db47",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf891691_01802fd1",
+        "filename": "include/vcl/printer/PrinterOptions.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-03T09:17:54Z",
+      "side": 1,
+      "message": "By the way, this one seems to be wrong here: e.g., in include/vcl/print.hxx:50, it is in plain vcl. Or is it another one?",
+      "revId": "9887277bdd1a1a1c3efc6350b268fe28e651db47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
