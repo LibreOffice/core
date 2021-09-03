@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2ed22dc_3f1ff8a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-03T05:58:27Z",
+      "side": 1,
+      "message": "Note that you are actively beginning to solve bug 62032 with these \"related\" patches.",
+      "revId": "6d9b61c22a5b4372bf5592556d21c8417ed22bfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
