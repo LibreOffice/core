@@ -211,8 +211,8 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
 
         std::string dpbBuffer;
         {
-            char userName[256] = "";
-            char userPassword[256] = "";
+            OUString userName;
+            OUString userPassword;
 
             dpbBuffer.push_back(isc_dpb_version1);
             dpbBuffer.push_back(isc_dpb_sql_dialect);
@@ -233,28 +233,48 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
 
             if (m_bIsEmbedded || m_bIsFile)
             {
-                strcpy(userName,"sysdba");
-                strcpy(userPassword,"masterkey");
+                userName = "sysdba";
+                userPassword = "masterkey";
             }
             else
             {
-                // TODO: parse password from connection string as needed?
+                for (const auto& rIter : info)
+                {
+                    if (rIter.Name == "user")
+                    {
+                        if (OUString value; rIter.Value >>= value)
+                            userName = value;
+                    }
+                    else if (rIter.Name == "password")
+                    {
+                        if (OUString value; rIter.Value >>= value)
+                            userPassword = value;
+                    }
+                }
             }
 
-            if (strlen(userName))
+            if (!userName.isEmpty())
             {
-                int nUsernameLength = strlen(userName);
+                int nUsernameLength
+                    = userName.getLength() > 31 // max 31 bytes. Should be a constant
+                          ? 31
+                          : userName.getLength();
                 dpbBuffer.push_back(isc_dpb_user_name);
                 dpbBuffer.push_back(nUsernameLength);
-                dpbBuffer.append(userName);
+                dpbBuffer.append(OUStringToOString(userName, RTL_TEXTENCODING_UTF8).getStr(),
+                                 nUsernameLength);
             }
 
-            if (strlen(userPassword))
+            if (!userPassword.isEmpty())
             {
-                int nPasswordLength = strlen(userPassword);
+                int nPasswordLength
+                    = userPassword.getLength() > 256 // max 256 bytes allowed. Should be a constant
+                          ? 256
+                          : userPassword.getLength();
                 dpbBuffer.push_back(isc_dpb_password);
                 dpbBuffer.push_back(nPasswordLength);
-                dpbBuffer.append(userPassword);
+                dpbBuffer.append(OUStringToOString(userPassword, RTL_TEXTENCODING_UTF8).getStr(),
+                                 nPasswordLength);
             }
         }
 
