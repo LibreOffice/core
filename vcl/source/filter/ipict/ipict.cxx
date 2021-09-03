@@ -1871,7 +1871,7 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
     default: // 0x00a2 bis 0xffff (most times reserved)
         if      (nOpcode<=0x00af) { pPict->ReadUInt16( nUSHORT ); nDataSize=2+nUSHORT; }
         else if (nOpcode<=0x00cf) { nDataSize=0; }
-        else if (nOpcode<=0x00fe) { sal_uInt32 nTemp; pPict->ReadUInt32( nTemp ) ; nDataSize = nTemp; nDataSize+=4; }
+        else if (nOpcode<=0x00fe) { sal_uInt32 nTemp(0); pPict->ReadUInt32(nTemp) ; nDataSize = nTemp; nDataSize+=4; }
         // Osnola: checkme: in the Quickdraw Ref examples ( for pict v2)
         //         0x00ff(EndOfPict) is also not followed by any data...
         else if (nOpcode==0x00ff) { nDataSize=IsVersion2 ? 2 : 0; } // OpEndPic
@@ -1882,7 +1882,7 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         else if (nOpcode<=0x7eff) { nDataSize=24; }
         else if (nOpcode<=0x7fff) { nDataSize=254; }
         else if (nOpcode<=0x80ff) { nDataSize=0; }
-        else                      { sal_uInt32 nTemp; pPict->ReadUInt32( nTemp ) ; nDataSize = nTemp; nDataSize+=4; }
+        else                      { sal_uInt32 nTemp(0); pPict->ReadUInt32(nTemp) ; nDataSize = nTemp; nDataSize+=4; }
     }
 
     if (nDataSize==0xffffffff) {
