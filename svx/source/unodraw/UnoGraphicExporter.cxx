@@ -285,7 +285,7 @@ private:
 };
 
 ImplExportCheckVisisbilityRedirector::ImplExportCheckVisisbilityRedirector( SdrPage* pCurrentPage )
-:   ViewObjectContactRedirector(), mpCurrentPage( pCurrentPage )
+:   mpCurrentPage( pCurrentPage )
 {
 }
 

@@ -47,10 +47,7 @@ void ObjectContact::calculateGridOffsetForB2DRange(
 }
 
 ObjectContact::ObjectContact()
-:   maViewObjectContactVector(),
-    maPrimitiveAnimator(),
-    mpViewObjectContactRedirector(nullptr),
-    maViewInformation2D(),
+:   mpViewObjectContactRedirector(nullptr),
     mbIsPreviewRenderer(false)
 {
 }

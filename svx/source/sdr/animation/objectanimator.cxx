@@ -23,7 +23,6 @@
 namespace sdr::animation
 {
         primitiveAnimator::primitiveAnimator()
-        :   Scheduler()
         {
         }
 

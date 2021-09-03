@@ -63,12 +63,8 @@ const sal_Int32 InitialObjectContainerCapacity (64);
 //////////////////////////////////////////////////////////////////////////////
 
 SdrObjList::SdrObjList()
-:   maList(),
-    maSdrObjListOutRect(),
-    maSdrObjListSnapRect(),
-    mbObjOrdNumsDirty(false),
+:   mbObjOrdNumsDirty(false),
     mbRectsDirty(false),
-    mxNavigationOrder(),
     mbIsNavigationOrderDirty(false)
 {
     maList.reserve(InitialObjectContainerCapacity);
@@ -1157,8 +1153,7 @@ static void ImpPageChange(SdrPage& rSdrPage)
 }
 
 SdrPageProperties::SdrPageProperties(SdrPage& rSdrPage)
-:   SfxListener(),
-    mpSdrPage(&rSdrPage),
+:   mpSdrPage(&rSdrPage),
     mpStyleSheet(nullptr),
     maProperties(
         mpSdrPage->getSdrModelFromSdrPage().GetItemPool(),
@@ -1238,9 +1233,7 @@ void SdrPageProperties::SetStyleSheet(SfxStyleSheet* pStyleSheet)
 
 
 SdrPage::SdrPage(SdrModel& rModel, bool bMasterPage)
-:   SdrObjList(),
-    maPageUsers(),
-    mrSdrModelFromSdrPage(rModel),
+:   mrSdrModelFromSdrPage(rModel),
     mnWidth(10),
     mnHeight(10),
     mnBorderLeft(0),
@@ -1248,7 +1241,6 @@ SdrPage::SdrPage(SdrModel& rModel, bool bMasterPage)
     mnBorderRight(0),
     mnBorderLower(0),
     mpLayerAdmin(new SdrLayerAdmin(&rModel.GetLayerAdmin())),
-    mxUnoPage(),
     nPageNum(0),
     mbMaster(bMasterPage),
     mbInserted(false),

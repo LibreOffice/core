@@ -133,8 +133,7 @@ namespace drawinglayer::primitive2d
             const basegfx::B2DHomMatrix& rObjectTransform,
             sal_uInt32 nGraphicVersion
         )
-        :   BufferedDecompositionPrimitive2D(),
-            mpSdrOle2Obj(const_cast< SdrOle2Obj* >(&rSdrOle2Obj)),
+        :   mpSdrOle2Obj(const_cast< SdrOle2Obj* >(&rSdrOle2Obj)),
             maObjectTransform(rObjectTransform),
             mnGraphicVersion(nGraphicVersion)
         {

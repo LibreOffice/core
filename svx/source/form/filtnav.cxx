@@ -1050,7 +1050,6 @@ FmFilterNavigator::FmFilterNavigator(vcl::Window* pTopLevel, std::unique_ptr<wel
     : m_xTopLevel(pTopLevel)
     , m_xTreeView(std::move(xTreeView))
     , m_aDropTargetHelper(*this)
-    , m_aControlExchange()
     , m_nAsyncRemoveEvent(nullptr)
 {
     m_xTreeView->set_help_id(HID_FILTER_NAVIGATOR);

@@ -23,10 +23,7 @@
 #include <svx/svdetc.hxx>
 
 SdrOutlinerCache::SdrOutlinerCache( SdrModel* pModel )
-:   mpModel( pModel ),
-    maModeOutline(),
-    maModeText(),
-    maActiveOutliners()
+:   mpModel( pModel )
 {
 }
 

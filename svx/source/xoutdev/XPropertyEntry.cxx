@@ -21,7 +21,6 @@
 
 XPropertyEntry::XPropertyEntry(const OUString& rPropEntryName)
     : maPropEntryName(rPropEntryName)
-    , maUiBitmap()
 {
 }
 

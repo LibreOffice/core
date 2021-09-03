@@ -141,11 +141,7 @@ ViewObjectContact& ViewContactOfE3dScene::CreateObjectSpecificViewObjectContact(
 }
 
 ViewContactOfE3dScene::ViewContactOfE3dScene(E3dScene& rScene)
-:   ViewContactOfSdrObj(rScene),
-    maViewInformation3D(),
-    maObjectTransformation(),
-    maSdrSceneAttribute(),
-    maSdrLightingAttribute()
+:   ViewContactOfSdrObj(rScene)
 {
 }
 

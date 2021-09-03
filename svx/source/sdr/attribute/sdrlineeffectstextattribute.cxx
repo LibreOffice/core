@@ -37,9 +37,6 @@ namespace drawinglayer::attribute
         }
 
         SdrLineEffectsTextAttribute::SdrLineEffectsTextAttribute()
-        :   SdrEffectsTextAttribute(),
-            maLine(),
-            maLineStartEnd()
         {
         }
 

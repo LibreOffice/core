@@ -81,13 +81,11 @@ ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(
     SdrModel& rModel,
     SdrLayerID nLay,
     const tools::Rectangle& rRect)
-:   maTmpList(),
-    mpVD(VclPtr<VirtualDevice>::Create()),
+:   mpVD(VclPtr<VirtualDevice>::Create()),
     maScaleRect(rRect),
     mnMapScalingOfs(0),
     mpModel(&rModel),
     mnLayer(nLay),
-    maOldLineColor(),
     mnLineWidth(0),
     maLineJoin(basegfx::B2DLineJoin::NONE),
     maLineCap(css::drawing::LineCap_BUTT),
@@ -103,8 +101,7 @@ ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(
     mbLastObjWasPolyWithoutLine(false),
     mbNoLine(false),
     mbNoFill(false),
-    mbLastObjWasLine(false),
-    maClip()
+    mbLastObjWasLine(false)
 {
     mpVD->EnableOutput(false);
     mpVD->SetLineColor();

@@ -425,7 +425,6 @@ ParaPropertyPanel::ParaPropertyPanel(weld::Widget* pParent,
       maLRSpaceControl (SID_ATTR_PARA_LRSPACE,*pBindings,*this),
       maULSpaceControl (SID_ATTR_PARA_ULSPACE, *pBindings,*this),
       m_aMetricCtl (SID_ATTR_METRIC, *pBindings,*this),
-      maContext(),
       mpBindings(pBindings),
       mxSidebar(rxSidebar)
 {

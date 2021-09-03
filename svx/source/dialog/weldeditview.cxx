@@ -459,8 +459,7 @@ class WeldEditSource : public SvxEditSource
     WeldEditAccessible& m_rEditAcc;
 
     WeldEditSource(const WeldEditSource& rSrc)
-        : SvxEditSource()
-        , m_aViewFwd(rSrc.m_rEditAcc)
+        : m_aViewFwd(rSrc.m_rEditAcc)
         , m_aTextFwd(rSrc.m_rEditAcc, *this)
         , m_aEditViewFwd(rSrc.m_rEditAcc)
         , m_rEditAcc(rSrc.m_rEditAcc)

@@ -84,8 +84,6 @@ namespace svx
         :m_xContext( _rContext )
         ,m_rLocationInput( _rLocationInput )
         ,m_rDialog( _rDialog )
-        ,m_aFilterExtensions()
-        ,m_sFilterUIName()
         ,m_bNeedExistenceCheck( true )
     {
         impl_initFilterProperties_nothrow();

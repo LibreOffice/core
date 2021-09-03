@@ -37,8 +37,6 @@
 #define CELL_HEIGHT      800L
 
 SvxPageWindow::SvxPageWindow() :
-    aWinSize(),
-    aSize(),
     nTop(0),
     nBottom(0),
     nLeft(0),
@@ -54,9 +52,6 @@ SvxPageWindow::SvxPageWindow() :
     nFtRight(0),
     nFtDist(0),
     nFtHeight(0),
-    maHeaderFillAttributes(),
-    maFooterFillAttributes(),
-    maPageFillAttributes(),
     bFooter(false),
     bHeader(false),
     bTable(false),

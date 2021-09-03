@@ -245,9 +245,7 @@ void Svx3DPreviewControl::Set3DAttributes( const SfxItemSet& rAttr )
 const sal_Int32 g_nInteractionStartDistance = 5 * 5 * 2;
 
 Svx3DLightControl::Svx3DLightControl()
-:   maChangeCallback(),
-    maSelectionChangeCallback(),
-    maSelectedLight(NO_LIGHT_SELECTED),
+:   maSelectedLight(NO_LIGHT_SELECTED),
     mpExpansionObject(nullptr),
     mpLampBottomObject(nullptr),
     mpLampShaftObject(nullptr),
@@ -255,7 +253,6 @@ Svx3DLightControl::Svx3DLightControl()
     mfRotateX(-20.0),
     mfRotateY(45.0),
     mfRotateZ(0.0),
-    maActionStartPoint(),
     mfSaveActionStartHor(0.0),
     mfSaveActionStartVer(0.0),
     mfSaveActionStartRotZ(0.0),

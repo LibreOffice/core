@@ -86,11 +86,9 @@ public:
 };
 
 Impl3DMirrorConstructOverlay::Impl3DMirrorConstructOverlay(const E3dView& rView)
-:   maObjects(),
-    mrView(rView),
+:   mrView(rView),
     mnCount(rView.GetMarkedObjectCount()),
-    mpPolygons(nullptr),
-    maFullOverlay()
+    mpPolygons(nullptr)
 {
     if(!mnCount)
         return;

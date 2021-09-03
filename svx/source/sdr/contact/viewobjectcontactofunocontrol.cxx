@@ -140,16 +140,10 @@ namespace sdr::contact {
 
     public:
         ControlHolder()
-            :m_xControl()
-            ,m_xControlWindow()
-            ,m_xControlView()
         {
         }
 
         explicit ControlHolder( const Reference< XControl >& _rxControl )
-            :m_xControl()
-            ,m_xControlWindow()
-            ,m_xControlView()
         {
             *this = _rxControl;
         }
@@ -844,7 +838,6 @@ namespace sdr::contact {
         ,m_bControlIsVisible( false )
         ,m_bIsDesignModeListening( false )
         ,m_eControlDesignMode( eUnknown )
-        ,m_aZoomLevelNormalization()
     {
         DBG_ASSERT( m_pAntiImpl, "ViewObjectContactOfUnoControl_Impl::ViewObjectContactOfUnoControl_Impl: invalid AntiImpl!" );
 
