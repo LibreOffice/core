@@ -1415,11 +1415,13 @@ protected:
                                     double &fMaximumArea);
 
     /** Retrieve downsampled and cropped bitmap
+     
+        Takes destination size in twips units.
 
         @attention This method ignores negative rDstSz values, thus
         mirroring must happen outside this method (e.g. in DrawBitmap)
      */
-    Bitmap                      GetDownsampledBitmap(
+    static Bitmap               GetDownsampledBitmap(
                                     const Size& rDstSz,
                                     const Point& rSrcPt,
                                     const Size& rSrcSz,
