@@ -141,6 +141,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b34c84c_874e9827",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2064,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-03T08:08:05Z",
+      "side": 1,
+      "message": "Hmm, yes, we might need to use utl::TextSearch here, too, in anticipation of the same reasoning ... 😊",
+      "parentUuid": "3c16994c_5c32ce38",
+      "revId": "38f28f3324d6ea7c475421b68493d1676a38b38c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5118d7aa_361cbb7b",
