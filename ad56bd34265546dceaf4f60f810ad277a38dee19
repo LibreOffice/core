@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e52751e_f16b4e36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-03T14:28:52Z",
+      "side": 1,
+      "message": "I buy the \"at least this is now readable to some\" argument. I trust you on the second hunk. :-)",
+      "revId": "ad56bd34265546dceaf4f60f810ad277a38dee19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
