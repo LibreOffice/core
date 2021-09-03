@@ -500,8 +500,7 @@ public:
 private:
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
-    // sets new border size and adapts scrollbar and child widget position/size as needed
-    void updateBorderWidth(tools::Long nBorderWidth);
+    int CalcBorderWidth() const;
     DECL_LINK(ScrollBarHdl, ScrollBar*, void);
     void InitScrollBars(const Size &rRequest);
     virtual bool EventNotify(NotifyEvent& rNEvt) override;
