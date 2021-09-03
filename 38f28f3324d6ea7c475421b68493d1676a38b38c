@@ -105,6 +105,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f2cbf89_9068d220",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2064,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-03T07:55:05Z",
+      "side": 1,
+      "message": "We replaced it with https://gerrit.libreoffice.org/c/core/+/118760, because of https://bugs.documentfoundation.org/show_bug.cgi?id\u003d142487",
+      "parentUuid": "e76f4683_a00a991c",
+      "revId": "38f28f3324d6ea7c475421b68493d1676a38b38c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5118d7aa_361cbb7b",
@@ -118,6 +136,30 @@
       "writtenOn": "2021-09-02T19:41:58Z",
       "side": 1,
       "message": "OUString aName \u003d aSysLocale.GetCharClass().uppercase(rName);",
+      "range": {
+        "startLine": 2071,
+        "startChar": 12,
+        "endLine": 2072,
+        "endChar": 63
+      },
+      "revId": "38f28f3324d6ea7c475421b68493d1676a38b38c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93b44d6d_ac807522",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2072,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-03T07:55:05Z",
+      "side": 1,
+      "message": "Here I get the \"no instance of overload function\" error and I don\u0027t know another way to overcome this error.",
+      "parentUuid": "5118d7aa_361cbb7b",
       "range": {
         "startLine": 2071,
         "startChar": 12,
@@ -151,6 +193,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "12e41564_41a7041a",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2073,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-03T07:55:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54c7b8c1_018c57b0",
+      "range": {
+        "startLine": 2073,
+        "startChar": 36,
+        "endLine": 2073,
+        "endChar": 59
+      },
+      "revId": "38f28f3324d6ea7c475421b68493d1676a38b38c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "39ddb1fe_868b90ea",
@@ -164,6 +230,24 @@
       "writtenOn": "2021-09-02T19:41:58Z",
       "side": 1,
       "message": "if (aName \u003d\u003d aVarName)",
+      "revId": "38f28f3324d6ea7c475421b68493d1676a38b38c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5ca4086_fb64548f",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2074,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-03T07:55:05Z",
+      "side": 1,
+      "message": "Nice, thank you!",
+      "parentUuid": "39ddb1fe_868b90ea",
       "revId": "38f28f3324d6ea7c475421b68493d1676a38b38c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
