@@ -46,6 +46,30 @@
       },
       "revId": "872b77f6e8997b663fd01c9df655cd35a31ce39e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35654f67_38bfa4e6",
+        "filename": "external/firebird/ExternalProject_firebird.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-03T06:53:01Z",
+      "side": 1,
+      "message": "Care to elaborate?  \u003chttps://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/95987/consoleFull\u003e is apparently the gerrit_linux_clang_dbgutil build of \u003chttps://ci.libreoffice.org/job/gerrit_master/95205/\u003e for patchset 2.  It failed due to\n  error: unable to open output file \u0027/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/workdir/UnpackedTarball/firebird/temp/Debug/cloop/release/tests/test1/CTest.o\u0027: \u0027No such file or directory\u0027\n  1 error generated.\n  Makefile:72: recipe for target \u0027/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/workdir/UnpackedTarball/firebird/temp/Debug/cloop/release/tests/test1/CTest.o\u0027 failed\n  make[6]: *** [/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/workdir/UnpackedTarball/firebird/temp/Debug/cloop/release/tests/test1/CTest.o] Error 1\n  make[6]: Target \u0027all\u0027 not remade because of errors.\n  Makefile:130: recipe for target \u0027extern\u0027 failed\n  make[5]: *** [extern] Error 2\n  Makefile:181: recipe for target \u0027master_process\u0027 failed\n  make[4]: *** [master_process] Error 2\n  Makefile:72: recipe for target \u0027Debug\u0027 failed\n  make[3]: *** [Debug] Error 2\n  Makefile:6: recipe for target \u0027Debug\u0027 failed\n  make[2]: *** [Debug] Error 2\n  /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/external/firebird/ExternalProject_firebird.mk:29: recipe for target \u0027/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/workdir/ExternalProject/firebird/build\u0027 failed\n  make[1]: *** [/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/workdir/ExternalProject/firebird/build] Error 1\n\nWhat exactly do you claim does that show?  I\u0027m puzzled.",
+      "parentUuid": "75b2b28f_f7955085",
+      "range": {
+        "startLine": 86,
+        "startChar": 8,
+        "endLine": 86,
+        "endChar": 40
+      },
+      "revId": "872b77f6e8997b663fd01c9df655cd35a31ce39e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
