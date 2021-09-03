@@ -170,7 +170,7 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
     }
 }
 
-Bitmap OutputDevice::GetDownsampledBitmap( const Size& rDstSz,
+Bitmap OutputDevice::GetDownsampledBitmap( const Size& rDstSizeTwip,
                                            const Point& rSrcPt, const Size& rSrcSz,
                                            const Bitmap& rBmp, tools::Long nMaxBmpDPIX, tools::Long nMaxBmpDPIY )
 {
@@ -193,10 +193,8 @@ Bitmap OutputDevice::GetDownsampledBitmap( const Size& rDstSz,
         if( !aBmp.IsEmpty() )
         {
             // do downsampling if necessary
-            Size aDstSizeTwip( PixelToLogic(LogicToPixel(rDstSz), MapMode(MapUnit::MapTwip)) );
-
             // #103209# Normalize size (mirroring has to happen outside of this method)
-            aDstSizeTwip = Size( std::abs(aDstSizeTwip.Width()), std::abs(aDstSizeTwip.Height()) );
+            Size aDstSizeTwip(std::abs(rDstSizeTwip.Width()), std::abs(rDstSizeTwip.Height()));
 
             const Size      aBmpSize( aBmp.GetSizePixel() );
             const double    fBmpPixelX = aBmpSize.Width();
