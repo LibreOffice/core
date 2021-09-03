@@ -1233,17 +1233,17 @@ void ScXMLImport::SetLabelRanges()
     table::CellRangeAddress aLabelRange;
     table::CellRangeAddress aDataRange;
 
-    for (const auto& rxLabelRange : maMyLabelRanges)
+    for (const auto& rLabelRange : maMyLabelRanges)
     {
         sal_Int32 nOffset1(0);
         sal_Int32 nOffset2(0);
         FormulaGrammar::AddressConvention eConv = FormulaGrammar::CONV_OOO;
 
         assert(pDoc);
-        if (ScRangeStringConverter::GetRangeFromString( aLabelRange, rxLabelRange->sLabelRangeStr, *pDoc, eConv, nOffset1 ) &&
-            ScRangeStringConverter::GetRangeFromString( aDataRange, rxLabelRange->sDataRangeStr, *pDoc, eConv, nOffset2 ))
+        if (ScRangeStringConverter::GetRangeFromString( aLabelRange, rLabelRange.sLabelRangeStr, *pDoc, eConv, nOffset1 ) &&
+            ScRangeStringConverter::GetRangeFromString( aDataRange, rLabelRange.sDataRangeStr, *pDoc, eConv, nOffset2 ))
         {
-            if ( rxLabelRange->bColumnOrientation )
+            if ( rLabelRange.bColumnOrientation )
                 xColRanges->addNew( aLabelRange, aDataRange );
             else
                 xRowRanges->addNew( aLabelRange, aDataRange );
