@@ -9,6 +9,7 @@
 
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
+#include <test/xmltesttools.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -16,18 +17,22 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/BibliographyDataType.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/tempfile.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 
 using namespace ::com::sun::star;
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/xmloff/qa/unit/data/";
 
 /// Covers xmloff/source/text/ fixes.
-class XmloffStyleTest : public test::BootstrapFixture, public unotest::MacrosTest
+class XmloffStyleTest : public test::BootstrapFixture,
+                        public unotest::MacrosTest,
+                        public XmlTestTools
 {
 private:
     uno::Reference<lang::XComponent> mxComponent;
@@ -35,8 +40,14 @@ private:
 public:
     void setUp() override;
     void tearDown() override;
+    void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
     uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
 };
+
+void XmloffStyleTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
+{
+    XmlTestTools::registerODFNamespaces(pXmlXpathCtx);
+}
 
 void XmloffStyleTest::setUp()
 {
@@ -181,6 +192,32 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testParaStyleListLevel)
     sal_Int16 nNumberingLevel{};
     CPPUNIT_ASSERT(xStyle->getPropertyValue("NumberingLevel") >>= nNumberingLevel);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2), nNumberingLevel);
+
+    // Test the export as well:
+
+    // Given a doc model that has a para style with NumberingLevel=2:
+    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
+
+    // When exporting that to ODT:
+    uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
+        { "FilterName", uno::makeAny(OUString("writer8")) },
+    });
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
+
+    // Then make sure we save the style's numbering level:
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, aTempFile.GetURL());
+    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("styles.xml"),
+                                                  uno::UNO_QUERY);
+    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // Without the accompanying fix in place, this failed with:
+    // - XPath '/office:document-styles/office:styles/style:style[@style:name='mystyle']' no attribute 'list-level' exist
+    // i.e. a custom NumberingLevel was lost on save.
+    assertXPath(pXmlDoc, "/office:document-styles/office:styles/style:style[@style:name='mystyle']",
+                "list-level", "2");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
