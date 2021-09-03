@@ -462,7 +462,7 @@ namespace emfio
     {
         tools::Rectangle aOutputRect = EmfReader::ReadRectangle();
 
-        sal_uInt32 nCountFormats;
+        sal_uInt32 nCountFormats(0);
         mpInputStream->ReadUInt32(nCountFormats);
         if (nCountFormats < 1)
         {
@@ -2325,7 +2325,7 @@ namespace emfio
 
     tools::Rectangle EmfReader::ReadRectangle()
     {
-        sal_Int32 nLeft, nTop, nRight, nBottom;
+        sal_Int32 nLeft(0), nTop(0), nRight(0), nBottom(0);
         mpInputStream->ReadInt32(nLeft);
         mpInputStream->ReadInt32(nTop);
         mpInputStream->ReadInt32(nRight);
