@@ -35,7 +35,7 @@ public:
     {
     public:
         virtual ~Inserter() {}
-        virtual void insert(ScMyNamedExpression* pExp) = 0;
+        virtual void insert(ScMyNamedExpression aExp) = 0;
     };
 
     /**
@@ -46,7 +46,7 @@ public:
     {
     public:
         explicit GlobalInserter(ScXMLImport& rImport);
-        virtual void insert(ScMyNamedExpression* pExp) override;
+        virtual void insert(ScMyNamedExpression aExp) override;
     private:
         ScXMLImport& mrImport;
     };
@@ -60,7 +60,7 @@ public:
     {
     public:
         SheetLocalInserter(ScXMLImport& rImport, SCTAB nTab);
-        virtual void insert(ScMyNamedExpression* pExp) override;
+        virtual void insert(ScMyNamedExpression aExp) override;
     private:
         ScXMLImport& mrImport;
         SCTAB mnTab;
