@@ -700,7 +700,9 @@ bool GraphicFormatDetector::checkSVG()
         ZCodec aCodec;
         mrStream.Seek(mnStreamPosition);
         aCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, /*gzLib*/ true);
-        nDecompressedSize = aCodec.Read(mrStream, sExtendedOrDecompressedFirstBytes, 2048);
+        auto nDecompressedOut = aCodec.Read(mrStream, sExtendedOrDecompressedFirstBytes, 2048);
+        // ZCodec::Decompress returns -1 on failure
+        nDecompressedSize = nDecompressedOut < 0 ? 0 : nDecompressedOut;
         nCheckSize = std::min<sal_uInt64>(nDecompressedSize, 256);
         aCodec.EndCompression();
         pCheckArray = sExtendedOrDecompressedFirstBytes;
