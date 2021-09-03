@@ -16,6 +16,24 @@
       "message": "Coverity (presumably) only began warning about the unchecked osl::Directory::open() here because some critical % of other checks of osl::Directory::open() want past some tipping point it uses. Here I presumed its ok to continue ignoring the ret value.",
       "revId": "d260e5ee47d3a689ad72e274874c68e61dfd65e7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c9b7c8f_df056c57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-03T11:01:39Z",
+      "side": 1,
+      "message": "My assumption would be that ignoring the return value wasn\u0027t deliberate, and that the code should look something like\n\n  err \u003d aDir.open();\n  if (err \u003d\u003d osl::FileBase::E_None) {\n      err \u003d osl::Directory::create( dstUnqPath );\n\nso that failure from `open` is faithfully returned from `TaskManager::copy_recursive`, rather than relying on a follow-up failure of `create` and reporting that.  (Whether or not that would make much of a difference in practice...)",
+      "parentUuid": "88e14f32_fb17fb07",
+      "revId": "d260e5ee47d3a689ad72e274874c68e61dfd65e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
