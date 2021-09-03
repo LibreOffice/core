@@ -826,7 +826,7 @@ namespace emfio
                 mpInputStream->ReadInt16( nBitmapType ).ReadInt16( nWidth ).ReadInt16( nHeight ).ReadInt16( nBytesPerScan ).ReadUChar( nPlanes ).ReadUChar( nBitCount );
 
                 SAL_INFO("emfio", "\t\t Bitmap type:" << nBitmapType << " Width:" << nWidth << " Height:" << nHeight << " WidthBytes:" << nBytesPerScan << " Planes: " << static_cast< sal_uInt16 >( nPlanes ) << " BitCount: " << static_cast< sal_uInt16 >( nBitCount ) );
-                if ( bNoSourceBitmap || ( nBitCount == 4 ) || ( nBitCount == 8 ) || nPlanes != 1 )
+                if (!mpInputStream->good() || bNoSourceBitmap || nBitCount == 4 || nBitCount == 8 || nPlanes != 1)
                 {
                     SAL_WARN("emfio", "\t\t TODO The unsupported Bitmap record. Please fill a bug.");
                     break;
