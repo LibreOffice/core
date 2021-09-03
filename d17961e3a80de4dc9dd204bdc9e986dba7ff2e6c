@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73153080_5c6fff54",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-03T21:13:08Z",
+      "side": 1,
+      "message": "Hi Noel, I noticed you made a few changes around this area (made things easier to read, thanks!). \n\nCan you have a look at this one?",
+      "revId": "d17961e3a80de4dc9dd204bdc9e986dba7ff2e6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
