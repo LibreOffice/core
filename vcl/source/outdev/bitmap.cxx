@@ -23,7 +23,6 @@
 #include <tools/debug.hxx>
 #include <tools/helpers.hxx>
 
-#include <vcl/image.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 #include <vcl/virdev.hxx>
@@ -693,30 +692,6 @@ bool OutputDevice::HasFastDrawTransformedBitmap() const
     assert(mpGraphics);
 
     return mpGraphics->HasFastDrawTransformedBitmap();
-}
-
-void OutputDevice::DrawImage( const Point& rPos, const Image& rImage, DrawImageFlags nStyle )
-{
-    assert(!is_double_buffered_window());
-
-    DrawImage( rPos, Size(), rImage, nStyle );
-}
-
-void OutputDevice::DrawImage( const Point& rPos, const Size& rSize,
-                              const Image& rImage, DrawImageFlags nStyle )
-{
-    assert(!is_double_buffered_window());
-
-    bool bIsSizeValid = !rSize.IsEmpty();
-
-    if (!ImplIsRecordLayout())
-    {
-        Image& rNonConstImage = const_cast<Image&>(rImage);
-        if (bIsSizeValid)
-            rNonConstImage.Draw(this, rPos, nStyle, &rSize);
-        else
-            rNonConstImage.Draw(this, rPos, nStyle);
-    }
 }
 
 namespace
