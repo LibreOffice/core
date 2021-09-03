@@ -11,7 +11,6 @@
 
 #include "plugin.hxx"
 
-#include <iostream>
 #include <cassert>
 #include <cstddef>
 #include <string>
