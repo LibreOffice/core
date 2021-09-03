@@ -17,7 +17,7 @@
     </style:default-style>
     <style:default-style style:family="paragraph">
       <style:paragraph-properties fo:hyphenation-ladder-count="no-limit" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging" style:line-break="strict" style:tab-stop-distance="1.251cm" style:writing-mode="page"/>
-      <style:text-properties style:use-window-font-color="true" style:font-name="Liberation Serif" fo:font-size="12pt" style:letter-kerning="true" style:font-name-asian="Source Han Sans CN Regular" style:font-size-asian="10.5pt" style:font-name-complex="Lohit Devanagari" style:font-size-complex="12pt" fo:hyphenate="false" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2"/>
+      <style:text-properties style:use-window-font-color="true" style:font-name="Liberation Serif" fo:font-size="12pt" style:letter-kerning="true" style:font-name-asian="Source Han Sans CN Regular" style:font-size-asian="12pt" style:font-name-complex="Lohit Devanagari" style:font-size-complex="12pt" fo:hyphenate="false" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2"/>
     </style:default-style>
     <style:default-style style:family="table">
       <style:table-properties table:border-model="collapsing"/>
@@ -33,21 +33,7 @@
     <style:style style:name="Text_20_body" style:display-name="Text body" style:family="paragraph" style:parent-style-name="Standard" style:class="text">
       <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.247cm" loext:contextual-spacing="false" fo:line-height="120%"/>
     </style:style>
-    <style:style style:name="List" style:family="paragraph" style:parent-style-name="Text_20_body" style:class="list">
-      <style:text-properties style:font-size-asian="12pt" style:font-name-complex="Lohit Devanagari1" style:font-family-complex="'Lohit Devanagari'"/>
-    </style:style>
-    <style:style style:name="Caption" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
-      <style:paragraph-properties fo:margin-top="0.212cm" fo:margin-bottom="0.212cm" loext:contextual-spacing="false" text:number-lines="false" text:line-number="0"/>
-      <style:text-properties fo:font-size="12pt" fo:font-style="italic" style:font-size-asian="12pt" style:font-style-asian="italic" style:font-name-complex="Lohit Devanagari1" style:font-family-complex="'Lohit Devanagari'" style:font-size-complex="12pt" style:font-style-complex="italic"/>
-    </style:style>
-    <style:style style:name="Index" style:family="paragraph" style:parent-style-name="Standard" style:class="index">
-      <style:paragraph-properties text:number-lines="false" text:line-number="0"/>
-      <style:text-properties style:font-size-asian="12pt" style:font-name-complex="Lohit Devanagari1" style:font-family-complex="'Lohit Devanagari'"/>
-    </style:style>
-    <style:style style:name="Quotations" style:family="paragraph" style:parent-style-name="Standard" style:class="html">
-      <style:paragraph-properties fo:margin-left="1cm" fo:margin-right="1cm" fo:margin-top="0cm" fo:margin-bottom="0.499cm" loext:contextual-spacing="false" fo:text-indent="0cm" style:auto-text-indent="false"/>
-    </style:style>
-    <style:style style:name="Title" style:family="paragraph" style:parent-style-name="Heading" style:next-style-name="Text_20_body" style:class="chapter">
+    <style:style style:name="Title" style:family="paragraph" style:parent-style-name="Heading" style:next-style-name="Subtitle" style:class="chapter">
       <style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/>
       <style:text-properties fo:font-size="28pt" fo:font-weight="bold" style:font-size-asian="28pt" style:font-weight-asian="bold" style:font-size-complex="28pt" style:font-weight-complex="bold"/>
     </style:style>
@@ -65,7 +51,7 @@
     </style:style>
     <style:style style:name="Heading_20_3" style:display-name="Heading 3" style:family="paragraph" style:parent-style-name="Heading" style:next-style-name="Text_20_body" style:default-outline-level="3" style:class="text">
       <style:paragraph-properties fo:margin-top="0.247cm" fo:margin-bottom="0.212cm" loext:contextual-spacing="false"/>
-      <style:text-properties fo:font-size="101%" fo:font-weight="bold" style:font-size-asian="101%" style:font-weight-asian="bold" style:font-size-complex="101%" style:font-weight-complex="bold"/>
+      <style:text-properties fo:font-size="100%" fo:font-weight="bold" style:font-size-asian="100%" style:font-weight-asian="bold" style:font-size-complex="100%" style:font-weight-complex="bold"/>
     </style:style>
     <style:style style:name="Heading_20_4" style:display-name="Heading 4" style:family="paragraph" style:parent-style-name="Heading" style:next-style-name="Text_20_body" style:default-outline-level="4" style:class="text">
       <style:paragraph-properties fo:margin-top="0.212cm" fo:margin-bottom="0.212cm" loext:contextual-spacing="false"/>
@@ -83,75 +69,13 @@
       <style:paragraph-properties fo:margin-top="0.106cm" fo:margin-bottom="0.106cm" loext:contextual-spacing="false"/>
       <style:text-properties fo:font-size="80%" fo:font-weight="bold" style:font-size-asian="80%" style:font-weight-asian="bold" style:font-size-complex="80%" style:font-weight-complex="bold"/>
     </style:style>
-    <style:style style:name="Sender" style:family="paragraph" style:hidden="true" style:parent-style-name="Standard" style:class="extra">
-    </style:style>
-    <style:style style:name="Addressee" style:family="paragraph" style:hidden="true" style:parent-style-name="Standard" style:class="extra">
-    </style:style>
-    <style:style style:name="Salutation" style:family="paragraph" style:hidden="true" style:parent-style-name="Standard" style:class="text">
-    </style:style>
-    <style:style style:name="Horizontal_20_Line" style:display-name="Horizontal Line" style:family="paragraph" style:hidden="true" style:parent-style-name="Standard" style:next-style-name="Text_20_body" style:class="html">
-    </style:style>
-    <style:style style:name="Signature" style:family="paragraph" style:hidden="true" style:parent-style-name="Standard" style:class="text">
-    </style:style>
-    <text:outline-style style:name="Outline">
-      <text:outline-level-style text:level="1" style:num-format="">
-        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
-          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="0.762cm" fo:text-indent="-0.762cm" fo:margin-left="0.762cm"/>
-        </style:list-level-properties>
-      </text:outline-level-style>
-      <text:outline-level-style text:level="2" style:num-format="">
-        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
-          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="1.016cm" fo:text-indent="-1.016cm" fo:margin-left="1.016cm"/>
-        </style:list-level-properties>
-      </text:outline-level-style>
-      <text:outline-level-style text:level="3" style:num-format="">
-        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
-          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="1.27cm" fo:text-indent="-1.27cm" fo:margin-left="1.27cm"/>
-        </style:list-level-properties>
-      </text:outline-level-style>
-      <text:outline-level-style text:level="4" style:num-format="">
-        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
-          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="1.524cm" fo:text-indent="-1.524cm" fo:margin-left="1.524cm"/>
-        </style:list-level-properties>
-      </text:outline-level-style>
-      <text:outline-level-style text:level="5" style:num-format="">
-        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
-          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="1.778cm" fo:text-indent="-1.778cm" fo:margin-left="1.778cm"/>
-        </style:list-level-properties>
-      </text:outline-level-style>
-      <text:outline-level-style text:level="6" style:num-format="">
-        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
-          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="2.032cm" fo:text-indent="-2.032cm" fo:margin-left="2.032cm"/>
-        </style:list-level-properties>
-      </text:outline-level-style>
-      <text:outline-level-style text:level="7" style:num-format="">
-        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
-          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="2.286cm" fo:text-indent="-2.286cm" fo:margin-left="2.286cm"/>
-        </style:list-level-properties>
-      </text:outline-level-style>
-      <text:outline-level-style text:level="8" style:num-format="">
-        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
-          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="2.54cm" fo:text-indent="-2.54cm" fo:margin-left="2.54cm"/>
-        </style:list-level-properties>
-      </text:outline-level-style>
-      <text:outline-level-style text:level="9" style:num-format="">
-        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
-          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="2.794cm" fo:text-indent="-2.794cm" fo:margin-left="2.794cm"/>
-        </style:list-level-properties>
-      </text:outline-level-style>
-      <text:outline-level-style text:level="10" style:num-format="">
-        <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
-          <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="3.048cm" fo:text-indent="-3.048cm" fo:margin-left="3.048cm"/>
-        </style:list-level-properties>
-      </text:outline-level-style>
-    </text:outline-style>
     <text:notes-configuration text:note-class="footnote" style:num-format="1" text:start-value="0" text:footnotes-position="page" text:start-numbering-at="document"/>
     <text:notes-configuration text:note-class="endnote" style:num-format="i" text:start-value="0"/>
-    <text:linenumbering-configuration text:number-lines="false" text:offset="0.499cm" style:num-format="1" text:number-position="left" text:increment="5"/>
+    <text:linenumbering-configuration text:number-lines="false" text:offset="0.5cm" style:num-format="1" text:number-position="left" text:increment="5"/>
   </office:styles>
   <office:automatic-styles>
     <style:page-layout style:name="Mpm1">
-      <style:page-layout-properties fo:page-width="21.001cm" fo:page-height="29.7cm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm" style:writing-mode="lr-tb" style:footnote-max-height="0cm">
+      <style:page-layout-properties style:num-format="1" style:print-orientation="portrait" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm" style:footnote-max-height="0cm">
         <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:line-style="none" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
       </style:page-layout-properties>
       <style:header-style/>
