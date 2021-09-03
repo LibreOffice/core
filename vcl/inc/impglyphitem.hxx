@@ -29,17 +29,17 @@
 
 #include "fontinstance.hxx"
 
-enum class GlyphItemFlags
+enum class GlyphItemFlags : sal_uInt8
 {
     NONE = 0,
-    IS_IN_CLUSTER = 0x001,
-    IS_RTL_GLYPH = 0x002,
-    IS_DIACRITIC = 0x004,
-    IS_VERTICAL = 0x008,
-    IS_SPACING = 0x010,
-    ALLOW_KASHIDA = 0x020,
-    IS_DROPPED = 0x040,
-    IS_CLUSTER_START = 0x080
+    IS_IN_CLUSTER = 0x01,
+    IS_RTL_GLYPH = 0x02,
+    IS_DIACRITIC = 0x04,
+    IS_VERTICAL = 0x08,
+    IS_SPACING = 0x10,
+    ALLOW_KASHIDA = 0x20,
+    IS_DROPPED = 0x40,
+    IS_CLUSTER_START = 0x80
 };
 namespace o3tl
 {
@@ -50,30 +50,30 @@ template <> struct typed_flags<GlyphItemFlags> : is_typed_flags<GlyphItemFlags, 
 
 class VCL_DLLPUBLIC GlyphItem
 {
-    sal_GlyphId m_aGlyphId;
-    int m_nCharCount; // number of characters making up this glyph
-    int m_nOrigWidth; // original glyph width
     LogicalFontInstance* m_pFontInstance;
-    int m_nCharPos; // index in string
+    sal_Int32 m_nOrigWidth; // original glyph width
+    sal_Int32 m_nCharPos; // index in string
+    sal_Int32 m_nXOffset;
+    sal_GlyphId m_aGlyphId;
+    sal_Int8 m_nCharCount; // number of characters making up this glyph
     GlyphItemFlags m_nFlags;
-    int m_nXOffset;
 
 public:
-    int m_nNewWidth; // width after adjustments
     Point m_aLinearPos; // absolute position of non rotated string
+    sal_Int32 m_nNewWidth; // width after adjustments
 
     GlyphItem(int nCharPos, int nCharCount, sal_GlyphId aGlyphId, const Point& rLinearPos,
               GlyphItemFlags nFlags, int nOrigWidth, int nXOffset,
               LogicalFontInstance* pFontInstance)
-        : m_aGlyphId(aGlyphId)
-        , m_nCharCount(nCharCount)
+        : m_pFontInstance(pFontInstance)
         , m_nOrigWidth(nOrigWidth)
-        , m_pFontInstance(pFontInstance)
         , m_nCharPos(nCharPos)
-        , m_nFlags(nFlags)
         , m_nXOffset(nXOffset)
-        , m_nNewWidth(nOrigWidth)
+        , m_aGlyphId(aGlyphId)
+        , m_nCharCount(nCharCount)
+        , m_nFlags(nFlags)
         , m_aLinearPos(rLinearPos)
+        , m_nNewWidth(nOrigWidth)
     {
         assert(m_pFontInstance);
     }
