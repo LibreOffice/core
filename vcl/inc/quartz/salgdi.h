@@ -69,7 +69,7 @@ public:
     int                             GetFontTable( const char pTagName[5], unsigned char* ) const;
 
     FontCharMapRef GetFontCharMap() const override;
-    bool GetFontCapabilities(vcl::FontCapabilities&) const override;
+    bool GetFontCapabilities(vcl::font::FontCapabilities&) const override;
     bool                            HasChar( sal_uInt32 cChar ) const;
 
     rtl::Reference<LogicalFontInstance> CreateFontInstance(const FontSelectPattern&) const override;
@@ -77,7 +77,7 @@ public:
 private:
     const sal_IntPtr                mnFontId;
     mutable FontCharMapRef          mxCharMap;
-    mutable vcl::FontCapabilities   maFontCapabilities;
+    mutable vcl::font::FontCapabilities   maFontCapabilities;
     mutable bool                    mbFontCapabilitiesRead;
 };
 
@@ -532,7 +532,7 @@ public:
     virtual void            GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel ) override;
     // get the repertoire of the current font
     virtual FontCharMapRef  GetFontCharMap() const override;
-    virtual bool            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const override;
+    virtual bool            GetFontCapabilities(vcl::font::FontCapabilities &rFontCapabilities) const override;
     // graphics must fill supplied font list
     virtual void            GetDevFontList( PhysicalFontCollection* ) override;
     // graphics must drop any cached font info

@@ -162,7 +162,7 @@ FontCharMapRef GenPspGraphics::GetFontCharMap() const
     return m_pFreetypeFont[0]->GetFreetypeFont().GetFontCharMap();
 }
 
-bool GenPspGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+bool GenPspGraphics::GetFontCapabilities(vcl::font::FontCapabilities &rFontCapabilities) const
 {
     if (!m_pFreetypeFont[0])
         return false;

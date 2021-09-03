@@ -19,7 +19,7 @@ namespace vcl
 class Font;
 }
 
-UScriptCode otCoverageToScript(vcl::UnicodeCoverage::UnicodeCoverageEnum eOTCoverage);
+UScriptCode otCoverageToScript(vcl::text::UnicodeCoverage::UnicodeCoverageEnum eOTCoverage);
 
 bool isSymbolFont(const vcl::Font& rFont);
 

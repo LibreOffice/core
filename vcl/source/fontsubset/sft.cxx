@@ -2254,15 +2254,15 @@ append(std::bitset<N> & rSet, size_t const nOffset, sal_uInt32 const nValue)
 }
 
 bool getTTCoverage(
-    std::optional<std::bitset<UnicodeCoverage::MAX_UC_ENUM>> &rUnicodeRange,
-    std::optional<std::bitset<CodePageCoverage::MAX_CP_ENUM>> &rCodePageRange,
+    std::optional<std::bitset<text::UnicodeCoverage::MAX_UC_ENUM>> &rUnicodeRange,
+    std::optional<std::bitset<text::CodePageCoverage::MAX_CP_ENUM>> &rCodePageRange,
     const unsigned char* pTable, size_t nLength)
 {
     bool bRet = false;
     // parse OS/2 header
     if (nLength >= OS2_Legacy_length)
     {
-        rUnicodeRange = std::bitset<UnicodeCoverage::MAX_UC_ENUM>();
+        rUnicodeRange = std::bitset<text::UnicodeCoverage::MAX_UC_ENUM>();
         append(*rUnicodeRange,  0, GetUInt32(pTable, OS2_ulUnicodeRange1_offset));
         append(*rUnicodeRange, 32, GetUInt32(pTable, OS2_ulUnicodeRange2_offset));
         append(*rUnicodeRange, 64, GetUInt32(pTable, OS2_ulUnicodeRange3_offset));
@@ -2270,7 +2270,7 @@ bool getTTCoverage(
         bRet = true;
         if (nLength >= OS2_V1_length)
         {
-            rCodePageRange = std::bitset<CodePageCoverage::MAX_CP_ENUM>();
+            rCodePageRange = std::bitset<text::CodePageCoverage::MAX_CP_ENUM>();
             append(*rCodePageRange,  0, GetUInt32(pTable, OS2_ulCodePageRange1_offset));
             append(*rCodePageRange, 32, GetUInt32(pTable, OS2_ulCodePageRange2_offset));
         }

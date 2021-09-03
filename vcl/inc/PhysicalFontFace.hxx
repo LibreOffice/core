@@ -33,7 +33,7 @@ struct FontMatchStatus;
 class FontSelectPattern;
 class PhysicalFontFamily;
 
-namespace vcl
+namespace vcl::font
 {
 struct FontCapabilities;
 }
@@ -67,7 +67,7 @@ public:
     int                     GetWidth() const            { return mnWidth; }
     virtual sal_IntPtr      GetFontId() const = 0;
     virtual FontCharMapRef GetFontCharMap() const = 0;
-    virtual bool GetFontCapabilities(vcl::FontCapabilities&) const = 0;
+    virtual bool GetFontCapabilities(vcl::font::FontCapabilities&) const = 0;
 
     bool                    IsBetterMatch( const FontSelectPattern&, FontMatchStatus& ) const;
     sal_Int32               CompareWithSize( const PhysicalFontFace& ) const;

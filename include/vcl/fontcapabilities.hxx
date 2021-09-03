@@ -16,7 +16,7 @@
 //See OS/2 table, i.e. http://www.microsoft.com/typography/otspec/os2.htm#ur
 namespace vcl
 {
-    namespace UnicodeCoverage
+    namespace text::UnicodeCoverage
     {
         enum UnicodeCoverageEnum
         {
@@ -152,7 +152,7 @@ namespace vcl
         };
     };
 
-    namespace CodePageCoverage
+    namespace text::CodePageCoverage
     {
         enum CodePageCoverageEnum
         {
@@ -191,11 +191,14 @@ namespace vcl
         };
     };
 
-    struct FontCapabilities
+    namespace font
     {
-        std::optional<std::bitset<UnicodeCoverage::MAX_UC_ENUM>> oUnicodeRange;
-        std::optional<std::bitset<CodePageCoverage::MAX_CP_ENUM>> oCodePageRange;
-    };
+        struct FontCapabilities
+        {
+            std::optional<std::bitset<text::UnicodeCoverage::MAX_UC_ENUM>> oUnicodeRange;
+            std::optional<std::bitset<text::CodePageCoverage::MAX_CP_ENUM>> oCodePageRange;
+        };
+    }
 }
 
 #endif

@@ -73,7 +73,7 @@ public:
     BYTE                    GetPitchAndFamily() const   { return mnPitchAndFamily; }
 
     FontCharMapRef GetFontCharMap() const override;
-    bool GetFontCapabilities(vcl::FontCapabilities&) const override;
+    bool GetFontCapabilities(vcl::font::FontCapabilities&) const override;
 
 private:
     sal_IntPtr              mnId;
@@ -81,7 +81,7 @@ private:
     // some members that are initialized lazily when the font gets selected into a HDC
     mutable bool                    mbFontCapabilitiesRead;
     mutable FontCharMapRef          mxUnicodeMap;
-    mutable vcl::FontCapabilities   maFontCapabilities;
+    mutable vcl::font::FontCapabilities   maFontCapabilities;
 
     BYTE                    meWinCharSet;
     BYTE                    mnPitchAndFamily;
@@ -338,7 +338,7 @@ public:
     // get the repertoire of the current font
     virtual FontCharMapRef  GetFontCharMap() const override;
     // get the layout capabilities of the current font
-    virtual bool GetFontCapabilities(vcl::FontCapabilities &rGetFontCapabilities) const override;
+    virtual bool GetFontCapabilities(vcl::font::FontCapabilities &rGetFontCapabilities) const override;
     // graphics must fill supplied font list
     virtual void            GetDevFontList( PhysicalFontCollection* ) override;
     // graphics must drop any cached font info

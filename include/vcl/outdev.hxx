@@ -101,11 +101,11 @@ namespace vcl
 {
     class ExtOutDevData;
     class ITextLayout;
-    struct FontCapabilities;
     class Window;
     class WindowOutputDevice;
     namespace font {
         struct Feature;
+        struct FontCapabilities;
     }
 
     namespace text {
@@ -1124,7 +1124,7 @@ public:
     FontMetric                  GetFontMetric( const vcl::Font& rFont ) const;
 
     bool                        GetFontCharMap( FontCharMapRef& rxFontCharMap ) const;
-    bool                        GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const;
+    bool                        GetFontCapabilities( vcl::font::FontCapabilities& rFontCapabilities ) const;
 
     bool GetFontFeatures(std::vector<vcl::font::Feature>& rFontFeatures) const;
 
