@@ -1221,10 +1221,11 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     Point aOutPoint;
     tools::Rectangle aRectangle;
     const GlyphItem* pGlyph;
+    const LogicalFontInstance* pGlyphFont;
     int nStart = 0;
-    while (rSalLayout.GetNextGlyph(&pGlyph, aOutPoint, nStart))
+    while (rSalLayout.GetNextGlyph(&pGlyph, aOutPoint, nStart, &pGlyphFont))
     {
-        if (!pGlyph->GetGlyphBoundRect(aRectangle))
+        if (!pGlyph->GetGlyphBoundRect(pGlyphFont, aRectangle))
             continue;
 
         if (!pGlyph->IsSpacing())

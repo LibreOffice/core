@@ -50,7 +50,6 @@ template <> struct typed_flags<GlyphItemFlags> : is_typed_flags<GlyphItemFlags, 
 
 class VCL_DLLPUBLIC GlyphItem
 {
-    LogicalFontInstance* m_pFontInstance;
     sal_Int32 m_nOrigWidth; // original glyph width
     sal_Int32 m_nCharPos; // index in string
     sal_Int32 m_nXOffset;
@@ -63,10 +62,8 @@ public:
     sal_Int32 m_nNewWidth; // width after adjustments
 
     GlyphItem(int nCharPos, int nCharCount, sal_GlyphId aGlyphId, const Point& rLinearPos,
-              GlyphItemFlags nFlags, int nOrigWidth, int nXOffset,
-              LogicalFontInstance* pFontInstance)
-        : m_pFontInstance(pFontInstance)
-        , m_nOrigWidth(nOrigWidth)
+              GlyphItemFlags nFlags, int nOrigWidth, int nXOffset)
+        : m_nOrigWidth(nOrigWidth)
         , m_nCharPos(nCharPos)
         , m_nXOffset(nXOffset)
         , m_aGlyphId(aGlyphId)
@@ -75,7 +72,6 @@ public:
         , m_aLinearPos(rLinearPos)
         , m_nNewWidth(nOrigWidth)
     {
-        assert(m_pFontInstance);
     }
 
     bool IsInCluster() const { return bool(m_nFlags & GlyphItemFlags::IS_IN_CLUSTER); }
@@ -87,8 +83,8 @@ public:
     bool IsDropped() const { return bool(m_nFlags & GlyphItemFlags::IS_DROPPED); }
     bool IsClusterStart() const { return bool(m_nFlags & GlyphItemFlags::IS_CLUSTER_START); }
 
-    inline bool GetGlyphBoundRect(tools::Rectangle&) const;
-    inline bool GetGlyphOutline(basegfx::B2DPolyPolygon&) const;
+    inline bool GetGlyphBoundRect(const LogicalFontInstance*, tools::Rectangle&) const;
+    inline bool GetGlyphOutline(const LogicalFontInstance*, basegfx::B2DPolyPolygon&) const;
     inline void dropGlyph();
 
     sal_GlyphId glyphId() const { return m_aGlyphId; }
@@ -98,14 +94,16 @@ public:
     int xOffset() const { return m_nXOffset; }
 };
 
-VCL_DLLPUBLIC bool GlyphItem::GetGlyphBoundRect(tools::Rectangle& rRect) const
+VCL_DLLPUBLIC bool GlyphItem::GetGlyphBoundRect(const LogicalFontInstance* pFontInstance,
+                                                tools::Rectangle& rRect) const
 {
-    return m_pFontInstance->GetGlyphBoundRect(m_aGlyphId, rRect, IsVertical());
+    return pFontInstance->GetGlyphBoundRect(m_aGlyphId, rRect, IsVertical());
 }
 
-VCL_DLLPUBLIC bool GlyphItem::GetGlyphOutline(basegfx::B2DPolyPolygon& rPoly) const
+VCL_DLLPUBLIC bool GlyphItem::GetGlyphOutline(const LogicalFontInstance* pFontInstance,
+                                              basegfx::B2DPolyPolygon& rPoly) const
 {
-    return m_pFontInstance->GetGlyphOutline(m_aGlyphId, rPoly, IsVertical());
+    return pFontInstance->GetGlyphOutline(m_aGlyphId, rPoly, IsVertical());
 }
 
 void GlyphItem::dropGlyph()
