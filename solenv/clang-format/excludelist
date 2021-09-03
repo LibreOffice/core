@@ -15033,6 +15033,7 @@ vcl/source/outdev/curvedshapes.cxx
 vcl/source/outdev/fill.cxx
 vcl/source/outdev/font.cxx
 vcl/source/outdev/gradient.cxx
+vcl/source/outdev/image.cxx
 vcl/source/outdev/hatch.cxx
 vcl/source/outdev/line.cxx
 vcl/source/outdev/map.cxx
