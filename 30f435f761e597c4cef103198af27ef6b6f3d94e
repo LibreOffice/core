@@ -16,6 +16,24 @@
       "message": "I am not sure it is heading in the correct direction. Refpoint seems not separate enough to me to warrant an own unit; will we then add a separate unit for getter vs setter? ;)",
       "revId": "30f435f761e597c4cef103198af27ef6b6f3d94e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cda2461_f9725a27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-03T20:17:56Z",
+      "side": 1,
+      "message": "That\u0027s fair enough, I\u0027ll keep it in outdev.cxx. I have kept the unit tests.",
+      "parentUuid": "9da0cc8b_0dd52bf2",
+      "revId": "30f435f761e597c4cef103198af27ef6b6f3d94e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
