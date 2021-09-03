@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "feed0e98_186eb437",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-03T20:34:19Z",
+      "side": 1,
+      "message": "Hi Tomaz and Mike, I\u0027ve have simplified this function slightly, I wrote a unit test for it also.",
+      "revId": "b9367efe21eca4863ba5c031fad458ec5d9aa5c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
