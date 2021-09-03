@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc137b87_e2e8fdef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-03T16:21:31Z",
+      "side": 1,
+      "message": "Laurent, I see you are keeping meta.xml in your template. I guess it probably is a bit more helpful in that full-document case. I expect it is just junk in autotext (and remove it in the followup commit).  I wonder if atevents.xml and a few others might be junk as well. But I have no experience in judging any of this.",
+      "revId": "dcede10f7023016ac7335bf521e684d904ebd261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
