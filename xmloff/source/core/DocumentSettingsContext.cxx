@@ -352,7 +352,6 @@ XMLConfigBaseContext::XMLConfigBaseContext(SvXMLImport& rImport,
         XMLConfigBaseContext* pTempBaseContext)
     : SvXMLImportContext( rImport ),
     maProps( rImport.GetComponentContext() ),
-    maProp(),
     mrAny(rTempAny),
     mpBaseContext(pTempBaseContext)
 {

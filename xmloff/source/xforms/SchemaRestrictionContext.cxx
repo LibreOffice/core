@@ -59,8 +59,7 @@ SchemaRestrictionContext::SchemaRestrictionContext(
     const OUString& sTypeName ) :
         TokenContext( rImport ),
         mxRepository( rRepository ),
-        msTypeName( sTypeName ),
-        msBaseName()
+        msTypeName( sTypeName )
 {
     SAL_WARN_IF( !mxRepository.is(), "xmloff", "need repository" );
 }

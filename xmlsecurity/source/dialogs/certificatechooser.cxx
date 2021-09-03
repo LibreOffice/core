@@ -41,7 +41,6 @@ CertificateChooser::CertificateChooser(weld::Window* _pParent,
                                        std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > const & rxSecurityContexts,
                                        UserAction eAction)
     : GenericDialogController(_pParent, "xmlsec/ui/selectcertificatedialog.ui", "SelectCertificateDialog")
-    , mvUserData()
     , meAction(eAction)
     , m_xFTSign(m_xBuilder->weld_label("sign"))
     , m_xFTEncrypt(m_xBuilder->weld_label("encrypt"))

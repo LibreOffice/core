@@ -157,7 +157,6 @@ SdXMLShapeContext::SdXMLShapeContext(
     , mnRelWidth(0)
     , mnRelHeight(0)
     , maPosition(0, 0)
-    , maUsedTransformation()
     , mbVisible(true)
     , mbPrintable(true)
     , mbHaveXmlId(false)
@@ -2264,8 +2263,7 @@ SdXMLGraphicObjectShapeContext::SdXMLGraphicObjectShapeContext(
     SvXMLImport& rImport,
     const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes)
-:   SdXMLShapeContext( rImport, xAttrList, rShapes, false/*bTemporaryShape*/ ),
-    maURL()
+:   SdXMLShapeContext( rImport, xAttrList, rShapes, false/*bTemporaryShape*/ )
 {
 }
 
@@ -3154,10 +3152,7 @@ SdXMLFrameShapeContext::SdXMLFrameShapeContext( SvXMLImport& rImport,
         css::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape)
 : SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape ),
-    MultiImageImportHelper(),
-    mbSupportsReplacement( false ),
-    mxImplContext(),
-    mxReplImplContext()
+    mbSupportsReplacement( false )
 {
     uno::Reference < util::XCloneable > xClone( xAttrList, uno::UNO_QUERY );
     if( xClone.is() )

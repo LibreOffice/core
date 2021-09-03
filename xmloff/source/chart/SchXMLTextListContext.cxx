@@ -74,7 +74,6 @@ SchXMLTextListContext::SchXMLTextListContext(
         , Sequence< OUString>& rTextList )
         : SvXMLImportContext( rImport )
         , m_rTextList( rTextList )
-        , m_aTextVector()
 {
 }
 

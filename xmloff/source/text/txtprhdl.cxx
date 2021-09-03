@@ -1422,8 +1422,7 @@ static const XMLPropertyHandler *GetPropertyHandler
     return pHdl;
 }
 
-XMLTextPropertyHandlerFactory::XMLTextPropertyHandlerFactory() :
-    XMLPropertyHandlerFactory()
+XMLTextPropertyHandlerFactory::XMLTextPropertyHandlerFactory()
 {
 }
 

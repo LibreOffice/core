@@ -92,8 +92,7 @@ namespace
 }
 
 MultiImageImportHelper::MultiImageImportHelper()
-:   maImplContextVector(),
-    mbSupportsMultipleContents(false)
+:   mbSupportsMultipleContents(false)
 {
 }
 

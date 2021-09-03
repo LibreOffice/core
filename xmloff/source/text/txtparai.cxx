@@ -2015,9 +2015,7 @@ XMLNumberedParaContext::XMLNumberedParaContext(
         const Reference< xml::sax::XFastAttributeList > & xAttrList ) :
     SvXMLImportContext( i_rImport ),
     m_Level(0),
-    m_StartValue(-1),
-    m_ListId(),
-    m_xNumRules()
+    m_StartValue(-1)
 {
     OUString StyleName;
 

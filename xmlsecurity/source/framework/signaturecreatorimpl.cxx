@@ -30,7 +30,7 @@ namespace com::sun::star::xml::wrapper { class XXMLElementWrapper; }
 using namespace com::sun::star::uno;
 
 SignatureCreatorImpl::SignatureCreatorImpl()
-    : SignatureCreatorImpl_Base(), m_nIdOfBlocker(-1)
+    :  m_nIdOfBlocker(-1)
 {
 }
 

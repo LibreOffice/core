@@ -2455,7 +2455,6 @@ SvXMLElementExport::SvXMLElementExport(
     bool bIWSOutside,
     bool bIWSInside )
     : mrExport( rExp )
-    , maElementName()
     , mbIgnoreWhitespaceInside( bIWSInside )
     , mbDoSomething( true )
 {
@@ -2470,7 +2469,6 @@ SvXMLElementExport::SvXMLElementExport(
     bool bIWSOutside,
     bool bIWSInside )
     : mrExport( rExp )
-    , maElementName()
     , mbIgnoreWhitespaceInside( bIWSInside )
     , mbDoSomething( true )
 {
@@ -2484,7 +2482,6 @@ SvXMLElementExport::SvXMLElementExport(
     bool bIWSOutside,
     bool bIWSInside )
     : mrExport( rExp )
-    , maElementName()
     , mbIgnoreWhitespaceInside( bIWSInside )
     , mbDoSomething( true )
 {
@@ -2499,7 +2496,6 @@ SvXMLElementExport::SvXMLElementExport(
     bool bIWSOutside,
     bool bIWSInside )
     : mrExport( rExp )
-    , maElementName()
     , mbIgnoreWhitespaceInside( bIWSInside )
     , mbDoSomething( bDoSth )
 {
@@ -2513,7 +2509,6 @@ SvXMLElementExport::SvXMLElementExport(
     bool bIWSOutside,
     bool bIWSInside )
     : mrExport( rExp )
-    , maElementName()
     , mbIgnoreWhitespaceInside( bIWSInside )
     , mbDoSomething( true )
 {

@@ -30,9 +30,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
 XMLEventImportHelper::XMLEventImportHelper() :
-    aFactoryMap(),
-    pEventNameMap(new NameMap),
-    aEventNameMapVector()
+    pEventNameMap(new NameMap)
 {
 }
 

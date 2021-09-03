@@ -172,7 +172,6 @@ constexpr OUStringLiteral gsHyperlink( u"Hyperlink" );
 XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
                                 SvXMLExportPropertyMapper *pExtMapper )
 :   mrExport( rExp ),
-    maShapesInfos(),
     maCurrentShapesIter(maShapesInfos.end()),
     mbExportLayer( false ),
     // #88546# init to sal_False

@@ -1218,7 +1218,6 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     bBlock( false ),
     bOpenRuby( false ),
     mpTextListsHelper( nullptr ),
-    maTextListsHelperStack(),
     mbCollected(false),
     aCharStyleNamesPropInfoCache( gsCharStyleNames )
 {

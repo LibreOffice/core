@@ -1246,7 +1246,6 @@ XMLDatabaseNextImportContext::XMLDatabaseNextImportContext(
         XMLDatabaseFieldImportContext(rImport, rHlp, pServiceName, false),
         sPropertyCondition(sAPI_condition),
         sTrue(sAPI_true),
-        sCondition(),
         bConditionOK(false)
 {
 }
@@ -1769,7 +1768,6 @@ XMLHiddenParagraphImportContext::XMLHiddenParagraphImportContext(
         XMLTextFieldImportContext(rImport, rHlp, "HiddenParagraph"),
         sPropertyCondition(sAPI_condition),
         sPropertyIsHidden(sAPI_is_hidden),
-        sCondition(),
         bIsHidden(false)
 {
 }
@@ -2163,8 +2161,6 @@ XMLCountFieldImportContext::XMLCountFieldImportContext(
         XMLTextFieldImportContext(rImport, rHlp, MapTokenToServiceName(nElement)),
         sPropertyNumberingType(
             sAPI_numbering_type),
-        sNumberFormat(),
-        sLetterSync(),
         bNumberFormatOK(false)
 {
     bValid = true;
@@ -2254,8 +2250,6 @@ OUString XMLCountFieldImportContext::MapTokenToServiceName(
 XMLPageVarGetFieldImportContext::XMLPageVarGetFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp) :
         XMLTextFieldImportContext(rImport, rHlp, "ReferencePageGet"),
-        sNumberFormat(),
-        sLetterSync(),
         bNumberFormatOK(false)
 {
     bValid = true;
@@ -2735,8 +2729,7 @@ void XMLDdeFieldDeclImportContext::startFastElement(
 XMLDdeFieldImportContext::XMLDdeFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp) :
         XMLTextFieldImportContext(rImport, rHlp, sAPI_dde),
-        sName()
-        ,sPropertyContent(sAPI_content)
+        sPropertyContent(sAPI_content)
 {
 }
 
@@ -2903,8 +2896,7 @@ void XMLUrlFieldImportContext::PrepareField(
 XMLBibliographyFieldImportContext::XMLBibliographyFieldImportContext(
     SvXMLImport& rImport,
     XMLTextImportHelper& rHlp) :
-        XMLTextFieldImportContext(rImport, rHlp, "Bibliography"),
-        aValues()
+        XMLTextFieldImportContext(rImport, rHlp, "Bibliography")
 {
     bValid = true;
 }
@@ -3447,8 +3439,6 @@ XMLDropDownFieldImportContext::XMLDropDownFieldImportContext(
         SvXMLImport& rImport,
         XMLTextImportHelper& rHlp) :
     XMLTextFieldImportContext( rImport, rHlp, "DropDown" ),
-    aLabels(),
-    sName(),
     nSelected( -1 ),
     bNameOK( false ),
     bHelpOK(false),
