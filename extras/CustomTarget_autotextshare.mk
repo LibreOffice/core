@@ -1666,7 +1666,6 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	fr/standard/NF/content.xml \
 	fr/standard/NF/manifest.rdf \
 	fr/standard/NF/Object_1/content.xml \
-	fr/standard/NF/Object_1/settings.xml \
 	fr/standard/NF/styles.xml \
 	fr/standard/O/atevent.xml \
 	fr/standard/O/O.xml \

@@ -25,7 +25,6 @@
  <manifest:file-entry manifest:full-path="MM/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="MM/styles.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="NF/content.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="NF/Object_1/settings.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="NF/Object_1/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="NF/Object_1/" manifest:media-type="application/vnd.oasis.opendocument.formula"/>
  <manifest:file-entry manifest:full-path="NF/manifest.rdf" manifest:media-type="application/rdf+xml"/>
