@@ -3569,6 +3569,12 @@ void XclImpDffConverter::ProcessClientAnchor2( SvStream& rDffStrm,
     rDffStrm.SeekRel( 1 );  // flags
     rDffStrm >> aAnchor;    // anchor format equal to BIFF5 OBJ records
 
+    if (!rDffStrm.good())
+    {
+        SAL_WARN("sc.filter", "ProcessClientAnchor2 short read");
+        return;
+    }
+
     pDrawObj->SetAnchor( aAnchor );
     rObjData.aChildAnchor = rConvData.mrDrawing.CalcAnchorRect( aAnchor, true );
     rObjData.bChildAnchor = true;
