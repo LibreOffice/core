@@ -52,7 +52,7 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 			$(CXXFLAGS_CXX11) \
 			$(if $(filter TRUE,$(COM_IS_CLANG)), -Wno-c++11-narrowing) \
 			$(if $(call gb_Module__symbols_enabled,firebird),$(gb_DEBUGINFO_FLAGS)) \
-			$(if $(ENABLE_DEBUG)$(ENABLE_DBGUTIL),$(if $(filter MSC,$(COM)),-Od -Z7,-Wno-error)) \
+			$(if $(ENABLE_DEBUG),$(if $(filter MSC,$(COM)),-Od -Z7)) \
 		" \
 		&& export LDFLAGS=" \
 			$(if $(SYSTEM_LIBATOMIC_OPS),$(LIBATOMIC_OPS_LIBS), \
@@ -83,7 +83,7 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 							'<' 101200)), \
 					ac_cv_func_clock_gettime=no)) \
 		&& LC_ALL=C $(MAKE) \
-			$(if $(ENABLE_DEBUG)$(ENABLE_DBGUTIL),Debug) SHELL='$(SHELL)' $(if $(filter LINUX,$(OS)),CXXFLAGS="$$CXXFLAGS -std=gnu++11") \
+			$(if $(ENABLE_DEBUG),Debug) SHELL='$(SHELL)' $(if $(filter LINUX,$(OS)),CXXFLAGS="$$CXXFLAGS -std=gnu++11") \
 			MATHLIB="$(if $(SYSTEM_LIBTOMMATH),$(LIBTOMMATH_LIBS),-L$(call gb_UnpackedTarball_get_dir,libtommath) -ltommath)" \
 			LIBO_TUNNEL_LIBRARY_PATH='$(subst ','\'',$(subst $$,$$$$,$(call gb_Helper_extend_ld_path,$(call gb_UnpackedTarball_get_dir,icu)/source/lib)))' \
 		$(if $(filter MACOSX,$(OS)), \
