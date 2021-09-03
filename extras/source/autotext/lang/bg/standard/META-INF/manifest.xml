@@ -4,7 +4,6 @@
  <manifest:file-entry manifest:full-path="/" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="FN/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="FN/Obj0012D655/meta.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="FN/Obj0012D655/settings.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="FN/Obj0012D655/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="FN/Obj0012D655/" manifest:media-type="application/vnd.sun.xml.math"/>
  <manifest:file-entry manifest:full-path="FN/styles.xml" manifest:media-type="text/xml"/>
@@ -12,7 +11,6 @@
  <manifest:file-entry manifest:full-path="I/I.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="J/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="J/atevent.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="J/settings.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="J/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="J/manifest.rdf" manifest:media-type="application/rdf+xml"/>
  <manifest:file-entry manifest:full-path="J/styles.xml" manifest:media-type="text/xml"/>
@@ -21,7 +19,6 @@
  <manifest:file-entry manifest:full-path="TWIMC/TWIMC.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="JAINV/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="JAINV/atevent.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="JAINV/settings.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="JAINV/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="JAINV/manifest.rdf" manifest:media-type="application/rdf+xml"/>
  <manifest:file-entry manifest:full-path="JAINV/styles.xml" manifest:media-type="text/xml"/>
@@ -48,7 +45,6 @@
  <manifest:file-entry manifest:full-path="S/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="S/S.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BCQEHQ-/content.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="+BCQEHQ-/Object_1/settings.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BCQEHQ-/Object_1/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BCQEHQ-/Object_1/" manifest:media-type="application/vnd.oasis.opendocument.formula"/>
  <manifest:file-entry manifest:full-path="+BCQEHQ-/manifest.rdf" manifest:media-type="application/rdf+xml"/>
@@ -56,7 +52,6 @@
  <manifest:file-entry manifest:full-path="+BCQEHQ-/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
  <manifest:file-entry manifest:full-path="JACL/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="JACL/atevent.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="JACL/settings.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="JACL/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="JACL/manifest.rdf" manifest:media-type="application/rdf+xml"/>
  <manifest:file-entry manifest:full-path="JACL/styles.xml" manifest:media-type="text/xml"/>
@@ -65,7 +60,6 @@
  <manifest:file-entry manifest:full-path="RM/RM.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="YT/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="YT/atevent.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="YT/settings.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="YT/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="YT/manifest.rdf" manifest:media-type="application/rdf+xml"/>
  <manifest:file-entry manifest:full-path="YT/styles.xml" manifest:media-type="text/xml"/>
@@ -74,7 +68,6 @@
  <manifest:file-entry manifest:full-path="BW/BW.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="JACR/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="JACR/atevent.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="JACR/settings.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="JACR/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="JACR/manifest.rdf" manifest:media-type="application/rdf+xml"/>
  <manifest:file-entry manifest:full-path="JACR/styles.xml" manifest:media-type="text/xml"/>
@@ -89,7 +82,6 @@
  <manifest:file-entry manifest:full-path="IRT/IRT.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="CAN/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="CAN/atevent.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="CAN/settings.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="CAN/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="CAN/manifest.rdf" manifest:media-type="application/rdf+xml"/>
  <manifest:file-entry manifest:full-path="CAN/styles.xml" manifest:media-type="text/xml"/>
@@ -103,21 +95,18 @@
  <manifest:file-entry manifest:full-path="BlockList.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="JARL/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="JARL/atevent.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="JARL/settings.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="JARL/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="JARL/manifest.rdf" manifest:media-type="application/rdf+xml"/>
  <manifest:file-entry manifest:full-path="JARL/styles.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="JARL/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
  <manifest:file-entry manifest:full-path="R1/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="R1/atevent.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="R1/settings.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="R1/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="R1/manifest.rdf" manifest:media-type="application/rdf+xml"/>
  <manifest:file-entry manifest:full-path="R1/styles.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="R1/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
  <manifest:file-entry manifest:full-path="R2/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="R2/atevent.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="R2/settings.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="R2/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="R2/manifest.rdf" manifest:media-type="application/rdf+xml"/>
  <manifest:file-entry manifest:full-path="R2/styles.xml" manifest:media-type="text/xml"/>
@@ -132,7 +121,6 @@
  <manifest:file-entry manifest:full-path="VA/VA.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="DMS/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="DMS/atevent.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="DMS/settings.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="DMS/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="DMS/manifest.rdf" manifest:media-type="application/rdf+xml"/>
  <manifest:file-entry manifest:full-path="DMS/styles.xml" manifest:media-type="text/xml"/>
