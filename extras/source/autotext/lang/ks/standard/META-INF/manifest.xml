@@ -3,7 +3,6 @@
 <manifest:manifest xmlns:manifest="http://openoffice.org/2001/manifest">
  <manifest:file-entry manifest:full-path="/" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="FN/content.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="FN/Object_1/settings.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="FN/Object_1/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="FN/Object_1/" manifest:media-type="application/vnd.oasis.opendocument.formula"/>
  <manifest:file-entry manifest:full-path="FN/manifest.rdf" manifest:media-type="application/rdf+xml"/>
