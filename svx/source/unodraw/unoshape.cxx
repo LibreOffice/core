@@ -132,7 +132,6 @@ struct SvxShapeImpl
         ,mpMaster( nullptr )
         ,mbHasSdrObjectOwnership( false )
         ,mbDisposing( false )
-        ,mpCreatedObj()
         ,maDisposeListeners( _rMutex )
         ,maPropertyNotifier( _rAntiImpl, _rMutex )
     {

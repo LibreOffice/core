@@ -43,8 +43,7 @@ LinePropertyPanel::LinePropertyPanel(
     maTransControl(SID_ATTR_LINE_TRANSPARENCE, *pBindings, *this),
     maEdgeStyle(SID_ATTR_LINE_JOINT, *pBindings, *this),
     maCapStyle(SID_ATTR_LINE_CAP, *pBindings, *this),
-    mpBindings(pBindings),
-    maContext()
+    mpBindings(pBindings)
 {
     setMapUnit(maWidthControl.GetCoreMetric());
 }

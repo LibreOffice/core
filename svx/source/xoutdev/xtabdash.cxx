@@ -40,9 +40,6 @@ using namespace com::sun::star;
 
 XDashList::XDashList(const OUString& rPath, const OUString& rReferer)
     : XPropertyList(XPropertyListType::Dash, rPath, rReferer)
-    , maBitmapSolidLine()
-    , maStringSolidLine()
-    , maStringNoLine()
 {
 }
 

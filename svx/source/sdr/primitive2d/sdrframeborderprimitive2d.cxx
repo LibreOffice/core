@@ -69,8 +69,7 @@ namespace
             double fMinimalDiscreteUnit)
         :   mfRefModeOffset(0.0),
             maB2DVector(rB2DVector),
-            mfAngle(fAngle),
-            maOffsets()
+            mfAngle(fAngle)
         {
             if (!rStyle.IsUsed())
                 return;
@@ -196,7 +195,6 @@ namespace
 
     public:
         StyleVectorTable()
-        :   maEntries()
         {
         }
 
@@ -670,9 +668,7 @@ namespace drawinglayer::primitive2d
             maX(rX),
             maStyle(rStyle),
             maColor(nullptr != pForceColor ? *pForceColor : Color()),
-            mbForceColor(nullptr != pForceColor),
-            maStart(),
-            maEnd()
+            mbForceColor(nullptr != pForceColor)
         {
         }
 
@@ -853,8 +849,7 @@ namespace drawinglayer::primitive2d
         SdrFrameBorderPrimitive2D::SdrFrameBorderPrimitive2D(
             std::shared_ptr<SdrFrameBorderDataVector>& rFrameBorders,
             bool bForceToSingleDiscreteUnit)
-        :   BufferedDecompositionPrimitive2D(),
-            maFrameBorders(std::move(rFrameBorders)),
+        :   maFrameBorders(std::move(rFrameBorders)),
             mfMinimalNonZeroBorderWidth(0.0),
             mfMinimalNonZeroBorderWidthUsedForDecompose(0.0),
             mbForceToSingleDiscreteUnit(bForceToSingleDiscreteUnit)

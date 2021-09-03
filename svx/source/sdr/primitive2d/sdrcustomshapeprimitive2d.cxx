@@ -94,8 +94,7 @@ namespace drawinglayer::primitive2d
             bool bWordWrap,
             bool b3DShape,
             const basegfx::B2DHomMatrix& rTransform)
-        :   BufferedDecompositionPrimitive2D(),
-            maSdrSTAttribute(rSdrSTAttribute),
+        :   maSdrSTAttribute(rSdrSTAttribute),
             maSubPrimitives(rSubPrimitives),
             maTextBox(rTextBox),
             mbWordWrap(bWordWrap),

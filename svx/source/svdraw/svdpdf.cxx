@@ -81,13 +81,11 @@ using namespace com::sun::star;
 
 ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools::Rectangle& rRect,
                                  Graphic const& rGraphic)
-    : maTmpList()
-    , mpVD(VclPtr<VirtualDevice>::Create())
+    : mpVD(VclPtr<VirtualDevice>::Create())
     , maScaleRect(rRect)
     , mnMapScalingOfs(0)
     , mpModel(&rModel)
     , mnLayer(nLay)
-    , maOldLineColor()
     , mnLineWidth(0)
     , maDash(css::drawing::DashStyle_RECT, 0, 0, 0, 0, 0)
     , mbMov(false)
@@ -101,7 +99,6 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
     , mbLastObjWasPolyWithoutLine(false)
     , mbNoLine(false)
     , mbNoFill(false)
-    , maClip()
     , mnPageCount(0)
     , mdPageHeightPts(0)
     , mpPDFium(vcl::pdf::PDFiumLibrary::get())

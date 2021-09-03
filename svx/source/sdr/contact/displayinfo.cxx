@@ -24,7 +24,6 @@ namespace sdr::contact
 {
         DisplayInfo::DisplayInfo()
         :   maProcessLayers(true), // init layer info with all bits set to draw everything on default
-            maRedrawArea(),
             mbControlLayerProcessingActive(false),
             mbPageProcessingActive(true),
             mbGhostedDrawModeActive(false),

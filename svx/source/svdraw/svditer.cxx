@@ -24,8 +24,7 @@
 #include <osl/diagnose.h>
 
 SdrObjListIter::SdrObjListIter(const SdrObjList* pObjList, SdrIterMode eMode, bool bReverse)
-:   maObjList(),
-    mnIndex(0),
+:   mnIndex(0),
     mbReverse(bReverse),
     mbUseZOrder(true)
 {
@@ -38,8 +37,7 @@ SdrObjListIter::SdrObjListIter(const SdrObjList* pObjList, SdrIterMode eMode, bo
 }
 
 SdrObjListIter::SdrObjListIter(const SdrObjList* pObjList, bool bUseZOrder, SdrIterMode eMode, bool bReverse)
-:   maObjList(),
-    mnIndex(0),
+:   mnIndex(0),
     mbReverse(bReverse),
     mbUseZOrder(bUseZOrder)
 {
@@ -58,8 +56,7 @@ SdrObjListIter::SdrObjListIter(const SdrObjList* pObjList, bool bUseZOrder, SdrI
 }
 
 SdrObjListIter::SdrObjListIter(const SdrObject& rSdrObject, SdrIterMode eMode, bool bReverse)
-:   maObjList(),
-    mnIndex(0),
+:   mnIndex(0),
     mbReverse(bReverse),
     mbUseZOrder(true)
 {
@@ -68,8 +65,7 @@ SdrObjListIter::SdrObjListIter(const SdrObject& rSdrObject, SdrIterMode eMode, b
 }
 
 SdrObjListIter::SdrObjListIter(const SdrPage* pSdrPage, SdrIterMode eMode, bool bReverse)
-:   maObjList(),
-    mnIndex(0),
+:   mnIndex(0),
     mbReverse(bReverse),
     mbUseZOrder(true)
 {
@@ -79,8 +75,7 @@ SdrObjListIter::SdrObjListIter(const SdrPage* pSdrPage, SdrIterMode eMode, bool 
 }
 
 SdrObjListIter::SdrObjListIter( const SdrMarkList& rMarkList, SdrIterMode eMode )
-:   maObjList(),
-    mnIndex(0),
+:   mnIndex(0),
     mbReverse(false),
     mbUseZOrder(true)
 {

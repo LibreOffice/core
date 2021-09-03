@@ -123,8 +123,7 @@ namespace drawinglayer::primitive2d
             const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute,
             const basegfx::B2DPolyPolygon& rUnitPolyPolygon,
             const basegfx::B2DPolyPolygon& rUnitDefinitionPolyPolygon)
-        :   BufferedDecompositionPrimitive2D(),
-            maTransform(rTransform),
+        :   maTransform(rTransform),
             maSdrLFSTAttribute(rSdrLFSTAttribute),
             maUnitPolyPolygon(rUnitPolyPolygon),
             maUnitDefinitionPolyPolygon(rUnitDefinitionPolyPolygon)

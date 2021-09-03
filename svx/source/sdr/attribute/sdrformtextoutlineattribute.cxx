@@ -45,9 +45,7 @@ namespace drawinglayer::attribute
             }
 
             ImpSdrFormTextOutlineAttribute()
-            : maLineAttribute(),
-              maStrokeAttribute(),
-              mnTransparence(0)
+            : mnTransparence(0)
             {
             }
 

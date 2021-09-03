@@ -80,11 +80,6 @@ SvxFillToolBoxControl::SvxFillToolBoxControl(
     ToolBoxItemId nId,
     ToolBox& rTbx )
     : SfxToolBoxControl( nSlotId, nId, rTbx )
-    , mpStyleItem()
-    , mpColorItem()
-    , mpFillGradientItem()
-    , mpHatchItem()
-    , mpBitmapItem()
     , mxFillControl(nullptr)
     , mpLbFillType(nullptr)
     , mpToolBoxColor(nullptr)

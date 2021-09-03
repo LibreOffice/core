@@ -36,10 +36,7 @@ ViewObjectContact& ViewContact::CreateObjectSpecificViewObjectContact(ObjectCont
     return *(new ViewObjectContact(rObjectContact, *this));
 }
 
-ViewContact::ViewContact()
-    : maViewObjectContactVector()
-{
-}
+ViewContact::ViewContact() {}
 
 ViewContact::~ViewContact() { deleteAllVOCs(); }
 

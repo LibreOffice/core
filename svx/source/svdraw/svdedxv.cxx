@@ -470,10 +470,6 @@ TextEditOverlayObject::TextEditOverlayObject(const Color& rColor, OutlinerView& 
                                              bool bVisualizeSurroundingFrame)
     : OverlayObject(rColor)
     , mrOutlinerView(rOutlinerView)
-    , maLastRange()
-    , maRange()
-    , maTextPrimitives()
-    , maLastTextPrimitives()
     , mbVisualizeSurroundingFrame(bVisualizeSurroundingFrame)
 {
     // no AA for TextEdit overlay

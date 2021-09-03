@@ -46,8 +46,7 @@ OverlayStaticRectanglePrimitive::OverlayStaticRectanglePrimitive(
                                     const basegfx::BColor& rFillColor,
                                     double fTransparence,
                                     double fRotation)
-    : DiscreteMetricDependentPrimitive2D()
-    , maPosition(rPosition)
+    : maPosition(rPosition)
     , maSize(rSize)
     , maStrokeColor(rStrokeColor)
     , maFillColor(rFillColor)
@@ -134,8 +133,7 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
             sal_uInt16 nCenterY,
             double fShearX,
             double fRotation)
-        :   DiscreteMetricDependentPrimitive2D(),
-            maBitmapEx(rBitmapEx),
+        :   maBitmapEx(rBitmapEx),
             maBasePosition(rBasePosition),
             mnCenterX(nCenterX),
             mnCenterY(nCenterY),
@@ -218,8 +216,7 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
             const basegfx::BColor& rRGBColorA,
             const basegfx::BColor& rRGBColorB,
             double fDiscreteDashLength)
-        :   ViewportDependentPrimitive2D(),
-            maBasePosition(rBasePosition),
+        :   maBasePosition(rBasePosition),
             maRGBColorA(rRGBColorA),
             maRGBColorB(rRGBColorB),
             mfDiscreteDashLength(fDiscreteDashLength)
@@ -285,8 +282,7 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
             double fDiscreteGrow,
             double fDiscreteShrink,
             double fRotation)
-        :   DiscreteMetricDependentPrimitive2D(),
-            maObjectRange(rObjectRange),
+        :   maObjectRange(rObjectRange),
             maColor(rColor),
             mfTransparence(fTransparence),
             mfDiscreteGrow(fDiscreteGrow),
@@ -414,8 +410,7 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
             const basegfx::BColor& rRGBColorA,
             const basegfx::BColor& rRGBColorB,
             double fDiscreteDashLength)
-        :   ViewportDependentPrimitive2D(),
-            maBasePosition(rBasePosition),
+        :   maBasePosition(rBasePosition),
             meStyle(eStyle),
             maRGBColorA(rRGBColorA),
             maRGBColorB(rRGBColorB),
@@ -521,8 +516,7 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
             const basegfx::BColor& rRGBColorA,
             const basegfx::BColor& rRGBColorB,
             double fDiscreteDashLength)
-        :   ViewportDependentPrimitive2D(),
-            maRollingRectangle(aRollingRectangle),
+        :   maRollingRectangle(aRollingRectangle),
             maRGBColorA(rRGBColorA),
             maRGBColorB(rRGBColorB),
             mfDiscreteDashLength(fDiscreteDashLength)

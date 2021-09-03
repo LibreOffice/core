@@ -51,9 +51,6 @@ std::unique_ptr<sdr::properties::BaseProperties> E3dObject::CreateObjectSpecific
 
 E3dObject::E3dObject(SdrModel& rSdrModel)
 :   SdrAttrObj(rSdrModel),
-    maLocalBoundVol(),
-    maTransformation(),
-    maFullTransform(),
     mbTfHasChanged(true),
     mbIsSelected(false)
 {
@@ -63,9 +60,6 @@ E3dObject::E3dObject(SdrModel& rSdrModel)
 
 E3dObject::E3dObject(SdrModel& rSdrModel, E3dObject const & rSource)
 :   SdrAttrObj(rSdrModel, rSource),
-    maLocalBoundVol(),
-    maTransformation(),
-    maFullTransform(),
     mbTfHasChanged(true),
     mbIsSelected(false)
 {

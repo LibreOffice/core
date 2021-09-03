@@ -81,8 +81,7 @@ SdrDragEntry::~SdrDragEntry()
 
 
 SdrDragEntryPolyPolygon::SdrDragEntryPolyPolygon(const basegfx::B2DPolyPolygon& rOriginalPolyPolygon)
-:   SdrDragEntry(),
-    maOriginalPolyPolygon(rOriginalPolyPolygon)
+:   maOriginalPolyPolygon(rOriginalPolyPolygon)
 {
 }
 
@@ -134,8 +133,7 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPolyPolygon::createP
 SdrDragEntrySdrObject::SdrDragEntrySdrObject(
     const SdrObject& rOriginal,
     bool bModify)
-:   SdrDragEntry(),
-    maOriginal(rOriginal),
+:   maOriginal(rOriginal),
     mbModify(bModify)
 {
     // add SdrObject parts to transparent overlay stuff
@@ -181,8 +179,7 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntrySdrObject::createPri
 
 SdrDragEntryPrimitive2DSequence::SdrDragEntryPrimitive2DSequence(
     const drawinglayer::primitive2d::Primitive2DContainer& rSequence)
-:   SdrDragEntry(),
-    maPrimitive2DSequence(rSequence)
+:   maPrimitive2DSequence(rSequence)
 {
     // add parts to transparent overlay stuff if necessary
     setAddToTransparent(true);
@@ -627,9 +624,7 @@ void SdrDragMethod::applyCurrentTransformationToPolyPolygon(basegfx::B2DPolyPoly
 }
 
 SdrDragMethod::SdrDragMethod(SdrDragView& rNewView)
-:   maSdrDragEntries(),
-    maOverlayObjectList(),
-    mrSdrDragView(rNewView),
+:   mrSdrDragView(rNewView),
     mbMoveOnly(false),
     mbSolidDraggingActive(getSdrDragView().IsSolidDragging()),
     mbShiftPressed(false)

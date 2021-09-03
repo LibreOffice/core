@@ -244,8 +244,6 @@ void SdrUndoAttrObj::ensureStyleSheetInStyleSheetPool(SfxStyleSheetBasePool& rSt
 
 SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSaveText)
     : SdrUndoObj(rNewObj)
-    , mxUndoStyleSheet()
-    , mxRedoStyleSheet()
     , bHaveToTakeRedoSet(true)
 {
     bStyleSheet = bStyleSheet1;

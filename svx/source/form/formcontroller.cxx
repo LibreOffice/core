@@ -224,13 +224,9 @@ struct ColumnInfo
     sal_Int32               nRequiredGridColumn;
 
     ColumnInfo()
-        :xColumn()
-        ,nNullable( ColumnValue::NULLABLE_UNKNOWN )
+        :nNullable( ColumnValue::NULLABLE_UNKNOWN )
         ,bAutoIncrement( false )
         ,bReadOnly( false )
-        ,sName()
-        ,xFirstControlWithInputRequired()
-        ,xFirstGridWithInputRequiredColumn()
         ,nRequiredGridColumn( -1 )
     {
     }
@@ -258,8 +254,7 @@ private:
 
 
 ColumnInfoCache::ColumnInfoCache( const Reference< XColumnsSupplier >& _rxColSupplier )
-    :m_aColumns()
-    ,m_bControlsInitialized( false )
+    :m_bControlsInitialized( false )
 {
     try
     {
@@ -455,7 +450,7 @@ class FmXAutoControl: public UnoControl
 
 {
 public:
-    FmXAutoControl() :UnoControl()
+    FmXAutoControl()
     {
     }
 
@@ -537,7 +532,6 @@ FormController::FormController(const Reference< css::uno::XComponentContext > & 
                   ,m_aRowSetApproveListeners(m_aMutex)
                   ,m_aParameterListeners(m_aMutex)
                   ,m_aFilterListeners(m_aMutex)
-                  ,m_xFormOperations()
                   ,m_aMode( OUString( "DataMode"  ) )
                   ,m_aLoadEvent( LINK( this, FormController, OnLoad ) )
                   ,m_aToggleEvent( LINK( this, FormController, OnToggleAutoFields ) )

@@ -32,7 +32,6 @@ MediaPlaybackPanel::MediaPlaybackPanel (
     weld::Widget* pParent,
     SfxBindings* pBindings)
     : PanelLayout(pParent, "MediaPlaybackPanel", "svx/ui/mediaplayback.ui"),
-    MediaControlBase(),
     maMediaController(SID_AVMEDIA_TOOLBOX, *pBindings, *this),
     maIdle("MediaPlaybackPanel"),
     mpBindings(pBindings)

@@ -181,7 +181,6 @@ constexpr sal_uInt16 gnRightSlot = SID_ATTR_LINE_COLOR;
 SvxColorDockingWindow::SvxColorDockingWindow(SfxBindings* _pBindings, SfxChildWindow* pCW, vcl::Window* _pParent)
     : SfxDockingWindow(_pBindings, pCW, _pParent,
         "DockingColorWindow", "svx/ui/dockingcolorwindow.ui")
-    , pColorList()
     , xColorSet(new SvxColorValueSet_docking(m_xBuilder->weld_scrolled_window("valuesetwin", true)))
     , xColorSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *xColorSet))
 {

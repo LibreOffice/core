@@ -71,12 +71,6 @@ AreaPropertyPanelBase::AreaPropertyPanelBase(
       mnLastPosBitmap(0),
       mnLastPosPattern(0),
       mnLastTransSolid(50),
-      maGradientLinear(),
-      maGradientAxial(),
-      maGradientRadial(),
-      maGradientElliptical(),
-      maGradientSquare(),
-      maGradientRect(),
       mxColorTextFT(m_xBuilder->weld_label("filllabel")),
       mxLbFillType(m_xBuilder->weld_combo_box("fillstylearea")),
       mxLbFillAttr(m_xBuilder->weld_combo_box("fillattrhb")),
@@ -92,19 +86,12 @@ AreaPropertyPanelBase::AreaPropertyPanelBase(
       mxMTRAngle(m_xBuilder->weld_metric_spin_button("gradangle", FieldUnit::DEGREE)),
       mxGradientStyle(m_xBuilder->weld_combo_box("gradientstyle")),
       mxBmpImport(m_xBuilder->weld_button("bmpimport")),
-      mpStyleItem(),
-      mpColorItem(),
-      mpFillGradientItem(),
-      mpHatchItem(),
-      mpBitmapItem(),
       maImgAxial(BMP_AXIAL),
       maImgElli(BMP_ELLI),
       maImgQuad(BMP_QUAD),
       maImgRadial(BMP_RADIAL),
       maImgSquare(BMP_SQUARE),
-      maImgLinear(BMP_LINEAR),
-      mpFloatTransparenceItem(),
-      mpTransparanceItem()
+      maImgLinear(BMP_LINEAR)
 {
     Initialize();
 }

@@ -52,8 +52,7 @@ namespace sdr::contact
 
         ObjectContactOfPageView::ObjectContactOfPageView(
                 SdrPageWindow& rPageWindow, const char *pDebugName)
-            : ObjectContact()
-            , Idle(pDebugName)
+            : Idle(pDebugName)
             , mrPageWindow(rPageWindow)
         {
             // init PreviewRenderer flag

@@ -635,7 +635,6 @@ private:
     LineListBox::LineListBox()
         : ValueSet(nullptr)
         , m_nWidth( 5 )
-        , m_sNone()
         , aVirDev(VclPtr<VirtualDevice>::Create())
         , aColor(Application::GetSettings().GetStyleSettings().GetWindowTextColor())
         , maPaintCol(COL_BLACK)

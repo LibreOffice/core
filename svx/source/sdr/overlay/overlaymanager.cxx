@@ -112,14 +112,10 @@ namespace sdr::overlay
         }
 
         OverlayManager::OverlayManager(OutputDevice& rOutputDevice)
-        :   Scheduler(),
-            mrOutputDevice(rOutputDevice),
-            maOverlayObjects(),
+        :   mrOutputDevice(rOutputDevice),
             maStripeColorA(COL_BLACK),
             maStripeColorB(COL_WHITE),
             mnStripeLengthPixel(5),
-            maViewTransformation(),
-            maViewInformation2D(),
             mfDiscreteOne(0.0)
         {
             // set Property 'ReducedDisplayQuality' to true to allow simpler interaction

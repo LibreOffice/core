@@ -41,8 +41,7 @@ ViewObjectContact& ViewContactOfSdrObj::CreateObjectSpecificViewObjectContact(Ob
 }
 
 ViewContactOfSdrObj::ViewContactOfSdrObj(SdrObject& rObj)
-:   ViewContact(),
-    mrObject(rObj),
+:   mrObject(rObj),
     meRememberedAnimationKind(SdrTextAniKind::NONE)
 {
     // init AnimationKind

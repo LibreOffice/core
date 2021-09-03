@@ -51,11 +51,6 @@ namespace drawinglayer::attribute
         }
 
         SdrAllFillAttributesHelper::SdrAllFillAttributesHelper(const Color& rColor)
-        :   maLastPaintRange(),
-            maLastDefineRange(),
-            maFillAttribute(),
-            maFillGradientAttribute(),
-            maPrimitives()
         {
             maFillAttribute = drawinglayer::attribute::SdrFillAttribute(
                     0.0,
@@ -66,13 +61,10 @@ namespace drawinglayer::attribute
         }
 
         SdrAllFillAttributesHelper::SdrAllFillAttributesHelper(const SfxItemSet& rSet)
-        :   maLastPaintRange(),
-            maLastDefineRange(),
-            maFillAttribute(
+        :   maFillAttribute(
                     drawinglayer::primitive2d::createNewSdrFillAttribute(rSet)),
             maFillGradientAttribute(
-                    drawinglayer::primitive2d::createNewTransparenceGradientAttribute(rSet)),
-            maPrimitives()
+                    drawinglayer::primitive2d::createNewTransparenceGradientAttribute(rSet))
         {
         }
 

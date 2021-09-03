@@ -848,7 +848,6 @@ XPolyPolygon::XPolyPolygon( const XPolyPolygon& ) = default;
 XPolyPolygon::XPolyPolygon( XPolyPolygon&& ) = default;
 
 XPolyPolygon::XPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
-    : pImpXPolyPolygon()
 {
     for(auto const& rCandidate : rPolyPolygon)
     {

@@ -100,8 +100,7 @@ namespace sdr::animation
         }
 
         PrimitiveAnimation::PrimitiveAnimation(sdr::contact::ViewObjectContact& rVOContact, const drawinglayer::primitive2d::Primitive2DContainer& rAnimatedPrimitives)
-        :   Event(),
-            mrVOContact(rVOContact),
+        :   mrVOContact(rVOContact),
             maAnimatedPrimitives(rAnimatedPrimitives)
         {
             if (!comphelper::LibreOfficeKit::isActive())

@@ -55,7 +55,6 @@ SafeModeDialog::SafeModeDialog(weld::Window* pParent)
     , mxUserProfileLink(m_xBuilder->weld_link_button("linkbutton_profile"))
     , mxBtnCreateZip(m_xBuilder->weld_button("btn_create_zip"))
     , mxExpander(m_xBuilder->weld_expander("expander"))
-    , maBackupFileHelper()
 {
     m_xDialog->set_centered_on_parent(false);
     mxRadioRestore->connect_toggled(LINK(this, SafeModeDialog, RadioBtnHdl));

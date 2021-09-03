@@ -343,7 +343,6 @@ SdrObject::SdrObject(SdrModel& rSdrModel)
     ,mnNavigationPosition(SAL_MAX_UINT32)
     ,mnLayerID(0)
     ,mpSvxShape( nullptr )
-    ,maWeakUnoShape()
     ,mbDoNotInsertIntoPageAutomatically(false)
 {
     m_bVirtObj         =false;
@@ -382,7 +381,6 @@ SdrObject::SdrObject(SdrModel& rSdrModel, SdrObject const & rSource)
     ,mnNavigationPosition(SAL_MAX_UINT32)
     ,mnLayerID(0)
     ,mpSvxShape( nullptr )
-    ,maWeakUnoShape()
     ,mbDoNotInsertIntoPageAutomatically(false)
 {
     m_bVirtObj         =false;

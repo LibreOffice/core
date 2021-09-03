@@ -49,15 +49,13 @@ std::unique_ptr<sdr::contact::ViewContact> SdrObjGroup::CreateObjectSpecificView
 
 SdrObjGroup::SdrObjGroup(SdrModel& rSdrModel)
 :   SdrObject(rSdrModel),
-    SdrObjList(),
     maRefPoint(0, 0)
 {
     m_bClosedObj=false;
 }
 
 SdrObjGroup::SdrObjGroup(SdrModel& rSdrModel, SdrObjGroup const & rSource)
-:   SdrObject(rSdrModel, rSource),
-    SdrObjList()
+:   SdrObject(rSdrModel, rSource)
 {
     m_bClosedObj=false;
 

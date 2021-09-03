@@ -32,7 +32,6 @@ using namespace ::com::sun::star;
 ChineseTranslation_UnoDialog::ChineseTranslation_UnoDialog()
                     : m_bDisposed(false)
                     , m_bInDispose(false)
-                    , m_aContainerMutex()
                     , m_aDisposeEventListeners(m_aContainerMutex)
 {
 }

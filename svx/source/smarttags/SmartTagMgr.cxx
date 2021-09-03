@@ -48,10 +48,6 @@ using namespace com::sun::star::i18n;
 
 SmartTagMgr::SmartTagMgr( const OUString& rApplicationName )
     : maApplicationName( rApplicationName ),
-      maRecognizerList(),
-      maActionList(),
-      maDisabledSmartTagTypes(),
-      maSmartTagMap(),
       mxContext( ::comphelper::getProcessComponentContext() ),
       mbLabelTextWithSmartTags(true)
 {

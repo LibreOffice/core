@@ -74,7 +74,6 @@ AnimatedExtractingProcessor2D::AnimatedExtractingProcessor2D(
     bool bTextAnimationAllowed,
     bool bGraphicAnimationAllowed)
 :   drawinglayer::processor2d::BaseProcessor2D(rViewInformation),
-    maPrimitive2DSequence(),
     mbTextAnimationAllowed(bTextAnimationAllowed),
     mbGraphicAnimationAllowed(bGraphicAnimationAllowed)
 {
@@ -146,8 +145,6 @@ namespace sdr::contact {
 ViewObjectContact::ViewObjectContact(ObjectContact& rObjectContact, ViewContact& rViewContact)
 :   mrObjectContact(rObjectContact),
     mrViewContact(rViewContact),
-    maObjectRange(),
-    mxPrimitive2DSequence(),
     maGridOffset(0.0, 0.0),
     mbLazyInvalidate(false)
 {

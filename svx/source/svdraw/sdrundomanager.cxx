@@ -23,7 +23,6 @@
 
 SdrUndoManager::SdrUndoManager()
     : EditUndoManager(20 /*nMaxUndoActionCount*/)
-    , maEndTextEditHdl()
     , mpLastUndoActionBeforeTextEdit(nullptr)
     , mnRedoActionCountBeforeTextEdit(0)
     , mbEndTextEditTriggeredFromUndo(false)

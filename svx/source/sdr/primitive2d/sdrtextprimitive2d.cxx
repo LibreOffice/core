@@ -95,13 +95,10 @@ namespace drawinglayer::primitive2d
         SdrTextPrimitive2D::SdrTextPrimitive2D(
             const SdrText* pSdrText,
             const OutlinerParaObject& rOutlinerParaObject)
-        :   BufferedDecompositionPrimitive2D(),
-            mrSdrText(const_cast< SdrText* >(pSdrText)),
+        :   mrSdrText(const_cast< SdrText* >(pSdrText)),
             maOutlinerParaObject(rOutlinerParaObject),
-            mxLastVisualizingPage(),
             mnLastPageNumber(0),
             mnLastPageCount(0),
-            maLastTextBackgroundColor(),
             mbContainsPageField(false),
             mbContainsPageCountField(false),
             mbContainsOtherFields(false)

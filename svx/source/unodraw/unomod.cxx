@@ -232,19 +232,7 @@ SdrModel& SvxUnoDrawingModel::getSdrModelFromUnoModel() const
 
 SvxUnoDrawingModel::SvxUnoDrawingModel(SdrModel* pDoc) noexcept
 :   SfxBaseModel(nullptr),
-    SvxFmMSFactory(),
-    css::drawing::XDrawPagesSupplier(),
-    css::lang::XServiceInfo(),
-    css::ucb::XAnyCompareFactory(),
-    mpDoc(pDoc),
-    mxDrawPagesAccess(),
-    mxDashTable(),
-    mxGradientTable(),
-    mxHatchTable(),
-    mxBitmapTable(),
-    mxTransGradientTable(),
-    mxMarkerTable(),
-    maTypeSequence()
+    mpDoc(pDoc)
 {
 }
 
