@@ -215,7 +215,6 @@ namespace svl::undo::impl
         explicit NotifyUndoListener( UndoListenerVoidMethod i_notificationMethod )
             :m_notificationMethod( i_notificationMethod )
             ,m_altNotificationMethod( nullptr )
-            ,m_sActionComment()
         {
         }
 
@@ -258,7 +257,6 @@ namespace svl::undo::impl
         explicit UndoManagerGuard( SfxUndoManager_Data& i_managerData )
             :m_rManagerData( i_managerData )
             ,m_aGuard( i_managerData.aMutex )
-            ,m_notifiers()
         {
         }
 
