@@ -1487,9 +1487,11 @@ void SwContentNode::DelFrames(SwRootFrame const*const pLayout)
             if ( pViewShell && pViewShell->GetLayout() &&
                  pViewShell->GetLayout()->IsAnyShellAccessible() )
             {
+                auto pNext = pFrame->FindNextCnt( true );
+                auto pPrev = pFrame->FindPrevCnt();
                 pViewShell->InvalidateAccessibleParaFlowRelation(
-                            pFrame->FindNextCnt( true )->DynCastTextFrame(),
-                            pFrame->FindPrevCnt()->DynCastTextFrame() );
+                            pNext ? pNext->DynCastTextFrame() : nullptr,
+                            pPrev ? pPrev->DynCastTextFrame() : nullptr );
             }
         }
 

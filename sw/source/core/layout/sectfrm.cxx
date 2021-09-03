@@ -203,9 +203,11 @@ void SwSectionFrame::DelEmpty( bool bRemove )
             if ( pViewShell && pViewShell->GetLayout() &&
                  pViewShell->GetLayout()->IsAnyShellAccessible() )
             {
+                auto pNext = FindNextCnt( true );
+                auto pPrev = FindPrevCnt();
                 pViewShell->InvalidateAccessibleParaFlowRelation(
-                                FindNextCnt( true )->DynCastTextFrame(),
-                                FindPrevCnt()->DynCastTextFrame() );
+                                pNext ? pNext->DynCastTextFrame() : nullptr,
+                                pPrev ? pPrev->DynCastTextFrame() : nullptr );
             }
         }
         Cut_( bRemove );
