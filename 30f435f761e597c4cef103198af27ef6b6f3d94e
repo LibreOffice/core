@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9da0cc8b_0dd52bf2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-03T09:23:58Z",
+      "side": 1,
+      "message": "I am not sure it is heading in the correct direction. Refpoint seems not separate enough to me to warrant an own unit; will we then add a separate unit for getter vs setter? ;)",
+      "revId": "30f435f761e597c4cef103198af27ef6b6f3d94e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
