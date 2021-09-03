@@ -73,7 +73,7 @@ struct ScMyNamedExpression
     bool               bIsExpression;
 };
 
-typedef ::std::list<std::unique_ptr<ScMyNamedExpression>> ScMyNamedExpressions;
+typedef ::std::list<ScMyNamedExpression> ScMyNamedExpressions;
 
 struct ScMyLabelRange
 {
@@ -223,12 +223,12 @@ public:
 
     sc::PivotTableSources& GetPivotTableSources();
 
-    void AddNamedExpression(ScMyNamedExpression* pMyNamedExpression)
+    void AddNamedExpression(ScMyNamedExpression aMyNamedExpression)
     {
-        m_aMyNamedExpressions.push_back(std::unique_ptr<ScMyNamedExpression>(pMyNamedExpression));
+        m_aMyNamedExpressions.push_back(std::move(aMyNamedExpression));
     }
 
-    void AddNamedExpression(SCTAB nTab, ScMyNamedExpression* pNamedExp);
+    void AddNamedExpression(SCTAB nTab, ScMyNamedExpression aNamedExp);
 
     void AddLabelRange(std::unique_ptr<const ScMyLabelRange> pMyLabelRange)
     {

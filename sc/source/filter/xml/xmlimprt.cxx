@@ -570,9 +570,8 @@ bool ScXMLImport::GetValidation(const OUString& sName, ScMyImportValidation& aVa
     return false;
 }
 
-void ScXMLImport::AddNamedExpression(SCTAB nTab, ScMyNamedExpression* pNamedExp)
+void ScXMLImport::AddNamedExpression(SCTAB nTab, ScMyNamedExpression aNamedExp)
 {
-    ::std::unique_ptr<ScMyNamedExpression> p(pNamedExp);
     SheetNamedExpMap::iterator itr = m_SheetNamedExpressions.find(nTab);
     if (itr == m_SheetNamedExpressions.end())
     {
@@ -586,7 +585,7 @@ void ScXMLImport::AddNamedExpression(SCTAB nTab, ScMyNamedExpression* pNamedExp)
         itr = r.first;
     }
     ScMyNamedExpressions& r = itr->second;
-    r.push_back(std::move(p));
+    r.push_back(std::move(aNamedExp));
 }
 
 ScXMLChangeTrackingImportHelper* ScXMLImport::GetChangeTrackingImportHelper()
@@ -1265,11 +1264,11 @@ public:
     RangeNameInserter(ScDocument& rDoc, ScRangeName& rRangeName) :
         mrDoc(rDoc), mrRangeName(rRangeName) {}
 
-    void operator() (const std::unique_ptr<ScMyNamedExpression>& p) const
+    void operator() (const ScMyNamedExpression& p) const
     {
         using namespace formula;
 
-        const OUString& aType = p->sRangeType;
+        const OUString& aType = p.sRangeType;
         sal_uInt32 nUnoType = ScXMLImport::GetRangeType(aType);
 
         ScRangeData::Type nNewType = ScRangeData::Type::Name;
@@ -1282,16 +1281,16 @@ public:
         ScAddress aPos;
         sal_Int32 nOffset = 0;
         bool bSuccess = ScRangeStringConverter::GetAddressFromString(
-            aPos, p->sBaseCellAddress, mrDoc, FormulaGrammar::CONV_OOO, nOffset);
+            aPos, p.sBaseCellAddress, mrDoc, FormulaGrammar::CONV_OOO, nOffset);
 
         if (bSuccess)
         {
-            OUString aContent = p->sContent;
-            if (!p->bIsExpression)
+            OUString aContent = p.sContent;
+            if (!p.bIsExpression)
                 ScXMLConverter::ConvertCellRangeAddress(aContent);
 
             ScRangeData* pData = new ScRangeData(
-                mrDoc, p->sName, aContent, aPos, nNewType, p->eGrammar);
+                mrDoc, p.sName, aContent, aPos, nNewType, p.eGrammar);
             mrRangeName.insert(pData);
         }
     }

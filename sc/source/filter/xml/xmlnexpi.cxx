@@ -29,18 +29,17 @@ using namespace xmloff::token;
 
 ScXMLNamedExpressionsContext::GlobalInserter::GlobalInserter(ScXMLImport& rImport) : mrImport(rImport) {}
 
-void ScXMLNamedExpressionsContext::GlobalInserter::insert(ScMyNamedExpression* pExp)
+void ScXMLNamedExpressionsContext::GlobalInserter::insert(ScMyNamedExpression aExp)
 {
-    if (pExp)
-        mrImport.AddNamedExpression(pExp);
+    mrImport.AddNamedExpression(std::move(aExp));
 }
 
 ScXMLNamedExpressionsContext::SheetLocalInserter::SheetLocalInserter(ScXMLImport& rImport, SCTAB nTab) :
     mrImport(rImport), mnTab(nTab) {}
 
-void ScXMLNamedExpressionsContext::SheetLocalInserter::insert(ScMyNamedExpression* pExp)
+void ScXMLNamedExpressionsContext::SheetLocalInserter::insert(ScMyNamedExpression aExp)
 {
-    mrImport.AddNamedExpression(mnTab, pExp);
+    mrImport.AddNamedExpression(mnTab, std::move(aExp));
 }
 
 ScXMLNamedExpressionsContext::ScXMLNamedExpressionsContext(
@@ -88,10 +87,10 @@ ScXMLNamedRangeContext::ScXMLNamedRangeContext(
     if (!pInserter)
         return;
 
-    ScMyNamedExpression* pNamedExpression(new ScMyNamedExpression);
+    ScMyNamedExpression aNamedExpression;
     // A simple table:cell-range-address is not a formula expression, stored
     // without [] brackets but with dot, .A1
-    pNamedExpression->eGrammar = formula::FormulaGrammar::mergeToGrammar(
+    aNamedExpression.eGrammar = formula::FormulaGrammar::mergeToGrammar(
             GetScImport().GetDocument()->GetStorageGrammar(),
             formula::FormulaGrammar::CONV_OOO);
 
@@ -102,22 +101,22 @@ ScXMLNamedRangeContext::ScXMLNamedRangeContext(
             switch (aIter.getToken())
             {
                 case XML_ELEMENT( TABLE, XML_NAME ):
-                    pNamedExpression->sName = aIter.toString();
+                    aNamedExpression.sName = aIter.toString();
                     break;
                 case XML_ELEMENT( TABLE, XML_CELL_RANGE_ADDRESS ):
-                    pNamedExpression->sContent = aIter.toString();
+                    aNamedExpression.sContent = aIter.toString();
                     break;
                 case XML_ELEMENT( TABLE, XML_BASE_CELL_ADDRESS ):
-                    pNamedExpression->sBaseCellAddress = aIter.toString();
+                    aNamedExpression.sBaseCellAddress = aIter.toString();
                     break;
                 case XML_ELEMENT( TABLE, XML_RANGE_USABLE_AS ):
-                    pNamedExpression->sRangeType = aIter.toString();
+                    aNamedExpression.sRangeType = aIter.toString();
                     break;
             }
         }
     }
-    pNamedExpression->bIsExpression = false;
-    pInserter->insert(pNamedExpression);
+    aNamedExpression.bIsExpression = false;
+    pInserter->insert(std::move(aNamedExpression));
 }
 
 ScXMLNamedRangeContext::~ScXMLNamedRangeContext()
@@ -133,7 +132,7 @@ ScXMLNamedExpressionContext::ScXMLNamedExpressionContext(
     if (!pInserter)
         return;
 
-    ScMyNamedExpression* pNamedExpression(new ScMyNamedExpression);
+    ScMyNamedExpression aNamedExpression;
 
     if ( rAttrList.is() )
     {
@@ -142,21 +141,21 @@ ScXMLNamedExpressionContext::ScXMLNamedExpressionContext(
             switch (aIter.getToken())
             {
                 case XML_ELEMENT( TABLE, XML_NAME ):
-                    pNamedExpression->sName = aIter.toString();
+                    aNamedExpression.sName = aIter.toString();
                     break;
                 case XML_ELEMENT( TABLE, XML_EXPRESSION ):
                     GetScImport().ExtractFormulaNamespaceGrammar(
-                        pNamedExpression->sContent, pNamedExpression->sContentNmsp,
-                        pNamedExpression->eGrammar, aIter.toString() );
+                        aNamedExpression.sContent, aNamedExpression.sContentNmsp,
+                        aNamedExpression.eGrammar, aIter.toString() );
                     break;
                 case XML_ELEMENT( TABLE, XML_BASE_CELL_ADDRESS ):
-                    pNamedExpression->sBaseCellAddress = aIter.toString();
+                    aNamedExpression.sBaseCellAddress = aIter.toString();
                     break;
             }
         }
     }
-    pNamedExpression->bIsExpression = true;
-    pInserter->insert(pNamedExpression);
+    aNamedExpression.bIsExpression = true;
+    pInserter->insert(std::move(aNamedExpression));
 }
 
 ScXMLNamedExpressionContext::~ScXMLNamedExpressionContext()
