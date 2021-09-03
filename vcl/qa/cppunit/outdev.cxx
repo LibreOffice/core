@@ -44,6 +44,7 @@ public:
     void testDrawScalePartBitmap();
     void testDrawTransformedBitmapEx();
     void testDrawTransformedBitmapExFlip();
+    void testCroppedDownsampledBitmap();
     void testRTL();
     void testRTLGuard();
     void testDefaultFillColor();
@@ -76,6 +77,7 @@ public:
     CPPUNIT_TEST(testGetReadableFontColorWindow);
     CPPUNIT_TEST(testDrawTransformedBitmapEx);
     CPPUNIT_TEST(testDrawTransformedBitmapExFlip);
+    CPPUNIT_TEST(testCroppedDownsampledBitmap);
     CPPUNIT_TEST(testRTL);
     CPPUNIT_TEST(testRTLGuard);
     CPPUNIT_TEST(testDefaultFillColor);
@@ -508,6 +510,75 @@ void VclOutdevTest::testDrawTransformedBitmapExFlip()
     // - Color is expected to be black, is ffffff (row 2, col 2)
     // i.e. the top left quarter of the image was not black, due to a missing flip.
     CPPUNIT_ASSERT_EQUAL_MESSAGE(ss.str(), COL_BLACK, Color(aColor));
+}
+
+namespace
+{
+class DownsampleBitmapTester : public OutputDevice
+{
+public:
+    DownsampleBitmapTester()
+        : OutputDevice(OUTDEV_VIRDEV)
+        , maBitmap(Bitmap(Size(16, 16), vcl::PixelFormat::N24_BPP))
+    {
+        SetDPIX(96);
+        SetDPIY(96);
+    }
+
+    bool AcquireGraphics() const { return true; }
+    void ReleaseGraphics(bool) {}
+    bool UsePolyPolygonForComplexGradient() { return false; }
+
+    Bitmap testCropFullyOutsideBounds()
+    {
+        return GetDownsampledBitmap(Size(10, 10), Point(20, 20), Size(5, 5), maBitmap, 72, 72);
+    }
+
+    Bitmap testCropSameSize()
+    {
+        return GetDownsampledBitmap(Size(10, 10), Point(0, 0), maBitmap.GetSizePixel(), maBitmap,
+                                    72, 72);
+    }
+
+    Bitmap testFullyOvercrop()
+    {
+        return GetDownsampledBitmap(Size(10, 10), Point(0, 0), Size(100, 100), maBitmap, 72, 72);
+    }
+
+    Bitmap testPartiallyOvercrop()
+    {
+        return GetDownsampledBitmap(Size(10, 10), Point(10, 10), Size(100, 100), maBitmap, 72, 72);
+    }
+
+private:
+    Bitmap maBitmap;
+};
+}
+
+void VclOutdevTest::testCroppedDownsampledBitmap()
+{
+    ScopedVclPtrInstance<DownsampleBitmapTester> pTester;
+
+    {
+        Bitmap aDownsampledBmp(pTester->testCropFullyOutsideBounds());
+        CPPUNIT_ASSERT_MESSAGE("Crop was fully outside of bitmap bounds",
+                               aDownsampledBmp.IsEmpty());
+    }
+
+    {
+        Bitmap aDownsampledBmp(pTester->testCropSameSize());
+        CPPUNIT_ASSERT_MESSAGE("Crop same size as bitmap", !aDownsampledBmp.IsEmpty());
+    }
+
+    {
+        Bitmap aDownsampledBmp(pTester->testFullyOvercrop());
+        CPPUNIT_ASSERT_MESSAGE("Crop larger than bitmap", !aDownsampledBmp.IsEmpty());
+    }
+
+    {
+        Bitmap aDownsampledBmp(pTester->testPartiallyOvercrop());
+        CPPUNIT_ASSERT_MESSAGE("Crop partially overcrops bitmap", !aDownsampledBmp.IsEmpty());
+    }
 }
 
 void VclOutdevTest::testRTL()

@@ -45,6 +45,7 @@ class BitmapTest : public CppUnit::TestFixture
     void testEmptyAccess();
     void testDitherSize();
     void testMirror();
+    void testCrop();
 
     CPPUNIT_TEST_SUITE(BitmapTest);
     CPPUNIT_TEST(testCreation);
@@ -61,6 +62,7 @@ class BitmapTest : public CppUnit::TestFixture
     CPPUNIT_TEST(testEmptyAccess);
     CPPUNIT_TEST(testDitherSize);
     CPPUNIT_TEST(testMirror);
+    CPPUNIT_TEST(testCrop);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -685,6 +687,45 @@ void BitmapTest::testMirror()
     }
 }
 
+void BitmapTest::testCrop()
+{
+    Bitmap aBitmap(Bitmap(Size(16, 16), vcl::PixelFormat::N24_BPP));
+
+    {
+        Bitmap aCroppedBmp(aBitmap);
+        CPPUNIT_ASSERT_MESSAGE("Crop was fully outside of bitmap bounds",
+                               !aCroppedBmp.Crop(tools::Rectangle(Point(20, 20), Size(5, 5))));
+        CPPUNIT_ASSERT_EQUAL(Size(16, 16), aCroppedBmp.GetSizePixel());
+    }
+
+    {
+        Bitmap aCroppedBmp(aBitmap);
+        CPPUNIT_ASSERT_MESSAGE("Crop same size as bitmap",
+                               !aCroppedBmp.Crop(tools::Rectangle(Point(0, 0), Size(16, 16))));
+        CPPUNIT_ASSERT_EQUAL(Size(16, 16), aCroppedBmp.GetSizePixel());
+    }
+
+    {
+        Bitmap aCroppedBmp(aBitmap);
+        CPPUNIT_ASSERT_MESSAGE("Crop larger than bitmap",
+                               !aCroppedBmp.Crop(tools::Rectangle(Point(0, 0), Size(100, 100))));
+        CPPUNIT_ASSERT_EQUAL(Size(16, 16), aCroppedBmp.GetSizePixel());
+    }
+
+    {
+        Bitmap aCroppedBmp(aBitmap);
+        CPPUNIT_ASSERT_MESSAGE("Crop partially overcrops bitmap",
+                               aCroppedBmp.Crop(tools::Rectangle(Point(10, 10), Size(100, 100))));
+        CPPUNIT_ASSERT_EQUAL(Size(6, 6), aCroppedBmp.GetSizePixel());
+    }
+
+    {
+        Bitmap aCroppedBmp(aBitmap);
+        CPPUNIT_ASSERT_MESSAGE("Crop inside bitmap",
+                               aCroppedBmp.Crop(tools::Rectangle(Point(5, 5), Size(10, 10))));
+        CPPUNIT_ASSERT_EQUAL(Size(10, 10), aCroppedBmp.GetSizePixel());
+    }
+}
 } // namespace
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BitmapTest);
