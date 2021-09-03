@@ -2072,7 +2072,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
                 pOS2MET->SeekRel(4); nLen-=4;
             }
             if (nLen>=2) {
-                sal_uInt8 nbyte;
+                sal_uInt8 nbyte(0);
                 pOS2MET->ReadUChar( nbyte );
                 if ((nbyte&0x80)==0 && aAttr.aChrCellSize==Size(0,0))
                     aAttr.aChrCellSize = aDefAttr.aChrCellSize;
@@ -2097,7 +2097,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         case GOrdPMkPrc: PushAttr(nOrderID);
             [[fallthrough]];
         case GOrdSMkPrc: {
-            sal_uInt8 nbyte;
+            sal_uInt8 nbyte(0);
             pOS2MET->ReadUChar( nbyte );
             if (nbyte==0) aAttr.nMrkPrec=aDefAttr.nMrkPrec;
             else aAttr.nMrkPrec=nbyte;
@@ -2406,7 +2406,7 @@ void OS2METReader::ReadFont(sal_uInt16 nFieldSize)
                 break;
             case 0x1f: { // Font Attributes
                 FontWeight eWeight;
-                sal_uInt8 nbyte;
+                sal_uInt8 nbyte(0);
                 pOS2MET->ReadUChar( nbyte );
                 switch (nbyte) {
                     case 1:  eWeight=WEIGHT_THIN;       break;
