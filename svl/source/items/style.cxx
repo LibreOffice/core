@@ -104,7 +104,6 @@ SfxStyleSheetBase::SfxStyleSheetBase( const OUString& rName, SfxStyleSheetBasePo
     : m_pPool( p )
     , nFamily( eFam )
     , aName( rName )
-    , aParent()
     , aFollow( rName )
     , pSet( nullptr )
     , nMask(mask)

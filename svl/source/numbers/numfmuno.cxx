@@ -105,7 +105,6 @@ static LanguageType lcl_GetLanguage( const lang::Locale& rLocale )
 }
 
 SvNumberFormatterServiceObj::SvNumberFormatterServiceObj()
-    :m_aMutex()
 {
 }
 

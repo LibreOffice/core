@@ -46,15 +46,11 @@ namespace {
     public:
         // #i86923#
         Node() // root node Ctor
-            : mChildren(),
-              maItemSet(),
-              mpUpper( nullptr ),
+            : mpUpper( nullptr ),
               mbIsItemIgnorable( false )
         {}
         Node( const SfxPoolItem& rItem, Node* pParent, const bool bIgnorable ) // child node Ctor
-            : mChildren(),
-              maItemSet(),
-              mpItem( rItem.Clone() ),
+            : mpItem( rItem.Clone() ),
               mpUpper( pParent ),
               mbIsItemIgnorable( bIgnorable )
         {}
@@ -353,7 +349,7 @@ private:
 public:
     // #i86923#
     explicit StylePoolImpl( SfxItemSet const * pIgnorableItems )
-        : maRoot(),
+        :
 #ifdef DEBUG
           mnCount(0),
 #endif
