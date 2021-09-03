@@ -211,8 +211,8 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
 
         std::string dpbBuffer;
         {
-            char userName[256] = "";
-            char userPassword[256] = "";
+            OString userName;
+            OString userPassword;
 
             dpbBuffer.push_back(isc_dpb_version1);
             dpbBuffer.push_back(isc_dpb_sql_dialect);
@@ -233,25 +233,37 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
 
             if (m_bIsEmbedded || m_bIsFile)
             {
-                strcpy(userName,"sysdba");
-                strcpy(userPassword,"masterkey");
+                userName = "sysdba";
+                userPassword = "masterkey";
             }
             else
             {
-                // TODO: parse password from connection string as needed?
+                for (auto rIter : info)
+                {
+                    if (rIter.Name == "user")
+                    {
+                        if (OUString value; rIter.Value >>= value)
+                            userName = OUStringToOString(value, RTL_TEXTENCODING_UTF8);
+                    }
+                    else if (rIter.Name == "password")
+                    {
+                        if (OUString value; rIter.Value >>= value)
+                            userPassword = OUStringToOString(value, RTL_TEXTENCODING_UTF8);
+                    }
+                }
             }
 
-            if (strlen(userName))
+            if (!userName.isEmpty())
             {
-                int nUsernameLength = strlen(userName);
+                int nUsernameLength = userName.getLength();
                 dpbBuffer.push_back(isc_dpb_user_name);
                 dpbBuffer.push_back(nUsernameLength);
                 dpbBuffer.append(userName);
             }
 
-            if (strlen(userPassword))
+            if (!userPassword.isEmpty())
             {
-                int nPasswordLength = strlen(userPassword);
+                int nPasswordLength = userPassword.getLength();
                 dpbBuffer.push_back(isc_dpb_password);
                 dpbBuffer.push_back(nPasswordLength);
                 dpbBuffer.append(userPassword);
