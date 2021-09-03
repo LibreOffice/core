@@ -22,6 +22,30 @@
       },
       "revId": "86576cef2c77c8dc78e374aadaadf018610ed6f4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3063890_7d2d27a0",
+        "filename": "vcl/win/dtrans/WinClipboard.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-03T12:42:33Z",
+      "side": 0,
+      "message": "thanks! fixed with\n   https://gerrit.libreoffice.org/c/core/+/121600",
+      "parentUuid": "c143d233_7e247797",
+      "range": {
+        "startLine": 330,
+        "startChar": 0,
+        "endLine": 330,
+        "endChar": 84
+      },
+      "revId": "86576cef2c77c8dc78e374aadaadf018610ed6f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
