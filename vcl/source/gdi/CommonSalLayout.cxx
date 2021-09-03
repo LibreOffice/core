@@ -195,7 +195,7 @@ void GenericSalLayout::AdjustLayout(ImplLayoutArgs& rArgs)
     SalLayout::AdjustLayout(rArgs);
 
     if (rArgs.mpDXArray)
-        ApplyDXArray(rArgs);
+        ApplyDXArray(rArgs.mpDXArray, rArgs.mnFlags);
     else if (rArgs.mnLayoutWidth)
         Justify(rArgs.mnLayoutWidth);
     // apply asian kerning if the glyphs are not already formatted
@@ -633,11 +633,8 @@ void GenericSalLayout::GetCharWidths(DeviceCoordinate* pCharWidths) const
 //   * For any RTL glyph that has DX adjustment, insert enough Kashidas to
 //     fill in the added space.
 
-void GenericSalLayout::ApplyDXArray(const ImplLayoutArgs& rArgs)
+void GenericSalLayout::ApplyDXArray(const DeviceCoordinate* pDXArray, SalLayoutFlags nLayoutFlags)
 {
-    if (rArgs.mpDXArray == nullptr)
-        return;
-
     int nCharCount = mnEndCharPos - mnMinCharPos;
     std::unique_ptr<DeviceCoordinate[]> const pOldCharWidths(new DeviceCoordinate[nCharCount]);
     std::unique_ptr<DeviceCoordinate[]> const pNewCharWidths(new DeviceCoordinate[nCharCount]);
@@ -649,15 +646,15 @@ void GenericSalLayout::ApplyDXArray(const ImplLayoutArgs& rArgs)
     for (int i = 0; i < nCharCount; ++i)
     {
         if (i == 0)
-            pNewCharWidths[i] = rArgs.mpDXArray[i];
+            pNewCharWidths[i] = pDXArray[i];
         else
-            pNewCharWidths[i] = rArgs.mpDXArray[i] - rArgs.mpDXArray[i - 1];
+            pNewCharWidths[i] = pDXArray[i] - pDXArray[i - 1];
     }
 
     bool bKashidaJustify = false;
     DeviceCoordinate nKashidaWidth = 0;
     hb_codepoint_t nKashidaIndex = 0;
-    if (rArgs.mnFlags & SalLayoutFlags::KashidaJustification)
+    if (nLayoutFlags & SalLayoutFlags::KashidaJustification)
     {
         hb_font_t *pHbFont = GetFont().GetHbFont();
         // Find Kashida glyph width and index.
