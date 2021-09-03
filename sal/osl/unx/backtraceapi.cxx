@@ -49,35 +49,57 @@ std::unique_ptr<sal::BacktraceState> sal::backtrace_get(sal_uInt32 maxDepth)
 // (e.g. the calls could be grouped by the binary).
 #include <dlfcn.h>
 #include <unistd.h>
+#include <vector>
 #include <osl/process.h>
 #include <rtl/strbuf.hxx>
 #include "file_url.hxx"
 
-static OString symbol_addr2line_info(const char* file, ptrdiff_t offset)
+namespace
+{
+struct FrameData
+{
+    const char* file = nullptr;
+    ptrdiff_t offset;
+    OString info;
+    bool handled = false;
+};
+
+void process_file_addr2line( const char* file, std::vector<FrameData>& frameData )
 {
     OUString binary("addr2line");
     OUString dummy;
-    if(!osl::detail::find_in_PATH(binary, dummy) || access( file, R_OK ) != 0)
-        return OString(); // Will not work, avoid warnings from osl process code.
     OUString arg1("-Cfe");
     OUString arg2 = OUString::fromUtf8(file);
-    OUString arg3 = "0x" + OUString::number(offset, 16);
-    rtl_uString* args[] = { arg1.pData, arg2.pData, arg3.pData };
-    sal_Int32 nArgs = 3;
+    std::vector<OUString> addrs;
+    std::vector<rtl_uString*> args;
+    args.reserve(frameData.size() + 2);
+    args.push_back( arg1.pData );
+    args.push_back( arg2.pData );
+    for( FrameData& frame : frameData )
+    {
+        if( strcmp( file, frame.file ) == 0 )
+        {
+            addrs.push_back("0x" + OUString::number(frame.offset, 16));
+            args.push_back(addrs.back().pData);
+            frame.handled = true;
+        }
+    }
 
+    if(!osl::detail::find_in_PATH(binary, dummy) || access( file, R_OK ) != 0)
+        return; // Will not work, avoid warnings from osl process code.
     oslProcess aProcess;
     oslFileHandle pOut = nullptr;
     oslFileHandle pErr = nullptr;
     oslSecurity pSecurity = osl_getCurrentSecurity();
     oslProcessError eErr = osl_executeProcess_WithRedirectedIO(
-        binary.pData, args, nArgs, osl_Process_SEARCHPATH | osl_Process_HIDDEN, pSecurity, nullptr,
+        binary.pData, args.data(), args.size(), osl_Process_SEARCHPATH | osl_Process_HIDDEN, pSecurity, nullptr,
         nullptr, 0, &aProcess, nullptr, &pOut, &pErr);
     osl_freeSecurityHandle(pSecurity);
 
     if (eErr != osl_Process_E_None)
-        return OString();
+        return;
 
-    OStringBuffer result;
+    OStringBuffer outputBuffer;
     if (pOut)
     {
         const sal_uInt64 BUF_SIZE = 1024;
@@ -91,7 +113,7 @@ static OString symbol_addr2line_info(const char* file, ptrdiff_t offset)
             oslFileError err = osl_readFile(pOut, buffer, BUF_SIZE, &bytesRead);
             if(bytesRead == 0 && err == osl_File_E_None)
                 break;
-            result.append(buffer, bytesRead);
+            outputBuffer.append(buffer, bytesRead);
             if (err != osl_File_E_None && err != osl_File_E_AGAIN)
                 break;
         }
@@ -101,42 +123,71 @@ static OString symbol_addr2line_info(const char* file, ptrdiff_t offset)
         osl_closeFile(pErr);
     eErr = osl_joinProcess(aProcess);
     osl_freeProcessHandle(aProcess);
-    return result.makeStringAndClear();
-}
 
-static OString symbol_addr2line(void* addr)
-{
-    Dl_info dli;
-    ptrdiff_t offset;
-    if (dladdr(addr, &dli) != 0)
+    OString output = outputBuffer.makeStringAndClear();
+    std::vector<OString> lines;
+    sal_Int32 outputPos = 0;
+    while(outputPos < output.getLength())
     {
-        if (dli.dli_fname && dli.dli_fbase)
+        sal_Int32 end1 = output.indexOf('\n', outputPos);
+        if(end1 < 0)
+            break;
+        sal_Int32 end2 = output.indexOf('\n', end1 + 1);
+        if(end2 < 0)
+            end2 = output.getLength();
+        lines.push_back(output.copy( outputPos, end1 - outputPos ));
+        lines.push_back(output.copy( end1 + 1, end2 - end1 - 1 ));
+        outputPos = end2 + 1;
+    }
+    if(lines.size() != addrs.size() * 2)
+        return; // addr2line problem?
+    size_t linesPos = 0;
+    for( FrameData& frame : frameData )
+    {
+        if( strcmp( file, frame.file ) == 0 )
         {
-            offset = reinterpret_cast<ptrdiff_t>(addr) - reinterpret_cast<ptrdiff_t>(dli.dli_fbase);
-            OString info = symbol_addr2line_info(dli.dli_fname, offset);
             // There should be two lines, first function name and second source file information.
             // If each of them starts with ??, it is invalid/unknown.
-            if(!info.isEmpty() && !info.startsWith("??"))
+            OString function = lines[linesPos];
+            OString source = lines[linesPos+1];
+            linesPos += 2;
+            if(!function.isEmpty() && !function.startsWith("??"))
             {
-                sal_Int32 end1 = info.indexOf('\n');
-                if(end1 > 0)
-                {
-                    OString function = info.copy( 0, end1 );
-                    sal_Int32 end2 = info.indexOf('\n', end1 + 1);
-                    OString source = info.copy( end1 + 1, end2 > 0 ? end2 - end1 - 1 : info.getLength() - end1 );
-                    if( source.startsWith("??"))
-                        return function + " in " + dli.dli_fname;
-                    else
-                        return function + " at " + source;
-                }
+                if( source.startsWith("??"))
+                    frame.info = function + " in " + file;
+                else
+                    frame.info = function + " at " + source;
             }
         }
     }
-    return OString();
 }
+
+} // namespace
 
 OUString sal::backtrace_to_string(BacktraceState* backtraceState)
 {
+    // Collect frames for each binary and process each binary in one addr2line
+    // call for better performance.
+    std::vector< FrameData > frameData;
+    frameData.resize(backtraceState->nDepth);
+    for (int i = 0; i != backtraceState->nDepth; ++i)
+    {
+        Dl_info dli;
+        void* addr = backtraceState->buffer[i];
+        if (dladdr(addr, &dli) != 0)
+        {
+            if (dli.dli_fname && dli.dli_fbase)
+            {
+                frameData[ i ].file = dli.dli_fname;
+                frameData[ i ].offset = reinterpret_cast<ptrdiff_t>(addr) - reinterpret_cast<ptrdiff_t>(dli.dli_fbase);
+            }
+        }
+    }
+    for (int i = 0; i != backtraceState->nDepth; ++i)
+    {
+        if(frameData[ i ].file != nullptr && !frameData[ i ].handled)
+            process_file_addr2line( frameData[ i ].file, frameData );
+    }
     OUStringBuffer b3;
     std::unique_ptr<char*, decltype(free)*> b2{ nullptr, free };
     bool fallbackInitDone = false;
@@ -144,9 +195,8 @@ OUString sal::backtrace_to_string(BacktraceState* backtraceState)
     {
         if (i != 0)
             b3.append("\n");
-        OString info = symbol_addr2line(backtraceState->buffer[i]);
-        if(!info.isEmpty())
-            b3.append(o3tl::runtimeToOUString(info.getStr()));
+        if(!frameData[i].info.isEmpty())
+            b3.append(o3tl::runtimeToOUString(frameData[i].info.getStr()));
         else
         {
             if(!fallbackInitDone)
