@@ -1,7 +1,7 @@
 {
     "id": "org.libreoffice.LibreOffice",
     "runtime": "org.freedesktop.Platform",
-    "runtime-version": "20.08",
+    "runtime-version": "21.08",
     "sdk": "org.freedesktop.Sdk",
     "sdk-extensions": [
         "org.freedesktop.Sdk.Extension.openjdk11"
@@ -654,13 +654,6 @@
                     "type": "file",
                     "dest": "external/tarballs",
                     "dest-filename": "libatomic_ops-7.6.8.tar.gz"
-                },
-                {
-                    "url": "https://dev-www.libreoffice.org/src/skia-m94-975fcdd755dfc5d57cddbb25857e0c4ac29abe98.tar.xz",
-                    "sha256": "f69f9164ee982a8254722e1100aa7d31f78a5cd5e084418a3e202b55104fc3e2",
-                    "type": "file",
-                    "dest": "external/tarballs",
-                    "dest-filename": "skia-m94-975fcdd755dfc5d57cddbb25857e0c4ac29abe98.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/dtoa-20180411.tgz",
