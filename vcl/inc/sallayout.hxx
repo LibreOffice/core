@@ -112,7 +112,7 @@ public:
     void        NeedFallback( int nMinRunPos, int nEndRunPos, bool bRTL )
                     { maFallbackRuns.AddRun( nMinRunPos, nEndRunPos, bRTL ); }
     // methods used by BiDi and glyph fallback
-    bool        NeedFallback() const
+    bool        HasFallbackRun() const
                     { return !maFallbackRuns.IsEmpty(); }
     bool        PrepareFallback(const SalLayoutGlyphsImpl* pGlyphsImpl);
 
