@@ -2241,7 +2241,7 @@ bool AnimationImporter::importAttributeValue( const Atom* pAtom, Any& rAny )
         sal_uInt32 nRecLen = pAtom->getLength();
         if ( nRecLen >= 1 )
         {
-            sal_Int8 nType;
+            sal_Int8 nType(0);
             mrStCtrl.ReadSChar( nType );
             switch( nType )
             {
