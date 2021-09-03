@@ -393,7 +393,7 @@ ScXMLImport::~ScXMLImport() noexcept
 
     m_aMyNamedExpressions.clear();
     maMyLabelRanges.clear();
-    pValidations.reset();
+    maValidations.clear();
     pDetectiveOpArray.reset();
 
     //call SvXMLImport dtor contents before deleting pSolarMutexGuard
@@ -558,17 +558,14 @@ XMLShapeImportHelper* ScXMLImport::CreateShapeImport()
 
 bool ScXMLImport::GetValidation(const OUString& sName, ScMyImportValidation& aValidation)
 {
-    if (pValidations)
+    auto aItr = std::find_if(maValidations.begin(), maValidations.end(),
+        [&sName](const ScMyImportValidation& rValidation) { return rValidation.sName == sName; });
+    if (aItr != maValidations.end())
     {
-        auto aItr = std::find_if(pValidations->begin(), pValidations->end(),
-            [&sName](const ScMyImportValidation& rValidation) { return rValidation.sName == sName; });
-        if (aItr != pValidations->end())
-        {
-            // source position must be set as string,
-            // so sBaseCellAddress no longer has to be converted here
-            aValidation = *aItr;
-            return true;
-        }
+        // source position must be set as string,
+        // so sBaseCellAddress no longer has to be converted here
+        aValidation = *aItr;
+        return true;
     }
     return false;
 }
