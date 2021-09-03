@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35aaea01_5bbad07a",
+        "filename": "include/vcl/font/EmbeddedFontsHelper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-03T09:31:14Z",
+      "side": 0,
+      "message": "Why removing this include? OUString is used explicitly in the header - it\u0027s best to include explicitly everything that is used here (well, I\u0027m OK when something is not included when it\u0027s used in overridden virtual functions only - then it\u0027s obvious that it must be included in a superclass; but otherwise, I suppose that relying on nested including is not consistent with this project\u0027s typical use, where we don\u0027t seem to have \"convenience\" headers just to minimize includes).\n\nAnother tip on includes section - since you touch it often: there is a convention that include section must always start with \u003csal/config.h\u003e. It is no enforced; but you may see it introduced by sberg at every change where he modifies the very first include in files. You might want to follow that best practice when you modify includes.",
+      "revId": "08ccd6d3c45c108b5188e65d328cc23173139109",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
