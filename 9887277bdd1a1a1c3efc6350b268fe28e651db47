@@ -33,6 +33,23 @@
       "message": "Sorry, that should read \"into the vcl::print namespace\"",
       "revId": "9887277bdd1a1a1c3efc6350b268fe28e651db47",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a94ddfab_7fb74799",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-03T06:15:54Z",
+      "side": 1,
+      "message": "Hey folks, are you OK with this one? Trying to cleanup our vcl namespace. No unit tests for this one, it\u0027s a straight accessor class, almost no logic to it at all. ",
+      "revId": "9887277bdd1a1a1c3efc6350b268fe28e651db47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
