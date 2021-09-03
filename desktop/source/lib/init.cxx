@@ -256,6 +256,7 @@ const ExtensionMap aWriterExtensionMap[] =
     { "txt",   "Text" },
     { "xhtml", "XHTML Writer File" },
     { "png",   "writer_png_Export" },
+    { "xml",   "writer_indexing_export" },
     { nullptr, nullptr }
 };
 
