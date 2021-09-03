@@ -277,6 +277,7 @@ public:
             {
                 std::cerr << "Windows has significant build problems with long PATH variables ";
                 std::cerr << "please check your PATH variable and re-autogen.\n";
+                std::cerr << "PATH is length " << strlen(pPath) << " and content: " << pPath  << "\n";
             }
 #endif
             std::cerr << "Path is '" << getenv("PATH") << "'\n";
