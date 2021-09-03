@@ -318,18 +318,20 @@ void ImportLotus::RowPresentation( sal_uInt16 nRecLen )
 {
     SAL_WARN_IF( nRecLen < 5, "sc.filter", "*ImportLotus::RowPresentation(): Record too short!" );
 
-    sal_uInt8    nLTab, nFlags;
-    sal_uInt16  nRow, nHeight;
-    sal_uInt16    nCnt = (nRecLen < 4) ? 0 : ( nRecLen - 4 ) / 8;
+    sal_uInt16 nCnt = (nRecLen < 4) ? 0 : ( nRecLen - 4 ) / 8;
 
+    sal_uInt8 nLTab(0);
     Read( nLTab );
     Skip( 1 );
 
-    while( nCnt )
+    while (nCnt && pIn->good())
     {
+        sal_uInt16 nRow(0);
         Read( nRow );
+        sal_uInt16 nHeight(0);
         Read( nHeight );
         Skip( 2 );
+        sal_uInt8 nFlags(0);
         Read( nFlags );
         Skip( 1 );
 
