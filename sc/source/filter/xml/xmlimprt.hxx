@@ -116,7 +116,7 @@ class ScXMLImport: public SvXMLImport
     ScXMLImport(const ScXMLImport&) = delete;
     const ScXMLImport& operator=(const ScXMLImport&) = delete;
 
-    typedef ::std::map<SCTAB, std::unique_ptr<ScMyNamedExpressions>> SheetNamedExpMap;
+    typedef ::std::map<SCTAB, ScMyNamedExpressions> SheetNamedExpMap;
 
     ScDocument*             pDoc;
     std::unique_ptr<ScDocumentImport> mpDocImport;
@@ -140,7 +140,7 @@ class ScXMLImport: public SvXMLImport
 
     std::vector<ScDocRowHeightUpdater::TabRanges> maRecalcRowRanges;
 
-    std::unique_ptr<ScMyNamedExpressions>   m_pMyNamedExpressions;
+    ScMyNamedExpressions   m_aMyNamedExpressions;
     SheetNamedExpMap m_SheetNamedExpressions;
 
     std::unique_ptr<ScMyLabelRanges>            pMyLabelRanges;
@@ -225,9 +225,7 @@ public:
 
     void AddNamedExpression(ScMyNamedExpression* pMyNamedExpression)
     {
-        if (!m_pMyNamedExpressions)
-            m_pMyNamedExpressions.reset(new ScMyNamedExpressions);
-        m_pMyNamedExpressions->push_back(std::unique_ptr<ScMyNamedExpression>(pMyNamedExpression));
+        m_aMyNamedExpressions.push_back(std::unique_ptr<ScMyNamedExpression>(pMyNamedExpression));
     }
 
     void AddNamedExpression(SCTAB nTab, ScMyNamedExpression* pNamedExp);
