@@ -392,7 +392,7 @@ ScXMLImport::~ScXMLImport() noexcept
     pStylesImportHelper.reset();
 
     m_aMyNamedExpressions.clear();
-    pMyLabelRanges.reset();
+    maMyLabelRanges.clear();
     pValidations.reset();
     pDetectiveOpArray.reset();
 
@@ -1218,7 +1218,7 @@ sal_Int32 ScXMLImport::GetRangeType(const OUString& sRangeType)
 
 void ScXMLImport::SetLabelRanges()
 {
-    if (!pMyLabelRanges)
+    if (maMyLabelRanges.empty())
         return;
 
     uno::Reference <beans::XPropertySet> xPropertySet (GetModel(), uno::UNO_QUERY);
@@ -1237,7 +1237,7 @@ void ScXMLImport::SetLabelRanges()
     table::CellRangeAddress aLabelRange;
     table::CellRangeAddress aDataRange;
 
-    for (const auto& rxLabelRange : *pMyLabelRanges)
+    for (const auto& rxLabelRange : maMyLabelRanges)
     {
         sal_Int32 nOffset1(0);
         sal_Int32 nOffset2(0);
@@ -1254,7 +1254,7 @@ void ScXMLImport::SetLabelRanges()
         }
     }
 
-    pMyLabelRanges->clear();
+    maMyLabelRanges.clear();
 }
 
 namespace {
