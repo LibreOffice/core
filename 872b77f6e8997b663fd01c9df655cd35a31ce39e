@@ -94,6 +94,30 @@
       },
       "revId": "872b77f6e8997b663fd01c9df655cd35a31ce39e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01a0a4d2_afbd75de",
+        "filename": "external/firebird/ExternalProject_firebird.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-03T06:56:40Z",
+      "side": 1,
+      "message": "I even added the Wno-error to workaround that after seeing the failure ... looks like totally unnecessary now.",
+      "parentUuid": "273f24f5_a0c8a02f",
+      "range": {
+        "startLine": 86,
+        "startChar": 8,
+        "endLine": 86,
+        "endChar": 40
+      },
+      "revId": "872b77f6e8997b663fd01c9df655cd35a31ce39e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
