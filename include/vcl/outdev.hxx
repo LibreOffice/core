@@ -1413,6 +1413,19 @@ protected:
                                     basegfx::B2DRange &aVisibleRange,
                                     double &fMaximumArea);
 
+    /** Retrieve downsampled and cropped bitmap
+
+        @attention This method ignores negative rDstSz values, thus
+        mirroring must happen outside this method (e.g. in DrawBitmap)
+     */
+    Bitmap                      GetDownsampledBitmap(
+                                    const Size& rDstSz,
+                                    const Point& rSrcPt,
+                                    const Size& rSrcSz,
+                                    const Bitmap& rBmp,
+                                    tools::Long nMaxBmpDPIX,
+                                    tools::Long nMaxBmpDPIY );
+
 private:
 
     SAL_DLLPRIVATE void         DrawDeviceAlphaBitmap(
@@ -1459,19 +1472,6 @@ private:
                                     const sal_Int32     nDstWidth,
                                     const tools::Long*         pMapX,
                                     const tools::Long*         pMapY );
-
-    /** Retrieve downsampled and cropped bitmap
-
-        @attention This method ignores negative rDstSz values, thus
-        mirroring must happen outside this method (e.g. in DrawBitmap)
-     */
-    SAL_DLLPRIVATE Bitmap       GetDownsampledBitmap(
-                                    const Size& rDstSz,
-                                    const Point& rSrcPt,
-                                    const Size& rSrcSz,
-                                    const Bitmap& rBmp,
-                                    tools::Long nMaxBmpDPIX,
-                                    tools::Long nMaxBmpDPIY );
 
     ///@}
 
