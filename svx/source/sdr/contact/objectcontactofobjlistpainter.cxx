@@ -58,8 +58,7 @@ ObjectContactOfObjListPainter::ObjectContactOfObjListPainter(
     OutputDevice& rTargetDevice,
     const SdrObjectVector& rObjects,
     const SdrPage* pProcessedPage)
-:   ObjectContactPainter(),
-    mrTargetOutputDevice(rTargetDevice),
+:   mrTargetOutputDevice(rTargetDevice),
     maStartObjects(rObjects),
     mpProcessedPage(pProcessedPage)
 {
@@ -157,9 +156,7 @@ ViewContact& ObjectContactOfPagePainter::GetPaintObjectViewContact(sal_uInt32 /*
 
 ObjectContactOfPagePainter::ObjectContactOfPagePainter(
     ObjectContact& rOriginalObjectContact)
-:   ObjectContactPainter(),
-    mrOriginalObjectContact(rOriginalObjectContact),
-    mxStartPage()
+:   mrOriginalObjectContact(rOriginalObjectContact)
 {
 }
 

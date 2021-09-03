@@ -79,8 +79,7 @@ void StyleStatusListener::StateChangedAtStatusListener(SfxItemState /*eState*/,
 }
 
 StylePoolChangeListener::StylePoolChangeListener(StylesPreviewWindow_Base* pPreviewControl)
-    : SfxListener()
-    , m_pPreviewControl(pPreviewControl)
+    : m_pPreviewControl(pPreviewControl)
 {
     SfxObjectShell* pDocShell = SfxObjectShell::Current();
 

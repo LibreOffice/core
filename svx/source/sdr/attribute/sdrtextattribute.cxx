@@ -88,7 +88,6 @@ namespace drawinglayer::attribute
                 bool bChainable)
             :   mpSdrText(pSdrText),
                 mxOutlinerParaObject(std::make_shared<OutlinerParaObject>(rOutlinerParaObject)),
-                maSdrFormTextAttribute(),
                 maTextLeftDistance(aTextLeftDistance),
                 maTextUpperDistance(aTextUpperDistance),
                 maTextRightDistance(aTextRightDistance),
@@ -125,7 +124,6 @@ namespace drawinglayer::attribute
 
             ImpSdrTextAttribute()
             :   mpSdrText(nullptr),
-                maSdrFormTextAttribute(),
                 maTextLeftDistance(0),
                 maTextUpperDistance(0),
                 maTextRightDistance(0),

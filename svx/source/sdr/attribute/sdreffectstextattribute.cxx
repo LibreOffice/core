@@ -36,8 +36,6 @@ namespace drawinglayer::attribute
         }
 
         SdrEffectsTextAttribute::SdrEffectsTextAttribute()
-        :   maShadow(),
-            maTextAttribute()
         {
         }
 

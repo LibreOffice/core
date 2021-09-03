@@ -77,8 +77,7 @@ namespace sdr::contact
 
         // basic constructor
         ViewContactOfMasterPageDescriptor::ViewContactOfMasterPageDescriptor(sdr::MasterPageDescriptor& rDescriptor)
-        :   ViewContact(),
-            mrMasterPageDescriptor(rDescriptor)
+        :   mrMasterPageDescriptor(rDescriptor)
         {
         }
 

@@ -46,11 +46,9 @@ CommonStylePreviewRenderer::CommonStylePreviewRenderer(
                                 const SfxObjectShell& rShell, OutputDevice& rOutputDev,
                                 SfxStyleSheetBase* pStyle, tools::Long nMaxHeight)
     : StylePreviewRenderer(rShell, rOutputDev, pStyle, nMaxHeight)
-    , m_pFont()
     , maFontColor(COL_AUTO)
     , maHighlightColor(COL_AUTO)
     , maBackgroundColor(COL_AUTO)
-    , maPixelSize()
     , maStyleName(mpStyle->GetName())
 {
 }

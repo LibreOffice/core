@@ -331,8 +331,7 @@ Reference< XInterface > FmXGridControl_NewInstance_Impl(const Reference< XMultiS
 }
 
 FmXGridControl::FmXGridControl(const Reference< XComponentContext >& _rxContext)
-               :UnoControl()
-               ,m_aModifyListeners(*this, GetMutex())
+               :m_aModifyListeners(*this, GetMutex())
                ,m_aUpdateListeners(*this, GetMutex())
                ,m_aContainerListeners(*this, GetMutex())
                ,m_aSelectionListeners(*this, GetMutex())

@@ -53,11 +53,6 @@ struct SvxZoomSliderControl::SvxZoomSliderControl_Impl
         mnMinZoom( 0 ),
         mnMaxZoom( 0 ),
         mnSliderCenter( 0 ),
-        maSnappingPointOffsets(),
-        maSnappingPointZooms(),
-        maSliderButton(),
-        maIncreaseButton(),
-        maDecreaseButton(),
         mbValuesSet( false ),
         mbDraggingStarted( false ) {}
 };

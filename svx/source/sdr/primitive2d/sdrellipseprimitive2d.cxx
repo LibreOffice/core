@@ -111,8 +111,7 @@ namespace drawinglayer::primitive2d
         SdrEllipsePrimitive2D::SdrEllipsePrimitive2D(
             const basegfx::B2DHomMatrix& rTransform,
             const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute)
-        :   BufferedDecompositionPrimitive2D(),
-            maTransform(rTransform),
+        :   maTransform(rTransform),
             maSdrLFSTAttribute(rSdrLFSTAttribute)
         {
         }

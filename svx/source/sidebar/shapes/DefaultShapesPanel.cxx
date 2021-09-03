@@ -30,7 +30,6 @@ DefaultShapesPanel::DefaultShapesPanel (
     weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
     : PanelLayout(pParent, "DefaultShapesPanel", "svx/ui/defaultshapespanel.ui")
-    , SvxShapeCommandsMap()
     , mxLineArrowSet(new ValueSet(nullptr))
     , mxLineArrowSetWin(new weld::CustomWeld(*m_xBuilder, "LinesArrows", *mxLineArrowSet))
     , mxCurveSet(new ValueSet(nullptr))

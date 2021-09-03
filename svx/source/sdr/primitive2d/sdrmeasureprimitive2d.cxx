@@ -446,8 +446,7 @@ namespace drawinglayer::primitive2d
             bool bBelow,
             bool bTextRotation,
             bool bTextAutoAngle)
-        :   BufferedDecompositionPrimitive2D(),
-            maSdrLSTAttribute(rSdrLSTAttribute),
+        :   maSdrLSTAttribute(rSdrLSTAttribute),
             maStart(rStart),
             maEnd(rEnd),
             meHorizontal(eHorizontal),

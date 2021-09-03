@@ -67,8 +67,7 @@ namespace drawinglayer::primitive2d
             SdrCellPrimitive2D(
                 const basegfx::B2DHomMatrix& rTransform,
                 const attribute::SdrFillTextAttribute& rSdrFTAttribute)
-            :   BufferedDecompositionPrimitive2D(),
-                maTransform(rTransform),
+            :   maTransform(rTransform),
                 maSdrFTAttribute(rSdrFTAttribute)
             {
             }

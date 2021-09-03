@@ -169,7 +169,6 @@ std::unique_ptr<sdr::contact::ViewContact> E3dScene::CreateObjectSpecificViewCon
 
 E3dScene::E3dScene(SdrModel& rSdrModel)
 :   E3dObject(rSdrModel),
-    SdrObjList(),
     aCamera(basegfx::B3DPoint(0.0, 0.0, 4.0), basegfx::B3DPoint()),
     bDrawOnlySelected(false),
     mbSkipSettingDirty(false)
@@ -180,7 +179,6 @@ E3dScene::E3dScene(SdrModel& rSdrModel)
 
 E3dScene::E3dScene(SdrModel& rSdrModel, E3dScene const & rSource)
 :   E3dObject(rSdrModel, rSource),
-    SdrObjList(),
     aCamera(basegfx::B3DPoint(0.0, 0.0, 4.0), basegfx::B3DPoint()),
     bDrawOnlySelected(false),
     mbSkipSettingDirty(false)

@@ -126,8 +126,7 @@ namespace drawinglayer::primitive2d
             const basegfx::B2DPolygon& rTail,
             double fCornerRadiusX,
             double fCornerRadiusY)
-        :   BufferedDecompositionPrimitive2D(),
-            maTransform(rTransform),
+        :   maTransform(rTransform),
             maSdrLFSTAttribute(rSdrLFSTAttribute),
             maTail(rTail),
             mfCornerRadiusX(fCornerRadiusX),

@@ -36,7 +36,6 @@ namespace svxform
     DispatchInterceptionMultiplexer::DispatchInterceptionMultiplexer(
                 const Reference< XDispatchProviderInterception >& _rxToIntercept, DispatchInterceptor* _pMaster )
         :DispatchInterceptionMultiplexer_BASE(_pMaster && _pMaster->getInterceptorMutex() ? *_pMaster->getInterceptorMutex() : m_aFallback)
-        ,m_aFallback()
         ,m_pMutex( _pMaster && _pMaster->getInterceptorMutex() ? _pMaster->getInterceptorMutex() : &m_aFallback )
         ,m_xIntercepted(_rxToIntercept)
         ,m_bListening(false)

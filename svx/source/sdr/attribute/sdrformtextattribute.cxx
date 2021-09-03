@@ -174,8 +174,6 @@ namespace drawinglayer::attribute
                 meFormTextAdjust(rSet.Get(XATTR_FORMTXTADJUST).GetValue()),
                 meFormTextShadow(rSet.Get(XATTR_FORMTXTSHADOW).GetValue()),
                 maFormTextShdwColor(rSet.Get(XATTR_FORMTXTSHDWCOLOR).GetColorValue()),
-                maOutline(),
-                maShadowOutline(),
                 mbFormTextMirror(rSet.Get(XATTR_FORMTXTMIRROR).GetValue()),
                 mbFormTextOutline(rSet.Get(XATTR_FORMTXTOUTLINE).GetValue())
             {
@@ -213,9 +211,6 @@ namespace drawinglayer::attribute
                 meFormTextStyle(XFormTextStyle::NONE),
                 meFormTextAdjust(XFormTextAdjust::Center),
                 meFormTextShadow(XFormTextShadow::NONE),
-                maFormTextShdwColor(),
-                maOutline(),
-                maShadowOutline(),
                 mbFormTextMirror(false),
                 mbFormTextOutline(false)
             {

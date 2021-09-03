@@ -127,8 +127,7 @@ SdrGrafPrimitive2D::SdrGrafPrimitive2D(
     const basegfx::B2DHomMatrix& rTransform,
     const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute,
     const GraphicObject& rGraphicObject, const GraphicAttr& rGraphicAttr)
-    : BufferedDecompositionPrimitive2D()
-    , maTransform(rTransform)
+    : maTransform(rTransform)
     , maSdrLFSTAttribute(rSdrLFSTAttribute)
     , maGraphicObject(rGraphicObject)
     , maGraphicAttr(rGraphicAttr)

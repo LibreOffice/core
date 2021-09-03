@@ -83,9 +83,7 @@ namespace sdr::overlay
         }
 
         OverlayObject::OverlayObject(Color aBaseColor)
-        :   Event(),
-            mpOverlayManager(nullptr),
-            maPrimitive2DSequence(),
+        :   mpOverlayManager(nullptr),
             maOffset(0.0, 0.0),
             maBaseColor(aBaseColor),
             mbIsVisible(true),

@@ -34,9 +34,6 @@ namespace drawinglayer::attribute
         }
 
         SdrFillTextAttribute::SdrFillTextAttribute()
-        :   maFill(),
-            maFillFloatTransGradient(),
-            maTextAttribute()
         {
         }
 

@@ -102,14 +102,7 @@ namespace
 
     public:
         explicit impTextBreakupHandler(SdrOutliner& rOutliner)
-        :   maTextPortionPrimitives(),
-            maLinePrimitives(),
-            maParagraphPrimitives(),
-            mrOutliner(rOutliner),
-            maNewTransformA(),
-            maNewTransformB(),
-            maScale(),
-            maClipRange()
+        :   mrOutliner(rOutliner)
         {
         }
 

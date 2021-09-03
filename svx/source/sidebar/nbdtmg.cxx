@@ -243,7 +243,6 @@ sal_Unicode BulletsTypeMgr::aDynamicBulletTypes[]={' ',' ',' ',' ',' ',' ',' ','
 sal_Unicode BulletsTypeMgr::aDynamicRTLBulletTypes[]={' ',' ',' ',' ',' ',' ',' ',' '};
 
 BulletsTypeMgr::BulletsTypeMgr()
-    : NBOTypeMgrBase()
 {
     Init();
 }
@@ -370,7 +369,6 @@ bool BulletsTypeMgr::IsCustomized(sal_uInt16 nIndex)
 
 // Numbering Type lib
 NumberingTypeMgr::NumberingTypeMgr()
-    : NBOTypeMgrBase()
 {
     Init();
     maDefaultNumberSettingsArr = maNumberSettingsArr;
@@ -551,7 +549,6 @@ bool NumberingTypeMgr::IsCustomized(sal_uInt16 nIndex)
 }
 // Multi-level /Outline Type lib
 OutlineTypeMgr::OutlineTypeMgr()
-    : NBOTypeMgrBase()
 {
     Init();
     for(sal_Int32 nItem = 0; nItem < DEFAULT_NUM_VALUSET_COUNT; nItem++ )

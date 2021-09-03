@@ -488,8 +488,7 @@ ViewObjectContact& ViewContactOfSdrPage::CreateObjectSpecificViewObjectContact(O
 }
 
 ViewContactOfSdrPage::ViewContactOfSdrPage(SdrPage& rPage)
-:   ViewContact(),
-    mrPage(rPage),
+:   mrPage(rPage),
     maViewContactOfPageBackground(*this),
     maViewContactOfPageShadow(*this),
     maViewContactOfPageFill(*this),

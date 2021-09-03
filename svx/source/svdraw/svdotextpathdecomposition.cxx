@@ -76,7 +76,6 @@ namespace
             mnTextLength(rInfo.mnTextLen),
             mnParagraph(rInfo.mnPara),
             maFont(rInfo.mrFont),
-            maDblDXArray(),
             maLocale(rInfo.mpLocale ? *rInfo.mpLocale : css::lang::Locale()),
             mbRTL(!rInfo.mrFont.IsVertical() && rInfo.IsRTL())
         {

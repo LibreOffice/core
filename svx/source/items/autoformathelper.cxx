@@ -173,36 +173,6 @@ void AutoFormatBase::SetRotateAngle( const SfxInt32Item& rNew ) { m_aRotateAngle
 void AutoFormatBase::SetRotateMode( const SvxRotateModeItem& rNew ) { m_aRotateMode.reset(rNew.Clone()); }
 
 AutoFormatBase::AutoFormatBase()
-:   m_aFont(),
-    m_aHeight(),
-    m_aWeight(),
-    m_aPosture(),
-    m_aCJKFont(),
-    m_aCJKHeight(),
-    m_aCJKWeight(),
-    m_aCJKPosture(),
-    m_aCTLFont(),
-    m_aCTLHeight(),
-    m_aCTLWeight(),
-    m_aCTLPosture(),
-    m_aUnderline(),
-    m_aOverline(),
-    m_aCrossedOut(),
-    m_aContour(),
-    m_aShadowed(),
-    m_aColor(),
-    m_aBox(),
-    m_aTLBR(),
-    m_aBLTR(),
-    m_aBackground(),
-    m_aAdjust(),
-    m_aHorJustify(),
-    m_aVerJustify(),
-    m_aStacked(),
-    m_aMargin(),
-    m_aLinebreak(),
-    m_aRotateAngle(),
-    m_aRotateMode()
 {
 }
 

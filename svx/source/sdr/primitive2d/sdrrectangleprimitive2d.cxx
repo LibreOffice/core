@@ -117,8 +117,7 @@ namespace drawinglayer::primitive2d
             double fCornerRadiusX,
             double fCornerRadiusY,
             bool bForceFillForHitTest)
-        :   BufferedDecompositionPrimitive2D(),
-            maTransform(rTransform),
+        :   maTransform(rTransform),
             maSdrLFSTAttribute(rSdrLFSTAttribute),
             mfCornerRadiusX(fCornerRadiusX),
             mfCornerRadiusY(fCornerRadiusY),
