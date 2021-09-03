@@ -142,6 +142,30 @@
       },
       "revId": "872b77f6e8997b663fd01c9df655cd35a31ce39e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "171c9d29_82000fb6",
+        "filename": "external/firebird/ExternalProject_firebird.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-03T07:21:59Z",
+      "side": 1,
+      "message": "Addressed in https://gerrit.libreoffice.org/c/core/+/121553 - thanks for the review!",
+      "parentUuid": "35640aab_cfa03cbe",
+      "range": {
+        "startLine": 86,
+        "startChar": 8,
+        "endLine": 86,
+        "endChar": 40
+      },
+      "revId": "872b77f6e8997b663fd01c9df655cd35a31ce39e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
