@@ -1809,7 +1809,6 @@ IMPL_LINK( VclExpander, ClickHdl, CheckBox&, rBtn, void )
 VclScrolledWindow::VclScrolledWindow(vcl::Window *pParent)
     : VclBin(pParent, WB_HIDE | WB_CLIPCHILDREN | WB_AUTOHSCROLL | WB_AUTOVSCROLL | WB_TABSTOP)
     , m_bUserManagedScrolling(false)
-    , m_nBorderWidth(1)
     , m_eDrawFrameStyle(DrawFrameStyle::NONE)
     , m_eDrawFrameFlags(DrawFrameFlags::NONE)
     , m_pVScroll(VclPtr<ScrollBar>::Create(this, WB_HIDE | WB_VERT))
@@ -1827,6 +1826,18 @@ VclScrolledWindow::VclScrolledWindow(vcl::Window *pParent)
     Link<ScrollBar*,void> aLink( LINK( this, VclScrolledWindow, ScrollBarHdl ) );
     m_pVScroll->SetScrollHdl(aLink);
     m_pHScroll->SetScrollHdl(aLink);
+
+    m_nBorderWidth = CalcBorderWidth();
+}
+
+int VclScrolledWindow::CalcBorderWidth() const
+{
+    const tools::Rectangle aRect(tools::Rectangle(Point(0, 0), Size(100, 100)));
+    DecorationView aDecoView(const_cast<OutputDevice*>(GetOutDev()));
+    // don't actually draw anything, just measure what size it would be and the diff is the desired border size to reserve
+    const tools::Rectangle aContentRect = aDecoView.DrawFrame(aRect, m_eDrawFrameStyle, m_eDrawFrameFlags | DrawFrameFlags::NoDraw);
+    const auto nBorderWidth = (aRect.GetWidth() - aContentRect.GetWidth()) / 2;
+    return std::max<int>(nBorderWidth, 1);
 }
 
 void VclScrolledWindow::dispose()
@@ -2030,24 +2041,35 @@ Size VclScrolledWindow::getVisibleChildSize() const
 
 bool VclScrolledWindow::set_property(const OString &rKey, const OUString &rValue)
 {
-    if (rKey == "shadow-type")
+    if (rKey == "shadow-type" || rKey == "name")
     {
-        // despite the style names, this looks like the best mapping
-        if (rValue == "in")
-            m_eDrawFrameStyle = DrawFrameStyle::Out;
-        else if (rValue == "out")
-            m_eDrawFrameStyle = DrawFrameStyle::In;
-        else if (rValue == "etched-in")
-            m_eDrawFrameStyle = DrawFrameStyle::DoubleOut;
-        else if (rValue == "etched-out")
-            m_eDrawFrameStyle = DrawFrameStyle::DoubleIn;
-        else if (rValue == "none")
-            m_eDrawFrameStyle = DrawFrameStyle::NONE;
+        if (rKey == "shadow-type")
+        {
+            // despite the style names, this looks like the best mapping
+            if (rValue == "in")
+                m_eDrawFrameStyle = DrawFrameStyle::Out;
+            else if (rValue == "out")
+                m_eDrawFrameStyle = DrawFrameStyle::In;
+            else if (rValue == "etched-in")
+                m_eDrawFrameStyle = DrawFrameStyle::DoubleOut;
+            else if (rValue == "etched-out")
+                m_eDrawFrameStyle = DrawFrameStyle::DoubleIn;
+            else if (rValue == "none")
+                m_eDrawFrameStyle = DrawFrameStyle::NONE;
+        }
+        else if (rKey == "name")
+        {
+            m_eDrawFrameFlags = rValue == "monoborder" ? DrawFrameFlags::Mono : DrawFrameFlags::NONE;
+        }
+
+        auto nBorderWidth = CalcBorderWidth();
+        if (m_nBorderWidth != nBorderWidth)
+        {
+            m_nBorderWidth = nBorderWidth;
+            queue_resize();
+        }
+
         return true;
-    }
-    else if (rKey == "name")
-    {
-        m_eDrawFrameFlags = rValue == "monoborder" ? DrawFrameFlags::Mono : DrawFrameFlags::NONE;
     }
 
     bool bRet = VclBin::set_property(rKey, rValue);
