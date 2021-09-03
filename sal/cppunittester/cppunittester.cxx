@@ -279,7 +279,7 @@ public:
                 std::cerr << "please check your PATH variable and re-autogen.\n";
             }
 #endif
-            std::cerr << "Path is '" << getenv("PATH") << "'\n";
+            std::cerr << "Path (length: " << strlen(pPath)<< ") is '" << getenv("PATH") << "'\n";
             return false;
         }
 #endif
