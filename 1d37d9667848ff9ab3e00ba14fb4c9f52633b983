@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b54016e4_8c602036",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-03T16:18:12Z",
+      "side": 1,
+      "message": "Nice. This template is the reason I was looking into settings.xml (and meta.xml) in the first place. I was looking at removing AddParaTableSpacingAtStart.",
+      "revId": "1d37d9667848ff9ab3e00ba14fb4c9f52633b983",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
