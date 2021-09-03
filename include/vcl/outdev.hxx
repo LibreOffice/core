@@ -1414,21 +1414,6 @@ protected:
                                     basegfx::B2DRange &aVisibleRange,
                                     double &fMaximumArea);
 
-    /** Retrieve downsampled and cropped bitmap
-     
-        Takes destination size in twips units.
-
-        @attention This method ignores negative rDstSz values, thus
-        mirroring must happen outside this method (e.g. in DrawBitmap)
-     */
-    static Bitmap               GetDownsampledBitmap(
-                                    const Size& rDstSz,
-                                    const Point& rSrcPt,
-                                    const Size& rSrcSz,
-                                    const Bitmap& rBmp,
-                                    tools::Long nMaxBmpDPIX,
-                                    tools::Long nMaxBmpDPIY );
-
 private:
 
     SAL_DLLPRIVATE void         DrawDeviceAlphaBitmap(

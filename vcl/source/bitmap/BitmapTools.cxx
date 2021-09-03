@@ -13,6 +13,7 @@
 #include <array>
 #include <utility>
 
+#include <tools/helpers.hxx>
 #include <vcl/BitmapTools.hxx>
 
 #include <sal/log.hxx>
@@ -1138,6 +1139,73 @@ bool convertBitmap32To24Plus8(BitmapEx const & rInput, BitmapEx & rResult)
     else
         rResult = BitmapEx(aResultBitmap, aResultAlpha);
     return true;
+}
+
+Bitmap GetDownsampledBitmap(Size const& rDstSizeTwip, Point const& rSrcPt, Size const& rSrcSz,
+                            Bitmap const& rBmp, tools::Long nMaxBmpDPIX, tools::Long nMaxBmpDPIY)
+{
+    Bitmap aBmp(rBmp);
+
+    if (!aBmp.IsEmpty())
+    {
+        const tools::Rectangle aBmpRect( Point(), aBmp.GetSizePixel() );
+        tools::Rectangle       aSrcRect( rSrcPt, rSrcSz );
+
+        // do cropping if necessary
+        if( aSrcRect.Intersection( aBmpRect ) != aBmpRect )
+        {
+            if( !aSrcRect.IsEmpty() )
+                aBmp.Crop( aSrcRect );
+            else
+                aBmp.SetEmpty();
+        }
+
+        if( !aBmp.IsEmpty() )
+        {
+            // do downsampling if necessary
+            // #103209# Normalize size (mirroring has to happen outside of this method)
+            Size aDstSizeTwip(std::abs(rDstSizeTwip.Width()), std::abs(rDstSizeTwip.Height()));
+
+            const Size aBmpSize( aBmp.GetSizePixel() );
+            const double fBmpPixelX = aBmpSize.Width();
+            const double fBmpPixelY = aBmpSize.Height();
+            const double fMaxPixelX
+                = o3tl::convert<double>(aDstSizeTwip.Width(), o3tl::Length::twip, o3tl::Length::in)
+                  * nMaxBmpDPIX;
+            const double fMaxPixelY
+                = o3tl::convert<double>(aDstSizeTwip.Height(), o3tl::Length::twip, o3tl::Length::in)
+                  * nMaxBmpDPIY;
+
+            // check, if the bitmap DPI exceeds the maximum DPI (allow 4 pixel rounding tolerance)
+            if (((fBmpPixelX > (fMaxPixelX + 4)) ||
+                  (fBmpPixelY > (fMaxPixelY + 4))) &&
+                (fBmpPixelY > 0.0) && (fMaxPixelY > 0.0))
+            {
+                // do scaling
+                Size aNewBmpSize;
+                const double fBmpWH = fBmpPixelX / fBmpPixelY;
+                const double fMaxWH = fMaxPixelX / fMaxPixelY;
+
+                if (fBmpWH < fMaxWH)
+                {
+                    aNewBmpSize.setWidth(FRound(fMaxPixelY * fBmpWH));
+                    aNewBmpSize.setHeight(FRound(fMaxPixelY));
+                }
+                else if (fBmpWH > 0.0)
+                {
+                    aNewBmpSize.setWidth(FRound(fMaxPixelX));
+                    aNewBmpSize.setHeight(FRound(fMaxPixelX / fBmpWH));
+                }
+
+                if( aNewBmpSize.Width() && aNewBmpSize.Height() )
+                    aBmp.Scale(aNewBmpSize);
+                else
+                    aBmp.SetEmpty();
+            }
+        }
+    }
+
+    return aBmp;
 }
 
 } // end vcl::bitmap
