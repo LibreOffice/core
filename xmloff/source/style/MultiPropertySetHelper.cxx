@@ -36,8 +36,6 @@ using ::com::sun::star::uno::UNO_QUERY;
 MultiPropertySetHelper::MultiPropertySetHelper(
     const char** pNames ) :
         nLength( 0 ),
-        aPropertySequence(),
-        aValues(),
         pValues( nullptr )
 {
     // first count the elements

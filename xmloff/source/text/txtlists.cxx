@@ -42,9 +42,7 @@ using namespace ::com::sun::star;
 
 
 XMLTextListsHelper::XMLTextListsHelper()
-   :  msLastProcessedListId(),
-      msListStyleOfLastProcessedList()
-      // Inconsistent behavior regarding lists (#i92811#)
+ // Inconsistent behavior regarding lists (#i92811#)
 {
 }
 

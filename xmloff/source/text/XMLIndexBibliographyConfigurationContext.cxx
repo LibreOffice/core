@@ -59,9 +59,6 @@ constexpr OUStringLiteral gsLocale(u"Locale");
 XMLIndexBibliographyConfigurationContext::XMLIndexBibliographyConfigurationContext(
     SvXMLImport& rImport) :
         SvXMLStyleContext(rImport, XmlStyleFamily::TEXT_BIBLIOGRAPHYCONFIG),
-        sSuffix(),
-        sPrefix(),
-        sAlgorithm(),
         maLanguageTagODF(),
         bNumberedEntries(false),
         bSortByPosition(true)

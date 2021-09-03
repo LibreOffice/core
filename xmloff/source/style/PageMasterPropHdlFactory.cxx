@@ -49,8 +49,7 @@ SvXMLEnumMapEntry<sal_uInt16> const aXML_TextGridMode_ConstantMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-XMLPageMasterPropHdlFactory::XMLPageMasterPropHdlFactory() :
-    XMLPropertyHandlerFactory()
+XMLPageMasterPropHdlFactory::XMLPageMasterPropHdlFactory()
 {
 }
 

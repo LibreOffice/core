@@ -27,8 +27,7 @@ using namespace css::uno;
 using namespace css::security;
 using namespace css::util;
 
-CertificateImpl::CertificateImpl() :
-    m_pKey()
+CertificateImpl::CertificateImpl()
 {
 }
 

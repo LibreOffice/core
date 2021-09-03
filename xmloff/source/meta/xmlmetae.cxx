@@ -304,8 +304,7 @@ SvXMLMetaExport::SvXMLMetaExport(
         const uno::Reference<document::XDocumentProperties>& i_rDocProps ) :
     mrExport( i_rExp ),
     mxDocProps( i_rDocProps ),
-    m_level( 0 ),
-    m_preservedNSs()
+    m_level( 0 )
 {
     assert(mxDocProps.is());
 }

@@ -80,7 +80,6 @@ XMLFootnoteConfigHelper::XMLFootnoteConfigHelper(
     XMLFootnoteConfigurationImportContext& rConfigImport,
     bool bBegin)
 :   SvXMLImportContext(rImport)
-,   sBuffer()
 ,   rConfig(rConfigImport)
 ,   bIsBegin(bBegin)
 {

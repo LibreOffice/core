@@ -319,8 +319,6 @@ public:
         , mxComponentContext( rxContext )
         , implementationName(theImplementationName)
         , maSupportedServiceNames(sSupportedServiceNames)
-        , mpRDFaHelper() // lazy
-        , mpDocumentInfo() // lazy
     {
         SAL_WARN_IF(!mxComponentContext.is(), "xmloff.core", "SvXMLImport: no ComponentContext");
         if (!mxComponentContext.is()) throw uno::RuntimeException();

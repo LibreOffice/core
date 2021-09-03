@@ -118,7 +118,7 @@ static char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* /*ar
 }
 
 SecurityEnvironment_NssImpl::SecurityEnvironment_NssImpl() :
-m_pHandler( nullptr ) , m_tSymKeyList() {
+m_pHandler( nullptr ) {
     PK11_SetPasswordFunc( GetPasswordFunction ) ;
 }
 

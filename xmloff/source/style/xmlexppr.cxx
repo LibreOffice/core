@@ -174,8 +174,7 @@ public:
     sal_uInt32 GetPropertyCount() const { return aPropInfos.size(); }
 };
 
-FilterPropertiesInfo_Impl::FilterPropertiesInfo_Impl() :
-    aPropInfos()
+FilterPropertiesInfo_Impl::FilterPropertiesInfo_Impl()
 {
 }
 

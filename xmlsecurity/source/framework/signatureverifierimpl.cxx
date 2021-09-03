@@ -27,7 +27,6 @@
 
 
 SignatureVerifierImpl::SignatureVerifierImpl()
-  : SignatureVerifierImpl_Base()
 {
 }
 

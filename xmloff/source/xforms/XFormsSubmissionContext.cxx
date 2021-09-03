@@ -44,8 +44,7 @@ using namespace xmloff::token;
 XFormsSubmissionContext::XFormsSubmissionContext(
     SvXMLImport& rImport,
     const Reference<XModel2>& xModel ) :
-        TokenContext( rImport ),
-        mxSubmission()
+        TokenContext( rImport )
 {
     // register submission with model
     SAL_WARN_IF( !xModel.is(), "xmloff", "need model" );

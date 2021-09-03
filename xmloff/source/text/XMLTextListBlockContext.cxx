@@ -47,13 +47,9 @@ XMLTextListBlockContext::XMLTextListBlockContext(
         const bool bRestartNumberingAtSubList )
 :   SvXMLImportContext( rImport )
 ,   mrTxtImport( rTxtImp )
-,   msListStyleName()
-,   mxParentListBlock( )
 ,   mnLevel( 0 )
 ,   mbRestartNumbering( false )
 ,   mbSetDefaults( false )
-,   msListId()
-,   msContinueListId()
 {
     static constexpr OUStringLiteral s_PropNameDefaultListId = u"DefaultListId";
     {

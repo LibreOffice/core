@@ -44,7 +44,6 @@ XMLIndexTabStopEntryContext::XMLIndexTabStopEntryContext(
     XMLIndexTemplateContext& rTemplate ) :
         XMLIndexSimpleEntryContext(rImport, "TokenTabStop",
                                    rTemplate),
-        sLeaderChar(),
         nTabPosition(0),
         bTabPositionOK(false),
         bTabRightAligned(false),

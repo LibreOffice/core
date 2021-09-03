@@ -47,8 +47,7 @@ XMLTextListItemContext::XMLTextListItemContext(
     : SvXMLImportContext( rImport ),
       rTxtImport( rTxtImp ),
       nStartValue( -1 ),
-      mnSubListCount( 0 ),
-      mxNumRulesOverride()
+      mnSubListCount( 0 )
 {
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {

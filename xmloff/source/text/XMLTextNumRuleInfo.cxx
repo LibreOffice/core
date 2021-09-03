@@ -37,10 +37,7 @@ using namespace ::com::sun::star::style;
 
 // Complete refactoring of the class and enhancement of the class for lists.
 XMLTextNumRuleInfo::XMLTextNumRuleInfo()
-    : mxNumRules()
-    , msNumRulesName()
-    , msListId()
-    , mnListStartValue( -1 )
+    : mnListStartValue( -1 )
     , mnListLevel( 0 )
     , mbIsNumbered( false )
     , mbIsRestart( false )

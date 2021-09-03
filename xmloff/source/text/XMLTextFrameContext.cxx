@@ -1320,11 +1320,8 @@ XMLTextFrameContext::XMLTextFrameContext(
         const Reference< XFastAttributeList > & xAttrList,
         TextContentAnchorType eATyp )
 :   SvXMLImportContext( rImport )
-,   MultiImageImportHelper()
 ,   m_xAttrList( new sax_fastparser::FastAttributeList( xAttrList ) )
     // Implement Title/Description Elements UI (#i73249#)
-,   m_sTitle()
-,   m_sDesc()
 ,   m_eDefaultAnchorType( eATyp )
     // Shapes in Writer cannot be named via context menu (#i51726#)
 ,   m_HasAutomaticStyleWithoutParentStyle( false )

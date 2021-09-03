@@ -64,7 +64,6 @@ PageStyleContext::PageStyleContext( SvXMLImport& rImport,
         SvXMLStylesContext& rStyles,
         bool bDefaultStyle) :
     XMLPropStyleContext( rImport, rStyles, XmlStyleFamily::PAGE_MASTER, bDefaultStyle),
-    sPageUsage(),
     m_bIsFillStyleAlreadyConverted(false) //
 {
 }

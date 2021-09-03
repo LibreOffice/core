@@ -64,7 +64,7 @@ XMLMetaImportComponent_get_implementation(
 
 XMLMetaImportComponent::XMLMetaImportComponent(
     const uno::Reference< uno::XComponentContext >& xContext)
-    :   SvXMLImport(xContext, ""), mxDocProps()
+    :   SvXMLImport(xContext, "")
 {
 }
 
