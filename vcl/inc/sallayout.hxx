@@ -200,7 +200,7 @@ private:
                     GenericSalLayout( const GenericSalLayout& ) = delete;
                     GenericSalLayout& operator=( const GenericSalLayout& ) = delete;
 
-    void            ApplyDXArray(const ImplLayoutArgs&);
+    void            ApplyDXArray(const DeviceCoordinate*, SalLayoutFlags nLayoutFlags);
     void            Justify(DeviceCoordinate nNewWidth);
     void            ApplyAsianKerning(const OUString& rStr);
 
