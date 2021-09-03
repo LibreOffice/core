@@ -212,7 +212,7 @@ FontCharMapRef Qt5FontFace::GetFontCharMap() const
     return m_xCharMap;
 }
 
-bool Qt5FontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) const
+bool Qt5FontFace::GetFontCapabilities(vcl::font::FontCapabilities& rFontCapabilities) const
 {
     // read this only once per font
     if (m_bFontCapabilitiesRead)

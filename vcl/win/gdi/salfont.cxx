@@ -691,7 +691,7 @@ FontCharMapRef WinFontFace::GetFontCharMap() const
     return mxUnicodeMap;
 }
 
-bool WinFontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+bool WinFontFace::GetFontCapabilities(vcl::font::FontCapabilities &rFontCapabilities) const
 {
     rFontCapabilities = maFontCapabilities;
     return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
@@ -943,7 +943,7 @@ FontCharMapRef WinSalGraphics::GetFontCharMap() const
     return mpWinFontEntry[0]->GetFontFace()->GetFontCharMap();
 }
 
-bool WinSalGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+bool WinSalGraphics::GetFontCapabilities(vcl::font::FontCapabilities &rFontCapabilities) const
 {
     if (!mpWinFontEntry[0])
         return false;

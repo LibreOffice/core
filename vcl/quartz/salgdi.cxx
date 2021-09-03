@@ -162,7 +162,7 @@ FontCharMapRef CoreTextFontFace::GetFontCharMap() const
     return mxCharMap;
 }
 
-bool CoreTextFontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+bool CoreTextFontFace::GetFontCapabilities(vcl::font::FontCapabilities &rFontCapabilities) const
 {
     // read this only once per font
     if( mbFontCapabilitiesRead )
@@ -519,7 +519,7 @@ FontCharMapRef AquaSalGraphics::GetFontCharMap() const
     return static_cast<const CoreTextFontFace*>(mpTextStyle[0]->GetFontFace())->GetFontCharMap();
 }
 
-bool AquaSalGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+bool AquaSalGraphics::GetFontCapabilities(vcl::font::FontCapabilities &rFontCapabilities) const
 {
     if (!mpTextStyle[0])
         return false;

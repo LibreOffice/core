@@ -671,7 +671,7 @@ const FontCharMapRef & FreetypeFont::GetFontCharMap() const
     return mxFontInfo->GetFontCharMap();
 }
 
-bool FreetypeFont::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+bool FreetypeFont::GetFontCapabilities(vcl::font::FontCapabilities &rFontCapabilities) const
 {
     return mxFontInfo->GetFontCapabilities(rFontCapabilities);
 }
@@ -702,7 +702,7 @@ const FontCharMapRef & FreetypeFontInfo::GetFontCharMap() const
     return mxFontCharMap;
 }
 
-bool FreetypeFontInfo::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+bool FreetypeFontInfo::GetFontCapabilities(vcl::font::FontCapabilities &rFontCapabilities) const
 {
     bool bRet = false;
 

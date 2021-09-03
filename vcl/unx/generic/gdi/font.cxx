@@ -34,7 +34,7 @@ FontCharMapRef X11SalGraphics::GetFontCharMap() const
     return mxTextRenderImpl->GetFontCharMap();
 }
 
-bool X11SalGraphics::GetFontCapabilities(vcl::FontCapabilities &rGetImplFontCapabilities) const
+bool X11SalGraphics::GetFontCapabilities(vcl::font::FontCapabilities &rGetImplFontCapabilities) const
 {
     return mxTextRenderImpl->GetFontCapabilities(rGetImplFontCapabilities);
 }

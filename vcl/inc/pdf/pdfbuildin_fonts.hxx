@@ -69,7 +69,7 @@ public:
     const BuildinFont& GetBuildinFont() const { return mrBuildin; }
     sal_IntPtr GetFontId() const override { return reinterpret_cast<sal_IntPtr>(&mrBuildin); }
     FontCharMapRef GetFontCharMap() const override { return mrBuildin.GetFontCharMap(); }
-    bool GetFontCapabilities(vcl::FontCapabilities&) const override { return false; }
+    bool GetFontCapabilities(vcl::font::FontCapabilities&) const override { return false; }
 
     static const BuildinFont& Get(int nId) { return m_aBuildinFonts[nId]; }
 };

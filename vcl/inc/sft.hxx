@@ -495,8 +495,8 @@ class TrueTypeFont;
 #endif
 
     bool VCL_DLLPUBLIC getTTCoverage(
-        std::optional<std::bitset<UnicodeCoverage::MAX_UC_ENUM>> & rUnicodeCoverage,
-        std::optional<std::bitset<CodePageCoverage::MAX_CP_ENUM>> & rCodePageCoverage,
+        std::optional<std::bitset<text::UnicodeCoverage::MAX_UC_ENUM>> & rUnicodeCoverage,
+        std::optional<std::bitset<text::CodePageCoverage::MAX_CP_ENUM>> & rCodePageCoverage,
         const unsigned char* pTable, size_t nLength);
 
 /**

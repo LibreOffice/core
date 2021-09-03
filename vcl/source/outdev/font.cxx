@@ -302,7 +302,7 @@ bool OutputDevice::GetFontCharMap( FontCharMapRef& rxFontCharMap ) const
     return !rxFontCharMap->IsDefaultMap();
 }
 
-bool OutputDevice::GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const
+bool OutputDevice::GetFontCapabilities( vcl::font::FontCapabilities& rFontCapabilities ) const
 {
     if (!InitFont())
         return false;

@@ -40,7 +40,7 @@ FontCharMapRef SvpSalGraphics::GetFontCharMap() const
     return m_aTextRenderImpl.GetFontCharMap();
 }
 
-bool SvpSalGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+bool SvpSalGraphics::GetFontCapabilities(vcl::font::FontCapabilities &rFontCapabilities) const
 {
     return m_aTextRenderImpl.GetFontCapabilities(rFontCapabilities);
 }

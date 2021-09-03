@@ -73,7 +73,7 @@ public:
     void                  AnnounceFont( PhysicalFontCollection* );
 
     const FontCharMapRef & GetFontCharMap() const;
-    bool GetFontCapabilities(vcl::FontCapabilities&) const;
+    bool GetFontCapabilities(vcl::font::FontCapabilities&) const;
 
 private:
     friend class FreetypeManager;
@@ -103,10 +103,10 @@ public:
     virtual sal_IntPtr      GetFontId() const override { return mpFreetypeFontInfo->GetFontId(); }
 
     FontCharMapRef GetFontCharMap() const override { return mpFreetypeFontInfo->GetFontCharMap(); }
-    inline bool GetFontCapabilities(vcl::FontCapabilities&) const override;
+    inline bool GetFontCapabilities(vcl::font::FontCapabilities&) const override;
 };
 
-bool FreetypeFontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) const
+bool FreetypeFontFace::GetFontCapabilities(vcl::font::FontCapabilities& rFontCapabilities) const
 {
     return mpFreetypeFontInfo->GetFontCapabilities(rFontCapabilities);
 }
