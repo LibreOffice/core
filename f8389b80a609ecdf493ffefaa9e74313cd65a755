@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "491024a2_47477730",
+        "filename": "basic/qa/vba_tests/collection.vb",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-03T20:13:15Z",
+      "side": 1,
+      "message": "Please also test with \"ss\" and its single-character counterpart.",
+      "range": {
+        "startLine": 27,
+        "startChar": 14,
+        "endLine": 27,
+        "endChar": 15
+      },
+      "revId": "f8389b80a609ecdf493ffefaa9e74313cd65a755",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
