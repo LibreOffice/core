@@ -16,6 +16,23 @@
       "message": "oss-fuzz is generating documents which leak SwTextBoxNode since this landed and I can\u0027t figure out how the ownership should work so I fixed a bug https://bugs.documentfoundation.org/show_bug.cgi?id\u003d144271 with some of the examples it has created",
       "revId": "504d78acb866495fd954fcd6db22ea68f174a5ab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d49c5c3b_543278d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-09-03T10:01:57Z",
+      "side": 1,
+      "message": "I am so sorry about the leak. It is only the first part of the way to have textboxes for each shape in a group object. I agree, this can be an experimental feature until this not works fine. If i understand well behind the memory leak stands that problem i use the \u0027new\u0027 operator in textboxhelper.cxx line 119, and there is no \u0027delete\u0027 for it. If this makes the problem, the fix is coming in the next part which is there: https://gerrit.libreoffice.org/c/core/+/121449 I hope that will solve the problem. About the ownership i can say that, i did not do it correctly. Before there was only one SwDrawFrameFormat \u003c-\u003e SwFlyFrameFormat pair, but that means a 1-1 connection. The problem is that for me, group shapes has only one SwDrawFrameFormat, but every textbox needs own SwFlyFrameFormat so i decided that i introduce this class which makes that possible to one DrawFrameFormat has many FlyFrameFormats. That was the main goal of this. Before the frameformat pairs have the ownership of the other format respectively. In this patch  each format owns the SwTextBoxNode class, and this cause the problem i think. Next patch the shape will own the node class and if the shape is destroyed the node class will be destroyed too, and if a fly is destroyed, only the entry of the fly will be removed from the node class. Hopefully it will work correctly in this way, but any good idea are welcome!",
+      "revId": "504d78acb866495fd954fcd6db22ea68f174a5ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
