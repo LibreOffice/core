@@ -83,6 +83,16 @@ bool VCL_DLLPUBLIC isHistorical8x8(const BitmapEx& rBitmapEx, Color& o_rBack, Co
 
 VCL_DLLPUBLIC bool convertBitmap32To24Plus8(BitmapEx const & rInput, BitmapEx & rResult);
 
+/** Retrieve downsampled and cropped bitmap
+
+    Takes destination size in twips units.
+
+    @attention This method ignores negative rDstSz values, thus
+    mirroring must happen outside this method (e.g. in DrawBitmap)
+ */
+VCL_DLLPUBLIC Bitmap GetDownsampledBitmap(Size const& rDstSizeTwip, Point const& rSrcPt, Size const& rSrcSz,
+                            Bitmap const& rBmp, tools::Long nMaxBmpDPIX, tools::Long nMaxBmpDPIY);
+
 } // end vcl::bitmap
 
 #endif // INCLUDED_VCL_BITMAP_TOOLS_HXX
