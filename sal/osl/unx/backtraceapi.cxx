@@ -52,6 +52,8 @@ std::unique_ptr<sal::BacktraceState> sal::backtrace_get(sal_uInt32 maxDepth)
 #include <vector>
 #include <osl/process.h>
 #include <rtl/strbuf.hxx>
+#include <osl/mutex.hxx>
+#include <o3tl/lru_map.hxx>
 #include "file_url.hxx"
 
 namespace
@@ -59,10 +61,15 @@ namespace
 struct FrameData
 {
     const char* file = nullptr;
+    void* addr;
     ptrdiff_t offset;
     OString info;
     bool handled = false;
 };
+
+typedef o3tl::lru_map<void*, OString> FrameCache;
+osl::Mutex frameCacheMutex;
+FrameCache frameCache( 256 );
 
 void process_file_addr2line( const char* file, std::vector<FrameData>& frameData )
 {
@@ -77,7 +84,7 @@ void process_file_addr2line( const char* file, std::vector<FrameData>& frameData
     args.push_back( arg2.pData );
     for( FrameData& frame : frameData )
     {
-        if( strcmp( file, frame.file ) == 0 )
+        if( frame.file != nullptr && strcmp( file, frame.file ) == 0 )
         {
             addrs.push_back("0x" + OUString::number(frame.offset, 16));
             args.push_back(addrs.back().pData);
@@ -144,7 +151,7 @@ void process_file_addr2line( const char* file, std::vector<FrameData>& frameData
     size_t linesPos = 0;
     for( FrameData& frame : frameData )
     {
-        if( strcmp( file, frame.file ) == 0 )
+        if( frame.file != nullptr && strcmp( file, frame.file ) == 0 )
         {
             // There should be two lines, first function name and second source file information.
             // If each of them starts with ??, it is invalid/unknown.
@@ -157,6 +164,8 @@ void process_file_addr2line( const char* file, std::vector<FrameData>& frameData
                     frame.info = function + " in " + file;
                 else
                     frame.info = function + " at " + source;
+                osl::MutexGuard guard(frameCacheMutex);
+                frameCache.insert( { frame.addr, frame.info } );
             }
         }
     }
@@ -174,11 +183,20 @@ OUString sal::backtrace_to_string(BacktraceState* backtraceState)
     {
         Dl_info dli;
         void* addr = backtraceState->buffer[i];
-        if (dladdr(addr, &dli) != 0)
+        osl::ClearableMutexGuard guard(frameCacheMutex);
+        auto it = frameCache.find(addr);
+        guard.clear();
+        if( it != frameCache.end())
+        {
+            frameData[ i ].info = it->second;
+            frameData[ i ].handled = true;
+        }
+        else if (dladdr(addr, &dli) != 0)
         {
             if (dli.dli_fname && dli.dli_fbase)
             {
                 frameData[ i ].file = dli.dli_fname;
+                frameData[ i ].addr = addr;
                 frameData[ i ].offset = reinterpret_cast<ptrdiff_t>(addr) - reinterpret_cast<ptrdiff_t>(dli.dli_fbase);
             }
         }
