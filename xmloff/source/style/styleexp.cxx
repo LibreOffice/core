@@ -41,6 +41,7 @@
 #include <memory>
 #include <set>
 #include <prstylecond.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -120,6 +121,34 @@ void XMLStyleExport::exportStyleContent( const Reference< XStyle >& rStyle )
     catch( const beans::UnknownPropertyException& )
     {
     }
+}
+
+namespace
+{
+/// Writes <style:style style:list-level="..."> for Writer paragraph styles.
+void ExportStyleListlevel(const uno::Reference<beans::XPropertySetInfo>& xPropSetInfo,
+                          const uno::Reference<beans::XPropertyState>& xPropState,
+                          const uno::Reference<beans::XPropertySet>& xPropSet, SvXMLExport& rExport)
+{
+    if (!xPropSetInfo->hasPropertyByName("NumberingLevel"))
+    {
+        SAL_WARN("xmloff", "ExportStyleListlevel: no NumberingLevel for a Writer paragraph style");
+        return;
+    }
+
+    if (xPropState->getPropertyState("NumberingLevel") != beans::PropertyState_DIRECT_VALUE)
+    {
+        return;
+    }
+
+    sal_Int16 nNumberingLevel{};
+    if (!(xPropSet->getPropertyValue("NumberingLevel") >>= nNumberingLevel))
+    {
+        return;
+    }
+
+    rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_LIST_LEVEL, OUString::number(nNumberingLevel));
+}
 }
 
 bool XMLStyleExport::exportStyle(
@@ -302,6 +331,8 @@ bool XMLStyleExport::exportStyle(
                         GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                                   XML_LIST_STYLE_NAME,
                                   GetExport().EncodeStyleName( sListName ) );
+
+                        ExportStyleListlevel(xPropSetInfo, xPropState, xPropSet, GetExport());
                     }
                 }
             }
