@@ -612,10 +612,11 @@ bool SalLayout::GetOutline(basegfx::B2DPolyPolygonVector& rVector) const
     Point aPos;
     const GlyphItem* pGlyph;
     int nStart = 0;
-    while (GetNextGlyph(&pGlyph, aPos, nStart))
+    const LogicalFontInstance* pGlyphFont;
+    while (GetNextGlyph(&pGlyph, aPos, nStart, &pGlyphFont))
     {
         // get outline of individual glyph, ignoring "empty" glyphs
-        bool bSuccess = pGlyph->GetGlyphOutline(aGlyphOutline);
+        bool bSuccess = pGlyph->GetGlyphOutline(pGlyphFont, aGlyphOutline);
         bAllOk &= bSuccess;
         bOneOk |= bSuccess;
         // only add non-empty outlines
@@ -644,10 +645,11 @@ bool SalLayout::GetBoundRect(tools::Rectangle& rRect) const
     Point aPos;
     const GlyphItem* pGlyph;
     int nStart = 0;
-    while (GetNextGlyph(&pGlyph, aPos, nStart))
+    const LogicalFontInstance* pGlyphFont;
+    while (GetNextGlyph(&pGlyph, aPos, nStart, &pGlyphFont))
     {
         // get bounding rectangle of individual glyph
-        if (pGlyph->GetGlyphBoundRect(aRectangle))
+        if (pGlyph->GetGlyphBoundRect(pGlyphFont, aRectangle))
         {
             // merge rectangle
             aRectangle += aPos;
@@ -915,6 +917,7 @@ sal_Int32 GenericSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoor
 
 bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
                                     Point& rPos, int& nStart,
+                                    const LogicalFontInstance** ppGlyphFont,
                                     const PhysicalFontFace**) const
 {
     std::vector<GlyphItem>::const_iterator pGlyphIter = m_GlyphItems.begin();
@@ -939,6 +942,8 @@ bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
     // update return data with glyph info
     *pGlyph = &(*pGlyphIter);
     ++nStart;
+    if (ppGlyphFont)
+        *ppGlyphFont = m_GlyphItems.GetFont().get();
 
     // calculate absolute position in pixel units
     Point aRelativePos = pGlyphIter->m_aLinearPos;
@@ -1529,6 +1534,7 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, tools::Long* pCaretXArray
 
 bool MultiSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
                                   Point& rPos, int& nStart,
+                                  const LogicalFontInstance** ppGlyphFont,
                                   const PhysicalFontFace** pFallbackFont) const
 {
     // NOTE: nStart is tagged with current font index
@@ -1539,7 +1545,7 @@ bool MultiSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
         GenericSalLayout& rLayout = *mpLayouts[ nLevel ];
         rLayout.InitFont();
         const PhysicalFontFace* pFontFace = rLayout.GetFont().GetFontFace();
-        if (rLayout.GetNextGlyph(pGlyph, rPos, nStart))
+        if (rLayout.GetNextGlyph(pGlyph, rPos, nStart, ppGlyphFont))
         {
             int nFontTag = nLevel << GF_FONTSHIFT;
             nStart |= nFontTag;
