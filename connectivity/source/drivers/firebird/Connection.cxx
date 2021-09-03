@@ -211,8 +211,8 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
 
         std::string dpbBuffer;
         {
-            char userName[256] = "";
-            char userPassword[256] = "";
+            OString userName;
+            OString userPassword;
 
             dpbBuffer.push_back(isc_dpb_version1);
             dpbBuffer.push_back(isc_dpb_sql_dialect);
@@ -233,28 +233,42 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
 
             if (m_bIsEmbedded || m_bIsFile)
             {
-                strcpy(userName,"sysdba");
-                strcpy(userPassword,"masterkey");
+                userName = "sysdba";
+                userPassword = "masterkey";
             }
             else
             {
-                // TODO: parse password from connection string as needed?
+                for (const auto& rIter : info)
+                {
+                    if (rIter.Name == "user")
+                    {
+                        if (OUString value; rIter.Value >>= value)
+                            userName = OUStringToOString(value, RTL_TEXTENCODING_UTF8);
+                    }
+                    else if (rIter.Name == "password")
+                    {
+                        if (OUString value; rIter.Value >>= value)
+                            userPassword = OUStringToOString(value, RTL_TEXTENCODING_UTF8);
+                    }
+                }
             }
 
-            if (strlen(userName))
+            if (!userName.isEmpty())
             {
-                int nUsernameLength = strlen(userName);
+                const sal_Int32 nMaxUsername = 255; //max size
+                int nUsernameLength = std::min(userName.getLength(), nMaxUsername);
                 dpbBuffer.push_back(isc_dpb_user_name);
                 dpbBuffer.push_back(nUsernameLength);
-                dpbBuffer.append(userName);
+                dpbBuffer.append(userName.getStr(), nUsernameLength);
             }
 
-            if (strlen(userPassword))
+            if (!userPassword.isEmpty())
             {
-                int nPasswordLength = strlen(userPassword);
+                const sal_Int32 nMaxPassword = 255; //max size
+                int nPasswordLength = std::min(userPassword.getLength(), nMaxPassword);
                 dpbBuffer.push_back(isc_dpb_password);
                 dpbBuffer.push_back(nPasswordLength);
-                dpbBuffer.append(userPassword);
+                dpbBuffer.append(userPassword.getStr(), nPasswordLength);
             }
         }
 
