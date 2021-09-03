@@ -89,10 +89,10 @@ void SAL_CALL ScXMLLabelRangeContext::endFastElement( sal_Int32 /*nElement*/ )
     //  Label ranges must be stored as strings until all sheets are loaded
     //  (like named expressions).
 
-    auto pLabelRange = std::make_unique<ScMyLabelRange>(
+    ScMyLabelRange aLabelRange(
                 ScMyLabelRange{sLabelRangeStr, sDataRangeStr, bColumnOrientation});
 
-    GetScImport().AddLabelRange(std::move(pLabelRange));
+    GetScImport().AddLabelRange(std::move(aLabelRange));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
