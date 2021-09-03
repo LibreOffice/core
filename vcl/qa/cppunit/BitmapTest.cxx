@@ -11,21 +11,22 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#include <unordered_map>
-
-#include <vcl/bitmap.hxx>
-#include <vcl/virdev.hxx>
+#include <config_features.h>
 
 #include <rtl/strbuf.hxx>
-#include <config_features.h>
+
+#include <vcl/BitmapTools.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 #include <vcl/BitmapMonochromeFilter.hxx>
 
 #include <bitmap/BitmapWriteAccess.hxx>
-
-#include <svdata.hxx>
-#include <salinst.hxx>
 #include <bitmap/Octree.hxx>
+#include <salinst.hxx>
+#include <svdata.hxx>
+
+#include <unordered_map>
 
 namespace
 {
@@ -45,6 +46,7 @@ class BitmapTest : public CppUnit::TestFixture
     void testEmptyAccess();
     void testDitherSize();
     void testMirror();
+    void testCroppedDownsampledBitmap();
 
     CPPUNIT_TEST_SUITE(BitmapTest);
     CPPUNIT_TEST(testCreation);
@@ -61,6 +63,7 @@ class BitmapTest : public CppUnit::TestFixture
     CPPUNIT_TEST(testEmptyAccess);
     CPPUNIT_TEST(testDitherSize);
     CPPUNIT_TEST(testMirror);
+    CPPUNIT_TEST(testCroppedDownsampledBitmap);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -685,6 +688,13 @@ void BitmapTest::testMirror()
     }
 }
 
+void BitmapTest::testCroppedDownsampledBitmap()
+{
+    Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N24_BPP);
+    Bitmap aDownsampledBmp(vcl::bitmap::GetDownsampledBitmap(Size(10, 10), Point(20, 20),
+                                                             Size(5, 5), aBitmap, 72, 72));
+    CPPUNIT_ASSERT(aDownsampledBmp.IsEmpty());
+}
 } // namespace
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BitmapTest);

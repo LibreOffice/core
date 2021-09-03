@@ -24,6 +24,7 @@
 #include <tools/helpers.hxx>
 #include <officecfg/Office/Common.hxx>
 
+#include <vcl/BitmapTools.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/print.hxx>
 #include <vcl/settings.hxx>
@@ -1836,9 +1837,9 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
                                     // scale down bitmap, if requested
                                     if( bDownsampleBitmaps )
-                                        aBandBmp = GetDownsampledBitmap( PixelToLogic(LogicToPixel(aDstSzPix), MapMode(MapUnit::MapTwip)),
+                                        aBandBmp = vcl::bitmap::GetDownsampledBitmap(PixelToLogic(LogicToPixel(aDstSzPix), MapMode(MapUnit::MapTwip)),
                                                                          Point(), aBandBmp.GetSizePixel(),
-                                                                         aBandBmp, nMaxBmpDPIX, nMaxBmpDPIY );
+                                                                         aBandBmp, nMaxBmpDPIX, nMaxBmpDPIY);
 
                                     rOutMtf.AddAction( new MetaCommentAction( "PRNSPOOL_TRANSPARENTBITMAP_BEGIN" ) );
                                     rOutMtf.AddAction( new MetaBmpScaleAction( aDstPtPix, aDstSzPix, aBandBmp ) );
