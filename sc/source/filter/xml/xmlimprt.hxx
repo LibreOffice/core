@@ -143,7 +143,7 @@ class ScXMLImport: public SvXMLImport
     ScMyNamedExpressions   m_aMyNamedExpressions;
     SheetNamedExpMap m_SheetNamedExpressions;
 
-    std::unique_ptr<ScMyLabelRanges>            pMyLabelRanges;
+    ScMyLabelRanges            maMyLabelRanges;
     std::unique_ptr<ScMyImportValidations>  pValidations;
     std::unique_ptr<ScMyImpDetectiveOpArray>    pDetectiveOpArray;
     std::unique_ptr<SolarMutexGuard>        pSolarMutexGuard;
@@ -230,10 +230,10 @@ public:
 
     void AddNamedExpression(SCTAB nTab, ScMyNamedExpression* pNamedExp);
 
-    void AddLabelRange(std::unique_ptr<const ScMyLabelRange> pMyLabelRange) {
-        if (!pMyLabelRanges)
-            pMyLabelRanges.reset(new ScMyLabelRanges);
-        pMyLabelRanges->push_back(std::move(pMyLabelRange)); }
+    void AddLabelRange(std::unique_ptr<const ScMyLabelRange> pMyLabelRange)
+    {
+        maMyLabelRanges.push_back(std::move(pMyLabelRange));
+    }
 
     void AddValidation(const ScMyImportValidation& rValidation) {
         if (!pValidations)
