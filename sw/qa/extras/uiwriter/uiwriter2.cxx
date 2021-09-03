@@ -4465,6 +4465,40 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineDOCXTableMoveToFrame)
     CPPUNIT_ASSERT(!xTableNames->hasByName("Table2"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf143215)
+{
+    // load a table with tracked insertion of an empty row
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "TC-table-rowadd.docx");
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    // check table count
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+
+    // check table row count
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable->getRows()->getCount());
+
+    // reject insertion of the empty table row
+    IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
+    rIDRA.AcceptAllRedline(false);
+    // This was 4 (remained empty row)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getRows()->getCount());
+
+    // Undo and accept insertion of the table row
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    rIDRA.AcceptAllRedline(true);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable->getRows()->getCount());
+
+    // delete it with change tracking, and accept the deletion
+    dispatchCommand(mxComponent, ".uno:DeleteRows", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable->getRows()->getCount());
+    rIDRA.AcceptAllRedline(true);
+    // This was 4 (remained empty row)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getRows()->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf128335)
 {
     // Load the bugdoc, which has 3 textboxes.
