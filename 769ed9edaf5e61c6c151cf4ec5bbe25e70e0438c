@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e0d6acc_e4de8340",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2065,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-03T14:02:04Z",
+      "side": 1,
+      "message": "Please prefix pointers with p... so pCharClass",
+      "range": {
+        "startLine": 2065,
+        "startChar": 21,
+        "endLine": 2065,
+        "endChar": 31
+      },
+      "revId": "769ed9edaf5e61c6c151cf4ec5bbe25e70e0438c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
