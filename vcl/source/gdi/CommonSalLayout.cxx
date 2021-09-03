@@ -187,7 +187,7 @@ void GenericSalLayout::SetNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nCharPos
         mxBreak->previousCharacters(rArgs.mrStr, nCharPos, aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
 
-    rArgs.NeedFallback(nGraphemeStartPos, nGraphemeEndPos, bRightToLeft);
+    rArgs.AddFallbackRun(nGraphemeStartPos, nGraphemeEndPos, bRightToLeft);
 }
 
 void GenericSalLayout::AdjustLayout(ImplLayoutArgs& rArgs)
