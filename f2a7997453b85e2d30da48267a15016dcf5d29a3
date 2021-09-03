@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3bf1a4d_260258d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-03T16:36:35Z",
+      "side": 1,
+      "message": "I take on board your feedback, the name \"Printer\" in the class names is indeed redundant, but they seem to be be a poor man\u0027s namespace convention. I am going to change it to vcl::printer::Options (notice I have changed the namespace name to vcl::printer). Should make things clearer. ",
+      "revId": "f2a7997453b85e2d30da48267a15016dcf5d29a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
