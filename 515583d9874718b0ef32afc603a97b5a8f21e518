@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36adf801_8c4f1052",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-03T09:10:04Z",
+      "side": 1,
+      "message": "It looks reasonable - nice! Thank you for working on this!\n\nHowever, this one is missing one important piece described at [1]: all changes to Writer import and export filters must have unit tests. This one needs to test that files with paragraphs longer than 10000 characters do not get modified (new line ends inserted) after round-trip.\n\n[1] https://wiki.documentfoundation.org/Development/Unit_Tests#Areas_with_.22No_fix_without_a_unit_test.22_rule",
+      "revId": "515583d9874718b0ef32afc603a97b5a8f21e518",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
