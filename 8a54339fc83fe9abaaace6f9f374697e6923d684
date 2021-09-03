@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "eeaee687_2e87ef07",
         "filename": "compilerplugins/clang/plugin.cxx",
@@ -14,8 +15,25 @@
       "side": 1,
       "message": "debugging leftover?",
       "revId": "8a54339fc83fe9abaaace6f9f374697e6923d684",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": true
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c26c4771_cfc46b97",
+        "filename": "compilerplugins/clang/plugin.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-03T12:45:34Z",
+      "side": 1,
+      "message": "thanks, fixed with\n   https://gerrit.libreoffice.org/c/core/+/121602",
+      "parentUuid": "eeaee687_2e87ef07",
+      "revId": "8a54339fc83fe9abaaace6f9f374697e6923d684",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
