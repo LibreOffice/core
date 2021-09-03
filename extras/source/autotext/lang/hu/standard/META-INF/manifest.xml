@@ -19,7 +19,6 @@
  <manifest:file-entry manifest:full-path="EL/EL.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="T/T.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="T/atevent.xml" manifest:media-type=""/>
- <manifest:file-entry manifest:full-path="KHU/meta.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="KHU/atevent.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="KHU/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="KHU/styles.xml" manifest:media-type="text/xml"/>
@@ -29,7 +28,6 @@
  <manifest:file-entry manifest:full-path="SZ/SZ.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="U/atevent.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="U/U.xml" manifest:media-type=""/>
- <manifest:file-entry manifest:full-path="KH/meta.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="KH/atevent.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="KH/content.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="KH/styles.xml" manifest:media-type=""/>
@@ -39,11 +37,9 @@
  <manifest:file-entry manifest:full-path="EX/EX.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="TC/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="TC/TC.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="KU/meta.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="KU/atevent.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="KU/content.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="KU/styles.xml" manifest:media-type=""/>
- <manifest:file-entry manifest:full-path="TH/meta.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="TH/atevent.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="TH/content.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="TH/styles.xml" manifest:media-type=""/>
@@ -51,7 +47,6 @@
  <manifest:file-entry manifest:full-path="TI/TI.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="TL/atevent.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="TL/TL.xml" manifest:media-type=""/>
- <manifest:file-entry manifest:full-path="THU/meta.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="THU/atevent.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="THU/content.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="THU/styles.xml" manifest:media-type=""/>
@@ -60,7 +55,6 @@
  <manifest:file-entry manifest:full-path="MJ/MJ.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="ML/ML.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="ML/atevent.xml" manifest:media-type=""/>
- <manifest:file-entry manifest:full-path="TU/meta.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="TU/atevent.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="TU/content.xml" manifest:media-type=""/>
  <manifest:file-entry manifest:full-path="TU/styles.xml" manifest:media-type=""/>

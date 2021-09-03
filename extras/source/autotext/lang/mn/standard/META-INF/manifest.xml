@@ -9,7 +9,6 @@
  <manifest:file-entry manifest:full-path="FN/manifest.rdf" manifest:media-type="application/rdf+xml"/>
  <manifest:file-entry manifest:full-path="FN/styles.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="FN/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
- <manifest:file-entry manifest:full-path="+BBAE6AQi-/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BBAE6AQi-/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BBAE6AQi-/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BBAE6AQi-/styles.xml" manifest:media-type="text/xml"/>
@@ -21,7 +20,6 @@
  <manifest:file-entry manifest:full-path="+BCIEHQ-/+BCIEHQ-.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="TWIMC/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="TWIMC/TWIMC.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="+BBAE6AQlBBAEEQ-/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BBAE6AQlBBAEEQ-/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BBAE6AQlBBAEEQ-/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BBAE6AQlBBAEEQ-/styles.xml" manifest:media-type="text/xml"/>
@@ -32,26 +30,22 @@
  <manifest:file-entry manifest:full-path="RF/RF.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BBEELw-/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BBEELw-/+BBEELw-.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="+BBMEJQ-/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BBMEJQ-/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BBMEJQ-/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BBMEJQ-/styles.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BBMEJQ-/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
  <manifest:file-entry manifest:full-path="+BBg-/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BBg-/+BBg-.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="+BBAE6AQiBBE-/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BBAE6AQiBBE-/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BBAE6AQiBBE-/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BBAE6AQiBBE-/styles.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BBAE6AQiBBE-/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
- <manifest:file-entry manifest:full-path="+BCE-1/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BCE-1/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BCE-1/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BCE-1/styles.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BCE-1/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
  <manifest:file-entry manifest:full-path="RM/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="RM/RM.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="+BCE-2/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BCE-2/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BCE-2/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BCE-2/styles.xml" manifest:media-type="text/xml"/>
@@ -70,7 +64,6 @@
  <manifest:file-entry manifest:full-path="+BCUEEAQg-/+BCUEEAQg-.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BBAEKA-/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BBAEKA-/+BBAEKA-.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="+BBAE6AQvBCM-/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BBAE6AQvBCM-/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BBAE6AQvBCM-/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BBAE6AQvBCM-/styles.xml" manifest:media-type="text/xml"/>
@@ -86,7 +79,6 @@
  <manifest:file-entry manifest:full-path="+BBA-/+BBA-.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BCEEIQQl-/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BCEEIQQl-/+BCEEIQQl-.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="+BCYEFQ-/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BCYEFQ-/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BCYEFQ-/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BCYEFQ-/styles.xml" manifest:media-type="text/xml"/>
@@ -99,14 +91,12 @@
  <manifest:file-entry manifest:full-path="+BB0E6AQo-/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="C/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="C/C.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="+BBAE6AQR-/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BBAE6AQR-/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BBAE6AQR-/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BBAE6AQR-/styles.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BBAE6AQR-/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
  <manifest:file-entry manifest:full-path="+BCUEEQQd-/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BCUEEQQd-/+BCUEEQQd-.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="+BC0EJQQd-/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BC0EJQQd-/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BC0EJQQd-/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="+BC0EJQQd-/styles.xml" manifest:media-type="text/xml"/>

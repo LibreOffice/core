@@ -12,13 +12,11 @@
  <manifest:file-entry manifest:full-path="CINVI/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
  <manifest:file-entry manifest:full-path="AR/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="AR/AR.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="CREC/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="CREC/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="CREC/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="CREC/manifest.rdf" manifest:media-type="application/rdf+xml"/>
  <manifest:file-entry manifest:full-path="CREC/styles.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="CREC/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
- <manifest:file-entry manifest:full-path="MM/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="MM/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="MM/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="MM/styles.xml" manifest:media-type="text/xml"/>
@@ -30,7 +28,6 @@
  <manifest:file-entry manifest:full-path="NF/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
  <manifest:file-entry manifest:full-path="COP/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="COP/COP.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="RESI/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="RESI/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="RESI/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="RESI/manifest.rdf" manifest:media-type="application/rdf+xml"/>
@@ -49,7 +46,6 @@
  <manifest:file-entry manifest:full-path="CLET/manifest.rdf" manifest:media-type="application/rdf+xml"/>
  <manifest:file-entry manifest:full-path="CLET/styles.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="CLET/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
- <manifest:file-entry manifest:full-path="CDOS/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="CDOS/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="CDOS/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="CDOS/manifest.rdf" manifest:media-type="application/rdf+xml"/>
@@ -59,17 +55,14 @@
  <manifest:file-entry manifest:full-path="C/C.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="D/D.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="BlockList.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="SALU/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="SALU/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="SALU/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="SALU/styles.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="R1/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="R1/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="R1/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="R1/manifest.rdf" manifest:media-type="application/rdf+xml"/>
  <manifest:file-entry manifest:full-path="R1/styles.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="R1/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
- <manifest:file-entry manifest:full-path="R2/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="R2/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="R2/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="R2/manifest.rdf" manifest:media-type="application/rdf+xml"/>
