@@ -70,6 +70,30 @@
       },
       "revId": "872b77f6e8997b663fd01c9df655cd35a31ce39e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "273f24f5_a0c8a02f",
+        "filename": "external/firebird/ExternalProject_firebird.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-03T06:55:19Z",
+      "side": 1,
+      "message": "Hum. Possibly I was mistaken? I saw the warning above about a dangling \"else\"; and I see now that it\u0027s for a different unit. So was that firebird failure after changes introduced into firebird build just a coincidence after all?",
+      "parentUuid": "35654f67_38bfa4e6",
+      "range": {
+        "startLine": 86,
+        "startChar": 8,
+        "endLine": 86,
+        "endChar": 40
+      },
+      "revId": "872b77f6e8997b663fd01c9df655cd35a31ce39e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
