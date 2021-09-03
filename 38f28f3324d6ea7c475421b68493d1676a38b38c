@@ -123,6 +123,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c16994c_5c32ce38",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2064,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-03T07:56:43Z",
+      "side": 1,
+      "message": "The same way we solved also:\ntdf#143332  InStrRev function https://gerrit.libreoffice.org/c/core/+/119177\ntdf#139840  InStr function    https://gerrit.libreoffice.org/c/core/+/118996",
+      "parentUuid": "0f2cbf89_9068d220",
+      "revId": "38f28f3324d6ea7c475421b68493d1676a38b38c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5118d7aa_361cbb7b",
