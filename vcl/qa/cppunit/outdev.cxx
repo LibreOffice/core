@@ -44,6 +44,7 @@ public:
     void testDrawScalePartBitmap();
     void testDrawTransformedBitmapEx();
     void testDrawTransformedBitmapExFlip();
+    void testCroppedDownsampledBitmap();
     void testRTL();
     void testRTLGuard();
     void testDefaultFillColor();
@@ -74,6 +75,7 @@ public:
     CPPUNIT_TEST(testGetReadableFontColorWindow);
     CPPUNIT_TEST(testDrawTransformedBitmapEx);
     CPPUNIT_TEST(testDrawTransformedBitmapExFlip);
+    CPPUNIT_TEST(testCroppedDownsampledBitmap);
     CPPUNIT_TEST(testRTL);
     CPPUNIT_TEST(testRTLGuard);
     CPPUNIT_TEST(testDefaultFillColor);
@@ -504,6 +506,36 @@ void VclOutdevTest::testDrawTransformedBitmapExFlip()
     // - Color is expected to be black, is ffffff (row 2, col 2)
     // i.e. the top left quarter of the image was not black, due to a missing flip.
     CPPUNIT_ASSERT_EQUAL_MESSAGE(ss.str(), COL_BLACK, Color(aColor));
+}
+
+namespace
+{
+class DownsampleBitmapTester : public OutputDevice
+{
+public:
+    DownsampleBitmapTester()
+        : OutputDevice(OUTDEV_VIRDEV)
+    {
+    }
+
+    bool AcquireGraphics() const { return true; }
+    void ReleaseGraphics(bool) {}
+    bool UsePolyPolygonForComplexGradient() { return false; }
+
+    Bitmap GetEmptyBitmap(Bitmap const& rBitmap)
+    {
+        return GetDownsampledBitmap(Size(10, 10), Point(20, 20), Size(5, 5), rBitmap, 72, 72);
+    }
+};
+}
+
+void VclOutdevTest::testCroppedDownsampledBitmap()
+{
+    Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N24_BPP);
+    ScopedVclPtrInstance<DownsampleBitmapTester> pTester;
+
+    Bitmap aDownsampledBmp(pTester->GetEmptyBitmap(aBitmap));
+    CPPUNIT_ASSERT(aDownsampledBmp.IsEmpty());
 }
 
 void VclOutdevTest::testRTL()

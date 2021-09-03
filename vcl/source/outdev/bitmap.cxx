@@ -178,19 +178,11 @@ Bitmap OutputDevice::GetDownsampledBitmap( const Size& rDstSz,
 
     if( !aBmp.IsEmpty() )
     {
-        const tools::Rectangle aBmpRect( Point(), aBmp.GetSizePixel() );
-        tools::Rectangle       aSrcRect( rSrcPt, rSrcSz );
-
-        // do cropping if necessary
-        if( aSrcRect.Intersection( aBmpRect ) != aBmpRect )
+        if (!aBmp.Crop(tools::Rectangle(rSrcPt, rSrcSz)))
         {
-            if( !aSrcRect.IsEmpty() )
-                aBmp.Crop( aSrcRect );
-            else
-                aBmp.SetEmpty();
+            aBmp.SetEmpty();
         }
-
-        if( !aBmp.IsEmpty() )
+        else
         {
             // do downsampling if necessary
             Size aDstSizeTwip( PixelToLogic(LogicToPixel(rDstSz), MapMode(MapUnit::MapTwip)) );
