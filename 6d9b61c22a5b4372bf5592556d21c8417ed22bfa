@@ -16,6 +16,23 @@
       "message": "Note that you are actively beginning to solve bug 62032 with these \"related\" patches.",
       "revId": "6d9b61c22a5b4372bf5592556d21c8417ed22bfa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9947f54a_1a4c7c6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-03T07:33:58Z",
+      "side": 1,
+      "message": "Thanks, will use that bug number for the ODT export.",
+      "revId": "6d9b61c22a5b4372bf5592556d21c8417ed22bfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
