@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <osl/file.hxx>
 #include <emojiview.hxx>
 #include <emojiviewitem.hxx>
 #include <rtl/bootstrap.hxx>
@@ -66,9 +67,12 @@ EmojiView::EmojiView(std::unique_ptr<weld::ScrolledWindow> xWindow)
     : ThumbnailView(std::move(xWindow), nullptr)
 {
     // locate json data file
-    OUString sPath("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/emojiconfig/emoji.json");
-    rtl::Bootstrap::expandMacros(sPath);
-    std::string strPath = OUStringToOString(sPath.subView(strlen("file://")), RTL_TEXTENCODING_UTF8).getStr();
+    OUString aURL("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/emojiconfig/emoji.json");
+    rtl::Bootstrap::expandMacros(aURL);
+
+    OUString aPath;
+    osl::FileBase::getSystemPathFromFileURL(aURL, aPath);
+    std::string strPath = OUStringToOString(aPath, RTL_TEXTENCODING_UTF8).getStr();
 
     std::ifstream file(strPath);
     if(!file.is_open())
