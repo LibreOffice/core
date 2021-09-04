@@ -16,6 +16,23 @@
       "message": "Laurent, I see you are keeping meta.xml in your template. I guess it probably is a bit more helpful in that full-document case. I expect it is just junk in autotext (and remove it in the followup commit).  I wonder if atevents.xml and a few others might be junk as well. But I have no experience in judging any of this.",
       "revId": "dcede10f7023016ac7335bf521e684d904ebd261",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40b0d69c_47c4732f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2021-09-04T19:09:12Z",
+      "side": 1,
+      "message": "Great cleanup :-)\nI think you can remove autotext/lang/bg/standard/FN/Obj0012D655/settings.xml also, because formula code is defined in content.xml (like all other lang).",
+      "revId": "dcede10f7023016ac7335bf521e684d904ebd261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
