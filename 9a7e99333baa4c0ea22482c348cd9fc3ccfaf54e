@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91f96b6e_27d28d23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-04T18:47:47Z",
+      "side": 1,
+      "message": "Mike, appreciate the pickup, to prevent this from happening in future, I have added a unit test for GetDownsampledImage(). However, given this called on Bitmap::Crop() and I noticed it had no test coverage, I have written a test for this function also.",
+      "revId": "9a7e99333baa4c0ea22482c348cd9fc3ccfaf54e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
