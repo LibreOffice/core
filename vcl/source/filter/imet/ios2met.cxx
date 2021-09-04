@@ -1236,7 +1236,7 @@ void OS2METReader::ReadPolygons()
     sal_uInt32 nNumPolys(0);
     pOS2MET->ReadUChar(nFlags).ReadUInt32(nNumPolys);
 
-    if (nNumPolys > SAL_MAX_UINT16)
+    if (!pOS2MET->good() || nNumPolys > SAL_MAX_UINT16)
     {
         pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
         ErrorCode=11;
@@ -1249,7 +1249,7 @@ void OS2METReader::ReadPolygons()
         pOS2MET->ReadUInt32(nNumPoints);
         sal_uInt32 nLimit = SAL_MAX_UINT16;
         if (i==0) --nLimit;
-        if (nNumPoints > nLimit)
+        if (!pOS2MET->good() || nNumPoints > nLimit)
         {
             pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
             ErrorCode=11;
