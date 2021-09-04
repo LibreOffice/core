@@ -269,7 +269,7 @@ bool ImplSdPPTImport::Import()
                 if ( ( nType == VT_I4 ) || ( nType == VT_UI4 ) )
                 {
                     // examine PID_HEADINGPAIR to get the correct entry for PID_DOCPARTS
-                    sal_uInt32 nSlideCount, nVecCount;
+                    sal_uInt32 nSlideCount(0), nVecCount(0);
                     aPropItem.ReadUInt32( nSlideCount );
                     if ( nSlideCount && pSection->GetProperty( PID_HEADINGPAIR, aPropItem ) )
                     {
