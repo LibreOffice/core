@@ -16,6 +16,23 @@
       "message": "Hi Tomaz and Mike, I\u0027ve have simplified this function slightly, I wrote a unit test for it also.",
       "revId": "b9367efe21eca4863ba5c031fad458ec5d9aa5c0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "442711b9_1655cbcd",
+        "filename": "vcl/source/outdev/bitmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-04T08:06:07Z",
+      "side": 1,
+      "message": "This looks nice, but is not correct, unfortunately. It will make empty also for the case when {rSrcPt, rSrcSz} \u003e\u003d bmpRect (i.e., no crop happens).",
+      "revId": "b9367efe21eca4863ba5c031fad458ec5d9aa5c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
