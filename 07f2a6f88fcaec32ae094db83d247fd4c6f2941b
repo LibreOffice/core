@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0d0dc66_db6c04bc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-04T08:10:55Z",
+      "side": 1,
+      "message": "This looks like a copy-paste error - did you mean \"vcl::font\"?",
+      "revId": "07f2a6f88fcaec32ae094db83d247fd4c6f2941b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
