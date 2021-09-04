@@ -86,17 +86,17 @@ void ScHTMLStyles::add(const char* pElemName, size_t nElemName, const char* pCla
             {
                 // new element
                 std::pair<ElemsType::iterator, bool> r =
-                    m_ElemProps.insert(std::make_pair(aElem, std::make_unique<NamePropsType>()));
+                    m_ElemProps.insert(std::make_pair(aElem, NamePropsType()));
                 if (!r.second)
                     // insertion failed.
                     return;
                 itrElem = r.first;
             }
 
-            NamePropsType *const pClsProps = itrElem->second.get();
+            NamePropsType& rClsProps = itrElem->second;
             OUString aClass(pClassName, nClassName, RTL_TEXTENCODING_UTF8);
             aClass = aClass.toAsciiLowerCase();
-            insertProp(*pClsProps, aClass, aProp, aValue);
+            insertProp(rClsProps, aClass, aProp, aValue);
         }
         else
         {
@@ -124,13 +124,13 @@ const OUString& ScHTMLStyles::getPropertyValue(
         auto const itr = m_ElemProps.find(rElem);
         if (itr != m_ElemProps.end())
         {
-            const NamePropsType *const pClasses = itr->second.get();
-            NamePropsType::const_iterator itr2 = pClasses->find(rClass);
-            if (itr2 != pClasses->end())
+            const NamePropsType& rClasses = itr->second;
+            NamePropsType::const_iterator itr2 = rClasses.find(rClass);
+            if (itr2 != rClasses.end())
             {
-                const PropsType *const pProps = itr2->second.get();
-                PropsType::const_iterator itr3 = pProps->find(rPropName);
-                if (itr3 != pProps->end())
+                const PropsType& rProps = itr2->second;
+                PropsType::const_iterator itr3 = rProps.find(rPropName);
+                if (itr3 != rProps.end())
                     return itr3->second;
             }
         }
@@ -140,9 +140,9 @@ const OUString& ScHTMLStyles::getPropertyValue(
         auto const itr = m_GlobalProps.find(rClass);
         if (itr != m_GlobalProps.end())
         {
-            const PropsType *const pProps = itr->second.get();
-            PropsType::const_iterator itr2 = pProps->find(rPropName);
-            if (itr2 != pProps->end())
+            const PropsType& rProps = itr->second;
+            PropsType::const_iterator itr2 = rProps.find(rPropName);
+            if (itr2 != rProps.end())
                 return itr2->second;
         }
     }
@@ -151,9 +151,9 @@ const OUString& ScHTMLStyles::getPropertyValue(
         auto const itr = m_ElemGlobalProps.find(rClass);
         if (itr != m_ElemGlobalProps.end())
         {
-            const PropsType *const pProps = itr->second.get();
-            PropsType::const_iterator itr2 = pProps->find(rPropName);
-            if (itr2 != pProps->end())
+            const PropsType& rProps = itr->second;
+            PropsType::const_iterator itr2 = rProps.find(rPropName);
+            if (itr2 != rProps.end())
                 return itr2->second;
         }
     }
@@ -170,7 +170,7 @@ void ScHTMLStyles::insertProp(
     {
         // new element
         std::pair<NamePropsType::iterator, bool> r =
-            rStore.insert(std::make_pair(aName, std::make_unique<PropsType>()));
+            rStore.insert(std::make_pair(aName, PropsType()));
         if (!r.second)
             // insertion failed.
             return;
@@ -178,8 +178,8 @@ void ScHTMLStyles::insertProp(
         itr = r.first;
     }
 
-    PropsType *const pProps = itr->second.get();
-    pProps->emplace(aProp, aValue);
+    PropsType& rProps = itr->second;
+    rProps.emplace(aProp, aValue);
 }
 
 // BASE class for HTML parser classes
