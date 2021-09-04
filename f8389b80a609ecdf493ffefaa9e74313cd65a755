@@ -46,6 +46,30 @@
       },
       "revId": "f8389b80a609ecdf493ffefaa9e74313cd65a755",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0dcfed86_17ab2211",
+        "filename": "basic/qa/vba_tests/collection.vb",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-04T07:12:26Z",
+      "side": 1,
+      "message": "Unfortunately I can\u0027t test with VBA myself - I have a Russian Windows, and VBA only uses 8-bit codepage in its Basic IDE, thus me trying to paste ẞ/ß there results in ?.\n\nSo the idea is to check what VBA does on a German system with ẞ/ß/SS/ss, and test that our Basic does the same :)",
+      "parentUuid": "e8155214_0ad40d59",
+      "range": {
+        "startLine": 27,
+        "startChar": 14,
+        "endLine": 27,
+        "endChar": 15
+      },
+      "revId": "f8389b80a609ecdf493ffefaa9e74313cd65a755",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
