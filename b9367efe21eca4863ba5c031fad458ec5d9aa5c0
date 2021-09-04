@@ -33,6 +33,24 @@
       "message": "This looks nice, but is not correct, unfortunately. It will make empty also for the case when {rSrcPt, rSrcSz} \u003e\u003d bmpRect (i.e., no crop happens).",
       "revId": "b9367efe21eca4863ba5c031fad458ec5d9aa5c0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96e6c624_1c7468c6",
+        "filename": "vcl/source/outdev/bitmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-04T17:48:47Z",
+      "side": 1,
+      "message": "Ah! My unit test didn\u0027t account for that. Thanks for the pickup Mike.",
+      "parentUuid": "442711b9_1655cbcd",
+      "revId": "b9367efe21eca4863ba5c031fad458ec5d9aa5c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
