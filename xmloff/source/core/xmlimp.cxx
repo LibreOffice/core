@@ -785,7 +785,7 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
         const SvXMLImportContextRef & pHandler = maContexts.top();
         SAL_INFO("xmloff.core", "calling createFastChildContext on " << typeid(*pHandler.get()).name());
         auto tmp = pHandler->createFastChildContext( Element, Attribs );
-        xContext = dynamic_cast<SvXMLImportContext*>(tmp.get());
+        xContext = static_cast<SvXMLImportContext*>(tmp.get());
         assert((tmp && xContext) || (!tmp && !xContext));
     }
     else
@@ -823,7 +823,7 @@ void SAL_CALL SvXMLImport::startUnknownElement (const OUString & rNamespace, con
         const SvXMLImportContextRef & pHandler = maContexts.top();
         SAL_INFO("xmloff.core", "calling createUnknownChildContext on " << typeid(*pHandler.get()).name());
         auto tmp = pHandler->createUnknownChildContext( rNamespace, rName, Attribs );
-        xContext = dynamic_cast<SvXMLImportContext*>(tmp.get());
+        xContext = static_cast<SvXMLImportContext*>(tmp.get());
         assert((tmp && xContext) || (!tmp && !xContext));
     }
     else

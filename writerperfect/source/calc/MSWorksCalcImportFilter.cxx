@@ -333,7 +333,7 @@ MSWorksCalcImportFilter::filter(const css::uno::Sequence<css::beans::PropertyVal
     // OO Graphics Handler: abstract class to handle document SAX messages, concrete implementation here
     // writes to in-memory target doc
     writerperfect::DocumentHandler aHandler(
-        new SvXMLLegacyToFastDocHandler(dynamic_cast<SvXMLImport*>(xInternalHandler.get())));
+        new SvXMLLegacyToFastDocHandler(static_cast<SvXMLImport*>(xInternalHandler.get())));
 
     writerperfect::WPXSvInputStream input(xInputStream);
     OdsGenerator exporter;

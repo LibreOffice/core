@@ -87,7 +87,7 @@ public:
         // OO Graphics Handler: abstract class to handle document SAX messages, concrete implementation here
         // writes to in-memory target doc
         DocumentHandler aHandler(
-            new SvXMLLegacyToFastDocHandler(dynamic_cast<SvXMLImport*>(xInternalHandler.get())));
+            new SvXMLLegacyToFastDocHandler(static_cast<SvXMLImport*>(xInternalHandler.get())));
 
         WPXSvInputStream input(xInputStream);
 

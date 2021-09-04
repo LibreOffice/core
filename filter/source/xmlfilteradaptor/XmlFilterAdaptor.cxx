@@ -191,8 +191,7 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
         }
         else if (xConverter1 && xFastParser)
         {
-            auto pImport = dynamic_cast<SvXMLImport*>(xFastParser.get());
-            assert(pImport);
+            auto pImport = static_cast<SvXMLImport*>(xFastParser.get());
             Reference<XDocumentHandler> xLegacyDocHandler = new SvXMLLegacyToFastDocHandler(pImport);
             if (!xConverter1->importer(aDescriptor,xLegacyDocHandler,msUserData)) {
                 if (xStatusIndicator.is())

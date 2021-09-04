@@ -1636,7 +1636,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameContext::c
             // note: no more draw:image can be added once we get here
             m_xImplContext = solveMultipleImages();
         }
-        xContext = &dynamic_cast<SvXMLImportContext&>(*m_xImplContext->createFastChildContext( nElement, xAttrList ));
+        xContext = static_cast<SvXMLImportContext*>(m_xImplContext->createFastChildContext( nElement, xAttrList ).get());
     }
     else if (nElement == XML_ELEMENT(LO_EXT, XML_SIGNATURELINE))
     {
@@ -1645,7 +1645,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameContext::c
             // note: no more draw:image can be added once we get here
             m_xImplContext = solveMultipleImages();
         }
-        xContext = &dynamic_cast<SvXMLImportContext&>(*m_xImplContext->createFastChildContext(nElement, xAttrList));
+        xContext = static_cast<SvXMLImportContext*>(m_xImplContext->createFastChildContext(nElement, xAttrList).get());
     }
     else if (nElement == XML_ELEMENT(LO_EXT, XML_QRCODE))
     {
@@ -1654,11 +1654,11 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameContext::c
             // note: no more draw:image can be added once we get here
             m_xImplContext = solveMultipleImages();
         }
-        xContext = &dynamic_cast<SvXMLImportContext&>(*m_xImplContext->createFastChildContext(nElement, xAttrList));
+        xContext = static_cast<SvXMLImportContext*>(m_xImplContext->createFastChildContext(nElement, xAttrList).get());
     }
     else if (nElement == XML_ELEMENT(DRAW, XML_A))
     {
-        xContext = &dynamic_cast<SvXMLImportContext&>(*m_xImplContext->createFastChildContext(nElement, xAttrList));
+        xContext = static_cast<SvXMLImportContext*>(m_xImplContext->createFastChildContext(nElement, xAttrList).get());
     }
     else
     {
