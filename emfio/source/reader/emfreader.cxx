@@ -1142,8 +1142,8 @@ namespace emfio
                         if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
                         {
                             LineInfo    aLineInfo;
-                            sal_uInt32      nStyle;
-                            sal_Int32 nPenWidth, nIgnored;
+                            sal_uInt32 nStyle(0);
+                            sal_Int32 nPenWidth(0), nIgnored;
 
                             mpInputStream->ReadUInt32( nStyle ).ReadInt32( nPenWidth ).ReadInt32( nIgnored );
 
