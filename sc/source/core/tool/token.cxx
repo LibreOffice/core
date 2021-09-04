@@ -1892,6 +1892,17 @@ ScTokenArray& ScTokenArray::operator=( const ScTokenArray& rArr )
     return *this;
 }
 
+ScTokenArray& ScTokenArray::operator=( ScTokenArray&& rArr )
+{
+    mxSheetLimits = std::move(rArr.mxSheetLimits);
+    mnHashValue = rArr.mnHashValue;
+    meVectorState = rArr.meVectorState;
+    mbOpenCLEnabled = rArr.mbOpenCLEnabled;
+    mbThreadingEnabled = rArr.mbThreadingEnabled;
+    Move(std::move(rArr));
+    return *this;
+}
+
 bool ScTokenArray::EqualTokens( const ScTokenArray* pArr2) const
 {
     // We only compare the non-RPN array
@@ -1972,6 +1983,64 @@ std::unique_ptr<ScTokenArray> ScTokenArray::Clone() const
         }
     }
     return p;
+}
+
+ScTokenArray ScTokenArray::CloneValue() const
+{
+    ScTokenArray aNew(*mxSheetLimits);
+    aNew.nLen = nLen;
+    aNew.nRPN = nRPN;
+    aNew.nMode = nMode;
+    aNew.nError = nError;
+    aNew.bHyperLink = bHyperLink;
+    aNew.mnHashValue = mnHashValue;
+    aNew.meVectorState = meVectorState;
+    aNew.mbOpenCLEnabled = mbOpenCLEnabled;
+    aNew.mbThreadingEnabled = mbThreadingEnabled;
+    aNew.mbFromRangeName = mbFromRangeName;
+    aNew.mbShareable = mbShareable;
+
+    FormulaToken** pp;
+    if( nLen )
+    {
+        aNew.pCode.reset(new FormulaToken*[ nLen ]);
+        pp = aNew.pCode.get();
+        memcpy( pp, pCode.get(), nLen * sizeof( formula::FormulaToken* ) );
+        for( sal_uInt16 i = 0; i < nLen; i++, pp++ )
+        {
+            *pp = (*pp)->Clone();
+            (*pp)->IncRef();
+        }
+    }
+    if( nRPN )
+    {
+        pp = aNew.pRPN = new FormulaToken*[ nRPN ];
+        memcpy( pp, pRPN, nRPN * sizeof( formula::FormulaToken* ) );
+        for( sal_uInt16 i = 0; i < nRPN; i++, pp++ )
+        {
+            FormulaToken* t = *pp;
+            if( t->GetRef() > 1 )
+            {
+                FormulaToken** p2 = pCode.get();
+                sal_uInt16 nIdx = 0xFFFF;
+                for( sal_uInt16 j = 0; j < nLen; j++, p2++ )
+                {
+                    if( *p2 == t )
+                    {
+                        nIdx = j; break;
+                    }
+                }
+                if( nIdx == 0xFFFF )
+                    *pp = t->Clone();
+                else
+                    *pp = aNew.pCode[ nIdx ];
+            }
+            else
+                *pp = t->Clone();
+            (*pp)->IncRef();
+        }
+    }
+    return aNew;
 }
 
 FormulaToken* ScTokenArray::AddRawToken( const ScRawToken& r )

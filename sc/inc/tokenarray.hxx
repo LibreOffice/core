@@ -66,12 +66,14 @@ public:
     /** Assignment with incrementing references of FormulaToken entries
         (not copied!) */
     ScTokenArray( const ScTokenArray& ) = default;
+    ScTokenArray( ScTokenArray&& ) = default;
     virtual ~ScTokenArray() override;
 
     bool EqualTokens( const ScTokenArray* pArr2 ) const;
 
     virtual void Clear() override;
     std::unique_ptr<ScTokenArray> Clone() const;    /// True copy!
+    ScTokenArray CloneValue() const;    /// True copy!
 
     void GenHash();
     size_t GetHash() const { return mnHashValue;}
@@ -130,6 +132,7 @@ public:
     /** Assignment with incrementing references of FormulaToken entries
         (not copied!) */
     ScTokenArray& operator=( const ScTokenArray& );
+    ScTokenArray& operator=( ScTokenArray&& );
 
     /**
      * Make all absolute references external references pointing to the old document

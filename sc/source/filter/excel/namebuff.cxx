@@ -62,9 +62,9 @@ void SharedFormulaBuffer::Clear()
 
 void SharedFormulaBuffer::Store( const ScAddress& rPos, const ScTokenArray& rArray )
 {
-    std::unique_ptr<ScTokenArray> xCode(rArray.Clone());
-    xCode->GenHash();
-    maTokenArrays.emplace(rPos, std::move(xCode));
+    ScTokenArray aCode(rArray.CloneValue());
+    aCode.GenHash();
+    maTokenArrays.emplace(rPos, std::move(aCode));
 }
 
 const ScTokenArray* SharedFormulaBuffer::Find( const ScAddress& rRefPos ) const
@@ -73,7 +73,7 @@ const ScTokenArray* SharedFormulaBuffer::Find( const ScAddress& rRefPos ) const
     if (it == maTokenArrays.end())
         return nullptr;
 
-    return it->second.get();
+    return &it->second;
 }
 
 sal_Int16 ExtSheetBuffer::Add( const OUString& rFPAN, const OUString& rTN, const bool bSWB )
