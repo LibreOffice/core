@@ -262,26 +262,28 @@ private:
     class TableSlots
     {
     public:
-                                        TableSlots(SCSIZE nBcaSlots);
-                                        ~TableSlots();
-        ScBroadcastAreaSlot**    getSlots() { return ppSlots.get(); }
+        TableSlots(SCSIZE nBcaSlots);
+        ~TableSlots();
+        TableSlots( const TableSlots& ) = delete;
+        TableSlots( TableSlots&& ) = default;
+        TableSlots& operator=( const TableSlots& ) = delete;
+        TableSlots& operator=( TableSlots&& ) = default;
+
+        ScBroadcastAreaSlot**    getSlots() const { return ppSlots.get(); }
 
         /**
             Obtain slot pointer, no check on validity! It is assumed that
             all calls are made with the results of ComputeSlotOffset(),
             ComputeAreaPoints() and ComputeNextSlot()
           */
-        ScBroadcastAreaSlot*     getAreaSlot( SCSIZE nOff ) { return ppSlots[nOff]; }
+        ScBroadcastAreaSlot*     getAreaSlot( SCSIZE nOff ) const { return ppSlots[nOff]; }
 
     private:
         SCSIZE                                    mnBcaSlots;
         std::unique_ptr<ScBroadcastAreaSlot*[]>   ppSlots;
-
-        TableSlots( const TableSlots& ) = delete;
-        TableSlots& operator=( const TableSlots& ) = delete;
     };
 
-    typedef ::std::map< SCTAB, std::unique_ptr<TableSlots> > TableSlotsMap;
+    typedef ::std::map< SCTAB, TableSlots > TableSlotsMap;
 
     typedef ::std::vector< ::std::pair< ScBroadcastAreaSlot*, ScBroadcastAreas::iterator > > AreasToBeErased;
 
