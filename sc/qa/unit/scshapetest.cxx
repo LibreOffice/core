@@ -71,6 +71,8 @@ public:
     void testTdf115655_HideDetail();
     void testFitToCellSize();
     void testCustomShapeCellAnchoredRotatedShape();
+    void testTdf144242_Line_noSwapWH();
+    void testTdf144242_OpenBezier_noSwapWH();
 
     CPPUNIT_TEST_SUITE(ScShapeTest);
     CPPUNIT_TEST(testTdf143619_validation_circle_pos);
@@ -98,6 +100,8 @@ public:
     CPPUNIT_TEST(testTdf115655_HideDetail);
     CPPUNIT_TEST(testFitToCellSize);
     CPPUNIT_TEST(testCustomShapeCellAnchoredRotatedShape);
+    CPPUNIT_TEST(testTdf144242_Line_noSwapWH);
+    CPPUNIT_TEST(testTdf144242_OpenBezier_noSwapWH);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -204,6 +208,86 @@ static SdrObject* lcl_getSdrObjectWithAssert(ScDocument& rDoc, sal_uInt16 nObjNu
     OString sMsg = "no Object " + OString::number(nObjNumber);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), pObj);
     return pObj;
+}
+
+void ScShapeTest::testTdf144242_OpenBezier_noSwapWH()
+{
+    // Shapes, which have rotation incorporated in their points, got erroneously width-height
+    // swapped, because they report a rotation. (Rotation was introduced to align text with curve.)
+
+    // Create a spreadsheet document with default row height and col width
+    uno::Reference<lang::XComponent> xComponent
+        = loadFromDesktop("private:factory/scalc", "com.sun.star.sheet.SpreadsheetDocument");
+
+    // Get ScDocShell
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+
+    // Insert default open Bezier curve
+    ScTabViewShell* pTabViewShell = lcl_getScTabViewShellWithAssert(pDocSh);
+    SfxRequest aReq(pTabViewShell->GetViewFrame(), SID_DRAW_BEZIER_NOFILL);
+    aReq.SetModifier(KEY_MOD1); // Ctrl
+    pTabViewShell->ExecDraw(aReq);
+    pTabViewShell->SetDrawShell(false);
+
+    // Get document and newly created object
+    ScDocument& rDoc = pDocSh->GetDocument();
+    SdrObject* pObj = lcl_getSdrObjectWithAssert(rDoc, 0);
+
+    // Rotate object by 300deg
+    pObj->Rotate(pObj->GetSnapRect().Center(), 30000_deg100, sin(toRadians(30000_deg100)),
+                 cos(toRadians(30000_deg100)));
+    tools::Rectangle aExpectRect(pObj->GetSnapRect());
+
+    // Save, reload and compare
+    saveAndReload(xComponent, "Calc Office Open XML");
+    pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocument& rDoc2 = pDocSh->GetDocument();
+    pObj = lcl_getSdrObjectWithAssert(rDoc2, 0);
+    tools::Rectangle aSnapRect(pObj->GetSnapRect());
+    // Without fix in place width and height were swapped
+    lcl_AssertRectEqualWithTolerance("Reload: wrong pos and size", aExpectRect, aSnapRect, 30);
+
+    pDocSh->DoClose();
+}
+
+void ScShapeTest::testTdf144242_Line_noSwapWH()
+{
+    // Shapes, which have rotation incorporated in their points, got erroneously width-height
+    // swapped, because they report a rotation. (Rotation was introduced to align text with line.)
+
+    // Create a spreadsheet document with default row height and col width
+    uno::Reference<lang::XComponent> xComponent
+        = loadFromDesktop("private:factory/scalc", "com.sun.star.sheet.SpreadsheetDocument");
+
+    // Get ScDocShell
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+
+    // Insert default line
+    ScTabViewShell* pTabViewShell = lcl_getScTabViewShellWithAssert(pDocSh);
+    SfxRequest aReq(pTabViewShell->GetViewFrame(), SID_DRAW_LINE);
+    aReq.SetModifier(KEY_MOD1); // Ctrl
+    pTabViewShell->ExecDraw(aReq);
+    pTabViewShell->SetDrawShell(false);
+
+    // Get document and newly created object
+    ScDocument& rDoc = pDocSh->GetDocument();
+    SdrObject* pObj = lcl_getSdrObjectWithAssert(rDoc, 0);
+
+    // Rotate object by 300deg
+    pObj->Rotate(pObj->GetSnapRect().Center(), 30000_deg100, sin(toRadians(30000_deg100)),
+                 cos(toRadians(30000_deg100)));
+    tools::Rectangle aExpectRect(pObj->GetSnapRect());
+
+    // Save, reload and compare
+    saveAndReload(xComponent, "Calc Office Open XML");
+    pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocument& rDoc2 = pDocSh->GetDocument();
+    pObj = lcl_getSdrObjectWithAssert(rDoc2, 0);
+    tools::Rectangle aSnapRect(pObj->GetSnapRect());
+    // Without fix in place width and height were swapped
+    lcl_AssertRectEqualWithTolerance("Reload: wrong pos and size", aExpectRect, aSnapRect, 30);
+
+    pDocSh->DoClose();
 }
 
 void ScShapeTest::testTdf143619_validation_circle_pos()
