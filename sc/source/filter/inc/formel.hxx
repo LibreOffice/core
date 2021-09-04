@@ -54,7 +54,7 @@ enum FORMULA_TYPE
 class ScRangeListTabs
 {
     typedef ::std::vector<ScRange> RangeListType;
-    typedef ::std::map<SCTAB, std::unique_ptr<RangeListType>> TabRangeType;
+    typedef ::std::map<SCTAB, RangeListType> TabRangeType;
     TabRangeType m_TabRanges;
     RangeListType::const_iterator maItrCur;
     RangeListType::const_iterator maItrCurEnd;

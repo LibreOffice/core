@@ -55,7 +55,7 @@ void ScRangeListTabs::Append( const ScAddress& aSRD, SCTAB nTab )
     {
         // No entry for this table yet.  Insert a new one.
         std::pair<TabRangeType::iterator, bool> r =
-            m_TabRanges.insert(std::make_pair(nTab, std::make_unique<RangeListType>()));
+            m_TabRanges.insert(std::make_pair(nTab, RangeListType()));
 
         if (!r.second)
             // Insertion failed.
@@ -63,7 +63,7 @@ void ScRangeListTabs::Append( const ScAddress& aSRD, SCTAB nTab )
 
         itr = r.first;
     }
-    itr->second->push_back(ScRange(a.Col(),a.Row(),a.Tab()));
+    itr->second.push_back(ScRange(a.Col(),a.Row(),a.Tab()));
 }
 
 void ScRangeListTabs::Append( const ScRange& aCRD, SCTAB nTab )
@@ -113,7 +113,7 @@ void ScRangeListTabs::Append( const ScRange& aCRD, SCTAB nTab )
     {
         // No entry for this table yet.  Insert a new one.
         std::pair<TabRangeType::iterator, bool> r =
-            m_TabRanges.insert(std::make_pair(nTab, std::make_unique<RangeListType>()));
+            m_TabRanges.insert(std::make_pair(nTab, RangeListType()));
 
         if (!r.second)
             // Insertion failed.
@@ -121,7 +121,7 @@ void ScRangeListTabs::Append( const ScRange& aCRD, SCTAB nTab )
 
         itr = r.first;
     }
-    itr->second->push_back(a);
+    itr->second.push_back(a);
 }
 
 const ScRange* ScRangeListTabs::First( SCTAB n )
@@ -133,7 +133,7 @@ const ScRange* ScRangeListTabs::First( SCTAB n )
         // No range list exists for this table.
         return nullptr;
 
-    const RangeListType& rList = *itr->second;
+    const RangeListType& rList = itr->second;
     maItrCur = rList.begin();
     maItrCurEnd = rList.end();
     return rList.empty() ? nullptr : &(*maItrCur);
