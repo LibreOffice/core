@@ -248,6 +248,7 @@ protected:
 protected:
     void                    Assign( const FormulaTokenArray& );
     void                    Assign( sal_uInt16 nCode, FormulaToken **pTokens );
+    void                    Move( FormulaTokenArray&& );
 
     /// Also used by the compiler. The token MUST had been allocated with new!
     FormulaToken*           Add( FormulaToken* );
@@ -289,6 +290,7 @@ public:
     /** Assignment with incrementing references of FormulaToken entries
         (not copied!) */
     FormulaTokenArray( const FormulaTokenArray& );
+    FormulaTokenArray( FormulaTokenArray&& );
     virtual ~FormulaTokenArray();
 
     virtual void Clear();
@@ -485,6 +487,7 @@ public:
     /** Assignment with incrementing references of FormulaToken entries
         (not copied!) */
     FormulaTokenArray& operator=( const FormulaTokenArray& );
+    FormulaTokenArray& operator=( FormulaTokenArray&& );
 
     /** Determines if this formula needs any changes to convert it to something
         previous versions of OOo could consume (Plain Old Formula, pre-ODFF, or
