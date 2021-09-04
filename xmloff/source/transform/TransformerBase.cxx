@@ -387,8 +387,7 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
         css::uno::Reference< XFastDocumentHandler > xFastHandler;
         if( (rArgument >>= xFastHandler) && xFastHandler )
         {
-            SvXMLImport *pFastHandler = dynamic_cast<SvXMLImport*>( xFastHandler.get() );
-            assert(pFastHandler);
+            SvXMLImport *pFastHandler = static_cast<SvXMLImport*>( xFastHandler.get() );
             m_xHandler.set( new SvXMLLegacyToFastDocHandler( pFastHandler ) );
         }
         // document handler

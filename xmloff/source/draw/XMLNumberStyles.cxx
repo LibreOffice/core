@@ -704,7 +704,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLNumberFormatImpor
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     return new SdXMLNumberFormatMemberImportContext( GetImport(), nElement, xAttrList,
-        this, &dynamic_cast<SvXMLImportContext&>(*SvXMLNumFormatContext::createFastChildContext( nElement, xAttrList )) );
+        this, static_cast<SvXMLImportContext*>(SvXMLNumFormatContext::createFastChildContext( nElement, xAttrList ).get()) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
