@@ -80,7 +80,7 @@ private:
 
 protected:
     bool m_bSupportsBitmap32 = false;
-    bool m_bSupportsOpenGL = true;
+    bool m_bSupportsOpenGL = false;
 
 public:
     SalInstance(std::unique_ptr<comphelper::SolarMutex> pMutex);
@@ -158,6 +158,7 @@ public:
     // may return NULL to disable session management, only used by X11 backend
     virtual std::unique_ptr<SalSession> CreateSalSession();
 
+    // also needs to set m_bSupportsOpenGL = true in your SalInstance implementation!
     virtual OpenGLContext*  CreateOpenGLContext();
 
     virtual weld::Builder* CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile);
