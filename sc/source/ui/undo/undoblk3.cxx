@@ -1286,7 +1286,7 @@ pRedoDoc    ( std::move(pNewRedoDoc) ),
 aRange      ( aMarkRange ),
 bMulti      ( bNewMulti )
 {
-    assert(pUndoDoc && pUndoDoc);
+    assert(pUndoDoc && pRedoDoc);
     SetChangeTrack();
 }
 
