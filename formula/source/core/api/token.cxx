@@ -598,6 +598,11 @@ FormulaTokenArray::FormulaTokenArray( const FormulaTokenArray& rArr )
     Assign( rArr );
 }
 
+FormulaTokenArray::FormulaTokenArray( FormulaTokenArray&& rArr )
+{
+    Move( std::move(rArr) );
+}
+
 FormulaTokenArray::~FormulaTokenArray()
 {
     FormulaTokenArray::Clear();
@@ -646,6 +651,23 @@ void FormulaTokenArray::Assign( const FormulaTokenArray& r )
     }
 }
 
+void FormulaTokenArray::Move( FormulaTokenArray&& r )
+{
+    pCode  = std::move(r.pCode);
+    pRPN   = r.pRPN;
+    r.pRPN = nullptr;
+    nLen   = r.nLen;
+    r.nLen = 0;
+    nRPN   = r.nRPN;
+    r.nRPN = 0;
+    nError = r.nError;
+    nMode  = r.nMode;
+    bHyperLink = r.bHyperLink;
+    mbFromRangeName = r.mbFromRangeName;
+    mbShareable = r.mbShareable;
+    mbFinalized = r.mbFinalized;
+}
+
 /// Optimisation for efficiently creating StringXML placeholders
 void FormulaTokenArray::Assign( sal_uInt16 nCode, FormulaToken **pTokens )
 {
@@ -672,6 +694,13 @@ FormulaTokenArray& FormulaTokenArray::operator=( const FormulaTokenArray& rArr )
 
     Clear();
     Assign( rArr );
+    return *this;
+}
+
+FormulaTokenArray& FormulaTokenArray::operator=( FormulaTokenArray&& rArr )
+{
+    Clear();
+    Move( std::move(rArr) );
     return *this;
 }
 

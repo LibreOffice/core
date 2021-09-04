@@ -26,10 +26,9 @@
 #include "root.hxx"
 #include "xiroot.hxx"
 #include <refdata.hxx>
+#include <tokenarray.hxx>
 
 #include <unordered_map>
-
-class ScTokenArray;
 
 class StringHashEntry
 {
@@ -59,7 +58,7 @@ inline bool StringHashEntry::operator ==( const StringHashEntry& r ) const
  */
 class SharedFormulaBuffer : public ExcRoot
 {
-    typedef std::unordered_map<ScAddress, std::unique_ptr<ScTokenArray>, ScAddressHashFunctor> TokenArraysType;
+    typedef std::unordered_map<ScAddress, ScTokenArray, ScAddressHashFunctor> TokenArraysType;
     TokenArraysType maTokenArrays;
 
 public:
