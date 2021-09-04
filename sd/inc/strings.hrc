@@ -230,7 +230,7 @@
 #define STR_HTMLEXP_ERROR_CREATE_FILE                   NC_("STR_HTMLEXP_ERROR_CREATE_FILE", "Cannot create the file $(URL1).")
 #define STR_HTMLEXP_ERROR_OPEN_FILE                     NC_("STR_HTMLEXP_ERROR_OPEN_FILE", "Could not open the file $(URL1).")
 #define STR_HTMLEXP_ERROR_COPY_FILE                     NC_("STR_HTMLEXP_ERROR_COPY_FILE", "The file $(URL1) could not be copied to $(URL2)")
-#define STR_STATUSBAR_MASTERPAGE                        NC_("STR_STATUSBAR_MASTERPAGE", "Slide Master name. Right-click for list and double-click for dialog.")
+#define STR_STATUSBAR_MASTERPAGE                        NC_("STR_STATUSBAR_MASTERPAGE", "Slide Master name. Right-click for list or click for dialog.")
 #define STR_TITLE_RENAMESLIDE                           NC_("STR_TITLE_RENAMESLIDE", "Rename Slide")
 #define STR_TITLE_RENAMEPAGE                            NC_("STR_TITLE_RENAMEPAGE", "Rename Page")
 #define STR_TOOLTIP_RENAME                              NC_("STR_TOOLTIP_RENAME", "Duplicate or empty names are not possible")
