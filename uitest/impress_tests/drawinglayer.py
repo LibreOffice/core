@@ -74,11 +74,18 @@ class ImpressDrawinglayerTest(UITestCase):
 
         xImpressDoc = self.xUITest.getTopFocusWindow()
 
+<<<<<<< HEAD   (6dfbfe tdf#135061: sw_uiwriter3: Add unittest)
         document = self.ui_test.get_component()
         self.assertEqual(25199, document.DrawPages[0].getByIndex(0).Size.Width)
         self.assertEqual(2629, document.DrawPages[0].getByIndex(0).Size.Height)
         self.assertEqual(25199, document.DrawPages[0].getByIndex(1).Size.Width)
         self.assertEqual(9134, document.DrawPages[0].getByIndex(1).Size.Height)
+=======
+            self.assertEqual(25199, document.DrawPages[0].getByIndex(0).Size.Width)
+            self.assertEqual(2629, document.DrawPages[0].getByIndex(0).Size.Height)
+            self.assertEqual(25199, document.DrawPages[0].getByIndex(1).Size.Width)
+            self.assertAlmostEqual(9134, document.DrawPages[0].getByIndex(1).Size.Height,delta=1)
+>>>>>>> CHANGE (46ebf8 work around off-by-ones on i386 in uicheck uitests...)
 
         xEditWin = xImpressDoc.getChild("impress_win")
 
@@ -90,7 +97,14 @@ class ImpressDrawinglayerTest(UITestCase):
         self.assertEqual(12600, document.DrawPages[0].getByIndex(1).Size.Width)
         self.assertEqual(4568, document.DrawPages[0].getByIndex(1).Size.Height)
 
+<<<<<<< HEAD   (6dfbfe tdf#135061: sw_uiwriter3: Add unittest)
         self.assertIsNone(document.CurrentSelection)
+=======
+            self.assertEqual(25199, document.DrawPages[0].getByIndex(0).Size.Width)
+            self.assertEqual(2629, document.DrawPages[0].getByIndex(0).Size.Height)
+            self.assertEqual(12600, document.DrawPages[0].getByIndex(1).Size.Width)
+            self.assertAlmostEqual(4568, document.DrawPages[0].getByIndex(1).Size.Height,delta=1)
+>>>>>>> CHANGE (46ebf8 work around off-by-ones on i386 in uicheck uitests...)
 
         xEditWin.executeAction("SELECT", mkPropertyValues({"OBJECT":"Unnamed Drawinglayer object 1"}))
         self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
@@ -123,12 +137,20 @@ class ImpressDrawinglayerTest(UITestCase):
 
         xImpressDoc = self.xUITest.getTopFocusWindow()
 
+<<<<<<< HEAD   (6dfbfe tdf#135061: sw_uiwriter3: Add unittest)
         document = self.ui_test.get_component()
         self.assertEqual(25199, document.DrawPages[0].getByIndex(0).Size.Width)
         self.assertEqual(2629, document.DrawPages[0].getByIndex(0).Size.Height)
         self.assertEqual(25199, document.DrawPages[0].getByIndex(1).Size.Width)
         self.assertEqual(9134, document.DrawPages[0].getByIndex(1).Size.Height)
         self.assertEqual(0, document.DrawPages[0].getByIndex(1).RotateAngle)
+=======
+            self.assertEqual(25199, document.DrawPages[0].getByIndex(0).Size.Width)
+            self.assertEqual(2629, document.DrawPages[0].getByIndex(0).Size.Height)
+            self.assertEqual(25199, document.DrawPages[0].getByIndex(1).Size.Width)
+            self.assertAlmostEqual(9134, document.DrawPages[0].getByIndex(1).Size.Height,delta=1)
+            self.assertEqual(0, document.DrawPages[0].getByIndex(1).RotateAngle)
+>>>>>>> CHANGE (46ebf8 work around off-by-ones on i386 in uicheck uitests...)
 
         xEditWin = xImpressDoc.getChild("impress_win")
 
@@ -141,7 +163,15 @@ class ImpressDrawinglayerTest(UITestCase):
         self.assertEqual(9134, document.DrawPages[0].getByIndex(1).Size.Height)
         self.assertEqual(3000, document.DrawPages[0].getByIndex(1).RotateAngle)
 
+<<<<<<< HEAD   (6dfbfe tdf#135061: sw_uiwriter3: Add unittest)
         self.assertIsNone(document.CurrentSelection)
+=======
+            self.assertEqual(25199, document.DrawPages[0].getByIndex(0).Size.Width)
+            self.assertEqual(2629, document.DrawPages[0].getByIndex(0).Size.Height)
+            self.assertEqual(25199, document.DrawPages[0].getByIndex(1).Size.Width)
+            self.assertAlmostEqual(9134, document.DrawPages[0].getByIndex(1).Size.Height,delta=1)
+            self.assertEqual(3000, document.DrawPages[0].getByIndex(1).RotateAngle)
+>>>>>>> CHANGE (46ebf8 work around off-by-ones on i386 in uicheck uitests...)
 
         xEditWin.executeAction("SELECT", mkPropertyValues({"OBJECT":"Unnamed Drawinglayer object 1"}))
         self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
