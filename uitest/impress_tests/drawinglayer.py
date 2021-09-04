@@ -74,7 +74,7 @@ class ImpressDrawinglayerTest(UITestCase):
             self.assertEqual(25199, document.DrawPages[0].getByIndex(0).Size.Width)
             self.assertEqual(2629, document.DrawPages[0].getByIndex(0).Size.Height)
             self.assertEqual(25199, document.DrawPages[0].getByIndex(1).Size.Width)
-            self.assertEqual(9134, document.DrawPages[0].getByIndex(1).Size.Height)
+            self.assertAlmostEqual(9134, document.DrawPages[0].getByIndex(1).Size.Height,delta=1)
 
             xEditWin = xImpressDoc.getChild("impress_win")
 
@@ -87,7 +87,7 @@ class ImpressDrawinglayerTest(UITestCase):
             self.assertEqual(25199, document.DrawPages[0].getByIndex(0).Size.Width)
             self.assertEqual(2629, document.DrawPages[0].getByIndex(0).Size.Height)
             self.assertEqual(12600, document.DrawPages[0].getByIndex(1).Size.Width)
-            self.assertEqual(4568, document.DrawPages[0].getByIndex(1).Size.Height)
+            self.assertAlmostEqual(4568, document.DrawPages[0].getByIndex(1).Size.Height,delta=1)
 
             self.assertIsNone(document.CurrentSelection)
 
@@ -118,7 +118,7 @@ class ImpressDrawinglayerTest(UITestCase):
             self.assertEqual(25199, document.DrawPages[0].getByIndex(0).Size.Width)
             self.assertEqual(2629, document.DrawPages[0].getByIndex(0).Size.Height)
             self.assertEqual(25199, document.DrawPages[0].getByIndex(1).Size.Width)
-            self.assertEqual(9134, document.DrawPages[0].getByIndex(1).Size.Height)
+            self.assertAlmostEqual(9134, document.DrawPages[0].getByIndex(1).Size.Height,delta=1)
             self.assertEqual(0, document.DrawPages[0].getByIndex(1).RotateAngle)
 
             xEditWin = xImpressDoc.getChild("impress_win")
@@ -132,7 +132,7 @@ class ImpressDrawinglayerTest(UITestCase):
             self.assertEqual(25199, document.DrawPages[0].getByIndex(0).Size.Width)
             self.assertEqual(2629, document.DrawPages[0].getByIndex(0).Size.Height)
             self.assertEqual(25199, document.DrawPages[0].getByIndex(1).Size.Width)
-            self.assertEqual(9134, document.DrawPages[0].getByIndex(1).Size.Height)
+            self.assertAlmostEqual(9134, document.DrawPages[0].getByIndex(1).Size.Height,delta=1)
             self.assertEqual(3000, document.DrawPages[0].getByIndex(1).RotateAngle)
 
             self.assertIsNone(document.CurrentSelection)
