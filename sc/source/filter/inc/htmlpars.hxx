@@ -47,8 +47,8 @@ class ScHTMLTable;
 class ScHTMLStyles
 {
     typedef std::unordered_map<OUString, OUString> PropsType;
-    typedef ::std::map<OUString, std::unique_ptr<PropsType>> NamePropsType;
-    typedef ::std::map<OUString, std::unique_ptr<NamePropsType>> ElemsType;
+    typedef ::std::map<OUString, PropsType> NamePropsType;
+    typedef ::std::map<OUString, NamePropsType> ElemsType;
 
     NamePropsType m_GlobalProps;     /// global properties (for a given class for all elements)
     NamePropsType m_ElemGlobalProps; /// element global properties (no class specified)
