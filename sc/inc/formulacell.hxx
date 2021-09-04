@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <map>
 #include <memory>
 
 #include <formula/tokenarray.hxx>
@@ -51,12 +52,23 @@ class ScProgress;
 class ScTokenArray;
 enum class SvNumFormatType : sal_Int16;
 
+struct AreaListenerKey
+{
+    ScRange maRange;
+    bool mbStartFixed;
+    bool mbEndFixed;
+
+    AreaListenerKey( const ScRange& rRange, bool bStartFixed, bool bEndFixed ) :
+        maRange(rRange), mbStartFixed(bStartFixed), mbEndFixed(bEndFixed) {}
+
+    bool operator < ( const AreaListenerKey& r ) const;
+};
+
+typedef std::map<AreaListenerKey, std::unique_ptr<sc::FormulaGroupAreaListener>> AreaListenersType;
+
 struct SC_DLLPUBLIC ScFormulaCellGroup
 {
-private:
-    struct Impl;
-    std::unique_ptr<Impl> mpImpl;
-
+    AreaListenersType m_AreaListeners;
 public:
 
     mutable size_t mnRefCount;

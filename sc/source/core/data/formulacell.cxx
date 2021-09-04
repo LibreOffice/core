@@ -478,49 +478,31 @@ void adjustDBRange(formula::FormulaToken* pToken, ScDocument& rNewDoc, const ScD
     pToken->SetIndex(pNewDBData->GetIndex());
 }
 
-struct AreaListenerKey
-{
-    ScRange maRange;
-    bool mbStartFixed;
-    bool mbEndFixed;
-
-    AreaListenerKey( const ScRange& rRange, bool bStartFixed, bool bEndFixed ) :
-        maRange(rRange), mbStartFixed(bStartFixed), mbEndFixed(bEndFixed) {}
-
-    bool operator < ( const AreaListenerKey& r ) const
-    {
-        if (maRange.aStart.Tab() != r.maRange.aStart.Tab())
-            return maRange.aStart.Tab() < r.maRange.aStart.Tab();
-        if (maRange.aStart.Col() != r.maRange.aStart.Col())
-            return maRange.aStart.Col() < r.maRange.aStart.Col();
-        if (maRange.aStart.Row() != r.maRange.aStart.Row())
-            return maRange.aStart.Row() < r.maRange.aStart.Row();
-        if (maRange.aEnd.Tab() != r.maRange.aEnd.Tab())
-            return maRange.aEnd.Tab() < r.maRange.aEnd.Tab();
-        if (maRange.aEnd.Col() != r.maRange.aEnd.Col())
-            return maRange.aEnd.Col() < r.maRange.aEnd.Col();
-        if (maRange.aEnd.Row() != r.maRange.aEnd.Row())
-            return maRange.aEnd.Row() < r.maRange.aEnd.Row();
-        if (mbStartFixed != r.mbStartFixed)
-            return r.mbStartFixed;
-        if (mbEndFixed != r.mbEndFixed)
-            return r.mbEndFixed;
-
-        return false;
-    }
-};
-
-typedef std::map<AreaListenerKey, std::unique_ptr<sc::FormulaGroupAreaListener>> AreaListenersType;
-
 }
 
-struct ScFormulaCellGroup::Impl
+bool AreaListenerKey::operator < ( const AreaListenerKey& r ) const
 {
-    AreaListenersType m_AreaListeners;
-};
+    if (maRange.aStart.Tab() != r.maRange.aStart.Tab())
+        return maRange.aStart.Tab() < r.maRange.aStart.Tab();
+    if (maRange.aStart.Col() != r.maRange.aStart.Col())
+        return maRange.aStart.Col() < r.maRange.aStart.Col();
+    if (maRange.aStart.Row() != r.maRange.aStart.Row())
+        return maRange.aStart.Row() < r.maRange.aStart.Row();
+    if (maRange.aEnd.Tab() != r.maRange.aEnd.Tab())
+        return maRange.aEnd.Tab() < r.maRange.aEnd.Tab();
+    if (maRange.aEnd.Col() != r.maRange.aEnd.Col())
+        return maRange.aEnd.Col() < r.maRange.aEnd.Col();
+    if (maRange.aEnd.Row() != r.maRange.aEnd.Row())
+        return maRange.aEnd.Row() < r.maRange.aEnd.Row();
+    if (mbStartFixed != r.mbStartFixed)
+        return r.mbStartFixed;
+    if (mbEndFixed != r.mbEndFixed)
+        return r.mbEndFixed;
+
+    return false;
+}
 
 ScFormulaCellGroup::ScFormulaCellGroup() :
-    mpImpl(new Impl),
     mnRefCount(0),
     mpTopCell(nullptr),
     mnLength(0),
@@ -576,11 +558,11 @@ sc::FormulaGroupAreaListener* ScFormulaCellGroup::getAreaListener(
 {
     AreaListenerKey aKey(rRange, bStartFixed, bEndFixed);
 
-    AreaListenersType::iterator it = mpImpl->m_AreaListeners.lower_bound(aKey);
-    if (it == mpImpl->m_AreaListeners.end() || mpImpl->m_AreaListeners.key_comp()(aKey, it->first))
+    AreaListenersType::iterator it = m_AreaListeners.lower_bound(aKey);
+    if (it == m_AreaListeners.end() || m_AreaListeners.key_comp()(aKey, it->first))
     {
         // Insert a new one.
-        it = mpImpl->m_AreaListeners.insert(
+        it = m_AreaListeners.insert(
             it, std::make_pair(aKey, std::make_unique<sc::FormulaGroupAreaListener>(
                 rRange, (*ppTopCell)->GetDocument(), (*ppTopCell)->aPos, mnLength, bStartFixed, bEndFixed)));
     }
@@ -590,7 +572,7 @@ sc::FormulaGroupAreaListener* ScFormulaCellGroup::getAreaListener(
 
 void ScFormulaCellGroup::endAllGroupListening( ScDocument& rDoc )
 {
-    for (const auto& rEntry : mpImpl->m_AreaListeners)
+    for (const auto& rEntry : m_AreaListeners)
     {
         sc::FormulaGroupAreaListener *const pListener = rEntry.second.get();
         ScRange aListenRange = pListener->getListeningRange();
@@ -599,7 +581,7 @@ void ScFormulaCellGroup::endAllGroupListening( ScDocument& rDoc )
         rDoc.EndListeningArea(aListenRange, bGroupListening, pListener);
     }
 
-    mpImpl->m_AreaListeners.clear();
+    m_AreaListeners.clear();
 }
 
 ScFormulaCell::ScFormulaCell( ScDocument& rDoc, const ScAddress& rPos ) :
