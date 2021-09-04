@@ -1103,10 +1103,14 @@ void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const Reference< XShape >& 
     awt::Size   aSize       = rShape->getSize();
 
     // There are a few cases where we must adjust these values
+    // Do not adjust objects, which have rotation incorporated into their points
+    // but report a rotation angle nevertheless.
     SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rShape);
-    if (pObj)
+    if (pObj && pObj->GetObjIdentifier() != OBJ_LINE && pObj->GetObjIdentifier() != OBJ_PLIN
+        && pObj->GetObjIdentifier() != OBJ_PATHLINE && pObj->GetObjIdentifier() != OBJ_FREELINE
+        && pObj->GetObjIdentifier() != OBJ_PATHPLIN)
     {
-        Degree100 nRotation = pObj->GetRotateAngle();
+        Degree100 nRotation = NormAngle36000(pObj->GetRotateAngle());
         if (nRotation)
         {
             sal_Int16 nHalfWidth = aSize.Width / 2;
