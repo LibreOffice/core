@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1402449a_1ba690c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-09-04T18:10:59Z",
+      "side": 1,
+      "message": "I think the shadow behind the “L” angle of the cross should be a diagonal line; right now it looks blocky, or pixel-like",
+      "revId": "48b61fca5984c4397705075f60a9fe5113b1477f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
