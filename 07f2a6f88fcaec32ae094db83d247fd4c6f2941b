@@ -16,6 +16,24 @@
       "message": "This looks like a copy-paste error - did you mean \"vcl::font\"?",
       "revId": "07f2a6f88fcaec32ae094db83d247fd4c6f2941b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d875e78c_a1322966",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-04T10:56:16Z",
+      "side": 1,
+      "message": "juggling a few too many patches! I will fix.",
+      "parentUuid": "c0d0dc66_db6c04bc",
+      "revId": "07f2a6f88fcaec32ae094db83d247fd4c6f2941b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
