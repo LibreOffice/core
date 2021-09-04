@@ -85,7 +85,9 @@ public:
 
     ColumnSpanSet();
     ColumnSpanSet(const ColumnSpanSet&) = delete;
-    const ColumnSpanSet& operator=(const ColumnSpanSet&) = delete;
+    ColumnSpanSet& operator=(const ColumnSpanSet&) = delete;
+    ColumnSpanSet(ColumnSpanSet&&) = default;
+    ColumnSpanSet& operator=(ColumnSpanSet&&) = default;
     ~ColumnSpanSet();
 
     void set(const ScDocument& rDoc, SCTAB nTab, SCCOL nCol, SCROW nRow, bool bVal);

@@ -245,7 +245,7 @@ public:
 class  ScBroadcastAreaSlotMachine
 {
 private:
-    typedef std::map<ScBroadcastArea*, std::unique_ptr<sc::ColumnSpanSet>> BulkGroupAreasType;
+    typedef std::map<ScBroadcastArea*, sc::ColumnSpanSet> BulkGroupAreasType;
 
     /**
         Slot offset arrangement of columns and rows, once per sheet.
