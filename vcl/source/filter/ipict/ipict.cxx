@@ -418,9 +418,9 @@ Size PictReader::ReadSize()
 
 Color PictReader::ReadColor()
 {
-    sal_uInt32 nCol;
     Color aCol;
 
+    sal_uInt32 nCol(0);
     pPict->ReadUInt32( nCol );
     switch (nCol)
     {
@@ -436,7 +436,6 @@ Color PictReader::ReadColor()
     }
     return aCol;
 }
-
 
 Color PictReader::ReadRGBColor()
 {
@@ -1525,6 +1524,9 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         aPoint=ReadPoint(); aPenPosition=ReadPoint();
         nDataSize=8;
 
+        if (!pPict->good())
+            break;
+
         if (IsInvisible( PictDrawingMethod::FRAME )) break;
         DrawingMethod( PictDrawingMethod::FRAME );
         PictReaderShape::drawLine(pVirDev, aPoint,aPenPosition, nActPenSize);
@@ -1533,6 +1535,9 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
     case 0x0021:   // LineFrom
         aPoint=aPenPosition; aPenPosition=ReadPoint();
         nDataSize=4;
+
+        if (!pPict->good())
+            break;
 
         if (IsInvisible( PictDrawingMethod::FRAME )) break;
         DrawingMethod( PictDrawingMethod::FRAME );
@@ -1544,6 +1549,9 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         aPenPosition=ReadDeltaH(aPoint);
         aPenPosition=ReadDeltaV(aPenPosition);
         nDataSize=6;
+
+        if (!pPict->good())
+            break;
 
         if ( IsInvisible(PictDrawingMethod::FRAME) ) break;
         DrawingMethod( PictDrawingMethod::FRAME );
