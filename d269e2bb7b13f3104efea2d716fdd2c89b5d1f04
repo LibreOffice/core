@@ -16,6 +16,23 @@
       "message": "yeah, that\u0027s what I meant to state",
       "revId": "d269e2bb7b13f3104efea2d716fdd2c89b5d1f04",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0573b19a_ae873025",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-09-04T20:42:40Z",
+      "side": 1,
+      "message": "Thank you for the quick feedback, let\u0027s push this one since Jenkins is ok now.",
+      "revId": "d269e2bb7b13f3104efea2d716fdd2c89b5d1f04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
