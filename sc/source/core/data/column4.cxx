@@ -927,7 +927,7 @@ public:
                 std::unique_ptr<ScTokenArray> pNewCode = aComp.CompileString(aFormula);
                 ScFormulaCellGroupRef xGroup = pTop->GetCellGroup();
                 assert(xGroup);
-                xGroup->setCode(std::move(pNewCode));
+                xGroup->setCode(std::move(*pNewCode));
                 xGroup->compileCode(mrDoc, pTop->aPos, mrDoc.GetGrammar());
 
                 // Propagate the new token array to all formula cells in the group.
