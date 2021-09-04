@@ -66,7 +66,7 @@ bool SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type
         xGroup2->mbInvariant = xGroup->mbInvariant;
         xGroup2->mpTopCell = &rTop;
         xGroup2->mnLength = nLength2;
-        xGroup2->mpCode = xGroup->mpCode->Clone();
+        xGroup2->mpCode = xGroup->mpCode->CloneValue();
     }
 
     xGroup->mnLength = nRow - xGroup->mpTopCell->aPos.Row();
@@ -322,7 +322,7 @@ void SharedFormulaUtil::unshareFormulaCell(const CellStoreType::position_type& a
             xGroup2->mpTopCell = &rNext;
             xGroup2->mnLength = nLength2;
             xGroup2->mbInvariant = xGroup->mbInvariant;
-            xGroup2->mpCode = xGroup->mpCode->Clone();
+            xGroup2->mpCode = xGroup->mpCode->CloneValue();
 #if DEBUG_COLUMN_STORAGE
             if (xGroup2->mpTopCell->aPos.Row() + size_t(xGroup2->mnLength) > it->position + it->size)
             {
@@ -392,7 +392,7 @@ void SharedFormulaUtil::startListeningAsGroup( sc::StartListeningContext& rCxt, 
     rDoc.SetDetectiveDirty(true);
 
     ScFormulaCellGroupRef xGroup = rTopCell.GetCellGroup();
-    const ScTokenArray* pCode = xGroup->mpCode.get();
+    const ScTokenArray* pCode = xGroup->mpCode ? &*xGroup->mpCode : nullptr;
     assert(pCode == rTopCell.GetCode());
     if (pCode->IsRecalcModeAlways())
     {

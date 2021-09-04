@@ -521,12 +521,12 @@ ScFormulaCellGroup::~ScFormulaCellGroup()
 
 void ScFormulaCellGroup::setCode( const ScTokenArray& rCode )
 {
-    mpCode = rCode.Clone();
+    mpCode = rCode.CloneValue();
     mbInvariant = mpCode->IsInvariant();
     mpCode->GenHash();
 }
 
-void ScFormulaCellGroup::setCode( std::unique_ptr<ScTokenArray> pCode )
+void ScFormulaCellGroup::setCode( std::optional<ScTokenArray> pCode )
 {
     mpCode = std::move(pCode); // takes ownership of the token array.
     mpCode->Finalize(); // Reduce memory usage if needed.
@@ -771,7 +771,7 @@ ScFormulaCell::ScFormulaCell(
     nSeenInIteration(0),
     nFormatType(xGroup->mnFormatType),
     eTempGrammar( eGrammar),
-    pCode(xGroup->mpCode ? xGroup->mpCode.get() : new ScTokenArray(rDoc)),
+    pCode(xGroup->mpCode ? &*xGroup->mpCode : new ScTokenArray(rDoc)),
     rDocument( rDoc ),
     pPrevious(nullptr),
     pNext(nullptr),
@@ -3990,7 +3990,9 @@ ScFormulaCellGroupRef ScFormulaCell::CreateCellGroup( SCROW nLen, bool bInvarian
     mxGroup->mpTopCell = this;
     mxGroup->mbInvariant = bInvariant;
     mxGroup->mnLength = nLen;
-    mxGroup->mpCode.reset(pCode); // Move this to the shared location.
+    mxGroup->mpCode = std::move(*pCode); // Move this to the shared location.
+    delete pCode;
+    pCode = &*mxGroup->mpCode;
     return mxGroup;
 }
 
@@ -4012,7 +4014,7 @@ void ScFormulaCell::SetCellGroup( const ScFormulaCellGroupRef &xRef )
         delete pCode;
 
     mxGroup = xRef;
-    pCode = mxGroup->mpCode.get();
+    pCode = &*mxGroup->mpCode;
     mxGroup->mnWeight = 0;      // invalidate
 }
 
@@ -5480,12 +5482,12 @@ sal_Int32 ScFormulaCell::GetWeight() const
 
 ScTokenArray* ScFormulaCell::GetSharedCode()
 {
-    return mxGroup ? mxGroup->mpCode.get() : nullptr;
+    return mxGroup ? &*mxGroup->mpCode : nullptr;
 }
 
 const ScTokenArray* ScFormulaCell::GetSharedCode() const
 {
-    return mxGroup ? mxGroup->mpCode.get() : nullptr;
+    return mxGroup ? &*mxGroup->mpCode : nullptr;
 }
 
 void ScFormulaCell::SyncSharedCode()
@@ -5494,7 +5496,7 @@ void ScFormulaCell::SyncSharedCode()
         // Not a shared formula cell.
         return;
 
-    pCode = mxGroup->mpCode.get();
+    pCode = &*mxGroup->mpCode;
 }
 
 #if DUMP_COLUMN_STORAGE

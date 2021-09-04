@@ -21,6 +21,7 @@
 
 #include <map>
 #include <memory>
+#include <optional>
 
 #include <formula/tokenarray.hxx>
 #include <formula/errorcodes.hxx>
@@ -32,6 +33,7 @@
 #include "docoptio.hxx"
 #include "formulalogger.hxx"
 #include "formularesult.hxx"
+#include "tokenarray.hxx"
 
 namespace sc {
 
@@ -49,7 +51,6 @@ class UpdatedRangeNames;
 
 class ScFormulaCell;
 class ScProgress;
-class ScTokenArray;
 enum class SvNumFormatType : sal_Int16;
 
 struct AreaListenerKey
@@ -73,7 +74,7 @@ public:
 
     mutable size_t mnRefCount;
 
-    std::unique_ptr<ScTokenArray> mpCode;
+    std::optional<ScTokenArray> mpCode;
     ScFormulaCell *mpTopCell;
     SCROW mnLength; // How many of these do we have ?
     sal_Int32 mnWeight;
@@ -90,7 +91,7 @@ public:
     ~ScFormulaCellGroup();
 
     void setCode( const ScTokenArray& rCode );
-    void setCode( std::unique_ptr<ScTokenArray> pCode );
+    void setCode( std::optional<ScTokenArray> pCode );
     void compileCode(
         ScDocument& rDoc, const ScAddress& rPos, formula::FormulaGrammar::Grammar eGram );
 
