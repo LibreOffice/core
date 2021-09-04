@@ -350,6 +350,7 @@ AquaSalInstance::AquaSalInstance()
 
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mxToolkitName = OUString("osx");
+    m_bSupportsOpenGL = true;
 }
 
 AquaSalInstance::~AquaSalInstance()

@@ -384,6 +384,7 @@ WinSalInstance::WinSalInstance()
 {
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mxToolkitName = OUString("win");
+    m_bSupportsOpenGL = true;
 #if HAVE_FEATURE_SKIA
     WinSkiaSalGraphicsImpl::prepareSkia();
 #if SKIA_USE_BITMAP32
