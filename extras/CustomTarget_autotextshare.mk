@@ -226,24 +226,19 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	be/standard/FN/styles.xml \
 	be/standard/LOREM/LOREM.xml \
 	be/standard/META-INF/manifest.xml \
-	bg/crdbus50/+BBUEGwQV-1/atevent.xml \
 	bg/crdbus50/+BBUEGwQV-1/content.xml \
 	bg/crdbus50/+BBUEGwQV-1/manifest.rdf \
 	bg/crdbus50/+BBUEGwQV-1/styles.xml \
-	bg/crdbus50/+BBUEGwQV-2/atevent.xml \
 	bg/crdbus50/+BBUEGwQV-2/content.xml \
 	bg/crdbus50/+BBUEGwQV-2/manifest.rdf \
 	bg/crdbus50/+BBUEGwQV-2/styles.xml \
-	bg/crdbus50/+BBUEGwQV-3/atevent.xml \
 	bg/crdbus50/+BBUEGwQV-3/content.xml \
 	bg/crdbus50/+BBUEGwQV-3/manifest.rdf \
 	bg/crdbus50/+BBUEGwQV-3/styles.xml \
-	bg/crdbus50/+BCEEKgQS-1/atevent.xml \
 	bg/crdbus50/+BCEEKgQS-1/content.xml \
 	bg/crdbus50/+BCEEKgQS-1/manifest.rdf \
 	bg/crdbus50/+BCEEKgQS-1/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	bg/crdbus50/+BCEEKgQS-1/styles.xml \
-	bg/crdbus50/+BCEEKgQS-2/atevent.xml \
 	bg/crdbus50/+BCEEKgQS-2/content.xml \
 	bg/crdbus50/+BCEEKgQS-2/manifest.rdf \
 	bg/crdbus50/+BCEEKgQS-2/Pictures/2000001B00000CD200000CED91A0BB03.svm \
@@ -258,102 +253,66 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	bg/standard/+BCQEHQ-/Object_1/content.xml \
 	bg/standard/+BCQEHQ-/styles.xml \
 	bg/standard/A/A.xml \
-	bg/standard/A/atevent.xml \
 	bg/standard/AR/AR.xml \
-	bg/standard/AR/atevent.xml \
 	bg/standard/BlockList.xml \
-	bg/standard/BW/atevent.xml \
 	bg/standard/BW/BW.xml \
-	bg/standard/C/atevent.xml \
 	bg/standard/C/C.xml \
-	bg/standard/CAN/atevent.xml \
 	bg/standard/CAN/content.xml \
 	bg/standard/CAN/manifest.rdf \
 	bg/standard/CAN/styles.xml \
-	bg/standard/CD/atevent.xml \
 	bg/standard/CD/CD.xml \
-	bg/standard/CM/atevent.xml \
 	bg/standard/CM/CM.xml \
-	bg/standard/CNL/atevent.xml \
 	bg/standard/CNL/CNL.xml \
-	bg/standard/DMS/atevent.xml \
 	bg/standard/DMS/content.xml \
 	bg/standard/DMS/manifest.rdf \
 	bg/standard/DMS/styles.xml \
-	bg/standard/DT/atevent.xml \
 	bg/standard/DT/DT.xml \
 	bg/standard/E/E.xml \
 	bg/standard/FN/content.xml \
 	bg/standard/FN/Obj0012D655/content.xml \
 	bg/standard/FN/styles.xml \
 	bg/standard/I/I.xml \
-	bg/standard/IRT/atevent.xml \
 	bg/standard/IRT/IRT.xml \
-	bg/standard/J/atevent.xml \
 	bg/standard/J/content.xml \
 	bg/standard/J/manifest.rdf \
 	bg/standard/J/styles.xml \
-	bg/standard/JACL/atevent.xml \
 	bg/standard/JACL/content.xml \
 	bg/standard/JACL/manifest.rdf \
 	bg/standard/JACL/styles.xml \
-	bg/standard/JACR/atevent.xml \
 	bg/standard/JACR/content.xml \
 	bg/standard/JACR/manifest.rdf \
 	bg/standard/JACR/styles.xml \
-	bg/standard/JAINV/atevent.xml \
 	bg/standard/JAINV/content.xml \
 	bg/standard/JAINV/manifest.rdf \
 	bg/standard/JAINV/styles.xml \
-	bg/standard/JARL/atevent.xml \
 	bg/standard/JARL/content.xml \
 	bg/standard/JARL/manifest.rdf \
 	bg/standard/JARL/styles.xml \
-	bg/standard/LAG/atevent.xml \
 	bg/standard/LAG/LAG.xml \
 	bg/standard/LOREM/LOREM.xml \
 	bg/standard/META-INF/manifest.xml \
-	bg/standard/O/atevent.xml \
 	bg/standard/O/O.xml \
-	bg/standard/P/atevent.xml \
 	bg/standard/P/P.xml \
-	bg/standard/Q/atevent.xml \
 	bg/standard/Q/Q.xml \
-	bg/standard/R1/atevent.xml \
 	bg/standard/R1/content.xml \
 	bg/standard/R1/manifest.rdf \
 	bg/standard/R1/styles.xml \
-	bg/standard/R2/atevent.xml \
 	bg/standard/R2/content.xml \
 	bg/standard/R2/manifest.rdf \
 	bg/standard/R2/styles.xml \
-	bg/standard/RE/atevent.xml \
 	bg/standard/RE/RE.xml \
-	bg/standard/RF/atevent.xml \
 	bg/standard/RF/RF.xml \
-	bg/standard/RG/atevent.xml \
 	bg/standard/RG/RG.xml \
-	bg/standard/RM/atevent.xml \
 	bg/standard/RM/RM.xml \
-	bg/standard/S/atevent.xml \
 	bg/standard/S/S.xml \
-	bg/standard/SD/atevent.xml \
 	bg/standard/SD/SD.xml \
-	bg/standard/SI/atevent.xml \
 	bg/standard/SI/SI.xml \
-	bg/standard/TC/atevent.xml \
 	bg/standard/TC/TC.xml \
-	bg/standard/TOP/atevent.xml \
 	bg/standard/TOP/TOP.xml \
-	bg/standard/TWIMC/atevent.xml \
 	bg/standard/TWIMC/TWIMC.xml \
-	bg/standard/TY/atevent.xml \
 	bg/standard/TY/TY.xml \
-	bg/standard/VA/atevent.xml \
 	bg/standard/VA/VA.xml \
-	bg/standard/VOM/atevent.xml \
 	bg/standard/VOM/VOM.xml \
-	bg/standard/YT/atevent.xml \
 	bg/standard/YT/content.xml \
 	bg/standard/YT/manifest.rdf \
 	bg/standard/YT/styles.xml \
@@ -461,63 +420,44 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	ca/standard/LOREM/LOREM.xml \
 	ca/standard/META-INF/manifest.xml \
 	cs/crdbus50/BlockList.xml \
-	cs/crdbus50/CON1/atevent.xml \
 	cs/crdbus50/CON1/content.xml \
 	cs/crdbus50/CON1/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	cs/crdbus50/CON1/styles.xml \
-	cs/crdbus50/CON2/atevent.xml \
 	cs/crdbus50/CON2/content.xml \
 	cs/crdbus50/CON2/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	cs/crdbus50/CON2/styles.xml \
-	cs/crdbus50/ELE1/atevent.xml \
 	cs/crdbus50/ELE1/content.xml \
 	cs/crdbus50/ELE1/styles.xml \
-	cs/crdbus50/ELE2/atevent.xml \
 	cs/crdbus50/ELE2/content.xml \
 	cs/crdbus50/ELE2/styles.xml \
-	cs/crdbus50/ELE3/atevent.xml \
 	cs/crdbus50/ELE3/content.xml \
 	cs/crdbus50/ELE3/styles.xml \
 	cs/crdbus50/META-INF/manifest.xml \
 	cs/crdbus54/BlockList.xml \
-	cs/crdbus54/ELE1/atevent.xml \
 	cs/crdbus54/ELE1/content.xml \
 	cs/crdbus54/ELE1/styles.xml \
-	cs/crdbus54/ELE2/atevent.xml \
 	cs/crdbus54/ELE2/content.xml \
 	cs/crdbus54/ELE2/styles.xml \
-	cs/crdbus54/ELE3/atevent.xml \
 	cs/crdbus54/ELE3/content.xml \
 	cs/crdbus54/ELE3/styles.xml \
 	cs/crdbus54/META-INF/manifest.xml \
-	cs/crdbus54/MOD1/atevent.xml \
 	cs/crdbus54/MOD1/content.xml \
 	cs/crdbus54/MOD1/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	cs/crdbus54/MOD1/styles.xml \
-	cs/crdbus54/MOD2/atevent.xml \
 	cs/crdbus54/MOD2/content.xml \
 	cs/crdbus54/MOD2/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	cs/crdbus54/MOD2/styles.xml \
 	cs/standard/A/A.xml \
-	cs/standard/A/atevent.xml \
 	cs/standard/BlockList.xml \
-	cs/standard/BW/atevent.xml \
 	cs/standard/BW/BW.xml \
-	cs/standard/C/atevent.xml \
 	cs/standard/C/C.xml \
-	cs/standard/CAN/atevent.xml \
 	cs/standard/CAN/content.xml \
 	cs/standard/CAN/styles.xml \
-	cs/standard/CD/atevent.xml \
 	cs/standard/CD/CD.xml \
-	cs/standard/CM/atevent.xml \
 	cs/standard/CM/CM.xml \
-	cs/standard/CNL/atevent.xml \
 	cs/standard/CNL/CNL.xml \
-	cs/standard/DMS/atevent.xml \
 	cs/standard/DMS/content.xml \
 	cs/standard/DMS/styles.xml \
-	cs/standard/DT/atevent.xml \
 	cs/standard/DT/content.xml \
 	cs/standard/DT/DT.xml \
 	cs/standard/DT/styles.xml \
@@ -525,65 +465,40 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	cs/standard/FN/manifest.rdf \
 	cs/standard/FN/Object_1/content.xml \
 	cs/standard/FN/styles.xml \
-	cs/standard/IRT/atevent.xml \
 	cs/standard/IRT/IRT.xml \
-	cs/standard/J/atevent.xml \
 	cs/standard/J/content.xml \
 	cs/standard/J/styles.xml \
-	cs/standard/JACL/atevent.xml \
 	cs/standard/JACL/content.xml \
 	cs/standard/JACL/styles.xml \
-	cs/standard/JACR/atevent.xml \
 	cs/standard/JACR/content.xml \
 	cs/standard/JACR/styles.xml \
-	cs/standard/JAINV/atevent.xml \
 	cs/standard/JAINV/content.xml \
 	cs/standard/JAINV/styles.xml \
-	cs/standard/JARL/atevent.xml \
 	cs/standard/JARL/content.xml \
 	cs/standard/JARL/styles.xml \
-	cs/standard/LAG/atevent.xml \
 	cs/standard/LAG/LAG.xml \
-	cs/standard/LIC/atevent.xml \
 	cs/standard/LIC/content.xml \
 	cs/standard/LIC/styles.xml \
 	cs/standard/LOREM/LOREM.xml \
 	cs/standard/META-INF/manifest.xml \
-	cs/standard/P/atevent.xml \
 	cs/standard/P/P.xml \
-	cs/standard/R1/atevent.xml \
 	cs/standard/R1/content.xml \
 	cs/standard/R1/styles.xml \
-	cs/standard/R2/atevent.xml \
 	cs/standard/R2/content.xml \
 	cs/standard/R2/styles.xml \
-	cs/standard/RE/atevent.xml \
 	cs/standard/RE/RE.xml \
-	cs/standard/RF/atevent.xml \
 	cs/standard/RF/RF.xml \
-	cs/standard/RG/atevent.xml \
 	cs/standard/RG/RG.xml \
-	cs/standard/RM/atevent.xml \
 	cs/standard/RM/RM.xml \
-	cs/standard/S/atevent.xml \
 	cs/standard/S/S.xml \
-	cs/standard/SD/atevent.xml \
 	cs/standard/SD/SD.xml \
-	cs/standard/SI/atevent.xml \
 	cs/standard/SI/SI.xml \
-	cs/standard/TC/atevent.xml \
 	cs/standard/TC/TC.xml \
-	cs/standard/TOP/atevent.xml \
 	cs/standard/TOP/TOP.xml \
-	cs/standard/TWIMC/atevent.xml \
 	cs/standard/TWIMC/TWIMC.xml \
-	cs/standard/TY/atevent.xml \
 	cs/standard/TY/TY.xml \
-	cs/standard/VA/atevent.xml \
 	cs/standard/VA/VA.xml \
-	cs/standard/VOM/atevent.xml \
 	cs/standard/VOM/VOM.xml \
-	cs/standard/YT/atevent.xml \
 	cs/standard/YT/content.xml \
 	cs/standard/YT/styles.xml \
 	cs/template/BlockList.xml \
@@ -627,46 +542,31 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	cy/standard/LOREM/LOREM.xml \
 	cy/standard/META-INF/manifest.xml \
 	da/crdbus50/BlockList.xml \
-	da/crdbus50/CON1/atevent.xml \
 	da/crdbus50/CON1/content.xml \
 	da/crdbus50/CON1/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	da/crdbus50/CON1/styles.xml \
-	da/crdbus50/CON2/atevent.xml \
 	da/crdbus50/CON2/content.xml \
 	da/crdbus50/CON2/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	da/crdbus50/CON2/styles.xml \
-	da/crdbus50/ELE1/atevent.xml \
 	da/crdbus50/ELE1/content.xml \
 	da/crdbus50/ELE1/styles.xml \
-	da/crdbus50/ELE2/atevent.xml \
 	da/crdbus50/ELE2/content.xml \
 	da/crdbus50/ELE2/styles.xml \
-	da/crdbus50/ELE3/atevent.xml \
 	da/crdbus50/ELE3/content.xml \
 	da/crdbus50/ELE3/styles.xml \
 	da/crdbus50/META-INF/manifest.xml \
 	da/standard/A/A.xml \
-	da/standard/A/atevent.xml \
 	da/standard/AR/AR.xml \
-	da/standard/AR/atevent.xml \
 	da/standard/BlockList.xml \
-	da/standard/BW/atevent.xml \
 	da/standard/BW/BW.xml \
-	da/standard/C/atevent.xml \
 	da/standard/C/C.xml \
-	da/standard/CAN/atevent.xml \
 	da/standard/CAN/content.xml \
 	da/standard/CAN/styles.xml \
-	da/standard/CD/atevent.xml \
 	da/standard/CD/CD.xml \
-	da/standard/CM/atevent.xml \
 	da/standard/CM/CM.xml \
-	da/standard/CNL/atevent.xml \
 	da/standard/CNL/CNL.xml \
-	da/standard/DMS/atevent.xml \
 	da/standard/DMS/content.xml \
 	da/standard/DMS/styles.xml \
-	da/standard/DT/atevent.xml \
 	da/standard/DT/DT.xml \
 	da/standard/E/E.xml \
 	da/standard/FN/content.xml \
@@ -674,66 +574,40 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	da/standard/FN/Object_1/content.xml \
 	da/standard/FN/styles.xml \
 	da/standard/I/I.xml \
-	da/standard/IRT/atevent.xml \
 	da/standard/IRT/IRT.xml \
-	da/standard/J/atevent.xml \
 	da/standard/J/content.xml \
 	da/standard/J/styles.xml \
-	da/standard/JACL/atevent.xml \
 	da/standard/JACL/content.xml \
 	da/standard/JACL/styles.xml \
-	da/standard/JACR/atevent.xml \
 	da/standard/JACR/content.xml \
 	da/standard/JACR/styles.xml \
-	da/standard/JAINV/atevent.xml \
 	da/standard/JAINV/content.xml \
 	da/standard/JAINV/styles.xml \
-	da/standard/JARL/atevent.xml \
 	da/standard/JARL/content.xml \
 	da/standard/JARL/styles.xml \
-	da/standard/LAG/atevent.xml \
 	da/standard/LAG/LAG.xml \
 	da/standard/LOREM/LOREM.xml \
 	da/standard/META-INF/manifest.xml \
-	da/standard/O/atevent.xml \
 	da/standard/O/O.xml \
-	da/standard/P/atevent.xml \
 	da/standard/P/P.xml \
-	da/standard/Q/atevent.xml \
 	da/standard/Q/Q.xml \
-	da/standard/R1/atevent.xml \
 	da/standard/R1/content.xml \
 	da/standard/R1/styles.xml \
-	da/standard/R2/atevent.xml \
 	da/standard/R2/content.xml \
 	da/standard/R2/styles.xml \
-	da/standard/RE/atevent.xml \
 	da/standard/RE/RE.xml \
-	da/standard/RF/atevent.xml \
 	da/standard/RF/RF.xml \
-	da/standard/RG/atevent.xml \
 	da/standard/RG/RG.xml \
-	da/standard/RM/atevent.xml \
 	da/standard/RM/RM.xml \
-	da/standard/S/atevent.xml \
 	da/standard/S/S.xml \
-	da/standard/SD/atevent.xml \
 	da/standard/SD/SD.xml \
-	da/standard/SI/atevent.xml \
 	da/standard/SI/SI.xml \
-	da/standard/TC/atevent.xml \
 	da/standard/TC/TC.xml \
-	da/standard/TOP/atevent.xml \
 	da/standard/TOP/TOP.xml \
-	da/standard/TWIMC/atevent.xml \
 	da/standard/TWIMC/TWIMC.xml \
-	da/standard/TY/atevent.xml \
 	da/standard/TY/TY.xml \
-	da/standard/VA/atevent.xml \
 	da/standard/VA/VA.xml \
-	da/standard/VOM/atevent.xml \
 	da/standard/VOM/VOM.xml \
-	da/standard/YT/atevent.xml \
 	da/standard/YT/content.xml \
 	da/standard/YT/styles.xml \
 	da/template/BlockList.xml \
@@ -783,99 +657,70 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	de/crdbus50/MOD2/styles.xml \
 	de/standard/AF/AF.xml \
 	de/standard/AG/AG.xml \
-	de/standard/AG/atevent.xml \
 	de/standard/AL/AL.xml \
-	de/standard/BEW/atevent.xml \
 	de/standard/BEW/content.xml \
 	de/standard/BEW/styles.xml \
-	de/standard/BEWABS/atevent.xml \
 	de/standard/BEWABS/content.xml \
 	de/standard/BEWABS/styles.xml \
-	de/standard/BEWEIN/atevent.xml \
 	de/standard/BEWEIN/content.xml \
 	de/standard/BEWEIN/styles.xml \
-	de/standard/BEWUNT/atevent.xml \
 	de/standard/BEWUNT/content.xml \
 	de/standard/BEWUNT/styles.xml \
-	de/standard/BEWVOR/atevent.xml \
 	de/standard/BEWVOR/content.xml \
 	de/standard/BEWVOR/styles.xml \
 	de/standard/BlockList.xml \
-	de/standard/BS/atevent.xml \
 	de/standard/BS/BS.xml \
-	de/standard/BT/atevent.xml \
 	de/standard/BT/BT.xml \
-	de/standard/EB/atevent.xml \
 	de/standard/EB/EB.xml \
 	de/standard/FN/content.xml \
 	de/standard/FN/manifest.rdf \
 	de/standard/FN/Object_1/content.xml \
 	de/standard/FN/styles.xml \
-	de/standard/K+ANw-/atevent.xml \
 	de/standard/K+ANw-/content.xml \
 	de/standard/K+ANw-/styles.xml \
 	de/standard/LOREM/LOREM.xml \
-	de/standard/M1/atevent.xml \
 	de/standard/M1/content.xml \
 	de/standard/M1/styles.xml \
-	de/standard/M2/atevent.xml \
 	de/standard/M2/content.xml \
 	de/standard/M2/styles.xml \
 	de/standard/META-INF/manifest.xml \
-	de/standard/MFG/atevent.xml \
 	de/standard/MFG/content.xml \
 	de/standard/MFG/styles.xml \
-	de/standard/SGDH/atevent.xml \
 	de/standard/SGDH/content.xml \
 	de/standard/SGDH/styles.xml \
-	de/standard/UL/atevent.xml \
 	de/standard/UL/UL.xml \
-	de/standard/ZBED/atevent.xml \
 	de/standard/ZBED/ZBED.xml \
 	de/template/BlockList.xml \
-	de/template/H1B/atevent.xml \
 	de/template/H1B/content.xml \
 	de/template/H1B/Pictures/2000001B00000CD200000CED63AA5866.svm \
 	de/template/H1B/styles.xml \
 	de/template/H1C/content.xml \
 	de/template/H1C/styles.xml \
-	de/template/H1N/atevent.xml \
 	de/template/H1N/content.xml \
 	de/template/H1N/styles.xml \
-	de/template/HB/atevent.xml \
 	de/template/HB/content.xml \
 	de/template/HB/Pictures/2000001B00000CD200000CED63AA5866.svm \
 	de/template/HB/styles.xml \
-	de/template/HC/atevent.xml \
 	de/template/HC/content.xml \
 	de/template/HC/styles.xml \
-	de/template/HLB/atevent.xml \
 	de/template/HLB/content.xml \
 	de/template/HLB/styles.xml \
-	de/template/HLC/atevent.xml \
 	de/template/HLC/content.xml \
 	de/template/HLC/styles.xml \
-	de/template/HLN/atevent.xml \
 	de/template/HLN/content.xml \
 	de/template/HLN/styles.xml \
-	de/template/HN/atevent.xml \
 	de/template/HN/content.xml \
 	de/template/HN/styles.xml \
-	de/template/HRB/atevent.xml \
 	de/template/HRB/content.xml \
 	de/template/HRB/Pictures/2000001B00000CD200000CED63AA5866.svm \
 	de/template/HRB/styles.xml \
-	de/template/HRC/atevent.xml \
 	de/template/HRC/content.xml \
 	de/template/HRC/styles.xml \
-	de/template/HRN/atevent.xml \
 	de/template/HRN/content.xml \
 	de/template/HRN/styles.xml \
 	de/template/META-INF/manifest.xml \
-	de/template/PT1/atevent.xml \
 	de/template/PT1/content.xml \
 	de/template/PT1/styles.xml \
-	de/template/PT2/atevent.xml \
 	de/template/PT2/content.xml \
 	de/template/PT2/styles.xml \
 	dgo/standard/BlockList.xml \
@@ -907,48 +752,33 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	el/standard/LOREM/LOREM.xml \
 	el/standard/META-INF/manifest.xml \
 	en-GB/crdbus50/BlockList.xml \
-	en-GB/crdbus50/CON1/atevent.xml \
 	en-GB/crdbus50/CON1/content.xml \
 	en-GB/crdbus50/CON1/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	en-GB/crdbus50/CON1/styles.xml \
-	en-GB/crdbus50/CON2/atevent.xml \
 	en-GB/crdbus50/CON2/content.xml \
 	en-GB/crdbus50/CON2/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	en-GB/crdbus50/CON2/styles.xml \
-	en-GB/crdbus50/ELE1/atevent.xml \
 	en-GB/crdbus50/ELE1/content.xml \
 	en-GB/crdbus50/ELE1/styles.xml \
-	en-GB/crdbus50/ELE2/atevent.xml \
 	en-GB/crdbus50/ELE2/content.xml \
 	en-GB/crdbus50/ELE2/styles.xml \
-	en-GB/crdbus50/ELE3/atevent.xml \
 	en-GB/crdbus50/ELE3/content.xml \
 	en-GB/crdbus50/ELE3/styles.xml \
 	en-GB/crdbus50/META-INF/manifest.xml \
 	en-GB/standard/A/A.xml \
-	en-GB/standard/A/atevent.xml \
 	en-GB/standard/AR/AR.xml \
-	en-GB/standard/AR/atevent.xml \
 	en-GB/standard/AR/content.xml \
 	en-GB/standard/AR/styles.xml \
 	en-GB/standard/BlockList.xml \
-	en-GB/standard/BW/atevent.xml \
 	en-GB/standard/BW/BW.xml \
-	en-GB/standard/C/atevent.xml \
 	en-GB/standard/C/C.xml \
-	en-GB/standard/CAN/atevent.xml \
 	en-GB/standard/CAN/content.xml \
 	en-GB/standard/CAN/styles.xml \
-	en-GB/standard/CD/atevent.xml \
 	en-GB/standard/CD/CD.xml \
-	en-GB/standard/CM/atevent.xml \
 	en-GB/standard/CM/CM.xml \
-	en-GB/standard/CNL/atevent.xml \
 	en-GB/standard/CNL/CNL.xml \
-	en-GB/standard/DMS/atevent.xml \
 	en-GB/standard/DMS/content.xml \
 	en-GB/standard/DMS/styles.xml \
-	en-GB/standard/DT/atevent.xml \
 	en-GB/standard/DT/content.xml \
 	en-GB/standard/DT/DT.xml \
 	en-GB/standard/DT/styles.xml \
@@ -958,70 +788,44 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	en-GB/standard/FN/Object_1/content.xml \
 	en-GB/standard/FN/styles.xml \
 	en-GB/standard/I/I.xml \
-	en-GB/standard/IRT/atevent.xml \
 	en-GB/standard/IRT/IRT.xml \
-	en-GB/standard/J/atevent.xml \
 	en-GB/standard/J/content.xml \
 	en-GB/standard/J/styles.xml \
-	en-GB/standard/JACL/atevent.xml \
 	en-GB/standard/JACL/content.xml \
 	en-GB/standard/JACL/styles.xml \
-	en-GB/standard/JACR/atevent.xml \
 	en-GB/standard/JACR/content.xml \
 	en-GB/standard/JACR/styles.xml \
-	en-GB/standard/JAINV/atevent.xml \
 	en-GB/standard/JAINV/content.xml \
 	en-GB/standard/JAINV/styles.xml \
-	en-GB/standard/JARL/atevent.xml \
 	en-GB/standard/JARL/content.xml \
 	en-GB/standard/JARL/styles.xml \
-	en-GB/standard/LAG/atevent.xml \
 	en-GB/standard/LAG/LAG.xml \
 	en-GB/standard/LOREM/LOREM.xml \
 	en-GB/standard/META-INF/manifest.xml \
-	en-GB/standard/O/atevent.xml \
 	en-GB/standard/O/content.xml \
 	en-GB/standard/O/O.xml \
 	en-GB/standard/O/styles.xml \
-	en-GB/standard/P/atevent.xml \
 	en-GB/standard/P/P.xml \
-	en-GB/standard/Q/atevent.xml \
 	en-GB/standard/Q/content.xml \
 	en-GB/standard/Q/Q.xml \
 	en-GB/standard/Q/styles.xml \
-	en-GB/standard/R1/atevent.xml \
 	en-GB/standard/R1/content.xml \
 	en-GB/standard/R1/styles.xml \
-	en-GB/standard/R2/atevent.xml \
 	en-GB/standard/R2/content.xml \
 	en-GB/standard/R2/styles.xml \
-	en-GB/standard/RE/atevent.xml \
 	en-GB/standard/RE/RE.xml \
-	en-GB/standard/RF/atevent.xml \
 	en-GB/standard/RF/RF.xml \
-	en-GB/standard/RG/atevent.xml \
 	en-GB/standard/RG/RG.xml \
-	en-GB/standard/RM/atevent.xml \
 	en-GB/standard/RM/RM.xml \
-	en-GB/standard/S/atevent.xml \
 	en-GB/standard/S/S.xml \
-	en-GB/standard/SD/atevent.xml \
 	en-GB/standard/SD/SD.xml \
-	en-GB/standard/SI/atevent.xml \
 	en-GB/standard/SI/SI.xml \
-	en-GB/standard/TC/atevent.xml \
 	en-GB/standard/TC/TC.xml \
-	en-GB/standard/TOP/atevent.xml \
 	en-GB/standard/TOP/TOP.xml \
-	en-GB/standard/TWIMC/atevent.xml \
 	en-GB/standard/TWIMC/TWIMC.xml \
-	en-GB/standard/TY/atevent.xml \
 	en-GB/standard/TY/TY.xml \
-	en-GB/standard/VA/atevent.xml \
 	en-GB/standard/VA/VA.xml \
-	en-GB/standard/VOM/atevent.xml \
 	en-GB/standard/VOM/VOM.xml \
-	en-GB/standard/YT/atevent.xml \
 	en-GB/standard/YT/content.xml \
 	en-GB/standard/YT/styles.xml \
 	en-GB/template/BlockList.xml \
@@ -1058,46 +862,31 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	en-GB/template/PT2/content.xml \
 	en-GB/template/PT2/styles.xml \
 	en-US/crdbus50/BlockList.xml \
-	en-US/crdbus50/CON1/atevent.xml \
 	en-US/crdbus50/CON1/content.xml \
 	en-US/crdbus50/CON1/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	en-US/crdbus50/CON1/styles.xml \
-	en-US/crdbus50/CON2/atevent.xml \
 	en-US/crdbus50/CON2/content.xml \
 	en-US/crdbus50/CON2/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	en-US/crdbus50/CON2/styles.xml \
-	en-US/crdbus50/ELE1/atevent.xml \
 	en-US/crdbus50/ELE1/content.xml \
 	en-US/crdbus50/ELE1/styles.xml \
-	en-US/crdbus50/ELE2/atevent.xml \
 	en-US/crdbus50/ELE2/content.xml \
 	en-US/crdbus50/ELE2/styles.xml \
-	en-US/crdbus50/ELE3/atevent.xml \
 	en-US/crdbus50/ELE3/content.xml \
 	en-US/crdbus50/ELE3/styles.xml \
 	en-US/crdbus50/META-INF/manifest.xml \
 	en-US/standard/A/A.xml \
-	en-US/standard/A/atevent.xml \
 	en-US/standard/AR/AR.xml \
-	en-US/standard/AR/atevent.xml \
 	en-US/standard/BlockList.xml \
-	en-US/standard/BW/atevent.xml \
 	en-US/standard/BW/BW.xml \
-	en-US/standard/C/atevent.xml \
 	en-US/standard/C/C.xml \
-	en-US/standard/CAN/atevent.xml \
 	en-US/standard/CAN/content.xml \
 	en-US/standard/CAN/styles.xml \
-	en-US/standard/CD/atevent.xml \
 	en-US/standard/CD/CD.xml \
-	en-US/standard/CM/atevent.xml \
 	en-US/standard/CM/CM.xml \
-	en-US/standard/CNL/atevent.xml \
 	en-US/standard/CNL/CNL.xml \
-	en-US/standard/DMS/atevent.xml \
 	en-US/standard/DMS/content.xml \
 	en-US/standard/DMS/styles.xml \
-	en-US/standard/DT/atevent.xml \
 	en-US/standard/DT/DT.xml \
 	en-US/standard/E/E.xml \
 	en-US/standard/FN/content.xml \
@@ -1105,66 +894,40 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	en-US/standard/FN/Object_1/content.xml \
 	en-US/standard/FN/styles.xml \
 	en-US/standard/I/I.xml \
-	en-US/standard/IRT/atevent.xml \
 	en-US/standard/IRT/IRT.xml \
-	en-US/standard/J/atevent.xml \
 	en-US/standard/J/content.xml \
 	en-US/standard/J/styles.xml \
-	en-US/standard/JACL/atevent.xml \
 	en-US/standard/JACL/content.xml \
 	en-US/standard/JACL/styles.xml \
-	en-US/standard/JACR/atevent.xml \
 	en-US/standard/JACR/content.xml \
 	en-US/standard/JACR/styles.xml \
-	en-US/standard/JAINV/atevent.xml \
 	en-US/standard/JAINV/content.xml \
 	en-US/standard/JAINV/styles.xml \
-	en-US/standard/JARL/atevent.xml \
 	en-US/standard/JARL/content.xml \
 	en-US/standard/JARL/styles.xml \
-	en-US/standard/LAG/atevent.xml \
 	en-US/standard/LAG/LAG.xml \
 	en-US/standard/LOREM/LOREM.xml \
 	en-US/standard/META-INF/manifest.xml \
-	en-US/standard/O/atevent.xml \
 	en-US/standard/O/O.xml \
-	en-US/standard/P/atevent.xml \
 	en-US/standard/P/P.xml \
-	en-US/standard/Q/atevent.xml \
 	en-US/standard/Q/Q.xml \
-	en-US/standard/R1/atevent.xml \
 	en-US/standard/R1/content.xml \
 	en-US/standard/R1/styles.xml \
-	en-US/standard/R2/atevent.xml \
 	en-US/standard/R2/content.xml \
 	en-US/standard/R2/styles.xml \
-	en-US/standard/RE/atevent.xml \
 	en-US/standard/RE/RE.xml \
-	en-US/standard/RF/atevent.xml \
 	en-US/standard/RF/RF.xml \
-	en-US/standard/RG/atevent.xml \
 	en-US/standard/RG/RG.xml \
-	en-US/standard/RM/atevent.xml \
 	en-US/standard/RM/RM.xml \
-	en-US/standard/S/atevent.xml \
 	en-US/standard/S/S.xml \
-	en-US/standard/SD/atevent.xml \
 	en-US/standard/SD/SD.xml \
-	en-US/standard/SI/atevent.xml \
 	en-US/standard/SI/SI.xml \
-	en-US/standard/TC/atevent.xml \
 	en-US/standard/TC/TC.xml \
-	en-US/standard/TOP/atevent.xml \
 	en-US/standard/TOP/TOP.xml \
-	en-US/standard/TWIMC/atevent.xml \
 	en-US/standard/TWIMC/TWIMC.xml \
-	en-US/standard/TY/atevent.xml \
 	en-US/standard/TY/TY.xml \
-	en-US/standard/VA/atevent.xml \
 	en-US/standard/VA/VA.xml \
-	en-US/standard/VOM/atevent.xml \
 	en-US/standard/VOM/VOM.xml \
-	en-US/standard/YT/atevent.xml \
 	en-US/standard/YT/content.xml \
 	en-US/standard/YT/styles.xml \
 	en-US/template/BlockList.xml \
@@ -1215,42 +978,30 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	eo/standard/LOREM/LOREM.xml \
 	eo/standard/META-INF/manifest.xml \
 	es/crdbus50/BlockList.xml \
-	es/crdbus50/CLA1/atevent.xml \
 	es/crdbus50/CLA1/content.xml \
 	es/crdbus50/CLA1/styles.xml \
-	es/crdbus50/CLA2/atevent.xml \
 	es/crdbus50/CLA2/content.xml \
 	es/crdbus50/CLA2/styles.xml \
-	es/crdbus50/CLA3/atevent.xml \
 	es/crdbus50/CLA3/content.xml \
 	es/crdbus50/CLA3/styles.xml \
 	es/crdbus50/META-INF/manifest.xml \
-	es/crdbus50/MOD1/atevent.xml \
 	es/crdbus50/MOD1/content.xml \
 	es/crdbus50/MOD1/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	es/crdbus50/MOD1/styles.xml \
-	es/crdbus50/MOD2/atevent.xml \
 	es/crdbus50/MOD2/content.xml \
 	es/crdbus50/MOD2/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	es/crdbus50/MOD2/styles.xml \
 	es/standard/A/A.xml \
 	es/standard/AR/AR.xml \
-	es/standard/AR/atevent.xml \
-	es/standard/ATEN/atevent.xml \
 	es/standard/ATEN/content.xml \
 	es/standard/ATEN/styles.xml \
-	es/standard/AV1/atevent.xml \
 	es/standard/AV1/content.xml \
 	es/standard/AV1/styles.xml \
-	es/standard/AV2/atevent.xml \
 	es/standard/AV2/content.xml \
 	es/standard/AV2/styles.xml \
 	es/standard/BlockList.xml \
-	es/standard/CDP/atevent.xml \
 	es/standard/CDP/CDP.xml \
-	es/standard/DA/atevent.xml \
 	es/standard/DA/DA.xml \
-	es/standard/ESYS/atevent.xml \
 	es/standard/ESYS/content.xml \
 	es/standard/ESYS/styles.xml \
 	es/standard/LOREM/LOREM.xml \
@@ -1259,28 +1010,19 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	es/standard/N+ANo-M/manifest.rdf \
 	es/standard/N+ANo-M/Object_1/content.xml \
 	es/standard/N+ANo-M/styles.xml \
-	es/standard/O/atevent.xml \
 	es/standard/O/O.xml \
-	es/standard/P/atevent.xml \
 	es/standard/P/P.xml \
-	es/standard/RE/atevent.xml \
 	es/standard/RE/content.xml \
 	es/standard/RE/styles.xml \
 	es/standard/S/S.xml \
-	es/standard/SENT/atevent.xml \
 	es/standard/SENT/SENT.xml \
-	es/standard/SINV/atevent.xml \
 	es/standard/SINV/content.xml \
 	es/standard/SINV/styles.xml \
-	es/standard/SMAN/atevent.xml \
 	es/standard/SMAN/SMAN.xml \
-	es/standard/SOL/atevent.xml \
 	es/standard/SOL/content.xml \
 	es/standard/SOL/styles.xml \
-	es/standard/SRECH/atevent.xml \
 	es/standard/SRECH/content.xml \
 	es/standard/SRECH/styles.xml \
-	es/standard/TE/atevent.xml \
 	es/standard/TE/TE.xml \
 	es/template/BlockList.xml \
 	es/template/H1B/content.xml \
@@ -1344,82 +1086,61 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	fi/standard/LOREM/LOREM.xml \
 	fi/standard/META-INF/manifest.xml \
 	fr/crdbus50/BlockList.xml \
-	fr/crdbus50/CLA1/atevent.xml \
 	fr/crdbus50/CLA1/content.xml \
 	fr/crdbus50/CLA1/styles.xml \
-	fr/crdbus50/CLA2/atevent.xml \
 	fr/crdbus50/CLA2/content.xml \
 	fr/crdbus50/CLA2/styles.xml \
-	fr/crdbus50/CLA3/atevent.xml \
 	fr/crdbus50/CLA3/content.xml \
 	fr/crdbus50/CLA3/styles.xml \
 	fr/crdbus50/META-INF/manifest.xml \
-	fr/crdbus50/MOD1/atevent.xml \
 	fr/crdbus50/MOD1/content.xml \
 	fr/crdbus50/MOD1/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	fr/crdbus50/MOD1/styles.xml \
-	fr/crdbus50/MOD2/atevent.xml \
 	fr/crdbus50/MOD2/content.xml \
 	fr/crdbus50/MOD2/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	fr/crdbus50/MOD2/styles.xml \
 	fr/standard/AR/AR.xml \
-	fr/standard/AR/atevent.xml \
 	fr/standard/BlockList.xml \
-	fr/standard/C/atevent.xml \
 	fr/standard/C/C.xml \
-	fr/standard/CDOS/atevent.xml \
 	fr/standard/CDOS/content.xml \
 	fr/standard/CDOS/manifest.rdf \
 	fr/standard/CDOS/styles.xml \
-	fr/standard/CINVI/atevent.xml \
 	fr/standard/CINVI/content.xml \
 	fr/standard/CINVI/manifest.rdf \
 	fr/standard/CINVI/styles.xml \
-	fr/standard/CLET/atevent.xml \
 	fr/standard/CLET/content.xml \
 	fr/standard/CLET/manifest.rdf \
 	fr/standard/CLET/styles.xml \
-	fr/standard/CNON/atevent.xml \
 	fr/standard/CNON/content.xml \
 	fr/standard/CNON/manifest.rdf \
 	fr/standard/CNON/styles.xml \
-	fr/standard/COP/atevent.xml \
 	fr/standard/COP/COP.xml \
-	fr/standard/CREC/atevent.xml \
 	fr/standard/CREC/content.xml \
 	fr/standard/CREC/manifest.rdf \
 	fr/standard/CREC/styles.xml \
 	fr/standard/D/D.xml \
 	fr/standard/LOREM/LOREM.xml \
 	fr/standard/META-INF/manifest.xml \
-	fr/standard/MM/atevent.xml \
 	fr/standard/MM/content.xml \
 	fr/standard/MM/styles.xml \
 	fr/standard/NF/content.xml \
 	fr/standard/NF/manifest.rdf \
 	fr/standard/NF/Object_1/content.xml \
 	fr/standard/NF/styles.xml \
-	fr/standard/O/atevent.xml \
 	fr/standard/O/O.xml \
 	fr/standard/P/P.xml \
-	fr/standard/PAI/atevent.xml \
 	fr/standard/PAI/PAI.xml \
-	fr/standard/R1/atevent.xml \
 	fr/standard/R1/content.xml \
 	fr/standard/R1/manifest.rdf \
 	fr/standard/R1/styles.xml \
-	fr/standard/R2/atevent.xml \
 	fr/standard/R2/content.xml \
 	fr/standard/R2/manifest.rdf \
 	fr/standard/R2/styles.xml \
-	fr/standard/RESI/atevent.xml \
 	fr/standard/RESI/content.xml \
 	fr/standard/RESI/manifest.rdf \
 	fr/standard/RESI/styles.xml \
-	fr/standard/SALU/atevent.xml \
 	fr/standard/SALU/content.xml \
 	fr/standard/SALU/styles.xml \
-	fr/standard/TEX/atevent.xml \
 	fr/standard/TEX/TEX.xml \
 	fr/template/BlockList.xml \
 	fr/template/H1B/content.xml \
@@ -1525,103 +1246,70 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	hsb/standard/LOREM/LOREM.xml \
 	hsb/standard/META-INF/manifest.xml \
 	hu/crdbus50/BlockList.xml \
-	hu/crdbus50/CLE1/atevent.xml \
 	hu/crdbus50/CLE1/content.xml \
 	hu/crdbus50/CLE1/styles.xml \
-	hu/crdbus50/CLE2/atevent.xml \
 	hu/crdbus50/CLE2/content.xml \
 	hu/crdbus50/CLE2/styles.xml \
-	hu/crdbus50/CLE3/atevent.xml \
 	hu/crdbus50/CLE3/content.xml \
 	hu/crdbus50/CLE3/styles.xml \
-	hu/crdbus50/CON1/atevent.xml \
 	hu/crdbus50/CON1/content.xml \
 	hu/crdbus50/CON1/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	hu/crdbus50/CON1/styles.xml \
-	hu/crdbus50/CON2/atevent.xml \
 	hu/crdbus50/CON2/content.xml \
 	hu/crdbus50/CON2/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	hu/crdbus50/CON2/styles.xml \
 	hu/crdbus50/META-INF/manifest.xml \
 	hu/crdbus54/BlockList.xml \
-	hu/crdbus54/ELE1/atevent.xml \
 	hu/crdbus54/ELE1/content.xml \
 	hu/crdbus54/ELE1/styles.xml \
-	hu/crdbus54/ELE2/atevent.xml \
 	hu/crdbus54/ELE2/content.xml \
 	hu/crdbus54/ELE2/styles.xml \
-	hu/crdbus54/ELE3/atevent.xml \
 	hu/crdbus54/ELE3/content.xml \
 	hu/crdbus54/ELE3/styles.xml \
 	hu/crdbus54/META-INF/manifest.xml \
-	hu/crdbus54/MOD1/atevent.xml \
 	hu/crdbus54/MOD1/content.xml \
 	hu/crdbus54/MOD1/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	hu/crdbus54/MOD1/styles.xml \
-	hu/crdbus54/MOD2/atevent.xml \
 	hu/crdbus54/MOD2/content.xml \
 	hu/crdbus54/MOD2/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	hu/crdbus54/MOD2/styles.xml \
 	hu/standard/2016/content.xml \
 	hu/standard/2016/styles.xml \
 	hu/standard/AL/AL.xml \
-	hu/standard/AL/atevent.xml \
-	hu/standard/B/atevent.xml \
 	hu/standard/B/B.xml \
 	hu/standard/BlockList.xml \
-	hu/standard/EL/atevent.xml \
 	hu/standard/EL/EL.xml \
-	hu/standard/EX/atevent.xml \
 	hu/standard/EX/EX.xml \
 	hu/standard/FN/content.xml \
 	hu/standard/FN/manifest.rdf \
 	hu/standard/FN/Object_1/content.xml \
 	hu/standard/FN/styles.xml \
-	hu/standard/HI/atevent.xml \
 	hu/standard/HI/HI.xml \
-	hu/standard/I/atevent.xml \
 	hu/standard/I/I.xml \
-	hu/standard/K/atevent.xml \
 	hu/standard/K/K.xml \
-	hu/standard/KH/atevent.xml \
 	hu/standard/KH/content.xml \
 	hu/standard/KH/styles.xml \
-	hu/standard/KHU/atevent.xml \
 	hu/standard/KHU/content.xml \
 	hu/standard/KHU/styles.xml \
-	hu/standard/KU/atevent.xml \
 	hu/standard/KU/content.xml \
 	hu/standard/KU/styles.xml \
 	hu/standard/LOREM/LOREM.xml \
-	hu/standard/LP/atevent.xml \
 	hu/standard/LP/LP.xml \
 	hu/standard/META-INF/manifest.xml \
-	hu/standard/MJ/atevent.xml \
 	hu/standard/MJ/MJ.xml \
-	hu/standard/ML/atevent.xml \
 	hu/standard/ML/ML.xml \
-	hu/standard/PL/atevent.xml \
 	hu/standard/PL/PL.xml \
-	hu/standard/SZ/atevent.xml \
 	hu/standard/SZ/SZ.xml \
-	hu/standard/T/atevent.xml \
 	hu/standard/T/T.xml \
-	hu/standard/TC/atevent.xml \
 	hu/standard/TC/TC.xml \
-	hu/standard/TH/atevent.xml \
 	hu/standard/TH/content.xml \
 	hu/standard/TH/styles.xml \
-	hu/standard/THU/atevent.xml \
 	hu/standard/THU/content.xml \
 	hu/standard/THU/styles.xml \
-	hu/standard/TI/atevent.xml \
 	hu/standard/TI/TI.xml \
-	hu/standard/TL/atevent.xml \
 	hu/standard/TL/TL.xml \
-	hu/standard/TU/atevent.xml \
 	hu/standard/TU/content.xml \
 	hu/standard/TU/styles.xml \
-	hu/standard/U/atevent.xml \
 	hu/standard/U/U.xml \
 	hu/template/BlockList.xml \
 	hu/template/H1B/content.xml \
@@ -1671,73 +1359,52 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	is/standard/LOREM/LOREM.xml \
 	is/standard/META-INF/manifest.xml \
 	it/crdbus50/BlockList.xml \
-	it/crdbus50/CLA1/atevent.xml \
 	it/crdbus50/CLA1/content.xml \
 	it/crdbus50/CLA1/styles.xml \
-	it/crdbus50/CLA2/atevent.xml \
 	it/crdbus50/CLA2/content.xml \
 	it/crdbus50/CLA2/styles.xml \
-	it/crdbus50/CLA3/atevent.xml \
 	it/crdbus50/CLA3/content.xml \
 	it/crdbus50/CLA3/styles.xml \
 	it/crdbus50/META-INF/manifest.xml \
-	it/crdbus50/MOD1/atevent.xml \
 	it/crdbus50/MOD1/content.xml \
 	it/crdbus50/MOD1/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	it/crdbus50/MOD1/styles.xml \
-	it/crdbus50/MOD2/atevent.xml \
 	it/crdbus50/MOD2/content.xml \
 	it/crdbus50/MOD2/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	it/crdbus50/MOD2/styles.xml \
 	it/standard/A/A.xml \
 	it/standard/BlockList.xml \
-	it/standard/CP/atevent.xml \
 	it/standard/CP/CP.xml \
-	it/standard/CR/atevent.xml \
 	it/standard/CR/CR.xml \
-	it/standard/CS/atevent.xml \
 	it/standard/CS/content.xml \
 	it/standard/CS/styles.xml \
-	it/standard/DA/atevent.xml \
 	it/standard/DA/DA.xml \
-	it/standard/DG/atevent.xml \
 	it/standard/DG/content.xml \
 	it/standard/DG/styles.xml \
-	it/standard/DIRIF/atevent.xml \
 	it/standard/DIRIF/content.xml \
 	it/standard/DIRIF/styles.xml \
 	it/standard/FN/content.xml \
 	it/standard/FN/manifest.rdf \
 	it/standard/FN/Object_1/content.xml \
 	it/standard/FN/styles.xml \
-	it/standard/ICOLL/atevent.xml \
 	it/standard/ICOLL/content.xml \
 	it/standard/ICOLL/styles.xml \
-	it/standard/IDOC/atevent.xml \
 	it/standard/IDOC/content.xml \
 	it/standard/IDOC/styles.xml \
-	it/standard/IMP/atevent.xml \
 	it/standard/IMP/content.xml \
 	it/standard/IMP/styles.xml \
-	it/standard/IRIC/atevent.xml \
 	it/standard/IRIC/IRIC.xml \
 	it/standard/LOREM/LOREM.xml \
 	it/standard/META-INF/manifest.xml \
-	it/standard/O/atevent.xml \
 	it/standard/O/O.xml \
-	it/standard/P/atevent.xml \
 	it/standard/P/P.xml \
 	it/standard/R/R.xml \
-	it/standard/S1/atevent.xml \
 	it/standard/S1/content.xml \
 	it/standard/S1/styles.xml \
-	it/standard/S2/atevent.xml \
 	it/standard/S2/content.xml \
 	it/standard/S2/styles.xml \
-	it/standard/SD/atevent.xml \
 	it/standard/SD/content.xml \
 	it/standard/SD/styles.xml \
-	it/standard/TE/atevent.xml \
 	it/standard/TE/TE.xml \
 	it/template/BlockList.xml \
 	it/template/H1B/content.xml \
@@ -1785,9 +1452,7 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	ja/crdbus50/MOD2/content.xml \
 	ja/crdbus50/MOD2/styles.xml \
 	ja/standard/AR/AR.xml \
-	ja/standard/AR/atevent.xml \
 	ja/standard/BlockList.xml \
-	ja/standard/CAN/atevent.xml \
 	ja/standard/CAN/content.xml \
 	ja/standard/CAN/styles.xml \
 	ja/standard/CP/content.xml \
@@ -1802,13 +1467,10 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	ja/standard/HK/content.xml \
 	ja/standard/HK/styles.xml \
 	ja/standard/I/I.xml \
-	ja/standard/JACL/atevent.xml \
 	ja/standard/JACL/content.xml \
 	ja/standard/JACL/styles.xml \
-	ja/standard/JAINV/atevent.xml \
 	ja/standard/JAINV/content.xml \
 	ja/standard/JAINV/styles.xml \
-	ja/standard/JARL/atevent.xml \
 	ja/standard/JARL/content.xml \
 	ja/standard/JARL/styles.xml \
 	ja/standard/JARWPR/content.xml \
@@ -1817,14 +1479,10 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	ja/standard/KG/styles.xml \
 	ja/standard/LOREM/LOREM.xml \
 	ja/standard/META-INF/manifest.xml \
-	ja/standard/O/atevent.xml \
 	ja/standard/O/O.xml \
-	ja/standard/Q/atevent.xml \
 	ja/standard/Q/Q.xml \
-	ja/standard/R1/atevent.xml \
 	ja/standard/R1/content.xml \
 	ja/standard/R1/styles.xml \
-	ja/standard/R2/atevent.xml \
 	ja/standard/R2/content.xml \
 	ja/standard/R2/styles.xml \
 	ja/standard/TOP/content.xml \
@@ -1884,46 +1542,31 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	kk/standard/LOREM/LOREM.xml \
 	kk/standard/META-INF/manifest.xml \
 	km/crdbus50/BlockList.xml \
-	km/crdbus50/CON1/atevent.xml \
 	km/crdbus50/CON1/content.xml \
 	km/crdbus50/CON1/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	km/crdbus50/CON1/styles.xml \
-	km/crdbus50/CON2/atevent.xml \
 	km/crdbus50/CON2/content.xml \
 	km/crdbus50/CON2/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	km/crdbus50/CON2/styles.xml \
-	km/crdbus50/ELE1/atevent.xml \
 	km/crdbus50/ELE1/content.xml \
 	km/crdbus50/ELE1/styles.xml \
-	km/crdbus50/ELE2/atevent.xml \
 	km/crdbus50/ELE2/content.xml \
 	km/crdbus50/ELE2/styles.xml \
-	km/crdbus50/ELE3/atevent.xml \
 	km/crdbus50/ELE3/content.xml \
 	km/crdbus50/ELE3/styles.xml \
 	km/crdbus50/META-INF/manifest.xml \
 	km/standard/A/A.xml \
-	km/standard/A/atevent.xml \
 	km/standard/AR/AR.xml \
-	km/standard/AR/atevent.xml \
 	km/standard/BlockList.xml \
-	km/standard/BW/atevent.xml \
 	km/standard/BW/BW.xml \
-	km/standard/C/atevent.xml \
 	km/standard/C/C.xml \
-	km/standard/CAN/atevent.xml \
 	km/standard/CAN/content.xml \
 	km/standard/CAN/styles.xml \
-	km/standard/CD/atevent.xml \
 	km/standard/CD/CD.xml \
-	km/standard/CM/atevent.xml \
 	km/standard/CM/CM.xml \
-	km/standard/CNL/atevent.xml \
 	km/standard/CNL/CNL.xml \
-	km/standard/DMS/atevent.xml \
 	km/standard/DMS/content.xml \
 	km/standard/DMS/styles.xml \
-	km/standard/DT/atevent.xml \
 	km/standard/DT/DT.xml \
 	km/standard/E/E.xml \
 	km/standard/FN/content.xml \
@@ -1931,66 +1574,40 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	km/standard/FN/Object_1/content.xml \
 	km/standard/FN/styles.xml \
 	km/standard/I/I.xml \
-	km/standard/IRT/atevent.xml \
 	km/standard/IRT/IRT.xml \
-	km/standard/J/atevent.xml \
 	km/standard/J/content.xml \
 	km/standard/J/styles.xml \
-	km/standard/JACL/atevent.xml \
 	km/standard/JACL/content.xml \
 	km/standard/JACL/styles.xml \
-	km/standard/JACR/atevent.xml \
 	km/standard/JACR/content.xml \
 	km/standard/JACR/styles.xml \
-	km/standard/JAINV/atevent.xml \
 	km/standard/JAINV/content.xml \
 	km/standard/JAINV/styles.xml \
-	km/standard/JARL/atevent.xml \
 	km/standard/JARL/content.xml \
 	km/standard/JARL/styles.xml \
-	km/standard/LAG/atevent.xml \
 	km/standard/LAG/LAG.xml \
 	km/standard/LOREM/LOREM.xml \
 	km/standard/META-INF/manifest.xml \
-	km/standard/O/atevent.xml \
 	km/standard/O/O.xml \
-	km/standard/P/atevent.xml \
 	km/standard/P/P.xml \
-	km/standard/Q/atevent.xml \
 	km/standard/Q/Q.xml \
-	km/standard/R1/atevent.xml \
 	km/standard/R1/content.xml \
 	km/standard/R1/styles.xml \
-	km/standard/R2/atevent.xml \
 	km/standard/R2/content.xml \
 	km/standard/R2/styles.xml \
-	km/standard/RE/atevent.xml \
 	km/standard/RE/RE.xml \
-	km/standard/RF/atevent.xml \
 	km/standard/RF/RF.xml \
-	km/standard/RG/atevent.xml \
 	km/standard/RG/RG.xml \
-	km/standard/RM/atevent.xml \
 	km/standard/RM/RM.xml \
-	km/standard/S/atevent.xml \
 	km/standard/S/S.xml \
-	km/standard/SD/atevent.xml \
 	km/standard/SD/SD.xml \
-	km/standard/SI/atevent.xml \
 	km/standard/SI/SI.xml \
-	km/standard/TC/atevent.xml \
 	km/standard/TC/TC.xml \
-	km/standard/TOP/atevent.xml \
 	km/standard/TOP/TOP.xml \
-	km/standard/TWIMC/atevent.xml \
 	km/standard/TWIMC/TWIMC.xml \
-	km/standard/TY/atevent.xml \
 	km/standard/TY/TY.xml \
-	km/standard/VA/atevent.xml \
 	km/standard/VA/VA.xml \
-	km/standard/VOM/atevent.xml \
 	km/standard/VOM/VOM.xml \
-	km/standard/YT/atevent.xml \
 	km/standard/YT/content.xml \
 	km/standard/YT/styles.xml \
 	km/template/BlockList.xml \
@@ -2053,18 +1670,14 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	ko/crdbus50/BlockList.xml \
 	ko/crdbus50/META-INF/manifest.xml \
 	ko/standard/AR/AR.xml \
-	ko/standard/AR/atevent.xml \
-	ko/standard/BEW/atevent.xml \
 	ko/standard/BEW/content.xml \
 	ko/standard/BEW/styles.xml \
 	ko/standard/BEWABS/content.xml \
 	ko/standard/BEWABS/styles.xml \
 	ko/standard/BEWEIN/content.xml \
 	ko/standard/BEWEIN/styles.xml \
-	ko/standard/BEWUNT/atevent.xml \
 	ko/standard/BEWUNT/content.xml \
 	ko/standard/BEWUNT/styles.xml \
-	ko/standard/BEWVOR/atevent.xml \
 	ko/standard/BEWVOR/content.xml \
 	ko/standard/BEWVOR/styles.xml \
 	ko/standard/BlockList.xml \
@@ -2076,24 +1689,18 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	ko/standard/FN/Object_1/content.xml \
 	ko/standard/FN/styles.xml \
 	ko/standard/I/I.xml \
-	ko/standard/K_/atevent.xml \
 	ko/standard/K_/content.xml \
 	ko/standard/K_/styles.xml \
-	ko/standard/KU/atevent.xml \
 	ko/standard/KU/KU.xml \
 	ko/standard/LOREM/LOREM.xml \
-	ko/standard/M1/atevent.xml \
 	ko/standard/M1/content.xml \
 	ko/standard/M1/styles.xml \
-	ko/standard/M2/atevent.xml \
 	ko/standard/M2/content.xml \
 	ko/standard/M2/styles.xml \
 	ko/standard/META-INF/manifest.xml \
 	ko/standard/MFG/content.xml \
 	ko/standard/MFG/styles.xml \
-	ko/standard/O/atevent.xml \
 	ko/standard/O/O.xml \
-	ko/standard/Q/atevent.xml \
 	ko/standard/Q/Q.xml \
 	ko/standard/SGDH/content.xml \
 	ko/standard/SGDH/styles.xml \
@@ -2197,95 +1804,60 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	ml/standard/FN/styles.xml \
 	ml/standard/LOREM/LOREM.xml \
 	ml/standard/META-INF/manifest.xml \
-	mn/crdbus50/+BCEEHgQd-1/atevent.xml \
 	mn/crdbus50/+BCEEHgQd-1/content.xml \
 	mn/crdbus50/+BCEEHgQd-1/styles.xml \
-	mn/crdbus50/+BCEEHgQd-2/atevent.xml \
 	mn/crdbus50/+BCEEHgQd-2/content.xml \
 	mn/crdbus50/+BCEEHgQd-2/styles.xml \
-	mn/crdbus50/+BCEEHgQd-3/atevent.xml \
 	mn/crdbus50/+BCEEHgQd-3/content.xml \
 	mn/crdbus50/+BCEEHgQd-3/styles.xml \
-	mn/crdbus50/+BCgEGAQd-1/atevent.xml \
 	mn/crdbus50/+BCgEGAQd-1/content.xml \
 	mn/crdbus50/+BCgEGAQd-1/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	mn/crdbus50/+BCgEGAQd-1/styles.xml \
-	mn/crdbus50/+BCgEGAQd-2/atevent.xml \
 	mn/crdbus50/+BCgEGAQd-2/content.xml \
 	mn/crdbus50/+BCgEGAQd-2/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	mn/crdbus50/+BCgEGAQd-2/styles.xml \
 	mn/crdbus50/BlockList.xml \
 	mn/crdbus50/META-INF/manifest.xml \
 	mn/standard/+BB0E6AQo-/+BB0E6AQo-.xml \
-	mn/standard/+BB0E6AQo-/atevent.xml \
 	mn/standard/+BBA-/+BBA-.xml \
-	mn/standard/+BBA-/atevent.xml \
-	mn/standard/+BBAE6AQi-/atevent.xml \
 	mn/standard/+BBAE6AQi-/content.xml \
 	mn/standard/+BBAE6AQi-/styles.xml \
-	mn/standard/+BBAE6AQiBBE-/atevent.xml \
 	mn/standard/+BBAE6AQiBBE-/content.xml \
 	mn/standard/+BBAE6AQiBBE-/styles.xml \
-	mn/standard/+BBAE6AQlBBAEEQ-/atevent.xml \
 	mn/standard/+BBAE6AQlBBAEEQ-/content.xml \
 	mn/standard/+BBAE6AQlBBAEEQ-/styles.xml \
-	mn/standard/+BBAE6AQR-/atevent.xml \
 	mn/standard/+BBAE6AQR-/content.xml \
 	mn/standard/+BBAE6AQR-/styles.xml \
-	mn/standard/+BBAE6AQvBCM-/atevent.xml \
 	mn/standard/+BBAE6AQvBCM-/content.xml \
 	mn/standard/+BBAE6AQvBCM-/styles.xml \
 	mn/standard/+BBAEKA-/+BBAEKA-.xml \
-	mn/standard/+BBAEKA-/atevent.xml \
 	mn/standard/+BBEEKA-/+BBEEKA-.xml \
-	mn/standard/+BBEEKA-/atevent.xml \
 	mn/standard/+BBEELw-/+BBEELw-.xml \
-	mn/standard/+BBEELw-/atevent.xml \
 	mn/standard/+BBg-/+BBg-.xml \
-	mn/standard/+BBg-/atevent.xml \
-	mn/standard/+BBMEJQ-/atevent.xml \
 	mn/standard/+BBMEJQ-/content.xml \
 	mn/standard/+BBMEJQ-/styles.xml \
 	mn/standard/+BBsEEA-/+BBsEEA-.xml \
-	mn/standard/+BBsEEA-/atevent.xml \
-	mn/standard/+BC0EJQQd-/atevent.xml \
 	mn/standard/+BC0EJQQd-/content.xml \
 	mn/standard/+BC0EJQQd-/styles.xml \
 	mn/standard/+BCE-/+BCE-.xml \
-	mn/standard/+BCE-/atevent.xml \
-	mn/standard/+BCE-1/atevent.xml \
 	mn/standard/+BCE-1/content.xml \
 	mn/standard/+BCE-1/styles.xml \
-	mn/standard/+BCE-2/atevent.xml \
 	mn/standard/+BCE-2/content.xml \
 	mn/standard/+BCE-2/styles.xml \
 	mn/standard/+BCEEIQQl-/+BCEEIQQl-.xml \
-	mn/standard/+BCEEIQQl-/atevent.xml \
 	mn/standard/+BCIEHQ-/+BCIEHQ-.xml \
-	mn/standard/+BCIEHQ-/atevent.xml \
 	mn/standard/+BCIEHQQY-/+BCIEHQQY-.xml \
-	mn/standard/+BCIEHQQY-/atevent.xml \
 	mn/standard/+BCU-/+BCU-.xml \
-	mn/standard/+BCU-/atevent.xml \
 	mn/standard/+BCUEEAQg-/+BCUEEAQg-.xml \
-	mn/standard/+BCUEEAQg-/atevent.xml \
 	mn/standard/+BCUEEAQR-/+BCUEEAQR-.xml \
-	mn/standard/+BCUEEAQR-/atevent.xml \
 	mn/standard/+BCUEEQ-/+BCUEEQ-.xml \
-	mn/standard/+BCUEEQ-/atevent.xml \
 	mn/standard/+BCUEEQQd-/+BCUEEQQd-.xml \
-	mn/standard/+BCUEEQQd-/atevent.xml \
 	mn/standard/+BCUEHQ-/+BCUEHQ-.xml \
-	mn/standard/+BCUEHQ-/atevent.xml \
-	mn/standard/+BCYEFQ-/atevent.xml \
 	mn/standard/+BCYEFQ-/content.xml \
 	mn/standard/+BCYEFQ-/styles.xml \
 	mn/standard/BlockList.xml \
-	mn/standard/C/atevent.xml \
 	mn/standard/C/C.xml \
-	mn/standard/CD/atevent.xml \
 	mn/standard/CD/CD.xml \
-	mn/standard/CNL/atevent.xml \
 	mn/standard/CNL/CNL.xml \
 	mn/standard/E/E.xml \
 	mn/standard/FN/content.xml \
@@ -2295,17 +1867,11 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	mn/standard/I/I.xml \
 	mn/standard/LOREM/LOREM.xml \
 	mn/standard/META-INF/manifest.xml \
-	mn/standard/O/atevent.xml \
 	mn/standard/O/O.xml \
-	mn/standard/RF/atevent.xml \
 	mn/standard/RF/RF.xml \
-	mn/standard/RM/atevent.xml \
 	mn/standard/RM/RM.xml \
-	mn/standard/SI/atevent.xml \
 	mn/standard/SI/SI.xml \
-	mn/standard/TC/atevent.xml \
 	mn/standard/TC/TC.xml \
-	mn/standard/TWIMC/atevent.xml \
 	mn/standard/TWIMC/TWIMC.xml \
 	mn/template/+BBcEHAQdBCI-/content.xml \
 	mn/template/+BBcEHAQdBCI-/styles.xml \
@@ -2375,90 +1941,65 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	ne/standard/FN/styles.xml \
 	ne/standard/LOREM/LOREM.xml \
 	ne/standard/META-INF/manifest.xml \
-	nl/crdbus50/ACT1/atevent.xml \
 	nl/crdbus50/ACT1/content.xml \
 	nl/crdbus50/ACT1/Pictures/2000001B00000CD200000CED63AA5866.svm \
 	nl/crdbus50/ACT1/styles.xml \
-	nl/crdbus50/ACT2/atevent.xml \
 	nl/crdbus50/ACT2/content.xml \
 	nl/crdbus50/ACT2/Pictures/2000001B00000CD200000CED63AA5866.svm \
 	nl/crdbus50/ACT2/styles.xml \
 	nl/crdbus50/BlockList.xml \
-	nl/crdbus50/ELEG1/atevent.xml \
 	nl/crdbus50/ELEG1/content.xml \
 	nl/crdbus50/ELEG1/Pictures/2000000D00000434000006FD09D5CC61.svm \
 	nl/crdbus50/ELEG1/styles.xml \
-	nl/crdbus50/ELEG2/atevent.xml \
 	nl/crdbus50/ELEG2/content.xml \
 	nl/crdbus50/ELEG2/Pictures/2000000D00000434000006FD09D5CC61.svm \
 	nl/crdbus50/ELEG2/styles.xml \
-	nl/crdbus50/ELEG3/atevent.xml \
 	nl/crdbus50/ELEG3/content.xml \
 	nl/crdbus50/ELEG3/Pictures/2000000D00000434000006FD09D5CC61.svm \
 	nl/crdbus50/ELEG3/styles.xml \
 	nl/crdbus50/META-INF/manifest.xml \
-	nl/crdbus50/PRO1/atevent.xml \
 	nl/crdbus50/PRO1/content.xml \
 	nl/crdbus50/PRO1/styles.xml \
-	nl/crdbus50/PRO2/atevent.xml \
 	nl/crdbus50/PRO2/content.xml \
 	nl/crdbus50/PRO2/styles.xml \
-	nl/crdbus50/PRO3/atevent.xml \
 	nl/crdbus50/PRO3/content.xml \
 	nl/crdbus50/PRO3/styles.xml \
 	nl/standard/A/A.xml \
-	nl/standard/A1/atevent.xml \
 	nl/standard/A1/content.xml \
 	nl/standard/A1/styles.xml \
-	nl/standard/A2/atevent.xml \
 	nl/standard/A2/content.xml \
 	nl/standard/A2/styles.xml \
 	nl/standard/AL/AL.xml \
-	nl/standard/AL/atevent.xml \
 	nl/standard/AL/content.xml \
 	nl/standard/AL/styles.xml \
 	nl/standard/B/B.xml \
-	nl/standard/BETV/atevent.xml \
 	nl/standard/BETV/BETV.xml \
 	nl/standard/BlockList.xml \
-	nl/standard/BO/atevent.xml \
 	nl/standard/BO/BO.xml \
-	nl/standard/BS/atevent.xml \
 	nl/standard/BS/BS.xml \
-	nl/standard/BT/atevent.xml \
 	nl/standard/BT/BT.xml \
 	nl/standard/FN/content.xml \
 	nl/standard/FN/manifest.rdf \
 	nl/standard/FN/Object_1/content.xml \
 	nl/standard/FN/styles.xml \
-	nl/standard/GDH/atevent.xml \
 	nl/standard/GDH/content.xml \
 	nl/standard/GDH/styles.xml \
-	nl/standard/LIC/atevent.xml \
 	nl/standard/LIC/content.xml \
 	nl/standard/LIC/styles.xml \
 	nl/standard/LOREM/LOREM.xml \
 	nl/standard/META-INF/manifest.xml \
-	nl/standard/MVG/atevent.xml \
 	nl/standard/MVG/content.xml \
 	nl/standard/MVG/styles.xml \
-	nl/standard/O/atevent.xml \
 	nl/standard/O/O.xml \
-	nl/standard/OP/atevent.xml \
 	nl/standard/OP/content.xml \
 	nl/standard/OP/styles.xml \
-	nl/standard/SOL/atevent.xml \
 	nl/standard/SOL/content.xml \
 	nl/standard/SOL/styles.xml \
-	nl/standard/SOLAFZ/atevent.xml \
 	nl/standard/SOLAFZ/content.xml \
 	nl/standard/SOLAFZ/styles.xml \
-	nl/standard/SOLDOC/atevent.xml \
 	nl/standard/SOLDOC/content.xml \
 	nl/standard/SOLDOC/styles.xml \
-	nl/standard/SOLONT/atevent.xml \
 	nl/standard/SOLONT/SOLONT.xml \
-	nl/standard/SOLUIT/atevent.xml \
 	nl/standard/SOLUIT/content.xml \
 	nl/standard/SOLUIT/styles.xml \
 	nl/template/BlockList.xml \
@@ -2561,43 +2102,31 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	pl/standard/FN/styles.xml \
 	pl/standard/LOREM/LOREM.xml \
 	pl/standard/META-INF/manifest.xml \
-	pl/standard/O/atevent.xml \
 	pl/standard/O/O.xml \
-	pl/standard/PO/atevent.xml \
 	pl/standard/PO/PO.xml \
-	pl/standard/POD/atevent.xml \
 	pl/standard/POD/POD.xml \
-	pl/standard/PODDOK/atevent.xml \
 	pl/standard/PODDOK/PODDOK.xml \
-	pl/standard/PODODM/atevent.xml \
 	pl/standard/PODODM/PODODM.xml \
 	pl/standard/PODPOTW/content.xml \
 	pl/standard/PODPOTW/styles.xml \
-	pl/standard/PODZAPR/atevent.xml \
 	pl/standard/PODZAPR/PODZAPR.xml \
 	pl/standard/SZPA/content.xml \
 	pl/standard/SZPA/styles.xml \
 	pl/standard/TW/content.xml \
 	pl/standard/TW/styles.xml \
-	pl/standard/U1/atevent.xml \
 	pl/standard/U1/U1.xml \
-	pl/standard/U2/atevent.xml \
 	pl/standard/U2/U2.xml \
 	pl/standard/WP+AUE-A/WP+AUE-A.xml \
-	pl/standard/WYP/atevent.xml \
 	pl/standard/WYP/WYP.xml \
 	pl/standard/Z/content.xml \
 	pl/standard/Z/styles.xml \
-	pl/standard/ZA/atevent.xml \
 	pl/standard/ZA/ZA.xml \
-	pl/standard/ZO/atevent.xml \
 	pl/standard/ZO/content.xml \
 	pl/standard/ZO/styles.xml \
 	pl/standard/ZPO/content.xml \
 	pl/standard/ZPO/styles.xml \
 	pl/template/BlockList.xml \
 	pl/template/META-INF/manifest.xml \
-	pl/template/PT1/atevent.xml \
 	pl/template/PT1/content.xml \
 	pl/template/PT1/styles.xml \
 	pl/template/PT2/content.xml \
@@ -2618,43 +2147,34 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	pt-BR/standard/A/styles.xml \
 	pt-BR/standard/AN/AN.xml \
 	pt-BR/standard/BlockList.xml \
-	pt-BR/standard/CAN/atevent.xml \
 	pt-BR/standard/CAN/content.xml \
 	pt-BR/standard/CAN/styles.xml \
 	pt-BR/standard/CDP/content.xml \
 	pt-BR/standard/CDP/styles.xml \
-	pt-BR/standard/CR/atevent.xml \
 	pt-BR/standard/CR/CR.xml \
 	pt-BR/standard/FN/content.xml \
 	pt-BR/standard/FN/manifest.rdf \
 	pt-BR/standard/FN/Object_1/content.xml \
 	pt-BR/standard/FN/styles.xml \
-	pt-BR/standard/L1/atevent.xml \
 	pt-BR/standard/L1/content.xml \
 	pt-BR/standard/L1/styles.xml \
-	pt-BR/standard/L2/atevent.xml \
 	pt-BR/standard/L2/content.xml \
 	pt-BR/standard/L2/styles.xml \
 	pt-BR/standard/LDA/content.xml \
 	pt-BR/standard/LDA/styles.xml \
 	pt-BR/standard/LOREM/LOREM.xml \
 	pt-BR/standard/META-INF/manifest.xml \
-	pt-BR/standard/OC/atevent.xml \
 	pt-BR/standard/OC/OC.xml \
-	pt-BR/standard/P/atevent.xml \
 	pt-BR/standard/P/P.xml \
 	pt-BR/standard/PC/PC.xml \
-	pt-BR/standard/PECA/atevent.xml \
 	pt-BR/standard/PECA/content.xml \
 	pt-BR/standard/PECA/styles.xml \
-	pt-BR/standard/PECE/atevent.xml \
 	pt-BR/standard/PECE/content.xml \
 	pt-BR/standard/PECE/styles.xml \
 	pt-BR/standard/PECR/content.xml \
 	pt-BR/standard/PECR/styles.xml \
 	pt-BR/standard/PECRE/content.xml \
 	pt-BR/standard/PECRE/styles.xml \
-	pt-BR/standard/PERGF/atevent.xml \
 	pt-BR/standard/PERGF/PERGF.xml \
 	pt-BR/standard/PSS/content.xml \
 	pt-BR/standard/PSS/styles.xml \
@@ -2694,120 +2214,77 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	pt-BR/template/PT2/content.xml \
 	pt-BR/template/PT2/styles.xml \
 	pt/crdbus50/BlockList.xml \
-	pt/crdbus50/CSL/atevent.xml \
 	pt/crdbus50/CSL/content.xml \
 	pt/crdbus50/CSL/Pictures/10000000000000400000004077CDC8F9.png \
 	pt/crdbus50/CSL/styles.xml \
-	pt/crdbus50/ELCN/atevent.xml \
 	pt/crdbus50/ELCN/content.xml \
 	pt/crdbus50/ELCN/styles.xml \
-	pt/crdbus50/ELEA/atevent.xml \
 	pt/crdbus50/ELEA/content.xml \
 	pt/crdbus50/ELEA/styles.xml \
-	pt/crdbus50/ELSS/atevent.xml \
 	pt/crdbus50/ELSS/content.xml \
 	pt/crdbus50/ELSS/styles.xml \
-	pt/crdbus50/MCN/atevent.xml \
 	pt/crdbus50/MCN/content.xml \
 	pt/crdbus50/MCN/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	pt/crdbus50/MCN/styles.xml \
-	pt/crdbus50/MEA/atevent.xml \
 	pt/crdbus50/MEA/content.xml \
 	pt/crdbus50/MEA/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	pt/crdbus50/MEA/styles.xml \
 	pt/crdbus50/META-INF/manifest.xml \
 	pt/standard/_CON/_CON.xml \
-	pt/standard/_CON/atevent.xml \
-	pt/standard/1L/atevent.xml \
 	pt/standard/1L/content.xml \
 	pt/standard/1L/styles.xml \
-	pt/standard/2L/atevent.xml \
 	pt/standard/2L/content.xml \
 	pt/standard/2L/styles.xml \
 	pt/standard/AG/AG.xml \
-	pt/standard/AG/atevent.xml \
 	pt/standard/ANE/ANE.xml \
 	pt/standard/AQPD/AQPD.xml \
-	pt/standard/AQPD/atevent.xml \
 	pt/standard/AS/AS.xml \
-	pt/standard/AS/atevent.xml \
 	pt/standard/AT/AT.xml \
-	pt/standard/AT/atevent.xml \
-	pt/standard/ATE/atevent.xml \
 	pt/standard/ATE/content.xml \
 	pt/standard/ATE/styles.xml \
-	pt/standard/AV/atevent.xml \
 	pt/standard/AV/AV.xml \
 	pt/standard/BlockList.xml \
-	pt/standard/CCE/atevent.xml \
 	pt/standard/CCE/CCE.xml \
-	pt/standard/CGE/atevent.xml \
 	pt/standard/CGE/content.xml \
 	pt/standard/CGE/styles.xml \
-	pt/standard/CI/atevent.xml \
 	pt/standard/CI/CI.xml \
-	pt/standard/CO/atevent.xml \
 	pt/standard/CO/CO.xml \
-	pt/standard/COR/atevent.xml \
 	pt/standard/COR/COR.xml \
-	pt/standard/CR/atevent.xml \
 	pt/standard/CR/CR.xml \
-	pt/standard/CRMC/atevent.xml \
 	pt/standard/CRMC/content.xml \
 	pt/standard/CRMC/styles.xml \
-	pt/standard/CSS/atevent.xml \
 	pt/standard/CSS/content.xml \
 	pt/standard/CSS/styles.xml \
-	pt/standard/CTC/atevent.xml \
 	pt/standard/CTC/content.xml \
 	pt/standard/CTC/styles.xml \
-	pt/standard/CTCE/atevent.xml \
 	pt/standard/CTCE/content.xml \
 	pt/standard/CTCE/styles.xml \
-	pt/standard/CTCR/atevent.xml \
 	pt/standard/CTCR/content.xml \
 	pt/standard/CTCR/styles.xml \
-	pt/standard/CTCRE/atevent.xml \
 	pt/standard/CTCRE/content.xml \
 	pt/standard/CTCRE/styles.xml \
-	pt/standard/EE/atevent.xml \
 	pt/standard/EE/EE.xml \
-	pt/standard/EN/atevent.xml \
 	pt/standard/EN/EN.xml \
-	pt/standard/ERA/atevent.xml \
 	pt/standard/ERA/ERA.xml \
 	pt/standard/INQ/INQ.xml \
-	pt/standard/LAC/atevent.xml \
 	pt/standard/LAC/LAC.xml \
 	pt/standard/LOREM/LOREM.xml \
-	pt/standard/MC/atevent.xml \
 	pt/standard/MC/MC.xml \
-	pt/standard/ME/atevent.xml \
 	pt/standard/ME/ME.xml \
 	pt/standard/META-INF/manifest.xml \
 	pt/standard/NF/content.xml \
 	pt/standard/NF/manifest.rdf \
 	pt/standard/NF/Object_1/content.xml \
 	pt/standard/NF/styles.xml \
-	pt/standard/OB/atevent.xml \
 	pt/standard/OB/OB.xml \
-	pt/standard/PCA/atevent.xml \
 	pt/standard/PCA/PCA.xml \
-	pt/standard/PCN/atevent.xml \
 	pt/standard/PCN/PCN.xml \
-	pt/standard/PE/atevent.xml \
 	pt/standard/PE/PE.xml \
-	pt/standard/REF/atevent.xml \
 	pt/standard/REF/REF.xml \
-	pt/standard/RES/atevent.xml \
 	pt/standard/RES/RES.xml \
-	pt/standard/SIN/atevent.xml \
 	pt/standard/SIN/SIN.xml \
-	pt/standard/SS/atevent.xml \
 	pt/standard/SS/SS.xml \
-	pt/standard/TE/atevent.xml \
 	pt/standard/TE/TE.xml \
-	pt/standard/TP/atevent.xml \
 	pt/standard/TP/TP.xml \
 	pt/template/BlockList.xml \
 	pt/template/META-INF/manifest.xml \
@@ -2823,46 +2300,31 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	ro/standard/LOREM/LOREM.xml \
 	ro/standard/META-INF/manifest.xml \
 	ru/crdbus50/BlockList.xml \
-	ru/crdbus50/CON1/atevent.xml \
 	ru/crdbus50/CON1/content.xml \
 	ru/crdbus50/CON1/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	ru/crdbus50/CON1/styles.xml \
-	ru/crdbus50/CON2/atevent.xml \
 	ru/crdbus50/CON2/content.xml \
 	ru/crdbus50/CON2/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	ru/crdbus50/CON2/styles.xml \
-	ru/crdbus50/ELE1/atevent.xml \
 	ru/crdbus50/ELE1/content.xml \
 	ru/crdbus50/ELE1/styles.xml \
-	ru/crdbus50/ELE2/atevent.xml \
 	ru/crdbus50/ELE2/content.xml \
 	ru/crdbus50/ELE2/styles.xml \
-	ru/crdbus50/ELE3/atevent.xml \
 	ru/crdbus50/ELE3/content.xml \
 	ru/crdbus50/ELE3/styles.xml \
 	ru/crdbus50/META-INF/manifest.xml \
 	ru/standard/A/A.xml \
-	ru/standard/A/atevent.xml \
 	ru/standard/AR/AR.xml \
-	ru/standard/AR/atevent.xml \
 	ru/standard/BlockList.xml \
-	ru/standard/BW/atevent.xml \
 	ru/standard/BW/BW.xml \
-	ru/standard/C/atevent.xml \
 	ru/standard/C/C.xml \
-	ru/standard/CAN/atevent.xml \
 	ru/standard/CAN/content.xml \
 	ru/standard/CAN/styles.xml \
-	ru/standard/CD/atevent.xml \
 	ru/standard/CD/CD.xml \
-	ru/standard/CM/atevent.xml \
 	ru/standard/CM/CM.xml \
-	ru/standard/CNL/atevent.xml \
 	ru/standard/CNL/CNL.xml \
-	ru/standard/DMS/atevent.xml \
 	ru/standard/DMS/content.xml \
 	ru/standard/DMS/styles.xml \
-	ru/standard/DT/atevent.xml \
 	ru/standard/DT/DT.xml \
 	ru/standard/E/E.xml \
 	ru/standard/FN/content.xml \
@@ -2870,66 +2332,40 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	ru/standard/FN/Object_1/content.xml \
 	ru/standard/FN/styles.xml \
 	ru/standard/I/I.xml \
-	ru/standard/IRT/atevent.xml \
 	ru/standard/IRT/IRT.xml \
-	ru/standard/J/atevent.xml \
 	ru/standard/J/content.xml \
 	ru/standard/J/styles.xml \
-	ru/standard/JACL/atevent.xml \
 	ru/standard/JACL/content.xml \
 	ru/standard/JACL/styles.xml \
-	ru/standard/JACR/atevent.xml \
 	ru/standard/JACR/content.xml \
 	ru/standard/JACR/styles.xml \
-	ru/standard/JAINV/atevent.xml \
 	ru/standard/JAINV/content.xml \
 	ru/standard/JAINV/styles.xml \
-	ru/standard/JARL/atevent.xml \
 	ru/standard/JARL/content.xml \
 	ru/standard/JARL/styles.xml \
-	ru/standard/LAG/atevent.xml \
 	ru/standard/LAG/LAG.xml \
 	ru/standard/LOREM/LOREM.xml \
 	ru/standard/META-INF/manifest.xml \
-	ru/standard/O/atevent.xml \
 	ru/standard/O/O.xml \
-	ru/standard/P/atevent.xml \
 	ru/standard/P/P.xml \
-	ru/standard/Q/atevent.xml \
 	ru/standard/Q/Q.xml \
-	ru/standard/R1/atevent.xml \
 	ru/standard/R1/content.xml \
 	ru/standard/R1/styles.xml \
-	ru/standard/R2/atevent.xml \
 	ru/standard/R2/content.xml \
 	ru/standard/R2/styles.xml \
-	ru/standard/RE/atevent.xml \
 	ru/standard/RE/RE.xml \
-	ru/standard/RF/atevent.xml \
 	ru/standard/RF/RF.xml \
-	ru/standard/RG/atevent.xml \
 	ru/standard/RG/RG.xml \
-	ru/standard/RM/atevent.xml \
 	ru/standard/RM/RM.xml \
-	ru/standard/S/atevent.xml \
 	ru/standard/S/S.xml \
-	ru/standard/SD/atevent.xml \
 	ru/standard/SD/SD.xml \
-	ru/standard/SI/atevent.xml \
 	ru/standard/SI/SI.xml \
-	ru/standard/TC/atevent.xml \
 	ru/standard/TC/TC.xml \
-	ru/standard/TOP/atevent.xml \
 	ru/standard/TOP/TOP.xml \
-	ru/standard/TWIMC/atevent.xml \
 	ru/standard/TWIMC/TWIMC.xml \
-	ru/standard/TY/atevent.xml \
 	ru/standard/TY/TY.xml \
-	ru/standard/VA/atevent.xml \
 	ru/standard/VA/VA.xml \
-	ru/standard/VOM/atevent.xml \
 	ru/standard/VOM/VOM.xml \
-	ru/standard/YT/atevent.xml \
 	ru/standard/YT/content.xml \
 	ru/standard/YT/styles.xml \
 	ru/template/BlockList.xml \
@@ -3009,127 +2445,83 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	sid/standard/LOREM/LOREM.xml \
 	sid/standard/META-INF/manifest.xml \
 	sk/crdbus50/BlockList.xml \
-	sk/crdbus50/CON1/atevent.xml \
 	sk/crdbus50/CON1/content.xml \
 	sk/crdbus50/CON1/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	sk/crdbus50/CON1/styles.xml \
-	sk/crdbus50/CON2/atevent.xml \
 	sk/crdbus50/CON2/content.xml \
 	sk/crdbus50/CON2/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	sk/crdbus50/CON2/styles.xml \
-	sk/crdbus50/ELE1/atevent.xml \
 	sk/crdbus50/ELE1/content.xml \
 	sk/crdbus50/ELE1/styles.xml \
-	sk/crdbus50/ELE2/atevent.xml \
 	sk/crdbus50/ELE2/content.xml \
 	sk/crdbus50/ELE2/styles.xml \
-	sk/crdbus50/ELE3/atevent.xml \
 	sk/crdbus50/ELE3/content.xml \
 	sk/crdbus50/ELE3/styles.xml \
 	sk/crdbus50/META-INF/manifest.xml \
 	sk/crdbus54/BlockList.xml \
-	sk/crdbus54/ELE1/atevent.xml \
 	sk/crdbus54/ELE1/content.xml \
 	sk/crdbus54/ELE1/styles.xml \
-	sk/crdbus54/ELE2/atevent.xml \
 	sk/crdbus54/ELE2/content.xml \
 	sk/crdbus54/ELE2/styles.xml \
-	sk/crdbus54/ELE3/atevent.xml \
 	sk/crdbus54/ELE3/content.xml \
 	sk/crdbus54/ELE3/styles.xml \
 	sk/crdbus54/META-INF/manifest.xml \
-	sk/crdbus54/MOD1/atevent.xml \
 	sk/crdbus54/MOD1/content.xml \
 	sk/crdbus54/MOD1/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	sk/crdbus54/MOD1/styles.xml \
-	sk/crdbus54/MOD2/atevent.xml \
 	sk/crdbus54/MOD2/content.xml \
 	sk/crdbus54/MOD2/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	sk/crdbus54/MOD2/styles.xml \
 	sk/standard/A/A.xml \
-	sk/standard/A/atevent.xml \
 	sk/standard/BlockList.xml \
-	sk/standard/BW/atevent.xml \
 	sk/standard/BW/BW.xml \
-	sk/standard/C/atevent.xml \
 	sk/standard/C/C.xml \
-	sk/standard/CAN/atevent.xml \
 	sk/standard/CAN/content.xml \
 	sk/standard/CAN/styles.xml \
-	sk/standard/CD/atevent.xml \
 	sk/standard/CD/CD.xml \
-	sk/standard/CM/atevent.xml \
 	sk/standard/CM/CM.xml \
-	sk/standard/CNL/atevent.xml \
 	sk/standard/CNL/CNL.xml \
-	sk/standard/DMS/atevent.xml \
 	sk/standard/DMS/content.xml \
 	sk/standard/DMS/styles.xml \
-	sk/standard/DT/atevent.xml \
 	sk/standard/DT/DT.xml \
 	sk/standard/FN/content.xml \
 	sk/standard/FN/manifest.rdf \
 	sk/standard/FN/Object_1/content.xml \
 	sk/standard/FN/styles.xml \
-	sk/standard/IRT/atevent.xml \
 	sk/standard/IRT/IRT.xml \
-	sk/standard/J/atevent.xml \
 	sk/standard/J/content.xml \
 	sk/standard/J/styles.xml \
-	sk/standard/JACL/atevent.xml \
 	sk/standard/JACL/content.xml \
 	sk/standard/JACL/styles.xml \
-	sk/standard/JACR/atevent.xml \
 	sk/standard/JACR/content.xml \
 	sk/standard/JACR/styles.xml \
-	sk/standard/JAINV/atevent.xml \
 	sk/standard/JAINV/content.xml \
 	sk/standard/JAINV/styles.xml \
-	sk/standard/JARL/atevent.xml \
 	sk/standard/JARL/content.xml \
 	sk/standard/JARL/styles.xml \
-	sk/standard/LAG/atevent.xml \
 	sk/standard/LAG/LAG.xml \
-	sk/standard/LIC/atevent.xml \
 	sk/standard/LIC/content.xml \
 	sk/standard/LIC/styles.xml \
 	sk/standard/LOREM/LOREM.xml \
 	sk/standard/META-INF/manifest.xml \
-	sk/standard/P/atevent.xml \
 	sk/standard/P/P.xml \
-	sk/standard/R1/atevent.xml \
 	sk/standard/R1/content.xml \
 	sk/standard/R1/styles.xml \
-	sk/standard/R2/atevent.xml \
 	sk/standard/R2/content.xml \
 	sk/standard/R2/styles.xml \
-	sk/standard/RE/atevent.xml \
 	sk/standard/RE/RE.xml \
-	sk/standard/RF/atevent.xml \
 	sk/standard/RF/RF.xml \
-	sk/standard/RG/atevent.xml \
 	sk/standard/RG/RG.xml \
-	sk/standard/RM/atevent.xml \
 	sk/standard/RM/RM.xml \
-	sk/standard/S/atevent.xml \
 	sk/standard/S/S.xml \
-	sk/standard/SD/atevent.xml \
 	sk/standard/SD/SD.xml \
-	sk/standard/SI/atevent.xml \
 	sk/standard/SI/SI.xml \
-	sk/standard/TC/atevent.xml \
 	sk/standard/TC/TC.xml \
-	sk/standard/TOP/atevent.xml \
 	sk/standard/TOP/TOP.xml \
-	sk/standard/TWIMC/atevent.xml \
 	sk/standard/TWIMC/TWIMC.xml \
-	sk/standard/TY/atevent.xml \
 	sk/standard/TY/TY.xml \
-	sk/standard/VA/atevent.xml \
 	sk/standard/VA/VA.xml \
-	sk/standard/VOM/atevent.xml \
 	sk/standard/VOM/VOM.xml \
-	sk/standard/YT/atevent.xml \
 	sk/standard/YT/content.xml \
 	sk/standard/YT/styles.xml \
 	sk/template/BlockList.xml \
@@ -3166,127 +2558,83 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	sk/template/PT2/content.xml \
 	sk/template/PT2/styles.xml \
 	sl/crdbus50/BlockList.xml \
-	sl/crdbus50/CON1/atevent.xml \
 	sl/crdbus50/CON1/content.xml \
 	sl/crdbus50/CON1/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	sl/crdbus50/CON1/styles.xml \
-	sl/crdbus50/CON2/atevent.xml \
 	sl/crdbus50/CON2/content.xml \
 	sl/crdbus50/CON2/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	sl/crdbus50/CON2/styles.xml \
-	sl/crdbus50/ELE1/atevent.xml \
 	sl/crdbus50/ELE1/content.xml \
 	sl/crdbus50/ELE1/styles.xml \
-	sl/crdbus50/ELE2/atevent.xml \
 	sl/crdbus50/ELE2/content.xml \
 	sl/crdbus50/ELE2/styles.xml \
-	sl/crdbus50/ELE3/atevent.xml \
 	sl/crdbus50/ELE3/content.xml \
 	sl/crdbus50/ELE3/styles.xml \
 	sl/crdbus50/META-INF/manifest.xml \
 	sl/crdbus54/BlockList.xml \
-	sl/crdbus54/ELE1/atevent.xml \
 	sl/crdbus54/ELE1/content.xml \
 	sl/crdbus54/ELE1/styles.xml \
-	sl/crdbus54/ELE2/atevent.xml \
 	sl/crdbus54/ELE2/content.xml \
 	sl/crdbus54/ELE2/styles.xml \
-	sl/crdbus54/ELE3/atevent.xml \
 	sl/crdbus54/ELE3/content.xml \
 	sl/crdbus54/ELE3/styles.xml \
 	sl/crdbus54/META-INF/manifest.xml \
-	sl/crdbus54/MOD1/atevent.xml \
 	sl/crdbus54/MOD1/content.xml \
 	sl/crdbus54/MOD1/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	sl/crdbus54/MOD1/styles.xml \
-	sl/crdbus54/MOD2/atevent.xml \
 	sl/crdbus54/MOD2/content.xml \
 	sl/crdbus54/MOD2/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	sl/crdbus54/MOD2/styles.xml \
 	sl/standard/A/A.xml \
-	sl/standard/A/atevent.xml \
 	sl/standard/BlockList.xml \
-	sl/standard/BW/atevent.xml \
 	sl/standard/BW/BW.xml \
-	sl/standard/C/atevent.xml \
 	sl/standard/C/C.xml \
-	sl/standard/CAN/atevent.xml \
 	sl/standard/CAN/content.xml \
 	sl/standard/CAN/styles.xml \
-	sl/standard/CD/atevent.xml \
 	sl/standard/CD/CD.xml \
-	sl/standard/CM/atevent.xml \
 	sl/standard/CM/CM.xml \
-	sl/standard/CNL/atevent.xml \
 	sl/standard/CNL/CNL.xml \
-	sl/standard/DMS/atevent.xml \
 	sl/standard/DMS/content.xml \
 	sl/standard/DMS/styles.xml \
-	sl/standard/DT/atevent.xml \
 	sl/standard/DT/DT.xml \
 	sl/standard/FN/content.xml \
 	sl/standard/FN/manifest.rdf \
 	sl/standard/FN/Object_1/content.xml \
 	sl/standard/FN/styles.xml \
-	sl/standard/IRT/atevent.xml \
 	sl/standard/IRT/IRT.xml \
-	sl/standard/J/atevent.xml \
 	sl/standard/J/content.xml \
 	sl/standard/J/styles.xml \
-	sl/standard/JACL/atevent.xml \
 	sl/standard/JACL/content.xml \
 	sl/standard/JACL/styles.xml \
-	sl/standard/JACR/atevent.xml \
 	sl/standard/JACR/content.xml \
 	sl/standard/JACR/styles.xml \
-	sl/standard/JAINV/atevent.xml \
 	sl/standard/JAINV/content.xml \
 	sl/standard/JAINV/styles.xml \
-	sl/standard/JARL/atevent.xml \
 	sl/standard/JARL/content.xml \
 	sl/standard/JARL/styles.xml \
-	sl/standard/LAG/atevent.xml \
 	sl/standard/LAG/LAG.xml \
-	sl/standard/LIC/atevent.xml \
 	sl/standard/LIC/content.xml \
 	sl/standard/LIC/styles.xml \
 	sl/standard/LOREM/LOREM.xml \
 	sl/standard/META-INF/manifest.xml \
-	sl/standard/P/atevent.xml \
 	sl/standard/P/P.xml \
-	sl/standard/R1/atevent.xml \
 	sl/standard/R1/content.xml \
 	sl/standard/R1/styles.xml \
-	sl/standard/R2/atevent.xml \
 	sl/standard/R2/content.xml \
 	sl/standard/R2/styles.xml \
-	sl/standard/RE/atevent.xml \
 	sl/standard/RE/RE.xml \
-	sl/standard/RF/atevent.xml \
 	sl/standard/RF/RF.xml \
-	sl/standard/RG/atevent.xml \
 	sl/standard/RG/RG.xml \
-	sl/standard/RM/atevent.xml \
 	sl/standard/RM/RM.xml \
-	sl/standard/S/atevent.xml \
 	sl/standard/S/S.xml \
-	sl/standard/SD/atevent.xml \
 	sl/standard/SD/SD.xml \
-	sl/standard/SI/atevent.xml \
 	sl/standard/SI/SI.xml \
-	sl/standard/TC/atevent.xml \
 	sl/standard/TC/TC.xml \
-	sl/standard/TOP/atevent.xml \
 	sl/standard/TOP/TOP.xml \
-	sl/standard/TWIMC/atevent.xml \
 	sl/standard/TWIMC/TWIMC.xml \
-	sl/standard/TY/atevent.xml \
 	sl/standard/TY/TY.xml \
-	sl/standard/VA/atevent.xml \
 	sl/standard/VA/VA.xml \
-	sl/standard/VOM/atevent.xml \
 	sl/standard/VOM/VOM.xml \
-	sl/standard/YT/atevent.xml \
 	sl/standard/YT/content.xml \
 	sl/standard/YT/styles.xml \
 	sl/template/BlockList.xml \
@@ -3361,69 +2709,49 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	st/standard/LOREM/LOREM.xml \
 	st/standard/META-INF/manifest.xml \
 	sv/crdbus50/BlockList.xml \
-	sv/crdbus50/KLA1/atevent.xml \
 	sv/crdbus50/KLA1/content.xml \
 	sv/crdbus50/KLA1/styles.xml \
-	sv/crdbus50/KLA2/atevent.xml \
 	sv/crdbus50/KLA2/content.xml \
 	sv/crdbus50/KLA2/styles.xml \
-	sv/crdbus50/KLA3/atevent.xml \
 	sv/crdbus50/KLA3/content.xml \
 	sv/crdbus50/KLA3/styles.xml \
 	sv/crdbus50/META-INF/manifest.xml \
-	sv/crdbus50/MOD1/atevent.xml \
 	sv/crdbus50/MOD1/content.xml \
 	sv/crdbus50/MOD1/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	sv/crdbus50/MOD1/styles.xml \
-	sv/crdbus50/MOD2/atevent.xml \
 	sv/crdbus50/MOD2/content.xml \
 	sv/crdbus50/MOD2/Pictures/2000001B00000CD200000CED91A0BB03.svm \
 	sv/crdbus50/MOD2/styles.xml \
-	sv/standard/AA/atevent.xml \
 	sv/standard/AA/content.xml \
 	sv/standard/AA/styles.xml \
 	sv/standard/ABM/ABM.xml \
-	sv/standard/ABM/atevent.xml \
-	sv/standard/AI/atevent.xml \
 	sv/standard/AI/content.xml \
 	sv/standard/AI/styles.xml \
-	sv/standard/ANS/atevent.xml \
 	sv/standard/ANS/content.xml \
 	sv/standard/ANS/styles.xml \
 	sv/standard/ANY/ANY.xml \
-	sv/standard/ANY/atevent.xml \
 	sv/standard/B/B.xml \
 	sv/standard/BlockList.xml \
-	sv/standard/BT/atevent.xml \
 	sv/standard/BT/BT.xml \
-	sv/standard/BV/atevent.xml \
 	sv/standard/BV/BV.xml \
 	sv/standard/F/F.xml \
 	sv/standard/FN/content.xml \
 	sv/standard/FN/manifest.rdf \
 	sv/standard/FN/Object_1/content.xml \
 	sv/standard/FN/styles.xml \
-	sv/standard/K/atevent.xml \
 	sv/standard/K/K.xml \
 	sv/standard/LOREM/LOREM.xml \
 	sv/standard/META-INF/manifest.xml \
-	sv/standard/MVH/atevent.xml \
 	sv/standard/MVH/content.xml \
 	sv/standard/MVH/styles.xml \
-	sv/standard/O/atevent.xml \
 	sv/standard/O/O.xml \
-	sv/standard/OR/atevent.xml \
 	sv/standard/OR/OR.xml \
-	sv/standard/P1/atevent.xml \
 	sv/standard/P1/content.xml \
 	sv/standard/P1/styles.xml \
-	sv/standard/P2/atevent.xml \
 	sv/standard/P2/content.xml \
 	sv/standard/P2/styles.xml \
-	sv/standard/UA/atevent.xml \
 	sv/standard/UA/content.xml \
 	sv/standard/UA/styles.xml \
-	sv/standard/UL/atevent.xml \
 	sv/standard/UL/UL.xml \
 	sv/template/BlockList.xml \
 	sv/template/H1B/content.xml \
@@ -3508,31 +2836,23 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	tn/standard/LOREM/LOREM.xml \
 	tn/standard/META-INF/manifest.xml \
 	tr/crdbus50/BlockList.xml \
-	tr/crdbus50/C+AR4-D1/atevent.xml \
 	tr/crdbus50/C+AR4-D1/content.xml \
 	tr/crdbus50/C+AR4-D1/styles.xml \
-	tr/crdbus50/C+AR4-D2/atevent.xml \
 	tr/crdbus50/C+AR4-D2/content.xml \
 	tr/crdbus50/C+AR4-D2/styles.xml \
 	tr/crdbus50/META-INF/manifest.xml \
-	tr/crdbus50/PRO1/atevent.xml \
 	tr/crdbus50/PRO1/content.xml \
 	tr/crdbus50/PRO1/styles.xml \
-	tr/crdbus50/PRO2/atevent.xml \
 	tr/crdbus50/PRO2/content.xml \
 	tr/crdbus50/PRO2/styles.xml \
-	tr/crdbus50/PRO3/atevent.xml \
 	tr/crdbus50/PRO3/content.xml \
 	tr/crdbus50/PRO3/styles.xml \
-	tr/crdbus50/ZAR1/atevent.xml \
 	tr/crdbus50/ZAR1/content.xml \
 	tr/crdbus50/ZAR1/Pictures/2000000D00000434000006FD09D5CC61.svm \
 	tr/crdbus50/ZAR1/styles.xml \
-	tr/crdbus50/ZAR2/atevent.xml \
 	tr/crdbus50/ZAR2/content.xml \
 	tr/crdbus50/ZAR2/Pictures/2000000D00000434000006FD09D5CC61.svm \
 	tr/crdbus50/ZAR2/styles.xml \
-	tr/crdbus50/ZAR3/atevent.xml \
 	tr/crdbus50/ZAR3/content.xml \
 	tr/crdbus50/ZAR3/Pictures/2000000D00000434000006FD09D5CC61.svm \
 	tr/crdbus50/ZAR3/styles.xml \
@@ -3545,10 +2865,8 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	tr/standard/META-INF/manifest.xml \
 	tr/template/BlockList.xml \
 	tr/template/META-INF/manifest.xml \
-	tr/template/PT1/atevent.xml \
 	tr/template/PT1/content.xml \
 	tr/template/PT1/styles.xml \
-	tr/template/PT2/atevent.xml \
 	tr/template/PT2/content.xml \
 	tr/template/PT2/styles.xml \
 	ts/standard/BlockList.xml \
@@ -3627,9 +2945,7 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	zh-CN/crdbus50/MOD2/content.xml \
 	zh-CN/crdbus50/MOD2/styles.xml \
 	zh-CN/standard/AR/AR.xml \
-	zh-CN/standard/AR/atevent.xml \
 	zh-CN/standard/BlockList.xml \
-	zh-CN/standard/CAN/atevent.xml \
 	zh-CN/standard/CAN/content.xml \
 	zh-CN/standard/CAN/styles.xml \
 	zh-CN/standard/CP/content.xml \
@@ -3644,30 +2960,22 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	zh-CN/standard/FN/Object_1/content.xml \
 	zh-CN/standard/FN/styles.xml \
 	zh-CN/standard/I/I.xml \
-	zh-CN/standard/JACL/atevent.xml \
 	zh-CN/standard/JACL/content.xml \
 	zh-CN/standard/JACL/styles.xml \
 	zh-CN/standard/JACR/content.xml \
 	zh-CN/standard/JACR/styles.xml \
-	zh-CN/standard/JAINV/atevent.xml \
 	zh-CN/standard/JAINV/content.xml \
 	zh-CN/standard/JAINV/styles.xml \
-	zh-CN/standard/JARL/atevent.xml \
 	zh-CN/standard/JARL/content.xml \
 	zh-CN/standard/JARL/styles.xml \
-	zh-CN/standard/JARWPR/atevent.xml \
 	zh-CN/standard/JARWPR/content.xml \
 	zh-CN/standard/JARWPR/styles.xml \
 	zh-CN/standard/LOREM/LOREM.xml \
 	zh-CN/standard/META-INF/manifest.xml \
-	zh-CN/standard/O/atevent.xml \
 	zh-CN/standard/O/O.xml \
-	zh-CN/standard/Q/atevent.xml \
 	zh-CN/standard/Q/Q.xml \
-	zh-CN/standard/R1/atevent.xml \
 	zh-CN/standard/R1/content.xml \
 	zh-CN/standard/R1/styles.xml \
-	zh-CN/standard/R2/atevent.xml \
 	zh-CN/standard/R2/content.xml \
 	zh-CN/standard/R2/styles.xml \
 	zh-CN/standard/TOP/content.xml \
@@ -3720,10 +3028,8 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	zh-TW/crdbus50/MOD2/content.xml \
 	zh-TW/crdbus50/MOD2/styles.xml \
 	zh-TW/standard/AR/AR.xml \
-	zh-TW/standard/AR/atevent.xml \
 	zh-TW/standard/BlockList.xml \
 	zh-TW/standard/BT/BT.xml \
-	zh-TW/standard/CAN/atevent.xml \
 	zh-TW/standard/CAN/content.xml \
 	zh-TW/standard/CAN/styles.xml \
 	zh-TW/standard/CP/content.xml \
@@ -3736,12 +3042,10 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	zh-TW/standard/FN/Object_1/content.xml \
 	zh-TW/standard/FN/styles.xml \
 	zh-TW/standard/I/I.xml \
-	zh-TW/standard/JACL/atevent.xml \
 	zh-TW/standard/JACL/content.xml \
 	zh-TW/standard/JACL/styles.xml \
 	zh-TW/standard/JACR/content.xml \
 	zh-TW/standard/JACR/styles.xml \
-	zh-TW/standard/JAINV/atevent.xml \
 	zh-TW/standard/JAINV/content.xml \
 	zh-TW/standard/JAINV/styles.xml \
 	zh-TW/standard/JARL/content.xml \
@@ -3749,16 +3053,12 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	zh-TW/standard/JARWPR/content.xml \
 	zh-TW/standard/JARWPR/styles.xml \
 	zh-TW/standard/LOREM/LOREM.xml \
-	zh-TW/standard/M1/atevent.xml \
 	zh-TW/standard/M1/content.xml \
 	zh-TW/standard/M1/styles.xml \
-	zh-TW/standard/M2/atevent.xml \
 	zh-TW/standard/M2/content.xml \
 	zh-TW/standard/M2/styles.xml \
 	zh-TW/standard/META-INF/manifest.xml \
-	zh-TW/standard/O/atevent.xml \
 	zh-TW/standard/O/O.xml \
-	zh-TW/standard/Q/atevent.xml \
 	zh-TW/standard/Q/Q.xml \
 	zh-TW/standard/TOP/content.xml \
 	zh-TW/standard/TOP/styles.xml \
