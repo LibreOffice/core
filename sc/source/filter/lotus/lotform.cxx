@@ -390,21 +390,13 @@ typedef DefTokenId ( FuncType2 ) ( sal_uInt8 );
 
 void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest )
 {
-    sal_uInt8               nOc;
-    sal_uInt8               nRelBits;
-    sal_uInt16              nRngIndex;
     FUNC_TYPE           eType = FT_NOP;
-    TokenId             nBuf0;
-    DefTokenId          eOc;
     const char*         pExtName = nullptr;
     RangeNameBufferWK3& rRangeNameBufferWK3 = *m_rContext.pRngNmBffWK3;
 
     ScComplexRefData        aCRD;
     aCRD.InitFlags();
     ScSingleRefData&        rR = aCRD.Ref1;
-
-    LR_ID               nId;
-    TokenId             nNewId;
 
     LotusRangeList&     rRangeList = m_rContext.maRangeNames;
 
@@ -436,7 +428,8 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
 
     while( eType )      // != FT_Return (==0)
     {
-        Read( nOc );
+        sal_uInt8 nOc;
+        Read(nOc);
 
         if( nBytesLeft < 0 )
         {
@@ -445,7 +438,7 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
         }
 
         eType = pIndexToType( nOc );
-        eOc   = pIndexToToken( nOc );
+        DefTokenId eOc = pIndexToToken(nOc);
         if( eOc == ocNoName )
             pExtName = GetAddInName( nOc );
 
@@ -477,10 +470,13 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
                 aPool >> aStack;
                 break;
             case FT_Op:
+            {
+                TokenId nBuf0;
                 aStack >> nBuf0;
                 aPool << aStack << eOc << nBuf0;
                 aPool >> aStack;
                 break;
+            }
             case FT_ConstFloat:
             {
                 double  fDouble;
@@ -496,12 +492,13 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
 
                 LotusRelToScRel( nCol, nRow, rR );
 
+                TokenId nNewId;
+
                 if( bWK3 )
                     nNewId = aPool.Store( rR );
                 else
                 {
-                    nId = rRangeList.GetIndex(rR.Col(), rR.Row());
-
+                    LR_ID nId = rRangeList.GetIndex(rR.Col(), rR.Row());
                     if( nId == ID_FAIL )
                         // missing range
                         nNewId = aPool.Store( rR );
@@ -523,11 +520,13 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
                 LotusRelToScRel( nColS, nRowS, rR );
                 LotusRelToScRel( nColE, nRowE, aCRD.Ref2 );
 
+                TokenId nNewId;
+
                 if( bWK3 )
                     nNewId = aPool.Store( aCRD );
                 else
                 {
-                    nId = rRangeList.GetIndex(rR.Col(), rR.Row(), aCRD.Ref2.Col(), aCRD.Ref2.Row());
+                    LR_ID nId = rRangeList.GetIndex(rR.Col(), rR.Row(), aCRD.Ref2.Col(), aCRD.Ref2.Row());
 
                     if( nId == ID_FAIL )
                         // missing range
@@ -545,7 +544,7 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
                 break;
             case FT_ConstInt:
             {
-                sal_Int16 nVal;
+                sal_Int16 nVal(0);
                 Read( nVal );
                 aStack << aPool.Store( static_cast<double>(nVal) );
                 break;
@@ -560,18 +559,25 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
                 break;
             // for > WK3
             case FT_Cref:
+            {
+                sal_uInt8 nRelBits(0);
                 Read( nRelBits );
                 ReadSRD( m_rContext.rDoc, rR, nRelBits );
                 aStack << aPool.Store( rR );
                 break;
+            }
             case FT_Rref:
+            {
+                sal_uInt8 nRelBits(0);
                 Read( nRelBits );
                 ReadCRD( m_rContext.rDoc, aCRD, nRelBits );
                 aStack << aPool.Store( aCRD );
                 break;
+            }
             case FT_Nrref:
             {
                 OUString  aTmp(ScfTools::read_zeroTerminated_uInt8s_ToOUString(aIn, nBytesLeft, eSrcChar));
+                sal_uInt16 nRngIndex;
                 if( rRangeNameBufferWK3.FindRel( aTmp, nRngIndex ) )
                     aStack << aPool.Store( nRngIndex );
                 else
@@ -584,6 +590,7 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
             case FT_Absnref:
             {
                 OUString aTmp(ScfTools::read_zeroTerminated_uInt8s_ToOUString(aIn, nBytesLeft, eSrcChar));
+                sal_uInt16 nRngIndex;
                 if( rRangeNameBufferWK3.FindAbs( aTmp, nRngIndex ) )
                     aStack << aPool.Store( nRngIndex );
                 else
