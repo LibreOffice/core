@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0efa1af_002f09ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-09-04T20:43:21Z",
+      "side": 1,
+      "message": "Oups, you\u0027ve been faster than me! :-)",
+      "revId": "0244dcf1725aafafc7d37f729a74b9e4b2d4ed8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
