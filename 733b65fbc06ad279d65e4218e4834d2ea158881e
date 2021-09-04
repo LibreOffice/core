@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3315539_747af1d3",
+        "filename": "sd/inc/strings.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-09-04T18:16:04Z",
+      "side": 1,
+      "message": "The word “opening” is unnecessary and sounds awkward.",
+      "revId": "733b65fbc06ad279d65e4218e4834d2ea158881e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
