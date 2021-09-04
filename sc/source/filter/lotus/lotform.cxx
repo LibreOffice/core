@@ -619,16 +619,9 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
 
                 if( nStrLen )
                 {
-                    std::unique_ptr<char[]> p(new (::std::nothrow) char[ nStrLen + 1 ]);
-                    if (p)
-                    {
-                        aIn.ReadBytes(p.get(), nStrLen);
-                        p[ nStrLen ] = 0x00;
-
-                        DoFunc( ocNoName, nCnt, p.get() );
-                    }
-                    else
-                        DoFunc( ocNoName, nCnt, nullptr );
+                    std::vector<char> aBuffer(nStrLen + 1);
+                    aBuffer[aIn.ReadBytes(aBuffer.data(), nStrLen)] = 0;
+                    DoFunc(ocNoName, nCnt, aBuffer.data());
                 }
                 else
                     DoFunc( ocNoName, nCnt, nullptr );
