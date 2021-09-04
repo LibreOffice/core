@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2e7089a_adb58a2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-09-04T19:42:07Z",
+      "side": 1,
+      "message": "yeah, that\u0027s what I meant to state",
+      "revId": "d269e2bb7b13f3104efea2d716fdd2c89b5d1f04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
