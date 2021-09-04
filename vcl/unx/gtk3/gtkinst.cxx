@@ -212,6 +212,7 @@ GtkInstance::GtkInstance( std::unique_ptr<SalYieldMutex> pMutex )
     , bNeedsInit(true)
     , m_pLastCairoFontOptions(nullptr)
 {
+    m_bSupportsOpenGL = true;
 }
 
 //We want to defer initializing gtk until we are after uno has been

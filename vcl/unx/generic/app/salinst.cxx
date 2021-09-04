@@ -74,6 +74,7 @@ X11SalInstance::X11SalInstance(std::unique_ptr<SalYieldMutex> pMutex)
 {
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mxToolkitName = OUString("x11");
+    m_bSupportsOpenGL = true;
 #if HAVE_FEATURE_SKIA
     X11SkiaSalGraphicsImpl::prepareSkia();
 #if SKIA_USE_BITMAP32
