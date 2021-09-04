@@ -103,8 +103,6 @@ SvpSalInstance::SvpSalInstance( std::unique_ptr<SalYieldMutex> pMutex )
 #if !defined(ANDROID) && !defined(IOS)
     pthread_atfork(nullptr, nullptr, atfork_child);
 #endif
-
-    m_bSupportsOpenGL = false;
 }
 
 SvpSalInstance::~SvpSalInstance()

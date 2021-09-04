@@ -246,8 +246,8 @@ Qt5Instance::Qt5Instance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo)
     connect(QGuiApplication::inputMethod(), &QInputMethod::localeChanged, this,
             &Qt5Instance::localeChanged);
 
-#ifdef EMSCRIPTEN
-    m_bSupportsOpenGL = false;
+#ifndef EMSCRIPTEN
+    m_bSupportsOpenGL = true;
 #endif
 }
 
