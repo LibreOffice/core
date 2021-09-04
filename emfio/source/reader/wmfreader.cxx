@@ -1170,10 +1170,9 @@ namespace emfio
             case W_META_PATBLT:
             {
                 sal_uInt32 nROP = 0;
-                WMFRasterOp nOldROP = WMFRasterOp::NONE;
                 mpInputStream->ReadUInt32( nROP );
                 Size aSize = ReadYXExt();
-                nOldROP = SetRasterOp( static_cast<WMFRasterOp>(nROP) );
+                WMFRasterOp nOldROP = SetRasterOp( static_cast<WMFRasterOp>(nROP) );
                 DrawRect( tools::Rectangle( ReadYX(), aSize ), false );
                 SetRasterOp( nOldROP );
             }
