@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a007b80_342efb3f",
+        "filename": "drawinglayer/source/primitive2d/textlayoutdevice.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-09-04T09:12:45Z",
+      "side": 1,
+      "message": "GetTextArray will now resize the std::vector if its passed in right, so there isn\u0027t a need to use nTextLength here, right ?",
+      "revId": "d4dc6b5cfdb02ad00a06ad32650948648abe010d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
