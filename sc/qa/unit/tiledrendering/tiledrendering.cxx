@@ -114,7 +114,6 @@ public:
     void testSpellOnlineRenderParameter();
     void testPasteIntoWrapTextCell();
     void testSortAscendingDescending();
-    void testAutoInputStringBlock();
     void testAutoInputExactMatch();
     void testMoveShapeHandle();
     void testEditCursorBounds();
@@ -168,7 +167,6 @@ public:
     CPPUNIT_TEST(testSpellOnlineRenderParameter);
     CPPUNIT_TEST(testPasteIntoWrapTextCell);
     CPPUNIT_TEST(testSortAscendingDescending);
-    CPPUNIT_TEST(testAutoInputStringBlock);
     CPPUNIT_TEST(testAutoInputExactMatch);
     CPPUNIT_TEST(testMoveShapeHandle);
     CPPUNIT_TEST(testEditCursorBounds);
@@ -2650,41 +2648,6 @@ void lcl_typeCharsInCell(const std::string& aStr, SCCOL nCol, SCROW nRow, ScTabV
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
-}
-
-void ScTiledRenderingTest::testAutoInputStringBlock()
-{
-    comphelper::LibreOfficeKit::setActive();
-
-    ScModelObj* pModelObj = createDoc("empty.ods");
-    CPPUNIT_ASSERT(pModelObj);
-    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
-    CPPUNIT_ASSERT(pView);
-    ScDocument* pDoc = pModelObj->GetDocument();
-
-    pDoc->SetString(ScAddress(0, 3, 0), "ABC");  // A4
-    pDoc->SetString(ScAddress(0, 4, 0), "BAC");  // A5
-    ScFieldEditEngine& rEE = pDoc->GetEditEngine();
-    rEE.SetText("XYZ");
-    pDoc->SetEditText(ScAddress(0, 5, 0), rEE.CreateTextObject()); // A6
-    pDoc->SetValue(ScAddress(0, 6, 0), 123);
-    pDoc->SetString(ScAddress(0, 7, 0), "ZZZ");  // A8
-
-    ScAddress aA1(0, 0, 0);
-    lcl_typeCharsInCell("X", aA1.Col(), aA1.Row(), pView, pModelObj); // Type 'X' in A1
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("A1 should not autocomplete", OUString("X"), pDoc->GetString(aA1));
-
-    ScAddress aA3(0, 2, 0); // Adjacent to the string "superblock" A4:A8
-    lcl_typeCharsInCell("X", aA3.Col(), aA3.Row(), pView, pModelObj); // Type 'X' in A3
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("A3 should autocomplete", OUString("XYZ"), pDoc->GetString(aA3));
-
-    ScAddress aA9(0, 8, 0); // Adjacent to the string "superblock" A4:A8
-    lcl_typeCharsInCell("X", aA9.Col(), aA9.Row(), pView, pModelObj); // Type 'X' in A9
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("A9 should autocomplete", OUString("XYZ"), pDoc->GetString(aA9));
-
-    ScAddress aA11(0, 10, 0);
-    lcl_typeCharsInCell("X", aA11.Col(), aA11.Row(), pView, pModelObj); // Type 'X' in A11
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("A11 should not autocomplete", OUString("X"), pDoc->GetString(aA11));
 }
 
 void ScTiledRenderingTest::testAutoInputExactMatch()
