@@ -1077,12 +1077,11 @@ void ScBroadcastAreaSlotMachine::InsertBulkGroupArea( ScBroadcastArea* pArea, co
     if (it == m_BulkGroupAreas.end() || m_BulkGroupAreas.key_comp()(pArea, it->first))
     {
         // Insert a new one.
-        it = m_BulkGroupAreas.insert(it, std::make_pair(pArea, std::make_unique<sc::ColumnSpanSet>()));
+        it = m_BulkGroupAreas.insert(it, std::make_pair(pArea, sc::ColumnSpanSet()));
     }
 
-    sc::ColumnSpanSet *const pSet = it->second.get();
-    assert(pSet);
-    pSet->set(*pDoc, rRange, true);
+    sc::ColumnSpanSet& rSet = it->second;
+    rSet.set(*pDoc, rRange, true);
 }
 
 bool ScBroadcastAreaSlotMachine::BulkBroadcastGroupAreas( SfxHintId nHintId )
@@ -1093,7 +1092,7 @@ bool ScBroadcastAreaSlotMachine::BulkBroadcastGroupAreas( SfxHintId nHintId )
     sc::BulkDataHint aHint( *pDoc, nHintId);
 
     bool bBroadcasted = false;
-    for (const auto& [pArea, rxSpans] : m_BulkGroupAreas)
+    for (const auto& [pArea, rSpans] : m_BulkGroupAreas)
     {
         assert(pArea);
         SvtBroadcaster& rBC = pArea->GetBroadcaster();
@@ -1105,9 +1104,7 @@ bool ScBroadcastAreaSlotMachine::BulkBroadcastGroupAreas( SfxHintId nHintId )
         }
         else
         {
-            const sc::ColumnSpanSet *const pSpans = rxSpans.get();
-            assert(pSpans);
-            aHint.setSpans(pSpans);
+            aHint.setSpans(&rSpans);
             rBC.Broadcast(aHint);
             bBroadcasted = true;
         }
