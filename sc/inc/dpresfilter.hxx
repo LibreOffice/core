@@ -66,11 +66,6 @@ private:
         MembersType maChildMembersValueNames;
         MembersType maChildMembersValues;
 
-        DimensionNode();
-        DimensionNode(const DimensionNode&) = delete;
-        const DimensionNode& operator=(const DimensionNode&) = delete;
-        ~DimensionNode();
-
 #if DEBUG_PIVOT_TABLE
         void dump(int nLevel) const;
 #endif
@@ -79,7 +74,7 @@ private:
     struct MemberNode
     {
         ValuesType maValues;
-        std::map<OUString, std::unique_ptr<DimensionNode>> maChildDimensions;
+        std::map<OUString, DimensionNode> maChildDimensions;
 
         MemberNode();
         MemberNode(const MemberNode&) = delete;

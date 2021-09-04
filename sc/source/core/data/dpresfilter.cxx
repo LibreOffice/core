@@ -36,12 +36,6 @@ size_t ScDPResultTree::NamePairHash::operator() (const NamePairType& rPair) cons
     return seed;
 }
 
-ScDPResultTree::DimensionNode::DimensionNode() {}
-
-ScDPResultTree::DimensionNode::~DimensionNode()
-{
-}
-
 #if DEBUG_PIVOT_TABLE
 void ScDPResultTree::DimensionNode::dump(int nLevel) const
 {
@@ -110,7 +104,7 @@ void ScDPResultTree::add(
         if (itDim == rDims.end())
         {
             // New dimension.  Insert it.
-            auto r = rDims.emplace(aUpperName, std::make_unique<DimensionNode>());
+            auto r = rDims.emplace(aUpperName, DimensionNode());
             assert(r.second);
             itDim = r.first;
         }
@@ -118,8 +112,8 @@ void ScDPResultTree::add(
         pDimName = &itDim->first;
 
         // Now, see if this dimension member exists.
-        DimensionNode* pDim = itDim->second.get();
-        MembersType& rMembersValueNames = pDim->maChildMembersValueNames;
+        DimensionNode& rDim = itDim->second;
+        MembersType& rMembersValueNames = rDim.maChildMembersValueNames;
         aUpperName = ScGlobal::getCharClassPtr()->uppercase(filter.maValueName);
         MembersType::iterator itMem = rMembersValueNames.find(aUpperName);
         if (itMem == rMembersValueNames.end())
@@ -139,7 +133,7 @@ void ScDPResultTree::add(
             // makes no sense to add it to the separate mapping.
             if (!filter.maValue.isEmpty() && filter.maValue != filter.maValueName)
             {
-                MembersType& rMembersValues = pDim->maChildMembersValues;
+                MembersType& rMembersValues = rDim.maChildMembersValues;
                 aUpperName = ScGlobal::getCharClassPtr()->uppercase(filter.maValue);
                 MembersType::iterator itMemVal = rMembersValues.find(aUpperName);
                 if (itMemVal == rMembersValues.end())
@@ -210,16 +204,16 @@ const ScDPResultTree::ValuesType* ScDPResultTree::getResults(
             // Specified dimension not found.
             return nullptr;
 
-        const DimensionNode* pDim = itDim->second.get();
-        MembersType::const_iterator itMem( pDim->maChildMembersValueNames.find(
+        const DimensionNode& rDim = itDim->second;
+        MembersType::const_iterator itMem( rDim.maChildMembersValueNames.find(
                     ScGlobal::getCharClassPtr()->uppercase( rFilter.MatchValueName)));
 
-        if (itMem == pDim->maChildMembersValueNames.end())
+        if (itMem == rDim.maChildMembersValueNames.end())
         {
             // Specified member name not found, try locale independent value.
-            itMem = pDim->maChildMembersValues.find( ScGlobal::getCharClassPtr()->uppercase( rFilter.MatchValue));
+            itMem = rDim.maChildMembersValues.find( ScGlobal::getCharClassPtr()->uppercase( rFilter.MatchValue));
 
-            if (itMem == pDim->maChildMembersValues.end())
+            if (itMem == rDim.maChildMembersValues.end())
                 // Specified member not found.
                 return nullptr;
         }
@@ -236,10 +230,10 @@ const ScDPResultTree::ValuesType* ScDPResultTree::getResults(
         while (pFieldMember->maChildDimensions.size() == 1)
         {
             auto itDim( pFieldMember->maChildDimensions.begin());
-            const DimensionNode* pDim = itDim->second.get();
-            if (pDim->maChildMembersValueNames.size() != 1)
+            const DimensionNode& rDim = itDim->second;
+            if (rDim.maChildMembersValueNames.size() != 1)
                 break;  // while
-            pFieldMember = pDim->maChildMembersValueNames.begin()->second.get();
+            pFieldMember = rDim.maChildMembersValueNames.begin()->second.get();
             if (!pFieldMember->maValues.empty())
                 return &pFieldMember->maValues;
         }
