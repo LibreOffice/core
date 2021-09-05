@@ -124,6 +124,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cac84c89_4b169d19",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-05T16:06:20Z",
+      "side": 1,
+      "message": "\u003e should I ask in the irc channel?\n\nI think it\u0027s better to ask on the mailing list. IRC is not the place where people who know *this* stuff hang usually.",
+      "parentUuid": "67e854ef_ec7d59c4",
+      "revId": "75886269a80d87cfb97224196f8c857599963d60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0aa30ed7_7f560ad0",
