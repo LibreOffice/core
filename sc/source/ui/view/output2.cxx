@@ -2716,9 +2716,9 @@ bool ScOutputData::DrawEditParam::adjustHorAlignment(ScFieldEditEngine* pEngine)
         SvxAdjust eEditAdjust = (meHorJustResult == SvxCellHorJustify::Center) ?
             SvxAdjust::Center : SvxAdjust::Right;
 
-        pEngine->SetUpdateLayout(false);
+        const bool bPrevUpdateLayout = pEngine->SetUpdateLayout(false);
         pEngine->SetDefaultItem( SvxAdjustItem(eEditAdjust, EE_PARA_JUST) );
-        pEngine->SetUpdateLayout(true);
+        pEngine->SetUpdateLayout(bPrevUpdateLayout);
         return true;
     }
     return false;

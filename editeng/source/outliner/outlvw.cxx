@@ -644,13 +644,13 @@ void OutlinerView::InsertText( const OutlinerParaObject& rParaObj )
 
     pOwner->UndoActionStart( OLUNDO_INSERT );
 
-    pOwner->pEditEngine->SetUpdateLayout( false );
+    const bool bPrevUpdateLayout = pOwner->pEditEngine->SetUpdateLayout( false );
     sal_Int32 nStart, nParaCount;
     nParaCount = pOwner->pEditEngine->GetParagraphCount();
     sal_uInt16 nSize = ImpInitPaste( nStart );
     pEditView->InsertText( rParaObj.GetTextObject() );
     ImpPasted( nStart, nParaCount, nSize);
-    pEditView->SetEditEngineUpdateLayout( true );
+    pEditView->SetEditEngineUpdateLayout( bPrevUpdateLayout );
 
     pOwner->UndoActionEnd();
 
@@ -679,7 +679,7 @@ void OutlinerView::Paste( bool bUseSpecial )
 
     pOwner->UndoActionStart( OLUNDO_INSERT );
 
-    pOwner->pEditEngine->SetUpdateLayout( false );
+    const bool bPrevUpdateLayout = pOwner->pEditEngine->SetUpdateLayout( false );
     pOwner->bPasting = true;
 
     if ( bUseSpecial )
@@ -695,7 +695,7 @@ void OutlinerView::Paste( bool bUseSpecial )
             pOwner->ImplSetLevelDependentStyleSheet( nPara );
     }
 
-    pEditView->SetEditEngineUpdateLayout( true );
+    pEditView->SetEditEngineUpdateLayout( bPrevUpdateLayout );
     pOwner->UndoActionEnd();
     pEditView->ShowCursor();
 
