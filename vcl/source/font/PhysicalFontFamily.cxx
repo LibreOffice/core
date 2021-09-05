@@ -21,6 +21,7 @@
 #include <unotools/fontdefs.hxx>
 
 #include <outdev.h>
+#include <font/PhysicalFontFaceCollection.hxx>
 #include <PhysicalFontCollection.hxx>
 
 void PhysicalFontFamily::CalcType( ImplFontAttrs& rType, FontWeight& rWeight, FontWidth& rWidth,
@@ -230,7 +231,7 @@ PhysicalFontFace* PhysicalFontFamily::FindBestFontFace( const FontSelectPattern&
 
 // update device font list with unique font faces, with uniqueness
 // meaning different font attributes, but not different fonts sizes
-void PhysicalFontFamily::UpdateDevFontList( ImplDeviceFontList& rDevFontList ) const
+void PhysicalFontFamily::UpdateDevFontList( PhysicalFontFaceCollection& rDevFontList ) const
 {
     PhysicalFontFace* pPrevFace = nullptr;
     for (auto const& font : maFontFaces)
