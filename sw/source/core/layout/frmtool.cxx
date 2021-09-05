@@ -1588,9 +1588,11 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                      pViewShell->GetLayout()->IsAnyShellAccessible() &&
                      pFrame->FindPageFrame() != nullptr)
                 {
+                    auto pNext = pFrame->FindNextCnt( true );
+                    auto pPrev = pFrame->FindPrevCnt();
                     pViewShell->InvalidateAccessibleParaFlowRelation(
-                        pFrame->FindNextCnt( true )->DynCastTextFrame(),
-                        pFrame->FindPrevCnt()->DynCastTextFrame() );
+                        pNext ? pNext->DynCastTextFrame() : nullptr,
+                        pPrev ? pPrev->DynCastTextFrame() : nullptr );
                     // #i68958#
                     // The information flags of the text frame are validated
                     // in methods <FindNextCnt(..)> and <FindPrevCnt(..)>.
@@ -1674,9 +1676,11 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                      pViewShell->GetLayout()->IsAnyShellAccessible() &&
                      pFrame->FindPageFrame() != nullptr)
                 {
+                    auto pNext = pFrame->FindNextCnt( true );
+                    auto pPrev = pFrame->FindPrevCnt();
                     pViewShell->InvalidateAccessibleParaFlowRelation(
-                            pFrame->FindNextCnt( true )->DynCastTextFrame(),
-                            pFrame->FindPrevCnt()->DynCastTextFrame() );
+                            pNext ? pNext->DynCastTextFrame() : nullptr,
+                            pPrev ? pPrev->DynCastTextFrame() : nullptr );
                 }
             }
             if ( bObjsDirect && !pTable->empty() )
@@ -1786,9 +1790,11 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                          pViewShell->GetLayout()->IsAnyShellAccessible() &&
                          pFrame->FindPageFrame() != nullptr)
                     {
+                        auto pNext = pFrame->FindNextCnt( true );
+                        auto pPrev = pFrame->FindPrevCnt();
                         pViewShell->InvalidateAccessibleParaFlowRelation(
-                            pFrame->FindNextCnt( true )->DynCastTextFrame(),
-                            pFrame->FindPrevCnt()->DynCastTextFrame() );
+                            pNext ? pNext->DynCastTextFrame() : nullptr,
+                            pPrev ? pPrev->DynCastTextFrame() : nullptr );
                     }
                 }
                 pFrame->CheckDirChange();
