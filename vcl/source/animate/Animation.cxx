@@ -203,7 +203,7 @@ bool Animation::Start(OutputDevice& rOut, const Point& rDestPt, const Size& rDes
 
             if (!mbIsInAnimation)
             {
-                ImplRestartTimer(maAnimationFrames[mnFrameIndex]->mnWait);
+                RestartTimer(maAnimationFrames[mnFrameIndex]->mnWait);
                 mbIsInAnimation = true;
             }
         }
@@ -269,7 +269,7 @@ namespace
 constexpr sal_uLong constMinTimeout = 2;
 }
 
-void Animation::ImplRestartTimer(sal_uLong nTimeout)
+void Animation::RestartTimer(sal_uLong nTimeout)
 {
     maTimer.SetTimeout(std::max(nTimeout, constMinTimeout) * 10);
     maTimer.Start();
@@ -285,28 +285,29 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 
         if (maNotifyLink.IsSet())
         {
-            std::vector<std::unique_ptr<AInfo>> aAInfoList;
-            // create AInfo-List
+            std::vector<std::unique_ptr<AnimationData>> aAnimationDataList;
+            // create AnimationData-List
             for (auto const& i : maAnimationRenderers)
-                aAInfoList.emplace_back(i->createAInfo());
+                aAnimationDataList.emplace_back(i->createAnimationData());
 
             maNotifyLink.Call(this);
 
-            // set view state from AInfo structure
-            for (auto& pAInfo : aAInfoList)
+            // set view state from AnimationData structure
+            for (auto& pAnimationData : aAnimationDataList)
             {
                 AnimationRenderer* pRenderer = nullptr;
-                if (!pAInfo->pViewData)
+                if (!pAnimationData->pViewData)
                 {
-                    pRenderer = new AnimationRenderer(this, pAInfo->pOutDev, pAInfo->aStartOrg,
-                                                      pAInfo->aStartSize, pAInfo->nCallerId);
+                    pRenderer = new AnimationRenderer(
+                        this, pAnimationData->pOutDev, pAnimationData->aStartOrg,
+                        pAnimationData->aStartSize, pAnimationData->nCallerId);
 
                     maAnimationRenderers.push_back(std::unique_ptr<AnimationRenderer>(pRenderer));
                 }
                 else
-                    pRenderer = static_cast<AnimationRenderer*>(pAInfo->pViewData);
+                    pRenderer = static_cast<AnimationRenderer*>(pAnimationData->pViewData);
 
-                pRenderer->pause(pAInfo->bPause);
+                pRenderer->pause(pAnimationData->bPause);
                 pRenderer->setMarked(true);
             }
 
@@ -333,7 +334,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
         if (maAnimationRenderers.empty())
             Stop();
         else if (bIsGloballyPaused)
-            ImplRestartTimer(10);
+            RestartTimer(10);
         else
         {
             AnimationBitmap* pStepBmp = (++mnFrameIndex < maAnimationFrames.size())
@@ -377,7 +378,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
             if (maAnimationRenderers.empty())
                 Stop();
             else
-                ImplRestartTimer(pStepBmp->mnWait);
+                RestartTimer(pStepBmp->mnWait);
         }
     }
     else
@@ -676,7 +677,7 @@ SvStream& ReadAnimation(SvStream& rIStm, Animation& rAnimation)
     return rIStm;
 }
 
-AInfo::AInfo()
+AnimationData::AnimationData()
     : pOutDev(nullptr)
     , pViewData(nullptr)
     , nCallerId(0)

@@ -111,7 +111,7 @@ private:
     bool mbIsInAnimation;
     bool mbLoopTerminated;
 
-    SAL_DLLPRIVATE void ImplRestartTimer(sal_uLong nTimeout);
+    SAL_DLLPRIVATE void RestartTimer(sal_uLong nTimeout);
     DECL_DLLPRIVATE_LINK(ImplTimeoutHdl, Timer*, void);
 };
 

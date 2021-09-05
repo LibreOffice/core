@@ -80,7 +80,7 @@ AnimationRenderer::AnimationRenderer( Animation* pParent, OutputDevice* pOut,
     mpRenderContext->SaveBackground(*mpBackground, maDispPt, maDispSz, maSzPix);
 
     // Initialize drawing to actual position
-    drawToPos( mpParent->ImplGetCurPos() );
+    drawToIndex( mpParent->ImplGetCurPos() );
 
     // If first frame OutputDevice is set, update variables now for real OutputDevice
     if( pFirstFrameOutDev )
@@ -140,7 +140,7 @@ void AnimationRenderer::getPosSize( const AnimationBitmap& rAnimationBitmap, Poi
         rPosPix.setY( maSzPix.Height() - 1 - aPt2.Y() );
 }
 
-void AnimationRenderer::drawToPos( sal_uLong nPos )
+void AnimationRenderer::drawToIndex( sal_uLong nPos )
 {
     VclPtr<vcl::RenderContext> pRenderContext = mpRenderContext;
 
@@ -304,22 +304,22 @@ void AnimationRenderer::repaint()
     mpRenderContext->SaveBackground(*mpBackground, maDispPt, maDispSz, maSzPix);
 
     mbIsPaused = false;
-    drawToPos( mnActPos );
+    drawToIndex( mnActPos );
     mbIsPaused = bOldPause;
 }
 
-AInfo* AnimationRenderer::createAInfo() const
+AnimationData* AnimationRenderer::createAnimationData() const
 {
-    AInfo* pAInfo = new AInfo;
+    AnimationData* pAnimationData = new AnimationData;
 
-    pAInfo->aStartOrg = maPt;
-    pAInfo->aStartSize = maSz;
-    pAInfo->pOutDev = mpRenderContext;
-    pAInfo->pViewData = const_cast<AnimationRenderer *>(this);
-    pAInfo->nCallerId = mnCallerId;
-    pAInfo->bPause = mbIsPaused;
+    pAnimationData->aStartOrg = maPt;
+    pAnimationData->aStartSize = maSz;
+    pAnimationData->pOutDev = mpRenderContext;
+    pAnimationData->pViewData = const_cast<AnimationRenderer *>(this);
+    pAnimationData->nCallerId = mnCallerId;
+    pAnimationData->bPause = mbIsPaused;
 
-    return pAInfo;
+    return pAnimationData;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
