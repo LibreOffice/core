@@ -41,7 +41,6 @@ ErrCode ImportLotus::parse()
     };
 
     sal_uInt16          nOp;
-    sal_uInt16          nSubType;
     sal_uInt16          nRecLen;
     sal_uInt32          nNextRec = 0;
     ErrCode        eRet = ERRCODE_NONE;
@@ -158,6 +157,7 @@ ErrCode ImportLotus::parse()
                 case 0x001b:                            // extended attributes
                 if (nRecLen > 2)
                 {
+                    sal_uInt16 nSubType(0);
                     Read( nSubType );
                     nRecLen -= 2;
                     switch( nSubType )
