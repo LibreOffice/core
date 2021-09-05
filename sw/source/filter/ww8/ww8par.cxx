@@ -4236,8 +4236,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_pFlyFormatOfJustInsertedGraphic(nullptr)
     , m_pPreviousNumPaM(nullptr)
     , m_pPrevNumRule(nullptr)
-    , m_aTextNodesHavingFirstLineOfstSet()
-    , m_aTextNodesHavingLeftIndentSet()
     , m_pCurrentColl(nullptr)
     , m_pDfltTextFormatColl(nullptr)
     , m_pStandardFormatColl(nullptr)
@@ -4319,7 +4317,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_pPreviousNode(nullptr)
     , m_bCareFirstParaEndInToc(false)
     , m_bCareLastParaEndInToc(false)
-    , m_aTOXEndCps()
     , m_bNotifyMacroEventRead(false)
     , m_bFuzzing(utl::ConfigManager::IsFuzzing())
 {

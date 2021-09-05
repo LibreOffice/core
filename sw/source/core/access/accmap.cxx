@@ -292,7 +292,6 @@ private:
 public:
 
     explicit SwAccessibleShapeMap_Impl( SwAccessibleMap const *pMap )
-        : maMap()
     {
         maInfo.SetSdrView( pMap->GetShell()->GetDrawView() );
         maInfo.SetWindow( pMap->GetShell()->GetWin() );

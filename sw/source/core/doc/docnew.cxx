@@ -249,7 +249,6 @@ SwDoc::SwDoc()
     mpExtInputRing( nullptr ),
     mpGrammarContact(createGrammarContact()),
     mpCellStyles(new SwCellStyleTable),
-    m_pXmlIdRegistry(),
     mReferenceCount(0),
     mbDtor(false),
     mbCopyIsMove(false),

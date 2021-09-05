@@ -356,9 +356,7 @@ const SwFormatVertOrient*      SwNumFormat::GetGraphicOrientation() const
 SwNumRule::SwNumRule( const OUString& rNm,
                       const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode,
                       SwNumRuleType eType )
-  : maTextNodeList(),
-    maParagraphStyleList(),
-    mpNumRuleMap(nullptr),
+  : mpNumRuleMap(nullptr),
     msName( rNm ),
     meRuleType( eType ),
     mnPoolFormatId( USHRT_MAX ),
@@ -371,8 +369,7 @@ SwNumRule::SwNumRule( const OUString& rNm,
     mbHidden( false ),
     mbCountPhantoms( true ),
     mbUsedByRedline( false ),
-    meDefaultNumberFormatPositionAndSpaceMode( eDefaultNumberFormatPositionAndSpaceMode ),
-    msDefaultListId()
+    meDefaultNumberFormatPositionAndSpaceMode( eDefaultNumberFormatPositionAndSpaceMode )
 {
     if( !snRefCount++ )          // for the first time, initialize
     {
@@ -444,9 +441,7 @@ SwNumRule::SwNumRule( const OUString& rNm,
 }
 
 SwNumRule::SwNumRule( const SwNumRule& rNumRule )
-    : maTextNodeList(),
-      maParagraphStyleList(),
-      mpNumRuleMap(nullptr),
+    : mpNumRuleMap(nullptr),
       msName( rNumRule.msName ),
       meRuleType( rNumRule.meRuleType ),
       mnPoolFormatId( rNumRule.GetPoolFormatId() ),

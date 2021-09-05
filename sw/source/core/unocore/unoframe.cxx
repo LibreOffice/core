@@ -1126,8 +1126,7 @@ namespace {
 class SwOLEProperties_Impl : public SwFrameProperties_Impl
 {
 public:
-    SwOLEProperties_Impl() :
-        SwFrameProperties_Impl(/*aSwMapProvider.GetPropertyMap(PROPERTY_MAP_EMBEDDED_OBJECT)*/ ){}
+    SwOLEProperties_Impl() {}
 
     virtual bool AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrameSet, SfxItemSet& rSet, bool& rSizeFound) override;
 };

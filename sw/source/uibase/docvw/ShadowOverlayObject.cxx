@@ -55,8 +55,7 @@ public:
         const basegfx::B2DPoint& rBasePosition,
         const basegfx::B2DPoint& rSecondPosition,
         ShadowState aShadowState)
-    :   drawinglayer::primitive2d::DiscreteMetricDependentPrimitive2D(),
-        maBasePosition(rBasePosition),
+    :   maBasePosition(rBasePosition),
         maSecondPosition(rSecondPosition),
         maShadowState(aShadowState)
     {}

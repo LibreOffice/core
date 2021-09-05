@@ -3938,8 +3938,7 @@ MSWordSections& WW8Export::Sections() const
 }
 
 SwWW8Writer::SwWW8Writer(const OUString& rFltName, const OUString& rBaseURL)
-    : StgWriter(),
-      m_pExport( nullptr ),
+    : m_pExport( nullptr ),
       mpMedium( nullptr )
 {
     assert(rFltName == FILTER_WW8); // WW6/7 export was removed

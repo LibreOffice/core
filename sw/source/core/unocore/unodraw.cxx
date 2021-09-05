@@ -405,7 +405,6 @@ namespace
 }
 
 SwXShapesEnumeration::SwXShapesEnumeration(SwXDrawPage* const pDrawPage)
-    : m_aShapes()
 {
     SolarMutexGuard aGuard;
     sal_Int32 nCount = pDrawPage->getCount();

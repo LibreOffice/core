@@ -208,9 +208,7 @@ static rtl::Reference<ChainablePropertySetInfo> lcl_createPrintSettingsInfo()
     return new ChainablePropertySetInfo ( aPrintSettingsMap_Impl );
 }
 
-SwXModule::SwXModule() :
-    mxViewSettings(),
-    mxPrintSettings()
+SwXModule::SwXModule()
 {
 }
 

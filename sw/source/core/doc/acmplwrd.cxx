@@ -103,7 +103,6 @@ SwAutoCompleteClient::SwAutoCompleteClient(SwAutoCompleteWord& rToTell, SwDoc& r
 }
 
 SwAutoCompleteClient::SwAutoCompleteClient(const SwAutoCompleteClient& rClient) :
-    SwClient(),
     m_pAutoCompleteWord(rClient.m_pAutoCompleteWord),
     m_pDoc(rClient.m_pDoc)
 {

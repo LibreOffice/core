@@ -37,10 +37,7 @@ using namespace objectpositioning;
 using namespace ::com::sun::star;
 
 SwToLayoutAnchoredObjectPosition::SwToLayoutAnchoredObjectPosition( SdrObject& _rDrawObj )
-    : SwAnchoredObjectPosition( _rDrawObj ),
-      maRelPos( Point() ),
-      // #i26791#
-      maOffsetToFrameAnchorPos( Point() )
+    : SwAnchoredObjectPosition( _rDrawObj )
 {}
 
 SwToLayoutAnchoredObjectPosition::~SwToLayoutAnchoredObjectPosition()
