@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fa5e674_0f7b40cc",
+        "filename": "basic/qa/vba_tests/collection.vb",
+        "patchSetId": 9
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-09-05T19:11:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a0c79b9a_570bdfce",
+      "revId": "0707f6aa0e7e918ccef1d0f90487d0eb1283be4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e8aa2e2d_a7ccee71",
