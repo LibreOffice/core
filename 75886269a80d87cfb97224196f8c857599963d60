@@ -106,6 +106,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "67e854ef_ec7d59c4",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1003336
+      },
+      "writtenOn": "2021-09-05T15:49:53Z",
+      "side": 1,
+      "message": "Next, I think I should create a page in the connection wizard that takes advantage of this patch, but I have no idea how to start. should I ask in the irc channel?",
+      "parentUuid": "0e3b0baf_147f38fc",
+      "revId": "75886269a80d87cfb97224196f8c857599963d60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0aa30ed7_7f560ad0",
