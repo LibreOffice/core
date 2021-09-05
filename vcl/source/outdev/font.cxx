@@ -35,6 +35,7 @@
 #include <outdev.h>
 #include <window.h>
 
+#include <font/PhysicalFontFaceCollection.hxx>
 #include <PhysicalFontCollection.hxx>
 #include <drawmode.hxx>
 #include <font/FeatureCollector.hxx>
@@ -100,7 +101,7 @@ FontMetric OutputDevice::GetDevFont( int nDevFontIndex ) const
     int nCount = GetDevFontCount();
     if( nDevFontIndex < nCount )
     {
-        const PhysicalFontFace& rData = *mpDeviceFontList->Get( nDevFontIndex );
+        const PhysicalFontFace& rData = *mpFontFaceCollection->Get( nDevFontIndex );
         aFontMetric.SetFamilyName( rData.GetFamilyName() );
         aFontMetric.SetStyleName( rData.GetStyleName() );
         aFontMetric.SetCharSet( rData.GetCharSet() );
@@ -118,22 +119,22 @@ FontMetric OutputDevice::GetDevFont( int nDevFontIndex ) const
 
 int OutputDevice::GetDevFontCount() const
 {
-    if( !mpDeviceFontList )
+    if( !mpFontFaceCollection )
     {
         if (!mxFontCollection)
         {
             return 0;
         }
 
-        mpDeviceFontList = mxFontCollection->GetDeviceFontList();
+        mpFontFaceCollection = mxFontCollection->GetDeviceFontList();
 
-        if (!mpDeviceFontList->Count())
+        if (!mpFontFaceCollection->Count())
         {
-            mpDeviceFontList.reset();
+            mpFontFaceCollection.reset();
             return 0;
         }
     }
-    return mpDeviceFontList->Count();
+    return mpFontFaceCollection->Count();
 }
 
 bool OutputDevice::IsFontAvailable( const OUString& rFontName ) const
@@ -509,7 +510,7 @@ void OutputDevice::ImplClearFontData( const bool bNewFontLists )
 
     if ( bNewFontLists )
     {
-        mpDeviceFontList.reset();
+        mpFontFaceCollection.reset();
         mpDeviceFontSizeList.reset();
 
         // release all physically selected fonts on this device
@@ -1484,7 +1485,7 @@ void OutputDevice::ImplReleaseFonts()
     mbInitFont = true;
 
     mpFontInstance.clear();
-    mpDeviceFontList.reset();
+    mpFontFaceCollection.reset();
     mpDeviceFontSizeList.reset();
 }
 

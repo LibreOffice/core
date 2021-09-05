@@ -68,7 +68,7 @@ class LogicalFontInstance;
 struct SystemGraphicsData;
 class ImplFontCache;
 class PhysicalFontCollection;
-class ImplDeviceFontList;
+class PhysicalFontFaceCollection;
 class ImplDeviceFontSizeList;
 class ImplMultiTextLineInfo;
 class SalGraphics;
@@ -181,7 +181,7 @@ private:
     mutable VclPtr<OutputDevice>    mpNextGraphics;     ///< Next output device in list
     GDIMetaFile*                    mpMetaFile;
     mutable rtl::Reference<LogicalFontInstance> mpFontInstance;
-    mutable std::unique_ptr<ImplDeviceFontList>     mpDeviceFontList;
+    mutable std::unique_ptr<PhysicalFontFaceCollection>  mpFontFaceCollection;
     mutable std::unique_ptr<ImplDeviceFontSizeList> mpDeviceFontSizeList;
     std::vector<OutDevState>        maOutDevStateStack;
     std::unique_ptr<ImplOutDevData> mpOutDevData;
