@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f9055b0_57cc4371",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-05T04:58:34Z",
+      "side": 1,
+      "message": "Here and elsewhere, initializing O(U)String with empty string is unnecessary: default ctor already initializes them with empty value.\n\n            OString userName;\n            OString userPassword;",
+      "revId": "75886269a80d87cfb97224196f8c857599963d60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a255cb58_f8f9e6dc",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-05T04:58:34Z",
+      "side": 1,
+      "message": "In new code, we should use range-based for instead of the awkward extraction of C-style array.\n\n                for (auto rIter : info)\n                {\n                    if (rIter.Name \u003d\u003d \"user\")\n                    ...",
+      "revId": "75886269a80d87cfb97224196f8c857599963d60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0aa30ed7_7f560ad0",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-05T04:58:34Z",
+      "side": 1,
+      "message": "operator \u003e\u003e\u003d returns a boolean indicating success (and may fail).\n\n                        if (OUString value; pIter-\u003eValue \u003e\u003e\u003d value)\n                            userName \u003d OUStringToOString(value, RTL_TEXTENCODING_UTF8);",
+      "revId": "75886269a80d87cfb97224196f8c857599963d60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4d68d62_de2a5402",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-05T04:58:34Z",
+      "side": 1,
+      "message": "isEmpty() is used for explicit check if it is empty or not (getting length is not that telling).\n\n            if (!userName.isEmpty())",
+      "revId": "75886269a80d87cfb97224196f8c857599963d60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
