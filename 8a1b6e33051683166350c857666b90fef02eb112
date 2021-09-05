@@ -86,6 +86,24 @@
       "parentUuid": "bb91fea0_af82842f",
       "revId": "8a1b6e33051683166350c857666b90fef02eb112",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8861281_c6ea64e9",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1003336
+      },
+      "writtenOn": "2021-09-05T17:17:47Z",
+      "side": 1,
+      "message": "Sorry, the longest password is 256, but only 20 bytes are efective. So we should take this into account and do something to never send more than 256 bytes. Any suggestion?",
+      "parentUuid": "9e5c12d6_67b4a096",
+      "revId": "8a1b6e33051683166350c857666b90fef02eb112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
