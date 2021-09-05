@@ -24,6 +24,7 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <tools/helpers.hxx>
+#include <tools/debug.hxx>
 
 #include <vcl/QueueInfo.hxx>
 #include <vcl/event.hxx>
@@ -35,6 +36,7 @@
 #include <outdev.h>
 #include <print.h>
 #include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontFaceCollection.hxx>
 #include <print.hrc>
 #include <salgdi.hxx>
 #include <salinst.hxx>
@@ -560,7 +562,7 @@ void Printer::ImplReleaseFonts()
     mbInitFont = true;
 
     mpFontInstance.clear();
-    mpDeviceFontList.reset();
+    mpFontFaceCollection.reset();
     mpDeviceFontSizeList.reset();
 }
 
@@ -922,7 +924,7 @@ void Printer::dispose()
         // the FontEntry to NULL here
         // TODO: consolidate duplicate cleanup by Printer and OutputDevice
         mpFontInstance.clear();
-        mpDeviceFontList.reset();
+        mpFontFaceCollection.reset();
         mpDeviceFontSizeList.reset();
         mxFontCache.reset();
         // font list deleted by OutputDevice dtor
@@ -1069,7 +1071,7 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
             ReleaseGraphics();
             pSVData->mpDefInst->DestroyInfoPrinter( mpInfoPrinter );
             mpFontInstance.clear();
-            mpDeviceFontList.reset();
+            mpFontFaceCollection.reset();
             mpDeviceFontSizeList.reset();
             // clean up font list
             mxFontCache.reset();
@@ -1098,7 +1100,7 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
             pSVData->mpDefInst->DestroyInfoPrinter( mpInfoPrinter );
 
             mpFontInstance.clear();
-            mpDeviceFontList.reset();
+            mpFontFaceCollection.reset();
             mpDeviceFontSizeList.reset();
             mxFontCache.reset();
             mxFontCollection.reset();
