@@ -28,12 +28,10 @@ using std::vector;
 using std::find;
 
 SwNumberTreeNode::SwNumberTreeNode()
-    : mChildren(),
-      mpParent( nullptr ),
+    : mpParent( nullptr ),
       mnNumber( 0 ),
       mbContinueingPreviousSubTree( false ),
-      mbPhantom( false ),
-      mItLastValid()
+      mbPhantom( false )
 {
     mItLastValid = mChildren.end();
 }

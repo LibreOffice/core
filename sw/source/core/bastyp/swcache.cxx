@@ -79,7 +79,6 @@ SwCache::SwCache( const sal_uInt16 nInitSize
     , const OString &rNm
 #endif
     ) :
-    m_aCacheObjects(),
     m_pRealFirst( nullptr ),
     m_pFirst( nullptr ),
     m_pLast( nullptr ),

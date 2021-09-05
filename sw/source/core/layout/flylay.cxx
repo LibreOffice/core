@@ -56,10 +56,7 @@ SwFlyFreeFrame::SwFlyFreeFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFram
     // #i34753#
     mbNoMakePos( false ),
     // #i37068#
-    mbNoMoveOnCheckClip( false ),
-    maUnclippedFrame(),
-    // RotateFlyFrame3
-    mpTransformableSwFrame()
+    mbNoMoveOnCheckClip( false )
 {
 }
 

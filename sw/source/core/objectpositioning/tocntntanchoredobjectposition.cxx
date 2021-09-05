@@ -48,8 +48,6 @@ using namespace ::com::sun::star;
 SwToContentAnchoredObjectPosition::SwToContentAnchoredObjectPosition( SdrObject& _rDrawObj )
     : SwAnchoredObjectPosition ( _rDrawObj ),
       mpVertPosOrientFrame( nullptr ),
-      // #i26791#
-      maOffsetToFrameAnchorPos( Point() ),
       mbAnchorToChar ( false ),
       mpToCharOrientFrame( nullptr ),
       mpToCharRect( nullptr ),

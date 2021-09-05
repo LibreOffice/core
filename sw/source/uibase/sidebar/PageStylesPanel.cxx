@@ -109,8 +109,7 @@ PageStylesPanel::PageStylesPanel(
     mxColumnCount(m_xBuilder->weld_combo_box("columnbox")),
     mxNumberSelectLB(new SvxPageNumberListBox(m_xBuilder->weld_combo_box("numberbox"))),
     mxBgFillType(m_xBuilder->weld_combo_box("bgselect")),
-    mxCustomEntry(m_xBuilder->weld_label("customlabel")),
-    aCustomEntry()
+    mxCustomEntry(m_xBuilder->weld_label("customlabel"))
 {
     Initialize();
 }

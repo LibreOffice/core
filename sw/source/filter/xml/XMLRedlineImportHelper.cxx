@@ -213,12 +213,7 @@ public:
 
 RedlineInfo::RedlineInfo() :
     eType(RedlineType::Insert),
-    sAuthor(),
-    sComment(),
-    aDateTime(),
     bMergeLastParagraph( false ),
-    aAnchorStart(),
-    aAnchorEnd(),
     pContentIndex(nullptr),
     pNextRedline(nullptr),
     bNeedsAdjustment( false )
@@ -240,12 +235,10 @@ XMLRedlineImportHelper::XMLRedlineImportHelper(
     bool bNoRedlinesPlease,
     const Reference<XPropertySet> & rModel,
     const Reference<XPropertySet> & rImportInfo )
-    :   m_rImport(rImport)
-    ,
+    :   m_rImport(rImport),
         m_sInsertion( GetXMLToken( XML_INSERTION )),
         m_sDeletion( GetXMLToken( XML_DELETION )),
         m_sFormatChange( GetXMLToken( XML_FORMAT_CHANGE )),
-        m_aRedlineMap(),
         m_bIgnoreRedlines(bNoRedlinesPlease),
         m_xModelPropertySet(rModel),
         m_xImportInfoPropertySet(rImportInfo)

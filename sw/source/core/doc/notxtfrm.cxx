@@ -145,11 +145,7 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
 }
 
 SwNoTextFrame::SwNoTextFrame(SwNoTextNode * const pNode, SwFrame* pSib )
-:   SwContentFrame( pNode, pSib ),
-    // RotateFlyFrame3
-    mpTransformableSwFrame(),
-    // MM02
-    mpViewContact()
+:   SwContentFrame( pNode, pSib )
 {
     mnFrameType = SwFrameType::NoTxt;
 }
@@ -1085,8 +1081,7 @@ sdr::contact::ViewObjectContact& ViewContactOfSwNoTextFrame::CreateObjectSpecifi
 ViewContactOfSwNoTextFrame::ViewContactOfSwNoTextFrame(
     const SwNoTextFrame& rSwNoTextFrame
 )
-:   sdr::contact::ViewContact(),
-    mrSwNoTextFrame(rSwNoTextFrame)
+: mrSwNoTextFrame(rSwNoTextFrame)
 {
 }
 } // end of anonymous namespace

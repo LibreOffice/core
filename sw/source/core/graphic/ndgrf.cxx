@@ -63,7 +63,6 @@ SwGrfNode::SwGrfNode(
         SwGrfFormatColl *pGrfColl,
         SwAttrSet const * pAutoAttr ) :
     SwNoTextNode( rWhere, SwNodeType::Grf, pGrfColl, pAutoAttr ),
-    maGrfObj(),
     mbInBaseLinkSwapIn(true),
     // #i73788#
     mbLinkedInputStreamReady( false ),
@@ -102,7 +101,6 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
                       SwGrfFormatColl *pGrfColl,
                       SwAttrSet const * pAutoAttr ) :
     SwNoTextNode( rWhere, SwNodeType::Grf, pGrfColl, pAutoAttr ),
-    maGrfObj(),
     mbInBaseLinkSwapIn(true),
     // #i73788#
     mbLinkedInputStreamReady( false ),

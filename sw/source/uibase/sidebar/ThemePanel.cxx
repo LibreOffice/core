@@ -97,7 +97,6 @@ class StyleSet
 
 public:
     explicit StyleSet()
-        : maStyles()
     {}
 
     void add(StyleRedefinition const & aRedefinition)
@@ -436,7 +435,6 @@ ThemePanel::ThemePanel(weld::Widget* pParent)
     , mxValueSetColors(new ValueSet(nullptr))
     , mxValueSetColorsWin(new weld::CustomWeld(*m_xBuilder, "valueset_colors", *mxValueSetColors))
     , mxApplyButton(m_xBuilder->weld_button("apply"))
-    , maColorSets()
 {
     mxValueSetColors->SetColCount(2);
     mxValueSetColors->SetLineCount(3);
