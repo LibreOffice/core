@@ -16,15 +16,21 @@ $(eval $(call gb_CppunitTest_set_include,vcl_font,\
 
 $(eval $(call gb_CppunitTest_add_exception_objects,vcl_font, \
 	vcl/qa/cppunit/font \
+	vcl/qa/cppunit/physicalfontfacecollection \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,vcl_font,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,vcl_font,\
+	boost_headers \
+	harfbuzz \
+	graphite \
+))
 
 $(eval $(call gb_CppunitTest_use_libraries,vcl_font, \
 	comphelper \
 	cppu \
 	cppuhelper \
 	sal \
+	salhelper \
 	svt \
 	test \
 	tl \

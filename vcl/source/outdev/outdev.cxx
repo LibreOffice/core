@@ -32,6 +32,7 @@
 #include <vcl/lazydelete.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <font/PhysicalFontFaceCollection.hxx>
 #include <salgdi.hxx>
 #include <window.h>
 #include <outdev.h>
@@ -68,7 +69,7 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
     mpNextGraphics                  = nullptr;
     mpMetaFile                      = nullptr;
     mpFontInstance                     = nullptr;
-    mpDeviceFontList                = nullptr;
+    mpFontFaceCollection                = nullptr;
     mpDeviceFontSizeList            = nullptr;
     mpAlphaVDev                     = nullptr;
     mpExtOutDevData                 = nullptr;
@@ -169,7 +170,7 @@ void OutputDevice::dispose()
     mpFontInstance.clear();
 
     // remove cached results of GetDevFontList/GetDevSizeList
-    mpDeviceFontList.reset();
+    mpFontFaceCollection.reset();
     mpDeviceFontSizeList.reset();
 
     // release ImplFontCache specific to this OutputDevice
