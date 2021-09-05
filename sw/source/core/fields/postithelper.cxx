@@ -120,7 +120,6 @@ SwSidebarItem::SwSidebarItem(const bool aFocus)
     , mbFocus(aFocus)
     , mbPendingLayout(false)
     , mLayoutStatus(SwPostItHelper::INVISIBLE)
-    , maLayoutInfo()
 {
 }
 

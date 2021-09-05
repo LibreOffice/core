@@ -1069,7 +1069,6 @@ namespace
 
 template<FlyCntType T>
 SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc& rDoc)
-    : m_aFrames()
 {
     SolarMutexGuard aGuard;
     const SwFrameFormats* const pFormats = rDoc.GetSpzFrameFormats();

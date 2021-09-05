@@ -315,7 +315,6 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
         uno::Reference< XText > const & xParentText,
         const sal_Int32 nStart,
         const sal_Int32 nEnd )
-    : m_Portions()
 {
     m_pUnoCursor = rParaCursor.GetDoc().CreateUnoCursor(*rParaCursor.GetPoint());
 

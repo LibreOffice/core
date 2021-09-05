@@ -397,7 +397,6 @@ SwAccessibleParagraph::SwAccessibleParagraph(
         std::shared_ptr<SwAccessibleMap> const& pInitMap,
         const SwTextFrame& rTextFrame )
     : SwAccessibleContext( pInitMap, AccessibleRole::PARAGRAPH, &rTextFrame )
-    , m_sDesc()
     , m_nOldCaretPos( -1 )
     , m_bIsHeading( false )
     //Get the real heading level, Heading1 ~ Heading10

@@ -98,8 +98,7 @@ PageFormatPanel::PageFormatPanel(weld::Widget* pParent, SfxBindings* pBindings) 
     mpPageLRMarginItem( new SvxLongLRSpaceItem( 0, 0, SID_ATTR_PAGE_LRSPACE ) ),
     mpPageULMarginItem( new SvxLongULSpaceItem( 0, 0, SID_ATTR_PAGE_ULSPACE ) ),
     meFUnit(GetModuleFieldUnit()),
-    meUnit(),
-    aCustomEntry()
+    meUnit()
 {
     Initialize();
 }

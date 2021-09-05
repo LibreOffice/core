@@ -3282,8 +3282,7 @@ class SplitTable_Para
 
 public:
     SplitTable_Para(SwTableNode* pNew, SwTable& rOld)
-        : m_aSrcDestMap()
-        , m_pNewTableNode(pNew)
+        : m_pNewTableNode(pNew)
         , m_rOldTable(rOld)
     {}
     SwFrameFormat* GetDestFormat( SwFrameFormat* pSrcFormat ) const

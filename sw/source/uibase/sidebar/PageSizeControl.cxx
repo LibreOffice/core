@@ -77,7 +77,6 @@ PageSizeControl::PageSizeControl(PageSizePopup* pControl, weld::Widget* pParent)
     , mxSizeValueSet(new svx::sidebar::ValueSetWithTextControl)
     , mxSizeValueSetWin(new weld::CustomWeld(*m_xBuilder, "pagesizevalueset", *mxSizeValueSet))
     , mxControl(pControl)
-    , maPaperList()
 {
     mxWidthHeightField->set_unit(FieldUnit::CM);
     mxWidthHeightField->set_range(0, 9999, FieldUnit::NONE);

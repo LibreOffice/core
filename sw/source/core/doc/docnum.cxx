@@ -1227,8 +1227,7 @@ namespace
 
         ListStyleData()
             : pReplaceNumRule( nullptr ),
-              bCreateNewList( false ),
-              sListId()
+              bCreateNewList( false )
         {}
     };
 }

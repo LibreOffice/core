@@ -226,8 +226,7 @@ SwField::SwField(
         sal_uInt32 nFormat,
         LanguageType nLang,
         bool bUseFieldValueCache)
-    : m_Cache()
-    , m_pType( pType )
+    : m_pType( pType )
     , m_nFormat( nFormat )
     , m_nLang( nLang )
     , m_bUseFieldValueCache( bUseFieldValueCache )

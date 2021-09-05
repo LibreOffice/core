@@ -38,9 +38,7 @@ class CancelJobsThread : public osl::Thread
 {
     public:
         explicit CancelJobsThread( const std::list< css::uno::Reference< css::util::XCancellable > >& rJobs )
-            : osl::Thread(),
-              maMutex(),
-              maJobs( rJobs ),
+            : maJobs( rJobs ),
               mbAllJobsCancelled( false ),
               mbStopped( false )
         {
@@ -148,9 +146,7 @@ class TerminateOfficeThread : public osl::Thread
     public:
         TerminateOfficeThread( CancelJobsThread const & rCancelJobsThread,
                                css::uno::Reference< css::uno::XComponentContext > const & xContext )
-            : osl::Thread(),
-              maMutex(),
-              mrCancelJobsThread( rCancelJobsThread ),
+            : mrCancelJobsThread( rCancelJobsThread ),
               mbStopOfficeTermination( false ),
               mxContext( xContext )
         {
@@ -228,8 +224,6 @@ void SAL_CALL TerminateOfficeThread::onTerminated()
 
 FinalThreadManager::FinalThreadManager(css::uno::Reference< css::uno::XComponentContext > const & context)
     : m_xContext(context),
-      maMutex(),
-      maThreads(),
       mpTerminateOfficeThread( nullptr ),
       mbRegisteredAtDesktop( false )
 {

@@ -41,7 +41,6 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
             : VCLXAccessibleComponent( dynamic_cast<VCLXWindow*>(rSidebarWin.CreateAccessible().get()) )
             , mrViewShell( rViewShell )
             , mpAnchorFrame( pAnchorFrame )
-            , maMutex()
         {
             rSidebarWin.SetAccessibleRole( css::accessibility::AccessibleRole::COMMENT );
         }
@@ -98,8 +97,7 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
 SidebarWinAccessible::SidebarWinAccessible( sw::annotation::SwAnnotationWin& rSidebarWin,
                                             SwViewShell& rViewShell,
                                             const SwSidebarItem& rSidebarItem )
-    : VCLXWindow()
-    , mrSidebarWin( rSidebarWin )
+    : mrSidebarWin( rSidebarWin )
     , mrViewShell( rViewShell )
     , mpAnchorFrame( rSidebarItem.maLayoutInfo.mpAnchorFrame )
     , bAccContextCreated( false )

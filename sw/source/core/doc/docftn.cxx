@@ -284,7 +284,6 @@ SwFootnoteInfo::SwFootnoteInfo(const SwFootnoteInfo& rInfo) :
 }
 
 SwFootnoteInfo::SwFootnoteInfo() :
-    SwEndNoteInfo(),
     m_ePos( FTNPOS_PAGE ),
     m_eNum( FTNNUM_DOC )
 {

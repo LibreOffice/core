@@ -181,8 +181,7 @@ public:
 };
 
 SwAfVersions::SwAfVersions()
-:   AutoFormatVersions(),
-    m_nTextOrientationVersion(0),
+:   m_nTextOrientationVersion(0),
     m_nVerticalAlignmentVersion(0)
 {
 }
@@ -216,13 +215,10 @@ void SwAfVersions::Write(SvStream& rStream, sal_uInt16 fileVersion)
 
 
 SwBoxAutoFormat::SwBoxAutoFormat()
-:   AutoFormatBase(),
-    m_aTextOrientation(std::make_unique<SvxFrameDirectionItem>(SvxFrameDirection::Environment, RES_FRAMEDIR)),
+:   m_aTextOrientation(std::make_unique<SvxFrameDirectionItem>(SvxFrameDirection::Environment, RES_FRAMEDIR)),
     m_aVerticalAlignment(std::make_unique<SwFormatVertOrient>(0, css::text::VertOrientation::NONE, css::text::RelOrientation::FRAME)),
-    m_sNumFormatString(),
     m_eSysLanguage(::GetAppLanguage()),
-    m_eNumFormatLanguage(::GetAppLanguage()),
-    m_wXObject()
+    m_eNumFormatLanguage(::GetAppLanguage())
 {
     // need to set default instances for base class AutoFormatBase here
     // due to resource defines (e.g. RES_CHRATR_FONT) which are not available
@@ -270,8 +266,7 @@ SwBoxAutoFormat::SwBoxAutoFormat( const SwBoxAutoFormat& rNew )
     m_aVerticalAlignment(rNew.m_aVerticalAlignment->Clone()),
     m_sNumFormatString( rNew.m_sNumFormatString ),
     m_eSysLanguage( rNew.m_eSysLanguage ),
-    m_eNumFormatLanguage( rNew.m_eNumFormatLanguage ),
-    m_wXObject()
+    m_eNumFormatLanguage( rNew.m_eNumFormatLanguage )
 {
 }
 
@@ -385,8 +380,7 @@ SwTableAutoFormat::SwTableAutoFormat( const OUString& rName )
 }
 
 SwTableAutoFormat::SwTableAutoFormat( const SwTableAutoFormat& rNew )
-    : m_aKeepWithNextPara()
-    , m_aShadow(std::make_shared<SvxShadowItem>(RES_SHADOW))
+    : m_aShadow(std::make_shared<SvxShadowItem>(RES_SHADOW))
 {
     for(SwBoxAutoFormat* & rp : m_aBoxAutoFormat)
         rp = nullptr;

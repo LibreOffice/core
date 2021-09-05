@@ -193,7 +193,6 @@ bool SwObjPosOscillationControl::OscillationDetected()
 
 
 SwAnchoredDrawObject::SwAnchoredDrawObject() :
-    SwAnchoredObject(),
     mbValidPos( false ),
     mbNotYetAttachedToAnchorFrame( true ),
     // --> #i28749#

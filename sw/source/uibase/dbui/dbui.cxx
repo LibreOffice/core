@@ -49,7 +49,6 @@ PrintMonitor::~PrintMonitor()
 CreateMonitor::CreateMonitor(weld::Window *pParent)
     : GenericDialogController(pParent, "modules/swriter/ui/mmcreatingdialog.ui",
         "MMCreatingDialog")
-    , m_sCountingPattern()
     , m_nTotalCount(0)
     , m_nCurrentPosition(0)
     , m_xCounting(m_xBuilder->weld_label("progress"))

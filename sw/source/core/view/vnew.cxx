@@ -145,7 +145,6 @@ SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
                         const SwViewOption *pNewOpt, OutputDevice *pOutput,
                         tools::Long nFlags )
     :
-    maBrowseBorder(),
     mpSfxViewShell( nullptr ),
     mpImp( new SwViewShellImp( this ) ),
     mpWin( pWindow ),
@@ -163,8 +162,7 @@ SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
     mnLockPaint( 0 ),
     mbSelectAll(false),
     mbOutputToWindow(false),
-    mpPrePostOutDev(nullptr),
-    maPrePostMapMode()
+    mpPrePostOutDev(nullptr)
 {
     // in order to suppress event handling in
     // <SwDrawContact::Changed> during construction of <SwViewShell> instance
@@ -233,8 +231,7 @@ SwViewShell::SwViewShell( SwViewShell& rShell, vcl::Window *pWindow,
     mnLockPaint( 0 ),
     mbSelectAll(false),
     mbOutputToWindow(false),
-    mpPrePostOutDev(nullptr),
-    maPrePostMapMode()
+    mpPrePostOutDev(nullptr)
 {
     // in order to suppress event handling in
     // <SwDrawContact::Changed> during construction of <SwViewShell> instance

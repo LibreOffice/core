@@ -697,8 +697,6 @@ private:
 public:
     explicit DeflateData(const uno::Reference< frame::XModel >& rXModel)
     :   maXModel(rXModel),
-        maPrimitive2DSequence(),
-        maRange(),
         mbKilled(false),
         mpTag( comphelper::ThreadPool::createThreadTaskTag() )
     {
@@ -774,9 +772,7 @@ private:
 
 SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
     m_pOLENode( nullptr ),
-    m_xOLERef( xObj ),
-    m_aPrimitive2DSequence(),
-    m_aRange()
+    m_xOLERef( xObj )
 {
     m_xOLERef.Lock();
     if ( xObj.is() )
@@ -788,9 +784,7 @@ SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
 
 SwOLEObj::SwOLEObj( const OUString &rString, sal_Int64 nAspect ) :
     m_pOLENode( nullptr ),
-    m_aName( rString ),
-    m_aPrimitive2DSequence(),
-    m_aRange()
+    m_aName( rString )
 {
     m_xOLERef.Lock();
     m_xOLERef.SetViewAspect( nAspect );
