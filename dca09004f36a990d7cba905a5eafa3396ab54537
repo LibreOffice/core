@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "832dacf0_f3c4afa7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-09-05T06:41:54Z",
+      "side": 1,
+      "message": "BTW, I tested this on Linux and Windows but couldn\u0027t on MacOs since I don\u0027t have one.\nI asked to Alex to give it a try on MacOs once a daily build will be available with the patch.\nHowever, I\u0027m quite confident since I suppose osl::FileBase::getSystemPathFromFileURL deals with all envs.",
+      "revId": "dca09004f36a990d7cba905a5eafa3396ab54537",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
