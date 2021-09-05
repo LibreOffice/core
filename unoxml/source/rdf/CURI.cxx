@@ -66,8 +66,7 @@ private:
     OUString m_LocalName;
 };
 
-CURI::CURI() :
-    m_Namespace(), m_LocalName()
+CURI::CURI()
 {}
 
 // com.sun.star.uno.XServiceInfo:

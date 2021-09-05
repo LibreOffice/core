@@ -75,8 +75,7 @@ public: // struct to cache the result of a path lookup
         PathStatus   status;
 
         PathData()
-        : path()
-        , status(DATA_UNKNOWN)
+        : status(DATA_UNKNOWN)
         {}
     };
 public: // data members

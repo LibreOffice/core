@@ -144,7 +144,6 @@ namespace toolkit
 
 
     AnimatedImagesPeer::AnimatedImagesPeer()
-        :AnimatedImagesPeer_Base()
     {
     }
 

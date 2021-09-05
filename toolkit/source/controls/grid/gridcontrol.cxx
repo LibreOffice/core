@@ -266,8 +266,7 @@ Reference< XPropertySetInfo > UnoGridModel::getPropertySetInfo(  )
 //= UnoGridControl
 
 UnoGridControl::UnoGridControl()
-    :UnoGridControl_Base()
-    ,m_aSelectionListeners( *this )
+    :m_aSelectionListeners( *this )
     ,m_pEventForwarder( new toolkit::GridEventForwarder( *this ) )
 {
 }

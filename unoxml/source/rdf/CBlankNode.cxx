@@ -57,8 +57,7 @@ private:
     OUString m_NodeID;
 };
 
-CBlankNode::CBlankNode() :
-    m_NodeID()
+CBlankNode::CBlankNode()
 {}
 
 // com.sun.star.uno.XServiceInfo:

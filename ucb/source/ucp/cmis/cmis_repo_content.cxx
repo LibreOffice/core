@@ -54,7 +54,6 @@ namespace cmis
         : ContentImplHelper( rxContext, pProvider, Identifier ),
         m_pProvider( pProvider ),
         m_aURL( Identifier->getContentIdentifier( ) ),
-        m_sRepositoryId( ),
         m_aRepositories( aRepos )
     {
         // Split the URL into bits

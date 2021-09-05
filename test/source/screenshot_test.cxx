@@ -43,8 +43,7 @@ using namespace css::uno;
 constexpr OUStringLiteral g_aScreenshotDirectory(u"screenshots");
 
 ScreenshotTest::ScreenshotTest()
-    : maKnownDialogs()
-    , maParent(nullptr, "vcl/ui/screenshotparent.ui", "ScreenShot")
+    : maParent(nullptr, "vcl/ui/screenshotparent.ui", "ScreenShot")
     , mxParentWidget(maParent.getDialog()->weld_content_area())
 {
     if (auto const env = getenv("LO_TEST_LOCALE")) {

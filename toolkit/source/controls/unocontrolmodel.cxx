@@ -110,7 +110,6 @@ static void lcl_ImplMergeFontProperty( FontDescriptor& rFD, sal_uInt16 nPropId, 
 
 UnoControlModel::UnoControlModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel_Base()
-    ,MutexAndBroadcastHelper()
     ,OPropertySetHelper( BrdcstHelper )
     ,maDisposeListeners( *this )
     ,m_xContext( rxContext )
@@ -121,7 +120,6 @@ UnoControlModel::UnoControlModel( const Reference< XComponentContext >& rxContex
 
 UnoControlModel::UnoControlModel( const UnoControlModel& rModel )
     : UnoControlModel_Base()
-    , MutexAndBroadcastHelper()
     , OPropertySetHelper( BrdcstHelper )
     , maData( rModel.maData )
     , maDisposeListeners( *this )

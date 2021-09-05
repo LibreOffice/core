@@ -331,7 +331,6 @@ const OUString& MediaDescriptor::PROP_SUGGESTEDSAVEASNAME()
 }
 
 MediaDescriptor::MediaDescriptor()
-    : SequenceAsHashMap()
 {
 }
 

@@ -64,8 +64,7 @@ private:
     css::uno::Reference< css::rdf::XURI > m_xDatatype;
 };
 
-CLiteral::CLiteral() :
-    m_Value(), m_Language(), m_xDatatype()
+CLiteral::CLiteral()
 {}
 
 // com.sun.star.uno.XServiceInfo:

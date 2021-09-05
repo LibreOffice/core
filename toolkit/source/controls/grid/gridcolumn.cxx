@@ -41,7 +41,6 @@ namespace toolkit
 
     GridColumn::GridColumn()
         :GridColumn_Base( m_aMutex )
-        ,m_aIdentifier()
         ,m_nIndex(-1)
         ,m_nDataColumnIndex(-1)
         ,m_nColumnWidth(4)

@@ -26,8 +26,7 @@ using namespace css::xml::dom::views;
 namespace DOM::events
 {
     CUIEvent::CUIEvent()
-        : CUIEvent_Base()
-        , m_detail(0)
+        : m_detail(0)
     {
     }
 

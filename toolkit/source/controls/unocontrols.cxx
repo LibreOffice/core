@@ -154,8 +154,7 @@ stardiv_Toolkit_UnoControlEditModel_get_implementation(
 
 
 UnoEditControl::UnoEditControl()
-    :UnoControlBase()
-    ,maTextListeners( *this )
+    :maTextListeners( *this )
     ,mnMaxTextLen( 0 )
     ,mbSetTextInPeer( false )
     ,mbSetMaxTextLenInPeer( false )
@@ -544,7 +543,6 @@ stardiv_Toolkit_UnoControlFileControlModel_get_implementation(
 
 
 UnoFileControl::UnoFileControl()
-    :UnoEditControl()
 {
 }
 
@@ -715,8 +713,7 @@ stardiv_Toolkit_UnoControlButtonModel_get_implementation(
 
 
 UnoButtonControl::UnoButtonControl()
-    :UnoButtonControl_Base()
-    ,maActionListeners( *this )
+    :maActionListeners( *this )
     ,maItemListeners( *this )
 {
     maComponentInfos.nWidth = 50;
@@ -970,8 +967,7 @@ stardiv_Toolkit_UnoControlImageControlModel_get_implementation(
 
 
 UnoImageControlControl::UnoImageControlControl()
-    :UnoImageControlControl_Base()
-    ,maActionListeners( *this )
+    :maActionListeners( *this )
 {
     // TODO: Where should I look for defaults?
     maComponentInfos.nWidth = 100;
@@ -1098,8 +1094,7 @@ stardiv_Toolkit_UnoControlRadioButtonModel_get_implementation(
 
 
 UnoRadioButtonControl::UnoRadioButtonControl()
-    :UnoRadioButtonControl_Base()
-    ,maItemListeners( *this )
+    :maItemListeners( *this )
     ,maActionListeners( *this )
 {
     maComponentInfos.nWidth = 100;
@@ -1331,8 +1326,7 @@ stardiv_Toolkit_UnoControlCheckBoxModel_get_implementation(
 
 
 UnoCheckBoxControl::UnoCheckBoxControl()
-    :UnoCheckBoxControl_Base()
-    ,maItemListeners( *this ), maActionListeners( *this )
+    :maItemListeners( *this ), maActionListeners( *this )
 {
     maComponentInfos.nWidth = 100;
     maComponentInfos.nHeight = 12;
@@ -1530,8 +1524,7 @@ stardiv_Toolkit_UnoControlFixedHyperlinkModel_get_implementation(
 
 
 UnoFixedHyperlinkControl::UnoFixedHyperlinkControl()
-    :UnoControlBase()
-    ,maActionListeners( *this )
+    :maActionListeners( *this )
 {
     maComponentInfos.nWidth = 100;
     maComponentInfos.nHeight = 12;
@@ -1729,7 +1722,6 @@ stardiv_Toolkit_UnoControlFixedTextModel_get_implementation(
 
 
 UnoFixedTextControl::UnoFixedTextControl()
-    :UnoControlBase()
 {
     maComponentInfos.nWidth = 100;
     maComponentInfos.nHeight = 12;
@@ -1894,7 +1886,6 @@ stardiv_Toolkit_UnoControlGroupBoxModel_get_implementation(
 
 
 UnoGroupBoxControl::UnoGroupBoxControl()
-    :UnoControlBase()
 {
     maComponentInfos.nWidth = 100;
     maComponentInfos.nHeight = 100;
@@ -1941,16 +1932,11 @@ struct ListItem
     Any             ItemData;
 
     ListItem()
-        :ItemText()
-        ,ItemImageURL()
-        ,ItemData()
     {
     }
 
     explicit ListItem( const OUString& i_rItemText )
         :ItemText( i_rItemText )
-        ,ItemImageURL()
-        ,ItemData()
     {
     }
 };
@@ -1976,7 +1962,6 @@ struct UnoControlListBoxModel_Data
     explicit UnoControlListBoxModel_Data( UnoControlListBoxModel& i_rAntiImpl )
         :m_bSettingLegacyProperty( false )
         ,m_rAntiImpl( i_rAntiImpl )
-        ,m_aListItems()
     {
     }
 
@@ -2486,8 +2471,7 @@ stardiv_Toolkit_UnoControlListBoxModel_get_implementation(
 
 
 UnoListBoxControl::UnoListBoxControl()
-    :UnoListBoxControl_Base()
-    ,maActionListeners( *this )
+    :maActionListeners( *this )
     ,maItemListeners( *this )
 {
     maComponentInfos.nWidth = 100;
@@ -2985,8 +2969,7 @@ stardiv_Toolkit_UnoControlComboBoxModel_get_implementation(
 
 
 UnoComboBoxControl::UnoComboBoxControl()
-    :UnoEditControl()
-    ,maActionListeners( *this )
+    :maActionListeners( *this )
     ,maItemListeners( *this )
 {
     maComponentInfos.nWidth = 100;
@@ -3299,8 +3282,7 @@ stardiv_Toolkit_UnoComboBoxControl_get_implementation(
 //  UnoSpinFieldControl
 
 UnoSpinFieldControl::UnoSpinFieldControl()
-    :UnoEditControl()
-    ,maSpinListeners( *this )
+    :maSpinListeners( *this )
 {
     mbRepeat = false;
 }
@@ -3453,7 +3435,6 @@ stardiv_Toolkit_UnoControlDateFieldModel_get_implementation(
 
 
 UnoDateFieldControl::UnoDateFieldControl()
-    :UnoSpinFieldControl()
 {
     mnFirst = util::Date( 1, 1, 1900 );
     mnLast = util::Date( 31, 12, 2200 );
@@ -3722,7 +3703,6 @@ stardiv_Toolkit_UnoControlTimeFieldModel_get_implementation(
 
 
 UnoTimeFieldControl::UnoTimeFieldControl()
-    :UnoSpinFieldControl()
 {
     mnFirst = util::Time( 0, 0, 0, 0, false );
     mnLast = util::Time( 999999999, 59, 59, 23, false );
@@ -3950,7 +3930,6 @@ stardiv_Toolkit_UnoControlNumericFieldModel_get_implementation(
 
 
 UnoNumericFieldControl::UnoNumericFieldControl()
-    :UnoSpinFieldControl()
 {
     mnFirst = 0;
     mnLast = 0x7FFFFFFF;
@@ -4171,7 +4150,6 @@ stardiv_Toolkit_UnoControlCurrencyFieldModel_get_implementation(
 
 
 UnoCurrencyFieldControl::UnoCurrencyFieldControl()
-    :UnoSpinFieldControl()
 {
     mnFirst = 0;
     mnLast = 0x7FFFFFFF;
@@ -4389,7 +4367,6 @@ stardiv_Toolkit_UnoControlPatternFieldModel_get_implementation(
 
 
 UnoPatternFieldControl::UnoPatternFieldControl()
-    :UnoSpinFieldControl()
 {
 }
 
@@ -4566,7 +4543,6 @@ stardiv_Toolkit_UnoControlProgressBarModel_get_implementation(
 
 
 UnoProgressBarControl::UnoProgressBarControl()
-    :UnoControlBase()
 {
 }
 
@@ -4725,7 +4701,6 @@ stardiv_Toolkit_UnoControlFixedLineModel_get_implementation(
 
 
 UnoFixedLineControl::UnoFixedLineControl()
-    :UnoControlBase()
 {
     maComponentInfos.nWidth = 100;      // ??
     maComponentInfos.nHeight = 100;     // ??

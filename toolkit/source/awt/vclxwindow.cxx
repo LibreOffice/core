@@ -194,7 +194,6 @@ VCLXWindowImpl::VCLXWindowImpl( VCLXWindow& _rAntiImpl, bool _bWithDefaultProps 
     ,mbDrawingOntoParent( false )
     ,mbEnableVisible(true)
     ,mbDirectVisible(true)
-    ,maListenerContainerMutex( )
     ,maWindow2Listeners( maListenerContainerMutex )
     ,maDockableWindowListeners( maListenerContainerMutex )
     ,maEventListeners( _rAntiImpl )

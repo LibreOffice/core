@@ -111,7 +111,6 @@ private:
 
     DefaultGridDataModel::DefaultGridDataModel()
         :DefaultGridDataModel_Base( m_aMutex )
-        ,m_aRowHeaders()
         ,m_nColumnCount(0)
     {
     }

@@ -351,8 +351,7 @@ basegfx::B3DPoint B3dTransformationSet::EyeToWorldCoor(const basegfx::B3DPoint& 
 // B3dViewport -----------------------------------------------------------------
 
 B3dViewport::B3dViewport()
-:   B3dTransformationSet(),
-    aVRP(0, 0, 0),
+:   aVRP(0, 0, 0),
     aVPN(0, 0, 1),
     aVUV(0, 1, 0)
 {
@@ -390,8 +389,7 @@ void B3dViewport::CalcOrientation()
 B3dCamera::B3dCamera(
     const basegfx::B3DPoint& rPos, const basegfx::B3DVector& rLkAt,
     double fFocLen, double fBnkAng)
-:   B3dViewport(),
-    aPosition(rPos),
+:   aPosition(rPos),
     aLookAt(rLkAt),
     fFocalLength(fFocLen),
     fBankAngle(fBnkAng)
