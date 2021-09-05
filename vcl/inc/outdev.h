@@ -35,20 +35,6 @@ class VirtualDevice;
 class PhysicalFontCollection;
 enum class AddFontSubstituteFlags;
 
-// an ImplDeviceFontList is created by a PhysicalFontCollection
-// it becomes invalid when original PhysicalFontCollection is modified
-class ImplDeviceFontList
-{
-private:
-    std::vector<rtl::Reference<PhysicalFontFace>> maDevFontVector;
-
-public:
-                        ImplDeviceFontList()        { maDevFontVector.reserve(1024); }
-    void                Add( PhysicalFontFace* pFace )  { maDevFontVector.push_back( pFace ); }
-    PhysicalFontFace*   Get( int nIndex ) const     { return maDevFontVector[ nIndex ].get(); }
-    int                 Count() const               { return maDevFontVector.size(); }
-};
-
 class ImplDeviceFontSizeList
 {
 private:
