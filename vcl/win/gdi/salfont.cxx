@@ -53,6 +53,7 @@
 
 #include <fontsubset.hxx>
 #include <outdev.h>
+#include <font/PhysicalFontFaceCollection.hxx>
 #include <PhysicalFontCollection.hxx>
 #include <PhysicalFontFace.hxx>
 #include <sft.hxx>
@@ -329,7 +330,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPattern& rFont
     }
 
     // last level fallback, check each font type face one by one
-    std::unique_ptr<ImplDeviceFontList> pTestFontList = pFontCollection->GetDeviceFontList();
+    std::unique_ptr<vcl::font::PhysicalFontFaceCollection> pTestFontList = pFontCollection->GetFontFaceCollection();
     // limit the count of fonts to be checked to prevent hangs
     static const int MAX_GFBFONT_COUNT = 600;
     int nTestFontCount = pTestFontList->Count();
