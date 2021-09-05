@@ -37,7 +37,6 @@ OOXMLFastDocumentHandler::OOXMLFastDocumentHandler(
     , mpStream( pStream )
     , mpDocument( pDocument )
     , mnXNoteId( nXNoteId )
-    , mxContextHandler()
 {
 }
 

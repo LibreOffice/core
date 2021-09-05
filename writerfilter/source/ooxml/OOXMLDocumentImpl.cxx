@@ -53,8 +53,6 @@ namespace writerfilter::ooxml
 OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t const & pStream, const uno::Reference<task::XStatusIndicator>& xStatusIndicator, bool bSkipImages, const uno::Sequence<beans::PropertyValue>& rDescriptor)
     : mpStream(pStream)
     , mxStatusIndicator(xStatusIndicator)
-    , mpXFootnoteStream()
-    , mpXEndnoteStream()
     , mnXNoteId(0)
     , mbIsSubstream(false)
     , mbSkipImages(bSkipImages)

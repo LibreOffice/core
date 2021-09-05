@@ -40,17 +40,13 @@ using namespace ::std;
 
 DomainMapperTableManager::DomainMapperTableManager() :
     m_nRow(0),
-    m_nCell(),
     m_nGridSpan(1),
     m_nHeaderRepeat(0),
     m_nTableWidth(0),
     m_bIsInShape(false),
-    m_aTmpPosition(),
-    m_aTmpTableProperties(),
     m_bPushCurrentWidth(false),
     m_bTableSizeTypeInserted(false),
     m_nLayoutType(0),
-    m_aParagraphsToEndTable(),
     m_pTablePropsHandler(new TablePropertiesHandler())
 {
     m_pTablePropsHandler->SetTableManager( this );

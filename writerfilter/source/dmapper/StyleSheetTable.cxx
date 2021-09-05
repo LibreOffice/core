@@ -53,14 +53,11 @@ namespace writerfilter::dmapper
 {
 
 StyleSheetEntry::StyleSheetEntry() :
-        sStyleIdentifierD()
-        ,bIsDefaultStyle(false)
+        bIsDefaultStyle(false)
         ,bAssignedAsChapterNumbering(false)
         ,bInvalidHeight(false)
         ,bHasUPE(false)
         ,nStyleTypeCode(STYLE_TYPE_UNKNOWN)
-        ,sBaseStyleIdentifier()
-        ,sNextStyleIdentifier()
         ,pProperties(new StyleSheetPropertyMap)
         ,bAutoRedefine(false)
 {
@@ -70,8 +67,7 @@ StyleSheetEntry::~StyleSheetEntry()
 {
 }
 
-TableStyleSheetEntry::TableStyleSheetEntry( StyleSheetEntry const & rEntry ):
-    StyleSheetEntry( )
+TableStyleSheetEntry::TableStyleSheetEntry( StyleSheetEntry const & rEntry )
 {
     bIsDefaultStyle = rEntry.bIsDefaultStyle;
     bInvalidHeight = rEntry.bInvalidHeight;
@@ -293,10 +289,8 @@ struct StyleSheetTable_Impl
 StyleSheetTable_Impl::StyleSheetTable_Impl(DomainMapper& rDMapper,
         uno::Reference< text::XTextDocument> const& xTextDocument,
         bool const bIsNewDoc)
-    :
-            m_rDMapper( rDMapper ),
+    :       m_rDMapper( rDMapper ),
             m_xTextDocument( xTextDocument ),
-            m_pCurrentEntry(),
             m_pDefaultParaProps(new PropertyMap),
             m_pDefaultCharProps(new PropertyMap),
             m_sDefaultParaStyleName("Normal"),

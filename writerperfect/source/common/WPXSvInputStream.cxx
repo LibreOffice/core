@@ -156,18 +156,13 @@ public:
 };
 
 OLEStreamData::OLEStreamData(const OString& rName, const OString& rvngName)
-    : stream()
-    , name(rName)
+    : name(rName)
     , RVNGname(rvngName)
 {
 }
 
 OLEStorageImpl::OLEStorageImpl()
-    : mxRootStorage()
-    , maStorageMap()
-    , maStreams()
-    , maNameMap()
-    , mbInitialized(false)
+    : mbInitialized(false)
 {
 }
 
@@ -315,15 +310,12 @@ public:
 };
 
 ZipStreamData::ZipStreamData(const OString& rName)
-    : xStream()
-    , aName(rName)
+    : aName(rName)
 {
 }
 
 ZipStorageImpl::ZipStorageImpl(const Reference<container::XNameAccess>& rxContainer)
     : mxContainer(rxContainer)
-    , maStreams()
-    , maNameMap()
     , mbInitialized(false)
 {
     assert(mxContainer.is());

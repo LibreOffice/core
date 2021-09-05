@@ -84,8 +84,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
 }
 
 OOXMLFastContextHandler::OOXMLFastContextHandler(OOXMLFastContextHandler * pContext)
-: cppu::WeakImplHelper<xml::sax::XFastContextHandler>(),
-  mpParent(pContext),
+: mpParent(pContext),
   mId(0),
   mnDefine(0),
   mnToken(oox::XML_TOKEN_COUNT),

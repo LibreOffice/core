@@ -72,9 +72,7 @@ class FolderStream : public librevenge::RVNGInputStream
 public:
     //! constructor
     explicit FolderStream(const css::uno::Reference<css::ucb::XContent>& xContent)
-        : librevenge::RVNGInputStream()
-        , m_xContent(xContent)
-        , m_nameToPathMap()
+        : m_xContent(xContent)
     {
     }
 
