@@ -392,13 +392,13 @@ DECLARE_RTFEXPORT_TEST(testNestedTable, "rhbz1065629.rtf")
     table::BorderLine2 halfPtSolid(sal_Int32(COL_BLACK), 0, 18, 0, table::BorderLineStyle::SOLID,
                                    18);
     CPPUNIT_ASSERT_BORDER_EQUAL(halfPtSolid, getProperty<table::BorderLine2>(xCell, "LeftBorder"));
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffffff),
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE,
                          getProperty<sal_Int32>(xCell, "BackColor"));
     xCell.set(xTable->getCellByName("B2"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xCell.is());
     CPPUNIT_ASSERT_BORDER_EQUAL(halfPtSolid, getProperty<table::BorderLine2>(xCell, "LeftBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(halfPtSolid, getProperty<table::BorderLine2>(xCell, "RightBorder"));
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffffff),
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE,
                          getProperty<sal_Int32>(xCell, "BackColor"));
 
     // \sect at the end resulted in spurious page break
