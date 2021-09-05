@@ -1735,7 +1735,7 @@ void EditEngine::InsertParagraph(sal_Int32 nPara, const OUString& rTxt)
 
 void EditEngine::SetText(sal_Int32 nPara, const OUString& rTxt)
 {
-    std::unique_ptr<EditSelection> pSel = pImpEditEngine->SelectParagraph( nPara );
+    std::optional<EditSelection> pSel = pImpEditEngine->SelectParagraph( nPara );
     if ( pSel )
     {
         pImpEditEngine->UndoActionStart( EDITUNDO_INSERT );

@@ -947,7 +947,7 @@ public:
 //  OV-Special
     void            InvalidateFromParagraph( sal_Int32 nFirstInvPara );
     EditPaM         InsertParagraph( sal_Int32 nPara );
-    std::unique_ptr<EditSelection> SelectParagraph( sal_Int32 nPara );
+    std::optional<EditSelection> SelectParagraph( sal_Int32 nPara );
 
     void            SetStatusEventHdl( const Link<EditStatus&, void>& rLink ) { aStatusHdlLink = rLink; }
     const Link<EditStatus&,void>& GetStatusEventHdl() const               { return aStatusHdlLink; }
