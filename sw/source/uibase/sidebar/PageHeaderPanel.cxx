@@ -63,7 +63,6 @@ PageHeaderPanel::PageHeaderPanel(
     maHeaderSpacingController(SID_ATTR_PAGE_HEADER_SPACING, *pBindings, *this),
     maHeaderLayoutController(SID_ATTR_PAGE_HEADER_LAYOUT, *pBindings, *this),
     meFUnit(GetModuleFieldUnit()),
-    aCustomEntry(),
     mpHeaderItem( new SfxBoolItem(SID_ATTR_PAGE_HEADER) ),
     mpHeaderLRMarginItem( new SvxLongLRSpaceItem(0, 0, SID_ATTR_PAGE_HEADER_LRMARGIN)),
     mpHeaderSpacingItem( new SvxLongULSpaceItem(0, 0, SID_ATTR_PAGE_HEADER_SPACING)),

@@ -68,9 +68,7 @@
 using namespace ::com::sun::star;
 
 SwFrameAreaDefinition::SwFrameAreaDefinition()
-:   maFrameArea(),
-    maFramePrintArea(),
-    mbFrameAreaPositionValid(false),
+:   mbFrameAreaPositionValid(false),
     mbFrameAreaSizeValid(false),
     mbFramePrintAreaValid(false),
     mnFrameId(SwFrameAreaDefinition::snLastFrameId++)
@@ -291,9 +289,7 @@ void TransformableSwFrame::transform(const basegfx::B2DHomMatrix& aTransform)
 }
 
 SwFrame::SwFrame( sw::BroadcastingModify *pMod, SwFrame* pSib )
-:   SwFrameAreaDefinition(),
-    SwClient( pMod ),
-    SfxBroadcaster(),
+:   SwClient( pMod ),
     mpRoot( pSib ? pSib->getRootFrame() : nullptr ),
     mpUpper(nullptr),
     mpNext(nullptr),

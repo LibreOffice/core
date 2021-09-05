@@ -156,8 +156,6 @@ namespace ww8
     Frame::Frame(const Graphic &rGrf, const SwPosition &rPos)
         : mpFlyFrame(nullptr)
         , maPos(rPos)
-        , maSize()
-        , maLayoutSize()
         , meWriterType(eBulletGrf)
         , mpStartFrameContent(nullptr)
         , mbIsInline(true)
@@ -181,15 +179,12 @@ namespace ww8
     Frame::Frame(const SwFrameFormat &rFormat, const SwPosition &rPos)
         : mpFlyFrame(&rFormat)
         , maPos(rPos)
-        , maSize()
-        , maLayoutSize() // #i43447#
         , meWriterType(eTextBox)
         , mpStartFrameContent(nullptr)
         // #i43447# - move to initialization list
         , mbIsInline( (rFormat.GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR) )
         // #i120928# - handle graphic of bullet within existing implementation
         , mbForBullet(false)
-        , maGrf()
     {
         switch (rFormat.Which())
         {

@@ -164,7 +164,6 @@ bool SwGlosDocShell::Save()
 }
 
 SwWebGlosDocShell::SwWebGlosDocShell()
-    : SwWebDocShell()
 {
 }
 

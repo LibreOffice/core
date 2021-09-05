@@ -852,7 +852,6 @@ SwRedlineExtraData_Format::SwRedlineExtraData_Format( const SfxItemSet& rSet )
 
 SwRedlineExtraData_Format::SwRedlineExtraData_Format(
         const SwRedlineExtraData_Format& rCpy )
-    : SwRedlineExtraData()
 {
     m_aWhichIds.insert( m_aWhichIds.begin(), rCpy.m_aWhichIds.begin(), rCpy.m_aWhichIds.end() );
 }

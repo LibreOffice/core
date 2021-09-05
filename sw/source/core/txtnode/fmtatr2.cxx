@@ -154,11 +154,6 @@ void SwFormatAutoFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 SwFormatINetFormat::SwFormatINetFormat()
     : SfxPoolItem( RES_TXTATR_INETFMT )
-    , msURL()
-    , msTargetFrame()
-    , msINetFormatName()
-    , msVisitedFormatName()
-    , msHyperlinkName()
     , mpTextAttr( nullptr )
     , mnINetFormatId( 0 )
     , mnVisitedFormatId( 0 )
@@ -168,9 +163,6 @@ SwFormatINetFormat::SwFormatINetFormat( const OUString& rURL, const OUString& rT
     : SfxPoolItem( RES_TXTATR_INETFMT )
     , msURL( rURL )
     , msTargetFrame( rTarget )
-    , msINetFormatName()
-    , msVisitedFormatName()
-    , msHyperlinkName()
     , mpTextAttr( nullptr )
     , mnINetFormatId( RES_POOLCHR_INET_NORMAL )
     , mnVisitedFormatId( RES_POOLCHR_INET_VISIT )
@@ -181,7 +173,6 @@ SwFormatINetFormat::SwFormatINetFormat( const OUString& rURL, const OUString& rT
 
 SwFormatINetFormat::SwFormatINetFormat( const SwFormatINetFormat& rAttr )
     : SfxPoolItem( RES_TXTATR_INETFMT )
-    , sw::BroadcasterMixin()
     , msURL( rAttr.GetValue() )
     , msTargetFrame( rAttr.msTargetFrame )
     , msINetFormatName( rAttr.msINetFormatName )
@@ -532,7 +523,6 @@ SwFormatMeta * SwFormatMeta::CreatePoolDefault(const sal_uInt16 i_nWhich)
 
 SwFormatMeta::SwFormatMeta(const sal_uInt16 i_nWhich)
     : SfxPoolItem( i_nWhich )
-    , m_pMeta()
     , m_pTextAttr( nullptr )
 {
    OSL_ENSURE((RES_TXTATR_META == i_nWhich) || (RES_TXTATR_METAFIELD == i_nWhich),
@@ -637,8 +627,7 @@ void SwFormatMeta::DoCopy(::sw::MetaFieldManager & i_rTargetDocManager,
 namespace sw {
 
 Meta::Meta(SwFormatMeta * const i_pFormat)
-    : ::sfx2::Metadatable()
-    , sw::BroadcastingModify()
+    : sw::BroadcastingModify()
     , m_pFormat(i_pFormat)
     , m_pTextNode(nullptr)
 {

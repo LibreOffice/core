@@ -1023,8 +1023,7 @@ void SwHistoryChangeCharFormat::SetInDoc(SwDoc * pDoc, bool )
 // <- #i27615#
 
 SwHistory::SwHistory()
-    : m_SwpHstry()
-    , m_nEndDiff( 0 )
+    : m_nEndDiff( 0 )
 {
 }
 

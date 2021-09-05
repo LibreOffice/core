@@ -370,33 +370,8 @@ SwXTextDocument::SwXTextDocument(SwDocShell* pShell)
     , m_pImpl(new Impl)
     ,
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_DOCUMENT)),
-
     m_pDocShell(pShell),
-
     m_bObjectValid(pShell != nullptr),
-
-    mxXNumberingRules(),
-    mxXFootnotes(),
-    mxXFootnoteSettings(),
-    mxXEndnotes(),
-    mxXEndnoteSettings(),
-    mxXReferenceMarks(),
-    mxXTextFieldTypes(),
-    mxXTextFieldMasters(),
-    mxXTextSections(),
-    mxXBookmarks(),
-    mxXTextTables(),
-    mxXTextFrames(),
-    mxXGraphicObjects(),
-    mxXEmbeddedObjects(),
-    mxXStyleFamilies(),
-    mxXAutoStyles(),
-    mxXChapterNumbering(),
-    mxXDocumentIndexes(),
-
-    mxXLineNumberingProperties(),
-    mxLinkTargetSupplier(),
-    mxXRedlines(),
     m_pHiddenViewFrame(nullptr),
     // #i117783#
     m_bApplyPagePrintSettingsFromXPagePrintable( false )

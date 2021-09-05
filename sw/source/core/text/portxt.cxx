@@ -671,7 +671,6 @@ void SwTextPortion::HandlePortion( SwPortionHandler& rPH ) const
 }
 
 SwTextInputFieldPortion::SwTextInputFieldPortion()
-    : SwTextPortion()
 {
     SetWhichPor( PortionType::InputField );
 }

@@ -50,9 +50,7 @@ SwAsCharAnchoredObjectPosition::SwAsCharAnchoredObjectPosition(
       mnLineDescent( _nLineDescent ),
       mnLineAscentInclObjs( _nLineAscentInclObjs ),
       mnLineDescentInclObjs( _nLineDescentInclObjs ),
-      maAnchorPos ( Point() ),
       mnRelPos ( 0 ),
-      maObjBoundRect ( SwRect() ),
       mnLineAlignment ( sw::LineAlign::NONE )
 {}
 

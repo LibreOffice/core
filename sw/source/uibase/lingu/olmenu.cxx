@@ -425,7 +425,6 @@ SwSpellPopup::SwSpellPopup(
     , m_nRedlineNextId(m_xPopupMenu->GetItemId("next"))
     , m_nRedlinePrevId(m_xPopupMenu->GetItemId("prev"))
     , m_pSh(pWrtSh)
-    , m_sExplanationLink()
     , m_bGrammarResults(true)
 {
     m_nCheckedLanguage = LanguageTag::convertToLanguageType( rResult.aLocale );
