@@ -95,6 +95,7 @@ void CommonInitialize(int *argc, char ***argv)
     setenv("SAL_DISABLE_PRINTERLIST", "1", 1);
     setenv("SAL_DISABLE_DEFAULTPRINTER", "1", 1);
     setenv("SAL_NO_FONT_LOOKUP", "1", 1);
+    setenv("SAX_DISABLE_THREADS", "1", 1);
 
     //allow bubbling of max input len to fuzzer targets
     int nMaxLen = 0;
