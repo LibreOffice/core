@@ -51,8 +51,6 @@ static sal_uInt16 nFieldDlgFormatSel = 0;
 
 SwFieldRefPage::SwFieldRefPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *const pCoreSet )
     : SwFieldPage(pPage, pController, "modules/swriter/ui/fldrefpage.ui", "FieldRefPage", pCoreSet)
-    , maOutlineNodes()
-    , maNumItems()
     , mpSavedSelectedTextNode(nullptr)
     , mnSavedSelectedPos(0)
     , m_xTypeLB(m_xBuilder->weld_tree_view("type"))

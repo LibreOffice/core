@@ -28,7 +28,7 @@
 namespace sw
 {
 
-DocumentListsManager::DocumentListsManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc ), maLists(), maListStyleLists()
+DocumentListsManager::DocumentListsManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc )
 {
 }
 

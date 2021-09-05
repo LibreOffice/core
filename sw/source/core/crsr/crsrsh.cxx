@@ -2943,7 +2943,6 @@ SwCursorShell::SwCursorShell( SwCursorShell& rShell, vcl::Window *pInitWin )
     , m_nCursorMove( 0 )
     , m_eMvState( CursorMoveState::NONE )
     , m_eEnhancedTableSel(SwTable::SEARCH_NONE)
-    , m_sMarkedListId()
     , m_nMarkedListLevel( 0 )
     , m_oldColFrame(nullptr)
 {
@@ -2980,7 +2979,6 @@ SwCursorShell::SwCursorShell( SwDoc& rDoc, vcl::Window *pInitWin,
     , m_nCursorMove( 0 )
     , m_eMvState( CursorMoveState::NONE ) // state for crsr-travelling - GetModelPositionForViewPoint
     , m_eEnhancedTableSel(SwTable::SEARCH_NONE)
-    , m_sMarkedListId()
     , m_nMarkedListLevel( 0 )
     , m_oldColFrame(nullptr)
 {

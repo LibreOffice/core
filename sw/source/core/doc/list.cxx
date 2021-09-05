@@ -29,7 +29,6 @@ SwList::SwList( const OUString& sListId,
                         const SwNodes& rNodes )
     : msListId( sListId ),
       msDefaultListStyleName( rDefaultListStyle.GetName() ),
-      maListTrees(),
       mnMarkedListLevel( MAXLEVEL )
 {
     // create empty list trees for the document ranges

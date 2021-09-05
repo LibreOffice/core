@@ -63,7 +63,7 @@ SwLineNumberInfo::SwLineNumberInfo() :
 {
 }
 
-SwLineNumberInfo::SwLineNumberInfo(const SwLineNumberInfo &rCpy ) : SwClient(),
+SwLineNumberInfo::SwLineNumberInfo(const SwLineNumberInfo &rCpy ) :
     m_aType( rCpy.GetNumType() ),
     m_aDivider( rCpy.GetDivider() ),
     m_nPosFromLeft( rCpy.GetPosFromLeft() ),

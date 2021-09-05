@@ -44,9 +44,7 @@ using ::com::sun::star::accessibility::XAccessibleContext;
 SwAccessibleTextFrame::SwAccessibleTextFrame(
         std::shared_ptr<SwAccessibleMap> const& pInitMap,
         const SwFlyFrame& rFlyFrame  ) :
-    SwAccessibleFrameBase( pInitMap, AccessibleRole::TEXT_FRAME, &rFlyFrame ),
-    msTitle(),
-    msDesc()
+    SwAccessibleFrameBase( pInitMap, AccessibleRole::TEXT_FRAME, &rFlyFrame )
 {
     const SwFlyFrameFormat* pFlyFrameFormat = rFlyFrame.GetFormat();
     msTitle = pFlyFrameFormat->GetObjTitle();

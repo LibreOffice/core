@@ -22,7 +22,6 @@
 #include <swtypes.hxx>
 
 SwRegionRects::SwRegionRects( const SwRect &rStartRect, sal_uInt16 nInit ) :
-    SwRects(),
     m_aOrigin( rStartRect )
 {
     reserve(nInit);

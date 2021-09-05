@@ -323,8 +323,7 @@ const vcl::Cursor& SwVisibleCursor::GetTextCursor() const
 }
 
 SwSelPaintRects::SwSelPaintRects( const SwCursorShell& rCSh )
-    : SwRects()
-    , m_pCursorShell( &rCSh )
+    : m_pCursorShell( &rCSh )
 #if HAVE_FEATURE_DESKTOP
     , m_bShowTextInputFieldOverlay(true)
 #endif

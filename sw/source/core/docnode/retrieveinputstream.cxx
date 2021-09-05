@@ -39,8 +39,7 @@ SwAsyncRetrieveInputStreamThread::SwAsyncRetrieveInputStreamThread(
                             const SwRetrievedInputStreamDataManager::tDataKey nDataKey,
                             const OUString& rLinkedURL,
                             const OUString& rReferer )
-    : ObservableThread(),
-      mnDataKey( nDataKey ),
+    : mnDataKey( nDataKey ),
       mrLinkedURL( rLinkedURL ),
       mrReferer( rReferer )
 {

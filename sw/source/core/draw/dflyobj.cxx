@@ -163,8 +163,7 @@ namespace drawinglayer::primitive2d
             SwVirtFlyDrawObjPrimitive(
                 const SwVirtFlyDrawObj& rSwVirtFlyDrawObj,
                 const basegfx::B2DRange &rOuterRange)
-            :   BufferedDecompositionPrimitive2D(),
-                mrSwVirtFlyDrawObj(rSwVirtFlyDrawObj),
+            :   mrSwVirtFlyDrawObj(rSwVirtFlyDrawObj),
                 maOuterRange(rOuterRange)
             {
             }

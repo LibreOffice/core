@@ -24,8 +24,7 @@
     #i73788#
 */
 ThreadListener::ThreadListener( ThreadManager& rThreadListenerOwner )
-    : IFinishedThreadListener(),
-      mrThreadListenerOwner( rThreadListenerOwner )
+    : mrThreadListenerOwner( rThreadListenerOwner )
 {
 }
 

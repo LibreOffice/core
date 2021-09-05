@@ -372,7 +372,6 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
         const Reference< xml::sax::XFastAttributeList > & xAttrList,
         SwXMLTableContext *pTable ) :
     SvXMLImportContext( rImport ),
-    m_sFormula(),
     m_xMyTable( pTable ),
     m_fValue( 0.0 ),
     m_bHasValue( false ),
@@ -952,10 +951,6 @@ public:
 
 SwXMLDDETableContext_Impl::SwXMLDDETableContext_Impl(SwXMLImport& rImport) :
         SvXMLImportContext(rImport),
-        m_sConnectionName(),
-        m_sDDEApplication(),
-        m_sDDEItem(),
-        m_sDDETopic(),
         m_bIsAutomaticUpdate(false)
 {
 }

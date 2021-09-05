@@ -537,11 +537,7 @@ void IDocumentMarkAccess::DeleteFieldmarkCommand(::sw::mark::IFieldmark const& r
 namespace sw::mark
 {
     MarkManager::MarkManager(SwDoc& rDoc)
-        : m_vAllMarks()
-        , m_vBookmarks()
-        , m_vFieldmarks()
-        , m_vAnnotationMarks()
-        , m_rDoc(rDoc)
+        : m_rDoc(rDoc)
         , m_pLastActiveFieldmark(nullptr)
     { }
 
@@ -1803,7 +1799,6 @@ SaveBookmark::SaveBookmark(
     const SwIndex* pIdx)
     : m_aName(rBkmk.GetName())
     , m_bHidden(false)
-    , m_aCode()
     , m_eOrigBkmType(IDocumentMarkAccess::GetType(rBkmk))
 {
     const IBookmark* const pBookmark = dynamic_cast< const IBookmark* >(&rBkmk);

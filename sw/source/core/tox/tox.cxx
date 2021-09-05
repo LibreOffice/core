@@ -112,7 +112,6 @@ SwTOXMark::SwTOXMark(const SwTOXType* pType)
 
 SwTOXMark::SwTOXMark(const SwTOXMark& rCopy)
     : SfxPoolItem(RES_TXTATR_TOXMARK)
-    , SvtListener()
     , m_pType(rCopy.m_pType)
     , m_aPrimaryKey(rCopy.m_aPrimaryKey)
     , m_aSecondaryKey(rCopy.m_aSecondaryKey)
@@ -537,7 +536,6 @@ SwTOXBase::SwTOXBase(const SwTOXType* pTyp, const SwForm& rForm,
     , m_bFromChapter(false)
     , m_bFromObjectNames(false)
     , m_bLevelFromChapter(false)
-    , maMSTOCExpression()
     , mbKeepExpression(true)
 {
     m_aData.nOptions = SwTOIOptions::NONE;

@@ -88,9 +88,7 @@ SwXTextView::SwXTextView(SwView* pSwView) :
     SfxBaseController(pSwView),
     m_SelChangedListeners(m_aMutex),
     m_pView(pSwView),
-    m_pPropSet( aSwMapProvider.GetPropertySet( PROPERTY_MAP_TEXT_VIEW ) ),
-    mxViewSettings(),
-    mxTextViewCursor()
+    m_pPropSet( aSwMapProvider.GetPropertySet( PROPERTY_MAP_TEXT_VIEW ) )
 {
 
 }

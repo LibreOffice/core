@@ -28,8 +28,7 @@
 using namespace std;
 
 SwFrameControlsManager::SwFrameControlsManager( SwEditWin* pEditWin ) :
-    m_pEditWin( pEditWin ),
-    m_aControls( )
+    m_pEditWin( pEditWin )
 {
 }
 

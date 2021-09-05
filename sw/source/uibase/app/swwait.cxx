@@ -30,7 +30,6 @@ SwWait::SwWait(
     const bool bLockUnlockDispatcher )
     : mrDoc ( rDocShell )
     , mbLockUnlockDispatcher( bLockUnlockDispatcher )
-    , mpLockedDispatchers()
 {
     EnterWaitAndLockDispatcher();
 }

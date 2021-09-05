@@ -125,8 +125,7 @@ public:
 
     Impl(   SwXTextSection& rThis,
             SwSectionFormat* const pFormat, const bool bIndexHeader)
-        : SvtListener()
-        , m_rThis(rThis)
+        : m_rThis(rThis)
         , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_SECTION))
         , m_EventListeners(m_Mutex)
         , m_bIndexHeader(bIndexHeader)
