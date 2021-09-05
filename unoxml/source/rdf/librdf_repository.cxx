@@ -878,7 +878,6 @@ librdf_Repository::librdf_Repository(
 //    m_pWorld  (static_cast<librdf_world  *>(0), safe_librdf_free_world  ),
     , m_pStorage(static_cast<librdf_storage*>(nullptr), safe_librdf_free_storage)
     , m_pModel  (static_cast<librdf_model  *>(nullptr), safe_librdf_free_model  )
-    , m_NamedGraphs()
     , m_TypeConverter(i_xContext, *this)
 {
     OSL_ENSURE(i_xContext.is(), "librdf_Repository: null context");

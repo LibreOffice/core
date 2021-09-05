@@ -110,10 +110,6 @@ namespace ucb::ucp::ext
                       const Reference< XContentIdentifier >& i_rIdentifier )
         :Content_Base( rxContext, i_pProvider, i_rIdentifier )
         ,m_eExtContentType( E_UNKNOWN )
-        ,m_aIsFolder()
-        ,m_aContentType()
-        ,m_sExtensionId()
-        ,m_sPathIntoExtension()
     {
         const OUString sURL( getIdentifier()->getContentIdentifier() );
         if ( denotesRootContent( sURL ) )

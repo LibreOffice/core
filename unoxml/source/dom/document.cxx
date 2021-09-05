@@ -87,7 +87,6 @@ namespace DOM
         : CDocument_Base(*this, m_Mutex,
                 NodeType_DOCUMENT_NODE, reinterpret_cast<xmlNodePtr>(pDoc))
         , m_aDocPtr(pDoc)
-        , m_streamListeners()
         , m_pEventDispatcher(new events::CEventDispatcher)
     {
     }

@@ -81,7 +81,6 @@ public:
 };
 
     AnimatedImagesControl::AnimatedImagesControl()
-        :AnimatedImagesControl_Base()
     {
     }
 

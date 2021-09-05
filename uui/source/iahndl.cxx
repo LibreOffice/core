@@ -109,8 +109,7 @@ class HandleData : public osl::Condition
 public:
     explicit HandleData(
         uno::Reference< task::XInteractionRequest > const & rRequest)
-        : osl::Condition(),
-          m_rRequest(rRequest),
+        : m_rRequest(rRequest),
           bHandled( false )
     {
     }

@@ -181,8 +181,7 @@ private:
 };
 
 UnoTreeControl::UnoTreeControl()
-: UnoTreeControl_Base()
-, maSelectionListeners( *this )
+: maSelectionListeners( *this )
 , maTreeExpansionListeners( *this )
 , maTreeEditListeners( *this )
 {

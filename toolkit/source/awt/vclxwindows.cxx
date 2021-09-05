@@ -7815,7 +7815,6 @@ void SVTXNumericField::GetPropertyIds( std::vector< sal_uInt16 > &rIds )
 }
 
 SVTXDateField::SVTXDateField()
-    :VCLXDateField()
 {
 }
 

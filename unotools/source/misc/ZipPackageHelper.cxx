@@ -55,10 +55,7 @@ using ::rtl::Uri;
 ZipPackageHelper::ZipPackageHelper(
     const Reference< XComponentContext >& rxContext,
     const OUString& sPackageURL)
-: mxContext( rxContext ),
-  mxHNameAccess(),
-  mxFactory(),
-  mxRootFolder()
+: mxContext( rxContext )
 {
     // create the package zip file
     Sequence< Any > aArguments( 2 );

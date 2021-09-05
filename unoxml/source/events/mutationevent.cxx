@@ -26,8 +26,7 @@ using namespace css::xml::dom::events;
 namespace DOM::events
 {
     CMutationEvent::CMutationEvent()
-        : CMutationEvent_Base()
-        , m_attrChangeType(AttrChangeType_MODIFICATION)
+        : m_attrChangeType(AttrChangeType_MODIFICATION)
     {
     }
 
