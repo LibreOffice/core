@@ -17,38 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_OUTDEV_H
-#define INCLUDED_VCL_INC_OUTDEV_H
+#pragma once
 
-#include <set>
-#include <vector>
+#include <sal/config.h>
 
 #include <tools/gen.hxx>
+
 #include <vcl/vclptr.hxx>
 
 #include "fontinstance.hxx"
 #include "PhysicalFontFace.hxx"
 #include "impfontcache.hxx"
 
+#include <set>
+#include <vector>
+
 class Size;
 namespace vcl { class Font; }
 class VirtualDevice;
 class PhysicalFontCollection;
 enum class AddFontSubstituteFlags;
-
-// an ImplDeviceFontList is created by a PhysicalFontCollection
-// it becomes invalid when original PhysicalFontCollection is modified
-class ImplDeviceFontList
-{
-private:
-    std::vector<rtl::Reference<PhysicalFontFace>> maDevFontVector;
-
-public:
-                        ImplDeviceFontList()        { maDevFontVector.reserve(1024); }
-    void                Add( PhysicalFontFace* pFace )  { maDevFontVector.push_back( pFace ); }
-    PhysicalFontFace*   Get( int nIndex ) const     { return maDevFontVector[ nIndex ].get(); }
-    int                 Count() const               { return maDevFontVector.size(); }
-};
 
 class ImplDeviceFontSizeList
 {
@@ -139,6 +127,4 @@ struct ImplOutDevData
 
 void ImplFontSubstitute( OUString& rFontName );
 
-#endif // INCLUDED_VCL_INC_OUTDEV_H
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

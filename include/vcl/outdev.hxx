@@ -17,18 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_OUTDEV_HXX
-#define INCLUDED_VCL_OUTDEV_HXX
+#pragma once
 
+#include <sal/config.h>
+
+#include <cppuhelper/weakref.hxx>
+#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/vector/b2enums.hxx>
 #include <tools/gen.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/color.hxx>
 #include <tools/poly.hxx>
+#include <unotools/fontdefs.hxx>
+
+#include <vcl/dllapi.h>
 #include <vcl/bitmap.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/devicecoordinate.hxx>
-#include <vcl/dllapi.h>
 #include <vcl/font.hxx>
 #include <vcl/region.hxx>
 #include <vcl/rendercontext/AddFontSubstituteFlags.hxx>
@@ -44,18 +51,11 @@
 #include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/rendercontext/SalLayoutFlags.hxx>
 #include <vcl/mapmod.hxx>
-#include <vcl/wall.hxx>
 #include <vcl/metaactiontypes.hxx>
-#include <vcl/salnativewidgets.hxx>
 #include <vcl/outdevstate.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/vclreferencebase.hxx>
-
-#include <basegfx/numeric/ftools.hxx>
-#include <basegfx/vector/b2enums.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-
-#include <unotools/fontdefs.hxx>
-#include <cppuhelper/weakref.hxx>
+#include <vcl/wall.hxx>
 
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/uno/Reference.h>
@@ -69,7 +69,6 @@ class LogicalFontInstance;
 struct SystemGraphicsData;
 class ImplFontCache;
 class PhysicalFontCollection;
-class ImplDeviceFontList;
 class ImplDeviceFontSizeList;
 class ImplMultiTextLineInfo;
 class SalGraphics;
@@ -106,6 +105,7 @@ namespace vcl
     class WindowOutputDevice;
     namespace font {
         struct Feature;
+        class PhysicalFontFaceCollection;
     }
 
     namespace text {
@@ -182,7 +182,7 @@ private:
     mutable VclPtr<OutputDevice>    mpNextGraphics;     ///< Next output device in list
     GDIMetaFile*                    mpMetaFile;
     mutable rtl::Reference<LogicalFontInstance> mpFontInstance;
-    mutable std::unique_ptr<ImplDeviceFontList>     mpDeviceFontList;
+    mutable std::unique_ptr<vcl::font::PhysicalFontFaceCollection>  mpFontFaceCollection;
     mutable std::unique_ptr<ImplDeviceFontSizeList> mpDeviceFontSizeList;
     std::vector<OutDevState>        maOutDevStateStack;
     std::unique_ptr<ImplOutDevData> mpOutDevData;
@@ -1907,6 +1907,4 @@ protected:
 
 };
 
-#endif // INCLUDED_VCL_OUTDEV_HXX
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

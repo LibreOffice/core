@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <sal/types.h>
 #include <config_folders.h>
 
@@ -51,6 +53,7 @@
 
 #include <fontsubset.hxx>
 #include <outdev.h>
+#include <font/PhysicalFontFaceCollection.hxx>
 #include <PhysicalFontCollection.hxx>
 #include <PhysicalFontFace.hxx>
 #include <sft.hxx>
@@ -327,7 +330,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPattern& rFont
     }
 
     // last level fallback, check each font type face one by one
-    std::unique_ptr<ImplDeviceFontList> pTestFontList = pFontCollection->GetDeviceFontList();
+    std::unique_ptr<vcl::font::PhysicalFontFaceCollection> pTestFontList = pFontCollection->GetFontFaceCollection();
     // limit the count of fonts to be checked to prevent hangs
     static const int MAX_GFBFONT_COUNT = 600;
     int nTestFontCount = pTestFontList->Count();
@@ -1656,4 +1659,4 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
     SalGraphics::GetGlyphWidths(*aSftTTF.get(), *pFont, bVertical, rWidths, rUnicodeEnc);
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -17,13 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_PHYSICALFONTCOLLECTION_HXX
-#define INCLUDED_VCL_INC_PHYSICALFONTCOLLECTION_HXX
+#pragma once
+
+#include <sal/config.h>
 
 #include <vcl/dllapi.h>
 
 #include "fontinstance.hxx"
 #include "PhysicalFontFamily.hxx"
+
 #include <array>
 
 #define MAX_GLYPHFALLBACK 16
@@ -31,7 +33,6 @@
 class ImplDeviceFontSizeList;
 class ImplGlyphFallbackFontSubstitution;
 class ImplPreMatchFontSubstitution;
-
 
 // TODO: merge with ImplFontCache
 // TODO: rename to LogicalFontManager
@@ -66,7 +67,7 @@ public:
 
     // misc utilities
     std::shared_ptr<PhysicalFontCollection> Clone() const;
-    std::unique_ptr<ImplDeviceFontList> GetDeviceFontList() const;
+    std::unique_ptr<vcl::font::PhysicalFontFaceCollection> GetFontFaceCollection() const;
     std::unique_ptr<ImplDeviceFontSizeList> GetDeviceFontSizeList( const OUString& rFontName ) const;
 
 private:
@@ -91,6 +92,4 @@ private:
 
 };
 
-#endif // INCLUDED_VCL_INC_PHYSICALFONTCOLLECTION_HXX
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_PHYSICALFONTFAMILY_HXX
-#define INCLUDED_VCL_INC_PHYSICALFONTFAMILY_HXX
+#pragma once
+
+#include <sal/config.h>
 
 #include <vcl/dllapi.h>
 #include <vcl/outdev.hxx>
@@ -29,7 +30,7 @@
 
 #include "PhysicalFontFace.hxx"
 
-class ImplDeviceFontList;
+namespace vcl::font { class PhysicalFontFaceCollection; }
 class PhysicalFontFace;
 class PhysicalFontCollection;
 
@@ -73,7 +74,7 @@ public:
 
     PhysicalFontFace*   FindBestFontFace( const FontSelectPattern& rFSD ) const;
 
-    void                UpdateDevFontList( ImplDeviceFontList& ) const;
+    void                UpdateDevFontList( vcl::font::PhysicalFontFaceCollection& ) const;
     void                UpdateCloneFontList(PhysicalFontCollection&) const;
 
 static void             CalcType( ImplFontAttrs& rType, FontWeight& rWeight, FontWidth& rWidth,
@@ -96,6 +97,4 @@ private:
     FontWidth           meMatchWidth;       // MATCH - Width
 };
 
-#endif // INCLUDED_VCL_INC_PHYSICALFONTFAMILY_HXX
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
