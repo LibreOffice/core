@@ -2518,8 +2518,6 @@ SwFrameFormat::SwFrameFormat(
     sal_uInt16 nFormatWhich,
     const WhichRangesContainer& pWhichRange)
 :   SwFormat(rPool, pFormatNm, pWhichRange, pDrvdFrame, nFormatWhich),
-    m_wXObject(),
-    maFillAttributes(),
     m_ffList(nullptr),
     m_pOtherTextBoxFormat(nullptr)
 {
@@ -2532,8 +2530,6 @@ SwFrameFormat::SwFrameFormat(
     sal_uInt16 nFormatWhich,
     const WhichRangesContainer& pWhichRange)
 :   SwFormat(rPool, rFormatNm, pWhichRange, pDrvdFrame, nFormatWhich),
-    m_wXObject(),
-    maFillAttributes(),
     m_ffList(nullptr),
     m_pOtherTextBoxFormat(nullptr)
 {

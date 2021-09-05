@@ -80,7 +80,6 @@ SwFormat::SwFormat( SwAttrPool& rPool, const OUString& rFormatNm,
 }
 
 SwFormat::SwFormat( const SwFormat& rFormat ) :
-    sw::BorderCacheOwner(),
     m_aFormatName( rFormat.m_aFormatName ),
     m_aSet( rFormat.m_aSet ),
     m_nWhichId( rFormat.m_nWhichId ),

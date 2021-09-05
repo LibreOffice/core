@@ -36,12 +36,8 @@ using namespace ::com::sun::star;
 const std::deque< ThreadManager::tThreadData >::size_type ThreadManager::snStartedSize = 10;
 
 ThreadManager::ThreadManager( uno::Reference< util::XJobManager > const & rThreadJoiner )
-    : maMutex(),
-      mrThreadJoiner( rThreadJoiner ),
-      mpThreadListener(),
+    : mrThreadJoiner( rThreadJoiner ),
       mnThreadIDCounter( 0 ),
-      maWaitingForStartThreads(),
-      maStartedThreads(),
       maStartNewThreadIdle("SW ThreadManager StartNewThreadIdle"),
       mbStartingOfThreadsSuspended( false )
 {

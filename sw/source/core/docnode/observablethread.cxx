@@ -26,8 +26,7 @@
    #i73788#
 */
 ObservableThread::ObservableThread()
-    : mnThreadID( 0 ),
-      mpThreadListener()
+    : mnThreadID( 0 )
 {
 }
 

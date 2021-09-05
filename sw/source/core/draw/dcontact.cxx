@@ -697,7 +697,6 @@ bool CheckControlLayer( const SdrObject *pObj )
 
 SwDrawContact::SwDrawContact( SwFrameFormat* pToRegisterIn, SdrObject* pObj ) :
     SwContact( pToRegisterIn ),
-    maAnchoredDrawObj(),
     mbMasterObjCleared( false ),
     mbDisconnectInProgress( false ),
     mbUserCallActive( false ),
@@ -2217,7 +2216,6 @@ SwDrawVirtObj::SwDrawVirtObj(
     SdrObject& _rNewObj,
     SwDrawContact& _rDrawContact)
 :   SdrVirtObj(rSdrModel, _rNewObj ),
-    maAnchoredDrawObj(),
     mrDrawContact(_rDrawContact)
 {
     // #i26791#
@@ -2231,7 +2229,6 @@ SwDrawVirtObj::SwDrawVirtObj(
     SdrModel& rSdrModel,
     SwDrawVirtObj const & rSource)
 :   SdrVirtObj(rSdrModel, rSource),
-    maAnchoredDrawObj(),
     mrDrawContact(rSource.mrDrawContact)
 {
     // #i26791#

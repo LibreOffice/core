@@ -396,7 +396,6 @@ namespace sw::mark
         const vcl::KeyCode& rCode,
         const OUString& rName)
         : DdeBookmark(aPaM)
-        , ::sfx2::Metadatable()
         , m_aCode(rCode)
         , m_bHidden(false)
     {

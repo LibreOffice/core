@@ -80,7 +80,7 @@ static SwTwips lcl_CalcAutoWidth( const SwLayoutFrame& rFrame );
 
 SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch ) :
     SwLayoutFrame( pFormat, pSib ),
-    SwAnchoredObject(), // #i26791#
+     // #i26791#
     m_pPrevLink( nullptr ),
     m_pNextLink( nullptr ),
     m_bInCnt( false ),

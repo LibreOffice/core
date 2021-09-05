@@ -65,8 +65,7 @@ class SwStyleManager : public IStyleAccess
 public:
     // accept empty item set for ignorable paragraph items.
     explicit SwStyleManager(SfxItemSet const* pIgnorableParagraphItems)
-        : m_aAutoCharPool()
-        , m_aAutoParaPool(pIgnorableParagraphItems)
+        : m_aAutoParaPool(pIgnorableParagraphItems)
     {}
     virtual std::shared_ptr<SfxItemSet> getAutomaticStyle( const SfxItemSet& rSet,
                                                                IStyleAccess::SwAutoStyleFamily eFamily,

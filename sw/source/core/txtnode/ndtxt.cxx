@@ -187,7 +187,6 @@ SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
 
 SwTextNode::SwTextNode( const SwNodeIndex &rWhere, SwTextFormatColl *pTextColl, const SfxItemSet* pAutoAttr )
 :   SwContentNode( rWhere, SwNodeType::Text, pTextColl ),
-    m_Text(),
     m_pParaIdleData_Impl(nullptr),
     m_bContainsHiddenChars(false),
     m_bHiddenCharsHidePara(false),
@@ -195,10 +194,7 @@ SwTextNode::SwTextNode( const SwNodeIndex &rWhere, SwTextFormatColl *pTextColl, 
     m_bLastOutlineState( false ),
     m_bNotifiable( false ),
     mbEmptyListStyleSetDueToSetOutlineLevelAttr( false ),
-    mbInSetOrResetAttr( false ),
-    m_pNumStringCache(),
-    m_wXParagraph(),
-    maFillAttributes()
+    mbInSetOrResetAttr( false )
 {
     InitSwParaStatistics( true );
 

@@ -95,7 +95,6 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL, const OUString& rFilterOpt
     : m_pNumRuleInfo(new SwHTMLNumRuleInfo)
     , m_nHTMLMode(0)
     , m_eCSS1Unit(FieldUnit::NONE)
-    , mxFormComps()
     , m_pStartNdIdx(nullptr)
     , m_pCurrPageDesc(nullptr)
     , m_pFormatFootnote(nullptr)

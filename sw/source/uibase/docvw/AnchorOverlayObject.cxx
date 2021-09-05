@@ -64,8 +64,7 @@ public:
                      const basegfx::BColor& rColor,
                      double fDiscreteLineWidth,
                      bool bLineSolid )
-    :   drawinglayer::primitive2d::DiscreteMetricDependentPrimitive2D(),
-        maTriangle(rTriangle),
+    :   maTriangle(rTriangle),
         maLine(rLine),
         maLineTop(rLineTop),
         maAnchorState(aAnchorState),
@@ -229,9 +228,6 @@ AnchorOverlayObject::AnchorOverlayObject( const basegfx::B2DPoint& rBasePos,
     , maFifthPosition(rFifthPos)
     , maSixthPosition(rSixthPos)
     , maSeventhPosition(rSeventhPos)
-    , maTriangle()
-    , maLine()
-    , maLineTop()
     , mAnchorState(AnchorState::All)
     , mbLineSolid(false)
 {

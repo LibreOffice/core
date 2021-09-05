@@ -72,8 +72,6 @@ SwAnchoredObject::SwAnchoredObject() :
     mpAnchorFrame( nullptr ),
     // --> #i28701#
     mpPageFrame( nullptr ),
-    maRelPos(),
-    maLastCharRect(),
     mnLastTopOfLine( 0 ),
     mpVertPosOrientFrame( nullptr ),
     // --> #i28701#
@@ -87,10 +85,7 @@ SwAnchoredObject::SwAnchoredObject() :
     mbClearedEnvironment( false ),
     // --> #i3317#
     mbTmpConsiderWrapInfluence( false ),
-    // --> #i68520#
-    maObjRectWithSpaces(),
-    mbObjRectWithSpacesValid( false ),
-    maLastObjRect()
+    mbObjRectWithSpacesValid( false )
 {
 }
 

@@ -48,8 +48,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
 
 SwView_Impl::SwView_Impl(SwView* pShell)
-    : mxXTextView()
-    , pView(pShell)
+    : pView(pShell)
     , eShellMode(ShellMode::Text)
     , m_nParam(0)
     , m_bSelectObject(false)

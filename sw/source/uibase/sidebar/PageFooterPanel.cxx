@@ -59,7 +59,6 @@ PageFooterPanel::PageFooterPanel(
     maFooterSpacingController(SID_ATTR_PAGE_FOOTER_SPACING, *pBindings, *this),
     maFooterLayoutController(SID_ATTR_PAGE_FOOTER_LAYOUT, *pBindings, *this),
     meFUnit(GetModuleFieldUnit()),
-    aCustomEntry(),
     mpFooterItem( new SfxBoolItem(SID_ATTR_PAGE_FOOTER) ),
     mpFooterLRMarginItem( new SvxLongLRSpaceItem(0, 0, SID_ATTR_PAGE_FOOTER_LRMARGIN)),
     mpFooterSpacingItem( new SvxLongULSpaceItem(0, 0, SID_ATTR_PAGE_FOOTER_SPACING)),

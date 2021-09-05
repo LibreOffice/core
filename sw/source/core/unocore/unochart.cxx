@@ -1820,7 +1820,6 @@ SwChartDataSequence::SwChartDataSequence(
 
 SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
     SwChartDataSequenceBaseClass(rObj),
-    SvtListener(),
     m_pFormat( rObj.m_pFormat ),
     m_aEvtListeners( GetChartMutex() ),
     m_aModifyListeners( GetChartMutex() ),

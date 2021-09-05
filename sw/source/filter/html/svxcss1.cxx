@@ -696,7 +696,6 @@ void SvxCSS1Parser::SelectorParsed( std::unique_ptr<CSS1Selector> pSelector, boo
 
 SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL,
                               sal_uInt16 const *pWhichIds, sal_uInt16 nWhichIds ) :
-    CSS1Parser(),
     m_sBaseURL( rBaseURL ),
     m_pItemSet(nullptr),
     m_pPropInfo( nullptr ),

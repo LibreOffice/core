@@ -4814,8 +4814,7 @@ namespace drawinglayer::primitive2d
             const svx::frame::Style& rStyleRight,
             const svx::frame::Style& rStyleBottom,
             const svx::frame::Style& rStyleLeft)
-        :   BufferedDecompositionPrimitive2D(),
-            maB2DHomMatrix(rB2DHomMatrix),
+        :   maB2DHomMatrix(rB2DHomMatrix),
             maStyleTop(rStyleTop),
             maStyleRight(rStyleRight),
             maStyleBottom(rStyleBottom),

@@ -328,7 +328,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
  * The base class is initialized without setting anything
  */
 SwTabPortion::SwTabPortion( const sal_uInt16 nTabPosition, const sal_Unicode cFillChar, const bool bAutoTab )
-    : SwFixPortion(), m_nTabPos(nTabPosition), m_cFill(cFillChar), m_bAutoTabStop( bAutoTab )
+    : m_nTabPos(nTabPosition), m_cFill(cFillChar), m_bAutoTabStop( bAutoTab )
 {
     mnLineLength = TextFrameIndex(1);
     OSL_ENSURE(!IsFilled() || ' ' != m_cFill, "SwTabPortion::CTOR: blanks ?!");

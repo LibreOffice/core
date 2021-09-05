@@ -64,16 +64,9 @@ static size_t FindLastBreak(const std::vector<T>& rPositions, T nValue);
 SwAccessiblePortionData::SwAccessiblePortionData(
     const SwTextFrame *const pTextFrame,
     const SwViewOption* pViewOpt ) :
-    SwPortionHandler(),
     m_pTextFrame(pTextFrame),
-    m_aBuffer(),
     m_nViewPosition( 0 ),
     m_pViewOptions( pViewOpt ),
-    m_sAccessibleString(),
-    m_aLineBreaks(),
-    m_aAccessiblePositions(),
-    m_aFieldPosition(),
-    m_aPortionAttrs(),
     m_nBeforePortions( 0 ),
     m_bFinished( false )
 {

@@ -1453,7 +1453,6 @@ bool SwTable::IsTableComplex() const
 SwTableLine::SwTableLine( SwTableLineFormat *pFormat, sal_uInt16 nBoxes,
                             SwTableBox *pUp )
     : SwClient( pFormat ),
-    m_aBoxes(),
     m_pUpper( pUp )
 {
     m_aBoxes.reserve( nBoxes );
