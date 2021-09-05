@@ -49,7 +49,6 @@ SalFrameGeometry SalFrame::GetGeometry() const
 
 SalGraphics::SalGraphics()
 :   m_nLayout( SalLayoutFlags::NONE ),
-    m_aLastMirror(),
     m_aLastMirrorW(0),
     m_nLastMirrorDeviceLTRButBiDiRtlTranslate(0),
     m_bLastMirrorDeviceLTRButBiDiRtlSet(false),

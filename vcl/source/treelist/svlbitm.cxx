@@ -333,8 +333,7 @@ SvLBoxButton::SvLBoxButton( SvLBoxButtonData* pBData )
 }
 
 SvLBoxButton::SvLBoxButton()
-    : SvLBoxItem()
-    , isVis(false)
+    : isVis(false)
     , pData(nullptr)
     , nItemFlags(SvItemStateFlags::NONE)
 {
@@ -472,8 +471,7 @@ SvLBoxContextBmp::SvLBoxContextBmp(const Image& aBmp1, const Image& aBmp2,
 }
 
 SvLBoxContextBmp::SvLBoxContextBmp()
-    :SvLBoxItem( )
-    ,m_pImpl( new SvLBoxContextBmp_Impl )
+    : m_pImpl( new SvLBoxContextBmp_Impl )
 {
     m_pImpl->m_bExpanded = false;
 }

@@ -43,7 +43,7 @@ Hatch::Hatch() = default;
 Hatch::Hatch( const Hatch& ) = default;
 
 Hatch::Hatch( HatchStyle eStyle, const Color& rColor,
-              tools::Long nDistance, Degree10 nAngle10 ) : mpImplHatch()
+              tools::Long nDistance, Degree10 nAngle10 )
 {
     mpImplHatch->maColor = rColor;
     mpImplHatch->meStyle = eStyle;

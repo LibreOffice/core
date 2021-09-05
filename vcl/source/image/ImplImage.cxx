@@ -37,7 +37,6 @@ ImplImage::ImplImage(const BitmapEx &rBitmapEx)
 
 ImplImage::ImplImage(const OUString &aStockName)
     : maBitmapChecksum(0)
-    , maSizePixel() // defer size lookup
     , maStockName(aStockName)
 {
 }

@@ -64,20 +64,20 @@ Font::Font( vcl::Font&& rFont ) noexcept : mpImplFont( std::move(rFont.mpImplFon
 {
 }
 
-Font::Font( const OUString& rFamilyName, const Size& rSize ) : mpImplFont()
+Font::Font( const OUString& rFamilyName, const Size& rSize )
 {
     mpImplFont->SetFamilyName( rFamilyName );
     mpImplFont->SetFontSize( rSize );
 }
 
-Font::Font( const OUString& rFamilyName, const OUString& rStyleName, const Size& rSize ) : mpImplFont()
+Font::Font( const OUString& rFamilyName, const OUString& rStyleName, const Size& rSize )
 {
     mpImplFont->SetFamilyName( rFamilyName );
     mpImplFont->SetStyleName( rStyleName );
     mpImplFont->SetFontSize( rSize );
 }
 
-Font::Font( FontFamily eFamily, const Size& rSize ) : mpImplFont()
+Font::Font( FontFamily eFamily, const Size& rSize )
 {
     mpImplFont->SetFamilyType( eFamily );
     mpImplFont->SetFontSize( rSize );

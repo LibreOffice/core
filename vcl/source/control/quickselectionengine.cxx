@@ -39,9 +39,6 @@ namespace vcl
 
         explicit QuickSelectionEngine_Data( ISearchableStringList& _entryList )
             :rEntryList( _entryList )
-            ,sCurrentSearchString()
-            ,aSingleSearchChar()
-            ,aSearchTimeout()
         {
             aSearchTimeout.SetTimeout( 2500 );
             aSearchTimeout.SetInvokeHandler( LINK( this, QuickSelectionEngine_Data, SearchStringTimeout ) );

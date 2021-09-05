@@ -35,7 +35,7 @@ SalSystem *GtkInstance::CreateSalSystem()
     return GtkSalSystem::GetSingleton();
 }
 
-GtkSalSystem::GtkSalSystem() : SalGenericSystem()
+GtkSalSystem::GtkSalSystem()
 {
     mpDisplay = gdk_display_get_default();
 #if !GTK_CHECK_VERSION(4, 0, 0)

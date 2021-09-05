@@ -67,9 +67,6 @@ struct CIEXYZTriple
     CIEXYZ          aXyzBlue;
 
     CIEXYZTriple()
-    :   aXyzRed(),
-        aXyzGreen(),
-        aXyzBlue()
     {}
 };
 
@@ -119,13 +116,11 @@ struct DIBV5Header : public DIBInfoHeader
     sal_uInt32      nV5Reserved;
 
     DIBV5Header()
-    :   DIBInfoHeader(),
-        nV5RedMask(0),
+    :   nV5RedMask(0),
         nV5GreenMask(0),
         nV5BlueMask(0),
         nV5AlphaMask(0),
         nV5CSType(0),
-        aV5Endpoints(),
         nV5GammaRed(0),
         nV5GammaGreen(0),
         nV5GammaBlue(0),

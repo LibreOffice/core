@@ -28,7 +28,7 @@
 
 struct ImplTileInfo
 {
-    ImplTileInfo() : aTileTopLeft(), aNextTileTopLeft(), aTileSizePixel(), nTilesEmptyX(0), nTilesEmptyY(0) {}
+    ImplTileInfo() : nTilesEmptyX(0), nTilesEmptyY(0) {}
 
     Point aTileTopLeft;     // top, left position of the rendered tile
     Point aNextTileTopLeft; // top, left position for next recursion

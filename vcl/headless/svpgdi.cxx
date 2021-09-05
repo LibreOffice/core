@@ -357,8 +357,7 @@ namespace
 
     public:
         explicit SurfaceHelper()
-        :   pSurface(nullptr),
-            maDownscaled()
+        :   pSurface(nullptr)
         {
         }
         ~SurfaceHelper()
@@ -398,11 +397,9 @@ namespace
         explicit BitmapHelper(
             const SalBitmap& rSourceBitmap,
             const bool bForceARGB32 = false)
-        :   SurfaceHelper(),
 #ifdef HAVE_CAIRO_FORMAT_RGB24_888
-            m_bForceARGB32(bForceARGB32),
+            : m_bForceARGB32(bForceARGB32)
 #endif
-            aTmpBmp()
         {
             const SvpSalBitmap& rSrcBmp = static_cast<const SvpSalBitmap&>(rSourceBitmap);
 #ifdef HAVE_CAIRO_FORMAT_RGB24_888
@@ -513,8 +510,6 @@ namespace
 
     public:
         explicit MaskHelper(const SalBitmap& rAlphaBitmap)
-        :   SurfaceHelper(),
-            pAlphaBits()
         {
             const SvpSalBitmap& rMask = static_cast<const SvpSalBitmap&>(rAlphaBitmap);
             const BitmapBuffer* pMaskBuf = rMask.GetBuffer();
@@ -1417,8 +1412,7 @@ SystemDependentData_CairoPath::SystemDependentData_CairoPath(
 :   basegfx::SystemDependentData(rSystemDependentDataManager),
     mpCairoPath(nullptr),
     mbNoJoin(bNoJoin),
-    mbAntiAlias(bAntiAlias),
-    maStroke()
+    mbAntiAlias(bAntiAlias)
 {
     // tdf#129845 only create a copy of the path when nSizeMeasure is
     // bigger than some decent threshold

@@ -315,9 +315,6 @@ VectorGraphicData::VectorGraphicData(
     sal_Int32 nPageIndex)
 :   maDataContainer(rDataContainer),
     mbSequenceCreated(false),
-    maRange(),
-    maSequence(),
-    maReplacement(),
     mNestedBitmapSize(0),
     meType(eVectorDataType),
     mnPageIndex(nPageIndex)
@@ -328,9 +325,6 @@ VectorGraphicData::VectorGraphicData(
     const OUString& rPath,
     VectorGraphicDataType eVectorDataType)
 :   mbSequenceCreated(false),
-    maRange(),
-    maSequence(),
-    maReplacement(),
     mNestedBitmapSize(0),
     meType(eVectorDataType),
     mnPageIndex(-1)

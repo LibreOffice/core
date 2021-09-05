@@ -97,11 +97,7 @@ void VclCanvasBitmap::setComponentInfo( sal_uInt32 redShift, sal_uInt32 greenShi
 VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
     m_aBmpEx( rBitmap ),
     m_aBitmap( rBitmap.GetBitmap() ),
-    m_aAlpha(),
     m_pBmpAcc( m_aBitmap ),
-    m_aComponentTags(),
-    m_aComponentBitCounts(),
-    m_aLayout(),
     m_nBitsPerInputPixel(0),
     m_nBitsPerOutputPixel(0),
     m_nRedIndex(-1),

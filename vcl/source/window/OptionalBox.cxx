@@ -27,7 +27,6 @@
 
 OptionalBox::OptionalBox(vcl::Window* pParent)
     : VclHBox(pParent)
-    , IPrioritable()
     , m_bInFullView(true)
 {
 }

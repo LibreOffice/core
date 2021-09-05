@@ -95,7 +95,6 @@ void TabPage::ImplInitSettings()
 
 TabPage::TabPage( vcl::Window* pParent, WinBits nStyle ) :
     Window( WindowType::TABPAGE )
-    , IContext()
 {
     ImplInit( pParent, nStyle );
 }

@@ -36,8 +36,7 @@ using namespace com::sun::star;
 
 namespace unographic {
 
-Graphic::Graphic() :
-    maGraphic()
+Graphic::Graphic()
 {
 }
 

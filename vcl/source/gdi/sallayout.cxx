@@ -585,8 +585,7 @@ void GenericSalLayout::Simplify( bool bIsBase )
 }
 
 MultiSalLayout::MultiSalLayout( std::unique_ptr<SalLayout> pBaseLayout )
-:   SalLayout()
-,   mnLevel( 1 )
+:   mnLevel( 1 )
 ,   mbIncomplete( false )
 {
     assert(dynamic_cast<GenericSalLayout*>(pBaseLayout.get()));
