@@ -159,6 +159,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ff3c015_6e13cc34",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2064,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-05T14:32:17Z",
+      "side": 1,
+      "message": "\u003e SvtSysLocale is perfect\n\nI believe I had (have?) doubts because of tdf#132145 and the similar, where the existence of alternative ways to obtain the same info result in inconsistent behavior, because of different caching strategies (or maybe the underlying problem is more complex - I admit I never tried to dig too deep there). Not telling that I disagree; just wanted to share the reason of my initial doubts.",
+      "parentUuid": "1b34c84c_874e9827",
+      "revId": "38f28f3324d6ea7c475421b68493d1676a38b38c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5118d7aa_361cbb7b",
