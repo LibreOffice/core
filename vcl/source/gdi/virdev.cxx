@@ -24,6 +24,7 @@
 #include <vcl/virdev.hxx>
 
 #include <outdev.h>
+#include <font/PhysicalFontFaceCollection.hxx>
 #include <PhysicalFontCollection.hxx>
 #include <salinst.hxx>
 #include <salgdi.hxx>
