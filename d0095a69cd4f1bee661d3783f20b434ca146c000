@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9da86f03_e2c8fc5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-05T03:49:35Z",
+      "side": 1,
+      "message": "Renamed class to more informative name, I have written a unit test for it also.",
+      "revId": "d0095a69cd4f1bee661d3783f20b434ca146c000",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
