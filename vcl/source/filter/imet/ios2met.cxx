@@ -1009,7 +1009,7 @@ void OS2METReader::ReadBitBlt()
 void OS2METReader::ReadChrStr(bool bGivenPos, bool bMove, bool bExtra, sal_uInt16 nOrderLen)
 {
     Point aP0;
-    sal_uInt16 i, nLen;
+    sal_uInt16 nLen;
     OSFont * pF;
     vcl::Font aFont;
     Size aSize;
@@ -1043,10 +1043,10 @@ void OS2METReader::ReadChrStr(bool bGivenPos, bool bMove, bool bExtra, sal_uInt1
         else
             nLen = nOrderLen-4;
     }
-    if (nLen > pOS2MET->remainingSize())
+    if (!pOS2MET->good() || nLen > pOS2MET->remainingSize())
         throw css::uno::Exception("attempt to read past end of input", nullptr);
     std::unique_ptr<char[]> pChr(new char[nLen+1]);
-    for (i=0; i<nLen; i++)
+    for (sal_uInt16 i=0; i<nLen; i++)
         pOS2MET->ReadChar( pChr[i] );
     pChr[nLen] = 0;
     OUString aStr( pChr.get(), strlen(pChr.get()), osl_getThreadTextEncoding() );
