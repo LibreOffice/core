@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08ad273d_62718857",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-05T15:32:51Z",
+      "side": 1,
+      "message": "Thanks!\nLet\u0027s have Jenkins happy, and merge it :)",
+      "revId": "8a1b6e33051683166350c857666b90fef02eb112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

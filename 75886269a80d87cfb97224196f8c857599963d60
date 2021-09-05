@@ -88,6 +88,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e3b0baf_147f38fc",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-05T15:32:51Z",
+      "side": 1,
+      "message": "No, please don\u0027t change the lines that you don\u0027t touch for the sake of this functional patch. It should only change what is necessary, to simplify review and, if needed, fixing regressions.\n\nBut you are welcome to come with separate follow-up change(s) if you like, that would focus on modernizing code.",
+      "parentUuid": "db52488b_7c2524ea",
+      "revId": "75886269a80d87cfb97224196f8c857599963d60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0aa30ed7_7f560ad0",
