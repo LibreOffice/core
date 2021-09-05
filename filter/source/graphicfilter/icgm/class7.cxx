@@ -89,7 +89,7 @@ void CGM::ImplDoClass7()
                     break;
                     case 0x2BE : /*AppData - SHWSLIDEREC*/
                     {
-                        if (mpEndValidSource - pAppData < 16)
+                        if (mpEndValidSource - pAppData < 17)
                             throw css::uno::Exception("attempt to read past end of input", nullptr);
 
                         if ( pAppData[ 16 ] == 0 )      // a blank template ?
