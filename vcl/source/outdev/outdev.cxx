@@ -18,23 +18,23 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
+#include <sal/log.hxx>
 #include <tools/debug.hxx>
-#include <vcl/gdimtf.hxx>
-#include <vcl/graph.hxx>
-#include <vcl/metaact.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/toolkit/unowrap.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/sysdata.hxx>
-#include <vcl/lazydelete.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <salgdi.hxx>
-#include <window.h>
+#include <vcl/graph.hxx>
+#include <vcl/lazydelete.hxx>
+#include <vcl/metaact.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/sysdata.hxx>
+#include <vcl/toolkit/unowrap.hxx>
+#include <vcl/virdev.hxx>
+
 #include <outdev.h>
+#include <window.h>
+#include <font/PhysicalFontFaceCollection.hxx>
+#include <salgdi.hxx>
 
 #include <com/sun/star/awt/DeviceCapability.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -68,7 +68,7 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
     mpNextGraphics                  = nullptr;
     mpMetaFile                      = nullptr;
     mpFontInstance                     = nullptr;
-    mpDeviceFontList                = nullptr;
+    mpFontFaceCollection                = nullptr;
     mpDeviceFontSizeList            = nullptr;
     mpAlphaVDev                     = nullptr;
     mpExtOutDevData                 = nullptr;
@@ -169,7 +169,7 @@ void OutputDevice::dispose()
     mpFontInstance.clear();
 
     // remove cached results of GetDevFontList/GetDevSizeList
-    mpDeviceFontList.reset();
+    mpFontFaceCollection.reset();
     mpDeviceFontSizeList.reset();
 
     // release ImplFontCache specific to this OutputDevice
@@ -870,4 +870,4 @@ void OutputDevice::ImplDisposeCanvas()
     }
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

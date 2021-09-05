@@ -7,22 +7,27 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <memory>
+#include <sal/config.h>
+
 #include <config_folders.h>
 #include <config_eot.h>
 
+#include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
-#include <sal/log.hxx>
+
 #include <vcl/svapp.hxx>
 #include <vcl/embeddedfontshelper.hxx>
-#include <com/sun/star/io/XInputStream.hpp>
 
 #include <outdev.h>
+#include <font/PhysicalFontFaceCollection.hxx>
 #include <PhysicalFontCollection.hxx>
 #include <salgdi.hxx>
 #include <sft.hxx>
 
+#include <com/sun/star/io/XInputStream.hpp>
+
+#include <memory>
 
 #if ENABLE_EOT
 extern "C"
@@ -256,7 +261,7 @@ OUString EmbeddedFontsHelper::fontFileUrl( std::u16string_view familyName, FontF
     SalGraphics* graphics = Application::GetDefaultDevice()->GetGraphics();
     PhysicalFontCollection fonts;
     graphics->GetDevFontList( &fonts );
-    std::unique_ptr< ImplDeviceFontList > fontInfo( fonts.GetDeviceFontList());
+    std::unique_ptr< vcl::font::PhysicalFontFaceCollection > fontInfo( fonts.GetFontFaceCollection());
     PhysicalFontFace* selected = nullptr;
     for( int i = 0;
          i < fontInfo->Count();
@@ -329,4 +334,4 @@ OUString EmbeddedFontsHelper::fontFileUrl( std::u16string_view familyName, FontF
     return ok ? url : "";
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
