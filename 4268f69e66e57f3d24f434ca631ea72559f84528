@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7d27b95_8fab6e52",
+        "filename": "basic/qa/vba_tests/collection.vb",
+        "patchSetId": 10
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-05T19:08:17Z",
+      "side": 1,
+      "message": "You likely wanted to have\n\n  \"a.Item(\"\"D\"\")\"\n\n(outer quotes missing)",
+      "range": {
+        "startLine": 51,
+        "startChar": 41,
+        "endLine": 51,
+        "endChar": 54
+      },
+      "revId": "4268f69e66e57f3d24f434ca631ea72559f84528",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
