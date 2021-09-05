@@ -33,7 +33,6 @@ struct ThemeTable_Impl
 {
     ThemeTable_Impl() :
         m_currentThemeFontId(0),
-        m_currentFontThemeEntry(),
         m_supplementalFontId(0)
         {}
     std::map<sal_uInt32, std::map<sal_uInt32, OUString> > m_themeFontMap;

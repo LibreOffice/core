@@ -303,7 +303,6 @@ struct SettingsTable_Impl
     , m_bDoNotExpandShiftReturn(false)
     , m_bProtectForm(false)
     , m_bRedlineProtection(false)
-    , m_sRedlineProtectionKey()
     , m_bReadOnly(false)
     , m_bDisplayBackgroundShape(false)
     , m_sDecimalSymbol(".")

@@ -296,10 +296,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bTextInserted(false),
         m_sCurrentPermId(0),
         m_bFrameDirectionSet(false),
-        m_pLastSectionContext( ),
-        m_pLastCharacterContext(),
-        m_sCurrentParaStyleName(),
-        m_sDefaultParaStyleName(),
         m_bInDocDefaultsImport(false),
         m_bInStyleSheetImport( false ),
         m_bInNumberingImport(false),
@@ -332,9 +328,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bSdt(false),
         m_bIsFirstRun(false),
         m_bIsOutsideAParagraph(true),
-        m_xAnnotationField(),
         m_nAnnotationId( -1 ),
-        m_aAnnotationPositions(),
         m_aSmartTagHandler(m_xComponentContext, m_xTextDocument),
         m_xInsertTextRange(rMediaDesc.getUnpackedValueOrDefault("TextInsertModeRange", uno::Reference<text::XTextRange>())),
         m_xAltChunkStartingRange(rMediaDesc.getUnpackedValueOrDefault("AltChunkStartingRange", uno::Reference<text::XTextRange>())),
@@ -350,7 +344,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIgnoreNextTab(false),
         m_bIsSplitPara(false),
         m_bIsActualParagraphFramed( false ),
-        m_vTextFramesForChaining(),
         m_bParaHadField(false),
         m_bSaveParaHadField(false),
         m_bParaAutoBefore(false),
@@ -358,7 +351,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bSaveFirstParagraphInCell(false),
         m_bParaWithInlineObject(false),
         m_bSaxError(false)
-
 {
     m_aBaseUrl = rMediaDesc.getUnpackedValueOrDefault(
         utl::MediaDescriptor::PROP_DOCUMENTBASEURL(), OUString());

@@ -402,7 +402,7 @@ const OUString& AbstractListDef::MapListId(OUString const& rId)
 
 //----------------------------------------------  ListDef implementation
 
-ListDef::ListDef( ) : AbstractListDef( )
+ListDef::ListDef( )
 {
 }
 

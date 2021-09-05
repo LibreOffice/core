@@ -173,7 +173,7 @@ void OOXMLEmbeddedFontHandler::sprm(Sprm & /*sprm*/)
   class OOXMLFooterHandler
  */
 OOXMLFooterHandler::OOXMLFooterHandler(OOXMLFastContextHandler * pContext)
-    : mpFastContext(pContext), msStreamId(), mnType(0)
+    : mpFastContext(pContext), mnType(0)
 {
 }
 
@@ -205,7 +205,7 @@ void OOXMLFooterHandler::sprm(Sprm & /*sprm*/)
   class OOXMLHeaderHandler
  */
 OOXMLHeaderHandler::OOXMLHeaderHandler(OOXMLFastContextHandler * pContext)
-    : mpFastContext(pContext), msStreamId(), mnType(0)
+    : mpFastContext(pContext), mnType(0)
 {
 }
 
