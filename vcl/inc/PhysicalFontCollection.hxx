@@ -21,8 +21,6 @@
 
 #include <sal/config.h>
 
-#include <sal/config.h>
-
 #include <vcl/dllapi.h>
 
 #include "PhysicalFontFamily.hxx"
@@ -35,7 +33,6 @@
 class ImplDeviceFontSizeList;
 class ImplGlyphFallbackFontSubstitution;
 class ImplPreMatchFontSubstitution;
-
 
 // TODO: merge with ImplFontCache
 // TODO: rename to LogicalFontManager
@@ -70,7 +67,7 @@ public:
 
     // misc utilities
     std::shared_ptr<PhysicalFontCollection> Clone() const;
-    std::unique_ptr<ImplDeviceFontList> GetDeviceFontList() const;
+    std::unique_ptr<vcl::font::PhysicalFontFaceCollection> GetFontFaceCollection() const;
     std::unique_ptr<ImplDeviceFontSizeList> GetDeviceFontSizeList( const OUString& rFontName ) const;
 
 private:

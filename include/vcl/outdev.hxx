@@ -21,8 +21,6 @@
 
 #include <sal/config.h>
 
-#include <sal/config.h>
-
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/vector/b2enums.hxx>
@@ -71,7 +69,6 @@ class LogicalFontInstance;
 struct SystemGraphicsData;
 class ImplFontCache;
 class PhysicalFontCollection;
-class ImplDeviceFontList;
 class ImplDeviceFontSizeList;
 class ImplMultiTextLineInfo;
 class SalGraphics;
@@ -108,6 +105,7 @@ namespace vcl
     class WindowOutputDevice;
     namespace font {
         struct Feature;
+        class PhysicalFontFaceCollection;
     }
 
     namespace text {
@@ -184,7 +182,7 @@ private:
     mutable VclPtr<OutputDevice>    mpNextGraphics;     ///< Next output device in list
     GDIMetaFile*                    mpMetaFile;
     mutable rtl::Reference<LogicalFontInstance> mpFontInstance;
-    mutable std::unique_ptr<ImplDeviceFontList>     mpDeviceFontList;
+    mutable std::unique_ptr<vcl::font::PhysicalFontFaceCollection>  mpFontFaceCollection;
     mutable std::unique_ptr<ImplDeviceFontSizeList> mpDeviceFontSizeList;
     std::vector<OutDevState>        maOutDevStateStack;
     std::unique_ptr<ImplOutDevData> mpOutDevData;
