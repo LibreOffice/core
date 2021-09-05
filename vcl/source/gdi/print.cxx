@@ -30,6 +30,7 @@
 
 #include <comphelper/processfactory.hxx>
 
+#include <font/PhysicalFontFaceCollection.hxx>
 #include <salinst.hxx>
 #include <salvd.hxx>
 #include <salgdi.hxx>

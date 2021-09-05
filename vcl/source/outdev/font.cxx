@@ -35,6 +35,7 @@
 #include <outdev.h>
 #include <window.h>
 
+#include <font/PhysicalFontFaceCollection.hxx>
 #include <PhysicalFontCollection.hxx>
 #include <drawmode.hxx>
 #include <font/FeatureCollector.hxx>

@@ -32,6 +32,7 @@
 #include <vcl/lazydelete.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <font/PhysicalFontFaceCollection.hxx>
 #include <salgdi.hxx>
 #include <window.h>
 #include <outdev.h>
