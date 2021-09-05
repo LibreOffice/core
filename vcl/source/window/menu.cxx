@@ -2399,8 +2399,7 @@ MenuBarWindow* MenuBar::getMenuBarWindow()
 }
 
 MenuBar::MenuBar()
-    : Menu(),
-      mbCloseBtnVisible(false),
+    : mbCloseBtnVisible(false),
       mbFloatBtnVisible(false),
       mbHideBtnVisible(false),
       mbDisplayable(true)
@@ -2409,8 +2408,7 @@ MenuBar::MenuBar()
 }
 
 MenuBar::MenuBar( const MenuBar& rMenu )
-    : Menu(),
-      mbCloseBtnVisible(false),
+    : mbCloseBtnVisible(false),
       mbFloatBtnVisible(false),
       mbHideBtnVisible(false),
       mbDisplayable(true)
@@ -2706,7 +2704,6 @@ PopupMenu::PopupMenu()
 }
 
 PopupMenu::PopupMenu( const PopupMenu& rMenu )
-    : Menu()
 {
     mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(false, this);
     *this = rMenu;

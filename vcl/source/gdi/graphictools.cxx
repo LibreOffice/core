@@ -29,15 +29,11 @@ SvtGraphicFill::Transform::Transform()
 }
 
 SvtGraphicStroke::SvtGraphicStroke() :
-    maPath(),
-    maStartArrow(),
-    maEndArrow(),
     mfTransparency(),
     mfStrokeWidth(),
     maCapType(),
     maJoinType(),
-    mfMiterLimit( 3.0 ),
-    maDashArray()
+    mfMiterLimit( 3.0 )
 {
 }
 
@@ -161,20 +157,17 @@ SvStream& ReadSvtGraphicStroke( SvStream& rIStm, SvtGraphicStroke& rClass )
 }
 
 SvtGraphicFill::SvtGraphicFill() :
-    maPath(),
     maFillColor( COL_BLACK ),
     mfTransparency(),
     maFillRule(),
     maFillType(),
-    maFillTransform(),
     mbTiling( false ),
     maHatchType(),
     maHatchColor( COL_BLACK ),
     maGradientType(),
     maGradient1stColor( COL_BLACK ),
     maGradient2ndColor( COL_BLACK ),
-    maGradientStepCount( gradientStepsInfinite ),
-    maFillGraphic()
+    maGradientStepCount( gradientStepsInfinite )
 {
 }
 

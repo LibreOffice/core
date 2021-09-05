@@ -53,7 +53,7 @@ inline bool ImplLineInfo::operator==( const ImplLineInfo& rB ) const
 }
 
 
-LineInfo::LineInfo( LineStyle eStyle, double nWidth ) : mpImplLineInfo()
+LineInfo::LineInfo( LineStyle eStyle, double nWidth )
 {
     mpImplLineInfo->meStyle = eStyle;
     mpImplLineInfo->mnWidth = nWidth;

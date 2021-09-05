@@ -93,8 +93,8 @@ public:
     rtl::Reference<VclStatusListener<Button>> mpStatusListener;
 };
 
-ImplCommonButtonData::ImplCommonButtonData() : maFocusRect(), mnSeparatorX(0), mnButtonState(DrawButtonFlags::NONE),
-mbSmallSymbol(false), mbGeneratedTooltip(false), maImage(), meImageAlign(ImageAlign::Top), meSymbolAlign(SymbolAlign::LEFT), maCustomContentImage()
+ImplCommonButtonData::ImplCommonButtonData() :  mnSeparatorX(0), mnButtonState(DrawButtonFlags::NONE),
+mbSmallSymbol(false), mbGeneratedTooltip(false),  meImageAlign(ImageAlign::Top), meSymbolAlign(SymbolAlign::LEFT)
 {
 }
 

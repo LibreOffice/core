@@ -25,8 +25,7 @@
 #include <QtWidgets/QWidget>
 
 Qt5SvpGraphics::Qt5SvpGraphics(Qt5Frame* pFrame)
-    : SvpSalGraphics()
-    , m_pFrame(pFrame)
+    : m_pFrame(pFrame)
 {
     if (!Qt5Data::noNativeControls())
         m_pWidgetDraw.reset(new Qt5Graphics_Controls(*this));

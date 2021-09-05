@@ -68,7 +68,6 @@ X11SalGraphics::X11SalGraphics():
     m_aXRenderPicture(0),
     mpClipRegion(nullptr),
 #if ENABLE_CAIRO_CANVAS
-    maClipRegion(),
     mnPenColor(SALCOLOR_NONE),
     mnFillColor(SALCOLOR_NONE),
 #endif // ENABLE_CAIRO_CANVAS

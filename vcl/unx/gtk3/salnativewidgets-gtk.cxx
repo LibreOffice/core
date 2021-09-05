@@ -2823,8 +2823,7 @@ void GtkSalData::deInitNWF()
 }
 
 GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
-    : SvpSalGraphics(),
-      mpFrame( pFrame ),
+    : mpFrame( pFrame ),
       mpWindow( pWindow )
 {
     if (style_loaded)

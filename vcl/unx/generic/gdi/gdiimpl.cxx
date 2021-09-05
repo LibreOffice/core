@@ -1635,8 +1635,7 @@ SystemDependentData_Triangulation::SystemDependentData_Triangulation(
     mfLineWidth(fLineWidth),
     meJoin(eJoin),
     meCap(eCap),
-    mfMiterMinimumAngle(fMiterMinimumAngle),
-    maStroke()
+    mfMiterMinimumAngle(fMiterMinimumAngle)
 {
     if(nullptr != pStroke)
     {

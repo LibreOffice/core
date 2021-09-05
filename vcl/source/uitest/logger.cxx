@@ -63,8 +63,7 @@ vcl::Window* get_top_parent(vcl::Window* pWindow)
 }
 }
 UITestLogger::UITestLogger()
-    : maStream()
-    , mbValid(false)
+    : mbValid(false)
 {
     static const char* pFile = std::getenv("LO_COLLECT_UIINFO");
     if (pFile)

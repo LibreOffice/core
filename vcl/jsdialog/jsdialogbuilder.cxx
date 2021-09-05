@@ -50,7 +50,6 @@ JSDialogNotifyIdle::JSDialogNotifyIdle(VclPtr<vcl::Window> aNotifierWindow,
     , m_aNotifierWindow(aNotifierWindow)
     , m_aContentWindow(aContentWindow)
     , m_sTypeOfJSON(sTypeOfJSON)
-    , m_LastNotificationMessage()
     , m_bForce(false)
 {
     SetPriority(TaskPriority::POST_PAINT);

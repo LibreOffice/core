@@ -109,7 +109,6 @@ DXFGroupReader::DXFGroupReader(SvStream & rIStream)
   : rIS(rIStream)
   , bStatus(true)
   , nLastG(0)
-  , S()
   , I(0)
 {
     rIS.Seek(0);
