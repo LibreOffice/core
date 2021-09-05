@@ -25,6 +25,7 @@
 #include <unotools/fontdefs.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <outdev.h>
+#include <font/PhysicalFontFaceCollection.hxx>
 #include <PhysicalFontCollection.hxx>
 
 static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
@@ -885,9 +886,9 @@ std::shared_ptr<PhysicalFontCollection> PhysicalFontCollection::Clone() const
     return xClonedCollection;
 }
 
-std::unique_ptr<ImplDeviceFontList> PhysicalFontCollection::GetDeviceFontList() const
+std::unique_ptr<PhysicalFontFaceCollection> PhysicalFontCollection::GetDeviceFontList() const
 {
-    std::unique_ptr<ImplDeviceFontList> pDeviceFontList(new ImplDeviceFontList);
+    std::unique_ptr<PhysicalFontFaceCollection> pDeviceFontList(new PhysicalFontFaceCollection);
 
     for (auto const& family : maPhysicalFontFamilies)
     {
