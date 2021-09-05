@@ -76,8 +76,7 @@ namespace utl
     }
 
     OConfigurationNode::OConfigurationNode(const OConfigurationNode& _rSource)
-        : OEventListenerAdapter()
-        , m_xHierarchyAccess(_rSource.m_xHierarchyAccess)
+        : m_xHierarchyAccess(_rSource.m_xHierarchyAccess)
         , m_xDirectAccess(_rSource.m_xDirectAccess)
         , m_xReplaceAccess(_rSource.m_xReplaceAccess)
         , m_xContainerAccess(_rSource.m_xContainerAccess)
@@ -89,8 +88,7 @@ namespace utl
     }
 
     OConfigurationNode::OConfigurationNode(OConfigurationNode&& _rSource)
-        : OEventListenerAdapter()
-        , m_xHierarchyAccess(std::move(_rSource.m_xHierarchyAccess))
+        : m_xHierarchyAccess(std::move(_rSource.m_xHierarchyAccess))
         , m_xDirectAccess(std::move(_rSource.m_xDirectAccess))
         , m_xReplaceAccess(std::move(_rSource.m_xReplaceAccess))
         , m_xContainerAccess(std::move(_rSource.m_xContainerAccess))
@@ -491,7 +489,6 @@ namespace utl
     OConfigurationTreeRoot::OConfigurationTreeRoot( const Reference<XComponentContext> & i_rContext, const OUString& i_rNodePath, const bool i_bUpdatable )
         :OConfigurationNode( lcl_createConfigurationRoot( lcl_getConfigProvider( i_rContext ),
                                 i_rNodePath, i_bUpdatable, -1 ) )
-        ,m_xCommitter()
     {
         if ( i_bUpdatable )
         {

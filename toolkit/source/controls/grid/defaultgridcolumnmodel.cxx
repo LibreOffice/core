@@ -95,7 +95,6 @@ private:
     DefaultGridColumnModel::DefaultGridColumnModel()
         :DefaultGridColumnModel_Base( m_aMutex )
         ,m_aContainerListeners( m_aMutex )
-        ,m_aColumns()
     {
     }
 
@@ -103,7 +102,6 @@ private:
         :cppu::BaseMutex()
         ,DefaultGridColumnModel_Base( m_aMutex )
         ,m_aContainerListeners( m_aMutex )
-        ,m_aColumns()
     {
         Columns aColumns;
         aColumns.reserve( i_copySource.m_aColumns.size() );

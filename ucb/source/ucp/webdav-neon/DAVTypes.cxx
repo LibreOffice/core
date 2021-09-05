@@ -25,13 +25,9 @@ DAVOptions::DAVOptions() :
     m_isClass3( false ),
     m_isHeadAllowed( true ),
     m_isLocked( false ),
-    m_aAllowedMethods(),
     m_nStaleTime( 0 ),
     m_nRequestedTimeLife( 0 ),
-    m_sURL(),
-    m_sRedirectedURL(),
-    m_nHttpResponseStatusCode( 0 ),
-    m_sHttpResponseStatusText()
+    m_nHttpResponseStatusCode( 0 )
 {
 }
 

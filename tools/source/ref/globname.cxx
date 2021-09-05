@@ -55,8 +55,7 @@ bool ImpSvGlobalName::operator == ( const ImpSvGlobalName & rObj ) const
 }
 
 // SvGlobalName ----------------------------------------------------------------
-SvGlobalName::SvGlobalName() :
-    pImp()
+SvGlobalName::SvGlobalName()
 {
 }
 

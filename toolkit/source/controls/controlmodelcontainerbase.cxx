@@ -1045,7 +1045,6 @@ void ControlModelContainerBase::stopControlListening( const Reference< XControlM
 
 ResourceListener::ResourceListener(
     const Reference< util::XModifyListener >& rListener ) :
-    OWeakObject(),
     m_xListener( rListener ),
     m_bListening( false )
 {
@@ -1256,8 +1255,7 @@ void SAL_CALL ResourceListener::disposing(
 
 
 ControlContainerBase::ControlContainerBase( const Reference< XComponentContext >& rxContext )
-    :ControlContainer_IBase()
-    ,m_xContext(rxContext)
+    :m_xContext(rxContext)
     ,mbSizeModified(false)
     ,mbPosModified(false)
 {

@@ -125,8 +125,7 @@ struct UnoControl_Data
     bool            bLocalizationSupport;
 
     UnoControl_Data()
-        :aSuspendedPropertyNotifications()
-        ,bLocalizationSupport( false )
+        :bLocalizationSupport( false )
     {
     }
 };

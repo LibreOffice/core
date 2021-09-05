@@ -23,8 +23,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 
-ORoadmapEntry::ORoadmapEntry() : ORoadmapEntry_Base( )
-                                ,OPropertyContainer( GetBroadcastHelper() )
+ORoadmapEntry::ORoadmapEntry() : OPropertyContainer( GetBroadcastHelper() )
 {
     // registerProperty or registerMayBeVoidProperty or registerPropertyNoMember
 

@@ -419,16 +419,11 @@ Moderator::Moderator(
     Reference < XInteractionHandler > const & xInteract,
     const Command& rArg
 )
-    : m_aMutex(),
-
-      m_aRes(m_aMutex,*this),
+    : m_aRes(m_aMutex,*this),
       m_aResultType(ResultType::NORESULT),
       m_nIOErrorCode(IOErrorCode_ABORT),
-      m_aResult(),
-
       m_aRep(m_aMutex,*this),
       m_aReplyType(NOREPLY),
-
       m_aArg(rArg),
       m_aContent(
           xContent,

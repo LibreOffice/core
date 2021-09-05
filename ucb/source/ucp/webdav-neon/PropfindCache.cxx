@@ -16,16 +16,13 @@ namespace webdav_ucp
     // PropertyNames implementation
 
     PropertyNames::PropertyNames() :
-        m_nStaleTime( 0 ),
-        m_sURL(),
-        m_aPropertiesNames()
+        m_nStaleTime( 0 )
     {
     }
 
     PropertyNames::PropertyNames( const OUString& rURL ) :
         m_nStaleTime( 0 ),
-        m_sURL( rURL ),
-        m_aPropertiesNames()
+        m_sURL( rURL )
     {
     }
 

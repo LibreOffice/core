@@ -363,15 +363,13 @@ void SAL_CALL DialogStepChangedListener::propertyChange( const  beans::PropertyC
 
 
 UnoControlContainer::UnoControlContainer()
-    :UnoControlContainer_Base()
-    ,maCListeners( *this )
+    :maCListeners( *this )
 {
     mpControls.reset(new UnoControlHolderList);
 }
 
 UnoControlContainer::UnoControlContainer(const uno::Reference< awt::XWindowPeer >& xP )
-    :UnoControlContainer_Base()
-    ,maCListeners( *this )
+    :maCListeners( *this )
 {
     setPeer( xP );
     mbDisposePeer = false;
