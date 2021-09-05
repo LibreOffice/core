@@ -84,9 +84,7 @@ namespace connectivity::firebird
             virtual ~OStatementCommonBase() override;
 
             /// @throws css::sdbc::SQLException
-            void prepareAndDescribeStatement(std::u16string_view sqlIn,
-                                             XSQLDA*& pOutSqlda,
-                                             XSQLDA* pInSqlda=nullptr);
+            void prepareAndDescribeStatement(std::u16string_view sqlIn, XSQLDA*& pOutSqlda);
 
             /// @throws css::sdbc::SQLException
             short getSqlInfoItem(char aInfoItem);
