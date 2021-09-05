@@ -668,8 +668,9 @@ SwContentFrame *SwTextFrame::JoinFrame()
         if ( pViewShell && pViewShell->GetLayout() &&
              pViewShell->GetLayout()->IsAnyShellAccessible() )
         {
+            auto pNext = pFoll->FindNextCnt( true );
             pViewShell->InvalidateAccessibleParaFlowRelation(
-                            pFoll->FindNextCnt( true )->DynCastTextFrame(),
+                            pNext ? pNext->DynCastTextFrame() : nullptr,
                             this );
         }
     }
@@ -702,8 +703,9 @@ void SwTextFrame::SplitFrame(TextFrameIndex const nTextPos)
         if ( pViewShell && pViewShell->GetLayout() &&
              pViewShell->GetLayout()->IsAnyShellAccessible() )
         {
+            auto pNext = pNew->FindNextCnt( true );
             pViewShell->InvalidateAccessibleParaFlowRelation(
-                            pNew->FindNextCnt( true )->DynCastTextFrame(),
+                            pNext ? pNext->DynCastTextFrame() : nullptr,
                             this );
         }
     }
