@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e795b3c_4de1421f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003336
+      },
+      "writtenOn": "2021-09-05T15:25:57Z",
+      "side": 1,
+      "message": "Thank you for your advises!",
+      "revId": "75886269a80d87cfb97224196f8c857599963d60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9f9055b0_57cc4371",
@@ -14,6 +31,24 @@
       "writtenOn": "2021-09-05T04:58:34Z",
       "side": 1,
       "message": "Here and elsewhere, initializing O(U)String with empty string is unnecessary: default ctor already initializes them with empty value.\n\n            OString userName;\n            OString userPassword;",
+      "revId": "75886269a80d87cfb97224196f8c857599963d60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7494f1a_b6194e81",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1003336
+      },
+      "writtenOn": "2021-09-05T15:25:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f9055b0_57cc4371",
       "revId": "75886269a80d87cfb97224196f8c857599963d60",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -35,6 +70,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db52488b_7c2524ea",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1003336
+      },
+      "writtenOn": "2021-09-05T15:25:57Z",
+      "side": 1,
+      "message": "Done.\nShould I do the same in other for loops, for example in line143, altough \"not my problem\"?",
+      "parentUuid": "a255cb58_f8f9e6dc",
+      "revId": "75886269a80d87cfb97224196f8c857599963d60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0aa30ed7_7f560ad0",
@@ -52,6 +105,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1360221d_69f553a3",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1003336
+      },
+      "writtenOn": "2021-09-05T15:25:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0aa30ed7_7f560ad0",
+      "revId": "75886269a80d87cfb97224196f8c857599963d60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d4d68d62_de2a5402",
@@ -65,6 +136,24 @@
       "writtenOn": "2021-09-05T04:58:34Z",
       "side": 1,
       "message": "isEmpty() is used for explicit check if it is empty or not (getting length is not that telling).\n\n            if (!userName.isEmpty())",
+      "revId": "75886269a80d87cfb97224196f8c857599963d60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9dd0eec_37e19e35",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1003336
+      },
+      "writtenOn": "2021-09-05T15:25:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4d68d62_de2a5402",
       "revId": "75886269a80d87cfb97224196f8c857599963d60",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
