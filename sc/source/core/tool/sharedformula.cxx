@@ -392,17 +392,17 @@ void SharedFormulaUtil::startListeningAsGroup( sc::StartListeningContext& rCxt, 
     rDoc.SetDetectiveDirty(true);
 
     ScFormulaCellGroupRef xGroup = rTopCell.GetCellGroup();
-    const ScTokenArray* pCode = xGroup->mpCode ? &*xGroup->mpCode : nullptr;
-    assert(pCode == rTopCell.GetCode());
-    if (pCode->IsRecalcModeAlways())
+    const ScTokenArray& rCode = *xGroup->mpCode;
+    assert(&rCode == rTopCell.GetCode());
+    if (rCode.IsRecalcModeAlways())
     {
         rDoc.StartListeningArea(
             BCA_LISTEN_ALWAYS, false,
             xGroup->getAreaListener(ppSharedTop, BCA_LISTEN_ALWAYS, true, true));
     }
 
-    formula::FormulaToken** p = pCode->GetCode();
-    formula::FormulaToken** pEnd = p + pCode->GetCodeLen();
+    formula::FormulaToken** p = rCode.GetCode();
+    formula::FormulaToken** pEnd = p + rCode.GetCodeLen();
     for (; p != pEnd; ++p)
     {
         const formula::FormulaToken* t = *p;
