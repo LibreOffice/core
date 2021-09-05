@@ -42,9 +42,9 @@ public:
     void Clear();
 
     bool Start(OutputDevice& rOutDev, const Point& rDestPt, const Size& rDestSz,
-               tools::Long nExtraData, OutputDevice* pFirstFrameOutDev);
+               tools::Long nCallerId, OutputDevice* pFirstFrameOutDev);
 
-    void Stop(const OutputDevice* pOutDev = nullptr, tools::Long nExtraData = 0);
+    void Stop(const OutputDevice* pOutDev = nullptr, tools::Long nCallerId = 0);
 
     void Draw(OutputDevice& rOutDev, const Point& rDestPt) const;
     void Draw(OutputDevice& rOutDev, const Point& rDestPt, const Size& rDestSz) const;
@@ -65,8 +65,11 @@ public:
     void SetNotifyHdl(const Link<Animation*, void>& rLink) { maNotifyLink = rLink; }
     const Link<Animation*, void>& GetNotifyHdl() const { return maNotifyLink; }
 
-    std::vector<std::unique_ptr<AnimationBitmap>>& GetAnimationFrames() { return maList; }
-    size_t Count() const { return maList.size(); }
+    std::vector<std::unique_ptr<AnimationBitmap>>& GetAnimationFrames()
+    {
+        return maAnimationFrames;
+    }
+    size_t Count() const { return maAnimationFrames.size(); }
     bool Insert(const AnimationBitmap& rAnimationBitmap);
     const AnimationBitmap& Get(sal_uInt16 nAnimation) const;
     void Replace(const AnimationBitmap& rNewAnimationBmp, sal_uInt16 nAnimation);
@@ -90,12 +93,12 @@ public:
 public:
     SAL_DLLPRIVATE static void ImplIncAnimCount() { mnAnimCount++; }
     SAL_DLLPRIVATE static void ImplDecAnimCount() { mnAnimCount--; }
-    SAL_DLLPRIVATE sal_uLong ImplGetCurPos() const { return mnPos; }
+    SAL_DLLPRIVATE sal_uLong ImplGetCurPos() const { return mnFrameIndex; }
 
 private:
     SAL_DLLPRIVATE static sal_uLong mnAnimCount;
 
-    std::vector<std::unique_ptr<AnimationBitmap>> maList;
+    std::vector<std::unique_ptr<AnimationBitmap>> maAnimationFrames;
     std::vector<std::unique_ptr<AnimationRenderer>> maAnimationRenderers;
 
     Link<Animation*, void> maNotifyLink;
@@ -104,7 +107,7 @@ private:
     Size maGlobalSize;
     sal_uInt32 mnLoopCount;
     sal_uInt32 mnLoops;
-    size_t mnPos;
+    size_t mnFrameIndex;
     bool mbIsInAnimation;
     bool mbLoopTerminated;
 
