@@ -1731,7 +1731,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         case GOrdPIvAtr: PushAttr(nOrderID);
             [[fallthrough]];
         case GOrdSIvAtr: {
-            sal_uInt8 nA, nP, nFlags;
+            sal_uInt8 nA(0), nP(0), nFlags(0);
             Color aCol;
             RasterOp eROP;
             pOS2MET->ReadUChar( nA ).ReadUChar( nP ).ReadUChar( nFlags );
@@ -1780,7 +1780,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
                 }
             }
             else {
-                sal_uInt8 nMix;
+                sal_uInt8 nMix(0);
                 pOS2MET->ReadUChar( nMix );
                 if (nMix==0) {
                     switch (nP) {
