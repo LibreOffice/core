@@ -2036,7 +2036,7 @@ void ScTextWnd::MakeDialogEditView()
     pNew->SetExecuteURL( false );
     m_xEditEngine = std::move(pNew);
 
-    m_xEditEngine->SetUpdateLayout( false );
+    const bPrevUpdateLayout = m_xEditEngine->SetUpdateLayout( false );
     m_xEditEngine->SetWordDelimiters( m_xEditEngine->GetWordDelimiters() + "=" );
     m_xEditEngine->SetPaperSize( Size( bIsRTL ? USHRT_MAX : THESIZE, 300 ) );
 
@@ -2046,7 +2046,7 @@ void ScTextWnd::MakeDialogEditView()
     if ( bIsRTL )
         lcl_ModifyRTLDefaults( *pSet );
     static_cast<ScEditEngineDefaulter*>(m_xEditEngine.get())->SetDefaults( std::move(pSet) );
-    m_xEditEngine->SetUpdateLayout( true );
+    m_xEditEngine->SetUpdateLayout( bPrevUpdateLayout );
 
     m_xEditView = std::make_unique<EditView>(m_xEditEngine.get(), nullptr);
     m_xEditView->setEditViewCallbacks(this);
