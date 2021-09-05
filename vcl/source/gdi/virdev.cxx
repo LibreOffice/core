@@ -26,6 +26,7 @@
 #include <vcl/virdev.hxx>
 
 #include <outdev.h>
+#include <font/PhysicalFontFaceCollection.hxx>
 #include <PhysicalFontCollection.hxx>
 #include <salinst.hxx>
 #include <salgdi.hxx>
@@ -470,7 +471,7 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
     // the reference device should have only scalable fonts
     // => clean up the original font lists before getting new ones
     mpFontInstance.clear();
-    mpDeviceFontList.reset();
+    mpFontFaceCollection.reset();
     mpDeviceFontSizeList.reset();
 
     // preserve global font lists
