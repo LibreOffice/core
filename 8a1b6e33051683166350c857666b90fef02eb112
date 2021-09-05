@@ -16,6 +16,23 @@
       "message": "Thanks!\nLet\u0027s have Jenkins happy, and merge it :)",
       "revId": "8a1b6e33051683166350c857666b90fef02eb112",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df9d0df7_4091a30e",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-05T15:36:27Z",
+      "side": 1,
+      "message": "By the way: do you know if we need to check some size limit here? Previously, userName (and userPassword) was limited to 256 characters, but now the length may in theory be 2Gi characters.",
+      "revId": "8a1b6e33051683166350c857666b90fef02eb112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
