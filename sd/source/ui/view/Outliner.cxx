@@ -1639,10 +1639,10 @@ void SdOutliner::EnterEditMode (bool bGrabFocus)
     mpSearchSpellTextObj->setActiveText(mnText);
 
     // Turn on the edit mode for the text object.
+    SetUpdateLayout(true);
     mpView->SdrBeginTextEdit(mpSearchSpellTextObj, pPV, mpWindow, true, this,
                             pOutlinerView, true, true, bGrabFocus);
 
-    SetUpdateLayout(true);
     mbFoundObject = true;
 }
 

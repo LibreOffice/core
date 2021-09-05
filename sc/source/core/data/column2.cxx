@@ -376,7 +376,7 @@ tools::Long ScColumn::GetNeededSize(
         // save in document ?
         std::unique_ptr<ScFieldEditEngine> pEngine = rDocument.CreateFieldEditEngine();
 
-        pEngine->SetUpdateLayout( false );
+        const bool bPrevUpdateLayout = pEngine->SetUpdateLayout( false );
         bool bTextWysiwyg = ( pDev->GetOutDevType() == OUTDEV_PRINTER );
         EEControlBits nCtrl = pEngine->GetControlWord();
         if ( bTextWysiwyg )
@@ -474,7 +474,7 @@ tools::Long ScColumn::GetNeededSize(
 
         bool bEngineVertical = pEngine->IsEffectivelyVertical();
         pEngine->SetVertical( bAsianVertical );
-        pEngine->SetUpdateLayout( true );
+        pEngine->SetUpdateLayout( bPrevUpdateLayout );
 
         bool bEdWidth = bWidth;
         if ( eOrient != SvxCellOrientation::Standard && eOrient != SvxCellOrientation::Stacked )
