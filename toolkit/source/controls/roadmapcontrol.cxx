@@ -357,8 +357,7 @@ static void lcl_throwIndexOutOfBoundsException( )
 
 
     UnoRoadmapControl::UnoRoadmapControl()
-        :UnoControlRoadmap_Base()
-        ,maItemListeners( *this )
+        :maItemListeners( *this )
     {
     }
 

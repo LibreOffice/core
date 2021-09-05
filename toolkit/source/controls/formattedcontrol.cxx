@@ -412,7 +412,6 @@ namespace toolkit
 
 
     UnoFormattedFieldControl::UnoFormattedFieldControl()
-        :UnoSpinFieldControl()
     {
     }
 

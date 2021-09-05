@@ -26,8 +26,7 @@ using namespace css::xml::dom::views;
 namespace DOM::events
 {
     CMouseEvent::CMouseEvent()
-        : CMouseEvent_Base()
-        , m_screenX(0)
+        : m_screenX(0)
         , m_screenY(0)
         , m_clientX(0)
         , m_clientY(0)

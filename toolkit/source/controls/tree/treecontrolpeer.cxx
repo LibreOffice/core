@@ -1564,8 +1564,7 @@ void UnoTreeListItem::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry
 
 
 UnoTreeListEntry::UnoTreeListEntry( const Reference< XTreeNode >& xNode, TreeControlPeer* pPeer )
-: SvTreeListEntry()
-, mxNode( xNode )
+: mxNode( xNode )
 , mpPeer( pPeer )
 {
     if( mpPeer )

@@ -32,8 +32,7 @@
 using namespace ::com::sun::star;
 
 VCLXHatchWindow::VCLXHatchWindow()
-: VCLXWindow()
-, pHatchWindow(nullptr)
+: pHatchWindow(nullptr)
 {
 }
 

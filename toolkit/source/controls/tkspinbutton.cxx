@@ -196,8 +196,7 @@ public:
 
 
     UnoSpinButtonControl::UnoSpinButtonControl()
-        :UnoControlBase()
-        ,maAdjustmentListeners( *this )
+        :maAdjustmentListeners( *this )
     {
     }
 

@@ -98,8 +98,7 @@ namespace toolkit
     //= UnoControlScrollBarModel
 
     UnoScrollBarControl::UnoScrollBarControl()
-        :UnoControlBase()
-        ,maAdjustmentListeners( *this )
+        :maAdjustmentListeners( *this )
     {
     }
 
