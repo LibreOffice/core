@@ -84,8 +84,7 @@ Gradient::Gradient( const Gradient& ) = default;
 Gradient::Gradient( Gradient&& ) = default;
 
 Gradient::Gradient( GradientStyle eStyle,
-                    const Color& rStartColor, const Color& rEndColor ) :
-    mpImplGradient()
+                    const Color& rStartColor, const Color& rEndColor )
 {
     mpImplGradient->meStyle         = eStyle;
     mpImplGradient->maStartColor    = rStartColor;

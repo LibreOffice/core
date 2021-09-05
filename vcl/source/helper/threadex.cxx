@@ -23,9 +23,7 @@
 using namespace vcl;
 
 SolarThreadExecutor::SolarThreadExecutor()
-    : m_aStart()
-    , m_aFinish()
-    , m_bTimeout(false)
+    : m_bTimeout(false)
 {
 }
 

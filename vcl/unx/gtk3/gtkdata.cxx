@@ -331,8 +331,6 @@ int GtkSalDisplay::CaptureMouse( SalFrame* pSFrame )
 
 GtkSalData::GtkSalData( SalInstance *pInstance )
     : GenericUnixSalData(pInstance)
-    , m_aDispatchMutex()
-    , m_aDispatchCondition()
 {
     m_pUserEvent = nullptr;
 }

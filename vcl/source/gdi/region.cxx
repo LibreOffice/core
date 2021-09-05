@@ -308,27 +308,18 @@ basegfx::B2DPolyPolygon vcl::Region::ImplCreateB2DPolyPolygonFromRegionBand() co
 }
 
 Region::Region(bool bIsNull)
-:   mpB2DPolyPolygon(),
-    mpPolyPolygon(),
-    mpRegionBand(),
-    mbIsNull(bIsNull)
+:   mbIsNull(bIsNull)
 {
 }
 
 Region::Region(const tools::Rectangle& rRect)
-:   mpB2DPolyPolygon(),
-    mpPolyPolygon(),
-    mpRegionBand(),
-    mbIsNull(false)
+:   mbIsNull(false)
 {
     mpRegionBand.reset(rRect.IsEmpty() ? nullptr : new RegionBand(rRect));
 }
 
 Region::Region(const tools::Polygon& rPolygon)
-:   mpB2DPolyPolygon(),
-    mpPolyPolygon(),
-    mpRegionBand(),
-    mbIsNull(false)
+:   mbIsNull(false)
 {
 
     if(rPolygon.GetSize())
@@ -338,10 +329,7 @@ Region::Region(const tools::Polygon& rPolygon)
 }
 
 Region::Region(const tools::PolyPolygon& rPolyPoly)
-:   mpB2DPolyPolygon(),
-    mpPolyPolygon(),
-    mpRegionBand(),
-    mbIsNull(false)
+:   mbIsNull(false)
 {
 
     if(rPolyPoly.Count())
@@ -351,10 +339,7 @@ Region::Region(const tools::PolyPolygon& rPolyPoly)
 }
 
 Region::Region(const basegfx::B2DPolyPolygon& rPolyPoly)
-:   mpB2DPolyPolygon(),
-    mpPolyPolygon(),
-    mpRegionBand(),
-    mbIsNull(false)
+:   mbIsNull(false)
 {
 
     if(rPolyPoly.count())

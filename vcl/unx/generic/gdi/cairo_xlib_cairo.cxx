@@ -114,7 +114,6 @@ namespace cairo
      **/
     X11Surface::X11Surface( const CairoSurfaceSharedPtr& pSurface ) :
         maSysData(),
-        mpPixmap(),
         mpSurface(pSurface)
     {}
 
@@ -134,7 +133,6 @@ namespace cairo
      **/
     X11Surface::X11Surface( const X11SysData& rSysData, int x, int y, int width, int height ) :
         maSysData(rSysData),
-        mpPixmap(),
         mpSurface(
             cairo_xlib_surface_create( static_cast<Display*>(rSysData.pDisplay),
                                        rSysData.hDrawable,
@@ -159,7 +157,6 @@ namespace cairo
     X11Surface::X11Surface( const X11SysData&       rSysData,
                             const BitmapSystemData& rData ) :
         maSysData( rSysData ),
-        mpPixmap(),
         mpSurface(
             cairo_xlib_surface_create( static_cast<Display*>(rSysData.pDisplay),
                                        reinterpret_cast<Drawable>(rData.aPixmap),

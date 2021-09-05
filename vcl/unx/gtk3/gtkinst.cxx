@@ -1840,8 +1840,7 @@ class GtkOpenGLContext : public OpenGLContext
 
 public:
     GtkOpenGLContext()
-        : OpenGLContext()
-        , m_pGLArea(nullptr)
+        : m_pGLArea(nullptr)
         , m_pContext(nullptr)
         , m_nAreaFrameBuffer(0)
         , m_nFrameBuffer(0)

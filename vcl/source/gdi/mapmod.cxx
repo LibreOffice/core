@@ -77,7 +77,7 @@ MapMode::MapMode() : mpImplMapMode(GetGlobalDefault())
 
 MapMode::MapMode( const MapMode& ) = default;
 
-MapMode::MapMode( MapUnit eUnit ) : mpImplMapMode()
+MapMode::MapMode( MapUnit eUnit )
 {
     mpImplMapMode->meUnit = eUnit;
 }

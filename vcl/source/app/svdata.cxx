@@ -112,8 +112,7 @@ namespace
 
     public:
         SystemDependentDataBuffer(const char* pDebugName)
-        :   basegfx::SystemDependentDataManager(),
-            maTimer(std::make_unique<AutoTimer>(pDebugName))
+        :   maTimer(std::make_unique<AutoTimer>(pDebugName))
         {
             maTimer->SetTimeout(1000);
             maTimer->SetInvokeHandler(LINK(this, SystemDependentDataBuffer, implTimeoutHdl));

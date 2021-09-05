@@ -68,13 +68,9 @@ namespace {
 
 PrintDialog::PrintPreviewWindow::PrintPreviewWindow(PrintDialog* pDialog)
     : mpDialog(pDialog)
-    , maMtf()
     , maOrigSize( 10, 10 )
-    , maPreviewSize()
     , mnDPIX(Application::GetDefaultDevice()->GetDPIX())
     , mnDPIY(Application::GetDefaultDevice()->GetDPIY())
-    , maPreviewBitmap()
-    , maReplacementString()
     , mbGreyscale( false )
 {
 }

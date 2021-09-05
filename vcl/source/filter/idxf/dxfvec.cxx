@@ -82,7 +82,7 @@ DXFTransform::DXFTransform(double fScaleX, double fScaleY, double fScaleZ,
 
 
 DXFTransform::DXFTransform(const DXFVector & rExtrusion) :
-    aMX(), aMY(), aMZ(), aMP(0.0, 0.0, 0.0)
+    aMP(0.0, 0.0, 0.0)
 {
     // 'Arbitrary Axis Algorithm' (cf. DXF documentation by Autodesk)
     if ( fabs(rExtrusion.fx) < 1.0/64.0 && fabs(rExtrusion.fy) < 1.0/64.0) {
@@ -97,8 +97,7 @@ DXFTransform::DXFTransform(const DXFVector & rExtrusion) :
 }
 
 
-DXFTransform::DXFTransform(const DXFVector & rViewDir, const DXFVector & rViewTarget) :
-    aMX(), aMY(), aMZ(), aMP()
+DXFTransform::DXFTransform(const DXFVector & rViewDir, const DXFVector & rViewTarget)
 {
     DXFVector aV;
 
@@ -132,8 +131,7 @@ DXFTransform::DXFTransform(const DXFVector & rViewDir, const DXFVector & rViewTa
 }
 
 
-DXFTransform::DXFTransform(const DXFTransform & rT1, const DXFTransform & rT2) :
-    aMX(),aMY(),aMZ(),aMP()
+DXFTransform::DXFTransform(const DXFTransform & rT1, const DXFTransform & rT2)
 {
     rT2.TransDir(rT1.aMX,aMX);
     rT2.TransDir(rT1.aMY,aMY);
