@@ -1003,7 +1003,7 @@ void OutlineView::FillOutliner()
     mrOutliner.GetUndoManager().Clear();
     mrOutliner.EnableUndo(false);
     ResetLinks();
-    mrOutliner.SetUpdateLayout(false);
+    const bool bPrevUpdateLayout = mrOutliner.SetUpdateLayout(false);
 
     Paragraph* pTitleToSelect = nullptr;
     sal_uInt16 nPageCount = mrDoc.GetSdPageCount(PageKind::Standard);
@@ -1098,7 +1098,7 @@ void OutlineView::FillOutliner()
 
     mrOutliner.EnableUndo(true);
 
-    mrOutliner.SetUpdateLayout(true);
+    mrOutliner.SetUpdateLayout(bPrevUpdateLayout);
 }
 
 /**
