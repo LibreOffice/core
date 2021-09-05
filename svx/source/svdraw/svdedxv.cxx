@@ -290,7 +290,7 @@ void SdrObjEditView::ModelHasChanged()
             {
                 aTextEditArea = aEditArea1;
                 aMinTextEditArea = aMinArea1;
-                pTextEditOutliner->SetUpdateLayout(false);
+                const bool bPrevUpdateLayout = pTextEditOutliner->SetUpdateLayout(false);
                 pTextEditOutliner->SetMinAutoPaperSize(aPaperMin1);
                 pTextEditOutliner->SetMaxAutoPaperSize(aPaperMax1);
                 pTextEditOutliner->SetPaperSize(Size(0, 0)); // re-format Outliner
@@ -323,7 +323,7 @@ void SdrObjEditView::ModelHasChanged()
                     if (nStat != nStat0)
                         pOLV->SetControlWord(nStat);
                 }
-                pTextEditOutliner->SetUpdateLayout(true);
+                pTextEditOutliner->SetUpdateLayout(bPrevUpdateLayout);
                 bAreaChg = true;
             }
         }

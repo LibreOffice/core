@@ -88,7 +88,8 @@ void ImpEditEngine::SetStyleSheet( sal_Int32 nPara, SfxStyleSheet* pStyle )
             StartListening(*pStyle, DuplicateHandling::Prevent);
         ParaAttribsChanged( pNode );
     }
-    FormatAndLayout();
+    if (IsUpdateLayout())
+        FormatAndLayout();
 }
 
 void ImpEditEngine::UpdateParagraphsWithStyleSheet( SfxStyleSheet* pStyle )
@@ -114,7 +115,8 @@ void ImpEditEngine::UpdateParagraphsWithStyleSheet( SfxStyleSheet* pStyle )
     if ( bUsed )
     {
         GetEditEnginePtr()->StyleSheetChanged( pStyle );
-        FormatAndLayout();
+        if (IsUpdateLayout())
+            FormatAndLayout();
     }
 }
 
@@ -129,7 +131,8 @@ void ImpEditEngine::RemoveStyleFromParagraphs( SfxStyleSheet const * pStyle )
             ParaAttribsChanged( pNode );
         }
     }
-    FormatAndLayout();
+    if (IsUpdateLayout())
+        FormatAndLayout();
 }
 
 void ImpEditEngine::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
