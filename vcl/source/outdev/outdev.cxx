@@ -35,6 +35,7 @@
 
 #include <outdev.h>
 #include <window.h>
+#include <font/PhysicalFontFaceCollection.hxx>
 #include <salgdi.hxx>
 
 #include <com/sun/star/awt/DeviceCapability.hpp>
