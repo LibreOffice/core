@@ -81,9 +81,7 @@ void OPreparedStatement::ensurePrepared()
         m_pInSqlda->sqln = 10;
     }
 
-    prepareAndDescribeStatement(m_sSqlStatement,
-                               m_pOutSqlda,
-                               m_pInSqlda);
+    prepareAndDescribeStatement(m_sSqlStatement, m_pOutSqlda);
 
     aErr = isc_dsql_describe_bind(m_statusVector,
                                   &m_aStatementHandle,
