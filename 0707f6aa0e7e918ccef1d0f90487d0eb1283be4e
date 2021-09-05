@@ -53,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcbe2bf2_54f3e3e3",
+        "filename": "basic/qa/vba_tests/collection.vb",
+        "patchSetId": 9
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-05T19:15:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e8aa2e2d_a7ccee71",
+      "revId": "0707f6aa0e7e918ccef1d0f90487d0eb1283be4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5eddba59_03af1780",
@@ -66,6 +84,24 @@
       "writtenOn": "2021-09-05T14:06:14Z",
       "side": 1,
       "message": "Could you please also specify the intended result after tdf#110003 is fixed, together with commented out test for specific pairs?",
+      "revId": "0707f6aa0e7e918ccef1d0f90487d0eb1283be4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3dbaa39c_33172e5c",
+        "filename": "basic/qa/vba_tests/collection.vb",
+        "patchSetId": 9
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-05T19:15:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5eddba59_03af1780",
       "revId": "0707f6aa0e7e918ccef1d0f90487d0eb1283be4e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
