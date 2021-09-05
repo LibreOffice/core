@@ -98,7 +98,8 @@ void LwpSilverBullet::Read()
     for (sal_uInt16 nC = 0; nC < nNumPos; nC++)
         m_pResetPositionFlags[nC] = m_pObjStrm->QuickReaduInt8();
 
-    std::fill(m_pResetPositionFlags + nNumPos, m_pResetPositionFlags + SAL_N_ELEMENTS(m_pResetPositionFlags), 0);
+    if (nNumPos < SAL_N_ELEMENTS(m_pResetPositionFlags))
+        std::fill(m_pResetPositionFlags + nNumPos, m_pResetPositionFlags + SAL_N_ELEMENTS(m_pResetPositionFlags), 0);
 
     m_nUseCount = m_pObjStrm->QuickReaduInt32();
 
