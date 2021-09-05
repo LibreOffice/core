@@ -2095,7 +2095,7 @@ namespace emfio
                             mpInputStream->ReadUInt32( offBits );
                             mpInputStream->ReadUInt32( cbBits );
 
-                            if ( (cbBits > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBits < cbBmi) )
+                            if ( !mpInputStream->good() || (cbBits > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBits < cbBmi) )
                                bStatus = false;
                             else if ( offBmi )
                             {
