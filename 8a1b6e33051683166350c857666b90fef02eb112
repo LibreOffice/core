@@ -35,6 +35,40 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5c55a76_70e7170c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-05T18:48:25Z",
+      "side": 1,
+      "message": "\u003e clang plugin rangedforcopy did trigger. Loop variable passed by value, pass by reference instead\n\n",
+      "revId": "8a1b6e33051683166350c857666b90fef02eb112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bede0e92_4de449ac",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-05T18:48:25Z",
+      "side": 1,
+      "message": "oh - I missed this; please use\n\n                for (const auto\u0026 rIter : info)\n\nthat\u0027s what the clang-plugin warning is about",
+      "revId": "8a1b6e33051683166350c857666b90fef02eb112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "df9d0df7_4091a30e",
@@ -102,6 +136,24 @@
       "side": 1,
       "message": "Sorry, the longest password is 256, but only 20 bytes are efective. So we should take this into account and do something to never send more than 256 bytes. Any suggestion?",
       "parentUuid": "9e5c12d6_67b4a096",
+      "revId": "8a1b6e33051683166350c857666b90fef02eb112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79bcb56d_5446a89b",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-05T18:48:25Z",
+      "side": 1,
+      "message": "Ah - yes; the string\u0027s push_back would append a char (even though we pass an int). So we must do that.\n\nJust use the append variant that takes a length and a pointer; and make sure to set nUsernameLength  to min of 256 and length.",
+      "parentUuid": "d8861281_c6ea64e9",
       "revId": "8a1b6e33051683166350c857666b90fef02eb112",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
