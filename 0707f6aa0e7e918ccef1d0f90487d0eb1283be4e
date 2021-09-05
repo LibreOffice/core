@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8aa2e2d_a7ccee71",
+        "filename": "basic/qa/vba_tests/collection.vb",
+        "patchSetId": 9
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-05T14:06:14Z",
+      "side": 1,
+      "message": "Could we also test for specific pairs please?",
+      "revId": "0707f6aa0e7e918ccef1d0f90487d0eb1283be4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5eddba59_03af1780",
+        "filename": "basic/qa/vba_tests/collection.vb",
+        "patchSetId": 9
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-05T14:06:14Z",
+      "side": 1,
+      "message": "Could you please also specify the intended result after tdf#110003 is fixed, together with commented out test for specific pairs?",
+      "revId": "0707f6aa0e7e918ccef1d0f90487d0eb1283be4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
