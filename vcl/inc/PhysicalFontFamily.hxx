@@ -29,9 +29,11 @@
 
 #include "PhysicalFontFace.hxx"
 
-class ImplDeviceFontList;
+namespace vcl::font { class PhysicalFontFaceCollection; }
 class PhysicalFontFace;
 class PhysicalFontCollection;
+
+using namespace vcl::font;
 
 // flags for mnTypeFaces member
 enum class FontTypeFaces {
@@ -73,7 +75,7 @@ public:
 
     PhysicalFontFace*   FindBestFontFace( const FontSelectPattern& rFSD ) const;
 
-    void                UpdateDevFontList( ImplDeviceFontList& ) const;
+    void                UpdateDevFontList( PhysicalFontFaceCollection& ) const;
     void                UpdateCloneFontList(PhysicalFontCollection&) const;
 
 static void             CalcType( ImplFontAttrs& rType, FontWeight& rWeight, FontWidth& rWidth,
