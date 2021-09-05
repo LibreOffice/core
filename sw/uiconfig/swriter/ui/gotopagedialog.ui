@@ -81,13 +81,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="page">
+              <object class="GtkSpinButton" id="page">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="adjustment">page_value</property>
                 <property name="activates_default">True</property>
                 <property name="width_chars">5</property>
-                <property name="truncate-multiline">True</property>
-                <property name="input_purpose">number</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -101,6 +100,7 @@
                 <property name="halign">end</property>
                 <property name="label" translatable="yes" context="gotopagedialog|page_label">Page:</property>
                 <property name="use_underline">True</property>
+                <property name="mnemonic_widget">page</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -127,7 +127,7 @@
   </object>
   <object class="GtkAdjustment" id="page_value">
     <property name="lower">1</property>
-    <property name="upper">75</property>
+    <property name="upper">100000</property>
     <property name="value">1</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>

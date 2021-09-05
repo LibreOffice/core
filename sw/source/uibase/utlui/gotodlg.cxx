@@ -31,7 +31,7 @@ SwGotoPageDlg::SwGotoPageDlg(weld::Window* pParent, SfxBindings* _pBindings)
     , m_pCreateView(nullptr)
     , m_rBindings(_pBindings)
     , mnMaxPageCnt(1)
-    , mxMtrPageCtrl(m_xBuilder->weld_entry("page"))
+    , mxMtrPageCtrl(m_xBuilder->weld_spin_button("page"))
     , mxPageNumberLbl(m_xBuilder->weld_label("page_count"))
 {
     sal_uInt16 nTotalPage = GetPageInfo();
@@ -54,9 +54,11 @@ IMPL_LINK_NOARG(SwGotoPageDlg, PageModifiedHdl, weld::Entry&, void)
         int page_value = mxMtrPageCtrl->get_text().toInt32();
 
         if (page_value <= 0)
-            mxMtrPageCtrl->set_text(OUString::number(1));
+            mxMtrPageCtrl->set_value(1);
         else if (page_value > mnMaxPageCnt)
-            mxMtrPageCtrl->set_text(OUString::number(mnMaxPageCnt));
+            mxMtrPageCtrl->set_value(mnMaxPageCnt);
+        else
+            mxMtrPageCtrl->set_value(page_value);
 
         mxMtrPageCtrl->set_position(-1);
     }
@@ -87,13 +89,14 @@ sal_uInt16 SwGotoPageDlg::GetPageInfo()
 {
     SwView* pView = GetCreateView();
     SwWrtShell* pSh = pView ? &pView->GetWrtShell() : nullptr;
-    mxMtrPageCtrl->set_text(OUString::number(1));
+    mxMtrPageCtrl->set_value(1);
     if (pSh)
     {
         const sal_uInt16 nPageCnt = pSh->GetPageCnt();
         sal_uInt16 nPhyPage, nVirPage;
         pSh->GetPageNum(nPhyPage, nVirPage);
-        mxMtrPageCtrl->set_text(OUString::number(nPhyPage));
+        mxMtrPageCtrl->set_max(nPageCnt);
+        mxMtrPageCtrl->set_value(nPhyPage);
         return nPageCnt;
     }
     return 0;

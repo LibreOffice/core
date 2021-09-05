@@ -40,7 +40,7 @@ private:
     SfxBindings  *m_rBindings;
     sal_uInt16   mnMaxPageCnt;
 
-    std::unique_ptr<weld::Entry> mxMtrPageCtrl;
+    std::unique_ptr<weld::SpinButton> mxMtrPageCtrl;
     std::unique_ptr<weld::Label> mxPageNumberLbl;
 
     SwView*    GetCreateView() const;
