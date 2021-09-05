@@ -1602,8 +1602,6 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         break;
 
     case 0x002c: { // fontName
-        char        sFName[ 256 ], nByteLen;
-        sal_uInt16  nLen;
         pPict->ReadUInt16( nUSHORT ); nDataSize=nUSHORT+2;
         pPict->ReadUInt16( nUSHORT );
         if      (nUSHORT <=    1) aActFont.SetFamily(FAMILY_SWISS);
@@ -1614,9 +1612,11 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         else if (nUSHORT <= 1023) aActFont.SetFamily(FAMILY_SWISS);
         else                      aActFont.SetFamily(FAMILY_ROMAN);
         aActFont.SetCharSet(GetTextEncoding(nUSHORT));
-        pPict->ReadChar( nByteLen ); nLen=static_cast<sal_uInt16>(nByteLen)&0x00ff;
-        pPict->ReadBytes(&sFName, nLen);
-        sFName[ nLen ] = 0;
+        char nByteLen(0);
+        pPict->ReadChar( nByteLen );
+        sal_uInt16 nLen = static_cast<sal_uInt16>(nByteLen)&0x00ff;
+        char sFName[ 256 ];
+        sFName[pPict->ReadBytes(sFName, nLen)] = 0;
         OUString aString( sFName, strlen(sFName), osl_getThreadTextEncoding() );
         aActFont.SetFamilyName( aString );
         eActMethod = PictDrawingMethod::UNDEFINED;
