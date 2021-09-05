@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22d23860_25c10836",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000863
+      },
+      "writtenOn": "2021-09-05T02:23:37Z",
+      "side": 1,
+      "message": "I just noticed László already has a WIP patch on this that\u0027s essentially the same: https://gerrit.libreoffice.org/c/core/+/121612\n(one of the changes in his patch is already in)\n\nHad I noticed it earlier, I wouldn\u0027t have submitted this, feel free to merge whichever you see fit.",
+      "revId": "c627e82a870e0d7bc7f865631685e42f6c133903",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
