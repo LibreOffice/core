@@ -234,7 +234,7 @@ public:
     // implement some specific MSAA methods,such as accSelection,accNavigate
     static AccObjectManagerAgent* g_pAgent;
 
-    static BOOL get_IAccessibleFromXAccessible(
+    static bool get_IAccessibleFromXAccessible(
             css::accessibility::XAccessible * pXAcc, IAccessible** ppIA);
     XGUIDToComObjHash m_containedObjects;
 
