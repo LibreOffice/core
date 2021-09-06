@@ -99,7 +99,7 @@ published enum UnicodeScript
     kBopomofoExtended,
     kEnclosedCJKLetterMonth,
     kCJKCompatibility,
-    k_CJKUnifiedIdeographsExtensionA,
+    kCJKUnifiedIdeographsExtensionA,
     kCJKUnifiedIdeograph,
     kYiSyllables,
     kYiRadicals,

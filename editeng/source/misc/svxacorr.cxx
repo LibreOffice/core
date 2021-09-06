@@ -147,7 +147,7 @@ static bool lcl_IsUnsupportedUnicodeChar( CharClass const & rCC, const OUString&
             case css::i18n::UnicodeScript_kHangulCompatibilityJamo:
             case css::i18n::UnicodeScript_kEnclosedCJKLetterMonth:
             case css::i18n::UnicodeScript_kCJKCompatibility:
-            case css::i18n::UnicodeScript_k_CJKUnifiedIdeographsExtensionA:
+            case css::i18n::UnicodeScript_kCJKUnifiedIdeographsExtensionA:
             case css::i18n::UnicodeScript_kCJKUnifiedIdeograph:
             case css::i18n::UnicodeScript_kHangulSyllable:
             case css::i18n::UnicodeScript_kCJKCompatibilityIdeograph:
