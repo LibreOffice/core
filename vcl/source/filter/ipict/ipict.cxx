@@ -90,8 +90,7 @@ namespace PictReaderInternal {
   }
 
   sal_uInt8 Pattern::read(SvStream &stream) {
-    unsigned char nbyte[8];
-    sal_uInt32 nHiBytes, nLoBytes;
+    unsigned char nbyte[8] = {0};
     isColor = false;
 
     // count the no of bits in pattern which are set to 1:
@@ -99,16 +98,16 @@ namespace PictReaderInternal {
     for (unsigned char & ny : nbyte) {
       stream.ReadChar( reinterpret_cast<char&>(ny) );
       for (short nx=0; nx<8; nx++) {
-    if ( (ny & (1<<nx)) != 0 ) nBitCount++;
+        if ( (ny & (1<<nx)) != 0 ) nBitCount++;
       }
     }
 
     // store pattern in 2 long words:
-    nHiBytes=(((((static_cast<sal_uInt32>(nbyte[0])<<8)|
+    sal_uInt32 nHiBytes = (((((static_cast<sal_uInt32>(nbyte[0])<<8)|
          static_cast<sal_uInt32>(nbyte[1]))<<8)|
            static_cast<sal_uInt32>(nbyte[2]))<<8)|
       static_cast<sal_uInt32>(nbyte[3]);
-    nLoBytes=(((((static_cast<sal_uInt32>(nbyte[4])<<8)|
+    sal_uInt32 nLoBytes = (((((static_cast<sal_uInt32>(nbyte[4])<<8)|
          static_cast<sal_uInt32>(nbyte[5]))<<8)|
            static_cast<sal_uInt32>(nbyte[6]))<<8)|
       static_cast<sal_uInt32>(nbyte[7]);
