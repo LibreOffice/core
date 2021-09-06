@@ -182,7 +182,7 @@ OString mathSymbolToString(const SmNode* node, rtl_TextEncoding nEncoding)
     assert(node->GetType() == SmNodeType::Math || node->GetType() == SmNodeType::MathIdent);
     auto txtnode = static_cast<const SmTextNode*>(node);
     if (txtnode->GetText().isEmpty())
-        return OString();
+        return {};
     assert(txtnode->GetText().getLength() == 1);
     sal_Unicode chr = SmTextNode::ConvertSymbolToUnicode(txtnode->GetText()[0]);
     OUString aValue(chr);

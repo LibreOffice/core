@@ -99,7 +99,7 @@ BinaryDataContainer createBinaryDataContainer(SvStream& rStream)
     // Save the original PDF stream for later use.
     SvMemoryStream aMemoryStream;
     if (!getCompatibleStream(rStream, aMemoryStream))
-        return BinaryDataContainer();
+        return {};
 
     const sal_uInt32 nStreamLength = aMemoryStream.TellEnd();
 
@@ -108,9 +108,9 @@ BinaryDataContainer createBinaryDataContainer(SvStream& rStream)
     aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
     aMemoryStream.ReadBytes(aPdfData->data(), aPdfData->size());
     if (aMemoryStream.GetError())
-        return BinaryDataContainer();
+        return {};
 
-    return BinaryDataContainer(std::move(aPdfData));
+    return { std::move(aPdfData) };
 }
 
 } // end anonymous namespace
@@ -245,7 +245,7 @@ basegfx::B2DPoint convertFromPDFInternalToHMM(basegfx::B2DSize const& rInputPoin
 {
     double x = convertPointToMm100(rInputPoint.getX());
     double y = convertPointToMm100(rPageSize.getY() - rInputPoint.getY());
-    return basegfx::B2DPoint(x, y);
+    return { x, y };
 }
 
 std::vector<PDFGraphicAnnotation>

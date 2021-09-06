@@ -273,7 +273,7 @@ OString InsertOLE1Header(SvStream& rOle2, SvStream& rOle1, sal_uInt32& nWidth, s
     rOle2.Seek(0);
     tools::SvRef<SotStorage> xStorage(new SotStorage(rOle2));
     if (xStorage->GetError() != ERRCODE_NONE)
-        return OString();
+        return {};
 
     if (xStorage->IsStream("\1Ole10Native"))
     {

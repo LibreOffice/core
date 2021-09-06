@@ -378,12 +378,11 @@ SwTextBoxHelper::getUnoTextFrame(uno::Reference<drawing::XShape> const& xShape)
             auto pSdrObj = pFrameFormat->FindSdrObject();
             if (pSdrObj)
             {
-                return uno::Reference<css::text::XTextFrame>(pSdrObj->getUnoShape(),
-                                                             uno::UNO_QUERY);
+                return { pSdrObj->getUnoShape(), uno::UNO_QUERY };
             }
         }
     }
-    return uno::Reference<css::text::XTextFrame>();
+    return {};
 }
 
 template <typename T> static void lcl_queryInterface(const SwFrameFormat* pShape, uno::Any& rAny)
@@ -623,11 +622,11 @@ void SwTextBoxHelper::getProperty(SwFrameFormat const* pShape, sal_uInt16 nWID, 
 css::uno::Any SwTextBoxHelper::getProperty(SwFrameFormat const* pShape, const OUString& rPropName)
 {
     if (!pShape)
-        return uno::Any();
+        return {};
 
     SwFrameFormat* pFormat = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT);
     if (!pFormat)
-        return uno::Any();
+        return {};
 
     uno::Reference<beans::XPropertySet> const xPropertySet(
         SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat), uno::UNO_QUERY);

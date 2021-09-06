@@ -82,7 +82,7 @@ ODriver::getPropertyInfo(const OUString& url, const uno::Sequence<beans::Propert
         const OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
         ::dbtools::throwGenericSQLException(sMessage, *this);
     }
-    return uno::Sequence<sdbc::DriverPropertyInfo>();
+    return {};
 }
 
 } // namespace
