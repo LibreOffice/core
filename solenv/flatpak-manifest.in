@@ -285,11 +285,11 @@
                     "dest-filename": "libfreehand-0.1.2.tar.xz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/language-subtag-registry-2021-03-05.tar.bz2",
-                    "sha256": "ce80e8face06bf2ada363e0c159e3f990c4116fdae9232ca43e6369aa82bf16a",
+                    "url": "https://dev-www.libreoffice.org/src/language-subtag-registry-2021-08-06.tar.bz2",
+                    "sha256": "08452d3997c78e21f2d81e31409dc46557707be6dc1df3129674019659e5ff9b",
                     "type": "file",
                     "dest": "external/tarballs",
-                    "dest-filename": "language-subtag-registry-2021-03-05.tar.bz2"
+                    "dest-filename": "language-subtag-registry-2021-08-06.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/liblangtag-0.6.2.tar.bz2",
