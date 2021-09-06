@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca45cd61_127755b2",
+        "filename": "connectivity/source/drivers/flat/ETable.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-06T11:41:46Z",
+      "side": 1,
+      "message": "That should be set for both in TRowPositionInFile, first and second, otherwise the range in file would be [Tell(),0) (no idea what would happen then, but it\u0027s certainly not correct).",
+      "range": {
+        "startLine": 77,
+        "startChar": 68,
+        "endLine": 77,
+        "endChar": 72
+      },
+      "revId": "ecc7e35f9b9f2f9ceb42f0efcafdab66299c1a6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
