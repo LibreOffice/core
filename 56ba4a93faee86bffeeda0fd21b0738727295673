@@ -16,6 +16,23 @@
       "message": "Some of these settings should still be kept, or else it looks like a very old LO format.\nI don\u0027t know exactly what all these do, but it seems prudent to set modern defaults.\n\nI started document compatibility flags in general at https://wiki.documentfoundation.org/Documentation/CompatibilityFlags.",
       "revId": "56ba4a93faee86bffeeda0fd21b0738727295673",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e94ce6a0_c52a8a92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-06T07:51:30Z",
+      "side": 1,
+      "message": "Let me be a bit clearer in why I said these should be kept.\nIn sw/source/filter/xml/xmlimp.cxx we have the code that loads settings from the file. It watches to see if certain settings are MISSING. If they are missing (AKA - an old format), then it sets an old behaviour. So we want to includes these settings, and set them to the opposite value - the new behaviour.",
+      "revId": "56ba4a93faee86bffeeda0fd21b0738727295673",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
