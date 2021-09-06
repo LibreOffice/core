@@ -51,6 +51,24 @@
       "parentUuid": "7ef7c0aa_037c7e46",
       "revId": "c36da188cc7c9d89c331deb6326f045b6e9f0ad9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e29cb3a6_1ccd0a24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-09-06T14:58:08Z",
+      "side": 1,
+      "message": "The same for me. I\u0027ve checked also with a crashing document, and that works well with the generic VCL plugin, too. Thanks for your feedbacks!",
+      "parentUuid": "412a08ea_4dfc07b3",
+      "revId": "c36da188cc7c9d89c331deb6326f045b6e9f0ad9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
