@@ -16,6 +16,23 @@
       "message": "Always good to have someone double-check your thinking when dealing with compat settings...\n\nIf the ODT doesn\u0027t explicitly have these variables, then there is no need for code to explicitly set it to the default value. I don\u0027t think there is anything special about any of these situations, so likely this is just copy/paste duplication of un-necessity.\n\nOne more patch follows with a same song-different verse situation.",
       "revId": "fefe09a82db31297741b760c19fad956d6a989da",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ff981b5_0a6caff1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-06T11:52:05Z",
+      "side": 1,
+      "message": "The reason for the change? I was looking at Laurent\u0027s attempt to simplify a template, and he cut out almost all settings.xml content. That got me thinking that this would make an OLD looking file, and some settings SHOULD be included. I was going through this list of variables that \"are not set\" and found these that matched the default settings for no apparent reason.\n\nSo, it would be nice to have a clean list of variables that ought to be set as a minimum for a modern ODT.",
+      "revId": "fefe09a82db31297741b760c19fad956d6a989da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
