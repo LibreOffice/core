@@ -1837,7 +1837,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         case GOrdSXtCol: {
             sal_uInt16 nVal;
             if (nOrderID==GOrdPColor || nOrderID==GOrdSColor) {
-                sal_uInt8 nbyte;
+                sal_uInt8 nbyte(0);
                 pOS2MET->ReadUChar( nbyte ); nVal=static_cast<sal_uInt16>(nbyte)|0xff00;
             }
             else pOS2MET->ReadUInt16( nVal );
@@ -1992,7 +1992,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         case GOrdPLnWdt: PushAttr(nOrderID);
             [[fallthrough]];
         case GOrdSLnWdt: {
-            sal_uInt8 nbyte;
+            sal_uInt8 nbyte(0);
             pOS2MET->ReadUChar( nbyte );
             if (nbyte==0) aAttr.nLinWidth=aDefAttr.nLinWidth;
             else aAttr.nLinWidth=static_cast<sal_uInt16>(nbyte)-1;
@@ -2035,7 +2035,8 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         case GOrdPChSet: PushAttr(nOrderID);
             [[fallthrough]];
         case GOrdSChSet: {
-            sal_uInt8 nbyte; pOS2MET->ReadUChar( nbyte );
+            sal_uInt8 nbyte(0);
+            pOS2MET->ReadUChar( nbyte );
             aAttr.nChrSet=static_cast<sal_uInt32>(nbyte)&0xff;
             break;
         }
@@ -2107,7 +2108,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         case GOrdPMkSet: PushAttr(nOrderID);
             [[fallthrough]];
         case GOrdSMkSet: {
-            sal_uInt8 nbyte;
+            sal_uInt8 nbyte(0);
             pOS2MET->ReadUChar( nbyte );
             if (nbyte==0) aAttr.nMrkSet=aDefAttr.nMrkSet;
             else aAttr.nMrkSet=nbyte;
@@ -2117,7 +2118,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         case GOrdPMkSym: PushAttr(nOrderID);
             [[fallthrough]];
         case GOrdSMkSym: {
-            sal_uInt8 nbyte;
+            sal_uInt8 nbyte(0);
             pOS2MET->ReadUChar( nbyte );
             if (nbyte==0) aAttr.nMrkSymbol=aDefAttr.nMrkSymbol;
             else aAttr.nMrkSymbol=nbyte;
@@ -2132,7 +2133,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             aAttr.aMrkCellSize.setHeight(ReadCoord(bCoord32) );
             if (bCoord32) nLen-=8; else nLen-=4;
             if (nLen>=2) {
-                sal_uInt8 nbyte;
+                sal_uInt8 nbyte(0);
                 pOS2MET->ReadUChar( nbyte );
                 if ((nbyte&0x80)==0 && aAttr.aMrkCellSize==Size(0,0))
                     aAttr.aMrkCellSize=aDefAttr.aMrkCellSize;
