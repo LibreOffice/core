@@ -16,7 +16,6 @@
  <manifest:file-entry manifest:full-path="LOREM/LOREM.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="DA/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="DA/DA.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="RE/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="RE/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="RE/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="RE/styles.xml" manifest:media-type="text/xml"/>
@@ -27,34 +26,27 @@
  <manifest:file-entry manifest:full-path="N+ANo-M/styles.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="N+ANo-M/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
  <manifest:file-entry manifest:full-path="A/A.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="SOL/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="SOL/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="SOL/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="SOL/styles.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="SRECH/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="SRECH/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="SRECH/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="SRECH/styles.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="ATEN/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="ATEN/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="ATEN/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="ATEN/styles.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="BlockList.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="ESYS/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="ESYS/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="ESYS/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="ESYS/styles.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="AV1/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="AV1/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="AV1/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="AV1/styles.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="AV2/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="AV2/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="AV2/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="AV2/styles.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="SMAN/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="SMAN/SMAN.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="SINV/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="SINV/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="SINV/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="SINV/styles.xml" manifest:media-type="text/xml"/>

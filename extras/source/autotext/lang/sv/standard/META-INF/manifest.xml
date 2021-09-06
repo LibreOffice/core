@@ -8,19 +8,15 @@
  <manifest:file-entry manifest:full-path="ANY/ANY.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="OR/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="OR/OR.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="MVH/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="MVH/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="MVH/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="MVH/styles.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="UA/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="UA/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="UA/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="UA/styles.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="P1/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="P1/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="P1/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="P1/styles.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="P2/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="P2/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="P2/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="P2/styles.xml" manifest:media-type="text/xml"/>
@@ -40,17 +36,14 @@
  <manifest:file-entry manifest:full-path="B/B.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="BV/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="BV/BV.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="AA/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="AA/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="AA/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="AA/styles.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="BlockList.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="F/F.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="ANS/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="ANS/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="ANS/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="ANS/styles.xml" manifest:media-type="text/xml"/>
- <manifest:file-entry manifest:full-path="AI/meta.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="AI/atevent.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="AI/content.xml" manifest:media-type="text/xml"/>
  <manifest:file-entry manifest:full-path="AI/styles.xml" manifest:media-type="text/xml"/>
