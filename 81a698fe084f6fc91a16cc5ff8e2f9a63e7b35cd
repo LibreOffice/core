@@ -98,6 +98,30 @@
       },
       "revId": "81a698fe084f6fc91a16cc5ff8e2f9a63e7b35cd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ad50b55_e4147154",
+        "filename": "connectivity/source/drivers/flat/ETable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-06T11:24:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "375db633_bf30ff19",
+      "range": {
+        "startLine": 77,
+        "startChar": 23,
+        "endLine": 77,
+        "endChar": 29
+      },
+      "revId": "81a698fe084f6fc91a16cc5ff8e2f9a63e7b35cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
