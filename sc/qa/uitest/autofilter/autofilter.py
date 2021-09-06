@@ -545,4 +545,29 @@ class AutofilterTest(UITestCase):
 
         self.ui_test.close_doc()
 
+    def test_tdf144253(self):
+        doc = self.ui_test.load_file(get_url_for_data_file("tdf144253.ods"))
+
+        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+
+        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "4", "ROW": "0"}))
+        xFloatWindow = self.xUITest.getFloatWindow()
+        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+        xTreeList = xCheckListMenu.getChild("check_list_box")
+        self.assertEqual(2, len(xTreeList.getChildren()))
+        self.assertEqual("65.43", get_state_as_dict(xTreeList.getChild('0'))['Text'])
+        self.assertEqual("83.33", get_state_as_dict(xTreeList.getChild('1'))['Text'])
+
+        xFirstEntry = xTreeList.getChild("1")
+        xFirstEntry.executeAction("CLICK", tuple())
+
+        xOkBtn = xFloatWindow.getChild("ok")
+        xOkBtn.executeAction("CLICK", tuple())
+
+        self.assertFalse(is_row_hidden(doc, 0))
+        self.assertTrue(is_row_hidden(doc, 1))
+        self.assertFalse(is_row_hidden(doc, 2))
+
+        self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
