@@ -1,4 +1,5 @@
 dnl -*- Mode: Autoconf; tab-width: 4; indent-tabs-mode: nil; fill-column: 100 -*-
+dnl -*- Mode: Autoconf; tab-width: 4; indent-tabs-mode: nil; fill-column: 100 -*-
 dnl configure.ac serves as input for the GNU autoconf package
 dnl in order to create a configure script.
 
@@ -10348,6 +10349,11 @@ dnl ===================================================================
 dnl Check for system mdds
 dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([mdds], [MDDS], [mdds-1.5 >= 1.5.0], ["-I${WORKDIR}/UnpackedTarball/mdds/include"])
+
+dnl ===================================================================
+dnl Check for system cuckoo
+dnl ===================================================================
+libo_CHECK_SYSTEM_MODULE([cuckoo], [CUCKOO], [cuckoo-1.0 >= 1.0.0], ["-I${WORKDIR}/UnpackedTarball/cuckoo"])
 
 dnl ===================================================================
 dnl Check for system glm
