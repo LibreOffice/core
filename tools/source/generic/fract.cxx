@@ -43,6 +43,9 @@ static boost::rational<sal_Int32> toRational(sal_Int32 n, sal_Int32 d)
     // https://github.com/boostorg/boost/issues/335 when these are std::numeric_limits<sal_Int32>::min
     if (n == d)
         return 1;
+    // tdf#144319 avoid boost::bad_rational e.g. if numerator=-476741369, denominator=-2147483648
+    if (d < -std::numeric_limits<sal_Int32>::max())
+        return 0;
     return boost::rational<sal_Int32>(n, d);
 }
 
