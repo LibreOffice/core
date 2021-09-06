@@ -717,7 +717,7 @@ void ScAccessibleSpreadsheet::RemoveSelection(const ScMarkData &refScMarkData)
     AccessibleEventObject aEvent;
     aEvent.Source = uno::Reference< XAccessible >(this);
     MAP_ADDR_XACC::iterator miRemove = m_mapSelectionSend.begin();
-    for(;  miRemove != m_mapSelectionSend.end() ;)
+    while (miRemove != m_mapSelectionSend.end())
     {
         if (refScMarkData.IsCellMarked(miRemove->first.Col(),miRemove->first.Row(),true) ||
             refScMarkData.IsCellMarked(miRemove->first.Col(),miRemove->first.Row()) )
@@ -1567,7 +1567,7 @@ void ScAccessibleSpreadsheet::RemoveFormulaSelection(bool bRemoveAll )
     AccessibleEventObject aEvent;
     aEvent.Source = uno::Reference< XAccessible >(this);
     MAP_ADDR_XACC::iterator miRemove = m_mapFormulaSelectionSend.begin();
-    for(;  miRemove != m_mapFormulaSelectionSend.end() ;)
+    while (miRemove != m_mapFormulaSelectionSend.end())
     {
         if( !bRemoveAll && IsScAddrFormulaSel(miRemove->first) )
         {
