@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "308e38de_7e07feab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-09-06T13:41:38Z",
+      "side": 1,
+      "message": "You probably introduced the lag with the merge conflict with LOK_CALLBACK_VIEW_SCROLL.",
+      "revId": "460348e90a683272afca92e93ff4e19ed7150310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
