@@ -34,6 +34,46 @@
       "parentUuid": "5ccbff8e_25924ffd",
       "revId": "4502ad7b3c34650b838db3a08221d838a46e50b0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "635c8194_4fe704ca",
+        "filename": "basic/qa/vba_tests/collection.vb",
+        "patchSetId": 11
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-06T06:58:46Z",
+      "side": 1,
+      "message": "Thanks for adding the intended final results! Please make the two cases consistent: you have the \"After the fix of\" comment *after* the corresponding line 59, but *before* the line 68.",
+      "revId": "4502ad7b3c34650b838db3a08221d838a46e50b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7ed6d18_0cb05586",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 2075,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-06T06:58:46Z",
+      "side": 1,
+      "message": "utl::TextSearch (internally using an implementation from i18npool/source/search/textsearch.hxx) looks like an overkill here. It creates a css::i18n::BreakIterator, and an implementation of css::i18n::XExtendedTransliteration. It allows for searching substrings. It needs a complex procedure to just compare two strings.\n\nWe don\u0027t need the search capabilities; we only need what css::i18n::XExtendedTransliteration provides: equals or compareString [1]. We may use utl::TransliterationWrapper for that (that even has an isEqual helper).\n\n[1] https://api.libreoffice.org/docs/idl/ref/interfacecom_1_1sun_1_1star_1_1i18n_1_1XTransliteration.html#a92b4f658b622eb9a2738f9088ee85075",
+      "range": {
+        "startLine": 2075,
+        "startChar": 4,
+        "endLine": 2075,
+        "endChar": 19
+      },
+      "revId": "4502ad7b3c34650b838db3a08221d838a46e50b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
