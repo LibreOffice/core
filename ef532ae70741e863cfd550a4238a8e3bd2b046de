@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7d3f12a_87fef08f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-09-06T18:16:21Z",
+      "side": 1,
+      "message": "rene@frodo:~/libcuckoo$ sudo make install\nInstall the project...\n-- Install configuration: \"\"\n-- Installing: /usr/local/share/cmake/libcuckoo/libcuckoo-targets.cmake\n-- Installing: /usr/local/share/cmake/libcuckoo/libcuckoo-config.cmake\n-- Installing: /usr/local/share/cmake/libcuckoo/libcuckoo-config-version.cmake\n-- Installing: /usr/local/include/libcuckoo/cuckoohash_config.hh\n-- Installing: /usr/local/include/libcuckoo/cuckoohash_map.hh\n-- Installing: /usr/local/include/libcuckoo/cuckoohash_util.hh\n-- Installing: /usr/local/include/libcuckoo/bucket_container.hh\n-- Installing: /usr/local/include/libcuckoo-c/cuckoo_table_template.h\n-- Installing: /usr/local/include/libcuckoo-c/cuckoo_table_template.cc\n\nSo AC_CHECK_HEADER for libcuckoo/cuckoohash_map.hh, see the check below",
+      "revId": "ef532ae70741e863cfd550a4238a8e3bd2b046de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da8ec066_a8a69fcc",
@@ -14,6 +31,24 @@
       "writtenOn": "2021-09-06T18:00:07Z",
       "side": 1,
       "message": "that one checks for a .pc file.\n\na) I don\u0027t see https://github.com/efficient/libcuckoo shipping a .pc at all\nb) I don\u0027t see there would be any \u003e\u003d 1.0.0 release\n\nYou probably should use AC_CHECK_HEADER, if it\u0027s indeed only header-only",
+      "revId": "ef532ae70741e863cfd550a4238a8e3bd2b046de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fad3cec5_e07fc507",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 10356,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-09-06T18:16:21Z",
+      "side": 1,
+      "message": "rene@frodo:~/libcuckoo$ sudo make install\nInstall the project...\n-- Install configuration: \"\"\n-- Installing: /usr/local/share/cmake/libcuckoo/libcuckoo-targets.cmake\n-- Installing: /usr/local/share/cmake/libcuckoo/libcuckoo-config.cmake\n-- Installing: /usr/local/share/cmake/libcuckoo/libcuckoo-config-version.cmake\n-- Installing: /usr/local/include/libcuckoo/cuckoohash_config.hh\n-- Installing: /usr/local/include/libcuckoo/cuckoohash_map.hh\n-- Installing: /usr/local/include/libcuckoo/cuckoohash_util.hh\n-- Installing: /usr/local/include/libcuckoo/bucket_container.hh\n-- Installing: /usr/local/include/libcuckoo-c/cuckoo_table_template.h\n-- Installing: /usr/local/include/libcuckoo-c/cuckoo_table_template.cc\n\nSo AC_CHECK_HEADER for libcuckoo/cuckoohash_map.hh, see the check below.",
+      "parentUuid": "da8ec066_a8a69fcc",
       "revId": "ef532ae70741e863cfd550a4238a8e3bd2b046de",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
