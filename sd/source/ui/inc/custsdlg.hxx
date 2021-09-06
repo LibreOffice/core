@@ -84,8 +84,6 @@ public:
 
     SdDefineCustomShowDlg(weld::Window* pWindow, SdDrawDocument& rDrawDoc, std::unique_ptr<SdCustomShow>& rpCS);
     virtual ~SdDefineCustomShowDlg() override;
-
-    bool            IsModified() const { return bModified; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
