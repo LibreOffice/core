@@ -208,7 +208,6 @@ private:
     HRESULT GetLastChild(VARIANT varStart,VARIANT* pvarEndUpAt);//for accNavigate implementation
     HRESULT GetNextSibling(VARIANT varStart,VARIANT* pvarEndUpAt);//for accNavigate implementation
     HRESULT GetPreSibling(VARIANT varStart,VARIANT* pvarEndUpAt);//for accNavigate implementation
-    bool IsDescendantManage();//identify whether the current COM belongs to manage_descendant roles
 
     // the following private methods are used to implement accSelect method
     HRESULT SelectChild(css::accessibility::XAccessible* pItem);

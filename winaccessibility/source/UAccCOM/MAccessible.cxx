@@ -1406,17 +1406,6 @@ IMAccessible* CMAccessible::GetChildInterface(long dChildID)//for test
 }
 
 /**
-* For List, tree and table,these roles belong to manage_descendant in UNO,
-* need to process specifically when navigate
-* @return  BOOL, if it is descendantmanager, return true.
-*/
-bool CMAccessible::IsDescendantManage()
-{
-
-    return (m_iRole==ROLE_SYSTEM_LIST)||(m_iRole==ROLE_SYSTEM_OUTLINE)||(m_iRole==ROLE_SYSTEM_TABLE);
-}
-
-/**
 * for descendantmanager circumstance,provide child interface when navigate
 * @param    varCur, the current child.
 * @param    flags, the navigation direction.
