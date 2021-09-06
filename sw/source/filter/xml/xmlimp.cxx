@@ -1301,7 +1301,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bIgnoreFirstLineIndentInNumbering = false;
     bool bDoNotJustifyLinesWithManualBreak = false;
     bool bDoNotResetParaAttrsForNumFont    = false;
-    bool bLoadReadonly = false;
     bool bDoNotCaptureDrawObjsOnPage( false );
     bool bClipAsCharacterAnchoredWriterFlyFrames( false );
     bool bUnixForceZeroExtLeading = false;
@@ -1381,8 +1380,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                     bDoNotJustifyLinesWithManualBreak = true;
                 else if ( rValue.Name == "DoNotResetParaAttrsForNumFont" )
                     bDoNotResetParaAttrsForNumFont = true;
-                else if ( rValue.Name == "LoadReadonly" )
-                    bLoadReadonly = true;
                 else if ( rValue.Name == "DoNotCaptureDrawObjsOnPage" )
                     bDoNotCaptureDrawObjsOnPage = true;
                 else if ( rValue.Name == "ClipAsCharacterAnchoredWriterFlyFrames" )
@@ -1509,11 +1506,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     {
         xProps->setPropertyValue( "DoNotResetParaAttrsForNumFont",
             makeAny( true ) );
-    }
-
-    if ( !bLoadReadonly )
-    {
-        xProps->setPropertyValue( "LoadReadonly", makeAny( false ) );
     }
 
     // This flag has to be set for all documents < SO8
