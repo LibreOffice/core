@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da8ec066_a8a69fcc",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 10356,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-09-06T18:00:07Z",
+      "side": 1,
+      "message": "that one checks for a .pc file.\n\na) I don\u0027t see https://github.com/efficient/libcuckoo shipping a .pc at all\nb) I don\u0027t see there would be any \u003e\u003d 1.0.0 release\n\nYou probably should use AC_CHECK_HEADER, if it\u0027s indeed only header-only",
+      "revId": "ef532ae70741e863cfd550a4238a8e3bd2b046de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
