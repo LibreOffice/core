@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4e89a0b_0cdeb56b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-09-06T20:25:29Z",
+      "side": 1,
+      "message": "Thought it could be interesting at least for master branch (also perhaps on 7.2 branch?)",
+      "revId": "adba5025f4676e3af01611fc1f91ba2f706dc386",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
