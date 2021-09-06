@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb0ed550_16357e01",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-09-06T11:00:26Z",
+      "side": 1,
+      "message": "@xisco: did you add me to the reviewers explicitly or was that done automatically?\n\nI can\u0027t review my own change, as I reviewed the original... being the author should be sufficient for notifications and this way I\u0027ll maybe be skipped from the \"attention set\" - let\u0027s see if I\u0027m correct.",
+      "revId": "de3c876df9773460925eaa7dd1df7fd1491413e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
