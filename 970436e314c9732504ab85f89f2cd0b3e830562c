@@ -16,6 +16,41 @@
       "message": "Any concerns performance-wise?",
       "revId": "970436e314c9732504ab85f89f2cd0b3e830562c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b230515_fee9a829",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-06T11:34:04Z",
+      "side": 1,
+      "message": "Keep holding CursorDown until rows start scrolling and you\u0027ll see the cell cursor lagging behind and not being redrawn until key released; worse with CursorUp after that, scrolling then also lacks clearing of the old cell cursor.",
+      "parentUuid": "b8d7fbaf_41f72a4f",
+      "revId": "970436e314c9732504ab85f89f2cd0b3e830562c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe019397_a24e3e8c",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 6260,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-06T11:34:04Z",
+      "side": 1,
+      "message": "On large zoom values (e.g. 200%+) the border becomes quite thick (too thick for my taste), but worse on small zoom values below 75% it\u0027s barely visible anymore.",
+      "revId": "970436e314c9732504ab85f89f2cd0b3e830562c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
