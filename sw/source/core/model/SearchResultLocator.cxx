@@ -20,6 +20,8 @@
 #include <tools/XmlWalker.hxx>
 #include <tools/stream.hxx>
 
+#include <boost/property_tree/json_parser.hpp>
+
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
 
@@ -30,7 +32,7 @@ void SearchResultLocator::findOne(LocationResult& rResult, SearchIndexData const
     if (rSearchIndexData.meType == NodeType::WriterNode)
     {
         SwNodes const& rNodes = mpDocument->GetNodes();
-        if (rSearchIndexData.mnNodeIndex >= rNodes.Count())
+        if (rSearchIndexData.mnNodeIndex >= sal_Int32(rNodes.Count()))
             return;
         SwNode* pNode = rNodes[rSearchIndexData.mnNodeIndex];
 
@@ -85,51 +87,91 @@ LocationResult SearchResultLocator::find(std::vector<SearchIndexData> const& rSe
     return aResult;
 }
 
-LocationResult SearchResultLocator::findForPayload(const char* pPayload)
+/** Trying to parse the payload as JSON
+ *
+ *  Returns true if parsing was successful and the payload was identified as JSON, else false
+ */
+bool SearchResultLocator::tryParseJSON(const char* pPayload,
+                                       std::vector<sw::search::SearchIndexData>& rDataVector)
 {
-    LocationResult aResult;
+    boost::property_tree::ptree aTree;
+    std::stringstream aStream(pPayload);
+    try
+    {
+        boost::property_tree::read_json(aStream, aTree);
+    }
+    catch (const boost::property_tree::json_parser_error& /*exception*/)
+    {
+        return false;
+    }
 
+    for (auto& rEachNode : boost::make_iterator_range(aTree.equal_range("")))
+    {
+        auto const& rEach = rEachNode.second;
+
+        sal_Int32 nType = rEach.get<sal_Int32>("type", 0);
+        sal_Int32 nIndex = rEach.get<sal_Int32>("index", -1);
+
+        // Don't add search data elements that don't have valid data
+        if (nType > 0 && nIndex >= 0)
+            rDataVector.emplace_back(sw::search::NodeType(nType), nIndex);
+    }
+
+    return true;
+}
+
+/** Trying to parse the payload as XML
+ *
+ *  Returns true if parsing was successful and the payload was identified as XML, else false
+ */
+bool SearchResultLocator::tryParseXML(const char* pPayload,
+                                      std::vector<sw::search::SearchIndexData>& rDataVector)
+{
     const OString aPayloadString(pPayload);
 
     SvMemoryStream aStream(const_cast<char*>(aPayloadString.getStr()), aPayloadString.getLength(),
                            StreamMode::READ);
+
     tools::XmlWalker aWalker;
 
     if (!aWalker.open(&aStream))
-        return aResult;
+        return false;
 
-    if (aWalker.name() == "indexing")
+    if (aWalker.name() != "indexing")
+        return true;
+
+    aWalker.children();
+    while (aWalker.isValid())
     {
-        std::vector<sw::search::SearchIndexData> aDataVector;
-        aWalker.children();
-        while (aWalker.isValid())
+        if (aWalker.name() == "paragraph")
         {
-            if (aWalker.name() == "paragraph")
+            OString sType = aWalker.attribute("type");
+            OString sIndex = aWalker.attribute("index");
+
+            if (!sType.isEmpty() && !sIndex.isEmpty())
             {
-                OString sType = aWalker.attribute("type");
-                OString sIndex = aWalker.attribute("index");
+                sw::search::SearchIndexData aData;
+                aData.mnNodeIndex = sIndex.toInt32();
+                aData.meType = sw::search::NodeType(sType.toInt32());
 
-                if (!sType.isEmpty() && !sIndex.isEmpty())
-                {
-                    sw::search::SearchIndexData aData;
-                    aData.mnNodeIndex = sIndex.toInt32();
-                    aData.meType = sw::search::NodeType(sType.toInt32());
-
-                    aDataVector.push_back(aData);
-                }
+                rDataVector.push_back(aData);
             }
-            aWalker.next();
         }
-        aWalker.parent();
-
-        if (!aDataVector.empty())
-        {
-            for (auto const& rSearchIndexData : aDataVector)
-                findOne(aResult, rSearchIndexData);
-        }
+        aWalker.next();
     }
+    aWalker.parent();
+    return true;
+}
 
-    return aResult;
+LocationResult SearchResultLocator::findForPayload(const char* pPayload)
+{
+    std::vector<sw::search::SearchIndexData> aDataVector;
+
+    // Try parse the payload as JSON, if not recognised as JSON, try parse
+    // it as XML
+    tryParseJSON(pPayload, aDataVector) || tryParseXML(pPayload, aDataVector);
+
+    return find(aDataVector);
 }
 
 } // end sw namespace
