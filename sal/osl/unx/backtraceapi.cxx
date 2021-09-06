@@ -213,6 +213,7 @@ OUString sal::backtrace_to_string(BacktraceState* backtraceState)
     {
         if (i != 0)
             b3.append("\n");
+        b3.append( "#" + OUString::number( i ) + " " );
         if(!frameData[i].info.isEmpty())
             b3.append(o3tl::runtimeToOUString(frameData[i].info.getStr()));
         else
@@ -245,6 +246,7 @@ OUString sal::backtrace_to_string(BacktraceState* backtraceState)
         if (i != 0) {
             b3.append("\n");
         }
+        b3.append( "#" + OUString::number( i ) + " " );
         b3.append(o3tl::runtimeToOUString(b2.get()[i]));
     }
     return b3.makeStringAndClear();
