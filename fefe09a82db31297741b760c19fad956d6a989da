@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3836d91b_53aa87aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-06T11:48:15Z",
+      "side": 1,
+      "message": "Always good to have someone double-check your thinking when dealing with compat settings...\n\nIf the ODT doesn\u0027t explicitly have these variables, then there is no need for code to explicitly set it to the default value. I don\u0027t think there is anything special about any of these situations, so likely this is just copy/paste duplication of un-necessity.\n\nOne more patch follows with a same song-different verse situation.",
+      "revId": "fefe09a82db31297741b760c19fad956d6a989da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
