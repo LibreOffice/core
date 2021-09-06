@@ -156,6 +156,24 @@
       "parentUuid": "d8861281_c6ea64e9",
       "revId": "8a1b6e33051683166350c857666b90fef02eb112",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5eead4ef_cf08a341",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1003336
+      },
+      "writtenOn": "2021-09-06T16:41:20Z",
+      "side": 1,
+      "message": "I don\u0027t know what API we are using to connect to Firebird, but I have been looking around, and in the API that they call IBPP from the firebird page, the user class is defined as follows:\n\t/* Class User wraps all the information about a user that the engine can manage. */\n\n\tclass User\n\t{\n\tpublic:\n\t\tstd::string username;\n\t\tstd::string password;\n\t\tstd::string firstname;\n\t\tstd::string middlename;\n\t\tstd::string lastname;\n\t\tuint32_t userid;\t\t// Only relevant on unixes\n\t\tuint32_t groupid;\t\t// Only relevant on unixes\n\nThat is, both username and password are defined as strings, so, IMHO, we shouldn\u0027t worry about the size of our OString.\nI wait for your answer to see if I change something like you said in the previous message or just leave it as it is, without worrying about the size.",
+      "parentUuid": "79bcb56d_5446a89b",
+      "revId": "8a1b6e33051683166350c857666b90fef02eb112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
