@@ -1190,7 +1190,7 @@ protected:
     void SetFontCollectionFromSVData();
     void ResetNewFontCache();
 
-    SAL_DLLPRIVATE bool         ImplNewFont() const;
+    SAL_DLLPRIVATE virtual bool ImplNewFont() const;
 
 private:
 
