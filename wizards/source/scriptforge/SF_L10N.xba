@@ -53,7 +53,7 @@ Option Explicit
 &apos;&apos;&apos;				Locale: in the form la-CO (language-COUNTRY)
 &apos;&apos;&apos;		Service invocation examples:
 &apos;&apos;&apos;			Dim myPO As Variant
-&apos;&apos;&apos;			myPO = CreateScriptService(&quot;L10N&quot;)	&apos;	AddText, AddTextsFromDialogt and ExportToPOTFile are allowed
+&apos;&apos;&apos;			myPO = CreateScriptService(&quot;L10N&quot;)	&apos;	AddText, AddTextsFromDialog and ExportToPOTFile are allowed
 &apos;&apos;&apos;			myPO = CreateScriptService(&quot;L10N&quot;, &quot;C:\myPOFiles\&quot;, &quot;fr-BE&quot;)
 &apos;&apos;&apos;				&apos;All functionalities are available
 &apos;&apos;&apos;
