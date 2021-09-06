@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0380f49a_8dfe2495",
+        "filename": "include/vcl/print.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-06T11:04:56Z",
+      "side": 1,
+      "message": "If we follow the convention that I mentioned about the sal/config.h, then it must be the absolutely first, before any other headers, however sorted they might be.",
+      "revId": "ec1ae63e6afe6fb2d1e2a96bfb5be2776e6414dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
