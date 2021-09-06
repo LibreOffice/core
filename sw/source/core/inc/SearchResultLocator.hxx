@@ -18,20 +18,20 @@ namespace sw::search
 {
 enum class NodeType
 {
-    Undefined,
-    WriterNode,
-    SdrObject
+    Undefined = 0,
+    WriterNode = 1,
+    SdrObject = 2
 };
 
 struct SearchIndexData
 {
     NodeType meType = NodeType::Undefined;
-    sal_uInt32 mnNodeIndex = 0;
+    sal_Int32 mnNodeIndex = 0;
     OUString maObjectName;
 
     SearchIndexData() {}
 
-    SearchIndexData(NodeType eType, sal_uInt32 nNodeIndex, OUString const& aObjectName = OUString())
+    SearchIndexData(NodeType eType, sal_Int32 nNodeIndex, OUString const& aObjectName = OUString())
         : meType(eType)
         , mnNodeIndex(nNodeIndex)
         , maObjectName(aObjectName)
@@ -50,6 +50,8 @@ class SW_DLLPUBLIC SearchResultLocator
     SwDoc* mpDocument;
 
     void findOne(LocationResult& rResult, SearchIndexData const& rSearchIndexData);
+    bool tryParseJSON(const char* pPayload, std::vector<sw::search::SearchIndexData>& rDataVector);
+    bool tryParseXML(const char* pPayload, std::vector<sw::search::SearchIndexData>& rDataVector);
 
 public:
     SearchResultLocator(SwDoc* pDoc)
@@ -58,7 +60,6 @@ public:
     }
 
     LocationResult find(std::vector<SearchIndexData> const& rSearchIndexDataVector);
-
     LocationResult findForPayload(const char* pPayload);
 };
 
