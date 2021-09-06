@@ -105,8 +105,8 @@ public:
 class SwLabCfgItem final : public utl::ConfigItem
 {
 private:
-    SwLabItem   aItem;
-    bool    bIsLabel;
+    SwLabItem   m_aItem;
+    bool    m_bIsLabel;
 
     css::uno::Sequence<OUString> GetPropertyNames() const;
 
@@ -115,7 +115,7 @@ private:
 public:
     SwLabCfgItem(bool bLabel);
 
-    SwLabItem&              GetItem() {return aItem;}
+    SwLabItem&              GetItem() {return m_aItem;}
 
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 };
