@@ -1,0 +1,326 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b50b0e3e_388391d2",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-06T07:47:47Z",
+      "side": 0,
+      "message": "keep - set true.",
+      "range": {
+        "startLine": 43,
+        "startChar": 39,
+        "endLine": 43,
+        "endChar": 50
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8c34f42_d22729bc",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-06T07:47:47Z",
+      "side": 0,
+      "message": "keep - set true.",
+      "range": {
+        "startLine": 44,
+        "startChar": 39,
+        "endLine": 44,
+        "endChar": 70
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3287c365_549cd9c0",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-06T07:47:47Z",
+      "side": 0,
+      "message": "keep - set false.",
+      "range": {
+        "startLine": 45,
+        "startChar": 39,
+        "endLine": 45,
+        "endChar": 60
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37ad9d67_247ec7f7",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-06T07:47:47Z",
+      "side": 0,
+      "message": "keep",
+      "range": {
+        "startLine": 47,
+        "startChar": 39,
+        "endLine": 47,
+        "endChar": 60
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1bfd7f6_9f4157bc",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-06T07:47:47Z",
+      "side": 0,
+      "message": "keep - set false",
+      "range": {
+        "startLine": 49,
+        "startChar": 40,
+        "endLine": 49,
+        "endChar": 61
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0002cf65_0f8687b7",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-06T07:47:47Z",
+      "side": 0,
+      "message": "keep - set true.",
+      "range": {
+        "startLine": 51,
+        "startChar": 39,
+        "endLine": 51,
+        "endChar": 54
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54542188_1c840c03",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-06T07:47:47Z",
+      "side": 0,
+      "message": "keep - set false.",
+      "range": {
+        "startLine": 58,
+        "startChar": 39,
+        "endLine": 58,
+        "endChar": 60
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25b5874a_f9f4abe3",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-06T07:47:47Z",
+      "side": 0,
+      "message": "add AddParaLineSpacingToTableCells - true.",
+      "range": {
+        "startLine": 60,
+        "startChar": 39,
+        "endLine": 60,
+        "endChar": 65
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08e69636_38f8fb13",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-06T07:47:47Z",
+      "side": 0,
+      "message": "keep - set false.",
+      "range": {
+        "startLine": 63,
+        "startChar": 39,
+        "endLine": 63,
+        "endChar": 59
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e4f98bd_cb91f0ec",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-06T07:47:47Z",
+      "side": 0,
+      "message": "keep - set false.",
+      "range": {
+        "startLine": 66,
+        "startChar": 39,
+        "endLine": 66,
+        "endChar": 54
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d47d5e1e_cad4e887",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-06T07:47:47Z",
+      "side": 0,
+      "message": "keep - set true.",
+      "range": {
+        "startLine": 67,
+        "startChar": 39,
+        "endLine": 67,
+        "endChar": 58
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e6cf173_cff59b44",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-06T07:47:47Z",
+      "side": 0,
+      "message": "keep - set false.",
+      "range": {
+        "startLine": 73,
+        "startChar": 39,
+        "endLine": 73,
+        "endChar": 65
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb2ba158_d84a55a9",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-06T07:47:47Z",
+      "side": 0,
+      "message": "keep - set to high-resolution",
+      "range": {
+        "startLine": 75,
+        "startChar": 39,
+        "endLine": 75,
+        "endChar": 63
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9379ad12_5ca9f585",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/settings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-06T07:47:47Z",
+      "side": 0,
+      "message": "keep - and leave as false.  (verified in an ODT I created that it matches the default. But we don\u0027t want to leave this empty, or it considers it to be pre-S08 and affects other settings.",
+      "range": {
+        "startLine": 80,
+        "startChar": 39,
+        "endLine": 80,
+        "endChar": 63
+      },
+      "revId": "bcd823d31f7a2c670db81988e527d5c9682fe177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

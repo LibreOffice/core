@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47856f49_3cb74299",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-06T07:47:47Z",
+      "side": 1,
+      "message": "Some of these settings should still be kept, or else it looks like a very old LO format.\nI don\u0027t know exactly what all these do, but it seems prudent to set modern defaults.\n\nI started document compatibility flags in general at https://wiki.documentfoundation.org/Documentation/CompatibilityFlags.",
+      "revId": "56ba4a93faee86bffeeda0fd21b0738727295673",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
