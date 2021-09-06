@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0a77fc8_2298f8cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-09-06T13:07:13Z",
+      "side": 1,
+      "message": "Undo cause crash, unfortunately. But if this issue is fixed, it can be merged.",
+      "revId": "0d4c9dff14474dead014dacfe0256afe9091217b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
