@@ -48,41 +48,41 @@ published enum TransliterationModulesNew
     /// Ignore full width and half width characters when comparing strings by transliteration service
     IGNORE_WIDTH                   = 9,  // ja_JP
     /// Ignore Japanese traditional Kanji characters in Japanese fuzzy search
-    ignoreTraditionalKanji_ja_JP   = 10,
+    IgnoreTraditionalKanji_ja_JP   = 10,
     /// Ignore Japanese traditional Katakana and Hiragana characters in Japanese fuzzy search
-    ignoreTraditionalKana_ja_JP    = 11,
+    IgnoreTraditionalKana_ja_JP    = 11,
     /// Ignore dash or minus sign in Japanese fuzzy search
-    ignoreMinusSign_ja_JP          = 12,
+    IgnoreMinusSign_ja_JP          = 12,
     /// Ignore Hiragana and Katakana iteration mark in Japanese fuzzy search
-    ignoreIterationMark_ja_JP      = 13,
+    IgnoreIterationMark_ja_JP      = 13,
     /// Ignore separator punctuations in Japanese fuzzy search
-    ignoreSeparator_ja_JP          = 14,
+    IgnoreSeparator_ja_JP          = 14,
     /// Ignore Katakana and Hiragana Zi/Zi and Zu/Zu  in Japanese fuzzy search
-    ignoreZiZu_ja_JP               = 15,
+    IgnoreZiZu_ja_JP               = 15,
     /// Ignore Katakana and Hiragana Ba/Gua and Ha/Fa in Japanese fuzzy search
-    ignoreBaFa_ja_JP               = 16,
+    IgnoreBaFa_ja_JP               = 16,
     /// Ignore Katakana and Hiragana Tsui/Tea/Ti and Dyi/Ji in Japanese fuzzy search
-    ignoreTiJi_ja_JP               = 17,
+    IgnoreTiJi_ja_JP               = 17,
     /// Ignore Katakana and Hiragana Hyu/Fyu and Byu/Gyu in Japanese fuzzy search
-    ignoreHyuByu_ja_JP             = 18,
+    IgnoreHyuByu_ja_JP             = 18,
     /// Ignore Katakana and Hiragana Se/Sye and Ze/Je in Japanese fuzzy search
-    ignoreSeZe_ja_JP               = 19,
+    IgnoreSeZe_ja_JP               = 19,
     /// Ignore Katakana YA/A following the character in either I or E row in Japanese fuzzy search
-    ignoreIandEfollowedByYa_ja_JP  = 20,
+    IgnoreIandEfollowedByYa_ja_JP  = 20,
     /// Ignore Katakana KI/KU following the character in SA column in Japanese fuzzy search
-    ignoreKiKuFollowedBySa_ja_JP   = 21,
+    IgnoreKiKuFollowedBySa_ja_JP   = 21,
     /// Ignore Japanese normal and small sized character in Japanese fuzzy search
-    ignoreSize_ja_JP               = 22,
+    IgnoreSize_ja_JP               = 22,
     /// Ignore Japanese prolonged sound mark in Japanese fuzzy search
-    ignoreProlongedSoundMark_ja_JP = 23,
+    IgnoreProlongedSoundMark_ja_JP = 23,
     /// Ignore middle dot in Japanese fuzzy search
-    ignoreMiddleDot_ja_JP          = 24,
+    IgnoreMiddleDot_ja_JP          = 24,
     /// Ignore white space characters, include space, TAB, return, etc. in Japanese fuzzy search
-    ignoreSpace_ja_JP              = 25,
+    IgnoreSpace_ja_JP              = 25,
     /// transliterate Japanese small sized character to normal sized character
-    smallToLarge_ja_JP             = 26,
+    SmallToLarge_ja_JP             = 26,
     /// transliterate Japanese normal sized character to small sized character
-    largeToSmall_ja_JP             = 27,
+    LargeToSmall_ja_JP             = 27,
     /// Transliterate an ASCII number string to Simplified Chinese lower case number string in spellout format
     NumToTextLower_zh_CN           = 28,
     /// Transliterate an ASCII number string to Simplified Chinese upper case number string in spellout format
