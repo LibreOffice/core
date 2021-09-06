@@ -16,6 +16,24 @@
       "message": "Why not simply\n\n    const sal_Int32 nPos \u003d static_cast\u003csal_Int32\u003e(m_pFileStream-\u003eTell());\n    TRowPositionInFile rowPos(nPos, nPos);\n\ninstead of calling Tell() twice?",
       "revId": "519e9258e836213d8f8d773bcebf7d124ed04c2a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0dfd117_923b25d0",
+        "filename": "connectivity/source/drivers/flat/ETable.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-06T20:49:07Z",
+      "side": 1,
+      "message": "Sry for the noise, but when the day was long ...",
+      "parentUuid": "d79ee93d_f3ebd62c",
+      "revId": "519e9258e836213d8f8d773bcebf7d124ed04c2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
