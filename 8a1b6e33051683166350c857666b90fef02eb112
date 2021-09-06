@@ -174,6 +174,47 @@
       "parentUuid": "79bcb56d_5446a89b",
       "revId": "8a1b6e33051683166350c857666b90fef02eb112",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29683e37_02adef9e",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-06T20:56:43Z",
+      "side": 1,
+      "message": "The API they use internally doesn\u0027t matter. As it is obvious now:\n\n1. isc_create_database has a limit of 32KiB of the dpbBuffer.\n2. When putting a username and password to this dpbBuffer, the structure is 1 byte constant defining the type of the value (e.g., isc_dpb_user_name), then *1 byte len*, then bytes representing the value; hence the value *must* be limited to 256 characters max, or else it will get a garbage length, and try to read the next value after that garbage 1-byte len.",
+      "parentUuid": "5eead4ef_cf08a341",
+      "revId": "8a1b6e33051683166350c857666b90fef02eb112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b8b3ef1_5a6c8826",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-06T20:56:43Z",
+      "side": 1,
+      "message": "\u003e I don\u0027t know what API we are using to connect to Firebird\n\nThis one",
+      "range": {
+        "startLine": 277,
+        "startChar": 19,
+        "endLine": 277,
+        "endChar": 38
+      },
+      "revId": "8a1b6e33051683166350c857666b90fef02eb112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
