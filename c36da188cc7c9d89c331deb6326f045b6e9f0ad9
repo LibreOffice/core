@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1c60369_908f05b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-09-06T06:53:27Z",
+      "side": 1,
+      "message": "@Aron: thanks for the fix and CCing. (We planned an unit test before e.g. selecting the text and inserting a section crashed on 80% of the fixed code parts, so if you think, you can do that, too.)",
+      "revId": "c36da188cc7c9d89c331deb6326f045b6e9f0ad9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
