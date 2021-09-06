@@ -46,7 +46,7 @@ namespace xmloff::token {
     /**
      * The enumeration of all XML tokens.
      */
-    enum XMLTokenEnum
+    enum XMLTokenEnum : sal_Int16
     {
         XML_TOKEN_START = 0,
         XML_TOKEN_INVALID = XML_TOKEN_START,

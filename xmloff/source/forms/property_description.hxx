@@ -63,17 +63,17 @@ namespace xmloff
         /** denotes the attribute which represents the property. Note that multiple properties might comprise a single
             attribute value.
         */
-        const AttributeDescription          attribute;
         /// is the factory for creating a handler for reading and writing the property
         const PropertyHandlerFactory        factory;
         /// the unique ID of the property. The property meta data table must not contain two entries with the same property ID
         const PropertyId                    propertyId;
+        const AttributeDescription          attribute;
 
         PropertyDescription()
             :propertyName()
-            ,attribute()
             ,factory( nullptr )
             ,propertyId( PID_INVALID )
+            ,attribute()
         {
         }
 
@@ -85,9 +85,9 @@ namespace xmloff
             const PropertyId                    i_propertyId
         )
             :propertyName( i_propertyName )
-            ,attribute( i_namespacePrefix, i_attributeToken )
             ,factory( i_factory )
             ,propertyId( i_propertyId )
+            ,attribute( i_namespacePrefix, i_attributeToken )
         {
         }
     };

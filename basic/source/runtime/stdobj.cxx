@@ -58,16 +58,16 @@
 namespace {
 
 struct Method {
+    RtlCall     pFunc;
     std::u16string_view sName;
     SbxDataType eType;
     short       nArgs;
-    RtlCall     pFunc;
     sal_uInt16      nHash;
     constexpr Method(std::u16string_view name, SbxDataType type, short args, RtlCall func)
-        : sName(name)
+        : pFunc(func)
+        , sName(name)
         , eType(type)
         , nArgs(args)
-        , pFunc(func)
         , nHash(SbxVariable::MakeHashCode(name))
     {
     }
