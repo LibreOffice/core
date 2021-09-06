@@ -682,6 +682,13 @@
                     "type": "file",
                     "dest": "external/tarballs",
                     "dest-filename": "f543e6e2d7275557a839a164941c0a86e5f2c3f2a0042bfc434c88c6dde9e140-opens___.ttf"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/libcuckoo-93217f8d391718380c508a722ab9acd5e9081233.tar.gz",
+                    "sha256": "471dd83a813ed2816c2246c373004470ad0f6612c7ce72038929dc5161cdd58e",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "libcuckoo-93217f8d391718380c508a722ab9acd5e9081233.tar.gz"
                 }
             ],
             "buildsystem": "simple",
