@@ -16,6 +16,24 @@
       "message": "pinging rene since this adds an external dependency (that is not, to my knowledge, current packaged)",
       "revId": "9b515324c297451cbdf163a995a64d8f8457955e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5de9574_5ea18a43",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-09-06T20:13:26Z",
+      "side": 1,
+      "message": "looks like Arch has it: https://aur.archlinux.org/packages/libcuckoo (in an old(er) version. I assume 0.3 doesn\u0027t suffice and one needs the git snapshot you packed up?)\n\n(And I just did it for Debian: https://people.debian.org/~rene/libreoffice/libcuckoo/. Needs to be uploaded to Debian proper)",
+      "parentUuid": "f1ab0ac4_9fb0f3a6",
+      "revId": "9b515324c297451cbdf163a995a64d8f8457955e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
