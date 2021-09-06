@@ -180,8 +180,7 @@ m_pIParent(nullptr),
 m_dChildID(0x00),
 m_dFocusChildID(UACC_NO_FOCUS),
 m_hwnd(nullptr),
-m_isDestroy(false),
-m_bRequiresSave(FALSE)
+m_isDestroy(false)
 {
     m_sLocation.m_dLeft=0;
     m_sLocation.m_dTop = 0;

@@ -236,7 +236,6 @@ public:
 
     static BOOL get_IAccessibleFromXAccessible(
             css::accessibility::XAccessible * pXAcc, IAccessible** ppIA);
-    BOOL m_bRequiresSave;
     XGUIDToComObjHash m_containedObjects;
 
     static HRESULT WINAPI SmartQI_(void* pv,
