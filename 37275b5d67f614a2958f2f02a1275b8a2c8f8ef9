@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92f9b294_0e1834c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-09-06T13:52:27Z",
+      "side": 1,
+      "message": "we already have 3 +1s. heiko\u0027s, eike\u0027s and mine. submitting",
+      "revId": "37275b5d67f614a2958f2f02a1275b8a2c8f8ef9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
