@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "758659fd_f7925464",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-06T15:52:41Z",
+      "side": 1,
+      "message": "General approval from Laurent given, as well as Caolan, Michael, and Miklos expressing that this looked like leftover conversion junk to them (in IRC). ",
+      "revId": "a81b9b9b49b30179f1e8da203486954754f012af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
