@@ -1764,6 +1764,8 @@ namespace emfio
                             }
                         }
 
+                        bRecordOk &= pStm->good();
+
                         SAL_WARN_IF(!bRecordOk, "emfio", "polyline record claimed more points than the stream can provide");
 
                         if (!bRecordOk)
@@ -1801,7 +1803,7 @@ namespace emfio
 
                         SAL_WARN_IF(!bRecordOk, "emfio", "polypolygon record has more polygons than we can handle");
 
-                        bRecordOk = bRecordOk && pStm->good();
+                        bRecordOk &= pStm->good();
 
                         if (!bRecordOk)
                         {
@@ -1857,6 +1859,8 @@ namespace emfio
 
                         SAL_WARN_IF(!bRecordOk, "emfio", "polyline record claimed more points than the stream can provide");
 
+                        bRecordOk &= pStm->good();
+
                         if (!bRecordOk)
                         {
                             pStm->SetError( SVSTREAM_FILEFORMAT_ERROR );
@@ -1876,7 +1880,7 @@ namespace emfio
 
                     case W_META_TEXTOUT:
                     {
-                        sal_uInt16 nLength;
+                        sal_uInt16 nLength(0);
                         pStm->ReadUInt16( nLength );
                         // todo: we also have to take care of the text width
                         if ( nLength )
@@ -1890,7 +1894,7 @@ namespace emfio
 
                     case W_META_EXTTEXTOUT:
                     {
-                        sal_uInt16  nLen, nOptions;
+                        sal_uInt16 nLen(0), nOptions;
                         Point aPosition = ReadYX();
                         pStm->ReadUInt16( nLen ).ReadUInt16( nOptions );
                         // todo: we also have to take care of the text width
@@ -1942,7 +1946,7 @@ namespace emfio
 
                     case W_META_PATBLT:
                     {
-                        sal_uInt32 nROP;
+                        sal_uInt32 nROP(0);
                         pStm->ReadUInt32( nROP );
                         Size aSize = ReadYXExt();
                         GetWinExtMax( tools::Rectangle( ReadYX(), aSize ), aBound, nMapMode );
