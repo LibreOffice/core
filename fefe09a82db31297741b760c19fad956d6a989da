@@ -33,6 +33,23 @@
       "message": "The reason for the change? I was looking at Laurent\u0027s attempt to simplify a template, and he cut out almost all settings.xml content. That got me thinking that this would make an OLD looking file, and some settings SHOULD be included. I was going through this list of variables that \"are not set\" and found these that matched the default settings for no apparent reason.\n\nSo, it would be nice to have a clean list of variables that ought to be set as a minimum for a modern ODT.",
       "revId": "fefe09a82db31297741b760c19fad956d6a989da",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5190e1d_a2f6572b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-06T12:23:46Z",
+      "side": 1,
+      "message": "Yes, this indeed looks redundant.",
+      "revId": "fefe09a82db31297741b760c19fad956d6a989da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
