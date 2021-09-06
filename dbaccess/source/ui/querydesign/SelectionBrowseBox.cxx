@@ -2105,6 +2105,8 @@ OUString OSelectionBrowseBox::GetCellText(sal_Int32 nRow, sal_uInt16 nColId) con
 {
 
     sal_uInt16 nPos = GetColumnPos(nColId);
+    if ( nPos == 0 || nPos == BROWSER_INVALIDID || nPos > getFields().size() )
+        return OUString();
 
     OTableFieldDescRef pEntry = getFields()[nPos-1];
     OSL_ENSURE(pEntry != nullptr, "OSelectionBrowseBox::GetCellText : invalid column id, prepare for GPF ... ");
@@ -2689,7 +2691,7 @@ void OSelectionBrowseBox::setFunctionCell(OTableFieldDescRef const & _pEntry)
 Reference< XAccessible > OSelectionBrowseBox::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos )
 {
     OTableFieldDescRef pEntry;
-    if(getFields().size() > o3tl::make_unsigned(_nColumnPos - 1))
+    if ( _nColumnPos != 0 && _nColumnPos != BROWSER_INVALIDID && _nColumnPos <= getFields().size() )
         pEntry = getFields()[_nColumnPos - 1];
 
     if ( _nRow == BROW_VIS_ROW && pEntry.is() )
