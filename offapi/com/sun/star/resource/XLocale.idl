@@ -114,7 +114,7 @@ published interface XLocale: com::sun::star::uno::XInterface
                     name is not found, returns the ISO code. The desired user language
                     is from the default locale.
      */
-    string getDisplayLanguage_Default( [in] com::sun::star::lang::Locale locale );
+    string getDisplayLanguageDefault( [in] com::sun::star::lang::Locale locale );
 
 
     /** @return
@@ -134,7 +134,7 @@ published interface XLocale: com::sun::star::uno::XInterface
                     name is not found, returns the ISO code. The desired user country
                     is from the default locale.
      */
-    string getDisplayCountry_Default( [in] com::sun::star::lang::Locale locale );
+    string getDisplayCountryDefault( [in] com::sun::star::lang::Locale locale );
 
     /** @returns
                     country code for display of field to user. If the localized
@@ -152,7 +152,7 @@ published interface XLocale: com::sun::star::uno::XInterface
                     variant code for display of field to user. The desired user variant
                     is from the default locale.
      */
-    string getDisplayVariant_Default( [in] com::sun::star::lang::Locale locale );
+    string getDisplayVariantDefault( [in] com::sun::star::lang::Locale locale );
 
     /** @returns
                     variant code for display of field to user. If the localized
@@ -173,7 +173,7 @@ published interface XLocale: com::sun::star::uno::XInterface
 
             @param locale the locale.
      */
-    string getDisplayName_Default( [in] com::sun::star::lang::Locale locale );
+    string getDisplayNameDefault( [in] com::sun::star::lang::Locale locale );
 
     /** @returns
                     a string to display the entire locale to user. If the localized
