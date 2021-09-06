@@ -96,7 +96,6 @@ public:
     // Returns the Family Item at ith index
     // Used in Dialog's ReadResource_Hdl
     const SfxStyleFamilyItem& GetFamilyItemByIndex(size_t i) const;
-    const SfxObjectShell* GetObjectShell() const { return m_pCurObjShell; }
     bool IsHierarchical() const { return m_bHierarchical; }
 
     void Enabledel(bool candel) { m_bCanDel = candel; }
@@ -120,8 +119,6 @@ public:
 
     void FamilySelect(sal_uInt16 nEntry);
     void FilterSelect(sal_uInt16 nActFilter, bool bsetFilter);
-
-    void setVisible(bool b);
 
     DECL_LINK(NewMenuExecuteAction, void*, void);
 

@@ -49,7 +49,6 @@ private:
     DECL_LINK(ModifiedTrgrHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(Left_Click45_Impl, const OString&, void);
     DECL_LINK(Right_Click45_Impl, const OString&, void);
-    DECL_LINK(FocusHdl, weld::Widget&, void);
 
 public:
     AreaTransparencyGradientPopup(const css::uno::Reference<css::frame::XFrame>& rFrame,

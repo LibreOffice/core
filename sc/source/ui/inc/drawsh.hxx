@@ -43,8 +43,6 @@ class ScDrawShell : public SfxShell
 
     DECL_LINK( NameObjectHdl, AbstractSvxObjectNameDialog&, bool );
 
-    void SetHlinkForObject( SdrObject* pObj, const OUString& rHlnk );
-
 protected:
     virtual void    Activate(bool bMDI) override;
     ScViewData& GetViewData() { return rViewData; }

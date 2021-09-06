@@ -52,9 +52,6 @@ enum class MtfConversion
 typedef Color (*ColorExchangeFnc)( const Color& rColor, const void* pColParam );
 typedef BitmapEx (*BmpExchangeFnc)( const BitmapEx& rBmpEx, const void* pBmpParam );
 
-VCL_DLLPUBLIC SvStream& ReadGDIMetaFile(SvStream& rIStm, GDIMetaFile& rGDIMetaFile, ImplMetaReadData* pReadData = nullptr);
-VCL_DLLPUBLIC SvStream& WriteGDIMetaFile( SvStream& rOStm, const GDIMetaFile& rGDIMetaFile );
-
 class VCL_DLLPUBLIC GDIMetaFile final
 {
 private:
