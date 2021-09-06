@@ -27,8 +27,34 @@
 
  grep ODS_VERSION $OdsH | grep -v ENCODE_ODS >$Mini
 
+--- configure	2016-07-07 15:57:04.538983200 +0200
++++ configure	2016-07-13 11:31:18.132820200 +0200
+@@ -21473,13 +21473,12 @@
+ else
+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+-#include <semaphore.h>
+ main () {
+   struct s {
+     char a;
+-    union { long long x; sem_t y; } b;
++    long long b;
+   };
+   exit((int)&((struct s*)1024)->b - 1024);
+ }
+ _ACEOF
+ if ac_fn_c_try_run "$LINENO"; then :
 --- builds/make.new/config/config.h.in	2016-07-07 15:55:55.693112800 +0200
 +++ builds/make.new/config/config.h.in	2016-07-08 13:38:49.994986400 +0200
+@@ -211,7 +211,7 @@
+ #undef HAVE_GETMNTENT
+ 
+ /* Define to 1 if you have the `getpagesize' function. */
+-#undef HAVE_GETPAGESIZE
++#define HAVE_GETPAGESIZE 1
+ 
+ /* Define to 1 if you have the `getrlimit' function. */
+ #undef HAVE_GETRLIMIT
 @@ -396,7 +396,7 @@
  #undef HAVE_SIGSET
  
@@ -56,7 +82,7 @@
  
  /* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
     significant byte first (like Motorola and SPARC, unlike Intel). */
-@@ -703,3 +703,36 @@
+@@ -703,3 +703,20 @@
  #ifndef HAVE_SOCKLEN_T
  typedef int socklen_t;
  #endif
@@ -66,28 +92,12 @@
 +#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
 +#endif
 +/* target architecture */
-+#if defined(_M_IX86)
-+/* sizeof(void *) */
-+#define SIZEOF_VOID_P 4
-+/* sizeof(size_t) */
-+#define SIZEOF_SIZE_T 4
-+/* alignment of long */
-+#define FB_ALIGNMENT 4
-+#elif defined(_M_AMD64)
++#if defined(_M_AMD64)
 +#define AMD64
-+/* sizeof(void *) */
-+#define SIZEOF_VOID_P 8
-+/* sizeof(size_t) */
-+#define SIZEOF_SIZE_T 8
-+/* alignment of long */
-+#define FB_ALIGNMENT 8
-+#else
-+#error unknown target platform
 +#endif
 +
 +#define HAVE_IO_H
 +#define HAVE_CTIME_S
-+#define HAVE_GETPAGESIZE
 +
 +#if defined _MSC_VER
 +#define isnan _isnan
