@@ -4169,6 +4169,9 @@ Word2CHPX ReadWord2Chpx(SvStream &rSt, std::size_t nOffset, sal_uInt8 nSize)
         rSt.ReadUChar( nFlags8 );
         nCount++;
 
+        if (!rSt.good())
+            break;
+
         aChpx.fBold = nFlags8 & 0x01;
         aChpx.fItalic = (nFlags8 & 0x02) >> 1;
         aChpx.fRMarkDel = (nFlags8 & 0x04) >> 2;
@@ -4181,6 +4184,9 @@ Word2CHPX ReadWord2Chpx(SvStream &rSt, std::size_t nOffset, sal_uInt8 nSize)
         if (nCount >= nSize) break;
         rSt.ReadUChar( nFlags8 );
         nCount++;
+
+        if (!rSt.good())
+            break;
 
         aChpx.fRMark = nFlags8 & 0x01;
         aChpx.fSpec = (nFlags8 & 0x02) >> 1;
@@ -4195,6 +4201,9 @@ Word2CHPX ReadWord2Chpx(SvStream &rSt, std::size_t nOffset, sal_uInt8 nSize)
         rSt.ReadUChar( nFlags8 );
         nCount++;
 
+        if (!rSt.good())
+            break;
+
         aChpx.fsIco = nFlags8 & 0x01;
         aChpx.fsFtc = (nFlags8 & 0x02) >> 1;
         aChpx.fsHps = (nFlags8 & 0x04) >> 2;
@@ -4207,6 +4216,9 @@ Word2CHPX ReadWord2Chpx(SvStream &rSt, std::size_t nOffset, sal_uInt8 nSize)
         if (nCount >= nSize) break;
         rSt.ReadUChar( nFlags8 );
         nCount++;
+
+        if (!rSt.good())
+            break;
 
         aChpx.fsFtcBi = nFlags8 & 0x01;
         aChpx.fsHpsBi = (nFlags8 & 0x02) >> 1;
@@ -4224,6 +4236,9 @@ Word2CHPX ReadWord2Chpx(SvStream &rSt, std::size_t nOffset, sal_uInt8 nSize)
         rSt.ReadUChar( nFlags8 );
         nCount++;
 
+        if (!rSt.good())
+            break;
+
         aChpx.qpsSpace = nFlags8 & 0x3F;
         aChpx.fSysVanish = (nFlags8 & 0x40) >> 6;
         aChpx.fNumRun = (nFlags8 & 0x80) >> 7;
@@ -4231,6 +4246,9 @@ Word2CHPX ReadWord2Chpx(SvStream &rSt, std::size_t nOffset, sal_uInt8 nSize)
         if (nCount >= nSize) break;
         rSt.ReadUChar( nFlags8 );
         nCount++;
+
+        if (!rSt.good())
+            break;
 
         aChpx.ico = nFlags8 & 0x1F;
         aChpx.kul = (nFlags8 & 0xE0) >> 5;
