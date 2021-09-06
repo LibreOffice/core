@@ -140,6 +140,30 @@
       },
       "revId": "4502ad7b3c34650b838db3a08221d838a46e50b0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d47ac9f8_92642ebc",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 2075,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-06T18:05:01Z",
+      "side": 1,
+      "message": "Ah, Basic already has such TransliterationWrapper instance, that\u0027s good.",
+      "parentUuid": "6b87a267_26187b68",
+      "range": {
+        "startLine": 2075,
+        "startChar": 4,
+        "endLine": 2075,
+        "endChar": 19
+      },
+      "revId": "4502ad7b3c34650b838db3a08221d838a46e50b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
