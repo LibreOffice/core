@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cb94efd_43f7a3d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2021-09-06T05:47:37Z",
+      "side": 1,
+      "message": "Thanks! :)\nI have added you to the list of contributors at https://wiki.documentfoundation.org/WikiAction/submit/Development/Developers . Please double-check the entry and feel free to add your IRC nick or wiki username if you want.",
+      "revId": "0b78b8371f73ea6327e29ca269c808517787f76c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
