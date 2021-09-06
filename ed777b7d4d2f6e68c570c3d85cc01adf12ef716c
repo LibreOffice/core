@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a0dd6e2_669ae8bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-06T15:57:34Z",
+      "side": 1,
+      "message": "Laurent, I hope you agree that meta.xml is also pointless in this context.\n\nI abandoned the atevent.xml because it seems like a semi-enabler of allowing someone to create their OWN macros to trigger when an autotext is run. So the content seems mostly irrelevant and it is just the presence of the file that is important (based on a casual understanding of the code read). The rest of the files seem to be conceivably relevant, so these two should be the only mass cleanup possible.",
+      "revId": "ed777b7d4d2f6e68c570c3d85cc01adf12ef716c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
