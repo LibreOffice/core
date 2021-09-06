@@ -16,6 +16,24 @@
       "message": "this needs to be virtual now, otherwise the change effectively removes the PDFWriterImpl code",
       "revId": "9a58ec3f6f65da27e3b26e1173b6661b743e66a4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b968a938_1b5d2a1c",
+        "filename": "include/vcl/outdev.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-06T18:43:27Z",
+      "side": 1,
+      "message": "Ah, of course! Thanks Noel, I will post a followup shortly.",
+      "parentUuid": "12007be1_f1074c1f",
+      "revId": "9a58ec3f6f65da27e3b26e1173b6661b743e66a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
