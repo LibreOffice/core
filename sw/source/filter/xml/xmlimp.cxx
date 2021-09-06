@@ -769,7 +769,7 @@ void SwXMLImport::endDocument()
                     pPos->nContent.Assign( pNextNd, 0 );
                     pPaM->SetMark(); pPaM->DeleteMark();
                     pNextNd->JoinPrev();
-                    
+
                     // Remove line break that has been inserted by the import,
                     // but only if one has been inserted and
                     // no endNode found to avoid removing section
@@ -1307,10 +1307,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bUnixForceZeroExtLeading = false;
     bool bSmallCapsPercentage66 = false;
     bool bTabOverflow = false;
-    bool bUnbreakableNumberings = false;
-    bool bClippedPictures = false;
-    bool bBackgroundParaOverDrawings = false;
-    bool bTabOverMargin = false;
     bool bTabOverMarginValue = false;
     bool bPropLineSpacingShrinksFirstLine = false;
     bool bSubtractFlysAnchoredAtFlys = false;
@@ -1397,15 +1393,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                     bSmallCapsPercentage66 = true;
                 else if ( rValue.Name == "TabOverflow" )
                     bTabOverflow = true;
-                else if ( rValue.Name == "UnbreakableNumberings" )
-                    bUnbreakableNumberings = true;
-                else if ( rValue.Name == "ClippedPictures" )
-                    bClippedPictures = true;
-                else if ( rValue.Name == "BackgroundParaOverDrawings" )
-                    bBackgroundParaOverDrawings = true;
                 else if ( rValue.Name == "TabOverMargin" )
                 {
-                    bTabOverMargin = true;
                     rValue.Value >>= bTabOverMarginValue;
                 }
                 else if ( rValue.Name == "PropLineSpacingShrinksFirstLine" )
@@ -1559,22 +1548,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     {
         xProps->setPropertyValue( "TabOverflow", makeAny( false ) );
     }
-
-    if ( !bUnbreakableNumberings )
-    {
-        xProps->setPropertyValue( "UnbreakableNumberings", makeAny( false ) );
-    }
-
-    if ( !bClippedPictures )
-    {
-        xProps->setPropertyValue( "ClippedPictures", makeAny( false ) );
-    }
-
-    if ( !bBackgroundParaOverDrawings )
-        xProps->setPropertyValue("BackgroundParaOverDrawings", makeAny( false ) );
-
-    if ( !bTabOverMargin )
-        xProps->setPropertyValue("TabOverMargin", makeAny( false ) );
 
     if (bTabOverMarginValue)
         // Let TabOverMargin imply the new default for
