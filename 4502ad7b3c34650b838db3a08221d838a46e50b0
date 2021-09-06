@@ -74,6 +74,30 @@
       },
       "revId": "4502ad7b3c34650b838db3a08221d838a46e50b0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3c99b5a_4162d0f2",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 2075,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-06T11:54:10Z",
+      "side": 1,
+      "message": "Agreed, a temporary TextSearch is way overkill and TransliterationWrapper::isEqual() would be the way to go. I wonder if it would be best to add an ignore case TransliterationWrapper instance to SvtSysLocale (in a separate change of course).",
+      "parentUuid": "d7ed6d18_0cb05586",
+      "range": {
+        "startLine": 2075,
+        "startChar": 4,
+        "endLine": 2075,
+        "endChar": 19
+      },
+      "revId": "4502ad7b3c34650b838db3a08221d838a46e50b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
