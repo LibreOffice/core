@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1ab0ac4_9fb0f3a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-06T11:03:25Z",
+      "side": 1,
+      "message": "pinging rene since this adds an external dependency (that is not, to my knowledge, current packaged)",
+      "revId": "9b515324c297451cbdf163a995a64d8f8457955e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
