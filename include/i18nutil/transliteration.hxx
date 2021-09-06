@@ -82,41 +82,41 @@ enum class TransliterationFlags {
     /// Ignore full width and half width character when comparing strings by transliteration service
     IGNORE_WIDTH                   = int(css::i18n::TransliterationModules_IGNORE_WIDTH), // ja_JP
     /// Ignore Japanese traditional Kanji character in Japanese fuzzy search
-    ignoreTraditionalKanji_ja_JP   = int(css::i18n::TransliterationModules_ignoreTraditionalKanji_ja_JP),
+    ignoreTraditionalKanji_ja_JP   = int(css::i18n::TransliterationModules_IgnoreTraditionalKanji_ja_JP),
     /// Ignore Japanese traditional Katakana and Hiragana character in Japanese fuzzy search
-    ignoreTraditionalKana_ja_JP    = int(css::i18n::TransliterationModules_ignoreTraditionalKana_ja_JP),
+    ignoreTraditionalKana_ja_JP    = int(css::i18n::TransliterationModules_IgnoreTraditionalKana_ja_JP),
     /// Ignore dash or minus sign in Japanese fuzzy search
-    ignoreMinusSign_ja_JP          = int(css::i18n::TransliterationModules_ignoreMinusSign_ja_JP),
+    ignoreMinusSign_ja_JP          = int(css::i18n::TransliterationModules_IgnoreMinusSign_ja_JP),
     /// Ignore Hiragana and Katakana iteration mark in Japanese fuzzy search
-    ignoreIterationMark_ja_JP      = int(css::i18n::TransliterationModules_ignoreIterationMark_ja_JP),
+    ignoreIterationMark_ja_JP      = int(css::i18n::TransliterationModules_IgnoreIterationMark_ja_JP),
     /// Ignore separator punctuations in Japanese fuzzy search
-    ignoreSeparator_ja_JP          = int(css::i18n::TransliterationModules_ignoreSeparator_ja_JP),
+    ignoreSeparator_ja_JP          = int(css::i18n::TransliterationModules_IgnoreSeparator_ja_JP),
     /// Ignore Katakana and Hiragana Zi/Zi and Zu/Zu  in Japanese fuzzy search
-    ignoreZiZu_ja_JP               = int(css::i18n::TransliterationModules_ignoreZiZu_ja_JP),
+    ignoreZiZu_ja_JP               = int(css::i18n::TransliterationModules_IgnoreZiZu_ja_JP),
     /// Ignore Katakana and Hiragana Ba/Gua and Ha/Fa in Japanese fuzzy search
-    ignoreBaFa_ja_JP               = int(css::i18n::TransliterationModules_ignoreBaFa_ja_JP),
+    ignoreBaFa_ja_JP               = int(css::i18n::TransliterationModules_IgnoreBaFa_ja_JP),
     /// Ignore Katakana and Hiragana Tsui/Tea/Ti and Dyi/Ji in Japanese fuzzy search
-    ignoreTiJi_ja_JP               = int(css::i18n::TransliterationModules_ignoreTiJi_ja_JP),
+    ignoreTiJi_ja_JP               = int(css::i18n::TransliterationModules_IgnoreTiJi_ja_JP),
     /// Ignore Katakana and Hiragana Hyu/Fyu and Byu/Gyu in Japanese fuzzy search
-    ignoreHyuByu_ja_JP             = int(css::i18n::TransliterationModules_ignoreHyuByu_ja_JP),
+    ignoreHyuByu_ja_JP             = int(css::i18n::TransliterationModules_IgnoreHyuByu_ja_JP),
     /// Ignore Katakana and Hiragana Se/Sye and Ze/Je in Japanese fuzzy search
-    ignoreSeZe_ja_JP               = int(css::i18n::TransliterationModules_ignoreSeZe_ja_JP),
+    ignoreSeZe_ja_JP               = int(css::i18n::TransliterationModules_IgnoreSeZe_ja_JP),
     /// Ignore Katakana YA/A which follows the character in either I or E row in Japanese fuzzy search
-    ignoreIandEfollowedByYa_ja_JP  = int(css::i18n::TransliterationModules_ignoreIandEfollowedByYa_ja_JP),
+    ignoreIandEfollowedByYa_ja_JP  = int(css::i18n::TransliterationModules_IgnoreIandEfollowedByYa_ja_JP),
     /// Ignore Katakana KI/KU which follows the character in SA column in Japanese fuzzy search
-    ignoreKiKuFollowedBySa_ja_JP   = int(css::i18n::TransliterationModules_ignoreKiKuFollowedBySa_ja_JP),
+    ignoreKiKuFollowedBySa_ja_JP   = int(css::i18n::TransliterationModules_IgnoreKiKuFollowedBySa_ja_JP),
     /// Ignore Japanese normal and small sized character in Japanese fuzzy search
-    ignoreSize_ja_JP               = int(css::i18n::TransliterationModules_ignoreSize_ja_JP),
+    ignoreSize_ja_JP               = int(css::i18n::TransliterationModules_IgnoreSize_ja_JP),
     /// Ignore Japanese prolonged sound mark in Japanese fuzzy search
-    ignoreProlongedSoundMark_ja_JP = int(css::i18n::TransliterationModules_ignoreProlongedSoundMark_ja_JP),
+    ignoreProlongedSoundMark_ja_JP = int(css::i18n::TransliterationModules_IgnoreProlongedSoundMark_ja_JP),
     /// Ignore middle dot in Japanese fuzzy search
-    ignoreMiddleDot_ja_JP          = int(css::i18n::TransliterationModules_ignoreMiddleDot_ja_JP),
+    ignoreMiddleDot_ja_JP          = int(css::i18n::TransliterationModules_IgnoreMiddleDot_ja_JP),
     /// Ignore white space characters, include space, TAB, return, etc. in Japanese fuzzy search
-    ignoreSpace_ja_JP              = int(css::i18n::TransliterationModules_ignoreSpace_ja_JP),
+    ignoreSpace_ja_JP              = int(css::i18n::TransliterationModules_IgnoreSpace_ja_JP),
     /// transliterate Japanese small sized character to normal sized character
-    smallToLarge_ja_JP             = int(css::i18n::TransliterationModules_smallToLarge_ja_JP),
+    smallToLarge_ja_JP             = int(css::i18n::TransliterationModules_SmallToLarge_ja_JP),
     /// transliterate Japanese normal sized character to small sized character
-    largeToSmall_ja_JP             = int(css::i18n::TransliterationModules_largeToSmall_ja_JP),
+    largeToSmall_ja_JP             = int(css::i18n::TransliterationModules_LargeToSmall_ja_JP),
 
     /// Transliterate decomposing and removing diacritics, not only CTL, despite its name.
     IGNORE_DIACRITICS_CTL          = int(css::i18n::TransliterationModulesExtra::IGNORE_DIACRITICS_CTL),

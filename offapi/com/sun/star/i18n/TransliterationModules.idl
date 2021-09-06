@@ -68,41 +68,41 @@ published enum TransliterationModules
     /// Ignore full width and half width character when comparing strings by transliteration service
     IGNORE_WIDTH                   = 0x00000400, // ja_JP
     /// Ignore Japanese traditional Kanji character in Japanese fuzzy search
-    ignoreTraditionalKanji_ja_JP   = 0x00001000,
+    IgnoreTraditionalKanji_ja_JP   = 0x00001000,
     /// Ignore Japanese traditional Katakana and Hiragana character in Japanese fuzzy search
-    ignoreTraditionalKana_ja_JP    = 0x00002000,
+    IgnoreTraditionalKana_ja_JP    = 0x00002000,
     /// Ignore dash or minus sign in Japanese fuzzy search
-    ignoreMinusSign_ja_JP          = 0x00004000,
+    IgnoreMinusSign_ja_JP          = 0x00004000,
     /// Ignore Hiragana and Katakana iteration mark in Japanese fuzzy search
-    ignoreIterationMark_ja_JP      = 0x00008000,
+    IgnoreIterationMark_ja_JP      = 0x00008000,
     /// Ignore separator punctuations in Japanese fuzzy search
-    ignoreSeparator_ja_JP          = 0x00010000,
+    IgnoreSeparator_ja_JP          = 0x00010000,
     /// Ignore Katakana and Hiragana Zi/Zi and Zu/Zu  in Japanese fuzzy search
-    ignoreZiZu_ja_JP               = 0x00020000,
+    IgnoreZiZu_ja_JP               = 0x00020000,
     /// Ignore Katakana and Hiragana Ba/Gua and Ha/Fa in Japanese fuzzy search
-    ignoreBaFa_ja_JP               = 0x00040000,
+    IgnoreBaFa_ja_JP               = 0x00040000,
     /// Ignore Katakana and Hiragana Tsui/Tea/Ti and Dyi/Ji in Japanese fuzzy search
-    ignoreTiJi_ja_JP               = 0x00080000,
+    IgnoreTiJi_ja_JP               = 0x00080000,
     /// Ignore Katakana and Hiragana Hyu/Fyu and Byu/Gyu in Japanese fuzzy search
-    ignoreHyuByu_ja_JP             = 0x00100000,
+    IgnoreHyuByu_ja_JP             = 0x00100000,
     /// Ignore Katakana and Hiragana Se/Sye and Ze/Je in Japanese fuzzy search
-    ignoreSeZe_ja_JP               = 0x00200000,
+    IgnoreSeZe_ja_JP               = 0x00200000,
     /// Ignore Katakana YA/A which follows the character in either I or E row in Japanese fuzzy search
-    ignoreIandEfollowedByYa_ja_JP  = 0x00400000,
+    IgnoreIandEfollowedByYa_ja_JP  = 0x00400000,
     /// Ignore Katakana KI/KU which follows the character in SA column in Japanese fuzzy search
-    ignoreKiKuFollowedBySa_ja_JP   = 0x00800000,
+    IgnoreKiKuFollowedBySa_ja_JP   = 0x00800000,
     /// Ignore Japanese normal and small sized character in Japanese fuzzy search
-    ignoreSize_ja_JP               = 0x01000000,
+    IgnoreSize_ja_JP               = 0x01000000,
     /// Ignore Japanese prolonged sound mark in Japanese fuzzy search
-    ignoreProlongedSoundMark_ja_JP = 0x02000000,
+    IgnoreProlongedSoundMark_ja_JP = 0x02000000,
     /// Ignore middle dot in Japanese fuzzy search
-    ignoreMiddleDot_ja_JP          = 0x04000000,
+    IgnoreMiddleDot_ja_JP          = 0x04000000,
     /// Ignore white space characters, include space, TAB, return, etc. in Japanese fuzzy search
-    ignoreSpace_ja_JP              = 0x08000000,
+    IgnoreSpace_ja_JP              = 0x08000000,
     /// transliterate Japanese small sized character to normal sized character
-    smallToLarge_ja_JP             = 0x10000000,
+    SmallToLarge_ja_JP             = 0x10000000,
     /// transliterate Japanese normal sized character to small sized character
-    largeToSmall_ja_JP             = 0x20000000,
+    LargeToSmall_ja_JP             = 0x20000000,
     END_OF_MODULE                  = 0
 };
 
