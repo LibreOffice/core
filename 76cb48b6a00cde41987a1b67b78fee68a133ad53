@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9952ffeb_d04517a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-09-06T10:16:04Z",
+      "side": 1,
+      "message": "Since you still considered https://gerrit.libreoffice.org/c/core/+/121567 for 7-2-1, I\u0027m just wondering…",
+      "revId": "76cb48b6a00cde41987a1b67b78fee68a133ad53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
