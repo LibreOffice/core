@@ -10350,6 +10350,26 @@ dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([mdds], [MDDS], [mdds-1.5 >= 1.5.0], ["-I${WORKDIR}/UnpackedTarball/mdds/include"])
 
 dnl ===================================================================
+dnl Check for system cuckoo
+dnl ===================================================================
+AC_MSG_CHECKING([which cuckoo to use])
+if test "$with_system_cuckoo" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_CUCKOO=TRUE
+    AC_LANG_PUSH([C++])
+    AC_CHECK_HEADER([ libcuckoo/cuckoohash_map.hh], [],
+       [AC_MSG_ERROR([ libcuckoo/cuckoohash_map.hh not found. install cuckoo])], [])
+    AC_LANG_POP([C++])
+else
+    AC_MSG_RESULT([internal])
+    BUILD_TYPE="$BUILD_TYPE CUCKOO"
+    SYSTEM_CUCKOO=
+    CUCKOO_CFLAGS="${ISYSTEM}${WORKDIR}/UnpackedTarball/cuckoo"
+fi
+AC_SUBST([CUCKOO_CFLAGS])
+AC_SUBST([SYSTEM_CUCKOO])
+
+dnl ===================================================================
 dnl Check for system glm
 dnl ===================================================================
 AC_MSG_CHECKING([which glm to use])
