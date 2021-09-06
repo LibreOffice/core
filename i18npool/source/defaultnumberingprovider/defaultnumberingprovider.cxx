@@ -1028,9 +1028,11 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
 
 struct Supported_NumberingType
 {
-        sal_Int16    nType;
-        const char*  cSymbol;
-        sal_Int16    langOption;
+    const char*  cSymbol;
+    sal_Int16    nType;
+    sal_Int16    langOption;
+    Supported_NumberingType(sal_Int16 nType_, const char* pSymbol, sal_Int16 opt)
+        : cSymbol(pSymbol), nType(nType_), langOption(opt) {}
 };
 const Supported_NumberingType aSupportedTypes[] =
 {

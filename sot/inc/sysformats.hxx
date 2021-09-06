@@ -31,14 +31,14 @@
 struct SotAction_Impl
 {
     SotClipboardFormatId   nFormatId;          // Clipboard Id
-    sal_uInt16             nAction;            // Action Id
     SotExchangeActionFlags nFlags;             // Action Id
+    sal_uInt16             nAction;            // Action Id
     sal_uInt8              nContextCheckId;    // additional check of content in clipboard
 
     constexpr SotAction_Impl(SotClipboardFormatId _nFormatId, sal_uInt16 _nAction, SotExchangeActionFlags _nFlags, sal_uInt8 _nContextCheckId)
-        : nFormatId(_nFormatId), nAction(_nAction), nFlags(_nFlags), nContextCheckId(_nContextCheckId) {}
+        : nFormatId(_nFormatId), nFlags(_nFlags), nAction(_nAction), nContextCheckId(_nContextCheckId) {}
     constexpr SotAction_Impl(SotClipboardFormatId _nFormatId, sal_uInt16 _nAction)
-        : nFormatId(_nFormatId), nAction(_nAction), nFlags(SotExchangeActionFlags::NONE), nContextCheckId(0) {}
+        : nFormatId(_nFormatId), nFlags(SotExchangeActionFlags::NONE), nAction(_nAction), nContextCheckId(0) {}
 };
 
 namespace sot
