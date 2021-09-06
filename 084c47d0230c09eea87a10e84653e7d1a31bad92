@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "a8659d1a_078fd9f2",
         "filename": "chart2/qa/extras/chart2export.cxx",
@@ -14,10 +15,28 @@
       "side": 1,
       "message": "You can not assign -1 to nColor.",
       "revId": "084c47d0230c09eea87a10e84653e7d1a31bad92",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": true
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4121c630_14a9a698",
+        "filename": "chart2/qa/extras/chart2export.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 944,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-09-06T22:06:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8659d1a_078fd9f2",
+      "revId": "084c47d0230c09eea87a10e84653e7d1a31bad92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "6584bbe4_1e33dfa3",
         "filename": "chart2/qa/extras/chart2export.cxx",
@@ -31,8 +50,25 @@
       "side": 1,
       "message": "This is also wrong. You can not assign -1 to nColor.",
       "revId": "084c47d0230c09eea87a10e84653e7d1a31bad92",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": true
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02047ddf_e28b3d75",
+        "filename": "chart2/qa/extras/chart2export.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 971,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-09-06T22:06:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6584bbe4_1e33dfa3",
+      "revId": "084c47d0230c09eea87a10e84653e7d1a31bad92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

@@ -16,6 +16,23 @@
       "message": "Looks good to me.",
       "revId": "f3605a58e1894bef8c74371cc21fa5a07d7ddf9a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c023476_061dac60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-09-06T22:06:44Z",
+      "side": 1,
+      "message": "These are resolved by the latest patch.",
+      "revId": "f3605a58e1894bef8c74371cc21fa5a07d7ddf9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
