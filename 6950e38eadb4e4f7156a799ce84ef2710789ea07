@@ -16,6 +16,23 @@
       "message": "+1 for reverting in general (not having tested the patch)",
       "revId": "6950e38eadb4e4f7156a799ce84ef2710789ea07",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28eff260_88216bc3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-09-06T08:46:33Z",
+      "side": 1,
+      "message": "I do confirm the patch fixes tdf#143960.\n\n@Ilmari, should you also add tdf#143960 to the commit message for reference ?",
+      "revId": "6950e38eadb4e4f7156a799ce84ef2710789ea07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
