@@ -60,12 +60,12 @@ uno::Reference<security::XCertificate> getSignatureCertificate(SfxObjectShell* p
 {
     if (!pShell)
     {
-        return uno::Reference<security::XCertificate>();
+        return {};
     }
 
     if (!pParent)
     {
-        return uno::Reference<security::XCertificate>();
+        return {};
     }
 
     uno::Reference<security::XDocumentDigitalSignatures> xSigner;

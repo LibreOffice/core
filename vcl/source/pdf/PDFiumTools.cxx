@@ -15,11 +15,11 @@ namespace vcl::pdf
 OUString convertPdfDateToISO8601(OUString const& rInput)
 {
     if (rInput.getLength() < 6)
-        return OUString();
+        return {};
 
     OUString prefix = rInput.copy(0, 2);
     if (prefix != "D:")
-        return OUString();
+        return {};
 
     OUString sYear = rInput.copy(2, 4);
 

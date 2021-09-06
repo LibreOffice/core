@@ -82,7 +82,7 @@ static OUString lcl_GetExceptionMessageRec(xml::sax::SAXException const& e)
     {
         return ue.Message;
     }
-    return OUString();
+    return {};
 }
 
 namespace

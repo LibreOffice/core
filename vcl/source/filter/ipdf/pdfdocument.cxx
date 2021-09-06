@@ -1432,7 +1432,7 @@ OString PDFDocument::ReadKeyword(SvStream& rStream)
     char ch;
     rStream.ReadChar(ch);
     if (rStream.eof())
-        return OString();
+        return {};
     while (rtl::isAsciiAlpha(static_cast<unsigned char>(ch)))
     {
         aBuf.append(ch);

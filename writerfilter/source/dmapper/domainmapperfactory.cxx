@@ -30,8 +30,8 @@ DomainMapperFactory::createMapper(css::uno::Reference<css::uno::XComponentContex
     TagLogger::getInstance().startDocument();
 #endif
 
-    return Stream::Pointer_t(new DomainMapper(xContext, xInputStream, xModel, bRepairStorage,
-                                              eDocumentType, rMediaDesc));
+    return { new DomainMapper(xContext, xInputStream, xModel, bRepairStorage, eDocumentType,
+                              rMediaDesc) };
 }
 
 } // namespace writerfilter::dmapper

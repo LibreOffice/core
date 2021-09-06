@@ -188,7 +188,7 @@ OString PDFObjectCopier::copyExternalResources(filter::PDFObjectElement& rPage,
             filter::PDFObjectElement* pReferenced = pReference->LookupObject();
             if (!pReferenced)
             {
-                return OString();
+                return {};
             }
 
             aItems = pReferenced->GetDictionaryItems();
@@ -206,7 +206,7 @@ OString PDFObjectCopier::copyExternalResources(filter::PDFObjectElement& rPage,
             aItems = pObject->GetDictionaryItems();
     }
     if (aItems.empty())
-        return OString();
+        return {};
 
     SvMemoryStream& rDocBuffer = rPage.GetDocument().GetEditBuffer();
 
