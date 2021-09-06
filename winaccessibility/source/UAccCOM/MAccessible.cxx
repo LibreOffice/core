@@ -2628,27 +2628,20 @@ HRESULT WINAPI CMAccessible::SmartQI(void* /*pv*/, REFIID iid, void** ppvObject)
     LEAVE_PROTECTED_BLOCK
 }
 
-BOOL
-CMAccessible::get_IAccessibleFromXAccessible(XAccessible * pXAcc, IAccessible **ppIA)
+bool CMAccessible::get_IAccessibleFromXAccessible(XAccessible* pXAcc, IAccessible** ppIA)
 {
-
     try
     {
-
         // #CHECK#
         if(ppIA == nullptr)
         {
-            return FALSE;
+            return false;
         }
         bool isGet = false;
         if(g_pAgent)
             isGet = g_pAgent->GetIAccessibleFromXAccessible(pXAcc, ppIA);
 
-        if(isGet)
-            return TRUE;
-        else
-            return FALSE;
-
+        return isGet;
     }
     catch(...)
     {
