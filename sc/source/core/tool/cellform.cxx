@@ -135,7 +135,7 @@ void ScCellFormat::GetInputString(
             if (pFC->IsEmptyDisplayedAsString())
                 rString = EMPTY_OUSTRING;
             else if (pFC->IsValue())
-                rFormatter.GetInputLineString(pFC->GetValue(), nFormat, rString);
+                rFormatter.GetInputLineString(pFC->GetValue(), nFormat, rString, bFiltering);
             else
                 rString = pFC->GetString().getString();
 

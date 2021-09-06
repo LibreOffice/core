@@ -2348,7 +2348,7 @@ public:
                     nCellVal = mrDoc.RoundValueAsShown(rCell.mfValue, nNumFmt, pContext);
                 break;
                 case CELLTYPE_FORMULA :
-                    nCellVal = rCell.mpFormula->GetValue();
+                    nCellVal = mrDoc.RoundValueAsShown(rCell.mpFormula->GetValue(), nNumFmt, pContext);
                 break;
                 default:
                     nCellVal = 0.0;
