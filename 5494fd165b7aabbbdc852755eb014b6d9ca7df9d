@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c041c5ea_7528ba74",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-09-07T11:03:03Z",
+      "side": 1,
+      "message": "\"Certainly this libcuckoo is not packaged anywhere yet, so the check\nin configure.ac is completely bogus.\"\n\nis obsolete, isn\u0027t it?",
+      "revId": "5494fd165b7aabbbdc852755eb014b6d9ca7df9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20139fd6_f9bd5f1c",
+        "filename": "configure.ac",
+        "patchSetId": 5
+      },
+      "lineNbr": 10369,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-09-07T11:03:03Z",
+      "side": 1,
+      "message": "That one needs to be set in config_host.mk.. (Though it normally should be )use/include which is in the default search path anyway...)",
+      "revId": "5494fd165b7aabbbdc852755eb014b6d9ca7df9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
