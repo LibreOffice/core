@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63d27b84_009f949d",
+        "filename": "xmloff/source/style/XMLFontAutoStylePool.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-07T12:40:29Z",
+      "side": 1,
+      "message": "This becomes really clumsy. Now that we use the namespace, we need to move everything possible - all enums, all static methods - from the class into the namespace itself, to avoid this.\n\n  vcl::font::EmbedRights::ViewingAllowed",
+      "range": {
+        "startLine": 478,
+        "startChar": 40,
+        "endLine": 478,
+        "endChar": 98
+      },
+      "revId": "b899ed79e237926669fb131d1e07c79b4ac3bb97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
