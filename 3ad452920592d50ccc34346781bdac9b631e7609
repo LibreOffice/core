@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22d17116_8973ca60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-07T07:00:24Z",
+      "side": 1,
+      "message": "Mike, genprnpsp.cxx does using vcl::printer::Options, in the line:\n\naContext.ColorMode \u003d i_rController.getPrinter()-\u003eGetPrinterOptions().IsConvertToGreyscales()\n\nI knew I added that include for a good reason :-)",
+      "revId": "3ad452920592d50ccc34346781bdac9b631e7609",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
