@@ -181,6 +181,10 @@ class SfxVoidItem;
 #define CH_TXT_ATR_SUBST_FIELDSTART ("[")
 #define CH_TXT_ATR_SUBST_FIELDEND ("]")
 
+// a non-visible dummy character to track deleted tables,
+// table rows, and images anchored to characters
+#define CH_TXT_TRACKED_DUMMY_CHAR u'\x200D'
+
 /*
  * Enums for the hints
  */
