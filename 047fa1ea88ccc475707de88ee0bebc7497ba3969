@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6aa08cc2_2011e2c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-09-07T18:08:26Z",
+      "side": 1,
+      "message": "checking which cuckoo to use... external\nchecking for  libcuckoo/cuckoohash_map.hh... no\nconfigure: error:  libcuckoo/cuckoohash_map.hh not found. install cuckoo\n",
+      "revId": "047fa1ea88ccc475707de88ee0bebc7497ba3969",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "83f5f1ff_744ee7c4",
@@ -49,6 +66,23 @@
       "side": 1,
       "message": "reply to myself:\n\nor something like (with s/sane/cuckoo/ of course)\n\nAC_ARG_WITH(system-sane,\n    AS_HELP_STRING([--with-system-sane],\n        [Use sane.h already on system.]),,\n    [with_system_sane\u003d\"$with_system_headers\"])\n\nnote the with_system_sane\u003d\"$with_system_headers\", so with-system-headers sets that too",
       "parentUuid": "daf0ede0_88210c5b",
+      "revId": "047fa1ea88ccc475707de88ee0bebc7497ba3969",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e9b3a29_a811d7c6",
+        "filename": "configure.ac",
+        "patchSetId": 8
+      },
+      "lineNbr": 10360,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-09-07T18:08:26Z",
+      "side": 1,
+      "message": "this must not contain that space. That space makes it fails:\n\nchecking which cuckoo to use... external\nchecking for  libcuckoo/cuckoohash_map.hh... no\nconfigure: error:  libcuckoo/cuckoohash_map.hh not found. install cuckoo\nError running configure at ./autogen.sh line 322.\n\n(of course, a #include \u003c libcuckoo/cuckoohash_map.hh\u003e would be wrong.)",
       "revId": "047fa1ea88ccc475707de88ee0bebc7497ba3969",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
