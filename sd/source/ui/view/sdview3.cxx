@@ -293,15 +293,27 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         pImplementation = nullptr;
     }
 
+    bool bSelfDND = false;
+
     // try to get own transfer data
     if( pImplementation )
     {
         if( SD_MOD()->pTransferClip == pImplementation )
             pOwnData = SD_MOD()->pTransferClip;
         else if( SD_MOD()->pTransferDrag == pImplementation )
+        {
             pOwnData = SD_MOD()->pTransferDrag;
+            bSelfDND = true;
+        }
         else if( SD_MOD()->pTransferSelection == pImplementation )
             pOwnData = SD_MOD()->pTransferSelection;
+    }
+
+    const bool bGroupUndoFromDragWithDrop = bSelfDND && mpDragSrcMarkList && IsUndoEnabled();
+    if (bGroupUndoFromDragWithDrop)
+    {
+        OUString aStr(SdResId(STR_UNDO_DRAGDROP));
+        BegUndo(aStr + " " + mpDragSrcMarkList->GetMarkDescription());
     }
 
     // ImageMap?
@@ -1522,6 +1534,15 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     MarkListHasChanged();
     mbIsDropAllowed = true;
     rDnDAction = mnAction;
+
+    if (bGroupUndoFromDragWithDrop)
+    {
+        // this is called eventually by the underlying toolkit anyway in the case of a self-dnd
+        // but we call it early in this case to group its undo actions into this open dnd undo group
+        // and rely on that repeated calls to View::DragFinished are safe to do
+        DragFinished(mnAction);
+        EndUndo();
+    }
 
     return bReturn;
 }
