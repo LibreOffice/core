@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bb07cf5_5485b0d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-07T12:00:37Z",
+      "side": 1,
+      "message": "Hey guys, I\u0027ve added a test for an internal animation class. ",
+      "revId": "db1a70c7e5617db42298b3b9671449da67259077",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
