@@ -100,12 +100,22 @@ SwExtTextInput::~SwExtTextInput()
             }
             else
             {
-                pTNd->EraseText( rIdx, nEndCnt - nSttCnt );
+                // we need to keep correct formatting
+                // ie. when we erase first, then we will lost information about format
+                // so:
+                // 1. insert new content using Doc interface at the end so we will use the same formatting
+                // 2. erase old content which is placed at "start" position and before recently inserted text
+
+                GetPoint()->nContent = nEndCnt;
 
                 if( bInsText )
                 {
                     pDoc->getIDocumentContentOperations().InsertString( *this, sText );
                 }
+
+                GetPoint()->nContent = nSttCnt;
+
+                pTNd->EraseText( rIdx, nEndCnt - nSttCnt );
             }
             pDoc->GetIDocumentUndoRedo().DoGroupUndo(bKeepGroupUndo);
             if (eInputLanguage != LANGUAGE_DONTKNOW)
