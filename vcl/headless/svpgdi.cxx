@@ -26,7 +26,6 @@
 #include <headless/svpbmp.hxx>
 #include <headless/svpframe.hxx>
 #include <headless/svpcairotextrender.hxx>
-#include <headless/CustomWidgetDraw.hxx>
 #include <saldatabasic.hxx>
 
 #include <sal/log.hxx>
@@ -919,11 +918,7 @@ SvpSalGraphics::SvpSalGraphics()
     , m_aTextRenderImpl(*this)
 {
     bool bLOKActive = comphelper::LibreOfficeKit::isActive();
-    if (!initWidgetDrawBackends(bLOKActive))
-    {
-        if (bLOKActive)
-            m_pWidgetDraw.reset(new vcl::CustomWidgetDraw(*this));
-    }
+    initWidgetDrawBackends(bLOKActive);
 }
 
 SvpSalGraphics::~SvpSalGraphics()
