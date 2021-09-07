@@ -546,6 +546,7 @@ public:
     //@{
     /// Decode a hex dump.
     static std::vector<unsigned char> DecodeHexString(PDFHexStringElement const* pElement);
+    static OUString DecodeHexStringUTF16BE(PDFHexStringElement const& rElement);
     static OString ReadKeyword(SvStream& rStream);
     static size_t FindStartXRef(SvStream& rStream);
     void ReadXRef(SvStream& rStream);
