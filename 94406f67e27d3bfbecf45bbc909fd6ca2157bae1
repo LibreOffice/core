@@ -16,6 +16,47 @@
       "message": "sberg, note my attempted flatpack update here",
       "revId": "94406f67e27d3bfbecf45bbc909fd6ca2157bae1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36d8b04f_69b33413",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-07T07:23:32Z",
+      "side": 1,
+      "message": "oh, that\u0027s appreciated :)",
+      "parentUuid": "c574b9f2_9e647b4d",
+      "revId": "94406f67e27d3bfbecf45bbc909fd6ca2157bae1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "785e7256_18edc627",
+        "filename": "solenv/flatpak-manifest.in",
+        "patchSetId": 3
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-07T07:23:32Z",
+      "side": 1,
+      "message": "the comma needs to move up after the previous block",
+      "range": {
+        "startLine": 692,
+        "startChar": 17,
+        "endLine": 692,
+        "endChar": 18
+      },
+      "revId": "94406f67e27d3bfbecf45bbc909fd6ca2157bae1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
