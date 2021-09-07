@@ -750,6 +750,10 @@ namespace accessibility
             SvxTextForwarder& rCacheTF = GetTextForwarder();
             sal_Int32 nParas=rCacheTF.GetParagraphCount();
 
+            // GetTextForwarder might have replaced everything, update
+            // paragraph count in case it's outdated
+            maParaManager.SetNum( nParas );
+
             mnFirstVisibleChild = -1;
             mnLastVisibleChild = -2;
 
