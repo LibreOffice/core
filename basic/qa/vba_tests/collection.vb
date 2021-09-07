@@ -60,12 +60,12 @@ Sub verify_testCollection()
     ' After the fix of tdf#110003
     ' TestUtil.AssertEqual(b.Count, 2, "b.Count")
 
-    TestUtil.AssertEqual(b.Item("SS"), 1, "a.Item(""SS"")")
-    TestUtil.AssertEqual(b.Item("ss"), 1, "a.Item(""ss"")")
-    TestUtil.AssertEqual(b.Item("ẞ"), 3, "a.Item(""ẞ"")")
-    TestUtil.AssertEqual(b.Item("ß"), 4, "a.Item(""ß"")")
+    TestUtil.AssertEqual(b.Item("SS"), 1, "b.Item(""SS"")")
+    TestUtil.AssertEqual(b.Item("ss"), 1, "b.Item(""ss"")")
+    TestUtil.AssertEqual(b.Item("ẞ"), 3, "b.Item(""ẞ"")")
+    TestUtil.AssertEqual(b.Item("ß"), 4, "b.Item(""ß"")")
     ' After the fix of tdf#110003
-    ' TestUtil.AssertEqual(a.Item("ß"), 3, "a.Item(""ß"")")
+    ' TestUtil.AssertEqual(b.Item("ß"), 3, "b.Item(""ß"")")
 
     Exit Sub
 errorHandler:
