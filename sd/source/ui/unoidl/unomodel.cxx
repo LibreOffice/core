@@ -125,6 +125,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/json_writer.hxx>
 #include <tools/UnitConversion.hxx>
+#include <svx/ColorSets.hxx>
 
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -197,6 +198,7 @@ const sal_uInt16 WID_MODEL_HASVALIDSIGNATURES = 11;
 const sal_uInt16 WID_MODEL_DIALOGLIBS         = 12;
 const sal_uInt16 WID_MODEL_FONTS              = 13;
 const sal_uInt16 WID_MODEL_INTEROPGRABBAG     = 14;
+const sal_uInt16 WID_MODEL_THEME = 15;
 
 static const SvxItemPropertySet* ImplGetDrawModelPropertySet()
 {
@@ -217,6 +219,7 @@ static const SvxItemPropertySet* ImplGetDrawModelPropertySet()
         { sUNO_Prop_HasValidSignatures,   WID_MODEL_HASVALIDSIGNATURES, ::cppu::UnoType<sal_Bool>::get(),                      beans::PropertyAttribute::READONLY, 0},
         { u"Fonts",                        WID_MODEL_FONTS,              cppu::UnoType<uno::Sequence<uno::Any>>::get(),                     beans::PropertyAttribute::READONLY, 0},
         { sUNO_Prop_InteropGrabBag,       WID_MODEL_INTEROPGRABBAG,     cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(),       0, 0},
+        { sUNO_Prop_Theme,                WID_MODEL_THEME,              cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(),       0, 0},
         { u"", 0, css::uno::Type(), 0, 0 }
     };
     static SvxItemPropertySet aDrawModelPropertySet_Impl( aDrawModelPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
@@ -1248,6 +1251,13 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
         case WID_MODEL_INTEROPGRABBAG:
             setGrabBagItem(aValue);
             break;
+        case WID_MODEL_THEME:
+            {
+                SdrModel& rModel = getSdrModelFromUnoModel();
+                std::unique_ptr<svx::Theme> pTheme = svx::Theme::FromAny(aValue);
+                rModel.SetTheme(std::move(pTheme));
+            }
+            break;
         default:
             throw beans::UnknownPropertyException( aPropertyName, static_cast<cppu::OWeakObject*>(this));
     }
@@ -1368,6 +1378,21 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
         case WID_MODEL_INTEROPGRABBAG:
             getGrabBagItem(aAny);
             break;
+        case WID_MODEL_THEME:
+            {
+                SdrModel& rModel = getSdrModelFromUnoModel();
+                svx::Theme* pTheme = rModel.GetTheme();
+                if (pTheme)
+                {
+                    pTheme->ToAny(aAny);
+                }
+                else
+                {
+                    beans::PropertyValues aValues;
+                    aAny <<= aValues;
+                }
+                break;
+            }
         default:
             throw beans::UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
     }

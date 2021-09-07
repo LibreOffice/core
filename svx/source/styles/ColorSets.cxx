@@ -14,6 +14,13 @@
 
 #include <libxml/xmlwriter.h>
 
+#include <com/sun/star/beans/PropertyValues.hpp>
+
+#include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+
+using namespace com::sun::star;
+
 namespace svx
 {
 
@@ -153,6 +160,31 @@ void Theme::dumpAsXml(xmlTextWriterPtr pWriter) const
     }
 
     (void)xmlTextWriterEndElement(pWriter);
+}
+
+void Theme::ToAny(css::uno::Any& rVal) const
+{
+    beans::PropertyValues aValues = {
+        comphelper::makePropertyValue("Name", maName)
+    };
+
+    rVal <<= aValues;
+}
+
+std::unique_ptr<Theme> Theme::FromAny(const css::uno::Any& rVal)
+{
+    comphelper::SequenceAsHashMap aMap(rVal);
+    std::unique_ptr<Theme> pTheme;
+
+    auto it = aMap.find("Name");
+    if (it != aMap.end())
+    {
+        OUString aName;
+        it->second >>= aName;
+        pTheme = std::make_unique<Theme>(aName);
+    }
+
+    return pTheme;
 }
 
 } // end of namespace svx

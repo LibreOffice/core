@@ -85,6 +85,10 @@ public:
     const OUString& GetName() const;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
+
+    void ToAny(css::uno::Any& rVal) const;
+
+    static std::unique_ptr<Theme> FromAny(const css::uno::Any& rVal);
 };
 
 } // end of namespace svx

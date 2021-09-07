@@ -59,6 +59,7 @@ inline constexpr OUStringLiteral sUNO_Prop_BookmarkURL = u"BookmarkURL";
 inline constexpr OUStringLiteral sUNO_Prop_RuntimeUID = u"RuntimeUID";
 inline constexpr OUStringLiteral sUNO_Prop_HasValidSignatures = u"HasValidSignatures";
 inline constexpr OUStringLiteral sUNO_Prop_InteropGrabBag = u"InteropGrabBag";
+inline constexpr OUStringLiteral sUNO_Prop_Theme = u"Theme";
 
 // view settings
 inline constexpr OUStringLiteral sUNO_View_ViewId = u"ViewId";
