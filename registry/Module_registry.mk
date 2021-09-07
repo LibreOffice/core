@@ -20,15 +20,4 @@ $(eval $(call gb_Module_add_targets,registry,\
 	) \
 ))
 
-ifneq ($(OS),iOS) # missing regmerge (see above), needed within test
-
-ifeq ($(ENABLE_MACOSX_SANDBOX),) # ditto
-
-$(eval $(call gb_Module_add_check_targets,registry, \
-    CustomTarget_regcompare_test \
-))
-
-endif
-endif
-
 # vim:set noet sw=4 ts=4:
