@@ -33,6 +33,24 @@
       "message": "Good idea, you just should make sure that the font that was selected back then is still the best choice; see https://bugs.documentfoundation.org/show_bug.cgi?id\u003d105689#c46",
       "revId": "adba5025f4676e3af01611fc1f91ba2f706dc386",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8254fcc1_e3327aef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-09-07T06:29:07Z",
+      "side": 1,
+      "message": "New bug 144348",
+      "parentUuid": "c35685b4_292e85b4",
+      "revId": "adba5025f4676e3af01611fc1f91ba2f706dc386",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
