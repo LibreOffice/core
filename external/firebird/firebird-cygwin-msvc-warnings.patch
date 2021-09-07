@@ -180,12 +180,12 @@ diff -ur builds/posix/make.rules builds/posix/make.rules
  vpath %.cpp $(SRC_DIRS)
  
  define compile
--$1/%.o: %.c
-+$1/%.obj: %.c
+-$1/%.o: %.c | $1
++$1/%.obj: %.c | $1
  	$(CC) -c $$(C_FLAGS) $$< -o $$@
  
--$1/%.o: %.cpp
-+$1/%.obj: %.cpp
+-$1/%.o: %.cpp | $1
++$1/%.obj: %.cpp | $1
  	$(CXX) -c $$(CXX_FLAGS) $$< -o $$@
  endef
  
