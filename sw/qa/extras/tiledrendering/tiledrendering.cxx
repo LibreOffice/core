@@ -32,6 +32,7 @@
 #include <vcl/virdev.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
+#include <editeng/wghtitem.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/stritem.hxx>
@@ -132,6 +133,7 @@ public:
     void testTdf115088();
     void testRedlineField();
     void testIMESupport();
+    void testIMEFormattingAtEndOfParagraph();
     void testSplitNodeRedlineCallback();
     void testDeleteNodeRedlineCallback();
     void testVisCursorInvalidation();
@@ -212,6 +214,7 @@ public:
     CPPUNIT_TEST(testTdf115088);
     CPPUNIT_TEST(testRedlineField);
     CPPUNIT_TEST(testIMESupport);
+    CPPUNIT_TEST(testIMEFormattingAtEndOfParagraph);
     CPPUNIT_TEST(testSplitNodeRedlineCallback);
     CPPUNIT_TEST(testDeleteNodeRedlineCallback);
     CPPUNIT_TEST(testVisCursorInvalidation);
@@ -2217,6 +2220,112 @@ void SwTiledRenderingTest::testIMESupport()
 
     // content contains only the last IME composition, not all
     CPPUNIT_ASSERT_EQUAL(OUString(aInputs[aInputs.size() - 1] + "Aaa bbb."), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+}
+
+void SwTiledRenderingTest::testIMEFormattingAtEndOfParagraph()
+{
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    VclPtr<vcl::Window> pDocWindow = pXTextDocument->getDocWindow();
+
+    SwView* pView = dynamic_cast<SwView*>(SfxViewShell::Current());
+    assert(pView);
+    SwWrtShell* pWrtShell = pView->GetWrtShellPtr();
+
+    // delete all characters
+
+    for (int i = 0; i < 9; i++)
+    {
+        pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DELETE);
+        pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DELETE);
+    }
+
+    Scheduler::ProcessEventsToIdle();
+
+    pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, "a");
+    pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
+
+    // status: "a"
+
+    comphelper::dispatchCommand(".uno:Bold", uno::Sequence<beans::PropertyValue>());
+    Scheduler::ProcessEventsToIdle();
+
+    pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, "b");
+    pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
+
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // status: "a<bold>b</bold>\n"
+
+    pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, "a");
+    pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
+
+    std::unique_ptr<SfxPoolItem> pItem;
+    pView->GetViewFrame()->GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pItem);
+    auto pWeightItem = dynamic_cast<SvxWeightItem*>(pItem.get());
+    CPPUNIT_ASSERT(pWeightItem);
+
+    CPPUNIT_ASSERT_EQUAL(FontWeight::WEIGHT_BOLD, pWeightItem->GetWeight());
+
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // status: "a<bold>b</bold>\n
+    //          <bold>a</bold>\n"
+
+    comphelper::dispatchCommand(".uno:Bold", uno::Sequence<beans::PropertyValue>());
+    Scheduler::ProcessEventsToIdle();
+
+    pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, "b");
+    pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
+
+    pView->GetViewFrame()->GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pItem);
+    auto pWeightItem2 = dynamic_cast<SvxWeightItem*>(pItem.get());
+    CPPUNIT_ASSERT(pWeightItem2);
+
+    CPPUNIT_ASSERT_EQUAL(FontWeight::WEIGHT_NORMAL, pWeightItem2->GetWeight());
+
+    // status: "a<bold>b</bold>\n
+    //          <bold>a</bold>\n"
+    //          b"
+
+    comphelper::dispatchCommand(".uno:Bold", uno::Sequence<beans::PropertyValue>());
+    Scheduler::ProcessEventsToIdle();
+
+    pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, "a");
+    pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
+
+    pView->GetViewFrame()->GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pItem);
+    auto pWeightItem3 = dynamic_cast<SvxWeightItem*>(pItem.get());
+    CPPUNIT_ASSERT(pWeightItem3);
+
+    CPPUNIT_ASSERT_EQUAL(FontWeight::WEIGHT_BOLD, pWeightItem3->GetWeight());
+
+    comphelper::dispatchCommand(".uno:Bold", uno::Sequence<beans::PropertyValue>());
+    Scheduler::ProcessEventsToIdle();
+
+    pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, "b");
+    pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
+
+    pView->GetViewFrame()->GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pItem);
+    auto pWeightItem4 = dynamic_cast<SvxWeightItem*>(pItem.get());
+    CPPUNIT_ASSERT(pWeightItem4);
+
+    CPPUNIT_ASSERT_EQUAL(FontWeight::WEIGHT_NORMAL, pWeightItem4->GetWeight());
+
+    // status: "a<bold>b</bold>\n
+    //          <bold>a</bold>\n"
+    //          b<bold>a</bold>b"
+
+    // the cursor should be at position 3nd
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), pShellCursor->GetPoint()->nContent.GetIndex());
+
+    // check the content
+    CPPUNIT_ASSERT_EQUAL(OUString("bab"), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
 }
 
 void SwTiledRenderingTest::testSplitNodeRedlineCallback()
