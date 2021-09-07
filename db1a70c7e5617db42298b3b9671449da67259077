@@ -16,6 +16,23 @@
       "message": "Hey guys, I\u0027ve added a test for an internal animation class. ",
       "revId": "db1a70c7e5617db42298b3b9671449da67259077",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c7771d1_70b34962",
+        "filename": "vcl/inc/impanmvw.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-07T12:08:21Z",
+      "side": 1,
+      "message": "Should some methods below be still private maybe? Likely the public change was needed only for a subset, e.g. ctor?",
+      "revId": "db1a70c7e5617db42298b3b9671449da67259077",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
