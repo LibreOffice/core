@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50b43203_f1380782",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-09-07T17:54:00Z",
+      "side": 1,
+      "message": "Maybe this will help. Worth a shot and seems to solve what I see locally.",
+      "revId": "eb17953627d29483583841f42477b3eb8fa48b92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
