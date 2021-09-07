@@ -3119,7 +3119,7 @@ void DesktopLOKTest::testRenderSearchResult()
     unsigned char* pBuffer = nullptr;
     OString aPayload =
     "<indexing>"
-        "<paragraph type=\"1\" index=\"19\">ABC</paragraph>"
+        "<paragraph node_type=\"writer\" index=\"19\">ABC</paragraph>"
     "</indexing>";
 
     int nWidth = 0;
