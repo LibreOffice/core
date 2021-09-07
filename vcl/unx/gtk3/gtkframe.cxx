@@ -2299,12 +2299,6 @@ void GtkSalFrame::SetPointer( PointerStyle ePointerStyle )
     m_ePointerStyle = ePointerStyle;
     GdkCursor *pCursor = getDisplay()->getCursor( ePointerStyle );
     widget_set_cursor(GTK_WIDGET(m_pWindow), pCursor);
-
-    // #i80791# use grabPointer the same way as CaptureMouse, respective float grab
-    if( getDisplay()->MouseCaptured( this ) )
-        grabPointer( true, false, false );
-    else if( m_nFloats > 0 )
-        grabPointer( true, false, true );
 }
 
 void GtkSalFrame::grabPointer( bool bGrab, bool bKeyboardAlso, bool bOwnerEvents )
