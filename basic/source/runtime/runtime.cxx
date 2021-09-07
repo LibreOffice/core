@@ -4188,8 +4188,8 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
                     if( nDefaultId > 0 )
                     {
                         // tdf#143707 - check if the data type character was added after the string
-                        // termination  symbol, and convert the variable if it was present. The
-                        // data type character was It was added in basic/source/comp/symtbl.cxx.
+                        // termination symbol, and convert the variable if it was present. The
+                        // data type character was added in basic/source/comp/symtbl.cxx.
                         SbxDataType eTypeStr;
                         OUString aDefaultStr = pImg->GetString( nDefaultId, &eTypeStr );
                         pVar = new SbxVariable(pParam-> eType);
