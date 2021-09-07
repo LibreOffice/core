@@ -795,6 +795,7 @@ void SvxTextEditSourceImpl::UpdateData()
 
 void SvxTextEditSourceImpl::lock()
 {
+    assert(!mbIsLocked);
     mbIsLocked = true;
     if( mpOutliner )
     {
