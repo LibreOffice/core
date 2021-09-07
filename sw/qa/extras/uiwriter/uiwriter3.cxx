@@ -1615,6 +1615,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132744)
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf132744.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
+    // disable change tracking to cut the table
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+
+    CPPUNIT_ASSERT_MESSAGE("redlining should be off",
+                           !pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
