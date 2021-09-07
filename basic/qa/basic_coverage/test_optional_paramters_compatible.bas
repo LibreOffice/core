@@ -1,6 +1,10 @@
 Option Compatible
 Option Explicit
 
+Type testObject
+    testInt As Integer
+End Type
+
 Function doUnitTest() As String
     TestUtil.TestInit
     verify_testOptionalsCompatible
@@ -99,6 +103,30 @@ Sub verify_testOptionalsCompatible()
     TestUtil.AssertEqualApprox(TestOptArrayByRefByVal(, aB), 691.2, 1E-5, "TestOptArrayByRefByVal(, B)")
     TestUtil.AssertEqualApprox(TestOptArrayByRefByVal(aA, aB), 1270.2, 1E-5, "TestOptArrayByRefByVal(A, B)")
 
+    ' tdf#144353 - error handling of missing optional parameters (arithmetic operator)
+    ' Without the fix in place, this test would have failed with:
+    ' - Expected: 449 (ERRCODE_BASIC_NOT_OPTIONAL - Argument not optional)
+    ' - Actual  : 549 (Actual value of the variable)
+    TestUtil.AssertEqual(TestArithmeticOperator, 449, "TestArithmeticOperator")
+
+    ' tdf#144353 - error handling of missing optional parameters (unary operator)
+    ' Without the fix in place, this test would have failed with:
+    ' - Expected: 449 (ERRCODE_BASIC_NOT_OPTIONAL - Argument not optional)
+    ' - Actual  : 100 (Actual value of the variable)
+    TestUtil.AssertEqual(TestUnaryOperator, 449, "TestUnaryOperator")
+
+    ' tdf#144353 - error handling of missing optional parameters (assigning to a collection)
+    ' Without the fix in place, this test would have failed with:
+    ' - Expected: 449 (ERRCODE_BASIC_NOT_OPTIONAL - Argument not optional)
+    ' - Actual  : 549 (Actual value of the variable)
+    TestUtil.AssertEqual(TestCollection, 449, "TestCollection")
+
+    ' tdf#144353 - error handling of missing optional parameters (assigning to an object)
+    ' Without the fix in place, this test would have failed with:
+    ' - Expected: 449 (ERRCODE_BASIC_NOT_OPTIONAL - Argument not optional)
+    ' - Actual  : 448 (Actual value of the variable)
+    TestUtil.AssertEqual(TestObjectError, 449, "TestObjectError")
+
     Exit Sub
 errorHandler:
     TestUtil.ReportErrorHandler("verify_testOptionalsCompatible", Err, Error$, Erl)
@@ -166,6 +194,41 @@ Function OptStringConcat(is_missingA As Boolean, A, is_missingB As Boolean, B)
     OptStringConcat = ""
     If Not is_missingA Then OptStringConcat = A
     If Not is_missingB Then OptStringConcat = OptStringConcat & B
+End Function
+
+Function TestArithmeticOperator(Optional optInt)
+On Error GoTo errorHandler
+    optInt = optInt + 100
+    TestArithmeticOperator = optInt
+errorHandler:
+    TestArithmeticOperator = Err()
+End Function
+
+Function TestUnaryOperator(Optional optInt)
+On Error GoTo errorHandler
+    If (Not optInt) Then optInt = 100
+    TestUnaryOperator = optInt
+errorHandler:
+    TestUnaryOperator = Err()
+End Function
+
+Function TestCollection(Optional optInt)
+On Error GoTo errorHandler
+    Dim cA As New Collection
+    cA.Add(optInt)
+    TestCollection = cA.Item(1) + 100
+errorHandler:
+    TestCollection = Err()
+End Function
+
+Function TestObjectError(Optional optInt)
+On Error GoTo errorHandler
+    Dim aTestObject As Variant
+    aTestObject = CreateObject("testObject")
+    aTestObject.testInt = optInt
+    TestObjectError = optInt
+errorHandler:
+    TestObjectError = Err()
 End Function
 
 Function CollectionSum(C)
