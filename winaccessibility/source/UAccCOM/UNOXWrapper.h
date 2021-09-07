@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include "stdafx.h"
 #include "Resource.h" // main symbols
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
