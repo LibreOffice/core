@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b34f9501_ee8ebc3d",
+        "filename": "include/vcl/font/EmbeddedFontsHelper.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-09-07T13:03:47Z",
+      "side": 1,
+      "message": "namespace vcl::font\n{",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 1
+      },
+      "revId": "b899ed79e237926669fb131d1e07c79b4ac3bb97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "63d27b84_009f949d",
         "filename": "xmloff/source/style/XMLFontAutoStylePool.cxx",
         "patchSetId": 4
