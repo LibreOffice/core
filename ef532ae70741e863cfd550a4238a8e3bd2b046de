@@ -51,6 +51,24 @@
       "parentUuid": "da8ec066_a8a69fcc",
       "revId": "ef532ae70741e863cfd550a4238a8e3bd2b046de",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3ae161f_2d2a0b0a",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 10356,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-07T06:53:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fad3cec5_e07fc507",
+      "revId": "ef532ae70741e863cfd550a4238a8e3bd2b046de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
