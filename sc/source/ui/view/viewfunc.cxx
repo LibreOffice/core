@@ -2186,7 +2186,21 @@ void ScViewFunc::SetWidthOrHeight(
                     aCxt.setExtraHeight(nSizeTwips);
                     rDoc.SetOptimalHeight(aCxt, nStartNo, nEndNo, nTab, true);
                     if (bAll)
-                        rDoc.ShowRows( nStartNo, nEndNo, nTab, true );
+                    {
+                        for (SCROW nRow = nStartNo; nRow <= nEndNo; ++nRow)
+                        {
+                            SCROW nFirstRow = nRow;
+                            SCROW nLastRow = nRow;
+                            // tdf#36383 skip consecutive rows hidden by AutoFilter
+                            if (rDoc.RowFiltered(nRow, nTab, &nFirstRow, &nLastRow))
+                                rDoc.ShowRows(nRow, nFirstRow <= nEndNo ? nFirstRow - 1 : nEndNo,
+                                              nTab, true);
+                            else
+                                rDoc.ShowRows(nRow, nLastRow <= nEndNo ? nLastRow : nEndNo, nTab,
+                                              true);
+                            nRow = nLastRow + 1;
+                        }
+                    }
 
                     //  Manual-Flag already (re)set in SetOptimalHeight in case of bAll=sal_True
                     //  (set for Extra-Height, else reset).
@@ -2199,7 +2213,20 @@ void ScViewFunc::SetWidthOrHeight(
                         rDoc.SetManualHeight( nStartNo, nEndNo, nTab, true );          // height was set manually
                     }
 
-                    rDoc.ShowRows( nStartNo, nEndNo, nTab, nSizeTwips != 0 );
+                    bool bShowRows = nSizeTwips != 0;
+                    for (SCROW nRow = nStartNo; nRow <= nEndNo; ++nRow)
+                    {
+                        SCROW nFirstRow = nRow;
+                        SCROW nLastRow = nRow;
+                        // tdf#36383 skip consecutive rows hidden by AutoFilter
+                        if (rDoc.RowFiltered(nRow, nTab, &nFirstRow, &nLastRow))
+                            rDoc.ShowRows(nRow, nFirstRow <= nEndNo ? nFirstRow - 1 : nEndNo, nTab,
+                                          bShowRows);
+                        else
+                            rDoc.ShowRows(nRow, nLastRow <= nEndNo ? nLastRow : nEndNo, nTab,
+                                          bShowRows);
+                        nRow = nLastRow + 1;
+                    }
 
                     if (!bShow && nStartNo <= nCurY && nCurY <= nEndNo && nTab == nCurTab)
                     {
