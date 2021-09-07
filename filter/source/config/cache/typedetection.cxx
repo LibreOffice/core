@@ -422,9 +422,8 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
         // outside (bAllowDeep=sal_False) or break the whole detection by
         // throwing an exception if creation of the might needed input
         // stream failed by e.g. an IO exception ...
-        std::vector<OUString> lUsedDetectors;
         if (!lFlatTypes.empty())
-            sType = impl_detectTypeFlatAndDeep(stlDescriptor, lFlatTypes, bAllowDeep, lUsedDetectors, sLastChance);
+            sType = impl_detectTypeFlatAndDeep(stlDescriptor, lFlatTypes, bAllowDeep, sLastChance);
 
         // flat detection failed
         // pure deep detection failed
@@ -855,13 +854,11 @@ void TypeDetection::impl_getAllFormatTypes(
 OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& rDescriptor   ,
                                                           const FlatDetection&                 lFlatTypes    ,
                                                                 bool                       bAllowDeep    ,
-                                                                std::vector<OUString>&         rUsedDetectors,
                                                                 OUString&               rLastChance   )
 {
     // reset it everytimes, so the outside code can distinguish between
     // a set and a not set value.
     rLastChance.clear();
-    rUsedDetectors.clear();
 
     // step over all possible types for this URL.
     // solutions:
@@ -919,10 +916,6 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
                 continue;
             }
 
-            // don't forget to add every real asked deep detection service here.
-            // Such detectors will be ignored if may be "impl_detectTypeDeepOnly()"
-            // must be called later!
-            rUsedDetectors.push_back(sDetectService);
             OUString sDeepType = impl_askDetectService(sDetectService, rDescriptor);
 
             // d)

@@ -98,10 +98,6 @@ private:
                     was used without getting any result. Then this "last-chance-type"
                     should be returned. Of course using of it can fail too ... but it's a try :-)
 
-                    As an optimization - this method collects the names of all used deep
-                    detection services. This information can be useful inside the may be
-                    afterwards called method "impl_detectTypeDeepOnly()"!
-
         @param      rDescriptor
                     provides any easy-to-use stl interface to the MediaDescriptor.
                     Note : Its content will be adapted to returned result of this method.
@@ -116,12 +112,6 @@ private:
                     Note: it will be reset to an empty string every time. So
                     a set value of "rLastChance" can be detected outside very easy.
 
-        @param      rUsedDetectors
-                    used as [out] parameter. It contains a list of names of all deep
-                    detection services, which was used inside this method.
-                    Such detectors can be ignored later if "impl_detectTypeDeepOnly()"
-                    is called.
-
         @param      bAllowDeep
                     enable/disable using of a might existing deep detection service.
 
@@ -132,7 +122,6 @@ private:
     OUString impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& rDescriptor   ,
                                                const FlatDetection&                 lFlatTypes    ,
                                                      bool                       bAllowDeep    ,
-                                                     std::vector<OUString>&         rUsedDetectors,
                                                      OUString&               rLastChance   );
 
 
