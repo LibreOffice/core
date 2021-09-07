@@ -63,7 +63,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_accessibleAt(long row, long col
     if(!pRXTable.is())
         return E_FAIL;
 
-    Reference<XAccessible> pRAcc = GetXInterface()->getAccessibleCellAt(row,column);
+    Reference<XAccessible> pRAcc = pRXTable->getAccessibleCellAt(row, column);
 
     if(!pRAcc.is())
     {
@@ -82,7 +82,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_accessibleAt(long row, long col
     }
     else if(pRAcc.is())
     {
-        Reference<XAccessible> pxTable(GetXInterface(),UNO_QUERY);
+        Reference<XAccessible> pxTable(pRXTable, UNO_QUERY);
 
         CMAccessible::g_pAgent->InsertAccObj(pRAcc.get(),pxTable.get());
         isTRUE = CMAccessible::get_IAccessibleFromXAccessible(pRAcc.get(), &pRet);
@@ -129,7 +129,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_columnDescription(long column, 
     if(!pRXTable.is())
         return E_FAIL;
 
-    const OUString& ouStr = GetXInterface()->getAccessibleColumnDescription(column);
+    const OUString& ouStr = pRXTable->getAccessibleColumnDescription(column);
     // #CHECK#
 
     SAFE_SYSFREESTRING(*description);
@@ -154,23 +154,15 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_columnExtentAt(long row, long c
 
     ENTER_PROTECTED_BLOCK
 
-    XAccessibleTable    *pXAccTable = GetXInterface();
-
     // Check pointer.
     if(nColumnsSpanned == nullptr)
         return E_INVALIDARG;
 
-    // Get Extent.
-    if(pXAccTable)
-    {
-        long lExt = pXAccTable->getAccessibleColumnExtentAt(row,column);
+    if(!pRXTable.is())
+        return E_FAIL;
 
-        // Fill Extent struct.
-        *nColumnsSpanned = lExt;
-        return S_OK;
-    }
-
-    return E_FAIL;
+    *nColumnsSpanned = pRXTable->getAccessibleColumnExtentAt(row, column);
+    return S_OK;
 
     LEAVE_PROTECTED_BLOCK
 }
@@ -195,7 +187,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_columnHeader(IAccessibleTable _
     if(!pRXTable.is())
         return E_FAIL;
 
-    Reference<XAccessibleTable> pRColumnHeaderTable = GetXInterface()->getAccessibleColumnHeaders();
+    Reference<XAccessibleTable> pRColumnHeaderTable = pRXTable->getAccessibleColumnHeaders();
     if(!pRColumnHeaderTable.is())
     {
         *accessibleTable = nullptr;
@@ -245,7 +237,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_nColumns(long * columnCount)
     if(!pRXTable.is())
         return E_FAIL;
 
-    *columnCount = GetXInterface()->getAccessibleColumnCount();
+    *columnCount = pRXTable->getAccessibleColumnCount();
     return S_OK;
 
     LEAVE_PROTECTED_BLOCK
@@ -270,7 +262,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_nRows(long * rowCount)
     if(!pRXTable.is())
         return E_FAIL;
 
-    *rowCount = GetXInterface()->getAccessibleRowCount();
+    *rowCount = pRXTable->getAccessibleRowCount();
     return S_OK;
 
     LEAVE_PROTECTED_BLOCK
@@ -295,7 +287,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_nSelectedColumns(long * columnC
     if(!pRXTable.is())
         return E_FAIL;
 
-    Sequence<long> pSelected = GetXInterface()->getSelectedAccessibleColumns();
+    Sequence<long> pSelected = pRXTable->getSelectedAccessibleColumns();
     *columnCount = pSelected.getLength();
     return S_OK;
 
@@ -321,7 +313,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_nSelectedRows(long * rowCount)
     if(!pRXTable.is())
         return E_FAIL;
 
-    Sequence<long> pSelected = GetXInterface()->getSelectedAccessibleRows();
+    Sequence<long> pSelected = pRXTable->getSelectedAccessibleRows();
     *rowCount = pSelected.getLength();
     return S_OK;
 
@@ -348,7 +340,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_rowDescription(long row, BSTR *
     if(!pRXTable.is())
         return E_FAIL;
 
-    const OUString& ouStr = GetXInterface()->getAccessibleRowDescription(row);
+    const OUString& ouStr = pRXTable->getAccessibleRowDescription(row);
     // #CHECK#
 
     SAFE_SYSFREESTRING(*description);
@@ -373,24 +365,16 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_rowExtentAt(long row, long colu
 
     ENTER_PROTECTED_BLOCK
 
-    XAccessibleTable    *pXAccTable = GetXInterface();
-
     // Check pointer.
     if(nRowsSpanned == nullptr)
         return E_INVALIDARG;
 
-    // Get Extent.
-    if(pXAccTable)
-    {
-        long lExt = GetXInterface()->getAccessibleRowExtentAt(row,column);
+    if(!pRXTable.is())
+        return E_FAIL;
 
-        // Fill Extent struct.
-        *nRowsSpanned= lExt;
+    *nRowsSpanned= pRXTable->getAccessibleRowExtentAt(row, column);
 
-        return S_OK;
-    }
-
-    return E_FAIL;
+    return S_OK;
 
     LEAVE_PROTECTED_BLOCK
 }
@@ -415,7 +399,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_rowHeader(IAccessibleTable __RP
     if(!pRXTable.is())
         return E_FAIL;
 
-    Reference<XAccessibleTable> pRRowHeaderTable = GetXInterface()->getAccessibleRowHeaders();
+    Reference<XAccessibleTable> pRRowHeaderTable = pRXTable->getAccessibleRowHeaders();
     if(!pRRowHeaderTable.is())
     {
         *accessibleTable = nullptr;
@@ -467,7 +451,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_selectedRows(long, long ** rows
     if(!pRXTable.is())
         return E_FAIL;
 
-    Sequence<long> pSelected = GetXInterface()->getSelectedAccessibleRows();
+    Sequence<long> pSelected = pRXTable->getSelectedAccessibleRows();
     long count = pSelected.getLength() ;
     *nRows = count;
 
@@ -506,7 +490,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_selectedColumns(long, long ** c
     if(!pRXTable.is())
         return E_FAIL;
 
-    Sequence<long> pSelected = GetXInterface()->getSelectedAccessibleColumns();
+    Sequence<long> pSelected = pRXTable->getSelectedAccessibleColumns();
     long count = pSelected.getLength() ;
     *numColumns = count;
 
@@ -541,10 +525,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_summary(IUnknown * * accessible
 
     // #CHECK XInterface#
     if(!pRXTable.is())
-    {
         return E_FAIL;
-    }
-    Reference<XAccessible> pRAcc = GetXInterface()->getAccessibleSummary();
+
+    Reference<XAccessible> pRAcc = pRXTable->getAccessibleSummary();
 
     IAccessible* pRet = nullptr;
     CMAccessible::get_IAccessibleFromXAccessible(pRAcc.get(), &pRet);
@@ -581,7 +564,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_isColumnSelected(long column, b
     if(!pRXTable.is())
         return E_FAIL;
 
-    *isSelected = GetXInterface()->isAccessibleColumnSelected(column);
+    *isSelected = pRXTable->isAccessibleColumnSelected(column);
     return S_OK;
 
     LEAVE_PROTECTED_BLOCK
@@ -605,10 +588,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_isRowSelected(long row, boolean
 
     // #CHECK XInterface#
     if(!pRXTable.is())
-    {
         return E_FAIL;
-    }
-    *isSelected = GetXInterface()->isAccessibleRowSelected(row);
+
+    *isSelected = pRXTable->isAccessibleRowSelected(row);
     return S_OK;
 
     LEAVE_PROTECTED_BLOCK
@@ -635,7 +617,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_isSelected(long row, long colum
     if(!pRXTable.is())
         return E_FAIL;
 
-    *isSelected = GetXInterface()->isAccessibleSelected(row,column);
+    *isSelected = pRXTable->isAccessibleSelected(row, column);
     return S_OK;
 
     LEAVE_PROTECTED_BLOCK
@@ -666,16 +648,16 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::selectRow(long row)
     else
     {
         // Get XAccessibleSelection.
-        Reference<XAccessibleSelection>     pRSelection(GetXInterface(), UNO_QUERY);
+        Reference<XAccessibleSelection>     pRSelection(pRXTable, UNO_QUERY);
         if(!pRSelection.is())
             return E_FAIL;
 
         // Select row.
         long            lCol, lColumnCount;
-        lColumnCount = GetXInterface()->getAccessibleColumnCount();
+        lColumnCount = pRXTable->getAccessibleColumnCount();
         for(lCol = 0; lCol < lColumnCount; lCol ++)
         {
-            long lChildIndex = GetXInterface()->getAccessibleIndex(row, lCol);
+            long lChildIndex = pRXTable->getAccessibleIndex(row, lCol);
             pRSelection->selectAccessibleChild(lChildIndex);
         }
 
@@ -701,7 +683,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::selectColumn(long column)
     if(!pRXTable.is())
         return E_FAIL;
 
-    Reference<XAccessibleTableSelection>        pRTableExtent(GetXInterface(), UNO_QUERY);
+    Reference<XAccessibleTableSelection>        pRTableExtent(pRXTable, UNO_QUERY);
     if(pRTableExtent.is())
     {
         pRTableExtent->selectColumn(column);
@@ -716,10 +698,10 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::selectColumn(long column)
 
         // Select column.
         long            lRow, lRowCount;
-        lRowCount = GetXInterface()->getAccessibleRowCount();
+        lRowCount = pRXTable->getAccessibleRowCount();
         for(lRow = 0; lRow < lRowCount; lRow ++)
         {
-            long lChildIndex = GetXInterface()->getAccessibleIndex(lRow, column);
+            long lChildIndex = pRXTable->getAccessibleIndex(lRow, column);
             pRSelection->selectAccessibleChild(lChildIndex);
         }
 
@@ -746,7 +728,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::unselectRow(long row)
     if(!pRXTable.is())
         return E_FAIL;
 
-    Reference<XAccessibleTableSelection>        pRTableExtent(GetXInterface(), UNO_QUERY);
+    Reference<XAccessibleTableSelection>        pRTableExtent(pRXTable, UNO_QUERY);
     if(pRTableExtent.is())
     {
         if(pRTableExtent->unselectRow(row))
@@ -763,10 +745,10 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::unselectRow(long row)
 
         // Select column.
         long            lColumn, lColumnCount;
-        lColumnCount = GetXInterface()->getAccessibleColumnCount();
+        lColumnCount = pRXTable->getAccessibleColumnCount();
         for(lColumn = 0; lColumn < lColumnCount; lColumn ++)
         {
-            long lChildIndex = GetXInterface()->getAccessibleIndex(row,lColumn);
+            long lChildIndex = pRXTable->getAccessibleIndex(row, lColumn);
             pRSelection->deselectAccessibleChild(lChildIndex);
         }
 
@@ -793,7 +775,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::unselectColumn(long column)
     if(!pRXTable.is())
         return E_FAIL;
 
-    Reference<XAccessibleTableSelection>        pRTableExtent(GetXInterface(), UNO_QUERY);
+    Reference<XAccessibleTableSelection>        pRTableExtent(pRXTable, UNO_QUERY);
     if(pRTableExtent.is())
     {
         if(pRTableExtent->unselectColumn(column))
@@ -810,11 +792,11 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::unselectColumn(long column)
 
         // Unselect columns.
         long            lRow, lRowCount;
-        lRowCount = GetXInterface()->getAccessibleRowCount();
+        lRowCount = pRXTable->getAccessibleRowCount();
 
         for(lRow = 0; lRow < lRowCount; lRow ++)
         {
-            long lChildIndex = GetXInterface()->getAccessibleIndex(lRow, column);
+            long lChildIndex = pRXTable->getAccessibleIndex(lRow, column);
             pRSelection->deselectAccessibleChild(lChildIndex);
         }
         return S_OK;
@@ -872,7 +854,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_columnIndex(long childIndex, lo
     if(!pRXTable.is())
         return E_FAIL;
 
-    *columnIndex = GetXInterface()->getAccessibleColumn(childIndex);
+    *columnIndex = pRXTable->getAccessibleColumn(childIndex);
     return S_OK;
 
     LEAVE_PROTECTED_BLOCK
@@ -896,7 +878,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_rowIndex(long childIndex, long 
     if(!pRXTable.is())
         return E_FAIL;
 
-    *rowIndex = GetXInterface()->getAccessibleRow(childIndex);
+    *rowIndex = pRXTable->getAccessibleRow(childIndex);
     return S_OK;
 
     LEAVE_PROTECTED_BLOCK
@@ -920,7 +902,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_childIndex(long RowIndex , long
     if(!pRXTable.is())
         return E_FAIL;
 
-    *childIndex = GetXInterface()->getAccessibleIndex(RowIndex, columnIndex);
+    *childIndex = pRXTable->getAccessibleIndex(RowIndex, columnIndex);
     return S_OK;
 
     LEAVE_PROTECTED_BLOCK
@@ -958,7 +940,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_nSelectedChildren(long *childCo
     if(!pRXTable.is())
         return E_FAIL;
 
-    Reference<XAccessibleSelection>     pRSelection(GetXInterface(), UNO_QUERY);
+    Reference<XAccessibleSelection> pRSelection(pRXTable, UNO_QUERY);
     if(!pRSelection.is())
         return E_FAIL;
 
@@ -989,7 +971,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_selectedChildren(long, long **c
     if(!pRXTable.is())
         return E_FAIL;
 
-    Reference<XAccessibleSelection>     pRSelection(GetXInterface(), UNO_QUERY);
+    Reference<XAccessibleSelection> pRSelection(pRXTable, UNO_QUERY);
     if(!pRSelection.is())
         return E_FAIL;
 
