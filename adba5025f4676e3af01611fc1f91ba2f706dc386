@@ -16,6 +16,23 @@
       "message": "Thought it could be interesting at least for master branch (also perhaps on 7.2 branch?)",
       "revId": "adba5025f4676e3af01611fc1f91ba2f706dc386",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c35685b4_292e85b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-09-07T05:48:40Z",
+      "side": 1,
+      "message": "Good idea, you just should make sure that the font that was selected back then is still the best choice; see https://bugs.documentfoundation.org/show_bug.cgi?id\u003d105689#c46",
+      "revId": "adba5025f4676e3af01611fc1f91ba2f706dc386",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
