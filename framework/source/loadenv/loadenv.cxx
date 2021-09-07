@@ -745,6 +745,9 @@ void LoadEnv::impl_detectTypeAndFilter()
 
     if (queryOrcusTypeAndFilter(lDescriptor, sType, sFilter) && !sType.isEmpty() && !sFilter.isEmpty())
     {
+        // SAFE ->
+        osl::MutexGuard aWriteLock(m_mutex);
+
         // Orcus type detected.  Skip the normal type detection process.
         m_lMediaDescriptor << lDescriptor;
         m_lMediaDescriptor[utl::MediaDescriptor::PROP_TYPENAME()] <<= sType;
@@ -752,6 +755,7 @@ void LoadEnv::impl_detectTypeAndFilter()
         m_lMediaDescriptor[utl::MediaDescriptor::PROP_FILTERPROVIDER()] <<= OUString("orcus");
         m_lMediaDescriptor[utl::MediaDescriptor::PROP_DOCUMENTSERVICE()] <<= OUString("com.sun.star.sheet.SpreadsheetDocument");
         return;
+        // <- SAFE
     }
 
     css::uno::Reference< css::document::XTypeDetection > xDetect(
