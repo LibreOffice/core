@@ -51,6 +51,23 @@
       "parentUuid": "c35685b4_292e85b4",
       "revId": "adba5025f4676e3af01611fc1f91ba2f706dc386",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c03c77be_6edfe069",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-09-07T17:00:21Z",
+      "side": 1,
+      "message": "Since there\u0027s some debate about tdf#144348, let\u0027s wait for the moment.\nIMHO there should be an agreement before making this feature fully available, no need to hurry to \"unexperimental\" this to have several bugs about it.\nFor the moment, the more I read about it, the more it seems complicated and resemble a kind of burden to maintain.",
+      "revId": "adba5025f4676e3af01611fc1f91ba2f706dc386",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
