@@ -1309,6 +1309,14 @@ void SbiRuntime::StepArith( SbxOperator eOp )
     TOSMakeTemp();
     SbxVariable* p2 = GetTOS();
 
+    // tdf#144353 - do not compute any operation with a missing optional variable
+    if ((p1->GetType() == SbxERROR && IsMissing(p1.get(), 1))
+        || (p2->GetType() == SbxERROR && IsMissing(p2, 1)))
+    {
+        Error(ERRCODE_BASIC_NOT_OPTIONAL);
+        return;
+    }
+
     p2->ResetFlag( SbxFlagBits::Fixed );
     p2->Compute( eOp, *p1 );
 
@@ -1319,6 +1327,12 @@ void SbiRuntime::StepUnary( SbxOperator eOp )
 {
     TOSMakeTemp();
     SbxVariable* p = GetTOS();
+    // tdf#144353 - do not compute any operation with a missing optional variable
+    if (p->GetType() == SbxERROR && IsMissing(p, 1))
+    {
+        Error(ERRCODE_BASIC_NOT_OPTIONAL);
+        return;
+    }
     p->Compute( eOp, *p );
 }
 
@@ -1326,6 +1340,14 @@ void SbiRuntime::StepCompare( SbxOperator eOp )
 {
     SbxVariableRef p1 = PopVar();
     SbxVariableRef p2 = PopVar();
+
+    // tdf#144353 - do not compare a missing optional variable
+    if ((p1->GetType() == SbxERROR && SbiRuntime::IsMissing(p1.get(), 1))
+        || (p2->GetType() == SbxERROR && SbiRuntime::IsMissing(p2.get(), 1)))
+    {
+        SbxBase::SetError(ERRCODE_BASIC_NOT_OPTIONAL);
+        return;
+    }
 
     // Make sure objects with default params have
     // values ( and type ) set as appropriate
@@ -1606,6 +1628,13 @@ static bool checkUnoStructCopy( bool bVBA, SbxVariableRef const & refVal, SbxVar
 {
     SbxDataType eVarType = refVar->GetType();
     SbxDataType eValType = refVal->GetType();
+
+    // tdf#144353 - do not assign a missing optional variable to a property
+    if (refVal->GetType() == SbxERROR && SbiRuntime::IsMissing(refVal.get(), 1))
+    {
+        SbxBase::SetError(ERRCODE_BASIC_NOT_OPTIONAL);
+        return true;
+    }
 
     if ( ( bVBA && ( eVarType == SbxEMPTY ) ) || !refVar->CanWrite() )
         return false;
