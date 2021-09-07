@@ -1723,7 +1723,12 @@ void SbiRuntime::StepPUT()
         }
     }
 
-    if ( !checkUnoStructCopy( bVBAEnabled, refVal, refVar ) )
+    // tdf#144353 - do not assign a missing optional variable to a property
+    if (refVal->GetType() == SbxERROR && IsMissing(refVal.get(), 1))
+    {
+        Error(ERRCODE_BASIC_NOT_OPTIONAL);
+    }
+    else if (!checkUnoStructCopy(bVBAEnabled, refVal, refVar))
         *refVar = *refVal;
 
     if( bFlagsChanged )
