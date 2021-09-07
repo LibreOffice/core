@@ -528,7 +528,6 @@ vcl_headless_code= \
         vcl/headless/svpbmp \
         vcl/headless/svpgdi \
         $(if $(ENABLE_HEADLESS),vcl/headless/svpdata) \
-        vcl/headless/CustomWidgetDraw \
     ) \
     vcl/headless/svpdummies \
     vcl/headless/svpinst \
