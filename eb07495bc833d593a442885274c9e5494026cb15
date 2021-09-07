@@ -33,6 +33,24 @@
       "message": "Is the idea behind this splitting to be able to include the enum separately to places where it\u0027s used in context of output devise, and where it\u0027s used in context of meta action?",
       "revId": "eb07495bc833d593a442885274c9e5494026cb15",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62242cf4_41aa3aa3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-07T06:12:39Z",
+      "side": 1,
+      "message": "That is correct. I will eventually be splitting the metaaction processing from the rendering processing.",
+      "parentUuid": "2b89bd71_b2ad3739",
+      "revId": "eb07495bc833d593a442885274c9e5494026cb15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
