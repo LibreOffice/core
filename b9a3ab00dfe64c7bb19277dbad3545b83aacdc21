@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a266ab9_11a46462",
+        "filename": "vcl/source/gdi/print2.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-07T05:57:42Z",
+      "side": 0,
+      "message": "Any reason to remove the trailing line here?",
+      "revId": "b9a3ab00dfe64c7bb19277dbad3545b83aacdc21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
