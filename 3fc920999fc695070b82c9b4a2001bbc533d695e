@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6391dee6_56360f3f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2021-09-07T08:03:58Z",
+      "side": 1,
+      "message": "Thanks for your\n\n        commit b9a3ab00dfe64c7bb19277dbad3545b83aacdc21\n        Author: Caolán McNamara \u003ccaolanm@redhat.com\u003e\n        Date:   Fri Sep 3 17:27:54 2021 +0100\n    \n            tdf#142458 Set correct ScrolledWindow BorderWidth in the ctor\n\nand taking care of this!",
+      "revId": "3fc920999fc695070b82c9b4a2001bbc533d695e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
