@@ -27,5 +27,6 @@ $(eval $(call gb_Module_add_targets_for_build,unoidl, \
 
 $(eval $(call gb_Module_add_check_targets,unoidl, \
     CustomTarget_unoidl-write_test \
+    $(if $(filter ODK,$(BUILD_TYPE)),CustomTarget_unoidl-check_test) \
 ))
 # vim: set noet sw=4 ts=4:
