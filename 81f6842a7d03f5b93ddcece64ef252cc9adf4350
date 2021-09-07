@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "155b17ca_a4217d6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-07T03:26:50Z",
+      "side": 1,
+      "message": "Thank you!",
+      "revId": "81f6842a7d03f5b93ddcece64ef252cc9adf4350",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6e84f7c_2d64117b",
+        "filename": "vcl/headless/svpbmp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-07T03:26:50Z",
+      "side": 1,
+      "message": "Possibly places like this one could be further made \u0027\u003d default;\u0027",
+      "revId": "81f6842a7d03f5b93ddcece64ef252cc9adf4350",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "718ca52f_4edcc044",
+        "filename": "vcl/source/gdi/graphictools.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-07T03:26:50Z",
+      "side": 1,
+      "message": "And IMO, making these more explicit using zero values would also improve readability.",
+      "revId": "81f6842a7d03f5b93ddcece64ef252cc9adf4350",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
