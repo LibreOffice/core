@@ -2100,25 +2100,11 @@ bool VclScrolledWindow::EventNotify(NotifyEvent& rNEvt)
     return bDone || VclBin::EventNotify( rNEvt );
 }
 
-void VclScrolledWindow::updateBorderWidth(tools::Long nBorderWidth)
-{
-    if (m_nBorderWidth == nBorderWidth || nBorderWidth < 1)
-        return;
-
-    m_nBorderWidth = nBorderWidth;
-    // update scrollbars and child window
-    doSetAllocation(GetSizePixel(), false);
-};
-
 void VclScrolledWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     const tools::Rectangle aRect(tools::Rectangle(Point(0,0), GetSizePixel()));
     DecorationView aDecoView(&rRenderContext);
-    const tools::Rectangle aContentRect = aDecoView.DrawFrame(aRect, m_eDrawFrameStyle, m_eDrawFrameFlags);
-
-    // take potentially changed frame size into account before rendering content
-    const tools::Long nFrameWidth = (aRect.GetWidth() - aContentRect.GetWidth()) / 2;
-    updateBorderWidth(nFrameWidth);
+    aDecoView.DrawFrame(aRect, m_eDrawFrameStyle, m_eDrawFrameFlags);
 
     VclBin::Paint(rRenderContext, rRect);
 }
