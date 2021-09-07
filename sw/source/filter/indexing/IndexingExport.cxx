@@ -101,7 +101,7 @@ public:
         m_rXmlWriter.attribute("index", pTextNode->GetIndex());
         m_rXmlWriter.attribute("node_type", "writer");
         if (nParentIndex >= 0)
-            m_rXmlWriter.attribute("parent", nParentIndex);
+            m_rXmlWriter.attribute("parent_index", nParentIndex);
         m_rXmlWriter.content(rString);
         m_rXmlWriter.endElement();
     }
@@ -131,7 +131,7 @@ public:
                 m_rXmlWriter.startElement("paragraph");
                 m_rXmlWriter.attribute("index", nParagraph);
                 m_rXmlWriter.attribute("node_type", "common");
-                m_rXmlWriter.attribute("parent", pObject->GetName());
+                m_rXmlWriter.attribute("object_name", pObject->GetName());
                 m_rXmlWriter.content(sText);
                 m_rXmlWriter.endElement();
             }
