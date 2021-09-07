@@ -16,6 +16,24 @@
       "message": "Any reason to remove the trailing line here?",
       "revId": "b9a3ab00dfe64c7bb19277dbad3545b83aacdc21",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25396a4f_4a650207",
+        "filename": "vcl/source/gdi/print2.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-07T06:03:53Z",
+      "side": 0,
+      "message": "Oops! Sorry, that was done in error - thanks for picking this up.",
+      "parentUuid": "5a266ab9_11a46462",
+      "revId": "b9a3ab00dfe64c7bb19277dbad3545b83aacdc21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
