@@ -1015,7 +1015,7 @@ namespace emfio
 
                     case EMR_SETMAPMODE :
                     {
-                        sal_uInt32 nMapMode;
+                        sal_uInt32 nMapMode(0);
                         mpInputStream->ReadUInt32( nMapMode );
                         SAL_INFO("emfio", "\t\tMapMode: 0x" << std::hex << nMapMode << std::dec);
                         SetMapMode( nMapMode );
@@ -1101,7 +1101,7 @@ namespace emfio
 
                     case EMR_RESTOREDC :
                     {
-                        sal_Int32 nSavedDC;
+                        sal_Int32 nSavedDC(0);
                         mpInputStream->ReadInt32( nSavedDC );
                         SAL_INFO( "emfio", "\t\t SavedDC Index: " << nSavedDC );
                         if ( nSavedDC < 0 )
