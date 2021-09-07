@@ -6217,9 +6217,9 @@ ErrCode SwWW8ImplReader::LoadDoc(WW8Glossary *pGloss)
                 if (m_pStg && 0xa5ec == nMagic)
                 {
                     sal_uLong nCurPos = m_pStrm->Tell();
-                    if (m_pStrm->Seek(nCurPos + 22))
+                    if (checkSeek(*m_pStrm, nCurPos + 2))
                     {
-                        sal_uInt32 nfcMin;
+                        sal_uInt32 nfcMin(0);
                         m_pStrm->ReadUInt32( nfcMin );
                         if (0x300 != nfcMin)
                             nErrRet = ERR_WW6_NO_WW6_FILE_ERR;
