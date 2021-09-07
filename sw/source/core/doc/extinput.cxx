@@ -102,12 +102,23 @@ SwExtTextInput::~SwExtTextInput()
     }
     else
     {
-        pTNd->EraseText( rIdx, nEndCnt - nSttCnt );
+        // we need to keep correct formatting
+        // ie. when we erase first, then we will lost information about format
+        // so:
+        // 0. initial status: xxxx | OLD
+        // 1. insert new content using Doc interface at the end so we will use the same formatting
+        //            status: xxxx | OLD | NEW
+        // 2. erase old content which is placed at "start" position and before recently inserted text
+        //            status: xxxx | NEW
+
+        sal_Int32 nLenghtOfOldString = nEndCnt - nSttCnt;
 
         if( m_bInsText )
         {
             rDoc.getIDocumentContentOperations().InsertString( *this, sText );
         }
+
+        pTNd->EraseText( rIdx, nLenghtOfOldString );
     }
     rDoc.GetIDocumentUndoRedo().DoGroupUndo(bKeepGroupUndo);
     if (m_eInputLanguage == LANGUAGE_DONTKNOW)
