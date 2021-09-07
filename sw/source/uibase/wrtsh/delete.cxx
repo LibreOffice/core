@@ -18,6 +18,7 @@
  */
 
 #include <cmdid.h>
+#include <hintids.hxx>
 #include <wrtsh.hxx>
 #include <swcrsr.hxx>
 #include <editeng/lrspitem.hxx>
@@ -463,8 +464,9 @@ bool SwWrtShell::DelRight()
                     ( eAnchorId == RndStdIds::FLY_AT_CHAR || eAnchorId == RndStdIds::FLY_AS_CHAR ) )
             {
                 sal_Int32 nRedlineLength = 1;
-                // create a double ZWJ anchor point of the image to record the deletion, if needed
-                // (otherwise use the existing anchor point of the image anchored *as* character)
+                // create a double CH_TXT_TRACKED_DUMMY_CHAR anchor point of the image to record the
+                // deletion, if needed (otherwise use the existing anchor point of the image anchored
+                // *as* character)
                 if ( eAnchorId == RndStdIds::FLY_AT_CHAR )
                 {
                     nRedlineLength = 2;
@@ -472,7 +474,8 @@ bool SwWrtShell::DelRight()
                     UnSelectFrame();
                     RedlineFlags eOld = GetRedlineFlags();
                     SetRedlineFlags( eOld | RedlineFlags::Ignore );
-                    Insert( OUString( u"‍‍" ) );
+                    Insert( OUStringChar(CH_TXT_TRACKED_DUMMY_CHAR) +
+                            OUStringChar(CH_TXT_TRACKED_DUMMY_CHAR) );
                     SwFormatAnchor anchor(RndStdIds::FLY_AT_CHAR);
                     SwCursorShell::Left(1, CRSR_SKIP_CHARS);
                     anchor.SetAnchor(GetCursor()->GetPoint());

@@ -35,6 +35,8 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentContentOperations.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <pam.hxx>
 #include <swcrsr.hxx>
@@ -556,7 +558,24 @@ void SwDoc::SetRowNotTracked( const SwCursor& rCursor, const SvxPrintItem &rNew 
     aFormatCmp.reserve( std::max( 255, static_cast<int>(aRowArr.size()) ) );
 
     for( auto pLn : aRowArr )
+    {
         ::lcl_ProcessRowAttr( aFormatCmp, pLn, rNew );
+        // as a workaround for the rows without text content,
+        // add a redline with invisible text CH_TXT_TRACKED_DUMMY_CHAR
+        if (pLn->IsEmpty())
+        {
+            SwNodeIndex aInsPos( *(pLn->GetTabBoxes()[0]->GetSttNd()), 1 );
+            RedlineFlags eOld = getIDocumentRedlineAccess().GetRedlineFlags();
+            getIDocumentRedlineAccess().SetRedlineFlags_intern(RedlineFlags::NONE);
+            SwPaM aPaM(aInsPos);
+            getIDocumentContentOperations().InsertString( aPaM,
+                    OUStringChar(CH_TXT_TRACKED_DUMMY_CHAR) );
+            aPaM.SetMark();
+            aPaM.GetMark()->nContent.Assign(aPaM.GetContentNode(), 0);
+            getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
+            getIDocumentContentOperations().DeleteAndJoin( aPaM );
+        }
+    }
 
     getIDocumentState().SetModified();
 }

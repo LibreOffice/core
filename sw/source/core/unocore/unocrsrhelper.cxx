@@ -35,6 +35,7 @@
 #include <svx/unoshape.hxx>
 
 #include <cmdid.h>
+#include <hintids.hxx>
 #include <unotextrange.hxx>
 #include <unodraw.hxx>
 #include <unofootnote.hxx>
@@ -1417,11 +1418,12 @@ void makeTableRowRedline( SwTableLine& rTableLine,
         SvxPrintItem aSetTracking(RES_PRINT, false);
         SwNodeIndex aInsPos( *(rTableLine.GetTabBoxes()[0]->GetSttNd()), 1 );
         // as a workaround for the rows without text content,
-        // add a redline with invisible text ZWJ
+        // add a redline with invisible text CH_TXT_TRACKED_DUMMY_CHAR
         if ( rTableLine.IsEmpty() )
         {
             SwPaM aPaM(aInsPos);
-            pDoc->getIDocumentContentOperations().InsertString( aPaM, u"‍" );
+            pDoc->getIDocumentContentOperations().InsertString( aPaM,
+                    OUStringChar(CH_TXT_TRACKED_DUMMY_CHAR) );
             aPaM.SetMark();
             aPaM.GetMark()->nContent.Assign(aPaM.GetContentNode(), 0);
             makeRedline(aPaM, RedlineType::TableRowInsert == eType
