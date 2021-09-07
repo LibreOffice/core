@@ -332,6 +332,8 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
     // and set IsNoTracked table line property to false
     if ( GetDoc()->GetDocShell()->IsChangeRecording() )
     {
+        SwEditShell* pEditShell = GetDoc()->GetEditShell();
+        SwRedlineTable::size_type nOldRedlineCount = pEditShell->GetRedlineCount();
         StartUndo(bCompleteTable ? SwUndoId::UI_TABLE_DELETE : SwUndoId::ROW_DELETE);
         StartAllAction();
 
@@ -341,8 +343,6 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
         if ( SwWrtShell* pWrtShell = dynamic_cast<SwWrtShell*>(this) )
             pWrtShell->SelectTableRow();
 
-        SwEditShell* pEditShell = GetDoc()->GetEditShell();
-        SwRedlineTable::size_type nPrev = pEditShell->GetRedlineCount();
         pEditShell->Delete();
 
         EndAllActionAndCall();
@@ -351,7 +351,7 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
         // track row deletion only if there were tracked text changes
         // FIXME redline count can be the same in special cases, e.g. adding a
         // new tracked deletion with removing an own tracked insertion...
-        if ( nPrev != pEditShell->GetRedlineCount() )
+        if ( nOldRedlineCount != pEditShell->GetRedlineCount() )
             return true;
     }
 
