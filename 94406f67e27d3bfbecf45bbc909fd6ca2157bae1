@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c574b9f2_9e647b4d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-07T07:18:59Z",
+      "side": 1,
+      "message": "sberg, note my attempted flatpack update here",
+      "revId": "94406f67e27d3bfbecf45bbc909fd6ca2157bae1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
