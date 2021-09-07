@@ -20,7 +20,7 @@ enum class NodeType
 {
     Undefined = 0,
     WriterNode = 1,
-    SdrObject = 2
+    CommonNode = 2 // node in a SdrObject
 };
 
 struct SearchIndexData

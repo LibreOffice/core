@@ -52,7 +52,7 @@ void SearchResultLocator::findOne(LocationResult& rResult, SearchIndexData const
                                               rArea.Top() + rArea.Height());
         }
     }
-    else if (rSearchIndexData.meType == NodeType::SdrObject)
+    else if (rSearchIndexData.meType == NodeType::CommonNode)
     {
         IDocumentDrawModelAccess& rDrawModelAccess = mpDocument->getIDocumentDrawModelAccess();
         auto* pModel = rDrawModelAccess.GetDrawModel();
@@ -66,7 +66,6 @@ void SearchResultLocator::findOne(LocationResult& rResult, SearchIndexData const
                 {
                     if (pObject->GetName() == rSearchIndexData.maObjectName)
                     {
-
                         auto aLogicRect = pObject->GetLogicRect();
                         auto nLeft = convertMm100ToTwip(aLogicRect.Left());
                         auto nTop = convertMm100ToTwip(aLogicRect.Top());
@@ -114,12 +113,18 @@ bool SearchResultLocator::tryParseJSON(const char* pPayload,
     {
         auto const& rEach = rEachNode.second;
 
-        sal_Int32 nType = rEach.get<sal_Int32>("type", 0);
+        std::string sType = rEach.get<std::string>("node_type", "");
+        auto eNodeType = sw::search::NodeType::Undefined;
+        if (sType == "writer")
+            eNodeType = sw::search::NodeType::WriterNode;
+        else if (sType == "common")
+            eNodeType = sw::search::NodeType::CommonNode;
+
         sal_Int32 nIndex = rEach.get<sal_Int32>("index", -1);
 
         // Don't add search data elements that don't have valid data
-        if (nType > 0 && nIndex >= 0)
-            rDataVector.emplace_back(sw::search::NodeType(nType), nIndex);
+        if (eNodeType != sw::search::NodeType::Undefined && nIndex >= 0)
+            rDataVector.emplace_back(eNodeType, nIndex);
     }
 
     return true;
@@ -150,14 +155,20 @@ bool SearchResultLocator::tryParseXML(const char* pPayload,
     {
         if (aWalker.name() == "paragraph")
         {
-            OString sType = aWalker.attribute("type");
+            OString sType = aWalker.attribute("node_type");
             OString sIndex = aWalker.attribute("index");
 
             if (!sType.isEmpty() && !sIndex.isEmpty())
             {
                 sw::search::SearchIndexData aData;
                 aData.mnNodeIndex = sIndex.toInt32();
-                aData.meType = sw::search::NodeType(sType.toInt32());
+                auto eNodeType = sw::search::NodeType::Undefined;
+                if (sType == "writer")
+                    eNodeType = sw::search::NodeType::WriterNode;
+                else if (sType == "common")
+                    eNodeType = sw::search::NodeType::CommonNode;
+
+                aData.meType = eNodeType;
 
                 rDataVector.push_back(aData);
             }
