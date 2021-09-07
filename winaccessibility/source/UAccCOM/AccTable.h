@@ -166,13 +166,7 @@ public:
     STDMETHOD(put_XInterface)(hyper pXInterface) override;
 
 private:
-
     css::uno::Reference<css::accessibility::XAccessibleTable> pRXTable;
-
-    css::accessibility::XAccessibleTable* GetXInterface()
-    {
-        return pRXTable.get();
-    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
