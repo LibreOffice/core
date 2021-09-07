@@ -669,7 +669,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
 
         if( SDRLAYER_NOTFOUND != mpEscherEx->GetHellLayerId() &&
             rObj.ImplGetPropertyValue( "LayerID" ) &&
-            *o3tl::doAccess<sal_uInt16>(rObj.GetUsrAny()) == sal_uInt8(mpEscherEx->GetHellLayerId()) )
+            *o3tl::doAccess<sal_Int16>(rObj.GetUsrAny()) == mpEscherEx->GetHellLayerId().get() )
         {
             aPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x200020 );
         }

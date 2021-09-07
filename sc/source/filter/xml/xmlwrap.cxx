@@ -786,15 +786,15 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
                     xShape->getPropertyValue("LayerID") >>= nLayerID;
                     switch (nLayerID)
                     {
-                        case sal_uInt8(SC_LAYER_FRONT):
+                        case sal_Int16(SC_LAYER_FRONT):
                             return 1;
-                        case sal_uInt8(SC_LAYER_BACK):
+                        case sal_Int16(SC_LAYER_BACK):
                             return 0;
-                        case sal_uInt8(SC_LAYER_INTERN):
+                        case sal_Int16(SC_LAYER_INTERN):
                             return 2;
-                        case sal_uInt8(SC_LAYER_CONTROLS):
+                        case sal_Int16(SC_LAYER_CONTROLS):
                             return 3;
-                        case sal_uInt8(SC_LAYER_HIDDEN):
+                        case sal_Int16(SC_LAYER_HIDDEN):
                             return 1; // treat as equivalent to front
                         default:
                             O3TL_UNREACHABLE;
