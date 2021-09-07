@@ -33,6 +33,24 @@
       "message": "oh, and you probably want\n\nif test \"$with_system_cuckoo\" \u003d \"yes\" -o test \"$with_system_headers\" \u003d \"yes\"; then\n\n--with-system-headers should include this",
       "revId": "047fa1ea88ccc475707de88ee0bebc7497ba3969",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f84f2c19_73d25690",
+        "filename": "configure.ac",
+        "patchSetId": 8
+      },
+      "lineNbr": 10356,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-09-07T18:02:58Z",
+      "side": 1,
+      "message": "reply to myself:\n\nor something like (with s/sane/cuckoo/ of course)\n\nAC_ARG_WITH(system-sane,\n    AS_HELP_STRING([--with-system-sane],\n        [Use sane.h already on system.]),,\n    [with_system_sane\u003d\"$with_system_headers\"])\n\nnote the with_system_sane\u003d\"$with_system_headers\", so with-system-headers sets that too",
+      "parentUuid": "daf0ede0_88210c5b",
+      "revId": "047fa1ea88ccc475707de88ee0bebc7497ba3969",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
