@@ -2583,7 +2583,7 @@ void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, cons
         sal_Int32 nUnscaledExtentsTop = nExtentsTop * m_fScale;
         sal_Int32 nUnscaledExtentsBottom = nExtentsBottom * m_fScale;
 
-        // not sure why this happens
+        // Handle headless size forced to (1,1) by SvpSalFrame::GetSurfaceFrameSize().
         int target_surface_width = cairo_image_surface_get_width(target_surface);
         if (nUnscaledExtentsLeft > target_surface_width)
             nUnscaledExtentsLeft = target_surface_width;
