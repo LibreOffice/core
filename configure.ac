@@ -8830,7 +8830,7 @@ if test -n "$with_idlc_cpp"; then
     fi
 else
     AC_MSG_RESULT([ucpp])
-    AC_MSG_CHECKING([which ucpp tp use])
+    AC_MSG_CHECKING([which ucpp to use])
     if test -n "$with_system_ucpp" -a "$with_system_ucpp" != "no"; then
         AC_MSG_RESULT([external])
         AC_PATH_PROG(SYSTEM_UCPP, ucpp)
