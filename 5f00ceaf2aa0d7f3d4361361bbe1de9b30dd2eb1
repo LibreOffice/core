@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07ebde23_694b9021",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-09-07T17:54:11Z",
+      "side": 1,
+      "message": "This whole GSoC project was misguided and unnecessary. A better effort would have been to integrate with macOS’ native input methods (which include an emoji picker) and ensuring that emoji characters print and export to PDF (which they currently don’t on any platform). (Windows 10 and 11 have a working emoji picker too). I think all this code should be removed from LibreOffice.",
+      "revId": "5f00ceaf2aa0d7f3d4361361bbe1de9b30dd2eb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
