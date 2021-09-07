@@ -492,26 +492,26 @@
     </style:style>
     <style:style style:name="P1" style:family="paragraph">
       <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
-      <style:text-properties fo:font-size="18pt" fo:language="zxx" fo:country="none" fo:font-weight="bold" style:language-asian="zxx" style:country-asian="none" style:font-weight-asian="bold" style:language-complex="zxx" style:country-complex="none" style:font-weight-complex="bold"/>
+      <style:text-properties fo:font-size="18pt" fo:font-weight="bold"/>
     </style:style>
     <style:style style:name="P2" style:family="paragraph">
       <loext:graphic-properties draw:fill="solid" draw:fill-color="#ffffa6"/>
       <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
-      <style:text-properties fo:font-size="18pt" fo:language="zxx" fo:country="none" fo:font-weight="bold" style:language-asian="zxx" style:country-asian="none" style:font-weight-asian="bold" style:language-complex="zxx" style:country-complex="none" style:font-weight-complex="bold"/>
+      <style:text-properties fo:font-size="18pt" fo:font-weight="bold"/>
     </style:style>
     <style:style style:name="P3" style:family="paragraph">
       <style:paragraph-properties fo:text-align="start"/>
     </style:style>
     <style:style style:name="P4" style:family="paragraph">
       <style:paragraph-properties fo:text-align="start" style:writing-mode="lr-tb"/>
-      <style:text-properties fo:font-size="11pt" fo:language="zxx" fo:country="none" style:language-asian="zxx" style:country-asian="none" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties fo:font-size="11pt"/>
     </style:style>
     <style:style style:name="P5" style:family="paragraph">
       <style:paragraph-properties style:writing-mode="lr-tb"/>
-      <style:text-properties fo:font-size="11pt" fo:language="zxx" fo:country="none" style:language-asian="zxx" style:country-asian="none" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties fo:font-size="11pt"/>
     </style:style>
     <style:style style:name="P6" style:family="paragraph">
-      <style:text-properties fo:language="zxx" fo:country="none" style:language-asian="zxx" style:country-asian="none" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties/>
     </style:style>
     <style:style style:name="P7" style:family="paragraph">
       <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb">
@@ -522,21 +522,21 @@
       <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb">
         <style:tab-stops/>
       </style:paragraph-properties>
-      <style:text-properties fo:font-size="11pt" fo:language="zxx" fo:country="none" style:font-size-asian="18pt" style:language-asian="zxx" style:country-asian="none" style:font-size-complex="18pt" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties fo:font-size="11pt"/>
     </style:style>
     <style:style style:name="P9" style:family="paragraph">
       <style:paragraph-properties fo:text-align="center"/>
-      <style:text-properties fo:language="zxx" fo:country="none" style:language-asian="zxx" style:country-asian="none" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties/>
     </style:style>
     <style:style style:name="P10" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
       <style:paragraph-properties style:writing-mode="lr-tb"/>
-      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" fo:language="zxx" fo:country="none" style:language-asian="zxx" style:country-asian="none" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt"/>
     </style:style>
     <style:style style:name="P11" style:family="paragraph">
       <loext:graphic-properties draw:fill="none"/>
       <style:paragraph-properties fo:text-align="center"/>
-      <style:text-properties fo:language="zxx" fo:country="none" style:language-asian="zxx" style:country-asian="none" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties/>
     </style:style>
     <style:style style:name="P12" style:family="paragraph">
       <style:paragraph-properties fo:text-align="center"/>
@@ -544,82 +544,82 @@
     <style:style style:name="P13" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
       <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
-      <style:text-properties fo:font-size="10pt" fo:language="zxx" fo:country="none" style:font-size-asian="10pt" style:language-asian="zxx" style:country-asian="none" style:font-size-complex="10pt" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties fo:font-size="10pt"/>
     </style:style>
     <style:style style:name="P14" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
       <style:paragraph-properties style:writing-mode="lr-tb"/>
-      <style:text-properties fo:font-size="14pt" fo:language="zxx" fo:country="none" fo:font-weight="bold" style:font-size-asian="14pt" style:language-asian="zxx" style:country-asian="none" style:font-weight-asian="bold" style:font-size-complex="14pt" style:language-complex="zxx" style:country-complex="none" style:font-weight-complex="bold"/>
+      <style:text-properties fo:font-size="14pt" fo:font-weight="bold"/>
     </style:style>
     <style:style style:name="P15" style:family="paragraph">
       <loext:graphic-properties draw:fill-color="#ffffff"/>
       <style:paragraph-properties fo:text-align="center"/>
-      <style:text-properties fo:language="zxx" fo:country="none" style:language-asian="zxx" style:country-asian="none" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties/>
     </style:style>
     <style:style style:name="P16" style:family="paragraph">
       <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
     </style:style>
     <style:style style:name="P17" style:family="paragraph">
       <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
-      <style:text-properties fo:font-size="11pt" fo:language="zxx" fo:country="none" style:font-size-asian="18pt" style:language-asian="zxx" style:country-asian="none" style:font-size-complex="18pt" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties fo:font-size="11pt"/>
     </style:style>
     <style:style style:name="P18" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
       <style:paragraph-properties fo:text-align="center"/>
-      <style:text-properties fo:language="zxx" fo:country="none" style:language-asian="zxx" style:country-asian="none" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties/>
     </style:style>
     <style:style style:name="P19" style:family="paragraph">
       <loext:graphic-properties draw:fill="solid"/>
       <style:paragraph-properties fo:text-align="center"/>
-      <style:text-properties fo:language="zxx" fo:country="none" style:language-asian="zxx" style:country-asian="none" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties/>
     </style:style>
     <style:style style:name="P20" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
       <style:paragraph-properties style:writing-mode="lr-tb"/>
-      <style:text-properties fo:font-size="18pt" fo:language="zxx" fo:country="none" style:text-underline-style="none" fo:font-weight="bold" style:language-asian="zxx" style:country-asian="none" style:font-weight-asian="bold" style:language-complex="zxx" style:country-complex="none" style:font-weight-complex="bold"/>
+      <style:text-properties fo:font-size="18pt" style:text-underline-style="none" fo:font-weight="bold"/>
     </style:style>
     <style:style style:name="P21" style:family="paragraph">
       <loext:graphic-properties draw:fill="none"/>
       <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
-      <style:text-properties fo:font-size="11pt" fo:language="zxx" fo:country="none" style:font-size-asian="11pt" style:language-asian="zxx" style:country-asian="none" style:font-size-complex="11pt" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties fo:font-size="11pt"/>
     </style:style>
     <style:style style:name="P22" style:family="paragraph">
       <loext:graphic-properties draw:fill="none"/>
-      <style:text-properties fo:language="zxx" fo:country="none" style:language-asian="zxx" style:country-asian="none" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties/>
     </style:style>
     <style:style style:name="P23" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
       <style:paragraph-properties style:writing-mode="lr-tb"/>
-      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" fo:language="zxx" fo:country="none" style:font-size-asian="10pt" style:language-asian="zxx" style:country-asian="none" style:font-size-complex="10pt" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt"/>
     </style:style>
     <style:style style:name="P24" style:family="paragraph">
       <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
-      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" fo:language="zxx" fo:country="none" style:font-size-asian="10pt" style:language-asian="zxx" style:country-asian="none" style:font-size-complex="10pt" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt"/>
     </style:style>
     <style:style style:name="P25" style:family="paragraph">
       <loext:graphic-properties draw:fill="solid" draw:fill-color="#00a933"/>
       <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
-      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" fo:language="zxx" fo:country="none" style:font-size-asian="10pt" style:language-asian="zxx" style:country-asian="none" style:font-size-complex="10pt" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt"/>
     </style:style>
     <style:style style:name="P26" style:family="paragraph">
       <loext:graphic-properties draw:fill="solid" draw:fill-color="#ffbf00"/>
       <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
-      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" fo:language="zxx" fo:country="none" style:font-size-asian="10pt" style:language-asian="zxx" style:country-asian="none" style:font-size-complex="10pt" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt"/>
     </style:style>
     <style:style style:name="P27" style:family="paragraph">
       <loext:graphic-properties draw:fill="solid" draw:fill-color="#ff0000"/>
       <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
-      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" fo:language="zxx" fo:country="none" style:font-size-asian="10pt" style:language-asian="zxx" style:country-asian="none" style:font-size-complex="10pt" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt"/>
     </style:style>
     <style:style style:name="P28" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
       <style:paragraph-properties style:writing-mode="lr-tb"/>
-      <style:text-properties fo:font-size="10pt" fo:language="zxx" fo:country="none" style:font-size-asian="10pt" style:language-asian="zxx" style:country-asian="none" style:font-size-complex="10pt" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties fo:font-size="10pt"/>
     </style:style>
     <style:style style:name="P29" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
       <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
-      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" fo:language="zxx" fo:country="none" fo:font-weight="bold" style:language-asian="zxx" style:country-asian="none" style:font-weight-asian="bold" style:language-complex="zxx" style:country-complex="none" style:font-weight-complex="bold"/>
+      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" fo:font-weight="bold"/>
     </style:style>
     <style:style style:name="P30" style:family="paragraph">
       <style:paragraph-properties fo:text-align="start" style:writing-mode="lr-tb"/>
@@ -627,71 +627,71 @@
     <style:style style:name="P31" style:family="paragraph">
       <loext:graphic-properties draw:fill="none"/>
       <style:paragraph-properties fo:text-align="start" style:writing-mode="lr-tb"/>
-      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" fo:language="zxx" fo:country="none" style:font-size-asian="10pt" style:language-asian="zxx" style:country-asian="none" style:font-size-complex="10pt" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt"/>
     </style:style>
     <style:style style:name="P32" style:family="paragraph">
       <style:paragraph-properties fo:text-align="start" style:writing-mode="lr-tb"/>
-      <style:text-properties fo:font-size="11pt" fo:language="zxx" fo:country="none" style:font-size-asian="11pt" style:language-asian="zxx" style:country-asian="none" style:font-size-complex="11pt" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties fo:font-size="11pt"/>
     </style:style>
     <style:style style:name="P33" style:family="paragraph">
       <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
-      <style:text-properties fo:language="zxx" fo:country="none" style:language-asian="zxx" style:country-asian="none" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties/>
     </style:style>
     <style:style style:name="P34" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
       <style:paragraph-properties style:writing-mode="lr-tb"/>
-      <style:text-properties fo:language="zxx" fo:country="none" style:language-asian="zxx" style:country-asian="none" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties/>
     </style:style>
     <style:style style:name="T1" style:family="text">
-      <style:text-properties fo:font-size="18pt" fo:language="zxx" fo:country="none" fo:font-weight="bold" style:language-asian="zxx" style:country-asian="none" style:font-weight-asian="bold" style:language-complex="zxx" style:country-complex="none" style:font-weight-complex="bold"/>
+      <style:text-properties fo:font-size="18pt" fo:font-weight="bold"/>
     </style:style>
     <style:style style:name="T2" style:family="text">
-      <style:text-properties fo:font-size="11pt" fo:language="zxx" fo:country="none" style:language-asian="zxx" style:country-asian="none" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties fo:font-size="11pt"/>
     </style:style>
     <style:style style:name="T3" style:family="text">
-      <style:text-properties fo:font-size="11pt" fo:language="zxx" fo:country="none" style:font-size-asian="18pt" style:language-asian="zxx" style:country-asian="none" style:font-size-complex="18pt" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties fo:font-size="11pt"/>
     </style:style>
     <style:style style:name="T4" style:family="text">
-      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" fo:language="zxx" fo:country="none" fo:font-weight="bold" style:font-size-asian="10pt" style:language-asian="zxx" style:country-asian="none" style:font-weight-asian="bold" style:font-size-complex="10pt" style:language-complex="zxx" style:country-complex="none" style:font-weight-complex="bold"/>
+      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" fo:font-weight="bold"/>
     </style:style>
     <style:style style:name="T5" style:family="text">
-      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" fo:language="zxx" fo:country="none" fo:font-weight="normal" style:font-size-asian="10pt" style:language-asian="zxx" style:country-asian="none" style:font-weight-asian="normal" style:font-size-complex="10pt" style:language-complex="zxx" style:country-complex="none" style:font-weight-complex="normal"/>
+      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" fo:font-weight="normal"/>
     </style:style>
     <style:style style:name="T6" style:family="text">
-      <style:text-properties fo:font-size="10pt" fo:language="zxx" fo:country="none" style:font-size-asian="10pt" style:language-asian="zxx" style:country-asian="none" style:font-size-complex="10pt" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties fo:font-size="10pt"/>
     </style:style>
     <style:style style:name="T7" style:family="text">
-      <style:text-properties fo:font-size="14pt" fo:language="zxx" fo:country="none" fo:font-weight="bold" style:font-size-asian="14pt" style:language-asian="zxx" style:country-asian="none" style:font-weight-asian="bold" style:font-size-complex="14pt" style:language-complex="zxx" style:country-complex="none" style:font-weight-complex="bold"/>
+      <style:text-properties fo:font-size="14pt" fo:font-weight="bold"/>
     </style:style>
     <style:style style:name="T8" style:family="text">
-      <style:text-properties fo:font-size="14pt" fo:language="zxx" fo:country="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="14pt" style:language-asian="zxx" style:country-asian="none" style:font-weight-asian="bold" style:font-size-complex="14pt" style:language-complex="zxx" style:country-complex="none" style:font-weight-complex="bold"/>
+      <style:text-properties fo:font-size="14pt" style:text-underline-style="none" fo:font-weight="bold"/>
     </style:style>
     <style:style style:name="T9" style:family="text">
-      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" fo:language="zxx" fo:country="none" style:font-size-asian="10pt" style:language-asian="zxx" style:country-asian="none" style:font-size-complex="10pt" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt"/>
     </style:style>
     <style:style style:name="T10" style:family="text">
-      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" fo:language="zxx" fo:country="none" fo:font-weight="bold" style:font-size-asian="10.5pt" style:language-asian="zxx" style:country-asian="none" style:font-weight-asian="bold" style:font-size-complex="10.5pt" style:language-complex="zxx" style:country-complex="none" style:font-weight-complex="bold"/>
+      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" fo:font-weight="bold"/>
     </style:style>
     <style:style style:name="T11" style:family="text">
-      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" fo:language="zxx" fo:country="none" style:font-size-asian="10.5pt" style:language-asian="zxx" style:country-asian="none" style:font-size-complex="10.5pt" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt"/>
     </style:style>
     <style:style style:name="T12" style:family="text">
-      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" fo:language="zxx" fo:country="none" fo:font-style="italic" style:font-size-asian="10pt" style:language-asian="zxx" style:country-asian="none" style:font-style-asian="italic" style:font-size-complex="10pt" style:language-complex="zxx" style:country-complex="none" style:font-style-complex="italic"/>
+      <style:text-properties style:font-name="Liberation Sans1" fo:font-size="10pt" fo:font-style="italic"/>
     </style:style>
     <style:style style:name="T13" style:family="text">
-      <style:text-properties fo:font-size="10pt" fo:language="zxx" fo:country="none" style:font-size-asian="4pt" style:language-asian="zxx" style:country-asian="none" style:font-size-complex="4pt" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties fo:font-size="10pt"/>
     </style:style>
     <style:style style:name="T14" style:family="text">
-      <style:text-properties fo:font-size="11pt" fo:language="zxx" fo:country="none" style:font-size-asian="11pt" style:language-asian="zxx" style:country-asian="none" style:font-size-complex="11pt" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties fo:font-size="11pt"/>
     </style:style>
     <style:style style:name="T15" style:family="text">
-      <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Liberation Sans1" fo:font-size="10pt" fo:language="zxx" fo:country="none" style:font-size-asian="10pt" style:language-asian="zxx" style:country-asian="none" style:font-name-complex="Trebuchet MS1" style:font-size-complex="10pt" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Liberation Sans1" fo:font-size="10pt"/>
     </style:style>
     <style:style style:name="T16" style:family="text">
-      <style:text-properties fo:language="zxx" fo:country="none" style:language-asian="zxx" style:country-asian="none" style:language-complex="zxx" style:country-complex="none"/>
+      <style:text-properties/>
     </style:style>
     <style:style style:name="T17" style:family="text">
-      <style:text-properties fo:font-size="10pt" fo:language="zxx" fo:country="none" fo:font-weight="bold" style:font-size-asian="10pt" style:language-asian="zxx" style:country-asian="none" style:font-weight-asian="bold" style:font-size-complex="10pt" style:language-complex="zxx" style:country-complex="none" style:font-weight-complex="bold"/>
+      <style:text-properties fo:font-size="10pt" fo:font-weight="bold"/>
     </style:style>
     <text:list-style style:name="L1">
       <text:list-level-style-bullet text:level="1" text:bullet-char="●">
