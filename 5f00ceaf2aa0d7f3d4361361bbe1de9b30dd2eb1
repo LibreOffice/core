@@ -16,6 +16,23 @@
       "message": "This whole GSoC project was misguided and unnecessary. A better effort would have been to integrate with macOS’ native input methods (which include an emoji picker) and ensuring that emoji characters print and export to PDF (which they currently don’t on any platform). (Windows 10 and 11 have a working emoji picker too). I think all this code should be removed from LibreOffice.",
       "revId": "5f00ceaf2aa0d7f3d4361361bbe1de9b30dd2eb1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8b147d3_c2940638",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2021-09-07T18:30:28Z",
+      "side": 1,
+      "message": "The macOS and the Windows 10 emoji picker interfaces had not been implemented at that point. The GSOC 2016 project was reasonable then, and remains reasonable cross platform using the emoji.json mechanism. While doing native code for emoji support (macOS and Windows 10) may not be out of scope--but it is native code and unlikely to attract dev interest or TDF sponsorship. As to printing/export, those fonts providing the codepoint render to document canvas and will print and export to PDF just fine.  What is actually missing cross platform is color font support on document canvas, printing and PDF export.",
+      "revId": "5f00ceaf2aa0d7f3d4361361bbe1de9b30dd2eb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
