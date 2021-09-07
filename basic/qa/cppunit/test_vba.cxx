@@ -74,6 +74,7 @@ void VBATest::testMiscVBAFunctions()
         "cos.vb",
         "cint.vb",
         "clng.vb",
+        "collection.vb",
         "csng.vb",
         "cstr.vb",
         "cvdate.vb",
