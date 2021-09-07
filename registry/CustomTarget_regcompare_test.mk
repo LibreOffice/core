@@ -197,17 +197,10 @@ else
 endif
 
 $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/%.rdb: \
-        $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/%.urd \
-        $(call gb_Executable_get_runtime_dependencies,regmerge)
-	$(call gb_Helper_abbreviate_dirs,( \
-        $(call gb_Executable_get_command,regmerge) $@ /UCR $<))
-
-$(call gb_CustomTarget_get_workdir,registry/regcompare_test)/%.urd: \
         $(SRCDIR)/registry/test/regcompare/%.idl \
-        $(call gb_Executable_get_runtime_dependencies,idlc)
+        $(call gb_Executable_get_runtime_dependencies,unoidl-write) \
+        | $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/.dir
 	$(call gb_Helper_abbreviate_dirs,( \
-        $(call gb_Executable_get_command,idlc) \
-            -O$(call gb_CustomTarget_get_workdir,registry/regcompare_test) \
-            -cid -we $<))
+        $(call gb_Executable_get_command,unoidl-write) $< $@))
 
 # vim: set noet sw=4 ts=4:
