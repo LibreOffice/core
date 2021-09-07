@@ -2052,6 +2052,23 @@ std::vector<unsigned char> PDFDocument::DecodeHexString(PDFHexStringElement cons
     return svl::crypto::DecodeHexString(pElement->GetValue());
 }
 
+OUString PDFDocument::DecodeHexStringUTF16BE(PDFHexStringElement const& rElement)
+{
+    std::vector<unsigned char> const encoded(DecodeHexString(&rElement));
+    // Text strings can be PDF-DocEncoding or UTF-16BE with mandatory BOM;
+    // only the latter supported is here
+    if (encoded.size() < 2 || encoded[0] != 0xFE || encoded[1] != 0xFF || (encoded.size() & 1) != 0)
+    {
+        return OUString();
+    }
+    OUStringBuffer buf(static_cast<unsigned int>(encoded.size() - 2));
+    for (size_t i = 2; i < encoded.size(); i += 2)
+    {
+        buf.append(sal_Unicode((static_cast<sal_uInt16>(encoded[i]) << 8) | encoded[i + 1]));
+    }
+    return buf.makeStringAndClear();
+}
+
 PDFCommentElement::PDFCommentElement(PDFDocument& rDoc)
     : m_rDoc(rDoc)
 {

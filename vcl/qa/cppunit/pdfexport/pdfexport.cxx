@@ -2791,6 +2791,93 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfUaMetadata)
     CPPUNIT_ASSERT_EQUAL(OString("1"), aPdfUaPart);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142129)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "master.odm";
+    mxComponent = loadFromDesktop(aURL);
+
+    // update linked section
+    dispatchCommand(mxComponent, ".uno:UpdateAllLinks", {});
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+
+    // Enable Outlines export
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "ExportBookmarks", uno::Any(true) } }));
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result.
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    auto* pCatalog = aDocument.GetCatalog();
+    CPPUNIT_ASSERT(pCatalog);
+    auto* pCatalogDictionary = pCatalog->GetDictionary();
+    CPPUNIT_ASSERT(pCatalogDictionary);
+    auto* pOutlinesObject = pCatalogDictionary->LookupObject("Outlines");
+    CPPUNIT_ASSERT(pOutlinesObject);
+    auto* pOutlinesDictionary = pOutlinesObject->GetDictionary();
+#if 0
+    // Type isn't actually written currently
+    auto* pType
+        = dynamic_cast<vcl::filter::PDFNameElement*>(pOutlinesDictionary->LookupElement("Type"));
+    CPPUNIT_ASSERT(pType);
+    CPPUNIT_ASSERT_EQUAL(OString("Outlines"), pType->GetValue());
+#endif
+
+    auto* pFirst = dynamic_cast<vcl::filter::PDFReferenceElement*>(
+        pOutlinesDictionary->LookupElement("First"));
+    CPPUNIT_ASSERT(pFirst);
+    auto* pFirstD = pFirst->LookupObject()->GetDictionary();
+    CPPUNIT_ASSERT(pFirstD);
+    //CPPUNIT_ASSERT_EQUAL(OString("Outlines"), dynamic_cast<vcl::filter::PDFNameElement*>(pFirstD->LookupElement("Type"))->GetValue());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"Preface"), ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
+                                                   *dynamic_cast<vcl::filter::PDFHexStringElement*>(
+                                                       pFirstD->LookupElement("Title"))));
+
+    auto* pFirst1
+        = dynamic_cast<vcl::filter::PDFReferenceElement*>(pFirstD->LookupElement("First"));
+    CPPUNIT_ASSERT(pFirst1);
+    auto* pFirst1D = pFirst1->LookupObject()->GetDictionary();
+    CPPUNIT_ASSERT(pFirst1D);
+    // here is a hidden section with headings "Copyright" etc.; check that
+    // there are no outline entries for it
+    //CPPUNIT_ASSERT_EQUAL(OString("Outlines"), dynamic_cast<vcl::filter::PDFNameElement*>(pFirst1D->LookupElement("Type"))->GetValue());
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(u"Who is this book for?"),
+        ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
+            *dynamic_cast<vcl::filter::PDFHexStringElement*>(pFirst1D->LookupElement("Title"))));
+
+    auto* pFirst2
+        = dynamic_cast<vcl::filter::PDFReferenceElement*>(pFirst1D->LookupElement("Next"));
+    auto* pFirst2D = pFirst2->LookupObject()->GetDictionary();
+    CPPUNIT_ASSERT(pFirst2D);
+    //CPPUNIT_ASSERT_EQUAL(OString("Outlines"), dynamic_cast<vcl::filter::PDFNameElement*>(pFirst2D->LookupElement("Type"))->GetValue());
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(u"What\u2019s in this book?"),
+        ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
+            *dynamic_cast<vcl::filter::PDFHexStringElement*>(pFirst2D->LookupElement("Title"))));
+
+    auto* pFirst3
+        = dynamic_cast<vcl::filter::PDFReferenceElement*>(pFirst2D->LookupElement("Next"));
+    auto* pFirst3D = pFirst3->LookupObject()->GetDictionary();
+    CPPUNIT_ASSERT(pFirst3D);
+    //CPPUNIT_ASSERT_EQUAL(OString("Outlines"), dynamic_cast<vcl::filter::PDFNameElement*>(pFirst3D->LookupElement("Type"))->GetValue());
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(u"Minimum requirements for using LibreOffice"),
+        ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
+            *dynamic_cast<vcl::filter::PDFHexStringElement*>(pFirst3D->LookupElement("Title"))));
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<vcl::filter::PDFElement*>(nullptr),
+                         pFirst3D->LookupElement("Next"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<vcl::filter::PDFElement*>(nullptr),
+                         pFirstD->LookupElement("Next"));
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageRotate180)
 {
     // Create an empty document.
