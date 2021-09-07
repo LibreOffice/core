@@ -349,14 +349,11 @@ void View::StartDrag( const Point& rStartPos, vcl::Window* pWindow )
     if( IsTextEdit() )
         SdrEndTextEdit();
 
-    DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >( mpDocSh ? mpDocSh->GetViewShell() : nullptr );
-
-    if( pDrawViewShell )
+    if (DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(mpDocSh ? mpDocSh->GetViewShell() : nullptr))
     {
-        const rtl::Reference<FuPoor>& xFunction( pDrawViewShell->GetCurrentFunction() );
-
-        if( xFunction.is() && nullptr != dynamic_cast< const FuDraw *>( xFunction.get() ) )
-            static_cast<FuDraw*>(xFunction.get())->ForcePointer();
+        const rtl::Reference<FuPoor>& xFunction(pDrawViewShell->GetCurrentFunction());
+        if (FuDraw* pFunction = dynamic_cast<FuDraw*>(xFunction.get()))
+            pFunction->ForcePointer();
     }
 
     mpDragSrcMarkList.reset( new SdrMarkList(GetMarkedObjectList()) );
