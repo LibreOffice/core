@@ -64,6 +64,7 @@ public:
     void testTdf130307();
     void testTdf146742();
     void testMacroButtonFormControlXlsxExport();
+    void testShapeLayerId();
 
     CPPUNIT_TEST_SUITE(ScMacrosTest);
     CPPUNIT_TEST(testStarBasic);
@@ -92,6 +93,7 @@ public:
     CPPUNIT_TEST(testTdf130307);
     CPPUNIT_TEST(testTdf146742);
     CPPUNIT_TEST(testMacroButtonFormControlXlsxExport);
+    CPPUNIT_TEST(testShapeLayerId);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -997,6 +999,52 @@ void ScMacrosTest::testTdf105558()
 
     css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
     xCloseable->close(true);
+}
+
+void ScMacrosTest::testShapeLayerId()
+{
+    auto xComponent = loadFromDesktop("private:factory/scalc");
+
+    // insert initial library
+    css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(xComponent, UNO_QUERY_THROW);
+    auto xLibs = xDocScr->getBasicLibraries();
+    auto xLibrary = xLibs->createLibrary("TestLibrary");
+    xLibrary->insertByName(
+        "TestModule",
+        uno::Any(
+            OUString("Function TestLayerID\n"
+                     "  xShape = thisComponent.createInstance(\"com.sun.star.drawing.TextShape\")\n"
+                     "  thisComponent.DrawPages(0).Add(xShape)\n"
+                     "  origID = xShape.LayerID\n"
+                     "  On Error Goto handler\n"
+                     "  xShape.LayerID = 257 ' 1 if wrongly converted to unsigned 8-bit type\n"
+                     "  TestLayerID = origID & \" \" & xShape.LayerID ' Should not happen\n"
+                     "  Exit Function\n"
+                     "handler:\n"
+                     "  ' This is expected to happen\n"
+                     "  TestLayerID = origID & \" Expected runtime error happened\"\n"
+                     "End Function\n")));
+
+    Any aRet;
+    Sequence<sal_Int16> aOutParamIndex;
+    Sequence<Any> aOutParam;
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+
+    SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:TestLibrary.TestModule.TestLayerID?language=Basic&location=document",
+        {}, aRet, aOutParamIndex, aOutParam);
+    // Without the fix in place, this test would have failed in non-debug builds with
+    // - Expected : <Any: (string) 0 Expected runtime error happened>
+    // - Actual   : <Any: (string) 0 1>
+    // In debug builds, it would crash on assertion inside strong_int ctor.
+    // The LayerID property of com.sun.star.drawing.Shape service has 'short' IDL type.
+    // The expected run-time error is because there are only 5 layers there.
+    CPPUNIT_ASSERT_EQUAL(Any(OUString("0 Expected runtime error happened")), aRet);
+    pDocSh->DoClose();
 }
 
 ScMacrosTest::ScMacrosTest()

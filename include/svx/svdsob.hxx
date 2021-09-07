@@ -30,6 +30,7 @@
 
 class SVXCORE_DLLPUBLIC SdrLayerIDSet final
 {
+    // For now, have up to 256 layers
     sal_uInt8 aData[32];
 
 public:
@@ -45,12 +46,16 @@ public:
 
     void Set(SdrLayerID a)
     {
-        aData[sal_uInt8(a)/8] |= 1 << (sal_uInt8(a) % 8);
+        const sal_Int16 nId = a.get();
+        if (nId >= 0 && nId < 256)
+            aData[nId / 8] |= 1 << (nId % 8);
     }
 
     void Clear(SdrLayerID a)
     {
-        aData[sal_uInt8(a)/8] &= ~(1 << (sal_uInt8(a) % 8));
+        const sal_Int16 nId = a.get();
+        if (nId >= 0 && nId < 256)
+            aData[nId / 8] &= ~(1 << (nId % 8));
     }
 
     void Set(SdrLayerID a, bool b)
@@ -63,7 +68,8 @@ public:
 
     bool IsSet(SdrLayerID a) const
     {
-        return (aData[sal_uInt8(a)/8] & 1<<sal_uInt8(a)%8) != 0;
+        const sal_Int16 nId = a.get();
+        return nId >= 0 && nId < 256 && (aData[nId / 8] & 1 << nId % 8) != 0;
     }
 
     void SetAll()

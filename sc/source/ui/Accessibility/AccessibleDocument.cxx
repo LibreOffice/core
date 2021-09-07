@@ -136,19 +136,19 @@ struct ScShapeDataLess
     static void ConvertLayerId(sal_Int16& rLayerID) // changes the number of the LayerId so it the accessibility order
     {
         // note: MSVC 2017 ICE's if this is written as "switch" so use "if"
-        if (sal_uInt8(SC_LAYER_FRONT) == rLayerID)
+        if (SC_LAYER_FRONT.get() == rLayerID)
         {
             rLayerID = 1;
         }
-        else if (sal_uInt8(SC_LAYER_BACK) == rLayerID)
+        else if (SC_LAYER_BACK.get() == rLayerID)
         {
             rLayerID = 0;
         }
-        else if (sal_uInt8(SC_LAYER_INTERN) == rLayerID)
+        else if (SC_LAYER_INTERN.get() == rLayerID)
         {
             rLayerID = 2;
         }
-        else if (sal_uInt8(SC_LAYER_CONTROLS) == rLayerID)
+        else if (SC_LAYER_CONTROLS.get() == rLayerID)
         {
             rLayerID = 3;
         }

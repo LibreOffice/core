@@ -362,8 +362,8 @@ void ScShapeTest::testTdf140252_DragCreateFormControl()
     SdrUnoObj* pObj = static_cast<SdrUnoObj*>(lcl_getSdrObjectWithAssert(rDoc, 0));
 
     // Without the fix in place, the shape would be on layer SC_LAYER_FRONT (0)
-    sal_uInt8 nExpectedID = sal_uInt8(SC_LAYER_CONTROLS);
-    sal_uInt8 nActualID = pObj->GetLayer().get();
+    sal_Int16 nExpectedID = SC_LAYER_CONTROLS.get();
+    sal_Int16 nActualID = pObj->GetLayer().get();
     CPPUNIT_ASSERT_EQUAL(nExpectedID, nActualID);
 
     pDocSh->DoClose();
@@ -407,8 +407,8 @@ void ScShapeTest::testTdf134355_DragCreateCustomShape()
     SdrObjCustomShape* pObj = static_cast<SdrObjCustomShape*>(lcl_getSdrObjectWithAssert(rDoc, 0));
 
     // Without the fix in place, the shape would be on layer SC_LAYER_CONTROLS (3)
-    sal_uInt8 nExpectedID = sal_uInt8(SC_LAYER_FRONT);
-    sal_uInt8 nActualID = pObj->GetLayer().get();
+    sal_Int16 nExpectedID = SC_LAYER_FRONT.get();
+    sal_Int16 nActualID = pObj->GetLayer().get();
     CPPUNIT_ASSERT_EQUAL(nExpectedID, nActualID);
 
     pDocSh->DoClose();
@@ -441,8 +441,8 @@ void ScShapeTest::testTdf140252_LayerOfControl()
     SdrObject* pObj = lcl_getSdrObjectWithAssert(rDoc, 0);
 
     // Check LayerID of object. Without the fix in place it was 0.
-    sal_uInt8 nExpectedID = sal_uInt8(SC_LAYER_CONTROLS);
-    sal_uInt8 nActualID = pObj->GetLayer().get();
+    sal_Int16 nExpectedID = SC_LAYER_CONTROLS.get();
+    sal_Int16 nActualID = pObj->GetLayer().get();
     CPPUNIT_ASSERT_EQUAL(nExpectedID, nActualID);
 
     pDocSh->DoClose();

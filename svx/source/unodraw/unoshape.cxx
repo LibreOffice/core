@@ -2778,7 +2778,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
         break;
     }
     case SDRATTR_LAYERID:
-        rValue <<= sal_uInt16(sal_uInt8(GetSdrObject()->GetLayer()));
+        rValue <<= GetSdrObject()->GetLayer().get();
         break;
 
     case SDRATTR_LAYERNAME:

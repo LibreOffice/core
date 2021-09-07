@@ -24,10 +24,10 @@
 #include <svl/intitem.hxx>
 #include <svx/svdtypes.hxx>
 
-class SdrLayerIdItem final : public SfxUInt16Item {
+class SdrLayerIdItem final : public SfxInt16Item {
 public:
-    SdrLayerIdItem(SdrLayerID nId): SfxUInt16Item(SDRATTR_LAYERID,sal_uInt8(nId))  {}
-    SdrLayerID GetValue() const { return SdrLayerID(SfxUInt16Item::GetValue()); }
+    SdrLayerIdItem(SdrLayerID nId): SfxInt16Item(SDRATTR_LAYERID,nId.get())  {}
+    SdrLayerID GetValue() const { return SdrLayerID(SfxInt16Item::GetValue()); }
     virtual SdrLayerIdItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
 
