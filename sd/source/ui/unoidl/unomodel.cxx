@@ -57,6 +57,8 @@
 #include <svx/svdundo.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unofill.hxx>
+#include <svx/sdrpagewindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 #include <editeng/fontitem.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <svx/svdpool.hxx>
@@ -2208,6 +2210,25 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
     if (!pViewSh)
         return;
 
+    // Setup drawing layer to work properly. Since we use a custom VirtualDevice
+    // for the drawing, SdrPaintView::BeginCompleteRedraw() will call FindPaintWindow()
+    // unsuccessfully and use a temporary window that doesn't keep state. So patch
+    // the existing SdrPageWindow to use a temporary, and this way the state will be kept.
+    // Well, at least that's how I understand it based on Writer's RenderContextGuard,
+    // as the drawing layer classes lack documentation.
+    SdrPageWindow* patchedPageWindow = nullptr;
+    SdrPaintWindow* previousPaintWindow = nullptr;
+    std::unique_ptr<SdrPaintWindow> temporaryPaintWindow;
+    if(SdrView* pDrawView = pViewSh->GetDrawView())
+    {
+        if(SdrPageView* pSdrPageView = pDrawView->GetSdrPageView())
+        {
+            patchedPageWindow = pSdrPageView->FindPageWindow(*getDocWindow()->GetOutDev());
+            temporaryPaintWindow.reset(new SdrPaintWindow(*pDrawView, rDevice));
+            previousPaintWindow = patchedPageWindow->patchPaintWindow(*temporaryPaintWindow);
+        }
+    }
+
     // Scaling. Must convert from pixels to twips. We know
     // that VirtualDevices use a DPI of 96.
     // We specifically calculate these scales first as we're still
@@ -2244,6 +2265,9 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
 
     LokChartHelper::PaintAllChartsOnTile(rDevice, nOutputWidth, nOutputHeight,
                                          nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+
+    if(patchedPageWindow != nullptr)
+        patchedPageWindow->unpatchPaintWindow(previousPaintWindow);
 }
 
 void SdXImpressDocument::selectPart(int nPart, int nSelect)
