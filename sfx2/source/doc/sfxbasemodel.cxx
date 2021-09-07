@@ -99,6 +99,7 @@
 #include <objshimp.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
+#include <sfx2/ColorSets.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/dispatch.hxx>
@@ -2732,6 +2733,27 @@ void SfxBaseModel::loadCmisProperties( )
     }
     catch (const ucb::CommandAbortedException &)
     {
+    }
+}
+
+void SAL_CALL SfxBaseModel::addNewColorSet(const OUString& rColorSetName,
+               const css::uno::Sequence<css::util::Color>& rColorSetColors)
+{
+    if(SfxObjectShell* pObjShell = SfxObjectShell::Current())
+    {
+        if(const SfxColorSetListItem* pColorSetItem = pObjShell->GetItem(SID_COLOR_SETS))
+        {
+            pColorSetItem->GetSfxColorSetListPtr();//->AddNewColorSet( NAME, COLORS );
+            //SAL/_DEBUG("Got the ColorSet without a problem!");
+        }
+        else
+        {
+            //SAL/_DEBUG("Couldn't get pColorSetItem (in addNewColorSet)");
+        }
+    }
+    else
+    {
+        //SAL/_DEBUG("Couldn't get the object shell (in addNewColorSet)");
     }
 }
 

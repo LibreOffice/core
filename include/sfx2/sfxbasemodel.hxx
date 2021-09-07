@@ -28,6 +28,7 @@
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/document/XCmisDocument.hpp>
+#include <com/sun/star/document/XColorSetsManager.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentRecovery.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
@@ -42,6 +43,7 @@
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/frame/XModel3.hpp>
+#include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/util/XModifiable2.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
@@ -115,6 +117,7 @@ namespace com::sun::star::util { class XModifyListener; }
 typedef ::cppu::WeakImplHelper  <   css::container::XChild
                                         ,   css::document::XDocumentPropertiesSupplier
                                         ,   css::document::XCmisDocument
+                                        ,   css::document::XColorSetsManager
                                         ,   css::rdf::XDocumentMetadataAccess
                                         ,   css::document::XDocumentRecovery
                                         ,   css::document::XUndoManagerSupplier
@@ -664,6 +667,9 @@ public:
     virtual sal_Bool SAL_CALL canCheckOut( ) override;
     virtual sal_Bool SAL_CALL canCancelCheckOut( ) override;
     virtual sal_Bool SAL_CALL canCheckIn( ) override;
+
+    // XColorSetsManager
+    virtual void SAL_CALL addNewColorSet(const OUString& rColorSetName, const css::uno::Sequence<css::util::Color>& rColorSetColors) override;
 
     /// @throws css::uno::RuntimeException
     bool getBoolPropertyValue( const OUString& rName );

@@ -2221,6 +2221,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/document,\
 	XBinaryStreamResolver \
 	XCmisDocument \
 	XCodeNameQuery \
+	XColorSetsManager \
 	XCompatWriterDocProperties \
 	XDocumentEventBroadcaster \
 	XDocumentEventListener \
