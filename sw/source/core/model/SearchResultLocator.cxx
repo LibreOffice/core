@@ -110,17 +110,29 @@ bool SearchResultLocator::tryParseJSON(const char* pPayload,
         auto const& rEach = rEachNode.second;
 
         std::string sType = rEach.get<std::string>("node_type", "");
+
         auto eNodeType = sw::search::NodeType::Undefined;
         if (sType == "writer")
             eNodeType = sw::search::NodeType::WriterNode;
         else if (sType == "common")
             eNodeType = sw::search::NodeType::CommonNode;
 
+        std::string sJsonObjectName = rEach.get<std::string>("object_name", "");
+
         sal_Int32 nIndex = rEach.get<sal_Int32>("index", -1);
 
         // Don't add search data elements that don't have valid data
         if (eNodeType != sw::search::NodeType::Undefined && nIndex >= 0)
-            rDataVector.emplace_back(eNodeType, nIndex);
+        {
+            OUString sObjectName;
+            if (!sJsonObjectName.empty())
+            {
+                OString sObjectNameOString(sJsonObjectName.c_str());
+                sObjectName = OStringToOUString(sObjectNameOString, RTL_TEXTENCODING_UTF8);
+            }
+
+            rDataVector.emplace_back(eNodeType, nIndex, sObjectName);
+        }
     }
 
     return true;
@@ -153,6 +165,7 @@ bool SearchResultLocator::tryParseXML(const char* pPayload,
         {
             OString sType = aWalker.attribute("node_type");
             OString sIndex = aWalker.attribute("index");
+            OString sObjectName = aWalker.attribute("object_name");
 
             if (!sType.isEmpty() && !sIndex.isEmpty())
             {
@@ -165,7 +178,8 @@ bool SearchResultLocator::tryParseXML(const char* pPayload,
                     eNodeType = sw::search::NodeType::CommonNode;
 
                 aData.meType = eNodeType;
-
+                if (!sObjectName.isEmpty())
+                    aData.maObjectName = OStringToOUString(sObjectName, RTL_TEXTENCODING_UTF8);
                 rDataVector.push_back(aData);
             }
         }
