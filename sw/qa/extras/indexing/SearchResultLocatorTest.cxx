@@ -88,7 +88,7 @@ void SearchResultLocatorTest::testSearchResultLocatorUsingXmlPayload()
 
     sw::search::SearchResultLocator aLocator(pDoc);
     OString payload = "<indexing>"
-                      "<paragraph type=\"1\" index=\"14\" />"
+                      "<paragraph node_type=\"writer\" index=\"14\" />"
                       "</indexing>";
 
     sw::search::LocationResult aResult = aLocator.findForPayload(payload.getStr());
@@ -116,7 +116,7 @@ void SearchResultLocatorTest::testSearchResultLocatorUsingJsonPayload()
 
     sw::search::SearchResultLocator aLocator(pDoc);
     OString payload = "["
-                      "{ \"type\" : 1, \"index\" : 14 }"
+                      "{ \"node_type\" : \"writer\", \"index\" : 14 }"
                       "]";
 
     sw::search::LocationResult aResult = aLocator.findForPayload(payload.getStr());
@@ -144,7 +144,7 @@ void SearchResultLocatorTest::testSearchResultLocatorForSdrObjects()
 
     sw::search::SearchResultLocator aLocator(pDoc);
     std::vector<sw::search::SearchIndexData> aDataVector;
-    aDataVector.emplace_back(sw::search::NodeType::SdrObject, 1, u"Circle");
+    aDataVector.emplace_back(sw::search::NodeType::CommonNode, 1, u"Circle");
 
     sw::search::LocationResult aResult = aLocator.find(aDataVector);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aResult.maRectangles.size());
