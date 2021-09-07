@@ -16,6 +16,24 @@
       "message": "From this description, it is unclear what the difference is between aRole and aRoleQualifier, and why two distinct parameters are needed here.\n(And when you change the method\u0027s signature incompatibly anyway, would it make sense semantically to not stick aRoleQualifier at the end but rather group aRole and aRoleQualifier together?)",
       "revId": "f547cf17a179ebd7de5c2b4dd2d00d0027a25429",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "404ff0db_6c3573d7",
+        "filename": "offapi/com/sun/star/chart2/data/XDataProvider.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2021-09-07T09:18:11Z",
+      "side": 1,
+      "message": "The @param descriptions are not the same. aRole is used to specify the role of the sequence and aRoleQualifier describes this role. \n\nYes it makes sense to group aRole and aRoleQualifier together.",
+      "parentUuid": "e2babb63_0bd8fe82",
+      "revId": "f547cf17a179ebd7de5c2b4dd2d00d0027a25429",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
