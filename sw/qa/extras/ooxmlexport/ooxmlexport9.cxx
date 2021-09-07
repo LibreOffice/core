@@ -75,8 +75,9 @@ DECLARE_OOXMLEXPORT_TEST(testFdo55381, "fdo55381.docx")
     //TODO: frames not located on the correct pages
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDocm, "hello.docm")
+CPPUNIT_TEST_FIXTURE(Test, testDocm)
 {
+    loadAndSave("hello.docm");
     // Make sure that we check the name of the export filter.
     // This was application/vnd.ms-word.document.macroEnabled.main+xml when the
     // name of the import filter was checked.
@@ -87,8 +88,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDocm, "hello.docm")
                 "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDefaultContentTypes, "fdo55381.docx")
+CPPUNIT_TEST_FIXTURE(Test, testDefaultContentTypes)
 {
+    loadAndSave("fdo55381.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("[Content_Types].xml");
     assertXPath(pXmlDoc,
                 "/ContentType:Types/ContentType:Default[@Extension='xml']",
@@ -137,8 +139,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf109063, "tdf109063.docx")
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf108269, "tdf108269.docm")
+CPPUNIT_TEST_FIXTURE(Test, testTdf108269)
 {
+    loadAndSave("tdf108269.docm");
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     // This failed: VBA streams were not roundtripped via the doc-level
     // grab-bag.
@@ -191,8 +194,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf122342, "tdf122342.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(494), getProperty<sal_Int32>(getParagraph(3), "ParaBottomMargin"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf132802, "tdf132802.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf132802)
 {
+    loadAndSave("tdf132802.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "after", "0");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:spacing", "after", "0");
@@ -207,8 +211,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf132802, "tdf132802.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:spacing", "after", "280");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf132807, "tdf132807.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf132807)
 {
+    loadAndSave("tdf132807.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:spacing", "before", "280");
     // This was 240 (list auto spacing is zero in lists)
@@ -225,8 +230,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf132807, "tdf132807.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:pPr/w:spacing", "before", "280");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf133052, "tdf133052.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf133052)
 {
+    loadAndSave("tdf133052.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // These were 240 (top auto spacing of list subitems are zero)
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:spacing", "before", "0");
@@ -238,8 +244,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf133052, "tdf133052.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p[5]/w:pPr/w:spacing", "before", "0");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf134648, "tdf134648.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf134648)
 {
+    loadAndSave("tdf134648.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // list item with direct top auto spacing
@@ -314,8 +321,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf129575_docDefault, "tdf129575-docDefault.docx")
 
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf118812, "tdf118812_tableStyles-comprehensive.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf118812)
 {
+    loadAndSave("tdf118812_tableStyles-comprehensive.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // cell A1
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:pPr/w:pStyle", "val", "Normal");
@@ -404,8 +412,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf118812, "tdf118812_tableStyles-compre
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[9]/w:tc/w:p/w:pPr/w:ind", "hanging", "360");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf107626, "tdf107626.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf107626)
 {
+    loadAndSave("tdf107626.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // This was 2 (missing trailing cell in merged cell range)
@@ -737,16 +746,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf112352_nextPageColumns, "tdf112352_nextPageColum
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xTextColumns->getColumnCount());
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf109310_endnoteStyleForMSO, "tdf109310_endnoteStyleForMSO.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf109310_endnoteStyleForMSO)
 {
+    loadAndSave("tdf109310_endnoteStyleForMSO.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/endnotes.xml");
     // Check w:rStyle element has w:val attribute - note that w: is not specified for attribute
     assertXPath(pXmlDoc, "/w:endnotes/w:endnote[@w:id='2']/w:p/w:r[1]/w:rPr/w:rStyle", "val",
                 "EndnoteCharacters");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf103389, "tdf103389.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf103389)
 {
+    loadAndSave("tdf103389.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // No geometry was exported for the second canvas
     // Check both canvases' geometry
@@ -845,8 +856,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf103982, "tdf103982.docx")
     CPPUNIT_ASSERT(!getProperty<bool>(xPropertySet, "Shadow"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf104115, "tdf104115.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf104115)
 {
+    loadAndSave("tdf104115.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // This found 0 nodes: the custom geometry was not written for the Bezier
     // curve -> Word refused to open the document.
@@ -865,8 +877,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103651, "tdf103651.docx")
     CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(1), 1), "CharAutoKerning"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf99227, "tdf99227.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf99227)
 {
+    loadAndSave("tdf99227.docx");
     // A drawing anchored as character to a footnote caused write past end of document.xml at export to docx.
     // After that, importing after export failed with
     // SAXParseException: '[word/document.xml line 2]: Extra content at the end of the document', Stream 'word / document.xml',
@@ -1040,8 +1053,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106001, "tdf106001.docx")
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>( 100 ), getProperty<sal_Int16>(getRun(getParagraph(1), 1), "CharScaleWidth" ));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf106001_2, "tdf106001-2.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf106001_2)
 {
+    loadAndSave("tdf106001-2.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // In test ODT CharScaleWidth = 900, this was not changed upon OOXML export to stay in [1..600], now it's clamped to 600
     // Note: we disregard what's set in pPr / rPr and only care about r / rPr
@@ -1116,8 +1130,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121670_columnsInSectionsOnly, "tdf121670_columns
     CPPUNIT_ASSERT_EQUAL_MESSAGE("# of columns", sal_Int16(0), xTextColumns->getColumnCount());
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf106492, "tdf106492.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf106492)
 {
+    loadAndSave("tdf106492.docx");
     xmlDocUniquePtr pXmlDoc = parseExport();
     // This was 4: an additional sectPr was added to the document.
     assertXPath(pXmlDoc, "//w:sectPr", 3);
@@ -1355,8 +1370,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf109184, "tdf109184.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xff0000), getProperty<sal_Int32>(xCell3, "BackColor"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf111964, "tdf111964.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf111964)
 {
+    loadAndSave("tdf111964.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // Unicode spaces that are not XML whitespace must not be trimmed
     static constexpr OUStringLiteral sWSReference = u"\u2002\u2002\u2002\u2002\u2002";
@@ -1429,8 +1445,9 @@ DECLARE_OOXMLEXPORT_TEST(testActiveXOptionButtonGroup, "activex_option_button_gr
     CPPUNIT_ASSERT_EQUAL(sGroupName, getProperty<OUString>(xPropertySet, "GroupName"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(tdf112169, "tdf112169.odt")
+CPPUNIT_TEST_FIXTURE(Test, tdf112169)
 {
+    loadAndSave("tdf112169.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(6, getPages());
     // LO crashed while export because of character background color handling
@@ -1441,8 +1458,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(tdf112169, "tdf112169.odt")
     assertXPath(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:pPr/w:ind", "firstLine","360");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf103090, "tdf103090.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf103090)
 {
+    loadAndSave("tdf103090.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
@@ -1460,8 +1478,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf103090, "tdf103090.odt")
     CPPUNIT_ASSERT_EQUAL(expectedFieldName, fieldName);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf107111, "tdf107111.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf107111)
 {
+    loadAndSave("tdf107111.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // Ensure that hyperlink and its properties are in place.
@@ -1540,8 +1559,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104354_2, "tdf104354-2.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraphOfText(1, xCell5->getText()), "ParaBottomMargin"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf137593, "tdf137593.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf137593)
 {
+    loadAndSave("tdf137593.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // zero auto spacing, if the first paragraph contains text boxes
@@ -1549,16 +1569,18 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf137593, "tdf137593.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:tc/w:p[1]/w:pPr/w:spacing", "before", "0");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf115557, "tdf115557.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf115557)
 {
+    loadAndSave("tdf115557.docx");
     // A chart anchored to a footnote multiplied during import
     xmlDocUniquePtr pXmlDoc = parseExport("word/footnotes.xml");
 
     assertXPath(pXmlDoc, "//w:footnote/w:p/w:r/w:drawing", 1);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAlignmentRelativeFromTopMarginDML, "tdf137641_RelativeFromTopMargin.docx")
+CPPUNIT_TEST_FIXTURE(Test, testAlignmentRelativeFromTopMarginDML)
 {
+    loadAndSave("tdf137641_RelativeFromTopMargin.docx");
     // Import as DML.
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
@@ -1588,8 +1610,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAlignmentRelativeFromTopMarginDML, "tdf1
                        "center");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAlignmentRelativeFromTopMarginVML, "tdf137642_Vertical_Alignment_toppage.docx")
+CPPUNIT_TEST_FIXTURE(Test, testAlignmentRelativeFromTopMarginVML)
 {
+    loadAndSave("tdf137642_Vertical_Alignment_toppage.docx");
     // Import as VML.
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
@@ -1619,8 +1642,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAlignmentRelativeFromTopMarginVML, "tdf1
                        "center");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testVmlShapeWithTextbox, "tdf41466_testVmlShapeWithTextbox.docx")
+CPPUNIT_TEST_FIXTURE(Test, testVmlShapeWithTextbox)
 {
+    loadAndSave("tdf41466_testVmlShapeWithTextbox.docx");
     // Import as VML.
     // tdf#41466: check whether VML DOCX shape with text is imported as shape with a text frame
     // (text box). These kind of shapes were imported only as text frames previously, losing the
@@ -1634,8 +1658,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testVmlShapeWithTextbox, "tdf41466_testVmlSh
         "prst", "wedgeRectCallout");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testLayoutFlowAltAlone, "layout-flow-alt-alone.docx")
+CPPUNIT_TEST_FIXTURE(Test, testLayoutFlowAltAlone)
 {
+    loadAndSave("layout-flow-alt-alone.docx");
     // moved from oox/qa/unit/vml.cxx
     // FIXME: now the DML part is checked, but we should check VML part in Fallback (too)
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
