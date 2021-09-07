@@ -341,7 +341,7 @@ void View::DoPaste (::sd::Window* pWindow)
 
 void View::StartDrag( const Point& rStartPos, vcl::Window* pWindow )
 {
-    if( !AreObjectsMarked() || !IsAction() || !mpViewSh || !pWindow || mpDragSrcMarkList )
+    if (!AreObjectsMarked() || !IsAction() || !mpViewSh || !pWindow)
         return;
 
     BrkAction();
@@ -359,17 +359,18 @@ void View::StartDrag( const Point& rStartPos, vcl::Window* pWindow )
     mpDragSrcMarkList.reset( new SdrMarkList(GetMarkedObjectList()) );
     mnDragSrcPgNum = GetSdrPageView()->GetPage()->GetPageNum();
 
-    if( IsUndoEnabled() )
-    {
-        OUString aStr(SdResId(STR_UNDO_DRAGDROP));
-        BegUndo(aStr + " " + mpDragSrcMarkList->GetMarkDescription());
-    }
     CreateDragDataObject( this, *pWindow, rStartPos );
 }
 
 void View::DragFinished( sal_Int8 nDropAction )
 {
     const bool bUndo = IsUndoEnabled();
+    const bool bGroupUndo = bUndo && mpDragSrcMarkList;
+    if (bGroupUndo)
+    {
+        OUString aStr(SdResId(STR_UNDO_DRAGDROP));
+        BegUndo(aStr + " " + mpDragSrcMarkList->GetMarkDescription());
+    }
 
     SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
 
@@ -419,11 +420,7 @@ void View::DragFinished( sal_Int8 nDropAction )
     if( pDragTransferable )
         pDragTransferable->SetInternalMove( false );
 
-    //This Undo appears to matches with the STR_UNDO_DRAGDROP Undo Start of
-    //View::StartDrag But this DragFinished can be called without a matching
-    //StartDrag. So use the existence of mpDragSrcMarkList as a flag that
-    //this EndUndo has a matching BegUndo
-    if (bUndo && mpDragSrcMarkList)
+    if (bGroupUndo)
         EndUndo();
     mnDragSrcPgNum = SDRPAGE_NOTFOUND;
     mpDragSrcMarkList.reset();
