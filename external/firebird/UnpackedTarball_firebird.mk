@@ -45,6 +45,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
     external/firebird/0001-extern-cloop-Missing-dependency-of-BIN_DIR-cloop-on-.patch.1 \
     external/firebird/msvc.patch \
     external/firebird/wnt-per-process-trace-storage.patch.1 \
+    external/firebird/parallelism.patch \
 ))
 
 ifeq ($(OS),WNT)
