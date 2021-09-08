@@ -904,7 +904,10 @@ IMPL_LINK_NOARG(SpellDialog, ModifyHdl, LinkParamNone*, void)
 IMPL_LINK_NOARG(SpellDialog, CancelHdl, weld::Button&, void)
 {
     //apply changes and ignored text parts first - if there are any
-    rParent.ApplyChangedSentence(m_xSentenceED->CreateSpellPortions(), false);
+    if (m_xSentenceED->IsModified())
+    {
+        rParent.ApplyChangedSentence(m_xSentenceED->CreateSpellPortions(), false);
+    }
     Close();
 }
 
