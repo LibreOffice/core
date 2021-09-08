@@ -95,32 +95,17 @@ void OutputDevice::SetFont( const vcl::Font& rNewFont )
     mpAlphaVDev->SetFont( aFont );
 }
 
-FontMetric OutputDevice::GetDevFont( int nDevFontIndex ) const
+FontMetric OutputDevice::GetFontMetricFromCollection(int nDevFontIndex) const
 {
-    FontMetric aFontMetric;
-
     ImplInitFontList();
 
-    int nCount = GetDevFontCount();
-    if( nDevFontIndex < nCount )
-    {
-        const PhysicalFontFace& rData = *mpFontFaceCollection->Get( nDevFontIndex );
-        aFontMetric.SetFamilyName( rData.GetFamilyName() );
-        aFontMetric.SetStyleName( rData.GetStyleName() );
-        aFontMetric.SetCharSet( rData.GetCharSet() );
-        aFontMetric.SetFamily( rData.GetFamilyType() );
-        aFontMetric.SetPitch( rData.GetPitch() );
-        aFontMetric.SetWeight( rData.GetWeight() );
-        aFontMetric.SetItalic( rData.GetItalic() );
-        aFontMetric.SetAlignment( TextAlign::ALIGN_TOP );
-        aFontMetric.SetWidthType( rData.GetWidthType() );
-        aFontMetric.SetQuality( rData.GetQuality() );
-    }
+    if (nDevFontIndex < GetFontFaceCollectionCount())
+        return FontMetric(*mpFontFaceCollection->Get(nDevFontIndex));
 
-    return aFontMetric;
+    return FontMetric();
 }
 
-int OutputDevice::GetDevFontCount() const
+int OutputDevice::GetFontFaceCollectionCount() const
 {
     if( !mpFontFaceCollection )
     {
