@@ -24,6 +24,7 @@
 #include <vcl/outdev.hxx>
 #include <sal/log.hxx>
 
+#include <PhysicalFontFace.hxx>
 #include <fontinstance.hxx>
 #include <fontselect.hxx>
 #include <impfontmetricdata.hxx>
@@ -49,6 +50,20 @@ FontMetric::FontMetric()
 {}
 
 FontMetric::FontMetric( const FontMetric& rFontMetric ) = default;
+
+FontMetric::FontMetric(PhysicalFontFace const& rFace)
+{
+    SetFamilyName(rFace.GetFamilyName());
+    SetStyleName(rFace.GetStyleName());
+    SetCharSet(rFace.GetCharSet());
+    SetFamily(rFace.GetFamilyType());
+    SetPitch(rFace.GetPitch());
+    SetWeight(rFace.GetWeight());
+    SetItalic(rFace.GetItalic());
+    SetAlignment(TextAlign::ALIGN_TOP);
+    SetWidthType(rFace.GetWidthType());
+    SetQuality(rFace.GetQuality() );
+}
 
 FontMetric::~FontMetric()
 {

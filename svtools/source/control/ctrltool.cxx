@@ -252,16 +252,16 @@ void FontList::ImplInsertFonts(OutputDevice* pDevice, bool bInsertData)
         nType = FontListFontNameType::PRINTER;
 
     // inquire all fonts from the device
-    int n = pDevice->GetDevFontCount();
+    int n = pDevice->GetFontFaceCollectionCount();
     if (n == 0 && comphelper::LibreOfficeKit::isActive())
     {
         pDevice->RefreshFontData(true);
-        n = pDevice->GetDevFontCount();
+        n = pDevice->GetFontFaceCollectionCount();
     }
 
     for (int i = 0; i < n; ++i)
     {
-        FontMetric aFontMetric = pDevice->GetDevFont( i );
+        FontMetric aFontMetric = pDevice->GetFontMetricFromCollection( i );
         OUString aSearchName(aFontMetric.GetFamilyName());
         ImplFontListNameInfo*   pData;
         sal_uInt32              nIndex;

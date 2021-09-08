@@ -20,12 +20,14 @@
 #ifndef INCLUDED_VCL_METRIC_HXX
 #define INCLUDED_VCL_METRIC_HXX
 
-#include <vcl/dllapi.h>
-#include <vcl/font.hxx>
 #include <tools/ref.hxx>
 #include <tools/gen.hxx>
 
+#include <vcl/dllapi.h>
+#include <vcl/font.hxx>
+
 class FontCharMap;
+class PhysicalFontFace;
 
 typedef tools::SvRef<FontCharMap> FontCharMapRef;
 
@@ -34,6 +36,7 @@ class VCL_DLLPUBLIC FontMetric : public vcl::Font
 public:
     explicit            FontMetric();
                         FontMetric( const FontMetric& );  // TODO make this explicit
+                        FontMetric(PhysicalFontFace const& rFace);
                         ~FontMetric() override;
 
     tools::Long                GetAscent() const                           { return mnAscent; }
