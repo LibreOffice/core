@@ -57,6 +57,30 @@
       },
       "revId": "1e6b5e083fad78275709bd231cd27cdd5ef2f73c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b55505eb_025a9bac",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1731,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-08T11:07:25Z",
+      "side": 1,
+      "message": "Yes, the above commit was just a very very fast draft of a solution. Imho, we need to add checks in StepUnary, StepArith, and StepCompare in order to raise the appriopriate error. Can you think of other places, too?",
+      "parentUuid": "ce4b778d_f61244fb",
+      "range": {
+        "startLine": 1731,
+        "startChar": 14,
+        "endLine": 1731,
+        "endChar": 32
+      },
+      "revId": "1e6b5e083fad78275709bd231cd27cdd5ef2f73c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
