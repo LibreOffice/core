@@ -3255,7 +3255,7 @@ void XMLAnnotationImportContext::endFastElement(sal_Int32 /*nElement*/)
                 }
                 catch (const uno::RuntimeException&)
                 {
-                    // Loosing the start of the anchor is better than not opening the document at
+                    // Losing the start of the anchor is better than not opening the document at
                     // all.
                     TOOLS_WARN_EXCEPTION(
                         "xmloff.text",

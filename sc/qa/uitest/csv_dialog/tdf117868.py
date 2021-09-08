@@ -25,7 +25,7 @@ class Td117868(UITestCase):
         xSeparatedBy = xDialog.getChild("toseparatedby")
         xSeparatedBy.executeAction("CLICK", tuple())
 
-        # Without the fix in place, this test would haved failed with
+        # Without the fix in place, this test would have failed with
         # AssertionError: 'true' != 'false'
         self.assertEqual('true', get_state_as_dict(xDialog.getChild("other"))['Selected'])
         self.assertEqual('false', get_state_as_dict(xDialog.getChild("tab"))['Selected'])

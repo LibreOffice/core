@@ -3129,7 +3129,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf50447_keep_hints)
 
     dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
 
-    // all hints and text portions between them got back the original formattings
+    // all hints and text portions between them got back the original formatting
 
     xText = getParagraph(1)->getText();
     CPPUNIT_ASSERT(xText.is());
