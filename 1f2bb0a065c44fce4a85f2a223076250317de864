@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22425d9f_de89b785",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-09-08T19:13:37Z",
+      "side": 1,
+      "message": "just a typo found during some debug with Orca and enable-dbgutil\n\nsoffice.bin: /home/julien/lo/libreoffice/vcl/unx/gtk3/gtkinst.cxx:16980: virtual a11yref (anonymous namespace)::GtkInstanceDrawingArea::get_accessible_parent(): Assertion `false \u0026\u0026 \"get_accessible_parent should only be called on a vcl impl\"\u0027 failed.\n#4  0x00007f6585f60ab6 in (anonymous namespace)::GtkInstanceDrawingArea::get_accessible_parent() (this\u003d0x4536900) at vcl/unx/gtk3/gtkinst.cxx:16980\n#5  0x00007f6585f610c0 in virtual thunk to (anonymous namespace)::GtkInstanceDrawingArea::get_accessible_parent() () at vcl/unx/gtk3/gtkinst.cxx:17093\n#6  0x00007f659645252e in ThumbnailViewAcc::getAccessibleParent() (this\u003d0x45352a0) at sfx2/source/control/thumbnailviewacc.cxx:100\n#7  0x00007f6596453ee0 in ThumbnailViewAcc::getLocationOnScreen() (this\u003d0x45352a0) at sfx2/source/control/thumbnailviewacc.cxx:310\n#8  0x00007f659645412e in non-virtual thunk to ThumbnailViewAcc::getLocationOnScreen() () at sfx2/source/control/thumbnailviewacc.cxx:326\n#9  0x00007f659645717a in ThumbnailViewItemAcc::getLocationOnScreen() (this\u003d0x45fabc0) at sfx2/source/control/thumbnailviewacc.cxx:846\n#10 0x00007f659645727e in non-virtual thunk to ThumbnailViewItemAcc::getLocationOnScreen() () at sfx2/source/control/thumbnailviewacc.cxx:854\n#11 0x00007f6585e8674d in translatePoint(com::sun::star::uno::Reference\u003ccom::sun::star::accessibility::XAccessibleComponent\u003e const\u0026, int, int, AtkCoordType)\n    (pComponent\u003duno::Reference to (class ThumbnailViewItemAcc *) 0x45fac00, x\u003d57, y\u003d291, t\u003dATK_XY_SCREEN) at vcl/unx/gtk3/a11y/atkcomponent.cxx:62\n#12 0x00007f6585e857b9 in component_wrapper_contains(_AtkComponent*, int, int, AtkCoordType) (component\u003d0x4ded8b0, x\u003d57, y\u003d291, coord_type\u003dATK_XY_SCREEN) at vcl/unx/gtk3/a11y/atkcomponent.cxx:114\n#13 0x00007f658531a327 in  () at /usr/lib/x86_64-linux-gnu/libatk-bridge-2.0.so.0\n#14 0x00007f6585321bc1 in  () at /usr/lib/x86_64-linux-gnu/libatk-bridge-2.0.so.0\n#15 0x00007f6599413acd in  () at /lib/x86_64-linux-gnu/libdbus-1.so.3\n#16 0x00007f6599403c54 in dbus_connection_dispatch () at /lib/x86_64-linux-gnu/libdbus-1.so.3\n#17 0x00007f6584d7a505 in  () at /usr/lib/x86_64-linux-gnu/libatspi.so.0\n#18 0x00007f658bb9385b in g_main_context_dispatch () at /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0\n#19 0x00007f658bb93b08 in  () at /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0\n#20 0x00007f658bb93bbf in g_main_context_iteration () at /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0\n#21 0x00007f6585ee1efc in GtkSalData::Yield(bool, bool) (this\u003d0x21e0470, bWait\u003dtrue, bHandleAllCurrentEvents\u003dfalse) at vcl/unx/gtk3/gtkdata.cxx:404\n",
+      "revId": "1f2bb0a065c44fce4a85f2a223076250317de864",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
