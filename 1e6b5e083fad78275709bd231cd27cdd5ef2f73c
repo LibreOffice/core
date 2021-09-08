@@ -81,6 +81,30 @@
       },
       "revId": "1e6b5e083fad78275709bd231cd27cdd5ef2f73c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d3914a3_74f991c2",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1731,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-08T11:13:50Z",
+      "side": 1,
+      "message": "\u003e Can you think of other places, too?\n\nNot really - you know the code much better than me.\n\nI only had a vague idea about somehow making getters for the values to check if it\u0027s missing, and set the error right there, only having some specific methods for explicit access of missing variables (if we really need them). That would localize the checks, and would ~automatically expose all places where we need explicit treatment ... like passing as arguments to nested function calls.\n\nBut that would likely be a large undertaking. What you do here is good enough. Thank you!",
+      "parentUuid": "b55505eb_025a9bac",
+      "range": {
+        "startLine": 1731,
+        "startChar": 14,
+        "endLine": 1731,
+        "endChar": 32
+      },
+      "revId": "1e6b5e083fad78275709bd231cd27cdd5ef2f73c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
