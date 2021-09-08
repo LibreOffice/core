@@ -125,6 +125,9 @@ public:
     /// Modify ZOrder of an SdrObject
     virtual SdrObject* SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum);
 
+    /// Modify ZOrder of an SdrObject, object must already be in the list
+    virtual void SetExistingObjectOrdNum(SdrObject* pExistingObj, size_t nNewObjNum);
+
     void SetSdrObjListRectsDirty();
 
     const tools::Rectangle& GetAllObjSnapRect() const;

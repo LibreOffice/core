@@ -2126,11 +2126,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
         {
             SdrObjList* pObjList = GetSdrObject()->getParentSdrObjListFromSdrObject();
             if( pObjList )
-            {
-                SdrObject* pCheck =
-                            pObjList->SetObjectOrdNum( GetSdrObject()->GetOrdNum(), static_cast<size_t>(nNewOrdNum) );
-                DBG_ASSERT( pCheck == GetSdrObject(), "GetOrdNum() failed!" );
-            }
+                pObjList->SetExistingObjectOrdNum( GetSdrObject(), static_cast<size_t>(nNewOrdNum) );
             return true;
         }
         break;

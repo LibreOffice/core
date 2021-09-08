@@ -561,6 +561,62 @@ SdrObject* SdrObjList::SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum)
     return pObj;
 }
 
+void SdrObjList::SetExistingObjectOrdNum(SdrObject* pObj, size_t nNewObjNum)
+{
+    assert(std::find(maList.begin(), maList.end(), pObj) != maList.end() && "This method requires that the child object already be inserted");
+    assert(pObj->IsInserted() && "SdrObjList::SetObjectOrdNum: the object does not have status Inserted.");
+
+    // I am deliberately bypassing getOrdNum() because I dont want to unnecessarily
+    // trigger RecalcObjOrdNums()
+    const sal_uInt32 nOldOrdNum = pObj->m_nOrdNum;
+    if (!mbObjOrdNumsDirty && nOldOrdNum == nNewObjNum)
+       return;
+
+    // Update the navigation positions.
+    if (HasObjectNavigationOrder())
+    {
+        tools::WeakReference<SdrObject> aReference (pObj);
+        auto iObject = ::std::find(
+            mxNavigationOrder->begin(),
+            mxNavigationOrder->end(),
+            aReference);
+        mxNavigationOrder->erase(iObject);
+        mbIsNavigationOrderDirty = true;
+        // The new object does not have a user defined position so append it
+        // to the list.
+        pObj->SetNavigationPosition(mxNavigationOrder->size());
+        mxNavigationOrder->push_back(pObj);
+    }
+    if (nOldOrdNum < maList.size() && maList[nOldOrdNum] == pObj)
+        maList.erase(maList.begin()+nOldOrdNum);
+    else
+    {
+        auto it = std::find(maList.begin(), maList.end(), pObj);
+        maList.erase(it);
+    }
+    // Insert object into object list.  Because the insert() method requires
+    // a valid iterator as insertion position, we have to use push_back() to
+    // insert at the end of the list.
+    if (nNewObjNum >= maList.size())
+        maList.push_back(pObj);
+    else
+        maList.insert(maList.begin()+nNewObjNum, pObj);
+
+    mbObjOrdNumsDirty=true;
+
+    // No need to delete visualisation data since same object
+    // gets inserted again. Also a single ActionChanged is enough
+    pObj->ActionChanged();
+
+    pObj->SetOrdNum(nNewObjNum);
+    mbObjOrdNumsDirty=true;
+
+    // TODO: We need a different broadcast here.
+    if (pObj->getSdrPageFromSdrObject()!=nullptr)
+        pObj->getSdrModelFromSdrObject().Broadcast(SdrHint(SdrHintKind::ObjectChange, *pObj));
+    pObj->getSdrModelFromSdrObject().SetChanged();
+}
+
 void SdrObjList::sort( std::vector<sal_Int32>& sortOrder)
 {
     // no negative indexes and indexes larger than maList size are allowed
