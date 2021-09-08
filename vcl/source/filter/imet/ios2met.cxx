@@ -1602,8 +1602,8 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         }
         case GOrdFilPth:
         {
-            sal_uInt32 nID;
-            sal_uInt16  nDummy;
+            sal_uInt32 nID(0);
+            sal_uInt16 nDummy(0);
             OSPath* p = pPathList;
 
             pOS2MET->ReadUInt16( nDummy )
@@ -1801,7 +1801,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         case GOrdPIxCol: PushAttr(nOrderID);
             [[fallthrough]];
         case GOrdSIxCol: {
-            sal_uInt8 nFlags;
+            sal_uInt8 nFlags(0);
             pOS2MET->ReadUChar( nFlags );
             if ((nFlags&0x80)!=0) {
                 aAttr.aLinCol=aDefAttr.aLinCol;
@@ -1829,7 +1829,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             [[fallthrough]];
         case GOrdSColor:
         case GOrdSXtCol: {
-            sal_uInt16 nVal;
+            sal_uInt16 nVal(0);
             if (nOrderID==GOrdPColor || nOrderID==GOrdSColor) {
                 sal_uInt8 nbyte(0);
                 pOS2MET->ReadUChar( nbyte ); nVal=static_cast<sal_uInt16>(nbyte)|0xff00;
@@ -1857,7 +1857,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         case GOrdPBgCol: PushAttr(nOrderID);
             [[fallthrough]];
         case GOrdSBgCol: {
-            sal_uInt16 nVal;
+            sal_uInt16 nVal(0);
             pOS2MET->ReadUInt16( nVal );
             if (nVal==0x0000 || nVal==0xff00)  {
                 aAttr.aLinBgCol=aDefAttr.aLinBgCol;
@@ -1880,7 +1880,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         case GOrdPBxCol: PushAttr(nOrderID);
             [[fallthrough]];
         case GOrdSBxCol: {
-            sal_uInt8 nFlags;
+            sal_uInt8 nFlags(0);
             pOS2MET->ReadUChar( nFlags );
             if ((nFlags&0x80)!=0) {
                 aAttr.aLinBgCol=aDefAttr.aLinBgCol;
@@ -1906,7 +1906,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         case GOrdPMixMd: PushAttr(nOrderID);
             [[fallthrough]];
         case GOrdSMixMd: {
-            sal_uInt8 nMix;
+            sal_uInt8 nMix(0);
             pOS2MET->ReadUChar( nMix );
             if (nMix==0) {
                 aAttr.eLinMix=aDefAttr.eLinMix;
@@ -1924,7 +1924,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         case GOrdPBgMix: PushAttr(nOrderID);
             [[fallthrough]];
         case GOrdSBgMix: {
-            sal_uInt8 nMix;
+            sal_uInt8 nMix(0);
             pOS2MET->ReadUChar( nMix );
             if (nMix==0) {
                 aAttr.eLinBgMix=aDefAttr.eLinBgMix;
@@ -1947,7 +1947,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         case GOrdPPtSym: PushAttr(nOrderID);
             [[fallthrough]];
         case GOrdSPtSym: {
-            sal_uInt8 nPatt;
+            sal_uInt8 nPatt(0);
             pOS2MET->ReadUChar( nPatt );
             aAttr.bFill = ( nPatt != 0x0f );
             break;
@@ -1971,7 +1971,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         case GOrdPLnTyp: PushAttr(nOrderID);
             [[fallthrough]];
         case GOrdSLnTyp: {
-            sal_uInt8 nType;
+            sal_uInt8 nType(0);
             pOS2MET->ReadUChar( nType );
             switch (nType) {
                 case 0:         aAttr.eLinStyle=aDefAttr.eLinStyle; break;
@@ -2001,7 +2001,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             [[fallthrough]];
         case GOrdSStLWd :
         {
-            sal_uInt8 nFlags;
+            sal_uInt8 nFlags(0);
 
             pOS2MET->ReadUChar( nFlags );
             if ( nFlags & 0x80 )
