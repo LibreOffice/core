@@ -17,20 +17,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <sal/log.hxx>
+#include <comphelper/sequence.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <unotools/configmgr.hxx>
+
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
-#include <sal/log.hxx>
 
+#include <PhysicalFontFace.hxx>
 #include <fontinstance.hxx>
 #include <fontselect.hxx>
 #include <impfontmetricdata.hxx>
 #include <sft.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include <comphelper/sequence.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -49,6 +53,20 @@ FontMetric::FontMetric()
 {}
 
 FontMetric::FontMetric( const FontMetric& rFontMetric ) = default;
+
+FontMetric::FontMetric(PhysicalFontFace const& rFace)
+{
+    SetFamilyName(rFace.GetFamilyName());
+    SetStyleName(rFace.GetStyleName());
+    SetCharSet(rFace.GetCharSet());
+    SetFamily(rFace.GetFamilyType());
+    SetPitch(rFace.GetPitch());
+    SetWeight(rFace.GetWeight());
+    SetItalic(rFace.GetItalic());
+    SetAlignment(TextAlign::ALIGN_TOP);
+    SetWidthType(rFace.GetWidthType());
+    SetQuality(rFace.GetQuality() );
+}
 
 FontMetric::~FontMetric()
 {
