@@ -67,6 +67,7 @@
 #include <lwpglobalmgr.hxx>
 
 #include <sal/log.hxx>
+#include <unotools/configmgr.hxx>
 
 #include <xfilter/xfstylemanager.hxx>
 #include <xfilter/xfcell.hxx>
@@ -813,13 +814,14 @@ LwpCellBorderType LwpConnectedCellLayout::GetCellBorderType(sal_uInt16 nRow, sal
 void LwpConnectedCellLayout::Read()
 {
     LwpCellLayout::Read();
-    sal_uInt16 numcols;
 
     cnumrows = m_pObjStrm->QuickReaduInt16();
-    numcols = m_pObjStrm->QuickReaduInt16();        // written as a lushort
+    sal_uInt16 numcols = m_pObjStrm->QuickReaduInt16();        // written as a lushort
     cnumcols = static_cast<sal_uInt8>(numcols);
 
     m_nRealrowspan = cnumrows;
+    if (utl::ConfigManager::IsFuzzing())
+        m_nRealrowspan = std::min<sal_uInt16>(m_nRealrowspan, SAL_MAX_INT16);
     m_nRealcolspan = cnumcols;
 
     m_pObjStrm->SkipExtra();
