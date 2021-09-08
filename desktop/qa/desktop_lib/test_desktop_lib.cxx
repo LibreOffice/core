@@ -198,7 +198,8 @@ public:
     void testMetricField();
     void testMultiDocuments();
     void testJumpCursor();
-    void testRenderSearchResult();
+    void testRenderSearchResult_WriterNode();
+    void testRenderSearchResult_CommonNode();
     void testNoDuplicateTableSelection();
     void testMultiViewTableSelection();
     void testABI();
@@ -264,7 +265,8 @@ public:
     CPPUNIT_TEST(testMetricField);
     CPPUNIT_TEST(testMultiDocuments);
     CPPUNIT_TEST(testJumpCursor);
-    CPPUNIT_TEST(testRenderSearchResult);
+    CPPUNIT_TEST(testRenderSearchResult_WriterNode);
+    CPPUNIT_TEST(testRenderSearchResult_CommonNode);
     CPPUNIT_TEST(testNoDuplicateTableSelection);
     CPPUNIT_TEST(testMultiViewTableSelection);
     CPPUNIT_TEST(testABI);
@@ -3096,7 +3098,7 @@ void DesktopLOKTest::testJumpCursor()
     comphelper::LibreOfficeKit::setTiledAnnotations(true);
 }
 
-void DesktopLOKTest::testRenderSearchResult()
+void DesktopLOKTest::testRenderSearchResult_WriterNode()
 {
     constexpr const bool bDumpBitmap = false;
 
@@ -3137,6 +3139,51 @@ void DesktopLOKTest::testRenderSearchResult()
     }
     CPPUNIT_ASSERT_EQUAL(tools::Long(642), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(561), aBitmap.GetSizePixel().Height());
+
+    std::free(pBuffer);
+}
+
+void DesktopLOKTest::testRenderSearchResult_CommonNode()
+{
+    constexpr const bool bDumpBitmap = false;
+
+    LibLODocument_Impl* pDocument = loadDoc("SearchIndexResultShapeTest.odt");
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+
+    Scheduler::ProcessEventsToIdle();
+
+    unsigned char* pBuffer = nullptr;
+    OString aPayload =
+    "<indexing>"
+        "<paragraph node_type=\"common\" index=\"0\" object_name=\"Shape 1\" />"
+    "</indexing>";
+
+    int nWidth = 0;
+    int nHeight = 0;
+    size_t nByteSize = 0;
+
+    bool bResult = pDocument->m_pDocumentClass->renderSearchResult(pDocument, aPayload.getStr(), &pBuffer, &nWidth, &nHeight, &nByteSize);
+
+    CPPUNIT_ASSERT(bResult);
+    CPPUNIT_ASSERT(pBuffer);
+
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(192, nWidth);
+    CPPUNIT_ASSERT_EQUAL(96, nHeight);
+    CPPUNIT_ASSERT_EQUAL(size_t(73728), nByteSize);
+
+    const sal_uInt8* pD = reinterpret_cast<const sal_uInt8*>(pBuffer);
+    BitmapEx aBitmap = vcl::bitmap::CreateFromData(pD, nWidth, nHeight, nWidth * 4, 32, true);
+
+    if (bDumpBitmap)
+    {
+        SvFileStream aStream("~/SearchResultBitmap.png", StreamMode::WRITE | StreamMode::TRUNC);
+        vcl::PNGWriter aPNGWriter(aBitmap);
+        aPNGWriter.Write(aStream);
+    }
+    CPPUNIT_ASSERT_EQUAL(tools::Long(192), aBitmap.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(96), aBitmap.GetSizePixel().Height());
 
     std::free(pBuffer);
 }
