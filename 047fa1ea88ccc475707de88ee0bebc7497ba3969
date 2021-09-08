@@ -70,6 +70,42 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2b97e46_fcafec6b",
+        "filename": "configure.ac",
+        "patchSetId": 8
+      },
+      "lineNbr": 10356,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-08T07:16:05Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "83f5f1ff_744ee7c4",
+      "revId": "047fa1ea88ccc475707de88ee0bebc7497ba3969",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22a7e31e_778ff3fe",
+        "filename": "configure.ac",
+        "patchSetId": 8
+      },
+      "lineNbr": 10356,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-08T07:16:05Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "f84f2c19_73d25690",
+      "revId": "047fa1ea88ccc475707de88ee0bebc7497ba3969",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9e9b3a29_a811d7c6",
@@ -83,6 +119,24 @@
       "writtenOn": "2021-09-07T18:08:26Z",
       "side": 1,
       "message": "this must not contain that space. That space makes it fails:\n\nchecking which cuckoo to use... external\nchecking for  libcuckoo/cuckoohash_map.hh... no\nconfigure: error:  libcuckoo/cuckoohash_map.hh not found. install cuckoo\nError running configure at ./autogen.sh line 322.\n\n(of course, a #include \u003c libcuckoo/cuckoohash_map.hh\u003e would be wrong.)",
+      "revId": "047fa1ea88ccc475707de88ee0bebc7497ba3969",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72b20c0b_9d74b401",
+        "filename": "configure.ac",
+        "patchSetId": 8
+      },
+      "lineNbr": 10360,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-08T07:16:05Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "9e9b3a29_a811d7c6",
       "revId": "047fa1ea88ccc475707de88ee0bebc7497ba3969",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
