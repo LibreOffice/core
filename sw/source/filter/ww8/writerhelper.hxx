@@ -224,8 +224,7 @@ namespace sw
         */
         template<class T> const T & item_cast(const SfxPoolItem &rItem)
         {
-            if (dynamic_cast<const T *>(&rItem) == nullptr)
-                throw std::bad_cast();
+            assert(dynamic_cast<const T *>(&rItem) && "bad type cast");
             return static_cast<const T &>(rItem);
         }
 
