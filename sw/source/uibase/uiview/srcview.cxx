@@ -201,7 +201,7 @@ SwSrcView::SwSrcView(SfxViewFrame* pViewFrame, SfxViewShell*) :
 SwSrcView::~SwSrcView()
 {
     SwDocShell* pDocShell = GetDocShell();
-    OSL_ENSURE(dynamic_cast<SwWebDocShell*>( pDocShell), "Why no WebDocShell?" );
+    assert(dynamic_cast<SwWebDocShell*>( pDocShell) && "Why no WebDocShell?" );
     const TextSelection&  rSel = aEditWin->GetTextView()->GetSelection();
     static_cast<SwWebDocShell*>(pDocShell)->SetSourcePara( static_cast< sal_uInt16 >( rSel.GetStart().GetPara() ) );
 
@@ -833,7 +833,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
         pDocShell->SetModified();// The flag will be reset in between times.
     // Disable AutoLoad
     pDocShell->SetAutoLoad(INetURLObject(), 0, false);
-    OSL_ENSURE(dynamic_cast<SwWebDocShell*>( pDocShell), "Why no WebDocShell?" );
+    assert(dynamic_cast<SwWebDocShell*>( pDocShell) && "Why no WebDocShell?" );
     sal_uInt16 nLine = static_cast<SwWebDocShell*>(pDocShell)->GetSourcePara();
     aEditWin->SetStartLine(nLine);
     aEditWin->GetTextEngine()->ResetUndo();

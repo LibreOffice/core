@@ -183,7 +183,7 @@ namespace frm
 
     AttributeCheckState ParaAlignmentHandler::implGetCheckState( const SfxPoolItem& _rItem ) const
     {
-        OSL_ENSURE( dynamic_cast<const SvxAdjustItem*>( &_rItem) !=  nullptr, "ParaAlignmentHandler::implGetCheckState: invalid pool item!" );
+        assert( dynamic_cast<const SvxAdjustItem*>( &_rItem) && "ParaAlignmentHandler::implGetCheckState: invalid pool item!" );
         SvxAdjust eAdjust = static_cast< const SvxAdjustItem& >( _rItem ).GetAdjust();
         return ( eAdjust == m_eAdjust ) ? eChecked : eUnchecked;
     }
@@ -213,7 +213,7 @@ namespace frm
 
     AttributeCheckState LineSpacingHandler::implGetCheckState( const SfxPoolItem& _rItem ) const
     {
-        OSL_ENSURE( dynamic_cast<const SvxLineSpacingItem*>( &_rItem) !=  nullptr, "LineSpacingHandler::implGetCheckState: invalid pool item!" );
+        assert( dynamic_cast<const SvxLineSpacingItem*>( &_rItem) && "LineSpacingHandler::implGetCheckState: invalid pool item!" );
         sal_uInt16 nLineSpace = static_cast< const SvxLineSpacingItem& >( _rItem ).GetPropLineSpace();
         return ( nLineSpace == m_nLineSpace ) ? eChecked : eUnchecked;
     }
@@ -250,7 +250,7 @@ namespace frm
 
     AttributeCheckState EscapementHandler::implGetCheckState( const SfxPoolItem& _rItem ) const
     {
-        OSL_ENSURE( dynamic_cast<const SvxEscapementItem*>( &_rItem) !=  nullptr, "EscapementHandler::getState: invalid pool item!" );
+        assert( dynamic_cast<const SvxEscapementItem*>( &_rItem) && "EscapementHandler::getState: invalid pool item!" );
         SvxEscapement eEscapement = static_cast< const SvxEscapementItem& >( _rItem ).GetEscapement();
         return ( eEscapement == m_eEscapement ) ? eChecked : eUnchecked;
     }
@@ -389,7 +389,7 @@ namespace frm
 
     AttributeCheckState ParagraphDirectionHandler::implGetCheckState( const SfxPoolItem& _rItem ) const
     {
-        OSL_ENSURE( dynamic_cast<const SvxFrameDirectionItem*>( &_rItem) !=  nullptr, "ParagraphDirectionHandler::implGetCheckState: invalid pool item!" );
+        assert( dynamic_cast<const SvxFrameDirectionItem*>( &_rItem) && "ParagraphDirectionHandler::implGetCheckState: invalid pool item!" );
         SvxFrameDirection eDirection = static_cast< const SvxFrameDirectionItem& >( _rItem ).GetValue();
         return ( eDirection == m_eParagraphDirection ) ? eChecked : eUnchecked;
     }

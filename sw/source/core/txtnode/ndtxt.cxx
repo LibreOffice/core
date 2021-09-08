@@ -3915,8 +3915,7 @@ namespace {
 SwFormatColl* SwTextNode::ChgFormatColl( SwFormatColl *pNewColl )
 {
     OSL_ENSURE( pNewColl,"ChgFormatColl: Collectionpointer has value 0." );
-    OSL_ENSURE( dynamic_cast<const SwTextFormatColl *>(pNewColl) != nullptr,
-                "ChgFormatColl: is not a Text Collection pointer." );
+    assert( dynamic_cast<const SwTextFormatColl *>(pNewColl) && "ChgFormatColl: is not a Text Collection pointer." );
 
     SwTextFormatColl *pOldColl = GetTextColl();
     if( pNewColl != pOldColl )

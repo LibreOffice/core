@@ -737,8 +737,7 @@ void MetaField::GetPrefixAndSuffix(
     try
     {
         const uno::Reference<rdf::XMetadatable> xMetaField( MakeUnoObject() );
-        OSL_ENSURE(dynamic_cast<SwXMetaField*>(xMetaField.get()),
-                "GetPrefixAndSuffix: no SwXMetaField?");
+        assert(dynamic_cast<SwXMetaField*>(xMetaField.get()) && "GetPrefixAndSuffix: no SwXMetaField?");
         if (xMetaField.is())
         {
             SwTextNode * const pTextNode( GetTextNode() );

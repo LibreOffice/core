@@ -420,7 +420,7 @@ void ScModule::Execute( SfxRequest& rReq )
             if (pReqArgs)
             {
                 auto const & p = pReqArgs->Get(SID_PSZ_FUNCTION);
-                OSL_ENSURE(dynamic_cast<const SfxUInt32Item*>(&p) !=  nullptr,"wrong Parameter");
+                assert(dynamic_cast<const SfxUInt32Item*>(&p) && "wrong Parameter");
                 const SfxUInt32Item& rItem = static_cast<const SfxUInt32Item&>(p);
 
                 ScAppOptions aNewOpts( GetAppOptions() );
