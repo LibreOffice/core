@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f016548_f52371da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-08T08:36:40Z",
+      "side": 1,
+      "message": "The antialiasing *feels* like belong to state; so is there some plan to drop the \"state\" CXX at all? Or is there some other reason to move?",
+      "revId": "82368d091b52fa6cad25287aa862d086340e0daa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
