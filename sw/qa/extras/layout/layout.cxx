@@ -3719,6 +3719,20 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf135035)
     CPPUNIT_ASSERT_GREATER(nParentWidth, nFly3Width);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf139336_ColumnsWithFootnoteDoNotOccupyEntirePage)
+{
+    SwDoc* pDoc
+        = createSwDoc(DATA_DIRECTORY, "tdf139336_ColumnsWithFootnoteDoNotOccupyEntirePage.docx");
+    CPPUNIT_ASSERT(pDoc);
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Without the fix, it would be 5 pages, but with the fix the whole document
+    // would fit into 1 page, but it will be 2 pages right now, because
+    // when writer import (from docx) the last section with columns, then it does not set
+    // the evenly distributed settings, and this settings is required for the fix now, to
+    // avoid some regression.
+    assertXPath(pXmlDoc, "/root/page", 2);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
