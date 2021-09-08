@@ -1315,7 +1315,7 @@ namespace emfio
                                         mpEMFStream.reset();
                                     }
                                     else
-                                        mpEMFStream = std::make_unique<SvMemoryStream>(mnEMFSize, 0);
+                                        mpEMFStream = std::vector<sal_uInt8>();
                                 }
                                 else if( (mnEMFRecCount != nComRecCount ) || (mnEMFSize != nEMFTotalSize ) ) // add additional checks here
                                 {
@@ -1343,7 +1343,9 @@ namespace emfio
                                     std::vector<sal_Int8> aBuf(nCurRecSize);
                                     sal_uInt32 nCount = mpInputStream->ReadBytes(aBuf.data(), nCurRecSize);
                                     if( nCount == nCurRecSize )
-                                        mpEMFStream->WriteBytes(aBuf.data(), nCount);
+                                    {
+                                        mpEMFStream->insert(mpEMFStream->end(), aBuf.begin(), aBuf.end());
+                                    }
                                 }
                             }
                         }
@@ -1594,8 +1596,8 @@ namespace emfio
                         if(mpEMFStream && mnEMFRecCount == mnEMFRec)
                         {
                             GDIMetaFile aMeta;
-                            mpEMFStream->Seek( 0 );
-                            std::unique_ptr<EmfReader> pEMFReader(std::make_unique<EmfReader>( *mpEMFStream, aMeta ));
+                            SvMemoryStream aStream(mpEMFStream->data(), mpEMFStream->size(), StreamMode::STD_READ);
+                            std::unique_ptr<EmfReader> pEMFReader(std::make_unique<EmfReader>(aStream, aMeta));
                             pEMFReader->SetEnableEMFPlus(mbEnableEMFPlus);
                             bEMFAvailable = pEMFReader->ReadEnhWMF();
                             pEMFReader.reset(); // destroy first!!!
