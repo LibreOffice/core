@@ -731,7 +731,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
 
     ShapeFlag nMirrorFlags = ShapeFlag::NONE;
     MSO_SPT eShapeType = EscherPropertyContainer::GetCustomShapeType( xShape, nMirrorFlags, sShapeType );
-    OSL_ENSURE(nullptr != dynamic_cast< SdrObjCustomShape* >(SdrObject::getSdrObjectFromXShape(xShape)), "Not a SdrObjCustomShape (!)");
+    assert(dynamic_cast< SdrObjCustomShape* >(SdrObject::getSdrObjectFromXShape(xShape)) && "Not a SdrObjCustomShape (!)");
     SdrObjCustomShape& rSdrObjCustomShape(static_cast< SdrObjCustomShape& >(*SdrObject::getSdrObjectFromXShape(xShape)));
     const bool bIsDefaultObject(
         EscherPropertyContainer::IsDefaultObject(

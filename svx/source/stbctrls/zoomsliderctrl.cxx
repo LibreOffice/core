@@ -167,7 +167,7 @@ void SvxZoomSliderControl::StateChangedAtStatusBarControl( sal_uInt16 /*nSID*/, 
     }
     else
     {
-        OSL_ENSURE( dynamic_cast<const SvxZoomSliderItem*>( pState) !=  nullptr, "invalid item type: should be a SvxZoomSliderItem" );
+        assert( dynamic_cast<const SvxZoomSliderItem*>( pState) && "invalid item type: should be a SvxZoomSliderItem" );
         mxImpl->mnCurrentZoom = static_cast<const SvxZoomSliderItem*>( pState )->GetValue();
         mxImpl->mnMinZoom     = static_cast<const SvxZoomSliderItem*>( pState )->GetMinZoom();
         mxImpl->mnMaxZoom     = static_cast<const SvxZoomSliderItem*>( pState )->GetMaxZoom();

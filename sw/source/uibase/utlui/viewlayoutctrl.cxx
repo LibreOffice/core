@@ -65,7 +65,7 @@ void SwViewLayoutControl::StateChangedAtStatusBarControl( sal_uInt16 /*nSID*/, S
         GetStatusBar().SetItemText( GetId(), OUString() );
     else
     {
-        OSL_ENSURE( dynamic_cast< const SvxViewLayoutItem *>( pState ) !=  nullptr, "invalid item type" );
+        assert( dynamic_cast< const SvxViewLayoutItem *>( pState )  && "invalid item type" );
         const sal_uInt16 nColumns  = static_cast<const SvxViewLayoutItem*>( pState )->GetValue();
         const bool   bBookMode = static_cast<const SvxViewLayoutItem*>( pState )->IsBookMode();
 

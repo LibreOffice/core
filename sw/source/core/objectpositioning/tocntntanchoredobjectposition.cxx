@@ -81,7 +81,7 @@ SwTwips SwToContentAnchoredObjectPosition::ToCharTopOfLine() const
 
 SwTextFrame& SwToContentAnchoredObjectPosition::GetAnchorTextFrame() const
 {
-    OSL_ENSURE( dynamic_cast<const SwTextFrame*>( &GetAnchorFrame()) != nullptr ,
+    assert( dynamic_cast<const SwTextFrame*>( &GetAnchorFrame()) &&
             "SwToContentAnchoredObjectPosition::GetAnchorTextFrame() - wrong anchor frame type" );
 
     return static_cast<SwTextFrame&>(GetAnchorFrame());

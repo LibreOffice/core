@@ -2456,7 +2456,7 @@ void SwLayoutFrame::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
         }
         else
         {
-            OSL_ENSURE( dynamic_cast<const SwAnchoredDrawObject*>( pObj) !=  nullptr,
+            assert( dynamic_cast<const SwAnchoredDrawObject*>( pObj) &&
                     "<SwLayoutFrame::NotifyFlys() - anchored object of unexpected type" );
             // #i26945# - use <pAnchorFrame> to check, if
             // fly frame is lower of layout frame resp. if fly frame is

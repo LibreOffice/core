@@ -292,7 +292,7 @@ SwSidebarItem* SwPostItMgr::InsertItem(SfxBroadcaster* pItem, bool bCheckExisten
         mvPostItFields.push_back(std::make_unique<SwAnnotationItem>(*pSwFormatField, bFocus));
         pAnnotationItem = mvPostItFields.back().get();
     }
-    OSL_ENSURE(dynamic_cast< const SwFormatField *>( pItem ) !=  nullptr,"Mgr::InsertItem: seems like new stuff was added");
+    assert(dynamic_cast< const SwFormatField *>( pItem ) && "Mgr::InsertItem: seems like new stuff was added");
     StartListening(*pItem);
     return pAnnotationItem;
 }

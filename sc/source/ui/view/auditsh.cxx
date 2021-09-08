@@ -91,7 +91,7 @@ void ScAuditingShell::Execute( const SfxRequest& rReq )
                     if ( pReqArgs->GetItemState( SID_RANGE_COL, true, &pXItem ) == SfxItemState::SET
                       && pReqArgs->GetItemState( SID_RANGE_ROW, true, &pYItem ) == SfxItemState::SET )
                     {
-                        OSL_ENSURE( dynamic_cast<const SfxInt16Item*>( pXItem) != nullptr && dynamic_cast<const SfxInt32Item*>( pYItem) !=  nullptr,
+                        assert( dynamic_cast<const SfxInt16Item*>( pXItem) && dynamic_cast<const SfxInt32Item*>( pYItem) &&
                                         "wrong items" );
                         SCCOL nCol = static_cast<SCCOL>(static_cast<const SfxInt16Item*>(pXItem)->GetValue());
                         SCROW nRow = static_cast<SCROW>(static_cast<const SfxInt32Item*>(pYItem)->GetValue());

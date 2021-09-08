@@ -304,7 +304,7 @@ void SwViewShell::CalcPagesForPrint( sal_uInt16 nMax )
 
 void SwViewShell::FillPrtDoc( SwDoc& rPrtDoc, const SfxPrinter* pPrt)
 {
-    OSL_ENSURE( dynamic_cast<const SwFEShell*>( this) !=  nullptr,"SwViewShell::Prt for FEShell only");
+    assert( dynamic_cast<const SwFEShell*>( this) && "SwViewShell::Prt for FEShell only");
     SwFEShell* pFESh = static_cast<SwFEShell*>(this);
     rPrtDoc.getIDocumentFieldsAccess().LockExpFields();
 

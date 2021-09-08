@@ -61,7 +61,7 @@ SwAsCharAnchoredObjectPosition::~SwAsCharAnchoredObjectPosition()
 /** method to cast <SwAnchoredObjectPosition::GetAnchorFrame()> to needed type */
 const SwTextFrame& SwAsCharAnchoredObjectPosition::GetAnchorTextFrame() const
 {
-    OSL_ENSURE( dynamic_cast<const SwTextFrame*>( &GetAnchorFrame() ) !=  nullptr,
+    assert( dynamic_cast<const SwTextFrame*>( &GetAnchorFrame() ) &&
             "SwAsCharAnchoredObjectPosition::GetAnchorTextFrame() - wrong anchor frame type" );
 
     return static_cast<const SwTextFrame&>(GetAnchorFrame());
@@ -264,7 +264,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
             rAnchorFrame.SwitchHorizontalToVertical( aAnchorPos );
 
         // #i44347# - keep last object rectangle at anchored object
-        OSL_ENSURE( dynamic_cast<const SwAnchoredDrawObject*>( &GetAnchoredObj() ) !=  nullptr,
+        assert( dynamic_cast<const SwAnchoredDrawObject*>( &GetAnchoredObj() ) &&
                  "<SwAsCharAnchoredObjectPosition::CalcPosition()> - wrong type of anchored object." );
         SwAnchoredDrawObject& rAnchoredDrawObj =
                         static_cast<SwAnchoredDrawObject&>( GetAnchoredObj() );
@@ -291,7 +291,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
             aRelAttr = Point( 0, nRelPos );
 
         // OD 2004-03-23 #i26791#
-        OSL_ENSURE( dynamic_cast<const SwFlyInContentFrame*>( &GetAnchoredObj()) !=  nullptr,
+        assert( dynamic_cast<const SwFlyInContentFrame*>( &GetAnchoredObj()) &&
                 "<SwAsCharAnchoredObjectPosition::CalcPosition()> - wrong anchored object." );
         const SwFlyInContentFrame& rFlyInContentFrame =
                 static_cast<const SwFlyInContentFrame&>(GetAnchoredObj());

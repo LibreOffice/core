@@ -1246,8 +1246,7 @@ SwXMetaField::SwXMetaField(SwDoc *const pDoc, ::sw::Meta *const pMeta,
         std::unique_ptr<TextRangeList_t const> pPortions)
     : SwXMetaField_Base(pDoc, pMeta, xParentText, std::move(pPortions))
 {
-    OSL_ENSURE(dynamic_cast< ::sw::MetaField* >(pMeta),
-        "SwXMetaField created for wrong hint!");
+    assert(dynamic_cast< ::sw::MetaField* >(pMeta) && "SwXMetaField created for wrong hint!");
 }
 
 SwXMetaField::SwXMetaField(SwDoc *const pDoc)

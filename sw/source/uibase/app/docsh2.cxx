@@ -689,8 +689,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     }
                 }
 
-                OSL_ENSURE(dynamic_cast<SwWebDocShell*>(this),
-                            "SourceView only in WebDocShell");
+                assert(dynamic_cast<SwWebDocShell*>(this) && "SourceView only in WebDocShell");
 
                 // the SourceView is not the 1 for SwWebDocShell
                 sal_uInt16 nSlot = SID_VIEWSHELL1;
@@ -1156,7 +1155,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
         case SID_ATTR_YEAR2000:
             if ( pArgs && SfxItemState::SET == pArgs->GetItemState( nWhich , false, &pItem ))
             {
-                OSL_ENSURE(dynamic_cast< const SfxUInt16Item *>( pItem ) !=  nullptr, "wrong Item");
+                assert(dynamic_cast< const SfxUInt16Item *>( pItem ) && "wrong Item");
                 sal_uInt16 nYear2K = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
                 // iterate over Views and put the State to FormShells
 

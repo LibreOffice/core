@@ -245,7 +245,7 @@ namespace
         Reference <XFrame> xFrame;
         if (pArgs && pArgs->GetItemState(SID_FILLFRAME, false, &pItem) == SfxItemState::SET)
         {
-            OSL_ENSURE( dynamic_cast< const SfxUnoFrameItem *>( pItem ) !=  nullptr, "SfxApplication::OfaExec_Impl: XFrames are to be transported via SfxUnoFrameItem by now!" );
+            assert( dynamic_cast< const SfxUnoFrameItem *>( pItem ) && "SfxApplication::OfaExec_Impl: XFrames are to be transported via SfxUnoFrameItem by now!" );
             xFrame = static_cast< const SfxUnoFrameItem*>( pItem )->GetFrame();
         }
         return xFrame;

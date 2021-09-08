@@ -2595,7 +2595,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
                     const sal_uInt32 nPos = pObj->GetOrdNum();
                     for ( size_t k = 0; bSub && k < aSortObjs.size(); ++k )
                     {
-                        OSL_ENSURE( dynamic_cast< const SwFlyFrame *>( aSortObjs[k] ) !=  nullptr,
+                        assert( dynamic_cast< const SwFlyFrame *>( aSortObjs[k] ) &&
                             "<SwRootFrame::CalcFrameRects(..)> - object in <aSortObjs> of unexpected type" );
                         const SwFlyFrame* pTmp = static_cast<SwFlyFrame*>(aSortObjs[k]);
                         do
