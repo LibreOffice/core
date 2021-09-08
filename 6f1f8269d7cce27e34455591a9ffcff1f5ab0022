@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f212c053_6cec440e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-09-08T17:34:15Z",
+      "side": 1,
+      "message": "for future reverts, please also state the reason for the revert in the commit message - having the bug reference is OK, but \"CALC Row operations over 100 times slower in 7.2 compared to 7.1\" in the commit message will make it a lot easier to understand in local history/without having to browse to bugzilla...",
+      "revId": "6f1f8269d7cce27e34455591a9ffcff1f5ab0022",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
