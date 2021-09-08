@@ -31,6 +31,7 @@
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
 #include <fmtpdsc.hxx>
+#include <fmtclbl.hxx>
 #include <txtfrm.hxx>
 #include <bodyfrm.hxx>
 #include <calbck.hxx>
@@ -38,6 +39,7 @@
 #include <ndtxt.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+
 
 /// Searches the first ContentFrame in BodyText below the page.
 SwLayoutFrame *SwFootnoteBossFrame::FindBodyCont()
@@ -440,7 +442,30 @@ SwFootnoteBossFrame* SwFrame::FindFootnoteBossFrame( bool bFootnotes )
     // don't contain footnote texts there
     if( pRet->IsInTab() )
         pRet = pRet->FindTabFrame();
-    while ( pRet && !pRet->IsFootnoteBossFrame() )
+
+    // tdf139336: put the footnotes into the page frame (instead of a column frame)
+    // to avoid maximizing the section to the full page.... if:
+    // - it is in a section
+    // - collect footnotes at section end (FootnoteAtEnd) is not set
+    // - columns are evenly distributed (=balanced) is not set
+    // Note 1: at page end, the footnotes have no multi-column-capability,
+    //         so this fix is used only where there is better chance to help
+    // Note 2: If balanced is not set, there is a higher chance that the 1. column will reach
+    //         the end of the page... if that happens the section will be maximized anyway.
+    // Note 3: The user will be able to easily choose the old layout (with multi-column footnotes)
+    //         with this setting.
+    //         similar case can be reached with a page break + FootnoteAtEnd setting
+    SwSectionFrame* pSectframe = pRet->FindSctFrame();
+    bool bMoveToPageFrame = false;
+    if (pSectframe)
+    {
+        bool bNoBalance = pSectframe->GetSection()->GetFormat()->GetBalancedColumns().GetValue();
+        bool bFAtEnd = pSectframe->IsFootnoteAtEnd();
+        bMoveToPageFrame = !bFAtEnd && !bNoBalance;
+    }
+    while (pRet
+           && ((!bMoveToPageFrame && !pRet->IsFootnoteBossFrame())
+               || (bMoveToPageFrame && !pRet->IsPageFrame())))
     {
         if ( pRet->GetUpper() )
             pRet = pRet->GetUpper();

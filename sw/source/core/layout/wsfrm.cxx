@@ -4025,6 +4025,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
     if( IsSctFrame() )
     {
         // OD 14.03.2003 #i11760# - adjust 2nd parameter - sal_True --> true
+        setFrameAreaSizeValid(true);
         ::CalcContent( this, true );
         if( bBackLock )
             static_cast<SwSectionFrame*>(this)->SetFootnoteLock( false );
