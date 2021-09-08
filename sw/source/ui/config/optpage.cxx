@@ -766,10 +766,10 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
     {
         // get the set of distinct available family names
         std::set< OUString > aFontNames;
-        int nFontNames = m_pPrt->GetDevFontCount();
+        int nFontNames = m_pPrt->GetFontFaceCollectionCount();
         for( int i = 0; i < nFontNames; i++ )
         {
-            FontMetric aFontMetric( m_pPrt->GetDevFont( i ) );
+            FontMetric aFontMetric( m_pPrt->GetFontMetricFromCollection( i ) );
             aFontNames.insert( aFontMetric.GetFamilyName() );
         }
 
@@ -2234,4 +2234,4 @@ IMPL_LINK_NOARG(SwTestTabPage, AutoClickHdl, weld::Toggleable&, void)
 
 #endif
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

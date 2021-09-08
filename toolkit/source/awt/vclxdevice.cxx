@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
@@ -98,13 +100,13 @@ css::uno::Sequence< css::awt::FontDescriptor > VCLXDevice::getFontDescriptors(  
     css::uno::Sequence< css::awt::FontDescriptor> aFonts;
     if( mpOutputDevice )
     {
-        int nFonts = mpOutputDevice->GetDevFontCount();
+        int nFonts = mpOutputDevice->GetFontFaceCollectionCount();
         if ( nFonts )
         {
             aFonts = css::uno::Sequence< css::awt::FontDescriptor>( nFonts );
             css::awt::FontDescriptor* pFonts = aFonts.getArray();
             for ( int n = 0; n < nFonts; n++ )
-                pFonts[n] = VCLUnoHelper::CreateFontDescriptor( mpOutputDevice->GetDevFont( n ) );
+                pFonts[n] = VCLUnoHelper::CreateFontDescriptor( mpOutputDevice->GetFontMetricFromCollection( n ) );
         }
     }
     return aFonts;
@@ -253,4 +255,4 @@ css::awt::Size SAL_CALL VCLXDevice::convertSizeToPixel( const css::awt::Size& aS
     return aAWTSize;
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

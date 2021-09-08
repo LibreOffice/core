@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -1937,7 +1939,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
             // get device used to retrieve the FontList
             SmDocShell *pDoc = GetDoc();
             OutputDevice *pDev = pDoc->GetPrinter();
-            if (!pDev || pDev->GetDevFontCount() == 0)
+            if (!pDev || pDev->GetFontFaceCollectionCount() == 0)
                 pDev = &SM_MOD()->GetDefaultVirtualDev();
             SAL_WARN_IF( !pDev, "starmath", "device for font list missing" );
 
@@ -2172,4 +2174,4 @@ void SmViewShell::ZoomByItemSet(const SfxItemSet *pSet)
     }
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -204,10 +204,10 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
 
             // get the set of distinct available family names
             std::set< OUString > aFontNames;
-            int nFontNames = pPrt->GetDevFontCount();
+            int nFontNames = pPrt->GetFontFaceCollectionCount();
             for( int i = 0; i < nFontNames; i++ )
             {
-                FontMetric aFontMetric( pPrt->GetDevFont( i ) );
+                FontMetric aFontMetric( pPrt->GetFontMetricFromCollection( i ) );
                 aFontNames.insert( aFontMetric.GetFamilyName() );
             }
 
@@ -445,4 +445,4 @@ IMPL_LINK(SwAsciiFilterDlg, LineEndHdl, weld::Toggleable&, rBtn, void)
         rBtn.save_state();
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
