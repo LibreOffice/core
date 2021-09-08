@@ -35,7 +35,7 @@ namespace emfio
         sal_uInt32      mnRecSize;
 
         // embedded EMF data
-        std::unique_ptr<SvMemoryStream> mpEMFStream;
+        std::optional<std::vector<sal_uInt8>> mpEMFStream;
 
         // total number of comment records containing EMF data
         sal_uInt32      mnEMFRecCount;
