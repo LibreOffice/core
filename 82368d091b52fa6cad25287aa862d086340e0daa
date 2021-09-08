@@ -16,6 +16,24 @@
       "message": "The antialiasing *feels* like belong to state; so is there some plan to drop the \"state\" CXX at all? Or is there some other reason to move?",
       "revId": "82368d091b52fa6cad25287aa862d086340e0daa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3aa2e2c_678f5952",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-08T11:14:58Z",
+      "side": 1,
+      "message": "Outdevstate is an unnecessary file, my plan is to eventually rename it to stack.cxx, with only push(), pop() and clearstack(). state really should be in outdev.cxx. \n\nUltimately, the end game is to separate metafile processing from rendering.",
+      "parentUuid": "8f016548_f52371da",
+      "revId": "82368d091b52fa6cad25287aa862d086340e0daa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
