@@ -17,15 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_METRIC_HXX
-#define INCLUDED_VCL_METRIC_HXX
+#pragma once
 
-#include <vcl/dllapi.h>
-#include <vcl/font.hxx>
+#include <sal/config.h>
+
 #include <tools/ref.hxx>
 #include <tools/gen.hxx>
 
+#include <vcl/dllapi.h>
+#include <vcl/font.hxx>
+
 class FontCharMap;
+class PhysicalFontFace;
 
 typedef tools::SvRef<FontCharMap> FontCharMapRef;
 
@@ -34,6 +37,7 @@ class VCL_DLLPUBLIC FontMetric : public vcl::Font
 public:
     explicit            FontMetric();
                         FontMetric( const FontMetric& );  // TODO make this explicit
+                        FontMetric(PhysicalFontFace const& rFace);
                         ~FontMetric() override;
 
     tools::Long                GetAscent() const                           { return mnAscent; }
@@ -90,7 +94,5 @@ inline std::basic_ostream<charT, traits> & operator <<(
            << "}";
     return stream;
 }
-
-#endif // INCLUDED_VCL_METRIC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
