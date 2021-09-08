@@ -32,6 +32,7 @@ $(eval $(call gb_Library_use_libraries,lwpft,\
     svxcore \
     tl \
     ucbhelper \
+    utl \
     vcl \
     xo \
 ))
