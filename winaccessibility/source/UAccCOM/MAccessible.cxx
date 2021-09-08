@@ -2550,6 +2550,7 @@ static AggMapEntry g_CMAccessible_AggMap[] = {
     { &IID_IAccessibleEditableText, &createAggInstance<CAccEditableText>, XInterfaceType::XI_EDITABLETEXT },
     { &IID_IAccessibleImage, &createAggInstance<CAccImage>, XInterfaceType::XI_IMAGE },
     { &IID_IAccessibleTable, &createAggInstance<CAccTable>, XInterfaceType::XI_TABLE },
+    { &IID_IAccessibleTable2, &createAggInstance<CAccTable>, XInterfaceType::XI_TABLE },
     { &IID_IAccessibleAction, &createAggInstance<CAccAction>, XInterfaceType::XI_ACTION },
     { &IID_IAccessibleValue, &createAggInstance<CAccValue>, XInterfaceType::XI_VALUE },
     { &IID_IAccessibleHypertext, &createAggInstance<CAccHypertext>, XInterfaceType::XI_HYPERTEXT },

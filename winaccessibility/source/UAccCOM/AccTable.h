@@ -26,12 +26,13 @@
 #include "UNOXWrapper.h"
 
 /**
- * CAccTable implements IAccessibleTable interface.
+ * CAccTable implements the IAccessibleTable and IAccessibleTable2 interfaces.
  */
 class ATL_NO_VTABLE CAccTable :
             public CComObjectRoot,
             public CComCoClass<CAccTable, &CLSID_AccTable>,
             public IAccessibleTable,
+            public IAccessibleTable2,
             public CUNOXWrapper
 
 {
@@ -45,6 +46,7 @@ public:
 
     BEGIN_COM_MAP(CAccTable)
     COM_INTERFACE_ENTRY(IAccessibleTable)
+    COM_INTERFACE_ENTRY(IAccessibleTable2)
     COM_INTERFACE_ENTRY(IUNOXWrapper)
     COM_INTERFACE_ENTRY_FUNC_BLIND(NULL,SmartQI_)
 #if defined __clang__
@@ -72,10 +74,13 @@ public:
     DECLARE_NO_REGISTRY()
 
 public:
-    // IAccessibleTable
+    // IAccessibleTable and IAccessibleTable2
 
-    // Gets accessible table cell.
+    // Gets accessible table cell (IAccessibleTable version).
     STDMETHOD(get_accessibleAt)(long row, long column, IUnknown * * accessible) override;
+
+    // Gets accessible table cell (IAccessibleTable2 version).
+    STDMETHOD(get_cellAt)(long row, long column, IUnknown * * cell) override;
 
     // Gets accessible table caption.
     STDMETHOD(get_caption)(IUnknown * * accessible) override;
@@ -111,9 +116,11 @@ public:
     STDMETHOD(get_rowHeader)(IAccessibleTable __RPC_FAR *__RPC_FAR *accessibleTable, long *startingColumnIndex) override;
 
     // Gets list of row indexes currently selected (0-based).
+    STDMETHOD(get_selectedRows)(long **rows, long * nRows) override;
     STDMETHOD(get_selectedRows)(long maxRows, long **rows, long * nRows) override;
 
     // Gets list of column indexes currently selected (0-based).
+    STDMETHOD(get_selectedColumns)(long **columns, long * numColumns) override;
     STDMETHOD(get_selectedColumns)(long maxColumns, long **columns, long * numColumns) override;
 
     // Gets accessible table summary.
@@ -149,9 +156,14 @@ public:
 
     STDMETHOD(get_childIndex)(long rowIndex,long columnIndex, long * childIndex) override;
 
+    // get total number of selected cells
     STDMETHOD(get_nSelectedChildren)(long *childCount) override;
+    STDMETHOD(get_nSelectedCells)(long *childCount) override;
 
     STDMETHOD(get_selectedChildren)(long maxChildren, long **children, long *nChildren) override;
+
+    // Returns a list of accessibles currently selected
+    STDMETHOD(get_selectedCells)(IUnknown * * * cells, long *nSelectedCells) override;
 
     STDMETHOD(get_rowColumnExtentsAtIndex)( long index,
                                             long  *row,
