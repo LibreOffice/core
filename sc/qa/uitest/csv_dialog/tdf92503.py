@@ -5,41 +5,30 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import get_cell_by_position
+from libreoffice.calc.csv_dialog import load_csv_file
 
 class Tdf92503(UITestCase):
 
     def test_tdf92503(self):
+        with load_csv_file(self, "tdf92503.csv", True) as xDialog:
+            xFixedWidth = xDialog.getChild("tofixedwidth")
+            xGrid = xDialog.getChild("csvgrid")
+            xColumnType = xDialog.getChild("columntype")
 
-        # Load file from Open dialog
-        with self.ui_test.execute_dialog_through_command(".uno:Open", close_button="open") as xOpenDialog:
+            xFixedWidth.executeAction("CLICK", tuple())
+            self.assertEqual('true', get_state_as_dict(xFixedWidth)['Checked'])
 
-            xFileName = xOpenDialog.getChild("file_name")
-            xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("tdf92503.csv")}))
+            # Use the right arrow to put the focus in the grid
+            xGrid.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RIGHT"}))
 
-        xDialog = self.ui_test.wait_for_top_focus_window('TextImportCsvDialog')
-        xFixedWidth = xDialog.getChild("tofixedwidth")
-        xGrid = xDialog.getChild("csvgrid")
-        xColumnType = xDialog.getChild("columntype")
+            self.assertEqual('true', get_state_as_dict(xColumnType)['Enabled'])
 
-        self.assertEqual('false', get_state_as_dict(xFixedWidth)['Checked'])
-        xFixedWidth.executeAction("CLICK", tuple())
-        self.assertEqual('true', get_state_as_dict(xFixedWidth)['Checked'])
+            xColumnType.executeAction("SELECT", mkPropertyValues({"TEXT": "Date (DMY)"}))
 
-        # Use the right arrow to put the focus in the grid
-        xGrid.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RIGHT"}))
-
-        self.assertEqual('true', get_state_as_dict(xColumnType)['Enabled'])
-
-        xColumnType.executeAction("SELECT", mkPropertyValues({"TEXT": "Date (DMY)"}))
-
-        self.assertEqual('Date (DMY)', get_state_as_dict(xColumnType)['SelectEntryText'])
-
-        xOK = xDialog.getChild('ok')
-        with self.ui_test.wait_until_component_loaded():
-            self.ui_test.close_dialog_through_button(xOK)
+            self.assertEqual('Date (DMY)', get_state_as_dict(xColumnType)['SelectEntryText'])
 
         document = self.ui_test.get_component()
 
@@ -55,5 +44,7 @@ class Tdf92503(UITestCase):
         self.assertEqual("03/29/15 01:00 AM", get_cell_by_position(document, 0, 0, 6).getString())
         self.assertEqual("03/29/15 02:00 AM", get_cell_by_position(document, 0, 0, 7).getString())
         self.assertEqual("03/29/15 03:00 AM", get_cell_by_position(document, 0, 0, 8).getString())
+
+        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

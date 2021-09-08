@@ -5,32 +5,19 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
-from libreoffice.uno.propertyvalue import mkPropertyValues
+from uitest.uihelper.common import get_state_as_dict
 from libreoffice.calc.document import get_cell_by_position
+from libreoffice.calc.csv_dialog import load_csv_file
 
 class Td114878(UITestCase):
 
     def test_tdf114878(self):
 
-        # Load file from Open dialog
-        with self.ui_test.execute_dialog_through_command(".uno:Open", close_button="open") as xOpenDialog:
-
-            xFileName = xOpenDialog.getChild("file_name")
-            xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("tdf114878.csv")}))
-
-        xDialog = self.ui_test.wait_for_top_focus_window('TextImportCsvDialog')
-
         # First import the file with 'Evaluate Formulas' unchecked
-
-        # Without the fix in place, this test would have failed with
-        # Could not find child with id: evaluateformulas
-        xEvalutateFormulas = xDialog.getChild("evaluateformulas")
-        self.assertEqual('false', get_state_as_dict(xEvalutateFormulas)['Selected'])
-
-        xOK = xDialog.getChild('ok')
-        with self.ui_test.wait_until_component_loaded():
-            self.ui_test.close_dialog_through_button(xOK)
+        with load_csv_file(self, "tdf114878.csv", True):
+            # Without the fix in place, this test would have failed with
+            # Could not find child with id: evaluateformulas
+            pass
 
         document = self.ui_test.get_component()
 
@@ -41,22 +28,11 @@ class Td114878(UITestCase):
 
         self.ui_test.close_doc()
 
-        # Load the same file again
-        with self.ui_test.execute_dialog_through_command(".uno:Open", close_button="open") as xOpenDialog:
-
-            xFileName = xOpenDialog.getChild("file_name")
-            xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("tdf114878.csv")}))
-
-        xDialog = self.ui_test.wait_for_top_focus_window('TextImportCsvDialog')
-
         # Now import the file with 'Evaluate Formulas' checked
-        xEvalutateFormulas = xDialog.getChild("evaluateformulas")
-        xEvalutateFormulas.executeAction("CLICK", tuple())
-        self.assertEqual('true', get_state_as_dict(xEvalutateFormulas)['Selected'])
-
-        xOK = xDialog.getChild('ok')
-        with self.ui_test.wait_until_component_loaded():
-            self.ui_test.close_dialog_through_button(xOK)
+        with load_csv_file(self, "tdf114878.csv", True) as xDialog:
+            xEvalutateFormulas = xDialog.getChild("evaluateformulas")
+            xEvalutateFormulas.executeAction("CLICK", tuple())
+            self.assertEqual('true', get_state_as_dict(xEvalutateFormulas)['Selected'])
 
         document = self.ui_test.get_component()
 
