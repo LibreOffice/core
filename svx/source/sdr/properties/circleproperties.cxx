@@ -66,12 +66,12 @@ namespace sdr::properties
             return std::unique_ptr<BaseProperties>(new CircleProperties(*this, rObj));
         }
 
-        void CircleProperties::ItemSetChanged(const SfxItemSet& rSet)
+        void CircleProperties::ItemSetChanged(const SfxItemSet* pSet)
         {
             SdrCircObj& rObj = static_cast<SdrCircObj&>(GetSdrObject());
 
             // call parent
-            RectangleProperties::ItemSetChanged(rSet);
+            RectangleProperties::ItemSetChanged(pSet);
 
             // local changes
             rObj.ImpSetAttrToCircInfo();

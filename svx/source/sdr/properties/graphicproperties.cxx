@@ -93,7 +93,7 @@ namespace sdr::properties
             return std::unique_ptr<BaseProperties>(new GraphicProperties(*this, rObj));
         }
 
-        void GraphicProperties::ItemSetChanged(const SfxItemSet& rSet)
+        void GraphicProperties::ItemSetChanged(const SfxItemSet* pSet)
         {
             SdrGrafObj& rObj = static_cast<SdrGrafObj&>(GetSdrObject());
 
@@ -109,7 +109,7 @@ namespace sdr::properties
             rObj.ImpSetAttrToGrafInfo();
 
             // call parent
-            RectangleProperties::ItemSetChanged(rSet);
+            RectangleProperties::ItemSetChanged(pSet);
         }
 
         void GraphicProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)

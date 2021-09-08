@@ -276,7 +276,7 @@ namespace sdr::properties
             return *mxItemSet;
         }
 
-        void AttributeProperties::ItemSetChanged(const SfxItemSet& /*rSet*/)
+        void AttributeProperties::ItemSetChanged(const SfxItemSet* /*pSet*/)
         {
             // own modifications
             SdrObject& rObj = GetSdrObject();

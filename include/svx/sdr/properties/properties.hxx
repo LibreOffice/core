@@ -104,7 +104,10 @@ namespace sdr::properties
             virtual void PostItemChange(const sal_uInt16 nWhich) = 0;
 
             // Internally react on ItemSet changes. The given ItemSet contains all changed items, the new ones.
-            virtual void ItemSetChanged(const SfxItemSet& rSet) = 0;
+            virtual void ItemSetChanged(const SfxItemSet*) = 0;
+            // Subclasses need to return true if they want the ItemSetChanged() callback to actually have a non-zero pointer.
+            // We do this because creating the temporary item set is expensive and seldom used.
+            virtual bool WantItemSetInItemSetChanged() const { return false; }
 
         public:
             // basic constructor, used from SdrObject.

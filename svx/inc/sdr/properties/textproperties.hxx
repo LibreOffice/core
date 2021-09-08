@@ -40,7 +40,8 @@ namespace sdr::properties
             virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) override;
 
             // react on ItemSet changes
-            virtual void ItemSetChanged(const SfxItemSet& rSet) override;
+            virtual void ItemSetChanged(const SfxItemSet*) override;
+            virtual bool WantItemSetInItemSetChanged() const override final { return true; }
 
             /// Get the TextProvider related to our SdrObject
             virtual const svx::ITextProvider& getTextProvider() const;

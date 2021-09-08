@@ -82,7 +82,7 @@ namespace sdr::properties
             assert(!"EmptyProperties::SetObjectItemSet() should never be called");
         }
 
-        void EmptyProperties::ItemSetChanged(const SfxItemSet& /*rSet*/)
+        void EmptyProperties::ItemSetChanged(const SfxItemSet* /*pSet*/)
         {
             assert(!"EmptyProperties::ItemSetChanged() should never be called");
         }

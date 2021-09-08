@@ -81,7 +81,7 @@ namespace sdr::properties
             return std::unique_ptr<BaseProperties>(new TextProperties(*this, rObj));
         }
 
-        void TextProperties::ItemSetChanged(const SfxItemSet& rSet)
+        void TextProperties::ItemSetChanged(const SfxItemSet* pSet)
         {
             SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
 
@@ -121,7 +121,7 @@ namespace sdr::properties
                     for(sal_Int32 nPara = 0; nPara < nParaCount; nPara++)
                     {
                         SfxItemSet aSet(pOutliner->GetParaAttribs(nPara));
-                        aSet.Put(rSet);
+                        aSet.Put(*pSet);
                         pOutliner->SetParaAttribs(nPara, aSet);
                     }
 
@@ -145,7 +145,7 @@ namespace sdr::properties
             }
 
             // Extra-Repaint for radical layout changes (#43139#)
-            if(SfxItemState::SET == rSet.GetItemState(SDRATTR_TEXT_CONTOURFRAME))
+            if(SfxItemState::SET == pSet->GetItemState(SDRATTR_TEXT_CONTOURFRAME))
             {
                 // Here only repaint wanted
                 rObj.ActionChanged();
@@ -153,7 +153,7 @@ namespace sdr::properties
             }
 
             // call parent
-            AttributeProperties::ItemSetChanged(rSet);
+            AttributeProperties::ItemSetChanged(pSet);
         }
 
         void TextProperties::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
@@ -394,7 +394,7 @@ namespace sdr::properties
             // #i61284# push hard ObjectItemSet to OutlinerParaObject attributes
             // using existing functionality
             GetObjectItemSet(); // force ItemSet
-            ItemSetChanged(*mxItemSet);
+            ItemSetChanged(&*mxItemSet);
 
             // now the standard TextProperties stuff
             SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());

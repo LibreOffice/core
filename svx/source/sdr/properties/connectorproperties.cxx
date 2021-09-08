@@ -63,12 +63,12 @@ namespace sdr::properties
             return std::unique_ptr<BaseProperties>(new ConnectorProperties(*this, rObj));
         }
 
-        void ConnectorProperties::ItemSetChanged(const SfxItemSet& rSet)
+        void ConnectorProperties::ItemSetChanged(const SfxItemSet* pSet)
         {
             SdrEdgeObj& rObj = static_cast<SdrEdgeObj&>(GetSdrObject());
 
             // call parent
-            TextProperties::ItemSetChanged(rSet);
+            TextProperties::ItemSetChanged(pSet);
 
             // local changes
             rObj.ImpSetAttrToEdgeInfo();
