@@ -1110,8 +1110,8 @@ private:
 
 public:
 
-    FontMetric                  GetDevFont( int nDevFontIndex ) const;
-    int                         GetDevFontCount() const;
+    FontMetric                  GetFontMetricFromCollection( int nDevFontIndex ) const;
+    int                         GetFontFaceCollectionCount() const;
 
     bool                        IsFontAvailable( const OUString& rFontName ) const;
 
