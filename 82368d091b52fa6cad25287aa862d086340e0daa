@@ -34,6 +34,24 @@
       "parentUuid": "8f016548_f52371da",
       "revId": "82368d091b52fa6cad25287aa862d086340e0daa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3002b07_fecd48a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-08T11:23:28Z",
+      "side": 1,
+      "message": "It\u0027s OK by me; however, it would be nice to state the intermediate goals that this change is part of. The \"end game\" is not that important; but a note in each and every commit that moves something from outdevstate, like\n\n  ... as a preparational step before eventual renaming of outdevstate to stack\n\nwould be awesome. It would at least tell the reader that it was a part of a bigger task with a visible scope (one may see all commits that led to eventual rename).\n\nAnd of course, something similar for task serving different intermediate goals. The message does not need to be different for each in the series. Many serial commits share the ~same message: see e.g. today\u0027s https://gerrit.libreoffice.org/c/core/+/121790, which has the same message as other ones in https://gerrit.libreoffice.org/q/a226cec52e536c46e03f57a5f1f7931abbeb0cdd.\n\nThanks.",
+      "parentUuid": "b3aa2e2c_678f5952",
+      "revId": "82368d091b52fa6cad25287aa862d086340e0daa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
