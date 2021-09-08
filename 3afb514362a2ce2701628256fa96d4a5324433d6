@@ -51,6 +51,24 @@
       "parentUuid": "793fbc34_542b9bdf",
       "revId": "3afb514362a2ce2701628256fa96d4a5324433d6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f137c425_8ef37185",
+        "filename": "sc/source/ui/drawfunc/fudraw.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-08T12:58:50Z",
+      "side": 1,
+      "message": "\u003e But it would definitely be worthwhile to move cheaper operations to the front when doing something like\n\u003e     if (dynamic_cast\u003cX\u003e \u0026\u0026 bLocalVariable)\n\nBasically, I hoped that my code would do this: it would check if bOle, if so it would cheaply assign nullptr to pOleObj, and only *when !bOle*, it would do the dynamic cast; then the \"dynamic_cast\u003cX\u003e \u0026\u0026 bLocalVariable\" would be equivalent to \"if (pointer that is only valid when local variable and dynamic_cast)\"...",
+      "parentUuid": "edd50f44_f2c00650",
+      "revId": "3afb514362a2ce2701628256fa96d4a5324433d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
