@@ -99,6 +99,11 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_accessibleAt(long row, long col
     LEAVE_PROTECTED_BLOCK
 }
 
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_cellAt(long row, long column, IUnknown * * cell)
+{
+    return get_accessibleAt(row, column, cell);
+}
+
 /**
   * Gets accessible table caption.
   *
@@ -433,11 +438,10 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_rowHeader(IAccessibleTable __RP
 /**
   * Gets list of row indexes currently selected (0-based).
   *
-  * @param    maxRows        the max number of the rows.
   * @param    accessible     the accessible object array of the selected rows.
   * @param    nRows          the actual size of the accessible object array.
   */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_selectedRows(long, long ** rows, long * nRows)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_selectedRows(long** rows, long* nRows)
 {
     SolarMutexGuard g;
 
@@ -470,13 +474,24 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_selectedRows(long, long ** rows
 }
 
 /**
+  * Gets list of row indexes currently selected (0-based).
+  *
+  * @param    maxRows        This parameter is ignored.
+  * @param    accessible     the accessible object array of the selected rows.
+  * @param    nRows          the actual size of the accessible object array.
+  */
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_selectedRows(long, long ** rows, long * nRows)
+{
+    return get_selectedRows(rows, nRows);
+}
+
+/**
   * Gets list of column indexes currently selected (0-based).
   *
-  * @param    maxColumns    the max number of the columns.
   * @param    accessible    the accessible object array of the selected columns.
   * @param    numColumns    the actual size of accessible object array.
   */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_selectedColumns(long, long ** columns, long * numColumns)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_selectedColumns(long ** columns, long * numColumns)
 {
     SolarMutexGuard g;
 
@@ -506,6 +521,18 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_selectedColumns(long, long ** c
     return S_OK;
 
     LEAVE_PROTECTED_BLOCK
+}
+
+/**
+  * Gets list of column indexes currently selected (0-based).
+  *
+  * @param    maxColumns    This parameter is ignored
+  * @param    accessible    the accessible object array of the selected columns.
+  * @param    numColumns    the actual size of accessible object array.
+  */
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_selectedColumns(long, long ** columns, long * numColumns)
+{
+    return get_selectedColumns(columns, numColumns);
 }
 
 /**
@@ -835,6 +862,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::put_XInterface(hyper pXInterface)
     LEAVE_PROTECTED_BLOCK
 }
 
+
 /**
   * Gets columnIndex of childIndex.
   *
@@ -883,6 +911,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_rowIndex(long childIndex, long 
 
     LEAVE_PROTECTED_BLOCK
 }
+
 /**
   * Gets childIndex of childIndex.
   *
@@ -950,6 +979,13 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_nSelectedChildren(long *childCo
     LEAVE_PROTECTED_BLOCK
 }
 
+
+
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_nSelectedCells(long *cellCount)
+{
+    return get_nSelectedChildren(cellCount);
+}
+
 // @brief Returns a list of child indexes currently selected (0-based).
 //   @param [in] maxChildren
 //    Max children requested (possibly from IAccessibleTable::nSelectedChildren)
@@ -999,6 +1035,61 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_selectedChildren(long, long **c
 
     LEAVE_PROTECTED_BLOCK
 
+}
+
+/**
+ * @brief Returns a list of accessibles currently selected.
+ * @param cells Pointer to an array of references to selected accessibles.
+ *        The array is allocated by the server with CoTaskMemAlloc and
+ *        freed by the client with CoTaskMemFree.
+ * @param nSelectedCells The number of accessibles returned; the size of the returned array.
+ * @return S_FALSE if there are none, [out] values are NULL and 0 respectively, otherwise S_OK
+ */
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_selectedCells(IUnknown * * * cells, long *nSelectedCells)
+{
+    SolarMutexGuard g;
+
+    ENTER_PROTECTED_BLOCK
+
+    if (cells == nullptr || nSelectedCells == nullptr)
+        return E_INVALIDARG;
+
+    if (!pRXTable.is())
+        return E_FAIL;
+
+    Reference<XAccessibleSelection> xSelection(pRXTable, UNO_QUERY);
+    if (!xSelection.is())
+        return E_FAIL;
+
+    const long nSelected = xSelection->getSelectedAccessibleChildCount();
+    *nSelectedCells = nSelected;
+
+    *cells = static_cast<IUnknown**>(CoTaskMemAlloc(nSelected * sizeof(IUnknown*)));
+
+    for (long i = 0; i < nSelected; i++)
+    {
+        Reference<XAccessible> xAcc = xSelection->getSelectedAccessibleChild(i);
+        assert(xAcc.is());
+
+        IAccessible* pIAccessible;
+        bool bOK = CMAccessible::get_IAccessibleFromXAccessible(xAcc.get(), &pIAccessible);
+
+        if (!bOK)
+        {
+            Reference<XAccessible> xTable(pRXTable, UNO_QUERY);
+            CMAccessible::g_pAgent->InsertAccObj(xAcc.get(), xTable.get());
+            bOK = CMAccessible::get_IAccessibleFromXAccessible(xAcc.get(), &pIAccessible);
+        }
+
+        assert(bOK && "Couldn't retrieve IAccessible object");
+
+        pIAccessible->AddRef();
+        (*cells)[i] = pIAccessible;
+    }
+
+    return S_OK;
+
+    LEAVE_PROTECTED_BLOCK
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
