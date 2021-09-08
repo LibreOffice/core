@@ -79,22 +79,22 @@ struct OutDevState
     OutDevState() = default;
     OutDevState(OutDevState&&) = default;
 
-    std::optional<MapMode> mpMapMode;
-    bool mbMapActive = false;
     std::unique_ptr<vcl::Region> mpClipRegion;
+    std::optional<MapMode> mpMapMode;
+    std::optional<vcl::Font> mpFont;
+    std::optional<Point> mpRefPoint;
     std::optional<Color> mpLineColor;
     std::optional<Color> mpFillColor;
-    std::optional<vcl::Font> mpFont;
     std::optional<Color> mpTextColor;
     std::optional<Color> mpTextFillColor;
     std::optional<Color> mpTextLineColor;
     std::optional<Color> mpOverlineColor;
-    std::optional<Point> mpRefPoint;
     TextAlign meTextAlign = ALIGN_TOP;
     RasterOp meRasterOp = RasterOp::OverPaint;
     ComplexTextLayoutFlags mnTextLayoutMode = ComplexTextLayoutFlags::Default;
     LanguageType meTextLanguage = LANGUAGE_SYSTEM;
     PushFlags mnFlags = PushFlags::NONE;
+    bool mbMapActive = false;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

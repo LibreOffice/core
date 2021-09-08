@@ -309,16 +309,15 @@ class VCL_DLLPUBLIC CommandGestureData
 public:
     double const mfX;
     double const mfY;
-    GestureEventType const meEventType;
-
     double const mfOffset;
+    GestureEventType const meEventType;
     PanningOrientation const meOrientation;
 
     CommandGestureData(double fX, double fY, GestureEventType eEventType, double fOffset, PanningOrientation eOrientation)
         : mfX(fX)
         , mfY(fY)
-        , meEventType(eEventType)
         , mfOffset(fOffset)
+        , meEventType(eEventType)
         , meOrientation(eOrientation)
     {}
 };

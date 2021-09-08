@@ -575,8 +575,8 @@ BrowseEvent::BrowseEvent( vcl::Window* pWindow,
                           sal_Int32 nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
                           const tools::Rectangle& rRect ):
     pWin(pWindow),
-    nRow(nAbsRow),
     aRect(rRect),
+    nRow(nAbsRow),
     nCol(nColumn),
     nColId(nColumnId)
 {

@@ -143,20 +143,17 @@ double EDITENG_DLLPUBLIC ConvertBorderWidthFromWord(SvxBorderLineStyle,
 
 class EDITENG_DLLPUBLIC SvxBorderLine final
 {
-    Color  aColor;
-
     tools::Long m_nWidth;
-    bool m_bMirrorWidths;
-    BorderWidthImpl m_aWidthImpl;
     tools::Long m_nMult;
     tools::Long m_nDiv;
-
+    Color (*m_pColorOutFn)(Color);
+    Color (*m_pColorInFn)(Color);
+    Color (*m_pColorGapFn)(Color);
+    BorderWidthImpl m_aWidthImpl;
+    Color aColor;
     SvxBorderLineStyle   m_nStyle;
-
-    bool             m_bUseLeftTop;
-    Color            (*m_pColorOutFn)( Color );
-    Color            (*m_pColorInFn)( Color );
-    Color            (*m_pColorGapFn)( Color );
+    bool m_bMirrorWidths;
+    bool m_bUseLeftTop;
 
 public:
     SvxBorderLine( const Color *pCol = nullptr,

@@ -533,13 +533,13 @@ public:
     struct UIControlOptions
     {
         OUString         maDependsOnName;
-        sal_Int32        mnDependsOnEntry;
-        bool             mbAttachToDependency;
         OUString         maGroupHint;
-        bool             mbInternalOnly;
-        bool             mbEnabled;
         std::vector< css::beans::PropertyValue >
                          maAddProps;
+        sal_Int32        mnDependsOnEntry;
+        bool             mbAttachToDependency;
+        bool             mbInternalOnly;
+        bool             mbEnabled;
 
                          UIControlOptions( const OUString& i_rDependsOnName = OUString(),
                              sal_Int32 i_nDependsOnEntry = -1, bool i_bAttachToDependency = false)
