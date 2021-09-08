@@ -16,6 +16,24 @@
       "message": "Do we still want this for 7-1?",
       "revId": "87d5ca5d4e507fa05f5a0243345232fa66c728f8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4521cc7_53cfd31d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2021-09-08T05:32:35Z",
+      "side": 1,
+      "message": "I leave that to you. Looks OK to me, but I haven\u0027t built and tested explicitly.\nSince tdf#143796 is qt5-only (doesn\u0027t affect kf5) and it\u0027s fixed in 7.2, I probably wouldn\u0027t have put any extra effort for the last 7.1 release, but now that you\u0027ve already done the work...",
+      "parentUuid": "6b0d7e16_b1d1303e",
+      "revId": "87d5ca5d4e507fa05f5a0243345232fa66c728f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
