@@ -29,7 +29,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/bitmapex.hxx>
 #include <vcl/font.hxx>
-#include <vcl/bitmapex.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/gradient.hxx>
