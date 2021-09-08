@@ -98,13 +98,13 @@ css::uno::Sequence< css::awt::FontDescriptor > VCLXDevice::getFontDescriptors(  
     css::uno::Sequence< css::awt::FontDescriptor> aFonts;
     if( mpOutputDevice )
     {
-        int nFonts = mpOutputDevice->GetDevFontCount();
+        int nFonts = mpOutputDevice->GetFontFaceCollectionCount();
         if ( nFonts )
         {
             aFonts = css::uno::Sequence< css::awt::FontDescriptor>( nFonts );
             css::awt::FontDescriptor* pFonts = aFonts.getArray();
             for ( int n = 0; n < nFonts; n++ )
-                pFonts[n] = VCLUnoHelper::CreateFontDescriptor( mpOutputDevice->GetDevFont( n ) );
+                pFonts[n] = VCLUnoHelper::CreateFontDescriptor( mpOutputDevice->GetFontMetricFromCollection( n ) );
         }
     }
     return aFonts;
