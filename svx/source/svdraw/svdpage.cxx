@@ -561,6 +561,20 @@ SdrObject* SdrObjList::SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum)
     return pObj;
 }
 
+void SdrObjList::SetObjectOrdNum(SdrObject* pObj, size_t nNewObjNum)
+{
+    assert(std::find(maList.begin(), maList.end(), pObj) != maList.end() && "This method requires that the child object already be inserted");
+    assert(pObj->IsInserted() && "SdrObjList::SetObjectOrdNum: the object does not have status Inserted.");
+
+    pObj->SetOrdNum(nNewObjNum);
+    mbObjOrdNumsDirty=true;
+
+    // TODO: We need a different broadcast here.
+    if (pObj->getSdrPageFromSdrObject()!=nullptr)
+        pObj->getSdrModelFromSdrObject().Broadcast(SdrHint(SdrHintKind::ObjectChange, *pObj));
+    pObj->getSdrModelFromSdrObject().SetChanged();
+}
+
 void SdrObjList::sort( std::vector<sal_Int32>& sortOrder)
 {
     // no negative indexes and indexes larger than maList size are allowed
