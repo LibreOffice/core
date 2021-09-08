@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8889bcf_8861d4a5",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-08T22:35:24Z",
+      "side": 1,
+      "message": "Max password is not 256, it\u0027s 255. You can\u0027t put value \u0027256\u0027 into a char.",
+      "revId": "8b4c6b0d6f5867967ed2e32876f3b919ae41a95b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
