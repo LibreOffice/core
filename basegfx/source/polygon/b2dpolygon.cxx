@@ -463,7 +463,7 @@ private:
     std::optional< basegfx::B2DPolygon >  mpDefaultSubdivision;
 
     // Possibility to hold the last B2DRange calculation
-    std::unique_ptr< basegfx::B2DRange >    mpB2DRange;
+    mutable std::optional< basegfx::B2DRange > moB2DRange;
 
 public:
     ImplBufferedData()
@@ -482,7 +482,7 @@ public:
 
     const basegfx::B2DRange& getB2DRange(const basegfx::B2DPolygon& rSource) const
     {
-        if(!mpB2DRange)
+        if(!moB2DRange)
         {
             basegfx::B2DRange aNewRange;
             const sal_uInt32 nPointCount(rSource.count());
@@ -542,10 +542,10 @@ public:
                 }
             }
 
-            const_cast< ImplBufferedData* >(this)->mpB2DRange.reset(new basegfx::B2DRange(aNewRange));
+            moB2DRange = aNewRange;
         }
 
-        return *mpB2DRange;
+        return *moB2DRange;
     }
 };
 
