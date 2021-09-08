@@ -760,12 +760,13 @@ void Chart2Positioner::createPositionMap()
                     aCellData.SetAbsRow(nRow);
                     aCellData.SetAbsTab(nTab);
 
-                    if (rCol.find(nInsRow) == rCol.end())
+                    auto& rCell = rCol[nInsRow];
+                    if (!rCell)
                     {
                         if (bExternal)
-                            rCol[ nInsRow ].reset(new ScExternalSingleRefToken(nFileId, aTabName, aCellData));
+                            rCell.reset(new ScExternalSingleRefToken(nFileId, aTabName, aCellData));
                         else
-                            rCol[ nInsRow ].reset(new ScSingleRefToken(mpDoc->GetSheetLimits(), aCellData));
+                            rCell.reset(new ScSingleRefToken(mpDoc->GetSheetLimits(), aCellData));
                     }
                 }
             }
