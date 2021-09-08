@@ -33,6 +33,24 @@
       "message": "Should some methods below be still private maybe? Likely the public change was needed only for a subset, e.g. ctor?",
       "revId": "db1a70c7e5617db42298b3b9671449da67259077",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53850c25_19b6e2a8",
+        "filename": "vcl/inc/impanmvw.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-08T03:10:29Z",
+      "side": 1,
+      "message": "That\u0027s reasonable - I think the testing is not as complete as I could have made it. I think I\u0027ll move this back to a WIP and improve the test coverage.",
+      "parentUuid": "4c7771d1_70b34962",
+      "revId": "db1a70c7e5617db42298b3b9671449da67259077",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
