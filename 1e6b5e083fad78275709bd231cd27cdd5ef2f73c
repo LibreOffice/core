@@ -105,6 +105,30 @@
       },
       "revId": "1e6b5e083fad78275709bd231cd27cdd5ef2f73c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60615bfb_34feeede",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1731,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-08T18:48:05Z",
+      "side": 1,
+      "message": "Ya some kind of getter for a SbxVariable would be a great idea, but I think there are so many circumstance we may not consider. Lets hope that these 3 cases cover all these missing optional parameters.",
+      "parentUuid": "6d3914a3_74f991c2",
+      "range": {
+        "startLine": 1731,
+        "startChar": 14,
+        "endLine": 1731,
+        "endChar": 32
+      },
+      "revId": "1e6b5e083fad78275709bd231cd27cdd5ef2f73c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
