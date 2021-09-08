@@ -612,10 +612,11 @@ bool X11SalBitmap::Create( const SalBitmap& rSSalBmp )
 {
     Destroy();
 
-    if( dynamic_cast<const X11SalBitmap*>( &rSSalBmp ) == nullptr )
+    auto pX11Bmp = dynamic_cast<const X11SalBitmap*>( &rSSalBmp );
+    if (!pX11Bmp)
         return false;
 
-    const X11SalBitmap& rSalBmp = static_cast<const X11SalBitmap&>( rSSalBmp );
+    const X11SalBitmap& rSalBmp = *pX11Bmp;
 
     if( rSalBmp.mpDIB )
     {

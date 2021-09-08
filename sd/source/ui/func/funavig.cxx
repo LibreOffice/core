@@ -69,75 +69,74 @@ void FuNavigation::DoExecute( SfxRequest& rReq )
 
         case SID_GO_TO_PREVIOUS_PAGE:
         {
-            if( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr && !bSlideShow)
-            {
-                // With no modifier pressed we move to the previous
-                // slide.
-                mpView->SdrEndTextEdit();
-
-                // Previous page.
-                SdPage* pPage = static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
-                sal_uInt16 nSdPage = (pPage->GetPageNum() - 1) / 2;
-
-                if (nSdPage > 0)
+            if( !bSlideShow)
+                if( auto pDrawViewShell = dynamic_cast<DrawViewShell *>( mpViewShell ) )
                 {
-                    // Switch the page and send events regarding
-                    // deactivation the old page and activating the new
-                    // one.
-                    TabControl& rPageTabControl =
-                        static_cast<DrawViewShell*>(mpViewShell)
-                        ->GetPageTabControl();
-                    if (rPageTabControl.IsReallyShown())
-                        rPageTabControl.SendDeactivatePageEvent ();
-                    static_cast<DrawViewShell*>(mpViewShell)->SwitchPage(nSdPage - 1);
-                    if (rPageTabControl.IsReallyShown())
-                        rPageTabControl.SendActivatePageEvent ();
+                    // With no modifier pressed we move to the previous
+                    // slide.
+                    mpView->SdrEndTextEdit();
+
+                    // Previous page.
+                    SdPage* pPage = pDrawViewShell->GetActualPage();
+                    sal_uInt16 nSdPage = (pPage->GetPageNum() - 1) / 2;
+
+                    if (nSdPage > 0)
+                    {
+                        // Switch the page and send events regarding
+                        // deactivation the old page and activating the new
+                        // one.
+                        TabControl& rPageTabControl =
+                            static_cast<DrawViewShell*>(mpViewShell)
+                            ->GetPageTabControl();
+                        if (rPageTabControl.IsReallyShown())
+                            rPageTabControl.SendDeactivatePageEvent ();
+                        static_cast<DrawViewShell*>(mpViewShell)->SwitchPage(nSdPage - 1);
+                        if (rPageTabControl.IsReallyShown())
+                            rPageTabControl.SendActivatePageEvent ();
+                    }
                 }
-            }
         }
         break;
 
         case SID_GO_TO_NEXT_PAGE:
         {
-            if( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr && !bSlideShow)
-            {
-                // With no modifier pressed we move to the next slide.
-                mpView->SdrEndTextEdit();
-
-                // Next page.
-                SdPage* pPage = static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
-                sal_uInt16 nSdPage = (pPage->GetPageNum() - 1) / 2;
-
-                if (nSdPage < mpDoc->GetSdPageCount(pPage->GetPageKind()) - 1)
+            if( !bSlideShow)
+                if( auto pDrawViewShell = dynamic_cast<DrawViewShell *>( mpViewShell ))
                 {
-                    // Switch the page and send events regarding
-                    // deactivation the old page and activating the new
-                    // one.
-                    TabControl& rPageTabControl =
-                        static_cast<DrawViewShell*>(mpViewShell)->GetPageTabControl();
-                    if (rPageTabControl.IsReallyShown())
-                        rPageTabControl.SendDeactivatePageEvent ();
-                    static_cast<DrawViewShell*>(mpViewShell)->SwitchPage(nSdPage + 1);
-                    if (rPageTabControl.IsReallyShown())
-                        rPageTabControl.SendActivatePageEvent ();
+                    // With no modifier pressed we move to the next slide.
+                    mpView->SdrEndTextEdit();
+
+                    // Next page.
+                    SdPage* pPage = pDrawViewShell->GetActualPage();
+                    sal_uInt16 nSdPage = (pPage->GetPageNum() - 1) / 2;
+
+                    if (nSdPage < mpDoc->GetSdPageCount(pPage->GetPageKind()) - 1)
+                    {
+                        // Switch the page and send events regarding
+                        // deactivation the old page and activating the new
+                        // one.
+                        TabControl& rPageTabControl =
+                            static_cast<DrawViewShell*>(mpViewShell)->GetPageTabControl();
+                        if (rPageTabControl.IsReallyShown())
+                            rPageTabControl.SendDeactivatePageEvent ();
+                        static_cast<DrawViewShell*>(mpViewShell)->SwitchPage(nSdPage + 1);
+                        if (rPageTabControl.IsReallyShown())
+                            rPageTabControl.SendActivatePageEvent ();
+                    }
                 }
-            }
         }
         break;
 
         case SID_GO_TO_LAST_PAGE:
         {
-            if (!mpView->IsTextEdit()
-                && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr
-                && !bSlideShow)
-            {
-                // jump to last page
-                SdPage* pPage =
-                    static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
-                static_cast<DrawViewShell*>(mpViewShell)
-                    ->SwitchPage(mpDoc->GetSdPageCount(
-                        pPage->GetPageKind()) - 1);
-            }
+            if (!mpView->IsTextEdit() && !bSlideShow)
+                if (auto pDrawViewShell = dynamic_cast<DrawViewShell *>( mpViewShell ))
+                {
+                    // jump to last page
+                    SdPage* pPage = pDrawViewShell->GetActualPage();
+                    pDrawViewShell->SwitchPage(mpDoc->GetSdPageCount(
+                            pPage->GetPageKind()) - 1);
+                }
         }
         break;
     }

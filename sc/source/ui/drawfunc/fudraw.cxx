@@ -241,9 +241,10 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 {
                     bool bOle = rViewShell.GetViewFrame()->GetFrame().IsInPlace();
                     SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-                    if( dynamic_cast<const SdrOle2Obj*>( pObj) && !bOle )
+                    auto pOleObj = dynamic_cast<SdrOle2Obj*>(pObj);
+                    if( pOleObj && !bOle )
                     {
-                        rViewShell.ActivateObject(static_cast<SdrOle2Obj*>(pObj), css::embed::EmbedVerbs::MS_OLEVERB_PRIMARY);
+                        rViewShell.ActivateObject(pOleObj, css::embed::EmbedVerbs::MS_OLEVERB_PRIMARY);
 
                         // consumed
                         bReturn = true;

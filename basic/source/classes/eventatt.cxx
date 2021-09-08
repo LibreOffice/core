@@ -417,12 +417,12 @@ void RTL_Impl_CreateUnoDialog( SbxArray& rPar )
 
     // Get dialog
     SbxBaseRef pObj = rPar.Get(1)->GetObject();
-    if( !(pObj.is() && dynamic_cast<const SbUnoObject*>( pObj.get() ) != nullptr) )
+    SbUnoObject* pUnoObj = dynamic_cast<SbUnoObject*>(pObj.get());
+    if( !pUnoObj )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
-    SbUnoObject* pUnoObj = static_cast<SbUnoObject*>(pObj.get());
     Any aAnyISP = pUnoObj->getUnoAny();
     TypeClass eType = aAnyISP.getValueType().getTypeClass();
 

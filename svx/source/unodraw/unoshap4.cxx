@@ -87,10 +87,12 @@ bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPro
         // TODO/LATER: seems to make no sense for iconified object
 
         awt::Rectangle aVisArea;
-        if( (rValue >>= aVisArea) && dynamic_cast<const SdrOle2Obj* >(GetSdrObject()) != nullptr)
+        if( !(rValue >>= aVisArea))
+            break;
+        if( auto pOle2Obj = dynamic_cast<SdrOle2Obj* >(GetSdrObject()) )
         {
             Size aTmp( aVisArea.X + aVisArea.Width, aVisArea.Y + aVisArea.Height );
-            uno::Reference < embed::XEmbeddedObject > xObj = static_cast<SdrOle2Obj*>(GetSdrObject())->GetObjRef();
+            uno::Reference < embed::XEmbeddedObject > xObj = pOle2Obj->GetObjRef();
             if( xObj.is() )
             {
                 try

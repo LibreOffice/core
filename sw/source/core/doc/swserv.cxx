@@ -299,14 +299,14 @@ SwDataChanged::~SwDataChanged()
     {
         ::sfx2::SvLinkSourceRef refObj( rpLinkSrc );
         // Anyone else interested in the Object?
-        if( refObj->HasDataLinks() && dynamic_cast<const SwServerObject*>( refObj.get() ) !=  nullptr)
-        {
-            SwServerObject& rObj = *static_cast<SwServerObject*>( refObj.get() );
-            if( m_pPos )
-                rObj.SendDataChanged( *m_pPos );
-            else
-                rObj.SendDataChanged( *m_pPam );
-        }
+        if( refObj->HasDataLinks())
+            if (auto pServerObj = dynamic_cast<SwServerObject*>( refObj.get() ))
+            {
+                if( m_pPos )
+                    pServerObj->SendDataChanged( *m_pPos );
+                else
+                    pServerObj->SendDataChanged( *m_pPam );
+            }
 
         // We shouldn't have a connection anymore
         if( !refObj->HasDataLinks() )
