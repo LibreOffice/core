@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "319c4364_bf173c29",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-08T12:53:02Z",
+      "side": 1,
+      "message": "I always enjoy your commits making things simpler!",
+      "revId": "3afb514362a2ce2701628256fa96d4a5324433d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "793fbc34_542b9bdf",
+        "filename": "sc/source/ui/drawfunc/fudraw.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-08T12:53:02Z",
+      "side": 1,
+      "message": "Interesting how expensive dynamic cast is. Is it worth to do micro-optimizations like\n\n                    auto pOleObj \u003d dynamic_cast\u003cSdrOle2Obj*\u003e(bOle ? nullptr : pObj);\n                    if (pOleObj)\n\nand is that even an optimization - i.e., is dynamic_casting a nullptr a cheap operation?",
+      "revId": "3afb514362a2ce2701628256fa96d4a5324433d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
