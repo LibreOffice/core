@@ -39,6 +39,30 @@
       },
       "revId": "fea7e22bea445139a5e0762bf2eeb3df8f6caa30",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3bc8000_433f7f45",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-08T22:12:33Z",
+      "side": 1,
+      "message": "By the way.\n\nPlease let\u0027s use limit of 255, not 31. If user enters a too long name, it should be passed as is to the engine, and not truncate by us. User would get an error, instead of accidental success.\n\nAdditionally, 31 may increase later. Unless necessary, we should not duplicate the limits ourselves: it makes sense to limit to used data type (hence 255 as the max value in a byte), but not 31 (as an artificial limit used in a specific version of engine).",
+      "parentUuid": "2776bd6d_659dbb72",
+      "range": {
+        "startLine": 258,
+        "startChar": 16,
+        "endLine": 259,
+        "endChar": 42
+      },
+      "revId": "fea7e22bea445139a5e0762bf2eeb3df8f6caa30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
