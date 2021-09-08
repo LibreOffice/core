@@ -1937,7 +1937,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
             // get device used to retrieve the FontList
             SmDocShell *pDoc = GetDoc();
             OutputDevice *pDev = pDoc->GetPrinter();
-            if (!pDev || pDev->GetDevFontCount() == 0)
+            if (!pDev || pDev->GetFontFaceCollectionCount() == 0)
                 pDev = &SM_MOD()->GetDefaultVirtualDev();
             SAL_WARN_IF( !pDev, "starmath", "device for font list missing" );
 
