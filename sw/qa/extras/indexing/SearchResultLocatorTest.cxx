@@ -155,11 +155,11 @@ void SearchResultLocatorTest::testSearchResultLocatorForSdrObjects()
     // inconsistent results
 #if !defined(_WIN32) && !defined(MACOSX)
     auto aRectangle = aResult.maRectangles[0];
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1478.0, aRectangle.getMinX(), 1e-4);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(3223.0, aRectangle.getMinY(), 1e-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2607.0, aRectangle.getMinX(), 1e-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(5685.0, aRectangle.getMinY(), 1e-4);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2059.0, aRectangle.getWidth(), 1e-4);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2059.0, aRectangle.getHeight(), 1e-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3631.0, aRectangle.getWidth(), 1e-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3631.0, aRectangle.getHeight(), 1e-4);
 #endif
 }
 
@@ -183,11 +183,11 @@ void SearchResultLocatorTest::testSearchResultLocatorForSdrObjectsUsingJsonPaylo
     // inconsistent results
 #if !defined(_WIN32) && !defined(MACOSX)
     auto aRectangle = aResult.maRectangles[0];
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1478.0, aRectangle.getMinX(), 1e-4);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(3223.0, aRectangle.getMinY(), 1e-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2607.0, aRectangle.getMinX(), 1e-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(5685.0, aRectangle.getMinY(), 1e-4);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2059.0, aRectangle.getWidth(), 1e-4);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2059.0, aRectangle.getHeight(), 1e-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3631.0, aRectangle.getWidth(), 1e-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3631.0, aRectangle.getHeight(), 1e-4);
 #endif
 }
 
