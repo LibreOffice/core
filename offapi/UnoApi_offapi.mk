@@ -4133,6 +4133,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/util,\
 	NotLockedException \
 	NotNumericException \
 	NumberFormat \
+	PackageNeedsRepairException \
 	RevisionTag \
 	SearchAlgorithms \
 	SearchAlgorithms2 \

@@ -31,6 +31,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/util/PackageNeedsRepairException.hpp>
 
 using namespace ::com::sun::star;
 using utl::MediaDescriptor;
@@ -113,6 +114,9 @@ OUString SAL_CALL StorageFilterDetect::detect(uno::Sequence<beans::PropertyValue
         if ( ( aWrap.TargetException >>= aZipException ) && !aRequestedTypeName.isEmpty() )
         {
             // The package is a broken one.
+            if (aMediaDesc.getUnpackedValueOrDefault( "ThrowOnRepair", false ))
+                throw css::util::PackageNeedsRepairException();
+
             uno::Reference< task::XInteractionHandler > xInteraction =
                 aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_INTERACTIONHANDLER(), uno::Reference< task::XInteractionHandler >() );
 

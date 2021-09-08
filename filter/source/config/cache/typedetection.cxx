@@ -22,6 +22,7 @@
 
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/util/PackageNeedsRepairException.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
@@ -34,6 +35,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <comphelper/fileurl.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
 
 #define DEBUG_TYPE_DETECTION 0
@@ -860,7 +862,10 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
     // a set and a not set value.
     rLastChance.clear();
 
-    // step over all possible types for this URL.
+    // step over all possible types for this URL. Do in two passes: first is without interaction,
+    // not asking if user wants to repair broken package. If this pass fails, on the second pass
+    // re-try those filters that reported that they want to try a repair, using interaction.
+    // Pass 1
     // solutions:
     // a) no types                                => no detection
     // b) deep detection not allowed              => return first valid type of list (because it's the preferred or the first valid one)
@@ -871,9 +876,19 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
     //                                               It must be the first one, because it can be a preferred type.
     //                                               Our types list was sorted by such criteria!
     // d) detect service return a valid result    => return its decision
-    // e) detect service return an invalid result
+    // e) detect service return a "needs repair"  => save for pass 2
+    // f) detect service return an invalid result
     //    or any needed information could not be
     //    obtained from the cache                 => ignore it, and continue with search
+    // Pass 2
+    // options d) and f) from pass 1
+
+    std::vector<std::pair<OUString, OUString>> aDataForRepair;
+
+    // Pass 1: no interaction; hopefully this will find the correct filter silently
+    rDescriptor["ThrowOnRepair"] <<= true;
+    comphelper::ScopeGuard aThrowOnRepairGuard([&rDescriptor]
+                                               { rDescriptor.erase("ThrowOnRepair"); });
 
     for (auto const& flatTypeInfo : lFlatTypes)
     {
@@ -893,14 +908,15 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
             return sFlatType;
         }
 
+        OUString sDetectService;
         try
         {
             // SAFE -> ----------------------------------
             osl::ClearableMutexGuard aLock(m_aLock);
             CacheItem aType = GetTheFilterCache().getItem(FilterCache::E_TYPE, sFlatType);
             aLock.clear();
+            // <- SAFE ----------------------------------
 
-            OUString sDetectService;
             aType[PROPNAME_DETECTSERVICE] >>= sDetectService;
 
             // c)
@@ -924,11 +940,30 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
         }
         catch(const css::container::NoSuchElementException&)
             {}
-        // e)
+        catch (const css::util::PackageNeedsRepairException&)
+        {
+            // e)
+            aDataForRepair.emplace_back(sDetectService, sFlatType);
+        }
+        // f)
+    }
+
+    // Pass 2: allow user interaction, asking for repair; will only run if
+    // first pass failed, and some services indicated an ability to repair
+    rDescriptor.erase("ThrowOnRepair");
+    aThrowOnRepairGuard.dismiss();
+
+    for (const auto& [sDetectService, sFlatType] : aDataForRepair)
+    {
+        impl_validateAndSetTypeOnDescriptor(rDescriptor, sFlatType);
+        const OUString sDeepType = impl_askDetectService(sDetectService, rDescriptor);
+        // d)
+        if (!sDeepType.isEmpty())
+            return sDeepType;
+        // f)
     }
 
     return OUString();
-    // <- SAFE ----------------------------------
 }
 
 void TypeDetection::impl_seekStreamToZero(utl::MediaDescriptor const & rDescriptor)
@@ -999,6 +1034,7 @@ OUString TypeDetection::impl_askDetectService(const OUString&               sDet
         return OUString();
 
     OUString sDeepType;
+    bool bWantsRepair = false;
     try
     {
         // start deep detection
@@ -1013,6 +1049,11 @@ OUString TypeDetection::impl_askDetectService(const OUString&               sDet
         rDescriptor >> lDescriptor;
         sDeepType = xDetector->detect(lDescriptor);
         rDescriptor << lDescriptor;
+    }
+    catch (const css::util::PackageNeedsRepairException&)
+    {
+        bWantsRepair = true;
+        sDeepType.clear();
     }
     catch (...)
     {
@@ -1030,11 +1071,14 @@ OUString TypeDetection::impl_askDetectService(const OUString&               sDet
     // analyze the results
     // a) detect service returns "" => return "" too and remove TYPE/FILTER prop from descriptor
     // b) returned type is unknown  => return "" too and remove TYPE/FILTER prop from descriptor
-    // c) returned type is valid    => check TYPE/FILTER props inside descriptor and return the type
+    // c) detect service wants to try repair => remove TYPE/FILTER prop from descriptor and throw
+    // d) returned type is valid    => check TYPE/FILTER props inside descriptor and return the type
 
     // this special helper checks for a valid type
     // and set right values on the descriptor!
     bool bValidType = impl_validateAndSetTypeOnDescriptor(rDescriptor, sDeepType);
+    if (bWantsRepair)
+        throw css::util::PackageNeedsRepairException();
     if (bValidType)
         return sDeepType;
 
