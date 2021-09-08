@@ -53,6 +53,7 @@
 #include "AccImage.h"
 #include "AccValue.h"
 #include "AccTable.h"
+#include "AccTableCell.h"
 #include "AccHyperLink.h"
 #include "AccHypertext.h"
 
@@ -69,6 +70,7 @@ OBJECT_ENTRY(CLSID_AccEditableText, CAccEditableText)
 OBJECT_ENTRY(CLSID_AccImage, CAccImage)
 OBJECT_ENTRY(CLSID_AccValue, CAccValue)
 OBJECT_ENTRY(CLSID_AccTable, CAccTable)
+OBJECT_ENTRY(CLSID_AccTableCell, CAccTableCell)
 OBJECT_ENTRY(CLSID_AccHyperLink, CAccHyperLink)
 OBJECT_ENTRY(CLSID_AccHypertext, CAccHypertext)
 #if defined __clang__

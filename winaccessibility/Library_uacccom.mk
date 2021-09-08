@@ -38,6 +38,7 @@ $(eval $(call gb_Library_add_exception_objects,UAccCOM,\
 	winaccessibility/source/UAccCOM/AccImage \
 	winaccessibility/source/UAccCOM/AccRelation \
 	winaccessibility/source/UAccCOM/AccTable \
+	winaccessibility/source/UAccCOM/AccTableCell \
 	winaccessibility/source/UAccCOM/AccText \
 	winaccessibility/source/UAccCOM/AccTextBase \
 	winaccessibility/source/UAccCOM/AccValue \

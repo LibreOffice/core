@@ -192,6 +192,14 @@ library UACCCOMLib
     {
         [default] interface IAccessibleTable;
     };
+    [
+        uuid(77948F17-05C8-4DAA-93D4-BCCD16ADC660),
+        helpstring("AccTableCell Class")
+    ]
+    coclass AccTableCell
+    {
+        [default] interface IAccessibleTableCell;
+    };
 
     [
         uuid(519A64CD-F6A6-4793-BE50-4E36C4C593EF),
