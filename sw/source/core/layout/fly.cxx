@@ -2950,7 +2950,7 @@ const SwFormatAnchor* SwFlyFrame::GetAnchorFromPoolItem(const SfxPoolItem& rItem
     switch(rItem.Which())
     {
         case RES_ATTRSET_CHG:
-            return static_cast<const SwAttrSetChg*>(&rItem)->GetChgSet()->GetItem(RES_ANCHOR, false);
+            return rItem.StaticWhichCast(RES_ATTRSET_CHG).GetChgSet()->GetItem(RES_ANCHOR, false);
         case RES_ANCHOR:
             return static_cast<const SwFormatAnchor*>(&rItem);
         default:

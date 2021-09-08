@@ -50,7 +50,7 @@ DefaultToxTabStopTokenHandler::HandleTabStopToken(
 
     // check whether a tab adjustment has been specified.
     if (SvxTabAdjust::End > aToken.eTabAlign) {
-        const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>( targetNode.SwContentNode::GetAttr(RES_LR_SPACE) );
+        const SvxLRSpaceItem& rLR = targetNode.SwContentNode::GetAttr(RES_LR_SPACE).StaticWhichCast(RES_LR_SPACE);
 
         tools::Long nTabPosition = aToken.nTabStopPosition;
         if (!mTabPositionIsRelativeToParagraphIndent && rLR.GetTextLeft()) {
