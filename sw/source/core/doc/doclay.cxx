@@ -137,9 +137,7 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveWithinDoc,
 
     // For drawing objects: set layer of cloned object to invisible layer
     SdrLayerID nLayerIdForClone = rObj.GetLayer();
-    if ( dynamic_cast<const SwFlyDrawObj*>( pObj) ==  nullptr &&
-         dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr &&
-         typeid(SdrObject) != typeid(pObj) )
+    if ( dynamic_cast<SdrObject*>( pObj) == nullptr )
     {
         if ( getIDocumentDrawModelAccess().IsVisibleLayerId( nLayerIdForClone ) )
         {
