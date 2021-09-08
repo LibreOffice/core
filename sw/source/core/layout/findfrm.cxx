@@ -440,7 +440,12 @@ SwFootnoteBossFrame* SwFrame::FindFootnoteBossFrame( bool bFootnotes )
     // don't contain footnote texts there
     if( pRet->IsInTab() )
         pRet = pRet->FindTabFrame();
-    while ( pRet && !pRet->IsFootnoteBossFrame() )
+    // tdf139336: put the footnotes into the page (instead of a column), if
+    // FootnoteAtEnd is not set for its containing section, to avoid
+    // maximizing the section to the full page
+    SwSectionFrame* pSectframe = pRet->FindSctFrame();
+    bool bFAtEnd = pSectframe && pSectframe->IsFootnoteAtEnd();
+    while ( pRet && ( ( bFAtEnd && !pRet->IsFootnoteBossFrame() ) || ( !bFAtEnd && !pRet->IsPageFrame() ) ) )
     {
         if ( pRet->GetUpper() )
             pRet = pRet->GetUpper();
