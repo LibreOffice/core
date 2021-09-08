@@ -451,12 +451,12 @@ void SvxCharacterMap::init()
 
     OUString aDefStr( aFont.GetFamilyName() );
     OUString aLastName;
-    int nCount = m_xVirDev->GetDevFontCount();
+    int nCount = m_xVirDev->GetFontFaceCollectionCount();
     std::vector<weld::ComboBoxEntry> aEntries;
     aEntries.reserve(nCount);
     for (int i = 0; i < nCount; ++i)
     {
-        OUString aFontName( m_xVirDev->GetDevFont( i ).GetFamilyName() );
+        OUString aFontName( m_xVirDev->GetFontMetricFromCollection( i ).GetFamilyName() );
         if (aFontName != aLastName)
         {
             aLastName = aFontName;
@@ -657,7 +657,7 @@ void SvxCharacterMap::insertCharToDoc(const OUString& sGlyph)
 IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, weld::ComboBox&, void)
 {
     const sal_uInt32 nFont = m_xFontLB->get_active_id().toUInt32();
-    aFont = m_xVirDev->GetDevFont(nFont);
+    aFont = m_xVirDev->GetFontMetricFromCollection(nFont);
     aFont.SetWeight( WEIGHT_DONTKNOW );
     aFont.SetItalic( ITALIC_NONE );
     aFont.SetWidthType( WIDTH_DONTKNOW );
