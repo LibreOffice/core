@@ -32,16 +32,12 @@ basegfx::B2DRange
 getB2DRangeFromPrimitive2DReference(const Primitive2DReference& rCandidate,
                                     const geometry::ViewInformation2D& aViewInformation)
 {
-    basegfx::B2DRange aRetval;
+    if (!rCandidate)
+        return basegfx::B2DRange();
 
-    if (rCandidate.is())
-    {
-        // get C++ implementation base
-        const BasePrimitive2D* pCandidate(static_cast<BasePrimitive2D*>(rCandidate.get()));
-        aRetval.expand(pCandidate->getB2DRange(aViewInformation));
-    }
-
-    return aRetval;
+    // get C++ implementation base
+    const BasePrimitive2D* pCandidate(static_cast<BasePrimitive2D*>(rCandidate.get()));
+    return pCandidate->getB2DRange(aViewInformation);
 }
 
 bool arePrimitive2DReferencesEqual(const Primitive2DReference& rxA, const Primitive2DReference& rxB)
