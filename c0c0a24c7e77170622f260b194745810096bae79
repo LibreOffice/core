@@ -16,6 +16,24 @@
       "message": "nice catch. I was checking the new document right now and in fact it fails if the fix is reverted.\nThanks for this patch. I don\u0027t know why I submitted such a huge document, I guess it was one of the first test I wrote. Now I always take care about the document size.",
       "revId": "c0c0a24c7e77170622f260b194745810096bae79",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0158e5d_9b8455c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-09-08T16:00:43Z",
+      "side": 1,
+      "message": "You are welcome. Thanks for verifying. (Last time I added only the unit test document, but not the unit test, so I had to rewrite it later. Maybe it would be fine to add an automatic test to test the tests, too. :)",
+      "parentUuid": "fb7eb89e_4cee811e",
+      "revId": "c0c0a24c7e77170622f260b194745810096bae79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
