@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <uielement/fontsizemenucontroller.hxx>
 
 #include <services.h>
@@ -150,7 +152,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
     if ( !aPrinterName.isEmpty() )
     {
         pInfoPrinter.disposeAndReset(VclPtr<Printer>::Create( aPrinterName ));
-        if ( pInfoPrinter && pInfoPrinter->GetDevFontCount() > 0 )
+        if ( pInfoPrinter && pInfoPrinter->GetFontFaceCollectionCount() > 0 )
             pFontList.reset(new FontList( pInfoPrinter.get() ));
     }
 
@@ -322,4 +324,4 @@ framework_FontSizeMenuController_get_implementation(
     return cppu::acquire(new framework::FontSizeMenuController(context));
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

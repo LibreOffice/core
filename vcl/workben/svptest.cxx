@@ -226,12 +226,12 @@ void MyWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rR
                          Size(aPaperSize.Width() - 600,
                               aPaperSize.Height() - 600)));
 
-    const int nFontCount = rRenderContext.GetDevFontCount();
+    const int nFontCount = rRenderContext.GetFontFaceCollectionCount();
     const int nFontSamples = (nFontCount < 15) ? nFontCount : 15;
     for (int i = 0; i < nFontSamples; ++i)
     {
 
-        FontMetric aFont = rRenderContext.GetDevFont((i * nFontCount) / nFontSamples);
+        FontMetric aFont(rRenderContext.GetFontMetricFromCollection((i * nFontCount) / nFontSamples));
         aFont.SetFontHeight(400 + (i % 7) * 100);
         aFont.SetOrientation(Degree10(i * (3600 / nFontSamples)));
         rRenderContext.SetFont(aFont);
@@ -322,4 +322,4 @@ void MyWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rR
     rRenderContext.Pop();
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
