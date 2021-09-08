@@ -115,9 +115,14 @@ namespace sdr::properties
                 ItemChange(nWhichID, &rItem);
                 PostItemChange(nWhichID);
 
-                SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), nWhichID, nWhichID);
-                aSet.Put(rItem);
-                ItemSetChanged(aSet);
+                if (WantItemSetInItemSetChanged())
+                {
+                    SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), nWhichID, nWhichID);
+                    aSet.Put(rItem);
+                    ItemSetChanged(&aSet);
+                }
+                else
+                    ItemSetChanged(nullptr);
             }
         }
 
@@ -140,8 +145,13 @@ namespace sdr::properties
 
                 if(nWhich)
                 {
-                    SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), nWhich, nWhich);
-                    ItemSetChanged(aSet);
+                    if (WantItemSetInItemSetChanged())
+                    {
+                        SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), nWhich, nWhich);
+                        ItemSetChanged(&aSet);
+                    }
+                    else
+                        ItemSetChanged(nullptr);
                 }
             }
         }
@@ -176,7 +186,9 @@ namespace sdr::properties
             const SfxPoolItem *pPoolItem;
             std::vector< sal_uInt16 > aPostItemChangeList;
             bool bDidChange(false);
-            SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), svl::Items<SDRATTR_START, EE_ITEMS_END>);
+            std::optional<SfxItemSet> aSet;
+            if (WantItemSetInItemSetChanged())
+                aSet.emplace(GetSdrObject().GetObjectItemPool(), svl::Items<SDRATTR_START, EE_ITEMS_END>);
 
             // give a hint to STL_Vector
             aPostItemChangeList.reserve(rSet.Count());
@@ -190,7 +202,8 @@ namespace sdr::properties
                         bDidChange = true;
                         ItemChange(nWhich, pPoolItem);
                         aPostItemChangeList.push_back( nWhich );
-                        aSet.Put(*pPoolItem);
+                        if (aSet)
+                            aSet->Put(*pPoolItem);
                     }
                 }
 
@@ -204,11 +217,14 @@ namespace sdr::properties
                     PostItemChange(rItem);
                 }
 
-                ItemSetChanged(aSet);
+                if (aSet)
+                    ItemSetChanged(&*aSet);
+                else
+                    ItemSetChanged(nullptr);
             }
         }
 
-        void DefaultProperties::ItemSetChanged(const SfxItemSet& /*rSet*/)
+        void DefaultProperties::ItemSetChanged(const SfxItemSet* /*pSet*/)
         {
         }
 

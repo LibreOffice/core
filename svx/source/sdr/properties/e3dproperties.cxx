@@ -60,12 +60,12 @@ namespace sdr::properties
             return std::unique_ptr<BaseProperties>(new E3dProperties(*this, rObj));
         }
 
-        void E3dProperties::ItemSetChanged(const SfxItemSet& rSet)
+        void E3dProperties::ItemSetChanged(const SfxItemSet* pSet)
         {
             E3dObject& rObj = static_cast<E3dObject&>(GetSdrObject());
 
             // call parent
-            AttributeProperties::ItemSetChanged(rSet);
+            AttributeProperties::ItemSetChanged(pSet);
 
             // local changes
             rObj.StructureChanged();

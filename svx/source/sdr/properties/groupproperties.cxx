@@ -193,7 +193,7 @@ namespace sdr::properties
             assert(!"GroupProperties::SetObjectItemSet() should never be called");
         }
 
-        void GroupProperties::ItemSetChanged(const SfxItemSet& /*rSet*/)
+        void GroupProperties::ItemSetChanged(const SfxItemSet* /*pSet*/)
         {
             assert(!"GroupProperties::ItemSetChanged() should never be called");
         }

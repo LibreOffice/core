@@ -52,7 +52,7 @@ namespace sdr::properties
             virtual void PostItemChange(const sal_uInt16 nWhich) override;
 
             // react on ItemSet changes
-            virtual void ItemSetChanged(const SfxItemSet& rSet) override;
+            virtual void ItemSetChanged(const SfxItemSet*) override;
 
             // check if SfxItemSet exists
             bool HasSfxItemSet() const { return bool(mxItemSet); }

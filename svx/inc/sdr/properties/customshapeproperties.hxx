@@ -37,7 +37,7 @@ namespace sdr::properties
             virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) const override;
 
             // react on ItemSet changes
-            virtual void ItemSetChanged(const SfxItemSet& rSet) override;
+            virtual void ItemSetChanged(const SfxItemSet*) override;
 
             // react on Item change
             virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) override;

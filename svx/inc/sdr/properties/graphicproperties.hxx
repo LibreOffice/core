@@ -34,7 +34,7 @@ namespace sdr::properties
             virtual SfxItemSet CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
 
             // react on ItemSet changes
-            virtual void ItemSetChanged(const SfxItemSet& rSet) override;
+            virtual void ItemSetChanged(const SfxItemSet*) override;
 
         public:
             // basic constructor

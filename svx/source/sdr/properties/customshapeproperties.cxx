@@ -102,7 +102,7 @@ namespace sdr::properties
                     nWhich2 = aIter.NextWhich();
                 }
                 SfxItemSet aSet(GetSdrObject().GetObjectItemPool());
-                ItemSetChanged(aSet);
+                ItemSetChanged(&aSet);
             }
             else
                 TextProperties::ClearObjectItem( nWhich );
@@ -124,10 +124,10 @@ namespace sdr::properties
                 TextProperties::ClearObjectItemDirect( nWhich );
         }
 
-        void CustomShapeProperties::ItemSetChanged(const SfxItemSet& rSet)
+        void CustomShapeProperties::ItemSetChanged(const SfxItemSet* pSet)
         {
             // call parent
-            TextProperties::ItemSetChanged(rSet);
+            TextProperties::ItemSetChanged(pSet);
 
             // update bTextFrame and RenderGeometry
             UpdateTextFrameStatus(true);

@@ -62,7 +62,7 @@ namespace sdr::properties
             return std::unique_ptr<BaseProperties>(new CaptionProperties(*this, rObj));
         }
 
-        void CaptionProperties::ItemSetChanged(const SfxItemSet& rSet)
+        void CaptionProperties::ItemSetChanged(const SfxItemSet* pSet)
         {
             SdrCaptionObj& rObj = static_cast<SdrCaptionObj&>(GetSdrObject());
 
@@ -70,7 +70,7 @@ namespace sdr::properties
             rObj.ImpRecalcTail();
 
             // call parent
-            RectangleProperties::ItemSetChanged(rSet);
+            RectangleProperties::ItemSetChanged(pSet);
         }
 
         void CaptionProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
