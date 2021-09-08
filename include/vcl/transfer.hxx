@@ -90,9 +90,9 @@ struct TransferableObjectDescriptor
 
 struct AcceptDropEvent
 {
-    sal_Int8                                                        mnAction;
     Point                                                           maPosPixel;
     const css::datatransfer::dnd::DropTargetDragEvent               maDragEvent;
+    sal_Int8                                                        mnAction;
     bool                                                            mbLeaving;
     bool                                                            mbDefault;
 
@@ -104,26 +104,26 @@ struct AcceptDropEvent
     AcceptDropEvent( sal_Int8 nAction,
                      const Point& rPosPixel,
                      const css::datatransfer::dnd::DropTargetDragEvent& rDragEvent ) :
-        mnAction( nAction ),
         maPosPixel( rPosPixel ),
         maDragEvent( rDragEvent ),
+        mnAction( nAction ),
         mbLeaving( false ),
         mbDefault( false ) {}
 };
 
 struct ExecuteDropEvent
 {
-    sal_Int8                                                        mnAction;
     Point                                                           maPosPixel;
     const css::datatransfer::dnd::DropTargetDropEvent               maDropEvent;
+    sal_Int8                                                        mnAction;
     bool                                                            mbDefault;
 
     ExecuteDropEvent( sal_Int8 nAction,
                       const Point& rPosPixel,
                       const css::datatransfer::dnd::DropTargetDropEvent& rDropEvent ) :
-        mnAction( nAction ),
         maPosPixel( rPosPixel ),
         maDropEvent( rDropEvent ),
+        mnAction( nAction ),
         mbDefault( false ) {}
 };
 
