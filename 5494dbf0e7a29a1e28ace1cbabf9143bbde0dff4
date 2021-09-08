@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8c13eac_935fe6db",
+        "filename": "vcl/source/outdev/line.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-08T08:35:13Z",
+      "side": 0,
+      "message": "This file shouldn\u0027t be modified for the sake of this change ;)",
+      "revId": "5494dbf0e7a29a1e28ace1cbabf9143bbde0dff4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
