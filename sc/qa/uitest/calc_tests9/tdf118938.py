@@ -12,38 +12,23 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 #             with additional password protection for editing not working (Calc)
 
 class tdf118938(UITestCase):
+
     def test_tdf118938(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf118938.xlsx")):
             #The document was created in Calc after this fix.
             calcDoc = self.xUITest.getTopFocusWindow()
             gridwin = calcDoc.getChild("grid_window")
 
-            incorrectPass = False;
+            document = self.ui_test.get_component()
 
-            try:
-                self.xUITest.executeDialog(".uno:EditDoc")
-                xDialog = self.xUITest.getTopFocusWindow();
+            # Without the fix in place, this test would have failed with
+            # AssertionError: False is not true
+            self.assertTrue(document.isReadonly())
+
+            with self.ui_test.execute_dialog_through_command(".uno:EditDoc") as xDialog:
                 xPassword = xDialog.getChild("newpassEntry")
                 xPassword.executeAction("TYPE", mkPropertyValues({"TEXT": "a"}))
-                xOKBtn = xDialog.getChild("ok")
-                self.ui_test.close_dialog_through_button(xOKBtn)
 
-                try:
-                    xWarnDialog = self.xUITest.getTopFocusWindow()
-                    xOK = xWarnDialog.getChild("ok")
-                    self.ui_test.close_dialog_through_button(xOK)
-
-                    xDialog2 = self.xUITest.getTopFocusWindow();
-                    xCancelBtn = xDialog2.getChild("cancel")
-                    self.ui_test.close_dialog_through_button(xCancelBtn)
-
-                    incorrectPass = True;
-                except:
-                    pass
-            except:
-                assert False, "The password dialog hasn't appeared."
-
-            if incorrectPass:
-                assert False, "Incorrect password."
+            self.assertFalse(document.isReadonly())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
