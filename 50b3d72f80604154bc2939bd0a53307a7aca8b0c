@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e93b52b_e9304f18",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2021-09-08T06:08:13Z",
+      "side": 1,
+      "message": "Thanks a lot Michael for review. I\u0027m going to upload new version.",
+      "revId": "50b3d72f80604154bc2939bd0a53307a7aca8b0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
