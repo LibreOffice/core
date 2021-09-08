@@ -65,8 +65,7 @@ void SearchResultLocator::findOne(LocationResult& rResult, SearchIndexData const
                 {
                     if (pObject->GetName() == rSearchIndexData.maObjectName)
                     {
-                        auto aRect = o3tl::convert(pObject->GetLogicRect(), o3tl::Length::mm100,
-                                                   o3tl::Length::twip);
+                        auto aRect = pObject->GetLogicRect();
                         rResult.mbFound = true;
                         rResult.maRectangles.emplace_back(aRect.Left(), aRect.Top(),
                                                           aRect.Left() + aRect.GetWidth(),
