@@ -38,6 +38,7 @@
 #include "AccEditableText.h"
 #include "AccImage.h"
 #include "AccTable.h"
+#include "AccTableCell.h"
 #include "AccValue.h"
 #include "AccHypertext.h"
 #include "AccHyperLink.h"
@@ -77,6 +78,7 @@ enum class XInterfaceType {
     XI_COMPONENT,
     XI_TEXT,
     XI_TABLE,
+    XI_TABLECELL,
     XI_EDITABLETEXT,
     XI_IMAGE,
     XI_SELECTION,
@@ -104,6 +106,30 @@ bool queryXInterface(XAccessible* pXAcc, XInterface** ppXI)
         return false;
 
     *ppXI = pRXI.get();
+    return true;
+}
+
+// Since there's no specific XInterface for table cells, this
+// method checks that the accessible's parent is a table
+// (implements XAccessibleTable) and pXAcc's context implements
+// XAccessibleComponent.
+bool queryTableCell(XAccessible* pXAcc, XInterface** ppXI)
+{
+    XInterface* pXInterface = nullptr;
+
+    const bool bSupportsInterface = queryXInterface<XAccessibleComponent>(pXAcc, &pXInterface);
+    if (!bSupportsInterface)
+        return false;
+
+    // check whether parent is a table (its accessible context implements XAccessibleTable)
+    XInterface* pParentXInterface = nullptr;
+    Reference<XAccessible> xParentAcc = pXAcc->getAccessibleContext()->getAccessibleParent();
+    const bool bParentIsTable = queryXInterface<XAccessibleTable>(xParentAcc.get(), &pParentXInterface);
+
+    if (!bParentIsTable)
+        return false;
+
+    *ppXI = pXInterface;
     return true;
 }
 
@@ -2498,6 +2524,9 @@ bool CMAccessible::GetXInterfaceFromXAccessible(XAccessible* pXAcc, XInterface**
         return queryXInterface<XAccessibleEditableText>(pXAcc, ppXI);
     case XInterfaceType::XI_TABLE:
         return queryXInterface<XAccessibleTable>(pXAcc, ppXI);
+    case XInterfaceType::XI_TABLECELL:
+        // needs specific handling, since there's no XInterface for table cells
+        return queryTableCell(pXAcc, ppXI);
     case XInterfaceType::XI_SELECTION:
         return queryXInterface<XAccessibleSelection>(pXAcc, ppXI);
     case XInterfaceType::XI_EXTENDEDCOMP:
@@ -2551,6 +2580,7 @@ static AggMapEntry g_CMAccessible_AggMap[] = {
     { &IID_IAccessibleImage, &createAggInstance<CAccImage>, XInterfaceType::XI_IMAGE },
     { &IID_IAccessibleTable, &createAggInstance<CAccTable>, XInterfaceType::XI_TABLE },
     { &IID_IAccessibleTable2, &createAggInstance<CAccTable>, XInterfaceType::XI_TABLE },
+    { &IID_IAccessibleTableCell, &createAggInstance<CAccTableCell>, XInterfaceType::XI_TABLECELL },
     { &IID_IAccessibleAction, &createAggInstance<CAccAction>, XInterfaceType::XI_ACTION },
     { &IID_IAccessibleValue, &createAggInstance<CAccValue>, XInterfaceType::XI_VALUE },
     { &IID_IAccessibleHypertext, &createAggInstance<CAccHypertext>, XInterfaceType::XI_HYPERTEXT },
