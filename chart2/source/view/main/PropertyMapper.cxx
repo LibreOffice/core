@@ -101,13 +101,13 @@ void PropertyMapper::getValueMap(
     {
         for (auto const& elem : rNameMap)
         {
-            OUString aTarget = elem.first;
-            OUString aSource = elem.second;
+            const OUString & rTarget = elem.first;
+            const OUString & rSource = elem.second;
             try
             {
-                uno::Any aAny( xSourceProp->getPropertyValue(aSource) );
+                uno::Any aAny( xSourceProp->getPropertyValue(rSource) );
                 if( aAny.hasValue() )
-                    rValueMap.emplace(  aTarget, aAny );
+                    rValueMap.emplace(  rTarget, aAny );
             }
             catch( const uno::Exception& )
             {
