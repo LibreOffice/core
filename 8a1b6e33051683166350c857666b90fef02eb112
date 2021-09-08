@@ -230,6 +230,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3d67e33_40aafdd4",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-08T21:42:45Z",
+      "side": 1,
+      "message": "\u003e I had to modify the OString strings to be OUString, otherwise I couldn\u0027t get .append to work with the size parameter\n\nI don\u0027t get it. It should just work. You use OString in append anyway - that\u0027s what OUStringToOString returns.\n\nAdditionally, taking the length from OUString (UTF-16), and applying it to a UTF-8 string is conceptually wrong - their number of code units may differ.",
+      "parentUuid": "06e7c502_64235e9b",
+      "revId": "8a1b6e33051683166350c857666b90fef02eb112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b8b3ef1_5a6c8826",

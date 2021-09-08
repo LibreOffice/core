@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6df9eeb4_33bb9d4e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-08T21:42:45Z",
+      "side": 1,
+      "message": "\u003e Oh, I forgot, I suppose that the sizes (31 and 256) that I have hard coded, should be consts, but I don\u0027t know how to name them and in which file they should be written\n\nJust put the consts right at the place where you use it - as I shown in an comment inline",
+      "revId": "fea7e22bea445139a5e0762bf2eeb3df8f6caa30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2776bd6d_659dbb72",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-08T21:42:45Z",
+      "side": 1,
+      "message": "const sal_int32 nMaxUserName \u003d 31;\nint nUsernameLength \u003d std::min(userName.getLength(), nMaxUserName);",
+      "range": {
+        "startLine": 258,
+        "startChar": 16,
+        "endLine": 259,
+        "endChar": 42
+      },
+      "revId": "fea7e22bea445139a5e0762bf2eeb3df8f6caa30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
