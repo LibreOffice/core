@@ -2582,12 +2582,13 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
     if ( !aXPropSet.is() )
         return;
 
-    if(nullptr == dynamic_cast< SdrObjCustomShape* >(SdrObject::getSdrObjectFromXShape(rXShape)))
+    SdrObjCustomShape* pSdrObjCustomShape = dynamic_cast< SdrObjCustomShape* >(SdrObject::getSdrObjectFromXShape(rXShape));
+    if(!pSdrObjCustomShape)
     {
         return;
     }
 
-    SdrObjCustomShape& rSdrObjCustomShape(static_cast< SdrObjCustomShape& >(*SdrObject::getSdrObjectFromXShape(rXShape)));
+    SdrObjCustomShape& rSdrObjCustomShape = *pSdrObjCustomShape;
     uno::Any aGeoPropSet = aXPropSet->getPropertyValue( "CustomShapeGeometry" );
     uno::Sequence< beans::PropertyValue > aGeoPropSeq;
     if ( !(aGeoPropSet >>= aGeoPropSeq) )

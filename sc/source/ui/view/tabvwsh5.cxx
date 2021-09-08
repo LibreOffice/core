@@ -106,15 +106,14 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
         }
     }
-    else if (dynamic_cast<const ScTablesHint*>(&rHint))               // table insert / deleted
+    else if (auto pTablesHint = dynamic_cast<const ScTablesHint*>(&rHint))               // table insert / deleted
     {
         // first fetch current table (can be changed during DeleteTab on ViewData)
         SCTAB nActiveTab = GetViewData().GetTabNo();
 
-        const ScTablesHint& rTabHint = static_cast<const ScTablesHint&>(rHint);
-        SCTAB nTab1 = rTabHint.GetTab1();
-        SCTAB nTab2 = rTabHint.GetTab2();
-        sal_uInt16 nId  = rTabHint.GetTablesHintId();
+        SCTAB nTab1 = pTablesHint->GetTab1();
+        SCTAB nTab2 = pTablesHint->GetTab2();
+        sal_uInt16 nId  = pTablesHint->GetTablesHintId();
         switch (nId)
         {
             case SC_TAB_INSERTED:

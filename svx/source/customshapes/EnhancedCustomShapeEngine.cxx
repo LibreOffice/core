@@ -195,14 +195,11 @@ std::unique_ptr<SdrObject, SdrObjectFreeOp> EnhancedCustomShapeEngine::ImplForce
 
             // get the text bounds and set at text object
             tools::Rectangle aTextBounds(rSdrObjCustomShape.GetSnapRect());
-            const bool bIsSdrObjCustomShape(nullptr != dynamic_cast< SdrObjCustomShape* >(SdrObject::getSdrObjectFromXShape(mxShape)));
+            auto pSdrObjCustomShape = dynamic_cast< SdrObjCustomShape* >(SdrObject::getSdrObjectFromXShape(mxShape));
 
-            if(bIsSdrObjCustomShape)
+            if(pSdrObjCustomShape)
             {
-                SdrObjCustomShape& rSdrObjCustomShape2(
-                    static_cast< SdrObjCustomShape& >(
-                        *SdrObject::getSdrObjectFromXShape(mxShape)));
-                EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape2);
+                EnhancedCustomShape2d aCustomShape2d(*pSdrObjCustomShape);
                 aTextBounds = aCustomShape2d.GetTextRect();
             }
 

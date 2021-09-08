@@ -2693,8 +2693,9 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
     case OWN_ATTR_MIRRORED:
     {
         bool bMirror = false;
-        if( HasSdrObject() && dynamic_cast<const SdrGrafObj*>(GetSdrObject()) != nullptr )
-            bMirror = static_cast<SdrGrafObj*>(GetSdrObject())->IsMirrored();
+        if( HasSdrObject() )
+            if (auto pGrafObj = dynamic_cast<SdrGrafObj*>(GetSdrObject()) )
+                bMirror = pGrafObj->IsMirrored();
 
         rValue <<= bMirror;
         break;

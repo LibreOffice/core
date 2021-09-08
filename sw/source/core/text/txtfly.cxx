@@ -224,7 +224,7 @@ SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
             // the graphic to change its size, call ClrObject()
             tools::PolyPolygon aPoly;
             if( !pVirtFlyDrawObj->GetFlyFrame()->GetContour( aPoly ) )
-                aPoly = tools::PolyPolygon( static_cast<const SwVirtFlyDrawObj*>(pObj)->
+                aPoly = tools::PolyPolygon( pVirtFlyDrawObj->
                                      GetFlyFrame()->getFrameArea().SVRect() );
             aPolyPolygon.clear();
             aPolyPolygon.append(aPoly.getB2DPolyPolygon());

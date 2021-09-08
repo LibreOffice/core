@@ -373,31 +373,27 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_HOME:
         {
-            if (!mpView->IsTextEdit()
-                && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr
-                && !bSlideShow)
-            {
-               // jump to first page
-               static_cast<DrawViewShell*>(mpViewShell)->SwitchPage(0);
-               bReturn = true;
-            }
+            if (!mpView->IsTextEdit() && !bSlideShow)
+                if (auto pDrawViewShell = dynamic_cast<DrawViewShell *>( mpViewShell ))
+                {
+                   // jump to first page
+                   pDrawViewShell->SwitchPage(0);
+                   bReturn = true;
+                }
         }
         break;
 
         case KEY_END:
         {
-            if (!mpView->IsTextEdit()
-                && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr
-                && !bSlideShow)
-            {
-                // jump to last page
-                SdPage* pPage =
-                    static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
-                static_cast<DrawViewShell*>(mpViewShell)
-                    ->SwitchPage(mpDoc->GetSdPageCount(
-                        pPage->GetPageKind()) - 1);
-                bReturn = true;
-            }
+            if (!mpView->IsTextEdit() && !bSlideShow)
+                if (auto pDrawViewShell = dynamic_cast<DrawViewShell *>( mpViewShell ))
+                {
+                    // jump to last page
+                    SdPage* pPage = pDrawViewShell->GetActualPage();
+                    pDrawViewShell->SwitchPage(mpDoc->GetSdPageCount(
+                            pPage->GetPageKind()) - 1);
+                    bReturn = true;
+                }
         }
         break;
 
@@ -405,8 +401,10 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             if( rKEvt.GetKeyCode().IsMod1() && rKEvt.GetKeyCode().IsMod2() )
                 break;
+            if( bSlideShow)
+                break;
 
-            if( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr && !bSlideShow)
+            if( auto pDrawViewShell = dynamic_cast<DrawViewShell *>( mpViewShell ) )
             {
                 // The page-up key switches layers or pages depending on the
                 // modifier key.
@@ -418,7 +416,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                     // Previous page.
                     bReturn = true;
-                    SdPage* pPage = static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
+                    SdPage* pPage = pDrawViewShell->GetActualPage();
                     sal_uInt16 nSdPage = (pPage->GetPageNum() - 1) / 2;
 
                     if (nSdPage > 0)
@@ -427,11 +425,10 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         // deactivation the old page and activating the new
                         // one.
                         TabControl& rPageTabControl =
-                            static_cast<DrawViewShell*>(mpViewShell)
-                            ->GetPageTabControl();
+                            pDrawViewShell->GetPageTabControl();
                         if (rPageTabControl.IsReallyShown())
                             rPageTabControl.SendDeactivatePageEvent ();
-                        static_cast<DrawViewShell*>(mpViewShell)->SwitchPage(nSdPage - 1);
+                        pDrawViewShell->SwitchPage(nSdPage - 1);
                         if (rPageTabControl.IsReallyShown())
                             rPageTabControl.SendActivatePageEvent ();
                     }
@@ -439,7 +436,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 else if (rKEvt.GetKeyCode().IsMod1())
                 {
                     // With the CONTROL modifier we switch layers.
-                    if (static_cast<DrawViewShell*>(mpViewShell)->IsLayerModeActive())
+                    if (pDrawViewShell->IsLayerModeActive())
                     {
                         // Moves to the previous layer.
                         SwitchLayer (-1);
@@ -600,11 +597,11 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     bool bIsMoveOfConnectedHandle(false);
                     bool bOldSuppress = false;
                     SdrEdgeObj* pEdgeObj = nullptr;
+                    if(pHdl)
+                        pEdgeObj = dynamic_cast<SdrEdgeObj *>( pHdl->GetObj() );
 
-                    if(pHdl && dynamic_cast< const SdrEdgeObj *>( pHdl->GetObj() ) && 0 == pHdl->GetPolyNum())
+                    if(pEdgeObj && 0 == pHdl->GetPolyNum())
                     {
-                        pEdgeObj = static_cast<SdrEdgeObj*>(pHdl->GetObj());
-
                         if(0 == pHdl->GetPointNum())
                         {
                             if(pEdgeObj->GetConnection(true).GetObject())
