@@ -16985,7 +16985,7 @@ public:
     {
         //get_accessible_relation_set should only be needed for the vcl implementation,
         //in the gtk impl the native equivalent should negate the need.
-        assert(false && "get_accessible_parent should only be called on a vcl impl");
+        assert(false && "get_accessible_relation_set should only be called on a vcl impl");
         return uno::Reference<css::accessibility::XAccessibleRelationSet>();
     }
 
