@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5935690d_58919ffc",
+        "filename": "configure.ac",
+        "patchSetId": 9
+      },
+      "lineNbr": 10361,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-09-08T15:07:11Z",
+      "side": 1,
+      "message": "I am sorry, that was a wrong syntax in my comment. :/\n\nNo extra \"test\" (or remove the -o part, that was what I meant in my last comment with \"or somthing like\"):\n\nchecking which cuckoo to use... ./configure: line 32298: test: too many arguments\ninternal\n\nis wrong for --with-system-cuckoo :)",
+      "revId": "3879cc0d8691d0d58ce1fa0feab4614dca5bcabd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
