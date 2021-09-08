@@ -118,8 +118,8 @@ namespace o3tl
 class BrowseEvent
 {
     VclPtr<vcl::Window>     pWin;
-    sal_Int32               nRow;
     tools::Rectangle        aRect;
+    sal_Int32               nRow;
     sal_uInt16              nCol;
     sal_uInt16              nColId;
 
