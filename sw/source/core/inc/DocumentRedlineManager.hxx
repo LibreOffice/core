@@ -145,9 +145,9 @@ private:
     SwDoc& m_rDoc;
 
     RedlineFlags meRedlineFlags;     //< Current Redline Mode.
-    std::unique_ptr<SwRedlineTable> mpRedlineTable;           //< List of all Ranged Redlines.
-    std::unique_ptr<SwExtraRedlineTable> mpExtraRedlineTable;      //< List of all Extra Redlines.
-    std::unique_ptr<OUString> mpAutoFormatRedlnComment;  //< Comment for Redlines inserted via AutoFormat.
+    SwRedlineTable maRedlineTable;           //< List of all Ranged Redlines.
+    SwExtraRedlineTable maExtraRedlineTable;      //< List of all Extra Redlines.
+    std::optional<OUString> moAutoFormatRedlnComment;  //< Comment for Redlines inserted via AutoFormat.
     bool mbIsRedlineMove;    //< true: Redlines are moved into to / out of the section.
     sal_uInt16 mnAutoFormatRedlnCommentNo;  /**< SeqNo for conjoining of AutoFormat-Redlines.
                                          by the UI. Managed by SwAutoFormat! */
