@@ -564,6 +564,51 @@ void DomainMapper_Impl::AddDummyParaForTableInSection()
     }
 }
 
+ static bool lcl_ParaHasBookmark(const uno::Reference<text::XTextCursor>& xCursor)
+ {
+     if (!xCursor.is())
+         return false;
+
+     xCursor->goLeft(1, true);
+     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCursor, uno::UNO_QUERY);
+     if (!xParaEnumAccess.is())
+     {
+         xCursor->goRight(1, true);
+         return false;
+     }
+
+     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+     if (!xParaEnum->hasMoreElements())
+     {
+         xCursor->goRight(1, true);
+         return false;
+     }
+
+     uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParaEnum->nextElement(),
+                                                                  uno::UNO_QUERY);
+     if (!xRunEnumAccess.is())
+     {
+         xCursor->goRight(1, true);
+         return false;
+     }
+     uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+     while (xRunEnum->hasMoreElements())
+     {
+         uno::Reference<beans::XPropertySet> xProps(xRunEnum->nextElement(), uno::UNO_QUERY);
+         uno::Any aType(xProps->getPropertyValue("TextPortionType"));
+         OUString sType;
+         aType >>= sType;
+         if (sType == "Bookmark")
+         {
+             xCursor->goRight(1, true);
+             return true;
+         }
+     }
+
+     xCursor->goRight(1, true);
+     return false;
+ }
+
 void DomainMapper_Impl::RemoveLastParagraph( )
 {
     if (m_bDiscardHeaderFooter)
@@ -593,7 +638,7 @@ void DomainMapper_Impl::RemoveLastParagraph( )
         // (but only for paste/insert, not load; otherwise it can happen that
         // flys anchored at the disposed paragraph are deleted (fdo47036.rtf))
         bool const bEndOfDocument(m_aTextAppendStack.size() == 1);
-        if ((IsInHeaderFooter() || (bEndOfDocument && !m_bIsNewDoc))
+        if ((IsInHeaderFooter() || lcl_ParaHasBookmark(xCursor) || (bEndOfDocument && !m_bIsNewDoc))
             && xEnumerationAccess.is())
         {
             uno::Reference<container::XEnumeration> xEnumeration = xEnumerationAccess->createEnumeration();
