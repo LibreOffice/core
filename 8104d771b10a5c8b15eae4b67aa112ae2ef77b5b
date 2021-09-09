@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ede44482_40f9d31d",
+        "filename": "drawinglayer/source/primitive2d/fillgraphicprimitive2d.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-09T13:27:59Z",
+      "side": 1,
+      "message": "But is it OK to move the same container in a loop?",
+      "revId": "8104d771b10a5c8b15eae4b67aa112ae2ef77b5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
