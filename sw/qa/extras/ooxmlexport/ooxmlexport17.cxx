@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <string_view>
+#include <com/sun/star/text/XBookmarksSupplier.hpp>
 
 #include <swmodeltestbase.hxx>
 
@@ -52,6 +53,26 @@ CPPUNIT_TEST_FIXTURE(Test, testParaStyleNumLevel)
     // i.e. a custom list level in a para style was lost on import+export.
     assertXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='Mystyle']/w:pPr/w:numPr/w:ilvl", "val", "1");
 }
+
+DECLARE_OOXMLEXPORT_TEST(testTdf123642_BookmarkAtDocEnd, "tdf123642.docx")
+{
+    // get bookmark interface
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xBookmarksByName = xBookmarksSupplier->getBookmarks();
+
+    // check: we have 1 bookmark (previously there were 0)
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xBookmarksByIdx->getCount());
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Bookmark1"));
+
+    // and it is really in exprted DOCX (let's ensure)
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+       return; // initial import, no futher checks
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Bookmark1"), getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:bookmarkStart[1]", "name"));
+}
+
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
