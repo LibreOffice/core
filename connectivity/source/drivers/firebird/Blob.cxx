@@ -122,22 +122,22 @@ sal_uInt16 Blob::getMaximumSegmentSize()
     return m_nMaxSegmentSize;
 }
 
-bool Blob::readOneSegment(uno::Sequence< sal_Int8 >& rDataOut)
+bool Blob::readOneSegment(std::vector<char>& rDataOut)
 {
     checkDisposed(Blob_BASE::rBHelper.bDisposed);
     ensureBlobIsOpened();
 
     sal_uInt16 nMaxSize = getMaximumSegmentSize();
 
-    if(rDataOut.getLength() < nMaxSize)
-        rDataOut.realloc(nMaxSize);
+    if(rDataOut.size() < nMaxSize)
+        rDataOut.resize(nMaxSize);
 
     sal_uInt16 nActualSize = 0;
     ISC_STATUS aRet = isc_get_segment(m_statusVector,
             &m_blobHandle,
             &nActualSize,
             nMaxSize,
-            reinterpret_cast<char*>(rDataOut.getArray()) );
+            rDataOut.data() );
 
     if (aRet && aRet != isc_segstr_eof && IndicatesError(m_statusVector))
     {
@@ -145,8 +145,8 @@ bool Blob::readOneSegment(uno::Sequence< sal_Int8 >& rDataOut)
         throw IOException(sError, *this);
     }
 
-    if (rDataOut.getLength() > nActualSize)
-        rDataOut.realloc(nActualSize);
+    if (rDataOut.size() > nActualSize)
+        rDataOut.resize(nActualSize);
     m_nBlobPosition += nActualSize;
     return aRet == isc_segstr_eof;  // last segment read
 }
