@@ -2750,8 +2750,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf123898)
     Scheduler::ProcessEventsToIdle();
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    // Make sure that the arrow on the left is not there (there are 43 children if it's there)
-    assertXPathChildren(pXmlDoc, "/root/page/body/txt/anchored/fly/txt", 42);
+    // Make sure that the arrow on the left is not there (there are 44 children if it's there)
+    assertXPathChildren(pXmlDoc, "/root/page/body/txt/anchored/fly/txt", 43);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf123651)
