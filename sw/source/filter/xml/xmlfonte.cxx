@@ -46,21 +46,27 @@ SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(SwXMLExport& _rExport, 
                                       RES_CHRATR_CTL_FONT };
 
     const SfxItemPool& rPool = _rExport.getDoc()->GetAttrPool();
+    std::vector<const SvxFontItem *> aFonts;
     for(sal_uInt16 nWhichId : aWhichIds)
     {
         const SvxFontItem& rFont =
             static_cast<const SvxFontItem&>(rPool.GetDefaultItem( nWhichId ));
-        Add( rFont.GetFamilyName(), rFont.GetStyleName(),
-             rFont.GetFamily(), rFont.GetPitch(),
-             rFont.GetCharSet() );
+        aFonts.push_back(&rFont);
         for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(nWhichId))
         {
             auto pFont = static_cast<const SvxFontItem *>(pItem);
-            Add( pFont->GetFamilyName(), pFont->GetStyleName(),
-                 pFont->GetFamily(), pFont->GetPitch(),
-                 pFont->GetCharSet() );
+            aFonts.push_back(pFont);
         }
     }
+
+    std::sort(aFonts.begin(), aFonts.end(),
+              [](const SvxFontItem* pA, const SvxFontItem* pB) -> bool { return *pA < *pB; });
+    for (const auto& pFont : aFonts)
+    {
+        Add(pFont->GetFamilyName(), pFont->GetStyleName(), pFont->GetFamily(), pFont->GetPitch(),
+            pFont->GetCharSet());
+    }
+
     auto const & pDocument = _rExport.getDoc();
 
     m_bEmbedUsedOnly = pDocument->getIDocumentSettingAccess().get(DocumentSettingId::EMBED_USED_FONTS);
