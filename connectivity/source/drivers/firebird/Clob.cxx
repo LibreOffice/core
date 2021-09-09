@@ -56,11 +56,9 @@ sal_Int64 SAL_CALL Clob::length()
     bool bLastSegmRead = false;
     do
     {
-        uno::Sequence < sal_Int8 > aSegmentBytes;
+        std::vector<char> aSegmentBytes;
         bLastSegmRead = m_aBlob->readOneSegment( aSegmentBytes );
-        OUString sSegment ( reinterpret_cast< const char *>( aSegmentBytes.getConstArray() ),
-                            aSegmentBytes.getLength(),
-                            RTL_TEXTENCODING_UTF8 );
+        OUString sSegment(aSegmentBytes.data(), aSegmentBytes.size(), RTL_TEXTENCODING_UTF8);
 
         if( !bLastSegmRead)
             m_nCharCount += sSegment.getLength();
@@ -85,14 +83,12 @@ OUString SAL_CALL Clob::getSubString(sal_Int64 nPosition,
     // skip irrelevant parts
     while( nActPos < nPosition )
     {
-        uno::Sequence < sal_Int8 > aSegmentBytes;
+        std::vector<char> aSegmentBytes;
         bool bLastRead = m_aBlob->readOneSegment( aSegmentBytes );
         if( bLastRead )
             throw lang::IllegalArgumentException("nPosition out of range", *this, 0);
 
-        OUString sSegment ( reinterpret_cast< const char *>( aSegmentBytes.getConstArray() ),
-                            aSegmentBytes.getLength(),
-                            RTL_TEXTENCODING_UTF8 );
+        OUString sSegment(aSegmentBytes.data(), aSegmentBytes.size(), RTL_TEXTENCODING_UTF8);
         sal_Int32 nStrLen = sSegment.getLength();
         nActPos += nStrLen;
         if( nActPos > nPosition )
@@ -109,12 +105,10 @@ OUString SAL_CALL Clob::getSubString(sal_Int64 nPosition,
     // read nLength characters
     while( nActLen < nLength )
     {
-        uno::Sequence < sal_Int8 > aSegmentBytes;
+        std::vector<char> aSegmentBytes;
         bool bLastRead = m_aBlob->readOneSegment( aSegmentBytes );
 
-        OUString sSegment ( reinterpret_cast< const char *>( aSegmentBytes.getConstArray() ),
-                            aSegmentBytes.getLength(),
-                            RTL_TEXTENCODING_UTF8 );
+        OUString sSegment(aSegmentBytes.data(), aSegmentBytes.size(), RTL_TEXTENCODING_UTF8);
         sal_Int32 nStrLen = sSegment.getLength();
         if( nActLen + nStrLen > nLength )
             sSegmentBuffer.append(sSegment.subView(0, nLength - nActLen));
