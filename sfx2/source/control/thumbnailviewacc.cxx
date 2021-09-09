@@ -824,30 +824,19 @@ awt::Point SAL_CALL ThumbnailViewItemAcc::getLocation()
     return aRet;
 }
 
+// get position of the accessible parent in screen coordinates
 awt::Point SAL_CALL ThumbnailViewItemAcc::getLocationOnScreen()
 {
     const SolarMutexGuard aSolarGuard;
     awt::Point          aRet;
 
-    if( mpParent )
+    if (mpParent)
     {
         const Point aPos = mpParent->getDrawArea().TopLeft();
+        const Point aScreenPos(mpParent->mrParent.GetDrawingArea()->get_accessible_location_on_screen());
 
-        aRet.X = aPos.X();
-        aRet.Y = aPos.Y();
-
-        // get position of the accessible parent in screen coordinates
-        uno::Reference< XAccessible > xParent = getAccessibleParent();
-        if ( xParent.is() )
-        {
-            uno::Reference<XAccessibleComponent> xParentComponent(xParent->getAccessibleContext(), uno::UNO_QUERY);
-            if (xParentComponent.is())
-            {
-                awt::Point aParentScreenLoc = xParentComponent->getLocationOnScreen();
-                aRet.X += aParentScreenLoc.X;
-                aRet.Y += aParentScreenLoc.Y;
-            }
-        }
+        aRet.X = aPos.X() + aScreenPos.X();
+        aRet.Y = aPos.Y() + aScreenPos.X();
     }
 
     return aRet;
