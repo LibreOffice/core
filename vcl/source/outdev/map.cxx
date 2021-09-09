@@ -268,6 +268,14 @@ static tools::Long ImplLogicToPixel(tools::Long n, tools::Long nDPI, tools::Long
     return n;
 }
 
+static double ImplLogicToPixel(double n, tools::Long nDPI, tools::Long nMapNum,
+                                         tools::Long nMapDenom)
+{
+    assert(nDPI > 0);
+    assert(nMapDenom != 0);
+    return n * nMapNum * nDPI / nMapDenom;
+}
+
 static tools::Long ImplPixelToLogic(tools::Long n, tools::Long nDPI, tools::Long nMapNum,
                                     tools::Long nMapDenom)
 {
@@ -451,6 +459,39 @@ tools::Polygon OutputDevice::ImplLogicToDevicePixel( const tools::Polygon& rLogi
             aPt.AdjustX(mnOutOffX );
             aPt.AdjustY(mnOutOffY );
             aPoly[i] = aPt;
+        }
+    }
+
+    return aPoly;
+}
+
+basegfx::B2DPolygon OutputDevice::ImplLogicToDevicePixel(const basegfx::B2DPolygon& rLogicPoly) const
+{
+    if (!mbMap && !mnOutOffX && !mnOutOffY)
+        return rLogicPoly;
+
+    sal_uInt32 nPoints = rLogicPoly.count();
+    basegfx::B2DPolygon aPoly(rLogicPoly);
+
+    if (mbMap)
+    {
+        for (sal_uInt32 i = 0; i < nPoints; ++i)
+        {
+            const basegfx::B2DPoint& rPt = aPoly.getB2DPoint(i);
+            basegfx::B2DPoint aPt(ImplLogicToPixel( rPt.getX()+maMapRes.mnMapOfsX, mnDPIX,
+                                        maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX )+mnOutOffX+mnOutOffOrigX,
+                                  ImplLogicToPixel( rPt.getY()+maMapRes.mnMapOfsY, mnDPIY,
+                                        maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY )+mnOutOffY+mnOutOffOrigY);
+            aPoly.setB2DPoint(i, aPt);
+        }
+    }
+    else
+    {
+        for (sal_uInt32 i = 0; i < nPoints; ++i)
+        {
+            const basegfx::B2DPoint& rPt = aPoly.getB2DPoint(i);
+            basegfx::B2DPoint aPt(rPt.getX() + mnOutOffX, rPt.getY() + mnOutOffY);
+            aPoly.setB2DPoint(i, aPt);
         }
     }
 
