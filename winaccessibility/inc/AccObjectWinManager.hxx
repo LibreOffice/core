@@ -37,6 +37,8 @@
 #pragma clang diagnostic pop
 #endif
 
+#include <com/sun/star/accessibility/XAccessible.hpp>
+
 class ResIDGenerator;
 class AccObjectManagerAgent;
 class AccEventListener;
@@ -55,8 +57,8 @@ class AccObjectWinManager
     friend class AccObjectManagerAgent;
 
 private:
-    typedef std::map<void*, AccObject> XIdToAccObjHash;
-    typedef std::map<HWND, void*> XHWNDToXAccHash;
+    typedef std::map<com::sun::star::accessibility::XAccessible*, AccObject> XIdToAccObjHash;
+    typedef std::map<HWND, com::sun::star::accessibility::XAccessible*> XHWNDToXAccHash;
     typedef std::map<const long, AccObject*> XResIdToAccObjHash;
 
     typedef std::map<const HWND, css::accessibility::XAccessible* >
