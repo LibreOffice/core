@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6076db82_f4f769a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-09T08:12:36Z",
+      "side": 1,
+      "message": "pinging jmux, this might be of interest",
+      "revId": "4a02a9cb78a0e76063d373c3d5d4d22614bb8345",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
