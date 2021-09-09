@@ -1024,6 +1024,11 @@ void FixZOrder(uno::Reference<drawing::XShapes> const& xShapes,
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
         uno::Reference<beans::XPropertySet> const xShape(xShapes->getByIndex(i), uno::UNO_QUERY);
+        if (!xShape.is())
+        {
+            SAL_WARN("xmloff", "FixZOrder: null shape, cannot sort");
+            return;
+        }
         unsigned int const nLayer(rGetLayer(xShape));
         if (layers.size() <= nLayer)
         {
