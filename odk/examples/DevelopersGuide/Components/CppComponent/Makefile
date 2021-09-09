@@ -72,7 +72,7 @@ SLOFILES = $(patsubst %.cxx,$(SAMPLE_SLO_OUT)/%.$(OBJ_EXT),$(CXXFILES))
 
 GENURDFILES = $(patsubst %.idl,$(SAMPLE_GEN_OUT)/%.urd,$(IDLFILES))
 
-TYPELIST=-Tmy_module.XSomething  \
+TYPESLIST=-Tmy_module.XSomething  \
 	-Tmy_modules.MyService1 \
 	-Tmy_module.MyService2
  
