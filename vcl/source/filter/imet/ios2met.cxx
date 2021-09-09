@@ -240,12 +240,26 @@ struct OSPath
     tools::PolyPolygon aPPoly;
     bool    bClosed;
     bool    bStroke;
+
+    OSPath()
+        : pSucc(nullptr)
+        , nID(0)
+        , bClosed(false)
+        , bStroke(false)
+    {
+    }
 };
 
 struct OSFont {
     OSFont *  pSucc;
     sal_uInt32 nID;
     vcl::Font aFont;
+
+    OSFont()
+        : pSucc(nullptr)
+        , nID(0)
+    {
+    }
 };
 
 struct OSBitmap {
