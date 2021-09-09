@@ -88,6 +88,24 @@
       "parentUuid": "43a8836e_a1be16dc",
       "revId": "8b4c6b0d6f5867967ed2e32876f3b919ae41a95b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3922200b_741bfd90",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-09T19:21:36Z",
+      "side": 1,
+      "message": "Please no need to be sorry - we are dealing with rather low-level stuff, so we need to iterate a bit until we are safe 😊\n\nThank you!",
+      "parentUuid": "58c840e5_930aba6d",
+      "revId": "8b4c6b0d6f5867967ed2e32876f3b919ae41a95b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
