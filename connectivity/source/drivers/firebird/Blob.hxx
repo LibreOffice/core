@@ -16,6 +16,8 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/sdbc/XBlob.hpp>
 
+#include <vector>
+
 namespace connectivity::firebird
     {
         typedef ::cppu::WeakComponentImplHelper< css::sdbc::XBlob,
@@ -59,7 +61,7 @@ namespace connectivity::firebird
                  isc_tr_handle* pTransactionHandle,
                  ISC_QUAD const & aBlobID);
 
-            bool readOneSegment(css::uno::Sequence< sal_Int8 >& rDataOut);
+            bool readOneSegment(std::vector<char>& rDataOut);
 
             // ---- XBlob ----------------------------------------------------
             virtual sal_Int64 SAL_CALL
