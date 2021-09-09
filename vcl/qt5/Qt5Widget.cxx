@@ -514,7 +514,6 @@ bool Qt5Widget::handleKeyEvent(Qt5Frame& rFrame, const QWidget& rWidget, QKeyEve
 
             if (eState == ButtonKeyState::Released)
             {
-                aModEvt.mnModKeyCode = rFrame.m_nKeyModifiers;
                 nModCode &= ~nModMask;
                 rFrame.m_nKeyModifiers &= ~nExtModMask;
             }
@@ -522,8 +521,8 @@ bool Qt5Widget::handleKeyEvent(Qt5Frame& rFrame, const QWidget& rWidget, QKeyEve
             {
                 nModCode |= nModMask;
                 rFrame.m_nKeyModifiers |= nExtModMask;
-                aModEvt.mnModKeyCode = rFrame.m_nKeyModifiers;
             }
+            aModEvt.mnModKeyCode = rFrame.m_nKeyModifiers;
         }
 #endif
         aModEvt.mnCode = nModCode;
