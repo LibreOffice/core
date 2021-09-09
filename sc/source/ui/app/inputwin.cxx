@@ -1575,12 +1575,17 @@ bool ScTextWnd::MouseMove( const MouseEvent& rMEvt )
     return m_xEditView && m_xEditView->MouseMove(rMEvt);
 }
 
+bool ScTextWnd::CanFocus() const
+{
+    return SC_MOD()->IsEditMode();
+}
+
 bool ScTextWnd::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if (!HasFocus())
     {
         StartEditEngine();
-        if ( SC_MOD()->IsEditMode() )
+        if (CanFocus())
             TextGrabFocus();
     }
 
