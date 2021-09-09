@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a915e991_a94e68c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-09T18:24:59Z",
+      "side": 1,
+      "message": "For the tests, I thought about a new file with something like the following, or should we insert it into the optional parameter tests?\n\nType testObject\n    testInt As Integer\nEnd Type\n\nFunction TestObjectError(Optional optInt)\nOn Error GoTo errorHandler\n    testObject \u003d CreateObject(\"testObject\")\n    testObject.testInt \u003d optInt\n    TestObjectError \u003d optInt\nerrorHandler:\n    TestObjectError \u003d Err()\nEnd Function\n\nSub Main\n    TestUtil.AssertEqual(TestObjectError, 449, \"TestObjectError\")\nEnd Sub\n\nOr maybe you have an other idea how to test the fix using an object?",
+      "revId": "6d8fb90de6639fc6be9e355b6d2f6f98627d9aec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
