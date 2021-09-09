@@ -47,14 +47,10 @@ using namespace drawinglayer::primitive2d;
 
 constexpr int gnFineness = 5;
 
-bool ThumbnailViewBase::renameItem(ThumbnailViewItem*, const OUString&)
+bool ThumbnailView::renameItem(ThumbnailViewItem*, const OUString&)
 {
     // Do nothing by default
     return false;
-}
-
-ThumbnailViewBase::~ThumbnailViewBase()
-{
 }
 
 BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)

@@ -32,7 +32,7 @@ namespace drawinglayer::primitive2d { class Primitive2DContainer; }
 
 const int THUMBNAILVIEW_ITEM_CORNER = 5;
 
-class ThumbnailViewBase;
+class ThumbnailView;
 class MouseEvent;
 
 namespace basegfx {
@@ -66,7 +66,7 @@ class SFX2_DLLPUBLIC ThumbnailViewItem
 {
 public:
 
-    ThumbnailViewBase &mrParent;
+    ThumbnailView& mrParent;
     sal_uInt16 mnId;
     bool mbVisible;
     bool mbBorder;
@@ -77,7 +77,7 @@ public:
     OUString maHelpText;
     css::uno::Reference< css::accessibility::XAccessible > mxAcc;
 
-    ThumbnailViewItem (ThumbnailViewBase &rView, sal_uInt16 nId);
+    ThumbnailViewItem(ThumbnailView& rView, sal_uInt16 nId);
 
     virtual ~ThumbnailViewItem ();
 

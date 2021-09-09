@@ -40,7 +40,7 @@ using namespace ::com::sun::star;
 using namespace drawinglayer::attribute;
 using namespace drawinglayer::primitive2d;
 
-ThumbnailViewItem::ThumbnailViewItem(ThumbnailViewBase &rView, sal_uInt16 nId)
+ThumbnailViewItem::ThumbnailViewItem(ThumbnailView& rView, sal_uInt16 nId)
     : mrParent(rView)
     , mnId(nId)
     , mbVisible(true)
