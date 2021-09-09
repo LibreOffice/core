@@ -145,7 +145,7 @@ AccObject* AccObjectWinManager::GetTopWindowAccObj(HWND hWnd)
     XHWNDToXAccHash::iterator iterResult =HwndXAcc.find(hWnd);
     if(iterResult == HwndXAcc.end())
         return nullptr;
-    XAccessible* pXAcc = static_cast<XAccessible*>(iterResult->second);
+    XAccessible* pXAcc = iterResult->second;
     return GetAccObjByXAcc(pXAcc);
 }
 
