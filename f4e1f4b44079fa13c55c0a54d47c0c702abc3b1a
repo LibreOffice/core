@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71f3ebcb_67b692c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-09T13:46:05Z",
+      "side": 1,
+      "message": "This is just a rebase because I got conflicts when applying this on top of latest co-2021. Will comment here when I actually figure out what is going on here.",
+      "revId": "f4e1f4b44079fa13c55c0a54d47c0c702abc3b1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
