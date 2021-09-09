@@ -130,6 +130,11 @@ void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
         // Window's create/destroy is called via SendMessage() from another thread.
         // Have a look at the osl_waitCondition implementation for more info.
         do {
+            // Calling Condition::reset frequently turns out to be a little expensive,
+            // and the vast majority of the time there is no contention, so first
+            // try just acquiring the mutex.
+            if (m_aMutex.tryToAcquire())
+                break;
             // reset condition *before* acquiring!
             m_condition.reset();
             if (m_aMutex.tryToAcquire())
