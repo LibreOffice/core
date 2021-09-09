@@ -248,8 +248,6 @@ void OutputDevice::drawPolyLine(const tools::Polygon& rPoly, const LineInfo& rLi
     if ( !IsDeviceOutputNecessary() || !mbLineColor || ( nPoints < 2 ) || ( LineStyle::NONE == rLineInfo.GetStyle() ) || ImplIsRecordLayout() )
         return;
 
-    tools::Polygon aPoly = ImplLogicToDevicePixel( rPoly );
-
     // we need a graphics
     if ( !mpGraphics && !AcquireGraphics() )
         return;
@@ -268,12 +266,15 @@ void OutputDevice::drawPolyLine(const tools::Polygon& rPoly, const LineInfo& rLi
     const bool bDashUsed(LineStyle::Dash == aInfo.GetStyle());
     const bool bLineWidthUsed(aInfo.GetWidth() > 1);
 
-    if(bDashUsed || bLineWidthUsed)
+    if (bDashUsed || bLineWidthUsed)
     {
-        drawLine ( basegfx::B2DPolyPolygon(aPoly.getB2DPolygon()), aInfo );
+        basegfx::B2DPolygon aPoly = ImplLogicToDevicePixel(rPoly.getB2DPolygon());
+        drawLine(basegfx::B2DPolyPolygon(aPoly), aInfo);
     }
     else
     {
+        tools::Polygon aPoly = ImplLogicToDevicePixel(rPoly);
+
         // #100127# the subdivision HAS to be done here since only a pointer
         // to an array of points is given to the DrawPolyLine method, there is
         // NO way to find out there that it's a curve.
