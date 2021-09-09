@@ -159,35 +159,20 @@ public:
  *
  **/
 
-class SFX2_DLLPUBLIC ThumbnailViewBase
+class SFX2_DLLPUBLIC ThumbnailView : public weld::CustomWidgetController
 {
     friend class ThumbnailViewAcc;
     friend class ThumbnailViewItemAcc;
 
-    virtual sal_uInt16 ImplGetVisibleItemCount() const = 0;
-    virtual ThumbnailViewItem* ImplGetVisibleItem(sal_uInt16 nVisiblePos) = 0;
-
-    virtual css::uno::Reference<css::accessibility::XAccessible> getAccessible() = 0;
-
-public:
-    /// Updates information in the view; used only in RecentDocsView ATM.
-    virtual void Reload() {}
-
-    virtual bool renameItem(ThumbnailViewItem* pItem, const OUString& sNewTitle);
-
-    virtual bool isDrawMnemonic() const = 0;
-
-    virtual ~ThumbnailViewBase();
-};
-
-class SFX2_DLLPUBLIC ThumbnailView : public weld::CustomWidgetController, public ThumbnailViewBase
-{
 public:
     ThumbnailView(std::unique_ptr<weld::ScrolledWindow> xWindow, std::unique_ptr<weld::Menu> xMenu);
 
     virtual ~ThumbnailView() override;
 
     virtual bool MouseMove(const MouseEvent& rMEvt) override;
+
+    /// Updates information in the view; used only in RecentDocsView ATM.
+    virtual void Reload() {}
 
     void AppendItem(std::unique_ptr<ThumbnailViewItem> pItem);
 
@@ -206,7 +191,9 @@ public:
 
     sal_uInt16 getNextItemId () const;
 
-    virtual bool isDrawMnemonic() const override { return mbDrawMnemonics; }
+    virtual bool renameItem(ThumbnailViewItem* pItem, const OUString& sNewTitle);
+
+    virtual bool isDrawMnemonic() const { return mbDrawMnemonics; }
 
     void setItemMaxTextLength (sal_uInt32 nLength);
 
@@ -269,7 +256,7 @@ protected:
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
-    virtual css::uno::Reference<css::accessibility::XAccessible> getAccessible() override;
+    virtual css::uno::Reference<css::accessibility::XAccessible> getAccessible();
 
 protected:
 
@@ -295,8 +282,8 @@ protected:
     void         ImplDeleteItems();
     size_t       ImplGetItem( const Point& rPoint ) const;
     ThumbnailViewItem*    ImplGetItem( size_t nPos );
-    virtual sal_uInt16 ImplGetVisibleItemCount() const override;
-    virtual ThumbnailViewItem* ImplGetVisibleItem(sal_uInt16 nVisiblePos) override;
+    virtual sal_uInt16 ImplGetVisibleItemCount() const;
+    virtual ThumbnailViewItem* ImplGetVisibleItem(sal_uInt16 nVisiblePos);
     void         ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
     bool         ImplHasAccessibleListeners();
     DECL_LINK( ImplScrollHdl, weld::ScrolledWindow&, void );

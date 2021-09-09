@@ -14,7 +14,7 @@
 
 struct TemplateSearchViewItem final : public TemplateViewItem
 {
-    TemplateSearchViewItem(ThumbnailViewBase& rView, sal_uInt16 nId)
+    TemplateSearchViewItem(ThumbnailView& rView, sal_uInt16 nId)
         : TemplateViewItem(rView, nId)
         , mnAssocId(0)
     {

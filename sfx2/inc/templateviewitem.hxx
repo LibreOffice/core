@@ -15,7 +15,7 @@ class TemplateViewItem : public ThumbnailViewItem
 {
 public:
 
-    TemplateViewItem (ThumbnailViewBase &rView, sal_uInt16 nId);
+    TemplateViewItem(ThumbnailView& rView, sal_uInt16 nId);
 
     virtual ~TemplateViewItem () override;
 
