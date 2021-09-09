@@ -15,6 +15,10 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#endif
 #if defined __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-parameter"
@@ -29,6 +33,9 @@
 #endif
 #if defined __clang__
 #pragma clang diagnostic pop
+#endif
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
 #endif
 
 namespace svl
