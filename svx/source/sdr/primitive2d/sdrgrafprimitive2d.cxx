@@ -94,8 +94,8 @@ void SdrGrafPrimitive2D::create2DDecomposition(
     // Soft edges should be before text, since text is not affected by soft edges
     if (!aRetval.empty() && getSdrLFSTAttribute().getSoftEdgeRadius())
     {
-        aRetval
-            = createEmbeddedSoftEdgePrimitive(aRetval, getSdrLFSTAttribute().getSoftEdgeRadius());
+        aRetval = createEmbeddedSoftEdgePrimitive(std::move(aRetval),
+                                                  getSdrLFSTAttribute().getSoftEdgeRadius());
     }
 
     // add text

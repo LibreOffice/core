@@ -348,10 +348,10 @@ namespace wmfemfhelper
 
             if (rClipPolyPolygon.count())
             {
-                const drawinglayer::primitive2d::Primitive2DReference xMask(
+                drawinglayer::primitive2d::Primitive2DReference xMask(
                     new drawinglayer::primitive2d::MaskPrimitive2D(
                         rClipPolyPolygon,
-                        xRetval));
+                        std::move(xRetval)));
 
                 xRetval = drawinglayer::primitive2d::Primitive2DContainer{ xMask };
             }
@@ -845,7 +845,7 @@ namespace wmfemfhelper
             {
                 rTargetHolders.Current().append(
                     new drawinglayer::primitive2d::GroupPrimitive2D(
-                        aSubContent));
+                        std::move(aSubContent)));
             }
         }
 
@@ -892,7 +892,7 @@ namespace wmfemfhelper
                     // force content to black
                     rTargetHolders.Current().append(
                         new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
-                            aSubContent,
+                            std::move(aSubContent),
                             std::make_shared<basegfx::BColorModifier_replace>(
                                     basegfx::BColor(0.0, 0.0, 0.0))));
                 }
@@ -901,7 +901,7 @@ namespace wmfemfhelper
                     // invert content
                     rTargetHolders.Current().append(
                         new drawinglayer::primitive2d::InvertPrimitive2D(
-                            aSubContent));
+                            std::move(aSubContent)));
                 }
             }
         }
@@ -959,11 +959,11 @@ namespace wmfemfhelper
             if(!rPropertyHolder.getTransformation().isIdentity())
             {
                 const drawinglayer::primitive2d::Primitive2DReference xPrim(pRetval);
-                const drawinglayer::primitive2d::Primitive2DContainer xSeq { xPrim };
+                drawinglayer::primitive2d::Primitive2DContainer xSeq { xPrim };
 
                 pRetval = new drawinglayer::primitive2d::TransformPrimitive2D(
                     rPropertyHolder.getTransformation(),
-                    xSeq);
+                    std::move(xSeq));
             }
 
             return pRetval;
@@ -1270,7 +1270,7 @@ namespace wmfemfhelper
                         rProperty.getTextFillColor()));
 
                 // set as group at pResult
-                pResult = new drawinglayer::primitive2d::GroupPrimitive2D(aSequence);
+                pResult = new drawinglayer::primitive2d::GroupPrimitive2D(std::move(aSequence));
             }
         }
 
@@ -1420,7 +1420,7 @@ namespace wmfemfhelper
             rTarget.append(
                 new drawinglayer::primitive2d::TransformPrimitive2D(
                     rProperty.getTransformation(),
-                    xTargets));
+                    std::move(xTargets)));
         }
     }
 
@@ -1970,7 +1970,7 @@ namespace wmfemfhelper
                                 rTargetHolders.Current().append(
                                     new drawinglayer::primitive2d::TransformPrimitive2D(
                                         rPropertyHolders.Current().getTransformation(),
-                                        xSubContent));
+                                        std::move(xSubContent)));
                             }
                         }
                     }
@@ -2158,7 +2158,7 @@ namespace wmfemfhelper
                                 rTargetHolders.Current().append(
                                     new drawinglayer::primitive2d::MaskPrimitive2D(
                                         aOutline,
-                                        xGradient));
+                                        std::move(xGradient)));
                             }
                         }
                     }
@@ -2670,7 +2670,7 @@ namespace wmfemfhelper
 
                             // create primitives there and get them
                             createHairlineAndFillPrimitive(aOutline, rTargetHolders.Current(), rPropertyHolders.Current());
-                            const drawinglayer::primitive2d::Primitive2DContainer aSubContent(
+                            drawinglayer::primitive2d::Primitive2DContainer aSubContent(
                                 rTargetHolders.Current().getPrimitive2DSequence(rPropertyHolders.Current()));
 
                             // back to old target
@@ -2680,7 +2680,7 @@ namespace wmfemfhelper
                             {
                                 rTargetHolders.Current().append(
                                     new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
-                                        aSubContent,
+                                        std::move(aSubContent),
                                         nTransparence * 0.01));
                             }
                         }
@@ -2820,7 +2820,7 @@ namespace wmfemfhelper
                                     const drawinglayer::primitive2d::Primitive2DReference aEmbeddedTransform(
                                         new drawinglayer::primitive2d::TransformPrimitive2D(
                                             aSubTransform,
-                                            xSubContent));
+                                            std::move(xSubContent)));
 
                                     xSubContent = drawinglayer::primitive2d::Primitive2DContainer { aEmbeddedTransform };
                                 }
@@ -2834,7 +2834,7 @@ namespace wmfemfhelper
                                     // not really a gradient; create UnifiedTransparencePrimitive2D
                                     rTargetHolders.Current().append(
                                         new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
-                                            xSubContent,
+                                            std::move(xSubContent),
                                             aAttribute.getStartColor().luminance()));
                                 }
                                 else
@@ -2852,7 +2852,7 @@ namespace wmfemfhelper
                                     // create transparence primitive
                                     rTargetHolders.Current().append(
                                         new drawinglayer::primitive2d::TransparencePrimitive2D(
-                                            xSubContent,
+                                            std::move(xSubContent),
                                             drawinglayer::primitive2d::Primitive2DContainer { xTransparence }));
                                 }
                             }

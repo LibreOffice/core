@@ -213,7 +213,7 @@ void SwPageBreakWin::PaintButton()
                 std::make_shared<basegfx::BColorModifier_interpolate>(COL_WHITE.getBColor(),
                                                         1.0 - nFadeRate);
     aGhostedSeq[0].set( new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
-                            aSeq, aBColorModifier));
+                            std::move(aSeq), aBColorModifier));
 
     // Create the processor and process the primitives
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;

@@ -69,7 +69,7 @@ namespace drawinglayer::primitive2d
                 {
                     // shrunk primitive has no content (zero size in X or Y), nothing to display. Still create
                     // invisible content for HitTest and BoundRect
-                    const Primitive2DReference xHiddenLines(new HiddenGeometryPrimitive2D(xRetval));
+                    const Primitive2DReference xHiddenLines(new HiddenGeometryPrimitive2D(std::move(xRetval)));
 
                     xRetval = Primitive2DContainer { xHiddenLines, };
                 }
@@ -82,7 +82,7 @@ namespace drawinglayer::primitive2d
                     aTransform.translate(aDestRange.getMinX(), aDestRange.getMinY());
 
                     // add transform primitive
-                    const Primitive2DReference aScaled(new TransformPrimitive2D(aTransform, xRetval));
+                    Primitive2DReference aScaled(new TransformPrimitive2D(aTransform, std::move(xRetval)));
                     xRetval = Primitive2DContainer { aScaled };
                 }
             }

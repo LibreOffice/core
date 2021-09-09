@@ -33,9 +33,9 @@ using namespace com::sun::star;
 namespace drawinglayer::primitive2d
 {
         UnifiedTransparencePrimitive2D::UnifiedTransparencePrimitive2D(
-            const Primitive2DContainer& rChildren,
+            Primitive2DContainer&& aChildren,
             double fTransparence)
-        :   GroupPrimitive2D(rChildren),
+        :   GroupPrimitive2D(std::move(aChildren)),
             mfTransparence(fTransparence)
         {
         }
@@ -93,7 +93,7 @@ namespace drawinglayer::primitive2d
                 aTransparenceContent[1] = Primitive2DReference(new PolygonHairlinePrimitive2D(aPolygon, aGray));
 
                 // create sub-transparence group with a gray-colored rectangular fill polygon
-                rVisitor.append(new TransparencePrimitive2D(getChildren(), aTransparenceContent));
+                rVisitor.append(new TransparencePrimitive2D(Primitive2DContainer(getChildren()), std::move(aTransparenceContent)));
             }
             else
             {

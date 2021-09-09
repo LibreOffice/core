@@ -492,7 +492,7 @@ namespace svgio::svgreader
                     rTarget.push_back(
                         new drawinglayer::primitive2d::TransformPrimitive2D(
                             *rFillPattern.getPatternTransform(),
-                            aNewTarget));
+                            std::move(aNewTarget)));
                 }
             }
             else
@@ -579,7 +579,7 @@ namespace svgio::svgreader
                 const drawinglayer::primitive2d::Primitive2DReference xRef(
                     new drawinglayer::primitive2d::TransformPrimitive2D(
                         aMapPrimitivesToUnitRange,
-                        aPrimitives));
+                        std::move(aPrimitives)));
 
                 aPrimitives = drawinglayer::primitive2d::Primitive2DContainer { xRef };
             }
@@ -638,7 +638,7 @@ namespace svgio::svgreader
                 // embed in UnifiedTransparencePrimitive2D
                 rTarget.push_back(
                     new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
-                        aNewFill,
+                        std::move(aNewFill),
                         1.0 - fFillOpacity));
             }
             else
@@ -794,7 +794,7 @@ namespace svgio::svgreader
                 // embed in UnifiedTransparencePrimitive2D
                 rTarget.push_back(
                     new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
-                        aNewStroke,
+                        std::move(aNewStroke),
                         1.0 - fStrokeOpacity));
             }
             else
@@ -1057,7 +1057,7 @@ namespace svgio::svgreader
                         drawinglayer::primitive2d::Primitive2DReference xMarker(
                             new drawinglayer::primitive2d::TransformPrimitive2D(
                                 aCombinedTransform,
-                                aPreparedMarkerPrimitives));
+                                drawinglayer::primitive2d::Primitive2DContainer(aPreparedMarkerPrimitives)));
 
                         if(!aPreparedMarkerClipRange.isEmpty())
                         {
@@ -1168,7 +1168,7 @@ namespace svgio::svgreader
                 // embed in UnifiedTransparencePrimitive2D
                 const drawinglayer::primitive2d::Primitive2DReference xRef(
                     new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
-                        aSource,
+                        std::move(aSource),
                         1.0 - fOpacity));
 
                 aSource = drawinglayer::primitive2d::Primitive2DContainer { xRef };
@@ -1181,7 +1181,7 @@ namespace svgio::svgreader
                 const drawinglayer::primitive2d::Primitive2DReference xRef(
                     new drawinglayer::primitive2d::TransformPrimitive2D(
                         *pTransform,
-                        aSource));
+                        std::move(aSource)));
 
                 aSource = drawinglayer::primitive2d::Primitive2DContainer { xRef };
             }
@@ -1231,7 +1231,7 @@ namespace svgio::svgreader
                             // Slide/Page information
                             const drawinglayer::primitive2d::Primitive2DReference xRef(
                                 new drawinglayer::primitive2d::PageHierarchyPrimitive2D(
-                                    aSource));
+                                    std::move(aSource)));
 
                             aSource = drawinglayer::primitive2d::Primitive2DContainer { xRef };
                         }

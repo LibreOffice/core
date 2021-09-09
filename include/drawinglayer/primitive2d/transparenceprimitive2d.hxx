@@ -62,8 +62,8 @@ namespace drawinglayer::primitive2d
                 using the common RGB_to_luminance definitions
              */
             TransparencePrimitive2D(
-                const Primitive2DContainer& rChildren,
-                const Primitive2DContainer& rTransparence);
+                Primitive2DContainer&& rChildren,
+                Primitive2DContainer&& aTransparence);
 
             /// data read access
             const Primitive2DContainer& getTransparence() const { return maTransparence; }

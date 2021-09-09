@@ -166,13 +166,13 @@ void Impl3DMirrorConstructOverlay::SetMirrorAxis(Point aMirrorAxisA, Point aMirr
                     if(!aMatrixTransform.isIdentity())
                     {
                         // embed in transformation group
-                        drawinglayer::primitive2d::Primitive2DReference aTransformPrimitive2D(new drawinglayer::primitive2d::TransformPrimitive2D(aMatrixTransform, aContent));
+                        drawinglayer::primitive2d::Primitive2DReference aTransformPrimitive2D(new drawinglayer::primitive2d::TransformPrimitive2D(aMatrixTransform, std::move(aContent)));
                         aContent = drawinglayer::primitive2d::Primitive2DContainer { aTransformPrimitive2D };
                     }
 
                     // if we have full overlay from selected objects, embed with 50% transparence, the
                     // transformation is added to the OverlayPrimitive2DSequenceObject
-                    drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparencePrimitive2D(new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(aContent, 0.5));
+                    drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparencePrimitive2D(new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(std::move(aContent), 0.5));
                     aContent = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparencePrimitive2D };
 
                     std::unique_ptr<sdr::overlay::OverlayPrimitive2DSequenceObject> pNew(new sdr::overlay::OverlayPrimitive2DSequenceObject(aContent));

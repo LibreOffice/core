@@ -362,9 +362,9 @@ namespace
         if(rInfo.mbEndOfBullet)
         {
             // embed in TextHierarchyBulletPrimitive2D
-            const drawinglayer::primitive2d::Primitive2DReference aNewReference(pNewPrimitive);
-            const drawinglayer::primitive2d::Primitive2DContainer aNewSequence { aNewReference } ;
-            pNewPrimitive = new drawinglayer::primitive2d::TextHierarchyBulletPrimitive2D(aNewSequence);
+            drawinglayer::primitive2d::Primitive2DReference aNewReference(pNewPrimitive);
+            drawinglayer::primitive2d::Primitive2DContainer aNewSequence { aNewReference } ;
+            pNewPrimitive = new drawinglayer::primitive2d::TextHierarchyBulletPrimitive2D(std::move(aNewSequence));
         }
 
         if(rInfo.mpFieldData)
@@ -465,15 +465,15 @@ namespace
                 meValues.emplace_back("Representation", pURLField->GetRepresentation());
                 meValues.emplace_back("TargetFrame", pURLField->GetTargetFrame());
                 meValues.emplace_back("SvxURLFormat", OUString::number(static_cast<sal_uInt16>(pURLField->GetFormat())));
-                xRet = new drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D(aSequence, drawinglayer::primitive2d::FIELD_TYPE_URL, &meValues);
+                xRet = new drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D(std::move(aSequence), drawinglayer::primitive2d::FIELD_TYPE_URL, &meValues);
             }
             else if(pPageField)
             {
-                xRet = new drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D(aSequence, drawinglayer::primitive2d::FIELD_TYPE_PAGE);
+                xRet = new drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D(std::move(aSequence), drawinglayer::primitive2d::FIELD_TYPE_PAGE);
             }
             else
             {
-                xRet = new drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D(aSequence, drawinglayer::primitive2d::FIELD_TYPE_COMMON);
+                xRet = new drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D(std::move(aSequence), drawinglayer::primitive2d::FIELD_TYPE_COMMON);
             }
         }
 
@@ -486,8 +486,7 @@ namespace
         // empty line primitives (contrary to paragraphs, see below).
         if(!maTextPortionPrimitives.empty())
         {
-            maLinePrimitives.push_back(new drawinglayer::primitive2d::TextHierarchyLinePrimitive2D(maTextPortionPrimitives));
-            maTextPortionPrimitives.clear();
+            maLinePrimitives.push_back(new drawinglayer::primitive2d::TextHierarchyLinePrimitive2D(std::move(maTextPortionPrimitives)));
         }
     }
 
@@ -504,9 +503,8 @@ namespace
         // have an empty sub-PrimitiveSequence.
         maParagraphPrimitives.push_back(
             new drawinglayer::primitive2d::TextHierarchyParagraphPrimitive2D(
-                maLinePrimitives,
+                std::move(maLinePrimitives),
                 nOutlineLevel));
-        maLinePrimitives.clear();
     }
 
     void impTextBreakupHandler::impHandleDrawPortionInfo(const DrawPortionInfo& rInfo)
@@ -550,8 +548,8 @@ namespace
             aGraphicAttr));
 
         // embed in TextHierarchyBulletPrimitive2D
-        const drawinglayer::primitive2d::Primitive2DContainer aNewSequence { aNewReference };
-        rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> pNewPrimitive = new drawinglayer::primitive2d::TextHierarchyBulletPrimitive2D(aNewSequence);
+        drawinglayer::primitive2d::Primitive2DContainer aNewSequence { aNewReference };
+        rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> pNewPrimitive = new drawinglayer::primitive2d::TextHierarchyBulletPrimitive2D(std::move(aNewSequence));
 
         // add to output
         maTextPortionPrimitives.push_back(pNewPrimitive);

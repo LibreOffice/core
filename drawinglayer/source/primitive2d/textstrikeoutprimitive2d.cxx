@@ -213,7 +213,7 @@ namespace drawinglayer::primitive2d
                 xRetval.push_back(
                         new TransformPrimitive2D(
                             aTransform,
-                            xRetval));
+                            Primitive2DContainer(xRetval)));
             }
 
             rContainer.insert(rContainer.end(), xRetval.begin(), xRetval.end());

@@ -80,11 +80,11 @@ namespace drawinglayer::primitive2d
 
                     if(fOpacity < 1.0)
                     {
-                        const Primitive2DContainer aContent { xRef };
+                        Primitive2DContainer aContent { xRef };
 
                         xRef = Primitive2DReference(
                             new UnifiedTransparencePrimitive2D(
-                                aContent,
+                                std::move(aContent),
                                 1.0 - fOpacity));
                     }
 
@@ -310,8 +310,8 @@ namespace drawinglayer::primitive2d
             const basegfx::B2DHomMatrix& rUnitGradientToObject,
             bool bInvert) const
         {
-            const Primitive2DContainer aTargetColorEntries(rTargetColor.maybeInvert(bInvert));
-            const Primitive2DContainer aTargetOpacityEntries(rTargetOpacity.maybeInvert(bInvert));
+            Primitive2DContainer aTargetColorEntries(rTargetColor.maybeInvert(bInvert));
+            Primitive2DContainer aTargetOpacityEntries(rTargetOpacity.maybeInvert(bInvert));
 
             if(aTargetColorEntries.empty())
                 return;
@@ -321,8 +321,8 @@ namespace drawinglayer::primitive2d
             if(!aTargetOpacityEntries.empty())
             {
                 const Primitive2DReference xRefOpacity = new TransparencePrimitive2D(
-                    aTargetColorEntries,
-                    aTargetOpacityEntries);
+                    std::move(aTargetColorEntries),
+                    std::move(aTargetOpacityEntries));
 
                 xRefContent = new TransformPrimitive2D(
                     rUnitGradientToObject,
@@ -332,7 +332,7 @@ namespace drawinglayer::primitive2d
             {
                 xRefContent = new TransformPrimitive2D(
                     rUnitGradientToObject,
-                    aTargetColorEntries);
+                    std::move(aTargetColorEntries));
             }
 
             rContainer.push_back(new MaskPrimitive2D(

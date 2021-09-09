@@ -23,8 +23,8 @@
 
 namespace drawinglayer::primitive2d
 {
-SoftEdgePrimitive2D::SoftEdgePrimitive2D(double fRadius, const Primitive2DContainer& rChildren)
-    : GroupPrimitive2D(rChildren)
+SoftEdgePrimitive2D::SoftEdgePrimitive2D(double fRadius, Primitive2DContainer&& aChildren)
+    : GroupPrimitive2D(std::move(aChildren))
     , mfRadius(fRadius)
 {
 }
@@ -58,7 +58,8 @@ void SoftEdgePrimitive2D::get2DDecomposition(
     basegfx::BColorModifierSharedPtr aBColorModifier
         = std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor());
 
-    const Primitive2DReference xRef(new ModifiedColorPrimitive2D(getChildren(), aBColorModifier));
+    const Primitive2DReference xRef(
+        new ModifiedColorPrimitive2D(Primitive2DContainer(getChildren()), aBColorModifier));
     rVisitor.append(xRef);
 }
 

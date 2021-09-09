@@ -37,10 +37,10 @@ void PolyPolygonGradientPrimitive2D::create2DDecomposition(
         const basegfx::B2DRange aPolyPolygonRange(getB2DPolyPolygon().getB2DRange());
         rtl::Reference<FillGradientPrimitive2D> pNewGradient = new FillGradientPrimitive2D(
             aPolyPolygonRange, getDefinitionRange(), getFillGradient());
-        const Primitive2DContainer aSubSequence{ pNewGradient };
+        Primitive2DContainer aSubSequence{ pNewGradient };
 
         // create mask primitive
-        rContainer.push_back(new MaskPrimitive2D(getB2DPolyPolygon(), aSubSequence));
+        rContainer.push_back(new MaskPrimitive2D(getB2DPolyPolygon(), std::move(aSubSequence)));
     }
 }
 

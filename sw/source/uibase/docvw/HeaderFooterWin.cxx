@@ -384,7 +384,7 @@ void SwHeaderFooterWin::PaintButton()
                                                 1.0 - nFadeRate);
 
     aGhostedSeq[0] = drawinglayer::primitive2d::Primitive2DReference(
-                        new drawinglayer::primitive2d::ModifiedColorPrimitive2D(aSeq, aBColorModifier));
+                        new drawinglayer::primitive2d::ModifiedColorPrimitive2D(std::move(aSeq), aBColorModifier));
 
     pProcessor->process(aGhostedSeq);
 

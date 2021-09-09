@@ -125,11 +125,11 @@ namespace drawinglayer::primitive2d
             if(0 != mnDiscreteWidth && 0 != mnDiscreteHeight)
             {
                 const geometry::ViewInformation2D aViewInformation2D;
-                const primitive2d::Primitive2DReference xEmbedRef(
+                primitive2d::Primitive2DReference xEmbedRef(
                     new primitive2d::TransformPrimitive2D(
                         basegfx::utils::createScaleB2DHomMatrix(mnDiscreteWidth, mnDiscreteHeight),
-                        getChildren()));
-                const primitive2d::Primitive2DContainer xEmbedSeq { xEmbedRef };
+                        Primitive2DContainer(getChildren())));
+                primitive2d::Primitive2DContainer xEmbedSeq { xEmbedRef };
 
                 const BitmapEx aBitmapEx(
                     convertToBitmapEx(
@@ -173,7 +173,7 @@ namespace drawinglayer::primitive2d
                     const Primitive2DReference xRef(
                         new MaskPrimitive2D(
                             basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aUnitRange)),
-                            aContent));
+                            std::move(aContent)));
 
                     aContent = Primitive2DContainer { xRef };
                 }
@@ -186,11 +186,11 @@ namespace drawinglayer::primitive2d
         BitmapEx PatternFillPrimitive2D::createTileImage(sal_uInt32 nWidth, sal_uInt32 nHeight) const
         {
             const geometry::ViewInformation2D aViewInformation2D;
-            const Primitive2DContainer aContent(createContent(aViewInformation2D));
+            Primitive2DContainer aContent(createContent(aViewInformation2D));
             const primitive2d::Primitive2DReference xEmbedRef(
                     new primitive2d::TransformPrimitive2D(
                         basegfx::utils::createScaleB2DHomMatrix(nWidth, nHeight),
-                        aContent));
+                        std::move(aContent)));
             const primitive2d::Primitive2DContainer xEmbedSeq { xEmbedRef };
 
             return convertToBitmapEx(
@@ -223,7 +223,7 @@ namespace drawinglayer::primitive2d
             aTiling.appendTransformations(aMatrices);
 
             // create content
-            const Primitive2DContainer aContent(createContent(rViewInformation));
+            Primitive2DContainer aContent(createContent(rViewInformation));
 
             // resize result
             aRetval.resize(aMatrices.size());
@@ -233,7 +233,7 @@ namespace drawinglayer::primitive2d
             {
                 aRetval[a] = new TransformPrimitive2D(
                     aMatrices[a],
-                    aContent);
+                    Primitive2DContainer(aContent));
             }
 
             // transform result which is in unit coordinates to mask's object coordinates
@@ -243,10 +243,10 @@ namespace drawinglayer::primitive2d
                         aMaskRange.getRange(),
                         aMaskRange.getMinimum()));
 
-                const Primitive2DReference xRef(
+                Primitive2DReference xRef(
                     new TransformPrimitive2D(
                         aMaskTransform,
-                        aRetval));
+                        std::move(aRetval)));
 
                 aRetval = Primitive2DContainer { xRef };
             }
@@ -256,7 +256,7 @@ namespace drawinglayer::primitive2d
                 rContainer.push_back(
                     new MaskPrimitive2D(
                         getMask(),
-                        aRetval));
+                        std::move(aRetval)));
             }
         }
 

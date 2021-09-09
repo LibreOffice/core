@@ -433,7 +433,7 @@ namespace svgio::svgreader
                                 const drawinglayer::primitive2d::Primitive2DReference xRef(
                                     new drawinglayer::primitive2d::TransformPrimitive2D(
                                         aEmbeddingTransform,
-                                        aSequence));
+                                        drawinglayer::primitive2d::Primitive2DContainer(aSequence)));
 
                                 if(rRatio.isMeetOrSlice())
                                 {
@@ -464,7 +464,7 @@ namespace svgio::svgreader
                                 const drawinglayer::primitive2d::Primitive2DReference xRef(
                                     new drawinglayer::primitive2d::TransformPrimitive2D(
                                         basegfx::utils::createTranslateB2DHomMatrix(fX, fY),
-                                        aSequence));
+                                        std::move(aSequence)));
 
                                 aSequence = drawinglayer::primitive2d::Primitive2DContainer { xRef, };
                             }
@@ -475,7 +475,7 @@ namespace svgio::svgreader
                                     basegfx::B2DPolyPolygon(
                                         basegfx::utils::createPolygonFromRect(
                                             basegfx::B2DRange(fX, fY, fX + fW, fY + fH))),
-                                    aSequence));
+                                    drawinglayer::primitive2d::Primitive2DContainer(aSequence)));
 
                             // append
                             rTarget.push_back(xMask);
@@ -567,7 +567,7 @@ namespace svgio::svgreader
                                     const drawinglayer::primitive2d::Primitive2DReference xTransform(
                                         new drawinglayer::primitive2d::TransformPrimitive2D(
                                             aViewBoxMapping,
-                                            aSequence));
+                                            std::move(aSequence)));
 
                                     aSequence = drawinglayer::primitive2d::Primitive2DContainer { xTransform };
                                 }
@@ -645,7 +645,7 @@ namespace svgio::svgreader
                                     basegfx::B2DPolyPolygon(
                                         basegfx::utils::createPolygonFromRect(
                                             aSvgCanvasRange)),
-                                    aSequence));
+                                    std::move(aSequence)));
 
                             aSequence = drawinglayer::primitive2d::Primitive2DContainer { xMask };
                         }
@@ -688,7 +688,7 @@ namespace svgio::svgreader
                                 const drawinglayer::primitive2d::Primitive2DReference xTransform(
                                     new drawinglayer::primitive2d::TransformPrimitive2D(
                                         aTransform,
-                                        aSequence));
+                                        std::move(aSequence)));
 
                                 aSequence = drawinglayer::primitive2d::Primitive2DContainer { xTransform };
                             }

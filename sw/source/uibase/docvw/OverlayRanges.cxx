@@ -78,7 +78,7 @@ namespace sw::overlay
             const double fTransparence( nTransparence / 100.0 );
             const drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparence(
                 new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
-                aRetval,
+                std::move(aRetval),
                 fTransparence));
 
             if ( mbShowSolidBorder )
@@ -90,9 +90,7 @@ namespace sw::overlay
                     aPolyPolygon,
                     aRGBColor));
 
-                aRetval.resize(2);
-                aRetval[0] = aUnifiedTransparence;
-                aRetval[1] = aOutline;
+                aRetval = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparence, aOutline };
             }
             else
             {

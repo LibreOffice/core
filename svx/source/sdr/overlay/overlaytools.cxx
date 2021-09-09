@@ -92,7 +92,7 @@ void OverlayStaticRectanglePrimitive::create2DDecomposition(Primitive2DContainer
         {
             const Primitive2DReference aFillTransparent(
                 new UnifiedTransparencePrimitive2D(
-                    aPrimitive2DSequence,
+                    std::move(aPrimitive2DSequence),
                     mfTransparence));
 
             aPrimitive2DSequence = Primitive2DContainer { aFillTransparent };
@@ -367,9 +367,9 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
                     // embed filled to transparency (if used)
                     if(getTransparence() > 0.0)
                     {
-                        const Primitive2DReference aFillTransparent(
+                        Primitive2DReference aFillTransparent(
                             new UnifiedTransparencePrimitive2D(
-                                aRetval,
+                                std::move(aRetval),
                                 getTransparence()));
 
                         aRetval = Primitive2DContainer { aFillTransparent };

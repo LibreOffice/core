@@ -61,7 +61,7 @@ namespace drawinglayer::primitive2d
                 const basegfx::B2DHomMatrix& rShadowTransform,
                 const basegfx::BColor& rShadowColor,
                 double fShadowBlur,
-                const Primitive2DContainer& rChildren);
+                Primitive2DContainer&& aChildren);
 
             /// data read access
             const basegfx::B2DHomMatrix& getShadowTransform() const { return maShadowTransform; }

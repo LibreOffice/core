@@ -61,7 +61,7 @@ void PolyPolygonSelectionPrimitive2D::create2DDecomposition(
     if (!aRetval.empty() && getTransparence() > 0.0)
     {
         const Primitive2DReference aTrans(
-            new UnifiedTransparencePrimitive2D(aRetval, getTransparence()));
+            new UnifiedTransparencePrimitive2D(std::move(aRetval), getTransparence()));
 
         aRetval = Primitive2DContainer{ aTrans };
     }

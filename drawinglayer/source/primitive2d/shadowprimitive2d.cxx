@@ -34,8 +34,8 @@ namespace drawinglayer::primitive2d
             const basegfx::B2DHomMatrix& rShadowTransform,
             const basegfx::BColor& rShadowColor,
             double fShadowBlur,
-            const Primitive2DContainer& rChildren)
-        :   GroupPrimitive2D(rChildren),
+            Primitive2DContainer&& aChildren)
+        :   GroupPrimitive2D(std::move(aChildren)),
             maShadowTransform(rShadowTransform),
             maShadowColor(rShadowColor),
             mfShadowBlur(fShadowBlur)
@@ -75,12 +75,12 @@ namespace drawinglayer::primitive2d
                     getShadowColor());
             const Primitive2DReference xRefA(
                 new ModifiedColorPrimitive2D(
-                    getChildren(),
+                    Primitive2DContainer(getChildren()),
                     aBColorModifier));
-            const Primitive2DContainer aSequenceB { xRefA };
+            Primitive2DContainer aSequenceB { xRefA };
 
             // build transformed primitiveVector with shadow offset and add to target
-            rVisitor.append(new TransformPrimitive2D(getShadowTransform(), aSequenceB));
+            rVisitor.append(new TransformPrimitive2D(getShadowTransform(), std::move(aSequenceB)));
         }
 
         // provide unique ID

@@ -58,7 +58,7 @@ namespace drawinglayer::primitive2d
                 const Primitive2DReference xReferenceA(
                     new MaskPrimitive2D(
                         basegfx::B2DPolyPolygon(
-                            basegfx::utils::createPolygonFromRect(aAllowedContentRange)), aContent));
+                            basegfx::utils::createPolygonFromRect(aAllowedContentRange)), std::move(aContent)));
                 aContent = Primitive2DContainer { xReferenceA };
             }
 
@@ -97,7 +97,7 @@ namespace drawinglayer::primitive2d
             aPageTrans = aCombined * aPageTrans;
 
             // embed in necessary transformation to map from SdrPage to SdrPageObject
-            rContainer.push_back(new TransformPrimitive2D(aPageTrans, aContent));
+            rContainer.push_back(new TransformPrimitive2D(aPageTrans, std::move(aContent)));
         }
 
         PagePreviewPrimitive2D::PagePreviewPrimitive2D(

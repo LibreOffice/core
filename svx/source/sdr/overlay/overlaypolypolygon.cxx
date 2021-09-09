@@ -62,8 +62,8 @@ namespace sdr::overlay
                 sal_uInt8 nTransparency = 255 - getBaseColor().GetAlpha();
                 if (nTransparency > 0)
                 {
-                    const drawinglayer::primitive2d::Primitive2DReference aTransparencePrimitive(
-                        new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(aReturnContainer, nTransparency / 255.0));
+                    drawinglayer::primitive2d::Primitive2DReference aTransparencePrimitive(
+                        new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(std::move(aReturnContainer), nTransparency / 255.0));
                     aReturnContainer = drawinglayer::primitive2d::Primitive2DContainer{ aTransparencePrimitive };
                 }
             }

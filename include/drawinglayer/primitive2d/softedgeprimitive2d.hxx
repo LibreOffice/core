@@ -32,7 +32,7 @@ private:
     mutable bool mbInMaskGeneration = false;
 
 public:
-    SoftEdgePrimitive2D(double fRadius, const Primitive2DContainer& rChildren);
+    SoftEdgePrimitive2D(double fRadius, Primitive2DContainer&& aChildren);
 
     double getRadius() const { return mfRadius; }
 

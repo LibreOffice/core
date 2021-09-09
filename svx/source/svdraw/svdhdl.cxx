@@ -2636,7 +2636,7 @@ void SdrCropViewHdl::CreateB2dIAObject()
     const drawinglayer::primitive2d::Primitive2DReference aMaskedGraphic(
         new drawinglayer::primitive2d::MaskPrimitive2D(
             aCropPolyPolygon,
-            aCombination));
+            std::move(aCombination)));
 
     // embed to UnifiedTransparencePrimitive2D
     const drawinglayer::primitive2d::Primitive2DReference aTransparenceMaskedGraphic(

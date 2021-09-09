@@ -37,10 +37,10 @@ void PolyPolygonHatchPrimitive2D::create2DDecomposition(
         const basegfx::B2DRange aPolyPolygonRange(getB2DPolyPolygon().getB2DRange());
         rtl::Reference<FillHatchPrimitive2D> pNewHatch = new FillHatchPrimitive2D(
             aPolyPolygonRange, getDefinitionRange(), getBackgroundColor(), getFillHatch());
-        const Primitive2DContainer aSubSequence{ pNewHatch };
+        Primitive2DContainer aSubSequence{ pNewHatch };
 
         // create mask primitive
-        rContainer.push_back(new MaskPrimitive2D(getB2DPolyPolygon(), aSubSequence));
+        rContainer.push_back(new MaskPrimitive2D(getB2DPolyPolygon(), std::move(aSubSequence)));
     }
 }
 

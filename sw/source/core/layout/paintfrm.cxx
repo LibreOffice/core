@@ -1788,7 +1788,7 @@ bool DrawFillAttributes(
                     basegfx::B2DPolyPolygon const& maskRegion(rClipState.getClipPoly());
                     primitives.resize(1);
                     primitives[0] = new drawinglayer::primitive2d::MaskPrimitive2D(
-                            maskRegion, rSequence);
+                            maskRegion, drawinglayer::primitive2d::Primitive2DContainer(rSequence));
                     pPrimitives = &primitives;
                 }
                 assert(pPrimitives && pPrimitives->size());

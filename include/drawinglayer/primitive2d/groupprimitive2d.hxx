@@ -68,7 +68,7 @@ namespace drawinglayer::primitive2d
 
         public:
             /// constructor
-            explicit GroupPrimitive2D(const Primitive2DContainer& rChildren);
+            explicit GroupPrimitive2D(Primitive2DContainer&& aChildren);
 
             /// data read access
             const Primitive2DContainer& getChildren() const { return maChildren; }

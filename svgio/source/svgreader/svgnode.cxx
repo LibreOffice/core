@@ -569,9 +569,9 @@ namespace svgio::svgreader
                         }
 
                         // pack in ObjectInfoPrimitive2D group
-                        const drawinglayer::primitive2d::Primitive2DReference xRef(
+                        drawinglayer::primitive2d::Primitive2DReference xRef(
                             new drawinglayer::primitive2d::ObjectInfoPrimitive2D(
-                                rTarget,
+                                std::move(rTarget),
                                 aObjectName,
                                 rTitle,
                                 rDesc));
