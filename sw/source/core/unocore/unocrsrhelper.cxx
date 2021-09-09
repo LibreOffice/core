@@ -1425,8 +1425,8 @@ void makeTableRowRedline( SwTableLine& rTableLine,
             aPaM.SetMark();
             aPaM.GetMark()->nContent.Assign(aPaM.GetContentNode(), 0);
             makeRedline(aPaM, RedlineType::TableRowInsert == eType
-                    ? u"Insert"
-                    : u"Delete", rRedlineProperties);
+                    ? OUString("Insert")
+                    : OUString("Delete"), rRedlineProperties);
         }
         SwCursor aCursor( SwPosition(aInsPos), nullptr );
         pDoc->SetRowNotTracked( aCursor, aSetTracking );
