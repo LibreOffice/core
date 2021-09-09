@@ -564,6 +564,52 @@ void DomainMapper_Impl::AddDummyParaForTableInSection()
     }
 }
 
+ static OUString lcl_ParaHasBookmark(const uno::Reference<text::XTextCursor>& xCursor)
+ {
+     if (!xCursor.is())
+         return OUString();
+
+     // Select 1 previous element
+     xCursor->goLeft(1, true);
+     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCursor, uno::UNO_QUERY);
+     if (!xParaEnumAccess.is())
+     {
+         xCursor->goRight(1, true);
+         return OUString();
+     }
+
+     // Iterate through selection paragraphs
+     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+     if (!xParaEnum->hasMoreElements())
+     {
+         xCursor->goRight(1, true);
+         return OUString();
+     }
+
+     // Iterate through first para portions
+     uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParaEnum->nextElement(),
+                                                                  uno::UNO_QUERY_THROW);
+     uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+     while (xRunEnum->hasMoreElements())
+     {
+         uno::Reference<beans::XPropertySet> xProps(xRunEnum->nextElement(), uno::UNO_QUERY_THROW);
+         uno::Any aType(xProps->getPropertyValue("TextPortionType"));
+         OUString sType;
+         aType >>= sType;
+         if (sType == "Bookmark")
+         {
+             uno::Reference<container::XNamed> xBookmark(xProps->getPropertyValue("Bookmark"),
+                                                         uno::UNO_QUERY_THROW);
+             OUString sName = xBookmark->getName();
+             xCursor->goRight(1, true);
+             return sName;
+         }
+     }
+
+     xCursor->goRight(1, true);
+     return OUString();
+ }
+
 void DomainMapper_Impl::RemoveLastParagraph( )
 {
     if (m_bDiscardHeaderFooter)
@@ -592,6 +638,8 @@ void DomainMapper_Impl::RemoveLastParagraph( )
         // a table before the cursor position would be deleted
         // (but only for paste/insert, not load; otherwise it can happen that
         // flys anchored at the disposed paragraph are deleted (fdo47036.rtf))
+        OUString sLastBookmarkName = lcl_ParaHasBookmark(xCursor);
+
         bool const bEndOfDocument(m_aTextAppendStack.size() == 1);
         if ((IsInHeaderFooter() || (bEndOfDocument && !m_bIsNewDoc))
             && xEnumerationAccess.is())
@@ -620,6 +668,20 @@ void DomainMapper_Impl::RemoveLastParagraph( )
                 // delete
                 xCursor->setString(OUString());
 
+                // call to xCursor->setString did remove final bookmark from previous paragraph
+                // we need to restore it, if there were any
+                if (sLastBookmarkName.getLength())
+                {
+                    uno::Reference<text::XTextContent> xBookmark(
+                        m_xTextFactory->createInstance("com.sun.star.text.Bookmark"),
+                        uno::UNO_QUERY_THROW);
+
+                    uno::Reference<container::XNamed> xBkmNamed(xBookmark, uno::UNO_QUERY_THROW);
+                    xBkmNamed->setName(sLastBookmarkName);
+                    xTextAppend->insertTextContent(
+                        uno::Reference<text::XTextRange>(xCursor, uno::UNO_QUERY_THROW), xBookmark,
+                        !xCursor->isCollapsed());
+                }
                 // restore again
                 xDocProps->setPropertyValue(aRecordChanges, aPreviousValue);
             }
