@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14889bec_02e2960e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-09T14:55:48Z",
+      "side": 1,
+      "message": "I rebased once more, because the I could reproduce the hang locally, but not after I rebase on top of Lubos\u0027 recent changes that kills vcl-initiated idle paints alltogether. I would suggest that given the idle paints are gone, the original problem is now not too interesting and let\u0027s just get this in if Jenkins verifies. :-)",
+      "revId": "6f64bccedde2f8e4568389964259f0a35da39ca9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
