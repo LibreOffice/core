@@ -259,7 +259,7 @@ bool WeldEditView::MouseButtonDown(const MouseEvent& rMEvt)
     if (!IsMouseCaptured())
         CaptureMouse();
 
-    if (!HasFocus())
+    if (!HasFocus() && CanFocus())
     {
         GrabFocus();
         GetFocus();
@@ -1628,6 +1628,8 @@ void WeldEditView::LoseFocus()
             pHelper->SetFocus(false);
     }
 }
+
+bool WeldEditView::CanFocus() const { return true; }
 
 css::uno::Reference<css::datatransfer::dnd::XDropTarget> WeldEditView::GetDropTarget()
 {
