@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1d2c430_6300a3ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-09T11:03:35Z",
+      "side": 1,
+      "message": "Aha, pFontFamilyGeneric may be nullptr, let me fix that.",
+      "revId": "2f6e74f465b8358dc640fcfc3b8544b7ba0dcc63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
