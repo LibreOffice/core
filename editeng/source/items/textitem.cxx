@@ -153,6 +153,24 @@ bool SvxFontListItem::GetPresentation
 
 // class SvxFontItem -----------------------------------------------------
 
+namespace
+{
+sal_Int32 CompareTo(sal_Int32 nA, sal_Int32 nB)
+{
+    if (nA < nB)
+    {
+        return -1;
+    }
+
+    if (nA > nB)
+    {
+        return 1;
+    }
+
+    return 0;
+}
+}
+
 SvxFontItem::SvxFontItem( const sal_uInt16 nId ) :
     SfxPoolItem( nId )
 {
@@ -288,6 +306,36 @@ bool SvxFontItem::operator==( const SfxPoolItem& rAttr ) const
         }
     }
     return bRet;
+}
+
+bool SvxFontItem::operator<(const SfxPoolItem& rCmp) const
+{
+    const auto& rOther = static_cast<const SvxFontItem&>(rCmp);
+    sal_Int32 nRet = GetFamilyName().compareTo(rOther.GetFamilyName());
+    if (nRet != 0)
+    {
+        return nRet < 0;
+    }
+
+    nRet = GetStyleName().compareTo(rOther.GetStyleName());
+    if (nRet != 0)
+    {
+        return nRet < 0;
+    }
+
+    nRet = CompareTo(GetFamily(), rOther.GetFamily());
+    if (nRet != 0)
+    {
+        return nRet < 0;
+    }
+
+    nRet = CompareTo(GetPitch(), rOther.GetPitch());
+    if (nRet != 0)
+    {
+        return nRet < 0;
+    }
+
+    return GetCharSet() < rOther.GetCharSet();
 }
 
 SvxFontItem* SvxFontItem::Clone( SfxItemPool * ) const
