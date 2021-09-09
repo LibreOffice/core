@@ -2435,8 +2435,8 @@ public:
             if (rCell.meType == CELLTYPE_FORMULA && rCell.mpFormula->GetErrCode() != FormulaError::NONE)
             {
                 // Error cell is evaluated as string (for now).
-                const svl::SharedString aCellStr = mrStrPool.intern(ScGlobal::GetErrorString(rCell.mpFormula->GetErrCode()));
-                return compareByStringComparator(rEntry, rItem, &aCellStr, nullptr);
+                const OUString aCellStr = ScGlobal::GetErrorString(rCell.mpFormula->GetErrCode());
+                return compareByStringComparator(rEntry, rItem, nullptr, &aCellStr);
             }
             else if (rCell.meType == CELLTYPE_STRING)
             {
