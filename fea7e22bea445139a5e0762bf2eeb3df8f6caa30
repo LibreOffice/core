@@ -63,6 +63,30 @@
       },
       "revId": "fea7e22bea445139a5e0762bf2eeb3df8f6caa30",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb671e5f_d8017029",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1003336
+      },
+      "writtenOn": "2021-09-09T15:25:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d3bc8000_433f7f45",
+      "range": {
+        "startLine": 258,
+        "startChar": 16,
+        "endLine": 259,
+        "endChar": 42
+      },
+      "revId": "fea7e22bea445139a5e0762bf2eeb3df8f6caa30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
