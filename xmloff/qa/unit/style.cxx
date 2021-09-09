@@ -25,6 +25,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <rtl/character.hxx>
 
 using namespace ::com::sun::star;
 
@@ -85,6 +86,25 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFillImageBase64)
     CPPUNIT_ASSERT(xBitmaps->hasByName("libreoffice_0"));
 }
 
+namespace
+{
+struct XmlFont
+{
+    OString aName;
+    OString aFontFamilyGeneric;
+    bool operator<(const XmlFont& rOther) const
+    {
+        sal_Int32 nRet = aName.compareTo(rOther.aName);
+        if (nRet != 0)
+        {
+            return nRet < 0;
+        }
+
+        return aFontFamilyGeneric.compareTo(rOther.aFontFamilyGeneric) < 0;
+    }
+};
+}
+
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFontSorting)
 {
     // Given an empty document with default fonts (Liberation Sans, Lucida Sans, etc):
@@ -110,25 +130,46 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFontSorting)
         = getXPathNode(pXmlDoc, "/office:document-content/office:font-face-decls/style:font-face");
     xmlNodeSetPtr pXmlNodes = pXPath->nodesetval;
     int nNodeCount = xmlXPathNodeSetGetLength(pXmlNodes);
-    std::vector<OString> aXMLNames;
-    std::set<OString> aSortedNames;
+    std::vector<XmlFont> aXMLFonts;
+    std::vector<XmlFont> aSortedFonts;
     for (int i = 0; i < nNodeCount; ++i)
     {
         xmlNodePtr pXmlNode = pXmlNodes->nodeTab[i];
         xmlChar* pName = xmlGetProp(pXmlNode, BAD_CAST("name"));
         OString aName(reinterpret_cast<char const*>(pName));
-        aXMLNames.push_back(aName);
-        aSortedNames.insert(aName);
+
+        // Ignore numbers at the end, those are just appended to make all names unique.
+        while (rtl::isAsciiDigit(static_cast<sal_uInt32>(aName[aName.getLength() - 1])))
+        {
+            aName = aName.copy(0, aName.getLength() - 1);
+        }
+
+        xmlChar* pFontFamilyGeneric = xmlGetProp(pXmlNode, BAD_CAST("font-family-generic"));
+        OString aFontFamilyGeneric;
+        if (pFontFamilyGeneric)
+        {
+            aFontFamilyGeneric = OString(reinterpret_cast<char const*>(pFontFamilyGeneric));
+        }
+
+        aXMLFonts.push_back(XmlFont{ aName, aFontFamilyGeneric });
+        aSortedFonts.push_back(XmlFont{ aName, aFontFamilyGeneric });
         xmlFree(pName);
     }
+    std::sort(aSortedFonts.begin(), aSortedFonts.end());
     size_t nIndex = 0;
-    for (const auto& rName : aSortedNames)
+    for (const auto& rFont : aSortedFonts)
     {
         // Without the accompanying fix in place, this test would have failed with:
         // - Expected: Liberation Sans
         // - Actual  : Lucida Sans1
         // i.e. the output was not lexicographically sorted, "u" was before "i".
-        CPPUNIT_ASSERT_EQUAL(rName, aXMLNames[nIndex]);
+        CPPUNIT_ASSERT_EQUAL(rFont.aName, aXMLFonts[nIndex].aName);
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: swiss
+        // - Actual  : system
+        // i.e. the output was not lexicographically sorted when style:name was the same, but
+        // style:font-family-generic was not the same.
+        CPPUNIT_ASSERT_EQUAL(rFont.aFontFamilyGeneric, aXMLFonts[nIndex].aFontFamilyGeneric);
         ++nIndex;
     }
     xmlXPathFreeObject(pXPath);
