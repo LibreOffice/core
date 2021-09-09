@@ -509,6 +509,7 @@ class ScGlobal
     static std::unique_ptr<ScUserList> xUserList;
     static SC_DLLPUBLIC const OUString aEmptyOUString;
     static OUString         aStrClipDocName;
+    static OUString         aStrErrorStringNoRef;
     static std::unique_ptr<SvxBrushItem> xEmptyBrushItem;
     static std::unique_ptr<SvxBrushItem> xButtonBrushItem;
 
