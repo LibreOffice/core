@@ -2,6 +2,10 @@
 <!-- Generated with glade 3.38.2 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
+  <object class="GtkListStore" id="liststore1"/>
+  <object class="GtkListStore" id="liststore2"/>
+  <object class="GtkListStore" id="liststore3"/>
+  <object class="GtkListStore" id="liststore4"/>
   <object class="GtkDialog" id="StandardFilterDialog">
     <property name="can-focus">False</property>
     <property name="border-width">6</property>
@@ -338,6 +342,8 @@
                                       <item translatable="yes" context="standardfilterdialog|cond1">Does not begin with</item>
                                       <item translatable="yes" context="standardfilterdialog|cond1">Ends with</item>
                                       <item translatable="yes" context="standardfilterdialog|cond1">Does not end with</item>
+                                      <item translatable="yes" context="standardfilterdialog|cond1">Text color</item>
+                                      <item translatable="yes" context="standardfilterdialog|cond1">Background color</item>
                                     </items>
                                     <accessibility>
                                       <relation type="labelled-by" target="label4"/>
@@ -374,6 +380,8 @@
                                       <item translatable="yes" context="standardfilterdialog|cond2">Does not begin with</item>
                                       <item translatable="yes" context="standardfilterdialog|cond2">Ends with</item>
                                       <item translatable="yes" context="standardfilterdialog|cond2">Does not end with</item>
+                                      <item translatable="yes" context="standardfilterdialog|cond2">Text color</item>
+                                      <item id="&lt;Enter ID&gt;" translatable="yes" context="standardfilterdialog|cond2">Background color</item>
                                     </items>
                                     <accessibility>
                                       <relation type="labelled-by" target="label4"/>
@@ -410,6 +418,8 @@
                                       <item translatable="yes" context="standardfilterdialog|cond3">Does not begin with</item>
                                       <item translatable="yes" context="standardfilterdialog|cond3">Ends with</item>
                                       <item translatable="yes" context="standardfilterdialog|cond3">Does not end with</item>
+                                      <item translatable="yes" context="standardfilterdialog|cond3">Text color</item>
+                                      <item translatable="yes" context="standardfilterdialog|cond3">Background color</item>
                                     </items>
                                     <accessibility>
                                       <relation type="labelled-by" target="label4"/>
@@ -446,6 +456,8 @@
                                       <item translatable="yes" context="standardfilterdialog|cond4">Does not begin with</item>
                                       <item translatable="yes" context="standardfilterdialog|cond4">Ends with</item>
                                       <item translatable="yes" context="standardfilterdialog|cond4">Does not end with</item>
+                                      <item translatable="yes" context="standardfilterdialog|cond4">Text color</item>
+                                      <item translatable="yes" context="standardfilterdialog|cond4">Background color</item>
                                     </items>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="cond4-atkobject">
@@ -459,24 +471,47 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBoxText" id="val1">
+                                  <object class="GtkBox">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
-                                    <property name="hexpand">True</property>
-                                    <property name="has-entry">True</property>
-                                    <child internal-child="entry">
-                                      <object class="GtkEntry" id="comboboxtext-entry2">
-                                        <property name="can-focus">True</property>
-                                        <property name="activates-default">True</property>
+                                    <child>
+                                      <object class="GtkComboBoxText" id="val1">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="has-entry">True</property>
+                                        <child internal-child="entry">
+                                          <object class="GtkEntry">
+                                            <property name="can-focus">False</property>
+                                          </object>
+                                        </child>
+                                        <accessibility>
+                                          <relation type="labelled-by" target="label5"/>
+                                        </accessibility>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="val1-atkobject">
+                                            <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|val1-atkobject">Value 1</property>
+                                          </object>
+                                        </child>
                                       </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
                                     </child>
-                                    <accessibility>
-                                      <relation type="labelled-by" target="label5"/>
-                                    </accessibility>
-                                    <child internal-child="accessible">
-                                      <object class="AtkObject" id="val1-atkobject">
-                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|val1-atkobject">Value 1</property>
+                                    <child>
+                                      <object class="GtkComboBox" id="color1">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="model">liststore1</property>
                                       </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
                                     </child>
                                   </object>
                                   <packing>
@@ -485,24 +520,47 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBoxText" id="val2">
+                                  <object class="GtkBox">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
-                                    <property name="hexpand">True</property>
-                                    <property name="has-entry">True</property>
-                                    <child internal-child="entry">
-                                      <object class="GtkEntry" id="comboboxtext-entry4">
-                                        <property name="can-focus">True</property>
-                                        <property name="activates-default">True</property>
+                                    <child>
+                                      <object class="GtkComboBoxText" id="val2">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="has-entry">True</property>
+                                        <child internal-child="entry">
+                                          <object class="GtkEntry">
+                                            <property name="can-focus">True</property>
+                                          </object>
+                                        </child>
+                                        <accessibility>
+                                          <relation type="labelled-by" target="label5"/>
+                                        </accessibility>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="val2-atkobject">
+                                            <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|val1-atkobject">Value 1</property>
+                                          </object>
+                                        </child>
                                       </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
                                     </child>
-                                    <accessibility>
-                                      <relation type="labelled-by" target="label5"/>
-                                    </accessibility>
-                                    <child internal-child="accessible">
-                                      <object class="AtkObject" id="val2-atkobject">
-                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|val2-atkobject">Value 2</property>
+                                    <child>
+                                      <object class="GtkComboBox" id="color2">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="model">liststore2</property>
                                       </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
                                     </child>
                                   </object>
                                   <packing>
@@ -511,24 +569,47 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBoxText" id="val3">
+                                  <object class="GtkBox">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
-                                    <property name="hexpand">True</property>
-                                    <property name="has-entry">True</property>
-                                    <child internal-child="entry">
-                                      <object class="GtkEntry" id="comboboxtext-entry6">
-                                        <property name="can-focus">True</property>
-                                        <property name="activates-default">True</property>
+                                    <child>
+                                      <object class="GtkComboBoxText" id="val3">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="has-entry">True</property>
+                                        <child internal-child="entry">
+                                          <object class="GtkEntry">
+                                            <property name="can-focus">True</property>
+                                          </object>
+                                        </child>
+                                        <accessibility>
+                                          <relation type="labelled-by" target="label5"/>
+                                        </accessibility>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="val3-atkobject">
+                                            <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|val1-atkobject">Value 1</property>
+                                          </object>
+                                        </child>
                                       </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
                                     </child>
-                                    <accessibility>
-                                      <relation type="labelled-by" target="label5"/>
-                                    </accessibility>
-                                    <child internal-child="accessible">
-                                      <object class="AtkObject" id="val3-atkobject">
-                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|val3-atkobject">Value 3</property>
+                                    <child>
+                                      <object class="GtkComboBox" id="color3">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="model">liststore3</property>
                                       </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
                                     </child>
                                   </object>
                                   <packing>
@@ -537,21 +618,47 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBoxText" id="val4">
+                                  <object class="GtkBox">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
-                                    <property name="hexpand">True</property>
-                                    <property name="has-entry">True</property>
-                                    <child internal-child="entry">
-                                      <object class="GtkEntry" id="comboboxtext-entry8">
-                                        <property name="can-focus">True</property>
-                                        <property name="activates-default">True</property>
+                                    <child>
+                                      <object class="GtkComboBoxText" id="val4">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="has-entry">True</property>
+                                        <child internal-child="entry">
+                                          <object class="GtkEntry">
+                                            <property name="can-focus">True</property>
+                                          </object>
+                                        </child>
+                                        <accessibility>
+                                          <relation type="labelled-by" target="label5"/>
+                                        </accessibility>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="val4-atkobject">
+                                            <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|val1-atkobject">Value 1</property>
+                                          </object>
+                                        </child>
                                       </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
                                     </child>
-                                    <child internal-child="accessible">
-                                      <object class="AtkObject" id="val4-atkobject">
-                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|val4-atkobject">Value 4</property>
+                                    <child>
+                                      <object class="GtkComboBox" id="color4">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="model">liststore4</property>
                                       </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
                                     </child>
                                   </object>
                                   <packing>
