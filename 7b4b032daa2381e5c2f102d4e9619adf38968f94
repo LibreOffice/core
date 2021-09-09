@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a680959d_b3001426",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-09-09T12:31:08Z",
+      "side": 1,
+      "message": "I guess testing a mutex is always faster then reseting the conditional. And since LO is still primary single threaded, that looks fine.",
+      "revId": "7b4b032daa2381e5c2f102d4e9619adf38968f94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
