@@ -56,7 +56,7 @@ namespace drawinglayer::primitive2d
                 const vcl::PDFWriter::StructElement& rStructureElement,
                 bool bBackground,
                 bool bIsImage,
-                const Primitive2DContainer& rChildren);
+                Primitive2DContainer&& aChildren);
 
             /// data read access
             const vcl::PDFWriter::StructElement& getStructureElement() const { return maStructureElement; }

@@ -1769,12 +1769,12 @@ drawinglayer::primitive2d::Primitive2DContainer ImplRenderPaintProc::createRedir
                         const bool bBackground(nullptr != pSdrPage && pSdrPage->IsMasterPage());
                         const bool bImage(pObject->GetObjIdentifier() == OBJ_GRAF);
 
-                        const drawinglayer::primitive2d::Primitive2DReference xReference(
+                        drawinglayer::primitive2d::Primitive2DReference xReference(
                             new drawinglayer::primitive2d::StructureTagPrimitive2D(
                                 eElement,
                                 bBackground,
                                 bImage,
-                                xRetval));
+                                std::move(xRetval)));
 
                         xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
                     }

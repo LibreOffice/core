@@ -110,7 +110,7 @@ namespace svgio::svgreader
                 const drawinglayer::primitive2d::Primitive2DReference xRef(
                     new drawinglayer::primitive2d::TransformPrimitive2D(
                         *getTransform(),
-                        aNewTarget));
+                        std::move(aNewTarget)));
 
                 rTarget.push_back(xRef);
             }
@@ -231,10 +231,10 @@ namespace svgio::svgreader
                     // geometry. Using the automatically set mbIsClipPathContent at
                     // SvgStyleAttributes the clip definition is without fill, stroke,
                     // and strokeWidth and forced to black
-                    const drawinglayer::primitive2d::Primitive2DReference xEmbedTransparence(
+                    drawinglayer::primitive2d::Primitive2DReference xEmbedTransparence(
                         new drawinglayer::primitive2d::MaskPrimitive2D(
                             aClipPolyPolygon,
-                            rContent));
+                            std::move(rContent)));
 
                     rContent = drawinglayer::primitive2d::Primitive2DContainer { xEmbedTransparence };
                 }

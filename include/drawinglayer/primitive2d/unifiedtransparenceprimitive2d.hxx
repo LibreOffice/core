@@ -44,7 +44,7 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             UnifiedTransparencePrimitive2D(
-                const Primitive2DContainer& rChildren,
+                Primitive2DContainer&& rChildren,
                 double fTransparence);
 
             /// data read access

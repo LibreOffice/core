@@ -230,9 +230,9 @@ drawinglayer::primitive2d::Primitive2DContainer OverlayTableEdge::createOverlayO
         {
             // embed in HiddenGeometryPrimitive2D to support HitTest of this invisible
             // overlay object
-            const drawinglayer::primitive2d::Primitive2DContainer aSequence { aReference };
+            drawinglayer::primitive2d::Primitive2DContainer aSequence { aReference };
             const drawinglayer::primitive2d::Primitive2DReference aNewReference(
-                new drawinglayer::primitive2d::HiddenGeometryPrimitive2D(aSequence));
+                new drawinglayer::primitive2d::HiddenGeometryPrimitive2D(std::move(aSequence)));
             aRetval = drawinglayer::primitive2d::Primitive2DContainer { aNewReference };
         }
     }

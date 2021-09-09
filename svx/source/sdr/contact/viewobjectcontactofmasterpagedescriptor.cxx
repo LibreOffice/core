@@ -108,7 +108,7 @@ namespace sdr::contact
             {
                 // get range of MasterPage sub hierarchy
                 const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-                const basegfx::B2DRange aSubHierarchyRange(xMasterPageSequence.getB2DRange(rViewInformation2D));
+                basegfx::B2DRange aSubHierarchyRange(xMasterPageSequence.getB2DRange(rViewInformation2D));
 
                 if (rPageFillRange.isInside(aSubHierarchyRange))
                 {
@@ -123,7 +123,7 @@ namespace sdr::contact
 
                     // need to create a clip primitive, add clipped list to target
                     const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::MaskPrimitive2D(
-                        basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aCommonArea)), xMasterPageSequence));
+                        basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aCommonArea)), std::move(xMasterPageSequence)));
                     xRetval.push_back(xReference);
                 }
             }

@@ -32,13 +32,13 @@ using namespace com::sun::star;
 namespace drawinglayer::primitive2d
 {
         CropPrimitive2D::CropPrimitive2D(
-            const Primitive2DContainer& rChildren,
+            Primitive2DContainer&& aChildren,
             const basegfx::B2DHomMatrix& rTransformation,
             double fCropLeft,
             double fCropTop,
             double fCropRight,
             double fCropBottom)
-        :   GroupPrimitive2D(rChildren),
+        :   GroupPrimitive2D(std::move(aChildren)),
             maTransformation(rTransformation),
             mfCropLeft(fCropLeft),
             mfCropTop(fCropTop),
@@ -120,7 +120,7 @@ namespace drawinglayer::primitive2d
             const Primitive2DReference xTransformPrimitive(
                 new TransformPrimitive2D(
                     aNewTransform,
-                    getChildren()));
+                    Primitive2DContainer(getChildren())));
 
             if(aUnitRange.isInside(aNewRange))
             {

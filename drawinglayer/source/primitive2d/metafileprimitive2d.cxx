@@ -58,7 +58,7 @@ namespace drawinglayer::primitive2d
                                 basegfx::B2DPolyPolygon(
                                     basegfx::utils::createPolygonFromRect(
                                         aMtfRange)),
-                                xRetval));
+                                std::move(xRetval)));
 
                         xRetval = drawinglayer::primitive2d::Primitive2DContainer{ xMask };
                     }
@@ -77,7 +77,7 @@ namespace drawinglayer::primitive2d
                 const Primitive2DReference aEmbeddedTransform(
                     new TransformPrimitive2D(
                         aAdaptedTransform,
-                        xRetval));
+                        std::move(xRetval)));
 
                 xRetval = Primitive2DContainer { aEmbeddedTransform };
             }

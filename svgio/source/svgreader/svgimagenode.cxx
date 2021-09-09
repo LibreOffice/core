@@ -328,7 +328,7 @@ namespace svgio::svgreader
                     const drawinglayer::primitive2d::Primitive2DReference xRef(
                         new drawinglayer::primitive2d::TransformPrimitive2D(
                             aEmbeddingTransform,
-                            aNewTarget));
+                            std::move(aNewTarget)));
 
                     aNewTarget = drawinglayer::primitive2d::Primitive2DContainer { xRef };
                 }
@@ -340,7 +340,7 @@ namespace svgio::svgreader
                         new drawinglayer::primitive2d::MaskPrimitive2D(
                             basegfx::B2DPolyPolygon(
                                 basegfx::utils::createPolygonFromRect(aTarget)),
-                            aNewTarget));
+                            std::move(aNewTarget)));
 
                     aNewTarget = drawinglayer::primitive2d::Primitive2DContainer { xMask };
                 }

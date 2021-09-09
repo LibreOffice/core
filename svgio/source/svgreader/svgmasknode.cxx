@@ -174,10 +174,10 @@ namespace svgio::svgreader
             if(getTransform())
             {
                 // create embedding group element with transformation
-                const drawinglayer::primitive2d::Primitive2DReference xRef(
+                drawinglayer::primitive2d::Primitive2DReference xRef(
                     new drawinglayer::primitive2d::TransformPrimitive2D(
                         *getTransform(),
-                        aNewTarget));
+                        std::move(aNewTarget)));
 
                 aNewTarget = drawinglayer::primitive2d::Primitive2DContainer { xRef };
             }
@@ -241,12 +241,12 @@ namespace svgio::svgreader
                     if (SvgUnits::objectBoundingBox == maMaskContentUnits)
                     {
                         // mask is object-relative, embed in content transformation
-                        const drawinglayer::primitive2d::Primitive2DReference xTransform(
+                        drawinglayer::primitive2d::Primitive2DReference xTransform(
                             new drawinglayer::primitive2d::TransformPrimitive2D(
                                 basegfx::utils::createScaleTranslateB2DHomMatrix(
                                     aContentRange.getRange(),
                                     aContentRange.getMinimum()),
-                                aMaskTarget));
+                                std::move(aMaskTarget)));
 
                         aMaskTarget = drawinglayer::primitive2d::Primitive2DContainer { xTransform };
                     }
@@ -255,10 +255,10 @@ namespace svgio::svgreader
                         // #i124852#
                         if(pTransform)
                         {
-                            const drawinglayer::primitive2d::Primitive2DReference xTransform(
+                            drawinglayer::primitive2d::Primitive2DReference xTransform(
                                 new drawinglayer::primitive2d::TransformPrimitive2D(
                                     *pTransform,
-                                    aMaskTarget));
+                                    std::move(aMaskTarget)));
 
                             aMaskTarget = drawinglayer::primitive2d::Primitive2DContainer { xTransform };
                         }
@@ -267,9 +267,9 @@ namespace svgio::svgreader
                     // embed content to a ModifiedColorPrimitive2D since the definitions
                     // how content is used as alpha is special for Svg
                     {
-                        const drawinglayer::primitive2d::Primitive2DReference xInverseMask(
+                        drawinglayer::primitive2d::Primitive2DReference xInverseMask(
                             new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
-                                aMaskTarget,
+                                std::move(aMaskTarget),
                                 std::make_shared<basegfx::BColorModifier_luminance_to_alpha>()));
 
                         aMaskTarget = drawinglayer::primitive2d::Primitive2DContainer { xInverseMask };
@@ -278,8 +278,8 @@ namespace svgio::svgreader
                     // prepare new content
                     drawinglayer::primitive2d::Primitive2DReference xNewContent(
                         new drawinglayer::primitive2d::TransparencePrimitive2D(
-                            rTarget,
-                            aMaskTarget));
+                            std::move(rTarget),
+                            std::move(aMaskTarget)));
 
                     // output up to now is defined by aContentRange and mask is oriented
                     // relative to it. It is possible that aOffscreenBufferRange defines

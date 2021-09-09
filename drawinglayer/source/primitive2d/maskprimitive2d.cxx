@@ -28,8 +28,8 @@ namespace drawinglayer::primitive2d
 {
         MaskPrimitive2D::MaskPrimitive2D(
             const basegfx::B2DPolyPolygon& rMask,
-            const Primitive2DContainer& rChildren)
-        :   GroupPrimitive2D(rChildren),
+            Primitive2DContainer&& aChildren)
+        :   GroupPrimitive2D(std::move(aChildren)),
             maMask(rMask)
         {
         }

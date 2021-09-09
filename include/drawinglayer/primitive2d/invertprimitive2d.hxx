@@ -40,7 +40,7 @@ namespace drawinglayer::primitive2d
         {
         public:
             /// constructor
-            explicit InvertPrimitive2D(const Primitive2DContainer& rChildren);
+            explicit InvertPrimitive2D(Primitive2DContainer&& aChildren);
 
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;

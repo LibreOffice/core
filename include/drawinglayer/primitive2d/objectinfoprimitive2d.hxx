@@ -43,7 +43,7 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             ObjectInfoPrimitive2D(
-                const Primitive2DContainer& rChildren,
+                Primitive2DContainer&& aChildren,
                 const OUString& rName,
                 const OUString& rTitle,
                 const OUString& rDesc);

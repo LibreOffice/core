@@ -76,15 +76,15 @@ namespace drawinglayer::processor3d
                         rPrimitive.getShadowTransform(),
                         rPrimitive.getShadowColor(),
                         0,  // shadow3d doesn't have rPrimitive.getShadowBlur() yet.
-                        aNewSubList);
+                        std::move(aNewSubList));
 
                     if(basegfx::fTools::more(rPrimitive.getShadowTransparence(), 0.0))
                     {
                         // create simpleTransparencePrimitive, add created primitives
-                        const primitive2d::Primitive2DContainer aNewTransPrimitiveVector { pNew };
+                        primitive2d::Primitive2DContainer aNewTransPrimitiveVector { pNew };
 
                         pNew = new primitive2d::UnifiedTransparencePrimitive2D(
-                            aNewTransPrimitiveVector,
+                            std::move(aNewTransPrimitiveVector),
                             rPrimitive.getShadowTransparence());
                     }
 

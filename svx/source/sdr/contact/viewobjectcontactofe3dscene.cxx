@@ -105,7 +105,7 @@ namespace sdr::contact
                             0.5);
                     const drawinglayer::primitive2d::Primitive2DReference xReference(
                         new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
-                            xRetval,
+                            std::move(xRetval),
                             aBColorModifier));
 
                     xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };

@@ -37,9 +37,9 @@ namespace drawinglayer::primitive2d
 
         AnimatedSwitchPrimitive2D::AnimatedSwitchPrimitive2D(
             const animation::AnimationEntry& rAnimationEntry,
-            const Primitive2DContainer& rChildren,
+            Primitive2DContainer&& aChildren,
             bool bIsTextAnimation)
-        :   GroupPrimitive2D(rChildren),
+        :   GroupPrimitive2D(std::move(aChildren)),
             mbIsTextAnimation(bIsTextAnimation)
         {
             // clone given animation description
@@ -93,8 +93,8 @@ namespace drawinglayer::primitive2d
 {
         AnimatedBlinkPrimitive2D::AnimatedBlinkPrimitive2D(
             const animation::AnimationEntry& rAnimationEntry,
-            const Primitive2DContainer& rChildren)
-        :   AnimatedSwitchPrimitive2D(rAnimationEntry, rChildren, true/*bIsTextAnimation*/)
+            Primitive2DContainer&& aChildren)
+        :   AnimatedSwitchPrimitive2D(rAnimationEntry, std::move(aChildren), true/*bIsTextAnimation*/)
         {
         }
 
@@ -125,8 +125,8 @@ namespace drawinglayer::primitive2d
         AnimatedInterpolatePrimitive2D::AnimatedInterpolatePrimitive2D(
             const std::vector< basegfx::B2DHomMatrix >& rmMatrixStack,
             const animation::AnimationEntry& rAnimationEntry,
-            const Primitive2DContainer& rChildren)
-        :   AnimatedSwitchPrimitive2D(rAnimationEntry, rChildren, true/*bIsTextAnimation*/)
+            Primitive2DContainer&& aChildren)
+        :   AnimatedSwitchPrimitive2D(rAnimationEntry, std::move(aChildren), true/*bIsTextAnimation*/)
         {
             // copy matrices to locally pre-decomposed matrix stack
             const sal_uInt32 nCount(rmMatrixStack.size());
@@ -184,7 +184,7 @@ namespace drawinglayer::primitive2d
                 }
 
                 // create new transform primitive reference, return new sequence
-                const Primitive2DReference xRef(new TransformPrimitive2D(aTargetTransform, getChildren()));
+                Primitive2DReference xRef(new TransformPrimitive2D(aTargetTransform, Primitive2DContainer(getChildren())));
                 rVisitor.append(xRef);
             }
             else

@@ -236,7 +236,7 @@ namespace drawinglayer::primitive2d
                             aShadowTransform,
                             aShadowColor,
                             0,          // fShadowBlur = 0, there's no blur for text shadow yet.
-                            aRetval);
+                            Primitive2DContainer(aRetval));
                     }
 
                     if(bHasTextRelief)

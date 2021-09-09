@@ -138,8 +138,8 @@ void GraphicPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer,
 
         if (!basegfx::fTools::equalZero(fTransparency))
         {
-            const Primitive2DReference aUnifiedTransparence(
-                new UnifiedTransparencePrimitive2D(aRetval, fTransparency));
+            Primitive2DReference aUnifiedTransparence(
+                new UnifiedTransparencePrimitive2D(std::move(aRetval), fTransparency));
 
             aRetval = Primitive2DContainer{ aUnifiedTransparence };
         }
@@ -157,11 +157,12 @@ void GraphicPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer,
             getGraphicAttr().GetBottomCrop()));
 
         // embed content in cropPrimitive
-        Primitive2DReference xPrimitive(new CropPrimitive2D(
-            aRetval, aTransform, getGraphicAttr().GetLeftCrop() * aCropScaleFactor.getX(),
-            getGraphicAttr().GetTopCrop() * aCropScaleFactor.getY(),
-            getGraphicAttr().GetRightCrop() * aCropScaleFactor.getX(),
-            getGraphicAttr().GetBottomCrop() * aCropScaleFactor.getY()));
+        Primitive2DReference xPrimitive(
+            new CropPrimitive2D(std::move(aRetval), aTransform,
+                                getGraphicAttr().GetLeftCrop() * aCropScaleFactor.getX(),
+                                getGraphicAttr().GetTopCrop() * aCropScaleFactor.getY(),
+                                getGraphicAttr().GetRightCrop() * aCropScaleFactor.getX(),
+                                getGraphicAttr().GetBottomCrop() * aCropScaleFactor.getY()));
 
         aRetval = Primitive2DContainer{ xPrimitive };
     }

@@ -559,8 +559,8 @@ namespace drawinglayer::primitive2d
 
                         Primitive2DReference mask = new MaskPrimitive2D(
                             basegfx::B2DPolyPolygon(aMaskPolygon),
-                            aRetval);
-                        aRetval[0] = mask;
+                            std::move(aRetval));
+                        aRetval = Primitive2DContainer { mask };
                     }
                     break;
                 }
@@ -618,7 +618,7 @@ namespace drawinglayer::primitive2d
                     // convert to grey
                     const Primitive2DReference aPrimitiveGrey(
                         new ModifiedColorPrimitive2D(
-                            aRetval,
+                            std::move(aRetval),
                             std::make_shared<basegfx::BColorModifier_gray>()));
 
                     aRetval = Primitive2DContainer { aPrimitiveGrey };
@@ -629,7 +629,7 @@ namespace drawinglayer::primitive2d
                     // convert to mono (black/white with threshold 0.5)
                     const Primitive2DReference aPrimitiveBlackAndWhite(
                         new ModifiedColorPrimitive2D(
-                            aRetval,
+                            std::move(aRetval),
                             std::make_shared<basegfx::BColorModifier_black_and_white>(0.5)));
 
                     aRetval = Primitive2DContainer { aPrimitiveBlackAndWhite };
@@ -655,7 +655,7 @@ namespace drawinglayer::primitive2d
             {
                 const Primitive2DReference aPrimitiveRGBLuminannceContrast(
                     new ModifiedColorPrimitive2D(
-                        aRetval,
+                        std::move(aRetval),
                         std::make_shared<basegfx::BColorModifier_RGBLuminanceContrast>(
                                 fRed,
                                 fGreen,
@@ -671,7 +671,7 @@ namespace drawinglayer::primitive2d
             {
                 const Primitive2DReference aPrimitiveGamma(
                     new ModifiedColorPrimitive2D(
-                        aRetval,
+                        std::move(aRetval),
                         std::make_shared<basegfx::BColorModifier_gamma>(
                                 fGamma)));
 
@@ -683,7 +683,7 @@ namespace drawinglayer::primitive2d
             {
                 const Primitive2DReference aPrimitiveInvert(
                     new ModifiedColorPrimitive2D(
-                        aRetval,
+                        std::move(aRetval),
                         std::make_shared<basegfx::BColorModifier_invert>()));
 
                 aRetval = Primitive2DContainer { aPrimitiveInvert };

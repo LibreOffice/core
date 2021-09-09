@@ -24,11 +24,11 @@ using namespace com::sun::star;
 namespace drawinglayer::primitive2d
 {
         ObjectInfoPrimitive2D::ObjectInfoPrimitive2D(
-            const Primitive2DContainer& rChildren,
+            Primitive2DContainer&& aChildren,
             const OUString& rName,
             const OUString& rTitle,
             const OUString& rDesc)
-        :   GroupPrimitive2D(rChildren),
+        :   GroupPrimitive2D(std::move(aChildren)),
             maName(rName),
             maTitle(rTitle),
             maDesc(rDesc)

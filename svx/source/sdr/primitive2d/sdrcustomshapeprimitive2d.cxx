@@ -38,7 +38,7 @@ namespace drawinglayer::primitive2d
             // Soft edges should be before text, since text is not affected by soft edges
             if (!aRetval.empty() && getSdrSTAttribute().getSoftEdgeRadius())
             {
-                aRetval = createEmbeddedSoftEdgePrimitive(aRetval,
+                aRetval = createEmbeddedSoftEdgePrimitive(std::move(aRetval),
                                                           getSdrSTAttribute().getSoftEdgeRadius());
             }
 

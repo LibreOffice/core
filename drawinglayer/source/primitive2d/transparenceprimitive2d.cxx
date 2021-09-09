@@ -27,10 +27,10 @@ using namespace com::sun::star;
 namespace drawinglayer::primitive2d
 {
         TransparencePrimitive2D::TransparencePrimitive2D(
-            const Primitive2DContainer& rChildren,
-            const Primitive2DContainer& rTransparence)
-        :   GroupPrimitive2D(rChildren),
-            maTransparence(rTransparence)
+            Primitive2DContainer&& aChildren,
+            Primitive2DContainer&& aTransparence)
+        :   GroupPrimitive2D(std::move(aChildren)),
+            maTransparence(std::move(aTransparence))
         {
         }
 

@@ -49,7 +49,7 @@ namespace drawinglayer
             // get destination size in pixels
             const MapMode aMapModePixel(MapUnit::MapPixel);
             const sal_uInt32 nViewVisibleArea(nDiscreteWidth * nDiscreteHeight);
-            drawinglayer::primitive2d::Primitive2DContainer aSequence(rSeq);
+            drawinglayer::primitive2d::Primitive2DContainer aSequence;
 
             if(nViewVisibleArea > nMaxSquarePixels)
             {
@@ -61,10 +61,12 @@ namespace drawinglayer
                 const drawinglayer::primitive2d::Primitive2DReference aEmbed(
                     new drawinglayer::primitive2d::TransformPrimitive2D(
                         basegfx::utils::createScaleB2DHomMatrix(fReduceFactor, fReduceFactor),
-                        rSeq));
+                        primitive2d::Primitive2DContainer(rSeq)));
 
                 aSequence = drawinglayer::primitive2d::Primitive2DContainer { aEmbed };
             }
+            else
+                aSequence = rSeq;
 
             const Point aEmptyPoint;
             const Size aSizePixel(nDiscreteWidth, nDiscreteHeight);
@@ -119,7 +121,7 @@ namespace drawinglayer
             // embed primitives to paint them black
             const primitive2d::Primitive2DReference xRef(
                 new primitive2d::ModifiedColorPrimitive2D(
-                    aSequence,
+                    std::move(aSequence),
                     std::make_shared<basegfx::BColorModifier_replace>(
                             basegfx::BColor(0.0, 0.0, 0.0))));
             const primitive2d::Primitive2DContainer xSeq { xRef };

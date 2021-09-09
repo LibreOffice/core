@@ -25,8 +25,8 @@ using namespace com::sun::star;
 namespace drawinglayer::primitive2d
 {
 GlowPrimitive2D::GlowPrimitive2D(const Color& rGlowColor, double fRadius,
-                                 const Primitive2DContainer& rChildren)
-    : GroupPrimitive2D(rChildren)
+                                 Primitive2DContainer&& rChildren)
+    : GroupPrimitive2D(std::move(rChildren))
     , maGlowColor(rGlowColor)
     , mfGlowRadius(fRadius)
 {

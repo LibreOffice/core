@@ -390,7 +390,7 @@ namespace drawinglayer::primitive2d
             if(getSdrLSTAttribute().getLine().isDefault())
             {
                 // embed line geometry to invisible (100% transparent) line group for HitTest
-                const Primitive2DReference xHiddenLines(new HiddenGeometryPrimitive2D(aRetval));
+                Primitive2DReference xHiddenLines(new HiddenGeometryPrimitive2D(std::move(aRetval)));
 
                 aRetval = Primitive2DContainer { xHiddenLines };
             }

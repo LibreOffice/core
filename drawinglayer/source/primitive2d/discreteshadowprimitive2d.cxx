@@ -251,7 +251,7 @@ namespace drawinglayer::primitive2d
             rContainer.push_back(
                 new TransformPrimitive2D(
                     getTransform(),
-                    xRetval));
+                    std::move(xRetval)));
         }
 
         DiscreteShadowPrimitive2D::DiscreteShadowPrimitive2D(

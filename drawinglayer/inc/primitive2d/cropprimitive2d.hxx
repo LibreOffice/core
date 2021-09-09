@@ -64,7 +64,7 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             CropPrimitive2D(
-                const Primitive2DContainer& rChildren,
+                Primitive2DContainer&& aChildren,
                 const basegfx::B2DHomMatrix& rTransformation,
                 double fCropLeft,
                 double fCropTop,

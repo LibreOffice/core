@@ -111,10 +111,10 @@ namespace sdr::overlay
                     const basegfx::B2DHomMatrix aTranslateGridOffset(
                         basegfx::utils::createTranslateB2DHomMatrix(
                             getOffset()));
-                    const drawinglayer::primitive2d::Primitive2DReference aEmbed(
+                    drawinglayer::primitive2d::Primitive2DReference aEmbed(
                         new drawinglayer::primitive2d::TransformPrimitive2D(
                             aTranslateGridOffset,
-                            maPrimitive2DSequence));
+                            std::move(const_cast<drawinglayer::primitive2d::Primitive2DContainer&>(maPrimitive2DSequence))));
 
                     const_cast< OverlayObject* >(this)->maPrimitive2DSequence = drawinglayer::primitive2d::Primitive2DContainer { aEmbed };
                 }

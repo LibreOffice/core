@@ -27,8 +27,8 @@ using namespace com::sun::star;
 namespace drawinglayer::primitive2d
 {
         InvertPrimitive2D::InvertPrimitive2D(
-            const Primitive2DContainer& rChildren)
-        :   GroupPrimitive2D(rChildren)
+            Primitive2DContainer&& aChildren)
+        :   GroupPrimitive2D(std::move(aChildren))
         {
         }
 
