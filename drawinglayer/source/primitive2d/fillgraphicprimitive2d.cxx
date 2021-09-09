@@ -73,7 +73,7 @@ namespace drawinglayer::primitive2d
                 {
                     rContainer.push_back(new TransformPrimitive2D(
                         getTransformation() * aMatrices[a],
-                        std::move(xSeq)));
+                        Primitive2DContainer(xSeq)));
                 }
             }
             else
