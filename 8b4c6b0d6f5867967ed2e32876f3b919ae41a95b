@@ -34,6 +34,24 @@
       "parentUuid": "a8889bcf_8861d4a5",
       "revId": "8b4c6b0d6f5867967ed2e32876f3b919ae41a95b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ecabce3_71d19332",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-09T15:35:20Z",
+      "side": 1,
+      "message": "\u003e there was no need for the username size control, because you can\u0027t create a longer name.\n\nWhy? I don\u0027t get it. I meant that we don\u0027t need to limit the name to 31 characters, only to 256; and let FB to do the rest (check 31-char limit).\n\nOur check it *necessary*, because user *can* specify a long username in config. \nThat would mean that arbitrarily long 4-byte integer would be passed into push_back; it will be converted to char; e.g., 1025 would get converted to 1; this would mean that FB will read 1 character of the name, and then read the next character as type; what it will get there is undefined; it may well result in a read after the buffer.\n\nSo please make sure to limit the user name to the *maximum allowed by the data format* (i.e., fitting into 1 byte).",
+      "parentUuid": "73f82da0_ffa04ec8",
+      "revId": "8b4c6b0d6f5867967ed2e32876f3b919ae41a95b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
