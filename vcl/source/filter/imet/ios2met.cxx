@@ -814,7 +814,7 @@ sal_uInt32 OS2METReader::ReadBigEndian3BytesLong()
 
 sal_uInt32 OS2METReader::ReadLittleEndian3BytesLong()
 {
-    sal_uInt8 nHi,nMed,nLo;
+    sal_uInt8 nHi(0), nMed(0), nLo(0);
 
     pOS2MET->ReadUChar( nLo ).ReadUChar( nMed ).ReadUChar( nHi );
     return ((static_cast<sal_uInt32>(nHi)&0xff)<<16)|((static_cast<sal_uInt32>(nMed)&0xff)<<8)|(static_cast<sal_uInt32>(nLo)&0xff);
