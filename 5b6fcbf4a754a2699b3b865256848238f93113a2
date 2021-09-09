@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "097b7474_1139e212",
+        "filename": "vcl/source/outdev/line.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-09T07:06:33Z",
+      "side": 0,
+      "message": "This was still not addressed. Let\u0027s push nevertheless.",
+      "revId": "5b6fcbf4a754a2699b3b865256848238f93113a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
