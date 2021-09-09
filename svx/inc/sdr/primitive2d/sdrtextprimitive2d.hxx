@@ -75,7 +75,7 @@ namespace drawinglayer::primitive2d
 
         protected:
             // support for XTEXT_PAINTSHAPE_BEGIN/XTEXT_PAINTSHAPE_END Metafile comments
-            static void encapsulateWithTextHierarchyBlockPrimitive2D(Primitive2DContainer& rContainer, const Primitive2DContainer& rCandidate);
+            static void encapsulateWithTextHierarchyBlockPrimitive2D(Primitive2DContainer& rContainer, Primitive2DContainer&& aCandidate);
 
         public:
             SdrTextPrimitive2D(

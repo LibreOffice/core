@@ -65,9 +65,9 @@ namespace sdr::overlay
 
 
                 // embed in 50% transparent paint
-                const drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparence(
+                drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparence(
                     new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
-                        aRetval,
+                        std::move(aRetval),
                         0.5));
 
                 aRetval = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparence };

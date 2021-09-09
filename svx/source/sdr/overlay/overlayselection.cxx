@@ -118,9 +118,9 @@ namespace sdr::overlay
                 if(bInvert)
                 {
                     // embed all in invert primitive
-                    const drawinglayer::primitive2d::Primitive2DReference aInvert(
+                    drawinglayer::primitive2d::Primitive2DReference aInvert(
                         new drawinglayer::primitive2d::InvertPrimitive2D(
-                            aRetval));
+                            std::move(aRetval)));
                     aRetval = drawinglayer::primitive2d::Primitive2DContainer { aInvert };
                 }
                 else if(OverlayType::Transparent == maLastOverlayType)
@@ -129,7 +129,7 @@ namespace sdr::overlay
                     const double fTransparence(mnLastTransparence / 100.0);
                     const drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparence(
                         new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
-                            aRetval,
+                            std::move(aRetval),
                             fTransparence));
 
                     if(mbBorder)
@@ -141,9 +141,7 @@ namespace sdr::overlay
                                 aRGBColor));
 
                         // add both to result
-                        aRetval.resize(2);
-                        aRetval[0] = aUnifiedTransparence;
-                        aRetval[1] = aSelectionOutline;
+                        aRetval = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparence, aSelectionOutline };
                     }
                     else
                     {

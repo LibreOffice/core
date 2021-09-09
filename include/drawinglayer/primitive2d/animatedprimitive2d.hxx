@@ -78,7 +78,7 @@ protected:
 public:
     /// constructor
     AnimatedSwitchPrimitive2D(const animation::AnimationEntry& rAnimationEntry,
-                              const Primitive2DContainer& rChildren, bool bIsTextAnimation);
+                              Primitive2DContainer&& aChildren, bool bIsTextAnimation);
 
     /// destructor - needed due to mpAnimationEntry
     virtual ~AnimatedSwitchPrimitive2D() override;
@@ -114,7 +114,7 @@ class DRAWINGLAYER_DLLPUBLIC AnimatedBlinkPrimitive2D final : public AnimatedSwi
 public:
     /// constructor
     AnimatedBlinkPrimitive2D(const animation::AnimationEntry& rAnimationEntry,
-                             const Primitive2DContainer& rChildren);
+                             Primitive2DContainer&& aChildren);
 
     /// create local decomposition
     virtual void
@@ -142,7 +142,7 @@ public:
     /// constructor
     AnimatedInterpolatePrimitive2D(const std::vector<basegfx::B2DHomMatrix>& rmMatrixStack,
                                    const animation::AnimationEntry& rAnimationEntry,
-                                   const Primitive2DContainer& rChildren);
+                                   Primitive2DContainer&& aChildren);
 
     /// create local decomposition
     virtual void

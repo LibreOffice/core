@@ -242,8 +242,8 @@ namespace drawinglayer::primitive2d
             aTransform.translate(aTranslate.getX(), aTranslate.getY());
 
             // add transform primitive
-            const Primitive2DContainer aContent { aNewPrimitive };
-            rContainer.push_back( new TransformPrimitive2D(aTransform, aContent) );
+            Primitive2DContainer aContent { aNewPrimitive };
+            rContainer.push_back( new TransformPrimitive2D(aTransform, std::move(aContent)) );
         }
 
         TextLinePrimitive2D::TextLinePrimitive2D(

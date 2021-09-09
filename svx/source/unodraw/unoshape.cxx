@@ -740,10 +740,10 @@ uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
                             MapMode(MapUnit::Map100thMM)));
 
                     // Embed primitives to get them in 100th mm
-                    const drawinglayer::primitive2d::Primitive2DReference xEmbedRef(
+                    drawinglayer::primitive2d::Primitive2DReference xEmbedRef(
                         new drawinglayer::primitive2d::TransformPrimitive2D(
                             aMapTransform,
-                            xPrimitives));
+                            std::move(xPrimitives)));
 
                     xPrimitives = drawinglayer::primitive2d::Primitive2DContainer { xEmbedRef };
 

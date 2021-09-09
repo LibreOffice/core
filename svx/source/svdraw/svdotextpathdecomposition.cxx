@@ -610,7 +610,7 @@ namespace
 
                             aNewPrimitives.push_back(
                                 new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
-                                    aStrokePrimitiveSequence,
+                                    std::move(aStrokePrimitiveSequence),
                                     static_cast<double>(rOutlineAttribute.getTransparence()) / 100.0) );
                         }
                         else

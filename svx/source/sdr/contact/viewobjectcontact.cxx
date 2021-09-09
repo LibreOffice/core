@@ -314,9 +314,9 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::createPrimiti
                 std::make_shared<basegfx::BColorModifier_interpolate>(
                     aRGBWhite,
                     0.5);
-            const drawinglayer::primitive2d::Primitive2DReference xReference(
+            drawinglayer::primitive2d::Primitive2DReference xReference(
                 new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
-                    xRetval,
+                    std::move(xRetval),
                     aBColorModifier));
 
             xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
@@ -369,7 +369,7 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
             const drawinglayer::primitive2d::Primitive2DReference aEmbed(
                  new drawinglayer::primitive2d::TransformPrimitive2D(
                     aTranslateGridOffset,
-                    mxPrimitive2DSequence));
+                    drawinglayer::primitive2d::Primitive2DContainer(mxPrimitive2DSequence)));
 
             // Set values at local data. So for now, the mechanism is to reset some of the
             // defining things (mxPrimitive2DSequence, maGridOffset) and re-create the

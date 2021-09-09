@@ -971,7 +971,7 @@ void paintGraphicUsingPrimitivesHelper(
             rContent[0] =
                 new drawinglayer::primitive2d::MaskPrimitive2D(
                     aClip,
-                    rContent);
+                    drawinglayer::primitive2d::Primitive2DContainer(rContent));
         }
     }
 
@@ -982,7 +982,7 @@ void paintGraphicUsingPrimitivesHelper(
         rContent.resize(1);
         rContent[0] =
             new drawinglayer::primitive2d::ObjectInfoPrimitive2D(
-                rContent,
+                drawinglayer::primitive2d::Primitive2DContainer(rContent),
                 rName,
                 rTitle,
                 rDescription);

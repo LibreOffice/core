@@ -30,8 +30,8 @@ namespace drawinglayer::primitive2d
             const vcl::PDFWriter::StructElement& rStructureElement,
             bool bBackground,
             bool bIsImage,
-            const Primitive2DContainer& rChildren)
-        :   GroupPrimitive2D(rChildren),
+            Primitive2DContainer&& aChildren)
+        :   GroupPrimitive2D(std::move(aChildren)),
             maStructureElement(rStructureElement),
             mbBackground(bBackground),
             mbIsImage(bIsImage)

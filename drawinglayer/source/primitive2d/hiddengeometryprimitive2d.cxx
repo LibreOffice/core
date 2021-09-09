@@ -27,8 +27,8 @@ using namespace com::sun::star;
 namespace drawinglayer::primitive2d
 {
         HiddenGeometryPrimitive2D::HiddenGeometryPrimitive2D(
-            const Primitive2DContainer& rChildren)
-        :   GroupPrimitive2D(rChildren)
+            Primitive2DContainer&& aChildren)
+        :   GroupPrimitive2D(std::move(aChildren))
         {
         }
 

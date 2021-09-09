@@ -37,7 +37,7 @@ private:
 
 public:
     /// constructor
-    GlowPrimitive2D(const Color& rGlowColor, double fRadius, const Primitive2DContainer& rChildren);
+    GlowPrimitive2D(const Color& rGlowColor, double fRadius, Primitive2DContainer&& rChildren);
 
     /// data read access
     const Color& getGlowColor() const { return maGlowColor; }

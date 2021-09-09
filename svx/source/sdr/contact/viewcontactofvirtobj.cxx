@@ -76,10 +76,10 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfVirtObj::createView
     if(!xSequenceVirtual.empty())
     {
         // create transform primitive
-        const drawinglayer::primitive2d::Primitive2DReference xReference(
+        drawinglayer::primitive2d::Primitive2DReference xReference(
             new drawinglayer::primitive2d::TransformPrimitive2D(
                 aObjectMatrix,
-                xSequenceVirtual));
+                drawinglayer::primitive2d::Primitive2DContainer(xSequenceVirtual)));
 
         return drawinglayer::primitive2d::Primitive2DContainer { xReference };
     }

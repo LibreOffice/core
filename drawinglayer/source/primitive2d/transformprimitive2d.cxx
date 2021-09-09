@@ -28,8 +28,8 @@ namespace drawinglayer::primitive2d
 {
         TransformPrimitive2D::TransformPrimitive2D(
             const basegfx::B2DHomMatrix& rTransformation,
-            const Primitive2DContainer& rChildren)
-        :   GroupPrimitive2D(rChildren),
+            Primitive2DContainer&& aChildren)
+        :   GroupPrimitive2D(std::move(aChildren)),
             maTransformation(rTransformation)
         {
         }

@@ -35,7 +35,7 @@ namespace drawinglayer::primitive2d
         private:
         public:
             /// constructor
-            explicit PageHierarchyPrimitive2D(const Primitive2DContainer& rChildren);
+            explicit PageHierarchyPrimitive2D(Primitive2DContainer&& aChildren);
 
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;

@@ -26,8 +26,8 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-        TextHierarchyLinePrimitive2D::TextHierarchyLinePrimitive2D(const Primitive2DContainer& rChildren)
-        :   GroupPrimitive2D(rChildren)
+        TextHierarchyLinePrimitive2D::TextHierarchyLinePrimitive2D(Primitive2DContainer&& aChildren)
+        :   GroupPrimitive2D(std::move(aChildren))
         {
         }
 
@@ -39,9 +39,9 @@ namespace drawinglayer::primitive2d
 
 
         TextHierarchyParagraphPrimitive2D::TextHierarchyParagraphPrimitive2D(
-            const Primitive2DContainer& rChildren,
+            Primitive2DContainer&& aChildren,
             sal_Int16 nOutlineLevel)
-        :   GroupPrimitive2D(rChildren),
+        :   GroupPrimitive2D(std::move(aChildren)),
             mnOutlineLevel(nOutlineLevel)
         {
         }
@@ -66,8 +66,8 @@ namespace drawinglayer::primitive2d
 
 
 
-        TextHierarchyBulletPrimitive2D::TextHierarchyBulletPrimitive2D(const Primitive2DContainer& rChildren)
-        :   GroupPrimitive2D(rChildren)
+        TextHierarchyBulletPrimitive2D::TextHierarchyBulletPrimitive2D(Primitive2DContainer&& aChildren)
+        :   GroupPrimitive2D(std::move(aChildren))
         {
         }
 
@@ -78,8 +78,8 @@ namespace drawinglayer::primitive2d
         }
 
 
-        TextHierarchyBlockPrimitive2D::TextHierarchyBlockPrimitive2D(const Primitive2DContainer& rChildren)
-        :   GroupPrimitive2D(rChildren)
+        TextHierarchyBlockPrimitive2D::TextHierarchyBlockPrimitive2D(Primitive2DContainer&& aChildren)
+        :   GroupPrimitive2D(std::move(aChildren))
         {
         }
 
@@ -91,10 +91,10 @@ namespace drawinglayer::primitive2d
 
 
         TextHierarchyFieldPrimitive2D::TextHierarchyFieldPrimitive2D(
-            const Primitive2DContainer& rChildren,
+            Primitive2DContainer&& aChildren,
             const FieldType& rFieldType,
             const std::vector< std::pair< OUString, OUString>>* pNameValue)
-        :   GroupPrimitive2D(rChildren),
+        :   GroupPrimitive2D(std::move(aChildren)),
             meType(rFieldType)
         {
             if (nullptr != pNameValue)
@@ -136,8 +136,8 @@ namespace drawinglayer::primitive2d
         }
 
 
-        TextHierarchyEditPrimitive2D::TextHierarchyEditPrimitive2D(const Primitive2DContainer& rChildren)
-        :   GroupPrimitive2D(rChildren)
+        TextHierarchyEditPrimitive2D::TextHierarchyEditPrimitive2D(Primitive2DContainer&& aChildren)
+        :   GroupPrimitive2D(std::move(aChildren))
         {
         }
 

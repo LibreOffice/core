@@ -24,8 +24,8 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-        PageHierarchyPrimitive2D::PageHierarchyPrimitive2D(const Primitive2DContainer& rChildren)
-        :   GroupPrimitive2D(rChildren)
+        PageHierarchyPrimitive2D::PageHierarchyPrimitive2D(Primitive2DContainer&& aChildren)
+        :   GroupPrimitive2D(std::move(aChildren))
         {
         }
 

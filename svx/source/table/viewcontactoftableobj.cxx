@@ -340,7 +340,7 @@ namespace sdr::contact
                     }
 
                     // now create all CellBorderPrimitives
-                    const drawinglayer::primitive2d::Primitive2DContainer aCellBorderPrimitives(aArray.CreateB2DPrimitiveArray());
+                    drawinglayer::primitive2d::Primitive2DContainer aCellBorderPrimitives(aArray.CreateB2DPrimitiveArray());
 
                     if(!aCellBorderPrimitives.empty())
                     {
@@ -380,11 +380,11 @@ namespace sdr::contact
                         aRetval.append(
                             new drawinglayer::primitive2d::TransformPrimitive2D(
                                 aTransform,
-                                aCellBorderPrimitives));
+                                drawinglayer::primitive2d::Primitive2DContainer(aCellBorderPrimitives)));
 
                         // Borders are always the same for shadow as well.
                         aRetvalForShadow.append(new drawinglayer::primitive2d::TransformPrimitive2D(
-                            aTransform, aCellBorderPrimitives));
+                            aTransform, std::move(aCellBorderPrimitives)));
                     }
                 }
 

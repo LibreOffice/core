@@ -91,7 +91,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrOle2Obj::createP
     {
         // try to get chart primitives and chart range directly from xChartModel
         basegfx::B2DRange aChartContentRange;
-        const drawinglayer::primitive2d::Primitive2DContainer aChartSequence(
+        drawinglayer::primitive2d::Primitive2DContainer aChartSequence(
             ChartHelper::tryToGetChartContentAsPrimitive2DSequence(
                 GetOle2Obj().getXModel(),
                 aChartContentRange));
@@ -112,7 +112,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrOle2Obj::createP
             aEmbed = aObjectMatrix * aEmbed;
             xContent = new drawinglayer::primitive2d::TransformPrimitive2D(
                 aEmbed,
-                aChartSequence);
+                std::move(aChartSequence));
         }
     }
 

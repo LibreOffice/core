@@ -41,7 +41,7 @@ namespace drawinglayer::primitive2d
         private:
         public:
             /// constructor
-            explicit TextHierarchyLinePrimitive2D(const Primitive2DContainer& rChildren);
+            explicit TextHierarchyLinePrimitive2D(Primitive2DContainer&& aChildren);
 
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
@@ -56,7 +56,7 @@ namespace drawinglayer::primitive2d
         private:
         public:
             /// constructor
-            explicit TextHierarchyBulletPrimitive2D(const Primitive2DContainer& rChildren);
+            explicit TextHierarchyBulletPrimitive2D(Primitive2DContainer&& aChildren);
 
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
@@ -76,7 +76,7 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             explicit TextHierarchyParagraphPrimitive2D(
-                const Primitive2DContainer& rChildren,
+                Primitive2DContainer&& aChildren,
                 sal_Int16 nOutlineLevel = -1);
 
             /// data read access
@@ -98,7 +98,7 @@ namespace drawinglayer::primitive2d
         private:
         public:
             /// constructor
-            explicit TextHierarchyBlockPrimitive2D(const Primitive2DContainer& rChildren);
+            explicit TextHierarchyBlockPrimitive2D(Primitive2DContainer&& aChildren);
 
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
@@ -138,7 +138,7 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             TextHierarchyFieldPrimitive2D(
-                const Primitive2DContainer& rChildren,
+                Primitive2DContainer&& aChildren,
                 const FieldType& rFieldType,
                 const std::vector< std::pair< OUString, OUString>>* pNameValue = nullptr);
 
@@ -168,7 +168,7 @@ namespace drawinglayer::primitive2d
         private:
         public:
             /// constructor
-            explicit TextHierarchyEditPrimitive2D(const Primitive2DContainer& rChildren);
+            explicit TextHierarchyEditPrimitive2D(Primitive2DContainer&& aChildren);
 
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
