@@ -260,10 +260,7 @@ bool WeldEditView::MouseButtonDown(const MouseEvent& rMEvt)
         CaptureMouse();
 
     if (!HasFocus() && CanFocus())
-    {
         GrabFocus();
-        GetFocus();
-    }
 
     EditView* pEditView = GetEditView();
     return pEditView && pEditView->MouseButtonDown(rMEvt);
