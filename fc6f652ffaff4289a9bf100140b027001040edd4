@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfd2cb5b_ed0a4aa2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-09T19:49:12Z",
+      "side": 1,
+      "message": "Consider the following snippet:\n\nSub TestCollection(Optional optInt)\n\tDim cA As New Collection\n\tcA.Add(optInt) \u0027 it makes sense to add such an element to a collection(?)\n\tMsgBox cA.Item(1) + 4 \u0027 here it should throw an error\nEnd Sub\n\nSub Main\n\tTestCollection\nEnd Sub\n\nIn https://opengrok.libreoffice.org/xref/core/basic/source/runtime/runtime.cxx?r\u003d975c73fe\u0026mo\u003d111828\u0026fi\u003d3657#3657 the value is retrieved in https://opengrok.libreoffice.org/xref/core/basic/source/sbx/sbxvalue.cxx?r\u003d8024118d#65 AND we lose the SbxInfo including isMissing of the variable since only the value is retrieved.\n\nHowever, adding a CVErr to a collection would again lead to ERRCODE_BASIC_NOT_OPTIONAL if we don\u0027t ask isMissing 😞\n\nI will dig further ...",
+      "revId": "fc6f652ffaff4289a9bf100140b027001040edd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
