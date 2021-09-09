@@ -34,10 +34,14 @@
 #include <strings.hrc>
 
 #include <filtdlg.hxx>
+#include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
 #include <svl/numformat.hxx>
 #include <svl/sharedstringpool.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <limits>
 
@@ -56,6 +60,8 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pPa
     , aStrEmpty(ScResId(SCSTR_FILTER_EMPTY))
     , aStrNotEmpty(ScResId(SCSTR_FILTER_NOTEMPTY))
     , aStrColumn(ScResId(SCSTR_COLUMN))
+    , aStrTextColor(ScResId(SCSTR_FILTER_TEXT_COLOR))
+    , aStrBackgroundColor(ScResId(SCSTR_FILTER_BACKGROUND_COLOR))
     , nWhichQuery(rArgSet.GetPool()->GetWhich(SID_QUERY))
     , theQueryData(static_cast<const ScQueryItem&>(rArgSet.Get(nWhichQuery)).GetQueryData())
     , pViewData(nullptr)
@@ -66,21 +72,25 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pPa
     , m_xLbField1(m_xBuilder->weld_combo_box("field1"))
     , m_xLbCond1(m_xBuilder->weld_combo_box("cond1"))
     , m_xEdVal1(m_xBuilder->weld_combo_box("val1"))
+    , m_xLbColor1(m_xBuilder->weld_combo_box("color1"))
     , m_xBtnRemove1(m_xBuilder->weld_button("remove1"))
     , m_xLbConnect2(m_xBuilder->weld_combo_box("connect2"))
     , m_xLbField2(m_xBuilder->weld_combo_box("field2"))
     , m_xLbCond2(m_xBuilder->weld_combo_box("cond2"))
     , m_xEdVal2(m_xBuilder->weld_combo_box("val2"))
+    , m_xLbColor2(m_xBuilder->weld_combo_box("color2"))
     , m_xBtnRemove2(m_xBuilder->weld_button("remove2"))
     , m_xLbConnect3(m_xBuilder->weld_combo_box("connect3"))
     , m_xLbField3(m_xBuilder->weld_combo_box("field3"))
     , m_xLbCond3(m_xBuilder->weld_combo_box("cond3"))
     , m_xEdVal3(m_xBuilder->weld_combo_box("val3"))
+    , m_xLbColor3(m_xBuilder->weld_combo_box("color3"))
     , m_xBtnRemove3(m_xBuilder->weld_button("remove3"))
     , m_xLbConnect4(m_xBuilder->weld_combo_box("connect4"))
     , m_xLbField4(m_xBuilder->weld_combo_box("field4"))
     , m_xLbCond4(m_xBuilder->weld_combo_box("cond4"))
     , m_xEdVal4(m_xBuilder->weld_combo_box("val4"))
+    , m_xLbColor4(m_xBuilder->weld_combo_box("color4"))
     , m_xBtnRemove4(m_xBuilder->weld_button("remove4"))
     , m_xContents(m_xBuilder->weld_widget("grid"))
     , m_xScrollBar(m_xBuilder->weld_scrolled_window("scrollbar", true))
@@ -122,6 +132,33 @@ ScFilterDlg::~ScFilterDlg()
     pTimer.reset();
 }
 
+namespace {
+VirtualDevice* lcl_getColorImage(const Color &rColor)
+{
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    Size aImageSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
+
+    VclPtrInstance<VirtualDevice> xDevice;
+    xDevice->SetOutputSize(aImageSize);
+    const tools::Rectangle aRect(Point(0, 0), aImageSize);
+    if (rColor == COL_NONE_COLOR)
+    {
+        const Color aW(COL_WHITE);
+        const Color aG(0xef, 0xef, 0xef);
+        xDevice->DrawCheckered(aRect.TopLeft(), aRect.GetSize(), 8, aW, aG);
+        xDevice->SetFillColor();
+    }
+    else
+    {
+        xDevice->SetFillColor(rColor);
+    }
+
+    xDevice->DrawRect(aRect);
+
+    return xDevice.get();
+}
+}
+
 void ScFilterDlg::Init( const SfxItemSet& rArgSet )
 {
     const ScQueryItem& rQueryItem = static_cast<const ScQueryItem&>(
@@ -157,6 +194,11 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     m_xLbCond3->connect_changed( LINK( this, ScFilterDlg, LbSelectHdl ) );
     m_xLbCond4->connect_changed( LINK( this, ScFilterDlg, LbSelectHdl ) );
 
+    m_xLbColor1->connect_changed( LINK( this, ScFilterDlg, LbSelectHdl ) );
+    m_xLbColor2->connect_changed( LINK( this, ScFilterDlg, LbSelectHdl ) );
+    m_xLbColor3->connect_changed( LINK( this, ScFilterDlg, LbSelectHdl ) );
+    m_xLbColor4->connect_changed( LINK( this, ScFilterDlg, LbSelectHdl ) );
+
     m_xBtnRemove1->connect_clicked( LINK( this, ScFilterDlg, BtnRemoveHdl ) );
     m_xBtnRemove2->connect_clicked( LINK( this, ScFilterDlg, BtnRemoveHdl ) );
     m_xBtnRemove3->connect_clicked( LINK( this, ScFilterDlg, BtnRemoveHdl ) );
@@ -187,6 +229,11 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     maConnLbArr.push_back(m_xLbConnect2.get());
     maConnLbArr.push_back(m_xLbConnect3.get());
     maConnLbArr.push_back(m_xLbConnect4.get());
+    maColorLbArr.reserve(QUERY_ENTRY_COUNT);
+    maColorLbArr.push_back(m_xLbColor1.get());
+    maColorLbArr.push_back(m_xLbColor2.get());
+    maColorLbArr.push_back(m_xLbColor3.get());
+    maColorLbArr.push_back(m_xLbColor4.get());
     maRemoveBtnArr.reserve(QUERY_ENTRY_COUNT);
     maRemoveBtnArr.push_back(m_xBtnRemove1.get());
     maRemoveBtnArr.push_back(m_xBtnRemove2.get());
@@ -219,6 +266,8 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         size_t nCondPos = 0;
         size_t nFieldSelPos = 0;
 
+        maColorLbArr[i]->set_visible(false);
+
         ScQueryEntry& rEntry = theQueryData.GetEntry(i);
         if ( rEntry.bDoQuery )
         {
@@ -236,8 +285,11 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
             }
             else if (rEntry.IsQueryByTextColor() || rEntry.IsQueryByBackgroundColor())
             {
-                // No support for color filters in filter dialog currently
-                continue;
+                nCondPos = maCondLbArr[i]->find_text(
+                    rEntry.IsQueryByTextColor() ? aStrTextColor : aStrBackgroundColor);
+                maValueEdArr[i]->set_visible(false);
+                maColorLbArr[i]->set_visible(true);
+                maColorLbArr[i]->set_sensitive(true);
             }
             else
             {
@@ -263,6 +315,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         maValueEdArr[i]->set_entry_completion(false);
         maValueEdArr[i]->connect_changed( LINK( this, ScFilterDlg, ValModifyHdl ) );
         UpdateValueList(i+1);
+        UpdateColorList(i+1);
     }
 
     m_xScrollBar->connect_vadjustment_changed( LINK( this, ScFilterDlg, ScrollHdl ) );
@@ -293,6 +346,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         m_xLbField2->set_sensitive(false);
         m_xLbCond2->set_sensitive(false);
         m_xEdVal2->set_sensitive(false);
+        m_xLbColor2->set_sensitive(false);
         m_xBtnRemove2->set_sensitive(false);
     }
     else if ( m_xLbConnect2->get_active() == -1 )
@@ -300,6 +354,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         m_xLbField2->set_sensitive(false);
         m_xLbCond2->set_sensitive(false);
         m_xEdVal2->set_sensitive(false);
+        m_xLbColor2->set_sensitive(false);
         m_xBtnRemove2->set_sensitive(false);
     }
 
@@ -309,6 +364,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         m_xLbField3->set_sensitive(false);
         m_xLbCond3->set_sensitive(false);
         m_xEdVal3->set_sensitive(false);
+        m_xLbColor3->set_sensitive(false);
         m_xBtnRemove3->set_sensitive(false);
     }
     else if ( m_xLbConnect3->get_active() == -1 )
@@ -316,6 +372,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         m_xLbField3->set_sensitive(false);
         m_xLbCond3->set_sensitive(false);
         m_xEdVal3->set_sensitive(false);
+        m_xLbColor3->set_sensitive(false);
         m_xBtnRemove3->set_sensitive(false);
     }
     if ( m_xLbField3->get_active() == 0 )
@@ -324,6 +381,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         m_xLbField4->set_sensitive(false);
         m_xLbCond4->set_sensitive(false);
         m_xEdVal4->set_sensitive(false);
+        m_xLbColor4->set_sensitive(false);
         m_xBtnRemove4->set_sensitive(false);
     }
     else if ( m_xLbConnect4->get_active() == -1 )
@@ -331,6 +389,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         m_xLbField4->set_sensitive(false);
         m_xLbCond4->set_sensitive(false);
         m_xEdVal4->set_sensitive(false);
+        m_xLbColor4->set_sensitive(false);
         m_xBtnRemove4->set_sensitive(false);
     }
 
@@ -567,6 +626,62 @@ void ScFilterDlg::ClearValueList( size_t nList )
     }
 }
 
+void ScFilterDlg::UpdateColorList(size_t nList)
+{
+    if (!pDoc || nList <= 0 || nList > QUERY_ENTRY_COUNT)
+        return;
+
+    size_t nPos = nList - 1;
+    ScQueryEntry& rEntry = theQueryData.GetEntry(nPos);
+    const sal_Int32 nFieldSelPos = maFieldLbArr[nPos]->get_active();
+    if (!nFieldSelPos)
+        return;
+
+    SCCOL nColumn = theQueryData.nCol1 + static_cast<SCCOL>(nFieldSelPos) - 1;
+    EntryList* pList = m_EntryLists[nColumn].get();
+    if (!pList)
+        return;
+
+    std::set<Color> aColors;
+    OUString sSelectedCondition = maCondLbArr[nPos]->get_active_text();
+    if (sSelectedCondition == aStrTextColor)
+        aColors = pList->maFilterEntries.getTextColors();
+    else if (sSelectedCondition == aStrBackgroundColor)
+        aColors = pList->maFilterEntries.getBackgroundColors();
+    else
+        return;
+
+    sal_Int32 i = 1;
+    maColorLbArr[nPos]->clear();
+    for (const auto& rColor : aColors)
+    {
+        OUString sId = rColor.AsRGBHexString();
+        if (rColor == COL_AUTO)
+        {
+            OUString sText = sSelectedCondition == aStrTextColor
+                                 ? ScResId(SCSTR_FILTER_AUTOMATIC_COLOR)
+                                 : ScResId(SCSTR_FILTER_NO_FILL);
+            maColorLbArr[nPos]->append(sId, sText);
+        }
+        else
+        {
+            VirtualDevice* pDev = lcl_getColorImage(rColor);
+            maColorLbArr[nPos]->append(sId, OUString(), *pDev);
+        }
+
+        auto aItem = rEntry.GetQueryItem();
+        if (aItem.maColor == rColor
+            && ((sSelectedCondition == aStrTextColor && aItem.meType == ScQueryEntry::ByTextColor)
+                || (sSelectedCondition == aStrBackgroundColor
+                    && aItem.meType == ScQueryEntry::ByBackgroundColor)))
+        {
+            maColorLbArr[nPos]->set_active_id(sId);
+        }
+
+        i++;
+    }
+}
+
 size_t ScFilterDlg::GetFieldSelPos( SCCOL nField )
 {
     if ( nField >= theQueryData.nCol1 && nField <= theQueryData.nCol2 )
@@ -665,6 +780,9 @@ IMPL_LINK( ScFilterDlg, BtnClearHdl, weld::Button&, rBtn, void )
     m_xEdVal2->set_sensitive(false);
     m_xEdVal3->set_sensitive(false);
     m_xEdVal4->set_sensitive(false);
+    m_xLbColor2->set_sensitive(false);
+    m_xLbColor3->set_sensitive(false);
+    m_xLbColor4->set_sensitive(false);
     m_xBtnRemove2->set_sensitive(false);
     m_xBtnRemove3->set_sensitive(false);
     m_xBtnRemove4->set_sensitive(false);
@@ -798,6 +916,7 @@ IMPL_LINK(ScFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void)
         m_xLbField4->set_sensitive(true);
         m_xLbCond4->set_sensitive(true);
         m_xEdVal4->set_sensitive(true);
+        m_xLbColor4->set_sensitive(true);
         m_xBtnRemove4->set_sensitive(true);
 
         const sal_Int32 nConnect4 = m_xLbConnect4->get_active();
@@ -837,6 +956,9 @@ IMPL_LINK(ScFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void)
             m_xEdVal2->set_sensitive(false);
             m_xEdVal3->set_sensitive(false);
             m_xEdVal4->set_sensitive(false);
+            m_xLbColor2->set_sensitive(false);
+            m_xLbColor3->set_sensitive(false);
+            m_xLbColor4->set_sensitive(false);
             m_xBtnRemove2->set_sensitive(false);
             m_xBtnRemove3->set_sensitive(false);
             m_xBtnRemove4->set_sensitive(false);
@@ -854,6 +976,7 @@ IMPL_LINK(ScFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void)
         else
         {
             UpdateValueList( 1 );
+            UpdateColorList( 1 );
             if ( !m_xLbConnect2->get_sensitive() )
             {
                 m_xLbConnect2->set_sensitive(true);
@@ -885,6 +1008,8 @@ IMPL_LINK(ScFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void)
             m_xLbCond4->set_sensitive(false);
             m_xEdVal3->set_sensitive(false);
             m_xEdVal4->set_sensitive(false);
+            m_xLbColor3->set_sensitive(false);
+            m_xLbColor4->set_sensitive(false);
             m_xBtnRemove3->set_sensitive(false);
             m_xBtnRemove4->set_sensitive(false);
 
@@ -903,6 +1028,7 @@ IMPL_LINK(ScFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void)
         else
         {
             UpdateValueList( 2 );
+            UpdateColorList( 2 );
             if ( !m_xLbConnect3->get_sensitive() )
             {
                 m_xLbConnect3->set_sensitive(true);
@@ -927,6 +1053,7 @@ IMPL_LINK(ScFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void)
             m_xLbField4->set_sensitive(false);
             m_xLbCond4->set_sensitive(false);
             m_xEdVal4->set_sensitive(false);
+            m_xLbColor4->set_sensitive(false);
             m_xBtnRemove4->set_sensitive(false);
 
             sal_uInt16 nTemp=nOffset+2;
@@ -944,6 +1071,7 @@ IMPL_LINK(ScFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void)
         else
         {
             UpdateValueList( 3 );
+            UpdateColorList( 3 );
             if ( !m_xLbConnect4->get_sensitive() )
             {
                 m_xLbConnect4->set_sensitive(true);
@@ -976,6 +1104,7 @@ IMPL_LINK(ScFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void)
         else
         {
             UpdateValueList( 4 );
+            UpdateColorList( 4 );
             const sal_Int32 nField = rLb.get_active();
             sal_uInt16 nQ=3+nOffset;
             theQueryData.GetEntry(nQ).bDoQuery = true;
@@ -983,24 +1112,89 @@ IMPL_LINK(ScFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void)
         }
 
     }
-    else if ( &rLb == m_xLbCond1.get())
+    else if (&rLb == m_xLbCond1.get() || &rLb == m_xLbCond2.get() || &rLb == m_xLbCond3.get()
+             || &rLb == m_xLbCond4.get())
     {
-        theQueryData.GetEntry(nOffset).eOp=static_cast<ScQueryOp>(rLb.get_active());
+        ScQueryOp op;
+        sal_uInt16 nQ = 0;
+        bool bEnableColorLb = false;
+        if (rLb.get_active_text() == aStrTextColor || rLb.get_active_text() == aStrBackgroundColor)
+        {
+            bEnableColorLb = true;
+            op = SC_EQUAL;
+        }
+        else
+        {
+            op = static_cast<ScQueryOp>(rLb.get_active());
+        }
+
+        if (&rLb == m_xLbCond1.get())
+        {
+            nQ = nOffset;
+            m_xLbColor1->set_visible(bEnableColorLb);
+            m_xLbColor1->set_sensitive(bEnableColorLb);
+            m_xEdVal1->set_visible(!bEnableColorLb);
+            UpdateColorList(1);
+        }
+        else if (&rLb == m_xLbCond2.get())
+        {
+            nQ = 1 + nOffset;
+            m_xLbColor2->set_visible(bEnableColorLb);
+            m_xLbColor2->set_sensitive(bEnableColorLb);
+            m_xEdVal2->set_visible(!bEnableColorLb);
+            UpdateColorList(2);
+        }
+        else if (&rLb == m_xLbCond3.get())
+        {
+            nQ = 2 + nOffset;
+            m_xLbColor3->set_visible(bEnableColorLb);
+            m_xLbColor3->set_sensitive(bEnableColorLb);
+            m_xEdVal3->set_visible(!bEnableColorLb);
+            UpdateColorList(3);
+        }
+        else if (&rLb == m_xLbCond4.get())
+        {
+            nQ = 3 + nOffset;
+            m_xLbColor4->set_visible(bEnableColorLb);
+            m_xLbColor4->set_sensitive(bEnableColorLb);
+            m_xEdVal4->set_visible(!bEnableColorLb);
+            UpdateColorList(4);
+        }
+
+        auto aEntry = theQueryData.GetEntry(nQ);
+        aEntry.eOp = op;
     }
-    else if ( &rLb == m_xLbCond2.get())
+    else if (&rLb == m_xLbColor1.get() || &rLb == m_xLbColor2.get() || &rLb == m_xLbColor3.get()
+             || &rLb == m_xLbColor4.get())
     {
-        sal_uInt16 nQ=1+nOffset;
-        theQueryData.GetEntry(nQ).eOp=static_cast<ScQueryOp>(rLb.get_active());
-    }
-    else if ( &rLb == m_xLbCond3.get())
-    {
-        sal_uInt16 nQ=2+nOffset;
-        theQueryData.GetEntry(nQ).eOp=static_cast<ScQueryOp>(rLb.get_active());
-    }
-    else
-    {
-        sal_uInt16 nQ=3+nOffset;
-        theQueryData.GetEntry(nQ).eOp=static_cast<ScQueryOp>(rLb.get_active());
+        sal_uInt16 nQ = 0;
+        if (&rLb == m_xLbColor1.get())
+        {
+            nQ = nOffset;
+        }
+        else if (&rLb == m_xLbColor2.get())
+        {
+            nQ = 1 + nOffset;
+        }
+        else if (&rLb == m_xLbColor3.get())
+        {
+            nQ = 2 + nOffset;
+        }
+        else if (&rLb == m_xLbColor4.get())
+        {
+            nQ = 3 + nOffset;
+        }
+
+        ScQueryEntry& aEntry = theQueryData.GetEntry(nQ);
+        Color aColor = Color::STRtoRGB(maColorLbArr[nQ]->get_active_id());
+        if (maCondLbArr[nQ]->get_active_text() == aStrTextColor)
+        {
+            aEntry.SetQueryByTextColor(aColor);
+        }
+        else if (maCondLbArr[nQ]->get_active_text() == aStrBackgroundColor)
+        {
+            aEntry.SetQueryByBackgroundColor(aColor);
+        }
     }
 }
 
@@ -1037,6 +1231,11 @@ IMPL_LINK( ScFilterDlg, CheckBoxHdl, weld::Toggleable&, rBox, void )
         UpdateValueList( 2 );
         UpdateValueList( 3 );
         UpdateValueList( 4 );
+
+        UpdateColorList( 1 );
+        UpdateColorList( 2 );
+        UpdateColorList( 3 );
+        UpdateColorList( 4 );
     }
 }
 
@@ -1227,6 +1426,8 @@ void ScFilterDlg::RefreshEditRow( size_t nOffset )
         size_t nFieldSelPos = 0;
         size_t nQE = i + nOffset;
 
+        maColorLbArr[i]->set_visible(false);
+
         if (maRefreshExceptQuery.size() < nQE + 1)
             maRefreshExceptQuery.resize(nQE + 1, false);
 
@@ -1251,7 +1452,12 @@ void ScFilterDlg::RefreshEditRow( size_t nOffset )
             }
             else if (rEntry.IsQueryByTextColor() || rEntry.IsQueryByBackgroundColor())
             {
-                continue;
+                nCondPos = maCondLbArr[i]->find_text(
+                    rEntry.IsQueryByTextColor() ? aStrTextColor : aStrBackgroundColor);
+
+                maValueEdArr[i]->set_visible(false);
+                maColorLbArr[i]->set_visible(true);
+                maColorLbArr[i]->set_sensitive(true);
             }
             else
             {
@@ -1322,6 +1528,7 @@ void ScFilterDlg::RefreshEditRow( size_t nOffset )
         maCondLbArr [i]->set_active( nCondPos );
         maValueEdArr[i]->set_entry_text( aValStr );
         UpdateValueList(i+1);
+        UpdateColorList(i+1);
     }
 }
 
