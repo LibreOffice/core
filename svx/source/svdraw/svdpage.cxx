@@ -566,7 +566,7 @@ void SdrObjList::SetExistingObjectOrdNum(SdrObject* pObj, size_t nNewObjNum)
     assert(std::find(maList.begin(), maList.end(), pObj) != maList.end() && "This method requires that the child object already be inserted");
     assert(pObj->IsInserted() && "SdrObjList::SetObjectOrdNum: the object does not have status Inserted.");
 
-    // I am deliberately bypassing getOrdNum() because I dont want to unnecessarily
+    // I am deliberately bypassing getOrdNum() because I don't want to unnecessarily
     // trigger RecalcObjOrdNums()
     const sal_uInt32 nOldOrdNum = pObj->m_nOrdNum;
     if (!mbObjOrdNumsDirty && nOldOrdNum == nNewObjNum)
