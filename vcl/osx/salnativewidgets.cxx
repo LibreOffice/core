@@ -994,13 +994,15 @@ bool AquaSalGraphics::getNativeControlRegion(ControlType nType,
             break;
         case ControlType::Editbox:
             {
-                w = aCtrlBoundRect.GetWidth();
+                const tools::Long nBorderThickness = FOCUS_RING_WIDTH + EDITBOX_BORDER_WIDTH + EDITBOX_INSET_MARGIN;
+                // tdf#144241 don't return a negative width, expand the region to the min osx width
+                w = std::max(nBorderThickness * 2, aCtrlBoundRect.GetWidth());
                 h = EDITBOX_HEIGHT + 2 * FOCUS_RING_WIDTH;
                 rNativeBoundingRegion = tools::Rectangle(Point(x, y), Size(w, h));
-                w -= 2 * (FOCUS_RING_WIDTH + EDITBOX_BORDER_WIDTH + EDITBOX_INSET_MARGIN);
-                h -= 2 * (FOCUS_RING_WIDTH + EDITBOX_BORDER_WIDTH + EDITBOX_INSET_MARGIN);
-                x += FOCUS_RING_WIDTH + EDITBOX_BORDER_WIDTH + EDITBOX_INSET_MARGIN;
-                y += FOCUS_RING_WIDTH + EDITBOX_BORDER_WIDTH + EDITBOX_INSET_MARGIN;
+                w -= 2 * nBorderThickness;
+                h -= 2 * nBorderThickness;
+                x += nBorderThickness;
+                y += nBorderThickness;
                 rNativeContentRegion = tools::Rectangle(Point(x, y), Size(w, h));
                 toReturn = true;
             }
