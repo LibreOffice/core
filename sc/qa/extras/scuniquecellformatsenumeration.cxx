@@ -119,7 +119,7 @@ void ScUniqueCellFormatsEnumeration::changeColor(const uno::Reference<sheet::XSp
                                                  uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet(xCellRange, uno::UNO_QUERY_THROW);
 
-    sal_Int32 nColor = 16777216 + rgb.hashCode();
+    Color nColor = 16777216 + rgb.hashCode();
     uno::Any aValue;
     aValue <<= nColor;
     xPropertySet->setPropertyValue("CellBackColor", aValue);
