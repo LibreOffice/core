@@ -16,6 +16,24 @@
       "message": "But is it OK to move the same container in a loop?",
       "revId": "8104d771b10a5c8b15eae4b67aa112ae2ef77b5b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28f67157_f3554ae2",
+        "filename": "drawinglayer/source/primitive2d/fillgraphicprimitive2d.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-09T13:35:47Z",
+      "side": 1,
+      "message": "thanks! fixed in\n   https://gerrit.libreoffice.org/c/core/+/121852",
+      "parentUuid": "ede44482_40f9d31d",
+      "revId": "8104d771b10a5c8b15eae4b67aa112ae2ef77b5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
