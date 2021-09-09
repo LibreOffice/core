@@ -137,16 +137,21 @@ public:
         {
             // check if param is const&
             auto param = functionDecl->getParamDecl(i);
-            auto lvalueType = param->getType()->getAs<LValueReferenceType>();
-            if (!lvalueType)
-                continue;
-            if (!lvalueType->getPointeeType().isConstQualified())
-                continue;
-            auto paramClassOrStructType = lvalueType->getPointeeType()->getAs<RecordType>();
+            auto rvalueType = param->getType()->getAs<RValueReferenceType>();
+            if (!rvalueType)
+            {
+                auto lvalueType = param->getType()->getAs<LValueReferenceType>();
+                if (!lvalueType)
+                    continue;
+                if (!lvalueType->getPointeeType().isConstQualified())
+                    continue;
+            }
+            auto valueType = param->getType()->getAs<ReferenceType>();
+            auto paramClassOrStructType = valueType->getPointeeType()->getAs<RecordType>();
             if (!paramClassOrStructType)
                 continue;
             // check for temporary and functional cast in argument expression
-            auto arg = callExpr->getArg(i)->IgnoreImplicit();
+            auto arg = compat::IgnoreParenImplicit(callExpr->getArg(i));
             auto functionalCast = dyn_cast<CXXFunctionalCastExpr>(arg);
             if (!functionalCast)
                 continue;
@@ -158,10 +163,19 @@ public:
             // something useful
             if (t1.getCanonicalType().getTypePtr() != paramClassOrStructType)
                 continue;
+            if (rvalueType)
+            {
+                // constructing a temporary to pass to a && argument is fine. But we will see that in the VisitFunctionalCast
+                // method below and generate a warning. And we don't have enough context there to determine that we're
+                // doing the wrong thing. So add the expression to the m_Seen list here to prevent that warning.
+                m_Seen.insert(functionalCast->getExprLoc());
+                continue;
+            }
 
             if (m_Seen.insert(arg->getExprLoc()).second)
             {
-                report(DiagnosticsEngine::Warning, "redundant functional cast from %0 to %1",
+                report(DiagnosticsEngine::Warning,
+                       "redundant functional cast from %0 to %1 in construct expression",
                        arg->getExprLoc())
                     << t2 << t1 << arg->getSourceRange();
                 report(DiagnosticsEngine::Note, "in call to method here", param->getLocation())
@@ -234,10 +248,12 @@ public:
         {
             return false;
         }
-        auto cxxConstruct = dyn_cast<CXXConstructExpr>(compat::IgnoreImplicit(expr->getSubExpr()));
+        auto cxxConstruct
+            = dyn_cast<CXXConstructExpr>(compat::IgnoreParenImplicit(expr->getSubExpr()));
         if (!cxxConstruct)
             return false;
-        auto const lambda = dyn_cast<LambdaExpr>(cxxConstruct->getArg(0)->IgnoreImplicit());
+        auto const lambda
+            = dyn_cast<LambdaExpr>(compat::IgnoreParenImplicit(cxxConstruct->getArg(0)));
         if (!lambda)
             return false;
         if (deduced)
@@ -261,9 +277,9 @@ public:
         if (ignoreLocation(expr))
             return true;
         // specifying the name for an init-list is necessary sometimes
-        if (isa<InitListExpr>(expr->getSubExpr()->IgnoreImplicit()))
+        if (isa<InitListExpr>(compat::IgnoreParenImplicit(expr->getSubExpr())))
             return true;
-        if (isa<CXXStdInitializerListExpr>(expr->getSubExpr()->IgnoreImplicit()))
+        if (isa<CXXStdInitializerListExpr>(compat::IgnoreParenImplicit(expr->getSubExpr())))
             return true;
         auto const t1 = expr->getTypeAsWritten();
         auto const t2 = compat::getSubExprAsWritten(expr)->getType();
@@ -297,7 +313,6 @@ public:
             report(DiagnosticsEngine::Warning, "redundant functional cast from %0 to %1",
                    expr->getExprLoc())
                 << t2 << t1 << expr->getSourceRange();
-        //getParentStmt(expr)->dump();
         return true;
     }
 

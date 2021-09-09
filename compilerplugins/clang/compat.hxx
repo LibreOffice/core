@@ -172,6 +172,11 @@ inline clang::Expr const * IgnoreImplicit(clang::Expr const * expr) {
 #endif
 }
 
+/// Utility method
+inline clang::Expr const * IgnoreParenImplicit(clang::Expr const * expr) {
+    return compat::IgnoreImplicit(compat::IgnoreImplicit(expr)->IgnoreParens());
+}
+
 inline bool CPlusPlus17(clang::LangOptions const & opts) {
 #if CLANG_VERSION >= 60000
     return opts.CPlusPlus17;
