@@ -194,7 +194,7 @@ namespace
         return pIdx != nullptr
                ? ( rPos.nNode > rNdIdx
                    || ( rPos.nNode == rNdIdx
-                        && rPos.nContent >= pIdx->GetIndex() ) )
+                        && rPos.nContent > pIdx->GetIndex() ) )
                : rPos.nNode >= rNdIdx;
     }
 
