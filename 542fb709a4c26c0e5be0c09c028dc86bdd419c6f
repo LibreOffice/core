@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5be1d3c0_69315da5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-09T14:59:22Z",
+      "side": 1,
+      "message": "Is all the look-through-parens--related stuff actually relevant for this change\u0027s stated goal?  (I don\u0027t see anything at least in \u003chttps://git.libreoffice.org/core/+/8104d771b10a5c8b15eae4b67aa112ae2ef77b5b%5E%21\u003e \"tdf#144052 reduce Primitive2D copying\" that would motivate it.)",
+      "revId": "542fb709a4c26c0e5be0c09c028dc86bdd419c6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
