@@ -132,7 +132,8 @@ public:
 
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 
-    static void GetOperator(std::u16string_view aOpStr, ScQueryParam& rParam, ScQueryEntry& rEntry);
+    static void GetOperator(std::u16string_view aOpStr, ScQueryParam& rParam, ScQueryEntry& rEntry,
+                            bool bIsColorFilter);
     void AddSetItem(const ScQueryEntry::Item& rItem);
 };
 

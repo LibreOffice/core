@@ -349,7 +349,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLConditionContext::
 }
 
 void ScXMLConditionContext::GetOperator(
-    std::u16string_view aOpStr, ScQueryParam& rParam, ScQueryEntry& rEntry)
+    std::u16string_view aOpStr, ScQueryParam& rParam, ScQueryEntry& rEntry, bool bIsColorFilter)
 {
     rParam.eSearchType = utl::SearchParam::SearchType::Normal;
     if (IsXMLToken(aOpStr, XML_MATCH))
@@ -415,7 +415,10 @@ void SAL_CALL ScXMLConditionContext::endFastElement( sal_Int32 /*nElement*/ )
     rEntry.bDoQuery = true;
     rEntry.eConnect = pFilterContext->GetConnection() ? SC_OR : SC_AND;
 
-    GetOperator(sOperator, mrQueryParam, rEntry);
+    bool bIsColorFilter
+        = IsXMLToken(sDataType, XML_TEXT_COLOR) || IsXMLToken(sDataType, XML_BACKGROUND_COLOR);
+
+    GetOperator(sOperator, mrQueryParam, rEntry, bIsColorFilter);
     SCCOLROW nStartPos = mrQueryParam.bByRow ? mrQueryParam.nCol1 : mrQueryParam.nRow1;
     rEntry.nField = o3tl::saturating_add(nField, nStartPos);
 
@@ -427,8 +430,7 @@ void SAL_CALL ScXMLConditionContext::endFastElement( sal_Int32 /*nElement*/ )
             rItem.mfVal = sConditionValue.toDouble();
             rItem.meType = ScQueryEntry::ByValue;
         }
-        else if (IsXMLToken(sDataType, XML_TEXT_COLOR)
-                 || IsXMLToken(sDataType, XML_BACKGROUND_COLOR))
+        else if (bIsColorFilter)
         {
             rItem.meType = IsXMLToken(sDataType, XML_TEXT_COLOR) ? ScQueryEntry::ByTextColor
                                                                  : ScQueryEntry::ByBackgroundColor;
