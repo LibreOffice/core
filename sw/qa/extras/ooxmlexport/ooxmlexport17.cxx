@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <string_view>
+#include <com/sun/star/text/XBookmarksSupplier.hpp>
 
 #include <swmodeltestbase.hxx>
 
@@ -41,6 +42,26 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135164_cancelledNumbering, "tdf135164_cancelledN
     xPara.set(getParagraph(6, "Default style has roman numbering"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("i"), getProperty<OUString>(xPara, "ListLabelString"));
 }
+
+DECLARE_OOXMLEXPORT_TEST(testTdf123642_BookmarkAtDocEnd, "tdf123642.docx")
+{
+    // get bookmark interface
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xBookmarksByName = xBookmarksSupplier->getBookmarks();
+
+    // check: we have 1 bookmark (previously there were 0)
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xBookmarksByIdx->getCount());
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Bookmark1"));
+
+    // and it is really in exprted DOCX (let's ensure)
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+       return; // initial import, no futher checks
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Bookmark1"), getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:bookmarkStart[1]", "name"));
+}
+
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
