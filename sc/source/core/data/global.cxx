@@ -89,6 +89,7 @@ std::atomic<::utl::TransliterationWrapper*> ScGlobal::pCaseTransliteration(nullp
 css::uno::Reference< css::i18n::XOrdinalSuffix> ScGlobal::xOrdinalSuffix;
 const OUString  ScGlobal::aEmptyOUString;
 OUString        ScGlobal::aStrClipDocName;
+OUString        ScGlobal::aStrErrorStringNoRef;
 
 std::unique_ptr<SvxBrushItem> ScGlobal::xEmptyBrushItem;
 std::unique_ptr<SvxBrushItem> ScGlobal::xButtonBrushItem;
@@ -305,8 +306,8 @@ OUString ScGlobal::GetErrorString(FormulaError nErr)
     switch (nErr)
     {
         case FormulaError::NoRef:
-            pErrNumber = STR_NO_REF_TABLE;
-            break;
+            // tdf#144249 This may get called very extensively, so cached.
+            return aStrErrorStringNoRef;
         case FormulaError::NoAddin:
             pErrNumber = STR_NO_ADDIN;
             break;
@@ -452,6 +453,7 @@ void ScGlobal::Init()
     InitAddIns();
 
     aStrClipDocName = ScResId( SCSTR_NONAME ) + "1";
+    aStrErrorStringNoRef = ScResId( STR_NO_REF_TABLE );
 
     //  ScDocumentPool::InitVersionMaps() has been called earlier already
 }
