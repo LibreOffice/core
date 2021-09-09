@@ -72,122 +72,123 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues( bool bChar
 {
     using comphelper::makePropertyValue;
 
-    if ( m_aValues.empty() && !m_vMap.empty() )
+    if ( !m_aValues.empty() || m_vMap.empty() )
+        return comphelper::containerToSequence( m_aValues );
+
+    size_t nCharGrabBag = 0;
+    size_t nParaGrabBag = 0;
+    size_t nCellGrabBag = 0;
+    size_t nRowGrabBag  = 0;
+
+    const PropValue* pParaStyleProp = nullptr;
+    const PropValue* pCharStyleProp = nullptr;
+    const PropValue* pNumRuleProp   = nullptr;
+
+    m_aValues.reserve( m_vMap.size() );
+    for ( const auto& rPropPair : m_vMap )
     {
-        size_t nCharGrabBag = 0;
-        size_t nParaGrabBag = 0;
-        size_t nCellGrabBag = 0;
-        size_t nRowGrabBag  = 0;
+        if ( rPropPair.second.getGrabBagType() == CHAR_GRAB_BAG )
+            nCharGrabBag++;
+        else if ( rPropPair.second.getGrabBagType() == PARA_GRAB_BAG )
+            nParaGrabBag++;
+        else if ( rPropPair.second.getGrabBagType() == CELL_GRAB_BAG )
+            nCellGrabBag++;
+        else if ( rPropPair.first == PROP_CELL_INTEROP_GRAB_BAG )
+        {
+            uno::Sequence< beans::PropertyValue > aSeq;
+            rPropPair.second.getValue() >>= aSeq;
+            nCellGrabBag += aSeq.getLength();
+        }
+        else if ( rPropPair.second.getGrabBagType() == ROW_GRAB_BAG )
+            nRowGrabBag++;
 
-        const PropValue* pParaStyleProp = nullptr;
-        const PropValue* pCharStyleProp = nullptr;
-        const PropValue* pNumRuleProp   = nullptr;
+        if ( rPropPair.first == PROP_PARA_STYLE_NAME ) pParaStyleProp = &rPropPair.second;
+        if ( rPropPair.first == PROP_CHAR_STYLE_NAME ) pCharStyleProp = &rPropPair.second;
+        if ( rPropPair.first == PROP_NUMBERING_RULES ) pNumRuleProp   = &rPropPair.second;
+    }
 
-        for ( const auto& rPropPair : m_vMap )
+    // Style names have to be the first elements within the property sequence
+    // otherwise they will overwrite 'hard' attributes
+    if ( pParaStyleProp != nullptr )
+        m_aValues.push_back( makePropertyValue( getPropertyName( PROP_PARA_STYLE_NAME ), pParaStyleProp->getValue() ) );
+    if ( pCharStyleProp != nullptr )
+        m_aValues.push_back( makePropertyValue( getPropertyName( PROP_CHAR_STYLE_NAME ), pCharStyleProp->getValue() ) );
+    if ( pNumRuleProp != nullptr )
+        m_aValues.push_back( makePropertyValue(getPropertyName( PROP_NUMBERING_RULES ), pNumRuleProp->getValue() ) );
+
+    // If there are any grab bag properties, we need one slot for them.
+    uno::Sequence< beans::PropertyValue > aCharGrabBagValues( nCharGrabBag );
+    uno::Sequence< beans::PropertyValue > aParaGrabBagValues( nParaGrabBag );
+    uno::Sequence< beans::PropertyValue > aCellGrabBagValues( nCellGrabBag );
+    uno::Sequence< beans::PropertyValue > aRowGrabBagValues ( nRowGrabBag );
+    beans::PropertyValue* pCharGrabBagValues = aCharGrabBagValues.getArray();
+    beans::PropertyValue* pParaGrabBagValues = aParaGrabBagValues.getArray();
+    beans::PropertyValue* pCellGrabBagValues = aCellGrabBagValues.getArray();
+    beans::PropertyValue* pRowGrabBagValues  = aRowGrabBagValues.getArray();
+    // Record index for the next property to be added in each grab bag.
+    sal_Int32 nRowGrabBagValue  = 0;
+    sal_Int32 nCellGrabBagValue = 0;
+    sal_Int32 nParaGrabBagValue = 0;
+    sal_Int32 nCharGrabBagValue = 0;
+
+    for ( const auto& rPropPair : m_vMap )
+    {
+        if ( rPropPair.first != PROP_PARA_STYLE_NAME &&
+             rPropPair.first != PROP_CHAR_STYLE_NAME &&
+             rPropPair.first != PROP_NUMBERING_RULES )
         {
             if ( rPropPair.second.getGrabBagType() == CHAR_GRAB_BAG )
-                nCharGrabBag++;
+            {
+                if ( bCharGrabBag )
+                {
+                    pCharGrabBagValues[nCharGrabBagValue].Name  = getPropertyName( rPropPair.first );
+                    pCharGrabBagValues[nCharGrabBagValue].Value = rPropPair.second.getValue();
+                    ++nCharGrabBagValue;
+                }
+            }
             else if ( rPropPair.second.getGrabBagType() == PARA_GRAB_BAG )
-                nParaGrabBag++;
+            {
+                pParaGrabBagValues[nParaGrabBagValue].Name  = getPropertyName( rPropPair.first );
+                pParaGrabBagValues[nParaGrabBagValue].Value = rPropPair.second.getValue();
+                ++nParaGrabBagValue;
+            }
             else if ( rPropPair.second.getGrabBagType() == CELL_GRAB_BAG )
-                nCellGrabBag++;
+            {
+                pCellGrabBagValues[nCellGrabBagValue].Name  = getPropertyName( rPropPair.first );
+                pCellGrabBagValues[nCellGrabBagValue].Value = rPropPair.second.getValue();
+                ++nCellGrabBagValue;
+            }
+            else if ( rPropPair.second.getGrabBagType() == ROW_GRAB_BAG )
+            {
+                pRowGrabBagValues[nRowGrabBagValue].Name  = getPropertyName( rPropPair.first );
+                pRowGrabBagValues[nRowGrabBagValue].Value = rPropPair.second.getValue();
+                ++nRowGrabBagValue;
+            }
             else if ( rPropPair.first == PROP_CELL_INTEROP_GRAB_BAG )
             {
                 uno::Sequence< beans::PropertyValue > aSeq;
                 rPropPair.second.getValue() >>= aSeq;
-                nCellGrabBag += aSeq.getLength();
+                std::copy(aSeq.begin(), aSeq.end(), pCellGrabBagValues + nCellGrabBagValue);
+                nCellGrabBagValue += aSeq.getLength();
             }
-            else if ( rPropPair.second.getGrabBagType() == ROW_GRAB_BAG )
-                nRowGrabBag++;
-
-            if ( rPropPair.first == PROP_PARA_STYLE_NAME ) pParaStyleProp = &rPropPair.second;
-            if ( rPropPair.first == PROP_CHAR_STYLE_NAME ) pCharStyleProp = &rPropPair.second;
-            if ( rPropPair.first == PROP_NUMBERING_RULES ) pNumRuleProp   = &rPropPair.second;
-        }
-
-        // Style names have to be the first elements within the property sequence
-        // otherwise they will overwrite 'hard' attributes
-        if ( pParaStyleProp != nullptr )
-            m_aValues.push_back( makePropertyValue( getPropertyName( PROP_PARA_STYLE_NAME ), pParaStyleProp->getValue() ) );
-        if ( pCharStyleProp != nullptr )
-            m_aValues.push_back( makePropertyValue( getPropertyName( PROP_CHAR_STYLE_NAME ), pCharStyleProp->getValue() ) );
-        if ( pNumRuleProp != nullptr )
-            m_aValues.push_back( makePropertyValue(getPropertyName( PROP_NUMBERING_RULES ), pNumRuleProp->getValue() ) );
-
-        // If there are any grab bag properties, we need one slot for them.
-        uno::Sequence< beans::PropertyValue > aCharGrabBagValues( nCharGrabBag );
-        uno::Sequence< beans::PropertyValue > aParaGrabBagValues( nParaGrabBag );
-        uno::Sequence< beans::PropertyValue > aCellGrabBagValues( nCellGrabBag );
-        uno::Sequence< beans::PropertyValue > aRowGrabBagValues ( nRowGrabBag );
-        beans::PropertyValue* pCharGrabBagValues = aCharGrabBagValues.getArray();
-        beans::PropertyValue* pParaGrabBagValues = aParaGrabBagValues.getArray();
-        beans::PropertyValue* pCellGrabBagValues = aCellGrabBagValues.getArray();
-        beans::PropertyValue* pRowGrabBagValues  = aRowGrabBagValues.getArray();
-        // Record index for the next property to be added in each grab bag.
-        sal_Int32 nRowGrabBagValue  = 0;
-        sal_Int32 nCellGrabBagValue = 0;
-        sal_Int32 nParaGrabBagValue = 0;
-        sal_Int32 nCharGrabBagValue = 0;
-
-        for ( const auto& rPropPair : m_vMap )
-        {
-            if ( rPropPair.first != PROP_PARA_STYLE_NAME &&
-                 rPropPair.first != PROP_CHAR_STYLE_NAME &&
-                 rPropPair.first != PROP_NUMBERING_RULES )
+            else
             {
-                if ( rPropPair.second.getGrabBagType() == CHAR_GRAB_BAG )
-                {
-                    if ( bCharGrabBag )
-                    {
-                        pCharGrabBagValues[nCharGrabBagValue].Name  = getPropertyName( rPropPair.first );
-                        pCharGrabBagValues[nCharGrabBagValue].Value = rPropPair.second.getValue();
-                        ++nCharGrabBagValue;
-                    }
-                }
-                else if ( rPropPair.second.getGrabBagType() == PARA_GRAB_BAG )
-                {
-                    pParaGrabBagValues[nParaGrabBagValue].Name  = getPropertyName( rPropPair.first );
-                    pParaGrabBagValues[nParaGrabBagValue].Value = rPropPair.second.getValue();
-                    ++nParaGrabBagValue;
-                }
-                else if ( rPropPair.second.getGrabBagType() == CELL_GRAB_BAG )
-                {
-                    pCellGrabBagValues[nCellGrabBagValue].Name  = getPropertyName( rPropPair.first );
-                    pCellGrabBagValues[nCellGrabBagValue].Value = rPropPair.second.getValue();
-                    ++nCellGrabBagValue;
-                }
-                else if ( rPropPair.second.getGrabBagType() == ROW_GRAB_BAG )
-                {
-                    pRowGrabBagValues[nRowGrabBagValue].Name  = getPropertyName( rPropPair.first );
-                    pRowGrabBagValues[nRowGrabBagValue].Value = rPropPair.second.getValue();
-                    ++nRowGrabBagValue;
-                }
-                else if ( rPropPair.first == PROP_CELL_INTEROP_GRAB_BAG )
-                {
-                    uno::Sequence< beans::PropertyValue > aSeq;
-                    rPropPair.second.getValue() >>= aSeq;
-                    std::copy(aSeq.begin(), aSeq.end(), pCellGrabBagValues + nCellGrabBagValue);
-                    nCellGrabBagValue += aSeq.getLength();
-                }
-                else
-                {
-                    m_aValues.push_back( makePropertyValue( getPropertyName( rPropPair.first ), rPropPair.second.getValue() ) );
-                }
+                m_aValues.push_back( makePropertyValue( getPropertyName( rPropPair.first ), rPropPair.second.getValue() ) );
             }
         }
-
-        if ( nCharGrabBag && bCharGrabBag )
-            m_aValues.push_back( makePropertyValue( "CharInteropGrabBag", uno::makeAny( aCharGrabBagValues ) ) );
-
-        if ( nParaGrabBag )
-            m_aValues.push_back( makePropertyValue( "ParaInteropGrabBag", uno::makeAny( aParaGrabBagValues ) ) );
-
-        if ( nCellGrabBag )
-            m_aValues.push_back( makePropertyValue( "CellInteropGrabBag", uno::makeAny( aCellGrabBagValues ) ) );
-
-        if ( nRowGrabBag )
-            m_aValues.push_back( makePropertyValue( "RowInteropGrabBag", uno::makeAny( aRowGrabBagValues ) ) );
     }
+
+    if ( nCharGrabBag && bCharGrabBag )
+        m_aValues.push_back( makePropertyValue( "CharInteropGrabBag", uno::makeAny( aCharGrabBagValues ) ) );
+
+    if ( nParaGrabBag )
+        m_aValues.push_back( makePropertyValue( "ParaInteropGrabBag", uno::makeAny( aParaGrabBagValues ) ) );
+
+    if ( nCellGrabBag )
+        m_aValues.push_back( makePropertyValue( "CellInteropGrabBag", uno::makeAny( aCellGrabBagValues ) ) );
+
+    if ( nRowGrabBag )
+        m_aValues.push_back( makePropertyValue( "RowInteropGrabBag", uno::makeAny( aRowGrabBagValues ) ) );
 
     return comphelper::containerToSequence( m_aValues );
 }
