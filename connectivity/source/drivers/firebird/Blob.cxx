@@ -144,6 +144,9 @@ bool Blob::readOneSegment(uno::Sequence< sal_Int8 >& rDataOut)
         OUString sError(StatusVectorToString(m_statusVector, u"isc_get_segment"));
         throw IOException(sError, *this);
     }
+
+    if (rDataOut.getLength() > nActualSize)
+        rDataOut.realloc(nActualSize);
     m_nBlobPosition += nActualSize;
     return aRet == isc_segstr_eof;  // last segment read
 }
