@@ -18,6 +18,8 @@
  */
 #pragma once
 
+#include <libxml/xmlwriter.h>
+
 #include <scriptinfo.hxx>
 
 #include <swrect.hxx>
@@ -321,6 +323,8 @@ public:
     void SetErgoSumNum( const OUString &rErgo );
 
     const SwDropPortion *FindDropPortion() const;
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 inline void SwParaPortion::ResetPreps()

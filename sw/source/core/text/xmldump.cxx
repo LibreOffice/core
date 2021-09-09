@@ -28,6 +28,8 @@
 #include <view.hxx>
 #include <svx/svdobj.hxx>
 
+#include "porlay.hxx"
+
 namespace {
 
 class XmlPortionDumper:public SwPortionHandler
@@ -481,6 +483,10 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
                                       reinterpret_cast<const xmlChar *>(aText8.getStr(  )) );
             XmlPortionDumper pdumper( writer, aText );
             pTextFrame->VisitPortions( pdumper );
+            if (const SwParaPortion* pPara = pTextFrame->GetPara())
+            {
+                pPara->dumpAsXml(writer);
+            }
 
         }
         else
