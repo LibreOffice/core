@@ -125,8 +125,6 @@ protected:
 
     virtual bool    StartDrag() override;
 
-//TODO    virtual OUString  GetText() const override;
-
 private:
     void            ImplInitSettings();
     void            UpdateAutoCorrFlag();
