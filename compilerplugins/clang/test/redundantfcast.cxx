@@ -74,7 +74,7 @@ int main()
 
     const tools::Polygon aPolygon;
     ImplWritePolyPolygonRecord(tools::PolyPolygon(tools::Polygon(
-        aPolygon))); // expected-error@-1 {{redundant functional cast from 'const tools::Polygon' to 'tools::Polygon' [loplugin:redundantfcast]}}
+        aPolygon))); // expected-error@-1 {{redundant functional cast from 'const tools::Polygon' to 'tools::Polygon' in construct expression [loplugin:redundantfcast]}}
 }
 
 class Class1
@@ -202,4 +202,23 @@ void g(std::initializer_list<int> il)
 }
 }
 
+namespace test8
+{
+class Primitive2DContainer
+{
+};
+struct GroupPrimitive
+{
+    GroupPrimitive(Primitive2DContainer&&);
+};
+
+const Primitive2DContainer& getChildren();
+
+void foo()
+{
+    // no warning expected, we have to create a temporary for this constructor
+    GroupPrimitive aGroup((Primitive2DContainer(getChildren())));
+    (void)aGroup;
+}
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
