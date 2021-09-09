@@ -2505,6 +2505,13 @@ const SwDropPortion *SwParaPortion::FindDropPortion() const
     return nullptr;
 }
 
+void SwParaPortion::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwParaPortion"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 void SwLineLayout::Init( SwLinePortion* pNextPortion )
 {
     Height( 0, false );
