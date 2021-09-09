@@ -4301,16 +4301,6 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
     if( !m_rDoc.getIDocumentRedlineAccess().IsIgnoreRedline() && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() )
         m_rDoc.getIDocumentRedlineAccess().DeleteRedline( rPam, true, RedlineType::Any );
 
-    // Delete and move all "Flys at the paragraph", which are within the Selection
-    DelFlyInRange(rPam.GetMark()->nNode, rPam.GetPoint()->nNode,
-        &rPam.GetMark()->nContent, &rPam.GetPoint()->nContent);
-    DelBookmarks(
-        pStt->nNode,
-        pEnd->nNode,
-        nullptr,
-        &pStt->nContent,
-        &pEnd->nContent);
-
     SwNodeIndex aSttIdx( pStt->nNode );
     SwContentNode * pCNd = aSttIdx.GetNode().GetContentNode();
 
@@ -4329,11 +4319,17 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
                 // Don't call again, if already empty
                 if( nLen )
                 {
-                    pStartTextNode->EraseText( pStt->nContent, nLen );
+                    // Delete and move all "Flys at the paragraph", which are within the Selection
+                    DelFlyInRange(rPam.GetMark()->nNode, rPam.GetPoint()->nNode,
+                                  &rPam.GetMark()->nContent, &rPam.GetPoint()->nContent);
+                    DelBookmarks(pStt->nNode, pEnd->nNode, nullptr, &pStt->nContent,
+                                 &pEnd->nContent);
+
+                    pStartTextNode->EraseText(pStt->nContent, nLen);
 
                     if( !pStartTextNode->Len() )
                     {
-                // METADATA: remove reference if empty (consider node deleted)
+                        // METADATA: remove reference if empty (consider node deleted)
                         pStartTextNode->RemoveMetadataReference();
                     }
                 }
