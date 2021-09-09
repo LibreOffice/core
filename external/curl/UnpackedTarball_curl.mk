@@ -14,23 +14,14 @@ $(eval $(call gb_UnpackedTarball_set_tarball,curl,$(CURL_TARBALL),,curl))
 $(eval $(call gb_UnpackedTarball_set_patchlevel,curl,1))
 
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,curl,\
-	lib/Makefile.vc12 \
+	winbuild/MakefileBuild.vc \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	external/curl/curl-msvc.patch.1 \
 	external/curl/curl-msvc-disable-protocols.patch.1 \
-	external/curl/curl-msvc-schannel.patch.1 \
 	external/curl/curl-7.26.0_win-proxy.patch \
-	external/curl/curl-xp.patch.1 \
-	external/curl/CVE-2017-8816.patch \
-	external/curl/CVE-2018-1000005.patch \
-	external/curl/CVE-2018-1000007.patch \
-	external/curl/CVE-2018-14618.patch \
-	external/curl/CVE-2017-1000254.patch \
-	external/curl/CVE-2018-1000120.patch \
-	external/curl/CVE-2018-16890.patch \
-	external/curl/CVE-2019-3822.patch \
+	external/curl/zlib.patch.0 \
 ))
 
 ifeq ($(SYSTEM_NSS),)
@@ -39,12 +30,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 ))
 endif
 
-ifeq ($(OS),MACOSX)
-ifneq ($(filter 1090 101000,$(MAC_OS_X_VERSION_MIN_REQUIRED)),)
-$(eval $(call gb_UnpackedTarball_add_patches,curl,\
-	external/curl/curl-osx.patch.1 \
+ifeq ($(OS)-$(COM_IS_CLANG),WNT-TRUE)
+$(eval $(call gb_UnpackedTarball_add_patches,curl, \
+    external/curl/clang-cl.patch.0 \
 ))
-endif
 endif
 
 # vim: set noet sw=4 ts=4:
