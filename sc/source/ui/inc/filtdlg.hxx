@@ -25,6 +25,8 @@
 #include <filterentries.hxx>
 #include <queryentry.hxx>
 
+#include <svx/colorbox.hxx>
+
 #include <memory>
 #include <deque>
 #include <vector>
@@ -70,6 +72,8 @@ private:
     const OUString aStrEmpty;
     const OUString aStrNotEmpty;
     const OUString aStrColumn;
+    const OUString aStrTextColor;
+    const OUString aStrBackgroundColor;
 
     std::unique_ptr<ScFilterOptionsMgr> pOptionsMgr;
 
@@ -84,6 +88,7 @@ private:
     std::vector<weld::ComboBox*> maFieldLbArr;
     std::vector<weld::ComboBox*> maCondLbArr;
     std::vector<weld::ComboBox*> maConnLbArr;
+    std::vector<weld::ComboBox*> maColorLbArr;
     std::vector<weld::Button*>   maRemoveBtnArr;
 
     std::deque<bool>   maHasDates;
@@ -99,24 +104,28 @@ private:
     std::unique_ptr<weld::ComboBox> m_xLbField1;
     std::unique_ptr<weld::ComboBox> m_xLbCond1;
     std::unique_ptr<weld::ComboBox> m_xEdVal1;
+    std::unique_ptr<weld::ComboBox> m_xLbColor1;
     std::unique_ptr<weld::Button>   m_xBtnRemove1;
 
     std::unique_ptr<weld::ComboBox> m_xLbConnect2;
     std::unique_ptr<weld::ComboBox> m_xLbField2;
     std::unique_ptr<weld::ComboBox> m_xLbCond2;
     std::unique_ptr<weld::ComboBox> m_xEdVal2;
+    std::unique_ptr<weld::ComboBox> m_xLbColor2;
     std::unique_ptr<weld::Button>   m_xBtnRemove2;
 
     std::unique_ptr<weld::ComboBox> m_xLbConnect3;
     std::unique_ptr<weld::ComboBox> m_xLbField3;
     std::unique_ptr<weld::ComboBox> m_xLbCond3;
     std::unique_ptr<weld::ComboBox> m_xEdVal3;
+    std::unique_ptr<weld::ComboBox> m_xLbColor3;
     std::unique_ptr<weld::Button>   m_xBtnRemove3;
 
     std::unique_ptr<weld::ComboBox> m_xLbConnect4;
     std::unique_ptr<weld::ComboBox> m_xLbField4;
     std::unique_ptr<weld::ComboBox> m_xLbCond4;
     std::unique_ptr<weld::ComboBox> m_xEdVal4;
+    std::unique_ptr<weld::ComboBox> m_xLbColor4;
     std::unique_ptr<weld::Button>   m_xBtnRemove4;
 
     std::unique_ptr<weld::Widget> m_xContents;
@@ -145,6 +154,7 @@ private:
     void            UpdateValueList ( size_t nList );
     void            UpdateHdrInValueList( size_t nList );
     void            ClearValueList  ( size_t nList );
+    void            UpdateColorList ( size_t nList );
     size_t          GetFieldSelPos  ( SCCOL nField );
     ScQueryItem*    GetOutputItem   ();
     void            SetValString    ( const OUString& rQueryStr,
