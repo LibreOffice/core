@@ -16,6 +16,24 @@
       "message": "Max password is not 256, it\u0027s 255. You can\u0027t put value \u0027256\u0027 into a char.",
       "revId": "8b4c6b0d6f5867967ed2e32876f3b919ae41a95b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73f82da0_ffa04ec8",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1003336
+      },
+      "writtenOn": "2021-09-09T15:24:08Z",
+      "side": 1,
+      "message": "Yes, I know, but I was obsessed with the password length.\nIn any case, this way it does not support a 256-character password, only 255, although I guess not many people use such long passwords.\nOn the other hand, on second thought, there was no need for the username size control, because you can\u0027t create a longer name.",
+      "parentUuid": "a8889bcf_8861d4a5",
+      "revId": "8b4c6b0d6f5867967ed2e32876f3b919ae41a95b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
