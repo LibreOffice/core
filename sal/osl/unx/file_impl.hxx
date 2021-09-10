@@ -26,9 +26,8 @@
 
 struct DirectoryItem_Impl
 {
-    sal_Int32     m_RefCount;
-
     rtl_String *  m_strFilePath;       /* holds native file name */
+    sal_Int32     m_RefCount;
     unsigned char m_DType;
 
     explicit DirectoryItem_Impl(

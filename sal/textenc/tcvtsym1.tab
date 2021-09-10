@@ -32,11 +32,11 @@ ImplTextEncodingData const aImplSYMBOLTextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "adobe-fontspecific",
+        "invariant",
         1,
         1,
         1,
         2,
-        "adobe-fontspecific",
-        "invariant",
         RTL_TEXTENCODING_INFO_SYMBOL };
     /* SCRIPT_SYMBOL, pc code page 65400, mac encoding 32 */

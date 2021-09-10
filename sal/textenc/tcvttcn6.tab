@@ -585,10 +585,10 @@ ImplDBCSConvertData const aImplBIG5DBCSCvtData =
 {
     aBIG5UniLeadTab,
     aBIG5DBCSHighTab,
+    aImplMS950DBCSEUDCTab,
+    DBCS_EUDC_MS950_COUNT,
     0x00, 0xFF,
     0x40, 0xFE,
-    aImplMS950DBCSEUDCTab,
-    DBCS_EUDC_MS950_COUNT
 };
 
 /* ----------------------------------------------------------------------- */
@@ -603,12 +603,12 @@ ImplTextEncodingData const aImplBIG5TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "euc-tw",
+        "big5",
         1,
         2,
         2,
         136,
-        "euc-tw",
-        "big5",
         RTL_TEXTENCODING_INFO_MULTIBYTE | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_CHINESE_TRADITIONAL, pc code page 950, mac encoding 2 */
 
@@ -1142,10 +1142,10 @@ ImplDBCSConvertData const aImplMS950DBCSCvtData =
 {
     aMS950UniLeadTab,
     aMS950DBCSHighTab,
+    aImplMS950DBCSEUDCTab,
+    DBCS_EUDC_MS950_COUNT,
     0x00, 0xFF,
     0x40, 0xFE,
-    aImplMS950DBCSEUDCTab,
-    DBCS_EUDC_MS950_COUNT
 };
 
 /* ----------------------------------------------------------------------- */
@@ -1160,12 +1160,12 @@ ImplTextEncodingData const aImplMS950TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "euc-tw",
+        "big5",
         1,
         2,
         2,
         136,
-        "euc-tw",
-        "big5",
         RTL_TEXTENCODING_INFO_MULTIBYTE };
     /* WIN/DOS/OS2, SCRIPT_CHINESE_TRADITIONAL, pc code page 950, mac encoding
        2 */
@@ -1700,10 +1700,10 @@ ImplDBCSConvertData const aImplAPPLECHINTRADDBCSCvtData =
 {
     aAPPLECHINTRADUniLeadTab,
     aAPPLECHINTRADDBCSHighTab,
+    nullptr,
+    0,
     0x00, 0xFF,
     0x40, 0xFE,
-    nullptr,
-    0
 };
 
 /* ----------------------------------------------------------------------- */
@@ -1718,11 +1718,11 @@ ImplTextEncodingData const aImplAPPLECHINTRADTextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "euc-tw",
+        "big5",
         1,
         2,
         2,
         136,
-        "euc-tw",
-        "big5",
         RTL_TEXTENCODING_INFO_MULTIBYTE };
     /* MAC, SCRIPT_CHINESE_TRADITIONAL, pc code page 950, mac encoding 2 */

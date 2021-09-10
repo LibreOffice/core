@@ -90,12 +90,12 @@ struct ImplTextConverter
 struct SAL_DLLPUBLIC_RTTI ImplTextEncodingData
 {
     ImplTextConverter maConverter;
+    char const * mpBestUnixCharset;
+    char const * mpBestMimeCharset;
     sal_uInt8 mnMinCharSize;
     sal_uInt8 mnMaxCharSize;
     sal_uInt8 mnAveCharSize;
     sal_uInt8 mnBestWindowsCharset;
-    char const * mpBestUnixCharset;
-    char const * mpBestMimeCharset;
     sal_uInt32 mnInfoFlags;
 };
 
@@ -116,13 +116,13 @@ struct ImplByteConvertData
 {
     const sal_uInt16*               mpToUniTab1;
     const sal_uInt16*               mpToUniTab2;
-    unsigned char                       mnToUniStart1;
-    unsigned char                       mnToUniEnd1;
-    unsigned char                       mnToUniStart2;
-    unsigned char                       mnToUniEnd2;
-    const unsigned char*                mpToCharTab1;
-    const unsigned char*                mpToCharTab2;
+    const unsigned char*            mpToCharTab1;
+    const unsigned char*            mpToCharTab2;
     const ImplUniCharTabData*       mpToCharExTab;
+    unsigned char                   mnToUniStart1;
+    unsigned char                   mnToUniEnd1;
+    unsigned char                   mnToUniStart2;
+    unsigned char                   mnToUniEnd2;
     sal_uInt16                      mnToCharStart1;
     sal_uInt16                      mnToCharEnd1;
     sal_uInt16                      mnToCharStart2;
@@ -169,12 +169,12 @@ struct ImplDBCSConvertData
 {
     const ImplDBCSToUniLeadTab*     mpToUniLeadTab;
     const ImplUniToDBCSHighTab*     mpToDBCSHighTab;
-    unsigned char                       mnLeadStart;
-    unsigned char                       mnLeadEnd;
-    unsigned char                       mnTrailStart;
-    unsigned char                       mnTrailEnd;
     const ImplDBCSEUDCData*         mpEUDCTab;
     sal_uInt16                      mnEUDCCount;
+    unsigned char                   mnLeadStart;
+    unsigned char                   mnLeadEnd;
+    unsigned char                   mnTrailStart;
+    unsigned char                   mnTrailEnd;
 };
 
 /* ---------------------------------- */

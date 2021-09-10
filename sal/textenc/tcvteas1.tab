@@ -105,11 +105,11 @@ ImplByteConvertData const aImplMS874ByteCvtData =
 {
     aImplMS874ToUniTab,
     nullptr,
-    MS874UNI_START, MS874UNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplMS874ToCharTab,
     nullptr,
     aImplMS874ToCharTabEx,
+    MS874UNI_START, MS874UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     MS874CHAR_START, MS874CHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     MS874TOCHARTABEX_COUNT
@@ -127,12 +127,12 @@ ImplTextEncodingData const aImplMS874TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-1", /* TODO! correct? */
+        "windows-874",
         1,
         1,
         1,
         222,
-        "iso8859-1", /* TODO! correct? */
-        "windows-874",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* WIN/DOS/OS2, SCRIPT_THAI, pc code page 874, mac encoding 21 */
 
@@ -159,11 +159,11 @@ ImplByteConvertData const aImplTis620ByteCvtData =
 {
     aImplMS874ToUniTab + (0xA0 - MS874UNI_START),
     aImpl8090SameToUniTab,
-    0xA0, MS874UNI_END,
-    SAME8090UNI_START, SAME8090UNI_END,
     aImplMS874ToCharTab,
     aImpl8090SameToCharTab,
     aImplMS874ToCharTabEx,
+    0xA0, MS874UNI_END,
+    SAME8090UNI_START, SAME8090UNI_END,
     MS874CHAR_START, MS874CHAR_END,
     SAME8090CHAR_START, SAME8090CHAR_END,
     1
@@ -179,12 +179,12 @@ ImplTextEncodingData const aImplTis620TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-1", /* TODO! correct? */
+        "TIS-620",
         1,
         1,
         1,
         222,
-        "iso8859-1", /* TODO! correct? */
-        "TIS-620",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
 
 /* ======================================================================= */
@@ -400,11 +400,11 @@ ImplByteConvertData const aImplMS1258ByteCvtData =
 {
     aImplMS1258ToUniTab,
     nullptr,
-    MS1258UNI_START, MS1258UNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplMS1258ToCharTab,
     nullptr,
     aImplMS1258ToCharTabEx,
+    MS1258UNI_START, MS1258UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     MS1258CHAR_START, MS1258CHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     MS1258TOCHARTABEX_COUNT
@@ -422,11 +422,11 @@ ImplTextEncodingData const aImplMS1258TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-1", /* TODO! correct? */
+        "windows-1258",
         1,
         2,
         1,
         163,
-        "iso8859-1", /* TODO! correct? */
-        "windows-1258",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* WIN, SCRIPT_VIETNAMESE, mac encoding 30 */

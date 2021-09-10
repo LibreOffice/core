@@ -583,10 +583,10 @@ ImplDBCSConvertData const aImplGB2312DBCSCvtData =
 {
     aGB2312UniLeadTab,
     aGB2312DBCSHighTab,
+    aImplMS936DBCSEUDCTab,
+    DBCS_EUDC_MS936_COUNT,
     0x00, 0xFF,
     0xA1, 0xFE,
-    aImplMS936DBCSEUDCTab,
-    DBCS_EUDC_MS936_COUNT
 };
 
 /* ----------------------------------------------------------------------- */
@@ -601,12 +601,12 @@ ImplTextEncodingData const aImplGB2312TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "euc-cn",
+        "gb2312",
         1,
         2,
         2,
         134,
-        "euc-cn",
-        "gb2312",
         RTL_TEXTENCODING_INFO_ASCII
             | RTL_TEXTENCODING_INFO_MULTIBYTE
             | RTL_TEXTENCODING_INFO_MIME };
@@ -624,12 +624,12 @@ ImplTextEncodingData const aImplEUCCNTextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "euc-cn",
+        "gb2312",
         1,
         2,
         2,
         134,
-        "euc-cn",
-        "gb2312",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MULTIBYTE };
     /* SCRIPT_CHINESE_SIMPLIFIED, pc code page 936, mac encoding 25 */
 
@@ -1163,10 +1163,10 @@ ImplDBCSConvertData const aImplGBT12345DBCSCvtData =
 {
     aGBT12345UniLeadTab,
     aGBT12345DBCSHighTab,
+    aImplMS936DBCSEUDCTab,
+    DBCS_EUDC_MS936_COUNT,
     0x00, 0xFF,
     0xA1, 0xFE,
-    aImplMS936DBCSEUDCTab,
-    DBCS_EUDC_MS936_COUNT
 };
 
 /* ----------------------------------------------------------------------- */
@@ -1181,12 +1181,12 @@ ImplTextEncodingData const aImplGBT12345TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "euc-cn",
+        "cn-gb-12345",
         1,
         2,
         2,
         134,
-        "euc-cn",
-        "cn-gb-12345",
         RTL_TEXTENCODING_INFO_ASCII
             | RTL_TEXTENCODING_INFO_MULTIBYTE
             | RTL_TEXTENCODING_INFO_MIME };
@@ -1808,10 +1808,10 @@ ImplDBCSConvertData const aImplGBKDBCSCvtData =
 {
     aGBKUniLeadTab,
     aGBKDBCSHighTab,
+    aImplMS936DBCSEUDCTab,
+    DBCS_EUDC_MS936_COUNT,
     0x00, 0xFF,
     0x40, 0xFE,
-    aImplMS936DBCSEUDCTab,
-    DBCS_EUDC_MS936_COUNT
 };
 
 /* ----------------------------------------------------------------------- */
@@ -1826,12 +1826,12 @@ ImplTextEncodingData const aImplGBKTextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "euc-cn",
+        "GBK",
         1,
         2,
         2,
         134,
-        "euc-cn",
-        "GBK",
         RTL_TEXTENCODING_INFO_MULTIBYTE | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_CHINESE_SIMPLIFIED, pc code page 936, mac encoding 25 */
 
@@ -2365,10 +2365,10 @@ ImplDBCSConvertData const aImplMS936DBCSCvtData =
 {
     aMS936UniLeadTab,
     aMS936DBCSHighTab,
+    aImplMS936DBCSEUDCTab,
+    DBCS_EUDC_MS936_COUNT,
     0x00, 0xFF,
     0x40, 0xFE,
-    aImplMS936DBCSEUDCTab,
-    DBCS_EUDC_MS936_COUNT
 };
 
 /* ----------------------------------------------------------------------- */
@@ -2383,12 +2383,12 @@ ImplTextEncodingData const aImplMS936TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "euc-cn",
+        "gb2312",
         1,
         2,
         2,
         134,
-        "euc-cn",
-        "gb2312",
         RTL_TEXTENCODING_INFO_MULTIBYTE };
     /* WIN/DOS/OS2, SCRIPT_CHINESE_SIMPLIFIED, pc code page 936, mac encoding
        25 */
@@ -2923,10 +2923,10 @@ ImplDBCSConvertData const aImplAPPLECHINSIMPDBCSCvtData =
 {
     aAPPLECHINSIMPUniLeadTab,
     aAPPLECHINSIMPDBCSHighTab,
+    nullptr,
+    0,
     0x00, 0xFF,
     0xA1, 0xFE,
-    nullptr,
-    0
 };
 
 /* ----------------------------------------------------------------------- */
@@ -2941,11 +2941,11 @@ ImplTextEncodingData const aImplAPPLECHINSIMPTextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "euc-cn",
+        "gb2312",
         1,
         2,
         2,
         134,
-        "euc-cn",
-        "gb2312",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MULTIBYTE };
     /* MAC, SCRIPT_CHINESE_SIMPLIFIED, pc code page 936, mac encoding 25 */

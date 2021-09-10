@@ -44,11 +44,11 @@ ImplTextEncodingData const aImplEucTwTextEncodingData
           &ImplCreateUnicodeToTextContext,
           &ImplDestroyUnicodeToTextContext,
           &ImplResetUnicodeToTextContext },
+        "cns11643-1",
+        "Big5",
         1,
         4,
         2,
         136,
-        "cns11643-1",
-        "Big5",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MULTIBYTE };
     /* SCRIPT_CHINESE_TRADITIONAL */

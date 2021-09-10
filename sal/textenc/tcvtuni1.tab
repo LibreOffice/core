@@ -28,12 +28,12 @@ ImplTextEncodingData const aImplUTF7TextEncodingData
           ImplUTF7CreateUnicodeToTextContext,
           ImplUTF7DestroyUnicodeToTextContext,
           ImplUTF7ResetUnicodeToTextContext },
+        "iso8859-1",
+        "utf-7",
         1,
         6,
         1,
         0,
-        "iso8859-1",
-        "utf-7",
         RTL_TEXTENCODING_INFO_CONTEXT
             | RTL_TEXTENCODING_INFO_UNICODE
             | RTL_TEXTENCODING_INFO_7BIT

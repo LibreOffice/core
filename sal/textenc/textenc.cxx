@@ -158,11 +158,11 @@ ImplByteConvertData const aImplMS1252ByteCvtData =
 {
     aImplMS1252ToUniTab,
     nullptr,
-    MS1252UNI_START, MS1252UNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplA0FFSameToCharTab,
     nullptr,
     aImplMS1252ToCharTabEx,
+    MS1252UNI_START, MS1252UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     SAMEA0FFCHAR_START, SAMEA0FFCHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     MS1252TOCHARTABEX_COUNT
@@ -180,12 +180,12 @@ ImplTextEncodingData const aImplMS1252TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-1",
+        "windows-1252",
         1,
         1,
         1,
         0,
-        "iso8859-1",
-        "windows-1252",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* WIN, SCRIPT_LATIN, pc code page 850 */
 
@@ -223,11 +223,11 @@ ImplByteConvertData const aImplISO88591ByteCvtData =
 {
     aImplISO88591ToUniTab,
     aImpl8090SameToUniTab,
-    ISO88591UNI_START, ISO88591UNI_END,
-    SAME8090UNI_START, SAME8090UNI_END,
     aImplA0FFSameToCharTab,
     aImpl8090SameToCharTab,
     nullptr,
+    ISO88591UNI_START, ISO88591UNI_END,
+    SAME8090UNI_START, SAME8090UNI_END,
     SAMEA0FFCHAR_START, SAMEA0FFCHAR_END,
     SAME8090CHAR_START, SAME8090CHAR_END,
     0
@@ -245,12 +245,12 @@ ImplTextEncodingData const aImplISO88591TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-1",
+        "iso-8859-1",
         1,
         1,
         1,
         0,
-        "iso8859-1",
-        "iso-8859-1",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_LATIN, pc code page 850 */
 
@@ -271,11 +271,11 @@ ImplByteConvertData const aImplUSASCIIByteCvtData =
 {
     aImplMS1252ToUniTab,
     nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
     MS1252UNI_START, MS1252UNI_END,
     NOTABUNI_START, NOTABUNI_END,
-    nullptr,
-    nullptr,
-    nullptr,
     NOTABCHAR_START, NOTABCHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     0
@@ -293,12 +293,12 @@ ImplTextEncodingData const aImplUSASCIITextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-1",
+        "us-ascii",
         1,
         1,
         1,
         0,
-        "iso8859-1",
-        "us-ascii",
         RTL_TEXTENCODING_INFO_ASCII
             | RTL_TEXTENCODING_INFO_7BIT
             | RTL_TEXTENCODING_INFO_MIME };
@@ -314,12 +314,12 @@ ImplTextEncodingData const aImplUTF8TextEncodingData
           &ImplCreateUnicodeToUtf8Context,
           &ImplDestroyUnicodeToUtf8Context,
           &ImplResetUnicodeToUtf8Context },
+        "iso8859-1",
+        "utf-8",
         1,
         6,
         1,
         0,
-        "iso8859-1",
-        "utf-8",
         RTL_TEXTENCODING_INFO_ASCII
             | RTL_TEXTENCODING_INFO_UNICODE
             | RTL_TEXTENCODING_INFO_MULTIBYTE
@@ -341,12 +341,12 @@ ImplTextEncodingData const aImplJavaUtf8TextEncodingData
           &ImplCreateUnicodeToUtf8Context,
           &ImplDestroyUnicodeToUtf8Context,
           &ImplResetUnicodeToUtf8Context },
+        nullptr,
+        nullptr,
         1,
         3,
         1,
         0,
-        nullptr,
-        nullptr,
         RTL_TEXTENCODING_INFO_UNICODE | RTL_TEXTENCODING_INFO_MULTIBYTE };
 
 namespace {

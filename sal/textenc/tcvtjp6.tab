@@ -571,10 +571,10 @@ ImplDBCSConvertData const aImplSJISDBCSCvtData =
 {
     aSJISUniLeadTab,
     aSJISDBCSHighTab,
+    aImplSJISDBCSEUDCTab,
+    DBCS_EUDC_SJIS_COUNT,
     0x00, 0xFF,
     0x40, 0xFC,
-    aImplSJISDBCSEUDCTab,
-    DBCS_EUDC_SJIS_COUNT
 };
 
 /* ----------------------------------------------------------------------- */
@@ -589,12 +589,12 @@ ImplTextEncodingData const aImplSJISTextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "euc-jp",
+        "shift_jis",
         1,
         2,
         2,
         128,
-        "euc-jp",
-        "shift_jis",
         RTL_TEXTENCODING_INFO_MULTIBYTE | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_JAPANESE, pc code page 932, mac encoding 1 */
 
@@ -1128,10 +1128,10 @@ ImplDBCSConvertData const aImplMS932DBCSCvtData =
 {
     aMS932UniLeadTab,
     aMS932DBCSHighTab,
+    aImplSJISDBCSEUDCTab,
+    DBCS_EUDC_SJIS_COUNT,
     0x00, 0xFF,
     0x40, 0xFC,
-    aImplSJISDBCSEUDCTab,
-    DBCS_EUDC_SJIS_COUNT
 };
 
 /* ----------------------------------------------------------------------- */
@@ -1146,12 +1146,12 @@ ImplTextEncodingData const aImplMS932TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "euc-jp",
+        "shift_jis",
         1,
         2,
         2,
         128,
-        "euc-jp",
-        "shift_jis",
         RTL_TEXTENCODING_INFO_MULTIBYTE };
     /* WIN/DOS/OS2, SCRIPT_JAPANESE, pc code page 932, mac encoding 1 */
 
@@ -1685,10 +1685,10 @@ ImplDBCSConvertData const aImplAPPLEJAPANESEDBCSCvtData =
 {
     aAPPLEJAPANESEUniLeadTab,
     aAPPLEJAPANESEDBCSHighTab,
+    aImplSJISDBCSEUDCTab,
+    DBCS_EUDC_SJIS_COUNT,
     0x00, 0xFF,
     0x40, 0xFC,
-    aImplSJISDBCSEUDCTab,
-    DBCS_EUDC_SJIS_COUNT
 };
 
 /* ----------------------------------------------------------------------- */
@@ -1703,12 +1703,12 @@ ImplTextEncodingData const aImplAPPLEJAPANESETextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "euc-jp",
+        "shift_jis",
         1,
         2,
         2,
         128,
-        "euc-jp",
-        "shift_jis",
         RTL_TEXTENCODING_INFO_MULTIBYTE };
     /* MAC, SCRIPT_JAPANESE, pc code page 932, mac encoding 1 */
 
@@ -2526,12 +2526,12 @@ ImplTextEncodingData const aImplEUCJPTextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "euc-jp",
+        "euc-jp",
         1,
         3,
         2,
         128,
-        "euc-jp",
-        "euc-jp",
         RTL_TEXTENCODING_INFO_ASCII
             | RTL_TEXTENCODING_INFO_MULTIBYTE
             | RTL_TEXTENCODING_INFO_MIME };
@@ -2558,11 +2558,11 @@ ImplByteConvertData const aImplJISX0201ByteCvtData =
 {
     nullptr,
     nullptr,
-    0, 0,
-    0, 0,
     aImplJISX0201Tab,
     nullptr,
     nullptr,
+    0, 0,
+    0, 0,
     HALFWIDTHKANA_START, HALFWIDTHKANA_END,
     0, 0,
     0
@@ -2580,12 +2580,12 @@ ImplTextEncodingData const aImplJISX0201TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "euc-jp",
+        "euc-jp",
         1,
         1,
         1,
         128,
-        "euc-jp",
-        "euc-jp",
         RTL_TEXTENCODING_INFO_MULTIBYTE };
     /* SCRIPT_JAPANESE, pc code page 932, mac encoding 1 */
 
@@ -2595,10 +2595,10 @@ ImplDBCSConvertData const aImplJISX0208DBCSCvtData =
 {
     nullptr,
     aJIS0208DBCSHighTab,
+    nullptr,
+    0,
     0x00, 0xFF,
     0x21, 0x7E,
-    nullptr,
-    0
 };
 
 /* ----------------------------------------------------------------------- */
@@ -2613,12 +2613,12 @@ ImplTextEncodingData const aImplJISX0208TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "euc-jp",
+        "euc-jp",
         2,
         2,
         2,
         128,
-        "euc-jp",
-        "euc-jp",
         RTL_TEXTENCODING_INFO_MULTIBYTE };
     /* SCRIPT_JAPANESE, pc code page 932, mac encoding 1 */
 
@@ -2628,10 +2628,10 @@ ImplDBCSConvertData const aImplJISX0212DBCSCvtData =
 {
     nullptr,
     aJIS0212DBCSHighTab,
+    nullptr,
+    0,
     0x00, 0xFF,
     0x21, 0x7E,
-    nullptr,
-    0
 };
 
 /* ----------------------------------------------------------------------- */
@@ -2646,11 +2646,11 @@ ImplTextEncodingData const aImplJISX0212TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "euc-jp",
+        "euc-jp",
         2,
         2,
         2,
         128,
-        "euc-jp",
-        "euc-jp",
         RTL_TEXTENCODING_INFO_MULTIBYTE };
     /* SCRIPT_JAPANESE, pc code page 932, mac encoding 1 */

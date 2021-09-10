@@ -171,11 +171,11 @@ ImplByteConvertData const aImplIBM437ByteCvtData =
 {
     aImplIBM437ToUniTab,
     nullptr,
-    IBM437UNI_START, IBM437UNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplIBM437ToCharTab,
     nullptr,
     aImplIBM437ToCharTabEx,
+    IBM437UNI_START, IBM437UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     IBM437CHAR_START, IBM437CHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     IBM437TOCHARTABEX_COUNT
@@ -193,12 +193,12 @@ ImplTextEncodingData const aImplIBM437TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-1",
+        "ibm437",
         1,
         1,
         1,
         0,
-        "iso8859-1",
-        "ibm437",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* DOS/OS2, SCRIPT_LATIN, pc code page 437 */
 
@@ -305,11 +305,11 @@ ImplByteConvertData const aImplIBM850ByteCvtData =
 {
     aImplIBM850ToUniTab,
     nullptr,
-    IBM850UNI_START, IBM850UNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplIBM850ToCharTab,
     nullptr,
     aImplIBM850ToCharTabEx,
+    IBM850UNI_START, IBM850UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     IBM850CHAR_START, IBM850CHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     IBM850TOCHARTABEX_COUNT
@@ -327,12 +327,12 @@ ImplTextEncodingData const aImplIBM850TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-1",
+        "ibm850",
         1,
         1,
         1,
         0,
-        "iso8859-1",
-        "ibm850",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* DOS/OS2, SCRIPT_LATIN, pc code page 850 */
 
@@ -478,11 +478,11 @@ ImplByteConvertData const aImplIBM860ByteCvtData =
 {
     aImplIBM860ToUniTab,
     nullptr,
-    IBM860UNI_START, IBM860UNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplIBM860ToCharTab,
     nullptr,
     aImplIBM860ToCharTabEx,
+    IBM860UNI_START, IBM860UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     IBM860CHAR_START, IBM860CHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     IBM860TOCHARTABEX_COUNT
@@ -500,12 +500,12 @@ ImplTextEncodingData const aImplIBM860TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-1",
+        "IBM860",
         1,
         1,
         1,
         0,
-        "iso8859-1",
-        "IBM860",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* DOS/OS2, SCRIPT_LATIN, pc code page 860 */
 
@@ -653,11 +653,11 @@ ImplByteConvertData const aImplIBM861ByteCvtData =
 {
     aImplIBM861ToUniTab,
     nullptr,
-    IBM861UNI_START, IBM861UNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplIBM861ToCharTab,
     nullptr,
     aImplIBM861ToCharTabEx,
+    IBM861UNI_START, IBM861UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     IBM861CHAR_START, IBM861CHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     IBM861TOCHARTABEX_COUNT
@@ -675,12 +675,12 @@ ImplTextEncodingData const aImplIBM861TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-1",
+        "IBM861",
         1,
         1,
         1,
         0,
-        "iso8859-1",
-        "IBM861",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* DOS/OS2, SCRIPT_LATIN, pc code page 861, mac encoding 37 */
 
@@ -828,11 +828,11 @@ ImplByteConvertData const aImplIBM863ByteCvtData =
 {
     aImplIBM863ToUniTab,
     nullptr,
-    IBM863UNI_START, IBM863UNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplIBM863ToCharTab,
     nullptr,
     aImplIBM863ToCharTabEx,
+    IBM863UNI_START, IBM863UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     IBM863CHAR_START, IBM863CHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     IBM863TOCHARTABEX_COUNT
@@ -850,12 +850,12 @@ ImplTextEncodingData const aImplIBM863TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-1",
+        "IBM863",
         1,
         1,
         1,
         0,
-        "iso8859-1",
-        "IBM863",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* DOS/OS2, SCRIPT_LATIN, pc code page 863 */
 
@@ -1003,11 +1003,11 @@ ImplByteConvertData const aImplIBM865ByteCvtData =
 {
     aImplIBM865ToUniTab,
     nullptr,
-    IBM865UNI_START, IBM865UNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplIBM865ToCharTab,
     nullptr,
     aImplIBM865ToCharTabEx,
+    IBM865UNI_START, IBM865UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     IBM865CHAR_START, IBM865CHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     IBM865TOCHARTABEX_COUNT
@@ -1025,12 +1025,12 @@ ImplTextEncodingData const aImplIBM865TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-1",
+        "IBM865",
         1,
         1,
         1,
         0,
-        "iso8859-1",
-        "IBM865",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* DOS/OS2, SCRIPT_LATIN, pc code page 865 */
 
@@ -1131,11 +1131,11 @@ ImplByteConvertData const aImplISO885914ByteCvtData =
 {
     aImplISO885914ToUniTab,
     aImpl8090SameToUniTab,
-    ISO885914UNI_START, ISO885914UNI_END,
-    SAME8090UNI_START, SAME8090UNI_END,
     aImplISO885914ToCharTab,
     aImpl8090SameToCharTab,
     aImplISO885914ToCharTabEx,
+    ISO885914UNI_START, ISO885914UNI_END,
+    SAME8090UNI_START, SAME8090UNI_END,
     ISO885914CHAR_START, ISO885914CHAR_END,
     SAME8090CHAR_START, SAME8090CHAR_END,
     ISO885914TOCHARTABEX_COUNT
@@ -1153,12 +1153,12 @@ ImplTextEncodingData const aImplISO885914TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-14",
+        "iso-8859-14",
         1,
         1,
         1,
         0,
-        "iso8859-14",
-        "iso-8859-14",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_LATIN, pc code page 850 */
 
@@ -1233,11 +1233,11 @@ ImplByteConvertData const aImplISO885915ByteCvtData =
 {
     aImplISO885915ToUniTab,
     aImpl8090SameToUniTab,
-    ISO885915UNI_START, ISO885915UNI_END,
-    SAME8090UNI_START, SAME8090UNI_END,
     aImplISO885915ToCharTab,
     aImpl8090SameToCharTab,
     aImplISO885915ToCharTabEx,
+    ISO885915UNI_START, ISO885915UNI_END,
+    SAME8090UNI_START, SAME8090UNI_END,
     ISO885915CHAR_START, ISO885915CHAR_END,
     SAME8090CHAR_START, SAME8090CHAR_END,
     ISO885915TOCHARTABEX_COUNT
@@ -1255,12 +1255,12 @@ ImplTextEncodingData const aImplISO885915TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-15",
+        "iso-8859-15",
         1,
         1,
         1,
         0,
-        "iso8859-15",
-        "iso-8859-15",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_LATIN, pc code page 850 */
 
@@ -1373,11 +1373,11 @@ ImplByteConvertData const aImplAPPLEICELANDByteCvtData =
 {
     aImplAPPLEICELANDToUniTab,
     nullptr,
-    APPLEICELANDUNI_START, APPLEICELANDUNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplAPPLEICELANDToCharTab,
     nullptr,
     aImplAPPLEICELANDToCharTabEx,
+    APPLEICELANDUNI_START, APPLEICELANDUNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     APPLEICELANDCHAR_START, APPLEICELANDCHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     APPLEICELANDTOCHARTABEX_COUNT
@@ -1395,12 +1395,12 @@ ImplTextEncodingData const aImplAPPLEICELANDTextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-1",
+        "iso-8859-1",
         1,
         1,
         1,
         0,
-        "iso8859-1",
-        "iso-8859-1",
         RTL_TEXTENCODING_INFO_ASCII };
     /* MAC, SCRIPT_LATIN, pc code page 861, mac encoding 37 */
 
@@ -1520,11 +1520,11 @@ ImplByteConvertData const aImplAPPLEROMANByteCvtData =
 {
     aImplAPPLEROMANToUniTab,
     nullptr,
-    APPLEROMANUNI_START, APPLEROMANUNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplAPPLEROMANToCharTab,
     nullptr,
     aImplAPPLEROMANToCharTabEx,
+    APPLEROMANUNI_START, APPLEROMANUNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     APPLEROMANCHAR_START, APPLEROMANCHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     APPLEROMANTOCHARTABEX_COUNT
@@ -1542,11 +1542,11 @@ ImplTextEncodingData const aImplAPPLEROMANTextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-1",
+        "macintosh",
         1,
         1,
         1,
         77,
-        "iso8859-1",
-        "macintosh",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* MAC, SCRIPT_LATIN, pc code page 850 */
