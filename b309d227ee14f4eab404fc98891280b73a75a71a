@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b7570f1_a202ff34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-09-10T20:39:41Z",
+      "side": 1,
+      "message": "This case from crashtesting seems to be reliably reproducible at least",
+      "revId": "b309d227ee14f4eab404fc98891280b73a75a71a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
