@@ -17,12 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <fontinstance.hxx>
-#include <impfontcache.hxx>
+#include <sal/config.h>
+#include <sal/log.hxx>
+
 #include <PhysicalFontCollection.hxx>
 #include <PhysicalFontFace.hxx>
-#include <PhysicalFontFamily.hxx>
-#include <sal/log.hxx>
+#include <font/PhysicalFontFamily.hxx>
+#include <fontinstance.hxx>
+#include <impfontcache.hxx>
+
+using namespace vcl::font;
 
 size_t ImplFontCache::IFSD_Hash::operator()( const FontSelectPattern& rFSD ) const
 {
