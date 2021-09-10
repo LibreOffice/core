@@ -75,8 +75,8 @@ struct InterfaceEntry
 struct ObjectEntry
 {
     OUString oid;
-    sal_Int32 nRef;
     std::vector< InterfaceEntry > aInterfaces;
+    sal_Int32 nRef;
     bool mixedObject;
 
     explicit ObjectEntry( const OUString & rOId_ );
