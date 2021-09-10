@@ -33,12 +33,9 @@ class tdf140731(UITestCase):
             self.assertTrue(document.Redlines.createEnumeration().hasMoreElements())
 
             #Removing all the redlines.
-            self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges")
-            xTrackDlg = self.xUITest.getTopFocusWindow()
-            xAccBtn = xTrackDlg.getChild("rejectall")
-            xAccBtn.executeAction("CLICK", tuple())
-            xCancBtn = xTrackDlg.getChild("close")
-            xCancBtn.executeAction("CLICK", tuple())
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
+                xAccBtn = xTrackDlg.getChild("rejectall")
+                xAccBtn.executeAction("CLICK", tuple())
 
             #Without the fix in place, on big selections writer would freeze. Now it ignores change tracking.
             self.xUITest.executeCommand(".uno:SelectAll")

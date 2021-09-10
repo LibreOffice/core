@@ -28,12 +28,6 @@ class SpellingAndGrammarDialog(UITestCase):
             # we found the correct combination
             return True
 
-    def launch_dialog(self):
-        self.ui_test.execute_modeless_dialog_through_command(
-            ".uno:SpellingAndGrammarDialog")
-
-        return self.xUITest.getTopFocusWindow()
-
     TDF46852_INPUT = """\
 dogg
 dogg
@@ -72,33 +66,32 @@ frog, dogg, catt"""
 
             # Step 3: Initiate spellchecking, and make sure "Check grammar" is
             # unchecked
-            spell_dialog = self.launch_dialog()
-            checkgrammar = spell_dialog.getChild('checkgrammar')
-            if get_state_as_dict(checkgrammar)['Selected'] == 'true':
-                checkgrammar.executeAction('CLICK', ())
-            self.assertTrue(get_state_as_dict(checkgrammar)['Selected'] == 'false')
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SpellingAndGrammarDialog", close_button="") as xDialog:
+                checkgrammar = xDialog.getChild('checkgrammar')
+                if get_state_as_dict(checkgrammar)['Selected'] == 'true':
+                    checkgrammar.executeAction('CLICK', ())
+                self.assertTrue(get_state_as_dict(checkgrammar)['Selected'] == 'false')
 
-            # Step 4: Repetitively click on "Correct all" for each misspelling
-            #         prompt until end of document is reached.
-            changeall = spell_dialog.getChild('changeall')
-            changeall.executeAction("CLICK", ())
-            changeall.executeAction("CLICK", ())
-            # The third time we click on changeall, the click action is going to
-            # block while two message boxes are shown, so we need to do this third
-            # click specially
-            # Use empty close_button to open consecutive dialogs
-            with self.ui_test.execute_blocking_action(
-                    changeall.executeAction, args=('CLICK', ()), close_button="") as dialog:
-                # Step 5: Confirm to "Continue check at beginning of document"
-                xYesBtn = dialog.getChild("yes")
-
+                # Step 4: Repetitively click on "Correct all" for each misspelling
+                #         prompt until end of document is reached.
+                changeall = xDialog.getChild('changeall')
+                changeall.executeAction("CLICK", ())
+                changeall.executeAction("CLICK", ())
+                # The third time we click on changeall, the click action is going to
+                # block while two message boxes are shown, so we need to do this third
+                # click specially
+                # Use empty close_button to open consecutive dialogs
                 with self.ui_test.execute_blocking_action(
-                        xYesBtn.executeAction, args=('CLICK', ())):
-                    pass
+                        changeall.executeAction, args=('CLICK', ()), close_button="") as dialog:
+                    # Step 5: Confirm to "Continue check at beginning of document"
+                    xYesBtn = dialog.getChild("yes")
+
+                    with self.ui_test.execute_blocking_action(
+                            xYesBtn.executeAction, args=('CLICK', ())):
+                        pass
 
             output_text = document.Text.getString().replace('\r\n', '\n')
             self.assertTrue(re.match(self.TDF46852_REGEX, output_text))
-
 
     def test_tdf66043(self):
         supported_locale = self.is_supported_locale("en", "US")
@@ -107,19 +100,16 @@ frog, dogg, catt"""
         with self.ui_test.load_file(get_url_for_data_file("tdf66043.fodt")) as writer_doc:
             # Step 1: Initiate spellchecking, and make sure "Check grammar" is
             # unchecked
-            spell_dialog = self.launch_dialog()
-            checkgrammar = spell_dialog.getChild('checkgrammar')
-            if get_state_as_dict(checkgrammar)['Selected'] == 'true':
-                checkgrammar.executeAction('CLICK', ())
-            self.assertTrue(get_state_as_dict(checkgrammar)['Selected'] == 'false')
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SpellingAndGrammarDialog", close_button="close") as xDialog:
+                checkgrammar = xDialog.getChild('checkgrammar')
+                if get_state_as_dict(checkgrammar)['Selected'] == 'true':
+                    checkgrammar.executeAction('CLICK', ())
+                self.assertTrue(get_state_as_dict(checkgrammar)['Selected'] == 'false')
 
-            # Step 2: Click on "Correct all" for each misspelling
-            #         prompt until end of document is reached.
-            changeall = spell_dialog.getChild('changeall')
-            changeall.executeAction("CLICK", ())
-
-            xCloseBtn = spell_dialog.getChild("close")
-            xCloseBtn.executeAction("CLICK", tuple())
+                # Step 2: Click on "Correct all" for each misspelling
+                #         prompt until end of document is reached.
+                changeall = xDialog.getChild('changeall')
+                changeall.executeAction("CLICK", ())
 
             output_text = writer_doc.Text.getString().replace('\r\n', '\n')
             # This was "gooodgood baaad eeend" ("goood" is a deletion,

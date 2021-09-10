@@ -34,35 +34,32 @@ class tdf64690(UITestCase):
 
             self.xUITest.executeCommand(".uno:SelectAll")
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
 
-            searchterm = xDialog.getChild("searchterm")
-            searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"."}))
+                searchterm = xDialog.getChild("searchterm")
+                searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"."}))
 
-            replaceterm = xDialog.getChild("replaceterm")
-            replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"ABC"}))
+                replaceterm = xDialog.getChild("replaceterm")
+                replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"ABC"}))
 
-            regexp = xDialog.getChild("regexp")
-            if get_state_as_dict(regexp)['Selected'] == 'false':
-                regexp.executeAction("CLICK", tuple())
-            self.assertEqual("true", get_state_as_dict(regexp)['Selected'])
+                regexp = xDialog.getChild("regexp")
+                if get_state_as_dict(regexp)['Selected'] == 'false':
+                    regexp.executeAction("CLICK", tuple())
+                self.assertEqual("true", get_state_as_dict(regexp)['Selected'])
 
-            selection = xDialog.getChild("selection")
-            if get_state_as_dict(selection)['Selected'] == 'false':
-                selection.executeAction("CLICK", tuple())
-            self.assertEqual("true", get_state_as_dict(selection)['Selected'])
+                selection = xDialog.getChild("selection")
+                if get_state_as_dict(selection)['Selected'] == 'false':
+                    selection.executeAction("CLICK", tuple())
+                self.assertEqual("true", get_state_as_dict(selection)['Selected'])
 
-            replaceall = xDialog.getChild("replaceall")
+                replaceall = xDialog.getChild("replaceall")
 
-            # Without the fix in place, this test would have hung here
-            with self.ui_test.execute_blocking_action(replaceall.executeAction, args=('CLICK', ())):
-                pass
+                # Without the fix in place, this test would have hung here
+                with self.ui_test.execute_blocking_action(replaceall.executeAction, args=('CLICK', ())):
+                    pass
 
-            xcloseBtn = xDialog.getChild("close")
-            self.ui_test.close_dialog_through_button(xcloseBtn)
 
             self.assertEqual("ABCABCABCABC\nABCABCABCABC\n", get_state_as_dict(xEditWin)['Text'])
 
