@@ -72,7 +72,7 @@ BitmapInfoAccess::~BitmapInfoAccess()
 
 sal_uInt16 BitmapInfoAccess::GetBestPaletteIndex(const BitmapColor& rBitmapColor) const
 {
-    const BitmapBuffer* pBuffer = mpBuffer;
+    const BitmapBuffer* pBuffer = std::as_const(mpBuffer);
 
     return (HasPalette() ? pBuffer->maPalette.GetBestIndex(rBitmapColor) : 0);
 }

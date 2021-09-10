@@ -89,7 +89,7 @@ public:
     {
         if (HasPalette())
         {
-            const BitmapBuffer* pBuffer = mpBuffer;
+            const BitmapBuffer* pBuffer = std::as_const(mpBuffer);
             return pBuffer->maPalette[GetPixelIndex(nY, nX)];
         }
         else

@@ -87,7 +87,7 @@ public:
 
     bool HasPalette() const
     {
-        const BitmapBuffer* pBuffer = mpBuffer;
+        const BitmapBuffer* pBuffer = std::as_const(mpBuffer);
 
         assert(pBuffer && "Access is not valid!");
 
@@ -96,7 +96,7 @@ public:
 
     const BitmapPalette& GetPalette() const
     {
-        const BitmapBuffer* pBuffer = mpBuffer;
+        const BitmapBuffer* pBuffer = std::as_const(mpBuffer);
 
         assert(pBuffer && "Access is not valid!");
 
@@ -105,7 +105,7 @@ public:
 
     sal_uInt16 GetPaletteEntryCount() const
     {
-        const BitmapBuffer* pBuffer = mpBuffer;
+        const BitmapBuffer* pBuffer = std::as_const(mpBuffer);
 
         assert(HasPalette() && "Bitmap has no palette!");
 
@@ -114,7 +114,8 @@ public:
 
     const BitmapColor& GetPaletteColor(sal_uInt16 nColor) const
     {
-        const BitmapBuffer* pBuffer = mpBuffer;
+        const BitmapBuffer* pBuffer = std::as_const(mpBuffer);
+
         assert(pBuffer && "Access is not valid!");
         assert(HasPalette() && "Bitmap has no palette!");
 
@@ -125,7 +126,7 @@ public:
 
     const ColorMask& GetColorMask() const
     {
-        const BitmapBuffer* pBuffer = mpBuffer;
+        const BitmapBuffer* pBuffer = std::as_const(mpBuffer);
 
         assert(pBuffer && "Access is not valid!");
 
