@@ -1530,7 +1530,7 @@ void Chart2ExportTest2::testNameRangeXLSX()
     load(u"/chart2/qa/extras/data/xlsx/", "chart_with_name_range.xlsx");
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
     CPPUNIT_ASSERT(pXmlDoc);
-    // test the syntax of local range name on the the local sheet.
+    // test the syntax of local range name on the local sheet.
     assertXPathContent(pXmlDoc,
                        "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:cat/c:strRef/c:f",
                        "Sheet1!local_name_range");

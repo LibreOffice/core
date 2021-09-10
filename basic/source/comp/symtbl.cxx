@@ -102,7 +102,7 @@ short SbiStringPool::Add(double n, SbxDataType t)
         default: assert(false); break; // should not happen
     }
 
-    // tdf#143707 - add the content of the buffer to the string pool inclding its calculated length
+    // tdf#143707 - add the content of the buffer to the string pool including its calculated length
     return Add(OUString::fromUtf8(std::string_view(buf, size)));
 }
 
