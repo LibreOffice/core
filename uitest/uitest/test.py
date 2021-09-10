@@ -110,8 +110,8 @@ class UITest(object):
 
     # Calls UITest.close_dialog_through_button at exit
     @contextmanager
-    def execute_dialog_through_command(self, command, printNames=False, close_button = "ok"):
-        with EventListener(self._xContext, "DialogExecute", printNames=printNames) as event:
+    def execute_dialog_through_command(self, command, printNames=False, close_button = "ok", eventName = "DialogExecute"):
+        with EventListener(self._xContext, eventName, printNames=printNames) as event:
             if not self._xUITest.executeDialog(command):
                 raise Exception("Dialog not executed for: " + command)
             while True:
@@ -124,6 +124,11 @@ class UITest(object):
                             self.close_dialog_through_button(xDialog.getChild(close_button))
                     return
                 time.sleep(DEFAULT_SLEEP)
+
+    @contextmanager
+    def execute_modeless_dialog_through_command_guarded(self, command, printNames=False, close_button = "ok"):
+        with self.execute_dialog_through_command(command, printNames, close_button, "ModelessDialogVisible") as xDialog:
+            yield xDialog
 
     def execute_modeless_dialog_through_command(self, command, printNames=False):
         with EventListener(self._xContext, "ModelessDialogVisible", printNames = printNames) as event:
