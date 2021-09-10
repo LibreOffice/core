@@ -34,10 +34,10 @@ class TOOLS_DLLPUBLIC JsonWriter
     friend class ScopedJsonWriterArray;
     friend class ScopedJsonWriterStruct;
 
-    int mSpaceAllocated;
     char* mpBuffer;
-    int mStartNodeCount;
     char* mPos;
+    int mSpaceAllocated;
+    int mStartNodeCount;
     bool mbFirstFieldInNode;
 
 public:
