@@ -244,7 +244,7 @@ bool WinGlyphFallbackSubstititution::HasMissingChars(PhysicalFontFace* pFace, OU
 namespace
 {
     //used by 2-level font fallback
-    PhysicalFontFamily* findDevFontListByLocale(const PhysicalFontCollection &rFontCollection,
+    vcl::font::PhysicalFontFamily* findDevFontListByLocale(const PhysicalFontCollection &rFontCollection,
                                                 const LanguageTag& rLanguageTag )
     {
         // get the default font for a specified locale
@@ -302,7 +302,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPattern& rFont
     // first level fallback:
     // try use the locale specific default fonts defined in VCL.xcu
     const PhysicalFontCollection* pFontCollection = ImplGetSVData()->maGDIData.mxScreenFontList.get();
-    PhysicalFontFamily* pFontFamily = findDevFontListByLocale(*pFontCollection, aLanguageTag);
+    vcl::font::PhysicalFontFamily* pFontFamily = findDevFontListByLocale(*pFontCollection, aLanguageTag);
     if( pFontFamily )
     {
         PhysicalFontFace* pFace = pFontFamily->FindBestFontFace( rFontSelData );
