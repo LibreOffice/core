@@ -27,8 +27,8 @@
 
 struct MapMode::ImplMapMode
 {
-    MapUnit         meUnit;
     Point           maOrigin;
+    MapUnit         meUnit;
     // NOTE: these Fraction must NOT have more than 32 bits precision
     // because ReadFraction / WriteFraction do only 32 bits, so more than
     // that cannot be stored in MetaFiles!

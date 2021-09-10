@@ -49,15 +49,15 @@ class TextView;
 class TETextPortion
 {
 private:
+    tools::Long     nWidth;
     sal_Int32       nLen;
-    tools::Long            nWidth;
     sal_uInt8       nKind;
     bool            bRightToLeft;
 
 public:
                 TETextPortion( sal_Int32 nL )
-                    : nLen {nL}
-                    , nWidth {-1}
+                    : nWidth {-1}
+                    , nLen {nL}
                     , nKind {PORTIONKIND_TEXT}
                     , bRightToLeft {false}
                 {}

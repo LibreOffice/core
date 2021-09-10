@@ -35,38 +35,38 @@ class VCL_DLLPUBLIC GraphicAttr
 {
 private:
     double mfGamma;
-    BmpMirrorFlags mnMirrFlags;
     tools::Long mnLeftCrop;
     tools::Long mnTopCrop;
     tools::Long mnRightCrop;
     tools::Long mnBottomCrop;
+    BmpMirrorFlags mnMirrFlags;
+    GraphicDrawMode meDrawMode;
     Degree10 mnRotate10;
     short mnContPercent;
     short mnLumPercent;
     short mnRPercent;
     short mnGPercent;
     short mnBPercent;
-    bool mbInvert;
     sal_uInt8 mcAlpha;
-    GraphicDrawMode meDrawMode;
+    bool mbInvert;
 
 public:
     GraphicAttr()
         : mfGamma(1.0)
-        , mnMirrFlags(BmpMirrorFlags::NONE)
         , mnLeftCrop(0)
         , mnTopCrop(0)
         , mnRightCrop(0)
         , mnBottomCrop(0)
+        , mnMirrFlags(BmpMirrorFlags::NONE)
+        , meDrawMode(GraphicDrawMode::Standard)
         , mnRotate10(0)
         , mnContPercent(0)
         , mnLumPercent(0)
         , mnRPercent(0)
         , mnGPercent(0)
         , mnBPercent(0)
-        , mbInvert(false)
         , mcAlpha(255)
-        , meDrawMode(GraphicDrawMode::Standard)
+        , mbInvert(false)
     {
     }
 
