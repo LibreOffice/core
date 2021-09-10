@@ -172,6 +172,7 @@ public:
     void testWriterComments();
     void testSheetOperations();
     void testSheetSelections();
+    void testSheetDragDrop();
     void testContextMenuCalc();
     void testContextMenuWriter();
     void testContextMenuImpress();
@@ -239,6 +240,7 @@ public:
     CPPUNIT_TEST(testWriterComments);
     CPPUNIT_TEST(testSheetOperations);
     CPPUNIT_TEST(testSheetSelections);
+    CPPUNIT_TEST(testSheetDragDrop);
     CPPUNIT_TEST(testContextMenuCalc);
     CPPUNIT_TEST(testContextMenuWriter);
     CPPUNIT_TEST(testContextMenuImpress);
@@ -1185,6 +1187,132 @@ void DesktopLOKTest::testSheetSelections()
 
         free(pUsedMimeType);
         free(pCopiedContent);
+    }
+}
+
+void DesktopLOKTest::testSheetDragDrop()
+{
+    LibLODocument_Impl* pDocument = loadDoc("sheets.ods", LOK_DOCTYPE_SPREADSHEET);
+    pDocument->pClass->initializeForRendering(pDocument, nullptr);
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+
+    int row01 = 100;
+    int col01 = 1100;
+    int col02 = 2200;
+    int col03 = 3300;
+    int col05 = 5500;
+    int col07 = 5700;
+
+    // Select row 01 from column 01 through column 05
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      col01, row01,
+                                      1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEMOVE,
+                                      col02, row01,
+                                      1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEMOVE,
+                                      col05, row01,
+                                      1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                      col05, row01,
+                                      1, 1, 0);
+
+    Scheduler::ProcessEventsToIdle();
+    {
+        SfxViewShell* pViewShell = SfxViewShell::Current();
+        SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
+
+        OUString sValue;
+        css::uno::Any aValue;
+        css::util::URL aURL;
+        std::unique_ptr<SfxPoolItem> pState;
+
+        aURL.Protocol = ".uno:";
+        aURL.Complete = ".uno:Address";
+        aURL.Path = "Address";
+        aURL.Main = ".uno:Address";
+
+        pViewFrame->GetBindings().QueryState(pViewFrame->GetBindings().QuerySlotId(aURL), pState);
+        pState->QueryValue(aValue);
+        aValue >>= sValue;
+        CPPUNIT_ASSERT_EQUAL(OUString("Sheet5.A1:E1"), sValue);
+    }
+
+    // Check selection content
+    {
+        char* pMimeType = nullptr;
+        char* pContent = pDocument->pClass->getTextSelection(pDocument, nullptr, &pMimeType);
+        std::vector<long> aExpected = {1, 2, 3, 4, 5};
+        std::istringstream aContent(pContent);
+        std::string token;
+        for (size_t i = 0; i < aExpected.size(); i++)
+        {
+            aContent >> token;
+            CPPUNIT_ASSERT_EQUAL(aExpected[i], strtol(token.c_str(), nullptr, 10));
+        }
+
+        free(pMimeType);
+        free(pContent);
+    }
+
+    // drag and drop
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      col01, row01,
+                                      1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEMOVE,
+                                      col02, row01,
+                                      1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEMOVE,
+                                      col03, row01,
+                                      1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                      col07, row01,
+                                      1, 1, 0);
+
+    Scheduler::ProcessEventsToIdle();
+    {
+        SfxViewShell* pViewShell = SfxViewShell::Current();
+        SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
+
+        OUString sValue;
+        css::uno::Any aValue;
+        css::util::URL aURL;
+        std::unique_ptr<SfxPoolItem> pState;
+
+        aURL.Protocol = ".uno:";
+        aURL.Complete = ".uno:Address";
+        aURL.Path = "Address";
+        aURL.Main = ".uno:Address";
+
+        pViewFrame->GetBindings().QueryState(pViewFrame->GetBindings().QuerySlotId(aURL), pState);
+        pState->QueryValue(aValue);
+        aValue >>= sValue;
+        CPPUNIT_ASSERT_EQUAL(OUString("Sheet5.D1:H1"), sValue);
+    }
+
+    // Check selection content
+    {
+        char* pMimeType = nullptr;
+        char* pContent = pDocument->pClass->getTextSelection(pDocument, nullptr, &pMimeType);
+        std::vector<long> aExpected = {1, 2, 3, 4, 5};
+        std::istringstream aContent(pContent);
+        std::string token;
+        for (size_t i = 0; i < aExpected.size(); i++)
+        {
+            aContent >> token;
+            CPPUNIT_ASSERT_EQUAL(aExpected[i], strtol(token.c_str(), nullptr, 10));
+        }
+
+        free(pMimeType);
+        free(pContent);
     }
 }
 
