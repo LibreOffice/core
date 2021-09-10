@@ -386,7 +386,7 @@ void MMExcludeEntryController::statusChanged(const frame::FeatureStateEvent& rEv
     }
     else
     {
-        m_xExcludeCheckbox->set_sensitive(false);
+        m_xExcludeCheckbox->set_sensitive(true);
         m_xExcludeCheckbox->set_active(xConfigItem->IsRecordExcluded(xConfigItem->GetResultSetPosition()));
     }
 }
