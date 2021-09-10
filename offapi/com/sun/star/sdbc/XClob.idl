@@ -117,7 +117,7 @@ published interface XClob: com::sun::star::uno::XInterface
         consecutive characters.
         </p>
         @param pos
-            the starting position
+            the starting position, 1-based
         @param length
             the length of the substring
         @returns
