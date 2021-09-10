@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfb0f283_34ede60e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-09-10T07:30:31Z",
+      "side": 1,
+      "message": "Blah, I was triggering new builds without checking the error log as it was an uncategorized failure. Really what is seen in the Windows log is:\n\naccumulation-based service com.sun.star.drawing.GraphicObjectShape direct property #24 changed from com.sun.star.drawing.QRCode QRCodeProperties to com.sun.star.drawing.BarCode BarCodeProperties\nmake[1]: *** [C:/cygwin64/home/tdf/lode/jenkins/workspace/gerrit_windows/solenv/gbuild/UnoApiTarget.mk:46: C:/cygwin64/home/tdf/lode/jenkins/workspace/gerrit_windows/workdir/UnoApiTarget/offapi.rdb] Error 1\n\nhttps://ci.libreoffice.org/job/gerrit_windows/106596/console\n\nAkshit, can you look into it?",
+      "revId": "9b09e11f9d688aac05dff0567e0cc33b093fba44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
