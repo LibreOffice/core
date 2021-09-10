@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d9be5da_ace86d36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-09-10T09:08:48Z",
+      "side": 1,
+      "message": "The patch is wrong. you are getting the BackColor properties as sal_Int32 and them converting them to Color while you can get them directly as Color. See https://gerrit.libreoffice.org/c/core/+/121868",
+      "revId": "7b3a681a867eeb2d68abd4ce33b07cabfff224ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
