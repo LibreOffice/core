@@ -1922,6 +1922,7 @@ OfaAutoCompleteTabPage::OfaAutoCompleteTabPage(weld::Container* pPage, weld::Dia
 
     m_xLBEntries->set_size_request(m_xLBEntries->get_approximate_digit_width() * 30,
                                    m_xLBEntries->get_height_rows(10));
+    m_xLBEntries->set_selection_mode(SelectionMode::Multiple);
 
     // the defined KEYs
     static const sal_uInt16 aKeyCodes[] = {
