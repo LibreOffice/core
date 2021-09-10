@@ -22,101 +22,84 @@ class findReplace(UITestCase):
             self.assertEqual(impress_doc.CurrentController.getCurrentPage().Number, 1)
 
             # search for string "second"
-            self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            searchterm = xDialog.getChild("searchterm")
-            searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"second"}))  #2nd slide
-            xsearch = xDialog.getChild("search")
-            xsearch.executeAction("CLICK", tuple())
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+                searchterm = xDialog.getChild("searchterm")
+                searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"second"}))  #2nd slide
+                xsearch = xDialog.getChild("search")
+                xsearch.executeAction("CLICK", tuple())
 
-            # verify we moved to slide 2
-            self.assertEqual(impress_doc.CurrentController.getCurrentPage().Number, 2)
+                # verify we moved to slide 2
+                self.assertEqual(impress_doc.CurrentController.getCurrentPage().Number, 2)
 
-            # search for string "third"
-            searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"third"}))
-            xsearch.executeAction("CLICK", tuple())
+                # search for string "third"
+                searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"third"}))
+                xsearch.executeAction("CLICK", tuple())
 
-            #verify we moved to slide 3
-            self.assertEqual(impress_doc.CurrentController.getCurrentPage().Number, 3)  #3rd slide
-
-            # close the dialog
-            xcloseBtn = xDialog.getChild("close")
-            self.ui_test.close_dialog_through_button(xcloseBtn)
+                #verify we moved to slide 3
+                self.assertEqual(impress_doc.CurrentController.getCurrentPage().Number, 3)  #3rd slide
 
             # now open dialog and verify find="third" (remember last value);
             # replace value with "First" (click match case) with word "Replace"
             # click twice the Replace button, check "Replace first first"
 
             # open the dialog again
-            self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
 
-            # verify search string is still "third" from previous search
-            searchterm = xDialog.getChild("searchterm")
-            self.assertEqual(get_state_as_dict(searchterm)["Text"], "third")
+                # verify search string is still "third" from previous search
+                searchterm = xDialog.getChild("searchterm")
+                self.assertEqual(get_state_as_dict(searchterm)["Text"], "third")
 
-            # replace it with "First"
-            searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"First"}))
+                # replace it with "First"
+                searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"First"}))
 
-            # click "match case"
-            matchcase = xDialog.getChild("matchcase")
-            matchcase.executeAction("CLICK", tuple())  #click match case
+                # click "match case"
+                matchcase = xDialog.getChild("matchcase")
+                matchcase.executeAction("CLICK", tuple())  #click match case
 
-            # set the replace string to "Replace"
-            replaceterm = xDialog.getChild("replaceterm")
-            replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"Replace"})) #replace textbox
+                # set the replace string to "Replace"
+                replaceterm = xDialog.getChild("replaceterm")
+                replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"Replace"})) #replace textbox
 
-            # hit replace button 2 times
-            replace = xDialog.getChild("replace")
-            replace.executeAction("CLICK", tuple())
-            replace.executeAction("CLICK", tuple())   #click twice Replace button (one selects, second replaces)
+                # hit replace button 2 times
+                replace = xDialog.getChild("replace")
+                replace.executeAction("CLICK", tuple())
+                replace.executeAction("CLICK", tuple())   #click twice Replace button (one selects, second replaces)
 
-            # close and reopen the dialog, because of bug 122788
-            xcloseBtn = xDialog.getChild("close")
-            self.ui_test.close_dialog_through_button(xcloseBtn)
-            self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
+            # reopen the dialog, because of bug 122788
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
 
-            # now replace first (uncheck match case) with word "aaa" - click once Replace All button, check "Replace aaa aaa"
-            matchcase = xDialog.getChild("matchcase")
-            matchcase.executeAction("CLICK", tuple())  # uncheck match case
+                # now replace first (uncheck match case) with word "aaa" - click once Replace All button, check "Replace aaa aaa"
+                matchcase = xDialog.getChild("matchcase")
+                matchcase.executeAction("CLICK", tuple())  # uncheck match case
 
-            replaceterm = xDialog.getChild("replaceterm")
-            replaceterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            replaceterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"aaa"}))
-            replaceall = xDialog.getChild("replaceall")
-            replaceall.executeAction("CLICK", tuple()) # click on replace all button
-            xcloseBtn = xDialog.getChild("close")
-            self.ui_test.close_dialog_through_button(xcloseBtn) #close the dialog
+                replaceterm = xDialog.getChild("replaceterm")
+                replaceterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                replaceterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"aaa"}))
+                replaceall = xDialog.getChild("replaceall")
+                replaceall.executeAction("CLICK", tuple()) # click on replace all button
 
             # go to second page
-            self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            searchterm = xDialog.getChild("searchterm")
-            searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"second"}))  #2nd slide
-            xsearch = xDialog.getChild("search")
-            xsearch.executeAction("CLICK", tuple())
-            xcloseBtn = xDialog.getChild("close")
-            self.ui_test.close_dialog_through_button(xcloseBtn)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+                searchterm = xDialog.getChild("searchterm")
+                searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"second"}))  #2nd slide
+                xsearch = xDialog.getChild("search")
+                xsearch.executeAction("CLICK", tuple())
             self.assertEqual(impress_doc.CurrentController.getCurrentPage().Number, 2)
             #now check if text "Replace aaa aaa" is on first slide
-            self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            searchterm = xDialog.getChild("searchterm")
-            backsearch = xDialog.getChild("backsearch")
-            searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"Replace aaa aaa"}))
-            backsearch.executeAction("CLICK", tuple())
-            #verify
-            self.assertEqual(impress_doc.CurrentController.getCurrentPage().Number, 1)  #1st slide
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+                searchterm = xDialog.getChild("searchterm")
+                backsearch = xDialog.getChild("backsearch")
+                searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"Replace aaa aaa"}))
+                backsearch.executeAction("CLICK", tuple())
+                #verify
+                self.assertEqual(impress_doc.CurrentController.getCurrentPage().Number, 1)  #1st slide
 
-            xcloseBtn = xDialog.getChild("close")
-            self.ui_test.close_dialog_through_button(xcloseBtn)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
