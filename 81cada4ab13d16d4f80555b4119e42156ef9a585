@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f01b0f7c_2513d183",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-09-10T08:30:29Z",
+      "side": 1,
+      "message": "@Balázs: thanks for the fix! I suggest a minor clean-up and commenting the UI elements, because the fix is not obvious from the code.",
+      "revId": "81cada4ab13d16d4f80555b4119e42156ef9a585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ee82786_76447686",
+        "filename": "sw/source/ui/dbui/mmresultdialogs.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-09-10T08:30:29Z",
+      "side": 1,
+      "message": "Is it sure? It would be fine to add a comment about SaveIndividualRB.",
+      "range": {
+        "startLine": 559,
+        "startChar": 8,
+        "endLine": 559,
+        "endChar": 9
+      },
+      "revId": "81cada4ab13d16d4f80555b4119e42156ef9a585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5df8c266_e81a36fa",
+        "filename": "sw/source/ui/dbui/mmresultdialogs.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-09-10T08:30:29Z",
+      "side": 1,
+      "message": "Simply\n\n    }\n    \n    xConfigItem-\u003eSetBeginEnd(nBegin, nEnd);",
+      "range": {
+        "startLine": 566,
+        "startChar": 1,
+        "endLine": 569,
+        "endChar": 47
+      },
+      "revId": "81cada4ab13d16d4f80555b4119e42156ef9a585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0049d0c_d691112e",
+        "filename": "sw/source/ui/dbui/mmresultdialogs.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 798,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-09-10T08:30:29Z",
+      "side": 1,
+      "message": "}\n\nxConfigItem-\u003eSetBeginEnd(nBegin, nEnd);",
+      "range": {
+        "startLine": 795,
+        "startChar": 3,
+        "endLine": 798,
+        "endChar": 47
+      },
+      "revId": "81cada4ab13d16d4f80555b4119e42156ef9a585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4febcc36_328ddcbc",
+        "filename": "sw/source/ui/dbui/mmresultdialogs.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-09-10T08:30:29Z",
+      "side": 1,
+      "message": "}\n\n    xConfigItem-\u003eSetBeginEnd(nBegin, nEnd);",
+      "range": {
+        "startLine": 914,
+        "startChar": 0,
+        "endLine": 917,
+        "endChar": 47
+      },
+      "revId": "81cada4ab13d16d4f80555b4119e42156ef9a585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
