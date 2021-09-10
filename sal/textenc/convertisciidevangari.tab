@@ -24,12 +24,12 @@ ImplTextEncodingData const aImplIsciiDevanagariTextEncodingData
           &ImplCreateUnicodeToIsciiDevanagariContext,
           &ImplDestroyUnicodeToIsciiDevanagariContext,
           &ImplResetUnicodeToIsciiDevanagariContext },
-        1,
-        2,
-        2,
-        1,
         nullptr,
         "x-iscii-de ",
+        1,
+        2,
+        2,
+        1,
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MULTIBYTE };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

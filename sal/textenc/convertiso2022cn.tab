@@ -48,12 +48,12 @@ ImplTextEncodingData const aImplIso2022CnTextEncodingData
           &ImplCreateUnicodeToIso2022CnContext,
           &ImplDestroyUnicodeToIso2022CnContext,
           &ImplResetUnicodeToIso2022CnContext },
+        "euc-cn",
+        "ISO-2022-CN",
         1,
         8,
         2,
         134,
-        "euc-cn",
-        "ISO-2022-CN",
          RTL_TEXTENCODING_INFO_CONTEXT
              | RTL_TEXTENCODING_INFO_MULTIBYTE
              | RTL_TEXTENCODING_INFO_MIME };

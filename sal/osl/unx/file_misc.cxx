@@ -85,8 +85,8 @@ struct DirectoryImpl
 
 DirectoryItem_Impl::DirectoryItem_Impl(
     rtl_String * strFilePath, unsigned char DType)
-    : m_RefCount     (1),
-      m_strFilePath (strFilePath),
+    : m_strFilePath (strFilePath),
+      m_RefCount     (1),
       m_DType        (DType)
 {
     if (m_strFilePath != nullptr)

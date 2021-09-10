@@ -154,11 +154,11 @@ ImplByteConvertData const aImplIBM737ByteCvtData =
 {
     aImplIBM737ToUniTab,
     nullptr,
-    IBM737UNI_START, IBM737UNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplIBM737ToCharTab,
     nullptr,
     aImplIBM737ToCharTabEx,
+    IBM737UNI_START, IBM737UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     IBM737CHAR_START, IBM737CHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     IBM737TOCHARTABEX_COUNT
@@ -176,12 +176,12 @@ ImplTextEncodingData const aImplIBM737TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-7",
+        "iso-8859-7",
         1,
         1,
         1,
         161,
-        "iso8859-7",
-        "iso-8859-7",
         RTL_TEXTENCODING_INFO_ASCII };
     /* DOS/OS2, SCRIPT_GREEK, pc code page 737, mac encoding 6 */
 
@@ -360,11 +360,11 @@ ImplByteConvertData const aImplIBM775ByteCvtData =
 {
     aImplIBM775ToUniTab,
     nullptr,
-    IBM775UNI_START, IBM775UNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     nullptr,
     nullptr,
     aImplIBM775ToCharTabEx,
+    IBM775UNI_START, IBM775UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     NOTABCHAR_START, NOTABCHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     IBM775TOCHARTABEX_COUNT
@@ -382,12 +382,12 @@ ImplTextEncodingData const aImplIBM775TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-4",
+        "iso-8859-4",
         1,
         1,
         1,
         186,
-        "iso8859-4",
-        "iso-8859-4",
         RTL_TEXTENCODING_INFO_ASCII };
     /* DOS/OS2, SCRIPT_BALTIC, pc code page 775, mac encoding 29 (?) */
 
@@ -566,11 +566,11 @@ ImplByteConvertData const aImplIBM852ByteCvtData =
 {
     aImplIBM852ToUniTab,
     nullptr,
-    IBM852UNI_START, IBM852UNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     nullptr,
     nullptr,
     aImplIBM852ToCharTabEx,
+    IBM852UNI_START, IBM852UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     NOTABCHAR_START, NOTABCHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     IBM852TOCHARTABEX_COUNT
@@ -588,12 +588,12 @@ ImplTextEncodingData const aImplIBM852TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-2",
+        "ibm852",
         1,
         1,
         1,
         238,
-        "iso8859-2",
-        "ibm852",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* DOS/OS2, SCRIPT_EASTEUROPE, pc code page 852, mac encoding 29 */
 
@@ -702,11 +702,11 @@ ImplByteConvertData const aImplIBM855ByteCvtData =
 {
     aImplIBM855ToUniTab,
     nullptr,
-    IBM855UNI_START, IBM855UNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplIBM855ToCharTab,
     nullptr,
     aImplIBM855ToCharTabEx,
+    IBM855UNI_START, IBM855UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     IBM855CHAR_START, IBM855CHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     IBM855TOCHARTABEX_COUNT
@@ -724,12 +724,12 @@ ImplTextEncodingData const aImplIBM855TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-5",
+        "iso-8859-5",
         1,
         1,
         1,
         204,
-        "iso8859-5",
-        "iso-8859-5",
         RTL_TEXTENCODING_INFO_ASCII };
     /* DOS/OS2, SCRIPT_CYRILLIC, pc code page 855, mac encoding 7 */
 
@@ -837,11 +837,11 @@ ImplByteConvertData const aImplIBM857ByteCvtData =
 {
     aImplIBM857ToUniTab,
     nullptr,
-    IBM857UNI_START, IBM857UNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplIBM857ToCharTab,
     nullptr,
     aImplIBM857ToCharTabEx,
+    IBM857UNI_START, IBM857UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     IBM857CHAR_START, IBM857CHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     IBM857TOCHARTABEX_COUNT
@@ -859,12 +859,12 @@ ImplTextEncodingData const aImplIBM857TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-9",
+        "iso-8859-9",
         1,
         1,
         1,
         162,
-        "iso8859-9",
-        "iso-8859-9",
         RTL_TEXTENCODING_INFO_ASCII };
     /* DOS/OS2, SCRIPT_TURKISH, pc code page 857, mac encoding 35 */
 
@@ -993,11 +993,11 @@ ImplByteConvertData const aImplIBM866ByteCvtData =
 {
     aImplIBM866ToUniTab,
     nullptr,
-    IBM866UNI_START, IBM866UNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplIBM866ToCharTab,
     nullptr,
     aImplIBM866ToCharTabEx,
+    IBM866UNI_START, IBM866UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     IBM866CHAR_START, IBM866CHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     IBM866TOCHARTABEX_COUNT
@@ -1015,12 +1015,12 @@ ImplTextEncodingData const aImplIBM866TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-5",
+        "cp866",
         1,
         1,
         1,
         204,
-        "iso8859-5",
-        "cp866",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* DOS/OS2, SCRIPT_LATIN, pc code page 866, mac encoding 7 */
 
@@ -1139,11 +1139,11 @@ ImplByteConvertData const aImplIBM869ByteCvtData =
 {
     aImplIBM869ToUniTab,
     nullptr,
-    IBM869UNI_START, IBM869UNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplIBM869ToCharTab,
     nullptr,
     aImplIBM869ToCharTabEx,
+    IBM869UNI_START, IBM869UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     IBM869CHAR_START, IBM869CHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     IBM869TOCHARTABEX_COUNT
@@ -1161,12 +1161,12 @@ ImplTextEncodingData const aImplIBM869TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-7",
+        "iso-8859-7",
         1,
         1,
         1,
         161,
-        "iso8859-7",
-        "iso-8859-7",
         RTL_TEXTENCODING_INFO_ASCII };
     /* DOS/OS2, SCRIPT_LATIN, pc code page 869, mac encoding 6 */
 
@@ -1340,11 +1340,11 @@ ImplByteConvertData const aImplMS1250ByteCvtData =
 {
     aImplMS1250ToUniTab,
     nullptr,
-    MS1250UNI_START, MS1250UNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     nullptr,
     nullptr,
     aImplMS1250ToCharTabEx,
+    MS1250UNI_START, MS1250UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     NOTABCHAR_START, NOTABCHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     MS1250TOCHARTABEX_COUNT
@@ -1362,12 +1362,12 @@ ImplTextEncodingData const aImplMS1250TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-2",
+        "windows-1250",
         1,
         1,
         1,
         238,
-        "iso8859-2",
-        "windows-1250",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* WIN, SCRIPT_EASTEUROPE, pc code page 852, mac encoding 29 */
 
@@ -1475,11 +1475,11 @@ ImplByteConvertData const aImplMS1251ByteCvtData =
 {
     aImplMS1251ToUniTab,
     nullptr,
-    MS1251UNI_START, MS1251UNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplMS1251ToCharTab,
     nullptr,
     aImplMS1251ToCharTabEx,
+    MS1251UNI_START, MS1251UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     MS1251CHAR_START, MS1251CHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     MS1251TOCHARTABEX_COUNT
@@ -1497,12 +1497,12 @@ ImplTextEncodingData const aImplMS1251TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-5",
+        "windows-1251",
         1,
         1,
         1,
         204,
-        "iso8859-5",
-        "windows-1251",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* WIN, SCRIPT_CYRILLIC, pc code page 866 (855?), mac encoding 7 */
 
@@ -1613,11 +1613,11 @@ ImplByteConvertData const aImplMS1253ByteCvtData =
 {
     aImplMS1253ToUniTab,
     nullptr,
-    MS1253UNI_START, MS1253UNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplMS1253ToCharTab,
     nullptr,
     aImplMS1253ToCharTabEx,
+    MS1253UNI_START, MS1253UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     MS1253CHAR_START, MS1253CHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     MS1253TOCHARTABEX_COUNT
@@ -1635,12 +1635,12 @@ ImplTextEncodingData const aImplMS1253TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-7",
+        "windows-1253",
         1,
         1,
         1,
         161,
-        "iso8859-7",
-        "windows-1253",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* WIN, SCRIPT_GREEK, pc code page 869, mac encoding 6 */
 
@@ -1744,11 +1744,11 @@ ImplByteConvertData const aImplMS1254ByteCvtData =
 {
     aImplMS1254ToUniTab,
     nullptr,
-    MS1254UNI_START, MS1254UNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplMS1254ToCharTab,
     nullptr,
     aImplMS1254ToCharTabEx,
+    MS1254UNI_START, MS1254UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     MS1254CHAR_START, MS1254CHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     MS1254TOCHARTABEX_COUNT,
@@ -1766,12 +1766,12 @@ ImplTextEncodingData const aImplMS1254TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-9",
+        "windows-1254",
         1,
         1,
         1,
         162,
-        "iso8859-9",
-        "windows-1254",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* WIN, SCRIPT_TURKISH, pc code page 857, mac encoding 35 */
 
@@ -1880,11 +1880,11 @@ ImplByteConvertData const aImplMS1257ByteCvtData =
 {
     aImplMS1257ToUniTab,
     nullptr,
-    MS1257UNI_START, MS1257UNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplMS1257ToCharTab,
     nullptr,
     aImplMS1257ToCharTabEx,
+    MS1257UNI_START, MS1257UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     MS1257CHAR_START, MS1257CHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     MS1257TOCHARTABEX_COUNT,
@@ -1902,12 +1902,12 @@ ImplTextEncodingData const aImplMS1257TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-4",
+        "windows-1257",
         1,
         1,
         1,
         186,
-        "iso8859-4",
-        "windows-1257",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* WIN, SCRIPT_BALTIC, pc code page 775, mac encoding 29 */
 
@@ -2048,11 +2048,11 @@ ImplByteConvertData const aImplISO88592ByteCvtData =
 {
     aImplISO88592ToUniTab,
     aImpl8090SameToUniTab,
-    ISO88592UNI_START, ISO88592UNI_END,
-    SAME8090UNI_START, SAME8090UNI_END,
     aImpl8090SameToCharTab,
     nullptr,
     aImplISO88592ToCharTabEx,
+    ISO88592UNI_START, ISO88592UNI_END,
+    SAME8090UNI_START, SAME8090UNI_END,
     SAME8090CHAR_START, SAME8090CHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     ISO88592TOCHARTABEX_COUNT
@@ -2070,12 +2070,12 @@ ImplTextEncodingData const aImplISO88592TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-2",
+        "iso-8859-2",
         1,
         1,
         1,
         238,
-        "iso8859-2",
-        "iso-8859-2",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_EASTEUROPE, pc code page 852, mac encoding 29 */
 
@@ -2209,11 +2209,11 @@ ImplByteConvertData const aImplISO88593ByteCvtData =
 {
     aImplISO88593ToUniTab,
     aImpl8090SameToUniTab,
-    ISO88593UNI_START, ISO88593UNI_END,
-    SAME8090UNI_START, SAME8090UNI_END,
     aImpl8090SameToCharTab,
     nullptr,
     aImplISO88593ToCharTabEx,
+    ISO88593UNI_START, ISO88593UNI_END,
+    SAME8090UNI_START, SAME8090UNI_END,
     SAME8090CHAR_START, SAME8090CHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     ISO88593TOCHARTABEX_COUNT
@@ -2231,12 +2231,12 @@ ImplTextEncodingData const aImplISO88593TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-3",
+        "iso-8859-3",
         1,
         1,
         1,
         0,
-        "iso8859-3",
-        "iso-8859-3",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_LATIN, pc code page 850 */
 
@@ -2377,11 +2377,11 @@ ImplByteConvertData const aImplISO88594ByteCvtData =
 {
     aImplISO88594ToUniTab,
     aImpl8090SameToUniTab,
-    ISO88594UNI_START, ISO88594UNI_END,
-    SAME8090UNI_START, SAME8090UNI_END,
     aImpl8090SameToCharTab,
     nullptr,
     aImplISO88594ToCharTabEx,
+    ISO88594UNI_START, ISO88594UNI_END,
+    SAME8090UNI_START, SAME8090UNI_END,
     SAME8090CHAR_START, SAME8090CHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     ISO88594TOCHARTABEX_COUNT
@@ -2399,12 +2399,12 @@ ImplTextEncodingData const aImplISO88594TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-4",
+        "iso-8859-4",
         1,
         1,
         1,
         186,
-        "iso8859-4",
-        "iso-8859-4",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_BALTIC, pc code page 775, mac encoding 29 (?) */
 
@@ -2475,11 +2475,11 @@ ImplByteConvertData const aImplISO88595ByteCvtData =
 {
     aImplISO88595ToUniTab,
     aImpl8090SameToUniTab,
-    ISO88595UNI_START, ISO88595UNI_END,
-    SAME8090UNI_START, SAME8090UNI_END,
     aImplISO88595ToCharTab,
     aImpl8090SameToCharTab,
     aImplISO88595ToCharTabEx,
+    ISO88595UNI_START, ISO88595UNI_END,
+    SAME8090UNI_START, SAME8090UNI_END,
     ISO88595CHAR_START, ISO88595CHAR_END,
     SAME8090CHAR_START, SAME8090CHAR_END,
     ISO88595TOCHARTABEX_COUNT
@@ -2497,12 +2497,12 @@ ImplTextEncodingData const aImplISO88595TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-5",
+        "iso-8859-5",
         1,
         1,
         1,
         204,
-        "iso8859-5",
-        "iso-8859-5",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_CYRILLIC, pc code page 866 (855?), mac encoding 7 */
 
@@ -2586,11 +2586,11 @@ ImplByteConvertData const aImplISO88597ByteCvtData =
 {
     aImplISO88597ToUniTab,
     aImpl8090SameToUniTab,
-    ISO88597UNI_START, ISO88597UNI_END,
-    SAME8090UNI_START, SAME8090UNI_END,
     aImplISO88597ToCharTab,
     aImpl8090SameToCharTab,
     aImplISO88597ToCharTabEx,
+    ISO88597UNI_START, ISO88597UNI_END,
+    SAME8090UNI_START, SAME8090UNI_END,
     ISO88597CHAR_START, ISO88597CHAR_END,
     SAME8090CHAR_START, SAME8090CHAR_END,
     ISO88597TOCHARTABEX_COUNT
@@ -2608,12 +2608,12 @@ ImplTextEncodingData const aImplISO88597TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-7",
+        "iso-8859-7",
         1,
         1,
         1,
         161,
-        "iso8859-7",
-        "iso-8859-7",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_GREEK, pc code page 869, mac encoding 6 */
 
@@ -2686,11 +2686,11 @@ ImplByteConvertData const aImplISO88599ByteCvtData =
 {
     aImplISO88599ToUniTab,
     aImpl8090SameToUniTab,
-    ISO88599UNI_START, ISO88599UNI_END,
-    SAME8090UNI_START, SAME8090UNI_END,
     aImplISO88599ToCharTab,
     aImpl8090SameToCharTab,
     aImplISO88599ToCharTabEx,
+    ISO88599UNI_START, ISO88599UNI_END,
+    SAME8090UNI_START, SAME8090UNI_END,
     ISO88599CHAR_START, ISO88599CHAR_END,
     SAME8090CHAR_START, SAME8090CHAR_END,
     ISO88599TOCHARTABEX_COUNT
@@ -2708,12 +2708,12 @@ ImplTextEncodingData const aImplISO88599TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-9",
+        "iso-8859-9",
         1,
         1,
         1,
         162,
-        "iso8859-9",
-        "iso-8859-9",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_TURKISH, pc code page 857, mac encoding 35 */
 
@@ -2827,11 +2827,11 @@ ImplByteConvertData const aImplISO885910ByteCvtData =
 {
     aImplISO885910ToUniTab,
     aImpl8090SameToUniTab,
-    ISO885910UNI_START, ISO885910UNI_END,
-    SAME8090UNI_START, SAME8090UNI_END,
     aImplISO885910ToCharTab,
     aImpl8090SameToCharTab,
     aImplISO885910ToCharTabEx,
+    ISO885910UNI_START, ISO885910UNI_END,
+    SAME8090UNI_START, SAME8090UNI_END,
     ISO885910CHAR_START, ISO885910CHAR_END,
     SAME8090CHAR_START, SAME8090CHAR_END,
     ISO885910TOCHARTABEX_COUNT
@@ -2849,12 +2849,12 @@ ImplTextEncodingData const aImplISO885910TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-10",
+        "iso-8859-10",
         1,
         1,
         1,
         238,
-        "iso8859-10",
-        "iso-8859-10",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_EASTEUROPE, pc code page 852, mac encoding 29 */
 
@@ -2995,11 +2995,11 @@ ImplByteConvertData const aImplISO885913ByteCvtData =
 {
     aImplISO885913ToUniTab,
     aImpl8090SameToUniTab,
-    ISO885913UNI_START, ISO885913UNI_END,
-    SAME8090UNI_START, SAME8090UNI_END,
     aImpl8090SameToCharTab,
     nullptr,
     aImplISO885913ToCharTabEx,
+    ISO885913UNI_START, ISO885913UNI_END,
+    SAME8090UNI_START, SAME8090UNI_END,
     SAME8090CHAR_START, SAME8090CHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     ISO885913TOCHARTABEX_COUNT
@@ -3017,12 +3017,12 @@ ImplTextEncodingData const aImplISO885913TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-13",
+        "iso-8859-13",
         1,
         1,
         1,
         238,
-        "iso8859-13",
-        "iso-8859-13",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_EASTEUROPE, pc code page 852, mac encoding 29 */
 
@@ -3200,11 +3200,11 @@ ImplByteConvertData const aImplAPPLECENTEUROByteCvtData =
 {
     aImplAPPLECENTEUROToUniTab,
     nullptr,
-    APPLECENTEUROUNI_START, APPLECENTEUROUNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     nullptr,
     nullptr,
     aImplAPPLECENTEUROToCharTabEx,
+    APPLECENTEUROUNI_START, APPLECENTEUROUNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     NOTABCHAR_START, NOTABCHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     APPLECENTEUROTOCHARTABEX_COUNT
@@ -3222,12 +3222,12 @@ ImplTextEncodingData const aImplAPPLECENTEUROTextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-2",
+        "iso-8859-2",
         1,
         1,
         1,
         238,
-        "iso8859-2",
-        "iso-8859-2",
         RTL_TEXTENCODING_INFO_ASCII };
     /* MAC, SCRIPT_EASTEUROPE, pc code page 852, mac encoding 29 */
 
@@ -3348,11 +3348,11 @@ ImplByteConvertData const aImplAPPLECROATIANByteCvtData =
 {
     aImplAPPLECROATIANToUniTab,
     nullptr,
-    APPLECROATIANUNI_START, APPLECROATIANUNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplAPPLECROATIANToCharTab,
     nullptr,
     aImplAPPLECROATIANToCharTabEx,
+    APPLECROATIANUNI_START, APPLECROATIANUNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     APPLECROATIANCHAR_START, APPLECROATIANCHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     APPLECROATIANTOCHARTABEX_COUNT
@@ -3370,12 +3370,12 @@ ImplTextEncodingData const aImplAPPLECROATIANTextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-2",
+        "iso-8859-2",
         1,
         1,
         1,
         238,
-        "iso8859-2",
-        "iso-8859-2",
         RTL_TEXTENCODING_INFO_ASCII };
     /* MAC, SCRIPT_EASTEUROPE, pc code page 852, mac encoding 36 */
 
@@ -3483,11 +3483,11 @@ ImplByteConvertData const aImplAPPLECYRILLICByteCvtData =
 {
     aImplAPPLECYRILLICToUniTab,
     nullptr,
-    APPLECYRILLICUNI_START, APPLECYRILLICUNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplAPPLECYRILLICToCharTab,
     nullptr,
     aImplAPPLECYRILLICToCharTabEx,
+    APPLECYRILLICUNI_START, APPLECYRILLICUNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     APPLECYRILLICCHAR_START, APPLECYRILLICCHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     APPLECYRILLICTOCHARTABEX_COUNT
@@ -3505,12 +3505,12 @@ ImplTextEncodingData const aImplAPPLECYRILLICTextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-5",
+        "iso-8859-5",
         1,
         1,
         1,
         204,
-        "iso8859-5",
-        "iso-8859-5",
         RTL_TEXTENCODING_INFO_ASCII };
     /* MAC, SCRIPT_CYRILLIC, pc code page 866 (855?), mac encoding 7 */
 
@@ -3637,11 +3637,11 @@ ImplByteConvertData const aImplAPPLEGREEKByteCvtData =
 {
     aImplAPPLEGREEKToUniTab,
     nullptr,
-    APPLEGREEKUNI_START, APPLEGREEKUNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplAPPLEGREEKToCharTab,
     nullptr,
     aImplAPPLEGREEKToCharTabEx,
+    APPLEGREEKUNI_START, APPLEGREEKUNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     APPLEGREEKCHAR_START, APPLEGREEKCHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     APPLEGREEKTOCHARTABEX_COUNT
@@ -3659,12 +3659,12 @@ ImplTextEncodingData const aImplAPPLEGREEKTextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-7",
+        "iso-8859-7",
         1,
         1,
         1,
         161,
-        "iso8859-7",
-        "iso-8859-7",
         RTL_TEXTENCODING_INFO_ASCII };
     /* MAC, SCRIPT_GREEK, pc code page 869, mac encoding 6 */
 
@@ -3791,11 +3791,11 @@ ImplByteConvertData const aImplAPPLEROMANIANByteCvtData =
 {
     aImplAPPLEROMANIANToUniTab,
     nullptr,
-    APPLEROMANIANUNI_START, APPLEROMANIANUNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplAPPLEROMANIANToCharTab,
     nullptr,
     aImplAPPLEROMANIANToCharTabEx,
+    APPLEROMANIANUNI_START, APPLEROMANIANUNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     APPLEROMANIANCHAR_START, APPLEROMANIANCHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     APPLEROMANIANTOCHARTABEX_COUNT
@@ -3813,12 +3813,12 @@ ImplTextEncodingData const aImplAPPLEROMANIANTextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-2",
+        "iso-8859-2",
         1,
         1,
         1,
         238,
-        "iso8859-2",
-        "iso-8859-2",
         RTL_TEXTENCODING_INFO_ASCII };
     /* MAC, SCRIPT_EASTEUROPE, pc code page 852, mac encoding 38 */
 
@@ -3938,11 +3938,11 @@ ImplByteConvertData const aImplAPPLETURKISHByteCvtData =
 {
     aImplAPPLETURKISHToUniTab,
     nullptr,
-    APPLETURKISHUNI_START, APPLETURKISHUNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplAPPLETURKISHToCharTab,
     nullptr,
     aImplAPPLETURKISHToCharTabEx,
+    APPLETURKISHUNI_START, APPLETURKISHUNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     APPLETURKISHCHAR_START, APPLETURKISHCHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     APPLETURKISHTOCHARTABEX_COUNT
@@ -3960,12 +3960,12 @@ ImplTextEncodingData const aImplAPPLETURKISHTextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-9",
+        "iso-8859-9",
         1,
         1,
         1,
         162,
-        "iso8859-9",
-        "iso-8859-9",
         RTL_TEXTENCODING_INFO_ASCII };
     /* MAC, SCRIPT_TURKISH, pc code page 857, mac encoding 35 */
 
@@ -4073,11 +4073,11 @@ ImplByteConvertData const aImplAPPLEUKRAINIANByteCvtData =
 {
     aImplAPPLEUKRAINIANToUniTab,
     nullptr,
-    APPLEUKRAINIANUNI_START, APPLEUKRAINIANUNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplAPPLEUKRAINIANToCharTab,
     nullptr,
     aImplAPPLEUKRAINIANToCharTabEx,
+    APPLEUKRAINIANUNI_START, APPLEUKRAINIANUNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     APPLEUKRAINIANCHAR_START, APPLEUKRAINIANCHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     APPLEUKRAINIANTOCHARTABEX_COUNT
@@ -4095,12 +4095,12 @@ ImplTextEncodingData const aImplAPPLEUKRAINIANTextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-5",
+        "iso-8859-5",
         1,
         1,
         1,
         204,
-        "iso8859-5",
-        "iso-8859-5",
         RTL_TEXTENCODING_INFO_ASCII };
     /* MAC, SCRIPT_CYRILLIC, pc code page 866 (855?), mac encoding 0x98
        (MAC 8.5 and above) */
@@ -4232,11 +4232,11 @@ ImplByteConvertData const aImplKOI8RByteCvtData =
 {
     aImplKOI8RToUniTab,
     nullptr,
-    KOI8RUNI_START, KOI8RUNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplKOI8RToCharTab,
     nullptr,
     aImplKOI8RToCharTabEx,
+    KOI8RUNI_START, KOI8RUNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     KOI8RCHAR_START, KOI8RCHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     KOI8RTOCHARTABEX_COUNT
@@ -4254,12 +4254,12 @@ ImplTextEncodingData const aImplKOI8RTextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "koi8-r",
+        "koi8-r",
         1,
         1,
         1,
         204,
-        "koi8-r",
-        "koi8-r",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_CYRILLIC, pc code page 866 (855?), mac encoding 7 */
 
@@ -4392,11 +4392,11 @@ ImplByteConvertData const aImplKOI8UByteCvtData =
 {
     aImplKOI8UToUniTab,
     nullptr,
-    KOI8UUNI_START, KOI8UUNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplKOI8UToCharTab,
     nullptr,
     aImplKOI8UToCharTabEx,
+    KOI8UUNI_START, KOI8UUNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     KOI8UCHAR_START, KOI8UCHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     KOI8UTOCHARTABEX_COUNT
@@ -4412,12 +4412,12 @@ ImplTextEncodingData const aImplKoi8UTextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "koi8-u",
+        "KOI8-U",
         1,
         1,
         1,
         204,
-        "koi8-u",
-        "KOI8-U",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_CYRILLIC */
 
@@ -4548,11 +4548,11 @@ ImplByteConvertData const aImplPT154ByteCvtData =
 {
     aImplPT154ToUniTab,
     nullptr,
-    PT154UNI_START, PT154UNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplPT154ToCharTab,
     nullptr,
     aImplPT154ToCharTabEx,
+    PT154UNI_START, PT154UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     PT154CHAR_START, PT154CHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     PT154TOCHARTABEX_COUNT
@@ -4570,11 +4570,11 @@ ImplTextEncodingData const aImplPT154TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-5",
+        "PTCP154",
         1,
         1,
         1,
         204,
-        "iso8859-5",
-        "PTCP154",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_CYRILLIC */

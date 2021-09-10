@@ -291,8 +291,8 @@ ImplTextEncodingData const adobeStandardEncodingData
       nullptr, nullptr, nullptr,
       ImplCreateUnicodeToTextContext, ImplDestroyUnicodeToTextContext,
       ImplResetUnicodeToTextContext },
-    1, 1, 1,
-    0, nullptr, "Adobe-Standard-Encoding",
+    nullptr, "Adobe-Standard-Encoding",
+    1, 1, 1, 0,
     RTL_TEXTENCODING_INFO_MIME };
 
 ImplTextEncodingData const adobeSymbolEncodingData
@@ -302,8 +302,8 @@ ImplTextEncodingData const adobeSymbolEncodingData
       nullptr, nullptr, nullptr,
       ImplCreateUnicodeToTextContext, ImplDestroyUnicodeToTextContext,
       ImplResetUnicodeToTextContext },
-    1, 1, 1,
-    0, nullptr, "Adobe-Symbol-Encoding",
+    nullptr, "Adobe-Symbol-Encoding",
+    1, 1, 1, 0,
     RTL_TEXTENCODING_INFO_SYMBOL | RTL_TEXTENCODING_INFO_MIME };
 
 ImplTextEncodingData const adobeDingbatsEncodingData
@@ -313,8 +313,8 @@ ImplTextEncodingData const adobeDingbatsEncodingData
       nullptr, nullptr, nullptr,
       ImplCreateUnicodeToTextContext, ImplDestroyUnicodeToTextContext,
       ImplResetUnicodeToTextContext },
-    1, 1, 1,
-    0, nullptr, "Adobe-ZapfDingbats-Encoding",
+    nullptr, "Adobe-ZapfDingbats-Encoding",
+    1, 1, 1, 0,
     0 }; // TODO: RTL_TEXTENCODING_INFO_DINGBATS
 
 }

@@ -47,11 +47,11 @@ ImplTextEncodingData const aImplBig5HkscsTextEncodingData
           &ImplCreateUnicodeToTextContext,
           &ImplDestroyUnicodeToTextContext,
           &ImplResetUnicodeToTextContext },
+        "euc-tw",
+        "Big5-HKSCS",
         1,
         2,
         2,
         136,
-        "euc-tw",
-        "Big5-HKSCS",
         RTL_TEXTENCODING_INFO_MULTIBYTE | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_CHINESE_TRADITIONAL */

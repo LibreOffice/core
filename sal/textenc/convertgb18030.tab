@@ -41,12 +41,12 @@ ImplTextEncodingData const aImplGb18030TextEncodingData
           &ImplCreateUnicodeToTextContext,
           &ImplDestroyUnicodeToTextContext,
           &ImplResetUnicodeToTextContext },
+        "gbk-0",
+        "GB18030",
         1,
         4,
         2,
         134,
-        "gbk-0",
-        "GB18030",
         RTL_TEXTENCODING_INFO_UNICODE
             | RTL_TEXTENCODING_INFO_MULTIBYTE
             | RTL_TEXTENCODING_INFO_MIME };

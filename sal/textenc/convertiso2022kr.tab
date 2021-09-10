@@ -38,12 +38,12 @@ ImplTextEncodingData const aImplIso2022KrTextEncodingData
           &ImplCreateUnicodeToIso2022KrContext,
           &ImplDestroyUnicodeToIso2022KrContext,
           &ImplResetUnicodeToIso2022KrContext },
+        "euc-kr",
+        "ISO-2022-KR",
         1,
         8,
         2,
         130,
-        "euc-kr",
-        "ISO-2022-KR",
         RTL_TEXTENCODING_INFO_CONTEXT
              | RTL_TEXTENCODING_INFO_MULTIBYTE
              | RTL_TEXTENCODING_INFO_MIME };

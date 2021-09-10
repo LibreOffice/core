@@ -573,10 +573,10 @@ ImplDBCSConvertData const aImplKSC5601DBCSCvtData =
 {
     aKSC5601UniLeadTab,
     aKSC5601DBCSHighTab,
-    0xA1, 0xFE,
-    0xA1, 0xFE,
     aImplMS949DBCSEUDCTab,
-    DBCS_EUDC_MS949_COUNT
+    DBCS_EUDC_MS949_COUNT,
+    0xA1, 0xFE,
+    0xA1, 0xFE,
 };
 
 /* ----------------------------------------------------------------------- */
@@ -585,10 +585,10 @@ ImplDBCSConvertData const aImplMS949DBCSCvtData =
 {
     aKSC5601UniLeadTab,
     aKSC5601DBCSHighTab,
+    aImplMS949DBCSEUDCTab,
+    DBCS_EUDC_MS949_COUNT,
     0x00, 0xFF,
     0x41, 0xFE,
-    aImplMS949DBCSEUDCTab,
-    DBCS_EUDC_MS949_COUNT
 };
 
 /* ======================================================================= */
@@ -603,12 +603,12 @@ ImplTextEncodingData const aImplEUCKRTextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "euc-kr",
+        "euc-kr",
         1,
         2,
         2,
         129,
-        "euc-kr",
-        "euc-kr",
         RTL_TEXTENCODING_INFO_ASCII
             | RTL_TEXTENCODING_INFO_MULTIBYTE
             | RTL_TEXTENCODING_INFO_MIME };
@@ -626,12 +626,12 @@ ImplTextEncodingData const aImplMS949TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "euc-kr",
+        "euc-kr",
         1,
         2,
         2,
         129,
-        "euc-kr",
-        "euc-kr",
         RTL_TEXTENCODING_INFO_MULTIBYTE };
     /* WIN/DOS/OS2, SCRIPT_KOREAN, pc code page 934, mac encoding 3 */
 
@@ -649,12 +649,12 @@ ImplTextEncodingData const aImplAPPLEKOREANTextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "euc-kr",
+        "euc-kr",
         1,
         2,
         2,
         129,
-        "euc-kr",
-        "euc-kr",
         RTL_TEXTENCODING_INFO_MULTIBYTE };
     /* MAC, SCRIPT_KOREAN, pc code page 934, mac encoding 3 */
 
@@ -1205,10 +1205,10 @@ ImplDBCSConvertData const aImplJOHABDBCSCvtData =
 {
     aJOHABUniLeadTab,
     aJOHABDBCSHighTab,
+    aImplMS1361DBCSEUDCTab,
+    DBCS_EUDC_MS1361_COUNT,
     0x00, 0xFF,
     0x31, 0xFE,
-    aImplMS1361DBCSEUDCTab,
-    DBCS_EUDC_MS1361_COUNT
 };
 
 /* ======================================================================= */
@@ -1223,11 +1223,11 @@ ImplTextEncodingData const aImplMS1361TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "euc-kr",
+        "euc-kr",
         1,
         2,
         2,
         130,
-        "euc-kr",
-        "euc-kr",
         RTL_TEXTENCODING_INFO_MULTIBYTE | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_KOREAN, pc code page 1361, mac encoding 3 */

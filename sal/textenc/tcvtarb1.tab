@@ -188,11 +188,11 @@ ImplByteConvertData const aImplIBM862ByteCvtData =
 {
     aImplIBM862ToUniTab,
     nullptr,
-    IBM862UNI_START, IBM862UNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplIBM862ToCharTab,
     nullptr,
     aImplIBM862ToCharTabEx,
+    IBM862UNI_START, IBM862UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     IBM862CHAR_START, IBM862CHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     IBM862TOCHARTABEX_COUNT
@@ -210,12 +210,12 @@ ImplTextEncodingData const aImplIBM862TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-8",
+        "IBM862",
         1,
         1,
         1,
         177,
-        "iso8859-8",
-        "IBM862",
         RTL_TEXTENCODING_INFO_ASCII
             | RTL_TEXTENCODING_INFO_MIME
             | RTL_TEXTENCODING_INFO_R2L };
@@ -346,11 +346,11 @@ ImplByteConvertData const aImplIBM864ByteCvtData =
 {
     aImplIBM864ToUniTab,
     nullptr,
-    IBM864UNI_START, IBM864UNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplIBM864ToCharTab,
     nullptr,
     aImplIBM864ToCharTabEx,
+    IBM864UNI_START, IBM864UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     IBM864CHAR_START, IBM864CHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     IBM864TOCHARTABEX_COUNT
@@ -368,12 +368,12 @@ ImplTextEncodingData const aImplIBM864TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-6",
+        "IBM864",
         1,
         1,
         1,
         178,
-        "iso8859-6",
-        "IBM864",
         RTL_TEXTENCODING_INFO_ASCII
             | RTL_TEXTENCODING_INFO_MIME
             | RTL_TEXTENCODING_INFO_R2L };
@@ -499,11 +499,11 @@ ImplByteConvertData const aImplMS1255ByteCvtData =
 {
     aImplMS1255ToUniTab,
     nullptr,
-    MS1255UNI_START, MS1255UNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplMS1255ToCharTab,
     nullptr,
     aImplMS1255ToCharTabEx,
+    MS1255UNI_START, MS1255UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     MS1255CHAR_START, MS1255CHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     MS1255TOCHARTABEX_COUNT
@@ -521,12 +521,12 @@ ImplTextEncodingData const aImplMS1255TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-8",
+        "windows-1255",
         1,
         1,
         1,
         177,
-        "iso8859-8",
-        "windows-1255",
         RTL_TEXTENCODING_INFO_ASCII
             | RTL_TEXTENCODING_INFO_MIME
             | RTL_TEXTENCODING_INFO_R2L };
@@ -677,11 +677,11 @@ ImplByteConvertData const aImplMS1256ByteCvtData =
 {
     aImplMS1256ToUniTab,
     nullptr,
-    MS1256UNI_START, MS1256UNI_END,
-    NOTABUNI_START, NOTABUNI_END,
     aImplMS1256ToCharTab,
     nullptr,
     aImplMS1256ToCharTabEx,
+    MS1256UNI_START, MS1256UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
     MS1256CHAR_START, MS1256CHAR_END,
     NOTABCHAR_START, NOTABCHAR_END,
     MS1256TOCHARTABEX_COUNT
@@ -699,12 +699,12 @@ ImplTextEncodingData const aImplMS1256TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-6",
+        "windows-1256",
         1,
         1,
         1,
         178,
-        "iso8859-6",
-        "windows-1256",
         RTL_TEXTENCODING_INFO_ASCII
             | RTL_TEXTENCODING_INFO_MIME
             | RTL_TEXTENCODING_INFO_R2L };
@@ -777,11 +777,11 @@ ImplByteConvertData const aImplISO88596ByteCvtData =
 {
     aImplISO88596ToUniTab,
     aImpl8090SameToUniTab,
-    ISO88596UNI_START, ISO88596UNI_END,
-    SAME8090UNI_START, SAME8090UNI_END,
     aImplISO88596ToCharTab,
     aImpl8090SameToCharTab,
     aImplISO88596ToCharTabEx,
+    ISO88596UNI_START, ISO88596UNI_END,
+    SAME8090UNI_START, SAME8090UNI_END,
     ISO88596CHAR_START, ISO88596CHAR_END,
     SAME8090CHAR_START, SAME8090CHAR_END,
     ISO88596TOCHARTABEX_COUNT
@@ -799,12 +799,12 @@ ImplTextEncodingData const aImplISO88596TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-6",
+        "ISO-8859-6",
         1,
         1,
         1,
         178,
-        "iso8859-6",
-        "ISO-8859-6",
         RTL_TEXTENCODING_INFO_ASCII
             | RTL_TEXTENCODING_INFO_R2L
             | RTL_TEXTENCODING_INFO_MIME };
@@ -898,11 +898,11 @@ ImplByteConvertData const aImplISO88598ByteCvtData =
 {
     aImplISO88598ToUniTab,
     aImpl8090SameToUniTab,
-    ISO88598UNI_START, ISO88598UNI_END,
-    SAME8090UNI_START, SAME8090UNI_END,
     aImplISO88598ToCharTab,
     aImpl8090SameToCharTab,
     aImplISO88598ToCharTabEx,
+    ISO88598UNI_START, ISO88598UNI_END,
+    SAME8090UNI_START, SAME8090UNI_END,
     ISO88598CHAR_START, ISO88598CHAR_END,
     SAME8090CHAR_START, SAME8090CHAR_END,
     ISO88598TOCHARTABEX_COUNT
@@ -920,12 +920,12 @@ ImplTextEncodingData const aImplISO88598TextEncodingData
           nullptr,
           nullptr,
           nullptr },
+        "iso8859-8",
+        "ISO-8859-8",
         1,
         1,
         1,
         177,
-        "iso8859-8",
-        "ISO-8859-8",
         RTL_TEXTENCODING_INFO_ASCII
             | RTL_TEXTENCODING_INFO_R2L
             | RTL_TEXTENCODING_INFO_MIME };

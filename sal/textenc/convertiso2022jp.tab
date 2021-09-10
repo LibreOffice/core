@@ -38,12 +38,12 @@ ImplTextEncodingData const aImplIso2022JpTextEncodingData
           &ImplCreateUnicodeToIso2022JpContext,
           &ImplDestroyUnicodeToIso2022JpContext,
           &ImplResetUnicodeToIso2022JpContext },
+        "euc-jp",
+        "ISO-2022-JP",
         1,
         8,
         2,
         128,
-        "euc-jp",
-        "ISO-2022-JP",
         RTL_TEXTENCODING_INFO_CONTEXT
              | RTL_TEXTENCODING_INFO_MULTIBYTE
              | RTL_TEXTENCODING_INFO_MIME };
