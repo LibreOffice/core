@@ -514,6 +514,8 @@ bool Qt5Widget::handleKeyEvent(Qt5Frame& rFrame, const QWidget& rWidget, QKeyEve
 
             if (eState == ButtonKeyState::Released)
             {
+                // sending the old mnModKeyCode mask on release is needed to
+                // implement the writing direction switch with Ctrl + L/R-Shift
                 aModEvt.mnModKeyCode = rFrame.m_nKeyModifiers;
                 nModCode &= ~nModMask;
                 rFrame.m_nKeyModifiers &= ~nExtModMask;
@@ -531,6 +533,9 @@ bool Qt5Widget::handleKeyEvent(Qt5Frame& rFrame, const QWidget& rWidget, QKeyEve
         rFrame.CallCallback(SalEvent::KeyModChange, &aModEvt);
         return false;
     }
+
+    // prevent interference of writing direction switch (Ctrl + L/R-Shift) with "normal" shortcuts
+    rFrame.m_nKeyModifiers = ModKeyFlags::NONE;
 
     SalKeyEvent aEvent;
     aEvent.mnCharCode = (pEvent->text().isEmpty() ? 0 : pEvent->text().at(0).unicode());
@@ -605,6 +610,7 @@ void Qt5Widget::closePopup()
 
 void Qt5Widget::focusOutEvent(QFocusEvent*)
 {
+    m_rFrame.m_nKeyModifiers = ModKeyFlags::NONE;
     endExtTextInput();
     m_rFrame.CallCallback(SalEvent::LoseFocus, nullptr);
     closePopup();
