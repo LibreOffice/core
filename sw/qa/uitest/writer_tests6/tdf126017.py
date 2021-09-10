@@ -16,14 +16,11 @@ class tdf126017(UITestCase):
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             #go to TOC
-            self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            searchterm = xDialog.getChild("searchterm")
-            searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"aasasas"}))
-            xsearch = xDialog.getChild("search")
-            xsearch.executeAction("CLICK", tuple())
-            xcloseBtn = xDialog.getChild("close")
-            self.ui_test.close_dialog_through_button(xcloseBtn)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+                searchterm = xDialog.getChild("searchterm")
+                searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"aasasas"}))
+                xsearch = xDialog.getChild("search")
+                xsearch.executeAction("CLICK", tuple())
             #edit index
             with self.ui_test.execute_dialog_through_command(".uno:EditCurIndex") as xDiagIndex:
                 title = xDiagIndex.getChild("title")
