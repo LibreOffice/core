@@ -96,31 +96,39 @@ public:
 
     bool HasPalette() const
     {
-        assert(mpBuffer && "Access is not valid!");
+        const BitmapBuffer* pBuffer = mpBuffer;
 
-        return mpBuffer && !!mpBuffer->maPalette;
+        assert(pBuffer && "Access is not valid!");
+
+        return pBuffer && !!pBuffer->maPalette;
     }
 
     const BitmapPalette& GetPalette() const
     {
-        assert(mpBuffer && "Access is not valid!");
+        const BitmapBuffer* pBuffer = mpBuffer;
 
-        return mpBuffer->maPalette;
+        assert(pBuffer && "Access is not valid!");
+
+        return pBuffer->maPalette;
     }
 
     sal_uInt16 GetPaletteEntryCount() const
     {
+        const BitmapBuffer* pBuffer = mpBuffer;
+
         assert(HasPalette() && "Bitmap has no palette!");
 
-        return HasPalette() ? mpBuffer->maPalette.GetEntryCount() : 0;
+        return HasPalette() ? pBuffer->maPalette.GetEntryCount() : 0;
     }
 
     const BitmapColor& GetPaletteColor( sal_uInt16 nColor ) const
     {
-        assert(mpBuffer && "Access is not valid!");
+        const BitmapBuffer* pBuffer = mpBuffer;
+
+        assert(pBuffer && "Access is not valid!");
         assert(HasPalette() && "Bitmap has no palette!");
 
-        return mpBuffer->maPalette[nColor];
+        return pBuffer->maPalette[nColor];
     }
 
     const BitmapColor& GetBestPaletteColor(const BitmapColor& rBitmapColor) const
@@ -130,11 +138,13 @@ public:
 
     sal_uInt16 GetBestPaletteIndex(const BitmapColor& rBitmapColor) const;
 
-    ColorMask& GetColorMask() const
+    const ColorMask& GetColorMask() const
     {
-        assert(mpBuffer && "Access is not valid!");
+        const BitmapBuffer* pBuffer = mpBuffer;
 
-        return mpBuffer->maColorMask;
+        assert(pBuffer && "Access is not valid!");
+
+        return pBuffer->maColorMask;
     }
 
 private:
@@ -207,7 +217,10 @@ public:
     BitmapColor GetColor(tools::Long nY, tools::Long nX) const
     {
         if (HasPalette())
-            return mpBuffer->maPalette[GetPixelIndex(nY, nX)];
+        {
+            const BitmapBuffer* pBuffer = mpBuffer;
+            return pBuffer->maPalette[GetPixelIndex(nY, nX)];
+        }
         else
             return GetPixel(nY, nX);
     }
