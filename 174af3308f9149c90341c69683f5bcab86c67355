@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f57fd8ed_7819fffb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2021-09-10T08:03:42Z",
+      "side": 1,
+      "message": "After looking a bit into this, I\u0027m wondering whether Ctrl+Right_Shift is designed to switch to RTL - at least when no other key is pressed in addition?? (s. my tdf#144412 comment 5 for more details)?\nBut maybe I just misunderstood or missded something else...\n\nThis is no longer the case with this change in place, so I\u0027m wondering whether it should still be the case (or that should be dropped completely for all backends in case it\u0027s not considered useful).\n\n",
+      "revId": "174af3308f9149c90341c69683f5bcab86c67355",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
