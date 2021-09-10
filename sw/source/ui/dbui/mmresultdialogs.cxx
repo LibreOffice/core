@@ -552,11 +552,17 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
     assert(xConfigItem);
 
-    sal_uInt32 nBegin = static_cast<sal_Int32>(m_xFromNF->get_value() - 1);
-    sal_uInt32 nEnd = static_cast<sal_Int32>(m_xToNF->get_value());
-    sal_uInt32 nMax = static_cast<sal_Int32>(m_xToNF->get_max());
-    if (nEnd > nMax)
-        nEnd = nMax;
+    const sal_uInt32 nDocumentCount = xConfigItem->GetMergedDocumentCount();
+    sal_uInt32 nBegin = 0;
+    sal_uInt32 nEnd = nDocumentCount;
+
+    if (m_xFromRB->get_active())
+    {
+        nBegin = static_cast<sal_Int32>(m_xFromNF->get_value() - 1);
+        nEnd = static_cast<sal_Int32>(m_xToNF->get_value());
+        if (nEnd > nDocumentCount)
+            nEnd = nDocumentCount;
+    }
 
     xConfigItem->SetBeginEnd(nBegin, nEnd);
 
@@ -773,11 +779,17 @@ IMPL_LINK_NOARG(SwMMResultPrintDialog, PrintHdl_Impl, weld::Button&, void)
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
     assert(xConfigItem);
 
-    sal_uInt32 nBegin = static_cast<sal_Int32>(m_xFromNF->get_value() - 1);
-    sal_uInt32 nEnd = static_cast<sal_Int32>(m_xToNF->get_value());
-    sal_uInt32 nMax = static_cast<sal_Int32>(m_xToNF->get_max());
-    if (nEnd > nMax)
-        nEnd = nMax;
+    const sal_uInt32 nDocumentCount = xConfigItem->GetMergedDocumentCount();
+    sal_uInt32 nBegin = 0;
+    sal_uInt32 nEnd = nDocumentCount;
+
+    if (m_xFromRB->get_active())
+    {
+        nBegin = static_cast<sal_Int32>(m_xFromNF->get_value() - 1);
+        nEnd = static_cast<sal_Int32>(m_xToNF->get_value());
+        if (nEnd > nDocumentCount)
+            nEnd = nDocumentCount;
+    }
 
     xConfigItem->SetBeginEnd(nBegin, nEnd);
 
@@ -791,8 +803,8 @@ IMPL_LINK_NOARG(SwMMResultPrintDialog, PrintHdl_Impl, weld::Button&, void)
     // refer to the non-blank pages as they appear in the document (see tdf#89708).
     const bool bIgnoreEmptyPages =
             !pTargetView->GetDocShell()->GetDoc()->getIDocumentDeviceAccess().getPrintData().IsPrintEmptyPages();
-    const int nStartPage = documentStartPageNumber(xConfigItem.get(), nBegin, bIgnoreEmptyPages);
-    const int nEndPage = documentEndPageNumber(xConfigItem.get(), nEnd - 1, bIgnoreEmptyPages);
+    const int nStartPage = documentStartPageNumber(xConfigItem.get(), 0, bIgnoreEmptyPages);
+    const int nEndPage = documentEndPageNumber(xConfigItem.get(), nEnd - nBegin - 1, bIgnoreEmptyPages);
 
     const OUString sPages(OUString::number(nStartPage) + "-" + OUString::number(nEndPage));
 
@@ -884,11 +896,17 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
     assert(xConfigItem);
 
-    sal_uInt32 nBegin = static_cast<sal_Int32>(m_xFromNF->get_value() - 1);
-    sal_uInt32 nEnd = static_cast<sal_Int32>(m_xToNF->get_value());
-    sal_uInt32 nMax = static_cast<sal_Int32>(m_xToNF->get_max());
-    if (nEnd > nMax)
-        nEnd = nMax;
+    const sal_uInt32 nDocumentCount = xConfigItem->GetMergedDocumentCount();
+    sal_uInt32 nBegin = 0;
+    sal_uInt32 nEnd = nDocumentCount;
+
+    if (m_xFromRB->get_active())
+    {
+        nBegin = static_cast<sal_Int32>(m_xFromNF->get_value() - 1);
+        nEnd = static_cast<sal_Int32>(m_xToNF->get_value());
+        if (nEnd > nDocumentCount)
+            nEnd = nDocumentCount;
+    }
 
     xConfigItem->SetBeginEnd(nBegin, nEnd);
 
@@ -1085,7 +1103,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
     //predetermined breaking point
     Application::Reschedule( true );
     m_xDialog->response(RET_OK);
-    for(sal_uInt32 nDoc = nBegin; nDoc < nEnd; ++nDoc)
+    for(sal_uInt32 nDoc = 0; nDoc < nEnd - nBegin; ++nDoc)
     {
         SwDocMergeInfo& rInfo = xConfigItem->GetDocumentMergeInfo(nDoc);
 
