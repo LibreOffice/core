@@ -32,11 +32,12 @@
 class LogicalFontInstance;
 struct FontMatchStatus;
 class FontSelectPattern;
-class PhysicalFontFamily;
+class PhysicalFontFace;
 
 namespace vcl
 {
 struct FontCapabilities;
+class PhysicalFontFamily;
 }
 
 struct FontMatchStatus
