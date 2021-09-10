@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb039cf9_8a0503a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-10T17:48:44Z",
+      "side": 1,
+      "message": "just a spelling fix in the comment - Jenkins approved.",
+      "revId": "9109cac426ccdfb4277d23d8afdc2c5e3d2b75c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
