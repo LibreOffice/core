@@ -16,6 +16,24 @@
       "message": "You probably introduced the lag with the merge conflict with LOK_CALLBACK_VIEW_SCROLL.",
       "revId": "460348e90a683272afca92e93ff4e19ed7150310",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce5a1102_afb1fd07",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-10T14:46:40Z",
+      "side": 1,
+      "message": "Certainly not, because I didn\u0027t even have that change applied and furthermore that\u0027s only active if LOK.\n\nI may have to retry using a non-debug build, but the lag was only with this change, not visible in the original debug build.",
+      "parentUuid": "308e38de_7e07feab",
+      "revId": "460348e90a683272afca92e93ff4e19ed7150310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
