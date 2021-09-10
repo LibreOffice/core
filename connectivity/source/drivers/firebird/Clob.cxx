@@ -140,7 +140,7 @@ sal_Int64 SAL_CALL Clob::position(const OUString& /*rPattern*/,
 sal_Int64 SAL_CALL Clob::positionOfClob(const Reference <XClob >& /*rPattern*/,
                                          sal_Int64 /*aStart*/)
 {
-    ::dbtools::throwFeatureNotImplementedSQLException("Blob::positionOfBlob", *this);
+    ::dbtools::throwFeatureNotImplementedSQLException("Clob::positionOfClob", *this);
     return 0;
 }
 
