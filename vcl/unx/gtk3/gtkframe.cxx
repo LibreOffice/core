@@ -1193,10 +1193,15 @@ void GtkSalFrame::DisallowCycleFocusOut()
     g_signal_handler_disconnect(G_OBJECT(m_pWindow), m_nSetFocusSignalId);
     m_nSetFocusSignalId = 0;
 
-    // set container without can-focus and focus will tab between
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    // gtk3: set container without can-focus and focus will tab between
     // the native embedded widgets using the default gtk handling for
     // that
+    // gtk4: no need because the native widgets are the only
+    // thing in the overlay and the drawing widget is underneath so
+    // the natural focus cycle is sufficient
     gtk_widget_set_can_focus(GTK_WIDGET(m_pFixedContainer), false);
+#endif
 }
 
 bool GtkSalFrame::IsCycleFocusOutDisallowed() const
@@ -1216,10 +1221,15 @@ void GtkSalFrame::AllowCycleFocusOut()
     m_nSetFocusSignalId = g_signal_connect(G_OBJECT(m_pWindow), "notify::focus-widget", G_CALLBACK(signalSetFocus), this);
 #endif
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     // set container without can-focus and focus will tab between
     // the native embedded widgets using the default gtk handling for
     // that
+    // gtk4: no need because the native widgets are the only
+    // thing in the overlay and the drawing widget is underneath so
+    // the natural focus cycle is sufficient
     gtk_widget_set_can_focus(GTK_WIDGET(m_pFixedContainer), true);
+#endif
 }
 
 
@@ -2877,14 +2887,14 @@ void GtkSalFrame::GrabFocus()
         pGrabWidget = GTK_WIDGET(m_pWindow);
     else
         pGrabWidget = GTK_WIDGET(m_pFixedContainer);
-#else
-    pGrabWidget = GTK_WIDGET(m_pFixedContainer);
-#endif
     // m_nSetFocusSignalId is 0 for the DisallowCycleFocusOut case where
     // we don't allow focus to enter the toplevel, but expect it to
     // stay in some embedded native gtk widget
     if (!gtk_widget_get_can_focus(pGrabWidget) && m_nSetFocusSignalId)
         gtk_widget_set_can_focus(pGrabWidget, true);
+#else
+    pGrabWidget = GTK_WIDGET(m_pFixedContainer);
+#endif
     if (!gtk_widget_has_focus(pGrabWidget))
     {
         gtk_widget_grab_focus(pGrabWidget);
@@ -3710,7 +3720,9 @@ void GtkSalFrame::signalSetFocus(GtkWindow*, GParamSpec*, gpointer frame)
     // do not propagate focus get/lose if floats are open
     pThis->CallCallbackExc(bLoseFocus ? SalEvent::LoseFocus : SalEvent::GetFocus, nullptr);
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gtk_widget_set_can_focus(GTK_WIDGET(pThis->m_pFixedContainer), !bLoseFocus);
+#endif
 }
 
 void GtkSalFrame::WindowMap()
