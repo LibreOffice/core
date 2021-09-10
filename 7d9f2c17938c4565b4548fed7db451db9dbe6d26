@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fc038c8_854d034d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-10T07:49:00Z",
+      "side": 1,
+      "message": "I tested this a lot on my machines and certaintly I cannot say if I have considered all the cases, but imho this patch could be ok. What do you think?",
+      "revId": "7d9f2c17938c4565b4548fed7db451db9dbe6d26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
