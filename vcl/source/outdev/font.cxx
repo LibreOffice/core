@@ -128,7 +128,7 @@ int OutputDevice::GetFontFaceCollectionCount() const
 bool OutputDevice::IsFontAvailable( const OUString& rFontName ) const
 {
     ImplInitFontList();
-    PhysicalFontFamily* pFound = mxFontCollection->FindFontFamily( rFontName );
+    vcl::font::PhysicalFontFamily* pFound = mxFontCollection->FindFontFamily( rFontName );
     return (pFound != nullptr);
 }
 
@@ -792,7 +792,7 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
             sal_Int32     nIndex = 0;
             do
             {
-                PhysicalFontFamily* pFontFamily = pOutDev->mxFontCollection->FindFontFamily( GetNextFontToken( aSearch, nIndex ) );
+                vcl::font::PhysicalFontFamily* pFontFamily = pOutDev->mxFontCollection->FindFontFamily( GetNextFontToken( aSearch, nIndex ) );
                 if( pFontFamily )
                 {
                     AddTokenFontName( aName, pFontFamily->GetFamilyName() );
