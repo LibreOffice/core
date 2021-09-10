@@ -20,30 +20,28 @@ class tdf77509(UITestCase):
             #2. Select any empty cell, eg. cell D1
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "D1"}))
             #3. Tab: Data > Consolidate
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataConsolidate")
-            xDialog = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataConsolidate") as xDialog:
 
-            xfunc = xDialog.getChild("func")
-            xeddataarea = xDialog.getChild("eddataarea")
-            xadd = xDialog.getChild("add")
-            xbyrow = xDialog.getChild("byrow")
-            xbycol = xDialog.getChild("bycol")
-            xeddestarea = xDialog.getChild("eddestarea")
+                xfunc = xDialog.getChild("func")
+                xeddataarea = xDialog.getChild("eddataarea")
+                xadd = xDialog.getChild("add")
+                xbyrow = xDialog.getChild("byrow")
+                xbycol = xDialog.getChild("bycol")
+                xeddestarea = xDialog.getChild("eddestarea")
 
-            select_by_text(xfunc, "Sum")
-            #4. Source data ranges: $Sheet1.$A$1:$B$7
-            #5. Click 'Add' so that ranges appear in "Consolidation ranges"
-            xeddataarea.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$A$1:$B$7"}))
-            xadd.executeAction("CLICK", tuple())
+                select_by_text(xfunc, "Sum")
+                #4. Source data ranges: $Sheet1.$A$1:$B$7
+                #5. Click 'Add' so that ranges appear in "Consolidation ranges"
+                xeddataarea.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$A$1:$B$7"}))
+                xadd.executeAction("CLICK", tuple())
 
-            xConsAreas = xDialog.getChild("consareas")
-            self.assertEqual(1, len(xConsAreas.getChildren()))
-            self.assertEqual("$Sheet1.$A$1:$B$7", get_state_as_dict(xConsAreas.getChild("0"))['Text'])
+                xConsAreas = xDialog.getChild("consareas")
+                self.assertEqual(1, len(xConsAreas.getChildren()))
+                self.assertEqual("$Sheet1.$A$1:$B$7", get_state_as_dict(xConsAreas.getChild("0"))['Text'])
 
-            #6. Click 'Options' > check 'Row labels' > click OK
-            xbyrow.executeAction("CLICK", tuple())
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                #6. Click 'Options' > check 'Row labels' > click OK
+                xbyrow.executeAction("CLICK", tuple())
+
             #verify
             self.assertEqual("A 1", get_cell_by_position(calc_doc, 0, 3, 0).getString())
             self.assertEqual("AB 1", get_cell_by_position(calc_doc, 0, 3, 1).getString())

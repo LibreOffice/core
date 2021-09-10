@@ -23,15 +23,12 @@ class CreateRangeNameTest(UITestCase):
             xPosWindow = calcDoc.getChild('pos_window')
             self.assertEqual('A1', get_state_as_dict(xPosWindow)['Text'])
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:AddName")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AddName", close_button="add") as xAddNameDlg:
 
-            xAddNameDlg = self.xUITest.getTopFocusWindow()
 
-            xEdit = xAddNameDlg.getChild("edit")
-            type_text(xEdit, "globalRangeName")
+                xEdit = xAddNameDlg.getChild("edit")
+                type_text(xEdit, "globalRangeName")
 
-            xAddBtn = xAddNameDlg.getChild("add")
-            self.ui_test.close_dialog_through_button(xAddBtn)
 
             self.assertEqual('globalRangeName', get_state_as_dict(xPosWindow)['Text'])
 
@@ -93,18 +90,15 @@ class CreateRangeNameTest(UITestCase):
             xPosWindow = calcDoc.getChild('pos_window')
             self.assertEqual('A1', get_state_as_dict(xPosWindow)['Text'])
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:AddName")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AddName", close_button="add") as xAddNameDlg:
 
-            xAddNameDlg = self.xUITest.getTopFocusWindow()
 
-            xEdit = xAddNameDlg.getChild("edit")
-            type_text(xEdit, "localRangeName")
+                xEdit = xAddNameDlg.getChild("edit")
+                type_text(xEdit, "localRangeName")
 
-            xScope = xAddNameDlg.getChild("scope")
-            select_pos(xScope, "1")
+                xScope = xAddNameDlg.getChild("scope")
+                select_pos(xScope, "1")
 
-            xAddBtn = xAddNameDlg.getChild("add")
-            self.ui_test.close_dialog_through_button(xAddBtn)
 
             # tdf#67007: Without the fix in place, this test would have failed with
             # AssertionError: 'localRangeName' != 'A1'

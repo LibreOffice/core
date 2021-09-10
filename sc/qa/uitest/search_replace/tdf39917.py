@@ -60,19 +60,16 @@ class tdf39917(UITestCase):
             # Find: Page2
             # Replace: Page3
             # 6. Press Replace all
-            self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            searchterm = xDialog.getChild("searchterm")
-            searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"Page2"}))
-            replaceterm = xDialog.getChild("replaceterm")
-            replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"Page3"})) #replace textbox
-            replace = xDialog.getChild("replace")
-            replace.executeAction("CLICK", tuple())
-            replace.executeAction("CLICK", tuple())
-            xcloseBtn = xDialog.getChild("close")
-            self.ui_test.close_dialog_through_button(xcloseBtn)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+                searchterm = xDialog.getChild("searchterm")
+                searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"Page2"}))
+                replaceterm = xDialog.getChild("replaceterm")
+                replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"Page3"})) #replace textbox
+                replace = xDialog.getChild("replace")
+                replace.executeAction("CLICK", tuple())
+                replace.executeAction("CLICK", tuple())
 
             #verify
             enter_text_to_cell(gridwin, "A1", "=FORMULA(R[3]C[1])")

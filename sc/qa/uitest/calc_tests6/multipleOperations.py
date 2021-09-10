@@ -38,15 +38,12 @@ class multipleOperations(UITestCase):
             #Select the range D2:E11
             xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "D2:E11"}))
             #Choose Data > Multiple Operations.
-            self.ui_test.execute_modeless_dialog_through_command(".uno:TableOperationDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            #Formulas = B5 ; Column input cell = B4
-            formulas = xDialog.getChild("formulas")
-            col = xDialog.getChild("col")
-            formulas.executeAction("TYPE", mkPropertyValues({"TEXT":"$B$5"}))
-            col.executeAction("TYPE", mkPropertyValues({"TEXT":"$B$4"}))
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:TableOperationDialog") as xDialog:
+                #Formulas = B5 ; Column input cell = B4
+                formulas = xDialog.getChild("formulas")
+                col = xDialog.getChild("col")
+                formulas.executeAction("TYPE", mkPropertyValues({"TEXT":"$B$5"}))
+                col.executeAction("TYPE", mkPropertyValues({"TEXT":"$B$4"}))
             #verify
             self.assertEqual(get_cell_by_position(document, 0, 4, 1).getValue(), -6000)
             self.assertEqual(get_cell_by_position(document, 0, 4, 2).getValue(), -2000)
@@ -85,15 +82,12 @@ class multipleOperations(UITestCase):
             #Select the range D2:F11
             xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "D2:F11"}))
             #Choose Data > Multiple Operations.
-            self.ui_test.execute_modeless_dialog_through_command(".uno:TableOperationDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            #Formulas = B5 ; Column input cell = B4
-            formulas = xDialog.getChild("formulas")
-            col = xDialog.getChild("col")
-            formulas.executeAction("TYPE", mkPropertyValues({"TEXT":"$B$5:$C$5"}))
-            col.executeAction("TYPE", mkPropertyValues({"TEXT":"$B$4"}))
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:TableOperationDialog") as xDialog:
+                #Formulas = B5 ; Column input cell = B4
+                formulas = xDialog.getChild("formulas")
+                col = xDialog.getChild("col")
+                formulas.executeAction("TYPE", mkPropertyValues({"TEXT":"$B$5:$C$5"}))
+                col.executeAction("TYPE", mkPropertyValues({"TEXT":"$B$4"}))
             #verify
             self.assertEqual(get_cell_by_position(document, 0, 4, 1).getValue(), -6000)
             self.assertEqual(get_cell_by_position(document, 0, 4, 2).getValue(), -2000)

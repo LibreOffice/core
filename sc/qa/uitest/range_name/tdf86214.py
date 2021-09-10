@@ -17,43 +17,41 @@ class InvalidNames(UITestCase):
 
         with self.ui_test.create_doc_in_start_center("calc"):
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:AddName")
-
-            xAddNameDlg = self.xUITest.getTopFocusWindow()
-
-            invalid_names = ["A1", "12", "1.2", "A1:B2", "test.a", \
-                    "test+", "test-", "test*", "test!abc", "test#", \
-                    "test^", "test°", "test$", "test§", "test%", \
-                    "test&", "test/", "test(", "test)", "test[", "test]", \
-                    "test\\", "test`", "test´", "test'", "test~", "test<", \
-                    "tst>", "test|", "test:t", "test;z"]
-
-            xLabel = xAddNameDlg.getChild("label")
-            xAddBtn = xAddNameDlg.getChild("add")
-            xEdit = xAddNameDlg.getChild("edit")
-
-            success_text = get_state_as_dict(xLabel)["Text"]
-
-            for name in invalid_names:
-                with self.subTest(name = name):
-                    select_all(xEdit)
-                    type_text(xEdit, name)
-
-                    # tdf#132869 - Without the fix in place, this test would have failed with
-                    # - Expected: "Invalid name. Start with a letter, use only letters, numbers and underscore."
-                    # - Actual  : ""
-                    self.assertNotEqual(success_text, get_state_as_dict(xEdit)["QuickHelpText"])
-                    self.assertEqual(get_state_as_dict(xAddBtn)["Enabled"], "false")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AddName", close_button="add") as xAddNameDlg:
 
 
-            select_all(xEdit)
-            type_text(xEdit, "valid_name")
+                invalid_names = ["A1", "12", "1.2", "A1:B2", "test.a", \
+                        "test+", "test-", "test*", "test!abc", "test#", \
+                        "test^", "test°", "test$", "test§", "test%", \
+                        "test&", "test/", "test(", "test)", "test[", "test]", \
+                        "test\\", "test`", "test´", "test'", "test~", "test<", \
+                        "tst>", "test|", "test:t", "test;z"]
 
-            self.assertEqual(success_text, get_state_as_dict(xLabel)["Text"])
-            self.assertEqual(success_text, get_state_as_dict(xEdit)["QuickHelpText"])
-            self.assertEqual(get_state_as_dict(xAddBtn)["Enabled"], "true")
+                xLabel = xAddNameDlg.getChild("label")
+                xAddBtn = xAddNameDlg.getChild("add")
+                xEdit = xAddNameDlg.getChild("edit")
 
-            self.ui_test.close_dialog_through_button(xAddBtn)
+                success_text = get_state_as_dict(xLabel)["Text"]
+
+                for name in invalid_names:
+                    with self.subTest(name = name):
+                        select_all(xEdit)
+                        type_text(xEdit, name)
+
+                        # tdf#132869 - Without the fix in place, this test would have failed with
+                        # - Expected: "Invalid name. Start with a letter, use only letters, numbers and underscore."
+                        # - Actual  : ""
+                        self.assertNotEqual(success_text, get_state_as_dict(xEdit)["QuickHelpText"])
+                        self.assertEqual(get_state_as_dict(xAddBtn)["Enabled"], "false")
+
+
+                select_all(xEdit)
+                type_text(xEdit, "valid_name")
+
+                self.assertEqual(success_text, get_state_as_dict(xLabel)["Text"])
+                self.assertEqual(success_text, get_state_as_dict(xEdit)["QuickHelpText"])
+                self.assertEqual(get_state_as_dict(xAddBtn)["Enabled"], "true")
+
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
