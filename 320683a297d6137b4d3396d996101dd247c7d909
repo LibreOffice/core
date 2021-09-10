@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab204be2_13ad5bcf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-10T17:47:04Z",
+      "side": 1,
+      "message": "Miklos: not sure if you attempted to do this for DOC or not. (Combined with import, it breaks a unit test - because it validates a chapter-numbering situation that otherwise was denied). But we can safely export the value, and this moves it forward for all 3 formats anyway.\n\n(Now that styles can hold/apply listLevel, the value of Chapter Numbering has lost almost all its value anyway, so one option would to be just kill CN altogether...)",
+      "revId": "320683a297d6137b4d3396d996101dd247c7d909",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
