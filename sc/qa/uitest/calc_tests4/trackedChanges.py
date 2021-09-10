@@ -17,27 +17,24 @@ class CalcTrackedChanges(UITestCase):
     def test_tdf131907(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf131907.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
-            self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptChanges")
-            xTrackDlg = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AcceptChanges", close_button="close") as xTrackDlg:
 
-            xChangesList = xTrackDlg.getChild("calcchanges")
-            self.assertEqual(1, len(xChangesList.getChildren()))
+                xChangesList = xTrackDlg.getChild("calcchanges")
+                self.assertEqual(1, len(xChangesList.getChildren()))
 
-            textStart = "Row inserted \tSheet1.1:1\t \t"
-            textEnd = "(Row 1:1 inserted)"
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].startswith(textStart))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].endswith(textEnd))
+                textStart = "Row inserted \tSheet1.1:1\t \t"
+                textEnd = "(Row 1:1 inserted)"
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].startswith(textStart))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].endswith(textEnd))
 
-            #it would crash here
-            xRejBtn = xTrackDlg.getChild("reject")
-            xRejBtn.executeAction("CLICK", tuple())
+                #it would crash here
+                xRejBtn = xTrackDlg.getChild("reject")
+                xRejBtn.executeAction("CLICK", tuple())
 
-            self.assertEqual(2, len(xChangesList.getChildren()))
-            self.assertEqual(get_state_as_dict(xChangesList.getChild('0'))["Text"], "Accepted")
-            self.assertEqual(get_state_as_dict(xChangesList.getChild('1'))["Text"], "Rejected")
+                self.assertEqual(2, len(xChangesList.getChildren()))
+                self.assertEqual(get_state_as_dict(xChangesList.getChild('0'))["Text"], "Accepted")
+                self.assertEqual(get_state_as_dict(xChangesList.getChild('1'))["Text"], "Rejected")
 
-            xCancBtn = xTrackDlg.getChild("close")
-            xCancBtn.executeAction("CLICK", tuple())
 
     def test_tdf66263_Protect_Records(self):
         with self.ui_test.create_doc_in_start_center("calc") as document:
@@ -68,45 +65,42 @@ class CalcTrackedChanges(UITestCase):
             enter_text_to_cell(gridwin, "A1", "Test LibreOffice")
             enter_text_to_cell(gridwin, "A2", "Test LibreOffice")
             #accept tracked changes
-            self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptChanges")
-            xTrackDlg = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AcceptChanges", close_button="close") as xTrackDlg:
 
-            xChangesList = xTrackDlg.getChild("calcchanges")
-            self.assertEqual(2, len(xChangesList.getChildren()))
+                xChangesList = xTrackDlg.getChild("calcchanges")
+                self.assertEqual(2, len(xChangesList.getChildren()))
 
-            textStart = "Changed contents\tSheet1.A1\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
-            textEnd = "(Cell A1 changed from '<empty>' to 'Test LibreOffice')"
-            textStart2 = "Changed contents\tSheet1.A2\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
-            textEnd2 = "(Cell A2 changed from '<empty>' to 'Test LibreOffice')"
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].startswith(textStart))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].endswith(textEnd))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('1'))["Text"].startswith(textStart2))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('1'))["Text"].endswith(textEnd2))
+                textStart = "Changed contents\tSheet1.A1\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textEnd = "(Cell A1 changed from '<empty>' to 'Test LibreOffice')"
+                textStart2 = "Changed contents\tSheet1.A2\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textEnd2 = "(Cell A2 changed from '<empty>' to 'Test LibreOffice')"
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].startswith(textStart))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].endswith(textEnd))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('1'))["Text"].startswith(textStart2))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('1'))["Text"].endswith(textEnd2))
 
-            xAccBtn = xTrackDlg.getChild("accept")
-            xAccBtn.executeAction("CLICK", tuple())
+                xAccBtn = xTrackDlg.getChild("accept")
+                xAccBtn.executeAction("CLICK", tuple())
 
-            self.assertEqual(2, len(xChangesList.getChildren()))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].startswith(textStart2))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].endswith(textEnd2))
-            self.assertEqual(get_state_as_dict(xChangesList.getChild('1'))["Text"], "Accepted")
+                self.assertEqual(2, len(xChangesList.getChildren()))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].startswith(textStart2))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].endswith(textEnd2))
+                self.assertEqual(get_state_as_dict(xChangesList.getChild('1'))["Text"], "Accepted")
 
-            xAccBtn = xTrackDlg.getChild("accept")
-            xAccBtn.executeAction("CLICK", tuple())
+                xAccBtn = xTrackDlg.getChild("accept")
+                xAccBtn.executeAction("CLICK", tuple())
 
-            self.assertEqual(1, len(xChangesList.getChildren()))
-            self.assertEqual(get_state_as_dict(xChangesList.getChild('0'))["Text"], "Accepted")
-            xChangesList.getChild('0').executeAction("EXPAND", tuple())
+                self.assertEqual(1, len(xChangesList.getChildren()))
+                self.assertEqual(get_state_as_dict(xChangesList.getChild('0'))["Text"], "Accepted")
+                xChangesList.getChild('0').executeAction("EXPAND", tuple())
 
-            self.assertEqual(2, len(xChangesList.getChild('0').getChildren()))
+                self.assertEqual(2, len(xChangesList.getChild('0').getChildren()))
 
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('0'))["Text"].startswith(textStart))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('0'))["Text"].endswith(textEnd))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('1'))["Text"].startswith(textStart2))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('1'))["Text"].endswith(textEnd2))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('0'))["Text"].startswith(textStart))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('0'))["Text"].endswith(textEnd))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('1'))["Text"].startswith(textStart2))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('1'))["Text"].endswith(textEnd2))
 
-            xCancBtn = xTrackDlg.getChild("close")
-            xCancBtn.executeAction("CLICK", tuple())
 
             self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "Test LibreOffice")
 
@@ -121,37 +115,34 @@ class CalcTrackedChanges(UITestCase):
             enter_text_to_cell(gridwin, "A1", "Test LibreOffice")
             enter_text_to_cell(gridwin, "A2", "Test LibreOffice")
             #accept All tracked changes
-            self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptChanges")
-            xTrackDlg = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AcceptChanges", close_button="close") as xTrackDlg:
 
-            xChangesList = xTrackDlg.getChild("calcchanges")
-            self.assertEqual(2, len(xChangesList.getChildren()))
+                xChangesList = xTrackDlg.getChild("calcchanges")
+                self.assertEqual(2, len(xChangesList.getChildren()))
 
-            textStart = "Changed contents\tSheet1.A1\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
-            textEnd = "(Cell A1 changed from '<empty>' to 'Test LibreOffice')"
-            textStart2 = "Changed contents\tSheet1.A2\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
-            textEnd2 = "(Cell A2 changed from '<empty>' to 'Test LibreOffice')"
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].startswith(textStart))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].endswith(textEnd))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('1'))["Text"].startswith(textStart2))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('1'))["Text"].endswith(textEnd2))
+                textStart = "Changed contents\tSheet1.A1\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textEnd = "(Cell A1 changed from '<empty>' to 'Test LibreOffice')"
+                textStart2 = "Changed contents\tSheet1.A2\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textEnd2 = "(Cell A2 changed from '<empty>' to 'Test LibreOffice')"
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].startswith(textStart))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].endswith(textEnd))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('1'))["Text"].startswith(textStart2))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('1'))["Text"].endswith(textEnd2))
 
-            xAccBtn = xTrackDlg.getChild("acceptall")
-            xAccBtn.executeAction("CLICK", tuple())
+                xAccBtn = xTrackDlg.getChild("acceptall")
+                xAccBtn.executeAction("CLICK", tuple())
 
-            self.assertEqual(1, len(xChangesList.getChildren()))
-            self.assertEqual(get_state_as_dict(xChangesList.getChild('0'))["Text"], "Accepted")
-            xChangesList.getChild('0').executeAction("EXPAND", tuple())
+                self.assertEqual(1, len(xChangesList.getChildren()))
+                self.assertEqual(get_state_as_dict(xChangesList.getChild('0'))["Text"], "Accepted")
+                xChangesList.getChild('0').executeAction("EXPAND", tuple())
 
-            self.assertEqual(2, len(xChangesList.getChild('0').getChildren()))
+                self.assertEqual(2, len(xChangesList.getChild('0').getChildren()))
 
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('0'))["Text"].startswith(textStart))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('0'))["Text"].endswith(textEnd))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('1'))["Text"].startswith(textStart2))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('1'))["Text"].endswith(textEnd2))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('0'))["Text"].startswith(textStart))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('0'))["Text"].endswith(textEnd))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('1'))["Text"].startswith(textStart2))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('1'))["Text"].endswith(textEnd2))
 
-            xCancBtn = xTrackDlg.getChild("close")
-            xCancBtn.executeAction("CLICK", tuple())
 
             self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "Test LibreOffice")
 
@@ -166,57 +157,54 @@ class CalcTrackedChanges(UITestCase):
             enter_text_to_cell(gridwin, "A1", "Test LibreOffice")
             enter_text_to_cell(gridwin, "A2", "Test LibreOffice")
             #accept tracked changes
-            self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptChanges")
-            xTrackDlg = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AcceptChanges", close_button="close") as xTrackDlg:
 
-            xChangesList = xTrackDlg.getChild("calcchanges")
-            self.assertEqual(2, len(xChangesList.getChildren()))
+                xChangesList = xTrackDlg.getChild("calcchanges")
+                self.assertEqual(2, len(xChangesList.getChildren()))
 
-            textStart = "Changed contents\tSheet1.A1\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
-            textEnd = "(Cell A1 changed from '<empty>' to 'Test LibreOffice')"
-            textStart2 = "Changed contents\tSheet1.A2\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
-            textEnd2 = "(Cell A2 changed from '<empty>' to 'Test LibreOffice')"
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].startswith(textStart))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].endswith(textEnd))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('1'))["Text"].startswith(textStart2))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('1'))["Text"].endswith(textEnd2))
+                textStart = "Changed contents\tSheet1.A1\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textEnd = "(Cell A1 changed from '<empty>' to 'Test LibreOffice')"
+                textStart2 = "Changed contents\tSheet1.A2\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textEnd2 = "(Cell A2 changed from '<empty>' to 'Test LibreOffice')"
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].startswith(textStart))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].endswith(textEnd))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('1'))["Text"].startswith(textStart2))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('1'))["Text"].endswith(textEnd2))
 
-            xRejBtn = xTrackDlg.getChild("reject")
-            xRejBtn.executeAction("CLICK", tuple())
+                xRejBtn = xTrackDlg.getChild("reject")
+                xRejBtn.executeAction("CLICK", tuple())
 
-            self.assertEqual(3, len(xChangesList.getChildren()))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].startswith(textStart2))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].endswith(textEnd2))
-            self.assertEqual(get_state_as_dict(xChangesList.getChild('1'))["Text"], "Accepted")
-            self.assertEqual(get_state_as_dict(xChangesList.getChild('2'))["Text"], "Rejected")
+                self.assertEqual(3, len(xChangesList.getChildren()))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].startswith(textStart2))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].endswith(textEnd2))
+                self.assertEqual(get_state_as_dict(xChangesList.getChild('1'))["Text"], "Accepted")
+                self.assertEqual(get_state_as_dict(xChangesList.getChild('2'))["Text"], "Rejected")
 
-            xAccBtn = xTrackDlg.getChild("reject")
-            xAccBtn.executeAction("CLICK", tuple())
+                xAccBtn = xTrackDlg.getChild("reject")
+                xAccBtn.executeAction("CLICK", tuple())
 
-            self.assertEqual(2, len(xChangesList.getChildren()))
-            self.assertEqual(get_state_as_dict(xChangesList.getChild('0'))["Text"], "Accepted")
-            self.assertEqual(get_state_as_dict(xChangesList.getChild('1'))["Text"], "Rejected")
+                self.assertEqual(2, len(xChangesList.getChildren()))
+                self.assertEqual(get_state_as_dict(xChangesList.getChild('0'))["Text"], "Accepted")
+                self.assertEqual(get_state_as_dict(xChangesList.getChild('1'))["Text"], "Rejected")
 
-            xChangesList.getChild('0').executeAction("EXPAND", tuple())
-            self.assertEqual(2, len(xChangesList.getChild('0').getChildren()))
+                xChangesList.getChild('0').executeAction("EXPAND", tuple())
+                self.assertEqual(2, len(xChangesList.getChild('0').getChildren()))
 
-            textEnd3 = "(Cell A1 changed from 'Test LibreOffice' to '<empty>')"
-            textEnd4 = "(Cell A2 changed from 'Test LibreOffice' to '<empty>')"
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('0'))["Text"].startswith(textStart))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('0'))["Text"].endswith(textEnd3))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('1'))["Text"].startswith(textStart2))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('1'))["Text"].endswith(textEnd4))
+                textEnd3 = "(Cell A1 changed from 'Test LibreOffice' to '<empty>')"
+                textEnd4 = "(Cell A2 changed from 'Test LibreOffice' to '<empty>')"
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('0'))["Text"].startswith(textStart))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('0'))["Text"].endswith(textEnd3))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('1'))["Text"].startswith(textStart2))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('1'))["Text"].endswith(textEnd4))
 
-            xChangesList.getChild('1').executeAction("EXPAND", tuple())
-            self.assertEqual(2, len(xChangesList.getChild('1').getChildren()))
+                xChangesList.getChild('1').executeAction("EXPAND", tuple())
+                self.assertEqual(2, len(xChangesList.getChild('1').getChildren()))
 
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('1').getChild('0'))["Text"].startswith(textStart))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('1').getChild('0'))["Text"].endswith(textEnd))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('1').getChild('1'))["Text"].startswith(textStart2))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('1').getChild('1'))["Text"].endswith(textEnd2))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('1').getChild('0'))["Text"].startswith(textStart))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('1').getChild('0'))["Text"].endswith(textEnd))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('1').getChild('1'))["Text"].startswith(textStart2))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('1').getChild('1'))["Text"].endswith(textEnd2))
 
-            xCancBtn = xTrackDlg.getChild("close")
-            xCancBtn.executeAction("CLICK", tuple())
 
             self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "")
 
@@ -231,48 +219,45 @@ class CalcTrackedChanges(UITestCase):
             enter_text_to_cell(gridwin, "A1", "Test LibreOffice")
             enter_text_to_cell(gridwin, "A2", "Test LibreOffice")
             #accept tracked changes
-            self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptChanges")
-            xTrackDlg = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AcceptChanges", close_button="close") as xTrackDlg:
 
-            xChangesList = xTrackDlg.getChild("calcchanges")
-            self.assertEqual(2, len(xChangesList.getChildren()))
+                xChangesList = xTrackDlg.getChild("calcchanges")
+                self.assertEqual(2, len(xChangesList.getChildren()))
 
-            textStart = "Changed contents\tSheet1.A1\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
-            textEnd = "(Cell A1 changed from '<empty>' to 'Test LibreOffice')"
-            textStart2 = "Changed contents\tSheet1.A2\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
-            textEnd2 = "(Cell A2 changed from '<empty>' to 'Test LibreOffice')"
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].startswith(textStart))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].endswith(textEnd))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('1'))["Text"].startswith(textStart2))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('1'))["Text"].endswith(textEnd2))
+                textStart = "Changed contents\tSheet1.A1\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textEnd = "(Cell A1 changed from '<empty>' to 'Test LibreOffice')"
+                textStart2 = "Changed contents\tSheet1.A2\t \t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                textEnd2 = "(Cell A2 changed from '<empty>' to 'Test LibreOffice')"
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].startswith(textStart))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].endswith(textEnd))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('1'))["Text"].startswith(textStart2))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('1'))["Text"].endswith(textEnd2))
 
-            xAccBtn = xTrackDlg.getChild("rejectall")
-            xAccBtn.executeAction("CLICK", tuple())
+                xAccBtn = xTrackDlg.getChild("rejectall")
+                xAccBtn.executeAction("CLICK", tuple())
 
-            self.assertEqual(2, len(xChangesList.getChildren()))
-            self.assertEqual(get_state_as_dict(xChangesList.getChild('0'))["Text"], "Accepted")
-            self.assertEqual(get_state_as_dict(xChangesList.getChild('1'))["Text"], "Rejected")
+                self.assertEqual(2, len(xChangesList.getChildren()))
+                self.assertEqual(get_state_as_dict(xChangesList.getChild('0'))["Text"], "Accepted")
+                self.assertEqual(get_state_as_dict(xChangesList.getChild('1'))["Text"], "Rejected")
 
-            xChangesList.getChild('0').executeAction("EXPAND", tuple())
-            self.assertEqual(2, len(xChangesList.getChild('0').getChildren()))
+                xChangesList.getChild('0').executeAction("EXPAND", tuple())
+                self.assertEqual(2, len(xChangesList.getChild('0').getChildren()))
 
-            textEnd3 = "(Cell A1 changed from 'Test LibreOffice' to '<empty>')"
-            textEnd4 = "(Cell A2 changed from 'Test LibreOffice' to '<empty>')"
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('0'))["Text"].startswith(textStart2))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('0'))["Text"].endswith(textEnd4))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('1'))["Text"].startswith(textStart))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('1'))["Text"].endswith(textEnd3))
+                textEnd3 = "(Cell A1 changed from 'Test LibreOffice' to '<empty>')"
+                textEnd4 = "(Cell A2 changed from 'Test LibreOffice' to '<empty>')"
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('0'))["Text"].startswith(textStart2))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('0'))["Text"].endswith(textEnd4))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('1'))["Text"].startswith(textStart))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('0').getChild('1'))["Text"].endswith(textEnd3))
 
-            xChangesList.getChild('1').executeAction("EXPAND", tuple())
-            self.assertEqual(2, len(xChangesList.getChild('1').getChildren()))
+                xChangesList.getChild('1').executeAction("EXPAND", tuple())
+                self.assertEqual(2, len(xChangesList.getChild('1').getChildren()))
 
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('1').getChild('0'))["Text"].startswith(textStart))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('1').getChild('0'))["Text"].endswith(textEnd))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('1').getChild('1'))["Text"].startswith(textStart2))
-            self.assertTrue(get_state_as_dict(xChangesList.getChild('1').getChild('1'))["Text"].endswith(textEnd2))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('1').getChild('0'))["Text"].startswith(textStart))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('1').getChild('0'))["Text"].endswith(textEnd))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('1').getChild('1'))["Text"].startswith(textStart2))
+                self.assertTrue(get_state_as_dict(xChangesList.getChild('1').getChild('1'))["Text"].endswith(textEnd2))
 
-            xCancBtn = xTrackDlg.getChild("close")
-            xCancBtn.executeAction("CLICK", tuple())
 
             self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "")
 
@@ -282,25 +267,22 @@ class CalcTrackedChanges(UITestCase):
 
             self.xUITest.getTopFocusWindow()
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptChanges")
-            xTrackDlg = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AcceptChanges", close_button="close") as xTrackDlg:
 
-            xChangesList = xTrackDlg.getChild("calcchanges")
-            self.assertEqual(1, len(xChangesList.getChildren()))
+                xChangesList = xTrackDlg.getChild("calcchanges")
+                self.assertEqual(1, len(xChangesList.getChildren()))
 
-            xRejectAllBtn = xTrackDlg.getChild("rejectall")
-            xRejectBtn = xTrackDlg.getChild("reject")
-            xAcceptAllBtn = xTrackDlg.getChild("acceptall")
-            xAcceptBtn = xTrackDlg.getChild("accept")
+                xRejectAllBtn = xTrackDlg.getChild("rejectall")
+                xRejectBtn = xTrackDlg.getChild("reject")
+                xAcceptAllBtn = xTrackDlg.getChild("acceptall")
+                xAcceptBtn = xTrackDlg.getChild("accept")
 
-            # Without the fix in place, it would have failed with
-            # AssertionError: 'R~eject All' != 'R~eject All/Clear formatting'
-            self.assertEqual('R~eject All', get_state_as_dict(xRejectAllBtn)['Text'])
-            self.assertEqual('~Reject', get_state_as_dict(xRejectBtn)['Text'])
-            self.assertEqual('A~ccept All', get_state_as_dict(xAcceptAllBtn)['Text'])
-            self.assertEqual('~Accept', get_state_as_dict(xAcceptBtn)['Text'])
+                # Without the fix in place, it would have failed with
+                # AssertionError: 'R~eject All' != 'R~eject All/Clear formatting'
+                self.assertEqual('R~eject All', get_state_as_dict(xRejectAllBtn)['Text'])
+                self.assertEqual('~Reject', get_state_as_dict(xRejectBtn)['Text'])
+                self.assertEqual('A~ccept All', get_state_as_dict(xAcceptAllBtn)['Text'])
+                self.assertEqual('~Accept', get_state_as_dict(xAcceptBtn)['Text'])
 
-            xCancBtn = xTrackDlg.getChild("close")
-            xCancBtn.executeAction("CLICK", tuple())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

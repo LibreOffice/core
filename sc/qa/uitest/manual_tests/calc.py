@@ -23,15 +23,12 @@ class ManualCalcTests(UITestCase):
             xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:D10"}))
 
             # Execute "Define DB Range dialog"
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DefineDBName")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DefineDBName") as xDefineNameDlg:
 
-            xDefineNameDlg = self.xUITest.getTopFocusWindow()
 
-            xEntryBox = xDefineNameDlg.getChild("entry")
-            type_text(xEntryBox, "my_database")
+                xEntryBox = xDefineNameDlg.getChild("entry")
+                type_text(xEntryBox, "my_database")
 
-            xOkBtn = xDefineNameDlg.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOkBtn)
 
             # Deselect range
             xGridWin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
@@ -170,31 +167,28 @@ class ManualCalcTests(UITestCase):
 
             xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A2:A10"}))
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:RandomNumberGeneratorDialog")
-            xRandomNumberDlg = self.xUITest.getTopFocusWindow()
-            xDistributionLstBox = xRandomNumberDlg.getChild("distribution-combo")
-            xDistributionLstBox.executeAction("SELECT", mkPropertyValues({"POS": "1"}))
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:RandomNumberGeneratorDialog") as xRandomNumberDlg:
+                xDistributionLstBox = xRandomNumberDlg.getChild("distribution-combo")
+                xDistributionLstBox.executeAction("SELECT", mkPropertyValues({"POS": "1"}))
 
-            xMin = xRandomNumberDlg.getChild("parameter1-spin")
-            xMin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+A"}))
-            xMin.executeAction("TYPE", mkPropertyValues({"TEXT": "-2"}))
-            xMax = xRandomNumberDlg.getChild("parameter2-spin")
-            xMax.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+A"}))
-            xMax.executeAction("TYPE", mkPropertyValues({"TEXT": "10"}))
+                xMin = xRandomNumberDlg.getChild("parameter1-spin")
+                xMin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+A"}))
+                xMin.executeAction("TYPE", mkPropertyValues({"TEXT": "-2"}))
+                xMax = xRandomNumberDlg.getChild("parameter2-spin")
+                xMax.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+A"}))
+                xMax.executeAction("TYPE", mkPropertyValues({"TEXT": "10"}))
 
-            xApplyBtn = xRandomNumberDlg.getChild("apply")
-            xApplyBtn.executeAction("CLICK", tuple())
+                xApplyBtn = xRandomNumberDlg.getChild("apply")
+                xApplyBtn.executeAction("CLICK", tuple())
 
 
-            def check_random_values():
-                for i in range(1, 9):
-                    val = get_cell_by_position(document, 0, 0, i).getValue()
-                    self.assertTrue(val <= 10 and val >= -2)
+                def check_random_values():
+                    for i in range(1, 9):
+                        val = get_cell_by_position(document, 0, 0, i).getValue()
+                        self.assertTrue(val <= 10 and val >= -2)
 
-            check_random_values()
+                check_random_values()
 
-            xOkBtn = xRandomNumberDlg.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOkBtn)
 
             # we might want to check that clicking 'ok' actually changes the values
             check_random_values()

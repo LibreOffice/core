@@ -23,15 +23,12 @@ class tdf141547(UITestCase):
                 self.assertTrue(is_row_hidden(calc_doc, i))
 
             # Without the fix in place, this test would have crashed here
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
-            self.assertEqual("0", get_state_as_dict(xDialog.getChild("val1"))['Text'])
-            self.assertEqual("过帐日期", get_state_as_dict(xDialog.getChild("field1"))["DisplayText"])
-            self.assertEqual("Empty", get_state_as_dict(xDialog.getChild("val2"))['Text'])
-            self.assertEqual("过帐日期", get_state_as_dict(xDialog.getChild("field2"))["DisplayText"])
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+                self.assertEqual("0", get_state_as_dict(xDialog.getChild("val1"))['Text'])
+                self.assertEqual("过帐日期", get_state_as_dict(xDialog.getChild("field1"))["DisplayText"])
+                self.assertEqual("Empty", get_state_as_dict(xDialog.getChild("val2"))['Text'])
+                self.assertEqual("过帐日期", get_state_as_dict(xDialog.getChild("field2"))["DisplayText"])
 
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 
             self.assertFalse(is_row_hidden(calc_doc, 0))
             for i in range(1, 7):
