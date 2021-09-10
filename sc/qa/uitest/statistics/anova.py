@@ -57,28 +57,25 @@ class anova(UITestCase):
             enter_text_to_cell(gridwin, "C10", "12")
             enter_text_to_cell(gridwin, "C11", "60")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A2:C13"}))
-            self.ui_test.execute_modeless_dialog_through_command(".uno:AnalysisOfVarianceDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xinputrangeedit = xDialog.getChild("input-range-edit")
-            xoutputrangeedit = xDialog.getChild("output-range-edit")
-            xradiotwofactor = xDialog.getChild("radio-two-factor")
-            xradiosinglefactor = xDialog.getChild("radio-single-factor")
-            xgroupedbyrowsradio = xDialog.getChild("groupedby-rows-radio")
-            xgroupedbycolumnsradio = xDialog.getChild("groupedby-columns-radio")
-            xalphaspin = xDialog.getChild("alpha-spin")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AnalysisOfVarianceDialog") as xDialog:
+                xinputrangeedit = xDialog.getChild("input-range-edit")
+                xoutputrangeedit = xDialog.getChild("output-range-edit")
+                xradiotwofactor = xDialog.getChild("radio-two-factor")
+                xradiosinglefactor = xDialog.getChild("radio-single-factor")
+                xgroupedbyrowsradio = xDialog.getChild("groupedby-rows-radio")
+                xgroupedbycolumnsradio = xDialog.getChild("groupedby-columns-radio")
+                xalphaspin = xDialog.getChild("alpha-spin")
 
-            xinputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            xinputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            xinputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$A$2:$C$13"}))
-            xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$F$1"}))
-            xradiosinglefactor.executeAction("CLICK", tuple())
-            xalphaspin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            xalphaspin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            xalphaspin.executeAction("TYPE", mkPropertyValues({"TEXT":"0.05"}))
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                xinputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xinputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xinputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$A$2:$C$13"}))
+                xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$F$1"}))
+                xradiosinglefactor.executeAction("CLICK", tuple())
+                xalphaspin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xalphaspin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xalphaspin.executeAction("TYPE", mkPropertyValues({"TEXT":"0.05"}))
             #Verify
             self.assertEqual(get_cell_by_position(document, 0, 5, 0).getString(), "ANOVA - Single Factor")
             self.assertEqual(get_cell_by_position(document, 0, 5, 1).getString(), "Alpha")
@@ -137,9 +134,7 @@ class anova(UITestCase):
             self.assertEqual(get_cell_by_position(document, 0, 5, 0).getString(), "")
 
             # test cancel button
-            self.ui_test.execute_modeless_dialog_through_command(".uno:AnalysisOfVarianceDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xCancelBtn = xDialog.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xCancelBtn)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AnalysisOfVarianceDialog", close_button="cancel"):
+                pass
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

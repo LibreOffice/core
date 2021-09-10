@@ -19,10 +19,10 @@ class Forms(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "form"}))
 
             # Without the fix in place, this test would have hung here
-            self.ui_test.execute_modeless_dialog_through_command(".uno:ControlProperties")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:ControlProperties", close_button=""):
 
-            xCellRange = self.ui_test.wait_until_child_is_available('textfield-Source cell range')
+                xCellRange = self.ui_test.wait_until_child_is_available('textfield-Source cell range')
 
-            self.assertEqual("A1:A7000", get_state_as_dict(xCellRange)['Text'])
+                self.assertEqual("A1:A7000", get_state_as_dict(xCellRange)['Text'])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

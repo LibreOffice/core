@@ -14,17 +14,14 @@ class tdf132783(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf132783.ods")) as calc_doc:
 
             for i in range(5):
-                self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
-                xDialog = self.xUITest.getTopFocusWindow()
-                xSearchTerm = xDialog.getChild("searchterm")
+                with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+                    xSearchTerm = xDialog.getChild("searchterm")
 
-                xSearchTerm.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
+                    xSearchTerm.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
 
-                xSearch = xDialog.getChild("search")
-                xSearch.executeAction("CLICK", tuple())
+                    xSearch = xDialog.getChild("search")
+                    xSearch.executeAction("CLICK", tuple())
 
-                xcloseBtn = xDialog.getChild("close")
-                self.ui_test.close_dialog_through_button(xcloseBtn)
 
                 xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
                 self.assertEqual(get_state_as_dict(xGridWin)["CurrentRow"], "1")
