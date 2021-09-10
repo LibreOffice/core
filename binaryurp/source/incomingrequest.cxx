@@ -50,9 +50,9 @@ IncomingRequest::IncomingRequest(
     std::vector< BinaryAny > const & inArguments, bool currentContextMode,
     css::uno::UnoInterfaceReference const & currentContext):
     bridge_(bridge), tid_(tid), oid_(oid), object_(object), type_(type),
-    functionId_(functionId), synchronous_(synchronous), member_(member),
-    setter_(setter), inArguments_(inArguments),
-    currentContextMode_(currentContextMode), currentContext_(currentContext)
+    member_(member), currentContext_(currentContext),
+    inArguments_(inArguments), functionId_(functionId),
+    synchronous_(synchronous), setter_(setter), currentContextMode_(currentContextMode)
 {
     assert(bridge.is());
     assert(member.is());
