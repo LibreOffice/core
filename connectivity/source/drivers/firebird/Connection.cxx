@@ -273,6 +273,10 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
             }
         }
 
+        // use isc_dpb_utf8_filename to identify encoding of filenames
+        dpbBuffer.push_back(isc_dpb_utf8_filename);
+        dpbBuffer.push_back(0); // no filename here, it is passed to functions directly
+
         ISC_STATUS_ARRAY status;            /* status vector */
         ISC_STATUS aErr;
         const OString sFirebirdURL = OUStringToOString(m_sFirebirdURL, RTL_TEXTENCODING_UTF8);
