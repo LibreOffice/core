@@ -24,7 +24,7 @@
 #include <vcl/dllapi.h>
 
 #include "fontinstance.hxx"
-#include "PhysicalFontFamily.hxx"
+#include "font/PhysicalFontFamily.hxx"
 #include <array>
 
 #define MAX_GLYPHFALLBACK 16
@@ -32,7 +32,6 @@
 class ImplDeviceFontSizeList;
 class ImplGlyphFallbackFontSubstitution;
 class ImplPreMatchFontSubstitution;
-
 
 // TODO: merge with ImplFontCache
 // TODO: rename to LogicalFontManager
@@ -49,15 +48,15 @@ public:
     int                     Count() const { return maPhysicalFontFamilies.size(); }
 
     // find the device font family
-    PhysicalFontFamily*     FindFontFamily( const OUString& rFontName ) const;
-    PhysicalFontFamily*     FindOrCreateFontFamily( const OUString &rFamilyName );
-    PhysicalFontFamily*     FindFontFamily( FontSelectPattern& ) const;
-    PhysicalFontFamily*     FindFontFamilyByTokenNames(const OUString& rTokenStr) const;
-    PhysicalFontFamily*     FindFontFamilyByAttributes(ImplFontAttrs nSearchType, FontWeight, FontWidth,
+    vcl::font::PhysicalFontFamily* FindFontFamily( const OUString& rFontName ) const;
+    vcl::font::PhysicalFontFamily* FindOrCreateFontFamily( const OUString &rFamilyName );
+    vcl::font::PhysicalFontFamily* FindFontFamily( FontSelectPattern& ) const;
+    vcl::font::PhysicalFontFamily* FindFontFamilyByTokenNames(const OUString& rTokenStr) const;
+    vcl::font::PhysicalFontFamily* FindFontFamilyByAttributes(ImplFontAttrs nSearchType, FontWeight, FontWidth,
                                              FontItalic, const OUString& rSearchFamily) const;
 
     // suggest fonts for glyph fallback
-    PhysicalFontFamily*     GetGlyphFallbackFont( FontSelectPattern&,
+    vcl::font::PhysicalFontFamily* GetGlyphFallbackFont( FontSelectPattern&,
                                                   LogicalFontInstance* pLogicalFont,
                                                   OUString& rMissingCodes, int nFallbackLevel ) const;
 
@@ -73,22 +72,22 @@ public:
 private:
     mutable bool            mbMatchData;    // true if matching attributes are initialized
 
-    typedef std::unordered_map<OUString, std::unique_ptr<PhysicalFontFamily>> PhysicalFontFamilies;
+    typedef std::unordered_map<OUString, std::unique_ptr<vcl::font::PhysicalFontFamily>> PhysicalFontFamilies;
     PhysicalFontFamilies    maPhysicalFontFamilies;
 
     ImplPreMatchFontSubstitution* mpPreMatchHook;       // device specific prematch substitution
     ImplGlyphFallbackFontSubstitution* mpFallbackHook;  // device specific glyph fallback substitution
 
-    mutable std::unique_ptr<std::array<PhysicalFontFamily*,MAX_GLYPHFALLBACK>>  mpFallbackList;
+    mutable std::unique_ptr<std::array<vcl::font::PhysicalFontFamily*,MAX_GLYPHFALLBACK>> mpFallbackList;
     mutable int             mnFallbackCount;
 
     void                    ImplInitMatchData() const;
     void                    ImplInitGenericGlyphFallback() const;
 
-    PhysicalFontFamily*     ImplFindFontFamilyBySearchName( const OUString& ) const;
-    PhysicalFontFamily*     ImplFindFontFamilyBySubstFontAttr( const utl::FontNameAttr& ) const;
+    vcl::font::PhysicalFontFamily* ImplFindFontFamilyBySearchName( const OUString& ) const;
+    vcl::font::PhysicalFontFamily* ImplFindFontFamilyBySubstFontAttr( const utl::FontNameAttr& ) const;
 
-    PhysicalFontFamily*     ImplFindFontFamilyOfDefaultFont() const;
+    vcl::font::PhysicalFontFamily* ImplFindFontFamilyOfDefaultFont() const;
 
 };
 
