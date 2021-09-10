@@ -1539,11 +1539,13 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
             {
                 bool bAgain = false;
                 bool bRestartLayoutProcess = false;
-                SwPageFrame* pPageFrame = pFrame->FindPageFrame();
                 size_t nCnt = pFrame->GetDrawObjs()->size();
                 size_t i = 0;
                 while ( i < nCnt )
                 {
+                    // pFrame can move to a different page in FormatObj()
+                    SwPageFrame *const pPageFrame = pFrame->FindPageFrame();
+
                     // #i28701#
                     SwAnchoredObject* pAnchoredObj = (*pFrame->GetDrawObjs())[i];
                     assert(pAnchoredObj);
