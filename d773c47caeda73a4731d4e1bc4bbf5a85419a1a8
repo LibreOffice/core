@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a78bea69_8a430f73",
+        "filename": "include/vcl/BitmapReadAccess.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-10T18:43:26Z",
+      "side": 1,
+      "message": "maybe\n   std::as_const(mpBuffer)-\u003emaPalette[GetPixelIndex(nY, nX)];\nto make the intention clear?",
+      "revId": "d773c47caeda73a4731d4e1bc4bbf5a85419a1a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
