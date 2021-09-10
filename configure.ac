@@ -1951,7 +1951,7 @@ AC_ARG_WITH(system-liblangtag,
 AC_ARG_WITH(webdav,
     AS_HELP_STRING([--with-webdav],
         [Specify which library to use for webdav implementation.
-         Possible values: "neon", "serf", "no". The default value is "neon".
+         Possible values: "neon", "serf", "curl", "no". The default value is "neon".
          Example: --with-webdav="serf"]),
     WITH_WEBDAV=$withval,
     WITH_WEBDAV="neon")
@@ -9817,6 +9817,13 @@ if test $_os = iOS -o $_os = Android; then
 fi
 AC_MSG_CHECKING([for webdav library])
 case "$WITH_WEBDAV" in
+curl)
+    AC_MSG_RESULT([curl])
+    # curl is already mandatory (almost) and checked elsewhere
+    if test "$enable_curl" = "no"; then
+        AC_MSG_ERROR(["--with-webdav=curl conflicts with --disable-curl"])
+    fi
+    ;;
 serf)
     AC_MSG_RESULT([serf])
     # Check for system apr-util
