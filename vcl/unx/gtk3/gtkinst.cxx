@@ -5547,22 +5547,39 @@ public:
     virtual void child_grab_focus() override
     {
         gtk_widget_grab_focus(m_pWidget);
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+        bool bHasFocusChild = gtk_widget_get_focus_child(GTK_WIDGET(m_pContainer));
+#else
         bool bHasFocusChild = gtk_container_get_focus_child(m_pContainer);
+#endif
         if (!bHasFocusChild)
         {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            if (GtkWidget* pChild = gtk_widget_get_first_child(m_pContainer))
+            {
+                gtk_widget_set_focus_child(m_pContainer, pChild);
+                bHasFocusChild = true;
+            }
+#else
             GList* pChildren = gtk_container_get_children(m_pContainer);
-            for (GList* pChild = g_list_first(pChildren); pChild; pChild = g_list_next(pChild))
+            if (GList* pChild = g_list_first(pChildren))
             {
                 gtk_container_set_focus_child(m_pContainer, static_cast<GtkWidget*>(pChild->data));
                 bHasFocusChild = true;
-                break;
             }
             g_list_free(pChildren);
+#endif
         }
+
         if (bHasFocusChild)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            gtk_widget_child_focus(gtk_widget_get_focus_child(m_pWidget), GTK_DIR_TAB_FORWARD);
+#else
             gtk_widget_child_focus(gtk_container_get_focus_child(GTK_CONTAINER(m_pWidget)), GTK_DIR_TAB_FORWARD);
 #endif
+        }
+
     }
 
     virtual void move(weld::Widget* pWidget, weld::Container* pNewParent) override
