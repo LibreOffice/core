@@ -121,29 +121,29 @@ extern "C" {
 
 struct ImplPostEventData
 {
-    VclEventId      mnEvent;
     VclPtr<vcl::Window> mpWin;
     ImplSVEvent *   mnEventId;
-    KeyEvent        maKeyEvent;
     MouseEvent      maMouseEvent;
+    VclEventId      mnEvent;
+    KeyEvent        maKeyEvent;
     GestureEvent    maGestureEvent;
 
     ImplPostEventData(VclEventId nEvent, vcl::Window* pWin, const KeyEvent& rKeyEvent)
-        : mnEvent(nEvent)
-        , mpWin(pWin)
+        : mpWin(pWin)
         , mnEventId(nullptr)
+        , mnEvent(nEvent)
         , maKeyEvent(rKeyEvent)
     {}
     ImplPostEventData(VclEventId nEvent, vcl::Window* pWin, const MouseEvent& rMouseEvent)
-        : mnEvent(nEvent)
-        , mpWin(pWin)
+        : mpWin(pWin)
         , mnEventId(nullptr)
         , maMouseEvent(rMouseEvent)
+        , mnEvent(nEvent)
     {}
     ImplPostEventData(VclEventId nEvent, vcl::Window* pWin, const GestureEvent& rGestureEvent)
-        : mnEvent(nEvent)
-        , mpWin(pWin)
+        : mpWin(pWin)
         , mnEventId(nullptr)
+        , mnEvent(nEvent)
         , maGestureEvent(rGestureEvent)
     {}
 };

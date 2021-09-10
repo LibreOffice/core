@@ -35,14 +35,14 @@ struct SalTwoRect;
 
 struct VCL_DLLPUBLIC BitmapBuffer
 {
-    ScanlineFormat       mnFormat;
-    tools::Long            mnWidth;
-    tools::Long            mnHeight;
-    tools::Long            mnScanlineSize;
-    sal_uInt16      mnBitCount;
-    ColorMask       maColorMask;
+    tools::Long     mnWidth;
+    tools::Long     mnHeight;
+    tools::Long     mnScanlineSize;
     BitmapPalette   maPalette;
     sal_uInt8*      mpBits;
+    ScanlineFormat  mnFormat;
+    ColorMask       maColorMask;
+    sal_uInt16      mnBitCount;
 };
 
 VCL_DLLPUBLIC std::unique_ptr<BitmapBuffer> StretchAndConvert(

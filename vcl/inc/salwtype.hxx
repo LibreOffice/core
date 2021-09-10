@@ -214,13 +214,13 @@ struct SalSurroundingTextSelectionChangeEvent
 
 struct SalQueryCharPositionEvent
 {
-    bool            mbValid;                // The data is valid or not.
     sal_uLong       mnCharPos;              // The index of character in a composition.
+    tools::Long     mnCursorBoundX;         // The cursor bounds corresponding to the character specified by mnCharPos - X
+    tools::Long     mnCursorBoundY;         // The cursor bounds corresponding to the character specified by mnCharPos - Y
+    tools::Long     mnCursorBoundWidth;     // The cursor bounds corresponding to the character specified by mnCharPos - Width
+    tools::Long     mnCursorBoundHeight;    // The cursor bounds corresponding to the character specified by mnCharPos - Height
+    bool            mbValid;                // The data is valid or not.
     bool            mbVertical;             // The text is vertical or not.
-    tools::Long            mnCursorBoundX;         // The cursor bounds corresponding to the character specified by mnCharPos - X
-    tools::Long            mnCursorBoundY;         // The cursor bounds corresponding to the character specified by mnCharPos - Y
-    tools::Long            mnCursorBoundWidth;     // The cursor bounds corresponding to the character specified by mnCharPos - Width
-    tools::Long            mnCursorBoundHeight;    // The cursor bounds corresponding to the character specified by mnCharPos - Height
 };
 
 typedef bool (*SALFRAMEPROC)( vcl::Window* pInst, SalEvent nEvent, const void* pEvent );
@@ -233,7 +233,6 @@ enum class SalObjEvent {
 
 struct SalFrameState
 {
-    WindowStateMask mnMask;
     tools::Long            mnX;
     tools::Long            mnY;
     tools::Long            mnWidth;
@@ -242,6 +241,7 @@ struct SalFrameState
     tools::Long            mnMaximizedY;
     tools::Long            mnMaximizedWidth;
     tools::Long            mnMaximizedHeight;
+    WindowStateMask  mnMask;
     WindowStateState mnState;
 };
 
