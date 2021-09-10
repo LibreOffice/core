@@ -16,6 +16,24 @@
       "message": "Justin,\n\nThis is quite abandoned attempt to create ovverride tables in DOC. It does not work.\nUnfortunately I\u0027m out of time to get back to this issue, moreover corresponding task was already resolved by you.\n\nIf you are interested, you could move on. Or abandon/reimplement this.",
       "revId": "184dea6ff7c05f4e75ba6cd312dcdf719de1b296",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4de7fa98_b3f6a242",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-10T18:16:55Z",
+      "side": 1,
+      "message": "I don\u0027t understand override very well, and am not that eager to cause devastation in numbering :-). I just saw that you un-abandoned it and wanted to add myself as a CC to watch as an interested bystander. Unfortunately, Gerrit makes that a very noisy event...",
+      "parentUuid": "09cc8edc_9f4ea985",
+      "revId": "184dea6ff7c05f4e75ba6cd312dcdf719de1b296",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
