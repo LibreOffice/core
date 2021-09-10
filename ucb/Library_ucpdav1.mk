@@ -27,6 +27,30 @@ $(eval $(call gb_Library_use_libraries,ucpdav1,\
 	tl \
 ))
 
+ifeq ($(WITH_WEBDAV),curl)
+
+$(eval $(call gb_Library_set_componentfile,ucpdav1,ucb/source/ucp/webdav-curl/ucpdav1))
+
+$(eval $(call gb_Library_use_externals,ucpdav1,\
+	curl \
+))
+
+$(eval $(call gb_Library_add_exception_objects,ucpdav1,\
+	ucb/source/ucp/webdav-curl/ContentProperties \
+	ucb/source/ucp/webdav-curl/DAVProperties \
+	ucb/source/ucp/webdav-curl/DAVResourceAccess \
+	ucb/source/ucp/webdav-curl/DAVSessionFactory \
+	ucb/source/ucp/webdav-curl/DateTimeHelper \
+	ucb/source/ucp/webdav-curl/UCBDeadPropertyValue \
+	ucb/source/ucp/webdav-curl/webdavcontent \
+	ucb/source/ucp/webdav-curl/webdavcontentcaps \
+	ucb/source/ucp/webdav-curl/webdavdatasupplier \
+	ucb/source/ucp/webdav-curl/webdavprovider \
+	ucb/source/ucp/webdav-curl/webdavresponseparser \
+	ucb/source/ucp/webdav-curl/webdavresultset \
+))
+
+else
 ifeq ($(WITH_WEBDAV),neon)
 
 $(eval $(call gb_Library_set_componentfile,ucpdav1,ucb/source/ucp/webdav-neon/ucpdav1))
@@ -114,6 +138,7 @@ $(eval $(call gb_Library_add_exception_objects,ucpdav1,\
 	ucb/source/ucp/webdav/webdavresultset \
  ))
 
+endif # WITH_WEBDAV
 endif # WITH_WEBDAV
 
 ifeq ($(OS),WNT)
