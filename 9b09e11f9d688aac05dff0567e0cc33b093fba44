@@ -16,6 +16,64 @@
       "message": "Blah, I was triggering new builds without checking the error log as it was an uncategorized failure. Really what is seen in the Windows log is:\n\naccumulation-based service com.sun.star.drawing.GraphicObjectShape direct property #24 changed from com.sun.star.drawing.QRCode QRCodeProperties to com.sun.star.drawing.BarCode BarCodeProperties\nmake[1]: *** [C:/cygwin64/home/tdf/lode/jenkins/workspace/gerrit_windows/solenv/gbuild/UnoApiTarget.mk:46: C:/cygwin64/home/tdf/lode/jenkins/workspace/gerrit_windows/workdir/UnoApiTarget/offapi.rdb] Error 1\n\nhttps://ci.libreoffice.org/job/gerrit_windows/106596/console\n\nAkshit, can you look into it?",
       "revId": "9b09e11f9d688aac05dff0567e0cc33b093fba44",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9164a067_bff565ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-09-10T09:11:42Z",
+      "side": 1,
+      "message": "hmm... the QRCode property was added quite recently and it\u0027s optional, it\u0027s unlikely to be used by lots of extensions, so in this case i don\u0027t see much of a problem in removing it by renaming/changing its type...\n\nyou\u0027d need to edit offapi/type_reference/offapi.idl\n\noh, also put \"[API CHANGE]\" in the commit message.",
+      "parentUuid": "bfb0f283_34ede60e",
+      "revId": "9b09e11f9d688aac05dff0567e0cc33b093fba44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23ab40b8_6eb7fb0b",
+        "filename": "xmloff/source/draw/QRCodeContext.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-09-10T09:11:42Z",
+      "side": 1,
+      "message": "this is still using the old type of the property",
+      "revId": "9b09e11f9d688aac05dff0567e0cc33b093fba44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2331f9f_5c4e837d",
+        "filename": "xmloff/source/draw/QRCodeContext.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-09-10T09:11:42Z",
+      "side": 1,
+      "message": "this is still using the old name of the property",
+      "range": {
+        "startLine": 88,
+        "startChar": 32,
+        "endLine": 88,
+        "endChar": 48
+      },
+      "revId": "9b09e11f9d688aac05dff0567e0cc33b093fba44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
