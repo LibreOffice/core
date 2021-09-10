@@ -19,25 +19,22 @@ class TestSwuiidxmrk(UITestCase):
         # Given an empty Writer document:
         with self.ui_test.create_doc_in_start_center("writer") as component:
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:InsertAuthoritiesEntry")
-            insert_entry = self.xUITest.getTopFocusWindow()
-            from_document = insert_entry.getChild("fromdocument")
-            from_document.executeAction("CLICK", tuple())
-            new = insert_entry.getChild("new")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:InsertAuthoritiesEntry", close_button="close") as insert_entry:
+                from_document = insert_entry.getChild("fromdocument")
+                from_document.executeAction("CLICK", tuple())
+                new = insert_entry.getChild("new")
 
-            # When inserting a biblio entry field with a page number:
-            with self.ui_test.execute_blocking_action(new.executeAction, args=('CLICK', ())) as define_entry:
-                entry = define_entry.getChild("entry")
-                type_text(entry, "aaa")
-                listbox = define_entry.getChild("listbox")
-                select_pos(listbox, "16")  # WWW document, just select a valid position
-                pagecb = define_entry.getChild("pagecb-local-visible")
-                pagecb.executeAction("CLICK", tuple())
+                # When inserting a biblio entry field with a page number:
+                with self.ui_test.execute_blocking_action(new.executeAction, args=('CLICK', ())) as define_entry:
+                    entry = define_entry.getChild("entry")
+                    type_text(entry, "aaa")
+                    listbox = define_entry.getChild("listbox")
+                    select_pos(listbox, "16")  # WWW document, just select a valid position
+                    pagecb = define_entry.getChild("pagecb-local-visible")
+                    pagecb.executeAction("CLICK", tuple())
 
-            insert = insert_entry.getChild("insert")
-            insert.executeAction("CLICK", tuple())
-            close = insert_entry.getChild("close")
-            self.ui_test.close_dialog_through_button(close)
+                insert = insert_entry.getChild("insert")
+                insert.executeAction("CLICK", tuple())
 
             # Then make sure the local URL contains that page number:
             paragraphs = component.Text.createEnumeration()

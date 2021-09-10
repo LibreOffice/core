@@ -20,26 +20,23 @@ class tdf144089(UITestCase):
 
             self.assertEqual("test", document.CurrentSelection[0].String)
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xSearchterm = xDialog.getChild("searchterm")
-            xSearchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            xSearchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            xSearchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"^."}))
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+                xSearchterm = xDialog.getChild("searchterm")
+                xSearchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xSearchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xSearchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"^."}))
 
-            xReplaceterm = xDialog.getChild("replaceterm")
-            xReplaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"A"}))
+                xReplaceterm = xDialog.getChild("replaceterm")
+                xReplaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"A"}))
 
-            xSelectionOnly = xDialog.getChild("selection")
-            xSelectionOnly.executeAction("CLICK", tuple())
+                xSelectionOnly = xDialog.getChild("selection")
+                xSelectionOnly.executeAction("CLICK", tuple())
 
-            xRegexp = xDialog.getChild("regexp")
-            xRegexp.executeAction("CLICK", tuple())
+                xRegexp = xDialog.getChild("regexp")
+                xRegexp.executeAction("CLICK", tuple())
 
-            replaceall = xDialog.getChild("replaceall")
-            replaceall.executeAction("CLICK", tuple())
-            xcloseBtn = xDialog.getChild("close")
-            self.ui_test.close_dialog_through_button(xcloseBtn)
+                replaceall = xDialog.getChild("replaceall")
+                replaceall.executeAction("CLICK", tuple())
 
             # Without the fix in place, this test would have failed with
             # AssertionError: 'This is a test' != 'This is a AAAA'
