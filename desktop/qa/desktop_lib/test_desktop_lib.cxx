@@ -160,6 +160,7 @@ public:
     void testWriterComments();
     void testSheetOperations();
     void testSheetSelections();
+    void testSheetDragDrop();
     void testContextMenuCalc();
     void testContextMenuWriter();
     void testContextMenuImpress();
@@ -225,6 +226,7 @@ public:
     CPPUNIT_TEST(testWriterComments);
     CPPUNIT_TEST(testSheetOperations);
     CPPUNIT_TEST(testSheetSelections);
+    CPPUNIT_TEST(testSheetDragDrop);
     CPPUNIT_TEST(testContextMenuCalc);
     CPPUNIT_TEST(testContextMenuWriter);
     CPPUNIT_TEST(testContextMenuImpress);
@@ -1107,21 +1109,6 @@ void DesktopLOKTest::testSheetSelections()
     /*
      * Check if clicking inside the selection deselects the whole selection
      */
-    int const row10 = 2400;
-    // Select starting from row5, col1 to row10, col5
-    pDocument->pClass->postMouseEvent(pDocument,
-                                      LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
-                                      col1, row5,
-                                      1, 1, 0);
-    pDocument->pClass->postMouseEvent(pDocument,
-                                      LOK_MOUSEEVENT_MOUSEMOVE,
-                                      col5, row5,
-                                      1, 1, 0);
-    pDocument->pClass->postMouseEvent(pDocument,
-                                      LOK_MOUSEEVENT_MOUSEBUTTONUP,
-                                      col5, row10,
-                                      1, 1, 0);
-
     // Click at row5, col4
     pDocument->pClass->postMouseEvent(pDocument,
                                       LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
@@ -1149,6 +1136,90 @@ void DesktopLOKTest::testSheetSelections()
 
         free(pUsedMimeType);
         free(pCopiedContent);
+    }
+}
+
+void DesktopLOKTest::testSheetDragDrop()
+{
+    LibLODocument_Impl* pDocument = loadDoc("sheets.ods", LOK_DOCTYPE_SPREADSHEET);
+    pDocument->pClass->initializeForRendering(pDocument, nullptr);
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+
+    int row01 = 100;
+    int col01 = 1100;
+    int col02 = 2200;
+    int col03 = 3300;
+    int col05 = 5500;
+    int col07 = 5700;
+
+    // Select row 01 from column 01 through column 05
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      col01, row01,
+                                      1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEMOVE,
+                                      col02, row01,
+                                      1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEMOVE,
+                                      col05, row01,
+                                      1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                      col05, row01,
+                                      1, 1, 0);
+
+    Scheduler::ProcessEventsToIdle();
+    {
+        char* pMimeType = nullptr;
+        char* pContent = pDocument->pClass->getTextSelection(pDocument, nullptr, &pMimeType);
+        std::vector<long> aExpected = {1, 2, 3, 4, 5};
+        std::istringstream aContent(pContent);
+        std::string token;
+        for (size_t i = 0; i < aExpected.size(); i++)
+        {
+            aContent >> token;
+            CPPUNIT_ASSERT_EQUAL(aExpected[i], strtol(token.c_str(), nullptr, 10));
+        }
+
+        free(pMimeType);
+        free(pContent);
+    }
+
+    // drag and drop
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      col01, row01,
+                                      1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEMOVE,
+                                      col02, row01,
+                                      1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEMOVE,
+                                      col03, row01,
+                                      1, 1, 0);
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                      col07, row01,
+                                      1, 1, 0);
+
+    Scheduler::ProcessEventsToIdle();
+    {
+        char* pMimeType = nullptr;
+        char* pContent = pDocument->pClass->getTextSelection(pDocument, nullptr, &pMimeType);
+        std::vector<long> aExpected = {1, 2, 3, 4, 5};
+        std::istringstream aContent(pContent);
+        std::string token;
+        for (size_t i = 0; i < aExpected.size(); i++)
+        {
+            aContent >> token;
+            CPPUNIT_ASSERT_EQUAL(aExpected[i], strtol(token.c_str(), nullptr, 10));
+        }
+
+        free(pMimeType);
+        free(pContent);
     }
 }
 
