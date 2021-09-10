@@ -154,6 +154,196 @@ CPPUNIT_TEST_FIXTURE(Test, testDmlGroupshapePolygon)
     assertXPath(pXmlDoc, "//wpg:grpSpPr/a:xfrm/a:chExt", "cx", "5328360");
     assertXPath(pXmlDoc, "//wps:spPr/a:xfrm/a:ext", "cx", "5328360");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testCustomShapeArrowExport)
+{
+    // Given a document with a few different kinds of arrow shapes in it:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf142602_CustomShapeArrows.odt";
+    // When saving that to DOCX:
+    loadAndSave(aURL, "Office Open XML Text");
+
+    // Then the shapes should retain their correct control values.
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, getTempFile().GetURL());
+    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("word/document.xml"),
+                                                  uno::UNO_QUERY);
+    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+
+    // Without the fix the output OOXML would have no <a:prstGeom> tags in it.
+
+    // Right arrow
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
+                "prst", "rightArrow");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
+                "fmla", "val 50000");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
+                "fmla", "val 46321");
+
+    // Left arrow
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
+                "prst", "leftArrow");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
+                "fmla", "val 50000");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
+                "fmla", "val 52939");
+
+    // Down arrow
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
+                "prst", "downArrow");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
+                "fmla", "val 50000");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
+                "fmla", "val 59399");
+
+    // Up arrow
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[4]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
+                "prst", "upArrow");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[4]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
+                "fmla", "val 50000");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[4]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
+                "fmla", "val 63885");
+
+    // Left-right arrow
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[5]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
+                "prst", "leftRightArrow");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[5]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
+                "fmla", "val 50000");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[5]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
+                "fmla", "val 53522");
+
+    // Up-down arrow
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[6]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
+                "prst", "upDownArrow");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[6]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
+                "fmla", "val 50000");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[6]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
+                "fmla", "val 62743");
+
+    // Right arrow callout
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[7]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
+                "prst", "rightArrowCallout");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[7]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
+                "fmla", "val 25002");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[7]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
+                "fmla", "val 25000");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[7]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[3]",
+                "fmla", "val 25052");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[7]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[4]",
+                "fmla", "val 66667");
+
+    // Left arrow callout
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[8]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
+                "prst", "leftArrowCallout");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[8]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
+                "fmla", "val 25002");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[8]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
+                "fmla", "val 25000");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[8]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[3]",
+                "fmla", "val 25057");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[8]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[4]",
+                "fmla", "val 66673");
+
+    // Down arrow callout
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[9]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
+                "prst", "downArrowCallout");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[9]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
+                "fmla", "val 29415");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[9]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
+                "fmla", "val 29413");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[9]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[3]",
+                "fmla", "val 16667");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[9]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[4]",
+                "fmla", "val 66667");
+
+    // Up arrow callout
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[10]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
+                "prst", "upArrowCallout");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[10]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]",
+                "fmla", "val 31033");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[10]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]",
+                "fmla", "val 31030");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[10]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[3]",
+                "fmla", "val 16667");
+    assertXPath(pXmlDoc,
+                "//w:r/mc:AlternateContent[10]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+                "a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[4]",
+                "fmla", "val 66660");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
