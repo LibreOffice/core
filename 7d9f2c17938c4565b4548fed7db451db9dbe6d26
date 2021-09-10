@@ -16,6 +16,23 @@
       "message": "I tested this a lot on my machines and certaintly I cannot say if I have considered all the cases, but imho this patch could be ok. What do you think?",
       "revId": "7d9f2c17938c4565b4548fed7db451db9dbe6d26",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3323273e_cda722e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-10T11:25:19Z",
+      "side": 1,
+      "message": "Looks fine to me. Thanks!",
+      "revId": "7d9f2c17938c4565b4548fed7db451db9dbe6d26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
