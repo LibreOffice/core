@@ -16,6 +16,23 @@
       "message": "After looking a bit into this, I\u0027m wondering whether Ctrl+Right_Shift is designed to switch to RTL - at least when no other key is pressed in addition?? (s. my tdf#144412 comment 5 for more details)?\nBut maybe I just misunderstood or missded something else...\n\nThis is no longer the case with this change in place, so I\u0027m wondering whether it should still be the case (or that should be dropped completely for all backends in case it\u0027s not considered useful).\n\n",
       "revId": "174af3308f9149c90341c69683f5bcab86c67355",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65037db8_7f88c86d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-09-10T09:51:54Z",
+      "side": 1,
+      "message": "So the general behavior of switching to RTL with Ctrl + R-Shift and LTR with Ctrl + L-Shift is not a bug, but a feature. It triggers on button release, which should prevent interference with shortcut usage, but that doesn\u0027t happen for kf5.\n\nSo this patch is wrong.",
+      "revId": "174af3308f9149c90341c69683f5bcab86c67355",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
