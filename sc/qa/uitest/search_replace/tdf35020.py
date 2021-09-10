@@ -20,22 +20,19 @@ class tdf35020(UITestCase):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            searchterm = xDialog.getChild("searchterm")
-            searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"X6"}))
-            replaceterm = xDialog.getChild("replaceterm")
-            replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"A6"})) #replace textbox
-            allsheets = xDialog.getChild("allsheets")
-            allsheets.executeAction("CLICK", tuple())
-            calcsearchin = xDialog.getChild("calcsearchin")
-            select_by_text(calcsearchin, "Formulas")
-            replaceall = xDialog.getChild("replaceall")
-            replaceall.executeAction("CLICK", tuple())
-            xcloseBtn = xDialog.getChild("close")
-            self.ui_test.close_dialog_through_button(xcloseBtn)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+                searchterm = xDialog.getChild("searchterm")
+                searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"X6"}))
+                replaceterm = xDialog.getChild("replaceterm")
+                replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"A6"})) #replace textbox
+                allsheets = xDialog.getChild("allsheets")
+                allsheets.executeAction("CLICK", tuple())
+                calcsearchin = xDialog.getChild("calcsearchin")
+                select_by_text(calcsearchin, "Formulas")
+                replaceall = xDialog.getChild("replaceall")
+                replaceall.executeAction("CLICK", tuple())
 
             #verify Sheet1.A13 A14 = 2
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 12).getValue(), 2)
