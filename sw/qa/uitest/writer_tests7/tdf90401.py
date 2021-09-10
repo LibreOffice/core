@@ -82,16 +82,15 @@ class tdf90401(UITestCase):
                     self.assertEqual(year, 0)
 
                     # check removed personal info on tracked changes
-                    try:
-                        self.ui_test.execute_modeless_dialog_through_command('.uno:AcceptTrackedChanges')
-                        xTrackDlg = self.xUITest.getTopFocusWindow()
-                        xTreeList = xTrackDlg.getChild('writerchanges')
-                        state = get_state_as_dict(xTreeList)
-                        # This was 'NL\t11/03/2020 19:19:05\t', containing personal info
-                        self.assertEqual(state['SelectEntryText'], 'Author1\t01/01/1970 00:00:00\t')
-                    except:
-                        # skip the test for Clang's exception "Dialog not executed for..."
-                        pass
+                    self.ui_test.execute_modeless_dialog_through_command('.uno:AcceptTrackedChanges')
+                    xTrackDlg = self.xUITest.getTopFocusWindow()
+                    xTreeList = xTrackDlg.getChild('writerchanges')
+                    state = get_state_as_dict(xTreeList)
+                    # This was 'NL\t11/03/2020 19:19:05\t', containing personal info
+                    self.assertEqual(state['SelectEntryText'], 'Author1\t01/01/1970 00:00:00\t')
+
+                    xCloseBtn = xTrackDlg.getChild("close")
+                    xCloseBtn.executeAction("CLICK", tuple())
 
 
    def test_tdf142902_remove_personal_info_in_DOCX(self):
@@ -166,15 +165,14 @@ class tdf90401(UITestCase):
 
                     # check removed personal info on tracked changes
 
-                    try:
-                        self.ui_test.execute_modeless_dialog_through_command('.uno:AcceptTrackedChanges')
-                        xTrackDlg = self.xUITest.getTopFocusWindow()
-                        xTreeList = xTrackDlg.getChild('writerchanges')
-                        state = get_state_as_dict(xTreeList)
-                        # This was 'NL\t11/03/2020 19:19:05\t', containing personal info
-                        self.assertEqual(state['SelectEntryText'], 'Author1\t01/01/1970 00:00:00\t')
-                    except:
-                        # skip the test for Clang's exception "Dialog not executed for..."
-                        pass
+                    self.ui_test.execute_modeless_dialog_through_command('.uno:AcceptTrackedChanges')
+                    xTrackDlg = self.xUITest.getTopFocusWindow()
+                    xTreeList = xTrackDlg.getChild('writerchanges')
+                    state = get_state_as_dict(xTreeList)
+                    # This was 'NL\t11/03/2020 19:19:05\t', containing personal info
+                    self.assertEqual(state['SelectEntryText'], 'Author1\t01/01/1970 00:00:00\t')
+
+                    xCloseBtn = xTrackDlg.getChild("close")
+                    xCloseBtn.executeAction("CLICK", tuple())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
