@@ -5927,7 +5927,6 @@ void SwWW8ImplReader::SetOutlineStyles()
     {
         sal_uInt16 nStyle = 0;
         std::map<const SwNumRule*, int> aWW8ListStyleCounts;
-        std::map<const SwNumRule*, bool> aPreventUseAsChapterNumbering;
         for (SwWW8StyInf& rSI : m_vColl)
         {
             // Copy inherited numbering info since LO drops inheritance after ChapterNumbering
@@ -5939,15 +5938,6 @@ void SwWW8ImplReader::SetOutlineStyles()
                 if (rSI.m_nLFOIndex == USHRT_MAX)
                 {
                     rSI.m_nLFOIndex = m_vColl[rSI.m_nBase].m_nLFOIndex;
-
-                    // When ANYTHING is wrong or strange, prohibit eligibility for ChapterNumbering.
-                    // A style never inherits numbering from Chapter Numbering.
-                    if (rSI.m_nLFOIndex != USHRT_MAX)
-                    {
-                        const SwNumRule* pNumRule = m_vColl[rSI.m_nBase].m_pOutlineNumrule;
-                        if (pNumRule)
-                            aPreventUseAsChapterNumbering[pNumRule] = true;
-                    }
                 }
                 if (rSI.m_nListLevel == MAXLEVEL)
                     rSI.m_nListLevel = m_vColl[rSI.m_nBase].m_nListLevel;
@@ -5973,12 +5963,6 @@ void SwWW8ImplReader::SetOutlineStyles()
                 continue;
             }
 
-            // When ANYTHING is wrong or strange, prohibit eligibility for ChapterNumbering.
-            if (rSI.IsOutlineNumbered() && rSI.m_nListLevel != rSI.mnWW8OutlineLevel)
-            {
-                aPreventUseAsChapterNumbering[rSI.m_pOutlineNumrule] = true;
-            }
-
             aWW8BuiltInHeadingStyles.push_back(&rSI);
 
             const SwNumRule* pWW8ListStyle = rSI.GetOutlineNumrule();
@@ -5994,19 +5978,6 @@ void SwWW8ImplReader::SetOutlineStyles()
                 {
                     ++(aCountIter->second);
                 }
-            }
-        }
-
-        int nCurrentMaxCount = 0;
-        for (const auto& rEntry : aWW8ListStyleCounts)
-        {
-            if (aPreventUseAsChapterNumbering[rEntry.first])
-                continue;
-
-            if (rEntry.second > nCurrentMaxCount)
-            {
-                nCurrentMaxCount = rEntry.second;
-                m_pChosenWW8OutlineStyle = rEntry.first;
             }
         }
     }
@@ -6048,9 +6019,7 @@ void SwWW8ImplReader::SetOutlineStyles()
             |= nOutlineStyleListLevelOfWW8BuiltInHeadingStyle;
 
         SwTextFormatColl* pTextFormatColl = static_cast<SwTextFormatColl*>(pStyleInf->m_pFormat);
-        if (pStyleInf->GetOutlineNumrule() != m_pChosenWW8OutlineStyle
-            || (pStyleInf->m_nListLevel < WW8ListManager::nMaxLevel
-                && pStyleInf->mnWW8OutlineLevel != pStyleInf->m_nListLevel))
+
         {
             // WW8 Built-In Heading Style does not apply the chosen one.
             // --> delete assignment to OutlineStyle, but keep its current
@@ -6069,11 +6038,6 @@ void SwWW8ImplReader::SetOutlineStyles()
                     pStyleInf->mnWW8OutlineLevel);
             pTextFormatColl->SetFormatAttr(
                 SfxUInt16Item(RES_PARATR_OUTLINELEVEL, nOutlineLevel));
-        }
-        else
-        {
-            pTextFormatColl->AssignToListLevelOfOutlineStyle(
-                pStyleInf->mnWW8OutlineLevel);
         }
     }
 

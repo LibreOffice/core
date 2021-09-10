@@ -1774,17 +1774,12 @@ void SwWW8ImplReader::RegisterNumFormatOnStyle(sal_uInt16 nStyle)
 
         if (pNmRule != nullptr)
         {
-            if (rStyleInf.IsWW8BuiltInHeadingStyle()
-                && rStyleInf.HasWW8OutlineLevel())
-            {
-                rStyleInf.m_pOutlineNumrule = pNmRule;
-            }
-            else
-            {
-                rStyleInf.m_pFormat->SetFormatAttr(
-                    SwNumRuleItem(pNmRule->GetName()));
-                rStyleInf.m_bHasStyNumRule = true;
-            }
+            rStyleInf.m_pFormat->SetFormatAttr(SwNumRuleItem(pNmRule->GetName()));
+            rStyleInf.m_bHasStyNumRule = true;
+
+            rStyleInf.m_pFormat->SetFormatAttr(
+                SfxInt16Item(RES_PARATR_LIST_LEVEL,
+                             static_cast<sal_Int16>(rStyleInf.m_nListLevel)));
 
             SetStyleIndent(rStyleInf, pNmRule->Get(rStyleInf.m_nListLevel));
         }
