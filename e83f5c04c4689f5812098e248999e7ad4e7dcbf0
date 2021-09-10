@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57e8b86d_3604d1c4",
+        "filename": "chart2/qa/extras/chart2export.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-09-10T08:49:30Z",
+      "side": 0,
+      "message": "Why do you get FillStyle as a sal_Int32 when you can get it directly as a Color? Then you can compare COL_WHITE and nColor directly without the need to use the complex Color(ColorTransparency, nColor \u0026 0x00FFFFFF)",
+      "revId": "e83f5c04c4689f5812098e248999e7ad4e7dcbf0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
