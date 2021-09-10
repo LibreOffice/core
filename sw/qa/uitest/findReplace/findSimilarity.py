@@ -19,21 +19,20 @@ class findSimilarities(UITestCase):
             self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "1")
             # search and replace dialog
             #find = seco
-            self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            searchterm = xDialog.getChild("searchterm")
-            searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"seco"}))  #seco
-            # check similarities, button similarities, set values = 1; close dialog with OK
-            similarity = xDialog.getChild("similarity")
-            similaritybtn = xDialog.getChild("similaritybtn")
-            similarity.executeAction("CLICK", tuple())
-            with self.ui_test.execute_blocking_action(similaritybtn.executeAction, args=('CLICK', ())) as dialog:
-                otherfld = dialog.getChild("otherfld")
-                longerfld = dialog.getChild("longerfld")
-                shorterfld = dialog.getChild("shorterfld")
-                otherfld.executeAction("DOWN", tuple())
-                longerfld.executeAction("DOWN", tuple())
-                shorterfld.executeAction("DOWN", tuple())
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="") as xDialog:
+                searchterm = xDialog.getChild("searchterm")
+                searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"seco"}))  #seco
+                # check similarities, button similarities, set values = 1; close dialog with OK
+                similarity = xDialog.getChild("similarity")
+                similaritybtn = xDialog.getChild("similaritybtn")
+                similarity.executeAction("CLICK", tuple())
+                with self.ui_test.execute_blocking_action(similaritybtn.executeAction, args=('CLICK', ())) as dialog:
+                    otherfld = dialog.getChild("otherfld")
+                    longerfld = dialog.getChild("longerfld")
+                    shorterfld = dialog.getChild("shorterfld")
+                    otherfld.executeAction("DOWN", tuple())
+                    longerfld.executeAction("DOWN", tuple())
+                    shorterfld.executeAction("DOWN", tuple())
 
             #open dialog again, verify values = 1; close dialog with cancel
             with self.ui_test.execute_blocking_action(similaritybtn.executeAction, args=('CLICK', ()), close_button="cancel") as dialog:

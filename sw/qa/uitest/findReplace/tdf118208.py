@@ -36,18 +36,15 @@ class tdf118208(UITestCase):
                     complexlanguage.executeAction("CLICK", tuple())
 
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
 
-            format = xDialog.getChild("format")
+                format = xDialog.getChild("format")
 
-            with self.ui_test.execute_blocking_action(format.executeAction, args=('CLICK', ())):
-                pass
+                with self.ui_test.execute_blocking_action(format.executeAction, args=('CLICK', ())):
+                    pass
 
-            #verify
-            self.assertEqual(writer_doc.Text.String[0:14], "Aaaaaaaaaaaaaa")
-            xcloseBtn = xDialog.getChild("close")
-            self.ui_test.close_dialog_through_button(xcloseBtn)
+                #verify
+                self.assertEqual(writer_doc.Text.String[0:14], "Aaaaaaaaaaaaaa")
 
             #enable lang support again
             with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialog:
