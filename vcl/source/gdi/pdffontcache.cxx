@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <sal/types.h>
 
 #include <PhysicalFontFace.hxx>
@@ -61,4 +63,4 @@ sal_Int32 PDFFontCache::getGlyphWidth( const PhysicalFontFace* pFont, sal_GlyphI
     return nWidth;
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
