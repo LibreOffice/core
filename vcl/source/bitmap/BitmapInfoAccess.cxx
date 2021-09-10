@@ -72,7 +72,9 @@ BitmapInfoAccess::~BitmapInfoAccess()
 
 sal_uInt16 BitmapInfoAccess::GetBestPaletteIndex(const BitmapColor& rBitmapColor) const
 {
-    return (HasPalette() ? mpBuffer->maPalette.GetBestIndex(rBitmapColor) : 0);
+    const BitmapBuffer* pBuffer = mpBuffer;
+
+    return (HasPalette() ? pBuffer->maPalette.GetBestIndex(rBitmapColor) : 0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

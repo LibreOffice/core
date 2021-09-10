@@ -87,40 +87,49 @@ public:
 
     bool HasPalette() const
     {
-        assert(mpBuffer && "Access is not valid!");
+        const BitmapBuffer* pBuffer = mpBuffer;
 
-        return mpBuffer && !!mpBuffer->maPalette;
+        assert(pBuffer && "Access is not valid!");
+
+        return pBuffer && !!pBuffer->maPalette;
     }
 
     const BitmapPalette& GetPalette() const
     {
-        assert(mpBuffer && "Access is not valid!");
+        const BitmapBuffer* pBuffer = mpBuffer;
 
-        return mpBuffer->maPalette;
+        assert(pBuffer && "Access is not valid!");
+
+        return pBuffer->maPalette;
     }
 
     sal_uInt16 GetPaletteEntryCount() const
     {
+        const BitmapBuffer* pBuffer = mpBuffer;
+
         assert(HasPalette() && "Bitmap has no palette!");
 
-        return HasPalette() ? mpBuffer->maPalette.GetEntryCount() : 0;
+        return HasPalette() ? pBuffer->maPalette.GetEntryCount() : 0;
     }
 
     const BitmapColor& GetPaletteColor(sal_uInt16 nColor) const
     {
-        assert(mpBuffer && "Access is not valid!");
+        const BitmapBuffer* pBuffer = mpBuffer;
+        assert(pBuffer && "Access is not valid!");
         assert(HasPalette() && "Bitmap has no palette!");
 
-        return mpBuffer->maPalette[nColor];
+        return pBuffer->maPalette[nColor];
     }
 
     sal_uInt16 GetBestPaletteIndex(const BitmapColor& rBitmapColor) const;
 
     const ColorMask& GetColorMask() const
     {
-        assert(mpBuffer && "Access is not valid!");
+        const BitmapBuffer* pBuffer = mpBuffer;
 
-        return mpBuffer->maColorMask;
+        assert(pBuffer && "Access is not valid!");
+
+        return pBuffer->maColorMask;
     }
 
 private:
