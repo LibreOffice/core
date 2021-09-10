@@ -14,15 +14,12 @@ class FunctionWizardTest(UITestCase):
     def test_open_function_wizard(self):
         with self.ui_test.create_doc_in_start_center("calc"):
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:FunctionDialog")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:FunctionDialog", close_button="cancel") as xFunctionDlg:
 
-            xFunctionDlg = self.xUITest.getTopFocusWindow()
 
-            xArrayChkBox = xFunctionDlg.getChild("array")
-            xArrayChkBox.executeAction("CLICK", tuple())
+                xArrayChkBox = xFunctionDlg.getChild("array")
+                xArrayChkBox.executeAction("CLICK", tuple())
 
-            xCancelBtn = xFunctionDlg.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xCancelBtn)
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

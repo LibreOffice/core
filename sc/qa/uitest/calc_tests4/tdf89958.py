@@ -22,17 +22,14 @@ class tdf89958(UITestCase):
 
             #Menu: Data->Filter->Standard Filter ...
             #Field Name "Column A", Condition "Does not end with", Value: "CTORS"
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xfield1 = xDialog.getChild("field1")
-            xval1 = xDialog.getChild("val1")
-            xcond1 = xDialog.getChild("cond1")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+                xfield1 = xDialog.getChild("field1")
+                xval1 = xDialog.getChild("val1")
+                xcond1 = xDialog.getChild("cond1")
 
-            select_by_text(xfield1, "Column A")
-            select_by_text(xcond1, "Does not end with")
-            xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"CTORS"}))
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                select_by_text(xfield1, "Column A")
+                select_by_text(xcond1, "Does not end with")
+                xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"CTORS"}))
 
             #Expected behaviours: A2 is not filtered as it does not end with "CTORS".
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
