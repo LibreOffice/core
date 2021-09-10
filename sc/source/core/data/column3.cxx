@@ -2479,8 +2479,12 @@ class FilterEntriesHandler
                 {
                     const ScColorScaleFormat* pColFormat
                         = static_cast<const ScColorScaleFormat*>(aEntry);
-                    backgroundColor = *(pColFormat->GetColor(aPos));
-                    bHasConditionalBackgroundColor = true;
+                    std::optional<Color> oColor = pColFormat->GetColor(aPos);
+                    if (oColor)
+                    {
+                        backgroundColor = *oColor;
+                        bHasConditionalBackgroundColor = true;
+                    }
                 }
             }
         }
