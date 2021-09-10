@@ -552,13 +552,21 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
     assert(xConfigItem);
 
-    sal_uInt32 nBegin = static_cast<sal_Int32>(m_xFromNF->get_value() - 1);
-    sal_uInt32 nEnd = static_cast<sal_Int32>(m_xToNF->get_value());
-    sal_uInt32 nMax = static_cast<sal_Int32>(m_xToNF->get_max());
-    if (nEnd > nMax)
-        nEnd = nMax;
+    const sal_uInt32 nDocumentCount = xConfigItem->GetMergedDocumentCount();
+    sal_uInt32 nBegin = 0;
+    sal_uInt32 nEnd = nDocumentCount;
 
-    xConfigItem->SetBeginEnd(nBegin, nEnd);
+    if (!m_xSaveIndividualRB->get_active())
+    {
+        nBegin = static_cast<sal_Int32>(m_xFromNF->get_value() - 1);
+        nEnd = static_cast<sal_Int32>(m_xToNF->get_value());
+        if (nEnd > nDocumentCount)
+            nEnd = nDocumentCount;
+
+        xConfigItem->SetBeginEnd(nBegin, nEnd);
+    }
+    else
+        xConfigItem->SetBeginEnd(nBegin, nEnd);
 
     if (!xConfigItem->GetTargetView())
         SwDBManager::PerformMailMerge(pView);
@@ -773,13 +781,21 @@ IMPL_LINK_NOARG(SwMMResultPrintDialog, PrintHdl_Impl, weld::Button&, void)
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
     assert(xConfigItem);
 
-    sal_uInt32 nBegin = static_cast<sal_Int32>(m_xFromNF->get_value() - 1);
-    sal_uInt32 nEnd = static_cast<sal_Int32>(m_xToNF->get_value());
-    sal_uInt32 nMax = static_cast<sal_Int32>(m_xToNF->get_max());
-    if (nEnd > nMax)
-        nEnd = nMax;
+    const sal_uInt32 nDocumentCount = xConfigItem->GetMergedDocumentCount();
+    sal_uInt32 nBegin = 0;
+    sal_uInt32 nEnd = nDocumentCount;
 
-    xConfigItem->SetBeginEnd(nBegin, nEnd);
+    if (!m_xPrintAllRB->get_active())
+    {
+        nBegin = static_cast<sal_Int32>(m_xFromNF->get_value() - 1);
+        nEnd = static_cast<sal_Int32>(m_xToNF->get_value());
+        if (nEnd > nDocumentCount)
+            nEnd = nDocumentCount;
+
+        xConfigItem->SetBeginEnd(nBegin, nEnd);
+    }
+    else
+        xConfigItem->SetBeginEnd(nBegin, nEnd);
 
     if(!xConfigItem->GetTargetView())
         SwDBManager::PerformMailMerge(pView);
@@ -884,13 +900,21 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
     assert(xConfigItem);
 
-    sal_uInt32 nBegin = static_cast<sal_Int32>(m_xFromNF->get_value() - 1);
-    sal_uInt32 nEnd = static_cast<sal_Int32>(m_xToNF->get_value());
-    sal_uInt32 nMax = static_cast<sal_Int32>(m_xToNF->get_max());
-    if (nEnd > nMax)
-        nEnd = nMax;
+    const sal_uInt32 nDocumentCount = xConfigItem->GetMergedDocumentCount();
+    sal_uInt32 nBegin = 0;
+    sal_uInt32 nEnd = nDocumentCount;
 
-    xConfigItem->SetBeginEnd(nBegin, nEnd);
+    if (!m_xSendAllRB->get_active())
+    {
+        nBegin = static_cast<sal_Int32>(m_xFromNF->get_value() - 1);
+        nEnd = static_cast<sal_Int32>(m_xToNF->get_value());
+        if (nEnd > nDocumentCount)
+            nEnd = nDocumentCount;
+
+        xConfigItem->SetBeginEnd(nBegin, nEnd);
+    }
+    else
+        xConfigItem->SetBeginEnd(nBegin, nEnd);
 
     if (!xConfigItem->GetTargetView())
         SwDBManager::PerformMailMerge(pView);
