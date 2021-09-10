@@ -16,6 +16,23 @@
       "message": "Why was this needed in the first place?\nI saw no problem in the dialog on Linux or Windows after reverting that line.\nBut there must have been some reason to add it...",
       "revId": "45a82a814229c5212ec69f1c7536aaf1bff685b6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60253645_26691c6b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-10T11:50:36Z",
+      "side": 1,
+      "message": "Gulsah has detailed notes on this one perhaps.\n\nIIRC this MM stuff was originally developed against gtk3 then was fixed up to work with the non-gtk3 weld backend as well. So if gtk3+Windows doesn\u0027t need it anymore, it can go.",
+      "revId": "45a82a814229c5212ec69f1c7536aaf1bff685b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
