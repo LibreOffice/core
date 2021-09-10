@@ -1786,6 +1786,13 @@ void SwWW8ImplReader::RegisterNumFormatOnStyle(sal_uInt16 nStyle)
                 rStyleInf.m_bHasStyNumRule = true;
             }
 
+            if (rStyleInf.m_nListLevel)
+            {
+                rStyleInf.m_pFormat->SetFormatAttr(
+                    SfxInt16Item(RES_PARATR_LIST_LEVEL,
+                                 static_cast<sal_Int16>(rStyleInf.m_nListLevel));
+            }
+
             SetStyleIndent(rStyleInf, pNmRule->Get(rStyleInf.m_nListLevel));
         }
     }
