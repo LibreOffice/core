@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f673340d_c2da6c0b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-09-10T14:04:46Z",
+      "side": 1,
+      "message": "see https://gerrit.libreoffice.org/c/core/+/121906 for a follow up if considering backporting",
+      "revId": "817ef891cf2bef8fdc82852f73acb422afb89bd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
