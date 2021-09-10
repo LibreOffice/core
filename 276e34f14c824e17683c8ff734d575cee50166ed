@@ -70,6 +70,24 @@
       "parentUuid": "4db09242_a2f6c7e7",
       "revId": "276e34f14c824e17683c8ff734d575cee50166ed",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eeb5eaec_e81d35cd",
+        "filename": "sc/qa/uitest/calc_tests9/tdf115933.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-09-10T12:30:25Z",
+      "side": 1,
+      "message": "yep, it \"hangs\" so at some point you have to kill it, thus it fails. same in jenkins, it would be killed by the kill-wrapper",
+      "parentUuid": "44706290_7bfd97bd",
+      "revId": "276e34f14c824e17683c8ff734d575cee50166ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
