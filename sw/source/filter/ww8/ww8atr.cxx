@@ -3745,6 +3745,15 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
     {
         if ( pC && pC->IsAssignedToListLevelOfOutlineStyle() )
             nLvl = static_cast< sal_uInt8 >( pC->GetAssignedOutlineStyleLevel() );
+        else
+        {
+            const SfxItemSet* pSet = GetExport().m_pISet;
+            if (pSet && pSet->HasItem(RES_PARATR_LIST_LEVEL))
+            {
+                const SfxPoolItem* pItem = pSet->GetItem(RES_PARATR_LIST_LEVEL);
+                nLvl = pItem->StaticWhichCast(RES_PARATR_LIST_LEVEL).GetValue();
+            }
+        }
     }
 
     if ( nLvl >= WW8ListManager::nMaxLevel )
