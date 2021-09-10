@@ -418,7 +418,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 if (!bChildCanFocus)
                 {
                     OUString sParentClass = GetParentObjectType(xChild);
-                    if (sParentClass == "GtkBox" || sParentClass == "GtkGrid")
+                    if (sParentClass == "GtkBox" || sParentClass == "GtkGrid"
+                        || sParentClass == "GtkViewport")
                     {
                         // e.g. for the case of notebooks without children yet, just remove the can't focus property
                         // from Boxes and Grids
