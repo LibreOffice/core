@@ -37,13 +37,13 @@ void StatisticalFunctionsTest::testIntrinsicSums()
     double* pCurrent = summands;
     size_t i = 0;
     if (sc::op::hasAVX512F)
-        CPPUNIT_ASSERT_EQUAL(42.0, sc::op::executeAVX512F(i, 9, pCurrent).get());
+        CPPUNIT_ASSERT_EQUAL(42.0, KahanSum(sc::op::executeAVX512F(i, 9, pCurrent)).get());
     i = 0;
     if (sc::op::hasAVX)
-        CPPUNIT_ASSERT_EQUAL(42.0, sc::op::executeAVX(i, 9, pCurrent).get());
+        CPPUNIT_ASSERT_EQUAL(42.0, KahanSum(sc::op::executeAVX(i, 9, pCurrent)).get());
     i = 0;
     if (sc::op::hasSSE2)
-        CPPUNIT_ASSERT_EQUAL(42.0, sc::op::executeSSE2(i, 9, pCurrent).get());
+        CPPUNIT_ASSERT_EQUAL(42.0, KahanSum(sc::op::executeSSE2(i, 9, pCurrent)).get());
     i = 0;
     CPPUNIT_ASSERT_EQUAL(42.0, sc::op::executeUnrolled(i, 9, pCurrent).get());
 }

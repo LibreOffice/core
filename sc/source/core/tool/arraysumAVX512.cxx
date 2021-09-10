@@ -8,10 +8,15 @@
  *
  */
 
-#include <arraysumfunctor.hxx>
-#include <sal/log.hxx>
+#define LO_ARRAYSUM_SPACE AVX512
+#include "arraysum.hxx"
+
+#include <arraysumfunctorinternal.hxx>
+
 #include <tools/simd.hxx>
 #include <tools/simdsupport.hxx>
+
+#include <cstdlib>
 
 /* TODO Remove this once GCC updated and AVX512 can work. */
 #ifdef __GNUC__
@@ -23,15 +28,17 @@
 #endif
 #endif
 
-#ifdef LO_AVX512F_AVAILABLE
-const bool sc::op::hasAVX512F = cpuid::hasAVX512F();
-#else
-const bool sc::op::hasAVX512F = false;
-#endif
-
 namespace sc::op
 {
+#ifdef LO_AVX512F_AVAILABLE
+const bool hasAVX512F = cpuid::hasAVX512F();
+#else
+const bool hasAVX512F = false;
+#endif
+
 #ifdef LO_AVX512F_AVAILABLE // New processors
+
+using namespace AVX512;
 
 /** Kahan sum with AVX512.
   */
@@ -59,7 +66,7 @@ static inline void sumAVX512(__m512d& sum, __m512d& err, const __m512d& value)
 
 /** Execute Kahan sum with AVX512.
   */
-KahanSum executeAVX512F(size_t& i, size_t nSize, const double* pCurrent)
+KahanSumSimple executeAVX512F(size_t& i, size_t nSize, const double* pCurrent)
 {
 #ifdef LO_AVX512F_AVAILABLE // New processors
     // Make sure we don't fall out of bounds.
@@ -85,8 +92,8 @@ KahanSum executeAVX512F(size_t& i, size_t nSize, const double* pCurrent)
         static_assert(sizeof(double) == 8);
         double sums[8];
         double errs[8];
-        _mm512_storeu_pd(static_cast<void*>(&sums[0]), sum);
-        _mm512_storeu_pd(static_cast<void*>(&errs[0]), err);
+        _mm512_storeu_pd(&sums[0], sum);
+        _mm512_storeu_pd(&errs[0], err);
 
         // First Kahan & pairwise summation
         // 0+1 1+2 3+4 4+5 6+7 -> 0, 2, 4, 6
@@ -112,16 +119,14 @@ KahanSum executeAVX512F(size_t& i, size_t nSize, const double* pCurrent)
         sumNeumanierNormal(sums[0], errs[0], errs[4]);
 
         // Return final result
-        return KahanSum(sums[0], errs[0]);
+        return { sums[0], errs[0] };
     }
-    else
-        return 0.0;
+    return { 0.0, 0.0 };
 #else
-    SAL_WARN("sc", "Failed to use AVX 512");
     (void)i;
     (void)nSize;
     (void)pCurrent;
-    return 0.0;
+    abort();
 #endif
 }
 

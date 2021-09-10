@@ -8,23 +8,27 @@
  *
  */
 
-#include <arraysumfunctor.hxx>
-#include <sal/log.hxx>
+#define LO_ARRAYSUM_SPACE SSE2
+#include "arraysum.hxx"
+
+#include <arraysumfunctorinternal.hxx>
+
 #include <tools/simd.hxx>
 #include <tools/simdsupport.hxx>
 
-//AVX512VL + AVX512F + KNCNI
+#include <cstdlib>
 
 namespace sc::op
 {
 #ifdef LO_SSE2_AVAILABLE // Old processors
 
-const __m128d ANNULATE_SIGN_BIT = _mm_castsi128_pd(_mm_set1_epi64x(0x7FFF'FFFF'FFFF'FFFF));
+using namespace SSE2;
 
-/** Kahan sum with SSE4.2.
+/** Kahan sum with SSE2.
   */
 static inline void sumSSE2(__m128d& sum, __m128d& err, const __m128d& value)
 {
+    const __m128d ANNULATE_SIGN_BIT = _mm_castsi128_pd(_mm_set1_epi64x(0x7FFF'FFFF'FFFF'FFFF));
     // Temporal parameter
     __m128d t = _mm_add_pd(sum, value);
     // Absolute value of the total sum
@@ -47,7 +51,7 @@ static inline void sumSSE2(__m128d& sum, __m128d& err, const __m128d& value)
 
 /** Execute Kahan sum with SSE2.
   */
-KahanSum executeSSE2(size_t& i, size_t nSize, const double* pCurrent)
+KahanSumSimple executeSSE2(size_t& i, size_t nSize, const double* pCurrent)
 {
 #ifdef LO_SSE2_AVAILABLE
     // Make sure we don't fall out of bounds.
@@ -113,15 +117,14 @@ KahanSum executeSSE2(size_t& i, size_t nSize, const double* pCurrent)
         sumNeumanierNormal(sums[0], errs[0], errs[1]);
 
         // Store result
-        return KahanSum(sums[0], errs[0]);
+        return { sums[0], errs[0] };
     }
-    return 0.0;
+    return { 0.0, 0.0 };
 #else
-    SAL_WARN("sc", "Failed to use SSE2");
     (void)i;
     (void)nSize;
     (void)pCurrent;
-    return 0.0;
+    abort();
 #endif
 }
 }

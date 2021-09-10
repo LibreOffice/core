@@ -12,33 +12,15 @@
 
 #include <cmath>
 #include "kahan.hxx"
-#include "scdllapi.h"
+#include "arraysumfunctorinternal.hxx"
 #include <tools/cpuid.hxx>
 #include <formula/errorcodes.hxx>
 
 namespace sc::op
 {
 /* Checkout available optimization options */
-SC_DLLPUBLIC extern const bool hasAVX512F;
 const bool hasAVX = cpuid::hasAVX();
 const bool hasSSE2 = cpuid::hasSSE2();
-
-/**
-  * Performs one step of the Neumanier sum between doubles
-  * Overwrites the summand and error
-  * @parma sum
-  * @param err
-  * @param value
-  */
-inline void sumNeumanierNormal(double& sum, double& err, const double& value)
-{
-    double t = sum + value;
-    if (std::abs(sum) >= std::abs(value))
-        err += (sum - t) + value;
-    else
-        err += (value - t) + sum;
-    sum = t;
-}
 
 /**
   * If no boosts available, Unrolled KahanSum.
@@ -68,11 +50,6 @@ static inline KahanSum executeUnrolled(size_t& i, size_t nSize, const double* pC
     }
     return 0.0;
 }
-
-/* Available methods */
-SC_DLLPUBLIC KahanSum executeAVX512F(size_t& i, size_t nSize, const double* pCurrent);
-SC_DLLPUBLIC KahanSum executeAVX(size_t& i, size_t nSize, const double* pCurrent);
-SC_DLLPUBLIC KahanSum executeSSE2(size_t& i, size_t nSize, const double* pCurrent);
 
 /**
   * This function task is to choose the fastest method available to perform the sum.
