@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a25cb542_8f38d153",
+        "filename": "sc/qa/uitest/signatureLine/insertSignatureLine.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-10T06:12:10Z",
+      "side": 1,
+      "message": "is there a reason why this assertEqual is repeated from two lines above?",
+      "range": {
+        "startLine": 42,
+        "startChar": 8,
+        "endLine": 42,
+        "endChar": 121
+      },
+      "revId": "97ed3b93e1def081a535de14cc3c3644363cbd45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a7efd9c_5ee89470",
+        "filename": "sc/qa/uitest/signatureLine/insertSignatureLine.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-10T06:12:10Z",
+      "side": 1,
+      "message": "is there a reason why this assertEqual is repeated from two lines above?",
+      "range": {
+        "startLine": 78,
+        "startChar": 8,
+        "endLine": 78,
+        "endChar": 121
+      },
+      "revId": "97ed3b93e1def081a535de14cc3c3644363cbd45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
