@@ -640,13 +640,69 @@ bool DMLPresetShapeExporter::WriteShapeWithAVlist()
         }
         if (sShapeType == "downArrow")
         {
-            // TODO
-            return false;
+            auto aPointX = GetAdjustmentPointXValue(0);
+            auto aPointY = GetAdjustmentPointYValue(0);
+            if (!aPointX.nCurrVal.has_value() || !aPointX.nMaxVal.has_value()
+                || !aPointX.nMinVal.has_value() || !aPointY.nCurrVal.has_value()
+                || !aPointY.nMaxVal.has_value() || !aPointY.nMinVal.has_value())
+                return false;
+
+            m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
+                                                     false, false);
+            tools::Long nMaxVal1 = 100000;
+            tools::Long nMaxVal2
+                = 100000 * m_xShape->getSize().Height
+                  / std::min(m_xShape->getSize().Width, m_xShape->getSize().Height);
+            tools::Long nVal1 = std::lround((*aPointX.nMaxVal - *aPointX.nCurrVal)
+                                            / (*aPointX.nMaxVal - *aPointX.nMinVal) * nMaxVal1);
+            tools::Long nVal2 = std::lround((*aPointY.nMaxVal - *aPointY.nCurrVal)
+                                            / (*aPointY.nMaxVal - *aPointY.nMinVal) * nMaxVal2);
+            return StartAVListWriting()
+                   && WriteAV(u"adj1", OUString(u"val " + OUString::number(nVal1)))
+                   && WriteAV(u"adj2", OUString(u"val " + OUString::number(nVal2)))
+                   && EndAVListWriting();
         }
         if (sShapeType == "downArrowCallout")
         {
-            // TODO
-            return false;
+            auto aNeckFromBox = GetAdjustmentPointXValue(1);
+            auto aHeadFromNeck = GetAdjustmentPointXValue(2);
+            auto aHeadHeight = GetAdjustmentPointYValue(1);
+            auto aBoxHeight = GetAdjustmentPointYValue(0);
+            if (!aNeckFromBox.nCurrVal.has_value() || !aNeckFromBox.nMaxVal.has_value()
+                || !aNeckFromBox.nMinVal.has_value() || !aHeadFromNeck.nCurrVal.has_value()
+                || !aHeadFromNeck.nMaxVal.has_value() || !aHeadFromNeck.nMinVal.has_value()
+                || !aHeadHeight.nCurrVal.has_value() || !aHeadHeight.nMaxVal.has_value()
+                || !aHeadHeight.nMinVal.has_value() || !aBoxHeight.nCurrVal.has_value()
+                || !aBoxHeight.nMaxVal.has_value() || !aBoxHeight.nMinVal.has_value())
+                return false;
+
+            m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
+                                                     false, false);
+            tools::Long nMaxVal1
+                = 100000 * m_xShape->getSize().Width
+                  / std::min(m_xShape->getSize().Width, m_xShape->getSize().Height);
+            tools::Long nMaxVal2
+                = 50000 * m_xShape->getSize().Width
+                  / std::min(m_xShape->getSize().Width, m_xShape->getSize().Height);
+            tools::Long nMaxVal3
+                = 100000 * m_xShape->getSize().Height
+                  / std::min(m_xShape->getSize().Width, m_xShape->getSize().Height);
+            tools::Long nVal1
+                = std::lround((*aNeckFromBox.nMaxVal - *aNeckFromBox.nCurrVal)
+                              / (*aNeckFromBox.nMaxVal - *aNeckFromBox.nMinVal) * nMaxVal1);
+            tools::Long nVal2 = std::lround((10800 - *aHeadFromNeck.nCurrVal)
+                                            / (10800 - *aHeadFromNeck.nMinVal) * nMaxVal2);
+            tools::Long nVal3
+                = std::lround((*aHeadHeight.nMaxVal - *aHeadHeight.nCurrVal)
+                              / (*aHeadHeight.nMaxVal - *aHeadHeight.nMinVal) * nMaxVal3);
+            tools::Long nVal4 = std::lround((*aBoxHeight.nCurrVal - *aBoxHeight.nMinVal)
+                                            / (21600 - *aBoxHeight.nMinVal) * 100000);
+            return StartAVListWriting()
+                   && WriteAV(u"adj1", OUString(u"val " + OUString::number(nVal1)))
+                   && WriteAV(u"adj2", OUString(u"val " + OUString::number(nVal2)))
+                   && WriteAV(u"adj3", OUString(u"val " + OUString::number(nVal3)))
+                   && WriteAV(u"adj4", OUString(u"val " + OUString::number(nVal4)))
+                   && EndAVListWriting();
         }
         if (sShapeType == "ellipse")
         {
@@ -893,13 +949,69 @@ bool DMLPresetShapeExporter::WriteShapeWithAVlist()
         }
         if (sShapeType == "leftArrow")
         {
-            // TODO
-            return false;
+            auto aPointX = GetAdjustmentPointXValue(0);
+            auto aPointY = GetAdjustmentPointYValue(0);
+            if (!aPointX.nCurrVal.has_value() || !aPointX.nMaxVal.has_value()
+                || !aPointX.nMinVal.has_value() || !aPointY.nCurrVal.has_value()
+                || !aPointY.nMaxVal.has_value() || !aPointY.nMinVal.has_value())
+                return false;
+
+            m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
+                                                     false, false);
+            tools::Long nMaxVal1 = 100000;
+            tools::Long nMaxVal2
+                = 100000
+                  * (double(m_xShape->getSize().Width)
+                     / std::min(m_xShape->getSize().Width, m_xShape->getSize().Height));
+            tools::Long nVal1 = std::lround((*aPointY.nMaxVal - *aPointY.nCurrVal)
+                                            / (*aPointY.nMaxVal - *aPointY.nMinVal) * nMaxVal1);
+            tools::Long nVal2 = std::lround((*aPointX.nCurrVal - *aPointX.nMinVal)
+                                            / (*aPointX.nMaxVal - *aPointX.nMinVal) * nMaxVal2);
+            return StartAVListWriting()
+                   && WriteAV(u"adj1", OUString(u"val " + OUString::number(nVal1)))
+                   && WriteAV(u"adj2", OUString(u"val " + OUString::number(nVal2)))
+                   && EndAVListWriting();
         }
         if (sShapeType == "leftArrowCallout")
         {
-            // TODO
-            return false;
+            auto aBoxWidth = GetAdjustmentPointXValue(0);
+            auto aNeckLength = GetAdjustmentPointXValue(1);
+            auto aNeckFromBox = GetAdjustmentPointYValue(1);
+            auto aHeadFromNeck = GetAdjustmentPointYValue(2);
+            if (!aBoxWidth.nCurrVal.has_value() || !aBoxWidth.nMaxVal.has_value()
+                || !aBoxWidth.nMinVal.has_value() || !aNeckLength.nCurrVal.has_value()
+                || !aNeckLength.nMaxVal.has_value() || !aNeckLength.nMinVal.has_value()
+                || !aNeckFromBox.nCurrVal.has_value() || !aNeckFromBox.nMaxVal.has_value()
+                || !aNeckFromBox.nMinVal.has_value() || !aHeadFromNeck.nCurrVal.has_value()
+                || !aHeadFromNeck.nMaxVal.has_value() || !aHeadFromNeck.nMinVal.has_value())
+                return false;
+
+            m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
+                                                     false, false);
+            tools::Long nMaxVal1
+                = 100000 * m_xShape->getSize().Height
+                  / std::min(m_xShape->getSize().Width, m_xShape->getSize().Height);
+            tools::Long nMaxVal2
+                = 50000 * m_xShape->getSize().Height
+                  / std::min(m_xShape->getSize().Width, m_xShape->getSize().Height);
+            tools::Long nMaxVal3
+                = 100000 * m_xShape->getSize().Width
+                  / std::min(m_xShape->getSize().Width, m_xShape->getSize().Height);
+            tools::Long nVal1
+                = std::lround((*aNeckFromBox.nMaxVal - *aNeckFromBox.nCurrVal)
+                              / (*aNeckFromBox.nMaxVal - *aNeckFromBox.nMinVal) * nMaxVal1);
+            tools::Long nVal2 = std::lround((10800 - *aHeadFromNeck.nCurrVal)
+                                            / (10800 - *aHeadFromNeck.nMinVal) * nMaxVal2);
+            tools::Long nVal3 = std::lround((*aNeckLength.nCurrVal - *aNeckLength.nMinVal)
+                                            / (21600 - *aNeckLength.nMinVal) * nMaxVal3);
+            tools::Long nVal4 = std::lround((*aBoxWidth.nMaxVal - *aBoxWidth.nCurrVal)
+                                            / (*aBoxWidth.nMaxVal - *aBoxWidth.nMinVal) * 100000);
+            return StartAVListWriting()
+                   && WriteAV(u"adj1", OUString(u"val " + OUString::number(nVal1)))
+                   && WriteAV(u"adj2", OUString(u"val " + OUString::number(nVal2)))
+                   && WriteAV(u"adj3", OUString(u"val " + OUString::number(nVal3)))
+                   && WriteAV(u"adj4", OUString(u"val " + OUString::number(nVal4)))
+                   && EndAVListWriting();
         }
         if (sShapeType == "leftBrace")
         {
@@ -913,18 +1025,74 @@ bool DMLPresetShapeExporter::WriteShapeWithAVlist()
         }
         if (sShapeType == "leftCircularArrow")
         {
-            // TODO
+            // LO does not have this type, not necessary to map
             return false;
         }
         if (sShapeType == "leftRightArrow")
         {
-            // TODO
-            return false;
+            auto aPointX = GetAdjustmentPointXValue(0);
+            auto aPointY = GetAdjustmentPointYValue(0);
+            if (!aPointX.nCurrVal.has_value() || !aPointX.nMaxVal.has_value()
+                || !aPointX.nMinVal.has_value() || !aPointY.nCurrVal.has_value()
+                || !aPointY.nMaxVal.has_value() || !aPointY.nMinVal.has_value())
+                return false;
+
+            m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
+                                                     false, false);
+            tools::Long nMaxVal1 = 100000;
+            tools::Long nMaxVal2
+                = 50000
+                  * (double(m_xShape->getSize().Width)
+                     / std::min(m_xShape->getSize().Width, m_xShape->getSize().Height));
+            tools::Long nVal1 = std::lround((*aPointY.nMaxVal - *aPointY.nCurrVal)
+                                            / (*aPointY.nMaxVal - *aPointY.nMinVal) * nMaxVal1);
+            tools::Long nVal2 = std::lround((*aPointX.nCurrVal - *aPointX.nMinVal)
+                                            / (*aPointX.nMaxVal - *aPointX.nMinVal) * nMaxVal2);
+            return StartAVListWriting()
+                   && WriteAV(u"adj1", OUString(u"val " + OUString::number(nVal1)))
+                   && WriteAV(u"adj2", OUString(u"val " + OUString::number(nVal2)))
+                   && EndAVListWriting();
         }
         if (sShapeType == "leftRightArrowCallout")
         {
-            // TODO
-            return false;
+            auto aNeckFromBox = GetAdjustmentPointXValue(1);
+            auto aHeadFromNeck = GetAdjustmentPointXValue(2);
+            auto aHeadHeight = GetAdjustmentPointYValue(1);
+            auto aBoxHeight = GetAdjustmentPointYValue(0);
+            if (!aNeckFromBox.nCurrVal.has_value() || !aNeckFromBox.nMaxVal.has_value()
+                || !aNeckFromBox.nMinVal.has_value() || !aHeadFromNeck.nCurrVal.has_value()
+                || !aHeadFromNeck.nMaxVal.has_value() || !aHeadFromNeck.nMinVal.has_value()
+                || !aHeadHeight.nCurrVal.has_value() || !aHeadHeight.nMaxVal.has_value()
+                || !aHeadHeight.nMinVal.has_value() || !aBoxHeight.nCurrVal.has_value()
+                || !aBoxHeight.nMaxVal.has_value() || !aBoxHeight.nMinVal.has_value())
+                return false;
+
+            m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
+                                                     false, false);
+            tools::Long nMaxVal1
+                = 100000 * m_xShape->getSize().Width
+                  / std::min(m_xShape->getSize().Width, m_xShape->getSize().Height);
+            tools::Long nMaxVal2
+                = 50000 * m_xShape->getSize().Width
+                  / std::min(m_xShape->getSize().Width, m_xShape->getSize().Height);
+            tools::Long nMaxVal3
+                = 100000 * m_xShape->getSize().Height
+                  / std::min(m_xShape->getSize().Width, m_xShape->getSize().Height);
+            tools::Long nVal1
+                = std::lround((*aNeckFromBox.nMaxVal - *aNeckFromBox.nCurrVal)
+                              / (*aNeckFromBox.nMaxVal - *aNeckFromBox.nMinVal) * nMaxVal1);
+            tools::Long nVal2 = std::lround((10800 - *aHeadFromNeck.nCurrVal)
+                                            / (10800 - *aHeadFromNeck.nMinVal) * nMaxVal2);
+            tools::Long nVal3 = std::lround((*aHeadHeight.nCurrVal - *aHeadHeight.nMinVal)
+                                            / (21600 - *aHeadHeight.nMinVal) * nMaxVal3);
+            tools::Long nVal4 = std::lround((*aBoxHeight.nCurrVal - *aBoxHeight.nMinVal)
+                                            / (10800 - *aBoxHeight.nMinVal) * 100000);
+            return StartAVListWriting()
+                   && WriteAV(u"adj1", OUString(u"val " + OUString::number(nVal1)))
+                   && WriteAV(u"adj2", OUString(u"val " + OUString::number(nVal2)))
+                   && WriteAV(u"adj3", OUString(u"val " + OUString::number(nVal3)))
+                   && WriteAV(u"adj4", OUString(u"val " + OUString::number(nVal4)))
+                   && EndAVListWriting();
         }
         if (sShapeType == "leftRightCircularArrow")
         {
@@ -938,13 +1106,14 @@ bool DMLPresetShapeExporter::WriteShapeWithAVlist()
         }
         if (sShapeType == "leftRightUpArrow")
         {
-            // TODO
+            // TODO?
+            // MS Word stretches the arrow to fit the bounding box; LO doesn't
             return false;
         }
         if (sShapeType == "leftUpArrow")
         {
-            // TODO
-            return false;
+            // MS Word's and LO's interpretations of what a leftUpArrow should look like
+            // are too different to find a compromise :(
         }
         if (sShapeType == "lightningBolt")
         {
@@ -1105,13 +1274,70 @@ bool DMLPresetShapeExporter::WriteShapeWithAVlist()
         }
         if (sShapeType == "rightArrow")
         {
-            // TODO
-            return false;
+            auto aPointX = GetAdjustmentPointXValue(0);
+            auto aPointY = GetAdjustmentPointYValue(0);
+            if (!aPointX.nCurrVal.has_value() || !aPointX.nMaxVal.has_value()
+                || !aPointX.nMinVal.has_value() || !aPointY.nCurrVal.has_value()
+                || !aPointY.nMaxVal.has_value() || !aPointY.nMinVal.has_value())
+                return false;
+
+            m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
+                                                     false, false);
+            tools::Long nMaxVal1 = 100000;
+            tools::Long nMaxVal2
+                = 100000
+                  * (double(m_xShape->getSize().Width)
+                     / std::min(m_xShape->getSize().Width, m_xShape->getSize().Height));
+            tools::Long nVal1 = std::lround((*aPointY.nMaxVal - *aPointY.nCurrVal)
+                                            / (*aPointY.nMaxVal - *aPointY.nMinVal) * nMaxVal1);
+            tools::Long nVal2 = std::lround((*aPointX.nMaxVal - *aPointX.nCurrVal)
+                                            / (*aPointX.nMaxVal - *aPointX.nMinVal) * nMaxVal2);
+            return StartAVListWriting()
+                   && WriteAV(u"adj1", OUString(u"val " + OUString::number(nVal1)))
+                   && WriteAV(u"adj2", OUString(u"val " + OUString::number(nVal2)))
+                   && EndAVListWriting();
         }
         if (sShapeType == "rightArrowCallout")
         {
-            // TODO
-            return false;
+            auto aBoxWidth = GetAdjustmentPointXValue(0);
+            auto aNeckLength = GetAdjustmentPointXValue(1);
+            auto aNeckFromBox = GetAdjustmentPointYValue(1);
+            auto aHeadFromNeck = GetAdjustmentPointYValue(2);
+            if (!aBoxWidth.nCurrVal.has_value() || !aBoxWidth.nMaxVal.has_value()
+                || !aBoxWidth.nMinVal.has_value() || !aNeckLength.nCurrVal.has_value()
+                || !aNeckLength.nMaxVal.has_value() || !aNeckLength.nMinVal.has_value()
+                || !aNeckFromBox.nCurrVal.has_value() || !aNeckFromBox.nMaxVal.has_value()
+                || !aNeckFromBox.nMinVal.has_value() || !aHeadFromNeck.nCurrVal.has_value()
+                || !aHeadFromNeck.nMaxVal.has_value() || !aHeadFromNeck.nMinVal.has_value())
+                return false;
+
+            m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
+                                                     false, false);
+            tools::Long nMaxVal1
+                = 100000 * m_xShape->getSize().Height
+                  / std::min(m_xShape->getSize().Width, m_xShape->getSize().Height);
+            tools::Long nMaxVal2
+                = 50000 * m_xShape->getSize().Height
+                  / std::min(m_xShape->getSize().Width, m_xShape->getSize().Height);
+            tools::Long nMaxVal3
+                = 100000 * m_xShape->getSize().Width
+                  / std::min(m_xShape->getSize().Width, m_xShape->getSize().Height);
+            tools::Long nVal1
+                = std::lround((*aNeckFromBox.nMaxVal - *aNeckFromBox.nCurrVal)
+                              / (*aNeckFromBox.nMaxVal - *aNeckFromBox.nMinVal) * nMaxVal1);
+            tools::Long nVal2 = std::lround((10800 - *aHeadFromNeck.nCurrVal)
+                                            / (10800 - *aHeadFromNeck.nMinVal) * nMaxVal2);
+            tools::Long nVal3
+                = std::lround((*aNeckLength.nMaxVal - *aNeckLength.nCurrVal)
+                              / (*aNeckLength.nMaxVal - *aNeckLength.nMinVal) * nMaxVal3);
+            tools::Long nVal4 = std::lround((*aBoxWidth.nCurrVal - *aBoxWidth.nMinVal)
+                                            / (21600 - *aBoxWidth.nMinVal) * 100000);
+            return StartAVListWriting()
+                   && WriteAV(u"adj1", OUString(u"val " + OUString::number(nVal1)))
+                   && WriteAV(u"adj2", OUString(u"val " + OUString::number(nVal2)))
+                   && WriteAV(u"adj3", OUString(u"val " + OUString::number(nVal3)))
+                   && WriteAV(u"adj4", OUString(u"val " + OUString::number(nVal4)))
+                   && EndAVListWriting();
         }
         if (sShapeType == "rightBrace")
         {
@@ -1299,18 +1525,92 @@ bool DMLPresetShapeExporter::WriteShapeWithAVlist()
         }
         if (sShapeType == "upArrowCallout")
         {
-            // TODO
-            return false;
+            auto aNeckFromBox = GetAdjustmentPointXValue(1);
+            auto aHeadFromNeck = GetAdjustmentPointXValue(2);
+            auto aHeadHeight = GetAdjustmentPointYValue(1);
+            auto aBoxHeight = GetAdjustmentPointYValue(0);
+            if (!aNeckFromBox.nCurrVal.has_value() || !aNeckFromBox.nMaxVal.has_value()
+                || !aNeckFromBox.nMinVal.has_value() || !aHeadFromNeck.nCurrVal.has_value()
+                || !aHeadFromNeck.nMaxVal.has_value() || !aHeadFromNeck.nMinVal.has_value()
+                || !aHeadHeight.nCurrVal.has_value() || !aHeadHeight.nMaxVal.has_value()
+                || !aHeadHeight.nMinVal.has_value() || !aBoxHeight.nCurrVal.has_value()
+                || !aBoxHeight.nMaxVal.has_value() || !aBoxHeight.nMinVal.has_value())
+                return false;
+
+            m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
+                                                     false, false);
+            tools::Long nMaxVal1
+                = 100000 * m_xShape->getSize().Width
+                  / std::min(m_xShape->getSize().Width, m_xShape->getSize().Height);
+            tools::Long nMaxVal2
+                = 50000 * m_xShape->getSize().Width
+                  / std::min(m_xShape->getSize().Width, m_xShape->getSize().Height);
+            tools::Long nMaxVal3
+                = 100000 * m_xShape->getSize().Height
+                  / std::min(m_xShape->getSize().Width, m_xShape->getSize().Height);
+            tools::Long nVal1
+                = std::lround((*aNeckFromBox.nMaxVal - *aNeckFromBox.nCurrVal)
+                              / (*aNeckFromBox.nMaxVal - *aNeckFromBox.nMinVal) * nMaxVal1);
+            tools::Long nVal2 = std::lround((10800 - *aHeadFromNeck.nCurrVal)
+                                            / (10800 - *aHeadFromNeck.nMinVal) * nMaxVal2);
+            tools::Long nVal3 = std::lround((*aHeadHeight.nCurrVal - *aHeadHeight.nMinVal)
+                                            / (21600 - *aHeadHeight.nMinVal) * nMaxVal3);
+            tools::Long nVal4 = std::lround((*aBoxHeight.nCurrVal - *aBoxHeight.nMinVal)
+                                            / (10800 - *aBoxHeight.nMinVal) * 100000);
+            return StartAVListWriting()
+                   && WriteAV(u"adj1", OUString(u"val " + OUString::number(nVal1)))
+                   && WriteAV(u"adj2", OUString(u"val " + OUString::number(nVal2)))
+                   && WriteAV(u"adj3", OUString(u"val " + OUString::number(nVal3)))
+                   && WriteAV(u"adj4", OUString(u"val " + OUString::number(nVal4)))
+                   && EndAVListWriting();
         }
         if (sShapeType == "upDownArrow")
         {
-            // TODO
-            return false;
+            auto aPointX = GetAdjustmentPointXValue(0);
+            auto aPointY = GetAdjustmentPointYValue(0);
+            if (!aPointX.nCurrVal.has_value() || !aPointX.nMaxVal.has_value()
+                || !aPointX.nMinVal.has_value() || !aPointY.nCurrVal.has_value()
+                || !aPointY.nMaxVal.has_value() || !aPointY.nMinVal.has_value())
+                return false;
+
+            m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
+                                                     false, false);
+            tools::Long nMaxVal1 = 100000;
+            tools::Long nMaxVal2
+                = 50000 * m_xShape->getSize().Height
+                  / std::min(m_xShape->getSize().Width, m_xShape->getSize().Height);
+            tools::Long nVal1 = std::lround((*aPointX.nMaxVal - *aPointX.nCurrVal)
+                                            / (*aPointX.nMaxVal - *aPointX.nMinVal) * nMaxVal1);
+            tools::Long nVal2 = std::lround((*aPointY.nCurrVal - *aPointY.nMinVal)
+                                            / (*aPointY.nMaxVal - *aPointY.nMinVal) * nMaxVal2);
+            return StartAVListWriting()
+                   && WriteAV(u"adj1", OUString(u"val " + OUString::number(nVal1)))
+                   && WriteAV(u"adj2", OUString(u"val " + OUString::number(nVal2)))
+                   && EndAVListWriting();
         }
         if (sShapeType == "upArrow")
         {
-            // TODO
-            return false;
+            auto aPointX = GetAdjustmentPointXValue(0);
+            auto aPointY = GetAdjustmentPointYValue(0);
+            if (!aPointX.nCurrVal.has_value() || !aPointX.nMaxVal.has_value()
+                || !aPointX.nMinVal.has_value() || !aPointY.nCurrVal.has_value()
+                || !aPointY.nMaxVal.has_value() || !aPointY.nMinVal.has_value())
+                return false;
+
+            m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
+                                                     false, false);
+            tools::Long nMaxVal1 = 100000;
+            tools::Long nMaxVal2
+                = 100000 * m_xShape->getSize().Height
+                  / std::min(m_xShape->getSize().Width, m_xShape->getSize().Height);
+            tools::Long nVal1 = std::lround((*aPointX.nMaxVal - *aPointX.nCurrVal)
+                                            / (*aPointX.nMaxVal - *aPointX.nMinVal) * nMaxVal1);
+            tools::Long nVal2 = std::lround((*aPointY.nCurrVal - *aPointY.nMinVal)
+                                            / (*aPointY.nMaxVal - *aPointY.nMinVal) * nMaxVal2);
+            return StartAVListWriting()
+                   && WriteAV(u"adj1", OUString(u"val " + OUString::number(nVal1)))
+                   && WriteAV(u"adj2", OUString(u"val " + OUString::number(nVal2)))
+                   && EndAVListWriting();
         }
         if (sShapeType == "upDownArrowCallout")
         {
