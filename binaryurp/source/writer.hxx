@@ -119,27 +119,16 @@ private:
             std::vector< BinaryAny > const & outArguments,
             bool theSetCurrentContextMode);
 
-        bool request;
-
         rtl::ByteSequence tid; // request + reply
-
         OUString oid; // request
-
         com::sun::star::uno::TypeDescription type; // request
-
         com::sun::star::uno::TypeDescription member; // request + reply
-
-        bool setter; // reply
-
-        std::vector< BinaryAny > arguments;
-            // request: inArguments; reply: outArguments
-
-        bool exception; // reply
-
-        BinaryAny returnValue; // reply
-
         com::sun::star::uno::UnoInterfaceReference currentContext; // request
-
+        BinaryAny returnValue; // reply
+        std::vector< BinaryAny > arguments; // request: inArguments; reply: outArguments
+        bool request;
+        bool setter; // reply
+        bool exception; // reply
         bool setCurrentContextMode; // reply
     };
 

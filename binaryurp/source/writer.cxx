@@ -56,9 +56,9 @@ Writer::Item::Item(
     css::uno::TypeDescription const & theMember,
     std::vector< BinaryAny > const & inArguments,
     css::uno::UnoInterfaceReference const & theCurrentContext):
-    request(true), tid(theTid), oid(theOid), type(theType), member(theMember),
-    setter(false), arguments(inArguments), exception(false),
-    currentContext(theCurrentContext), setCurrentContextMode(false)
+    tid(theTid), oid(theOid), type(theType), member(theMember),
+    currentContext(theCurrentContext), arguments(inArguments),
+    request(true), setter(false), exception(false), setCurrentContextMode(false)
 {}
 
 Writer::Item::Item(
@@ -67,9 +67,10 @@ Writer::Item::Item(
     bool theException, BinaryAny const & theReturnValue,
     std::vector< BinaryAny > const & outArguments,
     bool theSetCurrentContextMode):
-    request(false), tid(theTid), member(theMember), setter(theSetter),
-    arguments(outArguments), exception(theException),
-    returnValue(theReturnValue), setCurrentContextMode(theSetCurrentContextMode)
+    tid(theTid), member(theMember),
+    returnValue(theReturnValue), arguments(outArguments),
+    request(false), setter(theSetter),
+    exception(theException), setCurrentContextMode(theSetCurrentContextMode)
 {}
 
 Writer::Writer(rtl::Reference< Bridge > const  & bridge):

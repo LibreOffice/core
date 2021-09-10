@@ -31,12 +31,12 @@ struct OutgoingRequest {
     OutgoingRequest(
         Kind theKind, com::sun::star::uno::TypeDescription const & theMember,
         bool theSetter):
-        kind(theKind), member(theMember), setter(theSetter)
+        member(theMember), kind(theKind), setter(theSetter)
     {}
 
-    Kind kind;
-
     com::sun::star::uno::TypeDescription member;
+
+    Kind kind;
 
     bool setter;
 };

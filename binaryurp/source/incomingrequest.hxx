@@ -65,13 +65,13 @@ private:
     OUString oid_; // initial object queryInterface; release
     com::sun::star::uno::UnoInterfaceReference object_;
     com::sun::star::uno::TypeDescription type_;
+    com::sun::star::uno::TypeDescription member_;
+    com::sun::star::uno::UnoInterfaceReference currentContext_;
+    std::vector< BinaryAny > inArguments_;
     sal_uInt16 functionId_;
     bool synchronous_;
-    com::sun::star::uno::TypeDescription member_;
     bool setter_;
-    std::vector< BinaryAny > inArguments_;
     bool currentContextMode_;
-    com::sun::star::uno::UnoInterfaceReference currentContext_;
 };
 
 }
