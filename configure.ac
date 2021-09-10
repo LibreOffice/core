@@ -819,7 +819,6 @@ disable_database_connectivity_dependencies()
 # ===================================================================
 build_crypto=yes
 test_cmis=yes
-test_curl=yes
 test_gdb_index=no
 test_openldap=yes
 test_split_debug=no
@@ -10269,7 +10268,7 @@ if test "$with_system_curl" = "auto"; then
     with_system_curl="$with_system_libs"
 fi
 
-if test "$test_curl" = "yes" -a "$enable_curl" = "yes" -a "$with_system_curl" = "yes"; then
+if test "$enable_curl" = "yes" -a "$with_system_curl" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_CURL=TRUE
 
@@ -10301,7 +10300,7 @@ if test "$test_curl" = "yes" -a "$enable_curl" = "yes" -a "$with_system_curl" = 
     fi
 
     ENABLE_CURL=TRUE
-elif test "$test_curl" = "no"; then
+elif test "$enable_curl" = "no"; then
     AC_MSG_RESULT([none])
 else
     AC_MSG_RESULT([internal])
