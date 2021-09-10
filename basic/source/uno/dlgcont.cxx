@@ -373,12 +373,12 @@ Reference< css::resource::XStringResourcePersistence >
             xLibrariesStor = mxStorage->openStorageElement( maLibrariesDir, embed::ElementModes::READ );
                 // TODO: Should be READWRITE with new storage concept using store() instead of storeTo()
             if ( !xLibrariesStor.is() )
-                throw uno::RuntimeException("null returned from openStorageElement");
+                throw uno::RuntimeException("null returned from openStorageElement",static_cast< cppu::OWeakObject * >(this));
 
             xLibraryStor = xLibrariesStor->openStorageElement( aLibName, embed::ElementModes::READ );
                 // TODO: Should be READWRITE with new storage concept using store() instead of storeTo()
             if ( !xLibraryStor.is() )
-                throw uno::RuntimeException("null returned from openStorageElement");
+                throw uno::RuntimeException("null returned from openStorageElement",static_cast< cppu::OWeakObject * >(this));
         }
         catch(const uno::Exception& )
         {
@@ -426,12 +426,12 @@ void SfxDialogLibraryContainer::onNewRootStorage()
             try {
                 xLibrariesStor = mxStorage->openStorageElement( maLibrariesDir, embed::ElementModes::READWRITE );
                 if ( !xLibrariesStor.is() )
-                    throw uno::RuntimeException("null returned from openStorageElement");
+                    throw uno::RuntimeException("null returned from openStorageElement",static_cast< cppu::OWeakObject * >(this));
 
                 OUString aLibName = pDialogLibrary->getName();
                 xLibraryStor = xLibrariesStor->openStorageElement( aLibName, embed::ElementModes::READWRITE );
                 if ( !xLibraryStor.is() )
-                    throw uno::RuntimeException("null returned from openStorageElement");
+                    throw uno::RuntimeException("null returned from openStorageElement",static_cast< cppu::OWeakObject * >(this));
 
                 Reference< resource::XStringResourceWithStorage >
                     xStringResourceWithStorage( xStringResourcePersistence, UNO_QUERY );
