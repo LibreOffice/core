@@ -22,31 +22,28 @@ class tdf143759(UITestCase):
 
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:F6"}))
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xSearchterm = xDialog.getChild("searchterm")
-            xSearchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            xSearchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            xSearchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"^$"}))
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+                xSearchterm = xDialog.getChild("searchterm")
+                xSearchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xSearchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xSearchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"^$"}))
 
-            xRegexp = xDialog.getChild("regexp")
-            if get_state_as_dict(xRegexp)['Selected'] == 'false':
-                xRegexp.executeAction("CLICK", tuple())
-            self.assertEqual("true", get_state_as_dict(xRegexp)['Selected'])
+                xRegexp = xDialog.getChild("regexp")
+                if get_state_as_dict(xRegexp)['Selected'] == 'false':
+                    xRegexp.executeAction("CLICK", tuple())
+                self.assertEqual("true", get_state_as_dict(xRegexp)['Selected'])
 
-            xSelection = xDialog.getChild("selection")
-            if get_state_as_dict(xSelection)['Selected'] == 'false':
-                xSelection.executeAction("CLICK", tuple())
-            self.assertEqual("true", get_state_as_dict(xSelection)['Selected'])
+                xSelection = xDialog.getChild("selection")
+                if get_state_as_dict(xSelection)['Selected'] == 'false':
+                    xSelection.executeAction("CLICK", tuple())
+                self.assertEqual("true", get_state_as_dict(xSelection)['Selected'])
 
-            xSearchall = xDialog.getChild("searchall")
-            with self.ui_test.execute_dialog_through_action(
-                    xSearchall, "CLICK", event_name = "ModelessDialogVisible", close_button="close") as dialog:
-                # Without the fix in place, this test would have failed with
-                # AssertionError: 13 != 0
-                self.assertEqual(13, len(dialog.getChild("results").getChildren()))
+                xSearchall = xDialog.getChild("searchall")
+                with self.ui_test.execute_dialog_through_action(
+                        xSearchall, "CLICK", event_name = "ModelessDialogVisible", close_button="close") as dialog:
+                    # Without the fix in place, this test would have failed with
+                    # AssertionError: 13 != 0
+                    self.assertEqual(13, len(dialog.getChild("results").getChildren()))
 
-            xCloseBtn = xDialog.getChild("close")
-            self.ui_test.close_dialog_through_button(xCloseBtn)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

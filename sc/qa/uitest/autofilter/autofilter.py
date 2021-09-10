@@ -443,14 +443,11 @@ class AutofilterTest(UITestCase):
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
             xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B8"}))
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xval1 = xDialog.getChild("val1")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+                xval1 = xDialog.getChild("val1")
 
-            select_by_text(xval1, "0.365")
+                select_by_text(xval1, "0.365")
 
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 
             self.assertFalse(is_row_hidden(doc, 0))
             self.assertFalse(is_row_hidden(doc, 1))
@@ -467,19 +464,16 @@ class AutofilterTest(UITestCase):
 
             #Test '<' condition
             xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B8"}))
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
 
-            xfield1 = xDialog.getChild("field1")
-            xval1 = xDialog.getChild("val1")
-            xcond1 = xDialog.getChild("cond1")
+                xfield1 = xDialog.getChild("field1")
+                xval1 = xDialog.getChild("val1")
+                xcond1 = xDialog.getChild("cond1")
 
-            select_by_text(xfield1, "Values")
-            select_by_text(xcond1, "<")
-            select_by_text(xval1, "0.365")
+                select_by_text(xfield1, "Values")
+                select_by_text(xcond1, "<")
+                select_by_text(xval1, "0.365")
 
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 
             self.assertFalse(is_row_hidden(doc, 0))
             self.assertTrue(is_row_hidden(doc, 1))
@@ -492,18 +486,15 @@ class AutofilterTest(UITestCase):
 
             #Test '>=' condition
             xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B8"}))
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xfield1 = xDialog.getChild("field1")
-            xval1 = xDialog.getChild("val1")
-            xcond1 = xDialog.getChild("cond1")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+                xfield1 = xDialog.getChild("field1")
+                xval1 = xDialog.getChild("val1")
+                xcond1 = xDialog.getChild("cond1")
 
-            select_by_text(xfield1, "Values")
-            select_by_text(xcond1, ">=")
-            select_by_text(xval1, "0.046")
+                select_by_text(xfield1, "Values")
+                select_by_text(xcond1, ">=")
+                select_by_text(xval1, "0.046")
 
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 
             self.assertFalse(is_row_hidden(doc, 0))
             self.assertFalse(is_row_hidden(doc, 1))

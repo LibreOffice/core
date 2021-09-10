@@ -37,76 +37,70 @@ class regression(UITestCase):
 
     def _do_regression(self, regression_type, data_groupedby_column = True, calc_intercept = True):
         assert(regression_type == "LINEAR" or regression_type == "LOG" or regression_type == "POWER")
-        self.ui_test.execute_modeless_dialog_through_command(".uno:RegressionDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xvariable1rangeedit = xDialog.getChild("variable1-range-edit")
-        xvariable2rangeedit = xDialog.getChild("variable2-range-edit")
-        xoutputrangeedit = xDialog.getChild("output-range-edit")
-        xwithlabelscheck = xDialog.getChild("withlabels-check")
-        xgroupedbyrowsradio = xDialog.getChild("groupedby-rows-radio")
-        xgroupedbycolumnsradio = xDialog.getChild("groupedby-columns-radio")
-        xlinearradio = xDialog.getChild("linear-radio")
-        xlogarithmicradio = xDialog.getChild("logarithmic-radio")
-        xpowerradio = xDialog.getChild("power-radio")
-        xnointerceptcheck = xDialog.getChild("nointercept-check")
+        with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:RegressionDialog") as xDialog:
+            xvariable1rangeedit = xDialog.getChild("variable1-range-edit")
+            xvariable2rangeedit = xDialog.getChild("variable2-range-edit")
+            xoutputrangeedit = xDialog.getChild("output-range-edit")
+            xwithlabelscheck = xDialog.getChild("withlabels-check")
+            xgroupedbyrowsradio = xDialog.getChild("groupedby-rows-radio")
+            xgroupedbycolumnsradio = xDialog.getChild("groupedby-columns-radio")
+            xlinearradio = xDialog.getChild("linear-radio")
+            xlogarithmicradio = xDialog.getChild("logarithmic-radio")
+            xpowerradio = xDialog.getChild("power-radio")
+            xnointerceptcheck = xDialog.getChild("nointercept-check")
 
-        ## Set the X, Y and output ranges
-        xvariable1rangeedit.executeAction("FOCUS", tuple()) # Without this the range parser does not kick in somehow
-        xvariable1rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        xvariable1rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-        if data_groupedby_column:
-            xvariable1rangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$DataInColumns.$A$1:$C$11"}))
-        else:
-            xvariable1rangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$DataInRows.$A$1:$K$3"}))
-
-        xvariable2rangeedit.executeAction("FOCUS", tuple()) # Without this the range parser does not kick in somehow
-        xvariable2rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        xvariable2rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-        if data_groupedby_column:
-            xvariable2rangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$DataInColumns.$D$1:$D$11"}))
-        else:
-            xvariable2rangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$DataInRows.$A$4:$K$4"}))
-        # The data ranges have labels in them
-        if (get_state_as_dict(xwithlabelscheck)["Selected"]) == "false":
-            xwithlabelscheck.executeAction("CLICK", tuple())
-
-        xoutputrangeedit.executeAction("FOCUS", tuple()) # Without this the range parser does not kick in somehow
-        xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-        if regression_type == "LINEAR":
-            if calc_intercept:
-                xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$ActualLinear.$A$1"}))
+            ## Set the X, Y and output ranges
+            xvariable1rangeedit.executeAction("FOCUS", tuple()) # Without this the range parser does not kick in somehow
+            xvariable1rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+            xvariable1rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+            if data_groupedby_column:
+                xvariable1rangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$DataInColumns.$A$1:$C$11"}))
             else:
-                xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$ActualLinearNoIntercept.$A$1"}))
-        elif regression_type == "LOG":
-            xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$ActualLog.$A$1"}))
-        else:
-            xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$ActualPower.$A$1"}))
+                xvariable1rangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$DataInRows.$A$1:$K$3"}))
 
-        if data_groupedby_column:
-            xgroupedbycolumnsradio.executeAction("CLICK", tuple())
-        else:
-            xgroupedbyrowsradio.executeAction("CLICK", tuple())
+            xvariable2rangeedit.executeAction("FOCUS", tuple()) # Without this the range parser does not kick in somehow
+            xvariable2rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+            xvariable2rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+            if data_groupedby_column:
+                xvariable2rangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$DataInColumns.$D$1:$D$11"}))
+            else:
+                xvariable2rangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$DataInRows.$A$4:$K$4"}))
+            # The data ranges have labels in them
+            if (get_state_as_dict(xwithlabelscheck)["Selected"]) == "false":
+                xwithlabelscheck.executeAction("CLICK", tuple())
 
-        if regression_type == "LINEAR":
-            xlinearradio.executeAction("CLICK", tuple())
-        elif regression_type == "LOG":
-            xlogarithmicradio.executeAction("CLICK", tuple())
-        else:
-            xpowerradio.executeAction("CLICK", tuple())
+            xoutputrangeedit.executeAction("FOCUS", tuple()) # Without this the range parser does not kick in somehow
+            xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+            xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+            if regression_type == "LINEAR":
+                if calc_intercept:
+                    xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$ActualLinear.$A$1"}))
+                else:
+                    xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$ActualLinearNoIntercept.$A$1"}))
+            elif regression_type == "LOG":
+                xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$ActualLog.$A$1"}))
+            else:
+                xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$ActualPower.$A$1"}))
 
-        if not calc_intercept:
-            xnointerceptcheck.executeAction("CLICK", tuple())
+            if data_groupedby_column:
+                xgroupedbycolumnsradio.executeAction("CLICK", tuple())
+            else:
+                xgroupedbyrowsradio.executeAction("CLICK", tuple())
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+            if regression_type == "LINEAR":
+                xlinearradio.executeAction("CLICK", tuple())
+            elif regression_type == "LOG":
+                xlogarithmicradio.executeAction("CLICK", tuple())
+            else:
+                xpowerradio.executeAction("CLICK", tuple())
+
+            if not calc_intercept:
+                xnointerceptcheck.executeAction("CLICK", tuple())
+
 
     def test_regression_cancel(self):
         with self.ui_test.create_doc_in_start_center("calc"):
-            self.ui_test.execute_modeless_dialog_through_command(".uno:RegressionDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xCancelBtn = xDialog.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xCancelBtn)
-
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:RegressionDialog", close_button="cancel"):
+                pass
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -25,21 +25,18 @@ class tdf39959(UITestCase):
             # 4. Try Find-and-replace (Ctrl+Alt+F) to search for "asdf"
             # Whether the checkbox "in allen Tabellen suchen" is activated or not: LibO Calc never seems to find the text
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            searchterm = xDialog.getChild("searchterm")
-            searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"asdf"}))
-            replaceterm = xDialog.getChild("replaceterm")
-            replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"bbb"})) #replace textbox
-            allsheets = xDialog.getChild("allsheets")
-            allsheets.executeAction("CLICK", tuple())
-            replaceall = xDialog.getChild("replaceall")
-            replaceall.executeAction("CLICK", tuple())
-            # print(xDialog.getChildren())
-            xcloseBtn = xDialog.getChild("close")
-            self.ui_test.close_dialog_through_button(xcloseBtn)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+                searchterm = xDialog.getChild("searchterm")
+                searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"asdf"}))
+                replaceterm = xDialog.getChild("replaceterm")
+                replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"bbb"})) #replace textbox
+                allsheets = xDialog.getChild("allsheets")
+                allsheets.executeAction("CLICK", tuple())
+                replaceall = xDialog.getChild("replaceall")
+                replaceall.executeAction("CLICK", tuple())
+                # print(xDialog.getChildren())
 
             #verify Sheet2.A1 = "bbb"
             self.assertEqual(get_cell_by_position(calc_doc, 1, 0, 0).getString(), "bbb ")

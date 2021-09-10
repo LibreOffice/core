@@ -50,28 +50,25 @@ class sampling(UITestCase):
             enter_text_to_cell(gridwin, "C8", "38")
             enter_text_to_cell(gridwin, "C9", "39")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C9"}))
-            self.ui_test.execute_modeless_dialog_through_command(".uno:SamplingDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xinputrangeedit = xDialog.getChild("input-range-edit")
-            xoutputrangeedit = xDialog.getChild("output-range-edit")
-            xrandommethodradio = xDialog.getChild("random-method-radio")
-            xsamplesizespin = xDialog.getChild("sample-size-spin")
-            xperiodicmethodradio = xDialog.getChild("periodic-method-radio")
-            xperiodspin = xDialog.getChild("period-spin")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SamplingDialog") as xDialog:
+                xinputrangeedit = xDialog.getChild("input-range-edit")
+                xoutputrangeedit = xDialog.getChild("output-range-edit")
+                xrandommethodradio = xDialog.getChild("random-method-radio")
+                xsamplesizespin = xDialog.getChild("sample-size-spin")
+                xperiodicmethodradio = xDialog.getChild("periodic-method-radio")
+                xperiodspin = xDialog.getChild("period-spin")
 
-            xinputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            xinputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            xinputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$A$1:$C$9"}))
+                xinputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xinputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xinputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$A$1:$C$9"}))
 
-            xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$F$1"}))
+                xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$F$1"}))
 
-            xperiodicmethodradio.executeAction("CLICK", tuple())
+                xperiodicmethodradio.executeAction("CLICK", tuple())
 
-            xperiodspin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            xperiodspin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            xperiodspin.executeAction("TYPE", mkPropertyValues({"TEXT":"2"}))
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                xperiodspin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xperiodspin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xperiodspin.executeAction("TYPE", mkPropertyValues({"TEXT":"2"}))
             #Verify
             self.assertEqual(get_cell_by_position(document, 0, 5, 0).getValue(), 12)
             self.assertEqual(get_cell_by_position(document, 0, 5, 1).getValue() , 14)
@@ -105,9 +102,7 @@ class sampling(UITestCase):
             self.assertEqual(get_cell_by_position(document, 0, 7, 3).getValue() , 0)
 
             # test cancel button
-            self.ui_test.execute_modeless_dialog_through_command(".uno:SamplingDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xCancelBtn = xDialog.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xCancelBtn)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SamplingDialog", close_button="cancel"):
+                pass
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
