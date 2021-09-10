@@ -71,55 +71,51 @@ sal_Int64 SAL_CALL Clob::length()
 OUString SAL_CALL Clob::getSubString(sal_Int64 nPosition,
                                                sal_Int32 nLength)
 {
+    if (nPosition < 1) // XClob is indexed from 1
+        throw lang::IllegalArgumentException("nPosition < 1", *this, 0);
+    --nPosition; // make 0-based
+
+    if (nLength < 0)
+        throw lang::IllegalArgumentException("nLength < 0", *this, 0);
+
     MutexGuard aGuard(m_aMutex);
     checkDisposed(Clob_BASE::rBHelper.bDisposed);
     // TODO do not reset position if it is not necessary
     m_aBlob->closeInput(); // reset position
 
     OUStringBuffer sSegmentBuffer;
-    sal_Int64 nActPos = 1;
-    sal_Int32 nActLen = 0;
     std::vector<char> aSegmentBytes;
 
-    // skip irrelevant parts
-    while( nActPos < nPosition )
+    for (;;)
     {
         bool bLastRead = m_aBlob->readOneSegment( aSegmentBytes );
-        if( bLastRead )
-            throw lang::IllegalArgumentException("nPosition out of range", *this, 0);
-
+        // TODO: handle possible case of split UTF-8 character
         OUString sSegment(aSegmentBytes.data(), aSegmentBytes.size(), RTL_TEXTENCODING_UTF8);
-        sal_Int32 nStrLen = sSegment.getLength();
-        nActPos += nStrLen;
-        if( nActPos > nPosition )
+
+        // skip irrelevant parts
+        if (sSegment.getLength() < nPosition)
         {
-            sal_Int32 nCharsToCopy = static_cast<sal_Int32>(nActPos - nPosition);
-            if( nCharsToCopy > nLength )
-                nCharsToCopy = nLength;
-            // append relevant part of first segment
-            sSegmentBuffer.append( sSegment.subView(0, nCharsToCopy) );
-            nActLen += sSegmentBuffer.getLength();
+            if (bLastRead)
+                throw lang::IllegalArgumentException("nPosition out of range", *this, 0);
+            nPosition -= sSegment.getLength();
+            continue;
         }
-    }
 
-    // read nLength characters
-    while( nActLen < nLength )
-    {
-        bool bLastRead = m_aBlob->readOneSegment( aSegmentBytes );
+        // Getting here for the first time, nPosition may be > 0, meaning copy start offset.
+        // This also handles sSegment.getLength() == nPosition case, including nLength == 0.
+        const sal_Int32 nCharsToCopy = std::min<sal_Int32>(sSegment.getLength() - nPosition,
+                                                           nLength - sSegmentBuffer.getLength());
+        sSegmentBuffer.append(sSegment.subView(nPosition, nCharsToCopy));
+        if (sSegmentBuffer.getLength() == nLength)
+            return sSegmentBuffer.makeStringAndClear();
 
-        OUString sSegment(aSegmentBytes.data(), aSegmentBytes.size(), RTL_TEXTENCODING_UTF8);
-        sal_Int32 nStrLen = sSegment.getLength();
-        if( nActLen + nStrLen > nLength )
-            sSegmentBuffer.append(sSegment.subView(0, nLength - nActLen));
-        else
-            sSegmentBuffer.append(sSegment);
-        nActLen += nStrLen;
+        assert(sSegmentBuffer.getLength() < nLength);
 
-        if( bLastRead && nActLen < nLength )
+        if (bLastRead)
             throw lang::IllegalArgumentException("out of range", *this, 0);
-    }
 
-    return sSegmentBuffer.makeStringAndClear();
+        nPosition = 0; // No offset after first append
+    }
 }
 
 uno::Reference< XInputStream > SAL_CALL  Clob::getCharacterStream()

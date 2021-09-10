@@ -1417,7 +1417,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
             uno::Reference< XClob > xClob = xRow->getClob(4);
             if (xClob.is())
             {
-                aCurrentRow[5] = new ORowSetValueDecorator(xClob->getSubString(0, xClob->length()));
+                aCurrentRow[5] = new ORowSetValueDecorator(xClob->getSubString(1, xClob->length()));
             }
         }
 
