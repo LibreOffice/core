@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_PHYSICALFONTFACE_HXX
-#define INCLUDED_VCL_INC_PHYSICALFONTFACE_HXX
+#pragma once
 
-#include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <tools/long.hxx>
+
 #include <vcl/dllapi.h>
 #include <vcl/fontcharmap.hxx>
 
@@ -31,7 +31,7 @@
 class LogicalFontInstance;
 struct FontMatchStatus;
 class FontSelectPattern;
-class PhysicalFontFamily;
+class PhysicalFontFace;
 
 namespace vcl
 {
@@ -81,7 +81,4 @@ protected:
     tools::Long                    mnHeight;   // Height (in pixels)
 };
 
-#endif // INCLUDED_VCL_INC_PHYSICALFONTFACE_HXX
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

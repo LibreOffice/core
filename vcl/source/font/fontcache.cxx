@@ -17,12 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <fontinstance.hxx>
-#include <impfontcache.hxx>
+#include <sal/config.h>
+#include <sal/log.hxx>
+
 #include <PhysicalFontCollection.hxx>
 #include <PhysicalFontFace.hxx>
-#include <PhysicalFontFamily.hxx>
-#include <sal/log.hxx>
+#include <font/PhysicalFontFamily.hxx>
+#include <fontinstance.hxx>
+#include <impfontcache.hxx>
+
+using namespace vcl::font;
 
 size_t ImplFontCache::IFSD_Hash::operator()( const FontSelectPattern& rFSD ) const
 {
@@ -271,4 +275,4 @@ void ImplFontCache::CacheGlyphBoundRect(const LogicalFontInstance *pFont, sal_Gl
     m_aBoundRectCache.insert({{pFont, nID}, rRect});
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
