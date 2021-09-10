@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
 #include <test/bootstrapfixture.hxx>
 #include <cppunit/TestAssert.h>
 
@@ -18,11 +20,7 @@
 #include <vcl/glyphitem.hxx>
 #include <vcl/virdev.hxx>
 
-#include <PhysicalFontFace.hxx>
-#include <font/PhysicalFontFaceCollection.hxx>
-#include <fontattributes.hxx>
-#include <fontinstance.hxx>
-#include <fontselect.hxx>
+#include "fontmocks.hxx"
 
 class VclPhysicalFontFaceCollectionTest : public test::BootstrapFixture
 {
@@ -38,49 +36,6 @@ public:
     CPPUNIT_TEST(test);
     CPPUNIT_TEST_SUITE_END();
 };
-
-namespace
-{
-class TestFontInstance : public LogicalFontInstance
-{
-public:
-    TestFontInstance(PhysicalFontFace const& rFontFace, FontSelectPattern const& rFontSelectPattern)
-        : LogicalFontInstance(rFontFace, rFontSelectPattern)
-    {
-    }
-
-    bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const override
-    {
-        return true;
-    }
-
-protected:
-    bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const override { return true; }
-};
-
-class TestFontFace : public PhysicalFontFace
-{
-public:
-    TestFontFace(sal_uIntPtr nId)
-        : PhysicalFontFace(FontAttributes())
-        , mnFontId(nId)
-    {
-    }
-
-    rtl::Reference<LogicalFontInstance>
-    CreateFontInstance(FontSelectPattern const& rFontSelectPattern) const override
-    {
-        return new TestFontInstance(*this, rFontSelectPattern);
-    }
-
-    sal_IntPtr GetFontId() const override { return mnFontId; }
-    FontCharMapRef GetFontCharMap() const override { return FontCharMap::GetDefaultMap(false); }
-    bool GetFontCapabilities(vcl::FontCapabilities&) const override { return true; }
-
-private:
-    sal_IntPtr mnFontId;
-};
-}
 
 void VclPhysicalFontFaceCollectionTest::test()
 {
