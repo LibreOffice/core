@@ -49,6 +49,7 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
 
+#include <osl/file.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 
@@ -205,7 +206,7 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
                 if (!xFileAccess->exists(m_sFirebirdURL))
                     bIsNewDatabase = true;
 
-                m_sFirebirdURL = m_sFirebirdURL.copy(OUString("file://").getLength());
+                osl::FileBase::getSystemPathFromFileURL(m_sFirebirdURL, m_sFirebirdURL);
             }
         }
 
@@ -274,11 +275,12 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
 
         ISC_STATUS_ARRAY status;            /* status vector */
         ISC_STATUS aErr;
+        const OString sFirebirdURL = OUStringToOString(m_sFirebirdURL, RTL_TEXTENCODING_UTF8);
         if (bIsNewDatabase)
         {
             aErr = isc_create_database(status,
-                                       m_sFirebirdURL.getLength(),
-                                       OUStringToOString(m_sFirebirdURL,RTL_TEXTENCODING_UTF8).getStr(),
+                                       sFirebirdURL.getLength(),
+                                       sFirebirdURL.getStr(),
                                        &m_aDBHandle,
                                        dpbBuffer.size(),
                                        dpbBuffer.c_str(),
@@ -296,8 +298,8 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
             }
 
             aErr = isc_attach_database(status,
-                                       m_sFirebirdURL.getLength(),
-                                       OUStringToOString(m_sFirebirdURL, RTL_TEXTENCODING_UTF8).getStr(),
+                                       sFirebirdURL.getLength(),
+                                       sFirebirdURL.getStr(),
                                        &m_aDBHandle,
                                        dpbBuffer.size(),
                                        dpbBuffer.c_str());
