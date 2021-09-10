@@ -24,21 +24,18 @@ class tdf44861(UITestCase):
             # check option "Enable regular expressions"
             # Press "Replace all"
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            searchterm = xDialog.getChild("searchterm")
-            searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"([0-9]{2})([0-9]{2})"}))
-            replaceterm = xDialog.getChild("replaceterm")
-            replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"$1.$2"})) #replace textbox
-            regexp = xDialog.getChild("regexp")
-            if (get_state_as_dict(regexp)["Selected"]) == "false":
-                regexp.executeAction("CLICK", tuple())   #regular expressions
-            replaceall = xDialog.getChild("replaceall")
-            replaceall.executeAction("CLICK", tuple())
-            xcloseBtn = xDialog.getChild("close")
-            self.ui_test.close_dialog_through_button(xcloseBtn)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+                searchterm = xDialog.getChild("searchterm")
+                searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"([0-9]{2})([0-9]{2})"}))
+                replaceterm = xDialog.getChild("replaceterm")
+                replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"$1.$2"})) #replace textbox
+                regexp = xDialog.getChild("regexp")
+                if (get_state_as_dict(regexp)["Selected"]) == "false":
+                    regexp.executeAction("CLICK", tuple())   #regular expressions
+                replaceall = xDialog.getChild("replaceall")
+                replaceall.executeAction("CLICK", tuple())
 
             #Expected: instead of 1345-1430 appears 13.45-14.30
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 0).getString(), "13.45-14.30")

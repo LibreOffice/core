@@ -29,20 +29,17 @@ class tdf44398(UITestCase):
             # check regular expression
             # hit replace all
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            searchterm = xDialog.getChild("searchterm")
-            searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"([0-9])"}))
-            replaceterm = xDialog.getChild("replaceterm")
-            replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"$1"})) #replace textbox
-            regexp = xDialog.getChild("regexp")
-            regexp.executeAction("CLICK", tuple())   #regular expressions
-            replaceall = xDialog.getChild("replaceall")
-            replaceall.executeAction("CLICK", tuple())
-            xcloseBtn = xDialog.getChild("close")
-            self.ui_test.close_dialog_through_button(xcloseBtn)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+                searchterm = xDialog.getChild("searchterm")
+                searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"([0-9])"}))
+                replaceterm = xDialog.getChild("replaceterm")
+                replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"$1"})) #replace textbox
+                regexp = xDialog.getChild("regexp")
+                regexp.executeAction("CLICK", tuple())   #regular expressions
+                replaceall = xDialog.getChild("replaceall")
+                replaceall.executeAction("CLICK", tuple())
 
             #verify 3. A1 => 123456
             self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "123456")
@@ -63,25 +60,22 @@ class tdf44398(UITestCase):
             # check case
             # hit replace all
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            searchterm = xDialog.getChild("searchterm")
-            searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"([A-Z])"}))
-            replaceterm = xDialog.getChild("replaceterm")
-            replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":" $1"})) #replace textbox
-            regexp = xDialog.getChild("regexp")
-            if (get_state_as_dict(regexp)["Selected"]) == "false":
-                regexp.executeAction("CLICK", tuple())   #regular expressions
-            matchcase = xDialog.getChild("matchcase")
-            matchcase.executeAction("CLICK", tuple())   #case
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+                searchterm = xDialog.getChild("searchterm")
+                searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"([A-Z])"}))
+                replaceterm = xDialog.getChild("replaceterm")
+                replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":" $1"})) #replace textbox
+                regexp = xDialog.getChild("regexp")
+                if (get_state_as_dict(regexp)["Selected"]) == "false":
+                    regexp.executeAction("CLICK", tuple())   #regular expressions
+                matchcase = xDialog.getChild("matchcase")
+                matchcase.executeAction("CLICK", tuple())   #case
 
-            replaceall = xDialog.getChild("replaceall")
-            replaceall.executeAction("CLICK", tuple())
+                replaceall = xDialog.getChild("replaceall")
+                replaceall.executeAction("CLICK", tuple())
 
-            xcloseBtn = xDialog.getChild("close")
-            self.ui_test.close_dialog_through_button(xcloseBtn)
 
             #verify A1 => ' Var Number A'
             self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), " Var Number A")

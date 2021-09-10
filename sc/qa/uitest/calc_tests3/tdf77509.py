@@ -20,21 +20,18 @@ class tdf77509(UITestCase):
             #2. Select any empty cell, eg. cell D1
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "D1"}))
             #3. Tab: Data > Consolidate
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataConsolidate")
-            xDialog = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataConsolidate", close_button="add") as xDialog:
 
-            xfunc = xDialog.getChild("func")
-            xeddataarea = xDialog.getChild("eddataarea")
-            xadd = xDialog.getChild("add")
-            xbyrow = xDialog.getChild("byrow")
-            xbycol = xDialog.getChild("bycol")
-            xeddestarea = xDialog.getChild("eddestarea")
+                xfunc = xDialog.getChild("func")
+                xeddataarea = xDialog.getChild("eddataarea")
+                xbyrow = xDialog.getChild("byrow")
+                xbycol = xDialog.getChild("bycol")
+                xeddestarea = xDialog.getChild("eddestarea")
 
-            select_by_text(xfunc, "Sum")
-            #4. Source data ranges: $Sheet1.$A$1:$B$7
-            #5. Click 'Add' so that ranges appear in "Consolidation ranges"
-            xeddataarea.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$A$1:$B$7"}))
-            xadd.executeAction("CLICK", tuple())
+                select_by_text(xfunc, "Sum")
+                #4. Source data ranges: $Sheet1.$A$1:$B$7
+                #5. Click 'Add' so that ranges appear in "Consolidation ranges"
+                xeddataarea.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$A$1:$B$7"}))
 
             xConsAreas = xDialog.getChild("consareas")
             self.assertEqual(1, len(xConsAreas.getChildren()))

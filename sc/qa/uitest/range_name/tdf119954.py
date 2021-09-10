@@ -30,27 +30,22 @@ class tdf119954(UITestCase):
             #  => see that the formula is =aaa instead of =bbb
 
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DefineDBName")
-            xDefineNameDlg = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DefineDBName", close_button="add") as xDefineNameDlg:
 
-            xEntryBox = xDefineNameDlg.getChild("entry")
-            type_text(xEntryBox, "aaa")
-            add = xDefineNameDlg.getChild("add")
-            assign = xDefineNameDlg.getChild("assign")
-            add.executeAction("CLICK", tuple())
+                xEntryBox = xDefineNameDlg.getChild("entry")
+                type_text(xEntryBox, "aaa")
+                assign = xDefineNameDlg.getChild("assign")
             xOkBtn = xDefineNameDlg.getChild("ok")
             self.ui_test.close_dialog_through_button(xOkBtn)
 
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DefineDBName")
-            xDefineNameDlg = self.xUITest.getTopFocusWindow()
-            xEntryBox = xDefineNameDlg.getChild("entry")
-            assign = xDefineNameDlg.getChild("assign")
-            select_all(xEntryBox)
-            type_text(xEntryBox, "bbb")
-            select_all(assign)
-            type_text(assign, "$Sheet2.$C$3")
-            add.executeAction("CLICK", tuple())
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DefineDBName", close_button="add") as xDefineNameDlg:
+                xEntryBox = xDefineNameDlg.getChild("entry")
+                assign = xDefineNameDlg.getChild("assign")
+                select_all(xEntryBox)
+                type_text(xEntryBox, "bbb")
+                select_all(assign)
+                type_text(assign, "$Sheet2.$C$3")
 
             xOkBtn = xDefineNameDlg.getChild("ok")
             self.ui_test.close_dialog_through_button(xOkBtn)
@@ -71,9 +66,6 @@ class tdf119954(UITestCase):
             self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 1).getFormula(), "")
 
             # check cancel button
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DefineDBName")
-            xDefineNameDlg = self.xUITest.getTopFocusWindow()
-            xCancelBtn = xDefineNameDlg.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xCancelBtn)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DefineDBName", close_button="cancel") as xDefineNameDlg:
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

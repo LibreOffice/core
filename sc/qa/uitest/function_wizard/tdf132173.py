@@ -13,15 +13,12 @@ class tdf132173(UITestCase):
     def test_tdf132173(self):
         with self.ui_test.create_doc_in_start_center("calc") as document:
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:FunctionDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xFormula = xDialog.getChild("ed_formula")
-            xFormula.executeAction("TYPE", mkPropertyValues({"TEXT": 'FIND({"A";"B";"C"},"SAMPLE TEXT")'}))
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:FunctionDialog") as xDialog:
+                xFormula = xDialog.getChild("ed_formula")
+                xFormula.executeAction("TYPE", mkPropertyValues({"TEXT": 'FIND({"A";"B";"C"},"SAMPLE TEXT")'}))
 
-            self.assertEqual(get_state_as_dict(xFormula)["Text"], '=FIND({"A";"B";"C"},"SAMPLE TEXT")')
+                self.assertEqual(get_state_as_dict(xFormula)["Text"], '=FIND({"A";"B";"C"},"SAMPLE TEXT")')
 
-            xOk = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOk)
 
 
             #Without the fix in place, cell's value would have been #NAME?

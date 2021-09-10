@@ -20,21 +20,18 @@ class standardFilter(UITestCase):
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C8"}))
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xfield1 = xDialog.getChild("field1")
-            xval1 = xDialog.getChild("val1")
-            xconnect2 = xDialog.getChild("connect2")
-            xfield2 = xDialog.getChild("field2")
-            xval2 = xDialog.getChild("val2")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+                xfield1 = xDialog.getChild("field1")
+                xval1 = xDialog.getChild("val1")
+                xconnect2 = xDialog.getChild("connect2")
+                xfield2 = xDialog.getChild("field2")
+                xval2 = xDialog.getChild("val2")
 
-            select_by_text(xfield1, "a")
-            xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
-            select_by_text(xconnect2, "OR")
-            select_by_text(xfield2, "b")
-            xval2.executeAction("TYPE", mkPropertyValues({"TEXT":"3"}))
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                select_by_text(xfield1, "a")
+                xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
+                select_by_text(xconnect2, "OR")
+                select_by_text(xfield2, "b")
+                xval2.executeAction("TYPE", mkPropertyValues({"TEXT":"3"}))
             #3x down - should be on row 9
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
@@ -46,21 +43,18 @@ class standardFilter(UITestCase):
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xfield1 = xDialog.getChild("field1")
-            xval1 = xDialog.getChild("val1")
-            xconnect2 = xDialog.getChild("connect2")
-            xfield2 = xDialog.getChild("field2")
-            xval2 = xDialog.getChild("val2")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+                xfield1 = xDialog.getChild("field1")
+                xval1 = xDialog.getChild("val1")
+                xconnect2 = xDialog.getChild("connect2")
+                xfield2 = xDialog.getChild("field2")
+                xval2 = xDialog.getChild("val2")
 
-            self.assertEqual(get_state_as_dict(xfield1)["SelectEntryText"], "a")
-            self.assertEqual(get_state_as_dict(xfield2)["SelectEntryText"], "b")
-            self.assertEqual(get_state_as_dict(xconnect2)["SelectEntryText"], "OR")
-            self.assertEqual(get_state_as_dict(xval1)["Text"], "1")
-            self.assertEqual(get_state_as_dict(xval2)["Text"], "3")
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                self.assertEqual(get_state_as_dict(xfield1)["SelectEntryText"], "a")
+                self.assertEqual(get_state_as_dict(xfield2)["SelectEntryText"], "b")
+                self.assertEqual(get_state_as_dict(xconnect2)["SelectEntryText"], "OR")
+                self.assertEqual(get_state_as_dict(xval1)["Text"], "1")
+                self.assertEqual(get_state_as_dict(xval2)["Text"], "3")
 
     def test_standard_filter_copy_result(self):
         with self.ui_test.load_file(get_url_for_data_file("standardFilter.ods")) as calc_doc:
@@ -68,24 +62,21 @@ class standardFilter(UITestCase):
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C8"}))
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xfield1 = xDialog.getChild("field1")
-            xval1 = xDialog.getChild("val1")
-            xconnect2 = xDialog.getChild("connect2")
-            xfield2 = xDialog.getChild("field2")
-            xval2 = xDialog.getChild("val2")
-            xcopyresult = xDialog.getChild("copyresult")
-            xedcopyarea = xDialog.getChild("edcopyarea")
-            select_by_text(xfield1, "a")
-            xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
-            select_by_text(xconnect2, "OR")
-            select_by_text(xfield2, "b")
-            xval2.executeAction("TYPE", mkPropertyValues({"TEXT":"3"}))
-            xcopyresult.executeAction("CLICK", tuple())
-            xedcopyarea.executeAction("TYPE", mkPropertyValues({"TEXT":"F1"}))
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+                xfield1 = xDialog.getChild("field1")
+                xval1 = xDialog.getChild("val1")
+                xconnect2 = xDialog.getChild("connect2")
+                xfield2 = xDialog.getChild("field2")
+                xval2 = xDialog.getChild("val2")
+                xcopyresult = xDialog.getChild("copyresult")
+                xedcopyarea = xDialog.getChild("edcopyarea")
+                select_by_text(xfield1, "a")
+                xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
+                select_by_text(xconnect2, "OR")
+                select_by_text(xfield2, "b")
+                xval2.executeAction("TYPE", mkPropertyValues({"TEXT":"3"}))
+                xcopyresult.executeAction("CLICK", tuple())
+                xedcopyarea.executeAction("TYPE", mkPropertyValues({"TEXT":"F1"}))
             #verify
             self.assertEqual(get_cell_by_position(calc_doc, 0, 5, 0).getString(), "a")
             self.assertEqual(get_cell_by_position(calc_doc, 0, 6, 0).getString(), "b")
@@ -103,24 +94,21 @@ class standardFilter(UITestCase):
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C8"}))
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xfield1 = xDialog.getChild("field1")
-            xval1 = xDialog.getChild("val1")
-            xconnect2 = xDialog.getChild("connect2")
-            xfield2 = xDialog.getChild("field2")
-            xval2 = xDialog.getChild("val2")
-            xcopyresult = xDialog.getChild("copyresult")
-            xedcopyarea = xDialog.getChild("edcopyarea")
-            select_by_text(xfield1, "a")
-            xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
-            select_by_text(xconnect2, "OR")
-            select_by_text(xfield2, "b")
-            xval2.executeAction("TYPE", mkPropertyValues({"TEXT":"3"}))
-            xcopyresult.executeAction("CLICK", tuple())
-            xedcopyarea.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet2.$F$1"}))
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+                xfield1 = xDialog.getChild("field1")
+                xval1 = xDialog.getChild("val1")
+                xconnect2 = xDialog.getChild("connect2")
+                xfield2 = xDialog.getChild("field2")
+                xval2 = xDialog.getChild("val2")
+                xcopyresult = xDialog.getChild("copyresult")
+                xedcopyarea = xDialog.getChild("edcopyarea")
+                select_by_text(xfield1, "a")
+                xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
+                select_by_text(xconnect2, "OR")
+                select_by_text(xfield2, "b")
+                xval2.executeAction("TYPE", mkPropertyValues({"TEXT":"3"}))
+                xcopyresult.executeAction("CLICK", tuple())
+                xedcopyarea.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet2.$F$1"}))
             #verify
             self.assertEqual(get_cell_by_position(calc_doc, 1, 5, 0).getString(), "a")
             self.assertEqual(get_cell_by_position(calc_doc, 1, 6, 0).getString(), "b")
@@ -146,17 +134,14 @@ class standardFilter(UITestCase):
             enter_text_to_cell(gridwin, "B3", "5")
             enter_text_to_cell(gridwin, "B4", "6")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B4"}))
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xfield1 = xDialog.getChild("field1")
-            xval1 = xDialog.getChild("val1")
-            xcase = xDialog.getChild("case")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+                xfield1 = xDialog.getChild("field1")
+                xval1 = xDialog.getChild("val1")
+                xcase = xDialog.getChild("case")
 
-            select_by_text(xfield1, "first")
-            xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"a1"}))
-            xcase.executeAction("CLICK", tuple())
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                select_by_text(xfield1, "first")
+                xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"a1"}))
+                xcase.executeAction("CLICK", tuple())
             #2x down - should be on row 5
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
@@ -166,17 +151,14 @@ class standardFilter(UITestCase):
             #reopen filter and verify
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xfield1 = xDialog.getChild("field1")
-            xval1 = xDialog.getChild("val1")
-            xcase = xDialog.getChild("case")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+                xfield1 = xDialog.getChild("field1")
+                xval1 = xDialog.getChild("val1")
+                xcase = xDialog.getChild("case")
 
-            self.assertEqual(get_state_as_dict(xfield1)["SelectEntryText"], "first")
-            self.assertEqual(get_state_as_dict(xval1)["Text"], "a1")
-            self.assertEqual(get_state_as_dict(xcase)["Selected"], "true")
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                self.assertEqual(get_state_as_dict(xfield1)["SelectEntryText"], "first")
+                self.assertEqual(get_state_as_dict(xval1)["Text"], "a1")
+                self.assertEqual(get_state_as_dict(xcase)["Selected"], "true")
 
     def test_standard_filter_regular_expression(self):
         with self.ui_test.create_doc_in_start_center("calc"):
@@ -196,17 +178,14 @@ class standardFilter(UITestCase):
             enter_text_to_cell(gridwin, "B5", "4")
             enter_text_to_cell(gridwin, "B6", "5")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B6"}))
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xfield1 = xDialog.getChild("field1")
-            xval1 = xDialog.getChild("val1")
-            xregexp = xDialog.getChild("regexp")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+                xfield1 = xDialog.getChild("field1")
+                xval1 = xDialog.getChild("val1")
+                xregexp = xDialog.getChild("regexp")
 
-            select_by_text(xfield1, "first")
-            xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"a*"}))
-            xregexp.executeAction("CLICK", tuple())
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                select_by_text(xfield1, "first")
+                xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"a*"}))
+                xregexp.executeAction("CLICK", tuple())
             #3x down - should be on row 7
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
@@ -218,17 +197,14 @@ class standardFilter(UITestCase):
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xfield1 = xDialog.getChild("field1")
-            xval1 = xDialog.getChild("val1")
-            xregexp = xDialog.getChild("regexp")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+                xfield1 = xDialog.getChild("field1")
+                xval1 = xDialog.getChild("val1")
+                xregexp = xDialog.getChild("regexp")
 
-            self.assertEqual(get_state_as_dict(xfield1)["SelectEntryText"], "first")
-            self.assertEqual(get_state_as_dict(xval1)["Text"], "a*")
-            self.assertEqual(get_state_as_dict(xregexp)["Selected"], "true")
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                self.assertEqual(get_state_as_dict(xfield1)["SelectEntryText"], "first")
+                self.assertEqual(get_state_as_dict(xval1)["Text"], "a*")
+                self.assertEqual(get_state_as_dict(xregexp)["Selected"], "true")
 
     def test_standard_filter_condition_contains(self):
         with self.ui_test.create_doc_in_start_center("calc"):
@@ -248,17 +224,14 @@ class standardFilter(UITestCase):
             enter_text_to_cell(gridwin, "B5", "4")
             enter_text_to_cell(gridwin, "B6", "5")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B6"}))
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xfield1 = xDialog.getChild("field1")
-            xval1 = xDialog.getChild("val1")
-            xregexp = xDialog.getChild("regexp")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+                xfield1 = xDialog.getChild("field1")
+                xval1 = xDialog.getChild("val1")
+                xregexp = xDialog.getChild("regexp")
 
-            select_by_text(xfield1, "first")
-            xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"a*"}))
-            xregexp.executeAction("CLICK", tuple())
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                select_by_text(xfield1, "first")
+                xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"a*"}))
+                xregexp.executeAction("CLICK", tuple())
             #3x down - should be on row 7
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
@@ -270,17 +243,14 @@ class standardFilter(UITestCase):
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xfield1 = xDialog.getChild("field1")
-            xval1 = xDialog.getChild("val1")
-            xregexp = xDialog.getChild("regexp")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+                xfield1 = xDialog.getChild("field1")
+                xval1 = xDialog.getChild("val1")
+                xregexp = xDialog.getChild("regexp")
 
-            self.assertEqual(get_state_as_dict(xfield1)["SelectEntryText"], "first")
-            self.assertEqual(get_state_as_dict(xval1)["Text"], "a*")
-            self.assertEqual(get_state_as_dict(xregexp)["Selected"], "true")
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                self.assertEqual(get_state_as_dict(xfield1)["SelectEntryText"], "first")
+                self.assertEqual(get_state_as_dict(xval1)["Text"], "a*")
+                self.assertEqual(get_state_as_dict(xregexp)["Selected"], "true")
 
         #from testcasespecification OOo
     def test_standard_filter_condition_contains2(self):
@@ -312,17 +282,14 @@ class standardFilter(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:D5"}))
             #Choose DATA-FILTER-STANDARDFILTER
             #Choose field name "A"/ Choose condition "Contains"/Enter value "cio"/Press OK button
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xfield1 = xDialog.getChild("field1")
-            xval1 = xDialog.getChild("val1")
-            xcond1 = xDialog.getChild("cond1")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+                xfield1 = xDialog.getChild("field1")
+                xval1 = xDialog.getChild("val1")
+                xcond1 = xDialog.getChild("cond1")
 
-            select_by_text(xfield1, "A")
-            select_by_text(xcond1, "Contains")
-            xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"cio"}))
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                select_by_text(xfield1, "A")
+                select_by_text(xcond1, "Contains")
+                xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"cio"}))
 
             #Verify that row 1,3, 4 are visible (2 and 5 are hidden)
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
@@ -335,16 +302,13 @@ class standardFilter(UITestCase):
             #reopen filter and verify
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xfield1 = xDialog.getChild("field1")
-            xval1 = xDialog.getChild("val1")
-            xcond1 = xDialog.getChild("cond1")
-            self.assertEqual(get_state_as_dict(xfield1)["SelectEntryText"], "A")
-            self.assertEqual(get_state_as_dict(xval1)["Text"], "cio")
-            self.assertEqual(get_state_as_dict(xcond1)["SelectEntryText"], "Contains")
-            xCancelBtn = xDialog.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xCancelBtn)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter", close_button="cancel") as xDialog:
+                xfield1 = xDialog.getChild("field1")
+                xval1 = xDialog.getChild("val1")
+                xcond1 = xDialog.getChild("cond1")
+                self.assertEqual(get_state_as_dict(xfield1)["SelectEntryText"], "A")
+                self.assertEqual(get_state_as_dict(xval1)["Text"], "cio")
+                self.assertEqual(get_state_as_dict(xcond1)["SelectEntryText"], "Contains")
 
     def test_standard_filter_condition_does_not_contains(self):
         with self.ui_test.create_doc_in_start_center("calc"):
@@ -375,17 +339,14 @@ class standardFilter(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:D5"}))
             #Choose DATA-FILTER-STANDARDFILTER
             #Choose field name "A"/ Choose condition "Does not contain"/Enter value "cio"/Press OK button
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xfield1 = xDialog.getChild("field1")
-            xval1 = xDialog.getChild("val1")
-            xcond1 = xDialog.getChild("cond1")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+                xfield1 = xDialog.getChild("field1")
+                xval1 = xDialog.getChild("val1")
+                xcond1 = xDialog.getChild("cond1")
 
-            select_by_text(xfield1, "A")
-            select_by_text(xcond1, "Does not contain")
-            xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"cio"}))
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                select_by_text(xfield1, "A")
+                select_by_text(xcond1, "Does not contain")
+                xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"cio"}))
 
             #Verify that row 1,2, 5 are visible (3 and 4 are hidden)
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
@@ -398,16 +359,13 @@ class standardFilter(UITestCase):
             #reopen filter and verify
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xfield1 = xDialog.getChild("field1")
-            xval1 = xDialog.getChild("val1")
-            xcond1 = xDialog.getChild("cond1")
-            self.assertEqual(get_state_as_dict(xfield1)["SelectEntryText"], "A")
-            self.assertEqual(get_state_as_dict(xval1)["Text"], "cio")
-            self.assertEqual(get_state_as_dict(xcond1)["SelectEntryText"], "Does not contain")
-            xCancelBtn = xDialog.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xCancelBtn)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter", close_button="cancel") as xDialog:
+                xfield1 = xDialog.getChild("field1")
+                xval1 = xDialog.getChild("val1")
+                xcond1 = xDialog.getChild("cond1")
+                self.assertEqual(get_state_as_dict(xfield1)["SelectEntryText"], "A")
+                self.assertEqual(get_state_as_dict(xval1)["Text"], "cio")
+                self.assertEqual(get_state_as_dict(xcond1)["SelectEntryText"], "Does not contain")
 
 
     def test_standard_filter_condition_Begins_with(self):
@@ -439,17 +397,14 @@ class standardFilter(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:D5"}))
             #Choose DATA-FILTER-STANDARDFILTER
             #Choose field name "A"/ Choose condition "Begins with"/Enter value "si"/Press OK button
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xfield1 = xDialog.getChild("field1")
-            xval1 = xDialog.getChild("val1")
-            xcond1 = xDialog.getChild("cond1")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+                xfield1 = xDialog.getChild("field1")
+                xval1 = xDialog.getChild("val1")
+                xcond1 = xDialog.getChild("cond1")
 
-            select_by_text(xfield1, "A")
-            select_by_text(xcond1, "Begins with")
-            xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"so"}))
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                select_by_text(xfield1, "A")
+                select_by_text(xcond1, "Begins with")
+                xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"so"}))
 
             #Verify that row 1,3, 4 are visible (2 and 5 are hidden)
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
@@ -462,16 +417,13 @@ class standardFilter(UITestCase):
             #reopen filter and verify
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xfield1 = xDialog.getChild("field1")
-            xval1 = xDialog.getChild("val1")
-            xcond1 = xDialog.getChild("cond1")
-            self.assertEqual(get_state_as_dict(xfield1)["SelectEntryText"], "A")
-            self.assertEqual(get_state_as_dict(xval1)["Text"], "so")
-            self.assertEqual(get_state_as_dict(xcond1)["SelectEntryText"], "Begins with")
-            xCancelBtn = xDialog.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xCancelBtn)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter", close_button="cancel") as xDialog:
+                xfield1 = xDialog.getChild("field1")
+                xval1 = xDialog.getChild("val1")
+                xcond1 = xDialog.getChild("cond1")
+                self.assertEqual(get_state_as_dict(xfield1)["SelectEntryText"], "A")
+                self.assertEqual(get_state_as_dict(xval1)["Text"], "so")
+                self.assertEqual(get_state_as_dict(xcond1)["SelectEntryText"], "Begins with")
 
 
     def test_standard_filter_condition_Does_not_begin_with(self):
@@ -503,17 +455,14 @@ class standardFilter(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:D5"}))
             #Choose DATA-FILTER-STANDARDFILTER
             #Choose field name "A"/ Choose condition "Does not contain"/Enter value "cio"/Press OK button
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xfield1 = xDialog.getChild("field1")
-            xval1 = xDialog.getChild("val1")
-            xcond1 = xDialog.getChild("cond1")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+                xfield1 = xDialog.getChild("field1")
+                xval1 = xDialog.getChild("val1")
+                xcond1 = xDialog.getChild("cond1")
 
-            select_by_text(xfield1, "A")
-            select_by_text(xcond1, "Does not begin with")
-            xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"so"}))
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                select_by_text(xfield1, "A")
+                select_by_text(xcond1, "Does not begin with")
+                xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"so"}))
 
             #Verify that row 1,2, 5 are visible (3 and 4 are hidden)
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
@@ -526,16 +475,13 @@ class standardFilter(UITestCase):
             #reopen filter and verify
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xfield1 = xDialog.getChild("field1")
-            xval1 = xDialog.getChild("val1")
-            xcond1 = xDialog.getChild("cond1")
-            self.assertEqual(get_state_as_dict(xfield1)["SelectEntryText"], "A")
-            self.assertEqual(get_state_as_dict(xval1)["Text"], "so")
-            self.assertEqual(get_state_as_dict(xcond1)["SelectEntryText"], "Does not begin with")
-            xCancelBtn = xDialog.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xCancelBtn)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter", close_button="cancel") as xDialog:
+                xfield1 = xDialog.getChild("field1")
+                xval1 = xDialog.getChild("val1")
+                xcond1 = xDialog.getChild("cond1")
+                self.assertEqual(get_state_as_dict(xfield1)["SelectEntryText"], "A")
+                self.assertEqual(get_state_as_dict(xval1)["Text"], "so")
+                self.assertEqual(get_state_as_dict(xcond1)["SelectEntryText"], "Does not begin with")
 
 
     def test_standard_filter_condition_Ends_with(self):
@@ -567,17 +513,14 @@ class standardFilter(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:D5"}))
             #Choose DATA-FILTER-STANDARDFILTER
             #Choose field name "A"/ Choose condition "Does not contain"/Enter value "cio"/Press OK button
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xfield1 = xDialog.getChild("field1")
-            xval1 = xDialog.getChild("val1")
-            xcond1 = xDialog.getChild("cond1")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+                xfield1 = xDialog.getChild("field1")
+                xval1 = xDialog.getChild("val1")
+                xcond1 = xDialog.getChild("cond1")
 
-            select_by_text(xfield1, "A")
-            select_by_text(xcond1, "Ends with")
-            xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"s"}))
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                select_by_text(xfield1, "A")
+                select_by_text(xcond1, "Ends with")
+                xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"s"}))
 
             #Verify that row 1,2, 5 are visible (3 and 4 are hidden)
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
@@ -590,16 +533,13 @@ class standardFilter(UITestCase):
             #reopen filter and verify
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xfield1 = xDialog.getChild("field1")
-            xval1 = xDialog.getChild("val1")
-            xcond1 = xDialog.getChild("cond1")
-            self.assertEqual(get_state_as_dict(xfield1)["SelectEntryText"], "A")
-            self.assertEqual(get_state_as_dict(xval1)["Text"], "s")
-            self.assertEqual(get_state_as_dict(xcond1)["SelectEntryText"], "Ends with")
-            xCancelBtn = xDialog.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xCancelBtn)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter", close_button="cancel") as xDialog:
+                xfield1 = xDialog.getChild("field1")
+                xval1 = xDialog.getChild("val1")
+                xcond1 = xDialog.getChild("cond1")
+                self.assertEqual(get_state_as_dict(xfield1)["SelectEntryText"], "A")
+                self.assertEqual(get_state_as_dict(xval1)["Text"], "s")
+                self.assertEqual(get_state_as_dict(xcond1)["SelectEntryText"], "Ends with")
 
 
     def test_standard_filter_condition_Does_not_end_with(self):
@@ -631,17 +571,14 @@ class standardFilter(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:D5"}))
             #Choose DATA-FILTER-STANDARDFILTER
             #Choose field name "A"/ Choose condition "Begins with"/Enter value "si"/Press OK button
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xfield1 = xDialog.getChild("field1")
-            xval1 = xDialog.getChild("val1")
-            xcond1 = xDialog.getChild("cond1")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+                xfield1 = xDialog.getChild("field1")
+                xval1 = xDialog.getChild("val1")
+                xcond1 = xDialog.getChild("cond1")
 
-            select_by_text(xfield1, "A")
-            select_by_text(xcond1, "Does not end with")
-            xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"s"}))
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                select_by_text(xfield1, "A")
+                select_by_text(xcond1, "Does not end with")
+                xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"s"}))
 
             #Verify that row 1,3, 4 are visible (2 and 5 are hidden)
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
@@ -654,15 +591,12 @@ class standardFilter(UITestCase):
             #reopen filter and verify
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xfield1 = xDialog.getChild("field1")
-            xval1 = xDialog.getChild("val1")
-            xcond1 = xDialog.getChild("cond1")
-            self.assertEqual(get_state_as_dict(xfield1)["SelectEntryText"], "A")
-            self.assertEqual(get_state_as_dict(xval1)["Text"], "s")
-            self.assertEqual(get_state_as_dict(xcond1)["SelectEntryText"], "Does not end with")
-            xCancelBtn = xDialog.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xCancelBtn)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter", close_button="cancel") as xDialog:
+                xfield1 = xDialog.getChild("field1")
+                xval1 = xDialog.getChild("val1")
+                xcond1 = xDialog.getChild("cond1")
+                self.assertEqual(get_state_as_dict(xfield1)["SelectEntryText"], "A")
+                self.assertEqual(get_state_as_dict(xval1)["Text"], "s")
+                self.assertEqual(get_state_as_dict(xcond1)["SelectEntryText"], "Does not end with")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
