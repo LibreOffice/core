@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdf1ffc2_869583ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-09-10T11:05:34Z",
+      "side": 1,
+      "message": "@Balázs: Thanks for the clean-up!\n\n\nNote: I\u0027ve noticed other problems here:\n\n1) Using range settings in printing, LibreOffice crashes with the following assert:\n\nsoffice.bin: /home/laci/libreoffice/sw/source/uibase/dbui/mmconfigitem.cxx:1542: SwDocMergeInfo\u0026 SwMailMergeConfigItem::GetDocumentMergeInfo(sal_uInt32): Assertion `nDocument \u003c m_pImpl-\u003em_aMergeInfos.size()\u0027 failed.\n\n2) printing all pages e.g. 1-20, the second info windows shows printing No. ??-39.",
+      "revId": "94e99bfec8855ee45ae80721790fff03670b4edb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
