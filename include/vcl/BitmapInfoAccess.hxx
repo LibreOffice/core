@@ -116,7 +116,7 @@ public:
 
     sal_uInt16 GetBestPaletteIndex(const BitmapColor& rBitmapColor) const;
 
-    ColorMask& GetColorMask() const
+    const ColorMask& GetColorMask() const
     {
         assert(mpBuffer && "Access is not valid!");
 
