@@ -476,6 +476,8 @@ def filter_ignore(line, module):
             'src/gpu/GrUtil.h',
             'src/sksl/', # conflict between SkSL::Expression and SkSL::dsl::Expression
             'include/sksl/',
+            'src/gpu/vk/',
+            'include/gpu/vk'
             ]
 
     for i in ignore_list:
