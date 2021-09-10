@@ -16,6 +16,24 @@
       "message": "maybe\n   std::as_const(mpBuffer)-\u003emaPalette[GetPixelIndex(nY, nX)];\nto make the intention clear?",
       "revId": "d773c47caeda73a4731d4e1bc4bbf5a85419a1a8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9eb43ac_b6c3ccb7",
+        "filename": "include/vcl/BitmapReadAccess.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-09-10T19:14:00Z",
+      "side": 1,
+      "message": "Ah, so there is something already like that. I was unaware of that. I\u0027ll do a follow up.",
+      "parentUuid": "a78bea69_8a430f73",
+      "revId": "d773c47caeda73a4731d4e1bc4bbf5a85419a1a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
