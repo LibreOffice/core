@@ -3322,6 +3322,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116501)
     createSwDoc(DATA_DIRECTORY, "tdf116501.odt");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf123163)
+{
+    //just care it doesn't assert
+    createSwDoc(DATA_DIRECTORY, "tdf123163-1.docx");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testAbi11870)
 {
     //just care it doesn't assert
