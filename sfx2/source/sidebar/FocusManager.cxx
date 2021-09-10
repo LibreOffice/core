@@ -393,7 +393,6 @@ bool FocusManager::HandleKeyEvent(
                 default:
                     break;
             }
-            fprintf(stderr, "seen here, consumed %d\n", bConsumed);
             break;
         }
 
