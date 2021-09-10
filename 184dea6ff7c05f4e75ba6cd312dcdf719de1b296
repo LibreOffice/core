@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09cc8edc_9f4ea985",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2021-09-10T18:11:21Z",
+      "side": 1,
+      "message": "Justin,\n\nThis is quite abandoned attempt to create ovverride tables in DOC. It does not work.\nUnfortunately I\u0027m out of time to get back to this issue, moreover corresponding task was already resolved by you.\n\nIf you are interested, you could move on. Or abandon/reimplement this.",
+      "revId": "184dea6ff7c05f4e75ba6cd312dcdf719de1b296",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
