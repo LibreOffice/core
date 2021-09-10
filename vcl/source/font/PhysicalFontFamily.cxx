@@ -26,6 +26,9 @@
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <PhysicalFontCollection.hxx>
 
+namespace vcl::font
+{
+
 void PhysicalFontFamily::CalcType( ImplFontAttrs& rType, FontWeight& rWeight, FontWidth& rWidth,
                                    FontFamily eFamily, const utl::FontNameAttr* pFontAttr )
 {
@@ -271,6 +274,7 @@ void PhysicalFontFamily::UpdateCloneFontList(PhysicalFontCollection& rFontCollec
         assert(pFamily);
         pFamily->AddFontFace( pFoundFontFace );
     }
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
