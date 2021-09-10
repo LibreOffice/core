@@ -44,8 +44,6 @@ include $(SETTINGS)/std.mk
 COMP_NAME=remoteclientsample
 COMP_IMPL_NAME=$(COMP_NAME).uno.$(SHAREDLIB_EXT)
 COMP_IMPL=$(SHAREDLIB_OUT)/$(COMP_IMPL_NAME)
-COMP_RDB_NAME = $(COMP_NAME).uno.rdb
-COMP_RDB = $(OUT_BIN)/$(COMP_RDB_NAME)
 COMP_SERVICES=$(SHAREDLIB_OUT)/remoteclientsample.rdb
 
 ENV_COMP_SERVICES=-env:URE_MORE_SERVICES=$(URLPREFIX)$(COMP_SERVICES)
@@ -66,12 +64,6 @@ ALL : \
 	CppClientExample
 
 include $(SETTINGS)/stdtarget.mk
-
-# This example type library will be extended by the URE types
-$(OUT_BIN)/%.rdb :
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
-	$(REGMERGE) $@ / $(URE_TYPES) 
 
 $(OUT_COMP_SLO)/%.$(OBJ_EXT) : %.cxx $(SDKTYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
