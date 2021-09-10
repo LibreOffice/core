@@ -14,26 +14,22 @@ class asianPhoneticGuide(UITestCase):
         with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:RubyDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:RubyDialog", close_button="close") as xDialog:
 
-            xLeft1ED = xDialog.getChild("Left1ED")
-            xRight1ED = xDialog.getChild("Right1ED")
-            xadjustlb = xDialog.getChild("adjustlb")
-            xpositionlb = xDialog.getChild("positionlb")
-            xstylelb = xDialog.getChild("stylelb")
+                xLeft1ED = xDialog.getChild("Left1ED")
+                xRight1ED = xDialog.getChild("Right1ED")
+                xadjustlb = xDialog.getChild("adjustlb")
+                xpositionlb = xDialog.getChild("positionlb")
+                xstylelb = xDialog.getChild("stylelb")
 
-            xLeft1ED.executeAction("TYPE", mkPropertyValues({"TEXT":"a"}))
-            xRight1ED.executeAction("TYPE", mkPropertyValues({"TEXT":"w"}))
-            select_by_text(xadjustlb, "Right")
-            select_by_text(xpositionlb, "Right")
-            select_by_text(xstylelb, "Quotation")
+                xLeft1ED.executeAction("TYPE", mkPropertyValues({"TEXT":"a"}))
+                xRight1ED.executeAction("TYPE", mkPropertyValues({"TEXT":"w"}))
+                select_by_text(xadjustlb, "Right")
+                select_by_text(xpositionlb, "Right")
+                select_by_text(xstylelb, "Quotation")
 
-            xApplyBtn = xDialog.getChild("ok")
-            xApplyBtn.executeAction("CLICK", tuple())
-
-            xCloseBtn = xDialog.getChild("close")
-            self.ui_test.close_dialog_through_button(xCloseBtn)
+                xApplyBtn = xDialog.getChild("ok")
+                xApplyBtn.executeAction("CLICK", tuple())
 
             self.assertEqual(document.Text.String[0:1], "a")
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
