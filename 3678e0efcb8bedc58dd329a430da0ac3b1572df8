@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "772718de_430d7c4f",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2188,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-10T13:11:49Z",
+      "side": 1,
+      "message": "Seeing this got reverted with https://gerrit.libreoffice.org/c/core/+/121555 and the code iterates over each and every non-filtered row individually that\u0027s indeed wasted time.\n\nRather take advantage of the fact that ScDocument::RowFiltered() returns the first and last row of each block both for filtered and non-filtered (see ScTable::RowFiltered()), so with that ScDocument::ShowRows() still can be called for a block of non-filtered rows.\n\nSame for the code below.",
+      "revId": "3678e0efcb8bedc58dd329a430da0ac3b1572df8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
