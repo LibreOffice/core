@@ -34,6 +34,7 @@
 #include <outdev.h>
 #include <print.h>
 #include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontFaceCollection.hxx>
 #include <print.hrc>
 #include <salgdi.hxx>
 #include <salinst.hxx>
