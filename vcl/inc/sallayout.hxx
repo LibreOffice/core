@@ -44,10 +44,9 @@
 
 #define MAX_FALLBACK 16
 
-
-class SalGraphics;
 class PhysicalFontFace;
 class GenericSalLayout;
+class SalGraphics;
 enum class SalLayoutFlags;
 namespace vcl::text {
     class TextLayoutCache;
