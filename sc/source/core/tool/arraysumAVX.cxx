@@ -8,21 +8,28 @@
  *
  */
 
-#include <arraysumfunctor.hxx>
-#include <sal/log.hxx>
+#define LO_ARRAYSUM_SPACE AVX
+#include "arraysum.hxx"
+
+#include <arraysumfunctorinternal.hxx>
+
 #include <tools/simd.hxx>
 #include <tools/simdsupport.hxx>
+
+#include <cstdlib>
 
 namespace sc::op
 {
 #ifdef LO_AVX_AVAILABLE // Old processors
 
-const __m256d ANNULATE_SIGN_BIT = _mm256_castsi256_pd(_mm256_set1_epi64x(0x7FFF'FFFF'FFFF'FFFF));
+using namespace AVX;
 
 /** Kahan sum with AVX.
   */
 static inline void sumAVX(__m256d& sum, __m256d& err, const __m256d& value)
 {
+    const __m256d ANNULATE_SIGN_BIT
+        = _mm256_castsi256_pd(_mm256_set1_epi64x(0x7FFF'FFFF'FFFF'FFFF));
     // Temporal parameter
     __m256d t = _mm256_add_pd(sum, value);
     // Absolute value of the total sum
@@ -45,7 +52,7 @@ static inline void sumAVX(__m256d& sum, __m256d& err, const __m256d& value)
 
 /** Execute Kahan sum with AVX.
   */
-KahanSum executeAVX(size_t& i, size_t nSize, const double* pCurrent)
+KahanSumSimple executeAVX(size_t& i, size_t nSize, const double* pCurrent)
 {
 #ifdef LO_AVX_AVAILABLE
     // Make sure we don't fall out of bounds.
@@ -97,15 +104,14 @@ KahanSum executeAVX(size_t& i, size_t nSize, const double* pCurrent)
         sumNeumanierNormal(sums[0], errs[0], errs[2]);
 
         // Store result
-        return KahanSum(sums[0], errs[0]);
+        return { sums[0], errs[0] };
     }
-    return 0.0;
+    return { 0.0, 0.0 };
 #else
-    SAL_WARN("sc", "Failed to use AVX");
     (void)i;
     (void)nSize;
     (void)pCurrent;
-    return 0.0;
+    abort();
 #endif
 }
 
