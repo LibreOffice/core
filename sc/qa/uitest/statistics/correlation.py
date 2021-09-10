@@ -57,23 +57,20 @@ class correlation(UITestCase):
             enter_text_to_cell(gridwin, "C10", "12")
             enter_text_to_cell(gridwin, "C11", "60")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C13"}))
-            self.ui_test.execute_modeless_dialog_through_command(".uno:CorrelationDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xinputrangeedit = xDialog.getChild("input-range-edit")
-            xoutputrangeedit = xDialog.getChild("output-range-edit")
-            xgroupedbyrowsradio = xDialog.getChild("groupedby-rows-radio")
-            xgroupedbycolumnsradio = xDialog.getChild("groupedby-columns-radio")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:CorrelationDialog") as xDialog:
+                xinputrangeedit = xDialog.getChild("input-range-edit")
+                xoutputrangeedit = xDialog.getChild("output-range-edit")
+                xgroupedbyrowsradio = xDialog.getChild("groupedby-rows-radio")
+                xgroupedbycolumnsradio = xDialog.getChild("groupedby-columns-radio")
 
-            xinputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            xinputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            xinputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$A$1:$C$13"}))
-            xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$F$1"}))
-            xgroupedbyrowsradio.executeAction("CLICK", tuple())
-            xgroupedbycolumnsradio.executeAction("CLICK", tuple())
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                xinputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xinputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xinputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$A$1:$C$13"}))
+                xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$F$1"}))
+                xgroupedbyrowsradio.executeAction("CLICK", tuple())
+                xgroupedbycolumnsradio.executeAction("CLICK", tuple())
 
             #Verify
             self.assertEqual(get_cell_by_position(document, 0, 5, 0).getString(), "Correlations")
@@ -98,11 +95,8 @@ class correlation(UITestCase):
             self.assertEqual(get_cell_by_position(document, 0, 5, 0).getString(), "")
 
             # test cancel button
-            self.ui_test.execute_modeless_dialog_through_command(".uno:CorrelationDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xCancelBtn = xDialog.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xCancelBtn)
-
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:CorrelationDialog", close_button="cancel"):
+                pass
 
     def test_statistic_correlation_row(self):
         with self.ui_test.create_doc_in_start_center("calc") as document:
@@ -157,22 +151,19 @@ class correlation(UITestCase):
             enter_text_to_cell(gridwin, "M1", "26")
 
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:M3"}))
-            self.ui_test.execute_modeless_dialog_through_command(".uno:CorrelationDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xinputrangeedit = xDialog.getChild("input-range-edit")
-            xoutputrangeedit = xDialog.getChild("output-range-edit")
-            xgroupedbyrowsradio = xDialog.getChild("groupedby-rows-radio")
-            xgroupedbycolumnsradio = xDialog.getChild("groupedby-columns-radio")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:CorrelationDialog") as xDialog:
+                xinputrangeedit = xDialog.getChild("input-range-edit")
+                xoutputrangeedit = xDialog.getChild("output-range-edit")
+                xgroupedbyrowsradio = xDialog.getChild("groupedby-rows-radio")
+                xgroupedbycolumnsradio = xDialog.getChild("groupedby-columns-radio")
 
-            xinputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            xinputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            xinputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$A$1:$M$3"}))
-            xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$A$7"}))
-            xgroupedbyrowsradio.executeAction("CLICK", tuple())
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                xinputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xinputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xinputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$A$1:$M$3"}))
+                xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$A$7"}))
+                xgroupedbyrowsradio.executeAction("CLICK", tuple())
             #Verify
             self.assertEqual(get_cell_by_position(document, 0, 0, 6).getString(), "Correlations")
             self.assertEqual(get_cell_by_position(document, 0, 0, 7).getString(), "Row 1")

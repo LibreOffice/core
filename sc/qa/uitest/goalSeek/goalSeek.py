@@ -17,17 +17,16 @@ class goalSeek(UITestCase):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B4"}))
-            self.ui_test.execute_modeless_dialog_through_command(".uno:GoalSeekDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xformulaedit = xDialog.getChild("formulaedit")
-            xtarget = xDialog.getChild("target")
-            xvaredit = xDialog.getChild("varedit")
-            xtarget.executeAction("TYPE", mkPropertyValues({"TEXT":"15000"}))
-            xvaredit.executeAction("TYPE", mkPropertyValues({"TEXT":"B1"}))
-            xOKBtn = xDialog.getChild("ok")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:GoalSeekDialog", close_button="") as xDialog:
+                xformulaedit = xDialog.getChild("formulaedit")
+                xtarget = xDialog.getChild("target")
+                xvaredit = xDialog.getChild("varedit")
+                xtarget.executeAction("TYPE", mkPropertyValues({"TEXT":"15000"}))
+                xvaredit.executeAction("TYPE", mkPropertyValues({"TEXT":"B1"}))
+                xOKBtn = xDialog.getChild("ok")
 
-            with self.ui_test.execute_blocking_action(xOKBtn.executeAction, args=('CLICK', ()), close_button="yes"):
-                pass
+                with self.ui_test.execute_blocking_action(xOKBtn.executeAction, args=('CLICK', ()), close_button="yes"):
+                    pass
 
             #verify
             self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 0).getValue(), 200000)

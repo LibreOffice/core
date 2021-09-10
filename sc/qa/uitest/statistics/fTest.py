@@ -49,26 +49,23 @@ class tTest(UITestCase):
             enter_text_to_cell(gridwin, "B13", "33")
 
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B13"}))
-            self.ui_test.execute_modeless_dialog_through_command(".uno:FTestDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xvariable1rangeedit = xDialog.getChild("variable1-range-edit")
-            xvariable2rangeedit = xDialog.getChild("variable2-range-edit")
-            xoutputrangeedit = xDialog.getChild("output-range-edit")
-            xgroupedbyrowsradio = xDialog.getChild("groupedby-rows-radio")
-            xgroupedbycolumnsradio = xDialog.getChild("groupedby-columns-radio")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:FTestDialog") as xDialog:
+                xvariable1rangeedit = xDialog.getChild("variable1-range-edit")
+                xvariable2rangeedit = xDialog.getChild("variable2-range-edit")
+                xoutputrangeedit = xDialog.getChild("output-range-edit")
+                xgroupedbyrowsradio = xDialog.getChild("groupedby-rows-radio")
+                xgroupedbycolumnsradio = xDialog.getChild("groupedby-columns-radio")
 
-            xvariable1rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            xvariable1rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            xvariable1rangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$A$1:$A$13"}))
-            xvariable2rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            xvariable2rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            xvariable2rangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$B$1:$B$13"}))
-            xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"F1"}))
-            xgroupedbycolumnsradio.executeAction("CLICK", tuple())
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                xvariable1rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xvariable1rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xvariable1rangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$A$1:$A$13"}))
+                xvariable2rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xvariable2rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xvariable2rangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$B$1:$B$13"}))
+                xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"F1"}))
+                xgroupedbycolumnsradio.executeAction("CLICK", tuple())
             #Verify
             self.assertEqual(get_cell_by_position(document, 0, 5, 0).getString(), "F-test")
             self.assertEqual(get_cell_by_position(document, 0, 5, 1).getString(), "Alpha")
@@ -110,10 +107,7 @@ class tTest(UITestCase):
             self.assertEqual(get_cell_by_position(document, 0, 5, 0).getString(), "")
 
             # test cancel button
-            self.ui_test.execute_modeless_dialog_through_command(".uno:FTestDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xCancelBtn = xDialog.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xCancelBtn)
-
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:FTestDialog", close_button="cancel"):
+                pass
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
