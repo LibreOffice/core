@@ -10358,7 +10358,7 @@ dnl ===================================================================
 dnl Check for system cuckoo
 dnl ===================================================================
 AC_MSG_CHECKING([which cuckoo to use])
-if test "$with_system_cuckoo" = "yes" -o "$with_system_headers" = "yes"; then
+if test "$with_system_cuckoo" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_CUCKOO=TRUE
     AC_LANG_PUSH([C++])
