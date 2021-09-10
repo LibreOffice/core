@@ -1466,46 +1466,24 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
     addPolygonToPath(rPoly, aPath);
     aPath.setFillType(SkPathFillType::kEvenOdd);
     addUpdateRegion(aPath.getBounds());
+    SkAutoCanvasRestore autoRestore(getDrawCanvas(), true);
+    SkPaint aPaint;
     // TrackFrame just inverts a dashed path around the polygon
     if (eFlags == SalInvert::TrackFrame)
     {
         // TrackFrame is not supposed to paint outside of the polygon (usually rectangle),
         // but wider stroke width usually results in that, so ensure the requirement
         // by clipping.
-        SkAutoCanvasRestore autoRestore(getDrawCanvas(), true);
         getDrawCanvas()->clipRect(aPath.getBounds(), SkClipOp::kIntersect, false);
-        SkPaint aPaint;
         aPaint.setStrokeWidth(2);
-        float intervals[] = { 4.0f, 4.0f };
+        constexpr float intervals[] = { 4.0f, 4.0f };
         aPaint.setStyle(SkPaint::kStroke_Style);
         aPaint.setPathEffect(SkDashPathEffect::Make(intervals, SK_ARRAY_COUNT(intervals), 0));
         aPaint.setColor(SkColorSetARGB(255, 255, 255, 255));
         aPaint.setBlendMode(SkBlendMode::kDifference);
-        if (!rasterHack)
-            getDrawCanvas()->drawPath(aPath, aPaint);
-        else
-        {
-            SkRect area;
-            aPath.getBounds().roundOut(&area);
-            SkRect size = SkRect::MakeWH(area.width(), area.height());
-            sk_sp<SkSurface> surface
-                = SkSurface::MakeRasterN32Premul(area.width(), area.height(), surfaceProps());
-            SkPaint copy;
-            copy.setBlendMode(SkBlendMode::kSrc);
-            flushDrawing();
-            surface->getCanvas()->drawImageRect(makeCheckedImageSnapshot(mSurface), area, size,
-                                                SkSamplingOptions(), &copy,
-                                                SkCanvas::kFast_SrcRectConstraint);
-            aPath.offset(-area.x(), -area.y());
-            surface->getCanvas()->drawPath(aPath, aPaint);
-            getDrawCanvas()->drawImageRect(makeCheckedImageSnapshot(surface), size, area,
-                                           SkSamplingOptions(), &copy,
-                                           SkCanvas::kFast_SrcRectConstraint);
-        }
     }
     else
     {
-        SkPaint aPaint;
         aPaint.setColor(SkColorSetARGB(255, 255, 255, 255));
         aPaint.setStyle(SkPaint::kFill_Style);
         aPaint.setBlendMode(SkBlendMode::kDifference);
@@ -1532,27 +1510,27 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
             aPaint.setShader(
                 aBitmap.makeShader(SkTileMode::kRepeat, SkTileMode::kRepeat, SkSamplingOptions()));
         }
-        if (!rasterHack)
-            getDrawCanvas()->drawPath(aPath, aPaint);
-        else
-        {
-            SkRect area;
-            aPath.getBounds().roundOut(&area);
-            SkRect size = SkRect::MakeWH(area.width(), area.height());
-            sk_sp<SkSurface> surface
-                = SkSurface::MakeRasterN32Premul(area.width(), area.height(), surfaceProps());
-            SkPaint copy;
-            copy.setBlendMode(SkBlendMode::kSrc);
-            flushDrawing();
-            surface->getCanvas()->drawImageRect(makeCheckedImageSnapshot(mSurface), area, size,
-                                                SkSamplingOptions(), &copy,
-                                                SkCanvas::kFast_SrcRectConstraint);
-            aPath.offset(-area.x(), -area.y());
-            surface->getCanvas()->drawPath(aPath, aPaint);
-            getDrawCanvas()->drawImageRect(makeCheckedImageSnapshot(surface), size, area,
-                                           SkSamplingOptions(), &copy,
-                                           SkCanvas::kFast_SrcRectConstraint);
-        }
+    }
+    if (!rasterHack)
+        getDrawCanvas()->drawPath(aPath, aPaint);
+    else
+    {
+        SkRect area;
+        aPath.getBounds().roundOut(&area);
+        SkRect size = SkRect::MakeWH(area.width(), area.height());
+        sk_sp<SkSurface> surface
+            = SkSurface::MakeRasterN32Premul(area.width(), area.height(), surfaceProps());
+        SkPaint copy;
+        copy.setBlendMode(SkBlendMode::kSrc);
+        flushDrawing();
+        surface->getCanvas()->drawImageRect(makeCheckedImageSnapshot(mSurface), area, size,
+                                            SkSamplingOptions(), &copy,
+                                            SkCanvas::kFast_SrcRectConstraint);
+        aPath.offset(-area.x(), -area.y());
+        surface->getCanvas()->drawPath(aPath, aPaint);
+        getDrawCanvas()->drawImageRect(makeCheckedImageSnapshot(surface), size, area,
+                                       SkSamplingOptions(), &copy,
+                                       SkCanvas::kFast_SrcRectConstraint);
     }
     postDraw();
 }
