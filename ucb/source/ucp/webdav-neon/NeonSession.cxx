@@ -1569,6 +1569,19 @@ void NeonSession::LOCK( const OUString & inPath,
 
     if ( theRetVal == NE_OK )
     {
+        // independent from what input timeout was sent to the server, the
+        // accepted timeout is now returned in theLock->timeout. This is the
+        // base for preparing the LOCK refresh needed after that time. To not
+        // risk to fail due to asking too late, add a 5% security margin and
+        // just request the refresh a little bit earlier, to compensate slight
+        // timing losses/changes/errors in the complete data transfer chain.
+        // Cases where this happens just very tight in the time limit have been
+        // recorded.
+        if(theLock->timeout > 30)
+        {
+            theLock->timeout = static_cast<int>(static_cast<double>(theLock->timeout) * 0.95);
+        }
+
         m_aNeonLockStore.addLock( theLock,
                                   this,
                                   lastChanceToSendRefreshRequest(
@@ -1614,10 +1627,16 @@ bool NeonSession::LOCK( NeonLock * pLock,
     const int theRetVal = ne_lock_refresh(m_pHttpSession, pLock);
     if (theRetVal == NE_OK)
     {
+        // see above: Add 5% timeout safety to the new timeout returned from the Server
+        if(pLock->timeout > 30)
+        {
+            pLock->timeout = static_cast<int>(static_cast<double>(pLock->timeout) * 0.95);
+        }
+
         rlastChanceToSendRefreshRequest
             = lastChanceToSendRefreshRequest( startCall, pLock->timeout );
 
-        SAL_INFO( "ucb.ucp.webdav", "LOCK (refresh) - Lock successfully refreshed." );
+        SAL_INFO( "ucb.ucp.webdav", "LOCK (refresh) - Lock successfully refreshed (timeout:" << pLock->timeout << " sec.)" );
         return true;
     }
     else
@@ -1631,8 +1650,13 @@ bool NeonSession::LOCK( NeonLock * pLock,
         {
             // tdf#126279: see handling of NE_AUTH in HandleError
             m_bNeedNewSession = true;
-            m_aNeonLockStore.removeLockDeferred(pLock);
         }
+
+        // if NeonSession::LOCK initially worked, m_aNeonLockStore.addLock
+        // was executed. So, remove it here - independent from the type of
+        // error -> or short, in any error case
+        m_aNeonLockStore.removeLockDeferred(pLock);
+
         return false;
     }
 }
