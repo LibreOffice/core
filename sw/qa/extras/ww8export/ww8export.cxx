@@ -642,41 +642,22 @@ reading page numbers at sections > 255, in this case 256
 
 DECLARE_WW8EXPORT_TEST(testTdf95576, "tdf95576.doc")
 {
+    /* The prior test was very implementation specific - depending on numbering properties.
+     * No numbering is actually defined in this .doc file at all (no sprmPlfo, no sprmPIlvl),
+     * so numbering rules should not affect the paragraph.*/
+
     // The first three paragraphs in this document (which are headings)
-    // should have zero indent and first line indent
-    for (int nPara = 1; nPara <= 3; ++nPara) {
-        std::cout << "nPara = " << nPara << "\n";
+    // should have zero indent and zero first line indent
+    for (int nPara = 1; nPara <= 4; ++nPara)
+    {
         auto xPara = getParagraph(nPara);
 
-        // get the numbering rules effective at this paragraph
-        uno::Reference<container::XIndexReplace> xNumRules =
-            getProperty< uno::Reference<container::XIndexReplace> >(
-                xPara, "NumberingRules");
+        uno::Reference<beans::XPropertySet> xProps(xPara, uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(!xProps->getPropertyValue("NumberingRules").hasValue());
 
-        // get the numbering level of this paragraph, and the properties
-        // associated with that numbering level
-        int numLevel = getProperty<sal_Int32>(xPara, "NumberingLevel");
-        uno::Sequence< beans::PropertyValue > aPropertyValues;
-        xNumRules->getByIndex(numLevel) >>= aPropertyValues;
-
-        // Now look through these properties for the indent and
-        // first line indent settings
-        sal_Int32 nIndentAt = -1;
-        sal_Int32 nFirstLineIndent = -1;
-        for(int j = 0 ; j< aPropertyValues.getLength() ; ++j)
-        {
-            auto aProp = aPropertyValues[j];
-            std::cout << "Prop.Name: " << aProp.Name << "\n";
-            if (aProp.Name == "FirstLineIndent") {
-                nFirstLineIndent = aProp.Value.get<sal_Int32>();
-            } else if (aProp.Name == "IndentAt") {
-                nIndentAt = aProp.Value.get<sal_Int32>();
-            }
-        }
-
-        // The indent and first line indent should be zero
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nIndentAt);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nFirstLineIndent);
+       // The indent and first line indent should be zero
+       CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaFirstLineIndent"));
+       CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaLeftMargin"));
     }
 }
 
