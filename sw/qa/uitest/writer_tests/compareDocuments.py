@@ -29,17 +29,14 @@ class compareDocuments(UITestCase):
                 with self.ui_test.execute_dialog_through_action(xOpenBtn, 'CLICK', close_button="close"):
                     pass
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges")
-            xTrackDlg = self.xUITest.getTopFocusWindow()
-            changesList = xTrackDlg.getChild("writerchanges")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
+                changesList = xTrackDlg.getChild("writerchanges")
 
-            text = "Unknown Author\t" + datetime.datetime.now().strftime("%m/%d/%Y")
-            self.assertEqual(2, len(changesList.getChildren()))
-            self.assertTrue(get_state_as_dict(changesList.getChild('0'))["Text"].startswith(text))
-            self.assertTrue(get_state_as_dict(changesList.getChild('1'))["Text"].startswith(text))
+                text = "Unknown Author\t" + datetime.datetime.now().strftime("%m/%d/%Y")
+                self.assertEqual(2, len(changesList.getChildren()))
+                self.assertTrue(get_state_as_dict(changesList.getChild('0'))["Text"].startswith(text))
+                self.assertTrue(get_state_as_dict(changesList.getChild('1'))["Text"].startswith(text))
 
-            xcloseBtn = xTrackDlg.getChild("close")
-            xcloseBtn.executeAction("CLICK", tuple())
 
     def test_tdf137855(self):
 
@@ -57,20 +54,17 @@ class compareDocuments(UITestCase):
                 with self.ui_test.execute_dialog_through_action(xOpenBtn, 'CLICK', close_button="close"):
                     pass
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges")
-            xTrackDlg = self.xUITest.getTopFocusWindow()
-            changesList = xTrackDlg.getChild("writerchanges")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
+                changesList = xTrackDlg.getChild("writerchanges")
 
-            # Check the number of changes
-            self.assertEqual(263, len(changesList.getChildren()))
+                # Check the number of changes
+                self.assertEqual(263, len(changesList.getChildren()))
 
-            # Without the fix in place, this test would have crashed here
-            xAccBtn = xTrackDlg.getChild("acceptall")
-            xAccBtn.executeAction("CLICK", tuple())
+                # Without the fix in place, this test would have crashed here
+                xAccBtn = xTrackDlg.getChild("acceptall")
+                xAccBtn.executeAction("CLICK", tuple())
 
-            self.assertEqual(0, len(changesList.getChildren()))
+                self.assertEqual(0, len(changesList.getChildren()))
 
-            xcloseBtn = xTrackDlg.getChild("close")
-            xcloseBtn.executeAction("CLICK", tuple())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

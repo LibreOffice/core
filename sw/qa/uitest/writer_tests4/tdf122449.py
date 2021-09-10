@@ -18,17 +18,14 @@ class tdf122449(UITestCase):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             #search word Autocorrect (second find)   .uno:SearchDialog
-            self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
 
-            searchterm = xDialog.getChild("searchterm")
-            searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"Autocorrection"}))
-            xsearch = xDialog.getChild("search")
-            xsearch.executeAction("CLICK", tuple())  #first search
-            xsearch.executeAction("CLICK", tuple())  #2nd search
-            self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "6")
-            xcloseBtn = xDialog.getChild("close")
-            self.ui_test.close_dialog_through_button(xcloseBtn)
+                searchterm = xDialog.getChild("searchterm")
+                searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"Autocorrection"}))
+                xsearch = xDialog.getChild("search")
+                xsearch.executeAction("CLICK", tuple())  #first search
+                xsearch.executeAction("CLICK", tuple())  #2nd search
+                self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "6")
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "HOME"}))
             # invoke Index dialog Index entry   .uno:IndexEntryDialog
             with self.ui_test.execute_dialog_through_command(".uno:IndexEntryDialog", close_button="close"):
