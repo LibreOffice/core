@@ -3980,9 +3980,51 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
 }
 #else
 
-bool GtkSalFrame::DrawingAreaKey(SalEvent nEventType, guint keyval, guint keycode, guint32 nTime, guint state)
+bool GtkSalFrame::DrawingAreaKey(GtkEventControllerKey* pController, SalEvent nEventType, guint keyval, guint keycode, guint state)
 {
+    guint32 nTime = gdk_event_get_time(gtk_event_controller_get_current_event(GTK_EVENT_CONTROLLER(pController)));
     UpdateLastInputEventTime(nTime);
+
+    bool bFocusInAnotherGtkWidget = false;
+
+    VclPtr<vcl::Window> xTopLevelInterimWindow;
+
+    if (GTK_IS_WINDOW(m_pWindow))
+    {
+        GtkWidget* pFocusWindow = gtk_window_get_focus(GTK_WINDOW(m_pWindow));
+        bFocusInAnotherGtkWidget = pFocusWindow && pFocusWindow != GTK_WIDGET(m_pFixedContainer);
+        if (bFocusInAnotherGtkWidget)
+        {
+            if (!gtk_widget_get_realized(pFocusWindow))
+                return true;
+            // if the focus is not in our main widget, see if there is a handler
+            // for this key stroke in GtkWindow first
+            bool bHandled = gtk_event_controller_key_forward(pController, m_pWindow);
+            if (bHandled)
+                return true;
+
+            // Is focus inside an InterimItemWindow? In which case find that
+            // InterimItemWindow and send unconsumed keystrokes to it to
+            // support ctrl-q etc shortcuts. Only bother to search for the
+            // InterimItemWindow if it is a toplevel that fills its frame, or
+            // the keystroke is sufficiently special its worth passing on,
+            // e.g. F6 to switch between task-panels or F5 to close a navigator
+            if (IsCycleFocusOutDisallowed() || IsFunctionKeyVal(keyval))
+            {
+                GtkWidget* pSearch = pFocusWindow;
+                while (pSearch)
+                {
+                    void* pData = g_object_get_data(G_OBJECT(pSearch), "InterimWindowGlue");
+                    if (pData)
+                    {
+                        xTopLevelInterimWindow = static_cast<vcl::Window*>(pData);
+                        break;
+                    }
+                    pSearch = gtk_widget_get_parent(pSearch);
+                }
+            }
+        }
+    }
 
     vcl::DeletionListener aDel(this);
 
@@ -4062,6 +4104,32 @@ bool GtkSalFrame::DrawingAreaKey(SalEvent nEventType, guint keyval, guint keycod
     }
     else
     {
+        bool bRestoreDisallowCycleFocusOut = false;
+
+        VclPtr<vcl::Window> xOrigFrameFocusWin;
+        VclPtr<vcl::Window> xOrigFocusWin;
+        if (xTopLevelInterimWindow)
+        {
+            // Focus is inside an InterimItemWindow so send unconsumed
+            // keystrokes to by setting it as the mpFocusWin
+            VclPtr<vcl::Window> xVclWindow = GetWindow();
+            ImplFrameData* pFrameData = xVclWindow->ImplGetWindowImpl()->mpFrameData;
+            xOrigFrameFocusWin = pFrameData->mpFocusWin;
+            pFrameData->mpFocusWin = xTopLevelInterimWindow;
+
+            ImplSVData* pSVData = ImplGetSVData();
+            xOrigFocusWin = pSVData->mpWinData->mpFocusWin;
+            pSVData->mpWinData->mpFocusWin = xTopLevelInterimWindow;
+
+            if (keyval == GDK_KEY_F6 && IsCycleFocusOutDisallowed())
+            {
+                // For F6, allow the focus to leave the InterimItemWindow
+                AllowCycleFocusOut();
+                bRestoreDisallowCycleFocusOut = true;
+            }
+        }
+
+
         bStopProcessingKey = doKeyCallback(state,
                                            keyval,
                                            keycode,
@@ -4069,8 +4137,32 @@ bool GtkSalFrame::DrawingAreaKey(SalEvent nEventType, guint keyval, guint keycod
                                            sal_Unicode(gdk_keyval_to_unicode(keyval)),
                                            nEventType == SalEvent::KeyInput,
                                            false);
+
         if (!aDel.isDeleted())
+        {
             m_nKeyModifiers = ModKeyFlags::NONE;
+
+            if (xTopLevelInterimWindow)
+            {
+                // Focus was inside an InterimItemWindow, restore the original
+                // focus win, unless the focus was changed away from the
+                // InterimItemWindow which should only be possible with F6
+                VclPtr<vcl::Window> xVclWindow = GetWindow();
+                ImplFrameData* pFrameData = xVclWindow->ImplGetWindowImpl()->mpFrameData;
+                if (pFrameData->mpFocusWin == xTopLevelInterimWindow)
+                    pFrameData->mpFocusWin = xOrigFrameFocusWin;
+
+                ImplSVData* pSVData = ImplGetSVData();
+                if (pSVData->mpWinData->mpFocusWin == xTopLevelInterimWindow)
+                    pSVData->mpWinData->mpFocusWin = xOrigFocusWin;
+
+                if (bRestoreDisallowCycleFocusOut)
+                {
+                    // undo the above AllowCycleFocusOut for F6
+                    DisallowCycleFocusOut();
+                }
+            }
+        }
     }
 
     if (m_pIMHandler)
@@ -4082,15 +4174,13 @@ bool GtkSalFrame::DrawingAreaKey(SalEvent nEventType, guint keyval, guint keycod
 gboolean GtkSalFrame::signalKeyPressed(GtkEventControllerKey* pController, guint keyval, guint keycode, GdkModifierType state, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-    GdkEvent* pEvent = gtk_event_controller_get_current_event(GTK_EVENT_CONTROLLER(pController));
-    return pThis->DrawingAreaKey(SalEvent::KeyInput, keyval, keycode, gdk_event_get_time(pEvent), state);
+    return pThis->DrawingAreaKey(pController, SalEvent::KeyInput, keyval, keycode, state);
 }
 
 gboolean GtkSalFrame::signalKeyReleased(GtkEventControllerKey* pController, guint keyval, guint keycode, GdkModifierType state, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-    GdkEvent* pEvent = gtk_event_controller_get_current_event(GTK_EVENT_CONTROLLER(pController));
-    return pThis->DrawingAreaKey(SalEvent::KeyUp, keyval, keycode, gdk_event_get_time(pEvent), state);
+    return pThis->DrawingAreaKey(pController, SalEvent::KeyUp, keyval, keycode, state);
 }
 #endif
 

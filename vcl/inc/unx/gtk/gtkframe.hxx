@@ -311,9 +311,10 @@ class GtkSalFrame final : public SalFrame
     bool WindowCloseRequest();
     void DrawingAreaMotion(int nEventX, int nEventY, guint32 nTime, guint nState);
     void DrawingAreaCrossing(SalEvent nEventType, int nEventX, int nEventY, guint32 nTime, guint nState);
-    bool DrawingAreaKey(SalEvent nEventType, guint keyval, guint keycode, guint32 nTime, guint nState);
     void DrawingAreaScroll(double delta_x, double delta_y, int nEventX, int nEventY, guint32 nTime, guint nState);
 #if GTK_CHECK_VERSION(4, 0, 0)
+    bool DrawingAreaKey(GtkEventControllerKey* pController, SalEvent nEventType, guint keyval, guint keycode, guint nState);
+
     static void         signalMap(GtkWidget*, gpointer);
     static void         signalUnmap(GtkWidget*, gpointer);
 
