@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-08-24 13:03:12 using:
+ Generated on 2021-09-10 22:24:48 using:
  ./bin/update_pch external/skia skia --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -191,7 +191,6 @@
 #include <include/gpu/GrContextThreadSafeProxy.h>
 #include <include/gpu/GrDirectContext.h>
 #include <include/gpu/GrRecordingContext.h>
-#include <include/gpu/vk/GrVkTypes.h>
 #include <include/pathops/SkPathOps.h>
 #include <include/ports/SkRemotableFontMgr.h>
 #include <include/private/GrImageContext.h>
@@ -503,7 +502,6 @@
 #include <src/gpu/text/GrSDFTControl.h>
 #include <src/gpu/text/GrStrikeCache.h>
 #include <src/gpu/text/GrTextBlobCache.h>
-#include <src/gpu/vk/GrVkCaps.h>
 #include <src/image/SkImage_Base.h>
 #include <src/image/SkImage_Gpu.h>
 #include <src/image/SkImage_Lazy.h>
