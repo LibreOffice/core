@@ -16,29 +16,26 @@ class fillRandomNumber(UITestCase):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A2"}))
-            self.ui_test.execute_modeless_dialog_through_command(".uno:RandomNumberGeneratorDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xcellrangeedit = xDialog.getChild("cell-range-edit")
-            xdistributioncombo = xDialog.getChild("distribution-combo")
-            xparameter1spin = xDialog.getChild("parameter1-spin")
-            xparameter2spin = xDialog.getChild("parameter2-spin")
-            xenableseedcheck = xDialog.getChild("enable-seed-check")
-            xseedspin = xDialog.getChild("seed-spin")
-            xenableroundingcheck = xDialog.getChild("enable-rounding-check")
-            xdecimalplacesspin = xDialog.getChild("decimal-places-spin")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:RandomNumberGeneratorDialog") as xDialog:
+                xcellrangeedit = xDialog.getChild("cell-range-edit")
+                xdistributioncombo = xDialog.getChild("distribution-combo")
+                xparameter1spin = xDialog.getChild("parameter1-spin")
+                xparameter2spin = xDialog.getChild("parameter2-spin")
+                xenableseedcheck = xDialog.getChild("enable-seed-check")
+                xseedspin = xDialog.getChild("seed-spin")
+                xenableroundingcheck = xDialog.getChild("enable-rounding-check")
+                xdecimalplacesspin = xDialog.getChild("decimal-places-spin")
 
-            xcellrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$A$1:$A$2"}))
-            select_by_text(xdistributioncombo, "Uniform Integer")
+                xcellrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$A$1:$A$2"}))
+                select_by_text(xdistributioncombo, "Uniform Integer")
 
-            xparameter1spin.executeAction("UP", tuple())
-            xparameter2spin.executeAction("UP", tuple())
-            xenableseedcheck.executeAction("CLICK", tuple())
-            xseedspin.executeAction("UP", tuple())
-            xenableroundingcheck.executeAction("CLICK", tuple())
-            xdecimalplacesspin.executeAction("UP", tuple())
+                xparameter1spin.executeAction("UP", tuple())
+                xparameter2spin.executeAction("UP", tuple())
+                xenableseedcheck.executeAction("CLICK", tuple())
+                xseedspin.executeAction("UP", tuple())
+                xenableroundingcheck.executeAction("CLICK", tuple())
+                xdecimalplacesspin.executeAction("UP", tuple())
 
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
             #Verify
             self.assertEqual(bool(get_cell_by_position(document, 0, 0, 0).getString() ), True)
             self.assertEqual(bool(get_cell_by_position(document, 0, 0, 1).getString() ), True)
@@ -47,10 +44,9 @@ class fillRandomNumber(UITestCase):
             self.assertEqual(bool(get_cell_by_position(document, 0, 0, 0).getString() ), False)
             self.assertEqual(bool(get_cell_by_position(document, 0, 0, 1).getString() ), False)
             #close dialog without doing anything
-            self.ui_test.execute_modeless_dialog_through_command(".uno:RandomNumberGeneratorDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xCloseBtn = xDialog.getChild("close")
-            self.ui_test.close_dialog_through_button(xCloseBtn)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:RandomNumberGeneratorDialog", close_button="close"):
+                pass
+
             self.assertEqual(bool(get_cell_by_position(document, 0, 0, 0).getString() ), False)
             self.assertEqual(bool(get_cell_by_position(document, 0, 0, 1).getString() ), False)
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

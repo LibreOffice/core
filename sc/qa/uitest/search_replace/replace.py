@@ -16,43 +16,40 @@ class ReplaceTest(UITestCase):
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xSearchDlg:
 
-            xSearchDlg = self.xUITest.getTopFocusWindow()
 
-            xSearchTerm = xSearchDlg.getChild("searchterm")
-            xSearchTerm.executeAction("TYPE", mkPropertyValues({"TEXT": "1"}))
-            xReplaceTerm = xSearchDlg.getChild("replaceterm")
-            xReplaceTerm.executeAction("TYPE", mkPropertyValues({"TEXT": "2"}))
+                xSearchTerm = xSearchDlg.getChild("searchterm")
+                xSearchTerm.executeAction("TYPE", mkPropertyValues({"TEXT": "1"}))
+                xReplaceTerm = xSearchDlg.getChild("replaceterm")
+                xReplaceTerm.executeAction("TYPE", mkPropertyValues({"TEXT": "2"}))
 
-            xSearchBtn = xSearchDlg.getChild("search")
-            xSearchBtn.executeAction("CLICK", tuple())
+                xSearchBtn = xSearchDlg.getChild("search")
+                xSearchBtn.executeAction("CLICK", tuple())
 
-            self.assertEqual(get_state_as_dict(xGridWin)["CurrentRow"], "1")
-            lastTopVisibleRow = int(get_state_as_dict(xGridWin)["TopVisibleRow"])
+                self.assertEqual(get_state_as_dict(xGridWin)["CurrentRow"], "1")
+                lastTopVisibleRow = int(get_state_as_dict(xGridWin)["TopVisibleRow"])
 
-            # start replacing
-            xReplaceBtn = xSearchDlg.getChild("replace")
-            xReplaceBtn.executeAction("CLICK", tuple())
+                # start replacing
+                xReplaceBtn = xSearchDlg.getChild("replace")
+                xReplaceBtn.executeAction("CLICK", tuple())
 
-            # check position and visible range
-            self.assertEqual(get_state_as_dict(xGridWin)["CurrentRow"], "199")
-            currentTopVisibleRow = int(get_state_as_dict(xGridWin)["TopVisibleRow"])
-            self.assertGreater(currentTopVisibleRow, lastTopVisibleRow)
+                # check position and visible range
+                self.assertEqual(get_state_as_dict(xGridWin)["CurrentRow"], "199")
+                currentTopVisibleRow = int(get_state_as_dict(xGridWin)["TopVisibleRow"])
+                self.assertGreater(currentTopVisibleRow, lastTopVisibleRow)
 
-            lastTopVisibleRow = currentTopVisibleRow
+                lastTopVisibleRow = currentTopVisibleRow
 
-            # replace again
-            xReplaceBtn.executeAction("CLICK", tuple())
+                # replace again
+                xReplaceBtn.executeAction("CLICK", tuple())
 
-            # check position and visible range
-            self.assertEqual(get_state_as_dict(xGridWin)["CurrentRow"], "499")
-            currentTopVisibleRow = int(get_state_as_dict(xGridWin)["TopVisibleRow"])
-            self.assertGreater(currentTopVisibleRow, lastTopVisibleRow)
+                # check position and visible range
+                self.assertEqual(get_state_as_dict(xGridWin)["CurrentRow"], "499")
+                currentTopVisibleRow = int(get_state_as_dict(xGridWin)["TopVisibleRow"])
+                self.assertGreater(currentTopVisibleRow, lastTopVisibleRow)
 
-            xReplaceBtn.executeAction("CLICK", tuple())
+                xReplaceBtn.executeAction("CLICK", tuple())
 
-            xCloseBtn = xSearchDlg.getChild("close")
 
-            self.ui_test.close_dialog_through_button(xCloseBtn)
 
