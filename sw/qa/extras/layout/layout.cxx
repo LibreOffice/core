@@ -3528,6 +3528,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116501)
     createDoc("tdf116501.odt");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf123163)
+{
+    //just care it doesn't assert
+    createDoc("tdf123163-1.docx");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf118719)
 {
     // Insert a page break.
