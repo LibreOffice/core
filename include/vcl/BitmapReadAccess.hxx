@@ -88,7 +88,10 @@ public:
     BitmapColor GetColor(tools::Long nY, tools::Long nX) const
     {
         if (HasPalette())
-            return mpBuffer->maPalette[GetPixelIndex(nY, nX)];
+        {
+            const BitmapBuffer* pBuffer = mpBuffer;
+            return pBuffer->maPalette[GetPixelIndex(nY, nX)];
+        }
         else
             return GetPixel(nY, nX);
     }
