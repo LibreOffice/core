@@ -18,50 +18,41 @@ class printRange(UITestCase):
             #Set print range
             self.xUITest.executeCommand(".uno:DefinePrintArea")
             # Print Range dialog
-            self.ui_test.execute_modeless_dialog_through_command(".uno:EditPrintArea")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xlbprintarea = xDialog.getChild("lbprintarea")
-            xedprintarea = xDialog.getChild("edprintarea")
-            #verify range
-            self.assertEqual(get_state_as_dict(xlbprintarea)["SelectEntryText"], "- selection -")
-            self.assertEqual(get_state_as_dict(xedprintarea)["Text"], "$A$1:$F$20")
-            #set Row
-            xedrepeatrow = xDialog.getChild("edrepeatrow")
-            xedrepeatrow.executeAction("TYPE", mkPropertyValues({"TEXT":"$1"}))
-            #set Column
-            xedrepeatcol = xDialog.getChild("edrepeatcol")
-            xedrepeatcol.executeAction("TYPE", mkPropertyValues({"TEXT":"$A"}))
-            # Click Ok
-            xOK = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOK)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:EditPrintArea") as xDialog:
+                xlbprintarea = xDialog.getChild("lbprintarea")
+                xedprintarea = xDialog.getChild("edprintarea")
+                #verify range
+                self.assertEqual(get_state_as_dict(xlbprintarea)["SelectEntryText"], "- selection -")
+                self.assertEqual(get_state_as_dict(xedprintarea)["Text"], "$A$1:$F$20")
+                #set Row
+                xedrepeatrow = xDialog.getChild("edrepeatrow")
+                xedrepeatrow.executeAction("TYPE", mkPropertyValues({"TEXT":"$1"}))
+                #set Column
+                xedrepeatcol = xDialog.getChild("edrepeatcol")
+                xedrepeatcol.executeAction("TYPE", mkPropertyValues({"TEXT":"$A"}))
+                # Click Ok
 
             #Verify Print Range dialog
-            self.ui_test.execute_modeless_dialog_through_command(".uno:EditPrintArea")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xedprintarea = xDialog.getChild("edprintarea")
-            xedrepeatrow = xDialog.getChild("edrepeatrow")
-            xedrepeatcol = xDialog.getChild("edrepeatcol")
-            self.assertEqual(get_state_as_dict(xedprintarea)["Text"], "$A$1:$F$20")
-            self.assertEqual(get_state_as_dict(xedrepeatrow)["Text"], "$1")
-            self.assertEqual(get_state_as_dict(xedrepeatcol)["Text"], "$A")
-            xCancel = xDialog.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xCancel)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:EditPrintArea", close_button="cancel") as xDialog:
+                xedprintarea = xDialog.getChild("edprintarea")
+                xedrepeatrow = xDialog.getChild("edrepeatrow")
+                xedrepeatcol = xDialog.getChild("edrepeatcol")
+                self.assertEqual(get_state_as_dict(xedprintarea)["Text"], "$A$1:$F$20")
+                self.assertEqual(get_state_as_dict(xedrepeatrow)["Text"], "$1")
+                self.assertEqual(get_state_as_dict(xedrepeatcol)["Text"], "$A")
 
             #delete print ranges
             self.xUITest.executeCommand(".uno:DeletePrintArea")
             #Verify Print Range dialog
-            self.ui_test.execute_modeless_dialog_through_command(".uno:EditPrintArea")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xedprintarea = xDialog.getChild("edprintarea")
-            xlbprintarea = xDialog.getChild("lbprintarea")
-            xedrepeatrow = xDialog.getChild("edrepeatrow")
-            xedrepeatcol = xDialog.getChild("edrepeatcol")
-            self.assertEqual(get_state_as_dict(xedprintarea)["Text"], "")
-            self.assertEqual(get_state_as_dict(xlbprintarea)["SelectEntryText"], "- entire sheet -")
-            self.assertEqual(get_state_as_dict(xedrepeatrow)["Text"], "$1")
-            self.assertEqual(get_state_as_dict(xedrepeatcol)["Text"], "$A")
-            xOK = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOK)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:EditPrintArea") as xDialog:
+                xedprintarea = xDialog.getChild("edprintarea")
+                xlbprintarea = xDialog.getChild("lbprintarea")
+                xedrepeatrow = xDialog.getChild("edrepeatrow")
+                xedrepeatcol = xDialog.getChild("edrepeatcol")
+                self.assertEqual(get_state_as_dict(xedprintarea)["Text"], "")
+                self.assertEqual(get_state_as_dict(xlbprintarea)["SelectEntryText"], "- entire sheet -")
+                self.assertEqual(get_state_as_dict(xedrepeatrow)["Text"], "$1")
+                self.assertEqual(get_state_as_dict(xedrepeatcol)["Text"], "$A")
 
     def test_tdf33341_copy_sheet_with_print_range(self):
         with self.ui_test.create_doc_in_start_center("calc"):
@@ -72,37 +63,31 @@ class printRange(UITestCase):
             #Set print range
             self.xUITest.executeCommand(".uno:DefinePrintArea")
             # Print Range dialog
-            self.ui_test.execute_modeless_dialog_through_command(".uno:EditPrintArea")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xlbprintarea = xDialog.getChild("lbprintarea")
-            xedprintarea = xDialog.getChild("edprintarea")
-            #verify range
-            self.assertEqual(get_state_as_dict(xlbprintarea)["SelectEntryText"], "- selection -")
-            self.assertEqual(get_state_as_dict(xedprintarea)["Text"], "$A$1:$F$20")
-            #set Row
-            xedrepeatrow = xDialog.getChild("edrepeatrow")
-            xedrepeatrow.executeAction("TYPE", mkPropertyValues({"TEXT":"$1"}))
-            #set Column
-            xedrepeatcol = xDialog.getChild("edrepeatcol")
-            xedrepeatcol.executeAction("TYPE", mkPropertyValues({"TEXT":"$A"}))
-            # Click Ok
-            xOK = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOK)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:EditPrintArea") as xDialog:
+                xlbprintarea = xDialog.getChild("lbprintarea")
+                xedprintarea = xDialog.getChild("edprintarea")
+                #verify range
+                self.assertEqual(get_state_as_dict(xlbprintarea)["SelectEntryText"], "- selection -")
+                self.assertEqual(get_state_as_dict(xedprintarea)["Text"], "$A$1:$F$20")
+                #set Row
+                xedrepeatrow = xDialog.getChild("edrepeatrow")
+                xedrepeatrow.executeAction("TYPE", mkPropertyValues({"TEXT":"$1"}))
+                #set Column
+                xedrepeatcol = xDialog.getChild("edrepeatcol")
+                xedrepeatcol.executeAction("TYPE", mkPropertyValues({"TEXT":"$A"}))
+                # Click Ok
 
             #Copy sheet
             with self.ui_test.execute_dialog_through_command(".uno:Move"):
                 pass
             #Verify Print Range dialog on new sheet
-            self.ui_test.execute_modeless_dialog_through_command(".uno:EditPrintArea")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xedprintarea = xDialog.getChild("edprintarea")
-            xedrepeatrow = xDialog.getChild("edrepeatrow")
-            xedrepeatcol = xDialog.getChild("edrepeatcol")
-            self.assertEqual(get_state_as_dict(xedprintarea)["Text"], "$A$1:$F$20")
-            self.assertEqual(get_state_as_dict(xedrepeatrow)["Text"], "$1")
-            self.assertEqual(get_state_as_dict(xedrepeatcol)["Text"], "$A")
-            xOK = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOK)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:EditPrintArea") as xDialog:
+                xedprintarea = xDialog.getChild("edprintarea")
+                xedrepeatrow = xDialog.getChild("edrepeatrow")
+                xedrepeatcol = xDialog.getChild("edrepeatcol")
+                self.assertEqual(get_state_as_dict(xedprintarea)["Text"], "$A$1:$F$20")
+                self.assertEqual(get_state_as_dict(xedrepeatrow)["Text"], "$1")
+                self.assertEqual(get_state_as_dict(xedrepeatcol)["Text"], "$A")
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

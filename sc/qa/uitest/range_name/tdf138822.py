@@ -17,12 +17,8 @@ class tdf138822(UITestCase):
             xPosWindow = calcDoc.getChild('pos_window')
             self.assertEqual('A1', get_state_as_dict(xPosWindow)['Text'])
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DefineName")
-
-            xManageNamesDialog = self.xUITest.getTopFocusWindow()
-
-            xAddBtn = xManageNamesDialog.getChild("add")
-            self.ui_test.close_dialog_through_button(xAddBtn)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DefineName", close_button="add"):
+                pass
 
             xDefineNamesDialog = self.xUITest.getTopFocusWindow()
 
@@ -46,17 +42,12 @@ class tdf138822(UITestCase):
             self.ui_test.close_dialog_through_button(xCancelBtn)
 
             # Open the dialog again
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DefineName")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DefineName") as xManageNamesDialog:
 
-            xManageNamesDialog = self.xUITest.getTopFocusWindow()
-            xNamesList = xManageNamesDialog.getChild('names')
+                xNamesList = xManageNamesDialog.getChild('names')
 
-            # Without the fix in place, this test would have failed with
-            # AssertionError: 0 != 1
-            self.assertEqual(0, len(xNamesList.getChildren()))
-
-            xOkBtn = xManageNamesDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOkBtn)
-
+                # Without the fix in place, this test would have failed with
+                # AssertionError: 0 != 1
+                self.assertEqual(0, len(xNamesList.getChildren()))
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

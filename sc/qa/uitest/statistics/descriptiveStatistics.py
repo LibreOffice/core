@@ -59,27 +59,24 @@ class descriptiveStatistics(UITestCase):
             enter_text_to_cell(gridwin, "C11", "60")
 
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C13"}))
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DescriptiveStatisticsDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xinputrangeedit = xDialog.getChild("input-range-edit")
-            xoutputrangeedit = xDialog.getChild("output-range-edit")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DescriptiveStatisticsDialog") as xDialog:
+                xinputrangeedit = xDialog.getChild("input-range-edit")
+                xoutputrangeedit = xDialog.getChild("output-range-edit")
 
-            xgroupedbyrowsradio = xDialog.getChild("groupedby-rows-radio")
-            xgroupedbycolumnsradio = xDialog.getChild("groupedby-columns-radio")
+                xgroupedbyrowsradio = xDialog.getChild("groupedby-rows-radio")
+                xgroupedbycolumnsradio = xDialog.getChild("groupedby-columns-radio")
 
-            xinputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            xinputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            xinputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$A$1:$C$13"}))
+                xinputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xinputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xinputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$A$1:$C$13"}))
 
-            xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$F$1"}))
+                xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$F$1"}))
 
-            xgroupedbyrowsradio.executeAction("CLICK", tuple())
-            xgroupedbycolumnsradio.executeAction("CLICK", tuple())
+                xgroupedbyrowsradio.executeAction("CLICK", tuple())
+                xgroupedbycolumnsradio.executeAction("CLICK", tuple())
 
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 
             #Verify
             self.assertEqual(get_cell_by_position(document, 0, 5, 1).getString() , "Mean")
@@ -153,9 +150,7 @@ class descriptiveStatistics(UITestCase):
             self.assertEqual(get_cell_by_position(document, 0, 5, 0).getString(), "")
 
             # test cancel button
-            self.ui_test.execute_modeless_dialog_through_command(".uno:DescriptiveStatisticsDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xCancelBtn = xDialog.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xCancelBtn)
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DescriptiveStatisticsDialog", close_button="cancel"):
+                pass
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
