@@ -21,10 +21,10 @@ namespace tools
 constexpr int DEFAULT_BUFFER_SIZE = 2048;
 
 JsonWriter::JsonWriter()
-    : mSpaceAllocated(DEFAULT_BUFFER_SIZE)
-    , mpBuffer(static_cast<char*>(malloc(mSpaceAllocated)))
-    , mStartNodeCount(0)
+    : mpBuffer(static_cast<char*>(malloc(DEFAULT_BUFFER_SIZE)))
     , mPos(mpBuffer)
+    , mSpaceAllocated(DEFAULT_BUFFER_SIZE)
+    , mStartNodeCount(0)
     , mbFirstFieldInNode(true)
 {
     *mPos = '{';
