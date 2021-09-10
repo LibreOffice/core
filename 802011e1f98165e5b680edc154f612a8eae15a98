@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad9646cb_a57a9635",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-09-10T10:53:21Z",
+      "side": 1,
+      "message": "An other addition on my \"obscure LO features resulting in interesting new bugs for new VCL backends\". Probably too late for 7-2-1 final. Not yet sure, if it\u0027s now really fixed.\n\nNasty bug for Ctrl+Shift included shortcuts.",
+      "revId": "802011e1f98165e5b680edc154f612a8eae15a98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
