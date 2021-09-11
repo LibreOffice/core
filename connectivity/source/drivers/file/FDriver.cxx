@@ -20,6 +20,7 @@
 #include <file/FDriver.hxx>
 #include <file/FConnection.hxx>
 #include <file/fcode.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <connectivity/dbexception.hxx>
@@ -171,25 +172,15 @@ Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByConnection
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(ODriver_BASE::rBHelper.bDisposed);
 
-    Reference< XTablesSupplier > xTab;
-    Reference< css::lang::XUnoTunnel> xTunnel(connection,UNO_QUERY);
-    if(xTunnel.is())
+    if (OConnection* pSearchConnection = comphelper::getUnoTunnelImplementation<OConnection>(connection))
     {
-        OConnection* pSearchConnection = reinterpret_cast< OConnection* >( xTunnel->getSomething(OConnection::getUnoTunnelId()) );
-        OConnection* pConnection = nullptr;
         for (auto const& elem : m_xConnections)
         {
             if (static_cast<OConnection*>( Reference< XConnection >::query(elem.get()).get() ) == pSearchConnection)
-            {
-                pConnection = pSearchConnection;
-                break;
-            }
+                return pSearchConnection->createCatalog();
         }
-
-        if(pConnection)
-            xTab = pConnection->createCatalog();
     }
-    return xTab;
+    return {};
 }
 
 
