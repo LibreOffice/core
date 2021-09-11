@@ -174,7 +174,7 @@ ErrCode ReadThroughComponent(
     const char* pFilterName,
     const Sequence<Any>& rFilterArguments,
     const OUString& rName,
-    bool bMustBeSuccessfull,
+    bool bMustBeSuccessful,
     bool bEncrypted )
 {
     DBG_ASSERT(xInputStream.is(), "input stream missing");
@@ -260,14 +260,14 @@ ErrCode ReadThroughComponent(
         if (!rStreamName.isEmpty())
         {
             return *new TwoStringErrorInfo(
-                            (bMustBeSuccessfull ? ERR_FORMAT_FILE_ROWCOL
+                            (bMustBeSuccessful ? ERR_FORMAT_FILE_ROWCOL
                                                     : WARN_FORMAT_FILE_ROWCOL),
                             rStreamName, sErr,
                             DialogMask::ButtonsOk | DialogMask::MessageError );
         }
         else
         {
-            DBG_ASSERT( bMustBeSuccessfull, "Warnings are not supported" );
+            DBG_ASSERT( bMustBeSuccessful, "Warnings are not supported" );
             return *new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
                              DialogMask::ButtonsOk | DialogMask::MessageError );
         }
@@ -313,7 +313,7 @@ ErrCode ReadThroughComponent(
     const char* pFilterName,
     const Sequence<Any>& rFilterArguments,
     const OUString& rName,
-    bool bMustBeSuccessfull )
+    bool bMustBeSuccessful )
 {
     DBG_ASSERT(xStorage.is(), "Need storage!");
     DBG_ASSERT(nullptr != pStreamName, "Please, please, give me a name!");
@@ -365,7 +365,7 @@ ErrCode ReadThroughComponent(
         return ReadThroughComponent(
             xInputStream, xModelComponent, sStreamName, rxContext,
             pFilterName, rFilterArguments,
-            rName, bMustBeSuccessfull, bEncrypted );
+            rName, bMustBeSuccessful, bEncrypted );
     }
     catch (const packages::WrongPasswordException&)
     {

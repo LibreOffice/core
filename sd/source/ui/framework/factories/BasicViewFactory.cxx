@@ -471,15 +471,15 @@ std::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::GetViewFromC
     // remove it from the cache.
     if (pDescriptor != nullptr)
     {
-        bool bRelocationSuccessfull (false);
+        bool bRelocationSuccessful (false);
         Reference<XRelocatableResource> xResource (pDescriptor->mxView, UNO_QUERY);
         if (xResource.is() && rxPane.is())
         {
             if (xResource->relocateToAnchor(rxPane))
-                bRelocationSuccessfull = true;
+                bRelocationSuccessful = true;
         }
 
-        if ( ! bRelocationSuccessfull)
+        if ( ! bRelocationSuccessful)
         {
             ReleaseView(pDescriptor, true);
             pDescriptor.reset();

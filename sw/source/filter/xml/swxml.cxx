@@ -138,7 +138,7 @@ ErrCode ReadThroughComponent(
     const char* pFilterName,
     const Sequence<Any>& rFilterArguments,
     const OUString& rName,
-    bool bMustBeSuccessfull,
+    bool bMustBeSuccessful,
     bool bEncrypted )
 {
     OSL_ENSURE(xInputStream.is(), "input stream missing");
@@ -220,14 +220,14 @@ ErrCode ReadThroughComponent(
         if( !rStreamName.isEmpty() )
         {
             return *new TwoStringErrorInfo(
-                            (bMustBeSuccessfull ? ERR_FORMAT_FILE_ROWCOL
+                            (bMustBeSuccessful ? ERR_FORMAT_FILE_ROWCOL
                                                     : WARN_FORMAT_FILE_ROWCOL),
                             rStreamName, sErr,
                             DialogMask::ButtonsOk | DialogMask::MessageError );
         }
         else
         {
-            OSL_ENSURE( bMustBeSuccessfull, "Warnings are not supported" );
+            OSL_ENSURE( bMustBeSuccessful, "Warnings are not supported" );
             return *new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
                              DialogMask::ButtonsOk | DialogMask::MessageError );
         }
@@ -274,7 +274,7 @@ ErrCode ReadThroughComponent(
     const char* pFilterName,
     const Sequence<Any>& rFilterArguments,
     const OUString& rName,
-    bool bMustBeSuccessfull)
+    bool bMustBeSuccessful)
 {
     OSL_ENSURE(xStorage.is(), "Need storage!");
     OSL_ENSURE(nullptr != pStreamName, "Please, please, give me a name!");
@@ -323,7 +323,7 @@ ErrCode ReadThroughComponent(
         return ReadThroughComponent(
             xInputStream, xModelComponent, sStreamName, rxContext,
             pFilterName, rFilterArguments,
-            rName, bMustBeSuccessfull, bEncrypted );
+            rName, bMustBeSuccessful, bEncrypted );
     }
     catch ( packages::WrongPasswordException& )
     {
