@@ -15,4 +15,8 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,cuckoo,0))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,cuckoo))
 
+$(eval $(call gb_UnpackedTarball_add_patches,cuckoo,\
+	external/cuckoo/cuckoo-coverity.patch \
+))
+
 # vim: set noet sw=4 ts=4:
