@@ -1805,7 +1805,7 @@ bool FmGridControl::selectBookmarks(const Sequence< Any >& _rBookmarks)
 
     SetNoSelection();
 
-    bool bAllSuccessfull = true;
+    bool bAllSuccessful = true;
     try
     {
         for (const Any& rBookmark : _rBookmarks)
@@ -1814,7 +1814,7 @@ bool FmGridControl::selectBookmarks(const Sequence< Any >& _rBookmarks)
             if (m_pSeekCursor->moveToBookmark(rBookmark))
                 SelectRow( m_pSeekCursor->getRow() - 1);
             else
-                bAllSuccessfull = false;
+                bAllSuccessful = false;
         }
     }
     catch(Exception&)
@@ -1823,7 +1823,7 @@ bool FmGridControl::selectBookmarks(const Sequence< Any >& _rBookmarks)
         return false;
     }
 
-    return bAllSuccessfull;
+    return bAllSuccessful;
 }
 
 Sequence< Any> FmGridControl::getSelectionBookmarks()

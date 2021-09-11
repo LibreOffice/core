@@ -110,7 +110,7 @@ ErrCode ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCompo
     xml::sax::InputSource& aParserInput,
     const OUString& sComponentName, const OUString& sDocName,
     const uno::Sequence<uno::Any>& aArgs,
-    bool bMustBeSuccessfull)
+    bool bMustBeSuccessful)
 {
     uno::Reference < io::XStream > xDocStream;
     if ( !xStorage.is() && pMedium )
@@ -224,14 +224,14 @@ ErrCode ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCompo
             if( !sDocName.isEmpty() )
             {
                 nReturn = *new TwoStringErrorInfo(
-                                (bMustBeSuccessfull ? SCERR_IMPORT_FILE_ROWCOL
+                                (bMustBeSuccessful ? SCERR_IMPORT_FILE_ROWCOL
                                                         : SCWARN_IMPORT_FILE_ROWCOL),
                                 sDocName, sErr,
                                 DialogMask::ButtonsOk | DialogMask::MessageError );
             }
             else
             {
-                OSL_ENSURE( bMustBeSuccessfull, "Warnings are not supported" );
+                OSL_ENSURE( bMustBeSuccessful, "Warnings are not supported" );
                 nReturn = *new StringErrorInfo( SCERR_IMPORT_FORMAT_ROWCOL, sErr,
                                  DialogMask::ButtonsOk | DialogMask::MessageError );
             }
