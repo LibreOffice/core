@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/XIntrospection.hpp>
 
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
@@ -66,16 +67,15 @@ Adapter::~Adapter()
     mWrappedObject.scratch();
 }
 
-static cppu::OImplementationId g_id( false );
-
 Sequence<sal_Int8> Adapter::getUnoTunnelId()
 {
+    static const cppu::OImplementationId g_id(false);
     return g_id.getImplementationId();
 }
 
 sal_Int64 Adapter::getSomething( const Sequence< sal_Int8 > &id)
 {
-    if( id == g_id.getImplementationId() )
+    if (isUnoTunnelId<Adapter>(id))
         return reinterpret_cast<sal_Int64>(this);
     return 0;
 }
