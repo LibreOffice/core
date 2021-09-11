@@ -33,8 +33,8 @@ struct CommandInfo
     CommandInfo() : nId( 0 ),
                     nImageInfo( 0 ) {}
 
-    ToolBoxItemId               nId;
     ::std::vector< ToolBoxItemId > aIds;
+    ToolBoxItemId               nId;
     sal_Int16                   nImageInfo;
 };
 
