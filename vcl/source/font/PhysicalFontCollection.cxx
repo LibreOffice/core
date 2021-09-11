@@ -901,23 +901,6 @@ std::unique_ptr<vcl::font::PhysicalFontFaceCollection> PhysicalFontCollection::G
     return pDeviceFontList;
 }
 
-std::unique_ptr<ImplDeviceFontSizeList> PhysicalFontCollection::GetDeviceFontSizeList( const OUString& rFontName ) const
-{
-    std::unique_ptr<ImplDeviceFontSizeList> pDeviceFontSizeList(new ImplDeviceFontSizeList);
-
-    vcl::font::PhysicalFontFamily* pFontFamily = FindFontFamily( rFontName );
-    if( pFontFamily != nullptr )
-    {
-        o3tl::sorted_vector<int> rHeights;
-        pFontFamily->GetFontHeights( rHeights );
-
-        for( const auto& rHeight : rHeights )
-            pDeviceFontSizeList->Add( rHeight );
-    }
-
-    return pDeviceFontSizeList;
-}
-
 // These are the metric-compatible replacement fonts that are bundled with
 // LibreOffice, we prefer them over generic substitutions that might be
 // provided by the system.
