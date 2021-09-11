@@ -29,24 +29,11 @@ namespace cppu
 {
 
 
-OImplementationId::~OImplementationId()
-{
-    delete _pSeq;
-}
+OImplementationId::~OImplementationId() = default;
 
-Sequence< sal_Int8 > OImplementationId::getImplementationId() const
+void OImplementationId::InitId(bool bUseEthernetAddress)
 {
-    if (! _pSeq)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! _pSeq)
-        {
-            Sequence< sal_Int8 > * pSeq = new Sequence< sal_Int8 >( 16 );
-            ::rtl_createUuid( reinterpret_cast<sal_uInt8 *>(pSeq->getArray()), nullptr, _bUseEthernetAddress );
-            _pSeq = pSeq;
-        }
-    }
-    return *_pSeq;
+    rtl_createUuid(reinterpret_cast<sal_uInt8*>(m_aSeq.getArray()), nullptr, bUseEthernetAddress);
 }
 
 

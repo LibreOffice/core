@@ -175,8 +175,9 @@ public:
 */
 class SAL_WARN_UNUSED CPPUHELPER_DLLPUBLIC OImplementationId
 {
-    mutable css::uno::Sequence< sal_Int8 > * _pSeq;
-    sal_Bool _bUseEthernetAddress;
+    css::uno::Sequence<sal_Int8> m_aSeq;
+
+    void InitId(bool bUseEthernetAddress);
 
 public:
     /// @cond INTERNAL
@@ -200,27 +201,26 @@ public:
         @param bUseEthernetAddress whether an ethernet mac address should be taken into account
     */
     OImplementationId( bool bUseEthernetAddress = true )
-        : _pSeq( NULL )
-        , _bUseEthernetAddress( bUseEthernetAddress )
-        {}
+        : m_aSeq(16)
+    {
+        InitId(bUseEthernetAddress);
+    }
     /** Constructor giving implementation id.
 
         @param rSeq implementation id
     */
     OImplementationId( const css::uno::Sequence< sal_Int8 > & rSeq )
-        : _pSeq( new css::uno::Sequence< sal_Int8 >( rSeq ) )
-        , _bUseEthernetAddress( false )
+        : m_aSeq(rSeq)
         {}
     OImplementationId( const OImplementationId & rId )
-        : _pSeq( new css::uno::Sequence< sal_Int8 >( rId.getImplementationId() ) )
-        , _bUseEthernetAddress( false )
+        : m_aSeq(rId.getImplementationId())
         {}
 
     /** Get implementation id.
 
         @return implementation id
     */
-    css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() const;
+    css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() const { return m_aSeq; }
 };
 
 }
