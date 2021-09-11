@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a37e3478_ce76f456",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003332
+      },
+      "writtenOn": "2021-09-11T16:26:33Z",
+      "side": 1,
+      "message": "Hey, could you review this ? It builds on Jenkins without any issue",
+      "revId": "2c7e3ad0d749d613d9aaaee1c41b6ca9f48ce00a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
