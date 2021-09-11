@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be497cb9_b3644812",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-11T18:33:05Z",
+      "side": 1,
+      "message": "I hope it\u0027s OK, I made sure that the public interface doesn\u0027t change; but I don\u0027t know what are out C++ baseline for published API. This relies on C++11 thread-safe statics; and on VS they are only implemented since VS2015... And would that be wrong from some other PoV that I didn\u0027t consider?\n\nStephan: could you please review? Thank you!",
+      "revId": "902daaf961751537c4f5723837c5f10b08aa5507",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
