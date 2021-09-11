@@ -14,7 +14,6 @@
 
 #include <tools/fontenum.hxx>
 #include <unotools/fontcfg.hxx>
-#include <o3tl/sorted_vector.hxx>
 
 #include <vcl/virdev.hxx>
 
@@ -55,12 +54,6 @@ void VclPhysicalFontFaceTest::testCreateFontFamily()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Alias names", OUString(""), aFamily.GetAliasNames());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Min quality", -1, aFamily.GetMinQuality());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Type faces", FontTypeFaces::NONE, aFamily.GetTypeFaces());
-
-    o3tl::sorted_vector<int> aHeights;
-    aFamily.GetFontHeights(aHeights);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number font heights", static_cast<unsigned long>(0),
-                                 aHeights.size());
-
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Match family name", OUString(""), aFamily.GetMatchFamilyName());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Match type", ImplFontAttrs::None, aFamily.GetMatchType());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Match weight", WEIGHT_DONTKNOW, aFamily.GetMatchWeight());
