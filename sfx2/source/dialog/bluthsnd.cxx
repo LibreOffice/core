@@ -20,7 +20,7 @@ SfxBluetoothModel::SendMailResult SfxBluetoothModel::SaveAndSend( const css::uno
     OUString   aFileName;
 
     eSaveResult  = SaveDocumentAsFormat( OUString(), xFrame, OUString(), aFileName );
-    if( eSaveResult == SAVE_SUCCESSFULL )
+    if( eSaveResult == SAVE_SUCCESSFUL )
     {
         maAttachedDocuments.push_back( aFileName );
         return Send();
