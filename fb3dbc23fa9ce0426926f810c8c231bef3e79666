@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37383c08_bc716b78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2021-09-11T03:56:01Z",
+      "side": 1,
+      "message": "Not sure, if this version passing CI. Here is my version: https://gerrit.libreoffice.org/c/core/+/121923\nThere are issues with unittest (at least for me locally) so it is somewhat simplified. Original bugdoc is okay with it.",
+      "revId": "fb3dbc23fa9ce0426926f810c8c231bef3e79666",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
