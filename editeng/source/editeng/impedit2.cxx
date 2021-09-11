@@ -3124,13 +3124,13 @@ void ImpEditEngine::IterateLineAreas(const IterateLinesAreasFunc& f, IterFlag eO
                 return;
 
             LineAreaInfo aInfo{
-                nColumn, // nColumn
                 rPortion, // rPortion
-                n, // nPortion
                 nullptr, // pLine
-                0, // nLine
+                0, // nHeightNeededToNotWrap
                 { aLineStart, Size{ nColumnWidth, rPortion.GetFirstLineOffset() } }, // aArea
-                0 // nHeightNeededToNotWrap
+                n, // nPortion
+                0, // nLine
+                nColumn // nColumn
             };
             auto eResult = f(aInfo);
             if (eResult == CallbackResult::Stop)

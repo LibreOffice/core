@@ -62,10 +62,10 @@ class SVXCORE_DLLPUBLIC SdrLayer
     OUString maName;
     OUString maTitle;
     OUString maDescription;
+    SdrModel*  pModel; // For broadcasting
     bool mbVisibleODF; // corresponds to ODF draw:display
     bool mbPrintableODF; // corresponds to ODF draw:display
     bool mbLockedODF; // corresponds to ODF draw:protected
-    SdrModel*  pModel; // For broadcasting
     SdrLayerID nID;
 
     SdrLayer(SdrLayerID nNewID, const OUString& rNewName);

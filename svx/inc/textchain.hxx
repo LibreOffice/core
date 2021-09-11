@@ -33,7 +33,7 @@ class OUString;
 
 typedef OUString ChainLinkId;
 
-enum class CursorChainingEvent
+enum class CursorChainingEvent : sal_uInt8
 {
     TO_NEXT_LINK,
     TO_PREV_LINK,
@@ -58,10 +58,10 @@ protected:
 
 private:
     // NOTE: Remember to set default value in constructor when adding field
-    bool aNilChainingEvent;
-    CursorChainingEvent aCursorEvent;
     ESelection aPreChainingSel;
     ESelection aPostChainingSel;
+    CursorChainingEvent aCursorEvent;
+    bool aNilChainingEvent;
     bool aIsPartOfLastParaInNextLink;
     bool aSwitchingToNextBox;
 };

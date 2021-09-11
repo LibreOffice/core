@@ -52,9 +52,9 @@ public:
         mnEEIndex(0),
         mnFieldOffset(0),
         mnFieldLen(0),
-        mbInField(false),
         mnBulletOffset(0),
         mnBulletLen(0),
+        mbInField(false),
         mbInBullet(false) {};
 
     // Get/Set current paragraph
@@ -111,9 +111,9 @@ private:
     sal_Int32 mnEEIndex;
     sal_Int32 mnFieldOffset;
     sal_Int32 mnFieldLen;
-    bool  mbInField;
     sal_Int32 mnBulletOffset;
     sal_Int32 mnBulletLen;
+    bool  mbInField;
     bool  mbInBullet;
 };
 

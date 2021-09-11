@@ -226,7 +226,7 @@ public:
 };
 
 //Feature-Flags (only sal_uInt16!)
-enum class SvxNumRuleFlags
+enum class SvxNumRuleFlags : sal_uInt16
 {
     NONE                = 0x0000,
     CONTINUOUS          = 0x0001, // consecutive numbers possible?
@@ -242,7 +242,7 @@ namespace o3tl
     template<> struct typed_flags<SvxNumRuleFlags> : is_typed_flags<SvxNumRuleFlags, 0x039d> {};
 }
 
-enum class SvxNumRuleType
+enum class SvxNumRuleType : sal_uInt8
 {
     NUMBERING,
     OUTLINE_NUMBERING,
@@ -251,12 +251,11 @@ enum class SvxNumRuleType
 
 class EDITENG_DLLPUBLIC SvxNumRule final
 {
+    std::unique_ptr<SvxNumberFormat> aFmts[SVX_MAX_NUM];
     sal_uInt16          nLevelCount;            // Number of supported levels
     SvxNumRuleFlags     nFeatureFlags;          // What is supported?
     SvxNumRuleType      eNumberingType;         // Type of numbering
     bool                bContinuousNumbering;   // sequential numbering
-
-    std::unique_ptr<SvxNumberFormat> aFmts[SVX_MAX_NUM];
     bool                aFmtsSet[SVX_MAX_NUM]; // Flags indicating valid levels
 
     static sal_Int32    nRefCount;

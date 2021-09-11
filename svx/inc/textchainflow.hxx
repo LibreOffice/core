@@ -51,14 +51,6 @@ public:
     SdrTextObj* GetLinkTarget() const;
 
 protected:
-    // Cursor related
-    bool mbPossiblyCursorOut;
-    ESelection maOverflowPosSel;
-    ESelection maPostChainingSel;
-
-    std::unique_ptr<OFlowChainedText> mpOverflChText;
-    std::unique_ptr<UFlowChainedText> mpUnderflChText;
-
     void impCheckForFlowEvents(SdrOutliner*, SdrOutliner*);
 
     TextChain* GetTextChain() const;
@@ -69,15 +61,21 @@ protected:
     virtual void impSetFlowOutlinerParams(SdrOutliner*, SdrOutliner*);
 
 private:
-    bool mbOFisUFinduced;
-
     void impUpdateCursorInfo();
 
+protected:
+    std::unique_ptr<OFlowChainedText> mpOverflChText;
+    std::unique_ptr<UFlowChainedText> mpUnderflChText;
+    // Cursor related
+    ESelection maOverflowPosSel;
+    ESelection maPostChainingSel;
+    bool mbPossiblyCursorOut;
+
+private:
     SdrTextObj* mpTargetLink;
     SdrTextObj* mpNextLink;
-
     TextChain* mpTextChain;
-
+    bool mbOFisUFinduced;
     bool bUnderflow;
     bool bOverflow;
 };
