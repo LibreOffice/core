@@ -248,16 +248,6 @@ void PhysicalFontFamily::UpdateDevFontList( vcl::font::PhysicalFontFaceCollectio
     }
 }
 
-void PhysicalFontFamily::GetFontHeights( o3tl::sorted_vector<int>& rHeights ) const
-{
-    // add all available font heights
-    for (auto const& font : maFontFaces)
-    {
-        PhysicalFontFace *pFoundFontFace = font.get();
-        rHeights.insert( pFoundFontFace->GetHeight() );
-    }
-}
-
 void PhysicalFontFamily::UpdateCloneFontList(PhysicalFontCollection& rFontCollection) const
 {
     OUString aFamilyName = GetEnglishSearchFontName( GetFamilyName() );

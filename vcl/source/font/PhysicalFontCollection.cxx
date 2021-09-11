@@ -17,16 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
+#include <sal/config.h>
 
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/fontdefs.hxx>
 #include <o3tl/sorted_vector.hxx>
+
 #include <outdev.h>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <PhysicalFontCollection.hxx>
+
+#include <memory>
 
 static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
 {
@@ -899,23 +902,6 @@ std::unique_ptr<vcl::font::PhysicalFontFaceCollection> PhysicalFontCollection::G
     return pDeviceFontList;
 }
 
-std::unique_ptr<ImplDeviceFontSizeList> PhysicalFontCollection::GetDeviceFontSizeList( const OUString& rFontName ) const
-{
-    std::unique_ptr<ImplDeviceFontSizeList> pDeviceFontSizeList(new ImplDeviceFontSizeList);
-
-    vcl::font::PhysicalFontFamily* pFontFamily = FindFontFamily( rFontName );
-    if( pFontFamily != nullptr )
-    {
-        o3tl::sorted_vector<int> rHeights;
-        pFontFamily->GetFontHeights( rHeights );
-
-        for( const auto& rHeight : rHeights )
-            pDeviceFontSizeList->Add( rHeight );
-    }
-
-    return pDeviceFontSizeList;
-}
-
 // These are the metric-compatible replacement fonts that are bundled with
 // LibreOffice, we prefer them over generic substitutions that might be
 // provided by the system.
@@ -1264,5 +1250,4 @@ vcl::font::PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelec
     return pFoundData;
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

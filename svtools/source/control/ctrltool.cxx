@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <memory>
 #include <string.h>
 
@@ -757,32 +759,7 @@ const int* FontList::GetSizeAry( const FontMetric& rInfo ) const
     if ( pData )
         pDevice = pData->mpFirst->GetDevice();
 
-    int nDevSizeCount = pDevice->GetDevFontSizeCount( rInfo );
-    if ( !nDevSizeCount ||
-         (pDevice->GetDevFontSize( rInfo, 0 ).Height() == 0) )
-        return aStdSizeAry;
-
-    MapMode aOldMapMode = pDevice->GetMapMode();
-    MapMode aMap( MapUnit::Map10thInch, Point(), Fraction( 1, 72 ), Fraction( 1, 72 ) );
-    pDevice->SetMapMode( aMap );
-
-    int nRealCount = 0;
-    tools::Long    nOldHeight = 0;
-    mpSizeAry.reset(new int[nDevSizeCount+1] );
-    for (int i = 0; i < nDevSizeCount; ++i)
-    {
-        Size aSize = pDevice->GetDevFontSize( rInfo, i );
-        if ( aSize.Height() != nOldHeight )
-        {
-            nOldHeight = aSize.Height();
-            mpSizeAry[nRealCount] = nOldHeight;
-            nRealCount++;
-        }
-    }
-    mpSizeAry[nRealCount] = 0;
-
-    pDevice->SetMapMode( aOldMapMode );
-    return mpSizeAry.get();
+    return aStdSizeAry;
 }
 
 struct ImplFSNameItem
@@ -886,4 +863,4 @@ sal_Int32 FontSizeNames::GetIndexSize( sal_Int32 nIndex ) const
     return mpArray[nIndex].mnSize;
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
