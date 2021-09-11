@@ -16,6 +16,46 @@
       "message": "This is most likely fixing tdf#144386 (unfortunately I can\u0027t repro that problem myself, so can\u0027t test)",
       "revId": "b7c45c9cd1c619450625e4f3f9c2b1ee5961d667",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6824d928_a18d445b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-09-11T23:36:57Z",
+      "side": 1,
+      "message": "I have some doubts due to my lack of experience.\nBut looks good to me.",
+      "revId": "b7c45c9cd1c619450625e4f3f9c2b1ee5961d667",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edcb2499_707a4522",
+        "filename": "sc/source/core/tool/arraysumAVX.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-09-11T23:36:57Z",
+      "side": 1,
+      "message": "I lack knowledge about intrinsics.\nSo I can\u0027t understand this change\u0027s purpose.\nWhy has it been moved here?\nAnd why not static?",
+      "range": {
+        "startLine": 31,
+        "startChar": 18,
+        "endLine": 31,
+        "endChar": 35
+      },
+      "revId": "b7c45c9cd1c619450625e4f3f9c2b1ee5961d667",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
