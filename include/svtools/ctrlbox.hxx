@@ -459,7 +459,7 @@ class SVT_DLLPUBLIC FontSizeBox
 public:
     FontSizeBox(std::unique_ptr<weld::ComboBox> p);
 
-    void Fill(const FontMetric* pFontMetric, const FontList* pList);
+    void Fill(const FontList* pList);
 
     void EnableRelativeMode(sal_uInt16 nMin, sal_uInt16 nMax, sal_uInt16 nStep = 5);
     void EnablePtRelativeMode(short nMin, short nMax, short nStep = 10);
