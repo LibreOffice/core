@@ -64,13 +64,6 @@ private:
     SdrObjList(const SdrObjList& rSrcList) = delete;
     SdrObjList &operator=(const SdrObjList& rSrcList) = delete;
 
-    std::vector<SdrObject*> maList;
-
-    tools::Rectangle    maSdrObjListOutRect;
-    tools::Rectangle    maSdrObjListSnapRect;
-    bool                mbObjOrdNumsDirty;
-    bool                mbRectsDirty;
-
 protected:
     void RecalcRects();
 
@@ -229,10 +222,14 @@ public:
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
 private:
+    tools::Rectangle    maSdrObjListOutRect;
+    tools::Rectangle    maSdrObjListSnapRect;
+    std::vector<SdrObject*> maList;
     /// This list, if it exists, defines the navigation order. If it does
     /// not exist then maList defines the navigation order.
     std::optional<std::vector<tools::WeakReference<SdrObject>>> mxNavigationOrder;
-
+    bool                mbObjOrdNumsDirty;
+    bool                mbRectsDirty;
     /// This flag is <TRUE/> when the mpNavigation list has been changed but
     /// the indices of the referenced SdrObjects still have their old values.
     bool mbIsNavigationOrderDirty;

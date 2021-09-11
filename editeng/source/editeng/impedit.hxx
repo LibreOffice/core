@@ -155,14 +155,14 @@ typedef std::vector<EditSelection>  SpellContentSelections;
 
 struct SpellInfo
 {
+    EditPaM         aCurSentenceStart;
+    svx::SpellPortions    aLastSpellPortions;
+    SpellContentSelections  aLastSpellContentSelections;
     EESpellState    eState;
     EPaM            aSpellStart;
     EPaM            aSpellTo;
-    EditPaM         aCurSentenceStart;
     bool        bSpellToEnd;
     bool        bMultipleDoc;
-    svx::SpellPortions    aLastSpellPortions;
-    SpellContentSelections  aLastSpellContentSelections;
     SpellInfo() : eState(EESpellState::Ok), bSpellToEnd(true), bMultipleDoc(false)
         { }
 };
@@ -1139,14 +1139,14 @@ public:
     };
     struct LineAreaInfo
     {
-        sal_Int16 nColumn; // Column number; when overflowing, equal to total number of columns
         ParaPortion& rPortion; // Current ParaPortion
-        sal_Int32 nPortion;
         EditLine* pLine; // Current line, or nullptr for paragraph start
-        sal_Int32 nLine;
+        tools::Long nHeightNeededToNotWrap;
         tools::Rectangle aArea; // The area for the line (or for rPortion's first line offset)
                                 // Bottom coordinate *does not* belong to the area
-        tools::Long nHeightNeededToNotWrap;
+        sal_Int32 nPortion;
+        sal_Int32 nLine;
+        sal_Int16 nColumn; // Column number; when overflowing, equal to total number of columns
     };
     using IterateLinesAreasFunc = std::function<CallbackResult(const LineAreaInfo&)>;
     enum IterFlag // bitmask

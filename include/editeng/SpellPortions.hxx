@@ -41,6 +41,22 @@ struct SpellPortion
     /** contains the text of the portion.
      */
     OUString   sText;
+    /** for wrong words this reference is filled with the error information otherwise
+        it's an empty reference
+     */
+    css::uno::Reference< css::linguistic2::XSpellAlternatives> xAlternatives;
+    /** provides access to the grammar checker interface
+     */
+    css::uno::Reference< css::linguistic2::XProofreader > xGrammarChecker;
+    /** contains the proposed dialog title if the proof reading component provides one.
+     */
+    OUString   sDialogTitle;
+    /** contains the grammar error information
+    */
+    css::linguistic2::SingleProofreadingError aGrammarError;
+    /** contains the language applied to the text. It has to match the script type.
+     */
+    LanguageType    eLanguage;
     /** Marks the portion as field, footnote symbol or any other special content that
      should be protected against unintentional deletion.
      */
@@ -50,33 +66,17 @@ struct SpellPortion
         for them.
      */
     bool bIsHidden;
-    /** contains the language applied to the text. It has to match the script type.
-     */
-    LanguageType    eLanguage;
-    /** for wrong words this reference is filled with the error information otherwise
-        it's an empty reference
-     */
-    css::uno::Reference< css::linguistic2::XSpellAlternatives> xAlternatives;
     /** determines whether the error type is a grammar error
     */
     bool bIsGrammarError;
-    /** contains the grammar error information
-    */
-    css::linguistic2::SingleProofreadingError aGrammarError;
-    /** provides access to the grammar checker interface
-     */
-    css::uno::Reference< css::linguistic2::XProofreader > xGrammarChecker;
     /** marks portion as to-be-ignored. This is a return parameter.
      */
-    /** contains the proposed dialog title if the proof reading component provides one.
-     */
-    OUString   sDialogTitle;
-
     bool bIgnoreThisError;
+
     SpellPortion() :
+        eLanguage(LANGUAGE_DONTKNOW),
         bIsField(false),
         bIsHidden(false),
-        eLanguage(LANGUAGE_DONTKNOW),
         bIsGrammarError(false),
         bIgnoreThisError(false)
         {

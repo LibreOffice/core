@@ -23,7 +23,7 @@ class SdrObjEditView;
 class SdrTextObj;
 class KeyEvent;
 class SdrOutliner;
-enum class CursorChainingEvent;
+enum class CursorChainingEvent : sal_uInt8;
 struct ESelection;
 
 
