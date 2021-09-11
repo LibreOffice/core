@@ -1,0 +1,22 @@
+--- libcuckoo/cuckoohash_map.hh	2021-09-11 11:29:05.656553870 +0100
++++ libcuckoo/cuckoohash_map.hh	2021-09-11 11:31:48.265203248 +0100
+@@ -866,7 +866,8 @@
+ 
+   class TwoBuckets {
+   public:
+-    TwoBuckets() {}
++    TwoBuckets()
++        : i1(0), i2(0) {}
+     TwoBuckets(size_type i1_, size_type i2_, locked_table_mode)
+         : i1(i1_), i2(i2_) {}
+     TwoBuckets(locks_t &locks, size_type i1_, size_type i2_, normal_mode)
+@@ -1552,7 +1553,8 @@
+                   " MAX_BFS_PATH_LEN - 1");
+     static_assert(-1 >= std::numeric_limits<decltype(depth)>::min(),
+                   "The depth type must be able to hold a value of -1");
+-    b_slot() {}
++    b_slot()
++        : bucket(0), pathcode(0), depth(0) {}
+     b_slot(const size_type b, const uint16_t p, const decltype(depth) d)
+         : bucket(b), pathcode(p), depth(d) {
+       assert(d < MAX_BFS_PATH_LEN);
