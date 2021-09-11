@@ -34,6 +34,24 @@
       "parentUuid": "a78bea69_8a430f73",
       "revId": "d773c47caeda73a4731d4e1bc4bbf5a85419a1a8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a379556b_a9f3f41a",
+        "filename": "include/vcl/BitmapReadAccess.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-11T02:24:56Z",
+      "side": 1,
+      "message": "I am not sure that https://gerrit.libreoffice.org/c/core/+/121928 clarifies intent; also do you know if as_const(Foo*) returns a const Foo*, or a Foo* const? I\u0027m afraid, the latter.",
+      "parentUuid": "b9eb43ac_b6c3ccb7",
+      "revId": "d773c47caeda73a4731d4e1bc4bbf5a85419a1a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
