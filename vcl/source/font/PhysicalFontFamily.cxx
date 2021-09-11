@@ -221,7 +221,7 @@ PhysicalFontFace* PhysicalFontFamily::FindBestFontFace( const FontSelectPattern&
 
     // TODO: linear search improve!
     PhysicalFontFace* pBestFontFace = maFontFaces[0].get();
-    FontMatchStatus aFontMatchStatus = {0,0,0, pTargetStyleName};
+    FontMatchStatus aFontMatchStatus = {0, pTargetStyleName};
     for (auto const& font : maFontFaces)
     {
         PhysicalFontFace* pFoundFontFace = font.get();

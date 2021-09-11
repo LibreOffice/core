@@ -139,9 +139,6 @@ bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchSt
             nMatch += 600;
     }
 
-    int nHeightMatch = 0;
-    int nWidthMatch = 0;
-
     if( rFSD.mnOrientation != 0_deg10 )
         nMatch += 80;
     else if( rFSD.mnWidth != 0 )
@@ -150,30 +147,15 @@ bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchSt
         nMatch += 5;
 
     if( rStatus.mnFaceMatch > nMatch )
+    {
         return false;
+    }
     else if( rStatus.mnFaceMatch < nMatch )
     {
         rStatus.mnFaceMatch      = nMatch;
-        rStatus.mnHeightMatch    = nHeightMatch;
-        rStatus.mnWidthMatch     = nWidthMatch;
         return true;
     }
 
-    // when two fonts are still competing prefer the
-    // one with the best matching height
-    if( rStatus.mnHeightMatch > nHeightMatch )
-        return false;
-    else if( rStatus.mnHeightMatch < nHeightMatch )
-    {
-        rStatus.mnHeightMatch    = nHeightMatch;
-        rStatus.mnWidthMatch     = nWidthMatch;
-        return true;
-    }
-
-    if( rStatus.mnWidthMatch > nWidthMatch )
-        return false;
-
-    rStatus.mnWidthMatch = nWidthMatch;
     return true;
 }
 
