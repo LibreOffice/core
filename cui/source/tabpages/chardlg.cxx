@@ -592,7 +592,7 @@ void SvxCharNamePage::FillSizeBox_Impl(const weld::Widget& rNameBox)
     }
 
     FontMetric _aFontMetric(pFontList->Get(sFontName, pStyleBox->get_active_text()));
-    pSizeBox->Fill( &_aFontMetric, pFontList );
+    pSizeBox->Fill( pFontList );
 }
 
 namespace
