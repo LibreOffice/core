@@ -44,8 +44,10 @@
 #include <resource/sharedresources.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/typeprovider.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
 
@@ -376,6 +378,19 @@ Reference< XClob> Connection::createClob(ISC_QUAD const * pBlobId)
     return xReturn;
 }
 
+//----- XUnoTunnel ----------------------------------------------------------
+// virtual
+sal_Int64 SAL_CALL Connection::getSomething(const css::uno::Sequence<sal_Int8>& rId)
+{
+    return (isUnoTunnelId<Connection>(rId)) ? reinterpret_cast<sal_Int64>(this) : sal_Int64(0);
+}
+
+// static
+css::uno::Sequence<sal_Int8> Connection::getUnoTunnelId()
+{
+    static const cppu::OImplementationId implId;
+    return implId.getImplementationId();
+}
 
 //----- XConnection ----------------------------------------------------------
 Reference< XStatement > SAL_CALL Connection::createStatement( )
