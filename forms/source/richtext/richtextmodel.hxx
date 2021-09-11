@@ -166,7 +166,7 @@ namespace frm
 
         DECL_LINK( OnEngineContentModified, LinkParamNone*, void );
 
-        static  css::uno::Sequence< sal_Int8 > getEditEngineTunnelId();
+        static css::uno::Sequence<sal_Int8> getUnoTunnelId();
 
     private:
         ORichTextModel( const ORichTextModel& ) = delete;
