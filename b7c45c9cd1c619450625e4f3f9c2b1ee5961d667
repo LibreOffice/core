@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f195718_7d203c98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-11T09:16:06Z",
+      "side": 1,
+      "message": "This is most likely fixing tdf#144386 (unfortunately I can\u0027t repro that problem myself, so can\u0027t test)",
+      "revId": "b7c45c9cd1c619450625e4f3f9c2b1ee5961d667",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
