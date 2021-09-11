@@ -33,11 +33,18 @@ namespace xmloff::token {
     {
         struct XMLTokenEntry
         {
-            sal_Int32 nLength;
             const char* pChar;
             std::optional<OUString> xOUString;
+            sal_Int32 nLength;
 #if OSL_DEBUG_LEVEL > 0
             XMLTokenEnum eToken;
+#endif
+#if OSL_DEBUG_LEVEL > 0
+            XMLTokenEntry(sal_Int32 nLen, const char* p, std::optional<OUString> xStr, XMLTokenEnum eTok)
+                : pChar(p), xOUString(std::move(xStr)), nLength(nLen), eToken(eTok) {}
+#else
+            XMLTokenEntry(sal_Int32 nLen, const char* p, std::optional<OUString> xStr)
+                : pChar(p), xOUString(std::move(xStr)), nLength(nLen) {}
 #endif
         };
     }
