@@ -19,9 +19,6 @@
 
 #include <cppuhelper/typeprovider.hxx>
 
-#include <rtl/uuid.h>
-#include <osl/mutex.hxx>
-
 using namespace osl;
 using namespace com::sun::star::uno;
 
@@ -29,25 +26,7 @@ namespace cppu
 {
 
 
-OImplementationId::~OImplementationId()
-{
-    delete _pSeq;
-}
-
-Sequence< sal_Int8 > OImplementationId::getImplementationId() const
-{
-    if (! _pSeq)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! _pSeq)
-        {
-            Sequence< sal_Int8 > * pSeq = new Sequence< sal_Int8 >( 16 );
-            ::rtl_createUuid( reinterpret_cast<sal_uInt8 *>(pSeq->getArray()), nullptr, _bUseEthernetAddress );
-            _pSeq = pSeq;
-        }
-    }
-    return *_pSeq;
-}
+OImplementationId::~OImplementationId() = default;
 
 
 static void copy( Sequence< Type > & rDest, const Sequence< Type > & rSource, sal_Int32 nOffset )
