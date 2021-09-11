@@ -263,11 +263,11 @@ void SvxFontSizeBox_Base::UpdateFont(const css::awt::FontDescriptor& rCurrentFon
         aFontMetric.SetFamilyName(rCurrentFont.Name);
         aFontMetric.SetStyleName(rCurrentFont.StyleName);
         aFontMetric.SetFontHeight(rCurrentFont.Height);
-        m_xWidget->Fill(&aFontMetric, &aFontList);
+        m_xWidget->Fill(&aFontList);
     }
     else
     {
-        m_xWidget->Fill(nullptr, &aFontList);
+        m_xWidget->Fill(&aFontList);
     }
     m_xWidget->set_value(nOldVal); // restore old value
     m_aCurText = m_xWidget->get_active_text(); // memorize to reset at ESC
