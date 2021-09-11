@@ -37,7 +37,7 @@ PhysicalFontFace::PhysicalFontFace( const FontAttributes& rDFA )
             SetSymbolFlag( true );
 }
 
-sal_Int32 PhysicalFontFace::CompareIgnoreSize( const PhysicalFontFace& rOther ) const
+sal_Int32 PhysicalFontFace::Compare( const PhysicalFontFace& rOther ) const
 {
     // compare their width, weight, italic, style name and family name
     if( GetWidthType() < rOther.GetWidthType() )
@@ -63,25 +63,6 @@ sal_Int32 PhysicalFontFace::CompareIgnoreSize( const PhysicalFontFace& rOther ) 
     }
 
     return nRet;
-}
-
-sal_Int32 PhysicalFontFace::CompareWithSize( const PhysicalFontFace& rOther ) const
-{
-    sal_Int32 nCompare = CompareIgnoreSize( rOther );
-    if (nCompare != 0)
-        return nCompare;
-
-    if( mnHeight < rOther.mnHeight )
-        return -1;
-    else if( mnHeight > rOther.mnHeight )
-        return 1;
-
-    if( mnWidth < rOther.mnWidth )
-        return -1;
-    else if( mnWidth > rOther.mnWidth )
-        return 1;
-
-    return 0;
 }
 
 bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchStatus& rStatus ) const
