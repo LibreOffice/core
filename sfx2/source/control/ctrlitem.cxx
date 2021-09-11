@@ -170,19 +170,19 @@ void SfxControllerItem::SetId( sal_uInt16 nItemId )
 
 // creates an atomic item for a controller without registration.
 SfxControllerItem::SfxControllerItem()
-    : nId(0)
-    , pNext(this)
+    : pNext(this)
     , pBindings(nullptr)
     , eFallbackCoreMetric(MapUnit::Map100thMM)
+    , nId(0)
 {
 }
 
 // creates a representation of the function nId and registers it
 SfxControllerItem::SfxControllerItem(sal_uInt16 nID, SfxBindings &rBindings)
-    : nId(nID)
-    , pNext(this)
+    : pNext(this)
     , pBindings(&rBindings)
     , eFallbackCoreMetric(MapUnit::Map100thMM)
+    , nId(nID)
 {
     Bind(nId, &rBindings);
 }

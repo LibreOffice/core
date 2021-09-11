@@ -143,9 +143,9 @@ bool GetSplitSizeFromString( const OUString& rStr, Size& rSize )
 
 SfxChildWindow::SfxChildWindow(vcl::Window *pParentWindow, sal_uInt16 nId)
     : pParent(pParentWindow)
-    , nType(nId)
-    , eChildAlignment(SfxChildAlignment::NOALIGNMENT)
     , pImpl(new SfxChildWindow_Impl)
+    , eChildAlignment(SfxChildAlignment::NOALIGNMENT)
+    , nType(nId)
 {
     pImpl->pFact = nullptr;
     pImpl->bHideNotDelete = false;

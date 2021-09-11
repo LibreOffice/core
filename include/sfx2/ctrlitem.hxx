@@ -30,10 +30,10 @@ class SfxBindings;
 class SFX2_DLLPUBLIC SfxControllerItem
 {
 private:
-    sal_uInt16          nId;
     SfxControllerItem*  pNext; // to notify next ControllerItem
     SfxBindings*        pBindings;
     MapUnit             eFallbackCoreMetric;
+    sal_uInt16          nId;
 
 public:
     SfxBindings &       GetBindings() {
