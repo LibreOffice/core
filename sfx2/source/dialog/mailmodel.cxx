@@ -187,7 +187,7 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
                                     rArgs[rNumArgs-1].Name = pProp->Name;
                                     rArgs[rNumArgs-1].Value = pProp->Value;
                                 }
-                                eRet = SAVE_SUCCESSFULL;
+                                eRet = SAVE_SUCCESSFUL;
                             }
                             else
                             {
@@ -541,13 +541,13 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                                                             xSMGR, xModel, aFilterName, rType, bModified, nNumArgs, aArgs );
 
                         // don't continue on dialog cancel or error
-                        if ( eShowPDFFilterDialog != SAVE_SUCCESSFULL )
+                        if ( eShowPDFFilterDialog != SAVE_SUCCESSFUL )
                             return eShowPDFFilterDialog;
                     }
 
                     xStorable->storeToURL( aFileURL, aArgs );
                     rFileNamePath = aFileURL;
-                    eRet = SAVE_SUCCESSFULL;
+                    eRet = SAVE_SUCCESSFUL;
 
                     if( !bSendAsPDF )
                     {
@@ -607,7 +607,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                 {
                     xStorable->storeToURL( aFileURL, aArgs );
                     rFileNamePath = aFileURL;
-                    eRet = SAVE_SUCCESSFULL;
+                    eRet = SAVE_SUCCESSFUL;
                 }
                 catch ( css::io::IOException& )
                 {
@@ -649,9 +649,9 @@ SfxMailModel::SendMailResult SfxMailModel::AttachDocument(
     OUString sFileName;
 
     SaveResult eSaveResult = SaveDocumentAsFormat( sAttachmentTitle, xFrameOrModel, OUString()/*sDocumentType*/, sFileName );
-    if ( eSaveResult == SAVE_SUCCESSFULL &&  !sFileName.isEmpty() )
+    if ( eSaveResult == SAVE_SUCCESSFUL &&  !sFileName.isEmpty() )
         maAttachedDocuments.push_back(sFileName);
-    return eSaveResult == SAVE_SUCCESSFULL ? SEND_MAIL_OK : SEND_MAIL_ERROR;
+    return eSaveResult == SAVE_SUCCESSFUL ? SEND_MAIL_OK : SEND_MAIL_ERROR;
 }
 
 SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css::frame::XFrame >& xFrame )
@@ -781,7 +781,7 @@ SfxMailModel::SendMailResult SfxMailModel::SaveAndSend( const css::uno::Referenc
 
     eSaveResult = SaveDocumentAsFormat( OUString(), xFrame, rTypeName, aFileName );
 
-    if ( eSaveResult == SAVE_SUCCESSFULL )
+    if ( eSaveResult == SAVE_SUCCESSFUL )
     {
         maAttachedDocuments.push_back( aFileName );
         return Send( xFrame );

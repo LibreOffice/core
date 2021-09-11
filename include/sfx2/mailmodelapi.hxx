@@ -43,7 +43,7 @@ class SFX2_DLLPUBLIC SfxMailModel
 protected:
     enum SaveResult
     {
-        SAVE_SUCCESSFULL,
+        SAVE_SUCCESSFUL,
         SAVE_CANCELLED,
         SAVE_ERROR
     };
