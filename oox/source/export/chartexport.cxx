@@ -539,6 +539,7 @@ ChartExport::ChartExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, Reference< f
     , mbIs3DChart( false )
     , mbStacked(false)
     , mbPercent(false)
+    , mbHasDateCategories(false)
 {
 }
 
