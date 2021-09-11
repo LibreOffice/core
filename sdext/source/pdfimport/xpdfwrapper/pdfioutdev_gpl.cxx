@@ -435,7 +435,12 @@ int PDFOutDev::parseFont( long long nNewId, GfxFont* gfxFont, const GfxState* st
 #if POPPLER_CHECK_VERSION(20, 12, 0)
     std::string familyName = gfxFont->getNameWithoutSubsetTag();
 #else
+#if POPPLER_CHECK_VERSION(0, 71, 0) // GooString::toStr()
     std::string familyName = gfxFont->getName()->toStr();
+#else
+    const GooString* gooString = gfxFont->getName();
+    std::string familyName = std::string(gooString->getCString(), gooString->getLength());
+#endif
     if (familyName.length() > 7 && familyName.at(6) == '+')
     {
         familyName = familyName.substr(7);
