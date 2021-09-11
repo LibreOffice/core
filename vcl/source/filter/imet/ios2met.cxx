@@ -993,20 +993,17 @@ void OS2METReader::ReadBox(bool bGivenPos)
 
 void OS2METReader::ReadBitBlt()
 {
-    Point aP1,aP2;
-    Size aSize;
-    sal_uInt32 nID;
-    OSBitmap * pB;
-
     pOS2MET->SeekRel(4);
+    sal_uInt32 nID(0);
     pOS2MET->ReadUInt32( nID );
     pOS2MET->SeekRel(4);
-    aP1=ReadPoint(); aP2=ReadPoint();
+    Point aP1 = ReadPoint();
+    Point aP2 = ReadPoint();
     if (aP1.X() > aP2.X()) { auto nt=aP1.X(); aP1.setX(aP2.X() ); aP2.setX(nt ); }
     if (aP1.Y() > aP2.Y()) { auto nt=aP1.Y(); aP1.setY(aP2.Y() ); aP2.setY(nt ); }
-    aSize=Size(aP2.X()-aP1.X(),aP2.Y()-aP1.Y());
+    Size aSize(aP2.X() - aP1.X(), aP2.Y() - aP1.Y());
 
-    pB=pBitmapList;
+    OSBitmap* pB = pBitmapList;
     while (pB!=nullptr && pB->nID!=nID) pB=pB->pSucc;
     if (pB!=nullptr) {
         SetRasterOp(aAttr.ePatMix);
