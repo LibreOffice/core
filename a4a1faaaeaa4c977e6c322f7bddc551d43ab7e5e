@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24d26a22_6772acf1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-11T02:20:18Z",
+      "side": 1,
+      "message": "I believe that as_const doesn\u0027t clarify things: using a pointer to const is already telling, and as_const here is redundant. What I believe Noel was suggesting is using as_const in a one-liner expression, like\n\n  Foo* pFoo;\n  ...\n  std::as_const(pFoo)-\u003ebar();\n\ninstead of\n\n  Foo* pFoo;\n  ...\n  const Foo* pCFoo \u003d pFoo;\n  pCFoo-\u003ebar();\n\nbut I don\u0027t know if as_const would apply constness to the pointed object, or to the pointer itself (which is not what we need)?",
+      "revId": "a4a1faaaeaa4c977e6c322f7bddc551d43ab7e5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
