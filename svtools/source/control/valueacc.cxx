@@ -36,11 +36,11 @@ using namespace ::com::sun::star;
 
 ValueSetItem::ValueSetItem( ValueSet& rParent )
     : mrParent(rParent)
+    , mpData(nullptr)
+    , mxAcc()
     , mnId(0)
     , meType(VALUESETITEM_NONE)
     , mbVisible(true)
-    , mpData(nullptr)
-    , mxAcc()
 {
 }
 

@@ -28,13 +28,13 @@ namespace drawinglayer::attribute
         {
         public:
             // data definitions
-            GradientStyle                           meStyle;
             double                                  mfBorder;
             double                                  mfOffsetX;
             double                                  mfOffsetY;
             double                                  mfAngle;
             basegfx::BColor                         maStartColor;
             basegfx::BColor                         maEndColor;
+            GradientStyle                           meStyle;
             sal_uInt16                              mnSteps;
 
             ImpFillGradientAttribute(
@@ -46,23 +46,23 @@ namespace drawinglayer::attribute
                 const basegfx::BColor& rStartColor,
                 const basegfx::BColor& rEndColor,
                 sal_uInt16 nSteps)
-            :   meStyle(eStyle),
-                mfBorder(fBorder),
+            :   mfBorder(fBorder),
                 mfOffsetX(fOffsetX),
                 mfOffsetY(fOffsetY),
                 mfAngle(fAngle),
                 maStartColor(rStartColor),
                 maEndColor(rEndColor),
+                meStyle(eStyle),
                 mnSteps(nSteps)
             {
             }
 
             ImpFillGradientAttribute()
-            :   meStyle(GradientStyle::Linear),
-                mfBorder(0.0),
+            :   mfBorder(0.0),
                 mfOffsetX(0.0),
                 mfOffsetY(0.0),
                 mfAngle(0.0),
+                meStyle(GradientStyle::Linear),
                 mnSteps(0)
             {
             }

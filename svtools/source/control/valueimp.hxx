@@ -52,14 +52,14 @@ class ValueSet;
 struct ValueSetItem
 {
     ValueSet&        mrParent;
-    sal_uInt16          mnId;
-    sal_uInt8           meType;
-    bool                mbVisible;
-    Image               maImage;
-    Color               maColor;
     OUString            maText;
     void*               mpData;
     rtl::Reference< ValueItemAcc > mxAcc;
+    Image               maImage;
+    Color               maColor;
+    sal_uInt16          mnId;
+    sal_uInt8           meType;
+    bool                mbVisible;
 
     explicit ValueSetItem( ValueSet& rParent );
     ~ValueSetItem();

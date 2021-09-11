@@ -28,13 +28,13 @@ namespace drawinglayer::attribute
         {
         public:
             // line definitions
-            basegfx::B2DLineJoin                    meJoin;             // B2DLINEJOIN_* defines
             double                                  mfWidth;            // 1/100th mm, 0.0==hair
             double                                  mfTransparence;     // [0.0 .. 1.0], 0.0==no transp.
-            basegfx::BColor                         maColor;            // color of line
-            css::drawing::LineCap                   meCap;              // BUTT, ROUND, or SQUARE
-            std::vector< double >                 maDotDashArray;     // array of double which defines the dot-dash pattern
             double                                  mfFullDotDashLen;   // sum of maDotDashArray (for convenience)
+            basegfx::BColor                         maColor;            // color of line
+            std::vector< double >                   maDotDashArray;     // array of double which defines the dot-dash pattern
+            basegfx::B2DLineJoin                    meJoin;             // B2DLINEJOIN_* defines
+            css::drawing::LineCap                   meCap;              // BUTT, ROUND, or SQUARE
 
             ImpSdrLineAttribute(
                 basegfx::B2DLineJoin eJoin,
@@ -44,22 +44,22 @@ namespace drawinglayer::attribute
                 css::drawing::LineCap eCap,
                 const std::vector< double >& rDotDashArray,
                 double fFullDotDashLen)
-            :   meJoin(eJoin),
-                mfWidth(fWidth),
+            :   mfWidth(fWidth),
                 mfTransparence(fTransparence),
+                mfFullDotDashLen(fFullDotDashLen),
                 maColor(rColor),
-                meCap(eCap),
                 maDotDashArray(rDotDashArray),
-                mfFullDotDashLen(fFullDotDashLen)
+                meJoin(eJoin),
+                meCap(eCap)
             {
             }
 
             ImpSdrLineAttribute()
-            :   meJoin(basegfx::B2DLineJoin::Round),
-                mfWidth(0.0),
+            :   mfWidth(0.0),
                 mfTransparence(0.0),
-                meCap(css::drawing::LineCap_BUTT),
-                mfFullDotDashLen(0.0)
+                mfFullDotDashLen(0.0),
+                meJoin(basegfx::B2DLineJoin::Round),
+                meCap(css::drawing::LineCap_BUTT)
             {
             }
 
