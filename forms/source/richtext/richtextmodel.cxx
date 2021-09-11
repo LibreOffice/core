@@ -31,6 +31,7 @@
 
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/guarding.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <svl/itempool.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -512,7 +513,7 @@ namespace frm
         {
             try
             {
-                pEngine = reinterpret_cast< RichTextEngine* >( xTunnel->getSomething( getEditEngineTunnelId() ) );
+                pEngine = reinterpret_cast<RichTextEngine*>(xTunnel->getSomething(getUnoTunnelId()));
             }
             catch( const Exception& )
             {
@@ -523,7 +524,7 @@ namespace frm
     }
 
 
-    Sequence< sal_Int8 > ORichTextModel::getEditEngineTunnelId()
+    Sequence<sal_Int8> ORichTextModel::getUnoTunnelId()
     {
         static cppu::OImplementationId aId;
         return aId.getImplementationId();
@@ -547,10 +548,7 @@ namespace frm
 
     sal_Int64 SAL_CALL ORichTextModel::getSomething( const Sequence< sal_Int8 >& _rId )
     {
-        Sequence< sal_Int8 > aEditEngineAccessId( getEditEngineTunnelId() );
-        if  (   ( _rId.getLength() == aEditEngineAccessId.getLength() )
-            &&  ( 0 == memcmp( aEditEngineAccessId.getConstArray(),  _rId.getConstArray(), _rId.getLength() ) )
-            )
+        if (isUnoTunnelId<ORichTextModel>(_rId))
             return reinterpret_cast< sal_Int64 >( m_pEngine.get() );
 
         Reference< XUnoTunnel > xAggTunnel;
