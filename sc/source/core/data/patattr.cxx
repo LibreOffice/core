@@ -581,19 +581,19 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
 
         if ( pCondSet->GetItemState( ATTR_FONT_COLOR, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT_COLOR );
-        aColorItem.reset(static_cast<SvxColorItem*>(pItem->Clone()));
+        aColorItem.reset(&pItem->Clone()->StaticWhichCast(ATTR_FONT_COLOR));
 
         if ( pCondSet->GetItemState( ATTR_FONT, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT );
-        aFontItem.reset(static_cast<SvxFontItem*>(pItem->Clone()));
+        aFontItem.reset(&pItem->Clone()->StaticWhichCast(ATTR_FONT));
 
         if ( pCondSet->GetItemState( ATTR_CJK_FONT, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_CJK_FONT );
-        aCjkFontItem.reset(static_cast<SvxFontItem*>(pItem->Clone()));
+        aCjkFontItem.reset(&pItem->Clone()->StaticWhichCast(ATTR_CJK_FONT));
 
         if ( pCondSet->GetItemState( ATTR_CTL_FONT, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_CTL_FONT );
-        aCtlFontItem.reset(static_cast<SvxFontItem*>(pItem->Clone()));
+        aCtlFontItem.reset(&pItem->Clone()->StaticWhichCast(ATTR_CTL_FONT));
 
         if ( pCondSet->GetItemState( ATTR_FONT_HEIGHT, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT_HEIGHT );
@@ -627,11 +627,11 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
 
         if ( pCondSet->GetItemState( ATTR_FONT_UNDERLINE, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT_UNDERLINE );
-        aUnderlineItem.reset(static_cast<SvxUnderlineItem*>(pItem->Clone()));
+        aUnderlineItem.reset(&pItem->Clone()->StaticWhichCast(ATTR_FONT_UNDERLINE));
 
         if ( pCondSet->GetItemState( ATTR_FONT_OVERLINE, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT_OVERLINE );
-        aOverlineItem.reset(static_cast<SvxOverlineItem*>(pItem->Clone()));
+        aOverlineItem.reset(&pItem->Clone()->StaticWhichCast(ATTR_FONT_OVERLINE));
 
         if ( pCondSet->GetItemState( ATTR_FONT_WORDLINE, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT_WORDLINE );
