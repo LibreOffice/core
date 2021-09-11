@@ -69,7 +69,6 @@ class LogicalFontInstance;
 struct SystemGraphicsData;
 class ImplFontCache;
 class PhysicalFontCollection;
-class ImplDeviceFontSizeList;
 class ImplMultiTextLineInfo;
 class SalGraphics;
 class Gradient;
@@ -185,7 +184,6 @@ private:
     GDIMetaFile*                    mpMetaFile;
     mutable rtl::Reference<LogicalFontInstance> mpFontInstance;
     mutable std::unique_ptr<PhysicalFontFaceCollection>  mpFontFaceCollection;
-    mutable std::unique_ptr<ImplDeviceFontSizeList> mpDeviceFontSizeList;
     std::vector<OutDevState>        maOutDevStateStack;
     std::unique_ptr<ImplOutDevData> mpOutDevData;
     std::vector< VCLXGraphics* >*   mpUnoGraphicsList;
@@ -1115,9 +1113,6 @@ public:
     int                         GetFontFaceCollectionCount() const;
 
     bool                        IsFontAvailable( const OUString& rFontName ) const;
-
-    Size                        GetDevFontSize( const vcl::Font& rFont, int nSizeIndex ) const;
-    int                         GetDevFontSizeCount( const vcl::Font& ) const;
 
     bool                        AddTempDevFont( const OUString& rFileURL, const OUString& rFontName );
     void                        RefreshFontData( const bool bNewFontLists );
