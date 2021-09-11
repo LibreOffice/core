@@ -162,7 +162,7 @@ void PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewFontFace )
     for (; it != maFontFaces.end(); ++it)
     {
         PhysicalFontFace* pFoundFontFace = it->get();
-        sal_Int32 eComp = pNewFontFace->CompareWithSize( *pFoundFontFace );
+        sal_Int32 eComp = pNewFontFace->CompareIgnoreSize( *pFoundFontFace );
         if( eComp > 0 )
             continue;
         if( eComp < 0 )

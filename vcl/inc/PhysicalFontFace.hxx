@@ -73,12 +73,10 @@ public:
     virtual bool GetFontCapabilities(vcl::FontCapabilities&) const = 0;
 
     bool                    IsBetterMatch( const FontSelectPattern&, FontMatchStatus& ) const;
-    sal_Int32               CompareWithSize( const PhysicalFontFace& ) const;
     sal_Int32               CompareIgnoreSize( const PhysicalFontFace& ) const;
 
 protected:
     explicit PhysicalFontFace(const FontAttributes&);
-    void                    SetBitmapSize( int nW, int nH ) { mnWidth=nW; mnHeight=nH; }
 
     tools::Long                    mnWidth;    // Width (in pixels)
     tools::Long                    mnHeight;   // Height (in pixels)
