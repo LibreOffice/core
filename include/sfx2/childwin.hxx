@@ -60,13 +60,13 @@ namespace o3tl
 // ChildWindow Configuration
 struct SAL_DLLPUBLIC_RTTI SfxChildWinInfo
 {
-    bool                bVisible;
-    Point               aPos;
-    Size                aSize;
-    SfxChildWindowFlags nFlags;
     OUString            aExtraString;
     OUString            aModule;
     OString             aWinState;
+    Point               aPos;
+    Size                aSize;
+    SfxChildWindowFlags nFlags;
+    bool                bVisible;
 
                         SfxChildWinInfo()
                         {
@@ -85,8 +85,8 @@ typedef std::unique_ptr<SfxChildWindow> (*SfxChildWinCtor)( vcl::Window *pParent
 struct SFX2_DLLPUBLIC SfxChildWinFactory
 {
     SfxChildWinCtor             pCtor;  // Factory method
-    sal_uInt16                  nId;    // ChildWindow-Id ( SlotId )
     SfxChildWinInfo             aInfo;  // Configuration
+    sal_uInt16                  nId;    // ChildWindow-Id ( SlotId )
     sal_uInt16                  nPos;   // Position in UI
 
     SfxChildWinFactory( SfxChildWinCtor pTheCtor, sal_uInt16 nID, sal_uInt16 n );
@@ -99,12 +99,12 @@ extern SFX2_DLLPUBLIC bool ParentIsFloatingWindow(const vcl::Window *pParent);
 class SFX2_DLLPUBLIC SfxChildWindow
 {
     VclPtr<vcl::Window>        pParent;         // parent window ( Topwindow )
-    sal_uInt16                 nType;           // ChildWindow-Id
     VclPtr<vcl::Window>        pWindow;         // actual contents
+    std::unique_ptr< SfxChildWindow_Impl>       pImpl;            // Implementation data
     std::shared_ptr<SfxDialogController> xController;     // actual contents
     SfxChildAlignment          eChildAlignment; // Current css::drawing::Alignment
-    std::unique_ptr< SfxChildWindow_Impl>       pImpl;            // Implementation data
                                                  // Another window in pWindow
+    sal_uInt16                 nType;           // ChildWindow-Id
     SAL_DLLPRIVATE void ClearWorkwin();
 
 protected:
