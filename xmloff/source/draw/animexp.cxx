@@ -192,7 +192,7 @@ void SdXMLImplSetEffect( AnimationEffect eEffect, XMLEffect& eKind, XMLEffectDir
 
 namespace {
 
-enum XMLActionKind
+enum XMLActionKind : sal_Int8
 {
     XMLE_SHOW,
     XMLE_HIDE,
@@ -202,27 +202,27 @@ enum XMLActionKind
 
 struct XMLEffectHint
 {
-    XMLActionKind   meKind;
-    bool        mbTextEffect;
     Reference<XShape> mxShape;
+    XMLActionKind   meKind;
+    bool            mbTextEffect;
 
     XMLEffect       meEffect;
     XMLEffectDirection  meDirection;
     sal_Int16       mnStartScale;
 
     AnimationSpeed  meSpeed;
-    sal_Int32       maDimColor;
     OUString        maSoundURL;
-    bool        mbPlayFull;
+    sal_Int32       maDimColor;
     sal_Int32       mnPresId;
+    bool        mbPlayFull;
 
     bool operator<(const XMLEffectHint& rComp) const { return mnPresId < rComp.mnPresId; }
 
     XMLEffectHint()
     :   meKind( XMLE_SHOW ), mbTextEffect( false ),
         meEffect( EK_none ), meDirection( ED_none ), mnStartScale( -1 ),
-        meSpeed( AnimationSpeed_SLOW ), maDimColor(0), mbPlayFull( false ),
-        mnPresId( 0 )
+        meSpeed( AnimationSpeed_SLOW ), maDimColor(0),
+        mnPresId( 0 ), mbPlayFull( false )
         {}
 };
 

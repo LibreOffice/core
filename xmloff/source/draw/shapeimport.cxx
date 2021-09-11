@@ -64,9 +64,9 @@ namespace {
 struct ConnectionHint
 {
     css::uno::Reference< css::drawing::XShape > mxConnector;
-    bool      bStart;
     OUString  aDestShapeId;
     sal_Int32 nDestGlueId;
+    bool      bStart;
 };
 
 }
