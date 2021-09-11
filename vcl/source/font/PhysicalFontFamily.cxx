@@ -162,7 +162,7 @@ void PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewFontFace )
     for (; it != maFontFaces.end(); ++it)
     {
         PhysicalFontFace* pFoundFontFace = it->get();
-        sal_Int32 eComp = pNewFontFace->CompareWithSize( *pFoundFontFace );
+        sal_Int32 eComp = pNewFontFace->Compare( *pFoundFontFace );
         if( eComp > 0 )
             continue;
         if( eComp < 0 )
@@ -242,7 +242,7 @@ void PhysicalFontFamily::UpdateDevFontList( vcl::font::PhysicalFontFaceCollectio
     for (auto const& font : maFontFaces)
     {
         PhysicalFontFace* pFoundFontFace = font.get();
-        if( !pPrevFace || pFoundFontFace->CompareIgnoreSize( *pPrevFace ) )
+        if( !pPrevFace || pFoundFontFace->Compare( *pPrevFace ) )
             rDevFontList.Add( pFoundFontFace );
         pPrevFace = pFoundFontFace;
     }
