@@ -33,6 +33,7 @@
 #include <com/sun/star/document/XDocumentEventListener.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sdbc/XBlob.hpp>
 #include <com/sun/star/sdbc/XClob.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -45,6 +46,7 @@ namespace connectivity::firebird
 
         typedef ::cppu::WeakComponentImplHelper< css::document::XDocumentEventListener,
                                                  css::lang::XServiceInfo,
+                                                 css::lang::XUnoTunnel,
                                                  css::sdbc::XConnection,
                                                  css::sdbc::XWarningsSupplier
                                                > Connection_BASE;
@@ -206,6 +208,9 @@ namespace connectivity::firebird
 
             // XServiceInfo
             DECLARE_SERVICE_INFO();
+            // XUnoTunnel
+            virtual sal_Int64 SAL_CALL getSomething(const css::uno::Sequence<sal_Int8>& rId) override;
+            static css::uno::Sequence<sal_Int8> getUnoTunnelId();
             // XConnection
             virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;
             virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) override;
