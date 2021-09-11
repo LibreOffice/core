@@ -232,7 +232,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
 
     private boolean createTable()
     {
-        boolean bIsSuccessfull = true;
+        boolean bIsSuccessful = true;
         boolean bTableCreated = false;
         String schemaname = curFinalizer.getSchemaName();
         String catalogname = curFinalizer.getCatalogName();
@@ -242,19 +242,19 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
             if (keyfieldnames != null && keyfieldnames.length > 0)
             {
                 boolean bIsAutoIncrement = curPrimaryKeyHandler.isAutoIncremented();
-                bIsSuccessfull = curTableDescriptor.createTable(catalogname, schemaname, tablename, keyfieldnames, bIsAutoIncrement);
+                bIsSuccessful = curTableDescriptor.createTable(catalogname, schemaname, tablename, keyfieldnames, bIsAutoIncrement);
                 bTableCreated = true;
             }
         }
         if (!bTableCreated)
         {
-            bIsSuccessfull = curTableDescriptor.createTable(catalogname, schemaname, tablename);
+            bIsSuccessful = curTableDescriptor.createTable(catalogname, schemaname, tablename);
         }
-        if ((!bIsSuccessfull) && (curPrimaryKeyHandler.isAutomaticMode()))
+        if ((!bIsSuccessful) && (curPrimaryKeyHandler.isAutomaticMode()))
         {
             curTableDescriptor.dropColumnbyName(curPrimaryKeyHandler.getAutomaticFieldName());
         }
-        return bIsSuccessfull;
+        return bIsSuccessful;
     }
 
     @Override
