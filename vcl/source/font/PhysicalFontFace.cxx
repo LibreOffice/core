@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <sal/types.h>
 #include <tools/fontenum.hxx>
 #include <unotools/fontdefs.hxx>
@@ -63,25 +65,6 @@ sal_Int32 PhysicalFontFace::CompareIgnoreSize( const PhysicalFontFace& rOther ) 
     }
 
     return nRet;
-}
-
-sal_Int32 PhysicalFontFace::CompareWithSize( const PhysicalFontFace& rOther ) const
-{
-    sal_Int32 nCompare = CompareIgnoreSize( rOther );
-    if (nCompare != 0)
-        return nCompare;
-
-    if( mnHeight < rOther.mnHeight )
-        return -1;
-    else if( mnHeight > rOther.mnHeight )
-        return 1;
-
-    if( mnWidth < rOther.mnWidth )
-        return -1;
-    else if( mnWidth > rOther.mnWidth )
-        return 1;
-
-    return 0;
 }
 
 bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchStatus& rStatus ) const
@@ -196,4 +179,4 @@ bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchSt
     return true;
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
