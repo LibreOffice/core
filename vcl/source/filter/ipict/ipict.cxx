@@ -492,14 +492,13 @@ sal_uInt64 PictReader::ReadPixPattern(PictReader::Pattern &pattern)
     // Here again the attempt to calculate the size of the date to create simple StarView-Styles
     // from them. Luckily a PixPattern always contains a normal pattern.
 
-
     sal_uInt64 nDataSize;
-    sal_uInt16 nPatType;
-    BitmapEx aBMP;
 
-    pPict->ReadUInt16( nPatType );
+    sal_uInt16 nPatType(0);
+    pPict->ReadUInt16(nPatType);
     if (nPatType==1) {
         pattern.read(*pPict);
+        BitmapEx aBMP;
         nDataSize=ReadPixMapEtc(aBMP,false,true,nullptr,nullptr,false,false);
         // CHANGEME: use average pixmap colors to update the pattern, ...
         if (nDataSize!=0xffffffff) nDataSize+=10;
