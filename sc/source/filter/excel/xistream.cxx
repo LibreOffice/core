@@ -635,7 +635,7 @@ sal_Int16 XclImpStream::ReadInt16()
     {
         if( mbUseDecr )
         {
-            SVBT16 pnBuffer;
+            SVBT16 pnBuffer{0};
             mxDecrypter->Read( mrStrm, pnBuffer, 2 );
             nValue = static_cast< sal_Int16 >( SVBT16ToUInt16( pnBuffer ) );
         }
@@ -653,7 +653,7 @@ sal_uInt16 XclImpStream::ReaduInt16()
     {
         if( mbUseDecr )
         {
-            SVBT16 pnBuffer;
+            SVBT16 pnBuffer{0};
             mxDecrypter->Read( mrStrm, pnBuffer, 2 );
             nValue = SVBT16ToUInt16( pnBuffer );
         }
@@ -671,7 +671,7 @@ sal_Int32 XclImpStream::ReadInt32()
     {
         if( mbUseDecr )
         {
-            SVBT32 pnBuffer;
+            SVBT32 pnBuffer{0};
             mxDecrypter->Read( mrStrm, pnBuffer, 4 );
             nValue = static_cast< sal_Int32 >( SVBT32ToUInt32( pnBuffer ) );
         }
@@ -689,7 +689,7 @@ sal_uInt32 XclImpStream::ReaduInt32()
     {
         if( mbUseDecr )
         {
-            SVBT32 pnBuffer;
+            SVBT32 pnBuffer{0};
             mxDecrypter->Read( mrStrm, pnBuffer, 4 );
             nValue = SVBT32ToUInt32( pnBuffer );
         }
@@ -707,7 +707,7 @@ double XclImpStream::ReadDouble()
     {
         if( mbUseDecr )
         {
-            SVBT64 pnBuffer;
+            SVBT64 pnBuffer{0};
             mxDecrypter->Read( mrStrm, pnBuffer, 8 );
             nValue = SVBT64ToDouble( pnBuffer );
         }
