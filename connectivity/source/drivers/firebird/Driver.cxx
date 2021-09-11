@@ -25,6 +25,7 @@
 #include <strings.hrc>
 #include <resource/sharedresources.hxx>
 
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
@@ -190,8 +191,10 @@ sal_Int32 SAL_CALL FirebirdDriver::getMinorVersion(  )
 uno::Reference< XTablesSupplier > SAL_CALL FirebirdDriver::getDataDefinitionByConnection(
                                     const uno::Reference< XConnection >& rConnection)
 {
-    Connection* pConnection = static_cast< Connection* >(rConnection.get());
-    return pConnection->createCatalog();
+    Reference<XTablesSupplier> xTabSupplier;
+    if (Connection* pConnection = comphelper::getUnoTunnelImplementation<Connection>(rConnection))
+        xTabSupplier = pConnection->createCatalog();
+    return xTabSupplier;
 }
 
 uno::Reference< XTablesSupplier > SAL_CALL FirebirdDriver::getDataDefinitionByURL(
