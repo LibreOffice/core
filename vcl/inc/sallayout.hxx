@@ -47,7 +47,10 @@
 class SalGraphics;
 class GenericSalLayout;
 enum class SalLayoutFlags;
-class PhysicalFontFace;
+
+namespace vcl::font {
+    class PhysicalFontFace;
+}
 
 namespace vcl::text {
     class TextLayoutCache;
@@ -62,7 +65,7 @@ public:
     void            GetCaretPositions(int nArraySize, tools::Long* pCaretXArray) const override;
     bool            GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int& nStart,
                                  const LogicalFontInstance** ppGlyphFont = nullptr,
-                                 const PhysicalFontFace** pFallbackFont = nullptr) const override;
+                                 const vcl::font::PhysicalFontFace** pFallbackFont = nullptr) const override;
     bool            GetOutline(basegfx::B2DPolyPolygonVector&) const override;
     bool            IsKashidaPosValid(int nCharPos) const override;
     SalLayoutGlyphs GetGlyphs() const final override;
@@ -119,7 +122,7 @@ public:
 
     bool            GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int& nStart,
                                  const LogicalFontInstance** ppGlyphFont = nullptr,
-                                 const PhysicalFontFace** pFallbackFont = nullptr) const override;
+                                 const vcl::font::PhysicalFontFace** pFallbackFont = nullptr) const override;
 
     const SalLayoutGlyphsImpl& GlyphsImpl() const { return m_GlyphItems; }
 

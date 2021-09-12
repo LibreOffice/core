@@ -17,14 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <sal/types.h>
 #include <tools/fontenum.hxx>
 #include <unotools/fontdefs.hxx>
 
+#include <font/FontSelectPattern.hxx>
+#include <font/PhysicalFontFace.hxx>
 #include <fontattributes.hxx>
-#include <fontselect.hxx>
 
-#include <PhysicalFontFace.hxx>
+namespace vcl::font
+{
 
 PhysicalFontFace::PhysicalFontFace( const FontAttributes& rDFA )
     : FontAttributes( rDFA )
@@ -157,6 +161,8 @@ bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchSt
     }
 
     return true;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -46,7 +46,7 @@ static double toRadian(int nDegree)
     return nDegree * (M_PI / 1800.0);
 }
 
-CoreTextStyle::CoreTextStyle(const PhysicalFontFace& rPFF, const FontSelectPattern& rFSP)
+CoreTextStyle::CoreTextStyle(const vcl::font::PhysicalFontFace& rPFF, const FontSelectPattern& rFSP)
     : LogicalFontInstance(rPFF, rFSP)
     , mfFontStretch( 1.0 )
     , mfFontRotation( 0.0 )
