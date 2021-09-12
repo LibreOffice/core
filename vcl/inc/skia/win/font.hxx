@@ -8,8 +8,9 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_SKIA_WIN_FONT_HXX
-#define INCLUDED_VCL_INC_SKIA_WIN_FONT_HXX
+#pragma once
+
+#include <sal/config.h>
 
 #include <win/winlayout.hxx>
 
@@ -19,7 +20,7 @@
 class SkiaWinFontInstance : public WinFontInstance
 {
     friend rtl::Reference<LogicalFontInstance>
-    WinFontFace::CreateFontInstance(const FontSelectPattern&) const;
+    WinFontFace::CreateFontInstance(const vcl::font::FontSelectPattern&) const;
 
 public:
     sk_sp<SkTypeface> GetSkiaTypeface() const { return m_skiaTypeface; }
@@ -36,6 +37,4 @@ private:
     bool m_skiaDWrite;
 };
 
-#endif // INCLUDED_VCL_INC_SKIA_WIN_FONT_HXX
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -19,20 +19,26 @@
 
 #pragma once
 
-#include <vclpluginapi.h>
-#include <PhysicalFontFace.hxx>
+#include <sal/config.h>
 
 #include <tools/ref.hxx>
+
 #include <vcl/fontcapabilities.hxx>
 #include <vcl/fontcharmap.hxx>
+
+#include <vclpluginapi.h>
+#include <font/PhysicalFontFace.hxx>
 
 #include <QtCore/QString>
 #include <QtGui/QFont>
 
 class FontAttributes;
+namespace vcl::font
+{
 class FontSelectPattern;
+}
 
-class Qt5FontFace final : public PhysicalFontFace
+class Qt5FontFace final : public vcl::font::PhysicalFontFace
 {
 public:
     static Qt5FontFace* fromQFont(const QFont& rFont);
@@ -53,7 +59,7 @@ public:
     bool HasChar(sal_uInt32 cChar) const;
 
     rtl::Reference<LogicalFontInstance>
-    CreateFontInstance(const FontSelectPattern& rFSD) const override;
+    CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const override;
 
 private:
     typedef enum { Font, FontDB } FontIdType;
@@ -68,4 +74,4 @@ private:
     mutable bool m_bFontCapabilitiesRead;
 };
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

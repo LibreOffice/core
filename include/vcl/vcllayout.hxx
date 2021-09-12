@@ -17,19 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_VCLLAYOUT_HXX
-#define INCLUDED_VCL_VCLLAYOUT_HXX
+#pragma once
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <tools/gen.hxx>
 #include <tools/degree.hxx>
+
+#include <vcl/dllapi.h>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/glyphitem.hxx>
-#include <vcl/dllapi.h>
 
 class LogicalFontInstance;
 namespace vcl::text { class ImplLayoutArgs; }
-class PhysicalFontFace;
+namespace vcl::font { class PhysicalFontFace; }
 class SalGraphics;
 class GlyphItem;
 
@@ -92,7 +92,7 @@ public:
     // methods using glyph indexing
     virtual bool    GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int& nStart,
                                  const LogicalFontInstance** ppGlyphFont = nullptr,
-                                 const PhysicalFontFace** pFallbackFont = nullptr) const = 0;
+                                 const vcl::font::PhysicalFontFace** pFallbackFont = nullptr) const = 0;
     virtual bool GetOutline(basegfx::B2DPolyPolygonVector&) const;
     bool GetBoundRect(tools::Rectangle&) const;
 
@@ -117,6 +117,4 @@ protected:
     Point           maDrawBase;
 };
 
-#endif // INCLUDED_VCL_VCLLAYOUT_HXX
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

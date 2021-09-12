@@ -19,43 +19,46 @@
 
 #pragma once
 
-#include <map>
-#include <list>
-#include <unordered_map>
-#include <memory>
-#include <string_view>
-#include <vector>
+#include <sal/config.h>
 
-#include <pdf/ResourceDict.hxx>
-#include <pdf/BitmapID.hxx>
-#include <pdf/Matrix3.hxx>
-
-#include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/uno/Sequence.h>
 #include <osl/file.hxx>
 #include <rtl/cipher.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <comphelper/hash.hxx>
 #include <tools/gen.hxx>
+#include <tools/stream.hxx>
+#include <o3tl/lru_map.hxx>
+#include <o3tl/safeint.hxx>
+#include <o3tl/typed_flags_set.hxx>
+
+#include <vcl/BinaryDataContainer.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/filter/pdfobjectcontainer.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graphictools.hxx>
 #include <vcl/hatch.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/pdfwriter.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/wall.hxx>
-#include <o3tl/safeint.hxx>
-#include <o3tl/typed_flags_set.hxx>
-#include <o3tl/lru_map.hxx>
-#include <comphelper/hash.hxx>
-#include <tools/stream.hxx>
-#include <vcl/BinaryDataContainer.hxx>
 
-#include <vcl/filter/pdfobjectcontainer.hxx>
+#include <pdf/BitmapID.hxx>
 #include <pdf/ExternalPDFStreams.hxx>
+#include <pdf/Matrix3.hxx>
+#include <pdf/ResourceDict.hxx>
 #include <pdf/pdfbuildin_fonts.hxx>
 #include <pdf/pdffontcache.hxx>
+
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/util/XURLTransformer.hpp>
+
+#include <list>
+#include <map>
+#include <memory>
+#include <string_view>
+#include <unordered_map>
+#include <vector>
 
 class StyleSettings;
 class FontSelectPattern;
@@ -63,7 +66,7 @@ class FontSubsetInfo;
 class ZCodec;
 class EncHashTransporter;
 struct BitStreamState;
-class PhysicalFontFace;
+namespace vcl::font { class PhysicalFontFace; }
 class SvStream;
 class SvMemoryStream;
 
@@ -722,8 +725,8 @@ private:
     std::vector< TilingEmit >           m_aTilings;
     std::vector< TransparencyEmit >     m_aTransparentObjects;
     /*  contains all font subsets in use */
-    std::map<const PhysicalFontFace*, FontSubset> m_aSubsets;
-    std::map<const PhysicalFontFace*, EmbedFont> m_aSystemFonts;
+    std::map<const vcl::font::PhysicalFontFace*, FontSubset> m_aSubsets;
+    std::map<const vcl::font::PhysicalFontFace*, EmbedFont> m_aSystemFonts;
     sal_Int32                           m_nNextFID;
     PDFFontCache                        m_aFontCache;
 
@@ -808,7 +811,7 @@ i12626
     void appendLiteralStringEncrypt( std::string_view rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer );
 
     /* creates fonts and subsets that will be emitted later */
-    void registerGlyph(const GlyphItem* pGlyph, const PhysicalFontFace* pFont, const std::vector<sal_Ucs>& rCodeUnits, sal_uInt8& nMappedGlyph, sal_Int32& nMappedFontObject);
+    void registerGlyph(const GlyphItem* pGlyph, const vcl::font::PhysicalFontFace* pFont, const std::vector<sal_Ucs>& rCodeUnits, sal_uInt8& nMappedGlyph, sal_Int32& nMappedFontObject);
 
     /*  emits a text object according to the passed layout */
     /* TODO: remove rText as soon as SalLayout will change so that rText is not necessary anymore */
@@ -853,9 +856,9 @@ i12626
     /* writes a builtin font object and returns its objectid (or 0 in case of failure ) */
     sal_Int32 emitBuildinFont( const pdf::BuildinFontFace*, sal_Int32 nObject );
     /* writes a type1 system font object and returns its mapping from font ids to object ids (or 0 in case of failure ) */
-    std::map< sal_Int32, sal_Int32 > emitSystemFont( const PhysicalFontFace*, EmbedFont const & );
+    std::map< sal_Int32, sal_Int32 > emitSystemFont( const vcl::font::PhysicalFontFace*, EmbedFont const & );
     /* writes a font descriptor and returns its object id (or 0) */
-    sal_Int32 emitFontDescriptor( const PhysicalFontFace*, FontSubsetInfo const &, sal_Int32 nSubsetID, sal_Int32 nStream );
+    sal_Int32 emitFontDescriptor( const vcl::font::PhysicalFontFace*, FontSubsetInfo const &, sal_Int32 nSubsetID, sal_Int32 nStream );
     /* writes a ToUnicode cmap, returns the corresponding stream object */
     sal_Int32 createToUnicodeCMap( sal_uInt8 const * pEncoding, const sal_Ucs* pCodeUnits, const sal_Int32* pCodeUnitsPerGlyph,
                                    const sal_Int32* pEncToUnicodeIndex, int nGlyphs );
@@ -1274,4 +1277,4 @@ public:
 
 } // namespace vcl
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

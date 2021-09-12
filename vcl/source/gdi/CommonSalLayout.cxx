@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <sal/log.hxx>
 #include <unotools/configmgr.hxx>
 #include <o3tl/temporary.hxx>
@@ -27,7 +29,7 @@
 
 #include <ImplLayoutArgs.hxx>
 #include <TextLayoutCache.hxx>
-#include <fontselect.hxx>
+#include <font/FontSelectPattern.hxx>
 #include <salgdi.hxx>
 #include <sallayout.hxx>
 
@@ -831,4 +833,4 @@ bool GenericSalLayout::IsKashidaPosValid(int nCharPos) const
     return false;
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

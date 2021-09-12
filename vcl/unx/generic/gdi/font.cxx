@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <vcl/sysdata.hxx>
 #include <vcl/fontcharmap.hxx>
 
@@ -81,7 +83,7 @@ std::unique_ptr<GenericSalLayout> X11SalGraphics::GetTextLayout(int nFallbackLev
 
 bool X11SalGraphics::CreateFontSubset(
                                    const OUString& rToFile,
-                                   const PhysicalFontFace* pFont,
+                                   const vcl::font::PhysicalFontFace* pFont,
                                    const sal_GlyphId* pGlyphIds,
                                    const sal_uInt8* pEncoding,
                                    sal_Int32* pWidths,
@@ -93,7 +95,7 @@ bool X11SalGraphics::CreateFontSubset(
             pGlyphIds, pEncoding, pWidths, nGlyphCount, rInfo);
 }
 
-const void* X11SalGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, tools::Long* pDataLen)
+const void* X11SalGraphics::GetEmbedFontData(const vcl::font::PhysicalFontFace* pFont, tools::Long* pDataLen)
 {
     return mxTextRenderImpl->GetEmbedFontData(pFont, pDataLen);
 }
@@ -103,7 +105,7 @@ void X11SalGraphics::FreeEmbedFontData( const void* pData, tools::Long nLen )
     mxTextRenderImpl->FreeEmbedFontData(pData, nLen);
 }
 
-void X11SalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
+void X11SalGraphics::GetGlyphWidths( const vcl::font::PhysicalFontFace* pFont,
                                    bool bVertical,
                                    std::vector< sal_Int32 >& rWidths,
                                    Ucs2UIntMap& rUnicodeEnc )
@@ -111,4 +113,4 @@ void X11SalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
     mxTextRenderImpl->GetGlyphWidths(pFont, bVertical, rWidths, rUnicodeEnc);
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

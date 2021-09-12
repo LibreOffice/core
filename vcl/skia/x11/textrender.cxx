@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <skia/x11/textrender.hxx>
 
 #include <unx/fc_fontoptions.hxx>
@@ -32,7 +34,7 @@ void SkiaTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGr
 {
     const FreetypeFontInstance& rInstance = static_cast<FreetypeFontInstance&>(rLayout.GetFont());
     const FreetypeFont& rFont = rInstance.GetFreetypeFont();
-    const FontSelectPattern& rFSD = rInstance.GetFontSelectPattern();
+    const vcl::font::FontSelectPattern& rFSD = rInstance.GetFontSelectPattern();
     int nHeight = rFSD.mnHeight;
     int nWidth = rFSD.mnWidth ? rFSD.mnWidth : nHeight;
     if (nWidth == 0 || nHeight == 0)
@@ -82,4 +84,4 @@ void FontConfigFontOptions::cairo_font_options_substitute(FcPattern* pPattern)
 }
 #endif
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

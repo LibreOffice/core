@@ -17,20 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_WIN_WINLAYOUT_HXX
-#define INCLUDED_VCL_INC_WIN_WINLAYOUT_HXX
+#pragma once
+
+#include <sal/config.h>
 
 #include <rtl/ustring.hxx>
-
-#include <sallayout.hxx>
-#include <svsys.h>
-#include <win/salgdi.h>
 #include <o3tl/sorted_vector.hxx>
+
+#include <svsys.h>
+#include <sallayout.hxx>
+#include <win/salgdi.h>
 
 // win32 specific logical font instance
 class WinFontInstance : public LogicalFontInstance
 {
-    friend rtl::Reference<LogicalFontInstance> WinFontFace::CreateFontInstance(const FontSelectPattern&) const;
+    friend rtl::Reference<LogicalFontInstance> WinFontFace::CreateFontInstance(const vcl::font::FontSelectPattern&) const;
 
 public:
     ~WinFontInstance() override;
@@ -54,7 +55,7 @@ public:
     bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const override;
 
 private:
-    explicit WinFontInstance(const WinFontFace&, const FontSelectPattern&);
+    explicit WinFontInstance(const WinFontFace&, const vcl::font::FontSelectPattern&);
 
     hb_font_t* ImplInitHbFont() override;
     bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const override;
@@ -94,6 +95,4 @@ public:
         HDC hDC) override;
 };
 
-#endif // INCLUDED_VCL_INC_WIN_WINLAYOUT_HXX
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

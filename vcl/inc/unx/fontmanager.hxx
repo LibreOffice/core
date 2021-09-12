@@ -17,23 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_FONTMANAGER_HXX
-#define INCLUDED_VCL_INC_FONTMANAGER_HXX
+#pragma once
 
+#include <sal/config.h>
 #include <config_options.h>
+
 #include <tools/fontenum.hxx>
+
 #include <vcl/dllapi.h>
 #include <vcl/glyphitem.hxx>
 #include <vcl/timer.hxx>
-#include <com/sun/star/lang/Locale.hpp>
+
 #include <unx/fc_fontoptions.hxx>
 
+#include <com/sun/star/lang/Locale.hpp>
+
 #include <map>
-#include <set>
 #include <memory>
+#include <set>
 #include <string_view>
-#include <vector>
 #include <unordered_map>
+#include <vector>
 
 /*
  *  some words on metrics: every length returned by PrintFontManager and
@@ -43,7 +47,7 @@
 class FontAttributes;
 class FontSubsetInfo;
 class FontConfigFontOptions;
-class FontSelectPattern;
+namespace vcl::font { class FontSelectPattern; }
 class GenericUnixSalData;
 
 namespace psp {
@@ -319,12 +323,10 @@ public:
 
     static std::unique_ptr<FontConfigFontOptions> getFontOptions(const FontAttributes& rFontAttributes, int nSize);
 
-    void Substitute(FontSelectPattern &rPattern, OUString& rMissingCodes);
+    void Substitute(vcl::font::FontSelectPattern &rPattern, OUString& rMissingCodes);
 
 };
 
 } // namespace
 
-#endif // INCLUDED_VCL_INC_FONTMANAGER_HXX
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

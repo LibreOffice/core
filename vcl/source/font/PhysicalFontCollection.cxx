@@ -277,7 +277,7 @@ PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont( FontSelectPatt
     return pFallbackData;
 }
 
-void PhysicalFontCollection::Add( PhysicalFontFace* pNewData )
+void PhysicalFontCollection::Add( vcl::font::PhysicalFontFace* pNewData )
 {
     OUString aSearchName = GetEnglishSearchFontName( pNewData->GetFamilyName() );
 
@@ -889,9 +889,9 @@ std::shared_ptr<PhysicalFontCollection> PhysicalFontCollection::Clone() const
     return xClonedCollection;
 }
 
-std::unique_ptr<PhysicalFontFaceCollection> PhysicalFontCollection::GetFontFaceCollection() const
+std::unique_ptr<vcl::font::PhysicalFontFaceCollection> PhysicalFontCollection::GetFontFaceCollection() const
 {
-    std::unique_ptr<PhysicalFontFaceCollection> pDeviceFontList(new PhysicalFontFaceCollection);
+    std::unique_ptr<vcl::font::PhysicalFontFaceCollection> pDeviceFontList(new vcl::font::PhysicalFontFaceCollection);
 
     for (auto const& family : maPhysicalFontFamilies)
     {

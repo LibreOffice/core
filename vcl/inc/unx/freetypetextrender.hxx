@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_FREETYPETEXTRENDER_HXX
-#define INCLUDED_VCL_INC_UNX_FREETYPETEXTRENDER_HXX
+#pragma once
+
+#include <sal/config.h>
 
 #include <textrender.hxx>
 
@@ -48,17 +49,17 @@ public:
     virtual bool                AddTempDevFont( PhysicalFontCollection*, const OUString& rFileURL, const OUString& rFontName ) override;
     virtual bool                CreateFontSubset(
                                     const OUString& rToFile,
-                                    const PhysicalFontFace*,
+                                    const vcl::font::PhysicalFontFace*,
                                     const sal_GlyphId* pGlyphIDs,
                                     const sal_uInt8* pEncoding,
                                     sal_Int32* pWidths,
                                     int nGlyphs,
                                     FontSubsetInfo& rInfo) override;
 
-    virtual const void*         GetEmbedFontData(const PhysicalFontFace*, tools::Long* pDataLen) override;
+    virtual const void*         GetEmbedFontData(const vcl::font::PhysicalFontFace*, tools::Long* pDataLen) override;
     virtual void                FreeEmbedFontData( const void* pData, tools::Long nDataLen ) override;
     virtual void                GetGlyphWidths(
-                                    const PhysicalFontFace*,
+                                    const vcl::font::PhysicalFontFace*,
                                     bool bVertical,
                                     std::vector< sal_Int32 >& rWidths,
                                     Ucs2UIntMap& rUnicodeEnc ) override;
@@ -67,6 +68,4 @@ public:
                                 GetTextLayout(int nFallbackLevel) override;
 };
 
-#endif
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

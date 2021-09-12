@@ -17,13 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_QUARTZ_SALGDI_H
-#define INCLUDED_VCL_INC_QUARTZ_SALGDI_H
+#pragma once
 
-#include <vector>
+#include <sal/config.h>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <tools/long.hxx>
+
+#include <vcl/fontcapabilities.hxx>
+#include <vcl/metric.hxx>
 
 #include <premac.h>
 #ifdef MACOSX
@@ -37,27 +39,25 @@
 #endif
 #include <postmac.h>
 
-#include <vcl/fontcapabilities.hxx>
-#include <vcl/metric.hxx>
-
-
 #include <fontinstance.hxx>
+#include <font/PhysicalFontFace.hxx>
 #include <impfontmetricdata.hxx>
-#include <PhysicalFontFace.hxx>
 #include <salgdi.hxx>
 
+#include <quartz/CGHelpers.hxx>
 #include <quartz/salgdicommon.hxx>
-#include <unordered_map>
+
 #include <hb-ot.h>
 
-#include <quartz/CGHelpers.hxx>
+#include <unordered_map>
+#include <vector>
 
 class AquaSalFrame;
 class FontAttributes;
 class XorEmulation;
 
 // CoreText-specific physically available font face
-class CoreTextFontFace : public PhysicalFontFace
+class CoreTextFontFace : public vcl::font::PhysicalFontFace
 {
 public:
                                     CoreTextFontFace( const FontAttributes&, sal_IntPtr nFontID );
@@ -72,7 +72,7 @@ public:
     bool GetFontCapabilities(vcl::FontCapabilities&) const override;
     bool                            HasChar( sal_uInt32 cChar ) const;
 
-    rtl::Reference<LogicalFontInstance> CreateFontInstance(const FontSelectPattern&) const override;
+    rtl::Reference<LogicalFontInstance> CreateFontInstance(const vcl::font::FontSelectPattern&) const override;
 
 private:
     const sal_IntPtr                mnFontId;
@@ -83,7 +83,7 @@ private:
 
 class CoreTextStyle final : public LogicalFontInstance
 {
-    friend rtl::Reference<LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const FontSelectPattern&) const;
+    friend rtl::Reference<LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const vcl::font::FontSelectPattern&) const;
 
 public:
     ~CoreTextStyle() override;
@@ -101,7 +101,7 @@ public:
     bool mbFauxBold;
 
 private:
-    explicit CoreTextStyle(const PhysicalFontFace&, const FontSelectPattern&);
+    explicit CoreTextStyle(const vcl::font::PhysicalFontFace&, const vcl::font::FontSelectPattern&);
 
     hb_font_t* ImplInitHbFont() override;
     bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const override;
@@ -551,7 +551,7 @@ public:
     // implementation note: encoding 0 with glyph id 0 should be added implicitly
     // as "undefined character"
     virtual bool            CreateFontSubset( const OUString& rToFile,
-                                                  const PhysicalFontFace* pFont,
+                                                  const vcl::font::PhysicalFontFace* pFont,
                                                   const sal_GlyphId* pGlyphIds,
                                                   const sal_uInt8* pEncoding,
                                                   sal_Int32* pWidths,
@@ -563,12 +563,12 @@ public:
     // embeddable by GetDevFontList or NULL in case of error
     // parameters: pFont: describes the font in question
     //             pDataLen: out parameter, contains the byte length of the returned buffer
-    virtual const void*     GetEmbedFontData(const PhysicalFontFace*, tools::Long* pDataLen)
+    virtual const void*     GetEmbedFontData(const vcl::font::PhysicalFontFace*, tools::Long* pDataLen)
         override;
     // frees the font data again
     virtual void            FreeEmbedFontData( const void* pData, tools::Long nDataLen ) override;
 
-    virtual void            GetGlyphWidths( const PhysicalFontFace*,
+    virtual void            GetGlyphWidths( const vcl::font::PhysicalFontFace*,
                                             bool bVertical,
                                             std::vector< sal_Int32 >& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc ) override;
@@ -581,12 +581,9 @@ public:
                             GetGraphicsData() const override;
 
 private:
-    static bool             GetRawFontData( const PhysicalFontFace* pFontData,
+    static bool             GetRawFontData( const vcl::font::PhysicalFontFace* pFontData,
                                 std::vector<unsigned char>& rBuffer,
                                 bool* pJustCFF );
 };
 
-
-#endif // INCLUDED_VCL_INC_QUARTZ_SALGDI_H
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

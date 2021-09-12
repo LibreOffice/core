@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
 #include <skia/win/gdiimpl.hxx>
 
 #include <win/saldata.hxx>
@@ -232,7 +234,7 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
     font.setEdging(logFont.lfQuality == NONANTIALIASED_QUALITY ? SkFont::Edging::kAlias
                                                                : fontEdging);
 
-    const FontSelectPattern& rFSD = pWinFont->GetFontSelectPattern();
+    const vcl::font::FontSelectPattern& rFSD = pWinFont->GetFontSelectPattern();
     int nHeight = rFSD.mnHeight;
     int nWidth = rFSD.mnWidth ? rFSD.mnWidth : nHeight;
     if (nWidth == 0 || nHeight == 0)
@@ -383,4 +385,4 @@ void WinSkiaSalGraphicsImpl::prepareSkia()
     SkiaHelper::prepareSkia(createVulkanWindowContext);
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

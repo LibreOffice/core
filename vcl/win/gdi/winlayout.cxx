@@ -18,36 +18,32 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 #include <config_features.h>
 
-#include <memory>
-
-#include <o3tl/safeint.hxx>
-#include <osl/module.h>
-#include <osl/file.h>
 #include <sal/log.hxx>
-
+#include <osl/file.h>
+#include <osl/module.h>
+#include <rtl/character.hxx>
 #include <comphelper/windowserrorstring.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <o3tl/hash_combine.hxx>
+#include <o3tl/safeint.hxx>
+
+#include <outdev.h>
+#include <sallayout.hxx>
+#include <sft.hxx>
 
 #include <win/salgdi.h>
-#include <win/saldata.hxx>
-#include <win/wingdiimpl.hxx>
-#include <outdev.h>
-
 #include <win/DWriteTextRenderer.hxx>
+#include <win/saldata.hxx>
 #include <win/scoped_gdi.hxx>
+#include <win/wingdiimpl.hxx>
 
-#include <sft.hxx>
-#include <sallayout.hxx>
-
+#include <algorithm>
 #include <cstdio>
 #include <cstdlib>
-
-#include <rtl/character.hxx>
-
-#include <o3tl/hash_combine.hxx>
-#include <algorithm>
+#include <memory>
 
 #include <shlwapi.h>
 #include <winver.h>
@@ -104,7 +100,7 @@ std::unique_ptr<GenericSalLayout> WinSalGraphics::GetTextLayout(int nFallbackLev
     return std::make_unique<GenericSalLayout>(*mpWinFontEntry[nFallbackLevel]);
 }
 
-WinFontInstance::WinFontInstance(const WinFontFace& rPFF, const FontSelectPattern& rFSP)
+WinFontInstance::WinFontInstance(const WinFontFace& rPFF, const vcl::font::FontSelectPattern& rFSP)
     : LogicalFontInstance(rPFF, rFSP)
     , m_pGraphics(nullptr)
     , m_hFont(nullptr)
@@ -120,7 +116,7 @@ WinFontInstance::~WinFontInstance()
 
 bool WinFontInstance::hasHScale() const
 {
-    const FontSelectPattern& rPattern = GetFontSelectPattern();
+    const vcl::font::FontSelectPattern& rPattern = GetFontSelectPattern();
     int nHeight(rPattern.mnHeight);
     int nWidth(rPattern.mnWidth ? rPattern.mnWidth * GetAverageWidthFactor() : nHeight);
     return nWidth != nHeight;
@@ -128,7 +124,7 @@ bool WinFontInstance::hasHScale() const
 
 float WinFontInstance::getHScale() const
 {
-    const FontSelectPattern& rPattern = GetFontSelectPattern();
+    const vcl::font::FontSelectPattern& rPattern = GetFontSelectPattern();
     int nHeight(rPattern.mnHeight);
     if (!nHeight)
         return 1.0;
@@ -162,7 +158,7 @@ struct BlobReference
 };
 }
 
-using BlobCacheKey = std::pair<rtl::Reference<PhysicalFontFace>, hb_tag_t>;
+using BlobCacheKey = std::pair<rtl::Reference<vcl::font::PhysicalFontFace>, hb_tag_t>;
 
 namespace
 {
@@ -188,7 +184,8 @@ static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
     assert(hDC);
     assert(hFont);
 
-    BlobCacheKey cacheKey{ rtl::Reference<PhysicalFontFace>(pFont->GetFontFace()), nTableTag };
+    BlobCacheKey cacheKey{ rtl::Reference<vcl::font::PhysicalFontFace>(pFont->GetFontFace()),
+                           nTableTag };
     auto it = gCache.find(cacheKey);
     if (it != gCache.end())
     {
@@ -288,4 +285,4 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     ::SelectFont(hDC, hOrigFont);
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

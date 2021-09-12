@@ -18,33 +18,35 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
+#include <config_features.h>
 #include <config_folders.h>
 
+#include <sal/log.hxx>
+#include <osl/file.hxx>
+#include <osl/process.h>
+#include <rtl/bootstrap.h>
+#include <rtl/strbuf.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
-#include <osl/file.hxx>
-#include <osl/process.h>
-#include <rtl/bootstrap.h>
-#include <rtl/strbuf.hxx>
-#include <tools/long.hxx>
 #include <comphelper/lok.hxx>
+#include <tools/long.hxx>
 
-#include <vcl/metric.hxx>
 #include <vcl/fontcharmap.hxx>
+#include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 
-#include <quartz/ctfonts.hxx>
+#include <outdev.h>
+#include <PhysicalFontCollection.hxx>
 #include <fontsubset.hxx>
 #include <impfont.hxx>
 #include <impfontcharmap.hxx>
 #include <impfontmetricdata.hxx>
-#include <outdev.h>
-#include <PhysicalFontCollection.hxx>
+
+#include <quartz/ctfonts.hxx>
 
 #ifdef MACOSX
 #include <osx/salframe.h>
@@ -56,7 +58,6 @@
 #include <sallayout.hxx>
 #include <sft.hxx>
 
-#include <config_features.h>
 #include <vcl/skia/SkiaHelper.hxx>
 #if HAVE_FEATURE_SKIA
 #include <skia/osx/gdiimpl.hxx>
@@ -109,7 +110,7 @@ bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPattern& 
 }
 
 CoreTextFontFace::CoreTextFontFace( const FontAttributes& rDFA, sal_IntPtr nFontId )
-  : PhysicalFontFace( rDFA )
+  : vcl::font::PhysicalFontFace( rDFA )
   , mnFontId( nFontId )
   , mbFontCapabilitiesRead( false )
 {
@@ -556,7 +557,7 @@ static void FakeDirEntry( const char aTag[5], ByteCount nOfs, ByteCount nLen,
 
 // fake a TTF or CFF font as directly accessing font file is not possible
 // when only the fontid is known. This approach also handles *.font fonts.
-bool AquaSalGraphics::GetRawFontData( const PhysicalFontFace* pFontData,
+bool AquaSalGraphics::GetRawFontData( const vcl::font::PhysicalFontFace* pFontData,
                                       std::vector<unsigned char>& rBuffer, bool* pJustCFF )
 {
     const CoreTextFontFace* pMacFont = static_cast<const CoreTextFontFace*>(pFontData);
@@ -742,7 +743,7 @@ bool AquaSalGraphics::GetRawFontData( const PhysicalFontFace* pFontData,
     return true;
 }
 
-void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bVertical,
+void AquaSalGraphics::GetGlyphWidths( const vcl::font::PhysicalFontFace* pFontData, bool bVertical,
     std::vector< sal_Int32 >& rGlyphWidths, Ucs2UIntMap& rUnicodeEnc )
 {
     rGlyphWidths.clear();
@@ -768,7 +769,7 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
     ::CloseTTFont( pSftFont );
 }
 
-const void* AquaSalGraphics::GetEmbedFontData(const PhysicalFontFace*, tools::Long* /*pDataLen*/)
+const void* AquaSalGraphics::GetEmbedFontData(const vcl::font::PhysicalFontFace*, tools::Long* /*pDataLen*/)
 {
     return nullptr;
 }
@@ -806,4 +807,4 @@ bool AquaSharedAttributes::checkContext()
 
 #endif
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
