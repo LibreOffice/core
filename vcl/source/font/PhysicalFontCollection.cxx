@@ -25,8 +25,9 @@
 #include <unotools/fontdefs.hxx>
 #include <o3tl/sorted_vector.hxx>
 
-#include <outdev.h>
+#include <font/GlyphFallbackFontSubstitution.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
+#include <font/PreMatchFontSubstitution.hxx>
 #include <PhysicalFontCollection.hxx>
 
 #include <memory>
@@ -77,12 +78,12 @@ PhysicalFontCollection::~PhysicalFontCollection()
     Clear();
 }
 
-void PhysicalFontCollection::SetPreMatchHook( ImplPreMatchFontSubstitution* pHook )
+void PhysicalFontCollection::SetPreMatchHook( PreMatchFontSubstitution* pHook )
 {
     mpPreMatchHook = pHook;
 }
 
-void PhysicalFontCollection::SetFallbackHook( ImplGlyphFallbackFontSubstitution* pHook )
+void PhysicalFontCollection::SetFallbackHook( GlyphFallbackFontSubstitution* pHook )
 {
     mpFallbackHook = pHook;
 }

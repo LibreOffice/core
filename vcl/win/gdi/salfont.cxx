@@ -51,12 +51,13 @@
 #include <vcl/settings.hxx>
 #include <vcl/sysdata.hxx>
 
-#include <outdev.h>
 #include <impfontcharmap.hxx>
 #include <impfontmetricdata.hxx>
 #include <impglyphitem.hxx>
-#include <fontsubset.hxx>
+#include <font/GlyphFallbackFontSubstitution.hxx>
+#include <font/PreMatchFontSubstitution.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
+#include <fontsubset.hxx>
 #include <PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <sft.hxx>
