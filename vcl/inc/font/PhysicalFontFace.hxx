@@ -31,14 +31,16 @@
 
 class LogicalFontInstance;
 struct FontMatchStatus;
-class FontSelectPattern;
-class PhysicalFontFace;
 
 namespace vcl
 {
 struct FontCapabilities;
 class PhysicalFontFamily;
 }
+
+namespace vcl::font
+{
+class FontSelectPattern;
 
 struct FontMatchStatus
 {
@@ -48,7 +50,6 @@ public:
     int                 mnWidthMatch;
     const OUString*     mpTargetStyleName;
 };
-
 
 // TODO: no more direct access to members
 // TODO: get rid of height/width for scalable fonts
@@ -78,6 +79,8 @@ protected:
     tools::Long                    mnWidth;    // Width (in pixels)
     tools::Long                    mnHeight;   // Height (in pixels)
 };
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
 

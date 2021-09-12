@@ -70,12 +70,12 @@ class CoreTextGlyphFallbackSubstititution
 :    public ImplGlyphFallbackFontSubstitution
 {
 public:
-    bool FindFontSubstitute(FontSelectPattern&, LogicalFontInstance* pLogicalFont, OUString&) const override;
+    bool FindFontSubstitute(vcl::font::FontSelectPattern&, LogicalFontInstance* pLogicalFont, OUString&) const override;
 };
 
 }
 
-bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPattern& rPattern, LogicalFontInstance* pLogicalFont,
+bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(vcl::font::FontSelectPattern& rPattern, LogicalFontInstance* pLogicalFont,
     OUString& rMissingChars) const
 {
     bool bFound = false;
@@ -109,7 +109,7 @@ bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPattern& 
 }
 
 CoreTextFontFace::CoreTextFontFace( const FontAttributes& rDFA, sal_IntPtr nFontId )
-  : PhysicalFontFace( rDFA )
+  : vcl::font::PhysicalFontFace( rDFA )
   , mnFontId( nFontId )
   , mbFontCapabilitiesRead( false )
 {
@@ -377,7 +377,7 @@ void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout)
 #endif
 
     const CoreTextStyle& rStyle = *static_cast<const CoreTextStyle*>(&rLayout.GetFont());
-    const FontSelectPattern& rFontSelect = rStyle.GetFontSelectPattern();
+    const vcl::font::FontSelectPattern& rFontSelect = rStyle.GetFontSelectPattern();
     if (rFontSelect.mnHeight == 0)
     {
         SAL_WARN("vcl.quartz", "AquaSalGraphics::DrawTextLayout(): rFontSelect.mnHeight is zero!?");
@@ -556,7 +556,7 @@ static void FakeDirEntry( const char aTag[5], ByteCount nOfs, ByteCount nLen,
 
 // fake a TTF or CFF font as directly accessing font file is not possible
 // when only the fontid is known. This approach also handles *.font fonts.
-bool AquaSalGraphics::GetRawFontData( const PhysicalFontFace* pFontData,
+bool AquaSalGraphics::GetRawFontData( const vcl::font::PhysicalFontFace* pFontData,
                                       std::vector<unsigned char>& rBuffer, bool* pJustCFF )
 {
     const CoreTextFontFace* pMacFont = static_cast<const CoreTextFontFace*>(pFontData);
@@ -742,7 +742,7 @@ bool AquaSalGraphics::GetRawFontData( const PhysicalFontFace* pFontData,
     return true;
 }
 
-void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bVertical,
+void AquaSalGraphics::GetGlyphWidths( const vcl::font::PhysicalFontFace* pFontData, bool bVertical,
     std::vector< sal_Int32 >& rGlyphWidths, Ucs2UIntMap& rUnicodeEnc )
 {
     rGlyphWidths.clear();
@@ -768,7 +768,7 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
     ::CloseTTFont( pSftFont );
 }
 
-const void* AquaSalGraphics::GetEmbedFontData(const PhysicalFontFace*, tools::Long* /*pDataLen*/)
+const void* AquaSalGraphics::GetEmbedFontData(const vcl::font::PhysicalFontFace*, tools::Long* /*pDataLen*/)
 {
     return nullptr;
 }
