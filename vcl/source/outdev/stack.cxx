@@ -27,7 +27,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
 
-#include <outdev.h>
 #include <drawmode.hxx>
 #include <salgdi.hxx>
 
