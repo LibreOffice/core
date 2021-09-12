@@ -34,7 +34,7 @@ void SkiaTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGr
 {
     const FreetypeFontInstance& rInstance = static_cast<FreetypeFontInstance&>(rLayout.GetFont());
     const FreetypeFont& rFont = rInstance.GetFreetypeFont();
-    const FontSelectPattern& rFSD = rInstance.GetFontSelectPattern();
+    const vcl::font::FontSelectPattern& rFSD = rInstance.GetFontSelectPattern();
     int nHeight = rFSD.mnHeight;
     int nWidth = rFSD.mnWidth ? rFSD.mnWidth : nHeight;
     if (nWidth == 0 || nHeight == 0)
