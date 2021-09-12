@@ -403,7 +403,7 @@ namespace emfio
 
     void EmfReader::ReadGDIComment(sal_uInt32 nCommentId)
     {
-        sal_uInt32 nPublicCommentIdentifier;
+        sal_uInt32 nPublicCommentIdentifier(0);
         mpInputStream->ReadUInt32(nPublicCommentIdentifier);
 
         SAL_INFO("emfio", "\t\tEMR_COMMENT_PUBLIC, id: 0x" << std::hex << nCommentId << std::dec);
@@ -421,7 +421,7 @@ namespace emfio
                 SAL_INFO("emfio", "\t\t\t\t\tRight: " << right);
                 SAL_INFO("emfio", "\t\t\t\t\tBottom: " << bottom);
 
-                sal_uInt32 nDescChars;
+                sal_uInt32 nDescChars(0);
                 mpInputStream->ReadUInt32(nDescChars);
 
                 OUString aDesc;
