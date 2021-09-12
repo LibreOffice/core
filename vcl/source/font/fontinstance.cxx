@@ -22,9 +22,9 @@
 #include <hb-ot.h>
 #include <hb-graphite2.h>
 
+#include <font/PhysicalFontFace.hxx>
 #include <fontinstance.hxx>
 #include <impfontcache.hxx>
-#include <PhysicalFontFace.hxx>
 
 #include <o3tl/hash_combine.hxx>
 
@@ -45,7 +45,7 @@ namespace std
 }
 
 
-LogicalFontInstance::LogicalFontInstance(const PhysicalFontFace& rFontFace, const vcl::font::FontSelectPattern& rFontSelData )
+LogicalFontInstance::LogicalFontInstance(const vcl::font::PhysicalFontFace& rFontFace, const vcl::font::FontSelectPattern& rFontSelData )
     : mxFontMetric( new ImplFontMetricData( rFontSelData ))
     , mpConversion( nullptr )
     , mnLineHeight( 0 )
@@ -56,7 +56,7 @@ LogicalFontInstance::LogicalFontInstance(const PhysicalFontFace& rFontFace, cons
     , m_aFontSelData(rFontSelData)
     , m_pHbFont(nullptr)
     , m_nAveWidthFactor(1.0f)
-    , m_pFontFace(&const_cast<PhysicalFontFace&>(rFontFace))
+    , m_pFontFace(&const_cast<vcl::font::PhysicalFontFace&>(rFontFace))
 {
 }
 

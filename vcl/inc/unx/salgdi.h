@@ -51,7 +51,7 @@ class X11SalVirtualDevice;
 class X11SalGraphicsImpl;
 class X11SkiaSalVirtualDevice;
 class PhysicalFontCollection;
-class PhysicalFontFace;
+namespace vcl::font { class PhysicalFontFace; }
 class SalGraphicsImpl;
 class TextRenderImpl;
 
@@ -122,18 +122,18 @@ public:
 
     virtual bool                    CreateFontSubset(
                                         const OUString& rToFile,
-                                        const PhysicalFontFace*,
+                                        const vcl::font::PhysicalFontFace*,
                                         const sal_GlyphId* pGlyphIDs,
                                         const sal_uInt8* pEncoding,
                                         sal_Int32* pWidths,
                                         int nGlyphs,
                                         FontSubsetInfo& rInfo ) override;
 
-    virtual const void*             GetEmbedFontData(const PhysicalFontFace*, tools::Long* pDataLen) override;
+    virtual const void*             GetEmbedFontData(const vcl::font::PhysicalFontFace*, tools::Long* pDataLen) override;
     virtual void                    FreeEmbedFontData( const void* pData, tools::Long nDataLen ) override;
 
     virtual void                    GetGlyphWidths(
-                                        const PhysicalFontFace*,
+                                        const vcl::font::PhysicalFontFace*,
                                         bool bVertical,
                                         std::vector< sal_Int32 >& rWidths,
                                         Ucs2UIntMap& rUnicodeEnc ) override;

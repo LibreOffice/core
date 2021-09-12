@@ -260,12 +260,12 @@ OUString EmbeddedFontsHelper::fontFileUrl( std::u16string_view familyName, FontF
     PhysicalFontCollection fonts;
     graphics->GetDevFontList( &fonts );
     std::unique_ptr< vcl::font::PhysicalFontFaceCollection > fontInfo( fonts.GetFontFaceCollection());
-    PhysicalFontFace* selected = nullptr;
+    vcl::font::PhysicalFontFace* selected = nullptr;
     for( int i = 0;
          i < fontInfo->Count();
          ++i )
     {
-        PhysicalFontFace* f = fontInfo->Get( i );
+        vcl::font::PhysicalFontFace* f = fontInfo->Get( i );
         if( f->GetFamilyName() == familyName )
         {
             // Ignore comparing text encodings, at least for now. They cannot be trivially compared

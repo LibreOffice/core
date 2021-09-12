@@ -22,7 +22,7 @@
 #include <sal/config.h>
 
 #include <unx/glyphcache.hxx>
-#include <PhysicalFontFace.hxx>
+#include <font/PhysicalFontFace.hxx>
 #include <fontinstance.hxx>
 #include <vcl/glyphitem.hxx>
 
@@ -92,7 +92,7 @@ private:
     mutable FontCharMapRef mxFontCharMap;
 };
 
-class FreetypeFontFace : public PhysicalFontFace
+class FreetypeFontFace : public vcl::font::PhysicalFontFace
 {
 private:
     FreetypeFontInfo*             mpFreetypeFontInfo;
@@ -100,7 +100,7 @@ private:
 public:
                             FreetypeFontFace( FreetypeFontInfo*, const FontAttributes& );
 
-    virtual rtl::Reference<LogicalFontInstance> CreateFontInstance( const vcl::font::FontSelectPattern& ) const override;
+    virtual rtl::Reference<LogicalFontInstance> CreateFontInstance(const vcl::font::FontSelectPattern&) const override;
     virtual sal_IntPtr      GetFontId() const override { return mpFreetypeFontInfo->GetFontId(); }
 
     FontCharMapRef GetFontCharMap() const override { return mpFreetypeFontInfo->GetFontCharMap(); }
@@ -121,7 +121,7 @@ class SAL_DLLPUBLIC_RTTI FreetypeFontInstance final : public LogicalFontInstance
     virtual hb_font_t* ImplInitHbFont() override;
     virtual bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const override;
 
-    explicit FreetypeFontInstance(const PhysicalFontFace& rPFF, const vcl::font::FontSelectPattern& rFSP);
+    explicit FreetypeFontInstance(const vcl::font::PhysicalFontFace& rPFF, const vcl::font::FontSelectPattern& rFSP);
 
 public:
     virtual ~FreetypeFontInstance() override;
