@@ -1,4 +1,3 @@
-
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
@@ -34,7 +33,7 @@
 #include <win/salgdi.h>
 #include <win/saldata.hxx>
 #include <win/wingdiimpl.hxx>
-#include <outdev.h>
+#include <ImplOutDevData.hxx>
 
 #include <win/DWriteTextRenderer.hxx>
 #include <win/scoped_gdi.hxx>
@@ -290,4 +289,4 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     ::SelectFont(hDC, hOrigFont);
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

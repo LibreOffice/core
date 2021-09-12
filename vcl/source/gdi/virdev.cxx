@@ -25,9 +25,10 @@
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/virdev.hxx>
 
-#include <outdev.h>
+#include <ImplOutDevData.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <PhysicalFontCollection.hxx>
+#include <impfontcache.hxx>
 #include <salinst.hxx>
 #include <salgdi.hxx>
 #include <salvd.hxx>
