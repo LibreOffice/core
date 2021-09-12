@@ -33,9 +33,9 @@ class SwCallLink
 public:
     SwCursorShell & m_rShell;
     sal_uLong m_nNode;
+    tools::Long m_nLeftFramePos;
     sal_Int32 m_nContent;
     SwNodeType m_nNodeType;
-    tools::Long m_nLeftFramePos;
     bool m_bHasSelection;
 
     explicit SwCallLink( SwCursorShell & rSh );

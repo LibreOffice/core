@@ -38,14 +38,14 @@ class SW_DLLPUBLIC SwVisibleCursor
     friend void InitCore();
     friend void FinitCore();
 
-    bool m_bIsVisible;
-    bool m_bIsDragCursor;
-
-    vcl::Cursor m_aTextCursor;
     const SwCursorShell* m_pCursorShell;
+    vcl::Cursor m_aTextCursor;
 
     /// For LibreOfficeKit only - remember what page we were at the last time.
     sal_uInt16 m_nPageLastTime;
+
+    bool m_bIsVisible;
+    bool m_bIsDragCursor;
 
 public:
     SwVisibleCursor( const SwCursorShell * pCShell );
