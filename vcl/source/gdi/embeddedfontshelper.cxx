@@ -19,7 +19,6 @@
 #include <vcl/embeddedfontshelper.hxx>
 #include <vcl/svapp.hxx>
 
-#include <outdev.h>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <PhysicalFontCollection.hxx>
 #include <salgdi.hxx>
