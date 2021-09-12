@@ -600,11 +600,11 @@ void ScTabPageSortOptions::Reset( const SfxItemSet* /* rArgSet */ )
     }
 
     m_xBtnCase->set_active( aSortData.bCaseSens );
-    m_xBtnFormats->set_active( aSortData.bIncludePattern );
+    m_xBtnFormats->set_active( aSortData.aDataAreaExtras.mbCellFormats );
     m_xBtnHeader->set_active( aSortData.bHasHeader );
     m_xBtnNaturalSort->set_active( aSortData.bNaturalSort );
-    m_xBtnIncComments->set_active( aSortData.bIncludeComments );
-    m_xBtnIncImages->set_active( aSortData.bIncludeGraphicObjects );
+    m_xBtnIncComments->set_active( aSortData.aDataAreaExtras.mbCellNotes );
+    m_xBtnIncImages->set_active( aSortData.aDataAreaExtras.mbCellDrawObjects );
 
     if ( aSortData.bByRow )
     {
@@ -669,9 +669,9 @@ bool ScTabPageSortOptions::FillItemSet( SfxItemSet* rArgSet )
     aNewSortData.bHasHeader      = m_xBtnHeader->get_active();
     aNewSortData.bCaseSens       = m_xBtnCase->get_active();
     aNewSortData.bNaturalSort    = m_xBtnNaturalSort->get_active();
-    aNewSortData.bIncludeComments= m_xBtnIncComments->get_active();
-    aNewSortData.bIncludeGraphicObjects = m_xBtnIncImages->get_active();
-    aNewSortData.bIncludePattern = m_xBtnFormats->get_active();
+    aNewSortData.aDataAreaExtras.mbCellNotes = m_xBtnIncComments->get_active();
+    aNewSortData.aDataAreaExtras.mbCellDrawObjects = m_xBtnIncImages->get_active();
+    aNewSortData.aDataAreaExtras.mbCellFormats = m_xBtnFormats->get_active();
     aNewSortData.bInplace        = !m_xBtnCopyResult->get_active();
     aNewSortData.nDestCol        = theOutPos.Col();
     aNewSortData.nDestRow        = theOutPos.Row();

@@ -599,12 +599,11 @@ public:
 
     bool        ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rStartRow,
                                       SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly,
-                                      bool bStickyTopRow, bool bStickyLeftCol, bool bConsiderCellNotes,
-                                      bool bConsiderCellDrawObjects, bool bConsiderCellPatterns ) const;
+                                      bool bStickyTopRow, bool bStickyLeftCol,
+                                      ScDataAreaExtras* pDataAreaExtras ) const;
 
-    SCROW       GetLastDataRow( SCCOL nCol1, SCCOL nCol2, SCROW nLastRow, bool bConsiderCellNotes = false,
-                                bool bConsiderCellDrawObjects = false,
-                                bool bConsiderCellPatterns = false ) const;
+    SCROW       GetLastDataRow( SCCOL nCol1, SCCOL nCol2, SCROW nLastRow,
+                                ScDataAreaExtras* pDataAreaExtras = nullptr ) const;
 
     SCSIZE      GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow,
                                         SCCOL nEndCol, SCROW nEndRow, ScDirection eDir ) const;
@@ -1197,10 +1196,17 @@ private:
         const ScSortParam& rSortParam, SCCOLROW nInd1, SCCOLROW nInd2,
         bool bKeepQuery, bool bUpdateRefs );
     void        QuickSort( ScSortInfoArray*, SCCOLROW nLo, SCCOLROW nHi);
-    void SortReorderByColumn( const ScSortInfoArray* pArray, SCROW nRow1, SCROW nRow2, bool bPattern, ScProgress* pProgress );
+    void        SortReorderByColumn( const ScSortInfoArray* pArray, SCROW nRow1, SCROW nRow2,
+                                     bool bPattern, ScProgress* pProgress );
+    void        SortReorderAreaExtrasByColumn( const ScSortInfoArray* pArray, SCROW nDataRow1, SCROW nDataRow2,
+                                               const ScDataAreaExtras& rDataAreaExtras, ScProgress* pProgress );
 
-    void SortReorderByRow( ScSortInfoArray* pArray, SCCOL nCol1, SCCOL nCol2, ScProgress* pProgress );
-    void SortReorderByRowRefUpdate( ScSortInfoArray* pArray, SCCOL nCol1, SCCOL nCol2, ScProgress* pProgress );
+    void        SortReorderByRow( ScSortInfoArray* pArray, SCCOL nCol1, SCCOL nCol2,
+                                  ScProgress* pProgress, bool bOnlyDataAreaExtras );
+    void        SortReorderByRowRefUpdate( ScSortInfoArray* pArray, SCCOL nCol1, SCCOL nCol2,
+                                           ScProgress* pProgress );
+    void        SortReorderAreaExtrasByRow( ScSortInfoArray* pArray, SCCOL nDataCol1, SCCOL nDataCol2,
+                                            const ScDataAreaExtras& rDataAreaExtras, ScProgress* pProgress );
 
     bool        CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
     bool        CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
