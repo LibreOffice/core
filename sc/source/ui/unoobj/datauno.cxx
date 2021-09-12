@@ -307,7 +307,7 @@ void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq
     pArray[3].Value <<= aFields;
 
     pArray[4].Name = SC_UNONAME_BINDFMT;
-    pArray[4].Value <<= rParam.bIncludePattern;
+    pArray[4].Value <<= rParam.aDataAreaExtras.mbCellFormats;
 
     pArray[5].Name = SC_UNONAME_COPYOUT;
     pArray[5].Value <<= !rParam.bInplace;
@@ -409,7 +409,7 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
             rParam.bCaseSens = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
         }
         else if (aPropName == SC_UNONAME_BINDFMT)
-            rParam.bIncludePattern = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
+            rParam.aDataAreaExtras.mbCellFormats = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
         else if (aPropName == SC_UNONAME_COPYOUT)
             rParam.bInplace = !ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
         else if (aPropName == SC_UNONAME_OUTPOS)

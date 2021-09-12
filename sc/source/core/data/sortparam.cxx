@@ -33,11 +33,13 @@ ScSortParam::ScSortParam()
 }
 
 ScSortParam::ScSortParam( const ScSortParam& r ) :
-        nCol1(r.nCol1),nRow1(r.nRow1),nCol2(r.nCol2),nRow2(r.nRow2),nUserIndex(r.nUserIndex),
+        nCol1(r.nCol1),nRow1(r.nRow1),nCol2(r.nCol2),nRow2(r.nRow2),
+        aDataAreaExtras(r.aDataAreaExtras),
+        nUserIndex(r.nUserIndex),
         bHasHeader(r.bHasHeader),bByRow(r.bByRow),bCaseSens(r.bCaseSens),
-        bNaturalSort(r.bNaturalSort),bIncludeComments(r.bIncludeComments),
-        bIncludeGraphicObjects(r.bIncludeGraphicObjects),bUserDef(r.bUserDef),
-        bIncludePattern(r.bIncludePattern),bInplace(r.bInplace),
+        bNaturalSort(r.bNaturalSort),
+        bUserDef(r.bUserDef),
+        bInplace(r.bInplace),
         nDestTab(r.nDestTab),nDestCol(r.nDestCol),nDestRow(r.nDestRow),
         maKeyState( r.maKeyState ),
         aCollatorLocale( r.aCollatorLocale ), aCollatorAlgorithm( r.aCollatorAlgorithm ),
@@ -53,13 +55,14 @@ void ScSortParam::Clear()
 
     nCol1=nCol2=nDestCol = 0;
     nRow1=nRow2=nDestRow = 0;
+    aDataAreaExtras = ScDataAreaExtras();
+    aDataAreaExtras.mbCellDrawObjects = true;
+    aDataAreaExtras.mbCellFormats = true;
     nCompatHeader = 2;
     nDestTab = 0;
     nUserIndex = 0;
     bHasHeader=bCaseSens=bUserDef=bNaturalSort = false;
-    bIncludeComments = false;
-    bIncludeGraphicObjects = true;
-    bByRow=bIncludePattern=bInplace = true;
+    bByRow = bInplace = true;
     aCollatorLocale = css::lang::Locale();
     aCollatorAlgorithm.clear();
 
@@ -77,15 +80,13 @@ ScSortParam& ScSortParam::operator=( const ScSortParam& r )
     nRow1           = r.nRow1;
     nCol2           = r.nCol2;
     nRow2           = r.nRow2;
+    aDataAreaExtras = r.aDataAreaExtras;
     nUserIndex      = r.nUserIndex;
     bHasHeader      = r.bHasHeader;
     bByRow          = r.bByRow;
     bCaseSens       = r.bCaseSens;
     bNaturalSort    = r.bNaturalSort;
-    bIncludeComments= r.bIncludeComments;
-    bIncludeGraphicObjects = r.bIncludeGraphicObjects;
     bUserDef        = r.bUserDef;
-    bIncludePattern = r.bIncludePattern;
     bInplace        = r.bInplace;
     nDestTab        = r.nDestTab;
     nDestCol        = r.nDestCol;
@@ -123,15 +124,13 @@ bool ScSortParam::operator==( const ScSortParam& rOther ) const
         && (nRow1           == rOther.nRow1)
         && (nCol2           == rOther.nCol2)
         && (nRow2           == rOther.nRow2)
+        && (aDataAreaExtras == rOther.aDataAreaExtras)
         && (bHasHeader      == rOther.bHasHeader)
         && (bByRow          == rOther.bByRow)
         && (bCaseSens       == rOther.bCaseSens)
         && (bNaturalSort    == rOther.bNaturalSort)
-        && (bIncludeComments== rOther.bIncludeComments)
-        && (bIncludeGraphicObjects == rOther.bIncludeGraphicObjects)
         && (bUserDef        == rOther.bUserDef)
         && (nUserIndex      == rOther.nUserIndex)
-        && (bIncludePattern == rOther.bIncludePattern)
         && (bInplace        == rOther.bInplace)
         && (nDestTab        == rOther.nDestTab)
         && (nDestCol        == rOther.nDestCol)
@@ -155,15 +154,19 @@ bool ScSortParam::operator==( const ScSortParam& rOther ) const
 }
 
 ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld ) :
-        nCol1(rSub.nCol1),nRow1(rSub.nRow1),nCol2(rSub.nCol2),nRow2(rSub.nRow2),nUserIndex(rSub.nUserIndex),
+        nCol1(rSub.nCol1),nRow1(rSub.nRow1),nCol2(rSub.nCol2),nRow2(rSub.nRow2),
+        aDataAreaExtras(rOld.aDataAreaExtras),
+        nUserIndex(rSub.nUserIndex),
         bHasHeader(true),bByRow(true),bCaseSens(rSub.bCaseSens),bNaturalSort(rOld.bNaturalSort),
-        bIncludeComments(rOld.bIncludeComments),bIncludeGraphicObjects(rOld.bIncludeGraphicObjects),
-        bUserDef(rSub.bUserDef),bIncludePattern(rSub.bIncludePattern),
+        bUserDef(rSub.bUserDef),
         bInplace(true),
         nDestTab(0),nDestCol(0),nDestRow(0),
         aCollatorLocale( rOld.aCollatorLocale ), aCollatorAlgorithm( rOld.aCollatorAlgorithm ),
         nCompatHeader( rOld.nCompatHeader )
 {
+    aDataAreaExtras.mbCellFormats = rSub.bIncludePattern;
+    aDataAreaExtras.resetArea();
+
     sal_uInt16 i;
 
     //  first the groups from the partial results
@@ -201,12 +204,14 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
 ScSortParam::ScSortParam( const ScQueryParam& rParam, SCCOL nCol ) :
         nCol1(nCol),nRow1(rParam.nRow1),nCol2(nCol),nRow2(rParam.nRow2),nUserIndex(0),
         bHasHeader(rParam.bHasHeader),bByRow(true),bCaseSens(rParam.bCaseSens),
-        bNaturalSort(false),bIncludeComments(false),bIncludeGraphicObjects(true),
+        bNaturalSort(false),
 //TODO: what about Locale and Algorithm?
-        bUserDef(false),bIncludePattern(false),
+        bUserDef(false),
         bInplace(true),
         nDestTab(0),nDestCol(0),nDestRow(0), nCompatHeader(2)
 {
+    aDataAreaExtras.mbCellDrawObjects = true;
+
     ScSortKeyState aKeyState;
     aKeyState.bDoSort = true;
     aKeyState.nField = nCol;
