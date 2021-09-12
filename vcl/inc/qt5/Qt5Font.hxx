@@ -37,7 +37,7 @@ class Qt5Font final : public QFont, public LogicalFontInstance
 
     virtual hb_font_t* ImplInitHbFont() override;
 
-    explicit Qt5Font(const PhysicalFontFace&, const vcl::font::FontSelectPattern&);
+    explicit Qt5Font(const vcl::font::PhysicalFontFace&, const vcl::font::FontSelectPattern&);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
