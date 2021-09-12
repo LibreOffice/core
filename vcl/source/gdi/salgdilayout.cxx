@@ -22,7 +22,7 @@
 #include <memory>
 #include <config_features.h>
 #include <sal/log.hxx>
-#include <PhysicalFontFace.hxx>
+#include <font/PhysicalFontFace.hxx>
 #include <fontsubset.hxx>
 #include <salgdi.hxx>
 #include <salframe.hxx>
@@ -885,7 +885,7 @@ OUString SalGraphics::getRenderBackendName() const
 }
 
 void SalGraphics::GetGlyphWidths(const vcl::AbstractTrueTypeFont& rTTF,
-                                 const PhysicalFontFace& rFontFace, const bool bVertical,
+                                 const vcl::font::PhysicalFontFace& rFontFace, const bool bVertical,
                                  std::vector<sal_Int32>& rWidths, Ucs2UIntMap& rUnicodeEnc)
 {
     rWidths.clear();
