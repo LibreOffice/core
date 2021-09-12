@@ -55,7 +55,7 @@
 #include <outdev.h>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <PhysicalFontCollection.hxx>
-#include <PhysicalFontFace.hxx>
+#include <font/PhysicalFontFace.hxx>
 #include <sft.hxx>
 #include <win/saldata.hxx>
 #include <win/salgdi.h>
@@ -180,13 +180,13 @@ public:
     bool FindFontSubstitute(FontSelectPattern&, LogicalFontInstance* pLogicalFont, OUString& rMissingChars) const override;
 private:
     HDC mhDC;
-    bool HasMissingChars(PhysicalFontFace*, OUString& rMissingChars) const;
+    bool HasMissingChars(vcl::font::PhysicalFontFace*, OUString& rMissingChars) const;
 };
 
 }
 
 // does a font face hold the given missing characters?
-bool WinGlyphFallbackSubstititution::HasMissingChars(PhysicalFontFace* pFace, OUString& rMissingChars) const
+bool WinGlyphFallbackSubstititution::HasMissingChars(vcl::font::PhysicalFontFace* pFace, OUString& rMissingChars) const
 {
     WinFontFace* pWinFont = static_cast< WinFontFace* >(pFace);
     FontCharMapRef xFontCharMap = pWinFont->GetFontCharMap();
@@ -305,7 +305,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPattern& rFont
     PhysicalFontFamily* pFontFamily = findDevFontListByLocale(*pFontCollection, aLanguageTag);
     if( pFontFamily )
     {
-        PhysicalFontFace* pFace = pFontFamily->FindBestFontFace( rFontSelData );
+        vcl::font::PhysicalFontFace* pFace = pFontFamily->FindBestFontFace( rFontSelData );
         if( HasMissingChars( pFace, rMissingChars ) )
         {
             rFontSelData.maSearchName = pFontFamily->GetSearchName();
@@ -321,7 +321,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPattern& rFont
                                                      rFontSelData.maSearchName );
     if( pFontFamily )
     {
-        PhysicalFontFace* pFace = pFontFamily->FindBestFontFace( rFontSelData );
+        vcl::font::PhysicalFontFace* pFace = pFontFamily->FindBestFontFace( rFontSelData );
         if( HasMissingChars( pFace, rMissingChars ) )
         {
             rFontSelData.maSearchName = pFontFamily->GetSearchName();
@@ -340,7 +340,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPattern& rFont
     bool bFound = false;
     for( int i = 0; i < nTestFontCount; ++i )
     {
-        PhysicalFontFace* pFace = pTestFontList->Get( i );
+        vcl::font::PhysicalFontFace* pFace = pTestFontList->Get( i );
         bFound = HasMissingChars( pFace, rMissingChars );
         if( !bFound )
             continue;
@@ -628,7 +628,7 @@ void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
 
 WinFontFace::WinFontFace( const FontAttributes& rDFS,
     BYTE eWinCharSet, BYTE nPitchAndFamily )
-:   PhysicalFontFace( rDFS ),
+:   vcl::font::PhysicalFontFace( rDFS ),
     mnId( 0 ),
     mbFontCapabilitiesRead( false ),
     meWinCharSet( eWinCharSet ),
@@ -764,7 +764,7 @@ void WinSalGraphics::SetTextColor( Color nColor )
 }
 
 void ImplGetLogFontFromFontSelect( const FontSelectPattern& rFont,
-                                   const PhysicalFontFace* pFontFace,
+                                   const vcl::font::PhysicalFontFace* pFontFace,
                                    LOGFONTW& rLogFont )
 {
     OUString aName;
@@ -813,7 +813,7 @@ void ImplGetLogFontFromFontSelect( const FontSelectPattern& rFont,
 }
 
 HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const & i_rFont,
-                                    const PhysicalFontFace * i_pFontFace,
+                                    const vcl::font::PhysicalFontFace * i_pFontFace,
                                     HFONT& o_rOldFont)
 {
     HFONT hNewFont = nullptr;
@@ -1531,7 +1531,7 @@ SFErrCodes ScopedTrueTypeFont::open(void const * pBuffer, sal_uInt32 nLen,
 }
 
 bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
-    const PhysicalFontFace* pFont, const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
+    const vcl::font::PhysicalFontFace* pFont, const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
     sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo )
 {
     // TODO: use more of the central font-subsetting code, move stuff there if needed
@@ -1600,7 +1600,7 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
                                             pEncoding, pGlyphWidths, nGlyphCount);
 }
 
-const void* WinSalGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, tools::Long* pDataLen)
+const void* WinSalGraphics::GetEmbedFontData(const vcl::font::PhysicalFontFace* pFont, tools::Long* pDataLen)
 {
     // create matching FontSelectPattern
     // we need just enough to get to the font file data
@@ -1626,7 +1626,7 @@ void WinSalGraphics::FreeEmbedFontData( const void* pData, tools::Long /*nLen*/ 
     delete[] static_cast<char const *>(pData);
 }
 
-void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
+void WinSalGraphics::GetGlyphWidths( const vcl::font::PhysicalFontFace* pFont,
                                      bool bVertical,
                                      std::vector< sal_Int32 >& rWidths,
                                      Ucs2UIntMap& rUnicodeEnc )
