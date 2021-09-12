@@ -125,6 +125,11 @@ namespace Translate
         auto aFind = aCache.find(sUnique);
         if (aFind != aCache.end())
             return aFind->second;
+#if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
+        std::locale aRet(sIdentifier.getStr());
+        aCache[sUnique] = aRet;
+        return aRet;
+#else
         boost::locale::generator gen;
         gen.characters(boost::locale::char_facet);
         gen.categories(boost::locale::message_facet | boost::locale::information_facet);
@@ -196,10 +201,14 @@ namespace Translate
 
         aCache[sUnique] = aRet;
         return aRet;
+#endif
     }
 
     OUString get(TranslateId sContextAndId, const std::locale &loc)
     {
+#if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
+        return createFromUtf8(sContextAndId.mpId, strlen(sContextAndId.mpId));
+#else
         assert(!strchr(sContextAndId.mpId, '\004') && "should be using nget, not get");
 
         //if it's a key id locale, generate it here
@@ -221,10 +230,15 @@ namespace Translate
                 result = result.replaceAll(OUString::fromUtf8("\xC3\x9F"), "ss");
         }
         return result;
+#endif
     }
 
     OUString nget(TranslateNId aContextSingularPlural, int n, const std::locale &loc)
     {
+#if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
+        const char* pForm = n == 0 ? aContextSingularPlural.mpSingular : aContextSingularPlural.mpPlural;
+        return createFromUtf8(pForm, strlen(pForm));
+#else
         //if it's a key id locale, generate it here
         if (std::use_facet<boost::locale::info>(loc).language() == "qtz")
         {
@@ -244,6 +258,7 @@ namespace Translate
                 result = result.replaceAll(OUString::fromUtf8("\xC3\x9F"), "ss");
         }
         return result;
+#endif
     }
 
     static ResHookProc pImplResHookProc = nullptr;
