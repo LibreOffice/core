@@ -126,7 +126,7 @@ namespace Translate
         if (aFind != aCache.end())
             return aFind->second;
 #if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
-        std::locale aRet(sIdentifier.getStr());
+        std::locale aRet;
         aCache[sUnique] = aRet;
         return aRet;
 #else
