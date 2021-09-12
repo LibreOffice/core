@@ -29,7 +29,7 @@
 #include <font/FontSelectPattern.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <fontinstance.hxx>
-#include <fontselect.hxx>
+#include <font/FontSelectPattern.hxx>
 #include <impfontmetricdata.hxx>
 #include <sft.hxx>
 
