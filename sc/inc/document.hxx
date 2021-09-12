@@ -201,6 +201,7 @@ class ScColumnsRange;
 struct ScFilterEntries;
 typedef o3tl::sorted_vector<sal_uInt32> ScCondFormatIndexes;
 struct ScSheetLimits;
+struct ScDataAreaExtras;
 
 namespace sc {
 
@@ -1398,18 +1399,20 @@ public:
 
                     /** Shrink a range to only include used data area.
 
-                        @param o_bShrunk
-                               Out parameter, true if area was shrunk, false if not.
+                        @param  o_bShrunk
+                                Out parameter, true if area was shrunk, false if not.
+                        @param  bColumnsOnly
+                                If TRUE, shrink only by columns, not rows.
                         @param  bStickyTopRow
                                 If TRUE, do not adjust the top row.
                         @param  bStickyLeftCol
                                 If TRUE, do not adjust the left column.
-                        @param  bConsiderCellNotes
-                                If TRUE, consider the presence of cell notes besides data.
-                        @param  bConsiderCellDrawObjects
-                                If TRUE, consider the presence of draw objects anchored to the cell.
-                        @param bConsiderCellFormats
-                                If TRUE, consider the presence of cell formats.
+                        @param  pDataAreaExtras
+                                Consider additional area attributes like cell
+                                formatting, cell notes and draw objects. The
+                                possibly larger area than the actual cell
+                                content data area is returned within the
+                                struct.
 
                         @returns true if there is any data, false if not.
                      */
@@ -1417,9 +1420,7 @@ public:
                                           SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
                                           SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly,
                                           bool bStickyTopRow = false, bool bStickyLeftCol = false,
-                                          bool bConsiderCellNotes = false,
-                                          bool bConsiderCellDrawObjects = false,
-                                          bool bConsiderCellFormats = false ) const;
+                                          ScDataAreaExtras* pDataAreaExtras = nullptr ) const;
 
     /**
      * Return the last non-empty row position in given columns that's no
