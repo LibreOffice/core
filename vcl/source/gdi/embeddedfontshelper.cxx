@@ -20,7 +20,6 @@
 #include <vcl/embeddedfontshelper.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 
-#include <outdev.h>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <PhysicalFontCollection.hxx>
 #include <salgdi.hxx>
