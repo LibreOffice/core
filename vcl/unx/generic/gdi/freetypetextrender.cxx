@@ -33,7 +33,7 @@
 #include <unx/glyphcache.hxx>
 #include <unx/fc_fontoptions.hxx>
 #include <unx/freetype_glyphcache.hxx>
-#include <PhysicalFontFace.hxx>
+#include <font/PhysicalFontFace.hxx>
 #include <impfontmetricdata.hxx>
 
 #include <sallayout.hxx>
@@ -157,7 +157,7 @@ std::unique_ptr<GenericSalLayout> FreeTypeTextRenderImpl::GetTextLayout(int nFal
 
 bool FreeTypeTextRenderImpl::CreateFontSubset(
                                    const OUString& rToFile,
-                                   const PhysicalFontFace* pFont,
+                                   const vcl::font::PhysicalFontFace* pFont,
                                    const sal_GlyphId* pGlyphIds,
                                    const sal_uInt8* pEncoding,
                                    sal_Int32* pWidths,
@@ -183,7 +183,7 @@ bool FreeTypeTextRenderImpl::CreateFontSubset(
     return bSuccess;
 }
 
-const void* FreeTypeTextRenderImpl::GetEmbedFontData(const PhysicalFontFace* pFont, tools::Long* pDataLen)
+const void* FreeTypeTextRenderImpl::GetEmbedFontData(const vcl::font::PhysicalFontFace* pFont, tools::Long* pDataLen)
 {
     // in this context the pFont->GetFontId() is a valid PSP
     // font since they are the only ones left after the PDF
@@ -199,7 +199,7 @@ void FreeTypeTextRenderImpl::FreeEmbedFontData( const void* pData, tools::Long n
     GenPspGraphics::DoFreeEmbedFontData( pData, nLen );
 }
 
-void FreeTypeTextRenderImpl::GetGlyphWidths( const PhysicalFontFace* pFont,
+void FreeTypeTextRenderImpl::GetGlyphWidths( const vcl::font::PhysicalFontFace* pFont,
                                    bool bVertical,
                                    std::vector< sal_Int32 >& rWidths,
                                    Ucs2UIntMap& rUnicodeEnc )
