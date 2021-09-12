@@ -14484,7 +14484,6 @@ vcl/inc/osx/salprn.h
 vcl/inc/osx/salsys.h
 vcl/inc/osx/saltimer.h
 vcl/inc/osx/vclnsapp.h
-vcl/inc/outdev.h
 vcl/inc/pdf/pdffontcache.hxx
 vcl/inc/pdf/pdfwriter_impl.hxx
 vcl/inc/ppdparser.hxx
@@ -14940,6 +14939,7 @@ vcl/source/filter/wmf/emfwr.hxx
 vcl/source/filter/wmf/wmf.cxx
 vcl/source/filter/wmf/wmfwr.cxx
 vcl/source/filter/wmf/wmfwr.hxx
+vcl/source/font/DirectFontSubstitution.cxx
 vcl/source/font/FontSelectPattern.cxx
 vcl/source/font/PhysicalFontCollection.cxx
 vcl/source/font/PhysicalFontFace.cxx
