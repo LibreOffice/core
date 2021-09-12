@@ -47,6 +47,8 @@
 
 #include <vcl/uitest/uiobject.hxx>
 
+#include <ImplOutDevData.hxx>
+#include <impfontcache.hxx>
 #include <salframe.hxx>
 #include <salobj.hxx>
 #include <salinst.hxx>
@@ -54,7 +56,6 @@
 #include <svdata.hxx>
 #include <window.h>
 #include <toolbox.h>
-#include <outdev.h>
 #include <brdwin.hxx>
 #include <helpwin.hxx>
 
