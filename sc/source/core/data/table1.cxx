@@ -976,7 +976,7 @@ bool ScTable::GetDataAreaSubrange( ScRange& rRange ) const
 
 bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rStartRow,
         SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly, bool bStickyTopRow, bool bStickyLeftCol,
-        bool bConsiderCellNotes, bool bConsiderCellDrawObjects, bool bConsiderCellFormats ) const
+        ScDataAreaExtras* pDataAreaExtras ) const
 {
     rStartCol = std::min<SCCOL>( rStartCol, aCol.size()-1 );
     // check for rEndCol is done below.
@@ -1010,14 +1010,18 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
     {
         if (aCol[rEndCol].IsEmptyBlock( rStartRow, rEndRow))
         {
-            if (bConsiderCellNotes && !aCol[rEndCol].IsNotesEmptyBlock( rStartRow, rEndRow ))
-                break;
-
-            if (bConsiderCellDrawObjects && !aCol[rEndCol].IsDrawObjectsEmptyBlock( rStartRow, rEndRow ))
-                break;
-
-            if (bConsiderCellFormats && aCol[rEndCol].HasVisibleAttrIn(rStartRow, rEndRow))
-                break;
+            if (pDataAreaExtras && pDataAreaExtras->mnEndCol < rEndCol)
+            {
+                // Check in order of likeliness.
+                if (    (pDataAreaExtras->mbCellFormats
+                            && aCol[rEndCol].GetPatternCount( rStartRow, rEndRow) > 1
+                            && aCol[rEndCol].HasVisibleAttrIn( rStartRow, rEndRow)) ||
+                        (pDataAreaExtras->mbCellNotes
+                         && !aCol[rEndCol].IsNotesEmptyBlock( rStartRow, rEndRow)) ||
+                        (pDataAreaExtras->mbCellDrawObjects
+                         && !aCol[rEndCol].IsDrawObjectsEmptyBlock( rStartRow, rEndRow)))
+                    pDataAreaExtras->mnEndCol = rEndCol;
+            }
 
             --rEndCol;
             o_bShrunk = true;
@@ -1032,14 +1036,18 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
         {
             if (aCol[rStartCol].IsEmptyBlock( rStartRow, rEndRow))
             {
-                if (bConsiderCellNotes && !aCol[rStartCol].IsNotesEmptyBlock( rStartRow, rEndRow ))
-                    break;
-
-                if (bConsiderCellDrawObjects && !aCol[rStartCol].IsDrawObjectsEmptyBlock( rStartRow, rEndRow ))
-                    break;
-
-                if (bConsiderCellFormats && aCol[rEndCol].HasVisibleAttrIn(rStartRow, rEndRow))
-                    break;
+                if (pDataAreaExtras && pDataAreaExtras->mnStartCol > rStartCol)
+                {
+                    // Check in order of likeliness.
+                    if (    (pDataAreaExtras->mbCellFormats
+                                && aCol[rStartCol].GetPatternCount( rStartRow, rEndRow) > 1
+                                && aCol[rStartCol].HasVisibleAttrIn( rStartRow, rEndRow)) ||
+                            (pDataAreaExtras->mbCellNotes
+                             && !aCol[rStartCol].IsNotesEmptyBlock( rStartRow, rEndRow)) ||
+                            (pDataAreaExtras->mbCellDrawObjects
+                             && !aCol[rStartCol].IsDrawObjectsEmptyBlock( rStartRow, rEndRow)))
+                        pDataAreaExtras->mnStartCol = rStartCol;
+                }
 
                 ++rStartCol;
                 o_bShrunk = true;
@@ -1058,8 +1066,7 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
                 bool bFound = false;
                 for (SCCOL i=rStartCol; i<=rEndCol && !bFound; i++)
                 {
-                    if (aCol[i].HasDataAt(rStartRow, bConsiderCellNotes, bConsiderCellDrawObjects,
-                                          bConsiderCellFormats))
+                    if (aCol[i].HasDataAt(rStartRow, pDataAreaExtras))
                         bFound = true;
                 }
                 if (!bFound)
@@ -1074,8 +1081,7 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
 
         while (rStartRow < rEndRow)
         {
-            SCROW nLastDataRow = GetLastDataRow(rStartCol, rEndCol, rEndRow, bConsiderCellNotes,
-                                                bConsiderCellDrawObjects, bConsiderCellFormats);
+            SCROW nLastDataRow = GetLastDataRow(rStartCol, rEndCol, rEndRow, pDataAreaExtras);
             if (0 <= nLastDataRow && nLastDataRow < rEndRow)
             {
                 rEndRow = std::max( rStartRow, nLastDataRow);
@@ -1089,11 +1095,10 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
     return rStartCol != rEndCol || (bColumnsOnly ?
             !aCol[rStartCol].IsEmptyBlock( rStartRow, rEndRow) :
             (rStartRow != rEndRow ||
-                aCol[rStartCol].HasDataAt( rStartRow, bConsiderCellNotes, bConsiderCellDrawObjects, bConsiderCellFormats )));
+                aCol[rStartCol].HasDataAt( rStartRow, pDataAreaExtras)));
 }
 
-SCROW ScTable::GetLastDataRow( SCCOL nCol1, SCCOL nCol2, SCROW nLastRow, bool bConsiderCellNotes,
-                               bool bConsiderCellDrawObjects, bool bConsiderCellFormats ) const
+SCROW ScTable::GetLastDataRow( SCCOL nCol1, SCCOL nCol2, SCROW nLastRow, ScDataAreaExtras* pDataAreaExtras ) const
 {
     if ( !IsColValid( nCol1 ) || !ValidCol( nCol2 ) )
         return -1;
@@ -1103,8 +1108,7 @@ SCROW ScTable::GetLastDataRow( SCCOL nCol1, SCCOL nCol2, SCROW nLastRow, bool bC
     SCROW nNewLastRow = 0;
     for (SCCOL i = nCol1; i <= nCol2; ++i)
     {
-        SCROW nThis = aCol[i].GetLastDataPos(nLastRow, bConsiderCellNotes, bConsiderCellDrawObjects,
-                                             bConsiderCellFormats);
+        SCROW nThis = aCol[i].GetLastDataPos(nLastRow, pDataAreaExtras);
         if (nNewLastRow < nThis)
             nNewLastRow = nThis;
     }

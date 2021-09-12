@@ -253,7 +253,7 @@ void TestSort::testSortHorizontal()
     aSortData.nRow2 = 3;
     aSortData.bHasHeader = true;
     aSortData.bByRow = false; // Sort by column (in horizontal direction).
-    aSortData.bIncludePattern = true;
+    aSortData.aDataAreaExtras.mbCellFormats = true;
     aSortData.maKeyState[0].bDoSort = true;
     aSortData.maKeyState[0].nField = 0;
     aSortData.maKeyState[0].bAscending = true;
@@ -320,7 +320,7 @@ void TestSort::testSortHorizontalWholeColumn()
     aSortData.nRow2 = nRow2;
     aSortData.bHasHeader = false;
     aSortData.bByRow = false; // Sort by column (in horizontal direction).
-    aSortData.bIncludePattern = true;
+    aSortData.aDataAreaExtras.mbCellFormats = true;
     aSortData.maKeyState[0].bDoSort = true;
     aSortData.maKeyState[0].nField = 0;
     aSortData.maKeyState[0].bAscending = true;
@@ -381,7 +381,7 @@ void TestSort::testSortSingleRow()
     aSortData.nRow2 = 0;
     aSortData.bHasHeader = true;
     aSortData.bByRow = true;
-    aSortData.bIncludePattern = true;
+    aSortData.aDataAreaExtras.mbCellFormats = true;
     aSortData.maKeyState[0].bDoSort = true;
     aSortData.maKeyState[0].nField = 0;
     aSortData.maKeyState[0].bAscending = true;
@@ -749,7 +749,7 @@ void TestSort::testSortWithCellFormats()
     aSortData.nRow1 = 0;
     aSortData.nRow2 = 3;
     aSortData.bHasHeader = true;
-    aSortData.bIncludePattern = true;
+    aSortData.aDataAreaExtras.mbCellFormats = true;
     aSortData.maKeyState[0].bDoSort = true;
     aSortData.maKeyState[0].nField = 0;
     aSortData.maKeyState[0].bAscending = true;
