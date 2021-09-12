@@ -23,7 +23,7 @@ class ManualCalcTests(UITestCase):
             xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:D10"}))
 
             # Execute "Define DB Range dialog"
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DefineDBName") as xDefineNameDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DefineDBName") as xDefineNameDlg:
 
 
                 xEntryBox = xDefineNameDlg.getChild("entry")
@@ -167,7 +167,7 @@ class ManualCalcTests(UITestCase):
 
             xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A2:A10"}))
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:RandomNumberGeneratorDialog") as xRandomNumberDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:RandomNumberGeneratorDialog") as xRandomNumberDlg:
                 xDistributionLstBox = xRandomNumberDlg.getChild("distribution-combo")
                 xDistributionLstBox.executeAction("SELECT", mkPropertyValues({"POS": "1"}))
 

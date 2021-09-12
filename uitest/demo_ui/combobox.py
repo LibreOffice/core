@@ -16,7 +16,7 @@ class ComboBoxTest(UITestCase):
 
         with self.ui_test.create_doc_in_start_center("calc"):
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AddName", close_button="cancel") as xAddNameDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AddName", close_button="cancel") as xAddNameDlg:
 
                 scopeCB = xAddNameDlg.getChild("scope")
                 select_pos(scopeCB, "1")

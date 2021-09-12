@@ -48,7 +48,7 @@ class movingAverage(UITestCase):
             enter_text_to_cell(gridwin, "B13", "0")
 
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B13"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:MovingAverageDialog") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:MovingAverageDialog") as xDialog:
                 xinputrangeedit = xDialog.getChild("input-range-edit")
                 xoutputrangeedit = xDialog.getChild("output-range-edit")
                 xgroupedbyrowsradio = xDialog.getChild("groupedby-rows-radio")
@@ -100,7 +100,7 @@ class movingAverage(UITestCase):
             self.assertEqual(get_cell_by_position(document, 0, 5, 0).getString(), "")
 
             # test cancel button
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:MovingAverageDialog", close_button="cancel"):
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:MovingAverageDialog", close_button="cancel"):
                 pass
 
 
@@ -137,7 +137,7 @@ class movingAverage(UITestCase):
             enter_text_to_cell(gridwin, "B13", "0")
 
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B13"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:MovingAverageDialog") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:MovingAverageDialog") as xDialog:
                 xinputrangeedit = xDialog.getChild("input-range-edit")
                 xoutputrangeedit = xDialog.getChild("output-range-edit")
                 xgroupedbyrowsradio = xDialog.getChild("groupedby-rows-radio")

@@ -22,7 +22,7 @@ class findReplace(UITestCase):
             self.assertEqual(impress_doc.CurrentController.getCurrentPage().Number, 1)
 
             # search for string "second"
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
                 searchterm = xDialog.getChild("searchterm")
                 searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"second"}))  #2nd slide
                 xsearch = xDialog.getChild("search")
@@ -45,7 +45,7 @@ class findReplace(UITestCase):
             # click twice the Replace button, check "Replace first first"
 
             # open the dialog again
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
 
                 # verify search string is still "third" from previous search
                 searchterm = xDialog.getChild("searchterm")
@@ -70,7 +70,7 @@ class findReplace(UITestCase):
                 replace.executeAction("CLICK", tuple())   #click twice Replace button (one selects, second replaces)
 
             # reopen the dialog, because of bug 122788
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
 
                 # now replace first (uncheck match case) with word "aaa" - click once Replace All button, check "Replace aaa aaa"
                 matchcase = xDialog.getChild("matchcase")
@@ -84,14 +84,14 @@ class findReplace(UITestCase):
                 replaceall.executeAction("CLICK", tuple()) # click on replace all button
 
             # go to second page
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
                 searchterm = xDialog.getChild("searchterm")
                 searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"second"}))  #2nd slide
                 xsearch = xDialog.getChild("search")
                 xsearch.executeAction("CLICK", tuple())
             self.assertEqual(impress_doc.CurrentController.getCurrentPage().Number, 2)
             #now check if text "Replace aaa aaa" is on first slide
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
                 searchterm = xDialog.getChild("searchterm")
                 backsearch = xDialog.getChild("backsearch")
                 searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))

@@ -19,7 +19,7 @@ class Forms(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "form"}))
 
             # Without the fix in place, this test would have hung here
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:ControlProperties", close_button=""):
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:ControlProperties", close_button=""):
 
                 xCellRange = self.ui_test.wait_until_child_is_available('textfield-Source cell range')
 

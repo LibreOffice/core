@@ -18,7 +18,7 @@ class tdf122449(UITestCase):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             #search word Autocorrect (second find)   .uno:SearchDialog
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
 
                 searchterm = xDialog.getChild("searchterm")
                 searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"Autocorrection"}))

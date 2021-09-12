@@ -29,7 +29,7 @@ class compareDocuments(UITestCase):
                 with self.ui_test.execute_dialog_through_action(xOpenBtn, 'CLICK', close_button="close"):
                     pass
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
                 changesList = xTrackDlg.getChild("writerchanges")
 
                 text = "Unknown Author\t" + datetime.datetime.now().strftime("%m/%d/%Y")
@@ -54,7 +54,7 @@ class compareDocuments(UITestCase):
                 with self.ui_test.execute_dialog_through_action(xOpenBtn, 'CLICK', close_button="close"):
                     pass
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
                 changesList = xTrackDlg.getChild("writerchanges")
 
                 # Check the number of changes

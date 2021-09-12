@@ -25,7 +25,7 @@ class anova(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C5"}))
             #3. Choose Data - Analysis of Variance (ANOVA).
             #4. Choose an arbitrary output cell and click OK.
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AnalysisOfVarianceDialog") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AnalysisOfVarianceDialog") as xDialog:
                 xinputrangeedit = xDialog.getChild("input-range-edit")
                 xoutputrangeedit = xDialog.getChild("output-range-edit")
                 xradiotwofactor = xDialog.getChild("radio-two-factor")

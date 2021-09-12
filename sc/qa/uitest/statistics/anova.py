@@ -57,7 +57,7 @@ class anova(UITestCase):
             enter_text_to_cell(gridwin, "C10", "12")
             enter_text_to_cell(gridwin, "C11", "60")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A2:C13"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AnalysisOfVarianceDialog") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AnalysisOfVarianceDialog") as xDialog:
                 xinputrangeedit = xDialog.getChild("input-range-edit")
                 xoutputrangeedit = xDialog.getChild("output-range-edit")
                 xradiotwofactor = xDialog.getChild("radio-two-factor")
@@ -134,7 +134,7 @@ class anova(UITestCase):
             self.assertEqual(get_cell_by_position(document, 0, 5, 0).getString(), "")
 
             # test cancel button
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AnalysisOfVarianceDialog", close_button="cancel"):
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AnalysisOfVarianceDialog", close_button="cancel"):
                 pass
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -443,7 +443,7 @@ class AutofilterTest(UITestCase):
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
             xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B8"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter") as xDialog:
                 xval1 = xDialog.getChild("val1")
 
                 select_by_text(xval1, "0.365")
@@ -464,7 +464,7 @@ class AutofilterTest(UITestCase):
 
             #Test '<' condition
             xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B8"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter") as xDialog:
 
                 xfield1 = xDialog.getChild("field1")
                 xval1 = xDialog.getChild("val1")
@@ -486,7 +486,7 @@ class AutofilterTest(UITestCase):
 
             #Test '>=' condition
             xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B8"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter") as xDialog:
                 xfield1 = xDialog.getChild("field1")
                 xval1 = xDialog.getChild("val1")
                 xcond1 = xDialog.getChild("cond1")

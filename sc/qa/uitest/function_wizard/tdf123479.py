@@ -25,7 +25,7 @@ class tdf123479(UITestCase):
             #Select D14:D16
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "D14:D16"}))
             #Open Formula Wizard (Ctrl+F2)
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:FunctionDialog") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:FunctionDialog") as xDialog:
                 edArg1 = xDialog.getChild("ED_ARG1")
                 edArg2 = xDialog.getChild("ED_ARG2")
                 formulaRes = xDialog.getChild("formula_result")

@@ -24,7 +24,7 @@ class tdf44861(UITestCase):
             # check option "Enable regular expressions"
             # Press "Replace all"
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
                 searchterm = xDialog.getChild("searchterm")
                 searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
                 searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))

@@ -14,7 +14,7 @@ class tdf132097(UITestCase):
         with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
                 xCols = xDialog.getChild('cols')
                 xSearchTerm = xDialog.getChild("searchterm")
                 xBackSearch = xDialog.getChild("backsearch")

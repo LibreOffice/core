@@ -25,7 +25,7 @@ class tdf39959(UITestCase):
             # 4. Try Find-and-replace (Ctrl+Alt+F) to search for "asdf"
             # Whether the checkbox "in allen Tabellen suchen" is activated or not: LibO Calc never seems to find the text
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
                 searchterm = xDialog.getChild("searchterm")
                 searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
                 searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))

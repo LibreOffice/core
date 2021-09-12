@@ -14,7 +14,7 @@ class findReplace(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("findReplace.odt")) as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
 
                 searchterm = xDialog.getChild("searchterm")
                 searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"second"}))  #2nd page
@@ -32,7 +32,7 @@ class findReplace(UITestCase):
 
 
             #now open dialog and verify find="third" (remember last value); replace value with "First" ( click match case) with word "Replace" - click twice Replace button, check "Replace first first"
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
                 searchterm = xDialog.getChild("searchterm")
                 self.assertEqual(get_state_as_dict(searchterm)["Text"], "third")
                 searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
@@ -93,7 +93,7 @@ class findReplace(UITestCase):
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             type_text(xWriterEdit, "test number1 testnot")
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
                 searchterm = xDialog.getChild("searchterm")
                 searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"T(est|other)\\>"}))   #find
                 replaceterm = xDialog.getChild("replaceterm")
@@ -113,7 +113,7 @@ class findReplace(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf116242.odt")) as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
                 searchterm = xDialog.getChild("searchterm")
                 searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"ţ"}))   #find
                 replaceterm = xDialog.getChild("replaceterm")
@@ -132,7 +132,7 @@ class findReplace(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("findReplace.odt")) as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
 
                 searchterm = xDialog.getChild("searchterm")
                 searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"third"}))
@@ -158,7 +158,7 @@ class findReplace(UITestCase):
 
             self.assertEqual(document.Text.String, "x")
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
 
                 searchterm = xDialog.getChild("searchterm")
                 searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"x"}))

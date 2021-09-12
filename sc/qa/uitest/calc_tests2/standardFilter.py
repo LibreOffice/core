@@ -20,7 +20,7 @@ class standardFilter(UITestCase):
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C8"}))
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter") as xDialog:
                 xfield1 = xDialog.getChild("field1")
                 xval1 = xDialog.getChild("val1")
                 xconnect2 = xDialog.getChild("connect2")
@@ -43,7 +43,7 @@ class standardFilter(UITestCase):
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter") as xDialog:
                 xfield1 = xDialog.getChild("field1")
                 xval1 = xDialog.getChild("val1")
                 xconnect2 = xDialog.getChild("connect2")
@@ -62,7 +62,7 @@ class standardFilter(UITestCase):
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C8"}))
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter") as xDialog:
                 xfield1 = xDialog.getChild("field1")
                 xval1 = xDialog.getChild("val1")
                 xconnect2 = xDialog.getChild("connect2")
@@ -94,7 +94,7 @@ class standardFilter(UITestCase):
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C8"}))
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter") as xDialog:
                 xfield1 = xDialog.getChild("field1")
                 xval1 = xDialog.getChild("val1")
                 xconnect2 = xDialog.getChild("connect2")
@@ -134,7 +134,7 @@ class standardFilter(UITestCase):
             enter_text_to_cell(gridwin, "B3", "5")
             enter_text_to_cell(gridwin, "B4", "6")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B4"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter") as xDialog:
                 xfield1 = xDialog.getChild("field1")
                 xval1 = xDialog.getChild("val1")
                 xcase = xDialog.getChild("case")
@@ -151,7 +151,7 @@ class standardFilter(UITestCase):
             #reopen filter and verify
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter") as xDialog:
                 xfield1 = xDialog.getChild("field1")
                 xval1 = xDialog.getChild("val1")
                 xcase = xDialog.getChild("case")
@@ -178,7 +178,7 @@ class standardFilter(UITestCase):
             enter_text_to_cell(gridwin, "B5", "4")
             enter_text_to_cell(gridwin, "B6", "5")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B6"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter") as xDialog:
                 xfield1 = xDialog.getChild("field1")
                 xval1 = xDialog.getChild("val1")
                 xregexp = xDialog.getChild("regexp")
@@ -197,7 +197,7 @@ class standardFilter(UITestCase):
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter") as xDialog:
                 xfield1 = xDialog.getChild("field1")
                 xval1 = xDialog.getChild("val1")
                 xregexp = xDialog.getChild("regexp")
@@ -224,7 +224,7 @@ class standardFilter(UITestCase):
             enter_text_to_cell(gridwin, "B5", "4")
             enter_text_to_cell(gridwin, "B6", "5")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B6"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter") as xDialog:
                 xfield1 = xDialog.getChild("field1")
                 xval1 = xDialog.getChild("val1")
                 xregexp = xDialog.getChild("regexp")
@@ -243,7 +243,7 @@ class standardFilter(UITestCase):
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter") as xDialog:
                 xfield1 = xDialog.getChild("field1")
                 xval1 = xDialog.getChild("val1")
                 xregexp = xDialog.getChild("regexp")
@@ -282,7 +282,7 @@ class standardFilter(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:D5"}))
             #Choose DATA-FILTER-STANDARDFILTER
             #Choose field name "A"/ Choose condition "Contains"/Enter value "cio"/Press OK button
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter") as xDialog:
                 xfield1 = xDialog.getChild("field1")
                 xval1 = xDialog.getChild("val1")
                 xcond1 = xDialog.getChild("cond1")
@@ -302,7 +302,7 @@ class standardFilter(UITestCase):
             #reopen filter and verify
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter", close_button="cancel") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter", close_button="cancel") as xDialog:
                 xfield1 = xDialog.getChild("field1")
                 xval1 = xDialog.getChild("val1")
                 xcond1 = xDialog.getChild("cond1")
@@ -339,7 +339,7 @@ class standardFilter(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:D5"}))
             #Choose DATA-FILTER-STANDARDFILTER
             #Choose field name "A"/ Choose condition "Does not contain"/Enter value "cio"/Press OK button
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter") as xDialog:
                 xfield1 = xDialog.getChild("field1")
                 xval1 = xDialog.getChild("val1")
                 xcond1 = xDialog.getChild("cond1")
@@ -359,7 +359,7 @@ class standardFilter(UITestCase):
             #reopen filter and verify
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter", close_button="cancel") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter", close_button="cancel") as xDialog:
                 xfield1 = xDialog.getChild("field1")
                 xval1 = xDialog.getChild("val1")
                 xcond1 = xDialog.getChild("cond1")
@@ -397,7 +397,7 @@ class standardFilter(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:D5"}))
             #Choose DATA-FILTER-STANDARDFILTER
             #Choose field name "A"/ Choose condition "Begins with"/Enter value "si"/Press OK button
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter") as xDialog:
                 xfield1 = xDialog.getChild("field1")
                 xval1 = xDialog.getChild("val1")
                 xcond1 = xDialog.getChild("cond1")
@@ -417,7 +417,7 @@ class standardFilter(UITestCase):
             #reopen filter and verify
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter", close_button="cancel") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter", close_button="cancel") as xDialog:
                 xfield1 = xDialog.getChild("field1")
                 xval1 = xDialog.getChild("val1")
                 xcond1 = xDialog.getChild("cond1")
@@ -455,7 +455,7 @@ class standardFilter(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:D5"}))
             #Choose DATA-FILTER-STANDARDFILTER
             #Choose field name "A"/ Choose condition "Does not contain"/Enter value "cio"/Press OK button
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter") as xDialog:
                 xfield1 = xDialog.getChild("field1")
                 xval1 = xDialog.getChild("val1")
                 xcond1 = xDialog.getChild("cond1")
@@ -475,7 +475,7 @@ class standardFilter(UITestCase):
             #reopen filter and verify
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter", close_button="cancel") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter", close_button="cancel") as xDialog:
                 xfield1 = xDialog.getChild("field1")
                 xval1 = xDialog.getChild("val1")
                 xcond1 = xDialog.getChild("cond1")
@@ -513,7 +513,7 @@ class standardFilter(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:D5"}))
             #Choose DATA-FILTER-STANDARDFILTER
             #Choose field name "A"/ Choose condition "Does not contain"/Enter value "cio"/Press OK button
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter") as xDialog:
                 xfield1 = xDialog.getChild("field1")
                 xval1 = xDialog.getChild("val1")
                 xcond1 = xDialog.getChild("cond1")
@@ -533,7 +533,7 @@ class standardFilter(UITestCase):
             #reopen filter and verify
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter", close_button="cancel") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter", close_button="cancel") as xDialog:
                 xfield1 = xDialog.getChild("field1")
                 xval1 = xDialog.getChild("val1")
                 xcond1 = xDialog.getChild("cond1")
@@ -571,7 +571,7 @@ class standardFilter(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:D5"}))
             #Choose DATA-FILTER-STANDARDFILTER
             #Choose field name "A"/ Choose condition "Begins with"/Enter value "si"/Press OK button
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter") as xDialog:
                 xfield1 = xDialog.getChild("field1")
                 xval1 = xDialog.getChild("val1")
                 xcond1 = xDialog.getChild("cond1")
@@ -591,7 +591,7 @@ class standardFilter(UITestCase):
             #reopen filter and verify
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter", close_button="cancel") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter", close_button="cancel") as xDialog:
                 xfield1 = xDialog.getChild("field1")
                 xval1 = xDialog.getChild("val1")
                 xcond1 = xDialog.getChild("cond1")

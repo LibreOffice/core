@@ -13,7 +13,7 @@ class tdf105411(UITestCase):
 
         with self.ui_test.create_doc_in_start_center("calc"):
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:ConditionalFormatDialog", close_button="") as xCondFormatDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:ConditionalFormatDialog", close_button="") as xCondFormatDlg:
                 xDeleteBtn = xCondFormatDlg.getChild("delete")
                 xDeleteBtn.executeAction("CLICK", tuple())
 

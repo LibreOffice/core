@@ -16,7 +16,7 @@ class fillRandomNumber(UITestCase):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A2"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:RandomNumberGeneratorDialog") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:RandomNumberGeneratorDialog") as xDialog:
                 xcellrangeedit = xDialog.getChild("cell-range-edit")
                 xdistributioncombo = xDialog.getChild("distribution-combo")
                 xparameter1spin = xDialog.getChild("parameter1-spin")
@@ -44,7 +44,7 @@ class fillRandomNumber(UITestCase):
             self.assertEqual(bool(get_cell_by_position(document, 0, 0, 0).getString() ), False)
             self.assertEqual(bool(get_cell_by_position(document, 0, 0, 1).getString() ), False)
             #close dialog without doing anything
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:RandomNumberGeneratorDialog", close_button="close"):
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:RandomNumberGeneratorDialog", close_button="close"):
                 pass
 
             self.assertEqual(bool(get_cell_by_position(document, 0, 0, 0).getString() ), False)

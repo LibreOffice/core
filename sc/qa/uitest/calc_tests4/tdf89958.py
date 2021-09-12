@@ -22,7 +22,7 @@ class tdf89958(UITestCase):
 
             #Menu: Data->Filter->Standard Filter ...
             #Field Name "Column A", Condition "Does not end with", Value: "CTORS"
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataFilterStandardFilter") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter") as xDialog:
                 xfield1 = xDialog.getChild("field1")
                 xval1 = xDialog.getChild("val1")
                 xcond1 = xDialog.getChild("cond1")

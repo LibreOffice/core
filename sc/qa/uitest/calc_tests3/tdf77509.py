@@ -20,7 +20,7 @@ class tdf77509(UITestCase):
             #2. Select any empty cell, eg. cell D1
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "D1"}))
             #3. Tab: Data > Consolidate
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataConsolidate") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataConsolidate") as xDialog:
 
                 xfunc = xDialog.getChild("func")
                 xeddataarea = xDialog.getChild("eddataarea")

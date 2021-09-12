@@ -18,7 +18,7 @@ class printRange(UITestCase):
             #Set print range
             self.xUITest.executeCommand(".uno:DefinePrintArea")
             # Print Range dialog
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:EditPrintArea") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:EditPrintArea") as xDialog:
                 xlbprintarea = xDialog.getChild("lbprintarea")
                 xedprintarea = xDialog.getChild("edprintarea")
                 #verify range
@@ -33,7 +33,7 @@ class printRange(UITestCase):
                 # Click Ok
 
             #Verify Print Range dialog
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:EditPrintArea", close_button="cancel") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:EditPrintArea", close_button="cancel") as xDialog:
                 xedprintarea = xDialog.getChild("edprintarea")
                 xedrepeatrow = xDialog.getChild("edrepeatrow")
                 xedrepeatcol = xDialog.getChild("edrepeatcol")
@@ -44,7 +44,7 @@ class printRange(UITestCase):
             #delete print ranges
             self.xUITest.executeCommand(".uno:DeletePrintArea")
             #Verify Print Range dialog
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:EditPrintArea") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:EditPrintArea") as xDialog:
                 xedprintarea = xDialog.getChild("edprintarea")
                 xlbprintarea = xDialog.getChild("lbprintarea")
                 xedrepeatrow = xDialog.getChild("edrepeatrow")
@@ -63,7 +63,7 @@ class printRange(UITestCase):
             #Set print range
             self.xUITest.executeCommand(".uno:DefinePrintArea")
             # Print Range dialog
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:EditPrintArea") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:EditPrintArea") as xDialog:
                 xlbprintarea = xDialog.getChild("lbprintarea")
                 xedprintarea = xDialog.getChild("edprintarea")
                 #verify range
@@ -81,7 +81,7 @@ class printRange(UITestCase):
             with self.ui_test.execute_dialog_through_command(".uno:Move"):
                 pass
             #Verify Print Range dialog on new sheet
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:EditPrintArea") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:EditPrintArea") as xDialog:
                 xedprintarea = xDialog.getChild("edprintarea")
                 xedrepeatrow = xDialog.getChild("edrepeatrow")
                 xedrepeatcol = xDialog.getChild("edrepeatcol")

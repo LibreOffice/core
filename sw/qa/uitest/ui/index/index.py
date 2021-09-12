@@ -19,7 +19,7 @@ class TestSwuiidxmrk(UITestCase):
         # Given an empty Writer document:
         with self.ui_test.create_doc_in_start_center("writer") as component:
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:InsertAuthoritiesEntry", close_button="close") as insert_entry:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:InsertAuthoritiesEntry", close_button="close") as insert_entry:
                 from_document = insert_entry.getChild("fromdocument")
                 from_document.executeAction("CLICK", tuple())
                 new = insert_entry.getChild("new")

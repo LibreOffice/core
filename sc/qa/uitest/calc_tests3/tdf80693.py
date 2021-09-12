@@ -16,7 +16,7 @@ class tdf80693(UITestCase):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A2"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:RandomNumberGeneratorDialog") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:RandomNumberGeneratorDialog") as xDialog:
                 xcellrangeedit = xDialog.getChild("cell-range-edit")
                 xdistributioncombo = xDialog.getChild("distribution-combo")
                 xparameter1spin = xDialog.getChild("parameter1-spin")

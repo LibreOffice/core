@@ -22,7 +22,7 @@ class tdf105351(UITestCase):
             enter_text_to_cell(gridwin, "A1", "5")
             #3. Select cell A1, then choose from the menus Format -> Conditional Formatting -> Data Bar
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataBarFormatDialog") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataBarFormatDialog") as xDialog:
                 xcolscalemin = xDialog.getChild("colscalemin")
                 xedcolscalemin = xDialog.getChild("edcolscalemin")
                 xcolscalemax = xDialog.getChild("colscalemax")
@@ -37,7 +37,7 @@ class tdf105351(UITestCase):
                 xedcolscalemax.executeAction("TYPE", mkPropertyValues({"TEXT":"10"}))
 
             #Verify : The conditions set for cell A1 should be shown and editable.
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataBarFormatDialog") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataBarFormatDialog") as xDialog:
                 xcolscalemin = xDialog.getChild("colscalemin")
                 xedcolscalemin = xDialog.getChild("edcolscalemin")
                 xcolscalemax = xDialog.getChild("colscalemax")

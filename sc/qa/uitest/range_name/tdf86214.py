@@ -17,7 +17,7 @@ class InvalidNames(UITestCase):
 
         with self.ui_test.create_doc_in_start_center("calc"):
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AddName", close_button="add") as xAddNameDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AddName", close_button="add") as xAddNameDlg:
 
 
                 invalid_names = ["A1", "12", "1.2", "A1:B2", "test.a", \

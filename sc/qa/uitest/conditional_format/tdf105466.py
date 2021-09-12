@@ -17,7 +17,7 @@ class tdf105466(UITestCase):
 
         with self.ui_test.create_doc_in_start_center("calc"):
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:ConditionalFormatDialog") as xCondFormatDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:ConditionalFormatDialog") as xCondFormatDlg:
 
                 for i in range(0,4):
                     with self.subTest(i = i):

@@ -18,7 +18,7 @@ class Forms(UITestCase):
 
             self.xUITest.executeCommand(".uno:JumpToNextFrame")
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:ControlProperties", close_button=""):
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:ControlProperties", close_button=""):
                 xChild = self.ui_test.wait_until_child_is_available('listbox-Empty string is NULL')
 
                 # Without the fix in place, this test would have failed with
@@ -31,7 +31,7 @@ class Forms(UITestCase):
 
             self.xUITest.executeCommand(".uno:JumpToNextFrame")
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:ControlProperties", close_button=""):
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:ControlProperties", close_button=""):
                 xChild = self.ui_test.wait_until_child_is_available('listbox-Text type')
 
                 # Without the fix in place, this test would have failed with
@@ -43,7 +43,7 @@ class Forms(UITestCase):
         # Reuse document from tdf#140239
         with self.ui_test.load_file(get_url_for_data_file("tdf140239.odt")):
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:FormProperties", close_button=""):
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:FormProperties", close_button=""):
                 xURL = self.ui_test.wait_until_child_is_available('urlcontrol-URL')
 
                 xURL.executeAction("TYPE", mkPropertyValues({"TEXT": "1"}))
@@ -62,7 +62,7 @@ class Forms(UITestCase):
 
             self.xUITest.executeCommand(".uno:JumpToNextFrame")
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:ControlProperties", close_button=""):
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:ControlProperties", close_button=""):
                 xAction = self.ui_test.wait_until_child_is_available('listbox-Action')
                 xURL = self.ui_test.wait_until_child_is_available('urlcontrol-URL')
                 xEntry = self.ui_test.wait_until_child_is_available('entry')
@@ -106,7 +106,7 @@ class Forms(UITestCase):
 
             self.xUITest.executeCommand(".uno:JumpToNextFrame")
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:ControlProperties", close_button=""):
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:ControlProperties", close_button=""):
                 xChild = self.ui_test.wait_until_child_is_available('combobox-Data field')
 
                 xChild.executeAction("TYPE", mkPropertyValues({"TEXT": "1"}))
@@ -133,7 +133,7 @@ class Forms(UITestCase):
             self.assertEqual(13996, shape.getSize().Width)
             self.assertEqual(2408, shape.getSize().Height)
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:ControlProperties", close_button=""):
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:ControlProperties", close_button=""):
                 xWidth = self.ui_test.wait_until_child_is_available('numericfield-Width')
                 xHeight = self.ui_test.wait_until_child_is_available('numericfield-Height')
 
@@ -173,7 +173,7 @@ class Forms(UITestCase):
 
             for i, name in enumerate(['formattedcontrol-Value min.', 'formattedcontrol-Value max.']):
 
-                with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:ControlProperties", close_button=""):
+                with self.ui_test.execute_modeless_dialog_through_command(".uno:ControlProperties", close_button=""):
                     xChild = self.ui_test.wait_until_child_is_available(name)
 
                     self.assertEqual(aOldValue[i], get_state_as_dict(xChild)['Text'])
@@ -186,7 +186,7 @@ class Forms(UITestCase):
                     #Close the dialog and open it again
                     self.xUITest.executeCommand(".uno:ControlProperties")
 
-                with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:ControlProperties", close_button=""):
+                with self.ui_test.execute_modeless_dialog_through_command(".uno:ControlProperties", close_button=""):
                     xChild = self.ui_test.wait_until_child_is_available(name)
 
                     # Without the fix in place, this test would have failed here because

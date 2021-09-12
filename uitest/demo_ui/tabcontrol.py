@@ -23,7 +23,7 @@ class TabControlTest(UITestCase):
             enter_text_to_cell(xGridWindow, "B2", "=2+3+4")
             xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "B2"}))
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:FunctionDialog", close_button="cancel") as xFunctionDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:FunctionDialog", close_button="cancel") as xFunctionDlg:
 
 
                 xTabs = xFunctionDlg.getChild("tabcontrol")

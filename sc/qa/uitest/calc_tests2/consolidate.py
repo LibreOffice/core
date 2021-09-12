@@ -16,7 +16,7 @@ class consolidate(UITestCase):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataConsolidate") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataConsolidate") as xDialog:
                 xfunc = xDialog.getChild("func")
                 xlbdataarea = xDialog.getChild("lbdataarea")
                 xadd = xDialog.getChild("add")
@@ -61,7 +61,7 @@ class consolidate(UITestCase):
             self.assertEqual(get_cell_by_position(calc_doc, 0, 4, 4).getValue(), 315)
             self.assertEqual(get_cell_by_position(calc_doc, 0, 4, 5).getValue(), 318)
             #verify dialog
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataConsolidate") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataConsolidate") as xDialog:
                 xfunc = xDialog.getChild("func")
                 xlbdataarea = xDialog.getChild("lbdataarea")
                 xdelete = xDialog.getChild("delete")
@@ -101,7 +101,7 @@ class consolidate(UITestCase):
             self.assertEqual(get_cell_by_position(calc_doc, 0, 4, 5).getValue(), 212)
 
             # test cancel button
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DataConsolidate", close_button="cancel"):
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataConsolidate", close_button="cancel"):
                 pass
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

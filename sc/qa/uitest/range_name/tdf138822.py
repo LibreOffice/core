@@ -17,7 +17,7 @@ class tdf138822(UITestCase):
             xPosWindow = calcDoc.getChild('pos_window')
             self.assertEqual('A1', get_state_as_dict(xPosWindow)['Text'])
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DefineName", close_button="add"):
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DefineName", close_button="add"):
                 pass
 
             xDefineNamesDialog = self.xUITest.getTopFocusWindow()
@@ -42,7 +42,7 @@ class tdf138822(UITestCase):
             self.ui_test.close_dialog_through_button(xCancelBtn)
 
             # Open the dialog again
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DefineName") as xManageNamesDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DefineName") as xManageNamesDialog:
 
                 xNamesList = xManageNamesDialog.getChild('names')
 

@@ -18,7 +18,7 @@ class EditTest(UITestCase):
 
         with self.ui_test.create_doc_in_start_center("calc"):
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AddName", close_button="cancel") as xAddNameDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AddName", close_button="cancel") as xAddNameDlg:
 
                 xEdit = xAddNameDlg.getChild("edit")
 
@@ -30,7 +30,7 @@ class EditTest(UITestCase):
 
         with self.ui_test.create_doc_in_start_center("calc"):
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AddName", close_button="cancel") as xAddNameDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AddName", close_button="cancel") as xAddNameDlg:
 
                 xEdit = xAddNameDlg.getChild("edit")
 
