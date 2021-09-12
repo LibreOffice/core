@@ -23,8 +23,8 @@
 
 #include <rtl/ustring.hxx>
 
-#include <sallayout.hxx>
 #include <svsys.h>
+#include <sallayout.hxx>
 #include <win/salgdi.h>
 #include <o3tl/sorted_vector.hxx>
 
