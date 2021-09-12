@@ -24,6 +24,7 @@
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/json_writer.hxx>
@@ -51,7 +52,8 @@
 #include <vcl/wall.hxx>
 #include <vcl/window.hxx>
 
-#include <outdev.h>
+#include <ImplOutDevData.hxx>
+#include <impfontcache.hxx>
 #include <toolbox.h>
 #include <window.h>
 #include <brdwin.hxx>
@@ -77,7 +79,6 @@
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/rendering/CanvasFactory.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
-#include <comphelper/processfactory.hxx>
 
 #include <boost/property_tree/ptree.hpp>
 

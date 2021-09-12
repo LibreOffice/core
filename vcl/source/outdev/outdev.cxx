@@ -33,8 +33,8 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/lazydelete.hxx>
 
-#include <outdev.h>
 #include <window.h>
+#include <ImplOutDevData.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <salgdi.hxx>
 

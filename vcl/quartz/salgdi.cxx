@@ -39,8 +39,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 
-#include <outdev.h>
 #include <PhysicalFontCollection.hxx>
+#include <font/GlyphFallbackFontSubstitution.hxx>
 #include <fontsubset.hxx>
 #include <impfont.hxx>
 #include <impfontcharmap.hxx>
@@ -68,7 +68,7 @@ using namespace vcl;
 namespace {
 
 class CoreTextGlyphFallbackSubstititution
-:    public ImplGlyphFallbackFontSubstitution
+:    public vcl::font::GlyphFallbackFontSubstitution
 {
 public:
     bool FindFontSubstitute(vcl::font::FontSelectPattern&, LogicalFontInstance* pLogicalFont, OUString&) const override;

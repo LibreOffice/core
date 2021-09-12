@@ -17,12 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_fuzzers.h>
 #include <sal/config.h>
 
-#include <sal/log.hxx>
+#include <config_fuzzers.h>
+
 #include <osl/file.h>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <tools/lineend.hxx>
@@ -36,8 +37,8 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/virdev.hxx>
 
-#include <outdev.h>
 #include <ImplLayoutArgs.hxx>
+#include <ImplOutDevData.hxx>
 #include <drawmode.hxx>
 #include <impglyphitem.hxx>
 #include <salgdi.hxx>
