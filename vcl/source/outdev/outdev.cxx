@@ -31,8 +31,8 @@
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/virdev.hxx>
 
-#include <outdev.h>
 #include <window.h>
+#include <ImplOutDevData.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <salgdi.hxx>
 

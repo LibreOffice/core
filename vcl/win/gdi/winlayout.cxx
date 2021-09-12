@@ -30,7 +30,7 @@
 #include <o3tl/hash_combine.hxx>
 #include <o3tl/safeint.hxx>
 
-#include <outdev.h>
+#include <ImplOutDevData.hxx>
 #include <sallayout.hxx>
 #include <sft.hxx>
 
@@ -285,4 +285,4 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     ::SelectFont(hDC, hOrigFont);
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

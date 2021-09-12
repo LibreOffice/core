@@ -30,8 +30,11 @@
 
 #define MAX_GLYPHFALLBACK 16
 
-class ImplGlyphFallbackFontSubstitution;
-class ImplPreMatchFontSubstitution;
+namespace vcl::font
+{
+class GlyphFallbackFontSubstitution;
+class PreMatchFontSubstitution;
+}
 
 // TODO: merge with ImplFontCache
 // TODO: rename to LogicalFontManager
@@ -43,7 +46,7 @@ public:
                             ~PhysicalFontCollection();
 
     // fill the list with device font faces
-    void                    Add( vcl::font::PhysicalFontFace* );
+    void                    Add( PhysicalFontFace* );
     void                    Clear();
     int                     Count() const { return maPhysicalFontFamilies.size(); }
 
@@ -61,8 +64,8 @@ public:
                                                   OUString& rMissingCodes, int nFallbackLevel ) const;
 
     // prepare platform specific font substitutions
-    void                    SetPreMatchHook( ImplPreMatchFontSubstitution* );
-    void                    SetFallbackHook( ImplGlyphFallbackFontSubstitution* );
+    void                    SetPreMatchHook( PreMatchFontSubstitution* );
+    void                    SetFallbackHook( GlyphFallbackFontSubstitution* );
 
     // misc utilities
     std::shared_ptr<PhysicalFontCollection> Clone() const;
@@ -74,8 +77,8 @@ private:
     typedef std::unordered_map<OUString, std::unique_ptr<vcl::font::PhysicalFontFamily>> PhysicalFontFamilies;
     PhysicalFontFamilies    maPhysicalFontFamilies;
 
-    ImplPreMatchFontSubstitution* mpPreMatchHook;       // device specific prematch substitution
-    ImplGlyphFallbackFontSubstitution* mpFallbackHook;  // device specific glyph fallback substitution
+    PreMatchFontSubstitution* mpPreMatchHook;       // device specific prematch substitution
+    GlyphFallbackFontSubstitution* mpFallbackHook;  // device specific glyph fallback substitution
 
     mutable std::unique_ptr<std::array<vcl::font::PhysicalFontFamily*,MAX_GLYPHFALLBACK>>  mpFallbackList;
     mutable int             mnFallbackCount;
