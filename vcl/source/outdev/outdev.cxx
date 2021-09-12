@@ -32,10 +32,11 @@
 #include <vcl/lazydelete.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <font/ImplDeviceFontSizeList.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <salgdi.hxx>
 #include <window.h>
-#include <outdev.h>
+#include <ImplOutDevData.hxx>
 
 #include <com/sun/star/awt/DeviceCapability.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
