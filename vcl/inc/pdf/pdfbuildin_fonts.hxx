@@ -16,10 +16,12 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VCL_SOURCE_PDF_BUILDIN_FONTS_HXX
-#define INCLUDED_VCL_SOURCE_PDF_BUILDIN_FONTS_HXX
 
-#include <PhysicalFontFace.hxx>
+#pragma once
+
+#include <sal/config.h>
+
+#include <font/PhysicalFontFace.hxx>
 #include <fontinstance.hxx>
 
 namespace vcl::pdf
@@ -50,18 +52,18 @@ class BuildinFontInstance final : public LogicalFontInstance
     bool ImplGetGlyphBoundRect(sal_GlyphId nID, tools::Rectangle& rRect, bool) const override;
 
 public:
-    BuildinFontInstance(const PhysicalFontFace&, const FontSelectPattern&);
+    BuildinFontInstance(const vcl::font::PhysicalFontFace&, const vcl::font::FontSelectPattern&);
 
     bool GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rPoly, bool) const override;
 };
 
-class BuildinFontFace final : public PhysicalFontFace
+class BuildinFontFace final : public vcl::font::PhysicalFontFace
 {
     static const BuildinFont m_aBuildinFonts[14];
     const BuildinFont& mrBuildin;
 
     rtl::Reference<LogicalFontInstance>
-    CreateFontInstance(const FontSelectPattern& rFSD) const override;
+    CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const override;
 
 public:
     explicit BuildinFontFace(int nId);
@@ -75,7 +77,5 @@ public:
 };
 
 } // namespace vcl::pdf
-
-#endif // INCLUDED_VCL_SOURCE_PDF_BUILDIN_FONTS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
