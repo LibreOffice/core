@@ -52,10 +52,11 @@
 #include <comphelper/scopeguard.hxx>
 
 #include <fontsubset.hxx>
-#include <outdev.h>
+#include <font/GlyphFallbackFontSubstitution.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFace.hxx>
+#include <font/PreMatchFontSubstitution.hxx>
 #include <sft.hxx>
 #include <win/saldata.hxx>
 #include <win/salgdi.h>
@@ -157,14 +158,14 @@ RawFontData::RawFontData( HDC hDC, DWORD nTableTag )
 namespace {
 
 class WinPreMatchFontSubstititution
-:    public ImplPreMatchFontSubstitution
+:    public vcl::font::PreMatchFontSubstitution
 {
 public:
     bool FindFontSubstitute(vcl::font::FontSelectPattern&) const override;
 };
 
 class WinGlyphFallbackSubstititution
-:    public ImplGlyphFallbackFontSubstitution
+:    public vcl::font::GlyphFallbackFontSubstitution
 {
 public:
     explicit WinGlyphFallbackSubstititution()
