@@ -1255,7 +1255,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
     rLayoutArgs.ResetPos();
     OUString aMissingCodes = aMissingCodeBuf.makeStringAndClear();
 
-    FontSelectPattern aFontSelData(mpFontInstance->GetFontSelectPattern());
+    vcl::font::FontSelectPattern aFontSelData(mpFontInstance->GetFontSelectPattern());
     SalLayoutGlyphsImpl* pGlyphsImpl = pGlyphs ? pGlyphs->Impl(1) : nullptr;
 
     // try if fallback fonts support the missing code units
