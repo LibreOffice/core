@@ -23,7 +23,7 @@
 #include <comphelper/windowserrorstring.hxx>
 #include <o3tl/safeint.hxx>
 
-#include <outdev.h>
+#include <ImplOutDevData.hxx>
 #include <sallayout.hxx>
 #include <sft.hxx>
 #include <win/DWriteTextRenderer.hxx>
