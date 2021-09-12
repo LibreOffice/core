@@ -23,10 +23,12 @@
 #include <tools/fontenum.hxx>
 #include <unotools/fontdefs.hxx>
 
+#include <font/FontSelectPattern.hxx>
+#include <font/PhysicalFontFace.hxx>
 #include <fontattributes.hxx>
-#include <fontselect.hxx>
 
-#include <PhysicalFontFace.hxx>
+namespace vcl::font
+{
 
 PhysicalFontFace::PhysicalFontFace( const FontAttributes& rDFA )
     : FontAttributes( rDFA )
@@ -177,6 +179,8 @@ bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchSt
 
     rStatus.mnWidthMatch = nWidthMatch;
     return true;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
