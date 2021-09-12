@@ -18,12 +18,17 @@
  */
 
 #include <sal/config.h>
-#include <o3tl/safeint.hxx>
+
 #include <tools/gen.hxx>
+#include <o3tl/safeint.hxx>
+
 #include <vcl/font.hxx>
 
-#include <PhysicalFontFace.hxx>
-#include <fontselect.hxx>
+#include <font/FontSelectPattern.hxx>
+#include <font/PhysicalFontFace.hxx>
+
+namespace vcl::font
+{
 
 // These mustn't conflict with font name lists which use ; and ,
 const char FontSelectPattern::FEAT_PREFIX = ':';
@@ -145,6 +150,8 @@ bool FontSelectPattern::operator==(const FontSelectPattern& rOther) const
         return false;
 
     return true;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

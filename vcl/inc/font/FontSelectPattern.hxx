@@ -31,8 +31,11 @@
 namespace vcl { class Font; }
 
 class LogicalFontInstance;
-class PhysicalFontFace;
 class Size;
+
+namespace vcl::font
+{
+class PhysicalFontFace;
 
 class VCL_DLLPUBLIC FontSelectPattern : public FontAttributes
 {
@@ -69,9 +72,11 @@ public:
     ItalicMatrix    maItalicMatrix;             // Force matrix for slant
 };
 
+}
+
 template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
-    std::basic_ostream<charT, traits> & stream, const FontSelectPattern & rFSP)
+    std::basic_ostream<charT, traits> & stream, const vcl::font::FontSelectPattern & rFSP)
 {
     stream << (rFSP.maTargetName.isEmpty() ? "<default>" : rFSP.maTargetName)
            << " (" << rFSP.maSearchName << ") w: " << rFSP.mnWidth << " h: "

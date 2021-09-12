@@ -17,18 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
+#include <sal/config.h>
 #include <config_features.h>
+
 #include <sal/log.hxx>
-#include <PhysicalFontFace.hxx>
+#include <rtl/math.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+
+#include <FileDefinitionWidgetDraw.hxx>
+#include <font/PhysicalFontFace.hxx>
 #include <fontsubset.hxx>
 #include <salgdi.hxx>
 #include <salframe.hxx>
 #include <sft.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <FileDefinitionWidgetDraw.hxx>
-#include <rtl/math.hxx>
+
+#include <memory>
 
 // The only common SalFrame method
 
@@ -883,7 +887,7 @@ OUString SalGraphics::getRenderBackendName() const
 }
 
 void SalGraphics::GetGlyphWidths(const vcl::AbstractTrueTypeFont& rTTF,
-                                 const PhysicalFontFace& rFontFace, const bool bVertical,
+                                 const vcl::font::PhysicalFontFace& rFontFace, const bool bVertical,
                                  std::vector<sal_Int32>& rWidths, Ucs2UIntMap& rUnicodeEnc)
 {
     rWidths.clear();

@@ -29,7 +29,7 @@
 
 class LogicalFontInstance;
 namespace vcl::text { class ImplLayoutArgs; }
-class PhysicalFontFace;
+namespace vcl::font { class PhysicalFontFace; }
 class SalGraphics;
 class GlyphItem;
 
@@ -92,7 +92,7 @@ public:
     // methods using glyph indexing
     virtual bool    GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int& nStart,
                                  const LogicalFontInstance** ppGlyphFont = nullptr,
-                                 const PhysicalFontFace** pFallbackFont = nullptr) const = 0;
+                                 const vcl::font::PhysicalFontFace** pFallbackFont = nullptr) const = 0;
     virtual bool GetOutline(basegfx::B2DPolyPolygonVector&) const;
     bool GetBoundRect(tools::Rectangle&) const;
 

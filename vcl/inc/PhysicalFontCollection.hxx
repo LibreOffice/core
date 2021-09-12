@@ -45,7 +45,7 @@ public:
                             ~PhysicalFontCollection();
 
     // fill the list with device font faces
-    void                    Add( PhysicalFontFace* );
+    void                    Add( vcl::font::PhysicalFontFace* );
     void                    Clear();
     int                     Count() const { return maPhysicalFontFamilies.size(); }
 
