@@ -136,7 +136,7 @@ public:
     // in starmath at a fairly low stretch ratio. This appears fixed in 2.9 with
     // https://git.savannah.gnu.org/cgit/freetype/freetype2.git/commit/?id=91015cb41d8f56777f93394f5a60914bc0c0f330
     // "Improve complex rendering at high ppem"
-    static bool             AlmostHorizontalDrainsRenderingPool(int nRatio, const FontSelectPattern& rFSD);
+    static bool             AlmostHorizontalDrainsRenderingPool(int nRatio, const vcl::font::FontSelectPattern& rFSD);
 
 private:
     friend class FreetypeFontInstance;

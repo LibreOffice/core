@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-08-04 20:14:15 using:
+ Generated on 2021-09-21 16:33:04 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -33,9 +33,11 @@
 #include <deque>
 #include <float.h>
 #include <functional>
+#include <hb.h>
 #include <initializer_list>
 #include <iomanip>
 #include <limits>
+#include <list>
 #include <map>
 #include <math.h>
 #include <memory>
@@ -52,7 +54,6 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <boost/functional/hash.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multi_array.hpp>
 #include <boost/property_tree/json_parser.hpp>
@@ -80,6 +81,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/byteseq.hxx>
 #include <rtl/character.hxx>
+#include <rtl/cipher.h>
 #include <rtl/crc.h>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
@@ -129,8 +131,6 @@
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <bitmap/BitmapWriteAccess.hxx>
-#include <com/sun/star/awt/Key.hpp>
-#include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
@@ -146,8 +146,13 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/i18n/Calendar2.hpp>
+#include <com/sun/star/i18n/DirectionProperty.hpp>
+#include <com/sun/star/i18n/KCharacterType.hpp>
+#include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
+#include <com/sun/star/i18n/ParseResult.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
+#include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -190,10 +195,14 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <font/FontSelectPattern.hxx>
+#include <font/PhysicalFontFace.hxx>
+#include <font/PhysicalFontFaceCollection.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nutil/i18nutildllapi.h>
+#include <i18nutil/transliteration.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
@@ -246,18 +255,20 @@
 #include <uno/any2.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
+#include <unotools/calendarwrapper.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <unotools/resmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <PhysicalFontCollection.hxx>
-#include <PhysicalFontFace.hxx>
 #include <accel.hxx>
 #include <brdwin.hxx>
 #include <configsettings.hxx>
+#include <drawmode.hxx>
 #include <fontattributes.hxx>
 #include <impglyphitem.hxx>
 #include <outdev.h>
@@ -303,6 +314,8 @@
 #include <vcl/dllapi.h>
 #include <vcl/dockwin.hxx>
 #include <vcl/event.hxx>
+#include <vcl/filter/SvmReader.hxx>
+#include <vcl/filter/SvmWriter.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
 #include <vcl/formatter.hxx>
@@ -354,6 +367,7 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclevent.hxx>
+#include <vcl/vcllayout.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
