@@ -28,6 +28,8 @@
 #include <font/FontSelectPattern.hxx>
 #include <font/PhysicalFontFace.hxx>
 
+#include <string_view>
+
 namespace vcl::font
 {
 
@@ -68,115 +70,134 @@ sal_Int32 PhysicalFontFace::CompareIgnoreSize( const PhysicalFontFace& rOther ) 
     return nRet;
 }
 
-bool PhysicalFontFace::IsBetterMatch( const vcl::font::FontSelectPattern& rFSD, FontMatchStatus& rStatus ) const
+static int FamilyNameMatchValue(FontSelectPattern const& rFSP, std::u16string_view sFontFamily)
+{
+    const OUString& rFontName = rFSP.maTargetName;
+
+    if (rFontName.equalsIgnoreAsciiCase(sFontFamily))
+        return 240000;
+
+    return 0;
+}
+
+static int StyleNameMatchValue(FontMatchStatus const& rStatus, OUString const& rStyle)
+{
+    if (rStatus.mpTargetStyleName && rStyle.equalsIgnoreAsciiCase(*rStatus.mpTargetStyleName))
+        return 120000;
+
+    return 0;
+}
+
+static int PitchMatchValue(FontSelectPattern const& rFSP, FontPitch ePitch)
+{
+    if ((rFSP.GetPitch() != PITCH_DONTKNOW) && (rFSP.GetPitch() == ePitch))
+        return 20000;
+
+    return 0;
+}
+
+static int PreferNormalFontWidthMatchValue(FontWidth eWidthType)
+{
+    // TODO: change when the upper layers can tell their width preference
+    if (eWidthType == WIDTH_NORMAL)
+        return 400;
+    else if ((eWidthType == WIDTH_SEMI_EXPANDED) || (eWidthType == WIDTH_SEMI_CONDENSED))
+        return 300;
+
+    return 0;
+}
+
+static int WeightMatchValue(FontSelectPattern const& rFSP, FontWeight eWeight)
 {
     int nMatch = 0;
 
-    const OUString& rFontName = rFSD.maTargetName;
-    if( rFontName.equalsIgnoreAsciiCase( GetFamilyName() ) )
-        nMatch += 240000;
-
-    if( rStatus.mpTargetStyleName
-    &&  GetStyleName().equalsIgnoreAsciiCase( *rStatus.mpTargetStyleName ) )
-        nMatch += 120000;
-
-    if( (rFSD.GetPitch() != PITCH_DONTKNOW) && (rFSD.GetPitch() == GetPitch()) )
-        nMatch += 20000;
-
-    // prefer NORMAL font width
-    // TODO: change when the upper layers can tell their width preference
-    if( GetWidthType() == WIDTH_NORMAL )
-        nMatch += 400;
-    else if( (GetWidthType() == WIDTH_SEMI_EXPANDED) || (GetWidthType() == WIDTH_SEMI_CONDENSED) )
-        nMatch += 300;
-
-    if( rFSD.GetWeight() != WEIGHT_DONTKNOW )
+    if (rFSP.GetWeight() != WEIGHT_DONTKNOW)
     {
         // if not bold or requiring emboldening prefer light fonts to bold fonts
-        FontWeight ePatternWeight = rFSD.mbEmbolden ? WEIGHT_NORMAL : rFSD.GetWeight();
+        FontWeight ePatternWeight = rFSP.mbEmbolden ? WEIGHT_NORMAL : rFSP.GetWeight();
 
         int nReqWeight = static_cast<int>(ePatternWeight);
-        if ( ePatternWeight > WEIGHT_MEDIUM )
+        if (ePatternWeight > WEIGHT_MEDIUM)
             nReqWeight += 100;
 
-        int nGivenWeight = static_cast<int>(GetWeight());
-        if( GetWeight() > WEIGHT_MEDIUM )
+        int nGivenWeight = static_cast<int>(eWeight);
+        if (eWeight > WEIGHT_MEDIUM)
             nGivenWeight += 100;
 
         int nWeightDiff = nReqWeight - nGivenWeight;
 
-        if ( nWeightDiff == 0 )
+        if (nWeightDiff == 0)
             nMatch += 1000;
-        else if ( nWeightDiff == +1 || nWeightDiff == -1 )
+        else if (nWeightDiff == +1 || nWeightDiff == -1)
             nMatch += 700;
-        else if ( nWeightDiff < +50 && nWeightDiff > -50)
+        else if (nWeightDiff < +50 && nWeightDiff > -50)
             nMatch += 200;
-    }
-    else // requested weight == WEIGHT_DONTKNOW
-    {
-        // prefer NORMAL font weight
-        // TODO: change when the upper layers can tell their weight preference
-        if( GetWeight() == WEIGHT_NORMAL )
-            nMatch += 450;
-        else if( GetWeight() == WEIGHT_MEDIUM )
-            nMatch += 350;
-        else if( (GetWeight() == WEIGHT_SEMILIGHT) || (GetWeight() == WEIGHT_SEMIBOLD) )
-            nMatch += 200;
-        else if( GetWeight() == WEIGHT_LIGHT )
-            nMatch += 150;
-    }
-
-    // if requiring custom matrix to fake italic, prefer upright font
-    FontItalic ePatternItalic = rFSD.maItalicMatrix != ItalicMatrix() ? ITALIC_NONE : rFSD.GetItalic();
-
-    if ( ePatternItalic == ITALIC_NONE )
-    {
-        if( GetItalic() == ITALIC_NONE )
-            nMatch += 900;
     }
     else
     {
-        if( ePatternItalic == GetItalic() )
-            nMatch += 900;
-        else if( GetItalic() != ITALIC_NONE )
-            nMatch += 600;
+        // prefer NORMAL font weight
+        // TODO: change when the upper layers can tell their weight preference
+        if (eWeight == WEIGHT_NORMAL)
+            nMatch += 450;
+        else if (eWeight == WEIGHT_MEDIUM)
+            nMatch += 350;
+        else if ((eWeight == WEIGHT_SEMILIGHT) || (eWeight == WEIGHT_SEMIBOLD))
+            nMatch += 200;
+        else if (eWeight == WEIGHT_LIGHT)
+            nMatch += 150;
     }
 
-    int nHeightMatch = 0;
-    int nWidthMatch = 0;
+    return nMatch;
+}
 
-    if( rFSD.mnOrientation != 0_deg10 )
+static int ItalicMatchValue(FontSelectPattern const& rFSP, FontItalic eItalic)
+{
+    // if requiring custom matrix to fake italic, prefer upright font
+    FontItalic ePatternItalic
+        = rFSP.maItalicMatrix != ItalicMatrix() ? ITALIC_NONE : rFSP.GetItalic();
+
+    if (ePatternItalic == ITALIC_NONE)
+    {
+        if (eItalic == ITALIC_NONE)
+            return 900;
+    }
+    else
+    {
+        if (ePatternItalic == eItalic)
+            return 900;
+        else if (eItalic != ITALIC_NONE)
+            return 600;
+    }
+
+    return 0;
+}
+
+bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSP, FontMatchStatus& rStatus ) const
+{
+    int nMatch = FamilyNameMatchValue(rFSP, GetFamilyName());
+    nMatch += StyleNameMatchValue(rStatus, GetStyleName());
+    nMatch += PitchMatchValue(rFSP, GetPitch());
+    nMatch += PreferNormalFontWidthMatchValue(GetWidthType());
+    nMatch += WeightMatchValue(rFSP, GetWeight());
+    nMatch += ItalicMatchValue(rFSP, GetItalic());
+
+    if (rFSP.mnOrientation != 0_deg10)
         nMatch += 80;
-    else if( rFSD.mnWidth != 0 )
+    else if (rFSP.mnWidth != 0)
         nMatch += 25;
     else
         nMatch += 5;
 
     if( rStatus.mnFaceMatch > nMatch )
+    {
         return false;
+    }
     else if( rStatus.mnFaceMatch < nMatch )
     {
         rStatus.mnFaceMatch      = nMatch;
-        rStatus.mnHeightMatch    = nHeightMatch;
-        rStatus.mnWidthMatch     = nWidthMatch;
         return true;
     }
 
-    // when two fonts are still competing prefer the
-    // one with the best matching height
-    if( rStatus.mnHeightMatch > nHeightMatch )
-        return false;
-    else if( rStatus.mnHeightMatch < nHeightMatch )
-    {
-        rStatus.mnHeightMatch    = nHeightMatch;
-        rStatus.mnWidthMatch     = nWidthMatch;
-        return true;
-    }
-
-    if( rStatus.mnWidthMatch > nWidthMatch )
-        return false;
-
-    rStatus.mnWidthMatch = nWidthMatch;
     return true;
 }
 }
