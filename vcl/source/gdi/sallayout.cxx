@@ -30,6 +30,7 @@
 #include <math.h>
 
 #include <ImplLayoutArgs.hxx>
+#include <impglyphitem.hxx>
 #include <salgdi.hxx>
 #include <sallayout.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -44,8 +45,6 @@
 
 #include <algorithm>
 #include <memory>
-
-#include <impglyphitem.hxx>
 
 // Glyph Flags
 #define GF_FONTMASK  0xF0000000
@@ -494,7 +493,7 @@ sal_Int32 GenericSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoor
 bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
                                     Point& rPos, int& nStart,
                                     const LogicalFontInstance** ppGlyphFont,
-                                    const PhysicalFontFace**) const
+                                    const vcl::font::PhysicalFontFace**) const
 {
     std::vector<GlyphItem>::const_iterator pGlyphIter = m_GlyphItems.begin();
     std::vector<GlyphItem>::const_iterator pGlyphIterEnd = m_GlyphItems.end();
@@ -1108,7 +1107,7 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, tools::Long* pCaretXArray
 bool MultiSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
                                   Point& rPos, int& nStart,
                                   const LogicalFontInstance** ppGlyphFont,
-                                  const PhysicalFontFace** pFallbackFont) const
+                                  const vcl::font::PhysicalFontFace** pFallbackFont) const
 {
     // NOTE: nStart is tagged with current font index
     int nLevel = static_cast<unsigned>(nStart) >> GF_FONTSHIFT;
@@ -1117,7 +1116,7 @@ bool MultiSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
     {
         GenericSalLayout& rLayout = *mpLayouts[ nLevel ];
         rLayout.InitFont();
-        const PhysicalFontFace* pFontFace = rLayout.GetFont().GetFontFace();
+        const vcl::font::PhysicalFontFace* pFontFace = rLayout.GetFont().GetFontFace();
         if (rLayout.GetNextGlyph(pGlyph, rPos, nStart, ppGlyphFont))
         {
             int nFontTag = nLevel << GF_FONTSHIFT;
@@ -1183,4 +1182,5 @@ SalLayoutGlyphs MultiSalLayout::GetGlyphs() const
     return glyphs;
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -234,7 +234,7 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
     font.setEdging(logFont.lfQuality == NONANTIALIASED_QUALITY ? SkFont::Edging::kAlias
                                                                : fontEdging);
 
-    const FontSelectPattern& rFSD = pWinFont->GetFontSelectPattern();
+    const vcl::font::FontSelectPattern& rFSD = pWinFont->GetFontSelectPattern();
     int nHeight = rFSD.mnHeight;
     int nWidth = rFSD.mnWidth ? rFSD.mnWidth : nHeight;
     if (nWidth == 0 || nHeight == 0)

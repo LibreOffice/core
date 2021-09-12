@@ -28,7 +28,7 @@
 #include <vcl/font.hxx>
 
 class FontCharMap;
-class PhysicalFontFace;
+namespace vcl::font { class PhysicalFontFace; }
 
 typedef tools::SvRef<FontCharMap> FontCharMapRef;
 
@@ -37,7 +37,7 @@ class VCL_DLLPUBLIC FontMetric : public vcl::Font
 public:
     explicit            FontMetric();
                         FontMetric( const FontMetric& );  // TODO make this explicit
-                        FontMetric(PhysicalFontFace const& rFace);
+                        FontMetric(vcl::font::PhysicalFontFace const& rFace);
                         ~FontMetric() override;
 
     tools::Long                GetAscent() const                           { return mnAscent; }

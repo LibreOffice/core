@@ -21,20 +21,24 @@
 
 #include <sal/config.h>
 
-#include <vclpluginapi.h>
-#include <PhysicalFontFace.hxx>
-
 #include <tools/ref.hxx>
+
 #include <vcl/fontcapabilities.hxx>
 #include <vcl/fontcharmap.hxx>
+
+#include <vclpluginapi.h>
+#include <font/PhysicalFontFace.hxx>
 
 #include <QtCore/QString>
 #include <QtGui/QFont>
 
 class FontAttributes;
+namespace vcl::font
+{
 class FontSelectPattern;
+}
 
-class Qt5FontFace final : public PhysicalFontFace
+class Qt5FontFace final : public vcl::font::PhysicalFontFace
 {
 public:
     static Qt5FontFace* fromQFont(const QFont& rFont);
@@ -55,7 +59,7 @@ public:
     bool HasChar(sal_uInt32 cChar) const;
 
     rtl::Reference<LogicalFontInstance>
-    CreateFontInstance(const FontSelectPattern& rFSD) const override;
+    CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const override;
 
 private:
     typedef enum { Font, FontDB } FontIdType;
