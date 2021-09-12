@@ -14420,7 +14420,6 @@ vcl/headless/svpvd.cxx
 vcl/inc/IconThemeSelector.hxx
 vcl/inc/IPrioritable.hxx
 vcl/inc/PhysicalFontCollection.hxx
-vcl/inc/PhysicalFontFace.hxx
 vcl/inc/PhysicalFontFamily.hxx
 vcl/inc/ResampleKernel.hxx
 vcl/inc/WidgetThemeLibraryTypes.hxx
@@ -14440,6 +14439,7 @@ vcl/inc/dndlistenercontainer.hxx
 vcl/inc/factory.hxx
 vcl/inc/fltcall.hxx
 vcl/inc/font/FontSelectPattern.hxx
+vcl/inc/font/PhysicalFontFace.hxx
 vcl/inc/fontattributes.hxx
 vcl/inc/fontinstance.hxx
 vcl/inc/fontsubset.hxx
@@ -14940,6 +14940,7 @@ vcl/source/filter/wmf/emfwr.hxx
 vcl/source/filter/wmf/wmf.cxx
 vcl/source/filter/wmf/wmfwr.cxx
 vcl/source/filter/wmf/wmfwr.hxx
+vcl/source/font/FontSelectPattern.cxx
 vcl/source/font/PhysicalFontCollection.cxx
 vcl/source/font/PhysicalFontFace.cxx
 vcl/source/font/PhysicalFontFamily.cxx
@@ -14949,7 +14950,6 @@ vcl/source/font/fontcache.cxx
 vcl/source/font/fontcharmap.cxx
 vcl/source/font/fontinstance.cxx
 vcl/source/font/fontmetric.cxx
-vcl/source/font/fontselect.cxx
 vcl/source/fontsubset/cff.cxx
 vcl/source/fontsubset/fontsubset.cxx
 vcl/source/fontsubset/list.cxx

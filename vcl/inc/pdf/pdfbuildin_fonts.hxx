@@ -21,7 +21,7 @@
 
 #include <sal/config.h>
 
-#include <PhysicalFontFace.hxx>
+#include <font/PhysicalFontFace.hxx>
 #include <fontinstance.hxx>
 
 namespace vcl::pdf
@@ -52,12 +52,12 @@ class BuildinFontInstance final : public LogicalFontInstance
     bool ImplGetGlyphBoundRect(sal_GlyphId nID, tools::Rectangle& rRect, bool) const override;
 
 public:
-    BuildinFontInstance(const PhysicalFontFace&, const vcl::font::FontSelectPattern&);
+    BuildinFontInstance(const vcl::font::PhysicalFontFace&, const vcl::font::FontSelectPattern&);
 
     bool GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rPoly, bool) const override;
 };
 
-class BuildinFontFace final : public PhysicalFontFace
+class BuildinFontFace final : public vcl::font::PhysicalFontFace
 {
     static const BuildinFont m_aBuildinFonts[14];
     const BuildinFont& mrBuildin;
