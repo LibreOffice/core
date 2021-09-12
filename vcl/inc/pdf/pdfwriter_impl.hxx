@@ -64,7 +64,7 @@ class FontSubsetInfo;
 class ZCodec;
 class EncHashTransporter;
 struct BitStreamState;
-class PhysicalFontFace;
+namespace vcl::font { class PhysicalFontFace; }
 class SvStream;
 class SvMemoryStream;
 
@@ -721,8 +721,8 @@ private:
     std::vector< TilingEmit >           m_aTilings;
     std::vector< TransparencyEmit >     m_aTransparentObjects;
     /*  contains all font subsets in use */
-    std::map<const PhysicalFontFace*, FontSubset> m_aSubsets;
-    std::map<const PhysicalFontFace*, EmbedFont> m_aSystemFonts;
+    std::map<const vcl::font::PhysicalFontFace*, FontSubset> m_aSubsets;
+    std::map<const vcl::font::PhysicalFontFace*, EmbedFont> m_aSystemFonts;
     sal_Int32                           m_nNextFID;
     PDFFontCache                        m_aFontCache;
 
@@ -807,7 +807,7 @@ i12626
     void appendLiteralStringEncrypt( std::string_view rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer );
 
     /* creates fonts and subsets that will be emitted later */
-    void registerGlyph(const GlyphItem* pGlyph, const PhysicalFontFace* pFont, const std::vector<sal_Ucs>& rCodeUnits, sal_uInt8& nMappedGlyph, sal_Int32& nMappedFontObject);
+    void registerGlyph(const GlyphItem* pGlyph, const vcl::font::PhysicalFontFace* pFont, const std::vector<sal_Ucs>& rCodeUnits, sal_uInt8& nMappedGlyph, sal_Int32& nMappedFontObject);
 
     /*  emits a text object according to the passed layout */
     /* TODO: remove rText as soon as SalLayout will change so that rText is not necessary anymore */
@@ -852,9 +852,9 @@ i12626
     /* writes a builtin font object and returns its objectid (or 0 in case of failure ) */
     sal_Int32 emitBuildinFont( const pdf::BuildinFontFace*, sal_Int32 nObject );
     /* writes a type1 system font object and returns its mapping from font ids to object ids (or 0 in case of failure ) */
-    std::map< sal_Int32, sal_Int32 > emitSystemFont( const PhysicalFontFace*, EmbedFont const & );
+    std::map< sal_Int32, sal_Int32 > emitSystemFont(const vcl::font::PhysicalFontFace*, EmbedFont const &);
     /* writes a font descriptor and returns its object id (or 0) */
-    sal_Int32 emitFontDescriptor( const PhysicalFontFace*, FontSubsetInfo const &, sal_Int32 nSubsetID, sal_Int32 nStream );
+    sal_Int32 emitFontDescriptor(const vcl::font::PhysicalFontFace*, FontSubsetInfo const &, sal_Int32 nSubsetID, sal_Int32 nStream);
     /* writes a ToUnicode cmap, returns the corresponding stream object */
     sal_Int32 createToUnicodeCMap( sal_uInt8 const * pEncoding, const sal_Ucs* pCodeUnits, const sal_Int32* pCodeUnitsPerGlyph,
                                    const sal_Int32* pEncToUnicodeIndex, int nGlyphs );

@@ -46,8 +46,9 @@
 #include <fontinstance.hxx>
 #include <fontattributes.hxx>
 #include <impfontmetricdata.hxx>
+#include <font/FontSelectPattern.hxx>
 #include <PhysicalFontCollection.hxx>
-#include <PhysicalFontFace.hxx>
+#include <font/PhysicalFontFace.hxx>
 #include <sallayout.hxx>
 
 using namespace psp;
@@ -309,7 +310,7 @@ std::unique_ptr<GenericSalLayout> GenPspGraphics::GetTextLayout(int nFallbackLev
 
 bool GenPspGraphics::CreateFontSubset(
                                    const OUString& rToFile,
-                                   const PhysicalFontFace* pFont,
+                                   const vcl::font::PhysicalFontFace* pFont,
                                    const sal_GlyphId* pGlyphIds,
                                    const sal_uInt8* pEncoding,
                                    sal_Int32* pWidths,
@@ -335,7 +336,7 @@ bool GenPspGraphics::CreateFontSubset(
     return bSuccess;
 }
 
-void GenPspGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
+void GenPspGraphics::GetGlyphWidths( const vcl::font::PhysicalFontFace* pFont,
                                   bool bVertical,
                                   std::vector< sal_Int32 >& rWidths,
                                   Ucs2UIntMap& rUnicodeEnc )
@@ -504,7 +505,7 @@ void GenPspGraphics::FreeEmbedFontData( const void* pData, tools::Long nLen )
     DoFreeEmbedFontData( pData, nLen );
 }
 
-const void* GenPspGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, tools::Long* pDataLen)
+const void* GenPspGraphics::GetEmbedFontData(const vcl::font::PhysicalFontFace* pFont, tools::Long* pDataLen)
 {
     // in this context the pFont->GetFontId() is a valid PSP
     // font since they are the only ones left after the PDF
