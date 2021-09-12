@@ -26,7 +26,7 @@
 
 namespace {
 
-enum ScPreviewLocationType
+enum ScPreviewLocationType : sal_uInt8
 {
     SC_PLOC_CELLRANGE,
     SC_PLOC_COLHEADER,
@@ -43,17 +43,17 @@ enum ScPreviewLocationType
 
 struct ScPreviewLocationEntry
 {
-    ScPreviewLocationType   eType;
-    tools::Rectangle               aPixelRect;
+    tools::Rectangle         aPixelRect;
     ScRange                 aCellRange;
+    ScPreviewLocationType   eType;
     bool                    bRepeatCol;
     bool                    bRepeatRow;
 
     ScPreviewLocationEntry( ScPreviewLocationType eNewType, const tools::Rectangle& rPixel, const ScRange& rRange,
                             bool bRepCol, bool bRepRow ) :
-        eType( eNewType ),
         aPixelRect( rPixel ),
         aCellRange( rRange ),
+        eType( eNewType ),
         bRepeatCol( bRepCol ),
         bRepeatRow( bRepRow )
     {

@@ -345,7 +345,7 @@ FormulaBuffer::SharedFormulaEntry::SharedFormulaEntry(
 FormulaBuffer::SharedFormulaDesc::SharedFormulaDesc(
     const ScAddress& rAddr, sal_Int32 nSharedId,
     const OUString& rCellValue, sal_Int32 nValueType ) :
-    maAddress(rAddr), mnSharedId(nSharedId), maCellValue(rCellValue), mnValueType(nValueType) {}
+    maAddress(rAddr), maCellValue(rCellValue), mnSharedId(nSharedId), mnValueType(nValueType) {}
 
 FormulaBuffer::SheetItem::SheetItem() :
     mpCellFormulas(nullptr),

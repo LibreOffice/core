@@ -259,9 +259,9 @@ void ScOrcusNamedExpression::commit()
 }
 
 ScOrcusFactory::CellStoreToken::CellStoreToken(const ScAddress& rPos, Type eType)
-    : maPos(rPos)
+    : mfValue(std::numeric_limits<double>::quiet_NaN())
+    , maPos(rPos)
     , meType(eType)
-    , mfValue(std::numeric_limits<double>::quiet_NaN())
     , mnIndex1(0)
     , mnIndex2(0)
     , meGrammar(formula::FormulaGrammar::GRAM_UNSPECIFIED)
@@ -269,9 +269,9 @@ ScOrcusFactory::CellStoreToken::CellStoreToken(const ScAddress& rPos, Type eType
 }
 
 ScOrcusFactory::CellStoreToken::CellStoreToken(const ScAddress& rPos, double fValue)
-    : maPos(rPos)
+    : mfValue(fValue)
+    , maPos(rPos)
     , meType(Type::Numeric)
-    , mfValue(fValue)
     , mnIndex1(0)
     , mnIndex2(0)
     , meGrammar(formula::FormulaGrammar::GRAM_UNSPECIFIED)
@@ -279,9 +279,9 @@ ScOrcusFactory::CellStoreToken::CellStoreToken(const ScAddress& rPos, double fVa
 }
 
 ScOrcusFactory::CellStoreToken::CellStoreToken(const ScAddress& rPos, uint32_t nIndex)
-    : maPos(rPos)
+    : mfValue(std::numeric_limits<double>::quiet_NaN())
+    , maPos(rPos)
     , meType(Type::String)
-    , mfValue(std::numeric_limits<double>::quiet_NaN())
     , mnIndex1(nIndex)
     , mnIndex2(0)
     , meGrammar(formula::FormulaGrammar::GRAM_UNSPECIFIED)
@@ -290,10 +290,10 @@ ScOrcusFactory::CellStoreToken::CellStoreToken(const ScAddress& rPos, uint32_t n
 
 ScOrcusFactory::CellStoreToken::CellStoreToken(const ScAddress& rPos, const OUString& rFormula,
         formula::FormulaGrammar::Grammar eGrammar)
-    : maPos(rPos)
-    , meType(Type::Formula)
-    , maStr1(rFormula)
+    : maStr1(rFormula)
     , mfValue(std::numeric_limits<double>::quiet_NaN())
+    , maPos(rPos)
+    , meType(Type::Formula)
     , mnIndex1(0)
     , mnIndex2(0)
     , meGrammar(eGrammar)
@@ -1317,10 +1317,10 @@ ScOrcusStyles::ScOrcusStyles( ScOrcusFactory& rFactory, bool bSkipDefaultStyles 
 }
 
 ScOrcusStyles::font::font():
-    mbBold(false),
-    mbItalic(false),
     mnSize(10),
     maColor(COL_BLACK),
+    mbBold(false),
+    mbItalic(false),
     mbHasFontAttr(false),
     mbHasUnderlineAttr(false),
     mbHasStrikeout(false),
