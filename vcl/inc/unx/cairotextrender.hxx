@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_INC_UNX_CAIROTEXTRENDER_HXX
 #define INCLUDED_VCL_INC_UNX_CAIROTEXTRENDER_HXX
 
+#include <font/FontSelectPattern.hxx>
 #include <unx/freetypetextrender.hxx>
 
 typedef struct _cairo cairo_t;

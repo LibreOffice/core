@@ -7,18 +7,20 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#pragma once
+
 #include <sal/config.h>
 
-#include <PhysicalFontFace.hxx>
+#include <font/FontSelectPattern.hxx>
+#include <font/PhysicalFontFace.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <fontattributes.hxx>
 #include <fontinstance.hxx>
-#include <font/FontSelectPattern.hxx>
 
 class TestFontInstance : public LogicalFontInstance
 {
 public:
-    TestFontInstance(PhysicalFontFace const& rFontFace,
+    TestFontInstance(vcl::font::PhysicalFontFace const& rFontFace,
                      vcl::font::FontSelectPattern const& rFontSelectPattern)
         : LogicalFontInstance(rFontFace, rFontSelectPattern)
     {
@@ -33,17 +35,17 @@ protected:
     bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const override { return true; }
 };
 
-class TestFontFace : public PhysicalFontFace
+class TestFontFace : public vcl::font::PhysicalFontFace
 {
 public:
     TestFontFace(sal_uIntPtr nId)
-        : PhysicalFontFace(FontAttributes())
+        : vcl::font::PhysicalFontFace(FontAttributes())
         , mnFontId(nId)
     {
     }
 
     TestFontFace(FontAttributes const& rFontAttributes, sal_uIntPtr nId)
-        : PhysicalFontFace(rFontAttributes)
+        : vcl::font::PhysicalFontFace(rFontAttributes)
         , mnFontId(nId)
     {
     }
