@@ -123,17 +123,20 @@ public:
         if (pTextObject)
         {
             OutlinerParaObject* pOutlinerParagraphObject = pTextObject->GetOutlinerParaObject();
-            const EditTextObject& aEdit = pOutlinerParagraphObject->GetTextObject();
-            for (sal_Int32 nParagraph = 0; nParagraph < aEdit.GetParagraphCount(); ++nParagraph)
+            if (pOutlinerParagraphObject)
             {
-                OUString sText = aEdit.GetText(nParagraph);
+                const EditTextObject& aEdit = pOutlinerParagraphObject->GetTextObject();
+                for (sal_Int32 nParagraph = 0; nParagraph < aEdit.GetParagraphCount(); ++nParagraph)
+                {
+                    OUString sText = aEdit.GetText(nParagraph);
 
-                m_rXmlWriter.startElement("paragraph");
-                m_rXmlWriter.attribute("index", nParagraph);
-                m_rXmlWriter.attribute("node_type", "common");
-                m_rXmlWriter.attribute("object_name", pObject->GetName());
-                m_rXmlWriter.content(sText);
-                m_rXmlWriter.endElement();
+                    m_rXmlWriter.startElement("paragraph");
+                    m_rXmlWriter.attribute("index", nParagraph);
+                    m_rXmlWriter.attribute("node_type", "common");
+                    m_rXmlWriter.attribute("object_name", pObject->GetName());
+                    m_rXmlWriter.content(sText);
+                    m_rXmlWriter.endElement();
+                }
             }
         }
     }
