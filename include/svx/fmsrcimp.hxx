@@ -59,9 +59,9 @@ struct FmSearchProgress
     // Overflow - only valid in case of STATE_PROGRESS
     bool        bOverflow;
 
-    // the position of the search cursor - valid in case of STATE_SUCCESSFULL, STATE_CANCELED and STATE_NOTHING_FOUND
+    // the position of the search cursor - valid in case of STATE_SUCCESSFUL, STATE_CANCELED and STATE_NOTHING_FOUND
     css::uno::Any  aBookmark;
-    // the field, in which the text was found - valid in case of STATE_SUCCESSFULL
+    // the field, in which the text was found - valid in case of STATE_SUCCESSFUL
     sal_Int32   nFieldIndex;
 };
 
