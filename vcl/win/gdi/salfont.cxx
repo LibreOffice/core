@@ -53,7 +53,8 @@
 
 #include <font/FontSelectPattern.hxx>
 #include <fontsubset.hxx>
-#include <outdev.h>
+#include <font/GlyphFallbackFontSubstitution.hxx>
+#include <font/PreMatchFontSubstitution.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFace.hxx>
@@ -158,14 +159,14 @@ RawFontData::RawFontData( HDC hDC, DWORD nTableTag )
 namespace {
 
 class WinPreMatchFontSubstititution
-:    public ImplPreMatchFontSubstitution
+:    public vcl::font::PreMatchFontSubstitution
 {
 public:
     bool FindFontSubstitute(vcl::font::FontSelectPattern&) const override;
 };
 
 class WinGlyphFallbackSubstititution
-:    public ImplGlyphFallbackFontSubstitution
+:    public vcl::font::GlyphFallbackFontSubstitution
 {
 public:
     explicit WinGlyphFallbackSubstititution()
@@ -288,7 +289,8 @@ bool WinPreMatchFontSubstititution::FindFontSubstitute(vcl::font::FontSelectPatt
 
 // find a fallback font for missing characters
 // TODO: should stylistic matches be searched and preferred?
-bool WinGlyphFallbackSubstititution::FindFontSubstitute(vcl::font::FontSelectPattern& rFontSelData, LogicalFontInstance* /*pLogicalFont*/, OUString& rMissingChars) const
+bool WinGlyphFallbackSubstititution::FindFontSubstitute(vcl::font::FontSelectPattern& rFontSelData, LogicalFontInstance* /*pLogicalFont*/,
+        OUString& rMissingChars) const
 {
     // guess a locale matching to the missing chars
     LanguageType eLang = rFontSelData.meLanguage;
