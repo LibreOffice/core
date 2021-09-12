@@ -1190,43 +1190,43 @@ void SvxStyleBox_Base::SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 
 
     const SfxPoolItem *pItem = pItemSet->GetItem( SID_ATTR_CHAR_WEIGHT );
     if ( pItem )
-        aFont.SetWeight( static_cast< const SvxWeightItem* >( pItem )->GetWeight() );
+        aFont.SetWeight(&pItem->StaticWhichCast(SID_ATTR_CHAR_WEIGHT).GetWeight());
 
     pItem = pItemSet->GetItem( SID_ATTR_CHAR_POSTURE );
     if ( pItem )
-        aFont.SetItalic( static_cast< const SvxPostureItem* >( pItem )->GetPosture() );
+        aFont.SetItalic(&pItem->GetPosture()->StaticWhichCast(SID_ATTR_CHAR_POSTURE));
 
     pItem = pItemSet->GetItem( SID_ATTR_CHAR_CONTOUR );
     if ( pItem )
-        aFont.SetOutline( static_cast< const SvxContourItem* >( pItem )->GetValue() );
+        aFont.SetOutline(&pItem->GetValue()->StaticWhichCast(SID_ATTR_CHAR_CONTOUR));
 
     pItem = pItemSet->GetItem( SID_ATTR_CHAR_SHADOWED );
     if ( pItem )
-        aFont.SetShadow( static_cast< const SvxShadowedItem* >( pItem )->GetValue() );
+        aFont.SetShadow(&pItem->GetValue()->StaticWhichCast(SID_ATTR_CHAR_SHADOWED));
 
     pItem = pItemSet->GetItem( SID_ATTR_CHAR_RELIEF );
     if ( pItem )
-        aFont.SetRelief( static_cast< const SvxCharReliefItem* >( pItem )->GetValue() );
+        aFont.SetRelief(&pItem->GetValue()->StaticWhichCast(SID_ATTR_CHAR_RELIEF));
 
     pItem = pItemSet->GetItem( SID_ATTR_CHAR_UNDERLINE );
     if ( pItem )
-        aFont.SetUnderline( static_cast< const SvxUnderlineItem* >( pItem )->GetLineStyle() );
+        aFont.SetUnderline(&pItem->GetLineStyle()->StaticWhichCast(SID_ATTR_CHAR_UNDERLINE));
 
     pItem = pItemSet->GetItem( SID_ATTR_CHAR_OVERLINE );
     if ( pItem )
-        aFont.SetOverline( static_cast< const SvxOverlineItem* >( pItem )->GetValue() );
+        aFont.SetOverline(&pItem->GetValue()->StaticWhichCast(SID_ATTR_CHAR_OVERLINE));
 
     pItem = pItemSet->GetItem( SID_ATTR_CHAR_STRIKEOUT );
     if ( pItem )
-        aFont.SetStrikeout( static_cast< const SvxCrossedOutItem* >( pItem )->GetStrikeout() );
+        aFont.SetStrikeout(&pItem->GetStrikeout()->StaticWhichCast(SID_ATTR_CHAR_STRIKEOUT));
 
     pItem = pItemSet->GetItem( SID_ATTR_CHAR_CASEMAP );
     if ( pItem )
-        aFont.SetCaseMap(static_cast<const SvxCaseMapItem*>(pItem)->GetCaseMap());
+        aFont.SetCaseMap(&pItem->GetCaseMap()->StaticWhichCast(SID_ATTR_CHAR_CASEMAP));
 
     pItem = pItemSet->GetItem( SID_ATTR_CHAR_EMPHASISMARK );
     if ( pItem )
-        aFont.SetEmphasisMark( static_cast< const SvxEmphasisMarkItem* >( pItem )->GetEmphasisMark() );
+        aFont.SetEmphasisMark(&pItem->GetEmphasisMark()->StaticWhichCast(SID_ATTR_CHAR_EMPHASISMARK));
 
     // setup the device & draw
     Color aFontCol = COL_AUTO, aBackCol = COL_AUTO;
