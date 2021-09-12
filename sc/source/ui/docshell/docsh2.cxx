@@ -61,6 +61,7 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     m_aDocument.GetStyleSheetPool()->CreateStandardStyles();
     m_aDocument.UpdStlShtPtrsFrmNms();
 
+#if !defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
     if (!m_bUcalcTest)
     {
         /* Create styles that are imported through Orcus */
@@ -78,6 +79,7 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             m_aDocument.GetStyleSheetPool()->setAllParaStandard();
         }
     }
+#endif
 
     //  SetDocumentModified is not allowed anymore in Load/InitNew!
     InitItems();
