@@ -183,18 +183,18 @@ private:
         /** for storage of external cell references */
         struct ExtCellRef
         {
-            sal_uInt16      mnFileId;
             OUString        maTabName;
             ScSingleRefData   maRef;
+            sal_uInt16      mnFileId;
         };
         ::std::vector<ExtCellRef>   maExtCellRefs;
 
         /** for storage of external area references */
         struct ExtAreaRef
         {
-            sal_uInt16      mnFileId;
             OUString        maTabName;
             ScComplexRefData    maRef;
+            sal_uInt16      mnFileId;
         };
         ::std::vector<ExtAreaRef>   maExtAreaRefs;
 

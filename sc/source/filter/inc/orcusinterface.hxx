@@ -355,11 +355,11 @@ private:
 
     struct font
     {
-        bool mbBold;
-        bool mbItalic;
         OUString maName;
         double mnSize;
         Color maColor;
+        bool mbBold;
+        bool mbItalic;
 
         bool mbHasFontAttr;
         bool mbHasUnderlineAttr;
@@ -585,7 +585,7 @@ class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
 {
     struct CellStoreToken
     {
-        enum class Type
+        enum class Type : sal_uInt8
         {
             Auto,
             Numeric,
@@ -598,12 +598,13 @@ class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
             FillDownCells
         };
 
-        ScAddress maPos;
-        Type meType;
 
         OUString maStr1;
         OUString maStr2;
         double mfValue;
+
+        ScAddress maPos;
+        Type meType;
 
         uint32_t mnIndex1;
         uint32_t mnIndex2;

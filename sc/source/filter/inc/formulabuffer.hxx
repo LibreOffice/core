@@ -38,8 +38,8 @@ public:
     struct SharedFormulaDesc
     {
         ScAddress maAddress;
-        sal_Int32 mnSharedId;
         OUString maCellValue;
+        sal_Int32 mnSharedId;
         sal_Int32 mnValueType;
 
         SharedFormulaDesc(
