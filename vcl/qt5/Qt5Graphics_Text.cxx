@@ -30,9 +30,9 @@
 #include <fontsubset.hxx>
 #include <sallayout.hxx>
 #include <unx/geninst.h>
-#include <unx/genpspgraphics.h>
 #include <unx/fontmanager.hxx>
 #include <unx/glyphcache.hxx>
+#include <unx/genpspgraphics.h>
 
 #include <QtGui/QGlyphRun>
 #include <QtGui/QFontDatabase>
@@ -216,7 +216,8 @@ const sal_uInt8* Qt5TrueTypeFont::table(sal_uInt32 ord, sal_uInt32& size) const
 }
 }
 
-bool Qt5Graphics::CreateFontSubset(const OUString& rToFile, const PhysicalFontFace* pFontFace,
+bool Qt5Graphics::CreateFontSubset(const OUString& rToFile,
+                                   const vcl::font::PhysicalFontFace* pFontFace,
                                    const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
                                    sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo)
 {
@@ -254,14 +255,15 @@ bool Qt5Graphics::CreateFontSubset(const OUString& rToFile, const PhysicalFontFa
                                             pGlyphIds, pEncoding, pGlyphWidths, nGlyphCount);
 }
 
-const void* Qt5Graphics::GetEmbedFontData(const PhysicalFontFace*, tools::Long* /*pDataLen*/)
+const void* Qt5Graphics::GetEmbedFontData(const vcl::font::PhysicalFontFace*,
+                                          tools::Long* /*pDataLen*/)
 {
     return nullptr;
 }
 
 void Qt5Graphics::FreeEmbedFontData(const void* /*pData*/, tools::Long /*nDataLen*/) {}
 
-void Qt5Graphics::GetGlyphWidths(const PhysicalFontFace* pFontFace, bool bVertical,
+void Qt5Graphics::GetGlyphWidths(const vcl::font::PhysicalFontFace* pFontFace, bool bVertical,
                                  std::vector<sal_Int32>& rWidths, Ucs2UIntMap& rUnicodeEnc)
 {
     const Qt5FontFace* pQt5FontFace = static_cast<const Qt5FontFace*>(pFontFace);

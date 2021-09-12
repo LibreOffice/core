@@ -27,9 +27,8 @@
 #include <vcl/dllapi.h>
 #include <vcl/outdev.hxx>
 
-#include <PhysicalFontFace.hxx>
+#include "PhysicalFontFace.hxx"
 
-class PhysicalFontFace;
 class PhysicalFontCollection;
 
 namespace vcl::font
@@ -58,6 +57,7 @@ struct typed_flags<vcl::font::FontTypeFaces> : is_typed_flags<vcl::font::FontTyp
 
 namespace vcl::font
 {
+class PhysicalFontFace;
 class PhysicalFontFaceCollection;
 
 class VCL_PLUGIN_PUBLIC PhysicalFontFamily

@@ -47,6 +47,7 @@
 #include <impfontmetricdata.hxx>
 #include <impglyphitem.hxx>
 #include <fontsubset.hxx>
+#include <outdev.h>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFace.hxx>

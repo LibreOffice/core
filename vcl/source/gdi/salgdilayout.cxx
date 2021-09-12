@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
 #include <sal/config.h>
+#include <config_features.h>
 
 #include <sal/log.hxx>
 #include <rtl/math.hxx>
@@ -26,7 +26,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <FileDefinitionWidgetDraw.hxx>
-#include <PhysicalFontFace.hxx>
+#include <font/PhysicalFontFace.hxx>
 #include <fontsubset.hxx>
 #include <salframe.hxx>
 #include <salgdi.hxx>
@@ -887,7 +887,7 @@ OUString SalGraphics::getRenderBackendName() const
 }
 
 void SalGraphics::GetGlyphWidths(const vcl::AbstractTrueTypeFont& rTTF,
-                                 const PhysicalFontFace& rFontFace, const bool bVertical,
+                                 const vcl::font::PhysicalFontFace& rFontFace, const bool bVertical,
                                  std::vector<sal_Int32>& rWidths, Ucs2UIntMap& rUnicodeEnc)
 {
     rWidths.clear();
@@ -1041,4 +1041,4 @@ void SalGraphics::FillFontSubsetInfo(const vcl::TTGlobalFontInfo& rTTInfo, const
         rInfo.m_nDescent = -rTTInfo.descender;
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

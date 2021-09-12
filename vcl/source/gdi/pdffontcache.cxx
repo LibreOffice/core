@@ -21,7 +21,7 @@
 
 #include <sal/types.h>
 
-#include <PhysicalFontFace.hxx>
+#include <font/PhysicalFontFace.hxx>
 #include <pdf/pdffontcache.hxx>
 #include <salgdi.hxx>
 
@@ -29,14 +29,14 @@
 
 using namespace vcl;
 
-PDFFontCache::FontIdentifier::FontIdentifier( const PhysicalFontFace* pFont, bool bVertical ) :
+PDFFontCache::FontIdentifier::FontIdentifier( const vcl::font::PhysicalFontFace* pFont, bool bVertical ) :
     m_nFontId( pFont->GetFontId() ),
     m_bVertical( bVertical ),
     m_typeFontFace( const_cast<std::type_info*>(&typeid(pFont)) )
 {
 }
 
-PDFFontCache::FontData& PDFFontCache::getFont( const PhysicalFontFace* pFont, bool bVertical )
+PDFFontCache::FontData& PDFFontCache::getFont( const vcl::font::PhysicalFontFace* pFont, bool bVertical )
 {
     FontIdentifier aId( pFont, bVertical );
     FontToIndexMap::iterator it = m_aFontToIndex.find( aId );
@@ -47,7 +47,7 @@ PDFFontCache::FontData& PDFFontCache::getFont( const PhysicalFontFace* pFont, bo
     return m_aFonts.back();
 }
 
-sal_Int32 PDFFontCache::getGlyphWidth( const PhysicalFontFace* pFont, sal_GlyphId nGlyph, bool bVertical, SalGraphics* pGraphics )
+sal_Int32 PDFFontCache::getGlyphWidth( const vcl::font::PhysicalFontFace* pFont, sal_GlyphId nGlyph, bool bVertical, SalGraphics* pGraphics )
 {
     sal_Int32 nWidth = 0;
     FontData& rFontData( getFont( pFont, bVertical ) );
