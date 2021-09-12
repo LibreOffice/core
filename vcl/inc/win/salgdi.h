@@ -17,18 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_WIN_SALGDI_H
-#define INCLUDED_VCL_INC_WIN_SALGDI_H
+#pragma once
 
-#include <sallayout.hxx>
-#include <salgeom.hxx>
-#include <salgdi.hxx>
-#include <fontinstance.hxx>
-#include <fontattributes.hxx>
-#include <PhysicalFontFace.hxx>
-#include <impfont.hxx>
+#include <sal/config.h>
+
 #include <vcl/fontcapabilities.hxx>
 #include <vcl/fontcharmap.hxx>
+
+#include <font/PhysicalFontFace.hxx>
+#include <fontattributes.hxx>
+#include <fontinstance.hxx>
+#include <impfont.hxx>
+#include <salgeom.hxx>
+#include <salgdi.hxx>
+#include <sallayout.hxx>
 
 #include <memory>
 #include <unordered_set>
@@ -42,7 +44,7 @@
 #include <hb-ot.h>
 #include <dwrite.h>
 
-class FontSelectPattern;
+namespace vcl::font { class FontSelectPattern; }
 class WinFontInstance;
 class ImplFontAttrCache;
 class PhysicalFontCollection;
@@ -54,7 +56,7 @@ class ImplFontMetricData;
 #define PALRGB_TO_RGB(nPalRGB)      ((nPalRGB)&0x00ffffff)
 
 // win32 specific physically available font face
-class WinFontFace : public PhysicalFontFace
+class WinFontFace : public vcl::font::PhysicalFontFace
 {
 public:
     explicit                WinFontFace( const FontAttributes&,
@@ -62,7 +64,7 @@ public:
                                 BYTE nPitchAndFamily  );
     virtual                 ~WinFontFace() override;
 
-    virtual rtl::Reference<LogicalFontInstance> CreateFontInstance( const FontSelectPattern& ) const override;
+    virtual rtl::Reference<LogicalFontInstance> CreateFontInstance( const vcl::font::FontSelectPattern& ) const override;
     virtual sal_IntPtr      GetFontId() const override;
     void                    SetFontId( sal_IntPtr nId ) { mnId = nId; }
     void                    UpdateFromHDC( HDC ) const;
@@ -166,7 +168,7 @@ private:
     int                     mnPenWidth;         // line width
 
 public:
-    HFONT ImplDoSetFont(FontSelectPattern const & i_rFont, const PhysicalFontFace * i_pFontFace, HFONT& o_rOldFont);
+    HFONT ImplDoSetFont(vcl::font::FontSelectPattern const & i_rFont, const vcl::font::PhysicalFontFace * i_pFontFace, HFONT& o_rOldFont);
 
     HDC getHDC() const { return mhLocalDC; }
     void setHDC(HDC aNew) { mhLocalDC = aNew; }
@@ -357,7 +359,7 @@ public:
     // implementation note: encoding 0 with glyph id 0 should be added implicitly
     // as "undefined character"
     virtual bool            CreateFontSubset( const OUString& rToFile,
-                                              const PhysicalFontFace*,
+                                              const vcl::font::PhysicalFontFace*,
                                               const sal_GlyphId* pGlyphIDs,
                                               const sal_uInt8* pEncoding,
                                               sal_Int32* pWidths,
@@ -369,10 +371,10 @@ public:
     // embeddable by GetDevFontList or NULL in case of error
     // parameters: pFont: describes the font in question
     //             pDataLen: out parameter, contains the byte length of the returned buffer
-    virtual const void* GetEmbedFontData(const PhysicalFontFace*, tools::Long* pDataLen) override;
+    virtual const void* GetEmbedFontData(const vcl::font::PhysicalFontFace*, tools::Long* pDataLen) override;
     // frees the font data again
     virtual void            FreeEmbedFontData( const void* pData, tools::Long nDataLen ) override;
-    virtual void            GetGlyphWidths( const PhysicalFontFace*,
+    virtual void            GetGlyphWidths( const vcl::font::PhysicalFontFace*,
                                             bool bVertical,
                                             std::vector< sal_Int32 >& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc ) override;
@@ -392,8 +394,8 @@ public:
 // Init/Deinit Graphics
 void    ImplUpdateSysColorEntries();
 int     ImplIsSysColorEntry( Color nColor );
-void    ImplGetLogFontFromFontSelect( const FontSelectPattern&,
-            const PhysicalFontFace*, LOGFONTW& );
+void    ImplGetLogFontFromFontSelect( const vcl::font::FontSelectPattern&,
+            const vcl::font::PhysicalFontFace*, LOGFONTW& );
 
 #define MAX_64KSALPOINTS    ((((sal_uInt16)0xFFFF)-8)/sizeof(POINTS))
 
@@ -412,6 +414,4 @@ inline bool WinFontFace::HasChar( sal_uInt32 cChar ) const
     return mxUnicodeMap->HasChar( cChar );
 }
 
-#endif // INCLUDED_VCL_INC_WIN_SALGDI_H
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -17,17 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_IMPFONT_HXX
-#define INCLUDED_VCL_INC_IMPFONT_HXX
+#pragma once
+
+#include <sal/config.h>
 
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <i18nlangtag/languagetag.hxx>
+
 #include <vcl/fntstyle.hxx>
 
-#include "fontselect.hxx"
+#include <font/FontSelectPattern.hxx>
 
 /* The following class is extraordinarily similar to FontAttributes. */
 
@@ -145,6 +147,4 @@ private:
     tools::Long         mnCalculatedAverageFontWidth;
 };
 
-#endif // INCLUDED_VCL_INC_IMPFONT_HXX
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SOURCE_GDI_PDFFONTCACHE_HXX
-#define INCLUDED_VCL_SOURCE_GDI_PDFFONTCACHE_HXX
+#pragma once
 
-#include <typeinfo>
-
+#include <sal/config.h>
 #include <sal/types.h>
 
 #include <salgdi.hxx>
+
+#include <typeinfo>
 
 namespace vcl
 {
@@ -36,7 +36,7 @@ namespace vcl
             bool            m_bVertical;
             std::type_info* m_typeFontFace;
 
-            FontIdentifier( const PhysicalFontFace*, bool bVertical );
+            FontIdentifier( const vcl::font::PhysicalFontFace*, bool bVertical );
 
             // Less than needed for std::set and std::map
             bool operator<( const FontIdentifier& rRight ) const
@@ -59,14 +59,12 @@ namespace vcl
         std::vector< FontData >     m_aFonts;
         FontToIndexMap              m_aFontToIndex;
 
-        FontData& getFont( const PhysicalFontFace*, bool bVertical );
+        FontData& getFont( const vcl::font::PhysicalFontFace*, bool bVertical );
         public:
         PDFFontCache() {}
 
-        sal_Int32 getGlyphWidth( const PhysicalFontFace*, sal_GlyphId, bool bVertical, SalGraphics* );
+        sal_Int32 getGlyphWidth( const vcl::font::PhysicalFontFace*, sal_GlyphId, bool bVertical, SalGraphics* );
     };
 }
 
-#endif
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

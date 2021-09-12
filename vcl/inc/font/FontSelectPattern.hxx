@@ -17,11 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_FONTSELECT_HXX
-#define INCLUDED_VCL_INC_FONTSELECT_HXX
+#pragma once
+
+#include <sal/config.h>
 
 #include <i18nlangtag/lang.h>
 #include <tools/degree.hxx>
+
 #include <vcl/vclenum.hxx>
 
 #include "fontattributes.hxx"
@@ -31,8 +33,11 @@
 namespace vcl { class Font; }
 
 class LogicalFontInstance;
-class PhysicalFontFace;
 class Size;
+
+namespace vcl::font
+{
+class PhysicalFontFace;
 
 class VCL_DLLPUBLIC FontSelectPattern : public FontAttributes
 {
@@ -69,9 +74,11 @@ public:
     ItalicMatrix    maItalicMatrix;             // Force matrix for slant
 };
 
+}
+
 template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
-    std::basic_ostream<charT, traits> & stream, const FontSelectPattern & rFSP)
+    std::basic_ostream<charT, traits> & stream, const vcl::font::FontSelectPattern & rFSP)
 {
     stream << (rFSP.maTargetName.isEmpty() ? "<default>" : rFSP.maTargetName)
            << " (" << rFSP.maSearchName << ") w: " << rFSP.mnWidth << " h: "
@@ -79,6 +86,4 @@ inline std::basic_ostream<charT, traits> & operator <<(
     return stream;
 }
 
-#endif // INCLUDED_VCL_INC_FONTSELECT_HXX
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

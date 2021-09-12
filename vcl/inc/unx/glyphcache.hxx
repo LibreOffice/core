@@ -17,24 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_GENERIC_GLYPHCACHE_HXX
-#define INCLUDED_VCL_INC_GENERIC_GLYPHCACHE_HXX
+#pragma once
 
-#include <memory>
+#include <sal/config.h>
+
 #include <freetype/config/ftheader.h>
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
 
 #include <tools/gen.hxx>
 #include <tools/solar.h>
-#include <unx/gendata.hxx>
+
 #include <vcl/dllapi.h>
 #include <vcl/outdev.hxx>
 
 #include <fontattributes.hxx>
 #include <fontinstance.hxx>
 #include <impfontmetricdata.hxx>
+#include <unx/gendata.hxx>
 
+#include <memory>
 #include <unordered_map>
 
 class FreetypeFont;
@@ -135,7 +137,7 @@ public:
     // in starmath at a fairly low stretch ratio. This appears fixed in 2.9 with
     // https://git.savannah.gnu.org/cgit/freetype/freetype2.git/commit/?id=91015cb41d8f56777f93394f5a60914bc0c0f330
     // "Improve complex rendering at high ppem"
-    static bool             AlmostHorizontalDrainsRenderingPool(int nRatio, const FontSelectPattern& rFSD);
+    static bool             AlmostHorizontalDrainsRenderingPool(int nRatio, const vcl::font::FontSelectPattern& rFSD);
 
 private:
     friend class FreetypeFontInstance;
@@ -166,6 +168,4 @@ private:
     bool                    mbArtBold;
 };
 
-#endif // INCLUDED_VCL_INC_GENERIC_GLYPHCACHE_HXX
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

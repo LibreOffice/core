@@ -18,19 +18,16 @@
  */
 
 #include <sal/config.h>
+
+#include <sal/types.h>
 #include <sal/log.hxx>
-
-#include <cassert>
-#include <cstring>
-#include <numeric>
-
+#include <osl/endian.h>
+#include <osl/file.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <osl/endian.h>
-#include <osl/file.hxx>
-#include <sal/types.h>
 #include <tools/long.hxx>
+
 #include <vcl/sysdata.hxx>
 
 #include <fontsubset.hxx>
@@ -44,10 +41,14 @@
 #endif
 #include <sft.hxx>
 
+#include <cassert>
+#include <cstring>
+#include <numeric>
+
 using namespace vcl;
 
 bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
-                                        const PhysicalFontFace* pFontData,
+                                        const vcl::font::PhysicalFontFace* pFontData,
                                         const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
                                         sal_Int32* pGlyphWidths, const int nGlyphCount,
                                         FontSubsetInfo& rInfo )
@@ -284,4 +285,4 @@ XorEmulation::~XorEmulation()
     SetTarget( 0, 0, 0, nullptr, nullptr );
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -18,43 +18,40 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
-
-#include <vector>
+#include <config_cairo_canvas.h>
 
 #include <sal/types.h>
+#include <sal/log.hxx>
+#include <i18nlangtag/mslangid.hxx>
+
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/sysdata.hxx>
+#include <vcl/fontcharmap.hxx>
+
+#include <PhysicalFontCollection.hxx>
+#include <impfontmetricdata.hxx>
+#include <font/PhysicalFontFace.hxx>
+#include <fontattributes.hxx>
+#include <fontinstance.hxx>
+#include <fontsubset.hxx>
+#include <jobdata.hxx>
+#include <langboost.hxx>
+#include <sallayout.hxx>
+
+#include <unx/geninst.h>
+#include <unx/genpspgraphics.h>
+#include <unx/freetype_glyphcache.hxx>
+#include <unx/printergfx.hxx>
+
+#include <vector>
 
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 
-#include <i18nlangtag/mslangid.hxx>
-#include <jobdata.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/sysdata.hxx>
-#include <vcl/fontcharmap.hxx>
-#include <config_cairo_canvas.h>
-
-#include <fontsubset.hxx>
-#include <unx/freetype_glyphcache.hxx>
-#include <unx/geninst.h>
-#include <unx/genpspgraphics.h>
-#include <unx/printergfx.hxx>
-#include <langboost.hxx>
-#include <fontinstance.hxx>
-#include <fontattributes.hxx>
-#include <impfontmetricdata.hxx>
-#include <PhysicalFontCollection.hxx>
-#include <PhysicalFontFace.hxx>
-#include <sallayout.hxx>
-
 using namespace psp;
-
-/*******************************************************
- * GenPspGraphics
- *******************************************************/
 
 GenPspGraphics::GenPspGraphics()
     : m_pJobData( nullptr )
@@ -185,7 +182,7 @@ void GenPspGraphics::SetFont(LogicalFontInstance *pFontInstance, int nFallbackLe
 
     sal_IntPtr nID = pFontInstance->GetFontFace()->GetFontId();
 
-    const FontSelectPattern& rEntry = pFontInstance->GetFontSelectPattern();
+    const vcl::font::FontSelectPattern& rEntry = pFontInstance->GetFontSelectPattern();
 
     // determine which font attributes need to be emulated
     bool bArtItalic = false;
@@ -309,7 +306,7 @@ std::unique_ptr<GenericSalLayout> GenPspGraphics::GetTextLayout(int nFallbackLev
 
 bool GenPspGraphics::CreateFontSubset(
                                    const OUString& rToFile,
-                                   const PhysicalFontFace* pFont,
+                                   const vcl::font::PhysicalFontFace* pFont,
                                    const sal_GlyphId* pGlyphIds,
                                    const sal_uInt8* pEncoding,
                                    sal_Int32* pWidths,
@@ -335,7 +332,7 @@ bool GenPspGraphics::CreateFontSubset(
     return bSuccess;
 }
 
-void GenPspGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
+void GenPspGraphics::GetGlyphWidths( const vcl::font::PhysicalFontFace* pFont,
                                   bool bVertical,
                                   std::vector< sal_Int32 >& rWidths,
                                   Ucs2UIntMap& rUnicodeEnc )
@@ -504,7 +501,7 @@ void GenPspGraphics::FreeEmbedFontData( const void* pData, tools::Long nLen )
     DoFreeEmbedFontData( pData, nLen );
 }
 
-const void* GenPspGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, tools::Long* pDataLen)
+const void* GenPspGraphics::GetEmbedFontData(const vcl::font::PhysicalFontFace* pFont, tools::Long* pDataLen)
 {
     // in this context the pFont->GetFontId() is a valid PSP
     // font since they are the only ones left after the PDF
@@ -515,4 +512,4 @@ const void* GenPspGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, tool
     return DoGetEmbedFontData(aFont, pDataLen);
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

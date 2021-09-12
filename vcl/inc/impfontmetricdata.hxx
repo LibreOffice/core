@@ -17,12 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_IMPFONTMETRICDATA_HXX
-#define INCLUDED_VCL_INC_IMPFONTMETRICDATA_HXX
+#pragma once
 
-#include <vcl/dllapi.h>
 #include <tools/long.hxx>
 #include <tools/ref.hxx>
+
+#include <vcl/dllapi.h>
+
 #include "fontattributes.hxx"
 #include "sft.hxx"
 
@@ -32,13 +33,13 @@ class ImplFontMetricData;
 typedef tools::SvRef<ImplFontMetricData> ImplFontMetricDataRef;
 
 class OutputDevice;
-class FontSelectPattern;
+namespace vcl::font { class FontSelectPattern; }
 class LogicalFontInstance;
 
 class VCL_DLLPUBLIC ImplFontMetricData final : public FontAttributes, public SvRefBase
 {
 public:
-    explicit        ImplFontMetricData( const FontSelectPattern& );
+    explicit        ImplFontMetricData( const vcl::font::FontSelectPattern& );
 
     // font instance attributes from the font request
     tools::Long            GetWidth() const                                                { return mnWidth; }
@@ -145,6 +146,4 @@ private:
 
 };
 
-#endif // INCLUDED_VCL_INC_IMPFONTMETRICDATA_HXX
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

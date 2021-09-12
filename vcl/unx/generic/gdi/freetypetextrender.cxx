@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <unx/freetypetextrender.hxx>
 
 #include <unotools/configmgr.hxx>
@@ -31,7 +33,7 @@
 #include <unx/glyphcache.hxx>
 #include <unx/fc_fontoptions.hxx>
 #include <unx/freetype_glyphcache.hxx>
-#include <PhysicalFontFace.hxx>
+#include <font/PhysicalFontFace.hxx>
 #include <impfontmetricdata.hxx>
 
 #include <sallayout.hxx>
@@ -155,7 +157,7 @@ std::unique_ptr<GenericSalLayout> FreeTypeTextRenderImpl::GetTextLayout(int nFal
 
 bool FreeTypeTextRenderImpl::CreateFontSubset(
                                    const OUString& rToFile,
-                                   const PhysicalFontFace* pFont,
+                                   const vcl::font::PhysicalFontFace* pFont,
                                    const sal_GlyphId* pGlyphIds,
                                    const sal_uInt8* pEncoding,
                                    sal_Int32* pWidths,
@@ -181,7 +183,7 @@ bool FreeTypeTextRenderImpl::CreateFontSubset(
     return bSuccess;
 }
 
-const void* FreeTypeTextRenderImpl::GetEmbedFontData(const PhysicalFontFace* pFont, tools::Long* pDataLen)
+const void* FreeTypeTextRenderImpl::GetEmbedFontData(const vcl::font::PhysicalFontFace* pFont, tools::Long* pDataLen)
 {
     // in this context the pFont->GetFontId() is a valid PSP
     // font since they are the only ones left after the PDF
@@ -197,7 +199,7 @@ void FreeTypeTextRenderImpl::FreeEmbedFontData( const void* pData, tools::Long n
     GenPspGraphics::DoFreeEmbedFontData( pData, nLen );
 }
 
-void FreeTypeTextRenderImpl::GetGlyphWidths( const PhysicalFontFace* pFont,
+void FreeTypeTextRenderImpl::GetGlyphWidths( const vcl::font::PhysicalFontFace* pFont,
                                    bool bVertical,
                                    std::vector< sal_Int32 >& rWidths,
                                    Ucs2UIntMap& rUnicodeEnc )
@@ -211,4 +213,4 @@ void FreeTypeTextRenderImpl::GetGlyphWidths( const PhysicalFontFace* pFont,
     GenPspGraphics::DoGetGlyphWidths( aFont, bVertical, rWidths, rUnicodeEnc );
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

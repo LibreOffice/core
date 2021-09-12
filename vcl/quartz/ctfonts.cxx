@@ -18,27 +18,30 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
+#include <sal/log.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <tools/long.hxx>
+
 #include <vcl/settings.hxx>
 
-
-#include <quartz/ctfonts.hxx>
+#include <PhysicalFontCollection.hxx>
+#include <fontinstance.hxx>
+#include <fontattributes.hxx>
 #include <impfont.hxx>
+#include <impglyphitem.hxx>
+#include <sallayout.hxx>
+
 #ifdef MACOSX
 #include <osx/saldata.hxx>
 #include <osx/salinst.h>
 #endif
-#include <fontinstance.hxx>
-#include <fontattributes.hxx>
-#include <impglyphitem.hxx>
-#include <PhysicalFontCollection.hxx>
+
 #include <quartz/salgdi.h>
 #include <quartz/utils.h>
-#include <sallayout.hxx>
+#include <quartz/ctfonts.hxx>
+
 #include <hb-coretext.h>
 
 static double toRadian(int nDegree)
@@ -46,7 +49,7 @@ static double toRadian(int nDegree)
     return nDegree * (M_PI / 1800.0);
 }
 
-CoreTextStyle::CoreTextStyle(const PhysicalFontFace& rPFF, const FontSelectPattern& rFSP)
+CoreTextStyle::CoreTextStyle(const vcl::font::PhysicalFontFace& rPFF, const FontSelectPattern& rFSP)
     : LogicalFontInstance(rPFF, rFSP)
     , mfFontStretch( 1.0 )
     , mfFontRotation( 0.0 )
@@ -557,4 +560,4 @@ SystemFontList* GetCoretextFontList()
     return pList;
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

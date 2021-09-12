@@ -17,12 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <unx/cairotextrender.hxx>
+#include <sal/config.h>
 
+#include <vcl/svapp.hxx>
+
+#include <sallayout.hxx>
+#include <unx/cairotextrender.hxx>
 #include <unx/fc_fontoptions.hxx>
 #include <unx/freetype_glyphcache.hxx>
-#include <vcl/svapp.hxx>
-#include <sallayout.hxx>
 
 #include <cairo.h>
 #include <cairo-ft.h>
@@ -143,7 +145,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
     if (cairo_glyphs.empty())
         return;
 
-    const FontSelectPattern& rFSD = rInstance.GetFontSelectPattern();
+    const vcl::font::FontSelectPattern& rFSD = rInstance.GetFontSelectPattern();
     int nHeight = rFSD.mnHeight;
     int nWidth = rFSD.mnWidth ? rFSD.mnWidth : nHeight;
     if (nWidth == 0 || nHeight == 0)
@@ -292,4 +294,4 @@ void FontConfigFontOptions::cairo_font_options_substitute(FcPattern* pPattern)
     cairo_ft_font_options_substitute(pFontOptions, pPattern);
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

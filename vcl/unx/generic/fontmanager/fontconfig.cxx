@@ -24,39 +24,41 @@
 #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #endif
 
-#include <memory>
-#include <string_view>
+#include <sal/config.h>
 
-#include <o3tl/lru_map.hxx>
-#include <unx/fontmanager.hxx>
-#include <unx/helper.hxx>
+#include <sal/log.hxx>
+#include <osl/process.h>
+#include <rtl/strbuf.hxx>
 #include <comphelper/sequence.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/vclenum.hxx>
-#include <fontselect.hxx>
+#include <tools/diagnose_ex.h>
+#include <unotools/configmgr.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nutil/unicode.hxx>
-#include <rtl/strbuf.hxx>
-#include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <o3tl/hash_combine.hxx>
+#include <o3tl/lru_map.hxx>
+#include <officecfg/Office/Common.hxx>
+
+#include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+
+#include <font/FontSelectPattern.hxx>
+#include <unx/fontmanager.hxx>
+#include <unx/helper.hxx>
+
+#include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
+
 #include <unicode/uchar.h>
 #include <unicode/uscript.h>
-#include <officecfg/Office/Common.hxx>
-#include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
 
 using namespace psp;
 
 #include <fontconfig/fontconfig.h>
 
-#include <cstdio>
-
-#include <unotools/configmgr.hxx>
-
-#include <osl/process.h>
-
-#include <o3tl/hash_combine.hxx>
-#include <utility>
 #include <algorithm>
+#include <cstdio>
+#include <memory>
+#include <string_view>
+#include <utility>
 
 using namespace osl;
 
@@ -972,7 +974,7 @@ IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport, Timer *, void)
     m_aCurrentRequests.clear();
 }
 
-void PrintFontManager::Substitute(FontSelectPattern &rPattern, OUString& rMissingCodes)
+void PrintFontManager::Substitute(vcl::font::FontSelectPattern &rPattern, OUString& rMissingCodes)
 {
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
 
@@ -1287,4 +1289,4 @@ void PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const css::lang::Loc
     FcPatternDestroy( pPattern );
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

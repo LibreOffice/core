@@ -118,7 +118,7 @@ static inline void applyStyle(Qt5Font& rFont, FontItalic eItalic)
     }
 }
 
-Qt5Font::Qt5Font(const PhysicalFontFace& rPFF, const FontSelectPattern& rFSP)
+Qt5Font::Qt5Font(const vcl::font::PhysicalFontFace& rPFF, const vcl::font::FontSelectPattern& rFSP)
     : LogicalFontInstance(rPFF, rFSP)
 {
     setFamily(toQString(rPFF.GetFamilyName()));
@@ -158,4 +158,4 @@ bool Qt5Font::ImplGetGlyphBoundRect(sal_GlyphId nId, tools::Rectangle& rRect, bo
     return true;
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

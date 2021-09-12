@@ -16,6 +16,8 @@
  *
  */
 
+#include <sal/config.h>
+
 #include <skia/osx/gdiimpl.hxx>
 
 #include <skia/utils.hxx>
@@ -207,7 +209,7 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
 void AquaSkiaSalGraphicsImpl::drawTextLayout(const GenericSalLayout& rLayout)
 {
     const CoreTextStyle& rStyle = *static_cast<const CoreTextStyle*>(&rLayout.GetFont());
-    const FontSelectPattern& rFontSelect = rStyle.GetFontSelectPattern();
+    const vcl::font::FontSelectPattern& rFontSelect = rStyle.GetFontSelectPattern();
     int nHeight = rFontSelect.mnHeight;
     int nWidth = rFontSelect.mnWidth ? rFontSelect.mnWidth : nHeight;
     if (nWidth == 0 || nHeight == 0)
@@ -263,4 +265,4 @@ std::unique_ptr<sk_app::WindowContext> createMetalWindowContext(bool /*temporary
 
 void AquaSkiaSalGraphicsImpl::prepareSkia() { SkiaHelper::prepareSkia(createMetalWindowContext); }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

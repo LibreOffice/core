@@ -17,28 +17,31 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SALGDI_HXX
-#define INCLUDED_VCL_INC_SALGDI_HXX
+#pragma once
+
+#include <sal/config.h>
+#include <config_cairo_canvas.h>
+
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <vcl/outdev.hxx>
 
+#include "SalGradient.hxx"
+#include "WidgetDrawInterface.hxx"
 #include "impfontmetricdata.hxx"
 #include "salgdiimpl.hxx"
 #include "sallayout.hxx"
-#include "SalGradient.hxx"
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include "WidgetDrawInterface.hxx"
-
-#include <config_cairo_canvas.h>
 
 #include <map>
 #include <vector>
 
 class PhysicalFontCollection;
 class SalBitmap;
-class FontSelectPattern;
 class FontAttributes;
-class PhysicalFontFace;
+namespace vcl::font {
+    class FontSelectPattern;
+    class PhysicalFontFace;
+}
 class SalLayout;
 namespace tools { class Rectangle; }
 class FontSubsetInfo;
@@ -173,7 +176,7 @@ public:
     // as "undefined character"
     virtual bool                CreateFontSubset(
                                     const OUString& rToFile,
-                                    const PhysicalFontFace* pFont,
+                                    const vcl::font::PhysicalFontFace* pFont,
                                     const sal_GlyphId* pGlyphIDs,
                                     const sal_uInt8* pEncoding,
                                     sal_Int32* pWidths,
@@ -184,7 +187,7 @@ public:
     // embeddable by GetDevFontList or NULL in case of error
     // parameters: pFont: describes the font in question
     //             pDataLen: out parameter, contains the byte length of the returned buffer
-    virtual const void*         GetEmbedFontData(const PhysicalFontFace* pFont, tools::Long* pDataLen) = 0;
+    virtual const void*         GetEmbedFontData(const vcl::font::PhysicalFontFace* pFont, tools::Long* pDataLen) = 0;
 
     // free the font data again
     virtual void                FreeEmbedFontData( const void* pData, tools::Long nDataLen ) = 0;
@@ -194,7 +197,7 @@ public:
     // between unicode and glyph id
     // leave widths vector and mapping untouched in case of failure
     virtual void                GetGlyphWidths(
-                                    const PhysicalFontFace* pFont,
+                                    const vcl::font::PhysicalFontFace* pFont,
                                     bool bVertical,
                                     std::vector< sal_Int32 >& rWidths,
                                     Ucs2UIntMap& rUnicodeEnc ) = 0;
@@ -648,7 +651,7 @@ protected:
     vcl::WidgetDrawInterface* forWidget() { return m_pWidgetDraw ? m_pWidgetDraw.get() : this; }
 
     static void GetGlyphWidths(const vcl::AbstractTrueTypeFont& rTTF,
-                               const PhysicalFontFace& rFontFace, bool bVertical,
+                               const vcl::font::PhysicalFontFace& rFontFace, bool bVertical,
                                std::vector<sal_Int32>& rWidths, Ucs2UIntMap& rUnicodeEnc);
 
     static bool CreateTTFfontSubset(vcl::AbstractTrueTypeFont& aTTF, const OString& rSysPath,
@@ -924,6 +927,4 @@ public:
     }
 };
 
-#endif // INCLUDED_VCL_INC_SALGDI_HXX
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

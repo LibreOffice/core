@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <stdlib.h>
 #include <unx/freetype_glyphcache.hxx>
 #include <unx/gendata.hxx>
@@ -64,7 +66,7 @@ FreetypeFontFile* FreetypeManager::FindFontFile(const OString& rNativeFileName)
     return pFontFile;
 }
 
-FreetypeFontInstance::FreetypeFontInstance(const PhysicalFontFace& rPFF, const FontSelectPattern& rFSP)
+FreetypeFontInstance::FreetypeFontInstance(const vcl::font::PhysicalFontFace& rPFF, const vcl::font::FontSelectPattern& rFSP)
     : LogicalFontInstance(rPFF, rFSP)
     , mxFreetypeFont(FreetypeManager::get().CreateFont(this))
 {
@@ -116,4 +118,4 @@ bool FreetypeFontInstance::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPoly
     return mxFreetypeFont->GetGlyphOutline(nId, rPoly, bVertical);
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
