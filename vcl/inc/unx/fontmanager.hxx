@@ -44,7 +44,7 @@
 class FontAttributes;
 class FontSubsetInfo;
 class FontConfigFontOptions;
-class FontSelectPattern;
+namespace vcl::font { class FontSelectPattern; }
 class GenericUnixSalData;
 
 namespace psp {
@@ -320,7 +320,7 @@ public:
 
     static std::unique_ptr<FontConfigFontOptions> getFontOptions(const FontAttributes& rFontAttributes, int nSize);
 
-    void Substitute(FontSelectPattern &rPattern, OUString& rMissingCodes);
+    void Substitute(vcl::font::FontSelectPattern &rPattern, OUString& rMissingCodes);
 
 };
 
