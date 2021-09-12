@@ -28,9 +28,10 @@
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 
-#include <PhysicalFontFace.hxx>
+#include <font/FontSelectPattern.hxx>
+#include <font/PhysicalFontFace.hxx>
 #include <fontinstance.hxx>
-#include <fontselect.hxx>
+#include <impfontmetricdata.hxx>
 #include <sft.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -53,7 +54,7 @@ FontMetric::FontMetric()
 
 FontMetric::FontMetric( const FontMetric& rFontMetric ) = default;
 
-FontMetric::FontMetric(PhysicalFontFace const& rFace)
+FontMetric::FontMetric(vcl::font::PhysicalFontFace const& rFace)
 {
     SetFamilyName(rFace.GetFamilyName());
     SetStyleName(rFace.GetStyleName());
@@ -95,7 +96,7 @@ bool FontMetric::operator==( const FontMetric& r ) const
     return true;
 }
 
-ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
+ImplFontMetricData::ImplFontMetricData( const vcl::font::FontSelectPattern& rFontSelData )
     : FontAttributes( rFontSelData )
     , mnHeight ( rFontSelData.mnHeight )
     , mnWidth ( rFontSelData.mnWidth )
