@@ -18,36 +18,30 @@ class EditTest(UITestCase):
 
         with self.ui_test.create_doc_in_start_center("calc"):
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:AddName")
-            xAddNameDlg = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AddName", close_button="cancel") as xAddNameDlg:
 
-            xEdit = xAddNameDlg.getChild("edit")
+                xEdit = xAddNameDlg.getChild("edit")
 
-            type_text(xEdit, "simpleRangeName")
+                type_text(xEdit, "simpleRangeName")
 
-            xAddBtn = xAddNameDlg.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xAddBtn)
 
 
     def test_select_text(self):
 
         with self.ui_test.create_doc_in_start_center("calc"):
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:AddName")
-            xAddNameDlg = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AddName", close_button="cancel") as xAddNameDlg:
 
-            xEdit = xAddNameDlg.getChild("edit")
+                xEdit = xAddNameDlg.getChild("edit")
 
-            type_text(xEdit, "simpleRangeName")
-            xEdit.executeAction("SELECT", mkPropertyValues({"FROM": "2", "TO": "9"}))
-            type_text(xEdit, "otherChars")
-            self.assertEqual("siotherCharsgeName", get_state_as_dict(xEdit)["Text"])
+                type_text(xEdit, "simpleRangeName")
+                xEdit.executeAction("SELECT", mkPropertyValues({"FROM": "2", "TO": "9"}))
+                type_text(xEdit, "otherChars")
+                self.assertEqual("siotherCharsgeName", get_state_as_dict(xEdit)["Text"])
 
-            select_text(xEdit, from_pos="2", to="12")
-            self.assertEqual("otherChars", get_state_as_dict(xEdit)["SelectedText"])
+                select_text(xEdit, from_pos="2", to="12")
+                self.assertEqual("otherChars", get_state_as_dict(xEdit)["SelectedText"])
 
-            xAddBtn = xAddNameDlg.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xAddBtn)
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

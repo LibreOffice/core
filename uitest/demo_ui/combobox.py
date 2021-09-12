@@ -16,14 +16,11 @@ class ComboBoxTest(UITestCase):
 
         with self.ui_test.create_doc_in_start_center("calc"):
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:AddName")
-            xAddNameDlg = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AddName", close_button="cancel") as xAddNameDlg:
 
-            scopeCB = xAddNameDlg.getChild("scope")
-            select_pos(scopeCB, "1")
+                scopeCB = xAddNameDlg.getChild("scope")
+                select_pos(scopeCB, "1")
 
-            xCancelBtn = xAddNameDlg.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xCancelBtn)
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
