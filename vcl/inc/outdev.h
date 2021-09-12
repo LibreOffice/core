@@ -25,8 +25,9 @@
 #include <tools/gen.hxx>
 #include <vcl/vclptr.hxx>
 
+#include <font/PhysicalFontFace.hxx>
+
 #include "fontinstance.hxx"
-#include "PhysicalFontFace.hxx"
 #include "impfontcache.hxx"
 
 class Size;
@@ -82,7 +83,7 @@ class ImplPreMatchFontSubstitution
 :   public ImplFontSubstitution
 {
 public:
-    virtual bool FindFontSubstitute(FontSelectPattern&)  const = 0;
+    virtual bool FindFontSubstitute(vcl::font::FontSelectPattern&)  const = 0;
 };
 
 // ImplGlyphFallbackFontSubstitution
@@ -91,7 +92,7 @@ class ImplGlyphFallbackFontSubstitution
 :   public ImplFontSubstitution
 {
 public:
-    virtual bool FindFontSubstitute(FontSelectPattern&, LogicalFontInstance* pLogicalFont, OUString& rMissingCodes) const = 0;
+    virtual bool FindFontSubstitute(vcl::font::FontSelectPattern&, LogicalFontInstance* pLogicalFont, OUString& rMissingCodes) const = 0;
 };
 
 namespace vcl { struct ControlLayoutData; }
