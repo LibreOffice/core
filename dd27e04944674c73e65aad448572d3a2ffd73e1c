@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00ac05fa_967f73ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-09-12T06:44:31Z",
+      "side": 1,
+      "message": "It\u0027s in comment so no need to wait for Jenkins",
+      "revId": "dd27e04944674c73e65aad448572d3a2ffd73e1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
