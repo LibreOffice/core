@@ -1789,7 +1789,7 @@ IMPL_LINK( OfaLanguagesTabPage, DatePatternsHdl, weld::Entry&, rEd, void )
         }
     }
     if (bModified)
-        rEd.replace_selection(aBuf.makeStringAndClear());
+        rEd.set_text(aBuf.makeStringAndClear());  // This even keeps the cursor position so all good.
     if (bValid)
         rEd.set_message_type(weld::EntryMessageType::Normal);
     else
