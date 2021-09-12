@@ -18,10 +18,11 @@
  */
 
 #include <sal/config.h>
+
 #include <sal/log.hxx>
 
 #include <PhysicalFontCollection.hxx>
-#include <PhysicalFontFace.hxx>
+#include <font/PhysicalFontFace.hxx>
 #include <font/PhysicalFontFamily.hxx>
 #include <fontinstance.hxx>
 #include <impfontcache.hxx>
@@ -143,7 +144,7 @@ rtl::Reference<LogicalFontInstance> ImplFontCache::GetFontInstance( PhysicalFont
 
     if( !pFontInstance && pFontFamily) // still no cache hit => create a new font instance
     {
-        PhysicalFontFace* pFontData = pFontFamily->FindBestFontFace(aFontSelData);
+        vcl::font::PhysicalFontFace* pFontData = pFontFamily->FindBestFontFace(aFontSelData);
 
         // create a new logical font instance from this physical font face
         pFontInstance = pFontData->CreateFontInstance( aFontSelData );
