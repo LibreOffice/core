@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <rtl/strbuf.hxx>
 
 #include <pdf/pdfbuildin_fonts.hxx>
@@ -729,8 +731,8 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
 
       };
 
-BuildinFontInstance::BuildinFontInstance(const PhysicalFontFace& rFontFace,
-                                         const FontSelectPattern& rFSP)
+BuildinFontInstance::BuildinFontInstance(const vcl::font::PhysicalFontFace& rFontFace,
+                                         const vcl::font::FontSelectPattern& rFSP)
     : LogicalFontInstance(rFontFace, rFSP)
 {
 }
@@ -746,13 +748,13 @@ bool BuildinFontInstance::GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&,
 }
 
 BuildinFontFace::BuildinFontFace(int nId)
-    : PhysicalFontFace(m_aBuildinFonts[nId].GetFontAttributes())
+    : vcl::font::PhysicalFontFace(m_aBuildinFonts[nId].GetFontAttributes())
     , mrBuildin(m_aBuildinFonts[nId])
 {
 }
 
 rtl::Reference<LogicalFontInstance>
-BuildinFontFace::CreateFontInstance(const FontSelectPattern& rFSP) const
+BuildinFontFace::CreateFontInstance(const vcl::font::FontSelectPattern& rFSP) const
 {
     return new BuildinFontInstance(*this, rFSP);
 }

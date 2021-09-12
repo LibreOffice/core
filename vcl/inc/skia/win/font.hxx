@@ -19,7 +19,7 @@
 class SkiaWinFontInstance : public WinFontInstance
 {
     friend rtl::Reference<LogicalFontInstance>
-    WinFontFace::CreateFontInstance(const FontSelectPattern&) const;
+    WinFontFace::CreateFontInstance(const vcl::font::FontSelectPattern&) const;
 
 public:
     sk_sp<SkTypeface> GetSkiaTypeface() const { return m_skiaTypeface; }
