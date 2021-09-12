@@ -315,7 +315,7 @@ namespace
     }
 }
 
-bool FreetypeFont::AlmostHorizontalDrainsRenderingPool(int nRatio, const FontSelectPattern& rFSD)
+bool FreetypeFont::AlmostHorizontalDrainsRenderingPool(int nRatio, const vcl::font::FontSelectPattern& rFSD)
 {
     static bool bAlmostHorizontalDrainsRenderingPool = DoesAlmostHorizontalDrainRenderingPool();
     if (nRatio > 100 && rFSD.maTargetName == "OpenSymbol" && bAlmostHorizontalDrainsRenderingPool)
@@ -373,7 +373,7 @@ FreetypeFont* FreetypeManager::CreateFont(FreetypeFontInstance* pFontInstance)
     if (!pFontInstance)
         return nullptr;
 
-    const PhysicalFontFace* pFontFace = pFontInstance->GetFontFace();
+    const vcl::font::PhysicalFontFace* pFontFace = pFontInstance->GetFontFace();
     if (!pFontFace)
         return nullptr;
 
@@ -387,12 +387,12 @@ FreetypeFont* FreetypeManager::CreateFont(FreetypeFontInstance* pFontInstance)
 }
 
 FreetypeFontFace::FreetypeFontFace( FreetypeFontInfo* pFI, const FontAttributes& rDFA )
-:   PhysicalFontFace( rDFA ),
+:   vcl::font::PhysicalFontFace( rDFA ),
     mpFreetypeFontInfo( pFI )
 {
 }
 
-rtl::Reference<LogicalFontInstance> FreetypeFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
+rtl::Reference<LogicalFontInstance> FreetypeFontFace::CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const
 {
     return new FreetypeFontInstance(*this, rFSD);
 }
@@ -416,7 +416,7 @@ FreetypeFont::FreetypeFont(FreetypeFontInstance& rFontInstance, const std::share
 
     maFaceFT = mxFontInfo->GetFaceFT();
 
-    const FontSelectPattern& rFSD = rFontInstance.GetFontSelectPattern();
+    const vcl::font::FontSelectPattern& rFSD = rFontInstance.GetFontSelectPattern();
 
     if( rFSD.mnOrientation )
     {
