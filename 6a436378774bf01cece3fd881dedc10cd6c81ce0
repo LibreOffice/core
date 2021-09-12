@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd036885_11c2cb2b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-12T18:25:40Z",
+      "side": 1,
+      "message": "LOL, include/comphelper/servicehelper.hxx even provides UnoTunnelIdInit that already does exactly that. OImplementationId is simply redundant, and possibly should no be used in core.",
+      "revId": "6a436378774bf01cece3fd881dedc10cd6c81ce0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
