@@ -23,23 +23,20 @@ class TreeListTest(UITestCase):
             enter_text_to_cell(xGridWindow, "B2", "=2+3+4")
             xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "B2"}))
 
-            self.ui_test.execute_modeless_dialog_through_command(".uno:FunctionDialog")
+            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:FunctionDialog", close_button="cancel") as xFunctionDlg:
 
-            xFunctionDlg = self.xUITest.getTopFocusWindow()
 
-            xTabs = xFunctionDlg.getChild("tabcontrol")
-            select_pos(xTabs, "1")
+                xTabs = xFunctionDlg.getChild("tabcontrol")
+                select_pos(xTabs, "1")
 
-            xTreelist = xTabs.getChild("struct")
+                xTreelist = xTabs.getChild("struct")
 
-            xTreeEntry = xTreelist.getChild('0')
+                xTreeEntry = xTreelist.getChild('0')
 
-            xTreeEntry.executeAction("COLLAPSE", tuple())
+                xTreeEntry.executeAction("COLLAPSE", tuple())
 
-            xTreeEntry.executeAction("EXPAND", tuple())
+                xTreeEntry.executeAction("EXPAND", tuple())
 
-            xCancelBtn = xFunctionDlg.getChild("cancel")
-            xCancelBtn.executeAction("CLICK", tuple())
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
