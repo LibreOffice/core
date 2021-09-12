@@ -3892,11 +3892,11 @@ beans::PropertyState EscherPropertyValueHelper::GetPropertyState(
 
 EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject& rObject, const OString& rId,
                                         const GraphicAttr* pGraphicAttr ) :
+    maPrefMapMode   ( rObject.GetPrefMapMode() ),
+    maPrefSize      ( rObject.GetPrefSize() ),
     mnPictureOffset ( nPictureOffset ),
     mnRefCount      ( 1 ),
     mnSizeExtra     ( 0 ),
-    maPrefSize      ( rObject.GetPrefSize() ),
-    maPrefMapMode   ( rObject.GetPrefMapMode() ),
     mbIsEmpty       ( true )
 {
     mbIsNativeGraphicPossible = ( pGraphicAttr == nullptr );

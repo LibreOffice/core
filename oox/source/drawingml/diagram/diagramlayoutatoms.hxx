@@ -55,26 +55,26 @@ struct ConditionAttr
     // not sure this belong here, but wth
     void loadFromXAttr( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes );
 
+    OUString msVal;
     sal_Int32 mnFunc;
     sal_Int32 mnArg;
     sal_Int32 mnOp;
-    OUString msVal;
     sal_Int32 mnVal;
 };
 
 /// Constraints allow you to specify an ideal (or starting point) size for each shape.
 struct Constraint
 {
-    sal_Int32 mnFor;
     OUString msForName;
+    OUString msRefForName;
+    double mfFactor;
+    double mfValue;
+    sal_Int32 mnFor;
     sal_Int32 mnPointType;
     sal_Int32 mnType;
     sal_Int32 mnRefFor;
-    OUString msRefForName;
     sal_Int32 mnRefType;
     sal_Int32 mnRefPointType;
-    double mfFactor;
-    double mfValue;
     sal_Int32 mnOperator;
 };
 

@@ -34,8 +34,8 @@ TickInfo::TickInfo( const uno::Reference<chart2::XScaling>& xInverse )
 : fScaledTickValue( 0.0 )
 , xInverseScaling( xInverse )
 , aTickScreenPosition(0.0,0.0)
-, bPaintIt( true )
 , nFactorForLimitedTextWidth(1)
+, bPaintIt( true )
 {
 }
 
