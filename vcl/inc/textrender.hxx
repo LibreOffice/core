@@ -26,7 +26,7 @@
 
 class ImplFontMetricData;
 class PhysicalFontCollection;
-class PhysicalFontFace;
+namespace vcl::font { class PhysicalFontFace; }
 
 class TextRenderImpl
 {
@@ -45,17 +45,17 @@ public:
     virtual bool                    AddTempDevFont( PhysicalFontCollection*, const OUString& rFileURL, const OUString& rFontName ) = 0;
     virtual bool                    CreateFontSubset(
                                         const OUString& rToFile,
-                                        const PhysicalFontFace*,
+                                        const vcl::font::PhysicalFontFace*,
                                         const sal_GlyphId* pGlyphIDs,
                                         const sal_uInt8* pEncoding,
                                         sal_Int32* pWidths,
                                         int nGlyphs,
                                         FontSubsetInfo& rInfo) = 0;
 
-    virtual const void*             GetEmbedFontData(const PhysicalFontFace*, tools::Long* pDataLen) = 0;
+    virtual const void*             GetEmbedFontData(const vcl::font::PhysicalFontFace*, tools::Long* pDataLen) = 0;
     virtual void                    FreeEmbedFontData( const void* pData, tools::Long nDataLen ) = 0;
     virtual void                    GetGlyphWidths(
-                                        const PhysicalFontFace*,
+                                        const vcl::font::PhysicalFontFace*,
                                         bool bVertical,
                                         std::vector< sal_Int32 >& rWidths,
                                         Ucs2UIntMap& rUnicodeEnc ) = 0;

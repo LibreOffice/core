@@ -373,7 +373,7 @@ FreetypeFont* FreetypeManager::CreateFont(FreetypeFontInstance* pFontInstance)
     if (!pFontInstance)
         return nullptr;
 
-    const PhysicalFontFace* pFontFace = pFontInstance->GetFontFace();
+    const vcl::font::PhysicalFontFace* pFontFace = pFontInstance->GetFontFace();
     if (!pFontFace)
         return nullptr;
 
@@ -387,7 +387,7 @@ FreetypeFont* FreetypeManager::CreateFont(FreetypeFontInstance* pFontInstance)
 }
 
 FreetypeFontFace::FreetypeFontFace( FreetypeFontInfo* pFI, const FontAttributes& rDFA )
-:   PhysicalFontFace( rDFA ),
+:   vcl::font::PhysicalFontFace( rDFA ),
     mpFreetypeFontInfo( pFI )
 {
 }

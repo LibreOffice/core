@@ -26,7 +26,7 @@
 #include <salgdi.hxx>
 #include <fontinstance.hxx>
 #include <fontattributes.hxx>
-#include <PhysicalFontFace.hxx>
+#include <font/PhysicalFontFace.hxx>
 #include <impfont.hxx>
 #include <vcl/fontcapabilities.hxx>
 #include <vcl/fontcharmap.hxx>
@@ -58,7 +58,7 @@ class ImplFontMetricData;
 #define PALRGB_TO_RGB(nPalRGB)      ((nPalRGB)&0x00ffffff)
 
 // win32 specific physically available font face
-class WinFontFace : public PhysicalFontFace
+class WinFontFace : public vcl::font::PhysicalFontFace
 {
 public:
     explicit                WinFontFace( const FontAttributes&,
@@ -174,7 +174,7 @@ private:
     void DeInitGraphics();
 
 public:
-    HFONT ImplDoSetFont(vcl::font::FontSelectPattern const & i_rFont, const PhysicalFontFace * i_pFontFace, HFONT& o_rOldFont);
+    HFONT ImplDoSetFont(vcl::font::FontSelectPattern const & i_rFont, const vcl::font::PhysicalFontFace * i_pFontFace, HFONT& o_rOldFont);
 
     HDC getHDC() const { return mhLocalDC; }
     void setHDC(HDC aNew);
@@ -364,7 +364,7 @@ public:
     // implementation note: encoding 0 with glyph id 0 should be added implicitly
     // as "undefined character"
     virtual bool            CreateFontSubset( const OUString& rToFile,
-                                              const PhysicalFontFace*,
+                                              const vcl::font::PhysicalFontFace*,
                                               const sal_GlyphId* pGlyphIDs,
                                               const sal_uInt8* pEncoding,
                                               sal_Int32* pWidths,
@@ -376,10 +376,10 @@ public:
     // embeddable by GetDevFontList or NULL in case of error
     // parameters: pFont: describes the font in question
     //             pDataLen: out parameter, contains the byte length of the returned buffer
-    virtual const void* GetEmbedFontData(const PhysicalFontFace*, tools::Long* pDataLen) override;
+    virtual const void* GetEmbedFontData(const vcl::font::PhysicalFontFace*, tools::Long* pDataLen) override;
     // frees the font data again
     virtual void            FreeEmbedFontData( const void* pData, tools::Long nDataLen ) override;
-    virtual void            GetGlyphWidths( const PhysicalFontFace*,
+    virtual void            GetGlyphWidths( const vcl::font::PhysicalFontFace*,
                                             bool bVertical,
                                             std::vector< sal_Int32 >& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc ) override;
@@ -400,7 +400,7 @@ public:
 void    ImplUpdateSysColorEntries();
 int     ImplIsSysColorEntry( Color nColor );
 void    ImplGetLogFontFromFontSelect( const vcl::font::FontSelectPattern&,
-            const PhysicalFontFace*, LOGFONTW& );
+            const vcl::font::PhysicalFontFace*, LOGFONTW& );
 
 #define MAX_64KSALPOINTS    ((((sal_uInt16)0xFFFF)-8)/sizeof(POINTS))
 

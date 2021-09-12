@@ -276,7 +276,7 @@ vcl::font::PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont( vcl
     return pFallbackData;
 }
 
-void PhysicalFontCollection::Add( PhysicalFontFace* pNewData )
+void PhysicalFontCollection::Add( vcl::font::PhysicalFontFace* pNewData )
 {
     OUString aSearchName = GetEnglishSearchFontName( pNewData->GetFamilyName() );
 

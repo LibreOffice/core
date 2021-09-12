@@ -48,7 +48,7 @@ class VCL_PLUGIN_PUBLIC LogicalFontInstance : public salhelper::SimpleReferenceO
 {
     // just declaring the factory function doesn't work AKA
     // friend LogicalFontInstance* PhysicalFontFace::CreateFontInstance(const FontSelectPattern&) const;
-    friend class PhysicalFontFace;
+    friend class vcl::font::PhysicalFontFace;
     friend class ImplFontCache;
 
 public: // TODO: make data members private
@@ -72,8 +72,8 @@ public: // TODO: make data members private
     double GetAverageWidthFactor() const { return m_nAveWidthFactor; }
     const vcl::font::FontSelectPattern& GetFontSelectPattern() const { return m_aFontSelData; }
 
-    const PhysicalFontFace* GetFontFace() const { return m_pFontFace.get(); }
-    PhysicalFontFace* GetFontFace() { return m_pFontFace.get(); }
+    const vcl::font::PhysicalFontFace* GetFontFace() const { return m_pFontFace.get(); }
+    vcl::font::PhysicalFontFace* GetFontFace() { return m_pFontFace.get(); }
     const ImplFontCache* GetFontCache() const { return mpFontCache; }
 
     bool GetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const;
@@ -85,7 +85,7 @@ public: // TODO: make data members private
     static inline void DecodeOpenTypeTag(const uint32_t nTableTag, char* pTagName);
 
 protected:
-    explicit LogicalFontInstance(const PhysicalFontFace&, const vcl::font::FontSelectPattern&);
+    explicit LogicalFontInstance(const vcl::font::PhysicalFontFace&, const vcl::font::FontSelectPattern&);
 
     virtual bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const = 0;
 
@@ -103,7 +103,7 @@ private:
     const vcl::font::FontSelectPattern m_aFontSelData;
     hb_font_t* m_pHbFont;
     double m_nAveWidthFactor;
-    rtl::Reference<PhysicalFontFace> m_pFontFace;
+    rtl::Reference<vcl::font::PhysicalFontFace> m_pFontFace;
     std::optional<bool> m_xbIsGraphiteFont;
 };
 

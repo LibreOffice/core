@@ -39,7 +39,7 @@
 using namespace vcl;
 
 QtFontFace::QtFontFace(const QtFontFace& rSrc)
-    : PhysicalFontFace(rSrc)
+    : vcl::font::PhysicalFontFace(rSrc)
     , m_aFontId(rSrc.m_aFontId)
     , m_eFontIdType(rSrc.m_eFontIdType)
 {

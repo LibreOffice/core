@@ -31,6 +31,7 @@
 #include <vcl/sysdata.hxx>
 #include <config_cairo_canvas.h>
 
+#include <font/PhysicalFontFace.hxx>
 #include <salgdi.hxx>
 #include <sallayout.hxx>
 #include "svpcairotextrender.hxx"
@@ -183,16 +184,16 @@ public:
     virtual void ClearDevFontCache() override;
     virtual bool            AddTempDevFont( PhysicalFontCollection*, const OUString& rFileURL, const OUString& rFontName ) override;
     virtual bool        CreateFontSubset( const OUString& rToFile,
-                                              const PhysicalFontFace*,
+                                              const vcl::font::PhysicalFontFace*,
                                               const sal_GlyphId* pGlyphIds,
                                               const sal_uInt8* pEncoding,
                                               sal_Int32* pWidths,
                                               int nGlyphs,
                                               FontSubsetInfo& rInfo
                                               ) override;
-    virtual const void*     GetEmbedFontData(const PhysicalFontFace*, tools::Long* pDataLen) override;
+    virtual const void*     GetEmbedFontData(const vcl::font::PhysicalFontFace*, tools::Long* pDataLen) override;
     virtual void            FreeEmbedFontData( const void* pData, tools::Long nDataLen ) override;
-    virtual void            GetGlyphWidths( const PhysicalFontFace*,
+    virtual void            GetGlyphWidths( const vcl::font::PhysicalFontFace*,
                                             bool bVertical,
                                             std::vector< sal_Int32 >& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc ) override;

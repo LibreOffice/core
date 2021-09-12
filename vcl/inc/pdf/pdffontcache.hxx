@@ -37,7 +37,7 @@ namespace vcl
             bool            m_bVertical;
             std::type_info* m_typeFontFace;
 
-            FontIdentifier( const PhysicalFontFace*, bool bVertical );
+            FontIdentifier( const vcl::font::PhysicalFontFace*, bool bVertical );
 
             // Less than needed for std::set and std::map
             bool operator<( const FontIdentifier& rRight ) const
@@ -60,11 +60,11 @@ namespace vcl
         std::vector< FontData >     m_aFonts;
         FontToIndexMap              m_aFontToIndex;
 
-        FontData& getFont( const PhysicalFontFace*, bool bVertical );
+        FontData& getFont( const vcl::font::PhysicalFontFace*, bool bVertical );
         public:
         PDFFontCache() {}
 
-        sal_Int32 getGlyphWidth( const PhysicalFontFace*, sal_GlyphId, bool bVertical, SalGraphics* );
+        sal_Int32 getGlyphWidth( const vcl::font::PhysicalFontFace*, sal_GlyphId, bool bVertical, SalGraphics* );
     };
 }
 

@@ -216,7 +216,8 @@ const sal_uInt8* QtTrueTypeFont::table(sal_uInt32 ord, sal_uInt32& size) const
 }
 }
 
-bool QtGraphics::CreateFontSubset(const OUString& rToFile, const PhysicalFontFace* pFontFace,
+bool QtGraphics::CreateFontSubset(const OUString& rToFile,
+                                  const vcl::font::PhysicalFontFace* pFontFace,
                                   const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
                                   sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo)
 {
@@ -254,14 +255,15 @@ bool QtGraphics::CreateFontSubset(const OUString& rToFile, const PhysicalFontFac
                                             pGlyphIds, pEncoding, pGlyphWidths, nGlyphCount);
 }
 
-const void* QtGraphics::GetEmbedFontData(const PhysicalFontFace*, tools::Long* /*pDataLen*/)
+const void* QtGraphics::GetEmbedFontData(const vcl::font::PhysicalFontFace*,
+                                         tools::Long* /*pDataLen*/)
 {
     return nullptr;
 }
 
 void QtGraphics::FreeEmbedFontData(const void* /*pData*/, tools::Long /*nDataLen*/) {}
 
-void QtGraphics::GetGlyphWidths(const PhysicalFontFace* pFontFace, bool bVertical,
+void QtGraphics::GetGlyphWidths(const vcl::font::PhysicalFontFace* pFontFace, bool bVertical,
                                 std::vector<sal_Int32>& rWidths, Ucs2UIntMap& rUnicodeEnc)
 {
     const QtFontFace* pQtFontFace = static_cast<const QtFontFace*>(pFontFace);

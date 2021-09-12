@@ -47,7 +47,7 @@
 using namespace vcl;
 
 bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
-                                        const PhysicalFontFace* pFontData,
+                                        const vcl::font::PhysicalFontFace* pFontData,
                                         const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
                                         sal_Int32* pGlyphWidths, const int nGlyphCount,
                                         FontSubsetInfo& rInfo )

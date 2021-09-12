@@ -65,7 +65,7 @@ bool SvpSalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
 
 bool SvpSalGraphics::CreateFontSubset(
     const OUString& rToFile,
-    const PhysicalFontFace* pFont,
+    const vcl::font::PhysicalFontFace* pFont,
     const sal_GlyphId* pGlyphIds,
     const sal_uInt8* pEncoding,
     sal_Int32* pWidths,
@@ -75,7 +75,7 @@ bool SvpSalGraphics::CreateFontSubset(
     return m_aTextRenderImpl.CreateFontSubset(rToFile, pFont, pGlyphIds, pEncoding, pWidths, nGlyphCount, rInfo);
 }
 
-const void* SvpSalGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, tools::Long* pDataLen)
+const void* SvpSalGraphics::GetEmbedFontData(const vcl::font::PhysicalFontFace* pFont, tools::Long* pDataLen)
 {
     return m_aTextRenderImpl.GetEmbedFontData(pFont, pDataLen);
 }
@@ -85,7 +85,7 @@ void SvpSalGraphics::FreeEmbedFontData( const void* pData, tools::Long nLen )
     m_aTextRenderImpl.FreeEmbedFontData(pData, nLen);
 }
 
-void SvpSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
+void SvpSalGraphics::GetGlyphWidths( const vcl::font::PhysicalFontFace* pFont,
                                    bool bVertical,
                                    std::vector< sal_Int32 >& rWidths,
                                    Ucs2UIntMap& rUnicodeEnc )

@@ -22,6 +22,8 @@
 
 #include <unx/freetypetextrender.hxx>
 
+class GenericSalLayout;
+class SalGraphics;
 typedef struct _cairo cairo_t;
 
 class VCL_DLLPUBLIC CairoTextRender : public FreeTypeTextRenderImpl
