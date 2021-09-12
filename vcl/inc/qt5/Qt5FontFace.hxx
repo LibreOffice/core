@@ -21,12 +21,13 @@
 
 #include <sal/config.h>
 
-#include <vclpluginapi.h>
-#include <PhysicalFontFace.hxx>
-
 #include <tools/ref.hxx>
+
 #include <vcl/fontcapabilities.hxx>
 #include <vcl/fontcharmap.hxx>
+
+#include <vclpluginapi.h>
+#include <font/PhysicalFontFace.hxx>
 
 #include <QtCore/QString>
 #include <QtGui/QFont>
@@ -37,7 +38,7 @@ namespace vcl::font
 class FontSelectPattern;
 }
 
-class Qt5FontFace final : public PhysicalFontFace
+class Qt5FontFace final : public vcl::font::PhysicalFontFace
 {
 public:
     static Qt5FontFace* fromQFont(const QFont& rFont);
