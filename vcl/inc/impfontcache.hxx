@@ -28,7 +28,7 @@
 
 #include <vcl/glyphitem.hxx>
 
-#include "fontselect.hxx"
+#include <font/FontSelectPattern.hxx>
 
 class Size;
 namespace vcl { class Font; }
@@ -67,15 +67,15 @@ class ImplFontCache
 {
 private:
     // cache of recently used font instances
-    struct IFSD_Equal { bool operator()( const FontSelectPattern&, const FontSelectPattern& ) const; };
-    struct IFSD_Hash { size_t operator()( const FontSelectPattern& ) const; };
-    typedef o3tl::lru_map<FontSelectPattern, rtl::Reference<LogicalFontInstance>, IFSD_Hash, IFSD_Equal> FontInstanceList;
+    struct IFSD_Equal { bool operator()( const vcl::font::FontSelectPattern&, const vcl::font::FontSelectPattern& ) const; };
+    struct IFSD_Hash { size_t operator()( const vcl::font::FontSelectPattern& ) const; };
+    typedef o3tl::lru_map<vcl::font::FontSelectPattern, rtl::Reference<LogicalFontInstance>, IFSD_Hash, IFSD_Equal> FontInstanceList;
 
     LogicalFontInstance* mpLastHitCacheEntry; ///< keeps the last hit cache entry
     FontInstanceList maFontInstanceList;
     GlyphBoundRectCache m_aBoundRectCache;
 
-    rtl::Reference<LogicalFontInstance> GetFontInstance(PhysicalFontCollection const*, FontSelectPattern&);
+    rtl::Reference<LogicalFontInstance> GetFontInstance(PhysicalFontCollection const*, vcl::font::FontSelectPattern&);
 
 public:
     ImplFontCache();
@@ -83,7 +83,7 @@ public:
 
     rtl::Reference<LogicalFontInstance> GetFontInstance(PhysicalFontCollection const *,
                              const vcl::Font&, const Size& rPixelSize, float fExactHeight, bool bNonAntialias = false);
-    rtl::Reference<LogicalFontInstance> GetGlyphFallbackFont( PhysicalFontCollection const *, FontSelectPattern&,
+    rtl::Reference<LogicalFontInstance> GetGlyphFallbackFont( PhysicalFontCollection const *, vcl::font::FontSelectPattern&,
                             LogicalFontInstance* pLogicalFont,
                             int nFallbackLevel, OUString& rMissingCodes );
 
