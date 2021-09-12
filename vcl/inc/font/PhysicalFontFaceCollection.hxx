@@ -23,7 +23,7 @@
 
 #include <vcl/dllapi.h>
 
-#include <PhysicalFontFace.hxx>
+#include "PhysicalFontFace.hxx"
 
 #include <vector>
 
