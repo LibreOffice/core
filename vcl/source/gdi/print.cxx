@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <sal/types.h>
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
@@ -31,10 +33,11 @@
 #include <vcl/printer/Options.hxx>
 
 #include <jobset.h>
-#include <outdev.h>
 #include <print.h>
+#include <ImplOutDevData.hxx>
 #include <PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
+#include <impfontcache.hxx>
 #include <print.hrc>
 #include <salgdi.hxx>
 #include <salinst.hxx>
