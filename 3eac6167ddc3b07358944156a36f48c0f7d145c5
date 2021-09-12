@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c46082c_a8f0fe74",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-09-12T18:30:50Z",
+      "side": 1,
+      "message": "I\u0027m hoping these are just temp measures to get this not failing immediately in oss-fuzz",
+      "revId": "3eac6167ddc3b07358944156a36f48c0f7d145c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c9540eaa_dcd6d0df",
