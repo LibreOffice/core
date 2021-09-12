@@ -134,11 +134,11 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),`cat $(extraobjectlist)`) \
 		$(if $(filter TRUE,$(DISABLE_DYNLOADING)), \
 		    -Wl$(COMMA)--start-group \
-		    -Wl$(COMMA)-Bstatic \
+		    $(if $(filter-out EMSCRIPTEN LINUX,$(OS)),-Wl$(COMMA)-Bstatic) \
 		    $(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(patsubst %.$(gb_Library_UDK_MAJORVER),%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))))) \
 		    $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
-		    $(T_LIBS) \
-		    -Wl$(COMMA)-Bdynamic \
+		    $(patsubst %@,%,$(T_LIBS)) \
+		    $(if $(filter-out EMSCRIPTEN LINUX,$(OS)),-Wl$(COMMA)-Bdynamic) \
 		    $(if $(call gb_LinkTarget__NeedsCxxLinker),$(T_STDLIBS_CXX)) \
 		    -Wl$(COMMA)--end-group \
 		, \

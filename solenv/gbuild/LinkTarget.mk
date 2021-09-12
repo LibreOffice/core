@@ -1181,6 +1181,13 @@ define gb_LinkTarget_add_libs
 $(call gb_LinkTarget_get_target,$(1)) : T_LIBS += $(2)
 $(if $(call gb_LinkTarget__is_merged,$(1)),\
   $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,merged)) : T_LIBS += $(2))
+ifeq ($(DISABLE_DYNLOADING),TRUE)
+$(if $(gb_DEBUG_STATIC),$$(info $$(call gb_LinkTarget__get_all_libraries_var,$(1)) += $(filter-out $(call gb_LinkTarget__get_all_libraries,$(1)),$(patsubst %,$(gb_LinkTarget__syslib),$(2)))))
+$$(eval $$(call gb_LinkTarget__get_all_libraries_var,$(1)) += $(filter-out $(call gb_LinkTarget__get_all_libraries,$(1)),$(patsubst %,$(gb_LinkTarget__syslib),$(2))))
+ifeq (,$(gb_PARTIAL_BUILD))
+$(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS += $(filter-out $(call gb_LinkTarget__get_all_libraries,$(1)),$(patsubst %,$(gb_LinkTarget__syslib),$(2)))
+endif
+endif
 
 endef
 
@@ -1275,7 +1282,7 @@ endef
 $(eval $(call gb_LinkTarget__generate_all_x_accessors,libraries,LIBRARIES))
 gb_LinkTarget__filter_lo_libraries = $(filter-out $(gb_LinkTarget__syslib),$(1))
 gb_LinkTarget__get_all_lo_libraries = $(call gb_LinkTarget__filter_lo_libraries,$(call gb_LinkTarget__get_all_libraries,$(1)))
-gb_LinkTarget__filter_sys_libraries = $(patsubst $(gb_LinkTarget__syslib),%,$(filter $(gb_LinkTarget__syslib),$(1)))
+gb_LinkTarget__filter_sys_libraries = $(filter $(gb_LinkTarget__syslib),$(1))
 gb_LinkTarget__get_all_sys_libraries = $(call gb_LinkTarget__filter_sys_libraries,$(call gb_LinkTarget__get_all_libraries,$(1)))
 $(eval $(call gb_LinkTarget__generate_all_x_accessors,externals,EXTERNALS))
 $(eval $(call gb_LinkTarget__generate_all_x_accessors,statics,STATICS))
@@ -2078,6 +2085,7 @@ endef
 define gb_LinkTarget_use_package
 $(call gb_LinkTarget_get_headers_target,$(1)) :| \
 	$(call gb_Package_get_target,$(strip $(2)))
+$(call gb_Package_get_target,$(strip $(2))): RDEPENDS += $(call gb_LinkTarget__get_workdir_linktargetname,$(1))
 
 endef
 

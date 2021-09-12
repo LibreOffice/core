@@ -224,6 +224,9 @@ static OUString & getIniFileName_Impl()
         // .apk (zip) archive as the /assets/rc file.
         fileName = OUString("vnd.sun.star.pathname:/assets/rc");
         resolvePathnameUrl(&fileName);
+#elif defined EMSCRIPTEN
+        fileName = OUString("vnd.sun.star.pathname:/instdir/program/sofficerc");
+        resolvePathnameUrl(&fileName);
 #else
         if (getFromCommandLineArgs("INIFILENAME", &fileName))
         {

@@ -131,12 +131,17 @@ else # !$(OS),WNT
 
 ifeq ($(SYSTEM_XMLSEC),)
 $(eval $(call gb_Library_add_libs,xsec_xmlsec,\
-       $(call gb_UnpackedTarball_get_dir,xmlsec)/src/nss/.libs/libxmlsec1-nss.a \
        $(call gb_UnpackedTarball_get_dir,xmlsec)/src/.libs/libxmlsec1.a \
 ))
 endif
 
 ifeq ($(ENABLE_NSS),TRUE)
+
+ifeq ($(SYSTEM_XMLSEC),)
+$(eval $(call gb_Library_add_libs,xsec_xmlsec,\
+       $(call gb_UnpackedTarball_get_dir,xmlsec)/src/nss/.libs/libxmlsec1-nss.a \
+))
+endif
 
 $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 	xmlsecurity/source/xmlsec/nss/ciphercontext \

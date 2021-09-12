@@ -534,8 +534,10 @@ bool QtWidget::handleKeyEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent
         return false;
     }
 
+#if QT5_USING_X11
     // prevent interference of writing direction switch (Ctrl + L/R-Shift) with "normal" shortcuts
     rFrame.m_nKeyModifiers = ModKeyFlags::NONE;
+#endif
 
     SalKeyEvent aEvent;
     aEvent.mnCharCode = (pEvent->text().isEmpty() ? 0 : pEvent->text().at(0).unicode());
@@ -610,7 +612,9 @@ void QtWidget::closePopup()
 
 void QtWidget::focusOutEvent(QFocusEvent*)
 {
+#if QT5_USING_X11
     m_rFrame.m_nKeyModifiers = ModKeyFlags::NONE;
+#endif
     endExtTextInput();
     m_rFrame.CallCallback(SalEvent::LoseFocus, nullptr);
     closePopup();

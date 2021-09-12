@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_wasm_strip.h>
 
 #if HAVE_FEATURE_MACOSX_SANDBOX
 #include <premac.h>
@@ -291,9 +292,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
 
     m_bEmpty = false;
 
-    // return to avoid #elif
-    return;
-#endif
+#else
 
     m_cwdUrl = supplier.getCwdUrl();
     CommandLineEvent eCurrentEvent = CommandLineEvent::Open;
@@ -706,6 +705,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             }
         }
     }
+#endif
 }
 
 void CommandLineArgs::InitParamValues()

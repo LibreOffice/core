@@ -1547,6 +1547,7 @@ static void lcl_CheckHiddenPara( SwPosition& rPos )
         rPos = SwPosition( aTmp, SwIndex( pTextNd, 0 ) );
 }
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
 namespace {
 
 // #i27301# - helper class that notifies the accessibility about invalid text
@@ -1563,13 +1564,12 @@ class SwNotifyAccAboutInvalidTextSelections
 
         ~SwNotifyAccAboutInvalidTextSelections() COVERITY_NOEXCEPT_FALSE
         {
-#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
             mrCursorSh.InvalidateAccessibleParaTextSelection();
-#endif
         }
 };
 
 }
+#endif
 
 void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
 {
@@ -1583,7 +1583,9 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
         return; // if not then no update
     }
 
+#ifndef ENABLE_WASM_STRIP_ACCESSIBILITY
     SwNotifyAccAboutInvalidTextSelections aInvalidateTextSelections( *this );
+#endif
 
     if ( m_bIgnoreReadonly )
     {

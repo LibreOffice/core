@@ -1109,6 +1109,7 @@ emscripten)
     test_qt5=yes
     test_system_freetype=no
     enable_compiler_plugins=no
+    enable_qt5=yes
     enable_wasm_strip=yes
     with_system_zlib=no
     with_theme="breeze"
@@ -1147,6 +1148,7 @@ test "${test_system_freetype+set}" != set -a "${test_system_fontconfig+set}" = s
 # Don't sort!
 test "$test_kf5" = yes -a "$test_qt5" = no && test_kf5=no
 test "$test_kf5" = yes && test_qt5=yes
+test "$test_gtk3" != yes && enable_gtk3=no
 test "$test_gtk3" != yes -o "$test_kf5" != yes && test_gtk3_kde5=no
 test "$using_freetype_fontconfig" = no && using_headless_plugin=no
 test "$using_freetype_fontconfig" = yes && test_cairo=yes
@@ -2948,17 +2950,18 @@ if test "$enable_wasm_strip" = "yes"; then
     enable_cmis=no
     enable_coinmp=no
     enable_cups=no
-    enable_curl=no
+    test "$_os" = Emscripten && enable_curl=no
     enable_database_connectivity=no
     enable_dbus=no
     enable_dconf=no
-    test "${enable_dynamic_loading+set}" = set || enable_dynamic_loading=no
+    test "${enable_dynamic_loading+set}" = set -o "$_os" != Emscripten || enable_dynamic_loading=no
     enable_extension_integration=no
     enable_extensions=no
     enable_extension_update=no
     enable_gio=no
     enable_gpgmepp=no
     enable_ldap=no
+    enable_lotuswordpro=no
     enable_lpsolve=no
     enable_nss=no
     enable_odk=no
@@ -2973,7 +2976,14 @@ if test "$enable_wasm_strip" = "yes"; then
     enable_xmlhelp=no
     enable_zxing=no
     test_libepubgen=no
-#    with_system_libxml=no
+    test_libcdr=no
+    test_libetonyek=no
+    test_libfreehand=no
+    test_libmspub=no
+    test_libpagemaker=no
+    test_libqxp=no
+    test_libvisio=no
+    test_libzmf=no
     with_galleries=no
     with_webdav=no
     with_x=no

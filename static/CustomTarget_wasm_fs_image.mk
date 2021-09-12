@@ -17,8 +17,12 @@ $(eval $(call gb_CustomTarget_CustomTarget,static/wasm_fs_image))
 gb_wasm_image_filelist := \
     $(call gb_UnoApi_get_target,offapi) \
     $(call gb_UnoApi_get_target,udkapi) \
+    $(INSTROOT)/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,bootstrap) \
     $(INSTROOT)/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,fundamental) \
     $(INSTROOT)/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,louno) \
+    $(INSTROOT)/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,setup) \
+    $(INSTROOT)/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,soffice) \
+    $(INSTROOT)/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,version) \
     $(INSTROOT)/$(LIBO_ETC_FOLDER)/services/services.rdb \
     $(INSTROOT)/$(LIBO_URE_ETC_FOLDER)/$(call gb_Helper_get_rcfile,uno) \
     $(INSTROOT)/$(LIBO_URE_MISC_FOLDER)/services.rdb \

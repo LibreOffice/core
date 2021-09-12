@@ -68,7 +68,6 @@ $(eval $(call gb_Library_use_externals,wpftwriter,\
 	abw \
 	boost_headers \
 	ebook \
-	etonyek \
 	icu_headers \
 	icui18n \
 	icuuc \
