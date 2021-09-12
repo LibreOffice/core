@@ -30,9 +30,9 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
+#include <ImplOutDevData.hxx>
 #include <svdata.hxx>
 #include <window.h>
-#include <outdev.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <tools/UnitConversion.hxx>
