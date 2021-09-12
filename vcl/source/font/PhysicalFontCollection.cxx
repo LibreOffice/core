@@ -16,7 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #include <sal/config.h>
 
 #include <memory>
@@ -26,7 +25,9 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/fontdefs.hxx>
 #include <o3tl/sorted_vector.hxx>
-#include <outdev.h>
+#include <font/GlyphFallbackFontSubstitution.hxx>
+#include <font/PhysicalFontFaceCollection.hxx>
+#include <font/PreMatchFontSubstitution.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <PhysicalFontCollection.hxx>
 
@@ -76,12 +77,12 @@ PhysicalFontCollection::~PhysicalFontCollection()
     Clear();
 }
 
-void PhysicalFontCollection::SetPreMatchHook( ImplPreMatchFontSubstitution* pHook )
+void PhysicalFontCollection::SetPreMatchHook(vcl::font::PreMatchFontSubstitution* pHook)
 {
     mpPreMatchHook = pHook;
 }
 
-void PhysicalFontCollection::SetFallbackHook( ImplGlyphFallbackFontSubstitution* pHook )
+void PhysicalFontCollection::SetFallbackHook(vcl::font::GlyphFallbackFontSubstitution* pHook)
 {
     mpFallbackHook = pHook;
 }
@@ -967,7 +968,7 @@ vcl::font::PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( vcl::font
         }
 
         aSearchName = GetEnglishSearchFontName( aSearchName );
-        ImplFontSubstitute( aSearchName );
+        vcl::font::ImplFontSubstitute( aSearchName );
         // #114999# special emboldening for Ricoh fonts
         // TODO: smarter check for special cases by using PreMatch infrastructure?
         if( (rFSD.GetWeight() > WEIGHT_MEDIUM) &&
@@ -1064,7 +1065,7 @@ vcl::font::PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( vcl::font
         {
             aSearchName = GetEnglishSearchFontName( aSearchName );
         }
-        ImplFontSubstitute( aSearchName );
+        vcl::font::ImplFontSubstitute( aSearchName );
         vcl::font::PhysicalFontFamily* pFoundData = ImplFindFontFamilyBySearchName( aSearchName );
         if( pFoundData )
             return pFoundData;
