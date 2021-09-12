@@ -20,10 +20,11 @@
 #include <sal/config.h>
 #include <o3tl/safeint.hxx>
 #include <tools/gen.hxx>
+
 #include <vcl/font.hxx>
 
-#include <PhysicalFontFace.hxx>
 #include <font/FontSelectPattern.hxx>
+#include <font/PhysicalFontFace.hxx>
 
 namespace vcl::font
 {

@@ -28,7 +28,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/fontcharmap.hxx>
 
-#include "fontattributes.hxx"
+#include <fontattributes.hxx>
 
 class LogicalFontInstance;
 struct FontMatchStatus;
@@ -44,6 +44,10 @@ struct FontCapabilities;
 class PhysicalFontFamily;
 }
 
+namespace vcl::font
+{
+class FontSelectPattern;
+
 struct FontMatchStatus
 {
 public:
@@ -52,7 +56,6 @@ public:
     int                 mnWidthMatch;
     const OUString*     mpTargetStyleName;
 };
-
 
 // TODO: no more direct access to members
 // TODO: get rid of height/width for scalable fonts
@@ -79,6 +82,8 @@ public:
 protected:
     explicit PhysicalFontFace(const FontAttributes&);
 };
+
+}
 
 #endif // INCLUDED_VCL_INC_PHYSICALFONTFACE_HXX
 
