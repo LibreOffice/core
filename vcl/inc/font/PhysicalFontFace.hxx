@@ -17,26 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_PHYSICALFONTFACE_HXX
-#define INCLUDED_VCL_INC_PHYSICALFONTFACE_HXX
+#pragma once
 
-#include <salhelper/simplereferenceobject.hxx>
+#include <sal/config.h>
+
 #include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <tools/long.hxx>
+
 #include <vcl/dllapi.h>
 #include <vcl/fontcharmap.hxx>
 
-#include "fontattributes.hxx"
+#include <fontattributes.hxx>
 
 class LogicalFontInstance;
 struct FontMatchStatus;
-class FontSelectPattern;
-class PhysicalFontFace;
 
-namespace vcl
+namespace vcl { struct FontCapabilities; }
+
+namespace vcl::font
 {
-struct FontCapabilities;
-}
+class FontSelectPattern;
 
 struct FontMatchStatus
 {
@@ -44,7 +45,6 @@ public:
     int                 mnFaceMatch;
     const OUString*     mpTargetStyleName;
 };
-
 
 // TODO: no more direct access to members
 // TODO: get rid of height/width for scalable fonts
@@ -75,7 +75,7 @@ protected:
     tools::Long                    mnHeight;   // Height (in pixels)
 };
 
-#endif // INCLUDED_VCL_INC_PHYSICALFONTFACE_HXX
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 
