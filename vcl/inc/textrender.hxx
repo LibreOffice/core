@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_UNX_CAIROFONTIMPL_HXX
 #define INCLUDED_VCL_INC_UNX_CAIROFONTIMPL_HXX
 
+#include <font/FontSelectPattern.hxx>
+
 #include "salgdi.hxx"
 
 class ImplFontMetricData;

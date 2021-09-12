@@ -35,7 +35,7 @@
 #include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>
-#include <fontselect.hxx>
+#include <font/FontSelectPattern.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nutil/unicode.hxx>
 #include <rtl/strbuf.hxx>
@@ -974,7 +974,7 @@ IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport, Timer *, void)
     m_aCurrentRequests.clear();
 }
 
-void PrintFontManager::Substitute(FontSelectPattern &rPattern, OUString& rMissingCodes)
+void PrintFontManager::Substitute(vcl::font::FontSelectPattern &rPattern, OUString& rMissingCodes)
 {
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
 
