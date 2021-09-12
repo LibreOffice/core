@@ -98,7 +98,7 @@ std::unique_ptr<GenericSalLayout> WinSalGraphics::GetTextLayout(int nFallbackLev
     return std::make_unique<GenericSalLayout>(*mpWinFontEntry[nFallbackLevel]);
 }
 
-WinFontInstance::WinFontInstance(const WinFontFace& rPFF, const FontSelectPattern& rFSP)
+WinFontInstance::WinFontInstance(const WinFontFace& rPFF, const vcl::font::FontSelectPattern& rFSP)
     : LogicalFontInstance(rPFF, rFSP)
     , m_pGraphics(nullptr)
     , m_hFont(nullptr)
@@ -114,7 +114,7 @@ WinFontInstance::~WinFontInstance()
 
 bool WinFontInstance::hasHScale() const
 {
-    const FontSelectPattern& rPattern = GetFontSelectPattern();
+    const vcl::font::FontSelectPattern& rPattern = GetFontSelectPattern();
     int nHeight(rPattern.mnHeight);
     int nWidth(rPattern.mnWidth ? rPattern.mnWidth * GetAverageWidthFactor() : nHeight);
     return nWidth != nHeight;
@@ -122,7 +122,7 @@ bool WinFontInstance::hasHScale() const
 
 float WinFontInstance::getHScale() const
 {
-    const FontSelectPattern& rPattern = GetFontSelectPattern();
+    const vcl::font::FontSelectPattern& rPattern = GetFontSelectPattern();
     int nHeight(rPattern.mnHeight);
     if (!nHeight)
         return 1.0;
@@ -156,7 +156,7 @@ struct BlobReference
 };
 }
 
-using BlobCacheKey = std::pair<rtl::Reference<PhysicalFontFace>, hb_tag_t>;
+using BlobCacheKey = std::pair<rtl::Reference<vcl::font::PhysicalFontFace>, hb_tag_t>;
 
 namespace
 {
@@ -182,7 +182,8 @@ static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
     assert(hDC);
     assert(hFont);
 
-    BlobCacheKey cacheKey{ rtl::Reference<PhysicalFontFace>(pFont->GetFontFace()), nTableTag };
+    BlobCacheKey cacheKey{ rtl::Reference<vcl::font::PhysicalFontFace>(pFont->GetFontFace()),
+                           nTableTag };
     auto it = gCache.find(cacheKey);
     if (it != gCache.end())
     {

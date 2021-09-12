@@ -59,8 +59,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 
-#include <PhysicalFontFace.hxx>
 #include <bitmap/BitmapWriteAccess.hxx>
+#include <font/PhysicalFontFace.hxx>
 #include <fontsubset.hxx>
 #include <impglyphitem.hxx>
 #include <pdf/PdfConfig.hxx>
@@ -2311,7 +2311,7 @@ sal_Int32 PDFWriterImpl::emitBuildinFont(const pdf::BuildinFontFace* pFD, sal_In
     return nFontObject;
 }
 
-std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFontFace* pFont, EmbedFont const & rEmbed )
+std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const vcl::font::PhysicalFontFace* pFont, EmbedFont const & rEmbed )
 {
     std::map< sal_Int32, sal_Int32 > aRet;
 
@@ -2550,7 +2550,7 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8 const * pEncoding,
     return nStream;
 }
 
-sal_Int32 PDFWriterImpl::emitFontDescriptor( const PhysicalFontFace* pFont, FontSubsetInfo const & rInfo, sal_Int32 nSubsetID, sal_Int32 nFontStream )
+sal_Int32 PDFWriterImpl::emitFontDescriptor( const vcl::font::PhysicalFontFace* pFont, FontSubsetInfo const & rInfo, sal_Int32 nSubsetID, sal_Int32 nFontStream )
 {
     OStringBuffer aLine( 1024 );
     // get font flags, see PDF reference 1.4 p. 358
@@ -2855,7 +2855,7 @@ bool PDFWriterImpl::emitFonts()
             }
             else
             {
-                const PhysicalFontFace* pFont = subset.first;
+                const vcl::font::PhysicalFontFace* pFont = subset.first;
                 OStringBuffer aErrorComment( 256 );
                 aErrorComment.append( "CreateFontSubset failed for font \"" );
                 aErrorComment.append( OUStringToOString( pFont->GetFamilyName(), RTL_TEXTENCODING_UTF8 ) );
@@ -3890,7 +3890,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     FontCharMapRef pMap;
     GetFontCharMap(pMap);
     const LogicalFontInstance* pFontInstance = GetFontInstance();
-    const PhysicalFontFace* pDevFont = pFontInstance->GetFontFace();
+    const vcl::font::PhysicalFontFace* pDevFont = pFontInstance->GetFontFace();
     Pop();
 
     // make sure OpenSymbol is embedded, and includes our checkmark
@@ -5677,7 +5677,7 @@ sal_Int32 PDFWriterImpl::getSystemFont( const vcl::Font& i_rFont )
 
     SetFont( i_rFont );
 
-    const PhysicalFontFace* pDevFont = GetFontInstance()->GetFontFace();
+    const vcl::font::PhysicalFontFace* pDevFont = GetFontInstance()->GetFontFace();
     sal_Int32 nFontID = 0;
     auto it = m_aSystemFonts.find( pDevFont );
     if( it != m_aSystemFonts.end() )
@@ -5694,7 +5694,7 @@ sal_Int32 PDFWriterImpl::getSystemFont( const vcl::Font& i_rFont )
 }
 
 void PDFWriterImpl::registerGlyph(const GlyphItem* pGlyph,
-                                  const PhysicalFontFace* pFont,
+                                  const vcl::font::PhysicalFontFace* pFont,
                                   const std::vector<sal_Ucs>& rCodeUnits,
                                   sal_uInt8& nMappedGlyph,
                                   sal_Int32& nMappedFontObject)
@@ -6124,9 +6124,9 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     }
 
     FontMetric aRefDevFontMetric = GetFontMetric();
-    const PhysicalFontFace* pDevFont = GetFontInstance()->GetFontFace();
+    const vcl::font::PhysicalFontFace* pDevFont = GetFontInstance()->GetFontFace();
     const GlyphItem* pGlyph = nullptr;
-    const PhysicalFontFace* pFallbackFont = nullptr;
+    const vcl::font::PhysicalFontFace* pFallbackFont = nullptr;
 
     // collect the glyphs into a single array
     std::vector< PDFGlyph > aGlyphs;
