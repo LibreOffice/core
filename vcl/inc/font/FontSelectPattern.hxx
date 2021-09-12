@@ -36,6 +36,7 @@ class Size;
 
 namespace vcl::font
 {
+class PhysicalFontFace;
 
 class VCL_DLLPUBLIC FontSelectPattern : public FontAttributes
 {
