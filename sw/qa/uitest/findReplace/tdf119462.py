@@ -16,7 +16,7 @@ class tdf119462(UITestCase):
         with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             #1. Choose Edit > Find and Replace
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
                 #2. Choose Format
                 format = xDialog.getChild("format")
                 with self.ui_test.execute_blocking_action(format.executeAction, args=('CLICK', ())) as dialog:

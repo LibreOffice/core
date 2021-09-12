@@ -36,7 +36,7 @@ class tdf118208(UITestCase):
                     complexlanguage.executeAction("CLICK", tuple())
 
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
 
                 format = xDialog.getChild("format")
 

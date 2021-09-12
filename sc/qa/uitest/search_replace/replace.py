@@ -16,7 +16,7 @@ class ReplaceTest(UITestCase):
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xSearchDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xSearchDlg:
 
 
                 xSearchTerm = xSearchDlg.getChild("searchterm")

@@ -23,7 +23,7 @@ class trackedchanges(UITestCase):
             selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
             self.xUITest.executeCommand(".uno:Cut")   #cut  text
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AcceptTrackedChanges", close_button="close"):
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges", close_button="close"):
                 pass
 
     def test_tracked_changes_accept(self):
@@ -36,7 +36,7 @@ class trackedchanges(UITestCase):
             type_text(xWriterEdit, "Test LibreOffice")
             self.xUITest.executeCommand(".uno:ShowTrackedChanges")
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
                 xAccBtn = xTrackDlg.getChild("accept")
                 xAccBtn.executeAction("CLICK", tuple())
 
@@ -52,7 +52,7 @@ class trackedchanges(UITestCase):
             type_text(xWriterEdit, "Test LibreOffice")
             self.xUITest.executeCommand(".uno:ShowTrackedChanges")
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
 
                 xAccBtn = xTrackDlg.getChild("acceptall")
                 xAccBtn.executeAction("CLICK", tuple())
@@ -70,7 +70,7 @@ class trackedchanges(UITestCase):
             type_text(xWriterEdit, "Test LibreOffice")
             self.xUITest.executeCommand(".uno:ShowTrackedChanges")
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
 
                 xRejBtn = xTrackDlg.getChild("reject")
                 xRejBtn.executeAction("CLICK", tuple())
@@ -87,7 +87,7 @@ class trackedchanges(UITestCase):
             type_text(xWriterEdit, "Test LibreOffice")
             self.xUITest.executeCommand(".uno:ShowTrackedChanges")
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
 
                 xAccBtn = xTrackDlg.getChild("rejectall")
                 xAccBtn.executeAction("CLICK", tuple())
@@ -136,7 +136,7 @@ class trackedchanges(UITestCase):
                     "Unknown Author\t01/24/2020 16:19:39\t",
                     "Xisco Fauli\t01/27/2020 17:42:55\t"]
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
                 changesList = xTrackDlg.getChild("writerchanges")
 
                 resultsAccept = [
@@ -195,7 +195,7 @@ class trackedchanges(UITestCase):
 
             self.assertEqual(5, document.CurrentController.PageCount)
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
                 changesList = xTrackDlg.getChild("writerchanges")
                 self.assertEqual(147, len(changesList.getChildren()))
 

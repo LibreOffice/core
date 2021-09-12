@@ -14,7 +14,7 @@ class asianPhoneticGuide(UITestCase):
         with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:RubyDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:RubyDialog", close_button="close") as xDialog:
 
                 xLeft1ED = xDialog.getChild("Left1ED")
                 xRight1ED = xDialog.getChild("Right1ED")

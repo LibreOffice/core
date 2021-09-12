@@ -19,7 +19,7 @@ class findSimilarities(UITestCase):
             self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "1")
             # search and replace dialog
             #find = seco
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="") as xDialog:
                 searchterm = xDialog.getChild("searchterm")
                 searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"seco"}))  #seco
                 # check similarities, button similarities, set values = 1; close dialog with OK

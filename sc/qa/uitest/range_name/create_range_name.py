@@ -23,7 +23,7 @@ class CreateRangeNameTest(UITestCase):
             xPosWindow = calcDoc.getChild('pos_window')
             self.assertEqual('A1', get_state_as_dict(xPosWindow)['Text'])
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AddName", close_button="add") as xAddNameDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AddName", close_button="add") as xAddNameDlg:
 
 
                 xEdit = xAddNameDlg.getChild("edit")
@@ -90,7 +90,7 @@ class CreateRangeNameTest(UITestCase):
             xPosWindow = calcDoc.getChild('pos_window')
             self.assertEqual('A1', get_state_as_dict(xPosWindow)['Text'])
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AddName", close_button="add") as xAddNameDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AddName", close_button="add") as xAddNameDlg:
 
 
                 xEdit = xAddNameDlg.getChild("edit")

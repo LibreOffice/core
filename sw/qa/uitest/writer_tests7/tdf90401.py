@@ -82,7 +82,7 @@ class tdf90401(UITestCase):
                     self.assertEqual(year, 0)
 
                     # check removed personal info on tracked changes
-                    with self.ui_test.execute_modeless_dialog_through_command_guarded('.uno:AcceptTrackedChanges', close_button="close") as xTrackDlg:
+                    with self.ui_test.execute_modeless_dialog_through_command('.uno:AcceptTrackedChanges', close_button="close") as xTrackDlg:
                         xTreeList = xTrackDlg.getChild('writerchanges')
                         state = get_state_as_dict(xTreeList)
                         # This was 'NL\t11/03/2020 19:19:05\t', containing personal info
@@ -162,7 +162,7 @@ class tdf90401(UITestCase):
 
                     # check removed personal info on tracked changes
 
-                    with self.ui_test.execute_modeless_dialog_through_command_guarded('.uno:AcceptTrackedChanges', close_button="close") as xTrackDlg:
+                    with self.ui_test.execute_modeless_dialog_through_command('.uno:AcceptTrackedChanges', close_button="close") as xTrackDlg:
                         xTreeList = xTrackDlg.getChild('writerchanges')
                         state = get_state_as_dict(xTreeList)
                         # This was 'NL\t11/03/2020 19:19:05\t', containing personal info

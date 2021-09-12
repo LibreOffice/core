@@ -17,7 +17,7 @@ class goalSeek(UITestCase):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B4"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:GoalSeekDialog", close_button="") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:GoalSeekDialog", close_button="") as xDialog:
                 xformulaedit = xDialog.getChild("formulaedit")
                 xtarget = xDialog.getChild("target")
                 xvaredit = xDialog.getChild("varedit")

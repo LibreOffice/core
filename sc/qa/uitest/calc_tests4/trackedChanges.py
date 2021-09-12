@@ -17,7 +17,7 @@ class CalcTrackedChanges(UITestCase):
     def test_tdf131907(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf131907.ods")) as calc_doc:
             xCalcDoc = self.xUITest.getTopFocusWindow()
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AcceptChanges", close_button="close") as xTrackDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptChanges", close_button="close") as xTrackDlg:
 
                 xChangesList = xTrackDlg.getChild("calcchanges")
                 self.assertEqual(1, len(xChangesList.getChildren()))
@@ -65,7 +65,7 @@ class CalcTrackedChanges(UITestCase):
             enter_text_to_cell(gridwin, "A1", "Test LibreOffice")
             enter_text_to_cell(gridwin, "A2", "Test LibreOffice")
             #accept tracked changes
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AcceptChanges", close_button="close") as xTrackDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptChanges", close_button="close") as xTrackDlg:
 
                 xChangesList = xTrackDlg.getChild("calcchanges")
                 self.assertEqual(2, len(xChangesList.getChildren()))
@@ -115,7 +115,7 @@ class CalcTrackedChanges(UITestCase):
             enter_text_to_cell(gridwin, "A1", "Test LibreOffice")
             enter_text_to_cell(gridwin, "A2", "Test LibreOffice")
             #accept All tracked changes
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AcceptChanges", close_button="close") as xTrackDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptChanges", close_button="close") as xTrackDlg:
 
                 xChangesList = xTrackDlg.getChild("calcchanges")
                 self.assertEqual(2, len(xChangesList.getChildren()))
@@ -157,7 +157,7 @@ class CalcTrackedChanges(UITestCase):
             enter_text_to_cell(gridwin, "A1", "Test LibreOffice")
             enter_text_to_cell(gridwin, "A2", "Test LibreOffice")
             #accept tracked changes
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AcceptChanges", close_button="close") as xTrackDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptChanges", close_button="close") as xTrackDlg:
 
                 xChangesList = xTrackDlg.getChild("calcchanges")
                 self.assertEqual(2, len(xChangesList.getChildren()))
@@ -219,7 +219,7 @@ class CalcTrackedChanges(UITestCase):
             enter_text_to_cell(gridwin, "A1", "Test LibreOffice")
             enter_text_to_cell(gridwin, "A2", "Test LibreOffice")
             #accept tracked changes
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AcceptChanges", close_button="close") as xTrackDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptChanges", close_button="close") as xTrackDlg:
 
                 xChangesList = xTrackDlg.getChild("calcchanges")
                 self.assertEqual(2, len(xChangesList.getChildren()))
@@ -267,7 +267,7 @@ class CalcTrackedChanges(UITestCase):
 
             self.xUITest.getTopFocusWindow()
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:AcceptChanges", close_button="close") as xTrackDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptChanges", close_button="close") as xTrackDlg:
 
                 xChangesList = xTrackDlg.getChild("calcchanges")
                 self.assertEqual(1, len(xChangesList.getChildren()))

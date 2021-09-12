@@ -50,7 +50,7 @@ class sampling(UITestCase):
             enter_text_to_cell(gridwin, "C8", "38")
             enter_text_to_cell(gridwin, "C9", "39")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C9"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SamplingDialog") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SamplingDialog") as xDialog:
                 xinputrangeedit = xDialog.getChild("input-range-edit")
                 xoutputrangeedit = xDialog.getChild("output-range-edit")
                 xrandommethodradio = xDialog.getChild("random-method-radio")
@@ -102,7 +102,7 @@ class sampling(UITestCase):
             self.assertEqual(get_cell_by_position(document, 0, 7, 3).getValue() , 0)
 
             # test cancel button
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SamplingDialog", close_button="cancel"):
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SamplingDialog", close_button="cancel"):
                 pass
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

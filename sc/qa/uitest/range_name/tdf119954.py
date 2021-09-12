@@ -30,7 +30,7 @@ class tdf119954(UITestCase):
             #  => see that the formula is =aaa instead of =bbb
 
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DefineDBName") as xDefineNameDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DefineDBName") as xDefineNameDlg:
                 xEntryBox = xDefineNameDlg.getChild("entry")
                 type_text(xEntryBox, "aaa")
                 add = xDefineNameDlg.getChild("add")
@@ -38,7 +38,7 @@ class tdf119954(UITestCase):
                 add.executeAction("CLICK", tuple())
 
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DefineDBName") as xDefineNameDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DefineDBName") as xDefineNameDlg:
                 xEntryBox = xDefineNameDlg.getChild("entry")
                 add = xDefineNameDlg.getChild("add")
                 assign = xDefineNameDlg.getChild("assign")
@@ -64,7 +64,7 @@ class tdf119954(UITestCase):
             self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 1).getFormula(), "")
 
             # check cancel button
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DefineDBName", close_button="cancel"):
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DefineDBName", close_button="cancel"):
                 pass
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

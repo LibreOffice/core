@@ -126,23 +126,9 @@ class UITest(object):
                 time.sleep(DEFAULT_SLEEP)
 
     @contextmanager
-    def execute_modeless_dialog_through_command_guarded(self, command, printNames=False, close_button = "ok"):
+    def execute_modeless_dialog_through_command(self, command, printNames=False, close_button = "ok"):
         with self.execute_dialog_through_command(command, printNames, close_button, "ModelessDialogVisible") as xDialog:
             yield xDialog
-
-    def execute_modeless_dialog_through_command(self, command, printNames=False):
-        with EventListener(self._xContext, "ModelessDialogVisible", printNames = printNames) as event:
-            if not self._xUITest.executeCommand(command):
-                raise Exception("Dialog not executed for: " + command)
-            time_ = 0
-            while time_ < MAX_WAIT:
-                if event.executed:
-                    time.sleep(DEFAULT_SLEEP)
-                    return
-                time_ += DEFAULT_SLEEP
-                time.sleep(DEFAULT_SLEEP)
-
-        raise Exception("Dialog not executed for: " + command)
 
     # Calls UITest.close_dialog_through_button at exit
     @contextmanager

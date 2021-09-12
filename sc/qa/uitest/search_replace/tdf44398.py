@@ -29,7 +29,7 @@ class tdf44398(UITestCase):
             # check regular expression
             # hit replace all
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
                 searchterm = xDialog.getChild("searchterm")
                 searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
                 searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
@@ -60,7 +60,7 @@ class tdf44398(UITestCase):
             # check case
             # hit replace all
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SearchDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
                 searchterm = xDialog.getChild("searchterm")
                 searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
                 searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))

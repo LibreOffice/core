@@ -66,7 +66,7 @@ frog, dogg, catt"""
 
             # Step 3: Initiate spellchecking, and make sure "Check grammar" is
             # unchecked
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SpellingAndGrammarDialog", close_button="") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SpellingAndGrammarDialog", close_button="") as xDialog:
                 checkgrammar = xDialog.getChild('checkgrammar')
                 if get_state_as_dict(checkgrammar)['Selected'] == 'true':
                     checkgrammar.executeAction('CLICK', ())
@@ -100,7 +100,7 @@ frog, dogg, catt"""
         with self.ui_test.load_file(get_url_for_data_file("tdf66043.fodt")) as writer_doc:
             # Step 1: Initiate spellchecking, and make sure "Check grammar" is
             # unchecked
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SpellingAndGrammarDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SpellingAndGrammarDialog", close_button="close") as xDialog:
                 checkgrammar = xDialog.getChild('checkgrammar')
                 if get_state_as_dict(checkgrammar)['Selected'] == 'true':
                     checkgrammar.executeAction('CLICK', ())

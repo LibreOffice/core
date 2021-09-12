@@ -20,7 +20,7 @@ class writerWordCount(UITestCase):
             type_text(xWriterEdit, "Test for word count dialog") #type text
             xWriterEdit.executeAction("SELECT", mkPropertyValues({"START_POS": "0", "END_POS": "8"})) #select two words
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:WordCountDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog", close_button="close") as xDialog:
 
                 xselectwords = xDialog.getChild("selectwords")
                 xdocwords = xDialog.getChild("docwords")
@@ -49,7 +49,7 @@ class writerWordCount(UITestCase):
 
             xWriterEdit.executeAction("SELECT", mkPropertyValues({"START_POS": "24", "END_POS": "39"})) #select two words
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:WordCountDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog", close_button="close") as xDialog:
                 xselectwords = xDialog.getChild("selectwords")
                 xdocwords = xDialog.getChild("docwords")
                 xselectchars = xDialog.getChild("selectchars")
@@ -73,13 +73,13 @@ class writerWordCount(UITestCase):
         with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:WordCountDialog", close_button="close"):
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog", close_button="close"):
                 pass
 
     def test_tdf58050(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf58050.html")) as writer_doc:
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:WordCountDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog", close_button="close") as xDialog:
 
                 xselectwords = xDialog.getChild("selectwords")
                 xdocwords = xDialog.getChild("docwords")
@@ -107,7 +107,7 @@ class writerWordCount(UITestCase):
             #Open writer, enter "Testing one two! Test?"
             type_text(xWriterEdit, "Testing one two! Test?")
             #-> LO says: 4 words. SUCCESS! :)
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:WordCountDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog", close_button="close") as xDialog:
 
                 xselectwords = xDialog.getChild("selectwords")
                 xdocwords = xDialog.getChild("docwords")
@@ -139,7 +139,7 @@ class writerWordCount(UITestCase):
             type_text(xWriterEdit, "This is a test sentence.")
             #3. Open the word count dialogue.
             #   Word count in both, dialogue and status line, shows 5 words.
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:WordCountDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog", close_button="close") as xDialog:
 
                 xselectwords = xDialog.getChild("selectwords")
                 xdocwords = xDialog.getChild("docwords")
@@ -163,7 +163,7 @@ class writerWordCount(UITestCase):
             #5. Replace selection by a non-breaking space by pressing Shift+Ctrl+Space.  Don't move the cursor.
             self.xUITest.executeCommand(".uno:InsertNonBreakingSpace")
             #   Word count in dialogue shows 4 words, whereas in the status line it shows 5 words.
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:WordCountDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog", close_button="close") as xDialog:
 
                 xselectwords = xDialog.getChild("selectwords")
                 xdocwords = xDialog.getChild("docwords")
@@ -185,7 +185,7 @@ class writerWordCount(UITestCase):
             #6. Move the cursor by pressing Left.
             self.xUITest.executeCommand(".uno:GoLeft")
             #   Word count in both, dialogue and status line, shows 5 words.
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:WordCountDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog", close_button="close") as xDialog:
 
                 xselectwords = xDialog.getChild("selectwords")
                 xdocwords = xDialog.getChild("docwords")
@@ -211,7 +211,7 @@ class writerWordCount(UITestCase):
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             #1. Open attached document
             #2. Tools> Word count
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:WordCountDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog", close_button="close") as xDialog:
                 xselectwords = xDialog.getChild("selectwords")
                 xdocwords = xDialog.getChild("docwords")
                 xselectchars = xDialog.getChild("selectchars")
@@ -255,7 +255,7 @@ class writerWordCount(UITestCase):
 
             self.xUITest.executeCommand(".uno:SelectAll")
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:WordCountDialog", close_button="close") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog", close_button="close") as xDialog:
 
                 xselectwords = xDialog.getChild("selectwords")
                 xdocwords = xDialog.getChild("docwords")

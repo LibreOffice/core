@@ -18,7 +18,7 @@ class solver(UITestCase):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B4"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:SolverDialog", close_button="") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:SolverDialog", close_button="") as xDialog:
                 xtargetedit = xDialog.getChild("targetedit")
                 xvalue = xDialog.getChild("value")
                 xvalueedit = xDialog.getChild("valueedit")

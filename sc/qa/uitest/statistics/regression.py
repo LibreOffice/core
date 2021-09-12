@@ -37,7 +37,7 @@ class regression(UITestCase):
 
     def _do_regression(self, regression_type, data_groupedby_column = True, calc_intercept = True):
         assert(regression_type == "LINEAR" or regression_type == "LOG" or regression_type == "POWER")
-        with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:RegressionDialog") as xDialog:
+        with self.ui_test.execute_modeless_dialog_through_command(".uno:RegressionDialog") as xDialog:
             xvariable1rangeedit = xDialog.getChild("variable1-range-edit")
             xvariable2rangeedit = xDialog.getChild("variable2-range-edit")
             xoutputrangeedit = xDialog.getChild("output-range-edit")
@@ -100,7 +100,7 @@ class regression(UITestCase):
 
     def test_regression_cancel(self):
         with self.ui_test.create_doc_in_start_center("calc"):
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:RegressionDialog", close_button="cancel"):
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:RegressionDialog", close_button="cancel"):
                 pass
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

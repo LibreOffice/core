@@ -14,7 +14,7 @@ class FunctionWizardTest(UITestCase):
     def test_open_function_wizard(self):
         with self.ui_test.create_doc_in_start_center("calc"):
 
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:FunctionDialog", close_button="cancel") as xFunctionDlg:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:FunctionDialog", close_button="cancel") as xFunctionDlg:
 
 
                 xArrayChkBox = xFunctionDlg.getChild("array")

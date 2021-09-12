@@ -49,7 +49,7 @@ class zTest(UITestCase):
             enter_text_to_cell(gridwin, "B13", "33")
 
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B13"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:ZTestDialog") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:ZTestDialog") as xDialog:
                 xvariable1rangeedit = xDialog.getChild("variable1-range-edit")
                 xvariable2rangeedit = xDialog.getChild("variable2-range-edit")
                 xoutputrangeedit = xDialog.getChild("output-range-edit")
@@ -98,7 +98,7 @@ class zTest(UITestCase):
             self.assertEqual(get_cell_by_position(document, 0, 5, 0).getString(), "")
 
             # test cancel button
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:ZTestDialog", close_button="cancel"):
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:ZTestDialog", close_button="cancel"):
                 pass
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

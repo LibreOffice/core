@@ -59,7 +59,7 @@ class descriptiveStatistics(UITestCase):
             enter_text_to_cell(gridwin, "C11", "60")
 
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C13"}))
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DescriptiveStatisticsDialog") as xDialog:
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DescriptiveStatisticsDialog") as xDialog:
                 xinputrangeedit = xDialog.getChild("input-range-edit")
                 xoutputrangeedit = xDialog.getChild("output-range-edit")
 
@@ -150,7 +150,7 @@ class descriptiveStatistics(UITestCase):
             self.assertEqual(get_cell_by_position(document, 0, 5, 0).getString(), "")
 
             # test cancel button
-            with self.ui_test.execute_modeless_dialog_through_command_guarded(".uno:DescriptiveStatisticsDialog", close_button="cancel"):
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DescriptiveStatisticsDialog", close_button="cancel"):
                 pass
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
