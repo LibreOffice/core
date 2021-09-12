@@ -18,6 +18,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <config_features.h>
 
 #include <memory>
@@ -33,11 +35,12 @@
 #include <win/salgdi.h>
 #include <win/saldata.hxx>
 #include <win/wingdiimpl.hxx>
-#include <outdev.h>
+#include <ImplOutDevData.hxx>
 
 #include <win/DWriteTextRenderer.hxx>
 #include <win/scoped_gdi.hxx>
 
+#include <font/ImplGlyphFallbackFontSubstitution.hxx>
 #include <sft.hxx>
 #include <sallayout.hxx>
 

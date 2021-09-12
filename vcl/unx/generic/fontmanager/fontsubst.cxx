@@ -17,17 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#pragma once
+
 #include <unx/geninst.h>
-#include <outdev.h>
-#include <unx/fontmanager.hxx>
 #include <PhysicalFontCollection.hxx>
+#include <font/GlyphFallbackFontSubstitution.hxx>
+#include <unx/fontmanager.hxx>
 
 // platform specific font substitution hooks
 
 namespace {
 
 class FcPreMatchSubstitution
-:   public ImplPreMatchFontSubstitution
+:   public vcl::font::PreMatchFontSubstitution
 {
 public:
     bool FindFontSubstitute( vcl::font::FontSelectPattern& ) const override;
@@ -38,7 +40,7 @@ private:
 };
 
 class FcGlyphFallbackSubstitution
-:    public ImplGlyphFallbackFontSubstitution
+:    public vcl::font::GlyphFallbackFontSubstitution
 {
     // TODO: add a cache
 public:
