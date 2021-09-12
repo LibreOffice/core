@@ -33,9 +33,9 @@
 #include <vcl/virdev.hxx>
 #include <vcl/wrkwin.hxx>
 
-#include <svdata.hxx>
-#include <outdev.h>
 #include <window.h>
+#include <ImplOutDevData.hxx>
+#include <svdata.hxx>
 
 /*
 Reduces accuracy until it is a fraction (should become
