@@ -40,10 +40,10 @@
 
 #include <quartz/ctfonts.hxx>
 #include <fontsubset.hxx>
+#include <font/GlyphFallbackFontSubstitution.hxx>
 #include <impfont.hxx>
 #include <impfontcharmap.hxx>
 #include <impfontmetricdata.hxx>
-#include <outdev.h>
 #include <PhysicalFontCollection.hxx>
 
 #ifdef MACOSX
@@ -67,7 +67,7 @@ using namespace vcl;
 namespace {
 
 class CoreTextGlyphFallbackSubstititution
-:    public ImplGlyphFallbackFontSubstitution
+:    public vcl::font::GlyphFallbackFontSubstitution
 {
 public:
     bool FindFontSubstitute(FontSelectPattern&, LogicalFontInstance* pLogicalFont, OUString&) const override;
