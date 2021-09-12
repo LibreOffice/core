@@ -29,7 +29,7 @@
 
 #include <vcl/fntstyle.hxx>
 
-#include "fontselect.hxx"
+#include <font/FontSelectPattern.hxx>
 
 /* The following class is extraordinarily similar to FontAttributes. */
 

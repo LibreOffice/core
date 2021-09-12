@@ -30,20 +30,20 @@ public:
     {
     }
 
-    void test();
+    void testShouldGetFontId();
 
     CPPUNIT_TEST_SUITE(VclPhysicalFontFaceCollectionTest);
-    CPPUNIT_TEST(test);
+    CPPUNIT_TEST(testShouldGetFontId);
     CPPUNIT_TEST_SUITE_END();
 };
 
-void VclPhysicalFontFaceCollectionTest::test()
+void VclPhysicalFontFaceCollectionTest::testShouldGetFontId()
 {
     vcl::font::PhysicalFontFaceCollection aCollection;
     aCollection.Add(new TestFontFace(1988756));
 
-    rtl::Reference<PhysicalFontFace> pActual(new TestFontFace(1988756));
-    rtl::Reference<PhysicalFontFace> pExpected = aCollection.Get(0);
+    rtl::Reference<vcl::font::PhysicalFontFace> pActual(new TestFontFace(1988756));
+    rtl::Reference<vcl::font::PhysicalFontFace> pExpected = aCollection.Get(0);
 
     CPPUNIT_ASSERT_EQUAL(pExpected->GetFontId(), pActual->GetFontId());
     CPPUNIT_ASSERT_EQUAL(1, aCollection.Count());
