@@ -26,9 +26,9 @@
 #include <vcl/outdev.hxx>
 #include <sal/log.hxx>
 
-#include <PhysicalFontFace.hxx>
-#include <fontinstance.hxx>
 #include <font/FontSelectPattern.hxx>
+#include <font/PhysicalFontFace.hxx>
+#include <fontinstance.hxx>
 #include <impfontmetricdata.hxx>
 #include <sft.hxx>
 
@@ -53,7 +53,7 @@ FontMetric::FontMetric()
 
 FontMetric::FontMetric( const FontMetric& rFontMetric ) = default;
 
-FontMetric::FontMetric(PhysicalFontFace const& rFace)
+FontMetric::FontMetric(vcl::font::PhysicalFontFace const& rFace)
     : FontMetric()
 {
     SetFamilyName(rFace.GetFamilyName());
