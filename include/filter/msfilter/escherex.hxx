@@ -525,6 +525,9 @@ class EscherBlibEntry
     friend class EscherGraphicProvider;
     friend class EscherEx;
 
+    MapMode         maPrefMapMode;
+    Size            maPrefSize;
+
     sal_uInt32      mnIdentifier[ 4 ];
     sal_uInt32      mnPictureOffset;        // offset to the graphic in PictureStreams
     sal_uInt32      mnSize;                 // size of real graphic
@@ -533,9 +536,6 @@ class EscherBlibEntry
     sal_uInt32      mnSizeExtra;            // !! size of preceding header
 
     ESCHER_BlibType meBlibType;
-
-    Size            maPrefSize;
-    MapMode         maPrefMapMode;
 
     bool            mbIsEmpty;
     bool            mbIsNativeGraphicPossible;

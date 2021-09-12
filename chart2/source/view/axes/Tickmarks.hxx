@@ -35,14 +35,11 @@ struct TickInfo
 {
     double      fScaledTickValue;
     css::uno::Reference<css::chart2::XScaling> xInverseScaling;
-
-    ::basegfx::B2DVector  aTickScreenPosition;
-    bool        bPaintIt;
-
     css::uno::Reference<css::drawing::XShape> xTextShape;
-
     OUString aText;//used only for complex categories so far
+    ::basegfx::B2DVector  aTickScreenPosition;
     sal_Int32 nFactorForLimitedTextWidth;//categories in higher levels of complex categories can have more place than a single simple category
+    bool        bPaintIt;
 
 //methods:
     TickInfo() = delete;
