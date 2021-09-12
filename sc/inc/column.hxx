@@ -219,19 +219,16 @@ public:
                 // data only:
     bool        IsEmptyBlock(SCROW nStartRow, SCROW nEndRow) const;
     SCSIZE      GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirection eDir ) const;
-    bool        HasDataAt(SCROW nRow, bool bConsiderCellNotes = false,
-                   bool bConsiderCellDrawObjects = false, bool bConsiderCellFormats = false) const;
-    bool        HasDataAt(sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow,
-                   bool bConsiderCellNotes = false, bool bConsiderCellDrawObjects = false,
-                   bool bConsiderCellFormats = false) const;
-    bool        HasDataAt(sc::ColumnBlockPosition& rBlockPos, SCROW nRow, bool bConsiderCellNotes = false,
-                   bool bConsiderCellDrawObjects = false, bool bConsiderCellFormats = false);
+    bool        HasDataAt( SCROW nRow, ScDataAreaExtras* pDataAreaExtras = nullptr ) const;
+    bool        HasDataAt( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow,
+                           ScDataAreaExtras* pDataAreaExtras = nullptr ) const;
+    bool        HasDataAt( sc::ColumnBlockPosition& rBlockPos, SCROW nRow,
+                           ScDataAreaExtras* pDataAreaExtras = nullptr );
+    void        GetDataExtrasAt( SCROW nRow, ScDataAreaExtras& rDataAreaExtras ) const;
     bool        HasVisibleDataAt(SCROW nRow) const;
     SCROW       GetFirstDataPos() const;
     SCROW       GetLastDataPos() const;
-    SCROW       GetLastDataPos(SCROW nLastRow, bool bConsiderCellNotes = false,
-                         bool bConsiderCellDrawObjects = false,
-                         bool bConsiderCellFormats = false) const;
+    SCROW       GetLastDataPos( SCROW nLastRow, ScDataAreaExtras* pDataAreaExtras = nullptr ) const;
     bool        GetPrevDataPos(SCROW& rRow) const;
     bool        GetNextDataPos(SCROW& rRow) const;
     bool        TrimEmptyBlocks(SCROW& rRowStart, SCROW& rRowEnd) const;

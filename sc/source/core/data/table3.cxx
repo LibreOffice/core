@@ -399,16 +399,26 @@ public:
     }
 };
 
+// Assume that we can handle 512MB, which with a ~100 bytes
+// ScSortInfoArray::Cell element for 500MB are about 5 million cells plus
+// overhead in one chunk.
+constexpr sal_Int32 kSortCellsChunk = 500 * 1024 * 1024 / sizeof(ScSortInfoArray::Cell);
+
 namespace {
 
 void initDataRows(
     ScSortInfoArray& rArray, ScTable& rTab, ScColContainer& rCols,
     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-    bool bPattern, bool bHiddenFiltered )
+    bool bHiddenFiltered, bool bPattern, bool bCellNotes, bool bCellDrawObjects, bool bOnlyDataAreaExtras )
 {
     // Fill row-wise data table.
     ScSortInfoArray::RowsType& rRows = rArray.InitDataRows(nRow2-nRow1+1, nCol2-nCol1+1);
 
+    const std::vector<SCCOLROW>& rOrderIndices = rArray.GetOrderIndices();
+    assert(!bOnlyDataAreaExtras || (rOrderIndices.size() == static_cast<size_t>(nRow2 - nRow1 + 1)
+                && nRow1 == rArray.GetStart()));
+
+    ScDrawLayer* pDrawLayer = (bCellDrawObjects ? rTab.GetDoc().GetDrawLayer() : nullptr);
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
     {
         ScColumn& rCol = rCols[nCol];
@@ -419,17 +429,21 @@ void initDataRows(
         sc::ColumnBlockConstPosition aBlockPos;
         rCol.InitBlockPosition(aBlockPos);
         std::map<SCROW, std::vector<SdrObject*>> aRowDrawObjects;
-        ScDrawLayer* pDrawLayer = rTab.GetDoc().GetDrawLayer();
         if (pDrawLayer)
             aRowDrawObjects = pDrawLayer->GetObjectsAnchoredToRange(rTab.GetTab(), nCol, nRow1, nRow2);
 
-        for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+        for (SCROW nR = nRow1; nR <= nRow2; ++nR)
         {
-            ScSortInfoArray::Row& rRow = rRows[nRow-nRow1];
+            const SCROW nRow = (bOnlyDataAreaExtras ? rOrderIndices[nR - rArray.GetStart()] : nR);
+            ScSortInfoArray::Row& rRow = rRows[nR-nRow1];
             ScSortInfoArray::Cell& rCell = rRow.maCells[nCol-nCol1];
-            rCell.maCell = rCol.GetCellValue(aBlockPos, nRow);
-            rCell.mpAttr = rCol.GetCellTextAttr(aBlockPos, nRow);
-            rCell.mpNote = rCol.GetCellNote(aBlockPos, nRow);
+            if (!bOnlyDataAreaExtras)
+            {
+                rCell.maCell = rCol.GetCellValue(aBlockPos, nRow);
+                rCell.mpAttr = rCol.GetCellTextAttr(aBlockPos, nRow);
+            }
+            if (bCellNotes)
+                rCell.mpNote = rCol.GetCellNote(aBlockPos, nRow);
             if (pDrawLayer)
                 rCell.maDrawObjects = aRowDrawObjects[nRow];
 
@@ -438,7 +452,7 @@ void initDataRows(
         }
     }
 
-    if (bHiddenFiltered)
+    if (!bOnlyDataAreaExtras && bHiddenFiltered)
     {
         for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
         {
@@ -467,9 +481,8 @@ std::unique_ptr<ScSortInfoArray> ScTable::CreateSortInfoArray( const sc::Reorder
         pArray->SetKeepQuery(rParam.mbHiddenFiltered);
         pArray->SetUpdateRefs(rParam.mbUpdateRefs);
 
-        initDataRows(
-            *pArray, *this, aCol, nCol1, nRow1, nCol2, nRow2,
-            rParam.mbPattern, rParam.mbHiddenFiltered);
+        initDataRows( *pArray, *this, aCol, nCol1, nRow1, nCol2, nRow2, rParam.mbHiddenFiltered,
+                rParam.maDataAreaExtras.mbCellFormats, true, true, false);
     }
     else
     {
@@ -511,9 +524,8 @@ std::unique_ptr<ScSortInfoArray> ScTable::CreateSortInfoArray(
             }
         }
 
-        initDataRows(
-            *pArray, *this, aCol, rSortParam.nCol1, nInd1, rSortParam.nCol2, nInd2,
-            rSortParam.bIncludePattern, bKeepQuery);
+        initDataRows( *pArray, *this, aCol, rSortParam.nCol1, nInd1, rSortParam.nCol2, nInd2, bKeepQuery,
+                rSortParam.aDataAreaExtras.mbCellFormats, true, true, false);
     }
     else
     {
@@ -678,8 +690,11 @@ void fillSortedColumnArray(
     std::vector<std::unique_ptr<SortedColumn>>& rSortedCols,
     SortedRowFlags& rRowFlags,
     std::vector<SvtListener*>& rCellListeners,
-    ScSortInfoArray* pArray, SCTAB nTab, SCCOL nCol1, SCCOL nCol2, ScProgress* pProgress, const ScTable* pTable )
+    ScSortInfoArray* pArray, SCTAB nTab, SCCOL nCol1, SCCOL nCol2, ScProgress* pProgress, const ScTable* pTable,
+    bool bOnlyDataAreaExtras )
 {
+    assert(!bOnlyDataAreaExtras || !pArray->IsUpdateRefs());
+
     SCROW nRow1 = pArray->GetStart();
     ScSortInfoArray::RowsType* pRows = pArray->GetDataRows();
     std::vector<SCCOLROW> aOrderIndices = pArray->GetOrderIndices();
@@ -698,72 +713,83 @@ void fillSortedColumnArray(
 
     for (size_t i = 0; i < pRows->size(); ++i)
     {
+        const SCROW nRow = nRow1 + i;
+
         ScSortInfoArray::Row& rRow = (*pRows)[i];
         for (size_t j = 0; j < rRow.maCells.size(); ++j)
         {
-            ScAddress aCellPos(nCol1 + j, nRow1 + i, nTab);
-
             ScSortInfoArray::Cell& rCell = rRow.maCells[j];
 
-            sc::CellStoreType& rCellStore = aSortedCols.at(j)->maCells;
-            switch (rCell.maCell.meType)
+            // If bOnlyDataAreaExtras,
+            // sc::CellStoreType aSortedCols.at(j)->maCells
+            // and
+            // sc::CellTextAttrStoreType aSortedCols.at(j)->maCellTextAttrs
+            // are by definition all empty mdds::multi_type_vector, so nothing
+            // needs to be done to push *all* empty.
+
+            if (!bOnlyDataAreaExtras)
             {
-                case CELLTYPE_STRING:
-                    assert(rCell.mpAttr);
-                    rCellStore.push_back(*rCell.maCell.mpString);
-                break;
-                case CELLTYPE_VALUE:
-                    assert(rCell.mpAttr);
-                    rCellStore.push_back(rCell.maCell.mfValue);
-                break;
-                case CELLTYPE_EDIT:
-                    assert(rCell.mpAttr);
-                    rCellStore.push_back(rCell.maCell.mpEditText->Clone().release());
-                break;
-                case CELLTYPE_FORMULA:
+                sc::CellStoreType& rCellStore = aSortedCols.at(j)->maCells;
+                switch (rCell.maCell.meType)
                 {
-                    assert(rCell.mpAttr);
-                    ScAddress aOldPos = rCell.maCell.mpFormula->aPos;
+                    case CELLTYPE_STRING:
+                        assert(rCell.mpAttr);
+                        rCellStore.push_back(*rCell.maCell.mpString);
+                    break;
+                    case CELLTYPE_VALUE:
+                        assert(rCell.mpAttr);
+                        rCellStore.push_back(rCell.maCell.mfValue);
+                    break;
+                    case CELLTYPE_EDIT:
+                        assert(rCell.mpAttr);
+                        rCellStore.push_back(rCell.maCell.mpEditText->Clone().release());
+                    break;
+                    case CELLTYPE_FORMULA:
+                        {
+                            assert(rCell.mpAttr);
+                            ScAddress aOldPos = rCell.maCell.mpFormula->aPos;
 
-                    ScFormulaCell* pNew = rCell.maCell.mpFormula->Clone( aCellPos );
-                    if (pArray->IsUpdateRefs())
-                    {
-                        pNew->CopyAllBroadcasters(*rCell.maCell.mpFormula);
-                        pNew->GetCode()->AdjustReferenceOnMovedOrigin(aOldPos, aCellPos);
-                    }
-                    else
-                    {
-                        pNew->GetCode()->AdjustReferenceOnMovedOriginIfOtherSheet(aOldPos, aCellPos);
-                    }
+                            const ScAddress aCellPos(nCol1 + j, nRow, nTab);
+                            ScFormulaCell* pNew = rCell.maCell.mpFormula->Clone( aCellPos );
+                            if (pArray->IsUpdateRefs())
+                            {
+                                pNew->CopyAllBroadcasters(*rCell.maCell.mpFormula);
+                                pNew->GetCode()->AdjustReferenceOnMovedOrigin(aOldPos, aCellPos);
+                            }
+                            else
+                            {
+                                pNew->GetCode()->AdjustReferenceOnMovedOriginIfOtherSheet(aOldPos, aCellPos);
+                            }
 
-                    if (!rCellListeners.empty())
-                    {
-                        // Original source cells will be deleted during
-                        // sc::CellStoreType::transfer(), SvtListener is a base
-                        // class, so we need to replace it.
-                        auto it( ::std::find( rCellListeners.begin(), rCellListeners.end(), rCell.maCell.mpFormula));
-                        if (it != rCellListeners.end())
-                            *it = pNew;
-                    }
+                            if (!rCellListeners.empty())
+                            {
+                                // Original source cells will be deleted during
+                                // sc::CellStoreType::transfer(), SvtListener is a base
+                                // class, so we need to replace it.
+                                auto it( ::std::find( rCellListeners.begin(), rCellListeners.end(), rCell.maCell.mpFormula));
+                                if (it != rCellListeners.end())
+                                    *it = pNew;
+                            }
 
-                    rCellStore.push_back(pNew);
+                            rCellStore.push_back(pNew);
+                        }
+                    break;
+                    default:
+                        //assert(!rCell.mpAttr);
+                        // This assert doesn't hold, for example
+                        // CopyCellsFromClipHandler may omit copying cells during
+                        // PasteSpecial for which CopyTextAttrsFromClipHandler
+                        // still copies a CellTextAttr. So if that really is not
+                        // expected then fix it there.
+                        rCellStore.push_back_empty();
                 }
-                break;
-                default:
-                    //assert(!rCell.mpAttr);
-                    // This assert doesn't hold, for example
-                    // CopyCellsFromClipHandler may omit copying cells during
-                    // PasteSpecial for which CopyTextAttrsFromClipHandler
-                    // still copies a CellTextAttr. So if that really is not
-                    // expected then fix it there.
-                    rCellStore.push_back_empty();
-            }
 
-            sc::CellTextAttrStoreType& rAttrStore = aSortedCols.at(j)->maCellTextAttrs;
-            if (rCell.mpAttr)
-                rAttrStore.push_back(*rCell.mpAttr);
-            else
-                rAttrStore.push_back_empty();
+                sc::CellTextAttrStoreType& rAttrStore = aSortedCols.at(j)->maCellTextAttrs;
+                if (rCell.mpAttr)
+                    rAttrStore.push_back(*rCell.mpAttr);
+                else
+                    rAttrStore.push_back_empty();
+            }
 
             if (pArray->IsUpdateRefs())
             {
@@ -790,13 +816,12 @@ void fillSortedColumnArray(
             aSortedCols.at(j)->maCellDrawObjects.push_back(rCell.maDrawObjects);
 
             if (rCell.mpPattern)
-                aSortedCols.at(j)->setPattern(aCellPos.Row(), rCell.mpPattern);
+                aSortedCols.at(j)->setPattern(nRow, rCell.mpPattern);
         }
 
-        if (pArray->IsKeepQuery())
+        if (!bOnlyDataAreaExtras && pArray->IsKeepQuery())
         {
             // Hidden and filtered flags are first converted to segments.
-            SCROW nRow = nRow1 + i;
             aRowFlags.setRowHidden(nRow, rRow.mbHidden);
             aRowFlags.setRowFiltered(nRow, rRow.mbFiltered);
         }
@@ -874,6 +899,51 @@ public:
     }
 };
 
+}
+
+void ScTable::SortReorderAreaExtrasByRow( ScSortInfoArray* pArray,
+        SCCOL nDataCol1, SCCOL nDataCol2,
+        const ScDataAreaExtras& rDataAreaExtras, ScProgress* pProgress )
+{
+    const SCROW nRow1 = pArray->GetStart();
+    const SCROW nLastRow = pArray->GetLast();
+    const SCCOL nChunkCols = std::max<SCCOL>( 1, kSortCellsChunk / (nLastRow - nRow1 + 1));
+    // Before data area.
+    for (SCCOL nCol = rDataAreaExtras.mnStartCol; nCol < nDataCol1; nCol += nChunkCols)
+    {
+        const SCCOL nEndCol = std::min<SCCOL>( nCol + nChunkCols - 1, nDataCol1 - 1);
+        initDataRows( *pArray, *this, aCol, nCol, nRow1, nEndCol, nLastRow, false,
+                rDataAreaExtras.mbCellFormats, rDataAreaExtras.mbCellNotes, rDataAreaExtras.mbCellDrawObjects, true);
+        SortReorderByRow( pArray, nCol, nEndCol, pProgress, true);
+    }
+    // Behind data area.
+    for (SCCOL nCol = nDataCol2 + 1; nCol <= rDataAreaExtras.mnEndCol; nCol += nChunkCols)
+    {
+        const SCCOL nEndCol = std::min<SCCOL>( nCol + nChunkCols - 1, rDataAreaExtras.mnEndCol);
+        initDataRows( *pArray, *this, aCol, nCol, nRow1, nEndCol, nLastRow, false,
+                rDataAreaExtras.mbCellFormats, rDataAreaExtras.mbCellNotes, rDataAreaExtras.mbCellDrawObjects, true);
+        SortReorderByRow( pArray, nCol, nEndCol, pProgress, true);
+    }
+}
+
+void ScTable::SortReorderAreaExtrasByColumn( const ScSortInfoArray* pArray,
+        SCROW nDataRow1, SCROW nDataRow2, const ScDataAreaExtras& rDataAreaExtras, ScProgress* pProgress )
+{
+    const SCCOL nCol1 = static_cast<SCCOL>(pArray->GetStart());
+    const SCCOL nLastCol = static_cast<SCCOL>(pArray->GetLast());
+    const SCROW nChunkRows = std::max<SCROW>( 1, kSortCellsChunk / (nLastCol - nCol1 + 1));
+    // Above data area.
+    for (SCROW nRow = rDataAreaExtras.mnStartRow; nRow < nDataRow1; nRow += nChunkRows)
+    {
+        const SCROW nEndRow = std::min<SCROW>( nRow + nChunkRows - 1, nDataRow1 - 1);
+        SortReorderByColumn( pArray, nRow, nEndRow, rDataAreaExtras.mbCellFormats, pProgress);
+    }
+    // Below data area.
+    for (SCROW nRow = nDataRow2 + 1; nRow <= rDataAreaExtras.mnEndRow; nRow += nChunkRows)
+    {
+        const SCROW nEndRow = std::min<SCROW>( nRow + nChunkRows - 1, rDataAreaExtras.mnEndRow);
+        SortReorderByColumn( pArray, nRow, nEndRow, rDataAreaExtras.mbCellFormats, pProgress);
+    }
 }
 
 void ScTable::SortReorderByColumn(
@@ -1018,13 +1088,19 @@ void ScTable::SortReorderByColumn(
     }
 }
 
-void ScTable::SortReorderByRow(
-    ScSortInfoArray* pArray, SCCOL nCol1, SCCOL nCol2, ScProgress* pProgress )
+void ScTable::SortReorderByRow( ScSortInfoArray* pArray, SCCOL nCol1, SCCOL nCol2,
+        ScProgress* pProgress, bool bOnlyDataAreaExtras )
 {
     assert(!pArray->IsUpdateRefs());
 
     if (nCol2 < nCol1)
         return;
+
+    // bOnlyDataAreaExtras:
+    // Data area extras by definition do not have any cell content so no
+    // formula cells either, so that handling doesn't need to be executed.
+    // However, there may be listeners of formulas listening to broadcasters of
+    // empty cells.
 
     SCROW nRow1 = pArray->GetStart();
     SCROW nRow2 = pArray->GetLast();
@@ -1035,6 +1111,7 @@ void ScTable::SortReorderByRow(
     // When the update ref mode is disabled, we need to detach all formula
     // cells in the sorted range before reordering, and re-start them
     // afterward.
+    if (!bOnlyDataAreaExtras)
     {
         sc::EndListeningContext aCxt(rDocument);
         DetachFormulaCells(aCxt, nCol1, nRow1, nCol2, nRow2);
@@ -1060,33 +1137,40 @@ void ScTable::SortReorderByRow(
     }
 
     // Split formula groups at the sort range boundaries (if applicable).
-    std::vector<SCROW> aRowBounds;
-    aRowBounds.reserve(2);
-    aRowBounds.push_back(nRow1);
-    aRowBounds.push_back(nRow2+1);
-    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-        SplitFormulaGroups(nCol, aRowBounds);
+    if (!bOnlyDataAreaExtras)
+    {
+        std::vector<SCROW> aRowBounds;
+        aRowBounds.reserve(2);
+        aRowBounds.push_back(nRow1);
+        aRowBounds.push_back(nRow2+1);
+        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+            SplitFormulaGroups(nCol, aRowBounds);
+    }
 
     // Cells in the data rows only reference values in the document. Make
     // a copy before updating the document.
     std::vector<std::unique_ptr<SortedColumn>> aSortedCols; // storage for copied cells.
     SortedRowFlags aRowFlags(GetDoc().GetSheetLimits());
-    fillSortedColumnArray(aSortedCols, aRowFlags, aCellListeners, pArray, nTab, nCol1, nCol2, pProgress, this);
+    fillSortedColumnArray(aSortedCols, aRowFlags, aCellListeners, pArray, nTab, nCol1, nCol2,
+            pProgress, this, bOnlyDataAreaExtras);
 
     for (size_t i = 0, n = aSortedCols.size(); i < n; ++i)
     {
         SCCOL nThisCol = i + nCol1;
 
+        if (!bOnlyDataAreaExtras)
         {
-            sc::CellStoreType& rDest = aCol[nThisCol].maCells;
-            sc::CellStoreType& rSrc = aSortedCols[i]->maCells;
-            rSrc.transfer(nRow1, nRow2, rDest, nRow1);
-        }
+            {
+                sc::CellStoreType& rDest = aCol[nThisCol].maCells;
+                sc::CellStoreType& rSrc = aSortedCols[i]->maCells;
+                rSrc.transfer(nRow1, nRow2, rDest, nRow1);
+            }
 
-        {
-            sc::CellTextAttrStoreType& rDest = aCol[nThisCol].maCellTextAttrs;
-            sc::CellTextAttrStoreType& rSrc = aSortedCols[i]->maCellTextAttrs;
-            rSrc.transfer(nRow1, nRow2, rDest, nRow1);
+            {
+                sc::CellTextAttrStoreType& rDest = aCol[nThisCol].maCellTextAttrs;
+                sc::CellTextAttrStoreType& rSrc = aSortedCols[i]->maCellTextAttrs;
+                rSrc.transfer(nRow1, nRow2, rDest, nRow1);
+            }
         }
 
         {
@@ -1124,7 +1208,7 @@ void ScTable::SortReorderByRow(
         aCol[nThisCol].CellStorageModified();
     }
 
-    if (pArray->IsKeepQuery())
+    if (!bOnlyDataAreaExtras && pArray->IsKeepQuery())
     {
         aRowFlags.maRowsHidden.build_tree();
         aRowFlags.maRowsFiltered.build_tree();
@@ -1152,13 +1236,16 @@ void ScTable::SortReorderByRow(
             l->Notify(aHint);
     }
 
-    // Re-group columns in the sorted range too.
-    for (SCCOL i = nCol1; i <= nCol2; ++i)
-        aCol[i].RegroupFormulaCells();
-
+    if (!bOnlyDataAreaExtras)
     {
-        sc::StartListeningContext aCxt(rDocument);
-        AttachFormulaCells(aCxt, nCol1, nRow1, nCol2, nRow2);
+        // Re-group columns in the sorted range too.
+        for (SCCOL i = nCol1; i <= nCol2; ++i)
+            aCol[i].RegroupFormulaCells();
+
+        {
+            sc::StartListeningContext aCxt(rDocument);
+            AttachFormulaCells(aCxt, nCol1, nRow1, nCol2, nRow2);
+        }
     }
 }
 
@@ -1257,7 +1344,7 @@ void ScTable::SortReorderByRowRefUpdate(
     std::vector<std::unique_ptr<SortedColumn>> aSortedCols; // storage for copied cells.
     SortedRowFlags aRowFlags(GetDoc().GetSheetLimits());
     std::vector<SvtListener*> aListenersDummy;
-    fillSortedColumnArray(aSortedCols, aRowFlags, aListenersDummy, pArray, nTab, nCol1, nCol2, pProgress, this);
+    fillSortedColumnArray(aSortedCols, aRowFlags, aListenersDummy, pArray, nTab, nCol1, nCol2, pProgress, this, false);
 
     for (size_t i = 0, n = aSortedCols.size(); i < n; ++i)
     {
@@ -1703,8 +1790,8 @@ void ScTable::Sort(
     if (pUndo)
     {
         // Copy over the basic sort parameters.
+        pUndo->maDataAreaExtras = rSortParam.aDataAreaExtras;
         pUndo->mbByRow = rSortParam.bByRow;
-        pUndo->mbPattern = rSortParam.bIncludePattern;
         pUndo->mbHiddenFiltered = bKeepQuery;
         pUndo->mbUpdateRefs = bUpdateRefs;
         pUndo->mbHasHeaders = rSortParam.bHasHeader;
@@ -1715,14 +1802,15 @@ void ScTable::Sort(
     aSortParam = rSortParam;    // must be assigned before calling IsSorted()
     if (rSortParam.bByRow)
     {
-        SCROW nLastRow = rSortParam.nRow2;
-        SCROW nRow1 = (rSortParam.bHasHeader ? rSortParam.nRow1 + 1 : rSortParam.nRow1);
+        const SCROW nLastRow = rSortParam.nRow2;
+        const SCROW nRow1 = (rSortParam.bHasHeader ? rSortParam.nRow1 + 1 : rSortParam.nRow1);
         if (nRow1 < nLastRow && !IsSorted(nRow1, nLastRow))
         {
             if(pProgress)
                 pProgress->SetState( 0, nLastRow-nRow1 );
 
-            std::unique_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(aSortParam, nRow1, nLastRow, bKeepQuery, bUpdateRefs));
+            std::unique_ptr<ScSortInfoArray> pArray( CreateSortInfoArray(
+                        aSortParam, nRow1, nLastRow, bKeepQuery, bUpdateRefs));
 
             if ( nLastRow - nRow1 > 255 )
                 DecoladeRow(pArray.get(), nRow1, nLastRow);
@@ -1731,32 +1819,46 @@ void ScTable::Sort(
             if (pArray->IsUpdateRefs())
                 SortReorderByRowRefUpdate(pArray.get(), aSortParam.nCol1, aSortParam.nCol2, pProgress);
             else
-                SortReorderByRow(pArray.get(), aSortParam.nCol1, aSortParam.nCol2, pProgress);
+            {
+                SortReorderByRow(pArray.get(), aSortParam.nCol1, aSortParam.nCol2, pProgress, false);
+                if (rSortParam.aDataAreaExtras.anyExtrasWanted())
+                    SortReorderAreaExtrasByRow( pArray.get(), aSortParam.nCol1, aSortParam.nCol2,
+                            rSortParam.aDataAreaExtras, pProgress);
+            }
 
             if (pUndo)
             {
+                // Stored is the first data row without header row.
                 pUndo->maSortRange = ScRange(rSortParam.nCol1, nRow1, nTab, rSortParam.nCol2, nLastRow, nTab);
+                pUndo->maDataAreaExtras.mnStartRow = nRow1;
                 pUndo->maOrderIndices = pArray->GetOrderIndices();
             }
         }
     }
     else
     {
-        SCCOL nLastCol = rSortParam.nCol2;
-        SCCOL nCol1 = (rSortParam.bHasHeader ? rSortParam.nCol1 + 1 : rSortParam.nCol1);
+        const SCCOL nLastCol = rSortParam.nCol2;
+        const SCCOL nCol1 = (rSortParam.bHasHeader ? rSortParam.nCol1 + 1 : rSortParam.nCol1);
         if (nCol1 < nLastCol && !IsSorted(nCol1, nLastCol))
         {
             if(pProgress)
                 pProgress->SetState( 0, nLastCol-nCol1 );
 
-            std::unique_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(aSortParam, nCol1, nLastCol, bKeepQuery, bUpdateRefs));
+            std::unique_ptr<ScSortInfoArray> pArray( CreateSortInfoArray(
+                        aSortParam, nCol1, nLastCol, bKeepQuery, bUpdateRefs));
 
             QuickSort(pArray.get(), nCol1, nLastCol);
-            SortReorderByColumn(pArray.get(), aSortParam.nRow1, aSortParam.nRow2, aSortParam.bIncludePattern, pProgress);
+            SortReorderByColumn(pArray.get(), rSortParam.nRow1, rSortParam.nRow2,
+                    rSortParam.aDataAreaExtras.mbCellFormats, pProgress);
+            if (rSortParam.aDataAreaExtras.anyExtrasWanted() && !pArray->IsUpdateRefs())
+                SortReorderAreaExtrasByColumn( pArray.get(),
+                        rSortParam.nRow1, rSortParam.nRow2, rSortParam.aDataAreaExtras, pProgress);
 
             if (pUndo)
             {
+                // Stored is the first data column without header column.
                 pUndo->maSortRange = ScRange(nCol1, aSortParam.nRow1, nTab, nLastCol, aSortParam.nRow2, nTab);
+                pUndo->maDataAreaExtras.mnStartCol = nCol1;
                 pUndo->maOrderIndices = pArray->GetOrderIndices();
             }
         }
@@ -1781,8 +1883,14 @@ void ScTable::Reorder( const sc::ReorderParam& rParam )
             SortReorderByRowRefUpdate(
                 pArray.get(), rParam.maSortRange.aStart.Col(), rParam.maSortRange.aEnd.Col(), nullptr);
         else
-            SortReorderByRow(
-                pArray.get(), rParam.maSortRange.aStart.Col(), rParam.maSortRange.aEnd.Col(), nullptr);
+        {
+            SortReorderByRow( pArray.get(),
+                    rParam.maSortRange.aStart.Col(), rParam.maSortRange.aEnd.Col(), nullptr, false);
+            if (rParam.maDataAreaExtras.anyExtrasWanted())
+                SortReorderAreaExtrasByRow( pArray.get(),
+                        rParam.maSortRange.aStart.Col(), rParam.maSortRange.aEnd.Col(),
+                        rParam.maDataAreaExtras, nullptr);
+        }
     }
     else
     {
@@ -1790,7 +1898,11 @@ void ScTable::Reorder( const sc::ReorderParam& rParam )
         pArray->SetOrderIndices(rParam.maOrderIndices);
         SortReorderByColumn(
             pArray.get(), rParam.maSortRange.aStart.Row(), rParam.maSortRange.aEnd.Row(),
-            rParam.mbPattern, nullptr);
+            rParam.maDataAreaExtras.mbCellFormats, nullptr);
+        if (rParam.maDataAreaExtras.anyExtrasWanted() && !pArray->IsUpdateRefs())
+            SortReorderAreaExtrasByColumn( pArray.get(),
+                    rParam.maSortRange.aStart.Row(), rParam.maSortRange.aEnd.Row(),
+                    rParam.maDataAreaExtras, nullptr);
     }
 }
 

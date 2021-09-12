@@ -396,9 +396,9 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     aSortParam.bByRow           = true;
                     aSortParam.bCaseSens        = false;
                     aSortParam.bNaturalSort     = false;
-                    aSortParam.bIncludeComments = false;
-                    aSortParam.bIncludeGraphicObjects = true;
-                    aSortParam.bIncludePattern  = true;
+                    aSortParam.aDataAreaExtras.mbCellNotes = false;
+                    aSortParam.aDataAreaExtras.mbCellDrawObjects = true;
+                    aSortParam.aDataAreaExtras.mbCellFormats = true;
                     aSortParam.bInplace         = true;
                     aSortParam.maKeyState[0].bDoSort = true;
                     aSortParam.maKeyState[0].nField = nCol;
@@ -450,11 +450,11 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         if ( pArgs->GetItemState( SID_SORT_NATURALSORT, true, &pItem ) == SfxItemState::SET )
                             aSortParam.bNaturalSort = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                         if ( pArgs->GetItemState( SID_SORT_INCCOMMENTS, true, &pItem ) == SfxItemState::SET )
-                            aSortParam.bIncludeComments = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+                            aSortParam.aDataAreaExtras.mbCellNotes = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                         if ( pArgs->GetItemState( SID_SORT_INCIMAGES, true, &pItem ) == SfxItemState::SET )
-                            aSortParam.bIncludeGraphicObjects = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+                            aSortParam.aDataAreaExtras.mbCellDrawObjects = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                         if ( pArgs->GetItemState( SID_SORT_ATTRIBS, true, &pItem ) == SfxItemState::SET )
-                            aSortParam.bIncludePattern = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+                            aSortParam.aDataAreaExtras.mbCellFormats = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                         if ( pArgs->GetItemState( SID_SORT_USERDEF, true, &pItem ) == SfxItemState::SET )
                         {
                             sal_uInt16 nUserIndex = static_cast<const SfxUInt16Item*>(pItem)->GetValue();

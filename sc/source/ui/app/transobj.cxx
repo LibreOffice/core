@@ -50,6 +50,7 @@
 #include <docfunc.hxx>
 #include <scmod.hxx>
 #include <dragdata.hxx>
+#include <sortparam.hxx>
 
 #include <editeng/paperinf.hxx>
 #include <editeng/sizeitem.hxx>
@@ -252,10 +253,23 @@ static ScRange lcl_reduceBlock(const ScDocument& rDoc, ScRange aReducedBlock, bo
         SCROW nStartRow = aReducedBlock.aStart.Row();
         SCCOL nEndCol = aReducedBlock.aEnd.Col();
         SCROW nEndRow = aReducedBlock.aEnd.Row();
-        bool bShrunk = false;
-        rDoc.ShrinkToUsedDataArea( bShrunk, aReducedBlock.aStart.Tab(), nStartCol, nStartRow, nEndCol, nEndRow,
-                                   false, bIncludeVisual /*bStickyTopRow*/, bIncludeVisual /*bStickyLeftCol*/,
-                                   bIncludeVisual /*bConsiderCellNotes*/, bIncludeVisual /*bConsiderCellDrawObjects*/);
+
+        if (bIncludeVisual)
+        {
+            ScDataAreaExtras aDataAreaExtras;
+            aDataAreaExtras.mbCellNotes = true;
+            aDataAreaExtras.mbCellDrawObjects = true;
+            bool bShrunk = false;
+            rDoc.ShrinkToUsedDataArea( bShrunk, aReducedBlock.aStart.Tab(), nStartCol, nStartRow, nEndCol, nEndRow,
+                    false, true /*bStickyTopRow*/, true /*bStickyLeftCol*/, &aDataAreaExtras);
+            aDataAreaExtras.GetOverallRange( nStartCol, nStartRow, nEndCol, nEndRow, ScDataAreaExtras::Clip::None);
+        }
+        else
+        {
+            bool bShrunk = false;
+            rDoc.ShrinkToUsedDataArea( bShrunk, aReducedBlock.aStart.Tab(), nStartCol, nStartRow, nEndCol, nEndRow,
+                    false, false /*bStickyTopRow*/, false /*bStickyLeftCol*/);
+        }
 
         if ( nPrintAreaEndRow > nEndRow )
             nEndRow = nPrintAreaEndRow;

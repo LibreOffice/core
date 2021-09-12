@@ -808,9 +808,9 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
             aSortParam.bByRow = true;
             aSortParam.bCaseSens = false;
             aSortParam.bNaturalSort = false;
-            aSortParam.bIncludeComments = false;
-            aSortParam.bIncludeGraphicObjects = true;
-            aSortParam.bIncludePattern = true;
+            aSortParam.aDataAreaExtras.mbCellNotes = false;
+            aSortParam.aDataAreaExtras.mbCellDrawObjects = true;
+            aSortParam.aDataAreaExtras.mbCellFormats = true;
             aSortParam.bInplace = true;
             aSortParam.maKeyState[0].bDoSort = true;
             aSortParam.maKeyState[0].nField = nCol;

@@ -522,25 +522,58 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         return false;
     }
 
+    const ScInputOptions aInputOption = SC_MOD()->GetInputOptions();
+    const bool bUpdateRefs = aInputOption.GetSortRefUpdate();
+
     // Adjust aLocalParam cols/rows to used data area. Keep sticky top row or
     // column (depending on direction) in any case, not just if it has headers,
     // so empty leading cells will be sorted to the end.
+    // aLocalParam.nCol/Row will encompass data content only, extras in
+    // aLocalParam.aDataAreaExtras.
     bool bShrunk = false;
+    aLocalParam.aDataAreaExtras.resetArea();
     rDoc.ShrinkToUsedDataArea(bShrunk, nTab, aLocalParam.nCol1, aLocalParam.nRow1,
                               aLocalParam.nCol2, aLocalParam.nRow2, false, aLocalParam.bByRow,
-                              !aLocalParam.bByRow, aLocalParam.bIncludeComments,
-                              aLocalParam.bIncludeGraphicObjects, aLocalParam.bIncludePattern);
+                              !aLocalParam.bByRow,
+                              (aLocalParam.aDataAreaExtras.anyExtrasWanted() ?
+                               &aLocalParam.aDataAreaExtras : nullptr));
 
     SCROW nStartRow = aLocalParam.nRow1;
     if (aLocalParam.bByRow && aLocalParam.bHasHeader && nStartRow < aLocalParam.nRow2)
         ++nStartRow;
 
-    if ( aLocalParam.bIncludePattern && rDoc.HasAttrib(
-                                        aLocalParam.nCol1, nStartRow        , nTab,
-                                        aLocalParam.nCol2, aLocalParam.nRow2, nTab,
-                                        HasAttrFlags::Merged | HasAttrFlags::Overlapped ) )
+    SCCOL nOverallCol1 = aLocalParam.nCol1;
+    SCROW nOverallRow1 = aLocalParam.nRow1;
+    SCCOL nOverallCol2 = aLocalParam.nCol2;
+    SCROW nOverallRow2 = aLocalParam.nRow2;
+    if (aLocalParam.aDataAreaExtras.anyExtrasWanted())
     {
-        //  merge attributes would be mixed up during sorting
+        // Trailing empty excess columns/rows are excluded from being sorted,
+        // they stick at the end. Clip them.
+        const ScDataAreaExtras::Clip eClip = (aLocalParam.bByRow ?
+                ScDataAreaExtras::Clip::Row : ScDataAreaExtras::Clip::Col);
+        aLocalParam.aDataAreaExtras.GetOverallRange( nOverallCol1, nOverallRow1, nOverallCol2, nOverallRow2, eClip);
+        // Make it permanent.
+        aLocalParam.aDataAreaExtras.SetOverallRange( nOverallCol1, nOverallRow1, nOverallCol2, nOverallRow2);
+
+        if (bUpdateRefs)
+        {
+            // With update references the entire range needs to be handled as
+            // one entity for references pointing within to be moved along,
+            // even when there's no data content. For huge ranges we may be
+            // DOOMed then.
+            aLocalParam.nCol1 = nOverallCol1;
+            aLocalParam.nRow1 = nOverallRow1;
+            aLocalParam.nCol2 = nOverallCol2;
+            aLocalParam.nRow2 = nOverallRow2;
+        }
+    }
+
+    if (aLocalParam.aDataAreaExtras.mbCellFormats
+            && rDoc.HasAttrib( nOverallCol1, nStartRow, nTab, nOverallCol2, nOverallRow2, nTab,
+                HasAttrFlags::Merged | HasAttrFlags::Overlapped))
+    {
+        // Merge attributes would be mixed up during sorting.
         if (!bApi)
             rDocShell.ErrorMessage(STR_SORT_ERR_MERGED);
         return false;
@@ -559,8 +592,7 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         aLocalParam.nRow2-nStartRow+1);
 
     // No point adjusting row heights after the sort when all rows have the same height.
-    bool bUniformRowHeight =
-        rDoc.HasUniformRowHeight(nTab, nStartRow, aLocalParam.nRow2);
+    bool bUniformRowHeight = rDoc.HasUniformRowHeight(nTab, nStartRow, nOverallRow2);
 
     bool bRepeatQuery = false;                          // repeat existing filter?
     ScQueryParam aQueryParam;
@@ -573,8 +605,6 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     // don't call ScDocument::Sort with an empty SortParam (may be empty here if bCopy is set)
     if (aLocalParam.GetSortKeyCount() && aLocalParam.maKeyState[0].bDoSort)
     {
-        ScInputOptions aInputOption = SC_MOD()->GetInputOptions();
-        bool bUpdateRefs = aInputOption.GetSortRefUpdate();
         ScProgress aProgress(&rDocShell, ScResId(STR_PROGRESS_SORTING), 0, true);
         if (!bRepeatQuery)
             bRepeatQuery = rDoc.HasHiddenRows(aLocalParam.nRow1, aLocalParam.nRow2, nTab);
@@ -624,10 +654,10 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     if (bPaint)
     {
         PaintPartFlags nPaint = PaintPartFlags::Grid;
-        SCCOL nStartX = aLocalParam.nCol1;
-        SCROW nStartY = aLocalParam.nRow1;
-        SCCOL nEndX = aLocalParam.nCol2;
-        SCROW nEndY = aLocalParam.nRow2;
+        SCCOL nStartX = nOverallCol1;
+        SCROW nStartY = nOverallRow1;
+        SCCOL nEndX = nOverallCol2;
+        SCROW nEndY = nOverallRow2;
         if ( bRepeatQuery )
         {
             nPaint |= PaintPartFlags::Left;
@@ -637,8 +667,8 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         rDocShell.PostPaint(ScRange(nStartX, nStartY, nTab, nEndX, nEndY, nTab), nPaint);
     }
 
-    if (!bUniformRowHeight && nStartRow <= aLocalParam.nRow2)
-        rDocShell.AdjustRowHeight(nStartRow, aLocalParam.nRow2, nTab);
+    if (!bUniformRowHeight && nStartRow <= nOverallRow2)
+        rDocShell.AdjustRowHeight(nStartRow, nOverallRow2, nTab);
 
     aModificator.SetDocumentModified();
 

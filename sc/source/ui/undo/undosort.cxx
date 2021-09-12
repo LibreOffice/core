@@ -45,9 +45,18 @@ void UndoSort::Execute( bool bUndo )
         aParam.reverse();
     rDoc.Reorder(aParam);
 
+    ScRange aOverallRange( maParam.maSortRange);
+    if (maParam.maDataAreaExtras.anyExtrasWanted())
+    {
+        aOverallRange.aStart.SetCol( maParam.maDataAreaExtras.mnStartCol);
+        aOverallRange.aStart.SetRow( maParam.maDataAreaExtras.mnStartRow);
+        aOverallRange.aEnd.SetCol( maParam.maDataAreaExtras.mnEndCol);
+        aOverallRange.aEnd.SetRow( maParam.maDataAreaExtras.mnEndRow);
+    }
+
     if (maParam.mbHasHeaders)
     {
-        ScRange aMarkRange( maParam.maSortRange);
+        ScRange aMarkRange( aOverallRange);
         if (maParam.mbByRow)
         {
             if (aMarkRange.aStart.Row() > 0)
@@ -62,14 +71,14 @@ void UndoSort::Execute( bool bUndo )
     }
     else
     {
-        ScUndoUtil::MarkSimpleBlock(pDocShell, maParam.maSortRange);
+        ScUndoUtil::MarkSimpleBlock(pDocShell, aOverallRange);
     }
 
     rDoc.SetDirty(maParam.maSortRange, true);
     if (!aParam.mbUpdateRefs)
         rDoc.BroadcastCells(aParam.maSortRange, SfxHintId::ScDataChanged);
 
-    pDocShell->PostPaint(maParam.maSortRange, PaintPartFlags::Grid);
+    pDocShell->PostPaint(aOverallRange, PaintPartFlags::Grid);
     pDocShell->PostDataChanged();
 }
 

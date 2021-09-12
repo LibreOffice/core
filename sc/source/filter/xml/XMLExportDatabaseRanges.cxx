@@ -71,7 +71,7 @@ void writeSort(ScXMLExport& mrExport, const ScSortParam& aParam, const ScRange& 
 
     ScAddress aOutPos(aParam.nDestCol, aParam.nDestRow, aParam.nDestTab);
 
-    if (!aParam.bIncludePattern)
+    if (!aParam.aDataAreaExtras.mbCellFormats)
         mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_BIND_STYLES_TO_CONTENT, XML_FALSE);
 
     if (!aParam.bInplace)
