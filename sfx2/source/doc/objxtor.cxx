@@ -46,6 +46,7 @@
 #include <sfx2/sfxmodelfactory.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/script/DocumentDialogLibraryContainer.hpp>
@@ -1033,9 +1034,7 @@ SfxObjectShell* SfxObjectShell::GetShellFromComponent(const Reference<uno::XInte
     {
         Reference<lang::XUnoTunnel> xTunnel(xComp, UNO_QUERY_THROW);
         Sequence <sal_Int8> aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
-        sal_Int64 nHandle = xTunnel->getSomething( aSeq );
-        if (nHandle)
-            return reinterpret_cast<SfxObjectShell*>(sal::static_int_cast<sal_IntPtr>(nHandle));
+        return comphelper::getSomething_cast<SfxObjectShell>(xTunnel->getSomething(aSeq));
     }
     catch (const Exception&)
     {

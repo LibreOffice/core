@@ -220,10 +220,7 @@ sal_Int32 SecurityEnvironmentGpg::verifyCertificate( const Reference< XCertifica
 sal_Int32 SecurityEnvironmentGpg::getCertificateCharacters(
     const Reference< XCertificate >& aCert)
 {
-    const CertificateImpl* xCert;
-    Reference< XUnoTunnel > xCertTunnel(aCert, UNO_QUERY_THROW) ;
-    xCert = reinterpret_cast<CertificateImpl*>(sal::static_int_cast<sal_uIntPtr>(xCertTunnel->getSomething(CertificateImpl::getUnoTunnelId()))) ;
-    if (xCert == nullptr)
+    if (comphelper::getFromUnoTunnel<CertificateImpl>(aCert) == nullptr)
         throw RuntimeException();
 
     // we only listed private keys anyway, up in

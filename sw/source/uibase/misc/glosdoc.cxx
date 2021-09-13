@@ -593,7 +593,7 @@ Reference< text::XAutoTextEntry > SwGlossaries::GetAutoTextEntry(
 
         SwXAutoTextEntry* pEntry = nullptr;
         if ( xEntryTunnel.is() )
-            pEntry = reinterpret_cast< SwXAutoTextEntry* >( xEntryTunnel->getSomething( SwXAutoTextEntry::getUnoTunnelId() ) );
+            pEntry = comphelper::getFromUnoTunnel<SwXAutoTextEntry>(xEntryTunnel);
         else
         {
             // the object is dead in the meantime -> remove from cache

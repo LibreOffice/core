@@ -67,6 +67,7 @@
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/util/ElementChange.hpp>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/lok.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <cppu/unotype.hxx>
@@ -2156,14 +2157,7 @@ void Access::checkKnownProperty(OUString const & descriptor) {
 rtl::Reference< ChildAccess > Access::getFreeSetMember(
     css::uno::Any const & value)
 {
-    rtl::Reference< ChildAccess > freeAcc;
-    css::uno::Reference< css::lang::XUnoTunnel > tunnel;
-    value >>= tunnel;
-    if (tunnel.is()) {
-        freeAcc.set(
-            reinterpret_cast< ChildAccess * >(
-                tunnel->getSomething(ChildAccess::getUnoTunnelId())));
-    }
+    rtl::Reference< ChildAccess > freeAcc = comphelper::getFromUnoTunnel<ChildAccess>(value);
     if (!freeAcc.is() || freeAcc->getParentAccess().is() ||
         (freeAcc->isInTransaction() &&
          freeAcc->getRootAccess() != getRootAccess()))

@@ -193,19 +193,7 @@ ScTransferObj::~ScTransferObj()
 
 ScTransferObj* ScTransferObj::GetOwnClipboard(const uno::Reference<datatransfer::XTransferable2>& xTransferable)
 {
-    ScTransferObj* pObj = nullptr;
-    if (xTransferable.is())
-    {
-        uno::Reference<XUnoTunnel> xTunnel( xTransferable, uno::UNO_QUERY );
-        if ( xTunnel.is() )
-        {
-            sal_Int64 nHandle = xTunnel->getSomething( getUnoTunnelId() );
-            if ( nHandle )
-                pObj = dynamic_cast<ScTransferObj*>(reinterpret_cast<TransferableHelper*>( static_cast<sal_IntPtr>(nHandle) ));
-        }
-    }
-
-    return pObj;
+    return comphelper::getFromUnoTunnel<ScTransferObj>(xTransferable);
 }
 
 void ScTransferObj::AddSupportedFormats()

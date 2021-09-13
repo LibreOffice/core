@@ -1111,24 +1111,13 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
     bool bRet = false;
 
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = nullptr;
-    OTextCursorHelper* pCursor = nullptr;
-    SwXTextPortion* pPortion = nullptr;
-    SwXText* pText = nullptr;
-    SwXParagraph* pPara = nullptr;
-    SwXHeadFootText* pHeadText = nullptr;
-    if(xRangeTunnel.is())
-    {
-        pRange  = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
-        pCursor =
-            comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
-        pPortion=
-            comphelper::getFromUnoTunnel<SwXTextPortion>(xRangeTunnel);
-        pText   = comphelper::getFromUnoTunnel<SwXText>(xRangeTunnel);
-        pPara   = comphelper::getFromUnoTunnel<SwXParagraph>(xRangeTunnel);
-        if (eMode == TextRangeMode::AllowTableNode)
-            pHeadText = dynamic_cast<SwXHeadFootText*>(pText);
-    }
+    SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
+    OTextCursorHelper* pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
+    SwXTextPortion* pPortion = comphelper::getFromUnoTunnel<SwXTextPortion>(xRangeTunnel);
+    SwXText* pText = comphelper::getFromUnoTunnel<SwXText>(xRangeTunnel);
+    SwXParagraph* pPara = comphelper::getFromUnoTunnel<SwXParagraph>(xRangeTunnel);
+    SwXHeadFootText* pHeadText
+        = eMode == TextRangeMode::AllowTableNode ? dynamic_cast<SwXHeadFootText*>(pText) : nullptr;
 
     // if it's a text then create a temporary cursor there and re-use
     // the pCursor variable

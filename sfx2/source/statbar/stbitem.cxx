@@ -42,6 +42,7 @@
 #include <sfx2/objsh.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -184,14 +185,7 @@ void SAL_CALL SfxStatusBarControl::statusChanged( const frame::FeatureStateEvent
         if ( xDisp.is() )
         {
             uno::Reference< lang::XUnoTunnel > xTunnel( xDisp, uno::UNO_QUERY );
-            SfxOfficeDispatch* pDisp = nullptr;
-            if ( xTunnel.is() )
-            {
-                sal_Int64 nImplementation = xTunnel->getSomething(SfxOfficeDispatch::getUnoTunnelId());
-                pDisp = reinterpret_cast< SfxOfficeDispatch* >(sal::static_int_cast< sal_IntPtr >( nImplementation ));
-            }
-
-            if ( pDisp )
+            if (auto pDisp = comphelper::getFromUnoTunnel<SfxOfficeDispatch>(xTunnel))
                 pViewFrame = pDisp->GetDispatcher_Impl()->GetFrame();
         }
     }

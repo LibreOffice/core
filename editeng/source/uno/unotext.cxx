@@ -2093,10 +2093,8 @@ void SvxUnoTextBase::copyText(
     SvxTextForwarder *pTextForwarder = pEditSource ? pEditSource->GetTextForwarder() : nullptr;
     if( !pTextForwarder )
         return;
-    if( xUT.is() )
+    if (auto pSource = comphelper::getFromUnoTunnel<SvxUnoTextBase>(xUT))
     {
-        SvxUnoTextBase* pSource = reinterpret_cast<SvxUnoTextBase*>(sal::static_int_cast<sal_uIntPtr>(
-                                                                    xUT->getSomething( SvxUnoTextBase::getUnoTunnelId())));
         SvxEditSource *pSourceEditSource = pSource->GetEditSource();
         SvxTextForwarder *pSourceTextForwarder = pSourceEditSource ? pSourceEditSource->GetTextForwarder() : nullptr;
         if( pSourceTextForwarder )

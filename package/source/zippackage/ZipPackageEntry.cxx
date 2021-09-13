@@ -26,6 +26,7 @@
 #include <ZipPackageFolder.hxx>
 #include <ZipPackageStream.hxx>
 
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 
 using namespace com::sun::star;
@@ -93,12 +94,9 @@ void SAL_CALL ZipPackageEntry::setParent( const uno::Reference< XInterface >& xN
 {
     if ( !xNewParent.is() )
         throw NoSupportException(THROW_WHERE );
-    uno::Reference < XUnoTunnel > xTunnel ( xNewParent, UNO_QUERY );
-    sal_Int64 nTest = xTunnel->getSomething ( ZipPackageFolder::getUnoTunnelId () );
-    if ( nTest == 0 )
+    ZipPackageFolder* pNewParent = comphelper::getFromUnoTunnel<ZipPackageFolder>(xNewParent);
+    if (!pNewParent)
         throw NoSupportException(THROW_WHERE );
-
-    ZipPackageFolder *pNewParent = reinterpret_cast < ZipPackageFolder * > ( nTest );
 
     if ( pNewParent != mpParent )
     {

@@ -18,6 +18,8 @@
  */
 
 #include <memory>
+
+#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <o3tl/any.hxx>
@@ -75,13 +77,8 @@ bool SvXMLAttrContainerItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMembe
 
 bool SvXMLAttrContainerItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
-    SvUnoAttributeContainer* pContainer = nullptr;
-
     Reference<XUnoTunnel> xTunnel(rVal, UNO_QUERY);
-    if( xTunnel.is() )
-        pContainer = reinterpret_cast<SvUnoAttributeContainer*>(static_cast<sal_uLong>(xTunnel->getSomething(SvUnoAttributeContainer::getUnoTunnelId())));
-
-    if( pContainer )
+    if (auto pContainer = comphelper::getFromUnoTunnel<SvUnoAttributeContainer>(xTunnel))
     {
         maContainerData = *pContainer->GetContainerImpl();
     }

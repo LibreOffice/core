@@ -21,6 +21,7 @@
 
 #include <iomanip>
 
+#include <comphelper/servicehelper.hxx>
 #include <sal/log.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemiter.hxx>
@@ -1528,15 +1529,7 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, std::unique_ptr<SfxPoolI
 
         if ( xDisp.is() )
         {
-            css::uno::Reference< css::lang::XUnoTunnel > xTunnel( xDisp, css::uno::UNO_QUERY );
-            SfxOfficeDispatch* pDisp = nullptr;
-            if ( xTunnel.is() )
-            {
-                sal_Int64 nImplementation = xTunnel->getSomething(SfxOfficeDispatch::getUnoTunnelId());
-                pDisp = reinterpret_cast< SfxOfficeDispatch* >( sal::static_int_cast< sal_IntPtr >( nImplementation ));
-            }
-
-            if ( !pDisp )
+            if (!comphelper::getFromUnoTunnel<SfxOfficeDispatch>(xDisp))
             {
                 bool bDeleteCache = false;
                 if ( !pCache )
