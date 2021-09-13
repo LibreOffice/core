@@ -555,20 +555,13 @@ Reference<XModuleController> SAL_CALL
 
 const Sequence<sal_Int8>& DrawController::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theDrawControllerUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theDrawControllerUnoTunnelId;
     return theDrawControllerUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL DrawController::getSomething (const Sequence<sal_Int8>& rId)
 {
-    sal_Int64 nResult = 0;
-
-    if (isUnoTunnelId<DrawController>(rId))
-    {
-        nResult = sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
-    }
-
-    return nResult;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 //===== Properties ============================================================

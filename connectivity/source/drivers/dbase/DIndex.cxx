@@ -30,7 +30,6 @@
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <connectivity/dbexception.hxx>
 #include <dbase/DResultSet.hxx>
 #include <strings.hrc>
@@ -102,18 +101,16 @@ void ODbaseIndex::refreshColumns()
 
 Sequence< sal_Int8 > ODbaseIndex::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoTunnelIdInit implId;
+    return implId.getSeq();
 }
 
 // XUnoTunnel
 
 sal_Int64 ODbaseIndex::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return (isUnoTunnelId<ODbaseIndex>(rId))
-                ? reinterpret_cast< sal_Int64 >( this )
-                : ODbaseIndex_BASE::getSomething(rId);
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<ODbaseIndex_BASE>{});
 }
 
 ONDXPagePtr const & ODbaseIndex::getRoot()
@@ -569,7 +566,7 @@ void ODbaseIndex::CreateImpl()
     if(xSet->last())
     {
         Reference< XUnoTunnel> xTunnel(xSet, UNO_QUERY_THROW);
-        ODbaseResultSet* pDbaseRes = reinterpret_cast< ODbaseResultSet* >( xTunnel->getSomething(ODbaseResultSet::getUnoTunnelId()) );
+        ODbaseResultSet* pDbaseRes = comphelper::getFromUnoTunnel<ODbaseResultSet>(xTunnel);
         assert(pDbaseRes); //"No dbase resultset found? What's going on here!
         nRowsLeft = xSet->getRow();
 

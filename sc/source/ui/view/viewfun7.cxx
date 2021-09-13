@@ -178,7 +178,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
 
             ScDocument& rDocument = GetViewData().GetDocument();
             ScDocShell* pDocShell = GetViewData().GetDocShell();
-            ScModelObj* pModelObj = ( pDocShell ? comphelper::getUnoTunnelImplementation<ScModelObj>( pDocShell->GetModel() ) : nullptr );
+            ScModelObj* pModelObj = ( pDocShell ? comphelper::getFromUnoTunnel<ScModelObj>( pDocShell->GetModel() ) : nullptr );
             if ( pDestPage && pModelObj && pDrawTrans )
             {
                 const ScRangeListVector& rProtectedChartRangesVector( pDrawTrans->GetProtectedChartRangesVector() );
@@ -247,7 +247,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
 
         ScDocument& rDocument = GetViewData().GetDocument();
         ScDocShell* pDocShell = GetViewData().GetDocShell();
-        ScModelObj* pModelObj = ( pDocShell ? comphelper::getUnoTunnelImplementation<ScModelObj>( pDocShell->GetModel() ) : nullptr );
+        ScModelObj* pModelObj = ( pDocShell ? comphelper::getFromUnoTunnel<ScModelObj>( pDocShell->GetModel() ) : nullptr );
         const ScDrawTransferObj* pTransferObj = ScDrawTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(GetViewData().GetActiveWin()));
         if ( pPage && pModelObj && ( pTransferObj || pDrawTrans ) )
         {

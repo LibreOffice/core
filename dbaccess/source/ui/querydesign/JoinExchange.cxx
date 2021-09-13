@@ -20,7 +20,6 @@
 #include <JoinExchange.hxx>
 #include <sot/formats.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/typeprovider.hxx>
 
 namespace dbaui
 {
@@ -56,7 +55,7 @@ namespace dbaui
     OJoinExchangeData OJoinExchObj::GetSourceDescription(const Reference< XTransferable >& _rxObject)
     {
         OJoinExchangeData aReturn;
-        auto pImplementation = comphelper::getUnoTunnelImplementation<OJoinExchObj>(_rxObject);
+        auto pImplementation = comphelper::getFromUnoTunnel<OJoinExchObj>(_rxObject);
         if (pImplementation)
             aReturn = pImplementation->m_jxdSourceDescription;
         return aReturn;
@@ -64,17 +63,13 @@ namespace dbaui
 
     Sequence< sal_Int8 > OJoinExchObj::getUnoTunnelId()
     {
-        static ::cppu::OImplementationId implId;
-
-        return implId.getImplementationId();
+        static const comphelper::UnoTunnelIdInit implId;
+        return implId.getSeq();
     }
 
     sal_Int64 SAL_CALL OJoinExchObj::getSomething( const Sequence< sal_Int8 >& _rIdentifier )
     {
-        if (isUnoTunnelId<OJoinExchObj>(_rIdentifier))
-            return reinterpret_cast<sal_Int64>(this);
-
-        return 0;
+        return comphelper::getSomethingImpl(_rIdentifier, this);
     }
 
     void OJoinExchObj::AddSupportedFormats()

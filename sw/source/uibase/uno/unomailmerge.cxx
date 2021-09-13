@@ -151,7 +151,7 @@ static bool LoadFromURL_impl(
 
     // try to get the DocShell
     SwDocShell *pTmpDocShell = nullptr;
-    if (auto pTextDoc = comphelper::getUnoTunnelImplementation<SwXTextDocument>(xTmpModel); pTextDoc)
+    if (auto pTextDoc = comphelper::getFromUnoTunnel<SwXTextDocument>(xTmpModel); pTextDoc)
         pTmpDocShell = pTextDoc->GetDocShell();
 
     bool bRes = false;

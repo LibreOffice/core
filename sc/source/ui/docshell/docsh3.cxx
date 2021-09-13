@@ -175,7 +175,7 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
     // the document size too - cell size affects that, obviously)
     if ((nPart & (PaintPartFlags::Top | PaintPartFlags::Left)) && comphelper::LibreOfficeKit::isActive())
     {
-        ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(this->GetModel());
+        ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(this->GetModel());
         SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
     }
 }

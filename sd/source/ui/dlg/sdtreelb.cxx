@@ -114,21 +114,13 @@ void SdPageObjsTLV::SdPageObjsTransferable::DragFinished( sal_Int8 nDropAction )
 
 sal_Int64 SAL_CALL SdPageObjsTLV::SdPageObjsTransferable::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
-    sal_Int64 nRet;
-
-    if (isUnoTunnelId<SdPageObjsTLV::SdPageObjsTransferable>(rId))
-    {
-        nRet = static_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
-    }
-    else
-        nRet = SdTransferable::getSomething(rId);
-
-    return nRet;
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<SdTransferable>{});
 }
 
 const css::uno::Sequence<sal_Int8>& SdPageObjsTLV::SdPageObjsTransferable::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSdPageObjsTLBUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSdPageObjsTLBUnoTunnelId;
     return theSdPageObjsTLBUnoTunnelId.getSeq();
 }
 
@@ -137,11 +129,7 @@ SdPageObjsTLV::SdPageObjsTransferable* SdPageObjsTLV::SdPageObjsTransferable::ge
 {
     try
     {
-        css::uno::Reference< css::lang::XUnoTunnel > xUnoTunnel( rxData, css::uno::UNO_QUERY_THROW );
-
-        return reinterpret_cast<SdPageObjsTLV::SdPageObjsTransferable*>(
-                sal::static_int_cast<sal_uIntPtr>(
-                    xUnoTunnel->getSomething( SdPageObjsTLV::SdPageObjsTransferable::getUnoTunnelId()) ) );
+        return comphelper::getFromUnoTunnel<SdPageObjsTLV::SdPageObjsTransferable>(rxData);
     }
     catch( const css::uno::Exception& )
     {

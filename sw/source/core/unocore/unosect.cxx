@@ -229,14 +229,14 @@ SwXTextSection::~SwXTextSection()
 
 const uno::Sequence< sal_Int8 > & SwXTextSection::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextSectionUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSwXTextSectionUnoTunnelId;
     return theSwXTextSectionUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL
 SwXTextSection::getSomething(const uno::Sequence< sal_Int8 >& rId)
 {
-    return ::sw::UnoTunnelImpl<SwXTextSection>(rId, this);
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 uno::Reference< text::XTextSection > SAL_CALL
@@ -281,15 +281,8 @@ SwXTextSection::attach(const uno::Reference< text::XTextRange > & xTextRange)
         throw uno::RuntimeException();
     }
 
-    uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = nullptr;
-    OTextCursorHelper* pCursor = nullptr;
-    if(xRangeTunnel.is())
-    {
-        pRange  = ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
-        pCursor =
-            ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
-    }
+    SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xTextRange);
+    OTextCursorHelper* pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xTextRange);
 
     SwDoc *const pDoc =
         pRange ? &pRange->GetDoc() : (pCursor ? pCursor->GetDoc() : nullptr);

@@ -26,7 +26,6 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 
-#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/sdbc/SQLException.hpp>
@@ -452,7 +451,7 @@ OUString SAL_CALL ODBTableDecorator::getName()
 sal_Int64 SAL_CALL ODBTableDecorator::getSomething( const Sequence< sal_Int8 >& rId )
 {
     if (isUnoTunnelId<ODBTableDecorator>(rId))
-        return reinterpret_cast<sal_Int64>(this);
+        return comphelper::getSomething_cast(this);
 
     sal_Int64 nRet = 0;
     Reference<XUnoTunnel> xTunnel(m_xTable,UNO_QUERY);
@@ -463,9 +462,8 @@ sal_Int64 SAL_CALL ODBTableDecorator::getSomething( const Sequence< sal_Int8 >& 
 
 Sequence< sal_Int8 > ODBTableDecorator::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoTunnelIdInit implId;
+    return implId.getSeq();
 }
 
 void ODBTableDecorator::fillPrivileges() const

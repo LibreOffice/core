@@ -172,7 +172,7 @@ Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByConnection
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(ODriver_BASE::rBHelper.bDisposed);
 
-    if (OConnection* pSearchConnection = comphelper::getUnoTunnelImplementation<OConnection>(connection))
+    if (OConnection* pSearchConnection = comphelper::getFromUnoTunnel<OConnection>(connection))
     {
         for (auto const& elem : m_xConnections)
         {

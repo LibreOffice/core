@@ -18,7 +18,6 @@
  */
 
 #include <hsqldb/HTable.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <comphelper/property.hxx>
@@ -118,18 +117,16 @@ sdbcx::OCollection* OHSQLTable::createIndexes(const ::std::vector< OUString>& _r
 
 Sequence< sal_Int8 > OHSQLTable::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoTunnelIdInit implId;
+    return implId.getSeq();
 }
 
 // css::lang::XUnoTunnel
 
 sal_Int64 OHSQLTable::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return (isUnoTunnelId<OHSQLTable>(rId))
-                ? reinterpret_cast< sal_Int64 >( this )
-                : OTable_TYPEDEF::getSomething(rId);
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<OTable_TYPEDEF>{});
 }
 
 // XAlterTable

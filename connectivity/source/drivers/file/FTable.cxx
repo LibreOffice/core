@@ -23,7 +23,6 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
 using namespace connectivity;
@@ -121,18 +120,16 @@ void SAL_CALL OFileTable::disposing()
 
 Sequence< sal_Int8 > OFileTable::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId s_Id;
-
-    return s_Id.getImplementationId();
+    static const comphelper::UnoTunnelIdInit s_Id;
+    return s_Id.getSeq();
 }
 
 // css::lang::XUnoTunnel
 
 sal_Int64 OFileTable::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return isUnoTunnelId<OFileTable>(rId)
-                ? reinterpret_cast< sal_Int64 >( this )
-                : OTable_TYPEDEF::getSomething(rId);
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<OTable_TYPEDEF>{});
 }
 
 void OFileTable::FileClose()

@@ -168,15 +168,14 @@ SwXFootnote::CreateXFootnote(SwDoc & rDoc, SwFormatFootnote *const pFootnoteForm
 
 const uno::Sequence< sal_Int8 > & SwXFootnote::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXFootnoteUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSwXFootnoteUnoTunnelId;
     return theSwXFootnoteUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL
 SwXFootnote::getSomething(const uno::Sequence< sal_Int8 >& rId)
 {
-    const sal_Int64 nRet( ::sw::UnoTunnelImpl<SwXFootnote>(rId, this) );
-    return nRet ? nRet : SwXText::getSomething(rId);
+    return comphelper::getSomethingImpl(rId, this, comphelper::FallbackToGetSomethingOf<SwXText>{});
 }
 
 OUString SAL_CALL
@@ -294,12 +293,8 @@ SwXFootnote::attach(const uno::Reference< text::XTextRange > & xTextRange)
     {
         throw uno::RuntimeException();
     }
-    const uno::Reference<lang::XUnoTunnel> xRangeTunnel(
-            xTextRange, uno::UNO_QUERY);
-    SwXTextRange *const pRange =
-        ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
-    OTextCursorHelper *const pCursor =
-        ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
+    SwXTextRange* const pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xTextRange);
+    OTextCursorHelper* const pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xTextRange);
     SwDoc *const pNewDoc =
         pRange ? &pRange->GetDoc() : (pCursor ? pCursor->GetDoc() : nullptr);
     if (!pNewDoc)

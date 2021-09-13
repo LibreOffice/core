@@ -1945,19 +1945,14 @@ Oasis2OOoTransformer::~Oasis2OOoTransformer() noexcept
 
 const css::uno::Sequence<sal_Int8>& Oasis2OOoTransformer::getUnoTunnelId() noexcept
 {
-    static const class UnoTunnelIdInit theOasis2OOoTransformerUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theOasis2OOoTransformerUnoTunnelId;
     return theOasis2OOoTransformerUnoTunnelId.getSeq();
 }
 
 // XUnoTunnel
 sal_Int64 SAL_CALL Oasis2OOoTransformer::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<Oasis2OOoTransformer>(rId) )
-    {
-        return reinterpret_cast< sal_Int64 >( this );
-    }
-
-    return sal_Int64(0);
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 // XServiceInfo

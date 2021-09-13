@@ -32,6 +32,7 @@
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
@@ -406,11 +407,7 @@ void OStatement_Base::construct(const OUString& sql)
     }
 
     // at this moment we support only one table per select statement
-    Reference< css::lang::XUnoTunnel> xTunnel(rTabs.begin()->second,UNO_QUERY);
-    if(xTunnel.is())
-    {
-        m_pTable = reinterpret_cast<OFileTable*>(xTunnel->getSomething(OFileTable::getUnoTunnelId()));
-    }
+    m_pTable = comphelper::getFromUnoTunnel<OFileTable>(rTabs.begin()->second);
     OSL_ENSURE(m_pTable.is(),"No table!");
     if ( m_pTable.is() )
         m_xColNames     = m_pTable->getColumns();

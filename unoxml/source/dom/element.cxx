@@ -471,7 +471,7 @@ namespace DOM
         }
 
         ::rtl::Reference<CNode> const pCNode(
-            comphelper::getUnoTunnelImplementation<CNode>(Reference<XNode>(oldAttr)));
+            comphelper::getFromUnoTunnel<CNode>(Reference<XNode>(oldAttr)));
         if (!pCNode.is()) { throw RuntimeException(); }
 
         xmlNodePtr const pNode = pCNode->GetNodePtr();
@@ -531,7 +531,7 @@ namespace DOM
 
         // get the implementation
         CAttr *const pCAttr = dynamic_cast<CAttr*>(
-                comphelper::getUnoTunnelImplementation<CNode>(xNewAttr));
+                comphelper::getFromUnoTunnel<CNode>(xNewAttr));
         if (!pCAttr) { throw RuntimeException(); }
         xmlAttrPtr const pAttr =
             reinterpret_cast<xmlAttrPtr>(pCAttr->GetNodePtr());

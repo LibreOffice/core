@@ -377,7 +377,7 @@ static bool lcl_hasWordBreak( const Reference<drawing::XShape>& xShape )
     if (!xShape.is())
         return false;
 
-    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>(xShape);
+    SvxShape* pShape = comphelper::getFromUnoTunnel<SvxShape>(xShape);
     SvxShapeText* pShapeText = dynamic_cast<SvxShapeText*>(pShape);
     if (!pShapeText)
         return false;

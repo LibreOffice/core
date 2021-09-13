@@ -1161,17 +1161,13 @@ public:
 
 const ::uno::Sequence< sal_Int8 > & SwXFrame::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXFrameUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSwXFrameUnoTunnelId;
     return theSwXFrameUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXFrame::getSomething( const ::uno::Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SwXFrame>(rId) )
-    {
-        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
-    }
-    return 0;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 
@@ -1733,7 +1729,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             uno::Reference<text::XTextFrame> xFrame;
             if(aValue >>= xFrame)
             {
-                SwXFrame* pFrame = comphelper::getUnoTunnelImplementation<SwXFrame>(xFrame);
+                SwXFrame* pFrame = comphelper::getFromUnoTunnel<SwXFrame>(xFrame);
                 if(pFrame && this != pFrame && pFrame->GetFrameFormat() && pFrame->GetFrameFormat()->GetDoc() == pDoc)
                 {
                     SfxItemSet aSet( pDoc->GetAttrPool(),
@@ -2691,16 +2687,8 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
     SolarMutexGuard aGuard;
     if(!IsDescriptor())
         throw uno::RuntimeException();
-    uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = nullptr;
-    OTextCursorHelper* pCursor = nullptr;
-    if(xRangeTunnel.is())
-    {
-        pRange  = reinterpret_cast< SwXTextRange * >(
-                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
-        pCursor = reinterpret_cast< OTextCursorHelper * >(
-                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
-    }
+    SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xTextRange);
+    OTextCursorHelper* pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xTextRange);
 
     SwDoc* pDoc = pRange ? &pRange->GetDoc() : pCursor ? pCursor->GetDoc() : nullptr;
     if(!pDoc)

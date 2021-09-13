@@ -581,7 +581,7 @@ bool ScDocument::InsertTab(
 
         if (comphelper::LibreOfficeKit::isActive() && GetDrawLayer())
         {
-            ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(this->GetDocumentShell()->GetModel());
+            ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(this->GetDocumentShell()->GetModel());
             SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
         }
     }
@@ -747,7 +747,7 @@ bool ScDocument::DeleteTab( SCTAB nTab )
 
                 if (comphelper::LibreOfficeKit::isActive())
                 {
-                    ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(this->GetDocumentShell()->GetModel());
+                    ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(this->GetDocumentShell()->GetModel());
                     SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
                 }
 
@@ -839,7 +839,7 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
 
                 if (comphelper::LibreOfficeKit::isActive())
                 {
-                    ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(this->GetDocumentShell()->GetModel());
+                    ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(this->GetDocumentShell()->GetModel());
                     SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
                 }
 
@@ -886,7 +886,7 @@ bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool bExternalDoc
 
                 if (comphelper::LibreOfficeKit::isActive() && GetDrawLayer())
                 {
-                    ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(this->GetDocumentShell()->GetModel());
+                    ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(this->GetDocumentShell()->GetModel());
                     SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
                 }
             }

@@ -53,7 +53,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/typeprovider.hxx>
 
 using namespace com::sun::star::xml::xpath;
 using namespace com::sun::star::xml::dom::events;
@@ -301,8 +300,8 @@ EvaluationContext Binding::getEvaluationContext() const
 
 css::uno::Sequence<sal_Int8> Binding::getUnoTunnelId()
 {
-    static cppu::OImplementationId aImplementationId;
-    return aImplementationId.getImplementationId();
+    static const comphelper::UnoTunnelIdInit aImplementationId;
+    return aImplementationId.getSeq();
 }
 
 
@@ -449,7 +448,7 @@ bool Binding::isLive() const
 
 Model* Binding::getModelImpl() const
 {
-    return comphelper::getUnoTunnelImplementation<Model>( mxModel );
+    return comphelper::getFromUnoTunnel<Model>( mxModel );
 }
 
 static void lcl_addListenerToNode( const Reference<XNode>& xNode,
@@ -1168,7 +1167,7 @@ void Binding::handleEvent( const css::uno::Reference<css::xml::dom::events::XEve
 
 sal_Int64 Binding::getSomething( const css::uno::Sequence<sal_Int8>& xId )
 {
-    return reinterpret_cast<sal_Int64>( ( xId == getUnoTunnelId() ) ? this : nullptr );
+    return comphelper::getSomethingImpl(xId, this);
 }
 
 

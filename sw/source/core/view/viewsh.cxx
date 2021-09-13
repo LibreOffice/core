@@ -1061,7 +1061,7 @@ void SwViewShell::SizeChgNotify()
                 ss << aDocSize.Width() + 2 * DOCUMENTBORDER << ", " << aDocSize.Height() + 2 * DOCUMENTBORDER;
                 OString sSize = ss.str().c_str();
 
-                SwXTextDocument* pModel = comphelper::getUnoTunnelImplementation<SwXTextDocument>(GetSfxViewShell()->GetCurrentDocument());
+                SwXTextDocument* pModel = comphelper::getFromUnoTunnel<SwXTextDocument>(GetSfxViewShell()->GetCurrentDocument());
                 SfxLokHelper::notifyDocumentSizeChanged(GetSfxViewShell(), sSize, pModel);
             }
         }

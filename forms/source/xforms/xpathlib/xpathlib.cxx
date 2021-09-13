@@ -19,6 +19,8 @@
 
 
 #include <string.h>
+
+#include <comphelper/servicehelper.hxx>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
@@ -493,7 +495,7 @@ void xforms_instanceFunction(xmlXPathParserContextPtr ctxt, int nargs)
             try {
                 // xmlXPathObjectPtr xmlXPathNewNodeSet        (xmlNodePtr val);
                 Reference< XUnoTunnel > aTunnel(aInstance, UNO_QUERY_THROW);
-                xmlNodePtr pNode = reinterpret_cast< xmlNodePtr >( aTunnel->getSomething(Sequence< sal_Int8 >()) );
+                xmlNodePtr pNode = comphelper::getSomething_cast<xmlNode>(aTunnel->getSomething(Sequence<sal_Int8>()));
                 xmlXPathObjectPtr pObject = xmlXPathNewNodeSet(pNode);
                 xmlXPathReturnNodeSet(ctxt, pObject->nodesetval);
             } catch (const RuntimeException&)
@@ -520,7 +522,7 @@ void xforms_currentFunction(xmlXPathParserContextPtr ctxt, int nargs)
     {
         try {
             Reference< XUnoTunnel > aTunnel(aNode, UNO_QUERY_THROW);
-            xmlNodePtr pNode = reinterpret_cast< xmlNodePtr >( aTunnel->getSomething(Sequence< sal_Int8 >()) );
+            xmlNodePtr pNode = comphelper::getSomething_cast<xmlNode>(aTunnel->getSomething(Sequence<sal_Int8>()));
             xmlXPathObjectPtr pObject = xmlXPathNewNodeSet(pNode);
             xmlXPathReturnNodeSet(ctxt, pObject->nodesetval);
         }
