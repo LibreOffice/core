@@ -1692,7 +1692,7 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
         const sal_Unicode* ptrim_f = p;  // [ptrim_i,ptrim_f) is cell data after trimming
         if ( bRemoveSpace )
         {
-            while ( *ptrim_i == cBlank )
+            while ( ptrim_i < ptrim_f && *ptrim_i == cBlank )
                 ++ptrim_i;
             while ( ptrim_f > ptrim_i && ( *(ptrim_f - 1) == cBlank ) )
                 --ptrim_f;
