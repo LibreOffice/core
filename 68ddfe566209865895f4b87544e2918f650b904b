@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3517f043_e1bad5ff",
+        "filename": "offapi/com/sun/star/drawing/BarCode.idl",
+        "patchSetId": 10
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-13T13:13:08Z",
+      "side": 1,
+      "message": "Should this member come first (or after Payload)?  It looks like \"Type\" is more general information than the \"ErrorCorrection\" and \"Border\" details, so I would make the struct more readable to humans by putting it first.",
+      "revId": "68ddfe566209865895f4b87544e2918f650b904b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c3282561_72e8f473",
         "filename": "xmloff/source/core/xmltoken.cxx",
         "patchSetId": 10
