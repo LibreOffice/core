@@ -26,7 +26,7 @@
 
 #include <vcl/settings.hxx>
 
-#include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <fontinstance.hxx>
 #include <fontattributes.hxx>
 #include <impfont.hxx>
@@ -49,7 +49,7 @@ static double toRadian(int nDegree)
     return nDegree * (M_PI / 1800.0);
 }
 
-CoreTextStyle::CoreTextStyle(const vcl::font::PhysicalFontFace& rPFF, const FontSelectPattern& rFSP)
+CoreTextStyle::CoreTextStyle(const vcl::font::PhysicalFontFace& rPFF, const vcl::font::FontSelectPattern& rFSP)
     : LogicalFontInstance(rPFF, rFSP)
     , mfFontStretch( 1.0 )
     , mfFontRotation( 0.0 )
@@ -265,7 +265,7 @@ hb_font_t* CoreTextStyle::ImplInitHbFont()
     return InitHbFont(pHbFace);
 }
 
-rtl::Reference<LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const FontSelectPattern& rFSD) const
+rtl::Reference<LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const
 {
     return new CoreTextStyle(*this, rFSD);
 }
@@ -509,7 +509,7 @@ void SystemFontList::AddFont( CoreTextFontFace* pFontData )
     maFontContainer[ nFontId ] = pFontData;
 }
 
-void SystemFontList::AnnounceFonts( PhysicalFontCollection& rFontCollection ) const
+void SystemFontList::AnnounceFonts( vcl::font::PhysicalFontCollection& rFontCollection ) const
 {
     for(const auto& rEntry : maFontContainer )
     {

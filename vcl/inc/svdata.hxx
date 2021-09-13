@@ -52,12 +52,15 @@ struct ImplPostEventData;
 struct ImplTimerData;
 struct ImplIdleData;
 struct ImplConfigData;
-namespace vcl::font { class DirectFontSubstitution; }
+namespace vcl::font
+{
+    class DirectFontSubstitution;
+    class PhysicalFontCollection;
+}
 struct ImplHotKey;
 struct ImplEventHook;
 class Point;
 class ImplAccelManager;
-class PhysicalFontCollection;
 class ImplFontCache;
 class HelpTextWindow;
 class ImplTBDragMgr;
@@ -221,10 +224,10 @@ struct ImplSVGDIData
     OpenGLContext*          mpLastContext = nullptr;        // Last OpenGLContext
     VclPtr<Printer>         mpFirstPrinter;                 // First Printer
     std::unique_ptr<ImplPrnQueueList> mpPrinterQueueList;   // List of all printer queue
-    std::shared_ptr<PhysicalFontCollection> mxScreenFontList; // Screen-Font-List
+    std::shared_ptr<vcl::font::PhysicalFontCollection> mxScreenFontList; // Screen-Font-List
     std::shared_ptr<ImplFontCache> mxScreenFontCache;       // Screen-Font-Cache
     lru_scale_cache         maScaleCache = lru_scale_cache(10); // Cache for scaled images
-    DirectFontSubstitution* mpDirectFontSubst = nullptr; // Font-Substitutions defined in Tools->Options->Fonts
+    vcl::font::DirectFontSubstitution* mpDirectFontSubst = nullptr; // Font-Substitutions defined in Tools->Options->Fonts
     std::unique_ptr<GraphicConverter> mxGrfConverter;       // Converter for graphics
     tools::Long                    mnAppFontX = 0;                 // AppFont X-Numenator for 40/tel Width
     tools::Long                    mnAppFontY = 0;                 // AppFont Y-Numenator for 80/tel Height

@@ -23,7 +23,7 @@
 
 #include <vcl/dllapi.h>
 
-#include "font/PhysicalFontFamily.hxx"
+#include "PhysicalFontFamily.hxx"
 #include "fontinstance.hxx"
 
 #include <array>
@@ -39,6 +39,9 @@ class PreMatchFontSubstitution;
 // TODO: merge with ImplFontCache
 // TODO: rename to LogicalFontManager
 
+namespace vcl::font
+{
+
 class VCL_PLUGIN_PUBLIC PhysicalFontCollection final
 {
 public:
@@ -51,15 +54,15 @@ public:
     int                     Count() const { return maPhysicalFontFamilies.size(); }
 
     // find the device font family
-    vcl::font::PhysicalFontFamily*     FindFontFamily( const OUString& rFontName ) const;
-    vcl::font::PhysicalFontFamily*     FindOrCreateFontFamily( const OUString &rFamilyName );
-    vcl::font::PhysicalFontFamily*     FindFontFamily( FontSelectPattern& ) const;
-    vcl::font::PhysicalFontFamily*     FindFontFamilyByTokenNames(const OUString& rTokenStr) const;
-    vcl::font::PhysicalFontFamily*     FindFontFamilyByAttributes(ImplFontAttrs nSearchType, FontWeight, FontWidth,
+    PhysicalFontFamily*     FindFontFamily( const OUString& rFontName ) const;
+    PhysicalFontFamily*     FindOrCreateFontFamily( const OUString &rFamilyName );
+    PhysicalFontFamily*     FindFontFamily( FontSelectPattern& ) const;
+    PhysicalFontFamily*     FindFontFamilyByTokenNames(const OUString& rTokenStr) const;
+    PhysicalFontFamily*     FindFontFamilyByAttributes(ImplFontAttrs nSearchType, FontWeight, FontWidth,
                                              FontItalic, const OUString& rSearchFamily) const;
 
     // suggest fonts for glyph fallback
-    vcl::font::PhysicalFontFamily*     GetGlyphFallbackFont( FontSelectPattern&,
+    PhysicalFontFamily*     GetGlyphFallbackFont( FontSelectPattern&,
                                                   LogicalFontInstance* pLogicalFont,
                                                   OUString& rMissingCodes, int nFallbackLevel ) const;
 
@@ -69,28 +72,30 @@ public:
 
     // misc utilities
     std::shared_ptr<PhysicalFontCollection> Clone() const;
-    std::unique_ptr<vcl::font::PhysicalFontFaceCollection> GetFontFaceCollection() const;
+    std::unique_ptr<PhysicalFontFaceCollection> GetFontFaceCollection() const;
 
 private:
-    mutable bool            mbMatchData;    // true if matching attributes are initialized
+    mutable bool            mbMatchData = false;    // true if matching attributes are initialized
 
-    typedef std::unordered_map<OUString, std::unique_ptr<vcl::font::PhysicalFontFamily>> PhysicalFontFamilies;
+    typedef std::unordered_map<OUString, std::unique_ptr<PhysicalFontFamily>> PhysicalFontFamilies;
     PhysicalFontFamilies    maPhysicalFontFamilies;
 
-    PreMatchFontSubstitution* mpPreMatchHook;       // device specific prematch substitution
-    GlyphFallbackFontSubstitution* mpFallbackHook;  // device specific glyph fallback substitution
+    PreMatchFontSubstitution* mpPreMatchHook = nullptr;       // device specific prematch substitution
+    GlyphFallbackFontSubstitution* mpFallbackHook = nullptr;  // device specific glyph fallback substitution
 
-    mutable std::unique_ptr<std::array<vcl::font::PhysicalFontFamily*,MAX_GLYPHFALLBACK>>  mpFallbackList;
-    mutable int             mnFallbackCount;
+    mutable std::unique_ptr<std::array<PhysicalFontFamily*,MAX_GLYPHFALLBACK>>  mpFallbackList;
+    mutable int             mnFallbackCount = -1;
 
     void                    ImplInitMatchData() const;
     void                    ImplInitGenericGlyphFallback() const;
 
-    vcl::font::PhysicalFontFamily*     ImplFindFontFamilyBySearchName( const OUString& ) const;
-    vcl::font::PhysicalFontFamily*     ImplFindFontFamilyBySubstFontAttr( const utl::FontNameAttr& ) const;
+    PhysicalFontFamily*     ImplFindFontFamilyBySearchName( const OUString& ) const;
+    PhysicalFontFamily*     ImplFindFontFamilyBySubstFontAttr( const utl::FontNameAttr& ) const;
 
-    vcl::font::PhysicalFontFamily*     ImplFindFontFamilyOfDefaultFont() const;
+    PhysicalFontFamily*     ImplFindFontFamilyOfDefaultFont() const;
 
 };
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

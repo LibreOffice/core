@@ -312,7 +312,7 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
     hb_buffer_set_unicode_funcs(pHbBuffer, pHbUnicodeFuncs);
 #endif
 
-    const FontSelectPattern& rFontSelData = GetFont().GetFontSelectPattern();
+    const vcl::font::FontSelectPattern& rFontSelData = GetFont().GetFontSelectPattern();
     if (rArgs.mnFlags & SalLayoutFlags::DisableKerning)
     {
         SAL_INFO("vcl.harfbuzz", "Disabling kerning for font: " << rFontSelData.maTargetName);

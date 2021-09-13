@@ -39,8 +39,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 
-#include <outdev.h>
-#include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <font/GlyphFallbackFontSubstitution.hxx>
 #include <fontsubset.hxx>
 #include <impfont.hxx>
@@ -72,12 +71,12 @@ class CoreTextGlyphFallbackSubstititution
 :    public vcl::font::GlyphFallbackFontSubstitution
 {
 public:
-    bool FindFontSubstitute(FontSelectPattern&, LogicalFontInstance* pLogicalFont, OUString&) const override;
+    bool FindFontSubstitute(vcl::font::FontSelectPattern&, LogicalFontInstance* pLogicalFont, OUString&) const override;
 };
 
 }
 
-bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPattern& rPattern, LogicalFontInstance* pLogicalFont,
+bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(vcl::font::FontSelectPattern& rPattern, LogicalFontInstance* pLogicalFont,
     OUString& rMissingChars) const
 {
     bool bFound = false;
@@ -325,7 +324,7 @@ static void AddLocalTempFontDirs()
     AddTempFontDir( aBrandStr + "/" LIBO_SHARE_FOLDER "/fonts/truetype/" );
 }
 
-void AquaSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
+void AquaSalGraphics::GetDevFontList( vcl::font::PhysicalFontCollection* pFontCollection )
 {
     SAL_WARN_IF( !pFontCollection, "vcl", "AquaSalGraphics::GetDevFontList(NULL) !");
 
@@ -357,7 +356,7 @@ void AquaSalGraphics::ClearDevFontCache()
     pSalData->mpFontList = nullptr;
 }
 
-bool AquaSalGraphics::AddTempDevFont( PhysicalFontCollection*,
+bool AquaSalGraphics::AddTempDevFont( vcl::font::PhysicalFontCollection*,
     const OUString& rFontFileURL, const OUString& /*rFontName*/ )
 {
     return ::AddTempDevFont(rFontFileURL);
@@ -379,7 +378,7 @@ void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout)
 #endif
 
     const CoreTextStyle& rStyle = *static_cast<const CoreTextStyle*>(&rLayout.GetFont());
-    const FontSelectPattern& rFontSelect = rStyle.GetFontSelectPattern();
+    const vcl::font::FontSelectPattern& rFontSelect = rStyle.GetFontSelectPattern();
     if (rFontSelect.mnHeight == 0)
     {
         SAL_WARN("vcl.quartz", "AquaSalGraphics::DrawTextLayout(): rFontSelect.mnHeight is zero!?");

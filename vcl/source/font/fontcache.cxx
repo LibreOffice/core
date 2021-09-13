@@ -21,7 +21,7 @@
 
 #include <sal/log.hxx>
 
-#include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <font/PhysicalFontFamily.hxx>
 #include <fontinstance.hxx>

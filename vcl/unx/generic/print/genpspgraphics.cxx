@@ -29,12 +29,12 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/fontcharmap.hxx>
 
-#include <PhysicalFontCollection.hxx>
-#include <impfontmetricdata.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <fontattributes.hxx>
 #include <fontinstance.hxx>
 #include <fontsubset.hxx>
+#include <impfontmetricdata.hxx>
 #include <jobdata.hxx>
 #include <langboost.hxx>
 #include <sallayout.hxx>
@@ -512,4 +512,4 @@ const void* GenPspGraphics::GetEmbedFontData(const vcl::font::PhysicalFontFace* 
     return DoGetEmbedFontData(aFont, pDataLen);
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

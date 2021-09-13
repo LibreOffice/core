@@ -41,7 +41,7 @@
 #include <font/DirectFontSubstitution.hxx>
 #include <font/FontSubstEntry.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
-#include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <font/FeatureCollector.hxx>
 #include <impfontcache.hxx>
 #include <impglyphitem.hxx>
@@ -602,7 +602,7 @@ void OutputDevice::AddFontSubstitute( const OUString& rFontName,
 
 void OutputDevice::RemoveFontsSubstitute()
 {
-    DirectFontSubstitution* pSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
+    vcl::font::DirectFontSubstitution* pSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
     if( pSubst )
         pSubst->RemoveFontsSubstitute();
 }
