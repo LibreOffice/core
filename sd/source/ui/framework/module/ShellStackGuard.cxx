@@ -49,7 +49,7 @@ ShellStackGuard::ShellStackGuard (Reference<frame::XController> const & rxContro
         mxConfigurationController = xControllerManager->getConfigurationController();
 
         // Tunnel through the controller to obtain a ViewShellBase.
-        auto pController = comphelper::getUnoTunnelImplementation<sd::DrawController>(rxController);
+        auto pController = comphelper::getFromUnoTunnel<sd::DrawController>(rxController);
         if (pController != nullptr)
             mpBase = pController->GetViewShellBase();
     }

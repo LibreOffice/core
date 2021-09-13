@@ -25,7 +25,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/hash.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <algorithm>
 
@@ -154,8 +153,8 @@ Sequence< Type > SAL_CALL OConnectionWrapper::getTypes(  )
 // css::lang::XUnoTunnel
 sal_Int64 SAL_CALL OConnectionWrapper::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    if (isUnoTunnelId<OConnectionWrapper>(rId))
-        return reinterpret_cast< sal_Int64 >( this );
+    if (comphelper::isUnoTunnelId<OConnectionWrapper>(rId))
+        return comphelper::getSomething_cast(this);
 
     if(m_xUnoTunnel.is())
         return m_xUnoTunnel->getSomething(rId);
@@ -165,9 +164,8 @@ sal_Int64 SAL_CALL OConnectionWrapper::getSomething( const Sequence< sal_Int8 >&
 
 Sequence< sal_Int8 > OConnectionWrapper::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoTunnelIdInit implId;
+    return implId.getSeq();
 }
 
 namespace

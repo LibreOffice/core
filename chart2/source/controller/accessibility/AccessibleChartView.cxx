@@ -299,7 +299,7 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
         Reference< chart2::XChartDocument > xChartDoc( xChartModel, uno::UNO_QUERY );
         if( xChartDoc.is())
             m_spObjectHierarchy =
-                std::make_shared<ObjectHierarchy>( xChartDoc, comphelper::getUnoTunnelImplementation<ExplicitValueProvider>(m_xChartView) );
+                std::make_shared<ObjectHierarchy>( xChartDoc, comphelper::getFromUnoTunnel<ExplicitValueProvider>(m_xChartView) );
         else
             m_spObjectHierarchy.reset();
     }

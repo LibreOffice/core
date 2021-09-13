@@ -1382,18 +1382,15 @@ void OResultSet::OpenImpl()
 
 Sequence< sal_Int8 > OResultSet::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoTunnelIdInit implId;
+    return implId.getSeq();
 }
 
 // css::lang::XUnoTunnel
 
 sal_Int64 OResultSet::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return isUnoTunnelId<OResultSet>(rId)
-                ? reinterpret_cast< sal_Int64 >( this )
-                : 0;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 void OResultSet::setBoundedColumns(const OValueRefRow& _rRow,
@@ -1531,7 +1528,7 @@ Reference< css::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertySetInf
 void OResultSet::doTableSpecials(const OSQLTable& _xTable)
 {
     Reference<css::lang::XUnoTunnel> xTunnel(_xTable, UNO_QUERY_THROW);
-    m_pTable = reinterpret_cast< OFileTable* >(xTunnel->getSomething(OFileTable::getUnoTunnelId()));
+    m_pTable = comphelper::getFromUnoTunnel<OFileTable>(xTunnel);
     assert(m_pTable.is());
 }
 

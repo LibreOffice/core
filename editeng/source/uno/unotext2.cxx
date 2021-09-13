@@ -554,7 +554,7 @@ void SAL_CALL SvxUnoTextCursor::gotoRange( const uno::Reference< text::XTextRang
     if( !xRange.is() )
         return;
 
-    SvxUnoTextRangeBase* pRange = comphelper::getUnoTunnelImplementation<SvxUnoTextRangeBase>( xRange );
+    SvxUnoTextRangeBase* pRange = comphelper::getFromUnoTunnel<SvxUnoTextRangeBase>( xRange );
 
     if( !pRange )
         return;

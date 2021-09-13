@@ -151,14 +151,14 @@ SwXReferenceMark::CreateXReferenceMark(
 
 const uno::Sequence< sal_Int8 > & SwXReferenceMark::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXReferenceMarkUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSwXReferenceMarkUnoTunnelId;
     return theSwXReferenceMarkUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL
 SwXReferenceMark::getSomething(const uno::Sequence< sal_Int8 >& rId)
 {
-    return ::sw::UnoTunnelImpl<SwXReferenceMark>(rId, this);
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 OUString SAL_CALL SwXReferenceMark::getImplementationName()
@@ -274,15 +274,8 @@ SwXReferenceMark::attach(const uno::Reference< text::XTextRange > & xTextRange)
     {
         throw uno::RuntimeException();
     }
-    uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = nullptr;
-    OTextCursorHelper* pCursor = nullptr;
-    if(xRangeTunnel.is())
-    {
-        pRange = ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
-        pCursor =
-            ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
-    }
+    SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xTextRange);
+    OTextCursorHelper* pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xTextRange);
     SwDoc *const pDocument =
         pRange ? &pRange->GetDoc() : (pCursor ? pCursor->GetDoc() : nullptr);
     if (!pDocument)
@@ -712,8 +705,7 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
     {
         if (pPortions) // set cache in the XMeta to the given portions
         {
-            SwXMeta *const pXMeta(
-                comphelper::getUnoTunnelImplementation<SwXMeta>(xMeta));
+            SwXMeta* const pXMeta(comphelper::getFromUnoTunnel<SwXMeta>(xMeta));
             assert(pXMeta);
             // NB: the meta must always be created with the complete content
             // if SwXTextPortionEnumeration is created for a selection,
@@ -842,7 +834,7 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
 
 const uno::Sequence< sal_Int8 > & SwXMeta::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXMetaUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSwXMetaUnoTunnelId;
     return theSwXMetaUnoTunnelId.getSeq();
 }
 
@@ -850,7 +842,7 @@ const uno::Sequence< sal_Int8 > & SwXMeta::getUnoTunnelId()
 sal_Int64 SAL_CALL
 SwXMeta::getSomething( const uno::Sequence< sal_Int8 > & i_rId )
 {
-    return ::sw::UnoTunnelImpl<SwXMeta>(i_rId, this);
+    return comphelper::getSomethingImpl(i_rId, this);
 }
 
 // XServiceInfo
@@ -949,10 +941,9 @@ SwXMeta::AttachImpl(const uno::Reference< text::XTextRange > & i_xTextRange,
             "SwXMeta::attach(): argument is no XUnoTunnel",
             static_cast< ::cppu::OWeakObject* >(this), 0);
     }
-    SwXTextRange *const pRange(
-            ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel));
+    SwXTextRange *const pRange(comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel));
     OTextCursorHelper *const pCursor( pRange ? nullptr :
-            ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel));
+        comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel));
     if (!pRange && !pCursor)
     {
         throw lang::IllegalArgumentException(

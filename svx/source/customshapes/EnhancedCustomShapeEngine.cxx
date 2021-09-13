@@ -252,7 +252,7 @@ void SetTemporary( uno::Reference< drawing::XShape > const & xShape )
 {
     if ( xShape.is() )
     {
-        SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
+        SvxShape* pShape = comphelper::getFromUnoTunnel<SvxShape>( xShape );
         if ( pShape )
             pShape->TakeSdrObjectOwnership();
     }

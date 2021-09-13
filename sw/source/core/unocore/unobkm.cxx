@@ -187,8 +187,7 @@ uno::Reference<text::XTextContent> SwXBookmark::CreateXBookmark(
 ::sw::mark::IMark const* SwXBookmark::GetBookmarkInDoc(SwDoc const*const pDoc,
         const uno::Reference< lang::XUnoTunnel> & xUT)
 {
-    SwXBookmark *const pXBkm(
-            ::sw::UnoTunnelGetImplementation<SwXBookmark>(xUT));
+    SwXBookmark* const pXBkm(comphelper::getFromUnoTunnel<SwXBookmark>(xUT));
     if (pXBkm && (pDoc == pXBkm->m_pImpl->m_pDoc))
     {
         return pXBkm->m_pImpl->m_pRegisteredBookmark;
@@ -198,13 +197,13 @@ uno::Reference<text::XTextContent> SwXBookmark::CreateXBookmark(
 
 const uno::Sequence< sal_Int8 > & SwXBookmark::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXBookmarkUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSwXBookmarkUnoTunnelId;
     return theSwXBookmarkUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXBookmark::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    return ::sw::UnoTunnelImpl<SwXBookmark>(rId, this);
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 void SwXBookmark::attachToRangeEx(
@@ -216,16 +215,8 @@ void SwXBookmark::attachToRangeEx(
         throw uno::RuntimeException();
     }
 
-    const uno::Reference<lang::XUnoTunnel> xRangeTunnel(
-            xTextRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = nullptr;
-    OTextCursorHelper* pCursor = nullptr;
-    if(xRangeTunnel.is())
-    {
-        pRange = ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
-        pCursor =
-            ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
-    }
+    SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xTextRange);
+    OTextCursorHelper* pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xTextRange);
 
     SwDoc *const pDoc =
         pRange ? &pRange->GetDoc() : (pCursor ? pCursor->GetDoc() : nullptr);

@@ -30,7 +30,6 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <rtl/digest.h>
@@ -150,8 +149,8 @@ void ZipPackageFolder::setChildStreamsTypeByExtension( const beans::StringPair& 
 
 css::uno::Sequence < sal_Int8 > ZipPackageFolder::getUnoTunnelId()
 {
-    static cppu::OImplementationId lcl_CachedImplId;
-    return lcl_CachedImplId.getImplementationId();
+    static const comphelper::UnoTunnelIdInit lcl_CachedImplId;
+    return lcl_CachedImplId.getSeq();
 }
 
     // XNameContainer
@@ -165,19 +164,10 @@ void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const uno::
     if ( !(aElement >>= xRef) )
         throw IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
 
-    sal_Int64 nTest;
-    ZipPackageEntry *pEntry;
-    if ( ( nTest = xRef->getSomething ( ZipPackageFolder::getUnoTunnelId() ) ) != 0 )
-    {
-        ZipPackageFolder *pFolder = reinterpret_cast < ZipPackageFolder * > ( nTest );
-        pEntry = pFolder;
-    }
-    else if ( ( nTest = xRef->getSomething ( ZipPackageStream::getUnoTunnelId() ) ) != 0 )
-    {
-        ZipPackageStream *pStream = reinterpret_cast < ZipPackageStream * > ( nTest );
-        pEntry = pStream;
-    }
-    else
+    ZipPackageEntry* pEntry = comphelper::getFromUnoTunnel<ZipPackageFolder>(xRef);
+    if (!pEntry)
+        pEntry = comphelper::getFromUnoTunnel<ZipPackageStream>(xRef);
+    if (!pEntry)
        throw IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
 
     if (pEntry->getName() != aName )
@@ -344,10 +334,7 @@ void ZipPackageFolder::saveContents(
 
 sal_Int64 SAL_CALL ZipPackageFolder::getSomething( const uno::Sequence< sal_Int8 >& aIdentifier )
 {
-    sal_Int64 nMe = 0;
-    if ( isUnoTunnelId<ZipPackageFolder>(aIdentifier) )
-        nMe = reinterpret_cast < sal_Int64 > ( this );
-    return nMe;
+    return comphelper::getSomethingImpl(aIdentifier, this);
 }
 void SAL_CALL ZipPackageFolder::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
 {

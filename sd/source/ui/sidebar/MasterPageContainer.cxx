@@ -796,12 +796,9 @@ Reference<frame::XModel> MasterPageContainer::Implementation::GetModel()
             xLoadable->initNew();
 
         // Use its tunnel to get a pointer to its core implementation.
-        uno::Reference<lang::XUnoTunnel> xUnoTunnel (mxModel, uno::UNO_QUERY);
-        if (xUnoTunnel.is())
+        if (auto pSdXImpressDocument = comphelper::getFromUnoTunnel<SdXImpressDocument>(mxModel))
         {
-            mpDocument = reinterpret_cast<SdXImpressDocument*>(
-                xUnoTunnel->getSomething(
-                    SdXImpressDocument::getUnoTunnelId()))->GetDoc();
+            mpDocument = pSdXImpressDocument->GetDoc();
         }
 
         // Create a default page.

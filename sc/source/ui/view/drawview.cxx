@@ -528,7 +528,7 @@ void ScDrawView::MarkListHasChanged()
         uno::Reference<frame::XController> xController = rFrame.GetController();
         if (xController.is())
         {
-            ScTabViewObj* pImp = comphelper::getUnoTunnelImplementation<ScTabViewObj>( xController );
+            ScTabViewObj* pImp = comphelper::getFromUnoTunnel<ScTabViewObj>( xController );
             if (pImp)
                 pImp->SelectionChanged();
         }
@@ -578,7 +578,7 @@ bool ScDrawView::SdrBeginTextEdit(
         uno::Reference< frame::XController > xController = rFrame.GetController();
         if (xController.is())
         {
-            ScTabViewObj* pImp = comphelper::getUnoTunnelImplementation<ScTabViewObj>( xController );
+            ScTabViewObj* pImp = comphelper::getFromUnoTunnel<ScTabViewObj>( xController );
             if (pImp)
                 pImp->SelectionChanged();
         }
@@ -602,7 +602,7 @@ SdrEndTextEditKind ScDrawView::SdrEndTextEdit( bool bDontDeleteReally )
         uno::Reference< frame::XController > xController = rFrame.GetController();
         if (xController.is())
         {
-            ScTabViewObj* pImp = comphelper::getUnoTunnelImplementation<ScTabViewObj>( xController );
+            ScTabViewObj* pImp = comphelper::getFromUnoTunnel<ScTabViewObj>( xController );
             if (pImp)
                 pImp->SelectionChanged();
         }

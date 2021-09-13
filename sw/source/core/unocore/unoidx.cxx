@@ -427,14 +427,14 @@ SwXDocumentIndex::CreateXDocumentIndex(
 
 const uno::Sequence< sal_Int8 > & SwXDocumentIndex::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXDocumentIndexUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSwXDocumentIndexUnoTunnelId;
     return theSwXDocumentIndexUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL
 SwXDocumentIndex::getSomething(const uno::Sequence< sal_Int8 >& rId)
 {
-    return ::sw::UnoTunnelImpl<SwXDocumentIndex>(rId, this);
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 OUString SAL_CALL
@@ -1299,11 +1299,8 @@ SwXDocumentIndex::attach(const uno::Reference< text::XTextRange > & xTextRange)
     {
         throw uno::RuntimeException();
     }
-    const uno::Reference<XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
-    SwXTextRange *const pRange =
-        ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
-    OTextCursorHelper *const pCursor =
-        ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
+    SwXTextRange* const pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xTextRange);
+    OTextCursorHelper* const pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xTextRange);
 
     SwDoc *const pDoc =
         pRange ? &pRange->GetDoc() : (pCursor ? pCursor->GetDoc() : nullptr);
@@ -1656,14 +1653,14 @@ namespace
 
 const uno::Sequence< sal_Int8 > & SwXDocumentIndexMark::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXDocumentIndexMarkUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSwXDocumentIndexMarkUnoTunnelId;
     return theSwXDocumentIndexMarkUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL
 SwXDocumentIndexMark::getSomething(const uno::Sequence< sal_Int8 >& rId)
 {
-    return ::sw::UnoTunnelImpl<SwXDocumentIndexMark>(rId, this);
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 OUString SAL_CALL
@@ -1769,11 +1766,8 @@ SwXDocumentIndexMark::attach(
         throw uno::RuntimeException();
     }
 
-    const uno::Reference<XUnoTunnel> xRangeTunnel(xTextRange, uno::UNO_QUERY);
-    SwXTextRange *const pRange =
-        ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
-    OTextCursorHelper *const pCursor =
-        ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
+    SwXTextRange* const pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xTextRange);
+    OTextCursorHelper* const pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xTextRange);
     SwDoc *const pDoc =
         pRange ? &pRange->GetDoc() : (pCursor ? pCursor->GetDoc() : nullptr);
     if (!pDoc)

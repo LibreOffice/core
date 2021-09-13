@@ -2823,7 +2823,7 @@ void SdrObject::impl_setUnoShape( const uno::Reference< uno::XInterface >& _rxUn
     }
 
     maWeakUnoShape = _rxUnoShape;
-    mpSvxShape = comphelper::getUnoTunnelImplementation<SvxShape>( _rxUnoShape );
+    mpSvxShape = comphelper::getFromUnoTunnel<SvxShape>( _rxUnoShape );
 
     // I think this may never happen... But I am not sure enough .-)
     if ( bTransferOwnership )
@@ -2915,7 +2915,7 @@ css::uno::Reference< css::uno::XInterface > SdrObject::getUnoShape()
         uno::Reference< uno::XInterface > xPage(pPageCandidate->getUnoPage());
         if( xPage.is() )
         {
-            SvxDrawPage* pDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>(xPage);
+            SvxDrawPage* pDrawPage = comphelper::getFromUnoTunnel<SvxDrawPage>(xPage);
             if( pDrawPage )
             {
                 // create one

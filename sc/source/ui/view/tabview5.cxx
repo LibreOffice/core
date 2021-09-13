@@ -314,7 +314,7 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
         uno::Reference<frame::XController> xController = pViewFrame->GetFrame().GetController();
         if (xController.is())
         {
-            ScTabViewObj* pImp = comphelper::getUnoTunnelImplementation<ScTabViewObj>( xController );
+            ScTabViewObj* pImp = comphelper::getFromUnoTunnel<ScTabViewObj>( xController );
             if (pImp)
                 pImp->SheetChanged( bSameTabButMoved );
         }
@@ -334,7 +334,7 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
         return;
 
     ScDocShell* pDocSh = GetViewData().GetDocShell();
-    ScModelObj* pModelObj = pDocSh ? comphelper::getUnoTunnelImplementation<ScModelObj>( pDocSh->GetModel()) : nullptr;
+    ScModelObj* pModelObj = pDocSh ? comphelper::getFromUnoTunnel<ScModelObj>( pDocSh->GetModel()) : nullptr;
 
     if (!pModelObj)
         return;
@@ -350,7 +350,7 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
     OString sPayload = aRectangle.toString() + ", " + OString::number(aViewData.GetTabNo());
     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, sPayload.getStr());
 
-    ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(pViewShell->GetCurrentDocument());
+    ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(pViewShell->GetCurrentDocument());
     SfxLokHelper::notifyDocumentSizeChanged(pViewShell, sRect, pModel, false);
 }
 

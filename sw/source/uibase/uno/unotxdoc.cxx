@@ -271,19 +271,19 @@ public:
 
 const Sequence< sal_Int8 > & SwXTextDocument::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextDocumentUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSwXTextDocumentUnoTunnelId;
     return theSwXTextDocumentUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXTextDocument::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SwXTextDocument>(rId) )
+    if( comphelper::isUnoTunnelId<SwXTextDocument>(rId) )
     {
-        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ));
+        return comphelper::getSomething_cast(this);
     }
-    if( isUnoTunnelId<SfxObjectShell>(rId) )
+    if( comphelper::isUnoTunnelId<SfxObjectShell>(rId) )
     {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(m_pDocShell ));
+        return comphelper::getSomething_cast(m_pDocShell);
     }
 
     sal_Int64 nRet = SfxBaseModel::getSomething( rId );
@@ -433,14 +433,8 @@ void SwXTextDocument::GetNumberFormatter()
     {
         const uno::Type& rTunnelType = cppu::UnoType<XUnoTunnel>::get();
         Any aNumTunnel = m_xNumFormatAgg->queryAggregation(rTunnelType);
-        SvNumberFormatsSupplierObj* pNumFormat = nullptr;
-        Reference< XUnoTunnel > xNumTunnel;
-        if(aNumTunnel >>= xNumTunnel)
-        {
-            pNumFormat = reinterpret_cast<SvNumberFormatsSupplierObj*>(
-                    xNumTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
-
-        }
+        SvNumberFormatsSupplierObj* pNumFormat
+            = comphelper::getFromUnoTunnel<SvNumberFormatsSupplierObj>(aNumTunnel);
         OSL_ENSURE(pNumFormat, "No number formatter available");
         if (pNumFormat && !pNumFormat->GetNumberFormatter())
             pNumFormat->SetNumberFormatter(m_pDocShell->GetDoc()->GetNumberFormatter());
@@ -686,16 +680,12 @@ SwUnoCursor* SwXTextDocument::CreateCursorForSearch(Reference< XTextCursor > & x
 sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor > & xDesc)
 {
     SolarMutexGuard aGuard;
-    Reference< XUnoTunnel > xDescTunnel(xDesc, UNO_QUERY_THROW);
-    if(!IsValid() || !xDescTunnel->getSomething(SwXTextSearch::getUnoTunnelId()))
+    SwXTextSearch* pSearch;
+    if (!IsValid() || !(pSearch = comphelper::getFromUnoTunnel<SwXTextSearch>(xDesc)))
         throw DisposedException("", static_cast< XTextDocument* >(this));
 
     Reference< XTextCursor >  xCursor;
     auto pUnoCursor(CreateCursorForSearch(xCursor));
-
-    const SwXTextSearch* pSearch = reinterpret_cast<const SwXTextSearch*>(
-            xDescTunnel->getSomething(SwXTextSearch::getUnoTunnelId()));
-
     int eRanges(FindRanges::InBody|FindRanges::InSelAll);
 
     i18nutil::SearchOptions2 aSearchOpt;
@@ -768,7 +758,7 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
                                      sal_Int32& nResult,
                                      Reference< XInterface > const & xLastResult)
 {
-    const auto pSearch = comphelper::getUnoTunnelImplementation<SwXTextSearch>(xDesc);
+    const auto pSearch = comphelper::getFromUnoTunnel<SwXTextSearch>(xDesc);
     if(!IsValid() || !pSearch)
         return nullptr;
 
@@ -777,13 +767,7 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
     bool bParentInExtra = false;
     if(xLastResult.is())
     {
-        Reference<XUnoTunnel> xCursorTunnel( xLastResult, UNO_QUERY);
-        OTextCursorHelper* pPosCursor = nullptr;
-        if(xCursorTunnel.is())
-        {
-            pPosCursor = reinterpret_cast<OTextCursorHelper*>(xCursorTunnel->getSomething(
-                                    OTextCursorHelper::getUnoTunnelId()));
-        }
+        OTextCursorHelper* pPosCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xLastResult);
         SwPaM* pCursor = pPosCursor ? pPosCursor->GetPaM() : nullptr;
         if(pCursor)
         {
@@ -792,12 +776,7 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
         }
         else
         {
-            SwXTextRange* pRange = nullptr;
-            if(xCursorTunnel.is())
-            {
-                pRange = reinterpret_cast<SwXTextRange*>(xCursorTunnel->getSomething(
-                                        SwXTextRange::getUnoTunnelId()));
-            }
+            SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xLastResult);
             if(!pRange)
                 return nullptr;
             pRange->GetPositions(*pUnoCursor);
@@ -1388,15 +1367,11 @@ void SwXTextDocument::Invalidate()
     {
         const uno::Type& rTunnelType = cppu::UnoType<XUnoTunnel>::get();
         Any aNumTunnel = m_xNumFormatAgg->queryAggregation(rTunnelType);
-        SvNumberFormatsSupplierObj* pNumFormat = nullptr;
-        Reference< XUnoTunnel > xNumTunnel;
-        if(aNumTunnel >>= xNumTunnel)
-        {
-            pNumFormat = reinterpret_cast<SvNumberFormatsSupplierObj*>(
-                    xNumTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
-            pNumFormat->SetNumberFormatter(nullptr);
-        }
+        SvNumberFormatsSupplierObj* pNumFormat
+            = comphelper::getFromUnoTunnel<SvNumberFormatsSupplierObj>(aNumTunnel);
         OSL_ENSURE(pNumFormat, "No number formatter available");
+        if (pNumFormat)
+            pNumFormat->SetNumberFormatter(nullptr);
     }
     InitNewDoc();
     m_pDocShell = nullptr;
@@ -1449,14 +1424,8 @@ void    SwXTextDocument::InitNewDoc()
     {
         const uno::Type& rTunnelType = cppu::UnoType<XUnoTunnel>::get();
         Any aNumTunnel = m_xNumFormatAgg->queryAggregation(rTunnelType);
-        SvNumberFormatsSupplierObj* pNumFormat = nullptr;
-        Reference< XUnoTunnel > xNumTunnel;
-        if(aNumTunnel >>= xNumTunnel)
-        {
-            pNumFormat = reinterpret_cast<SvNumberFormatsSupplierObj*>(
-                    xNumTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
-
-        }
+        SvNumberFormatsSupplierObj* pNumFormat
+            = comphelper::getFromUnoTunnel<SvNumberFormatsSupplierObj>(aNumTunnel);
         OSL_ENSURE(pNumFormat, "No number formatter available");
         if (pNumFormat)
             pNumFormat->SetNumberFormatter(nullptr);
@@ -2282,7 +2251,7 @@ static VclPtr< OutputDevice > lcl_GetOutputDevice( const SwPrintUIOptions &rPrin
     aAny >>= xRenderDevice;
     if (xRenderDevice.is())
     {
-        VCLXDevice*     pDevice = comphelper::getUnoTunnelImplementation<VCLXDevice>( xRenderDevice );
+        VCLXDevice* pDevice = comphelper::getFromUnoTunnel<VCLXDevice>(xRenderDevice);
         pOut = pDevice ? pDevice->GetOutputDevice() : VclPtr< OutputDevice >();
     }
 

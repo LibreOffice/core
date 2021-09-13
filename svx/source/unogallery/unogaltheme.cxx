@@ -229,7 +229,7 @@ void SAL_CALL GalleryTheme::update(  )
 
     if( mpTheme )
     {
-        GalleryDrawingModel* pModel = comphelper::getUnoTunnelImplementation<GalleryDrawingModel>( Drawing );
+        GalleryDrawingModel* pModel = comphelper::getFromUnoTunnel<GalleryDrawingModel>( Drawing );
 
         if( pModel && dynamic_cast<const FmFormModel*>(pModel->GetDoc()) )
         {
@@ -248,7 +248,7 @@ void SAL_CALL GalleryTheme::update(  )
                 uno::Reference< drawing::XDrawPagesSupplier > xDrawPagesSupplier( Drawing, uno::UNO_QUERY_THROW );
                 uno::Reference< drawing::XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), uno::UNO_SET_THROW );
                 uno::Reference< drawing::XDrawPage > xPage( xDrawPages->getByIndex( 0 ), uno::UNO_QUERY_THROW );
-                SvxDrawPage* pUnoPage = xPage.is() ? comphelper::getUnoTunnelImplementation<SvxDrawPage>( xPage ) : nullptr;
+                SvxDrawPage* pUnoPage = xPage.is() ? comphelper::getFromUnoTunnel<SvxDrawPage>( xPage ) : nullptr;
                 SdrModel* pOrigModel = pUnoPage ? &pUnoPage->GetSdrPage()->getSdrModelFromSdrPage() : nullptr;
                 SdrPage* pOrigPage = pUnoPage ? pUnoPage->GetSdrPage() : nullptr;
 

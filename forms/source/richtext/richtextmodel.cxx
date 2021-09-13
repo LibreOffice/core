@@ -29,7 +29,6 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 
-#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/guarding.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <svl/itempool.hxx>
@@ -513,7 +512,7 @@ namespace frm
         {
             try
             {
-                pEngine = reinterpret_cast<RichTextEngine*>(xTunnel->getSomething(getUnoTunnelId()));
+                pEngine = comphelper::getSomething_cast<RichTextEngine>(xTunnel->getSomething(getUnoTunnelId()));
             }
             catch( const Exception& )
             {
@@ -526,8 +525,8 @@ namespace frm
 
     Sequence<sal_Int8> ORichTextModel::getUnoTunnelId()
     {
-        static cppu::OImplementationId aId;
-        return aId.getImplementationId();
+        static const comphelper::UnoTunnelIdInit aId;
+        return aId.getSeq();
     }
 
 
@@ -549,7 +548,7 @@ namespace frm
     sal_Int64 SAL_CALL ORichTextModel::getSomething( const Sequence< sal_Int8 >& _rId )
     {
         if (isUnoTunnelId<ORichTextModel>(_rId))
-            return reinterpret_cast< sal_Int64 >( m_pEngine.get() );
+            return comphelper::getSomething_cast(m_pEngine.get()); // Note returning a different type
 
         Reference< XUnoTunnel > xAggTunnel;
         if ( query_aggregation( m_xAggregate, xAggTunnel ) )

@@ -65,7 +65,7 @@ Reference< XPropertySet > ODbaseTables::createDescriptor()
 // XAppend
 sdbcx::ObjectType ODbaseTables::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    auto pTable = comphelper::getUnoTunnelImplementation<ODbaseTable>(descriptor);
+    auto pTable = comphelper::getFromUnoTunnel<ODbaseTable>(descriptor);
     if(pTable)
     {
         pTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(_rForName));
@@ -103,7 +103,7 @@ void ODbaseTables::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
 
     if ( xTunnel.is() )
     {
-        ODbaseTable* pTable = reinterpret_cast< ODbaseTable* >( xTunnel->getSomething(ODbaseTable::getUnoTunnelId()) );
+        ODbaseTable* pTable = comphelper::getFromUnoTunnel<ODbaseTable>(xTunnel);
         if(pTable)
             pTable->DropImpl();
     }

@@ -80,6 +80,7 @@
 #include <vcl/salctype.hxx>
 #include <vcl/gdimtf.hxx>
 #include <comphelper/fileformat.h>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/transfer.hxx>
@@ -3380,7 +3381,7 @@ sal_Int64 SAL_CALL SfxBaseModel::getSomething( const Sequence< sal_Int8 >& aIden
         SfxObjectShell *const pObjectShell(GetObjectShell());
         if (pObjectShell)
         {
-            return reinterpret_cast<sal_Int64>(pObjectShell);
+            return comphelper::getSomething_cast(pObjectShell);
         }
     }
 

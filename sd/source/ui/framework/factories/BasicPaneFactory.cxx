@@ -26,6 +26,7 @@
 #include "FrameWindowPane.hxx"
 #include "FullScreenPane.hxx"
 
+#include <comphelper/servicehelper.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <PaneShells.hxx>
 #include <ViewShellBase.hxx>
@@ -132,12 +133,8 @@ void SAL_CALL BasicPaneFactory::initialize (const Sequence<Any>& aArguments)
         // Tunnel through the controller to obtain access to the ViewShellBase.
         try
         {
-            Reference<lang::XUnoTunnel> xTunnel (xController, UNO_QUERY_THROW);
-            DrawController* pController
-                = reinterpret_cast<DrawController*>(
-                    (sal::static_int_cast<sal_uIntPtr>(
-                        xTunnel->getSomething(DrawController::getUnoTunnelId()))));
-            mpViewShellBase = pController->GetViewShellBase();
+            if (auto pController = comphelper::getFromUnoTunnel<DrawController>(xController))
+                mpViewShellBase = pController->GetViewShellBase();
         }
         catch(RuntimeException&)
         {}

@@ -312,7 +312,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getStart()
     {
         CheckSelection( maSelection, pForwarder );
 
-        SvxUnoTextBase* pText = comphelper::getUnoTunnelImplementation<SvxUnoTextBase>( getText() );
+        SvxUnoTextBase* pText = comphelper::getFromUnoTunnel<SvxUnoTextBase>( getText() );
 
         if(pText == nullptr)
             throw uno::RuntimeException();
@@ -340,7 +340,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getEnd()
     {
         CheckSelection( maSelection, pForwarder );
 
-        SvxUnoTextBase* pText = comphelper::getUnoTunnelImplementation<SvxUnoTextBase>( getText() );
+        SvxUnoTextBase* pText = comphelper::getFromUnoTunnel<SvxUnoTextBase>( getText() );
 
         if(pText == nullptr)
             throw uno::RuntimeException();
@@ -1453,8 +1453,8 @@ uno::Sequence< OUString > SvxUnoTextRangeBase::getSupportedServiceNames_Static()
 // XTextRangeCompare
 sal_Int16 SAL_CALL SvxUnoTextRangeBase::compareRegionStarts( const uno::Reference< text::XTextRange >& xR1, const uno::Reference< text::XTextRange >& xR2 )
 {
-    SvxUnoTextRangeBase* pR1 = comphelper::getUnoTunnelImplementation<SvxUnoTextRangeBase>( xR1 );
-    SvxUnoTextRangeBase* pR2 = comphelper::getUnoTunnelImplementation<SvxUnoTextRangeBase>( xR2 );
+    SvxUnoTextRangeBase* pR1 = comphelper::getFromUnoTunnel<SvxUnoTextRangeBase>( xR1 );
+    SvxUnoTextRangeBase* pR2 = comphelper::getFromUnoTunnel<SvxUnoTextRangeBase>( xR2 );
 
     if( (pR1 == nullptr) || (pR2 == nullptr) )
         throw lang::IllegalArgumentException();
@@ -1477,8 +1477,8 @@ sal_Int16 SAL_CALL SvxUnoTextRangeBase::compareRegionStarts( const uno::Referenc
 
 sal_Int16 SAL_CALL SvxUnoTextRangeBase::compareRegionEnds( const uno::Reference< text::XTextRange >& xR1, const uno::Reference< text::XTextRange >& xR2 )
 {
-    SvxUnoTextRangeBase* pR1 = comphelper::getUnoTunnelImplementation<SvxUnoTextRangeBase>( xR1 );
-    SvxUnoTextRangeBase* pR2 = comphelper::getUnoTunnelImplementation<SvxUnoTextRangeBase>( xR2 );
+    SvxUnoTextRangeBase* pR1 = comphelper::getFromUnoTunnel<SvxUnoTextRangeBase>( xR1 );
+    SvxUnoTextRangeBase* pR2 = comphelper::getFromUnoTunnel<SvxUnoTextRangeBase>( xR2 );
 
     if( (pR1 == nullptr) || (pR2 == nullptr) )
         throw lang::IllegalArgumentException();
@@ -1688,7 +1688,7 @@ uno::Reference< text::XTextCursor > SAL_CALL SvxUnoTextBase::createTextCursorByR
 
     if( aTextPosition.is() )
     {
-        SvxUnoTextRangeBase* pRange = comphelper::getUnoTunnelImplementation<SvxUnoTextRangeBase>( aTextPosition );
+        SvxUnoTextRangeBase* pRange = comphelper::getFromUnoTunnel<SvxUnoTextRangeBase>( aTextPosition );
         if(pRange)
             xCursor = createTextCursorBySelection( pRange->GetSelection() );
     }
@@ -1703,7 +1703,7 @@ void SAL_CALL SvxUnoTextBase::insertString( const uno::Reference< text::XTextRan
     if( !xRange.is() )
         return;
 
-    SvxUnoTextRangeBase* pRange = comphelper::getUnoTunnelImplementation<SvxUnoTextRange>( xRange );
+    SvxUnoTextRangeBase* pRange = comphelper::getFromUnoTunnel<SvxUnoTextRange>( xRange );
     if(!pRange)
         return;
 
@@ -1750,7 +1750,7 @@ void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text
     }
     case text::ControlCharacter::LINE_BREAK:
     {
-        SvxUnoTextRangeBase* pRange = comphelper::getUnoTunnelImplementation<SvxUnoTextRange>( xRange );
+        SvxUnoTextRangeBase* pRange = comphelper::getFromUnoTunnel<SvxUnoTextRange>( xRange );
         if(pRange)
         {
             ESelection aRange = pRange->GetSelection();
@@ -1781,7 +1781,7 @@ void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text
     }
     case text::ControlCharacter::APPEND_PARAGRAPH:
     {
-        SvxUnoTextRangeBase* pRange = comphelper::getUnoTunnelImplementation<SvxUnoTextRange>( xRange );
+        SvxUnoTextRangeBase* pRange = comphelper::getFromUnoTunnel<SvxUnoTextRange>( xRange );
         if(pRange)
         {
             ESelection aRange = pRange->GetSelection();
@@ -2088,15 +2088,12 @@ void SvxUnoTextBase::copyText(
     const uno::Reference< text::XTextCopy >& xSource )
 {
     SolarMutexGuard aGuard;
-    uno::Reference< lang::XUnoTunnel > xUT( xSource, uno::UNO_QUERY );
     SvxEditSource *pEditSource = GetEditSource();
     SvxTextForwarder *pTextForwarder = pEditSource ? pEditSource->GetTextForwarder() : nullptr;
     if( !pTextForwarder )
         return;
-    if( xUT.is() )
+    if (auto pSource = comphelper::getFromUnoTunnel<SvxUnoTextBase>(xSource))
     {
-        SvxUnoTextBase* pSource = reinterpret_cast<SvxUnoTextBase*>(sal::static_int_cast<sal_uIntPtr>(
-                                                                    xUT->getSomething( SvxUnoTextBase::getUnoTunnelId())));
         SvxEditSource *pSourceEditSource = pSource->GetEditSource();
         SvxTextForwarder *pSourceTextForwarder = pSourceEditSource ? pSourceEditSource->GetTextForwarder() : nullptr;
         if( pSourceTextForwarder )
@@ -2135,20 +2132,14 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextBase::getSupportedServiceNames_Stat
 
 const uno::Sequence< sal_Int8 > & SvxUnoTextBase::getUnoTunnelId() noexcept
 {
-    static const UnoTunnelIdInit theSvxUnoTextBaseUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSvxUnoTextBaseUnoTunnelId;
     return theSvxUnoTextBaseUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SvxUnoTextBase::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SvxUnoTextBase>(rId) )
-    {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
-    }
-    else
-    {
-        return SvxUnoTextRangeBase::getSomething( rId );
-    }
+    return comphelper::getSomethingImpl(
+        rId, this, comphelper::FallbackToGetSomethingOf<SvxUnoTextRangeBase>{});
 }
 
 SvxUnoText::SvxUnoText( const SvxItemPropertySet* _pSet ) noexcept
@@ -2209,20 +2200,14 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxUnoText::getImplementationId(  )
 
 const uno::Sequence< sal_Int8 > & SvxUnoText::getUnoTunnelId() noexcept
 {
-    static const UnoTunnelIdInit theSvxUnoTextUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSvxUnoTextUnoTunnelId;
     return theSvxUnoTextUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SvxUnoText::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SvxUnoText>(rId) )
-    {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
-    }
-    else
-    {
-        return SvxUnoTextBase::getSomething( rId );
-    }
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<SvxUnoTextBase>{});
 }
 
 

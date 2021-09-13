@@ -193,19 +193,7 @@ ScTransferObj::~ScTransferObj()
 
 ScTransferObj* ScTransferObj::GetOwnClipboard(const uno::Reference<datatransfer::XTransferable2>& xTransferable)
 {
-    ScTransferObj* pObj = nullptr;
-    if (xTransferable.is())
-    {
-        uno::Reference<XUnoTunnel> xTunnel( xTransferable, uno::UNO_QUERY );
-        if ( xTunnel.is() )
-        {
-            sal_Int64 nHandle = xTunnel->getSomething( getUnoTunnelId() );
-            if ( nHandle )
-                pObj = dynamic_cast<ScTransferObj*>(reinterpret_cast<TransferableHelper*>( static_cast<sal_IntPtr>(nHandle) ));
-        }
-    }
-
-    return pObj;
+    return comphelper::getFromUnoTunnel<ScTransferObj>(xTransferable);
 }
 
 void ScTransferObj::AddSupportedFormats()
@@ -648,7 +636,7 @@ ScDocument* ScTransferObj::GetSourceDocument()
 
 ScDocShell* ScTransferObj::GetSourceDocShell()
 {
-    ScCellRangesBase* pRangesObj = comphelper::getUnoTunnelImplementation<ScCellRangesBase>( m_xDragSourceRanges );
+    ScCellRangesBase* pRangesObj = comphelper::getFromUnoTunnel<ScCellRangesBase>( m_xDragSourceRanges );
     if (pRangesObj)
         return pRangesObj->GetDocShell();
 
@@ -658,7 +646,7 @@ ScDocShell* ScTransferObj::GetSourceDocShell()
 ScMarkData ScTransferObj::GetSourceMarkData() const
 {
     ScMarkData aMarkData(m_pDoc->GetSheetLimits());
-    ScCellRangesBase* pRangesObj = comphelper::getUnoTunnelImplementation<ScCellRangesBase>( m_xDragSourceRanges );
+    ScCellRangesBase* pRangesObj = comphelper::getFromUnoTunnel<ScCellRangesBase>( m_xDragSourceRanges );
     if (pRangesObj)
     {
         const ScRangeList& rRanges = pRangesObj->GetRangeList();
@@ -922,20 +910,14 @@ void ScTransferObj::StripRefs( ScDocument& rDoc,
 
 const css::uno::Sequence< sal_Int8 >& ScTransferObj::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theScTransferUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theScTransferUnoTunnelId;
     return theScTransferUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL ScTransferObj::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
-    sal_Int64 nRet;
-    if( isUnoTunnelId<ScTransferObj>(rId) )
-    {
-        nRet = reinterpret_cast< sal_Int64 >( this );
-    }
-    else
-        nRet = TransferDataContainer::getSomething(rId);
-    return nRet;
+    return comphelper::getSomethingImpl(
+        rId, this, comphelper::FallbackToGetSomethingOf<TransferDataContainer>{});
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

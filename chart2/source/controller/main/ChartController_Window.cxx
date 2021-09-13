@@ -1301,7 +1301,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     }
                 }
 
-                Menu* pPopupMenu = comphelper::getUnoTunnelImplementation<VCLXMenu>(xPopupMenu)->GetMenu();
+                Menu* pPopupMenu = comphelper::getFromUnoTunnel<VCLXMenu>(xPopupMenu)->GetMenu();
                 boost::property_tree::ptree aMenu = SfxDispatcher::fillPopupMenu(pPopupMenu);
                 boost::property_tree::ptree aRoot;
                 aRoot.add_child("menu", aMenu);
@@ -1382,7 +1382,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
     {
         // Navigation (Tab/F3/Home/End)
         uno::Reference< XChartDocument > xChartDoc( getModel(), uno::UNO_QUERY );
-        ObjectKeyNavigation aObjNav( m_aSelection.getSelectedOID(), xChartDoc, comphelper::getUnoTunnelImplementation<ExplicitValueProvider>( m_xChartView ));
+        ObjectKeyNavigation aObjNav( m_aSelection.getSelectedOID(), xChartDoc, comphelper::getFromUnoTunnel<ExplicitValueProvider>( m_xChartView ));
         awt::KeyEvent aKeyEvent( ::svt::AcceleratorExecute::st_VCLKey2AWTKey( aKeyCode ));
         bReturn = aObjNav.handleKeyEvent( aKeyEvent );
         if( bReturn )
@@ -1649,7 +1649,7 @@ bool ChartController::requestQuickHelp(
 
         // set rectangle
         ExplicitValueProvider * pValueProvider(
-            comphelper::getUnoTunnelImplementation<ExplicitValueProvider>( m_xChartView ));
+            comphelper::getFromUnoTunnel<ExplicitValueProvider>( m_xChartView ));
         if( pValueProvider )
             rOutEqualRect = pValueProvider->getRectangleOfObject( aCID, true );
     }
@@ -1804,7 +1804,7 @@ bool ChartController::impl_moveOrResizeObject(
             ( aRefSize.Width > 0 && aRefSize.Height > 0 ) )
         {
             ExplicitValueProvider * pValueProvider(
-                comphelper::getUnoTunnelImplementation<ExplicitValueProvider>( m_xChartView ));
+                comphelper::getFromUnoTunnel<ExplicitValueProvider>( m_xChartView ));
             if( pValueProvider )
             {
                 awt::Rectangle aRect( pValueProvider->getRectangleOfObject( rCID ));

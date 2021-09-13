@@ -155,7 +155,7 @@ Sequence< sal_Int32 > SAL_CALL ODbaseResultSet::deleteRows( const  Sequence<  An
 
 bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_xIndex)
 {
-    auto pIndex = comphelper::getUnoTunnelImplementation<dbase::ODbaseIndex>(_xIndex);
+    auto pIndex = comphelper::getFromUnoTunnel<dbase::ODbaseIndex>(_xIndex);
     if(pIndex)
     {
         std::unique_ptr<dbase::OIndexIterator> pIter = pIndex->createIterator();

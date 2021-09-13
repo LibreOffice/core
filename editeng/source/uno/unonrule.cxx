@@ -474,7 +474,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::Propert
 
 const SvxNumRule& SvxGetNumRule( Reference< XIndexReplace > const & xRule )
 {
-    SvxUnoNumberingRules* pRule = comphelper::getUnoTunnelImplementation<SvxUnoNumberingRules>( xRule );
+    SvxUnoNumberingRules* pRule = comphelper::getFromUnoTunnel<SvxUnoNumberingRules>( xRule );
     if( pRule == nullptr )
         throw IllegalArgumentException();
 
@@ -509,10 +509,10 @@ sal_Int16 SvxUnoNumberingRules::Compare( const Any& Any1, const Any& Any2 )
         if( x1.get() == x2.get() )
             return 0;
 
-        SvxUnoNumberingRules* pRule1 = comphelper::getUnoTunnelImplementation<SvxUnoNumberingRules>( x1 );
+        SvxUnoNumberingRules* pRule1 = comphelper::getFromUnoTunnel<SvxUnoNumberingRules>( x1 );
         if( pRule1 )
         {
-            SvxUnoNumberingRules* pRule2 = comphelper::getUnoTunnelImplementation<SvxUnoNumberingRules>( x2 );
+            SvxUnoNumberingRules* pRule2 = comphelper::getFromUnoTunnel<SvxUnoNumberingRules>( x2 );
             if( pRule2 )
             {
                 const SvxNumRule& rRule1 = pRule1->getNumRule();

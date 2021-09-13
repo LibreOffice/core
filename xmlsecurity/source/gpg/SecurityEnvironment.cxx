@@ -93,10 +93,7 @@ SecurityEnvironmentGpg::~SecurityEnvironmentGpg()
 /* XUnoTunnel */
 sal_Int64 SAL_CALL SecurityEnvironmentGpg::getSomething( const Sequence< sal_Int8 >& aIdentifier )
 {
-    if( isUnoTunnelId<SecurityEnvironmentGpg>(aIdentifier) ) {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
-    }
-    return 0 ;
+    return comphelper::getSomethingImpl(aIdentifier, this);
 }
 
 /* XUnoTunnel extension */
@@ -106,7 +103,7 @@ namespace
 }
 
 const Sequence< sal_Int8>& SecurityEnvironmentGpg::getUnoTunnelId() {
-    static const UnoTunnelIdInit theSecurityEnvironmentUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSecurityEnvironmentUnoTunnelId;
     return theSecurityEnvironmentUnoTunnelId.getSeq();
 }
 
@@ -223,9 +220,7 @@ sal_Int32 SecurityEnvironmentGpg::verifyCertificate( const Reference< XCertifica
 sal_Int32 SecurityEnvironmentGpg::getCertificateCharacters(
     const Reference< XCertificate >& aCert)
 {
-    const CertificateImpl* xCert;
-    Reference< XUnoTunnel > xCertTunnel(aCert, UNO_QUERY_THROW) ;
-    xCert = reinterpret_cast<CertificateImpl*>(sal::static_int_cast<sal_uIntPtr>(xCertTunnel->getSomething(CertificateImpl::getUnoTunnelId()))) ;
+    const CertificateImpl* xCert = comphelper::getFromUnoTunnel<CertificateImpl>(aCert);
     if (xCert == nullptr)
         throw RuntimeException();
 

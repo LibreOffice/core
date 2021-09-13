@@ -352,7 +352,7 @@ void GenericPopupToolbarController::statusChanged( const css::frame::FeatureStat
 
     if ( m_bReplaceWithLast && !rEvent.IsEnabled && m_xPopupMenu.is() )
     {
-        Menu* pVclMenu = comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu )->GetMenu();
+        Menu* pVclMenu = comphelper::getFromUnoTunnel<VCLXMenu>( m_xPopupMenu )->GetMenu();
 
         ToolBox* pToolBox = nullptr;
         ToolBoxItemId nId;
@@ -695,7 +695,7 @@ void SAL_CALL NewToolbarController::execute( sal_Int16 /*KeyModifier*/ )
     {
         // TODO investigate how to wrap Get/SetUserValue in css::awt::XMenu
         SolarMutexGuard aSolarMutexGuard;
-        Menu* pVclMenu = comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu )->GetMenu();
+        Menu* pVclMenu = comphelper::getFromUnoTunnel<VCLXMenu>( m_xPopupMenu )->GetMenu();
         aURL = pVclMenu->GetItemCommand( m_nMenuId );
 
         MenuAttributes* pMenuAttributes( static_cast<MenuAttributes*>( pVclMenu->GetUserValue( m_nMenuId ) ) );
@@ -724,7 +724,7 @@ sal_uInt16 NewToolbarController::getMenuIdForCommand( std::u16string_view rComma
 {
     if ( m_xPopupMenu.is() && !rCommand.empty() )
     {
-        Menu* pVclMenu( comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu )->GetMenu() );
+        Menu* pVclMenu( comphelper::getFromUnoTunnel<VCLXMenu>( m_xPopupMenu )->GetMenu() );
         sal_uInt16 nCount = pVclMenu->GetItemCount();
         for ( sal_uInt16 n = 0; n < nCount; ++n )
         {
@@ -751,7 +751,7 @@ void SAL_CALL NewToolbarController::updateImage()
     OUString aURL, aImageId;
     if ( m_xPopupMenu.is() && m_nMenuId )
     {
-        Menu* pVclMenu = comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu )->GetMenu();
+        Menu* pVclMenu = comphelper::getFromUnoTunnel<VCLXMenu>( m_xPopupMenu )->GetMenu();
         aURL = pVclMenu->GetItemCommand( m_nMenuId );
 
         MenuAttributes* pMenuAttributes( static_cast<MenuAttributes*>( pVclMenu->GetUserValue( m_nMenuId ) ) );

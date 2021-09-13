@@ -470,7 +470,7 @@ namespace HelperNotifyChanges
 {
     inline ScModelObj* getMustPropagateChangesModel(const ScDocShell &rDocShell)
     {
-        ScModelObj* pModelObj = comphelper::getUnoTunnelImplementation<ScModelObj>(rDocShell.GetModel());
+        ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(rDocShell.GetModel());
         if (pModelObj && pModelObj->HasChangesListeners())
             return pModelObj;
         return nullptr;

@@ -1732,7 +1732,7 @@ void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window* pWin, c
     aEvent.ExecutePosition.Y = aPos.Y();
 
     xPopupController->setPopupMenu( xPopupMenu );
-    VCLXMenu* pAwtMenu = comphelper::getUnoTunnelImplementation<VCLXMenu>( xPopupMenu );
+    VCLXMenu* pAwtMenu = comphelper::getFromUnoTunnel<VCLXMenu>( xPopupMenu );
     PopupMenu* pVCLMenu = static_cast< PopupMenu* >( pAwtMenu->GetMenu() );
     if (comphelper::LibreOfficeKit::isActive())
     {
