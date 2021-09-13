@@ -35,12 +35,12 @@
 #include <map>
 #include <vector>
 
-class PhysicalFontCollection;
 class SalBitmap;
 class FontAttributes;
 namespace vcl::font {
     class FontSelectPattern;
     class PhysicalFontFace;
+    class PhysicalFontCollection;
 }
 class SalLayout;
 namespace tools { class Rectangle; }
@@ -152,13 +152,13 @@ public:
     virtual bool                GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const = 0;
 
     // graphics must fill supplied font list
-    virtual void                GetDevFontList( PhysicalFontCollection* ) = 0;
+    virtual void                GetDevFontList( vcl::font::PhysicalFontCollection* ) = 0;
 
     // graphics must drop any cached font info
     virtual void                ClearDevFontCache() = 0;
 
     virtual bool                AddTempDevFont(
-                                    PhysicalFontCollection*,
+                                    vcl::font::PhysicalFontCollection*,
                                     const OUString& rFileURL,
                                     const OUString& rFontName ) = 0;
 

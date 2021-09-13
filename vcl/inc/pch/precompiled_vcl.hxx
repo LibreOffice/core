@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-09-16 03:23:02 using:
+ Generated on 2021-09-16 03:25:02 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -37,7 +37,6 @@
 #include <initializer_list>
 #include <iomanip>
 #include <limits>
-#include <list>
 #include <map>
 #include <math.h>
 #include <memory>
@@ -253,6 +252,7 @@
 #include <uno/sequence2.h>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/configmgr.hxx>
+#include <unotools/fontdefs.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/resmgr.hxx>
 #include <unotools/syslocale.hxx>
@@ -260,14 +260,15 @@
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <ImplOutDevData.hxx>
 #include <PhysicalFontCollection.hxx>
 #include <accel.hxx>
 #include <brdwin.hxx>
 #include <configsettings.hxx>
 #include <drawmode.hxx>
 #include <fontattributes.hxx>
+#include <impfontcache.hxx>
 #include <impglyphitem.hxx>
-#include <outdev.h>
 #include <salbmp.hxx>
 #include <salframe.hxx>
 #include <salgdi.hxx>
