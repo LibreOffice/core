@@ -126,5 +126,59 @@
         </node>
       </node>
     </node>
+    <!-- Firebird SERVER Driver -->
+    <node oor:name="sdbc:firebird:server" oor:op="replace">
+      <prop oor:name="Driver">
+        <value>com.sun.star.comp.sdbc.firebird.Driver</value>
+      </prop>
+      <prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
+        <value xml:lang="en-US">Firebird Database Server</value>
+      </prop>
+      <node oor:name="Properties">
+        <!-- Don't use ODBC syntax for date&time literals and (full) outer joins,
+             as PostgreSQL does not support it,
+             but supports the _interior_ of these escapes just fine. -->
+        <node oor:name="EscapeDateTime" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>false</value>
+          </prop>
+        </node>
+        <!--   Confusingly, this corresponds to "UseBracketedOuterJoinSyntax" in the Features -->
+        <node oor:name="EnableOuterJoinEscape" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>false</value>
+          </prop>
+        </node>
+        <node oor:name="UseCatalog" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>false</value>
+          </prop>
+        </node>
+        <node oor:name="ParameterNameSubstitution" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
+      </node>
+      <node oor:name="Features">
+      </node>
+      <node oor:name="MetaData">
+        <node oor:name="SupportsBrowsing" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
+        <node oor:name="SupportsDBCreation" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
+        <node oor:name="Authentication" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:string">
+            <value>UserPassword</value>
+          </prop>
+        </node>
+      </node>
+    </node>
   </node>
 </oor:component-data>
