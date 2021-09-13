@@ -35,6 +35,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "174024db_dd3b0824",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-13T11:52:38Z",
+      "side": 1,
+      "message": "Successful call stack is at https://pastebin.com/dAPjCL19\n\nThe difference is that the call to getSomething in comphelper::getFromUnoTunnel at line 59 calls SwXTextDocument::getSomething for problematic case, but SvNumberFormatsSupplierObj::getSomething in successful one.\n\nNo idea why. Stephan: does the info help? Should I gather something else?",
+      "revId": "48e0ca46909120ab227f977e62f5588edb43ce96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e69fae9_139c7ac9",
