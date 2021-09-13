@@ -16,6 +16,24 @@
       "message": "wow....\ni\u0027m already looking forward to the clang plugin that complains about the \"unnecessary\" local variable and advises its removal :)",
       "revId": "eea98dfd268c623776457b77ee7d9e6870e99ff3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b38d19aa_43da1f01",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-09-13T09:56:58Z",
+      "side": 1,
+      "message": "yeah, I considered https://gerrit.libreoffice.org/c/core/+/121928 to make it look \"fancy\" so the next person along wouldn\u0027t remove the important bit, but std::as_const doesn\u0027t do what I thought it did so I threw my hat at it and left it as-is",
+      "parentUuid": "23f60463_598c49e3",
+      "revId": "eea98dfd268c623776457b77ee7d9e6870e99ff3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
