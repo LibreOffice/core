@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c964c26c_deb46122",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-13T11:40:49Z",
+      "side": 1,
+      "message": "FTR, the failing test is\n\n  make CppunitTest_chart2_export CPPUNIT_TEST_NAME\u003dChart2ExportTest::testStockChart",
+      "revId": "48e0ca46909120ab227f977e62f5588edb43ce96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e69fae9_139c7ac9",
