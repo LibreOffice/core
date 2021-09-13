@@ -67,18 +67,8 @@ public:
                                          bool bChildrenOnDemand = false,
                                          sal_uInt32 nPos=TREELIST_APPEND, void* pUserData = nullptr ) override;
 
-    virtual SvTreeListEntry*    InsertEntry( const OUString& rText,
-                                         const Image& rExpandedEntryBmp,
-                                         const Image& rCollapsedEntryBmp,
-                                         SvTreeListEntry* pParent = nullptr,
-                                         bool bChildrenOnDemand = false,
-                                         sal_uInt32 nPos = TREELIST_APPEND, void* pUserData = nullptr ) override;
-
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, SvTreeListEntry* pParent,
                                  sal_uInt32 nPos, sal_uInt16 nCol, void* pUserData = nullptr );
-    virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, const Image& rExpandedEntryBmp,
-                                 const Image& rCollapsedEntryBmp, SvTreeListEntry* pParent,
-                                 sal_uInt32 nPos = TREELIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = nullptr );
 
     virtual OUString GetEntryText( SvTreeListEntry* pEntry ) const override;
     static OUString  GetEntryText( const SvTreeListEntry*, sal_uInt16 nCol );
@@ -128,9 +118,6 @@ public:
 
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, SvTreeListEntry* pParent,
                                  sal_uInt32 nPos, sal_uInt16 nCol, void* pUserData = nullptr ) override;
-    virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, const Image& rExpandedEntryBmp,
-                                 const Image& rCollapsedEntryBmp, SvTreeListEntry* pParent,
-                                 sal_uInt32 nPos = TREELIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = nullptr ) override;
     virtual sal_uInt32 Insert( SvTreeListEntry* pEnt,SvTreeListEntry* pPar,sal_uInt32 nPos=TREELIST_APPEND) override;
     virtual sal_uInt32 Insert( SvTreeListEntry* pEntry, sal_uInt32 nRootPos = TREELIST_APPEND ) override;
 

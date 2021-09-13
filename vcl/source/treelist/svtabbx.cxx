@@ -220,17 +220,6 @@ SvTreeListEntry* SvTabListBox::InsertEntry( const OUString& rText, SvTreeListEnt
     return InsertEntryToColumn( rText, pParent, nPos, 0xffff, pUserData );
 }
 
-SvTreeListEntry* SvTabListBox::InsertEntry( const OUString& rText,
-                                        const Image& rExpandedEntryBmp,
-                                        const Image& rCollapsedEntryBmp,
-                                        SvTreeListEntry* pParent,
-                                        bool /*bChildrenOnDemand*/,
-                                        sal_uInt32 nPos, void* pUserData )
-{
-    return InsertEntryToColumn( rText, rExpandedEntryBmp, rCollapsedEntryBmp,
-                                pParent, nPos, 0xffff, pUserData );
-}
-
 SvTreeListEntry* SvTabListBox::InsertEntryToColumn(const OUString& rStr,SvTreeListEntry* pParent,sal_uInt32 nPos,sal_uInt16 nCol,
     void* pUser )
 {
@@ -254,36 +243,6 @@ SvTreeListEntry* SvTabListBox::InsertEntryToColumn(const OUString& rStr,SvTreeLi
     else
         aCurEntry.clear();
     return SvTreeListBox::InsertEntry( aFirstStr, pParent, false, nPos, pUser );
-}
-
-SvTreeListEntry* SvTabListBox::InsertEntryToColumn( const OUString& rStr,
-    const Image& rExpandedEntryBmp, const Image& rCollapsedEntryBmp,
-    SvTreeListEntry* pParent,sal_uInt32 nPos,sal_uInt16 nCol, void* pUser )
-{
-    OUString aStr;
-    if( nCol != 0xffff )
-    {
-        while( nCol )
-        {
-            aStr += "\t";
-            nCol--;
-        }
-    }
-    aStr += rStr;
-    OUString aFirstStr( aStr );
-    sal_Int32 nEnd = aFirstStr.indexOf('\t');
-    if (nEnd != -1)
-    {
-        aFirstStr = aFirstStr.copy(0, nEnd);
-        aCurEntry = aStr.copy(++nEnd);
-    }
-    else
-        aCurEntry.clear();
-
-    return SvTreeListBox::InsertEntry(
-        aFirstStr,
-        rExpandedEntryBmp, rCollapsedEntryBmp,
-        pParent, false, nPos, pUser );
 }
 
 OUString SvTabListBox::GetEntryText( SvTreeListEntry* pEntry ) const
@@ -553,16 +512,6 @@ SvTreeListEntry* SvHeaderTabListBox::InsertEntryToColumn(
     const OUString& rStr, SvTreeListEntry* pParent, sal_uInt32 nPos, sal_uInt16 nCol, void* pUserData )
 {
     SvTreeListEntry* pEntry = SvTabListBox::InsertEntryToColumn( rStr, pParent, nPos, nCol, pUserData );
-    RecalculateAccessibleChildren();
-    return pEntry;
-}
-
-SvTreeListEntry* SvHeaderTabListBox::InsertEntryToColumn(
-    const OUString& rStr, const Image& rExpandedEntryBmp, const Image& rCollapsedEntryBmp,
-    SvTreeListEntry* pParent, sal_uInt32 nPos, sal_uInt16 nCol, void* pUserData )
-{
-    SvTreeListEntry* pEntry = SvTabListBox::InsertEntryToColumn(
-        rStr, rExpandedEntryBmp, rCollapsedEntryBmp, pParent, nPos, nCol, pUserData );
     RecalculateAccessibleChildren();
     return pEntry;
 }
