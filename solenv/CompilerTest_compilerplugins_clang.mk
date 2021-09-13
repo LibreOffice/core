@@ -25,6 +25,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/consttobool \
     compilerplugins/clang/test/constvars \
     compilerplugins/clang/test/convertlong \
+    compilerplugins/clang/test/cow_wrapper \
     compilerplugins/clang/test/cppunitassertequals \
     compilerplugins/clang/test/cstylecast \
     compilerplugins/clang/test/datamembershadow \
