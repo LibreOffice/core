@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23f60463_598c49e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-09-13T09:45:26Z",
+      "side": 1,
+      "message": "wow....\ni\u0027m already looking forward to the clang plugin that complains about the \"unnecessary\" local variable and advises its removal :)",
+      "revId": "eea98dfd268c623776457b77ee7d9e6870e99ff3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
