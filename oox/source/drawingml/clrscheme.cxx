@@ -22,6 +22,7 @@
 #include <osl/diagnose.h>
 #include <oox/drawingml/clrscheme.hxx>
 #include <oox/token/tokens.hxx>
+#include <vector>
 
 namespace oox::drawingml {
 
@@ -102,6 +103,33 @@ bool ClrScheme::getColorByIndex(size_t nIndex, ::Color& rColor) const
     return true;
 }
 
+std::vector<::Color> ClrScheme::getColorVector()
+{
+    // most likely should reorder using tokens here...
+    // this is a experimental hack:
+
+    std::vector<::Color> aColors;
+
+    for( auto rIndexColorPair : maClrScheme )
+    {
+        aColors.emplace_back(rIndexColorPair.second);
+    }
+    return aColors;
+}
+
+std::vector<sal_Int32> ClrScheme::getColorVectorAsInts()
+{
+    // most likely should reorder using tokens here...
+    // this is a experimental hack:
+
+    std::vector<sal_Int32> aColors;
+
+    for (auto rIndexColorPair : maClrScheme)
+    {
+        aColors.emplace_back(static_cast<sal_Int32>(rIndexColorPair.second));
+    }
+    return aColors;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

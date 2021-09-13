@@ -60,6 +60,12 @@ public:
     const ColorSet& getColorSet(sal_uInt32 nIndex) const { return maColorSets[nIndex]; }
 
     const ColorSet& getColorSet(std::u16string_view rName) const;
+
+    int addColorSet(const ColorSet& rColorSet)
+    {
+        maColorSets.push_back(rColorSet);
+        return maColorSets.size() - 1;
+    }
 };
 
 class SFX2_DLLPUBLIC SfxColorSetListItem final : public SfxPoolItem
@@ -81,7 +87,7 @@ public:
     virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
     virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
 
-    const ColorSets& GetSfxColorSetList() const { return *mpColorSets; }
+    ColorSets& GetSfxColorSetList() const { return *mpColorSets; }
     std::shared_ptr<ColorSets> GetSfxColorSetListPtr() const { return mpColorSets; }
 };
 

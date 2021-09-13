@@ -2739,21 +2739,22 @@ void SfxBaseModel::loadCmisProperties( )
 void SAL_CALL SfxBaseModel::addNewColorSet(const OUString& rColorSetName,
                const css::uno::Sequence<css::util::Color>& rColorSetColors)
 {
-    if(SfxObjectShell* pObjShell = SfxObjectShell::Current())
+    if(SfxObjectShell* pObjShell = GetObjectShell())
     {
         if(const SfxColorSetListItem* pColorSetItem = pObjShell->GetItem(SID_COLOR_SETS))
         {
-            pColorSetItem->GetSfxColorSetListPtr();//->AddNewColorSet( NAME, COLORS );
-            //SAL/_DEBUG("Got the ColorSet without a problem!");
+            ColorSet aColorSet(rColorSetName);
+            int nIndex = 0;
+            for( const css::util::Color& rColor : rColorSetColors )
+            {
+                aColorSet.add(nIndex++, rColor);
+            }
+
+            ColorSets& rColorSets = pColorSetItem->GetSfxColorSetList();
+
+            // let's force it as the selected color set for the moment.
+            rColorSets.setThemeColorSet( rColorSets.addColorSet(aColorSet) );
         }
-        else
-        {
-            //SAL/_DEBUG("Couldn't get pColorSetItem (in addNewColorSet)");
-        }
-    }
-    else
-    {
-        //SAL/_DEBUG("Couldn't get the object shell (in addNewColorSet)");
     }
 }
 

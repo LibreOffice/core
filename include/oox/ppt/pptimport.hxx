@@ -85,6 +85,7 @@ private:
     virtual GraphicHelper* implCreateGraphicHelper() const override;
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const override;
     virtual OUString SAL_CALL getImplementationName() override;
+    void saveImportedThemesIntoDocumentColorSets();
 
 private:
     OUString                                       maTableStyleListPath;

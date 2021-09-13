@@ -23,10 +23,12 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/document/XColorSetsManager.hpp>
 #include <com/sun/star/document/XUndoManager.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/sfxecode.hxx>
@@ -57,6 +59,22 @@ namespace oox::ppt {
 #if OSL_DEBUG_LEVEL > 0
 XmlFilterBase* PowerPointImport::mpDebugFilterBase = nullptr;
 #endif
+
+void PowerPointImport::saveImportedThemesIntoDocumentColorSets()
+{
+    auto rThemes = getThemes();
+    css::uno::Reference<css::document::XColorSetsManager> xColorSetsManager(getModel(), css::uno::UNO_QUERY_THROW);
+
+    for(auto& aItem : rThemes)
+    {
+        const OUString& rThemeName = aItem.second->getStyleName();
+        drawingml::ClrScheme& rColorScheme = aItem.second->getClrScheme(); // gets the theme color scheme
+
+        auto aColorVector = rColorScheme.getColorVectorAsInts();
+
+        xColorSetsManager->addNewColorSet(rThemeName, comphelper::containerToSequence(aColorVector));
+    }
+}
 
 PowerPointImport::PowerPointImport( const Reference< XComponentContext >& rxContext ) :
     XmlFilterBase( rxContext ),
@@ -101,11 +119,16 @@ bool PowerPointImport::importDocument()
         = xPresentationFragmentHandler->getFragmentPathFromFirstTypeFromOfficeDoc(u"presProps");
 
     bool bRet = importFragment(xPresentationFragmentHandler);
-    if (bRet && !sPresPropsPath.isEmpty())
+    if (bRet)
     {
-        FragmentHandlerRef xPresPropsFragmentHandler(
-            new PresPropsFragmentHandler(*this, sPresPropsPath));
-        importFragment(xPresPropsFragmentHandler);
+        if(!sPresPropsPath.isEmpty())
+        {
+            FragmentHandlerRef xPresPropsFragmentHandler(
+                new PresPropsFragmentHandler(*this, sPresPropsPath));
+            importFragment(xPresPropsFragmentHandler);
+        }
+
+        saveImportedThemesIntoDocumentColorSets();
     }
 
     static bool bNoSmartartWarning = getenv("OOX_NO_SMARTART_WARNING");

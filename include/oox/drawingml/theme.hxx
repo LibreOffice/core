@@ -60,6 +60,7 @@ public:
                         ~Theme();
 
     void                     setStyleName( const OUString& rStyleName ) { maStyleName = rStyleName; }
+    const OUString&          getStyleName() const { return maStyleName; }
 
     ClrScheme&               getClrScheme() { return maClrScheme; }
     const ClrScheme&         getClrScheme() const { return maClrScheme; }
