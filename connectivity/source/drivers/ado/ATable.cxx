@@ -31,7 +31,6 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
-#include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <ado/Awrapado.hxx>
@@ -138,9 +137,8 @@ Sequence< sal_Int8 > OAdoTable::getUnoTunnelId()
 
 sal_Int64 OAdoTable::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return comphelper::isUnoTunnelId<OAdoTable>(rId)
-                ? reinterpret_cast< sal_Int64 >( this )
-                : OTable_TYPEDEF::getSomething(rId);
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<OTable_TYPEDEF>{});
 }
 
 // XRename

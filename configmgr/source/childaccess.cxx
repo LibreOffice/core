@@ -55,7 +55,7 @@
 
 namespace configmgr {
 
-css::uno::Sequence< sal_Int8 > const & ChildAccess::getTunnelId()
+css::uno::Sequence< sal_Int8 > const & ChildAccess::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit theChildAccessUnoTunnelId;
     return theChildAccessUnoTunnelId.getSeq();
@@ -164,8 +164,7 @@ sal_Int64 ChildAccess::getSomething(
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    return aIdentifier == getTunnelId()
-        ? reinterpret_cast< sal_Int64 >(this) : 0;
+    return comphelper::getSomethingImpl(aIdentifier, this);
 }
 
 void ChildAccess::bind(

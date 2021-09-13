@@ -20,7 +20,6 @@
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/report/XReportComponent.hpp>
 #include <com/sun/star/report/ForceNewPage.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
@@ -567,7 +566,7 @@ sal_Bool SAL_CALL OSection::hasForms()
 sal_Int64 OSection::getSomething( const uno::Sequence< sal_Int8 > & rId )
 {
     if (comphelper::isUnoTunnelId<OSection>(rId) )
-        return reinterpret_cast<sal_Int64>(this);
+        return comphelper::getSomething_cast(this);
     return (m_xDrawPage_Tunnel.is()) ? m_xDrawPage_Tunnel->getSomething(rId) : 0;
 }
 

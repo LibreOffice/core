@@ -184,8 +184,7 @@ uno::Sequence<sal_Int8> SAL_CALL Graphic::getMaskDIB()
 
 sal_Int64 SAL_CALL Graphic::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    return( ( comphelper::isUnoTunnelId<::Graphic>(rId) ) ?
-            reinterpret_cast<sal_Int64>(&maGraphic) : 0 );
+    return comphelper::getSomethingImpl(rId, &maGraphic);
 }
 
 

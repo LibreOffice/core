@@ -395,14 +395,7 @@ sal_Int32 SAL_CALL ValueItemAcc::getBackground(  )
 
 sal_Int64 SAL_CALL ValueItemAcc::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    sal_Int64 nRet;
-
-    if( comphelper::isUnoTunnelId<ValueItemAcc>(rId) )
-        nRet = reinterpret_cast< sal_Int64 >( this );
-    else
-        nRet = 0;
-
-    return nRet;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 void ValueItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
@@ -914,14 +907,7 @@ void SAL_CALL ValueSetAcc::deselectAccessibleChild( sal_Int32 nChildIndex )
 
 sal_Int64 SAL_CALL ValueSetAcc::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    sal_Int64 nRet;
-
-    if( comphelper::isUnoTunnelId<ValueSetAcc>(rId) )
-        nRet = reinterpret_cast< sal_Int64 >( this );
-    else
-        nRet = 0;
-
-    return nRet;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 

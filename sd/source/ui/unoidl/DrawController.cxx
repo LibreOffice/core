@@ -561,14 +561,7 @@ const Sequence<sal_Int8>& DrawController::getUnoTunnelId()
 
 sal_Int64 SAL_CALL DrawController::getSomething (const Sequence<sal_Int8>& rId)
 {
-    sal_Int64 nResult = 0;
-
-    if (comphelper::isUnoTunnelId<DrawController>(rId))
-    {
-        nResult = sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
-    }
-
-    return nResult;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 //===== Properties ============================================================

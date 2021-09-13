@@ -30,7 +30,6 @@
 #include <tools/solar.h>
 #include <tools/urlobj.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/numbers.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/util/NumberFormat.hpp>
@@ -561,9 +560,8 @@ Sequence< sal_Int8 > OFlatTable::getUnoTunnelId()
 
 sal_Int64 OFlatTable::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return (comphelper::isUnoTunnelId<OFlatTable>(rId))
-                ? reinterpret_cast< sal_Int64 >( this )
-                : OFlatTable_BASE::getSomething(rId);
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<OFlatTable_BASE>{});
 }
 
 bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool bRetrieveData)

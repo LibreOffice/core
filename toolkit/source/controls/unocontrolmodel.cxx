@@ -429,10 +429,7 @@ const css::uno::Sequence< sal_Int8 >& UnoControlModel::getUnoTunnelId() noexcept
 
 sal_Int64 UnoControlModel::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
 {
-    if( comphelper::isUnoTunnelId<UnoControlModel>(rIdentifier) )
-        return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(this));
-
-    return 0;
+    return comphelper::getSomethingImpl(rIdentifier, this);
 }
 
 // XInterface

@@ -18,6 +18,7 @@
  */
 
 #include <classes/imagewrapper.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapTools.hxx>
@@ -45,10 +46,7 @@ ImageWrapper::~ImageWrapper()
 {
 }
 
-Sequence< sal_Int8 > const & ImageWrapper::GetUnoTunnelId()
-{
-    return impl_getStaticIdentifier();
-}
+Sequence<sal_Int8> const& ImageWrapper::getUnoTunnelId() { return impl_getStaticIdentifier(); }
 
 // XBitmap
 css::awt::Size SAL_CALL ImageWrapper::getSize()
@@ -80,10 +78,7 @@ Sequence< sal_Int8 > SAL_CALL ImageWrapper::getMaskDIB()
 // XUnoTunnel
 sal_Int64 SAL_CALL ImageWrapper::getSomething( const Sequence< sal_Int8 >& aIdentifier )
 {
-    if ( aIdentifier == impl_getStaticIdentifier() )
-        return reinterpret_cast< sal_Int64 >( this );
-    else
-        return 0;
+    return comphelper::getSomethingImpl(aIdentifier, this);
 }
 
 }

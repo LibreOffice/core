@@ -212,11 +212,7 @@ const uno::Sequence< sal_Int8 > & SwXAutoTextGroup::getUnoTunnelId()
 
 sal_Int64 SAL_CALL SwXAutoTextGroup::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    if( comphelper::isUnoTunnelId<SwXAutoTextGroup>(rId) )
-    {
-        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ));
-    }
-    return 0;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 SwXAutoTextGroup::SwXAutoTextGroup(const OUString& rName,
@@ -674,11 +670,7 @@ const uno::Sequence< sal_Int8 > & SwXAutoTextEntry::getUnoTunnelId()
 
 sal_Int64 SAL_CALL SwXAutoTextEntry::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    if( comphelper::isUnoTunnelId<SwXAutoTextEntry>(rId) )
-    {
-        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ));
-    }
-    return 0;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 SwXAutoTextEntry::SwXAutoTextEntry(SwGlossaries* pGlss, const OUString& rGroupName,

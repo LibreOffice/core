@@ -439,14 +439,7 @@ void SAL_CALL ThumbnailViewAcc::deselectAccessibleChild( sal_Int32 )
 
 sal_Int64 SAL_CALL ThumbnailViewAcc::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    sal_Int64 nRet;
-
-    if( comphelper::isUnoTunnelId<ThumbnailViewAcc>(rId) )
-        nRet = reinterpret_cast< sal_Int64 >( this );
-    else
-        nRet = 0;
-
-    return nRet;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 void SAL_CALL ThumbnailViewAcc::disposing()
@@ -871,14 +864,7 @@ sal_Int32 SAL_CALL ThumbnailViewItemAcc::getBackground(  )
 
 sal_Int64 SAL_CALL ThumbnailViewItemAcc::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    sal_Int64 nRet;
-
-    if( comphelper::isUnoTunnelId<ThumbnailViewItemAcc>(rId) )
-        nRet = reinterpret_cast< sal_Int64 >( this );
-    else
-        nRet = 0;
-
-    return nRet;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -3094,12 +3094,12 @@ sal_Int64 SAL_CALL ScModelObj::getSomething(
 {
     if ( comphelper::isUnoTunnelId<ScModelObj>(rId) )
     {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
+        return comphelper::getSomething_cast(this);
     }
 
     if ( comphelper::isUnoTunnelId<SfxObjectShell>(rId) )
     {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(pDocShell ));
+        return comphelper::getSomething_cast(pDocShell);
     }
 
     //  aggregated number formats supplier has XUnoTunnel, too

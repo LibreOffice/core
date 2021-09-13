@@ -33,7 +33,6 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <connectivity/dbexception.hxx>
 #include <osl/file.hxx>
 #include <strings.hrc>
@@ -490,11 +489,8 @@ void OConnection::disposing()
 
 sal_Int64 SAL_CALL OConnection::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
-    return comphelper::isUnoTunnelId<OConnection>(rId)
-                ?
-            reinterpret_cast< sal_Int64 >( this )
-                :
-            OConnection_BASE::getSomething(rId);
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<OConnection_BASE>{});
 }
 
 Sequence< sal_Int8 > OConnection::getUnoTunnelId()
