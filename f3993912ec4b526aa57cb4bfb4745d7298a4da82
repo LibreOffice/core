@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "721110d7_7a91a417",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-09-13T08:28:42Z",
+      "side": 1,
+      "message": "@Balázs: many thanks for the fix! For the new regression (range cannot merged in a single file) you can change the range radio button to a checkbox or if it\u0027s not so easy, as we thought, we can simply revert the condition.",
+      "revId": "f3993912ec4b526aa57cb4bfb4745d7298a4da82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
