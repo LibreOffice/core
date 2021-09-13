@@ -291,8 +291,7 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(
                 m_pImpl->m_xContext,
                 getResultSet()->getProperties(),
                 *(m_pImpl->m_aResults[ nIndex ]->pData),
-                rtl::Reference< ::ucbhelper::ContentProviderImplHelper >(
-                    m_pImpl->m_xContent->getProvider().get() ),
+                m_pImpl->m_xContent->getProvider(),
                 queryContentIdentifierString( nIndex ) );
         m_pImpl->m_aResults[ nIndex ]->xRow = xRow;
         return xRow;

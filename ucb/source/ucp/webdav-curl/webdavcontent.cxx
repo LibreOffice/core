@@ -171,7 +171,7 @@ void lcl_sendPartialGETRequest( bool &bError,
             }
         }
 
-        if ( xProps.get() )
+        if (xProps)
             xProps->addProperties(
                 rProps,
                 ContentProperties( aResource ) );
@@ -261,16 +261,14 @@ Content::~Content()
 
 
 // virtual
-void SAL_CALL Content::acquire()
-    throw( )
+void SAL_CALL Content::acquire() noexcept
 {
     ContentImplHelper::acquire();
 }
 
 
 // virtual
-void SAL_CALL Content::release()
-    throw( )
+void SAL_CALL Content::release() noexcept
 {
     ContentImplHelper::release();
 }
@@ -1232,7 +1230,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         xRow->appendPropertySet( xSet );
     }
 
-    return uno::Reference< sdbc::XRow >( xRow.get() );
+    return uno::Reference<sdbc::XRow>(xRow);
 }
 
 
@@ -1255,11 +1253,11 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         aUnescapedTitle = SerfUri::unescape( m_aEscapedTitle );
         xContext.set( m_xContext );
         xIdentifier.set( m_xIdentifier );
-        xProvider.set( m_xProvider.get() );
+        xProvider = m_xProvider;
         xResAccess.reset( new DAVResourceAccess( *m_xResAccess ) );
 
         // First, ask cache...
-        if ( m_xCachedProps.get() )
+        if (m_xCachedProps)
         {
             xCachedProps.reset( new ContentProperties( *m_xCachedProps ) );
 
@@ -1288,7 +1286,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         {
             // cache lookup... getResourceType may fill the props cache via
             // PROPFIND!
-            if ( m_xCachedProps.get() )
+            if (m_xCachedProps)
             {
                 xCachedProps.reset(
                     new ContentProperties( *m_xCachedProps ) );
@@ -1351,7 +1349,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
                         if ( 1 == resources.size() )
                         {
-                            if ( xProps.get())
+                            if (xProps)
                                 xProps->addProperties(
                                     aPropNames,
                                     ContentProperties( resources[ 0 ] ));
@@ -1379,7 +1377,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         {
             // All properties obtained already?
             std::vector< OUString > aMissingProps;
-            if ( !( xProps.get()
+            if ( !( xProps
                     && xProps->containsAllNames(
                         rProperties, aMissingProps ) )
                  || !m_bDidGetOrHead )
@@ -1401,7 +1399,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                         xResAccess->HEAD( aHeaderNames, resource, xEnv );
                         m_bDidGetOrHead = true;
 
-                        if ( xProps.get() )
+                        if (xProps)
                             xProps->addProperties(
                                 aMissingProps,
                                 ContentProperties( resource ) );
@@ -1482,7 +1480,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         }
         else
         {
-            if ( !xProps.get() )
+            if (!xProps)
                 xProps.reset( new ContentProperties( aUnescapedTitle, false ) );
             else
                 xProps->addProperty(
@@ -1550,7 +1548,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-        if ( !m_xCachedProps.get() )
+        if (!m_xCachedProps)
             m_xCachedProps.reset( new CachableContentProperties( *xProps ) );
         else
             m_xCachedProps->addProperties( *xProps );
@@ -1988,12 +1986,10 @@ uno::Any Content::open(
         {
             // Error: Not a folder!
 
-            OUString aMsg( "Non-folder resource cannot be opened as folder! Wrong Open Mode!" );
-
             ucbhelper::cancelCommandExecution(
                 uno::makeAny(
                     lang::IllegalArgumentException(
-                        aMsg,
+                        "Non-folder resource cannot be opened as folder! Wrong Open Mode!",
                         static_cast< cppu::OWeakObject * >( this ),
                         -1 ) ),
                 xEnv );
@@ -2044,7 +2040,7 @@ uno::Any Content::open(
                     osl::MutexGuard aGuard( m_aMutex );
 
                     // cache headers.
-                    if ( !m_xCachedProps.get())
+                    if (!m_xCachedProps)
                         m_xCachedProps.reset(
                             new CachableContentProperties( ContentProperties( aResource ) ) );
                     else
@@ -2088,7 +2084,7 @@ uno::Any Content::open(
                         osl::MutexGuard aGuard( m_aMutex );
 
                         // cache headers.
-                        if ( !m_xCachedProps.get())
+                        if (!m_xCachedProps)
                             m_xCachedProps.reset(
                                 new CachableContentProperties( ContentProperties( aResource ) ) );
                         else
@@ -2332,7 +2328,7 @@ void Content::insert(
                         aExAsAny,
                         ContinuationFlags::Approve
                             | ContinuationFlags::Disapprove );
-                xIH->handle( xRequest.get() );
+                xIH->handle( xRequest );
 
                 const ContinuationFlags nResp = xRequest->getResponse();
 
@@ -2515,7 +2511,7 @@ void Content::transfer(
 
         xContext.set( m_xContext );
         xIdentifier.set( m_xIdentifier );
-        xProvider.set( m_xProvider.get() );
+        xProvider.set( m_xProvider );
         xResAccess.reset( new DAVResourceAccess( *m_xResAccess ) );
     }
 
@@ -2780,7 +2776,7 @@ bool Content::supportsExclusiveWriteLock(
 {
     if ( getResourceType( Environment ) == DAV )
     {
-        if ( m_xCachedProps.get() )
+        if (m_xCachedProps)
         {
             uno::Sequence< ucb::LockEntry > aSupportedLocks;
             if ( m_xCachedProps->getValue( DAVProperties::SUPPORTEDLOCK )
@@ -3167,7 +3163,7 @@ Content::getBaseURI( const std::unique_ptr< DAVResourceAccess > & rResAccess )
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     // First, try to obtain value of response header "Content-Location".
-    if ( m_xCachedProps.get() )
+    if (m_xCachedProps)
     {
         OUString aLocation;
         m_xCachedProps->getValue( "Content-Location" ) >>= aLocation;

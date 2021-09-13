@@ -37,7 +37,7 @@ namespace http_dav_ucp
 class DateTimeHelper
 {
 private:
-    static sal_Int32 convertMonthToInt (const OUString& );
+    static sal_Int32 convertMonthToInt(std::u16string_view month);
 
     static bool ISO8601_To_DateTime (const OUString&,
         css::util::DateTime& );

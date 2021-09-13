@@ -50,14 +50,12 @@ ContentProvider::~ContentProvider()
 
 
 // XInterface methods.
-void SAL_CALL ContentProvider::acquire()
-    throw()
+void SAL_CALL ContentProvider::acquire() noexcept
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL ContentProvider::release()
-    throw()
+void SAL_CALL ContentProvider::release() noexcept
 {
     OWeakObject::release();
 }
@@ -143,8 +141,7 @@ ContentProvider::queryContent(
     osl::MutexGuard aGuard( m_aMutex );
 
     // Check, if a content with given id already exists...
-    uno::Reference< ucb::XContent > xContent
-        = queryExistingContent( xCanonicId ).get();
+    uno::Reference<ucb::XContent> xContent = queryExistingContent(xCanonicId);
     if ( xContent.is() )
         return xContent;
 

@@ -276,7 +276,7 @@ uno::Sequence< beans::Property > Content::getProperties(
 
         bTransient = m_bTransient;
         xResAccess.reset( new DAVResourceAccess( *m_xResAccess ) );
-        if ( m_xCachedProps.get() )
+        if (m_xCachedProps)
             xCachedProps.reset(
                 new ContentProperties( *m_xCachedProps ) );
         xProvider.set( m_pProvider );
@@ -438,7 +438,7 @@ uno::Sequence< beans::Property > Content::getProperties(
                 "CreatableContentsInfo" ) );
 
     // Add cached properties, if present and still missing.
-    if ( xCachedProps.get() )
+    if (xCachedProps)
     {
         const std::unique_ptr< PropertyValueMap > & xProps
             = xCachedProps->getProperties();
