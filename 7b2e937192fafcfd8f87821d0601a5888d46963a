@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a902aab6_a29b7444",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-09-13T03:07:40Z",
+      "side": 1,
+      "message": "I’d suggest splitting the color change to a separate patch",
+      "revId": "7b2e937192fafcfd8f87821d0601a5888d46963a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
