@@ -26,7 +26,7 @@
 #include <Qt5Font.hxx>
 #include <Qt5Painter.hxx>
 
-#include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <fontsubset.hxx>
 #include <sallayout.hxx>
 #include <unx/geninst.h>
@@ -84,7 +84,7 @@ bool Qt5Graphics::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) 
     return m_pTextStyle[0]->GetFontFace()->GetFontCapabilities(rFontCapabilities);
 }
 
-void Qt5Graphics::GetDevFontList(PhysicalFontCollection* pPFC)
+void Qt5Graphics::GetDevFontList(vcl::font::PhysicalFontCollection* pPFC)
 {
     static const bool bUseFontconfig = (nullptr == getenv("SAL_VCL_QT5_NO_FONTCONFIG"));
 
@@ -124,7 +124,7 @@ void Qt5Graphics::GetDevFontList(PhysicalFontCollection* pPFC)
 
 void Qt5Graphics::ClearDevFontCache() {}
 
-bool Qt5Graphics::AddTempDevFont(PhysicalFontCollection*, const OUString& /*rFileURL*/,
+bool Qt5Graphics::AddTempDevFont(vcl::font::PhysicalFontCollection*, const OUString& /*rFileURL*/,
                                  const OUString& /*rFontName*/)
 {
     return false;
