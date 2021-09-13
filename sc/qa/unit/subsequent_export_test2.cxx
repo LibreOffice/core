@@ -203,6 +203,7 @@ public:
     void testButtonFormControlXlsxExport();
     void testTdf142929_filterLessThanXLSX();
     void testInvalidNamedRange();
+    void testExternalDefinedNameXLSX();
     void testTdf143220XLSX();
     void testTdf142264ManyChartsToXLSX();
     void testTdf143929MultiColumnToODS();
@@ -310,6 +311,7 @@ public:
     CPPUNIT_TEST(testButtonFormControlXlsxExport);
     CPPUNIT_TEST(testTdf142929_filterLessThanXLSX);
     CPPUNIT_TEST(testInvalidNamedRange);
+    CPPUNIT_TEST(testExternalDefinedNameXLSX);
     CPPUNIT_TEST(testTdf143220XLSX);
     CPPUNIT_TEST(testTdf142264ManyChartsToXLSX);
     CPPUNIT_TEST(testTdf143929MultiColumnToODS);
@@ -2581,6 +2583,25 @@ void ScExportTest2::testInvalidNamedRange()
     // Without the fix in place, this test would have failed, we didn't ignore the problematic named
     // range on import.
     CPPUNIT_ASSERT(!xNamedRanges->hasByName("myname"));
+}
+
+void ScExportTest2::testExternalDefinedNameXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf144397.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(
+        *this, *xDocSh, m_xSFactory, "xl/externalLinks/externalLink1.xml", FORMAT_XLSX);
+
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/x:externalLink/x:externalBook/x:sheetNames/x:sheetName", "val", "Munka1");
+    assertXPath(pDoc, "/x:externalLink/x:externalBook/x:definedNames/x:definedName", "name",
+                "MonthNames");
+    assertXPath(pDoc, "/x:externalLink/x:externalBook/x:definedNames/x:definedName", "refersTo",
+                "[1]Munka1!$A$2:$A$13");
+    assertXPath(pDoc, "/x:externalLink/x:externalBook/x:sheetDataSet/x:sheetData", "sheetId", "0");
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest2::testTdf143220XLSX()

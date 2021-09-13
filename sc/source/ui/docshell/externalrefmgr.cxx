@@ -746,8 +746,9 @@ bool ScExternalRefCache::isValidRangeName(sal_uInt16 nFileId, const OUString& rN
     if (!pDoc)
         return false;
 
+    OUString aUpperName = ScGlobal::getCharClass().uppercase(rName);
     const RangeNameMap& rMap = pDoc->maRangeNames;
-    return rMap.count(rName) > 0;
+    return rMap.count(aUpperName) > 0;
 }
 
 void ScExternalRefCache::setRangeName(sal_uInt16 nFileId, const OUString& rName)
@@ -1752,8 +1753,50 @@ void ScExternalRefManager::setAllCacheTableReferencedStati( bool bReferenced )
 
 void ScExternalRefManager::storeRangeNameTokens(sal_uInt16 nFileId, const OUString& rName, const ScTokenArray& rArray)
 {
-    ScExternalRefCache::TokenArrayRef pArray(rArray.Clone());
-    maRefCache.setRangeNameTokens(nFileId, rName, pArray);
+    ScExternalRefCache::TokenArrayRef pNewArray;
+    if (!rArray.HasExternalRef())
+    {
+        // Parse all tokens in this external range data, and replace each absolute
+        // reference token with an external reference token, and cache them.
+        pNewArray = std::make_shared<ScTokenArray>(*new ScDocument());
+        FormulaTokenArrayPlainIterator aIter(rArray);
+        for (const FormulaToken* pToken = aIter.First(); pToken; pToken = aIter.Next())
+        {
+            bool bTokenAdded = false;
+            switch (pToken->GetType())
+            {
+                case svSingleRef:
+                {
+                    const ScSingleRefData& rRef = *pToken->GetSingleRef();
+                    OUString aTabName = maRefCache.getTableName(nFileId, rRef.Tab());
+                    ScExternalSingleRefToken aNewToken(nFileId, svl::SharedString(aTabName),   // string not interned
+                        *pToken->GetSingleRef());
+                    pNewArray->AddToken(aNewToken);
+                    bTokenAdded = true;
+                }
+                break;
+                case svDoubleRef:
+                {
+                    const ScSingleRefData& rRef = *pToken->GetSingleRef();
+                    OUString aTabName = maRefCache.getTableName(nFileId, rRef.Tab());
+                    ScExternalDoubleRefToken aNewToken(nFileId, svl::SharedString(aTabName),   // string not interned
+                        *pToken->GetDoubleRef());
+                    pNewArray->AddToken(aNewToken);
+                    bTokenAdded = true;
+                }
+                break;
+                default:
+                    ;   // nothing
+            }
+
+            if (!bTokenAdded)
+                pNewArray->AddToken(*pToken);
+        }
+    }
+    else
+        pNewArray = rArray.Clone();
+
+    maRefCache.setRangeNameTokens(nFileId, rName, pNewArray);
 }
 
 namespace {
