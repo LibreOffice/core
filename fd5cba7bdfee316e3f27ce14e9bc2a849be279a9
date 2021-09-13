@@ -16,6 +16,23 @@
       "message": "Eike, this was your work so please take a look at this simple tooltip string fix.\n\nIf you\u0027d like a bug report to accompany it, I\u0027ll be happy to file one, too.",
       "revId": "fd5cba7bdfee316e3f27ce14e9bc2a849be279a9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13cb6f43_1392c634",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-13T10:20:41Z",
+      "side": 1,
+      "message": "Ah darn, yes of course, seems I was focused on accessible-description.\nDoesn\u0027t need a bug to retrofit, it\u0027s just ongoing development.\nThanks!\n",
+      "revId": "fd5cba7bdfee316e3f27ce14e9bc2a849be279a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
