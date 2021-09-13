@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e69fae9_139c7ac9",
+        "filename": "sw/source/uibase/uno/unotxdoc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-13T11:38:57Z",
+      "side": 1,
+      "message": "So replacing these two lines with\n\n        SvNumberFormatsSupplierObj* pNumFormat \u003d nullptr;\n        Reference\u003c XUnoTunnel \u003e xNumTunnel;\n        if(aNumTunnel \u003e\u003e\u003d xNumTunnel)\n            pNumFormat \u003d comphelper::getFromUnoTunnel\u003cSvNumberFormatsSupplierObj\u003e(xNumTunnel);\n\nfixes the infinite loop.\nThe visible difference is that in the code above, the XUnoTunnel interface is passed to getFromUnoTunnel directly, taken using operator \u003e\u003e\u003d; and in the problematic code, the interface is obtained in getFromUnoTunnel taking const I\u0026 xIface, and using css::uno::Reference\u003ccss::lang::XUnoTunnel\u003e{ xIface, css::uno::UNO_QUERY } (where in this case I is Any). I honestly don\u0027t know what is different, but I will get the call stack dumps for the two cases.",
+      "range": {
+        "startLine": 436,
+        "startChar": 8,
+        "endLine": 437,
+        "endChar": 83
+      },
+      "revId": "48e0ca46909120ab227f977e62f5588edb43ce96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
