@@ -27,8 +27,8 @@
 
 #include <ImplOutDevData.hxx>
 #include <font/ImplDeviceFontSizeList.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
-#include <PhysicalFontCollection.hxx>
 #include <impfontcache.hxx>
 #include <salinst.hxx>
 #include <salgdi.hxx>
