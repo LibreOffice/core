@@ -32,6 +32,9 @@ namespace svt
         m_xWidget->connect_key_press(LINK(this, ControlBase, KeyInputHdl));
         m_xWidget->connect_focus_in(LINK(this, ControlBase, FocusInHdl));
         m_xWidget->connect_focus_out(LINK(this, ControlBase, FocusOutHdl));
+        m_xWidget->connect_mouse_press(LINK(this, ControlBase, MousePressHdl));
+        m_xWidget->connect_mouse_release(LINK(this, ControlBase, MouseReleaseHdl));
+        m_xWidget->connect_mouse_move(LINK(this, ControlBase, MouseMoveHdl));
     }
 
     void ComboBoxControl::dispose()
@@ -119,6 +122,9 @@ namespace svt
         m_xWidget->connect_key_press(LINK(this, ControlBase, KeyInputHdl));
         m_xWidget->connect_focus_in(LINK(this, ControlBase, FocusInHdl));
         m_xWidget->connect_focus_out(LINK(this, ControlBase, FocusOutHdl));
+        m_xWidget->connect_mouse_press(LINK(this, ControlBase, MousePressHdl));
+        m_xWidget->connect_mouse_release(LINK(this, ControlBase, MouseReleaseHdl));
+        m_xWidget->connect_mouse_move(LINK(this, ControlBase, MouseMoveHdl));
     }
 
     void ListBoxControl::dispose()
@@ -189,6 +195,9 @@ namespace svt
         m_xBox->connect_key_press(LINK(this, ControlBase, KeyInputHdl));
         m_xBox->connect_focus_in(LINK(this, ControlBase, FocusInHdl));
         m_xBox->connect_focus_out(LINK(this, ControlBase, FocusOutHdl));
+        m_xBox->connect_mouse_press(LINK(this, ControlBase, MousePressHdl));
+        m_xBox->connect_mouse_release(LINK(this, ControlBase, MouseReleaseHdl));
+        m_xBox->connect_mouse_move(LINK(this, ControlBase, MouseMoveHdl));
         m_xBox->connect_toggled(LINK(this, CheckBoxControl, OnToggle));
     }
 
@@ -342,6 +351,9 @@ namespace svt
         m_pEntry->connect_key_press(LINK(this, ControlBase, KeyInputHdl));
         m_pEntry->connect_focus_in(LINK(this, ControlBase, FocusInHdl));
         connect_focus_out(LINK(this, ControlBase, FocusOutHdl));
+        m_pEntry->connect_mouse_press(LINK(this, ControlBase, MousePressHdl));
+        m_pEntry->connect_mouse_release(LINK(this, ControlBase, MouseReleaseHdl));
+        m_pEntry->connect_mouse_move(LINK(this, ControlBase, MouseMoveHdl));
     }
 
     bool ControlBase::ProcessKey(const KeyEvent& rKEvt)
@@ -364,6 +376,24 @@ namespace svt
     {
         m_aFocusOutHdl.Call(nullptr);
         static_cast<BrowserDataWin*>(GetParent())->GetParent()->ChildFocusOut();
+    }
+
+    IMPL_LINK(ControlBase, MousePressHdl, const MouseEvent&, rEvent, bool)
+    {
+        m_aMousePressHdl.Call(rEvent);
+        return false;
+    }
+
+    IMPL_LINK(ControlBase, MouseReleaseHdl, const MouseEvent&, rEvent, bool)
+    {
+        m_aMouseReleaseHdl.Call(rEvent);
+        return false;
+    }
+
+    IMPL_LINK(ControlBase, MouseMoveHdl, const MouseEvent&, rEvent, bool)
+    {
+        m_aMouseMoveHdl.Call(rEvent);
+        return false;
     }
 
     void EditControlBase::dispose()
@@ -640,6 +670,9 @@ namespace svt
         m_xWidget->connect_key_press(LINK(this, ControlBase, KeyInputHdl));
         m_xWidget->connect_focus_in(LINK(this, ControlBase, FocusInHdl));
         m_xWidget->connect_focus_out(LINK(this, ControlBase, FocusOutHdl));
+        m_xWidget->connect_mouse_press(LINK(this, ControlBase, MousePressHdl));
+        m_xWidget->connect_mouse_release(LINK(this, ControlBase, MouseReleaseHdl));
+        m_xWidget->connect_mouse_move(LINK(this, ControlBase, MouseMoveHdl));
         // so any the natural size doesn't have an effect
         m_xWidget->set_size_request(1, 1);
     }
