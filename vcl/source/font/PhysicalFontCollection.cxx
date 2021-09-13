@@ -16,20 +16,21 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <sal/config.h>
 
-#include <memory>
+#include <sal/config.h>
 
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/fontdefs.hxx>
 #include <o3tl/sorted_vector.hxx>
+
 #include <font/GlyphFallbackFontSubstitution.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <font/PreMatchFontSubstitution.hxx>
-#include <font/PhysicalFontFaceCollection.hxx>
-#include <PhysicalFontCollection.hxx>
+
+#include <memory>
 
 static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
 {
@@ -65,6 +66,9 @@ static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
     return ImplFontAttrs::None;
 }
 
+namespace vcl::font
+{
+
 PhysicalFontCollection::PhysicalFontCollection()
     : mbMatchData( false )
     , mpPreMatchHook( nullptr )
@@ -77,12 +81,12 @@ PhysicalFontCollection::~PhysicalFontCollection()
     Clear();
 }
 
-void PhysicalFontCollection::SetPreMatchHook(vcl::font::PreMatchFontSubstitution* pHook)
+void PhysicalFontCollection::SetPreMatchHook(PreMatchFontSubstitution* pHook)
 {
     mpPreMatchHook = pHook;
 }
 
-void PhysicalFontCollection::SetFallbackHook(vcl::font::GlyphFallbackFontSubstitution* pHook)
+void PhysicalFontCollection::SetFallbackHook(GlyphFallbackFontSubstitution* pHook)
 {
     mpFallbackHook = pHook;
 }
@@ -915,7 +919,7 @@ const std::vector<std::pair<OUString, OUString>> aMetricCompatibleMap =
     { "Calibri",         "Carlito" },
 };
 
-static bool FindMetricCompatibleFont(vcl::font::FontSelectPattern& rFontSelData)
+static bool FindMetricCompatibleFont(FontSelectPattern& rFontSelData)
 {
     for (const auto& aSub : aMetricCompatibleMap)
     {
@@ -929,7 +933,7 @@ static bool FindMetricCompatibleFont(vcl::font::FontSelectPattern& rFontSelData)
     return false;
 }
 
-vcl::font::PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( vcl::font::FontSelectPattern& rFSD ) const
+vcl::font::PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& rFSD ) const
 {
     // give up if no fonts are available
     if( !Count() )
@@ -957,7 +961,7 @@ vcl::font::PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( vcl::font
 
         // Until features are properly supported, they are appended to the
         // font name, so we need to strip them off so the font is found.
-        sal_Int32 nFeat = aSearchName.indexOf(vcl::font::FontSelectPattern::FEAT_PREFIX);
+        sal_Int32 nFeat = aSearchName.indexOf(FontSelectPattern::FEAT_PREFIX);
         OUString aOrigName = rFSD.maTargetName;
         OUString aBaseFontName = aSearchName.copy( 0, (nFeat != -1) ? nFeat : aSearchName.getLength() );
 
@@ -968,7 +972,7 @@ vcl::font::PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( vcl::font
         }
 
         aSearchName = GetEnglishSearchFontName( aSearchName );
-        vcl::font::ImplFontSubstitute( aSearchName );
+        ImplFontSubstitute( aSearchName );
         // #114999# special emboldening for Ricoh fonts
         // TODO: smarter check for special cases by using PreMatch infrastructure?
         if( (rFSD.GetWeight() > WEIGHT_MEDIUM) &&
@@ -1065,7 +1069,7 @@ vcl::font::PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( vcl::font
         {
             aSearchName = GetEnglishSearchFontName( aSearchName );
         }
-        vcl::font::ImplFontSubstitute( aSearchName );
+        ImplFontSubstitute( aSearchName );
         vcl::font::PhysicalFontFamily* pFoundData = ImplFindFontFamilyBySearchName( aSearchName );
         if( pFoundData )
             return pFoundData;
@@ -1248,6 +1252,7 @@ vcl::font::PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( vcl::font
     }
 
     return pFoundData;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
