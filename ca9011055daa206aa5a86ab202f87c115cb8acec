@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bf98f45_26cd7a10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-13T11:36:29Z",
+      "side": 1,
+      "message": "Hey all, I\u0027m starting to work on our font code in OutputDevice, but before I feel confident about this I\u0027d like to get in some unit tests. ",
+      "revId": "ca9011055daa206aa5a86ab202f87c115cb8acec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
