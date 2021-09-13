@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:ooo="http://openoffice.org/2004/office" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:meta><meta:creation-date>2021-09-13T16:07:05.221699428</meta:creation-date><dc:date>2021-09-13T16:10:52.148997944</dc:date><meta:editing-duration>PT3M46S</meta:editing-duration><meta:editing-cycles>3</meta:editing-cycles><meta:generator>LibreOfficeDev/7.3.0.0.alpha0$Linux_X86_64 LibreOffice_project/ba346227f1c4f896b717676a7eae22fea222f3e4</meta:generator><meta:document-statistic meta:table-count="2" meta:image-count="0" meta:object-count="0" meta:page-count="4" meta:paragraph-count="5" meta:word-count="5" meta:character-count="12" meta:non-whitespace-character-count="12"/></office:meta>
+ <office:styles>
+  <style:default-style style:family="graphic">
+   <style:graphic-properties svg:stroke-color="#3465a4" draw:fill-color="#729fcf" fo:wrap-option="no-wrap" draw:shadow-offset-x="0.3cm" draw:shadow-offset-y="0.3cm" draw:start-line-spacing-horizontal="0.283cm" draw:start-line-spacing-vertical="0.283cm" draw:end-line-spacing-horizontal="0.283cm" draw:end-line-spacing-vertical="0.283cm" style:flow-with-text="false"/>
+   <style:paragraph-properties style:text-autospace="ideograph-alpha" style:line-break="strict" style:font-independent-line-spacing="false">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Liberation Serif" fo:font-size="12pt" fo:language="hu" fo:country="HU" style:letter-kerning="true" style:font-name-asian="Noto Serif CJK SC" style:font-size-asian="10.5pt" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="Lohit Devanagari" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN"/>
+  </style:default-style>
+  <style:default-style style:family="paragraph">
+   <style:paragraph-properties fo:orphans="2" fo:widows="2" fo:hyphenation-ladder-count="no-limit" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging" style:line-break="strict" style:tab-stop-distance="1.251cm" style:writing-mode="page"/>
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Liberation Serif" fo:font-size="12pt" fo:language="hu" fo:country="HU" style:letter-kerning="true" style:font-name-asian="Noto Serif CJK SC" style:font-size-asian="10.5pt" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="Lohit Devanagari" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN" fo:hyphenate="false" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false"/>
+  </style:default-style>
+  <style:default-style style:family="table">
+   <style:table-properties table:border-model="collapsing"/>
+  </style:default-style>
+  <style:default-style style:family="table-row">
+   <style:table-row-properties fo:keep-together="auto"/>
+  </style:default-style>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
+  <style:style style:name="Heading" style:family="paragraph" style:parent-style-name="Standard" style:next-style-name="Text_20_body" style:class="text">
+   <style:paragraph-properties fo:margin-top="0.423cm" fo:margin-bottom="0.212cm" style:contextual-spacing="false" fo:keep-with-next="always"/>
+   <style:text-properties style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="14pt" style:font-name-asian="Noto Sans CJK SC" style:font-family-asian="&apos;Noto Sans CJK SC&apos;" style:font-family-generic-asian="system" style:font-pitch-asian="variable" style:font-size-asian="14pt" style:font-name-complex="Lohit Devanagari" style:font-family-complex="&apos;Lohit Devanagari&apos;" style:font-family-generic-complex="system" style:font-pitch-complex="variable" style:font-size-complex="14pt"/>
+  </style:style>
+  <style:style style:name="Text_20_body" style:display-name="Text body" style:family="paragraph" style:parent-style-name="Standard" style:class="text">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.247cm" style:contextual-spacing="false" fo:line-height="115%"/>
+  </style:style>
+  <style:style style:name="List" style:family="paragraph" style:parent-style-name="Text_20_body" style:class="list">
+   <style:text-properties style:font-size-asian="12pt" style:font-name-complex="Lohit Devanagari1" style:font-family-complex="&apos;Lohit Devanagari&apos;"/>
+  </style:style>
+  <style:style style:name="Caption" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+   <style:paragraph-properties fo:margin-top="0.212cm" fo:margin-bottom="0.212cm" style:contextual-spacing="false" text:number-lines="false" text:line-number="0"/>
+   <style:text-properties fo:font-size="12pt" fo:font-style="italic" style:font-size-asian="12pt" style:font-style-asian="italic" style:font-name-complex="Lohit Devanagari1" style:font-family-complex="&apos;Lohit Devanagari&apos;" style:font-size-complex="12pt" style:font-style-complex="italic"/>
+  </style:style>
+  <style:style style:name="Index" style:family="paragraph" style:parent-style-name="Standard" style:class="index">
+   <style:paragraph-properties text:number-lines="false" text:line-number="0"/>
+   <style:text-properties fo:language="zxx" fo:country="none" style:font-size-asian="12pt" style:language-asian="zxx" style:country-asian="none" style:font-name-complex="Lohit Devanagari1" style:font-family-complex="&apos;Lohit Devanagari&apos;" style:language-complex="zxx" style:country-complex="none"/>
+  </style:style>
+  <style:style style:name="Table_20_Contents" style:display-name="Table Contents" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+   <style:paragraph-properties fo:orphans="0" fo:widows="0" text:number-lines="false" text:line-number="0"/>
+  </style:style>
+  <style:style style:name="Line_20_numbering" style:display-name="Line numbering" style:family="text"/>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="Table1" style:family="table">
+   <style:table-properties style:width="17cm" table:align="margins"/>
+  </style:style>
+  <style:style style:name="Table1.A" style:family="table-column">
+   <style:table-column-properties style:column-width="17cm" style:rel-column-width="65535*"/>
+  </style:style>
+  <style:style style:name="Table1.1" style:family="table-row">
+   <style:table-row-properties loext:text-changes-only="false"/>
+  </style:style>
+  <style:style style:name="Table1.A1" style:family="table-cell">
+   <style:table-cell-properties fo:padding="0.097cm" fo:border="0.05pt solid #000000"/>
+  </style:style>
+  <style:style style:name="Table1.A2" style:family="table-cell">
+   <style:table-cell-properties fo:padding="0.097cm" fo:border-left="0.05pt solid #000000" fo:border-right="0.05pt solid #000000" fo:border-top="none" fo:border-bottom="0.05pt solid #000000"/>
+  </style:style>
+  <style:style style:name="Table2" style:family="table">
+   <style:table-properties style:width="17cm" table:align="margins"/>
+  </style:style>
+  <style:style style:name="Table2.A" style:family="table-column">
+   <style:table-column-properties style:column-width="17cm" style:rel-column-width="65535*"/>
+  </style:style>
+  <style:style style:name="Table2.A1" style:family="table-cell">
+   <style:table-cell-properties fo:padding="0.097cm" fo:border="0.05pt solid #000000"/>
+  </style:style>
+  <style:style style:name="Table2.2" style:family="table-row">
+   <style:table-row-properties loext:text-changes-only="false"/>
+  </style:style>
+  <style:style style:name="Table2.A2" style:family="table-cell">
+   <style:table-cell-properties fo:padding="0.097cm" fo:border-left="0.05pt solid #000000" fo:border-right="0.05pt solid #000000" fo:border-top="none" fo:border-bottom="0.05pt solid #000000"/>
+  </style:style>
+  <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard">
+   <style:text-properties officeooo:paragraph-rsid="001444e4"/>
+  </style:style>
+  <style:style style:name="P2" style:family="paragraph" style:parent-style-name="Table_20_Contents">
+   <style:text-properties fo:font-size="96pt" officeooo:rsid="001444e4" officeooo:paragraph-rsid="001444e4" style:font-size-asian="96pt" style:font-size-complex="96pt"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21.001cm" fo:page-height="29.7cm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="20" style:layout-grid-base-height="0.706cm" style:layout-grid-ruby-height="0.353cm" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:footnote-max-height="0cm" loext:margin-gutter="0cm">
+    <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:line-style="solid" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+   </style:page-layout-properties>
+   <style:header-style/>
+   <style:footer-style/>
+  </style:page-layout>
+  <style:style style:name="dp1" style:family="drawing-page">
+   <style:drawing-page-properties draw:background-size="full"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1" draw:style-name="dp1"/>
+ </office:master-styles>
+ <office:body>
+  <office:text text:use-soft-page-breaks="true">
+   <text:tracked-changes text:track-changes="false">
+    <text:changed-region xml:id="ct94575160241328" text:id="ct94575160241328">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>xxx2</dc:creator>
+       <dc:date>2021-09-13T16:10:20</dc:date>
+      </office:change-info>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct94575160237104" text:id="ct94575160237104">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>xxx2</dc:creator>
+       <dc:date>2021-09-13T16:10:20</dc:date>
+      </office:change-info>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct94575160236256" text:id="ct94575160236256">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>xxx2</dc:creator>
+       <dc:date>2021-09-13T16:10:20</dc:date>
+      </office:change-info>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct94575160250512" text:id="ct94575160250512">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>xxx2</dc:creator>
+       <dc:date>2021-09-13T16:10:20</dc:date>
+      </office:change-info>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct94575160243136" text:id="ct94575160243136">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>xxx2</dc:creator>
+       <dc:date>2021-09-13T16:10:20</dc:date>
+      </office:change-info>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct94575160240416" text:id="ct94575160240416">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>xxx2</dc:creator>
+       <dc:date>2021-09-13T16:10:20</dc:date>
+      </office:change-info>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct94575160269216" text:id="ct94575160269216">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>xxx2</dc:creator>
+       <dc:date>2021-09-13T16:10:20</dc:date>
+      </office:change-info>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct94575160247680" text:id="ct94575160247680">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>xxx2</dc:creator>
+       <dc:date>2021-09-13T16:10:20</dc:date>
+      </office:change-info>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct94575160268688" text:id="ct94575160268688">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>xxx2</dc:creator>
+       <dc:date>2021-09-13T16:10:20</dc:date>
+      </office:change-info>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct94575160246240" text:id="ct94575160246240">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>xxx2</dc:creator>
+       <dc:date>2021-09-13T16:10:20</dc:date>
+      </office:change-info>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct94575160272032" text:id="ct94575160272032">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>xxx2</dc:creator>
+       <dc:date>2021-09-13T16:10:20</dc:date>
+      </office:change-info>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct94575160238720" text:id="ct94575160238720">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>xxx2</dc:creator>
+       <dc:date>2021-09-13T16:10:20</dc:date>
+      </office:change-info>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct94575160293824" text:id="ct94575160293824">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>xxx2</dc:creator>
+       <dc:date>2021-09-13T16:10:26</dc:date>
+      </office:change-info>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct94575160296240" text:id="ct94575160296240">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>xxx2</dc:creator>
+       <dc:date>2021-09-13T16:10:30</dc:date>
+      </office:change-info>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct94575160292400" text:id="ct94575160292400">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>xxx2</dc:creator>
+       <dc:date>2021-09-13T16:10:30</dc:date>
+      </office:change-info>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct94575160292064" text:id="ct94575160292064">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>xxx2</dc:creator>
+       <dc:date>2021-09-13T16:10:38</dc:date>
+      </office:change-info>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct94575160463408" text:id="ct94575160463408">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>xxx2</dc:creator>
+       <dc:date>2021-09-13T16:10:38</dc:date>
+      </office:change-info>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct94575160464880" text:id="ct94575160464880">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>xxx2</dc:creator>
+       <dc:date>2021-09-13T16:10:38</dc:date>
+      </office:change-info>
+     </text:deletion>
+    </text:changed-region>
+    <text:changed-region xml:id="ct94575160290112" text:id="ct94575160290112">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>xxx2</dc:creator>
+       <dc:date>2021-09-13T16:10:38</dc:date>
+      </office:change-info>
+     </text:deletion>
+    </text:changed-region>
+   </text:tracked-changes>
+   <table:table table:name="Table1" table:style-name="Table1">
+    <table:table-column table:style-name="Table1.A"/>
+    <table:table-row table:style-name="Table1.1">
+     <table:table-cell table:style-name="Table1.A1" office:value-type="string">
+      <text:p text:style-name="P2"><text:change-start text:change-id="ct94575160241328"/>A1<text:change-end text:change-id="ct94575160241328"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="Table1.1">
+     <table:table-cell table:style-name="Table1.A2" office:value-type="string">
+      <text:p text:style-name="P2"><text:change-start text:change-id="ct94575160237104"/>A2<text:change-end text:change-id="ct94575160237104"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="Table1.1">
+     <table:table-cell table:style-name="Table1.A2" office:value-type="string">
+      <text:p text:style-name="P2"><text:change-start text:change-id="ct94575160236256"/>A3<text:change-end text:change-id="ct94575160236256"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="Table1.1">
+     <table:table-cell table:style-name="Table1.A2" office:value-type="string">
+      <text:p text:style-name="P2"><text:change-start text:change-id="ct94575160250512"/>A4<text:change-end text:change-id="ct94575160250512"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="Table1.1">
+     <table:table-cell table:style-name="Table1.A2" office:value-type="string">
+      <text:p text:style-name="P2"><text:change-start text:change-id="ct94575160243136"/>A5<text:change-end text:change-id="ct94575160243136"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="Table1.1">
+     <table:table-cell table:style-name="Table1.A2" office:value-type="string">
+      <text:p text:style-name="P2"><text:change-start text:change-id="ct94575160240416"/>A6<text:change-end text:change-id="ct94575160240416"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <text:soft-page-break/>
+    <table:table-row table:style-name="Table1.1">
+     <table:table-cell table:style-name="Table1.A2" office:value-type="string">
+      <text:p text:style-name="P2"><text:change-start text:change-id="ct94575160269216"/>A7<text:change-end text:change-id="ct94575160269216"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="Table1.1">
+     <table:table-cell table:style-name="Table1.A2" office:value-type="string">
+      <text:p text:style-name="P2"><text:change-start text:change-id="ct94575160247680"/>A8<text:change-end text:change-id="ct94575160247680"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="Table1.1">
+     <table:table-cell table:style-name="Table1.A2" office:value-type="string">
+      <text:p text:style-name="P2"><text:change-start text:change-id="ct94575160268688"/>A9<text:change-end text:change-id="ct94575160268688"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="Table1.1">
+     <table:table-cell table:style-name="Table1.A2" office:value-type="string">
+      <text:p text:style-name="P2"><text:change-start text:change-id="ct94575160246240"/>A10<text:change-end text:change-id="ct94575160246240"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="Table1.1">
+     <table:table-cell table:style-name="Table1.A2" office:value-type="string">
+      <text:p text:style-name="P2"><text:change-start text:change-id="ct94575160272032"/>A11<text:change-end text:change-id="ct94575160272032"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="Table1.1">
+     <table:table-cell table:style-name="Table1.A2" office:value-type="string">
+      <text:p text:style-name="P2"><text:change-start text:change-id="ct94575160238720"/>A12<text:change-end text:change-id="ct94575160238720"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+   <text:p text:style-name="P1"/>
+   <table:table table:name="Table2" table:style-name="Table2">
+    <table:table-column table:style-name="Table2.A"/>
+    <text:soft-page-break/>
+    <table:table-row table:style-name="TableLine94575160286304">
+     <table:table-cell table:style-name="Table2.A1" office:value-type="string">
+      <text:p text:style-name="P2">B1</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="Table2.2">
+     <table:table-cell table:style-name="Table2.A2" office:value-type="string">
+      <text:p text:style-name="P2"><text:change-start text:change-id="ct94575160293824"/>B2<text:change-end text:change-id="ct94575160293824"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="TableLine94575160289680">
+     <table:table-cell table:style-name="Table2.A2" office:value-type="string">
+      <text:p text:style-name="P2">B3</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="Table2.2">
+     <table:table-cell table:style-name="Table2.A2" office:value-type="string">
+      <text:p text:style-name="P2"><text:change-start text:change-id="ct94575160296240"/>B4<text:change-end text:change-id="ct94575160296240"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="Table2.2">
+     <table:table-cell table:style-name="Table2.A2" office:value-type="string">
+      <text:p text:style-name="P2"><text:change-start text:change-id="ct94575160292400"/>B5<text:change-end text:change-id="ct94575160292400"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="TableLine94575160299120">
+     <table:table-cell table:style-name="Table2.A2" office:value-type="string">
+      <text:p text:style-name="P2">B6</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <text:soft-page-break/>
+    <table:table-row table:style-name="Table2.2">
+     <table:table-cell table:style-name="Table2.A2" office:value-type="string">
+      <text:p text:style-name="P2"><text:change-start text:change-id="ct94575160292064"/>B7<text:change-end text:change-id="ct94575160292064"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="Table2.2">
+     <table:table-cell table:style-name="Table2.A2" office:value-type="string">
+      <text:p text:style-name="P2"><text:change-start text:change-id="ct94575160463408"/>B8<text:change-end text:change-id="ct94575160463408"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="Table2.2">
+     <table:table-cell table:style-name="Table2.A2" office:value-type="string">
+      <text:p text:style-name="P2"><text:change-start text:change-id="ct94575160464880"/>B9<text:change-end text:change-id="ct94575160464880"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="Table2.2">
+     <table:table-cell table:style-name="Table2.A2" office:value-type="string">
+      <text:p text:style-name="P2"><text:change-start text:change-id="ct94575160290112"/>B10<text:change-end text:change-id="ct94575160290112"/></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="TableLine94575160471152">
+     <table:table-cell table:style-name="Table2.A2" office:value-type="string">
+      <text:p text:style-name="P2">B11</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="TableLine94575160471824">
+     <table:table-cell table:style-name="Table2.A2" office:value-type="string">
+      <text:p text:style-name="P2">B12</text:p>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+   <text:p text:style-name="P1"/>
+  </office:text>
+ </office:body>
+</office:document>

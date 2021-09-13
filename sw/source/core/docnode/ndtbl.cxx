@@ -2476,7 +2476,8 @@ void SwTableNode::DelFrames(SwRootFrame const*const pLayout)
                             pPrev ? pPrev->DynCastTextFrame() : nullptr );
                     }
                 }
-                pFrame->Cut();
+                if (pFrame->GetUpper())
+                    pFrame->Cut();
                 SwFrame::DestroyFrame(pFrame);
                 bAgain = true;
             }
