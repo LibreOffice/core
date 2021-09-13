@@ -662,6 +662,23 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
         return;
     }
 
+    if (comphelper::LibreOfficeKit::isActive() &&
+        SfxViewShell::Current()->isRestrictedView() &&
+        comphelper::LibreOfficeKit::isRestrictedCommand(aURL.Complete))
+    {
+        boost::property_tree::ptree aTree;
+        aTree.put("code", "");
+        aTree.put("kind", "restricted");
+        aTree.put("cmd", aURL.Complete);
+        aTree.put("message", "Blocked restricted feature");
+        aTree.put("viewID", SfxViewShell::Current()->GetViewShellId().get());
+
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, aTree);
+        SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_ERROR, aStream.str().c_str());
+        return;
+    }
+
     if (
         !(pDispatch &&
         (
