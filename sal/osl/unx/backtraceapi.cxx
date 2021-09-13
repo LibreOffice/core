@@ -238,7 +238,7 @@ OUString sal::backtrace_to_string(BacktraceState* backtraceState)
 OUString sal::backtrace_to_string(BacktraceState* backtraceState)
 {
     std::unique_ptr<char*, decltype(free)*> b2{backtrace_symbols(backtraceState->buffer, backtraceState->nDepth), free};
-    if (b2.get() == nullptr) {
+    if (!b2) {
         return OUString();
     }
     OUStringBuffer b3;
