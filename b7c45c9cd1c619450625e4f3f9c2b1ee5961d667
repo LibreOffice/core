@@ -56,6 +56,30 @@
       },
       "revId": "b7c45c9cd1c619450625e4f3f9c2b1ee5961d667",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5331febe_c0dc5b0f",
+        "filename": "sc/source/core/tool/arraysumAVX.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-09-13T09:08:17Z",
+      "side": 1,
+      "message": "The compiler is not guaranteed to optimize the global const variable to have a direct value, e.g. when optimizations are disabled the value will be computed during startup. And that is not guarded properly. Moving it to the function puts it inside guarded code.\nIt\u0027s not static because it seemed to me the compiler optimizes this case better than a function static, but feel free to change that if it would actually work better.",
+      "parentUuid": "edcb2499_707a4522",
+      "range": {
+        "startLine": 31,
+        "startChar": 18,
+        "endLine": 31,
+        "endChar": 35
+      },
+      "revId": "b7c45c9cd1c619450625e4f3f9c2b1ee5961d667",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
