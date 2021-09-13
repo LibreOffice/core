@@ -29,19 +29,19 @@ typedef struct { const char *nspace, *name; } SerfPropName;
 
 struct DAVProperties
 {
-    static const OUString CREATIONDATE;
-    static const OUString DISPLAYNAME;
-    static const OUString GETCONTENTLANGUAGE;
-    static const OUString GETCONTENTLENGTH;
-    static const OUString GETCONTENTTYPE;
-    static const OUString GETETAG;
-    static const OUString GETLASTMODIFIED;
-    static const OUString LOCKDISCOVERY;
-    static const OUString RESOURCETYPE;
-    static const OUString SUPPORTEDLOCK;
-    static const OUString EXECUTABLE;
+    static constexpr OUStringLiteral CREATIONDATE = u"DAV:creationdate";
+    static constexpr OUStringLiteral DISPLAYNAME = u"DAV:displayname";
+    static constexpr OUStringLiteral GETCONTENTLANGUAGE = u"DAV:getcontentlanguage";
+    static constexpr OUStringLiteral GETCONTENTLENGTH = u"DAV:getcontentlength";
+    static constexpr OUStringLiteral GETCONTENTTYPE = u"DAV:getcontenttype";
+    static constexpr OUStringLiteral GETETAG = u"DAV:getetag";
+    static constexpr OUStringLiteral GETLASTMODIFIED = u"DAV:getlastmodified";
+    static constexpr OUStringLiteral LOCKDISCOVERY = u"DAV:lockdiscovery";
+    static constexpr OUStringLiteral RESOURCETYPE = u"DAV:resourcetype";
+    static constexpr OUStringLiteral SUPPORTEDLOCK = u"DAV:supportedlock";
+    static constexpr OUStringLiteral EXECUTABLE = u"http://apache.org/dav/props/executable";
 
-    static void createSerfPropName( const OUString & rFullName,
+    static void createSerfPropName( ::std::u16string_view rFullName,
                                     SerfPropName & rName );
     static void createUCBPropName ( const char * nspace,
                                     const char * name,

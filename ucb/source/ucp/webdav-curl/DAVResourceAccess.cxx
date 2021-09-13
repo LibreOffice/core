@@ -70,7 +70,7 @@ int DAVAuthListener_Impl::authenticate(
                     outPassWord,
                     true /*bAllowPersistentStoring*/,
                     bCanUseSystemCredentials );
-            xIH->handle( xRequest.get() );
+            xIH->handle( xRequest );
 
             rtl::Reference< ucbhelper::InteractionContinuation > xSelection
                 = xRequest->getSelection();
@@ -1053,7 +1053,7 @@ void DAVResourceAccess::getUserRequestHeaders(
 
 
 bool DAVResourceAccess::detectRedirectCycle(
-                                const OUString& rRedirectURL )
+        ::std::u16string_view const rRedirectURL)
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 

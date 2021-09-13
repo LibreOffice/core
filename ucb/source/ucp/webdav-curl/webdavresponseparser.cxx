@@ -29,6 +29,7 @@
 #include <com/sun/star/ucb/Lock.hpp>
 #include <map>
 #include <unordered_map>
+#include <rtl/ref.hxx>
 #include <sal/log.hxx>
 
 using namespace com::sun::star;
@@ -46,13 +47,13 @@ namespace
         WebDAVNamespace_last
     };
 
-    WebDAVNamespace StrToWebDAVNamespace(const OUString& rStr)
+    WebDAVNamespace StrToWebDAVNamespace(::std::u16string_view rStr)
     {
-        if(rStr == "DAV:")
+        if (rStr == u"DAV:")
         {
             return WebDAVNamespace_DAV;
         }
-        else if(rStr == "http://ucb.openoffice.org/dav/props/")
+        else if (rStr == u"http://ucb.openoffice.org/dav/props/")
         {
             return WebDAVNamespace_ucb_openoffice_org_dav_props;
         }
@@ -849,7 +850,8 @@ namespace
                     comphelper::getProcessComponentContext() );
 
                 // create parser; connect parser and filter
-                WebDAVResponseParser* pWebDAVResponseParser = new WebDAVResponseParser(eWebDAVResponseParserMode);
+                rtl::Reference<WebDAVResponseParser> const pWebDAVResponseParser(
+                        new WebDAVResponseParser(eWebDAVResponseParserMode));
                 uno::Reference< xml::sax::XDocumentHandler > xWebDAVHdl(pWebDAVResponseParser);
                 xParser->setDocumentHandler(xWebDAVHdl);
 
@@ -857,7 +859,7 @@ namespace
                 xParser->parseStream(myInputSource);
 
                 // get result
-                rResult = (pWebDAVResponseParser->*fn)();
+                rResult = (pWebDAVResponseParser.get()->*fn)();
             }
             catch(uno::Exception&)
             {

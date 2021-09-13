@@ -28,25 +28,10 @@ namespace http_dav_ucp
 
 class UCBDeadPropertyValue
 {
-private:
-    static const OUString aTypeString;
-    static const OUString aTypeLong;
-    static const OUString aTypeShort;
-    static const OUString aTypeBoolean;
-    static const OUString aTypeChar;
-    static const OUString aTypeByte;
-    static const OUString aTypeHyper;
-    static const OUString aTypeFloat;
-    static const OUString aTypeDouble;
-
-    static const OUString aXMLPre;
-    static const OUString aXMLMid;
-    static const OUString aXMLEnd;
-
 public:
     static bool supportsType( const css::uno::Type & rType );
 
-    static bool createFromXML( const OString & rInData,
+    static bool createFromXML( std::u16string_view rInData,
                                css::uno::Any & rOutData );
     static bool toXML( const css::uno::Any & rInData,
                        OUString & rOutData );

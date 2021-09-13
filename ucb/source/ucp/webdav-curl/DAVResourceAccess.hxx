@@ -195,7 +195,7 @@ public:
 private:
     const OUString & getRequestURI() const;
     /// @throws DAVException
-    bool detectRedirectCycle( const OUString& rRedirectURL );
+    bool detectRedirectCycle(::std::u16string_view rRedirectURL);
     /// @throws DAVException
     bool handleException( DAVException & e, int errorCount );
     /// @throws DAVException

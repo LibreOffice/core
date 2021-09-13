@@ -96,7 +96,7 @@ bool DateTimeHelper::ISO8601_To_DateTime (const OUString& s,
                 dateTime.Seconds = aDateTime.Seconds;
 
                 return true;
-             }
+            }
         }
     }
 
@@ -125,31 +125,31 @@ sal_Int32 DateTimeHelper::convertDayToInt (const OUString& day)
 }
 */
 
-sal_Int32 DateTimeHelper::convertMonthToInt (const OUString& month)
+sal_Int32 DateTimeHelper::convertMonthToInt(std::u16string_view month)
 {
-    if (month == "Jan")
+    if (month == u"Jan")
         return 1;
-    else if (month == "Feb")
+    else if (month == u"Feb")
         return 2;
-    else if (month == "Mar")
+    else if (month == u"Mar")
         return 3;
-    else if (month == "Apr")
+    else if (month == u"Apr")
         return 4;
-    else if (month == "May")
+    else if (month == u"May")
         return 5;
-    else if (month == "Jun")
+    else if (month == u"Jun")
         return 6;
-    else if (month == "Jul")
+    else if (month == u"Jul")
         return 7;
-    else if (month == "Aug")
+    else if (month == u"Aug")
         return 8;
-    else if (month == "Sep")
+    else if (month == u"Sep")
         return 9;
-    else if (month == "Oct")
+    else if (month == u"Oct")
         return 10;
-    else if (month == "Nov")
+    else if (month == u"Nov")
         return 11;
-    else if (month == "Dec")
+    else if (month == u"Dec")
         return 12;
     else
         return 0;
