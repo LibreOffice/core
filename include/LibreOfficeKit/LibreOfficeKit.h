@@ -467,6 +467,15 @@ struct _LibreOfficeKitDocumentClass
                             int nViewId,
                             bool isFreemium);
 
+    /// @see lok::Document::setRestrictedCommandList
+    void (*setRestrictedCommandList) (LibreOfficeKitDocument* pThis,
+                                const char* restrictedCommandList);
+
+    /// @see lok::Document::setRestrictedView
+    void (*setRestrictedView) (LibreOfficeKitDocument* pThis,
+                            int nViewId,
+                            bool isRestricted);
+
     /// @see lok::Document::renderSearchResult
     bool (*renderSearchResult) (LibreOfficeKitDocument* pThis,
                                 const char* pSearchResult,
