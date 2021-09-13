@@ -99,26 +99,22 @@ ScMyAddress ScAccessibleSpreadsheet::CalcScAddressFromRangeList(ScRangeList *pMa
         for(sal_Int32 row = nMinRow ; row <= nMaxRow ; ++row)
         {
             m_vecTempCol.clear();
+            for (ScRange const & r : m_vecTempRange)
             {
-                for (ScRange const & r : m_vecTempRange)
+                if ( row >= r.aStart.Row() && row <= r.aEnd.Row())
                 {
-                    if ( row >= r.aStart.Row() && row <= r.aEnd.Row())
-                    {
-                        m_vecTempCol.emplace_back(r.aStart.Col(),r.aEnd.Col());
-                    }
+                    m_vecTempCol.emplace_back(r.aStart.Col(),r.aEnd.Col());
                 }
             }
             std::sort(m_vecTempCol.begin(),m_vecTempCol.end(),CompMinCol);
+            for (const PAIR_COL &pairCol : m_vecTempCol)
             {
-                for(const PAIR_COL &pairCol : m_vecTempCol)
+                sal_uInt16 nCol = pairCol.second - pairCol.first + 1;
+                if (nCol + nCurrentIndex > nSelectedChildIndex)
                 {
-                    sal_uInt16 nCol = pairCol.second - pairCol.first + 1;
-                    if (nCol + nCurrentIndex > nSelectedChildIndex)
-                    {
-                        return ScMyAddress(static_cast<SCCOL>(pairCol.first + nSelectedChildIndex - nCurrentIndex), row, maActiveCell.Tab());
-                    }
-                    nCurrentIndex += nCol;
+                    return ScMyAddress(static_cast<SCCOL>(pairCol.first + nSelectedChildIndex - nCurrentIndex), row, maActiveCell.Tab());
                 }
+                nCurrentIndex += nCol;
             }
         }
     }
