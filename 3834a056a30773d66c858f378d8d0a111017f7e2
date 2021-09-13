@@ -95,6 +95,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b8aa1cab_2f166b61",
+        "filename": "offapi/com/sun/star/drawing/BarCode.idl",
+        "patchSetId": 9
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-13T13:01:03Z",
+      "side": 1,
+      "message": "From \u003chttps://en.wikipedia.org/wiki/QR_code#Error_correction\u003e \"QR codes use Reed–Solomon error correction ...\" and the explicit mention there of the four L/M/Q/H levels that correpsond to the four css.drawing.QRCodeErrorCorrection constants, it does look like that is a concept specific to QR codes, and not to bar codes in general, after all?\n\nIf it is not a general bar code concept, but needed here anyway, that should be mentioned here (maybe along with a preferred value to use in cases where the given type does not make use of it?).\n\nBut if it is a general bar code concept, why do you not also rename css.drawing.QRCodeErrorCorrection?",
+      "parentUuid": "d6e7862d_e52d360e",
+      "revId": "3834a056a30773d66c858f378d8d0a111017f7e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9dcee32b_dfcf0929",
         "filename": "offapi/com/sun/star/drawing/BarCode.idl",
         "patchSetId": 9
