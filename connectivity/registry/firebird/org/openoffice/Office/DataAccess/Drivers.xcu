@@ -77,13 +77,13 @@
       <node oor:name="MetaData">
       </node>
     </node>
-    <!-- Firebird FILE Driver -->
+    <!-- Firebird EXTERNAL Driver -->
     <node oor:name="sdbc:firebird:*" oor:op="replace">
       <prop oor:name="Driver">
         <value>com.sun.star.comp.sdbc.firebird.Driver</value>
       </prop>
       <prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
-        <value xml:lang="en-US">Firebird File</value>
+        <value xml:lang="en-US">Firebird External</value>
       </prop>
       <node oor:name="Properties">
         <!-- Don't use ODBC syntax for date&time literals and (full) outer joins,
@@ -122,6 +122,11 @@
         <node oor:name="SupportsDBCreation" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:boolean">
             <value>true</value>
+          </prop>
+        </node>
+        <node oor:name="Authentication" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:string">
+            <value>UserPassword</value>
           </prop>
         </node>
       </node>
