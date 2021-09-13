@@ -432,6 +432,7 @@ certain functionality.
 @li @c ucb.ucp.ftp
 @li @c ucb.ucp.gio
 @li @c ucb.ucp.webdav
+@li @c ucb.ucp.webdav.curl
 
 @section unotools
 
