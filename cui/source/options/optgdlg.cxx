@@ -1789,7 +1789,13 @@ IMPL_LINK( OfaLanguagesTabPage, DatePatternsHdl, weld::Entry&, rEd, void )
         }
     }
     if (bModified)
-        rEd.set_text(aBuf.makeStringAndClear());  // This even keeps the cursor position so all good.
+    {
+        // gtk3 keeps the cursor position on equal length set_text() but at
+        // least the 'gen' backend does not and resets to 0.
+        const int nCursorPos = rEd.get_position();
+        rEd.set_text(aBuf.makeStringAndClear());
+        rEd.set_position(nCursorPos);
+    }
     if (bValid)
         rEd.set_message_type(weld::EntryMessageType::Normal);
     else
