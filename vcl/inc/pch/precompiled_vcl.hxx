@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-09-12 23:19:52 using:
+ Generated on 2021-09-13 22:49:19 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -191,6 +191,7 @@
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <font/FontSelectPattern.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <i18nlangtag/lang.h>
@@ -261,7 +262,6 @@
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <ImplOutDevData.hxx>
-#include <PhysicalFontCollection.hxx>
 #include <accel.hxx>
 #include <brdwin.hxx>
 #include <configsettings.hxx>

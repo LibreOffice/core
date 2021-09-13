@@ -68,7 +68,6 @@ struct ImplOutDevData;
 class LogicalFontInstance;
 struct SystemGraphicsData;
 class ImplFontCache;
-class PhysicalFontCollection;
 class ImplMultiTextLineInfo;
 class SalGraphics;
 class Gradient;
@@ -104,6 +103,7 @@ namespace vcl
     class WindowOutputDevice;
     namespace font {
         struct Feature;
+        class PhysicalFontCollection;
         class PhysicalFontFaceCollection;
     }
 

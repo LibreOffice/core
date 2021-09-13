@@ -28,9 +28,7 @@
 
 #include <unotools/fontcfg.hxx>
 
-#include <PhysicalFontFace.hxx>
-
-class PhysicalFontCollection;
+#include "PhysicalFontFace.hxx"
 
 namespace vcl::font
 {
@@ -58,6 +56,7 @@ struct typed_flags<vcl::font::FontTypeFaces> : is_typed_flags<vcl::font::FontTyp
 
 namespace vcl::font
 {
+class PhysicalFontCollection;
 class PhysicalFontFace;
 class PhysicalFontFaceCollection;
 

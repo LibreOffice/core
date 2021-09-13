@@ -23,7 +23,7 @@
 
 #include <vcl/dllapi.h>
 
-#include "font/PhysicalFontFamily.hxx"
+#include "PhysicalFontFamily.hxx"
 #include "fontinstance.hxx"
 
 #include <array>
@@ -34,9 +34,6 @@ namespace vcl::font
 {
 class GlyphFallbackFontSubstitution;
 class PreMatchFontSubstitution;
-}
-
-using namespace vcl::font;
 
 // TODO: merge with ImplFontCache
 // TODO: rename to LogicalFontManager
@@ -44,7 +41,7 @@ using namespace vcl::font;
 class VCL_PLUGIN_PUBLIC PhysicalFontCollection final
 {
 public:
-    explicit                PhysicalFontCollection();
+    explicit                PhysicalFontCollection() = default;
                             ~PhysicalFontCollection();
 
     // fill the list with device font faces
@@ -74,16 +71,16 @@ public:
     std::unique_ptr<PhysicalFontFaceCollection> GetFontFaceCollection() const;
 
 private:
-    mutable bool            mbMatchData;    // true if matching attributes are initialized
+    mutable bool            mbMatchData = false;    // true if matching attributes are initialized
 
     typedef std::unordered_map<OUString, std::unique_ptr<PhysicalFontFamily>> PhysicalFontFamilies;
     PhysicalFontFamilies    maPhysicalFontFamilies;
 
-    PreMatchFontSubstitution* mpPreMatchHook;       // device specific prematch substitution
-    GlyphFallbackFontSubstitution* mpFallbackHook;  // device specific glyph fallback substitution
+    PreMatchFontSubstitution* mpPreMatchHook = nullptr;       // device specific prematch substitution
+    GlyphFallbackFontSubstitution* mpFallbackHook = nullptr;  // device specific glyph fallback substitution
 
     mutable std::unique_ptr<std::array<PhysicalFontFamily*,MAX_GLYPHFALLBACK>>  mpFallbackList;
-    mutable int             mnFallbackCount;
+    mutable int             mnFallbackCount = -1;
 
     void                    ImplInitMatchData() const;
     void                    ImplInitGenericGlyphFallback() const;
@@ -94,5 +91,7 @@ private:
     PhysicalFontFamily*     ImplFindFontFamilyOfDefaultFont() const;
 
 };
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
