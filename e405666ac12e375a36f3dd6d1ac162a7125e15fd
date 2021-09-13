@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86ecb027_a16d2477",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-09-13T09:10:54Z",
+      "side": 1,
+      "message": "I consider both of these to be rather corner cases, but otherwise ok.\n",
+      "revId": "e405666ac12e375a36f3dd6d1ac162a7125e15fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
