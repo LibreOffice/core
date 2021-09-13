@@ -37,6 +37,7 @@ $(eval $(call gb_Library_use_externals,ucpdav1,\
 
 $(eval $(call gb_Library_add_exception_objects,ucpdav1,\
 	ucb/source/ucp/webdav-curl/ContentProperties \
+	ucb/source/ucp/webdav-curl/CurlSession \
 	ucb/source/ucp/webdav-curl/CurlUri \
 	ucb/source/ucp/webdav-curl/DAVProperties \
 	ucb/source/ucp/webdav-curl/DAVResourceAccess \
