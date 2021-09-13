@@ -32,7 +32,7 @@
 #include <unx/genpspgraphics.h>
 
 #include <sallayout.hxx>
-#include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontCollection.hxx>
 
 #include <QtGui/QGlyphRun>
 #include <QtGui/QFontDatabase>
@@ -84,7 +84,7 @@ bool QtGraphics::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) c
     return m_pTextStyle[0]->GetFontFace()->GetFontCapabilities(rFontCapabilities);
 }
 
-void QtGraphics::GetDevFontList(PhysicalFontCollection* pPFC)
+void QtGraphics::GetDevFontList(vcl::font::PhysicalFontCollection* pPFC)
 {
     static const bool bUseFontconfig = (nullptr == getenv("SAL_VCL_QT5_NO_FONTCONFIG"));
 
@@ -124,7 +124,7 @@ void QtGraphics::GetDevFontList(PhysicalFontCollection* pPFC)
 
 void QtGraphics::ClearDevFontCache() {}
 
-bool QtGraphics::AddTempDevFont(PhysicalFontCollection*, const OUString& /*rFileURL*/,
+bool QtGraphics::AddTempDevFont(vcl::font::PhysicalFontCollection*, const OUString& /*rFileURL*/,
                                 const OUString& /*rFontName*/)
 {
     return false;
