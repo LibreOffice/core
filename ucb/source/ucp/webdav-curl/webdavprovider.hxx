@@ -46,8 +46,8 @@ namespace http_dav_ucp {
 // contents ) according to this scheme.
 #define VNDSUNSTARWEBDAV_URL_SCHEME  "vnd.sun.star.webdav"
 #define VNDSUNSTARWEBDAVS_URL_SCHEME u"vnd.sun.star.webdavs"
-#define HTTP_URL_SCHEME              "http"
-#define HTTPS_URL_SCHEME             "https"
+#define HTTP_URL_SCHEME              u"http"
+#define HTTPS_URL_SCHEME             u"https"
 #define DAV_URL_SCHEME               u"dav"
 #define DAVS_URL_SCHEME              u"davs"
 #define WEBDAV_URL_SCHEME            u"webdav"

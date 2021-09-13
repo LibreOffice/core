@@ -20,7 +20,7 @@
 #include <memory>
 #include "DAVSessionFactory.hxx"
 #include "SerfSession.hxx"
-#include "SerfUri.hxx"
+#include "CurlUri.hxx"
 
 using namespace http_dav_ucp;
 using namespace com::sun::star;
@@ -43,7 +43,7 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
 
     if ( aIt == m_aMap.end() )
     {
-        SerfUri aURI( inUri );
+        CurlUri const aURI( inUri );
 
         std::unique_ptr< DAVSession > xElement(
             new SerfSession( this, inUri, *m_xProxyDecider ) );
@@ -67,7 +67,7 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
         // If URL scheme is different from http or https we definitely
         // have to use a proxy and therefore can optimize the getProxy
         // call a little:
-        SerfUri aURI( inUri );
+        CurlUri const aURI( inUri );
 
         aIt->second = new SerfSession( this, inUri, *m_xProxyDecider );
         aIt->second->m_aContainerIt = aIt;
