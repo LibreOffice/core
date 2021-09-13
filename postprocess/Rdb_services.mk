@@ -179,6 +179,9 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(filter serf,$(WITH_WEBDAV)), \
 		ucb/source/ucp/webdav/ucpdav1 \
 	) \
+	$(if $(filter curl,$(WITH_WEBDAV)), \
+		ucb/source/ucp/webdav-curl/ucpdav1 \
+	) \
 	$(call gb_Helper_optional,SCRIPTING, \
 		basctl/util/basctl \
 		sc/util/vbaobj \
