@@ -1047,6 +1047,18 @@ DECLARE_HTMLEXPORT_TEST(testFieldShadeReqIf, "field-shade-reqif.odt")
     assertXPath(pDoc, "/html/body/div/p[1]/sdfield", 0);
 }
 
+DECLARE_HTMLEXPORT_TEST(testTdf126879, "tdf126879.odt")
+{
+    const OString aExpected("<!DOCTYPE html>");
+    SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
+    CPPUNIT_ASSERT(pStream);
+    const OString aActual(read_uInt8s_ToOString(*pStream, aExpected.getLength()));
+    // Without the fix in place, this test would have failed with
+    // - Expected: <!DOCTYPE html>
+    // - Actual  : <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testBlockQuoteReqIf)
 {
     // Build a document model that uses the Quotations paragraph style.
