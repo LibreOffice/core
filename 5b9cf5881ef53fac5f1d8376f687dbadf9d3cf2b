@@ -1,6 +1,24 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ddbc846_a5af65f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-09-13T09:37:43Z",
+      "side": 1,
+      "message": "\u003e Patch Set 28:\n\u003e \n\u003e \u003e it\u0027s a feature, not a bugfix.\n\u003e \n\u003e I\u0027m not so sure.\n\u003e We have added Neumaier for NONE case previously for 7.2 in tdf#137679; but kept simple Kahan sum in SSE2, which resulted in inconsistent result depending on used instruction set - see e.g. https://bugs.documentfoundation.org/show_bug.cgi?id\u003d137679#c66. In this regard, tdf#142307 could be considered a bugfix (at least in its SSE2 part).\n\nAnd introduced https://bugs.documentfoundation.org/show_bug.cgi?id\u003d144386 (though fixed with https://gerrit.libreoffice.org/c/core/+/121929).\n\nSuch surprises should not happen in a 7.2.y release",
+      "revId": "5b9cf5881ef53fac5f1d8376f687dbadf9d3cf2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "19c16657_84b41991",
         "filename": "include/tools/cpuid.hxx",
@@ -20,10 +38,10 @@
         "endChar": 19
       },
       "revId": "5b9cf5881ef53fac5f1d8376f687dbadf9d3cf2b",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": true
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "914fe683_0358de88",
         "filename": "include/tools/cpuid.hxx",
@@ -44,10 +62,10 @@
         "endChar": 19
       },
       "revId": "5b9cf5881ef53fac5f1d8376f687dbadf9d3cf2b",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": false
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "f74af372_47dddfdb",
         "filename": "include/tools/cpuid.hxx",
@@ -68,10 +86,10 @@
         "endChar": 19
       },
       "revId": "5b9cf5881ef53fac5f1d8376f687dbadf9d3cf2b",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": false
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "b9706704_77c91904",
         "filename": "include/tools/cpuid.hxx",
@@ -91,10 +109,10 @@
         "endChar": 112
       },
       "revId": "5b9cf5881ef53fac5f1d8376f687dbadf9d3cf2b",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": true
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "719f5688_5970d13a",
         "filename": "include/tools/cpuid.hxx",
@@ -115,10 +133,10 @@
         "endChar": 112
       },
       "revId": "5b9cf5881ef53fac5f1d8376f687dbadf9d3cf2b",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": false
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "c3579c6f_f1945314",
         "filename": "include/tools/cpuid.hxx",
@@ -139,8 +157,7 @@
         "endChar": 112
       },
       "revId": "5b9cf5881ef53fac5f1d8376f687dbadf9d3cf2b",
-      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
-      "unresolved": false
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
