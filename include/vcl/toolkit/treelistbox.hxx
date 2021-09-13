@@ -556,13 +556,6 @@ public:
                                          bool bChildrenOnDemand = false,
                                          sal_uInt32 nPos=TREELIST_APPEND, void* pUserData = nullptr);
 
-    virtual SvTreeListEntry*    InsertEntry( const OUString& rText,
-                                         const Image& rExpandedEntryBmp,
-                                         const Image& rCollapsedEntryBmp,
-                                         SvTreeListEntry* pParent = nullptr,
-                                         bool bChildrenOnDemand = false,
-                                         sal_uInt32 nPos = TREELIST_APPEND, void* pUserData = nullptr );
-
     const Image&    GetDefaultExpandedEntryBmp( ) const;
     const Image&    GetDefaultCollapsedEntryBmp( ) const;
 

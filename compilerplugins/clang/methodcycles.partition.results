@@ -1,12 +1,8 @@
-callDict size 4
+callDict size 2
 
-
-std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > writerfilter::ooxml::OOXMLFastContextHandler::getType() const
-writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:88
 
 void sax_fastparser::FastSaxSerializer::ForMerge::print()
-sax/source/tools/fastserializer.hxx:184
+sax/source/tools/fastserializer.hxx:185
 
-SvTreeListEntry * SvTabListBox::InsertEntryToColumn(const rtl::OUString &,unsigned long,unsigned short,void *)
-include/vcl/svtabbx.hxx:86
-
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > writerfilter::ooxml::OOXMLFastContextHandler::getType() const
+writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:85

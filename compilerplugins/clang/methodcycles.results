@@ -1,93 +1,157 @@
 found cycle
-    unsigned long slideshow::internal::hash::operator()(const type-parameter-?-? &) const
-    slideshow/source/inc/tools.hxx:84
-
-    unsigned long com::sun::star::uno::hash_value(const Reference<type-parameter-?-?> &)
-    slideshow/source/inc/tools.hxx:94
-
-found cycle
-    void (anonymous namespace)::traceValue(_typelib_TypeDescriptionReference *,void *)
-    cppu/source/LogBridge/LogBridge.cxx:128
+    void LogProbe(bool,void *,void *,_typelib_TypeDescriptionReference *,_typelib_MethodParameter *,int,const _typelib_TypeDescription *,void *,void **,_uno_Any **)
+    cppu/source/LogBridge/LogBridge.cxx:188
 
     void uno_ext_getMapping(_uno_Mapping **,_uno_Environment *,_uno_Environment *)
     bridges/source/jni_uno/jni_bridge.cxx:514
 
-    void LogProbe(bool,void *,void *,_typelib_TypeDescriptionReference *,_typelib_MethodParameter *,int,const _typelib_TypeDescription *,void *,void **,_uno_Any **)
-    cppu/source/LogBridge/LogBridge.cxx:188
+    void (anonymous namespace)::traceValue(_typelib_TypeDescriptionReference *,void *)
+    cppu/source/LogBridge/LogBridge.cxx:128
 
 found cycle
-    void chart::ChartTypeDialogController::adjustParameterToMainType(chart::ChartTypeParameter &)
-    chart2/source/controller/dialogs/ChartTypeDialogController.hxx:116
+    void svl::Items_t::fill(typename array<pair<unsigned short, unsigned short>, sizeof...(WIDs) / 2>::iterator)
+    include/svl/whichranges.hxx:52
 
-    chart::ChartTypeTabPage::ChartTypeTabPage(weld::Container *,weld::DialogController *,const com::sun::star::uno::Reference<com::sun::star::chart2::XChartDocument> &,bool)
-    chart2/source/controller/dialogs/tp_ChartType.hxx:48
-
-    void chart::ChartTypeTabPage::selectMainType()
-    chart2/source/controller/dialogs/tp_ChartType.hxx:67
-
-    void chart::ChartTypeTabPage::LinkStubSelectMainTypeHdl(void *,weld::TreeView &)
-    chart2/source/controller/dialogs/tp_ChartType.hxx:69
-
-    void chart::ChartTypeTabPage::SelectMainTypeHdl(weld::TreeView &)
-    chart2/source/controller/dialogs/tp_ChartType.hxx:69
+    array<std::pair<unsigned short, unsigned short>, sizeof...(WIDs) / 2> svl::Items_t::make()
+    include/svl/whichranges.hxx:59
 
 found cycle
-    void SbxVariable::Dump(SvStream &,bool)
-    include/basic/sbxvar.hxx:262
+    void weld::IconView::select_all()
+    include/vcl/weld.hxx:1385
 
+    void weld::IconView::unselect(int)
+    include/vcl/weld.hxx:1370
+
+found cycle
+    SvTreeListEntry * SvTreeListBox::InsertEntry(const rtl::OUString &,const Image &,const Image &,SvTreeListEntry *,bool,unsigned int,void *)
+    include/vcl/toolkit/treelistbox.hxx:559
+
+    SvTreeListEntry * SvTabListBox::InsertEntryToColumn(const rtl::OUString &,const Image &,const Image &,SvTreeListEntry *,unsigned int,unsigned short,void *)
+    include/vcl/toolkit/svtabbx.hxx:79
+
+found cycle
+    void CGM::ImplDefaultReplacement()
+    filter/source/graphicfilter/icgm/cgm.hxx:115
+
+    void CGM::ImplDoClass()
+    filter/source/graphicfilter/icgm/cgm.hxx:116
+
+    void CGM::ImplDoClass0()
+    filter/source/graphicfilter/icgm/cgm.hxx:117
+
+    unsigned int ImportCGM(SvStream &,const com::sun::star::uno::Reference<com::sun::star::frame::XModel> &,const com::sun::star::uno::Reference<com::sun::star::task::XStatusIndicator> &)
+    filter/source/graphicfilter/icgm/cgm.cxx:686
+
+    bool CGM::Write(SvStream &)
+    filter/source/graphicfilter/icgm/cgm.hxx:137
+
+found cycle
+    bool ::operator()(weld::TreeIter &) const
+    reportdesign/source/ui/dlg/Navigator.cxx:234
+
+    void basctl::(anonymous namespace)::implCollapseModifiedObjectEntry(weld::TreeIter &,weld::TreeView &)
+    basctl/source/basicide/baside2b.cxx:2286
+
+found cycle
+    bool ::operator()(weld::TreeIter &) const
+    reportdesign/source/ui/dlg/Navigator.cxx:234
+
+    bool FmEntryData::IsEqualWithoutChildren(FmEntryData *)
+    svx/source/inc/fmexpl.hxx:159
+
+found cycle
+    void sdext::presenter::PresenterToolBar::ProcessEntry(const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> &,const sdext::presenter::PresenterToolBar::Context &)
+    sdext/source/presenter/PresenterToolBar.hxx:183
+
+    void ::operator()(const rtl::OUString &,const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> &) const
+    sdext/source/presenter/PresenterToolBar.cxx:611
+
+    void sdext::presenter::(anonymous namespace)::Element::SetModes(const std::shared_ptr<sdext::presenter::(anonymous namespace)::ElementMode> &,const std::shared_ptr<sdext::presenter::(anonymous namespace)::ElementMode> &,const std::shared_ptr<sdext::presenter::(anonymous namespace)::ElementMode> &,const std::shared_ptr<sdext::presenter::(anonymous namespace)::ElementMode> &,const std::shared_ptr<sdext::presenter::(anonymous namespace)::ElementMode> &)
+    sdext/source/presenter/PresenterToolBar.cxx:129
+
+found cycle
+    void cppcanvas::internal::ImplRenderer::createActions(GDIMetaFile &,const cppcanvas::internal::ActionFactoryParameters &,bool)
+    cppcanvas/source/inc/implrenderer.hxx:170
+
+    cppcanvas::internal::ImplRenderer::ImplRenderer(const std::shared_ptr<cppcanvas::Canvas> &,const GDIMetaFile &,const cppcanvas::Renderer::Parameters &)
+    cppcanvas/source/inc/implrenderer.hxx:122
+
+    void cppcanvas::internal::ImplRenderer::createGradientAction(const tools::PolyPolygon &,const Gradient &,const cppcanvas::internal::ActionFactoryParameters &,bool,bool)
+    cppcanvas/source/inc/implrenderer.hxx:185
+
+found cycle
     void SbxObject::Dump(SvStream &,bool)
     include/basic/sbxobj.hxx:80
 
     void SbRtl_DumpAllObjects(StarBASIC *,SbxArray &,bool)
-    basic/source/inc/rtlproto.hxx:293
+    basic/source/inc/rtlproto.hxx:290
+
+    void SbxVariable::Dump(SvStream &,bool)
+    include/basic/sbxvar.hxx:268
 
 found cycle
-    SvxMenuConfigPage::SvxMenuConfigPage(weld::Container *,weld::DialogController *,const SfxItemSet &,bool)
-    cui/source/inc/SvxMenuConfigPage.hxx:59
+    unsigned long com::sun::star::uno::hash_value(const Reference<type-parameter-?-?> &)
+    slideshow/source/inc/tools.hxx:86
 
-    void SvxMenuConfigPage::LinkStubGearHdl(void *,const rtl::OString &)
-    cui/source/inc/SvxMenuConfigPage.hxx:35
-
-    rtl::OUString SvxConfigPageHelper::generateCustomMenuURL(std::::vector<SvxConfigEntry *, std::allocator<SvxConfigEntry *> > *,int)
-    cui/source/inc/SvxConfigPageHelper.hxx:46
-
-    SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(weld::Window *,std::::vector<SvxConfigEntry *, std::allocator<SvxConfigEntry *> > *,const SvxConfigEntry *,bool)
-    cui/source/inc/cfg.hxx:507
-
-    void SvxMenuConfigPage::GearHdl(const rtl::OString &)
-    cui/source/inc/SvxMenuConfigPage.hxx:35
+    unsigned long slideshow::internal::hash::operator()(const type-parameter-?-? &) const
+    slideshow/source/inc/tools.hxx:76
 
 found cycle
-    sd::UndoAnimationPath::UndoAnimationPath(SdDrawDocument *,SdPage *,const com::sun::star::uno::Reference<com::sun::star::animations::XAnimationNode> &)
-    sd/inc/undoanim.hxx:55
+    std::unique_ptr<SdrUndoAction, std::default_delete<SdrUndoAction> > SdrUndoFactory::CreateUndoPageRemoveMasterPage(SdrPage &)
+    include/svx/svdundo.hxx:736
 
-    sd::UndoAnimationPathImpl::UndoAnimationPathImpl(SdPage *,const com::sun::star::uno::Reference<com::sun::star::animations::XAnimationNode> &)
-    sd/source/core/undoanim.cxx:119
-
-    int sd::EffectSequenceHelper::getOffsetFromEffect(const std::shared_ptr<sd::CustomAnimationEffect> &) const
-    sd/inc/CustomAnimationEffect.hxx:324
+    SdrUndoDelPage::SdrUndoDelPage(SdrPage &)
+    include/svx/svdundo.hxx:562
 
 found cycle
-    sd::UndoAnimationPath::UndoAnimationPath(SdDrawDocument *,SdPage *,const com::sun::star::uno::Reference<com::sun::star::animations::XAnimationNode> &)
-    sd/inc/undoanim.hxx:55
+    void oox::PropertyMap::dumpCode(const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> &)
+    include/oox/helper/propertymap.hxx:113
 
-    std::shared_ptr<sd::CustomAnimationEffect> sd::EffectSequenceHelper::findEffect(const com::sun::star::uno::Reference<com::sun::star::animations::XAnimationNode> &) const
-    sd/inc/CustomAnimationEffect.hxx:288
-
-    sd::UndoAnimationPathImpl::UndoAnimationPathImpl(SdPage *,const com::sun::star::uno::Reference<com::sun::star::animations::XAnimationNode> &)
-    sd/source/core/undoanim.cxx:119
+    const char * oox::lclDumpAnyValueCode(const com::sun::star::uno::Any &,int)
+    oox/source/helper/propertymap.cxx:548
 
 found cycle
-    void GtkInstanceAssistant::find_sidebar(_GtkWidget *,void *)
-    vcl/unx/gtk3/gtk3gtkinst.cxx:4162
-
-    GtkInstanceAssistant::GtkInstanceAssistant(_GtkAssistant *,GtkInstanceBuilder *,bool)
-    vcl/unx/gtk3/gtk3gtkinst.cxx:4185
-
-found cycle
-    void ScDPResultDimension::DumpState(const ScDPResultMember *,ScDocument *,ScAddress &) const
-    sc/inc/dptabres.hxx:573
-
     void ScDPResultMember::DumpState(const ScDPResultMember *,ScDocument *,ScAddress &) const
-    sc/inc/dptabres.hxx:405
+    sc/inc/dptabres.hxx:404
+
+    void ScDPResultDimension::DumpState(const ScDPResultMember *,ScDocument *,ScAddress &) const
+    sc/inc/dptabres.hxx:572
+
+found cycle
+    void ScXMLSourceDlg::LoadSourceFileStructure(const rtl::OUString &)
+    sc/source/ui/inc/xmlsourcedlg.hxx:77
+
+    void ScXMLSourceDlg::LinkStubBtnPressedHdl(void *,weld::Button &)
+    sc/source/ui/inc/xmlsourcedlg.hxx:101
+
+    void (anonymous namespace)::populateTree(weld::TreeView &,orcus::xml_structure_tree::walker &,const orcus::xml_structure_tree::entity_name &,bool,const weld::TreeIter *,ScOrcusXMLTreeParam &)
+    sc/source/filter/orcus/xmlcontext.cxx:70
+
+    void ScXMLSourceDlg::SelectSourceFile()
+    sc/source/ui/inc/xmlsourcedlg.hxx:76
+
+    void ScXMLSourceDlg::BtnPressedHdl(weld::Button &)
+    sc/source/ui/inc/xmlsourcedlg.hxx:101
+
+    ScXMLSourceDlg::ScXMLSourceDlg(SfxBindings *,SfxChildWindow *,weld::Window *,ScDocument *)
+    sc/source/ui/inc/xmlsourcedlg.hxx:66
+
+    void ScOrcusXMLContext::loadXMLStructure(weld::TreeView &,ScOrcusXMLTreeParam &)
+    sc/inc/orcusfilters.hxx:63
+
+found cycle
+    void (anonymous namespace)::getFieldLinks(ScOrcusImportXMLParam::RangeLink &,std::::vector<unsigned long, std::allocator<unsigned long> > &,const weld::TreeView &,const weld::TreeIter &)
+    sc/source/ui/xmlsource/xmlsourcedlg.cxx:448
+
+    void ScXMLSourceDlg::LinkStubBtnPressedHdl(void *,weld::Button &)
+    sc/source/ui/inc/xmlsourcedlg.hxx:101
+
+    void ScXMLSourceDlg::BtnPressedHdl(weld::Button &)
+    sc/source/ui/inc/xmlsourcedlg.hxx:101
+
+    ScXMLSourceDlg::ScXMLSourceDlg(SfxBindings *,SfxChildWindow *,weld::Window *,ScDocument *)
+    sc/source/ui/inc/xmlsourcedlg.hxx:66
+
+    void ScXMLSourceDlg::OkPressed()
+    sc/source/ui/inc/xmlsourcedlg.hxx:97
 

@@ -1574,34 +1574,6 @@ SvTreeListEntry* SvTreeListBox::InsertEntry(
     return pEntry;
 }
 
-SvTreeListEntry* SvTreeListBox::InsertEntry( const OUString& rText,
-    const Image& aExpEntryBmp, const Image& aCollEntryBmp,
-    SvTreeListEntry* pParent, bool bChildrenOnDemand, sal_uInt32 nPos, void* pUser )
-{
-    nTreeFlags |= SvTreeFlags::MANINS;
-
-    aCurInsertedExpBmp = aExpEntryBmp;
-    aCurInsertedColBmp = aCollEntryBmp;
-
-    SvTreeListEntry* pEntry = new SvTreeListEntry;
-    pEntry->SetUserData( pUser );
-    InitEntry( pEntry, rText, aCollEntryBmp, aExpEntryBmp );
-
-    pEntry->EnableChildrenOnDemand( bChildrenOnDemand );
-
-    if( !pParent )
-        Insert( pEntry, nPos );
-    else
-        Insert( pEntry, pParent, nPos );
-
-    aPrevInsertedExpBmp = aExpEntryBmp;
-    aPrevInsertedColBmp = aCollEntryBmp;
-
-    nTreeFlags &= ~SvTreeFlags::MANINS;
-
-    return pEntry;
-}
-
 void SvTreeListBox::SetEntryText(SvTreeListEntry* pEntry, const OUString& rStr)
 {
     SvLBoxString* pItem = static_cast<SvLBoxString*>(pEntry->GetFirstItem(SvLBoxItemType::String));

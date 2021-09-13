@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 from collections import defaultdict
 import io
@@ -33,7 +33,7 @@ def normalizeTypeParams( line ):
 # --------------------------------------------------------------------------------------------
 
 cnt = 0
-with io.open("workdir/loplugin.methodcycles.log", "rb", buffering=1024*1024) as txt:
+with io.open("workdir/loplugin.methodcycles.log", "r", buffering=1024*1024) as txt:
     for line in txt:
         tokens = line.strip().split("\t")
         if tokens[0] == "definition:":
@@ -131,10 +131,10 @@ uno_constructor_entrypoints = set()
 git_grep_process = subprocess.Popen("git grep -h 'constructor=' -- *.component", stdout=subprocess.PIPE, shell=True)
 with git_grep_process.stdout as txt:
     for line in txt:
-        idx1 = line.find("\"")
-        idx2 = line.find("\"", idx1 + 1)
+        idx1 = line.find(b"\"")
+        idx2 = line.find(b"\"", idx1 + 1)
         func = line[idx1+1 : idx2]
-        uno_constructor_entrypoints.add(func)
+        uno_constructor_entrypoints.add(func.decode('utf-8'))
 for caller in callDict:
     if "(com::sun::star::uno::XComponentContext *,const com::sun::star::uno::Sequence<com::sun::star::uno::Any> &)" in caller:
         for func in uno_constructor_entrypoints:
