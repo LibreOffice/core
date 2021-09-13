@@ -34,7 +34,7 @@
 #include <jobset.h>
 #include <print.h>
 #include <ImplOutDevData.hxx>
-#include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <font/fontsubstitution.hxx>
 #include <impfontcache.hxx>
@@ -665,7 +665,7 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
 
     // Init data
     ImplUpdatePageData();
-    mxFontCollection = std::make_shared<PhysicalFontCollection>();
+    mxFontCollection = std::make_shared<vcl::font::PhysicalFontCollection>();
     mxFontCache = std::make_shared<ImplFontCache>();
     mpGraphics->GetDevFontList(mxFontCollection.get());
 }
