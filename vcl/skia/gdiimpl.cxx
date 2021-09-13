@@ -1213,37 +1213,6 @@ bool SkiaSalGraphicsImpl::drawPolyPolygonBezier(sal_uInt32, const sal_uInt32*, c
     return false;
 }
 
-static void copyArea(SkCanvas* canvas, sk_sp<SkSurface> surface, tools::Long nDestX,
-                     tools::Long nDestY, tools::Long nSrcX, tools::Long nSrcY,
-                     tools::Long nSrcWidth, tools::Long nSrcHeight, bool srcIsRaster,
-                     bool destIsRaster)
-{
-    // Using SkSurface::draw() should be more efficient than SkSurface::makeImageSnapshot(),
-    // because it may detect copying to itself and avoid some needless copies.
-    // But it has problems with drawing to itself
-    // (https://groups.google.com/forum/#!topic/skia-discuss/6yiuw24jv0I) and also
-    // raster surfaces do not avoid a copy of the source
-    // (https://groups.google.com/forum/#!topic/skia-discuss/S3FMpCi82k0).
-    // Finally, there's not much point if one of them is raster and the other is not (chrome/m86 even crashes).
-    if (canvas == surface->getCanvas() || srcIsRaster || (srcIsRaster != destIsRaster))
-    {
-        SkPaint paint;
-        paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
-        canvas->drawImageRect(makeCheckedImageSnapshot(surface),
-                              SkRect::MakeXYWH(nSrcX, nSrcY, nSrcWidth, nSrcHeight),
-                              SkRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight),
-                              SkSamplingOptions(), &paint, SkCanvas::kFast_SrcRectConstraint);
-        return;
-    }
-    // SkCanvas::draw() cannot do a subrectangle, so clip.
-    canvas->save();
-    canvas->clipRect(SkRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight));
-    SkPaint paint;
-    paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
-    surface->draw(canvas, nDestX - nSrcX, nDestY - nSrcY, &paint);
-    canvas->restore();
-}
-
 void SkiaSalGraphicsImpl::copyArea(tools::Long nDestX, tools::Long nDestY, tools::Long nSrcX,
                                    tools::Long nSrcY, tools::Long nSrcWidth, tools::Long nSrcHeight,
                                    bool /*bWindowInvalidate*/)
@@ -1256,8 +1225,13 @@ void SkiaSalGraphicsImpl::copyArea(tools::Long nDestX, tools::Long nDestY, tools
                                    << SkIRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight));
     assert(!mXorMode);
     addUpdateRegion(SkRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight));
-    ::copyArea(getDrawCanvas(), mSurface, nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight,
-               !isGPU(), !isGPU());
+    // Using SkSurface::draw() should be more efficient, but it's too buggy.
+    SkPaint paint;
+    paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
+    getDrawCanvas()->drawImageRect(makeCheckedImageSnapshot(mSurface),
+                                   SkRect::MakeXYWH(nSrcX, nSrcY, nSrcWidth, nSrcHeight),
+                                   SkRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight),
+                                   SkSamplingOptions(), &paint, SkCanvas::kFast_SrcRectConstraint);
     postDraw();
 }
 
@@ -1280,39 +1254,26 @@ void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcG
     assert(!mXorMode);
     addUpdateRegion(SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
                                      rPosAry.mnDestHeight));
-    if (rPosAry.mnSrcWidth == rPosAry.mnDestWidth && rPosAry.mnSrcHeight == rPosAry.mnDestHeight)
-    {
-        auto srcDebug = [&]() -> std::string {
-            if (src == this)
-                return "(self)";
-            else
-            {
-                std::ostringstream stream;
-                stream << "(" << src << ")";
-                return stream.str();
-            }
-        };
-        SAL_INFO("vcl.skia.trace",
-                 "copybits(" << this << "): " << srcDebug() << " copy area: " << rPosAry);
-        ::copyArea(getDrawCanvas(), src->mSurface, rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnSrcX,
-                   rPosAry.mnSrcY, rPosAry.mnDestWidth, rPosAry.mnDestHeight, !src->isGPU(),
-                   !isGPU());
-    }
-    else
-    {
-        SAL_INFO("vcl.skia.trace", "copybits(" << this << "): (" << src << "): " << rPosAry);
-        // Do not use makeImageSnapshot(rect), as that one may make a needless data copy.
-        sk_sp<SkImage> image = makeCheckedImageSnapshot(src->mSurface);
-        SkPaint paint;
-        paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
-        getDrawCanvas()->drawImageRect(image,
-                                       SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY,
-                                                        rPosAry.mnSrcWidth, rPosAry.mnSrcHeight),
-                                       SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY,
-                                                        rPosAry.mnDestWidth, rPosAry.mnDestHeight),
-                                       makeSamplingOptions(rPosAry), &paint,
-                                       SkCanvas::kFast_SrcRectConstraint);
-    }
+    auto srcDebug = [&]() -> std::string {
+        if (src == this)
+            return "(self)";
+        else
+        {
+            std::ostringstream stream;
+            stream << "(" << src << ")";
+            return stream.str();
+        }
+    };
+    SAL_INFO("vcl.skia.trace", "copybits(" << this << "): " << srcDebug() << ": " << rPosAry);
+    SkPaint paint;
+    paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
+    // Do not use makeImageSnapshot(rect), as that one may make a needless data copy.
+    getDrawCanvas()->drawImageRect(
+        makeCheckedImageSnapshot(src->mSurface),
+        SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight),
+        SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
+                         rPosAry.mnDestHeight),
+        makeSamplingOptions(rPosAry), &paint, SkCanvas::kFast_SrcRectConstraint);
     postDraw();
 }
 
