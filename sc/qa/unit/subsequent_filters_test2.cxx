@@ -122,6 +122,7 @@ public:
     void testSharedFormulaXLS();
     void testSharedFormulaColumnLabelsODS();
     void testSharedFormulaColumnRowLabelsODS();
+    void testExternalDefinedNameXLSX();
     void testExternalRefCacheXLSX();
     void testExternalRefCacheODS();
     void testHybridSharedStringODS();
@@ -228,6 +229,7 @@ public:
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testSharedFormulaColumnLabelsODS);
     CPPUNIT_TEST(testSharedFormulaColumnRowLabelsODS);
+    CPPUNIT_TEST(testExternalDefinedNameXLSX);
     CPPUNIT_TEST(testExternalRefCacheXLSX);
     CPPUNIT_TEST(testExternalRefCacheODS);
     CPPUNIT_TEST(testHybridSharedStringODS);
@@ -897,6 +899,47 @@ void ScFiltersTest2::testSharedFormulaColumnRowLabelsODS()
     aCheckFunc(5, 1); // F2:H4
     aCheckFunc(9, 1); // J2:L4
     aCheckFunc(1, 6); // B7:D9
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest2::testExternalDefinedNameXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf144397.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    rDoc.CalcAll();
+
+    /* These string values are cached from an external defined name (rangenameinotherfile).
+       The formula (=VLOOKUP(A4;rangenameinotherfile;1;0)) after a re-calc should give back: */
+    // "January"
+    {
+        const ScFormulaCell* pFC = rDoc.GetFormulaCell(ScAddress(1, 1, 0));
+        sc::FormulaResultValue aRes = pFC->GetResult();
+        CPPUNIT_ASSERT_EQUAL(sc::FormulaResultValue::String, aRes.meType);
+        CPPUNIT_ASSERT_EQUAL(OUString("January"), aRes.maString.getString());
+    }
+    // "March"
+    {
+        const ScFormulaCell* pFC = rDoc.GetFormulaCell(ScAddress(1, 3, 0));
+        sc::FormulaResultValue aRes = pFC->GetResult();
+        CPPUNIT_ASSERT_EQUAL(sc::FormulaResultValue::String, aRes.meType);
+        CPPUNIT_ASSERT_EQUAL(OUString("March"), aRes.maString.getString());
+    }
+    // "Empty = #N/A"
+    {
+        const ScFormulaCell* pFC = rDoc.GetFormulaCell(ScAddress(1, 5, 0));
+        sc::FormulaResultValue aRes = pFC->GetResult();
+        CPPUNIT_ASSERT_EQUAL(sc::FormulaResultValue::Error, aRes.meType);
+        CPPUNIT_ASSERT_EQUAL(OUString(""), aRes.maString.getString());
+    }
+    // "June"
+    {
+        const ScFormulaCell* pFC = rDoc.GetFormulaCell(ScAddress(1, 6, 0));
+        sc::FormulaResultValue aRes = pFC->GetResult();
+        CPPUNIT_ASSERT_EQUAL(sc::FormulaResultValue::String, aRes.meType);
+        CPPUNIT_ASSERT_EQUAL(OUString("June"), aRes.maString.getString());
+    }
 
     xDocSh->DoClose();
 }
