@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3282561_72e8f473",
+        "filename": "xmloff/source/core/xmltoken.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1556,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-09-13T11:49:00Z",
+      "side": 1,
+      "message": "Should this be changed to BARCODE? Also, should all the other occurences of keyword \"QR Code\" should change to \"Bar Code\" or should they be left as is?",
+      "range": {
+        "startLine": 1556,
+        "startChar": 50,
+        "endLine": 1556,
+        "endChar": 60
+      },
+      "revId": "68ddfe566209865895f4b87544e2918f650b904b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
