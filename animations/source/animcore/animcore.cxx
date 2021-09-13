@@ -1221,11 +1221,7 @@ void SAL_CALL AnimationNode::setParent( const Reference< XInterface >& Parent )
     if( Parent != mxParent.get() )
     {
         mxParent = Parent;
-
-        mpParent = nullptr;
-        Reference< XUnoTunnel > xTunnel( mxParent.get(), UNO_QUERY );
-        if( xTunnel.is() )
-            mpParent = reinterpret_cast< AnimationNode* >( sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething( getUnoTunnelId() )));
+        mpParent = comphelper::getFromUnoTunnel<AnimationNode>(mxParent.get());
 
         fireChangeListener();
     }

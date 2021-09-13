@@ -433,14 +433,10 @@ void SwXTextDocument::GetNumberFormatter()
     {
         const uno::Type& rTunnelType = cppu::UnoType<XUnoTunnel>::get();
         Any aNumTunnel = m_xNumFormatAgg->queryAggregation(rTunnelType);
-        SvNumberFormatsSupplierObj* pNumFormat = nullptr;
         Reference< XUnoTunnel > xNumTunnel;
-        if(aNumTunnel >>= xNumTunnel)
-        {
-            pNumFormat = reinterpret_cast<SvNumberFormatsSupplierObj*>(
-                    xNumTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
-
-        }
+        aNumTunnel >>= xNumTunnel;
+        SvNumberFormatsSupplierObj* pNumFormat
+            = comphelper::getFromUnoTunnel<SvNumberFormatsSupplierObj>(xNumTunnel);
         OSL_ENSURE(pNumFormat, "No number formatter available");
         if (pNumFormat && !pNumFormat->GetNumberFormatter())
             pNumFormat->SetNumberFormatter(m_pDocShell->GetDoc()->GetNumberFormatter());
@@ -687,15 +683,12 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
 {
     SolarMutexGuard aGuard;
     Reference< XUnoTunnel > xDescTunnel(xDesc, UNO_QUERY_THROW);
-    if(!IsValid() || !xDescTunnel->getSomething(SwXTextSearch::getUnoTunnelId()))
+    SwXTextSearch* pSearch;
+    if (!IsValid() || !(pSearch = comphelper::getFromUnoTunnel<SwXTextSearch>(xDescTunnel)))
         throw DisposedException("", static_cast< XTextDocument* >(this));
 
     Reference< XTextCursor >  xCursor;
     auto pUnoCursor(CreateCursorForSearch(xCursor));
-
-    const SwXTextSearch* pSearch = reinterpret_cast<const SwXTextSearch*>(
-            xDescTunnel->getSomething(SwXTextSearch::getUnoTunnelId()));
-
     int eRanges(FindRanges::InBody|FindRanges::InSelAll);
 
     i18nutil::SearchOptions2 aSearchOpt;
@@ -778,12 +771,7 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
     if(xLastResult.is())
     {
         Reference<XUnoTunnel> xCursorTunnel( xLastResult, UNO_QUERY);
-        OTextCursorHelper* pPosCursor = nullptr;
-        if(xCursorTunnel.is())
-        {
-            pPosCursor = reinterpret_cast<OTextCursorHelper*>(xCursorTunnel->getSomething(
-                                    OTextCursorHelper::getUnoTunnelId()));
-        }
+        OTextCursorHelper* pPosCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xCursorTunnel);
         SwPaM* pCursor = pPosCursor ? pPosCursor->GetPaM() : nullptr;
         if(pCursor)
         {
@@ -792,12 +780,7 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
         }
         else
         {
-            SwXTextRange* pRange = nullptr;
-            if(xCursorTunnel.is())
-            {
-                pRange = reinterpret_cast<SwXTextRange*>(xCursorTunnel->getSomething(
-                                        SwXTextRange::getUnoTunnelId()));
-            }
+            SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xCursorTunnel);
             if(!pRange)
                 return nullptr;
             pRange->GetPositions(*pUnoCursor);
@@ -1388,14 +1371,13 @@ void SwXTextDocument::Invalidate()
     {
         const uno::Type& rTunnelType = cppu::UnoType<XUnoTunnel>::get();
         Any aNumTunnel = m_xNumFormatAgg->queryAggregation(rTunnelType);
-        SvNumberFormatsSupplierObj* pNumFormat = nullptr;
         Reference< XUnoTunnel > xNumTunnel;
-        if(aNumTunnel >>= xNumTunnel)
-        {
-            pNumFormat = reinterpret_cast<SvNumberFormatsSupplierObj*>(
-                    xNumTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
+        aNumTunnel >>= xNumTunnel;
+        SvNumberFormatsSupplierObj* pNumFormat
+            = comphelper::getFromUnoTunnel<SvNumberFormatsSupplierObj>(xNumTunnel);
+        OSL_ENSURE(pNumFormat, "No number formatter available");
+        if (pNumFormat)
             pNumFormat->SetNumberFormatter(nullptr);
-        }
         OSL_ENSURE(pNumFormat, "No number formatter available");
     }
     InitNewDoc();
@@ -1449,14 +1431,10 @@ void    SwXTextDocument::InitNewDoc()
     {
         const uno::Type& rTunnelType = cppu::UnoType<XUnoTunnel>::get();
         Any aNumTunnel = m_xNumFormatAgg->queryAggregation(rTunnelType);
-        SvNumberFormatsSupplierObj* pNumFormat = nullptr;
         Reference< XUnoTunnel > xNumTunnel;
-        if(aNumTunnel >>= xNumTunnel)
-        {
-            pNumFormat = reinterpret_cast<SvNumberFormatsSupplierObj*>(
-                    xNumTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
-
-        }
+        aNumTunnel >>= xNumTunnel;
+        SvNumberFormatsSupplierObj* pNumFormat
+            = comphelper::getFromUnoTunnel<SvNumberFormatsSupplierObj>(xNumTunnel);
         OSL_ENSURE(pNumFormat, "No number formatter available");
         if (pNumFormat)
             pNumFormat->SetNumberFormatter(nullptr);

@@ -103,7 +103,7 @@ void ODbaseTables::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
 
     if ( xTunnel.is() )
     {
-        ODbaseTable* pTable = reinterpret_cast< ODbaseTable* >( xTunnel->getSomething(ODbaseTable::getUnoTunnelId()) );
+        ODbaseTable* pTable = comphelper::getFromUnoTunnel<ODbaseTable>(xTunnel);
         if(pTable)
             pTable->DropImpl();
     }

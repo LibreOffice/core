@@ -129,11 +129,7 @@ SdPageObjsTLV::SdPageObjsTransferable* SdPageObjsTLV::SdPageObjsTransferable::ge
 {
     try
     {
-        css::uno::Reference< css::lang::XUnoTunnel > xUnoTunnel( rxData, css::uno::UNO_QUERY_THROW );
-
-        return reinterpret_cast<SdPageObjsTLV::SdPageObjsTransferable*>(
-                sal::static_int_cast<sal_uIntPtr>(
-                    xUnoTunnel->getSomething( SdPageObjsTLV::SdPageObjsTransferable::getUnoTunnelId()) ) );
+        return comphelper::getFromUnoTunnel<SdPageObjsTLV::SdPageObjsTransferable>(rxData);
     }
     catch( const css::uno::Exception& )
     {

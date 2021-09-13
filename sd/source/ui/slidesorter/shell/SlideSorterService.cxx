@@ -27,6 +27,8 @@
 #include <view/SlideSorterView.hxx>
 #include <view/SlsLayouter.hxx>
 #include <DrawController.hxx>
+
+#include <comphelper/servicehelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
@@ -78,8 +80,7 @@ void SAL_CALL SlideSorterService::initialize (const Sequence<Any>& rArguments)
     // Tunnel through the controller to obtain a ViewShellBase.
     ViewShellBase* pBase = nullptr;
     Reference<lang::XUnoTunnel> xTunnel (xController, UNO_QUERY_THROW);
-    ::sd::DrawController* pController = reinterpret_cast<sd::DrawController*>(
-        xTunnel->getSomething(sd::DrawController::getUnoTunnelId()));
+    ::sd::DrawController* pController = comphelper::getFromUnoTunnel<sd::DrawController>(xTunnel);
     if (pController != nullptr)
         pBase = pController->GetViewShellBase();
 

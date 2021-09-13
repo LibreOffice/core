@@ -164,19 +164,10 @@ void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const uno::
     if ( !(aElement >>= xRef) )
         throw IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
 
-    sal_Int64 nTest;
-    ZipPackageEntry *pEntry;
-    if ( ( nTest = xRef->getSomething ( ZipPackageFolder::getUnoTunnelId() ) ) != 0 )
-    {
-        ZipPackageFolder *pFolder = reinterpret_cast < ZipPackageFolder * > ( nTest );
-        pEntry = pFolder;
-    }
-    else if ( ( nTest = xRef->getSomething ( ZipPackageStream::getUnoTunnelId() ) ) != 0 )
-    {
-        ZipPackageStream *pStream = reinterpret_cast < ZipPackageStream * > ( nTest );
-        pEntry = pStream;
-    }
-    else
+    ZipPackageEntry* pEntry = comphelper::getFromUnoTunnel<ZipPackageFolder>(xRef);
+    if (!pEntry)
+        pEntry = comphelper::getFromUnoTunnel<ZipPackageStream>(xRef);
+    if (!pEntry)
        throw IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
 
     if (pEntry->getName() != aName )

@@ -374,12 +374,7 @@ sal_Int64 SAL_CALL SwXMLImport::getSomething( const Sequence< sal_Int8 >& rId )
 
 static OTextCursorHelper *lcl_xml_GetSwXTextCursor( const Reference < XTextCursor >& rTextCursor )
 {
-    Reference<XUnoTunnel> xCursorTunnel( rTextCursor, UNO_QUERY );
-    OSL_ENSURE( xCursorTunnel.is(), "missing XUnoTunnel for Cursor" );
-    if( !xCursorTunnel.is() )
-        return nullptr;
-    OTextCursorHelper *pTextCursor = reinterpret_cast< OTextCursorHelper *>(
-            sal::static_int_cast< sal_IntPtr >( xCursorTunnel->getSomething(  OTextCursorHelper::getUnoTunnelId() )));
+    OTextCursorHelper* pTextCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(rTextCursor);
     OSL_ENSURE( pTextCursor, "SwXTextCursor missing" );
     return pTextCursor;
 }
@@ -648,8 +643,7 @@ void SwXMLImport::endDocument()
         Reference<XUnoTunnel> xCursorTunnel( GetTextImport()->GetCursor(),
                                               UNO_QUERY);
         assert(xCursorTunnel.is() && "missing XUnoTunnel for Cursor");
-        OTextCursorHelper *pTextCursor = reinterpret_cast< OTextCursorHelper *>(
-                sal::static_int_cast< sal_IntPtr >( xCursorTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
+        OTextCursorHelper* pTextCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xCursorTunnel);
         assert(pTextCursor && "SwXTextCursor missing");
         SwPaM *pPaM = pTextCursor->GetPaM();
         if( IsInsertMode() && m_pSttNdIdx->GetIndex() )
@@ -1655,8 +1649,7 @@ SwDoc* SwXMLImport::getDoc()
     Reference < XText > xText = xTextDoc->getText();
     Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
     assert( xTextTunnel.is());
-    SwXText *pText = reinterpret_cast< SwXText *>(
-            sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
+    SwXText* pText = comphelper::getFromUnoTunnel<SwXText>(xTextTunnel);
     assert( pText != nullptr );
     m_pDoc = pText->GetDoc();
     assert( m_pDoc != nullptr );

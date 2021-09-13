@@ -512,7 +512,7 @@ namespace frm
         {
             try
             {
-                pEngine = reinterpret_cast<RichTextEngine*>(xTunnel->getSomething(getUnoTunnelId()));
+                pEngine = comphelper::getSomething_cast<RichTextEngine>(xTunnel->getSomething(getUnoTunnelId()));
             }
             catch( const Exception& )
             {

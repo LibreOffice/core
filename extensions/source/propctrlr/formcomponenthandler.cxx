@@ -1084,9 +1084,7 @@ namespace pcr
             {
                 Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
                 DBG_ASSERT(xTunnel.is(), "FormComponentPropertyHandler::describePropertyLine : xTunnel is invalid!");
-                SvNumberFormatsSupplierObj* pSupplier = reinterpret_cast<SvNumberFormatsSupplierObj*>(xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
-
-                if (pSupplier != nullptr)
+                if (auto pSupplier = comphelper::getFromUnoTunnel<SvNumberFormatsSupplierObj>(xTunnel))
                 {
                     bool bIsFormatKey = (PROPERTY_ID_FORMATKEY == nPropId);
 

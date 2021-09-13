@@ -205,8 +205,6 @@ void ZipPackage::parseManifest()
                     static const OUStringLiteral sKeyInfo (u"KeyInfo");
 
                     const uno::Sequence < uno::Sequence < PropertyValue > > aManifestSequence = xReader->readManifestSequence ( xSink->getInputStream() );
-                    ZipPackageStream *pStream = nullptr;
-                    ZipPackageFolder *pFolder = nullptr;
                     const Any *pKeyInfo = nullptr;
 
                     for ( const uno::Sequence<PropertyValue>& rSequence : aManifestSequence )
@@ -248,16 +246,13 @@ void ZipPackage::parseManifest()
                             aAny = getByHierarchicalName( sPath );
                             uno::Reference < XUnoTunnel > xUnoTunnel;
                             aAny >>= xUnoTunnel;
-                            sal_Int64 nTest=0;
-                            if ( (nTest = xUnoTunnel->getSomething( ZipPackageFolder::getUnoTunnelId() )) != 0 )
+                            if (auto pFolder = comphelper::getFromUnoTunnel<ZipPackageFolder>(xUnoTunnel))
                             {
-                                pFolder = reinterpret_cast < ZipPackageFolder* > ( nTest );
                                 pFolder->SetMediaType ( sMediaType );
                                 pFolder->SetVersion ( sVersion );
                             }
-                            else
+                            else if (auto pStream = comphelper::getFromUnoTunnel<ZipPackageStream>(xUnoTunnel))
                             {
-                                pStream = reinterpret_cast < ZipPackageStream* > ( xUnoTunnel->getSomething( ZipPackageStream::getUnoTunnelId() ));
                                 pStream->SetMediaType ( sMediaType );
                                 pStream->SetFromManifest( true );
 
@@ -357,6 +352,8 @@ void ZipPackage::parseManifest()
                                 else
                                     m_bHasNonEncryptedEntries = true;
                             }
+                            else
+                                throw ZipIOException(THROW_WHERE "Wrong content");
                         }
                     }
 
@@ -495,11 +492,9 @@ void ZipPackage::parseContentType()
                         uno::Any aIterAny = getByHierarchicalName( aPath );
                         uno::Reference < lang::XUnoTunnel > xIterTunnel;
                         aIterAny >>= xIterTunnel;
-                        sal_Int64 nTest = xIterTunnel->getSomething( ZipPackageStream::getUnoTunnelId() );
-                        if ( nTest != 0 )
+                        if (auto pStream = comphelper::getFromUnoTunnel<ZipPackageStream>(xIterTunnel))
                         {
                             // this is a package stream, in OFOPXML format only streams can have mediatype
-                            ZipPackageStream *pStream = reinterpret_cast < ZipPackageStream* > ( nTest );
                             pStream->SetMediaType( rPair.Second );
                         }
                     }

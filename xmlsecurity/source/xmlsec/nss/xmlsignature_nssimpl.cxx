@@ -26,6 +26,7 @@
 
 #include "securityenvironment_nssimpl.hxx"
 
+#include <comphelper/servicehelper.hxx>
 #include <sal/log.hxx>
 
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
@@ -108,10 +109,8 @@ SAL_CALL XMLSignature_NssImpl::generate(
     }
 
     Reference< XUnoTunnel > xNodTunnel( xElement , UNO_QUERY_THROW ) ;
-    XMLElementWrapper_XmlSecImpl* pElement =
-        reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(
-            sal::static_int_cast<sal_uIntPtr>(
-                xNodTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelId() )));
+    XMLElementWrapper_XmlSecImpl* pElement
+        = comphelper::getFromUnoTunnel<XMLElementWrapper_XmlSecImpl>(xNodTunnel);
     if( pElement == nullptr ) {
         throw RuntimeException() ;
     }
@@ -130,11 +129,8 @@ SAL_CALL XMLSignature_NssImpl::generate(
     Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY_THROW ) ;
 
     // the key manager should be retrieved from SecurityEnvironment, instead of SecurityContext
-
-    SecurityEnvironment_NssImpl* pSecEnv =
-        reinterpret_cast<SecurityEnvironment_NssImpl*>(
-            sal::static_int_cast<sal_uIntPtr>(
-                xSecTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() )));
+    SecurityEnvironment_NssImpl* pSecEnv
+        = comphelper::getFromUnoTunnel<SecurityEnvironment_NssImpl>(xSecTunnel);
     if( pSecEnv == nullptr )
         throw RuntimeException() ;
 
@@ -196,10 +192,8 @@ SAL_CALL XMLSignature_NssImpl::validate(
         throw RuntimeException() ;
 
     Reference< XUnoTunnel > xNodTunnel( xElement , UNO_QUERY_THROW ) ;
-    XMLElementWrapper_XmlSecImpl* pElement =
-        reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(
-            sal::static_int_cast<sal_uIntPtr>(
-                xNodTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelId() )));
+    XMLElementWrapper_XmlSecImpl* pElement
+        = comphelper::getFromUnoTunnel<XMLElementWrapper_XmlSecImpl>(xNodTunnel);
     if( pElement == nullptr )
         throw RuntimeException() ;
 
@@ -224,10 +218,8 @@ SAL_CALL XMLSignature_NssImpl::validate(
 
         //Get Keys Manager
         Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY_THROW ) ;
-        SecurityEnvironment_NssImpl* pSecEnv =
-            reinterpret_cast<SecurityEnvironment_NssImpl*>(
-                sal::static_int_cast<sal_uIntPtr>(
-                    xSecTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() )));
+        SecurityEnvironment_NssImpl* pSecEnv
+            = comphelper::getFromUnoTunnel<SecurityEnvironment_NssImpl>(xSecTunnel);
         if( pSecEnv == nullptr )
             throw RuntimeException() ;
 

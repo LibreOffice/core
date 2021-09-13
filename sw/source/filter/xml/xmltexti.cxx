@@ -191,8 +191,7 @@ bool SwXMLTextImportHelper::IsInHeaderFooter() const
     uno::Reference<XUnoTunnel> xCursorTunnel(
             const_cast<SwXMLTextImportHelper *>(this)->GetCursor(), UNO_QUERY );
     assert(xCursorTunnel.is() && "missing XUnoTunnel for Cursor");
-    OTextCursorHelper *pTextCursor = reinterpret_cast< OTextCursorHelper * >(
-                sal::static_int_cast< sal_IntPtr >( xCursorTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
+    OTextCursorHelper* pTextCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xCursorTunnel);
     SAL_WARN_IF(!pTextCursor, "sw.uno", "SwXTextCursor missing");
     SwDoc *pDoc = pTextCursor ? pTextCursor->GetDoc() : nullptr;
 
@@ -235,8 +234,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
 
     uno::Reference<XUnoTunnel> xCursorTunnel( GetCursor(), UNO_QUERY );
     assert(xCursorTunnel.is() && "missing XUnoTunnel for Cursor");
-    OTextCursorHelper *pTextCursor = reinterpret_cast< OTextCursorHelper * >(
-                sal::static_int_cast< sal_IntPtr >( xCursorTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
+    OTextCursorHelper* pTextCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xCursorTunnel);
     SAL_WARN_IF(!pTextCursor, "sw.uno", "SwXTextCursor missing");
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( rImport );
 
@@ -547,8 +545,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
 
     uno::Reference<XUnoTunnel> xCursorTunnel( GetCursor(), UNO_QUERY );
     assert(xCursorTunnel.is() && "missing XUnoTunnel for Cursor");
-    OTextCursorHelper *pTextCursor = reinterpret_cast< OTextCursorHelper * >(
-                sal::static_int_cast< sal_IntPtr >( xCursorTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
+    OTextCursorHelper* pTextCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xCursorTunnel);
     OSL_ENSURE( pTextCursor, "SwXTextCursor missing" );
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( rImport );
 
@@ -639,8 +636,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
     uno::Reference < XPropertySet > xPropSet;
     uno::Reference<XUnoTunnel> xCursorTunnel( GetCursor(), UNO_QUERY );
     assert(xCursorTunnel.is() && "missing XUnoTunnel for Cursor");
-    OTextCursorHelper *pTextCursor = reinterpret_cast< OTextCursorHelper * >(
-                sal::static_int_cast< sal_IntPtr >( xCursorTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
+    OTextCursorHelper* pTextCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xCursorTunnel);
     OSL_ENSURE( pTextCursor, "SwXTextCursor missing" );
     SwDoc *pDoc = pTextCursor->GetDoc();
 
@@ -685,8 +681,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
     uno::Reference < XPropertySet > xPropSet;
     uno::Reference<XUnoTunnel> xCursorTunnel( GetCursor(), UNO_QUERY );
     assert(xCursorTunnel.is() && "missing XUnoTunnel for Cursor");
-    OTextCursorHelper *pTextCursor = reinterpret_cast< OTextCursorHelper * >(
-            sal::static_int_cast< sal_IntPtr >( xCursorTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
+    OTextCursorHelper* pTextCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xCursorTunnel);
     OSL_ENSURE( pTextCursor, "SwXTextCursor missing" );
     SwDoc *pDoc = pTextCursor->GetDoc();
 
@@ -766,8 +761,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
     uno::Reference < XPropertySet > xPropSet;
     uno::Reference<XUnoTunnel> xCursorTunnel( GetCursor(), UNO_QUERY );
     assert(xCursorTunnel.is() && "missing XUnoTunnel for Cursor");
-    OTextCursorHelper *pTextCursor = reinterpret_cast< OTextCursorHelper * >(
-                sal::static_int_cast< sal_IntPtr >( xCursorTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
+    OTextCursorHelper* pTextCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xCursorTunnel);
     OSL_ENSURE( pTextCursor, "SwXTextCursor missing" );
     SwDoc *pDoc = pTextCursor->GetDoc();
 
@@ -916,8 +910,7 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
 
     uno::Reference<XUnoTunnel> xCursorTunnel( rPropSet, UNO_QUERY );
     assert(xCursorTunnel.is() && "missing XUnoTunnel for embedded");
-    SwXFrame *pFrame = reinterpret_cast< SwXFrame * >(
-                sal::static_int_cast< sal_IntPtr >( xCursorTunnel->getSomething( SwXFrame::getUnoTunnelId() )));
+    SwXFrame* pFrame = comphelper::getFromUnoTunnel<SwXFrame>(xCursorTunnel);
     OSL_ENSURE( pFrame, "SwXFrame missing" );
     SwFrameFormat *pFrameFormat = pFrame->GetFrameFormat();
     const SwFormatContent& rContent = pFrameFormat->GetContent();
