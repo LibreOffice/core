@@ -42,7 +42,7 @@
 #include <font/FontSubstEntry.hxx>
 #include <font/ImplDeviceFontSizeList.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
-#include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <font/FeatureCollector.hxx>
 #include <impfontcache.hxx>
 #include <impglyphitem.hxx>

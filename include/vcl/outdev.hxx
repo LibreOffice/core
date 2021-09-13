@@ -69,7 +69,6 @@ struct ImplOutDevData;
 class LogicalFontInstance;
 struct SystemGraphicsData;
 class ImplFontCache;
-class PhysicalFontCollection;
 class ImplDeviceFontSizeList;
 class ImplMultiTextLineInfo;
 class SalGraphics;
@@ -106,6 +105,7 @@ namespace vcl
     class WindowOutputDevice;
     namespace font {
         struct Feature;
+        class PhysicalFontCollection;
         class PhysicalFontFaceCollection;
     }
 
@@ -258,7 +258,7 @@ private:
     mutable bool                    mbEnableRTL : 1;
 
 protected:
-    mutable std::shared_ptr<PhysicalFontCollection> mxFontCollection;
+    mutable std::shared_ptr<vcl::font::PhysicalFontCollection> mxFontCollection;
     mutable std::shared_ptr<ImplFontCache> mxFontCache;
 
     /** @name Initialization and accessor functions
