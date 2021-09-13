@@ -73,6 +73,30 @@
       },
       "revId": "48e0ca46909120ab227f977e62f5588edb43ce96",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8107fd8d_8e40882e",
+        "filename": "sw/source/uibase/uno/unotxdoc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-13T17:22:36Z",
+      "side": 1,
+      "message": "The issue is that m_xNumFormatAgg and *this behave as one aggregated UNO object (see the m_xNumFormatAgg-\u003esetDelegator call in line 430 above):  The\n\n  css::uno::Reference\u003ccss::lang::XUnoTunnel\u003e{ xIface, css::uno::UNO_QUERY }\n\nin getFromUnoTunnel (in include/comphelper/servicehelper.hxx) will always extract an XInterface from the xIface Any and then do a queryInterface for XUnoTunnel on that.  Which, due to the aggregation, will return SwXTextDocument\u0027s own XUnoTunnel implementation, instead of the aggregated m_xNumFormatAgg\u0027s XImplementation.  Any operator \u003e\u003e\u003d, on the other hand, will see that the given Any already is of the requested XUnoTunnel type, so not do a queryInterface call (and thus provide the aggregated m_xNumFormatAgg\u0027s XUnoTunnel implementation).\n\nOne more point showing why that UNO aggregation concept is broken and deprecated and should not be used.",
+      "parentUuid": "3e69fae9_139c7ac9",
+      "range": {
+        "startLine": 436,
+        "startChar": 8,
+        "endLine": 437,
+        "endChar": 83
+      },
+      "revId": "48e0ca46909120ab227f977e62f5588edb43ce96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
