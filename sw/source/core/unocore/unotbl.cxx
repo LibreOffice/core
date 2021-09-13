@@ -2096,15 +2096,8 @@ SwXTextTable::attach(const uno::Reference<text::XTextRange> & xTextRange)
         throw uno::RuntimeException("SwXTextTable: already attached to range.", static_cast<cppu::OWeakObject*>(this));
 
     uno::Reference<XUnoTunnel> xRangeTunnel(xTextRange, uno::UNO_QUERY);
-    SwXTextRange* pRange(nullptr);
-    OTextCursorHelper* pCursor(nullptr);
-    if(xRangeTunnel.is())
-    {
-        pRange  = reinterpret_cast<SwXTextRange*>(
-                sal::static_int_cast<sal_IntPtr>(xRangeTunnel->getSomething(SwXTextRange::getUnoTunnelId())));
-        pCursor = reinterpret_cast<OTextCursorHelper*>(
-                sal::static_int_cast<sal_IntPtr>(xRangeTunnel->getSomething(OTextCursorHelper::getUnoTunnelId())));
-    }
+    SwXTextRange* pRange(comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel));
+    OTextCursorHelper* pCursor(comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel));
     SwDoc* pDoc = pRange ? &pRange->GetDoc() : pCursor ? pCursor->GetDoc() : nullptr;
     if (!pDoc || !m_pImpl->m_nRows || !m_pImpl->m_nColumns)
         throw lang::IllegalArgumentException();

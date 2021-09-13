@@ -41,7 +41,7 @@ namespace ooo::vba::word
 SwDocShell* getDocShell( const uno::Reference< frame::XModel>& xModel )
 {
     uno::Reference< lang::XUnoTunnel > xTunnel( xModel, uno::UNO_QUERY_THROW );
-    SwXTextDocument* pXDoc = reinterpret_cast< SwXTextDocument * >( sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething(SwXTextDocument::getUnoTunnelId())));
+    SwXTextDocument* pXDoc = comphelper::getFromUnoTunnel<SwXTextDocument>(xTunnel);
     return pXDoc ? pXDoc->GetDocShell() : nullptr;
 }
 

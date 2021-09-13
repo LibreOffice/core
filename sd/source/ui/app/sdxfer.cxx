@@ -741,8 +741,7 @@ SdTransferable* SdTransferable::getImplementation( const Reference< XInterface >
 {
     try
     {
-        Reference< css::lang::XUnoTunnel > xUnoTunnel( rxData, UNO_QUERY_THROW );
-        return reinterpret_cast<SdTransferable*>(sal::static_int_cast<sal_uIntPtr>(xUnoTunnel->getSomething( SdTransferable::getUnoTunnelId()) ) );
+        return comphelper::getFromUnoTunnel<SdTransferable>(rxData);
     }
     catch( const css::uno::Exception& )
     {

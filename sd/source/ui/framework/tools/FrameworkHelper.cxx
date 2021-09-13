@@ -30,6 +30,7 @@
 #include <app.hrc>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/frame/XController.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <svl/lstner.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -201,14 +202,11 @@ namespace
     ::std::shared_ptr< ViewShell > lcl_getViewShell( const Reference< XResource >& i_rViewShellWrapper )
     {
         ::std::shared_ptr< ViewShell > pViewShell;
-        if ( !i_rViewShellWrapper.is() )
-            return pViewShell;
-
         try
         {
             Reference<lang::XUnoTunnel> xViewTunnel( i_rViewShellWrapper, UNO_QUERY_THROW );
-            pViewShell = reinterpret_cast< ViewShellWrapper* >(
-                xViewTunnel->getSomething( ViewShellWrapper::getUnoTunnelId() ) )->GetViewShell();
+            if (auto pWrapper = comphelper::getFromUnoTunnel<ViewShellWrapper>(xViewTunnel))
+                pViewShell = pWrapper->GetViewShell();
         }
         catch( const Exception& )
         {

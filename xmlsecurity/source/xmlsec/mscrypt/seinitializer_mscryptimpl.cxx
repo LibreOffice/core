@@ -79,7 +79,7 @@ uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
 
         /* Setup key slot and certDb */
         uno::Reference< cssl::XUnoTunnel > xSecEnvTunnel( xSecEnv, uno::UNO_QUERY_THROW );
-        SecurityEnvironment_MSCryptImpl* pSecEnv = reinterpret_cast<SecurityEnvironment_MSCryptImpl*>(xSecEnvTunnel->getSomething( SecurityEnvironment_MSCryptImpl::getUnoTunnelId() ));
+        SecurityEnvironment_MSCryptImpl* pSecEnv = comphelper::getFromUnoTunnel<SecurityEnvironment_MSCryptImpl>(xSecEnvTunnel);
         if( pSecEnv == nullptr )
         {
             if( n_hStoreHandle != nullptr )
@@ -128,9 +128,8 @@ void SAL_CALL SEInitializer_MSCryptImpl::freeSecurityContext( const uno::Referen
     if( xSecEnv.is() )
     {
         uno::Reference< cssl::XUnoTunnel > xEnvTunnel( xSecEnv , uno::UNO_QUERY ) ;
-        if( xEnvTunnel.is() )
+        if (auto pSecEnv = comphelper::getFromUnoTunnel<SecurityEnvironment_MSCryptImpl>(xEnvTunnel))
         {
-            SecurityEnvironment_MSCryptImpl* pSecEnv = ( SecurityEnvironment_MSCryptImpl* )xEnvTunnel->getSomething( SecurityEnvironment_MSCryptImpl::getUnoTunnelId() ) ;
             HCERTSTORE n_hStoreHandle = pSecEnv->getCryptoSlot();
 
             if( n_hStoreHandle != NULL )

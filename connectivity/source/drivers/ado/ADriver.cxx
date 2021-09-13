@@ -24,6 +24,7 @@
 #include <ado/Awrapado.hxx>
 #include <ado/adoimp.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/safeCoInitUninit.hxx>
@@ -170,10 +171,8 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( co
 
     OConnection* pConnection = nullptr;
     Reference< css::lang::XUnoTunnel> xTunnel(connection,UNO_QUERY);
-    if(xTunnel.is())
+    if (auto pSearchConnection = comphelper::getFromUnoTunnel<OConnection>(xTunnel))
     {
-        OConnection* pSearchConnection = reinterpret_cast< OConnection* >( xTunnel->getSomething(OConnection::getUnoTunnelId()) );
-
         auto foundConnection = std::any_of(m_xConnections.begin(), m_xConnections.end(),
             [&pSearchConnection](const css::uno::WeakReferenceHelper& rxConnection) {
                 return static_cast<OConnection*>(Reference< XConnection >::query(rxConnection.get()).get()) == pSearchConnection; });
