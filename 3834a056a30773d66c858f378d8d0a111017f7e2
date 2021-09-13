@@ -77,6 +77,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d6e7862d_e52d360e",
+        "filename": "offapi/com/sun/star/drawing/BarCode.idl",
+        "patchSetId": 9
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-09-13T11:46:48Z",
+      "side": 1,
+      "message": "No, as far as I think it is required with every type of barcode zxing provides.",
+      "parentUuid": "07f2f184_c966a9a9",
+      "revId": "3834a056a30773d66c858f378d8d0a111017f7e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9dcee32b_dfcf0929",
         "filename": "offapi/com/sun/star/drawing/BarCode.idl",
         "patchSetId": 9
