@@ -65,6 +65,8 @@ public:
     static bool getViewIds(int nDocId, int* pArray, size_t nSize);
     /// Set View Freemium
     static void setFreemiumView(int nViewId, bool isFreemium);
+    /// Set View Restricted
+    static void setRestrictedView(int nViewId, bool isRestricted);
     /// Get the document id for a view
     static int getDocumentIdOfView(int nViewId);
     /// Get the default language that should be used for views

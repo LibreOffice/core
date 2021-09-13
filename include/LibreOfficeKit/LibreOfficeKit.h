@@ -458,11 +458,6 @@ struct _LibreOfficeKitDocumentClass
     void (*sendFormFieldEvent) (LibreOfficeKitDocument* pThis,
                                 const char* pArguments);
 
-    /// @see lok::Document::renderSearchResult
-    bool (*renderSearchResult) (LibreOfficeKitDocument* pThis,
-                                const char* pSearchResult,
-                                unsigned char** pBitmapBuffer,
-                                int* pWidth, int* pHeight, size_t* pByteSize);
     /// @see lok::Document::setFreemiumDenyList
     void (*setFreemiumDenyList) (LibreOfficeKitDocument* pThis,
                                 const char* freemiumDenyList);
@@ -471,6 +466,21 @@ struct _LibreOfficeKitDocumentClass
     void (*setFreemiumView) (LibreOfficeKitDocument* pThis,
                             int nViewId,
                             bool isFreemium);
+
+    /// @see lok::Document::setRestrictedCommandList
+    void (*setRestrictedCommandList) (LibreOfficeKitDocument* pThis,
+                                const char* restrictedCommandList);
+
+    /// @see lok::Document::setRestrictedView
+    void (*setRestrictedView) (LibreOfficeKitDocument* pThis,
+                            int nViewId,
+                            bool isRestricted);
+
+    /// @see lok::Document::renderSearchResult
+    bool (*renderSearchResult) (LibreOfficeKitDocument* pThis,
+                                const char* pSearchResult,
+                                unsigned char** pBitmapBuffer,
+                                int* pWidth, int* pHeight, size_t* pByteSize);
 
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
