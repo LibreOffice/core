@@ -25,7 +25,7 @@
 #include <Qt5Font.hxx>
 #include <Qt5Tools.hxx>
 
-#include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <font/FontSelectPattern.hxx>
 #include <fontinstance.hxx>
 #include <impfontcharmap.hxx>

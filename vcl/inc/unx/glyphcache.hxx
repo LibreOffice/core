@@ -42,7 +42,10 @@ class FreetypeFontFile;
 class FreetypeFontInstance;
 class FreetypeFontInfo;
 class FontConfigFontOptions;
+namespace vcl::font
+{
 class PhysicalFontCollection;
+}
 class FreetypeFont;
 class SvpGcpHelper;
 
@@ -83,7 +86,7 @@ public:
                                 sal_IntPtr nFontId,
                                 const FontAttributes&);
 
-    void                    AnnounceFonts( PhysicalFontCollection* ) const;
+    void                    AnnounceFonts( vcl::font::PhysicalFontCollection* ) const;
 
     void                    ClearFontCache();
 

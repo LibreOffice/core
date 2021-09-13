@@ -21,7 +21,7 @@
 #include <unotools/fontdefs.hxx>
 
 #include <font/PhysicalFontFaceCollection.hxx>
-#include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontCollection.hxx>
 
 namespace vcl::font
 {
@@ -245,7 +245,7 @@ void PhysicalFontFamily::UpdateDevFontList( PhysicalFontFaceCollection& rDevFont
     }
 }
 
-void PhysicalFontFamily::UpdateCloneFontList(PhysicalFontCollection& rFontCollection) const
+void PhysicalFontFamily::UpdateCloneFontList(vcl::font::PhysicalFontCollection& rFontCollection) const
 {
     OUString aFamilyName = GetEnglishSearchFontName( GetFamilyName() );
     PhysicalFontFamily* pFamily(nullptr);
