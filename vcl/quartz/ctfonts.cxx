@@ -35,10 +35,12 @@
 #include <fontinstance.hxx>
 #include <fontattributes.hxx>
 #include <impglyphitem.hxx>
-#include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <quartz/salgdi.h>
 #include <quartz/utils.h>
 #include <sallayout.hxx>
+#include <hb-coretext.h>
+
 #include <hb-coretext.h>
 
 static double toRadian(int nDegree)
@@ -506,7 +508,7 @@ void SystemFontList::AddFont( CoreTextFontFace* pFontData )
     maFontContainer[ nFontId ] = pFontData;
 }
 
-void SystemFontList::AnnounceFonts( PhysicalFontCollection& rFontCollection ) const
+void SystemFontList::AnnounceFonts( vcl::font::PhysicalFontCollection& rFontCollection ) const
 {
     for(const auto& rEntry : maFontContainer )
     {
