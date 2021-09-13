@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e1e8730_fff74b57",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-13T09:35:03Z",
+      "side": 1,
+      "message": "OK!\n\nDo you think that we need to implement that \"bUseEthernetAddress\" for UnoTunnelIdInit, because that\u0027s the \"functional\" change affecting most of the places where OImplementationId was used: its default ctor has its value true by default. No idea how would that be useful actually... And it seems that our rtl_createUuid ignores it - so ... ?",
+      "parentUuid": "f84d2d03_7860cce8",
+      "revId": "71b834aec0a7395069b87e65092744302af45623",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "067c1f45_cc5876b4",
