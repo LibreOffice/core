@@ -1078,6 +1078,7 @@ SfxViewShell::SfxViewShell
 ,   maLOKLocale(LANGUAGE_NONE)
 ,   maLOKDeviceFormFactor(LOKDeviceFormFactor::UNKNOWN)
 ,   mbLOKIsFreemiumView(false)
+,   mbLOKIsRestrictedView(false)
 {
     SetMargin( pViewFrame->GetMargin_Impl() );
 
