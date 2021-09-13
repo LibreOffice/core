@@ -14420,7 +14420,6 @@ vcl/headless/svptext.cxx
 vcl/headless/svpvd.cxx
 vcl/inc/IconThemeSelector.hxx
 vcl/inc/IPrioritable.hxx
-vcl/inc/PhysicalFontCollection.hxx
 vcl/inc/ResampleKernel.hxx
 vcl/inc/WidgetThemeLibraryTypes.hxx
 vcl/inc/bitmap/bmpfast.hxx
@@ -14439,6 +14438,7 @@ vcl/inc/dndlistenercontainer.hxx
 vcl/inc/factory.hxx
 vcl/inc/fltcall.hxx
 vcl/inc/font/FontSelectPattern.hxx
+vcl/inc/font/PhysicalFontCollection.hxx
 vcl/inc/font/PhysicalFontFace.hxx
 vcl/inc/fontattributes.hxx
 vcl/inc/fontinstance.hxx

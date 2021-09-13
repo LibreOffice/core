@@ -32,7 +32,7 @@
 #include <unx/genpspgraphics.h>
 
 #include <sallayout.hxx>
-#include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontCollection.hxx>
 
 #include <QtGui/QGlyphRun>
 #include <QtGui/QFontDatabase>
@@ -84,7 +84,7 @@ bool Qt5Graphics::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) 
     return m_pTextStyle[0]->GetFontFace()->GetFontCapabilities(rFontCapabilities);
 }
 
-void Qt5Graphics::GetDevFontList(PhysicalFontCollection* pPFC)
+void Qt5Graphics::GetDevFontList(vcl::font::PhysicalFontCollection* pPFC)
 {
     static const bool bUseFontconfig = (nullptr == getenv("SAL_VCL_QT5_NO_FONTCONFIG"));
 
@@ -124,7 +124,7 @@ void Qt5Graphics::GetDevFontList(PhysicalFontCollection* pPFC)
 
 void Qt5Graphics::ClearDevFontCache() {}
 
-bool Qt5Graphics::AddTempDevFont(PhysicalFontCollection*, const OUString& /*rFileURL*/,
+bool Qt5Graphics::AddTempDevFont(vcl::font::PhysicalFontCollection*, const OUString& /*rFileURL*/,
                                  const OUString& /*rFontName*/)
 {
     return false;
@@ -216,7 +216,8 @@ const sal_uInt8* Qt5TrueTypeFont::table(sal_uInt32 ord, sal_uInt32& size) const
 }
 }
 
-bool Qt5Graphics::CreateFontSubset(const OUString& rToFile, const vcl::font::PhysicalFontFace* pFontFace,
+bool Qt5Graphics::CreateFontSubset(const OUString& rToFile,
+                                   const vcl::font::PhysicalFontFace* pFontFace,
                                    const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
                                    sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo)
 {
@@ -254,7 +255,8 @@ bool Qt5Graphics::CreateFontSubset(const OUString& rToFile, const vcl::font::Phy
                                             pGlyphIds, pEncoding, pGlyphWidths, nGlyphCount);
 }
 
-const void* Qt5Graphics::GetEmbedFontData(const vcl::font::PhysicalFontFace*, tools::Long* /*pDataLen*/)
+const void* Qt5Graphics::GetEmbedFontData(const vcl::font::PhysicalFontFace*,
+                                          tools::Long* /*pDataLen*/)
 {
     return nullptr;
 }

@@ -56,8 +56,9 @@
 #include <font/PreMatchFontSubstitution.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
-#include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFace.hxx>
+#include <fontsubset.hxx>
 #include <sft.hxx>
 #include <win/saldata.hxx>
 #include <win/salgdi.h>
