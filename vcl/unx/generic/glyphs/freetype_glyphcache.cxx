@@ -29,7 +29,7 @@
 
 #include <vcl/fontcharmap.hxx>
 
-#include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <fontattributes.hxx>
 #include <fontinstance.hxx>
 #include <impfontcharmap.hxx>
@@ -276,7 +276,7 @@ const unsigned char* FreetypeFontInfo::GetTable( const char* pTag, sal_uLong* pL
     return nullptr;
 }
 
-void FreetypeFontInfo::AnnounceFont( PhysicalFontCollection* pFontCollection )
+void FreetypeFontInfo::AnnounceFont( vcl::font::PhysicalFontCollection* pFontCollection )
 {
     rtl::Reference<FreetypeFontFace> pFD(new FreetypeFontFace( this, maDevFontAttributes ));
     pFontCollection->Add( pFD.get() );
@@ -353,7 +353,7 @@ void FreetypeManager::AddFontFile(const OString& rNormalizedName,
         m_nMaxFontId = nFontId;
 }
 
-void FreetypeManager::AnnounceFonts( PhysicalFontCollection* pToAdd ) const
+void FreetypeManager::AnnounceFonts( vcl::font::PhysicalFontCollection* pToAdd ) const
 {
     for (auto const& font : m_aFontInfoList)
     {
