@@ -16,6 +16,23 @@
       "message": "just a spelling fix in the comment - Jenkins approved.",
       "revId": "9109cac426ccdfb4277d23d8afdc2c5e3d2b75c5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ebd992c_9782f315",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-13T06:53:03Z",
+      "side": 1,
+      "message": "Looks reasonable, thanks. I ran out of time for now, but my next priority would be UI (when you apply a style and to be able to edit this bit in the para style on the UI), not DOC/RTF.",
+      "revId": "9109cac426ccdfb4277d23d8afdc2c5e3d2b75c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
