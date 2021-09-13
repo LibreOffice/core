@@ -55,7 +55,7 @@ public:
         }
     }
 
-    virtual bool CanUse( const OUString & inPath ) = 0;
+    virtual bool CanUse( const OUString & rURI ) = 0;
 
     virtual bool UsesProxy() = 0;
 
