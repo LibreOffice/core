@@ -797,6 +797,16 @@ public:
         mpDoc->pClass->setFreemiumView(mpDoc, nViewId, isFreemium);
     }
 
+    void setRestrictedCommandList(const char* restrictedCommandList)
+    {
+        mpDoc->pClass->setRestrictedCommandList(mpDoc, restrictedCommandList);
+    }
+
+    void setRestrictedView(int nViewId, bool isRestricted)
+    {
+        mpDoc->pClass->setRestrictedView(mpDoc, nViewId, isRestricted);
+    }
+
     /**
      * Render input search result to a bitmap buffer.
      *
