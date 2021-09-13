@@ -1,0 +1,141 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6d14863_8316ade2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-13T08:33:32Z",
+      "side": 1,
+      "message": "quoting mstahl\u0027s \"hmm... the QRCode property was added quite recently and it\u0027s optional, it\u0027s unlikely to be used by lots of extensions, so in this case i don\u0027t see much of a problem in removing it by renaming/changing its type...\":\n\nAnd css.drawing.QRCode was only marked as published because it had to, for technical reasons (because it is referenced from the published css.drawing.GraphicObjectShape service).  So I too think that it is OK to do an API CHANGE here and replace css.beans.QRCode with the new css.beans.BarCode (which also has to be published, for the same technical reasons).\n\nWhat you do in the latest patch set, however, is to keep offapi/com/sun/star/drawing/QRCode.idl (and mark its contents as deprecated) but not to build it anymore.  That doesn\u0027t make sense; either keep it as deprecated alongside the new css.beans.BarCode (which I would not suggest to do, see above), or drop it completely.",
+      "revId": "3834a056a30773d66c858f378d8d0a111017f7e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5de8e80_fb900974",
+        "filename": "offapi/UnoApi_offapi.mk",
+        "patchSetId": 9
+      },
+      "lineNbr": 2334,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-13T08:33:32Z",
+      "side": 1,
+      "message": "Please keep this list sorted lexicographically.",
+      "revId": "3834a056a30773d66c858f378d8d0a111017f7e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b54168a3_0d75cc43",
+        "filename": "offapi/com/sun/star/drawing/BarCode.idl",
+        "patchSetId": 9
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-13T08:33:32Z",
+      "side": 1,
+      "message": "7.3?",
+      "range": {
+        "startLine": 17,
+        "startChar": 23,
+        "endLine": 17,
+        "endChar": 26
+      },
+      "revId": "3834a056a30773d66c858f378d8d0a111017f7e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07f2f184_c966a9a9",
+        "filename": "offapi/com/sun/star/drawing/BarCode.idl",
+        "patchSetId": 9
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-13T08:33:32Z",
+      "side": 1,
+      "message": "Is this only relevant if the bar code is a QR code?",
+      "revId": "3834a056a30773d66c858f378d8d0a111017f7e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dcee32b_dfcf0929",
+        "filename": "offapi/com/sun/star/drawing/BarCode.idl",
+        "patchSetId": 9
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-13T08:33:32Z",
+      "side": 1,
+      "message": "\"bar\"?",
+      "range": {
+        "startLine": 30,
+        "startChar": 31,
+        "endLine": 30,
+        "endChar": 33
+      },
+      "revId": "3834a056a30773d66c858f378d8d0a111017f7e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ad04bb0_525d9f07",
+        "filename": "offapi/com/sun/star/drawing/BarCode.idl",
+        "patchSetId": 9
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-13T08:33:32Z",
+      "side": 1,
+      "message": "\"bar\"?",
+      "range": {
+        "startLine": 32,
+        "startChar": 61,
+        "endLine": 32,
+        "endChar": 63
+      },
+      "revId": "3834a056a30773d66c858f378d8d0a111017f7e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d730f2a_4596e78f",
+        "filename": "offapi/com/sun/star/drawing/BarCode.idl",
+        "patchSetId": 9
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-13T08:33:32Z",
+      "side": 1,
+      "message": "What are the supported values?",
+      "revId": "3834a056a30773d66c858f378d8d0a111017f7e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
