@@ -93,7 +93,7 @@ FreeTypeTextRenderImpl::SetTextColor( Color nColor )
     }
 }
 
-bool FreeTypeTextRenderImpl::AddTempDevFont( PhysicalFontCollection* pFontCollection,
+bool FreeTypeTextRenderImpl::AddTempDevFont( vcl::font::PhysicalFontCollection* pFontCollection,
                                      const OUString& rFileURL,
                                      const OUString& rFontName )
 {
@@ -105,7 +105,7 @@ void FreeTypeTextRenderImpl::ClearDevFontCache()
     FreetypeManager::get().ClearFontCache();
 }
 
-void FreeTypeTextRenderImpl::GetDevFontList( PhysicalFontCollection* pFontCollection )
+void FreeTypeTextRenderImpl::GetDevFontList( vcl::font::PhysicalFontCollection* pFontCollection )
 {
     // prepare the FreetypeManager using psprint's font infos
     FreetypeManager& rFreetypeManager = FreetypeManager::get();
