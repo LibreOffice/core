@@ -630,7 +630,7 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
 // If there is a tabulator in smaller line, no adjustment is possible.
 void SwRubyPortion::Adjust_( SwTextFormatInfo &rInf )
 {
-    SwTwips nLineDiff = GetRoot().Width() - GetRoot().GetNext()->Width();
+    SwTwips nLineDiff = o3tl::narrowing<SwTwips>(GetRoot().Width()) - GetRoot().GetNext()->Width();
     TextFrameIndex const nOldIdx = rInf.GetIdx();
     if( !nLineDiff )
         return;
