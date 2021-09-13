@@ -32,6 +32,7 @@
 #include <sal/types.h>
 
 namespace com::sun::star {
+    namespace drawing { class XDrawPage; }
     namespace xml::dom { class XDocument; }
 }
 
@@ -57,6 +58,7 @@ class OOX_DLLPUBLIC Theme
 {
 public:
     void                     setStyleName( const OUString& rStyleName ) { maStyleName = rStyleName; }
+    void setThemeName(const OUString& rThemeName) { maThemeName = rThemeName; }
 
     ClrScheme&               getClrScheme() { return maClrScheme; }
     const ClrScheme&         getClrScheme() const { return maClrScheme; }
@@ -96,8 +98,11 @@ public:
     const css::uno::Reference<css::xml::dom::XDocument>& getFragment() const { return mxFragment; }
     void                     setFragment( const css::uno::Reference< css::xml::dom::XDocument>& xRef ) { mxFragment=xRef; }
 
+    void addTheme(const css::uno::Reference<css::drawing::XDrawPage>& xDrawPage) const;
+
 private:
     OUString            maStyleName;
+    OUString            maThemeName;
     ClrScheme           maClrScheme;
     FillStyleList       maFillStyleList;
     FillStyleList       maBgFillStyleList;

@@ -1287,6 +1287,9 @@ void SdrPageProperties::SetStyleSheet(SfxStyleSheet* pStyleSheet)
     ImpPageChange(*mpSdrPage);
 }
 
+void SdrPageProperties::SetTheme(std::unique_ptr<svx::Theme> pTheme) { mpTheme = std::move(pTheme); }
+
+svx::Theme* SdrPageProperties::GetTheme() { return mpTheme.get(); }
 
 SdrPage::SdrPage(SdrModel& rModel, bool bMasterPage)
 :   mrSdrModelFromSdrPage(rModel),

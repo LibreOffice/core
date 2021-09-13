@@ -20,6 +20,12 @@
 #include <oox/drawingml/theme.hxx>
 #include <oox/token/tokens.hxx>
 #include <drawingml/textcharacterproperties.hxx>
+#include <com/sun/star/beans/PropertyValues.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <comphelper/propertyvalue.hxx>
+
+using namespace com::sun::star;
 
 namespace oox::drawingml {
 
@@ -95,6 +101,15 @@ const TextFont* Theme::resolveFont( const OUString& rName ) const
             return &pCharProps->maAsianFont;
     }
     return nullptr;
+}
+
+void Theme::addTheme(const css::uno::Reference<css::drawing::XDrawPage>& xDrawPage) const
+{
+    beans::PropertyValues aValues = {
+        comphelper::makePropertyValue("Name", maThemeName),
+    };
+    uno::Reference<beans::XPropertySet> xPropertySet(xDrawPage, uno::UNO_QUERY);
+    xPropertySet->setPropertyValue("Theme", uno::makeAny(aValues));
 }
 
 } // namespace oox::drawingml
