@@ -374,7 +374,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
     rFmt.maSelection.nEndPos = nEnd;
 
     // Store the used text styles for export.
-    ScSheetSaveData* pSheetData = comphelper::getUnoTunnelImplementation<ScModelObj>(rXMLImport.GetModel())->GetSheetSaveData();
+    ScSheetSaveData* pSheetData = comphelper::getFromUnoTunnel<ScModelObj>(rXMLImport.GetModel())->GetSheetSaveData();
     ScAddress aCellPos = rXMLImport.GetTables().GetCurrentCellPos();
     pSheetData->AddTextStyle(rStyleName, aCellPos, rFmt.maSelection);
 
@@ -812,7 +812,7 @@ void ScXMLTableRowCellContext::SetContentValidation( const ScRange& rScRange )
     // is the below still needed?
     // For now, any sheet with validity is blocked from stream-copying.
     // Later, the validation names could be stored along with the style names.
-    ScSheetSaveData* pSheetData = comphelper::getUnoTunnelImplementation<ScModelObj>(GetImport().GetModel())->GetSheetSaveData();
+    ScSheetSaveData* pSheetData = comphelper::getFromUnoTunnel<ScModelObj>(GetImport().GetModel())->GetSheetSaveData();
     pSheetData->BlockSheet( GetScImport().GetTables().GetCurrentSheet() );
 }
 
@@ -925,7 +925,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
     }
 
     // store the style names for stream copying
-    ScSheetSaveData* pSheetData = comphelper::getUnoTunnelImplementation<ScModelObj>(rXMLImport.GetModel())->GetSheetSaveData();
+    ScSheetSaveData* pSheetData = comphelper::getFromUnoTunnel<ScModelObj>(rXMLImport.GetModel())->GetSheetSaveData();
     pSheetData->HandleNoteStyles( mxAnnotationData->maStyleName, mxAnnotationData->maTextStyle, rPos );
 
     for (const auto& rContentStyle : mxAnnotationData->maContentStyles)

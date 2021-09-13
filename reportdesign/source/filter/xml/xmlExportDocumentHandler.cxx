@@ -58,7 +58,7 @@ OUString lcl_createAttribute(const xmloff::token::XMLTokenEnum& _eNamespace,cons
 
 static void lcl_correctCellAddress(const OUString & _sName, const uno::Reference< xml::sax::XAttributeList > & xAttribs)
 {
-    SvXMLAttributeList* pList = comphelper::getUnoTunnelImplementation<SvXMLAttributeList>(xAttribs);
+    SvXMLAttributeList* pList = comphelper::getFromUnoTunnel<SvXMLAttributeList>(xAttribs);
     OUString sCellAddress = pList->getValueByName(_sName);
     const sal_Int32 nPos = sCellAddress.lastIndexOf('$');
     if ( nPos != -1 )
@@ -186,7 +186,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const OUString & _sName, const
         bExport = false;
     else if ( _sName == "chart:plot-area" )
     {
-        SvXMLAttributeList* pList = comphelper::getUnoTunnelImplementation<SvXMLAttributeList>(xAttribs);
+        SvXMLAttributeList* pList = comphelper::getFromUnoTunnel<SvXMLAttributeList>(xAttribs);
         pList->RemoveAttribute("table:cell-range-address");
     }
     else if ( _sName == "chart:categories" )
@@ -201,7 +201,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const OUString & _sName, const
     }
     else if ( m_bTableRowsStarted && !m_bFirstRowExported && _sName == "table:table-cell" )
     {
-        SvXMLAttributeList* pList = comphelper::getUnoTunnelImplementation<SvXMLAttributeList>(xAttribs);
+        SvXMLAttributeList* pList = comphelper::getFromUnoTunnel<SvXMLAttributeList>(xAttribs);
         static OUString s_sValue(lcl_createAttribute(XML_NP_OFFICE,XML_VALUE));
         pList->RemoveAttribute(s_sValue);
     }

@@ -30,6 +30,8 @@
 
 #include <ChartModel.hxx>
 
+#include <comphelper/servicehelper.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
@@ -110,13 +112,9 @@ uno::Reference< lang::XUnoTunnel > const & Chart2ModelContact::getChartView() co
 ExplicitValueProvider* Chart2ModelContact::getExplicitValueProvider() const
 {
     getChartView();
-    if(!m_xChartView.is())
-        return nullptr;
 
     //obtain the ExplicitValueProvider from the chart view
-    ExplicitValueProvider* pProvider = reinterpret_cast<ExplicitValueProvider*>(m_xChartView->getSomething(
-        ExplicitValueProvider::getUnoTunnelId() ));
-    return pProvider;
+    return comphelper::getFromUnoTunnel<ExplicitValueProvider>(m_xChartView);
 }
 
 uno::Reference< drawing::XDrawPage > Chart2ModelContact::getDrawPage() const

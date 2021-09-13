@@ -79,7 +79,7 @@ void ValueItemAcc::ParentDestroyed()
 
 const uno::Sequence< sal_Int8 >& ValueItemAcc::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theValueItemAccUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theValueItemAccUnoTunnelId;
     return theValueItemAccUnoTunnelId.getSeq();
 }
 
@@ -89,7 +89,7 @@ ValueItemAcc* ValueItemAcc::getImplementation( const uno::Reference< uno::XInter
 {
     try
     {
-        return comphelper::getUnoTunnelImplementation<ValueItemAcc>(rxData);
+        return comphelper::getFromUnoTunnel<ValueItemAcc>(rxData);
     }
     catch(const css::uno::Exception&)
     {
@@ -395,14 +395,7 @@ sal_Int32 SAL_CALL ValueItemAcc::getBackground(  )
 
 sal_Int64 SAL_CALL ValueItemAcc::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    sal_Int64 nRet;
-
-    if( isUnoTunnelId<ValueItemAcc>(rId) )
-        nRet = reinterpret_cast< sal_Int64 >( this );
-    else
-        nRet = 0;
-
-    return nRet;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 void ValueItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
@@ -464,7 +457,7 @@ void ValueSetAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue
 
 const uno::Sequence< sal_Int8 >& ValueSetAcc::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theValueSetAccUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theValueSetAccUnoTunnelId;
     return theValueSetAccUnoTunnelId.getSeq();
 }
 
@@ -474,7 +467,7 @@ ValueSetAcc* ValueSetAcc::getImplementation( const uno::Reference< uno::XInterfa
 {
     try
     {
-        return comphelper::getUnoTunnelImplementation<ValueSetAcc>(rxData);
+        return comphelper::getFromUnoTunnel<ValueSetAcc>(rxData);
     }
     catch(const css::uno::Exception&)
     {
@@ -914,14 +907,7 @@ void SAL_CALL ValueSetAcc::deselectAccessibleChild( sal_Int32 nChildIndex )
 
 sal_Int64 SAL_CALL ValueSetAcc::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    sal_Int64 nRet;
-
-    if( isUnoTunnelId<ValueSetAcc>(rId) )
-        nRet = reinterpret_cast< sal_Int64 >( this );
-    else
-        nRet = 0;
-
-    return nRet;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 

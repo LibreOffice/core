@@ -109,7 +109,7 @@ namespace XPath
     static void lcl_collectNamespaces(
             nsmap_t & rNamespaces, Reference< XNode > const& xNamespaceNode)
     {
-        DOM::CNode *const pCNode(comphelper::getUnoTunnelImplementation<DOM::CNode>(xNamespaceNode));
+        DOM::CNode *const pCNode(comphelper::getFromUnoTunnel<DOM::CNode>(xNamespaceNode));
         if (!pCNode) { throw RuntimeException(); }
 
         ::osl::MutexGuard const g(pCNode->GetOwnerDocument().GetMutex());
@@ -291,11 +291,11 @@ namespace XPath
 
         // get the node and document
         ::rtl::Reference<DOM::CDocument> const pCDoc(
-                dynamic_cast<DOM::CDocument*>( comphelper::getUnoTunnelImplementation<DOM::CNode>(
+                dynamic_cast<DOM::CDocument*>( comphelper::getFromUnoTunnel<DOM::CNode>(
                         xContextNode->getOwnerDocument())));
         if (!pCDoc.is()) { throw RuntimeException(); }
 
-        DOM::CNode *const pCNode = comphelper::getUnoTunnelImplementation<DOM::CNode>(xContextNode);
+        DOM::CNode *const pCNode = comphelper::getFromUnoTunnel<DOM::CNode>(xContextNode);
         if (!pCNode) { throw RuntimeException(); }
 
         ::osl::MutexGuard const g(pCDoc->GetMutex()); // lock the document!

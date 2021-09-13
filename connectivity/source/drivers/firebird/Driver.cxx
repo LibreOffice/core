@@ -191,7 +191,7 @@ sal_Int32 SAL_CALL FirebirdDriver::getMinorVersion(  )
 uno::Reference< XTablesSupplier > SAL_CALL FirebirdDriver::getDataDefinitionByConnection(
                                     const uno::Reference< XConnection >& rConnection)
 {
-    if (Connection* pConnection = comphelper::getUnoTunnelImplementation<Connection>(rConnection))
+    if (Connection* pConnection = comphelper::getFromUnoTunnel<Connection>(rConnection))
         return pConnection->createCatalog();
     return {};
 }

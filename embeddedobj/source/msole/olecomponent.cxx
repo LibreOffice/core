@@ -35,6 +35,7 @@
 #include <comphelper/multicontainer2.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/windowserrorstring.hxx>
 #include <osl/file.hxx>
 #include <rtl/ref.hxx>
@@ -1705,7 +1706,7 @@ sal_Int64 SAL_CALL OleComponent::getSomething( const css::uno::Sequence< sal_Int
     {
         uno::Sequence < sal_Int8 > aCLSID = GetCLSID();
         if ( MimeConfigurationHelper::ClassIDsEqual( aIdentifier, aCLSID ) )
-            return reinterpret_cast<sal_Int64>(static_cast<IUnknown*>(m_pNativeImpl->m_pObj));
+            return comphelper::getSomething_cast(static_cast<IUnknown*>(m_pNativeImpl->m_pObj));
 
         // compatibility hack for old versions: CLSID was used in wrong order (SvGlobalName order)
         sal_Int32 nLength = aIdentifier.getLength();

@@ -175,7 +175,7 @@ void SvxShapeGroup::addUnoShape( const uno::Reference< drawing::XShape >& xShape
         return;
     }
 
-    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
+    SvxShape* pShape = comphelper::getFromUnoTunnel<SvxShape>( xShape );
     if (!pShape)
     {
         OSL_FAIL("could not add XShape to group shape!");

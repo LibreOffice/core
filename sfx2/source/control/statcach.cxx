@@ -26,6 +26,7 @@
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/weak.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
@@ -262,14 +263,7 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
             if ( xDisp.is() )
             {
                 // test the dispatch object if it is just a wrapper for a SfxDispatcher
-                css::uno::Reference< css::lang::XUnoTunnel > xTunnel( xDisp, css::uno::UNO_QUERY );
-                SfxOfficeDispatch* pDisp = nullptr;
-                if ( xTunnel.is() )
-                {
-                    sal_Int64 nImplementation = xTunnel->getSomething(SfxOfficeDispatch::impl_getStaticIdentifier());
-                    pDisp = reinterpret_cast< SfxOfficeDispatch* >(sal::static_int_cast< sal_IntPtr >( nImplementation ));
-                }
-
+                SfxOfficeDispatch* pDisp = comphelper::getFromUnoTunnel<SfxOfficeDispatch>(xDisp);
                 if ( pDisp )
                 {
                     // The intercepting object is an SFX component

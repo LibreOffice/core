@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <sfx2/objsh.hxx>
 #include <comphelper/fileformat.h>
+#include <comphelper/servicehelper.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/helpers.hxx>
 #include <vcl/virdev.hxx>
@@ -412,15 +413,11 @@ SvxGalleryDrawModel::SvxGalleryDrawModel()
 
     mxDoc->DoInitNew();
 
-    uno::Reference< lang::XUnoTunnel > xTunnel( mxDoc->GetModel(), uno::UNO_QUERY );
-    if( xTunnel.is() )
+    mpFormModel
+        = dynamic_cast<FmFormModel*>(comphelper::getFromUnoTunnel<SdrModel>(mxDoc->GetModel()));
+    if (mpFormModel)
     {
-        mpFormModel = dynamic_cast< FmFormModel* >(
-            reinterpret_cast<SdrModel*>(xTunnel->getSomething(SdrModel::getUnoTunnelId())));
-        if( mpFormModel )
-        {
-            mpFormModel->InsertPage( mpFormModel->AllocPage( false ).get() );
-        }
+        mpFormModel->InsertPage(mpFormModel->AllocPage(false).get());
     }
 }
 

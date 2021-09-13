@@ -1946,19 +1946,14 @@ void OOo2OasisTransformer::Initialize(
 
 const css::uno::Sequence<sal_Int8>& OOo2OasisTransformer::getUnoTunnelId() noexcept
 {
-    static const UnoTunnelIdInit theOOo2OasisTransformerUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theOOo2OasisTransformerUnoTunnelId;
     return theOOo2OasisTransformerUnoTunnelId.getSeq();
 }
 
 // XUnoTunnel
 sal_Int64 SAL_CALL OOo2OasisTransformer::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<OOo2OasisTransformer>(rId) )
-    {
-        return reinterpret_cast< sal_Int64 >( this );
-    }
-
-    return sal_Int64(0);
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 // XServiceInfo

@@ -1880,7 +1880,7 @@ void SdrModel::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 const css::uno::Sequence< sal_Int8 >& SdrModel::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSdrModelUnoTunnelImplementationId;
+    static const comphelper::UnoTunnelIdInit theSdrModelUnoTunnelImplementationId;
     return theSdrModelUnoTunnelImplementationId.getSeq();
 }
 

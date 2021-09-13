@@ -116,7 +116,7 @@ Reference<drawing::XLayer> SdUnoDrawView::getActiveLayer() const
         // Get the corresponding XLayer object from the implementation
         // object of the layer manager.
         Reference<drawing::XLayerManager> xManager (pModel->getLayerManager(), uno::UNO_QUERY);
-        SdLayerManager* pManager = comphelper::getUnoTunnelImplementation<SdLayerManager> (xManager);
+        SdLayerManager* pManager = comphelper::getFromUnoTunnel<SdLayerManager> (xManager);
         if (pManager != nullptr)
             xCurrentLayer = pManager->GetLayer (pLayer);
     }
@@ -131,7 +131,7 @@ void SdUnoDrawView::setActiveLayer (const Reference<drawing::XLayer>& rxLayer)
     if ( ! rxLayer.is())
         return;
 
-    SdLayer* pLayer = comphelper::getUnoTunnelImplementation<SdLayer> (rxLayer);
+    SdLayer* pLayer = comphelper::getFromUnoTunnel<SdLayer> (rxLayer);
     if (pLayer == nullptr)
         return;
 
@@ -265,7 +265,7 @@ Any SAL_CALL SdUnoDrawView::getSelection()
                 if(!xPage.is())
                     continue;
 
-                SvxDrawPage* pDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( xPage );
+                SvxDrawPage* pDrawPage = comphelper::getFromUnoTunnel<SvxDrawPage>( xPage );
 
                 if(pDrawPage==nullptr)
                     continue;
@@ -400,7 +400,7 @@ Any SAL_CALL SdUnoDrawView::getFastPropertyValue (
 void SAL_CALL SdUnoDrawView::setCurrentPage (
     const Reference< drawing::XDrawPage >& xPage )
 {
-    SvxDrawPage* pDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( xPage );
+    SvxDrawPage* pDrawPage = comphelper::getFromUnoTunnel<SvxDrawPage>( xPage );
     SdrPage *pSdrPage = pDrawPage ? pDrawPage->GetSdrPage() : nullptr;
 
     if(pSdrPage)
@@ -510,7 +510,7 @@ SdXImpressDocument* SdUnoDrawView::GetModel() const noexcept
     if (mrView.GetDocSh()!=nullptr)
     {
         Reference<frame::XModel> xModel (mrView.GetDocSh()->GetModel());
-        return comphelper::getUnoTunnelImplementation<SdXImpressDocument>(xModel);
+        return comphelper::getFromUnoTunnel<SdXImpressDocument>(xModel);
     }
     else
         return nullptr;

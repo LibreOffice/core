@@ -35,7 +35,7 @@ ScDocument* ScXMLConverter::GetScDocument( const uno::Reference< frame::XModel >
 {
     if (xModel.is())
     {
-        ScModelObj* pDocObj = comphelper::getUnoTunnelImplementation<ScModelObj>( xModel );
+        ScModelObj* pDocObj = comphelper::getFromUnoTunnel<ScModelObj>( xModel );
         return pDocObj ? pDocObj->GetDocument() : nullptr;
     }
     return nullptr;

@@ -80,7 +80,7 @@ HeaderMenuController::~HeaderMenuController()
 // private function
 void HeaderMenuController::fillPopupMenu( const Reference< css::frame::XModel >& rModel, Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
-    VCLXPopupMenu*       pPopupMenu        = static_cast<VCLXPopupMenu *>(comphelper::getUnoTunnelImplementation<VCLXMenu>( rPopupMenu ));
+    VCLXPopupMenu*       pPopupMenu        = static_cast<VCLXPopupMenu *>(comphelper::getFromUnoTunnel<VCLXMenu>( rPopupMenu ));
     PopupMenu*           pVCLPopupMenu     = nullptr;
 
     SolarMutexGuard aSolarMutexGuard;

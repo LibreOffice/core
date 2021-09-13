@@ -84,7 +84,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
 
     // Tunnel through the controller to obtain a ViewShellBase.
     ViewShellBase* pBase = nullptr;
-    auto pController = comphelper::getUnoTunnelImplementation<sd::DrawController>(xFrame->getController());
+    auto pController = comphelper::getFromUnoTunnel<sd::DrawController>(xFrame->getController());
     if (pController != nullptr)
         pBase = pController->GetViewShellBase();
     if (pBase == nullptr)

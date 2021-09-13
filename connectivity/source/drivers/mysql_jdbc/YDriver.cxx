@@ -255,8 +255,7 @@ Reference<XConnection> SAL_CALL ODriverDelegator::connect(const OUString& url,
             if (xConnection.is())
             {
                 // now we have to set the URL to get the correct answer for metadata()->getURL()
-                auto pMetaConnection
-                    = comphelper::getUnoTunnelImplementation<OMetaConnection>(xConnection);
+                auto pMetaConnection = comphelper::getFromUnoTunnel<OMetaConnection>(xConnection);
                 if (pMetaConnection)
                     pMetaConnection->setURL(url);
                 m_aConnections.push_back(
@@ -321,7 +320,7 @@ ODriverDelegator::getDataDefinitionByConnection(const Reference<XConnection>& co
     checkDisposed(ODriverDelegator_BASE::rBHelper.bDisposed);
 
     Reference<XTablesSupplier> xTab;
-    auto pConnection = comphelper::getUnoTunnelImplementation<OMetaConnection>(connection);
+    auto pConnection = comphelper::getFromUnoTunnel<OMetaConnection>(connection);
     if (pConnection)
     {
         TWeakPairVector::iterator i

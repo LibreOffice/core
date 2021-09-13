@@ -206,17 +206,13 @@ uno::Sequence< OUString > SwXAutoTextContainer::getSupportedServiceNames()
 
 const uno::Sequence< sal_Int8 > & SwXAutoTextGroup::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXAutoTextGroupUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSwXAutoTextGroupUnoTunnelId;
     return theSwXAutoTextGroupUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXAutoTextGroup::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SwXAutoTextGroup>(rId) )
-    {
-        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ));
-    }
-    return 0;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 SwXAutoTextGroup::SwXAutoTextGroup(const OUString& rName,
@@ -332,16 +328,8 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
     const OUString& sLongName(aTitle);
     if (pGlosGroup && !pGlosGroup->GetError())
     {
-        uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
-        SwXTextRange* pxRange = nullptr;
-        OTextCursorHelper* pxCursor = nullptr;
-        if(xRangeTunnel.is())
-        {
-            pxRange = reinterpret_cast<SwXTextRange*>(xRangeTunnel->getSomething(
-                                    SwXTextRange::getUnoTunnelId()));
-            pxCursor = reinterpret_cast<OTextCursorHelper*>(xRangeTunnel->getSomething(
-                                    OTextCursorHelper::getUnoTunnelId()));
-        }
+        SwXTextRange* pxRange = comphelper::getFromUnoTunnel<SwXTextRange>(xTextRange);
+        OTextCursorHelper* pxCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xTextRange);
 
         OUString sOnlyText;
         OUString* pOnlyText = nullptr;
@@ -668,17 +656,13 @@ uno::Sequence< OUString > SwXAutoTextGroup::getSupportedServiceNames()
 
 const uno::Sequence< sal_Int8 > & SwXAutoTextEntry::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXAutoTextEntryUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSwXAutoTextEntryUnoTunnelId;
     return theSwXAutoTextEntryUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXAutoTextEntry::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SwXAutoTextEntry>(rId) )
-    {
-        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ));
-    }
-    return 0;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 SwXAutoTextEntry::SwXAutoTextEntry(SwGlossaries* pGlss, const OUString& rGroupName,
@@ -863,20 +847,9 @@ void SwXAutoTextEntry::applyTo(const uno::Reference< text::XTextRange > & xTextR
         // This means that we would reflect any changes which were done to the AutoText by foreign instances
         // in the meantime
 
-    uno::Reference<lang::XUnoTunnel> xTunnel( xTextRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = nullptr;
-    OTextCursorHelper* pCursor = nullptr;
-    SwXText *pText = nullptr;
-
-    if(xTunnel.is())
-    {
-        pRange = reinterpret_cast < SwXTextRange* >
-                ( xTunnel->getSomething( SwXTextRange::getUnoTunnelId() ) );
-        pCursor = reinterpret_cast < OTextCursorHelper*>
-                ( xTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() ) );
-        pText = reinterpret_cast < SwXText* >
-                ( xTunnel->getSomething( SwXText::getUnoTunnelId() ) );
-    }
+    SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xTextRange);
+    OTextCursorHelper* pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xTextRange);
+    SwXText *pText = comphelper::getFromUnoTunnel<SwXText>(xTextRange);
 
     SwDoc* pDoc = nullptr;
     if (pRange)
@@ -885,14 +858,9 @@ void SwXAutoTextEntry::applyTo(const uno::Reference< text::XTextRange > & xTextR
         pDoc = pCursor->GetDoc();
     else if ( pText && pText->GetDoc() )
     {
-        xTunnel.set(pText->getStart(), uno::UNO_QUERY);
-        if (xTunnel.is())
-        {
-            pCursor = reinterpret_cast < OTextCursorHelper* >
-                ( xTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() ) );
-            if (pCursor)
-                pDoc = pText->GetDoc();
-        }
+        pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(pText->getStart());
+        if (pCursor)
+            pDoc = pText->GetDoc();
     }
 
     if(!pDoc)

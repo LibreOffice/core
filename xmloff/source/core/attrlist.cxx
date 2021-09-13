@@ -46,7 +46,7 @@ SvXMLAttributeList::SvXMLAttributeList( const SvXMLAttributeList &r ) :
 SvXMLAttributeList::SvXMLAttributeList( const uno::Reference< xml::sax::XAttributeList> & rAttrList )
 {
     SvXMLAttributeList* pImpl =
-        comphelper::getUnoTunnelImplementation<SvXMLAttributeList>( rAttrList );
+        comphelper::getFromUnoTunnel<SvXMLAttributeList>( rAttrList );
 
     if( pImpl )
         vecAttribute = pImpl->vecAttribute;

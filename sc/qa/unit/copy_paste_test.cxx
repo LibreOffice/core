@@ -250,7 +250,7 @@ void ScCopyPasteTest::testTdf84411()
 
 
     // 3. Disable OpenCL
-    ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(pFoundShell->GetModel());
+    ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(pFoundShell->GetModel());
     CPPUNIT_ASSERT(pModel != nullptr);
     bool bOpenCLState = ScCalcConfig::isOpenCLEnabled();
     pModel->enableOpenCL(false);

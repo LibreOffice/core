@@ -904,7 +904,7 @@ void SwXTextRange::DeleteAndInsert(
 
 const uno::Sequence< sal_Int8 > & SwXTextRange::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextRangeUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSwXTextRangeUnoTunnelId;
     return theSwXTextRangeUnoTunnelId.getSeq();
 }
 
@@ -912,7 +912,7 @@ const uno::Sequence< sal_Int8 > & SwXTextRange::getUnoTunnelId()
 sal_Int64 SAL_CALL
 SwXTextRange::getSomething(const uno::Sequence< sal_Int8 >& rId)
 {
-    return ::sw::UnoTunnelImpl<SwXTextRange>(rId, this);
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 OUString SAL_CALL
@@ -1111,24 +1111,13 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
     bool bRet = false;
 
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = nullptr;
-    OTextCursorHelper* pCursor = nullptr;
-    SwXTextPortion* pPortion = nullptr;
-    SwXText* pText = nullptr;
-    SwXParagraph* pPara = nullptr;
-    SwXHeadFootText* pHeadText = nullptr;
-    if(xRangeTunnel.is())
-    {
-        pRange  = ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
-        pCursor =
-            ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
-        pPortion=
-            ::sw::UnoTunnelGetImplementation<SwXTextPortion>(xRangeTunnel);
-        pText   = ::sw::UnoTunnelGetImplementation<SwXText>(xRangeTunnel);
-        pPara   = ::sw::UnoTunnelGetImplementation<SwXParagraph>(xRangeTunnel);
-        if (eMode == TextRangeMode::AllowTableNode)
-            pHeadText = dynamic_cast<SwXHeadFootText*>(pText);
-    }
+    SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
+    OTextCursorHelper* pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
+    SwXTextPortion* pPortion = comphelper::getFromUnoTunnel<SwXTextPortion>(xRangeTunnel);
+    SwXText* pText = comphelper::getFromUnoTunnel<SwXText>(xRangeTunnel);
+    SwXParagraph* pPara = comphelper::getFromUnoTunnel<SwXParagraph>(xRangeTunnel);
+    SwXHeadFootText* pHeadText
+        = eMode == TextRangeMode::AllowTableNode ? dynamic_cast<SwXHeadFootText*>(pText) : nullptr;
 
     // if it's a text then create a temporary cursor there and re-use
     // the pCursor variable
@@ -1141,8 +1130,7 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
         // if it is started with a table then set into the table
         xTextCursor.set(pHeadText->CreateTextCursor(true));
         xTextCursor->gotoEnd(true);
-        pCursor =
-            comphelper::getUnoTunnelImplementation<OTextCursorHelper>(xTextCursor);
+        pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xTextCursor);
         pCursor->GetPaM()->Normalize();
     }
     else
@@ -1150,8 +1138,7 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
     {
         xTextCursor.set( pText->CreateCursor() );
         xTextCursor->gotoEnd(true);
-        pCursor =
-            comphelper::getUnoTunnelImplementation<OTextCursorHelper>(xTextCursor);
+        pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xTextCursor);
     }
     if(pRange && &pRange->GetDoc() == &rToFill.GetDoc())
     {
@@ -1633,14 +1620,14 @@ rtl::Reference<SwXTextRanges> SwXTextRanges::Create(SwPaM *const pPaM)
 
 const uno::Sequence< sal_Int8 > & SwXTextRanges::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextRangesUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSwXTextRangesUnoTunnelId;
     return theSwXTextRangesUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL
 SwXTextRangesImpl::getSomething(const uno::Sequence< sal_Int8 >& rId)
 {
-    return ::sw::UnoTunnelImpl<SwXTextRanges>(rId, this);
+    return comphelper::getSomethingImpl<SwXTextRanges>(rId, this);
 }
 
 /*

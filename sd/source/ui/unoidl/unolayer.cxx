@@ -458,7 +458,7 @@ void SAL_CALL SdLayerManager::remove( const uno::Reference< drawing::XLayer >& x
     if( mpModel == nullptr )
         throw lang::DisposedException();
 
-    SdLayer* pSdLayer = comphelper::getUnoTunnelImplementation<SdLayer>(xLayer);
+    SdLayer* pSdLayer = comphelper::getFromUnoTunnel<SdLayer>(xLayer);
 
     if(pSdLayer && GetView())
     {
@@ -478,7 +478,7 @@ void SAL_CALL SdLayerManager::attachShapeToLayer( const uno::Reference< drawing:
     if( mpModel == nullptr )
         throw lang::DisposedException();
 
-    SdLayer* pSdLayer = comphelper::getUnoTunnelImplementation<SdLayer>(xLayer);
+    SdLayer* pSdLayer = comphelper::getFromUnoTunnel<SdLayer>(xLayer);
     SdrLayer* pSdrLayer = pSdLayer?pSdLayer->GetSdrLayer():nullptr;
     if(pSdrLayer==nullptr)
         return;
@@ -664,7 +664,7 @@ bool compare_layers (const uno::WeakReference<uno::XInterface>& xRef, void const
     uno::Reference<uno::XInterface> xLayer (xRef);
     if (xLayer.is())
     {
-        SdLayer* pSdLayer = comphelper::getUnoTunnelImplementation<SdLayer> (xRef);
+        SdLayer* pSdLayer = comphelper::getFromUnoTunnel<SdLayer> (xRef);
         if (pSdLayer != nullptr)
         {
             SdrLayer* pSdrLayer = pSdLayer->GetSdrLayer ();

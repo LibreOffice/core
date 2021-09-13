@@ -477,17 +477,14 @@ void SwXMLExport::ExportContent_()
 
 const Sequence< sal_Int8 > & SwXMLExport::getUnoTunnelId() noexcept
 {
-    static const UnoTunnelIdInit theSwXMLExportUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSwXMLExportUnoTunnelId;
     return theSwXMLExportUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXMLExport::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SwXMLExport>(rId) )
-    {
-        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
-    }
-    return SvXMLExport::getSomething( rId );
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<SvXMLExport>{});
 }
 
 SwDoc* SwXMLExport::getDoc()
@@ -502,10 +499,7 @@ SwDoc* SwXMLExport::getDoc()
     }
 
     Reference < XText > xText = xTextDoc->getText();
-    Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
-    assert( xTextTunnel.is());
-    SwXText *pText = reinterpret_cast< SwXText *>(
-            sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
+    SwXText* pText = comphelper::getFromUnoTunnel<SwXText>(xText);
     assert( pText != nullptr );
     m_pDoc = pText->GetDoc();
     assert( m_pDoc != nullptr );

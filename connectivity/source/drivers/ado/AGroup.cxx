@@ -21,7 +21,6 @@
 #include <ado/AGroup.hxx>
 #include <ado/AUsers.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <ado/AConnection.hxx>
@@ -84,18 +83,16 @@ void OAdoGroup::refreshUsers()
 
 Sequence< sal_Int8 > OAdoGroup::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoTunnelIdInit implId;
+    return implId.getSeq();
 }
 
 // css::lang::XUnoTunnel
 
 sal_Int64 OAdoGroup::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return isUnoTunnelId<OAdoGroup>(rId)
-                ? reinterpret_cast< sal_Int64 >( this )
-                : OGroup_ADO::getSomething(rId);
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<OGroup_ADO>{});
 }
 
 
