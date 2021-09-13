@@ -1476,7 +1476,7 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
                                 {
                                     ++nPos;
                                     c = rPat[--nPatCheck];
-                                } while (c != 'Y' && c != 'M' && c != 'D');
+                                } while (c != 'Y' && c != 'M' && c != 'D' && nPatCheck > 0);
                             }
                     }
                 }
