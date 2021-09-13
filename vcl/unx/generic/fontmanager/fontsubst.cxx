@@ -22,8 +22,8 @@
 #include <sal/config.h>
 
 #include <unx/geninst.h>
-#include <PhysicalFontCollection.hxx>
 #include <font/GlyphFallbackFontSubstitution.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <unx/fontmanager.hxx>
 
 // platform specific font substitution hooks
@@ -51,7 +51,7 @@ public:
 
 }
 
-void SalGenericInstance::RegisterFontSubstitutors( PhysicalFontCollection* pFontCollection )
+void SalGenericInstance::RegisterFontSubstitutors( vcl::font::PhysicalFontCollection* pFontCollection )
 {
     // register font fallback substitutions
     static FcPreMatchSubstitution aSubstPreMatch;
