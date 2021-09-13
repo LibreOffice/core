@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27dd2ad7_3c93f5e9",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 10264,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-13T15:23:18Z",
+      "side": 1,
+      "message": "dropped the \"test\" command?",
+      "revId": "2bc494f3b7253147f42e1c04452c449c4764928c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
