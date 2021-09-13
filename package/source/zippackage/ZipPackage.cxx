@@ -60,7 +60,6 @@
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/random.h>
 #include <osl/diagnose.h>
@@ -1682,9 +1681,7 @@ Sequence< sal_Int8 > ZipPackage::getUnoTunnelId()
 
 sal_Int64 SAL_CALL ZipPackage::getSomething( const uno::Sequence< sal_Int8 >& aIdentifier )
 {
-    if ( comphelper::isUnoTunnelId<ZipPackage>(aIdentifier) )
-        return reinterpret_cast < sal_Int64 > ( this );
-    return 0;
+    return comphelper::getSomethingImpl(aIdentifier, this);
 }
 
 uno::Reference< XPropertySetInfo > SAL_CALL ZipPackage::getPropertySetInfo()

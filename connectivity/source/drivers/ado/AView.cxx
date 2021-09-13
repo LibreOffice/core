@@ -20,7 +20,6 @@
 #include <ado/AView.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <ado/adoimp.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <ado/Awrapado.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
@@ -51,9 +50,8 @@ Sequence< sal_Int8 > OAdoView::getUnoTunnelId()
 
 sal_Int64 OAdoView::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return comphelper::isUnoTunnelId<OAdoView>(rId)
-                ? reinterpret_cast< sal_Int64 >( this )
-                : OView_ADO::getSomething(rId);
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<OView_ADO>{});
 }
 
 

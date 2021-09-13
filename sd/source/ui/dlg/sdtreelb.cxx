@@ -114,16 +114,8 @@ void SdPageObjsTLV::SdPageObjsTransferable::DragFinished( sal_Int8 nDropAction )
 
 sal_Int64 SAL_CALL SdPageObjsTLV::SdPageObjsTransferable::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
-    sal_Int64 nRet;
-
-    if (comphelper::isUnoTunnelId<SdPageObjsTLV::SdPageObjsTransferable>(rId))
-    {
-        nRet = static_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
-    }
-    else
-        nRet = SdTransferable::getSomething(rId);
-
-    return nRet;
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<SdTransferable>{});
 }
 
 const css::uno::Sequence<sal_Int8>& SdPageObjsTLV::SdPageObjsTransferable::getUnoTunnelId()

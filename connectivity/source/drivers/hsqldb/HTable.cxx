@@ -18,7 +18,6 @@
  */
 
 #include <hsqldb/HTable.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <comphelper/property.hxx>
@@ -126,9 +125,8 @@ Sequence< sal_Int8 > OHSQLTable::getUnoTunnelId()
 
 sal_Int64 OHSQLTable::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return (comphelper::isUnoTunnelId<OHSQLTable>(rId))
-                ? reinterpret_cast< sal_Int64 >( this )
-                : OTable_TYPEDEF::getSomething(rId);
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<OTable_TYPEDEF>{});
 }
 
 // XAlterTable

@@ -438,10 +438,8 @@ Math_XMLOasisSettingsImporter_get_implementation(uno::XComponentContext* pCtx,
 
 sal_Int64 SAL_CALL SmXMLImport::getSomething(const uno::Sequence<sal_Int8>& rId)
 {
-    if (comphelper::isUnoTunnelId<SmXMLImport>(rId))
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
-
-    return SvXMLImport::getSomething(rId);
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<SvXMLImport>{});
 }
 
 void SmXMLImport::endDocument()

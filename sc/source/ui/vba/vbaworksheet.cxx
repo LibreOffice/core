@@ -1039,11 +1039,7 @@ ScVbaWorksheet::PrintOut( const uno::Any& From, const uno::Any& To, const uno::A
 sal_Int64 SAL_CALL
 ScVbaWorksheet::getSomething(const uno::Sequence<sal_Int8 > & rId)
 {
-    if (comphelper::isUnoTunnelId<ScVbaWorksheet>(rId))
-    {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
-    }
-    return 0;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

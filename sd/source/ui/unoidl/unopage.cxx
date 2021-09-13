@@ -330,14 +330,8 @@ const css::uno::Sequence< sal_Int8 > & SdGenericDrawPage::getUnoTunnelId() noexc
 
 sal_Int64 SAL_CALL SdGenericDrawPage::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
-        if( comphelper::isUnoTunnelId<SdGenericDrawPage>(rId) )
-        {
-                return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
-        }
-        else
-        {
-                return SvxFmDrawPage::getSomething( rId );
-        }
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<SvxFmDrawPage>{});
 }
 
 SdGenericDrawPage::SdGenericDrawPage(SdXImpressDocument* _pModel, SdPage* pInPage, const SvxItemPropertySet* _pSet)

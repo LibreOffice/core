@@ -67,11 +67,7 @@ const css::uno::Sequence<sal_Int8>& XMLMutableAttributeList::getUnoTunnelId() no
 sal_Int64 SAL_CALL XMLMutableAttributeList::getSomething(
         const Sequence< sal_Int8 >& rId )
 {
-    if( comphelper::isUnoTunnelId<XMLMutableAttributeList>(rId) )
-    {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
-    }
-    return 0;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 sal_Int16 SAL_CALL XMLMutableAttributeList::getLength()

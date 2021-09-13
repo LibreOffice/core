@@ -743,14 +743,8 @@ const css::uno::Sequence< sal_Int8 >& ScDrawTransferObj::getUnoTunnelId()
 
 sal_Int64 SAL_CALL ScDrawTransferObj::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
-    sal_Int64 nRet;
-    if( comphelper::isUnoTunnelId<ScDrawTransferObj>(rId) )
-    {
-        nRet = reinterpret_cast< sal_Int64 >( this );
-    }
-    else
-        nRet = TransferDataContainer::getSomething(rId);
-    return nRet;
+    return comphelper::getSomethingImpl(
+        rId, this, comphelper::FallbackToGetSomethingOf<TransferDataContainer>{});
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

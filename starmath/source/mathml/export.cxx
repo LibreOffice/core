@@ -446,9 +446,8 @@ SmMLExportWrapper::WriteThroughComponentMS(const Reference<XComponent>& xCompone
 
 sal_Int64 SAL_CALL SmMLExport::getSomething(const uno::Sequence<sal_Int8>& rId)
 {
-    if (comphelper::isUnoTunnelId<SmMLExport>(rId))
-        return reinterpret_cast<intptr_t>(this);
-    return SvXMLExport::getSomething(rId);
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<SvXMLExport>{});
 }
 
 const uno::Sequence<sal_Int8>& SmMLExport::getUnoTunnelId() noexcept

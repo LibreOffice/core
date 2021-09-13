@@ -91,7 +91,7 @@ public:
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override ;
-    static const css::uno::Sequence< sal_Int8 >& impl_getStaticIdentifier();
+    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
     static bool             IsMasterUnoCommand( const css::util::URL& aURL );
     static OUString         GetMasterUnoCommand( const css::util::URL& aURL );

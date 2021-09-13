@@ -26,7 +26,6 @@
 #include "CIndexes.hxx"
 
 #include <osl/diagnose.h>
-#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
@@ -296,13 +295,8 @@ void SAL_CALL ODBTable::alterColumnByName( const OUString& _rName, const Referen
 
 sal_Int64 SAL_CALL ODBTable::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    sal_Int64 nRet(0);
-    if (comphelper::isUnoTunnelId<ODBTable>(rId))
-        nRet = reinterpret_cast<sal_Int64>(this);
-    else
-        nRet = OTable_Base::getSomething(rId);
-
-    return nRet;
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<OTable_Base>{});
 }
 
 Sequence< sal_Int8 > ODBTable::getUnoTunnelId()

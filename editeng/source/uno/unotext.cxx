@@ -2141,14 +2141,8 @@ const uno::Sequence< sal_Int8 > & SvxUnoTextBase::getUnoTunnelId() noexcept
 
 sal_Int64 SAL_CALL SvxUnoTextBase::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    if( comphelper::isUnoTunnelId<SvxUnoTextBase>(rId) )
-    {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
-    }
-    else
-    {
-        return SvxUnoTextRangeBase::getSomething( rId );
-    }
+    return comphelper::getSomethingImpl(
+        rId, this, comphelper::FallbackToGetSomethingOf<SvxUnoTextRangeBase>{});
 }
 
 SvxUnoText::SvxUnoText( const SvxItemPropertySet* _pSet ) noexcept
@@ -2215,14 +2209,8 @@ const uno::Sequence< sal_Int8 > & SvxUnoText::getUnoTunnelId() noexcept
 
 sal_Int64 SAL_CALL SvxUnoText::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    if( comphelper::isUnoTunnelId<SvxUnoText>(rId) )
-    {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
-    }
-    else
-    {
-        return SvxUnoTextBase::getSomething( rId );
-    }
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<SvxUnoTextBase>{});
 }
 
 

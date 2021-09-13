@@ -21,6 +21,7 @@
 #include <classes/actiontriggercontainer.hxx>
 #include <classes/actiontriggerpropertyset.hxx>
 #include <classes/actiontriggerseparatorpropertyset.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -36,7 +37,7 @@ using namespace com::sun::star::beans;
 namespace framework
 {
 
-static Sequence< sal_Int8 > const & impl_getStaticIdentifier()
+const css::uno::Sequence<sal_Int8>& RootActionTriggerContainer::getUnoTunnelId() noexcept
 {
     static const sal_uInt8 pGUID[16] = { 0x17, 0x0F, 0xA2, 0xC9, 0xCA, 0x50, 0x4A, 0xD3, 0xA6, 0x3B, 0x39, 0x99, 0xC5, 0x96, 0x43, 0x27 };
     static css::uno::Sequence< sal_Int8 > seqID(reinterpret_cast<const sal_Int8*>(pGUID), 16);
@@ -211,10 +212,7 @@ Sequence< OUString > SAL_CALL RootActionTriggerContainer::getSupportedServiceNam
 // XUnoTunnel
 sal_Int64 SAL_CALL RootActionTriggerContainer::getSomething( const Sequence< sal_Int8 >& aIdentifier )
 {
-    if ( aIdentifier == impl_getStaticIdentifier() )
-        return reinterpret_cast< sal_Int64 >( this );
-    else
-        return 0;
+    return comphelper::getSomethingImpl(aIdentifier, this);
 }
 
 // XTypeProvider

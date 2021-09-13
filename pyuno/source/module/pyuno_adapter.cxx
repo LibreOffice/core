@@ -29,7 +29,6 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/typeprovider.hxx>
 
 
 using com::sun::star::beans::XIntrospectionAccess;
@@ -75,9 +74,7 @@ Sequence<sal_Int8> Adapter::getUnoTunnelId()
 
 sal_Int64 Adapter::getSomething( const Sequence< sal_Int8 > &id)
 {
-    if (comphelper::isUnoTunnelId<Adapter>(id))
-        return reinterpret_cast<sal_Int64>(this);
-    return 0;
+    return comphelper::getSomethingImpl(id, this);
 }
 
 void raiseInvocationTargetExceptionWhenNeeded( const Runtime &runtime )

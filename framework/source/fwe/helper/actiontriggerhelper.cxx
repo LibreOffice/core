@@ -155,7 +155,7 @@ static void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, const Refer
                             if ( xUnoTunnel.is() )
                             {
                                 // Try to get implementation pointer through XUnoTunnel
-                                sal_Int64 nPointer = xUnoTunnel->getSomething( ImageWrapper::GetUnoTunnelId() );
+                                sal_Int64 nPointer = xUnoTunnel->getSomething( ImageWrapper::getUnoTunnelId() );
                                 if ( nPointer )
                                 {
                                     // This is our own optimized implementation of menu images!

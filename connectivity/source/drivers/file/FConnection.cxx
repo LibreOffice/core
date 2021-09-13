@@ -21,7 +21,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <file/FConnection.hxx>
 #include <file/FDatabaseMetaData.hxx>
 #include <file/FDriver.hxx>
@@ -401,9 +400,7 @@ Reference< XDynamicResultSet > OConnection::getDir() const
 
 sal_Int64 SAL_CALL OConnection::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    return (comphelper::isUnoTunnelId<OConnection>(rId))
-        ? reinterpret_cast< sal_Int64 >( this )
-        : sal_Int64(0);
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 Sequence< sal_Int8 > OConnection::getUnoTunnelId()

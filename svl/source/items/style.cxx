@@ -896,12 +896,7 @@ SfxUnoStyleSheet* SfxUnoStyleSheet::getUnoStyleSheet( const css::uno::Reference<
  */
 ::sal_Int64 SAL_CALL SfxUnoStyleSheet::getSomething( const css::uno::Sequence< ::sal_Int8 >& rId )
 {
-    if( comphelper::isUnoTunnelId<SfxUnoStyleSheet>(rId) )
-    {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
-    }
-
-    return 0;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 void

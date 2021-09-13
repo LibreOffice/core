@@ -437,10 +437,7 @@ void SAL_CALL ORowSet::release() noexcept
 // css::XUnoTunnel
 sal_Int64 SAL_CALL ORowSet::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    if (comphelper::isUnoTunnelId<ORowSet>(rId))
-        return reinterpret_cast<sal_Int64>(this);
-
-    return 0;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 Sequence< sal_Int8 > ORowSet::getUnoTunnelId()
@@ -2907,10 +2904,7 @@ Sequence< sal_Int8 > ORowSetClone::getUnoTunnelId()
 // css::XUnoTunnel
 sal_Int64 SAL_CALL ORowSetClone::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    if (comphelper::isUnoTunnelId<ORowSetClone>(rId))
-        return reinterpret_cast<sal_Int64>(this);
-
-    return 0;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 void SAL_CALL ORowSetClone::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)

@@ -517,16 +517,7 @@ void SAL_CALL TransferableHelper::dropActionChanged( const DragSourceDragEvent& 
 
 sal_Int64 SAL_CALL TransferableHelper::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    sal_Int64 nRet;
-
-    if( comphelper::isUnoTunnelId<TransferableHelper>(rId) )
-    {
-        nRet = sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
-    }
-    else
-        nRet = 0;
-
-    return nRet;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 

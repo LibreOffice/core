@@ -34,7 +34,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
-#include <cppuhelper/typeprovider.hxx>
 
 using namespace ::comphelper;
 using namespace ::com::sun::star;
@@ -141,10 +140,7 @@ namespace
 
     sal_Int64 SAL_CALL OToolBoxWindowItem::getSomething( const Sequence< sal_Int8 >& _rId )
     {
-        if (comphelper::isUnoTunnelId<OToolBoxWindowItem>(_rId))
-            return reinterpret_cast< sal_Int64>( this );
-
-        return 0;
+        return comphelper::getSomethingImpl(_rId, this);
     }
 }
 

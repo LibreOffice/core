@@ -30,7 +30,6 @@
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <connectivity/dbexception.hxx>
 #include <dbase/DResultSet.hxx>
 #include <strings.hrc>
@@ -110,9 +109,8 @@ Sequence< sal_Int8 > ODbaseIndex::getUnoTunnelId()
 
 sal_Int64 ODbaseIndex::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return (comphelper::isUnoTunnelId<ODbaseIndex>(rId))
-                ? reinterpret_cast< sal_Int64 >( this )
-                : ODbaseIndex_BASE::getSomething(rId);
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<ODbaseIndex_BASE>{});
 }
 
 ONDXPagePtr const & ODbaseIndex::getRoot()

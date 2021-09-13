@@ -2162,7 +2162,7 @@ rtl::Reference< ChildAccess > Access::getFreeSetMember(
     if (tunnel.is()) {
         freeAcc.set(
             reinterpret_cast< ChildAccess * >(
-                tunnel->getSomething(ChildAccess::getTunnelId())));
+                tunnel->getSomething(ChildAccess::getUnoTunnelId())));
     }
     if (!freeAcc.is() || freeAcc->getParentAccess().is() ||
         (freeAcc->isInTransaction() &&

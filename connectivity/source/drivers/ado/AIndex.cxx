@@ -20,7 +20,6 @@
 #include <ado/AIndex.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#include <cppuhelper/typeprovider.hxx>
 #include <ado/AColumns.hxx>
 #include <TConnection.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -81,9 +80,8 @@ Sequence< sal_Int8 > OAdoIndex::getUnoTunnelId()
 
 sal_Int64 OAdoIndex::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return comphelper::isUnoTunnelId<OAdoIndex>(rId)
-                ? reinterpret_cast< sal_Int64 >( this )
-                : sdbcx::OIndex::getSomething(rId);
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<sdbcx::OIndex>{});
 }
 
 void SAL_CALL OAdoIndex::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)

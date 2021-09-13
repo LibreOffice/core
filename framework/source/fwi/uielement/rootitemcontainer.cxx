@@ -141,9 +141,7 @@ Reference< XIndexAccess > RootItemContainer::deepCopyContainer( const Reference<
 // XUnoTunnel
 sal_Int64 RootItemContainer::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
 {
-    if( comphelper::isUnoTunnelId<RootItemContainer>(rIdentifier) )
-        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ));
-    return 0;
+    return comphelper::getSomethingImpl(rIdentifier, this);
 }
 
 const Sequence< sal_Int8 >& RootItemContainer::getUnoTunnelId() noexcept

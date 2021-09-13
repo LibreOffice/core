@@ -101,14 +101,15 @@ public:
     */
     std::shared_ptr<UserData> GetUserData (const sal_Int32 nIndex) const;
 
+    // XUnoTunnel
+    virtual sal_Int64 SAL_CALL      getSomething(const css::uno::Sequence< sal_Int8 >& rId) override;
+
 protected:
 
     virtual void                    AddSupportedFormats() override;
     virtual bool                    GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
     virtual bool                    WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const css::datatransfer::DataFlavor& rFlavor ) override;
     virtual void                    ObjectReleased() override final;
-
-    virtual sal_Int64 SAL_CALL      getSomething( const css::uno::Sequence< sal_Int8 >& rId ) override;
 
 private:
 

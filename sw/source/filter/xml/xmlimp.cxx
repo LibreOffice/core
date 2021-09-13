@@ -368,11 +368,8 @@ const Sequence< sal_Int8 > & SwXMLImport::getUnoTunnelId() noexcept
 
 sal_Int64 SAL_CALL SwXMLImport::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    if( comphelper::isUnoTunnelId<SwXMLImport>(rId) )
-    {
-        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
-    }
-    return SvXMLImport::getSomething( rId );
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<SvXMLImport>{});
 }
 
 static OTextCursorHelper *lcl_xml_GetSwXTextCursor( const Reference < XTextCursor >& rTextCursor )

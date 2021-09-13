@@ -1027,11 +1027,7 @@ const uno::Sequence< sal_Int8 > & SwXNumberingRules::getUnoTunnelId()
 // return implementation specific data
 sal_Int64 SwXNumberingRules::getSomething( const uno::Sequence< sal_Int8 > & rId )
 {
-    if( comphelper::isUnoTunnelId<SwXNumberingRules>(rId) )
-    {
-        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
-    }
-    return 0;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 OUString SwXNumberingRules::getImplementationName()
