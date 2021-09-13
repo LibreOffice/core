@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "067c1f45_cc5876b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-13T09:07:12Z",
+      "side": 1,
+      "message": "I realize that the change is quite big; however, I don\u0027t see how to modularize it, given the renames needed to bear meaning of the meaning of the functions. And doing the renames one-by-one IMO would not decrease the volume much, but would introduce multiple repeated changes to the same files and often the same lines.\n\nDo you think it\u0027s ~reasonable in current form (modulo possible fixes when Jenkins shows my bugs), or do you have any suggestions? Thanks!",
+      "revId": "71b834aec0a7395069b87e65092744302af45623",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
