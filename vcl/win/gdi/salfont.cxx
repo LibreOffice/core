@@ -53,8 +53,8 @@
 
 #include <font/FontSelectPattern.hxx>
 #include <fontsubset.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
-#include <PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <font/fontsubstitution.hxx>
 #include <sft.hxx>
@@ -243,7 +243,7 @@ bool WinGlyphFallbackSubstititution::HasMissingChars(vcl::font::PhysicalFontFace
 namespace
 {
     //used by 2-level font fallback
-    vcl::font::PhysicalFontFamily* findDevFontListByLocale(const PhysicalFontCollection &rFontCollection,
+    vcl::font::PhysicalFontFamily* findDevFontListByLocale(const vcl::font::PhysicalFontCollection &rFontCollection,
                                                 const LanguageTag& rLanguageTag )
     {
         // get the default font for a specified locale
@@ -300,7 +300,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute(vcl::font::FontSelectPat
 
     // first level fallback:
     // try use the locale specific default fonts defined in VCL.xcu
-    const PhysicalFontCollection* pFontCollection = ImplGetSVData()->maGDIData.mxScreenFontList.get();
+    const vcl::font::PhysicalFontCollection* pFontCollection = ImplGetSVData()->maGDIData.mxScreenFontList.get();
     vcl::font::PhysicalFontFamily* pFontFamily = findDevFontListByLocale(*pFontCollection, aLanguageTag);
     if( pFontFamily )
     {
@@ -355,7 +355,7 @@ namespace {
 struct ImplEnumInfo
 {
     HDC                 mhDC;
-    PhysicalFontCollection* mpList;
+    vcl::font::PhysicalFontCollection* mpList;
     OUString*           mpName;
     LOGFONTW*           mpLogFont;
     bool                mbPrinter;
@@ -1116,7 +1116,7 @@ static OUString lcl_GetFontFamilyName(const OUString& rFontFileURL)
     return OUString(aBuffer + nNameOfs, nPos - nNameOfs, osl_getThreadTextEncoding());
 }
 
-bool WinSalGraphics::AddTempDevFont(PhysicalFontCollection* pFontCollection,
+bool WinSalGraphics::AddTempDevFont(vcl::font::PhysicalFontCollection* pFontCollection,
                                     const OUString& rFontFileURL, const OUString& rFontName)
 {
     OUString aFontFamily = lcl_GetFontFamilyName(rFontFileURL);
@@ -1158,7 +1158,7 @@ bool WinSalGraphics::AddTempDevFont(PhysicalFontCollection* pFontCollection,
     return true;
 }
 
-void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
+void WinSalGraphics::GetDevFontList( vcl::font::PhysicalFontCollection* pFontCollection )
 {
     // make sure all LO shared fonts are registered temporarily
     static std::once_flag init;
