@@ -69,7 +69,7 @@ ScMyAddress ScAccessibleSpreadsheet::CalcScAddressFromRangeList(ScRangeList *pMa
         ScDocument* pDoc= GetDocument(mpViewShell);
         sal_Int32 nMinRow = pDoc->MaxRow();
         sal_Int32 nMaxRow = 0;
-        m_vecTempRange.clear();
+        std::vector<ScRange> aRanges;
         size_t nSize = pMarkedRanges->size();
         for (size_t i = 0; i < nSize; ++i)
         {
@@ -79,7 +79,7 @@ ScMyAddress ScAccessibleSpreadsheet::CalcScAddressFromRangeList(ScRangeList *pMa
                 if ((maActiveCell.Tab() >= rRange.aStart.Tab()) ||
                     maActiveCell.Tab() <= rRange.aEnd.Tab())
                 {
-                    m_vecTempRange.push_back(rRange);
+                    aRanges.push_back(rRange);
                     nMinRow = std::min(rRange.aStart.Row(),nMinRow);
                     nMaxRow = std::max(rRange.aEnd.Row(),nMaxRow);
                 }
@@ -88,7 +88,7 @@ ScMyAddress ScAccessibleSpreadsheet::CalcScAddressFromRangeList(ScRangeList *pMa
             }
             else if(rRange.aStart.Tab() == maActiveCell.Tab())
             {
-                m_vecTempRange.push_back(rRange);
+                aRanges.push_back(rRange);
                 nMinRow = std::min(rRange.aStart.Row(),nMinRow);
                 nMaxRow = std::max(rRange.aEnd.Row(),nMaxRow);
             }
@@ -98,18 +98,18 @@ ScMyAddress ScAccessibleSpreadsheet::CalcScAddressFromRangeList(ScRangeList *pMa
         int nCurrentIndex = 0 ;
         for(sal_Int32 row = nMinRow ; row <= nMaxRow ; ++row)
         {
-            m_vecTempCol.clear();
-            for (ScRange const & r : m_vecTempRange)
+            std::vector<std::pair<SCCOL, SCCOL>> aVecCol;
+            for (ScRange const & r : aRanges)
             {
                 if ( row >= r.aStart.Row() && row <= r.aEnd.Row())
                 {
-                    m_vecTempCol.emplace_back(r.aStart.Col(),r.aEnd.Col());
+                    aVecCol.emplace_back(r.aStart.Col(), r.aEnd.Col());
                 }
             }
-            std::sort(m_vecTempCol.begin(),m_vecTempCol.end(),CompMinCol);
-            for (const PAIR_COL &pairCol : m_vecTempCol)
+            std::sort(aVecCol.begin(), aVecCol.end(), CompMinCol);
+            for (const std::pair<SCCOL, SCCOL> &pairCol : aVecCol)
             {
-                sal_uInt16 nCol = pairCol.second - pairCol.first + 1;
+                SCCOL nCol = pairCol.second - pairCol.first + 1;
                 if (nCol + nCurrentIndex > nSelectedChildIndex)
                 {
                     return ScMyAddress(static_cast<SCCOL>(pairCol.first + nSelectedChildIndex - nCurrentIndex), row, maActiveCell.Tab());

@@ -267,9 +267,6 @@ private:
     ScRange       m_aLastWithInMarkRange;
     OUString      m_strCurCellValue;
     ScRangeList   m_LastMarkedRanges;
-    std::vector<ScRange>  m_vecTempRange;
-    typedef std::pair<sal_uInt16,sal_uInt16> PAIR_COL;
-    std::vector<PAIR_COL> m_vecTempCol;
     OUString      m_strOldTabName;
 };
 
