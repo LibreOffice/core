@@ -54,8 +54,9 @@
 #include <font/FontSelectPattern.hxx>
 #include <fontsubset.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
-#include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontFaceCollection.hxx>
 #include <font/PhysicalFontFace.hxx>
+#include <font/PhysicalFontFamily.hxx>
 #include <font/fontsubstitution.hxx>
 #include <sft.hxx>
 #include <win/saldata.hxx>

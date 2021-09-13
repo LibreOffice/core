@@ -50,8 +50,11 @@ class SalFrame;
 class X11SalVirtualDevice;
 class X11SalGraphicsImpl;
 class X11SkiaSalVirtualDevice;
+namespace vcl::font
+{
 class PhysicalFontCollection;
-namespace vcl::font { class PhysicalFontFace; }
+class PhysicalFontFace;
+}
 class SalGraphicsImpl;
 class TextRenderImpl;
 
@@ -116,9 +119,9 @@ public:
     virtual void                    GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel ) override;
     virtual FontCharMapRef          GetFontCharMap() const override;
     virtual bool                    GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const override;
-    virtual void                    GetDevFontList( PhysicalFontCollection* ) override;
+    virtual void                    GetDevFontList( vcl::font::PhysicalFontCollection* ) override;
     virtual void                    ClearDevFontCache() override;
-    virtual bool                    AddTempDevFont( PhysicalFontCollection*, const OUString& rFileURL, const OUString& rFontName ) override;
+    virtual bool                    AddTempDevFont( vcl::font::PhysicalFontCollection*, const OUString& rFileURL, const OUString& rFontName ) override;
 
     virtual bool                    CreateFontSubset(
                                         const OUString& rToFile,
