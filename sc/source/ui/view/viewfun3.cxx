@@ -619,29 +619,15 @@ void ScViewFunc::PasteFromSystem()
 
 void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTransferable>& rxTransferable )
 {
-    ScTransferObj *pOwnClip=nullptr;
-    ScDrawTransferObj *pDrawClip=nullptr;
     uno::Reference<lang::XUnoTunnel> xTunnel( rxTransferable, uno::UNO_QUERY );
-    if ( xTunnel.is() )
-    {
-        sal_Int64 nHandle = xTunnel->getSomething( ScTransferObj::getUnoTunnelId() );
-        if ( nHandle )
-            pOwnClip = reinterpret_cast<ScTransferObj*>( static_cast<sal_IntPtr>(nHandle));
-        else
-        {
-            nHandle = xTunnel->getSomething( ScDrawTransferObj::getUnoTunnelId() );
-            if ( nHandle )
-                pDrawClip = reinterpret_cast<ScDrawTransferObj*>( static_cast<sal_IntPtr>(nHandle) );
-        }
-    }
 
-    if (pOwnClip)
+    if (auto pOwnClip = comphelper::getFromUnoTunnel<ScTransferObj>(xTunnel))
     {
         PasteFromClip( InsertDeleteFlags::ALL, pOwnClip->GetDocument(),
                         ScPasteFunc::NONE, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
                         true );     // allow warning dialog
     }
-    else if (pDrawClip)
+    else if (auto pDrawClip = comphelper::getFromUnoTunnel<ScDrawTransferObj>(xTunnel))
     {
         ScViewData& rViewData = GetViewData();
         SCCOL nPosX = rViewData.GetCurX();

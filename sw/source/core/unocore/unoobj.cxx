@@ -1040,14 +1040,8 @@ SwXTextCursor::gotoRange(
     SwUnoCursor & rOwnCursor( GetCursorOrThrow() );
 
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = nullptr;
-    OTextCursorHelper* pCursor = nullptr;
-    if(xRangeTunnel.is())
-    {
-        pRange  = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
-        pCursor =
-            comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
-    }
+    SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
+    OTextCursorHelper* pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
 
     if (!pRange && !pCursor)
     {

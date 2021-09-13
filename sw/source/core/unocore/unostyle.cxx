@@ -966,13 +966,7 @@ void XStyleFamily::insertByName(const OUString& rName, const uno::Any& rElement)
     else
     {
         uno::Reference<lang::XUnoTunnel> xStyleTunnel = rElement.get<uno::Reference<lang::XUnoTunnel>>();
-        SwXStyle* pNewStyle = nullptr;
-        if(xStyleTunnel.is())
-        {
-            pNewStyle = reinterpret_cast< SwXStyle * >(
-                    sal::static_int_cast< sal_IntPtr >( xStyleTunnel->getSomething( SwXStyle::getUnoTunnelId()) ));
-        }
-
+        SwXStyle* pNewStyle = comphelper::getFromUnoTunnel<SwXStyle>(xStyleTunnel);
         if (!pNewStyle || !pNewStyle->IsDescriptor() || pNewStyle->GetFamily() != m_rEntry.m_eFamily)
             throw lang::IllegalArgumentException();
 
@@ -1729,7 +1723,7 @@ void SwXStyle::SetPropertyValue<FN_UNO_NUM_RULES>(const SfxItemPropertyMapEntry&
     if(!rValue.has<uno::Reference<container::XIndexReplace>>() || !rValue.has<uno::Reference<lang::XUnoTunnel>>())
         throw lang::IllegalArgumentException();
     auto xNumberTunnel(rValue.get<uno::Reference<lang::XUnoTunnel>>());
-    SwXNumberingRules* pSwXRules = reinterpret_cast<SwXNumberingRules*>(sal::static_int_cast<sal_IntPtr>(xNumberTunnel->getSomething(SwXNumberingRules::getUnoTunnelId())));
+    SwXNumberingRules* pSwXRules = comphelper::getFromUnoTunnel<SwXNumberingRules>(xNumberTunnel);
     if(!pSwXRules)
         return;
     SwNumRule aSetRule(*pSwXRules->GetNumRule());

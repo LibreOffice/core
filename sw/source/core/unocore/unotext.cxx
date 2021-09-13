@@ -2255,9 +2255,7 @@ SwXText::copyText(
 
     uno::Reference<lang::XUnoTunnel> const xSourceTunnel(xSource,
         uno::UNO_QUERY);
-    SwXText const*const pSource( xSourceTunnel.is()
-        ? comphelper::getFromUnoTunnel<SwXText>(xSourceTunnel)
-        : nullptr);
+    SwXText const* const pSource(comphelper::getFromUnoTunnel<SwXText>(xSourceTunnel));
 
     uno::Reference< text::XText > const xText(xSource, uno::UNO_QUERY_THROW);
     uno::Reference< text::XTextCursor > const xCursor =

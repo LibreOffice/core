@@ -70,9 +70,8 @@ ViewTabBar::ViewTabBar (
     try
     {
         Reference<lang::XUnoTunnel> xTunnel (mxController, UNO_QUERY_THROW);
-        DrawController* pController = reinterpret_cast<DrawController*>(
-            xTunnel->getSomething(DrawController::getUnoTunnelId()));
-        mpViewShellBase = pController->GetViewShellBase();
+        if (auto pController = comphelper::getFromUnoTunnel<DrawController>(xTunnel))
+            mpViewShellBase = pController->GetViewShellBase();
     }
     catch (const RuntimeException&)
     {
@@ -150,9 +149,8 @@ vcl::Window* ViewTabBar::GetAnchorWindow(
     try
     {
         Reference<lang::XUnoTunnel> xTunnel (rxController, UNO_QUERY_THROW);
-        DrawController* pController = reinterpret_cast<DrawController*>(
-            xTunnel->getSomething(DrawController::getUnoTunnelId()));
-        pBase = pController->GetViewShellBase();
+        if (auto pController = comphelper::getFromUnoTunnel<DrawController>(xTunnel))
+            pBase = pController->GetViewShellBase();
     }
     catch (const RuntimeException&)
     {
@@ -187,9 +185,7 @@ vcl::Window* ViewTabBar::GetAnchorWindow(
         try
         {
             Reference<lang::XUnoTunnel> xTunnel (xPane, UNO_QUERY_THROW);
-            framework::Pane* pPane = reinterpret_cast<framework::Pane*>(
-                xTunnel->getSomething(framework::Pane::getUnoTunnelId()));
-            if (pPane != nullptr)
+            if (auto pPane = comphelper::getFromUnoTunnel<framework::Pane>(xTunnel))
                 pWindow = pPane->GetWindow()->GetParent();
         }
         catch (const RuntimeException&)

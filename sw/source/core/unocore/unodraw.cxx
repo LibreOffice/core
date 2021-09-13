@@ -360,10 +360,7 @@ uno::Reference< drawing::XShape > SwFmDrawPage::CreateShape( SdrObject *pObj ) c
         }
         uno::Reference< XUnoTunnel > xShapeTunnel(xRet, uno::UNO_QUERY);
         //don't create an SwXShape if it already exists
-        rtl::Reference<SwXShape> pShape;
-        if(xShapeTunnel.is())
-            pShape = reinterpret_cast< SwXShape * >(
-                    sal::static_int_cast< sal_IntPtr >( xShapeTunnel->getSomething(SwXShape::getUnoTunnelId()) ));
+        rtl::Reference<SwXShape> pShape = comphelper::getFromUnoTunnel<SwXShape>(xShapeTunnel);
         if(!pShape)
         {
             xShapeTunnel = nullptr;
@@ -558,15 +555,8 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     if(!m_pDoc)
         throw uno::RuntimeException();
     uno::Reference< lang::XUnoTunnel > xShapeTunnel(xShape, uno::UNO_QUERY);
-    SwXShape* pShape = nullptr;
-    SvxShape* pSvxShape = nullptr;
-    if(xShapeTunnel.is())
-    {
-        pShape      = reinterpret_cast< SwXShape * >(
-                sal::static_int_cast< sal_IntPtr >( xShapeTunnel->getSomething(SwXShape::getUnoTunnelId()) ));
-        pSvxShape   = reinterpret_cast< SvxShape * >(
-                sal::static_int_cast< sal_IntPtr >( xShapeTunnel->getSomething(SvxShape::getUnoTunnelId()) ));
-    }
+    SwXShape* pShape = comphelper::getFromUnoTunnel<SwXShape>(xShapeTunnel);
+    SvxShape* pSvxShape = comphelper::getFromUnoTunnel<SvxShape>(xShapeTunnel);
 
     // this is not a writer shape
     if(!pShape)
@@ -2022,32 +2012,16 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
     if(xRangeTunnel.is())
     {
-        SwXTextRange* pRange = nullptr;
-        OTextCursorHelper* pCursor = nullptr;
-        SwXTextPortion* pPortion = nullptr;
-        SwXText* pText = nullptr;
-        SwXParagraph* pParagraph = nullptr;
-
-        pRange  = reinterpret_cast< SwXTextRange * >(
-                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
-        pText   = reinterpret_cast< SwXText * >(
-                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXText::getUnoTunnelId()) ));
-        pCursor = reinterpret_cast< OTextCursorHelper * >(
-                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
-        pPortion = reinterpret_cast< SwXTextPortion * >(
-                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextPortion::getUnoTunnelId()) ));
-        pParagraph = reinterpret_cast< SwXParagraph * >(
-                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXParagraph::getUnoTunnelId( ) ) ) );
-
-        if (pRange)
+        if (auto pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel))
             pDoc = &pRange->GetDoc();
-        else if (pText)
+        else if (auto pText = comphelper::getFromUnoTunnel<SwXText>(xRangeTunnel))
             pDoc = pText->GetDoc();
-        else if (pCursor)
+        else if (auto pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel))
             pDoc = pCursor->GetDoc();
-        else if (pPortion)
+        else if (auto pPortion = comphelper::getFromUnoTunnel<SwXTextPortion>(xRangeTunnel))
             pDoc = &pPortion->GetCursor().GetDoc();
-        else if (pParagraph && pParagraph->GetTextNode())
+        else if (auto pParagraph = comphelper::getFromUnoTunnel<SwXParagraph>(xRangeTunnel);
+                 pParagraph && pParagraph->GetTextNode())
             pDoc = &pParagraph->GetTextNode()->GetDoc();
 
     }
@@ -2743,15 +2717,11 @@ void SwXGroupShape::add( const uno::Reference< XShape >& xShape )
 
 
     uno::Reference<lang::XUnoTunnel> xTunnel(xShape, uno::UNO_QUERY);
-    SwXShape* pSwShape = nullptr;
-    if(xShape.is())
-        pSwShape = reinterpret_cast< SwXShape * >(
-                sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SwXShape::getUnoTunnelId()) ));
+    SwXShape* pSwShape = comphelper::getFromUnoTunnel<SwXShape>(xTunnel);
     if(!(pSwShape && pSwShape->m_bDescriptor))
         return;
 
-    SvxShape* pAddShape = reinterpret_cast< SvxShape * >(
-            sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SvxShape::getUnoTunnelId()) ));
+    SvxShape* pAddShape = comphelper::getFromUnoTunnel<SvxShape>(xTunnel);
     if(pAddShape)
     {
         SdrObject* pObj = pAddShape->GetSdrObject();

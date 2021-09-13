@@ -1069,18 +1069,9 @@ void SwXTextViewCursor::gotoRange(
     }
 
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = nullptr;
-    SwXParagraph* pPara = nullptr;
-    OTextCursorHelper* pCursor = nullptr;
-    if(xRangeTunnel.is())
-    {
-        pRange = reinterpret_cast<SwXTextRange*>(xRangeTunnel->getSomething(
-                                SwXTextRange::getUnoTunnelId()));
-        pCursor = reinterpret_cast<OTextCursorHelper*>(xRangeTunnel->getSomething(
-                                OTextCursorHelper::getUnoTunnelId()));
-        pPara = reinterpret_cast<SwXParagraph*>(xRangeTunnel->getSomething(
-                                SwXParagraph::getUnoTunnelId()));
-    }
+    SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
+    SwXParagraph* pPara = comphelper::getFromUnoTunnel<SwXParagraph>(xRangeTunnel);
+    OTextCursorHelper* pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
 
     const FrameTypeFlags nFrameType = rSh.GetFrameType(nullptr,true);
 

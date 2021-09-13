@@ -95,7 +95,7 @@ sdbcx::ObjectType ODbaseIndexes::appendObject( const OUString& _rForName, const 
     Reference<XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
     if(xTunnel.is())
     {
-        ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelId()) );
+        ODbaseIndex* pIndex = comphelper::getFromUnoTunnel<ODbaseIndex>(xTunnel);
         if(!pIndex)
             throw SQLException();
         pIndex->CreateImpl();

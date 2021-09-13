@@ -18,6 +18,10 @@
  */
 #pragma once
 
+#include <sal/config.h>
+
+#include <comphelper/servicehelper.hxx>
+
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <vector>
 #include <global.hxx>
@@ -83,10 +87,7 @@ public:
 template < typename ImplObject >
     ImplObject* getImplFromDocModuleWrapper( const css::uno::Reference< css::uno::XInterface >& rxWrapperIf )
     {
-        ImplObject* pObj = nullptr;
-        css::uno::Reference< css::lang::XUnoTunnel >  xTunnel( rxWrapperIf, css::uno::UNO_QUERY );
-        if ( xTunnel.is() )
-            pObj = reinterpret_cast<ImplObject*>( xTunnel->getSomething(ImplObject::getUnoTunnelId()));
+        ImplObject* pObj = comphelper::getFromUnoTunnel<ImplObject>(rxWrapperIf);
         if ( !pObj )
             throw css::uno::RuntimeException("Internal error, can't extract implementation object", rxWrapperIf );
         return pObj;

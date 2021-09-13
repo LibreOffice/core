@@ -329,15 +329,8 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
     if (pGlosGroup && !pGlosGroup->GetError())
     {
         uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
-        SwXTextRange* pxRange = nullptr;
-        OTextCursorHelper* pxCursor = nullptr;
-        if(xRangeTunnel.is())
-        {
-            pxRange = reinterpret_cast<SwXTextRange*>(xRangeTunnel->getSomething(
-                                    SwXTextRange::getUnoTunnelId()));
-            pxCursor = reinterpret_cast<OTextCursorHelper*>(xRangeTunnel->getSomething(
-                                    OTextCursorHelper::getUnoTunnelId()));
-        }
+        SwXTextRange* pxRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
+        OTextCursorHelper* pxCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
 
         OUString sOnlyText;
         OUString* pOnlyText = nullptr;
@@ -855,20 +848,12 @@ void SwXAutoTextEntry::applyTo(const uno::Reference< text::XTextRange > & xTextR
         // This means that we would reflect any changes which were done to the AutoText by foreign instances
         // in the meantime
 
+    // The reference to the tunnel is needed during the whole call, likely because it could be a
+    // different object, not xTextRange itself, and the reference guards it from preliminary death
     uno::Reference<lang::XUnoTunnel> xTunnel( xTextRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = nullptr;
-    OTextCursorHelper* pCursor = nullptr;
-    SwXText *pText = nullptr;
-
-    if(xTunnel.is())
-    {
-        pRange = reinterpret_cast < SwXTextRange* >
-                ( xTunnel->getSomething( SwXTextRange::getUnoTunnelId() ) );
-        pCursor = reinterpret_cast < OTextCursorHelper*>
-                ( xTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() ) );
-        pText = reinterpret_cast < SwXText* >
-                ( xTunnel->getSomething( SwXText::getUnoTunnelId() ) );
-    }
+    SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xTunnel);
+    OTextCursorHelper* pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xTunnel);
+    SwXText *pText = comphelper::getFromUnoTunnel<SwXText>(xTunnel);
 
     SwDoc* pDoc = nullptr;
     if (pRange)
@@ -878,13 +863,9 @@ void SwXAutoTextEntry::applyTo(const uno::Reference< text::XTextRange > & xTextR
     else if ( pText && pText->GetDoc() )
     {
         xTunnel.set(pText->getStart(), uno::UNO_QUERY);
-        if (xTunnel.is())
-        {
-            pCursor = reinterpret_cast < OTextCursorHelper* >
-                ( xTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() ) );
-            if (pCursor)
-                pDoc = pText->GetDoc();
-        }
+        pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xTunnel);
+        if (pCursor)
+            pDoc = pText->GetDoc();
     }
 
     if(!pDoc)

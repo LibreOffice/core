@@ -25,6 +25,7 @@
 #include <svl/visitem.hxx>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -143,14 +144,7 @@ void SAL_CALL SfxStatusListener::statusChanged( const FeatureStateEvent& rEvent)
     if ( m_xDispatch.is() )
     {
         Reference< XUnoTunnel > xTunnel( m_xDispatch, UNO_QUERY );
-        SfxOfficeDispatch* pDisp = nullptr;
-        if ( xTunnel.is() )
-        {
-            sal_Int64 nImplementation = xTunnel->getSomething(SfxOfficeDispatch::getUnoTunnelId());
-            pDisp = reinterpret_cast< SfxOfficeDispatch* >(sal::static_int_cast< sal_IntPtr >( nImplementation ));
-        }
-
-        if ( pDisp )
+        if (auto pDisp = comphelper::getFromUnoTunnel<SfxOfficeDispatch>(xTunnel))
             pViewFrame = pDisp->GetDispatcher_Impl()->GetFrame();
     }
 

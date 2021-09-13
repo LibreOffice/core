@@ -60,6 +60,7 @@
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/numberedcollection.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/types.hxx>
@@ -2199,9 +2200,9 @@ com_sun_star_comp_dba_ODatabaseDocument(css::uno::XComponentContext* context,
         css::uno::Sequence<css::uno::Any> const &)
 {
     Reference<XUnoTunnel> xDBContextTunnel(DatabaseContext::create(context), UNO_QUERY_THROW);
-    dbaccess::ODatabaseContext* pContext = reinterpret_cast<dbaccess::ODatabaseContext*>(
-        xDBContextTunnel->getSomething(
-            dbaccess::ODatabaseContext::getUnoTunnelId()));
+    dbaccess::ODatabaseContext* pContext
+        = comphelper::getFromUnoTunnel<dbaccess::ODatabaseContext>(xDBContextTunnel);
+    assert(pContext);
 
     rtl::Reference pImpl(
             new dbaccess::ODatabaseModelImpl(context, *pContext));

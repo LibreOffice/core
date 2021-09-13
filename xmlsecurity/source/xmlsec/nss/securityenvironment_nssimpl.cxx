@@ -372,8 +372,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_NssImpl::buildCertifi
     m_xSigningCertificate = begin;
 
     Reference< XUnoTunnel > xCertTunnel( begin, UNO_QUERY_THROW ) ;
-    const X509Certificate_NssImpl* xcert = reinterpret_cast<X509Certificate_NssImpl*>(
-        sal::static_int_cast<sal_uIntPtr>(xCertTunnel->getSomething( X509Certificate_NssImpl::getUnoTunnelId() ))) ;
+    const X509Certificate_NssImpl* xcert = comphelper::getFromUnoTunnel<X509Certificate_NssImpl>(xCertTunnel);
     if( xcert == nullptr ) {
         throw RuntimeException() ;
     }
@@ -503,14 +502,12 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
                    const Sequence< Reference< csss::XCertificate > >&  intermediateCerts )
 {
     sal_Int32 validity = csss::CertificateValidity::INVALID;
-    const X509Certificate_NssImpl* xcert ;
     const CERTCertificate* cert ;
     Reference< XUnoTunnel > xCertTunnel( aCert, UNO_QUERY_THROW ) ;
 
     SAL_INFO("xmlsecurity.xmlsec", "Start verification of certificate: " << aCert->getSubjectName());
 
-    xcert = reinterpret_cast<X509Certificate_NssImpl*>(
-       sal::static_int_cast<sal_uIntPtr>(xCertTunnel->getSomething( X509Certificate_NssImpl::getUnoTunnelId() ))) ;
+    const X509Certificate_NssImpl* xcert = comphelper::getFromUnoTunnel<X509Certificate_NssImpl>(xCertTunnel);
     if( xcert == nullptr ) {
         throw RuntimeException() ;
     }
@@ -720,12 +717,10 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
 sal_Int32 SecurityEnvironment_NssImpl::getCertificateCharacters(
     const css::uno::Reference< css::security::XCertificate >& aCert ) {
     sal_Int32 characters ;
-    const X509Certificate_NssImpl* xcert ;
     const CERTCertificate* cert ;
 
     Reference< XUnoTunnel > xCertTunnel( aCert, UNO_QUERY_THROW ) ;
-    xcert = reinterpret_cast<X509Certificate_NssImpl*>(
-        sal::static_int_cast<sal_uIntPtr>(xCertTunnel->getSomething( X509Certificate_NssImpl::getUnoTunnelId() ))) ;
+    const X509Certificate_NssImpl* xcert = comphelper::getFromUnoTunnel<X509Certificate_NssImpl>(xCertTunnel);
     if( xcert == nullptr ) {
         throw RuntimeException() ;
     }

@@ -28,6 +28,7 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <vcl/svapp.hxx>
 #include <tools/stream.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/weak.hxx>
 #include <vcl/dibtools.hxx>
 
@@ -152,21 +153,16 @@ static void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, const Refer
                             bool bImageSet = false;
 
                             Reference< XUnoTunnel > xUnoTunnel( xBitmap, UNO_QUERY );
-                            if ( xUnoTunnel.is() )
+                            // Try to get implementation pointer through XUnoTunnel
+                            if (auto pImageWrapper = comphelper::getFromUnoTunnel<ImageWrapper>(xUnoTunnel))
                             {
-                                // Try to get implementation pointer through XUnoTunnel
-                                sal_Int64 nPointer = xUnoTunnel->getSomething( ImageWrapper::getUnoTunnelId() );
-                                if ( nPointer )
-                                {
-                                    // This is our own optimized implementation of menu images!
-                                    ImageWrapper* pImageWrapper = reinterpret_cast< ImageWrapper * >( nPointer );
-                                    const Image& aMenuImage = pImageWrapper->GetImage();
+                                // This is our own optimized implementation of menu images!
+                                const Image& aMenuImage = pImageWrapper->GetImage();
 
-                                    if ( !!aMenuImage )
-                                        pSubMenu->SetItemImage( nNewItemId, aMenuImage );
+                                if ( !!aMenuImage )
+                                    pSubMenu->SetItemImage( nNewItemId, aMenuImage );
 
-                                    bImageSet = true;
-                                }
+                                bImageSet = true;
                             }
 
                             if ( !bImageSet )

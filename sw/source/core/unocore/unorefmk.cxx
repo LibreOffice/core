@@ -275,14 +275,8 @@ SwXReferenceMark::attach(const uno::Reference< text::XTextRange > & xTextRange)
         throw uno::RuntimeException();
     }
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = nullptr;
-    OTextCursorHelper* pCursor = nullptr;
-    if(xRangeTunnel.is())
-    {
-        pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
-        pCursor =
-            comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
-    }
+    SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
+    OTextCursorHelper* pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
     SwDoc *const pDocument =
         pRange ? &pRange->GetDoc() : (pCursor ? pCursor->GetDoc() : nullptr);
     if (!pDocument)
