@@ -41,7 +41,7 @@
 class FixedText;
 class VclSizeGroup;
 class VirtualDevice;
-class PhysicalFontCollection;
+namespace vcl::font { class PhysicalFontCollection; }
 class ImplFontCache;
 class VCLXWindow;
 class WindowStateData;
@@ -132,7 +132,7 @@ struct ImplFrameData
     VclPtr<vcl::Window> mpMouseMoveWin;         //< last window, where MouseMove() called
     VclPtr<vcl::Window> mpMouseDownWin;         //< last window, where MouseButtonDown() called
     std::vector<VclPtr<vcl::Window> > maOwnerDrawList;    //< List of system windows with owner draw decoration
-    std::shared_ptr<PhysicalFontCollection> mxFontCollection;   //< Font-List for this frame
+    std::shared_ptr<vcl::font::PhysicalFontCollection> mxFontCollection;   //< Font-List for this frame
     std::shared_ptr<ImplFontCache> mxFontCache; //< Font-Cache for this frame
     sal_Int32           mnDPIX;                 //< Original Screen Resolution
     sal_Int32           mnDPIY;                 //< Original Screen Resolution
