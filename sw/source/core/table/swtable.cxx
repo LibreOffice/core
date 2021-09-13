@@ -1588,6 +1588,96 @@ bool SwTableLine::IsEmpty() const
     return true;
 }
 
+bool SwTable::HasDeletedRow() const
+{
+    const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    if ( aRedlineTable.empty() )
+        return false;
+
+    SwRedlineTable::size_type nRedlinePos = 0;
+    for (size_t i = 0; i < m_aLines.size(); ++i)
+    {
+        if ( m_aLines[i]->IsDeleted(nRedlinePos) )
+            return true;
+    }
+    return false;
+}
+
+bool SwTable::IsDeleted() const
+{
+    const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    if ( aRedlineTable.empty() )
+        return false;
+
+    SwRedlineTable::size_type nRedlinePos = 0;
+    for (size_t i = 0; i < m_aLines.size(); ++i)
+    {
+        if ( !m_aLines[i]->IsDeleted(nRedlinePos) )
+            return false;
+    }
+    return true;
+}
+
+bool SwTableLine::IsDeleted(SwRedlineTable::size_type& rRedlinePos) const
+{
+    bool bRet = false;
+    const SwRedlineTable& aRedlineTable = GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    if ( aRedlineTable.empty() )
+        return false;
+
+    // check table row property "HasTextChangesOnly", if it's defined and its
+    // value is false, and all text content is in delete redlines, the row is deleted
+    const SvxPrintItem *pHasTextChangesOnlyProp =
+            GetFrameFormat()->GetAttrSet().GetItem<SvxPrintItem>(RES_PRINT);
+    if ( pHasTextChangesOnlyProp && !pHasTextChangesOnlyProp->GetValue() )
+    {
+        const SwTableBoxes & rBoxes = GetTabBoxes();
+        size_t nBoxes = rBoxes.size();
+        for (size_t nBoxIndex = 0; nBoxIndex < nBoxes && rRedlinePos < aRedlineTable.size(); ++nBoxIndex)
+        {
+            auto pBox = rBoxes[nBoxIndex];
+            if ( pBox->IsEmpty() )
+            {
+               // no text content, check the next cells
+               continue;
+            }
+
+            SwPosition aCellStart( SwNodeIndex( *pBox->GetSttNd(), 0 ) );
+            SwPosition aCellEnd( SwNodeIndex( *pBox->GetSttNd()->EndOfSectionNode(), -1 ) );
+            SwNodeIndex pEndNodeIndex(aCellEnd.nNode.GetNode());
+            for( bRet = false ; rRedlinePos < aRedlineTable.size(); ++rRedlinePos )
+            {
+                const SwRangeRedline* pRedline = aRedlineTable[ rRedlinePos ];
+
+                if ( pRedline->Start()->nNode > pEndNodeIndex )
+                {
+                    // no more redlines in the actual cell,
+                    // check the next ones
+                    break;
+                }
+
+                // redline in the cell, it must be a delete redline
+                if ( aCellStart <= *pRedline->Start() )
+                {
+                    bRet = RedlineType::Delete == pRedline->GetType();
+                    if ( !bRet )
+                        // other type of redline, e.g. tracked row insertion
+                        // contains an insert redline at the beginning of the first cell
+                        return false;
+                }
+            }
+
+            if ( !bRet )
+            {
+                // not deleted cell content: the row is not empty
+                return false;
+            }
+            // TODO: check also text outside of the redlines
+        }
+    }
+    return bRet;
+}
+
 SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, sal_uInt16 nLines, SwTableLine *pUp )
     : SwClient(nullptr)
     , m_aLines()

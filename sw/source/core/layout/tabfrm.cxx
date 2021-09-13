@@ -20,6 +20,7 @@
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <viewimp.hxx>
 #include <fesh.hxx>
 #include <swtable.hxx>
@@ -92,8 +93,15 @@ SwTabFrame::SwTabFrame( SwTable &rTab, SwFrame* pSib )
     //Create the lines and insert them.
     const SwTableLines &rLines = rTab.GetTabLines();
     SwFrame *pTmpPrev = nullptr;
+    bool bHiddenRedlines = getRootFrame()->IsHideRedlines() &&
+        !GetFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable().empty();
+    SwRedlineTable::size_type nRedlinePos = 0;
     for ( size_t i = 0; i < rLines.size(); ++i )
     {
+        // skip lines deleted with track changes
+        if ( bHiddenRedlines && rLines[i]->IsDeleted(nRedlinePos) )
+            continue;
+
         SwRowFrame *pNew = new SwRowFrame( *rLines[i], this );
         if( pNew->Lower() )
         {

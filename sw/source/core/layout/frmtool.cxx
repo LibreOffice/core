@@ -1626,6 +1626,15 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                 continue; // skip it
             }
 
+            pFrame = pTableNode->MakeFrame( pLay );
+
+            // skip tables deleted with track changes
+            if ( !static_cast<SwTabFrame*>(pFrame)->Lower() )
+            {
+                nIndex = pTableNode->EndOfSectionIndex();
+                continue; // skip it
+            }
+
             // #108116# loading may produce table structures that GCLines
             // needs to clean up. To keep table formulas correct, change
             // all table formulas to internal (BOXPTR) representation.
@@ -1633,8 +1642,6 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
             aMsgHint.m_eFlags = TBL_BOXPTR;
             pDoc->getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
             pTableNode->GetTable().GCLines();
-
-            pFrame = pTableNode->MakeFrame( pLay );
 
             if( pPageMaker )
                 pPageMaker->CheckInsert( nIndex );
