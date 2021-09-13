@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f83c4586_bdca295c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-09-13T08:52:30Z",
+      "side": 1,
+      "message": "of course not. if you run sw/qa/uitest/writer_tests7/tdf140731.py locally, you will see it hangs with Michael\u0027s patch in place",
+      "parentUuid": "0592a8dd_e84f79cd",
+      "revId": "b3d9d748a3b63f4535e07b071cc357cd9dd7f08a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b053bd3e_be8eb0cd",
