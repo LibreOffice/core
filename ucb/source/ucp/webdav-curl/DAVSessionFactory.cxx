@@ -19,7 +19,7 @@
 
 #include <memory>
 #include "DAVSessionFactory.hxx"
-#include "SerfSession.hxx"
+#include "CurlSession.hxx"
 #include "CurlUri.hxx"
 
 using namespace http_dav_ucp;
@@ -46,7 +46,7 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
         CurlUri const aURI( inUri );
 
         std::unique_ptr< DAVSession > xElement(
-            new SerfSession( this, inUri, *m_xProxyDecider ) );
+            new CurlSession(this, inUri, *m_xProxyDecider) );
 
         aIt = m_aMap.emplace(  inUri, xElement.get() ).first;
         aIt->second->m_aContainerIt = aIt;
@@ -69,7 +69,7 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
         // call a little:
         CurlUri const aURI( inUri );
 
-        aIt->second = new SerfSession( this, inUri, *m_xProxyDecider );
+        aIt->second = new CurlSession(this, inUri, *m_xProxyDecider);
         aIt->second->m_aContainerIt = aIt;
         return aIt->second;
     }
