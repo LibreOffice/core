@@ -26,12 +26,13 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/fontdefs.hxx>
 #include <o3tl/sorted_vector.hxx>
+
 #include <font/GlyphFallbackFontSubstitution.hxx>
 #include <font/ImplDeviceFontSizeList.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <font/PreMatchFontSubstitution.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
-#include <PhysicalFontCollection.hxx>
 
 static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
 {
@@ -66,6 +67,9 @@ static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
 
     return ImplFontAttrs::None;
 }
+
+namespace vcl::font
+{
 
 PhysicalFontCollection::PhysicalFontCollection()
     : mbMatchData( false )
@@ -1250,6 +1254,7 @@ vcl::font::PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( vcl::font
     }
 
     return pFoundData;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

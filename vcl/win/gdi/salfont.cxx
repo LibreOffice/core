@@ -56,7 +56,7 @@
 #include <font/GlyphFallbackFontSubstitution.hxx>
 #include <font/PreMatchFontSubstitution.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
-#include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontFaceCollection.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <sft.hxx>
 #include <win/saldata.hxx>
