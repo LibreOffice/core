@@ -19,7 +19,7 @@
 
 #include <memory>
 #include <com/sun/star/util/DateTime.hpp>
-#include "SerfUri.hxx"
+#include "CurlUri.hxx"
 #include "DAVResource.hxx"
 #include "DAVProperties.hxx"
 #include "DateTimeHelper.hxx"
@@ -83,7 +83,7 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
     // Title
     try
     {
-        SerfUri aURI( rResource.uri );
+        CurlUri const aURI( rResource.uri );
         m_aEscapedTitle = aURI.GetPathBaseName();
 
         (*m_xProps)[ OUString( "Title" ) ]
