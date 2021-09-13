@@ -530,7 +530,7 @@ inline void SfxShell::SetPool
 }
 
 #define SFX_DECL_INTERFACE(nId)                                  \
-            static SfxInterface*     pInterface;                 \
+            static SfxInterface*     s_pInterface;                 \
             static SfxInterface*     GetStaticInterface();       \
             static SfxInterfaceId    GetInterfaceId() {return nId;} \
             static void              RegisterInterface(const SfxModule* pMod=nullptr); \
@@ -538,12 +538,12 @@ inline void SfxShell::SetPool
 
 #define SFX_TMPL_INTERFACE(Class,SuperClass,Abstract)                       \
                                                                             \
-    SfxInterface* Class::pInterface = nullptr;                              \
+    SfxInterface* Class::s_pInterface = nullptr;                              \
     SfxInterface* Class::GetStaticInterface()                               \
     {                                                                       \
-        if ( !pInterface )                                                  \
+        if ( !s_pInterface )                                                  \
         {                                                                   \
-            pInterface =                                                    \
+            s_pInterface =                                                    \
                 new SfxInterface(                                           \
             #Class, Abstract, GetInterfaceId(),                             \
             SuperClass::GetStaticInterface(),                               \
@@ -551,7 +551,7 @@ inline void SfxShell::SetPool
             sal_uInt16(sizeof(a##Class##Slots_Impl) / sizeof(SfxSlot) ) );   \
             InitInterface_Impl();                                           \
         }                                                                   \
-        return pInterface;                                                  \
+        return s_pInterface;                                                  \
     }                                                                       \
                                                                             \
     SfxInterface* Class::GetInterface() const                               \

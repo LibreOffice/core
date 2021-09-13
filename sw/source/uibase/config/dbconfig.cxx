@@ -45,19 +45,19 @@ SwDBConfig::SwDBConfig() :
 
 SwDBConfig::~SwDBConfig()
 {
-    pAdrImpl.reset();
-    pBibImpl.reset();
+    m_pAdrImpl.reset();
+    m_pBibImpl.reset();
 }
 
 void SwDBConfig::Load()
 {
     const Sequence<OUString>& rNames = GetPropertyNames();
-    if(!pAdrImpl)
+    if(!m_pAdrImpl)
     {
-        pAdrImpl.reset(new SwDBData);
-        pAdrImpl->nCommandType = 0;
-        pBibImpl.reset(new SwDBData);
-        pBibImpl->nCommandType = 0;
+        m_pAdrImpl.reset(new SwDBData);
+        m_pAdrImpl->nCommandType = 0;
+        m_pBibImpl.reset(new SwDBData);
+        m_pBibImpl->nCommandType = 0;
     }
     Sequence<Any> aValues = GetProperties(rNames);
     const Any* pValues = aValues.getConstArray();
@@ -69,28 +69,28 @@ void SwDBConfig::Load()
     {
         switch(nProp)
         {
-            case  0: pValues[nProp] >>= pAdrImpl->sDataSource;  break;
-            case  1: pValues[nProp] >>= pAdrImpl->sCommand;     break;
-            case  2: pValues[nProp] >>= pAdrImpl->nCommandType; break;
-            case  3: pValues[nProp] >>= pBibImpl->sDataSource;  break;
-            case  4: pValues[nProp] >>= pBibImpl->sCommand;     break;
-            case  5: pValues[nProp] >>= pBibImpl->nCommandType; break;
+            case  0: pValues[nProp] >>= m_pAdrImpl->sDataSource;  break;
+            case  1: pValues[nProp] >>= m_pAdrImpl->sCommand;     break;
+            case  2: pValues[nProp] >>= m_pAdrImpl->nCommandType; break;
+            case  3: pValues[nProp] >>= m_pBibImpl->sDataSource;  break;
+            case  4: pValues[nProp] >>= m_pBibImpl->sCommand;     break;
+            case  5: pValues[nProp] >>= m_pBibImpl->nCommandType; break;
         }
     }
 }
 
 const SwDBData& SwDBConfig::GetAddressSource()
 {
-    if(!pAdrImpl)
+    if(!m_pAdrImpl)
         Load();
-    return *pAdrImpl;
+    return *m_pAdrImpl;
 }
 
 const SwDBData& SwDBConfig::GetBibliographySource()
 {
-    if(!pBibImpl)
+    if(!m_pBibImpl)
         Load();
-    return *pBibImpl;
+    return *m_pBibImpl;
 }
 
 void SwDBConfig::ImplCommit() {}

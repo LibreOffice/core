@@ -46,9 +46,9 @@ struct AutoTextGroup
 
 class SwGlossaryList final : public AutoTimer
 {
-    std::vector<std::unique_ptr<AutoTextGroup>> aGroupArr;
-    OUString        sPath;
-    bool            bFilled;
+    std::vector<std::unique_ptr<AutoTextGroup>> m_aGroupArr;
+    OUString        m_sPath;
+    bool            m_bFilled;
 
     AutoTextGroup*  FindGroup(std::u16string_view rGroupName);
     static void     FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGloss);
