@@ -629,7 +629,7 @@
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
-                            <property name="tooltip-text" translatable="yes" context="textimportcsv|evaluateformulas">If enabled, blank cells in source will not override the target.</property>
+                            <property name="tooltip-text" translatable="yes" context="textimportcsv|evaluateformulas">If enabled, cells starting with '=' will be evaluated as formulas.</property>
                             <property name="use-underline">True</property>
                             <property name="draw-indicator">True</property>
                             <child internal-child="accessible">
