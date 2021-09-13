@@ -23,7 +23,7 @@
 
 #include <vcl/dllapi.h>
 
-#include "font/PhysicalFontFamily.hxx"
+#include "PhysicalFontFamily.hxx"
 #include "fontinstance.hxx"
 
 #include <array>
@@ -38,6 +38,9 @@ class PreMatchFontSubstitution;
 
 // TODO: merge with ImplFontCache
 // TODO: rename to LogicalFontManager
+
+namespace vcl::font
+{
 
 class VCL_PLUGIN_PUBLIC PhysicalFontCollection final
 {
@@ -92,5 +95,7 @@ private:
     vcl::font::PhysicalFontFamily* ImplFindFontFamilyOfDefaultFont() const;
 
 };
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

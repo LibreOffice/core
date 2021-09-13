@@ -53,7 +53,7 @@ X11SalGraphics::SetTextColor( Color nColor )
     mxTextRenderImpl->SetTextColor(nColor);
 }
 
-bool X11SalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
+bool X11SalGraphics::AddTempDevFont( vcl::font::PhysicalFontCollection* pFontCollection,
                                      const OUString& rFileURL,
                                      const OUString& rFontName )
 {
@@ -65,7 +65,7 @@ void X11SalGraphics::ClearDevFontCache()
     mxTextRenderImpl->ClearDevFontCache();
 }
 
-void X11SalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
+void X11SalGraphics::GetDevFontList( vcl::font::PhysicalFontCollection* pFontCollection )
 {
     mxTextRenderImpl->GetDevFontList(pFontCollection);
 }

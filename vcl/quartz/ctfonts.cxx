@@ -26,7 +26,7 @@
 
 #include <vcl/settings.hxx>
 
-#include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <fontinstance.hxx>
 #include <fontattributes.hxx>
 #include <impfont.hxx>
@@ -509,7 +509,7 @@ void SystemFontList::AddFont( CoreTextFontFace* pFontData )
     maFontContainer[ nFontId ] = pFontData;
 }
 
-void SystemFontList::AnnounceFonts( PhysicalFontCollection& rFontCollection ) const
+void SystemFontList::AnnounceFonts( vcl::font::PhysicalFontCollection& rFontCollection ) const
 {
     for(const auto& rEntry : maFontContainer )
     {

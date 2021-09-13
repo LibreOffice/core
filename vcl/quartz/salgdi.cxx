@@ -39,7 +39,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 
-#include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <font/GlyphFallbackFontSubstitution.hxx>
 #include <fontsubset.hxx>
 #include <impfont.hxx>
@@ -324,7 +324,7 @@ static void AddLocalTempFontDirs()
     AddTempFontDir( aBrandStr + "/" LIBO_SHARE_FOLDER "/fonts/truetype/" );
 }
 
-void AquaSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
+void AquaSalGraphics::GetDevFontList(vcl::font::PhysicalFontCollection* pFontCollection)
 {
     SAL_WARN_IF( !pFontCollection, "vcl", "AquaSalGraphics::GetDevFontList(NULL) !");
 
@@ -356,8 +356,8 @@ void AquaSalGraphics::ClearDevFontCache()
     pSalData->mpFontList = nullptr;
 }
 
-bool AquaSalGraphics::AddTempDevFont( PhysicalFontCollection*,
-    const OUString& rFontFileURL, const OUString& /*rFontName*/ )
+bool AquaSalGraphics::AddTempDevFont(vcl::font::PhysicalFontCollection*,
+    const OUString& rFontFileURL, const OUString& /*rFontName*/)
 {
     return ::AddTempDevFont(rFontFileURL);
 }

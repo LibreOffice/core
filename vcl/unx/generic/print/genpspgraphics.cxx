@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/config.h>
+##include <sal/config.h>
 #include <config_cairo_canvas.h>
 
 #include <sal/types.h>
@@ -25,7 +25,7 @@
 #include <fontsubset.hxx>
 #include <i18nlangtag/mslangid.hxx>
 
-#include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <fontattributes.hxx>
 #include <fontinstance.hxx>

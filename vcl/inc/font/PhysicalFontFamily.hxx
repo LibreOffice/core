@@ -29,8 +29,6 @@
 
 #include "PhysicalFontFace.hxx"
 
-class PhysicalFontCollection;
-
 namespace vcl::font
 {
 // flags for mnTypeFaces member
@@ -57,6 +55,7 @@ struct typed_flags<vcl::font::FontTypeFaces> : is_typed_flags<vcl::font::FontTyp
 
 namespace vcl::font
 {
+class PhysicalFontCollection;
 class PhysicalFontFace;
 class PhysicalFontFaceCollection;
 
