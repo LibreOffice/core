@@ -21,6 +21,12 @@
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
 #include <wrtsh.hxx>
+#include <IDocumentLayoutAccess.hxx>
+#include <rootfrm.hxx>
+#include <txtfrm.hxx>
+
+#include <porlay.hxx>
+#include <pormulti.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/text/data/";
 
@@ -168,6 +174,46 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testLineWidth)
     // - Actual  : 1872
     // i.e. the width (around 67408 twips) was truncated.
     CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(65536), nNewLeft - nOldLeft);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRuby)
+{
+    // Given a document with multiple ruby portions:
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "ruby.fodt");
+
+    // When laying out that document:
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+
+    // Then make sure that no unwanted margin portions are created, making the actual text
+    // invisible:
+    SwFrame* pPageFrame = pLayout->GetLower();
+    SwFrame* pBodyFrame = pPageFrame->GetLower();
+    SwFrame* pFrame = pBodyFrame->GetLower();
+    CPPUNIT_ASSERT(pFrame->IsTextFrame());
+    auto pTextFrame = static_cast<SwTextFrame*>(pFrame);
+    SwParaPortion* pPara = pTextFrame->GetPara();
+    bool bFirst = true;
+    for (SwLinePortion* pPor = pPara->GetFirstPortion(); pPor; pPor = pPor->GetNextPortion())
+    {
+        // Look for multi-portions in the only paragraph of the document.
+        if (pPor->GetWhichPor() != PortionType::Multi)
+        {
+            continue;
+        }
+
+        if (bFirst)
+        {
+            bFirst = false;
+            continue;
+        }
+
+        // The second multi-portion has two lines, check the start of the second line.
+        auto pMulti = static_cast<SwMultiPortion*>(pPor);
+        // Without the accompanying fix in place, this test would have failed, as the portion was a
+        // margin portion, not a text portion. The margin was so large that the actual text portion was
+        // hidden. No margin is needed here at all.
+        CPPUNIT_ASSERT(pMulti->GetRoot().GetNext()->GetFirstPortion()->IsTextPortion());
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
