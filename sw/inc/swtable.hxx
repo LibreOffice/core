@@ -26,6 +26,7 @@
 #include "calbck.hxx"
 #include "swrect.hxx"
 #include "swtblfmt.hxx"
+#include "docary.hxx"
 
 #include <memory>
 #include <vector>
@@ -345,6 +346,11 @@ public:
 
     bool CanConvertSubtables() const;
     void ConvertSubtables();
+
+    // is it a table deleted completely with change tracking
+    bool IsDeleted() const;
+    // is it a table with deleted row(s)
+    bool HasDeletedRow() const;
 };
 
 /// SwTableLine is one table row in the document model.
@@ -390,6 +396,10 @@ public:
 
     // it doesn't contain box content
     bool IsEmpty() const;
+
+    // is it a tracked deleted row
+    // (search its first redline from rRedlinePos to speed up SwTable::IsDeleted())
+    bool IsDeleted(SwRedlineTable::size_type& rRedlinePos) const;
 };
 
 /// SwTableBox is one table cell in the document model.

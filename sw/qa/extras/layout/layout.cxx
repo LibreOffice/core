@@ -2302,6 +2302,49 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineTables)
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "Portion", "foar");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf144057)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf144057.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
+    SwRootFrame* pLayout(pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
+    CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
+    discardDumpedLayout();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // show tracked row deletions
+    assertXPath(pXmlDoc, "/root/page", 4);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[6]/cell/txt/Text", "Portion", "A6");
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row[6]/cell/txt/Text", "Portion", "A12");
+    assertXPath(pXmlDoc, "/root/page[3]/body/tab/row[6]/cell/txt/Text", "Portion", "B6");
+    assertXPath(pXmlDoc, "/root/page[4]/body/tab/row[6]/cell/txt/Text", "Portion", "B12");
+
+    // hide tracked table and table row deletions
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    CPPUNIT_ASSERT(pLayout->IsHideRedlines());
+    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+
+    // This was 4 (unhidden tracked table and table row deletions)
+    assertXPath(pXmlDoc, "/root/page", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 5);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[5]/cell/txt/Text", "Portion", "B12");
+
+    // show tracked table and table row deletions again
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
+    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page", 4);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[6]/cell/txt/Text", "Portion", "A6");
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row[6]/cell/txt/Text", "Portion", "A12");
+    assertXPath(pXmlDoc, "/root/page[3]/body/tab/row[6]/cell/txt/Text", "Portion", "B6");
+    assertXPath(pXmlDoc, "/root/page[4]/body/tab/row[6]/cell/txt/Text", "Portion", "B12");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2464,7 +2464,8 @@ void SwTableNode::DelFrames(SwRootFrame const*const pLayout)
                             dynamic_cast<SwTextFrame*>(pFrame->FindPrevCnt()) );
                     }
                 }
-                pFrame->Cut();
+                if (pFrame->GetUpper())
+                    pFrame->Cut();
                 SwFrame::DestroyFrame(pFrame);
                 bAgain = true;
             }

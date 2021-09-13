@@ -60,6 +60,7 @@
 #include <layact.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
+#include <tblsel.hxx>
 
 // RotateFlyFrame3
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -4335,7 +4336,9 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                 if (rLayout.HasMergedParas())
                 {
                     assert(!pFrame->GetMergedPara() ||
-                        !rNode.IsCreateFrameWhenHidingRedlines());
+                        !rNode.IsCreateFrameWhenHidingRedlines() ||
+                        // FIXME: skip this assert in tables with deleted rows
+                        pFrame->IsInTab());
                     if (rNode.IsCreateFrameWhenHidingRedlines())
                     {
                         {
@@ -4427,6 +4430,7 @@ static void UnHideRedlines(SwRootFrame & rLayout,
         }
         else if (rNode.IsTableNode() && rLayout.IsHideRedlines())
         {
+            SwTableNode * pTableNd = rNode.GetTableNode();
             SwPosition const tmp(rNode);
             SwRangeRedline const*const pRedline(
                 rLayout.GetFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedline(tmp, nullptr));
@@ -4440,9 +4444,27 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                 {
                     rNode.GetNodes()[j]->SetRedlineMergeFlag(SwNode::Merge::Hidden);
                 }
-                rNode.GetTableNode()->DelFrames(&rLayout);
+                pTableNd->DelFrames(&rLayout);
+            }
+            else if ( pTableNd->GetTable().HasDeletedRow() )
+            {
+                pTableNd->DelFrames(&rLayout);
+                if ( !pTableNd->GetTable().IsDeleted() )
+                {
+                    SwNodeIndex aIdx( *pTableNd->EndOfSectionNode(), 1 );
+                    pTableNd->MakeOwnFrames(&aIdx);
+                }
             }
         }
+        else if (rNode.IsTableNode() && !rLayout.IsHideRedlines() &&
+            rNode.GetTableNode()->GetTable().HasDeletedRow() )
+        {
+            SwTableNode * pTableNd = rNode.GetTableNode();
+            pTableNd->DelFrames(&rLayout);
+            SwNodeIndex aIdx( *pTableNd->EndOfSectionNode(), 1 );
+            pTableNd->MakeOwnFrames(&aIdx);
+        }
+
         if (!rNode.IsCreateFrameWhenHidingRedlines())
         {
             if (rLayout.HasMergedParas())
@@ -4458,7 +4480,9 @@ static void UnHideRedlines(SwRootFrame & rLayout,
             }
             else
             {
-                assert(!rNode.IsContentNode() || !rNode.GetContentNode()->getLayoutFrame(&rLayout));
+                assert(!rNode.IsContentNode() || !rNode.GetContentNode()->getLayoutFrame(&rLayout) ||
+                    // FIXME: skip this assert in tables with deleted rows
+                    rNode.GetContentNode()->getLayoutFrame(&rLayout)->IsInTab());
                 sal_uLong j = i + 1;
                 for ( ; j < rEndOfSectionNode.GetIndex(); ++j)
                 {
