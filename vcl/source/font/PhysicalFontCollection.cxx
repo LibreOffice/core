@@ -28,11 +28,9 @@
 #include <font/GlyphFallbackFontSubstitution.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <font/PreMatchFontSubstitution.hxx>
-#include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontCollection.hxx>
 
 #include <memory>
-
-using namespace vcl::font;
 
 static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
 {
@@ -68,12 +66,8 @@ static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
     return ImplFontAttrs::None;
 }
 
-PhysicalFontCollection::PhysicalFontCollection()
-    : mbMatchData( false )
-    , mpPreMatchHook( nullptr )
-    , mpFallbackHook( nullptr )
-    , mnFallbackCount( -1 )
-{}
+namespace vcl::font
+{
 
 PhysicalFontCollection::~PhysicalFontCollection()
 {
@@ -1251,6 +1245,8 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
     }
 
     return pFoundData;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

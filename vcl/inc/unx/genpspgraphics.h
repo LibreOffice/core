@@ -31,8 +31,11 @@
 
 #include <unx/GenPspGfxBackend.hxx>
 
-namespace vcl::font { class PhysicalFontFace; }
+namespace vcl::font
+{
+class PhysicalFontFace;
 class PhysicalFontCollection;
+}
 
 namespace psp { struct JobData; class PrinterGfx; }
 
@@ -67,7 +70,7 @@ public:
                                               Ucs2UIntMap& rUnicodeEnc );
 
     static FontAttributes Info2FontAttributes( const psp::FastPrintFontInfo& );
-    static void             AnnounceFonts( PhysicalFontCollection*,
+    static void             AnnounceFonts( vcl::font::PhysicalFontCollection*,
                                            const psp::FastPrintFontInfo& );
 
     // override all pure virtual methods
@@ -83,13 +86,13 @@ public:
     virtual void            GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel ) override;
     virtual FontCharMapRef  GetFontCharMap() const override;
     virtual bool            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const override;
-    virtual void            GetDevFontList( PhysicalFontCollection* ) override;
+    virtual void            GetDevFontList( vcl::font::PhysicalFontCollection* ) override;
     // graphics must drop any cached font info
     virtual void            ClearDevFontCache() override;
-    virtual bool            AddTempDevFont( PhysicalFontCollection*,
+    virtual bool            AddTempDevFont( vcl::font::PhysicalFontCollection*,
                                             const OUString& rFileURL,
                                             const OUString& rFontName ) override;
-    static bool             AddTempDevFontHelper( PhysicalFontCollection* pFontCollection,
+    static bool             AddTempDevFontHelper( vcl::font::PhysicalFontCollection* pFontCollection,
                                                   const OUString& rFileURL,
                                                   const OUString& rFontName);
 
