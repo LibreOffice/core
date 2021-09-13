@@ -16,6 +16,24 @@
       "message": "see https://gerrit.libreoffice.org/c/core/+/121906 for a follow up if considering backporting",
       "revId": "817ef891cf2bef8fdc82852f73acb422afb89bd2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82f5b8ce_c5647334",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-09-13T11:48:06Z",
+      "side": 1,
+      "message": "Thx!",
+      "parentUuid": "f673340d_c2da6c0b",
+      "revId": "817ef891cf2bef8fdc82852f73acb422afb89bd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
