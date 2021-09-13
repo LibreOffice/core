@@ -204,6 +204,7 @@ public:
     void testButtonFormControlXlsxExport();
     void testTdf142929_filterLessThanXLSX();
     void testInvalidNamedRange();
+    void testExternalDefinedNameXLSX();
     void testTdf143220XLSX();
     void testTdf142264ManyChartsToXLSX();
     void testTdf143929MultiColumnToODS();
@@ -313,6 +314,7 @@ public:
     CPPUNIT_TEST(testButtonFormControlXlsxExport);
     CPPUNIT_TEST(testTdf142929_filterLessThanXLSX);
     CPPUNIT_TEST(testInvalidNamedRange);
+    CPPUNIT_TEST(testExternalDefinedNameXLSX);
     CPPUNIT_TEST(testTdf143220XLSX);
     CPPUNIT_TEST(testTdf142264ManyChartsToXLSX);
     CPPUNIT_TEST(testTdf143929MultiColumnToODS);
@@ -2641,6 +2643,66 @@ void ScExportTest2::testInvalidNamedRange()
     // Without the fix in place, this test would have failed, we didn't ignore the problematic named
     // range on import.
     CPPUNIT_ASSERT(!xNamedRanges->hasByName("myname"));
+}
+
+void ScExportTest2::testExternalDefinedNameXLSX()
+{
+    ScDocShellRef xShell = loadDoc(u"tdf144397.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xDocSh->ReloadAllLinks();
+    ScDocument& rDoc = xDocSh->GetDocument();
+    rDoc.CalcAll();
+
+    // "January"
+    {
+        const ScFormulaCell* pFC = rDoc.GetFormulaCell(ScAddress(1, 1, 0));
+        sc::FormulaResultValue aRes = pFC->GetResult();
+        CPPUNIT_ASSERT_EQUAL(sc::FormulaResultValue::String, aRes.meType);
+        CPPUNIT_ASSERT_EQUAL(OUString("January"), aRes.maString.getString());
+    }
+    // "March"
+    {
+        const ScFormulaCell* pFC = rDoc.GetFormulaCell(ScAddress(1, 3, 0));
+        sc::FormulaResultValue aRes = pFC->GetResult();
+        CPPUNIT_ASSERT_EQUAL(sc::FormulaResultValue::String, aRes.meType);
+        CPPUNIT_ASSERT_EQUAL(OUString("March"), aRes.maString.getString());
+    }
+    // "Empty = #N/A"
+    {
+        const ScFormulaCell* pFC = rDoc.GetFormulaCell(ScAddress(1, 5, 0));
+        sc::FormulaResultValue aRes = pFC->GetResult();
+        CPPUNIT_ASSERT_EQUAL(sc::FormulaResultValue::Error, aRes.meType);
+        CPPUNIT_ASSERT_EQUAL(OUString(""), aRes.maString.getString());
+    }
+    // "June"
+    {
+        const ScFormulaCell* pFC = rDoc.GetFormulaCell(ScAddress(1, 6, 0));
+        sc::FormulaResultValue aRes = pFC->GetResult();
+        CPPUNIT_ASSERT_EQUAL(sc::FormulaResultValue::String, aRes.meType);
+        CPPUNIT_ASSERT_EQUAL(OUString("June"), aRes.maString.getString());
+    }
+
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(
+        *this, *xDocSh, m_xSFactory, "xl/externalLinks/externalLink1.xml", FORMAT_XLSX);
+
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/x:externalLink/x:externalBook/x:sheetNames/x:sheetName", "val", "Munka1");
+    assertXPath(pDoc, "/x:externalLink/x:externalBook/x:definedNames/x:definedName", "name",
+                "MonthNames");
+    // TODO: no need for the [1] external document identifier
+    assertXPath(pDoc, "/x:externalLink/x:externalBook/x:definedNames/x:definedName", "refersTo",
+                "[1]Munka1!$A$2:$A$13");
+    assertXPath(pDoc, "/x:externalLink/x:externalBook/x:sheetDataSet/x:sheetData", "sheetId", "0");
+    assertXPath(pDoc, "/x:externalLink/x:externalBook/x:sheetDataSet/x:sheetData/x:row[2]", "r",
+                "3");
+    assertXPathContent(
+        pDoc, "/x:externalLink/x:externalBook/x:sheetDataSet/x:sheetData/x:row[2]/x:cell/x:v",
+        "February");
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest2::testTdf143220XLSX()

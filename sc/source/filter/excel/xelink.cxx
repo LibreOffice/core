@@ -1064,9 +1064,13 @@ void XclExpExtName::SaveXml(XclExpXmlStream& rStrm)
 {
     sax_fastparser::FSHelperPtr pExternalLink = rStrm.GetCurrentStream();
 
+    /* TODO: mpArray contains external references. It doesn't cause any problems, but it's enough
+    to export it without the external document identifier. */
+    OUString aFormula = XclXmlUtils::ToOUString(GetCompileFormulaContext(), ScAddress(0, 0, 0), mpArray.get());
+
     pExternalLink->startElement(XML_definedName,
             XML_name, maName.toUtf8(),
-            XML_refersTo, nullptr,
+            XML_refersTo, aFormula.toUtf8(),
             XML_sheetId, nullptr);
 
     pExternalLink->endElement(XML_definedName);
