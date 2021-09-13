@@ -3103,6 +3103,9 @@ void FmXGridCell::init()
         pEventWindow->AddEventListener( LINK( this, FmXGridCell, OnWindowEvent ) );
         pEventWindow->SetFocusInHdl(LINK( this, FmXGridCell, OnFocusGained));
         pEventWindow->SetFocusOutHdl(LINK( this, FmXGridCell, OnFocusLost));
+        pEventWindow->SetMousePressHdl(LINK( this, FmXGridCell, OnMousePress));
+        pEventWindow->SetMouseReleaseHdl(LINK( this, FmXGridCell, OnMouseRelease));
+        pEventWindow->SetMouseMoveHdl(LINK( this, FmXGridCell, OnMouseMove));
     }
 }
 
@@ -3376,45 +3379,50 @@ IMPL_LINK_NOARG(FmXGridCell, OnFocusLost, LinkParamNone*, void)
     onFocusLost(aEvent);
 }
 
+IMPL_LINK(FmXGridCell, OnMousePress, const MouseEvent&, rEventData, void)
+{
+    if (!m_aMouseListeners.getLength())
+        return;
+
+    awt::MouseEvent aEvent(VCLUnoHelper::createMouseEvent(rEventData, *this));
+    m_aMouseListeners.notifyEach(&awt::XMouseListener::mousePressed, aEvent);
+}
+
+IMPL_LINK(FmXGridCell, OnMouseRelease, const MouseEvent&, rEventData, void)
+{
+    if (!m_aMouseListeners.getLength())
+        return;
+
+    awt::MouseEvent aEvent(VCLUnoHelper::createMouseEvent(rEventData, *this));
+    m_aMouseListeners.notifyEach(&awt::XMouseListener::mouseReleased, aEvent);
+}
+
+IMPL_LINK(FmXGridCell, OnMouseMove, const MouseEvent&, rMouseEvent, void)
+{
+    if ( rMouseEvent.IsEnterWindow() || rMouseEvent.IsLeaveWindow() )
+    {
+        if ( m_aMouseListeners.getLength() != 0 )
+        {
+            awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( rMouseEvent, *this ) );
+            m_aMouseListeners.notifyEach( rMouseEvent.IsEnterWindow() ? &awt::XMouseListener::mouseEntered: &awt::XMouseListener::mouseExited, aEvent );
+        }
+    }
+    else if ( !rMouseEvent.IsEnterWindow() && !rMouseEvent.IsLeaveWindow() )
+    {
+        if ( m_aMouseMotionListeners.getLength() != 0 )
+        {
+            awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( rMouseEvent, *this ) );
+            aEvent.ClickCount = 0;
+            const bool bSimpleMove = bool( rMouseEvent.GetMode() & MouseEventModifiers::SIMPLEMOVE );
+            m_aMouseMotionListeners.notifyEach( bSimpleMove ? &awt::XMouseMotionListener::mouseMoved: &awt::XMouseMotionListener::mouseDragged, aEvent );
+        }
+    }
+}
+
 void FmXGridCell::onWindowEvent(const VclEventId _nEventId, const void* _pEventData)
 {
     switch ( _nEventId )
     {
-    case VclEventId::WindowMouseButtonDown:
-    case VclEventId::WindowMouseButtonUp:
-    {
-        if ( !m_aMouseListeners.getLength() )
-            break;
-
-        const bool bButtonDown = ( _nEventId == VclEventId::WindowMouseButtonDown );
-
-        awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *static_cast< const ::MouseEvent* >( _pEventData ), *this ) );
-        m_aMouseListeners.notifyEach( bButtonDown ? &awt::XMouseListener::mousePressed : &awt::XMouseListener::mouseReleased, aEvent );
-    }
-    break;
-    case VclEventId::WindowMouseMove:
-    {
-        const MouseEvent& rMouseEvent = *static_cast< const ::MouseEvent* >( _pEventData );
-        if ( rMouseEvent.IsEnterWindow() || rMouseEvent.IsLeaveWindow() )
-        {
-            if ( m_aMouseListeners.getLength() != 0 )
-            {
-                awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( rMouseEvent, *this ) );
-                m_aMouseListeners.notifyEach( rMouseEvent.IsEnterWindow() ? &awt::XMouseListener::mouseEntered: &awt::XMouseListener::mouseExited, aEvent );
-            }
-        }
-        else if ( !rMouseEvent.IsEnterWindow() && !rMouseEvent.IsLeaveWindow() )
-        {
-            if ( m_aMouseMotionListeners.getLength() != 0 )
-            {
-                awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( rMouseEvent, *this ) );
-                aEvent.ClickCount = 0;
-                const bool bSimpleMove = bool( rMouseEvent.GetMode() & MouseEventModifiers::SIMPLEMOVE );
-                m_aMouseMotionListeners.notifyEach( bSimpleMove ? &awt::XMouseMotionListener::mouseMoved: &awt::XMouseMotionListener::mouseDragged, aEvent );
-            }
-        }
-    }
-    break;
     case VclEventId::WindowKeyInput:
     case VclEventId::WindowKeyUp:
     {
