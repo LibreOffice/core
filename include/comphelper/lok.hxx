@@ -113,6 +113,10 @@ COMPHELPER_DLLPUBLIC void statusIndicatorFinish();
 COMPHELPER_DLLPUBLIC void setFreemiumDenyList(const char* freemiumDenyList);
 COMPHELPER_DLLPUBLIC const std::vector<OUString>& getFreemiumDenyList();
 COMPHELPER_DLLPUBLIC bool isCommandFreemiumDenied(const OUString& command);
+
+COMPHELPER_DLLPUBLIC void setRestrictedCommandList(const char* restrictedCommandList);
+COMPHELPER_DLLPUBLIC const std::vector<OUString>& getRestrictedCommandList();
+COMPHELPER_DLLPUBLIC bool isRestrictedCommand(const OUString& command);
 }
 
 #endif // INCLUDED_COMPHELPER_LOK_HXX

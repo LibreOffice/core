@@ -1073,6 +1073,13 @@ static void doc_setFreemiumView(LibreOfficeKitDocument* pThis,
                                 int nViewId,
                                 bool isFreemium);
 
+static void doc_setRestrictedCommandList(LibreOfficeKitDocument* pThis,
+                                    const char* restrictedCommandList);
+
+static void doc_setRestrictedView(LibreOfficeKitDocument* pThis,
+                                int nViewId,
+                                bool isRestricted);
+
 static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis,
                                             unsigned nWindowId,
                                             int nType,
@@ -1365,6 +1372,9 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
 
         m_pDocumentClass->setFreemiumDenyList = doc_setFreemiumDenyList;
         m_pDocumentClass->setFreemiumView = doc_setFreemiumView;
+
+        m_pDocumentClass->setRestrictedCommandList = doc_setRestrictedCommandList;
+        m_pDocumentClass->setRestrictedView = doc_setRestrictedView;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -3595,6 +3605,17 @@ static void doc_setFreemiumView(LibreOfficeKitDocument* /*pThis*/, int nViewId, 
 {
     SolarMutexGuard aGuard;
     SfxLokHelper::setFreemiumView(nViewId, isFreemium);
+}
+
+static void doc_setRestrictedCommandList(LibreOfficeKitDocument* /*pThis*/, const char* restrictedCommandList)
+{
+    comphelper::LibreOfficeKit::setRestrictedCommandList(restrictedCommandList);
+}
+
+static void doc_setRestrictedView(LibreOfficeKitDocument* /*pThis*/, int nViewId, bool isRestricted)
+{
+    SolarMutexGuard aGuard;
+    SfxLokHelper::setRestrictedView(nViewId, isRestricted);
 }
 
 static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis, unsigned nWindowId, int nType, const char* pText)
