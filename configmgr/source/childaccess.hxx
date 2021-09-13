@@ -52,7 +52,7 @@ class ChildAccess:
     public css::lang::XUnoTunnel
 {
 public:
-    static css::uno::Sequence< sal_Int8 > const & getTunnelId();
+    static css::uno::Sequence< sal_Int8 > const & getUnoTunnelId();
 
     ChildAccess(
         Components & components, rtl::Reference< RootAccess > const & root,

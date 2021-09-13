@@ -50,7 +50,6 @@
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 
 #include <rtl/random.h>
 #include <sal/log.hxx>
@@ -1107,10 +1106,7 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getPlainRawStream(
 
 sal_Int64 SAL_CALL ZipPackageStream::getSomething( const Sequence< sal_Int8 >& aIdentifier )
 {
-    sal_Int64 nMe = 0;
-    if ( comphelper::isUnoTunnelId<ZipPackageStream>(aIdentifier) )
-        nMe = reinterpret_cast < sal_Int64 > ( this );
-    return nMe;
+    return comphelper::getSomethingImpl(aIdentifier, this);
 }
 
 // XPropertySet

@@ -1215,11 +1215,7 @@ const uno::Sequence<sal_Int8>& SwXStyle::getUnoTunnelId()
 
 sal_Int64 SAL_CALL SwXStyle::getSomething(const uno::Sequence<sal_Int8>& rId)
 {
-    if(comphelper::isUnoTunnelId<SwXStyle>(rId))
-    {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
-    }
-    return 0;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 

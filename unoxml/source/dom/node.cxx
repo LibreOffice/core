@@ -978,12 +978,7 @@ namespace DOM
     ::sal_Int64 SAL_CALL
     CNode::getSomething(Sequence< ::sal_Int8 > const& rId)
     {
-        if (comphelper::isUnoTunnelId<CNode>(rId))
-        {
-            return ::sal::static_int_cast< sal_Int64 >(
-                    reinterpret_cast< sal_IntPtr >(this) );
-        }
-        return 0;
+        return comphelper::getSomethingImpl(rId, this);
     }
 }
 

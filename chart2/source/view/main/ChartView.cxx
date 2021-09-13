@@ -1204,12 +1204,7 @@ sal_Bool SAL_CALL ChartView::isDataFlavorSupported( const datatransfer::DataFlav
 // ____ XUnoTunnel ___
 ::sal_Int64 SAL_CALL ChartView::getSomething( const uno::Sequence< ::sal_Int8 >& aIdentifier )
 {
-    if( comphelper::isUnoTunnelId<ExplicitValueProvider>(aIdentifier) )
-    {
-        ExplicitValueProvider* pProvider = this;
-        return reinterpret_cast<sal_Int64>(pProvider);
-    }
-    return 0;
+    return comphelper::getSomethingImpl<ExplicitValueProvider>(aIdentifier, this);
 }
 
 // lang::XServiceInfo

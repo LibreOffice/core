@@ -43,7 +43,6 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/types.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <connectivity/dbtools.hxx>
@@ -741,9 +740,8 @@ Sequence< sal_Int8 > ODbaseTable::getUnoTunnelId()
 
 sal_Int64 ODbaseTable::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return (comphelper::isUnoTunnelId<ODbaseTable>(rId))
-                ? reinterpret_cast< sal_Int64 >( this )
-                : ODbaseTable_BASE::getSomething(rId);
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<ODbaseTable_BASE>{});
 }
 
 bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool bRetrieveData)

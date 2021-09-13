@@ -97,7 +97,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/types.hxx>
 #include <dbaccess/dbaundomanager.hxx>
 #include <editeng/paperinf.hxx>
@@ -1938,7 +1937,7 @@ sal_Int64 SAL_CALL OReportDefinition::getSomething( const uno::Sequence< sal_Int
 {
     sal_Int64 nRet = 0;
     if (comphelper::isUnoTunnelId<OReportDefinition>(rId) )
-        nRet = reinterpret_cast<sal_Int64>(this);
+        nRet = comphelper::getSomething_cast(this);
     else
     {
         uno::Reference< lang::XUnoTunnel> xUnoTunnel(m_pImpl->m_xNumberFormatsSupplier,uno::UNO_QUERY);

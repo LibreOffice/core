@@ -21,7 +21,6 @@
 #include <ado/ACatalog.hxx>
 #include <ado/AGroups.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <ado/AConnection.hxx>
@@ -76,9 +75,8 @@ Sequence< sal_Int8 > OAdoUser::getUnoTunnelId()
 
 sal_Int64 OAdoUser::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return comphelper::isUnoTunnelId<OAdoUser>(rId)
-                ? reinterpret_cast< sal_Int64 >( this )
-                : OUser_TYPEDEF::getSomething(rId);
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<OUser_TYPEDEF>{});
 }
 
 

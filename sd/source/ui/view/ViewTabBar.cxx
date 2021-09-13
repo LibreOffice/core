@@ -281,14 +281,7 @@ const Sequence<sal_Int8>& ViewTabBar::getUnoTunnelId()
 
 sal_Int64 SAL_CALL ViewTabBar::getSomething (const Sequence<sal_Int8>& rId)
 {
-    sal_Int64 nResult = 0;
-
-    if (comphelper::isUnoTunnelId<ViewTabBar>(rId))
-    {
-        nResult = reinterpret_cast<sal_Int64>(this);
-    }
-
-    return nResult;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 bool ViewTabBar::ActivatePage(size_t nIndex)

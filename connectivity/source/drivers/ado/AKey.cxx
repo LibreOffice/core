@@ -21,7 +21,6 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <ado/AColumns.hxx>
 #include <ado/AConnection.hxx>
 
@@ -77,9 +76,8 @@ Sequence< sal_Int8 > OAdoKey::getUnoTunnelId()
 
 sal_Int64 OAdoKey::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return comphelper::isUnoTunnelId<OAdoKey>(rId)
-                ? reinterpret_cast< sal_Int64 >( this )
-                : OKey_ADO::getSomething(rId);
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<OKey_ADO>{});
 }
 
 void OAdoKey::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)

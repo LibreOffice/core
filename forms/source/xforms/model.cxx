@@ -35,8 +35,8 @@
 #include <tools/debug.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 
 #include <algorithm>
 
@@ -589,7 +589,7 @@ void Model::update()
 
 sal_Int64 Model::getSomething( const css::uno::Sequence<sal_Int8>& xId )
 {
-    return reinterpret_cast<sal_Int64>( ( xId == getUnoTunnelId() ) ? this : nullptr );
+    return comphelper::getSomethingImpl(xId, this);
 }
 
 Sequence<sal_Int8> Model::getImplementationId()

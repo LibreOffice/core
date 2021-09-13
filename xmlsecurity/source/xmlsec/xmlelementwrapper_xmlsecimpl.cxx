@@ -22,7 +22,6 @@
 #include "xmlelementwrapper_xmlsecimpl.hxx"
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
@@ -42,12 +41,7 @@ uno::Sequence< sal_Int8 > XMLElementWrapper_XmlSecImpl::getUnoTunnelId()
 
 sal_Int64 SAL_CALL XMLElementWrapper_XmlSecImpl::getSomething( const uno::Sequence< sal_Int8 >& aIdentifier )
 {
-    if (comphelper::isUnoTunnelId<XMLElementWrapper_XmlSecImpl>(aIdentifier))
-    {
-        return reinterpret_cast < sal_Int64 > ( this );
-    }
-
-    return 0;
+    return comphelper::getSomethingImpl(aIdentifier, this);
 }
 
 /* XServiceInfo */

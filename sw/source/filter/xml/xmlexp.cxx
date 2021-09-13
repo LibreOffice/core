@@ -483,11 +483,8 @@ const Sequence< sal_Int8 > & SwXMLExport::getUnoTunnelId() noexcept
 
 sal_Int64 SAL_CALL SwXMLExport::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    if( comphelper::isUnoTunnelId<SwXMLExport>(rId) )
-    {
-        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
-    }
-    return SvXMLExport::getSomething( rId );
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<SvXMLExport>{});
 }
 
 SwDoc* SwXMLExport::getDoc()

@@ -1167,11 +1167,7 @@ const ::uno::Sequence< sal_Int8 > & SwXFrame::getUnoTunnelId()
 
 sal_Int64 SAL_CALL SwXFrame::getSomething( const ::uno::Sequence< sal_Int8 >& rId )
 {
-    if( comphelper::isUnoTunnelId<SwXFrame>(rId) )
-    {
-        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
-    }
-    return 0;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 

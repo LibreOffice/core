@@ -1213,10 +1213,8 @@ const uno::Sequence<sal_Int8>& SmMLImport::getUnoTunnelId() noexcept
 
 sal_Int64 SAL_CALL SmMLImport::getSomething(const uno::Sequence<sal_Int8>& rId)
 {
-    if (comphelper::isUnoTunnelId<SmMLImport>(rId))
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
-
-    return SvXMLImport::getSomething(rId);
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<SvXMLImport>{});
 }
 
 SvXMLImportContext*
