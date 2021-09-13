@@ -85,10 +85,10 @@ IMPL_LINK_NOARG(SwGlossDecideDlg, SelectHdl, weld::TreeView&, void)
 }
 
 SwGlossaryList::SwGlossaryList() :
-    bFilled(false)
+    m_bFilled(false)
 {
     SvtPathOptions aPathOpt;
-    sPath = aPathOpt.GetAutoTextPath();
+    m_sPath = aPathOpt.GetAutoTextPath();
     SetTimeout(GLOS_TIMEOUT);
 }
 
@@ -104,15 +104,15 @@ SwGlossaryList::~SwGlossaryList()
 bool SwGlossaryList::GetShortName(std::u16string_view rLongName,
                                   OUString& rShortName, OUString& rGroupName )
 {
-    if(!bFilled)
+    if(!m_bFilled)
         Update();
 
     std::vector<TripleString> aTripleStrings;
 
-    size_t nCount = aGroupArr.size();
+    size_t nCount = m_aGroupArr.size();
     for(size_t i = 0; i < nCount; i++ )
     {
-        AutoTextGroup* pGroup = aGroupArr[i].get();
+        AutoTextGroup* pGroup = m_aGroupArr[i].get();
         if(!rGroupName.isEmpty() && rGroupName != pGroup->sName)
             continue;
 
@@ -167,17 +167,17 @@ bool SwGlossaryList::GetShortName(std::u16string_view rLongName,
 
 size_t SwGlossaryList::GetGroupCount()
 {
-    if(!bFilled)
+    if(!m_bFilled)
         Update();
-    return aGroupArr.size();
+    return m_aGroupArr.size();
 }
 
 OUString SwGlossaryList::GetGroupName(size_t nPos)
 {
-    OSL_ENSURE(aGroupArr.size() > nPos, "group not available");
-    if(nPos < aGroupArr.size())
+    OSL_ENSURE(m_aGroupArr.size() > nPos, "group not available");
+    if(nPos < m_aGroupArr.size())
     {
-        AutoTextGroup* pGroup = aGroupArr[nPos].get();
+        AutoTextGroup* pGroup = m_aGroupArr[nPos].get();
         OUString sRet = pGroup->sName;
         return sRet;
     }
@@ -186,10 +186,10 @@ OUString SwGlossaryList::GetGroupName(size_t nPos)
 
 OUString SwGlossaryList::GetGroupTitle(size_t nPos)
 {
-    OSL_ENSURE(aGroupArr.size() > nPos, "group not available");
-    if(nPos < aGroupArr.size())
+    OSL_ENSURE(m_aGroupArr.size() > nPos, "group not available");
+    if(nPos < m_aGroupArr.size())
     {
-        AutoTextGroup* pGroup = aGroupArr[nPos].get();
+        AutoTextGroup* pGroup = m_aGroupArr[nPos].get();
         return pGroup->sTitle;
     }
     return OUString();
@@ -197,10 +197,10 @@ OUString SwGlossaryList::GetGroupTitle(size_t nPos)
 
 sal_uInt16 SwGlossaryList::GetBlockCount(size_t nGroup)
 {
-    OSL_ENSURE(aGroupArr.size() > nGroup, "group not available");
-    if(nGroup < aGroupArr.size())
+    OSL_ENSURE(m_aGroupArr.size() > nGroup, "group not available");
+    if(nGroup < m_aGroupArr.size())
     {
-        AutoTextGroup* pGroup = aGroupArr[nGroup].get();
+        AutoTextGroup* pGroup = m_aGroupArr[nGroup].get();
         return pGroup->nCount;
     }
     return 0;
@@ -208,10 +208,10 @@ sal_uInt16 SwGlossaryList::GetBlockCount(size_t nGroup)
 
 OUString SwGlossaryList::GetBlockLongName(size_t nGroup, sal_uInt16 nBlock)
 {
-    OSL_ENSURE(aGroupArr.size() > nGroup, "group not available");
-    if(nGroup < aGroupArr.size())
+    OSL_ENSURE(m_aGroupArr.size() > nGroup, "group not available");
+    if(nGroup < m_aGroupArr.size())
     {
-        AutoTextGroup* pGroup = aGroupArr[nGroup].get();
+        AutoTextGroup* pGroup = m_aGroupArr[nGroup].get();
         return pGroup->sLongNames.getToken(nBlock, STRING_DELIM);
     }
     return OUString();
@@ -219,10 +219,10 @@ OUString SwGlossaryList::GetBlockLongName(size_t nGroup, sal_uInt16 nBlock)
 
 OUString SwGlossaryList::GetBlockShortName(size_t nGroup, sal_uInt16 nBlock)
 {
-    OSL_ENSURE(aGroupArr.size() > nGroup, "group not available");
-    if(nGroup < aGroupArr.size())
+    OSL_ENSURE(m_aGroupArr.size() > nGroup, "group not available");
+    if(nGroup < m_aGroupArr.size())
     {
-        AutoTextGroup* pGroup = aGroupArr[nGroup].get();
+        AutoTextGroup* pGroup = m_aGroupArr[nGroup].get();
         return pGroup->sShortNames.getToken(nBlock, STRING_DELIM);
     }
     return OUString();
@@ -235,16 +235,16 @@ void SwGlossaryList::Update()
 
     SvtPathOptions aPathOpt;
     const OUString& sTemp( aPathOpt.GetAutoTextPath() );
-    if(sTemp != sPath)
+    if(sTemp != m_sPath)
     {
-        sPath = sTemp;
-        bFilled = false;
+        m_sPath = sTemp;
+        m_bFilled = false;
         ClearGroups();
     }
     SwGlossaries* pGlossaries = ::GetGlossaries();
     const std::vector<OUString> & rPathArr = pGlossaries->GetPathArray();
     const OUString sExt( SwGlossaries::GetExtension() );
-    if(!bFilled)
+    if(!m_bFilled)
     {
         const size_t nGroupCount = pGlossaries->GetGroupCnt();
         for(size_t i = 0; i < nGroupCount; ++i)
@@ -264,10 +264,10 @@ void SwGlossaryList::Update()
                                                 &pGroup->aDateModified,
                                                 &pGroup->aDateModified );
 
-                aGroupArr.insert( aGroupArr.begin(), std::move(pGroup) );
+                m_aGroupArr.insert( m_aGroupArr.begin(), std::move(pGroup) );
             }
         }
-        bFilled = true;
+        m_bFilled = true;
     }
     else
     {
@@ -296,7 +296,7 @@ void SwGlossaryList::Update()
                     FillGroup( pFound, pGlossaries );
                     pFound->aDateModified = rDT;
 
-                    aGroupArr.push_back(std::unique_ptr<AutoTextGroup>(pFound));
+                    m_aGroupArr.push_back(std::unique_ptr<AutoTextGroup>(pFound));
                 }
                 else if( pFound->aDateModified < rDT )
                 {
@@ -305,11 +305,11 @@ void SwGlossaryList::Update()
                 }
             }
 
-            for( size_t i = aGroupArr.size(); i>0; )
+            for( size_t i = m_aGroupArr.size(); i>0; )
             {
                 --i;
                 // maybe remove deleted groups
-                AutoTextGroup* pGroup = aGroupArr[i].get();
+                AutoTextGroup* pGroup = m_aGroupArr[i].get();
                 const size_t nGroupPath = static_cast<size_t>(
                     pGroup->sName.getToken( 1, GLOS_DELIM).toInt32());
                 // Only the groups will be checked which are registered
@@ -322,7 +322,7 @@ void SwGlossaryList::Update()
 
                     if(!bFound)
                     {
-                        aGroupArr.erase(aGroupArr.begin() + i);
+                        m_aGroupArr.erase(m_aGroupArr.begin() + i);
                     }
                 }
             }
@@ -339,7 +339,7 @@ void SwGlossaryList::Invoke()
 
 AutoTextGroup* SwGlossaryList::FindGroup(std::u16string_view rGroupName)
 {
-    for(const auto & pRet : aGroupArr)
+    for(const auto & pRet : m_aGroupArr)
     {
         if(pRet->sName == rGroupName)
             return pRet.get();
@@ -371,7 +371,7 @@ void SwGlossaryList::FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGlossaries)
 void SwGlossaryList::HasLongName(const std::vector<OUString>& rBeginCandidates,
                                  std::vector<std::pair<OUString, sal_uInt16>>& rLongNames)
 {
-    if(!bFilled)
+    if(!m_bFilled)
         Update();
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
     // We store results for all candidate words in separate lists, so that later
@@ -380,7 +380,7 @@ void SwGlossaryList::HasLongName(const std::vector<OUString>& rBeginCandidates,
 
     // We can't break after FIND_MAX_GLOS items found, since first items may have ended up in
     // lower-priority lists, and those from higher-priority lists are yet to come. So process all.
-    for (const auto& pGroup : aGroupArr)
+    for (const auto& pGroup : m_aGroupArr)
     {
         sal_Int32 nIdx{ 0 };
         for(sal_uInt16 j = 0; j < pGroup->nCount; j++)
@@ -435,8 +435,8 @@ void SwGlossaryList::HasLongName(const std::vector<OUString>& rBeginCandidates,
 
 void    SwGlossaryList::ClearGroups()
 {
-    aGroupArr.clear();
-    bFilled = false;
+    m_aGroupArr.clear();
+    m_bFilled = false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

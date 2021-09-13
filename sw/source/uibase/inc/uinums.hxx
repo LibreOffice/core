@@ -82,7 +82,7 @@ class SW_DLLPUBLIC SwChapterNumRules final
 public:
     enum { nMaxRules = MAX_NUM_RULES };         // currently 9 defined forms
 private:
-    std::unique_ptr<SwNumRulesWithName> pNumRules[ MAX_NUM_RULES ];
+    std::unique_ptr<SwNumRulesWithName> m_pNumRules[ MAX_NUM_RULES ];
 
     void Init();
     void Save();
@@ -100,7 +100,7 @@ public:
 inline const SwNumRulesWithName *SwChapterNumRules::GetRules(sal_uInt16 nIdx) const
 {
     assert(nIdx < nMaxRules);
-    return pNumRules[nIdx].get();
+    return m_pNumRules[nIdx].get();
 }
 
 

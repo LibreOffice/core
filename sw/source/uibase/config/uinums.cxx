@@ -73,7 +73,7 @@ SwChapterNumRules::~SwChapterNumRules()
 
 void  SwChapterNumRules::Init()
 {
-    for(auto & rpNumRule : pNumRules)
+    for(auto & rpNumRule : m_pNumRules)
         rpNumRule.reset();
 
     OUString sNm(CHAPTER_FILENAME);
@@ -89,17 +89,17 @@ void  SwChapterNumRules::Init()
 void SwChapterNumRules::CreateEmptyNumRule(sal_uInt16 const nIndex)
 {
     assert(nIndex < nMaxRules);
-    assert(!pNumRules[nIndex]);
-    pNumRules[nIndex].reset(new SwNumRulesWithName);
+    assert(!m_pNumRules[nIndex]);
+    m_pNumRules[nIndex].reset(new SwNumRulesWithName);
 }
 
 void SwChapterNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, sal_uInt16 nIdx)
 {
     assert(nIdx < nMaxRules);
-    if( !pNumRules[nIdx] )
-        pNumRules[nIdx].reset(new SwNumRulesWithName( rCopy ));
+    if( !m_pNumRules[nIdx] )
+        m_pNumRules[nIdx].reset(new SwNumRulesWithName( rCopy ));
     else
-        *pNumRules[nIdx] = rCopy;
+        *m_pNumRules[nIdx] = rCopy;
     Save(); // store it immediately
 }
 
