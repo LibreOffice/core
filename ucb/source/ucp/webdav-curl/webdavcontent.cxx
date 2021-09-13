@@ -77,7 +77,7 @@
 #include "webdavprovider.hxx"
 #include "webdavresultset.hxx"
 #include "ContentProperties.hxx"
-#include "SerfUri.hxx"
+#include "CurlUri.hxx"
 #include "UCBDeadPropertyValue.hxx"
 #include "DAVException.hxx"
 #include "DAVProperties.hxx"
@@ -210,7 +210,7 @@ Content::Content(
                 rSessionFactory,
                 Identifier->getContentIdentifier() ) );
 
-        SerfUri aURI( Identifier->getContentIdentifier() );
+        CurlUri const aURI( Identifier->getContentIdentifier() );
         m_aEscapedTitle = aURI.GetPathBaseName();
     }
     catch ( DAVException const & )
@@ -1250,7 +1250,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-        aUnescapedTitle = SerfUri::unescape( m_aEscapedTitle );
+        aUnescapedTitle = DecodeURI(m_aEscapedTitle);
         xContext.set( m_xContext );
         xIdentifier.set( m_xIdentifier );
         xProvider = m_xProvider;
@@ -1458,7 +1458,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
         // might trigger HTTP redirect.
         // Therefore, title must be updated here.
-        SerfUri aUri( xResAccess->getURL() );
+        CurlUri const aUri( xResAccess->getURL() );
         aUnescapedTitle = aUri.GetPathBaseNameUnescaped();
 
         if ( rType == UNKNOWN )
@@ -1554,7 +1554,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             m_xCachedProps->addProperties( *xProps );
 
         m_xResAccess.reset( new DAVResourceAccess( *xResAccess ) );
-        m_aEscapedTitle = SerfUri::escapeSegment( aUnescapedTitle );
+        m_aEscapedTitle = EncodeSegment(aUnescapedTitle);
     }
 
     return xResultRow;
@@ -1658,7 +1658,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 {
                     try
                     {
-                        SerfUri aURI( xIdentifier->getContentIdentifier() );
+                        CurlUri const aURI(xIdentifier->getContentIdentifier());
                         aOldTitle = aURI.GetPathBaseNameUnescaped();
 
                         if ( aNewValue != aOldTitle )
@@ -1879,7 +1879,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         if ( aNewURL.lastIndexOf( '/' ) != ( aNewURL.getLength() - 1 ) )
             aNewURL += "/";
 
-        aNewURL += SerfUri::escapeSegment( aNewTitle );
+        aNewURL += EncodeSegment(aNewTitle);
 
         uno::Reference< ucb::XContentIdentifier > xNewId
             = new ::ucbhelper::ContentIdentifier( aNewURL );
@@ -1887,8 +1887,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
         try
         {
-            SerfUri sourceURI( xOldId->getContentIdentifier() );
-            SerfUri targetURI( xNewId->getContentIdentifier() );
+            CurlUri const sourceURI( xOldId->getContentIdentifier() );
+            CurlUri targetURI( xNewId->getContentIdentifier() );
             targetURI.SetScheme( sourceURI.GetScheme() );
 
             xResAccess->MOVE(
@@ -1942,7 +1942,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         aEvent.OldValue     <<= aOldTitle;
         aEvent.NewValue     <<= aNewTitle;
 
-        m_aEscapedTitle     = SerfUri::escapeSegment( aNewTitle );
+        m_aEscapedTitle     = EncodeSegment(aNewTitle);
 
         aChanges.getArray()[ nChanged ] = aEvent;
         nChanged++;
@@ -2429,7 +2429,7 @@ void Content::insert(
                         OUString aTitle;
                         try
                         {
-                            SerfUri aURI( aURL );
+                            CurlUri const aURI( aURL );
                             aTitle = aURI.GetPathBaseNameUnescaped();
                         }
                         catch ( DAVException const & )
@@ -2518,8 +2518,8 @@ void Content::transfer(
     OUString aTargetURI;
     try
     {
-        SerfUri sourceURI( rArgs.SourceURL );
-        SerfUri targetURI( xIdentifier->getContentIdentifier() );
+        CurlUri sourceURI( rArgs.SourceURL );
+        CurlUri targetURI( xIdentifier->getContentIdentifier() );
         aTargetURI = targetURI.GetPathBaseNameUnescaped();
 
         // Check source's and target's URL scheme

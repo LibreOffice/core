@@ -34,7 +34,7 @@
 #include "DAVSession.hxx"
 #include "DAVResource.hxx"
 #include "DAVTypes.hxx"
-#include "SerfUri.hxx"
+#include "CurlUri.hxx"
 
 namespace http_dav_ucp
 {
@@ -49,7 +49,7 @@ class DAVResourceAccess
     rtl::Reference< DAVSession > m_xSession;
     rtl::Reference< DAVSessionFactory > m_xSessionFactory;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    std::vector< SerfUri > m_aRedirectURIs;
+    std::vector<CurlUri> m_aRedirectURIs;
 
 public:
     DAVResourceAccess() = default;
