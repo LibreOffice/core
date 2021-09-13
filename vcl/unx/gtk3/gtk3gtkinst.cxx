@@ -9146,6 +9146,13 @@ private:
         pThis->signal_activate();
     }
 
+    virtual void ensureMouseEventWidget() override
+    {
+        // The GtkEntry is sufficient to get mouse events without an intermediate GtkEventBox
+        if (!m_pMouseEventBox)
+            m_pMouseEventBox = m_pWidget;
+    }
+
 protected:
 
     virtual void signal_activate()

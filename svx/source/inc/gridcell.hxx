@@ -785,6 +785,10 @@ private:
     svt::ControlBase* getEventWindow() const;
     DECL_LINK(OnFocusGained, LinkParamNone*, void);
     DECL_LINK(OnFocusLost, LinkParamNone*, void);
+    DECL_LINK(OnMousePress, const MouseEvent&, void);
+    DECL_LINK(OnMouseRelease, const MouseEvent&, void);
+    DECL_LINK(OnMouseMove, const MouseEvent&, void);
+
     DECL_LINK( OnWindowEvent, VclWindowEvent&, void );
 };
 
