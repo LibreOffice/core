@@ -26,32 +26,20 @@ using namespace ::com::sun::star;
 
 
 // static
-const OUString UCBDeadPropertyValue::aTypeString
-    = "string";
-const OUString UCBDeadPropertyValue::aTypeLong
-    = "long";
-const OUString UCBDeadPropertyValue::aTypeShort
-    = "short";
-const OUString UCBDeadPropertyValue::aTypeBoolean
-    = "boolean";
-const OUString UCBDeadPropertyValue::aTypeChar
-    = "char";
-const OUString UCBDeadPropertyValue::aTypeByte
-    = "byte";
-const OUString UCBDeadPropertyValue::aTypeHyper
-    = "hyper";
-const OUString UCBDeadPropertyValue::aTypeFloat
-    = "float";
-const OUString UCBDeadPropertyValue::aTypeDouble
-    = "double";
+constexpr OUStringLiteral aTypeString = u"string";
+constexpr OUStringLiteral aTypeLong = u"long";
+constexpr OUStringLiteral aTypeShort = u"short";
+constexpr OUStringLiteral aTypeBoolean = u"boolean";
+constexpr OUStringLiteral aTypeChar = u"char";
+constexpr OUStringLiteral aTypeByte = u"byte";
+constexpr OUStringLiteral aTypeHyper = u"hyper";
+constexpr OUStringLiteral aTypeFloat = u"float";
+constexpr OUStringLiteral aTypeDouble = u"double";
 
 // static
-const OUString UCBDeadPropertyValue::aXMLPre
-    = "<ucbprop><type>";
-const OUString UCBDeadPropertyValue::aXMLMid
-    = "</type><value>";
-const OUString UCBDeadPropertyValue::aXMLEnd
-    = "</value></ucbprop>";
+constexpr OUStringLiteral aXMLPre = u"<ucbprop><type>";
+constexpr OUStringLiteral aXMLMid = u"</type><value>";
+constexpr OUStringLiteral aXMLEnd = u"</value></ucbprop>";
 
 /*
 
@@ -337,7 +325,7 @@ bool UCBDeadPropertyValue::supportsType( const uno::Type & rType )
 
 
 // static
-bool UCBDeadPropertyValue::createFromXML( const OString & /*rInData*/,
+bool UCBDeadPropertyValue::createFromXML( std::u16string_view /*rInData*/,
                                           uno::Any & /*rOutData*/ )
 {
     bool success = false;

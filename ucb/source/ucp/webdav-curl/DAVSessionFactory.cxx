@@ -35,7 +35,7 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !m_xProxyDecider.get() )
+    if (!m_xProxyDecider)
         m_xProxyDecider.reset( new ucbhelper::InternetProxyDecider( rxContext ) );
 
     Map::iterator aIt = std::find_if(m_aMap.begin(), m_aMap.end(),
