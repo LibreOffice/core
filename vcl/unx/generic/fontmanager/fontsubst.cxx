@@ -23,6 +23,7 @@
 
 #include <unx/geninst.h>
 #include <font/GlyphFallbackFontSubstitution.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <unx/fontmanager.hxx>
 #include <PhysicalFontCollection.hxx>
 
@@ -51,7 +52,7 @@ public:
 
 }
 
-void SalGenericInstance::RegisterFontSubstitutors( PhysicalFontCollection* pFontCollection )
+void SalGenericInstance::RegisterFontSubstitutors( vcl::font::PhysicalFontCollection* pFontCollection )
 {
     // register font fallback substitutions
     static FcPreMatchSubstitution aSubstPreMatch;
