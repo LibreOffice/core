@@ -36,6 +36,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea5a8808_489eadce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-13T09:44:01Z",
+      "side": 1,
+      "message": "\u003e Do you think that we need to implement that \"bUseEthernetAddress\" for UnoTunnelIdInit, because that\u0027s the \"functional\" change affecting most of the places where OImplementationId was used: its default ctor has its value true by default. No idea how would that be useful actually... And it seems that our rtl_createUuid ignores it - so ... ?\n\nIt is ignored ever since \u003chttps://git.libreoffice.org/core/+/4e9fa7e339a1cd6cb2fec643715991bcf5057cec%5E!/\u003e \"INTEGRATION: CWS sb67: #i51501# rtl_createUuid now generates version 4 instead of version 1 UUIDs\", but couldn\u0027t be removed from cppu::OImplementationId for compatibliy reasons.  We don\u0027t need to introduce it in UnoTunnelIdInit.",
+      "parentUuid": "2e1e8730_fff74b57",
+      "revId": "71b834aec0a7395069b87e65092744302af45623",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "067c1f45_cc5876b4",
