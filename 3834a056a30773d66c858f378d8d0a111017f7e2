@@ -113,6 +113,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6102d85d_c1c83c0b",
+        "filename": "offapi/com/sun/star/drawing/BarCode.idl",
+        "patchSetId": 9
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-09-13T16:14:49Z",
+      "side": 1,
+      "message": "It turns out that the error-correction concept is specific to 2d-barcodes(formats like qr code, data matrix etc [https://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction#Bar_code]) and so, I think it might be better to rename QRCodeErrorCorrection to BarCodeErrorCorrection.",
+      "parentUuid": "b8aa1cab_2f166b61",
+      "revId": "3834a056a30773d66c858f378d8d0a111017f7e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9dcee32b_dfcf0929",
         "filename": "offapi/com/sun/star/drawing/BarCode.idl",
         "patchSetId": 9

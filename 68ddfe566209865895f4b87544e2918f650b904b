@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bed7e0b9_c2b6bed7",
+        "filename": "offapi/com/sun/star/drawing/BarCode.idl",
+        "patchSetId": 10
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-09-13T16:14:49Z",
+      "side": 1,
+      "message": "Sounds good! I\u0027ll shift it to the top then...",
+      "parentUuid": "3517f043_e1bad5ff",
+      "revId": "68ddfe566209865895f4b87544e2918f650b904b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c3282561_72e8f473",
