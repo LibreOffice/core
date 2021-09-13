@@ -21,7 +21,7 @@
 #include <sal/log.hxx>
 #include <osl/time.h>
 #include <osl/thread.hxx>
-#include "SerfSession.hxx"
+#include "CurlSession.hxx"
 #include "SerfLockStore.hxx"
 
 using namespace http_dav_ucp;
@@ -94,7 +94,7 @@ SerfLockStore::~SerfLockStore()
 
     for ( auto& rLockInfo : m_aLockInfoMap )
     {
-        rLockInfo.second.m_xSession->UNLOCK( rLockInfo.first );
+        rLockInfo.second.m_xSession->NonInteractive_UNLOCK(rLockInfo.first);
     }
 }
 
@@ -142,7 +142,7 @@ OUString SerfLockStore::getLockToken( const OUString& rLock )
 
 void SerfLockStore::addLock( const OUString& rLock,
                              const OUString& sToken,
-                             rtl::Reference< SerfSession > const & xSession,
+                             rtl::Reference<CurlSession> const & xSession,
                              sal_Int32 nLastChanceToSendRefreshRequest )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -199,8 +199,8 @@ void SerfLockStore::refreshLocks()
             {
                 // refresh the lock.
                 sal_Int32 nlastChanceToSendRefreshRequest = -1;
-                if ( rInfo.m_xSession->LOCK(
-                         rLockInfo.first, &nlastChanceToSendRefreshRequest ) )
+                if (rInfo.m_xSession->NonInteractive_LOCK(
+                         rLockInfo.first, nlastChanceToSendRefreshRequest))
                 {
                     rInfo.m_nLastChanceToSendRefreshRequest
                         = nlastChanceToSendRefreshRequest;
