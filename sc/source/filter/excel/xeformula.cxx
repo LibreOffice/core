@@ -612,6 +612,7 @@ void XclExpFmlaCompImpl::Init( XclFormulaType eType, const ScTokenArray& rScTokA
         // token array iterator (use cloned token array if present)
         mxData->maTokArrIt.Init( mxData->mxOwnScTokArr ? *mxData->mxOwnScTokArr : rScTokArr, false );
         mxData->mpRefLog = pRefLog;
+        mxData->mpScBasePos = pScBasePos;
     }
 }
 
