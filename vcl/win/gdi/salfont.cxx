@@ -53,8 +53,8 @@
 
 #include <font/FontSelectPattern.hxx>
 #include <fontsubset.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
-#include <PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <font/fontsubstitution.hxx>
 #include <sft.hxx>
@@ -243,7 +243,7 @@ bool WinGlyphFallbackSubstititution::HasMissingChars(vcl::font::PhysicalFontFace
 namespace
 {
     //used by 2-level font fallback
-    vcl::font::PhysicalFontFamily* findDevFontListByLocale(const PhysicalFontCollection &rFontCollection,
+    vcl::font::PhysicalFontFamily* findDevFontListByLocale(const vcl::font::PhysicalFontCollection &rFontCollection,
                                                 const LanguageTag& rLanguageTag )
     {
         // get the default font for a specified locale
