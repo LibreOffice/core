@@ -41,7 +41,7 @@
 #include <impfontcache.hxx>
 #include <font/DirectFontSubstitution.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
-#include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <font/FeatureCollector.hxx>
 #include <impglyphitem.hxx>
 #include <sallayout.hxx>
