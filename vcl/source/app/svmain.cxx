@@ -57,7 +57,7 @@
 #include <vcl/virdev.hxx>
 
 #include <print.h>
-#include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <accmgr.hxx>
 #include <configsettings.hxx>
 #include <dbggui.hxx>
@@ -360,7 +360,7 @@ bool InitVCL()
     pSVData->maAppData.mxAppFileName = aNativeFileName;
 
     // Initialize global data
-    pSVData->maGDIData.mxScreenFontList = std::make_shared<PhysicalFontCollection>();
+    pSVData->maGDIData.mxScreenFontList = std::make_shared<vcl::font::PhysicalFontCollection>();
     pSVData->maGDIData.mxScreenFontCache = std::make_shared<ImplFontCache>();
     pSVData->maGDIData.mxGrfConverter.reset(new GraphicConverter);
 

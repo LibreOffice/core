@@ -19,6 +19,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_font, \
 	vcl/qa/cppunit/physicalfontface \
 	vcl/qa/cppunit/physicalfontfacecollection \
 	vcl/qa/cppunit/physicalfontfamily \
+	vcl/qa/cppunit/physicalfontcollection \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,vcl_font,\
