@@ -680,7 +680,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                             sOldName = sOldName.replaceFirst("%1", m_strOldTabName);
                             aEvent.OldValue <<= sOldName;
                             OUString sNewName(ScResId(STR_ACC_TABLE_NAME));
-                            sOldName = sNewName.replaceFirst("%1", tabName);
+                            sNewName = sNewName.replaceFirst("%1", tabName);
                             aEvent.NewValue <<= sNewName;
                             CommitChange( aEvent );
                             m_strOldTabName = tabName;
