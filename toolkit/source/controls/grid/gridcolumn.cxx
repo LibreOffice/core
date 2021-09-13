@@ -23,7 +23,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 
 namespace toolkit
 {
@@ -285,16 +284,14 @@ namespace toolkit
 
     sal_Int64 SAL_CALL GridColumn::getSomething( const Sequence< sal_Int8 >& i_identifier )
     {
-        if ( isUnoTunnelId<GridColumn>(i_identifier) )
-            return ::sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ) );
-        return 0;
+        return comphelper::getSomethingImpl(i_identifier, this);
     }
 
 
     Sequence< sal_Int8 > GridColumn::getUnoTunnelId() noexcept
     {
-        static ::cppu::OImplementationId const aId;
-        return aId.getImplementationId();
+        static const comphelper::UnoTunnelIdInit aId;
+        return aId.getSeq();
     }
 }
 

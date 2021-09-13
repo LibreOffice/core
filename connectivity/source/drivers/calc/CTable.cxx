@@ -41,7 +41,6 @@
 #include <rtl/math.hxx>
 #include <tools/time.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/typeprovider.hxx>
 
 using namespace connectivity;
 using namespace connectivity::calc;
@@ -612,18 +611,16 @@ void SAL_CALL OCalcTable::disposing()
 
 Sequence< sal_Int8 > OCalcTable::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoTunnelIdInit implId;
+    return implId.getSeq();
 }
 
 // css::lang::XUnoTunnel
 
 sal_Int64 OCalcTable::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return (isUnoTunnelId<OCalcTable>(rId))
-                ? reinterpret_cast< sal_Int64 >( this )
-                : OCalcTable_BASE::getSomething(rId);
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<OCalcTable_BASE>{});
 }
 
 bool OCalcTable::fetchRow( OValueRefRow& _rRow, const OSQLColumns & _rCols,

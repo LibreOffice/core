@@ -196,16 +196,13 @@ sal_Int32 SAL_CALL CertificateImpl::getCertificateUsage()
 /* XUnoTunnel */
 sal_Int64 SAL_CALL CertificateImpl::getSomething(const Sequence< sal_Int8 >& aIdentifier)
 {
-    if( isUnoTunnelId<CertificateImpl>(aIdentifier) ) {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
-    }
-    return 0 ;
+    return comphelper::getSomethingImpl(aIdentifier, this);
 }
 
 /* XUnoTunnel extension */
 
 const Sequence< sal_Int8>& CertificateImpl::getUnoTunnelId() {
-    static const UnoTunnelIdInit theCertificateImplUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theCertificateImplUnoTunnelId;
     return theCertificateImplUnoTunnelId.getSeq();
 }
 

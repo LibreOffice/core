@@ -105,16 +105,7 @@ void SAL_CALL SwXTextMarkup::commitTextRangeMarkup(::sal_Int32 nType, const OUSt
 
     if(!xRangeTunnel.is()) return;
 
-    SwXTextRange* pRange = nullptr;
-    OTextCursorHelper* pCursor = nullptr;
-
-    if(xRangeTunnel.is())
-    {
-        pRange  = reinterpret_cast<SwXTextRange*>( sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething(SwXTextRange::getUnoTunnelId())));
-        pCursor = reinterpret_cast<OTextCursorHelper*>( sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething(OTextCursorHelper::getUnoTunnelId())));
-    }
-
-    if (pRange)
+    if (auto pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel))
     {
         SwDoc& rDoc = pRange->GetDoc();
 
@@ -127,7 +118,7 @@ void SAL_CALL SwXTextMarkup::commitTextRangeMarkup(::sal_Int32 nType, const OUSt
 
         commitStringMarkup (nType, aIdentifier, startPos->nContent.GetIndex(), endPos->nContent.GetIndex() - startPos->nContent.GetIndex(), xMarkupInfoContainer);
     }
-    else if (pCursor)
+    else if (auto pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel))
     {
         SwPaM & rPam(*pCursor->GetPaM());
 

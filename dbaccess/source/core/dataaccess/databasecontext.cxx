@@ -52,7 +52,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/weak.hxx>
 #include <rtl/uri.hxx>
@@ -709,17 +708,13 @@ void ODatabaseContext::databaseDocumentURLChange( const OUString& _rOldURL, cons
 
 sal_Int64 SAL_CALL ODatabaseContext::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    if (isUnoTunnelId<ODatabaseContext>(rId))
-        return reinterpret_cast<sal_Int64>(this);
-
-    return 0;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 Sequence< sal_Int8 > ODatabaseContext::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoTunnelIdInit implId;
+    return implId.getSeq();
 }
 
 void ODatabaseContext::onBasicManagerCreated( const Reference< XModel >& _rxForDocument, BasicManager& _rBasicManager )

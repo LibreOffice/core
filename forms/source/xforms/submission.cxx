@@ -44,7 +44,6 @@
 #include <com/sun/star/xforms/InvalidDataOnSubmitException.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -192,7 +191,7 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
     ComputedExpression aExpression;
     if( !msBind.isEmpty() )
     {
-        Binding* pBinding = comphelper::getUnoTunnelImplementation<Binding>( mxModel->getBinding(msBind) );
+        Binding* pBinding = comphelper::getFromUnoTunnel<Binding>( mxModel->getBinding(msBind) );
         if( pBinding != nullptr )
         {
             aExpression.setExpression( pBinding->getBindingExpression() );
@@ -203,12 +202,12 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
     else if( !maRef.getExpression().isEmpty() )
     {
         aExpression.setExpression( maRef.getExpression() );
-        aEvalContext = comphelper::getUnoTunnelImplementation<Model>( mxModel )->getEvaluationContext();
+        aEvalContext = comphelper::getFromUnoTunnel<Model>( mxModel )->getEvaluationContext();
     }
     else
     {
         aExpression.setExpression( "/" );
-        aEvalContext = comphelper::getUnoTunnelImplementation<Model>( mxModel )->getEvaluationContext();
+        aEvalContext = comphelper::getFromUnoTunnel<Model>( mxModel )->getEvaluationContext();
     }
     aExpression.evaluate( aEvalContext );
     Reference<XXPathObject> xResult = aExpression.getXPath();
@@ -256,8 +255,8 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
 
 Sequence<sal_Int8> Submission::getUnoTunnelId()
 {
-    static cppu::OImplementationId aImplementationId;
-    return aImplementationId.getImplementationId();
+    static const comphelper::UnoTunnelIdInit aImplementationId;
+    return aImplementationId.getSeq();
 }
 
 
@@ -273,7 +272,7 @@ Model* Submission::getModelImpl() const
 {
     Model* pModel = nullptr;
     if( mxModel.is() )
-        pModel = comphelper::getUnoTunnelImplementation<Model>( mxModel );
+        pModel = comphelper::getFromUnoTunnel<Model>( mxModel );
     return pModel;
 }
 
@@ -367,7 +366,7 @@ void SAL_CALL Submission::setName( const OUString& sID )
 sal_Int64 SAL_CALL Submission::getSomething(
     const Sequence<sal_Int8>& aId )
 {
-    return ( aId == getUnoTunnelId() ) ? reinterpret_cast<sal_Int64>(this) : 0;
+    return comphelper::getSomethingImpl(aId, this);
 }
 
 
@@ -391,7 +390,7 @@ void SAL_CALL Submission::submitWithInteraction(
                 *this
               );
 
-    Model* pModel = comphelper::getUnoTunnelImplementation<Model>( xModel );
+    Model* pModel = comphelper::getFromUnoTunnel<Model>( xModel );
     OSL_ENSURE( pModel != nullptr, "illegal model?" );
 
     // #i36765# #i47248# warning on submission of illegal data

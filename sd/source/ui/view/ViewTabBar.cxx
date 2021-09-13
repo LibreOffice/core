@@ -69,10 +69,8 @@ ViewTabBar::ViewTabBar (
     // view frame.
     try
     {
-        Reference<lang::XUnoTunnel> xTunnel (mxController, UNO_QUERY_THROW);
-        DrawController* pController = reinterpret_cast<DrawController*>(
-            xTunnel->getSomething(DrawController::getUnoTunnelId()));
-        mpViewShellBase = pController->GetViewShellBase();
+        if (auto pController = comphelper::getFromUnoTunnel<DrawController>(mxController))
+            mpViewShellBase = pController->GetViewShellBase();
     }
     catch (const RuntimeException&)
     {
@@ -149,10 +147,8 @@ vcl::Window* ViewTabBar::GetAnchorWindow(
     // view frame.
     try
     {
-        Reference<lang::XUnoTunnel> xTunnel (rxController, UNO_QUERY_THROW);
-        DrawController* pController = reinterpret_cast<DrawController*>(
-            xTunnel->getSomething(DrawController::getUnoTunnelId()));
-        pBase = pController->GetViewShellBase();
+        if (auto pController = comphelper::getFromUnoTunnel<DrawController>(rxController))
+            pBase = pController->GetViewShellBase();
     }
     catch (const RuntimeException&)
     {
@@ -186,10 +182,7 @@ vcl::Window* ViewTabBar::GetAnchorWindow(
         // Tunnel through the XWindow to the VCL side.
         try
         {
-            Reference<lang::XUnoTunnel> xTunnel (xPane, UNO_QUERY_THROW);
-            framework::Pane* pPane = reinterpret_cast<framework::Pane*>(
-                xTunnel->getSomething(framework::Pane::getUnoTunnelId()));
-            if (pPane != nullptr)
+            if (auto pPane = comphelper::getFromUnoTunnel<framework::Pane>(xPane))
                 pWindow = pPane->GetWindow()->GetParent();
         }
         catch (const RuntimeException&)
@@ -275,20 +268,13 @@ sal_Bool SAL_CALL ViewTabBar::isAnchorOnly()
 
 const Sequence<sal_Int8>& ViewTabBar::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theViewTabBarUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theViewTabBarUnoTunnelId;
     return theViewTabBarUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL ViewTabBar::getSomething (const Sequence<sal_Int8>& rId)
 {
-    sal_Int64 nResult = 0;
-
-    if (isUnoTunnelId<ViewTabBar>(rId))
-    {
-        nResult = reinterpret_cast<sal_Int64>(this);
-    }
-
-    return nResult;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 bool ViewTabBar::ActivatePage(size_t nIndex)

@@ -222,7 +222,7 @@ void XMLTableShapeImportHelper::finishShape(
     if (!bNote)
     {
         // any shape other than a note prevents copying the sheet
-        ScSheetSaveData* pSheetData = comphelper::getUnoTunnelImplementation<ScModelObj>(mrImporter.GetModel())->GetSheetSaveData();
+        ScSheetSaveData* pSheetData = comphelper::getFromUnoTunnel<ScModelObj>(mrImporter.GetModel())->GetSheetSaveData();
         pSheetData->BlockSheet( rTables.GetCurrentSheet() );
     }
 

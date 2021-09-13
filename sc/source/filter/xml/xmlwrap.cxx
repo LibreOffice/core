@@ -663,7 +663,7 @@ bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentC
 
     if ( xFilter.is() )
     {
-        ScXMLExport* pExport = static_cast<ScXMLExport*>(comphelper::getUnoTunnelImplementation<SvXMLExport>(xFilter));
+        ScXMLExport* pExport = static_cast<ScXMLExport*>(comphelper::getFromUnoTunnel<SvXMLExport>(xFilter));
         pExport->SetSharedData(std::move(pSharedData));
 
         // if there are sheets to copy, get the source stream
@@ -678,7 +678,7 @@ bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentC
 
             // #i108978# If an embedded object is saved and no events are notified, don't use the stream
             // because without the ...DONE events, stream positions aren't updated.
-            ScSheetSaveData* pSheetData = comphelper::getUnoTunnelImplementation<ScModelObj>(xModel)->GetSheetSaveData();
+            ScSheetSaveData* pSheetData = comphelper::getFromUnoTunnel<ScModelObj>(xModel)->GetSheetSaveData();
             if (pSheetData && pSheetData->IsInSupportedSave())
             {
                 try

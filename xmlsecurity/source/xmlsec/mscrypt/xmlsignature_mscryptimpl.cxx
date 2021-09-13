@@ -100,8 +100,7 @@ SAL_CALL XMLSignature_MSCryptImpl::generate(
         throw RuntimeException() ;
 
     //Get Keys Manager
-    Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY_THROW ) ;
-    SecurityEnvironment_MSCryptImpl* pSecEnv = reinterpret_cast<SecurityEnvironment_MSCryptImpl*>(xSecTunnel->getSomething( SecurityEnvironment_MSCryptImpl::getUnoTunnelId() ));
+    SecurityEnvironment_MSCryptImpl* pSecEnv = comphelper::getFromUnoTunnel<SecurityEnvironment_MSCryptImpl>(aEnvironment);
     if( pSecEnv == nullptr )
         throw RuntimeException() ;
 
@@ -111,8 +110,7 @@ SAL_CALL XMLSignature_MSCryptImpl::generate(
         throw RuntimeException() ;
     }
 
-    Reference< XUnoTunnel > xNodTunnel( xElement , UNO_QUERY_THROW ) ;
-    XMLElementWrapper_XmlSecImpl* pElement = reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(xNodTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelId() ));
+    XMLElementWrapper_XmlSecImpl* pElement = comphelper::getFromUnoTunnel<XMLElementWrapper_XmlSecImpl>(xElement);
     if( pElement == nullptr ) {
         throw RuntimeException() ;
     }
@@ -189,8 +187,7 @@ SAL_CALL XMLSignature_MSCryptImpl::validate(
     Reference< XSecurityEnvironment > xSecEnv
         = aSecurityCtx->getSecurityEnvironmentByIndex(
             aSecurityCtx->getDefaultSecurityEnvironmentIndex());
-    Reference< XUnoTunnel > xSecTunnel( xSecEnv , UNO_QUERY_THROW ) ;
-    SecurityEnvironment_MSCryptImpl* pSecEnv = reinterpret_cast<SecurityEnvironment_MSCryptImpl*>(xSecTunnel->getSomething( SecurityEnvironment_MSCryptImpl::getUnoTunnelId() ));
+    SecurityEnvironment_MSCryptImpl* pSecEnv = comphelper::getFromUnoTunnel<SecurityEnvironment_MSCryptImpl>(xSecEnv);
     if( pSecEnv == nullptr )
         throw RuntimeException() ;
 
@@ -199,8 +196,7 @@ SAL_CALL XMLSignature_MSCryptImpl::validate(
     if( !xElement.is() )
         throw RuntimeException() ;
 
-    Reference< XUnoTunnel > xNodTunnel( xElement , UNO_QUERY_THROW ) ;
-    XMLElementWrapper_XmlSecImpl* pElement = reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(xNodTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelId() ));
+    XMLElementWrapper_XmlSecImpl* pElement = comphelper::getFromUnoTunnel<XMLElementWrapper_XmlSecImpl>(xElement);
     if( pElement == nullptr )
         throw RuntimeException() ;
 

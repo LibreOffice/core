@@ -755,18 +755,13 @@ SwXCell::~SwXCell()
 
 const uno::Sequence< sal_Int8 > & SwXCell::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXCellUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSwXCellUnoTunnelId;
     return theSwXCellUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXCell::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SwXCell>(rId) )
-    {
-        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
-    }
-    else
-        return SwXText::getSomething(rId);
+    return comphelper::getSomethingImpl(rId, this, comphelper::FallbackToGetSomethingOf<SwXText>{});
 }
 
 uno::Sequence< uno::Type > SAL_CALL SwXCell::getTypes(  )
@@ -1976,17 +1971,13 @@ public:
 
 const uno::Sequence< sal_Int8 > & SwXTextTable::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextTableUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSwXTextTableUnoTunnelId;
     return theSwXTextTableUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXTextTable::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    if(isUnoTunnelId<SwXTextTable>(rId))
-    {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
-    }
-    return 0;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 
@@ -2104,16 +2095,8 @@ SwXTextTable::attach(const uno::Reference<text::XTextRange> & xTextRange)
     if (!m_pImpl->IsDescriptor())  /* already attached ? */
         throw uno::RuntimeException("SwXTextTable: already attached to range.", static_cast<cppu::OWeakObject*>(this));
 
-    uno::Reference<XUnoTunnel> xRangeTunnel(xTextRange, uno::UNO_QUERY);
-    SwXTextRange* pRange(nullptr);
-    OTextCursorHelper* pCursor(nullptr);
-    if(xRangeTunnel.is())
-    {
-        pRange  = reinterpret_cast<SwXTextRange*>(
-                sal::static_int_cast<sal_IntPtr>(xRangeTunnel->getSomething(SwXTextRange::getUnoTunnelId())));
-        pCursor = reinterpret_cast<OTextCursorHelper*>(
-                sal::static_int_cast<sal_IntPtr>(xRangeTunnel->getSomething(OTextCursorHelper::getUnoTunnelId())));
-    }
+    SwXTextRange* pRange(comphelper::getFromUnoTunnel<SwXTextRange>(xTextRange));
+    OTextCursorHelper* pCursor(comphelper::getFromUnoTunnel<OTextCursorHelper>(xTextRange));
     SwDoc* pDoc = pRange ? &pRange->GetDoc() : pCursor ? pCursor->GetDoc() : nullptr;
     if (!pDoc || !m_pImpl->m_nRows || !m_pImpl->m_nColumns)
         throw lang::IllegalArgumentException();
@@ -3183,17 +3166,13 @@ namespace
 
 const uno::Sequence< sal_Int8 > & SwXCellRange::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXCellRangeUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSwXCellRangeUnoTunnelId;
     return theSwXCellRangeUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXCellRange::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SwXCellRange>(rId) )
-    {
-        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
-    }
-    return 0;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 

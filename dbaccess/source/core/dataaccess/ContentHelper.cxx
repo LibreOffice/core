@@ -33,7 +33,6 @@
 #include <ucbhelper/contentidentifier.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <tools/diagnose_ex.h>
 #include <apitools.hxx>
 #include <sdbcoretools.hxx>
@@ -91,8 +90,8 @@ IMPLEMENT_SERVICE_INFO1(OContentHelper,"com.sun.star.comp.sdb.Content","com.sun.
 
 css::uno::Sequence<sal_Int8> OContentHelper::getUnoTunnelId()
 {
-    static cppu::OImplementationId aId;
-    return aId.getImplementationId();
+    static const comphelper::UnoTunnelIdInit aId;
+    return aId.getSeq();
 }
 
 css::uno::Sequence<sal_Int8> OContentHelper::getImplementationId()
@@ -545,10 +544,7 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
 // css::lang::XUnoTunnel
 sal_Int64 OContentHelper::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    if (isUnoTunnelId<OContentHelper>(rId))
-        return reinterpret_cast<sal_Int64>(this);
-
-    return 0;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 Reference< XInterface > SAL_CALL OContentHelper::getParent(  )

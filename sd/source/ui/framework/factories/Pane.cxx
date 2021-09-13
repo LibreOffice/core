@@ -140,20 +140,13 @@ sal_Bool SAL_CALL Pane::isAnchorOnly()
 
 const Sequence<sal_Int8>& Pane::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit thePaneUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit thePaneUnoTunnelId;
     return thePaneUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL Pane::getSomething (const Sequence<sal_Int8>& rId)
 {
-    sal_Int64 nResult = 0;
-
-    if (isUnoTunnelId<Pane>(rId))
-    {
-        nResult = reinterpret_cast<sal_Int64>(this);
-    }
-
-    return nResult;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 Reference<rendering::XCanvas> Pane::CreateCanvas()

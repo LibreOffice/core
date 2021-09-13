@@ -965,14 +965,7 @@ void XStyleFamily::insertByName(const OUString& rName, const uno::Any& rElement)
     }
     else
     {
-        uno::Reference<lang::XUnoTunnel> xStyleTunnel = rElement.get<uno::Reference<lang::XUnoTunnel>>();
-        SwXStyle* pNewStyle = nullptr;
-        if(xStyleTunnel.is())
-        {
-            pNewStyle = reinterpret_cast< SwXStyle * >(
-                    sal::static_int_cast< sal_IntPtr >( xStyleTunnel->getSomething( SwXStyle::getUnoTunnelId()) ));
-        }
-
+        SwXStyle* pNewStyle = comphelper::getFromUnoTunnel<SwXStyle>(rElement);
         if (!pNewStyle || !pNewStyle->IsDescriptor() || pNewStyle->GetFamily() != m_rEntry.m_eFamily)
             throw lang::IllegalArgumentException();
 
@@ -1047,7 +1040,7 @@ void XStyleFamily::replaceByName(const OUString& rName, const uno::Any& rElement
         uno::Reference<style::XStyle> xStyle = FindStyle(pBase->GetName());
         if(xStyle.is())
         {
-            SwXStyle* pStyle = comphelper::getUnoTunnelImplementation<SwXStyle>(xStyle);
+            SwXStyle* pStyle = comphelper::getFromUnoTunnel<SwXStyle>(xStyle);
             if(pStyle)
                 pStyle->Invalidate();
         }
@@ -1209,17 +1202,13 @@ namespace
 
 const uno::Sequence<sal_Int8>& SwXStyle::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXStyleUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSwXStyleUnoTunnelId;
     return theSwXStyleUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXStyle::getSomething(const uno::Sequence<sal_Int8>& rId)
 {
-    if(isUnoTunnelId<SwXStyle>(rId))
-    {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
-    }
-    return 0;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 
@@ -1732,8 +1721,7 @@ void SwXStyle::SetPropertyValue<FN_UNO_NUM_RULES>(const SfxItemPropertyMapEntry&
 {
     if(!rValue.has<uno::Reference<container::XIndexReplace>>() || !rValue.has<uno::Reference<lang::XUnoTunnel>>())
         throw lang::IllegalArgumentException();
-    auto xNumberTunnel(rValue.get<uno::Reference<lang::XUnoTunnel>>());
-    SwXNumberingRules* pSwXRules = reinterpret_cast<SwXNumberingRules*>(sal::static_int_cast<sal_IntPtr>(xNumberTunnel->getSomething(SwXNumberingRules::getUnoTunnelId())));
+    SwXNumberingRules* pSwXRules = comphelper::getFromUnoTunnel<SwXNumberingRules>(rValue);
     if(!pSwXRules)
         return;
     SwNumRule aSetRule(*pSwXRules->GetNumRule());

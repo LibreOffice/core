@@ -403,7 +403,7 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
 
     ScDocument& rDoc = aViewData.GetDocument();
     ScDocShell* pDocSh = aViewData.GetDocShell();
-    ScModelObj* pModelObj = pDocSh ? comphelper::getUnoTunnelImplementation<ScModelObj>( pDocSh->GetModel() ) : nullptr;
+    ScModelObj* pModelObj = pDocSh ? comphelper::getFromUnoTunnel<ScModelObj>( pDocSh->GetModel() ) : nullptr;
     Size aOldSize(0, 0);
     if (pModelObj)
         aOldSize = pModelObj->getDocumentSize();
@@ -445,7 +445,7 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
     std::stringstream ss;
     ss << aNewSize.Width() << ", " << aNewSize.Height();
     OString sSize = ss.str().c_str();
-    ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(aViewData.GetViewShell()->GetCurrentDocument());
+    ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(aViewData.GetViewShell()->GetCurrentDocument());
     SfxLokHelper::notifyDocumentSizeChanged(aViewData.GetViewShell(), sSize, pModel, false);
 }
 
@@ -538,7 +538,7 @@ void ScTabView::SelectionChanged(bool bFromPaste)
         uno::Reference<frame::XController> xController = pViewFrame->GetFrame().GetController();
         if (xController.is())
         {
-            ScTabViewObj* pImp = comphelper::getUnoTunnelImplementation<ScTabViewObj>( xController );
+            ScTabViewObj* pImp = comphelper::getFromUnoTunnel<ScTabViewObj>( xController );
             if (pImp)
                 pImp->SelectionChanged();
         }

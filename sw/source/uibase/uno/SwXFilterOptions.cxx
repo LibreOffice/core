@@ -79,7 +79,7 @@ sal_Int16 SwXFilterOptions::execute()
         pInStream = utl::UcbStreamHelper::CreateStream( xInputStream );
 
     SwDocShell* pDocShell = nullptr;
-    if (auto pXDoc = comphelper::getUnoTunnelImplementation<SwXTextDocument>(xModel); pXDoc)
+    if (auto pXDoc = comphelper::getFromUnoTunnel<SwXTextDocument>(xModel); pXDoc)
         pDocShell = pXDoc->GetDocShell();
 
     if(pDocShell)

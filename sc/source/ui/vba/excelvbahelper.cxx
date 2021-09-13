@@ -82,7 +82,7 @@ GetAutoFiltRange( const ScDocShell* pShell, sal_Int16 nSheet )
 
 ScDocShell* GetDocShellFromRange( const uno::Reference< uno::XInterface >& xRange )
 {
-    ScCellRangesBase* pScCellRangesBase = comphelper::getUnoTunnelImplementation<ScCellRangesBase>( xRange );
+    ScCellRangesBase* pScCellRangesBase = comphelper::getFromUnoTunnel<ScCellRangesBase>( xRange );
     if ( !pScCellRangesBase )
     {
         throw uno::RuntimeException("Failed to access underlying doc shell uno range object" );

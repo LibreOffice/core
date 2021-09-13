@@ -97,7 +97,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/types.hxx>
 #include <dbaccess/dbaundomanager.hxx>
 #include <editeng/paperinf.hxx>
@@ -1937,8 +1936,8 @@ uno::Sequence< OUString > SAL_CALL OReportDefinition::getAvailableMimeTypes(  )
 sal_Int64 SAL_CALL OReportDefinition::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
     sal_Int64 nRet = 0;
-    if (isUnoTunnelId<OReportDefinition>(rId) )
-        nRet = reinterpret_cast<sal_Int64>(this);
+    if (comphelper::isUnoTunnelId<OReportDefinition>(rId))
+        nRet = comphelper::getSomething_cast(this);
     else
     {
         uno::Reference< lang::XUnoTunnel> xUnoTunnel(m_pImpl->m_xNumberFormatsSupplier,uno::UNO_QUERY);
@@ -1963,9 +1962,8 @@ uno::Sequence< sal_Int8 > SAL_CALL OReportDefinition::getImplementationId(  )
 
 uno::Sequence< sal_Int8 > OReportDefinition::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoTunnelIdInit implId;
+    return implId.getSeq();
 }
 
 uno::Reference< uno::XComponentContext > OReportDefinition::getContext()
@@ -1978,7 +1976,7 @@ uno::Reference< uno::XComponentContext > OReportDefinition::getContext()
 std::shared_ptr<rptui::OReportModel> OReportDefinition::getSdrModel(const uno::Reference< report::XReportDefinition >& _xReportDefinition)
 {
     std::shared_ptr<rptui::OReportModel> pReportModel;
-    auto pReportDefinition = comphelper::getUnoTunnelImplementation<OReportDefinition>(_xReportDefinition);
+    auto pReportDefinition = comphelper::getFromUnoTunnel<OReportDefinition>(_xReportDefinition);
     if (pReportDefinition)
         pReportModel = pReportDefinition->m_pImpl->m_pReportModel;
     return pReportModel;

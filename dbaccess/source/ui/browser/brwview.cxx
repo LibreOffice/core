@@ -251,7 +251,7 @@ SbaGridControl* UnoDataBrowserView::getVclControl() const
             Reference< css::awt::XWindowPeer >  xPeer = m_xGrid->getPeer();
             if ( xPeer.is() )
             {
-                SbaXGridPeer* pPeer = comphelper::getUnoTunnelImplementation<SbaXGridPeer>(xPeer);
+                SbaXGridPeer* pPeer = comphelper::getFromUnoTunnel<SbaXGridPeer>(xPeer);
                 UnoDataBrowserView* pTHIS = const_cast<UnoDataBrowserView*>(this);
                 if ( pPeer )
                 {

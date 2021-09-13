@@ -58,7 +58,7 @@ Reference< XPropertySet > OIndexes::createDescriptor()
 // XAppend
 sdbcx::ObjectType OIndexes::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    OAdoIndex* pIndex = getUnoTunnelImplementation<OAdoIndex>(descriptor);
+    OAdoIndex* pIndex = getFromUnoTunnel<OAdoIndex>(descriptor);
     if ( pIndex == nullptr )
         m_pConnection->throwGenericSQLException( STR_INVALID_INDEX_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
 

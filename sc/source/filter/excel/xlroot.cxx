@@ -287,7 +287,7 @@ SfxObjectShell* XclRoot::GetDocShell() const
 ScModelObj* XclRoot::GetDocModelObj() const
 {
     SfxObjectShell* pDocShell = GetDocShell();
-    return pDocShell ? comphelper::getUnoTunnelImplementation<ScModelObj>( pDocShell->GetModel() ) : nullptr;
+    return pDocShell ? comphelper::getFromUnoTunnel<ScModelObj>( pDocShell->GetModel() ) : nullptr;
 }
 
 OutputDevice* XclRoot::GetPrinter() const

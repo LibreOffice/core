@@ -393,7 +393,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
                     xNames->getByName(*pBegin), css::uno::UNO_QUERY);
                 if(xTable.is())
                 {
-                    auto pTable = comphelper::getUnoTunnelImplementation<OFileTable>(xTable);
+                    auto pTable = comphelper::getFromUnoTunnel<OFileTable>(xTable);
                     if(pTable && !pTable->isReadOnly())
                     {
                         aRow[6] = ODatabaseMetaDataResultSet::getInsertValue();

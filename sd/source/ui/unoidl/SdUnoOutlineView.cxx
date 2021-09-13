@@ -73,7 +73,7 @@ void SAL_CALL SdUnoOutlineView::removeSelectionChangeListener (
 void SAL_CALL SdUnoOutlineView::setCurrentPage (
     const Reference< drawing::XDrawPage >& xPage)
 {
-    SvxDrawPage* pDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( xPage );
+    SvxDrawPage* pDrawPage = comphelper::getFromUnoTunnel<SvxDrawPage>( xPage );
     SdrPage *pSdrPage = pDrawPage ? pDrawPage->GetSdrPage() : nullptr;
     SdPage *pSdPage = dynamic_cast<SdPage*>(pSdrPage);
 

@@ -458,7 +458,7 @@ void ScXMLExport::SetSourceStream( const uno::Reference<io::XInputStream>& xNewS
         // keep track of the bytes already read
         nSourceStreamPos = nRead;
 
-        const ScSheetSaveData* pSheetData = comphelper::getUnoTunnelImplementation<ScModelObj>(GetModel())->GetSheetSaveData();
+        const ScSheetSaveData* pSheetData = comphelper::getFromUnoTunnel<ScModelObj>(GetModel())->GetSheetSaveData();
         if (pSheetData)
         {
             // add the loaded namespaces to the name space map
@@ -1849,7 +1849,7 @@ const ScXMLEditAttributeMap& ScXMLExport::GetEditAttributeMap() const
 
 void ScXMLExport::RegisterDefinedStyleNames( const uno::Reference< css::sheet::XSpreadsheetDocument > & xSpreadDoc )
 {
-    ScFormatSaveData* pFormatData = comphelper::getUnoTunnelImplementation<ScModelObj>(xSpreadDoc)->GetFormatSaveData();
+    ScFormatSaveData* pFormatData = comphelper::getFromUnoTunnel<ScModelObj>(xSpreadDoc)->GetFormatSaveData();
     auto xAutoStylePool = GetAutoStylePool();
     for (const auto& rFormatInfo : pFormatData->maIDToName)
     {
@@ -1877,7 +1877,7 @@ void ScXMLExport::ExportContent_()
     if ( !xSpreadDoc.is() )
         return;
 
-    ScSheetSaveData* pSheetData = comphelper::getUnoTunnelImplementation<ScModelObj>(xSpreadDoc)->GetSheetSaveData();
+    ScSheetSaveData* pSheetData = comphelper::getFromUnoTunnel<ScModelObj>(xSpreadDoc)->GetSheetSaveData();
     if (pSheetData)
         pSheetData->ResetSaveEntries();
 
@@ -2078,7 +2078,7 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
             if (nKey)
             {
                 uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( GetModel(), uno::UNO_QUERY );
-                ScFormatSaveData* pFormatData = comphelper::getUnoTunnelImplementation<ScModelObj>(xSpreadDoc)->GetFormatSaveData();
+                ScFormatSaveData* pFormatData = comphelper::getFromUnoTunnel<ScModelObj>(xSpreadDoc)->GetFormatSaveData();
                 auto itr = pFormatData->maIDToName.find(nKey);
                 if (itr != pFormatData->maIDToName.end())
                 {
@@ -2243,7 +2243,7 @@ void ScXMLExport::collectAutoStyles()
         RegisterDefinedStyleNames( xSpreadDoc);
 
         //  re-create automatic styles with old names from stored data
-        ScSheetSaveData* pSheetData = comphelper::getUnoTunnelImplementation<ScModelObj>(xSpreadDoc)->GetSheetSaveData();
+        ScSheetSaveData* pSheetData = comphelper::getFromUnoTunnel<ScModelObj>(xSpreadDoc)->GetSheetSaveData();
         if (pSheetData && pDoc)
         {
             // formulas have to be calculated now, to detect changed results
@@ -2422,7 +2422,7 @@ void ScXMLExport::collectAutoStyles()
                         SdrCaptionObj* pDrawObj = pNote->GetOrCreateCaption( aPos );
                         uno::Reference<text::XSimpleText> xCellText(pDrawObj->getUnoShape(), uno::UNO_QUERY);
                         uno::Reference<beans::XPropertySet> xCursorProp(xCellText->createTextCursor(), uno::UNO_QUERY);
-                        ScDrawTextCursor* pCursor = comphelper::getUnoTunnelImplementation<ScDrawTextCursor>( xCursorProp );
+                        ScDrawTextCursor* pCursor = comphelper::getFromUnoTunnel<ScDrawTextCursor>( xCursorProp );
                         if (pCursor)
                         {
                             pCursor->SetSelection( rNoteTextEntry.maSelection );
@@ -2463,7 +2463,7 @@ void ScXMLExport::collectAutoStyles()
                     uno::Reference<text::XSimpleText> xCellText(xCellRange->getCellByPosition(aPos.Col(), aPos.Row()), uno::UNO_QUERY);
                     xCursorProp.set(xCellText->createTextCursor(), uno::UNO_QUERY);
                 }
-                ScCellTextCursor* pCursor = comphelper::getUnoTunnelImplementation<ScCellTextCursor>( xCursorProp );
+                ScCellTextCursor* pCursor = comphelper::getFromUnoTunnel<ScCellTextCursor>( xCursorProp );
                 if (!pCursor)
                     continue;
                 pCursor->SetSelection( rTextEntry.maSelection );
@@ -5170,7 +5170,7 @@ void ScXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
     {
         rProps.realloc(4);
         beans::PropertyValue* pProps(rProps.getArray());
-        ScModelObj* pDocObj(comphelper::getUnoTunnelImplementation<ScModelObj>( GetModel() ));
+        ScModelObj* pDocObj(comphelper::getFromUnoTunnel<ScModelObj>( GetModel() ));
         if (pDocObj)
         {
             SfxObjectShell* pEmbeddedObj = pDocObj->GetEmbeddedObject();
@@ -5322,7 +5322,7 @@ ErrCode ScXMLExport::exportDoc( enum XMLTokenEnum eClass )
             uno::Reference< frame::XModel > xModel = GetModel();
             if ( xModel.is() )
             {
-                auto pFoundShell = comphelper::getUnoTunnelImplementation<SfxObjectShell>(xModel);
+                auto pFoundShell = comphelper::getFromUnoTunnel<SfxObjectShell>(xModel);
                 if ( pFoundShell && ooo::vba::isAlienExcelDoc( *pFoundShell ) )
                 {
                     xRowStylesPropertySetMapper = new XMLPropertySetMapper(aXMLScFromXLSRowStylesProperties, xScPropHdlFactory, true);

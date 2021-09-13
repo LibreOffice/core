@@ -692,7 +692,7 @@ void ScDocument::RepaintRange( const ScRange& rRange )
 {
     if ( bIsVisible && mpShell )
     {
-        ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>( mpShell->GetModel() );
+        ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>( mpShell->GetModel() );
         if ( pModel )
             pModel->RepaintRange( rRange );     // locked repaints are checked there
     }
@@ -702,7 +702,7 @@ void ScDocument::RepaintRange( const ScRangeList& rRange )
 {
     if ( bIsVisible && mpShell )
     {
-        ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>( mpShell->GetModel() );
+        ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>( mpShell->GetModel() );
         if ( pModel )
             pModel->RepaintRange( rRange );     // locked repaints are checked there
     }

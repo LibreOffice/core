@@ -230,19 +230,7 @@ ScDrawTransferObj::~ScDrawTransferObj()
 
 ScDrawTransferObj* ScDrawTransferObj::GetOwnClipboard(const uno::Reference<datatransfer::XTransferable2>& xTransferable)
 {
-    ScDrawTransferObj* pObj = nullptr;
-    if (xTransferable.is())
-    {
-        uno::Reference<XUnoTunnel> xTunnel( xTransferable, uno::UNO_QUERY );
-        if ( xTunnel.is() )
-        {
-            sal_Int64 nHandle = xTunnel->getSomething( getUnoTunnelId() );
-            if ( nHandle )
-                pObj = dynamic_cast<ScDrawTransferObj*>(reinterpret_cast<TransferableHelper*>( static_cast<sal_IntPtr>(nHandle) ));
-        }
-    }
-
-    return pObj;
+    return comphelper::getFromUnoTunnel<ScDrawTransferObj>(xTransferable);
 }
 
 static bool lcl_HasOnlyControls( SdrModel* pModel )
@@ -737,20 +725,14 @@ void ScDrawTransferObj::InitDocShell()
 
 const css::uno::Sequence< sal_Int8 >& ScDrawTransferObj::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theScDrawTransferObjUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theScDrawTransferObjUnoTunnelId;
     return theScDrawTransferObjUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL ScDrawTransferObj::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
-    sal_Int64 nRet;
-    if( isUnoTunnelId<ScDrawTransferObj>(rId) )
-    {
-        nRet = reinterpret_cast< sal_Int64 >( this );
-    }
-    else
-        nRet = TransferDataContainer::getSomething(rId);
-    return nRet;
+    return comphelper::getSomethingImpl(
+        rId, this, comphelper::FallbackToGetSomethingOf<TransferDataContainer>{});
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
