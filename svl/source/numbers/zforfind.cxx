@@ -1487,8 +1487,9 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
                 if (!IsNum[nCheck])
                 {
                     // Trailing (or separating if time follows) blanks are ok.
-                    SkipBlanks( sStrArray[nCheck], nPos);
-                    if (nPos == sStrArray[nCheck].getLength())
+                    // No blank and a following number is not.
+                    const bool bBlanks = SkipBlanks( sStrArray[nCheck], nPos);
+                    if (nPos == sStrArray[nCheck].getLength() && (bBlanks || !IsNum[nNext]))
                     {
                         nAcceptedDatePattern = nPattern;
                         return true;
