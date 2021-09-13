@@ -98,7 +98,7 @@ enum WID_PAGE
     WID_PAGE_PAGENUMBERVISIBLE, WID_PAGE_DATETIMEVISIBLE, WID_PAGE_DATETIMEFIXED,
     WID_PAGE_DATETIMETEXT, WID_PAGE_DATETIMEFORMAT, WID_TRANSITION_TYPE, WID_TRANSITION_SUBTYPE,
     WID_TRANSITION_DIRECTION, WID_TRANSITION_FADE_COLOR, WID_TRANSITION_DURATION, WID_LOOP_SOUND,
-    WID_NAVORDER, WID_PAGE_PREVIEWMETAFILE
+    WID_NAVORDER, WID_PAGE_PREVIEWMETAFILE, WID_PAGE_THEME
 };
 
 }
@@ -280,6 +280,7 @@ static const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKin
         { u"BackgroundFullSize",           WID_PAGE_BACKFULL,  cppu::UnoType<bool>::get(),                        0, 0},
         { sUNO_Prop_UserDefinedAttributes,WID_PAGE_USERATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),         0,     0},
         { u"IsBackgroundDark",             WID_PAGE_ISDARK,    cppu::UnoType<bool>::get(),                        beans::PropertyAttribute::READONLY, 0},
+        { u"Theme", WID_PAGE_THEME, cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(), 0,  0},
         { u"", 0, css::uno::Type(), 0, 0 }
     };
 
@@ -972,6 +973,14 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             break;
         }
 
+        case WID_PAGE_THEME:
+        {
+            SdrPage* pPage = GetPage();
+            std::unique_ptr<svx::Theme> pTheme = svx::Theme::FromAny(aValue);
+            pPage->getSdrPageProperties().SetTheme(std::move(pTheme));
+            break;
+        }
+
         default:
             throw beans::UnknownPropertyException( aPropertyName, static_cast<cppu::OWeakObject*>(this));
     }
@@ -1285,6 +1294,22 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
     case WID_TRANSITION_DURATION:
         aAny <<= GetPage()->getTransitionDuration();
         break;
+
+    case WID_PAGE_THEME:
+    {
+        SdrPage* pPage = GetPage();
+        svx::Theme* pTheme = pPage->getSdrPageProperties().GetTheme();
+        if (pTheme)
+        {
+            pTheme->ToAny(aAny);
+        }
+        else
+        {
+            beans::PropertyValues aValues;
+            aAny <<= aValues;
+        }
+        break;
+    }
 
     default:
         throw beans::UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));

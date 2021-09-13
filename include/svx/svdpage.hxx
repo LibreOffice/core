@@ -30,6 +30,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <svx/svdobj.hxx>
+#include <svx/ColorSets.hxx>
 #include <memory>
 #include <optional>
 #include <vector>
@@ -312,6 +313,7 @@ private:
     // data
     SdrPage*                mpSdrPage;
     SfxStyleSheet*          mpStyleSheet;
+    std::unique_ptr<svx::Theme> mpTheme;
     SfxItemSet              maProperties;
 
     // internal helpers
@@ -339,6 +341,9 @@ public:
     // StyleSheet access
     void SetStyleSheet(SfxStyleSheet* pStyleSheet);
     SfxStyleSheet* GetStyleSheet() const { return mpStyleSheet;}
+
+    void SetTheme(std::unique_ptr<svx::Theme> pTheme);
+    svx::Theme* GetTheme();
 };
 
 

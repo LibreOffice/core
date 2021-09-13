@@ -378,6 +378,12 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
                         rFilter.importFragment( new LayoutFragmentHandler( rFilter, aLayoutFragmentPath, pMasterPersistPtr ) );
                         pMasterPersistPtr->createBackground( rFilter );
                         pMasterPersistPtr->createXShapes( rFilter );
+
+                        oox::drawingml::ThemePtr pTheme = pMasterPersistPtr->getTheme();
+                        if (pTheme)
+                        {
+                            pTheme->addTheme(pMasterPersistPtr->getPage());
+                        }
                     }
                 }
             }

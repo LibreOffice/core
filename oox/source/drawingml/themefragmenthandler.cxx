@@ -21,6 +21,7 @@
 #include <drawingml/objectdefaultcontext.hxx>
 #include <oox/drawingml/theme.hxx>
 #include <oox/token/namespaces.hxx>
+#include <oox/helper/attributelist.hxx>
 #include <drawingml/themeelementscontext.hxx>
 
 using namespace ::oox::core;
@@ -37,7 +38,7 @@ ThemeFragmentHandler::~ThemeFragmentHandler()
 {
 }
 
-ContextHandlerRef ThemeFragmentHandler::onCreateContext( sal_Int32 nElement, const AttributeList& )
+ContextHandlerRef ThemeFragmentHandler::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs)
 {
     // CT_OfficeStyleSheet
     switch( getCurrentElement() )
@@ -46,7 +47,10 @@ ContextHandlerRef ThemeFragmentHandler::onCreateContext( sal_Int32 nElement, con
             switch( nElement )
             {
                 case A_TOKEN( theme ):
+                {
+                    mrTheme.setThemeName(rAttribs.getString(XML_name).get());
                     return this;
+                }
             }
         break;
 
