@@ -10266,7 +10266,7 @@ if test "$enable_curl" = "yes" -a "$with_system_curl" = "yes"; then
     SYSTEM_CURL=TRUE
 
     # First try PKGCONFIG and then fall back
-    PKG_CHECK_MODULES(CURL, libcurl >= 7.19.4,, [:])
+    PKG_CHECK_MODULES(CURL, libcurl >= 7.63.0,, [:])
 
     if test -n "$CURL_PKG_ERRORS"; then
         AC_PATH_PROG(CURLCONFIG, curl-config)
