@@ -980,11 +980,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotDescriptorBase::getDataLayoutFi
 sal_Int64 SAL_CALL ScDataPilotDescriptorBase::getSomething(
                 const Sequence<sal_Int8 >& rId )
 {
-    if ( comphelper::isUnoTunnelId<ScDataPilotDescriptorBase>(rId) )
-    {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
-    }
-    return 0;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 const Sequence<sal_Int8>& ScDataPilotDescriptorBase::getUnoTunnelId()

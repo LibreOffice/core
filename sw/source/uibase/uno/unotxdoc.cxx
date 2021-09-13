@@ -279,11 +279,11 @@ sal_Int64 SAL_CALL SwXTextDocument::getSomething( const Sequence< sal_Int8 >& rI
 {
     if( comphelper::isUnoTunnelId<SwXTextDocument>(rId) )
     {
-        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ));
+        return comphelper::getSomething_cast(this);
     }
     if( comphelper::isUnoTunnelId<SfxObjectShell>(rId) )
     {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(m_pDocShell ));
+        return comphelper::getSomething_cast(m_pDocShell);
     }
 
     sal_Int64 nRet = SfxBaseModel::getSomething( rId );

@@ -297,7 +297,7 @@ void SAL_CALL SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent 
             SfxOfficeDispatch* pDisp = nullptr;
             if ( xTunnel.is() )
             {
-                sal_Int64 nImplementation = xTunnel->getSomething(SfxOfficeDispatch::impl_getStaticIdentifier());
+                sal_Int64 nImplementation = xTunnel->getSomething(SfxOfficeDispatch::getUnoTunnelId());
                 pDisp = reinterpret_cast< SfxOfficeDispatch* >( sal::static_int_cast< sal_IntPtr >( nImplementation ));
             }
 

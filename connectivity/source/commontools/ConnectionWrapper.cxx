@@ -25,7 +25,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/hash.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <algorithm>
 
@@ -155,7 +154,7 @@ Sequence< Type > SAL_CALL OConnectionWrapper::getTypes(  )
 sal_Int64 SAL_CALL OConnectionWrapper::getSomething( const Sequence< sal_Int8 >& rId )
 {
     if (comphelper::isUnoTunnelId<OConnectionWrapper>(rId))
-        return reinterpret_cast< sal_Int64 >( this );
+        return comphelper::getSomething_cast(this);
 
     if(m_xUnoTunnel.is())
         return m_xUnoTunnel->getSomething(rId);

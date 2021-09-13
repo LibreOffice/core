@@ -39,7 +39,7 @@ class ImageWrapper final : public ::cppu::WeakImplHelper< css::awt::XBitmap,
             return m_aImage;
         }
 
-        static css::uno::Sequence< sal_Int8 > const & GetUnoTunnelId();
+        static css::uno::Sequence<sal_Int8> const& getUnoTunnelId();
 
         // XBitmap
         virtual css::awt::Size SAL_CALL getSize() override;

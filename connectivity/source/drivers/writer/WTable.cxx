@@ -31,7 +31,6 @@
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <sal/log.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/typeprovider.hxx>
 
 namespace com::sun::star::text
 {
@@ -219,8 +218,8 @@ uno::Sequence<sal_Int8> OWriterTable::getUnoTunnelId()
 
 sal_Int64 OWriterTable::getSomething(const uno::Sequence<sal_Int8>& rId)
 {
-    return (comphelper::isUnoTunnelId<OWriterTable>(rId)) ? reinterpret_cast<sal_Int64>(this)
-                                                          : OWriterTable_BASE::getSomething(rId);
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<OWriterTable_BASE>{});
 }
 
 bool OWriterTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool bRetrieveData)

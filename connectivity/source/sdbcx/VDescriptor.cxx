@@ -46,9 +46,7 @@ namespace connectivity::sdbcx
         // css::lang::XUnoTunnel
         sal_Int64 SAL_CALL ODescriptor::getSomething( const Sequence< sal_Int8 >& rId )
         {
-            return (comphelper::isUnoTunnelId<ODescriptor>(rId))
-                ? reinterpret_cast< sal_Int64 >( this )
-                : 0;
+            return comphelper::getSomethingImpl(rId, this);
         }
 
 

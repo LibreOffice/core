@@ -30,7 +30,6 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <rtl/digest.h>
@@ -344,10 +343,7 @@ void ZipPackageFolder::saveContents(
 
 sal_Int64 SAL_CALL ZipPackageFolder::getSomething( const uno::Sequence< sal_Int8 >& aIdentifier )
 {
-    sal_Int64 nMe = 0;
-    if ( comphelper::isUnoTunnelId<ZipPackageFolder>(aIdentifier) )
-        nMe = reinterpret_cast < sal_Int64 > ( this );
-    return nMe;
+    return comphelper::getSomethingImpl(aIdentifier, this);
 }
 void SAL_CALL ZipPackageFolder::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
 {

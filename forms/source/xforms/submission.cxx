@@ -44,7 +44,6 @@
 #include <com/sun/star/xforms/InvalidDataOnSubmitException.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -367,7 +366,7 @@ void SAL_CALL Submission::setName( const OUString& sID )
 sal_Int64 SAL_CALL Submission::getSomething(
     const Sequence<sal_Int8>& aId )
 {
-    return ( aId == getUnoTunnelId() ) ? reinterpret_cast<sal_Int64>(this) : 0;
+    return comphelper::getSomethingImpl(aId, this);
 }
 
 

@@ -710,18 +710,7 @@ void SdTransferable::SetPageBookmarks( const std::vector<OUString> &rPageBookmar
 
 sal_Int64 SAL_CALL SdTransferable::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
-    sal_Int64 nRet;
-
-    if( comphelper::isUnoTunnelId<SdTransferable>(rId) )
-    {
-        nRet = sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
-    }
-    else
-    {
-        nRet = 0;
-    }
-
-    return nRet;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 void SdTransferable::AddUserData (const std::shared_ptr<UserData>& rpData)

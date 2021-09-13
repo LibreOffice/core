@@ -146,14 +146,7 @@ const Sequence<sal_Int8>& Pane::getUnoTunnelId()
 
 sal_Int64 SAL_CALL Pane::getSomething (const Sequence<sal_Int8>& rId)
 {
-    sal_Int64 nResult = 0;
-
-    if (comphelper::isUnoTunnelId<Pane>(rId))
-    {
-        nResult = reinterpret_cast<sal_Int64>(this);
-    }
-
-    return nResult;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 Reference<rendering::XCanvas> Pane::CreateCanvas()

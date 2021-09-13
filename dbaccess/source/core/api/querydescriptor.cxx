@@ -22,7 +22,6 @@
 #include <stringconstants.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 using namespace ::com::sun::star::uno;
@@ -140,10 +139,7 @@ OQueryDescriptor_Base::~OQueryDescriptor_Base()
 
 sal_Int64 SAL_CALL OQueryDescriptor_Base::getSomething( const Sequence< sal_Int8 >& _rIdentifier )
 {
-    if (comphelper::isUnoTunnelId<OQueryDescriptor_Base>(_rIdentifier))
-        return reinterpret_cast<sal_Int64>(this);
-
-    return 0;
+    return comphelper::getSomethingImpl(_rIdentifier, this);
 }
 
 css::uno::Sequence<sal_Int8> OQueryDescriptor_Base::getUnoTunnelId()

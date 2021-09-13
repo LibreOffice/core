@@ -25,7 +25,6 @@
 #include <impgraph.hxx>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <graphic/UnoGraphic.hxx>
 #include <vcl/GraphicExternalLink.hxx>
 

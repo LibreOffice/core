@@ -18,7 +18,6 @@
  */
 
 #include <TConnection.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
@@ -57,9 +56,7 @@ void OMetaConnection::disposing()
 //XUnoTunnel
 sal_Int64 SAL_CALL OMetaConnection::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
-    return (comphelper::isUnoTunnelId<OMetaConnection>(rId))
-        ? reinterpret_cast< sal_Int64 >( this )
-        : sal_Int64(0);
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 Sequence< sal_Int8 > OMetaConnection::getUnoTunnelId()

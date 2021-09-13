@@ -344,13 +344,11 @@ const css::uno::Sequence< sal_Int8 > & SdXImpressDocument::getUnoTunnelId() noex
 
 sal_Int64 SAL_CALL SdXImpressDocument::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
 {
-    if( comphelper::isUnoTunnelId<SdXImpressDocument>(rIdentifier) )
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
+    if (comphelper::isUnoTunnelId<SdrModel>(rIdentifier))
+        return comphelper::getSomething_cast(mpDoc);
 
-    if( comphelper::isUnoTunnelId<SdrModel>(rIdentifier) )
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(mpDoc));
-
-    return SfxBaseModel::getSomething( rIdentifier );
+    return comphelper::getSomethingImpl(rIdentifier, this,
+                                        comphelper::FallbackToGetSomethingOf<SfxBaseModel>{});
 }
 
 // XTypeProvider

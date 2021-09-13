@@ -324,10 +324,8 @@ SmXMLExport::SmXMLExport(const css::uno::Reference<css::uno::XComponentContext>&
 
 sal_Int64 SAL_CALL SmXMLExport::getSomething(const uno::Sequence<sal_Int8>& rId)
 {
-    if (comphelper::isUnoTunnelId<SmXMLExport>(rId))
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
-
-    return SvXMLExport::getSomething(rId);
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<SvXMLExport>{});
 }
 
 const uno::Sequence<sal_Int8>& SmXMLExport::getUnoTunnelId() noexcept

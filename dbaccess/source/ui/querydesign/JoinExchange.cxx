@@ -20,7 +20,6 @@
 #include <JoinExchange.hxx>
 #include <sot/formats.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/typeprovider.hxx>
 
 namespace dbaui
 {
@@ -70,10 +69,7 @@ namespace dbaui
 
     sal_Int64 SAL_CALL OJoinExchObj::getSomething( const Sequence< sal_Int8 >& _rIdentifier )
     {
-        if (comphelper::isUnoTunnelId<OJoinExchObj>(_rIdentifier))
-            return reinterpret_cast<sal_Int64>(this);
-
-        return 0;
+        return comphelper::getSomethingImpl(_rIdentifier, this);
     }
 
     void OJoinExchObj::AddSupportedFormats()

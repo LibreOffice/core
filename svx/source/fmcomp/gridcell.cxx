@@ -4405,14 +4405,7 @@ FmXFilterCell::~FmXFilterCell()
 // XUnoTunnel
 sal_Int64 SAL_CALL FmXFilterCell::getSomething( const Sequence< sal_Int8 >& _rIdentifier )
 {
-    sal_Int64 nReturn(0);
-
-    if  ( comphelper::isUnoTunnelId<FmXFilterCell>(_rIdentifier) )
-    {
-        nReturn = reinterpret_cast<sal_Int64>(this);
-    }
-
-    return nReturn;
+    return comphelper::getSomethingImpl(_rIdentifier, this);
 }
 
 const Sequence<sal_Int8>& FmXFilterCell::getUnoTunnelId()

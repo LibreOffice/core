@@ -856,7 +856,7 @@ sal_Int64 SAL_CALL SwXShape::getSomething( const uno::Sequence< sal_Int8 >& rId 
 {
     if( comphelper::isUnoTunnelId<SwXShape>(rId) )
     {
-        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
+        return comphelper::getSomething_cast(this);
     }
 
     if( m_xShapeAgg.is() )

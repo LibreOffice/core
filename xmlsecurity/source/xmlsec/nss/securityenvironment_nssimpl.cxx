@@ -154,10 +154,7 @@ Sequence< OUString > SAL_CALL SecurityEnvironment_NssImpl::getSupportedServiceNa
 /* XUnoTunnel */
 sal_Int64 SAL_CALL SecurityEnvironment_NssImpl::getSomething( const Sequence< sal_Int8 >& aIdentifier )
 {
-    if( comphelper::isUnoTunnelId<SecurityEnvironment_NssImpl>(aIdentifier) ) {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
-    }
-    return 0 ;
+    return comphelper::getSomethingImpl(aIdentifier, this);
 }
 
 /* XUnoTunnel extension */
