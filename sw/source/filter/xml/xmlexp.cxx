@@ -501,8 +501,7 @@ SwDoc* SwXMLExport::getDoc()
     Reference < XText > xText = xTextDoc->getText();
     Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
     assert( xTextTunnel.is());
-    SwXText *pText = reinterpret_cast< SwXText *>(
-            sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
+    SwXText* pText = comphelper::getFromUnoTunnel<SwXText>(xTextTunnel);
     assert( pText != nullptr );
     m_pDoc = pText->GetDoc();
     assert( m_pDoc != nullptr );

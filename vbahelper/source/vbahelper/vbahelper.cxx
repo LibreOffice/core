@@ -43,6 +43,7 @@
 #include <comphelper/automationinvokedzone.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -1100,12 +1101,7 @@ uno::Reference< XHelperInterface > getUnoDocModule( std::u16string_view aModName
 
 SfxObjectShell* getSfxObjShell( const uno::Reference< frame::XModel >& xModel )
 {
-    SfxObjectShell* pFoundShell = nullptr;
-    if ( xModel.is() )
-    {
-        uno::Reference< lang::XUnoTunnel >  xObjShellTunnel( xModel, uno::UNO_QUERY_THROW );
-        pFoundShell = reinterpret_cast<SfxObjectShell*>( xObjShellTunnel->getSomething(SfxObjectShell::getUnoTunnelId()));
-    }
+    SfxObjectShell* pFoundShell = comphelper::getFromUnoTunnel<SfxObjectShell>(xModel);
     if ( !pFoundShell )
         throw uno::RuntimeException();
     return pFoundShell;

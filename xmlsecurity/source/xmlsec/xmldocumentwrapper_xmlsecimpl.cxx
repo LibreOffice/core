@@ -372,10 +372,7 @@ xmlNodePtr XMLDocumentWrapper_XmlSecImpl::checkElement( const uno::Reference< cs
     {
         uno::Reference< css::lang::XUnoTunnel > xNodTunnel( xXMLElement, uno::UNO_QUERY_THROW ) ;
         XMLElementWrapper_XmlSecImpl* pElement
-            = reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(
-                sal::static_int_cast<sal_uIntPtr>(
-                    xNodTunnel->getSomething(
-                        XMLElementWrapper_XmlSecImpl::getUnoTunnelId() ))) ;
+            = comphelper::getFromUnoTunnel<XMLElementWrapper_XmlSecImpl>(xNodTunnel);
 
         if( pElement == nullptr ) {
             throw uno::RuntimeException() ;

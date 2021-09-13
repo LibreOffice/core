@@ -431,8 +431,7 @@ void SwOneExampleFrame::ClearDocument()
     if( !xTunnel.is() )
         return;
 
-    OTextCursorHelper* pCursor = reinterpret_cast<OTextCursorHelper*>(xTunnel->getSomething(
-                                    OTextCursorHelper::getUnoTunnelId()) );
+    OTextCursorHelper* pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xTunnel);
     if( pCursor )
     {
         SwDoc* pDoc = pCursor->GetDoc();
