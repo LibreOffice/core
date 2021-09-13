@@ -30,7 +30,7 @@
 #include "webdavcontent.hxx"
 #include "ContentProperties.hxx"
 #include "DAVProperties.hxx"
-#include "SerfUri.hxx"
+#include "CurlUri.hxx"
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/ResultSetException.hpp>
 #include <tools/diagnose_ex.h>
@@ -365,14 +365,14 @@ bool DataSupplier::getData()
         {
             try
             {
-                SerfUri aURI(
+                CurlUri const aURI(
                     m_pImpl->m_xContent->getResourceAccess().getURL() );
                 OUString aPath = aURI.GetPath();
 
                 if ( aPath.endsWith("/") )
                     aPath = aPath.copy( 0, aPath.getLength() - 1 );
 
-                aPath = SerfUri::unescape( aPath );
+                aPath = DecodeURI(aPath);
                 bool bFoundParent = false;
 
                 for ( size_t n = 0; n < resources.size(); ++n )
@@ -385,7 +385,7 @@ bool DataSupplier::getData()
                     {
                         try
                         {
-                            SerfUri aCurrURI( rRes.uri );
+                            CurlUri const aCurrURI( rRes.uri );
                             OUString aCurrPath = aCurrURI.GetPath();
                             if ( aCurrPath.endsWith("/") )
                                 aCurrPath
@@ -393,7 +393,7 @@ bool DataSupplier::getData()
                                         0,
                                         aCurrPath.getLength() - 1 );
 
-                            aCurrPath = SerfUri::unescape( aCurrPath );
+                            aCurrPath = DecodeURI(aCurrPath);
                             if ( aPath == aCurrPath )
                             {
                                 bFoundParent = true;
