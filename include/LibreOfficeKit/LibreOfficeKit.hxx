@@ -787,6 +787,24 @@ public:
         mpDoc->pClass->sendFormFieldEvent(mpDoc, pArguments);
     }
 
+    void setFreemiumDenyList(const char* freemiumDenyList)
+    {
+        mpDoc->pClass->setFreemiumDenyList(mpDoc, freemiumDenyList);
+    }
+
+    void setFreemiumView(int nViewId, bool isFreemium)
+    {
+        mpDoc->pClass->setFreemiumView(mpDoc, nViewId, isFreemium);
+    }
+    void setRestrictedCommandList(const char* restrictedCommandList)
+    {
+        mpDoc->pClass->setRestrictedCommandList(mpDoc, restrictedCommandList);
+    }
+
+    void setRestrictedView(int nViewId, bool isRestricted)
+    {
+        mpDoc->pClass->setRestrictedView(mpDoc, nViewId, isRestricted);
+    }
     /**
      * Render input search result to a bitmap buffer.
      *
@@ -801,15 +819,6 @@ public:
                             int* pWidth, int* pHeight, size_t* pByteSize)
     {
         return mpDoc->pClass->renderSearchResult(mpDoc, pSearchResult, pBitmapBuffer, pWidth, pHeight, pByteSize);
-    }
-    void setFreemiumDenyList(const char* freemiumDenyList)
-    {
-        mpDoc->pClass->setFreemiumDenyList(mpDoc, freemiumDenyList);
-    }
-
-    void setFreemiumView(int nViewId, bool isFreemium)
-    {
-        mpDoc->pClass->setFreemiumView(mpDoc, nViewId, isFreemium);
     }
 
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY

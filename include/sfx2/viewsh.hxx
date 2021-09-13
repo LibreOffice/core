@@ -167,6 +167,7 @@ friend class SfxPrinterController;
     LanguageTag                 maLOKLocale;
     LOKDeviceFormFactor         maLOKDeviceFormFactor;
     bool                        mbLOKIsFreemiumView;
+    bool                        mbLOKIsRestrictedView;
 
     /// Used to set the DocId at construction time. See SetCurrentDocId.
     static ViewShellDocId       mnCurrentDocId;
@@ -396,6 +397,10 @@ public:
     // Freemium view settings
     void setFreemiumView(bool isFreemium) { mbLOKIsFreemiumView = isFreemium; }
     bool isFreemiumView() const { return mbLOKIsFreemiumView; }
+
+    // Restricted view setting
+    void setRestrictedView(bool isRestricted) { mbLOKIsRestrictedView = isRestricted; }
+    bool isRestrictedView() { return mbLOKIsRestrictedView; }
 };
 
 

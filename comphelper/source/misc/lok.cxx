@@ -37,6 +37,8 @@ static Compat g_eCompatFlags(Compat::none);
 
 static std::vector<OUString> g_vFreemiumDenyList;
 
+static std::vector<OUString> g_vRestrictedCommandList;
+
 namespace
 {
 
@@ -308,6 +310,31 @@ const std::vector<OUString>& getFreemiumDenyList()
 bool isCommandFreemiumDenied(const OUString& command)
 {
     return std::find(g_vFreemiumDenyList.begin(), g_vFreemiumDenyList.end(), command) != g_vFreemiumDenyList.end();
+}
+
+void setRestrictedCommandList(const char* restrictedCommandList)
+{
+    if(!g_vRestrictedCommandList.empty())
+        return;
+
+    OUString RestrictedListString(restrictedCommandList, strlen(restrictedCommandList), RTL_TEXTENCODING_UTF8);
+
+    OUString command = RestrictedListString.getToken(0, ' ');
+    for (size_t i = 1; !command.isEmpty(); i++)
+    {
+        g_vRestrictedCommandList.emplace_back(command);
+        command = RestrictedListString.getToken(i, ' ');
+    }
+}
+
+const std::vector<OUString>& getRestrictedCommandList()
+{
+    return g_vRestrictedCommandList;
+}
+
+bool isRestrictedCommand(const OUString& command)
+{
+    return std::find(g_vRestrictedCommandList.begin(), g_vRestrictedCommandList.end(), command) != g_vRestrictedCommandList.end();
 }
 
 } // namespace
