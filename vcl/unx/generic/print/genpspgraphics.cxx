@@ -47,7 +47,7 @@
 #include <fontattributes.hxx>
 #include <impfontmetricdata.hxx>
 #include <font/FontSelectPattern.hxx>
-#include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <sallayout.hxx>
 

@@ -71,7 +71,7 @@ public:
     bool                  IsSymbolFont() const      { return maDevFontAttributes.IsSymbolFont(); }
     const FontAttributes& GetFontAttributes() const { return maDevFontAttributes; }
 
-    void                  AnnounceFont( PhysicalFontCollection* );
+    void                  AnnounceFont( vcl::font::PhysicalFontCollection* );
 
     const FontCharMapRef & GetFontCharMap() const;
     bool GetFontCapabilities(vcl::FontCapabilities&) const;
