@@ -30,7 +30,10 @@
 
 #include <memory>
 
+namespace vcl::font
+{
 class PhysicalFontCollection;
+}
 class QImage;
 class QPushButton;
 class Qt5Font;
@@ -223,9 +226,9 @@ public:
     virtual void GetFontMetric(ImplFontMetricDataRef&, int nFallbackLevel) override;
     virtual FontCharMapRef GetFontCharMap() const override;
     virtual bool GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) const override;
-    virtual void GetDevFontList(PhysicalFontCollection*) override;
+    virtual void GetDevFontList(vcl::font::PhysicalFontCollection*) override;
     virtual void ClearDevFontCache() override;
-    virtual bool AddTempDevFont(PhysicalFontCollection*, const OUString& rFileURL,
+    virtual bool AddTempDevFont(vcl::font::PhysicalFontCollection*, const OUString& rFileURL,
                                 const OUString& rFontName) override;
     virtual bool CreateFontSubset(const OUString& rToFile, const vcl::font::PhysicalFontFace* pFont,
                                   const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
