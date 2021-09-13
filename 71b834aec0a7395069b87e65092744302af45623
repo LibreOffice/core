@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "f84d2d03_7860cce8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-13T09:27:56Z",
+      "side": 1,
+      "message": "I wouldn\u0027t deprecate it only for LIBO_INTERNAL_ONLY, but generally (because it internally uses broken double checked locking), and let 3rd-party code seek alternatives themselves (or just keep using the deprecated functionality).",
+      "revId": "71b834aec0a7395069b87e65092744302af45623",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "067c1f45_cc5876b4",
@@ -14,6 +31,24 @@
       "writtenOn": "2021-09-13T09:07:12Z",
       "side": 1,
       "message": "I realize that the change is quite big; however, I don\u0027t see how to modularize it, given the renames needed to bear meaning of the meaning of the functions. And doing the renames one-by-one IMO would not decrease the volume much, but would introduce multiple repeated changes to the same files and often the same lines.\n\nDo you think it\u0027s ~reasonable in current form (modulo possible fixes when Jenkins shows my bugs), or do you have any suggestions? Thanks!",
+      "revId": "71b834aec0a7395069b87e65092744302af45623",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18b7f868_05da4d87",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-13T09:27:56Z",
+      "side": 1,
+      "message": "there\u0027s no suggestions that come to my mind",
+      "parentUuid": "067c1f45_cc5876b4",
       "revId": "71b834aec0a7395069b87e65092744302af45623",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
