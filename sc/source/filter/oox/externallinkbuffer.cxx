@@ -18,6 +18,9 @@
  */
 
 #include <externallinkbuffer.hxx>
+#include <externalrefmgr.hxx>
+#include <tokenarray.hxx>
+#include <tokenstringcontext.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/DDELinkInfo.hpp>
@@ -81,8 +84,26 @@ void ExternalName::importDefinedName( const AttributeList& rAttribs )
 {
     maModel.maName = rAttribs.getXString( XML_name, OUString() );
     OSL_ENSURE( !maModel.maName.isEmpty(), "ExternalName::importDefinedName - empty name" );
+    maModel.maFormula = rAttribs.getXString(XML_refersTo, OUString());
+    OSL_ENSURE( !maModel.maFormula.isEmpty(), "ExternalName::importDefinedName - empty formula" );
     // zero-based index into sheet list of externalBook
     maModel.mnSheet = rAttribs.getInteger( XML_sheetId, -1 );
+    // cache external defined names and formulas
+    ScCompiler aComp(getScDocument(), ScAddress(0, 0, maModel.mnSheet), formula::FormulaGrammar::GRAM_OOXML);
+    aComp.SetExternalLinks(getExternalLinks().getLinkInfos());
+    std::unique_ptr<ScTokenArray> pArray = aComp.CompileString(maModel.maFormula);
+    FormulaError nErr = pArray->GetCodeError();
+    aComp.CompileTokenArray();
+    getScDocument().CheckLinkFormulaNeedingCheck(*pArray);
+    pArray->DelRPN();
+    pArray->SetCodeError(nErr);
+
+    if (pArray->HasReferences())
+    {
+        ScExternalRefManager* pRefMgr = getScDocument().GetExternalRefManager();
+        sal_uInt16 nFileId = pRefMgr->getExternalFileId(mrParentLink.getTargetUrl());
+        pRefMgr->storeRangeNameTokens(nFileId, maModel.maName, *pArray);
+    }
 }
 
 void ExternalName::importDdeItem( const AttributeList& rAttribs )
