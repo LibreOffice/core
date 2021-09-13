@@ -35,7 +35,7 @@
 #include <fontinstance.hxx>
 #include <fontattributes.hxx>
 #include <impglyphitem.hxx>
-#include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontCollection.hxx>
 #include <quartz/salgdi.h>
 #include <quartz/utils.h>
 #include <sallayout.hxx>
@@ -506,7 +506,7 @@ void SystemFontList::AddFont( CoreTextFontFace* pFontData )
     maFontContainer[ nFontId ] = pFontData;
 }
 
-void SystemFontList::AnnounceFonts( PhysicalFontCollection& rFontCollection ) const
+void SystemFontList::AnnounceFonts( vcl::font::PhysicalFontCollection& rFontCollection ) const
 {
     for(const auto& rEntry : maFontContainer )
     {
