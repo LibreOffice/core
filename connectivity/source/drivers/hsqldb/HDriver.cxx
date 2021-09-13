@@ -333,7 +333,7 @@ namespace connectivity
                 if ( xOrig.is() )
                 {
                     // now we have to set the URL to get the correct answer for metadata()->getURL()
-                    auto pMetaConnection = comphelper::getUnoTunnelImplementation<OMetaConnection>(xOrig);
+                    auto pMetaConnection = comphelper::getFromUnoTunnel<OMetaConnection>(xOrig);
                     if ( pMetaConnection )
                         pMetaConnection->setURL(url);
 

@@ -461,14 +461,14 @@ protected:
 
 const uno::Sequence< sal_Int8 > & SwXFieldMaster::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXFieldMasterUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSwXFieldMasterUnoTunnelId;
     return theSwXFieldMasterUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL
 SwXFieldMaster::getSomething(const uno::Sequence< sal_Int8 >& rId)
 {
-    return ::sw::UnoTunnelImpl<SwXFieldMaster>(rId, this);
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 OUString SAL_CALL
@@ -1173,14 +1173,14 @@ public:
 
 const uno::Sequence< sal_Int8 > & SwXTextField::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextFieldUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSwXTextFieldUnoTunnelId;
     return theSwXTextFieldUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL
 SwXTextField::getSomething(const uno::Sequence< sal_Int8 >& rId)
 {
-    return ::sw::UnoTunnelImpl<SwXTextField>(rId, this);
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 SwXTextField::SwXTextField(
@@ -1266,10 +1266,7 @@ void SwXTextField::TransmuteLeadToInputField(SwSetExpField & rField)
     uno::Reference<text::XTextField> const xField(
         rField.GetFormatField()->GetXTextField());
     SwXTextField *const pXField = xField.is()
-        ? reinterpret_cast<SwXTextField*>(
-            sal::static_int_cast<sal_IntPtr>(
-                uno::Reference<lang::XUnoTunnel>(xField, uno::UNO_QUERY_THROW)
-                    ->getSomething(getUnoTunnelId())))
+        ? comphelper::getFromUnoTunnel<SwXTextField>(uno::Reference<lang::XUnoTunnel>(xField, uno::UNO_QUERY_THROW))
         : nullptr;
     if (pXField)
         pXField->m_pImpl->SetFormatField(nullptr, nullptr);
@@ -1296,7 +1293,7 @@ void SwXTextField::TransmuteLeadToInputField(SwSetExpField & rField)
     SwFormatField const& rNewFormat(pNewAttr->GetFormatField());
     assert(rNewFormat.Which() == (static_cast<SwSetExpField const*>(rNewFormat.GetField())->GetInputFlag() ? RES_TXTATR_INPUTFIELD : RES_TXTATR_FIELD));
     assert(static_cast<SwSetExpField const*>(rNewFormat.GetField())->GetInputFlag() == (dynamic_cast<SwTextInputField const*>(pNewAttr) != nullptr));
-    if (xField.is())
+    if (pXField)
     {
         pXField->m_pImpl->SetFormatField(const_cast<SwFormatField*>(&rNewFormat), &rNode.GetDoc());
         const_cast<SwFormatField&>(rNewFormat).SetXTextField(xField);
@@ -1313,8 +1310,7 @@ void SAL_CALL SwXTextField::attachTextFieldMaster(
     uno::Reference< lang::XUnoTunnel > xMasterTunnel(xFieldMaster, uno::UNO_QUERY);
     if (!xMasterTunnel.is())
         throw lang::IllegalArgumentException();
-    SwXFieldMaster* pMaster = reinterpret_cast< SwXFieldMaster * >(
-            sal::static_int_cast< sal_IntPtr >( xMasterTunnel->getSomething( SwXFieldMaster::getUnoTunnelId()) ));
+    SwXFieldMaster* pMaster = comphelper::getFromUnoTunnel<SwXFieldMaster>(xMasterTunnel);
 
     SwFieldType* pFieldType = pMaster ? pMaster->GetFieldType() : nullptr;
     if (!pFieldType ||
@@ -1355,16 +1351,8 @@ void SAL_CALL SwXTextField::attach(
     SolarMutexGuard aGuard;
     if (m_pImpl->IsDescriptor())
     {
-        uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
-        SwXTextRange* pRange = nullptr;
-        OTextCursorHelper* pCursor = nullptr;
-        if(xRangeTunnel.is())
-        {
-            pRange  = reinterpret_cast< SwXTextRange * >(
-                    sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
-            pCursor = reinterpret_cast< OTextCursorHelper * >(
-                    sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
-        }
+        SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xTextRange);
+        OTextCursorHelper* pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xTextRange);
 
         SwDoc* pDoc = pRange ? &pRange->GetDoc() : pCursor ? pCursor->GetDoc() : nullptr;
         // if a FieldMaster was attached, then the document is already fixed!

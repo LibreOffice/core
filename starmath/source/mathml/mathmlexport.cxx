@@ -99,7 +99,7 @@ bool SmXMLExportWrapper::Export(SfxMedium& rMedium)
     uno::Reference<lang::XComponent> xModelComp = xModel;
 
     bool bEmbedded = false;
-    SmModel* pModel = comphelper::getUnoTunnelImplementation<SmModel>(xModel);
+    SmModel* pModel = comphelper::getFromUnoTunnel<SmModel>(xModel);
 
     SmDocShell* pDocShell = pModel ? static_cast<SmDocShell*>(pModel->GetObjectShell()) : nullptr;
     if (pDocShell && SfxObjectCreateMode::EMBEDDED == pDocShell->GetCreateMode())
@@ -266,7 +266,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(const Reference<io::XOutputStream
     uno::Sequence<PropertyValue> aProps(0);
     xFilter->filter(aProps);
 
-    auto pFilter = comphelper::getUnoTunnelImplementation<SmXMLExport>(xFilter);
+    auto pFilter = comphelper::getFromUnoTunnel<SmXMLExport>(xFilter);
     return pFilter == nullptr || pFilter->GetSuccess();
 }
 
@@ -324,15 +324,13 @@ SmXMLExport::SmXMLExport(const css::uno::Reference<css::uno::XComponentContext>&
 
 sal_Int64 SAL_CALL SmXMLExport::getSomething(const uno::Sequence<sal_Int8>& rId)
 {
-    if (isUnoTunnelId<SmXMLExport>(rId))
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
-
-    return SvXMLExport::getSomething(rId);
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<SvXMLExport>{});
 }
 
 const uno::Sequence<sal_Int8>& SmXMLExport::getUnoTunnelId() noexcept
 {
-    static const UnoTunnelIdInit theSmXMLExportUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSmXMLExportUnoTunnelId;
     return theSmXMLExportUnoTunnelId.getSeq();
 }
 
@@ -393,7 +391,7 @@ ErrCode SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
     else
     {
         uno::Reference<frame::XModel> xModel = GetModel();
-        SmModel* pModel = comphelper::getUnoTunnelImplementation<SmModel>(xModel);
+        SmModel* pModel = comphelper::getFromUnoTunnel<SmModel>(xModel);
 
         if (pModel)
         {
@@ -428,7 +426,7 @@ ErrCode SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
 void SmXMLExport::ExportContent_()
 {
     uno::Reference<frame::XModel> xModel = GetModel();
-    SmModel* pModel = comphelper::getUnoTunnelImplementation<SmModel>(xModel);
+    SmModel* pModel = comphelper::getFromUnoTunnel<SmModel>(xModel);
     SmDocShell* pDocShell = pModel ? static_cast<SmDocShell*>(pModel->GetObjectShell()) : nullptr;
     OSL_ENSURE(pDocShell, "doc shell missing");
 
@@ -487,7 +485,7 @@ void SmXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
     if (!xModel.is())
         return;
 
-    SmModel* pModel = comphelper::getUnoTunnelImplementation<SmModel>(xModel);
+    SmModel* pModel = comphelper::getFromUnoTunnel<SmModel>(xModel);
 
     if (!pModel)
         return;

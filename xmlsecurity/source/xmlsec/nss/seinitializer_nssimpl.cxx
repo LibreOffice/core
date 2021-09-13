@@ -20,6 +20,7 @@
 #include <sal/types.h>
 #include <com/sun/star/xml/crypto/SecurityEnvironment.hpp>
 #include <com/sun/star/xml/crypto/XMLSecurityContext.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include "seinitializer_nssimpl.hxx"
@@ -58,9 +59,7 @@ uno::Reference< css::xml::crypto::XXMLSecurityContext > SAL_CALL
 
         uno::Reference< css::xml::crypto::XSecurityEnvironment > xSecEnv = css::xml::crypto::SecurityEnvironment::create( m_xContext );
         uno::Reference< lang::XUnoTunnel > xSecEnvTunnel(xSecEnv, uno::UNO_QUERY_THROW);
-        SecurityEnvironment_NssImpl* pSecEnv = reinterpret_cast<SecurityEnvironment_NssImpl*>(
-            sal::static_int_cast<sal_uIntPtr>(
-                xSecEnvTunnel->getSomething(SecurityEnvironment_NssImpl::getUnoTunnelId() ))) ;
+        SecurityEnvironment_NssImpl* pSecEnv = comphelper::getFromUnoTunnel<SecurityEnvironment_NssImpl>(xSecEnvTunnel);
         pSecEnv->setCertDb(pCertHandle);
 
         sal_Int32 n = xSecCtx->addSecurityEnvironment(xSecEnv);

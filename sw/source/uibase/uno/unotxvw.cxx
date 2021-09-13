@@ -1068,19 +1068,9 @@ void SwXTextViewCursor::gotoRange(
         *aOwnPaM.GetMark() = *pShellCursor->GetMark();
     }
 
-    uno::Reference<lang::XUnoTunnel> xRangeTunnel( xRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = nullptr;
-    SwXParagraph* pPara = nullptr;
-    OTextCursorHelper* pCursor = nullptr;
-    if(xRangeTunnel.is())
-    {
-        pRange = reinterpret_cast<SwXTextRange*>(xRangeTunnel->getSomething(
-                                SwXTextRange::getUnoTunnelId()));
-        pCursor = reinterpret_cast<OTextCursorHelper*>(xRangeTunnel->getSomething(
-                                OTextCursorHelper::getUnoTunnelId()));
-        pPara = reinterpret_cast<SwXParagraph*>(xRangeTunnel->getSomething(
-                                SwXParagraph::getUnoTunnelId()));
-    }
+    SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRange);
+    SwXParagraph* pPara = comphelper::getFromUnoTunnel<SwXParagraph>(xRange);
+    OTextCursorHelper* pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xRange);
 
     const FrameTypeFlags nFrameType = rSh.GetFrameType(nullptr,true);
 
@@ -1691,7 +1681,7 @@ Sequence< OUString > SwXTextViewCursor::getSupportedServiceNames()
 
 const uno::Sequence< sal_Int8 > & SwXTextViewCursor::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextViewCursorUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSwXTextViewCursorUnoTunnelId;
     return theSwXTextViewCursorUnoTunnelId.getSeq();
 }
 
@@ -1699,11 +1689,8 @@ const uno::Sequence< sal_Int8 > & SwXTextViewCursor::getUnoTunnelId()
 sal_Int64 SAL_CALL SwXTextViewCursor::getSomething(
     const uno::Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SwXTextViewCursor>(rId) )
-    {
-        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ));
-    }
-    return OTextCursorHelper::getSomething(rId);
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<OTextCursorHelper>{});
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2(SwXTextViewCursor,SwXTextViewCursor_Base,OTextCursorHelper)

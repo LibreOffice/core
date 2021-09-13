@@ -20,7 +20,6 @@
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/report/XReportComponent.hpp>
 #include <com/sun/star/report/ForceNewPage.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
@@ -566,16 +565,15 @@ sal_Bool SAL_CALL OSection::hasForms()
 
 sal_Int64 OSection::getSomething( const uno::Sequence< sal_Int8 > & rId )
 {
-    if (isUnoTunnelId<OSection>(rId) )
-        return reinterpret_cast<sal_Int64>(this);
+    if (isUnoTunnelId<OSection>(rId))
+        return comphelper::getSomething_cast(this);
     return (m_xDrawPage_Tunnel.is()) ? m_xDrawPage_Tunnel->getSomething(rId) : 0;
 }
 
 uno::Sequence< sal_Int8 > OSection::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoTunnelIdInit implId;
+    return implId.getSeq();
 }
 
 void OSection::notifyElementAdded(const uno::Reference< drawing::XShape >& xShape )

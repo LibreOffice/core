@@ -36,6 +36,7 @@
 #include <FrameView.hxx>
 #include <Window.hxx>
 
+#include <comphelper/servicehelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/wrkwin.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -239,8 +240,7 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
 
         // Tunnel through the controller to obtain a ViewShellBase.
         Reference<lang::XUnoTunnel> xTunnel (xController, UNO_QUERY_THROW);
-        ::sd::DrawController* pController = reinterpret_cast<sd::DrawController*>(
-            xTunnel->getSomething(sd::DrawController::getUnoTunnelId()));
+        ::sd::DrawController* pController = comphelper::getFromUnoTunnel<sd::DrawController>(xTunnel);
         if (pController != nullptr)
             mpBase = pController->GetViewShellBase();
 

@@ -129,8 +129,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
             xShapes->getByIndex(i) >>= xShape;
             if (xShape.is())
             {
-                SvxShape *const pSvxShape(
-                        ::sw::UnoTunnelGetImplementation<SvxShape>(xShape));
+                SvxShape *const pSvxShape(comphelper::getFromUnoTunnel<SvxShape>(xShape));
                 if (pSvxShape)
                 {
                     SdrObject *const pSdrObject = pSvxShape->GetSdrObject();
@@ -150,15 +149,14 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         return;
     }
 
-    SwXShape *const pShape(::sw::UnoTunnelGetImplementation<SwXShape>(xTunnel));
+    SwXShape* const pShape(comphelper::getFromUnoTunnel<SwXShape>(xTunnel));
     if (pShape)
     {
         uno::Reference<uno::XAggregation> const xAgg(
                 pShape->GetAggregationInterface());
         if (xAgg.is())
         {
-            SvxShape *const pSvxShape(
-                    ::sw::UnoTunnelGetImplementation<SvxShape>(xTunnel));
+            SvxShape* const pSvxShape(comphelper::getFromUnoTunnel<SvxShape>(xTunnel));
             if (pSvxShape)
             {
                 SdrObject *const pSdrObject = pSvxShape->GetSdrObject();
@@ -171,8 +169,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         return;
     }
 
-    OTextCursorHelper *const pCursor(
-        ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xTunnel));
+    OTextCursorHelper* const pCursor(comphelper::getFromUnoTunnel<OTextCursorHelper>(xTunnel));
     if (pCursor)
     {
         if (pCursor->GetDoc() == &rTargetDoc)
@@ -182,8 +179,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         return;
     }
 
-    SwXTextRanges* const pRanges(
-        ::sw::UnoTunnelGetImplementation<SwXTextRanges>(xTunnel));
+    SwXTextRanges* const pRanges(comphelper::getFromUnoTunnel<SwXTextRanges>(xTunnel));
     if (pRanges)
     {
         SwUnoCursor const* pUnoCursor = pRanges->GetCursor();
@@ -196,8 +192,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
 
     // check these before Range to prevent misinterpretation of text frames
     // and cells also implement XTextRange
-    SwXFrame *const pFrame(
-        ::sw::UnoTunnelGetImplementation<SwXFrame>(xTunnel));
+    SwXFrame* const pFrame(comphelper::getFromUnoTunnel<SwXFrame>(xTunnel));
     if (pFrame)
     {
         const SwFrameFormat *const pFrameFormat(pFrame->GetFrameFormat());
@@ -208,8 +203,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         return;
     }
 
-    SwXTextTable *const pTextTable(
-        ::sw::UnoTunnelGetImplementation<SwXTextTable>(xTunnel));
+    SwXTextTable* const pTextTable(comphelper::getFromUnoTunnel<SwXTextTable>(xTunnel));
     if (pTextTable)
     {
         SwFrameFormat *const pFrameFormat(pTextTable->GetFrameFormat());
@@ -220,8 +214,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         return;
     }
 
-    SwXCell *const pCell(
-        ::sw::UnoTunnelGetImplementation<SwXCell>(xTunnel));
+    SwXCell* const pCell(comphelper::getFromUnoTunnel<SwXCell>(xTunnel));
     if (pCell)
     {
         SwFrameFormat *const pFrameFormat(pCell->GetFrameFormat());
@@ -253,8 +246,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         return;
     }
 
-    SwXCellRange *const pCellRange(
-        ::sw::UnoTunnelGetImplementation<SwXCellRange>(xTunnel));
+    SwXCellRange* const pCellRange(comphelper::getFromUnoTunnel<SwXCellRange>(xTunnel));
     if (pCellRange)
     {
         SwUnoCursor const*const pUnoCursor(pCellRange->GetTableCursor());
@@ -833,7 +825,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
     uno::Reference<XIndexReplace> xIndexReplace;
     if(rValue >>= xIndexReplace)
     {
-        auto pSwNum = comphelper::getUnoTunnelImplementation<SwXNumberingRules>(xIndexReplace);
+        auto pSwNum = comphelper::getFromUnoTunnel<SwXNumberingRules>(xIndexReplace);
         if(pSwNum)
         {
             SwDoc& rDoc = rPam.GetDoc();

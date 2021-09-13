@@ -60,7 +60,6 @@
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/random.h>
 #include <osl/diagnose.h>
@@ -206,8 +205,6 @@ void ZipPackage::parseManifest()
                     static const OUStringLiteral sKeyInfo (u"KeyInfo");
 
                     const uno::Sequence < uno::Sequence < PropertyValue > > aManifestSequence = xReader->readManifestSequence ( xSink->getInputStream() );
-                    ZipPackageStream *pStream = nullptr;
-                    ZipPackageFolder *pFolder = nullptr;
                     const Any *pKeyInfo = nullptr;
 
                     for ( const uno::Sequence<PropertyValue>& rSequence : aManifestSequence )
@@ -249,16 +246,13 @@ void ZipPackage::parseManifest()
                             aAny = getByHierarchicalName( sPath );
                             uno::Reference < XUnoTunnel > xUnoTunnel;
                             aAny >>= xUnoTunnel;
-                            sal_Int64 nTest=0;
-                            if ( (nTest = xUnoTunnel->getSomething( ZipPackageFolder::getUnoTunnelId() )) != 0 )
+                            if (auto pFolder = comphelper::getFromUnoTunnel<ZipPackageFolder>(xUnoTunnel))
                             {
-                                pFolder = reinterpret_cast < ZipPackageFolder* > ( nTest );
                                 pFolder->SetMediaType ( sMediaType );
                                 pFolder->SetVersion ( sVersion );
                             }
-                            else
+                            else if (auto pStream = comphelper::getFromUnoTunnel<ZipPackageStream>(xUnoTunnel))
                             {
-                                pStream = reinterpret_cast < ZipPackageStream* > ( xUnoTunnel->getSomething( ZipPackageStream::getUnoTunnelId() ));
                                 pStream->SetMediaType ( sMediaType );
                                 pStream->SetFromManifest( true );
 
@@ -358,6 +352,8 @@ void ZipPackage::parseManifest()
                                 else
                                     m_bHasNonEncryptedEntries = true;
                             }
+                            else
+                                throw ZipIOException(THROW_WHERE "Wrong content");
                         }
                     }
 
@@ -494,13 +490,9 @@ void ZipPackage::parseContentType()
                     if ( !aPath.isEmpty() && hasByHierarchicalName( aPath ) )
                     {
                         uno::Any aIterAny = getByHierarchicalName( aPath );
-                        uno::Reference < lang::XUnoTunnel > xIterTunnel;
-                        aIterAny >>= xIterTunnel;
-                        sal_Int64 nTest = xIterTunnel->getSomething( ZipPackageStream::getUnoTunnelId() );
-                        if ( nTest != 0 )
+                        if (auto pStream = comphelper::getFromUnoTunnel<ZipPackageStream>(aIterAny))
                         {
                             // this is a package stream, in OFOPXML format only streams can have mediatype
-                            ZipPackageStream *pStream = reinterpret_cast < ZipPackageStream* > ( nTest );
                             pStream->SetMediaType( rPair.Second );
                         }
                     }
@@ -1676,16 +1668,13 @@ sal_Bool SAL_CALL ZipPackage::supportsService( OUString const & rServiceName )
 
 Sequence< sal_Int8 > ZipPackage::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoTunnelIdInit implId;
+    return implId.getSeq();
 }
 
 sal_Int64 SAL_CALL ZipPackage::getSomething( const uno::Sequence< sal_Int8 >& aIdentifier )
 {
-    if ( isUnoTunnelId<ZipPackage>(aIdentifier) )
-        return reinterpret_cast < sal_Int64 > ( this );
-    return 0;
+    return comphelper::getSomethingImpl(aIdentifier, this);
 }
 
 uno::Reference< XPropertySetInfo > SAL_CALL ZipPackage::getPropertySetInfo()

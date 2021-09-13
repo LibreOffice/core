@@ -177,7 +177,7 @@ void ChartController::executeDispatch_PositionAndSize(const ::css::uno::Sequence
         if(pOutItemSet || pArgs)
         {
             awt::Rectangle aOldObjectRect;
-            ExplicitValueProvider* pProvider(comphelper::getUnoTunnelImplementation<ExplicitValueProvider>( m_xChartView ));
+            ExplicitValueProvider* pProvider(comphelper::getFromUnoTunnel<ExplicitValueProvider>( m_xChartView ));
             if( pProvider )
                 aOldObjectRect = pProvider->getRectangleOfObject(aCID);
 

@@ -437,17 +437,13 @@ void SAL_CALL ORowSet::release() noexcept
 // css::XUnoTunnel
 sal_Int64 SAL_CALL ORowSet::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    if (isUnoTunnelId<ORowSet>(rId))
-        return reinterpret_cast<sal_Int64>(this);
-
-    return 0;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 Sequence< sal_Int8 > ORowSet::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId s_Id;
-
-    return s_Id.getImplementationId();
+    static const comphelper::UnoTunnelIdInit s_Id;
+    return s_Id.getSeq();
 }
 
 // css::XAggregation
@@ -2141,7 +2137,7 @@ void ORowSet::notifyRowSetAndClonesRowDelete( const Any& _rBookmark )
     // notify the clones
     for (auto const& elem : m_aClones)
     {
-        auto pClone = comphelper::getUnoTunnelImplementation<ORowSetClone>(elem.get());
+        auto pClone = comphelper::getFromUnoTunnel<ORowSetClone>(elem.get());
         if(pClone)
             pClone->onDeleteRow( _rBookmark );
     }
@@ -2154,7 +2150,7 @@ void ORowSet::notifyRowSetAndClonesRowDeleted( const Any& _rBookmark, sal_Int32 
     // notify the clones
     for (auto const& clone : m_aClones)
     {
-        auto pClone = comphelper::getUnoTunnelImplementation<ORowSetClone>(clone.get());
+        auto pClone = comphelper::getFromUnoTunnel<ORowSetClone>(clone.get());
         if(pClone)
             pClone->onDeletedRow( _rBookmark, _nPos );
     }
@@ -2901,18 +2897,14 @@ void ORowSetClone::close()
 
 Sequence< sal_Int8 > ORowSetClone::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoTunnelIdInit implId;
+    return implId.getSeq();
 }
 
 // css::XUnoTunnel
 sal_Int64 SAL_CALL ORowSetClone::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    if (isUnoTunnelId<ORowSetClone>(rId))
-        return reinterpret_cast<sal_Int64>(this);
-
-    return 0;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 void SAL_CALL ORowSetClone::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)

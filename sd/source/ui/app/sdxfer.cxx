@@ -710,18 +710,7 @@ void SdTransferable::SetPageBookmarks( const std::vector<OUString> &rPageBookmar
 
 sal_Int64 SAL_CALL SdTransferable::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
-    sal_Int64 nRet;
-
-    if( isUnoTunnelId<SdTransferable>(rId) )
-    {
-        nRet = sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
-    }
-    else
-    {
-        nRet = 0;
-    }
-
-    return nRet;
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 void SdTransferable::AddUserData (const std::shared_ptr<UserData>& rpData)
@@ -744,7 +733,7 @@ std::shared_ptr<SdTransferable::UserData> SdTransferable::GetUserData (const sal
 
 const css::uno::Sequence< sal_Int8 >& SdTransferable::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSdTransferableUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSdTransferableUnoTunnelId;
     return theSdTransferableUnoTunnelId.getSeq();
 }
 
@@ -752,8 +741,7 @@ SdTransferable* SdTransferable::getImplementation( const Reference< XInterface >
 {
     try
     {
-        Reference< css::lang::XUnoTunnel > xUnoTunnel( rxData, UNO_QUERY_THROW );
-        return reinterpret_cast<SdTransferable*>(sal::static_int_cast<sal_uIntPtr>(xUnoTunnel->getSomething( SdTransferable::getUnoTunnelId()) ) );
+        return comphelper::getFromUnoTunnel<SdTransferable>(rxData);
     }
     catch( const css::uno::Exception& )
     {

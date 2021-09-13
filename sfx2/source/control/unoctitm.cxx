@@ -77,6 +77,7 @@
 #include <sal/log.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <desktop/crashreport.hxx>
 #include <vcl/threadex.hxx>
@@ -164,10 +165,7 @@ void SAL_CALL SfxStatusDispatcher::removeStatusListener( const css::uno::Referen
 // XUnoTunnel
 sal_Int64 SAL_CALL SfxOfficeDispatch::getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier )
 {
-    if ( aIdentifier == impl_getStaticIdentifier() )
-        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ));
-    else
-        return 0;
+    return comphelper::getSomethingImpl(aIdentifier, this);
 }
 
 SfxOfficeDispatch::SfxOfficeDispatch( SfxBindings& rBindings, SfxDispatcher* pDispat, const SfxSlot* pSlot, const css::util::URL& rURL )
@@ -197,7 +195,7 @@ SfxOfficeDispatch::~SfxOfficeDispatch()
     }
 }
 
-const css::uno::Sequence< sal_Int8 >& SfxOfficeDispatch::impl_getStaticIdentifier()
+const css::uno::Sequence< sal_Int8 >& SfxOfficeDispatch::getUnoTunnelId()
 {
     // {38 57 CA 80 09 36 11 d4 83 FE 00 50 04 52 6B 21}
     static const sal_uInt8 pGUID[16] = { 0x38, 0x57, 0xCA, 0x80, 0x09, 0x36, 0x11, 0xd4, 0x83, 0xFE, 0x00, 0x50, 0x04, 0x52, 0x6B, 0x21 };

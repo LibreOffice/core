@@ -363,12 +363,8 @@ const uno::Sequence< sal_Int8 > & SmModel::getUnoTunnelId()
 
 sal_Int64 SAL_CALL SmModel::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SmModel>(rId) )
-    {
-        return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_uIntPtr >(this));
-    }
-
-    return SfxBaseModel::getSomething( rId );
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<SfxBaseModel>{});
 }
 
 static sal_Int16 lcl_AnyToINT16(const uno::Any& rAny)
@@ -988,7 +984,7 @@ void SAL_CALL SmModel::render(
     if (!xRenderDevice.is())
         return;
 
-    VCLXDevice*   pDevice = comphelper::getUnoTunnelImplementation<VCLXDevice>( xRenderDevice );
+    VCLXDevice* pDevice = comphelper::getFromUnoTunnel<VCLXDevice>(xRenderDevice);
     VclPtr< OutputDevice> pOut = pDevice ? pDevice->GetOutputDevice()
                                          : VclPtr< OutputDevice >();
     if (!pOut)

@@ -19,7 +19,6 @@
 
 #include <comphelper/accimplaccess.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/typeprovider.hxx>
 
 #include <string.h>
 
@@ -41,18 +40,14 @@ namespace comphelper
 
     Sequence<sal_Int8> OAccessibleImplementationAccess::getUnoTunnelId()
     {
-        static cppu::OImplementationId implID;
-
-        return implID.getImplementationId();
+        static const comphelper::UnoTunnelIdInit implID;
+        return implID.getSeq();
     }
 
 
     sal_Int64 SAL_CALL OAccessibleImplementationAccess::getSomething( const Sequence< sal_Int8 >& _rIdentifier )
     {
-        if (isUnoTunnelId<OAccessibleImplementationAccess>(_rIdentifier))
-            return reinterpret_cast<sal_Int64>(this);
-
-        return 0;
+        return comphelper::getSomethingImpl(_rIdentifier, this);
     }
 
 }   // namespace comphelper

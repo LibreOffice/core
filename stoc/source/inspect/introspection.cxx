@@ -1189,7 +1189,9 @@ void ImplIntrospectionAccess::set(Any& array, sal_Int32 index, const Any& value)
 // Methods from XUnoTunnel
 sal_Int64 ImplIntrospectionAccess::getSomething( const Sequence< sal_Int8 >& aIdentifier )
 {
-    return Reference<XUnoTunnel>::query( mxIface )->getSomething( aIdentifier );
+    if (Reference<XUnoTunnel> xUnoTunnel{ mxIface, css::uno::UNO_QUERY })
+        return xUnoTunnel->getSomething(aIdentifier);
+    return 0;
 }
 
 

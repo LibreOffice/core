@@ -295,12 +295,8 @@ SwXText::insertString(const uno::Reference< text::XTextRange >& xTextRange,
     {
         throw uno::RuntimeException();
     }
-    const uno::Reference<lang::XUnoTunnel> xRangeTunnel(xTextRange,
-            uno::UNO_QUERY);
-    SwXTextRange *const pRange =
-        ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
-    OTextCursorHelper *const pCursor =
-        ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
+    SwXTextRange* const pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xTextRange);
+    OTextCursorHelper *const pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xTextRange);
     if ((!pRange  || &pRange ->GetDoc() != GetDoc()) &&
         (!pCursor || pCursor->GetDoc() != GetDoc()))
     {
@@ -433,13 +429,8 @@ SwXText::insertControlCharacter(
             m_pImpl->m_pDoc->ClearBoxNumAttrs(aPam.GetPoint()->nNode);
             m_pImpl->m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPam.GetPoint());
 
-            const uno::Reference<lang::XUnoTunnel> xRangeTunnel(
-                    xTextRange, uno::UNO_QUERY);
-            SwXTextRange *const pRange =
-                ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
-            OTextCursorHelper *const pCursor =
-                ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(
-                            xRangeTunnel);
+            SwXTextRange *const pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xTextRange);
+            OTextCursorHelper *const pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xTextRange);
             if (pRange)
             {
                 pRange->SetPositions(aPam);
@@ -466,12 +457,8 @@ SwXText::insertControlCharacter(
     if (!bAbsorb)
         return;
 
-    const uno::Reference<lang::XUnoTunnel> xRangeTunnel(
-            xTextRange, uno::UNO_QUERY);
-    SwXTextRange *const pRange =
-        ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
-    OTextCursorHelper *const pCursor =
-        ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
+    SwXTextRange *const pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xTextRange);
+    OTextCursorHelper *const pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xTextRange);
 
     SwCursor aCursor(*aPam.GetPoint(), nullptr);
     SwUnoCursorHelper::SelectPam(aCursor, true);
@@ -584,17 +571,17 @@ SwXText::insertTextContent(
         throw aArgException;
     }
     SwXDocumentIndexMark *const pDocumentIndexMark =
-        ::sw::UnoTunnelGetImplementation<SwXDocumentIndexMark>(xContentTunnel);
+        comphelper::getFromUnoTunnel<SwXDocumentIndexMark>(xContentTunnel);
     SwXTextSection *const pSection =
-        ::sw::UnoTunnelGetImplementation<SwXTextSection>(xContentTunnel);
+        comphelper::getFromUnoTunnel<SwXTextSection>(xContentTunnel);
     SwXBookmark *const pBookmark =
-        ::sw::UnoTunnelGetImplementation<SwXBookmark>(xContentTunnel);
+        comphelper::getFromUnoTunnel<SwXBookmark>(xContentTunnel);
     SwXReferenceMark *const pReferenceMark =
-        ::sw::UnoTunnelGetImplementation<SwXReferenceMark>(xContentTunnel);
+        comphelper::getFromUnoTunnel<SwXReferenceMark>(xContentTunnel);
     SwXMeta *const pMeta =
-        ::sw::UnoTunnelGetImplementation<SwXMeta>(xContentTunnel);
+        comphelper::getFromUnoTunnel<SwXMeta>(xContentTunnel);
     SwXTextField* pTextField =
-        ::sw::UnoTunnelGetImplementation<SwXTextField>(xContentTunnel);
+        comphelper::getFromUnoTunnel<SwXTextField>(xContentTunnel);
     if (pTextField && pTextField->GetServiceId() != SwServiceType::FieldTypeAnnotation)
         pTextField = nullptr;
 
@@ -629,20 +616,15 @@ SwXText::insertTextContentBefore(
         throw aRuntime;
     }
 
-    SwXParagraph *const pPara =
-            comphelper::getUnoTunnelImplementation<SwXParagraph>(xNewContent);
+    SwXParagraph* const pPara = comphelper::getFromUnoTunnel<SwXParagraph>(xNewContent);
     if (!pPara || !pPara->IsDescriptor() || !xSuccessor.is())
     {
         throw lang::IllegalArgumentException();
     }
 
     bool bRet = false;
-    const uno::Reference<lang::XUnoTunnel> xSuccTunnel(xSuccessor,
-            uno::UNO_QUERY);
-    SwXTextSection *const pXSection =
-            ::sw::UnoTunnelGetImplementation<SwXTextSection>(xSuccTunnel);
-    SwXTextTable *const pXTable =
-            ::sw::UnoTunnelGetImplementation<SwXTextTable>(xSuccTunnel);
+    SwXTextSection* const pXSection = comphelper::getFromUnoTunnel<SwXTextSection>(xSuccessor);
+    SwXTextTable* const pXTable = comphelper::getFromUnoTunnel<SwXTextTable>(xSuccessor);
     SwFrameFormat *const pTableFormat = pXTable ? pXTable->GetFrameFormat() : nullptr;
     SwTextNode * pTextNode = nullptr;
     if(pTableFormat && pTableFormat->GetDoc() == GetDoc())
@@ -685,19 +667,14 @@ SwXText::insertTextContentAfter(
         throw uno::RuntimeException();
     }
 
-    SwXParagraph *const pPara =
-            comphelper::getUnoTunnelImplementation<SwXParagraph>(xNewContent);
+    SwXParagraph* const pPara = comphelper::getFromUnoTunnel<SwXParagraph>(xNewContent);
     if(!pPara || !pPara->IsDescriptor() || !xPredecessor.is())
     {
         throw lang::IllegalArgumentException();
     }
 
-    const uno::Reference<lang::XUnoTunnel> xPredTunnel(xPredecessor,
-            uno::UNO_QUERY);
-    SwXTextSection *const pXSection =
-            ::sw::UnoTunnelGetImplementation<SwXTextSection>(xPredTunnel);
-    SwXTextTable *const pXTable =
-            ::sw::UnoTunnelGetImplementation<SwXTextTable>(xPredTunnel);
+    SwXTextSection* const pXSection = comphelper::getFromUnoTunnel<SwXTextSection>(xPredecessor);
+    SwXTextTable *const pXTable = comphelper::getFromUnoTunnel<SwXTextTable>(xPredecessor);
     SwFrameFormat *const pTableFormat = pXTable ? pXTable->GetFrameFormat() : nullptr;
     bool bRet = false;
     SwTextNode * pTextNode = nullptr;
@@ -742,12 +719,8 @@ SwXText::removeTextContentBefore(
     }
 
     bool bRet = false;
-    const uno::Reference<lang::XUnoTunnel> xSuccTunnel(xSuccessor,
-            uno::UNO_QUERY);
-    SwXTextSection *const pXSection =
-            ::sw::UnoTunnelGetImplementation<SwXTextSection>(xSuccTunnel);
-    SwXTextTable *const pXTable =
-            ::sw::UnoTunnelGetImplementation<SwXTextTable>(xSuccTunnel);
+    SwXTextSection* const pXSection = comphelper::getFromUnoTunnel<SwXTextSection>(xSuccessor);
+    SwXTextTable* const pXTable = comphelper::getFromUnoTunnel<SwXTextTable>(xSuccessor);
     SwFrameFormat *const pTableFormat = pXTable ? pXTable->GetFrameFormat() : nullptr;
     if(pTableFormat && pTableFormat->GetDoc() == GetDoc())
     {
@@ -794,12 +767,8 @@ SwXText::removeTextContentAfter(
     }
 
     bool bRet = false;
-    const uno::Reference<lang::XUnoTunnel> xPredTunnel(xPredecessor,
-            uno::UNO_QUERY);
-    SwXTextSection *const pXSection =
-            ::sw::UnoTunnelGetImplementation<SwXTextSection>(xPredTunnel);
-    SwXTextTable *const pXTable =
-            ::sw::UnoTunnelGetImplementation<SwXTextTable>(xPredTunnel);
+    SwXTextSection* const pXSection = comphelper::getFromUnoTunnel<SwXTextSection>(xPredecessor);
+    SwXTextTable* const pXTable = comphelper::getFromUnoTunnel<SwXTextTable>(xPredecessor);
     SwFrameFormat *const pTableFormat = pXTable ? pXTable->GetFrameFormat() : nullptr;
     if(pTableFormat && pTableFormat->GetDoc() == GetDoc())
     {
@@ -978,7 +947,7 @@ bool SwXText::Impl::CheckForOwnMember(
     const uno::Reference<text::XTextCursor> xOwnCursor(m_rThis.CreateCursor());
 
     OTextCursorHelper *const pOwnCursor =
-            comphelper::getUnoTunnelImplementation<OTextCursorHelper>(xOwnCursor);
+            comphelper::getFromUnoTunnel<OTextCursorHelper>(xOwnCursor);
     OSL_ENSURE(pOwnCursor, "OTextCursorHelper::getUnoTunnelId() ??? ");
     const SwStartNode* pOwnStartNode =
         pOwnCursor->GetPaM()->GetNode().StartOfSectionNode();
@@ -1200,14 +1169,14 @@ namespace
 
 const uno::Sequence< sal_Int8 > & SwXText::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSwXTextUnoTunnelId;
     return theSwXTextUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL
 SwXText::getSomething(const uno::Sequence< sal_Int8 >& rId)
 {
-    return ::sw::UnoTunnelImpl<SwXText>(rId, this);
+    return comphelper::getSomethingImpl<SwXText>(rId, this);
 }
 
 uno::Reference< text::XTextRange > SAL_CALL
@@ -1359,10 +1328,9 @@ SwXText::insertTextPortion(
     uno::Reference< text::XTextRange > xRet;
     const uno::Reference<text::XTextCursor> xTextCursor = createTextCursorByRange(xInsertPosition);
 
-    const uno::Reference< lang::XUnoTunnel > xRangeTunnel(
-            xTextCursor, uno::UNO_QUERY_THROW );
-    SwXTextCursor *const pTextCursor =
-        ::sw::UnoTunnelGetImplementation<SwXTextCursor>(xRangeTunnel);
+    SwXTextCursor* const pTextCursor = comphelper::getFromUnoTunnel<SwXTextCursor>(xTextCursor);
+    if (!pTextCursor)
+        throw uno::RuntimeException();
 
     bool bIllegalException = false;
     bool bRuntimeException = false;
@@ -1570,10 +1538,8 @@ SwXText::convertToTextFrame(
     }
     pTempStartPam.reset();
 
-    SwXTextRange *const pStartRange =
-        comphelper::getUnoTunnelImplementation<SwXTextRange>(xStart);
-    SwXTextRange *const pEndRange   =
-        comphelper::getUnoTunnelImplementation<SwXTextRange>(xEnd);
+    SwXTextRange* const pStartRange = comphelper::getFromUnoTunnel<SwXTextRange>(xStart);
+    SwXTextRange* const pEndRange = comphelper::getFromUnoTunnel<SwXTextRange>(xEnd);
     // bookmarks have to be removed before the referenced text node
     // is deleted in DelFullPara
     if (pStartRange)
@@ -1779,7 +1745,7 @@ SwXText::convertToTextFrame(
         const uno::Reference<text::XTextCursor> xFrameTextCursor =
             rNewFrame.createTextCursor();
         SwXTextCursor *const pFrameCursor =
-            comphelper::getUnoTunnelImplementation<SwXTextCursor>(xFrameTextCursor);
+            comphelper::getFromUnoTunnel<SwXTextCursor>(xFrameTextCursor);
         if (bParaBeforeInserted)
         {
             // todo: remove paragraph before frame
@@ -2253,22 +2219,14 @@ SwXText::copyText(
 {
     SolarMutexGuard aGuard;
 
-    uno::Reference<lang::XUnoTunnel> const xSourceTunnel(xSource,
-        uno::UNO_QUERY);
-    SwXText const*const pSource( xSourceTunnel.is()
-        ? ::sw::UnoTunnelGetImplementation<SwXText>(xSourceTunnel)
-        : nullptr);
+    SwXText const* const pSource(comphelper::getFromUnoTunnel<SwXText>(xSource));
 
     uno::Reference< text::XText > const xText(xSource, uno::UNO_QUERY_THROW);
     uno::Reference< text::XTextCursor > const xCursor =
         xText->createTextCursor();
     xCursor->gotoEnd( true );
 
-    uno::Reference< lang::XUnoTunnel > const xCursorTunnel(xCursor,
-        uno::UNO_QUERY_THROW);
-
-    OTextCursorHelper *const pCursor =
-        ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xCursorTunnel);
+    OTextCursorHelper* const pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xCursor);
     if (!pCursor)
     {
         throw uno::RuntimeException();

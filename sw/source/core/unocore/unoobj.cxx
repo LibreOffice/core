@@ -849,15 +849,15 @@ SwXTextCursor::getSupportedServiceNames()
 
 const uno::Sequence< sal_Int8 > & SwXTextCursor::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextCursorUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theSwXTextCursorUnoTunnelId;
     return theSwXTextCursorUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL
 SwXTextCursor::getSomething(const uno::Sequence< sal_Int8 >& rId)
 {
-    const sal_Int64 nRet( ::sw::UnoTunnelImpl<SwXTextCursor>(rId, this) );
-    return nRet ? nRet : OTextCursorHelper::getSomething(rId);
+    return comphelper::getSomethingImpl(rId, this,
+                                        comphelper::FallbackToGetSomethingOf<OTextCursorHelper>{});
 }
 
 void SAL_CALL SwXTextCursor::collapseToStart()
@@ -1039,15 +1039,8 @@ SwXTextCursor::gotoRange(
 
     SwUnoCursor & rOwnCursor( GetCursorOrThrow() );
 
-    uno::Reference<lang::XUnoTunnel> xRangeTunnel( xRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = nullptr;
-    OTextCursorHelper* pCursor = nullptr;
-    if(xRangeTunnel.is())
-    {
-        pRange  = ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
-        pCursor =
-            ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
-    }
+    SwXTextRange* pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRange);
+    OTextCursorHelper* pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xRange);
 
     if (!pRange && !pCursor)
     {
@@ -2858,7 +2851,7 @@ SwXTextCursor::createEnumeration()
 
     SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
-    SwXText* pParentText = comphelper::getUnoTunnelImplementation<SwXText>(m_xParentText);
+    SwXText* pParentText = comphelper::getFromUnoTunnel<SwXText>(m_xParentText);
     OSL_ENSURE(pParentText, "parent is not a SwXText");
     if (!pParentText)
     {

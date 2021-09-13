@@ -70,7 +70,7 @@ double InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals(
 {
     double fStepWidth = 0.001;
 
-    ExplicitValueProvider* pExplicitValueProvider( comphelper::getUnoTunnelImplementation<ExplicitValueProvider>(xChartView) );
+    ExplicitValueProvider* pExplicitValueProvider( comphelper::getFromUnoTunnel<ExplicitValueProvider>(xChartView) );
     if( pExplicitValueProvider )
     {
         Reference< XAxis > xAxis;

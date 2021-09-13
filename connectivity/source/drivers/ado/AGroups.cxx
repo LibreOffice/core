@@ -58,7 +58,7 @@ Reference< XPropertySet > OGroups::createDescriptor()
 // XAppend
 sdbcx::ObjectType OGroups::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    OAdoGroup* pGroup = getUnoTunnelImplementation<OAdoGroup>(descriptor);
+    OAdoGroup* pGroup = getFromUnoTunnel<OAdoGroup>(descriptor);
     if ( pGroup == nullptr )
         m_pCatalog->getConnection()->throwGenericSQLException( STR_INVALID_GROUP_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
 

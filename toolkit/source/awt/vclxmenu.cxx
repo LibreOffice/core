@@ -385,7 +385,7 @@ void VCLXMenu::setPopupMenu(
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    VCLXMenu* pVCLMenu = comphelper::getUnoTunnelImplementation<VCLXMenu>( rxPopupMenu );
+    VCLXMenu* pVCLMenu = comphelper::getFromUnoTunnel<VCLXMenu>( rxPopupMenu );
     DBG_ASSERT( pVCLMenu && pVCLMenu->GetMenu() && pVCLMenu->IsPopupMenu(), "setPopupMenu: Invalid Menu!" );
 
     if ( mpMenu && pVCLMenu && pVCLMenu->GetMenu() && pVCLMenu->IsPopupMenu() )

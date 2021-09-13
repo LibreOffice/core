@@ -43,6 +43,7 @@
 #include <vcl/toolbox.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <vcl/InterimItemWindow.hxx>
@@ -293,14 +294,7 @@ void SAL_CALL SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent 
         Reference < XDispatch > xDisp = xProvider->queryDispatch( rEvent.FeatureURL, OUString(), 0 );
         if ( xDisp.is() )
         {
-            Reference< XUnoTunnel > xTunnel( xDisp, UNO_QUERY );
-            SfxOfficeDispatch* pDisp = nullptr;
-            if ( xTunnel.is() )
-            {
-                sal_Int64 nImplementation = xTunnel->getSomething(SfxOfficeDispatch::impl_getStaticIdentifier());
-                pDisp = reinterpret_cast< SfxOfficeDispatch* >( sal::static_int_cast< sal_IntPtr >( nImplementation ));
-            }
-
+            SfxOfficeDispatch* pDisp = comphelper::getFromUnoTunnel<SfxOfficeDispatch>(xDisp);
             if ( pDisp )
                 pViewFrame = pDisp->GetDispatcher_Impl()->GetFrame();
         }

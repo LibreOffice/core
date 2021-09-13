@@ -31,6 +31,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
@@ -538,8 +539,7 @@ void SAL_CALL VBAMacroResolver::initialize( const uno::Sequence< uno::Any >& rAr
 
     // first argument: document model
     mxModel.set( rArgs[ 0 ], uno::UNO_QUERY_THROW );
-    uno::Reference< lang::XUnoTunnel > xUnoTunnel( mxModel, uno::UNO_QUERY_THROW );
-    mpObjShell = reinterpret_cast< SfxObjectShell* >( xUnoTunnel->getSomething( SfxObjectShell::getUnoTunnelId() ) );
+    mpObjShell = comphelper::getFromUnoTunnel<SfxObjectShell>(mxModel);
     if( !mpObjShell )
         throw uno::RuntimeException();
 
@@ -734,8 +734,7 @@ void applyShortCutKeyBinding ( const uno::Reference< frame::XModel >& rxModel, c
         SfxObjectShell* pShell = nullptr;
         if ( rxModel.is() )
         {
-            uno::Reference< lang::XUnoTunnel >  xObjShellTunnel( rxModel, uno::UNO_QUERY_THROW );
-            pShell = reinterpret_cast<SfxObjectShell*>( xObjShellTunnel->getSomething(SfxObjectShell::getUnoTunnelId()));
+            pShell = comphelper::getFromUnoTunnel<SfxObjectShell>(rxModel);
             if ( !pShell )
                 throw uno::RuntimeException();
         }
