@@ -2259,9 +2259,6 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, bool bKeepEndingAttribs )
     // for a new paragraph we like to have the bullet/numbering visible by default
     aContentAttribs.GetItems().Put( SfxBoolItem( EE_PARA_BULLETSTATE, true) );
 
-    if(aPaM.GetNode()->Len() == 0)
-        aPaM.GetNode()->GetContentAttribs().GetItems().Put( SfxBoolItem(EE_PARA_BULLETSTATE, false));
-
     // ContentNode constructor copies also the paragraph attributes
     ContentNode* pNode = new ContentNode( aStr, aContentAttribs );
 
@@ -2311,11 +2308,6 @@ EditPaM EditDoc::InsertFeature( EditPaM aPaM, const SfxPoolItem& rItem  )
 EditPaM EditDoc::ConnectParagraphs( ContentNode* pLeft, ContentNode* pRight )
 {
     const EditPaM aPaM( pLeft, pLeft->Len() );
-    if(pLeft->Len()==0)
-    {
-        EditPaM aCopyPaM(aPaM);
-        aCopyPaM.GetNode()->GetContentAttribs().GetItems().Put( SfxBoolItem(EE_PARA_BULLETSTATE, true));
-    }
 
     // First the attributes, otherwise nLen will not be correct!
     pLeft->AppendAttribs( pRight );

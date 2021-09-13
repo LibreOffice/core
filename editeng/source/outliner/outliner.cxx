@@ -858,8 +858,6 @@ vcl::Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
     aBulletFont.SetOrientation( Degree10(bVertical ? (IsTopToBottom() ? 2700 : 900) : 0) );
 
     Color aColor( COL_AUTO );
-    OUString sText = GetText(GetParagraph(nPara));
-
     if( !pEditEngine->IsFlatMode() && !( pEditEngine->GetControlWord() & EEControlBits::NOCOLORS ) )
     {
         aColor = pFmt->GetBulletColor();
@@ -867,12 +865,6 @@ vcl::Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
 
     if ( ( aColor == COL_AUTO ) || ( IsForceAutoColor() ) )
         aColor = pEditEngine->GetAutoColor();
-
-    if( sText.getLength()>0)
-        aColor.SetAlpha(255);
-
-    else
-        aColor.SetAlpha(95);
 
     aBulletFont.SetColor( aColor );
     return aBulletFont;
