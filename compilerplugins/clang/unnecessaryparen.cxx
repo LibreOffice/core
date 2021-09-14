@@ -83,8 +83,6 @@ public:
         // fixing this, makes the source in the .y files look horrible
         if (loplugin::isSamePathname(fn, WORKDIR "/YaccTarget/unoidl/source/sourceprovider-parser.cxx"))
             return false;
-        if (loplugin::isSamePathname(fn, WORKDIR "/YaccTarget/idlc/source/parser.cxx"))
-            return false;
         return true;
     }
     virtual void run() override

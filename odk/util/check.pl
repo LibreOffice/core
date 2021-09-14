@@ -45,12 +45,9 @@ if (-d "$SdkDir") {
     # check binaries
     print "check binaries: ";
     if (check_dir("bin")) {
-        my @binarylist = ( "idlc","cppumaker","javamaker",
+        my @binarylist = ( "cppumaker","javamaker",
                "unoidl-read", "unoidl-write",
                "unoapploader", "uno-skeletonmaker" );
-    if ($ENV{SYSTEM_UCPP} eq "") {
-        push @binarylist,"ucpp";
-    }
 
     foreach $i (@binarylist)
     {
