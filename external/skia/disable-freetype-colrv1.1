@@ -1,0 +1,22 @@
+diff -urN skia-old/src/ports/SkFontHost_FreeType_common.cpp skia/src/ports/SkFontHost_FreeType_common.cpp
+--- skia-old/src/ports/SkFontHost_FreeType_common.cpp	2021-03-01 15:53:09.178606791 +0100
++++ skia/src/ports/SkFontHost_FreeType_common.cpp	2021-09-14 21:58:59.996633457 +0200
+@@ -372,6 +372,7 @@
+ // Only build COLRv1 rendering code if FreeType is new enough to have COLRv1
+ // additions. FreeType defines a macro in the ftoption header to tell us whether
+ // it does support these features.
++#undef TT_SUPPORT_COLRV1 // Unstable API.
+ #ifdef TT_SUPPORT_COLRV1
+ 
+ bool generateFacePathCOLRv1(FT_Face face, SkGlyphID glyphID, SkPath* path);
+diff -urN skia-old/src/ports/SkFontHost_FreeType.cpp skia/src/ports/SkFontHost_FreeType.cpp
+--- skia-old/src/ports/SkFontHost_FreeType.cpp	2021-03-01 15:53:09.178606791 +0100
++++ skia/src/ports/SkFontHost_FreeType.cpp	2021-09-14 21:59:08.916715446 +0200
+@@ -1299,6 +1299,7 @@
+         FT_UInt layerGlyphIndex;
+         FT_UInt layerColorIndex;
+ 
++#undef TT_SUPPORT_COLRV1 // Unstable API.
+ #ifdef TT_SUPPORT_COLRV1
+         FT_OpaquePaint opaqueLayerPaint;
+         opaqueLayerPaint.p = nullptr;
