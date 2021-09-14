@@ -463,9 +463,6 @@ void UseUniquePtr::CheckDeleteLocalVar(const FunctionDecl* functionDecl, const C
     // complicated
     if (fn == SRCDIR "/svx/source/sdr/contact/objectcontact.cxx")
         return;
-    // memory management in this module is a mess
-    if (fn == SRCDIR "/idlc/source/aststack.cxx")
-        return;
     // complicated
     if (fn == SRCDIR "/cui/source/customize/cfg.cxx")
         return;
@@ -728,9 +725,6 @@ void UseUniquePtr::CheckLoopDelete(const FunctionDecl* functionDecl, const CXXDe
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/qa/"))
             return;
         // linked list
-        if (fn == SRCDIR "/registry/source/reflwrit.cxx")
-            return;
-        // linked list
         if (fn == SRCDIR "/tools/source/generic/config.cxx")
             return;
         // linked lists
@@ -848,9 +842,6 @@ void UseUniquePtr::CheckCXXForRangeStmt(const FunctionDecl* functionDecl, const 
         if (!fieldDecl)
             return;
 
-        // appears to just randomly leak stuff, and it involves some lex/yacc stuff
-        if (fn == SRCDIR "/idlc/source/aststack.cxx")
-            return;
         // complicated
         if (fn == SRCDIR "/vcl/source/gdi/print.cxx")
             return;
@@ -1092,9 +1083,6 @@ bool UseUniquePtr::TraverseConstructorInitializer(CXXCtorInitializer * ctorInit)
         return true;
 
     StringRef fn = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(ctorInit->getSourceLocation()));
-    // don't feel like fiddling with the yacc parser
-    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/idlc/"))
-        return true;
     // cannot change URE
     if (loplugin::hasPathnamePrefix(fn, SRCDIR "/cppu/source/helper/purpenv/helper_purpenv_Environment.cxx"))
         return true;

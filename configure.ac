@@ -2214,11 +2214,6 @@ AC_ARG_WITH(system-libxml,
         [Use libxml/libxslt already on system.]),,
     [with_system_libxml=auto])
 
-AC_ARG_WITH(system-ucpp,
-    AS_HELP_STRING([--with-system-ucpp],
-        [Use ucpp already on system.]),,
-    [])
-
 AC_ARG_WITH(system-openldap,
     AS_HELP_STRING([--with-system-openldap],
         [Use the OpenLDAP LDAP SDK already on system.]),,
@@ -2736,11 +2731,6 @@ AC_ARG_WITH(compat-oowrappers,
 AC_ARG_WITH(os-version,
     AS_HELP_STRING([--with-os-version=<OSVERSION>],
         [For FreeBSD users, use this option to override the detected OSVERSION.]),
-,)
-
-AC_ARG_WITH(idlc-cpp,
-    AS_HELP_STRING([--with-idlc-cpp=<cpp/ucpp>],
-        [Specify the C Preprocessor to use for idlc. Default is ucpp.]),
 ,)
 
 AC_ARG_WITH(parallelism,
@@ -9056,40 +9046,6 @@ if test "$with_bffvalidator" != "no"; then
 else
     AC_MSG_RESULT([no])
 fi
-
-dnl ===================================================================
-dnl Check for C preprocessor to use
-dnl ===================================================================
-AC_MSG_CHECKING([which C preprocessor to use in idlc])
-SYSTEM_UCPP_IS_GCC=
-if test -n "$with_idlc_cpp"; then
-    AC_MSG_RESULT([$with_idlc_cpp])
-    AC_PATH_PROG(SYSTEM_UCPP, $with_idlc_cpp)
-    AC_MSG_CHECKING([if $with_idlc_cpp is GCC CPP])
-    # ucpp will accept -v (to output version), warn about the others as unknown
-    # and return 1 (due to -v)
-    # gcc will accept -v (as verbose), --version (to output version) and -nostdinc
-    # and return 0 (due to --version ) if all options are supported
-    $SYSTEM_UCPP -v --version -nostdinc >/dev/null 2>/dev/null
-    if test $? -eq 0;  then
-        SYSTEM_UCPP_IS_GCC=TRUE
-        AC_MSG_RESULT([yes])
-    else
-        AC_MSG_RESULT([no])
-    fi
-else
-    AC_MSG_RESULT([ucpp])
-    AC_MSG_CHECKING([which ucpp to use])
-    if test -n "$with_system_ucpp" -a "$with_system_ucpp" != "no"; then
-        AC_MSG_RESULT([external])
-        AC_PATH_PROG(SYSTEM_UCPP, ucpp)
-    else
-        AC_MSG_RESULT([internal])
-        BUILD_TYPE="$BUILD_TYPE UCPP"
-    fi
-fi
-AC_SUBST(SYSTEM_UCPP)
-AC_SUBST(SYSTEM_UCPP_IS_GCC)
 
 dnl ===================================================================
 dnl Check for epm (not needed for Windows)

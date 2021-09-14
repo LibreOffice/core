@@ -3929,12 +3929,6 @@ endef
 
 endif
 
-define gb_Executable__register_idlc
-$(call gb_Executable_add_runtime_dependencies,idlc,\
-	$(call gb_ExternalExecutable_get_dependencies,ucpp) \
-)
-endef
-
 define gb_Executable__register_localize
 $(call gb_Executable_add_runtime_dependencies,localize,\
 	$(foreach exec,cfgex helpex propex treex ulfex xrmex,\
@@ -4004,19 +3998,6 @@ $(call gb_ExternalExecutable_add_dependencies,xsltproc,\
 endef
 
 endif # SYSTEM_LIBXSLT_FOR_BUILD
-
-ifneq (,$(SYSTEM_UCPP))
-
-gb_ExternalExecutable__register_ucpp :=
-
-else # ! SYSTEM_UCPP
-
-define gb_ExternalExecutable__register_ucpp
-$(call gb_ExternalExecutable_set_internal,ucpp,$(INSTDIR_FOR_BUILD)/$(SDKDIRNAME)/bin/ucpp$(gb_Executable_EXT_for_build))
-
-endef
-
-endif # SYSTEM_UCPP
 
 ifeq (,$(PYTHON_FOR_BUILD))
 
