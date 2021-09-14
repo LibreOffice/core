@@ -747,6 +747,13 @@ void SwLineLayout::MaxAscentDescent( SwTwips& _orAscent,
     }
 }
 
+void SwLineLayout::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwLineLayout"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 void SwLineLayout::ResetFlags()
 {
     m_bFormatAdj = m_bDummy = m_bEndHyph = m_bMidHyph = m_bFly
@@ -2509,6 +2516,13 @@ void SwParaPortion::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwParaPortion"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+
+    SwLineLayout::dumpAsXml(pWriter);
+    for (const SwLineLayout* pLine = GetNext(); pLine; pLine = pLine->GetNext())
+    {
+        pLine->dumpAsXml(pWriter);
+    }
+
     (void)xmlTextWriterEndElement(pWriter);
 }
 
