@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc885bc5_b1d0820b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-09-14T12:57:07Z",
+      "side": 1,
+      "message": "LGTM; could be improved with a label, eg. \"Range\" above \"From\" to make clear that this checkbox is not one of the options. But nice improvement anyway.",
+      "revId": "5a735b46cbccc6f654cb01c8345b027b05a62109",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
