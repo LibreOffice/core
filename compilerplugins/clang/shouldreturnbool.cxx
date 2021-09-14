@@ -47,9 +47,6 @@ public:
         // false +, slightly odd usage, but not wrong
         if (loplugin::isSamePathname(fn, SRCDIR "/libreofficekit/qa/tilebench/tilebench.cxx"))
             return;
-        // uses the Unix convention of "non-zero return indicates error"
-        if (loplugin::isSamePathname(fn, SRCDIR "/idlc/source/idlcproduce.cxx"))
-            return;
         // template magic
         if (loplugin::isSamePathname(fn, SRCDIR "/vcl/source/gdi/bmpfast.cxx"))
             return;

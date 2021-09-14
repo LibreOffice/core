@@ -88,11 +88,9 @@ SDK_SED="$(OO_SDK_SED_HOME)/sed"
 else
 SDK_SED=sed
 endif
-IDLC="$(OO_SDK_HOME)/bin/idlc"
 UNOIDLWRITE="$(OO_SDK_HOME)/bin/unoidl-write"
 CPPUMAKER="$(OO_SDK_HOME)/bin/cppumaker"
 JAVAMAKER="$(OO_SDK_HOME)/bin/javamaker"
-REGMERGE="$(OO_SDK_URE_BIN_DIR)/regmerge"
 
 SDK_JAVA_UNO_BOOTSTRAP_FILES=\
     -C $(CLASSES_DIR) $(SQM)com/sun/star/lib/loader/$(SQM)
