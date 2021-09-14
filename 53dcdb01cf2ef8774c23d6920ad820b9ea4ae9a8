@@ -16,6 +16,24 @@
       "message": "Sorry I took so long to look at this, lots of other stuff going on.\n\nSo..... given that we are having to fire up the UNO_QUERY machinery for each call, is this any faster than just using dynamic_cast ?\n\nNot that dynamic_cast is wonderfully faster, but I\u0027d be surprised if it was any slower than UNO_QUERY, and it\u0027s less boilerplate.\n\n",
       "revId": "53dcdb01cf2ef8774c23d6920ad820b9ea4ae9a8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6897b514_95621a85",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-14T17:30:13Z",
+      "side": 1,
+      "message": "Heh, it would not be faster, indeed.\n\nIt is just different - quite often, unfortunately. Sometimes the call ends up giving a totally different object... See e.g. https://gerrit.libreoffice.org/c/core/+/121890\n\nNo idea if it would be reasonable to check and replace those calls that are expected (?) to provide exactly the same object.",
+      "parentUuid": "b4f8e2b7_aea40e94",
+      "revId": "53dcdb01cf2ef8774c23d6920ad820b9ea4ae9a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
