@@ -193,6 +193,18 @@ struct MSFILTER_DLLPUBLIC PptDocumentAtom
 
 public:
 
+    PptDocumentAtom()
+        : nNotesMasterPersist(0)
+        , nHandoutMasterPersist(0)
+        , n1stPageNumber(0)
+        , eSlidesPageFormat(PPTPF_SCREEN)
+        , bEmbeddedTrueType(false)
+        , bTitlePlaceholdersOmitted(false)
+        , bRightToLeft(false)
+        , bShowComments(false)
+    {
+    }
+
     Size const & GetSlidesPageSize() const { return aSlidesPageSize; }
     Size const & GetNotesPageSize() const { return aNotesPageSize; }
 

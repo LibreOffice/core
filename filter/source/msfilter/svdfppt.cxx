@@ -264,9 +264,9 @@ SvStream& ReadPptDocumentAtom(SvStream& rIn, PptDocumentAtom& rAtom)
 //  39 bShowComments     1
 
     DffRecordHeader aHd;
-    sal_Int32   nSlideX,nSlideY, nNoticeX, nNoticeY, nDummy;
-    sal_uInt16  nSlidePageFormat;
-    sal_Int8    nEmbeddedTrueType, nTitlePlaceHoldersOmitted, nRightToLeft, nShowComments;
+    sal_Int32 nSlideX(0), nSlideY(0), nNoticeX(0), nNoticeY(0), nDummy;
+    sal_uInt16 nSlidePageFormat(0);
+    sal_Int8 nEmbeddedTrueType(0), nTitlePlaceHoldersOmitted(0), nRightToLeft(0), nShowComments(0);
 
     ReadDffRecordHeader( rIn, aHd );
     rIn
