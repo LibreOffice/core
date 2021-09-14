@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "988476df_1f2f6f55",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-14T12:29:56Z",
+      "side": 1,
+      "message": "Sorry to nitpick on a successfully completed easy hack submission (which is great!), but one thing I would like to mention:\n\nWe do not generally bother to fill the exceptions\u0027 Context member.  It has proven much less valuable than the Message member, so filling it with something like\n\n  static_cast\u003c cppu::OWeakObject * \u003e(this)\n\nis considered more trouble than it\u0027s worth in most cases.",
+      "revId": "5f4a84ce5b775eb017bd784db95857684b7e90ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
