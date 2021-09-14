@@ -1049,10 +1049,11 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, to
             nWordLength = nWordLength < 1024 ? 1024 : nWordLength;
             ScopedVclPtrInstance< VirtualDevice > pVirtDev( *this, DeviceFormat::DEFAULT,
                                                            DeviceFormat::DEFAULT );
-            pVirtDev->SetAntialiasing( AntialiasingFlags::Enable );
             pVirtDev->SetOutputSizePixel( Size( nWordLength, nWaveHeight * 2 ), false );
             pVirtDev->SetLineColor( GetLineColor() );
             pVirtDev->SetBackground( Wallpaper( COL_TRANSPARENT ) );
+            pVirtDev->Erase();
+            pVirtDev->SetAntialiasing( AntialiasingFlags::Enable );
             pVirtDev->ImplDrawWaveLineBezier( 0, 0, nWordLength, 0, nWaveHeight, fOrientation, nLineWidth );
             rLineCache.insert( pVirtDev->GetBitmapEx( Point( 0, 0 ), pVirtDev->GetOutputSize() ), GetLineColor(), nLineWidth, nWaveHeight, nWordLength, aWavylinebmp );
         }
@@ -1065,9 +1066,6 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, to
     }
 
     ImplDrawWaveLineBezier( nStartX, nStartY, nEndX, nEndY, nWaveHeight, fOrientation, nLineWidth );
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawWaveLine( rStartPos, rEndPos, nLineWidth );
 }
 
 void OutputDevice::ImplDrawWaveLineBezier(tools::Long nStartX, tools::Long nStartY, tools::Long nEndX, tools::Long nEndY, tools::Long nWaveHeight, double fOrientation, tools::Long nLineWidth)
@@ -1089,6 +1087,9 @@ void OutputDevice::ImplDrawWaveLineBezier(tools::Long nStartX, tools::Long nStar
             basegfx::deg2rad(15.0),
             bPixelSnapHairline,
             *this);
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->ImplDrawWaveLineBezier(nStartX, nStartY, nEndX, nEndY, nWaveHeight, fOrientation, nLineWidth);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
