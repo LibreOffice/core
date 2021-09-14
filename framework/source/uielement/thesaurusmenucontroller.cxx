@@ -81,7 +81,7 @@ void ThesaurusMenuController::fillPopupMenu()
     css::lang::Locale aLocale = LanguageTag::convertToLocale( aIsoLang );
     getMeanings( aSynonyms, aText, aLocale, 7 /*max number of synonyms to retrieve*/ );
 
-    VCLXMenu* pAwtMenu = comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu );
+    VCLXMenu* pAwtMenu = comphelper::getFromUnoTunnel<VCLXMenu>( m_xPopupMenu );
     Menu* pVCLMenu = pAwtMenu->GetMenu();
     pVCLMenu->SetMenuFlags( MenuFlags::NoAutoMnemonics );
     if ( aSynonyms.empty() )

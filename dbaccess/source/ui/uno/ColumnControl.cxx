@@ -69,7 +69,7 @@ void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit
     vcl::Window* pParentWin = nullptr;
     if (rParentPeer.is())
     {
-        VCLXWindow* pParent = comphelper::getUnoTunnelImplementation<VCLXWindow>(rParentPeer);
+        VCLXWindow* pParent = comphelper::getFromUnoTunnel<VCLXWindow>(rParentPeer);
         if (pParent)
             pParentWin = pParent->GetWindow();
     }

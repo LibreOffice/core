@@ -1595,7 +1595,7 @@ void SwChartDataProvider::AddRowCols(
             const sal_Int32 nLen = xRef->getTextualData().getLength();
             if (nLen > 1) // value data-sequence ?
             {
-                auto pDataSeq = comphelper::getUnoTunnelImplementation<SwChartDataSequence>(xRef);
+                auto pDataSeq = comphelper::getFromUnoTunnel<SwChartDataSequence>(xRef);
                 if (pDataSeq)
                 {
                     SwRangeDescriptor aDesc;
@@ -1874,13 +1874,13 @@ SwChartDataSequence::~SwChartDataSequence()
 
 const uno::Sequence< sal_Int8 > & SwChartDataSequence::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwChartDataSequenceUnoTunnelId;
+    static const comphelper::UnoIdInit theSwChartDataSequenceUnoTunnelId;
     return theSwChartDataSequenceUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwChartDataSequence::getSomething( const uno::Sequence< sal_Int8 > &rId )
 {
-    if( isUnoTunnelId<SwChartDataSequence>(rId) )
+    if( comphelper::isUnoTunnelId<SwChartDataSequence>(rId) )
     {
         return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
     }

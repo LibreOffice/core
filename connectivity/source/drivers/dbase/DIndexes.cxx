@@ -107,7 +107,7 @@ sdbcx::ObjectType ODbaseIndexes::appendObject( const OUString& _rForName, const 
 // XDrop
 void ODbaseIndexes::dropObject(sal_Int32 _nPos, const OUString& /*_sElementName*/)
 {
-    auto pIndex = comphelper::getUnoTunnelImplementation<ODbaseIndex>(getObject(_nPos));
+    auto pIndex = comphelper::getFromUnoTunnel<ODbaseIndex>(getObject(_nPos));
     if ( pIndex )
         pIndex->DropImpl();
 }

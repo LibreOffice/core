@@ -135,7 +135,7 @@ uno::Reference<text::XText> SAL_CALL ScHeaderFooterContentObj::getRightText()
 sal_Int64 SAL_CALL ScHeaderFooterContentObj::getSomething(
                 const uno::Sequence<sal_Int8 >& rId )
 {
-    if ( isUnoTunnelId<ScHeaderFooterContentObj>(rId) )
+    if ( comphelper::isUnoTunnelId<ScHeaderFooterContentObj>(rId) )
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }
@@ -144,14 +144,14 @@ sal_Int64 SAL_CALL ScHeaderFooterContentObj::getSomething(
 
 const uno::Sequence<sal_Int8>& ScHeaderFooterContentObj::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theScHeaderFooterContentObjUnoTunnelId;
+    static const comphelper::UnoIdInit theScHeaderFooterContentObjUnoTunnelId;
     return theScHeaderFooterContentObjUnoTunnelId.getSeq();
 }
 
 rtl::Reference<ScHeaderFooterContentObj> ScHeaderFooterContentObj::getImplementation(
                                 const uno::Reference<sheet::XHeaderFooterContent>& rObj)
 {
-    return comphelper::getUnoTunnelImplementation<ScHeaderFooterContentObj>(rObj);
+    return comphelper::getFromUnoTunnel<ScHeaderFooterContentObj>(rObj);
 }
 
 void ScHeaderFooterContentObj::Init( const EditTextObject* pLeft,
@@ -379,10 +379,10 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
     SolarMutexGuard aGuard;
     if ( xContent.is() && xRange.is() )
     {
-        ScEditFieldObj* pHeaderField = comphelper::getUnoTunnelImplementation<ScEditFieldObj>( xContent );
+        ScEditFieldObj* pHeaderField = comphelper::getFromUnoTunnel<ScEditFieldObj>( xContent );
 
         SvxUnoTextRangeBase* pTextRange =
-            comphelper::getUnoTunnelImplementation<ScHeaderFooterTextCursor>( xRange );
+            comphelper::getFromUnoTunnel<ScHeaderFooterTextCursor>( xRange );
 
         if ( pHeaderField && !pHeaderField->IsInserted() && pTextRange )
         {
@@ -446,7 +446,7 @@ void SAL_CALL ScHeaderFooterTextObj::removeTextContent(
     SolarMutexGuard aGuard;
     if ( xContent.is() )
     {
-        ScEditFieldObj* pHeaderField = comphelper::getUnoTunnelImplementation<ScEditFieldObj>(xContent);
+        ScEditFieldObj* pHeaderField = comphelper::getFromUnoTunnel<ScEditFieldObj>(xContent);
         if ( pHeaderField && pHeaderField->IsInserted() )
         {
             //! check if the field is in this cell

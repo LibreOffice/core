@@ -304,13 +304,13 @@ uno::Any SAL_CALL SvxShape::queryAggregation( const uno::Type& rType )
 
 const css::uno::Sequence< sal_Int8 > & SvxShape::getUnoTunnelId() noexcept
 {
-    static const UnoTunnelIdInit theSvxShapeUnoTunnelId;
+    static const comphelper::UnoIdInit theSvxShapeUnoTunnelId;
     return theSvxShapeUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SvxShape::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SvxShape>(rId) )
+    if( comphelper::isUnoTunnelId<SvxShape>(rId) )
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
     }
@@ -4015,7 +4015,7 @@ uno::Reference< drawing::XShape > GetXShapeForSdrObject( SdrObject* pObj ) noexc
 
 SdrObject* SdrObject::getSdrObjectFromXShape( const css::uno::Reference< css::uno::XInterface >& xInt )
 {
-    SvxShape* pSvxShape = comphelper::getUnoTunnelImplementation<SvxShape>( xInt );
+    SvxShape* pSvxShape = comphelper::getFromUnoTunnel<SvxShape>( xInt );
     return pSvxShape ? pSvxShape->GetSdrObject() : nullptr;
 }
 

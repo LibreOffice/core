@@ -108,7 +108,7 @@ sal_Int32 getColumnTypeByModelName(const OUString& aModelName)
 
 const Sequence<sal_Int8>& OGridColumn::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theOGridColumnImplementationId;
+    static const comphelper::UnoIdInit theOGridColumnImplementationId;
     return theOGridColumnImplementationId.getSeq();
 }
 
@@ -117,7 +117,7 @@ sal_Int64 SAL_CALL OGridColumn::getSomething( const Sequence<sal_Int8>& _rIdenti
 {
     sal_Int64 nReturn(0);
 
-    if ( isUnoTunnelId<OGridColumn>(_rIdentifier) )
+    if ( comphelper::isUnoTunnelId<OGridColumn>(_rIdentifier) )
     {
         nReturn = reinterpret_cast<sal_Int64>(this);
     }

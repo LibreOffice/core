@@ -712,7 +712,7 @@ sal_Int64 SAL_CALL SdTransferable::getSomething( const css::uno::Sequence< sal_I
 {
     sal_Int64 nRet;
 
-    if( isUnoTunnelId<SdTransferable>(rId) )
+    if( comphelper::isUnoTunnelId<SdTransferable>(rId) )
     {
         nRet = sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }
@@ -744,7 +744,7 @@ std::shared_ptr<SdTransferable::UserData> SdTransferable::GetUserData (const sal
 
 const css::uno::Sequence< sal_Int8 >& SdTransferable::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSdTransferableUnoTunnelId;
+    static const comphelper::UnoIdInit theSdTransferableUnoTunnelId;
     return theSdTransferableUnoTunnelId.getSeq();
 }
 

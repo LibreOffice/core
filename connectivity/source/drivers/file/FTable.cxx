@@ -130,7 +130,7 @@ Sequence< sal_Int8 > OFileTable::getUnoTunnelId()
 
 sal_Int64 OFileTable::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return isUnoTunnelId<OFileTable>(rId)
+    return comphelper::isUnoTunnelId<OFileTable>(rId)
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OTable_TYPEDEF::getSomething(rId);
 }

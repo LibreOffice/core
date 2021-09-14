@@ -213,7 +213,7 @@ sal_Bool SAL_CALL ViewShellWrapper::relocateToAnchor (
 
 const Sequence<sal_Int8>& ViewShellWrapper::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theViewShellWrapperUnoTunnelId;
+    static const comphelper::UnoIdInit theViewShellWrapperUnoTunnelId;
     return theViewShellWrapperUnoTunnelId.getSeq();
 }
 
@@ -221,7 +221,7 @@ sal_Int64 SAL_CALL ViewShellWrapper::getSomething (const Sequence<sal_Int8>& rId
 {
     sal_Int64 nResult = 0;
 
-    if (isUnoTunnelId<ViewShellWrapper>(rId))
+    if (comphelper::isUnoTunnelId<ViewShellWrapper>(rId))
     {
         nResult = reinterpret_cast<sal_Int64>(this);
     }

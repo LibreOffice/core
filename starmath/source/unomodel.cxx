@@ -357,13 +357,13 @@ uno::Sequence< uno::Type > SAL_CALL SmModel::getTypes(  )
 
 const uno::Sequence< sal_Int8 > & SmModel::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSmModelUnoTunnelId;
+    static const comphelper::UnoIdInit theSmModelUnoTunnelId;
     return theSmModelUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SmModel::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SmModel>(rId) )
+    if( comphelper::isUnoTunnelId<SmModel>(rId) )
     {
         return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_uIntPtr >(this));
     }
@@ -988,7 +988,7 @@ void SAL_CALL SmModel::render(
     if (!xRenderDevice.is())
         return;
 
-    VCLXDevice*   pDevice = comphelper::getUnoTunnelImplementation<VCLXDevice>( xRenderDevice );
+    VCLXDevice*   pDevice = comphelper::getFromUnoTunnel<VCLXDevice>( xRenderDevice );
     VclPtr< OutputDevice> pOut = pDevice ? pDevice->GetOutputDevice()
                                          : VclPtr< OutputDevice >();
     if (!pOut)

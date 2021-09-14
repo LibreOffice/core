@@ -43,7 +43,7 @@ uno::Sequence< sal_Int8 > XMLElementWrapper_XmlSecImpl::getUnoTunnelId()
 
 sal_Int64 SAL_CALL XMLElementWrapper_XmlSecImpl::getSomething( const uno::Sequence< sal_Int8 >& aIdentifier )
 {
-    if (isUnoTunnelId<XMLElementWrapper_XmlSecImpl>(aIdentifier))
+    if (comphelper::isUnoTunnelId<XMLElementWrapper_XmlSecImpl>(aIdentifier))
     {
         return reinterpret_cast < sal_Int64 > ( this );
     }

@@ -338,16 +338,16 @@ void SAL_CALL SdXImpressDocument::release() noexcept
 // XUnoTunnel
 const css::uno::Sequence< sal_Int8 > & SdXImpressDocument::getUnoTunnelId() noexcept
 {
-    static const UnoTunnelIdInit theSdXImpressDocumentUnoTunnelId;
+    static const comphelper::UnoIdInit theSdXImpressDocumentUnoTunnelId;
     return theSdXImpressDocumentUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SdXImpressDocument::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
 {
-    if( isUnoTunnelId<SdXImpressDocument>(rIdentifier) )
+    if( comphelper::isUnoTunnelId<SdXImpressDocument>(rIdentifier) )
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
 
-    if( isUnoTunnelId<SdrModel>(rIdentifier) )
+    if( comphelper::isUnoTunnelId<SdrModel>(rIdentifier) )
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(mpDoc));
 
     return SfxBaseModel::getSomething( rIdentifier );
@@ -665,7 +665,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdXImpressDocument::duplicate( con
         throw lang::DisposedException();
 
     // get pPage from xPage and determine the Id (nPos ) afterwards
-    SvxDrawPage* pSvxPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( xPage );
+    SvxDrawPage* pSvxPage = comphelper::getFromUnoTunnel<SvxDrawPage>( xPage );
     if( pSvxPage )
     {
         SdPage* pPage = static_cast<SdPage*>( pSvxPage->GetSdrPage() );
@@ -1052,7 +1052,7 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
     }
 
     uno::Reference< drawing::XShape > xShape( xRet, uno::UNO_QUERY );
-    SvxShape* pShape = xShape.is() ? comphelper::getUnoTunnelImplementation<SvxShape>(xShape) : nullptr;
+    SvxShape* pShape = xShape.is() ? comphelper::getFromUnoTunnel<SvxShape>(xShape) : nullptr;
     if (pShape)
     {
         xRet.clear();
@@ -1872,7 +1872,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
     if( !(xRenderDevice.is() && nPageNumber && ( nPageNumber <= mpDoc->GetSdPageCount( ePageKind ) )) )
         return;
 
-    VCLXDevice* pDevice = comphelper::getUnoTunnelImplementation<VCLXDevice>( xRenderDevice );
+    VCLXDevice* pDevice = comphelper::getFromUnoTunnel<VCLXDevice>( xRenderDevice );
     VclPtr< OutputDevice> pOut = pDevice ? pDevice->GetOutputDevice() : VclPtr< OutputDevice >();
 
     if( !pOut )
@@ -2971,7 +2971,7 @@ void SAL_CALL SdDrawPagesAccess::remove( const uno::Reference< drawing::XDrawPag
     if( nPageCount > 1 )
     {
         // get pPage from xPage and determine the Id (nPos ) afterwards
-        SdDrawPage* pSvxPage = comphelper::getUnoTunnelImplementation<SdDrawPage>( xPage );
+        SdDrawPage* pSvxPage = comphelper::getFromUnoTunnel<SdDrawPage>( xPage );
         if( pSvxPage )
         {
             SdPage* pPage = static_cast<SdPage*>(pSvxPage->GetSdrPage());
@@ -3211,7 +3211,7 @@ void SAL_CALL SdMasterPagesAccess::remove( const uno::Reference< drawing::XDrawP
     if( nullptr == mpModel || mpModel->mpDoc == nullptr )
         throw lang::DisposedException();
 
-    SdMasterPage* pSdPage = comphelper::getUnoTunnelImplementation<SdMasterPage>( xPage );
+    SdMasterPage* pSdPage = comphelper::getFromUnoTunnel<SdMasterPage>( xPage );
     if(pSdPage == nullptr)
         return;
 

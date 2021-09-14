@@ -132,7 +132,7 @@ OSectionUndo::~OSectionUndo()
         rEnv.RemoveElement(xShape);
 
 #if OSL_DEBUG_LEVEL > 0
-        SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
+        SvxShape* pShape = comphelper::getFromUnoTunnel<SvxShape>( xShape );
         SdrObject* pObject = pShape ? pShape->GetSdrObject() : nullptr;
         OSL_ENSURE( pShape && pShape->HasSdrObjectOwnership() && pObject && !pObject->IsInserted(),
             "OSectionUndo::~OSectionUndo: inconsistency in the shape/object ownership!" );

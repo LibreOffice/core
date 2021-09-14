@@ -408,7 +408,7 @@ ScVbaWorkbook::getCodeName()
 sal_Int64
 ScVbaWorkbook::getSomething(const uno::Sequence<sal_Int8 >& rId )
 {
-    if (isUnoTunnelId<ScVbaWorksheet>(rId))
+    if (comphelper::isUnoTunnelId<ScVbaWorksheet>(rId))
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }

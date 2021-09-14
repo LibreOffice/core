@@ -519,7 +519,7 @@ sal_Int64 SAL_CALL TransferableHelper::getSomething( const Sequence< sal_Int8 >&
 {
     sal_Int64 nRet;
 
-    if( isUnoTunnelId<TransferableHelper>(rId) )
+    if( comphelper::isUnoTunnelId<TransferableHelper>(rId) )
     {
         nRet = sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }
@@ -1042,7 +1042,7 @@ void TransferableHelper::ClearPrimarySelection()
 
 const Sequence< sal_Int8 >& TransferableHelper::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theTransferableHelperUnoTunnelId;
+    static const comphelper::UnoIdInit theTransferableHelperUnoTunnelId;
     return theTransferableHelperUnoTunnelId.getSeq();
 }
 

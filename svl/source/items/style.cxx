@@ -887,7 +887,7 @@ SfxUnoStyleSheet* SfxUnoStyleSheet::getUnoStyleSheet( const css::uno::Reference<
 {
     SfxUnoStyleSheet* pRet = dynamic_cast< SfxUnoStyleSheet* >( xStyle.get() );
     if( !pRet )
-        pRet = comphelper::getUnoTunnelImplementation<SfxUnoStyleSheet>(xStyle);
+        pRet = comphelper::getFromUnoTunnel<SfxUnoStyleSheet>(xStyle);
     return pRet;
 }
 
@@ -896,7 +896,7 @@ SfxUnoStyleSheet* SfxUnoStyleSheet::getUnoStyleSheet( const css::uno::Reference<
  */
 ::sal_Int64 SAL_CALL SfxUnoStyleSheet::getSomething( const css::uno::Sequence< ::sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SfxUnoStyleSheet>(rId) )
+    if( comphelper::isUnoTunnelId<SfxUnoStyleSheet>(rId) )
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
     }
@@ -912,7 +912,7 @@ SfxStyleSheetBasePool::StoreStyleSheet(const rtl::Reference< SfxStyleSheetBase >
 
 const css::uno::Sequence< ::sal_Int8 >& SfxUnoStyleSheet::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSfxUnoStyleSheetIdentifier;
+    static const comphelper::UnoIdInit theSfxUnoStyleSheetIdentifier;
     return theSfxUnoStyleSheetIdentifier.getSeq();
 }
 

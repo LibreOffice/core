@@ -423,13 +423,13 @@ css::uno::Any UnoControlModel::queryAggregation( const css::uno::Type & rType )
 
 const css::uno::Sequence< sal_Int8 >& UnoControlModel::getUnoTunnelId() noexcept
 {
-    static const UnoTunnelIdInit theUnoControlModelUnoTunnelId;
+    static const comphelper::UnoIdInit theUnoControlModelUnoTunnelId;
     return theUnoControlModelUnoTunnelId.getSeq();
 }
 
 sal_Int64 UnoControlModel::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
 {
-    if( isUnoTunnelId<UnoControlModel>(rIdentifier) )
+    if( comphelper::isUnoTunnelId<UnoControlModel>(rIdentifier) )
         return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(this));
 
     return 0;

@@ -1310,7 +1310,7 @@ void DbFormattedField::Init( BrowserDataWin& rParent, const Reference< XRowSet >
     SvNumberFormatter* pFormatterUsed = nullptr;
     if (m_xSupplier.is())
     {
-        SvNumberFormatsSupplierObj* pImplementation = comphelper::getUnoTunnelImplementation<SvNumberFormatsSupplierObj>(m_xSupplier);
+        SvNumberFormatsSupplierObj* pImplementation = comphelper::getFromUnoTunnel<SvNumberFormatsSupplierObj>(m_xSupplier);
         if (pImplementation)
             pFormatterUsed = pImplementation->GetNumberFormatter();
         else
@@ -1898,7 +1898,7 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
     SvNumberFormatter* pFormatterUsed = nullptr;
     if ( xSupplier.is() )
     {
-        SvNumberFormatsSupplierObj* pImplementation = comphelper::getUnoTunnelImplementation<SvNumberFormatsSupplierObj>( xSupplier );
+        SvNumberFormatsSupplierObj* pImplementation = comphelper::getFromUnoTunnel<SvNumberFormatsSupplierObj>( xSupplier );
         pFormatterUsed = pImplementation ? pImplementation->GetNumberFormatter() : nullptr;
     }
     if ( nullptr == pFormatterUsed )
@@ -4407,7 +4407,7 @@ sal_Int64 SAL_CALL FmXFilterCell::getSomething( const Sequence< sal_Int8 >& _rId
 {
     sal_Int64 nReturn(0);
 
-    if  ( isUnoTunnelId<FmXFilterCell>(_rIdentifier) )
+    if  ( comphelper::isUnoTunnelId<FmXFilterCell>(_rIdentifier) )
     {
         nReturn = reinterpret_cast<sal_Int64>(this);
     }
@@ -4417,7 +4417,7 @@ sal_Int64 SAL_CALL FmXFilterCell::getSomething( const Sequence< sal_Int8 >& _rId
 
 const Sequence<sal_Int8>& FmXFilterCell::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theFmXFilterCellUnoTunnelId;
+    static const comphelper::UnoIdInit theFmXFilterCellUnoTunnelId;
     return theFmXFilterCellUnoTunnelId.getSeq();
 }
 

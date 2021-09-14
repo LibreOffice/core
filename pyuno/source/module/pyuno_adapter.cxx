@@ -75,7 +75,7 @@ Sequence<sal_Int8> Adapter::getUnoTunnelId()
 
 sal_Int64 Adapter::getSomething( const Sequence< sal_Int8 > &id)
 {
-    if (isUnoTunnelId<Adapter>(id))
+    if (comphelper::isUnoTunnelId<Adapter>(id))
         return reinterpret_cast<sal_Int64>(this);
     return 0;
 }

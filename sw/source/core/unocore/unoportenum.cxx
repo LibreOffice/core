@@ -280,14 +280,14 @@ namespace
 
 const uno::Sequence< sal_Int8 > & SwXTextPortionEnumeration::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextPortionEnumerationUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXTextPortionEnumerationUnoTunnelId;
     return theSwXTextPortionEnumerationUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXTextPortionEnumeration::getSomething(
         const uno::Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SwXTextPortionEnumeration>(rId) )
+    if( comphelper::isUnoTunnelId<SwXTextPortionEnumeration>(rId) )
     {
         return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ) );
     }

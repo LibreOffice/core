@@ -774,13 +774,13 @@ uno::Reference< container::XEnumeration >  SwXTextPortion::createContentEnumerat
 
 const uno::Sequence< sal_Int8 > & SwXTextPortion::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextPortionUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXTextPortionUnoTunnelId;
     return theSwXTextPortionUnoTunnelId.getSeq();
 }
 
 sal_Int64 SwXTextPortion::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SwXTextPortion>(rId) )
+    if( comphelper::isUnoTunnelId<SwXTextPortion>(rId) )
     {
         return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
     }

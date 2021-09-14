@@ -281,7 +281,7 @@ IMPL_LINK_NOARG(OFieldDescControl, FormatClickHdl, weld::Button&, void)
     sal_Int32 nOldFormatKey(pActFieldDescr->GetFormatKey());
     SvxCellHorJustify rOldJustify = pActFieldDescr->GetHorJustify();
     Reference< XNumberFormatsSupplier >  xSupplier = GetFormatter()->getNumberFormatsSupplier();
-    SvNumberFormatsSupplierObj* pSupplierImpl = comphelper::getUnoTunnelImplementation<SvNumberFormatsSupplierObj>( xSupplier );
+    SvNumberFormatsSupplierObj* pSupplierImpl = comphelper::getFromUnoTunnel<SvNumberFormatsSupplierObj>( xSupplier );
     if (!pSupplierImpl)
         return;
 

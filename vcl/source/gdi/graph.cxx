@@ -220,7 +220,7 @@ Graphic::Graphic(const GDIMetaFile& rMtf)
 
 Graphic::Graphic( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic )
 {
-    const ::Graphic* pGraphic = comphelper::getUnoTunnelImplementation<::Graphic>(rxGraphic);
+    const ::Graphic* pGraphic = comphelper::getFromUnoTunnel<::Graphic>(rxGraphic);
 
     if( pGraphic )
     {

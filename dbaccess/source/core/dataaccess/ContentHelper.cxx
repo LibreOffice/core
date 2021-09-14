@@ -545,7 +545,7 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
 // css::lang::XUnoTunnel
 sal_Int64 OContentHelper::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    if (isUnoTunnelId<OContentHelper>(rId))
+    if (comphelper::isUnoTunnelId<OContentHelper>(rId))
         return reinterpret_cast<sal_Int64>(this);
 
     return 0;

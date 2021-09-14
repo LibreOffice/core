@@ -344,7 +344,7 @@ SECKEYPrivateKey* X509Certificate_NssImpl::getPrivateKey()
 
 /* XUnoTunnel */
 sal_Int64 SAL_CALL X509Certificate_NssImpl::getSomething( const Sequence< sal_Int8 >& aIdentifier ) {
-    if( isUnoTunnelId<X509Certificate_NssImpl>(aIdentifier) ) {
+    if( comphelper::isUnoTunnelId<X509Certificate_NssImpl>(aIdentifier) ) {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
     }
     return 0 ;
@@ -353,7 +353,7 @@ sal_Int64 SAL_CALL X509Certificate_NssImpl::getSomething( const Sequence< sal_In
 /* XUnoTunnel extension */
 
 const Sequence< sal_Int8>& X509Certificate_NssImpl::getUnoTunnelId() {
-    static const UnoTunnelIdInit theX509Certificate_NssImplUnoTunnelId;
+    static const comphelper::UnoIdInit theX509Certificate_NssImplUnoTunnelId;
     return theX509Certificate_NssImplUnoTunnelId.getSeq();
 }
 

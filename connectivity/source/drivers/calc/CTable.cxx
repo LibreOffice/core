@@ -621,7 +621,7 @@ Sequence< sal_Int8 > OCalcTable::getUnoTunnelId()
 
 sal_Int64 OCalcTable::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return (isUnoTunnelId<OCalcTable>(rId))
+    return (comphelper::isUnoTunnelId<OCalcTable>(rId))
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OCalcTable_BASE::getSomething(rId);
 }

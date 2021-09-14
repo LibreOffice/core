@@ -229,7 +229,7 @@ SwXTextSection::~SwXTextSection()
 
 const uno::Sequence< sal_Int8 > & SwXTextSection::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextSectionUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXTextSectionUnoTunnelId;
     return theSwXTextSectionUnoTunnelId.getSeq();
 }
 

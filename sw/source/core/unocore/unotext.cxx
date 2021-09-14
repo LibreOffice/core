@@ -630,7 +630,7 @@ SwXText::insertTextContentBefore(
     }
 
     SwXParagraph *const pPara =
-            comphelper::getUnoTunnelImplementation<SwXParagraph>(xNewContent);
+            comphelper::getFromUnoTunnel<SwXParagraph>(xNewContent);
     if (!pPara || !pPara->IsDescriptor() || !xSuccessor.is())
     {
         throw lang::IllegalArgumentException();
@@ -686,7 +686,7 @@ SwXText::insertTextContentAfter(
     }
 
     SwXParagraph *const pPara =
-            comphelper::getUnoTunnelImplementation<SwXParagraph>(xNewContent);
+            comphelper::getFromUnoTunnel<SwXParagraph>(xNewContent);
     if(!pPara || !pPara->IsDescriptor() || !xPredecessor.is())
     {
         throw lang::IllegalArgumentException();
@@ -978,7 +978,7 @@ bool SwXText::Impl::CheckForOwnMember(
     const uno::Reference<text::XTextCursor> xOwnCursor(m_rThis.CreateCursor());
 
     OTextCursorHelper *const pOwnCursor =
-            comphelper::getUnoTunnelImplementation<OTextCursorHelper>(xOwnCursor);
+            comphelper::getFromUnoTunnel<OTextCursorHelper>(xOwnCursor);
     OSL_ENSURE(pOwnCursor, "OTextCursorHelper::getUnoTunnelId() ??? ");
     const SwStartNode* pOwnStartNode =
         pOwnCursor->GetPaM()->GetNode().StartOfSectionNode();
@@ -1200,7 +1200,7 @@ namespace
 
 const uno::Sequence< sal_Int8 > & SwXText::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXTextUnoTunnelId;
     return theSwXTextUnoTunnelId.getSeq();
 }
 
@@ -1571,9 +1571,9 @@ SwXText::convertToTextFrame(
     pTempStartPam.reset();
 
     SwXTextRange *const pStartRange =
-        comphelper::getUnoTunnelImplementation<SwXTextRange>(xStart);
+        comphelper::getFromUnoTunnel<SwXTextRange>(xStart);
     SwXTextRange *const pEndRange   =
-        comphelper::getUnoTunnelImplementation<SwXTextRange>(xEnd);
+        comphelper::getFromUnoTunnel<SwXTextRange>(xEnd);
     // bookmarks have to be removed before the referenced text node
     // is deleted in DelFullPara
     if (pStartRange)
@@ -1779,7 +1779,7 @@ SwXText::convertToTextFrame(
         const uno::Reference<text::XTextCursor> xFrameTextCursor =
             rNewFrame.createTextCursor();
         SwXTextCursor *const pFrameCursor =
-            comphelper::getUnoTunnelImplementation<SwXTextCursor>(xFrameTextCursor);
+            comphelper::getFromUnoTunnel<SwXTextCursor>(xFrameTextCursor);
         if (bParaBeforeInserted)
         {
             // todo: remove paragraph before frame

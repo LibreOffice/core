@@ -548,7 +548,7 @@ namespace frm
 
     sal_Int64 SAL_CALL ORichTextModel::getSomething( const Sequence< sal_Int8 >& _rId )
     {
-        if (isUnoTunnelId<ORichTextModel>(_rId))
+        if (comphelper::isUnoTunnelId<ORichTextModel>(_rId))
             return reinterpret_cast< sal_Int64 >( m_pEngine.get() );
 
         Reference< XUnoTunnel > xAggTunnel;

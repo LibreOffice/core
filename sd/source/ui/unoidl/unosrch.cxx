@@ -106,7 +106,7 @@ uno::Reference< util::XReplaceDescriptor > SAL_CALL SdUnoSearchReplaceShape::cre
 
 sal_Int32 SAL_CALL SdUnoSearchReplaceShape::replaceAll( const uno::Reference< util::XSearchDescriptor >& xDesc )
 {
-    SdUnoSearchReplaceDescriptor* pDescr = comphelper::getUnoTunnelImplementation<SdUnoSearchReplaceDescriptor>( xDesc );
+    SdUnoSearchReplaceDescriptor* pDescr = comphelper::getFromUnoTunnel<SdUnoSearchReplaceDescriptor>( xDesc );
     if( pDescr == nullptr )
         return 0;
 
@@ -186,7 +186,7 @@ uno::Reference< css::util::XSearchDescriptor > SAL_CALL SdUnoSearchReplaceShape:
 
 uno::Reference< css::container::XIndexAccess > SAL_CALL SdUnoSearchReplaceShape::findAll( const css::uno::Reference< css::util::XSearchDescriptor >& xDesc )
 {
-    SdUnoSearchReplaceDescriptor* pDescr = comphelper::getUnoTunnelImplementation<SdUnoSearchReplaceDescriptor>( xDesc );
+    SdUnoSearchReplaceDescriptor* pDescr = comphelper::getFromUnoTunnel<SdUnoSearchReplaceDescriptor>( xDesc );
     if( pDescr == nullptr )
         return uno::Reference< container::XIndexAccess > ();
 
@@ -298,7 +298,7 @@ uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetCurrentShape() co
 
 uno::Reference< css::uno::XInterface > SAL_CALL SdUnoSearchReplaceShape::findNext( const css::uno::Reference< css::uno::XInterface >& xStartAt, const css::uno::Reference< css::util::XSearchDescriptor >& xDesc )
 {
-    SdUnoSearchReplaceDescriptor* pDescr = comphelper::getUnoTunnelImplementation<SdUnoSearchReplaceDescriptor>( xDesc );
+    SdUnoSearchReplaceDescriptor* pDescr = comphelper::getFromUnoTunnel<SdUnoSearchReplaceDescriptor>( xDesc );
 
     uno::Reference< uno::XInterface > xFound;
 
@@ -546,7 +546,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( const uno::
             ESelection aSelection( pConvertPara[nStartPos], pConvertPos[nStartPos],
                              pConvertPara[nEndPos], pConvertPos[nEndPos] );
 
-            SvxUnoTextBase* pParent = comphelper::getUnoTunnelImplementation<SvxUnoTextBase>( xParent );
+            SvxUnoTextBase* pParent = comphelper::getFromUnoTunnel<SvxUnoTextBase>( xParent );
 
             if(pParent)
             {
@@ -600,7 +600,7 @@ bool SdUnoSearchReplaceShape::Search( const OUString& rText, sal_Int32& nStartPo
 ESelection SdUnoSearchReplaceShape::GetSelection( const uno::Reference< text::XTextRange >&  xTextRange ) noexcept
 {
     ESelection aSel;
-    SvxUnoTextRangeBase* pRange = comphelper::getUnoTunnelImplementation<SvxUnoTextRangeBase>( xTextRange );
+    SvxUnoTextRangeBase* pRange = comphelper::getFromUnoTunnel<SvxUnoTextRangeBase>( xTextRange );
 
     if(pRange)
         aSel = pRange->GetSelection();

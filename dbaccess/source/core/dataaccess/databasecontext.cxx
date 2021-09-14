@@ -709,7 +709,7 @@ void ODatabaseContext::databaseDocumentURLChange( const OUString& _rOldURL, cons
 
 sal_Int64 SAL_CALL ODatabaseContext::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    if (isUnoTunnelId<ODatabaseContext>(rId))
+    if (comphelper::isUnoTunnelId<ODatabaseContext>(rId))
         return reinterpret_cast<sal_Int64>(this);
 
     return 0;

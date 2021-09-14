@@ -48,7 +48,7 @@ ThumbnailViewAcc::~ThumbnailViewAcc()
 
 const uno::Sequence< sal_Int8 >& ThumbnailViewAcc::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSfxValueSetAccUnoTunnelId;
+    static const comphelper::UnoIdInit theSfxValueSetAccUnoTunnelId;
     return theSfxValueSetAccUnoTunnelId.getSeq();
 }
 
@@ -57,7 +57,7 @@ ThumbnailViewAcc* ThumbnailViewAcc::getImplementation( const uno::Reference< uno
 {
     try
     {
-        return comphelper::getUnoTunnelImplementation<ThumbnailViewAcc>(rxData);
+        return comphelper::getFromUnoTunnel<ThumbnailViewAcc>(rxData);
     }
     catch(const css::uno::Exception&)
     {
@@ -441,7 +441,7 @@ sal_Int64 SAL_CALL ThumbnailViewAcc::getSomething( const uno::Sequence< sal_Int8
 {
     sal_Int64 nRet;
 
-    if( isUnoTunnelId<ThumbnailViewAcc>(rId) )
+    if( comphelper::isUnoTunnelId<ThumbnailViewAcc>(rId) )
         nRet = reinterpret_cast< sal_Int64 >( this );
     else
         nRet = 0;
@@ -548,7 +548,7 @@ void ThumbnailViewAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOld
 
 const uno::Sequence< sal_Int8 >& ThumbnailViewItemAcc::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theValueItemAccUnoTunnelId;
+    static const comphelper::UnoIdInit theValueItemAccUnoTunnelId;
     return theValueItemAccUnoTunnelId.getSeq();
 }
 
@@ -557,7 +557,7 @@ ThumbnailViewItemAcc* ThumbnailViewItemAcc::getImplementation( const uno::Refere
 {
     try
     {
-        return comphelper::getUnoTunnelImplementation<ThumbnailViewItemAcc>(rxData);
+        return comphelper::getFromUnoTunnel<ThumbnailViewItemAcc>(rxData);
     }
     catch(const css::uno::Exception&)
     {
@@ -873,7 +873,7 @@ sal_Int64 SAL_CALL ThumbnailViewItemAcc::getSomething( const uno::Sequence< sal_
 {
     sal_Int64 nRet;
 
-    if( isUnoTunnelId<ThumbnailViewItemAcc>(rId) )
+    if( comphelper::isUnoTunnelId<ThumbnailViewItemAcc>(rId) )
         nRet = reinterpret_cast< sal_Int64 >( this );
     else
         nRet = 0;

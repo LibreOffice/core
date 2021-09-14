@@ -215,7 +215,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
 {
     //  supplier must be SvNumberFormatsSupplierObj
     SvNumberFormatsSupplierObj* pObj =
-                    comphelper::getUnoTunnelImplementation<SvNumberFormatsSupplierObj>( rSupp );
+                    comphelper::getFromUnoTunnel<SvNumberFormatsSupplierObj>( rSupp );
     if (pObj)
         pFormatter = pObj->GetNumberFormatter();
 
@@ -248,7 +248,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
 {
     //  supplier must be SvNumberFormatsSupplierObj
     SvNumberFormatsSupplierObj* pObj =
-                    comphelper::getUnoTunnelImplementation<SvNumberFormatsSupplierObj>( rSupp );
+                    comphelper::getFromUnoTunnel<SvNumberFormatsSupplierObj>( rSupp );
     if (pObj)
         pFormatter = pObj->GetNumberFormatter();
 

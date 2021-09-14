@@ -78,7 +78,7 @@ Sequence< sal_Int8 > OAdoKey::getUnoTunnelId()
 
 sal_Int64 OAdoKey::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return isUnoTunnelId<OAdoKey>(rId)
+    return comphelper::isUnoTunnelId<OAdoKey>(rId)
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OKey_ADO::getSomething(rId);
 }

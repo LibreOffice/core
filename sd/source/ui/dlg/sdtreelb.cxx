@@ -116,7 +116,7 @@ sal_Int64 SAL_CALL SdPageObjsTLV::SdPageObjsTransferable::getSomething( const cs
 {
     sal_Int64 nRet;
 
-    if (isUnoTunnelId<SdPageObjsTLV::SdPageObjsTransferable>(rId))
+    if (comphelper::isUnoTunnelId<SdPageObjsTLV::SdPageObjsTransferable>(rId))
     {
         nRet = static_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }
@@ -128,7 +128,7 @@ sal_Int64 SAL_CALL SdPageObjsTLV::SdPageObjsTransferable::getSomething( const cs
 
 const css::uno::Sequence<sal_Int8>& SdPageObjsTLV::SdPageObjsTransferable::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSdPageObjsTLBUnoTunnelId;
+    static const comphelper::UnoIdInit theSdPageObjsTLBUnoTunnelId;
     return theSdPageObjsTLBUnoTunnelId.getSeq();
 }
 

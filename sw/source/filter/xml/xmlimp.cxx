@@ -362,13 +362,13 @@ void SwXMLImport::setStyleInsertMode( SfxStyleFamily nFamilies,
 
 const Sequence< sal_Int8 > & SwXMLImport::getUnoTunnelId() noexcept
 {
-    static const UnoTunnelIdInit theSwXMLImportUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXMLImportUnoTunnelId;
     return theSwXMLImportUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXMLImport::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SwXMLImport>(rId) )
+    if( comphelper::isUnoTunnelId<SwXMLImport>(rId) )
     {
         return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
     }
@@ -1625,7 +1625,7 @@ void SwXMLImport::initialize(
 
 SwDoc* SwImport::GetDocFromXMLImport( SvXMLImport const & rImport )
 {
-    auto pTextDoc = comphelper::getUnoTunnelImplementation<SwXTextDocument>(rImport.GetModel());
+    auto pTextDoc = comphelper::getFromUnoTunnel<SwXTextDocument>(rImport.GetModel());
     assert( pTextDoc );
     assert( pTextDoc->GetDocShell() );
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -1636,7 +1636,7 @@ SwDoc* SwImport::GetDocFromXMLImport( SvXMLImport const & rImport )
 void SwXMLImport::initXForms()
 {
     // obtain SwDoc
-    auto pXTextDocument = comphelper::getUnoTunnelImplementation<SwXTextDocument>(GetModel());
+    auto pXTextDocument = comphelper::getFromUnoTunnel<SwXTextDocument>(GetModel());
     if( pXTextDocument == nullptr )
         return;
 

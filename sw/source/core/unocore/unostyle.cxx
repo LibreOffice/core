@@ -1047,7 +1047,7 @@ void XStyleFamily::replaceByName(const OUString& rName, const uno::Any& rElement
         uno::Reference<style::XStyle> xStyle = FindStyle(pBase->GetName());
         if(xStyle.is())
         {
-            SwXStyle* pStyle = comphelper::getUnoTunnelImplementation<SwXStyle>(xStyle);
+            SwXStyle* pStyle = comphelper::getFromUnoTunnel<SwXStyle>(xStyle);
             if(pStyle)
                 pStyle->Invalidate();
         }
@@ -1209,13 +1209,13 @@ namespace
 
 const uno::Sequence<sal_Int8>& SwXStyle::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXStyleUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXStyleUnoTunnelId;
     return theSwXStyleUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXStyle::getSomething(const uno::Sequence<sal_Int8>& rId)
 {
-    if(isUnoTunnelId<SwXStyle>(rId))
+    if(comphelper::isUnoTunnelId<SwXStyle>(rId))
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }

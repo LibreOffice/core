@@ -271,17 +271,17 @@ public:
 
 const Sequence< sal_Int8 > & SwXTextDocument::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextDocumentUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXTextDocumentUnoTunnelId;
     return theSwXTextDocumentUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXTextDocument::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SwXTextDocument>(rId) )
+    if( comphelper::isUnoTunnelId<SwXTextDocument>(rId) )
     {
         return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ));
     }
-    if( isUnoTunnelId<SfxObjectShell>(rId) )
+    if( comphelper::isUnoTunnelId<SfxObjectShell>(rId) )
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(m_pDocShell ));
     }
@@ -768,7 +768,7 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
                                      sal_Int32& nResult,
                                      Reference< XInterface > const & xLastResult)
 {
-    const auto pSearch = comphelper::getUnoTunnelImplementation<SwXTextSearch>(xDesc);
+    const auto pSearch = comphelper::getFromUnoTunnel<SwXTextSearch>(xDesc);
     if(!IsValid() || !pSearch)
         return nullptr;
 
@@ -2282,7 +2282,7 @@ static VclPtr< OutputDevice > lcl_GetOutputDevice( const SwPrintUIOptions &rPrin
     aAny >>= xRenderDevice;
     if (xRenderDevice.is())
     {
-        VCLXDevice*     pDevice = comphelper::getUnoTunnelImplementation<VCLXDevice>( xRenderDevice );
+        VCLXDevice*     pDevice = comphelper::getFromUnoTunnel<VCLXDevice>( xRenderDevice );
         pOut = pDevice ? pDevice->GetOutputDevice() : VclPtr< OutputDevice >();
     }
 

@@ -106,7 +106,7 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium& rMedium)
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
 
     bool bEmbedded = false;
-    SmModel* pModel = comphelper::getUnoTunnelImplementation<SmModel>(xModel);
+    SmModel* pModel = comphelper::getFromUnoTunnel<SmModel>(xModel);
 
     SmDocShell* pDocShell = pModel ? static_cast<SmDocShell*>(pModel->GetObjectShell()) : nullptr;
     if (pDocShell)
@@ -296,7 +296,7 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(const Reference<io::XInputStrea
             xParser->parseStream(aParserInput);
         }
 
-        auto pFilter = comphelper::getUnoTunnelImplementation<SmXMLImport>(xFilter);
+        auto pFilter = comphelper::getFromUnoTunnel<SmXMLImport>(xFilter);
         if (pFilter && pFilter->GetSuccess())
             nError = ERRCODE_NONE;
     }
@@ -408,7 +408,7 @@ SmXMLImport::SmXMLImport(const css::uno::Reference<css::uno::XComponentContext>&
 
 const uno::Sequence<sal_Int8>& SmXMLImport::getUnoTunnelId() noexcept
 {
-    static const UnoTunnelIdInit theSmXMLImportUnoTunnelId;
+    static const comphelper::UnoIdInit theSmXMLImportUnoTunnelId;
     return theSmXMLImportUnoTunnelId.getSeq();
 }
 
@@ -438,7 +438,7 @@ Math_XMLOasisSettingsImporter_get_implementation(uno::XComponentContext* pCtx,
 
 sal_Int64 SAL_CALL SmXMLImport::getSomething(const uno::Sequence<sal_Int8>& rId)
 {
-    if (isUnoTunnelId<SmXMLImport>(rId))
+    if (comphelper::isUnoTunnelId<SmXMLImport>(rId))
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
 
     return SvXMLImport::getSomething(rId);
@@ -451,7 +451,7 @@ void SmXMLImport::endDocument()
     if (pTree && pTree->GetType() == SmNodeType::Table)
     {
         uno::Reference<frame::XModel> xModel = GetModel();
-        SmModel* pModel = comphelper::getUnoTunnelImplementation<SmModel>(xModel);
+        SmModel* pModel = comphelper::getFromUnoTunnel<SmModel>(xModel);
 
         if (pModel)
         {
@@ -2581,7 +2581,7 @@ void SmXMLImport::SetViewSettings(const Sequence<PropertyValue>& aViewProps)
     if (!xModel.is())
         return;
 
-    SmModel* pModel = comphelper::getUnoTunnelImplementation<SmModel>(xModel);
+    SmModel* pModel = comphelper::getFromUnoTunnel<SmModel>(xModel);
 
     if (!pModel)
         return;

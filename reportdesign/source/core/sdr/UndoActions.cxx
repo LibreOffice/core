@@ -119,7 +119,7 @@ OUndoContainerAction::~OUndoContainerAction()
     rEnv.RemoveElement( m_xOwnElement );
 
 #if OSL_DEBUG_LEVEL > 0
-    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xChild );
+    SvxShape* pShape = comphelper::getFromUnoTunnel<SvxShape>( xChild );
     SdrObject* pObject = pShape ? pShape->GetSdrObject() : nullptr;
     OSL_ENSURE( pObject == nullptr || (pShape->HasSdrObjectOwnership() && !pObject->IsInserted()),
         "OUndoContainerAction::~OUndoContainerAction: inconsistency in the shape/object ownership!" );
