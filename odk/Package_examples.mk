@@ -72,14 +72,14 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     DevelopersGuide/Components/CppComponent/some.idl \
     DevelopersGuide/Components/JavaComponent/JavaComponent.components \
     DevelopersGuide/Components/JavaComponent/Makefile \
-    DevelopersGuide/Components/JavaComponent/SomethingA.idl \
-    DevelopersGuide/Components/JavaComponent/SomethingB.idl \
     DevelopersGuide/Components/JavaComponent/TestComponentA.java \
     DevelopersGuide/Components/JavaComponent/TestComponentB.java \
     DevelopersGuide/Components/JavaComponent/TestJavaComponent.java \
     DevelopersGuide/Components/JavaComponent/TestServiceProvider.java \
-    DevelopersGuide/Components/JavaComponent/XSomethingA.idl \
-    DevelopersGuide/Components/JavaComponent/XSomethingB.idl \
+    DevelopersGuide/Components/JavaComponent/com/sun/star/test/SomethingA.idl \
+    DevelopersGuide/Components/JavaComponent/com/sun/star/test/SomethingB.idl \
+    DevelopersGuide/Components/JavaComponent/com/sun/star/test/XSomethingA.idl \
+    DevelopersGuide/Components/JavaComponent/com/sun/star/test/XSomethingB.idl \
     DevelopersGuide/Components/SimpleLicense/LicenseTest.components \
     DevelopersGuide/Components/SimpleLicense/LicenseTest.idl \
     DevelopersGuide/Components/SimpleLicense/LicenseTest.java \
@@ -101,8 +101,8 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     DevelopersGuide/Components/dialogcomponent/DialogComponent.java \
     DevelopersGuide/Components/dialogcomponent/DialogComponent.odt \
     DevelopersGuide/Components/dialogcomponent/Makefile \
-    DevelopersGuide/Components/dialogcomponent/TestDialogHandler.idl \
-    DevelopersGuide/Components/dialogcomponent/XTestDialogHandler.idl \
+    DevelopersGuide/Components/dialogcomponent/com/sun/star/test/TestDialogHandler.idl \
+    DevelopersGuide/Components/dialogcomponent/com/sun/star/test/XTestDialogHandler.idl \
     DevelopersGuide/Config/ConfigExamples.java \
     DevelopersGuide/Config/Makefile \
     DevelopersGuide/Database/CodeSamples.java \
@@ -444,7 +444,6 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     java/Inspector/Inspector.java \
     java/Inspector/InspectorAddon.java \
     java/Inspector/InspectorPane.java \
-    java/Inspector/InstanceInspector.idl \
     java/Inspector/InstanceInspectorTest.odt \
     java/Inspector/Introspector.java \
     java/Inspector/Makefile \
@@ -468,7 +467,6 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     java/Inspector/UnoPropertyNode.java \
     java/Inspector/UnoTreeRenderer.java \
     java/Inspector/XDialogProvider.java \
-    java/Inspector/XInstanceInspector.idl \
     java/Inspector/XLanguageSourceCodeGenerator.java \
     java/Inspector/XTreeControlProvider.java \
     java/Inspector/XTreePathProvider.java \
@@ -483,6 +481,8 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     java/Inspector/images/properties_16.png \
     java/Inspector/images/services_16.png \
     java/Inspector/manifest.mf \
+    java/Inspector/org/openoffice/InstanceInspector.idl \
+    java/Inspector/org/openoffice/XInstanceInspector.idl \
     java/MinimalComponent/Makefile \
     java/MinimalComponent/MinimalComponent.components \
     java/MinimalComponent/MinimalComponent.idl \
@@ -513,10 +513,10 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     java/Text/oo_smiley.gif \
     java/ToDo/Makefile \
     java/ToDo/ToDo.components \
-    java/ToDo/ToDo.idl \
     java/ToDo/ToDo.java \
     java/ToDo/ToDo.ods \
-    java/ToDo/XToDo.idl \
+    java/ToDo/org/openoffice/ToDo.idl \
+    java/ToDo/org/openoffice/XToDo.idl \
     python/toolpanel/CalcWindowState.xcu \
     python/toolpanel/Factory.xcu \
     python/toolpanel/META-INF/manifest.xml \

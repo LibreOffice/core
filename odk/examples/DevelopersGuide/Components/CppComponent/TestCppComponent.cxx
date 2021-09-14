@@ -38,8 +38,8 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#include <my_module/MyService1.hpp>
-#include <my_module/MyService2.hpp>
+#include <mymodule/MyService1.hpp>
+#include <mymodule/MyService2.hpp>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -57,15 +57,15 @@ SAL_IMPLEMENT_MAIN()
         fprintf(stdout, "\nconnected to a running office...\n");
 
         // create a new instance of MyService1
-        Reference<my_module::XSomething> xSomething =
-            my_module::MyService1::create(xContext);
+        Reference<mymodule::XSomething> xSomething =
+            mymodule::MyService1::create(xContext);
 
         // call methodOne and print the return value on stdout
         OUString s = xSomething->methodOne(OUString("Hello World!"));
         fprintf(stdout,"\nCreate new instance of MyService1\nCall of XSomething.methOne at MyService1 = %s", OUStringToOString( s, RTL_TEXTENCODING_ASCII_US ).getStr());
 
         // create a new instance of MyService2 with the specified string argument
-        xSomething = my_module::MyService2::create(xContext, OUString("Hello My World!"));
+        xSomething = mymodule::MyService2::create(xContext, OUString("Hello My World!"));
 
         // call methodTwo and print the return value of methodTwo
         s = xSomething->methodTwo();

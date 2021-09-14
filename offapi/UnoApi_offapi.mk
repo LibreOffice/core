@@ -19,7 +19,6 @@
 
 $(eval $(call gb_UnoApi_UnoApi,offapi))
 
-$(eval $(call gb_UnoApi_package_idlfiles,offapi))
 
 $(eval $(call gb_UnoApi_use_api,offapi,\
     udkapi \
