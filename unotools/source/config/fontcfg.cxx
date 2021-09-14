@@ -736,6 +736,7 @@ void FontSubstConfiguration::getMapName( const OUString& rOrgName, OUString& rSh
     {
         if ( ImplIsTrailing(rFamilyName, pTypeList->mpStr) && ImplFindAndErase( rFamilyName, pTypeList->mpStr ) )
             rType |= pTypeList->mnType;
+
         pTypeList++;
     }
 
