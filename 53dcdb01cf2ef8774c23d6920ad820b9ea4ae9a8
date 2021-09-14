@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4f8e2b7_aea40e94",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-14T17:26:27Z",
+      "side": 1,
+      "message": "Sorry I took so long to look at this, lots of other stuff going on.\n\nSo..... given that we are having to fire up the UNO_QUERY machinery for each call, is this any faster than just using dynamic_cast ?\n\nNot that dynamic_cast is wonderfully faster, but I\u0027d be surprised if it was any slower than UNO_QUERY, and it\u0027s less boilerplate.\n\n",
+      "revId": "53dcdb01cf2ef8774c23d6920ad820b9ea4ae9a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
