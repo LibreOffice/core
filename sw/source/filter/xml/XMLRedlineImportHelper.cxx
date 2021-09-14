@@ -59,7 +59,7 @@ static SwDoc* lcl_GetDocViaTunnel( Reference<XTextCursor> const & rCursor )
     Reference<XUnoTunnel> xTunnel( rCursor, UNO_QUERY);
     OSL_ENSURE(xTunnel.is(), "missing XUnoTunnel for XTextCursor");
     OTextCursorHelper *const pXCursor =
-        ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xTunnel);
+        comphelper::getFromUnoTunnel<OTextCursorHelper>(xTunnel);
     OSL_ENSURE( pXCursor, "OTextCursorHelper missing" );
     return pXCursor ? pXCursor->GetDoc() : nullptr;
 }
@@ -69,7 +69,7 @@ static SwDoc* lcl_GetDocViaTunnel( Reference<XTextRange> const & rRange )
     Reference<XUnoTunnel> xTunnel(rRange, UNO_QUERY);
     OSL_ENSURE(xTunnel.is(), "missing XUnoTunnel for XTextRange");
     SwXTextRange *const pXRange =
-        ::sw::UnoTunnelGetImplementation<SwXTextRange>(xTunnel);
+        comphelper::getFromUnoTunnel<SwXTextRange>(xTunnel);
     // #i115174#: this may be a SvxUnoTextRange
     // OSL_ENSURE( pXRange, "SwXTextRange missing" );
     return pXRange ? &pXRange->GetDoc() : nullptr;

@@ -97,28 +97,6 @@ namespace sw {
     template<typename T>
     using UnoImplPtr = std::unique_ptr<T, UnoImplPtrDeleter<T> >;
 
-    template< class C > C *
-    UnoTunnelGetImplementation( css::uno::Reference< css::lang::XUnoTunnel > const & xUnoTunnel)
-    {
-        if (!xUnoTunnel.is()) { return 0; }
-        C *const pC( reinterpret_cast< C* >(
-                        ::sal::static_int_cast< sal_IntPtr >(
-                            xUnoTunnel->getSomething(C::getUnoTunnelId()))));
-        return pC;
-    }
-
-    template< class C > sal_Int64
-    UnoTunnelImpl(const css::uno::Sequence< sal_Int8 > & rId,
-                  C *const pThis)
-    {
-        if (comphelper::isUnoTunnelId<C>(rId))
-        {
-            return ::sal::static_int_cast< sal_Int64 >(
-                    reinterpret_cast< sal_IntPtr >(pThis) );
-        }
-        return 0;
-    }
-
 } // namespace sw
 
 #endif // INCLUDED_SW_INC_UNOBASECLASS_HXX

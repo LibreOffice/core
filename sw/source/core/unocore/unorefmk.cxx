@@ -158,7 +158,7 @@ const uno::Sequence< sal_Int8 > & SwXReferenceMark::getUnoTunnelId()
 sal_Int64 SAL_CALL
 SwXReferenceMark::getSomething(const uno::Sequence< sal_Int8 >& rId)
 {
-    return ::sw::UnoTunnelImpl<SwXReferenceMark>(rId, this);
+    return comphelper::getSomethingImpl<SwXReferenceMark>(rId, this);
 }
 
 OUString SAL_CALL SwXReferenceMark::getImplementationName()
@@ -279,9 +279,9 @@ SwXReferenceMark::attach(const uno::Reference< text::XTextRange > & xTextRange)
     OTextCursorHelper* pCursor = nullptr;
     if(xRangeTunnel.is())
     {
-        pRange = ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
+        pRange = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
         pCursor =
-            ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
+            comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
     }
     SwDoc *const pDocument =
         pRange ? &pRange->GetDoc() : (pCursor ? pCursor->GetDoc() : nullptr);
@@ -850,7 +850,7 @@ const uno::Sequence< sal_Int8 > & SwXMeta::getUnoTunnelId()
 sal_Int64 SAL_CALL
 SwXMeta::getSomething( const uno::Sequence< sal_Int8 > & i_rId )
 {
-    return ::sw::UnoTunnelImpl<SwXMeta>(i_rId, this);
+    return comphelper::getSomethingImpl<SwXMeta>(i_rId, this);
 }
 
 // XServiceInfo
@@ -950,9 +950,9 @@ SwXMeta::AttachImpl(const uno::Reference< text::XTextRange > & i_xTextRange,
             static_cast< ::cppu::OWeakObject* >(this), 0);
     }
     SwXTextRange *const pRange(
-            ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel));
+            comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel));
     OTextCursorHelper *const pCursor( pRange ? nullptr :
-            ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel));
+            comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel));
     if (!pRange && !pCursor)
     {
         throw lang::IllegalArgumentException(
