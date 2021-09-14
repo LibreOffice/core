@@ -70,15 +70,8 @@
             </tr>
             <tr valign="top">
               <td class="content3"><img src="images/arrow-1.gif"/></td>
-              <td><a href="#idlc" title="link to the idlc tool description">idlc</a></td>
-              <td class="content87">The deprecated UNOIDL compiler, generates a common
-			  legacy binary type library format as base for all codemaker tools and
-			  the UNO runtime type library.</td>
-            </tr>
-            <tr valign="top">
-              <td class="content3"><img src="images/arrow-1.gif"/></td>
               <td><a href="#unoidl-write" title="link to the unoidl-write tool description">unoidl-write</a></td>
-              <td class="content87">The new UNOIDL compiler, generates a common
+              <td class="content87">The UNOIDL compiler, generates a common
 			  binary type library format as base for all codemaker tools and
 			  the UNO runtime type library.</td>
             </tr>
@@ -110,12 +103,6 @@
               <td class="content3"><img src="images/arrow-1.gif"/></td>
               <td><a href="#uno-skeletonmaker" title="link to the uno-skeletonmaker tool description">uno-skeletonmaker</a></td>
               <td class="content87">Tool for dumping type definitions on stdout or generating complete code skeletons for Java/C++.</td>
-            </tr>
-            <tr valign="top">
-              <td class="content3"><img src="images/arrow-1.gif"/></td>
-              <td><a href="#regmerge"  title="link to the regmerge tool description">regmerge</a></td>
-              <td class="content87">Deprecated tool to merge several legacy registry (e.g. type
-			  libraries) files into one file. <b>Note:</b> Since OpenOffice.org 3 it is no longer part of the SDK but it comes directly with the office as part of the <b>ure</b>.</td>
             </tr>
             <tr valign="top">
               <td class="content3"><img src="images/arrow-1.gif"/></td>
@@ -320,80 +307,6 @@
 		  <p>You can easily connect to a server started with the
 		  <code>-u (url)</code> option by using this service, giving the same url
 		  to resolve. The service provides you an instance from remote.</p>
-		  </td>
-		</tr>
-      </table>
-    </td>
-    <td class="content1"><img class="nothing8" src="images/nada.gif"/></td>
-  </tr>
-  <tr>
-    <td colspan="3"><img class="line" src="images/sdk_line-1.gif"/></td>
-  </tr>
-  <tr>
-    <td class="content1"><img class="nothing8" src="images/nada.gif"/></td>
-    <td>
-      <table class="table2">
-        <tr>
-		  <td colspan="2" class="head1"><a name="idlc"/>idlc</td>
-		  <td align="right">
-		    <a href="#tools" title="link to the tools overview"><img class="navigate" src="images/nav_up.png"/></a>
-		    <a href="../index.html" title="link to the SDK start page"><img class="navigate" src="images/nav_home.png"/></a>
-		  </td>
-        </tr>
-		<tr>
-		  <td colspan="3">
-		  <p>'idlc' is the deprecated UNOIDL compiler.  It is a full featured compiler used
-		  to check UNODL type definitions and transform valid type definitions
-		  into a binary type library format, which is later used by all codemaker
-		  tools. It is also used as a dynamic type library for UNO at runtime.<br/>
-		  You can find a syntax description for UNOIDL <a href="http://wiki.openoffice.org/wiki/Documentation/DevGuide/AppendixD/UNOIDL_Syntax_Specification" title="link to the &quot;UNOIDL Syntax Specification&quot; chapter in the Developer's Guide">here</a>.</p>
-		  <p><b>Note:</b> idlc and regmerge are deprecated and produce a legacy binary type
-		  library format that is different from the new format that is produced by
-		  unoidl-write.</p>
-		  <p class="head2">Usage:</p>
-		  <blockquote>
-		  <b><code>idlc [-options] file_1 ... file_n | @&lt;filename&gt;</code></b>
-		  </blockquote>
-		  <table class="table4">
-		  <tr>
-            <td class="cell15"><code>file_1 ... file_n</code></td>
-			<td class="cell85">specifies one or more idl files. Only files with
-			the extension '.idl' are valid.</td>
-          </tr>
-		  <tr>
-            <td class="cell15"><code>@&lt;filename&gt;</code></td>
-			<td class="cell85">filename specifies the name of a command
-			file.</td>
-          </tr>
-		  </table>
-		  <p class="head2">Options:</p>
-		  <table class="table4">
-		  <tr>
-            <td class="cell15"><code>-O&lt;path&gt;</code></td>
-			<td class="cell85">path describes the output directory. The
-			generated output is a legacy registry file with the same name as the idl
-			input file.</td>
-          </tr>
-          <tr>
-		    <td class="cell15"><code>-I&lt;path&gt;</code></td>
-			<td class="cell85">path specifies a directory where included files
-			that will be searched by the preprocessor are located. Multiple
-			directories can be combined with ';'.</td>
-          </tr>
-		  <tr>
-            <td class="cell15"><code>-D&lt;name&gt;</code></td>
-			<td class="cell85">name defines a macro for the preprocessor.</td>
-          </tr>
-		  <tr>
-            <td class="cell15"><code>-C</code></td>
-			<td class="cell85">generates complete type information, including
-			additional service information and documentation.</td>
-          </tr>
-		  <tr>
-            <td class="cell15"><code>-h|?</code></td>
-			<td class="cell85">print this help message and exit.</td>
-          </tr>
-		  </table>
 		  </td>
 		</tr>
       </table>
@@ -882,61 +795,6 @@ types the specified types depend on.</p>
             <td class="cell15"><code>-h, --help</code></td>
 			<td class="cell85">print this help and exit.</td>
           </tr>
-		  </table>
-		  </td>
-		</tr>
-      </table>
-    </td>
-    <td class="content1"><img class="nothing8" src="images/nada.gif"/></td>
-  </tr>
-  <tr>
-    <td colspan="3"><img class="line" src="images/sdk_line-1.gif"/></td>
-  </tr>
-  <tr>
-    <td class="content1"><img class="nothing8" src="images/nada.gif"/></td>
-    <td>
-      <table class="table2">
-        <tr>
-		  <td colspan="2" class="head1"><a name="regmerge"/>regmerge</td>
-		  <td align="right">
-		    <a href="#tools" title="link to the tools overview"><img class="navigate" src="images/nav_up.png"/></a>
-		    <a href="../index.html" title="link to the SDK start page"><img class="navigate" src="images/nav_home.png"/></a>
-		  </td>
-        </tr>
-		<tr>
-		  <td colspan="3">
-		  <p>The deprecated 'regmerge' is a small tool to merge different legacy registry files under a
-		  specified key into another legacy registry file. If a value already exists in
-		  the target file the value is overwritten by the value of the source
-		  file.</p>
-		  <p><b>Note:</b> idlc and regmerge are deprecated and produce a legacy binary type
-		  library format that is different from the new format that is produced by
-		  unoidl-write.</p>
-		  <p class="head2">Usage:</p>
-		  <blockquote>
-		  <b><code>regmerge [-v|--verbose] &lt;mergefile&gt; &lt;mergeKeyName&gt; &lt;regfile_1&gt; ... &lt;regfile_n&gt;</code></b>
-		  </blockquote>
-		  <p class="head2">Options:</p>
-		  <table class="table4">
-		  <tr>
-            <td class="cell15"><code>-v|--verbose</code></td>
-			<td class="cell85">verbose output on stdout.</td>
-          </tr>
-		  <tr>
-            <td class="cell15"><code>&lt;mergefile&gt;</code></td>
-			<td class="cell85">specifies the merged registry file. If this file
-			doesn't exist, it is created.</td>
-		  </tr>
-		  <tr>
-            <td class="cell15"><code>&lt;mergeKeyName&gt;</code></td>
-			<td class="cell85">specifies the merge key, everything is merged
-			under this key. If this key doesn't exist, it is created.</td>
-          </tr>
-		  <tr>
-            <td class="cell15"><code>&lt;regfile_1&gt; ... &lt;regfile_n&gt;</code></td>
-			<td class="cell85">specifies one or more registry files that are
-			merged.</td>
-		  </tr>
 		  </table>
 		  </td>
 		</tr>
