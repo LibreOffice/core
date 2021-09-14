@@ -16,6 +16,23 @@
       "message": "confirmed that chapter numbering is the problem.\nOn initial load, it is aPreventUseAsChapterNumbering because there is an inheriting paraStyle.\nOn round trip, it is aPreventUseAsChapterNumbering because of a mismatch between outlineLevel and listLevel (which this patch \"breaks\" by putting in the correct listLevel). This second one \"just happens\" to help out in this situation. In the DOCX case, it is prevented because of no pStyle in the abstract numbering. There must be SOME way to identify the same thing in DOC, but I don\u0027t know what that is. It isn\u0027t very clear at all in DOC import.",
       "revId": "2eb556224e011cc687f75f727c1df40952155462",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85abb717_c5466bd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-14T06:03:51Z",
+      "side": 1,
+      "message": "In DOCX, we have a DOCX only variable m_bExportingOutline that only exports pStyle GetHeadingParagraphStyleId. The import code depends on this pStyle in order to set chapterNumbering, so it never can accidentally be converted to chapterNumbering.\n\nDOC doesn\u0027t seem to have anything corresponding to pStyle.",
+      "revId": "2eb556224e011cc687f75f727c1df40952155462",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
