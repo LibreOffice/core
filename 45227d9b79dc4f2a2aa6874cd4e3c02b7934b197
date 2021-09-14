@@ -34,6 +34,24 @@
       "parentUuid": "6bdd1cda_2070340b",
       "revId": "45227d9b79dc4f2a2aa6874cd4e3c02b7934b197",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c42a2b8_8a224e7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-09-14T14:38:33Z",
+      "side": 1,
+      "message": "given distros might get bison 3.8 and will need to build 7.2.x with it (and don\u0027t wait for 7.3 for an updated LO in their development tree), yes, there obviously is a need 😊",
+      "parentUuid": "201ac31f_dc59f5b4",
+      "revId": "45227d9b79dc4f2a2aa6874cd4e3c02b7934b197",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
