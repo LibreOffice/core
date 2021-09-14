@@ -111,7 +111,7 @@ Sequence< sal_Int8 > ODbaseIndex::getUnoTunnelId()
 
 sal_Int64 ODbaseIndex::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return (isUnoTunnelId<ODbaseIndex>(rId))
+    return (comphelper::isUnoTunnelId<ODbaseIndex>(rId))
                 ? reinterpret_cast< sal_Int64 >( this )
                 : ODbaseIndex_BASE::getSomething(rId);
 }

@@ -142,7 +142,7 @@ namespace
 
     sal_Int64 SAL_CALL OToolBoxWindowItem::getSomething( const Sequence< sal_Int8 >& _rId )
     {
-        if (isUnoTunnelId<OToolBoxWindowItem>(_rId))
+        if (comphelper::isUnoTunnelId<OToolBoxWindowItem>(_rId))
             return reinterpret_cast< sal_Int64>( this );
 
         return 0;
@@ -301,7 +301,7 @@ void VCLXAccessibleToolBox::implReleaseToolboxItem( ToolBoxItemsMap::iterator co
         NotifyAccessibleEvent( AccessibleEventId::CHILD, Any( xItemAcc ), Any() );
     }
 
-    auto pWindowItem = comphelper::getUnoTunnelImplementation<OToolBoxWindowItem>(xItemAcc);
+    auto pWindowItem = comphelper::getFromUnoTunnel<OToolBoxWindowItem>(xItemAcc);
     if ( !pWindowItem )
     {
         static_cast< VCLXAccessibleToolBoxItem* >( xItemAcc.get() )->ReleaseToolBox();
@@ -333,7 +333,7 @@ void VCLXAccessibleToolBox::UpdateItem_Impl( ToolBox::ImplToolItems::size_type _
     {
         Reference< XAccessible > xItemAcc( aIndexAdjust->second );
 
-        auto pWindowItem = comphelper::getUnoTunnelImplementation<OToolBoxWindowItem>(xItemAcc);
+        auto pWindowItem = comphelper::getFromUnoTunnel<OToolBoxWindowItem>(xItemAcc);
         if ( !pWindowItem )
         {
             VCLXAccessibleToolBoxItem* pItem = static_cast< VCLXAccessibleToolBoxItem* >( xItemAcc.get() );

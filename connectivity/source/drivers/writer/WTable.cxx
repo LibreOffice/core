@@ -220,8 +220,8 @@ uno::Sequence<sal_Int8> OWriterTable::getUnoTunnelId()
 
 sal_Int64 OWriterTable::getSomething(const uno::Sequence<sal_Int8>& rId)
 {
-    return (isUnoTunnelId<OWriterTable>(rId)) ? reinterpret_cast<sal_Int64>(this)
-                                              : OWriterTable_BASE::getSomething(rId);
+    return (comphelper::isUnoTunnelId<OWriterTable>(rId)) ? reinterpret_cast<sal_Int64>(this)
+                                                          : OWriterTable_BASE::getSomething(rId);
 }
 
 bool OWriterTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool bRetrieveData)

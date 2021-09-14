@@ -562,7 +562,7 @@ Sequence< sal_Int8 > OFlatTable::getUnoTunnelId()
 
 sal_Int64 OFlatTable::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return (isUnoTunnelId<OFlatTable>(rId))
+    return (comphelper::isUnoTunnelId<OFlatTable>(rId))
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OFlatTable_BASE::getSomething(rId);
 }

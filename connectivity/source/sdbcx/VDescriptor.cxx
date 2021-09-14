@@ -46,7 +46,7 @@ namespace connectivity::sdbcx
         // css::lang::XUnoTunnel
         sal_Int64 SAL_CALL ODescriptor::getSomething( const Sequence< sal_Int8 >& rId )
         {
-            return (isUnoTunnelId<ODescriptor>(rId))
+            return (comphelper::isUnoTunnelId<ODescriptor>(rId))
                 ? reinterpret_cast< sal_Int64 >( this )
                 : 0;
         }
@@ -87,7 +87,7 @@ namespace connectivity::sdbcx
 
         bool ODescriptor::isNew( const Reference< XInterface >& _rxDescriptor )
         {
-            ODescriptor* pImplementation = comphelper::getUnoTunnelImplementation<ODescriptor>( _rxDescriptor );
+            ODescriptor* pImplementation = comphelper::getFromUnoTunnel<ODescriptor>( _rxDescriptor );
             return pImplementation && pImplementation->isNew();
         }
 

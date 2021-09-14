@@ -57,7 +57,7 @@ void OMetaConnection::disposing()
 //XUnoTunnel
 sal_Int64 SAL_CALL OMetaConnection::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
-    return (isUnoTunnelId<OMetaConnection>(rId))
+    return (comphelper::isUnoTunnelId<OMetaConnection>(rId))
         ? reinterpret_cast< sal_Int64 >( this )
         : sal_Int64(0);
 }

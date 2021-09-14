@@ -88,7 +88,7 @@ IMPL_LINK_NOARG(SwMultiTOXTabDialog, CreateExample_Hdl, SwOneExampleFrame&, void
     try
     {
         uno::Reference< frame::XModel > & xModel = m_xExampleFrame->GetModel();
-        auto pDoc = comphelper::getUnoTunnelImplementation<SwXTextDocument>(xModel);
+        auto pDoc = comphelper::getFromUnoTunnel<SwXTextDocument>(xModel);
 
         if( pDoc )
             pDoc->GetDocShell()->LoadStyles_( *m_rWrtShell.GetView().GetDocShell(), true );

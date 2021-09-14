@@ -127,7 +127,7 @@ Sequence< sal_Int8 > OHSQLTable::getUnoTunnelId()
 
 sal_Int64 OHSQLTable::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return (isUnoTunnelId<OHSQLTable>(rId))
+    return (comphelper::isUnoTunnelId<OHSQLTable>(rId))
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OTable_TYPEDEF::getSomething(rId);
 }

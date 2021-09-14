@@ -18,7 +18,7 @@ BinaryDataContainer convertUnoBinaryDataContainer(
 {
     BinaryDataContainer aBinaryDataContainer;
     UnoBinaryDataContainer* pUnoBinaryDataContainer
-        = comphelper::getUnoTunnelImplementation<UnoBinaryDataContainer>(rxBinaryDataContainer);
+        = comphelper::getFromUnoTunnel<UnoBinaryDataContainer>(rxBinaryDataContainer);
     if (pUnoBinaryDataContainer)
         aBinaryDataContainer = pUnoBinaryDataContainer->getBinaryDataContainer();
     return aBinaryDataContainer;

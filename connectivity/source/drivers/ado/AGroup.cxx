@@ -93,7 +93,7 @@ Sequence< sal_Int8 > OAdoGroup::getUnoTunnelId()
 
 sal_Int64 OAdoGroup::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return isUnoTunnelId<OAdoGroup>(rId)
+    return comphelper::isUnoTunnelId<OAdoGroup>(rId)
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OGroup_ADO::getSomething(rId);
 }

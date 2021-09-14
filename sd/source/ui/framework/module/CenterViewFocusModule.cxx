@@ -51,7 +51,7 @@ CenterViewFocusModule::CenterViewFocusModule (Reference<frame::XController> cons
         mxConfigurationController = xControllerManager->getConfigurationController();
 
         // Tunnel through the controller to obtain a ViewShellBase.
-        auto pController = comphelper::getUnoTunnelImplementation<sd::DrawController>(rxController);
+        auto pController = comphelper::getFromUnoTunnel<sd::DrawController>(rxController);
         if (pController != nullptr)
             mpBase = pController->GetViewShellBase();
 
@@ -125,7 +125,7 @@ void CenterViewFocusModule::HandleNewView (
         xView.set( mxConfigurationController->getResource(xViewIds[0]),UNO_QUERY);
     if (mpBase!=nullptr)
     {
-        auto pViewShellWrapper = comphelper::getUnoTunnelImplementation<ViewShellWrapper>(xView);
+        auto pViewShellWrapper = comphelper::getFromUnoTunnel<ViewShellWrapper>(xView);
         if (pViewShellWrapper != nullptr)
         {
             std::shared_ptr<ViewShell> pViewShell = pViewShellWrapper->GetViewShell();

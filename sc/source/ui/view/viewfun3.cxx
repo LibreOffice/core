@@ -1453,7 +1453,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
 
     if ( nFlags & InsertDeleteFlags::OBJECTS )
     {
-        ScModelObj* pModelObj = comphelper::getUnoTunnelImplementation<ScModelObj>( pDocSh->GetModel() );
+        ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>( pDocSh->GetModel() );
         if ( pPage && pModelObj )
         {
             bool bSameDoc = ( rClipParam.getSourceDocID() == rDoc.GetDocumentID() );

@@ -459,7 +459,7 @@ void SwGlossaries::RemoveFileFromList( const OUString& rGroup )
                 aLoop != m_aGlossaryEntries.end();
             )
         {
-            auto pEntry = comphelper::getUnoTunnelImplementation<SwXAutoTextEntry>(aLoop->get());
+            auto pEntry = comphelper::getFromUnoTunnel<SwXAutoTextEntry>(aLoop->get());
             if ( pEntry && ( pEntry->GetGroupName() == rGroup ) )
             {
                 pEntry->Invalidate();
@@ -511,7 +511,7 @@ void SwGlossaries::InvalidateUNOOjects()
     // invalidate all the AutoTextEntry-objects
     for (const auto& rEntry : m_aGlossaryEntries)
     {
-        auto pEntry = comphelper::getUnoTunnelImplementation<SwXAutoTextEntry>(rEntry.get());
+        auto pEntry = comphelper::getFromUnoTunnel<SwXAutoTextEntry>(rEntry.get());
         if ( pEntry )
             pEntry->Invalidate();
     }
@@ -530,7 +530,7 @@ Reference< text::XAutoTextGroup > SwGlossaries::GetAutoTextGroup( const OUString
     UnoAutoTextGroups::iterator aSearch = m_aGlossaryGroups.begin();
     for ( ; aSearch != m_aGlossaryGroups.end(); )
     {
-        auto pSwGroup = comphelper::getUnoTunnelImplementation<SwXAutoTextGroup>(aSearch->get());
+        auto pSwGroup = comphelper::getFromUnoTunnel<SwXAutoTextGroup>(aSearch->get());
         if ( !pSwGroup )
         {
             // the object is dead in the meantime -> remove from cache

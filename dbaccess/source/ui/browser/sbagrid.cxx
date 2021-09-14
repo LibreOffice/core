@@ -667,7 +667,7 @@ SvNumberFormatter* SbaGridControl::GetDatasourceFormatter()
 {
     Reference< css::util::XNumberFormatsSupplier >  xSupplier = ::dbtools::getNumberFormats(::dbtools::getConnection(Reference< XRowSet > (getDataSource(),UNO_QUERY)), true, getContext());
 
-    SvNumberFormatsSupplierObj* pSupplierImpl = comphelper::getUnoTunnelImplementation<SvNumberFormatsSupplierObj>( xSupplier );
+    SvNumberFormatsSupplierObj* pSupplierImpl = comphelper::getFromUnoTunnel<SvNumberFormatsSupplierObj>( xSupplier );
     if ( !pSupplierImpl )
         return nullptr;
 

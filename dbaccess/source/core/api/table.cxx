@@ -297,7 +297,7 @@ void SAL_CALL ODBTable::alterColumnByName( const OUString& _rName, const Referen
 sal_Int64 SAL_CALL ODBTable::getSomething( const Sequence< sal_Int8 >& rId )
 {
     sal_Int64 nRet(0);
-    if (isUnoTunnelId<ODBTable>(rId))
+    if (comphelper::isUnoTunnelId<ODBTable>(rId))
         nRet = reinterpret_cast<sal_Int64>(this);
     else
         nRet = OTable_Base::getSomething(rId);

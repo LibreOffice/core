@@ -345,7 +345,7 @@ void ZipPackageFolder::saveContents(
 sal_Int64 SAL_CALL ZipPackageFolder::getSomething( const uno::Sequence< sal_Int8 >& aIdentifier )
 {
     sal_Int64 nMe = 0;
-    if ( isUnoTunnelId<ZipPackageFolder>(aIdentifier) )
+    if ( comphelper::isUnoTunnelId<ZipPackageFolder>(aIdentifier) )
         nMe = reinterpret_cast < sal_Int64 > ( this );
     return nMe;
 }

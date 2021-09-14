@@ -122,7 +122,7 @@ void SAL_CALL PresentationFactory::releaseResource (
 {
     ThrowIfDisposed();
 
-    auto pController = comphelper::getUnoTunnelImplementation<sd::DrawController>(mxController);
+    auto pController = comphelper::getFromUnoTunnel<sd::DrawController>(mxController);
     if (pController != nullptr)
     {
         ViewShellBase* pBase = pController->GetViewShellBase();

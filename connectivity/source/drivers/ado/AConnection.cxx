@@ -490,7 +490,7 @@ void OConnection::disposing()
 
 sal_Int64 SAL_CALL OConnection::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
-    return isUnoTunnelId<OConnection>(rId)
+    return comphelper::isUnoTunnelId<OConnection>(rId)
                 ?
             reinterpret_cast< sal_Int64 >( this )
                 :

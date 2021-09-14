@@ -101,7 +101,7 @@ ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape ) :
 
         xShape.set(uno::Reference<drawing::XShape>( mxShapeAgg, uno::UNO_QUERY ));
 
-        bIsTextShape = ( comphelper::getUnoTunnelImplementation<SvxUnoTextBase>( mxShapeAgg ) != nullptr );
+        bIsTextShape = ( comphelper::getFromUnoTunnel<SvxUnoTextBase>( mxShapeAgg ) != nullptr );
     }
 
     {
@@ -1090,7 +1090,7 @@ void SAL_CALL ScShapeObj::insertTextContent( const uno::Reference<text::XTextRan
 
     uno::Reference<text::XTextContent> xEffContent;
 
-    ScEditFieldObj* pCellField = comphelper::getUnoTunnelImplementation<ScEditFieldObj>( xContent );
+    ScEditFieldObj* pCellField = comphelper::getFromUnoTunnel<ScEditFieldObj>( xContent );
     if ( pCellField )
     {
         //  createInstance("TextField.URL") from the document creates a ScCellFieldObj.
@@ -1133,7 +1133,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScShapeObj::createTextCursor()
     {
         //  ScDrawTextCursor must be used to ensure the ScShapeObj is returned by getText
 
-        SvxUnoTextBase* pText = comphelper::getUnoTunnelImplementation<SvxUnoTextBase>( mxShapeAgg );
+        SvxUnoTextBase* pText = comphelper::getFromUnoTunnel<SvxUnoTextBase>( mxShapeAgg );
         if (pText)
             return new ScDrawTextCursor( this, *pText );
     }
@@ -1150,8 +1150,8 @@ uno::Reference<text::XTextCursor> SAL_CALL ScShapeObj::createTextCursorByRange(
     {
         //  ScDrawTextCursor must be used to ensure the ScShapeObj is returned by getText
 
-        SvxUnoTextBase* pText = comphelper::getUnoTunnelImplementation<SvxUnoTextBase>( mxShapeAgg );
-        SvxUnoTextRangeBase* pRange = comphelper::getUnoTunnelImplementation<SvxUnoTextRangeBase>( aTextPosition );
+        SvxUnoTextBase* pText = comphelper::getFromUnoTunnel<SvxUnoTextBase>( mxShapeAgg );
+        SvxUnoTextRangeBase* pRange = comphelper::getFromUnoTunnel<SvxUnoTextRangeBase>( aTextPosition );
         if ( pText && pRange )
         {
             rtl::Reference<SvxUnoTextCursor> pCursor = new ScDrawTextCursor( this, *pText );

@@ -57,7 +57,7 @@ namespace configmgr {
 
 css::uno::Sequence< sal_Int8 > const & ChildAccess::getTunnelId()
 {
-    static const UnoTunnelIdInit theChildAccessUnoTunnelId;
+    static const comphelper::UnoTunnelIdInit theChildAccessUnoTunnelId;
     return theChildAccessUnoTunnelId.getSeq();
 }
 

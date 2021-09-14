@@ -56,7 +56,7 @@ namespace dbaui
     OJoinExchangeData OJoinExchObj::GetSourceDescription(const Reference< XTransferable >& _rxObject)
     {
         OJoinExchangeData aReturn;
-        auto pImplementation = comphelper::getUnoTunnelImplementation<OJoinExchObj>(_rxObject);
+        auto pImplementation = comphelper::getFromUnoTunnel<OJoinExchObj>(_rxObject);
         if (pImplementation)
             aReturn = pImplementation->m_jxdSourceDescription;
         return aReturn;
@@ -71,7 +71,7 @@ namespace dbaui
 
     sal_Int64 SAL_CALL OJoinExchObj::getSomething( const Sequence< sal_Int8 >& _rIdentifier )
     {
-        if (isUnoTunnelId<OJoinExchObj>(_rIdentifier))
+        if (comphelper::isUnoTunnelId<OJoinExchObj>(_rIdentifier))
             return reinterpret_cast<sal_Int64>(this);
 
         return 0;

@@ -437,7 +437,7 @@ void SAL_CALL ORowSet::release() noexcept
 // css::XUnoTunnel
 sal_Int64 SAL_CALL ORowSet::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    if (isUnoTunnelId<ORowSet>(rId))
+    if (comphelper::isUnoTunnelId<ORowSet>(rId))
         return reinterpret_cast<sal_Int64>(this);
 
     return 0;
@@ -2141,7 +2141,7 @@ void ORowSet::notifyRowSetAndClonesRowDelete( const Any& _rBookmark )
     // notify the clones
     for (auto const& elem : m_aClones)
     {
-        auto pClone = comphelper::getUnoTunnelImplementation<ORowSetClone>(elem.get());
+        auto pClone = comphelper::getFromUnoTunnel<ORowSetClone>(elem.get());
         if(pClone)
             pClone->onDeleteRow( _rBookmark );
     }
@@ -2154,7 +2154,7 @@ void ORowSet::notifyRowSetAndClonesRowDeleted( const Any& _rBookmark, sal_Int32 
     // notify the clones
     for (auto const& clone : m_aClones)
     {
-        auto pClone = comphelper::getUnoTunnelImplementation<ORowSetClone>(clone.get());
+        auto pClone = comphelper::getFromUnoTunnel<ORowSetClone>(clone.get());
         if(pClone)
             pClone->onDeletedRow( _rBookmark, _nPos );
     }
@@ -2909,7 +2909,7 @@ Sequence< sal_Int8 > ORowSetClone::getUnoTunnelId()
 // css::XUnoTunnel
 sal_Int64 SAL_CALL ORowSetClone::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    if (isUnoTunnelId<ORowSetClone>(rId))
+    if (comphelper::isUnoTunnelId<ORowSetClone>(rId))
         return reinterpret_cast<sal_Int64>(this);
 
     return 0;

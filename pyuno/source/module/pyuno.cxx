@@ -1692,7 +1692,7 @@ PyRef PyUNO_new (
         xInvocation.set(
             ssf->createInstanceWithArguments( Sequence<Any>( &targetInterface, 1 ) ), css::uno::UNO_QUERY_THROW );
 
-        auto that = comphelper::getUnoTunnelImplementation<Adapter>(
+        auto that = comphelper::getFromUnoTunnel<Adapter>(
             xInvocation->getIntrospection()->queryAdapter(cppu::UnoType<XUnoTunnel>::get()));
         if( that )
             return that->getWrappedObject();

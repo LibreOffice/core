@@ -733,7 +733,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
         std::unique_ptr<wrapper::ItemConverter> pItemConverter(
             createItemConverter( rObjectCID, getModel(), m_xCC,
                                  m_pDrawModelWrapper->getSdrModel(),
-                                 comphelper::getUnoTunnelImplementation<ExplicitValueProvider>(m_xChartView),
+                                 comphelper::getFromUnoTunnel<ExplicitValueProvider>(m_xChartView),
                                  pRefSizeProv.get()));
 
         if (!pItemConverter)

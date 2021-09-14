@@ -881,7 +881,7 @@ bool ImplEESdrWriter::ImplInitPage( const SdrPage& rPage )
         mpSolverContainer.reset( new EscherSolverContainer );
     }
     else
-        pSvxDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>(mXDrawPage);
+        pSvxDrawPage = comphelper::getFromUnoTunnel<SvxDrawPage>(mXDrawPage);
 
     return pSvxDrawPage != nullptr;
 }

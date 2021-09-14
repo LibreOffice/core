@@ -90,7 +90,7 @@ Sequence< sal_Int8 > OAdoColumn::getUnoTunnelId()
 
 sal_Int64 OAdoColumn::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return isUnoTunnelId<OAdoColumn>(rId)
+    return comphelper::isUnoTunnelId<OAdoColumn>(rId)
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OColumn_ADO::getSomething(rId);
 }

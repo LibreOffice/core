@@ -1391,7 +1391,7 @@ Sequence< sal_Int8 > OResultSet::getUnoTunnelId()
 
 sal_Int64 OResultSet::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return isUnoTunnelId<OResultSet>(rId)
+    return comphelper::isUnoTunnelId<OResultSet>(rId)
                 ? reinterpret_cast< sal_Int64 >( this )
                 : 0;
 }

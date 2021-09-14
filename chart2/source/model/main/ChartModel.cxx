@@ -1210,7 +1210,7 @@ Reference< util::XNumberFormatsSupplier > const & ChartModel::getNumberFormatsSu
 // ____ XUnoTunnel ___
 ::sal_Int64 SAL_CALL ChartModel::getSomething( const Sequence< ::sal_Int8 >& aIdentifier )
 {
-    if( isUnoTunnelId<SvNumberFormatsSupplierObj>(aIdentifier) )
+    if( comphelper::isUnoTunnelId<SvNumberFormatsSupplierObj>(aIdentifier) )
     {
         Reference< lang::XUnoTunnel > xTunnel( getNumberFormatsSupplier(), uno::UNO_QUERY );
         if( xTunnel.is() )

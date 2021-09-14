@@ -7289,7 +7289,7 @@ void SVTXFormattedField::setFormatsSupplier(const css::uno::Reference< css::util
     }
     else
     {
-        pNew = comphelper::getUnoTunnelImplementation<SvNumberFormatsSupplierObj>(xSupplier);
+        pNew = comphelper::getFromUnoTunnel<SvNumberFormatsSupplierObj>(xSupplier);
         bIsStandardSupplier = false;
     }
 

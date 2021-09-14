@@ -82,7 +82,7 @@ Sequence< sal_Int8 > OAdoIndex::getUnoTunnelId()
 
 sal_Int64 OAdoIndex::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return isUnoTunnelId<OAdoIndex>(rId)
+    return comphelper::isUnoTunnelId<OAdoIndex>(rId)
                 ? reinterpret_cast< sal_Int64 >( this )
                 : sdbcx::OIndex::getSomething(rId);
 }

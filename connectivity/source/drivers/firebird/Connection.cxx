@@ -382,7 +382,7 @@ Reference< XClob> Connection::createClob(ISC_QUAD const * pBlobId)
 // virtual
 sal_Int64 SAL_CALL Connection::getSomething(const css::uno::Sequence<sal_Int8>& rId)
 {
-    return (isUnoTunnelId<Connection>(rId)) ? reinterpret_cast<sal_Int64>(this) : sal_Int64(0);
+    return (comphelper::isUnoTunnelId<Connection>(rId)) ? reinterpret_cast<sal_Int64>(this) : sal_Int64(0);
 }
 
 // static
