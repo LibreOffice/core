@@ -65,8 +65,6 @@ IDLFILES = XSomethingA.idl \
 	SomethingA.idl \
 	SomethingB.idl
 
-# normally the idl file should be stored in a directory tree fitting the module 
-# structure, for the example we know the module structure
 PACKAGE = com/sun/star/test
 
 COMPJAVAFILES  = \
@@ -77,7 +75,6 @@ COMPJAVAFILES  = \
 GENCLASSFILES = $(patsubst %.idl,$(OUT_COMP_CLASS)/$(PACKAGE)/%.class,$(IDLFILES))
 GENCLASSNAMES = $(patsubst %.idl,$(PACKAGE)/%.class,$(IDLFILES))
 GENTYPELIST = $(subst /,.,$(patsubst %.idl,-T$(PACKAGE)/% ,$(IDLFILES)))
-GENURDFILES = $(patsubst %.idl,$(OUT_COMP_GEN)/%.urd,$(IDLFILES))
 
 COMPCLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(COMPJAVAFILES))
 
@@ -101,14 +98,10 @@ $(OUT_COMP_CLASS)/%.Manifest :
 	@echo UNO-Type-Path: $(basename $(notdir $*)).uno.jar> $@
 	@echo RegistrationClassName: TestServiceProvider>> $@
 
-$(OUT_COMP_GEN)/%.urd : %.idl
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(IDLC) -I. -I$(IDL_DIR) -O$(OUT_COMP_GEN) $^
-
-$(OUT_COMP_GEN)/%.rdb : $(GENURDFILES)
+$(OUT_COMP_GEN)/%.rdb : $(patsubst %,$(PACKAGE)/%,$(IDLFILES))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(REGMERGE) $@ /UCR $(GENURDFILES)
+	$(UNOIDLWRITE) $(URE_TYPES) $(OFFICE_TYPES) . $@
 
 $(OUT_COMP_CLASS)/$(PACKAGE)/%.class : $(COMP_RDB)
 	-$(MKDIR) $(subst /,$(PS),$(@D))

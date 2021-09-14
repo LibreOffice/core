@@ -82,13 +82,6 @@
                     "dest-filename": "@PDFIUM_TARBALL@"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/@UCPP_TARBALL@",
-                    "sha256": "@UCPP_SHA256SUM@",
-                    "type": "file",
-                    "dest": "external/tarballs",
-                    "dest-filename": "@UCPP_TARBALL@"
-                },
-                {
                     "url": "https://dev-www.libreoffice.org/src/@XMLSEC_TARBALL@",
                     "sha256": "@XMLSEC_SHA256SUM@",
                     "type": "file",

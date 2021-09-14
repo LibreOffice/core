@@ -127,12 +127,12 @@ function getSdkHome()
                 continue;
             }
         }
-        //Check if this is an sdk folder by looking for the idl sub - dir
-        var idlDir = sHome + "\\idl";
-        if (! aFileSystemObject.FolderExists(idlDir))
+        //Check if this is an sdk folder by looking for the examples sub - dir
+        var examplesDir = sHome + "\\examples";
+        if (! aFileSystemObject.FolderExists(examplesDir))
         {
             stdout.WriteLine("\n Error: Could not find directory \"" +
-                             idlDir + "\". An SDK is required, please specify " +
+                             examplesDir + "\". An SDK is required, please specify " +
                              "the path to a valid SDK installation.");
             continue;
         }
