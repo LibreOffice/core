@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16b8d791_32244112",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-09-14T08:20:51Z",
+      "side": 1,
+      "message": "7.2.1 RC2 was tagged last week: https://wiki.documentfoundation.org/ReleasePlan/7.2",
+      "revId": "6725742faf9589b7fdda1cfe036813ebf3b7febf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
