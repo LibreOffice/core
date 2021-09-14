@@ -2733,6 +2733,16 @@ void SdrObjEditView::ApplyFormatPaintBrushToText(SfxItemSet const& rFormatSet, S
     rTextObj.NbcSetOutlinerParaObjectForText(std::move(pTemp), pText);
 }
 
+void SdrObjEditView::DisposeUndoManager()
+{
+    if (pTextEditOutliner)
+    {
+        pTextEditOutliner->SetUndoManager(nullptr);
+    }
+
+    mpOldTextEditUndoManager = nullptr;
+}
+
 void SdrObjEditView::ApplyFormatPaintBrush(SfxItemSet& rFormatSet, bool bNoCharacterFormats,
                                            bool bNoParagraphFormats)
 {

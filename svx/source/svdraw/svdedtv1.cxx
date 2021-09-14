@@ -899,7 +899,13 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
     for(size_t a = 0; a < nMarkCount; ++a)
     {
         // #80277# merging was done wrong in the prev version
-        const SfxItemSet& rSet = GetMarkedObjectByIndex(a)->GetMergedItemSet();
+        SdrObject *pObj = GetMarkedObjectByIndex(a);
+        if (!pObj)
+        {
+            continue;
+        }
+
+        const SfxItemSet& rSet = pObj->GetMergedItemSet();
         SfxWhichIter aIter(rSet);
         sal_uInt16 nWhich(aIter.FirstWhich());
 
