@@ -31,21 +31,17 @@
 
 class LogicalFontInstance;
 struct FontMatchStatus;
-namespace vcl::font
-{
-class FontSelectPattern;
-}
-class PhysicalFontFace;
 
 namespace vcl
 {
 struct FontCapabilities;
-class PhysicalFontFamily;
 }
 
 namespace vcl::font
 {
 class FontSelectPattern;
+class PhysicalFontFamily;
+class PhysicalFontFace;
 
 struct FontMatchStatus
 {
@@ -69,13 +65,13 @@ public:
 class VCL_PLUGIN_PUBLIC PhysicalFontFace : public FontAttributes, public salhelper::SimpleReferenceObject
 {
 public:
-    virtual rtl::Reference<LogicalFontInstance> CreateFontInstance(const vcl::font::FontSelectPattern&) const = 0;
+    virtual rtl::Reference<LogicalFontInstance> CreateFontInstance(const FontSelectPattern&) const = 0;
 
     virtual sal_IntPtr      GetFontId() const = 0;
     virtual FontCharMapRef GetFontCharMap() const = 0;
     virtual bool GetFontCapabilities(vcl::FontCapabilities&) const = 0;
 
-    bool                    IsBetterMatch( const vcl::font::FontSelectPattern&, FontMatchStatus& ) const;
+    bool                    IsBetterMatch( const FontSelectPattern&, FontMatchStatus& ) const;
     sal_Int32               CompareIgnoreSize( const PhysicalFontFace& ) const;
 
 protected:
