@@ -175,7 +175,7 @@ const uno::Sequence< sal_Int8 > & SwXFootnote::getUnoTunnelId()
 sal_Int64 SAL_CALL
 SwXFootnote::getSomething(const uno::Sequence< sal_Int8 >& rId)
 {
-    const sal_Int64 nRet( ::sw::UnoTunnelImpl<SwXFootnote>(rId, this) );
+    const sal_Int64 nRet( comphelper::getSomethingImpl<SwXFootnote>(rId, this) );
     return nRet ? nRet : SwXText::getSomething(rId);
 }
 
@@ -297,9 +297,9 @@ SwXFootnote::attach(const uno::Reference< text::XTextRange > & xTextRange)
     const uno::Reference<lang::XUnoTunnel> xRangeTunnel(
             xTextRange, uno::UNO_QUERY);
     SwXTextRange *const pRange =
-        ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
+        comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
     OTextCursorHelper *const pCursor =
-        ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
+        comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
     SwDoc *const pNewDoc =
         pRange ? &pRange->GetDoc() : (pCursor ? pCursor->GetDoc() : nullptr);
     if (!pNewDoc)

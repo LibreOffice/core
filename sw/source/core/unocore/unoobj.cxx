@@ -856,7 +856,7 @@ const uno::Sequence< sal_Int8 > & SwXTextCursor::getUnoTunnelId()
 sal_Int64 SAL_CALL
 SwXTextCursor::getSomething(const uno::Sequence< sal_Int8 >& rId)
 {
-    const sal_Int64 nRet( ::sw::UnoTunnelImpl<SwXTextCursor>(rId, this) );
+    const sal_Int64 nRet( comphelper::getSomethingImpl<SwXTextCursor>(rId, this) );
     return nRet ? nRet : OTextCursorHelper::getSomething(rId);
 }
 
@@ -1044,9 +1044,9 @@ SwXTextCursor::gotoRange(
     OTextCursorHelper* pCursor = nullptr;
     if(xRangeTunnel.is())
     {
-        pRange  = ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
+        pRange  = comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
         pCursor =
-            ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
+            comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
     }
 
     if (!pRange && !pCursor)

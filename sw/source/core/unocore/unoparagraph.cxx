@@ -294,7 +294,7 @@ const uno::Sequence< sal_Int8 > & SwXParagraph::getUnoTunnelId()
 sal_Int64 SAL_CALL
 SwXParagraph::getSomething(const uno::Sequence< sal_Int8 >& rId)
 {
-    return ::sw::UnoTunnelImpl<SwXParagraph>(rId, this);
+    return comphelper::getSomethingImpl<SwXParagraph>(rId, this);
 }
 
 OUString SAL_CALL

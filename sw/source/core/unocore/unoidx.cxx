@@ -434,7 +434,7 @@ const uno::Sequence< sal_Int8 > & SwXDocumentIndex::getUnoTunnelId()
 sal_Int64 SAL_CALL
 SwXDocumentIndex::getSomething(const uno::Sequence< sal_Int8 >& rId)
 {
-    return ::sw::UnoTunnelImpl<SwXDocumentIndex>(rId, this);
+    return comphelper::getSomethingImpl<SwXDocumentIndex>(rId, this);
 }
 
 OUString SAL_CALL
@@ -1301,9 +1301,9 @@ SwXDocumentIndex::attach(const uno::Reference< text::XTextRange > & xTextRange)
     }
     const uno::Reference<XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
     SwXTextRange *const pRange =
-        ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
+        comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
     OTextCursorHelper *const pCursor =
-        ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
+        comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
 
     SwDoc *const pDoc =
         pRange ? &pRange->GetDoc() : (pCursor ? pCursor->GetDoc() : nullptr);
@@ -1663,7 +1663,7 @@ const uno::Sequence< sal_Int8 > & SwXDocumentIndexMark::getUnoTunnelId()
 sal_Int64 SAL_CALL
 SwXDocumentIndexMark::getSomething(const uno::Sequence< sal_Int8 >& rId)
 {
-    return ::sw::UnoTunnelImpl<SwXDocumentIndexMark>(rId, this);
+    return comphelper::getSomethingImpl<SwXDocumentIndexMark>(rId, this);
 }
 
 OUString SAL_CALL
@@ -1771,9 +1771,9 @@ SwXDocumentIndexMark::attach(
 
     const uno::Reference<XUnoTunnel> xRangeTunnel(xTextRange, uno::UNO_QUERY);
     SwXTextRange *const pRange =
-        ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
+        comphelper::getFromUnoTunnel<SwXTextRange>(xRangeTunnel);
     OTextCursorHelper *const pCursor =
-        ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
+        comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel);
     SwDoc *const pDoc =
         pRange ? &pRange->GetDoc() : (pCursor ? pCursor->GetDoc() : nullptr);
     if (!pDoc)

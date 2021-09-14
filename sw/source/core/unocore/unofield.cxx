@@ -468,7 +468,7 @@ const uno::Sequence< sal_Int8 > & SwXFieldMaster::getUnoTunnelId()
 sal_Int64 SAL_CALL
 SwXFieldMaster::getSomething(const uno::Sequence< sal_Int8 >& rId)
 {
-    return ::sw::UnoTunnelImpl<SwXFieldMaster>(rId, this);
+    return comphelper::getSomethingImpl<SwXFieldMaster>(rId, this);
 }
 
 OUString SAL_CALL
@@ -1180,7 +1180,7 @@ const uno::Sequence< sal_Int8 > & SwXTextField::getUnoTunnelId()
 sal_Int64 SAL_CALL
 SwXTextField::getSomething(const uno::Sequence< sal_Int8 >& rId)
 {
-    return ::sw::UnoTunnelImpl<SwXTextField>(rId, this);
+    return comphelper::getSomethingImpl<SwXTextField>(rId, this);
 }
 
 SwXTextField::SwXTextField(

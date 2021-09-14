@@ -323,7 +323,7 @@ sal_Int64 SAL_CALL
 SwXFlatParagraph::getSomething(
         const uno::Sequence< sal_Int8 >& rId)
 {
-    return sw::UnoTunnelImpl(rId, this);
+    return comphelper::getSomethingImpl(rId, this);
 }
 
 SwXFlatParagraphIterator::SwXFlatParagraphIterator( SwDoc& rDoc, sal_Int32 nType, bool bAutomatic )
@@ -505,7 +505,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaAfter(co
 
     const uno::Reference<lang::XUnoTunnel> xFPTunnel(xPara, uno::UNO_QUERY);
     SAL_WARN_IF(!xFPTunnel.is(), "sw.core", "invalid argument");
-    SwXFlatParagraph* const pFlatParagraph(sw::UnoTunnelGetImplementation<SwXFlatParagraph>(xFPTunnel));
+    SwXFlatParagraph* const pFlatParagraph(comphelper::getFromUnoTunnel<SwXFlatParagraph>(xFPTunnel));
 
     if ( !pFlatParagraph )
         return xRet;
@@ -551,7 +551,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaBefore(c
     const uno::Reference<lang::XUnoTunnel> xFPTunnel(xPara, uno::UNO_QUERY);
 
     SAL_WARN_IF(!xFPTunnel.is(), "sw.core", "invalid argument");
-    SwXFlatParagraph* const pFlatParagraph(sw::UnoTunnelGetImplementation<SwXFlatParagraph>(xFPTunnel));
+    SwXFlatParagraph* const pFlatParagraph(comphelper::getFromUnoTunnel<SwXFlatParagraph>(xFPTunnel));
 
     if ( !pFlatParagraph )
         return xRet;
