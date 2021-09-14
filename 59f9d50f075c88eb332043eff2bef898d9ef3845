@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d912a15_9959aa2a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-14T12:53:34Z",
+      "side": 1,
+      "message": "Mike: could you please take a look? This is related to https://github.com/CollaboraOnline/online/issues/3218. A few more similar fixes will come in https://gerrit.libreoffice.org/c/core/+/122086 but that is not yet in master. Thanks.",
+      "revId": "59f9d50f075c88eb332043eff2bef898d9ef3845",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
