@@ -16,6 +16,23 @@
       "message": "I am looking for a mentor or at least a little help.\nMy intention in creating this patch is to create an option in the database connection wizard to take advantage of the possibility of connecting to a database on an external firebird server.\nI have started with a simple page, similar to PostgreSQL, but it does not work properly, although knowing the error it is possible to get around it and connect.\nThe error that occurs, is that after writing the connection string, to give the next button, the text \"server\" is added in front of the previously written connection. The word that is added before \"server\" in this case, coincides with the word that is written after \"odbc:firebird:\", in the line 130 \u003cnode oor:name\u003d\"sdbc:firebird:server\" oor:op\u003d\"replace\"\u003e.\nTo get around the error, after turning the page, returning to the previous page, you can delete the extra word and continue normally.\nPlease, I need some help!\n\nTranslated with www.DeepL.com/Translator (free version)",
       "revId": "d532362f42dc82ee29fea0af062ea7cbb5392a24",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a0ce27c_fea840db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-09-14T07:57:52Z",
+      "side": 1,
+      "message": "Javier, can you help Juan?",
+      "revId": "d532362f42dc82ee29fea0af062ea7cbb5392a24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
