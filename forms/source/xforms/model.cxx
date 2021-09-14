@@ -131,8 +131,8 @@ EvaluationContext Model::getEvaluationContext()
 
 css::uno::Sequence<sal_Int8> Model::getUnoTunnelId()
 {
-    static cppu::OImplementationId aImplementationId;
-    return aImplementationId.getImplementationId();
+    static const comphelper::UnoIdInit aImplementationId;
+    return aImplementationId.getSeq();
 }
 
 

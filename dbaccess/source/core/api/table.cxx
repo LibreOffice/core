@@ -307,9 +307,8 @@ sal_Int64 SAL_CALL ODBTable::getSomething( const Sequence< sal_Int8 >& rId )
 
 Sequence< sal_Int8 > ODBTable::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId s_Id;
-
-    return s_Id.getImplementationId();
+    static const comphelper::UnoIdInit s_Id;
+    return s_Id.getSeq();
 }
 
 Reference< XPropertySet > ODBTable::createColumnDescriptor()

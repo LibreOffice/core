@@ -42,6 +42,7 @@
 #include <osl/diagnose.h>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
 #include <comphelper/multicontainer2.hxx>
@@ -1931,8 +1932,8 @@ uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
 
 uno::Sequence< sal_Int8 > SAL_CALL OWriteStream::getImplementationId()
 {
-    static ::cppu::OImplementationId lcl_ImplId;
-    return lcl_ImplId.getImplementationId();
+    static const comphelper::UnoIdInit lcl_ImplId;
+    return lcl_ImplId.getSeq();
 }
 
 sal_Int32 SAL_CALL OWriteStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )

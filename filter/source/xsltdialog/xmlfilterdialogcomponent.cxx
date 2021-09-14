@@ -19,6 +19,7 @@
 
 #include <osl/mutex.hxx>
 
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/component.hxx>
@@ -163,8 +164,8 @@ OUString SAL_CALL XMLFilterDialogComponent::getImplementationName()
 
 Sequence< sal_Int8 > SAL_CALL XMLFilterDialogComponent::getImplementationId()
 {
-    static ::cppu::OImplementationId implId;
-    return implId.getImplementationId();
+    static const comphelper::UnoIdInit implId;
+    return implId.getSeq();
 }
 
 

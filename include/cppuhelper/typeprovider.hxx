@@ -173,7 +173,7 @@ public:
 /** Helper class to implement IDs for XUnoTunnel.  Construct a static object
     of this class for your UNO object's implementation id.
 */
-class SAL_WARN_UNUSED CPPUHELPER_DLLPUBLIC OImplementationId
+class SAL_DEPRECATED("Uses broken double checked locking") SAL_WARN_UNUSED CPPUHELPER_DLLPUBLIC OImplementationId
 {
     mutable css::uno::Sequence< sal_Int8 > * _pSeq;
     sal_Bool _bUseEthernetAddress;
@@ -211,10 +211,12 @@ public:
         : _pSeq( new css::uno::Sequence< sal_Int8 >( rSeq ) )
         , _bUseEthernetAddress( false )
         {}
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
     OImplementationId( const OImplementationId & rId )
         : _pSeq( new css::uno::Sequence< sal_Int8 >( rId.getImplementationId() ) )
         , _bUseEthernetAddress( false )
         {}
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
     /** Get implementation id.
 

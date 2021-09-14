@@ -165,9 +165,8 @@ sal_Int64 SAL_CALL OConnectionWrapper::getSomething( const Sequence< sal_Int8 >&
 
 Sequence< sal_Int8 > OConnectionWrapper::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoIdInit implId;
+    return implId.getSeq();
 }
 
 namespace

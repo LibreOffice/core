@@ -573,9 +573,8 @@ sal_Int64 OSection::getSomething( const uno::Sequence< sal_Int8 > & rId )
 
 uno::Sequence< sal_Int8 > OSection::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoIdInit implId;
+    return implId.getSeq();
 }
 
 void OSection::notifyElementAdded(const uno::Reference< drawing::XShape >& xShape )

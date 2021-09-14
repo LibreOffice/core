@@ -256,8 +256,8 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
 
 Sequence<sal_Int8> Submission::getUnoTunnelId()
 {
-    static cppu::OImplementationId aImplementationId;
-    return aImplementationId.getImplementationId();
+    static const comphelper::UnoIdInit aImplementationId;
+    return aImplementationId.getSeq();
 }
 
 

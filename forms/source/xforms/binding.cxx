@@ -301,8 +301,8 @@ EvaluationContext Binding::getEvaluationContext() const
 
 css::uno::Sequence<sal_Int8> Binding::getUnoTunnelId()
 {
-    static cppu::OImplementationId aImplementationId;
-    return aImplementationId.getImplementationId();
+    static const comphelper::UnoIdInit aImplementationId;
+    return aImplementationId.getSeq();
 }
 
 

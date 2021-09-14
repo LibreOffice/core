@@ -43,9 +43,8 @@ OAdoView::OAdoView(bool _bCase,ADOView* _pView) : OView_ADO(_bCase,nullptr)
 
 Sequence< sal_Int8 > OAdoView::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoIdInit implId;
+    return implId.getSeq();
 }
 
 // css::lang::XUnoTunnel
