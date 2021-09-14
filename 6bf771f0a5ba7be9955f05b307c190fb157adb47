@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9579594f_8344c0ff",
+        "filename": "winaccessibility/inc/AccObjectWinManager.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-14T14:35:03Z",
+      "side": 1,
+      "message": "A nitpick: since you use just a pointer to an object here, it\u0027s enough to forward-declare the class, and that would avoid the requirement to parse the included header :)",
+      "revId": "6bf771f0a5ba7be9955f05b307c190fb157adb47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
