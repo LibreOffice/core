@@ -1055,7 +1055,17 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, to
             pVirtDev->Erase();
             pVirtDev->SetAntialiasing( AntialiasingFlags::Enable );
             pVirtDev->ImplDrawWaveLineBezier( 0, 0, nWordLength, 0, nWaveHeight, fOrientation, nLineWidth );
-            rLineCache.insert( pVirtDev->GetBitmapEx( Point( 0, 0 ), pVirtDev->GetOutputSize() ), GetLineColor(), nLineWidth, nWaveHeight, nWordLength, aWavylinebmp );
+            BitmapEx aBitmapEx(pVirtDev->GetBitmapEx(Point(0, 0), pVirtDev->GetOutputSize()));
+
+            // Ideally we don't need this block, but in the split rgb surface + separate alpha surface
+            // with Antialiasing enabled and the svp/cairo backend we get both surfaces antialiased
+            // so their combination of aliases merge to overly wash-out the color. Hack it by taking just
+            // the alpha surface and use it to blend the original solid line color
+            Bitmap aSolidColor(aBitmapEx.GetBitmap());
+            aSolidColor.Erase(GetLineColor());
+            aBitmapEx = BitmapEx(aSolidColor, aBitmapEx.GetAlpha());
+
+            rLineCache.insert( aBitmapEx, GetLineColor(), nLineWidth, nWaveHeight, nWordLength, aWavylinebmp );
         }
         if ( aWavylinebmp.ImplGetBitmapSalBitmap() != nullptr )
         {
