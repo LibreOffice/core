@@ -19,6 +19,8 @@
 
 #include <memory>
 
+const int FONTID = 1;
+
 class VclPhysicalFontCollectionTest : public test::BootstrapFixture
 {
 public:
@@ -32,6 +34,12 @@ public:
     void testShouldNotFindFontFamily();
     void testShouldFindFontFamilyByTokenNames();
     void testShouldFindNoFamilyWithWorthlessAttributes();
+    void testShouldFindStarsymbolFamily();
+    void testShouldFindOpensymbolFamilyWithMultipleSymbolFamilies();
+    void testShouldFindSymboltypeFamily();
+    void testShouldFindSymbolFamilyByMatchType();
+    void testImpossibleSymbolFamily();
+    void testShouldNotFindSymbolFamily();
 
     CPPUNIT_TEST_SUITE(VclPhysicalFontCollectionTest);
     CPPUNIT_TEST(testShouldCreateAndAddFontFamilyToCollection);
@@ -39,6 +47,12 @@ public:
     CPPUNIT_TEST(testShouldNotFindFontFamily);
     CPPUNIT_TEST(testShouldFindFontFamilyByTokenNames);
     CPPUNIT_TEST(testShouldFindNoFamilyWithWorthlessAttributes);
+    CPPUNIT_TEST(testShouldFindStarsymbolFamily);
+    CPPUNIT_TEST(testShouldFindOpensymbolFamilyWithMultipleSymbolFamilies);
+    CPPUNIT_TEST(testShouldFindSymboltypeFamily);
+    CPPUNIT_TEST(testShouldFindSymbolFamilyByMatchType);
+    CPPUNIT_TEST(testImpossibleSymbolFamily);
+    CPPUNIT_TEST(testShouldNotFindSymbolFamily);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -105,12 +119,101 @@ void VclPhysicalFontCollectionTest::testShouldFindFontFamilyByTokenNames()
 
 void VclPhysicalFontCollectionTest::testShouldFindNoFamilyWithWorthlessAttributes()
 {
-    // note: you must normalize the search family name (first parameter of PhysicalFontFamily constructor)
     vcl::font::PhysicalFontCollection aFontCollection;
     aFontCollection.FindOrCreateFontFamily(GetEnglishSearchFontName("Test Font Family Name"));
 
     CPPUNIT_ASSERT(!aFontCollection.FindFontFamilyByAttributes(ImplFontAttrs::None, WEIGHT_NORMAL,
                                                                WIDTH_NORMAL, ITALIC_NONE, ""));
+}
+
+void VclPhysicalFontCollectionTest::testShouldFindStarsymbolFamily()
+{
+    vcl::font::PhysicalFontCollection aFontCollection;
+    vcl::font::PhysicalFontFamily* pFontFamily
+        = aFontCollection.FindOrCreateFontFamily("starsymbol");
+
+    CPPUNIT_ASSERT_MESSAGE("starsymbol created", pFontFamily);
+
+    vcl::font::PhysicalFontFamily* pStarsymbolFamily = aFontCollection.FindFontFamilyByAttributes(
+        ImplFontAttrs::Symbol, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NONE, "");
+    CPPUNIT_ASSERT_MESSAGE("family found", pStarsymbolFamily);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("starsymbol family found", OUString("starsymbol"),
+                                 pStarsymbolFamily->GetSearchName());
+}
+
+void VclPhysicalFontCollectionTest::testShouldFindOpensymbolFamilyWithMultipleSymbolFamilies()
+{
+    vcl::font::PhysicalFontCollection aFontCollection;
+    aFontCollection.FindOrCreateFontFamily("opensymbol");
+    aFontCollection.FindOrCreateFontFamily("wingdings");
+
+    vcl::font::PhysicalFontFamily* pStarsymbolFamily = aFontCollection.FindFontFamilyByAttributes(
+        ImplFontAttrs::Symbol, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NONE, "");
+    CPPUNIT_ASSERT_MESSAGE("family found", pStarsymbolFamily);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("starsymbol family found", OUString("opensymbol"),
+                                 pStarsymbolFamily->GetSearchName());
+}
+
+void VclPhysicalFontCollectionTest::testShouldFindSymboltypeFamily()
+{
+    vcl::font::PhysicalFontCollection aFontCollection;
+    vcl::font::PhysicalFontFamily* pFontFamily
+        = aFontCollection.FindOrCreateFontFamily("testsymbolfamily");
+
+    FontAttributes aFontAttr;
+    aFontAttr.SetSymbolFlag(true);
+    pFontFamily->AddFontFace(new TestFontFace(aFontAttr, FONTID));
+
+    vcl::font::PhysicalFontFamily* pSymbolFamily = aFontCollection.FindFontFamilyByAttributes(
+        ImplFontAttrs::Symbol, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NONE, "");
+    CPPUNIT_ASSERT_MESSAGE("family found", pSymbolFamily);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("test symbol family found", OUString("testsymbolfamily"),
+                                 pSymbolFamily->GetSearchName());
+}
+
+void VclPhysicalFontCollectionTest::testShouldFindSymbolFamilyByMatchType()
+{
+    // TODO: figure out how to test matchtype with ImplFontAttrs::Full
+
+    vcl::font::PhysicalFontCollection aFontCollection;
+    vcl::font::PhysicalFontFamily* pFontFamily = aFontCollection.FindOrCreateFontFamily("symbols");
+
+    FontAttributes aFontAttr;
+    aFontAttr.SetSymbolFlag(false);
+    pFontFamily->AddFontFace(new TestFontFace(aFontAttr, FONTID));
+
+    vcl::font::PhysicalFontFamily* pSymbolFamily = aFontCollection.FindFontFamilyByAttributes(
+        ImplFontAttrs::Symbol, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NONE, "");
+    CPPUNIT_ASSERT_MESSAGE("family found", pSymbolFamily);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("test symbol family found", OUString("symbols"),
+                                 pSymbolFamily->GetSearchName());
+}
+
+void VclPhysicalFontCollectionTest::testImpossibleSymbolFamily()
+{
+    vcl::font::PhysicalFontCollection aFontCollection;
+    vcl::font::PhysicalFontFamily* pFontFamily
+        = aFontCollection.FindOrCreateFontFamily("testsymbolfamily");
+
+    FontAttributes aFontAttr;
+    aFontAttr.SetSymbolFlag(true);
+    TestFontFace* pFontFace = new TestFontFace(aFontAttr, FONTID);
+    pFontFamily->AddFontFace(pFontFace);
+
+    CPPUNIT_ASSERT_MESSAGE("match for family not possible",
+                           !aFontCollection.FindFontFamilyByAttributes(ImplFontAttrs::Normal,
+                                                                       WEIGHT_NORMAL, WIDTH_NORMAL,
+                                                                       ITALIC_NONE, ""));
+}
+
+void VclPhysicalFontCollectionTest::testShouldNotFindSymbolFamily()
+{
+    vcl::font::PhysicalFontCollection aFontCollection;
+    aFontCollection.FindOrCreateFontFamily("symbol");
+
+    CPPUNIT_ASSERT_MESSAGE("No family found", !aFontCollection.FindFontFamilyByAttributes(
+                                                  ImplFontAttrs::Normal, WEIGHT_NORMAL,
+                                                  WIDTH_NORMAL, ITALIC_NONE, ""));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclPhysicalFontCollectionTest);
