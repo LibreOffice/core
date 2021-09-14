@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fe77316_e0e501cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-09-14T10:01:27Z",
+      "side": 1,
+      "message": " Thanks Pranam - looks fine; we can get this in - but some feedback on API and impl below we could iterate.",
+      "revId": "8c503ab44c3495c583245c8edd0cb2b9efb1d157",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eade0188_68fa7c54",
+        "filename": "comphelper/source/misc/lok.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-09-14T10:01:27Z",
+      "side": 1,
+      "message": "If we do a lot of lookups here - particularly in a core piece of code like the dispatch logic; it may well be worth using a hash instead (?)",
+      "revId": "8c503ab44c3495c583245c8edd0cb2b9efb1d157",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40e621e8_5c834631",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-09-14T10:01:27Z",
+      "side": 1,
+      "message": "Looks very similar to the 10 lines above; lets fix that, factor as much out as possible into a helper method.",
+      "revId": "8c503ab44c3495c583245c8edd0cb2b9efb1d157",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89d10912_5197c49b",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-09-14T10:01:27Z",
+      "side": 1,
+      "message": "Can we use include/tools/json_writer.hxx - it\u0027s hugely faster and we\u0027re trying to kill boost::property_tree \u003d)",
+      "revId": "8c503ab44c3495c583245c8edd0cb2b9efb1d157",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f74a705_9cf7c3e2",
+        "filename": "sfx2/source/view/lokhelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-09-14T10:01:27Z",
+      "side": 1,
+      "message": "Ooh - I wonder if we could have a more generic API that would set some bit-mask of properties for the views - that might be easier to extend later (?) \u003d)",
+      "revId": "8c503ab44c3495c583245c8edd0cb2b9efb1d157",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
