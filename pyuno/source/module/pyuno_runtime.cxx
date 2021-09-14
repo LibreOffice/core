@@ -809,7 +809,7 @@ Any Runtime::pyObject2Any(const PyRef & source, enum ConversionMode mode) const
             if( adapterObject.is() )
             {
                 // object got already bridged !
-                auto pAdapter = comphelper::getUnoTunnelImplementation<Adapter>(adapterObject);
+                auto pAdapter = comphelper::getFromUnoTunnel<Adapter>(adapterObject);
 
                 mappedObject = impl->cargo->xAdapterFactory->createAdapter(
                     adapterObject, pAdapter->getWrappedTypes() );

@@ -347,13 +347,13 @@ namespace
 
 const uno::Sequence< sal_Int8 > & SwXTextSearch::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextSearchUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXTextSearchUnoTunnelId;
     return theSwXTextSearchUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXTextSearch::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SwXTextSearch>(rId) )
+    if( comphelper::isUnoTunnelId<SwXTextSearch>(rId) )
     {
         return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
     }

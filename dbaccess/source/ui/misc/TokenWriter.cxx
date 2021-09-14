@@ -862,7 +862,7 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat, sal_Int32 nWidthPixel, sal
             "=" +
             pChar;
 
-    SvNumberFormatsSupplierObj* pSupplierImpl = m_xFormatter.is() ? comphelper::getUnoTunnelImplementation<SvNumberFormatsSupplierObj>(m_xFormatter->getNumberFormatsSupplier()) : nullptr;
+    SvNumberFormatsSupplierObj* pSupplierImpl = m_xFormatter.is() ? comphelper::getFromUnoTunnel<SvNumberFormatsSupplierObj>(m_xFormatter->getNumberFormatsSupplier()) : nullptr;
     SvNumberFormatter* pFormatter = pSupplierImpl ? pSupplierImpl->GetNumberFormatter() : nullptr;
     if(pFormatter)
     {

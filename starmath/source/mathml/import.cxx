@@ -106,7 +106,7 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
 
     // Get model via uno
-    SmModel* pModel = comphelper::getUnoTunnelImplementation<SmModel>(m_xModel);
+    SmModel* pModel = comphelper::getFromUnoTunnel<SmModel>(m_xModel);
     if (pModel == nullptr)
     {
         SAL_WARN("starmath", "Failed to fetch sm model while file input");
@@ -331,7 +331,7 @@ ErrCode SmMLImportWrapper::Import(std::u16string_view aSource)
     }
 
     // Get model via uno
-    SmModel* pModel = comphelper::getUnoTunnelImplementation<SmModel>(m_xModel);
+    SmModel* pModel = comphelper::getFromUnoTunnel<SmModel>(m_xModel);
     if (pModel == nullptr)
     {
         SAL_WARN("starmath", "Failed to fetch sm model while file input");
@@ -437,7 +437,7 @@ ErrCode SmMLImportWrapper::ReadThroughComponentIS(
 
         if (nSyntaxVersion == 5)
         {
-            SmXMLImport* pXMlImport = comphelper::getUnoTunnelImplementation<SmXMLImport>(xFilter);
+            SmXMLImport* pXMlImport = comphelper::getFromUnoTunnel<SmXMLImport>(xFilter);
             if (pXMlImport != nullptr && pXMlImport->GetSuccess())
                 return ERRCODE_NONE;
             else
@@ -447,7 +447,7 @@ ErrCode SmMLImportWrapper::ReadThroughComponentIS(
             }
         }
 
-        m_pMlImport = comphelper::getUnoTunnelImplementation<SmMLImport>(xFilter);
+        m_pMlImport = comphelper::getFromUnoTunnel<SmMLImport>(xFilter);
         if (m_pMlImport != nullptr && m_pMlImport->getSuccess())
             return ERRCODE_NONE;
         else
@@ -1207,13 +1207,13 @@ void SmMLImportContext::endFastElement(sal_Int32) { inheritStyleEnd(); }
 
 const uno::Sequence<sal_Int8>& SmMLImport::getUnoTunnelId() noexcept
 {
-    static const UnoTunnelIdInit theSmMLImportUnoTunnelId;
+    static const comphelper::UnoIdInit theSmMLImportUnoTunnelId;
     return theSmMLImportUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SmMLImport::getSomething(const uno::Sequence<sal_Int8>& rId)
 {
-    if (isUnoTunnelId<SmMLImport>(rId))
+    if (comphelper::isUnoTunnelId<SmMLImport>(rId))
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
 
     return SvXMLImport::getSomething(rId);
@@ -1267,7 +1267,7 @@ void SmMLImport::endDocument()
         return;
     }
 
-    SmModel* pModel = comphelper::getUnoTunnelImplementation<SmModel>(xModel);
+    SmModel* pModel = comphelper::getFromUnoTunnel<SmModel>(xModel);
     if (!pModel)
     {
         SAL_WARN("starmath", "Failed to set view settings because missing sm model");
@@ -1319,7 +1319,7 @@ void SmMLImport::SetViewSettings(const Sequence<PropertyValue>& aViewProps)
         return;
     }
 
-    SmModel* pModel = comphelper::getUnoTunnelImplementation<SmModel>(xModel);
+    SmModel* pModel = comphelper::getFromUnoTunnel<SmModel>(xModel);
     if (!pModel)
     {
         SAL_WARN("starmath", "Failed to set view settings because missing sm model");

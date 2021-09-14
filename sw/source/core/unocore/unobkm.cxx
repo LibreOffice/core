@@ -198,7 +198,7 @@ uno::Reference<text::XTextContent> SwXBookmark::CreateXBookmark(
 
 const uno::Sequence< sal_Int8 > & SwXBookmark::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXBookmarkUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXBookmarkUnoTunnelId;
     return theSwXBookmarkUnoTunnelId.getSeq();
 }
 

@@ -275,7 +275,7 @@ sal_Bool SAL_CALL ViewTabBar::isAnchorOnly()
 
 const Sequence<sal_Int8>& ViewTabBar::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theViewTabBarUnoTunnelId;
+    static const comphelper::UnoIdInit theViewTabBarUnoTunnelId;
     return theViewTabBarUnoTunnelId.getSeq();
 }
 
@@ -283,7 +283,7 @@ sal_Int64 SAL_CALL ViewTabBar::getSomething (const Sequence<sal_Int8>& rId)
 {
     sal_Int64 nResult = 0;
 
-    if (isUnoTunnelId<ViewTabBar>(rId))
+    if (comphelper::isUnoTunnelId<ViewTabBar>(rId))
     {
         nResult = reinterpret_cast<sal_Int64>(this);
     }

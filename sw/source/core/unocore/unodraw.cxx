@@ -848,13 +848,13 @@ void SwXDrawPage::InvalidateSwDoc()
 
 const uno::Sequence< sal_Int8 > & SwXShape::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXShapeUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXShapeUnoTunnelId;
     return theSwXShapeUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXShape::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SwXShape>(rId) )
+    if( comphelper::isUnoTunnelId<SwXShape>(rId) )
     {
         return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
     }
@@ -936,7 +936,7 @@ void SwXShape::AddExistingShapeToFormat( SdrObject const & _rObj )
         if ( !pCurrent )
             continue;
 
-        auto pSwShape = comphelper::getUnoTunnelImplementation<SwXShape>(pCurrent->getWeakUnoShape());
+        auto pSwShape = comphelper::getFromUnoTunnel<SwXShape>(pCurrent->getWeakUnoShape());
         if ( pSwShape )
         {
             if ( pSwShape->m_bDescriptor )
@@ -1060,7 +1060,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 uno::Reference<text::XTextFrame> xFrame;
                 if(aValue >>= xFrame)
                 {
-                    SwXFrame* pFrame = comphelper::getUnoTunnelImplementation<SwXFrame>(xFrame);
+                    SwXFrame* pFrame = comphelper::getFromUnoTunnel<SwXFrame>(xFrame);
                     if(pFrame && pFrame->GetFrameFormat() &&
                         pFrame->GetFrameFormat()->GetDoc() == pDoc)
                     {
@@ -2192,7 +2192,7 @@ uno::Sequence< OUString > SwXShape::getSupportedServiceNames()
 SvxShape*   SwXShape::GetSvxShape()
 {
     if(m_xShapeAgg.is())
-        return comphelper::getUnoTunnelImplementation<SvxShape>(m_xShapeAgg);
+        return comphelper::getFromUnoTunnel<SvxShape>(m_xShapeAgg);
     return nullptr;
 }
 
@@ -2308,7 +2308,7 @@ void SAL_CALL SwXShape::setPosition( const awt::Point& aPosition )
             // #i34750#
             // use method <SvxShape->getPosition()> to get the correct
             // 'Drawing layer' position of the top group shape.
-            auto pSvxGroupShape = comphelper::getUnoTunnelImplementation<SvxShape>(pTopGroupObj->getUnoShape());
+            auto pSvxGroupShape = comphelper::getFromUnoTunnel<SvxShape>(pTopGroupObj->getUnoShape());
             const awt::Point aGroupPos = pSvxGroupShape->getPosition();
             aNewPos.X = o3tl::saturating_add(aNewPos.X, aGroupPos.X);
             aNewPos.Y = o3tl::saturating_add(aNewPos.Y, aGroupPos.Y);

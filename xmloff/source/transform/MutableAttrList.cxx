@@ -59,7 +59,7 @@ XMLMutableAttributeList::~XMLMutableAttributeList()
 
 const css::uno::Sequence<sal_Int8>& XMLMutableAttributeList::getUnoTunnelId() noexcept
 {
-    static const UnoTunnelIdInit theXMLMutableAttributeListUnoTunnelId;
+    static const comphelper::UnoIdInit theXMLMutableAttributeListUnoTunnelId;
     return theXMLMutableAttributeListUnoTunnelId.getSeq();
 }
 
@@ -67,7 +67,7 @@ const css::uno::Sequence<sal_Int8>& XMLMutableAttributeList::getUnoTunnelId() no
 sal_Int64 SAL_CALL XMLMutableAttributeList::getSomething(
         const Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<XMLMutableAttributeList>(rId) )
+    if( comphelper::isUnoTunnelId<XMLMutableAttributeList>(rId) )
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
     }

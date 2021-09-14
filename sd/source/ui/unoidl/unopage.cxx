@@ -324,13 +324,13 @@ static const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKin
 
 const css::uno::Sequence< sal_Int8 > & SdGenericDrawPage::getUnoTunnelId() noexcept
 {
-    static const UnoTunnelIdInit theSdGenericDrawPageUnoTunnelId;
+    static const comphelper::UnoIdInit theSdGenericDrawPageUnoTunnelId;
     return theSdGenericDrawPageUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SdGenericDrawPage::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
-        if( isUnoTunnelId<SdGenericDrawPage>(rId) )
+        if( comphelper::isUnoTunnelId<SdGenericDrawPage>(rId) )
         {
                 return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
         }
@@ -386,7 +386,7 @@ void SdGenericDrawPage::UpdateModel()
     if( mpSdrModel )
     {
         uno::Reference< uno::XInterface > xModel( SvxFmDrawPage::mpModel->getUnoModel() );
-        mpDocModel = comphelper::getUnoTunnelImplementation<SdXImpressDocument>( xModel );
+        mpDocModel = comphelper::getFromUnoTunnel<SdXImpressDocument>( xModel );
     }
     else
     {
@@ -1467,13 +1467,13 @@ Reference< drawing::XShape >  SdGenericDrawPage::CreateShape(SdrObject *pObj) co
             }
 
             if( !pShape )
-                pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
+                pShape = comphelper::getFromUnoTunnel<SvxShape>( xShape );
 
             if( pShape )
                 pShape->SetShapeType( aShapeType );
         }
 
-        SvxShape *pSdShape = comphelper::getUnoTunnelImplementation<SvxShape>(xShape);
+        SvxShape *pSdShape = comphelper::getFromUnoTunnel<SvxShape>(xShape);
         if (pSdShape)
         {
             // SdXShape aggregates SvxShape
@@ -2327,7 +2327,7 @@ void SAL_CALL SdDrawPage::setMasterPage( const Reference< drawing::XDrawPage >& 
     if(!SvxFmDrawPage::mpPage)
         return;
 
-    SdMasterPage* pMasterPage = comphelper::getUnoTunnelImplementation<SdMasterPage>( xMasterPage );
+    SdMasterPage* pMasterPage = comphelper::getFromUnoTunnel<SdMasterPage>( xMasterPage );
     if( !(pMasterPage && pMasterPage->isValid()) )
         return;
 
@@ -2432,7 +2432,7 @@ void SdDrawPage::setBackground( const Any& rValue )
     }
 
     // is it our own implementation?
-    SdUnoPageBackground* pBack = comphelper::getUnoTunnelImplementation<SdUnoPageBackground>( xSet );
+    SdUnoPageBackground* pBack = comphelper::getFromUnoTunnel<SdUnoPageBackground>( xSet );
 
     SfxItemSet aSet( GetModel()->GetDoc()->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST> );
 
@@ -2800,7 +2800,7 @@ void SdMasterPage::setBackground( const Any& rValue )
         {
             // first fill an item set
             // is it our own implementation?
-            SdUnoPageBackground* pBack = comphelper::getUnoTunnelImplementation<SdUnoPageBackground>( xInputSet );
+            SdUnoPageBackground* pBack = comphelper::getFromUnoTunnel<SdUnoPageBackground>( xInputSet );
 
             SfxItemSet aSet( GetModel()->GetDoc()->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST> );
 
@@ -3015,7 +3015,7 @@ Reference< uno::XInterface > createUnoPageImpl( SdPage* pPage )
 
     if( pPage )
     {
-        SdXImpressDocument* pModel = comphelper::getUnoTunnelImplementation<SdXImpressDocument>( pPage->getSdrModelFromSdrPage().getUnoModel() );
+        SdXImpressDocument* pModel = comphelper::getFromUnoTunnel<SdXImpressDocument>( pPage->getSdrModelFromSdrPage().getUnoModel() );
         if( pModel )
         {
             if( pPage->IsMasterPage() )

@@ -626,7 +626,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                         css::uno::Reference< css::uno::XInterface > xInterface;
                         const SfxUnoAnyItem* pUnoAny = pReq->GetArg<SfxUnoAnyItem>(FN_PARAM_2);
                         AsyncFunc* pAsyncFunc = pUnoAny && (pUnoAny->GetValue() >>= xInterface ) ?
-                            comphelper::getUnoTunnelImplementation<AsyncFunc>(xInterface) : nullptr;
+                            comphelper::getFromUnoTunnel<AsyncFunc>(xInterface) : nullptr;
                         if (pAsyncFunc)
                             pAsyncFunc->Execute();
 
@@ -2063,7 +2063,7 @@ void SfxObjectShell::SignScriptingContent(weld::Window* pDialogParent)
 
 const uno::Sequence<sal_Int8>& SfxObjectShell::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSfxObjectShellUnoTunnelId;
+    static const comphelper::UnoIdInit theSfxObjectShellUnoTunnelId;
     return theSfxObjectShellUnoTunnelId.getSeq();
 }
 

@@ -172,7 +172,7 @@ ScVbaWorksheet::~ScVbaWorksheet()
 
 const uno::Sequence<sal_Int8>& ScVbaWorksheet::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theScVbaWorksheetUnoTunnelId;
+    static const comphelper::UnoIdInit theScVbaWorksheetUnoTunnelId;
     return theScVbaWorksheetUnoTunnelId.getSeq();
 }
 
@@ -1039,7 +1039,7 @@ ScVbaWorksheet::PrintOut( const uno::Any& From, const uno::Any& To, const uno::A
 sal_Int64 SAL_CALL
 ScVbaWorksheet::getSomething(const uno::Sequence<sal_Int8 > & rId)
 {
-    if (isUnoTunnelId<ScVbaWorksheet>(rId))
+    if (comphelper::isUnoTunnelId<ScVbaWorksheet>(rId))
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }

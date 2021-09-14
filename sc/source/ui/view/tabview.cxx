@@ -2157,7 +2157,7 @@ void ScTabView::SetNewVisArea()
         css::uno::Reference<css::frame::XController> xController = rFrame.GetController();
         if (xController.is())
         {
-            ScTabViewObj* pImp = comphelper::getUnoTunnelImplementation<ScTabViewObj>( xController );
+            ScTabViewObj* pImp = comphelper::getFromUnoTunnel<ScTabViewObj>( xController );
             if (pImp)
                 pImp->VisAreaChanged();
         }
@@ -2554,7 +2554,7 @@ void lcl_ExtendTiledDimension(bool bColumn, const SCCOLROW nEnd, const SCCOLROW 
 
     ScDocShell* pDocSh = rViewData.GetDocShell();
     ScModelObj* pModelObj = pDocSh ?
-        comphelper::getUnoTunnelImplementation<ScModelObj>( pDocSh->GetModel() ) : nullptr;
+        comphelper::getFromUnoTunnel<ScModelObj>( pDocSh->GetModel() ) : nullptr;
     Size aOldSize(0, 0);
     if (pModelObj)
         aOldSize = pModelObj->getDocumentSize();
@@ -2593,7 +2593,7 @@ void lcl_ExtendTiledDimension(bool bColumn, const SCCOLROW nEnd, const SCCOLROW 
     std::stringstream ss;
     ss << aNewSize.Width() << ", " << aNewSize.Height();
     OString sSize = ss.str().c_str();
-    ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(
+    ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(
         rViewData.GetViewShell()->GetCurrentDocument());
     SfxLokHelper::notifyDocumentSizeChanged(rViewData.GetViewShell(), sSize, pModel, false);
 }

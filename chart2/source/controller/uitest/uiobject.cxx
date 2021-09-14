@@ -175,7 +175,7 @@ std::set<OUString> ChartWindowUIObject::get_children() const
     css::uno::Reference< css::chart2::XChartDocument > xChartDoc( pController->getModel(), css::uno::UNO_QUERY );
 
     css::uno::Reference<css::uno::XInterface> xChartView = pController->getChartView();
-    chart::ExplicitValueProvider* pValueProvider = comphelper::getUnoTunnelImplementation<chart::ExplicitValueProvider>( xChartView );
+    chart::ExplicitValueProvider* pValueProvider = comphelper::getFromUnoTunnel<chart::ExplicitValueProvider>( xChartView );
     chart::ObjectHierarchy aHierarchy(xChartDoc, pValueProvider);
     chart::ObjectIdentifier aIdentifier = chart::ObjectHierarchy::getRootNodeOID();
     aChildren.insert(aIdentifier.getObjectCID());

@@ -152,14 +152,14 @@ void SwXDispatchProviderInterceptor::disposing( const lang::EventObject& )
 
 const uno::Sequence< sal_Int8 > & SwXDispatchProviderInterceptor::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXDispatchProviderInterceptorUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXDispatchProviderInterceptorUnoTunnelId;
     return theSwXDispatchProviderInterceptorUnoTunnelId.getSeq();
 }
 
 sal_Int64 SwXDispatchProviderInterceptor::getSomething(
     const uno::Sequence< sal_Int8 >& aIdentifier )
 {
-    if( isUnoTunnelId<SwXDispatchProviderInterceptor>(aIdentifier) )
+    if( comphelper::isUnoTunnelId<SwXDispatchProviderInterceptor>(aIdentifier) )
     {
         return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ));
     }

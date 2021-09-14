@@ -1161,13 +1161,13 @@ public:
 
 const ::uno::Sequence< sal_Int8 > & SwXFrame::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXFrameUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXFrameUnoTunnelId;
     return theSwXFrameUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXFrame::getSomething( const ::uno::Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SwXFrame>(rId) )
+    if( comphelper::isUnoTunnelId<SwXFrame>(rId) )
     {
         return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
     }
@@ -1733,7 +1733,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             uno::Reference<text::XTextFrame> xFrame;
             if(aValue >>= xFrame)
             {
-                SwXFrame* pFrame = comphelper::getUnoTunnelImplementation<SwXFrame>(xFrame);
+                SwXFrame* pFrame = comphelper::getFromUnoTunnel<SwXFrame>(xFrame);
                 if(pFrame && this != pFrame && pFrame->GetFrameFormat() && pFrame->GetFrameFormat()->GetDoc() == pDoc)
                 {
                     SfxItemSet aSet( pDoc->GetAttrPool(),

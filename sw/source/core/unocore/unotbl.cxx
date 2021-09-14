@@ -755,13 +755,13 @@ SwXCell::~SwXCell()
 
 const uno::Sequence< sal_Int8 > & SwXCell::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXCellUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXCellUnoTunnelId;
     return theSwXCellUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXCell::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SwXCell>(rId) )
+    if( comphelper::isUnoTunnelId<SwXCell>(rId) )
     {
         return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
     }
@@ -1976,13 +1976,13 @@ public:
 
 const uno::Sequence< sal_Int8 > & SwXTextTable::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextTableUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXTextTableUnoTunnelId;
     return theSwXTextTableUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXTextTable::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    if(isUnoTunnelId<SwXTextTable>(rId))
+    if(comphelper::isUnoTunnelId<SwXTextTable>(rId))
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }
@@ -3183,13 +3183,13 @@ namespace
 
 const uno::Sequence< sal_Int8 > & SwXCellRange::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXCellRangeUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXCellRangeUnoTunnelId;
     return theSwXCellRangeUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXCellRange::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SwXCellRange>(rId) )
+    if( comphelper::isUnoTunnelId<SwXCellRange>(rId) )
     {
         return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
     }

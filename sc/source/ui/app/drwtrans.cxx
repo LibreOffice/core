@@ -737,14 +737,14 @@ void ScDrawTransferObj::InitDocShell()
 
 const css::uno::Sequence< sal_Int8 >& ScDrawTransferObj::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theScDrawTransferObjUnoTunnelId;
+    static const comphelper::UnoIdInit theScDrawTransferObjUnoTunnelId;
     return theScDrawTransferObjUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL ScDrawTransferObj::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
     sal_Int64 nRet;
-    if( isUnoTunnelId<ScDrawTransferObj>(rId) )
+    if( comphelper::isUnoTunnelId<ScDrawTransferObj>(rId) )
     {
         nRet = reinterpret_cast< sal_Int64 >( this );
     }

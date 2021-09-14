@@ -461,7 +461,7 @@ protected:
 
 const uno::Sequence< sal_Int8 > & SwXFieldMaster::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXFieldMasterUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXFieldMasterUnoTunnelId;
     return theSwXFieldMasterUnoTunnelId.getSeq();
 }
 
@@ -1173,7 +1173,7 @@ public:
 
 const uno::Sequence< sal_Int8 > & SwXTextField::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextFieldUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXTextFieldUnoTunnelId;
     return theSwXTextFieldUnoTunnelId.getSeq();
 }
 

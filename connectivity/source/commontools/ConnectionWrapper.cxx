@@ -154,7 +154,7 @@ Sequence< Type > SAL_CALL OConnectionWrapper::getTypes(  )
 // css::lang::XUnoTunnel
 sal_Int64 SAL_CALL OConnectionWrapper::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    if (isUnoTunnelId<OConnectionWrapper>(rId))
+    if (comphelper::isUnoTunnelId<OConnectionWrapper>(rId))
         return reinterpret_cast< sal_Int64 >( this );
 
     if(m_xUnoTunnel.is())

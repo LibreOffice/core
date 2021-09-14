@@ -427,7 +427,7 @@ SwXDocumentIndex::CreateXDocumentIndex(
 
 const uno::Sequence< sal_Int8 > & SwXDocumentIndex::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXDocumentIndexUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXDocumentIndexUnoTunnelId;
     return theSwXDocumentIndexUnoTunnelId.getSeq();
 }
 
@@ -1656,7 +1656,7 @@ namespace
 
 const uno::Sequence< sal_Int8 > & SwXDocumentIndexMark::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXDocumentIndexMarkUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXDocumentIndexMarkUnoTunnelId;
     return theSwXDocumentIndexMarkUnoTunnelId.getSeq();
 }
 

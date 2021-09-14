@@ -1683,7 +1683,7 @@ Sequence< sal_Int8 > ZipPackage::getUnoTunnelId()
 
 sal_Int64 SAL_CALL ZipPackage::getSomething( const uno::Sequence< sal_Int8 >& aIdentifier )
 {
-    if ( isUnoTunnelId<ZipPackage>(aIdentifier) )
+    if ( comphelper::isUnoTunnelId<ZipPackage>(aIdentifier) )
         return reinterpret_cast < sal_Int64 > ( this );
     return 0;
 }

@@ -1020,14 +1020,14 @@ namespace
 
 const uno::Sequence< sal_Int8 > & SwXNumberingRules::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXNumberingRulesUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXNumberingRulesUnoTunnelId;
     return theSwXNumberingRulesUnoTunnelId.getSeq();
 }
 
 // return implementation specific data
 sal_Int64 SwXNumberingRules::getSomething( const uno::Sequence< sal_Int8 > & rId )
 {
-    if( isUnoTunnelId<SwXNumberingRules>(rId) )
+    if( comphelper::isUnoTunnelId<SwXNumberingRules>(rId) )
     {
         return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
     }

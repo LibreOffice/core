@@ -287,7 +287,7 @@ bool SwXParagraph::SelectPaM(SwPaM & rPaM)
 
 const uno::Sequence< sal_Int8 > & SwXParagraph::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXParagraphUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXParagraphUnoTunnelId;
     return theSwXParagraphUnoTunnelId.getSeq();
 }
 

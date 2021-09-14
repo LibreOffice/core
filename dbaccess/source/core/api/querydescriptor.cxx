@@ -140,7 +140,7 @@ OQueryDescriptor_Base::~OQueryDescriptor_Base()
 
 sal_Int64 SAL_CALL OQueryDescriptor_Base::getSomething( const Sequence< sal_Int8 >& _rIdentifier )
 {
-    if (isUnoTunnelId<OQueryDescriptor_Base>(_rIdentifier))
+    if (comphelper::isUnoTunnelId<OQueryDescriptor_Base>(_rIdentifier))
         return reinterpret_cast<sal_Int64>(this);
 
     return 0;

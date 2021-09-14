@@ -93,7 +93,7 @@ SecurityEnvironmentGpg::~SecurityEnvironmentGpg()
 /* XUnoTunnel */
 sal_Int64 SAL_CALL SecurityEnvironmentGpg::getSomething( const Sequence< sal_Int8 >& aIdentifier )
 {
-    if( isUnoTunnelId<SecurityEnvironmentGpg>(aIdentifier) ) {
+    if( comphelper::isUnoTunnelId<SecurityEnvironmentGpg>(aIdentifier) ) {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
     }
     return 0 ;
@@ -106,7 +106,7 @@ namespace
 }
 
 const Sequence< sal_Int8>& SecurityEnvironmentGpg::getUnoTunnelId() {
-    static const UnoTunnelIdInit theSecurityEnvironmentUnoTunnelId;
+    static const comphelper::UnoIdInit theSecurityEnvironmentUnoTunnelId;
     return theSecurityEnvironmentUnoTunnelId.getSeq();
 }
 

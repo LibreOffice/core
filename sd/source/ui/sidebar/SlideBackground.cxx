@@ -1082,7 +1082,7 @@ IMPL_LINK_NOARG(SlideBackground, PaperSizeModifyHdl, weld::ComboBox&, void)
     {
         if (pViewShell->GetDocId() == mrBase.GetDocId())
         {
-            SdXImpressDocument* pDoc = comphelper::getUnoTunnelImplementation<SdXImpressDocument>(pViewShell->GetCurrentDocument());
+            SdXImpressDocument* pDoc = comphelper::getFromUnoTunnel<SdXImpressDocument>(pViewShell->GetCurrentDocument());
             SfxLokHelper::notifyDocumentSizeChangedAllViews(pDoc);
         }
         pViewShell = SfxViewShell::GetNext(*pViewShell);

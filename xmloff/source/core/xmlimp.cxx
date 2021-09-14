@@ -467,14 +467,14 @@ bool SvXMLImport::addEmbeddedFont(const css::uno::Reference< css::io::XInputStre
 
 const css::uno::Sequence<sal_Int8>& SvXMLImport::getUnoTunnelId() noexcept
 {
-    static const UnoTunnelIdInit theSvXMLImportUnoTunnelId;
+    static const comphelper::UnoIdInit theSvXMLImportUnoTunnelId;
     return theSvXMLImportUnoTunnelId.getSeq();
 }
 
 // XUnoTunnel
 sal_Int64 SAL_CALL SvXMLImport::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SvXMLImport>(rId) )
+    if( comphelper::isUnoTunnelId<SvXMLImport>(rId) )
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
     }
@@ -988,7 +988,7 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                     uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= xIfc;
 
-                    StyleMap *pSMap = comphelper::getUnoTunnelImplementation<StyleMap>( xIfc );
+                    StyleMap *pSMap = comphelper::getFromUnoTunnel<StyleMap>( xIfc );
                     if( pSMap )
                     {
                         mpStyleMap = pSMap;

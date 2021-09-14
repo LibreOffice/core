@@ -1043,7 +1043,7 @@ namespace {
 
 uno::Reference< lang::XMultiServiceFactory > getShapeFactory(const uno::Reference<uno::XInterface>& xChartView)
 {
-    auto pProvider = comphelper::getUnoTunnelImplementation<ExplicitValueProvider>(xChartView);
+    auto pProvider = comphelper::getFromUnoTunnel<ExplicitValueProvider>(xChartView);
     if( pProvider )
         return pProvider->getDrawModelWrapper()->getShapeFactory();
 

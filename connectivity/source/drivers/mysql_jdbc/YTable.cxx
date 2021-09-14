@@ -128,8 +128,8 @@ Sequence<sal_Int8> OMySQLTable::getUnoTunnelId()
 
 sal_Int64 OMySQLTable::getSomething(const Sequence<sal_Int8>& rId)
 {
-    return (isUnoTunnelId<OMySQLTable>(rId)) ? reinterpret_cast<sal_Int64>(this)
-                                             : OTable_TYPEDEF::getSomething(rId);
+    return (comphelper::isUnoTunnelId<OMySQLTable>(rId)) ? reinterpret_cast<sal_Int64>(this)
+                                                         : OTable_TYPEDEF::getSomething(rId);
 }
 
 // XAlterTable

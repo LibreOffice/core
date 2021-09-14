@@ -111,7 +111,7 @@ namespace sw {
     UnoTunnelImpl(const css::uno::Sequence< sal_Int8 > & rId,
                   C *const pThis)
     {
-        if (isUnoTunnelId<C>(rId))
+        if (comphelper::isUnoTunnelId<C>(rId))
         {
             return ::sal::static_int_cast< sal_Int64 >(
                     reinterpret_cast< sal_IntPtr >(pThis) );

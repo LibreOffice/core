@@ -739,7 +739,7 @@ ElementDescription* OGridControlModel::createElementMetaData( )
 
 void OGridControlModel::approveNewElement( const Reference< XPropertySet >& _rxObject, ElementDescription* _pElement )
 {
-    OGridColumn* pCol = comphelper::getUnoTunnelImplementation<OGridColumn>( _rxObject );
+    OGridColumn* pCol = comphelper::getFromUnoTunnel<OGridColumn>( _rxObject );
     if ( !pCol )
         throw IllegalArgumentException();
     OInterfaceContainer::approveNewElement( _rxObject, _pElement );
@@ -763,7 +763,7 @@ void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream
     for (sal_Int32 i = 0; i < nLen; i++)
     {
         // first the service name for the underlying model
-        OGridColumn* pCol = comphelper::getUnoTunnelImplementation<OGridColumn>(m_aItems[i]);
+        OGridColumn* pCol = comphelper::getFromUnoTunnel<OGridColumn>(m_aItems[i]);
         DBG_ASSERT(pCol != nullptr, "OGridControlModel::write : such items should never reach it into my container !");
         _rxOutStream << pCol->getModelName();
         // then the object itself
@@ -867,7 +867,7 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream)
                 sal_Int32 nMark = xMark->createMark();
                 if (xCol.is())
                 {
-                    OGridColumn* pCol = comphelper::getUnoTunnelImplementation<OGridColumn>(xCol);
+                    OGridColumn* pCol = comphelper::getFromUnoTunnel<OGridColumn>(xCol);
                     pCol->read(_rxInStream);
                 }
                 xMark->jumpToMark(nMark);

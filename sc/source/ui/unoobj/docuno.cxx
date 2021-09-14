@@ -1328,7 +1328,7 @@ void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         if (xNumberAgg.is())
         {
             SvNumberFormatsSupplierObj* pNumFmt =
-                comphelper::getUnoTunnelImplementation<SvNumberFormatsSupplierObj>(
+                comphelper::getFromUnoTunnel<SvNumberFormatsSupplierObj>(
                         uno::Reference<util::XNumberFormatsSupplier>(xNumberAgg, uno::UNO_QUERY) );
             if ( pNumFmt )
                 pNumFmt->SetNumberFormatter( nullptr );
@@ -1411,7 +1411,7 @@ static OutputDevice* lcl_GetRenderDevice( const uno::Sequence<beans::PropertyVal
             uno::Reference<awt::XDevice> xRenderDevice(rProp.Value, uno::UNO_QUERY);
             if ( xRenderDevice.is() )
             {
-                VCLXDevice* pDevice = comphelper::getUnoTunnelImplementation<VCLXDevice>( xRenderDevice );
+                VCLXDevice* pDevice = comphelper::getFromUnoTunnel<VCLXDevice>( xRenderDevice );
                 if ( pDevice )
                 {
                     pRet = pDevice->GetOutputDevice().get();
@@ -1570,11 +1570,11 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
     uno::Reference<uno::XInterface> xInterface(aSelection, uno::UNO_QUERY);
     if ( xInterface.is() )
     {
-        ScCellRangesBase* pSelObj = comphelper::getUnoTunnelImplementation<ScCellRangesBase>( xInterface );
+        ScCellRangesBase* pSelObj = comphelper::getFromUnoTunnel<ScCellRangesBase>( xInterface );
         uno::Reference< drawing::XShapes > xShapes( xInterface, uno::UNO_QUERY );
         if ( pSelObj && pSelObj->GetDocShell() == pDocShell )
         {
-            bool bSheet = ( comphelper::getUnoTunnelImplementation<ScTableSheetObj>( xInterface ) != nullptr );
+            bool bSheet = ( comphelper::getFromUnoTunnel<ScTableSheetObj>( xInterface ) != nullptr );
             bool bCursor = pSelObj->IsCursorOnly();
             const ScRangeList& rRanges = pSelObj->GetRangeList();
 
@@ -1629,7 +1629,7 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
                 }
             }
         }
-        else if ( comphelper::getUnoTunnelImplementation<ScModelObj>( xInterface ) == this )
+        else if ( comphelper::getFromUnoTunnel<ScModelObj>( xInterface ) == this )
         {
             //  render the whole document
             //  -> no selection, all sheets
@@ -3092,12 +3092,12 @@ uno::Sequence<OUString> SAL_CALL ScModelObj::getSupportedServiceNames()
 sal_Int64 SAL_CALL ScModelObj::getSomething(
                 const uno::Sequence<sal_Int8 >& rId )
 {
-    if ( isUnoTunnelId<ScModelObj>(rId) )
+    if ( comphelper::isUnoTunnelId<ScModelObj>(rId) )
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }
 
-    if ( isUnoTunnelId<SfxObjectShell>(rId) )
+    if ( comphelper::isUnoTunnelId<SfxObjectShell>(rId) )
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(pDocShell ));
     }
@@ -3125,7 +3125,7 @@ sal_Int64 SAL_CALL ScModelObj::getSomething(
 
 const uno::Sequence<sal_Int8>& ScModelObj::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theScModelObjUnoTunnelId;
+    static const comphelper::UnoIdInit theScModelObjUnoTunnelId;
     return theScModelObjUnoTunnelId.getSeq();
 }
 
@@ -3527,7 +3527,7 @@ uno::Reference<drawing::XDrawPage> SAL_CALL ScDrawPagesObj::insertNewByIndex( sa
 void SAL_CALL ScDrawPagesObj::remove( const uno::Reference<drawing::XDrawPage>& xPage )
 {
     SolarMutexGuard aGuard;
-    SvxDrawPage* pImp = comphelper::getUnoTunnelImplementation<SvxDrawPage>( xPage );
+    SvxDrawPage* pImp = comphelper::getFromUnoTunnel<SvxDrawPage>( xPage );
     if ( pDocShell && pImp )
     {
         SdrPage* pPage = pImp->GetSdrPage();
@@ -3683,7 +3683,7 @@ void SAL_CALL ScTableSheetsObj::insertByName( const OUString& aName, const uno::
         uno::Reference<uno::XInterface> xInterface(aElement, uno::UNO_QUERY);
         if ( xInterface.is() )
         {
-            ScTableSheetObj* pSheetObj = comphelper::getUnoTunnelImplementation<ScTableSheetObj>( xInterface );
+            ScTableSheetObj* pSheetObj = comphelper::getFromUnoTunnel<ScTableSheetObj>( xInterface );
             if ( pSheetObj && !pSheetObj->GetDocShell() )   // not inserted yet?
             {
                 ScDocument& rDoc = pDocShell->GetDocument();
@@ -3729,7 +3729,7 @@ void SAL_CALL ScTableSheetsObj::replaceByName( const OUString& aName, const uno:
         uno::Reference<uno::XInterface> xInterface(aElement, uno::UNO_QUERY);
         if ( xInterface.is() )
         {
-            ScTableSheetObj* pSheetObj = comphelper::getUnoTunnelImplementation<ScTableSheetObj>( xInterface );
+            ScTableSheetObj* pSheetObj = comphelper::getFromUnoTunnel<ScTableSheetObj>( xInterface );
             if ( pSheetObj && !pSheetObj->GetDocShell() )   // not inserted yet?
             {
                 SCTAB nPosition;
@@ -3790,7 +3790,7 @@ sal_Int32 ScTableSheetsObj::importSheet(
     // Source document docShell
     if ( !xDocSrc.is() )
         throw uno::RuntimeException();
-    ScModelObj* pObj = comphelper::getUnoTunnelImplementation<ScModelObj>(xDocSrc);
+    ScModelObj* pObj = comphelper::getFromUnoTunnel<ScModelObj>(xDocSrc);
     ScDocShell* pDocShellSrc = static_cast<ScDocShell*>(pObj->GetEmbeddedObject());
 
     // SourceSheet Position and does srcName exists ?

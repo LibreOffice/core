@@ -60,7 +60,7 @@ SwView_Impl::SwView_Impl(SwView* pShell)
 
 SwView_Impl::~SwView_Impl()
 {
-    auto pInterceptor = comphelper::getUnoTunnelImplementation<SwXDispatchProviderInterceptor>(xDisProvInterceptor);
+    auto pInterceptor = comphelper::getFromUnoTunnel<SwXDispatchProviderInterceptor>(xDisProvInterceptor);
     if(pInterceptor)
         pInterceptor->Invalidate();
     view::XSelectionSupplier* pTextView = mxXTextView.get();
@@ -211,7 +211,7 @@ void SwView_Impl::Invalidate()
     GetUNOObject_Impl()->Invalidate();
     for (const auto& xTransferable: mxTransferables)
     {
-        auto pTransferable = comphelper::getUnoTunnelImplementation<SwTransferable>(xTransferable.get());
+        auto pTransferable = comphelper::getFromUnoTunnel<SwTransferable>(xTransferable.get());
         if(pTransferable)
             pTransferable->Invalidate();
     }

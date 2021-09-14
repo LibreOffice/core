@@ -1691,7 +1691,7 @@ Sequence< OUString > SwXTextViewCursor::getSupportedServiceNames()
 
 const uno::Sequence< sal_Int8 > & SwXTextViewCursor::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextViewCursorUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXTextViewCursorUnoTunnelId;
     return theSwXTextViewCursorUnoTunnelId.getSeq();
 }
 
@@ -1699,7 +1699,7 @@ const uno::Sequence< sal_Int8 > & SwXTextViewCursor::getUnoTunnelId()
 sal_Int64 SAL_CALL SwXTextViewCursor::getSomething(
     const uno::Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SwXTextViewCursor>(rId) )
+    if( comphelper::isUnoTunnelId<SwXTextViewCursor>(rId) )
     {
         return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ));
     }

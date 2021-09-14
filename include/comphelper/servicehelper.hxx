@@ -25,37 +25,89 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
-class UnoTunnelIdInit
-{
-private:
-    css::uno::Sequence< sal_Int8 > m_aSeq;
-public:
-    UnoTunnelIdInit() : m_aSeq(16)
-    {
-        rtl_createUuid( reinterpret_cast<sal_uInt8*>(m_aSeq.getArray()), nullptr, true );
-    }
-    const css::uno::Sequence< sal_Int8 >& getSeq() const { return m_aSeq; }
-};
+#include <type_traits>
 
 namespace comphelper {
 
-    template<class T>
-    T* getUnoTunnelImplementation( const css::uno::Reference< css::uno::XInterface >& xIface )
+    // Class incapsulating UIDs used as e.g. tunnel IDs for css::lang::XUnoTunnel,
+    // or implementation IDs for css::lang::XTypeProvider
+    class UnoIdInit
     {
-        css::uno::Reference< css::lang::XUnoTunnel > xUT( xIface, css::uno::UNO_QUERY );
+    private:
+        css::uno::Sequence< sal_Int8 > m_aSeq;
+    public:
+        UnoIdInit() : m_aSeq(16)
+        {
+            rtl_createUuid(reinterpret_cast<sal_uInt8*>(m_aSeq.getArray()), nullptr, true);
+        }
+        const css::uno::Sequence< sal_Int8 >& getSeq() const { return m_aSeq; }
+    };
+
+    inline sal_Int64 getSomething_cast(void* p)
+    {
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(p));
+    }
+
+    template<class T> inline T* getSomething_cast(sal_Int64 n)
+    {
+        return reinterpret_cast<T*>(sal::static_int_cast<sal_IntPtr>(n));
+    }
+
+    template <class T> T* getFromUnoTunnel(const css::uno::Reference<css::lang::XUnoTunnel>& xUT)
+    {
         if (!xUT.is())
             return nullptr;
 
-        return reinterpret_cast<T*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( T::getUnoTunnelId() )));
+        return getSomething_cast<T>(xUT->getSomething(T::getUnoTunnelId()));
     }
 
-}
+    // Takes an interface
+    template <class T> T* getFromUnoTunnel(const css::uno::Reference<css::uno::XInterface>& xIface)
+    {
+        return getFromUnoTunnel<T>(
+            css::uno::Reference<css::lang::XUnoTunnel>{ xIface, css::uno::UNO_QUERY });
+    }
 
-template <typename T>
-inline bool isUnoTunnelId(const css::uno::Sequence< sal_Int8 >& rId)
-{
-    return rId.getLength() == 16
-        && memcmp( T::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) == 0;
+    // Takes an Any
+    template <class T> T* getFromUnoTunnel(const css::uno::Any& rAny)
+    {
+        // For unclear reason, using a Reference ctor taking an Any
+        // gives different results compared to use of operator >>=.
+        css::uno::Reference<css::lang::XUnoTunnel> xUnoTunnel;
+        rAny >>= xUnoTunnel;
+        return getFromUnoTunnel<T>(xUnoTunnel);
+    }
+
+    template <typename T>
+    inline bool isUnoTunnelId(const css::uno::Sequence< sal_Int8 >& rId)
+    {
+        return rId.getLength() == 16
+            && memcmp(T::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16) == 0;
+    }
+
+    template <class Base> struct FallbackToGetSomethingOf
+    {
+        static sal_Int64 get(const css::uno::Sequence<sal_Int8>& rId, Base* p)
+        {
+            return p->Base::getSomething(rId);
+        }
+    };
+
+    template <> struct FallbackToGetSomethingOf<void>
+    {
+        static sal_Int64 get(const css::uno::Sequence<sal_Int8>&, void*) { return 0; }
+    };
+
+    template <class T, class Base = void>
+    sal_Int64 getSomethingImpl(const css::uno::Sequence<sal_Int8>& rId, T* pThis,
+        FallbackToGetSomethingOf<Base> = {})
+    {
+        if (isUnoTunnelId<T>(rId))
+            return getSomething_cast(pThis);
+
+        return FallbackToGetSomethingOf<Base>::get(rId, pThis);
+    }
+
 }
 
 /** the UNO3_GETIMPLEMENTATION_* macros  implement a static helper function
@@ -63,7 +115,7 @@ inline bool isUnoTunnelId(const css::uno::Sequence< sal_Int8 >& rId)
     if possible.
 
     Example:
-        MyClass* pClass = comphelper::getUnoTunnelImplementation<MyClass>( xRef );
+        MyClass* pClass = comphelper::getFromUnoTunnel<MyClass>( xRef );
 
     Usage:
         Put a UNO3_GETIMPLEMENTATION_DECL( classname ) inside your class
@@ -79,7 +131,7 @@ inline bool isUnoTunnelId(const css::uno::Sequence< sal_Int8 >& rId)
 #define UNO3_GETIMPLEMENTATION_BASE_IMPL( classname ) \
 const css::uno::Sequence< sal_Int8 > & classname::getUnoTunnelId() noexcept \
 { \
-    static const UnoTunnelIdInit aId; \
+    static const comphelper::UnoIdInit aId; \
     return aId.getSeq(); \
 }
 
@@ -87,25 +139,14 @@ const css::uno::Sequence< sal_Int8 > & classname::getUnoTunnelId() noexcept \
 UNO3_GETIMPLEMENTATION_BASE_IMPL(classname)\
 sal_Int64 SAL_CALL classname::getSomething( const css::uno::Sequence< sal_Int8 >& rId ) \
 { \
-    if( isUnoTunnelId<classname>(rId) ) \
-    { \
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this)); \
-    } \
-    return 0; \
+    return comphelper::getSomethingImpl(rId, this); \
 }
 
 #define UNO3_GETIMPLEMENTATION2_IMPL( classname, baseclass )\
 UNO3_GETIMPLEMENTATION_BASE_IMPL(classname)\
 sal_Int64 SAL_CALL classname::getSomething( const css::uno::Sequence< sal_Int8 >& rId ) \
 { \
-    if( isUnoTunnelId<classname>(rId) ) \
-    { \
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this)); \
-    } \
-    else \
-    { \
-        return baseclass::getSomething( rId ); \
-    } \
+    return comphelper::getSomethingImpl(rId, this, comphelper::FallbackToGetSomethingOf<baseclass>{}); \
 }
 
 

@@ -451,7 +451,7 @@ OUString SAL_CALL ODBTableDecorator::getName()
 
 sal_Int64 SAL_CALL ODBTableDecorator::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    if (isUnoTunnelId<ODBTableDecorator>(rId))
+    if (comphelper::isUnoTunnelId<ODBTableDecorator>(rId))
         return reinterpret_cast<sal_Int64>(this);
 
     sal_Int64 nRet = 0;

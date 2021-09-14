@@ -401,7 +401,7 @@ Reference< XDynamicResultSet > OConnection::getDir() const
 
 sal_Int64 SAL_CALL OConnection::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    return (isUnoTunnelId<OConnection>(rId))
+    return (comphelper::isUnoTunnelId<OConnection>(rId))
         ? reinterpret_cast< sal_Int64 >( this )
         : sal_Int64(0);
 }

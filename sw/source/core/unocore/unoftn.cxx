@@ -168,7 +168,7 @@ SwXFootnote::CreateXFootnote(SwDoc & rDoc, SwFormatFootnote *const pFootnoteForm
 
 const uno::Sequence< sal_Int8 > & SwXFootnote::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXFootnoteUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXFootnoteUnoTunnelId;
     return theSwXFootnoteUnoTunnelId.getSeq();
 }
 

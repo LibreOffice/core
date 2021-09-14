@@ -24,7 +24,7 @@ using namespace ::com::sun::star;
 
 const uno::Sequence< sal_Int8 > & OTextCursorHelper::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theOTextCursorHelperUnoTunnelId;
+    static const comphelper::UnoIdInit theOTextCursorHelperUnoTunnelId;
     return theOTextCursorHelperUnoTunnelId.getSeq();
 }
 
@@ -32,7 +32,7 @@ const uno::Sequence< sal_Int8 > & OTextCursorHelper::getUnoTunnelId()
 sal_Int64 SAL_CALL OTextCursorHelper::getSomething(
     const uno::Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<OTextCursorHelper>(rId) )
+    if( comphelper::isUnoTunnelId<OTextCursorHelper>(rId) )
     {
         return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
     }

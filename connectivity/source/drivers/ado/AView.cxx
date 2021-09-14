@@ -52,7 +52,7 @@ Sequence< sal_Int8 > OAdoView::getUnoTunnelId()
 
 sal_Int64 OAdoView::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return isUnoTunnelId<OAdoView>(rId)
+    return comphelper::isUnoTunnelId<OAdoView>(rId)
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OView_ADO::getSomething(rId);
 }

@@ -31,8 +31,7 @@ sal_Bool IndexingExportFilter::filter(const uno::Sequence<beans::PropertyValue>&
     utl::MediaDescriptor aMediaDesc = aDescriptor;
 
     // Actually get the SwRootFrame to call dumpAsXml
-    auto pXTextDocument
-        = comphelper::getUnoTunnelImplementation<SwXTextDocument>(m_xSourceDocument);
+    auto pXTextDocument = comphelper::getFromUnoTunnel<SwXTextDocument>(m_xSourceDocument);
     if (pXTextDocument)
     {
         uno::Reference<io::XOutputStream> xOutputStream = aMediaDesc.getUnpackedValueOrDefault(

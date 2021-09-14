@@ -147,7 +147,7 @@ Reference< XIndexAccess > ConstItemContainer::deepCopyContainer( const Reference
     Reference< XIndexAccess > xReturn;
     if ( rSubContainer.is() )
     {
-        ItemContainer*      pSource = comphelper::getUnoTunnelImplementation<ItemContainer>( rSubContainer );
+        ItemContainer*      pSource = comphelper::getFromUnoTunnel<ItemContainer>( rSubContainer );
         rtl::Reference<ConstItemContainer> pSubContainer;
         if ( pSource )
             pSubContainer = new ConstItemContainer( *pSource );
@@ -162,7 +162,7 @@ Reference< XIndexAccess > ConstItemContainer::deepCopyContainer( const Reference
 // XUnoTunnel
 sal_Int64 ConstItemContainer::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
 {
-    if( isUnoTunnelId<ConstItemContainer>(rIdentifier) )
+    if( comphelper::isUnoTunnelId<ConstItemContainer>(rIdentifier) )
     {
         return reinterpret_cast< sal_Int64 >( this );
     }
@@ -171,7 +171,7 @@ sal_Int64 ConstItemContainer::getSomething( const css::uno::Sequence< sal_Int8 >
 
 const Sequence< sal_Int8 >& ConstItemContainer::getUnoTunnelId() noexcept
 {
-    static const UnoTunnelIdInit theConstItemContainerUnoTunnelId;
+    static const comphelper::UnoIdInit theConstItemContainerUnoTunnelId;
     return theConstItemContainerUnoTunnelId.getSeq();
 }
 

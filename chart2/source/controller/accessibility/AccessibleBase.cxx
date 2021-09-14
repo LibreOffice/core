@@ -631,7 +631,7 @@ Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleAtPoint( const aw
 awt::Rectangle SAL_CALL AccessibleBase::getBounds()
 {
     ExplicitValueProvider *pExplicitValueProvider(
-        comphelper::getUnoTunnelImplementation<ExplicitValueProvider>( m_aAccInfo.m_xView ));
+        comphelper::getFromUnoTunnel<ExplicitValueProvider>( m_aAccInfo.m_xView ));
     if( pExplicitValueProvider )
     {
         VclPtr<vcl::Window> pWindow( VCLUnoHelper::GetWindow( m_aAccInfo.m_xWindow ));

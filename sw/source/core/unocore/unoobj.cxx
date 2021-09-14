@@ -849,7 +849,7 @@ SwXTextCursor::getSupportedServiceNames()
 
 const uno::Sequence< sal_Int8 > & SwXTextCursor::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextCursorUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXTextCursorUnoTunnelId;
     return theSwXTextCursorUnoTunnelId.getSeq();
 }
 
@@ -2858,7 +2858,7 @@ SwXTextCursor::createEnumeration()
 
     SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
-    SwXText* pParentText = comphelper::getUnoTunnelImplementation<SwXText>(m_xParentText);
+    SwXText* pParentText = comphelper::getFromUnoTunnel<SwXText>(m_xParentText);
     OSL_ENSURE(pParentText, "parent is not a SwXText");
     if (!pParentText)
     {

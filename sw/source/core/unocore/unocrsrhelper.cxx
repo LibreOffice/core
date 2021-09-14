@@ -833,7 +833,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
     uno::Reference<XIndexReplace> xIndexReplace;
     if(rValue >>= xIndexReplace)
     {
-        auto pSwNum = comphelper::getUnoTunnelImplementation<SwXNumberingRules>(xIndexReplace);
+        auto pSwNum = comphelper::getFromUnoTunnel<SwXNumberingRules>(xIndexReplace);
         if(pSwNum)
         {
             SwDoc& rDoc = rPam.GetDoc();

@@ -77,7 +77,7 @@ Sequence< sal_Int8 > OAdoUser::getUnoTunnelId()
 
 sal_Int64 OAdoUser::getSomething( const Sequence< sal_Int8 > & rId )
 {
-    return isUnoTunnelId<OAdoUser>(rId)
+    return comphelper::isUnoTunnelId<OAdoUser>(rId)
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OUser_TYPEDEF::getSomething(rId);
 }

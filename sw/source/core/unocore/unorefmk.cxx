@@ -151,7 +151,7 @@ SwXReferenceMark::CreateXReferenceMark(
 
 const uno::Sequence< sal_Int8 > & SwXReferenceMark::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXReferenceMarkUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXReferenceMarkUnoTunnelId;
     return theSwXReferenceMarkUnoTunnelId.getSeq();
 }
 
@@ -713,7 +713,7 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
         if (pPortions) // set cache in the XMeta to the given portions
         {
             SwXMeta *const pXMeta(
-                comphelper::getUnoTunnelImplementation<SwXMeta>(xMeta));
+                comphelper::getFromUnoTunnel<SwXMeta>(xMeta));
             assert(pXMeta);
             // NB: the meta must always be created with the complete content
             // if SwXTextPortionEnumeration is created for a selection,
@@ -842,7 +842,7 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
 
 const uno::Sequence< sal_Int8 > & SwXMeta::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXMetaUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXMetaUnoTunnelId;
     return theSwXMetaUnoTunnelId.getSeq();
 }
 

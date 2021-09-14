@@ -154,7 +154,7 @@ Sequence< OUString > SAL_CALL SecurityEnvironment_NssImpl::getSupportedServiceNa
 /* XUnoTunnel */
 sal_Int64 SAL_CALL SecurityEnvironment_NssImpl::getSomething( const Sequence< sal_Int8 >& aIdentifier )
 {
-    if( isUnoTunnelId<SecurityEnvironment_NssImpl>(aIdentifier) ) {
+    if( comphelper::isUnoTunnelId<SecurityEnvironment_NssImpl>(aIdentifier) ) {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
     }
     return 0 ;
@@ -163,7 +163,7 @@ sal_Int64 SAL_CALL SecurityEnvironment_NssImpl::getSomething( const Sequence< sa
 /* XUnoTunnel extension */
 
 const Sequence< sal_Int8>& SecurityEnvironment_NssImpl::getUnoTunnelId() {
-    static const UnoTunnelIdInit theSecurityEnvironment_NssImplUnoTunnelId;
+    static const comphelper::UnoIdInit theSecurityEnvironment_NssImplUnoTunnelId;
     return theSecurityEnvironment_NssImplUnoTunnelId.getSeq();
 }
 

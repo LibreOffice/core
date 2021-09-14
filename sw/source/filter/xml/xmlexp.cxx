@@ -477,13 +477,13 @@ void SwXMLExport::ExportContent_()
 
 const Sequence< sal_Int8 > & SwXMLExport::getUnoTunnelId() noexcept
 {
-    static const UnoTunnelIdInit theSwXMLExportUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXMLExportUnoTunnelId;
     return theSwXMLExportUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXMLExport::getSomething( const Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SwXMLExport>(rId) )
+    if( comphelper::isUnoTunnelId<SwXMLExport>(rId) )
     {
         return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
     }

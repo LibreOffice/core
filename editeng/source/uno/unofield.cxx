@@ -231,13 +231,13 @@ static tools::Time setTime( util::DateTime const & rDate )
 
 const css::uno::Sequence< sal_Int8 > & SvxUnoTextField::getUnoTunnelId() noexcept
 {
-    static const UnoTunnelIdInit theSvxUnoTextFieldUnoTunnelId;
+    static const comphelper::UnoIdInit theSvxUnoTextFieldUnoTunnelId;
     return theSvxUnoTextFieldUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SvxUnoTextField::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SvxUnoTextField>(rId) )
+    if( comphelper::isUnoTunnelId<SvxUnoTextField>(rId) )
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }
@@ -654,7 +654,7 @@ OUString SAL_CALL SvxUnoTextField::getPresentation( sal_Bool bShowCommand )
 // Interface text::XTextContent
 void SAL_CALL SvxUnoTextField::attach( const uno::Reference< text::XTextRange >& xTextRange )
 {
-    SvxUnoTextRangeBase* pRange = comphelper::getUnoTunnelImplementation<SvxUnoTextRange>( xTextRange );
+    SvxUnoTextRangeBase* pRange = comphelper::getFromUnoTunnel<SvxUnoTextRange>( xTextRange );
     if(pRange == nullptr)
         throw lang::IllegalArgumentException();
 

@@ -198,7 +198,7 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
             }
 
             // get that DrawPage's UNO API implementation
-            SvxDrawPage* pSvxDrawPage(comphelper::getUnoTunnelImplementation<SvxDrawPage>(xDrawPage));
+            SvxDrawPage* pSvxDrawPage(comphelper::getFromUnoTunnel<SvxDrawPage>(xDrawPage));
 
             if(nullptr == pSvxDrawPage || nullptr == pSvxDrawPage->GetSdrPage())
             {

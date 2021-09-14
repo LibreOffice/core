@@ -83,7 +83,7 @@ bool SmMLExportWrapper::Export(SfxMedium& rMedium)
     //Get model
     uno::Reference<lang::XComponent> xModelComp = m_xModel;
     SAL_WARN_IF(xModelComp == nullptr, "starmath", "Missing model component");
-    SmModel* pModel = comphelper::getUnoTunnelImplementation<SmModel>(m_xModel);
+    SmModel* pModel = comphelper::getFromUnoTunnel<SmModel>(m_xModel);
     SAL_WARN_IF(pModel == nullptr, "starmath", "Failed to get threw uno tunnel");
     if (xModelComp == nullptr || pModel == nullptr)
         return false;
@@ -251,7 +251,7 @@ OUString SmMLExportWrapper::Export(SmMlElement* pElementTree)
     //Get model
     uno::Reference<lang::XComponent> xModelComp = m_xModel;
     SAL_WARN_IF(xModelComp == nullptr, "starmath", "Missing model component");
-    SmModel* pModel = comphelper::getUnoTunnelImplementation<SmModel>(m_xModel);
+    SmModel* pModel = comphelper::getFromUnoTunnel<SmModel>(m_xModel);
     SAL_WARN_IF(pModel == nullptr, "starmath", "Failed to get threw uno tunnel");
     if (xModelComp == nullptr || pModel == nullptr)
         return u"";
@@ -336,7 +336,7 @@ bool SmMLExportWrapper::WriteThroughComponentOS(const Reference<io::XOutputStrea
     // filter
     if (nSyntaxVersion == 5)
     {
-        SmXMLExport* pFilter = comphelper::getUnoTunnelImplementation<SmXMLExport>(xFilter);
+        SmXMLExport* pFilter = comphelper::getFromUnoTunnel<SmXMLExport>(xFilter);
         if (pFilter == nullptr)
         {
             SAL_WARN("starmath", "Failed to fetch SmMLExport");
@@ -347,7 +347,7 @@ bool SmMLExportWrapper::WriteThroughComponentOS(const Reference<io::XOutputStrea
     }
 
     // filter
-    SmMLExport* pFilter = comphelper::getUnoTunnelImplementation<SmMLExport>(xFilter);
+    SmMLExport* pFilter = comphelper::getFromUnoTunnel<SmMLExport>(xFilter);
 
     // Setup filter
     if (pFilter == nullptr)
@@ -446,14 +446,14 @@ SmMLExportWrapper::WriteThroughComponentMS(const Reference<XComponent>& xCompone
 
 sal_Int64 SAL_CALL SmMLExport::getSomething(const uno::Sequence<sal_Int8>& rId)
 {
-    if (isUnoTunnelId<SmMLExport>(rId))
+    if (comphelper::isUnoTunnelId<SmMLExport>(rId))
         return reinterpret_cast<intptr_t>(this);
     return SvXMLExport::getSomething(rId);
 }
 
 const uno::Sequence<sal_Int8>& SmMLExport::getUnoTunnelId() noexcept
 {
-    static const UnoTunnelIdInit theSmMLExportUnoTunnelId;
+    static const comphelper::UnoIdInit theSmMLExportUnoTunnelId;
     return theSmMLExportUnoTunnelId.getSeq();
 }
 
@@ -491,7 +491,7 @@ Math_MLContentExporter_get_implementation(css::uno::XComponentContext* context,
 
 SmDocShell* SmMLExport::getSmDocShell()
 {
-    SmModel* pModel = comphelper::getUnoTunnelImplementation<SmModel>(GetModel());
+    SmModel* pModel = comphelper::getFromUnoTunnel<SmModel>(GetModel());
     if (pModel != nullptr)
         return static_cast<SmDocShell*>(pModel->GetObjectShell());
     return nullptr;

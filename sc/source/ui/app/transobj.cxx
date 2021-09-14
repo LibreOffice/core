@@ -648,7 +648,7 @@ ScDocument* ScTransferObj::GetSourceDocument()
 
 ScDocShell* ScTransferObj::GetSourceDocShell()
 {
-    ScCellRangesBase* pRangesObj = comphelper::getUnoTunnelImplementation<ScCellRangesBase>( m_xDragSourceRanges );
+    ScCellRangesBase* pRangesObj = comphelper::getFromUnoTunnel<ScCellRangesBase>( m_xDragSourceRanges );
     if (pRangesObj)
         return pRangesObj->GetDocShell();
 
@@ -658,7 +658,7 @@ ScDocShell* ScTransferObj::GetSourceDocShell()
 ScMarkData ScTransferObj::GetSourceMarkData() const
 {
     ScMarkData aMarkData(m_pDoc->GetSheetLimits());
-    ScCellRangesBase* pRangesObj = comphelper::getUnoTunnelImplementation<ScCellRangesBase>( m_xDragSourceRanges );
+    ScCellRangesBase* pRangesObj = comphelper::getFromUnoTunnel<ScCellRangesBase>( m_xDragSourceRanges );
     if (pRangesObj)
     {
         const ScRangeList& rRanges = pRangesObj->GetRangeList();
@@ -922,14 +922,14 @@ void ScTransferObj::StripRefs( ScDocument& rDoc,
 
 const css::uno::Sequence< sal_Int8 >& ScTransferObj::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theScTransferUnoTunnelId;
+    static const comphelper::UnoIdInit theScTransferUnoTunnelId;
     return theScTransferUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL ScTransferObj::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
     sal_Int64 nRet;
-    if( isUnoTunnelId<ScTransferObj>(rId) )
+    if( comphelper::isUnoTunnelId<ScTransferObj>(rId) )
     {
         nRet = reinterpret_cast< sal_Int64 >( this );
     }

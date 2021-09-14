@@ -206,13 +206,13 @@ uno::Sequence< OUString > SwXAutoTextContainer::getSupportedServiceNames()
 
 const uno::Sequence< sal_Int8 > & SwXAutoTextGroup::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXAutoTextGroupUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXAutoTextGroupUnoTunnelId;
     return theSwXAutoTextGroupUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXAutoTextGroup::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SwXAutoTextGroup>(rId) )
+    if( comphelper::isUnoTunnelId<SwXAutoTextGroup>(rId) )
     {
         return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ));
     }
@@ -668,13 +668,13 @@ uno::Sequence< OUString > SwXAutoTextGroup::getSupportedServiceNames()
 
 const uno::Sequence< sal_Int8 > & SwXAutoTextEntry::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXAutoTextEntryUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXAutoTextEntryUnoTunnelId;
     return theSwXAutoTextEntryUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXAutoTextEntry::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SwXAutoTextEntry>(rId) )
+    if( comphelper::isUnoTunnelId<SwXAutoTextEntry>(rId) )
     {
         return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ));
     }

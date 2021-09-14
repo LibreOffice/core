@@ -88,13 +88,13 @@ sal_uInt16 SvUnoAttributeContainer::getIndexByName(const OUString& aName ) const
 
 const css::uno::Sequence< sal_Int8 > & SvUnoAttributeContainer::getUnoTunnelId() noexcept
 {
-    static const UnoTunnelIdInit theSvUnoAttributeContainerUnoTunnelId;
+    static const comphelper::UnoIdInit theSvUnoAttributeContainerUnoTunnelId;
     return theSvUnoAttributeContainerUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SvUnoAttributeContainer::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
-    if( isUnoTunnelId<SvUnoAttributeContainer>(rId) )
+    if( comphelper::isUnoTunnelId<SvUnoAttributeContainer>(rId) )
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
     }

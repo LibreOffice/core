@@ -1033,7 +1033,7 @@ struct CreateShapeParam2D
 
 const uno::Sequence<sal_Int8>& ExplicitValueProvider::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theExplicitValueProviderUnoTunnelId;
+    static const comphelper::UnoIdInit theExplicitValueProviderUnoTunnelId;
     return theExplicitValueProviderUnoTunnelId.getSeq();
 }
 
@@ -1204,7 +1204,7 @@ sal_Bool SAL_CALL ChartView::isDataFlavorSupported( const datatransfer::DataFlav
 // ____ XUnoTunnel ___
 ::sal_Int64 SAL_CALL ChartView::getSomething( const uno::Sequence< ::sal_Int8 >& aIdentifier )
 {
-    if( isUnoTunnelId<ExplicitValueProvider>(aIdentifier) )
+    if( comphelper::isUnoTunnelId<ExplicitValueProvider>(aIdentifier) )
     {
         ExplicitValueProvider* pProvider = this;
         return reinterpret_cast<sal_Int64>(pProvider);
@@ -1736,7 +1736,7 @@ bool ChartView::getExplicitValuesForAxis(
 
 SdrPage* ChartView::getSdrPage()
 {
-    auto pSvxDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>(m_xDrawPage);
+    auto pSvxDrawPage = comphelper::getFromUnoTunnel<SvxDrawPage>(m_xDrawPage);
     if(pSvxDrawPage)
         return pSvxDrawPage->GetSdrPage();
 
@@ -1898,7 +1898,7 @@ awt::Rectangle ExplicitValueProvider::AddSubtractAxisTitleSizes(
     uno::Reference< chart2::XTitle > xSecondTitle_Width( TitleHelper::getTitle( TitleHelper::SECONDARY_Y_AXIS_TITLE, rModel ) );
     if( xTitle_Height.is() || xTitle_Width.is() || xSecondTitle_Height.is() || xSecondTitle_Width.is() )
     {
-        ExplicitValueProvider* pExplicitValueProvider = comphelper::getUnoTunnelImplementation<ExplicitValueProvider>(xChartView);
+        ExplicitValueProvider* pExplicitValueProvider = comphelper::getFromUnoTunnel<ExplicitValueProvider>(xChartView);
         if( pExplicitValueProvider )
         {
             //detect whether x axis points into x direction or not

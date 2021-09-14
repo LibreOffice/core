@@ -904,7 +904,7 @@ void SwXTextRange::DeleteAndInsert(
 
 const uno::Sequence< sal_Int8 > & SwXTextRange::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextRangeUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXTextRangeUnoTunnelId;
     return theSwXTextRangeUnoTunnelId.getSeq();
 }
 
@@ -1142,7 +1142,7 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
         xTextCursor.set(pHeadText->CreateTextCursor(true));
         xTextCursor->gotoEnd(true);
         pCursor =
-            comphelper::getUnoTunnelImplementation<OTextCursorHelper>(xTextCursor);
+            comphelper::getFromUnoTunnel<OTextCursorHelper>(xTextCursor);
         pCursor->GetPaM()->Normalize();
     }
     else
@@ -1151,7 +1151,7 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
         xTextCursor.set( pText->CreateCursor() );
         xTextCursor->gotoEnd(true);
         pCursor =
-            comphelper::getUnoTunnelImplementation<OTextCursorHelper>(xTextCursor);
+            comphelper::getFromUnoTunnel<OTextCursorHelper>(xTextCursor);
     }
     if(pRange && &pRange->GetDoc() == &rToFill.GetDoc())
     {
@@ -1633,7 +1633,7 @@ rtl::Reference<SwXTextRanges> SwXTextRanges::Create(SwPaM *const pPaM)
 
 const uno::Sequence< sal_Int8 > & SwXTextRanges::getUnoTunnelId()
 {
-    static const UnoTunnelIdInit theSwXTextRangesUnoTunnelId;
+    static const comphelper::UnoIdInit theSwXTextRangesUnoTunnelId;
     return theSwXTextRangesUnoTunnelId.getSeq();
 }
 

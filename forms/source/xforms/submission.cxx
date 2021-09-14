@@ -192,7 +192,7 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
     ComputedExpression aExpression;
     if( !msBind.isEmpty() )
     {
-        Binding* pBinding = comphelper::getUnoTunnelImplementation<Binding>( mxModel->getBinding(msBind) );
+        Binding* pBinding = comphelper::getFromUnoTunnel<Binding>( mxModel->getBinding(msBind) );
         if( pBinding != nullptr )
         {
             aExpression.setExpression( pBinding->getBindingExpression() );
@@ -203,12 +203,12 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
     else if( !maRef.getExpression().isEmpty() )
     {
         aExpression.setExpression( maRef.getExpression() );
-        aEvalContext = comphelper::getUnoTunnelImplementation<Model>( mxModel )->getEvaluationContext();
+        aEvalContext = comphelper::getFromUnoTunnel<Model>( mxModel )->getEvaluationContext();
     }
     else
     {
         aExpression.setExpression( "/" );
-        aEvalContext = comphelper::getUnoTunnelImplementation<Model>( mxModel )->getEvaluationContext();
+        aEvalContext = comphelper::getFromUnoTunnel<Model>( mxModel )->getEvaluationContext();
     }
     aExpression.evaluate( aEvalContext );
     Reference<XXPathObject> xResult = aExpression.getXPath();
@@ -273,7 +273,7 @@ Model* Submission::getModelImpl() const
 {
     Model* pModel = nullptr;
     if( mxModel.is() )
-        pModel = comphelper::getUnoTunnelImplementation<Model>( mxModel );
+        pModel = comphelper::getFromUnoTunnel<Model>( mxModel );
     return pModel;
 }
 
@@ -391,7 +391,7 @@ void SAL_CALL Submission::submitWithInteraction(
                 *this
               );
 
-    Model* pModel = comphelper::getUnoTunnelImplementation<Model>( xModel );
+    Model* pModel = comphelper::getFromUnoTunnel<Model>( xModel );
     OSL_ENSURE( pModel != nullptr, "illegal model?" );
 
     // #i36765# #i47248# warning on submission of illegal data
