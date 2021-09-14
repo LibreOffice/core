@@ -73,9 +73,15 @@ inline connectivity::OSQLInternalNode* newNode(const OUString& _newValue,
 
 // yyi is the internal number of the rule that is currently being reduced
 // This can be mapped to external rule number via the yyrmap.
+#if defined YYBISON && YYBISON >= 30800
+#define SQL_NEW_RULE 			newNode("", SQLNodeType::Rule, yyr1[yyrule])
+#define SQL_NEW_LISTRULE 		newNode("", SQLNodeType::ListRule, yyr1[yyrule])
+#define SQL_NEW_COMMALISTRULE   newNode("", SQLNodeType::CommaListRule, yyr1[yyrule])
+#else
 #define SQL_NEW_RULE 			newNode("", SQLNodeType::Rule, yyr1[yyn])
 #define SQL_NEW_LISTRULE 		newNode("", SQLNodeType::ListRule, yyr1[yyn])
 #define SQL_NEW_COMMALISTRULE   newNode("", SQLNodeType::CommaListRule, yyr1[yyn])
+#endif
 
 
 extern connectivity::OSQLParser* xxx_pGLOBAL_SQLPARSER;
