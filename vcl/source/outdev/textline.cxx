@@ -1070,6 +1070,20 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, to
 
 void OutputDevice::ImplDrawWaveLineBezier(tools::Long nStartX, tools::Long nStartY, tools::Long nEndX, tools::Long nEndY, tools::Long nWaveHeight, double fOrientation, tools::Long nLineWidth)
 {
+    // we need a graphics
+    if( !mpGraphics && !AcquireGraphics() )
+        return;
+    assert(mpGraphics);
+
+    if ( mbInitClipRegion )
+        InitClipRegion();
+
+    if ( mbOutputClipped )
+        return;
+
+    if (!InitFont())
+        return;
+
     const basegfx::B2DRectangle aWaveLineRectangle(nStartX, nStartY, nEndX, nEndY + nWaveHeight);
     const basegfx::B2DPolygon aWaveLinePolygon = basegfx::createWaveLinePolygon(aWaveLineRectangle);
     const basegfx::B2DHomMatrix aRotationMatrix = basegfx::utils::createRotateAroundPoint(nStartX, nStartY, basegfx::deg2rad(-fOrientation));
