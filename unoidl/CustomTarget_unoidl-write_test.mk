@@ -18,6 +18,7 @@ $(call gb_CustomTarget_get_target,unoidl/unoidl-write_test) : \
         $(SRCDIR)/idlc/test/parser/attribute.tests \
         $(SRCDIR)/idlc/test/parser/constant.tests \
         $(SRCDIR)/idlc/test/parser/constructor.tests \
+        $(SRCDIR)/idlc/test/parser/conversion.tests \
         $(SRCDIR)/idlc/test/parser/interfaceinheritance.tests \
         $(SRCDIR)/idlc/test/parser/methodoverload.tests \
         $(SRCDIR)/idlc/test/parser/polystruct.tests \
@@ -43,6 +44,12 @@ else
             $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/out.rdb \
         && $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \
             $(SRCDIR)/idlc/test/parser/constructor.tests \
+            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/in.idl \
+            1 $(call gb_Executable_get_command,unoidl-write) $(SRCDIR)/udkapi \
+            {} \
+            $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/out.rdb \
+        && $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \
+            $(SRCDIR)/idlc/test/parser/conversion.tests \
             $(call gb_CustomTarget_get_workdir,unoidl/unoidl-write_test)/in.idl \
             1 $(call gb_Executable_get_command,unoidl-write) $(SRCDIR)/udkapi \
             {} \
