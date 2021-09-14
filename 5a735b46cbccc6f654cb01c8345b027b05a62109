@@ -16,6 +16,24 @@
       "message": "LGTM; could be improved with a label, eg. \"Range\" above \"From\" to make clear that this checkbox is not one of the options. But nice improvement anyway.",
       "revId": "5a735b46cbccc6f654cb01c8345b027b05a62109",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d401e28a_68f92e72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2021-09-14T13:40:08Z",
+      "side": 1,
+      "message": "Thank you for the review and the good development idea, Heiko. Maybe we will do it in a different related patch.",
+      "parentUuid": "dc885bc5_b1d0820b",
+      "revId": "5a735b46cbccc6f654cb01c8345b027b05a62109",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
