@@ -30,11 +30,7 @@ URE_HOME ?= /opt/libreoffice
 
 
 .PHONY: check
-check: test-regview test-cpptest test-javatest test-javanative test-clientserver
-
-.PHONY: test-regview
-test-regview: out.pln/types.rdb
-	$(URE_HOME)/program/regview $< > /dev/null
+check: test-cpptest test-javatest test-javanative test-clientserver
 
 .PHONY: test-cpptest
 test-cpptest: out.pln/cppmain.uno.so out.pln/types.rdb out.pln/services.rdb
@@ -247,12 +243,9 @@ out.pln/types.javamaker.flag: out.pln/types.rdb | out.pln out.pln/class
 	touch $@
 
 
-out.pln/types.rdb: out.pln/types.urd | out.pln
-	$(URE_HOME)/program/regmerge $@ /UCR $<
-
-out.pln/types.urd: types.idl | out.pln
-	LD_LIBRARY_PATH=$(URE_HOME)/program $(SDK_HOME)/bin/idlc -O$(@D) \
-            -I$(SDK_HOME)/idl -cid -we $<
+out.pln/types.rdb: types.idl | out.pln
+	LD_LIBRARY_PATH=$(URE_HOME)/program $(SDK_HOME)/bin/unoidl-write \
+            $(URE_HOME)/program/types.rdb $< $@
 
 
 out.pln/services.rdb: services.rdb.in | out.pln/cpptest.uno.so \

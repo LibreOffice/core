@@ -266,11 +266,8 @@ out.sdk/types.javamaker.flag: out.sdk/types.rdb | out.sdk out.sdk/class
 	touch $@
 
 
-out.sdk/types.rdb: out.sdk/types.urd | out.sdk
-	$(REGMERGE) $@ /UCR $<
-
-out.sdk/types.urd: types.idl | out.sdk
-	$(IDLC) -O$(@D) -I$(IDL_DIR) -cid -we $<
+out.sdk/types.rdb: types.idl | out.sdk
+	$(UNOIDLWRITE) $(URE_TYPES) $< $@
 
 
 out.sdk/services.rdb: services.rdb.in | out.sdk/cpptest.uno.$(SHAREDLIB_EXT) \

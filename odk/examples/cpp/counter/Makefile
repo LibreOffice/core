@@ -66,8 +66,6 @@ CXXFILES = countermain.cxx
 SLOFILES = $(patsubst %.cxx,$(OUT_COMP_SLO)/%.$(OBJ_EXT),$(COMPCXXFILES))
 OBJFILES = $(patsubst %.cxx,$(OUT_COMP_SLO)/%.$(OBJ_EXT),$(CXXFILES))
 
-GENURDFILES = $(patsubst %.idl,$(OUT_COMP_GEN)/%.urd,$(IDLFILES))
-
 TYPESLIST = -Tfoo.XCountable
 
 # Targets
@@ -77,16 +75,10 @@ ALL : \
 
 include $(SETTINGS)/stdtarget.mk
 
-$(OUT_COMP_GEN)/%.urd : %.idl
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(IDLC) -I. -I$(IDL_DIR) -O$(OUT_COMP_GEN) $<
-
-# This example type library will be extended by the URE types
-$(OUT_BIN)/%.rdb : $(GENURDFILES)
+$(OUT_BIN)/%.rdb : $(IDLFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
-	$(REGMERGE) $@ /UCR $(GENURDFILES)
-#	$(REGMERGE) $@ / $(URE_TYPES) 
+	$(UNOIDLWRITE) $(URE_TYPES) $(OFFICE_TYPES) $< $@
 
 $(COMP_TYPEFLAG) : $(COMP_RDB) $(SDKTYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
