@@ -39,6 +39,7 @@ skia_patches := \
     fast-png-write.patch.1 \
     skia_sk_cpu_sse_level_0_by_default.patch.1 \
     fix-warnings.patch.1 \
+    disable-freetype-colrv1.1 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
