@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bdd1cda_2070340b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-09-14T14:28:42Z",
+      "side": 1,
+      "message": "shouldn\u0027t this also be cherry-picked to (at least) libreoffice-7-2?",
+      "revId": "45227d9b79dc4f2a2aa6874cd4e3c02b7934b197",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
