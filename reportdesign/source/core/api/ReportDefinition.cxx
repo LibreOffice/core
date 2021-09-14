@@ -1963,9 +1963,8 @@ uno::Sequence< sal_Int8 > SAL_CALL OReportDefinition::getImplementationId(  )
 
 uno::Sequence< sal_Int8 > OReportDefinition::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoIdInit implId;
+    return implId.getSeq();
 }
 
 uno::Reference< uno::XComponentContext > OReportDefinition::getContext()

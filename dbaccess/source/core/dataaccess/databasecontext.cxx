@@ -717,9 +717,8 @@ sal_Int64 SAL_CALL ODatabaseContext::getSomething( const Sequence< sal_Int8 >& r
 
 Sequence< sal_Int8 > ODatabaseContext::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoIdInit implId;
+    return implId.getSeq();
 }
 
 void ODatabaseContext::onBasicManagerCreated( const Reference< XModel >& _rxForDocument, BasicManager& _rBasicManager )

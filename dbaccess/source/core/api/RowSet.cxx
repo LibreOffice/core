@@ -445,9 +445,8 @@ sal_Int64 SAL_CALL ORowSet::getSomething( const Sequence< sal_Int8 >& rId )
 
 Sequence< sal_Int8 > ORowSet::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId s_Id;
-
-    return s_Id.getImplementationId();
+    static const comphelper::UnoIdInit s_Id;
+    return s_Id.getSeq();
 }
 
 // css::XAggregation
@@ -2901,9 +2900,8 @@ void ORowSetClone::close()
 
 Sequence< sal_Int8 > ORowSetClone::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoIdInit implId;
+    return implId.getSeq();
 }
 
 // css::XUnoTunnel

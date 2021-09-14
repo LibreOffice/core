@@ -76,8 +76,8 @@ using namespace cppu;
 
 css::uno::Sequence < sal_Int8 > ZipPackageStream::getUnoTunnelId()
 {
-    static cppu::OImplementationId lcl_CachedImplId;
-    return lcl_CachedImplId.getImplementationId();
+    static const comphelper::UnoIdInit lcl_CachedImplId;
+    return lcl_CachedImplId.getSeq();
 }
 
 ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,

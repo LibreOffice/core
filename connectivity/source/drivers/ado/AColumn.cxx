@@ -81,9 +81,8 @@ OAdoColumn::OAdoColumn(bool _bCase,OConnection* _pConnection)
 
 Sequence< sal_Int8 > OAdoColumn::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoIdInit implId;
+    return implId.getSeq();
 }
 
 // css::lang::XUnoTunnel

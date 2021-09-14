@@ -499,9 +499,8 @@ sal_Int64 SAL_CALL OConnection::getSomething( const css::uno::Sequence< sal_Int8
 
 Sequence< sal_Int8 > OConnection::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoIdInit implId;
+    return implId.getSeq();
 }
 
 const OExtendedTypeInfo* OConnection::getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,

@@ -553,9 +553,8 @@ Any SAL_CALL OFlatTable::queryInterface( const Type & rType )
 
 Sequence< sal_Int8 > OFlatTable::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoIdInit implId;
+    return implId.getSeq();
 }
 
 // css::lang::XUnoTunnel

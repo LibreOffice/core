@@ -64,9 +64,8 @@ sal_Int64 SAL_CALL OMetaConnection::getSomething( const css::uno::Sequence< sal_
 
 Sequence< sal_Int8 > OMetaConnection::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoIdInit implId;
+    return implId.getSeq();
 }
 
 ::dbtools::OPropertyMap& OMetaConnection::getPropMap()

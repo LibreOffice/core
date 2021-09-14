@@ -526,8 +526,8 @@ namespace frm
 
     Sequence<sal_Int8> ORichTextModel::getUnoTunnelId()
     {
-        static cppu::OImplementationId aId;
-        return aId.getImplementationId();
+        static const comphelper::UnoIdInit aId;
+        return aId.getSeq();
     }
 
 
