@@ -63,7 +63,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	treex \
 	ulfex \
 	unoidl-read \
-	unoidl-write \
 	xrmex \
 	$(if $(filter-out ANDROID iOS WNT,$(OS)), \
         svdemo \
@@ -82,11 +81,10 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
 	$(if $(filter MSC,$(COM)),$(if $(filter-out AARCH64,$(CPUNAME)),climaker)) \
 	cppumaker \
-	idlc \
 	javamaker \
-	$(if $(filter UCPP,$(BUILD_TYPE)),ucpp) \
 	$(if $(filter ODK,$(BUILD_TYPE)),unoapploader) \
 	unoidl-check \
+	unoidl-write \
 	$(if $(filter ODK,$(BUILD_TYPE)),uno-skeletonmaker) \
 ))
 
@@ -231,7 +229,6 @@ endif
 $(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\
 	$(if $(and $(ENABLE_JAVA),$(filter-out HAIKU MACOSX WNT,$(OS)),$(filter DESKTOP,$(BUILD_TYPE))),javaldx) \
 	$(if $(ENABLE_MACOSX_SANDBOX),, \
-		regmerge \
 		regview \
 	) \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),uno) \
@@ -879,8 +876,6 @@ $(eval $(call gb_Helper_register_packages_for_install,sdk,\
 	odk_html \
 	odk_settings \
 	odk_settings_generated \
-	offapi_idl \
-	udkapi_idl \
 	$(if $(ENABLE_JAVA), \
 		odk_javadoc \
 		odk_uno_loader_classes \
@@ -1123,7 +1118,6 @@ $(eval $(call gb_ExternalExecutable_register_executables,\
 	genccode \
 	gencmn \
 	python \
-	ucpp \
 	xmllint \
 	xsltproc \
 ))

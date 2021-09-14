@@ -68,16 +68,10 @@
 			  comes with the office installation and can be found in the program
 			  directory of the office installation.</td>
             </tr>
-           <tr valign="top">
-              <td class="content3"><img src="images/arrow-1.gif"/></td>
-              <td><a href="#regmerge"  title="link to the regmerge tool description">regmerge</a></td>
-              <td class="content87">Tool to merge several registry (e.g. type
-			  libraries) files into one file. <b>Note:</b> Since OpenOffice.org 3 it is no longer part of the SDK but it comes directly with the office as part of the <b>ure</b>.</td>
-            </tr>
             <tr valign="top">
               <td class="content3"><img src="images/arrow-1.gif"/></td>
               <td><a href="#regview"  title="link to the regview tool description">regview</a></td>
-              <td class="content87">Tool to view the content of a registry file
+              <td class="content87">Tool to view the content of a legacy registry file
 			  in a human readable manner. Special support for type library
 			  nodes. <b>Note:</b> Since OpenOffice.org 3 it is no longer part of the SDK but it comes directly with the office as part of the <b>ure</b>.</td>
             </tr>
@@ -86,7 +80,7 @@
             </tr>
             <tr valign="top">
               <td class="content3"><img src="images/arrow-1.gif"/></td>
-              <td><a href="#idlc" title="link to the idlc tool description">idlc</a></td>
+              <td><a href="#unoidl-write" title="link to the unoidl-write tool description">unoidl-write</a></td>
               <td class="content87">The UNOIDL compiler, generates a common
 			  binary type library format as base for all codemaker tools and
 			  the UNO runtime type library.</td>
@@ -116,14 +110,8 @@
             </tr>
             <tr valign="top">
               <td class="content3"><img src="images/arrow-1.gif"/></td>
-              <td><a href="#regmerge"  title="link to the regmerge tool description">regmerge</a></td>
-              <td class="content87">Tool to merge several registry (e.g. type
-			  libraries) files into one file.</td>
-            </tr>
-            <tr valign="top">
-              <td class="content3"><img src="images/arrow-1.gif"/></td>
               <td><a href="#regview"  title="link to the regview tool description">regview</a></td>
-              <td class="content87">Tool to view the content of a registry file
+              <td class="content87">Tool to view the content of a legacy registry file
 			  in a human readable manner. Special support for type library
 			  nodes.</td>
             </tr>
@@ -337,7 +325,7 @@
     <td>
       <table class="table2">
         <tr>
-		  <td colspan="2" class="head1"><a name="idlc"/>idlc</td>
+		  <td colspan="2" class="head1"><a name="unoidl-write"/>unoidl-write</td>
 		  <td align="right">
 		    <a href="#tools" title="link to the tools overview"><img class="navigate" src="images/nav_up.png"/></a>
 		    <a href="../index.html" title="link to the SDK start page"><img class="navigate" src="images/nav_home.png"/></a>
@@ -345,53 +333,42 @@
         </tr>
 		<tr>
 		  <td colspan="3">
-		  <p>'idlc' is the UNOIDL compiler.  It is a full featured compiler used
+		  <p>'unoidl-write' is the new UNOIDL compiler, replacing the former idlc and regmerge tools.  It is a full featured compiler used
 		  to check UNODL type definitions and transform valid type definitions
 		  into a binary type library format, which is later used by all codemaker
 		  tools. It is also used as a dynamic type library for UNO at runtime.<br/>
 		  You can find a syntax description for UNOIDL <a href="http://wiki.openoffice.org/wiki/Documentation/DevGuide/AppendixD/UNOIDL_Syntax_Specification" title="link to the &quot;UNOIDL Syntax Specification&quot; chapter in the Developer's Guide">here</a>.</p>
+		  <p><b>Note:</b> unoidl-write produces a new binary type library format that is
+		  different from the legacy format that was produced by idlc and regmerge.  While
+		  recent versions of LibreOffice are still able to read the old format, versions of
+		  LibreOffice prior to LibreOffice&nbsp;4.1 were not able to read the new format.
+		  Thus, if you use this SDK to generate a LibreOffice extension that contains a type
+		  library file produced by unoidl-write, you should specify a
+		  <code>LibreOffice-minimal-version</code> of at least&nbsp;4.1 for that extension
+		  (see <a
+		  href="https://wiki.documentfoundation.org/Development/Extension_Development#Compatibility_notes">&ldquo;Extension
+		  Development: Compatibility notes&rdquo;</a>).</p>
 		  <p class="head2">Usage:</p>
 		  <blockquote>
-		  <b><code>idlc [-options] file_1 ... file_n | @&lt;filename&gt;</code></b>
+		  <b><code>unoidl-write [&lt;registries&gt;] [@&lt;entries file&gt;] &lt;unoidl file&gt;</code></b>
 		  </blockquote>
 		  <table class="table4">
 		  <tr>
-            <td class="cell15"><code>file_1 ... file_n</code></td>
-			<td class="cell85">specifies one or more idl files. Only files with
-			the extension '.idl' are valid.</td>
+            <td class="cell15"><code>&lt;registries&gt;</code></td>
+			<td class="cell85">each <code>&lt;registry&gt;</code> is either a new- or
+			legacy-format .rdb file, a single .idl file, or a root directory of an .idl
+			file tree.</td>
           </tr>
 		  <tr>
-            <td class="cell15"><code>@&lt;filename&gt;</code></td>
-			<td class="cell85">filename specifies the name of a command
-			file.</td>
-          </tr>
-		  </table>
-		  <p class="head2">Options:</p>
-		  <table class="table4">
-		  <tr>
-            <td class="cell15"><code>-O&lt;path&gt;</code></td>
-			<td class="cell85">path describes the output directory. The
-			generated output is a registry file with the same name as the idl
-			input file.</td>
-          </tr>
-          <tr>
-		    <td class="cell15"><code>-I&lt;path&gt;</code></td>
-			<td class="cell85">path specifies a directory where included files
-			that will be searched by the preprocessor are located. Multiple
-			directories can be combined with ';'.</td>
+            <td class="cell15"><code>@&lt;entries file&gt;</code></td>
+			<td class="cell85">a UTF-8 encoded file containing zero or more
+			space-separated names of (non-module) entities to include in the output; if
+			omitted, the output defaults to the complete content of the last
+			<code>&lt;registry&gt;</code>, if any.</td>
           </tr>
 		  <tr>
-            <td class="cell15"><code>-D&lt;name&gt;</code></td>
-			<td class="cell85">name defines a macro for the preprocessor.</td>
-          </tr>
-		  <tr>
-            <td class="cell15"><code>-C</code></td>
-			<td class="cell85">generates complete type information, including
-			additional service information and documentation.</td>
-          </tr>
-		  <tr>
-            <td class="cell15"><code>-h|?</code></td>
-			<td class="cell85">print this help message and exit.</td>
+            <td class="cell15"><code>@&lt;unoidl file&gt;</code></td>
+			<td class="cell85">specifies the name of the output file.</td>
           </tr>
 		  </table>
 		  </td>
@@ -418,8 +395,8 @@
 		  <td colspan="3">
 		  <p>The 'cppumaker' generates a C++ representation for idl types. The
 		  cppumaker works on a typelibrary, which is generated by the UNOIDL
-		  compiler (<a href="#idlc" title="link to the idlc tool description">
-		  idlc</a>). It generates the output for all specified types and for all
+		  compiler (<a href="#unoidl-write" title="link to the unoidl-write tool description">
+		  unoidl-write</a>). It generates the output for all specified types and for all
 		  types the specified types depend on.</p>
 		  <p class="head2">Usage:</p>
 		  <blockquote>
@@ -509,8 +486,8 @@
 		  <td colspan="3">
 		  <p>The 'javamaker' generates the appropriate Java class file for each idl
 		  type. The javamaker works on a typelibrary which is generated by the
-		  UNOIDL compiler (<a href="#idlc" title="link to the idlc tool description">
-		  idlc</a>). It generates the output for all specified types and for all
+		  UNOIDL compiler (<a href="#unoidl-write" title="link to the unoidl-write tool description">
+		  unoidl-write</a>). It generates the output for all specified types and for all
 types the specified types depend on.</p>
 		  <p class="head2">Usage:</p>
 		  <blockquote>
@@ -588,8 +565,8 @@ types the specified types depend on.</p>
 		  <td colspan="3">
 		  <p>The 'climaker' (windows only) generates the appropriate CLI assemblies file for each idl
 		  type. The climaker works on a typelibrary which is generated by the
-		  UNOIDL compiler (<a href="#idlc" title="link to the idlc tool description">
-		  idlc</a>). It generates the output for all specified types and for all
+		  UNOIDL compiler (<a href="#unoidl-write" title="link to the unoidl-write tool description">
+		  unoidl-write</a>). It generates the output for all specified types and for all
 		    types the specified types depend on.</p>
 		  <p class="head2">Usage:</p>
 		  <blockquote>
@@ -788,58 +765,6 @@ types the specified types depend on.</p>
     <td>
       <table class="table2">
         <tr>
-		  <td colspan="2" class="head1"><a name="regmerge"/>regmerge</td>
-		  <td align="right">
-		    <a href="#tools" title="link to the tools overview"><img class="navigate" src="images/nav_up.png"/></a>
-		    <a href="../index.html" title="link to the SDK start page"><img class="navigate" src="images/nav_home.png"/></a>
-		  </td>
-        </tr>
-		<tr>
-		  <td colspan="3">
-		  <p>'regmerge' is a small tool to merge different registry files under a
-		  specified key into another registry file. If a value already exists in
-		  the target file the value is overwritten by the value of the source
-		  file.</p>
-		  <p class="head2">Usage:</p>
-		  <blockquote>
-		  <b><code>regmerge [-v|--verbose] &lt;mergefile&gt; &lt;mergeKeyName&gt; &lt;regfile_1&gt; ... &lt;regfile_n&gt;</code></b>
-		  </blockquote>
-		  <p class="head2">Options:</p>
-		  <table class="table4">
-		  <tr>
-            <td class="cell15"><code>-v|--verbose</code></td>
-			<td class="cell85">verbose output on stdout.</td>
-          </tr>
-		  <tr>
-            <td class="cell15"><code>&lt;mergefile&gt;</code></td>
-			<td class="cell85">specifies the merged registry file. If this file
-			doesn't exist, it is created.</td>
-		  </tr>
-		  <tr>
-            <td class="cell15"><code>&lt;mergeKeyName&gt;</code></td>
-			<td class="cell85">specifies the merge key, everything is merged
-			under this key. If this key doesn't exist, it is created.</td>
-          </tr>
-		  <tr>
-            <td class="cell15"><code>&lt;regfile_1&gt; ... &lt;regfile_n&gt;</code></td>
-			<td class="cell85">specifies one or more registry files that are
-			merged.</td>
-		  </tr>
-		  </table>
-		  </td>
-		</tr>
-      </table>
-    </td>
-    <td class="content1"><img class="nothing8" src="images/nada.gif"/></td>
-  </tr>
-  <tr>
-    <td colspan="3"><img class="line" src="images/sdk_line-1.gif"/></td>
-  </tr>
-  <tr>
-    <td class="content1"><img class="nothing8" src="images/nada.gif"/></td>
-    <td>
-      <table class="table2">
-        <tr>
 		  <td colspan="2" class="head1"><a name="regview"/>regview</td>
 		  <td align="right">
 		    <a href="#tools" title="link to the tools overview"><img class="navigate" src="images/nav_up.png"/></a>
@@ -848,7 +773,7 @@ types the specified types depend on.</p>
         </tr>
 		<tr>
 		  <td colspan="3">
-		  <p>'regview' is a tool to show the contents of a registry file. The tool
+		  <p>'regview' is a tool to show the contents of a legacy registry file. The tool
 		  dumps the hierarchical structure and the values of the nodes in a human
 		  readable manner to stdout.</p>
 		  <p class="head2">Usage:</p>

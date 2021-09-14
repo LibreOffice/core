@@ -13,7 +13,6 @@ $(eval $(call gb_Module_add_targets,registry,\
 	Library_reg \
 	$(if $(filter-out $(OS),iOS), \
 		$(if $(ENABLE_MACOSX_SANDBOX),, \
-			Executable_regmerge \
 			Executable_regview \
 		) \
 		StaticLibrary_registry_helper \

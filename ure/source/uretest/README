@@ -43,8 +43,8 @@ environment variables:
 
 - SDK_HOME
 Points to the base directory of an OpenOffice.org SDK so that you can access UNO
-programming tools and files that are not part of the URE.  For example, idlc,
-cppumaker, javamaker, UNOIDL files, and C++ headers.
+programming tools and files that are not part of the URE.  For example, unoidl-write,
+cppumaker, javamaker, and C++ headers.
 
 - PATH
 Points to a GCC installation (including g++) as well as a JDK installation that

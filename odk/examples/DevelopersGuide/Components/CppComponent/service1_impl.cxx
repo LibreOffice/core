@@ -40,7 +40,7 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <my_module/XSomething.hpp>
+#include <mymodule/XSomething.hpp>
 
 
 using namespace ::rtl; // for OUString
@@ -53,18 +53,18 @@ namespace my_sc_impl
 Sequence< OUString > SAL_CALL getSupportedServiceNames_MyService1Impl()
 {
     Sequence< OUString > names(1);
-    names[0] = "my_module.MyService1";
+    names[0] = "mymodule.MyService1";
     return names;
 }
 
 OUString SAL_CALL getImplementationName_MyService1Impl()
 {
-    return OUString("my_module.my_sc_implementation.MyService1");
+    return OUString("mymodule.my_sc_implementation.MyService1");
 }
 
 
 class MyService1Impl
-    : public ::my_module::XSomething
+    : public ::mymodule::XSomething
     , public lang::XServiceInfo
     , public lang::XTypeProvider
 {
@@ -124,11 +124,11 @@ Any MyService1Impl::queryInterface( Type const & type )
             static_cast< lang::XServiceInfo * >( this ) );
         return makeAny( x );
     }
-    if (type.equals(::cppu::UnoType<my_module::XSomething>::get()))
+    if (type.equals(::cppu::UnoType<mymodule::XSomething>::get()))
     {
         // return sample interface
-        Reference< ::my_module::XSomething > x(
-            static_cast< ::my_module::XSomething * >( this ) );
+        Reference< ::mymodule::XSomething > x(
+            static_cast< ::mymodule::XSomething * >( this ) );
         return makeAny( x );
     }
     // querying for unsupported type
@@ -158,7 +158,7 @@ Sequence< Type > MyService1Impl::getTypes()
     Sequence< Type > seq( 3 );
     seq[ 0 ] = ::cppu::UnoType<lang::XTypeProvider>::get();
     seq[ 1 ] = ::cppu::UnoType<lang::XServiceInfo>::get();
-    seq[ 2 ] = ::cppu::UnoType<my_module::XSomething>::get();
+    seq[ 2 ] = ::cppu::UnoType<mymodule::XSomething>::get();
     return seq;
 }
 
@@ -183,7 +183,7 @@ OUString MyService1Impl::methodTwo( )
 OUString MyService1Impl::getImplementationName()
 {
     // unique implementation name
-    return OUString("my_module.my_sc_implementation.MyService1");
+    return OUString("mymodule.my_sc_implementation.MyService1");
 }
 sal_Bool MyService1Impl::supportsService( OUString const & serviceName )
 {
@@ -192,7 +192,7 @@ sal_Bool MyService1Impl::supportsService( OUString const & serviceName )
 Sequence< OUString > MyService1Impl::getSupportedServiceNames()
 {
     // this object only supports one service
-    OUString serviceName("my_module.MyService1");
+    OUString serviceName("mymodule.MyService1");
     return Sequence< OUString >( &serviceName, 1 );
 }
 

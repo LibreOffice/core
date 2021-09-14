@@ -75,7 +75,6 @@ COMPJAVAFILES  = CalcAddins.java
 #GENJAVAFILES = $(patsubst %.idl,$(OUT_COMP_GEN)/$(PACKAGE)/%.java,$(IDLFILES))
 GENCLASSFILES = $(patsubst %.idl,$(OUT_COMP_CLASS)/$(PACKAGE)/%.class,$(IDLFILES))
 GENTYPELIST = $(subst /,.,$(patsubst %.idl,-T$(PACKAGE)/% ,$(IDLFILES)))
-GENURDFILES = $(patsubst %.idl,$(OUT_COMP_GEN)/%.urd,$(IDLFILES))
 
 COMPCLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(COMPJAVAFILES))
 #COMPCLASSFILES += $(subst $(OUT_COMP_GEN),$(OUT_COMP_CLASS),$(GENJAVAFILES:.java=.class))
@@ -101,14 +100,10 @@ $(OUT_COMP_CLASS)/%.Manifest :
 	@echo UNO-Type-Path: $(basename $*).uno.jar> $@
 	@echo RegistrationClassName: $(basename $*)>> $@
 
-$(OUT_COMP_GEN)/%.urd : %.idl
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(IDLC) -C -I. -I$(IDL_DIR) -O$(OUT_COMP_GEN) $<
-
-$(OUT_COMP_GEN)/%.rdb : $(GENURDFILES)
+$(OUT_COMP_GEN)/%.rdb : $(IDLFILES)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(REGMERGE) $@ /UCR $(GENURDFILES)
+	$(UNOIDLWRITE) $(URE_TYPES) $(OFFICE_TYPES) $< $@
 
 #$(OUT_COMP_GEN)/%.java : $(COMP_RDB)
 $(GENCLASSFILES) : $(COMP_RDB)

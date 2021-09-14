@@ -42,7 +42,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <my_module/XSomething.hpp>
+#include <mymodule/XSomething.hpp>
 
 
 using namespace ::rtl; // for OUString
@@ -61,17 +61,17 @@ extern Reference< XInterface > SAL_CALL create_MyService1Impl(
 static Sequence< OUString > getSupportedServiceNames_MyService2Impl()
 {
     Sequence<OUString> names(1);
-    names[0] = "my_module.MyService2";
+    names[0] = "mymodule.MyService2";
     return names;
 }
 
 static OUString getImplementationName_MyService2Impl()
 {
-    return OUString("my_module.my_sc_implementation.MyService2");
+    return OUString("mymodule.my_sc_implementation.MyService2");
 }
 
 class MyService2Impl : public ::cppu::WeakImplHelper3<
-      ::my_module::XSomething, lang::XServiceInfo, lang::XInitialization >
+      ::mymodule::XSomething, lang::XServiceInfo, lang::XInitialization >
 {
     OUString m_sData;
     // it's good practice to store the context for further use when you use
@@ -138,7 +138,7 @@ OUString MyService2Impl::methodTwo( )
 OUString MyService2Impl::getImplementationName()
 {
     // unique implementation name
-    return OUString("my_module.my_sc_implementation.MyService2");
+    return OUString("mymodule.my_sc_implementation.MyService2");
 }
 
 sal_Bool MyService2Impl::supportsService( OUString const & serviceName )

@@ -36,7 +36,7 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-module my_module
+module mymodule
 {
 
     interface XSomething

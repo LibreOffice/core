@@ -58,8 +58,6 @@ COMP_COMPONENTS=$(COMP_NAME).components
 IDLFILES = XToDo.idl \
 	ToDo.idl
 
-# normally the idl file should be stored in a directory tree fitting the module 
-# structure, for the example we know the module structure
 PACKAGE = org/openoffice
 
 COMP_JAVAFILES  = ToDo.java
@@ -67,7 +65,6 @@ COMP_CLASSFILES = $(patsubst %.java,$(COMP_CLASS_OUT)/%.class,$(COMP_JAVAFILES))
 
 GEN_CLASSFILES = $(patsubst %.idl,$(COMP_CLASS_OUT)/$(PACKAGE)/%.class,$(IDLFILES))
 GEN_TYPELIST = $(subst /,.,$(patsubst %.idl,-T$(PACKAGE)/% ,$(IDLFILES)))
-GEN_URDFILES = $(patsubst %.idl,$(COMP_GEN_OUT)/%.urd,$(IDLFILES))
 
 
 $(COMP_NAME)_CLASSFILES = $(COMP_NAME).class \
@@ -90,14 +87,10 @@ $(COMP_CLASS_OUT)/%.Manifest :
 	@echo UNO-Type-Path: $(basename $*).uno.jar> $@
 	@echo RegistrationClassName: $(basename $(basename $(@F)))>> $@
 
-$(COMP_GEN_OUT)/%.urd : %.idl
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(IDLC) -C -I. -I$(IDL_DIR) -O$(COMP_GEN_OUT) $<
-
-$(COMP_GEN_OUT)/%.rdb : $(GEN_URDFILES)
+$(COMP_GEN_OUT)/%.rdb : $(patsubst %,$(PACKAGE)/%,$(IDLFILES))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(REGMERGE) $@ /UCR $(GEN_URDFILES)
+	$(UNOIDLWRITE) $(URE_TYPES) $(OFFICE_TYPES) . $@
 
 $(GEN_CLASSFILES) : $(COMP_RDB)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
