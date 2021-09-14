@@ -33,6 +33,24 @@
       "message": "Javier, can you help Juan?",
       "revId": "d532362f42dc82ee29fea0af062ea7cbb5392a24",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a062f6d1_84294a54",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003336
+      },
+      "writtenOn": "2021-09-14T22:04:47Z",
+      "side": 1,
+      "message": "\u003e The error that occurs, is that after writing the connection string, to give the next button, the text \"server\" is added in front of the previously written connection. The word that is added before \"server\" in this case, coincides with the word that is written after \"odbc:firebird:\", in the line 130 \u003cnode oor:name\u003d\"sdbc:firebird:server\" oor:op\u003d\"replace\"\u003e.\n\n\nPerhaps we should add a DATASOURCE_TYPE in /core/dbaccess/source/inc/dsntypes.hxx and a kNownPrefix \"sdbc:firebird:server:\" in /core/dbaccess/source/core/misc/dsntypes.cxx",
+      "parentUuid": "2ff5160d_48f5cc22",
+      "revId": "d532362f42dc82ee29fea0af062ea7cbb5392a24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
