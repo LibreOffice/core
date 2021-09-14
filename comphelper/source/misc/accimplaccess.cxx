@@ -41,9 +41,8 @@ namespace comphelper
 
     Sequence<sal_Int8> OAccessibleImplementationAccess::getUnoTunnelId()
     {
-        static cppu::OImplementationId implID;
-
-        return implID.getImplementationId();
+        static const comphelper::UnoIdInit implID;
+        return implID.getSeq();
     }
 
 

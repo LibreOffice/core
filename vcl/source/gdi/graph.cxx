@@ -558,8 +558,8 @@ OString Graphic::getUniqueID() const
 }
 
 css::uno::Sequence<sal_Int8> Graphic::getUnoTunnelId() {
-    static cppu::OImplementationId gId;
-    return gId.getImplementationId();
+    static const comphelper::UnoIdInit gId;
+    return gId.getSeq();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

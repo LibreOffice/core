@@ -54,6 +54,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
 #include <comphelper/multicontainer2.hxx>
@@ -2173,8 +2174,8 @@ uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
 
 uno::Sequence< sal_Int8 > SAL_CALL OStorage::getImplementationId()
 {
-    static ::cppu::OImplementationId lcl_ImplId;
-    return lcl_ImplId.getImplementationId();
+    static const comphelper::UnoIdInit lcl_ImplId;
+    return lcl_ImplId.getSeq();
 }
 
 //  XStorage

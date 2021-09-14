@@ -135,9 +135,8 @@ namespace
 
     Sequence< sal_Int8 > OToolBoxWindowItem::getUnoTunnelId()
     {
-        static ::cppu::OImplementationId implId;
-
-        return implId.getImplementationId();
+        static const comphelper::UnoIdInit implId;
+        return implId.getSeq();
     }
 
     sal_Int64 SAL_CALL OToolBoxWindowItem::getSomething( const Sequence< sal_Int8 >& _rId )

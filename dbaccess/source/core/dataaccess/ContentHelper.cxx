@@ -91,8 +91,8 @@ IMPLEMENT_SERVICE_INFO1(OContentHelper,"com.sun.star.comp.sdb.Content","com.sun.
 
 css::uno::Sequence<sal_Int8> OContentHelper::getUnoTunnelId()
 {
-    static cppu::OImplementationId aId;
-    return aId.getImplementationId();
+    static const comphelper::UnoIdInit aId;
+    return aId.getSeq();
 }
 
 css::uno::Sequence<sal_Int8> OContentHelper::getImplementationId()
