@@ -82,13 +82,6 @@
                     "dest-filename": "pdfium-4643.tar.bz2"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/0168229624cfac409e766913506961a8-ucpp-1.3.2.tar.gz",
-                    "sha256": "983941d31ee8d366085cadf28db75eb1f5cb03ba1e5853b98f12f7f51c63b776",
-                    "type": "file",
-                    "dest": "external/tarballs",
-                    "dest-filename": "0168229624cfac409e766913506961a8-ucpp-1.3.2.tar.gz"
-                },
-                {
                     "url": "https://dev-www.libreoffice.org/src/xmlsec1-1.2.32.tar.gz",
                     "sha256": "e383702853236004e5b08e424b8afe9b53fe9f31aaa7a5382f39d9533eb7c043",
                     "type": "file",
