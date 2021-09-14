@@ -35,7 +35,7 @@ public:
     void testShouldFindFontFamilyByTokenNames();
     void testShouldFindNoFamilyWithWorthlessAttributes();
     void testShouldFindCJKFamily();
-    //    void testShouldNotFindCJKFamily();
+    void testShouldNotFindCJKFamily();
     void testShouldFindStarsymbolFamily();
     void testShouldFindOpensymbolFamilyWithMultipleSymbolFamilies();
     void testShouldFindSymboltypeFamily();
@@ -43,7 +43,7 @@ public:
     void testImpossibleSymbolFamily();
     void testShouldNotFindSymbolFamily();
     void testShouldMatchFamilyName();
-    //    void testShouldNotMatchFamilyName();
+    void testShouldNotMatchFamilyName();
     void testShouldMatchBrushScriptFamily();
     void testShouldNotMatchBrushScriptFamily();
     void testShouldMatchFixedFamily();
@@ -53,19 +53,19 @@ public:
     void testShouldMatchSansSerifFamily();
     void testShouldNotMatchSansSerifFamily();
     void testShouldMatchDecorativeFamily();
-    //    void testShouldNotMatchDecorativeFamily();
+    void testShouldNotMatchDecorativeFamily();
     void testShouldFindTitlingFamily();
-    //    void testShouldNotFindTitlingFamily();
+    void testShouldNotFindTitlingFamily();
     void testShouldFindCapitalsFamily();
-    //    void testShouldNotFindCapitalsFamily();
+    void testShouldNotFindCapitalsFamily();
     void testShouldFindFamilyName();
-    //    void testShouldNotFindFamilyName();
+    void testShouldNotFindFamilyName();
     void testShouldFindOtherStyleFamily();
     void testShouldNotFindOtherStyleFamily();
-    //    void testShouldFindTypewriterFamily();
-    //    void testShouldNotFindTypewriterFamily();
+    void testShouldFindTypewriterFamily();
+    void testShouldNotFindTypewriterFamily();
     void testShouldFindSchoolbookFamily();
-    //    void testShouldNotFindSchoolbookFamily();
+    void testShouldNotFindSchoolbookFamily();
 
     CPPUNIT_TEST_SUITE(VclPhysicalFontCollectionTest);
     CPPUNIT_TEST(testShouldCreateAndAddFontFamilyToCollection);
@@ -74,7 +74,7 @@ public:
     CPPUNIT_TEST(testShouldFindFontFamilyByTokenNames);
     CPPUNIT_TEST(testShouldFindNoFamilyWithWorthlessAttributes);
     CPPUNIT_TEST(testShouldFindCJKFamily);
-    //    CPPUNIT_TEST(testShouldNotFindCJKFamily);
+    CPPUNIT_TEST(testShouldNotFindCJKFamily);
     CPPUNIT_TEST(testShouldFindStarsymbolFamily);
     CPPUNIT_TEST(testShouldFindOpensymbolFamilyWithMultipleSymbolFamilies);
     CPPUNIT_TEST(testShouldFindSymboltypeFamily);
@@ -82,7 +82,7 @@ public:
     CPPUNIT_TEST(testImpossibleSymbolFamily);
     CPPUNIT_TEST(testShouldNotFindSymbolFamily);
     CPPUNIT_TEST(testShouldMatchFamilyName);
-    //    CPPUNIT_TEST(testShouldNotMatchFamilyName);
+    CPPUNIT_TEST(testShouldNotMatchFamilyName);
     CPPUNIT_TEST(testShouldMatchBrushScriptFamily);
     CPPUNIT_TEST(testShouldNotMatchBrushScriptFamily);
     CPPUNIT_TEST(testShouldMatchFixedFamily);
@@ -92,19 +92,19 @@ public:
     CPPUNIT_TEST(testShouldMatchSansSerifFamily);
     CPPUNIT_TEST(testShouldNotMatchSansSerifFamily);
     CPPUNIT_TEST(testShouldMatchDecorativeFamily);
-    //    CPPUNIT_TEST(testShouldNotMatchDecorativeFamily);
+    CPPUNIT_TEST(testShouldNotMatchDecorativeFamily);
     CPPUNIT_TEST(testShouldFindTitlingFamily);
-    //    CPPUNIT_TEST(testShouldNotFindTitlingFamily);
+    CPPUNIT_TEST(testShouldNotFindTitlingFamily);
     CPPUNIT_TEST(testShouldFindCapitalsFamily);
-    //    CPPUNIT_TEST(testShouldNotFindCapitalsFamily);
+    CPPUNIT_TEST(testShouldNotFindCapitalsFamily);
     CPPUNIT_TEST(testShouldFindFamilyName);
-    //    CPPUNIT_TEST(testShouldNotFindFamilyName);
+    CPPUNIT_TEST(testShouldNotFindFamilyName);
     CPPUNIT_TEST(testShouldFindOtherStyleFamily);
     CPPUNIT_TEST(testShouldNotFindOtherStyleFamily);
-    //    CPPUNIT_TEST(testShouldFindTypewriterFamily);
-    //    CPPUNIT_TEST(testShouldNotFindTypewriterFamily);
+    CPPUNIT_TEST(testShouldFindTypewriterFamily);
+    CPPUNIT_TEST(testShouldNotFindTypewriterFamily);
     CPPUNIT_TEST(testShouldFindSchoolbookFamily);
-    //    CPPUNIT_TEST(testShouldNotFindSchoolbookFamily);
+    CPPUNIT_TEST(testShouldNotFindSchoolbookFamily);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -180,6 +180,7 @@ static void AddNormalFontFace(vcl::font::PhysicalFontFamily* const pFontFamily,
 
 void VclPhysicalFontCollectionTest::testShouldFindNoFamilyWithWorthlessAttributes()
 {
+    // note: you must normalize the search family name (first parameter of PhysicalFontFamily constructor)
     vcl::font::PhysicalFontCollection aFontCollection;
     aFontCollection.FindOrCreateFontFamily(GetEnglishSearchFontName("Test Font Family Name"));
 
@@ -203,8 +204,6 @@ void VclPhysicalFontCollectionTest::testShouldFindCJKFamily()
                                  pCJKFamily->GetSearchName());
 }
 
-/* Test not working, has uncovered a bug, will fix in followup patch.
-
 void VclPhysicalFontCollectionTest::testShouldNotFindCJKFamily()
 {
     vcl::font::PhysicalFontCollection aFontCollection;
@@ -216,7 +215,6 @@ void VclPhysicalFontCollectionTest::testShouldNotFindCJKFamily()
                            !aFontCollection.FindFontFamilyByAttributes(
                                ImplFontAttrs::CJK, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NONE, ""));
 }
-*/
 
 void VclPhysicalFontCollectionTest::testShouldFindStarsymbolFamily()
 {
@@ -334,8 +332,6 @@ void VclPhysicalFontCollectionTest::testShouldMatchFamilyName()
                                "Matching family name"));
 }
 
-/* this test fails, has uncovered a bug
-
 void VclPhysicalFontCollectionTest::testShouldNotMatchFamilyName()
 {
     vcl::font::PhysicalFontCollection aFontCollection;
@@ -350,8 +346,6 @@ void VclPhysicalFontCollectionTest::testShouldNotMatchFamilyName()
                                                ImplFontAttrs::Normal, WEIGHT_NORMAL, WIDTH_NORMAL,
                                                ITALIC_NONE, "Non matching family name"));
 }
-
-*/
 
 void VclPhysicalFontCollectionTest::testShouldMatchBrushScriptFamily()
 {
@@ -511,8 +505,6 @@ void VclPhysicalFontCollectionTest::testShouldMatchDecorativeFamily()
                                                                       ITALIC_NORMAL, ""));
 }
 
-/* has uncovered a bug - will fix in followup patch
-
 void VclPhysicalFontCollectionTest::testShouldNotMatchDecorativeFamily()
 {
     vcl::font::PhysicalFontCollection aFontCollection;
@@ -530,8 +522,6 @@ void VclPhysicalFontCollectionTest::testShouldNotMatchDecorativeFamily()
                                                           WIDTH_NORMAL, ITALIC_NORMAL, ""));
 }
 
-*/
-
 void VclPhysicalFontCollectionTest::testShouldFindTitlingFamily()
 {
     vcl::font::PhysicalFontCollection aFontCollection;
@@ -544,18 +534,17 @@ void VclPhysicalFontCollectionTest::testShouldFindTitlingFamily()
                                                            WIDTH_NORMAL, ITALIC_NORMAL, ""));
 }
 
-/* has uncovered bug - will followup with patch
 void VclPhysicalFontCollectionTest::testShouldNotFindTitlingFamily()
 {
     vcl::font::PhysicalFontCollection aFontCollection;
-    vcl::font::PhysicalFontFamily* pFontFamily = aFontCollection.FindOrCreateFontFamily("testmonotype");
+    vcl::font::PhysicalFontFamily* pFontFamily
+        = aFontCollection.FindOrCreateFontFamily("testmonotype");
     AddNormalFontFace(pFontFamily, "testmonotype");
 
     CPPUNIT_ASSERT_MESSAGE("Titling family found", !aFontCollection.FindFontFamilyByAttributes(
                                                        ImplFontAttrs::Titling, WEIGHT_NORMAL,
                                                        WIDTH_NORMAL, ITALIC_NORMAL, ""));
 }
-*/
 
 void VclPhysicalFontCollectionTest::testShouldFindCapitalsFamily()
 {
@@ -568,7 +557,6 @@ void VclPhysicalFontCollectionTest::testShouldFindCapitalsFamily()
                                                             WIDTH_NORMAL, ITALIC_NORMAL, ""));
 }
 
-/* has uncovered bug - will followup with patch
 void VclPhysicalFontCollectionTest::testShouldNotFindCapitalsFamily()
 {
     vcl::font::PhysicalFontCollection aFontCollection;
@@ -579,7 +567,6 @@ void VclPhysicalFontCollectionTest::testShouldNotFindCapitalsFamily()
                                                         ImplFontAttrs::Capitals, WEIGHT_NORMAL,
                                                         WIDTH_NORMAL, ITALIC_NORMAL, ""));
 }
-*/
 
 void VclPhysicalFontCollectionTest::testShouldFindFamilyName()
 {
@@ -594,7 +581,6 @@ void VclPhysicalFontCollectionTest::testShouldFindFamilyName()
                                GetEnglishSearchFontName("Test font name")));
 }
 
-/* has uncovered bug - will followup with patch
 void VclPhysicalFontCollectionTest::testShouldNotFindFamilyName()
 {
     vcl::font::PhysicalFontCollection aFontCollection;
@@ -607,7 +593,6 @@ void VclPhysicalFontCollectionTest::testShouldNotFindFamilyName()
                                ImplFontAttrs::Normal, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NORMAL,
                                GetEnglishSearchFontName("Completely different name")));
 }
-*/
 
 void VclPhysicalFontCollectionTest::testShouldFindOtherStyleFamily()
 {
@@ -632,7 +617,6 @@ void VclPhysicalFontCollectionTest::testShouldNotFindOtherStyleFamily()
                                                   WIDTH_NORMAL, ITALIC_NORMAL, ""));
 }
 
-/* has uncovered bug - will followup with patch
 void VclPhysicalFontCollectionTest::testShouldFindTypewriterFamily()
 {
     vcl::font::PhysicalFontCollection aFontCollection;
@@ -648,14 +632,14 @@ void VclPhysicalFontCollectionTest::testShouldFindTypewriterFamily()
 void VclPhysicalFontCollectionTest::testShouldNotFindTypewriterFamily()
 {
     vcl::font::PhysicalFontCollection aFontCollection;
-    vcl::font::PhysicalFontFamily* pFontFamily = aFontCollection.FindOrCreateFontFamily("testmonotype");
+    vcl::font::PhysicalFontFamily* pFontFamily
+        = aFontCollection.FindOrCreateFontFamily("testmonotype");
     AddNormalFontFace(pFontFamily, "testmonotype");
 
     CPPUNIT_ASSERT_MESSAGE("Found font name", !aFontCollection.FindFontFamilyByAttributes(
                                                   ImplFontAttrs::Typewriter, WEIGHT_NORMAL,
                                                   WIDTH_NORMAL, ITALIC_NORMAL, ""));
 }
-*/
 
 void VclPhysicalFontCollectionTest::testShouldFindSchoolbookFamily()
 {
@@ -669,18 +653,17 @@ void VclPhysicalFontCollectionTest::testShouldFindSchoolbookFamily()
                                                          WIDTH_NORMAL, ITALIC_NORMAL, ""));
 }
 
-/* has uncovered bug - will followup with patch
 void VclPhysicalFontCollectionTest::testShouldNotFindSchoolbookFamily()
 {
     vcl::font::PhysicalFontCollection aFontCollection;
-    vcl::font::PhysicalFontFamily* pFontFamily = aFontCollection.FindOrCreateFontFamily("testmonotype");
+    vcl::font::PhysicalFontFamily* pFontFamily
+        = aFontCollection.FindOrCreateFontFamily("testmonotype");
     AddNormalFontFace(pFontFamily, "testmonotype");
 
     CPPUNIT_ASSERT_MESSAGE("Found font name", !aFontCollection.FindFontFamilyByAttributes(
                                                   ImplFontAttrs::Schoolbook, WEIGHT_NORMAL,
                                                   WIDTH_NORMAL, ITALIC_NORMAL, ""));
 }
-*/
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclPhysicalFontCollectionTest);
 
