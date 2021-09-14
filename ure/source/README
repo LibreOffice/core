@@ -25,7 +25,6 @@ ELF platforms (Linux, Solaris, *BSD):
 /opt/libreoffice/ure/THIRDPARTYLICENSEREADME.html
 /opt/libreoffice/ure/README
 /opt/libreoffice/ure/bin/uno
-/opt/libreoffice/ure/bin/regmerge
 /opt/libreoffice/ure/bin/regview
 /opt/libreoffice/ure/bin/javaldx
 /opt/libreoffice/ure/lib/libuno_cppu.so.3
@@ -83,7 +82,6 @@ Program Files\URE\LICENSE
 Program Files\URE\THIRDPARTYLICENSEREADME.html
 Program Files\URE\README
 Program Files\URE\bin\uno.exe
-Program Files\URE\bin\regmerge.exe
 Program Files\URE\bin\regview.exe
 Program Files\URE\bin\cppu3.dll
 Program Files\URE\bin\cppuhelper3MSC.dll
@@ -168,7 +166,7 @@ A URE installation contains the following public files:
 - uno is the executable file that runs UNO components.  For more details, see
 the SDK Developer's Guide.
 
-- regmerge and regview are tools that work with binary registries that contain
+- regview is a tool that works with old-format binary registries that contain
 UNO type or UNO service information.  For more details, see the SDK Developer's
 Guide.
 

@@ -185,9 +185,6 @@ void WriteOnlyVars::run()
         // false+
         if (loplugin::isSamePathname(fn, SRCDIR "/store/source/storpage.cxx"))
             return;
-        // yydebug?
-        if (loplugin::isSamePathname(fn, SRCDIR "/idlc/source/idlccompile.cxx"))
-            return;
         if (fn.contains("/qa/"))
             return;
         if (fn.contains("/vcl/workben/"))

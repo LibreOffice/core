@@ -22,8 +22,7 @@ formats to the `UNOIDL` format.  It is used at build-time to compile `UNOIDL` fo
 `.rdb` files (that are used at build-time only, or included in installation sets
 in `URE` or `program/types/` or as part of bundled extensions that are created
 during the build and not merely included as pre-built `.oxt` files) from source
-`.idl` files.  (The SDK still supports deprecated idlc generating legacy format `.rdb` files for
-now.)
+`.idl` files.
 
 `Executable_unoidl-read` is a helper tool to convert from any of the registry
 formats to the source-file format.  It can be used manually after a LibreOffice
