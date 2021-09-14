@@ -26,6 +26,8 @@
 #include <headless/svpgdi.hxx>
 #include <impfontmetricdata.hxx>
 #include <sallayout.hxx>
+#include <font/FontSelectPattern.hxx>
+#include <font/PhysicalFontFace.hxx>
 
 void SvpSalGraphics::SetFont(LogicalFontInstance* pIFSD, int nFallbackLevel)
 {
