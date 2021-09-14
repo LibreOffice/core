@@ -408,9 +408,8 @@ sal_Int64 SAL_CALL OConnection::getSomething( const Sequence< sal_Int8 >& rId )
 
 Sequence< sal_Int8 > OConnection::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoIdInit implId;
+    return implId.getSeq();
 }
 
 void OConnection::throwUrlNotValid(const OUString & _rsUrl,const OUString & _rsMessage)

@@ -2173,8 +2173,8 @@ uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
 
 uno::Sequence< sal_Int8 > SAL_CALL OStorage::getImplementationId()
 {
-    static ::cppu::OImplementationId lcl_ImplId;
-    return lcl_ImplId.getImplementationId();
+    static const comphelper::UnoIdInit lcl_ImplId;
+    return lcl_ImplId.getSeq();
 }
 
 //  XStorage

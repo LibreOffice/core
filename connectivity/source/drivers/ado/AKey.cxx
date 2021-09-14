@@ -69,9 +69,8 @@ void OAdoKey::refreshColumns()
 
 Sequence< sal_Int8 > OAdoKey::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoIdInit implId;
+    return implId.getSeq();
 }
 
 // css::lang::XUnoTunnel

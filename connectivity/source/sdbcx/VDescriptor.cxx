@@ -94,9 +94,8 @@ namespace connectivity::sdbcx
 
         Sequence< sal_Int8 > ODescriptor::getUnoTunnelId()
         {
-            static ::cppu::OImplementationId implId;
-
-            return implId.getImplementationId();
+            static const comphelper::UnoIdInit implId;
+            return implId.getSeq();
         }
 
 

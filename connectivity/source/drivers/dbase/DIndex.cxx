@@ -102,9 +102,8 @@ void ODbaseIndex::refreshColumns()
 
 Sequence< sal_Int8 > ODbaseIndex::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoIdInit implId;
+    return implId.getSeq();
 }
 
 // XUnoTunnel

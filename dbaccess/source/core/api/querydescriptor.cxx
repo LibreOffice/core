@@ -148,8 +148,8 @@ sal_Int64 SAL_CALL OQueryDescriptor_Base::getSomething( const Sequence< sal_Int8
 
 css::uno::Sequence<sal_Int8> OQueryDescriptor_Base::getUnoTunnelId()
 {
-    static cppu::OImplementationId aId;
-    return aId.getImplementationId();
+    static const comphelper::UnoIdInit aId;
+    return aId.getSeq();
 }
 
 css::uno::Sequence<sal_Int8> OQueryDescriptor_Base::getImplementationId()

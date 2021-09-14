@@ -69,8 +69,8 @@ Adapter::~Adapter()
 
 Sequence<sal_Int8> Adapter::getUnoTunnelId()
 {
-    static const cppu::OImplementationId g_id(false);
-    return g_id.getImplementationId();
+    static const comphelper::UnoIdInit g_id;
+    return g_id.getSeq();
 }
 
 sal_Int64 Adapter::getSomething( const Sequence< sal_Int8 > &id)

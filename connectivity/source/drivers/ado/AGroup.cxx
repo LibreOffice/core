@@ -84,9 +84,8 @@ void OAdoGroup::refreshUsers()
 
 Sequence< sal_Int8 > OAdoGroup::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoIdInit implId;
+    return implId.getSeq();
 }
 
 // css::lang::XUnoTunnel

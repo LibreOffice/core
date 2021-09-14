@@ -213,9 +213,8 @@ void SAL_CALL OWriterTable::disposing()
 
 uno::Sequence<sal_Int8> OWriterTable::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId implId;
-
-    return implId.getImplementationId();
+    static const comphelper::UnoIdInit implId;
+    return implId.getSeq();
 }
 
 sal_Int64 OWriterTable::getSomething(const uno::Sequence<sal_Int8>& rId)

@@ -121,9 +121,8 @@ void SAL_CALL OFileTable::disposing()
 
 Sequence< sal_Int8 > OFileTable::getUnoTunnelId()
 {
-    static ::cppu::OImplementationId s_Id;
-
-    return s_Id.getImplementationId();
+    static const comphelper::UnoIdInit s_Id;
+    return s_Id.getSeq();
 }
 
 // css::lang::XUnoTunnel
