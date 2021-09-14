@@ -116,7 +116,7 @@ FontList::GetStyleName()
 
 --------------------------------------------------------------------------
 
-const int* FontList::GetSizeAry( const FontMetric& rFontMetric ) const;
+const int* FontList::GetSizeAry() const;
 
 This method returns the available sizes for the given font.
 As only scalable font are available, standard sizes are returned.
@@ -184,6 +184,7 @@ public:
     static sal_Handle           GetNextFontMetric( sal_Handle hFontMetric );
     static const FontMetric& GetFontMetric( sal_Handle hFontMetric );
 
+    const int* GetSizeAry() const;
     static const int* GetStdSizeAry() { return aStdSizeAry; }
 
 private:
