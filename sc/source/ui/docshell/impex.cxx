@@ -687,7 +687,7 @@ static bool lcl_appendLineData( OUString& rField, const sal_Unicode* p1, const s
 {
     if (rField.getLength() + (p2 - p1) <= nArbitraryCellLengthLimit)
     {
-        rField += std::u16string_view( p1, sal::static_int_cast<sal_Int32>( p2 - p1 ) );
+        rField += std::u16string_view( p1, p2 - p1 );
         return true;
     }
     else
@@ -814,7 +814,7 @@ static const sal_Unicode* lcl_ScanSylkString( const sal_Unicode* p,
     }
     if (!pEndQuote)
         pEndQuote = p;  // Take all data as string.
-    rString += std::u16string_view(pStartQuote + 1, sal::static_int_cast<sal_Int32>( pEndQuote - pStartQuote - 1 ) );
+    rString += std::u16string_view(pStartQuote + 1, pEndQuote - pStartQuote - 1 );
     lcl_UnescapeSylk( rString, eVersion);
     return p;
 }
@@ -836,7 +836,7 @@ static const sal_Unicode* lcl_ScanSylkFormula( const sal_Unicode* p,
             }
             ++p;
         }
-        rString += std::u16string_view( pStart, sal::static_int_cast<sal_Int32>( p - pStart));
+        rString += std::u16string_view( pStart, p - pStart);
         lcl_UnescapeSylk( rString, eVersion);
     }
     else
@@ -877,7 +877,7 @@ static const sal_Unicode* lcl_ScanSylkFormula( const sal_Unicode* p,
         {
             while (*p && *p != ';')
                 ++p;
-            rString += std::u16string_view( pStart, sal::static_int_cast<sal_Int32>( p - pStart));
+            rString += std::u16string_view( pStart, p - pStart);
         }
     }
     return p;
