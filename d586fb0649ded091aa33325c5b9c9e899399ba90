@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67f911e6_531980ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2021-09-14T08:16:37Z",
+      "side": 1,
+      "message": "LGTM, CI is happy",
+      "revId": "d586fb0649ded091aa33325c5b9c9e899399ba90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
