@@ -19,8 +19,6 @@
 
 $(eval $(call gb_UnoApi_UnoApi,udkapi))
 
-$(eval $(call gb_UnoApi_package_idlfiles,udkapi))
-
 
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,com/sun/star/beans,\
 	PropertySet \
