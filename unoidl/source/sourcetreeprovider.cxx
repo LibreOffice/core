@@ -94,18 +94,24 @@ bool exists(OUString const & uri, bool directory) {
 
 class Cursor: public MapCursor {
 public:
-    Cursor() {}
+    Cursor(Manager& manager, OUString const & uri): manager_(manager), directory_(uri) {
+        auto const rc = directory_.open();
+        SAL_WARN_IF(
+            rc != osl::FileBase::E_None, "unoidl", "open(" << uri << ") failed with " << +rc);
+    }
 
 private:
     virtual ~Cursor() noexcept override {}
 
-    virtual rtl::Reference<Entity> getNext(OUString *) override
-    { return rtl::Reference<Entity>(); } //TODO
+    virtual rtl::Reference<Entity> getNext(OUString *) override;
+
+    Manager& manager_;
+    osl::Directory directory_;
 };
 
 class SourceModuleEntity: public ModuleEntity {
 public:
-    SourceModuleEntity() {}
+    SourceModuleEntity(Manager& manager, OUString const & uri): manager_(manager), uri_(uri) {}
 
 private:
     virtual ~SourceModuleEntity() noexcept override {}
@@ -114,9 +120,107 @@ private:
     { return std::vector<OUString>(); } //TODO
 
     virtual rtl::Reference< MapCursor > createCursor() const override
-    { return new Cursor; }
+    { return new Cursor(manager_, uri_); }
+
+    Manager& manager_;
+    OUString uri_;
 };
 
+bool isValidFileName(OUString const & name, bool directory) {
+    for (sal_Int32 i = 0;; ++i) {
+        if (i == name.getLength()) {
+            if (i == 0) {
+                return false;
+            }
+            return directory;
+        }
+        auto const c = name[i];
+        if (c == '.') {
+            if (i == 0 || name[i - 1] == '_') {
+                return false;
+            }
+            return !directory && name.subView(i + 1) == u"idl";
+        } else if (c == '_') {
+            //TODO: Ignore case of name[0] only for case-insensitive file systems:
+            if (i == 0 || name[i - 1] == '_') {
+                return false;
+            }
+        } else if (rtl::isAsciiDigit(c)) {
+            if (i == 0) {
+                return false;
+            }
+        } else if (!rtl::isAsciiAlpha(c)) {
+            return false;
+        }
+    }
+}
+
+}
+
+rtl::Reference<Entity> Cursor::getNext(OUString * name) {
+    assert(name != nullptr);
+    for (;;) {
+        osl::DirectoryItem i;
+        auto rc = directory_.getNextItem(i);
+        switch (rc) {
+        case osl::FileBase::E_None:
+            {
+                osl::FileStatus stat(
+                    osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName |
+                    osl_FileStatus_Mask_FileURL);
+                rc = i.getFileStatus(stat);
+                if (rc != osl::FileBase::E_None) {
+                    SAL_WARN(
+                        "unoidl",
+                        "getFileSatus in <" << directory_.getURL() << "> failed with " << +rc);
+                    continue;
+                }
+                auto const dir = stat.getFileType() == osl::FileStatus::Directory;
+                if (!isValidFileName(stat.getFileName(), dir)) {
+                    continue;
+                }
+                if (dir) {
+                    //TODO: Using osl::FileStatus::getFileName can likely cause issues on case-
+                    // insensitive/preserving file systems, see the free getFileName function above
+                    // (which likely goes unnoticed if module identifiers follow the convention of
+                    // being all-lowercase):
+                    *name = stat.getFileName();
+                    return new SourceModuleEntity(manager_, stat.getFileURL());
+                } else {
+                    SourceProviderScannerData data(&manager_);
+                    if (!parse(stat.getFileURL(), &data)) {
+                        SAL_WARN("unoidl", "cannot parse <" << stat.getFileURL() << ">");
+                        continue;
+                    }
+                    auto ent = data.entities.end();
+                    for (auto j = data.entities.begin(); j != data.entities.end(); ++j) {
+                        if (j->second.kind == SourceProviderEntity::KIND_EXTERNAL
+                            || j->second.kind == SourceProviderEntity::KIND_MODULE)
+                        {
+                            continue;
+                        }
+                        if (ent != data.entities.end()) {
+                            throw FileFormatException(
+                                stat.getFileURL(), "source file defines more than one entity");
+                        }
+                        ent = j;
+                    }
+                    if (ent == data.entities.end()) {
+                        throw FileFormatException(
+                            stat.getFileURL(), "source file defines no entity");
+                    }
+                    //TODO: Check that the entity's name matches the suffix of stat.getFileURL():
+                    *name = ent->first.copy(ent->first.lastIndexOf('.') + 1);
+                    return ent->second.entity;
+                }
+            }
+        default:
+            SAL_WARN( "unoidl", "getNext from <" << directory_.getURL() << "> failed with " << +rc);
+            [[fallthrough]];
+        case osl::FileBase::E_NOENT:
+            return {};
+        }
+    }
 }
 
 SourceTreeProvider::SourceTreeProvider(Manager & manager, OUString const & uri):
@@ -124,7 +228,7 @@ SourceTreeProvider::SourceTreeProvider(Manager & manager, OUString const & uri):
 {}
 
 rtl::Reference<MapCursor> SourceTreeProvider::createRootCursor() const {
-    return new Cursor;
+    return new Cursor(manager_, uri_);
 }
 
 rtl::Reference<Entity> SourceTreeProvider::findEntity(OUString const & name)
@@ -184,7 +288,7 @@ rtl::Reference<Entity> SourceTreeProvider::findEntity(OUString const & name)
     // Prevent conflicts between foo/ and Foo.idl on case-preserving file
     // systems:
     if (exists(uri, true) && !exists(uri + ".idl", false)) {
-        ent = new SourceModuleEntity;
+        ent = new SourceModuleEntity(manager_, uri);
     } else {
         uri += ".idl";
         SourceProviderScannerData data(&manager_);
