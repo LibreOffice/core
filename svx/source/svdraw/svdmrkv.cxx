@@ -594,7 +594,7 @@ bool SdrMarkView::ImpIsFrameHandles() const
     if (nMarkCount==1 && bStdDrag && bFrmHdl)
     {
         const SdrObject* pObj=GetMarkedObjectByIndex(0);
-        if (pObj->GetObjInventor()==SdrInventor::Default)
+        if (pObj && pObj->GetObjInventor()==SdrInventor::Default)
         {
             sal_uInt16 nIdent=pObj->GetObjIdentifier();
             if (nIdent==OBJ_LINE || nIdent==OBJ_EDGE || nIdent==OBJ_CAPTION || nIdent==OBJ_MEASURE || nIdent==OBJ_CUSTOMSHAPE || nIdent==OBJ_TABLE )
