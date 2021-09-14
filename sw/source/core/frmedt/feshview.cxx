@@ -2690,6 +2690,11 @@ FlyProtectFlags SwFEShell::IsSelObjProtected( FlyProtectFlags eType ) const
         for( size_t i = rMrkList.GetMarkCount(); i; )
         {
             SdrObject *pObj = rMrkList.GetMark( --i )->GetMarkedSdrObj();
+            if (!pObj)
+            {
+                continue;
+            }
+
             if( !bParent )
             {
                 nChk |= ( pObj->IsMoveProtect() ? FlyProtectFlags::Pos : FlyProtectFlags::NONE ) |

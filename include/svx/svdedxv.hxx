@@ -293,6 +293,8 @@ public:
     /** helper function for selections with multiple SdrText for one SdrTextObj (f.e. tables ) */
     static void ApplyFormatPaintBrushToText( SfxItemSet const & rFormatSet, SdrTextObj& rTextObj, SdrText* pText, bool bNoCharacterFormats, bool bNoParagraphFormats );
 
+    void DisposeUndoManager();
+
 protected:
     virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfo );
     virtual void OnEndPasteOrDrop( PasteOrDropInfos* pInfo );

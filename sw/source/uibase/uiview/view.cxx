@@ -107,6 +107,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <svtools/embedhlp.hxx>
 #include <tools/UnitConversion.hxx>
+#include <svx/svdoutl.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1095,6 +1096,10 @@ SwView::~SwView()
     SdrView *pSdrView = m_pWrtShell ? m_pWrtShell->GetDrawView() : nullptr;
     if( pSdrView && pSdrView->IsTextEdit() )
         pSdrView->SdrEndTextEdit( true );
+    else if (pSdrView)
+    {
+        pSdrView->DisposeUndoManager();
+    }
 
     SetWindow( nullptr );
 
