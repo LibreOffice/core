@@ -37,7 +37,7 @@ class SwMMResultSaveDialog final : public SfxDialogController
 
     std::unique_ptr<weld::RadioButton> m_xSaveAsOneRB;
     std::unique_ptr<weld::RadioButton> m_xSaveIndividualRB;
-    std::unique_ptr<weld::RadioButton> m_xFromRB;
+    std::unique_ptr<weld::CheckButton> m_xFromRB;
     std::unique_ptr<weld::SpinButton> m_xFromNF;
     std::unique_ptr<weld::Label> m_xToFT;
     std::unique_ptr<weld::SpinButton> m_xToNF;
