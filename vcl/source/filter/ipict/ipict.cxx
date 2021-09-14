@@ -1306,7 +1306,6 @@ static const char* operationName(sal_uInt16 nOpcode)
 
 sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
 {
-    sal_uInt16 nUSHORT;
     Point aPoint;
     sal_uInt64 nDataSize=0;
     PictDrawingMethod shapeDMethod = PictDrawingMethod::UNDEFINED;
@@ -1330,6 +1329,7 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         break;
 
     case 0x0001: { // Clip
+        sal_uInt16 nUSHORT(0);
         tools::Rectangle aRect;
         pPict->ReadUInt16( nUSHORT );
         nDataSize=nUSHORT;
@@ -1350,6 +1350,8 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         break;
 
     case 0x0003:   // TxFont
+    {
+        sal_uInt16 nUSHORT(0);
         pPict->ReadUInt16( nUSHORT );
         if      (nUSHORT <=    1) aActFont.SetFamily(FAMILY_SWISS);
         else if (nUSHORT <=   12) aActFont.SetFamily(FAMILY_DECORATIVE);
@@ -1362,7 +1364,7 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         eActMethod = PictDrawingMethod::UNDEFINED;
         nDataSize=2;
         break;
-
+    }
     case 0x0004: {  // TxFace
         char nFace;
         pPict->ReadChar( nFace );
@@ -1395,6 +1397,8 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         break;
     }
     case 0x0008:   // PnMode
+    {
+        sal_uInt16 nUSHORT(0);
         pPict->ReadUInt16( nUSHORT );
         // internal code for postscript command (Quickdraw Reference Drawing B-30,B-34)
         if (nUSHORT==23) eActROP = RasterOp::N1;
@@ -1413,7 +1417,7 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         eActMethod = PictDrawingMethod::UNDEFINED;
         nDataSize=2;
         break;
-
+    }
     case 0x0009:   // PnPat
         nDataSize=eActPenPattern.read(*pPict);
         eActMethod = PictDrawingMethod::UNDEFINED;
@@ -1435,6 +1439,7 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
 
     case 0x000d:   // TxSize
     {
+        sal_uInt16 nUSHORT(0);
         pPict->ReadUInt16( nUSHORT );
         aActFont.SetFontSize( Size( 0, static_cast<tools::Long>(nUSHORT) ) );
         eActMethod = PictDrawingMethod::UNDEFINED;
@@ -1574,10 +1579,12 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
     case 0x0025:   // Reserved (n Bytes)
     case 0x0026:   // Reserved (n Bytes)
     case 0x0027:   // Reserved (n Bytes)
+    {
+        sal_uInt16 nUSHORT(0);
         pPict->ReadUInt16( nUSHORT );
         nDataSize=2+nUSHORT;
         break;
-
+    }
     case 0x0028:   // LongText
         aTextPosition=ReadPoint();
         nDataSize=4+ReadAndDrawText();
@@ -1600,6 +1607,7 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         break;
 
     case 0x002c: { // fontName
+        sal_uInt16 nUSHORT(0);
         pPict->ReadUInt16( nUSHORT ); nDataSize=nUSHORT+2;
         pPict->ReadUInt16( nUSHORT );
         if      (nUSHORT <=    1) aActFont.SetFamily(FAMILY_SWISS);
@@ -1625,15 +1633,19 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         break;
 
     case 0x002e:   // glyphState
+    {
+        sal_uInt16 nUSHORT(0);
         pPict->ReadUInt16( nUSHORT );
         nDataSize=2+nUSHORT;
         break;
-
+    }
     case 0x002f:   // Reserved (n Bytes)
+    {
+        sal_uInt16 nUSHORT(0);
         pPict->ReadUInt16( nUSHORT );
         nDataSize=2+nUSHORT;
         break;
-
+    }
     case 0x0030:   // frameRect
     case 0x0031:   // paintRect
     case 0x0032:   // eraseRect
@@ -1757,9 +1769,11 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
     case 0x0075:   // Reserved (Polygon-Size)
     case 0x0076:   // Reserved (Polygon-Size)
     case 0x0077:   // Reserved (Polygon-Size)
+    {
+        sal_uInt16 nUSHORT(0);
         pPict->ReadUInt16( nUSHORT ); nDataSize=nUSHORT;
         break;
-
+    }
     case 0x0078:   // frameSamePoly
     case 0x0079:   // paintSamePoly
     case 0x007a:   // eraseSamePoly
@@ -1785,9 +1799,11 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
     case 0x0085:   // Reserved (Region-Size)
     case 0x0086:   // Reserved (Region-Size)
     case 0x0087:   // Reserved (Region-Size)
+    {
+        sal_uInt16 nUSHORT(0);
         pPict->ReadUInt16( nUSHORT ); nDataSize=nUSHORT;
         break;
-
+    }
     case 0x0088:   // frameSameRgn
     case 0x0089:   // paintSameRgn
     case 0x008a:   // eraseSameRgn
@@ -1824,9 +1840,11 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
     case 0x0095:   // Reserved (n Bytes)
     case 0x0096:   // Reserved (n Bytes)
     case 0x0097:   // Reserved (n Bytes)
+    {
+        sal_uInt16 nUSHORT(0);
         pPict->ReadUInt16( nUSHORT ); nDataSize=2+nUSHORT;
         break;
-
+    }
     case 0x0098: { // PackBitsRect
         BitmapEx aBmp;
         tools::Rectangle aSrcRect, aDestRect;
@@ -1863,18 +1881,23 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
     case 0x009d:   // Reserved (n Bytes)
     case 0x009e:   // Reserved (n Bytes)
     case 0x009f:   // Reserved (n Bytes)
+    {
+        sal_uInt16 nUSHORT(0);
         pPict->ReadUInt16( nUSHORT ); nDataSize=2+nUSHORT;
         break;
-
+    }
     case 0x00a0:   // ShortComment
         nDataSize=2;
         break;
 
     case 0x00a1:   // LongComment
+    {
+        sal_uInt16 nUSHORT(0);
         pPict->SeekRel(2); pPict->ReadUInt16( nUSHORT ); nDataSize=4+nUSHORT;
         break;
-
+    }
     default: // 0x00a2 bis 0xffff (most times reserved)
+        sal_uInt16 nUSHORT(0);
         if      (nOpcode<=0x00af) { pPict->ReadUInt16( nUSHORT ); nDataSize=2+nUSHORT; }
         else if (nOpcode<=0x00cf) { nDataSize=0; }
         else if (nOpcode<=0x00fe) { sal_uInt32 nTemp(0); pPict->ReadUInt32(nTemp) ; nDataSize = nTemp; nDataSize+=4; }
