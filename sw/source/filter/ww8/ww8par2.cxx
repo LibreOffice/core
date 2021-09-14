@@ -167,6 +167,32 @@ sal_uInt32 wwSectionManager::GetWWPageTopMargin() const
     return !maSegments.empty() ? maSegments.back().maSep.dyaTop : 0;
 }
 
+namespace
+{
+    class DeleteListener final : public SvtListener
+    {
+    private:
+        bool bObjectDeleted;
+    public:
+        explicit DeleteListener(SvtBroadcaster& rNotifier)
+            : bObjectDeleted(false)
+        {
+            StartListening(rNotifier);
+        }
+
+        virtual void Notify(const SfxHint& rHint) override
+        {
+            if (rHint.GetId() == SfxHintId::Dying)
+                bObjectDeleted = true;
+        }
+
+        bool WasDeleted() const
+        {
+            return bObjectDeleted;
+        }
+    };
+}
+
 sal_uInt16 SwWW8ImplReader::End_Footnote()
 {
     /*
@@ -192,7 +218,7 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
     sal_Int32 nPos = m_pPaM->GetPoint()->nContent.GetIndex();
 
     OUString sChar;
-    SwTextAttr* pFN = nullptr;
+    SwTextFootnote* pFN = nullptr;
     //There should have been a footnote char, we will replace this.
     if (pText && nPos)
     {
@@ -206,70 +232,79 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
         if (xLastAnchorCursor)
             m_pLastAnchorPos.reset(new SwPosition(*xLastAnchorCursor->GetPoint()));
         SwFormatFootnote aFootnote(rDesc.meType == MAN_EDN);
-        pFN = pText->InsertItem(aFootnote, nPos, nPos);
+        pFN = static_cast<SwTextFootnote*>(pText->InsertItem(aFootnote, nPos, nPos));
     }
     OSL_ENSURE(pFN, "Problems creating the footnote text");
     if (pFN)
     {
-
         SwPosition aTmpPos( *m_pPaM->GetPoint() );    // remember old cursor position
         WW8PLCFxSaveAll aSave;
         m_xPlcxMan->SaveAllPLCFx( aSave );
         std::shared_ptr<WW8PLCFMan> xOldPlcxMan = m_xPlcxMan;
 
-        const SwNodeIndex* pSttIdx = static_cast<SwTextFootnote*>(pFN)->GetStartNode();
-        OSL_ENSURE(pSttIdx, "Problems creating footnote text");
+        const SwNodeIndex* pSttIdx = pFN->GetStartNode();
+        assert(pSttIdx && "Problems creating footnote text");
 
-        static_cast<SwTextFootnote*>(pFN)->SetSeqNo( m_rDoc.GetFootnoteIdxs().size() );
+        pFN->SetSeqNo(m_rDoc.GetFootnoteIdxs().size());
 
         bool bOld = m_bFootnoteEdn;
         m_bFootnoteEdn = true;
 
+        SwFormatFootnote& rFormatFootnote = static_cast<SwFormatFootnote&>(pFN->GetAttr());
+
+        DeleteListener aDeleteListener(rFormatFootnote.GetNotifier());
+
         // read content of Ft-/End-Note
         Read_HdFtFootnoteText( pSttIdx, rDesc.mnStartCp, rDesc.mnLen, rDesc.meType);
-        bFtEdOk = true;
+
         m_bFootnoteEdn = bOld;
 
-        OSL_ENSURE(sChar.getLength()==1 && ((rDesc.mbAutoNum == (sChar[0] == 2))),
-         "footnote autonumbering must be 0x02, and everything else must not be");
-
-        // If no automatic numbering use the following char from the main text
-        // as the footnote number
-        if (!rDesc.mbAutoNum)
-            static_cast<SwTextFootnote*>(pFN)->SetNumber(0, 0, sChar);
-
-        /*
-            Delete the footnote char from the footnote if its at the beginning
-            as usual. Might not be if the user has already deleted it, e.g.
-            #i14737#
-        */
-        SwNodeIndex& rNIdx = m_pPaM->GetPoint()->nNode;
-        rNIdx = pSttIdx->GetIndex() + 1;
-        SwTextNode* pTNd = rNIdx.GetNode().GetTextNode();
-        if (pTNd && !pTNd->GetText().isEmpty() && !sChar.isEmpty())
+        SAL_WARN_IF(aDeleteListener.WasDeleted(), "sw.ww8", "Footnode deleted during its import");
+        if (!aDeleteListener.WasDeleted())
         {
-            const OUString &rText = pTNd->GetText();
-            if (rText[0] == sChar[0])
-            {
-                // Allow MSO to emulate LO footnote text starting at left margin - only meaningful with hanging indent
-                sal_Int32 nFirstLineIndent=0;
-                SfxItemSet aSet( m_rDoc.GetAttrPool(), svl::Items<RES_LR_SPACE, RES_LR_SPACE> );
-                if ( pTNd->GetAttr(aSet) )
-                {
-                    const SvxLRSpaceItem* pLRSpace = aSet.GetItem<SvxLRSpaceItem>(RES_LR_SPACE);
-                    if ( pLRSpace )
-                        nFirstLineIndent = pLRSpace->GetTextFirstLineOffset();
-                }
+            bFtEdOk = true;
 
-                m_pPaM->GetPoint()->nContent.Assign( pTNd, 0 );
-                m_pPaM->SetMark();
-                // Strip out aesthetic tabs we may have inserted on export #i24762#
-                if (nFirstLineIndent < 0 && rText.getLength() > 1 && rText[1] == 0x09)
+            OSL_ENSURE(sChar.getLength()==1 && ((rDesc.mbAutoNum == (sChar[0] == 2))),
+             "footnote autonumbering must be 0x02, and everything else must not be");
+
+            // If no automatic numbering use the following char from the main text
+            // as the footnote number
+            if (!rDesc.mbAutoNum)
+                pFN->SetNumber(0, 0, sChar);
+
+            /*
+                Delete the footnote char from the footnote if its at the beginning
+                as usual. Might not be if the user has already deleted it, e.g.
+                #i14737#
+            */
+            SwNodeIndex& rNIdx = m_pPaM->GetPoint()->nNode;
+            rNIdx = pSttIdx->GetIndex() + 1;
+            SwTextNode* pTNd = rNIdx.GetNode().GetTextNode();
+            if (pTNd && !pTNd->GetText().isEmpty() && !sChar.isEmpty())
+            {
+                const OUString &rText = pTNd->GetText();
+                if (rText[0] == sChar[0])
+                {
+                    // Allow MSO to emulate LO footnote text starting at left margin - only meaningful with hanging indent
+                    sal_Int32 nFirstLineIndent=0;
+                    SfxItemSet aSet( m_rDoc.GetAttrPool(), svl::Items<RES_LR_SPACE, RES_LR_SPACE> );
+                    if ( pTNd->GetAttr(aSet) )
+                    {
+                        const SvxLRSpaceItem* pLRSpace = aSet.GetItem<SvxLRSpaceItem>(RES_LR_SPACE);
+                        if ( pLRSpace )
+                            nFirstLineIndent = pLRSpace->GetTextFirstLineOffset();
+                    }
+
+                    m_pPaM->GetPoint()->nContent.Assign( pTNd, 0 );
+                    m_pPaM->SetMark();
+                    // Strip out aesthetic tabs we may have inserted on export #i24762#
+                    if (nFirstLineIndent < 0 && rText.getLength() > 1 && rText[1] == 0x09)
+                        ++m_pPaM->GetMark()->nContent;
                     ++m_pPaM->GetMark()->nContent;
-                ++m_pPaM->GetMark()->nContent;
-                m_xReffingStck->Delete(*m_pPaM);
-                m_rDoc.getIDocumentContentOperations().DeleteRange( *m_pPaM );
-                m_pPaM->DeleteMark();
+                    m_xReffingStck->Delete(*m_pPaM);
+                    m_rDoc.getIDocumentContentOperations().DeleteRange( *m_pPaM );
+                    m_pPaM->DeleteMark();
+                }
             }
         }
 
