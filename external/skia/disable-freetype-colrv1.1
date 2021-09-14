@@ -1,0 +1,23 @@
+diff --git a/src/ports/SkFontHost_FreeType.cpp b/src/ports/SkFontHost_FreeType.cpp
+index 62127ba8d9..73bfaa2af3 100644
+--- a/src/ports/SkFontHost_FreeType.cpp
++++ b/src/ports/SkFontHost_FreeType.cpp
+@@ -372,6 +372,7 @@
+ // Only build COLRv1 rendering code if FreeType is new enough to have COLRv1
+ // additions. FreeType defines a macro in the ftoption header to tell us whether
+ // it does support these features.
++#undef TT_SUPPORT_COLRV1 // Unstable API.
+ #ifdef TT_SUPPORT_COLRV1
+ 
+ bool generateFacePathCOLRv1(FT_Face face, SkGlyphID glyphID, SkPath* path);
+diff --git a/src/ports/SkFontHost_FreeType_common.cpp b/src/ports/SkFontHost_FreeType_common.cpp
+index 8488e859b9..baab503bfb 100644
+--- a/src/ports/SkFontHost_FreeType_common.cpp
++++ b/src/ports/SkFontHost_FreeType_common.cpp
+@@ -30,6 +30,7 @@
+ // In the past, FT_GlyphSlot_Own_Bitmap was defined in this header file.
+ #include FT_SYNTHESIS_H
+ 
++#undef TT_SUPPORT_COLRV1 // Unstable API.
+ #ifdef TT_SUPPORT_COLRV1
+ #include "src/core/SkScopeExit.h"
