@@ -130,7 +130,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
             if (xShape.is())
             {
                 SvxShape *const pSvxShape(
-                        ::sw::UnoTunnelGetImplementation<SvxShape>(xShape));
+                        comphelper::getFromUnoTunnel<SvxShape>(xShape));
                 if (pSvxShape)
                 {
                     SdrObject *const pSdrObject = pSvxShape->GetSdrObject();
@@ -150,7 +150,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         return;
     }
 
-    SwXShape *const pShape(::sw::UnoTunnelGetImplementation<SwXShape>(xTunnel));
+    SwXShape *const pShape(comphelper::getFromUnoTunnel<SwXShape>(xTunnel));
     if (pShape)
     {
         uno::Reference<uno::XAggregation> const xAgg(
@@ -158,7 +158,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         if (xAgg.is())
         {
             SvxShape *const pSvxShape(
-                    ::sw::UnoTunnelGetImplementation<SvxShape>(xTunnel));
+                    comphelper::getFromUnoTunnel<SvxShape>(xTunnel));
             if (pSvxShape)
             {
                 SdrObject *const pSdrObject = pSvxShape->GetSdrObject();
@@ -172,7 +172,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
     }
 
     OTextCursorHelper *const pCursor(
-        ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xTunnel));
+        comphelper::getFromUnoTunnel<OTextCursorHelper>(xTunnel));
     if (pCursor)
     {
         if (pCursor->GetDoc() == &rTargetDoc)
@@ -183,7 +183,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
     }
 
     SwXTextRanges* const pRanges(
-        ::sw::UnoTunnelGetImplementation<SwXTextRanges>(xTunnel));
+        comphelper::getFromUnoTunnel<SwXTextRanges>(xTunnel));
     if (pRanges)
     {
         SwUnoCursor const* pUnoCursor = pRanges->GetCursor();
@@ -197,7 +197,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
     // check these before Range to prevent misinterpretation of text frames
     // and cells also implement XTextRange
     SwXFrame *const pFrame(
-        ::sw::UnoTunnelGetImplementation<SwXFrame>(xTunnel));
+        comphelper::getFromUnoTunnel<SwXFrame>(xTunnel));
     if (pFrame)
     {
         const SwFrameFormat *const pFrameFormat(pFrame->GetFrameFormat());
@@ -209,7 +209,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
     }
 
     SwXTextTable *const pTextTable(
-        ::sw::UnoTunnelGetImplementation<SwXTextTable>(xTunnel));
+        comphelper::getFromUnoTunnel<SwXTextTable>(xTunnel));
     if (pTextTable)
     {
         SwFrameFormat *const pFrameFormat(pTextTable->GetFrameFormat());
@@ -221,7 +221,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
     }
 
     SwXCell *const pCell(
-        ::sw::UnoTunnelGetImplementation<SwXCell>(xTunnel));
+        comphelper::getFromUnoTunnel<SwXCell>(xTunnel));
     if (pCell)
     {
         SwFrameFormat *const pFrameFormat(pCell->GetFrameFormat());
@@ -254,7 +254,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
     }
 
     SwXCellRange *const pCellRange(
-        ::sw::UnoTunnelGetImplementation<SwXCellRange>(xTunnel));
+        comphelper::getFromUnoTunnel<SwXCellRange>(xTunnel));
     if (pCellRange)
     {
         SwUnoCursor const*const pUnoCursor(pCellRange->GetTableCursor());
