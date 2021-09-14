@@ -195,13 +195,9 @@ ALNUM {DIGIT}|{ALPHA}
 }
 
 ({ALPHA}|"_")({ALNUM}|"_")* {
-#if 1 //TODO
-    yylval->sval=new OString(yytext);return TOK_IDENTIFIER;
-#else
     yyextra->errorMessage = "illegal identifier "
         + OUString(yytext, yyleng, RTL_TEXTENCODING_ASCII_US);
     return TOK_ERROR;
-#endif
 }
 
 0+[LUlu]? |
