@@ -193,6 +193,7 @@ void PhysicalFontFamily::InitMatchData( const utl::FontSubstConfiguration& rFont
     utl::FontSubstConfiguration::getMapName( rSearchName, aShortName, aMatchFamilyName,
                             meMatchWeight, meMatchWidth, mnMatchType );
     maMatchFamilyName = aMatchFamilyName;
+
     const utl::FontNameAttr* pFontAttr = rFontSubst.getSubstInfo( rSearchName );
     // eventually use the stripped name
     if( !pFontAttr )
