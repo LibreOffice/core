@@ -146,10 +146,14 @@ void PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewFontFace )
     }
 
     if( pNewFontFace->GetItalic() == ITALIC_NONE )
+    {
         mnTypeFaces |= FontTypeFaces::NoneItalic;
+    }
     else if( (pNewFontFace->GetItalic() == ITALIC_NORMAL)
          ||  (pNewFontFace->GetItalic() == ITALIC_OBLIQUE) )
+    {
         mnTypeFaces |= FontTypeFaces::Italic;
+    }
 
     // reassign name (sharing saves memory)
     if( pNewFontFace->GetFamilyName() == GetFamilyName() )
@@ -192,7 +196,9 @@ void PhysicalFontFamily::InitMatchData( const utl::FontSubstConfiguration& rFont
     // get font attributes from the decorated font name
     utl::FontSubstConfiguration::getMapName( rSearchName, aShortName, aMatchFamilyName,
                             meMatchWeight, meMatchWidth, mnMatchType );
+
     maMatchFamilyName = aMatchFamilyName;
+
     const utl::FontNameAttr* pFontAttr = rFontSubst.getSubstInfo( rSearchName );
     // eventually use the stripped name
     if( !pFontAttr )
