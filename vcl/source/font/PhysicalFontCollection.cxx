@@ -398,19 +398,22 @@ void PhysicalFontCollection::ImplInitMatchData() const
     }
 }
 
-vcl::font::PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByAttributes( ImplFontAttrs nSearchType,
+bool AttributesAreNotWorthMatching(ImplFontAttrs nSearchType, FontWeight eSearchWeight, FontWidth eSearchWidth)
+{
+    return nSearchType == ImplFontAttrs::None && ((eSearchWeight == WEIGHT_DONTKNOW) || (eSearchWeight == WEIGHT_NORMAL))
+                            && ((eSearchWidth == WIDTH_DONTKNOW) || (eSearchWidth == WIDTH_NORMAL));
+}
+
+PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByAttributes( ImplFontAttrs nSearchType,
                                                                         FontWeight eSearchWeight,
                                                                         FontWidth eSearchWidth,
                                                                         FontItalic eSearchItalic,
                                                                         const OUString& rSearchFamilyName ) const
 {
-    if( (eSearchItalic != ITALIC_NONE) && (eSearchItalic != ITALIC_DONTKNOW) )
+    if( (eSearchItalic != ITALIC_NONE) && (eSearchItalic != ITALIC_DONTKNOW))
         nSearchType |= ImplFontAttrs::Italic;
 
-    // don't bother to match attributes if the attributes aren't worth matching
-    if( nSearchType == ImplFontAttrs::None
-    && ((eSearchWeight == WEIGHT_DONTKNOW) || (eSearchWeight == WEIGHT_NORMAL))
-    && ((eSearchWidth == WIDTH_DONTKNOW) || (eSearchWidth == WIDTH_NORMAL)) )
+    if (AttributesAreNotWorthMatching(nSearchType, eSearchWeight, eSearchWidth))
         return nullptr;
 
     ImplInitMatchData();
