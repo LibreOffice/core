@@ -58,7 +58,7 @@ static double ImplGetParameter( const Point& rCenter, const Point& rPt, double f
 {
     const double nDX = static_cast<double>(rPt.X()) - rCenter.X();
     const double nDY = static_cast<double>(rCenter.Y()) - rPt.Y();
-    double fAngle = atan2(nDY, (nDX == 0) ? 0.000000001 : nDX);
+    double fAngle = atan2(nDY, nDX);
 
     return atan2(fWR*sin(fAngle), fHR*cos(fAngle));
 }
