@@ -87,7 +87,7 @@
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="pack-type">end</property>
-            <property name="position">0</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
@@ -99,7 +99,7 @@
             <property name="label-xalign">0</property>
             <property name="shadow-type">none</property>
             <child>
-              <!-- n-columns=1 n-rows=3 -->
+              <!-- n-columns=1 n-rows=2 -->
               <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -148,94 +148,6 @@
                     <property name="top-attach">1</property>
                   </packing>
                 </child>
-                <child>
-                  <!-- n-columns=4 n-rows=1 -->
-                  <object class="GtkGrid" id="grid3">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="column-spacing">12</property>
-                    <child>
-                      <object class="GtkCheckButton" id="fromrb">
-                        <property name="label" translatable="yes" context="mmresultsavedialog|fromrb">_From</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
-                        <accessibility>
-                          <relation type="label-for" target="from"/>
-                        </accessibility>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="fromrb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="mmresultsavedialog|extended_tip|fromrb">Selects a range of records starting at the record number in the From box and ending at the record number in the To box.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="toft">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="mmresultsavedialog|toft">_To</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">to</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">2</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="from">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="activates-default">True</property>
-                        <property name="text">1</property>
-                        <property name="truncate-multiline">True</property>
-                        <property name="adjustment">adjustment1</property>
-                        <accessibility>
-                          <relation type="labelled-by" target="fromrb"/>
-                        </accessibility>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="from-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="mmresultsavedialog|extended_tip|from">Enter the number of the first record to include in the mail merge.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="to">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="activates-default">True</property>
-                        <property name="text">1</property>
-                        <property name="truncate-multiline">True</property>
-                        <property name="adjustment">adjustment2</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="to-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="mmresultsavedialog|extended_tip|to">Enter the number of the last record to include in the mail merge.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">3</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
               </object>
             </child>
             <child type="label">
@@ -243,6 +155,122 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="mmresultsavedialog|label2">Save As Options</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkFrame">
+            <property name="name">Rangeframe</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="hexpand">False</property>
+            <property name="vexpand">False</property>
+            <property name="label-xalign">0</property>
+            <property name="shadow-type">none</property>
+            <child>
+              <!-- n-columns=4 n-rows=1 -->
+              <object class="GtkGrid" id="grid3">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-start">12</property>
+                <property name="margin-top">6</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="column-spacing">12</property>
+                <child>
+                  <object class="GtkCheckButton" id="fromrb">
+                    <property name="label" translatable="yes" context="mmresultsavedialog|fromrb">_From</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                    <accessibility>
+                      <relation type="label-for" target="from"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="fromrb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="mmresultsavedialog|extended_tip|fromrb">Selects a range of records starting at the record number in the From box and ending at the record number in the To box.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="toft">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="mmresultsavedialog|toft">_To</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">to</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="from">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="activates-default">True</property>
+                    <property name="text">1</property>
+                    <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustment1</property>
+                    <property name="value">1</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="fromrb"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="from-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="mmresultsavedialog|extended_tip|from">Enter the number of the first record to include in the mail merge.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="to">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="activates-default">True</property>
+                    <property name="text">1</property>
+                    <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustment2</property>
+                    <property name="value">1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="to-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="mmresultsavedialog|extended_tip|to">Enter the number of the last record to include in the mail merge.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">3</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="FromToRange">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="mmresultsavedialog|FromToRange">Range</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
