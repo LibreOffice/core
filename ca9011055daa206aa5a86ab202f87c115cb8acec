@@ -16,6 +16,40 @@
       "message": "Hey all, I\u0027m starting to work on our font code in OutputDevice, but before I feel confident about this I\u0027d like to get in some unit tests. ",
       "revId": "ca9011055daa206aa5a86ab202f87c115cb8acec",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "445e4c65_8d27718c",
+        "filename": "vcl/inc/PhysicalFontCollection.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-15T05:41:07Z",
+      "side": 1,
+      "message": "Please don\u0027t introduce new \u0027using namespace\u0027. We try to remove existing ones, not add to the problem.\n\nIf you add something to a namespace, and then immediately add this line, then why bother adding to the namespace in the first place?",
+      "revId": "ca9011055daa206aa5a86ab202f87c115cb8acec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6815afd4_efdbc14d",
+        "filename": "vcl/inc/font/PhysicalFontFaceCollection.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-15T05:41:07Z",
+      "side": 1,
+      "message": "Don\u0027t know how important this is, and I myself don\u0027t use vim, and have no idea what the codes stand for - but you obviously copy-paste the template from somewhere, not from the authoritative source, which is https://git.libreoffice.org/core/+/master/TEMPLATE.SOURCECODE.HEADER ;)",
+      "revId": "ca9011055daa206aa5a86ab202f87c115cb8acec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
