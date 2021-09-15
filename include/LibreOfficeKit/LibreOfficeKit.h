@@ -458,23 +458,15 @@ struct _LibreOfficeKitDocumentClass
     void (*sendFormFieldEvent) (LibreOfficeKitDocument* pThis,
                                 const char* pArguments);
 
-    /// @see lok::Document::setFreemiumDenyList
-    void (*setFreemiumDenyList) (LibreOfficeKitDocument* pThis,
-                                const char* freemiumDenyList);
+    /// @see lok::Document::setBlockedCommandList
+    void (*setBlockedCommandList) (LibreOfficeKitDocument* pThis,
+                                const char* bolckedCommandList);
 
-    /// @see lok::Document::setFreemiumView
-    void (*setFreemiumView) (LibreOfficeKitDocument* pThis,
+    /// @see lok::Document::setBlockedCommandView
+    void (*setBlockedCommandView) (LibreOfficeKitDocument* pThis,
                             int nViewId,
-                            bool isFreemium);
-
-    /// @see lok::Document::setRestrictedCommandList
-    void (*setRestrictedCommandList) (LibreOfficeKitDocument* pThis,
-                                const char* restrictedCommandList);
-
-    /// @see lok::Document::setRestrictedView
-    void (*setRestrictedView) (LibreOfficeKitDocument* pThis,
-                            int nViewId,
-                            bool isRestricted);
+                            const char* type,
+                            bool isBlocked);
 
     /// @see lok::Document::renderSearchResult
     bool (*renderSearchResult) (LibreOfficeKitDocument* pThis,
