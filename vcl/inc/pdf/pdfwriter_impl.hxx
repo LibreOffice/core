@@ -272,7 +272,6 @@ struct TransparencyEmit
     double              m_fAlpha;
     tools::Rectangle    m_aBoundRect;
     std::unique_ptr<SvMemoryStream>  m_pContentStream;
-    std::unique_ptr<SvMemoryStream>  m_pSoftMaskStream;
 
     TransparencyEmit()
             : m_nObject( 0 ),
