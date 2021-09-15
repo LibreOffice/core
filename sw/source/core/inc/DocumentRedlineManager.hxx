@@ -51,7 +51,6 @@ public:
     virtual SwRedlineTable& GetRedlineTable() override;
     virtual const SwExtraRedlineTable& GetExtraRedlineTable() const override;
     virtual SwExtraRedlineTable& GetExtraRedlineTable() override;
-    virtual bool HasExtraRedlineTable() const override;
 
     virtual bool IsInRedlines(const SwNode& rNode) const override;
 

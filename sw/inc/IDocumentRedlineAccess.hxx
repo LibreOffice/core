@@ -129,7 +129,6 @@ public:
     virtual SwRedlineTable& GetRedlineTable() = 0;
     virtual const SwExtraRedlineTable& GetExtraRedlineTable() const = 0;
     virtual SwExtraRedlineTable& GetExtraRedlineTable() = 0;
-    virtual bool HasExtraRedlineTable() const = 0;
 
     virtual bool IsInRedlines(const SwNode& rNode) const = 0;
 

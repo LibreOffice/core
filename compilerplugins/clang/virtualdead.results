@@ -10,31 +10,28 @@ basic/source/comp/codegen.cxx:540
 canvas/inc/base/bitmapcanvasbase.hxx:79
     unsigned char canvas::BitmapCanvasBase::hasAlpha()
     1
-canvas/inc/base/bufferedgraphicdevicebase.hxx:107
+canvas/inc/base/bufferedgraphicdevicebase.hxx:105
     void canvas::BufferedGraphicDeviceBase::destroyBuffers()
     empty
-canvas/inc/base/graphicdevicebase.hxx:234
+canvas/inc/base/graphicdevicebase.hxx:233
     unsigned char canvas::GraphicDeviceBase::hasFullScreenMode()
     0
-canvas/inc/base/graphicdevicebase.hxx:239
+canvas/inc/base/graphicdevicebase.hxx:238
     unsigned char canvas::GraphicDeviceBase::enterFullScreenMode(unsigned char,)
     0
-canvas/inc/base/graphicdevicebase.hxx:305
+canvas/inc/base/graphicdevicebase.hxx:304
     void canvas::GraphicDeviceBase::removePropertyChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertyChangeListener> &,)
     empty
-canvas/inc/base/graphicdevicebase.hxx:318
+canvas/inc/base/graphicdevicebase.hxx:317
     void canvas::GraphicDeviceBase::removeVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
     empty
-desktop/source/deployment/registry/inc/dp_backenddb.hxx:119
-    class rtl::OUString dp_registry::backend::BackendDb::getDbNSName()
-    "http://openoffi
 include/basegfx/utils/unopolypolygon.hxx:94
     void basegfx::unotools::UnoPolyPolygon::modifying()const
     empty
 include/connectivity/sdbcx/IRefreshable.hxx:29
     void connectivity::sdbcx::IRefreshableGroups::refreshGroups()
     empty
-include/filter/msfilter/msdffimp.hxx:546
+include/filter/msfilter/msdffimp.hxx:544
     _Bool SvxMSDffManager::ShapeHasText(unsigned long,unsigned long,)const
     1
 include/svl/svdde.hxx:236
@@ -64,7 +61,7 @@ include/unotools/desktopterminationobserver.hxx:36
 include/vbahelper/vbahelperinterface.hxx:74
     int InheritedHelperInterfaceImpl::getCreator()
     1400204879
-sc/source/core/opencl/formulagroupcl.cxx:1069
+sc/source/core/opencl/formulagroupcl.cxx:1070
     void sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class std::__cxx11::basic_stringstream<char> &,)
     empty
 sc/source/core/opencl/opbase.hxx:202
@@ -79,7 +76,10 @@ sc/source/ui/vba/vbasheetobjects.cxx:142
 slideshow/source/engine/animationfactory.cxx:616
     void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch()
     empty
-vcl/inc/qt5/Qt5FilePicker.hxx:172
+sw/inc/IDocumentRedlineAccess.hxx:132
+    _Bool IDocumentRedlineAccess::HasExtraRedlineTable()const
+    1
+vcl/inc/qt5/Qt5FilePicker.hxx:173
     void Qt5FilePicker::updateAutomaticFileExtension()
     empty
 vcl/inc/salframe.hxx:145
@@ -91,13 +91,13 @@ vcl/inc/salframe.hxx:147
 vcl/inc/salframe.hxx:204
     _Bool SalFrame::MapUnicodeToKeyCode(char16_t,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>,class vcl::KeyCode &,)
     0
-vcl/inc/salinst.hxx:89
+vcl/inc/salinst.hxx:94
     _Bool SalInstance::SVMainHook(int *,)
     0
-vcl/inc/salinst.hxx:200
+vcl/inc/salinst.hxx:201
     void SalInstance::releaseMainThread()
     empty
-vcl/inc/salinst.hxx:209
+vcl/inc/salinst.hxx:210
     void SalInstance::BeforeAbort(const class rtl::OUString &,_Bool,)
     empty
 vcl/inc/salmenu.hxx:77

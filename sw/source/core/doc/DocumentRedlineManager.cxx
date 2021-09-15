@@ -1165,11 +1165,6 @@ SwExtraRedlineTable& DocumentRedlineManager::GetExtraRedlineTable()
     return maExtraRedlineTable;
 }
 
-bool DocumentRedlineManager::HasExtraRedlineTable() const
-{
-    return true;
-}
-
 bool DocumentRedlineManager::IsInRedlines(const SwNode & rNode) const
 {
     SwPosition aPos(rNode);

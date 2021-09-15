@@ -31,19 +31,19 @@ basic/source/comp/codegen.cxx:480
 basic/source/comp/codegen.cxx:481
     void (anonymous namespace)::OffSetAccumulator::processOpCode2(enum SbiOpcode,type-parameter-?-?,type-parameter-?-?,)
     000
-canvas/inc/base/bufferedgraphicdevicebase.hxx:229
+canvas/inc/base/bufferedgraphicdevicebase.hxx:227
     void canvas::BufferedGraphicDeviceBase::windowShown(const struct com::sun::star::lang::EventObject &,)
     0
-canvas/inc/base/bufferedgraphicdevicebase.hxx:236
+canvas/inc/base/bufferedgraphicdevicebase.hxx:234
     void canvas::BufferedGraphicDeviceBase::windowHidden(const struct com::sun::star::lang::EventObject &,)
     0
-canvas/inc/base/graphicdevicebase.hxx:239
+canvas/inc/base/graphicdevicebase.hxx:238
     unsigned char canvas::GraphicDeviceBase::enterFullScreenMode(unsigned char,)
     0
-canvas/inc/base/graphicdevicebase.hxx:305
+canvas/inc/base/graphicdevicebase.hxx:304
     void canvas::GraphicDeviceBase::removePropertyChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertyChangeListener> &,)
     00
-canvas/inc/base/graphicdevicebase.hxx:318
+canvas/inc/base/graphicdevicebase.hxx:317
     void canvas::GraphicDeviceBase::removeVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
     00
 canvas/inc/base/integerbitmapbase.hxx:57
@@ -67,13 +67,10 @@ include/cppuhelper/propshlp.hxx:330
 include/drawinglayer/primitive2d/textbreakuphelper.hxx:58
     _Bool drawinglayer::primitive2d::TextBreakupHelper::allowChange(unsigned int,class basegfx::B2DHomMatrix &,unsigned int,unsigned int,)
     0111
-include/editeng/editeng.hxx:484
-    void EditEngine::PaintingFirstLine(int,const class Point &,long,const class Point &,struct o3tl::strong_int<short, struct Degree10Tag>,class OutputDevice &,)
-    110111
-include/editeng/editeng.hxx:487
+include/editeng/editeng.hxx:493
     void EditEngine::ParagraphConnected(int,int,)
     01
-include/filter/msfilter/msdffimp.hxx:546
+include/filter/msfilter/msdffimp.hxx:544
     _Bool SvxMSDffManager::ShapeHasText(unsigned long,unsigned long,)const
     00
 include/oox/dump/dumperbase.hxx:473
@@ -85,7 +82,7 @@ include/oox/dump/dumperbase.hxx:564
 include/oox/dump/oledumper.hxx:165
     void oox::dump::ComCtlObjectBase::implDumpCommonExtra(long,)
     0
-include/oox/export/shapes.hxx:136
+include/oox/export/shapes.hxx:138
     class oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteNonVisualProperties(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,)
     0
 include/sfx2/stbitem.hxx:101
@@ -127,7 +124,7 @@ include/vcl/accessibletable.hxx:93
 include/vcl/dndhelp.hxx:62
     void vcl::unohelper::DragAndDropClient::dragExit(const struct com::sun::star::datatransfer::dnd::DropTargetEvent &,)
     0
-include/vcl/opengl/OpenGLContext.hxx:88
+include/vcl/opengl/OpenGLContext.hxx:101
     struct SystemWindowData OpenGLContext::generateWinData(class vcl::Window *,_Bool,)
     10
 include/xmloff/txtimp.hxx:108
@@ -142,7 +139,7 @@ sc/inc/filter.hxx:83
 sc/inc/formulagroup.hxx:144
     class boost::intrusive_ptr<class ScMatrix> sc::FormulaGroupInterpreter::inverseMatrix(const class ScMatrix &,)
     0
-sc/source/core/opencl/formulagroupcl.cxx:1069
+sc/source/core/opencl/formulagroupcl.cxx:1070
     void sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class std::__cxx11::basic_stringstream<char> &,)
     0
 sdext/source/pdfimport/inc/contentsink.hxx:151
@@ -184,7 +181,7 @@ starmath/source/wordexportbase.hxx:28
 sw/inc/swcrsr.hxx:163
     _Bool SwCursor::LeftRight(_Bool,unsigned short,unsigned short,_Bool,_Bool,_Bool,const class SwRootFrame *,_Bool,)
     11000000
-sw/source/core/access/acccontext.hxx:352
+sw/source/core/access/acccontext.hxx:354
     _Bool SwAccessibleContext::SetSelectedState(_Bool,)
     0
 sw/source/core/inc/txmsrt.hxx:145
@@ -220,19 +217,19 @@ vcl/inc/salgdiimpl.hxx:96
 vcl/inc/salgdiimpl.hxx:151
     void SalGraphicsImpl::copyArea(long,long,long,long,long,long,_Bool,)
     1111110
-vcl/inc/salinst.hxx:89
+vcl/inc/salinst.hxx:94
     _Bool SalInstance::SVMainHook(int *,)
     0
-vcl/inc/salinst.hxx:122
+vcl/inc/salinst.hxx:127
     void SalInstance::GetPrinterQueueState(struct SalPrinterQueueInfo *,)
     0
-vcl/inc/salinst.hxx:164
+vcl/inc/salinst.hxx:165
     class weld::Builder * SalInstance::CreateInterimBuilder(class vcl::Window *,const class rtl::OUString &,const class rtl::OUString &,_Bool,unsigned long,)
     11110
-vcl/inc/salinst.hxx:183
+vcl/inc/salinst.hxx:184
     void SalInstance::AddToRecentDocumentList(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,)
     100
-vcl/inc/salinst.hxx:209
+vcl/inc/salinst.hxx:210
     void SalInstance::BeforeAbort(const class rtl::OUString &,_Bool,)
     00
 vcl/inc/salmenu.hxx:71
