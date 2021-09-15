@@ -61,7 +61,7 @@ protected:
 
 //= ColumnResize
 
-class ColumnResize : public MouseFunction
+class ColumnResize final : public MouseFunction
 {
 public:
     ColumnResize()
@@ -84,7 +84,7 @@ private:
 
 //= RowSelection
 
-class RowSelection : public MouseFunction
+class RowSelection final : public MouseFunction
 {
 public:
     RowSelection()
@@ -107,7 +107,7 @@ private:
 
 //= ColumnSortHandler
 
-class ColumnSortHandler : public MouseFunction
+class ColumnSortHandler final : public MouseFunction
 {
 public:
     ColumnSortHandler()

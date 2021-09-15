@@ -34,7 +34,7 @@ namespace oox::shape {
 
 class ShapeFilterBase;
 
-class ShapeFragmentHandler : public core::FragmentHandler2
+class ShapeFragmentHandler final : public core::FragmentHandler2
 {
 public:
     typedef rtl::Reference<ShapeFragmentHandler> Pointer_t;
@@ -46,7 +46,7 @@ public:
     }
 };
 
-class OOX_DLLPUBLIC ShapeContextHandler:
+class OOX_DLLPUBLIC ShapeContextHandler final :
     public ::cppu::WeakImplHelper< css::xml::sax::XFastContextHandler >
 {
 public:

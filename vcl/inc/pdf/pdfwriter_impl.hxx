@@ -624,7 +624,7 @@ enum class Mode { DEFAULT, NOWRITE };
 
 }
 
-class PDFWriterImpl : public VirtualDevice, public PDFObjectContainer
+class PDFWriterImpl final : public VirtualDevice, public PDFObjectContainer
 {
     friend class PDFStreamIf;
 
@@ -641,14 +641,13 @@ public:
 
     static void convertLineInfoToExtLineInfo( const LineInfo& rIn, PDFWriter::ExtLineInfo& rOut );
 
-protected:
+private:
     bool ImplNewFont() const override;
     void ImplClearFontData(bool bNewFontLists) override;
     void ImplRefreshFontData(bool bNewFontLists) override;
     vcl::Region ClipToDeviceBounds(vcl::Region aRegion) const override;
     void DrawHatchLine_DrawLine(const Point& rStartPoint, const Point& rEndPoint) override;
 
-private:
     MapMode                             m_aMapMode; // PDFWriterImpl scaled units
     std::vector< PDFPage >              m_aPages;
     /* maps object numbers to file offsets (needed for xref) */

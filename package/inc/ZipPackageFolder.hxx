@@ -58,7 +58,7 @@ struct ZipContentInfo
 typedef std::unordered_map < OUString,
                              ZipContentInfo > ContentHash;
 
-class ZipPackageFolder : public cppu::ImplInheritanceHelper
+class ZipPackageFolder final : public cppu::ImplInheritanceHelper
 <
     ZipPackageEntry,
     css::container::XNameContainer,

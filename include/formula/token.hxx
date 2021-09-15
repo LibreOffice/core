@@ -226,7 +226,7 @@ inline void intrusive_ptr_release(const FormulaToken* p)
     p->DecRef();
 }
 
-class FORMULA_DLLPUBLIC FormulaSpaceToken : public FormulaToken
+class FORMULA_DLLPUBLIC FormulaSpaceToken final : public FormulaToken
 {
 private:
             sal_uInt8           nByte;

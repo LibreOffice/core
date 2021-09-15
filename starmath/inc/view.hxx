@@ -181,7 +181,7 @@ public:
     virtual void StateChangedAtToolBoxControl(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) override;
 };
 
-class SmCmdBoxWindow : public SfxDockingWindow
+class SmCmdBoxWindow final : public SfxDockingWindow
 {
     std::unique_ptr<SmEditWindow, o3tl::default_delete<SmEditWindow>> m_xEdit;
     SmEditController    aController;
@@ -190,8 +190,6 @@ class SmCmdBoxWindow : public SfxDockingWindow
     Timer               aInitialFocusTimer;
 
     DECL_LINK(InitialFocusTimerHdl, Timer *, void);
-
-protected:
 
     virtual Size CalcDockingSize(SfxChildAlignment eAlign) override;
     virtual SfxChildAlignment CheckAlignment(SfxChildAlignment eActual,
@@ -237,7 +235,7 @@ public:
 
 namespace sfx2 { class FileDialogHelper; }
 
-class SmViewShell: public SfxViewShell
+class SmViewShell final : public SfxViewShell
 {
     std::unique_ptr<sfx2::DocumentInserter> mpDocInserter;
     std::unique_ptr<SfxRequest> mpRequest;
@@ -253,8 +251,6 @@ class SmViewShell: public SfxViewShell
 
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper*, void );
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-
-protected:
 
     static Size GetTextLineSize(OutputDevice const & rDevice,
                          const OUString& rLine);
