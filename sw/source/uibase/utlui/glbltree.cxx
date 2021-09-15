@@ -773,8 +773,32 @@ void SwGlobalTree::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry
 
 IMPL_LINK_NOARG(SwGlobalTree, Timeout, Timer *, void)
 {
-    if (!m_xTreeView->has_focus() && Update(false))
-        Display();
+    if (m_pActiveShell && m_pActiveShell->GetView().GetEditWin().HasFocus())
+    {
+        if (Update(false))
+            Display();
+        UpdateTracking();
+    }
+}
+
+void SwGlobalTree::UpdateTracking()
+{
+    if (!m_pActiveShell)
+        return;
+
+    // track section at cursor position in document
+    m_xTreeView->unselect_all();
+    const SwSection* pActiveShellCurrSection = m_pActiveShell->GetCurrSection();
+    if (pActiveShellCurrSection)
+    {
+        const SwSection* pSection = pActiveShellCurrSection;
+        SwSection* pParent;
+        while ((pParent = pSection->GetParent()) != nullptr)
+            pSection = pParent;
+
+        if (pSection)
+            m_xTreeView->select_text(pSection->GetSectionName());
+    }
 }
 
 void SwGlobalTree::GotoContent(const SwGlblDocContent* pCont)
@@ -803,6 +827,7 @@ void SwGlobalTree::ShowTree()
 {
     m_aUpdateTimer.Start();
     m_xTreeView->show();
+    UpdateTracking();
 }
 
 void SwGlobalTree::HideTree()
