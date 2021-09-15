@@ -913,12 +913,11 @@ bool WinSalFrame::ReleaseFrameGraphicsDC( WinSalGraphics* pGraphics )
         return false;
     if ( pGraphics->getDefPal() )
         SelectPalette( hDC, pGraphics->getDefPal(), TRUE );
-    pGraphics->DeInitGraphics();
+    pGraphics->setHDC(nullptr);
     SendMessageW( pSalData->mpInstance->mhComWnd, SAL_MSG_RELEASEDC,
         reinterpret_cast<WPARAM>(mhWnd), reinterpret_cast<LPARAM>(hDC) );
     if ( pGraphics == mpThreadGraphics )
         pSalData->mnCacheDCInUse--;
-    pGraphics->setHDC(nullptr);
     return true;
 }
 
@@ -997,7 +996,6 @@ bool WinSalFrame::InitFrameGraphicsDC( WinSalGraphics *pGraphics, HDC hDC, HWND 
         pGraphics->setDefPal(SelectPalette( hDC, pSalData->mhDitherPal, TRUE ));
         RealizePalette( hDC );
     }
-    pGraphics->InitGraphics();
 
     if ( pGraphics == mpThreadGraphics )
         pSalData->mnCacheDCInUse++;
