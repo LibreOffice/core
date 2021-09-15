@@ -226,7 +226,7 @@ private:
     vector_type maVector;
     /// Sometimes we load bad data, and we need to know if we can use
     /// fast binary search, or if we have to fall back to a linear search
-    bool m_bHasOverlappingElements;
+    bool m_bHasOverlappingElements = false;
 public:
     ~SwRedlineTable();
     bool Contains(const SwRangeRedline* p) const { return maVector.find(const_cast<SwRangeRedline*>(p)) != maVector.end(); }
