@@ -876,7 +876,6 @@ bool ImplLOKHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, MouseNotifyEven
                     }
                 }
             }
-            else pFrameData->mbStartDragCalled = true;
         }
     }
 
