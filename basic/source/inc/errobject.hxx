@@ -21,7 +21,7 @@
 #include "sbunoobj.hxx"
 #include <ooo/vba/XErrObject.hpp>
 
-class SbxErrObject : public SbUnoObject
+class SbxErrObject final : public SbUnoObject
 {
     class ErrObject* m_pErrObject;
     css::uno::Reference<ooo::vba::XErrObject> m_xErr;

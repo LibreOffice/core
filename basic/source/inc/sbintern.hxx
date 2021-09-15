@@ -37,7 +37,7 @@ class SbiInstance;
 class SbModule;
 class BasicManager;
 
-class SbiFactory : public SbxFactory
+class SbiFactory final : public SbxFactory
 {
 public:
     virtual SbxBaseRef Create( sal_uInt16 nSbxId, sal_uInt32 ) override;
@@ -60,7 +60,7 @@ struct SbClassData
 
 // #115824: Factory class to create class objects (type command)
 // Implementation: sb.cxx
-class SbClassFactory : public SbxFactory
+class SbClassFactory final : public SbxFactory
 {
     SbxObjectRef    xClassModules;
 
@@ -78,14 +78,14 @@ public:
 };
 
 // Factory class to create user defined objects (type command)
-class SbTypeFactory : public SbxFactory
+class SbTypeFactory final : public SbxFactory
 {
 public:
     virtual SbxBaseRef Create( sal_uInt16 nSbxId, sal_uInt32 ) override;
     virtual SbxObjectRef CreateObject( const OUString& ) override;
 };
 
-class SbFormFactory : public SbxFactory
+class SbFormFactory final : public SbxFactory
 {
 public:
     virtual SbxBaseRef Create( sal_uInt16 nSbxId, sal_uInt32 ) override;
@@ -93,7 +93,7 @@ public:
 };
 
 // Factory class to create OLE objects
-class SbOLEFactory : public SbxFactory
+class SbOLEFactory final : public SbxFactory
 {
 public:
     virtual SbxBaseRef Create( sal_uInt16 nSbxId, sal_uInt32 ) override;

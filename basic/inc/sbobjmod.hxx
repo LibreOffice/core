@@ -80,7 +80,7 @@ public:
     class SbUserFormModuleInstance* CreateInstance();
 };
 
-class SbUserFormModuleInstance : public SbUserFormModule
+class SbUserFormModuleInstance final : public SbUserFormModule
 {
     SbUserFormModule* m_pParentModule;
 

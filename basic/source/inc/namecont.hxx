@@ -62,7 +62,7 @@ typedef ::cppu::WeakImplHelper<
     css::util::XChangesNotifier > NameContainer_BASE;
 
 
-class NameContainer : public ::cppu::BaseMutex, public NameContainer_BASE
+class NameContainer final : public ::cppu::BaseMutex, public NameContainer_BASE
 {
     typedef std::unordered_map < OUString, sal_Int32 > NameContainerNameMap;
 
@@ -160,7 +160,7 @@ typedef ::comphelper::OListenerContainerBase<
     css::script::vba::XVBAScriptListener,
     css::script::vba::VBAScriptEvent > VBAScriptListenerContainer_BASE;
 
-class VBAScriptListenerContainer : public VBAScriptListenerContainer_BASE
+class VBAScriptListenerContainer final : public VBAScriptListenerContainer_BASE
 {
 public:
     explicit VBAScriptListenerContainer( ::osl::Mutex& rMutex );
