@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b694202e_266fdd16",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-15T13:04:11Z",
+      "side": 1,
+      "message": "Thanks! Then this is the first test for that area. :-)",
+      "revId": "485add3cd6240a0faceb7a74784d44b1c0a6705e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
