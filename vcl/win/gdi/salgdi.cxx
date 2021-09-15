@@ -452,6 +452,9 @@ void ImplUpdateSysColorEntries()
 
 void WinSalGraphics::InitGraphics()
 {
+    if (!getHDC())
+        return;
+
     // calculate the minimal line width for the printer
     if ( isPrinter() )
     {
@@ -471,17 +474,36 @@ void WinSalGraphics::InitGraphics()
 
 void WinSalGraphics::DeInitGraphics()
 {
+    if (!getHDC())
+        return;
+
     // clear clip region
     SelectClipRgn( getHDC(), nullptr );
     // select default objects
     if ( mhDefPen )
+    {
         SelectPen( getHDC(), mhDefPen );
+        mhDefPen = nullptr;
+    }
     if ( mhDefBrush )
+    {
         SelectBrush( getHDC(), mhDefBrush );
+        mhDefBrush = nullptr;
+    }
     if ( mhDefFont )
+    {
         SelectFont( getHDC(), mhDefFont );
+        mhDefFont = nullptr;
+    }
 
     mpImpl->DeInit();
+}
+
+void WinSalGraphics::setHDC(HDC aNew)
+{
+    DeInitGraphics();
+    mhLocalDC = aNew;
+    InitGraphics();
 }
 
 HDC ImplGetCachedDC( sal_uLong nID, HBITMAP hBmp )
@@ -637,6 +659,8 @@ WinSalGraphics::~WinSalGraphics()
 
     // delete cache data
     delete [] reinterpret_cast<BYTE*>(mpStdClipRgnData);
+
+    setHDC(nullptr);
 }
 
 SalGraphicsImpl* WinSalGraphics::GetImpl() const
