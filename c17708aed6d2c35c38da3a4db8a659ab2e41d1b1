@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02821cbd_8f75f5af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-09-15T08:13:49Z",
+      "side": 1,
+      "message": "@Daniel: I have found only a few nitpick. Later i will test it more precisely, but i think if it works fine (and why not?) it will be a very useful patch :)",
+      "revId": "c17708aed6d2c35c38da3a4db8a659ab2e41d1b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c46c6b73_3c84ca61",
+        "filename": "oox/qa/unit/export.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-09-15T08:13:49Z",
+      "side": 1,
+      "message": "Wow this is a much better test than i have written before. :)",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 158,
+        "endChar": 54
+      },
+      "revId": "c17708aed6d2c35c38da3a4db8a659ab2e41d1b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6eba66a5_60c11e86",
+        "filename": "oox/source/export/DMLPresetShapeExport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-09-15T08:13:49Z",
+      "side": 1,
+      "message": "You have forget to remove this one :)",
+      "range": {
+        "startLine": 706,
+        "startChar": 12,
+        "endLine": 706,
+        "endChar": 25
+      },
+      "revId": "c17708aed6d2c35c38da3a4db8a659ab2e41d1b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e68b583_4417be2c",
+        "filename": "oox/source/export/DMLPresetShapeExport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-09-15T08:13:49Z",
+      "side": 1,
+      "message": "I like your variable naming. It is more useful than my Point1 Point2 ... etc.",
+      "range": {
+        "startLine": 978,
+        "startChar": 11,
+        "endLine": 981,
+        "endChar": 61
+      },
+      "revId": "c17708aed6d2c35c38da3a4db8a659ab2e41d1b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b122df95_e2f9e02d",
+        "filename": "oox/source/export/DMLPresetShapeExport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1016,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-09-15T08:13:49Z",
+      "side": 1,
+      "message": "same as before.",
+      "range": {
+        "startLine": 1016,
+        "startChar": 0,
+        "endLine": 1016,
+        "endChar": 25
+      },
+      "revId": "c17708aed6d2c35c38da3a4db8a659ab2e41d1b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90ce39be_7f206a16",
+        "filename": "oox/source/export/DMLPresetShapeExport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1344,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-09-15T08:13:49Z",
+      "side": 1,
+      "message": "again",
+      "range": {
+        "startLine": 1344,
+        "startChar": 1,
+        "endLine": 1344,
+        "endChar": 25
+      },
+      "revId": "c17708aed6d2c35c38da3a4db8a659ab2e41d1b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23a4154f_dff77e6b",
+        "filename": "oox/source/export/DMLPresetShapeExport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1570,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-09-15T08:13:49Z",
+      "side": 1,
+      "message": "and again",
+      "range": {
+        "startLine": 1570,
+        "startChar": 0,
+        "endLine": 1570,
+        "endChar": 25
+      },
+      "revId": "c17708aed6d2c35c38da3a4db8a659ab2e41d1b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
