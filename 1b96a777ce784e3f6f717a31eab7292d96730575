@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cfe4733_fe3d0873",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-09-15T12:24:20Z",
+      "side": 1,
+      "message": "Since we already have two dups for this bug and eventually more incoming...",
+      "revId": "1b96a777ce784e3f6f717a31eab7292d96730575",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
