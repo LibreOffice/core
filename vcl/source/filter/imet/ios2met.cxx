@@ -231,6 +231,16 @@ struct OSArea {
     RasterOp    eMix;
     RasterOp    eBgMix;
     bool    bFill;
+
+    OSArea()
+        : pSucc(nullptr)
+        , nFlags(0)
+        , bClosed(false)
+        , eMix(RasterOp::OverPaint)
+        , eBgMix(RasterOp::OverPaint)
+        , bFill(false)
+    {
+    }
 };
 
 struct OSPath
