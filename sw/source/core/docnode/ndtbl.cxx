@@ -2503,8 +2503,7 @@ void SwTableNode::RemoveRedlines()
 {
     SwDoc& rDoc = GetDoc();
     SwTable& rTable = GetTable();
-    if (rDoc.getIDocumentRedlineAccess().HasExtraRedlineTable())
-        rDoc.getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteAllTableRedlines(rDoc, rTable, true, RedlineType::Any);
+    rDoc.getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteAllTableRedlines(rDoc, rTable, true, RedlineType::Any);
 }
 
 void SwDoc::GetTabCols( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
