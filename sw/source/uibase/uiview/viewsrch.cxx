@@ -257,6 +257,8 @@ void SwView::ExecSearch(SfxRequest& rReq)
                 m_pWrtShell->GetSfxViewShell()->setTiledSearching(false);
 
                 GetDocShell()->Broadcast(
+                            SfxHint(SfxHintId::SwNavigatorUpdateTracking));
+                GetDocShell()->Broadcast(
                             SfxHint(SfxHintId::SwNavigatorSelectOutlinesWithSelections));
 
                 if( !bRet )
