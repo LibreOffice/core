@@ -368,6 +368,8 @@ public:
     void                ExecuteContextMenuAction(std::string_view rSelectedPopupEntry);
 
     const SwWrtShell*   GetActiveWrtShell() const {return m_pActiveShell;}
+
+    void UpdateTracking();
 };
 
 #endif
