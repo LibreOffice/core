@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6b44cee_5ea2d224",
+        "filename": "include/vcl/outdev.hxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-15T09:59:25Z",
+      "side": 1,
+      "message": "Fixed.",
+      "parentUuid": "6fdfe6f3_728f7cd3",
+      "revId": "a89ce5447e9c7e538fb7355d7d8e749adb47cc86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f1153ddd_3f625639",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-09-15T08:52:38Z",
       "side": 1,
       "message": "And this?",
+      "revId": "a89ce5447e9c7e538fb7355d7d8e749adb47cc86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8c4d2c8_d09a15a3",
+        "filename": "vcl/inc/PhysicalFontFamily.hxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-15T09:59:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f1153ddd_3f625639",
       "revId": "a89ce5447e9c7e538fb7355d7d8e749adb47cc86",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -52,6 +88,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "810ff807_cf38cb60",
+        "filename": "vcl/source/font/PhysicalFontCollection.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-15T09:59:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f340520e_03af051a",
+      "revId": "a89ce5447e9c7e538fb7355d7d8e749adb47cc86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f2eb3a97_426a6d8f",
@@ -65,6 +119,24 @@
       "writtenOn": "2021-09-15T08:52:38Z",
       "side": 1,
       "message": "And this.",
+      "revId": "a89ce5447e9c7e538fb7355d7d8e749adb47cc86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7ee7ae7_9f85c4af",
+        "filename": "vcl/source/font/PhysicalFontFamily.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-15T09:59:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2eb3a97_426a6d8f",
       "revId": "a89ce5447e9c7e538fb7355d7d8e749adb47cc86",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
