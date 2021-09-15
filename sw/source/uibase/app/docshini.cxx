@@ -80,6 +80,8 @@
 
 #include <memory>
 
+#include <officecfg/Office/Common.hxx>
+
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -234,7 +236,9 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         sal_uInt16 nFontWhich = RES_CHRATR_FONT;
         sal_uInt16 nFontHeightWhich = RES_CHRATR_FONTSIZE;
         LanguageType eLanguage = m_xDoc->GetDefault( RES_CHRATR_LANGUAGE ).GetLanguage();
-        for(sal_uInt8 nIdx = 0; nIdx < 24; nIdx += 2)
+        bool bDisableBuiltinStyles = officecfg::Office::Common::Load::DisableBuiltinStyles::get();
+        sal_uInt8 nLimit = bDisableBuiltinStyles ? 0 : 24;
+        for(sal_uInt8 nIdx = 0; nIdx < nLimit; nIdx += 2)
         {
             if(nIdx == 8)
             {

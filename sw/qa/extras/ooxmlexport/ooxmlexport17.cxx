@@ -10,7 +10,12 @@
 #include <sal/config.h>
 
 #include <string_view>
+
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
+
+#include <comphelper/configuration.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <swmodeltestbase.hxx>
 
@@ -52,6 +57,34 @@ CPPUNIT_TEST_FIXTURE(Test, testParaStyleNumLevel)
     // - Actual  : 0
     // i.e. a custom list level in a para style was lost on import+export.
     assertXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='Mystyle']/w:pPr/w:numPr/w:ilvl", "val", "1");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDontAddNewStyles)
+{
+    // Given a document that lacks builtin styles, and addition of them is disabled:
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Load::DisableBuiltinStyles::set(true, pBatch);
+        pBatch->commit();
+    }
+    comphelper::ScopeGuard g([] {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Load::DisableBuiltinStyles::set(false, pBatch);
+        pBatch->commit();
+    });
+
+    // When saving that document:
+    loadAndSave("dont-add-new-styles.docx");
+
+    // Then make sure that export doesn't have additional styles, Caption was one of them:
+    xmlDocUniquePtr pXmlDoc = parseExport("word/styles.xml");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1
+    // i.e. builtin styles were added to the export result, even if we opted out.
+    assertXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='Caption']", 0);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf123642_BookmarkAtDocEnd, "tdf123642.docx")
