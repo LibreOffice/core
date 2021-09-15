@@ -282,7 +282,7 @@ public:
     SwGlobalTreeDropTarget(SwGlobalTree& rTreeView);
 };
 
-class SwGlobalTree final
+class SwGlobalTree final : public SfxListener
 {
 private:
     std::unique_ptr<weld::TreeView> m_xTreeView;
@@ -368,6 +368,9 @@ public:
     void                ExecuteContextMenuAction(std::string_view rSelectedPopupEntry);
 
     const SwWrtShell*   GetActiveWrtShell() const {return m_pActiveShell;}
+
+    virtual void Notify(SfxBroadcaster& rBC, SfxHint const& rHint) override;
+    void UpdateTracking();
 };
 
 #endif
