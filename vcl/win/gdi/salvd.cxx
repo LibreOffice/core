@@ -169,14 +169,16 @@ WinSalVirtualDevice::~WinSalVirtualDevice()
     if( *ppVirDev )
         *ppVirDev = mpNext;
 
-    // destroy saved DC
+    HDC hDC = mpGraphics->getHDC();
+    // restores the graphics DC, so a !mbForeignDC can be deleted
+    mpGraphics->setHDC(nullptr);
+
     if( mpGraphics->getDefPal() )
-        SelectPalette( mpGraphics->getHDC(), mpGraphics->getDefPal(), TRUE );
-    mpGraphics->DeInitGraphics();
+        SelectPalette(hDC, mpGraphics->getDefPal(), TRUE);
     if( mhDefBmp )
-        SelectBitmap( mpGraphics->getHDC(), mhDefBmp );
+        SelectBitmap(hDC, mhDefBmp);
     if( !mbForeignDC )
-        DeleteDC( mpGraphics->getHDC() );
+        DeleteDC(hDC);
 }
 
 SalGraphics* WinSalVirtualDevice::AcquireGraphics()

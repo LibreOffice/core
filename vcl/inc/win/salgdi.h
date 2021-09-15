@@ -151,6 +151,7 @@ private:
     bool                    mbVirDev : 1;           // is VirDev
     bool                    mbWindow : 1;           // is Window
     bool                    mbScreen : 1;           // is Screen compatible
+    bool                    mbInitialized : 1;      // for DeInitGraphics in destructor
     HWND                    mhWnd;              // Window-Handle, when Window-Graphics
 
     rtl::Reference<WinFontInstance>
@@ -165,11 +166,13 @@ private:
     RGNDATA*                mpStdClipRgnData;   // Cache Standard-ClipRegion-Data
     int                     mnPenWidth;         // line width
 
+    void DeInitGraphics();
+
 public:
     HFONT ImplDoSetFont(FontSelectPattern const & i_rFont, const PhysicalFontFace * i_pFontFace, HFONT& o_rOldFont);
 
     HDC getHDC() const { return mhLocalDC; }
-    void setHDC(HDC aNew) { mhLocalDC = aNew; }
+    inline void setHDC(HDC aNew);
 
     HPALETTE getDefPal() const;
     void setDefPal(HPALETTE hDefPal);
@@ -177,7 +180,6 @@ public:
     HRGN getRegion() const;
 
     void InitGraphics();
-    void DeInitGraphics();
 
     enum Type
     {
@@ -388,6 +390,13 @@ public:
     /// Update settings based on the platform values
     static void updateSettingsNative( AllSettings& rSettings );
 };
+
+void WinSalGraphics::setHDC(HDC aNew)
+{
+    if (mbInitialized)
+        DeInitGraphics();
+    mhLocalDC = aNew;
+}
 
 // Init/Deinit Graphics
 void    ImplUpdateSysColorEntries();

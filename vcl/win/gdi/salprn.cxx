@@ -1044,9 +1044,9 @@ static bool ImplUpdateSalPrnIC( WinSalInfoPrinter* pPrinter, const ImplJobSetup*
 
     if ( pPrinter->mpGraphics )
     {
-        pPrinter->mpGraphics->DeInitGraphics();
-        DeleteDC( pPrinter->mpGraphics->getHDC() );
+        assert(pPrinter->mpGraphics->getHDC() == pPrinter->mhDC);
         delete pPrinter->mpGraphics;
+        DeleteDC(pPrinter->mhDC);
     }
 
     pPrinter->mpGraphics = ImplCreateSalPrnGraphics( hNewDC );
@@ -1104,9 +1104,9 @@ WinSalInfoPrinter::~WinSalInfoPrinter()
 {
     if ( mpGraphics )
     {
-        mpGraphics->DeInitGraphics();
-        DeleteDC( mpGraphics->getHDC() );
+        assert(mpGraphics->getHDC() == mhDC);
         delete mpGraphics;
+        DeleteDC(mhDC);
     }
 }
 
@@ -1370,12 +1370,7 @@ WinSalPrinter::~WinSalPrinter()
     HDC hDC = mhDC;
     if ( hDC )
     {
-        if ( mpGraphics )
-        {
-            mpGraphics->DeInitGraphics();
-            delete mpGraphics;
-        }
-
+        delete mpGraphics;
         DeleteDC( hDC );
     }
 
@@ -1533,12 +1528,8 @@ bool WinSalPrinter::EndJob()
     HDC hDC = mhDC;
     if ( isValid() && hDC )
     {
-        if ( mpGraphics )
-        {
-            mpGraphics->DeInitGraphics();
-            delete mpGraphics;
-            mpGraphics = nullptr;
-        }
+        delete mpGraphics;
+        mpGraphics = nullptr;
 
         // #i54419# Windows fax printer brings up a dialog in EndDoc
         // which text previously copied in soffice process can be
@@ -1599,17 +1590,13 @@ SalGraphics* WinSalPrinter::StartPage( ImplJobSetup* pSetupData, bool bNewJobDat
 
 void WinSalPrinter::EndPage()
 {
-    HDC hDC = mhDC;
-    if ( hDC && mpGraphics )
-    {
-        mpGraphics->DeInitGraphics();
-        delete mpGraphics;
-        mpGraphics = nullptr;
-    }
+    delete mpGraphics;
+    mpGraphics = nullptr;
 
     if( ! isValid() )
         return;
 
+    HDC hDC = mhDC;
     volatile int nRet = 0;
     CATCH_DRIVER_EX_BEGIN;
     nRet = ::EndPage( hDC );

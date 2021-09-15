@@ -452,6 +452,11 @@ void ImplUpdateSysColorEntries()
 
 void WinSalGraphics::InitGraphics()
 {
+    assert(!mbInitialized);
+    if (mbInitialized)
+        return;
+    mbInitialized = true;
+
     // calculate the minimal line width for the printer
     if ( isPrinter() )
     {
@@ -471,15 +476,29 @@ void WinSalGraphics::InitGraphics()
 
 void WinSalGraphics::DeInitGraphics()
 {
+    assert(mbInitialized);
+    if (!mbInitialized)
+        return;
+    mbInitialized = false;
+
     // clear clip region
     SelectClipRgn( getHDC(), nullptr );
     // select default objects
     if ( mhDefPen )
+    {
         SelectPen( getHDC(), mhDefPen );
+        mhDefPen = nullptr;
+    }
     if ( mhDefBrush )
+    {
         SelectBrush( getHDC(), mhDefBrush );
+        mhDefBrush = nullptr;
+    }
     if ( mhDefFont )
+    {
         SelectFont( getHDC(), mhDefFont );
+        mhDefFont = nullptr;
+    }
 
     mpImpl->DeInit();
 }
@@ -606,6 +625,7 @@ WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hW
     mbPrinter(eType == WinSalGraphics::PRINTER),
     mbVirDev(eType == WinSalGraphics::VIRTUAL_DEVICE),
     mbWindow(eType == WinSalGraphics::WINDOW),
+    mbInitialized(false),
     mbScreen(bScreen),
     mhWnd(hWnd),
     mhRegion(nullptr),
@@ -637,6 +657,9 @@ WinSalGraphics::~WinSalGraphics()
 
     // delete cache data
     delete [] reinterpret_cast<BYTE*>(mpStdClipRgnData);
+
+    if (mbInitialized)
+        DeInitGraphics();
 }
 
 SalGraphicsImpl* WinSalGraphics::GetImpl() const
