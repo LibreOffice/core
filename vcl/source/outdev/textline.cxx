@@ -1002,8 +1002,7 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, to
     // handle rotation
     if (nStartY != nEndY || nStartX > nEndX)
     {
-        tools::Long nLengthX = nEndX - nStartX;
-        fOrientation = std::atan2(nStartY - nEndY, (nLengthX == 0 ? 0.000000001 : nLengthX));
+        fOrientation = std::atan2(nStartY - nEndY, nEndX - nStartX);
         fOrientation /= F_PI180;
         // un-rotate the end point
         aStartPt.RotateAround(nEndX, nEndY, Degree10(static_cast<sal_Int16>(-fOrientation * 10.0)));
