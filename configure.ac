@@ -3840,6 +3840,8 @@ map_vs_year_to_version()
     case $1 in
     2019)
         vsversion=16;;
+    2022)
+        vsversion=17;;
     *)
         AC_MSG_ERROR([Assertion failure - invalid argument "$1" to map_vs_year_to_version()]);;
     esac
@@ -3931,7 +3933,7 @@ find_msvc()
     PathFormat "$vswhere"
     vswhere=$formatted_path_unix
     for ver in $vsversions; do
-        vswhereoutput=`$vswhere -version "@<:@ $ver , $(expr $ver + 1) @:}@" -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath | head -1`
+        vswhereoutput=`$vswhere -prerelease -version "@<:@ $ver , $(expr $ver + 1) @:}@" -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath | head -1`
         # Fall back to all MS products (this includes VC++ Build Tools)
         if ! test -n "$vswhereoutput"; then
             AC_MSG_CHECKING([VC++ Build Tools and similar])
@@ -3950,6 +3952,10 @@ find_msvc()
         16.0)
             vcyear=2019
             vcnum=160
+            ;;
+        17.0)
+            vcyear=2022
+            vcnum=170
             ;;
         esac
         vcbuildnumber=`ls $vctest/VC/Tools/MSVC -A1r | head -1`
@@ -4128,6 +4134,8 @@ if test "$_os" = "WINNT"; then
         160)
             WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0 8.1A 8.1 8.0"
             ;;
+        170)
+            WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0 8.1A 8.1 8.0"
         esac
 
         # The expectation is that --with-windows-sdk should not need to be used
