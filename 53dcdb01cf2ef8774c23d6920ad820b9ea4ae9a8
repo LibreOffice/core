@@ -34,6 +34,24 @@
       "parentUuid": "b4f8e2b7_aea40e94",
       "revId": "53dcdb01cf2ef8774c23d6920ad820b9ea4ae9a8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c9f06d6_93535fdf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-15T06:56:11Z",
+      "side": 1,
+      "message": "Note that, in general, dynamic_cast is not an adequate replacement for use of XUnoTunnel in C++ code.  (Think about scenarios where two C++ processes communicate, and process A uses XUnoTunnel on an object O from process B.  Even if B implements O as a class C that is also known to process A, a dynamic_cast\u003cC\u003e(O\u0027) on the proxy object O\u0027 for O in process A would fail.)",
+      "parentUuid": "6897b514_95621a85",
+      "revId": "53dcdb01cf2ef8774c23d6920ad820b9ea4ae9a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
