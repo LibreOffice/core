@@ -3392,7 +3392,8 @@ void SwContentTree::UpdateTracking()
     }
 
     // fields
-    if (SwField* pField = m_pActiveShell->GetCurField())
+    if (SwField* pField = m_pActiveShell->GetCurField(); pField &&
+            !(m_bIsRoot && m_nRootType != ContentTypeId::TEXTFIELD))
     {
         OUString sContentType(SwResId(STR_CONTENT_TYPE_TEXTFIELD));
         if (pField->GetTypeId() == SwFieldTypesEnum::Postit)
