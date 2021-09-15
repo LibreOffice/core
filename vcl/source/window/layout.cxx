@@ -1832,6 +1832,8 @@ VclScrolledWindow::VclScrolledWindow(vcl::Window *pParent)
 
 int VclScrolledWindow::CalcBorderWidth() const
 {
+    if (m_eDrawFrameStyle == DrawFrameStyle::NONE)
+        return 0;
     const tools::Rectangle aRect(tools::Rectangle(Point(0, 0), Size(100, 100)));
     DecorationView aDecoView(const_cast<OutputDevice*>(GetOutDev()));
     // don't actually draw anything, just measure what size it would be and the diff is the desired border size to reserve
@@ -2103,6 +2105,8 @@ bool VclScrolledWindow::EventNotify(NotifyEvent& rNEvt)
 void VclScrolledWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     VclBin::Paint(rRenderContext, rRect);
+    if (m_eDrawFrameStyle == DrawFrameStyle::NONE)
+        return;
     const tools::Rectangle aRect(tools::Rectangle(Point(0,0), GetSizePixel()));
     DecorationView aDecoView(&rRenderContext);
     const tools::Rectangle aContentRect = aDecoView.DrawFrame(aRect, m_eDrawFrameStyle, m_eDrawFrameFlags);
