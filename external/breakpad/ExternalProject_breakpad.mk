@@ -20,6 +20,7 @@ $(call gb_ExternalProject_get_state_target,breakpad,build) :
 	$(call gb_Trace_StartRange,breakpad,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		MSBuild.exe src/tools/windows/dump_syms/dump_syms.sln -p:Configuration=Release \
+			$(if $(filter 170,$(VCVER)),/p:PlatformToolset=v143 /p:VisualStudioVersion=17.0 /ToolsVersion:Current) \
 	)
 	$(call gb_Trace_EndRange,breakpad,EXTERNAL)
 
