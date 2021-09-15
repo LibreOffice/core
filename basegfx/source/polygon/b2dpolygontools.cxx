@@ -1235,7 +1235,7 @@ namespace basegfx::utils
             // precalculate maximal acceptable length of candidate polygon assuming
             // we want to create a maximum of fNumberOfAllowedSnippets. For
             // fNumberOfAllowedSnippets use ca. 65536, double due to line & gap.
-            static double fNumberOfAllowedSnippets(65535.0 * 2.0);
+            static const double fNumberOfAllowedSnippets(65535.0 * 2.0);
             const double fAllowedLength((fNumberOfAllowedSnippets * fDotDashLength) / double(rDotDashArray.size()));
             const double fCandidateLength(basegfx::utils::getLength(rCandidate));
             std::vector<double> aDotDashArray(rDotDashArray);

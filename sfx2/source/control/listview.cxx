@@ -285,7 +285,7 @@ void ListView::clearListView()
 IMPL_LINK(ListView, QueryTooltipHdl, const weld::TreeIter&, rIter, OUString)
 {
     OUString sId = mxTreeView->get_id(rIter);
-    for (auto& pItem : mListViewItems)
+    for (const auto& pItem : mListViewItems)
     {
         if (pItem->maId == sId)
             return pItem->maDisplayPath;

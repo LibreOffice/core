@@ -743,7 +743,7 @@ Box2DBodySharedPtr box2DWorld::createStaticBody(const slideshow::internal::Shape
     {
         basegfx::triangulator::B2DTriangleVector aTriangleVector;
         // iterate over the polygons of the shape and create representations for them
-        for (auto& rPolygon : aPolyPolygon)
+        for (const auto& rPolygon : std::as_const(aPolyPolygon))
         {
             // if the polygon is closed it will be represented by triangles
             if (rPolygon.isClosed())

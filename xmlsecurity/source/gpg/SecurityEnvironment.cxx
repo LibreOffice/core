@@ -139,7 +139,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getCertificatesIm
 
     Sequence< Reference< XCertificate > > xCertificateSequence(certsList.size());
     int i = 0;
-    for (auto& cert : certsList) {
+    for (const auto& cert : certsList) {
         xCertificateSequence[i++] = cert;
     }
 

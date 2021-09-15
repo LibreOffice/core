@@ -104,7 +104,7 @@ bool SearchResultLocator::tryParseJSON(const char* pPayload,
         return false;
     }
 
-    for (auto& rEachNode : boost::make_iterator_range(aTree.equal_range("")))
+    for (const auto& rEachNode : boost::make_iterator_range(aTree.equal_range("")))
     {
         auto const& rEach = rEachNode.second;
 

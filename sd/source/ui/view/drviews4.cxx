@@ -123,7 +123,7 @@ void DrawViewShell::DeleteActualPage()
                 pagesToDelete.push_back(xPage);
             }
         }
-        for (auto &xPage: pagesToDelete)
+        for (const auto &xPage: pagesToDelete)
         {
             xPages->remove(xPage);
         }

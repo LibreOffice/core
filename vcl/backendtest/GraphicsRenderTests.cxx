@@ -2125,7 +2125,7 @@ std::vector<VclTestResult>& GraphicsRenderTests::getTestResults() { return m_aTe
 OUString GraphicsRenderTests::getResultString()
 {
     std::vector<int> testResults(4);
-    for (VclTestResult& test : m_aTestResult)
+    for (const VclTestResult& test : m_aTestResult)
     {
         if (test.getStatus() == "PASSED")
         {

@@ -3646,7 +3646,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                 mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_REPEATED,
                                     OUString::number( aLastPoint.mnRepeat ));
 
-            for (auto& deletedLegendEntry : deletedLegendEntriesSeq)
+            for (const auto& deletedLegendEntry : std::as_const(deletedLegendEntriesSeq))
             {
                 if (nIndex == deletedLegendEntry)
                 {
@@ -3672,7 +3672,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_REPEATED,
                             OUString::number( aLastPoint.mnRepeat ));
 
-    for (auto& deletedLegendEntry : deletedLegendEntriesSeq)
+    for (const auto& deletedLegendEntry : std::as_const(deletedLegendEntriesSeq))
     {
         if (nIndex == deletedLegendEntry)
         {

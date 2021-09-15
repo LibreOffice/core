@@ -451,7 +451,7 @@ void SvxIconChoiceCtrl_Impl::Arrange( bool bKeepPredecessors, tools::Long nSetMa
 
 void SvxIconChoiceCtrl_Impl::ImpArrange( bool bKeepPredecessors )
 {
-    static Point aEmptyPoint;
+    static const Point aEmptyPoint;
 
     bool bOldUpdate = bUpdateMode;
     tools::Rectangle aCurOutputArea( GetOutputRect() );

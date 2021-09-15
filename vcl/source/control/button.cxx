@@ -2949,7 +2949,7 @@ void RadioButton::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 
     OUString sGroupId;
     std::vector<VclPtr<RadioButton>> aGroup = GetRadioButtonGroup();
-    for(auto& pButton : aGroup)
+    for(const auto& pButton : aGroup)
         sGroupId += pButton->get_id();
 
     if (!sGroupId.isEmpty())

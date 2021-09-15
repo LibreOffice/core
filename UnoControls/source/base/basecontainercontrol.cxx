@@ -309,7 +309,7 @@ Reference< XControl > SAL_CALL BaseContainerControl::getControl ( const OUString
     MutexGuard  aGuard ( Mutex::getGlobalMutex() );
 
     // Search for right control
-    for( IMPL_ControlInfo& rSearchControl : maControlInfoList )
+    for( const IMPL_ControlInfo& rSearchControl : maControlInfoList )
     {
         if ( rSearchControl.sName == rName )
         {
@@ -336,7 +336,7 @@ Sequence< Reference< XControl > > SAL_CALL BaseContainerControl::getControls ()
     Reference< XControl > *             pDestination    = aDescriptor.getArray ();
 
     // Copy controls to sequence
-    for( IMPL_ControlInfo& rCopyControl : maControlInfoList )
+    for( const IMPL_ControlInfo& rCopyControl : maControlInfoList )
     {
         pDestination [ nCount++ ] = rCopyControl.xControl;
     }

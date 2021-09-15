@@ -10913,7 +10913,7 @@ private:
 
     void signal_item_toggled(GtkToggleButton* pItem)
     {
-        for (auto& a : m_aMenuButtonMap)
+        for (const auto& a : m_aMenuButtonMap)
         {
             if (a.second->getWidget() == GTK_WIDGET(pItem))
             {

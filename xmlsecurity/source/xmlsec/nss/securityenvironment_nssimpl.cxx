@@ -304,7 +304,7 @@ SecurityEnvironment_NssImpl::getPersonalCertificates()
         int i = 0;
         Sequence< Reference< XCertificate > > certSeq( length ) ;
 
-        for( auto& rXCert : certsList ) {
+        for( const auto& rXCert : certsList ) {
             certSeq[i] = rXCert ;
             ++i;
         }

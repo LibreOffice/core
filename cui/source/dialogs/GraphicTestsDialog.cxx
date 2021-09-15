@@ -68,7 +68,7 @@ short GraphicsTestsDialog::run()
                           + "\n(Click on any test to view its resultant bitmap image)";
     m_xResultLog->set_text(aResultLog);
     sal_Int32 nTestNumber = 0;
-    for (VclTestResult& test : aTestObject.getTestResults())
+    for (const VclTestResult& test : aTestObject.getTestResults())
     {
         auto xGpTest = std::make_unique<GraphicTestEntry>(m_xContainerBox.get(), m_xDialog.get(),
                                                           test.getTestName(), test.getStatus(),

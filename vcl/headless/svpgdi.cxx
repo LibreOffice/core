@@ -589,7 +589,7 @@ namespace
     // MM02 decide to use buffers or not
     const char* pDisableMM02Goodies(getenv("SAL_DISABLE_MM02_GOODIES"));
     bool bUseBuffer(nullptr == pDisableMM02Goodies);
-    tools::Long nMinimalSquareSizeToBuffer(64*64);
+    const tools::Long nMinimalSquareSizeToBuffer(64*64);
 
     void tryToUseSourceBuffer(
         const SalBitmap& rSourceBitmap,
@@ -1627,7 +1627,7 @@ bool SvpSalGraphics::drawPolyLine(
     assert(!bStrokeUsed || (bStrokeUsed && pStroke));
 
     // MM01 decide if to stroke directly
-    static bool bDoDirectCairoStroke(true);
+    static const bool bDoDirectCairoStroke(true);
 
     // MM01 activate to stroke directly
     if(bDoDirectCairoStroke && bStrokeUsed)

@@ -469,7 +469,7 @@ SwDoc::~SwDoc()
         delete pTmp;
     }
 
-    for(auto& pType : *mpTOXTypes)
+    for(const auto& pType : *mpTOXTypes)
         pType->CallSwClientNotify(sw::DocumentDyingHint());
     mpTOXTypes->clear();
     mpDefTOXBases.reset();

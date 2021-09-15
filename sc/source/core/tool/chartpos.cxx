@@ -424,7 +424,7 @@ void ScChartPositioner::CreatePositionMap()
         {   // fill gaps with Dummies, first column is master
             RowMap& rFirstCol = aColMap.begin()->second;
 
-            for ( auto& it1 : rFirstCol )
+            for ( const auto& it1 : rFirstCol )
             {
                 sal_uLong nKey = it1.first;
                 for (ColumnMap::iterator it2 = ++aColMap.begin(); it2 != aColMap.end(); ++it2 )

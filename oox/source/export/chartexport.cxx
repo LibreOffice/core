@@ -1351,7 +1351,7 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
                     {
                         Sequence<sal_Int32> deletedLegendEntriesSeq;
                         aSeriesProp.getProperty(deletedLegendEntriesSeq, PROP_DeletedLegendEntries);
-                        for (auto& deletedLegendEntry : deletedLegendEntriesSeq)
+                        for (const auto& deletedLegendEntry : std::as_const(deletedLegendEntriesSeq))
                         {
                             pFS->startElement(FSNS(XML_c, XML_legendEntry));
                             pFS->singleElement(FSNS(XML_c, XML_idx), XML_val,

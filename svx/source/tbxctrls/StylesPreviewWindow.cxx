@@ -462,7 +462,7 @@ void StylesPreviewWindow_Base::UpdateStylesList()
     }
 
     m_xStylesView->clear();
-    for (auto& rStyle : m_aAllStyles)
+    for (const auto& rStyle : m_aAllStyles)
     {
         ScopedVclPtr<VirtualDevice> pImg = VclPtr<VirtualDevice>::Create();
         const Size aSize(100, 30);
