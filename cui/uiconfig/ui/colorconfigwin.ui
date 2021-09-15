@@ -381,7 +381,6 @@
                 <property name="label" translatable="yes" context="colorconfigwin|smarttags">Smart Tags</property>
                 <property name="use-underline">True</property>
                 <property name="mnemonic-widget">smarttags_lb</property>
-                <property name="track-visited-links">False</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
