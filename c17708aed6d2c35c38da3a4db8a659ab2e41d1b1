@@ -41,6 +41,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "773d0422_4e5143b1",
+        "filename": "oox/qa/unit/export.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2021-09-15T09:02:05Z",
+      "side": 1,
+      "message": "Thanks! ^_^",
+      "parentUuid": "c46c6b73_3c84ca61",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 158,
+        "endChar": 54
+      },
+      "revId": "c17708aed6d2c35c38da3a4db8a659ab2e41d1b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6eba66a5_60c11e86",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-09-15T08:13:49Z",
       "side": 1,
       "message": "You have forget to remove this one :)",
+      "range": {
+        "startLine": 706,
+        "startChar": 12,
+        "endLine": 706,
+        "endChar": 25
+      },
+      "revId": "c17708aed6d2c35c38da3a4db8a659ab2e41d1b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "188d77b7_1569e2a5",
+        "filename": "oox/source/export/DMLPresetShapeExport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2021-09-15T09:02:05Z",
+      "side": 1,
+      "message": "Good point, thanks! I\u0027m not really sure why the compiler didn\u0027t catch that.",
+      "parentUuid": "6eba66a5_60c11e86",
       "range": {
         "startLine": 706,
         "startChar": 12,
