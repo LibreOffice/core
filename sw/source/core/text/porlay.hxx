@@ -243,7 +243,7 @@ public:
                            const SwLinePortion* _pDontConsiderPortion = nullptr,
                            const bool _bNoFlyCntPorAndLinePor = false ) const;
 
-    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 /// Collection of SwLineLayout instances, represents the paragraph text in Writer layout.
