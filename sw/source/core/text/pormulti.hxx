@@ -77,7 +77,7 @@ struct SwBracket
 // or phonetics (ruby)
 // or combined characters
 // or a rotated portion.
-class SwMultiPortion : public SwLinePortion
+class SAL_DLLPUBLIC_RTTI SwMultiPortion : public SwLinePortion
 {
     SwLineLayout m_aRoot;     // One or more lines
     bool m_bTab1      :1;     // First line tabulator

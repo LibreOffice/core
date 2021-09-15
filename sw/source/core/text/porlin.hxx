@@ -46,7 +46,7 @@ class SwPortionHandler;
 
 /// Base class for anything that can be part of a line in the Writer layout.
 /// Typically owned by SwLineLayout.
-class SwLinePortion: public SwPosSize
+class SAL_DLLPUBLIC_RTTI SwLinePortion: public SwPosSize
 {
 protected:
     // Here we have areas with different attributes
