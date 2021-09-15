@@ -773,8 +773,33 @@ void SwGlobalTree::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry
 
 IMPL_LINK_NOARG(SwGlobalTree, Timeout, Timer *, void)
 {
-    if (!m_xTreeView->has_focus() && Update(false))
-        Display();
+    if (m_pActiveShell && m_pActiveShell->GetView().GetEditWin().HasFocus())
+    {
+        if (Update(false))
+            Display();
+        UpdateTracking();
+    }
+}
+
+void SwGlobalTree::UpdateTracking()
+{
+    if (!m_pActiveShell)
+        return;
+
+    // track section at cursor position in document
+    m_xTreeView->unselect_all();
+
+    const SwSection* pActiveShellCurrSection = m_pActiveShell->GetCurrSection();
+    if (pActiveShellCurrSection)
+    {
+        const SwSection* pSection = pActiveShellCurrSection;
+        SwSection* pParent;
+        while ((pParent = pSection->GetParent()) != nullptr)
+            pSection = pParent;
+
+        if (pSection)
+            m_xTreeView->select_text(pSection->GetSectionName());
+    }
 }
 
 void SwGlobalTree::GotoContent(const SwGlblDocContent* pCont)
@@ -803,6 +828,7 @@ void SwGlobalTree::ShowTree()
 {
     m_aUpdateTimer.Start();
     m_xTreeView->show();
+    UpdateTracking();
 }
 
 void SwGlobalTree::HideTree()
@@ -854,10 +880,13 @@ bool SwGlobalTree::Update(bool bHard)
     bool bRet = false;
     if (pActView && pActView->GetWrtShellPtr())
     {
-        const SwWrtShell* pOldShell = m_pActiveShell;
+        SwWrtShell* pOldShell = m_pActiveShell;
         m_pActiveShell = pActView->GetWrtShellPtr();
         if(m_pActiveShell != pOldShell)
         {
+            if (pOldShell)
+                EndListening(*pOldShell->GetView().GetDocShell());
+            StartListening(*m_pActiveShell->GetView().GetDocShell());
             m_pSwGlblDocContents.reset();
         }
         if(!m_pSwGlblDocContents)
@@ -1088,6 +1117,13 @@ IMPL_LINK( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, vo
     }
     InsertRegion( m_pDocContent.get(), aFileNames );
     m_pDocContent.reset();
+}
+
+void SwGlobalTree::Notify(SfxBroadcaster& rBC, SfxHint const& rHint)
+{
+    SfxListener::Notify(rBC, rHint);
+    if (rHint.GetId() == SfxHintId::SwNavigatorUpdateTracking)
+        UpdateTracking();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
