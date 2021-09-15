@@ -133,7 +133,6 @@ std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphi
         RealizePalette( hDC );
     }
 
-    pVirGraphics->InitGraphics();
     pVDev->setGraphics(pVirGraphics);
 
     return std::unique_ptr<SalVirtualDevice>(pVDev);
@@ -169,14 +168,16 @@ WinSalVirtualDevice::~WinSalVirtualDevice()
     if( *ppVirDev )
         *ppVirDev = mpNext;
 
-    // destroy saved DC
+    HDC hDC = mpGraphics->getHDC();
+    // restore the mpGraphics' original HDC values, so the HDC can be deleted in the !mbForeignDC case
+    mpGraphics->setHDC(nullptr);
+
     if( mpGraphics->getDefPal() )
-        SelectPalette( mpGraphics->getHDC(), mpGraphics->getDefPal(), TRUE );
-    mpGraphics->DeInitGraphics();
+        SelectPalette(hDC, mpGraphics->getDefPal(), TRUE);
     if( mhDefBmp )
-        SelectBitmap( mpGraphics->getHDC(), mhDefBmp );
+        SelectBitmap(hDC, mhDefBmp);
     if( !mbForeignDC )
-        DeleteDC( mpGraphics->getHDC() );
+        DeleteDC(hDC);
 }
 
 SalGraphics* WinSalVirtualDevice::AcquireGraphics()
