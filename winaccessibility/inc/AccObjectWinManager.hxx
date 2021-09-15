@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <map>
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
@@ -37,8 +36,9 @@
 #pragma clang diagnostic pop
 #endif
 
-#include <com/sun/star/accessibility/XAccessible.hpp>
-
+namespace com::sun::star::accessibility {
+class XAccessible;
+}
 class ResIDGenerator;
 class AccObjectManagerAgent;
 class AccEventListener;
