@@ -8015,17 +8015,14 @@ void PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
     aLine.append( ' ' );
     appendFixedInt( rObject.m_aBoundRect.Bottom()+1, aLine );
     aLine.append( " ]\n" );
-    if( ! rObject.m_pSoftMaskStream )
+    if( ! m_bIsPDF_A1 )
     {
-        if( ! m_bIsPDF_A1 )
-        {
-            // 7.8.3 Resource dicts are required for content streams
-            aLine.append( "/Resources " );
-            aLine.append( getResourceDictObj() );
-            aLine.append( " 0 R\n" );
+        // 7.8.3 Resource dicts are required for content streams
+        aLine.append( "/Resources " );
+        aLine.append( getResourceDictObj() );
+        aLine.append( " 0 R\n" );
 
-            aLine.append( "/Group<</S/Transparency/CS/DeviceRGB/K true>>\n" );
-        }
+        aLine.append( "/Group<</S/Transparency/CS/DeviceRGB/K true>>\n" );
     }
 
     aLine.append( "/Length " );
@@ -8050,75 +8047,22 @@ void PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
     aLine.append( rObject.m_nExtGStateObject );
     aLine.append( " 0 obj\n"
                   "<<" );
-    if( ! rObject.m_pSoftMaskStream )
+
+    if( m_bIsPDF_A1 )
     {
-        if( m_bIsPDF_A1 )
-        {
-            aLine.append( "/CA 1.0/ca 1.0" );
-            m_aErrors.insert( PDFWriter::Warning_Transparency_Omitted_PDFA );
-        }
-        else
-        {
-            aLine.append(  "/CA " );
-            appendDouble( rObject.m_fAlpha, aLine );
-            aLine.append( "\n"
-                          "   /ca " );
-            appendDouble( rObject.m_fAlpha, aLine );
-        }
-        aLine.append( "\n" );
+        aLine.append( "/CA 1.0/ca 1.0" );
+        m_aErrors.insert( PDFWriter::Warning_Transparency_Omitted_PDFA );
     }
     else
     {
-        if( m_bIsPDF_A1 )
-        {
-            aLine.append( "/SMask/None" );
-            m_aErrors.insert( PDFWriter::Warning_Transparency_Omitted_PDFA );
-        }
-        else
-        {
-            sal_Int32 nMaskSize = static_cast<sal_Int32>(rObject.m_pSoftMaskStream->TellEnd());
-            rObject.m_pSoftMaskStream->Seek( STREAM_SEEK_TO_BEGIN );
-            sal_Int32 nMaskObject = createObject();
-            aLine.append( "/SMask<</Type/Mask/S/Luminosity/G " );
-            aLine.append( nMaskObject );
-            aLine.append( " 0 R>>\n" );
-
-            OStringBuffer aMask;
-            aMask.append( nMaskObject );
-            aMask.append( " 0 obj\n"
-                          "<</Type/XObject\n"
-                          "/Subtype/Form\n"
-                          "/BBox[" );
-            appendFixedInt( rObject.m_aBoundRect.Left(), aMask );
-            aMask.append( ' ' );
-            appendFixedInt( rObject.m_aBoundRect.Top(), aMask );
-            aMask.append( ' ' );
-            appendFixedInt( rObject.m_aBoundRect.Right(), aMask );
-            aMask.append( ' ' );
-            appendFixedInt( rObject.m_aBoundRect.Bottom()+1, aMask );
-            aMask.append( "]\n" );
-
-            // 7.8.3 Resource dicts are required for content streams
-            aMask.append( "/Resources " );
-            aMask.append( getResourceDictObj() );
-            aMask.append( " 0 R\n" );
-
-            aMask.append( "/Group<</S/Transparency/CS/DeviceRGB>>\n" );
-            aMask.append( "/Length " );
-            aMask.append( nMaskSize );
-            aMask.append( ">>\n"
-                          "stream\n" );
-            CHECK_RETURN2( updateObject( nMaskObject ) );
-            checkAndEnableStreamEncryption(  nMaskObject );
-            CHECK_RETURN2( writeBuffer( aMask.getStr(), aMask.getLength() ) );
-            CHECK_RETURN2( writeBuffer( rObject.m_pSoftMaskStream->GetData(), nMaskSize ) );
-            disableStreamEncryption();
-            aMask.setLength( 0 );
-            aMask.append( "\nendstream\n"
-                          "endobj\n\n" );
-            CHECK_RETURN2( writeBuffer( aMask.getStr(), aMask.getLength() ) );
-        }
+        aLine.append(  "/CA " );
+        appendDouble( rObject.m_fAlpha, aLine );
+        aLine.append( "\n"
+                          "   /ca " );
+        appendDouble( rObject.m_fAlpha, aLine );
     }
+    aLine.append( "\n" );
+
     aLine.append( ">>\n"
                   "endobj\n\n" );
     CHECK_RETURN2( updateObject( rObject.m_nExtGStateObject ) );

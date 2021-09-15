@@ -104,8 +104,6 @@ codemaker/source/javamaker/classfile.cxx:508
      floatBytes float
 codemaker/source/javamaker/classfile.cxx:540
      doubleBytes double
-comphelper/qa/container/comphelper_ifcontainer.cxx:44
-    (anonymous namespace)::ContainerListener m_pStats struct (anonymous namespace)::ContainerStats *const
 comphelper/qa/unit/parallelsorttest.cxx:44
     ParallelSortTest mnThreads size_t
 comphelper/source/misc/asyncnotification.cxx:69
@@ -212,6 +210,8 @@ cppu/source/uno/copy.hxx:38
     cppu::(anonymous namespace)::SequencePrefix nRefCount sal_Int32
 cppu/source/uno/copy.hxx:39
     cppu::(anonymous namespace)::SequencePrefix nElements sal_Int32
+cppuhelper/qa/ifcontainer/cppu_ifcontainer.cxx:45
+    (anonymous namespace)::ContainerListener m_pStats struct (anonymous namespace)::ContainerStats *
 cppuhelper/source/access_control.cxx:79
     cppu::(anonymous namespace)::permission m_str1 rtl_uString *
 cppuhelper/source/access_control.cxx:80
@@ -244,8 +244,6 @@ dbaccess/source/ui/app/AppDetailView.hxx:107
     dbaui::OApplicationDetailView m_aExternalMnemonics class MnemonicGenerator
 dbaccess/source/ui/browser/dbloader.cxx:59
     (anonymous namespace)::DBContentLoader m_xListener Reference<class com::sun::star::frame::XLoadEventListener>
-desktop/qa/desktop_lib/test_desktop_lib.cxx:293
-    DesktopLOKTest m_bModified _Bool
 desktop/source/app/app.cxx:1223
     desktop::(anonymous namespace)::ExecuteGlobals pCTLLanguageOptions std::unique_ptr<SvtCTLOptions>
 desktop/source/app/app.cxx:1224
@@ -438,7 +436,7 @@ include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:46
     AddonNotebookBarItem nWidth sal_uInt16
 include/vcl/opengl/OpenGLContext.hxx:27
     GLWindow bMultiSampleSupported _Bool
-include/vcl/pdfextoutdevdata.hxx:83
+include/vcl/pdfextoutdevdata.hxx:82
     vcl::PDFExtOutDevData mbSinglePageSheets _Bool
 include/vcl/salnativewidgets.hxx:467
     ToolbarValue mbIsTopDockingArea _Bool
@@ -450,13 +448,13 @@ include/vcl/sysdata.hxx:68
     SystemEnvData pSalFrame class SalFrame *
 include/vcl/textrectinfo.hxx:35
     TextRectInfo mnLineCount sal_uInt16
-include/vcl/vclenum.hxx:200
+include/vcl/vclenum.hxx:198
     ItalicMatrix xx double
-include/vcl/vclenum.hxx:200
+include/vcl/vclenum.hxx:198
     ItalicMatrix xy double
-include/vcl/vclenum.hxx:200
+include/vcl/vclenum.hxx:198
     ItalicMatrix yx double
-include/vcl/vclenum.hxx:200
+include/vcl/vclenum.hxx:198
     ItalicMatrix yy double
 include/xmloff/shapeimport.hxx:95
     SdXML3DSceneAttributesHelper mbVRPUsed _Bool
@@ -554,9 +552,9 @@ sc/source/filter/inc/exp_op.hxx:47
     ExportBiff5 pExcRoot struct RootData *
 sc/source/filter/inc/imp_op.hxx:83
     ImportExcel::LastFormula mpCell class ScFormulaCell *
-sc/source/filter/inc/namebuff.hxx:37
+sc/source/filter/inc/namebuff.hxx:36
     StringHashEntry aString class rtl::OUString
-sc/source/filter/inc/namebuff.hxx:38
+sc/source/filter/inc/namebuff.hxx:37
     StringHashEntry nHash sal_uInt32
 sc/source/filter/inc/orcusinterface.hxx:385
     ScOrcusStyles::fill maBgColor class Color
@@ -644,8 +642,8 @@ sd/source/ui/framework/module/ToolBarModule.hxx:74
     sd::framework::ToolBarModule mpToolBarManagerLock std::unique_ptr<ToolBarManager::UpdateLock, o3tl::default_delete<ToolBarManager::UpdateLock> >
 sd/source/ui/inc/animobjs.hxx:122
     sd::AnimationWindow pControllerItem std::unique_ptr<AnimationControllerItem>
-sd/source/ui/inc/custsdlg.hxx:33
-    SdCustomShowDlg bModified _Bool
+sd/source/ui/inc/custsdlg.hxx:61
+    SdDefineCustomShowDlg bModified _Bool
 sd/source/ui/inc/fudspord.hxx:50
     sd::FuDisplayOrder mpOverlay std::unique_ptr<SdrDropMarkerOverlay>
 sd/source/ui/inc/navigatr.hxx:143
@@ -682,7 +680,7 @@ sfx2/inc/notebookbar/NotebookbarTabControl.hxx:41
     NotebookbarTabControl m_pListener css::uno::Reference<css::ui::XUIConfigurationListener>
 sfx2/source/appl/fileobj.hxx:40
     SvFileObject mxDelMed tools::SvRef<SfxMedium>
-sfx2/source/doc/sfxbasemodel.cxx:450
+sfx2/source/doc/sfxbasemodel.cxx:446
     (anonymous namespace)::SfxSaveGuard m_pFramesLock std::unique_ptr<SfxOwnFramesLocker>
 sfx2/source/inc/appdata.hxx:69
     SfxAppData_Impl pDocTopics std::unique_ptr<SfxDdeDocTopics_Impl>
@@ -690,27 +688,21 @@ sfx2/source/inc/appdata.hxx:70
     SfxAppData_Impl pTriggerTopic std::unique_ptr<SfxDdeTriggerTopic_Impl>
 sfx2/source/inc/appdata.hxx:71
     SfxAppData_Impl pDdeService2 std::unique_ptr<DdeService>
+sfx2/source/inc/appdata.hxx:79
+    SfxAppData_Impl m_pToolsErrorHdl std::optional<SfxErrorHandler>
 sfx2/source/inc/appdata.hxx:80
-    SfxAppData_Impl m_pToolsErrorHdl std::unique_ptr<SfxErrorHandler>
-sfx2/source/inc/appdata.hxx:81
-    SfxAppData_Impl m_pSoErrorHdl std::unique_ptr<SfxErrorHandler>
-sfx2/source/inc/appdata.hxx:83
-    SfxAppData_Impl m_pSbxErrorHdl std::unique_ptr<SfxErrorHandler>
-sfx2/source/inc/appdata.hxx:86
-    SfxAppData_Impl mxAppPickList std::unique_ptr<SfxPickList>
+    SfxAppData_Impl m_pSoErrorHdl std::optional<SfxErrorHandler>
+sfx2/source/inc/appdata.hxx:82
+    SfxAppData_Impl m_pSbxErrorHdl std::optional<SfxErrorHandler>
+sfx2/source/inc/appdata.hxx:85
+    SfxAppData_Impl mxAppPickList std::optional<SfxPickList>
 sfx2/source/inc/splitwin.hxx:52
     SfxSplitWindow pActive VclPtr<class SfxDockingWindow>
-sfx2/source/inc/StyleList.hxx:221
+sfx2/source/inc/StyleList.hxx:218
     StyleList m_xTreeView1DropTargetHelper std::unique_ptr<TreeViewDropTarget>
-sfx2/source/inc/StyleList.hxx:222
+sfx2/source/inc/StyleList.hxx:219
     StyleList m_xTreeView2DropTargetHelper std::unique_ptr<TreeViewDropTarget>
-sfx2/source/inc/templdgi.hxx:92
-    SfxCommonTemplateDialog_Impl bUpdateFamily _Bool
-sfx2/source/inc/templdgi.hxx:96
-    SfxCommonTemplateDialog_Impl bTreeDrag _Bool
-sfx2/source/inc/templdgi.hxx:107
-    SfxCommonTemplateDialog_Impl m_aStyleListNotify Link<enum SfxHintId, void>
-sfx2/source/inc/templdgi.hxx:226
+sfx2/source/inc/templdgi.hxx:215
     SfxTemplateDialog_Impl m_xToolbarDropTargetHelper std::unique_ptr<ToolbarDropTarget>
 sfx2/source/view/classificationcontroller.cxx:73
     sfx2::(anonymous namespace)::ClassificationCategoriesController m_aPropertyListener class sfx2::(anonymous namespace)::ClassificationPropertyListener
@@ -742,9 +734,9 @@ svgio/inc/svgsvgnode.hxx:41
     svgio::svgreader::SvgSvgNode maVersion class svgio::svgreader::SvgNumber
 svgio/inc/svgsymbolnode.hxx:32
     svgio::svgreader::SvgSymbolNode maSvgAspectRatio class svgio::svgreader::SvgAspectRatio
-svgio/inc/svgusenode.hxx:40
-    svgio::svgreader::SvgUseNode maWidth class svgio::svgreader::SvgNumber
 svgio/inc/svgusenode.hxx:41
+    svgio::svgreader::SvgUseNode maWidth class svgio::svgreader::SvgNumber
+svgio/inc/svgusenode.hxx:42
     svgio::svgreader::SvgUseNode maHeight class svgio::svgreader::SvgNumber
 svl/source/crypto/cryptosign.cxx:97
     (anonymous namespace)::MessageImprint hashedMessage SECItem
@@ -774,7 +766,7 @@ svl/source/crypto/cryptosign.cxx:181
     (anonymous namespace)::SigningCertificateV2 certs struct (anonymous namespace)::ESSCertIDv2 **
 svl/source/misc/inethist.cxx:45
     INetURLHistory_Impl::head_entry m_nMagic sal_uInt32
-svl/source/undo/undo.cxx:312
+svl/source/undo/undo.cxx:310
     svl::undo::impl::UndoManagerGuard m_aUndoActionsCleanup ::std::vector<std::unique_ptr<SfxUndoAction> >
 svx/inc/galbrws2.hxx:82
     GalleryBrowser2 mxDragDropTargetHelper std::unique_ptr<GalleryDragDrop>
@@ -906,7 +898,7 @@ sw/source/core/inc/unoflatpara.hxx:135
     SwXFlatParagraphIterator m_aFlatParaList std::set<css::uno::Reference<css::text::XFlatParagraph> >
 sw/source/core/layout/dbg_lay.cxx:133
     SwImplProtocol m_aVars std::vector<tools::Long>
-sw/source/core/table/swtable.cxx:2562
+sw/source/core/table/swtable.cxx:2649
     SwTableCellInfo::Impl m_HandledTableBoxes SwTableCellInfo::Impl::TableBoxes_t
 sw/source/core/text/porfld.hxx:65
     SwFieldPortion m_nAttrFieldType sal_uInt16
@@ -978,7 +970,7 @@ unoxml/source/xpath/nodelist.hxx:51
     XPath::CNodeList m_pXPathObj std::shared_ptr<xmlXPathObject>
 vbahelper/source/vbahelper/vbafillformat.hxx:36
     ScVbaFillFormat m_nForeColor sal_Int32
-vcl/inc/accel.hxx:41
+vcl/inc/accel.hxx:39
     ImplAccelEntry mpAutoAccel class Accelerator *
 vcl/inc/driverblocklist.hxx:114
     DriverBlocklist::DriverInfo maMsg class rtl::OUString
@@ -998,18 +990,18 @@ vcl/inc/salmenu.hxx:37
     SalItemParams nBits enum MenuItemBits
 vcl/inc/salwtype.hxx:206
     SalSurroundingTextRequestEvent mnEnd sal_uLong
-vcl/inc/salwtype.hxx:217
-    SalQueryCharPositionEvent mbValid _Bool
-vcl/inc/salwtype.hxx:219
-    SalQueryCharPositionEvent mbVertical _Bool
-vcl/inc/salwtype.hxx:220
+vcl/inc/salwtype.hxx:218
     SalQueryCharPositionEvent mnCursorBoundX tools::Long
-vcl/inc/salwtype.hxx:221
+vcl/inc/salwtype.hxx:219
     SalQueryCharPositionEvent mnCursorBoundY tools::Long
-vcl/inc/salwtype.hxx:222
+vcl/inc/salwtype.hxx:220
     SalQueryCharPositionEvent mnCursorBoundWidth tools::Long
-vcl/inc/salwtype.hxx:223
+vcl/inc/salwtype.hxx:221
     SalQueryCharPositionEvent mnCursorBoundHeight tools::Long
+vcl/inc/salwtype.hxx:222
+    SalQueryCharPositionEvent mbValid _Bool
+vcl/inc/salwtype.hxx:223
+    SalQueryCharPositionEvent mbVertical _Bool
 vcl/inc/salwtype.hxx:250
     SalInputContext mpFont rtl::Reference<LogicalFontInstance>
 vcl/inc/salwtype.hxx:257
@@ -1026,14 +1018,6 @@ vcl/inc/unx/gtk/gtkframe.hxx:82
     GtkSalFrame::IMHandler::PreviousKeyPress send_event gint8
 vcl/inc/unx/gtk/gtkframe.hxx:83
     GtkSalFrame::IMHandler::PreviousKeyPress time guint32
-vcl/inc/WidgetThemeLibrary.hxx:20
-    vcl::WidgetDrawStyle nSize uint32_t
-vcl/inc/WidgetThemeLibrary.hxx:104
-    vcl::ControlDrawParameters eButtonValue enum ButtonValue
-vcl/inc/WidgetThemeLibrary.hxx:105
-    vcl::ControlDrawParameters bIsAction _Bool
-vcl/inc/WidgetThemeLibrary.hxx:106
-    vcl::ControlDrawParameters nValue int64_t
 vcl/qa/cppunit/pdfexport/pdfexport.cxx:69
     (anonymous namespace)::PdfExportTest mpPDFium std::shared_ptr<vcl::pdf::PDFium>
 vcl/source/fontsubset/sft.cxx:92
@@ -1062,9 +1046,9 @@ vcl/unx/gtk3/a11y/atkwrapper.hxx:79
     AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk3/glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtkinst.cxx:2087
+vcl/unx/gtk3/gtkinst.cxx:2088
      in char *
-vcl/unx/gtk3/gtkinst.cxx:19164
+vcl/unx/gtk3/gtkinst.cxx:19192
     (anonymous namespace)::GtkInstanceComboBox m_xCustomMenuButtonHelper std::unique_ptr<CustomRenderMenuButtonHelper>
 vcl/unx/gtk3/hudawareness.cxx:18
     (anonymous namespace)::HudAwarenessHandle connection gpointer

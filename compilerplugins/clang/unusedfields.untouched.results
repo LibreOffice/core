@@ -12,7 +12,7 @@ chart2/source/controller/inc/RangeSelectionListener.hxx:61
     chart::RangeSelectionListener m_aControllerLockGuard class chart::ControllerLockGuardUNO
 chart2/source/inc/ModifyListenerCallBack.hxx:52
     chart::ModifyListenerCallBack m_xModifyListener css::uno::Reference<css::util::XModifyListener>
-comphelper/source/container/enumerablemap.cxx:298
+comphelper/source/container/enumerablemap.cxx:297
     comphelper::(anonymous namespace)::MapEnumeration m_xKeepMapAlive Reference<class com::sun::star::uno::XInterface>
 connectivity/source/drivers/evoab2/EApi.h:121
     (anonymous) address_format char *
@@ -30,12 +30,6 @@ dbaccess/source/core/inc/databasecontext.hxx:84
     dbaccess::ODatabaseContext m_aBasicDLL class BasicDLL
 dbaccess/source/sdbtools/inc/connectiondependent.hxx:115
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
-desktop/qa/desktop_lib/test_desktop_lib.cxx:2902
-      class AllSettings &
-drawinglayer/source/geometry/viewinformation2d.cxx:81
-    drawinglayer::geometry::ImpViewInformation2D mxViewInformation uno::Sequence<beans::PropertyValue>
-drawinglayer/source/geometry/viewinformation2d.cxx:85
-    drawinglayer::geometry::ImpViewInformation2D mxExtendedInformation uno::Sequence<beans::PropertyValue>
 embeddedobj/source/msole/olecomponent.hxx:50
     OleComponent m_aMutex ::osl::Mutex
 embeddedobj/source/msole/olecomponent.hxx:51
@@ -222,7 +216,7 @@ include/vcl/commandevent.hxx:310
     CommandGestureData mfX const double
 include/vcl/commandevent.hxx:311
     CommandGestureData mfY const double
-include/vcl/commandevent.hxx:315
+include/vcl/commandevent.hxx:314
     CommandGestureData meOrientation const enum PanningOrientation
 include/vcl/filter/PngImageReader.hxx:35
     vcl::PngImageReader mxStatusIndicator css::uno::Reference<css::task::XStatusIndicator>
@@ -330,9 +324,11 @@ sc/inc/editutil.hxx:111
     ScEnginePoolHelper pEnginePool rtl::Reference<SfxItemPool>
 sc/inc/editutil.hxx:113
     ScEnginePoolHelper bDeleteEnginePool _Bool
-sc/source/core/data/document.cxx:1235
+sc/qa/unit/ucalc_formula.cxx:3534
+      class TestFormula *
+sc/source/core/data/document.cxx:1234
     (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aSwitch sc::AutoCalcSwitch
-sc/source/core/data/document.cxx:1236
+sc/source/core/data/document.cxx:1235
     (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aBulk class ScBulkBroadcast
 sc/source/filter/html/htmlpars.cxx:3021
     (anonymous namespace)::CSSHandler::MemStr mp const char *
@@ -354,7 +350,7 @@ sd/source/ui/remotecontrol/ZeroconfService.hxx:32
     sd::ZeroconfService port uint
 sd/source/ui/slidesorter/view/SlsLayouter.cxx:62
     sd::slidesorter::view::Layouter::Implementation mpTheme std::shared_ptr<view::Theme>
-sd/source/ui/view/DocumentRenderer.cxx:1340
+sd/source/ui/view/DocumentRenderer.cxx:1334
     sd::DocumentRenderer::Implementation mxObjectShell SfxObjectShellRef
 sd/source/ui/view/viewshel.cxx:1166
     sd::(anonymous namespace)::KeepSlideSorterInSyncWithPageChanges m_aDrawLock sd::slidesorter::view::class SlideSorterView::DrawLock
@@ -378,7 +374,7 @@ sfx2/source/doc/doctempl.cxx:104
     DocTempl::(anonymous namespace)::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
 sfx2/source/inc/sfxpicklist.hxx:33
     SfxPickList mxImpl std::unique_ptr<SfxPickListImpl>
-sfx2/source/inc/templdgi.hxx:106
+sfx2/source/inc/templdgi.hxx:101
     SfxCommonTemplateDialog_Impl m_aStyleListUpdateFamily Link<void *, void>
 slideshow/source/engine/opengl/TransitionImpl.cxx:1987
     (anonymous namespace)::ThreeFloats x GLfloat
@@ -414,7 +410,7 @@ svl/source/crypto/cryptosign.cxx:269
     (anonymous namespace)::PKIStatusInfo failInfo SECItem
 svx/source/dialog/contimp.hxx:75
     SvxSuperContourDlg aContourItem class SvxContourDlgItem
-svx/source/dialog/weldeditview.cxx:459
+svx/source/dialog/weldeditview.cxx:456
     (anonymous namespace)::WeldEditSource m_rEditAcc class WeldEditAccessible &
 svx/source/inc/datanavi.hxx:190
     svxform::XFormsPage m_aDropHelper class svxform::DataTreeDropTarget
@@ -438,12 +434,18 @@ sw/source/uibase/inc/uivwimp.hxx:93
     SwView_Impl xTmpSelDocSh class SfxObjectShellLock
 sw/source/uibase/inc/unodispatch.hxx:45
     SwXDispatchProviderInterceptor::DispatchMutexLock_Impl aGuard class SolarMutexGuard
-toolkit/source/awt/stylesettings.cxx:94
+toolkit/source/awt/stylesettings.cxx:74
     toolkit::(anonymous namespace)::StyleMethodGuard m_aGuard class SolarMutexGuard
 unoidl/source/unoidlprovider.cxx:673
     unoidl::detail::(anonymous namespace)::UnoidlCursor reference1_ rtl::Reference<UnoidlProvider>
 unoidl/source/unoidlprovider.cxx:674
     unoidl::detail::(anonymous namespace)::UnoidlCursor reference2_ rtl::Reference<UnoidlModuleEntity>
+vcl/inc/pdf/pdfbuildin_fonts.hxx:32
+    vcl::pdf::BuildinFont m_nAscent const int
+vcl/inc/pdf/pdfbuildin_fonts.hxx:33
+    vcl::pdf::BuildinFont m_nDescent const int
+vcl/inc/pdf/pdfbuildin_fonts.hxx:40
+    vcl::pdf::BuildinFont m_aWidths const int [256]
 vcl/inc/qt5/Qt5AccessibleEventListener.hxx:34
     Qt5AccessibleEventListener m_xAccessible css::uno::Reference<css::accessibility::XAccessible>
 vcl/inc/qt5/Qt5AccessibleWidget.hxx:139
@@ -584,26 +586,10 @@ vcl/inc/qt5/Qt5Widget.hxx:40
     Qt5Widget m_nDeltaY int
 vcl/inc/salprn.hxx:45
     SalPrinterQueueInfo mpPortName std::unique_ptr<OUString>
-vcl/inc/WidgetThemeLibrary.hxx:100
-    vcl::ControlDrawParameters nSize uint32_t
-vcl/inc/WidgetThemeLibrary.hxx:101
-    vcl::ControlDrawParameters pCairo vcl::ControlDrawParameters::cairo_t *
-vcl/inc/WidgetThemeLibrary.hxx:102
-    vcl::ControlDrawParameters ePart enum ControlPart
-vcl/inc/WidgetThemeLibrary.hxx:103
-    vcl::ControlDrawParameters eState enum ControlState
-vcl/inc/WidgetThemeLibrary.hxx:119
-    vcl::WidgetThemeLibrary_t nSize uint32_t
 vcl/source/gdi/jobset.cxx:36
     (anonymous namespace)::ImplOldJobSetupData cDeviceName char [32]
 vcl/source/gdi/jobset.cxx:37
     (anonymous namespace)::ImplOldJobSetupData cPortName char [32]
-vcl/source/gdi/pdfbuildin_fonts.hxx:32
-    vcl::pdf::BuildinFont m_nAscent const int
-vcl/source/gdi/pdfbuildin_fonts.hxx:33
-    vcl::pdf::BuildinFont m_nDescent const int
-vcl/source/gdi/pdfbuildin_fonts.hxx:40
-    vcl::pdf::BuildinFont m_aWidths const int [256]
 vcl/source/uitest/uno/uitest_uno.cxx:35
     (anonymous namespace)::UITestUnoObj mpUITest std::unique_ptr<UITest>
 vcl/unx/gtk3/a11y/atkhypertext.cxx:31
