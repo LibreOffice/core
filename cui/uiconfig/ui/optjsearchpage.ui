@@ -123,7 +123,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="matchrepeatcharmarks">
-                <property name="label" translatable="yes" context="optjsearchpage|matchrepeatcharmarks">'re_peat character' marks</property>
+                <property name="label" translatable="yes" context="optjsearchpage|matchrepeatcharmarks">It_eration marks</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>

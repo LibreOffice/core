@@ -399,7 +399,7 @@
                     </items>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="adjustlb-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="asianphoneticguidedialog|extended_tip|adjustlb">Select the horizontal alignment for the Ruby text.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="asianphoneticguidedialog|extended_tip|adjustlb">Select the horizontal alignment for the ruby text.</property>
                       </object>
                     </child>
                   </object>

@@ -485,7 +485,7 @@
                   <object class="GtkLabel" id="lbCursor">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="tpviewpage|labelCursor">Cu_rsor:</property>
+                    <property name="label" translatable="yes" context="tpviewpage|labelCursor">Pointe_r:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">rbThemedCursor</property>
                     <property name="xalign">0</property>

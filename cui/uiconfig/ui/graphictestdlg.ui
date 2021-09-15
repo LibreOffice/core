@@ -50,7 +50,7 @@
           <object class="GtkLabel" id="gptest_label">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="tooltip-text" translatable="yes" context="graphictestdlg|gptest_label">Helps to determine the efficiency of LibreOffice's graphics rendering by running some tests under the hood and providing their results in the log.</property>
+            <property name="tooltip-text" translatable="yes" context="graphictestdlg|gptest_label">Helps to determine the efficiency of %PRODUCTNAME’s graphics rendering by running some tests under the hood and providing their results in the log.</property>
             <property name="margin-start">400</property>
             <property name="margin-top">10</property>
             <property name="label" translatable="yes" context="graphictestdlg|gptest_label">What's this?</property>
