@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fc98eb2_aba2b262",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003336
+      },
+      "writtenOn": "2021-09-15T11:10:46Z",
+      "side": 1,
+      "message": "Now it works properly, if it is written a connection string starting with a server name, connects to the server, if it is written a connection string starting with *file://*  it connects to a file (it is needed to remove one slash when you select the file with the browse button, it was a previous bug)",
+      "revId": "27efa1c900339b96a944eb5906d4941f3481e6ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
