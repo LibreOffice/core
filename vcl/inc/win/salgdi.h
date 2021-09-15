@@ -166,19 +166,21 @@ private:
     RGNDATA*                mpStdClipRgnData;   // Cache Standard-ClipRegion-Data
     int                     mnPenWidth;         // line width
 
+    // just call both from setHDC!
+    void InitGraphics();
+    void DeInitGraphics();
+
 public:
     HFONT ImplDoSetFont(FontSelectPattern const & i_rFont, const PhysicalFontFace * i_pFontFace, HFONT& o_rOldFont);
 
     HDC getHDC() const { return mhLocalDC; }
-    void setHDC(HDC aNew) { mhLocalDC = aNew; }
+    void setHDC(HDC aNew);
 
     HPALETTE getDefPal() const;
     void setDefPal(HPALETTE hDefPal);
 
     HRGN getRegion() const;
 
-    void InitGraphics();
-    void DeInitGraphics();
 
     enum Type
     {
