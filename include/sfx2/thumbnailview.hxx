@@ -193,7 +193,7 @@ public:
 
     virtual bool renameItem(ThumbnailViewItem* pItem, const OUString& sNewTitle);
 
-    virtual bool isDrawMnemonic() const { return mbDrawMnemonics; }
+    bool isDrawMnemonic() const { return mbDrawMnemonics; }
 
     void setItemMaxTextLength (sal_uInt32 nLength);
 
@@ -256,7 +256,7 @@ protected:
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
-    virtual css::uno::Reference<css::accessibility::XAccessible> getAccessible();
+    css::uno::Reference<css::accessibility::XAccessible> getAccessible();
 
 protected:
 
@@ -282,8 +282,8 @@ protected:
     void         ImplDeleteItems();
     size_t       ImplGetItem( const Point& rPoint ) const;
     ThumbnailViewItem*    ImplGetItem( size_t nPos );
-    virtual sal_uInt16 ImplGetVisibleItemCount() const;
-    virtual ThumbnailViewItem* ImplGetVisibleItem(sal_uInt16 nVisiblePos);
+    sal_uInt16 ImplGetVisibleItemCount() const;
+    ThumbnailViewItem* ImplGetVisibleItem(sal_uInt16 nVisiblePos);
     void         ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
     bool         ImplHasAccessibleListeners();
     DECL_LINK( ImplScrollHdl, weld::ScrolledWindow&, void );
