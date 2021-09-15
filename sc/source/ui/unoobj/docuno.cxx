@@ -1112,10 +1112,10 @@ void ScModelObj::getPostIts(tools::JsonWriter& rJsonWriter)
     std::vector<sc::NoteEntry> aNotes;
     rDoc.GetAllNoteEntries(aNotes);
 
-    auto commentsNode = rJsonWriter.startNode("comments");
+    auto commentsNode = rJsonWriter.startArray("comments");
     for (const sc::NoteEntry& aNote : aNotes)
     {
-        auto commentNode = rJsonWriter.startNode("");
+        auto commentNode = rJsonWriter.startStruct();
 
         rJsonWriter.put("id", aNote.mpNote->GetId());
         rJsonWriter.put("tab", aNote.maPos.Tab());
@@ -1154,10 +1154,10 @@ void ScModelObj::getPostItsPos(tools::JsonWriter& rJsonWriter)
     std::vector<sc::NoteEntry> aNotes;
     rDoc.GetAllNoteEntries(aNotes);
 
-    auto commentsNode = rJsonWriter.startNode("commentsPos");
+    auto commentsNode = rJsonWriter.startArray("commentsPos");
     for (const sc::NoteEntry& aNote : aNotes)
     {
-        auto commentNode = rJsonWriter.startNode("");
+        auto commentNode = rJsonWriter.startStruct();
 
         rJsonWriter.put("id", aNote.mpNote->GetId());
         rJsonWriter.put("tab", aNote.maPos.Tab());
