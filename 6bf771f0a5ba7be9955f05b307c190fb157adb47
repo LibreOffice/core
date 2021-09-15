@@ -16,6 +16,24 @@
       "message": "A nitpick: since you use just a pointer to an object here, it\u0027s enough to forward-declare the class, and that would avoid the requirement to parse the included header :)",
       "revId": "6bf771f0a5ba7be9955f05b307c190fb157adb47",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da0cf545_cc69a0f3",
+        "filename": "winaccessibility/inc/AccObjectWinManager.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2021-09-15T08:52:11Z",
+      "side": 1,
+      "message": "Thanks for the hint, https://gerrit.libreoffice.org/c/core/+/122132 does this now. (And I just realized the header had been included previously...)",
+      "parentUuid": "9579594f_8344c0ff",
+      "revId": "6bf771f0a5ba7be9955f05b307c190fb157adb47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
