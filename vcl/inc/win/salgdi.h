@@ -177,7 +177,7 @@ public:
     void setHDC(HDC aNew);
 
     HPALETTE getDefPal() const;
-    void setDefPal(HPALETTE hDefPal);
+    void setPalette(HPALETTE, BOOL bForceBkgd = TRUE);
 
     HRGN getRegion() const;
 
