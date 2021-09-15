@@ -4427,6 +4427,12 @@ namespace
 
     void set_label(GtkButton* pButton, const OUString& rText)
     {
+        // If the new text is empty and the button had no label set then keep
+        // it in that unset state, otherwise in gtk4 setting any label will set
+        // the css text-button property on buttons making e.g. the navigator
+        // up/down buttons wider than their original image-button state
+        if (rText.isEmpty() && !gtk_button_get_label(pButton))
+            return;
         gtk_button_set_label(pButton, MapToGtkAccelerator(rText).getStr());
     }
 
@@ -11268,7 +11274,7 @@ public:
 #else
         if (!GTK_IS_BUTTON(pItem))
             return;
-        gtk_button_set_label(GTK_BUTTON(pItem), MapToGtkAccelerator(rLabel).getStr());
+        ::set_label(GTK_BUTTON(pItem), rLabel);
 #endif
     }
 
@@ -11282,7 +11288,7 @@ public:
 #else
         if (!pItem || !GTK_IS_BUTTON(pItem))
             return;
-        gtk_button_set_label(GTK_BUTTON(pItem), MapToGtkAccelerator(rLabel).getStr());
+        ::set_label(GTK_BUTTON(pItem), rLabel);
 #endif
     }
 
