@@ -705,28 +705,37 @@ HPALETTE WinSalGraphics::getDefPal() const
     return mhDefPal;
 }
 
-void WinSalGraphics::setPalette(HPALETTE hNewPal, BOOL bForceBkgd)
+UINT WinSalGraphics::setPalette(HPALETTE hNewPal, BOOL bForceBkgd)
 {
+    UINT res = GDI_ERROR;
+
     if (!getHDC())
     {
         assert(!mhDefPal);
-        return;
+        return res;
     }
 
     if (hNewPal)
     {
         HPALETTE hOldPal = SelectPalette(getHDC(), hNewPal, bForceBkgd);
-        if (!mhDefPal)
-            mhDefPal = hOldPal;
+        if (hOldPal)
+        {
+            if (!mhDefPal)
+                mhDefPal = hOldPal;
+            res = RealizePalette(getHDC());
+        }
     }
     else
     {
+        res = 0;
         if (mhDefPal)
         {
             SelectPalette(getHDC(), mhDefPal, bForceBkgd);
             mhDefPal = nullptr;
         }
     }
+
+    return res;
 }
 
 HRGN WinSalGraphics::getRegion() const

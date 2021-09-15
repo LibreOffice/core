@@ -992,10 +992,7 @@ bool WinSalFrame::InitFrameGraphicsDC( WinSalGraphics *pGraphics, HDC hDC, HWND 
         return false;
 
     if ( pSalData->mhDitherPal )
-    {
         pGraphics->setPalette(pSalData->mhDitherPal);
-        RealizePalette( hDC );
-    }
 
     if ( pGraphics == mpThreadGraphics )
         pSalData->mnCacheDCInUse++;
@@ -4153,8 +4150,7 @@ static void ImplHandleForcePalette( HWND hWnd )
             WinSalGraphics* pGraphics = pFrame->mpLocalGraphics;
             if (pGraphics->getDefPal())
             {
-                pGraphics->setPalette(hPal, FALSE);
-                if ( RealizePalette( pGraphics->getHDC() ) )
+                if (pGraphics->setPalette(hPal, FALSE) != GDI_ERROR)
                 {
                     InvalidateRect( hWnd, nullptr, FALSE );
                     UpdateWindow( hWnd );
@@ -4209,7 +4205,7 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
     WinSalGraphics*     pGraphics;
     HDC                 hDC;
     HPALETTE hOldPal = nullptr;
-    UINT                nCols;
+    UINT nCols = GDI_ERROR;
     bool                bUpdate;
 
     pSalData->mbInPalChange = true;
@@ -4241,15 +4237,16 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
     {
         hDC = GetDC(hWnd);
         hOldPal = SelectPalette(hDC, hPal, TRUE);
+        if (hOldPal)
+            nCols = RealizePalette(hDC);
     }
     else
     {
         hDC = pFrame->mpLocalGraphics->getHDC();
-        pFrame->mpLocalGraphics->setPalette(hPal);
+        nCols = pFrame->mpLocalGraphics->setPalette(hPal);
     }
 
-    nCols = RealizePalette( hDC );
-    bUpdate = nCols != 0;
+    bUpdate = nCols != 0 && nCols != GDI_ERROR;
 
     if ( !bStdDC )
     {
@@ -4264,22 +4261,20 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
     {
         pGraphics = pTempVD->getGraphics();
         if ( pGraphics->getDefPal() )
-        {
             pGraphics->setPalette(hPal);
-            RealizePalette( pGraphics->getHDC() );
-        }
         pTempVD = pTempVD->getNext();
     }
+
     pTempFrame = pSalData->mpFirstFrame;
     while ( pTempFrame )
     {
         if ( pTempFrame != pFrame )
         {
             pGraphics = pTempFrame->mpLocalGraphics;
-            if ( pGraphics && pGraphics->getHDC() && pGraphics->getDefPal() )
+            if (pGraphics && pGraphics->getDefPal())
             {
-                pGraphics->setPalette(hPal);
-                if ( RealizePalette( pGraphics->getHDC() ) )
+                UINT nRes = pGraphics->setPalette(hPal);
+                if (nRes != 0 && nRes != GDI_ERROR)
                     bUpdate = true;
             }
         }
@@ -4293,7 +4288,7 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
         while ( pTempFrame )
         {
             pGraphics = pTempFrame->mpLocalGraphics;
-            if ( pGraphics && pGraphics->getHDC() && pGraphics->getDefPal() )
+            if (pGraphics && pGraphics->getDefPal())
             {
                 InvalidateRect( pTempFrame->mhWnd, nullptr, FALSE );
                 UpdateWindow( pTempFrame->mhWnd );
