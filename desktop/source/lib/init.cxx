@@ -1070,19 +1070,13 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis,
                              int nType,
                              int nCharCode,
                              int nKeyCode);
-static void doc_setFreemiumDenyList(LibreOfficeKitDocument* pThis,
-                                    const char* freemiumDenyList);
+static void doc_setBlockedCommandList(LibreOfficeKitDocument* pThis,
+                                    const char* bolckedCommandList);
 
-static void doc_setFreemiumView(LibreOfficeKitDocument* pThis,
+static void doc_setBlockedCommandView(LibreOfficeKitDocument* pThis,
                                 int nViewId,
-                                bool isFreemium);
-
-static void doc_setRestrictedCommandList(LibreOfficeKitDocument* pThis,
-                                    const char* restrictedCommandList);
-
-static void doc_setRestrictedView(LibreOfficeKitDocument* pThis,
-                                int nViewId,
-                                bool isRestricted);
+                                const char* type,
+                                bool isBlocked);
 
 static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis,
                                             unsigned nWindowId,
@@ -1374,11 +1368,8 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->sendFormFieldEvent = doc_sendFormFieldEvent;
         m_pDocumentClass->renderSearchResult = doc_renderSearchResult;
 
-        m_pDocumentClass->setFreemiumDenyList = doc_setFreemiumDenyList;
-        m_pDocumentClass->setFreemiumView = doc_setFreemiumView;
-
-        m_pDocumentClass->setRestrictedCommandList = doc_setRestrictedCommandList;
-        m_pDocumentClass->setRestrictedView = doc_setRestrictedView;
+        m_pDocumentClass->setBlockedCommandList = doc_setBlockedCommandList;
+        m_pDocumentClass->setBlockedCommandView = doc_setBlockedCommandView;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -3657,26 +3648,16 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nChar
     }
 }
 
-static void doc_setFreemiumDenyList(LibreOfficeKitDocument* /*pThis*/, const char* freemiumDenyList)
+static void doc_setBlockedCommandList(LibreOfficeKitDocument* /*pThis*/, const char* bolckedCommandList)
 {
-    comphelper::LibreOfficeKit::setFreemiumDenyList(freemiumDenyList);
+    comphelper::LibreOfficeKit::setBlockedCommandList(bolckedCommandList);
 }
 
-static void doc_setFreemiumView(LibreOfficeKitDocument* /*pThis*/, int nViewId, bool isFreemium)
+static void doc_setBlockedCommandView(LibreOfficeKitDocument* /*pThis*/, int nViewId, const char* type, bool isBlocked)
 {
     SolarMutexGuard aGuard;
-    SfxLokHelper::setFreemiumView(nViewId, isFreemium);
-}
-
-static void doc_setRestrictedCommandList(LibreOfficeKitDocument* /*pThis*/, const char* restrictedCommandList)
-{
-    comphelper::LibreOfficeKit::setRestrictedCommandList(restrictedCommandList);
-}
-
-static void doc_setRestrictedView(LibreOfficeKitDocument* /*pThis*/, int nViewId, bool isRestricted)
-{
-    SolarMutexGuard aGuard;
-    SfxLokHelper::setRestrictedView(nViewId, isRestricted);
+    OUString aType(type, strlen(type), RTL_TEXTENCODING_UTF8);
+    SfxLokHelper::setBlockedCommandView(nViewId, aType, isBlocked);
 }
 
 static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis, unsigned nWindowId, int nType, const char* pText)

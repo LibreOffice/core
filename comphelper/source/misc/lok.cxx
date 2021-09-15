@@ -35,9 +35,9 @@ static bool g_bLocalRendering(false);
 
 static Compat g_eCompatFlags(Compat::none);
 
-static std::vector<OUString> g_vFreemiumDenyList;
+static std::unordered_set<OUString> g_vFreemiumDenyList;
 
-static std::vector<OUString> g_vRestrictedCommandList;
+static std::unordered_set<OUString> g_vRestrictedCommandList;
 
 namespace
 {
@@ -287,54 +287,60 @@ void statusIndicatorFinish()
         pStatusIndicatorCallback(pStatusIndicatorCallbackData, statusIndicatorCallbackType::Finish, 0, nullptr);
 }
 
-void setFreemiumDenyList(const char* freemiumDenyList)
+void setBlockedCommandList(const char* bolckedCommandList)
 {
-    if(!g_vFreemiumDenyList.empty())
-        return;
 
-    OUString DenyListString(freemiumDenyList, strlen(freemiumDenyList), RTL_TEXTENCODING_UTF8);
+    OUString BolckedListString(bolckedCommandList, strlen(bolckedCommandList), RTL_TEXTENCODING_UTF8);
 
-    OUString command = DenyListString.getToken(0, ' ');
-    for (size_t i = 1; !command.isEmpty(); i++)
+    OUString type = BolckedListString.getToken(0, '-');
+
+    if (type == "freemium")
     {
-        g_vFreemiumDenyList.emplace_back(command);
-        command = DenyListString.getToken(i, ' ');
+        if(!g_vFreemiumDenyList.empty())
+            return;
+        OUString commands = BolckedListString.getToken(1, '-');
+
+        OUString command = commands.getToken(0, ' ');
+        for (size_t i = 1; !command.isEmpty(); i++)
+        {
+            g_vFreemiumDenyList.emplace(command);
+            command = commands.getToken(i, ' ');
+        }
+    }
+    else
+    {
+        if(!g_vRestrictedCommandList.empty())
+            return;
+
+        OUString commands = BolckedListString.getToken(1, '-');
+
+        OUString command = commands.getToken(0, ' ');
+        for (size_t i = 1; !command.isEmpty(); i++)
+        {
+            g_vRestrictedCommandList.emplace(command);
+            command = commands.getToken(i, ' ');
+        }
     }
 }
 
-const std::vector<OUString>& getFreemiumDenyList()
+const std::unordered_set<OUString>& getFreemiumDenyList()
 {
     return g_vFreemiumDenyList;
 }
 
 bool isCommandFreemiumDenied(const OUString& command)
 {
-    return std::find(g_vFreemiumDenyList.begin(), g_vFreemiumDenyList.end(), command) != g_vFreemiumDenyList.end();
+    return g_vFreemiumDenyList.find(command) != g_vFreemiumDenyList.end();
 }
 
-void setRestrictedCommandList(const char* restrictedCommandList)
-{
-    if(!g_vRestrictedCommandList.empty())
-        return;
-
-    OUString RestrictedListString(restrictedCommandList, strlen(restrictedCommandList), RTL_TEXTENCODING_UTF8);
-
-    OUString command = RestrictedListString.getToken(0, ' ');
-    for (size_t i = 1; !command.isEmpty(); i++)
-    {
-        g_vRestrictedCommandList.emplace_back(command);
-        command = RestrictedListString.getToken(i, ' ');
-    }
-}
-
-const std::vector<OUString>& getRestrictedCommandList()
+const std::unordered_set<OUString>& getRestrictedCommandList()
 {
     return g_vRestrictedCommandList;
 }
 
 bool isRestrictedCommand(const OUString& command)
 {
-    return std::find(g_vRestrictedCommandList.begin(), g_vRestrictedCommandList.end(), command) != g_vRestrictedCommandList.end();
+    return g_vRestrictedCommandList.find(command) != g_vRestrictedCommandList.end();
 }
 
 } // namespace
