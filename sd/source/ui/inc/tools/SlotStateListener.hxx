@@ -39,7 +39,7 @@ typedef cppu::WeakComponentImplHelper<
     to be informed when the support for vertical writing changes but it can
     be used to relay state changes of other slots as well.
 */
-class SlotStateListener
+class SlotStateListener final
     : protected MutexOwner,
       public SlotStateListenerInterfaceBase
 {
@@ -98,14 +98,13 @@ public:
     virtual void SAL_CALL
         disposing(const css::lang::EventObject& rEvent) override;
 
-protected:
+private:
     /** This method is called by the WeakComponentImplHelper base class in
         reaction to a XComponent::dispose() call.  It releases all currently
         active listeners.
     */
     virtual void SAL_CALL disposing() override;
 
-private:
     Link<const OUString&,void> maCallback;
 
     /** Remember the URLs that describe slots whose state changes we are

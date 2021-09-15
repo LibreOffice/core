@@ -39,7 +39,7 @@ class FramePainter;
 /** The insertion indicator is painted as a vertical or horizontal bar
     in the space between slides.
 */
-class InsertionIndicatorOverlay
+class InsertionIndicatorOverlay final
     : public ILayerPainter,
       public std::enable_shared_from_this<InsertionIndicatorOverlay>
 {

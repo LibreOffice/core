@@ -118,7 +118,7 @@ struct SearchSelection
     queried.  This is only sufficient for searching the outline view.
     </p>
 */
-class SdOutliner : public SdrOutliner
+class SdOutliner final : public SdrOutliner
 {
 public:
     friend class ::sd::outliner::OutlinerContainer;

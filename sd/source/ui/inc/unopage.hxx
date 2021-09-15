@@ -156,14 +156,13 @@ public:
 *                                                                      *
 ***********************************************************************/
 
-class SdDrawPage : public css::drawing::XMasterPageTarget,
+class SdDrawPage final : public css::drawing::XMasterPageTarget,
                    public css::presentation::XPresentationPage,
                    public SdGenericDrawPage
 {
 private:
     css::uno::Sequence< css::uno::Type > maTypeSequence;
 
-protected:
     virtual void setBackground( const css::uno::Any& rValue ) override;
     virtual void getBackground( css::uno::Any& rValue ) override;
 public:
@@ -218,12 +217,12 @@ public:
 *                                                                      *
 ***********************************************************************/
 
-class SdMasterPage : public css::presentation::XPresentationPage,
+class SdMasterPage final : public css::presentation::XPresentationPage,
                      public SdGenericDrawPage
 {
 private:
     css::uno::Sequence< css::uno::Type > maTypeSequence;
-protected:
+
     virtual void setBackground( const css::uno::Any& rValue ) override;
     virtual void getBackground( css::uno::Any& rValue ) override;
 

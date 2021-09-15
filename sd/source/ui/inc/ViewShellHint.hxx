@@ -26,7 +26,7 @@ namespace sd
 /** Local derivation of the SfxHint class that defines some hint ids that
     are used by the ViewShell class and its descendants.
 */
-class ViewShellHint : public SfxHint
+class ViewShellHint final : public SfxHint
 {
 public:
     enum HintId
