@@ -49,6 +49,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <boost/property_tree/json_parser.hpp>
+#include <tools/json_writer.hxx>
 
 #include <sfx2/app.hxx>
 #include <unoctitm.hxx>
@@ -635,6 +636,17 @@ void collectUIInformation(const util::URL& rURL, const css::uno::Sequence< css::
 }
 
 }
+void lcl_BlockCommand(const rtl::OUString& command, const rtl::OUString& kind)
+{
+    tools::JsonWriter aTree;
+    aTree.put("code", "");
+    aTree.put("kind", kind);
+    aTree.put("cmd", command);
+    aTree.put("message", "Blocked feature");
+    aTree.put("viewID", SfxViewShell::Current()->GetViewShellId().get());
+
+    SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_ERROR, aTree.extractData());
+}
 
 void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
         const css::uno::Sequence< css::beans::PropertyValue >& aArgs,
@@ -646,36 +658,18 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
     SolarMutexGuard aGuard;
 
     if (comphelper::LibreOfficeKit::isActive() &&
-        SfxViewShell::Current()->isFreemiumView() &&
-        comphelper::LibreOfficeKit::isCommandFreemiumDenied(aURL.Complete))
+        SfxViewShell::Current()->isRestrictedView() &&
+        comphelper::LibreOfficeKit::isRestrictedCommand(aURL.Complete))
     {
-        boost::property_tree::ptree aTree;
-        aTree.put("code", "");
-        aTree.put("kind", "freemiumdeny");
-        aTree.put("cmd", aURL.Complete);
-        aTree.put("message", "Blocked Freemium feature");
-        aTree.put("viewID", SfxViewShell::Current()->GetViewShellId().get());
-
-        std::stringstream aStream;
-        boost::property_tree::write_json(aStream, aTree);
-        SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_ERROR, aStream.str().c_str());
+        lcl_BlockCommand(aURL.Complete, "restricted");
         return;
     }
 
     if (comphelper::LibreOfficeKit::isActive() &&
-        SfxViewShell::Current()->isRestrictedView() &&
-        comphelper::LibreOfficeKit::isRestrictedCommand(aURL.Complete))
+        SfxViewShell::Current()->isFreemiumView() &&
+        comphelper::LibreOfficeKit::isCommandFreemiumDenied(aURL.Complete))
     {
-        boost::property_tree::ptree aTree;
-        aTree.put("code", "");
-        aTree.put("kind", "restricted");
-        aTree.put("cmd", aURL.Complete);
-        aTree.put("message", "Blocked restricted feature");
-        aTree.put("viewID", SfxViewShell::Current()->GetViewShellId().get());
-
-        std::stringstream aStream;
-        boost::property_tree::write_json(aStream, aTree);
-        SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_ERROR, aStream.str().c_str());
+        lcl_BlockCommand(aURL.Complete, "freemiumdeny");
         return;
     }
 
