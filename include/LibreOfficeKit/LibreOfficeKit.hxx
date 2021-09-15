@@ -787,24 +787,14 @@ public:
         mpDoc->pClass->sendFormFieldEvent(mpDoc, pArguments);
     }
 
-    void setFreemiumDenyList(const char* freemiumDenyList)
+    void setBlockedCommandList(const char* bolckedCommandList)
     {
-        mpDoc->pClass->setFreemiumDenyList(mpDoc, freemiumDenyList);
+        mpDoc->pClass->setBlockedCommandList(mpDoc, bolckedCommandList);
     }
 
-    void setFreemiumView(int nViewId, bool isFreemium)
+    void setBlockedCommandView(int nViewId, const char* type, bool isBlocked)
     {
-        mpDoc->pClass->setFreemiumView(mpDoc, nViewId, isFreemium);
-    }
-
-    void setRestrictedCommandList(const char* restrictedCommandList)
-    {
-        mpDoc->pClass->setRestrictedCommandList(mpDoc, restrictedCommandList);
-    }
-
-    void setRestrictedView(int nViewId, bool isRestricted)
-    {
-        mpDoc->pClass->setRestrictedView(mpDoc, nViewId, isRestricted);
+        mpDoc->pClass->setBlockedCommandView(mpDoc, nViewId, type, isBlocked);
     }
 
     /**
