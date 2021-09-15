@@ -1260,7 +1260,7 @@ void ElementDescriptor::readBullitinBoard( StyleBag * all_styles )
             }
         }
     }
-    for (rtl::Reference<ElementDescriptor> & p : all_elements)
+    for (const rtl::Reference<ElementDescriptor> & p : all_elements)
     {
         addSubElement( p );
     }

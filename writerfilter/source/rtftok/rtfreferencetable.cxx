@@ -20,7 +20,7 @@ RTFReferenceTable::~RTFReferenceTable() = default;
 
 void RTFReferenceTable::resolve(Table& rHandler)
 {
-    for (auto& rEntry : m_aEntries)
+    for (const auto& rEntry : m_aEntries)
         rHandler.entry(rEntry.first, rEntry.second);
 }
 

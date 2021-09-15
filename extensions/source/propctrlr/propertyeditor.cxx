@@ -79,7 +79,7 @@ namespace pcr
     void OPropertyEditor::CommitModified()
     {
         // commit all of my pages, if necessary
-        for (auto& page : m_aShownPages)
+        for (const auto& page : m_aShownPages)
         {
             OBrowserPage* pPage = page.second.xPage.get();
             if (pPage && pPage->getListBox().IsModified() )
@@ -318,7 +318,7 @@ namespace pcr
 
     void OPropertyEditor::EnablePropertyControls( const OUString& rEntryName, sal_Int16 nControls, bool bEnable )
     {
-        for (auto& rPage : m_aShownPages)
+        for (const auto& rPage : m_aShownPages)
         {
             OBrowserPage* pPage = rPage.second.xPage.get();
             if (pPage)
@@ -328,7 +328,7 @@ namespace pcr
 
     void OPropertyEditor::EnablePropertyLine( const OUString& rEntryName, bool bEnable )
     {
-        for (auto& rPage : m_aShownPages)
+        for (const auto& rPage : m_aShownPages)
         {
             OBrowserPage* pPage = rPage.second.xPage.get();
             if (pPage)

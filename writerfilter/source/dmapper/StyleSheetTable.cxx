@@ -901,7 +901,7 @@ void StyleSheetTable::ApplyNumberingStyleNameToParaStyles()
         if ( !xParaStyles.is() )
             return;
 
-        for ( auto& pEntry : m_pImpl->m_aStyleSheetEntries )
+        for ( const auto& pEntry : m_pImpl->m_aStyleSheetEntries )
         {
             StyleSheetPropertyMap* pStyleSheetProperties = nullptr;
             if ( pEntry->nStyleTypeCode == STYLE_TYPE_PARA && (pStyleSheetProperties = pEntry->pProperties.get()) )
@@ -954,7 +954,7 @@ void StyleSheetTable::ReApplyInheritedOutlineLevelFromChapterNumbering()
         if (!xParaStyles.is())
             return;
 
-        for (auto& pEntry : m_pImpl->m_aStyleSheetEntries)
+        for (const auto& pEntry : m_pImpl->m_aStyleSheetEntries)
         {
             if (pEntry->nStyleTypeCode != STYLE_TYPE_PARA || pEntry->sBaseStyleIdentifier.isEmpty())
                 continue;

@@ -1296,7 +1296,7 @@ size_t ScCheckListMenuControl::initMembers(int nMaxMemberWidth)
 
         mpChecks->thaw();
 
-        for (auto& rRow : aExpandRows)
+        for (const auto& rRow : aExpandRows)
             mpChecks->expand_row(*rRow);
     }
 

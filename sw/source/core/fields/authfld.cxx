@@ -112,7 +112,7 @@ SwAuthEntry* SwAuthorityFieldType::AddField(const OUString& rFieldContents)
         pEntry->SetAuthorField( static_cast<ToxAuthorityField>(i),
                         rFieldContents.getToken( 0, TOX_STYLE_DELIMITER, nIdx ));
 
-    for (auto &rpTemp : m_DataArr)
+    for (const auto &rpTemp : m_DataArr)
     {
         if (*rpTemp == *pEntry)
         {

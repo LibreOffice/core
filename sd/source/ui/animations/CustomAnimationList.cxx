@@ -1015,7 +1015,7 @@ IMPL_LINK_NOARG(CustomAnimationList, PostCollapseHdl, void*, void)
     mxTreeView->unselect_all();
 
     // Restore selection state for entries which are still visible
-    for (auto &pEntry : lastSelectedEntries)
+    for (const auto &pEntry : lastSelectedEntries)
     {
         if (weld::IsEntryVisible(*mxTreeView, *pEntry))
             mxTreeView->select(*pEntry);

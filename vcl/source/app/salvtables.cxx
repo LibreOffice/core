@@ -1126,7 +1126,7 @@ IMPL_LINK(SalInstanceToolbar, MenuToggleListener, VclWindowEvent&, rEvent, void)
 {
     if (rEvent.GetId() == VclEventId::WindowEndPopupMode)
     {
-        for (auto& rFloat : m_aFloats)
+        for (const auto& rFloat : m_aFloats)
         {
             if (rEvent.GetWindow() == rFloat.second)
             {

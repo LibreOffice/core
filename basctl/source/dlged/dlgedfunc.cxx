@@ -41,7 +41,7 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
 
     vcl::Window& rWindow  = rParent.GetWindow();
 
-    static Point aDefPoint;
+    static const Point aDefPoint;
     tools::Rectangle aOutRect( aDefPoint, rWindow.GetOutputSizePixel() );
     aOutRect = rWindow.PixelToLogic( aOutRect );
 

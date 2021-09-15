@@ -2409,7 +2409,7 @@ void EffectSequenceHelper::updateTextGroups()
     maGroupMap.clear();
 
     // first create all the groups
-    for( CustomAnimationEffectPtr& pEffect : maEffects )
+    for( const CustomAnimationEffectPtr& pEffect : maEffects )
     {
         const sal_Int32 nGroupId = pEffect->getGroupId();
 

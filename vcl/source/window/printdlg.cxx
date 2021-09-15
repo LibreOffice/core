@@ -379,7 +379,7 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
     // gets really bad for FormControls starting by a scale factor
     // smaller than 0.2 - that makes the ClipRegion overlap start.
     // So - for now - try not to go below that.
-    static double fMinimumScale(0.2);
+    static const double fMinimumScale(0.2);
     double fFactor(0.0);
     if(fScale < fMinimumScale)
     {
@@ -395,7 +395,7 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
         // necessary, also empirically estimated to
         // avoid the quality from collapsing (using a direct
         // in-between , ceil'd result)
-        static double fMaximumQualitySquare(1396221.0);
+        static const double fMaximumQualitySquare(1396221.0);
 
         if(fNewNeededPixels > fMaximumQualitySquare)
         {

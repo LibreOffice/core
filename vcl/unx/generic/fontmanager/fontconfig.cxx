@@ -668,7 +668,7 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int>& o
                 if( eIndexRes == FcResultMatch && nEntryId != -1 )
                 {
                     int nCollectionEntry = GetCollectionIndex(nEntryId);
-                    for (auto & font : aFonts)
+                    for (const auto & font : aFonts)
                     {
                         if( font.m_nCollectionEntry == nCollectionEntry )
                         {

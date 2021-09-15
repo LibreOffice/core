@@ -142,7 +142,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler >
     try
     {
         rtl::Reference<sax_fastparser::FastAttributeList> xFastList = new sax_fastparser::FastAttributeList(nullptr);
-        for (auto& aIter : aTmpAttrList)
+        for (const auto& aIter : aTmpAttrList)
             xFastList->add(aIter.first, aIter.second);
 
         Any aAny;

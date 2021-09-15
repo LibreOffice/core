@@ -152,7 +152,7 @@ DefItems::DefItems()
 
 DefItems::~DefItems()
 {
-    for (auto& rItem : mvDefItems)
+    for (const auto& rItem : mvDefItems)
         delete rItem;
 }
 

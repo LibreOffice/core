@@ -2204,7 +2204,7 @@ sal_Int32 CustomAnimationPane::fillAnimationLB( bool bHasText )
         mxLBAnimation->set_text_emphasis(mnFreeformPathPos, false, 0);
     }
 
-    for (PresetCategoryPtr& pCategory : rCategoryList)
+    for (const PresetCategoryPtr& pCategory : rCategoryList)
     {
         if( pCategory )
         {
@@ -2215,7 +2215,7 @@ sal_Int32 CustomAnimationPane::fillAnimationLB( bool bHasText )
             std::vector< CustomAnimationPresetPtr > aSortedVector =
                 pCategory->maEffects;
 
-            for( CustomAnimationPresetPtr& pDescriptor : aSortedVector )
+            for( const CustomAnimationPresetPtr& pDescriptor : aSortedVector )
             {
                 // ( !isTextOnly || ( isTextOnly && bHasText ) ) <=> !isTextOnly || bHasText
                 if( pDescriptor && ( !pDescriptor->isTextOnly() || bHasText ) )

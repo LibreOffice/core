@@ -248,7 +248,7 @@ DataPointItemConverter::DataPointItemConverter(
     uno::Reference<beans::XPropertySet> xSeriesProp(xSeries, uno::UNO_QUERY);
     uno::Sequence<sal_Int32> deletedLegendEntriesSeq;
     xSeriesProp->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq;
-    for (auto& deletedLegendEntry : deletedLegendEntriesSeq)
+    for (const auto& deletedLegendEntry : std::as_const(deletedLegendEntriesSeq))
     {
         if (nPointIndex == deletedLegendEntry)
         {
@@ -573,7 +573,7 @@ bool DataPointItemConverter::ApplySpecialItem(
                 Reference<beans::XPropertySet> xSeriesProp(m_xSeries, uno::UNO_QUERY);
                 xSeriesProp->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq;
                 std::vector<sal_Int32> deletedLegendEntries;
-                for (auto& deletedLegendEntry : deletedLegendEntriesSeq)
+                for (const auto& deletedLegendEntry : std::as_const(deletedLegendEntriesSeq))
                 {
                     if (bHideLegendEntry || m_nPointIndex != deletedLegendEntry)
                         deletedLegendEntries.push_back(deletedLegendEntry);

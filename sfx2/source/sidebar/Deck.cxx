@@ -138,7 +138,7 @@ void Deck::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         rJsonWriter.put("visible", false);
 
     auto childrenNode = rJsonWriter.startArray("children");
-    for (auto &it : maPanels)
+    for (const auto &it : maPanels)
     {
         // collapse the panel itself out
         auto xContent = it->GetContents();

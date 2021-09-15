@@ -4461,7 +4461,7 @@ bool PDFWriterImpl::emitAnnotations()
 
 bool PDFWriterImpl::emitEmbeddedFiles()
 {
-    for (auto& rEmbeddedFile : m_aEmbeddedFiles)
+    for (const auto& rEmbeddedFile : m_aEmbeddedFiles)
     {
         if (!updateObject(rEmbeddedFile.m_nObject))
             continue;

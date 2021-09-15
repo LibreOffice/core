@@ -2713,7 +2713,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
             for( sal_Int32 nIdx=0; nIdx<aCategoryNames.getLength(); ++nIdx )
             {
                 bool deletedLegendEntry = false;
-                for (auto& deletedLegendEntryIdx : deletedLegendEntries)
+                for (const auto& deletedLegendEntryIdx : std::as_const(deletedLegendEntries))
                 {
                     if (nIdx == deletedLegendEntryIdx)
                     {

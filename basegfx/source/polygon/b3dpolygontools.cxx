@@ -199,7 +199,7 @@ namespace basegfx::utils
             // we want to create a maximum of fNumberOfAllowedSnippets. In 3D
             // use less for fNumberOfAllowedSnippets, ca. 6553.6, double due to line & gap.
             // Less in 3D due to potentially blowing up to rounded line segments.
-            static double fNumberOfAllowedSnippets(6553.5 * 2.0);
+            static const double fNumberOfAllowedSnippets(6553.5 * 2.0);
             const double fAllowedLength((fNumberOfAllowedSnippets * fDotDashLength) / double(rDotDashArray.size()));
             const double fCandidateLength(basegfx::utils::getLength(rCandidate));
             std::vector<double> aDotDashArray(rDotDashArray);

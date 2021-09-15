@@ -415,7 +415,7 @@ void SAL_CALL PresenterToolBar::disposing()
     for (const auto& rxPart : maElementContainer)
     {
         OSL_ASSERT(rxPart != nullptr);
-        for (rtl::Reference<Element>& pElement : *rxPart)
+        for (const rtl::Reference<Element>& pElement : *rxPart)
         {
             if (pElement)
             {

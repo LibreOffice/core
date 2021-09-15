@@ -3284,7 +3284,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                 }
                 if (bUpright)
                 {
-                    for (auto& aProp : aGrabBag)
+                    for (const auto& aProp : std::as_const(aGrabBag))
                     {
                         if (aProp.Name == "nShapeRotationAtImport")
                             aProp.Value >>= nOldShapeRotation;

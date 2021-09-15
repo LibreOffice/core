@@ -641,7 +641,7 @@ void ShapeGroupContext::popGroupAndPostProcess()
         uno::Sequence<sal_Int32> aNewOrder(maZOrderList.size() + maUnsortedList.size());
         sal_Int32 nIndex = 0;
 
-        for (ZOrderHint& rHint : maZOrderList)
+        for (const ZOrderHint& rHint : maZOrderList)
         {
             // fill in the gaps from unordered list
             for (vector<ZOrderHint>::iterator aIt = maUnsortedList.begin(); aIt != maUnsortedList.end() && nIndex < rHint.nShould; )
