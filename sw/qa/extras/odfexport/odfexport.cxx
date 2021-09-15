@@ -132,6 +132,23 @@ DECLARE_ODFEXPORT_TEST(testMathObjectFlatExport, "2_MathType3.docx")
     CPPUNIT_ASSERT_EQUAL(OUString(" size 12{2+2=4} {}"), formula2);
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf144319, "tdf144319.odt")
+{
+    OUString formula1(getFormula(getRun(getParagraph(3), 1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("{ x = frac { { - b +- sqrt { b ^ 2 - 4 a c } } } { { 2 a } } }"), formula1);
+    OUString formula2(getFormula(getRun(getParagraph(4), 1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("{ sum csup n csub { i = 1 } i ^ 3 = left ( frac { { n left ( { n + 1 } right ) } } { 2 } right ) ^ 2 }"), formula2);
+    OUString formula3(getFormula(getRun(getParagraph(5), 1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("{ sum ^ n _ { i = 1 } i ^ 3 = left ( frac { { n left ( { n + 1 } right ) } } { 2 } right ) ^ 2 }"), formula3);
+    OUString formula4(getFormula(getRun(getParagraph(6), 1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("{ sum ^ n _ { i = 1 } i ^ 3 = left ( frac { { n left ( { n + 1 } right ) } } { 2 } right ) ^ 2 }"), formula4);
+
+    // Without the fix in place, this test would have failed with
+    // - the property is of unexpected type or void: Model
+    OUString formula5(getFormula(getRun(getParagraph(7), 1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("{ y ^ 2 { nitalic m p } = left ( { x ^ 3 + 7 } right ) { nitalic m p } }"), formula5);
+}
+
 static void testTdf43569_CheckIfFieldParse()
 {
     {
