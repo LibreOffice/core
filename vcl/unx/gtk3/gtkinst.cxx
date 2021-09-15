@@ -17438,7 +17438,7 @@ private:
 //    GtkMenuButton* m_pOverlayButton; // button that the StyleDropdown uses on an active row
     GtkWidget* m_pMenuWindow;
     GtkTreeModel* m_pTreeModel;
-//    GtkCellRenderer* m_pButtonTextRenderer;
+    GtkCellRenderer* m_pButtonTextRenderer;
     GtkWidget* m_pEntry;
     GtkEditable* m_pEditable;
 //    GtkCellView* m_pCellView;
@@ -18480,7 +18480,7 @@ public:
 //        , m_pOverlayButton(GTK_MENU_BUTTON(gtk_builder_get_object(pComboBuilder, "overlaybutton")))
         , m_pMenuWindow(nullptr)
         , m_pTreeModel(gtk_combo_box_get_model(pComboBox))
-//        , m_pButtonTextRenderer(nullptr)
+        , m_pButtonTextRenderer(nullptr)
 //        , m_pToggleButton(GTK_WIDGET(gtk_builder_get_object(pComboBuilder, "button")))
         , m_pEntry(GTK_IS_ENTRY(gtk_combo_box_get_child(pComboBox)) ? gtk_combo_box_get_child(pComboBox) : nullptr)
         , m_pEditable(GTK_EDITABLE(m_pEntry))
@@ -18518,6 +18518,9 @@ public:
         }
         SAL_WARN_IF(!m_pMenuWindow, "vcl.gtk", "GtkInstanceComboBox: couldn't find popup menu");
 
+        bool bHasEntry = gtk_combo_box_get_has_entry(m_pComboBox);
+
+        bool bFindButtonTextRenderer = !bHasEntry;
         GtkCellLayout* pCellLayout = GTK_CELL_LAYOUT(m_pComboBox);
         GList* cells = gtk_cell_layout_get_cells(pCellLayout);
         guint i = g_list_length(cells) - 1;;
@@ -18526,9 +18529,14 @@ public:
         {
             GtkCellRenderer* pCellRenderer = GTK_CELL_RENDERER(pRenderer->data);
             gtk_cell_layout_reorder(pCellLayout, pCellRenderer, i--);
+            if (bFindButtonTextRenderer)
+            {
+                m_pButtonTextRenderer = pCellRenderer;
+                bFindButtonTextRenderer = false;
+            }
         }
 
-        if (gtk_combo_box_get_has_entry(m_pComboBox))
+        if (bHasEntry)
         {
             m_bAutoComplete = true;
             m_nEntryInsertTextSignalId = g_signal_connect(m_pEditable, "insert-text", G_CALLBACK(signalEntryInsertText), this);
@@ -18610,7 +18618,6 @@ public:
 
     virtual void set_size_request(int nWidth, int nHeight) override
     {
-#if 0
         if (m_pButtonTextRenderer)
         {
             // tweak the cell render to get a narrower size to stick
@@ -18642,7 +18649,6 @@ public:
                 gtk_cell_renderer_set_fixed_size(m_pButtonTextRenderer, -1, -1);
             }
         }
-#endif
 
         gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
     }
