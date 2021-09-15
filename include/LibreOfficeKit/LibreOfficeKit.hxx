@@ -790,24 +790,14 @@ public:
         mpDoc->pClass->sendFormFieldEvent(mpDoc, pArguments);
     }
 
-    void setFreemiumDenyList(const char* freemiumDenyList)
+    void setBlockedCommandList(const char* bolckedCommandList)
     {
-        mpDoc->pClass->setFreemiumDenyList(freemiumDenyList);
+        mpDoc->pClass->setBlockedCommandList(mpDoc, bolckedCommandList);
     }
 
-    void setFreemiumView(int nViewId, bool isFreemium)
+    void setBlockedCommandView(int nViewId, const char* type, bool isBlocked)
     {
-        mpDoc->pClass->setFreemiumView(nViewId, isFreemium);
-    }
-
-    void setRestrictedCommandList(const char* restrictedCommandList)
-    {
-        mpDoc->pClass->setRestrictedCommandList(mpDoc, restrictedCommandList);
-    }
-
-    void setRestrictedView(int nViewId, bool isRestricted)
-    {
-        mpDoc->pClass->setRestrictedView(mpDoc, nViewId, isRestricted);
+        mpDoc->pClass->setBlockedCommandView(mpDoc, nViewId, type, isBlocked);
     }
 
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
