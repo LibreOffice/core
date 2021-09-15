@@ -373,6 +373,8 @@ bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
                 mpAlphaVDev->SetFillColor( COL_BLACK );
 
             mpAlphaVDev->SetMapMode( GetMapMode() );
+
+            mpAlphaVDev->SetAntialiasing( GetAntialiasing() );
         }
 
         return true;
