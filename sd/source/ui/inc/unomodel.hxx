@@ -61,7 +61,7 @@ class DrawViewShell;
 extern OUString getPageApiName( SdPage const * pPage );
 extern OUString getPageApiNameFromUiName( const OUString& rUIName );
 
-class SD_DLLPUBLIC SdXImpressDocument : public SfxBaseModel, // implements SfxListener, OWEAKOBJECT & other
+class SD_DLLPUBLIC SdXImpressDocument final : public SfxBaseModel, // implements SfxListener, OWEAKOBJECT & other
                            public SvxFmMSFactory,
                            public css::drawing::XDrawPageDuplicator,
                            public css::drawing::XLayerSupplier,
@@ -121,7 +121,6 @@ private:
 
     sd::DrawViewShell* GetViewShell();
 
-protected:
     /** abstract SdrModel provider */
     virtual SdrModel& getSdrModelFromUnoModel() const override;
 
@@ -292,7 +291,7 @@ public:
 *                                                                      *
 ***********************************************************************/
 
-class SdDrawPagesAccess : public ::cppu::WeakImplHelper< css::drawing::XDrawPages, css::container::XNameAccess, css::lang::XServiceInfo, css::lang::XComponent >
+class SdDrawPagesAccess final : public ::cppu::WeakImplHelper< css::drawing::XDrawPages, css::container::XNameAccess, css::lang::XServiceInfo, css::lang::XComponent >
 {
 private:
     SdXImpressDocument* mpModel;
@@ -333,7 +332,7 @@ public:
 *                                                                      *
 ***********************************************************************/
 
-class SdMasterPagesAccess : public ::cppu::WeakImplHelper< css::drawing::XDrawPages, css::lang::XServiceInfo, css::lang::XComponent >
+class SdMasterPagesAccess final : public ::cppu::WeakImplHelper< css::drawing::XDrawPages, css::lang::XServiceInfo, css::lang::XComponent >
 {
 private:
     SdXImpressDocument* mpModel;

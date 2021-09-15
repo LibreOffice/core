@@ -33,7 +33,7 @@ namespace sd::slidesorter::controller {
 /** Represent previews and other information so that they can be
     attached to an existing transferable.
 */
-class TransferableData
+class TransferableData final
     : public SdTransferable::UserData,
       public SfxListener
 {

@@ -40,7 +40,7 @@ class LayeredDevice;
 class PageObjectPainter;
 class ToolTip;
 
-class SlideSorterView
+class SlideSorterView final
     : public sd::View
 {
 public:

@@ -43,7 +43,7 @@ namespace sd
 {
 typedef std::vector<rtl::Reference<SmartTag>> ViewTagVector;
 
-class ViewOverlayManager : public SfxListener
+class ViewOverlayManager final : public SfxListener
 {
 public:
     ViewOverlayManager(ViewShellBase& rViewShellBase);

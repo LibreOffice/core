@@ -36,7 +36,7 @@ class SlideSorterModel;
         The PageEnumerationProvider has methods for creating different types
         of page enumerations.
 */
-class PageEnumeration : public Enumeration<SharedPageDescriptor>
+class PageEnumeration final : public Enumeration<SharedPageDescriptor>
 {
 public:
     /** Create a new page enumeration that enumerates a subset of the pages

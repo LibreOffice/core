@@ -34,7 +34,7 @@ namespace sd
     This cache acts like a singleton with a lifetime equal to that of the sd
     module.
 */
-class IconCache : public SdGlobalResource
+class IconCache final : public SdGlobalResource
 {
 public:
     /** The lifetime of the returned reference is limited to that of the sd

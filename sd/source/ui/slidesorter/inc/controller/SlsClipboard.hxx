@@ -49,7 +49,7 @@ namespace sd::slidesorter::controller {
 
 class SlideSorterController;
 
-class SAL_DLLPUBLIC_RTTI Clipboard
+class SAL_DLLPUBLIC_RTTI Clipboard final
     : public ViewClipboard
 {
 public:
@@ -94,10 +94,9 @@ public:
 
     void Abort();
 
-protected:
+private:
     virtual sal_uInt16 DetermineInsertPosition () override;
 
-private:
     SlideSorter& mrSlideSorter;
     SlideSorterController& mrController;
 
