@@ -105,6 +105,46 @@
       "parentUuid": "b2a901b1_ef8ab10e",
       "revId": "27efa1c900339b96a944eb5906d4941f3481e6ca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55b2bdd8_47d49138",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-09-15T18:14:41Z",
+      "side": 1,
+      "message": "\"External\" seems be a good idea since corresponds to the opposite of \"Embedded\".\nnitpick: I just noticed a comment to change in code + patch comment to update.\n\nI\u0027m adding Robert since, even if he doesn\u0027t code (or at least I don\u0027t think so :-)), he\u0027s knows very well databases and he\u0027s an expert for testing them. So he may have great advice here.",
+      "revId": "27efa1c900339b96a944eb5906d4941f3481e6ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3328bc12_d0002700",
+        "filename": "connectivity/registry/firebird/org/openoffice/Office/DataAccess/Drivers.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-09-15T18:14:41Z",
+      "side": 1,
+      "message": "Should be \"EXTERNAL\" too",
+      "range": {
+        "startLine": 80,
+        "startChar": 18,
+        "endLine": 80,
+        "endChar": 22
+      },
+      "revId": "27efa1c900339b96a944eb5906d4941f3481e6ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
