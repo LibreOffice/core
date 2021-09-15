@@ -129,7 +129,7 @@ std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphi
 
     if ( pSalData->mhDitherPal && pVirGraphics->isScreen() )
     {
-        pVirGraphics->setDefPal(SelectPalette( hDC, pSalData->mhDitherPal, TRUE ));
+        pVirGraphics->setPalette(pSalData->mhDitherPal);
         RealizePalette( hDC );
     }
 
@@ -173,8 +173,6 @@ WinSalVirtualDevice::~WinSalVirtualDevice()
     // restores the graphics DC, so a !mbForeignDC can be deleted
     mpGraphics->setHDC(nullptr);
 
-    if( mpGraphics->getDefPal() )
-        SelectPalette(hDC, mpGraphics->getDefPal(), TRUE);
     if( mhDefBmp )
         SelectBitmap(hDC, mhDefBmp);
     if( !mbForeignDC )
