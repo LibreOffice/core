@@ -10966,6 +10966,8 @@ private:
         gtk_tool_button_set_icon_widget(pItem, pImage);
 #else
         gtk_button_set_child(pItem, pImage);
+        // versions of gtk4 > 4.2.1 might do this on their own
+        gtk_widget_remove_css_class(GTK_WIDGET(pItem), "text-button");
 #endif
     }
 
@@ -10987,6 +10989,8 @@ private:
         gtk_tool_button_set_icon_widget(pItem, pImage);
 #else
         gtk_button_set_child(pItem, pImage);
+        // versions of gtk4 > 4.2.1 might do this on their own
+        gtk_widget_remove_css_class(GTK_WIDGET(pItem), "text-button");
 #endif
         gtk_widget_queue_draw(GTK_WIDGET(m_pToolbar));
     }
@@ -11320,6 +11324,8 @@ public:
         gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(pItem), pImage);
 #else
         gtk_button_set_child(GTK_BUTTON(pItem), pImage);
+        // versions of gtk4 > 4.2.1 might do this on their own
+        gtk_widget_remove_css_class(GTK_WIDGET(pItem), "text-button");
 #endif
     }
 
