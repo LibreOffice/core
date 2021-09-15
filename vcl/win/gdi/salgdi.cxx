@@ -495,6 +495,7 @@ void WinSalGraphics::DeInitGraphics()
         SelectFont( getHDC(), mhDefFont );
         mhDefFont = nullptr;
     }
+    setPalette(nullptr);
 
     mpImpl->DeInit();
 }
@@ -700,12 +701,32 @@ void WinSalGraphics::setHWND(HWND hWnd)
 
 HPALETTE WinSalGraphics::getDefPal() const
 {
+    assert(getHDC() || !mhDefPal);
     return mhDefPal;
 }
 
-void WinSalGraphics::setDefPal(HPALETTE hDefPal)
+void WinSalGraphics::setPalette(HPALETTE hNewPal, BOOL bForceBkgd)
 {
-    mhDefPal = hDefPal;
+    if (!getHDC())
+    {
+        assert(!mhDefPal);
+        return;
+    }
+
+    if (hNewPal)
+    {
+        HPALETTE hOldPal = SelectPalette(getHDC(), hNewPal, bForceBkgd);
+        if (!mhDefPal)
+            mhDefPal = hOldPal;
+    }
+    else
+    {
+        if (mhDefPal)
+        {
+            SelectPalette(getHDC(), mhDefPal, bForceBkgd);
+            mhDefPal = nullptr;
+        }
+    }
 }
 
 HRGN WinSalGraphics::getRegion() const

@@ -913,8 +913,6 @@ bool WinSalFrame::ReleaseFrameGraphicsDC( WinSalGraphics* pGraphics )
     HDC hDC = pGraphics->getHDC();
     if ( !hDC )
         return false;
-    if ( pGraphics->getDefPal() )
-        SelectPalette( hDC, pGraphics->getDefPal(), TRUE );
     pGraphics->setHDC(nullptr);
     SendMessageW( pSalData->mpInstance->mhComWnd, SAL_MSG_RELEASEDC,
         reinterpret_cast<WPARAM>(mhWnd), reinterpret_cast<LPARAM>(hDC) );
@@ -995,7 +993,7 @@ bool WinSalFrame::InitFrameGraphicsDC( WinSalGraphics *pGraphics, HDC hDC, HWND 
 
     if ( pSalData->mhDitherPal )
     {
-        pGraphics->setDefPal(SelectPalette( hDC, pSalData->mhDitherPal, TRUE ));
+        pGraphics->setPalette(pSalData->mhDitherPal);
         RealizePalette( hDC );
     }
 
@@ -4155,7 +4153,7 @@ static void ImplHandleForcePalette( HWND hWnd )
             WinSalGraphics* pGraphics = pFrame->mpLocalGraphics;
             if (pGraphics->getDefPal())
             {
-                SelectPalette( pGraphics->getHDC(), hPal, FALSE );
+                pGraphics->setPalette(hPal, FALSE);
                 if ( RealizePalette( pGraphics->getHDC() ) )
                 {
                     InvalidateRect( hWnd, nullptr, FALSE );
@@ -4210,9 +4208,8 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
     WinSalFrame*        pTempFrame;
     WinSalGraphics*     pGraphics;
     HDC                 hDC;
-    HPALETTE            hOldPal;
+    HPALETTE hOldPal = nullptr;
     UINT                nCols;
-    bool                bStdDC;
     bool                bUpdate;
 
     pSalData->mbInPalChange = true;
@@ -4222,24 +4219,14 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
     while ( pTempVD )
     {
         pGraphics = pTempVD->getGraphics();
-        if ( pGraphics->getDefPal() )
-        {
-            SelectPalette( pGraphics->getHDC(),
-                           pGraphics->getDefPal(),
-                           TRUE );
-        }
+        pGraphics->setPalette(nullptr);
         pTempVD = pTempVD->getNext();
     }
     pTempFrame = pSalData->mpFirstFrame;
     while ( pTempFrame )
     {
         pGraphics = pTempFrame->mpLocalGraphics;
-        if ( pGraphics && pGraphics->getHDC() && pGraphics->getDefPal() )
-        {
-            SelectPalette( pGraphics->getHDC(),
-                           pGraphics->getDefPal(),
-                           TRUE );
-        }
+        pGraphics->setPalette(nullptr);
         pTempFrame = pTempFrame->mpNextFrame;
     }
 
@@ -4247,23 +4234,27 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
     WinSalFrame* pFrame = nullptr;
     if ( bFrame )
         pFrame = GetWindowPtr( hWnd );
-    if ( pFrame && pFrame->mpLocalGraphics && pFrame->mpLocalGraphics->getHDC() )
+
+    UnrealizeObject(hPal);
+    const bool bStdDC = pFrame && pFrame->mpLocalGraphics && pFrame->mpLocalGraphics->getHDC();
+    if (!bStdDC)
     {
-        hDC = pFrame->mpLocalGraphics->getHDC();
-        bStdDC = true;
+        hDC = GetDC(hWnd);
+        hOldPal = SelectPalette(hDC, hPal, TRUE);
     }
     else
     {
-        hDC = GetDC( hWnd );
-        bStdDC = false;
+        hDC = pFrame->mpLocalGraphics->getHDC();
+        pFrame->mpLocalGraphics->setPalette(hPal);
     }
-    UnrealizeObject( hPal );
-    hOldPal = SelectPalette( hDC, hPal, TRUE );
+
     nCols = RealizePalette( hDC );
     bUpdate = nCols != 0;
+
     if ( !bStdDC )
     {
-        SelectPalette( hDC, hOldPal, TRUE );
+        if (hOldPal)
+            SelectPalette(hDC, hOldPal, TRUE);
         ReleaseDC( hWnd, hDC );
     }
 
@@ -4274,7 +4265,7 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
         pGraphics = pTempVD->getGraphics();
         if ( pGraphics->getDefPal() )
         {
-            SelectPalette( pGraphics->getHDC(), hPal, TRUE );
+            pGraphics->setPalette(hPal);
             RealizePalette( pGraphics->getHDC() );
         }
         pTempVD = pTempVD->getNext();
@@ -4287,7 +4278,7 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
             pGraphics = pTempFrame->mpLocalGraphics;
             if ( pGraphics && pGraphics->getHDC() && pGraphics->getDefPal() )
             {
-                SelectPalette( pGraphics->getHDC(), hPal, TRUE );
+                pGraphics->setPalette(hPal);
                 if ( RealizePalette( pGraphics->getHDC() ) )
                     bUpdate = true;
             }
