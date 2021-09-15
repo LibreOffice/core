@@ -2590,6 +2590,12 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="DisableBuiltinStyles" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Determines whether to skip addition of built-in styles to the document model.</desc>
+        </info>
+        <value>false</value>
+      </prop>
     </group>
     <group oor:name="Security">
       <info>
