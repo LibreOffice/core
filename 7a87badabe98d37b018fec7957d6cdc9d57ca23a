@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f3ec721_ac254d25",
+        "filename": "sw/source/uibase/utlui/glbltree.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-09-15T07:06:12Z",
+      "side": 1,
+      "message": "This works well for mouse clicks. But when I search as reported on BZ the selection is not updated. If you don\u0027t have an idea it\u0027s a huge step forward anyway.",
+      "range": {
+        "startLine": 791,
+        "startChar": 63,
+        "endLine": 791,
+        "endChar": 77
+      },
+      "revId": "7a87badabe98d37b018fec7957d6cdc9d57ca23a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
