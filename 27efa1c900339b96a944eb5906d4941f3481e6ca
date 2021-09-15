@@ -33,6 +33,42 @@
       "message": "You\u0027ve just replaced \"Firebird File\" by \"Firebird Server\" and added a password subentry.\nEither, \"Firebird Server\" should be a new entry or perhaps it should be renamed \"Firebird Server/File\".\nNow I\u0027m not a Firebird expert.",
       "revId": "27efa1c900339b96a944eb5906d4941f3481e6ca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79049357_8ea6794e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003336
+      },
+      "writtenOn": "2021-09-15T11:43:39Z",
+      "side": 1,
+      "message": "It is needed to remove a slash only in windows systems",
+      "parentUuid": "2fc98eb2_aba2b262",
+      "revId": "27efa1c900339b96a944eb5906d4941f3481e6ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59eb08f5_75260920",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003336
+      },
+      "writtenOn": "2021-09-15T11:43:39Z",
+      "side": 1,
+      "message": "Yes, that\u0027s right. I\u0027ve just follow instructions in patch. And its works.\nI agree it is needed a new option and a new specific page to connect to a server, but this is where I need mentoring.\nI was able to insert a new option but it doesn\u0027t work properly, a word was added to the connection string (see my first comment) and I\u0027m not able to discover where that word is added",
+      "parentUuid": "2e4b53c0_5d3eface",
+      "revId": "27efa1c900339b96a944eb5906d4941f3481e6ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
