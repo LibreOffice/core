@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "47708a70_f8ddb875",
+        "filename": "vcl/inc/PhysicalFontCollection.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-15T08:36:20Z",
+      "side": 1,
+      "message": "I\u0027ll fix.",
+      "parentUuid": "445e4c65_8d27718c",
+      "revId": "ca9011055daa206aa5a86ab202f87c115cb8acec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6815afd4_efdbc14d",
         "filename": "vcl/inc/font/PhysicalFontFaceCollection.hxx",
         "patchSetId": 16
@@ -48,6 +66,24 @@
       "writtenOn": "2021-09-15T05:41:07Z",
       "side": 1,
       "message": "Don\u0027t know how important this is, and I myself don\u0027t use vim, and have no idea what the codes stand for - but you obviously copy-paste the template from somewhere, not from the authoritative source, which is https://git.libreoffice.org/core/+/master/TEMPLATE.SOURCECODE.HEADER ;)",
+      "revId": "ca9011055daa206aa5a86ab202f87c115cb8acec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c756ce5_4b94029c",
+        "filename": "vcl/inc/font/PhysicalFontFaceCollection.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-15T08:36:20Z",
+      "side": 1,
+      "message": "I got it from the original file I took it from. I\u0027ll use the correct one.",
+      "parentUuid": "6815afd4_efdbc14d",
       "revId": "ca9011055daa206aa5a86ab202f87c115cb8acec",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
