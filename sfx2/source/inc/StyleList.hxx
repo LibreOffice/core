@@ -45,7 +45,7 @@ class TreeViewDropTarget;
 constexpr int MAX_FAMILIES = 6;
 constexpr int COUNT_BOUND_FUNC = 14;
 
-class StyleList : public SfxListener
+class StyleList final : public SfxListener
 {
     friend class TreeViewDropTarget;
     friend class SfxTemplateControllerItem;

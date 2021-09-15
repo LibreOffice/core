@@ -26,7 +26,8 @@
 
 typedef ::cppu::ImplHelper1<css::accessibility::XAccessibleValue> SVTXAccessibleNumericField_BASE;
 
-class SVTXAccessibleNumericField : public VCLXAccessibleEdit, public SVTXAccessibleNumericField_BASE
+class SVTXAccessibleNumericField final : public VCLXAccessibleEdit,
+                                         public SVTXAccessibleNumericField_BASE
 {
 public:
     SVTXAccessibleNumericField(VCLXWindow* pVCLXindow);

@@ -73,7 +73,7 @@ public:
 };
 
 
-class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
+class SM_DLLPUBLIC SmDocShell final : public SfxObjectShell, public SfxListener
 {
     friend class SmPrinterAccess;
     friend class SmCursor;

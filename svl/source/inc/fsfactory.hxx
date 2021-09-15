@@ -26,7 +26,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>
 
-class FSStorageFactory : public ::cppu::WeakImplHelper< css::lang::XSingleServiceFactory,
+class FSStorageFactory final : public ::cppu::WeakImplHelper< css::lang::XSingleServiceFactory,
                                                         css::lang::XServiceInfo >
 {
     css::uno::Reference< css::uno::XComponentContext > m_xContext;

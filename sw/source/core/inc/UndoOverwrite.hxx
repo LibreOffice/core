@@ -31,7 +31,7 @@ namespace utl {
     class TransliterationWrapper;
 }
 
-class SwUndoOverwrite: public SwUndo, private SwUndoSaveContent
+class SwUndoOverwrite final : public SwUndo, private SwUndoSaveContent
 {
     OUString m_aDelStr, m_aInsStr;
     std::unique_ptr<SwRedlineSaveDatas> m_pRedlSaveData;
@@ -66,7 +66,7 @@ public:
 };
 
 struct UndoTransliterate_Data;
-class SwUndoTransliterate : public SwUndo, public SwUndRng
+class SwUndoTransliterate final : public SwUndo, public SwUndRng
 {
     std::vector< std::unique_ptr<UndoTransliterate_Data> >    m_aChanges;
     TransliterationFlags m_nType;

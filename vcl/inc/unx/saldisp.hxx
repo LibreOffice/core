@@ -178,23 +178,23 @@ protected:
 
 public:
     SalXLib();
-    virtual         ~SalXLib();
-    virtual void    Init();
+    ~SalXLib();
+    void    Init();
 
-    virtual bool    Yield( bool bWait, bool bHandleAllCurrentEvents );
-    virtual void    Wakeup();
+    bool    Yield( bool bWait, bool bHandleAllCurrentEvents );
+    void    Wakeup();
     void            TriggerUserEventProcessing();
 
-    virtual void    Insert( int fd, void* data,
+    void    Insert( int fd, void* data,
                             YieldFunc   pending,
                             YieldFunc   queued,
                             YieldFunc   handle );
-    virtual void    Remove( int fd );
+    void    Remove( int fd );
 
-    virtual void    StartTimer( sal_uInt64 nMS );
-    virtual void    StopTimer();
+    void    StartTimer( sal_uInt64 nMS );
+    void    StopTimer();
 
-    virtual bool    CheckTimeout( bool bExecuteTimers = true );
+    bool    CheckTimeout( bool bExecuteTimers = true );
 
     SalI18N_InputMethod* GetInputMethod() const { return m_pInputMethod.get(); }
     Display*             GetDisplay() const { return m_pDisplay; }

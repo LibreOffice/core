@@ -11,7 +11,7 @@
 #include <editeng/fontitem.hxx>
 #include <unotools/lingucfg.hxx>
 
-class SmEditEngine : public EditEngine
+class SmEditEngine final : public EditEngine
 {
 public:
     SmEditEngine(SfxItemPool* pItemPool);
