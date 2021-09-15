@@ -3505,6 +3505,14 @@ void SwContentTree::UpdateTracking()
         }
         return;
     }
+    // section
+    if (const SwSection* pSection = m_pActiveShell->GetCurrSection(); pSection &&
+            !(m_bIsRoot && m_nRootType != ContentTypeId::REGION))
+    {
+        lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_REGION),
+                                       pSection->GetSectionName());
+        return;
+    }
     // outline
     // find out where the cursor is
     const SwOutlineNodes::size_type nActPos = GetWrtShell()->GetOutlinePos(MAXLEVEL);
