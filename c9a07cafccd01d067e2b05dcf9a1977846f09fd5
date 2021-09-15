@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0018f803_8bed0e17",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-15T19:34:19Z",
+      "side": 1,
+      "message": "Let me describe ~all that I find wrong with this change. It relates to your patches in general.\n\nThe patch is filled with unrelated stuff.\n1. You change inclusion guards with pragma once.\n2. You re-arrange includes \"while you are here\".\n3. When I told you that you used some non-\"standard\" footer string *for new file*, you changed it in *existing files*.\n4. You regenerated pch.\n\n1, 2, and 4 are nice by themselves. Yet, they *must* be separate. I already told you that; and you reply about how you did that *always*. OK, I simply can\u0027t review changes that don\u0027t allow me e.g. to easily see what inclusions were *added* for the sake of functional change - just because many headers were re-arranged, and I need to check if this header is new or moved. I can\u0027t just use the diff to see the places that were changed functionally - because there are + and - related to cosmetics like pragmas.\n\n3 is wrong. The existing files need no such change - at least I never saw commits that replaced the bottom line in existing files. As said, I don\u0027t even know what the string defines, and why the reference line for new files was changed ...\n\nAny cosmetic changes must be in separate dedicated commits. I simply refuse to review commits that fail that. Sorry.",
+      "revId": "c9a07cafccd01d067e2b05dcf9a1977846f09fd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
