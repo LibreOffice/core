@@ -25,7 +25,7 @@
 // All the basic-specific methods must be overridden virtually and must
 // be deactivated. The differentiation of normal modules is done by RTTI.
 
-class SbJScriptMethod : public SbMethod
+class SbJScriptMethod final : public SbMethod
 {
 public:
     SbJScriptMethod(SbxDataType);

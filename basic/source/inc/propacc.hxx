@@ -32,7 +32,7 @@ typedef ::cppu::WeakImplHelper< css::beans::XPropertySet,
                                 css::beans::XPropertyAccess > SbPropertyValuesHelper;
 
 
-class SbPropertyValues:     public SbPropertyValuesHelper
+class SbPropertyValues final : public SbPropertyValuesHelper
 {
     SbPropertyValueArr_Impl m_aPropVals;
     css::uno::Reference< css::beans::XPropertySetInfo > m_xInfo;

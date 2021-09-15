@@ -29,7 +29,7 @@ namespace basic
 {
 
 
-class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPassword
+class SfxScriptLibraryContainer final : public SfxLibraryContainer, public OldBasicPassword
 {
     css::uno::Reference< css::container::XNameAccess > mxCodeNameAccess;
 
@@ -106,7 +106,7 @@ typedef std::unordered_map< OUString, css::script::ModuleInfo > ModuleInfoMap;
 
 typedef ::cppu::ImplHelper1< css::script::vba::XVBAModuleInfo > SfxScriptLibrary_BASE;
 
-class SfxScriptLibrary : public SfxLibrary, public SfxScriptLibrary_BASE
+class SfxScriptLibrary final : public SfxLibrary, public SfxScriptLibrary_BASE
 {
     friend class SfxScriptLibraryContainer;
 
@@ -150,7 +150,7 @@ public:
 
     static bool containsValidModule( const css::uno::Any& _rElement );
 
-protected:
+private:
     virtual bool isLibraryElementValid(const css::uno::Any& rElement) const override;
 };
 

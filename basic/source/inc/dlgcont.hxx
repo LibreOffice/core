@@ -31,7 +31,7 @@ namespace basic
 {
 
 
-class SfxDialogLibraryContainer : public SfxLibraryContainer
+class SfxDialogLibraryContainer final : public SfxLibraryContainer
 {
     // Methods to distinguish between different library types
     virtual rtl::Reference<SfxLibrary> implCreateLibrary( const OUString& aName ) override;
@@ -88,7 +88,7 @@ public:
 typedef ::cppu::ImplHelper1 <   css::resource::XStringResourceSupplier
                             >   SfxDialogLibrary_BASE;
 
-class SfxDialogLibrary  :public SfxLibrary
+class SfxDialogLibrary final : public SfxLibrary
                         ,public SfxDialogLibrary_BASE
 {
     SfxDialogLibraryContainer*                                        m_pParent;
@@ -140,7 +140,7 @@ public:
 
     static bool containsValidDialog( const css::uno::Any& aElement );
 
-protected:
+private:
     virtual bool isLibraryElementValid(const css::uno::Any& rElement) const override;
 };
 

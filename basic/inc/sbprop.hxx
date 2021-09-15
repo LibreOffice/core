@@ -24,7 +24,7 @@
 
 class SbModule;
 
-class SbProperty : public SbxProperty
+class SbProperty final : public SbxProperty
 {
     friend class SbiFactory;
     friend class SbModule;
@@ -39,7 +39,7 @@ public:
 
 typedef tools::SvRef<SbProperty> SbPropertyRef;
 
-class SbProcedureProperty : public SbxProperty
+class SbProcedureProperty final : public SbxProperty
 {
     bool mbSet;     // Flag for set command
 

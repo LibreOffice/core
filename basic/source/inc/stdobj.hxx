@@ -24,7 +24,7 @@
 class StarBASIC;
 class SbStdFactory;
 
-class SbiStdObject : public SbxObject
+class SbiStdObject final : public SbxObject
 {
     std::unique_ptr<SbStdFactory> pStdFactory;
 

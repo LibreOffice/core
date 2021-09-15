@@ -61,7 +61,7 @@ public:
     void setValue( const css::uno::Any& );
 };
 
-class SbUnoStructRefObject: public SbxObject
+class SbUnoStructRefObject final : public SbxObject
 {
     struct caseLessComp
     {
@@ -146,7 +146,7 @@ typedef tools::SvRef<SbUnoObject> SbUnoObjectRef;
 void clearUnoMethods();
 void clearUnoMethodsForBasic( StarBASIC const * pBasic );
 
-class SbUnoMethod : public SbxMethod
+class SbUnoMethod final : public SbxMethod
 {
     friend class SbUnoObject;
     friend void clearUnoMethods();
@@ -175,7 +175,7 @@ public:
 };
 
 
-class SbUnoProperty : public SbxProperty
+class SbUnoProperty final : public SbxProperty
 {
     friend class SbUnoObject;
     friend class SbUnoStructRefObject;
@@ -201,7 +201,7 @@ public:
 };
 
 // factory class to create uno-structs per DIM AS NEW
-class SbUnoFactory : public SbxFactory
+class SbUnoFactory final : public SbxFactory
 {
 public:
     virtual SbxBaseRef Create( sal_uInt16 nSbxId, sal_uInt32 ) override;
@@ -209,7 +209,7 @@ public:
 };
 
 // wrapper for a uno-class
-class SbUnoClass : public SbxObject
+class SbUnoClass final : public SbxObject
 {
     const css::uno::Reference< css::reflection::XIdlClass >   m_xClass;
 
@@ -237,7 +237,7 @@ SbUnoClass* findUnoClass( const OUString& rName );
 
 
 // Wrapper for UNO Service
-class SbUnoService : public SbxObject
+class SbUnoService final : public SbxObject
 {
     const css::uno::Reference< css::reflection::XServiceTypeDescription2 > m_xServiceTypeDesc;
     bool m_bNeedsInit;
@@ -258,7 +258,7 @@ public:
 SbUnoService* findUnoService( const OUString& rName );
 
 
-class SbUnoServiceCtor : public SbxMethod
+class SbUnoServiceCtor final : public SbxMethod
 {
     friend class SbUnoService;
 
@@ -276,7 +276,7 @@ public:
 
 
 // Wrapper for UNO Singleton
-class SbUnoSingleton : public SbxObject
+class SbUnoSingleton final : public SbxObject
 {
 public:
     SbUnoSingleton( const OUString& aName_ );
@@ -288,7 +288,7 @@ SbUnoSingleton* findUnoSingleton( const OUString& rName );
 
 
 // #105565 Special Object to wrap a strongly typed Uno Any
-class SbUnoAnyObject: public SbxObject
+class SbUnoAnyObject final : public SbxObject
 {
     css::uno::Any     mVal;
 
@@ -307,7 +307,7 @@ public:
 // #112509 Special SbxArray to transport named parameters for calls
 // to OLEAutomation objects through the UNO OLE automation bridge
 
-class AutomationNamedArgsSbxArray : public SbxArray
+class AutomationNamedArgsSbxArray final : public SbxArray
 {
     css::uno::Sequence< OUString >      maNameSeq;
 public:
@@ -339,7 +339,7 @@ void clearNativeObjectWrapperVector();
 
 // #118116 Collection object
 
-class BasicCollection : public SbxObject
+class BasicCollection final : public SbxObject
 {
     friend class SbiRuntime;
     SbxArrayRef xItemArray;

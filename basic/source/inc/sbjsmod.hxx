@@ -25,7 +25,7 @@
 // All the basic-specific methods must be overridden virtually and must
 // be deactivated. The differentiation of normal modules is done by RTTI.
 
-class SbJScriptModule : public SbModule
+class SbJScriptModule final : public SbModule
 {
     virtual bool LoadData(SvStream&, sal_uInt16) override;
     virtual bool StoreData(SvStream&) const override;

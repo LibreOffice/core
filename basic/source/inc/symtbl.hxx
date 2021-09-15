@@ -158,7 +158,7 @@ private:
 
 };
 
-class SbiProcDef : public SbiSymDef {   // procedure definition (from basic):
+class SbiProcDef final : public SbiSymDef {   // procedure definition (from basic):
     SbiSymPool aParams;
     SbiSymPool aLabels;             // local jump targets
     OUString aLibName;
@@ -201,7 +201,7 @@ private:
 
 };
 
-class SbiConstDef : public SbiSymDef
+class SbiConstDef final : public SbiSymDef
 {
     double nVal;
     OUString aVal;
