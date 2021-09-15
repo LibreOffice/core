@@ -524,17 +524,33 @@ RectangleAndPart RectangleAndPart::Create(const std::string& rPayload)
         return aRet;
     }
 
-    std::istringstream aStream(rPayload);
-    tools::Long nLeft, nTop, nWidth, nHeight;
+    // Read '<left>, <top>, <width>, <height>[, <part>]'. C++ streams are simpler but slower.
+    const char* pos = rPayload.c_str();
+    const char* end = rPayload.c_str() + rPayload.size();
+    tools::Long nLeft = rtl_str_toInt64_WithLength(pos, 10, end - pos);
+    while( *pos != ',' )
+        ++pos;
+    ++pos;
+    assert(pos < end);
+    tools::Long nTop = rtl_str_toInt64_WithLength(pos, 10, end - pos);
+    while( *pos != ',' )
+        ++pos;
+    ++pos;
+    assert(pos < end);
+    tools::Long nWidth = rtl_str_toInt64_WithLength(pos, 10, end - pos);
+    while( *pos != ',' )
+        ++pos;
+    ++pos;
+    assert(pos < end);
+    tools::Long nHeight = rtl_str_toInt64_WithLength(pos, 10, end - pos);
     tools::Long nPart = INT_MIN;
-    char nComma;
     if (comphelper::LibreOfficeKit::isPartInInvalidation())
     {
-        aStream >> nLeft >> nComma >> nTop >> nComma >> nWidth >> nComma >> nHeight >> nComma >> nPart;
-    }
-    else
-    {
-        aStream >> nLeft >> nComma >> nTop >> nComma >> nWidth >> nComma >> nHeight;
+        while( *pos != ',' )
+            ++pos;
+        ++pos;
+        assert(pos < end);
+        nPart = rtl_str_toInt64_WithLength(pos, 10, end - pos);
     }
 
     if (nWidth > 0 && nHeight > 0)
