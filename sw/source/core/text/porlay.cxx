@@ -751,6 +751,15 @@ void SwLineLayout::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwLineLayout"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+
+    const SwLinePortion* pFirstPor = GetFirstPortion();
+    pFirstPor->SwLinePortion::dumpAsXml(pWriter);
+    for (const SwLinePortion* pPor = pFirstPor->GetNextPortion(); pPor;
+         pPor = pPor->GetNextPortion())
+    {
+        pPor->dumpAsXml(pWriter);
+    }
+
     (void)xmlTextWriterEndElement(pWriter);
 }
 

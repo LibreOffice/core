@@ -18,6 +18,8 @@
  */
 #pragma once
 
+#include <libxml/xmlwriter.h>
+
 #include "possiz.hxx"
 #include <txttypes.hxx>
 #include <TextFrameIndex.hxx>
@@ -170,6 +172,8 @@ public:
     bool GetJoinBorderWithNext() const { return m_bJoinBorderWithNext; }
     void SetJoinBorderWithPrev( const bool bJoinPrev ) { m_bJoinBorderWithPrev = bJoinPrev; }
     void SetJoinBorderWithNext( const bool bJoinNext ) { m_bJoinBorderWithNext = bJoinNext; }
+
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 inline SwLinePortion &SwLinePortion::operator=(const SwLinePortion &rPortion)
