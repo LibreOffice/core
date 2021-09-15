@@ -162,7 +162,6 @@
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">singlerb</property>
                         <accessibility>
                           <relation type="label-for" target="from"/>
                         </accessibility>
