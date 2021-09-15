@@ -1105,6 +1105,8 @@ WinSalInfoPrinter::~WinSalInfoPrinter()
     if ( mpGraphics )
     {
         mpGraphics->DeInitGraphics();
+        // we get intermittent crashes on the Windows jenkins box around here, let us see if there is something weird about the DC
+        SAL_WARN("vcl", "Graphics DC " << mpGraphics->getHDC());
         DeleteDC( mpGraphics->getHDC() );
         delete mpGraphics;
     }
