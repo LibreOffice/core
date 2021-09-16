@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cc230da_19d6cf22",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-09-16T11:43:08Z",
+      "side": 1,
+      "message": "could be better with LOKHandleMouseEvent for example to say that it is used only for LOK",
+      "revId": "b558adb361f405db07a66b1efaa4b81d8d50bd09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
