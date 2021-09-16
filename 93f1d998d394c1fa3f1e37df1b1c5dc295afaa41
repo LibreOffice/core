@@ -33,6 +33,46 @@
       "message": "I disagree. If we want to pass additional message, we need to have placeholders in the translated strings.",
       "revId": "93f1d998d394c1fa3f1e37df1b1c5dc295afaa41",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c68b984_c838914e",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1577,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-16T17:29:45Z",
+      "side": 1,
+      "message": "Or we could have a special localizable string with two placeholders for this case:\n\n  \"$ERR\\nAdditional info: $MSG\"",
+      "revId": "93f1d998d394c1fa3f1e37df1b1c5dc295afaa41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4c2db8b_158749a0",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1589,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-16T17:29:45Z",
+      "side": 1,
+      "message": "Unrelated, but this is also a nightmare - having such a mix of localizable and hardcoded messages in a single place... This also should be localizable with a placeholder.",
+      "range": {
+        "startLine": 1588,
+        "startChar": 27,
+        "endLine": 1589,
+        "endChar": 56
+      },
+      "revId": "93f1d998d394c1fa3f1e37df1b1c5dc295afaa41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
