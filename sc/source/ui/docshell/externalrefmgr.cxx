@@ -84,7 +84,7 @@ class TabNameSearchPredicate
 {
 public:
     explicit TabNameSearchPredicate(const OUString& rSearchName) :
-        maSearchName(ScGlobal::getCharClassPtr()->uppercase(rSearchName))
+        maSearchName(ScGlobal::getCharClass().uppercase(rSearchName))
     {
     }
 
@@ -498,7 +498,7 @@ const OUString* ScExternalRefCache::getRealRangeName(sal_uInt16 nFileId, const O
 
     const DocItem& rDoc = itrDoc->second;
     NamePairMap::const_iterator itr = rDoc.maRealRangeNameMap.find(
-        ScGlobal::getCharClassPtr()->uppercase(rRangeName));
+        ScGlobal::getCharClass().uppercase(rRangeName));
     if (itr == rDoc.maRealRangeNameMap.end())
         // range name not found.
         return nullptr;
@@ -717,7 +717,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getRangeNameTokens(sal_uIn
 
     RangeNameMap& rMap = pDoc->maRangeNames;
     RangeNameMap::const_iterator itr = rMap.find(
-        ScGlobal::getCharClassPtr()->uppercase(rName));
+        ScGlobal::getCharClass().uppercase(rName));
     if (itr == rMap.end())
         return TokenArrayRef();
 
@@ -732,7 +732,7 @@ void ScExternalRefCache::setRangeNameTokens(sal_uInt16 nFileId, const OUString& 
     if (!pDoc)
         return;
 
-    OUString aUpperName = ScGlobal::getCharClassPtr()->uppercase(rName);
+    OUString aUpperName = ScGlobal::getCharClass().uppercase(rName);
     RangeNameMap& rMap = pDoc->maRangeNames;
     rMap.emplace(aUpperName, pArray);
     pDoc->maRealRangeNameMap.emplace(aUpperName, rName);
@@ -758,7 +758,7 @@ void ScExternalRefCache::setRangeName(sal_uInt16 nFileId, const OUString& rName)
     if (!pDoc)
         return;
 
-    OUString aUpperName = ScGlobal::getCharClassPtr()->uppercase(rName);
+    OUString aUpperName = ScGlobal::getCharClass().uppercase(rName);
     pDoc->maRealRangeNameMap.emplace(aUpperName, rName);
 }
 
@@ -929,7 +929,7 @@ void ScExternalRefCache::initializeDoc(sal_uInt16 nFileId, const vector<OUString
     aNewTabNames.reserve(n);
     for (const auto& rTabName : rTabNames)
     {
-        TableName aNameItem(ScGlobal::getCharClassPtr()->uppercase(rTabName), rTabName);
+        TableName aNameItem(ScGlobal::getCharClass().uppercase(rTabName), rTabName);
         aNewTabNames.push_back(aNameItem);
     }
     pDoc->maTableNames.swap(aNewTabNames);
@@ -974,7 +974,7 @@ void ScExternalRefCache::initializeDoc(sal_uInt16 nFileId, const vector<OUString
 ScExternalRefCache::TableNameIndexMap::const_iterator ScExternalRefCache::DocItem::findTableNameIndex(
         const OUString& rTabName ) const
 {
-    const OUString aTabNameUpper = ScGlobal::getCharClassPtr()->uppercase( rTabName);
+    const OUString aTabNameUpper = ScGlobal::getCharClass().uppercase( rTabName);
     TableNameIndexMap::const_iterator itrTabName = maTableNameIndex.find( aTabNameUpper);
     if (itrTabName != maTableNameIndex.end())
         return itrTabName;
@@ -988,7 +988,7 @@ ScExternalRefCache::TableNameIndexMap::const_iterator ScExternalRefCache::DocIte
     // maSingleTableNameAlias has been set up only if the original file loaded
     // had exactly one sheet and internal sheet name was Sheet1 or localized or
     // customized equivalent, or base name.
-    if (aTabNameUpper == ScGlobal::getCharClassPtr()->uppercase( maSingleTableNameAlias))
+    if (aTabNameUpper == ScGlobal::getCharClass().uppercase( maSingleTableNameAlias))
         return maTableNameIndex.begin();
 
     return itrTabName;
@@ -1350,7 +1350,7 @@ ScExternalRefCache::TableTypeRef ScExternalRefCache::getCacheTable(sal_uInt16 nF
     }
 
     // Specified table doesn't exist yet.  Create one.
-    OUString aTabNameUpper = ScGlobal::getCharClassPtr()->uppercase(rTabName);
+    OUString aTabNameUpper = ScGlobal::getCharClass().uppercase(rTabName);
     nIndex = rDoc.maTables.size();
     if( pnIndex ) *pnIndex = nIndex;
     TableTypeRef pTab = std::make_shared<Table>();
@@ -2065,7 +2065,7 @@ namespace {
 bool hasRangeName(const ScDocument& rDoc, const OUString& rName)
 {
     ScRangeName* pExtNames = rDoc.GetRangeName();
-    OUString aUpperName = ScGlobal::getCharClassPtr()->uppercase(rName);
+    OUString aUpperName = ScGlobal::getCharClass().uppercase(rName);
     const ScRangeData* pRangeData = pExtNames->findByUpperName(aUpperName);
     return pRangeData != nullptr;
 }
@@ -2261,7 +2261,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokensFromSr
     vector<ScExternalRefCache::SingleRangeData> aCacheData;
     aCacheData.reserve(nTabSpan+1);
     aCacheData.emplace_back();
-    aCacheData.back().maTableName = ScGlobal::getCharClassPtr()->uppercase(rTabName);
+    aCacheData.back().maTableName = ScGlobal::getCharClass().uppercase(rTabName);
 
     for (SCTAB i = 1; i < nTabSpan + 1; ++i)
     {
@@ -2271,7 +2271,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokensFromSr
             break;
 
         aCacheData.emplace_back();
-        aCacheData.back().maTableName = ScGlobal::getCharClassPtr()->uppercase(aTabName);
+        aCacheData.back().maTableName = ScGlobal::getCharClass().uppercase(aTabName);
     }
 
     aRange.aStart.SetTab(nTab1);
@@ -2287,7 +2287,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokensFromSr
     sal_uInt16 nFileId, const ScDocument& rSrcDoc, OUString& rName)
 {
     ScRangeName* pExtNames = rSrcDoc.GetRangeName();
-    OUString aUpperName = ScGlobal::getCharClassPtr()->uppercase(rName);
+    OUString aUpperName = ScGlobal::getCharClass().uppercase(rName);
     const ScRangeData* pRangeData = pExtNames->findByUpperName(aUpperName);
     if (!pRangeData)
         return ScExternalRefCache::TokenArrayRef();

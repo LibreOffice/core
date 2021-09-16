@@ -84,7 +84,7 @@ ScDBData::ScDBData( const OUString& rName,
     mbTableColumnNamesDirty(true),
     nFilteredRowCount(SCSIZE_MAX)
 {
-    aUpper = ScGlobal::getCharClassPtr()->uppercase(aUpper);
+    aUpper = ScGlobal::getCharClass().uppercase(aUpper);
 }
 
 ScDBData::ScDBData( const ScDBData& rData ) :
@@ -153,7 +153,7 @@ ScDBData::ScDBData( const OUString& rName, const ScDBData& rData ) :
     mbTableColumnNamesDirty (rData.mbTableColumnNamesDirty),
     nFilteredRowCount   (rData.nFilteredRowCount)
 {
-    aUpper = ScGlobal::getCharClassPtr()->uppercase(aUpper);
+    aUpper = ScGlobal::getCharClass().uppercase(aUpper);
 }
 
 ScDBData& ScDBData::operator= (const ScDBData& rData)

@@ -535,7 +535,7 @@ class ScGlobal
 public:
     static std::unique_ptr<SvtSysLocale> xSysLocale;
     SC_DLLPUBLIC static const LocaleDataWrapper* getLocaleDataPtr();
-    SC_DLLPUBLIC static const CharClass* getCharClassPtr();
+    SC_DLLPUBLIC static const CharClass& getCharClass();
 
     static CalendarWrapper*     GetCalendar();
     SC_DLLPUBLIC static CollatorWrapper*        GetCollator();

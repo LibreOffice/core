@@ -170,7 +170,7 @@ ScImportExport::ScImportExport( ScDocument& r, const OUString& rPos )
     ScRangeName* pRange = rDoc.GetRangeName();
     if (pRange)
     {
-        const ScRangeData* pData = pRange->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aPos));
+        const ScRangeData* pData = pRange->findByUpperName(ScGlobal::getCharClass().uppercase(aPos));
         if (pData)
         {
             if( pData->HasType( ScRangeData::Type::RefArea )
@@ -1114,8 +1114,8 @@ static bool lcl_PutString(
                     nPos <= nStart[nFound]+2 && rStr[nPos] == 'T')
                 bInNum = false;     // ISO-8601: YYYY-MM-DDThh:mm...
             else if ((((!bInNum && nFound==nMP) || (bInNum && nFound==nMP+1))
-                        && ScGlobal::getCharClassPtr()->isLetterNumeric( rStr, nPos))
-                    || ScGlobal::getCharClassPtr()->isDigit( rStr, nPos))
+                        && ScGlobal::getCharClass().isLetterNumeric( rStr, nPos))
+                    || ScGlobal::getCharClass().isDigit( rStr, nPos))
             {
                 if (!bInNum)
                 {
@@ -1137,7 +1137,7 @@ static bool lcl_PutString(
             sal_Int32 nDateLen = nEnd[0] + 1 - nDateStart;
 
             if ( nDateLen >= 5 && nDateLen <= 8 &&
-                    ScGlobal::getCharClassPtr()->isNumeric( rStr.copy( nDateStart, nDateLen ) ) )
+                    ScGlobal::getCharClass().isNumeric( rStr.copy( nDateStart, nDateLen ) ) )
             {
                 //  6 digits: 2 each for day, month, year
                 //  8 digits: 4 for year, 2 each for day and month

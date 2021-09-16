@@ -91,8 +91,8 @@ ScUnoAddInFuncData::ScUnoAddInFuncData( const OUString& rNam, const OUString& rL
             pArgDescs[i] = pAD[i];
     }
 
-    aUpperName = ScGlobal::getCharClassPtr()->uppercase(aUpperName);
-    aUpperLocal = ScGlobal::getCharClassPtr()->uppercase(aUpperLocal);
+    aUpperName = ScGlobal::getCharClass().uppercase(aUpperName);
+    aUpperLocal = ScGlobal::getCharClass().uppercase(aUpperLocal);
 }
 
 ScUnoAddInFuncData::~ScUnoAddInFuncData()
@@ -569,7 +569,7 @@ bool ScUnoAddInCollection::GetCalcName( const OUString& rExcelName, OUString& rR
     if (!bInitialized)
         Initialize();
 
-    OUString aUpperCmp = ScGlobal::getCharClassPtr()->uppercase(rExcelName);
+    OUString aUpperCmp = ScGlobal::getCharClass().uppercase(rExcelName);
 
     for (tools::Long i=0; i<nFuncCount; i++)
     {
@@ -579,7 +579,7 @@ bool ScUnoAddInCollection::GetCalcName( const OUString& rExcelName, OUString& rR
             const ::std::vector<ScUnoAddInFuncData::LocalizedName>& rNames = pFuncData->GetCompNames();
             auto bFound = std::any_of(rNames.begin(), rNames.end(),
                 [&aUpperCmp](const ScUnoAddInFuncData::LocalizedName& rName) {
-                    return ScGlobal::getCharClassPtr()->uppercase( rName.maName ) == aUpperCmp; });
+                    return ScGlobal::getCharClass().uppercase( rName.maName ) == aUpperCmp; });
             if (bFound)
             {
                 //TODO: store upper case for comparing?

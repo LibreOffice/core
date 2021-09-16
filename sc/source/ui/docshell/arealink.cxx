@@ -182,7 +182,7 @@ bool ScAreaLink::IsEqual( std::u16string_view rFile, std::u16string_view rFilter
 bool ScAreaLink::FindExtRange( ScRange& rRange, const ScDocument& rSrcDoc, const OUString& rAreaName )
 {
     bool bFound = false;
-    OUString aUpperName = ScGlobal::getCharClassPtr()->uppercase(rAreaName);
+    OUString aUpperName = ScGlobal::getCharClass().uppercase(rAreaName);
     ScRangeName* pNames = rSrcDoc.GetRangeName();
     if (pNames)         // named ranges
     {

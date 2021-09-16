@@ -699,7 +699,7 @@ namespace
 IMPL_LINK_NOARG(ScCheckListMenuControl, EdModifyHdl, weld::Entry&, void)
 {
     OUString aSearchText = mxEdSearch->get_text();
-    aSearchText = ScGlobal::getCharClassPtr()->lowercase( aSearchText );
+    aSearchText = ScGlobal::getCharClass().lowercase( aSearchText );
     bool bSearchTextEmpty = aSearchText.isEmpty();
     size_t n = maMembers.size();
     size_t nSelCount = 0;
@@ -724,9 +724,9 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, EdModifyHdl, weld::Entry&, void)
             if ( !bSearchTextEmpty )
             {
                 if ( !bIsDate )
-                    bPartialMatch = ( ScGlobal::getCharClassPtr()->lowercase( aLabelDisp ).indexOf( aSearchText ) != -1 );
+                    bPartialMatch = ( ScGlobal::getCharClass().lowercase( aLabelDisp ).indexOf( aSearchText ) != -1 );
                 else if ( maMembers[i].meDatePartType == ScCheckListMember::DAY ) // Match with both numerical and text version of month
-                    bPartialMatch = (ScGlobal::getCharClassPtr()->lowercase( OUString(
+                    bPartialMatch = (ScGlobal::getCharClass().lowercase( OUString(
                                     maMembers[i].maRealName + maMembers[i].maDateParts[1] )).indexOf( aSearchText ) != -1);
                 else
                     continue;
@@ -795,7 +795,7 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, EdModifyHdl, weld::Entry&, void)
                 if ( aLabelDisp.isEmpty() )
                     aLabelDisp = ScResId( STR_EMPTYDATA );
 
-                bool bPartialMatch = ScGlobal::getCharClassPtr()->lowercase( aLabelDisp ).indexOf( aSearchText ) != -1;
+                bool bPartialMatch = ScGlobal::getCharClass().lowercase( aLabelDisp ).indexOf( aSearchText ) != -1;
 
                 if (!bPartialMatch)
                     continue;

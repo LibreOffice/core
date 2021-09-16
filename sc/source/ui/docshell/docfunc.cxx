@@ -5222,7 +5222,7 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
                 rDoc, ScRefFlags::RANGE_ABS_3D, ScAddress::Details( rDoc.GetAddressConvention(), nPosY, nPosX)));
 
     bool bInsert = false;
-    ScRangeData* pOld = rList.findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aName));
+    ScRangeData* pOld = rList.findByUpperName(ScGlobal::getCharClass().uppercase(aName));
     if (pOld)
     {
         OUString aOldStr;

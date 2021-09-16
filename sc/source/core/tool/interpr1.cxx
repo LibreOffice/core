@@ -3149,7 +3149,7 @@ void ScInterpreter::ScTrim()
 
 void ScInterpreter::ScUpper()
 {
-    OUString aString = ScGlobal::getCharClassPtr()->uppercase(GetString().getString());
+    OUString aString = ScGlobal::getCharClass().uppercase(GetString().getString());
     PushString(aString);
 }
 
@@ -3160,14 +3160,14 @@ void ScInterpreter::ScProper()
     const sal_Int32 nLen = aStr.getLength();
     if ( nLen > 0 )
     {
-        OUString aUpr(ScGlobal::getCharClassPtr()->uppercase(aStr.toString()));
-        OUString aLwr(ScGlobal::getCharClassPtr()->lowercase(aStr.toString()));
+        OUString aUpr(ScGlobal::getCharClass().uppercase(aStr.toString()));
+        OUString aLwr(ScGlobal::getCharClass().lowercase(aStr.toString()));
         aStr[0] = aUpr[0];
         sal_Int32 nPos = 1;
         while( nPos < nLen )
         {
             OUString aTmpStr( aStr[nPos-1] );
-            if ( !ScGlobal::getCharClassPtr()->isLetter( aTmpStr, 0 ) )
+            if ( !ScGlobal::getCharClass().isLetter( aTmpStr, 0 ) )
                 aStr[nPos] = aUpr[nPos];
             else
                 aStr[nPos] = aLwr[nPos];
@@ -3179,7 +3179,7 @@ void ScInterpreter::ScProper()
 
 void ScInterpreter::ScLower()
 {
-    OUString aString = ScGlobal::getCharClassPtr()->lowercase(GetString().getString());
+    OUString aString = ScGlobal::getCharClass().lowercase(GetString().getString());
     PushString(aString);
 }
 
@@ -8134,7 +8134,7 @@ void ScInterpreter::ScIndirect()
 
         do
         {
-            OUString aName( ScGlobal::getCharClassPtr()->uppercase( sRefStr));
+            OUString aName( ScGlobal::getCharClass().uppercase( sRefStr));
             ScDBCollection::NamedDBs& rDBs = mrDoc.GetDBCollection()->getNamedDBs();
             const ScDBData* pData = rDBs.findByUpperName( aName);
             if (!pData)
@@ -9264,7 +9264,7 @@ void ScInterpreter::ScSearchB()
         sal_Int32 nEndPos = aSubStr.getLength();
         utl::SearchParam::SearchType eSearchType = DetectSearchType( asStr, mrDoc );
         utl::SearchParam sPar( asStr, eSearchType, false, '~', false );
-        utl::TextSearch sT( sPar, *ScGlobal::getCharClassPtr() );
+        utl::TextSearch sT( sPar, ScGlobal::getCharClass() );
         if ( !sT.SearchForward( aSubStr, &nPos, &nEndPos ) )
             PushNoValue();
         else
@@ -9340,7 +9340,7 @@ void ScInterpreter::ScSearch()
     {
         utl::SearchParam::SearchType eSearchType = DetectSearchType( SearchStr, mrDoc );
         utl::SearchParam sPar(SearchStr, eSearchType, false, '~', false);
-        utl::TextSearch sT( sPar, *ScGlobal::getCharClassPtr() );
+        utl::TextSearch sT( sPar, ScGlobal::getCharClass() );
         bool bBool = sT.SearchForward(sStr, &nPos, &nEndPos);
         if (!bBool)
             PushNoValue();

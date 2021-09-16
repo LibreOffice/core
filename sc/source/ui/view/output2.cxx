@@ -1414,7 +1414,7 @@ bool beginsWithRTLCharacter(const OUString& rStr)
     if (rStr.isEmpty())
         return false;
 
-    switch (ScGlobal::getCharClassPtr()->getCharacterDirection(rStr, 0))
+    switch (ScGlobal::getCharClass().getCharacterDirection(rStr, 0))
     {
         case i18n::DirectionProperty_RIGHT_TO_LEFT:
         case i18n::DirectionProperty_RIGHT_TO_LEFT_ARABIC:

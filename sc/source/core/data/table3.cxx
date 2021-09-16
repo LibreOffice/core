@@ -113,7 +113,7 @@ static bool SplitString( const OUString &sWhole,
     sal_Int32 nPos = 0;
     while (nPos < sWhole.getLength())
     {
-        const sal_uInt16 nType = ScGlobal::getCharClassPtr()->getCharacterType( sWhole, nPos);
+        const sal_uInt16 nType = ScGlobal::getCharClass().getCharacterType( sWhole, nPos);
         if (nType & KCharacterType::DIGIT)
             break;
         sWhole.iterateCodePoints( &nPos );
@@ -125,7 +125,7 @@ static bool SplitString( const OUString &sWhole,
 
     // Get numeral element
     const OUString& sUser = ScGlobal::getLocaleDataPtr()->getNumDecimalSep();
-    ParseResult aPRNum = ScGlobal::getCharClassPtr()->parsePredefinedToken(
+    ParseResult aPRNum = ScGlobal::getCharClass().parsePredefinedToken(
         KParseType::ANY_NUMBER, sWhole, nPos,
         KParseTokens::ANY_NUMBER, "", KParseTokens::ANY_NUMBER, sUser );
 
@@ -2120,7 +2120,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
             {
                 GetString( nGroupCol[i], nStartRow, aSubString );
                 if ( bIgnoreCase )
-                    aCompString[i] = ScGlobal::getCharClassPtr()->uppercase( aSubString );
+                    aCompString[i] = ScGlobal::getCharClass().uppercase( aSubString );
                 else
                     aCompString[i] = aSubString;
             }                                                   // aSubString stays on the last
@@ -2140,7 +2140,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                     {
                         GetString( nGroupCol[i], nRow, aString );
                         if (bIgnoreCase)
-                            aString = ScGlobal::getCharClassPtr()->uppercase(aString);
+                            aString = ScGlobal::getCharClass().uppercase(aString);
                         //  when sorting, blanks are separate group
                         //  otherwise blank cells are allowed below
                         bChanged = ( ( !aString.isEmpty() || rParam.bDoSort ) &&
@@ -2200,7 +2200,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                         {
                             GetString( nGroupCol[i], nRow, aSubString );
                             if ( bIgnoreCase )
-                                aCompString[i] = ScGlobal::getCharClassPtr()->uppercase( aSubString );
+                                aCompString[i] = ScGlobal::getCharClass().uppercase( aSubString );
                             else
                                 aCompString[i] = aSubString;
                         }

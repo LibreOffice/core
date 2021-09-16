@@ -334,7 +334,7 @@ typedef std::unordered_set<OUString> LabelSet;
 
 void normalizeAddLabel(const OUString& rLabel, std::vector<OUString>& rLabels, LabelSet& rExistingNames)
 {
-    const OUString aLabelLower = ScGlobal::getCharClassPtr()->lowercase(rLabel);
+    const OUString aLabelLower = ScGlobal::getCharClass().lowercase(rLabel);
     sal_Int32 nSuffix = 1;
     OUString aNewLabel = rLabel;
     OUString aNewLabelLower = aLabelLower;
