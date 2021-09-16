@@ -281,8 +281,6 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
 
 void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
 {
-    MakeAllOutlineContentTemporarilyVisible a(GetShell().GetDoc());
-
     // Attention: At risk of suicide!
     // After paste, paste special the shell can be destroy.
 
@@ -355,6 +353,9 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     if( rSh.IsFrameSelected() || rSh.IsObjSelected() )
                         rSh.EnterSelFrameMode();
                     pView->AttrChangedNotify(nullptr);
+
+                    // Fold pasted outlines that have outline content visible attribute false
+                    MakeAllOutlineContentTemporarilyVisible a(rSh.GetDoc());
                 }
                 else
                     return;
@@ -386,6 +387,9 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                         if( rSh.IsFrameSelected() || rSh.IsObjSelected())
                             rSh.EnterSelFrameMode();
                         pView->AttrChangedNotify(nullptr);
+
+                        // Fold pasted outlines that have outline content visible attribute false
+                        MakeAllOutlineContentTemporarilyVisible a(rSh.GetDoc());
                     }
                 }
             }
@@ -418,6 +422,9 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     if (rSh.IsFrameSelected() || rSh.IsObjSelected())
                         rSh.EnterSelFrameMode();
                     pView->AttrChangedNotify(nullptr);
+
+                    // Fold pasted outlines that have outline content visible attribute false
+                    MakeAllOutlineContentTemporarilyVisible a(rSh.GetDoc());
                 }
                 else
                     return;
@@ -471,6 +478,9 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                         if (rSh.IsFrameSelected() || rSh.IsObjSelected())
                             rSh.EnterSelFrameMode();
                         pView->AttrChangedNotify(nullptr);
+
+                        // Fold pasted outlines that have outline content visible attribute false
+                        MakeAllOutlineContentTemporarilyVisible a(rSh.GetDoc());
                     }
 
                     pDlg->disposeOnce();
