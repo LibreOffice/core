@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_OUTDEV_HXX
-#define INCLUDED_VCL_OUTDEV_HXX
+#pragma once
 
 #include <tools/gen.hxx>
 #include <tools/ref.hxx>
@@ -1906,7 +1905,5 @@ protected:
     css::awt::DeviceInfo GetCommonDeviceInfo(Size const& aDevSize) const;
 
 };
-
-#endif // INCLUDED_VCL_OUTDEV_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
