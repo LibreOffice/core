@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <sal/main.h>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
