@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f981eae4_aa7274cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-16T19:24:26Z",
+      "side": 1,
+      "message": "Sry that I bother you with these basic questions, but I never have added a string to LO\u0027s codebase.",
+      "revId": "478383415f552ead2047b456456113550f7a86ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
