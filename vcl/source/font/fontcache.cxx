@@ -271,4 +271,4 @@ void ImplFontCache::CacheGlyphBoundRect(const LogicalFontInstance *pFont, sal_Gl
     m_aBoundRectCache.insert({{pFont, nID}, rRect});
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

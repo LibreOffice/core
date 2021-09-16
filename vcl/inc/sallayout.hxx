@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SALLAYOUT_HXX
-#define INCLUDED_VCL_INC_SALLAYOUT_HXX
+#pragma once
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <tools/gen.hxx>
@@ -156,6 +155,4 @@ private:
 
 #undef SalGraphics
 
-#endif // INCLUDED_VCL_INC_SALLAYOUT_HXX
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
