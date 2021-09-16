@@ -240,4 +240,6 @@ SvStream& WriteSwRect(SvStream &rStream, const SwRect &rRect)
 }
 #endif
 
+static_assert( std::is_trivially_copyable< SwRect >::value );
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
