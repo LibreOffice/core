@@ -1139,6 +1139,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             else if (sClass == "GtkMenuToolButton")
             {
                 xClass->setNodeValue("GtkMenuButton");
+                auto xAlwaysShowArrow = CreateProperty(xDoc, "always-show-arrow", "True");
+                insertAsFirstChild(xChild, xAlwaysShowArrow);
             }
             else if (sClass == "GtkRadioToolButton")
             {
