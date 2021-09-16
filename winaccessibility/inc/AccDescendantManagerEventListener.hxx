@@ -20,6 +20,7 @@
 #pragma once
 
 #include <stdio.h>
+#include <vector>
 #include "AccComponentEventListener.hxx"
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -32,6 +33,8 @@
  */
 class AccDescendantManagerEventListener: public AccComponentEventListener
 {
+private:
+    std::vector<com::sun::star::accessibility::XAccessible*> m_aUnselectedChildrenForDeletion;
 
 public:
     AccDescendantManagerEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);

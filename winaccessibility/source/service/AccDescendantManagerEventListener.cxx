@@ -183,10 +183,24 @@ bool AccDescendantManagerEventListener::NotifyChildEvent(short nWinEvent,const A
             XAccessible* pAcc = xChild.get();
             pAgent->NotifyAccEvent(nWinEvent, pAcc);
 
-            if (pAgent->IsStateManageDescendant(m_xAccessible.get())
-                    && (nWinEvent == UM_EVENT_SELECTION_CHANGED_REMOVE))
+            if (pAgent->IsStateManageDescendant(m_xAccessible.get()))
             {
-                pAgent->DeleteAccObj( pAcc );
+                if (nWinEvent == UM_EVENT_SELECTION_CHANGED_REMOVE)
+                {
+                    // The object has just been sent in a SELECTION_CHANGED_REMOVE event
+                    // and accessibility tools may query for the object and call methods on
+                    // it as a response to this.
+                    // Therefore, don't delete the object yet, but remember it for deletion
+                    // once the next event of a different type occurs.
+                    m_aUnselectedChildrenForDeletion.push_back(pAcc);
+                }
+                else
+                {
+                    // handle any pending deletions for objects previously removed from selection
+                    for (XAccessible* pAcc : m_aUnselectedChildrenForDeletion)
+                        pAgent->DeleteAccObj(pAcc);
+                    m_aUnselectedChildrenForDeletion.clear();
+                }
             }
             return true;
         }
