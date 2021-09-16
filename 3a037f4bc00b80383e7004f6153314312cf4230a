@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "250f8474_7c1a3d6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-16T18:54:28Z",
+      "side": 1,
+      "message": "My only problem is that I don\u0027t know hot to get the ERRCODE_BASIC_WITH_ADDITIONAL_INFO string here.",
+      "revId": "3a037f4bc00b80383e7004f6153314312cf4230a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
