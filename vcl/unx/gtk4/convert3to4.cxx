@@ -1280,6 +1280,9 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                         auto xUri = CreateProperty(xDoc, "file",
                                                    "private:///graphicrepository/" + sIconName);
                         xChild->insertBefore(xUri, xChildPropertyIconName);
+                        // calc, insert, header and footer, custom header menubutton icon
+                        auto xCanShrink = CreateProperty(xDoc, "can-shrink", "False");
+                        xChild->insertBefore(xCanShrink, xChildPropertyIconName);
                         xChild->removeChild(xChildPropertyIconName);
                     }
                 }
