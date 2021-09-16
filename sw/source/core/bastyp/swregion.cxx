@@ -29,6 +29,12 @@ SwRegionRects::SwRegionRects( const SwRect &rStartRect, sal_uInt16 nInit ) :
     push_back( m_aOrigin );
 }
 
+SwRegionRects::SwRegionRects( sal_uInt16 nInit ) :
+    m_aOrigin()
+{
+    reserve(nInit);
+}
+
 // If <rDel> is true then this Rect will be overwritten by <rRect> at
 // position <nPos>. Otherwise <rRect> is attached at the end.
 inline void SwRegionRects::InsertRect( const SwRect &rRect,
@@ -47,8 +53,7 @@ inline void SwRegionRects::InsertRect( const SwRect &rRect,
 
 void SwRegionRects::operator+=( const SwRect &rRect )
 {
-    bool f = false;
-    InsertRect( rRect, 0, f );
+    push_back( rRect );
 }
 
 /** Delete all overlaps of the Rects in array with the given <rRect>
@@ -139,6 +144,12 @@ void SwRegionRects::Invert()
 static inline SwTwips CalcArea( const SwRect &rRect )
 {
     return rRect.Width() * rRect.Height();
+}
+
+void SwRegionRects::LimitToOrigin()
+{
+    for (size_type i = 0; i < size(); ++i )
+        (*this)[ i ].Intersection( m_aOrigin );
 }
 
 // combine all adjacent rectangles
