@@ -730,6 +730,12 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             if (sName == "draw-indicator")
             {
                 assert(toBool(xChild->getFirstChild()->getNodeValue()));
+                if (GetParentObjectType(xChild) == "GtkMenuButton")
+                {
+                    auto xDoc = xChild->getOwnerDocument();
+                    auto xAlwaysShowArrow = CreateProperty(xDoc, "always-show-arrow", "True");
+                    xChild->getParentNode()->insertBefore(xAlwaysShowArrow, xChild);
+                }
                 xRemoveList.push_back(xChild);
             }
 
