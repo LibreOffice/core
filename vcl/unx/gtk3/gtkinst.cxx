@@ -10763,11 +10763,13 @@ void GtkInstanceMenuButton::set_menu(weld::Menu* pMenu)
 {
     GtkInstanceMenu* pPopoverWidget = dynamic_cast<GtkInstanceMenu*>(pMenu);
     m_pPopover = nullptr;
-    GtkWidget* pMenuWidget = GTK_WIDGET(pPopoverWidget ? pPopoverWidget->getMenu() : nullptr);
+    m_pMenu = pPopoverWidget ? pPopoverWidget->getMenu() : nullptr;
+
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    gtk_menu_button_set_popup(m_pMenuButton, pMenuWidget);
+    gtk_menu_button_set_popup(m_pMenuButton, GTK_WIDGET(m_pMenu));
 #else
-    gtk_menu_button_set_popover(m_pMenuButton, pMenuWidget);
+    gtk_menu_button_set_popover(m_pMenuButton, GTK_WIDGET(m_pMenu));
+    update_action_group_from_popover_model();
 #endif
 }
 
