@@ -85,8 +85,7 @@ public:
     short GetParentRole(css::accessibility::XAccessible* pXAcc );
     bool IsContainer(css::accessibility::XAccessible* pXAcc);
 
-    void SaveTopWindowHandle(sal_Int64 hWnd,
-            css::accessibility::XAccessible* pXAcc);
+    void SaveTopWindowHandle(HWND hWnd, css::accessibility::XAccessible* pXAcc);
 
     void UpdateChildState(css::accessibility::XAccessible* pXAcc);
 

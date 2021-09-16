@@ -157,11 +157,10 @@ bool AccObjectManagerAgent::InsertAccObj(
    * @return void
    */
 void
-AccObjectManagerAgent::SaveTopWindowHandle(sal_Int64 hWnd, XAccessible* pXAcc)
+AccObjectManagerAgent::SaveTopWindowHandle(HWND hWnd, XAccessible* pXAcc)
 {
     if( pWinManager )
-        pWinManager->SaveTopWindowHandle(
-                static_cast<HWND>(reinterpret_cast<void*>(hWnd)), pXAcc);
+        pWinManager->SaveTopWindowHandle(hWnd, pXAcc);
 }
 
 
