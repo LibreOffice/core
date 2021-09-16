@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6df8e466_ac42b83b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-16T03:24:58Z",
+      "side": 1,
+      "message": "I\u0027m updating the pragma once directive for a patch I want to land. I\u0027ve been advised I need to do this. Not including the person who told me to do this, as I feel particularly attacked. ",
+      "revId": "d5266bb6dba395a8f7c2cc9cdc32803142ce6980",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
