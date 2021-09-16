@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
