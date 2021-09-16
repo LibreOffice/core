@@ -1667,10 +1667,7 @@ bool SwWW8ImplReader::SetTextFormatCollAndListLevel(const SwPaM& rRg,
             return bRes;
         }
 
-        const SwNumRule * pNumRule = pTextNode->GetNumRule(); // #i27610#
-
-        if( !IsInvalidOrToBeMergedTabCell() &&
-            ! (pNumRule && pNumRule->IsOutlineRule()) ) // #i27610#
+        if( !IsInvalidOrToBeMergedTabCell())
         {
             pTextNode->ResetAttr( RES_PARATR_NUMRULE );
         }

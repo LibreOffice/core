@@ -228,7 +228,6 @@ public:
     rtl_TextEncoding m_eCJKFontSrcCharSet;    // rtl_TextEncoding for the font
     SwFormat*      m_pFormat;
     std::shared_ptr<WW8FlyPara> m_xWWFly;
-    SwNumRule*  m_pOutlineNumrule;
     tools::Long        m_nFilePos;
     sal_uInt16      m_nBase;
     sal_uInt16      m_nFollow;
@@ -268,7 +267,6 @@ public:
         m_eRTLFontSrcCharSet(0),
         m_eCJKFontSrcCharSet(0),
         m_pFormat( nullptr ),
-        m_pOutlineNumrule( nullptr ),
         m_nFilePos( 0 ),
         m_nBase( 0 ),
         m_nFollow( 0 ),
@@ -313,15 +311,6 @@ public:
         return (m_pFormat != nullptr && (MAXLEVEL > mnWW8OutlineLevel));
     }
 
-    bool IsOutlineNumbered() const
-    {
-        return m_pOutlineNumrule && HasWW8OutlineLevel();
-    }
-
-    const SwNumRule* GetOutlineNumrule() const
-    {
-        return m_pOutlineNumrule;
-    }
     rtl_TextEncoding GetCharSet() const;
     rtl_TextEncoding GetCJKCharSet() const;
 

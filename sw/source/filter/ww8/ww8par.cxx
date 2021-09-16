@@ -5963,21 +5963,6 @@ void SwWW8ImplReader::SetOutlineStyles()
             }
 
             aWW8BuiltInHeadingStyles.push_back(&rSI);
-
-            const SwNumRule* pWW8ListStyle = rSI.GetOutlineNumrule();
-            if (pWW8ListStyle != nullptr)
-            {
-                std::map<const SwNumRule*, int>::iterator aCountIter
-                    = aWW8ListStyleCounts.find(pWW8ListStyle);
-                if (aCountIter == aWW8ListStyleCounts.end())
-                {
-                    aWW8ListStyleCounts[pWW8ListStyle] = 1;
-                }
-                else
-                {
-                    ++(aCountIter->second);
-                }
-            }
         }
     }
 
@@ -6002,13 +5987,7 @@ void SwWW8ImplReader::SetOutlineStyles()
             // --> delete assignment to OutlineStyle, but keep its current
             // outline level
             pTextFormatColl->DeleteAssignmentToListLevelOfOutlineStyle();
-            // Apply existing WW8 list style a normal list style at the
-            // Paragraph Style
-            if (pStyleInf->GetOutlineNumrule() != nullptr)
-            {
-                pTextFormatColl->SetFormatAttr(
-                    SwNumRuleItem(pStyleInf->GetOutlineNumrule()->GetName()));
-            }
+
             // apply default outline level of WW8 Built-in Heading Style
             const sal_uInt8 nOutlineLevel
                 = SwWW8StyInf::WW8OutlineLevelToOutlinelevel(

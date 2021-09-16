@@ -3299,50 +3299,6 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
             {
                 case TOX_CONTENT:
                     {
-                        //If we would be created from outlines, either explicitly or by default
-                        //then see if we need extra styles added to the outlines
-                        SwTOXElement eEffectivelyFrom = eCreateFrom != SwTOXElement::NONE ? eCreateFrom : SwTOXElement::OutlineLevel;
-                        if (eEffectivelyFrom & SwTOXElement::OutlineLevel)
-                        {
-                            // #i19683# Insert a text token " " between the number and entry token.
-                            // In an ideal world we could handle the tab stop between the number and
-                            // the entry correctly, but I currently have no clue how to obtain
-                            // the tab stop position. It is _not_ set at the paragraph style.
-                            std::unique_ptr<SwForm> pForm;
-                            for (const SwWW8StyInf & rSI : m_vColl)
-                            {
-                                if (rSI.IsOutlineNumbered())
-                                {
-                                    sal_uInt16 nStyleLevel = rSI.mnWW8OutlineLevel;
-                                    const SwNumFormat& rFormat = rSI.GetOutlineNumrule()->Get( nStyleLevel );
-                                    if ( SVX_NUM_NUMBER_NONE != rFormat.GetNumberingType() )
-                                    {
-                                        ++nStyleLevel;
-
-                                        if ( !pForm )
-                                            pForm.reset(new SwForm( pBase->GetTOXForm() ));
-
-                                        SwFormTokens aPattern = pForm->GetPattern(nStyleLevel);
-                                        SwFormTokens::iterator aIt =
-                                                find_if(aPattern.begin(), aPattern.end(),
-                                                SwFormTokenEqualToFormTokenType(TOKEN_ENTRY_NO));
-
-                                        if ( aIt != aPattern.end() )
-                                        {
-                                            SwFormToken aNumberEntrySeparator( TOKEN_TEXT );
-                                            aNumberEntrySeparator.sText = " ";
-                                            aPattern.insert( ++aIt, aNumberEntrySeparator );
-                                            pForm->SetPattern( nStyleLevel, aPattern );
-                                        }
-                                    }
-                                }
-                            }
-                            if ( pForm )
-                            {
-                                pBase->SetTOXForm( *pForm );
-                            }
-                        }
-
                         if (eCreateFrom != SwTOXElement::NONE)
                             pBase->SetCreate(eCreateFrom);
                         EnsureMaxLevelForTemplates(*pBase);
