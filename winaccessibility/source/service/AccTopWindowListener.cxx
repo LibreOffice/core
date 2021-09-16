@@ -65,8 +65,7 @@ void AccTopWindowListener::HandleWindowOpened( css::accessibility::XAccessible* 
     //Only AccessibleContext exist, add all listeners
     if(pAccessibleContext != nullptr && systemdata != nullptr)
     {
-        accManagerAgent.SaveTopWindowHandle(
-                reinterpret_cast<sal_Int64>(systemdata->hWnd), pAccessible);
+        accManagerAgent.SaveTopWindowHandle(systemdata->hWnd, pAccessible);
 
         AddAllListeners(pAccessible,nullptr,systemdata->hWnd);
 
