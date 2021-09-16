@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <sal/config.h>
+
 #include <tools/gen.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
