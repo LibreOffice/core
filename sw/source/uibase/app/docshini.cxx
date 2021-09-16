@@ -107,7 +107,8 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             SwTransferable::InitOle( this );
 
         // set forbidden characters if necessary
-        if (!utl::ConfigManager::IsFuzzing())
+        const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+        if (!bFuzzing)
         {
             SvxAsianConfig aAsian;
             const Sequence<lang::Locale> aLocales =  aAsian.GetStartEndCharLocales();
@@ -236,7 +237,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         sal_uInt16 nFontWhich = RES_CHRATR_FONT;
         sal_uInt16 nFontHeightWhich = RES_CHRATR_FONTSIZE;
         LanguageType eLanguage = m_xDoc->GetDefault( RES_CHRATR_LANGUAGE ).GetLanguage();
-        bool bDisableBuiltinStyles = officecfg::Office::Common::Load::DisableBuiltinStyles::get();
+        bool bDisableBuiltinStyles = !bFuzzing && officecfg::Office::Common::Load::DisableBuiltinStyles::get();
         sal_uInt8 nLimit = bDisableBuiltinStyles ? 0 : 24;
         for(sal_uInt8 nIdx = 0; nIdx < nLimit; nIdx += 2)
         {
