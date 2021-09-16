@@ -2684,9 +2684,9 @@ public:
                         else
                         {
                             // fallback
-                            const svl::SharedString rSource2(mrStrPool.intern(*pValueSource2));
-                            // Fast string equality check by comparing string identifiers.
-                            bOk = rSource2.getDataIgnoreCase() == rItem.maString.getDataIgnoreCase();
+                            const CharClass& rCharClass = *ScGlobal::getCharClassPtr();
+                            rtl_uString* pTmpRHS = const_cast<rtl_uString*>(rItem.maString.getDataIgnoreCase());
+                            bOk = rCharClass.uppercase(*pValueSource2) == OUString::unacquired(&pTmpRHS);
                         }
                     }
 

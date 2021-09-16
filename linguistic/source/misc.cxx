@@ -566,21 +566,10 @@ uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
     return xRes;
 }
 
-static CharClass & lcl_GetCharClass()
-{
-    static CharClass aCC( LanguageTag( LANGUAGE_ENGLISH_US ));
-    return aCC;
-}
-
-static std::mutex s_GetCharClassMutex;
-
 bool IsUpper( const OUString &rText, sal_Int32 nPos, sal_Int32 nLen, LanguageType nLanguage )
 {
-    std::scoped_lock  aGuard( s_GetCharClassMutex );
-
-    CharClass &rCC = lcl_GetCharClass();
-    rCC.setLanguageTag( LanguageTag( nLanguage ));
-    sal_Int32 nFlags = rCC.getStringType( rText, nPos, nLen );
+    CharClass aCC(( LanguageTag( nLanguage ) ));
+    sal_Int32 nFlags = aCC.getStringType( rText, nPos, nLen );
     return      (nFlags & KCharacterType::UPPER)
             && !(nFlags & KCharacterType::LOWER);
 }
@@ -612,11 +601,8 @@ CapType capitalType(const OUString& aTerm, CharClass const * pCC)
 
 OUString ToLower( const OUString &rText, LanguageType nLanguage )
 {
-    std::scoped_lock  aGuard( s_GetCharClassMutex );
-
-    CharClass &rCC = lcl_GetCharClass();
-    rCC.setLanguageTag( LanguageTag( nLanguage ));
-    return rCC.lowercase( rText );
+    CharClass aCC(( LanguageTag( nLanguage ) ));
+    return aCC.lowercase( rText );
 }
 
 // sorted(!) array of unicode ranges for code points that are exclusively(!) used as numbers
