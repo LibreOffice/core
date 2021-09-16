@@ -172,7 +172,7 @@ SvStream& ReadPptCurrentUserAtom( SvStream& rIn, PptCurrentUserAtom& rAtom )
     if ( aHd.nRecType == PPT_PST_CurrentUserAtom )
     {
         sal_uInt32 nLen;
-        sal_uInt16 nUserNameLen, nPad;
+        sal_uInt16 nUserNameLen(0), nPad;
         rIn.ReadUInt32( nLen )
            .ReadUInt32( rAtom.nMagic )
            .ReadUInt32( rAtom.nCurrentUserEdit )
