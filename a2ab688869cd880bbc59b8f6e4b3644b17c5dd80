@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e616cbaa_48ba8fe6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-16T10:00:05Z",
+      "side": 1,
+      "message": "I am going to revert that commit, seems it is more trouble than it is worth:\n    https://gerrit.libreoffice.org/c/core/+/122124",
+      "revId": "a2ab688869cd880bbc59b8f6e4b3644b17c5dd80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
