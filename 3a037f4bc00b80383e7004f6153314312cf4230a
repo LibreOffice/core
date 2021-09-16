@@ -16,6 +16,24 @@
       "message": "My only problem is that I don\u0027t know hot to get the ERRCODE_BASIC_WITH_ADDITIONAL_INFO string here.",
       "revId": "3a037f4bc00b80383e7004f6153314312cf4230a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24a9c9c3_0afea692",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-16T19:04:16Z",
+      "side": 1,
+      "message": "Don\u0027t create new fake error in include/basic/sberrors.hxx. You don\u0027t need to add the new string to the RID_BASIC_START array. Just add a string *after* RID_BASIC_START (or maybe even better to basic/inc/strings.hrc):\n\n    #define STR_ADDITIONAL_INFO NC_(\"STR_ADDITIONAL_INFO\", \"$ERR\\nAdditional info: $MSG\")\n\nand use the STR_ADDITIONAL_INFO in call to\n\n  BasResId(STR_ADDITIONAL_INFO).replaceFirst(\"$ERR\", strOld).replaceFirst(\"$MSG\", strNew);\n\nBy the way, don\u0027t add trailing dot. The message may already contain one; having no dot is better than having two.",
+      "parentUuid": "250f8474_7c1a3d6c",
+      "revId": "3a037f4bc00b80383e7004f6153314312cf4230a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
