@@ -33,6 +33,24 @@
       "message": "My 2c:\n\nI would just \n\n(a) sort by y-axis\n(b) iterate over the resulting list ONCE, and merge anything that is adjacent/overlaps in the y-axis.\n\nOn the assumption that most of the time we are not updating something on the left and something on the right of the screen, normally they are next to each other. \n",
       "revId": "d905b7b4aea3aa7c4c06560f2a250236a08ca249",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6e328de_56297984",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-09-16T09:57:15Z",
+      "side": 1,
+      "message": "I have some doubts about N^1 being sufficient for this, but currently the function is no longer a noticeable bottleneck in my profiles, so this seems good enough.",
+      "parentUuid": "8ec919b1_cc24b080",
+      "revId": "d905b7b4aea3aa7c4c06560f2a250236a08ca249",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
