@@ -930,8 +930,8 @@ namespace emfio
             case W_META_DIBCREATEPATTERNBRUSH:
             {
                 Bitmap  aBmp;
-                sal_uInt32  nRed = 0, nGreen = 0, nBlue = 0, nCount = 1;
-                sal_uInt16  nStyle, nColorUsage;
+                sal_uInt32 nRed(0), nGreen(0), nBlue(0), nCount(1);
+                sal_uInt16 nStyle(0), nColorUsage(0);
 
                 mpInputStream->ReadUInt16( nStyle ).ReadUInt16( nColorUsage );
                 SAL_INFO( "emfio", "\t\t Style:" << nStyle << ", ColorUsage: " << nColorUsage );
