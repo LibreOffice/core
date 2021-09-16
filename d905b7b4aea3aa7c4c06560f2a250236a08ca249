@@ -16,6 +16,23 @@
       "message": "This looks reasonable to me; it would be good to add a sentence to the commit message to know how did you find this bottleneck and what is the old / new cost.\n\nhttps://bugs.collabora.com/show_bug.cgi?id\u003d2630 seems to be exactly about this, if so: could you please add a comment there, linking this gerrit change? Thanks.",
       "revId": "d905b7b4aea3aa7c4c06560f2a250236a08ca249",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ec919b1_cc24b080",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-16T09:23:44Z",
+      "side": 1,
+      "message": "My 2c:\n\nI would just \n\n(a) sort by y-axis\n(b) iterate over the resulting list ONCE, and merge anything that is adjacent/overlaps in the y-axis.\n\nOn the assumption that most of the time we are not updating something on the left and something on the right of the screen, normally they are next to each other. \n",
+      "revId": "d905b7b4aea3aa7c4c06560f2a250236a08ca249",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
