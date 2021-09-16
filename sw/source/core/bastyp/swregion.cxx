@@ -146,23 +146,32 @@ void SwRegionRects::Compress()
     bool bAgain;
     do
     {
+        sort( begin(), end(), []( const SwRect& l, const SwRect& r ) { return l.Top() < r.Top(); } );
         bAgain = false;
         for (size_type i = 0; i < size(); ++i )
         {
-            for ( size_type j = i+1; j < size(); ++j )
+            // Rectangles are sorted by Y axis, so check only pairs of rectangles
+            // that are possibly overlapping or adjacent or close enough to be grouped by the fuzzy
+            // code below.
+            const tools::Long nFuzzy = 1361513;
+            const tools::Long yMax = (*this)[i].Bottom() + nFuzzy / (*this)[i].Width();
+            size_type j = i+1;
+            while( j < size() && (*this)[j].Top() <= yMax )
+                ++j;
+            --j;
+            // Walk backwards for simpler and faster erase().
+            for ( ; j >= i+1; --j )
             {
                 // If one rectangle contains a second completely than the latter
                 // does not need to be stored and can be deleted
                 if ( (*this)[i].IsInside( (*this)[j] ) )
                 {
                     erase( begin() + j );
-                    --j;
                 }
                 else if ( (*this)[j].IsInside( (*this)[i] ) )
                 {
                     (*this)[i] = (*this)[j];
                     erase( begin() + j );
-                    --j;
                     bAgain = true;
                 }
                 else
@@ -186,7 +195,6 @@ void SwRegionRects::Compress()
                     // paints), the area of the union can be a little bit larger:
                     // ( 9622 * 141.5 = 1361513 ~= a quarter (1/4) centimeter wider
                     // than the width of an A4 page
-                    const tools::Long nFuzzy = 1361513;
                     SwRect aUnion( (*this)[i] );
                     aUnion.Union( (*this)[j] );
                     SwRect aInter( (*this)[i] );
@@ -197,12 +205,15 @@ void SwRegionRects::Compress()
                     {
                         (*this)[i] = aUnion;
                         erase( begin() + j );
-                        --j;
                         bAgain = true;
                     }
                 }
             }
         }
+        // Code paths setting bAgain alter elements of the vector, possibly breaking
+        // the Y-axis optimization, so run another pass just to make sure. The adjacent-rects
+        // merging code may possibly benefit from a repeated pass also if two pairs of merged
+        // rects might get merged again and this pass skipped that.
     } while(bAgain);
 }
 
