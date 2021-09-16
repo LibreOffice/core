@@ -276,4 +276,11 @@ tools::Long tools::Rectangle::getHeight() const
     return nBottom == RECT_EMPTY ? 0 : nBottom - nTop;
 }
 
+static_assert( std::is_trivially_copyable< Pair >::value );
+static_assert( std::is_trivially_copyable< Point >::value );
+static_assert( std::is_trivially_copyable< Size >::value );
+static_assert( std::is_trivially_copyable< Range >::value );
+static_assert( std::is_trivially_copyable< Selection >::value );
+static_assert( std::is_trivially_copyable< tools::Rectangle >::value );
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
