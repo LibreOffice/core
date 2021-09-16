@@ -21,9 +21,10 @@
 
 #include <sal/config.h>
 
-#include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <tools/long.hxx>
+
 #include <vcl/dllapi.h>
 #include <vcl/fontcharmap.hxx>
 
