@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <i18nlangtag/mslangid.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <unotools/configmgr.hxx>
