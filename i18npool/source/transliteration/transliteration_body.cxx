@@ -102,9 +102,12 @@ Transliteration_body::transliterateImpl(
     // Allocate the max possible buffer. Try to use stack instead of heap,
     // which would have to be reallocated most times anyways.
     constexpr sal_Int32 nLocalBuf = 2048;
-    sal_Unicode aLocalBuf[ nLocalBuf * NMAPPINGMAX ], *out = aLocalBuf;
+    sal_Unicode* out;
     std::unique_ptr<sal_Unicode[]> pHeapBuf;
-    if (nCount > nLocalBuf)
+    size_t nBytes = (nCount + 1) * sizeof(sal_Unicode);
+    if (nBytes <= nLocalBuf * NMAPPINGMAX)
+        out = static_cast<sal_Unicode*>(alloca(nBytes));
+    else
     {
         pHeapBuf.reset(new sal_Unicode[ nCount * NMAPPINGMAX ]);
         out = pHeapBuf.get();
