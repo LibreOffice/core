@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "526faffb_b126c275",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-16T16:47:18Z",
+      "side": 1,
+      "message": "I thought about just appending the custom error message at the end. I will add a test like in the bug report, too.",
+      "revId": "93f1d998d394c1fa3f1e37df1b1c5dc295afaa41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
