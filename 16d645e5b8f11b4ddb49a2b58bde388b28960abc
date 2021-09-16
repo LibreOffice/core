@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8e73455_4ea81ab5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-09-16T14:40:25Z",
+      "side": 1,
+      "message": "Ok I understand and it seems there\u0027s no alternative to use stack here.",
+      "revId": "16d645e5b8f11b4ddb49a2b58bde388b28960abc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
