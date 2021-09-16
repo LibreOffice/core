@@ -9,22 +9,24 @@
 
 #include <sal/config.h>
 
-#include <memory>
 #include <config_folders.h>
 #include <config_eot.h>
 
+#include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
-#include <sal/log.hxx>
-#include <vcl/svapp.hxx>
+
 #include <vcl/embeddedfontshelper.hxx>
-#include <com/sun/star/io/XInputStream.hpp>
+#include <vcl/svapp.hxx>
 
 #include <outdev.h>
 #include <PhysicalFontCollection.hxx>
 #include <salgdi.hxx>
 #include <sft.hxx>
 
+#include <com/sun/star/io/XInputStream.hpp>
+
+#include <memory>
 
 #if ENABLE_EOT
 extern "C"
@@ -331,4 +333,4 @@ OUString EmbeddedFontsHelper::fontFileUrl( std::u16string_view familyName, FontF
     return ok ? url : "";
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
