@@ -26,7 +26,7 @@ namespace i18npool {
 class transliteration_Numeric : public transliteration_commonclass {
 public:
         virtual OUString
-        transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 >& offset, bool useOffset ) override;
+        transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 >* pOffset ) override;
 
         virtual sal_Unicode SAL_CALL
         transliterateChar2Char( sal_Unicode inChar) override;
@@ -35,7 +35,7 @@ public:
         virtual sal_Int16 SAL_CALL getType(  ) override;
 
         virtual OUString
-        foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 >& offset, bool useOffset ) override;
+        foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 >* pOffset ) override;
 
         virtual sal_Bool SAL_CALL
         equals( const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1, const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 ) override;
@@ -51,7 +51,7 @@ private:
         /// @throws css::uno::RuntimeException
         OUString
         transliterateBullet( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-                             css::uno::Sequence< sal_Int32 >& offset, bool useOffset );
+                             css::uno::Sequence< sal_Int32 >* pOffset );
 };
 
 }

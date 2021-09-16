@@ -51,7 +51,7 @@ TextToPronounce_zh::getPronounce(const sal_Unicode ch)
 
 OUString
 TextToPronounce_zh::foldingImpl(const OUString & inStr, sal_Int32 startPos,
-        sal_Int32 nCount, Sequence< sal_Int32 > & offset, bool useOffset)
+        sal_Int32 nCount, Sequence< sal_Int32 >* pOffset)
 {
     OUStringBuffer sb;
     const sal_Unicode * chArr = inStr.getStr() + startPos;
@@ -62,13 +62,13 @@ TextToPronounce_zh::foldingImpl(const OUString & inStr, sal_Int32 startPos,
     if (startPos + nCount > inStr.getLength())
         nCount = inStr.getLength() - startPos;
 
-    offset[0] = 0;
+    (*pOffset)[0] = 0;
     for (sal_Int32 i = 0; i < nCount; i++) {
         OUString pron(getPronounce(chArr[i]));
         sb.append(pron);
 
-        if (useOffset)
-            offset[i + 1] = offset[i] + pron.getLength();
+        if (pOffset)
+            (*pOffset)[i + 1] = (*pOffset)[i] + pron.getLength();
     }
     return sb.makeStringAndClear();
 }

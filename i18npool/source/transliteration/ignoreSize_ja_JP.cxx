@@ -27,10 +27,10 @@ using namespace com::sun::star::lang;
 namespace i18npool {
 
 OUString
-ignoreSize_ja_JP::foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset )
+ignoreSize_ja_JP::foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >* pOffset )
 {
     rtl::Reference< smallToLarge_ja_JP > t1(new smallToLarge_ja_JP);
-    return t1->transliterateImpl(inStr, startPos, nCount, offset, useOffset);
+    return t1->transliterateImpl(inStr, startPos, nCount, pOffset);
 }
 
 

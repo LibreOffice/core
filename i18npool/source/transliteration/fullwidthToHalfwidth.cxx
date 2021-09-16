@@ -44,13 +44,13 @@ fullwidthToHalfwidth::fullwidthToHalfwidth()
  * The output string contains a transliterated string only, not whole string.
  */
 OUString
-fullwidthToHalfwidth::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset )
+fullwidthToHalfwidth::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >* pOffset )
 {
     // Decomposition: GA --> KA + voice-mark
-    const OUString& newStr = i18nutil::widthfolding::decompose_ja_voiced_sound_marks (inStr, startPos, nCount, offset, useOffset);
+    const OUString& newStr = i18nutil::widthfolding::decompose_ja_voiced_sound_marks (inStr, startPos, nCount, pOffset);
 
     // One to One mapping
-    return transliteration_OneToOne::transliterateImpl( newStr, 0, newStr.getLength(), offset, false);
+    return transliteration_OneToOne::transliterateImpl( newStr, 0, newStr.getLength(), pOffset);
 }
 
 sal_Unicode SAL_CALL
@@ -74,13 +74,13 @@ FULLWIDTHKATAKANA_HALFWIDTHKATAKANA::FULLWIDTHKATAKANA_HALFWIDTHKATAKANA()
  * Transliterate fullwidth katakana to halfwidth katakana.
  */
 OUString
-FULLWIDTHKATAKANA_HALFWIDTHKATAKANA::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset )
+FULLWIDTHKATAKANA_HALFWIDTHKATAKANA::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >* pOffset )
 {
     // Decomposition: GA --> KA + voice-mark
-    const OUString& newStr = i18nutil::widthfolding::decompose_ja_voiced_sound_marks (inStr, startPos, nCount, offset, useOffset);
+    const OUString& newStr = i18nutil::widthfolding::decompose_ja_voiced_sound_marks (inStr, startPos, nCount, pOffset);
 
     // One to One mapping
-    return transliteration_OneToOne::transliterateImpl( newStr, 0, newStr.getLength(), offset, false);
+    return transliteration_OneToOne::transliterateImpl( newStr, 0, newStr.getLength(), nullptr);
 }
 
 sal_Unicode SAL_CALL
@@ -104,13 +104,13 @@ FULLWIDTH_HALFWIDTH_LIKE_ASC::FULLWIDTH_HALFWIDTH_LIKE_ASC()
  * Transliterate fullwidth to halfwidth like Excel's ASC function.
  */
 OUString
-FULLWIDTH_HALFWIDTH_LIKE_ASC::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset )
+FULLWIDTH_HALFWIDTH_LIKE_ASC::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >* pOffset )
 {
     // Decomposition: GA --> KA + voice-mark
-    const OUString& newStr = i18nutil::widthfolding::decompose_ja_voiced_sound_marks (inStr, startPos, nCount, offset, useOffset);
+    const OUString& newStr = i18nutil::widthfolding::decompose_ja_voiced_sound_marks (inStr, startPos, nCount, pOffset);
 
     // One to One mapping
-    return transliteration_OneToOne::transliterateImpl( newStr, 0, newStr.getLength(), offset, false);
+    return transliteration_OneToOne::transliterateImpl( newStr, 0, newStr.getLength(), nullptr);
 }
 
 sal_Unicode SAL_CALL

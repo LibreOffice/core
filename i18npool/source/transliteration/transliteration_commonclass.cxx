@@ -106,8 +106,7 @@ transliteration_commonclass::compareString( const OUString& str1, const OUString
 OUString SAL_CALL
 transliteration_commonclass::transliterateString2String( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount )
 {
-    Sequence < sal_Int32 > dummy_offset;
-    return transliterateImpl(inStr, startPos, nCount, dummy_offset, false);
+    return transliterateImpl(inStr, startPos, nCount, nullptr);
 }
 
 OUString SAL_CALL

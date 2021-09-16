@@ -80,10 +80,10 @@ transliteration_Ignore::getType()
 
 OUString
 transliteration_Ignore::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-        Sequence< sal_Int32 >& offset, bool useOffset)
+        Sequence< sal_Int32 >* pOffset)
 {
     // The method folding is defined in a sub class.
-    return foldingImpl( inStr, startPos, nCount, offset, useOffset);
+    return foldingImpl( inStr, startPos, nCount, pOffset);
 }
 
 Sequence< OUString >
@@ -107,7 +107,7 @@ transliteration_Ignore::transliterateRange( const OUString& str1, const OUString
 
 OUString
 transliteration_Ignore::foldingImpl( const OUString& inStr, sal_Int32 startPos,
-    sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset)
+    sal_Int32 nCount, Sequence< sal_Int32 >* pOffset)
 {
     // Create a string buffer which can hold nCount + 1 characters.
     // The reference count is 1 now.
@@ -118,9 +118,9 @@ transliteration_Ignore::foldingImpl( const OUString& inStr, sal_Int32 startPos,
     // Allocate nCount length to offset argument.
     sal_Int32 *p = nullptr;
     sal_Int32 position = 0;
-    if (useOffset) {
-        offset.realloc( nCount );
-        p = offset.getArray();
+    if (pOffset) {
+        pOffset->realloc( nCount );
+        p = pOffset->getArray();
         position = startPos;
     }
 
@@ -135,7 +135,7 @@ transliteration_Ignore::foldingImpl( const OUString& inStr, sal_Int32 startPos,
             const Mapping *m;
             for (m = map; m->replaceChar; m++) {
                 if (previousChar == m->previousChar &&  currentChar == m->currentChar ) {
-                    if (useOffset) {
+                    if (pOffset) {
                         if (! m->two2one)
                             *p++ = position;
                         position++;
@@ -151,7 +151,7 @@ transliteration_Ignore::foldingImpl( const OUString& inStr, sal_Int32 startPos,
             }
 
             if (! m->replaceChar) {
-                if (useOffset)
+                if (pOffset)
                     *p ++ = position ++;
                 *dst ++ = previousChar;
                 previousChar = currentChar;
@@ -159,7 +159,7 @@ transliteration_Ignore::foldingImpl( const OUString& inStr, sal_Int32 startPos,
         }
 
         if (nCount == 0) {
-            if (useOffset)
+            if (pOffset)
                 *p = position;
             *dst ++ = previousChar;
         }
@@ -170,7 +170,7 @@ transliteration_Ignore::foldingImpl( const OUString& inStr, sal_Int32 startPos,
             c = func ? func( c) : (*table)[ c ];
             if (c != 0xffff)
                 *dst ++ = c;
-            if (useOffset) {
+            if (pOffset) {
                 if (c != 0xffff)
                     *p ++ = position;
                 position++;
@@ -178,8 +178,8 @@ transliteration_Ignore::foldingImpl( const OUString& inStr, sal_Int32 startPos,
         }
     }
     newStr->length = sal_Int32(dst - newStr->buffer);
-    if (useOffset)
-      offset.realloc(newStr->length);
+    if (pOffset)
+      pOffset->realloc(newStr->length);
     *dst = u'\0';
 
     return OUString(newStr, SAL_NO_ACQUIRE); // take ownership

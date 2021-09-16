@@ -88,7 +88,7 @@ static MappingType lcl_getMappingTypeForToggleCase( MappingType nMappingType, sa
 OUString
 Transliteration_body::transliterateImpl(
     const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-    Sequence< sal_Int32 >& offset, bool useOffset)
+    Sequence< sal_Int32 >* pOffset)
 {
     const sal_Unicode *in = inStr.getStr() + startPos;
 
@@ -113,7 +113,7 @@ Transliteration_body::transliterateImpl(
     sal_Int32 j = 0;
     // Two different blocks to eliminate the if(useOffset) condition inside the loop.
     // Yes, on massive use even such small things do count.
-    if ( useOffset )
+    if ( pOffset )
     {
         std::vector<sal_Int32> aVec;
         aVec.reserve(std::max<sal_Int32>(nLocalBuf, nCount) * NMAPPINGMAX);
@@ -129,7 +129,7 @@ Transliteration_body::transliterateImpl(
             j += map.nmap;
         }
 
-        offset = comphelper::containerToSequence(aVec);
+        *pOffset = comphelper::containerToSequence(aVec);
     }
     else
     {
@@ -173,9 +173,9 @@ Transliteration_body::transliterateChar2Char( sal_Unicode inChar )
 
 OUString
 Transliteration_body::foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-    Sequence< sal_Int32 >& offset, bool useOffset)
+    Sequence< sal_Int32 >* pOffset)
 {
-    return transliterateImpl(inStr, startPos, nCount, offset, useOffset);
+    return transliterateImpl(inStr, startPos, nCount, pOffset);
 }
 
 Transliteration_casemapping::Transliteration_casemapping()
@@ -189,7 +189,8 @@ void
 Transliteration_casemapping::setMappingType( const MappingType rMappingType, const Locale& rLocale )
 {
     nMappingType = rMappingType;
-    aLocale = rLocale;
+    if (aLocale != rLocale)
+        aLocale = rLocale;
 }
 
 Transliteration_u2l::Transliteration_u2l()
@@ -228,7 +229,7 @@ Transliteration_titlecase::Transliteration_titlecase()
 static OUString transliterate_titlecase_Impl(
     const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
     const Locale &rLocale,
-    Sequence< sal_Int32 >& offset )
+    Sequence< sal_Int32 >* pOffset )
 {
     const OUString aText( inStr.copy( startPos, nCount ) );
 
@@ -255,10 +256,10 @@ static OUString transliterate_titlecase_Impl(
         // The rest of the text should just become lowercase.
         aRes = xCharClassImpl->toTitle( aResolvedLigature, 0, nResolvedLen, rLocale ) +
                xCharClassImpl->toLower( aText, 1, aText.getLength() - 1, rLocale );
-        offset.realloc( aRes.getLength() );
+        pOffset->realloc( aRes.getLength() );
 
-        sal_Int32* pOffset = std::fill_n(offset.begin(), nResolvedLen, 0);
-        std::iota(pOffset, offset.end(), 1);
+        sal_Int32* pOffsetInt = std::fill_n(pOffset->begin(), nResolvedLen, 0);
+        std::iota(pOffsetInt, pOffset->end(), 1);
     }
     return aRes;
 }
@@ -267,9 +268,9 @@ static OUString transliterate_titlecase_Impl(
 // namely that startPos points to the first char of the word
 OUString Transliteration_titlecase::transliterateImpl(
     const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-    Sequence< sal_Int32 >& offset, bool )
+    Sequence< sal_Int32 >* pOffset )
 {
-    return transliterate_titlecase_Impl( inStr, startPos, nCount, aLocale, offset );
+    return transliterate_titlecase_Impl( inStr, startPos, nCount, aLocale, pOffset );
 }
 
 Transliteration_sentencecase::Transliteration_sentencecase()
@@ -283,9 +284,9 @@ Transliteration_sentencecase::Transliteration_sentencecase()
 // namely that startPos points to the first word (NOT first char!) in the sentence
 OUString Transliteration_sentencecase::transliterateImpl(
     const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-    Sequence< sal_Int32 >& offset, bool )
+    Sequence< sal_Int32 >* pOffset )
 {
-    return transliterate_titlecase_Impl( inStr, startPos, nCount, aLocale, offset );
+    return transliterate_titlecase_Impl( inStr, startPos, nCount, aLocale, pOffset );
 }
 
 }

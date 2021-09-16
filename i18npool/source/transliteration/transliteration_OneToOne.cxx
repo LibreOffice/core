@@ -37,7 +37,7 @@ sal_Int16 SAL_CALL transliteration_OneToOne::getType()
 
 OUString
 transliteration_OneToOne::foldingImpl( const OUString& /*inStr*/, sal_Int32 /*startPos*/,
-        sal_Int32 /*nCount*/, Sequence< sal_Int32 >& /*offset*/, bool)
+        sal_Int32 /*nCount*/, Sequence< sal_Int32 >* /*pOffset*/)
 {
         throw RuntimeException();
 }
@@ -57,7 +57,7 @@ transliteration_OneToOne::transliterateRange( const OUString& /*str1*/, const OU
 
 OUString
 transliteration_OneToOne::transliterateImpl( const OUString& inStr, sal_Int32 startPos,
-    sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset)
+    sal_Int32 nCount, Sequence< sal_Int32 >* pOffset)
 {
     // Create a string buffer which can hold nCount + 1 characters.
     // The reference count is 1 now.
@@ -66,9 +66,9 @@ transliteration_OneToOne::transliterateImpl( const OUString& inStr, sal_Int32 st
     const sal_Unicode * src = inStr.getStr() + startPos;
 
     // Allocate nCount length to offset argument.
-    if (useOffset) {
-        offset.realloc( nCount );
-        std::iota(offset.begin(), offset.end(), startPos);
+    if (pOffset) {
+        pOffset->realloc( nCount );
+        std::iota(pOffset->begin(), pOffset->end(), startPos);
     }
 
     // Translation

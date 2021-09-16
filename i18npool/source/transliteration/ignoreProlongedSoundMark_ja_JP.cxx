@@ -289,7 +289,7 @@ const sal_Unicode table_halfwidth[] = {
 
 
 OUString
-ignoreProlongedSoundMark_ja_JP::foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset )
+ignoreProlongedSoundMark_ja_JP::foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >* pOffset )
 {
     // Create a string buffer which can hold nCount + 1 characters.
     // The reference count is 1 now.
@@ -297,10 +297,10 @@ ignoreProlongedSoundMark_ja_JP::foldingImpl( const OUString& inStr, sal_Int32 st
     sal_Unicode * dst = newStr->buffer;
     const sal_Unicode * src = inStr.getStr() + startPos;
 
-    if (useOffset) {
+    if (pOffset) {
         // Allocate nCount length to offset argument.
-        offset.realloc( nCount );
-        std::iota(offset.begin(), offset.end(), startPos);
+        pOffset->realloc( nCount );
+        std::iota(pOffset->begin(), pOffset->end(), startPos);
     }
 
 
@@ -333,8 +333,8 @@ ignoreProlongedSoundMark_ja_JP::foldingImpl( const OUString& inStr, sal_Int32 st
     *dst = u'\0';
 
     newStr->length = sal_Int32(dst - newStr->buffer);
-    if (useOffset)
-        offset.realloc(newStr->length);
+    if (pOffset)
+        pOffset->realloc(newStr->length);
     return OUString(newStr, SAL_NO_ACQUIRE); // take ownership
 
 }

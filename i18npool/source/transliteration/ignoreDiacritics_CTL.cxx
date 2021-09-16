@@ -49,7 +49,7 @@ ignoreDiacritics_CTL::transliterateChar2Char(sal_Unicode nInChar)
 
 OUString
 ignoreDiacritics_CTL::foldingImpl(const OUString& rInStr, sal_Int32 nStartPos,
-    sal_Int32 nCount, css::uno::Sequence<sal_Int32>& rOffset, bool useOffset)
+    sal_Int32 nCount, css::uno::Sequence<sal_Int32>* pOffset)
 {
     if (!m_transliterator)
         throw css::uno::RuntimeException();
@@ -57,7 +57,7 @@ ignoreDiacritics_CTL::foldingImpl(const OUString& rInStr, sal_Int32 nStartPos,
     if (nStartPos < 0 || nStartPos + nCount > rInStr.getLength())
         throw css::uno::RuntimeException();
 
-    if (useOffset)
+    if (pOffset)
     {
         OUStringBuffer aOutBuf(nCount);
 
@@ -79,7 +79,7 @@ ignoreDiacritics_CTL::foldingImpl(const OUString& rInStr, sal_Int32 nStartPos,
             nPosition = nIndex;
         }
 
-        rOffset = comphelper::containerToSequence(aOffset);
+        *pOffset = comphelper::containerToSequence(aOffset);
         return aOutBuf.makeStringAndClear();
     }
     else

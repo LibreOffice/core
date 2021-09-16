@@ -36,7 +36,7 @@ sal_Int16 SAL_CALL transliteration_Numeric::getType()
 }
 
 OUString
-    transliteration_Numeric::foldingImpl( const OUString& /*inStr*/, sal_Int32 /*startPos*/, sal_Int32 /*nCount*/, Sequence< sal_Int32 >& /*offset*/, bool )
+    transliteration_Numeric::foldingImpl( const OUString& /*inStr*/, sal_Int32 /*startPos*/, sal_Int32 /*nCount*/, Sequence< sal_Int32 >* /*pOffset*/ )
 {
     throw RuntimeException();
 }
@@ -59,7 +59,7 @@ Sequence< OUString > SAL_CALL
 
 OUString
 transliteration_Numeric::transliterateBullet( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-        Sequence< sal_Int32 >& offset, bool useOffset )
+        Sequence< sal_Int32 >* pOffset )
 {
     sal_Int32 number = -1, j = 0, endPos = startPos + nCount;
 
@@ -69,8 +69,8 @@ transliteration_Numeric::transliterateBullet( const OUString& inStr, sal_Int32 s
     rtl_uString* pStr = rtl_uString_alloc(nCount);
     sal_Unicode* out = pStr->buffer;
 
-    if (useOffset)
-        offset.realloc(nCount);
+    if (pOffset)
+        pOffset->realloc(nCount);
 
     for (sal_Int32 i = startPos; i < endPos; i++) {
         if (isNumber(inStr[i]))
@@ -83,22 +83,22 @@ transliteration_Numeric::transliterateBullet( const OUString& inStr, sal_Int32 s
             }
         } else {
             if (number == 0) {
-                if (useOffset)
-                    offset[j] = startPos;
+                if (pOffset)
+                    (*pOffset)[j] = startPos;
                 out[j++] = NUMBER_ZERO;
             } else if (number > tableSize && !recycleSymbol) {
                 for (sal_Int32 k = startPos; k < i; k++) {
-                    if (useOffset)
-                        offset[j] = k;
+                    if (pOffset)
+                        (*pOffset)[j] = k;
                     out[j++] = inStr[k];
                 }
             } else if (number > 0) {
-                if (useOffset)
-                    offset[j] = startPos;
+                if (pOffset)
+                    (*pOffset)[j] = startPos;
                 out[j++] = table[--number % tableSize];
             } else if (i < endPos) {
-                if (useOffset)
-                    offset[j] = i;
+                if (pOffset)
+                    (*pOffset)[j] = i;
                 out[j++] = inStr[i];
             }
             number = -1;
@@ -106,20 +106,20 @@ transliteration_Numeric::transliterateBullet( const OUString& inStr, sal_Int32 s
     }
     out[j] = 0;
 
-    if (useOffset)
-        offset.realloc(j);
+    if (pOffset)
+        pOffset->realloc(j);
 
     return OUString( pStr, SAL_NO_ACQUIRE );
 }
 
 OUString
 transliteration_Numeric::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-        Sequence< sal_Int32 >& offset, bool useOffset )
+        Sequence< sal_Int32 >* pOffset )
 {
     if (tableSize)
-        return transliterateBullet( inStr, startPos, nCount, offset, useOffset);
+        return transliterateBullet( inStr, startPos, nCount, pOffset);
     else
-        return rtl::Reference<NativeNumberSupplierService>(new NativeNumberSupplierService(useOffset))->getNativeNumberString( inStr.copy(startPos, nCount), aLocale, nNativeNumberMode, offset );
+        return rtl::Reference<NativeNumberSupplierService>(new NativeNumberSupplierService(bool(pOffset)))->getNativeNumberString( inStr.copy(startPos, nCount), aLocale, nNativeNumberMode, *pOffset );
 }
 
 sal_Unicode SAL_CALL
