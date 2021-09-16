@@ -16,6 +16,24 @@
       "message": "Interesting, how std::from_chars (iiuc available on all supported compilers for integers) compares to our toInt64_WithLength. Testing on Widows using a dbgutil build, from_chars is about 15% faster - but indeed, this is absolutely useless test, and only optimized build on relevant platform could tell...",
       "revId": "c726d325493cacf279532adb10dfdd354cec4a7e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c73184d_8da80339",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-09-16T08:37:54Z",
+      "side": 1,
+      "message": "If I wanted to get the maximum performance here, I\u0027d go for a custom function that reads 10-base integers, it\u0027s just a couple of lines and it probably can\u0027t go faster than that. But so far this seems to be good enough.",
+      "parentUuid": "9b235c07_a8862b1a",
+      "revId": "c726d325493cacf279532adb10dfdd354cec4a7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
