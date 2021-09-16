@@ -21,26 +21,25 @@
 
 #include <sal/main.h>
 #include <sal/log.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <cppuhelper/bootstrap.hxx>
+#include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/extendapplicationenvironment.hxx>
 
-#include <cppuhelper/bootstrap.hxx>
-#include <comphelper/processfactory.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/event.hxx>
+#include <vcl/gradient.hxx>
+#include <vcl/lineinfo.hxx>
+#include <vcl/metric.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/vclptr.hxx>
+#include <vcl/wrkwin.hxx>
+
+#include <bitmap/BitmapWriteAccess.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-
-#include <vcl/event.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
-#include <vcl/gradient.hxx>
-#include <vcl/lineinfo.hxx>
-#include <vcl/bitmap.hxx>
-#include <vcl/metric.hxx>
-#include <vcl/vclptr.hxx>
-#include <bitmap/BitmapWriteAccess.hxx>
-
-#include <rtl/ustrbuf.hxx>
 
 #include <math.h>
 
