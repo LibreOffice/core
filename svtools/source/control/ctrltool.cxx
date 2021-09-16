@@ -886,4 +886,4 @@ sal_Int32 FontSizeNames::GetIndexSize( sal_Int32 nIndex ) const
     return mpArray[nIndex].mnSize;
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
