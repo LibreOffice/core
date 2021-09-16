@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_SALLAYOUT_HXX
 #define INCLUDED_VCL_INC_SALLAYOUT_HXX
 
+#include <sal/config.h>
+
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <tools/gen.hxx>
 #include <tools/degree.hxx>

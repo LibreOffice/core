@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_PHYSICALFONTFACE_HXX
 #define INCLUDED_VCL_INC_PHYSICALFONTFACE_HXX
 
+#include <sal/config.h>
+
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
 #include <tools/long.hxx>
