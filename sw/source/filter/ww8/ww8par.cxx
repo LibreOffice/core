@@ -4269,7 +4269,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_nWantedVersion(nVersionPara)
     , m_nSwNumLevel(0xff)
     , m_nWwNumType(0xff)
-    , m_pChosenWW8OutlineStyle(nullptr)
     , m_nListLevel(MAXLEVEL)
     , m_bNewDoc(bNewDoc)
     , m_bSkipImages(bSkipImages)
@@ -5982,28 +5981,6 @@ void SwWW8ImplReader::SetOutlineStyles()
         }
     }
 
-    // - set list level properties of Outline Style - ODF's list style applied
-    // by default to headings
-    // - assign corresponding Heading Paragraph Styles to the Outline Style
-    // - If a heading Paragraph Styles is not applying the WW8 list style which
-    // had been chosen as
-    //   the one which provides the list level properties for the Outline Style,
-    // its assignment to
-    //   the Outline Style is removed. A potential applied WW8 list style is
-    // assigned directly and
-    //   its default outline level is applied.
-    SwNumRule aOutlineRule(*m_rDoc.GetOutlineNumRule());
-    if (m_pChosenWW8OutlineStyle)
-    {
-        for (int i = 0; i < WW8ListManager::nMaxLevel; ++i)
-        {
-            // Don't clobber existing outline levels.
-            const sal_uInt16 nLevel = 1 << i;
-            if (!(nOutlineStyleListLevelWithAssignment & nLevel))
-                aOutlineRule.Set(i, m_pChosenWW8OutlineStyle->Get(i));
-        }
-    }
-
     for (const SwWW8StyInf* pStyleInf : aWW8BuiltInHeadingStyles)
     {
         const sal_uInt16 nOutlineStyleListLevelOfWW8BuiltInHeadingStyle
@@ -6021,7 +5998,7 @@ void SwWW8ImplReader::SetOutlineStyles()
         SwTextFormatColl* pTextFormatColl = static_cast<SwTextFormatColl*>(pStyleInf->m_pFormat);
 
         {
-            // WW8 Built-In Heading Style does not apply the chosen one.
+            // WW8 Built-In Heading Style should be removed from Chapter Numbering.
             // --> delete assignment to OutlineStyle, but keep its current
             // outline level
             pTextFormatColl->DeleteAssignmentToListLevelOfOutlineStyle();
@@ -6039,11 +6016,6 @@ void SwWW8ImplReader::SetOutlineStyles()
             pTextFormatColl->SetFormatAttr(
                 SfxUInt16Item(RES_PARATR_OUTLINELEVEL, nOutlineLevel));
         }
-    }
-
-    if (m_pChosenWW8OutlineStyle)
-    {
-        m_rDoc.SetOutlineNumRule(aOutlineRule);
     }
 }
 
