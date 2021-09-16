@@ -16,6 +16,24 @@
       "message": "Sry that I bother you with these basic questions, but I never have added a string to LO\u0027s codebase.",
       "revId": "478383415f552ead2047b456456113550f7a86ca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39775746_d3230083",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-16T19:26:31Z",
+      "side": 1,
+      "message": "Please don\u0027t be sorry. I\u0027m glad to help :)\n\nHope it worked actually, because I didn\u0027t try before suggesting, and didn\u0027t know if e.g. BasResId would work with IDs from basic/inc/strings.hrc.",
+      "parentUuid": "f981eae4_aa7274cd",
+      "revId": "478383415f552ead2047b456456113550f7a86ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
