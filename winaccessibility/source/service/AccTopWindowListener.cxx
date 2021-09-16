@@ -139,8 +139,7 @@ void AccTopWindowListener::AddAllListeners(css::accessibility::XAccessible* pAcc
         return;
     }
 
-    accManagerAgent.InsertAccObj(pAccessible, pParentXAcc,
-            reinterpret_cast<sal_Int64>(pWND));
+    accManagerAgent.InsertAccObj(pAccessible, pParentXAcc, pWND);
 
     if (!accManagerAgent.IsContainer(pAccessible))
     {

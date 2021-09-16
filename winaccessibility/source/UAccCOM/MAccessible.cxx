@@ -1415,8 +1415,7 @@ IMAccessible* CMAccessible::GetChildInterface(long dChildID)//for test
 
         if(!isGet)
         {
-            g_pAgent->InsertAccObj(pXChild.get(), m_xAccessible.get(),
-                    reinterpret_cast<sal_Int64>(m_hwnd));
+            g_pAgent->InsertAccObj(pXChild.get(), m_xAccessible.get(), m_hwnd);
             isGet = get_IAccessibleFromXAccessible(pXChild.get(), &pChild);
         }
 

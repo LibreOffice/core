@@ -21,6 +21,10 @@
 
 #include <memory>
 
+#include <prewin.h>
+#include <Windows.h>
+#include <postwin.h>
+
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
 struct IMAccessible;
@@ -45,7 +49,7 @@ public:
 
     virtual bool InsertAccObj(css::accessibility::XAccessible* pXAcc,
                               css::accessibility::XAccessible* pParentXAcc,
-                              sal_Int64 pWnd=0);
+                              HWND hWnd = 0);
     virtual void GetIAccessibleFromResID(long childID,IMAccessible**);
     virtual bool GetIAccessibleFromXAccessible(css::accessibility::XAccessible* pXAcc, IAccessible** ppIA);
 
@@ -55,7 +59,7 @@ public:
     bool NotifyAccEvent(short pEvent = 0, css::accessibility::XAccessible* pXAcc = nullptr);
 
     bool InsertChildrenAccObj(css::accessibility::XAccessible* pXAcc,
-                              sal_Int64 pWnd=0);
+                              HWND  hWnd = 0);
     void DeleteChildrenAccObj( css::accessibility::XAccessible* pXAcc );
 
     void  DecreaseState( css::accessibility::XAccessible* pXAcc,unsigned short pState );

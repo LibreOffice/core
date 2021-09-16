@@ -91,8 +91,7 @@ void AccFrameEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
                 = pvclwindow->GetWindow()->GetSystemData();
 
             //add this child
-            pAgent->InsertAccObj(pAcc, m_xAccessible.get(),
-                    reinterpret_cast<sal_Int64>(systemdata->hWnd));
+            pAgent->InsertAccObj(pAcc, m_xAccessible.get(), systemdata->hWnd);
             //add all oldValue's existing children
             pAgent->InsertChildrenAccObj(pAcc);
             pAgent->NotifyAccEvent(UM_EVENT_CHILD_ADDED, pAcc);

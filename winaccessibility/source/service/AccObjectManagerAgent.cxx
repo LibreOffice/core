@@ -142,11 +142,10 @@ void  AccObjectManagerAgent::UpdateDescription( XAccessible* pXAcc, Any newDesc 
    * @return If the method is correctly processed.
    */
 bool AccObjectManagerAgent::InsertAccObj(
-        XAccessible* pXAcc, XAccessible* pParentXAcc, sal_Int64 nWnd)
+        XAccessible* pXAcc, XAccessible* pParentXAcc, HWND hWnd)
 {
     if( pWinManager )
-        return pWinManager->InsertAccObj(pXAcc, pParentXAcc,
-                static_cast<HWND>(reinterpret_cast<void*>(nWnd)));
+        return pWinManager->InsertAccObj(pXAcc, pParentXAcc, hWnd);
 
     return false;
 }
@@ -174,10 +173,10 @@ AccObjectManagerAgent::SaveTopWindowHandle(sal_Int64 hWnd, XAccessible* pXAcc)
    * @return If the method is correctly processed.
    */
 bool
-AccObjectManagerAgent::InsertChildrenAccObj(XAccessible* pXAcc, sal_Int64 pWnd)
+AccObjectManagerAgent::InsertChildrenAccObj(XAccessible* pXAcc, HWND hWnd)
 {
     if( pWinManager )
-        return pWinManager->InsertChildrenAccObj( pXAcc, reinterpret_cast<HWND>(pWnd) );
+        return pWinManager->InsertChildrenAccObj(pXAcc, hWnd);
 
     return false;
 }
