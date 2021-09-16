@@ -46,7 +46,7 @@ namespace o3tl {
 
 namespace i18nutil {
 
-struct Value
+struct alignas(sal_uInt8) Value
 {
     sal_uInt8   type;
     sal_uInt16  value;  // value or address, depend on the type
