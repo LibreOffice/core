@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aefc08c2_24547890",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-09-16T13:54:36Z",
+      "side": 1,
+      "message": "@Tünde: very nice and useful fix, thanks for it! I\u0027ve made a note about the documents with unsupported hashing algorithms in the commit descriptions. Also is it sure, that a hash without iteration isn\u0027t supported any more?",
+      "revId": "81b7c565a45ec538f04db32d218fcfd6af78711a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

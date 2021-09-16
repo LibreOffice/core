@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a943b89_983efdf0",
+        "filename": "comphelper/source/misc/docpasswordhelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-09-16T13:54:36Z",
+      "side": 1,
+      "message": "Is it sure?",
+      "range": {
+        "startLine": 152,
+        "startChar": 16,
+        "endLine": 152,
+        "endChar": 28
+      },
+      "revId": "ae4367748d151797742e44432eae9868268f3ec3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
