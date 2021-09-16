@@ -170,6 +170,7 @@
 #define ERRCODE_BASIC_OPER_NOT_PERFORM      ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Compiler, 136 )  // Can't perform requested operation
 #define ERRCODE_BASIC_TOO_MANY_DLL          ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Compiler, 137 )  // Too many dll application clients
 #define ERRCODE_BASIC_LOOP_NOT_INIT         ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Compiler, 138 )  // For loop not initialized
+#define ERRCODE_BASIC_WITH_ADDITIONAL_INFO  ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Compiler, 139 )  // Error includiung additional info
 
 #endif
 

@@ -151,6 +151,7 @@ std::pair<TranslateId, ErrCode> const RID_BASIC_START[] =
     { NC_("RID_BASIC_START", "Can't perform requested operation."), ERRCODE_BASIC_OPER_NOT_PERFORM },
     { NC_("RID_BASIC_START", "Too many DLL application clients."), ERRCODE_BASIC_TOO_MANY_DLL },
     { NC_("RID_BASIC_START", "For loop not initialized."), ERRCODE_BASIC_LOOP_NOT_INIT },
+    { NC_("RID_BASIC_START", "$ERR\nAdditional info: $MSG."), ERRCODE_BASIC_WITH_ADDITIONAL_INFO },
     { NC_("RID_BASIC_START", "$(ARG1)"), ERRCODE_BASIC_COMPAT },
     { {}, ERRCODE_NONE }
 };
