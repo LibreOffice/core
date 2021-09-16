@@ -28,6 +28,12 @@ SwRegionRects::SwRegionRects( const SwRect &rStartRect, sal_uInt16 nInit ) :
     push_back( m_aOrigin );
 }
 
+SwRegionRects::SwRegionRects( sal_uInt16 nInit ) :
+    m_aOrigin()
+{
+    reserve(nInit);
+}
+
 // If <rDel> is true then this Rect will be overwritten by <rRect> at
 // position <nPos>. Otherwise <rRect> is attached at the end.
 inline void SwRegionRects::InsertRect( const SwRect &rRect,
@@ -46,8 +52,7 @@ inline void SwRegionRects::InsertRect( const SwRect &rRect,
 
 void SwRegionRects::operator+=( const SwRect &rRect )
 {
-    bool f = false;
-    InsertRect( rRect, 0, f );
+    push_back( rRect );
 }
 
 /** Delete all overlaps of the Rects in array with the given <rRect>
@@ -127,6 +132,7 @@ void SwRegionRects::Invert()
     // To avoid unnecessary memory requirements, create a "useful" initial size:
     // Number of rectangles in this area * 2 + 2 for the special case of a
     // single hole (so four Rects in the inverse case).
+    assert(!m_aOrigin.IsEmpty());
     SwRegionRects aInvRegion( m_aOrigin, size()*2+2 );
     for( const_iterator it = begin(); it != end(); ++it )
         aInvRegion -= *it;
@@ -138,6 +144,13 @@ void SwRegionRects::Invert()
 static inline SwTwips CalcArea( const SwRect &rRect )
 {
     return rRect.Width() * rRect.Height();
+}
+
+void SwRegionRects::LimitToOrigin()
+{
+    assert(!m_aOrigin.IsEmpty());
+    for (size_type i = 0; i < size(); ++i )
+        (*this)[ i ].Intersection( m_aOrigin );
 }
 
 // combine all adjacent rectangles
