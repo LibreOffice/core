@@ -757,6 +757,12 @@ void Window::ImplInvalidateFrameRegion( const vcl::Region* pRegion, InvalidateFl
 
 void Window::ImplInvalidateOverlapFrameRegion( const vcl::Region& rRegion )
 {
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // Tiled rendering is used, so there's no need to invalidate for idle painting.
+        return;
+    }
+
     vcl::Region aRegion = rRegion;
 
     ImplClipBoundaries( aRegion, true, true );
@@ -787,6 +793,12 @@ void Window::ImplInvalidateParentFrameRegion( vcl::Region& rRegion )
 
 void Window::ImplInvalidate( const vcl::Region* pRegion, InvalidateFlags nFlags )
 {
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // Tiled rendering is used, so there's no need to invalidate for idle painting.
+        return;
+    }
+
     // check what has to be redrawn
     bool bInvalidateAll = !pRegion;
 
