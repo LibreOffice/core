@@ -37,7 +37,8 @@ enum class MappingType {
     ToTitle          = 0x10,  // to Title mapping
     SimpleFolding    = 0x20,  // Simple Case Folding
     FullFolding      = 0x40,  // Full Case Folding
-    CasedLetterMask  = LowerToUpper | UpperToLower | ToUpper | ToLower | ToTitle | SimpleFolding | FullFolding, // for final sigmar
+    // for final sigma (where the case-mapping is different for the last letter of a word)
+    CasedLetterMask  = LowerToUpper | UpperToLower | ToUpper | ToLower | ToTitle | SimpleFolding | FullFolding,
     NotValue         = 0x80,  // Value field is an address
 };
 namespace o3tl {
