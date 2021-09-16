@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "233a8618_13878128",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-09-16T09:53:32Z",
+      "side": 1,
+      "message": "Thought \"alloca\" function shouldn\u0027t be called (a bit like \"goto\") because of its danger to trigger stack exception.\n\n(sorry these links are quite old:\nhttps://stackoverflow.com/questions/1018853/why-is-the-use-of-alloca-not-considered-good-practice\nhttps://softwareengineering.stackexchange.com/questions/116117/should-i-teach-my-students-alloca)",
+      "revId": "d356f380cd0e5823113219eb8f659230dfaceb5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
