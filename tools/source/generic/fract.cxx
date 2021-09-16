@@ -370,8 +370,8 @@ bool operator > ( const Fraction& rVal1, const Fraction& rVal2 )
 }
 
 // If dVal > LONG_MAX or dVal < LONG_MIN, the rational throws a boost::bad_rational.
-// Otherwise, dVal and denominator are multiplied by 8, until one of them
-// is larger than (LONG_MAX / 8).
+// Otherwise, dVal and denominator are multiplied by 10, until one of them
+// is larger than (LONG_MAX / 10).
 //
 // NOTE: here we use 'sal_Int32' due that only values in sal_Int32 range are valid.
 static boost::rational<sal_Int32> rational_FromDouble(double dVal)
@@ -381,11 +381,11 @@ static boost::rational<sal_Int32> rational_FromDouble(double dVal)
          std::isnan(dVal) )
         throw boost::bad_rational();
 
-    const sal_Int32 nMAX = std::numeric_limits<sal_Int32>::max() / 8;
+    const sal_Int32 nMAX = std::numeric_limits<sal_Int32>::max() / 10;
     sal_Int32 nDen = 1;
     while ( std::abs( dVal ) < nMAX && nDen < nMAX ) {
-        dVal *= 8;
-        nDen *= 8;
+        dVal *= 10;
+        nDen *= 10;
     }
     return boost::rational<sal_Int32>( sal_Int32(dVal), nDen );
 }
