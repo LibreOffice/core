@@ -19,8 +19,8 @@
 
 #include <sal/config.h>
 
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/lang.h>
@@ -1491,4 +1491,4 @@ void OutputDevice::ImplReleaseFonts()
     mpDeviceFontSizeList.reset();
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
