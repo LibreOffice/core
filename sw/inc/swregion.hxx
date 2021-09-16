@@ -25,21 +25,35 @@
 
 typedef std::vector<SwRect> SwRects;
 
+// A collection of rectangles within a given area (origin).
+// One way to use is to initially set rStartRect, which will set the origin
+// and the rectangles to rStartRect, and then use operator-= to punch holes.
+// Other way to use is to use empty constructor, call ChangeOrigin() and
+// then use operator+= to add rectangles, possibly followed by final
+// LimitToOrigin() and Compress(). The second way should be faster than
+// the first way followed by Invert().
 class SwRegionRects : public SwRects
 {
-    SwRect m_aOrigin; // Copy of StartRect.
+    SwRect m_aOrigin; // Origin area, limits the total area e.g. for Invert()
 
     inline void InsertRect( const SwRect &rRect, const sal_uInt16 nPos, bool &rDel);
 
 public:
-    SwRegionRects( const SwRect& rStartRect, sal_uInt16 nInit = 20 );
+    // Sets rStartRect as the first element and also the origin area.
+    explicit SwRegionRects( const SwRect& rStartRect, sal_uInt16 nInit = 20 );
+    // Empty constructor, does not set elements or origin area. You may
+    // most likely want to call ChangeOrigin() afterwards.
+    explicit SwRegionRects( sal_uInt16 nInit = 20 );
 
     // For punching from aOrigin.
     void operator-=( const SwRect& rRect );
     void operator+=( const SwRect& rRect );
 
-    // From holes to areas, from areas to holes.
+    // From holes to areas, from areas to holes, within the origin area.
     void Invert();
+
+    // Ensures all rectangles are within the origin area.
+    void LimitToOrigin();
 
     // Combine adjacent rectangles.
     void Compress();

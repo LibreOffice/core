@@ -129,9 +129,10 @@ bool SwViewShellImp::AddPaintRect( const SwRect &rRect )
             // In case of normal rendering, this makes sure only visible rectangles are painted.
             // Otherwise get the rectangle of the full document, so all paint rectangles are invalidated.
             const SwRect& rArea = comphelper::LibreOfficeKit::isActive() ? m_pShell->GetLayout()->getFrameArea() : m_pShell->VisArea();
-            m_pRegion.reset(new SwRegionRects(rArea));
+            m_pRegion.reset(new SwRegionRects);
+            m_pRegion->ChangeOrigin(rArea);
         }
-        (*m_pRegion) -= rRect;
+        (*m_pRegion) += rRect;
         return true;
     }
     return false;
