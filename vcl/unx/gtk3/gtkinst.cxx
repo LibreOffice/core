@@ -10779,6 +10779,7 @@ private:
     std::map<OString, GtkWidget*> m_aMap;
     std::map<OString, std::unique_ptr<GtkInstanceMenuButton>> m_aMenuButtonMap;
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     // at the time of writing there is no gtk_menu_tool_button_set_popover available
     // though there will be in the future
     // https://gitlab.gnome.org/GNOME/gtk/commit/03e30431a8af9a947a0c4ccab545f24da16bfe17?w=1
@@ -10789,10 +10790,8 @@ private:
             GtkWidget **ppToggleButton = static_cast<GtkWidget**>(user_data);
             *ppToggleButton = pWidget;
         }
-#if !GTK_CHECK_VERSION(4, 0, 0)
         else if (GTK_IS_CONTAINER(pWidget))
             gtk_container_forall(GTK_CONTAINER(pWidget), find_menu_button, user_data);
-#endif
     }
 
     static void find_menupeer_button(GtkWidget *pWidget, gpointer user_data)
@@ -10802,11 +10801,10 @@ private:
             GtkWidget **ppButton = static_cast<GtkWidget**>(user_data);
             *ppButton = pWidget;
         }
-#if !GTK_CHECK_VERSION(4, 0, 0)
         else if (GTK_IS_CONTAINER(pWidget))
             gtk_container_forall(GTK_CONTAINER(pWidget), find_menupeer_button, user_data);
-#endif
     }
+#endif
 
     static void collect(GtkWidget* pItem, gpointer widget)
     {
