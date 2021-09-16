@@ -16,6 +16,23 @@
       "message": "Since you \"just\" mentioned DC leaks on IRC... I\u0027m quite sure we have some, but I don\u0027t have reproducers. I just some seldom asserts with chart tests on our CI infra.",
       "revId": "ecd6ae9f197391facec294ed828ac02d408dfe50",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5e929de_911da25b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-16T07:53:52Z",
+      "side": 1,
+      "message": "I don\u0027t know about any leaks, what I\u0027m trying to fix is an intermittent crash on the Windows tinderboxes, e.g. see here\n\nhttps://ci.libreoffice.org/job/gerrit_windows/107115/consoleFull#-786980998d893063f-7f3d-4b7e-b56f-4e0f225817cd\n\nwhich seems to have something to do with calling DeleteDC\n\nBut certainly, any improvement in the management of DC would be welcome. I see that someone made a start by creating a ScopedDC typedef",
+      "revId": "ecd6ae9f197391facec294ed828ac02d408dfe50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
