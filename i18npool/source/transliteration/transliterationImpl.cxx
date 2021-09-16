@@ -40,8 +40,6 @@ using namespace com::sun::star::lang;
 
 namespace i18npool {
 
-#define ERROR RuntimeException()
-
 #define TmItem1( name ) \
   {TransliterationModules_##name, TransliterationModulesNew_##name, #name}
 
@@ -162,7 +160,7 @@ TransliterationImpl::getName()
         return bodyCascade[0]->getName();
     if (numCascade < 1)
         return ( OUString("Not Loaded"));
-    throw ERROR;
+    throw RuntimeException();
 }
 
 sal_Int16 SAL_CALL
@@ -172,7 +170,7 @@ TransliterationImpl::getType()
         return (TransliterationType::CASCADE|TransliterationType::IGNORE);
     if (numCascade > 0 && bodyCascade[0].is())
         return bodyCascade[0]->getType();
-    throw ERROR;
+    throw RuntimeException();
 }
 
 static TransliterationModules operator&(TransliterationModules lhs, TransliterationModules rhs) {
@@ -189,7 +187,7 @@ TransliterationImpl::loadModule( TransliterationModules modType, const Locale& r
     if (bool(modType & TransliterationModules_IGNORE_MASK) &&
         bool(modType & TransliterationModules_NON_IGNORE_MASK))
     {
-        throw ERROR;
+        throw RuntimeException();
     } else if (bool(modType & TransliterationModules_IGNORE_MASK)) {
 #define TransliterationModules_IGNORE_CASE_MASK (TransliterationModules_IGNORE_CASE | \
                                                 TransliterationModules_IGNORE_WIDTH | \
@@ -230,7 +228,7 @@ TransliterationImpl::loadModuleNew( const Sequence < TransliterationModulesNew >
     TransliterationModules mask = TransliterationModules_END_OF_MODULE;
     sal_Int32 count = modType.getLength();
     if (count > maxCascade)
-        throw ERROR; // could not handle more than maxCascade
+        throw RuntimeException(); // could not handle more than maxCascade
     for (sal_Int32 i = 0; i < count; i++) {
         for (sal_Int16 j = 0; bool(TMlist[j].tmn); j++) {
             if (TMlist[j].tmn == modType[i]) {
@@ -239,7 +237,7 @@ TransliterationImpl::loadModuleNew( const Sequence < TransliterationModulesNew >
                         TransliterationModules_IGNORE_MASK : TransliterationModules_NON_IGNORE_MASK;
                 else if (mask == TransliterationModules_IGNORE_MASK &&
                         (TMlist[i].tm&TransliterationModules_IGNORE_MASK) == TransliterationModules_END_OF_MODULE)
-                    throw ERROR; // could not mess up ignore trans. with non_ignore trans.
+                    throw RuntimeException(); // could not mess up ignore trans. with non_ignore trans.
                 if (loadModuleByName(OUString::createFromAscii(TMlist[j].implName), bodyCascade[numCascade], rLocale))
                     numCascade++;
                 break;
@@ -261,7 +259,7 @@ void SAL_CALL
 TransliterationImpl::loadModulesByImplNames(const Sequence< OUString >& implNameList, const Locale& rLocale )
 {
     if (implNameList.getLength() > maxCascade || implNameList.getLength() <= 0)
-        throw ERROR;
+        throw RuntimeException();
 
     clear();
     for (const auto& rName : implNameList)
@@ -515,7 +513,7 @@ TransliterationImpl::getRange(const Sequence< OUString > &inStrs,
         const Sequence< OUString >& temp = bodyCascade[_numCascade]->transliterateRange(inStrs[j], inStrs[j+1]);
 
         for (const auto& rStr : temp) {
-            if ( j_tmp++ >= nMaxOutputLength ) throw ERROR;
+            if ( j_tmp++ >= nMaxOutputLength ) throw RuntimeException();
             ostr.push_back(rStr);
         }
     }
