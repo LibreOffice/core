@@ -1570,7 +1570,18 @@ void StarBASIC::MakeErrorText( ErrCode nId, std::u16string_view aMsg )
             aMsg1.remove(nResult, aSrgStr.getLength());
             aMsg1.insert(nResult, aMsg);
         }
-        GetSbData()->aErrMsg = aMsg1.makeStringAndClear();
+        else
+        {
+            // tdf#123144 - append passed error message
+            aMsg1.append(" ");
+            aMsg1.append(aMsg);
+        }
+        GetSbData()->aErrMsg = aMsg1.makeStringAndClear().trim();
+    }
+    // tdf#123144 - don't use an artifical error message if there is a custom one
+    else if (!aMsg.empty())
+    {
+        GetSbData()->aErrMsg = aMsg;
     }
     else if( nOldID != 0 )
     {
