@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd96f423_2f4cb560",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-09-16T10:50:25Z",
+      "side": 1,
+      "message": "No review needed on this branch for now - but patch looks very sensible to me, the cost of doing the de-duplication work far exceeds any benefit we get from having less to invalidate IMHO \u003d) particularly when you consider in the LOK case we re-render whole tiles anyway ;-) I would be inclined to do sloppier overlapping and merging of items myself in some perfect future.\n\nFor now this is great; thanks !",
+      "revId": "12803702605e68d6f93ff53ccdd5520b3bb5c824",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
