@@ -10953,10 +10953,27 @@ private:
     }
 #endif
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    static void set_item_image(GtkWidget* pItem, GtkWidget* pImage)
+    {
+        if (GTK_IS_BUTTON(pItem))
+            gtk_button_set_child(GTK_BUTTON(pItem), pImage);
+        else if (GTK_IS_MENU_BUTTON(pItem))
+        {
+            // TODO after gtk 4.6 is released require that version and drop this
+            static auto menu_button_set_child = reinterpret_cast<void (*) (GtkMenuButton*, GtkWidget*)>(dlsym(nullptr, "gtk_menu_button_set_child"));
+            if (menu_button_set_child)
+                menu_button_set_child(GTK_MENU_BUTTON(pItem), pImage);
+        }
+        // versions of gtk4 > 4.2.1 might do this on their own
+        gtk_widget_remove_css_class(pItem, "text-button");
+    }
+#endif
+
 #if !GTK_CHECK_VERSION(4, 0, 0)
     static void set_item_image(GtkToolButton* pItem, const css::uno::Reference<css::graphic::XGraphic>& rIcon)
 #else
-    static void set_item_image(GtkButton* pItem, const css::uno::Reference<css::graphic::XGraphic>& rIcon)
+    static void set_item_image(GtkWidget* pItem, const css::uno::Reference<css::graphic::XGraphic>& rIcon)
 #endif
     {
         GtkWidget* pImage = nullptr;
@@ -10971,16 +10988,14 @@ private:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_tool_button_set_icon_widget(pItem, pImage);
 #else
-        gtk_button_set_child(pItem, pImage);
-        // versions of gtk4 > 4.2.1 might do this on their own
-        gtk_widget_remove_css_class(GTK_WIDGET(pItem), "text-button");
+        set_item_image(pItem, pImage);
 #endif
     }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
     void set_item_image(GtkToolButton* pItem, const VirtualDevice* pDevice)
 #else
-    void set_item_image(GtkButton* pItem, const VirtualDevice* pDevice)
+    void set_item_image(GtkWidget* pItem, const VirtualDevice* pDevice)
 #endif
     {
         GtkWidget* pImage = nullptr;
@@ -10994,9 +11009,7 @@ private:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_tool_button_set_icon_widget(pItem, pImage);
 #else
-        gtk_button_set_child(pItem, pImage);
-        // versions of gtk4 > 4.2.1 might do this on their own
-        gtk_widget_remove_css_class(GTK_WIDGET(pItem), "text-button");
+        set_item_image(pItem, pImage);
 #endif
         gtk_widget_queue_draw(GTK_WIDGET(m_pToolbar));
     }
@@ -11343,9 +11356,9 @@ public:
             return;
         set_item_image(GTK_TOOL_BUTTON(pItem), rIcon);
 #else
-        if (!pItem || !GTK_IS_BUTTON(pItem))
+        if (!pItem)
             return;
-        set_item_image(GTK_BUTTON(pItem), rIcon);
+        set_item_image(pItem, rIcon);
 #endif
     }
 
@@ -11357,9 +11370,9 @@ public:
             return;
         set_item_image(GTK_TOOL_BUTTON(pItem), pDevice);
 #else
-        if (!pItem || !GTK_IS_BUTTON(pItem))
+        if (!pItem)
             return;
-        set_item_image(GTK_BUTTON(pItem), pDevice);
+        set_item_image(pItem, pDevice);
 #endif
     }
 
@@ -11371,9 +11384,7 @@ public:
             return;
         set_item_image(GTK_TOOL_BUTTON(pItem), rIcon);
 #else
-        if (!GTK_IS_BUTTON(pItem))
-            return;
-        set_item_image(GTK_BUTTON(pItem), rIcon);
+        set_item_image(pItem, rIcon);
 #endif
     }
 
