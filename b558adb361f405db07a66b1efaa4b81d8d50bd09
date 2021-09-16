@@ -16,6 +16,24 @@
       "message": "could be better with LOKHandleMouseEvent for example to say that it is used only for LOK",
       "revId": "b558adb361f405db07a66b1efaa4b81d8d50bd09",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94dc684c_d2be1246",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1000865
+      },
+      "writtenOn": "2021-09-16T14:50:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4cc230da_19d6cf22",
+      "revId": "b558adb361f405db07a66b1efaa4b81d8d50bd09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
