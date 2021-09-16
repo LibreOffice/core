@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "883852a6_4ebabb93",
+        "filename": "sw/source/core/doc/DocumentLayoutManager.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-09-16T11:35:07Z",
+      "side": 1,
+      "message": "i will check it and if it is not needed it will be removed.",
+      "parentUuid": "a78816b1_9858c940",
+      "range": {
+        "startLine": 521,
+        "startChar": 0,
+        "endLine": 522,
+        "endChar": 26
+      },
+      "revId": "c25420ee71ed0b5c80920f470a4e650abb793f3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "942b08c8_29e99e78",
         "filename": "sw/source/core/doc/docfly.cxx",
         "patchSetId": 15
@@ -37,6 +61,30 @@
       "writtenOn": "2021-09-16T10:55:51Z",
       "side": 1,
       "message": "Keep the old code only in the git.",
+      "range": {
+        "startLine": 580,
+        "startChar": 4,
+        "endLine": 580,
+        "endChar": 58
+      },
+      "revId": "c25420ee71ed0b5c80920f470a4e650abb793f3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bae93486_77b3e9d8",
+        "filename": "sw/source/core/doc/docfly.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-09-16T11:35:07Z",
+      "side": 1,
+      "message": "you are absolutely right, i forgot to remove it :)",
+      "parentUuid": "942b08c8_29e99e78",
       "range": {
         "startLine": 580,
         "startChar": 4,
@@ -72,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f943eea5_1d5e7be5",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 1068,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-09-16T11:35:07Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "2fdb85d8_4b4b0cd8",
+      "range": {
+        "startLine": 1068,
+        "startChar": 4,
+        "endLine": 1068,
+        "endChar": 64
+      },
+      "revId": "c25420ee71ed0b5c80920f470a4e650abb793f3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6a1a89ae_c54fdf87",
         "filename": "sw/source/core/doc/textboxhelper.cxx",
         "patchSetId": 15
@@ -83,6 +155,30 @@
       "writtenOn": "2021-09-16T10:55:51Z",
       "side": 1,
       "message": "Don\u0027t forget to remove the commented code in the follow-up commits.",
+      "range": {
+        "startLine": 1331,
+        "startChar": 0,
+        "endLine": 1333,
+        "endChar": 10
+      },
+      "revId": "c25420ee71ed0b5c80920f470a4e650abb793f3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8726f463_fbb18fcb",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 1333,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-09-16T11:35:07Z",
+      "side": 1,
+      "message": "in the 3rd part i will remove, i promise :)",
+      "parentUuid": "6a1a89ae_c54fdf87",
       "range": {
         "startLine": 1331,
         "startChar": 0,
@@ -118,6 +214,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e0c27446_1dd8e22d",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 1367,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-09-16T11:35:07Z",
+      "side": 1,
+      "message": "unfortunately there was a dead-lock with a test document but it can be  much more improved, and it will be in the 3rd part.",
+      "parentUuid": "b48182a9_ce04318d",
+      "range": {
+        "startLine": 1365,
+        "startChar": 2,
+        "endLine": 1367,
+        "endChar": 60
+      },
+      "revId": "c25420ee71ed0b5c80920f470a4e650abb793f3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9b7c5492_7052cef8",
         "filename": "sw/source/core/doc/textboxhelper.cxx",
         "patchSetId": 15
@@ -129,6 +249,30 @@
       "writtenOn": "2021-09-16T10:55:51Z",
       "side": 1,
       "message": "nice catch!",
+      "range": {
+        "startLine": 1426,
+        "startChar": 9,
+        "endLine": 1437,
+        "endChar": 9
+      },
+      "revId": "c25420ee71ed0b5c80920f470a4e650abb793f3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8ddf8c8_d93f7faa",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 1437,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-09-16T11:35:07Z",
+      "side": 1,
+      "message": "thanks.",
+      "parentUuid": "9b7c5492_7052cef8",
       "range": {
         "startLine": 1426,
         "startChar": 9,
