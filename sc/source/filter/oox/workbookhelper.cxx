@@ -383,7 +383,7 @@ OUString findUnusedName( const ScRangeName* pRangeName, const OUString& rSuggest
 {
     OUString aNewName = rSuggestedName;
     sal_Int32 nIndex = 0;
-    while(pRangeName->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aNewName)))
+    while(pRangeName->findByUpperName(ScGlobal::getCharClass().uppercase(aNewName)))
         aNewName = rSuggestedName + OUStringChar('_') + OUString::number( nIndex++ );
 
     return aNewName;

@@ -1009,13 +1009,13 @@ const LocaleDataWrapper* ScGlobal::getLocaleDataPtr()
     return &xSysLocale->GetLocaleData();
 }
 
-const CharClass* ScGlobal::getCharClassPtr()
+const CharClass& ScGlobal::getCharClass()
 {
     OSL_ENSURE(
         xSysLocale,
         "ScGlobal::getCharClassPtr() called before ScGlobal::Init()");
 
-    return &xSysLocale->GetCharClass();
+    return xSysLocale->GetCharClass();
 }
 
 CalendarWrapper*     ScGlobal::GetCalendar()

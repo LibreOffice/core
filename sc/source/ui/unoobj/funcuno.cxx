@@ -276,7 +276,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScFunctionAccess )
 static bool lcl_AddFunctionToken( ScTokenArray& rArray, const OUString& rName,const ScCompiler& rCompiler )
 {
     // function names are always case-insensitive
-    OUString aUpper = ScGlobal::getCharClassPtr()->uppercase(rName);
+    OUString aUpper = ScGlobal::getCharClass().uppercase(rName);
 
     // same options as in ScCompiler::IsOpCode:
     // 1. built-in function name

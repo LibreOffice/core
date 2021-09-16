@@ -452,14 +452,14 @@ void StyleSelect(weld::Window* pDialogParent, weld::ComboBox& rLbStyle, const Sc
             {
                 for( sal_Int32 i = 1, n = rLbStyle.get_count(); i <= n && !bFound; ++i)
                 {
-                    OUString aStyleName = ScGlobal::getCharClassPtr()->uppercase(rLbStyle.get_text(i));
+                    OUString aStyleName = ScGlobal::getCharClass().uppercase(rLbStyle.get_text(i));
                     if( i == n )
                     {
                         rLbStyle.append_text(aName);
                         rLbStyle.set_active_text(aName);
                         bFound = true;
                     }
-                    else if( aStyleName > ScGlobal::getCharClassPtr()->uppercase(aName) )
+                    else if( aStyleName > ScGlobal::getCharClass().uppercase(aName) )
                     {
                         rLbStyle.insert_text(i, aName);
                         rLbStyle.set_active_text(aName);

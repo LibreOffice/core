@@ -2534,7 +2534,7 @@ void ScPosWnd::DoEnter()
                 {
                     ScRangeName* pNames = rDoc.GetRangeName();
                     ScRange aSelection;
-                    if ( pNames && !pNames->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aText)) &&
+                    if ( pNames && !pNames->findByUpperName(ScGlobal::getCharClass().uppercase(aText)) &&
                             (rViewData.GetSimpleArea( aSelection ) == SC_MARK_SIMPLE) )
                     {
                         ScRangeName aNewRanges( *pNames );

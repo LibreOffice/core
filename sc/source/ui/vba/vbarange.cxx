@@ -1193,7 +1193,7 @@ bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, const 
             if (pRangeName)
             {
                 // TODO: Handle local names correctly:
-                // bool bLocalName = pRangeName->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(sAddress)) != nullptr;
+                // bool bLocalName = pRangeName->findByUpperName(ScGlobal::getCharClass().uppercase(sAddress)) != nullptr;
             }
         }
         char aChar = 0;

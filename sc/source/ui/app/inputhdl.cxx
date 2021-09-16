@@ -1308,7 +1308,7 @@ bool ScInputHandler::GetFuncName( OUString& aStart, OUString& aResult )
     if ( aStart.isEmpty() )
         return false;
 
-    aStart = ScGlobal::getCharClassPtr()->uppercase( aStart );
+    aStart = ScGlobal::getCharClass().uppercase( aStart );
     sal_Int32 nPos = aStart.getLength() - 1;
     sal_Unicode c = aStart[ nPos ];
     // fdo#75264 use maFormulaChar to check if characters are used in function names
@@ -1485,7 +1485,7 @@ void ScInputHandler::UseFormulaData()
         return;
 
     if ( aParagraph.getLength() > aSel.nEndPos &&
-         ( ScGlobal::getCharClassPtr()->isLetterNumeric( aParagraph, aSel.nEndPos ) ||
+         ( ScGlobal::getCharClass().isLetterNumeric( aParagraph, aSel.nEndPos ) ||
            aParagraph[ aSel.nEndPos ] == '_' ||
            aParagraph[ aSel.nEndPos ] == '.' ||
            aParagraph[ aSel.nEndPos ] == '$'   ) )

@@ -189,7 +189,7 @@ void ScHTMLImport::WriteToDocument(
         if (!pTable->GetTableCaption().isEmpty())
             aName.append(" - " + pTable->GetTableCaption());
         if (!mpDoc->GetRangeName()->findByUpperName(
-                ScGlobal::getCharClassPtr()->uppercase(aName.toString())))
+                ScGlobal::getCharClass().uppercase(aName.toString())))
             InsertRangeName(*mpDoc, aName.toString(), aNewRange);
 
     }
@@ -218,7 +218,7 @@ OUString ScHTMLImport::GetHTMLRangeNameList( const ScDocument& rDoc, const OUStr
             for(;;)
             {
                 aToken = ScfTools::GetNameFromHTMLIndex( nIndex++ );
-                const ScRangeData* pRangeData = pRangeNames->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aToken));
+                const ScRangeData* pRangeData = pRangeNames->findByUpperName(ScGlobal::getCharClass().uppercase(aToken));
                 if (!pRangeData)
                     break;
                 ScRange aRange;

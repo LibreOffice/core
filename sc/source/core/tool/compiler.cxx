@@ -297,7 +297,7 @@ void ScCompiler::SetFormulaLanguage( const ScCompiler::OpCodeMapPtr & xMap )
     // though even de-DE and de-CH may differ in ß/SS handling..
     // At least don't care if both are English.
     // The current locale is more likely to not be "en" so check first.
-    const LanguageTag& rLT1 = ScGlobal::getCharClassPtr()->getLanguageTag();
+    const LanguageTag& rLT1 = ScGlobal::getCharClass().getLanguageTag();
     const LanguageTag& rLT2 = pCharClass->getLanguageTag();
     mbCharClassesDiffer = (rLT1 != rLT2 && (rLT1.getLanguage() != "en" || rLT2.getLanguage() != "en"));
 
@@ -1835,7 +1835,7 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, 
     mpInterpreterContext(pContext),
     mnCurrentSheetTab(-1),
     mnCurrentSheetEndPos(0),
-    pCharClass(ScGlobal::getCharClassPtr()),
+    pCharClass(&ScGlobal::getCharClass()),
     mbCharClassesDiffer(false),
     mnPredetectedReference(0),
     mnRangeOpPosInSymbol(-1),
@@ -1860,7 +1860,7 @@ ScCompiler::ScCompiler( ScDocument& rDocument, const ScAddress& rPos, ScTokenArr
         mnCurrentSheetTab(-1),
         mnCurrentSheetEndPos(0),
         nSrcPos(0),
-        pCharClass( ScGlobal::getCharClassPtr() ),
+        pCharClass( &ScGlobal::getCharClass() ),
         mbCharClassesDiffer(false),
         mnPredetectedReference(0),
         mnRangeOpPosInSymbol(-1),
@@ -1884,7 +1884,7 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos,
     mpInterpreterContext(pContext),
     mnCurrentSheetTab(-1),
     mnCurrentSheetEndPos(0),
-    pCharClass(ScGlobal::getCharClassPtr()),
+    pCharClass(&ScGlobal::getCharClass()),
     mbCharClassesDiffer(false),
     mnPredetectedReference(0),
     mnRangeOpPosInSymbol(-1),
@@ -1909,7 +1909,7 @@ ScCompiler::ScCompiler( ScDocument& rDocument, const ScAddress& rPos,
         mnCurrentSheetTab(-1),
         mnCurrentSheetEndPos(0),
         nSrcPos(0),
-        pCharClass( ScGlobal::getCharClassPtr() ),
+        pCharClass( &ScGlobal::getCharClass() ),
         mbCharClassesDiffer(false),
         mnPredetectedReference(0),
         mnRangeOpPosInSymbol(-1),
@@ -1933,7 +1933,7 @@ void ScCompiler::CheckTabQuotes( OUString& rString,
 {
     sal_Int32 nStartFlags = KParseTokens::ANY_LETTER_OR_NUMBER | KParseTokens::ASC_UNDERSCORE;
     sal_Int32 nContFlags = nStartFlags;
-    ParseResult aRes = ScGlobal::getCharClassPtr()->parsePredefinedToken(
+    ParseResult aRes = ScGlobal::getCharClass().parsePredefinedToken(
         KParseType::IDENTNAME, rString, 0, nStartFlags, EMPTY_OUSTRING, nContFlags, EMPTY_OUSTRING);
     bool bNeedsQuote = !((aRes.TokenType & KParseType::IDENTNAME) && aRes.EndPos == rString.getLength());
 
@@ -2787,8 +2787,8 @@ Label_MaskStateMachine:
                 cGroupSep != cSheetPrefix && cGroupSep != cSheetSep);
         // If a numeric context triggered bi18n then use the default locale's
         // CharClass, this may accept group separator as well.
-        const CharClass* pMyCharClass = (ScGlobal::getCharClassPtr()->isDigit( OUString(pStart[nSrcPos]), 0) ?
-                ScGlobal::getCharClassPtr() : pCharClass);
+        const CharClass* pMyCharClass = (ScGlobal::getCharClass().isDigit( OUString(pStart[nSrcPos]), 0) ?
+                &ScGlobal::getCharClass() : pCharClass);
         OUStringBuffer aSymbol;
         mnRangeOpPosInSymbol = -1;
         FormulaError nErr = FormulaError::NONE;
@@ -4520,7 +4520,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
             // more likely in that localized language than in the formula
             // language. This in corner cases needs to continue to work for
             // existing documents and environments.
-            aUpper = ScGlobal::getCharClassPtr()->uppercase( aOrg );
+            aUpper = ScGlobal::getCharClass().uppercase( aOrg );
         }
 
         if (IsNamedRange( aUpper ))
@@ -5162,7 +5162,7 @@ bool ScCompiler::IsCharFlagAllConventions(
         return true;
     }
     else
-        return ScGlobal::getCharClassPtr()->isLetterNumeric( rStr, nPos );
+        return ScGlobal::getCharClass().isLetterNumeric( rStr, nPos );
 }
 
 void ScCompiler::CreateStringFromExternal( OUStringBuffer& rBuffer, const FormulaToken* pTokenP ) const
@@ -5440,7 +5440,7 @@ void ScCompiler::LocalizeString( OUString& rName ) const
 // quote characters contained within are escaped by '\\'.
 bool ScCompiler::EnQuote( OUString& rStr )
 {
-    sal_Int32 nType = ScGlobal::getCharClassPtr()->getStringType( rStr, 0, rStr.getLength() );
+    sal_Int32 nType = ScGlobal::getCharClass().getStringType( rStr, 0, rStr.getLength() );
     if ( !CharClass::isNumericType( nType )
             && CharClass::isAlphaNumericType( nType ) )
         return false;

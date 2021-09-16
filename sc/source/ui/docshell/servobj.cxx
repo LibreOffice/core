@@ -40,7 +40,7 @@ static bool lcl_FillRangeFromName( ScRange& rRange, ScDocShell* pDocSh, const OU
         ScRangeName* pNames = rDoc.GetRangeName();
         if (pNames)
         {
-            const ScRangeData* pData = pNames->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(rName));
+            const ScRangeData* pData = pNames->findByUpperName(ScGlobal::getCharClass().uppercase(rName));
             if (pData)
             {
                 if ( pData->IsValidReference( rRange ) )

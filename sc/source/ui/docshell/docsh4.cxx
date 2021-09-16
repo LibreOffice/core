@@ -286,7 +286,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 if (bIsNewArea)
                 {
                     ScDBCollection* pDBColl = m_aDocument.GetDBCollection();
-                    if ( !pDBColl || !pDBColl->getNamedDBs().findByUpperName(ScGlobal::getCharClassPtr()->uppercase(sTarget)) )
+                    if ( !pDBColl || !pDBColl->getNamedDBs().findByUpperName(ScGlobal::getCharClass().uppercase(sTarget)) )
                     {
                         ScAddress aPos;
                         if ( aPos.Parse( sTarget, m_aDocument, m_aDocument.GetAddressConvention() ) & ScRefFlags::VALID )
@@ -2480,7 +2480,7 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
     ScRangeName* pRange = m_aDocument.GetRangeName();
     if( pRange )
     {
-        const ScRangeData* pData = pRange->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aPos));
+        const ScRangeData* pData = pRange->findByUpperName(ScGlobal::getCharClass().uppercase(aPos));
         if (pData)
         {
             if( pData->HasType( ScRangeData::Type::RefArea    )

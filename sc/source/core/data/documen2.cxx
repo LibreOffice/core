@@ -103,7 +103,7 @@ static ScSheetLimits* CreateSheetLimits()
 }
 
 ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
-        mpCellStringPool(std::make_shared<svl::SharedStringPool>(*ScGlobal::getCharClassPtr())),
+        mpCellStringPool(std::make_shared<svl::SharedStringPool>(ScGlobal::getCharClass())),
         mpDocLinkMgr(new sc::DocumentLinkManager(pDocShell)),
         mbFormulaGroupCxtBlockDiscard(false),
         maCalcConfig( ScInterpreter::GetGlobalConfig()),

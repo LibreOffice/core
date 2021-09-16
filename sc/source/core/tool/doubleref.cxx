@@ -41,7 +41,7 @@ namespace {
 
 void lcl_uppercase(OUString& rStr)
 {
-    rStr = ScGlobal::getCharClassPtr()->uppercase(rStr.trim());
+    rStr = ScGlobal::getCharClass().uppercase(rStr.trim());
 }
 
 bool lcl_createStarQuery(
@@ -189,7 +189,7 @@ bool lcl_createExcelQuery(
             while (nCol < nCols)
             {
                 aCellStr = pQueryRef->getString(nCol, nRow);
-                aCellStr = ScGlobal::getCharClassPtr()->uppercase( aCellStr );
+                aCellStr = ScGlobal::getCharClass().uppercase( aCellStr );
                 if (!aCellStr.isEmpty())
                 {
                     if (nIndex < nNewEntries)

@@ -123,7 +123,7 @@ bool ScDBDocFunc::DeleteDBRange(const OUString& rName)
     bool bUndo = rDoc.IsUndoEnabled();
 
     ScDBCollection::NamedDBs& rDBs = pDocColl->getNamedDBs();
-    auto const iter = rDBs.findByUpperName2(ScGlobal::getCharClassPtr()->uppercase(rName));
+    auto const iter = rDBs.findByUpperName2(ScGlobal::getCharClass().uppercase(rName));
     if (iter != rDBs.end())
     {
         ScDocShellModificator aModificator( rDocShell );
@@ -158,8 +158,8 @@ bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
     ScDBCollection* pDocColl = rDoc.GetDBCollection();
     bool bUndo = rDoc.IsUndoEnabled();
     ScDBCollection::NamedDBs& rDBs = pDocColl->getNamedDBs();
-    auto const iterOld = rDBs.findByUpperName2(ScGlobal::getCharClassPtr()->uppercase(rOld));
-    const ScDBData* pNew = rDBs.findByUpperName(ScGlobal::getCharClassPtr()->uppercase(rNew));
+    auto const iterOld = rDBs.findByUpperName2(ScGlobal::getCharClass().uppercase(rOld));
+    const ScDBData* pNew = rDBs.findByUpperName(ScGlobal::getCharClass().uppercase(rNew));
     if (iterOld != rDBs.end() && !pNew)
     {
         ScDocShellModificator aModificator( rDocShell );
@@ -298,7 +298,7 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bApi, bool bIsUnnamed,
     {
         ScDBCollection* pColl = rDoc.GetDBCollection();
         if (pColl)
-            pDBData = pColl->getNamedDBs().findByUpperName(ScGlobal::getCharClassPtr()->uppercase(rDBName));
+            pDBData = pColl->getNamedDBs().findByUpperName(ScGlobal::getCharClass().uppercase(rDBName));
     }
 
     if ( pDBData )
@@ -1730,7 +1730,7 @@ void ScDBDocFunc::UpdateImport( const OUString& rTarget, const svx::ODataAccessD
 
     ScDocument& rDoc = rDocShell.GetDocument();
     ScDBCollection& rDBColl = *rDoc.GetDBCollection();
-    const ScDBData* pData = rDBColl.getNamedDBs().findByUpperName(ScGlobal::getCharClassPtr()->uppercase(rTarget));
+    const ScDBData* pData = rDBColl.getNamedDBs().findByUpperName(ScGlobal::getCharClass().uppercase(rTarget));
     if (!pData)
     {
         std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(ScDocShell::GetActiveDialogParent(),

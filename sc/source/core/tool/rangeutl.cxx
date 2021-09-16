@@ -275,7 +275,7 @@ bool ScRangeUtil::MakeRangeFromName (
             }
         }
 
-        aName = ScGlobal::getCharClassPtr()->uppercase(aName);
+        aName = ScGlobal::getCharClass().uppercase(aName);
         ScRangeData* pData = nullptr;
         if (eScope != RUTL_NAMES_GLOBAL)
         {
@@ -324,7 +324,7 @@ bool ScRangeUtil::MakeRangeFromName (
     else if( eScope==RUTL_DBASE )
     {
         ScDBCollection::NamedDBs& rDbNames = rDoc.GetDBCollection()->getNamedDBs();
-        ScDBData* pData = rDbNames.findByUpperName(ScGlobal::getCharClassPtr()->uppercase(rName));
+        ScDBData* pData = rDbNames.findByUpperName(ScGlobal::getCharClass().uppercase(rName));
         if (pData)
         {
             pData->GetArea(nTab, nColStart, nRowStart, nColEnd, nRowEnd);
@@ -945,12 +945,12 @@ ScRangeData* ScRangeStringConverter::GetRangeDataFromString( const OUString& rSt
             return nullptr;
 
         const OUString aName( rString.copy( nIndex+1));
-        return pLocalRangeName->findByUpperName( ScGlobal::getCharClassPtr()->uppercase( aName));
+        return pLocalRangeName->findByUpperName( ScGlobal::getCharClass().uppercase( aName));
     }
 
     ScRangeName* pLocalRangeName = rDoc.GetRangeName(nTab);
     ScRangeData* pData = nullptr;
-    OUString aUpperName = ScGlobal::getCharClassPtr()->uppercase(rString);
+    OUString aUpperName = ScGlobal::getCharClass().uppercase(rString);
     if(pLocalRangeName)
     {
         pData = pLocalRangeName->findByUpperName(aUpperName);

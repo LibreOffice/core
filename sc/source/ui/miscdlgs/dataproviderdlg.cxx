@@ -997,7 +997,7 @@ namespace {
 
 bool hasDBName(const OUString& rName, ScDBCollection* pDBCollection)
 {
-    if (pDBCollection->getNamedDBs().findByUpperName(ScGlobal::getCharClassPtr()->uppercase(rName)))
+    if (pDBCollection->getNamedDBs().findByUpperName(ScGlobal::getCharClass().uppercase(rName)))
         return true;
 
     return false;

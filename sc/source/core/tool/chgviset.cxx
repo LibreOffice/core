@@ -98,7 +98,7 @@ void ScChangeViewSettings::SetTheComment(const OUString& rString)
         utl::SearchParam aSearchParam( rString,
             utl::SearchParam::SearchType::Regexp,false );
 
-        pCommentSearcher.reset( new utl::TextSearch( aSearchParam, *ScGlobal::getCharClassPtr() ) );
+        pCommentSearcher.reset( new utl::TextSearch( aSearchParam, ScGlobal::getCharClass() ) );
     }
 }
 

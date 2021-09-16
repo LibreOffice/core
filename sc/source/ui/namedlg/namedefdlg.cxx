@@ -151,7 +151,7 @@ bool ScNameDefDlg::IsNameValid()
         }
         bIsNameValid = false;
     }
-    else if (pRangeName->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aName)))
+    else if (pRangeName->findByUpperName(ScGlobal::getCharClass().uppercase(aName)))
     {
         aHelpText = maErrNameInUse;
         bIsNameValid = false;

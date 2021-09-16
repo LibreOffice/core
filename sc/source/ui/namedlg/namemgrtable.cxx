@@ -87,7 +87,7 @@ const ScRangeData* ScRangeManagerTable::findRangeData(const ScRangeNameLine& rLi
     else
         pRangeName = m_RangeMap.find(rLine.aScope)->second.get();
 
-    return pRangeName->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(rLine.aName));
+    return pRangeName->findByUpperName(ScGlobal::getCharClass().uppercase(rLine.aName));
 }
 
 void ScRangeManagerTable::CheckForFormulaString()
