@@ -20,10 +20,13 @@
 #ifndef INCLUDED_VCL_INC_PHYSICALFONTCOLLECTION_HXX
 #define INCLUDED_VCL_INC_PHYSICALFONTCOLLECTION_HXX
 
+#include <sal/config.h>
+
 #include <vcl/dllapi.h>
 
-#include "fontinstance.hxx"
 #include "PhysicalFontFamily.hxx"
+#include "fontinstance.hxx"
+
 #include <array>
 
 #define MAX_GLYPHFALLBACK 16

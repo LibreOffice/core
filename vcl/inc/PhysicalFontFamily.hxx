@@ -20,12 +20,13 @@
 #ifndef INCLUDED_VCL_INC_PHYSICALFONTFAMILY_HXX
 #define INCLUDED_VCL_INC_PHYSICALFONTFAMILY_HXX
 
-#include <vcl/dllapi.h>
-#include <vcl/outdev.hxx>
-
-#include <o3tl/sorted_vector.hxx>
+#include <sal/config.h>
 
 #include <unotools/fontcfg.hxx>
+#include <o3tl/sorted_vector.hxx>
+
+#include <vcl/dllapi.h>
+#include <vcl/outdev.hxx>
 
 #include "PhysicalFontFace.hxx"
 

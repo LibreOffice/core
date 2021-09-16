@@ -20,15 +20,18 @@
 #ifndef INCLUDED_VCL_INC_OUTDEV_H
 #define INCLUDED_VCL_INC_OUTDEV_H
 
-#include <set>
-#include <vector>
+#include <sal/config.h>
 
 #include <tools/gen.hxx>
+
 #include <vcl/vclptr.hxx>
 
-#include "fontinstance.hxx"
 #include "PhysicalFontFace.hxx"
+#include "fontinstance.hxx"
 #include "impfontcache.hxx"
+
+#include <set>
+#include <vector>
 
 class Size;
 namespace vcl { class Font; }
