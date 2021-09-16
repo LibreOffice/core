@@ -16,6 +16,23 @@
       "message": "Hossein: patchset 5 builds Python for me.",
       "revId": "4293c9355abd3fdc800397b565b6b9591a392e4a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c29fcc82_c7aa2caa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-16T12:18:51Z",
+      "side": 1,
+      "message": "I meant patchset 6, of course",
+      "revId": "4293c9355abd3fdc800397b565b6b9591a392e4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
