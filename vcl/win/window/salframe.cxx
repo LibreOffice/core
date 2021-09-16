@@ -86,9 +86,6 @@
 
 #include <oleacc.h>
 #include <com/sun/star/accessibility/XMSAAService.hpp>
-#ifndef WM_GETOBJECT // TESTME does this ever happen ?
-#  define WM_GETOBJECT  0x003D
-#endif
 
 #include <time.h>
 
