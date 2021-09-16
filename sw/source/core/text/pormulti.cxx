@@ -134,6 +134,20 @@ void SwMultiPortion::HandlePortion( SwPortionHandler& rPH ) const
     rPH.Text( GetLen(), GetWhichPor() );
 }
 
+void SwMultiPortion::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwMultiPortion"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("symbol"),  BAD_CAST(typeid(*this).name()));
+
+    for (const SwLineLayout* pLine = &GetRoot(); pLine; pLine = pLine->GetNext())
+    {
+        pLine->dumpAsXml(pWriter);
+    }
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 // sets the tabulator-flag, if there's any tabulator-portion inside.
 void SwMultiPortion::ActualizeTabulator()
 {
