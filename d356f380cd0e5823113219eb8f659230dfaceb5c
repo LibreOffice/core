@@ -16,6 +16,24 @@
       "message": "Thought \"alloca\" function shouldn\u0027t be called (a bit like \"goto\") because of its danger to trigger stack exception.\n\n(sorry these links are quite old:\nhttps://stackoverflow.com/questions/1018853/why-is-the-use-of-alloca-not-considered-good-practice\nhttps://softwareengineering.stackexchange.com/questions/116117/should-i-teach-my-students-alloca)",
       "revId": "d356f380cd0e5823113219eb8f659230dfaceb5c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05ac048d_e5facf65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-16T09:55:51Z",
+      "side": 1,
+      "message": "It is like a lot of things in C++/C - it\u0027s a sharp-edged tool, but as long as you are careful, and don\u0027t cut yourself, it is fine :-)",
+      "parentUuid": "233a8618_13878128",
+      "revId": "d356f380cd0e5823113219eb8f659230dfaceb5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
