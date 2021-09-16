@@ -246,7 +246,7 @@ double SwUserFieldType::GetValue( SwCalc& rCalc )
 
     // See if we need to temporarily switch rCalc's language: in case it
     // differs from the field type locale.
-    CharClass* pCharClass = rCalc.GetCharClass();
+    const CharClass* pCharClass = rCalc.GetCharClass();
     LanguageTag aCharClassLanguage = pCharClass->getLanguageTag();
     LanguageTag aContentLang(m_aContentLang);
 
@@ -256,14 +256,14 @@ double SwUserFieldType::GetValue( SwCalc& rCalc )
     bool bSwitchLanguage = m_aContentLang != aCharClassLanguage.getBcp47();
 
     if (bSwitchLanguage)
-        pCharClass->setLanguageTag(aContentLang);
+        rCalc.SetCharClass(aContentLang);
 
     m_nValue = rCalc.Calculate( m_aContent ).GetDouble();
 
     // we than have to set the proper char class languageTag again
 
     if (bSwitchLanguage)
-        pCharClass->setLanguageTag(aCharClassLanguage);
+        rCalc.SetCharClass(aCharClassLanguage);
 
     rCalc.Pop();
 

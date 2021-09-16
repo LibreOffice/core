@@ -338,7 +338,7 @@ void SvNumberFormatter::ChangeIntl(LanguageType eLnge)
     ActLnge = eLnge;
 
     maLanguageTag.reset( eLnge );
-    pCharClass->setLanguageTag( maLanguageTag );
+    pCharClass.reset( new CharClass( m_xContext, maLanguageTag ) );
     xLocaleData.changeLocale( maLanguageTag );
     xCalendar.changeLocale( maLanguageTag.getLocale() );
     xTransliteration.changeLocale( eLnge );
