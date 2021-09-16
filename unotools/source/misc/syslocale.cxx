@@ -53,7 +53,7 @@ public:
                                 SvtSysLocale_Impl();
     virtual                     ~SvtSysLocale_Impl() override;
 
-    CharClass*                  GetCharClass();
+    CharClass&                  GetCharClass();
     virtual void                ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints ) override;
 
 private:
@@ -75,11 +75,11 @@ SvtSysLocale_Impl::~SvtSysLocale_Impl()
     aSysLocaleOptions.RemoveListener( this );
 }
 
-CharClass* SvtSysLocale_Impl::GetCharClass()
+CharClass& SvtSysLocale_Impl::GetCharClass()
 {
     if ( !pCharClass )
         pCharClass.reset(new CharClass( aSysLocaleOptions.GetRealLanguageTag() ));
-    return pCharClass.get();
+    return *pCharClass;
 }
 
 void SvtSysLocale_Impl::ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints nHint )
@@ -93,7 +93,7 @@ void SvtSysLocale_Impl::ConfigurationChanged( utl::ConfigurationBroadcaster*, Co
     const LanguageTag& rLanguageTag = aSysLocaleOptions.GetRealLanguageTag();
     if ( nHint & ConfigurationHints::Locale )
     {
-        GetCharClass()->setLanguageTag( rLanguageTag );
+        GetCharClass().setLanguageTag( rLanguageTag );
     }
     pLocaleData.reset(new LocaleDataWrapper(rLanguageTag, getDateAcceptancePatternsConfig()));
 }
@@ -147,11 +147,6 @@ const LocaleDataWrapper& SvtSysLocale::GetLocaleData() const
 }
 
 const CharClass& SvtSysLocale::GetCharClass() const
-{
-    return *(pImpl->GetCharClass());
-}
-
-const CharClass* SvtSysLocale::GetCharClassPtr() const
 {
     return pImpl->GetCharClass();
 }

@@ -69,7 +69,7 @@ FormulaHelper::FormulaHelper(const IFunctionManager* _pFunctionManager)
     ,arrayOpen(_pFunctionManager->getSingleToken(IFunctionManager::eArrayOpen))
     ,arrayClose(_pFunctionManager->getSingleToken(IFunctionManager::eArrayClose))
 {
-    m_pCharClass = m_pSysLocale->GetCharClassPtr();
+    m_pCharClass = &m_pSysLocale->GetCharClass();
 }
 
 sal_Int32 FormulaHelper::GetCategoryCount() const

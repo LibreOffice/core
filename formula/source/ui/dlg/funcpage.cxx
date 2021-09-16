@@ -132,8 +132,8 @@ void FuncPage::UpdateFunctionList(const OUString& aStr)
     else
     {
         SvtSysLocale aSysLocale;
-        const CharClass* pCharClass = aSysLocale.GetCharClassPtr();
-        const OUString aSearchStr(pCharClass->uppercase(aStr));
+        const CharClass& rCharClass = aSysLocale.GetCharClass();
+        const OUString aSearchStr(rCharClass.uppercase(aStr));
 
         const sal_uInt32 nCategoryCount = m_pFunctionManager->getCount();
         // Category listbox holds additional entries for Last Used and All, so
@@ -159,7 +159,7 @@ void FuncPage::UpdateFunctionList(const OUString& aStr)
             for (sal_uInt32 j = 0; j < nFunctionCount; ++j)
             {
                 TFunctionDesc pDesc(pCategory->getFunction(j));
-                if (pCharClass->uppercase(pDesc->getFunctionName()).indexOf(aSearchStr) >= 0)
+                if (rCharClass.uppercase(pDesc->getFunctionName()).indexOf(aSearchStr) >= 0)
                 {
                     if (!pDesc->isHidden())
                     {

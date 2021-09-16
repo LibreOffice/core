@@ -1015,7 +1015,7 @@ const CharClass* ScGlobal::getCharClassPtr()
         xSysLocale,
         "ScGlobal::getCharClassPtr() called before ScGlobal::Init()");
 
-    return xSysLocale->GetCharClassPtr();
+    return &xSysLocale->GetCharClass();
 }
 
 CalendarWrapper*     ScGlobal::GetCalendar()
