@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6478e6ce_8e584d43",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-16T03:23:55Z",
+      "side": 1,
+      "message": "As I have been advised to do this, I\u0027m doing it. Don\u0027t blame me if this kicked off a build, I was directly told to do this. ",
+      "revId": "2fca5cf449f020b52797f802760ef1dfca17d431",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
