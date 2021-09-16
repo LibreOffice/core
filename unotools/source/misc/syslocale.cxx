@@ -93,7 +93,7 @@ void SvtSysLocale_Impl::ConfigurationChanged( utl::ConfigurationBroadcaster*, Co
     const LanguageTag& rLanguageTag = aSysLocaleOptions.GetRealLanguageTag();
     if ( nHint & ConfigurationHints::Locale )
     {
-        GetCharClass()->setLanguageTag( rLanguageTag );
+        pCharClass.reset(new CharClass( rLanguageTag ));
     }
     pLocaleData.reset(new LocaleDataWrapper(rLanguageTag, getDateAcceptancePatternsConfig()));
 }

@@ -810,8 +810,8 @@ bool SwScanner::NextWord()
     m_nBegin = m_nBegin + m_nLength;
     Boundary aBound;
 
-    CharClass& rCC = GetAppCharClass();
-    LanguageTag aOldLanguageTag = rCC.getLanguageTag();
+    const CharClass* pCC = &GetAppCharClass();
+    std::optional<CharClass> xLocalCharClass;
 
     while ( true )
     {
@@ -830,8 +830,9 @@ bool SwScanner::NextWord()
 
                 if ( m_nWordType != i18n::WordType::WORD_COUNT )
                 {
-                    rCC.setLanguageTag( LanguageTag( g_pBreakIt->GetLocale( m_aCurrentLang )) );
-                    if ( rCC.isLetterNumeric(OUString(m_aText[m_nBegin])) )
+                    xLocalCharClass.emplace(LanguageTag( g_pBreakIt->GetLocale( m_aCurrentLang ) ));
+                    pCC = &*xLocalCharClass;
+                    if ( pCC->isLetterNumeric(OUString(m_aText[m_nBegin])) )
                         break;
                 }
                 else
@@ -865,8 +866,6 @@ bool SwScanner::NextWord()
         else
             break;
     } // end while( true )
-
-    rCC.setLanguageTag( aOldLanguageTag );
 
     // #i89042, as discussed with HDU: don't evaluate script changes for word count. Use whole word.
     if ( m_nWordType == i18n::WordType::WORD_COUNT )

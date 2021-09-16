@@ -622,9 +622,14 @@ void SwCalc::Pop()
     m_aRekurStack.pop_back();
 }
 
-CharClass* SwCalc::GetCharClass()
+const CharClass* SwCalc::GetCharClass() const
 {
     return m_pCharClass;
+}
+
+void SwCalc::SetCharClass(const LanguageTag& rLanguageTag)
+{
+    m_pCharClass = new CharClass( ::comphelper::getProcessComponentContext(), rLanguageTag );
 }
 
 SwCalcOper SwCalc::GetToken()

@@ -62,7 +62,6 @@ class UNOTOOLS_DLLPUBLIC CharClass
 {
     LanguageTag                 maLanguageTag;
     css::uno::Reference< css::i18n::XCharacterClassification >    xCC;
-    mutable std::mutex        aMutex;
 
     CharClass(const CharClass&) = delete;
     CharClass& operator=(const CharClass&) = delete;
@@ -78,9 +77,6 @@ public:
     CharClass( const LanguageTag& rLanguageTag );
 
     ~CharClass();
-
-    /// set a new Locale
-    void setLanguageTag( const LanguageTag& rLanguageTag );
 
     /// get current Locale
     const LanguageTag& getLanguageTag() const;
