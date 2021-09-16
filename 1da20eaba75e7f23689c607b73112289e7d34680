@@ -34,6 +34,23 @@
       "parentUuid": "86cb58f8_4e7f94b6",
       "revId": "1da20eaba75e7f23689c607b73112289e7d34680",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78a1244b_351a562d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-16T18:17:08Z",
+      "side": 1,
+      "message": "This works only once.\nSaving as .xlsx and reloading again results in #NAME? errors.\nSame when saving as .ods\n",
+      "revId": "1da20eaba75e7f23689c607b73112289e7d34680",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
