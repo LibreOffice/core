@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc64e8b3_fdb0e800",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-16T06:49:02Z",
+      "side": 1,
+      "message": "This looks reasonable to me; it would be good to add a sentence to the commit message to know how did you find this bottleneck and what is the old / new cost.\n\nhttps://bugs.collabora.com/show_bug.cgi?id\u003d2630 seems to be exactly about this, if so: could you please add a comment there, linking this gerrit change? Thanks.",
+      "revId": "d905b7b4aea3aa7c4c06560f2a250236a08ca249",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
