@@ -9,6 +9,8 @@
 
 #include <mathmlattr.hxx>
 
+#include <o3tl/safeint.hxx>
+
 #include <unordered_map>
 
 static sal_Int32 ParseMathMLUnsignedNumber(const OUString& rStr, Fraction& rUN)
@@ -16,6 +18,9 @@ static sal_Int32 ParseMathMLUnsignedNumber(const OUString& rStr, Fraction& rUN)
     auto nLen = rStr.getLength();
     sal_Int32 nDecimalPoint = -1;
     sal_Int32 nIdx;
+    sal_Int64 nom = 0;
+    sal_Int64 den = 1;
+    bool validNomDen = true;
     for (nIdx = 0; nIdx < nLen; nIdx++)
     {
         auto cD = rStr[nIdx];
@@ -28,11 +33,29 @@ static sal_Int32 ParseMathMLUnsignedNumber(const OUString& rStr, Fraction& rUN)
         }
         if (cD < u'0' || u'9' < cD)
             break;
+        if (validNomDen
+            && (o3tl::checked_multiply(nom, sal_Int64(10), nom)
+                || o3tl::checked_add(nom, sal_Int64(cD - u'0'), nom)
+                || (nDecimalPoint >= 0 && o3tl::checked_multiply(den, sal_Int64(10), den))))
+        {
+            validNomDen = false;
+        }
     }
     if (nIdx == 0 || (nIdx == 1 && nDecimalPoint == 0))
         return -1;
 
-    rUN = Fraction(rStr.copy(0, nIdx).toDouble());
+    // If the input "xx.yyy" can be represented with nom = xx*10^n + yyy and den = 10^n in sal_Int64
+    // (where n is the length of "yyy"), then use that to create an accurate Fraction (and TODO: we
+    // could even ignore trailing "0" characters in "yyy", for a smaller n and thus a greater chance
+    // of validNomDen); if not, use the less accurate approach of creating a Fraction from double:
+    if (validNomDen)
+    {
+        rUN = Fraction(nom, den);
+    }
+    else
+    {
+        rUN = Fraction(rStr.copy(0, nIdx).toDouble());
+    }
 
     return nIdx;
 }
