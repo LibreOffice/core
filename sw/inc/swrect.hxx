@@ -38,7 +38,7 @@ class SAL_WARN_UNUSED SW_DLLPUBLIC SwRect
 
 public:
     inline SwRect();
-    inline SwRect( const SwRect &rRect );
+    inline SwRect( const SwRect &rRect ) = default;
     inline SwRect( const Point& rLT, const Size&  rSize );
     inline SwRect( const Point& rLT, const Point& rRB );
     inline SwRect( tools::Long X, tools::Long Y, tools::Long Width, tools::Long Height );
@@ -90,7 +90,7 @@ public:
     inline bool IsEmpty() const;
     inline void Clear();
 
-    inline SwRect &operator = ( const SwRect &rRect );
+    SwRect &operator = ( const SwRect &rRect ) = default;
 
     inline bool operator == ( const SwRect& rRect ) const;
     inline bool operator != ( const SwRect& rRect ) const;
@@ -248,13 +248,6 @@ inline tools::Long SwRect::Bottom() const
     return m_Size.getHeight() ? m_Point.getY() + m_Size.getHeight() - 1 : m_Point.getY();
 }
 
-// operators
-inline SwRect &SwRect::operator = ( const SwRect &rRect )
-{
-    m_Point = rRect.m_Point;
-    m_Size = rRect.m_Size;
-    return *this;
-}
 inline bool SwRect::operator == ( const SwRect& rRect ) const
 {
     return (m_Point == rRect.m_Point && m_Size == rRect.m_Size);
@@ -304,11 +297,6 @@ inline void SwRect::Clear()
 inline SwRect::SwRect() :
     m_Point( 0, 0 ),
     m_Size( 0, 0 )
-{
-}
-inline SwRect::SwRect( const SwRect &rRect ) :
-    m_Point( rRect.m_Point ),
-    m_Size( rRect.m_Size )
 {
 }
 inline SwRect::SwRect( const Point& rLT, const Size&  rSize ) :
