@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a91ed52_1e116339",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-16T06:18:43Z",
+      "side": 1,
+      "message": "Mike: could you please review this? This fixes the remaining problems found by https://github.com/CollaboraOnline/online/issues/3218. No testcase, the double-delete happened with 5 different views, and I couldn\u0027t reproduce it on the desktop with just 2 views, so I would just assume that loolstress will break again if this would go wrong in the future. Thanks.",
+      "revId": "e2548131212e9cff6e83700071a24fe89434633c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
