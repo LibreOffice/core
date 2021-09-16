@@ -50,7 +50,7 @@ struct Value
 {
     sal_uInt8   type;
     sal_uInt16  value;  // value or address, depend on the type
-};
+} __attribute__((packed));
 
 struct Mapping
 {
