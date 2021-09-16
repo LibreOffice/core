@@ -51,6 +51,24 @@
       "message": "This works only once.\nSaving as .xlsx and reloading again results in #NAME? errors.\nSame when saving as .ods\n",
       "revId": "1da20eaba75e7f23689c607b73112289e7d34680",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8eecc9d6_fe3c3f33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2021-09-16T19:07:39Z",
+      "side": 1,
+      "message": "Yes, because it is only the OOXMl import part. We don\u0027t export the named range and the reference (formula) of it into the externalLink.xml as the OOXML standard requires. That issue should be another bug report and another patch. Or should I fix the OOXMl export part in this patch?",
+      "parentUuid": "78a1244b_351a562d",
+      "revId": "1da20eaba75e7f23689c607b73112289e7d34680",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
