@@ -85,6 +85,7 @@ void VBATest::testMiscVBAFunctions()
         "day.vb",
         "enum.vb",
         "error.vb",
+        "error_message.vb",
         "Err.Raise.vb",
         "exp.vb",
         "fix.vb",
