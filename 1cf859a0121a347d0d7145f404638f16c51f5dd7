@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02ca31f6_0bd70b91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-16T16:22:50Z",
+      "side": 1,
+      "message": "Hossein: finally this one builds from distclean, and also builds MSI.",
+      "revId": "1cf859a0121a347d0d7145f404638f16c51f5dd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
