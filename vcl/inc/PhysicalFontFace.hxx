@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_PHYSICALFONTFACE_HXX
-#define INCLUDED_VCL_INC_PHYSICALFONTFACE_HXX
+#pragma once
 
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
@@ -80,8 +79,6 @@ protected:
     tools::Long                    mnWidth;    // Width (in pixels)
     tools::Long                    mnHeight;   // Height (in pixels)
 };
-
-#endif // INCLUDED_VCL_INC_PHYSICALFONTFACE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
 
