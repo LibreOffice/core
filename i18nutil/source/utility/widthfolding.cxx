@@ -39,7 +39,7 @@ sal_Unicode widthfolding::decompose_ja_voiced_sound_marksChar2Char (sal_Unicode 
 /**
  * Decompose Japanese specific voiced and semi-voiced sound marks.
  */
-OUString widthfolding::decompose_ja_voiced_sound_marks (const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset )
+OUString widthfolding::decompose_ja_voiced_sound_marks (const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >* pOffset )
 {
   // Create a string buffer which can hold nCount * 2 + 1 characters.
   // Its size may become double of nCount.
@@ -48,10 +48,10 @@ OUString widthfolding::decompose_ja_voiced_sound_marks (const OUString& inStr, s
 
   sal_Int32 *p = nullptr;
   sal_Int32 position = 0;
-  if (useOffset) {
+  if (pOffset) {
       // Allocate double of nCount length to offset argument.
-      offset.realloc( nCount * 2 );
-      p = offset.getArray();
+      pOffset->realloc( nCount * 2 );
+      p = pOffset->getArray();
       position = startPos;
   }
 
@@ -72,7 +72,7 @@ OUString widthfolding::decompose_ja_voiced_sound_marks (const OUString& inStr, s
       if (first != 0x0000) {
         *dst ++ = first;
         *dst ++ = decomposition_table[i].decomposited_character_2; // second
-        if (useOffset) {
+        if (pOffset) {
             *p ++ = position;
             *p ++ = position ++;
         }
@@ -80,14 +80,14 @@ OUString widthfolding::decompose_ja_voiced_sound_marks (const OUString& inStr, s
       }
     }
     *dst ++ = c;
-    if (useOffset)
+    if (pOffset)
         *p ++ = position ++;
   }
   *dst = u'\0';
 
   newStr->length = sal_Int32(dst - newStr->buffer);
-  if (useOffset)
-      offset.realloc(newStr->length);
+  if (pOffset)
+      pOffset->realloc(newStr->length);
   return OUString(newStr, SAL_NO_ACQUIRE); // take ownership
 }
 
@@ -101,7 +101,7 @@ oneToOneMapping& widthfolding::getfull2halfTable()
 /**
  * Compose Japanese specific voiced and semi-voiced sound marks.
  */
-OUString widthfolding::compose_ja_voiced_sound_marks (const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset, sal_Int32 nFlags )
+OUString widthfolding::compose_ja_voiced_sound_marks (const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >* pOffset, sal_Int32 nFlags )
 {
   // Create a string buffer which can hold nCount + 1 characters.
   // Its size may become equal to nCount or smaller.
@@ -126,10 +126,10 @@ OUString widthfolding::compose_ja_voiced_sound_marks (const OUString& inStr, sal
 
       sal_Int32 *p = nullptr;
       sal_Int32 position = 0;
-      if (useOffset) {
+      if (pOffset) {
           // Allocate nCount length to offset argument.
-          offset.realloc( nCount );
-          p = offset.getArray();
+          pOffset->realloc( nCount );
+          p = pOffset->getArray();
           position = startPos;
       }
 
@@ -165,7 +165,7 @@ OUString widthfolding::compose_ja_voiced_sound_marks (const OUString& inStr, sal
             bCompose = false;
 
           if( bCompose ){
-            if (useOffset) {
+            if (pOffset) {
                 position ++;
                 *p ++ = position ++;
             }
@@ -175,14 +175,14 @@ OUString widthfolding::compose_ja_voiced_sound_marks (const OUString& inStr, sal
             continue;
           }
         }
-        if (useOffset)
+        if (pOffset)
             *p ++ = position ++;
         *dst ++ = previousChar;
         previousChar = currentChar;
       }
 
       if (nCount == 0) {
-        if (useOffset)
+        if (pOffset)
             *p = position;
         *dst ++ = previousChar;
       }
@@ -191,8 +191,8 @@ OUString widthfolding::compose_ja_voiced_sound_marks (const OUString& inStr, sal
 
       newStr->length = sal_Int32(dst - newStr->buffer);
   }
-  if (useOffset)
-      offset.realloc(newStr->length);
+  if (pOffset)
+      pOffset->realloc(newStr->length);
   return OUString(newStr, SAL_NO_ACQUIRE); // take ownership
 }
 

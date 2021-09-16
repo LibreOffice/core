@@ -33,7 +33,7 @@ class transliteration_Ignore : public transliteration_commonclass
 {
 public:
         virtual OUString
-        foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 >& offset, bool useOffset ) override;
+        foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 >* pOffset ) override;
 
         // This method is shared.
         sal_Bool SAL_CALL
@@ -49,7 +49,7 @@ public:
         sal_Int16 SAL_CALL getType(  ) override;
 
         OUString
-        transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 >& offset, bool useOffset ) override;
+        transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 >* pOffset ) override;
 
         virtual sal_Unicode SAL_CALL
         transliterateChar2Char( sal_Unicode inChar) override;
@@ -98,7 +98,7 @@ public:
     ignoreDiacritics_CTL();
 
     OUString
-    foldingImpl(const OUString& rInStr, sal_Int32 nStartPos, sal_Int32 nCount, css::uno::Sequence<sal_Int32>& rOffset, bool useOffset) override;
+    foldingImpl(const OUString& rInStr, sal_Int32 nStartPos, sal_Int32 nCount, css::uno::Sequence<sal_Int32>* pOffset) override;
 
     sal_Unicode SAL_CALL
     transliterateChar2Char(sal_Unicode nInChar) override;
@@ -117,7 +117,7 @@ public:\
             implementationName = "com.sun.star.i18n.Transliteration.ignore"#name;\
         };\
         OUString foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, \
-                css::uno::Sequence< sal_Int32 >& offset, bool useOffset) override; \
+                css::uno::Sequence< sal_Int32 >* pOffset) override; \
 };
 
 TRANSLITERATION_IGNORE(KiKuFollowedBySa_ja_JP)
@@ -138,7 +138,7 @@ public:\
             implementationName = "com.sun.star.i18n.Transliteration.ignore"#name;\
         };\
         OUString foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, \
-                css::uno::Sequence< sal_Int32 >& offset, bool useOffset) override; \
+                css::uno::Sequence< sal_Int32 >* pOffset) override; \
         using transliteration_Ignore::transliterateRange;\
         css::uno::Sequence< OUString > SAL_CALL transliterateRange( const OUString& str1, \
                 const OUString& str2 ) override; \

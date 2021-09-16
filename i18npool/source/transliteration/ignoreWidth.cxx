@@ -30,10 +30,10 @@ using namespace com::sun::star::lang;
 namespace i18npool {
 
 OUString
-ignoreWidth::foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset )
+ignoreWidth::foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >* pOffset )
 {
     rtl::Reference< fullwidthToHalfwidth > t1(new fullwidthToHalfwidth);
-    return t1->transliterateImpl(inStr, startPos, nCount, offset, useOffset);
+    return t1->transliterateImpl(inStr, startPos, nCount, pOffset);
 }
 
 Sequence< OUString > SAL_CALL

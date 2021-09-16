@@ -30,10 +30,10 @@ using namespace com::sun::star::lang;
 namespace i18npool {
 
 OUString
-ignoreKana::foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset )
+ignoreKana::foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >* pOffset )
 {
     rtl::Reference< hiraganaToKatakana > t1(new hiraganaToKatakana);
-    return t1->transliterateImpl(inStr, startPos, nCount, offset, useOffset);
+    return t1->transliterateImpl(inStr, startPos, nCount, pOffset);
 }
 
 Sequence< OUString > SAL_CALL
