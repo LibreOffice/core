@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <sal/config.h>
+
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
 #include <tools/long.hxx>
