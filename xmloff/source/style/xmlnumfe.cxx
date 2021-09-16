@@ -895,7 +895,7 @@ bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
     OUString sCurString, sDummy;
     pFormatter->GetCompatibilityCurrency( sCurString, sDummy );
 
-    pCharClass->setLanguageTag( aLanguageTag );
+    pCharClass.reset( new CharClass( pFormatter->GetComponentContext(), aLanguageTag ) );
     OUString sUpperStr = pCharClass->uppercase(rString);
     sal_Int32 nPos = lcl_FindSymbol( sUpperStr, sCurString );
     if ( nPos >= 0 )

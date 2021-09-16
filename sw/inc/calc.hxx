@@ -240,7 +240,8 @@ public:
 
     bool        Push(const SwUserFieldType* pUserFieldType);
     void        Pop();
-    CharClass* GetCharClass();
+    const CharClass*  GetCharClass() const;
+    void        SetCharClass(const LanguageTag& rLanguageTag);
 
     void        SetCalcError( SwCalcError eErr )    { m_eError = eErr; }
     bool        IsCalcError() const                 { return SwCalcError::NONE != m_eError && SwCalcError::NaN != m_eError; }

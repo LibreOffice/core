@@ -813,9 +813,9 @@ void SpellCheckerDispatcher::FlushSpellCache()
 
 void SpellCheckerDispatcher::setCharClass(const LanguageTag& rLanguageTag)
 {
-    if (!m_pCharClass)
-        m_pCharClass.reset( new CharClass(rLanguageTag) );
-    m_pCharClass->setLanguageTag(rLanguageTag);
+    if (m_pCharClass && m_pCharClass->getLanguageTag() == rLanguageTag)
+        return;
+    m_pCharClass.reset( new CharClass(rLanguageTag) );
 }
 
 
