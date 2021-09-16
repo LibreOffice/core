@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_OUTDEV_H
-#define INCLUDED_VCL_INC_OUTDEV_H
+#pragma once
 
 #include <set>
 #include <vector>
@@ -138,7 +137,5 @@ struct ImplOutDevData
 };
 
 void ImplFontSubstitute( OUString& rFontName );
-
-#endif // INCLUDED_VCL_INC_OUTDEV_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
