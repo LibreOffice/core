@@ -327,9 +327,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
             {
                 SwRootFrame* pCurrentLayout = GetLayout();
 
-                //First Invert then Compress, never the other way round!
-                pRegion->Invert();
-
+                pRegion->LimitToOrigin();
                 pRegion->Compress();
 
                 ScopedVclPtr<VirtualDevice> pVout;
@@ -1665,8 +1663,7 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
 
         if ( pRegion )
         {
-            //First Invert then Compress, never the other way round!
-            pRegion->Invert();
+            pRegion->LimitToOrigin();
             pRegion->Compress();
             bRet = false;
             if ( !pRegion->empty() )
