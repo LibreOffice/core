@@ -281,8 +281,6 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
 
 void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
 {
-    MakeAllOutlineContentTemporarilyVisible a(GetShell().GetDoc());
-
     // Attention: At risk of suicide!
     // After paste, paste special the shell can be destroy.
 
@@ -488,6 +486,9 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
     }
     if(!bIgnore)
         rReq.Done();
+
+    // fold pasted outlines that have outline content visible attribute false
+    MakeAllOutlineContentTemporarilyVisible a(GetShell().GetDoc());
 }
 
 // ClipBoard state
