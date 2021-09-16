@@ -47,8 +47,8 @@ class SvtSysLocale_Impl : public utl::ConfigurationListener
 {
 public:
         SvtSysLocaleOptions                    aSysLocaleOptions;
-        std::unique_ptr<LocaleDataWrapper>      pLocaleData;
-        std::unique_ptr<CharClass>              pCharClass;
+        std::unique_ptr<LocaleDataWrapper>     pLocaleData;
+        std::optional<CharClass>               moCharClass;
 
                                 SvtSysLocale_Impl();
     virtual                     ~SvtSysLocale_Impl() override;
@@ -77,9 +77,9 @@ SvtSysLocale_Impl::~SvtSysLocale_Impl()
 
 CharClass& SvtSysLocale_Impl::GetCharClass()
 {
-    if ( !pCharClass )
-        pCharClass.reset(new CharClass( aSysLocaleOptions.GetRealLanguageTag() ));
-    return *pCharClass;
+    if ( !moCharClass )
+        moCharClass.emplace( aSysLocaleOptions.GetRealLanguageTag() );
+    return *moCharClass;
 }
 
 void SvtSysLocale_Impl::ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints nHint )
@@ -93,7 +93,7 @@ void SvtSysLocale_Impl::ConfigurationChanged( utl::ConfigurationBroadcaster*, Co
     const LanguageTag& rLanguageTag = aSysLocaleOptions.GetRealLanguageTag();
     if ( nHint & ConfigurationHints::Locale )
     {
-        GetCharClass().setLanguageTag( rLanguageTag );
+        moCharClass.emplace( rLanguageTag );
     }
     pLocaleData.reset(new LocaleDataWrapper(rLanguageTag, getDateAcceptancePatternsConfig()));
 }
