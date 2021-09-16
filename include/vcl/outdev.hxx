@@ -21,15 +21,21 @@
 
 #include <sal/config.h>
 
-#include <tools/gen.hxx>
-#include <tools/ref.hxx>
+#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/vector/b2enums.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <tools/solar.h>
 #include <tools/color.hxx>
+#include <tools/gen.hxx>
 #include <tools/poly.hxx>
+#include <tools/ref.hxx>
+#include <unotools/fontdefs.hxx>
+
+#include <vcl/dllapi.h>
 #include <vcl/bitmap.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/devicecoordinate.hxx>
-#include <vcl/dllapi.h>
 #include <vcl/font.hxx>
 #include <vcl/region.hxx>
 #include <vcl/rendercontext/AddFontSubstituteFlags.hxx>
@@ -45,18 +51,11 @@
 #include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/rendercontext/SalLayoutFlags.hxx>
 #include <vcl/mapmod.hxx>
-#include <vcl/wall.hxx>
 #include <vcl/metaactiontypes.hxx>
-#include <vcl/salnativewidgets.hxx>
 #include <vcl/outdevstate.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/vclreferencebase.hxx>
-
-#include <basegfx/numeric/ftools.hxx>
-#include <basegfx/vector/b2enums.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-
-#include <unotools/fontdefs.hxx>
-#include <cppuhelper/weakref.hxx>
+#include <vcl/wall.hxx>
 
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/uno/Reference.h>

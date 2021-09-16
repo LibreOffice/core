@@ -23,8 +23,9 @@
 
 #include <vcl/dllapi.h>
 
-#include "fontinstance.hxx"
 #include "PhysicalFontFamily.hxx"
+#include "fontinstance.hxx"
+
 #include <array>
 
 #define MAX_GLYPHFALLBACK 16
@@ -32,7 +33,6 @@
 class ImplDeviceFontSizeList;
 class ImplGlyphFallbackFontSubstitution;
 class ImplPreMatchFontSubstitution;
-
 
 // TODO: merge with ImplFontCache
 // TODO: rename to LogicalFontManager

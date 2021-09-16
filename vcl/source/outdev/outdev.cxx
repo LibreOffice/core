@@ -18,9 +18,11 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
+#include <sal/log.hxx>
+#include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
+
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/metaact.hxx>
@@ -30,11 +32,10 @@
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/lazydelete.hxx>
-#include <comphelper/processfactory.hxx>
 
-#include <salgdi.hxx>
-#include <window.h>
 #include <outdev.h>
+#include <window.h>
+#include <salgdi.hxx>
 
 #include <com/sun/star/awt/DeviceCapability.hpp>
 #include <com/sun/star/awt/XWindow.hpp>

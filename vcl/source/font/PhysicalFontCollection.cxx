@@ -19,15 +19,16 @@
 
 #include <sal/config.h>
 
-#include <memory>
-
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/fontdefs.hxx>
 #include <o3tl/sorted_vector.hxx>
+
 #include <outdev.h>
 #include <PhysicalFontCollection.hxx>
+
+#include <memory>
 
 static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
 {
