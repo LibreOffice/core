@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc7f5a20_312d36ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-09-16T10:55:51Z",
+      "side": 1,
+      "message": "@Attila: very nice work and thanks for fixing the crash! I\u0027ve found only minor problems, it\u0027s enough to fix them in your next commit.",
+      "revId": "49d8c9713c0fc8354eeb992d8165703d5daf10d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
