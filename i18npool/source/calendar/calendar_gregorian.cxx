@@ -127,8 +127,6 @@ using namespace ::com::sun::star::lang;
 
 namespace i18npool {
 
-#define ERROR RuntimeException()
-
 Calendar_gregorian::Calendar_gregorian()
     : mxNatNum(new NativeNumberSupplierService)
 {
@@ -174,7 +172,7 @@ Calendar_gregorian::init(const Era *_eraArray)
      */
     UErrorCode status = U_ZERO_ERROR;
     body.reset( icu::Calendar::createInstance( aIcuLocale, status) );
-    if (!body || !U_SUCCESS(status)) throw ERROR;
+    if (!body || !U_SUCCESS(status)) throw RuntimeException();
     eraArray=_eraArray;
 }
 
@@ -195,7 +193,7 @@ Calendar_hanja::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16
         css::lang::Locale jaLocale("ja", OUString(), OUString());
         if (idx == 0) return LocaleDataImpl::get()->getLocaleItem(jaLocale).timeAM;
         else if (idx == 1) return LocaleDataImpl::get()->getLocaleItem(jaLocale).timePM;
-        else throw ERROR;
+        else throw RuntimeException();
     }
     else
         return Calendar_gregorian::getDisplayName( displayIndex, idx, nameType );
@@ -215,7 +213,7 @@ Calendar_hanja_yoil::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_
         css::lang::Locale jaLocale("ja", OUString(), OUString());
         if (idx == 0) return LocaleDataImpl::get()->getLocaleItem(jaLocale).timeAM;
         else if (idx == 1) return LocaleDataImpl::get()->getLocaleItem(jaLocale).timePM;
-        else throw ERROR;
+        else throw RuntimeException();
     }
     else
         return Calendar_gregorian::getDisplayName( displayIndex, idx, nameType );
@@ -295,7 +293,7 @@ Calendar_gregorian::loadCalendar( const OUString& uniqueID, const css::lang::Loc
         }
     }
     // Calendar is not for the locale
-    throw ERROR;
+    throw RuntimeException();
 }
 
 
@@ -333,7 +331,7 @@ Calendar_gregorian::setDateTime( double fTimeInDays )
             "Calendar_gregorian::setDateTime: " << std::fixed << fM << " rounded to " << fR);
     UErrorCode status = U_ZERO_ERROR;
     body->setTime( fR, status);
-    if ( !U_SUCCESS(status) ) throw ERROR;
+    if ( !U_SUCCESS(status) ) throw RuntimeException();
     getValue();
 }
 
@@ -346,7 +344,7 @@ Calendar_gregorian::getDateTime()
     }
     UErrorCode status = U_ZERO_ERROR;
     double fR = body->getTime(status);
-    if ( !U_SUCCESS(status) ) throw ERROR;
+    if ( !U_SUCCESS(status) ) throw RuntimeException();
     return fR / U_MILLIS_PER_DAY;
 }
 
@@ -362,10 +360,10 @@ Calendar_gregorian::setLocalDateTime( double fTimeInDays )
     UErrorCode status = U_ZERO_ERROR;
     body->getTimeZone().getOffset( fR, true, nZoneOffset, nDSTOffset, status );
 
-    if ( !U_SUCCESS(status) ) throw ERROR;
+    if ( !U_SUCCESS(status) ) throw RuntimeException();
     status = U_ZERO_ERROR;
     body->setTime( fR - (nZoneOffset + nDSTOffset), status );
-    if ( !U_SUCCESS(status) ) throw ERROR;
+    if ( !U_SUCCESS(status) ) throw RuntimeException();
     getValue();
 }
 
@@ -378,13 +376,13 @@ Calendar_gregorian::getLocalDateTime()
     }
     UErrorCode status = U_ZERO_ERROR;
     double fTime = body->getTime( status );
-    if ( !U_SUCCESS(status) ) throw ERROR;
+    if ( !U_SUCCESS(status) ) throw RuntimeException();
     status = U_ZERO_ERROR;
     int32_t nZoneOffset = body->get( UCAL_ZONE_OFFSET, status );
-    if ( !U_SUCCESS(status) ) throw ERROR;
+    if ( !U_SUCCESS(status) ) throw RuntimeException();
     status = U_ZERO_ERROR;
     int32_t nDSTOffset = body->get( UCAL_DST_OFFSET, status );
-    if ( !U_SUCCESS(status) ) throw ERROR;
+    if ( !U_SUCCESS(status) ) throw RuntimeException();
     return (fTime + (nZoneOffset + nDSTOffset)) / U_MILLIS_PER_DAY;
 }
 
@@ -471,7 +469,7 @@ static UCalendarDateFields fieldNameConverter(sal_Int16 fieldIndex)
         case CalendarFieldIndex::YEAR:              f = UCAL_YEAR; break;
         case CalendarFieldIndex::MONTH:             f = UCAL_MONTH; break;
         case CalendarFieldIndex::ERA:               f = UCAL_ERA; break;
-        default: throw ERROR;
+        default: throw RuntimeException();
     }
     return f;
 }
@@ -480,7 +478,7 @@ void SAL_CALL
 Calendar_gregorian::setValue( sal_Int16 fieldIndex, sal_Int16 value )
 {
     if (fieldIndex < 0 || FIELD_INDEX_COUNT <= fieldIndex)
-        throw ERROR;
+        throw RuntimeException();
     fieldSet |= (1 << fieldIndex);
     fieldValue[fieldIndex] = value;
 }
@@ -583,7 +581,7 @@ void Calendar_gregorian::getValue()
         UErrorCode status = U_ZERO_ERROR;
         sal_Int32 value = body->get( fieldNameConverter(
                     fieldIndex), status);
-        if ( !U_SUCCESS(status) ) throw ERROR;
+        if ( !U_SUCCESS(status) ) throw RuntimeException();
 
         // Convert millisecond to minute for ZONE and DST and set remainder in
         // second field.
@@ -618,7 +616,7 @@ sal_Int16 SAL_CALL
 Calendar_gregorian::getValue( sal_Int16 fieldIndex )
 {
     if (fieldIndex < 0 || FIELD_INDEX_COUNT <= fieldIndex)
-        throw ERROR;
+        throw RuntimeException();
 
     if (fieldSet)  {
         setValue();
@@ -634,7 +632,7 @@ Calendar_gregorian::addValue( sal_Int16 fieldIndex, sal_Int32 value )
     // since ZONE and DST could not be add, we don't need to convert value here
     UErrorCode status = U_ZERO_ERROR;
     body->add(fieldNameConverter(fieldIndex), value, status);
-    if ( !U_SUCCESS(status) ) throw ERROR;
+    if ( !U_SUCCESS(status) ) throw RuntimeException();
     getValue();
 }
 
@@ -831,46 +829,46 @@ Calendar_gregorian::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_I
         case CalendarDisplayIndex::AM_PM:/* ==0 */
             if (idx == 0) aStr = LocaleDataImpl::get()->getLocaleItem(aLocale).timeAM;
             else if (idx == 1) aStr = LocaleDataImpl::get()->getLocaleItem(aLocale).timePM;
-            else throw ERROR;
+            else throw RuntimeException();
             break;
         case CalendarDisplayIndex::DAY:
-            if( idx >= aCalendar.Days.getLength() ) throw ERROR;
+            if( idx >= aCalendar.Days.getLength() ) throw RuntimeException();
             if (nameType == 0) aStr = aCalendar.Days[idx].AbbrevName;
             else if (nameType == 1) aStr = aCalendar.Days[idx].FullName;
             else if (nameType == 2) aStr = aCalendar.Days[idx].NarrowName;
-            else throw ERROR;
+            else throw RuntimeException();
             break;
         case CalendarDisplayIndex::MONTH:
-            if( idx >= aCalendar.Months.getLength() ) throw ERROR;
+            if( idx >= aCalendar.Months.getLength() ) throw RuntimeException();
             if (nameType == 0) aStr = aCalendar.Months[idx].AbbrevName;
             else if (nameType == 1) aStr = aCalendar.Months[idx].FullName;
             else if (nameType == 2) aStr = aCalendar.Months[idx].NarrowName;
-            else throw ERROR;
+            else throw RuntimeException();
             break;
         case CalendarDisplayIndex::GENITIVE_MONTH:
-            if( idx >= aCalendar.GenitiveMonths.getLength() ) throw ERROR;
+            if( idx >= aCalendar.GenitiveMonths.getLength() ) throw RuntimeException();
             if (nameType == 0) aStr = aCalendar.GenitiveMonths[idx].AbbrevName;
             else if (nameType == 1) aStr = aCalendar.GenitiveMonths[idx].FullName;
             else if (nameType == 2) aStr = aCalendar.GenitiveMonths[idx].NarrowName;
-            else throw ERROR;
+            else throw RuntimeException();
             break;
         case CalendarDisplayIndex::PARTITIVE_MONTH:
-            if( idx >= aCalendar.PartitiveMonths.getLength() ) throw ERROR;
+            if( idx >= aCalendar.PartitiveMonths.getLength() ) throw RuntimeException();
             if (nameType == 0) aStr = aCalendar.PartitiveMonths[idx].AbbrevName;
             else if (nameType == 1) aStr = aCalendar.PartitiveMonths[idx].FullName;
             else if (nameType == 2) aStr = aCalendar.PartitiveMonths[idx].NarrowName;
-            else throw ERROR;
+            else throw RuntimeException();
             break;
         case CalendarDisplayIndex::ERA:
-            if( idx >= aCalendar.Eras.getLength() ) throw ERROR;
+            if( idx >= aCalendar.Eras.getLength() ) throw RuntimeException();
             if (nameType == 0) aStr = aCalendar.Eras[idx].AbbrevName;
             else if (nameType == 1) aStr = aCalendar.Eras[idx].FullName;
-            else throw ERROR;
+            else throw RuntimeException();
             break;
         case CalendarDisplayIndex::YEAR:
             break;
         default:
-            throw ERROR;
+            throw RuntimeException();
     }
     return aStr;
 }
@@ -985,7 +983,7 @@ Calendar_gregorian::getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_In
                     getDisplayStringImpl( CalendarDisplayCode::LONG_YEAR, nNativeNumberMode, true );
 
             default:
-                throw ERROR;
+                throw RuntimeException();
         }
         aOUStr = OUString::createFromAscii(aStr);
     }
