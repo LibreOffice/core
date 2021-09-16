@@ -836,9 +836,9 @@ void SwShellTableCursor::FillRects()
         return;
 
     bool bStart = true;
-    SwRegionRects aReg( GetShell()->VisArea() );
-    if (comphelper::LibreOfficeKit::isActive())
-        aReg = GetShell()->getIDocumentLayoutAccess().GetCurrentLayout()->getFrameArea();
+    SwRegionRects aReg( comphelper::LibreOfficeKit::isActive()
+        ? GetShell()->getIDocumentLayoutAccess().GetCurrentLayout()->getFrameArea()
+        : GetShell()->VisArea() );
     SwNodes& rNds = GetDoc().GetNodes();
     SwFrame* pEndFrame = nullptr;
     for (size_t n = 0; n < m_SelectedBoxes.size(); ++n)
