@@ -53,6 +53,8 @@
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
 
+#include <strings.hrc>
+
 using namespace ::com::sun::star::script;
 
 constexpr OUStringLiteral SB_RTLNAME = u"@SBRTL";
@@ -1570,7 +1572,19 @@ void StarBASIC::MakeErrorText( ErrCode nId, std::u16string_view aMsg )
             aMsg1.remove(nResult, aSrgStr.getLength());
             aMsg1.insert(nResult, aMsg);
         }
+        else if (!aMsg.empty())
+        {
+            // tdf#123144 - create a meaningful error message
+            aMsg1 = BasResId(STR_ADDITIONAL_INFO)
+                        .replaceFirst("$ERR", aMsg1)
+                        .replaceFirst("$MSG", aMsg);
+        }
         GetSbData()->aErrMsg = aMsg1.makeStringAndClear();
+    }
+    // tdf#123144 - don't use an artifical error message if there is a custom one
+    else if (!aMsg.empty())
+    {
+        GetSbData()->aErrMsg = aMsg;
     }
     else if( nOldID != 0 )
     {

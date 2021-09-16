@@ -992,15 +992,9 @@ sal_Int32 SbiRuntime::translateErrorToVba( ErrCode nError, OUString& rMsg )
     // if there is an error defined it more than likely
     // is not the one you want ( some are the same though )
     // we really need a new vba compatible error list
-    if ( rMsg.isEmpty() )
-    {
-        StarBASIC::MakeErrorText( nError, rMsg );
-        rMsg = StarBASIC::GetErrorText();
-        if ( rMsg.isEmpty() ) // no message for err no, need localized resource here
-        {
-            rMsg = "Internal Object Error:";
-        }
-    }
+    // tdf#123144 - always translate an error number to a vba error message
+    StarBASIC::MakeErrorText( nError, rMsg );
+    rMsg = StarBASIC::GetErrorText();
     // no num? most likely then it *is* really a vba err
     sal_uInt16 nVBErrorCode = StarBASIC::GetVBErrorCode( nError );
     sal_Int32 nVBAErrorNumber = ( nVBErrorCode == 0 ) ? sal_uInt32(nError) : nVBErrorCode;

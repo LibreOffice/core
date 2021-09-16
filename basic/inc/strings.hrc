@@ -31,5 +31,6 @@
 #define STR_BASICKEY_FORMAT_CURRENCY    NC_("STR_BASICKEY_FORMAT_CURRENCY", "@0.00 $;@(0.00 $)")
 
 #define IDS_SBERR_TERMINATED            NC_("IDS_SBERR_TERMINATED", "The macro running has been interrupted")
+#define STR_ADDITIONAL_INFO             NC_("STR_ADDITIONAL_INFO", "$ERR\nAdditional information: $MSG")
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
