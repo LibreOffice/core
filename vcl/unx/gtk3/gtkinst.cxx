@@ -10852,7 +10852,7 @@ private:
 
             GtkWidget* pToggleButton = gtk_widget_get_first_child(GTK_WIDGET(pMenuButton));
             assert(GTK_IS_TOGGLE_BUTTON(pToggleButton));
-            g_signal_connect(pToggleButton, "state-flags-changed", G_CALLBACK(signalItemFlagsChanged), this);
+            g_signal_connect(pToggleButton, "toggled", G_CALLBACK(signalItemToggled), this);
 #endif
 
             // by default the GtkMenuButton down arrow button is as wide as
@@ -10909,7 +10909,6 @@ private:
         signal_clicked(::get_buildable_id(GTK_BUILDABLE(pItem)));
     }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     static void signalItemToggled(GtkToggleButton* pItem, gpointer widget)
     {
         GtkInstanceToolbar* pThis = static_cast<GtkInstanceToolbar*>(widget);
@@ -10921,37 +10920,17 @@ private:
     {
         for (const auto& a : m_aMenuButtonMap)
         {
+#if !GTK_CHECK_VERSION(4, 0, 0)
             if (a.second->getWidget() == GTK_WIDGET(pItem))
-            {
-                signal_toggle_menu(a.first);
-                break;
-            }
-        }
-    }
 #else
-    static void signalItemFlagsChanged(GtkToggleButton* pItem, GtkStateFlags flags, gpointer widget)
-    {
-        GtkInstanceToolbar* pThis = static_cast<GtkInstanceToolbar*>(widget);
-        bool bOldChecked = flags & GTK_STATE_FLAG_CHECKED;
-        bool bNewChecked = gtk_widget_get_state_flags(GTK_WIDGET(pItem)) & GTK_STATE_FLAG_CHECKED;
-        if (bOldChecked == bNewChecked)
-            return;
-        SolarMutexGuard aGuard;
-        pThis->signal_item_toggled(pItem);
-    }
-
-    void signal_item_toggled(GtkToggleButton* pItem)
-    {
-        for (auto& a : m_aMenuButtonMap)
-        {
             if (a.second->getWidget() == gtk_widget_get_parent(GTK_WIDGET(pItem)))
+#endif
             {
                 signal_toggle_menu(a.first);
                 break;
             }
         }
     }
-#endif
 
 #if GTK_CHECK_VERSION(4, 0, 0)
     static void set_item_image(GtkWidget* pItem, GtkWidget* pImage)
