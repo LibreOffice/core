@@ -21758,6 +21758,29 @@ private:
                 }
             }
         }
+        else if (GTK_IS_MENU_BUTTON(pWidget))
+        {
+            GtkMenuButton* pButton = GTK_MENU_BUTTON(pWidget);
+            if (const gchar* icon_name = gtk_menu_button_get_icon_name(pButton))
+            {
+                OUString aIconName(icon_name, strlen(icon_name), RTL_TEXTENCODING_UTF8);
+                if (!IsAllowedBuiltInIcon(aIconName))
+                {
+                    if (GdkPixbuf* pixbuf = load_icon_by_name_theme_lang(aIconName, m_aIconTheme, m_aUILang))
+                    {
+                        GtkWidget* pImage = gtk_image_new_from_pixbuf(pixbuf);
+                        gtk_widget_set_halign(pImage, GTK_ALIGN_CENTER);
+                        gtk_widget_set_valign(pImage, GTK_ALIGN_CENTER);
+                        g_object_unref(pixbuf);
+                        // TODO after gtk 4.6 is released require that version and drop this
+                        static auto menu_button_set_child = reinterpret_cast<void (*) (GtkMenuButton*, GtkWidget*)>(dlsym(nullptr, "gtk_menu_button_set_child"));
+                        if (menu_button_set_child)
+                            menu_button_set_child(pButton, pImage);
+                        gtk_widget_show(pImage);
+                    }
+                }
+            }
+        }
 #endif
 
         //set helpids
