@@ -327,7 +327,7 @@ void Test::testSharedString()
 void Test::testSharedStringPool()
 {
     SvtSysLocale aSysLocale;
-    svl::SharedStringPool aPool(*aSysLocale.GetCharClassPtr());
+    svl::SharedStringPool aPool(aSysLocale.GetCharClass());
 
     svl::SharedString p1, p2;
     p1 = aPool.intern("Andy");
@@ -360,7 +360,7 @@ void Test::testSharedStringPool()
 void Test::testSharedStringPoolPurge()
 {
     SvtSysLocale aSysLocale;
-    svl::SharedStringPool aPool(*aSysLocale.GetCharClassPtr());
+    svl::SharedStringPool aPool(aSysLocale.GetCharClass());
     aPool.intern("Andy");
     aPool.intern("andy");
     aPool.intern("ANDY");
@@ -418,7 +418,7 @@ void Test::testSharedStringPoolPurgeBug1()
     // We had a bug where, if we had two strings that mapped to the same uppercase string,
     // purge() would de-reference a dangling pointer and consequently cause an ASAN failure.
     SvtSysLocale aSysLocale;
-    svl::SharedStringPool aPool(*aSysLocale.GetCharClassPtr());
+    svl::SharedStringPool aPool(aSysLocale.GetCharClass());
     aPool.intern("Andy");
     aPool.intern("andy");
     aPool.purge();

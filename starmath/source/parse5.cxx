@@ -2695,7 +2695,7 @@ SmParser5::SmParser5()
     , m_bExportSymNames(false)
     , m_nParseDepth(0)
     , m_aNumCC(LanguageTag(LANGUAGE_ENGLISH_US))
-    , m_pSysCC(SM_MOD()->GetSysLocale().GetCharClassPtr())
+    , m_pSysCC(&SM_MOD()->GetSysLocale().GetCharClass())
 {
 }
 
