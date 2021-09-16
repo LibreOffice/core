@@ -53,6 +53,7 @@ public:
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/) override
     {
         rRenderContext.SetBackground(Theme::GetColor(Theme::Color_DeckTitleBarBackground));
+        rRenderContext.Erase();
         rRenderContext.DrawBitmapEx(Point(0, 0), maGrip);
     }
 };
