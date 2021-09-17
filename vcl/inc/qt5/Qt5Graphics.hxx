@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <sal/config.h>
+
 #include <salgdi.hxx>
 
 #include <memory>

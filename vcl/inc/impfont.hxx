@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <sal/config.h>
+
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 #include <tools/fontenum.hxx>
