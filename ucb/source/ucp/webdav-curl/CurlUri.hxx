@@ -59,7 +59,7 @@ public:
 
     bool operator==(CurlUri const& rOther) const;
 
-    CURLU* GetCURLU() { return m_pUrl.get(); }
+    CURLU* CloneCURLU() const { return curl_url_dup(m_pUrl.get()); }
     OUString const& GetURI() const { return m_URI; }
     OUString const& GetScheme() const { return m_Scheme; }
     OUString const& GetUser() const { return m_User; }

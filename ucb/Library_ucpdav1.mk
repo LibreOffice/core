@@ -35,6 +35,10 @@ $(eval $(call gb_Library_use_externals,ucpdav1,\
 	curl \
 ))
 
+$(eval $(call gb_Library_use_custom_headers,ucpdav1,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_add_exception_objects,ucpdav1,\
 	ucb/source/ucp/webdav-curl/ContentProperties \
 	ucb/source/ucp/webdav-curl/CurlSession \
