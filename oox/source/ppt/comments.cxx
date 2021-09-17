@@ -9,6 +9,7 @@
 
 #include <oox/ppt/comments.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <rtl/math.h>
 #include <rtl/math.hxx>
 
 namespace oox::ppt
@@ -37,7 +38,9 @@ void Comment::setDateTime(const OUString& sDateTime)
     aDateTime.Day = sDateTime.getToken(0, 'T', nIdx).toUInt32();
     aDateTime.Hours = sDateTime.getToken(0, ':', nIdx).toUInt32();
     aDateTime.Minutes = sDateTime.getToken(0, ':', nIdx).toUInt32();
-    double seconds = sDateTime.copy(nIdx).toDouble();
+    double seconds = rtl_math_uStringToDouble(sDateTime.getStr() + nIdx,
+                                              sDateTime.getStr() + sDateTime.getLength(), '.', 0,
+                                              nullptr, nullptr);
     aDateTime.Seconds = floor(seconds);
     seconds -= aDateTime.Seconds;
     aDateTime.NanoSeconds = ::rtl::math::round(seconds * 1000000000);

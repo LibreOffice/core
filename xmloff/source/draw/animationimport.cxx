@@ -50,6 +50,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
+#include <rtl/math.h>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <sax/tools/converter.hxx>
@@ -408,8 +409,11 @@ Sequence< TimeFilterPair > AnimationsImportHelperImpl::convertTimeFilter( const 
             sal_Int32 nPos = aToken.indexOf( ',' );
             if( nPos >= 0 )
             {
-                pValues->Time = aToken.copy( 0, nPos ).toDouble();
-                pValues->Progress = aToken.copy( nPos+1 ).toDouble();
+                pValues->Time = rtl_math_uStringToDouble(
+                    aToken.getStr(), aToken.getStr() + nPos, '.', 0, nullptr, nullptr);
+                pValues->Progress = rtl_math_uStringToDouble(
+                    aToken.getStr() + nPos + 1, aToken.getStr() + aToken.getLength(), '.', 0,
+                    nullptr, nullptr);
             }
             pValues++;
         }

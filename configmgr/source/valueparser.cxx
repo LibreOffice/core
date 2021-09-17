@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/sequence.hxx>
+#include <rtl/math.h>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
@@ -128,7 +129,8 @@ bool parseValue(xmlreader::Span const & text, sal_Int64 * value) {
 
 bool parseValue(xmlreader::Span const & text, double * value) {
     assert(text.is() && value != nullptr);
-    *value = OString(text.begin, text.length).toDouble();
+    *value = rtl_math_stringToDouble(
+        text.begin, text.begin + text.length, '.', 0, nullptr, nullptr);
         //TODO: check valid lexical representation
     return true;
 }
