@@ -20,9 +20,11 @@
 #include <sal/config.h>
 
 #include <sal/types.h>
-#include <unotools/configmgr.hxx>
-#include <vcl/fontcharmap.hxx>
 #include <basegfx/range/b2ibox.hxx>
+#include <unotools/configmgr.hxx>
+
+#include <vcl/fontcharmap.hxx>
+
 #include <headless/svpgdi.hxx>
 #include <impfontmetricdata.hxx>
 #include <sallayout.hxx>

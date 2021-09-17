@@ -22,11 +22,13 @@
 
 #include <sal/config.h>
 
-#include <memory>
 #include <comphelper/solarmutex.hxx>
+
 #include <salinst.hxx>
 #include <saldatabasic.hxx>
 #include <unx/genprn.h>
+
+#include <memory>
 
 class VCL_DLLPUBLIC SalYieldMutex : public comphelper::SolarMutex
 {

@@ -25,10 +25,10 @@
 #include <unotools/fontdefs.hxx>
 #include <o3tl/sorted_vector.hxx>
 
+#include <PhysicalFontCollection.hxx>
 #include <font/GlyphFallbackFontSubstitution.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <font/PreMatchFontSubstitution.hxx>
-#include <PhysicalFontCollection.hxx>
 
 #include <memory>
 

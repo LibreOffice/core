@@ -23,21 +23,23 @@
 #include <sal/config.h>
 
 #include <tools/fract.hxx>
+#include <cppuhelper/weakref.hxx>
+#include <o3tl/deleter.hxx>
+#include <o3tl/typed_flags_set.hxx>
+
 #include <vcl/commandevent.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/inputctx.hxx>
-#include <vcl/window.hxx>
 #include <vcl/settings.hxx>
-#include <o3tl/deleter.hxx>
-#include <o3tl/typed_flags_set.hxx>
-#include <cppuhelper/weakref.hxx>
+#include <vcl/window.hxx>
+
 #include "windowdev.hxx"
 
-#include <optional>
 #include <list>
 #include <memory>
-#include <vector>
+#include <optional>
 #include <set>
+#include <vector>
 
 class FixedText;
 class VclSizeGroup;
