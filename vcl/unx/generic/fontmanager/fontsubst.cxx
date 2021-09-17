@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <sal/config.h>
+
 #include <unx/geninst.h>
 #include <PhysicalFontCollection.hxx>
 #include <font/GlyphFallbackFontSubstitution.hxx>
