@@ -64,7 +64,7 @@ sal_Int32 ScDPItemData::Compare(const ScDPItemData& rA, const ScDPItemData& rB)
                 // strings may be interned.
                 return 0;
 
-            return ScGlobal::GetCollator()->compareString(rA.GetString(), rB.GetString());
+            return ScGlobal::GetCollator().compareString(rA.GetString(), rB.GetString());
         default:
             ;
     }

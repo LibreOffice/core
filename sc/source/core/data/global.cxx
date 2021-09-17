@@ -1040,9 +1040,9 @@ struct GetMutex {
 
 }
 
-CollatorWrapper*        ScGlobal::GetCollator()
+CollatorWrapper& ScGlobal::GetCollator()
 {
-    return comphelper::doubleCheckedInit( pCollator,
+    return *comphelper::doubleCheckedInit( pCollator,
         []()
         {
             CollatorWrapper* p = new CollatorWrapper( ::comphelper::getProcessComponentContext() );
@@ -1051,9 +1051,9 @@ CollatorWrapper*        ScGlobal::GetCollator()
         },
         GetMutex());
 }
-CollatorWrapper*        ScGlobal::GetCaseCollator()
+CollatorWrapper& ScGlobal::GetCaseCollator()
 {
-    return comphelper::doubleCheckedInit( pCaseCollator,
+    return *comphelper::doubleCheckedInit( pCaseCollator,
         []()
         {
             CollatorWrapper* p = new CollatorWrapper( ::comphelper::getProcessComponentContext() );
@@ -1061,6 +1061,10 @@ CollatorWrapper*        ScGlobal::GetCaseCollator()
             return p;
         },
         GetMutex());
+}
+CollatorWrapper& ScGlobal::GetCollator(bool bCaseSensitive)
+{
+    return bCaseSensitive ? GetCaseCollator() : GetCollator();
 }
 css::lang::Locale*     ScGlobal::GetLocale()
 {

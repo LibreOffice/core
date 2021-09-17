@@ -620,8 +620,7 @@ bool ScDBQueryDataIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScM
     vector<bool> aResults;
     aResults.reserve(nEntryCount);
 
-    const CollatorWrapper& rCollator =
-        mpParam->bCaseSens ? *ScGlobal::GetCaseCollator() : *ScGlobal::GetCollator();
+    const CollatorWrapper& rCollator = ScGlobal::GetCollator(mpParam->bCaseSens);
 
     for (SCSIZE i = 0; i < nEntryCount; ++i)
     {
@@ -1809,8 +1808,7 @@ bool ScQueryCellIterator::BinarySearch()
     if (pCol->IsEmptyData())
         return false;
 
-    CollatorWrapper* pCollator = (maParam.bCaseSens ? ScGlobal::GetCaseCollator() :
-        ScGlobal::GetCollator());
+    CollatorWrapper& rCollator = ScGlobal::GetCollator(maParam.bCaseSens);
     SvNumberFormatter& rFormatter = *(mrContext.GetFormatTable());
     const ScQueryEntry& rEntry = maParam.GetEntry(0);
     const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
@@ -1834,7 +1832,7 @@ bool ScQueryCellIterator::BinarySearch()
             sal_uInt32 nFormat = pCol->GetNumberFormat(mrContext, nRow);
             OUString aCellStr;
             ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter, rDoc);
-            sal_Int32 nTmp = pCollator->compareString(aCellStr, rEntry.GetQueryItem().maString.getString());
+            sal_Int32 nTmp = rCollator.compareString(aCellStr, rEntry.GetQueryItem().maString.getString());
             if ((rEntry.eOp == SC_LESS_EQUAL && nTmp > 0) ||
                     (rEntry.eOp == SC_GREATER_EQUAL && nTmp < 0) ||
                     (rEntry.eOp == SC_EQUAL && nTmp != 0))
@@ -1959,10 +1957,10 @@ bool ScQueryCellIterator::BinarySearch()
             sal_uInt32 nFormat = pCol->GetNumberFormat(mrContext, aCellData.second);
             ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter, rDoc);
 
-            nRes = pCollator->compareString(aCellStr, rEntry.GetQueryItem().maString.getString());
+            nRes = rCollator.compareString(aCellStr, rEntry.GetQueryItem().maString.getString());
             if (nRes < 0 && bLessEqual)
             {
-                sal_Int32 nTmp = pCollator->compareString( aLastInRangeString,
+                sal_Int32 nTmp = rCollator.compareString( aLastInRangeString,
                         aCellStr);
                 if (nTmp < 0)
                 {
@@ -1978,7 +1976,7 @@ bool ScQueryCellIterator::BinarySearch()
             }
             else if (nRes > 0 && !bLessEqual)
             {
-                sal_Int32 nTmp = pCollator->compareString( aLastInRangeString,
+                sal_Int32 nTmp = rCollator.compareString( aLastInRangeString,
                         aCellStr);
                 if (nTmp > 0)
                 {

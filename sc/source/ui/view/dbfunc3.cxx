@@ -1730,7 +1730,7 @@ void ScDBFunc::DataPilotSort(ScDPObject* pDPObj, tools::Long nDimIndex, bool bAs
         }
 
         // Sort the member list in ascending order.
-        ScOUStringCollate aCollate( ScGlobal::GetCollator() );
+        ScOUStringCollate aCollate( &ScGlobal::GetCollator() );
         std::stable_sort(aMembers.begin(), aMembers.end(), aCollate);
 
         // Collect and rank those custom sort strings that also exist in the member name list.

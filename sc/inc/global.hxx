@@ -539,8 +539,11 @@ public:
     SC_DLLPUBLIC static const CharClass& getCharClass();
 
     static CalendarWrapper&     GetCalendar();
-    SC_DLLPUBLIC static CollatorWrapper*        GetCollator();
-    static CollatorWrapper*     GetCaseCollator();
+    /// case-insensitive collator
+    SC_DLLPUBLIC static CollatorWrapper& GetCollator();
+    /// case-sensitive collator
+    static CollatorWrapper&     GetCaseCollator();
+    static CollatorWrapper&     GetCollator(bool bCaseSensitive);
     static css::lang::Locale*   GetLocale();
 
     SC_DLLPUBLIC static ::utl::TransliterationWrapper* GetpTransliteration();
