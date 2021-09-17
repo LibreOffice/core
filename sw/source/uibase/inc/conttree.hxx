@@ -112,6 +112,7 @@ class SwContentTree final : public SfxListener
     sal_uInt8           m_nOutlineLevel;
 
     sal_uInt32          m_nOutlineTracking = 1;
+    bool m_bTableTracking = true;
 
     enum class State { ACTIVE, CONSTANT, HIDDEN } m_eState;
 

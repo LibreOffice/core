@@ -231,6 +231,14 @@
       </object>
     </child>
     <child>
+      <object class="GtkCheckMenuItem" id="tabletracking">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_TABLE_TRACKING">Table Tracking</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
