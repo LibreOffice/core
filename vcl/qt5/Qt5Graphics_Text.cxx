@@ -19,20 +19,20 @@
 
 #include <sal/config.h>
 
+#include <vcl/fontcharmap.hxx>
+
 #include <Qt5Graphics.hxx>
 #include <Qt5FontFace.hxx>
 #include <Qt5Font.hxx>
 #include <Qt5Painter.hxx>
 
+#include <PhysicalFontCollection.hxx>
 #include <fontsubset.hxx>
-#include <vcl/fontcharmap.hxx>
+#include <sallayout.hxx>
 #include <unx/geninst.h>
+#include <unx/genpspgraphics.h>
 #include <unx/fontmanager.hxx>
 #include <unx/glyphcache.hxx>
-#include <unx/genpspgraphics.h>
-
-#include <sallayout.hxx>
-#include <PhysicalFontCollection.hxx>
 
 #include <QtGui/QGlyphRun>
 #include <QtGui/QFontDatabase>

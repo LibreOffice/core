@@ -21,21 +21,22 @@
 
 #include <sal/config.h>
 
-#include <memory>
 #include <freetype/config/ftheader.h>
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
 
 #include <tools/gen.hxx>
 #include <tools/solar.h>
-#include <unx/gendata.hxx>
+
 #include <vcl/dllapi.h>
 #include <vcl/outdev.hxx>
 
 #include <fontattributes.hxx>
 #include <fontinstance.hxx>
 #include <impfontmetricdata.hxx>
+#include <unx/gendata.hxx>
 
+#include <memory>
 #include <unordered_map>
 
 class FreetypeFont;

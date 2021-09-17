@@ -19,12 +19,12 @@
 
 #include <sal/config.h>
 
-#include <unx/cairotextrender.hxx>
+#include <vcl/svapp.hxx>
 
+#include <sallayout.hxx>
+#include <unx/cairotextrender.hxx>
 #include <unx/fc_fontoptions.hxx>
 #include <unx/freetype_glyphcache.hxx>
-#include <vcl/svapp.hxx>
-#include <sallayout.hxx>
 
 #include <cairo.h>
 #include <cairo-ft.h>

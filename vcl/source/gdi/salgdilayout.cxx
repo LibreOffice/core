@@ -17,20 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 #include <sal/config.h>
 
-#include <memory>
-#include <config_features.h>
 #include <sal/log.hxx>
-#include <PhysicalFontFace.hxx>
-#include <fontsubset.hxx>
-#include <salgdi.hxx>
-#include <salframe.hxx>
-#include <sft.hxx>
+#include <rtl/math.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+
 #include <FileDefinitionWidgetDraw.hxx>
-#include <rtl/math.hxx>
+#include <PhysicalFontFace.hxx>
+#include <fontsubset.hxx>
+#include <salframe.hxx>
+#include <salgdi.hxx>
+#include <sft.hxx>
+
+#include <memory>
 
 // The only common SalFrame method
 
