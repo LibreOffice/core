@@ -325,12 +325,21 @@ endif
 
 gb_GenCObject_get_source = $(WORKDIR)/$(1).c
 
+ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
 $(call gb_GenCObject_get_target,%) : $(gb_FORCE_COMPILE_ALL_TARGET)
+	$(call gb_Output_announce,$*.c,$(true),C  ,3)
+	$(call gb_Trace_StartRange,$*.c,C  )
+	test -f $(call gb_GenCObject_get_source,$*) || (echo "Missing generated source file $(call gb_GenCObject_get_source,$*)" && false)
+	$(call gb_CObject__tool_command,$*,$(call gb_GenCObject_get_source,$*),$(COMPILER_PLUGINS))
+	$(call gb_Trace_EndRange,$*.c,C  )
+else
+$(call gb_GenCObject_get_target,%) :
 	$(call gb_Output_announce,$*.c,$(true),C  ,3)
 	$(call gb_Trace_StartRange,$*.c,C  )
 	test -f $(call gb_GenCObject_get_source,$*) || (echo "Missing generated source file $(call gb_GenCObject_get_source,$*)" && false)
 	$(call gb_CObject__command_pattern,$@,$(T_CFLAGS) $(T_CFLAGS_APPEND),$(call gb_GenCObject_get_source,$*),$(call gb_GenCObject_get_dep_target,$*),$(COMPILER_PLUGINS),$(T_SYMBOLS),$(T_CC))
 	$(call gb_Trace_EndRange,$*.c,C  )
+endif
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(dir $(call gb_GenCObject_get_dep_target,%)).dir :
@@ -349,13 +358,22 @@ endif
 
 gb_GenCxxObject_get_source = $(WORKDIR)/$(1).$(gb_LinkTarget_CXX_SUFFIX_$(call gb_LinkTarget__get_workdir_linktargetname,$(2)))
 
+ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
 $(call gb_GenCxxObject_get_target,%) : $(gb_FORCE_COMPILE_ALL_TARGET)
+	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$(GEN_CXX_SOURCE)),$(true),CXX,3)
+	$(call gb_Trace_StartRange,$(subst $(BUILDDIR)/,,$(GEN_CXX_SOURCE)),CXX)
+	test -f $(GEN_CXX_SOURCE) || (echo "Missing generated source file $(GEN_CXX_SOURCE)" && false)
+	$(call gb_CxxObject__tool_command,$*,$(GEN_CXX_SOURCE),$(COMPILER_PLUGINS))
+	$(call gb_Trace_EndRange,$(subst $(BUILDDIR)/,,$(GEN_CXX_SOURCE)),CXX)
+else
+$(call gb_GenCxxObject_get_target,%) :
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$(GEN_CXX_SOURCE)),$(true),CXX,3)
 	$(call gb_Trace_StartRange,$(subst $(BUILDDIR)/,,$(GEN_CXX_SOURCE)),CXX)
 	test -f $(GEN_CXX_SOURCE) || (echo "Missing generated source file $(GEN_CXX_SOURCE)" && false)
 	$(eval $(gb_CxxObject__set_pchflags))
 	$(call gb_CObject__command_pattern,$@,$(T_CXXFLAGS) $(T_CXXFLAGS_APPEND),$(GEN_CXX_SOURCE),$(call gb_GenCxxObject_get_dep_target,$*),$(COMPILER_PLUGINS),$(T_SYMBOLS),$(T_CXX))
 	$(call gb_Trace_EndRange,$(subst $(BUILDDIR)/,,$(GEN_CXX_SOURCE)),CXX)
+endif
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(dir $(call gb_GenCxxObject_get_dep_target,%)).dir :
@@ -374,12 +392,21 @@ endif
 
 gb_GenCxxClrObject_get_source = $(WORKDIR)/$(1).$(gb_LinkTarget_CXX_SUFFIX_$(call gb_LinkTarget__get_workdir_linktargetname,$(2)))
 
+ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
 $(call gb_GenCxxClrObject_get_target,%) : $(gb_FORCE_COMPILE_ALL_TARGET)
+	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$(GEN_CXXCLR_SOURCE)),$(true),CLR,3)
+	$(call gb_Trace_StartRange,$(subst $(BUILDDIR)/,,$(GEN_CXXCLR_SOURCE)),CLR)
+	test -f $(GEN_CXXCLR_SOURCE) || (echo "Missing generated source file $(GEN_CXXCLR_SOURCE)" && false)
+	$(call gb_CxxClrObject__tool_command,$*,$(GEN_CXXCLR_SOURCE),$(COMPILER_PLUGINS))
+	$(call gb_Trace_EndRange,$(subst $(BUILDDIR)/,,$(GEN_CXXCLR_SOURCE)),CLR)
+else
+$(call gb_GenCxxClrObject_get_target,%) :
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$(GEN_CXXCLR_SOURCE)),$(true),CLR,3)
 	$(call gb_Trace_StartRange,$(subst $(BUILDDIR)/,,$(GEN_CXXCLR_SOURCE)),CLR)
 	test -f $(GEN_CXXCLR_SOURCE) || (echo "Missing generated source file $(GEN_CXXCLR_SOURCE)" && false)
 	$(call gb_CObject__command_pattern,$@,$(T_CXXCLRFLAGS) $(T_CXXCLRFLAGS_APPEND),$(GEN_CXXCLR_SOURCE),$(call gb_GenCxxClrObject_get_dep_target,$*),$(COMPILER_PLUGINS),$(T_SYMBOLS))
 	$(call gb_Trace_EndRange,$(subst $(BUILDDIR)/,,$(GEN_CXXCLR_SOURCE)),CLR)
+endif
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(dir $(call gb_GenCxxClrObject_get_dep_target,%)).dir :
@@ -520,12 +547,21 @@ endif
 
 gb_GenObjCObject_get_source = $(WORKDIR)/$(1).m
 
+ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
 $(call gb_GenObjCObject_get_target,%) : $(gb_FORCE_COMPILE_ALL_TARGET)
+	$(call gb_Output_announce,$*.m,$(true),OCC,3)
+	$(call gb_Trace_StartRange,$*.m,OCC)
+	test -f $(call gb_GenObjCObject_get_source,$*) || (echo "Missing generated source file $(call gb_GenObjCObject_get_source,$*)" && false)
+	$(call gb_ObjCObject__tool_command,$*,$(call gb_GenObjCObject_get_source,$*),$(COMPILER_PLUGINS))
+	$(call gb_Trace_EndRange,$*.m,OCC)
+else
+$(call gb_GenObjCObject_get_target,%) :
 	$(call gb_Output_announce,$*.m,$(true),OCC,3)
 	$(call gb_Trace_StartRange,$*.m,OCC)
 	test -f $(call gb_GenObjCObject_get_source,$*) || (echo "Missing generated source file $(call gb_GenObjCObject_get_source,$*)" && false)
 	$(call gb_CObject__command_pattern,$@,$(T_OBJCFLAGS) $(T_OBJCFLAGS_APPEND),$(call gb_GenObjCObject_get_source,$*),$(call gb_GenObjCObject_get_dep_target,$*),$(COMPILER_PLUGINS),$(T_SYMBOLS))
 	$(call gb_Trace_EndRange,$*.m,OCC)
+endif
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(dir $(call gb_GenObjCObject_get_dep_target,%)).dir :
@@ -544,12 +580,21 @@ endif
 
 gb_GenObjCxxObject_get_source = $(WORKDIR)/$(1).mm
 
+ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
 $(call gb_GenObjCxxObject_get_target,%) : $(gb_FORCE_COMPILE_ALL_TARGET)
+	$(call gb_Output_announce,$*.mm,$(true),OCX,3)
+	$(call gb_Trace_StartRange,$*.mm,OCX)
+	test -f $(call gb_GenObjCxxObject_get_source,$*) || (echo "Missing generated source file $(call gb_GenObjCxxObject_get_source,$*)" && false)
+	$(call gb_ObjCxxObject__tool_command,$*,$(call gb_GenObjCxxObject_get_source,$*),$(COMPILER_PLUGINS))
+	$(call gb_Trace_EndRange,$*.mm,OCX)
+else
+$(call gb_GenObjCxxObject_get_target,%) :
 	$(call gb_Output_announce,$*.mm,$(true),OCX,3)
 	$(call gb_Trace_StartRange,$*.mm,OCX)
 	test -f $(call gb_GenObjCxxObject_get_source,$*) || (echo "Missing generated source file $(call gb_GenObjCxxObject_get_source,$*)" && false)
 	$(call gb_CObject__command_pattern,$@,$(T_OBJCXXFLAGS) $(T_OBJCXXFLAGS_APPEND),$(call gb_GenObjCxxObject_get_source,$*),$(call gb_GenObjCxxObject_get_dep_target,$*),$(COMPILER_PLUGINS),$(T_SYMBOLS))
 	$(call gb_Trace_EndRange,$*.mm,OCX)
+endif
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(dir $(call gb_GenObjCxxObject_get_dep_target,%)).dir :
