@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca6f407b_078998f7",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1201,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-09-17T08:50:57Z",
+      "side": 1,
+      "message": "the pItem needs to be casted, not the value",
+      "revId": "72fedca7d0dc64a59630a5a93f6f7a8774554dc9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
