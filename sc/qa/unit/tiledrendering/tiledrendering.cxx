@@ -2776,7 +2776,7 @@ void ScTiledRenderingTest::testEditCursorBounds()
 
     CPPUNIT_ASSERT(!aView.m_aInvalidateCursorResult.empty());
     CPPUNIT_ASSERT_MESSAGE("Edit cursor must be in cell bounds!",
-        aCellBounds.IsInside(aView.m_aInvalidateCursorResult.getBounds()));
+        aCellBounds.Contains(aView.m_aInvalidateCursorResult.getBounds()));
 
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }

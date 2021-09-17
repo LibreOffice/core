@@ -1343,7 +1343,7 @@ void Edit::MouseButtonDown( const MouseEvent& rMEvt )
             ImplSetSelection( Selection( aBoundary.startPos, aBoundary.endPos ) );
             ImplCopyToSelectionClipboard();
         }
-        else if ( !rMEvt.IsShift() && HasFocus() && aSelection.IsInside( nCharPos ) )
+        else if ( !rMEvt.IsShift() && HasFocus() && aSelection.Contains( nCharPos ) )
             mbClickedInSelection = true;
         else if ( rMEvt.IsLeft() )
             ImplSetCursorPos( nCharPos, rMEvt.IsShift() );
@@ -2872,7 +2872,7 @@ void Edit::dragOver( const css::datatransfer::dnd::DropTargetDragEvent& rDTDE )
     aSel.Justify();
 
     // Don't accept drop in selection or read-only field...
-    if ( IsReadOnly() || aSel.IsInside( mpDDInfo->nDropPos ) || ! mpDDInfo->bIsStringSupported )
+    if ( IsReadOnly() || aSel.Contains( mpDDInfo->nDropPos ) || ! mpDDInfo->bIsStringSupported )
     {
         ImplHideDDCursor();
         rDTDE.Context->rejectDrag();

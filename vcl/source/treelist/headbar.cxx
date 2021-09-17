@@ -668,7 +668,7 @@ void HeaderBar::ImplDrag( const Point& rMousePos )
         bool bNewOutDrag;
 
         tools::Rectangle aItemRect = ImplGetItemRect( nPos );
-        bNewOutDrag = !aItemRect.IsInside( rMousePos );
+        bNewOutDrag = !aItemRect.Contains( rMousePos );
 
         //  if needed switch on ItemDrag
         if ( bNewOutDrag && mbDragable && !mbItemDrag )
@@ -1151,7 +1151,7 @@ sal_uInt16 HeaderBar::GetItemId( sal_uInt16 nPos ) const
 sal_uInt16 HeaderBar::GetItemId( const Point& rPos ) const
 {
     for ( size_t i = 0, n = mvItemList.size(); i < n; ++i ) {
-        if ( ImplGetItemRect( i ).IsInside( rPos ) ) {
+        if ( ImplGetItemRect( i ).Contains( rPos ) ) {
             return GetItemId( i );
         }
     }

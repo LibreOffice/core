@@ -96,7 +96,7 @@ namespace {
 
         // If the point is inside the rectangle, then distance is 0
         // Otherwise, compute the distance to the center of the rectangle.
-        if ( !rRect.IsInside( rPoint ) )
+        if ( !rRect.Contains( rPoint ) )
         {
             tools::Line aLine( rPoint, rRect.Center( ) );
             nDist = aLine.GetLength( );
@@ -164,7 +164,7 @@ bool SwLayoutFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoin
                                  pFrame->UnionFrame() :
                                  pFrame->GetPaintArea() );
 
-        if ( aPaintRect.IsInside( rPoint ) &&
+        if ( aPaintRect.Contains( rPoint ) &&
              ( bContentCheck || pFrame->GetModelPositionForViewPoint( pPos, rPoint, pCMS ) ) )
             bRet = true;
         else
@@ -183,7 +183,7 @@ bool SwPageFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
     Point aPoint( rPoint );
 
     // check, if we have to adjust the point
-    if ( !getFrameArea().IsInside( aPoint ) )
+    if ( !getFrameArea().Contains( aPoint ) )
     {
         aPoint.setX( std::max( aPoint.X(), getFrameArea().Left() ) );
         aPoint.setX( std::min( aPoint.X(), getFrameArea().Right() ) );
@@ -366,7 +366,7 @@ bool SwPageFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
 
 bool SwLayoutFrame::FillSelection( SwSelectionList& rList, const SwRect& rRect ) const
 {
-    if( rRect.IsOver(GetPaintArea()) )
+    if( rRect.Overlaps(GetPaintArea()) )
     {
         const SwFrame* pFrame = Lower();
         while( pFrame )
@@ -381,7 +381,7 @@ bool SwLayoutFrame::FillSelection( SwSelectionList& rList, const SwRect& rRect )
 bool SwPageFrame::FillSelection( SwSelectionList& rList, const SwRect& rRect ) const
 {
     bool bRet = false;
-    if( rRect.IsOver(GetPaintArea()) )
+    if( rRect.Overlaps(GetPaintArea()) )
     {
         bRet = SwLayoutFrame::FillSelection( rList, rRect );
         if( GetSortedObjs() )
@@ -504,7 +504,7 @@ bool SwCellFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
             while ( pFrame && !bRet )
             {
                 pFrame->Calc(pRenderContext);
-                if ( pFrame->getFrameArea().IsInside( rPoint ) )
+                if ( pFrame->getFrameArea().Contains( rPoint ) )
                 {
                     bRet = pFrame->GetModelPositionForViewPoint( pPos, rPoint, pCMS );
                     if ( pCMS && pCMS->m_bStop )
@@ -547,7 +547,7 @@ bool SwFlyFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
     //However if the Point sits inside a Fly which is completely located inside
     //the current one, we call GetModelPositionForViewPoint for it.
     Calc(pRenderContext);
-    bool bInside = getFrameArea().IsInside( rPoint ) && Lower();
+    bool bInside = getFrameArea().Contains( rPoint ) && Lower();
     bool bRet = false;
 
     //If a Frame contains a graphic, but only text was requested, it basically
@@ -565,8 +565,8 @@ bool SwFlyFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
         {
             const SwVirtFlyDrawObj* pObj = static_cast<const SwVirtFlyDrawObj*>(aIter());
             const SwFlyFrame* pFly = pObj ? pObj->GetFlyFrame() : nullptr;
-            if ( pFly && pFly->getFrameArea().IsInside( rPoint ) &&
-                 getFrameArea().IsInside( pFly->getFrameArea() ) )
+            if ( pFly && pFly->getFrameArea().Contains( rPoint ) &&
+                 getFrameArea().Contains( pFly->getFrameArea() ) )
             {
                 if (g_OszCtrl.ChkOsz(pFly))
                     break;
@@ -586,7 +586,7 @@ bool SwFlyFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
         while ( pFrame && !bRet )
         {
             pFrame->Calc(pRenderContext);
-            if ( pFrame->getFrameArea().IsInside( rPoint ) )
+            if ( pFrame->getFrameArea().Contains( rPoint ) )
             {
                 bRet = pFrame->GetModelPositionForViewPoint( pPos, rPoint, pCMS );
                 if ( pCMS && pCMS->m_bStop )
@@ -912,11 +912,11 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
                     else
                         aInsideCnt = Point( nX, nTmpTop );
 
-                    if ( pCell && pCell->getFrameArea().IsInside( aInsideCell ) )
+                    if ( pCell && pCell->getFrameArea().Contains( aInsideCell ) )
                     {
                         bEnd = true;
                         //Get the right Content out of the cell.
-                        if ( !pCnt->getFrameArea().IsInside( aInsideCnt ) )
+                        if ( !pCnt->getFrameArea().Contains( aInsideCnt ) )
                         {
                             pCnt = pCell->ContainsContent();
                             if ( fnNxtPrv == lcl_GetPrvCnt )
@@ -924,7 +924,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
                                     pCnt = pCnt->GetNextContentFrame();
                         }
                     }
-                    else if ( pCnt->getFrameArea().IsInside( aInsideCnt ) )
+                    else if ( pCnt->getFrameArea().Contains( aInsideCnt ) )
                         bEnd = true;
                 }
             }
@@ -1170,7 +1170,7 @@ static const SwLayoutFrame* lcl_Inside( const SwContentFrame *pCnt, Point const 
             return nullptr;
         }
         if( pUp->IsFootnoteContFrame() )
-            return pUp->getFrameArea().IsInside( rPt ) ? pUp : nullptr;
+            return pUp->getFrameArea().Contains( rPt ) ? pUp : nullptr;
         pUp = pUp->GetUpper();
     }
     return nullptr;
@@ -1227,7 +1227,7 @@ const SwContentFrame *SwLayoutFrame::GetContentPos( Point& rPoint,
                 if ( !pContent->IsTextFrame() || !static_cast<const SwTextFrame*>(pContent)->IsHiddenNow() )
                 {
                     SwRect aContentFrame( pContent->UnionFrame() );
-                    if ( aContentFrame.IsInside( rPoint ) )
+                    if ( aContentFrame.Contains( rPoint ) )
                     {
                         pActual = pContent;
                         aPoint = rPoint;
@@ -1402,7 +1402,7 @@ void SwPageFrame::GetContentPosition( const Point &rPt, SwPosition &rPos ) const
     while ( pContent )
     {
         SwRect aContentFrame( pContent->UnionFrame() );
-        if ( aContentFrame.IsInside( rPt ) )
+        if ( aContentFrame.Contains( rPt ) )
         {
             //This is the nearest one.
             pAct = pContent;
@@ -1524,7 +1524,7 @@ Point SwRootFrame::GetNextPrevContentPos( const Point& rPoint, bool bNext ) cons
     {
         //Does the point lie in the current ContentFrame?
         SwRect aContentFrame( pCnt->UnionFrame() );
-        if ( aContentFrame.IsInside( rPoint ) && !lcl_IsInRepeatedHeadline( pCnt ))
+        if ( aContentFrame.Contains( rPoint ) && !lcl_IsInRepeatedHeadline( pCnt ))
         {
             aRet = rPoint;
             break;
@@ -1917,7 +1917,7 @@ bool SwRootFrame::MakeTableCursors( SwTableCursor& rTableCursor )
 
             while ( pRow )
             {
-                if ( pRow->getFrameArea().IsOver( rUnion.GetUnion() ) )
+                if ( pRow->getFrameArea().Overlaps( rUnion.GetUnion() ) )
                 {
                     const SwLayoutFrame *pCell = pRow->FirstCell();
 
@@ -1971,7 +1971,7 @@ bool SwRootFrame::MakeTableCursors( SwTableCursor& rTableCursor )
 static void Sub( SwRegionRects& rRegion, const SwRect& rRect )
 {
     if( rRect.Width() > 1 && rRect.Height() > 1 &&
-        rRect.IsOver( rRegion.GetOrigin() ))
+        rRect.Overlaps( rRegion.GetOrigin() ))
         rRegion -= rRect;
 }
 
@@ -2507,7 +2507,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
             {
                 SwRect aCRect( pContent->UnionFrame( true ) );
                 aCRect.Intersection( pContent->GetPaintArea() );
-                if( aCRect.IsOver( aRegion.GetOrigin() ))
+                if( aCRect.Overlaps( aRegion.GetOrigin() ))
                 {
                     SwRect aTmp( aPrvRect );
                     aTmp.Union( aCRect );

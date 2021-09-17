@@ -55,7 +55,7 @@ SelectionEngine::~SelectionEngine()
 
 IMPL_LINK_NOARG(SelectionEngine, ImpWatchDog, Timer *, void)
 {
-    if ( !aArea.IsInside( aLastMove.GetPosPixel() ) )
+    if ( !aArea.Contains( aLastMove.GetPosPixel() ) )
         SelMouseMove( aLastMove );
 }
 
@@ -322,7 +322,7 @@ bool SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )
     aLastMove = rMEvt;
     // if the mouse is outside the area, the frequency of
     // SetCursorAtPoint() is only set by the Timer
-    if( aWTimer.IsActive() && !aArea.IsInside( rMEvt.GetPosPixel() ))
+    if( aWTimer.IsActive() && !aArea.Contains( rMEvt.GetPosPixel() ))
         return true;
 
     aWTimer.SetTimeout( nUpdateInterval );

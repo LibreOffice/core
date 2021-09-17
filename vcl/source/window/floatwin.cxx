@@ -563,7 +563,7 @@ FloatingWindow* FloatingWindow::ImplFloatHitTest( vcl::Window* pReference, const
 
         // the top-left corner in output coordinates ie (0,0)
         tools::Rectangle devRect( pBorderWin->ImplOutputToUnmirroredAbsoluteScreenPixel( tools::Rectangle( Point(), pBorderWin->GetSizePixel()) ) ) ;
-        if ( devRect.IsInside( aAbsolute ) )
+        if ( devRect.Contains( aAbsolute ) )
         {
             // inside the window
             return pWin;
@@ -573,7 +573,7 @@ FloatingWindow* FloatingWindow::ImplFloatHitTest( vcl::Window* pReference, const
         // toolbox item or similar)
         // note: maFloatRect is set in FloatingWindow::StartPopupMode() and
         //       is already in absolute device coordinates
-        if ( pWin->maFloatRect.IsInside( aAbsolute ) )
+        if ( pWin->maFloatRect.Contains( aAbsolute ) )
         {
             rbHitTestInsideRect = true;
             return pWin;

@@ -522,7 +522,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf136613)
         CPPUNIT_ASSERT(!rRect.IsEmpty());
 
         //...if it is on the page. This will fail if not.
-        CPPUNIT_ASSERT_MESSAGE("The pictures are outside the page!", rPageRect.IsInside(rRect));
+        CPPUNIT_ASSERT_MESSAGE("The pictures are outside the page!", rPageRect.Contains(rRect));
     }
 }
 
@@ -2750,7 +2750,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testBtlrCell)
     {
         std::stringstream ss;
         ss << "selection rectangle " << rRect << " is not inside cell rectangle " << aCellRect;
-        CPPUNIT_ASSERT_MESSAGE(ss.str(), aCellRect.IsInside(rRect));
+        CPPUNIT_ASSERT_MESSAGE(ss.str(), aCellRect.Contains(rRect));
     }
 
     // Make sure that the correct rectangle gets repainted on scroll.
@@ -3181,7 +3181,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testShapeAllowOverlapWrap)
     SwAnchoredObject* pSecond = rObjs[1];
     // Without the accompanying fix in place, this test would have failed: AllowOverlap=no had
     // priority over Surround=through (which is bad for Word compat).
-    CPPUNIT_ASSERT(pSecond->GetObjRect().IsOver(pFirst->GetObjRect()));
+    CPPUNIT_ASSERT(pSecond->GetObjRect().Overlaps(pFirst->GetObjRect()));
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf124600)
@@ -3513,7 +3513,7 @@ static SwRect lcl_getVisibleFlyObjRect(SwWrtShell* pWrtShell)
     pDrawObj = (*pDrawObjs)[0];
     CPPUNIT_ASSERT_EQUAL(OUString("Rahmen123"), pDrawObj->GetFrameFormat().GetName());
     SwRect aFlyRect = pDrawObj->GetObjRect();
-    CPPUNIT_ASSERT(pPage->getFrameArea().IsInside(aFlyRect));
+    CPPUNIT_ASSERT(pPage->getFrameArea().Contains(aFlyRect));
     return aFlyRect;
 }
 

@@ -818,7 +818,7 @@ int SwCursorShell::SetCursor( const Point &rLPt, bool bOnlyText, bool bBlock )
         {
             if( pFrame )
             {
-                if( pFrame->getFrameArea().IsInside( rCurrentCursorPt ))
+                if( pFrame->getFrameArea().Contains( rCurrentCursorPt ))
                     return bRet;
             }
             else if( aPos.nNode.GetNode().IsContentNode() )
@@ -839,7 +839,7 @@ int SwCursorShell::SetCursor( const Point &rLPt, bool bOnlyText, bool bBlock )
     {
         // SSelection over not allowed sections or if in header/footer -> different
         if( !CheckNodesRange( aPos.nNode, pCursor->GetMark()->nNode, true )
-            || ( pFrame && !pFrame->getFrameArea().IsInside( pCursor->GetMkPos() ) ))
+            || ( pFrame && !pFrame->getFrameArea().Contains( pCursor->GetMkPos() ) ))
             return bRet;
 
         // is at same position but not in header/footer
@@ -996,7 +996,7 @@ bool SwCursorShell::TestCurrPam(
 
     // check if the SPoint is in a table selection
     if( m_pTableCursor )
-        return m_pTableCursor->IsInside( rPt );
+        return m_pTableCursor->Contains( rPt );
 
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
     // search position <rPt> in document
@@ -1418,7 +1418,7 @@ void SwCursorShell::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
 
     bool bVis = false;
     // if a cursor is visible then hide the SV cursor
-    if( m_pVisibleCursor->IsVisible() && !aRect.IsOver( m_aCharRect ) )
+    if( m_pVisibleCursor->IsVisible() && !aRect.Overlaps( m_aCharRect ) )
     {
         bVis = true;
         m_pVisibleCursor->Hide();

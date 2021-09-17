@@ -207,7 +207,7 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
         tools::Rectangle aRect( pOLV->GetOutputArea() );
         aRect.Union( pObj->GetLogicRect() );
         const Point aPos = pOLV->GetWindow()->PixelToLogic(rEvt.maPosPixel);
-        if ( aRect.IsInside(aPos) )
+        if ( aRect.Contains(aPos) )
         {
             rSh.StartAllAction();
             rSh.EndAllAction();
@@ -267,7 +267,7 @@ SotExchangeDest SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject *
             tools::Rectangle aRect( pOLV->GetOutputArea() );
             aRect.Union( pObj->GetLogicRect() );
             const Point aPos = pOLV->GetWindow()->PixelToLogic( rPixPnt );
-            if( aRect.IsInside( aPos ) )
+            if( aRect.Contains( aPos ) )
                 return SotExchangeDest::NONE;
         }
     }
@@ -346,7 +346,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
     aWin.AdjustTop(nMargin );
     aWin.AdjustRight( -nMargin );
     aWin.AdjustBottom( -nMargin );
-    if(!aWin.IsInside(aPixPt)) {
+    if(!aWin.Contains(aPixPt)) {
         static sal_uInt64 last_tick = 0;
         sal_uInt64 current_tick = tools::Time::GetSystemTicks();
         if((current_tick-last_tick) > 500) {

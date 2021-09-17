@@ -503,7 +503,7 @@ namespace
                 if(pText
                     && pObj->IsClosedObj()
                     && (!bMaster || (!pObj->IsNotVisibleAsMaster() && 0 != no))
-                    && pObj->GetCurrentBoundRect().IsInside(rPnt)
+                    && pObj->GetCurrentBoundRect().Contains(rPnt)
                     && !pText->IsHideContour()
                     && SdrObjectPrimitiveHit(*pObj, rPnt, 0, rTextEditPV, &rVisLayers, false))
                 {

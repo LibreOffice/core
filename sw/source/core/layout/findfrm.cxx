@@ -585,7 +585,7 @@ const SwPageFrame* SwRootFrame::GetPageAtPos( const Point& rPt, const Size* pSiz
 
     if ( !bExtend )
     {
-        if( !getFrameArea().IsInside( rPt ) )
+        if( !getFrameArea().Contains( rPt ) )
             return nullptr;
 
         // skip pages above point:
@@ -600,8 +600,8 @@ const SwPageFrame* SwRootFrame::GetPageAtPos( const Point& rPt, const Size* pSiz
     {
         const SwRect& rBoundRect = bExtend ? maPageRects[ nPageIdx++ ] : pPage->getFrameArea();
 
-        if ( (!pSize && rBoundRect.IsInside(rPt)) ||
-              (pSize && rBoundRect.IsOver(aRect)) )
+        if ( (!pSize && rBoundRect.Contains(rPt)) ||
+              (pSize && rBoundRect.Overlaps(aRect)) )
         {
             pRet = static_cast<const SwPageFrame*>(pPage);
         }
@@ -614,7 +614,7 @@ const SwPageFrame* SwRootFrame::GetPageAtPos( const Point& rPt, const Size* pSiz
 
 bool SwRootFrame::IsBetweenPages(const Point& rPt) const
 {
-    if (!getFrameArea().IsInside(rPt))
+    if (!getFrameArea().Contains(rPt))
         return false;
 
     // top visible page
@@ -631,7 +631,7 @@ bool SwRootFrame::IsBetweenPages(const Point& rPt) const
         rPt.X() <= pPage->getFrameArea().Right())
     {
         // Trivial case when we're right in between.
-        if (!pPage->getFrameArea().IsInside(rPt))
+        if (!pPage->getFrameArea().Contains(rPt))
             return true;
 
         // In normal mode the gap is large enough and

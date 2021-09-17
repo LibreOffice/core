@@ -387,7 +387,7 @@ void SwView::CalcPt( Point *pPt, const tools::Rectangle &rRect,
 
 bool SwView::IsScroll( const tools::Rectangle &rRect ) const
 {
-    return m_bCenterCursor || m_bTopCursor || !m_aVisArea.IsInside(rRect);
+    return m_bCenterCursor || m_bTopCursor || !m_aVisArea.Contains(rRect);
 }
 
 void SwView::Scroll( const tools::Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt16 nRangeY )
@@ -416,7 +416,7 @@ void SwView::Scroll( const tools::Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt
         {
             // If we are not supposed to be centered, lying in the VisArea
             // and are not covered by the dialogue ...
-            if ( !m_bCenterCursor && aOldVisArea.IsInside( rRect )
+            if ( !m_bCenterCursor && aOldVisArea.Contains( rRect )
                  && ( rRect.Left() > aDlgRect.Right()
                       || rRect.Right() < aDlgRect.Left()
                       || rRect.Top() > aDlgRect.Bottom()
@@ -443,7 +443,7 @@ void SwView::Scroll( const tools::Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt
     }
 
     //s.o. !IsScroll()
-    if( !(m_bCenterCursor || m_bTopCursor) && m_aVisArea.IsInside( rRect ) )
+    if( !(m_bCenterCursor || m_bTopCursor) && m_aVisArea.Contains( rRect ) )
     {
         m_aVisArea = aOldVisArea;
         return;

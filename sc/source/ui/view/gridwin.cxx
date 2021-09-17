@@ -293,7 +293,7 @@ static void lcl_UnLockComment( ScDrawView* pView, const Point& rPos, const ScVie
     ScAddress aCellPos( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo() );
     ScPostIt* pNote = rDoc.GetNote( aCellPos );
     SdrObject* pObj = pNote ? pNote->GetCaption() : nullptr;
-    if( pObj && pObj->GetLogicRect().IsInside( rPos ) && ScDrawLayer::IsNoteCaption( pObj ) )
+    if( pObj && pObj->GetLogicRect().Contains( rPos ) && ScDrawLayer::IsNoteCaption( pObj ) )
     {
         const ScProtectionAttr* pProtAttr = rDoc.GetAttr( aCellPos, ATTR_PROTECTION );
         bool bProtectAttr = pProtAttr->GetProtection() || pProtAttr->GetHideCell() ;
@@ -1398,7 +1398,7 @@ bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
             if (aMarkRange.aStart.Tab() == mrViewData.GetTabNo() && mpAutoFillRect)
             {
                 Point aMousePos = rMEvt.GetPosPixel();
-                if (mpAutoFillRect->IsInside(aMousePos))
+                if (mpAutoFillRect->Contains(aMousePos))
                 {
                     SetPointer( PointerStyle::Cross );     //! bold cross ?
                     if (bAction)
@@ -1868,7 +1868,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         if ( bListValButton )
         {
             tools::Rectangle aButtonRect = GetListValButtonRect( aListValPos );
-            if ( aButtonRect.IsInside( aPos ) )
+            if ( aButtonRect.Contains( aPos ) )
             {
                 // tdf#125917 typically we have the mouse captured already, except if are editing the cell.
                 // Ensure its captured before the menu is launched even in the cell editing case
@@ -3217,7 +3217,7 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCCOL nCellX, S
     {
         OutlinerView* pOlView = pDrawView->GetTextEditOutlinerView();
         tools::Rectangle aOutputArea = pOlView->GetOutputArea();
-        if ( aOutputArea.IsInside( aLogicPos ) )
+        if ( aOutputArea.Contains( aLogicPos ) )
         {
             //  handle selection within the OutlinerView
 
@@ -4631,7 +4631,7 @@ void ScGridWindow::PasteSelection( const Point& rPosPixel )
         for (size_t i = 0; i < nCount; ++i)
         {
             SdrObject* pObj = pDrawView->GetMarkedObjectByIndex(i);
-            if (pObj && pObj->GetLogicRect().IsInside(aLogicPos))
+            if (pObj && pObj->GetLogicRect().Contains(aLogicPos))
             {
                 // Inside an active drawing object.  Bail out.
                 return;
@@ -5534,7 +5534,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
     aLogicEdit.SetBottom( aLogicEdit.Top() + nTextHeight );
 
     Point aLogicClick = PixelToLogic(rPos,aEditMode);
-    if ( aLogicEdit.IsInside(aLogicClick) )
+    if ( aLogicEdit.Contains(aLogicClick) )
     {
         EditView aTempView(pEngine.get(), this);
         aTempView.SetOutputArea( aLogicEdit );
@@ -5598,7 +5598,7 @@ bool ScGridWindow::IsSpellErrorAtPos( const Point& rPos, SCCOL nCol1, SCROW nRow
 
     aLogicEdit.setWidth(nTextWidth + 1);
 
-    if (!aLogicEdit.IsInside(aLogicClick))
+    if (!aLogicEdit.Contains(aLogicClick))
         return false;
 
     pEngine->SetControlWord(pEngine->GetControlWord() | EEControlBits::ONLINESPELLING);
@@ -5662,7 +5662,7 @@ bool ScGridWindow::HasScenarioButton( const Point& rPosPixel, ScRange& rScenRang
                 aButtonPos.AdjustX( -(nBWidth - nHSpace) );    // same for top or bottom
 
             tools::Rectangle aButRect( aButtonPos, Size(nBWidth,nBHeight) );
-            if ( aButRect.IsInside( rPosPixel ) )
+            if ( aButRect.Contains( rPosPixel ) )
             {
                 rScenRange = aRange;
                 return true;

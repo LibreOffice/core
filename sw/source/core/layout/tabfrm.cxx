@@ -2812,7 +2812,7 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
                     // fly anchored at character or at paragraph
                     pFly->IsFlyAtContentFrame() &&
                     // fly overlaps with corresponding table rectangle
-                    aFlyRect.IsOver( aRect ) &&
+                    aFlyRect.Overlaps( aRect ) &&
                     // fly isn't lower of table and
                     // anchor character frame of fly isn't lower of table
                     (pSpaceBelowBottom // not if in ShouldBwdMoved
@@ -5380,7 +5380,7 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
             {
                 SwRect aTmp( pAnchoredObj->GetObjRect() );
                 const SwFrame* pAnch = pAnchoredObj->GetAnchorFrame();
-                if ( (bConsiderWrapOnObjPos && IsAnLower( pAnch )) || (!bConsiderWrapOnObjPos && aTmp.IsOver( aRect )) )
+                if ( (bConsiderWrapOnObjPos && IsAnLower( pAnch )) || (!bConsiderWrapOnObjPos && aTmp.Overlaps( aRect )) )
                 {
                     const SwFrameFormat& rAnchoredObjFrameFormat = pAnchoredObj->GetFrameFormat();
                     const SwFormatSurround &rSur = rAnchoredObjFrameFormat.GetSurround();

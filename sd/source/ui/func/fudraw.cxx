@@ -280,7 +280,7 @@ bool FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
     {
         ::tools::Rectangle aOutputArea(Point(0,0), mpWindow->GetOutputSizePixel());
 
-        if (mpView && !aOutputArea.IsInside(rMEvt.GetPosPixel()))
+        if (mpView && !aOutputArea.Contains(rMEvt.GetPosPixel()))
             mpView->GetSdrPageView()->DeleteHelpLine(nHelpLine);
 
         mpWindow->ReleaseMouse();

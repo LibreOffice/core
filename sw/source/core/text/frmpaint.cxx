@@ -248,7 +248,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, tools::Long nAsc, tools::Long nMax,
         SwRect aRct( Point( aTmpPos.X(),
                          aTmpPos.Y() - pTmpFnt->GetAscent( m_pSh, *m_pSh->GetOut() )
                           ), aSize );
-        if( !m_aRect.IsInside( aRct ) )
+        if( !m_aRect.Contains( aRct ) )
         {
             if( aRct.Intersection( m_aRect ).IsEmpty() )
                 bPaint = false;
@@ -280,7 +280,7 @@ void SwExtraPainter::PaintRedline( SwTwips nY, tools::Long nMax )
     if( !IsClipChg() )
     {
         SwRect aRct( aStart, aEnd );
-        if( !m_aRect.IsInside( aRct ) )
+        if( !m_aRect.Contains( aRct ) )
         {
             if( aRct.Intersection( m_aRect ).IsEmpty() )
                 return;

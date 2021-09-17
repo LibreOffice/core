@@ -143,7 +143,7 @@ void SwAnnotationWin::PaintTile(vcl::RenderContext& rRenderContext, const tools:
 bool SwAnnotationWin::IsHitWindow(const Point& rPointLogic)
 {
     tools::Rectangle aRectangleLogic(EditWin().PixelToLogic(GetPosPixel()), EditWin().PixelToLogic(GetSizePixel()));
-    return aRectangleLogic.IsInside(rPointLogic);
+    return aRectangleLogic.Contains(rPointLogic);
 }
 
 void SwAnnotationWin::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark)

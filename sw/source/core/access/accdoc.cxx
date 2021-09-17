@@ -305,7 +305,7 @@ sal_Bool SAL_CALL SwAccessibleDocumentBase::containsPoint(
     aPixBounds.Move(-aPixBounds.Left(), -aPixBounds.Top());
 
     Point aPixPoint( aPoint.X, aPoint.Y );
-    return aPixBounds.IsInside( aPixPoint );
+    return aPixBounds.Contains( aPixPoint );
 }
 
 uno::Reference< XAccessible > SAL_CALL SwAccessibleDocumentBase::getAccessibleAtPoint(
@@ -324,7 +324,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleDocumentBase::getAccessibleAt
         }
 
         Point aPixPoint( aPoint.X, aPoint.Y ); // px rel to window
-        if( mpChildWin->GetWindowExtentsRelative( pWin ).IsInside( aPixPoint ) )
+        if( mpChildWin->GetWindowExtentsRelative( pWin ).Contains( aPixPoint ) )
             return mpChildWin->GetAccessible();
     }
 

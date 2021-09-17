@@ -1065,7 +1065,7 @@ sal_Int32 SvHeaderTabListBox::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nC
         sal_Int32 nPos = 0;
         for (auto const& rectangle : aRects)
         {
-            if( rectangle.IsInside(_rPoint) )
+            if( rectangle.Contains(_rPoint) )
                 return nPos;
             ++nPos;
         }

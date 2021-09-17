@@ -56,7 +56,7 @@ SwRect& SwRect::Union( const SwRect& rRect )
 SwRect& SwRect::Intersection( const SwRect& rRect )
 {
     // any similarity between me and given element?
-    if ( IsOver( rRect ) )
+    if ( Overlaps( rRect ) )
     {
         // get smaller right and lower, and greater left and upper edge
         if ( Left() < rRect.Left() )
@@ -90,7 +90,7 @@ SwRect& SwRect::Intersection_( const SwRect& rOther )
     return *this;
 }
 
-bool SwRect::IsInside( const SwRect& rRect ) const
+bool SwRect::Contains( const SwRect& rRect ) const
 {
     const tools::Long nRight  = Right();
     const tools::Long nBottom = Bottom();
@@ -102,7 +102,7 @@ bool SwRect::IsInside( const SwRect& rRect ) const
            (Top()  <= nrBottom)     && (nrBottom    <= nBottom);
 }
 
-bool SwRect::IsInside( const Point& rPoint ) const
+bool SwRect::Contains( const Point& rPoint ) const
 {
     return (Left()  <= rPoint.X()) &&
            (Top()   <= rPoint.Y()) &&
@@ -117,10 +117,10 @@ bool SwRect::IsNear( const Point& rPoint, tools::Long nTolerance ) const
                       ((Top()    - nTolerance) <= rPoint.Y()) &&
                       ((Right()  + nTolerance) >= rPoint.X()) &&
                       ((Bottom() + nTolerance) >= rPoint.Y()));
-    return IsInside(rPoint) || bIsNearby;
+    return Contains(rPoint) || bIsNearby;
 }
 
-bool SwRect::IsOver( const SwRect& rRect ) const
+bool SwRect::Overlaps( const SwRect& rRect ) const
 {
     return (Top()   <= rRect.Bottom()) &&
            (Left()  <= rRect.Right())  &&

@@ -85,7 +85,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 
     if(pPV && dynamic_cast< const ::sd::slidesorter::view::SlideSorterView* >(this) !=  nullptr)
     {
-        if(!pPV->GetPageRect().IsInside(rPos))
+        if(!pPV->GetPageRect().Contains(rPos))
             pPV = nullptr;
     }
 
@@ -313,7 +313,7 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rM
 
     if(pPV && dynamic_cast<const ::sd::slidesorter::view::SlideSorterView* >(this) )
     {
-        if(!pPV->GetPageRect().IsInside(rPos))
+        if(!pPV->GetPageRect().Contains(rPos))
             pPV = nullptr;
     }
 

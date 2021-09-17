@@ -73,7 +73,7 @@ sal_Bool SAL_CALL SvtRulerAccessible::containsPoint( const awt::Point& rPoint )
 {
     // no guard -> done in getBounds()
 //  return GetBoundingBox().IsInside( VCLPoint( rPoint ) );
-    return tools::Rectangle( Point( 0, 0 ), GetBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
+    return tools::Rectangle( Point( 0, 0 ), GetBoundingBox().GetSize() ).Contains( VCLPoint( rPoint ) );
 }
 
 uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleAtPoint( const awt::Point& )

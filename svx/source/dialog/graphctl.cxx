@@ -434,7 +434,7 @@ bool GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                         tools::Rectangle aMarkRect(pView->GetMarkedObjRect());
                         aMarkRect.Move(nX, nY);
 
-                        if(!aMarkRect.IsInside(rWorkArea))
+                        if(!aMarkRect.Contains(rWorkArea))
                         {
                             if(aMarkRect.Left() < rWorkArea.Left())
                             {
@@ -585,7 +585,7 @@ bool GraphCtrl::MouseButtonDown( const MouseEvent& rMEvt )
 
         const Point aLogPt( rDevice.PixelToLogic( rMEvt.GetPosPixel() ) );
 
-        if ( !tools::Rectangle( Point(), aGraphSize ).IsInside( aLogPt ) && !pView->IsEditMode() )
+        if ( !tools::Rectangle( Point(), aGraphSize ).Contains( aLogPt ) && !pView->IsEditMode() )
             weld::CustomWidgetController::MouseButtonDown( rMEvt );
         else
         {
@@ -645,7 +645,7 @@ bool GraphCtrl::MouseMove(const MouseEvent& rMEvt)
 
     if ( aMousePosLink.IsSet() )
     {
-        if ( tools::Rectangle( Point(), aGraphSize ).IsInside( aLogPos ) )
+        if ( tools::Rectangle( Point(), aGraphSize ).Contains( aLogPos ) )
             aMousePos = aLogPos;
         else
             aMousePos = Point();

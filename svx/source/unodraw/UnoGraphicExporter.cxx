@@ -860,7 +860,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
                     // metafile)
                     tools::Rectangle aTextRect;
 
-                    if( aScrollRectangle.IsInside( aPaintRectangle ) )
+                    if( aScrollRectangle.Contains( aPaintRectangle ) )
                         aTextRect = aScrollRectangle;
                     else
                         aTextRect = aPaintRectangle;

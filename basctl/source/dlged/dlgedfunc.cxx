@@ -50,7 +50,7 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
     tools::Long nDeltaX = pHScroll->GetLineSize();
     tools::Long nDeltaY = pVScroll->GetLineSize();
 
-    if( !aOutRect.IsInside( rPos ) )
+    if( !aOutRect.Contains( rPos ) )
     {
         if( rPos.X() < aOutRect.Left() )
             nDeltaX = -nDeltaX;
@@ -233,7 +233,7 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                             tools::Rectangle aMarkRect( rView.GetMarkedObjRect() );
                             aMarkRect.Move( nX, nY );
 
-                            if ( !rWorkArea.IsInside( aMarkRect ) )
+                            if ( !rWorkArea.Contains( aMarkRect ) )
                             {
                                 if ( aMarkRect.Left() < rWorkArea.Left() )
                                     nX += rWorkArea.Left() - aMarkRect.Left();

@@ -879,14 +879,14 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
 
             SwRect aTmpCalcPnt( pAct->getFramePrintArea() );
             aTmpCalcPnt += pAct->getFrameArea().Pos();
-            if ( aRect.IsOver( aTmpCalcPnt ) )
+            if ( aRect.Overlaps( aTmpCalcPnt ) )
             {
                 SwContentFrame *pCnt = pAct->ContainsContent();
                 while ( pCnt )
                 {
                     aTmpCalcPnt = pCnt->getFramePrintArea();
                     aTmpCalcPnt += pCnt->getFrameArea().Pos();
-                    if ( aRect.IsOver( aTmpCalcPnt ) )
+                    if ( aRect.Overlaps( aTmpCalcPnt ) )
                         static_cast<SwFrame*>(pCnt)->Prepare( PrepareHint::FlyFrameAttributesChanged );
                     pCnt = pCnt->GetNextContentFrame();
                 }
@@ -1448,7 +1448,7 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
                     const SwContentFrame* pContentFrame( pPageFrame->ContainsContent() );
                     while ( pContentFrame )
                     {
-                        if ( pContentFrame->UnionFrame().IsInside( rPt ) )
+                        if ( pContentFrame->UnionFrame().Contains( rPt ) )
                         {
                             const SwTextFrame* pTextFrame = pContentFrame->DynCastTextFrame();
                             if ( pTextFrame )
@@ -1461,7 +1461,7 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
                                     if (pTextFrame->GetCharRect(aCursorCharRect,
                                                 aPos))
                                     {
-                                        if ( aCursorCharRect.IsOver( SwRect( pObj->GetLastBoundRect() ) ) )
+                                        if ( aCursorCharRect.Overlaps( SwRect( pObj->GetLastBoundRect() ) ) )
                                         {
                                             bRet = false;
                                         }
@@ -1500,7 +1500,7 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
                     SdrObject *pCandidate = pPage->GetObj(a);
 
                     SwVirtFlyDrawObj* pDrawObj = dynamic_cast<SwVirtFlyDrawObj*>(pCandidate);
-                    if (pDrawObj && pDrawObj->GetCurrentBoundRect().IsInside(rPt))
+                    if (pDrawObj && pDrawObj->GetCurrentBoundRect().Contains(rPt))
                     {
                         bRet = false;
                     }
@@ -1915,7 +1915,7 @@ bool SwFEShell::ImpEndCreate()
             aRect.AdjustRight(constTwips_1cm);
             aRect.AdjustBottom(constTwips_1cm);
 
-            if( !aRect.IsOver( rBound ) && !::GetHtmlMode( GetDoc()->GetDocShell() ))
+            if( !aRect.Overlaps( rBound ) && !::GetHtmlMode( GetDoc()->GetDocShell() ))
                 bCharBound = false;
 
             // anchor in header/footer also not allowed.
@@ -1971,7 +1971,7 @@ bool SwFEShell::ImpEndCreate()
                 SwRect aBound( rBound );
                 while( pTmp )
                 {
-                    if( pTmp->getFrameArea().IsInside( aBound ) )
+                    if( pTmp->getFrameArea().Contains( aBound ) )
                     {
                         if( !bBodyOnly || !pTmp->FindFooterOrHeader() )
                             pPage = pTmpFrame;
@@ -2816,7 +2816,7 @@ void SwFEShell::CheckUnboundObjects()
             const Point aPt( rBound.TopLeft() );
             const SwFrame *pPage = GetLayout()->Lower();
             const SwFrame *pLast = pPage;
-            while ( pPage && !pPage->getFrameArea().IsInside( aPt ) )
+            while ( pPage && !pPage->getFrameArea().Contains( aPt ) )
             {
                 if ( aPt.Y() > pPage->getFrameArea().Bottom() )
                     pLast = pPage;
@@ -3325,7 +3325,7 @@ Point SwFEShell::GetRelativePagePosition(const Point& rDocPos)
 {
     Point aRet(-1, -1);
     const SwFrame *pPage = GetLayout()->Lower();
-    while ( pPage && !pPage->getFrameArea().IsInside( rDocPos ) )
+    while ( pPage && !pPage->getFrameArea().Contains( rDocPos ) )
     {
         pPage = pPage->GetNext();
     }

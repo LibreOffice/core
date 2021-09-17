@@ -129,7 +129,7 @@ bool FuSelection::IsNoteCaptionClicked( const Point& rPos ) const
         SdrObjListIter aIter( pPageView->GetObjList(), SdrIterMode::DeepNoGroups, true );
         for( SdrObject* pObj = aIter.Next(); pObj; pObj = aIter.Next() )
         {
-            if( pObj->GetLogicRect().IsInside( rPos ) )
+            if( pObj->GetLogicRect().Contains( rPos ) )
             {
                 if( const ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( pObj, nTab ) )
                 {

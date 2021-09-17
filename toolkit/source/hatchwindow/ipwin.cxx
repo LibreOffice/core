@@ -179,12 +179,12 @@ short SvResizeHelper::SelectMove( vcl::Window * pWin, const Point & rPos )
     {
         std::array<tools::Rectangle,8> aRects = FillHandleRectsPixel();
         for( sal_uInt16 i = 0; i < 8; i++ )
-            if( aRects[ i ].IsInside( rPos ) )
+            if( aRects[ i ].Contains( rPos ) )
                 return i;
         // Move-Rect overlaps Handles
         std::array<tools::Rectangle,4> aMoveRects = FillMoveRectsPixel();
         for(const auto & rMoveRect : aMoveRects)
-            if( rMoveRect.IsInside( rPos ) )
+            if( rMoveRect.Contains( rPos ) )
                 return 8;
     }
     else

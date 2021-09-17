@@ -764,7 +764,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
             {
                 AnimationBitmap aAnimationBitmap( aAnim.Get( nFrame ) );
 
-                if( !aCropRect.IsInside( tools::Rectangle(aAnimationBitmap.maPositionPixel, aAnimationBitmap.maSizePixel) ) )
+                if( !aCropRect.Contains( tools::Rectangle(aAnimationBitmap.maPositionPixel, aAnimationBitmap.maSizePixel) ) )
                 {
                     // setup actual cropping (relative to frame position)
                     tools::Rectangle aCropRectRel( aCropRect );

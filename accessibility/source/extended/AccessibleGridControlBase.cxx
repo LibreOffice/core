@@ -184,7 +184,7 @@ lang::Locale SAL_CALL AccessibleGridControlBase::getLocale()
 
 sal_Bool SAL_CALL AccessibleGridControlBase::containsPoint( const awt::Point& rPoint )
 {
-   return tools::Rectangle( Point(), getBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
+   return tools::Rectangle( Point(), getBoundingBox().GetSize() ).Contains( VCLPoint( rPoint ) );
 }
 
 awt::Rectangle SAL_CALL AccessibleGridControlBase::getBounds()
@@ -273,7 +273,7 @@ bool AccessibleGridControlBase::implIsShowing()
         css::uno::Reference< css::accessibility::XAccessibleComponent >
             xParentComp( m_xParent->getAccessibleContext(), uno::UNO_QUERY );
         if( xParentComp.is() )
-            bShowing = implGetBoundingBox().IsOver(
+            bShowing = implGetBoundingBox().Overlaps(
                 VCLRectangle( xParentComp->getBounds() ) );
     }
     return bShowing;

@@ -35,7 +35,7 @@ public:
             if (pUnoObect)
             {
                 tools::Rectangle aControlRectHMM = pUnoObect->GetLogicRect();
-                if (aControlRectHMM.IsInside(aPointHmm))
+                if (aControlRectHMM.Contains(aPointHmm))
                 {
                     css::uno::Reference<css::awt::XControl> xControl
                         = pUnoObect->GetUnoControl(*pDrawView, *rMainWindow.GetOutDev());
@@ -137,7 +137,7 @@ public:
 
                 // Check if we intersect with the tile rectangle and we
                 // need to draw the control.
-                if (aObjectRectHMM.IsOver(aTileRectHMM))
+                if (aObjectRectHMM.Overlaps(aTileRectHMM))
                 {
                     drawUnoControl(pDrawView, pUnoObect, rMainWindow, rDevice, aTileRectHMM,
                                    double(scaleX), double(scaleY));

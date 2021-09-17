@@ -174,7 +174,7 @@ void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
     const Size aOutputSize = GetOutputSizePixel();
     if( aPos.X() > aOutputSize.Width() || aPos.Y() > aOutputSize.Height() )
         return;
-    if ( rMEvt.GetClicks() == 2 || m_aImageRect.IsInside( aPos ) )
+    if ( rMEvt.GetClicks() == 2 || m_aImageRect.Contains( aPos ) )
     {
         m_bCollapsed = !m_bCollapsed;
 

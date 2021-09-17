@@ -165,7 +165,7 @@ bool ContourWindow::MouseMove( const MouseEvent& rMEvt )
         aPipetteColor = GetDrawingArea()->get_ref_device().GetPixel( aLogPt );
         weld::CustomWidgetController::MouseMove( rMEvt );
 
-        if ( aPipetteLink.IsSet() && tools::Rectangle( Point(), GetGraphicSize() ).IsInside( aLogPt ) )
+        if ( aPipetteLink.IsSet() && tools::Rectangle( Point(), GetGraphicSize() ).Contains( aLogPt ) )
         {
             SetPointer( PointerStyle::RefHand );
             aPipetteLink.Call( *this );
@@ -182,7 +182,7 @@ bool ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
     const tools::Rectangle aGraphRect( Point(), GetGraphicSize() );
     const Point     aLogPt( GetDrawingArea()->get_ref_device().PixelToLogic( rMEvt.GetPosPixel() ) );
 
-    bClickValid = aGraphRect.IsInside( aLogPt );
+    bClickValid = aGraphRect.Contains( aLogPt );
     ReleaseMouse();
 
     if ( bPipetteMode )

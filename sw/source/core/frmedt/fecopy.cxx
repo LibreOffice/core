@@ -223,7 +223,7 @@ void SwFEShell::Copy( SwDoc& rClpDoc, const OUString* pNewClpText )
 static const Point &lcl_FindBasePos( const SwFrame *pFrame, const Point &rPt )
 {
     const SwFrame *pF = pFrame;
-    while ( pF && !pF->getFrameArea().IsInside( rPt ) )
+    while ( pF && !pF->getFrameArea().Contains( rPt ) )
     {
         if ( pF->IsContentFrame() )
             pF = static_cast<const SwContentFrame*>(pF)->GetFollow();

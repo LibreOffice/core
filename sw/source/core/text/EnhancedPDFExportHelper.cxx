@@ -816,7 +816,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
             rInf.CalcRect( *pPor, &aPorRect );
             const Point aPorCenter = aPorRect.Center();
             auto aIter = std::find_if(rLinkIdMap.begin(), rLinkIdMap.end(),
-                [&aPorCenter](const IdMapEntry& rEntry) { return rEntry.first.IsInside(aPorCenter); });
+                [&aPorCenter](const IdMapEntry& rEntry) { return rEntry.first.Contains(aPorCenter); });
             if (aIter != rLinkIdMap.end())
             {
                 sal_Int32 nLinkId = (*aIter).second;

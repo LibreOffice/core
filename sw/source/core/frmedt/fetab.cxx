@@ -1503,7 +1503,7 @@ static const SwCellFrame *lcl_FindFrame( const SwLayoutFrame *pLay, const Point 
                             SwRect aPrevRect = pPrev->getFramePrintArea();
                             aPrevRect.Pos() += pPrev->getFrameArea().Pos();
 
-                            if( aPrevRect.IsInside( rPt ) )
+                            if( aPrevRect.Contains( rPt ) )
                             {
                                 bCloseToCol = false;
                             }

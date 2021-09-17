@@ -273,7 +273,7 @@ void DrawViewShell::StartRulerDrag (
 
     Point aWPos = GetActiveWindow()->PixelToLogic(GetActiveWindow()->GetPointerPosPixel());
 
-    if ( rRuler.GetExtraRect().IsInside(rMEvt.GetPosPixel()) )
+    if ( rRuler.GetExtraRect().Contains(rMEvt.GetPosPixel()) )
     {
         mpDrawView->BegSetPageOrg(aWPos);
         mbIsRulerDrag = true;
@@ -356,7 +356,7 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
     {
         ::tools::Rectangle aOutputArea(Point(0,0), GetActiveWindow()->GetOutputSizePixel());
 
-        if ( !aOutputArea.IsInside(rMEvt.GetPosPixel()) )
+        if ( !aOutputArea.Contains(rMEvt.GetPosPixel()) )
         {
             bool bInsideOtherWindow = false;
 
@@ -366,7 +366,7 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
                     mpContentWindow->GetOutputSizePixel());
 
                 Point aPos = mpContentWindow->GetPointerPosPixel();
-                if ( aOutputArea.IsInside(aPos) )
+                if ( aOutputArea.Contains(aPos) )
                     bInsideOtherWindow = true;
             }
 
@@ -467,7 +467,7 @@ void DrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
         {
             ::tools::Rectangle aOutputArea(Point(0,0), GetActiveWindow()->GetOutputSizePixel());
 
-            if (aOutputArea.IsInside(rMEvt.GetPosPixel()))
+            if (aOutputArea.Contains(rMEvt.GetPosPixel()))
             {
                 mpDrawView->EndAction();
 

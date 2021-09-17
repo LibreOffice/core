@@ -136,10 +136,10 @@ void MultiSelection::SelectAll( bool bSelect )
 
 bool MultiSelection::Select( sal_Int32 nIndex, bool bSelect )
 {
-    DBG_ASSERT( aTotRange.IsInside(nIndex), "selected index out of range" );
+    DBG_ASSERT( aTotRange.Contains(nIndex), "selected index out of range" );
 
     // out of range?
-    if ( !aTotRange.IsInside(nIndex) )
+    if ( !aTotRange.Contains(nIndex) )
         return false;
 
     // find the virtual target position
@@ -148,7 +148,7 @@ bool MultiSelection::Select( sal_Int32 nIndex, bool bSelect )
     if ( bSelect )
     {
         // is it included in the found sub selection?
-        if ( nSubSelPos < sal_Int32(aSels.size()) && aSels[ nSubSelPos ].IsInside( nIndex ) )
+        if ( nSubSelPos < sal_Int32(aSels.size()) && aSels[ nSubSelPos ].Contains( nIndex ) )
             // already selected, nothing to do
             return false;
 
@@ -187,7 +187,7 @@ bool MultiSelection::Select( sal_Int32 nIndex, bool bSelect )
     {
         // is it excluded from the found sub selection?
         if (  nSubSelPos >= sal_Int32(aSels.size())
-           || !aSels[ nSubSelPos ].IsInside( nIndex )
+           || !aSels[ nSubSelPos ].Contains( nIndex )
         ) {
             // not selected, nothing to do
             return false;
@@ -234,8 +234,8 @@ void MultiSelection::Select( const Range& rIndexRange, bool bSelect )
     sal_Int32 nTmpMax = rIndexRange.Max();
     sal_Int32 nCurMin = FirstSelected();
     sal_Int32 nCurMax = LastSelected();
-    DBG_ASSERT(aTotRange.IsInside(nTmpMax), "selected index out of range" );
-    DBG_ASSERT(aTotRange.IsInside(nTmpMin), "selected index out of range" );
+    DBG_ASSERT(aTotRange.Contains(nTmpMax), "selected index out of range" );
+    DBG_ASSERT(aTotRange.Contains(nTmpMin), "selected index out of range" );
 
     // replace whole selection?
     if( aSels.empty() || (nTmpMin <= nCurMin && nTmpMax >= nCurMax ) )
@@ -306,7 +306,7 @@ bool MultiSelection::IsSelected( sal_Int32 nIndex ) const
     // find the virtual target position
     sal_Int32 nSubSelPos = ImplFindSubSelection( nIndex );
 
-    return nSubSelPos < sal_Int32(aSels.size()) && aSels[ nSubSelPos ].IsInside(nIndex);
+    return nSubSelPos < sal_Int32(aSels.size()) && aSels[ nSubSelPos ].Contains(nIndex);
 }
 
 void MultiSelection::Insert( sal_Int32 nIndex, sal_Int32 nCount )
@@ -318,7 +318,7 @@ void MultiSelection::Insert( sal_Int32 nIndex, sal_Int32 nCount )
     if ( nSubSelPos < sal_Int32(aSels.size()) )
     {   // did we insert an unselected into an existing sub selection?
         if (  aSels[ nSubSelPos ].Min() != nIndex
-           && aSels[ nSubSelPos ].IsInside(nIndex)
+           && aSels[ nSubSelPos ].Contains(nIndex)
         ) { // split the sub selection
             if ( nSubSelPos < sal_Int32(aSels.size()) ) {
                 aSels.insert( aSels.begin() + nSubSelPos, Range( aSels[ nSubSelPos ].Min(), nIndex-1 ) );
@@ -348,7 +348,7 @@ void MultiSelection::Remove( sal_Int32 nIndex )
 
     // did we remove from an existing sub selection?
     if (  nSubSelPos < sal_Int32(aSels.size())
-       && aSels[ nSubSelPos ].IsInside(nIndex)
+       && aSels[ nSubSelPos ].Contains(nIndex)
     ) {
         // does this sub selection only contain the index to be deleted
         if ( aSels[ nSubSelPos ].Len() == 1 ) {

@@ -2342,7 +2342,7 @@ bool SwTextFormatter::ChkFlyUnderflow( SwTextFormatInfo &rInf ) const
             // New flys from below?
             if( !pPos->IsFlyPortion() )
             {
-                if( aInter.IsOver( aLine ) )
+                if( aInter.Overlaps( aLine ) )
                 {
                     aInter.Intersection_( aLine );
                     if( aInter.HasArea() )
@@ -2359,7 +2359,7 @@ bool SwTextFormatter::ChkFlyUnderflow( SwTextFormatInfo &rInf ) const
             else
             {
                 // The fly portion is not intersected by a fly anymore
-                if ( ! aInter.IsOver( aLine ) )
+                if ( ! aInter.Overlaps( aLine ) )
                 {
                     rInf.SetLineHeight( nHeight );
                     rInf.SetLineNetHeight( m_pCurr->Height() );
@@ -2470,7 +2470,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
         aInter.Height(0);
     }
 
-    if( !aInter.IsOver( aLine ) )
+    if( !aInter.Overlaps( aLine ) )
         return;
 
     aLine.Left( rInf.X() + nLeftMar );

@@ -357,7 +357,7 @@ void SwCursorShell::GotoFlyAnchor()
 
     // jump in BodyFrame closest to FlyFrame
     SwRect aTmpRect( m_aCharRect );
-    if( !pFrame->getFrameArea().IsInside( aTmpRect ))
+    if( !pFrame->getFrameArea().Contains( aTmpRect ))
         aTmpRect = pFrame->getFrameArea();
     Point aPt( aTmpRect.Left(), aTmpRect.Top() +
                 ( aTmpRect.Bottom() - aTmpRect.Top() ) / 2 );

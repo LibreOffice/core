@@ -732,7 +732,7 @@ ToolBox::ImplToolItems::size_type ToolBox::GetItemPos( const Point& rPos ) const
 {
     // search the item position on the given point
     auto it = std::find_if(mpData->m_aItems.begin(), mpData->m_aItems.end(),
-        [&rPos](const ImplToolItem& rItem) { return rItem.maRect.IsInside( rPos ); });
+        [&rPos](const ImplToolItem& rItem) { return rItem.maRect.Contains( rPos ); });
 
     if( it != mpData->m_aItems.end() )
         return std::distance(mpData->m_aItems.begin(), it);
@@ -749,7 +749,7 @@ ToolBoxItemId ToolBox::GetItemId( const Point& rPos ) const
 {
     // find item that was clicked
     auto it = std::find_if(mpData->m_aItems.begin(), mpData->m_aItems.end(),
-        [&rPos](const ImplToolItem& rItem) { return rItem.maRect.IsInside( rPos ); });
+        [&rPos](const ImplToolItem& rItem) { return rItem.maRect.Contains( rPos ); });
 
     if( (it != mpData->m_aItems.end()) && (it->meType == ToolBoxItemType::BUTTON) )
         return it->mnId;
@@ -1316,7 +1316,7 @@ bool ToolBox::IsItemReallyVisible( ToolBoxItemId nItemId ) const
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
     if ( pItem && pItem->mbVisible &&
-         !pItem->maRect.IsEmpty() && aRect.IsOver( pItem->maRect ) )
+         !pItem->maRect.IsEmpty() && aRect.Overlaps( pItem->maRect ) )
     {
         bRet = true;
     }

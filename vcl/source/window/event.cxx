@@ -118,7 +118,7 @@ bool Window::EventNotify( NotifyEvent& rNEvt )
         if ( rNEvt.GetType() == MouseNotifyEvent::MOUSEBUTTONDOWN )
         {
             const MouseEvent* pMEvt = rNEvt.GetMouseEvent();
-            bool bHit = pWrapper->GetDragArea().IsInside( pMEvt->GetPosPixel() );
+            bool bHit = pWrapper->GetDragArea().Contains( pMEvt->GetPosPixel() );
             if ( pMEvt->IsLeft() )
             {
                 if (!bDockingSupportCrippled && pMEvt->IsMod1() && (pMEvt->GetClicks() == 2))
@@ -138,7 +138,7 @@ bool Window::EventNotify( NotifyEvent& rNEvt )
         else if ( rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE )
         {
             const MouseEvent* pMEvt = rNEvt.GetMouseEvent();
-            bool bHit = pWrapper->GetDragArea().IsInside( pMEvt->GetPosPixel() );
+            bool bHit = pWrapper->GetDragArea().Contains( pMEvt->GetPosPixel() );
             if ( pMEvt->IsLeft() )
             {
                 // check if a single click initiated this sequence ( ImplStartDockingEnabled() )

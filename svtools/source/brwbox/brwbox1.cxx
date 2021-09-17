@@ -1988,7 +1988,7 @@ bool BrowseBox::IsFieldVisible( sal_Int32 nRow, sal_uInt16 nColumnId,
 
     if ( bCompletely )
         // test if the field is completely visible
-        return aOutRect.IsInside( aRect );
+        return aOutRect.Contains( aRect );
     else
         // test if the field is partly of completely visible
         return !aOutRect.Intersection( aRect ).IsEmpty();

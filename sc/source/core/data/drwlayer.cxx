@@ -1520,7 +1520,7 @@ bool ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow )
     while ( pObject && !bFound )
     {
         aObjRect = pObject->GetSnapRect();  //TODO: GetLogicRect ?
-        if (aTestRect.IsInside(aObjRect.TopLeft()) || aTestRect.IsInside(aObjRect.BottomLeft()))
+        if (aTestRect.Contains(aObjRect.TopLeft()) || aTestRect.Contains(aObjRect.BottomLeft()))
             bFound = true;
 
         pObject = aIter.Next();
@@ -1570,13 +1570,13 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
             if (pObjData && pObjData->meType == ScDrawObjData::ValidationCircle)
             {
                 aObjRect = pObject->GetLogicRect();
-                if(aDelCircle.IsInside(aObjRect))
+                if(aDelCircle.Contains(aObjRect))
                    ppObj.push_back(pObject);
             }
             else
             {
                 aObjRect = pObject->GetCurrentBoundRect();
-                if (aDelRect.IsInside(aObjRect))
+                if (aDelRect.Contains(aObjRect))
                 {
                     if (bAnchored)
                     {
@@ -1645,7 +1645,7 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
                         tools::Rectangle aObjRect = pObject->GetCurrentBoundRect();
                         ScRange aRange = pDoc->GetRange(nTab, aObjRect);
                         bool bObjectInMarkArea =
-                            aMarkBound.IsInside(aObjRect) && rMark.IsAllMarked(aRange);
+                            aMarkBound.Contains(aObjRect) && rMark.IsAllMarked(aRange);
                         const ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pObject);
                         ScAnchorType aAnchorType = ScDrawLayer::GetAnchorType(*pObject);
                         bool bObjectAnchoredToMarkedCell
@@ -1695,7 +1695,7 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const tools::Rec
     {
         tools::Rectangle aObjRect = pOldObject->GetCurrentBoundRect();
 
-        bool bObjectInArea = rRange.IsInside(aObjRect);
+        bool bObjectInArea = rRange.Contains(aObjRect);
         const ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pOldObject);
         if (pObjData)
         {
@@ -1886,7 +1886,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
         SCTAB nClipTab = bRestoreDestTabName ? nDestTab : nSourceTab;
         ScRange aClipRange = lcl_getClipRangeFromClipDoc(pClipDoc, nClipTab);
 
-        bool bObjectInArea = rSourceRange.IsInside(aObjRect);
+        bool bObjectInArea = rSourceRange.Contains(aObjRect);
         const ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pOldObject);
         if (pObjData) // Consider images anchored to the copied cell
             bObjectInArea = bObjectInArea || aClipRange.In(pObjData->maStart);

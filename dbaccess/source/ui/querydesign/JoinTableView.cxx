@@ -580,9 +580,9 @@ void OJoinTableView::SetDefaultTabWinPosSize( OTableWindow* pTabWin )
     aBottom.AdjustX(aNewSize.Width() );
     aBottom.AdjustY(aNewSize.Height() );
 
-    if(!GetHScrollBar().GetRange().IsInside(aBottom.X()))
+    if(!GetHScrollBar().GetRange().Contains(aBottom.X()))
         GetHScrollBar().SetRange( Range(0, aBottom.X()) );
-    if(!GetVScrollBar().GetRange().IsInside(aBottom.Y()))
+    if(!GetVScrollBar().GetRange().Contains(aBottom.Y()))
         GetVScrollBar().SetRange( Range(0, aBottom.Y()) );
 
     pTabWin->SetPosSizePixel( aNewPos, aNewSize );

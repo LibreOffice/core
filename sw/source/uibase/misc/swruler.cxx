@@ -193,7 +193,7 @@ void SwCommentRuler::Command(const CommandEvent& rCEvt)
     Point aMousePos = rCEvt.GetMousePosPixel();
     // Ignore command request if it is inside Comment Control
     if (!mpViewShell->GetPostItMgr() || !mpViewShell->GetPostItMgr()->HasNotes()
-        || !GetCommentControlRegion().IsInside(aMousePos))
+        || !GetCommentControlRegion().Contains(aMousePos))
         SvxRuler::Command(rCEvt);
 }
 
@@ -207,7 +207,7 @@ void SwCommentRuler::MouseMove(const MouseEvent& rMEvt)
 
     Point aMousePos = rMEvt.GetPosPixel();
     bool bWasHighlighted = mbIsHighlighted;
-    mbIsHighlighted = GetCommentControlRegion().IsInside(aMousePos);
+    mbIsHighlighted = GetCommentControlRegion().Contains(aMousePos);
     if (mbIsHighlighted != bWasHighlighted)
         // Do start fading
         maFadeTimer.Start();
@@ -216,7 +216,7 @@ void SwCommentRuler::MouseMove(const MouseEvent& rMEvt)
 void SwCommentRuler::MouseButtonDown(const MouseEvent& rMEvt)
 {
     Point aMousePos = rMEvt.GetPosPixel();
-    if (!rMEvt.IsLeft() || IsTracking() || !GetCommentControlRegion().IsInside(aMousePos))
+    if (!rMEvt.IsLeft() || IsTracking() || !GetCommentControlRegion().Contains(aMousePos))
     {
         SvxRuler::MouseButtonDown(rMEvt);
         return;

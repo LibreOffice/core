@@ -215,7 +215,7 @@ bool SdrMarkView::MarkPoints(const tools::Rectangle* pRect, bool bUnmark)
                 }
             }
             Point aPos(pHdl->GetPos());
-            if (pM!=nullptr && (pRect==nullptr || pRect->IsInside(aPos))) {
+            if (pM!=nullptr && (pRect==nullptr || pRect->Contains(aPos))) {
                 if (ImpMarkPoint(pHdl,pM,bUnmark)) bChgd=true;
             }
         }
@@ -415,7 +415,7 @@ bool SdrMarkView::MarkGluePoints(const tools::Rectangle* pRect, bool bUnmark)
                     if(rGP.IsUserDefined())
                     {
                         Point aPos(rGP.GetAbsolutePos(*pObj));
-                        if (pRect==nullptr || pRect->IsInside(aPos)) {
+                        if (pRect==nullptr || pRect->Contains(aPos)) {
                             bool bContains = rPts.find( rGP.GetId() ) != rPts.end();
                             if (!bUnmark && !bContains) {
                                 bChgd=true;

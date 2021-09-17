@@ -1939,7 +1939,7 @@ bool SwPostItMgr::IsHit(const Point &aPointPixel)
             aRect = mPages[nPageNum-1]->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT
                     ? tools::Rectangle(Point(aPageFrame.Left()-GetSidebarWidth()-GetSidebarBorderWidth(),aPageFrame.Top()),Size(GetSidebarWidth(),aPageFrame.Height()))
                     : tools::Rectangle( Point(aPageFrame.Right()+GetSidebarBorderWidth(),aPageFrame.Top()) , Size(GetSidebarWidth(),aPageFrame.Height()));
-            if (aRect.IsInside(aPoint))
+            if (aRect.Contains(aPoint))
             {
                 // we hit the note's sidebar
                 // lets now test for the arrow area
@@ -2018,7 +2018,7 @@ bool SwPostItMgr::ScrollbarHit(const tools::ULong aPage,const Point &aPoint)
     tools::Rectangle aRectBottom(GetBottomScrollRect(aPage));
     tools::Rectangle aRectTop(GetTopScrollRect(aPage));
 
-    if (aRectBottom.IsInside(aPoint))
+    if (aRectBottom.Contains(aPoint))
     {
         if (aPoint.X() < tools::Long((aPointBottom.X() + GetSidebarWidth()/3)))
             Scroll( GetScrollSize(),aPage);
@@ -2026,7 +2026,7 @@ bool SwPostItMgr::ScrollbarHit(const tools::ULong aPage,const Point &aPoint)
             Scroll( -1*GetScrollSize(), aPage);
         return true;
     }
-    else if (aRectTop.IsInside(aPoint))
+    else if (aRectTop.Contains(aPoint))
     {
         if (aPoint.X() < tools::Long((aPointTop.X() + GetSidebarWidth()/3*2)))
             Scroll(GetScrollSize(), aPage);

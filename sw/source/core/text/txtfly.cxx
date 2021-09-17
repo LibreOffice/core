@@ -181,7 +181,7 @@ SwRect SwContourCache::CalcBoundRect( const SwAnchoredObject* pAnchoredObj,
             static_cast<const SwFlyFrame*>(pAnchoredObj)->Lower()->IsNoTextFrame() ) ) )
     {
         aRet = pAnchoredObj->GetObjRectWithSpaces();
-        if( aRet.IsOver( rLine ) )
+        if( aRet.Overlaps( rLine ) )
         {
             if( !pContourCache )
                 pContourCache = new SwContourCache;
@@ -428,7 +428,7 @@ bool SwTextFly::IsAnyObj( const SwRect &rRect ) const
                 continue;
 
             // #i68520#
-            if( mpCurrAnchoredObj != pObj && aBound.IsOver( aRect ) )
+            if( mpCurrAnchoredObj != pObj && aBound.Overlaps( aRect ) )
                 return true;
         }
     }
@@ -496,7 +496,7 @@ void SwTextFly::DrawTextOpaque( SwDrawTextInfo &rInf )
             if( pFly && mpCurrAnchoredObj != pTmpAnchoredObj )
             {
                 // #i68520#
-                if( aRegion.GetOrigin().IsOver( pFly->getFrameArea() ) )
+                if( aRegion.GetOrigin().Overlaps( pFly->getFrameArea() ) )
                 {
                     const SwFrameFormat *pFormat = pFly->GetFormat();
                     const SwFormatSurround &rSur = pFormat->GetSurround();
@@ -734,7 +734,7 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             {
                 // #i68520#
                 const SwRect& aTmp( _pAnchoredObj->GetObjRectWithSpaces() );
-                if ( !aTmp.IsOver( mpCurrAnchoredObj->GetObjRectWithSpaces() ) )
+                if ( !aTmp.Overlaps( mpCurrAnchoredObj->GetObjRectWithSpaces() ) )
                     bEvade = false;
             }
         }
@@ -1031,7 +1031,7 @@ bool SwTextFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
                 break;
 
             // #i68520#
-            if ( mpCurrAnchoredObj != pAnchoredObj && aRect.IsOver( rRect ) )
+            if ( mpCurrAnchoredObj != pAnchoredObj && aRect.Overlaps( rRect ) )
             {
                 // #i68520#
                 const SwFormat* pFormat( &(pAnchoredObj->GetFrameFormat()) );
@@ -1068,7 +1068,7 @@ bool SwTextFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
                 {
                     // #i68520#
                     SwRect aFly = AnchoredObjToRect( pAnchoredObj, rRect );
-                    if( aFly.IsEmpty() || !aFly.IsOver( rRect ) )
+                    if( aFly.IsEmpty() || !aFly.Overlaps( rRect ) )
                         continue;
                     if( !bRet || (
                         (!m_pCurrFrame->IsRightToLeft() &&
@@ -1176,7 +1176,7 @@ void SwTextFly::CalcRightMargin( SwRect &rFly,
                                     aRectFnSet.GetTop(aLine) ) > 0 )
                 SetNextTop( 0 );
         }
-        if( aTmp.IsOver( aLine ) && nTmpRight > nFlyRight )
+        if( aTmp.Overlaps( aLine ) && nTmpRight > nFlyRight )
         {
             nFlyRight = nTmpRight;
             if( css::text::WrapTextMode_RIGHT == eSurroundForTextWrap ||
@@ -1242,7 +1242,7 @@ void SwTextFly::CalcLeftMargin( SwRect &rFly,
         const SwRect aTmp( SwContourCache::CalcBoundRect
                 (pNext, aLine, m_pCurrFrame, nFlyLeft, false) );
 
-        if( aRectFnSet.GetLeft(aTmp) < nFlyLeft && aTmp.IsOver( aLine ) )
+        if( aRectFnSet.GetLeft(aTmp) < nFlyLeft && aTmp.Overlaps( aLine ) )
         {
             // #118796# - no '+1', because <..fnGetRight>
             // returns the correct value.

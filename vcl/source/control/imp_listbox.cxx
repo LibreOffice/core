@@ -880,7 +880,7 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
         return;
 
     tools::Rectangle aRect( Point(), GetOutputSizePixel() );
-    if( !aRect.IsInside( rMEvt.GetPosPixel() ) )
+    if( !aRect.Contains( rMEvt.GetPosPixel() ) )
         return;
 
     if ( IsMouseMoveSelect() )
@@ -1121,7 +1121,7 @@ bool ImplListBoxWindow::SelectEntries( sal_Int32 nSelect, LB_EVENT_TYPE eLET, bo
 void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
 {
     tools::Rectangle aRect( Point(), GetOutputSizePixel() );
-    bool bInside = aRect.IsInside( rTEvt.GetMouseEvent().GetPosPixel() );
+    bool bInside = aRect.Contains( rTEvt.GetMouseEvent().GetPosPixel() );
 
     if( rTEvt.IsTrackingCanceled() || rTEvt.IsTrackingEnded() ) // MouseButtonUp
     {

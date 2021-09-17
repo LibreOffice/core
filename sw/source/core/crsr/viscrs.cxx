@@ -94,7 +94,7 @@ void SwVisibleCursor::Show()
         m_bIsVisible = true;
 
         // display at all?
-        if( m_pCursorShell->VisArea().IsOver( m_pCursorShell->m_aCharRect ) || comphelper::LibreOfficeKit::isActive() )
+        if( m_pCursorShell->VisArea().Overlaps( m_pCursorShell->m_aCharRect ) || comphelper::LibreOfficeKit::isActive() )
             SetPosAndShow(nullptr);
     }
 }
@@ -872,7 +872,7 @@ void SwShellTableCursor::FillRects()
 
         while ( pFrame )
         {
-            if( aReg.GetOrigin().IsOver( pFrame->getFrameArea() ) )
+            if( aReg.GetOrigin().Overlaps( pFrame->getFrameArea() ) )
             {
                 aReg -= pFrame->getFrameArea();
                 if (bStart)
@@ -899,7 +899,7 @@ void SwShellTableCursor::FillStartEnd(SwRect& rStart, SwRect& rEnd) const
 }
 
 // Check if the SPoint is within the Table-SSelection.
-bool SwShellTableCursor::IsInside( const Point& rPt ) const
+bool SwShellTableCursor::Contains( const Point& rPt ) const
 {
     // Calculate the new rectangles. If the cursor is still "parked" do nothing
     if (m_SelectedBoxes.empty() || m_bParked || !GetPoint()->nNode.GetIndex())
@@ -918,12 +918,12 @@ bool SwShellTableCursor::IsInside( const Point& rPt ) const
         while( pFrame && !pFrame->IsCellFrame() )
             pFrame = pFrame->GetUpper();
         OSL_ENSURE( pFrame, "Node not in a table" );
-        if( pFrame && pFrame->getFrameArea().IsInside( rPt ) )
+        if( pFrame && pFrame->getFrameArea().Contains( rPt ) )
             return true;
 
         for ( SwCellFrame* pCellFrame = static_cast<SwCellFrame*>(pFrame); pCellFrame; pCellFrame = pCellFrame->GetFollowCell() )
         {
-            if( pCellFrame->getFrameArea().IsInside( rPt ) )
+            if( pCellFrame->getFrameArea().Contains( rPt ) )
                 return true;
         }
     }

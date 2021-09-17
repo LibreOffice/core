@@ -1304,7 +1304,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                     else
                     {
                         if( ( pUp->GetType() & (SwFrameType::Fly | SwFrameType::Ftn ) ) &&
-                            !pUp->getFrameArea().IsInside( pFly->getFrameArea().Pos() ) )
+                            !pUp->getFrameArea().Contains( pFly->getFrameArea().Pos() ) )
                         {
                             if( pUp->IsFlyFrame() )
                             {
@@ -1312,7 +1312,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                                 while( pTmpFly->GetNextLink() )
                                 {
                                     pTmpFly = pTmpFly->GetNextLink();
-                                    if( pTmpFly->getFrameArea().IsInside( pFly->getFrameArea().Pos() ) )
+                                    if( pTmpFly->getFrameArea().Contains( pFly->getFrameArea().Pos() ) )
                                         break;
                                 }
                                 pUp = pTmpFly;
@@ -1323,7 +1323,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                                 while( pTmp->GetFollow() )
                                 {
                                     pTmp = pTmp->GetFollow();
-                                    if( pTmp->getFrameArea().IsInside( pFly->getFrameArea().Pos() ) )
+                                    if( pTmp->getFrameArea().Contains( pFly->getFrameArea().Pos() ) )
                                         break;
                                 }
                                 pUp = pTmp;

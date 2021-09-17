@@ -298,7 +298,7 @@ void SwNoTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect cons
     SwRect aNormal( getFrameArea().Pos() + getFramePrintArea().Pos(), getFramePrintArea().SSize() );
     aNormal.Justify(); // Normalized rectangle for the comparisons
 
-    if( aPaintArea.IsOver( aNormal ) )
+    if( aPaintArea.Overlaps( aNormal ) )
     {
         // Calculate the four to-be-deleted rectangles
         if( pSh->GetWin() )
@@ -679,7 +679,7 @@ bool SwNoTextFrame::GetCharRect( SwRect &rRect, const SwPosition& rPos,
     rRect.Justify();
 
     // Is the Bitmap in the visible area at all?
-    if( !aFrameRect.IsOver( rRect ) )
+    if( !aFrameRect.Overlaps( rRect ) )
     {
         // If not, then the Cursor is on the Frame
         rRect = aFrameRect;

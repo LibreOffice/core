@@ -283,11 +283,11 @@ void SwHeaderFooterWin::ShowAll(bool bShow)
 bool SwHeaderFooterWin::Contains( const Point &rDocPt ) const
 {
     ::tools::Rectangle aRect(GetPosPixel(), GetSizePixel());
-    if (aRect.IsInside(rDocPt))
+    if (aRect.Contains(rDocPt))
         return true;
 
     ::tools::Rectangle aLineRect(m_pLine->GetPosPixel(), m_pLine->GetSizePixel());
-    return aLineRect.IsInside(rDocPt);
+    return aLineRect.Contains(rDocPt);
 }
 
 void SwHeaderFooterWin::PaintButton()

@@ -542,7 +542,7 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
                                    &root_x, &root_y, &lx, &ly, &mask );
                     const std::vector< tools::Rectangle >& rScreens = GetDisplay()->GetXineramaScreens();
                     for(const auto & rScreen : rScreens)
-                        if( rScreen.IsInside( Point( root_x, root_y ) ) )
+                        if( rScreen.Contains( Point( root_x, root_y ) ) )
                         {
                             x = rScreen.Left();
                             y = rScreen.Top();
@@ -1463,7 +1463,7 @@ void X11SalFrame::Center( )
                            &mask );
         const std::vector< tools::Rectangle >& rScreens = GetDisplay()->GetXineramaScreens();
         for(const auto & rScreen : rScreens)
-            if( rScreen.IsInside( Point( root_x, root_y ) ) )
+            if( rScreen.Contains( Point( root_x, root_y ) ) )
             {
                 nScreenX            = rScreen.Left();
                 nScreenY            = rScreen.Top();
@@ -1553,7 +1553,7 @@ void X11SalFrame::updateScreenNumber()
         size_t nScreens = rScreenRects.size();
         for( size_t i = 0; i < nScreens; i++ )
         {
-            if( rScreenRects[i].IsInside( aPoint ) )
+            if( rScreenRects[i].Contains( aPoint ) )
             {
                 maGeometry.nDisplayScreenNumber = static_cast<unsigned int>(i);
                 break;

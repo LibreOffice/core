@@ -1030,7 +1030,7 @@ bool SmShowSymbolSet::MouseButtonDown(const MouseEvent& rMEvt)
     aPoint.AdjustX( -nXOffset );
     aPoint.AdjustY( -nYOffset );
 
-    if (rMEvt.IsLeft() && tools::Rectangle(Point(0, 0), aOutputSize).IsInside(rMEvt.GetPosPixel()))
+    if (rMEvt.IsLeft() && tools::Rectangle(Point(0, 0), aOutputSize).Contains(rMEvt.GetPosPixel()))
     {
         tools::Long nPos = (aPoint.Y() / nLen) * nColumns + (aPoint.X() / nLen) +
                       m_xScrolledWindow->vadjustment_get_value() * nColumns;

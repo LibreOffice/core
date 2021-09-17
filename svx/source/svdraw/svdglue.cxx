@@ -276,7 +276,7 @@ bool SdrGluePoint::IsHit(const Point& rPnt, const OutputDevice& rOut, const SdrO
     Point aPt(pObj!=nullptr ? GetAbsolutePos(*pObj) : GetPos());
     Size aSiz=rOut.PixelToLogic(aGlueHalfSize);
     tools::Rectangle aRect(aPt.X()-aSiz.Width(),aPt.Y()-aSiz.Height(),aPt.X()+aSiz.Width(),aPt.Y()+aSiz.Height());
-    return aRect.IsInside(rPnt);
+    return aRect.Contains(rPnt);
 }
 
 

@@ -446,7 +446,7 @@ void SlideSorterView::DeterminePageObjectVisibilities()
             SetState(
                 pDescriptor,
                 PageDescriptor::ST_Visible,
-                aRange.IsInside(nIndex));
+                aRange.Contains(nIndex));
     }
 
     // Broadcast a change of the set of visible page objects.
@@ -485,7 +485,7 @@ void SlideSorterView::UpdatePreciousFlags()
         {
             pCache->SetPreciousFlag(
                 pDescriptor->GetPage(),
-                maVisiblePageRange.IsInside(nIndex));
+                maVisiblePageRange.Contains(nIndex));
         }
         else
         {
@@ -758,7 +758,7 @@ void SlideSorterView::UpdatePageUnderMouse ()
     {
         const Window::PointerState aPointerState (pWindow->GetPointerState());
         const ::tools::Rectangle aWindowBox (pWindow->GetPosPixel(), pWindow->GetSizePixel());
-        if (aWindowBox.IsInside(aPointerState.maPos))
+        if (aWindowBox.Contains(aPointerState.maPos))
         {
             UpdatePageUnderMouse(aPointerState.maPos);
             return;

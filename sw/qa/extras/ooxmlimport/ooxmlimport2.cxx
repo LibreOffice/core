@@ -586,7 +586,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf112443)
     const SwRect aPageRect = pRootFrame->getFrameArea();
     const SwRect aShapeRect(getShape(1)->getPosition().X, getShape(1)->getPosition().Y,
                             getShape(1)->getSize().Width, getShape(1)->getSize().Height);
-    CPPUNIT_ASSERT_MESSAGE("The textframe must be off-page!", !aPageRect.IsInside(aShapeRect));
+    CPPUNIT_ASSERT_MESSAGE("The textframe must be off-page!", !aPageRect.Contains(aShapeRect));
 
     //OUString aTop = parseDump("//anchored/fly[1]/infos/bounds", "top");
     //CPPUNIT_ASSERT_EQUAL(sal_Int32(30624), aTop.toInt32() );
@@ -788,7 +788,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127825)
     CPPUNIT_ASSERT(rDrawObjs.size());
 
     // Without the accompanying fix in place, this overlapped the footer area, not the body area.
-    CPPUNIT_ASSERT(rDrawObjs[0]->GetObjRect().IsOver(pBody->getFrameArea()));
+    CPPUNIT_ASSERT(rDrawObjs[0]->GetObjRect().Overlaps(pBody->getFrameArea()));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf103345)

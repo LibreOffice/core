@@ -178,13 +178,13 @@ void SpinButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangl
 
 void SpinButton::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( maUpperRect.IsInside( rMEvt.GetPosPixel() ) && ( ImplIsUpperEnabled() ) )
+    if ( maUpperRect.Contains( rMEvt.GetPosPixel() ) && ( ImplIsUpperEnabled() ) )
     {
         mbUpperIn   = true;
         mbInitialUp = true;
         Invalidate( maUpperRect );
     }
-    else if ( maLowerRect.IsInside( rMEvt.GetPosPixel() ) && ( ImplIsLowerEnabled() ) )
+    else if ( maLowerRect.Contains( rMEvt.GetPosPixel() ) && ( ImplIsLowerEnabled() ) )
     {
         mbLowerIn     = true;
         mbInitialDown = true;
@@ -229,21 +229,21 @@ void SpinButton::MouseMove( const MouseEvent& rMEvt )
     if ( !rMEvt.IsLeft() || (!mbInitialUp && !mbInitialDown) )
         return;
 
-    if ( !maUpperRect.IsInside( rMEvt.GetPosPixel() ) &&
+    if ( !maUpperRect.Contains( rMEvt.GetPosPixel() ) &&
          mbUpperIn && mbInitialUp )
     {
         mbUpperIn = false;
         maRepeatTimer.Stop();
         Invalidate( maUpperRect );
     }
-    else if ( !maLowerRect.IsInside( rMEvt.GetPosPixel() ) &&
+    else if ( !maLowerRect.Contains( rMEvt.GetPosPixel() ) &&
               mbLowerIn && mbInitialDown )
     {
         mbLowerIn = false;
         maRepeatTimer.Stop();
         Invalidate( maLowerRect );
     }
-    else if ( maUpperRect.IsInside( rMEvt.GetPosPixel() ) &&
+    else if ( maUpperRect.Contains( rMEvt.GetPosPixel() ) &&
               !mbUpperIn && mbInitialUp )
     {
         mbUpperIn = true;
@@ -251,7 +251,7 @@ void SpinButton::MouseMove( const MouseEvent& rMEvt )
             maRepeatTimer.Start();
         Invalidate( maUpperRect );
     }
-    else if ( maLowerRect.IsInside( rMEvt.GetPosPixel() ) &&
+    else if ( maLowerRect.Contains( rMEvt.GetPosPixel() ) &&
               !mbLowerIn && mbInitialDown )
     {
         mbLowerIn = true;
@@ -420,9 +420,9 @@ void SpinButton::ImplCalcFocusRect( bool _bUpper )
 
 tools::Rectangle* SpinButton::ImplFindPartRect( const Point& rPt )
 {
-    if( maUpperRect.IsInside( rPt ) )
+    if( maUpperRect.Contains( rPt ) )
         return &maUpperRect;
-    else if( maLowerRect.IsInside( rPt ) )
+    else if( maLowerRect.Contains( rPt ) )
         return &maLowerRect;
     else
         return nullptr;

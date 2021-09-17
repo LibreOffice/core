@@ -665,7 +665,7 @@ void StatusBar::MouseButtonDown( const MouseEvent& rMEvt )
     {
         ImplStatusItem* pItem = mvItemList[ i ].get();
         // check item for being clicked
-        if ( ImplGetItemRectPos( sal_uInt16(i) ).IsInside( aMousePos ) )
+        if ( ImplGetItemRectPos( sal_uInt16(i) ).Contains( aMousePos ) )
         {
             mnCurItemId = pItem->mnId;
             if ( rMEvt.GetClicks() == 2 )
@@ -1030,7 +1030,7 @@ sal_uInt16 StatusBar::GetItemId( const Point& rPos ) const
         {
             // get rectangle
             tools::Rectangle aRect = ImplGetItemRectPos( nPos );
-            if ( aRect.IsInside( rPos ) )
+            if ( aRect.Contains( rPos ) )
                 return mvItemList[ nPos ]->mnId;
         }
     }

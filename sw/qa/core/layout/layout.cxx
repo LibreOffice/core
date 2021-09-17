@@ -223,7 +223,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxAutoGrowVertical)
     tools::Rectangle aFlyRect(nFlyLeft, nFlyTop, nFlyRight, nFlyBottom);
     // Without the accompanying fix in place, this test would have failed, as aFlyRect was too wide,
     // so it was not inside aShapeRect anymore.
-    CPPUNIT_ASSERT(aShapeRect.IsInside(aFlyRect));
+    CPPUNIT_ASSERT(aShapeRect.Contains(aFlyRect));
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextboxModification)

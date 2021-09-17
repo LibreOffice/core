@@ -135,9 +135,9 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrame *pFrame,
         if( rLower.IsAccessible( GetShell()->IsPreview() ) )
         {
             Action eAction = Action::NONE;
-            if( aBox.IsOver( rNewVisArea ) )
+            if( aBox.Overlaps( rNewVisArea ) )
             {
-                if( aBox.IsOver( rOldVisArea ) )
+                if( aBox.Overlaps( rOldVisArea ) )
                 {
                     eAction = Action::SCROLLED_WITHIN;
                 }
@@ -154,7 +154,7 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrame *pFrame,
                     }
                 }
             }
-            else if( aBox.IsOver( rOldVisArea ) )
+            else if( aBox.Overlaps( rOldVisArea ) )
             {
                 if ( bVisibleChildrenOnly &&
                      !rLower.AlwaysIncludeAsChild() )
@@ -251,8 +251,8 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrame *pFrame,
         }
         else if ( rLower.GetSwFrame() &&
                   ( !bVisibleChildrenOnly ||
-                    aBox.IsOver( rOldVisArea ) ||
-                    aBox.IsOver( rNewVisArea ) ) )
+                    aBox.Overlaps( rOldVisArea ) ||
+                    aBox.Overlaps( rNewVisArea ) ) )
         {
             // There are no unaccessible SdrObjects that need to be notified
             ChildrenScrolled( rLower.GetSwFrame(), rOldVisArea );

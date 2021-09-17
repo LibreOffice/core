@@ -1721,7 +1721,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
         if (rcOld.m_nPart == -1 || rcOld.m_nPart == rcNew.m_nPart)
         {
             // If fully overlapping.
-            if (rcOld.m_aRectangle.IsInside(rcNew.m_aRectangle))
+            if (rcOld.m_aRectangle.Contains(rcNew.m_aRectangle))
             {
                 SAL_INFO("lok", "Skipping queue [" << type << "]: [" << payload
                                                    << "] since overlaps existing all-parts.");
@@ -1767,7 +1767,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
                     // Don't merge unless fully overlapped.
                     SAL_INFO("lok", "New " << rcNew.toString() << " has " << rcOld.toString()
                                            << "?");
-                    if (rcNew.m_aRectangle.IsInside(rcOld.m_aRectangle))
+                    if (rcNew.m_aRectangle.Contains(rcOld.m_aRectangle))
                     {
                         SAL_INFO("lok", "New " << rcNew.toString() << " engulfs old "
                                                << rcOld.toString() << ".");
@@ -1779,7 +1779,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
                     // Don't merge unless fully overlapped.
                     SAL_INFO("lok", "Old " << rcOld.toString() << " has " << rcNew.toString()
                                            << "?");
-                    if (rcOld.m_aRectangle.IsInside(rcNew.m_aRectangle))
+                    if (rcOld.m_aRectangle.Contains(rcNew.m_aRectangle))
                     {
                         SAL_INFO("lok", "New " << rcNew.toString() << " engulfs old "
                                                << rcOld.toString() << ".");
@@ -1914,7 +1914,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
                             return false;
                         }
                         // new one engulfs the old one?
-                        else if (aNewRect.IsInside(aOldRect))
+                        else if (aNewRect.Contains(aOldRect))
                         {
                             SAL_INFO("lok.dialog",
                                      "New rect [" << aNewRect.toString() << "] engulfs old ["
@@ -1922,7 +1922,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
                             return true;
                         }
                         // old one engulfs the new one?
-                        else if (aOldRect.IsInside(aNewRect))
+                        else if (aOldRect.Contains(aNewRect))
                         {
                             SAL_INFO("lok.dialog",
                                      "Old rect [" << aOldRect.toString() << "] engulfs new ["

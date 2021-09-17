@@ -549,7 +549,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
             Size  aSize( pNode->GetSize() );
 
             tools::Rectangle aRect( aTLPos, aSize );
-            if (aRect.IsInside( aPos ))
+            if (aRect.Contains( aPos ))
             {
                 OSL_ENSURE( pNode->IsVisible(), "node is not a leaf" );
                 OUStringBuffer aBuf;

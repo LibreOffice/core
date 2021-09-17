@@ -1429,7 +1429,7 @@ void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)
                         tools::Rectangle aMarkRect( rView.GetMarkedObjRect() );
                         aMarkRect.Move( nX, nY );
 
-                        if ( !rWorkArea.IsInside( aMarkRect ) )
+                        if ( !rWorkArea.Contains( aMarkRect ) )
                         {
                             if ( aMarkRect.Left() < rWorkArea.Left() )
                                 nX += rWorkArea.Left() - aMarkRect.Left();
@@ -1487,7 +1487,7 @@ void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)
                                     }
 
                                     aMarkRect.SetPos(aPos);
-                                    if ( !rWorkArea.IsInside( aMarkRect ) )
+                                    if ( !rWorkArea.Contains( aMarkRect ) )
                                     {
                                         break;
                                     }

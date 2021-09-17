@@ -813,13 +813,13 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
             {
                 bool bAppend = false;
 
-                if( aClip.IsOver( *it ) )
+                if( aClip.Overlaps( *it ) )
                     bAppend = true;
                 else if( rStr[ nIndex ] == ' ' && bInserted )
                 {
                     std::vector< tools::Rectangle >::const_iterator next = it;
                     ++next;
-                    if( next != aTmp.end() && aClip.IsOver( *next ) )
+                    if( next != aTmp.end() && aClip.Overlaps( *next ) )
                         bAppend = true;
                 }
 

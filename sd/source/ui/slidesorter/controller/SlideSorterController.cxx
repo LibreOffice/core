@@ -180,7 +180,7 @@ model::SharedPageDescriptor SlideSorterController::GetPageAt (
             if ( ! mrView.GetLayouter().GetPageObjectLayouter()->GetBoundingBox(
                 pDescriptorAtPoint,
                 view::PageObjectLayouter::Part::Preview,
-                view::PageObjectLayouter::WindowCoordinateSystem).IsInside(aWindowPosition))
+                view::PageObjectLayouter::WindowCoordinateSystem).Contains(aWindowPosition))
             {
                 pDescriptorAtPoint.reset();
             }

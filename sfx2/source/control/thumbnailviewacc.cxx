@@ -249,7 +249,7 @@ sal_Bool SAL_CALL ThumbnailViewAcc::containsPoint( const awt::Point& aPoint )
     const Point             aSize( aRect.Width, aRect.Height );
     const Point             aNullPoint, aTestPoint( aPoint.X, aPoint.Y );
 
-    return tools::Rectangle( aNullPoint, aSize ).IsInside( aTestPoint );
+    return tools::Rectangle( aNullPoint, aSize ).Contains( aTestPoint );
 }
 
 uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAccessibleAtPoint( const awt::Point& aPoint )
@@ -764,7 +764,7 @@ sal_Bool SAL_CALL ThumbnailViewItemAcc::containsPoint( const awt::Point& aPoint 
     const Point             aSize( aRect.Width, aRect.Height );
     const Point             aNullPoint, aTestPoint( aPoint.X, aPoint.Y );
 
-    return tools::Rectangle( aNullPoint, aSize ).IsInside( aTestPoint );
+    return tools::Rectangle( aNullPoint, aSize ).Contains( aTestPoint );
 }
 
 uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewItemAcc::getAccessibleAtPoint( const awt::Point& )

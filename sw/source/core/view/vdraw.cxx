@@ -188,7 +188,7 @@ bool SwViewShellImp::IsDragPossible( const Point &rPoint )
     aRect.AddBottom(  FUZZY_EDGE );
     aRect.AddLeft  (- FUZZY_EDGE );
     aRect.AddRight (  FUZZY_EDGE );
-    return aRect.IsInside( rPoint );
+    return aRect.Contains( rPoint );
 }
 
 void SwViewShellImp::NotifySizeChg( const Size &rNewSz )
@@ -257,7 +257,7 @@ void SwViewShellImp::NotifySizeChg( const Size &rNewSz )
             }
 
             const tools::Rectangle aObjBound( pObj->GetCurrentBoundRect() );
-            if ( !aDocRect.IsInside( aObjBound ) )
+            if ( !aDocRect.Contains( aObjBound ) )
             {
                 Size aSz;
                 if ( aObjBound.Left() > aDocRect.Right() )

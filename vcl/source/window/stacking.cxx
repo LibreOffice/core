@@ -569,7 +569,7 @@ void Window::SetZOrder( vcl::Window* pRefWindow, ZOrderFlags nFlags )
         if ( pWindow == this )
             break;
         tools::Rectangle aCompRect = pWindow->GetOutputRectPixel();
-        if ( aWinRect.IsOver( aCompRect ) )
+        if ( aWinRect.Overlaps( aCompRect ) )
             pWindow->Invalidate( InvalidateFlags::Children | InvalidateFlags::NoTransparent );
         pWindow = pWindow->mpWindowImpl->mpNext;
     }
@@ -581,7 +581,7 @@ void Window::SetZOrder( vcl::Window* pRefWindow, ZOrderFlags nFlags )
         if ( pWindow != this )
         {
             tools::Rectangle aCompRect = pWindow->GetOutputRectPixel();
-            if ( aWinRect.IsOver( aCompRect ) )
+            if ( aWinRect.Overlaps( aCompRect ) )
             {
                 Invalidate( InvalidateFlags::Children | InvalidateFlags::NoTransparent );
                 break;

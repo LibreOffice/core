@@ -1577,7 +1577,7 @@ bool DemoRenderer::MouseButtonDown(const MouseEvent& rMEvt)
     std::vector<tools::Rectangle> aRegions(partition(GetSizePixel(), mnSegmentsX, mnSegmentsY));
     for (size_t i = 0; i < aRegions.size(); i++)
     {
-        if (aRegions[i].IsInside(rMEvt.GetPosPixel()))
+        if (aRegions[i].Contains(rMEvt.GetPosPixel()))
         {
             mnSelectedRenderer = i;
             Invalidate();

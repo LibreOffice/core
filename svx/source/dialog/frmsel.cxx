@@ -180,7 +180,7 @@ void FrameBorder::AddClickRect( const tools::Rectangle& rRect )
 
 bool FrameBorder::ContainsClickPoint( const Point& rPos ) const
 {
-    return vcl::Region( maClickArea ).IsInside( rPos );
+    return vcl::Region( maClickArea ).Contains( rPos );
 }
 
 tools::Rectangle FrameBorder::GetClickBoundRect() const

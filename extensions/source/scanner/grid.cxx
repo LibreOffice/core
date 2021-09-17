@@ -65,7 +65,7 @@ class GridWindow : public weld::CustomWidgetController
         {
             const Point aOffset(rWin.PixelToLogic(Point(mnOffX, mnOffY)));
             const tools::Rectangle aTarget(maPos - aOffset, maPos + aOffset);
-            return aTarget.IsInside(rPos);
+            return aTarget.Contains(rPos);
         }
     };
 

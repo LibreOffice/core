@@ -165,7 +165,7 @@ bool LokChartHelper::Hit(const Point& aPos)
         if (pChartWindow)
         {
             tools::Rectangle rChartBBox = GetChartBoundingBox();
-            return rChartBBox.IsInside(aPos);
+            return rChartBBox.Contains(aPos);
         }
     }
     return false;
@@ -281,7 +281,7 @@ bool LokChartHelper::postMouseEvent(int nType, int nX, int nY,
     if (pChartWindow)
     {
         tools::Rectangle rChartBBox = GetChartBoundingBox();
-        if (rChartBBox.IsInside(aMousePos))
+        if (rChartBBox.Contains(aMousePos))
         {
             int nChartWinX = nX - rChartBBox.Left();
             int nChartWinY = nY - rChartBBox.Top();
@@ -303,7 +303,7 @@ bool LokChartHelper::postMouseEvent(int nType, int nX, int nY,
 bool LokChartHelper::setTextSelection(int nType, int nX, int nY)
 {
     tools::Rectangle rChartBBox = GetChartBoundingBox();
-    if (rChartBBox.IsInside(Point(nX, nY)))
+    if (rChartBBox.Contains(Point(nX, nY)))
     {
         css::uno::Reference<css::frame::XDispatch> xDispatcher = GetXDispatcher();
         if (xDispatcher.is())
@@ -330,7 +330,7 @@ bool LokChartHelper::setGraphicSelection(int nType, int nX, int nY,
                                          double fScaleX, double fScaleY)
 {
     tools::Rectangle rChartBBox = GetChartBoundingBox();
-    if (rChartBBox.IsInside(Point(nX, nY)))
+    if (rChartBBox.Contains(Point(nX, nY)))
     {
         int nChartWinX = nX - rChartBBox.Left();
         int nChartWinY = nY - rChartBBox.Top();

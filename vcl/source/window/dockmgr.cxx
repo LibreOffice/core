@@ -179,7 +179,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl, void*, void)
             aBorderRect.AdjustRight( -nRight );
 
             PointerState aBorderState = pBorder->GetPointerState();
-            bRealMove = aBorderRect.IsInside( aBorderState.maPos );
+            bRealMove = aBorderRect.Contains( aBorderState.maPos );
         }
     }
 

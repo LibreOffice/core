@@ -75,7 +75,7 @@ void OSectionView::MakeVisible( const tools::Rectangle& rRect, vcl::Window& rWin
     const tools::Rectangle aVisRect( Point(-aOrg.X(),-aOrg.Y()), aVisSize );
 
     // check, if rectangle is inside visible area
-    if ( !aVisRect.IsInside( rRect ) )
+    if ( !aVisRect.Contains( rRect ) )
     {
         // calculate scroll distance; the rectangle must be inside the visible area
         sal_Int32 nScrollX = 0, nScrollY = 0;

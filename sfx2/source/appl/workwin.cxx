@@ -2245,7 +2245,7 @@ void SfxWorkWindow::EndAutoShow_Impl( Point aPos )
         {
             Point aLocalPos = p->ScreenToOutputPixel( aPos );
             tools::Rectangle aRect( Point(), p->GetSizePixel() );
-            if ( !aRect.IsInside( aLocalPos ) )
+            if ( !aRect.Contains( aLocalPos ) )
                 p->FadeOut();
         }
     }

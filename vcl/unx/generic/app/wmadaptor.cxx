@@ -1446,7 +1446,7 @@ void WMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVert
             Point aMed( aTL.X() + rGeom.nWidth/2, aTL.Y() + rGeom.nHeight/2 );
             const std::vector< tools::Rectangle >& rScreens = m_pSalDisplay->GetXineramaScreens();
             for(const auto & rScreen : rScreens)
-                if( rScreen.IsInside( aMed ) )
+                if( rScreen.Contains( aMed ) )
                 {
                     aTL += rScreen.TopLeft();
                     aScreenSize = rScreen.GetSize();
@@ -1960,7 +1960,7 @@ void NetWMAdaptor::showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const
                 Point aMousePoint( root_x, root_y );
                 for(const auto & rScreen : rScreens)
                 {
-                    if( rScreen.IsInside( aMousePoint ) )
+                    if( rScreen.Contains( aMousePoint ) )
                     {
                         pFrame->maGeometry.nX       = rScreen.Left();
                         pFrame->maGeometry.nY       = rScreen.Top();

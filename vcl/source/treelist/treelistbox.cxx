@@ -1918,13 +1918,13 @@ bool SvTreeListBox::PosOverBody(const Point& rPos) const
     if (pImpl->m_aVerSBar->IsVisible())
     {
         tools::Rectangle aRect(pImpl->m_aVerSBar->GetPosPixel(), pImpl->m_aVerSBar->GetSizePixel());
-        if (aRect.IsInside(rPos))
+        if (aRect.Contains(rPos))
             return false;
     }
     if (pImpl->m_aHorSBar->IsVisible())
     {
         tools::Rectangle aRect(pImpl->m_aHorSBar->GetPosPixel(), pImpl->m_aHorSBar->GetSizePixel());
-        if (aRect.IsInside(rPos))
+        if (aRect.Contains(rPos))
             return false;
     }
     return true;

@@ -1647,7 +1647,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocument::getAccessibleAtPoin
                 if (xComp.is())
                 {
                     tools::Rectangle aBound(VCLRectangle(xComp->getBounds()));
-                    if (aBound.IsInside(VCLPoint(rPoint)))
+                    if (aBound.Contains(VCLPoint(rPoint)))
                         xAccessible = mxTempAcc;
                 }
             }

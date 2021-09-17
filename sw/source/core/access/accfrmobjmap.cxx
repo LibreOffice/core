@@ -46,7 +46,7 @@ SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
     {
         if ( !bVisibleChildrenOnly ||
              aLower.AlwaysIncludeAsChild() ||
-             aLower.GetBox( rAccMap ).IsOver( rVisArea ) )
+             aLower.GetBox( rAccMap ).Overlaps( rVisArea ) )
         {
             insert( nPos++, SwAccessibleChildMapKey::TEXT, aLower );
         }
@@ -65,7 +65,7 @@ SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
             for(const SwAnchoredObject* pObj : *pObjs)
             {
                 aLower = pObj->GetDrawObj();
-                if ( aLower.GetBox( rAccMap ).IsOver( rVisArea ) )
+                if ( aLower.GetBox( rAccMap ).Overlaps( rVisArea ) )
                 {
                     insert( aLower.GetDrawObject(), aLower );
                 }
@@ -83,7 +83,7 @@ SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
                 if ( aLower.IsBoundAsChar() &&
                      ( !bVisibleChildrenOnly ||
                        aLower.AlwaysIncludeAsChild() ||
-                       aLower.GetBox( rAccMap ).IsOver( rVisArea ) ) )
+                       aLower.GetBox( rAccMap ).Overlaps( rVisArea ) ) )
                 {
                     insert( aLower.GetDrawObject(), aLower );
                 }

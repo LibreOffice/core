@@ -123,7 +123,7 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
             const SwRect aRect( *pRect );
             const SwFrame *pPg = pSh->GetLayout()->Lower();
             do
-            {   if ( pPg->getFrameArea().IsOver( aRect ) )
+            {   if ( pPg->getFrameArea().Overlaps( aRect ) )
                     ::InsertGridFrame( const_cast<SwDPage*>(this)->m_pGridLst.get(), pPg );
                 pPg = pPg->GetNext();
             } while ( pPg );
@@ -136,7 +136,7 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
                 do
                 {   ::InsertGridFrame( const_cast<SwDPage*>(this)->m_pGridLst.get(), pPg );
                     pPg = pPg->GetNext();
-                } while ( pPg && pPg->getFrameArea().IsOver( pSh->VisArea() ) );
+                } while ( pPg && pPg->getFrameArea().Overlaps( pSh->VisArea() ) );
         }
     }
     return m_pGridLst.get();

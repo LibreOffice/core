@@ -639,7 +639,7 @@ void SwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
             if (i == (nLines - 1))
                 aTxt.SetSize(Size(aTxt.GetWidth() / 2, aTxt.GetHeight()));
 
-            if (aTxt.IsOver(aFrmRect) && nAnchor != RndStdIds::FLY_AS_CHAR && !bIgnoreWrap)
+            if (aTxt.Overlaps(aFrmRect) && nAnchor != RndStdIds::FLY_AS_CHAR && !bIgnoreWrap)
             {
                 switch(nWrap)
                 {
@@ -658,7 +658,7 @@ void SwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
                     default: break;
                 }
             }
-            if (pOuterFrame->IsInside(aTxt))
+            if (pOuterFrame->Contains(aTxt))
                 DrawRect_Impl(rRenderContext, aTxt, m_aTxtCol, m_aTransColor );
 
             aTxt.Move(0, nStep);
@@ -692,7 +692,7 @@ void SwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     DrawRect_Impl(rRenderContext, aRect, m_aTransColor, m_aAlignColor);
 
     // Frame View
-    bool bDontFill = (nAnchor == RndStdIds::FLY_AT_CHAR && aFrmRect.IsOver(aAutoCharFrame)) || bTrans;
+    bool bDontFill = (nAnchor == RndStdIds::FLY_AT_CHAR && aFrmRect.Overlaps(aAutoCharFrame)) || bTrans;
     DrawRect_Impl(rRenderContext, aFrmRect, bDontFill? m_aTransColor : m_aBgCol, m_aFrameColor);
 }
 

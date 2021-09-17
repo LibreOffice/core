@@ -683,7 +683,7 @@ void SwLineRects::ConnectEdges( OutputDevice const *pOut, SwPaintProperties cons
 
                             SwRect aIns( rL1 );
                             aIns.Bottom( pLA->Bottom() );
-                            if ( !rL1.IsInside( aIns ) )
+                            if ( !rL1.Contains( aIns ) )
                                 continue;
                             m_aLineRects.emplace_back(aIns, &rL1.GetColor(),
                                                       SvxBorderLineStyle::SOLID, rL1.GetTab(),
@@ -724,7 +724,7 @@ void SwLineRects::ConnectEdges( OutputDevice const *pOut, SwPaintProperties cons
 
                             SwRect aIns( rL1 );
                             aIns.Right( pLA->Right() );
-                            if ( !rL1.IsInside( aIns ) )
+                            if ( !rL1.Contains( aIns ) )
                                 continue;
                             m_aLineRects.emplace_back(aIns, &rL1.GetColor(),
                                                       SvxBorderLineStyle::SOLID, rL1.GetTab(),
@@ -792,7 +792,7 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects, S
             if ( !bVerticalSubs == ( rLine.Height() > rLine.Width() ) ) //same direction?
                 continue;
 
-            if ( aSubsRect.IsOver( rLine ) )
+            if ( aSubsRect.Overlaps( rLine ) )
             {
                 if ( bVerticalSubs ) // Vertical?
                 {
@@ -1403,7 +1403,7 @@ static void lcl_SubtractFlys( const SwFrame *pFrame, const SwPageFrame *pPage,
         if (!pFly)
             continue;
 
-        if (pSelfFly == pFly || gProp.pSRetoucheFly == pFly || !rRect.IsOver(pFly->getFrameArea()))
+        if (pSelfFly == pFly || gProp.pSRetoucheFly == pFly || !rRect.Overlaps(pFly->getFrameArea()))
             continue;
 
         if (!pFly->GetFormat()->GetPrint().GetValue() &&
@@ -1679,7 +1679,7 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, vcl::RenderContext &rOu
     ::SwAlignRect( aAlignedGrfRect, &rSh, &rOutDev );
 
     // Change type from <bool> to <bool>.
-    const bool bNotInside = !rOut.IsInside( aAlignedGrfRect );
+    const bool bNotInside = !rOut.Contains( aAlignedGrfRect );
     if ( bNotInside )
     {
         rOutDev.Push( PushFlags::CLIPREGION );
@@ -1907,7 +1907,7 @@ void DrawGraphic(
         // E.g. this is the case for a Fly Frame without a background
         // brush positioned on the border of the page which inherited the background
         // brush from the page.
-        bRetouche = !rOut.IsInside( aGrf );
+        bRetouche = !rOut.Contains( aGrf );
         break;
 
     case GPOS_TILED:
@@ -2131,7 +2131,7 @@ void DrawGraphic(
         rOutDev.Pop();
     }
 
-    if( bDraw && aGrf.IsOver( rOut ) )
+    if( bDraw && aGrf.Overlaps( rOut ) )
         lcl_DrawGraphic( *pBrush, rOutDev, rSh, aGrf, rOut, bGrfNum, gProp,
                          bGrfBackgrdAlreadyDrawn );
 
@@ -2544,7 +2544,7 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                 }
             }
 
-            if (!rRect.IsOver(aRepaintRect))
+            if (!rRect.Overlaps(aRepaintRect))
             {
                 continue;
             }
@@ -3143,7 +3143,7 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
             SwPageFrame::GetBorderAndShadowBoundRect( pPage->getFrameArea(), pSh, &rRenderContext, aPaintRect,
                 bPaintLeftShadow, bPaintRightShadow, bRightSidebar );
 
-            if ( aRect.IsOver( aPaintRect ) )
+            if ( aRect.Overlaps( aPaintRect ) )
             {
                 if ( pSh->GetWin() )
                 {
@@ -3305,7 +3305,7 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
                 bPaintLeftShadow, bPaintRightShadow, bRightSidebar );
             aPaintRect.Intersection_( aRect );
 
-            if ( aRect.IsOver( aEmptyPageRect ) )
+            if ( aRect.Overlaps( aEmptyPageRect ) )
             {
                 // #i75172# if called from SwViewShell::ImplEndAction it should no longer
                 // really be used but handled by SwViewShell::ImplEndAction already
@@ -3482,10 +3482,10 @@ void SwLayoutFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect cons
             pFrame->ResetRetouche();
         }
 
-        if ( rRect.IsOver( aPaintRect ) )
+        if ( rRect.Overlaps( aPaintRect ) )
         {
             if ( bCnt && pFrame->IsCompletePaint() &&
-                 !rRect.IsInside( aPaintRect ) && Application::AnyInput( VclInputFlags::KEYBOARD ) )
+                 !rRect.Contains( aPaintRect ) && Application::AnyInput( VclInputFlags::KEYBOARD ) )
             {
                 //fix(8104): It may happen, that the processing wasn't complete
                 //but some parts of the paragraph were still repainted.
@@ -3894,7 +3894,7 @@ bool SwFlyFrame::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
             //HACK: exception: printing of frames in tables, those can overlap
             //a page once in a while when dealing with oversized tables (HTML).
             SwPageFrame *pPage = pFly->FindPageFrame();
-            if ( pPage && pPage->getFrameArea().IsOver( pFly->getFrameArea() ) )
+            if ( pPage && pPage->getFrameArea().Overlaps( pFly->getFrameArea() ) )
             {
                     pAnch = pFly->AnchorFrame();
             }
@@ -3917,7 +3917,7 @@ bool SwFlyFrame::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
                     //right now. Afterwards they must not be printed if the
                     //page over which they float position wise gets printed.
                     const SwPageFrame *pPage = pAnch->FindPageFrame();
-                    if ( !pPage->getFrameArea().IsOver( SwRect(pObj->GetCurrentBoundRect()) ) )
+                    if ( !pPage->getFrameArea().Overlaps( SwRect(pObj->GetCurrentBoundRect()) ) )
                         pAnch = nullptr;
                 }
             }
@@ -3992,7 +3992,7 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
         if (bInGenerateThumbnail)
         {
             const SwRect& aVisRect = pShell->VisArea();
-            if (!aVisRect.IsOver(getFrameArea()))
+            if (!aVisRect.Overlaps(getFrameArea()))
                 return;
         }
     }
@@ -4516,7 +4516,7 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
     for (const SwRect & rOut : aRegion)
     {
         aOut = rOut;
-        if ( rRect.IsOver( aOut ) && aOut.Height() > 0 && aOut.Width() > 0 )
+        if ( rRect.Overlaps( aOut ) && aOut.Height() > 0 && aOut.Width() > 0 )
         {
             aOut.Intersection_( rRect );
             pOut->DrawRect( aOut.SVRect() );
@@ -4576,7 +4576,7 @@ void SwFrame::PaintBorderLine( const SwRect& rRect,
                              const Color *pColor,
                              const SvxBorderLineStyle nStyle ) const
 {
-    if ( !rOutRect.IsOver( rRect ) )
+    if ( !rOutRect.Overlaps( rRect ) )
         return;
 
     SwRect aOut( rOutRect );
@@ -5207,7 +5207,7 @@ void SwFrame::PaintSwFrameShadowAndBorder(
     // suspend border paint under special cases - see below.
     // NOTE: This is a fix for the implementation of feature #99657#.
     bool bDrawOnlyShadowForTransparentFrame = false;
-    if ( aRect.IsInside( rRect ) )
+    if ( aRect.Contains( rRect ) )
     {
         // paint shadow, if background is transparent.
         // Because of introduced transparent background for fly frame #99657#,
@@ -5345,7 +5345,7 @@ void SwFootnoteContFrame::PaintSwFrameShadowAndBorder(
     //be painted.
     SwRect aRect( getFramePrintArea() );
     aRect.Pos() += getFrameArea().Pos();
-    if ( !aRect.IsInside( rRect ) )
+    if ( !aRect.Contains( rRect ) )
         PaintLine( rRect, pPage );
 }
 
@@ -5438,7 +5438,7 @@ void SwLayoutFrame::PaintColLines( const SwRect &rRect, const SwFormatCol &rForm
     {
         (aLineRect.*fnRect->fnSetPosX)
             ( (pCol->getFrameArea().*fnGetX)() - nPenHalf );
-        if ( aRect.IsOver( aLineRect ) )
+        if ( aRect.Overlaps( aLineRect ) )
             PaintBorderLine( aRect, aLineRect , pPage, &rFormatCol.GetLineColor(),
                    rFormatCol.GetLineStyle() );
         pCol = pCol->GetNext();
@@ -6108,7 +6108,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     tools::Rectangle aRectBottom(aPointBottom,aSize);
     tools::Rectangle aRectTop(aPointTop,aSize);
 
-    if (aRectBottom.IsOver(aVisRect))
+    if (aRectBottom.Overlaps(aVisRect))
     {
 
         if (Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
@@ -6129,7 +6129,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
         Point aMiddleSecond(aPointBottom + Point(pMgr->GetSidebarWidth()/3*2,_pViewShell->GetOut()->PixelToLogic(Size(0,nScrollerHeight)).Height()/2));
         PaintNotesSidebarArrows(aMiddleFirst,aMiddleSecond,_pViewShell,pMgr->GetArrowColor(KEY_PAGEUP,nPageNum), pMgr->GetArrowColor(KEY_PAGEDOWN,nPageNum));
     }
-    if (!aRectTop.IsOver(aVisRect))
+    if (!aRectTop.Overlaps(aVisRect))
         return;
 
     if (Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
@@ -6359,7 +6359,7 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
 
     // bOnlyTextBackground means background that's on top of background shapes,
     // this includes both text and cell frames.
-    if ( (!bOnlyTextBackground || IsTextFrame() || IsCellFrame()) && aPaintRect.IsOver( rRect ) )
+    if ( (!bOnlyTextBackground || IsTextFrame() || IsCellFrame()) && aPaintRect.Overlaps( rRect ) )
     {
         if ( bBack || bPageFrame || !bLowerMode )
         {
@@ -6496,11 +6496,11 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
             SfxProgress::Reschedule();
 
         aFrameRect = pFrame->GetPaintArea();
-        if ( aFrameRect.IsOver( aBorderRect ) )
+        if ( aFrameRect.Overlaps( aBorderRect ) )
         {
             SwBorderAttrAccess aAccess( SwFrame::GetCache(), pFrame );
             const SwBorderAttrs &rTmpAttrs = *aAccess.Get();
-            if ( ( pFrame->IsLayoutFrame() && bLowerBorder ) || aFrameRect.IsOver( aRect ) )
+            if ( ( pFrame->IsLayoutFrame() && bLowerBorder ) || aFrameRect.Overlaps( aRect ) )
             {
                 pFrame->PaintSwFrameBackground( aRect, pPage, rTmpAttrs, bLowMode,
                                        bLowerBorder, bOnlyTextBackground );
@@ -6563,7 +6563,7 @@ void SwLayoutFrame::RefreshLaySubsidiary( const SwPageFrame *pPage,
     SwShortCut aShortCut( *pLow, rRect );
     while( pLow && !aShortCut.Stop( pLow->getFrameArea() ) )
     {
-        if ( pLow->getFrameArea().IsOver( rRect ) && pLow->getFrameArea().HasArea() )
+        if ( pLow->getFrameArea().Overlaps( rRect ) && pLow->getFrameArea().HasArea() )
         {
             if ( pLow->IsLayoutFrame() )
                 static_cast<const SwLayoutFrame*>(pLow)->RefreshLaySubsidiary( pPage, rRect);
@@ -6576,7 +6576,7 @@ void SwLayoutFrame::RefreshLaySubsidiary( const SwPageFrame *pPage,
                                     pAnchoredObj->GetDrawObj()->GetLayer() ) )
                         if (auto pFly = pAnchoredObj->DynCastFlyFrame() )
                         {
-                            if ( pFly->IsFlyInContentFrame() && pFly->getFrameArea().IsOver( rRect ) )
+                            if ( pFly->IsFlyInContentFrame() && pFly->getFrameArea().Overlaps( rRect ) )
                             {
                                 if ( !pFly->Lower() || !pFly->Lower()->IsNoTextFrame() ||
                                      !static_cast<const SwNoTextFrame*>(pFly->Lower())->HasAnimation())
@@ -6937,7 +6937,7 @@ void SwLayoutFrame::PaintSubsidiaryLines( const SwPageFrame *pPage,
 
     ::SwAlignRect( aOriginal, gProp.pSGlobalShell, gProp.pSGlobalShell->GetOut() );
 
-    if ( !aOriginal.IsOver( rRect ) )
+    if ( !aOriginal.Overlaps( rRect ) )
         return;
 
     SwRect aOut( aOriginal );

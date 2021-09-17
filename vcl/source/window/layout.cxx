@@ -1569,7 +1569,7 @@ class DisclosureButton final : public CheckBox
             nState |= ControlState::DEFAULT;
         if (Window::IsEnabled())
             nState |= ControlState::ENABLED;
-        if (IsMouseOver() && GetMouseRect().IsInside(GetPointerPosPixel()))
+        if (IsMouseOver() && GetMouseRect().Contains(GetPointerPosPixel()))
             nState |= ControlState::ROLLOVER;
 
         if (rRenderContext.DrawNativeControl(ControlType::ListNode, ControlPart::Entire, aCtrlRegion,

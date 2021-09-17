@@ -344,7 +344,7 @@ void Slider::ImplDraw(vcl::RenderContext& rRenderContext)
 
         if (IsMouseOver())
         {
-            if (maThumbRect.IsInside(GetPointerPosPixel()))
+            if (maThumbRect.Contains(GetPointerPosPixel()))
                 aSliderValue.mnThumbState |= ControlState::ROLLOVER;
         }
 
@@ -475,7 +475,7 @@ bool Slider::ImplIsPageUp( const Point& rPos )
         aRect.SetLeft( 0 );
         aRect.SetRight( aSize.Width()-1 );
     }
-    return aRect.IsInside( rPos );
+    return aRect.Contains( rPos );
 }
 
 bool Slider::ImplIsPageDown( const Point& rPos )
@@ -492,7 +492,7 @@ bool Slider::ImplIsPageDown( const Point& rPos )
         aRect.SetLeft( 0 );
         aRect.SetRight( aSize.Width()-1 );
     }
-    return aRect.IsInside( rPos );
+    return aRect.Contains( rPos );
 }
 
 tools::Long Slider::ImplSlide( tools::Long nNewPos )
@@ -609,7 +609,7 @@ void Slider::MouseButtonDown( const MouseEvent& rMEvt )
     const Point&       rMousePos = rMEvt.GetPosPixel();
     StartTrackingFlags nTrackFlags = StartTrackingFlags::NONE;
 
-    if ( maThumbRect.IsInside( rMousePos ) )
+    if ( maThumbRect.Contains( rMousePos ) )
     {
         meScrollType    = ScrollType::Drag;
 

@@ -426,11 +426,11 @@ void SwPageBreakWin::ShowAll( bool bShow )
 bool SwPageBreakWin::Contains( const Point &rDocPt ) const
 {
     ::tools::Rectangle aRect( GetPosPixel(), GetSizePixel() );
-    if ( aRect.IsInside( rDocPt ) )
+    if ( aRect.Contains( rDocPt ) )
         return true;
 
     ::tools::Rectangle aLineRect( m_pLine->GetPosPixel(), m_pLine->GetSizePixel() );
-    return aLineRect.IsInside( rDocPt );
+    return aLineRect.Contains( rDocPt );
 }
 
 void SwPageBreakWin::SetReadonly( bool bReadonly )

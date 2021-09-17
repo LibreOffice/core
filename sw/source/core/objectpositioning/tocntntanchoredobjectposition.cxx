@@ -1164,7 +1164,7 @@ void SwToContentAnchoredObjectPosition::CalcOverlap(const SwTextFrame* pAnchorFr
             continue;
         }
 
-        if (!GetAnchoredObj().GetObjRect().IsOver(pAnchoredObj->GetObjRect()))
+        if (!GetAnchoredObj().GetObjRect().Overlaps(pAnchoredObj->GetObjRect()))
         {
             // Found an already positioned object, but it doesn't overlap, ignore.
             continue;

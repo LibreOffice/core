@@ -154,7 +154,7 @@ bool SvxShowCharSet::MouseButtonUp(const MouseEvent& rMEvt)
     if ( bDrag && rMEvt.IsLeft() )
     {
         // released mouse over character map
-        if ( tools::Rectangle(Point(), GetOutputSizePixel()).IsInside(rMEvt.GetPosPixel()))
+        if ( tools::Rectangle(Point(), GetOutputSizePixel()).Contains(rMEvt.GetPosPixel()))
             aSelectHdl.Call( this );
         ReleaseMouse();
         bDrag = false;

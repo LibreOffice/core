@@ -61,14 +61,14 @@ WindowHitTest Window::ImplHitTest( const Point& rFramePos )
         const OutputDevice *pOutDev = GetOutDev();
         pOutDev->ReMirror( aFramePos );
     }
-    if ( !GetOutputRectPixel().IsInside( aFramePos ) )
+    if ( !GetOutputRectPixel().Contains( aFramePos ) )
         return WindowHitTest::NONE;
     if ( mpWindowImpl->mbWinRegion )
     {
         Point aTempPos = aFramePos;
         aTempPos.AdjustX( -GetOutDev()->mnOutOffX );
         aTempPos.AdjustY( -GetOutDev()->mnOutOffY );
-        if ( !mpWindowImpl->maWinRegion.IsInside( aTempPos ) )
+        if ( !mpWindowImpl->maWinRegion.Contains( aTempPos ) )
             return WindowHitTest::NONE;
     }
 
@@ -86,7 +86,7 @@ bool Window::ImplTestMousePointerSet()
 
     // if the mouse is over the window, switch it
     tools::Rectangle aClientRect( Point( 0, 0 ), GetOutputSizePixel() );
-    return aClientRect.IsInside( GetPointerPosPixel() );
+    return aClientRect.Contains( GetPointerPosPixel() );
 }
 
 PointerStyle Window::ImplGetMousePointer() const

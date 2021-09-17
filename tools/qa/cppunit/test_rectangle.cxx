@@ -92,6 +92,21 @@ void Test::test_rectangle()
         static_assert(aRectMm100.GetWidth() == 0);
         static_assert(aRectMm100.GetHeight() == 0);
     }
+
+    {
+        constexpr tools::Rectangle rect(Point(0, 0), Size(20, 20));
+        constexpr tools::Rectangle inside(Point(10, 10), Size(10, 10));
+        constexpr tools::Rectangle overlap(Point(10, 10), Size(20, 20));
+        constexpr tools::Rectangle outside(Point(20, 20), Size(10, 10));
+        CPPUNIT_ASSERT(rect.Contains(inside));
+        CPPUNIT_ASSERT(rect.Contains(rect));
+        CPPUNIT_ASSERT(!rect.Contains(overlap));
+        CPPUNIT_ASSERT(!rect.Contains(outside));
+        CPPUNIT_ASSERT(rect.Overlaps(inside));
+        CPPUNIT_ASSERT(rect.Overlaps(rect));
+        CPPUNIT_ASSERT(rect.Overlaps(overlap));
+        CPPUNIT_ASSERT(!rect.Overlaps(outside));
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

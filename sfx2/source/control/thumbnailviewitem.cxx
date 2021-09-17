@@ -77,7 +77,7 @@ void ThumbnailViewItem::setHighlight (bool state)
 {
     bool bNeedsPaint = false;
 
-    if (bVisible && getDrawArea().IsInside(rPoint))
+    if (bVisible && getDrawArea().Contains(rPoint))
     {
         if (!isHighlighted())
             bNeedsPaint = true;

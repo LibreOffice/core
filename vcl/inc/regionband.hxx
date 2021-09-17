@@ -72,7 +72,7 @@ public:
     bool Exclude(const RegionBand& rSource);
     void XOr(const RegionBand& rSource);
     tools::Rectangle GetBoundRect() const;
-    bool IsInside(const Point& rPoint) const;
+    bool Contains(const Point& rPoint) const;
     sal_uInt32 getRectangleCount()
         const; // only users are Region::Intersect, Region::IsRectangle and PSWriter::ImplBmp
     void GetRegionRectangles(RectangleVector& rTarget) const;

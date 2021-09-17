@@ -440,7 +440,7 @@ SdrObject* IMapWindow::GetHitSdrObj( const Point& rPosPixel ) const
     SdrObject*  pObj = nullptr;
     Point       aPt = rDevice.PixelToLogic( rPosPixel );
 
-    if ( tools::Rectangle( Point(), GetGraphicSize() ).IsInside( aPt ) )
+    if ( tools::Rectangle( Point(), GetGraphicSize() ).Contains( aPt ) )
     {
         SdrPage* pPage = pModel->GetPage( 0 );
         if ( pPage )
