@@ -26,7 +26,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
 #include <com/sun/star/registry/InvalidValueException.hpp>
-#include <com/sun/star/registry/MergeConflictException.hpp>
 #include <com/sun/star/registry/RegistryKeyType.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
@@ -903,29 +902,9 @@ sal_Bool SimpleRegistry::isReadOnly()
 }
 
 void SimpleRegistry::mergeKey(
-    OUString const & aKeyName, OUString const & aUrl)
+    OUString const &, OUString const &)
 {
-    std::scoped_lock guard(mutex_);
-    RegistryKey root;
-    RegError err = registry_.openRootKey(root);
-    if (err == RegError::NO_ERROR) {
-        err = registry_.mergeKey(root, aKeyName, aUrl, false);
-    }
-    switch (err) {
-    case RegError::NO_ERROR:
-    case RegError::MERGE_CONFLICT:
-        break;
-    case RegError::MERGE_ERROR:
-        throw css::registry::MergeConflictException(
-            "com.sun.star.registry.SimpleRegistry.mergeKey:"
-            " underlying Registry::mergeKey() = RegError::MERGE_ERROR",
-            static_cast< cppu::OWeakObject * >(this));
-    default:
-        throw css::registry::InvalidRegistryException(
-            "com.sun.star.registry.SimpleRegistry.mergeKey:"
-            " underlying Registry::getRootKey/mergeKey() = " + OUString::number(static_cast<int>(err)),
-            static_cast< OWeakObject * >(this));
-    }
+    throw css::uno::RuntimeException("css.registry.SimpleRegistry::mergeKey: not implemented");
 }
 
 }
