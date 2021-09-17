@@ -739,17 +739,13 @@ void SfxLokHelper::postKeyEventAsync(const VclPtr<vcl::Window> &xWindow,
     postEventAsync(pLOKEv);
 }
 
-void SfxLokHelper::setBlockedCommandView(int nViewId, const OUString& type, bool isBlocked)
+void SfxLokHelper::setBlockedCommandList(int nViewId, const char* bolckedCommandList)
 {
-    OUString aType = type;
     SfxViewShell* pViewShell = SfxLokHelper::getViewOfId(nViewId);
 
     if(pViewShell)
     {
-        if(aType == "freemium")
-            pViewShell->setFreemiumView(isBlocked);
-        else
-            pViewShell->setRestrictedView(isBlocked);
+        pViewShell->setBlockedCommandList(bolckedCommandList);
     }
 }
 

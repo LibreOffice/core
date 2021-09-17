@@ -34,6 +34,7 @@
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 #include <editeng/outliner.hxx>
 #include <functional>
+#include <unordered_set>
 
 class SfxTabPage;
 class SfxBaseController;
@@ -166,8 +167,7 @@ friend class SfxPrinterController;
     LanguageTag                 maLOKLanguageTag;
     LanguageTag                 maLOKLocale;
     LOKDeviceFormFactor         maLOKDeviceFormFactor;
-    bool                        mbLOKIsFreemiumView;
-    bool                        mbLOKIsRestrictedView;
+    std::unordered_set<OUString>    mvLOKBlockedCommandList;
 
     /// Used to set the DocId at construction time. See SetCurrentDocId.
     static ViewShellDocId       mnCurrentDocId;
@@ -394,13 +394,9 @@ public:
 
     virtual tools::Rectangle getLOKVisibleArea() const { return tools::Rectangle(); }
 
-    // Freemium view settings
-    void setFreemiumView(bool isFreemium) { mbLOKIsFreemiumView = isFreemium; }
-    bool isFreemiumView() const { return mbLOKIsFreemiumView; }
-
-    // Restricted view setting
-    void setRestrictedView(bool isRestricted) { mbLOKIsRestrictedView = isRestricted; }
-    bool isRestrictedView() { return mbLOKIsRestrictedView; }
+    // Blocked Command view settings
+    void setBlockedCommandList(const char* bolckedCommandList);
+    bool isBlockedCommand(OUString command);
 };
 
 

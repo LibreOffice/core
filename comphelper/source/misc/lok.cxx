@@ -35,10 +35,6 @@ static bool g_bLocalRendering(false);
 
 static Compat g_eCompatFlags(Compat::none);
 
-static std::unordered_set<OUString> g_vFreemiumDenyList;
-
-static std::unordered_set<OUString> g_vRestrictedCommandList;
-
 namespace
 {
 
@@ -285,62 +281,6 @@ void statusIndicatorFinish()
 {
     if (pStatusIndicatorCallback)
         pStatusIndicatorCallback(pStatusIndicatorCallbackData, statusIndicatorCallbackType::Finish, 0, nullptr);
-}
-
-void setBlockedCommandList(const char* bolckedCommandList)
-{
-
-    OUString BolckedListString(bolckedCommandList, strlen(bolckedCommandList), RTL_TEXTENCODING_UTF8);
-
-    OUString type = BolckedListString.getToken(0, '-');
-
-    if (type == "freemium")
-    {
-        if(!g_vFreemiumDenyList.empty())
-            return;
-        OUString commands = BolckedListString.getToken(1, '-');
-
-        OUString command = commands.getToken(0, ' ');
-        for (size_t i = 1; !command.isEmpty(); i++)
-        {
-            g_vFreemiumDenyList.emplace(command);
-            command = commands.getToken(i, ' ');
-        }
-    }
-    else
-    {
-        if(!g_vRestrictedCommandList.empty())
-            return;
-
-        OUString commands = BolckedListString.getToken(1, '-');
-
-        OUString command = commands.getToken(0, ' ');
-        for (size_t i = 1; !command.isEmpty(); i++)
-        {
-            g_vRestrictedCommandList.emplace(command);
-            command = commands.getToken(i, ' ');
-        }
-    }
-}
-
-const std::unordered_set<OUString>& getFreemiumDenyList()
-{
-    return g_vFreemiumDenyList;
-}
-
-bool isCommandFreemiumDenied(const OUString& command)
-{
-    return g_vFreemiumDenyList.find(command) != g_vFreemiumDenyList.end();
-}
-
-const std::unordered_set<OUString>& getRestrictedCommandList()
-{
-    return g_vRestrictedCommandList;
-}
-
-bool isRestrictedCommand(const OUString& command)
-{
-    return g_vRestrictedCommandList.find(command) != g_vRestrictedCommandList.end();
 }
 
 } // namespace
