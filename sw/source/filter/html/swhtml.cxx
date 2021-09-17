@@ -314,6 +314,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_bFuzzing(utl::ConfigManager::IsFuzzing()),
     m_isInTableStructure(false),
     m_nTableDepth( 0 ),
+    m_nFloatingFrames( 0 ),
     m_pTempViewFrame(nullptr)
 {
     // If requested explicitly, then force ignoring of comments (don't create postits for them).
@@ -1463,8 +1464,13 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
         break;
 
     case HtmlTokenId::IFRAME_ON:
-        InsertFloatingFrame();
-        m_bCallNextToken = m_bInFloatingFrame && m_xTable;
+        if (m_bFuzzing && m_nFloatingFrames > 64)
+            SAL_WARN("sw.html", "Not importing any more FloatingFrames for fuzzing performance");
+        else
+        {
+            InsertFloatingFrame();
+            m_bCallNextToken = m_bInFloatingFrame && m_xTable;
+        }
         break;
 
     case HtmlTokenId::LINEBREAK:

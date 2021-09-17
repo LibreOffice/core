@@ -472,7 +472,8 @@ class SwHTMLParser : public SfxHTMLParser, public SvtListener
     bool m_bFuzzing;
     bool m_isInTableStructure;
 
-    sal_Int32 m_nTableDepth;
+    int m_nTableDepth;
+    int m_nFloatingFrames;
 
     /// the names corresponding to the DOCINFO field subtypes INFO[1-4]
     OUString m_InfoNames[4];
