@@ -27,6 +27,8 @@
 
 /** is thrown if entries of two registries are contradictory in the context of
     XSimpleRegistry::mergeKey()e() method.
+
+    @deprecated as XSimpleRegistry::mergeKey is deprecated as well
  */
 published exception MergeConflictException: com::sun::star::uno::Exception
 {
