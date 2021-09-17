@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_SALGDI_H
-#define INCLUDED_VCL_INC_UNX_SALGDI_H
+#pragma once
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -330,7 +329,5 @@ inline Display *X11SalGraphics::GetXDisplay() const
 
 inline Pixel X11SalGraphics::GetPixel( Color nColor ) const
 { return GetColormap().GetPixel( nColor ); }
-
-#endif // INCLUDED_VCL_INC_UNX_SALGDI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
