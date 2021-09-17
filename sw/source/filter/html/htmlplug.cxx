@@ -1161,6 +1161,8 @@ void SwHTMLParser::InsertFloatingFrame()
     RegisterFlyFrame( pFlyFormat );
 
     m_bInFloatingFrame = true;
+
+    ++m_nFloatingFrames;
 }
 
 sal_uInt16 SwHTMLWriter::GuessOLENodeFrameType( const SwNode& rNode )
