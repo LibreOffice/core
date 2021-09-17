@@ -28,11 +28,11 @@ Be warned that it produces around 5G of log file.
 
 The process goes something like this:
   $ make check
-  $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='inlinefields' check
+  $ make FORCE_COMPILE=all COMPILER_PLUGIN_TOOL='inlinefields' check
   $ ./compilerplugins/clang/inlinefields.py
 
 and then
-  $ for dir in *; do make FORCE_COMPILE_ALL=1 UPDATE_FILES=$dir COMPILER_PLUGIN_TOOL='inlinefieldsremove' $dir; done
+  $ for dir in *; do make FORCE_COMPILE=all UPDATE_FILES=$dir COMPILER_PLUGIN_TOOL='inlinefieldsremove' $dir; done
 to auto-remove the method declarations
 
 Note that the actual process may involve a fair amount of undoing, hand editing, and general messing around

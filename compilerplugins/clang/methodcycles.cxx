@@ -35,7 +35,7 @@ Then we will post-process the log file with a python script, which takes about
 
 The process goes something like this:
   $ make check
-  $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='methodcycles' check
+  $ make FORCE_COMPILE=all COMPILER_PLUGIN_TOOL='methodcycles' check
   $ ./compilerplugins/clang/methodcycles.py
 
 Note that the actual process may involve a fair amount of undoing, hand editing, and general messing around

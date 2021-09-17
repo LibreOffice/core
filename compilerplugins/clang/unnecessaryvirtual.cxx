@@ -24,9 +24,9 @@ that no longer has a purpose.
 
 The process goes something like this:
   $ make check
-  $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='unnecessaryvirtual' check
+  $ make FORCE_COMPILE=all COMPILER_PLUGIN_TOOL='unnecessaryvirtual' check
   $ ./compilerplugins/clang/unnecessaryvirtual.py
-  $ for dir in *; do make FORCE_COMPILE_ALL=1 UPDATE_FILES=$dir COMPILER_PLUGIN_TOOL='removevirtuals' $dir; done
+  $ for dir in *; do make FORCE_COMPILE=all UPDATE_FILES=$dir COMPILER_PLUGIN_TOOL='removevirtuals' $dir; done
 
 Note that the actual process may involve a fair amount of undoing, hand editing, and general messing around
 to get it to work :-)

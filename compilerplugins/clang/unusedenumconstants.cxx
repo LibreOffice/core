@@ -29,7 +29,7 @@ Be warned that it produces around 5G of log file.
 
 The process goes something like this:
   $ make check
-  $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='unusedenumconstants' check
+  $ make FORCE_COMPILE=all COMPILER_PLUGIN_TOOL='unusedenumconstants' check
   $ ./compilerplugins/clang/unusedenumconstants.py
 
 Note that the actual process may involve a fair amount of undoing, hand editing, and general messing around

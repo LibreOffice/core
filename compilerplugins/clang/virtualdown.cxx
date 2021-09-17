@@ -20,7 +20,7 @@ methods, which indicates a places where the virtual-ness is unwarranted, normall
 
 The process goes something like this:
   $ make check
-  $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='VirtualDown' check
+  $ make FORCE_COMPILE=all COMPILER_PLUGIN_TOOL='VirtualDown' check
   $ ./compilerplugins/clang/VirtualDown.py
 
 @TODO for some reason, we get false+ for operator== methods
