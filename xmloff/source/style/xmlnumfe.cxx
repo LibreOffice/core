@@ -221,8 +221,6 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
 
     if ( pFormatter )
     {
-        pCharClass.reset( new CharClass( pFormatter->GetComponentContext(),
-            pFormatter->GetLanguageTag() ) );
         pLocaleData.reset( new LocaleDataWrapper( pFormatter->GetComponentContext(),
             pFormatter->GetLanguageTag() ) );
     }
@@ -230,7 +228,6 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     {
         LanguageTag aLanguageTag( MsLangId::getSystemLanguage() );
 
-        pCharClass.reset( new CharClass( rExport.getComponentContext(), aLanguageTag ) );
         pLocaleData.reset( new LocaleDataWrapper( rExport.getComponentContext(), aLanguageTag ) );
     }
 
@@ -254,8 +251,6 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
 
     if ( pFormatter )
     {
-        pCharClass.reset( new CharClass( pFormatter->GetComponentContext(),
-            pFormatter->GetLanguageTag() ) );
         pLocaleData.reset( new LocaleDataWrapper( pFormatter->GetComponentContext(),
             pFormatter->GetLanguageTag() ) );
     }
@@ -263,7 +258,6 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     {
         LanguageTag aLanguageTag( MsLangId::getSystemLanguage() );
 
-        pCharClass.reset( new CharClass( rExport.getComponentContext(), aLanguageTag ) );
         pLocaleData.reset( new LocaleDataWrapper( rExport.getComponentContext(), aLanguageTag ) );
     }
 
@@ -895,8 +889,7 @@ bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
     OUString sCurString, sDummy;
     pFormatter->GetCompatibilityCurrency( sCurString, sDummy );
 
-    pCharClass.reset( new CharClass( pFormatter->GetComponentContext(), aLanguageTag ) );
-    OUString sUpperStr = pCharClass->uppercase(rString);
+    OUString sUpperStr = pFormatter->GetCharClass()->uppercase(rString);
     sal_Int32 nPos = lcl_FindSymbol( sUpperStr, sCurString );
     if ( nPos >= 0 )
     {
