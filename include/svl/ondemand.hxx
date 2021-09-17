@@ -51,79 +51,81 @@
 
 class OnDemandLocaleDataWrapper
 {
-            css::uno::Reference< css::uno::XComponentContext > m_xContext;
-            SvtSysLocale        aSysLocale;
-            LanguageType        eCurrentLanguage;
-            LanguageType        eLastAnyLanguage;
-    std::unique_ptr<const LocaleDataWrapper>  pEnglish;
-    std::unique_ptr<      LocaleDataWrapper>  pAny;
-            int                 nCurrent; // 0 == system, 1 == english, 2 == any
-            bool                bInitialized;
+    css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    SvtSysLocale aSysLocale;
+    LanguageType eCurrentLanguage;
+    LanguageType eLastAnyLanguage;
+    std::unique_ptr<const LocaleDataWrapper> pEnglish;
+    std::unique_ptr<LocaleDataWrapper> pAny;
+    int nCurrent; // 0 == system, 1 == english, 2 == any
+    bool bInitialized;
 
 public:
-                                OnDemandLocaleDataWrapper()
-                                    : eLastAnyLanguage( LANGUAGE_DONTKNOW )
-                                    , nCurrent(0)
-                                    , bInitialized(false)
-                                    {
-                                        eCurrentLanguage = LANGUAGE_SYSTEM;
-                                    }
+    OnDemandLocaleDataWrapper()
+        : eLastAnyLanguage(LANGUAGE_DONTKNOW)
+        , nCurrent(0)
+        , bInitialized(false)
+    {
+        eCurrentLanguage = LANGUAGE_SYSTEM;
+    }
 
-            bool                isInitialized() const   { return bInitialized; }
+    bool isInitialized() const { return bInitialized; }
 
-            void                init(
-                                    const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                    const LanguageTag& rLanguageTag
-                                    )
-                                    {
-                                        m_xContext = rxContext;
-                                        changeLocale( rLanguageTag );
-                                        bInitialized = true;
-                                    }
+    void init(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+              const LanguageTag& rLanguageTag)
+    {
+        m_xContext = rxContext;
+        changeLocale(rLanguageTag);
+        bInitialized = true;
+    }
 
-            void                changeLocale( const LanguageTag& rLanguageTag )
-                                    {
-                                        LanguageType eLang = rLanguageTag.getLanguageType( false);
-                                        if ( eLang == LANGUAGE_SYSTEM )
-                                            nCurrent = 0;
-                                        else if ( eLang == LANGUAGE_ENGLISH_US )
-                                        {
-                                            if ( !pEnglish )
-                                                pEnglish.reset( new LocaleDataWrapper( m_xContext, rLanguageTag ) );
-                                            nCurrent = 1;
-                                        }
-                                        else
-                                        {
-                                            if ( !pAny )
-                                            {
-                                                pAny.reset( new LocaleDataWrapper( m_xContext, rLanguageTag ) );
-                                                eLastAnyLanguage = eLang;
-                                            }
-                                            else if ( eLastAnyLanguage != eLang )
-                                            {
-                                                pAny.reset( new LocaleDataWrapper( m_xContext, rLanguageTag ) );
-                                                eLastAnyLanguage = eLang;
-                                            }
-                                            nCurrent = 2;
-                                        }
-                                        eCurrentLanguage = eLang;
-                                    }
+    void changeLocale(const LanguageTag& rLanguageTag)
+    {
+        LanguageType eLang = rLanguageTag.getLanguageType(false);
+        if (eLang == LANGUAGE_SYSTEM)
+            nCurrent = 0;
+        else if (eLang == LANGUAGE_ENGLISH_US)
+        {
+            if (!pEnglish)
+                pEnglish.reset(new LocaleDataWrapper(m_xContext, rLanguageTag));
+            nCurrent = 1;
+        }
+        else
+        {
+            if (!pAny)
+            {
+                pAny.reset(new LocaleDataWrapper(m_xContext, rLanguageTag));
+                eLastAnyLanguage = eLang;
+            }
+            else if (eLastAnyLanguage != eLang)
+            {
+                pAny.reset(new LocaleDataWrapper(m_xContext, rLanguageTag));
+                eLastAnyLanguage = eLang;
+            }
+            nCurrent = 2;
+        }
+        eCurrentLanguage = eLang;
+    }
 
-            LanguageType        getCurrentLanguage() const
-                                    { return eCurrentLanguage; }
+    LanguageType getCurrentLanguage() const { return eCurrentLanguage; }
 
-    const   LocaleDataWrapper*  get() const
+    const LocaleDataWrapper* get() const
     {
         switch (nCurrent)
         {
-            case 0: return &aSysLocale.GetLocaleData();
-            case 1: return pEnglish.get();
-            case 2: return pAny.get();
-            default: assert(false); return nullptr;
+            case 0:
+                return &aSysLocale.GetLocaleData();
+            case 1:
+                return pEnglish.get();
+            case 2:
+                return pAny.get();
+            default:
+                assert(false);
+                return nullptr;
         }
     }
-    const   LocaleDataWrapper*  operator->() const  { return get(); }
-    const   LocaleDataWrapper&  operator*() const   { return *get(); }
+    const LocaleDataWrapper* operator->() const { return get(); }
+    const LocaleDataWrapper& operator*() const { return *get(); }
 };
 
 /** Load a calendar only if it's needed. Keep calendar for "en-US" locale
@@ -136,67 +138,61 @@ public:
  */
 class OnDemandCalendarWrapper
 {
-            css::uno::Reference< css::uno::XComponentContext > m_xContext;
-            css::lang::Locale  aEnglishLocale;
-            css::lang::Locale  aLocale;
-    mutable css::lang::Locale  aLastAnyLocale;
+    css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    css::lang::Locale aEnglishLocale;
+    css::lang::Locale aLocale;
+    mutable css::lang::Locale aLastAnyLocale;
     mutable std::unique_ptr<CalendarWrapper> pEnglishPtr;
     mutable std::unique_ptr<CalendarWrapper> pAnyPtr;
 
 public:
-                                OnDemandCalendarWrapper()
-                                    {
-                                        LanguageTag aEnglishLanguageTag(LANGUAGE_ENGLISH_US);
-                                        aEnglishLocale = aEnglishLanguageTag.getLocale();
-                                        aLastAnyLocale = aEnglishLocale;
-                                    }
+    OnDemandCalendarWrapper()
+    {
+        LanguageTag aEnglishLanguageTag(LANGUAGE_ENGLISH_US);
+        aEnglishLocale = aEnglishLanguageTag.getLocale();
+        aLastAnyLocale = aEnglishLocale;
+    }
 
-            void                init(
-                                    const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                    const css::lang::Locale& rLocale
-                                    )
-                                    {
-                                        m_xContext = rxContext;
-                                        changeLocale( rLocale );
-                                        pEnglishPtr.reset();
-                                        pAnyPtr.reset();
-                                    }
+    void init(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+              const css::lang::Locale& rLocale)
+    {
+        m_xContext = rxContext;
+        changeLocale(rLocale);
+        pEnglishPtr.reset();
+        pAnyPtr.reset();
+    }
 
-            void                changeLocale( const css::lang::Locale& rLocale )
-                                    {
-                                        aLocale = rLocale;
-                                    }
+    void changeLocale(const css::lang::Locale& rLocale) { aLocale = rLocale; }
 
-            CalendarWrapper*    get() const
-                                    {
-                                        CalendarWrapper* pPtr;
-                                        if ( aLocale == aEnglishLocale )
-                                        {
-                                            if (!pEnglishPtr)
-                                            {
-                                                pEnglishPtr.reset( new CalendarWrapper( m_xContext ));
-                                                pEnglishPtr->loadDefaultCalendar( aEnglishLocale );
-                                            }
-                                            pPtr = pEnglishPtr.get();
-                                        }
-                                        else
-                                        {
-                                            if ( !pAnyPtr )
-                                            {
-                                                pAnyPtr.reset(new CalendarWrapper( m_xContext ));
-                                                pAnyPtr->loadDefaultCalendar(aLocale);
-                                                aLastAnyLocale = aLocale;
-                                            }
-                                            else if ( aLocale != aLastAnyLocale )
-                                            {
-                                                pAnyPtr->loadDefaultCalendar( aLocale );
-                                                aLastAnyLocale = aLocale;
-                                            }
-                                            pPtr = pAnyPtr.get();
-                                        }
-                                        return pPtr;
-                                    }
-
+    CalendarWrapper* get() const
+    {
+        CalendarWrapper* pPtr;
+        if (aLocale == aEnglishLocale)
+        {
+            if (!pEnglishPtr)
+            {
+                pEnglishPtr.reset(new CalendarWrapper(m_xContext));
+                pEnglishPtr->loadDefaultCalendar(aEnglishLocale);
+            }
+            pPtr = pEnglishPtr.get();
+        }
+        else
+        {
+            if (!pAnyPtr)
+            {
+                pAnyPtr.reset(new CalendarWrapper(m_xContext));
+                pAnyPtr->loadDefaultCalendar(aLocale);
+                aLastAnyLocale = aLocale;
+            }
+            else if (aLocale != aLastAnyLocale)
+            {
+                pAnyPtr->loadDefaultCalendar(aLocale);
+                aLastAnyLocale = aLocale;
+            }
+            pPtr = pAnyPtr.get();
+        }
+        return pPtr;
+    }
 };
 
 /** Load a transliteration only if it's needed.
@@ -206,55 +202,52 @@ public:
  */
 class OnDemandTransliterationWrapper
 {
-            css::uno::Reference< css::uno::XComponentContext > m_xContext;
-            LanguageType        eLanguage;
-            TransliterationFlags  nType;
-    mutable std::unique_ptr<::utl::TransliterationWrapper>
-                                pPtr;
-    mutable bool                bValid;
-            bool                bInitialized;
+    css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    LanguageType eLanguage;
+    TransliterationFlags nType;
+    mutable std::unique_ptr<::utl::TransliterationWrapper> pPtr;
+    mutable bool bValid;
+    bool bInitialized;
 
 public:
-                                OnDemandTransliterationWrapper()
-                                    : eLanguage( LANGUAGE_SYSTEM )
-                                    , nType(TransliterationFlags::NONE)
-                                    , bValid(false)
-                                    , bInitialized(false)
-                                    {}
+    OnDemandTransliterationWrapper()
+        : eLanguage(LANGUAGE_SYSTEM)
+        , nType(TransliterationFlags::NONE)
+        , bValid(false)
+        , bInitialized(false)
+    {
+    }
 
-            bool                isInitialized() const   { return bInitialized; }
+    bool isInitialized() const { return bInitialized; }
 
-            void                init(
-                                    const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                    LanguageType eLang
-                                    )
-                                    {
-                                        m_xContext = rxContext;
-                                        nType = TransliterationFlags::IGNORE_CASE;
-                                        changeLocale( eLang );
-                                        pPtr.reset();
-                                        bInitialized = true;
-                                    }
+    void init(const css::uno::Reference<css::uno::XComponentContext>& rxContext, LanguageType eLang)
+    {
+        m_xContext = rxContext;
+        nType = TransliterationFlags::IGNORE_CASE;
+        changeLocale(eLang);
+        pPtr.reset();
+        bInitialized = true;
+    }
 
-            void                changeLocale( LanguageType eLang )
-                                    {
-                                        bValid = false;
-                                        eLanguage = eLang;
-                                    }
+    void changeLocale(LanguageType eLang)
+    {
+        bValid = false;
+        eLanguage = eLang;
+    }
 
-    const   ::utl::TransliterationWrapper*  get() const
-                                    {
-                                        if ( !bValid )
-                                        {
-                                            if ( !pPtr )
-                                                pPtr.reset( new ::utl::TransliterationWrapper( m_xContext, nType ) );
-                                            pPtr->loadModuleIfNeeded( eLanguage );
-                                            bValid = true;
-                                        }
-                                        return pPtr.get();
-                                    }
+    const ::utl::TransliterationWrapper* get() const
+    {
+        if (!bValid)
+        {
+            if (!pPtr)
+                pPtr.reset(new ::utl::TransliterationWrapper(m_xContext, nType));
+            pPtr->loadModuleIfNeeded(eLanguage);
+            bValid = true;
+        }
+        return pPtr.get();
+    }
 
-    const   ::utl::TransliterationWrapper*  operator->() const  { return get(); }
+    const ::utl::TransliterationWrapper* operator->() const { return get(); }
 };
 
 /** Load a native number service wrapper only if it's needed.
@@ -266,29 +259,24 @@ public:
  */
 class OnDemandNativeNumberWrapper
 {
-            css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    mutable std::unique_ptr<NativeNumberWrapper>
-                                    pPtr;
+    css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    mutable std::unique_ptr<NativeNumberWrapper> pPtr;
 
 public:
-                                OnDemandNativeNumberWrapper()
-                                    {}
+    OnDemandNativeNumberWrapper() {}
 
-            void                init(
-                                    const css::uno::Reference< css::uno::XComponentContext >& rxContext
-                                    )
-                                    {
-                                        m_xContext = rxContext;
-                                        pPtr.reset();
-                                    }
+    void init(const css::uno::Reference<css::uno::XComponentContext>& rxContext)
+    {
+        m_xContext = rxContext;
+        pPtr.reset();
+    }
 
-            NativeNumberWrapper*    get() const
-                                    {
-                                        if ( !pPtr )
-                                            pPtr.reset(new NativeNumberWrapper( m_xContext ));
-                                        return pPtr.get();
-                                    }
-
+    NativeNumberWrapper* get() const
+    {
+        if (!pPtr)
+            pPtr.reset(new NativeNumberWrapper(m_xContext));
+        return pPtr.get();
+    }
 };
 
 #endif // INCLUDED_SVL_ONDEMAND_HXX
