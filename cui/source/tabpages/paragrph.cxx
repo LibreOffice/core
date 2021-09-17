@@ -1940,6 +1940,8 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage(weld::Container* pPage, weld::Dia
         SfxStyleSheetBase* pStyle = pPool->First(SfxStyleFamily::Page);
         OUString aStdName;
 
+        // tdf139131 - sort page styles
+        m_xApplyCollBox->make_sorted();
         while( pStyle )
         {
             if ( aStdName.isEmpty() )
