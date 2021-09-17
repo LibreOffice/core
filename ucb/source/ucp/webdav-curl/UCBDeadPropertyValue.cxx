@@ -154,6 +154,7 @@ static OUString encodeValue( const OUString & rValue )
     //       PROPFIND:
     //       - parser replaces &lt; by > ==> error (not well formed)
 
+    //FIXME this violates https://www.w3.org/TR/REC-xml/#indtd
     OUStringBuffer aResult;
     const sal_Unicode * pValue = rValue.getStr();
 
