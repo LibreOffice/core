@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_GENERIC_GENINST_H
 #define INCLUDED_VCL_INC_GENERIC_GENINST_H
 
+#include <sal/config.h>
+
 #include <memory>
 #include <comphelper/solarmutex.hxx>
 #include <salinst.hxx>
