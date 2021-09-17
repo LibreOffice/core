@@ -24,6 +24,8 @@
 #include <i18nlangtag/lang.h>
 #include <tools/link.hxx>
 #include <svl/zforlist.hxx>
+#include <unotools/charclass.hxx>
+#include <optional>
 
 class SvNumberFormatterRegistry_Impl;
 class NfCurrencyTable;
@@ -561,7 +563,7 @@ private:
     std::unique_ptr<SvNumberFormatTable> pFormatTable; // For the UI dialog
     std::unique_ptr<SvNumberFormatterIndexTable>
         pMergeTable; // List of indices for merging two formatters
-    std::unique_ptr<CharClass> pCharClass; // CharacterClassification
+    std::optional<CharClass> oCharClass; // CharacterClassification
     OnDemandLocaleDataWrapper xLocaleData; // LocaleData switched between SYSTEM, ENGLISH and other
     OnDemandTransliterationWrapper xTransliteration; // Transliteration loaded on demand
     OnDemandCalendarWrapper xCalendar; // Calendar loaded on demand
