@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_UNX_CAIROFONTIMPL_HXX
 #define INCLUDED_VCL_INC_UNX_CAIROFONTIMPL_HXX
 
+#include <sal/config.h>
+
 #include "salgdi.hxx"
 
 class ImplFontMetricData;
