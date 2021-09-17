@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <unx/cairotextrender.hxx>
 
 #include <unx/fc_fontoptions.hxx>
