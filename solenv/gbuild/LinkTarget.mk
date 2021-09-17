@@ -85,7 +85,7 @@ gb_LinkTarget_LAYER_LINKPATHS := \
 # it ever becomes necessary, they can be moved to e.g.
 # platform/com_{GCC,MSC}_class.mk and made different there.
 #
-# $(call gb_CObject__tool_command,relative-source,source)
+# $(call gb_CObject__tool_command,relative-source,source,compiler-plugins)
 define gb_CObject__tool_command
 $(call gb_Helper_abbreviate_dirs,\
         ICECC=no CCACHE_DISABLE=1 \
@@ -94,7 +94,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(gb_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
-		$(gb_COMPILER_PLUGINS) \
+		$(if $(3),$(gb_COMPILER_PLUGINS)) \
 		$(T_CFLAGS) $(T_CFLAGS_APPEND) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
 		-c $(2) \
@@ -109,7 +109,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(gb_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
-		$(gb_COMPILER_PLUGINS) \
+		$(if $(3),$(gb_COMPILER_PLUGINS)) \
 		$(T_OBJCFLAGS) $(T_OBJCFLAGS_APPEND) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
 		-c $(2) \
@@ -124,7 +124,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(gb_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
-		$(gb_COMPILER_PLUGINS) \
+		$(if $(3),$(gb_COMPILER_PLUGINS)) \
 		$(T_CXXFLAGS) $(T_CXXFLAGS_APPEND) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
 		-c $(2) \
@@ -139,7 +139,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(gb_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
-		$(gb_COMPILER_PLUGINS) \
+		$(if $(3),$(gb_COMPILER_PLUGINS)) \
 		$(T_OBJCXXFLAGS) $(T_OBJCXXFLAGS_APPEND) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
 		-c $(2) \
@@ -154,7 +154,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(gb_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
-		$(gb_COMPILER_PLUGINS) \
+		$(if $(3),$(gb_COMPILER_PLUGINS)) \
 		$(T_CXXCLRFLAGS) $(T_CXXCLRFLAGS_APPEND) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
 		-c $(2) \
@@ -235,7 +235,7 @@ ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
 $(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_ALL_TARGET)
 	$(call gb_Output_announce,$*.c,$(true),C  ,3)
 	$(call gb_Trace_StartRange,$*.c,C  )
-	$(call gb_CObject__tool_command,$*,$<)
+	$(call gb_CObject__tool_command,$*,$<,$(COMPILER_PLUGINS))
 	$(call gb_Trace_EndRange,$*.c,C  )
 else
 $(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,$(SRCDIR),%)
@@ -297,7 +297,7 @@ ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
 $(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_ALL_TARGET)
 	$(call gb_Output_announce,$*.cxx,$(true),CXX,3)
 	$(call gb_Trace_StartRange,$*.cxx,CXX)
-	$(call gb_CxxObject__tool_command,$*,$<)
+	$(call gb_CxxObject__tool_command,$*,$<,$(COMPILER_PLUGINS))
 	$(call gb_Trace_EndRange,$*.cxx,CXX)
 else
 $(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SRCDIR),%)
@@ -461,7 +461,7 @@ ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
 $(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_ALL_TARGET)
 	$(call gb_Output_announce,$*.mm,$(true),OCX,3)
 	$(call gb_Trace_StartRange,$*.mm,OCX)
-	$(call gb_ObjCxxObject__tool_command,$*,$<)
+	$(call gb_ObjCxxObject__tool_command,$*,$<,$(COMPILER_PLUGINS))
 	$(call gb_Trace_EndRange,$*.mm,OCX)
 else
 $(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDIR),%)
@@ -493,7 +493,7 @@ ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
 $(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_ALL_TARGET)
 	$(call gb_Output_announce,$*.m,$(true),OCC,3)
 	$(call gb_Trace_StartRange,$*.m,OCC)
-	$(call gb_ObjCObject__tool_command,$*,$<)
+	$(call gb_ObjCObject__tool_command,$*,$<,$(COMPILER_PLUGINS))
 	$(call gb_Trace_EndRange,$*.m,OCC)
 else
 $(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%)
@@ -573,7 +573,7 @@ ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
 $(call gb_CxxClrObject_get_target,%) : $(call gb_CxxClrObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_ALL_TARGET)
 	$(call gb_Output_announce,$*.cxx,$(true),CLR,3)
 	$(call gb_Trace_StartRange,$*.cxx,CLR)
-	$(call gb_CxxClrObject__tool_command,$*,$<)
+	$(call gb_CxxClrObject__tool_command,$*,$<,$(COMPILER_PLUGINS))
 	$(call gb_Trace_EndRange,$*.cxx,CLR)
 else
 $(call gb_CxxClrObject_get_target,%) : $(call gb_CxxClrObject_get_source,$(SRCDIR),%)
