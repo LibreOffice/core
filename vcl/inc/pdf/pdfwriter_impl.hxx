@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <sal/config.h>
+
 #include <map>
 #include <list>
 #include <unordered_map>

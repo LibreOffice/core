@@ -24,6 +24,8 @@
 #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #endif
 
+#include <sal/config.h>
+
 #include <memory>
 #include <string_view>
 
