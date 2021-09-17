@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_FONTSELECT_HXX
-#define INCLUDED_VCL_INC_FONTSELECT_HXX
+#pragma once
 
 #include <i18nlangtag/lang.h>
 #include <tools/degree.hxx>
@@ -78,7 +77,5 @@ inline std::basic_ostream<charT, traits> & operator <<(
            << rFSP.mnHeight << " alias: " << rFSP.mbNonAntialiased;
     return stream;
 }
-
-#endif // INCLUDED_VCL_INC_FONTSELECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
