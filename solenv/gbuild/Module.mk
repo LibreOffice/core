@@ -249,12 +249,16 @@ $(WORKDIR)/pot.done : $(foreach exec,cfgex helpex localize propex ulfex xrmex tr
 		&& touch $@)
 
 # enable if: no "-MODULE/" defined AND ["all" defined OR "MODULE/" defined]
+# $(1) is module name, $(2) is directory name two levels up (for externals it's 'external')
 gb_Module__symbols_enabled = \
  $(and $(if $(filter -$(1)/,$(gb_ENABLE_SYMBOLS_FOR)),,$(true)),\
+       $(if $(filter -$(2)/,$(gb_ENABLE_SYMBOLS_FOR)),,$(true)),\
        $(filter all $(1)/,$(gb_ENABLE_SYMBOLS_FOR)))
 # enable if: no "-MODULE/" defined AND ["all" defined OR "MODULE/" defined]
+# $(1) is module name, $(2) is directory name two levels up (for externals it's 'external')
 gb_Module__force_compile = \
  $(and $(if $(filter -$(1)/,$(FORCE_COMPILE)),,$(true)),\
+       $(if $(filter -$(2)/,$(FORCE_COMPILE)),,$(true)),\
        $(filter all $(1)/,$(FORCE_COMPILE)))
 
 define gb_Module_Module
@@ -270,8 +274,8 @@ gb_Module_SUBSEQUENTCHECKTARGETSTACK := $(call gb_Module_get_subsequentcheck_tar
 gb_Module_STAGINGCHECKTARGETSTACK := $(call gb_Module_get_stagingcheck_target,$(1)) $(gb_Module_STAGINGCHECKTARGETSTACK)
 gb_Module_PERFCHECKTARGETSTACK := $(call gb_Module_get_perfcheck_target,$(1)) $(gb_Module_PERFCHECKTARGETSTACK)
 gb_Module_CLEANTARGETSTACK := $(call gb_Module_get_clean_target,$(1)) $(gb_Module_CLEANTARGETSTACK)
-gb_Module_CURRENTMODULE_SYMBOLS_ENABLED := $(call gb_Module__symbols_enabled,$(1))
-gb_Module_CURRENTMODULE_FORCE_COMPILE := $(call gb_Module__force_compile,$(1))
+gb_Module_CURRENTMODULE_SYMBOLS_ENABLED := $(call gb_Module__symbols_enabled,$(1),$(notdir $(realpath $(dir $(realpath $(lastword $(MAKEFILE_LIST))))../)))
+gb_Module_CURRENTMODULE_FORCE_COMPILE := $(call gb_Module__force_compile,$(1),$(notdir $(realpath $(dir $(realpath $(lastword $(MAKEFILE_LIST))))../)))
 gb_Module_CURRENTMODULE_NAME := $(1)
 $(call gb_Helper_make_userfriendly_targets,$(1),Module)
 $(if $(filter-out libreoffice instsetoo_native android ios,$(1)),\
