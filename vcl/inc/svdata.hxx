@@ -22,31 +22,32 @@
 #include <sal/config.h>
 #include <config_version.h>
 
-#include <o3tl/lru_map.hxx>
-#include <o3tl/hash_combine.hxx>
+#include <basegfx/DrawCommands.hxx>
 #include <tools/fldunit.hxx>
 #include <unotools/options.hxx>
+#include <unotools/resmgr.hxx>
+#include <o3tl/hash_combine.hxx>
+#include <o3tl/lru_map.hxx>
+#include <LibreOfficeKit/LibreOfficeKitTypes.h>
+
 #include <vcl/bitmapex.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/window.hxx>
 #include <vcl/task.hxx>
-#include <LibreOfficeKit/LibreOfficeKitTypes.h>
-#include <unotools/resmgr.hxx>
+#include <vcl/window.hxx>
+
+#include "ControlCacheKey.hxx"
+#include "displayconnectiondispatch.hxx"
+#include "salwtype.hxx"
+#include "schedulerimpl.hxx"
+#include "vcleventlisteners.hxx"
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 
-#include "vcleventlisteners.hxx"
-#include "salwtype.hxx"
-#include "displayconnectiondispatch.hxx"
-
 #include <mutex>
-#include <vector>
 #include <unordered_map>
-#include "ControlCacheKey.hxx"
-#include "schedulerimpl.hxx"
-#include <basegfx/DrawCommands.hxx>
+#include <vector>
 
 struct ImplPostEventData;
 struct ImplTimerData;
