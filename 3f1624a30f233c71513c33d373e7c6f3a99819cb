@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d872a7c0_f5f8c2ed",
+        "filename": "basic/inc/strings.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-09-17T00:07:21Z",
+      "side": 1,
+      "message": "I’d spell out the word “information”, space isn’t an issue.",
+      "revId": "3f1624a30f233c71513c33d373e7c6f3a99819cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
