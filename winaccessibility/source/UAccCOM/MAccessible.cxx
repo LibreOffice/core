@@ -864,8 +864,10 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accSelection(VARIANT *pvarCh
             break;
         default:
             pvarChildren->vt = VT_UNKNOWN;
-            m_pEnumVar->AddRef();
-            pvarChildren->punkVal = m_pEnumVar;
+            IEnumVARIANT* pClone;
+            m_pEnumVar->Clone(&pClone);
+            pClone->Reset();
+            pvarChildren->punkVal = pClone;
             break;
         }
         return S_OK;
