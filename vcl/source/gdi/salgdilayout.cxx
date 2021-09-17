@@ -1037,4 +1037,4 @@ void SalGraphics::FillFontSubsetInfo(const vcl::TTGlobalFontInfo& rTTInfo, const
         rInfo.m_nDescent = -rTTInfo.descender;
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
