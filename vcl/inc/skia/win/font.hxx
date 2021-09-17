@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_SKIA_WIN_FONT_HXX
-#define INCLUDED_VCL_INC_SKIA_WIN_FONT_HXX
+#pragma once
 
 #include <win/winlayout.hxx>
 
@@ -35,7 +34,5 @@ private:
     sk_sp<SkTypeface> m_skiaTypeface;
     bool m_skiaDWrite;
 };
-
-#endif // INCLUDED_VCL_INC_SKIA_WIN_FONT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
