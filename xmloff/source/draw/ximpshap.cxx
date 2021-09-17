@@ -311,7 +311,7 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XFastAttri
         }
         catch(const uno::Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION( "xmloff", "during setting of glue points");
+            DBG_UNHANDLED_EXCEPTION( "xmloff", "during setting of gluepoints");
         }
     }
 }

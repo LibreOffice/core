@@ -214,10 +214,10 @@
       </node>
       <node oor:name=".uno:GlueEditMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Glue Points</value>
+          <value xml:lang="en-US">~Gluepoints</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Show Glue Points Functions</value>
+          <value xml:lang="en-US">Show Gluepoint Functions</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -225,7 +225,7 @@
       </node>
       <node oor:name=".uno:GlueInsertPoint" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Insert Glue Point</value>
+          <value xml:lang="en-US">Insert Gluepoint</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -233,7 +233,7 @@
       </node>
       <node oor:name=".uno:GluePercent" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Glue Point Relative</value>
+          <value xml:lang="en-US">Gluepoint Relative</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -246,7 +246,7 @@
       </node>
       <node oor:name=".uno:GlueHorzAlignCenter" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Glue Point Horizontal Center</value>
+          <value xml:lang="en-US">Gluepoint Horizontal Center</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -254,7 +254,7 @@
       </node>
       <node oor:name=".uno:GlueHorzAlignLeft" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Glue Point Horizontal Left</value>
+          <value xml:lang="en-US">Gluepoint Horizontal Left</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -262,7 +262,7 @@
       </node>
       <node oor:name=".uno:GlueHorzAlignRight" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Glue Point Horizontal Right</value>
+          <value xml:lang="en-US">Gluepoint Horizontal Right</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -270,7 +270,7 @@
       </node>
       <node oor:name=".uno:GlueVertAlignCenter" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Glue Point Vertical Center</value>
+          <value xml:lang="en-US">Gluepoint Vertical Center</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -278,7 +278,7 @@
       </node>
       <node oor:name=".uno:GlueVertAlignTop" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Glue Point Vertical Top</value>
+          <value xml:lang="en-US">Gluepoint Vertical Top</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -286,7 +286,7 @@
       </node>
       <node oor:name=".uno:GlueVertAlignBottom" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Glue Point Vertical Bottom</value>
+          <value xml:lang="en-US">Gluepoint Vertical Bottom</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

@@ -67,7 +67,7 @@
       </node>
       <node oor:name="private:resource/popupmenu/gluepoint" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Glue Point</value>
+          <value xml:lang="en-US">Gluepoint</value>
         </prop>
       </node>
       <node oor:name="private:resource/popupmenu/graphic" oor:op="replace">
@@ -530,7 +530,7 @@
       </node>
       <node oor:name="private:resource/toolbar/gluepointsobjectbar" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Glue Points</value>
+          <value xml:lang="en-US">Gluepoints</value>
         </prop>
         <prop oor:name="DockPos" oor:type="xs:string">
           <value>1,0</value>
