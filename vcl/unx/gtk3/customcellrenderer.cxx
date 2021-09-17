@@ -30,7 +30,11 @@ G_DEFINE_TYPE(CustomCellRenderer, custom_cell_renderer, GTK_TYPE_CELL_RENDERER_T
 
 static void custom_cell_renderer_init(CustomCellRenderer* self)
 {
-    new (&self->device) VclPtr<VirtualDevice>;
+    {
+        SolarMutexGuard aGuard;
+        new (&self->device) VclPtr<VirtualDevice>;
+    }
+
     // prevent loplugin:unreffun firing on macro generated function
     (void)custom_cell_renderer_get_instance_private(self);
 }
@@ -96,8 +100,12 @@ static void custom_cell_renderer_finalize(GObject* object)
     CustomCellRenderer* cellsurface = CUSTOM_CELL_RENDERER(object);
 
     g_free(cellsurface->id);
-    cellsurface->device.disposeAndClear();
-    cellsurface->device.~VclPtr<VirtualDevice>();
+
+    {
+        SolarMutexGuard aGuard;
+        cellsurface->device.disposeAndClear();
+        cellsurface->device.~VclPtr<VirtualDevice>();
+    }
 
     G_OBJECT_CLASS(custom_cell_renderer_parent_class)->finalize(object);
 }
