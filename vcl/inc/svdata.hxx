@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <sal/config.h>
 #include <config_version.h>
 
 #include <o3tl/lru_map.hxx>
