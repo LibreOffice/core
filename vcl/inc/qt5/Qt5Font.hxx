@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <sal/config.h>
+
 #include <fontinstance.hxx>
 
 #include <QtGui/QFont>
