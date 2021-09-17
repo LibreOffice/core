@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <sal/config.h>
+
 #include <vcl/vclenum.hxx>
 #include <config_cairo_canvas.h>
 

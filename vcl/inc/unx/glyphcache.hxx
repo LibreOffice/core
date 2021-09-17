@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <sal/config.h>
+
 #include <memory>
 #include <freetype/config/ftheader.h>
 #include FT_FREETYPE_H
