@@ -38,4 +38,4 @@ class Qt5Font final : public QFont, public LogicalFontInstance
     explicit Qt5Font(const PhysicalFontFace&, const FontSelectPattern&);
 };
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
