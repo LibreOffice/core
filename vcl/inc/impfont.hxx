@@ -26,6 +26,7 @@
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <i18nlangtag/languagetag.hxx>
+
 #include <vcl/fntstyle.hxx>
 
 #include "fontselect.hxx"

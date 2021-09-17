@@ -18,9 +18,43 @@
  */
 
 #include <sal/config.h>
+#include <config_folders.h>
 
 #include <sal/types.h>
-#include <config_folders.h>
+#include <sal/log.hxx>
+#include <osl/process.h>
+#include <rtl/tencinfo.h>
+#include <rtl/bootstrap.hxx>
+#include <osl/file.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <tools/helpers.hxx>
+#include <tools/stream.hxx>
+#include <tools/urlobj.hxx>
+#include <unotools/fontcfg.hxx>
+#include <i18nlangtag/mslangid.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
+#include <o3tl/lru_map.hxx>
+
+#include <vcl/fontcharmap.hxx>
+#include <vcl/metric.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/sysdata.hxx>
+
+#include <outdev.h>
+#include <impfontcharmap.hxx>
+#include <impfontmetricdata.hxx>
+#include <impglyphitem.hxx>
+#include <fontsubset.hxx>
+#include <font/PhysicalFontFaceCollection.hxx>
+#include <PhysicalFontCollection.hxx>
+#include <font/PhysicalFontFace.hxx>
+#include <sft.hxx>
+#include <win/salgdi.h>
+#include <win/saldata.hxx>
+#include <win/wingdiimpl.hxx>
+#include <win/winlayout.hxx>
 
 #include <algorithm>
 #include <map>
@@ -30,40 +64,6 @@
 #include <string.h>
 #include <svsys.h>
 #include <vector>
-
-#include <o3tl/lru_map.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <i18nlangtag/mslangid.hxx>
-#include <osl/file.hxx>
-#include <osl/process.h>
-#include <rtl/bootstrap.hxx>
-#include <rtl/tencinfo.h>
-#include <sal/log.hxx>
-#include <o3tl/char16_t2wchar_t.hxx>
-#include <tools/helpers.hxx>
-#include <tools/stream.hxx>
-#include <tools/urlobj.hxx>
-#include <unotools/fontcfg.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/sysdata.hxx>
-#include <vcl/metric.hxx>
-#include <vcl/fontcharmap.hxx>
-#include <comphelper/scopeguard.hxx>
-
-#include <fontsubset.hxx>
-#include <outdev.h>
-#include <font/PhysicalFontFaceCollection.hxx>
-#include <PhysicalFontCollection.hxx>
-#include <PhysicalFontFace.hxx>
-#include <sft.hxx>
-#include <win/saldata.hxx>
-#include <win/salgdi.h>
-#include <win/winlayout.hxx>
-#include <win/wingdiimpl.hxx>
-#include <impfontcharmap.hxx>
-#include <impfontmetricdata.hxx>
-#include <impglyphitem.hxx>
 
 #if HAVE_FEATURE_SKIA
 #include <vcl/skia/SkiaHelper.hxx>
