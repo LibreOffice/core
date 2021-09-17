@@ -19,23 +19,23 @@
 
 #include <sal/config.h>
 
+#include <sal/log.hxx>
+#include <osl/diagnose.h>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <tools/UnitConversion.hxx>
 #include <tools/bigint.hxx>
 #include <tools/debug.hxx>
+
 #include <vcl/cursor.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/wrkwin.hxx>
-#include <sal/log.hxx>
-#include <osl/diagnose.h>
 
 #include <svdata.hxx>
-#include <window.h>
 #include <outdev.h>
-
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <tools/UnitConversion.hxx>
+#include <window.h>
 
 /*
 Reduces accuracy until it is a fraction (should become

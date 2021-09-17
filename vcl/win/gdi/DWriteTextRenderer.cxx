@@ -19,21 +19,19 @@
 
 #include <sal/config.h>
 
+#include <sal/log.hxx>
+#include <comphelper/windowserrorstring.hxx>
+#include <o3tl/safeint.hxx>
+
+#include <outdev.h>
+#include <sallayout.hxx>
+#include <sft.hxx>
+#include <win/DWriteTextRenderer.hxx>
 #include <win/salgdi.h>
 #include <win/saldata.hxx>
-#include <outdev.h>
-
-#include <win/DWriteTextRenderer.hxx>
-
-#include <sft.hxx>
-#include <sallayout.hxx>
 
 #include <shlwapi.h>
 #include <winver.h>
-
-#include <comphelper/windowserrorstring.hxx>
-#include <o3tl/safeint.hxx>
-#include <sal/log.hxx>
 
 namespace
 {
