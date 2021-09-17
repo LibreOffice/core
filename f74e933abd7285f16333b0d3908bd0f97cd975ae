@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "2830ac8a_c897d087",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-17T06:47:30Z",
+      "side": 1,
+      "message": "Care to describe not only \"what\" you do (which is what you do here) but also \"why\"?\n\nThat could be a paragraph in the commit message after the first line.",
+      "revId": "f74e933abd7285f16333b0d3908bd0f97cd975ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "5107b239_220643e9",
@@ -31,6 +48,40 @@
       "writtenOn": "2021-09-17T06:03:02Z",
       "side": 1,
       "message": "In search for the go-to functionality I realized that the Navigator in Content Navigation View does not highlight the current section. Different topic, the actual issue is perfectly solved.\n\nMiklos, could you please have a look at the code?",
+      "revId": "f74e933abd7285f16333b0d3908bd0f97cd975ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87ee0472_71a12ca7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-17T06:47:30Z",
+      "side": 1,
+      "message": "See inline comments for 2 nits, the rest looks reasonable to me.",
+      "revId": "f74e933abd7285f16333b0d3908bd0f97cd975ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08903f41_eece1755",
+        "filename": "sw/source/uibase/inc/conttree.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-17T06:47:30Z",
+      "side": 1,
+      "message": "Is there a reason you don\u0027t mark this member function as \"override\"?",
       "revId": "f74e933abd7285f16333b0d3908bd0f97cd975ae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
