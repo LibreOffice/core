@@ -12,8 +12,6 @@
 
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
-#include <vector>
-#include <unordered_set>
 
 class LanguageTag;
 
@@ -112,11 +110,6 @@ COMPHELPER_DLLPUBLIC void statusIndicatorSetValue(int percent);
 COMPHELPER_DLLPUBLIC void statusIndicatorFinish();
 
 COMPHELPER_DLLPUBLIC void setBlockedCommandList(const char* bolckedCommandList);
-COMPHELPER_DLLPUBLIC const std::unordered_set<OUString>& getFreemiumDenyList();
-COMPHELPER_DLLPUBLIC bool isCommandFreemiumDenied(const OUString& command);
-
-COMPHELPER_DLLPUBLIC const std::unordered_set<OUString>& getRestrictedCommandList();
-COMPHELPER_DLLPUBLIC bool isRestrictedCommand(const OUString& command);
 }
 
 #endif // INCLUDED_COMPHELPER_LOK_HXX

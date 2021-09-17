@@ -85,7 +85,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <openuriexternally.hxx>
 #include <shellimpl.hxx>
-
+#include <iostream>
 #include <vector>
 #include <libxml/xmlwriter.h>
 
@@ -1076,8 +1076,6 @@ SfxViewShell::SfxViewShell
 ,   maLOKLanguageTag(LANGUAGE_NONE)
 ,   maLOKLocale(LANGUAGE_NONE)
 ,   maLOKDeviceFormFactor(LOKDeviceFormFactor::UNKNOWN)
-,   mbLOKIsFreemiumView(false)
-,   mbLOKIsRestrictedView(false)
 {
     SetMargin( pViewFrame->GetMargin_Impl() );
 
@@ -2044,6 +2042,25 @@ void SfxViewShell::AddRemoveClipboardListener( const uno::Reference < datatransf
 weld::Window* SfxViewShell::GetFrameWeld() const
 {
     return pWindow ? pWindow->GetFrameWeld() : nullptr;
+}
+
+void SfxViewShell::setBlockedCommandList(const char* bolckedCommandList)
+{
+    if(!mvLOKBlockedCommandList.empty())
+        return;
+
+    OUString BolckedListString(bolckedCommandList, strlen(bolckedCommandList), RTL_TEXTENCODING_UTF8);
+    OUString command = BolckedListString.getToken(0, ' ');
+    for (size_t i = 1; !command.isEmpty(); i++)
+    {
+        mvLOKBlockedCommandList.emplace(command);
+        command = BolckedListString.getToken(i, ' ');
+    }
+}
+
+bool SfxViewShell::isBlockedCommand(OUString command)
+{
+    return mvLOKBlockedCommandList.find(command) != mvLOKBlockedCommandList.end();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

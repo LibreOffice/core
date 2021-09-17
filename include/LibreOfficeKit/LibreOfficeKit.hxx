@@ -787,14 +787,9 @@ public:
         mpDoc->pClass->sendFormFieldEvent(mpDoc, pArguments);
     }
 
-    void setBlockedCommandList(const char* bolckedCommandList)
+    void setBlockedCommandList(int nViewId, const char* bolckedCommandList)
     {
-        mpDoc->pClass->setBlockedCommandList(mpDoc, bolckedCommandList);
-    }
-
-    void setBlockedCommandView(int nViewId, const char* type, bool isBlocked)
-    {
-        mpDoc->pClass->setBlockedCommandView(mpDoc, nViewId, type, isBlocked);
+        mpDoc->pClass->setBlockedCommandList(mpDoc, nViewId, bolckedCommandList);
     }
 
     /**
