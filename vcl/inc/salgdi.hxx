@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SALGDI_HXX
-#define INCLUDED_VCL_INC_SALGDI_HXX
+#pragma once
 
 #include <vcl/outdev.hxx>
 
@@ -923,7 +922,5 @@ public:
         return GetImpl()->getRenderBackendName();
     }
 };
-
-#endif // INCLUDED_VCL_INC_SALGDI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
