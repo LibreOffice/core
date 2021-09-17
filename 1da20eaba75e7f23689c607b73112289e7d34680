@@ -69,6 +69,24 @@
       "parentUuid": "78a1244b_351a562d",
       "revId": "1da20eaba75e7f23689c607b73112289e7d34680",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be86761b_00c6ce8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-17T09:48:31Z",
+      "side": 1,
+      "message": "Rather here in this patch. Because as is, it looks like it is working but after having saved the document it\u0027s broken and goes unnoticed until the document is reopened.",
+      "parentUuid": "8eecc9d6_fe3c3f33",
+      "revId": "1da20eaba75e7f23689c607b73112289e7d34680",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
