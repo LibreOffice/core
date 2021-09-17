@@ -33,6 +33,24 @@
       "message": "I suppose it could be even more logical to reverse the order. Now the item is cloned, then the clone is cast to a type, getting a reference, and then an address of the reference is obtained.\n\nBut it\u0027s the original object that has the expected type; and its Clone\u0027s return value is already sub-typed, so it could be like this:\n\n        aColorItem.reset(pItem-\u003eStaticWhichCast(ATTR_FONT_COLOR).Clone());",
       "revId": "6184eefa835f0495ed8136471d61837f5662b6d6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17dea39b_cee4ece1",
+        "filename": "sc/source/core/data/patattr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-09-17T11:16:16Z",
+      "side": 1,
+      "message": "oh, you are right!\n\ni assumed that all the Clone functions return SfxPoolItem* but in fact:\n\n    virtual SvxColorItem* Clone(SfxItemPool* pPool \u003d nullptr) const override;\n\nso it would indeed be better to cast before Clone()",
+      "parentUuid": "349fcbf5_808961f9",
+      "revId": "6184eefa835f0495ed8136471d61837f5662b6d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
