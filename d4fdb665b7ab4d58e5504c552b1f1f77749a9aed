@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73552a65_9031b620",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-17T07:30:02Z",
+      "side": 1,
+      "message": "Caolán, I assume this will also address ofz#38874",
+      "revId": "d4fdb665b7ab4d58e5504c552b1f1f77749a9aed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
