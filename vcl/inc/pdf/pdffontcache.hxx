@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SOURCE_GDI_PDFFONTCACHE_HXX
-#define INCLUDED_VCL_SOURCE_GDI_PDFFONTCACHE_HXX
+#pragma once
 
 #include <typeinfo>
 
@@ -66,7 +65,5 @@ namespace vcl
         sal_Int32 getGlyphWidth( const PhysicalFontFace*, sal_GlyphId, bool bVertical, SalGraphics* );
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
