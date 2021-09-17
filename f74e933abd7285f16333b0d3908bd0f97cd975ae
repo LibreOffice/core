@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5107b239_220643e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-09-17T00:25:16Z",
+      "side": 1,
+      "message": "Patchset 4 adds message listening to SwGlobalTree to be able to update tracking when using document search methods. Would be nice to have a dev with more SfxListener knowledge than I check this out.",
+      "revId": "f74e933abd7285f16333b0d3908bd0f97cd975ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
