@@ -826,7 +826,7 @@ bool ScTable::SearchAndReplace(
         {
             //  SearchParam no longer needed - SearchOptions contains all settings
             i18nutil::SearchOptions2 aSearchOptions = rSearchItem.GetSearchOptions();
-            aSearchOptions.Locale = *ScGlobal::GetLocale();
+            aSearchOptions.Locale = ScGlobal::GetLocale();
 
             //  reflect UseAsianOptions flag in SearchOptions
             //  (use only ignore case and width if asian options are disabled).
