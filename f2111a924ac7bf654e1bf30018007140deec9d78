@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea3dbf78_32854b03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-17T07:27:45Z",
+      "side": 1,
+      "message": "I don\u0027t remember if I already asked - so please forgive me if I\u0027m asking again.\n\nWouldn\u0027t the syntax be more convenient, if there were an overload taking a reference of pointer to rtl_uString? Like\n\n    static OUString const \u0026 unacquired( rtl_uString * const \u0026 rpHandle )\n        { return unacquired(\u0026rpHandle); }\n\nand then\n\n    bRet \u003d OUString::unacquired(m_aValue.m_pString).toInt32() !\u003d 0;\n\nwithout taking the address of the m_aValue.m_pString explicitly?",
+      "revId": "f2111a924ac7bf654e1bf30018007140deec9d78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
