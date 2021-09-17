@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_WIN_SALGDI_H
-#define INCLUDED_VCL_INC_WIN_SALGDI_H
+#pragma once
 
 #include <sallayout.hxx>
 #include <salgeom.hxx>
@@ -411,7 +410,5 @@ inline bool WinFontFace::HasChar( sal_uInt32 cChar ) const
         return false;
     return mxUnicodeMap->HasChar( cChar );
 }
-
-#endif // INCLUDED_VCL_INC_WIN_SALGDI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
