@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cbe568b_5285c4d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-17T18:36:02Z",
+      "side": 1,
+      "message": "Out of curiosity, what is the advantage of using std::optional over std::unique_ptr here?",
+      "revId": "7267b7b2730ba1af226f6620cdc4cd26d2f137a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
