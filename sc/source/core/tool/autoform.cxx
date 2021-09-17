@@ -750,7 +750,7 @@ bool DefaultFirstEntry::operator() (const OUString& left, const OUString& right)
         return true;
     if ( ScGlobal::GetpTransliteration()->isEqual( right, aStrStandard ) )
         return false;
-    return ScGlobal::GetCollator()->compareString( left, right) < 0;
+    return ScGlobal::GetCollator().compareString( left, right) < 0;
 }
 
 void ScAutoFormat::SetSaveLater( bool bSet )

@@ -626,8 +626,8 @@ struct PatternSpan
 
 bool ScTable::IsSortCollatorGlobal() const
 {
-    return  pSortCollator == ScGlobal::GetCollator() ||
-            pSortCollator == ScGlobal::GetCaseCollator();
+    return  pSortCollator == &ScGlobal::GetCollator() ||
+            pSortCollator == &ScGlobal::GetCaseCollator();
 }
 
 void ScTable::InitSortCollator( const ScSortParam& rPar )
@@ -642,8 +642,7 @@ void ScTable::InitSortCollator( const ScSortParam& rPar )
     else
     {   // SYSTEM
         DestroySortCollator();
-        pSortCollator = (rPar.bCaseSens ? ScGlobal::GetCaseCollator() :
-            ScGlobal::GetCollator());
+        pSortCollator = &ScGlobal::GetCollator(rPar.bCaseSens);
     }
 }
 
@@ -2393,7 +2392,7 @@ class QueryEvaluator
     void setupCollatorIfNeeded()
     {
         if (!mpCollator)
-            mpCollator = mrParam.bCaseSens ? ScGlobal::GetCaseCollator() : ScGlobal::GetCollator();
+            mpCollator = &ScGlobal::GetCollator(mrParam.bCaseSens);
     }
 
 public:

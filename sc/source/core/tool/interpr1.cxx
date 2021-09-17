@@ -4722,7 +4722,7 @@ sal_Int32 lcl_CompareMatrix2Query(
     OUString aStr1 = rMat.GetString(i);
     OUString aStr2 = rEntry.GetQueryItem().maString.getString();
 
-    return ScGlobal::GetCollator()->compareString(aStr1, aStr2); // case-insensitive
+    return ScGlobal::GetCollator().compareString(aStr1, aStr2); // case-insensitive
 }
 
 /** returns the last item with the identical value as the original item
@@ -6720,7 +6720,7 @@ void ScInterpreter::ScLookup()
             if (rItem.meType != ScQueryEntry::ByString)
                 bFound = false;
             else
-                bFound = (ScGlobal::GetCollator()->compareString(aDataStr.getString(), rItem.maString.getString()) <= 0);
+                bFound = (ScGlobal::GetCollator().compareString(aDataStr.getString(), rItem.maString.getString()) <= 0);
         }
 
         if (!bFound)
@@ -7306,13 +7306,13 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
             svl::SharedString aParamStr = rItem.maString;
             if ( bSorted )
             {
-                CollatorWrapper* pCollator = ScGlobal::GetCollator();
+                CollatorWrapper& rCollator = ScGlobal::GetCollator();
                 for (SCSIZE i = 0; i < nMatCount; i++)
                 {
                     if (bHLookup ? pMat->IsStringOrEmpty(i, 0) : pMat->IsStringOrEmpty(0, i))
                     {
                         sal_Int32 nRes =
-                            pCollator->compareString(
+                            rCollator.compareString(
                                 bHLookup ? pMat->GetString(i,0).getString() : pMat->GetString(0,i).getString(), aParamStr.getString());
                         if (nRes <= 0)
                             nDelta = i;

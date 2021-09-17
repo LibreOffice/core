@@ -23,7 +23,7 @@ bool ScTypedStrData::LessCaseSensitive::operator() (const ScTypedStrData& left, 
     if (left.mbIsDate != right.mbIsDate)
         return left.mbIsDate < right.mbIsDate;
 
-    return ScGlobal::GetCaseCollator()->compareString(
+    return ScGlobal::GetCaseCollator().compareString(
         left.maStrValue, right.maStrValue) < 0;
 }
 
@@ -38,7 +38,7 @@ bool ScTypedStrData::LessCaseInsensitive::operator() (const ScTypedStrData& left
     if (left.mbIsDate != right.mbIsDate)
         return left.mbIsDate < right.mbIsDate;
 
-    return ScGlobal::GetCollator()->compareString(
+    return ScGlobal::GetCollator().compareString(
         left.maStrValue, right.maStrValue) < 0;
 }
 
@@ -53,7 +53,7 @@ bool ScTypedStrData::EqualCaseSensitive::operator() (const ScTypedStrData& left,
     if (left.mbIsDate != right.mbIsDate )
         return false;
 
-    return ScGlobal::GetCaseCollator()->compareString(
+    return ScGlobal::GetCaseCollator().compareString(
         left.maStrValue, right.maStrValue) == 0;
 }
 
@@ -68,7 +68,7 @@ bool ScTypedStrData::EqualCaseInsensitive::operator() (const ScTypedStrData& lef
     if (left.mbIsDate != right.mbIsDate )
         return false;
 
-    return ScGlobal::GetCollator()->compareString(
+    return ScGlobal::GetCollator().compareString(
         left.maStrValue, right.maStrValue) == 0;
 }
 
