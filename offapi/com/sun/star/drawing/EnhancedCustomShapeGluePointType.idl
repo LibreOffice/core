@@ -24,24 +24,24 @@
  module com {  module sun {  module star {  module drawing {
 
 
-/** defines which glue points are being offered by the EnhancedCustomShape
+/** defines which gluepoints are being offered by the EnhancedCustomShape
  */
 constants EnhancedCustomShapeGluePointType
 {
-    /** no glue points are offered
+    /** no gluepoints are offered
      */
     const short NONE = 0;
 
-    /** glue points are offered for each segment
+    /** gluepoints are offered for each segment
      */
     const short SEGMENTS = 1;
 
-    /** only glue points of the GluePoints property from the
+    /** only gluepoints of the GluePoints property from the
         com::sun:star::drawing::EnhancedCustomShapePath are offered
      */
     const short CUSTOM = 2;
 
-    /** standard top, left, right, bottom glue points are offered
+    /** standard top, left, right, bottom gluepoints are offered
      */
     const short RECT = 3;
  };

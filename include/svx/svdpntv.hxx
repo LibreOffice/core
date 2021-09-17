@@ -157,10 +157,10 @@ protected:
     bool                        mbGridFront : 1;
     bool                        mbHlplVisible : 1;
     bool                        mbHlplFront : 1;
-    bool                        mbGlueVisible : 1;    // Persistent; show glue points
-    bool                        mbGlueVisible2 : 1;   // Also show glue points for GluePointEdit
-    bool                        mbGlueVisible3 : 1;   // Also show glue points for EdgeTool
-    bool                        mbGlueVisible4 : 1;   // Show glue points, if one edge is selected
+    bool                        mbGlueVisible : 1;    // Persistent; show gluepoints
+    bool                        mbGlueVisible2 : 1;   // Also show gluepoints for GluePointEdit
+    bool                        mbGlueVisible3 : 1;   // Also show gluepoints for EdgeTool
+    bool                        mbGlueVisible4 : 1;   // Show gluepoints, if one edge is selected
     bool                        mbSomeObjChgdFlag : 1;
     bool                        mbSwapAsynchron : 1;
     bool                        mbPrintPreview : 1;

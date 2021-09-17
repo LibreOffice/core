@@ -468,14 +468,14 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         else if (eHit == SdrHitKind::MarkedObject && nEditMode == SID_BEZIER_INSERT)
         {
             /******************************************************************
-            * Insert glue point
+            * Insert gluepoint
             ******************************************************************/
             mpView->BegInsObjPoint(aMDPos, rMEvt.IsMod1());
         }
         else if (eHit == SdrHitKind::MarkedObject && rMEvt.IsMod1())
         {
             /******************************************************************
-            * Select glue point
+            * Select gluepoint
             ******************************************************************/
             if (!rMEvt.IsShift())
                 mpView->UnmarkAllPoints();
@@ -494,7 +494,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         else if (eHit == SdrHitKind::Handle)
         {
             /******************************************************************
-            * Select glue point
+            * Select gluepoint
             ******************************************************************/
             if (!mpView->IsPointMarked(*aVEvt.mpHdl) || rMEvt.IsShift())
             {
@@ -567,7 +567,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             else if (mpView->AreObjectsMarked())
             {
                 /**************************************************************
-                * Select glue point
+                * Select gluepoint
                 **************************************************************/
                 if (!rMEvt.IsShift())
                     mpView->UnmarkAllPoints();

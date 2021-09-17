@@ -60,7 +60,7 @@ enum class SdrHitKind
     Object,          // Hit
     Handle,          // Marking handle
     HelpLine,        // Reference line
-    Gluepoint,       // Glue point
+    Gluepoint,       // Gluepoint
     TextEdit,        // Open OutlinerView was hit
     TextEditObj,     // Object for SdrBeginTextEdit (Textbereich)
     UrlField,        // Field in TextObj was hit (while it is currently not edited)
@@ -73,7 +73,7 @@ enum class SdrHitKind
 enum class SdrViewEditMode {
     Edit,           // Also known as arrow or pointer mode
     Create,         // Tool for object creation
-    GluePointEdit   // Glue point editing mode
+    GluePointEdit   // Gluepoint editing mode
 };
 
 /** options for ImpGetDescriptionString() */
@@ -199,7 +199,7 @@ public:
     virtual void HideSdrPage() override;
     bool IsObjMarkable(SdrObject const * pObj, SdrPageView const * pPV) const;
 
-    // Returns sal_True if objects, points or glue points are selected by drawing a frame
+    // Returns sal_True if objects, points or gluepoints are selected by drawing a frame
     // (as long as the frame is drawn).
     bool IsMarking() const { return IsMarkObj() || IsMarkPoints() || IsMarkGluePoints(); }
 
@@ -369,13 +369,13 @@ public:
 
     // A gluepoint is clearly identified by the SdrObject
     // (to which it belongs) as well as by a sal_uInt16 nId (as each SdrObject may consist of
-    // several glue points. Here at the View there is an additional
+    // several gluepoints. Here at the View there is an additional
     // SdrPageView, which should be defined correctly always.
     // Alternatively a gluepoint may be characterized by a SdrHdl.
     // In this case the SdrHdl instance consists of all required information.
-    // And in this case, the glue point are always is marked by enforcement
+    // And in this case, the gluepoint are always is marked by enforcement
     // (Handlers are just situated at marked gluepoints )
-    // Attention: With each change of the glue point status the handle list is re-calculated.
+    // Attention: With each change of the gluepoint status the handle list is re-calculated.
     // All previously saved SdrHdl* became invalid by this, the same with the point IDs!
     bool PickGluePoint(const Point& rPnt, SdrObject*& rpObj, sal_uInt16& rnId, SdrPageView*& rpPV) const;
     bool MarkGluePoint(const SdrObject* pObj, sal_uInt16 nId, bool bUnmark);
@@ -396,7 +396,7 @@ public:
     // P1 is deleted, a mark is set at P2.
     void MarkNextGluePoint();
 
-    // Draw a selection frame for glue point marking.
+    // Draw a selection frame for gluepoint marking.
     // This routine will just be started in case that HasMarkablePoints() returns sal_True.
     // The GlueEditMode sal_True is disregarded.
     // bool BegMarkGluePoints(const Point& rPnt, OutputDevice* pOut);
@@ -415,7 +415,7 @@ public:
     const tools::Rectangle& GetMarkedObjRect() const; // SnapRects of Objects, without line width
     tools::Rectangle GetMarkedObjBoundRect() const;   // incl. line width, overlapping rags, ...
     const tools::Rectangle& GetMarkedPointsRect() const;     // Enclosing rectangle of all marked points
-    const tools::Rectangle& GetMarkedGluePointsRect() const; // Enclosing rectangle of all marked glue points
+    const tools::Rectangle& GetMarkedGluePointsRect() const; // Enclosing rectangle of all marked gluepoints
     const tools::Rectangle& GetAllMarkedRect() const { return GetMarkedObjRect(); }
     tools::Rectangle GetAllMarkedBoundRect() const { return GetMarkedObjBoundRect(); }
 

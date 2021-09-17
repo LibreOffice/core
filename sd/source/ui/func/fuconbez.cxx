@@ -167,7 +167,7 @@ bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 
     if (eHit == SdrHitKind::MarkedObject && nEditMode == SID_BEZIER_INSERT)
     {
-        // insert glue point
+        // insert gluepoint
         mpView->BegInsObjPoint(aMDPos, rMEvt.IsMod1());
     }
     else

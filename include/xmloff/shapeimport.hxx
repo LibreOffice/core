@@ -220,16 +220,16 @@ public:
                              const OUString& rDestShapeId,
                              sal_Int32 nDestGlueId );
 
-    /** adds a mapping for a glue point identifier from an xml file to the identifier created after inserting
-        the new glue point into the core. The saved mappings can be retrieved by getGluePointId() */
+    /** adds a mapping for a gluepoint identifier from an xml file to the identifier created after inserting
+        the new gluepoint into the core. The saved mappings can be retrieved by getGluePointId() */
     void addGluePointMapping( css::uno::Reference< css::drawing::XShape > const & xShape,
                               sal_Int32 nSourceId, sal_Int32 nDestinnationId );
 
     /** moves all current DestinationId's for rXShape by n */
     void moveGluePointMapping( const css::uno::Reference< css::drawing::XShape >& xShape, const sal_Int32 n );
 
-    /** retrieves a mapping for a glue point identifier from the current xml file to the identifier created after
-        inserting the new glue point into the core. The mapping must be initialized first with addGluePointMapping() */
+    /** retrieves a mapping for a gluepoint identifier from the current xml file to the identifier created after
+        inserting the new gluepoint into the core. The mapping must be initialized first with addGluePointMapping() */
     sal_Int32 getGluePointId( const css::uno::Reference< css::drawing::XShape >& xShape, sal_Int32 nSourceId );
 
     /** this method must be calling before the first shape is imported for the given page.

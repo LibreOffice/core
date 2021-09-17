@@ -164,9 +164,9 @@ public class Organigram {
                     xConnectorProps.setPropertyValue("StartShape", xStartShape);
                     xConnectorProps.setPropertyValue("EndShape", xShape);
                     xConnectorProps.setPropertyValue("StartGluePointIndex",
-                                      Integer.valueOf(2)); // 2 = bottom glue point
+                                      Integer.valueOf(2)); // 2 = bottom gluepoint
                     xConnectorProps.setPropertyValue("EndGluePointIndex",
-                                      Integer.valueOf(0));   // 0 = top glue point
+                                      Integer.valueOf(0));   // 0 = top gluepoint
                 }
             }
         }

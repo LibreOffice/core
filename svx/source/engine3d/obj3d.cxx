@@ -430,8 +430,8 @@ void E3dObject::RestoreGeoData(const SdrObjGeoData& rGeo)
 // is regardless of how the scene has been rotated up until now.
 void E3dObject::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs)
 {
-    // So currently the glue points are defined relative to the scene aOutRect.
-    // Before turning the glue points are defined relative to the page. They
+    // So currently the gluepoints are defined relative to the scene aOutRect.
+    // Before turning the gluepoints are defined relative to the page. They
     // take no part in the rotation of the scene. To ensure this, there is the
     // SetGlueReallyAbsolute(sal_True);
     double fAngleInRad = toRadians(nAngle);
@@ -441,7 +441,7 @@ void E3dObject::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double
     NbcSetTransform(aRotateZ * GetTransform());
 
     SetBoundAndSnapRectsDirty();    // This forces a recalculation of all BoundRects
-    NbcRotateGluePoints(rRef,nAngle,sn,cs);  // Rotate the glue points (who still
+    NbcRotateGluePoints(rRef,nAngle,sn,cs);  // Rotate the gluepoints (who still
                                             // have coordinates relative to the
                                             // original page)
     SetGlueReallyAbsolute(false);       // from now they are again relative to BoundRect (that is defined as aOutRect)

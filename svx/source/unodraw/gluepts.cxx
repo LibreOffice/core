@@ -209,7 +209,7 @@ sal_Int32 SAL_CALL SvxUnoGluePointAccess::insert( const uno::Any& aElement )
         SdrGluePointList* pList = mpObject->ForceGluePointList();
         if( pList )
         {
-            // second, insert the new glue point
+            // second, insert the new gluepoint
             drawing::GluePoint2 aUnoGlue;
 
             if( aElement >>= aUnoGlue )
@@ -279,7 +279,7 @@ void SAL_CALL SvxUnoGluePointAccess::replaceByIdentifer( sal_Int32 Identifier, c
     {
         if( (*pList)[i].GetId() == nId )
         {
-            // change the glue point
+            // change the gluepoint
             SdrGluePoint& rTempPoint = (*pList)[i];
             convert( aGluePoint, rTempPoint );
 
@@ -301,7 +301,7 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identifier )
     {
         struct drawing::GluePoint2 aGluePoint;
 
-        if( Identifier < NON_USER_DEFINED_GLUE_POINTS ) // default glue point?
+        if( Identifier < NON_USER_DEFINED_GLUE_POINTS ) // default gluepoint?
         {
             SdrGluePoint aTempPoint = mpObject->GetVertexGluePoint( static_cast<sal_uInt16>(Identifier) );
             aGluePoint.IsUserDefined = false;
@@ -449,8 +449,8 @@ sal_Int32 SAL_CALL SvxUnoGluePointAccess::getCount()
     sal_Int32 nCount = 0;
     if( mpObject.is() )
     {
-        // each node has a default of 4 glue points
-        // and any number of user defined glue points
+        // each node has a default of 4 gluepoints
+        // and any number of user defined gluepoints
         nCount += 4;
 
         const SdrGluePointList* pList = mpObject->GetGluePointList();
@@ -467,7 +467,7 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIndex( sal_Int32 Index )
     {
         struct drawing::GluePoint2 aGluePoint;
 
-        if( Index < 4 ) // default glue point?
+        if( Index < 4 ) // default gluepoint?
         {
             SdrGluePoint aTempPoint = mpObject->GetVertexGluePoint( static_cast<sal_uInt16>(Index) );
             aGluePoint.IsUserDefined = false;

@@ -3638,7 +3638,7 @@ TOPIC:
 com.sun.star.i18n.XExtendedCalendar
 
 LINK:Documentation/DevGuide/Drawings/Glue_Points_and_Connectors
-DESCR:Drawings - Glue Points and Connectors
+DESCR:Drawings - Gluepoints and Connectors
 REF:
 com.sun.star.drawing.ConnectorShape
 TOPIC:

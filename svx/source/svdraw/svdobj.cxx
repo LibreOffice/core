@@ -1912,7 +1912,7 @@ void SdrObject::SaveGeoData(SdrObjGeoData& rGeo) const
     rGeo.bClosedObj    =m_bClosedObj    ;
     rGeo.mnLayerID = mnLayerID;
 
-    // user-defined glue points
+    // user-defined gluepoints
     if (m_pPlusData!=nullptr && m_pPlusData->pGluePoints!=nullptr) {
         if (rGeo.pGPL!=nullptr) {
             *rGeo.pGPL=*m_pPlusData->pGluePoints;
@@ -1936,7 +1936,7 @@ void SdrObject::RestoreGeoData(const SdrObjGeoData& rGeo)
     m_bClosedObj    =rGeo.bClosedObj    ;
     mnLayerID = rGeo.mnLayerID;
 
-    // user-defined glue points
+    // user-defined gluepoints
     if (rGeo.pGPL!=nullptr) {
         ImpForcePlusData();
         if (m_pPlusData->pGluePoints!=nullptr) {
@@ -2303,7 +2303,7 @@ SdrGluePointList* SdrObject::ForceGluePointList()
 
 void SdrObject::SetGlueReallyAbsolute(bool bOn)
 {
-    // First a const call to see whether there are any glue points.
+    // First a const call to see whether there are any gluepoints.
     // Force const call!
     if (GetGluePointList()!=nullptr) {
         SdrGluePointList* pGPL=ForceGluePointList();
@@ -2313,7 +2313,7 @@ void SdrObject::SetGlueReallyAbsolute(bool bOn)
 
 void SdrObject::NbcRotateGluePoints(const Point& rRef, Degree100 nAngle, double sn, double cs)
 {
-    // First a const call to see whether there are any glue points.
+    // First a const call to see whether there are any gluepoints.
     // Force const call!
     if (GetGluePointList()!=nullptr) {
         SdrGluePointList* pGPL=ForceGluePointList();
@@ -2323,7 +2323,7 @@ void SdrObject::NbcRotateGluePoints(const Point& rRef, Degree100 nAngle, double 
 
 void SdrObject::NbcMirrorGluePoints(const Point& rRef1, const Point& rRef2)
 {
-    // First a const call to see whether there are any glue points.
+    // First a const call to see whether there are any gluepoints.
     // Force const call!
     if (GetGluePointList()!=nullptr) {
         SdrGluePointList* pGPL=ForceGluePointList();
@@ -2333,7 +2333,7 @@ void SdrObject::NbcMirrorGluePoints(const Point& rRef1, const Point& rRef2)
 
 void SdrObject::NbcShearGluePoints(const Point& rRef, double tn, bool bVShear)
 {
-    // First a const call to see whether there are any glue points.
+    // First a const call to see whether there are any gluepoints.
     // Force const call!
     if (GetGluePointList()!=nullptr) {
         SdrGluePointList* pGPL=ForceGluePointList();

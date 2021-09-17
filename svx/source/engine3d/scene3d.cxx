@@ -609,8 +609,8 @@ void E3dScene::SetTransform(const basegfx::B3DHomMatrix& rMatrix)
 
 void E3dScene::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs)
 {
-    // So currently the glue points are defined relative to the scene aOutRect.
-    // Before turning the glue points are defined relative to the page. They
+    // So currently the gluepoints are defined relative to the scene aOutRect.
+    // Before turning the gluepoints are defined relative to the page. They
     // take no part in the rotation of the scene. To ensure this, there is the
     // SetGlueReallyAbsolute(sal_True);
 
@@ -628,7 +628,7 @@ void E3dScene::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double 
     NbcSetTransform(aRotation * GetTransform());
 
     SetBoundAndSnapRectsDirty();    // This forces a recalculation of all BoundRects
-    NbcRotateGluePoints(rRef,nAngle,sn,cs);  // Rotate the glue points (who still
+    NbcRotateGluePoints(rRef,nAngle,sn,cs);  // Rotate the gluepoints (who still
                                             // have coordinates relative to the
                                             // original page)
     SetGlueReallyAbsolute(false);  // from now they are again relative to BoundRect (that is defined as aOutRect)

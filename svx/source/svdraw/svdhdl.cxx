@@ -1041,7 +1041,7 @@ bool SdrHdl::IsFocusHdl() const
         case SdrHdlKind::Circle:      // angle of circle segments, corner radius of rectangles
         case SdrHdlKind::Ref1:      // reference point 1, e. g. center of rotation
         case SdrHdlKind::Ref2:      // reference point 2, e. g. endpoint of reflection axis
-        case SdrHdlKind::Glue:      // glue point
+        case SdrHdlKind::Glue:      // gluepoint
 
         // for SJ and the CustomShapeHandles:
         case SdrHdlKind::CustomShape1:

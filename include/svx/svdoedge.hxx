@@ -362,7 +362,7 @@ public:
  // SdrView). SdrEdgeObj::Move() itself does not remove the
  // connection.
  //
- // Each node object can have connectors, so-called glue points. These
+ // Each node object can have connectors, so-called gluepoints. These
  // are the geometric points at which the connecting edge object ends
  // when the connection is established. By default, each object has no
  // connectors.  Nevertheless, one can dock an edge in certain view
@@ -380,32 +380,32 @@ public:
  // used from the offering of connectors of the object or/and of the
  // vertices. The user assigns this attribute by docking the node in
  // its center (see, e.g., Visio).
- // 09-06-1996: bUseBestConnector uses vertex glue points only.
+ // 09-06-1996: bUseBestConnector uses vertex gluepoints only.
  //
  // And here is some terminology:
  //   Connector : The connector object (edge object)
  //   Node      : Any object to which a connector can be glued to, e.g., a rectangle,
  //               etc.
- //   Glue point: The point at which the connector is glued to the node object.
+ //   Gluepoint: The point at which the connector is glued to the node object.
  //               There are:
- //                 Vertex glue points: Each node object presents these glue
+ //                 Vertex gluepoints: Each node object presents these glue
  //                     points inherently. Perhaps there is already the option
  //                     "automatically glue to object vertex" in Draw (default is
  //                     on).
- //                 Corner glue points: These glue points, too, are already
+ //                 Corner gluepoints: These gluepoints, too, are already
  //                     auto-enabled on objects. Similar to the ones above,
  //                     there may already be an option for them in Draw (default is
  //                     off).
- //                 In contrast to Visio, vertex glue points and corner glue
+ //                 In contrast to Visio, vertex gluepoints and corner glue
  //                     points are not displayed in the UI; they are simply there (if
  //                     the option is activated).
- //                 Custom glue points: Any number of them are present on each
+ //                 Custom gluepoints: Any number of them are present on each
  //                     node object. They can be made visible using the option
  //                     (always visible when editing). At the moment, however, they
  //                     are not yet fully implemented.
- //                 Automatic glue point selection: If the connector is docked
+ //                 Automatic gluepoint selection: If the connector is docked
  //                     to the node object so that the black frame encompasses the
  //                     entire object, then the connector tries to find the most
- //                     convenient of the 4 vertex glue points (and only of those).
+ //                     convenient of the 4 vertex gluepoints (and only of those).
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

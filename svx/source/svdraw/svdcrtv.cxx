@@ -81,7 +81,7 @@ ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, S
             xTargetOverlay->add(*pNew);
             maObjects.append(std::move(pNew));
 
-            // glue points
+            // gluepoints
             for(sal_uInt16 i(0); i < 4; i++)
             {
                 SdrGluePoint aGluePoint(rObject.GetVertexGluePoint(i));

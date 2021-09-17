@@ -1792,7 +1792,7 @@ void SdrMarkView::CheckMarked()
         }
         else
         {
-            if (!IsGluePointEditMode()) { // selected glue points only in GlueEditMode
+            if (!IsGluePointEditMode()) { // selected gluepoints only in GlueEditMode
                 SdrUShortCont& rPts = pM->GetMarkedGluePoints();
                 rPts.clear();
             }

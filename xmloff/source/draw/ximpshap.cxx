@@ -241,7 +241,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLShapeContext::cre
 
 void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XFastAttributeList>& xAttrList )
 {
-    // get the glue points container for this shape if it's not already there
+    // get the gluepoints container for this shape if it's not already there
     if( !mxGluePoints.is() )
     {
         uno::Reference< drawing::XGluePointsSupplier > xSupplier( mxShape, uno::UNO_QUERY );
@@ -311,7 +311,7 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XFastAttri
         }
         catch(const uno::Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION( "xmloff", "during setting of glue points");
+            DBG_UNHANDLED_EXCEPTION( "xmloff", "during setting of gluepoints");
         }
     }
 }

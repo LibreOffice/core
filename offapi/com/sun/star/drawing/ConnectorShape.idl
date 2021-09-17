@@ -62,7 +62,7 @@ published service ConnectorShape
     [property] com::sun::star::drawing::XShape StartShape;
 
 
-    /** this property holds the index of the glue point the start point of
+    /** this property holds the index of the gluepoint the start point of
         this connector is glued on.
     */
     [property] long StartGluePointIndex;
@@ -82,7 +82,7 @@ published service ConnectorShape
     [property] com::sun::star::drawing::XShape EndShape;
 
 
-    /** this property holds the index of the glue point the end point of
+    /** this property holds the index of the gluepoint the end point of
         this connector is glued on.
     */
     [property] com::sun::star::awt::Point EndPosition;

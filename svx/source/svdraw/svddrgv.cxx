@@ -619,7 +619,7 @@ void SdrDragView::BrkDragObj()
 
     if (IsInsertGluePoint())
     {
-        mpInsPointUndo->Undo(); // delete inserted glue point again
+        mpInsPointUndo->Undo(); // delete inserted gluepoint again
         delete mpInsPointUndo;
         mpInsPointUndo=nullptr;
         SetInsertGluePoint(false);
@@ -781,7 +781,7 @@ bool SdrDragView::BegInsGluePoint(const Point& rPnt)
         }
         else
         {
-            // no glue points possible for this object (e. g. Edge)
+            // no gluepoints possible for this object (e. g. Edge)
             SetInsertGluePoint(false);
             delete mpInsPointUndo;
             mpInsPointUndo=nullptr;

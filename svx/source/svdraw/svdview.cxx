@@ -336,7 +336,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
     }
     else if (bGluePointMode && PickGluePoint(aLocalLogicPosition,pObj,nGlueId,pPV))
     {
-        eHit=SdrHitKind::Gluepoint; // deselected glue point hit
+        eHit=SdrHitKind::Gluepoint; // deselected gluepoint hit
     }
     else if ((pHitObj = PickObj(aLocalLogicPosition,mnHitTolLog,pPV,SdrSearchOptions::DEEP|SdrSearchOptions::MARKED,&pObj,&bHitPassDirect)))
     {
@@ -805,7 +805,7 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
             if (!MarkObj(aLogicPos, mnHitTolLog, rVEvt.mbAddMark))
             {
                 // No object hit. Do the following:
-                // 1. deselect any selected glue points
+                // 1. deselect any selected gluepoints
                 // 2. deselect any selected polygon points
                 // 3. deselect any selected objects
                 if (!rVEvt.mbAddMark) UnmarkAll();
