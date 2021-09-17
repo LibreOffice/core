@@ -21,15 +21,15 @@
 
 #include <unotools/fontdefs.hxx>
 
-#include <Qt5FontFace.hxx>
-#include <Qt5Font.hxx>
-#include <Qt5Tools.hxx>
-
-#include <sft.hxx>
+#include <PhysicalFontCollection.hxx>
 #include <impfontcharmap.hxx>
 #include <fontinstance.hxx>
 #include <fontselect.hxx>
-#include <PhysicalFontCollection.hxx>
+#include <sft.hxx>
+
+#include <Qt5FontFace.hxx>
+#include <Qt5Font.hxx>
+#include <Qt5Tools.hxx>
 
 #include <QtGui/QFont>
 #include <QtGui/QFontDatabase>

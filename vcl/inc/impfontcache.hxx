@@ -22,9 +22,10 @@
 #include <sal/config.h>
 
 #include <rtl/ref.hxx>
+#include <tools/gen.hxx>
 #include <o3tl/lru_map.hxx>
 #include <o3tl/hash_combine.hxx>
-#include <tools/gen.hxx>
+
 #include <vcl/glyphitem.hxx>
 
 #include "fontselect.hxx"

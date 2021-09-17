@@ -1,4 +1,3 @@
-
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
@@ -21,34 +20,28 @@
 #include <sal/config.h>
 #include <config_features.h>
 
-#include <memory>
-
-#include <o3tl/safeint.hxx>
-#include <osl/module.h>
-#include <osl/file.h>
 #include <sal/log.hxx>
-
+#include <osl/file.h>
+#include <osl/module.h>
+#include <rtl/character.hxx>
 #include <comphelper/windowserrorstring.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <o3tl/hash_combine.hxx>
+#include <o3tl/safeint.hxx>
 
-#include <win/salgdi.h>
-#include <win/saldata.hxx>
-#include <win/wingdiimpl.hxx>
 #include <outdev.h>
-
-#include <win/DWriteTextRenderer.hxx>
-#include <win/scoped_gdi.hxx>
-
-#include <sft.hxx>
 #include <sallayout.hxx>
+#include <sft.hxx>
+#include <win/salgdi.h>
+#include <win/DWriteTextRenderer.hxx>
+#include <win/saldata.hxx>
+#include <win/scoped_gdi.hxx>
+#include <win/wingdiimpl.hxx>
 
+#include <algorithm>
 #include <cstdio>
 #include <cstdlib>
-
-#include <rtl/character.hxx>
-
-#include <o3tl/hash_combine.hxx>
-#include <algorithm>
+#include <memory>
 
 #include <shlwapi.h>
 #include <winver.h>

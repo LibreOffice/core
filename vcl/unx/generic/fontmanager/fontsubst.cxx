@@ -19,10 +19,10 @@
 
 #include <sal/config.h>
 
-#include <unx/geninst.h>
 #include <outdev.h>
-#include <unx/fontmanager.hxx>
 #include <PhysicalFontCollection.hxx>
+#include <unx/geninst.h>
+#include <unx/fontmanager.hxx>
 
 // platform specific font substitution hooks
 

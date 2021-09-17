@@ -21,10 +21,11 @@
 
 #include <sal/config.h>
 
-#include <unx/glyphcache.hxx>
+#include <vcl/glyphitem.hxx>
+
 #include <PhysicalFontFace.hxx>
 #include <fontinstance.hxx>
-#include <vcl/glyphitem.hxx>
+#include <unx/glyphcache.hxx>
 
 class CmapResult;
 
