@@ -92,7 +92,7 @@ public class Document {
     public static final int CALLBACK_COMMENT = 32;
     public static final int CALLBACK_INVALIDATE_HEADER = 33;
     public static final int CALLBACK_CELL_ADDRESS = 34;
-    public static final int CALLBACK_SC_FOLLOW_JUMP = 52;
+    public static final int CALLBACK_SC_FOLLOW_JUMP = 54;
 
     /**
      * Set text selection types

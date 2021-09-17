@@ -780,6 +780,11 @@ typedef enum
     LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR = 52,
 
     /**
+     * When a user tries to use command which is restricted for that user
+     */
+    LOK_COMMAND_BLOCKED = 53,
+
+    /**
      * The position of the cell cursor jumped to.
      *
      * Payload format: "x, y, width, height, column, row", where the first
@@ -789,7 +794,7 @@ typedef enum
      *
      * Rectangle format is the same as LOK_CALLBACK_INVALIDATE_TILES.
      */
-    LOK_CALLBACK_SC_FOLLOW_JUMP = 53,
+    LOK_CALLBACK_SC_FOLLOW_JUMP = 54,
 }
 LibreOfficeKitCallbackType;
 
@@ -924,6 +929,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY";
     case LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR:
         return "LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR";
+    case LOK_COMMAND_BLOCKED:
+        return "LOK_COMMAND_BLOCKED";
     case LOK_CALLBACK_SC_FOLLOW_JUMP:
         return "LOK_CALLBACK_SC_FOLLOW_JUMP";
     }
