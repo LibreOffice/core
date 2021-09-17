@@ -16,6 +16,8 @@
  *
  */
 
+#include <sal/config.h>
+
 #include <skia/osx/gdiimpl.hxx>
 
 #include <skia/utils.hxx>
