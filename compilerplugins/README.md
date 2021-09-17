@@ -34,8 +34,13 @@ Rewriters analyse and possibly modify given source files.
 Usage: `make COMPILER_PLUGIN_TOOL=<rewriter_name>`
 Additional optional make arguments:
 
-- it is possible to also pass `FORCE_COMPILE_ALL=1` to make to trigger rebuild of all source files,
-    even those that are up to date.
+- it is possible to also pass `FORCE_COMPILE=all` to make to trigger rebuild of all source files,
+    even those that are up to date. FORCE_COMPILE takes a list of gbuild targets specifying
+    where to run the rewriter ('all' means everything, '-' prepended means to not enable, '/' appended means
+    everything in the directory; there is no ordering, more specific overrides
+    more general, and disabling takes precedence).
+    Example: FORCE_COMPILE="all -sw/ -Library_sc"
+
 - `UPDATE_FILES=<scope>` - limits which modified files will be actually written back with the changes
     - `mainfile` - only the main `.cxx` file will be modified (default)
     - `all` - all source files involved will be modified (possibly even header files from other LO modules),
@@ -54,7 +59,7 @@ all non-rewriter plugins; and all non--dual-mode plugins are disabled).  The
 typical process to use such a dual-mode rewriter X in rewriting mode is
 
     make COMPILER_PLUGIN_WARNINGS_ONLY=X \
-    && make COMPILER_PLUGIN_TOOL=X FORCE_COMPILE_ALL=1 UPDATE_FILES=all
+    && make COMPILER_PLUGIN_TOOL=X FORCE_COMPILE=all UPDATE_FILES=all
 
 which first generates a full build without failing due to warnings from plugin
 X in non-rewriting mode (in case of `--enable-werror`) and then repeats the build

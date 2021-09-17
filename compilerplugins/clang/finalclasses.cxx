@@ -26,7 +26,7 @@ some method calls
 
 The process goes something like this:
   $ make check
-  $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='finalclasses' check
+  $ make FORCE_COMPILE=all COMPILER_PLUGIN_TOOL='finalclasses' check
   $ ./compilerplugins/clang/finalclasses.py
 
 */

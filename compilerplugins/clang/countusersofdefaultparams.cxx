@@ -22,7 +22,7 @@
 
   The process goes something like this:
     $ make check
-    $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='countusersofdefaultparams' check
+    $ make FORCE_COMPILE=all COMPILER_PLUGIN_TOOL='countusersofdefaultparams' check
     $ ./compilerplugins/clang/countusersofdefaultparams.py
 */
 

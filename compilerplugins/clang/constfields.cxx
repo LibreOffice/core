@@ -34,11 +34,11 @@ Look for fields that are only assigned to in the constructor using field-init, a
 
 The process goes something like this:
   $ make check
-  $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='constfields' check
+  $ make FORCE_COMPILE=all COMPILER_PLUGIN_TOOL='constfields' check
   $ ./compilerplugins/clang/constfields.py
 
 and then
-  $ for dir in *; do make $dir FORCE_COMPILE_ALL=1 UPDATE_FILES=$dir COMPILER_PLUGIN_TOOL='constfieldsrewrite' $dir; done
+  $ for dir in *; do make $dir FORCE_COMPILE=all UPDATE_FILES=$dir COMPILER_PLUGIN_TOOL='constfieldsrewrite' $dir; done
 to auto-remove the method declarations
 
 */

@@ -220,22 +220,45 @@ endef
 # dep file as a side effect.
 # In the dep file rule just touch it so it's newer than the object.
 
-ifneq ($(FORCE_COMPILE_ALL),)
+# Setting FORCE_COMPILE allows forcing compilation for specific sources,
+# usually used to force running a tool on the sources (see compilerplugins/README).
+# If set, it'll force all considered sources for rebuild. But it's possible
+# to explicitly specify gbuild build targets where running of the tool will be skipped
+# (where 'all' means everything, '-' prepended means to not enable, '/' appended means
+# everything in the directory; there is no ordering, more specific overrides
+# more general, and disabling takes precedence).
+# Example: FORCE_COMPILE="all -sw/ -Library_sc"
+
+# Detect whether forced compile should be used for the given gbuild target.
+# enable if: no "-TARGET" defined AND [module is enabled OR "TARGET" defined]
+# call gb_LinkTarget__force_compile,linktargetmakefilename
+gb_LinkTarget__force_compile = \
+ $(and $(if $(filter -$(1),$(FORCE_COMPILE)),,$(true)),\
+       $(or $(gb_Module_CURRENTMODULE_FORCE_COMPILE),\
+            $(filter $(1),$(FORCE_COMPILE))))
+
 # This one only exists to force .c/.cxx "rebuilds" when running a compiler tool.
-.PHONY: force_compile_all_target
-force_compile_all_target:
-gb_FORCE_COMPILE_ALL_TARGET := force_compile_all_target
+.PHONY: force_compile_target
+force_compile_target:
+ifneq ($(FORCE_COMPILE),)
+gb_FORCE_COMPILE_TARGET := force_compile_target
 endif
+
+# A tool is run either if FORCE_COMPILE is not set (in that case it's always run,
+# because the target is not up to date), or if FORCE_COMPILE is set then
+# the tool is run only if the value of FORCE_COMPILE includes the target.
+gb_LinkTarget__tool_compile_enabled = \
+ $(if $(FORCE_COMPILE),$(T_FORCE_COMPILE),$(true))
 
 # CObject class
 
 gb_CObject_get_source = $(1)/$(2).c
 
 ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
-$(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_ALL_TARGET)
+$(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_TARGET)
 	$(call gb_Output_announce,$*.c,$(true),C  ,3)
 	$(call gb_Trace_StartRange,$*.c,C  )
-	$(call gb_CObject__tool_command,$*,$<,$(COMPILER_PLUGINS))
+	$(if $(call gb_LinkTarget__tool_compile_enabled),$(call gb_CObject__tool_command,$*,$<,$(COMPILER_PLUGINS)))
 	$(call gb_Trace_EndRange,$*.c,C  )
 else
 $(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,$(SRCDIR),%)
@@ -294,10 +317,10 @@ endif
 endef
 
 ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
-$(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_ALL_TARGET)
+$(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_TARGET)
 	$(call gb_Output_announce,$*.cxx,$(true),CXX,3)
 	$(call gb_Trace_StartRange,$*.cxx,CXX)
-	$(call gb_CxxObject__tool_command,$*,$<,$(COMPILER_PLUGINS))
+	$(if $(call gb_LinkTarget__tool_compile_enabled),$(call gb_CxxObject__tool_command,$*,$<,$(COMPILER_PLUGINS)))
 	$(call gb_Trace_EndRange,$*.cxx,CXX)
 else
 $(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SRCDIR),%)
@@ -326,11 +349,11 @@ endif
 gb_GenCObject_get_source = $(WORKDIR)/$(1).c
 
 ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
-$(call gb_GenCObject_get_target,%) : $(gb_FORCE_COMPILE_ALL_TARGET)
+$(call gb_GenCObject_get_target,%) : $(gb_FORCE_COMPILE_TARGET)
 	$(call gb_Output_announce,$*.c,$(true),C  ,3)
 	$(call gb_Trace_StartRange,$*.c,C  )
 	test -f $(call gb_GenCObject_get_source,$*) || (echo "Missing generated source file $(call gb_GenCObject_get_source,$*)" && false)
-	$(call gb_CObject__tool_command,$*,$(call gb_GenCObject_get_source,$*),$(COMPILER_PLUGINS))
+	$(if $(call gb_LinkTarget__tool_compile_enabled),$(call gb_CObject__tool_command,$*,$(call gb_GenCObject_get_source,$*),$(COMPILER_PLUGINS)))
 	$(call gb_Trace_EndRange,$*.c,C  )
 else
 $(call gb_GenCObject_get_target,%) :
@@ -359,11 +382,11 @@ endif
 gb_GenCxxObject_get_source = $(WORKDIR)/$(1).$(gb_LinkTarget_CXX_SUFFIX_$(call gb_LinkTarget__get_workdir_linktargetname,$(2)))
 
 ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
-$(call gb_GenCxxObject_get_target,%) : $(gb_FORCE_COMPILE_ALL_TARGET)
+$(call gb_GenCxxObject_get_target,%) : $(gb_FORCE_COMPILE_TARGET)
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$(GEN_CXX_SOURCE)),$(true),CXX,3)
 	$(call gb_Trace_StartRange,$(subst $(BUILDDIR)/,,$(GEN_CXX_SOURCE)),CXX)
 	test -f $(GEN_CXX_SOURCE) || (echo "Missing generated source file $(GEN_CXX_SOURCE)" && false)
-	$(call gb_CxxObject__tool_command,$*,$(GEN_CXX_SOURCE),$(COMPILER_PLUGINS))
+	$(if $(call gb_LinkTarget__tool_compile_enabled),$(call gb_CxxObject__tool_command,$*,$(GEN_CXX_SOURCE),$(COMPILER_PLUGINS)))
 	$(call gb_Trace_EndRange,$(subst $(BUILDDIR)/,,$(GEN_CXX_SOURCE)),CXX)
 else
 $(call gb_GenCxxObject_get_target,%) :
@@ -393,11 +416,11 @@ endif
 gb_GenCxxClrObject_get_source = $(WORKDIR)/$(1).$(gb_LinkTarget_CXX_SUFFIX_$(call gb_LinkTarget__get_workdir_linktargetname,$(2)))
 
 ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
-$(call gb_GenCxxClrObject_get_target,%) : $(gb_FORCE_COMPILE_ALL_TARGET)
+$(call gb_GenCxxClrObject_get_target,%) : $(gb_FORCE_COMPILE_TARGET)
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$(GEN_CXXCLR_SOURCE)),$(true),CLR,3)
 	$(call gb_Trace_StartRange,$(subst $(BUILDDIR)/,,$(GEN_CXXCLR_SOURCE)),CLR)
 	test -f $(GEN_CXXCLR_SOURCE) || (echo "Missing generated source file $(GEN_CXXCLR_SOURCE)" && false)
-	$(call gb_CxxClrObject__tool_command,$*,$(GEN_CXXCLR_SOURCE),$(COMPILER_PLUGINS))
+	$(if $(call gb_LinkTarget__tool_compile_enabled),$(call gb_CxxClrObject__tool_command,$*,$(GEN_CXXCLR_SOURCE),$(COMPILER_PLUGINS)))
 	$(call gb_Trace_EndRange,$(subst $(BUILDDIR)/,,$(GEN_CXXCLR_SOURCE)),CLR)
 else
 $(call gb_GenCxxClrObject_get_target,%) :
@@ -485,10 +508,10 @@ endef
 gb_ObjCxxObject_get_source = $(1)/$(2).mm
 
 ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
-$(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_ALL_TARGET)
+$(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_TARGET)
 	$(call gb_Output_announce,$*.mm,$(true),OCX,3)
 	$(call gb_Trace_StartRange,$*.mm,OCX)
-	$(call gb_ObjCxxObject__tool_command,$*,$<,$(COMPILER_PLUGINS))
+	$(if $(call gb_LinkTarget__tool_compile_enabled),$(call gb_ObjCxxObject__tool_command,$*,$<,$(COMPILER_PLUGINS)))
 	$(call gb_Trace_EndRange,$*.mm,OCX)
 else
 $(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDIR),%)
@@ -517,10 +540,10 @@ endif
 gb_ObjCObject_get_source = $(1)/$(2).m
 
 ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
-$(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_ALL_TARGET)
+$(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_TARGET)
 	$(call gb_Output_announce,$*.m,$(true),OCC,3)
 	$(call gb_Trace_StartRange,$*.m,OCC)
-	$(call gb_ObjCObject__tool_command,$*,$<,$(COMPILER_PLUGINS))
+	$(if $(call gb_LinkTarget__tool_compile_enabled),$(call gb_ObjCObject__tool_command,$*,$<,$(COMPILER_PLUGINS)))
 	$(call gb_Trace_EndRange,$*.m,OCC)
 else
 $(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%)
@@ -548,11 +571,11 @@ endif
 gb_GenObjCObject_get_source = $(WORKDIR)/$(1).m
 
 ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
-$(call gb_GenObjCObject_get_target,%) : $(gb_FORCE_COMPILE_ALL_TARGET)
+$(call gb_GenObjCObject_get_target,%) : $(gb_FORCE_COMPILE_TARGET)
 	$(call gb_Output_announce,$*.m,$(true),OCC,3)
 	$(call gb_Trace_StartRange,$*.m,OCC)
 	test -f $(call gb_GenObjCObject_get_source,$*) || (echo "Missing generated source file $(call gb_GenObjCObject_get_source,$*)" && false)
-	$(call gb_ObjCObject__tool_command,$*,$(call gb_GenObjCObject_get_source,$*),$(COMPILER_PLUGINS))
+	$(if $(call gb_LinkTarget__tool_compile_enabled),$(call gb_ObjCObject__tool_command,$*,$(call gb_GenObjCObject_get_source,$*),$(COMPILER_PLUGINS)))
 	$(call gb_Trace_EndRange,$*.m,OCC)
 else
 $(call gb_GenObjCObject_get_target,%) :
@@ -581,11 +604,11 @@ endif
 gb_GenObjCxxObject_get_source = $(WORKDIR)/$(1).mm
 
 ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
-$(call gb_GenObjCxxObject_get_target,%) : $(gb_FORCE_COMPILE_ALL_TARGET)
+$(call gb_GenObjCxxObject_get_target,%) : $(gb_FORCE_COMPILE_TARGET)
 	$(call gb_Output_announce,$*.mm,$(true),OCX,3)
 	$(call gb_Trace_StartRange,$*.mm,OCX)
 	test -f $(call gb_GenObjCxxObject_get_source,$*) || (echo "Missing generated source file $(call gb_GenObjCxxObject_get_source,$*)" && false)
-	$(call gb_ObjCxxObject__tool_command,$*,$(call gb_GenObjCxxObject_get_source,$*),$(COMPILER_PLUGINS))
+	$(if $(call gb_LinkTarget__tool_compile_enabled),$(call gb_ObjCxxObject__tool_command,$*,$(call gb_GenObjCxxObject_get_source,$*),$(COMPILER_PLUGINS)))
 	$(call gb_Trace_EndRange,$*.mm,OCX)
 else
 $(call gb_GenObjCxxObject_get_target,%) :
@@ -615,10 +638,10 @@ endif
 gb_CxxClrObject_get_source = $(1)/$(2).cxx
 
 ifneq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
-$(call gb_CxxClrObject_get_target,%) : $(call gb_CxxClrObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_ALL_TARGET)
+$(call gb_CxxClrObject_get_target,%) : $(call gb_CxxClrObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_TARGET)
 	$(call gb_Output_announce,$*.cxx,$(true),CLR,3)
 	$(call gb_Trace_StartRange,$*.cxx,CLR)
-	$(call gb_CxxClrObject__tool_command,$*,$<,$(COMPILER_PLUGINS))
+	$(if $(call gb_LinkTarget__tool_compile_enabled),$(call gb_CxxClrObject__tool_command,$*,$<,$(COMPILER_PLUGINS)))
 	$(call gb_Trace_EndRange,$*.cxx,CLR)
 else
 $(call gb_CxxClrObject_get_target,%) : $(call gb_CxxClrObject_get_source,$(SRCDIR),%)
@@ -944,6 +967,7 @@ $(call gb_LinkTarget_get_target,$(1)) : EXTERNAL_CODE :=
 $(call gb_LinkTarget_get_target,$(1)) : SOVERSIONSCRIPT :=
 $(call gb_LinkTarget_get_target,$(1)) : COMPILER_TEST :=
 $(call gb_LinkTarget_get_target,$(1)) : T_SYMBOLS := $(if $(call gb_LinkTarget__symbols_enabled,$(2)),$(true),$(false))
+$(call gb_LinkTarget_get_target,$(1)) : T_FORCE_COMPILE := $(if $(call gb_LinkTarget__force_compile,$(2)),$(true),$(false))
 $(call gb_LinkTarget_get_target,$(1)) : T_CC :=
 $(call gb_LinkTarget_get_target,$(1)) : T_CXX :=
 $(call gb_LinkTarget_get_target,$(1)) : T_USE_LD := $(USE_LD)

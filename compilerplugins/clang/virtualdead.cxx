@@ -24,9 +24,9 @@ Look for virtual methods where all of the overrides either
 
 The process goes something like this:
   $ make check
-  $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='VirtualDead' check
+  $ make FORCE_COMPILE=all COMPILER_PLUGIN_TOOL='VirtualDead' check
   $ ./compilerplugins/clang/VirtualDead.py
-  $ for dir in *; do make FORCE_COMPILE_ALL=1 UPDATE_FILES=$dir COMPILER_PLUGIN_TOOL='removevirtuals' $dir; done
+  $ for dir in *; do make FORCE_COMPILE=all UPDATE_FILES=$dir COMPILER_PLUGIN_TOOL='removevirtuals' $dir; done
 
 Note that the actual process may involve a fair amount of undoing, hand editing, and general messing around
 to get it to work :-)

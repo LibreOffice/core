@@ -33,11 +33,11 @@ Be warned that it produces around 15G of log file.
 
 The process goes something like this:
   $ make check
-  $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='unusedmethods' check
+  $ make FORCE_COMPILE=all COMPILER_PLUGIN_TOOL='unusedmethods' check
   $ ./compilerplugins/clang/unusedmethods.py
 
 and then
-  $ for dir in *; do make FORCE_COMPILE_ALL=1 UPDATE_FILES=$dir COMPILER_PLUGIN_TOOL='unusedmethodsremove' $dir; done
+  $ for dir in *; do make FORCE_COMPILE=all UPDATE_FILES=$dir COMPILER_PLUGIN_TOOL='unusedmethodsremove' $dir; done
 to auto-remove the method declarations
 
 Note that the actual process may involve a fair amount of undoing, hand editing, and general messing around

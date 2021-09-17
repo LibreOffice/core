@@ -16,7 +16,7 @@
 /**
  * Rewrites all Paint method on subclasses of vcl::Window to include RenderContext& as parameter.
  *
- * run as: make COMPILER_PLUGIN_TOOL=paintmethodconversion UPDATE_FILES=all FORCE_COMPILE_ALL=1
+ * run as: make COMPILER_PLUGIN_TOOL=paintmethodconversion UPDATE_FILES=all FORCE_COMPILE=all
  */
 
 namespace

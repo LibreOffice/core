@@ -17,9 +17,9 @@
  * Changes calls to tools::Rectangle/Point/Size methods that return a ref to instead call the setter methods.
  *
  * run as:
- *   make COMPILER_PLUGIN_TOOL=changetoolsgen UPDATE_FILES=all FORCE_COMPILE_ALL=1
+ *   make COMPILER_PLUGIN_TOOL=changetoolsgen UPDATE_FILES=all FORCE_COMPILE=all
  * or
- *   make <module> COMPILER_PLUGIN_TOOL=changetoolsgen FORCE_COMPILE_ALL=1
+ *   make <module> COMPILER_PLUGIN_TOOL=changetoolsgen FORCE_COMPILE=all
  */
 
 namespace
