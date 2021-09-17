@@ -53,7 +53,6 @@ private:
     OUStringBuffer              sTextContent;
     bool                        bHasText;
     std::unique_ptr<SvXMLNumUsedList_Impl>      pUsedList;
-    std::unique_ptr<CharClass>                  pCharClass;
     std::unique_ptr<LocaleDataWrapper>          pLocaleData;
 
     SAL_DLLPRIVATE void AddCalendarAttr_Impl( const OUString& rCalendar );
