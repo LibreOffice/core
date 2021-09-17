@@ -694,8 +694,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
     std::vector<bool> aPassed(nEntryCount, false);
 
     tools::Long nPos = -1;
-    CollatorWrapper* pCollator = (rParam.bCaseSens ? ScGlobal::GetCaseCollator() :
-                                  ScGlobal::GetCollator() );
+    CollatorWrapper& rCollator = ScGlobal::GetCollator(rParam.bCaseSens);
     ::utl::TransliterationWrapper* pTransliteration = (rParam.bCaseSens ?
                                                        ScGlobal::GetCaseTransliteration() : ScGlobal::GetpTransliteration());
 
@@ -823,7 +822,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
                 }
                 else
                 {   // use collator here because data was probably sorted
-                    sal_Int32 nCompare = pCollator->compareString(
+                    sal_Int32 nCompare = rCollator.compareString(
                         aCellStr, rEntry.GetQueryItem().maString.getString());
                     switch (rEntry.eOp)
                     {

@@ -1806,7 +1806,7 @@ int ScAcceptChgDlg::ColCompareHdl(const weld::TreeIter& rLeft, const weld::TreeI
         }
     }
 
-    return ScGlobal::GetCaseCollator()->compareString(rTreeView.get_text(rLeft, nSortCol),
+    return ScGlobal::GetCaseCollator().compareString(rTreeView.get_text(rLeft, nSortCol),
                                                       rTreeView.get_text(rRight, nSortCol));
 }
 

@@ -383,8 +383,7 @@ void Test::tearDown()
 
 void Test::testCollator()
 {
-    CollatorWrapper* p = ScGlobal::GetCollator();
-    sal_Int32 nRes = p->compareString("A", "B");
+    sal_Int32 nRes = ScGlobal::GetCollator().compareString("A", "B");
     CPPUNIT_ASSERT_MESSAGE("these strings are supposed to be different!", nRes != 0);
 }
 
