@@ -7,8 +7,6 @@ excludelist:
     registry/source/reflwrit.cxx:
     # OSL_BIGENDIAN is being checked
     - osl/endian.h
-    # Needed for correct linker visibility
-    - registry/writer.h
     registry/source/reflread.cxx:
     # OSL_BIGENDIAN is being checked
     - osl/endian.h

@@ -5506,8 +5506,6 @@ include/registry/reader.hxx
 include/registry/registry.hxx
 include/registry/typereg_reader.hxx
 include/registry/version.h
-include/registry/writer.h
-include/registry/writer.hxx
 include/rtl/alloc.h
 include/rtl/bootstrap.h
 include/rtl/bootstrap.hxx
@@ -7386,9 +7384,7 @@ registry/source/keyimpl.cxx
 registry/source/keyimpl.hxx
 registry/source/reflcnst.hxx
 registry/source/reflread.cxx
-registry/source/reflread.hxx
 registry/source/reflwrit.cxx
-registry/source/reflwrit.hxx
 registry/source/regimpl.cxx
 registry/source/regimpl.hxx
 registry/source/registry.cxx
