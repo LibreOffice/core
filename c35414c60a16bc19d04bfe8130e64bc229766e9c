@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5200d17c_e9be858c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003349
+      },
+      "writtenOn": "2021-09-17T09:32:13Z",
+      "side": 1,
+      "message": "The core patchset has been amended to change \"glue point\" in comments also.",
+      "revId": "c35414c60a16bc19d04bfe8130e64bc229766e9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
