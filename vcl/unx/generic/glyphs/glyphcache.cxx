@@ -19,14 +19,14 @@
 
 #include <sal/config.h>
 
-#include <stdlib.h>
+#include <sal/log.hxx>
+#include <rtl/ustring.hxx>
+
+#include <fontinstance.hxx>
 #include <unx/freetype_glyphcache.hxx>
 #include <unx/gendata.hxx>
 
-#include <fontinstance.hxx>
-
-#include <rtl/ustring.hxx>
-#include <sal/log.hxx>
+#include <stdlib.h>
 
 FreetypeManager::FreetypeManager()
     : m_nMaxFontId(0)

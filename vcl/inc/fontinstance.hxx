@@ -21,16 +21,17 @@
 
 #include <sal/config.h>
 
-#include "fontselect.hxx"
-#include "impfontmetricdata.hxx"
-
-#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
-#include <tools/gen.hxx>
-#include <tools/fontenum.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <tools/degree.hxx>
+#include <tools/fontenum.hxx>
+#include <tools/gen.hxx>
+
 #include <vcl/glyphitem.hxx>
+
+#include "fontselect.hxx"
+#include "impfontmetricdata.hxx"
 
 #include <optional>
 #include <unordered_map>

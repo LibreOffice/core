@@ -21,43 +21,45 @@
 
 #include <sal/config.h>
 
-#include <map>
-#include <list>
-#include <unordered_map>
-#include <memory>
-#include <string_view>
-#include <vector>
-
-#include <pdf/ResourceDict.hxx>
-#include <pdf/BitmapID.hxx>
-#include <pdf/Matrix3.hxx>
-
-#include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/uno/Sequence.h>
 #include <osl/file.hxx>
 #include <rtl/cipher.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/gradient.hxx>
-#include <vcl/graphictools.hxx>
-#include <vcl/hatch.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/pdfwriter.hxx>
-#include <vcl/wall.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/lru_map.hxx>
+
 #include <comphelper/hash.hxx>
 #include <tools/stream.hxx>
-#include <vcl/BinaryDataContainer.hxx>
 
+#include <vcl/BinaryDataContainer.hxx>
+#include <vcl/bitmapex.hxx>
 #include <vcl/filter/pdfobjectcontainer.hxx>
+#include <vcl/gradient.hxx>
+#include <vcl/graphictools.hxx>
+#include <vcl/hatch.hxx>
+#include <vcl/pdfwriter.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/wall.hxx>
+
+#include <pdf/BitmapID.hxx>
 #include <pdf/ExternalPDFStreams.hxx>
+#include <pdf/ResourceDict.hxx>
+#include <pdf/Matrix3.hxx>
 #include <pdf/pdfbuildin_fonts.hxx>
 #include <pdf/pdffontcache.hxx>
+
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/uno/Sequence.h>
+
+#include <list>
+#include <map>
+#include <memory>
+#include <string_view>
+#include <unordered_map>
+#include <vector>
 
 class StyleSettings;
 class FontSelectPattern;

@@ -21,9 +21,11 @@
 
 #include <sal/config.h>
 
-#include <vcl/dllapi.h>
 #include <tools/long.hxx>
 #include <tools/ref.hxx>
+
+#include <vcl/dllapi.h>
+
 #include "fontattributes.hxx"
 #include "sft.hxx"
 

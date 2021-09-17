@@ -18,37 +18,38 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
-
-#include <vector>
+#include <config_cairo_canvas.h>
 
 #include <sal/types.h>
+#include <sal/log.hxx>
+#include <fontsubset.hxx>
+#include <i18nlangtag/mslangid.hxx>
+
+#include <PhysicalFontCollection.hxx>
+#include <PhysicalFontFace.hxx>
+#include <fontattributes.hxx>
+#include <fontinstance.hxx>
+#include <impfontmetricdata.hxx>
+#include <langboost.hxx>
+#include <sallayout.hxx>
+#include <unx/geninst.h>
+#include <unx/freetype_glyphcache.hxx>
+#include <unx/genpspgraphics.h>
+#include <unx/printergfx.hxx>
+
+#include <vcl/fontcharmap.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/sysdata.hxx>
+
+#include <jobdata.hxx>
 
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 
-#include <i18nlangtag/mslangid.hxx>
-#include <jobdata.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/sysdata.hxx>
-#include <vcl/fontcharmap.hxx>
-#include <config_cairo_canvas.h>
-
-#include <fontsubset.hxx>
-#include <unx/freetype_glyphcache.hxx>
-#include <unx/geninst.h>
-#include <unx/genpspgraphics.h>
-#include <unx/printergfx.hxx>
-#include <langboost.hxx>
-#include <fontinstance.hxx>
-#include <fontattributes.hxx>
-#include <impfontmetricdata.hxx>
-#include <PhysicalFontCollection.hxx>
-#include <PhysicalFontFace.hxx>
-#include <sallayout.hxx>
+#include <vector>
 
 using namespace psp;
 

@@ -23,18 +23,21 @@
 #include <config_options.h>
 
 #include <tools/fontenum.hxx>
+
 #include <vcl/dllapi.h>
 #include <vcl/glyphitem.hxx>
 #include <vcl/timer.hxx>
-#include <com/sun/star/lang/Locale.hpp>
+
 #include <unx/fc_fontoptions.hxx>
 
+#include <com/sun/star/lang/Locale.hpp>
+
 #include <map>
-#include <set>
 #include <memory>
+#include <set>
 #include <string_view>
-#include <vector>
 #include <unordered_map>
+#include <vector>
 
 /*
  *  some words on metrics: every length returned by PrintFontManager and

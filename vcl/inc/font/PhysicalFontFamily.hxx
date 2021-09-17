@@ -21,12 +21,11 @@
 
 #include <sal/config.h>
 
-#include <vcl/dllapi.h>
-#include <vcl/outdev.hxx>
-
+#include <unotools/fontcfg.hxx>
 #include <o3tl/sorted_vector.hxx>
 
-#include <unotools/fontcfg.hxx>
+#include <vcl/dllapi.h>
+#include <vcl/outdev.hxx>
 
 #include <PhysicalFontFace.hxx>
 

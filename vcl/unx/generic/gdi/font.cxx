@@ -19,12 +19,12 @@
 
 #include <sal/config.h>
 
-#include <vcl/sysdata.hxx>
 #include <vcl/fontcharmap.hxx>
+#include <vcl/sysdata.hxx>
 
-#include <unx/salgdi.h>
-#include <textrender.hxx>
 #include <sallayout.hxx>
+#include <textrender.hxx>
+#include <unx/salgdi.h>
 
 void X11SalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {

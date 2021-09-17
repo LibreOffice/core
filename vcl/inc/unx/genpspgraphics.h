@@ -20,15 +20,14 @@
 #pragma once
 
 #include <sal/config.h>
-
-#include <vcl/vclenum.hxx>
 #include <config_cairo_canvas.h>
 
-#include <unx/fontmanager.hxx>
+#include <vcl/vclenum.hxx>
+
 #include <salgdi.hxx>
 #include <sallayout.hxx>
-
 #include <unx/GenPspGfxBackend.hxx>
+#include <unx/fontmanager.hxx>
 
 class PhysicalFontFace;
 class PhysicalFontCollection;

@@ -21,10 +21,11 @@
 
 #include <sal/config.h>
 
-#include <vector>
-
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <tools/long.hxx>
+
+#include <vcl/fontcapabilities.hxx>
+#include <vcl/metric.hxx>
 
 #include <premac.h>
 #ifdef MACOSX
@@ -38,20 +39,19 @@
 #endif
 #include <postmac.h>
 
-#include <vcl/fontcapabilities.hxx>
-#include <vcl/metric.hxx>
-
 
 #include <fontinstance.hxx>
 #include <impfontmetricdata.hxx>
 #include <PhysicalFontFace.hxx>
 #include <salgdi.hxx>
 
+#include <quartz/CGHelpers.hxx>
 #include <quartz/salgdicommon.hxx>
-#include <unordered_map>
+
 #include <hb-ot.h>
 
-#include <quartz/CGHelpers.hxx>
+#include <unordered_map>
+#include <vector>
 
 class AquaSalFrame;
 class FontAttributes;

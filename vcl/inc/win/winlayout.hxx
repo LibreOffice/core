@@ -22,11 +22,11 @@
 #include <sal/config.h>
 
 #include <rtl/ustring.hxx>
+#include <o3tl/sorted_vector.hxx>
 
 #include <sallayout.hxx>
 #include <svsys.h>
 #include <win/salgdi.h>
-#include <o3tl/sorted_vector.hxx>
 
 // win32 specific logical font instance
 class WinFontInstance : public LogicalFontInstance

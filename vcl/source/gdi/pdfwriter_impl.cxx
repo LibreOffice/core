@@ -21,73 +21,74 @@
 #include <config_crypto.h>
 
 #include <sal/types.h>
-
-#include <math.h>
-#include <algorithm>
-#include <string_view>
-
-#include <lcms2.h>
-
+#include <sal/log.hxx>
+#include <osl/thread.h>
+#include <osl/file.hxx>
+#include <rtl/digest.h>
+#include <rtl/ustrbuf.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <comphelper/hash.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <memory>
-#include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/util/URL.hpp>
-#include <com/sun/star/util/URLTransformer.hpp>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
-#include <cppuhelper/implbase.hxx>
-#include <i18nlangtag/languagetag.hxx>
-#include <o3tl/numeric.hxx>
-#include <officecfg/Office/Common.hxx>
-#include <osl/file.hxx>
-#include <osl/thread.h>
-#include <rtl/digest.h>
-#include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
-#include <svl/urihelper.hxx>
 #include <tools/fract.hxx>
 #include <tools/helpers.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/zcodec.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <o3tl/numeric.hxx>
+#include <o3tl/sorted_vector.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <svl/cryptosign.hxx>
+#include <svl/urihelper.hxx>
+
 #include <vcl/bitmapex.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/cvtgrf.hxx>
+#include <vcl/filter/pdfdocument.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/settings.hxx>
-#include <strhelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/filter/pdfdocument.hxx>
-#include <comphelper/hash.hxx>
 
-#include <svdata.hxx>
+#include <PhysicalFontFace.hxx>
 #include <bitmap/BitmapWriteAccess.hxx>
 #include <fontsubset.hxx>
-#include <PhysicalFontFace.hxx>
-#include <salgdi.hxx>
-#include <textlayout.hxx>
-#include <textlineinfo.hxx>
 #include <impglyphitem.hxx>
+#include <pdf/PdfConfig.hxx>
 #include <pdf/XmpMetadata.hxx>
 #include <pdf/objectcopier.hxx>
 #include <pdf/pdfwriter_impl.hxx>
-#include <pdf/PdfConfig.hxx>
-#include <o3tl/sorted_vector.hxx>
+#include <strhelper.hxx>
+#include <salgdi.hxx>
+#include <svdata.hxx>
+#include <textlayout.hxx>
+#include <textlineinfo.hxx>
+
+#include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/util/URL.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
+
+#include <lcms2.h>
 
 #include <config_eot.h>
 
 #if ENABLE_EOT
 #include <libeot/libeot.h>
 #endif
+
+#include <math.h>
+#include <algorithm>
+#include <memory>
+#include <string_view>
 
 using namespace::com::sun::star;
 

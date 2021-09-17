@@ -18,33 +18,35 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
+#include <config_features.h>
 #include <config_folders.h>
 
+#include <sal/log.hxx>
+#include <osl/file.hxx>
+#include <osl/process.h>
+#include <rtl/bootstrap.h>
+#include <rtl/strbuf.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
-#include <osl/file.hxx>
-#include <osl/process.h>
-#include <rtl/bootstrap.h>
-#include <rtl/strbuf.hxx>
-#include <tools/long.hxx>
 #include <comphelper/lok.hxx>
+#include <tools/long.hxx>
 
-#include <vcl/metric.hxx>
 #include <vcl/fontcharmap.hxx>
+#include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 
-#include <quartz/ctfonts.hxx>
+#include <outdev.h>
+#include <PhysicalFontCollection.hxx>
 #include <fontsubset.hxx>
 #include <impfont.hxx>
 #include <impfontcharmap.hxx>
 #include <impfontmetricdata.hxx>
-#include <outdev.h>
-#include <PhysicalFontCollection.hxx>
+
+#include <quartz/ctfonts.hxx>
 
 #ifdef MACOSX
 #include <osx/salframe.h>
@@ -56,7 +58,6 @@
 #include <sallayout.hxx>
 #include <sft.hxx>
 
-#include <config_features.h>
 #include <vcl/skia/SkiaHelper.hxx>
 #if HAVE_FEATURE_SKIA
 #include <skia/osx/gdiimpl.hxx>

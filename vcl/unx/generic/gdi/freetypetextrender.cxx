@@ -19,22 +19,22 @@
 
 #include <sal/config.h>
 
-#include <unx/freetypetextrender.hxx>
-
-#include <unotools/configmgr.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/sysdata.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/fontcharmap.hxx>
 #include <sal/log.hxx>
+#include <unotools/configmgr.hxx>
 
-#include <unx/genpspgraphics.h>
-#include <unx/geninst.h>
-#include <unx/glyphcache.hxx>
-#include <unx/fc_fontoptions.hxx>
-#include <unx/freetype_glyphcache.hxx>
+#include <vcl/fontcharmap.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/sysdata.hxx>
+
 #include <PhysicalFontFace.hxx>
 #include <impfontmetricdata.hxx>
+#include <unx/fc_fontoptions.hxx>
+#include <unx/freetype_glyphcache.hxx>
+#include <unx/freetypetextrender.hxx>
+#include <unx/geninst.h>
+#include <unx/genpspgraphics.h>
+#include <unx/glyphcache.hxx>
 
 #include <sallayout.hxx>
 

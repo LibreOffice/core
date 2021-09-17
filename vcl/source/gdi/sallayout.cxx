@@ -19,30 +19,25 @@
 
 #include <sal/config.h>
 
-#include <iostream>
-#include <iomanip>
-
-#include <sal/config.h>
 #include <sal/log.hxx>
-
-#include <cstdio>
-
-#include <math.h>
-
-#include <ImplLayoutArgs.hxx>
-#include <salgdi.hxx>
-#include <sallayout.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-
 #include <i18nlangtag/lang.h>
 
 #include <vcl/svapp.hxx>
 
+#include <ImplLayoutArgs.hxx>
+#include <salgdi.hxx>
+#include <sallayout.hxx>
+
 #include <unicode/ubidi.h>
 #include <unicode/uchar.h>
 
+#include <math.h>
 #include <algorithm>
+#include <cstdio>
+#include <iostream>
+#include <iomanip>
 #include <memory>
 
 #include <impglyphitem.hxx>
@@ -50,7 +45,6 @@
 // Glyph Flags
 #define GF_FONTMASK  0xF0000000
 #define GF_FONTSHIFT 28
-
 
 sal_UCS4 GetMirroredChar( sal_UCS4 nChar )
 {
