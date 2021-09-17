@@ -116,7 +116,7 @@ OUString ScDPUtil::getDateGroupName(
         case sheet::DataPilotFieldGroupBy::QUARTERS:
             return ScGlobal::getLocaleData().getQuarterAbbreviation(sal_Int16(nValue-1));    // nValue is 1-based
         case css::sheet::DataPilotFieldGroupBy::MONTHS:
-            return ScGlobal::GetCalendar()->getDisplayName(
+            return ScGlobal::GetCalendar().getDisplayName(
                         i18n::CalendarDisplayIndex::MONTH, sal_Int16(nValue-1), 0);    // 0-based, get short name
         case sheet::DataPilotFieldGroupBy::DAYS:
         {
