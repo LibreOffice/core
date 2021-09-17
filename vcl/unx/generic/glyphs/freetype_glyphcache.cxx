@@ -954,4 +954,4 @@ const unsigned char* FreetypeFont::GetTable(const char* pName, sal_uLong* pLengt
     return mxFontInfo->GetTable( pName, pLength );
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
