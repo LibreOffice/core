@@ -778,6 +778,11 @@ typedef enum
      * color in the payload as a RGB hex string (RRGGBB).
      */
     LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR = 52,
+
+    /**
+     * When a user tries to use command which is restricted for that user
+     */
+    LOK_COMMAND_BLOCKED = 53,
 }
 LibreOfficeKitCallbackType;
 
@@ -912,6 +917,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY";
     case LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR:
         return "LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR";
+    case LOK_COMMAND_BLOCKED:
+        return "LOK_COMMAND_BLOCKED";
     }
 
     assert(!"Unknown LibreOfficeKitCallbackType type.");
