@@ -30,7 +30,7 @@ namespace {
 
 sal_Unicode lclGetDecSep()
 {
-    return ScGlobal::getLocaleDataPtr()->getNumDecimalSep()[0];
+    return ScGlobal::getLocaleData().getNumDecimalSep()[0];
 }
 
 } // namespace
@@ -48,7 +48,7 @@ bool ScDoubleField::GetValue( double& rfValue ) const
     {
         rtl_math_ConversionStatus eStatus;
         sal_Int32 nEnd;
-        rfValue = ScGlobal::getLocaleDataPtr()->stringToDouble( aStr, true, &eStatus, &nEnd );
+        rfValue = ScGlobal::getLocaleData().stringToDouble( aStr, true, &eStatus, &nEnd );
         bOk = (eStatus == rtl_math_ConversionStatus_Ok) && (nEnd == aStr.getLength() );
     }
     return bOk;

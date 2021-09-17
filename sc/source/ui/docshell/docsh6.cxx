@@ -476,8 +476,8 @@ void ScDocShell::CheckConfigOptions()
         // no need to check repeatedly.
         return;
 
-    OUString aDecSep = ScGlobal::getLocaleDataPtr()->getNumDecimalSep();
-    OUString aDecSepAlt = ScGlobal::getLocaleDataPtr()->getNumDecimalSepAlt();
+    OUString aDecSep = ScGlobal::getLocaleData().getNumDecimalSep();
+    OUString aDecSepAlt = ScGlobal::getLocaleData().getNumDecimalSepAlt();
 
     ScModule* pScMod = SC_MOD();
     const ScFormulaOptions& rOpt=pScMod->GetFormulaOptions();

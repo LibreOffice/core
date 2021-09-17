@@ -3220,25 +3220,25 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
                 bInsertPreCorrectedString = false;
                 OUString aReplace(pAuto->GetStartDoubleQuote());
                 if( aReplace.isEmpty() )
-                    aReplace = ScGlobal::getLocaleDataPtr()->getDoubleQuotationMarkStart();
+                    aReplace = ScGlobal::getLocaleData().getDoubleQuotationMarkStart();
                 if( aReplace != "\"" )
                     aString = aString.replaceAll( aReplace, "\"" );
 
                 aReplace = OUString(pAuto->GetEndDoubleQuote());
                 if( aReplace.isEmpty() )
-                    aReplace = ScGlobal::getLocaleDataPtr()->getDoubleQuotationMarkEnd();
+                    aReplace = ScGlobal::getLocaleData().getDoubleQuotationMarkEnd();
                 if( aReplace != "\"" )
                     aString = aString.replaceAll( aReplace, "\"" );
 
                 aReplace = OUString(pAuto->GetStartSingleQuote());
                 if( aReplace.isEmpty() )
-                    aReplace = ScGlobal::getLocaleDataPtr()->getQuotationMarkStart();
+                    aReplace = ScGlobal::getLocaleData().getQuotationMarkStart();
                 if( aReplace != "'" )
                     aString = aString.replaceAll( aReplace, "'" );
 
                 aReplace = OUString(pAuto->GetEndSingleQuote());
                 if( aReplace.isEmpty() )
-                    aReplace = ScGlobal::getLocaleDataPtr()->getQuotationMarkEnd();
+                    aReplace = ScGlobal::getLocaleData().getQuotationMarkEnd();
                 if( aReplace != "'" )
                     aString = aString.replaceAll( aReplace, "'");
             }

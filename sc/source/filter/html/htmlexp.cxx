@@ -331,7 +331,7 @@ void ScHTMLExport::WriteHeader()
             OUT_COMMENT( GLOBSTR( STR_DOC_INFO ) );
             OUString aStrOut = GLOBSTR( STR_DOC_PRINTED ) + ": ";
             lcl_AddStamp( aStrOut, xDocProps->getPrintedBy(),
-                xDocProps->getPrintDate(), *ScGlobal::getLocaleDataPtr() );
+                xDocProps->getPrintDate(), ScGlobal::getLocaleData() );
             OUT_COMMENT( aStrOut );
         }
 

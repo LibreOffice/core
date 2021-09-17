@@ -209,7 +209,7 @@ void ScSolverOptionsDialog::FillListBox()
                 OUString sTxt = aVisName + ": ";
                 sTxt += rtl::math::doubleToUString(fDoubleValue,
                     rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-                    ScGlobal::getLocaleDataPtr()->getNumDecimalSep()[0], true );
+                    ScGlobal::getLocaleData().getNumDecimalSep()[0], true );
 
                 m_xLbSettings->set_text(nPos, sTxt, 0);
             }
@@ -265,7 +265,7 @@ void ScSolverOptionsDialog::EditOption()
                 OUString sTxt(pStringItem->GetText() + ": ");
                 sTxt += rtl::math::doubleToUString(pStringItem->GetDoubleValue(),
                     rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-                    ScGlobal::getLocaleDataPtr()->getNumDecimalSep()[0], true );
+                    ScGlobal::getLocaleData().getNumDecimalSep()[0], true );
 
                 m_xLbSettings->set_text(nEntry, sTxt, 0);
             }
@@ -390,7 +390,7 @@ void ScSolverValueDialog::SetValue( double fValue )
 {
     m_xEdValue->set_text( rtl::math::doubleToUString( fValue,
             rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-            ScGlobal::getLocaleDataPtr()->getNumDecimalSep()[0], true ) );
+            ScGlobal::getLocaleData().getNumDecimalSep()[0], true ) );
 }
 
 void ScSolverValueDialog::SetMax(double fMax)
@@ -404,7 +404,7 @@ double ScSolverValueDialog::GetValue() const
 
     rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
     sal_Int32 nParseEnd = 0;
-    double fValue = ScGlobal::getLocaleDataPtr()->stringToDouble( aInput, true, &eStatus, &nParseEnd);
+    double fValue = ScGlobal::getLocaleData().stringToDouble( aInput, true, &eStatus, &nParseEnd);
     /* TODO: shouldn't there be some error checking? */
     if (!std::isnan(m_fMaxValue) && fValue > m_fMaxValue)
         fValue = m_fMaxValue;

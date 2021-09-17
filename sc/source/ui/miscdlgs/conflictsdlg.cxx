@@ -419,8 +419,8 @@ void ScConflictsDlg::SetActionString(const ScChangeAction* pAction, ScDocument* 
     rTreeView.set_text(rEntry, aUser, 1);
 
     DateTime aDateTime = pAction->GetDateTime();
-    OUString aString = ScGlobal::getLocaleDataPtr()->getDate( aDateTime ) + " " +
-        ScGlobal::getLocaleDataPtr()->getTime( aDateTime, false );
+    OUString aString = ScGlobal::getLocaleData().getDate( aDateTime ) + " " +
+        ScGlobal::getLocaleData().getTime( aDateTime, false );
     rTreeView.set_text(rEntry, aString, 2);
 }
 
