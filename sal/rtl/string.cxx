@@ -23,7 +23,6 @@
 #include <cstdlib>
 
 #include <osl/interlck.h>
-#include <rtl/alloc.h>
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
 
@@ -599,7 +598,8 @@ void SAL_CALL rtl_string_new(rtl_String** ppThis) SAL_THROW_EXTERN_C()
 
 rtl_String* SAL_CALL rtl_string_alloc(sal_Int32 nLen) SAL_THROW_EXTERN_C()
 {
-    return rtl::str::alloc<rtl_String>(nLen);
+    assert(nLen >= 0);
+    return rtl::str::Alloc<rtl_String>(nLen);
 }
 
 void SAL_CALL rtl_string_new_WithLength(rtl_String** ppThis, sal_Int32 nLen) SAL_THROW_EXTERN_C()

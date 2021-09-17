@@ -27,7 +27,6 @@
 
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
-#include <rtl/alloc.h>
 #include <osl/mutex.h>
 #include <rtl/tencinfo.h>
 
@@ -1793,7 +1792,8 @@ void SAL_CALL rtl_uString_new(rtl_uString** ppThis) SAL_THROW_EXTERN_C()
 
 rtl_uString* SAL_CALL rtl_uString_alloc(sal_Int32 nLen) SAL_THROW_EXTERN_C()
 {
-    return rtl::str::alloc<rtl_uString>(nLen);
+    assert(nLen >= 0);
+    return rtl::str::Alloc<rtl_uString>(nLen);
 }
 
 void SAL_CALL rtl_uString_new_WithLength(rtl_uString** ppThis, sal_Int32 nLen) SAL_THROW_EXTERN_C()

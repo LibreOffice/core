@@ -1099,14 +1099,6 @@ template <typename IMPL_RTL_STRINGDATA> void new_( IMPL_RTL_STRINGDATA** ppThis 
 
 /* ----------------------------------------------------------------------- */
 
-template <typename IMPL_RTL_STRINGDATA> IMPL_RTL_STRINGDATA* alloc( sal_Int32 nLen )
-{
-    assert(nLen >= 0);
-    return Alloc<IMPL_RTL_STRINGDATA>( nLen );
-}
-
-/* ----------------------------------------------------------------------- */
-
 template <typename IMPL_RTL_STRINGDATA>
 void new_WithLength( IMPL_RTL_STRINGDATA** ppThis, sal_Int32 nLen )
 {
