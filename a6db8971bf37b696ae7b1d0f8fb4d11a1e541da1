@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19b5fde5_ad0906cb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-17T09:50:09Z",
+      "side": 1,
+      "message": "std::from_chars is char-based; would it help our sal_Unicode usage?",
+      "revId": "a6db8971bf37b696ae7b1d0f8fb4d11a1e541da1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
