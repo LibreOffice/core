@@ -100,7 +100,7 @@ private:
 public:
                             FreetypeFontFace( FreetypeFontInfo*, const FontAttributes& );
 
-    virtual rtl::Reference<LogicalFontInstance> CreateFontInstance(const vcl::font::FontSelectPattern&) const override;
+    virtual rtl::Reference<LogicalFontInstance> CreateFontInstance( const vcl::font::FontSelectPattern& ) const override;
     virtual sal_IntPtr      GetFontId() const override { return mpFreetypeFontInfo->GetFontId(); }
 
     FontCharMapRef GetFontCharMap() const override { return mpFreetypeFontInfo->GetFontCharMap(); }
