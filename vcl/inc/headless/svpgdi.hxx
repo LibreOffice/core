@@ -24,6 +24,7 @@
 #error This file is not for iOS
 #endif
 
+#include <sal/config.h>
 #include <config_features.h>
 
 #include <osl/endian.h>
