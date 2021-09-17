@@ -9,21 +9,353 @@
 
 #include "CurlSession.hxx"
 
+#include <sal/log.hxx>
+#include <rtl/strbuf.hxx>
+
+#include <map>
+#include <vector>
+
 namespace http_dav_ucp
 {
-CurlSession::CurlSession(::rtl::Reference<DAVSessionFactory> const& rpFactory, OUString const& rURI,
+class Init
+{
+    Init()
+    {
+        if (curl_global_init(CURL_GLOBAL_ALL) != CURLE_OK)
+        {
+            assert(!"curl_global_init failed");
+        }
+    }
+    // do not call curl_global_cleanup() - this is not the only client of curl
+};
+static Init g_Init;
+
+OString GetErrorString(CURLcode const rc, char const* const pErrorBuffer = nullptr)
+{
+    OStringBuffer buf;
+    buf.append('(');
+    buf.append(sal_Int32(rc));
+    buf.append(')');
+    buf.append(' ');
+    char const* const pMessage( // static fallback
+        (pErrorBuffer && pErrorBuffer[0] != '\0') ? pErrorBuffer : curl_easy_strerror(rc));
+    buf.append(pMessage, strlen(pMessage));
+    return buf.makeStringAndClear();
+}
+
+int debug_callback(CURL* handle, curl_infotype type, char* data, size_t size, void* userdata)
+{
+    char const pType(nullptr);
+    switch (type)
+    {
+        case CURLINFO_TEXT:
+            SAL_INFO("ucb.ucp.webdav.curl", "debug log: " << handle << ": " << data);
+            return 0;
+        case CURLINFO_HEADER_IN:
+            pType = "CURLINFO_HEADER_IN";
+            break;
+        case CURLINFO_HEADER_OUT:
+            pType = "CURLINFO_HEADER_OUT";
+            break;
+        case CURLINFO_DATA_IN:
+            pType = "CURLINFO_DATA_IN";
+            break;
+        case CURLINFO_DATA_OUT:
+            pType = "CURLINFO_DATA_OUT";
+            break;
+        case CURLINFO_SSL_DATA_IN:
+            pType = "CURLINFO_SSL_DATA_IN";
+            break;
+        case CURLINFO_SSL_DATA_OUT:
+            pType = "CURLINFO_SSL_DATA_OUT";
+            break;
+        default:
+            SAL_WARN("ucb.ucp.webdav.curl", "unexpected debug log type");
+            return 0;
+    }
+    SAL_INFO("ucb.ucp.webdav.curl", "debug log: " << handle << ": " << pType << " " << size);
+    return 0;
+}
+
+size_t write_callback(char* const ptr, size_t const size, size_t const nmemb, void* const userdata)
+{
+    //CurlSession *const pSession(static_cast<CurlSession*>(userdata));
+    auto* const pTarget(static_cast<CurlSession::DownloadTarget*>(userdata));
+    assert(pTarget);
+    assert(size == 1); // says the man page
+    assert(pTarget->xOutStream.is());
+    try
+    {
+        uno::Sequence<sal_Int8> const data(ptr, nmemb);
+        pTarget->xOutStream->writeBytes(data);
+    }
+    catch (...)
+    {
+        SAL_WARN("ucb.ucp.webdav.curl", "exception in write_callback");
+        return 0; // error
+    }
+    return nmemb;
+}
+
+size_t read_callback(char* const buffer, size_t const size, size_t const nitems,
+                     void* const userdata)
+{
+    auto* const pSource(static_cast<CurlSession::UploadSource*>(userdata));
+    assert(pSource);
+    assert(pSource->xInStream.is());
+    size_t const nBytes(size * nitems);
+    size_t nRet(0);
+    try
+    {
+        uno::Sequence<sal_Int8> data;
+        data.realloc(nBytes);
+        nRet = pSource->readSomeBytes(data, nBytes);
+        ::std::memcpy(buffer, data.getConstArray(), nRet);
+    }
+    catch (...)
+    {
+        SAL_WARN("ucb.ucp.webdav.curl", "exception in read_callback");
+        return CURL_READFUNC_ABORT; // error
+    }
+    return nRet;
+}
+
+size_t header_callback(char* const buffer, size_t const size, size_t const nitems,
+                       void* const userdata)
+{
+    auto* const pHeaders(static_cast<CurlSession::Headers*>(userdata));
+    //assert(pHeaders);
+    if (!pHeaders) // TODO maybe not needed in every request? not sure
+    {
+        return nitems;
+    }
+    assert(size == 1); // says the man page
+    try
+    {
+#if 0
+        if ("HTTP")
+        {
+        }
+        else
+            // start
+#endif
+        if (nitems == 0)
+        {
+            // end of header, body follows...
+            if (pHeaders.empty())
+            {
+                SAL_WARN("ucb.ucp.webdav.curl", "header_callback: empty header?");
+                return 0; // error
+            }
+            pHeaders->back().second = true;
+        }
+        else if ([0] == ' ' || [0] == '\t') // folded header field?
+        {
+            do
+            {
+                ++idx;
+            } while (idx == ' ' || idx == '\t');
+            if (pHeaders.empty() || pHeaders.back().second || pHeaders.back().first.empty())
+            {
+                SAL_WARN("ucb.ucp.webdav.curl",
+                         "header_callback: folded header field without start");
+                return 0; // error
+            }
+            pHeaders.back().first.back().append(' ');
+            pHeaders.back().first.back().append(idx...);
+        }
+        else
+        {
+            if (pHeaders.empty() || pHeaders.back().second)
+            {
+                pHeaders.emplace_back({}, false);
+            }
+            pHeaders.back().first.emplace_back(OString(buffer, nitems));
+        }
+    }
+    catch (...)
+    {
+        SAL_WARN("ucb.ucp.webdav.curl", "exception in header_callback");
+        return 0; // error
+    }
+    return nitems;
+}
+
+::std::map<OString, OString> ProcessHeaders(::std::vector<OString> const& rHeaders)
+{
+    ::std::map<OString, OString> ret;
+    for (OString const& rLine : rHeaders)
+    {
+        auto const nColon(rLine.indexOf(':'));
+        if (nColon == -1)
+        {
+            SAL_WARN("ucb.ucp.webdav.curl", "invalid header field (no :)");
+            continue;
+        }
+        if (nColon == 0)
+        {
+            SAL_WARN("ucb.ucp.webdav.curl", "invalid header field (empty name)");
+            continue;
+        }
+        auto const name(rLine.copy(0, nColon).toAsciiLowerCase()); // case insensitive
+        sal_Int32 nStart(nColon + 1);
+        while (nStart < rLine.getLength() && rLine[nStart] == ' ' && rLine[nStart] == '\t')
+        {
+            ++nStart;
+        }
+        sal_Int32 nEnd(rLine.getLength() - 1);
+        while (nStart < nEnd && rLine[nEnd] == ' ' && rLine[nEnd] == '\t')
+        {
+            --nEnd;
+        }
+        auto const value(rLine.copy(nStart, nEnd - nStart));
+        auto const it(ret.find(name));
+        if (it != ret.end())
+        {
+            it->second = it->second + "," + value;
+        }
+        else
+        {
+            ret[name] = value;
+        }
+    }
+    return ret;
+}
+
+CurlSession::CurlSession(uno::Reference<uno::XComponentContext> const& xContext,
+                         ::rtl::Reference<DAVSessionFactory> const& rpFactory, OUString const& rURI,
                          ::ucbhelper::InternetProxyDecider const& rProxyDecider)
     : DAVSession(rpFactory)
+    , m_xContext(xContext)
     , m_URI(rURI)
-    , m_rProxyDecider(rProxyDecider)
+    , m_Proxy(rProxyDecider.getProxy(m_URI.GetScheme(), m_URI.GetHost(), m_URI.GetPort()))
 {
+    assert(m_URI.GetScheme() == "http" || m_URI.GetScheme() == "https");
+    m_pCurl.reset(curl_easy_init());
+    if (!m_pCurl)
+    {
+        SAL_WARN("ucb.ucp.webdav.curl", "curl_easy_init failed: " << GetErrorString(rc).getStr());
+        throw DAVException(DAVException::DAV_SESSION_CREATE,
+                           ConnectionEndPointString(m_URI.GetHost(), m_URI.GetPort()));
+    }
+    curl_version_info_data const* const pVersion(curl_version_info(CURLVERSION_NOW));
+    assert(pVersion);
+    SAL_INFO("ucb.ucp.webdav.curl",
+             "curl version: " << pVersion->version << " " << pVersion->host << " features: "
+                              << std::hex << pVersion->features << " ssl: " << pVersion->ssl_version
+                              << " libz: " << pVersion->libz_version);
+    OString const useragent("LibreOffice " LIBO_VERSION_DOTTED " curl/" + pVersion->version + " "
+                            + pVersion->ssl_version) auto rc
+        = curl_easy_setopt(m_pCurl.get(), CURLOPT_USERAGENT, useragent.getStr());
+    if (rc != CURLE_OK)
+    {
+        SAL_WARN("ucb.ucp.webdav.curl",
+                 "CURLOPT_USERAGENT failed: " << GetErrorString(rc).getStr());
+        throw DAVException(DAVException::DAV_SESSION_CREATE,
+                           ConnectionEndPointString(m_URI.GetHost(), m_URI.GetPort()));
+    }
+    m_ErrorBuffer[0] = '\0';
+    // this supposedly gives the highest quality error reporting
+    auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_ERRORBUFFER, m_ErrorBuffer);
+    assert(rc == CURLE_OK);
+    // just for debugging...
+    rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_DEBUGFUNCTION, debug_callback);
+    assert(rc == CURLE_OK);
+    rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_VERBOSE, 1L);
+    assert(rc == CURLE_OK);
+    // accept any encoding supported by libcurl
+    rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_ACCEPT_ENCODING, "");
+    if (rc != CURLE_OK)
+    {
+        SAL_WARN("ucb.ucp.webdav.curl",
+                 "CURLOPT_ACCEPT_ENCODING failed: " << GetErrorString(rc).getStr());
+        throw DAVException(DAVException::DAV_SESSION_CREATE,
+                           ConnectionEndPointString(m_URI.GetHost(), m_URI.GetPort()));
+    }
+    // default is infinite
+    rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_TIMEOUT, 60L);
+    if (rc != CURLE_OK)
+    {
+        SAL_WARN("ucb.ucp.webdav.curl", "CURLOPT_TIMEOUT failed: " << GetErrorString(rc).getStr());
+        throw DAVException(DAVException::DAV_SESSION_CREATE,
+                           ConnectionEndPointString(m_URI.GetHost(), m_URI.GetPort()));
+    }
+    rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_WRITEFUNCTION, &write_callback);
+    assert(rc == CURLE_OK);
+#if 0
+    rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_WRITEDATA, &m_DownloadTarget);
+    assert(rc == CURLE_OK);
+#endif
+    rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_READFUNCTION, &read_callback);
+    assert(rc == CURLE_OK);
+#if 0
+    rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_READDATA, &m_UploadSource);
+    assert(rc == CURLE_OK);
+#endif
+    rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_HEADERFUNCTION, &header_callback);
+    assert(rc == CURLE_OK);
+    if (!m_Proxy.aName.isEmpty())
+    {
+        rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_PROXYPORT, static_cast<long>(m_Proxy.nPort));
+        assert(rc == CURLE_OK);
+        OString const utf8Proxy(::rtl::OUStringToOString(m_Proxy.aName, RTL_TEXTENCODING_UTF8));
+        rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_PROXY, );
+        if (rc != CURLE_OK)
+        {
+            SAL_WARN("ucb.ucp.webdav.curl",
+                     "CURLOPT_PROXY failed: " << GetErrorString(rc).getStr());
+            throw DAVException(DAVException::DAV_SESSION_CREATE,
+                               ConnectionEndPointString(m_Proxy.aName, m_Proxy.nPort));
+        }
+    }
+
+//TODO:
+//curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+#if 0
+struct curl_slist *list = NULL;
+list = curl_slist_append(list, "Name: Mr Smith");
+curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
+curl_easy_perform(curl);
+curl_slist_free_all(list); /* free the list again */
+#endif
+    //curl_easy_setopt(curl, CURLOPT_USERNAME, "joe");
+    //curl_easy_setopt(curl, CURLOPT_PASSWORD, "secret");
 }
 
 CurlSession::~CurlSession() {}
 
-auto CurlSession::CanUse(OUString const& rURI) -> bool {}
+auto CurlSession::CanUse(OUString const& rURI) -> bool
+{
+    try
+    {
+        CurlUri const uri(rURI);
 
-auto CurlSession::UsesProxy() -> bool {}
+        return m_URI.GetScheme() == uri.GetScheme() && m_URI.GetHost() == uri.GetHost()
+               && m_URI.GetPort() == uri.GetPort();
+    }
+    catch (DAVException const&)
+    {
+        return false;
+    }
+}
+
+auto CurlSession::UsesProxy() -> bool
+{
+    assert(m_URI.GetScheme() == "http" || m_URI.GetScheme() == "https");
+    return !m_Proxy.aName.isEmpty();
+}
+
+auto CurlSession::abort() -> void
+{
+    // this is using synchronous libcurl apis - no way to abort?
+    // might be possible with more complexity and CURLOPT_CONNECT_ONLY
+    // or curl_multi API, but is it worth the complexity?
+    // ... it looks like CURLOPT_CONNECT_ONLY would disable all HTTP handling.
+    // abort() was a no-op since OOo 3.2 and before that it crashed.
+    // ??? could use a pipe and select
+    // Win32 code uses SOCKET ...
+    // could use curl_multi_wakeup?
+}
 
 // DAV methods
 auto CurlSession::PROPFIND(OUString const& rInPath, Depth depth,
@@ -52,6 +384,147 @@ auto CurlSession::HEAD(OUString const& rInPath, ::std::vector<OUString> const& r
 auto CurlSession::GET(OUString const& rInPath, DAVRequestEnvironment const& rEnv)
     -> uno::Reference<io::XInputStream>
 {
+    ::std::scoped_lock const g(m_Mutex);
+
+    m_aEnv ? ? ?
+
+    // could use either com.sun.star.io.Pipe or com.sun.star.io.SequenceInputStream?
+    // Pipe can just write into its XOuputStream, which is simpler
+    // also it resizes exponentially, so performance should be fine
+    // only drawback is no XSeekable, not sure if anybody needs it
+
+#if 0
+    assert(m_DownloadTarget.buffer.isEmpty());
+#endif
+#if 0
+    assert(!m_DownloadTarget.xOutStream.is());
+    m_DownloadTarget.xOutStream.set(io::Pipe::create(m_xContext));
+    ::comphelper::ScopeGuard const gg([this](){ m_DownloadTarget.xOutStream.clear(); });
+#endif
+               DownloadTarget downloadTarget(io::Pipe::create(m_xContext));
+    ::comphelper::ScopeGuard const gg([this]() {
+        auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_WRITEDATA, nullptr);
+        assert(rc == CURLE_OK);
+    });
+    ::comphelper::ScopeGuard const gg([this]() {
+        auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_HEADERDATA, nullptr);
+        assert(rc == CURLE_OK);
+    });
+
+//CURLOPT_HEADERDATA
+#if 0
+    CurlURi uri(m_URI);
+    if (uri.GetPath() != rInPath)
+    {
+        uri.SetPath(rInPath);
+    }
+#endif
+    ::std::unique_ptr<CURLU, deleter_from_fn<curl_url_cleanup>> const pUrl(
+        curl_url_dup(m_URI.GetCURLU()));
+    OString const utf8Path(::rtl::OUStringToOString(rInPath, RTL_TEXTENCODING_UTF8));
+    auto uc = curl_url_set(m_pUrl.get(), CURLUPART_PATH, utf8Path.getStr(), 0);
+    if (uc)
+    {
+        SAL_WARN("ucb.ucp.webdav.curl", "curl_url_set failed: " << uc);
+        throw DAVException(DAVException::DAV_INVALID_ARG);
+    }
+
+    auto rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_CURLU, pUrl.get());
+    assert(rc == CURLE_OK); // can't fail since 7.63.0
+    rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_WRITEDATA, &downloadTarget);
+    assert(rc == CURLE_OK);
+#if 0
+    ::std::vector<::std::pair<::std::vector<OString>, bool>> headers;
+    rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_HEADERDATA, &headers);
+    assert(rc == CURLE_OK);
+#endif
+    rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_HTTPGET, 1L);
+    assert(rc == CURLE_OK);
+    m_ErrorBuffer[0] = '\0';
+    auto rc = curl_easy_perform(m_pCurl.get());
+    if (rc != CURLE_OK)
+    {
+        SAL_WARN("ucb.ucp.webdav.curl",
+                 "curl_easy_perform failed: " << GetErrorString(rc, m_ErrorBuffer).getStr());
+        switch (rc)
+        {
+            case CURLE_COULDNT_RESOLVE_PROXY:
+                throw DAVException(DAVException::DAV_HTTP_LOOKUP,
+                    ConnectionEndPointString(m_Proxy.aName, m_Proxy.nPort);
+            case CURLE_COULDNT_RESOLVE_HOST:
+                throw DAVException(DAVException::DAV_HTTP_LOOKUP,
+                    ConnectionEndPointString(m_URI.GetHost(), m_URI.GetPort());
+            case CURLE_COULDNT_CONNECT:
+            case CURLE_SSL_CONNECT_ERROR:
+            case CURLE_SSL_CERTPROBLEM:
+            case CURLE_SSL_CIPHER:
+            case CURLE_PEER_FAILED_VERIFICATION:
+            case CURLE_SSL_ISSUER_ERROR:
+            case CURLE_SSL_PINNEDPUBKEYNOTMATCH:
+            case CURLE_SSL_INVALIDCERTSTATUS:
+            case CURLE_QUIC_CONNECT_ERROR:
+                throw DAVException(DAVException::DAV_HTTP_CONNECT,
+                    ConnectionEndPointString(m_URI.GetHost(), m_URI.GetPort());
+            case CURLE_REMOTE_ACCESS_DENIED:
+            case CURLE_LOGIN_DENIED:
+            case CURLE_AUTH_ERROR:
+                throw DAVException(DAVException::DAV_NOAUTH, // or AUTH ???
+                    ConnectionEndPointString(m_URI.GetHost(), m_URI.GetPort());
+            case CURLE_WRITE_ERROR:
+            case CURLE_READ_ERROR: // error returned from our callbacks
+            case CURLE_OUT_OF_MEMORY:
+            case CURLE_ABORTED_BY_CALLBACK:
+            case CURLE_BAD_FUNCTION_ARGUMENT:
+            case CURLE_SEND_ERROR:
+            case CURLE_RECV_ERROR:
+            case CURLE_SSL_CACERT_BADFILE:
+            case CURLE_SSL_CRL_BADFILE:
+            case CURLE_RECURSIVE_API_CALL:
+                throw DAVException(DAVException::DAV_HTTP_FAILED,
+                    ConnectionEndPointString(m_URI.GetHost(), m_URI.GetPort());
+            case CURLE_OPERATION_TIMEDOUT:
+                throw DAVException(DAVException::DAV_HTTP_TIMEOUT,
+                    ConnectionEndPointString(m_URI.GetHost(), m_URI.GetPort());
+            default: // lots of generic errors
+                throw DAVException(DAVException::DAV_HTTP_ERROR, "", 0);
+        }
+    }
+    long statusCode(SC_NONE);
+    rc = curl_easy_getinfo(m_pCurl.get(), CURLINFO_RESPONSE_CODE, &statusCode);
+    assert(rc == CURLE_OK);
+    switch (statusCode)
+    {
+        case SC_NONE:
+            assert(false); // ??? should be error returned from perform?
+            break;
+        case SC_MOVED_PERMANENTLY:
+        case SC_MOVED_TEMPORARILY:
+        case SC_SEE_OTHER:
+        case SC_TEMPORARY_REDIRECT:
+        {
+            // could also use CURLOPT_FOLLOWLOCATION but apparently the
+            // upper layer wants to know about redirects?
+            char* pRedirectURL(nullptr);
+            rc = curl_easy_getinfo(m_pCurl.get(), CURLINFO_REDIRECT_URL, &pRedirectURL);
+            assert(rc == CURLE_OK);
+            if (pRedirectURL)
+            {
+                throw DAVException(DAVException::DAV_HTTP_REDIRECT,
+                                   pRedirectURL ? OUString(pRedirectURL, strlen(pRedirectURL))
+                                                : OUString());
+            }
+        }
+        default:
+            throw DAVException(DAVException::DAV_HTTP_ERROR, "", statusCode);
+    }
+
+#if 0
+    auto const xStream(io::SequenceInputStream::createStreamFromSequence(m_DownloadTarget.buffer));
+    assert(xStream.is());
+    m_DownloadTarget.buffer.clear();
+    return xStream;
+#endif
+    return downloadTarget.xOutStream;
 }
 
 auto CurlSession::GET(OUString const& rInPath, uno::Reference<io::XOutputStream>& rOutStream,
@@ -114,8 +587,6 @@ auto CurlSession::LOCK(OUString const& rInPath, sal_Int64 const nTimeout,
 }
 
 auto CurlSession::UNLOCK(OUString const& rInPath, DAVRequestEnvironment const& rEnv) -> void {}
-
-auto CurlSession::abort() -> void {}
 
 } // namespace http_dav_ucp
 
