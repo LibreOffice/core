@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5235664_530a0136",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-17T10:17:04Z",
+      "side": 1,
+      "message": "This doesn\u0027t look like a good idea.. ChangeIntl() is called for every locale change, imagine a spreadsheet with cells formatted with alternating locales, for each and every cell to be displayed this constructs a new CharClass.\n\nTo remedy this for at least some scenarios it probably needs an OnDemandCharClass switcher similar to the OnDemandLocaleDataWrapper and others; see xLocaleData and include/svl/ondemand.hxx",
+      "revId": "dac29c278531d5474289eb54aa03987c4958ac83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fd6f367_527bedcf",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 899,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-17T10:17:04Z",
+      "side": 1,
+      "message": "Arghl.. instead use\n\n  OUString sUpperStr \u003d pFormatter-\u003eGetCharClass()-\u003euppercase(rString);",
+      "range": {
+        "startLine": 898,
+        "startChar": 4,
+        "endLine": 899,
+        "endChar": 56
+      },
+      "revId": "dac29c278531d5474289eb54aa03987c4958ac83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
