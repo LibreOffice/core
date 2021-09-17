@@ -353,20 +353,20 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO74215)
     const OUString sStyle
         = getXPath(pXmlDoc, "/w:numbering/w:numPicBullet[2]/w:pict/v:shape", "style");
     {
-        const OUString sWidth = sStyle.getToken(0, ';');
-        CPPUNIT_ASSERT(sWidth.startsWith("width:"));
-        CPPUNIT_ASSERT(sWidth.endsWith("pt"));
-        const double fWidth = sWidth.copy(6, sWidth.getLength() - 8).toDouble();
+        OUString sWidth = sStyle.getToken(0, ';');
+        CPPUNIT_ASSERT(sWidth.startsWith("width:", &sWidth));
+        CPPUNIT_ASSERT(sWidth.endsWith("pt", &sWidth));
+        const double fWidth = sWidth.toDouble();
         const double fXScaleFactor = 96.0 / Application::GetDefaultDevice()->GetDPIX();
         // note: used to fail on Mac with 14.7945205479452 vs. 14.8
         // note: used to fail on another Mac with 12.1348314606742 vs 12.15
         CPPUNIT_ASSERT_DOUBLES_EQUAL(11.25 * fXScaleFactor, fWidth, 0.1);
     }
     {
-        const OUString sHeight = sStyle.getToken(1, ';');
-        CPPUNIT_ASSERT(sHeight.startsWith("height:"));
-        CPPUNIT_ASSERT(sHeight.endsWith("pt"));
-        const double fHeight = sHeight.copy(7, sHeight.getLength() - 9).toDouble();
+        OUString sHeight = sStyle.getToken(1, ';');
+        CPPUNIT_ASSERT(sHeight.startsWith("height:", &sHeight));
+        CPPUNIT_ASSERT(sHeight.endsWith("pt", &sHeight));
+        const double fHeight = sHeight.toDouble();
         const double fYScaleFactor = 96.0 / Application::GetDefaultDevice()->GetDPIY();
         CPPUNIT_ASSERT_DOUBLES_EQUAL(11.25 * fYScaleFactor, fHeight, 0.1);
     }

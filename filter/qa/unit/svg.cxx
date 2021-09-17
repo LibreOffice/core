@@ -117,11 +117,10 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentLine)
     xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
     OUString aStyle = getXPath(
         pXmlDoc, "//svg:g[@class='com.sun.star.drawing.LineShape']/svg:g/svg:g", "style");
-    OUString aPrefix("opacity: ");
     // Without the accompanying fix in place, this test would have failed, as the style was
     // "mask:url(#mask1)", not "opacity: <value>".
-    CPPUNIT_ASSERT(aStyle.startsWith(aPrefix));
-    int nPercent = std::round(aStyle.copy(aPrefix.getLength()).toDouble() * 100);
+    CPPUNIT_ASSERT(aStyle.startsWith("opacity: ", &aStyle));
+    int nPercent = std::round(aStyle.toDouble() * 100);
     // Make sure that the line is still 30% opaque, rather than completely invisible.
     CPPUNIT_ASSERT_EQUAL(30, nPercent);
 }
