@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e0eeabf_68b747e5",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-17T14:04:00Z",
+      "side": 1,
+      "message": "good idea! fix for that here\n   https://gerrit.libreoffice.org/c/core/+/122264",
+      "parentUuid": "e5235664_530a0136",
+      "revId": "dac29c278531d5474289eb54aa03987c4958ac83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0fd6f367_527bedcf",
