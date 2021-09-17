@@ -962,9 +962,9 @@ void ScExternalRefCache::initializeDoc(sal_uInt16 nFileId, const vector<OUString
         // If the one and only table name matches exactly, carry on the base
         // file name for further alias use. If instead the table name matches
         // the base name, carry on the sheet name as alias.
-        if (ScGlobal::GetpTransliteration()->isEqual( pDoc->maTableNames[0].maRealName, aSheetName))
+        if (ScGlobal::GetTransliteration().isEqual( pDoc->maTableNames[0].maRealName, aSheetName))
             pDoc->maSingleTableNameAlias = rBaseName;
-        else if (ScGlobal::GetpTransliteration()->isEqual( pDoc->maTableNames[0].maRealName, rBaseName))
+        else if (ScGlobal::GetTransliteration().isEqual( pDoc->maTableNames[0].maRealName, rBaseName))
             pDoc->maSingleTableNameAlias = aSheetName;
     }
 
@@ -998,12 +998,12 @@ bool ScExternalRefCache::DocItem::getSingleTableNameAlternative( OUString& rTabN
 {
     if (maSingleTableNameAlias.isEmpty() || maTableNames.size() != 1)
         return false;
-    if (ScGlobal::GetpTransliteration()->isEqual( rTabName, maTableNames[0].maRealName))
+    if (ScGlobal::GetTransliteration().isEqual( rTabName, maTableNames[0].maRealName))
     {
         rTabName = maSingleTableNameAlias;
         return true;
     }
-    if (ScGlobal::GetpTransliteration()->isEqual( rTabName, maSingleTableNameAlias))
+    if (ScGlobal::GetTransliteration().isEqual( rTabName, maSingleTableNameAlias))
     {
         rTabName = maTableNames[0].maRealName;
         return true;
@@ -1338,9 +1338,9 @@ ScExternalRefCache::TableTypeRef ScExternalRefCache::getCacheTable(sal_uInt16 nF
         {
             const OUString aBaseName( INetURLObject( *pExtUrl).GetBase());
             const OUString aSheetName( getFirstSheetName());
-            if (ScGlobal::GetpTransliteration()->isEqual( rTabName, aSheetName))
+            if (ScGlobal::GetTransliteration().isEqual( rTabName, aSheetName))
                 pDoc->maSingleTableNameAlias = aBaseName;
-            else if (ScGlobal::GetpTransliteration()->isEqual( rTabName, aBaseName))
+            else if (ScGlobal::GetTransliteration().isEqual( rTabName, aBaseName))
                 pDoc->maSingleTableNameAlias = aSheetName;
         }
     }

@@ -695,8 +695,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
 
     tools::Long nPos = -1;
     CollatorWrapper& rCollator = ScGlobal::GetCollator(rParam.bCaseSens);
-    ::utl::TransliterationWrapper* pTransliteration = (rParam.bCaseSens ?
-                                                       ScGlobal::GetCaseTransliteration() : ScGlobal::GetpTransliteration());
+    ::utl::TransliterationWrapper& rTransliteration = ScGlobal::GetTransliteration(rParam.bCaseSens);
 
     for (size_t i = 0; i < nEntryCount && rParam.GetEntry(i).bDoQuery; ++i)
     {
@@ -785,7 +784,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
                     {
                         // TODO: Use shared string for fast equality check.
                         OUString aStr = rEntry.GetQueryItem().maString.getString();
-                        bOk = pTransliteration->isEqual(aCellStr, aStr);
+                        bOk = rTransliteration.isEqual(aCellStr, aStr);
                         bool bHasStar = false;
                         sal_Int32 nIndex;
                         if (( nIndex = aStr.indexOf('*') ) != -1)
@@ -811,9 +810,9 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
                         OUString aQueryStr = rEntry.GetQueryItem().maString.getString();
                         css::uno::Sequence< sal_Int32 > xOff;
                         const LanguageType nLang = ScGlobal::oSysLocale->GetLanguageTag().getLanguageType();
-                        OUString aCell = pTransliteration->transliterate(
+                        OUString aCell = rTransliteration.transliterate(
                             aCellStr, nLang, 0, aCellStr.getLength(), &xOff);
-                        OUString aQuer = pTransliteration->transliterate(
+                        OUString aQuer = rTransliteration.transliterate(
                             aQueryStr, nLang, 0, aQueryStr.getLength(), &xOff);
                         bOk = (aCell.indexOf( aQuer ) != -1);
                     }

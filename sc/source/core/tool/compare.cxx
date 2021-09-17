@@ -151,9 +151,8 @@ double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
             }
             else if (rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL)
             {
-                ::utl::TransliterationWrapper* pTransliteration =
-                    (rComp.mbIgnoreCase ? ScGlobal::GetpTransliteration() :
-                     ScGlobal::GetCaseTransliteration());
+                ::utl::TransliterationWrapper& rTransliteration =
+                    ScGlobal::GetTransliteration(!rComp.mbIgnoreCase);
                 bool bMatch = false;
                 if (pOptions->bMatchWholeCell)
                 {
@@ -165,10 +164,10 @@ double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
                 else
                 {
                     const LanguageType nLang = ScGlobal::oSysLocale->GetLanguageTag().getLanguageType();
-                    OUString aCell( pTransliteration->transliterate(
+                    OUString aCell( rTransliteration.transliterate(
                                 rCell1.maStr.getString(), nLang, 0,
                                 rCell1.maStr.getLength(), nullptr));
-                    OUString aQuer( pTransliteration->transliterate(
+                    OUString aQuer( rTransliteration.transliterate(
                                 rCell2.maStr.getString(), nLang, 0,
                                 rCell2.maStr.getLength(), nullptr));
                     bMatch = (aCell.indexOf( aQuer ) != -1);

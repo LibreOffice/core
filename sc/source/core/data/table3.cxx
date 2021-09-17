@@ -2386,7 +2386,7 @@ class QueryEvaluator
     void setupTransliteratorIfNeeded()
     {
         if (!mpTransliteration)
-            mpTransliteration = mrParam.bCaseSens ? ScGlobal::GetCaseTransliteration() : ScGlobal::GetpTransliteration();
+            mpTransliteration = &ScGlobal::GetTransliteration(mrParam.bCaseSens);
     }
 
     void setupCollatorIfNeeded()

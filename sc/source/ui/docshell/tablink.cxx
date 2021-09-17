@@ -254,7 +254,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
             {
                 OUString aName;
                 rDoc.GetName( nTab, aName );
-                if ( ScGlobal::GetpTransliteration()->isEqual(
+                if ( ScGlobal::GetTransliteration().isEqual(
                         ScGlobal::GetDocTabName( aFileName, aTabName ), aName ) )
                 {
                     rDoc.RenameTab( nTab,

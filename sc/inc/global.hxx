@@ -546,8 +546,9 @@ public:
     static CollatorWrapper&     GetCollator(bool bCaseSensitive);
     static css::lang::Locale*   GetLocale();
 
-    SC_DLLPUBLIC static ::utl::TransliterationWrapper* GetpTransliteration();
-    static ::utl::TransliterationWrapper* GetCaseTransliteration();
+    SC_DLLPUBLIC static ::utl::TransliterationWrapper& GetTransliteration();
+    static ::utl::TransliterationWrapper& GetCaseTransliteration();
+    static ::utl::TransliterationWrapper& GetTransliteration(bool bCaseSensitive);
 
     SC_DLLPUBLIC static LanguageType            eLnge;
     static constexpr sal_Unicode cListDelimiter = ',';

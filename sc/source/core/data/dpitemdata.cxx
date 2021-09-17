@@ -205,7 +205,7 @@ bool ScDPItemData::IsCaseInsEqual(const ScDPItemData& r) const
         // Fast equality check for interned strings.
         return true;
 
-    return ScGlobal::GetpTransliteration()->isEqual(GetString(), r.GetString());
+    return ScGlobal::GetTransliteration().isEqual(GetString(), r.GetString());
 }
 
 bool ScDPItemData::operator== (const ScDPItemData& r) const
