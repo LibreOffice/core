@@ -16,6 +16,23 @@
       "message": "Patchset 4 adds message listening to SwGlobalTree to be able to update tracking when using document search methods. Would be nice to have a dev with more SfxListener knowledge than I check this out.",
       "revId": "f74e933abd7285f16333b0d3908bd0f97cd975ae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3485524e_87ecc133",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-09-17T06:03:02Z",
+      "side": 1,
+      "message": "In search for the go-to functionality I realized that the Navigator in Content Navigation View does not highlight the current section. Different topic, the actual issue is perfectly solved.\n\nMiklos, could you please have a look at the code?",
+      "revId": "f74e933abd7285f16333b0d3908bd0f97cd975ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
