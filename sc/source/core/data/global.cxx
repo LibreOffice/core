@@ -527,8 +527,8 @@ void ScGlobal::Clear()
     ExitExternalFunc();
     ClearAutoFormat();
     xSearchItem.reset();
-    delete pLegacyFuncCollection.load(); pLegacyFuncCollection = nullptr;
-    delete pAddInCollection.load(); pAddInCollection = nullptr;
+    delete pLegacyFuncCollection.exchange(nullptr);
+    delete pAddInCollection.exchange(nullptr);
     xUserList.reset();
     xStarCalcFunctionList.reset(); // Destroy before ResMgr!
     xStarCalcFunctionMgr.reset();
@@ -539,15 +539,15 @@ void ScGlobal::Clear()
     xEmptyBrushItem.reset();
     xButtonBrushItem.reset();
     xEnglishFormatter.reset();
-    delete pCaseTransliteration.load(); pCaseTransliteration = nullptr;
-    delete pTransliteration.load(); pTransliteration = nullptr;
-    delete pCaseCollator.load(); pCaseCollator = nullptr;
-    delete pCollator.load(); pCollator = nullptr;
+    delete pCaseTransliteration.exchange(nullptr);
+    delete pTransliteration.exchange(nullptr);
+    delete pCaseCollator.exchange(nullptr);
+    delete pCollator.exchange(nullptr);
     oCalendar.reset();
     oSysLocale.reset();
-    delete pLocale.load(); pLocale = nullptr;
+    delete pLocale.exchange(nullptr);
 
-    delete pUnitConverter.load(); pUnitConverter = nullptr;
+    delete pUnitConverter.exchange(nullptr);
     xFieldEditEngine.reset();
 
     xDrawClipDocShellRef.clear();
