@@ -1028,7 +1028,7 @@ CalendarWrapper& ScGlobal::GetCalendar()
     if ( !oCalendar )
     {
         oCalendar.emplace( ::comphelper::getProcessComponentContext() );
-        oCalendar->loadDefaultCalendar( *GetLocale() );
+        oCalendar->loadDefaultCalendar( GetLocale() );
     }
     return *oCalendar;
 }
@@ -1050,7 +1050,7 @@ CollatorWrapper& ScGlobal::GetCollator()
         []()
         {
             CollatorWrapper* p = new CollatorWrapper( ::comphelper::getProcessComponentContext() );
-            p->loadDefaultCollator( *GetLocale(), SC_COLLATOR_IGNORES );
+            p->loadDefaultCollator( GetLocale(), SC_COLLATOR_IGNORES );
             return p;
         },
         GetMutex());
@@ -1061,7 +1061,7 @@ CollatorWrapper& ScGlobal::GetCaseCollator()
         []()
         {
             CollatorWrapper* p = new CollatorWrapper( ::comphelper::getProcessComponentContext() );
-            p->loadDefaultCollator( *GetLocale(), 0 );
+            p->loadDefaultCollator( GetLocale(), 0 );
             return p;
         },
         GetMutex());
@@ -1070,9 +1070,9 @@ CollatorWrapper& ScGlobal::GetCollator(bool bCaseSensitive)
 {
     return bCaseSensitive ? GetCaseCollator() : GetCollator();
 }
-css::lang::Locale*     ScGlobal::GetLocale()
+css::lang::Locale& ScGlobal::GetLocale()
 {
-    return comphelper::doubleCheckedInit( pLocale,
+    return *comphelper::doubleCheckedInit( pLocale,
         []() { return new css::lang::Locale( Application::GetSettings().GetLanguageTag().getLocale()); });
 }
 

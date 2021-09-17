@@ -3297,7 +3297,7 @@ void ScInterpreter::ScInfo()
         return;
 
     OUString aStr = GetString().getString();
-    ScCellKeywordTranslator::transKeyword(aStr, ScGlobal::GetLocale(), ocInfo);
+    ScCellKeywordTranslator::transKeyword(aStr, &ScGlobal::GetLocale(), ocInfo);
     if( aStr == "SYSTEM" )
         PushString( SC_INFO_OSVERSION );
     else if( aStr == "OSVERSION" )
