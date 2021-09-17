@@ -46,7 +46,7 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
         CurlUri const aURI( inUri );
 
         std::unique_ptr< DAVSession > xElement(
-            new CurlSession(this, inUri, *m_xProxyDecider) );
+            new CurlSession(rxContext, this, inUri, *m_xProxyDecider) );
 
         aIt = m_aMap.emplace(  inUri, xElement.get() ).first;
         aIt->second->m_aContainerIt = aIt;
@@ -69,7 +69,7 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
         // call a little:
         CurlUri const aURI( inUri );
 
-        aIt->second = new CurlSession(this, inUri, *m_xProxyDecider);
+        aIt->second = new CurlSession(rxContext, this, inUri, *m_xProxyDecider);
         aIt->second->m_aContainerIt = aIt;
         return aIt->second;
     }

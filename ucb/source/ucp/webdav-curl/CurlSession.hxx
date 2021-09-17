@@ -12,16 +12,37 @@
 #include "DAVSession.hxx"
 #include "CurlUri.hxx"
 
+#include <curl/curl.h>
+
+#include <mutex>
+
 namespace http_dav_ucp
 {
+/// implementation of libcurl HTTP/DAV back-end
 class CurlSession : public DAVSession
 {
 private:
-    CurlUri m_URI;
-    ::ucbhelper::InternetProxyDecider const& m_rProxyDecider;
+    /// mutex required to access all other members
+    ::std::mutex m_Mutex;
+    css::uno::Reference<css::uno::XComponentContext> const m_xContext;
+    CurlUri const m_URI;
+    /// buffer for libcurl detailed error messages
+    char m_ErrorBuffer[CURL_ERROR_SIZE];
+    /// proxy is used if aName is non-empty
+    ::ucbhelper::InternetProxyServer const m_Proxy;
+    /// once authentication was successful, rely on m_pCurl's data
+    bool m_isAuthenticated = false;
+    bool m_isAuthenticatedProxy = false;
+
+    /// libcurl easy handle
+    ::std::unique_ptr<CURL, deleter_from_fn<curl_easy_cleanup>> m_pCurl;
+
+    // this class exists just to hide the implementation details in cxx file
+    friend struct CurlProcessor;
 
 public:
-    explicit CurlSession(::rtl::Reference<DAVSessionFactory> const& rpFactory, OUString const& rURI,
+    explicit CurlSession(css::uno::Reference<css::uno::XComponentContext> const& xContext,
+                         ::rtl::Reference<DAVSessionFactory> const& rpFactory, OUString const& rURI,
                          ::ucbhelper::InternetProxyDecider const& rProxyDecider);
     virtual ~CurlSession() override;
 
@@ -102,9 +123,9 @@ public:
 
     virtual auto abort() -> void override;
 
-    auto NonInteractive_LOCK(::std::u16string_view rURIReference,
+    auto NonInteractive_LOCK(OUString const& rURIReference,
                              sal_Int32& o_rLastChanceToSendRefreshRequest) -> bool;
-    auto NonInteractive_UNLOCK(::std::u16string_view rURIReference) -> void;
+    auto NonInteractive_UNLOCK(OUString const& rURIReference) -> void;
 };
 
 } // namespace http_dav_ucp
