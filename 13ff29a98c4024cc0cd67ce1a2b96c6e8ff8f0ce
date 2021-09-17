@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7642be04_dc20e182",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-17T12:10:52Z",
+      "side": 1,
+      "message": "Let\u0027s merge it: if we have the updated modelines, then someone benefits from those, and the git history noise in these lines is insignificant.\n\nHowever, I suppose that in future patches, generally there\u0027s no need to change these lines in existing files at all. New files should, of course, get the updated ones from TEMPLATE.SOURCECODE.HEADER.",
+      "revId": "13ff29a98c4024cc0cd67ce1a2b96c6e8ff8f0ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
