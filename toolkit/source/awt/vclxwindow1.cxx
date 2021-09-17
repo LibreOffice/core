@@ -45,7 +45,7 @@ void VCLXWindow::SetSystemParent_Impl(const css::uno::Any& rHandle)
     }
 
     // use sal_Int64 here to accommodate all int types
-    // uno::Any shift operator whill upcast if necessary
+    // uno::Any shift operator will upcast if necessary
     sal_Int64 nHandle = 0;
     bool bXEmbed = false;
     bool bThrow = false;
