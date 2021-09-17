@@ -636,17 +636,6 @@ void collectUIInformation(const util::URL& rURL, const css::uno::Sequence< css::
 }
 
 }
-void lcl_BlockCommand(const rtl::OUString& command, const rtl::OUString& kind)
-{
-    tools::JsonWriter aTree;
-    aTree.put("code", "");
-    aTree.put("kind", kind);
-    aTree.put("cmd", command);
-    aTree.put("message", "Blocked feature");
-    aTree.put("viewID", SfxViewShell::Current()->GetViewShellId().get());
-
-    SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_ERROR, aTree.extractData());
-}
 
 void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
         const css::uno::Sequence< css::beans::PropertyValue >& aArgs,
@@ -658,18 +647,16 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
     SolarMutexGuard aGuard;
 
     if (comphelper::LibreOfficeKit::isActive() &&
-        SfxViewShell::Current()->isRestrictedView() &&
-        comphelper::LibreOfficeKit::isRestrictedCommand(aURL.Complete))
+        SfxViewShell::Current()->isBlockedCommand(aURL.Complete))
     {
-        lcl_BlockCommand(aURL.Complete, "restricted");
-        return;
-    }
+        tools::JsonWriter aTree;
+        aTree.put("code", "");
+        aTree.put("kind", "BlockedCommand");
+        aTree.put("cmd", aURL.Complete);
+        aTree.put("message", "Blocked feature");
+        aTree.put("viewID", SfxViewShell::Current()->GetViewShellId().get());
 
-    if (comphelper::LibreOfficeKit::isActive() &&
-        SfxViewShell::Current()->isFreemiumView() &&
-        comphelper::LibreOfficeKit::isCommandFreemiumDenied(aURL.Complete))
-    {
-        lcl_BlockCommand(aURL.Complete, "freemiumdeny");
+        SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_COMMAND_BLOCKED, aTree.extractData());
         return;
     }
 
