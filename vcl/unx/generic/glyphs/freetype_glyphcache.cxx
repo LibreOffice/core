@@ -19,25 +19,24 @@
 
 #include <sal/config.h>
 
-#include <o3tl/safeint.hxx>
-#include <vcl/fontcharmap.hxx>
-
-#include <unx/freetype_glyphcache.hxx>
-
-#include <fontinstance.hxx>
-#include <fontattributes.hxx>
-
-#include <unotools/fontdefs.hxx>
-
-#include <tools/poly.hxx>
+#include <sal/log.hxx>
+#include <rtl/instance.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <tools/poly.hxx>
+#include <unotools/fontdefs.hxx>
+#include <o3tl/safeint.hxx>
 
-#include <sal/log.hxx>
+#include <vcl/fontcharmap.hxx>
 
-#include <langboost.hxx>
 #include <PhysicalFontCollection.hxx>
+#include <fontattributes.hxx>
+#include <fontinstance.hxx>
+#include <impfontcharmap.hxx>
+#include <langboost.hxx>
 #include <sft.hxx>
+#include <unx/freetype_glyphcache.hxx>
+#include <unx/fontmanager.hxx>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -48,8 +47,6 @@
 #include FT_SYNTHESIS_H
 #include FT_TRUETYPE_TABLES_H
 
-#include <rtl/instance.hxx>
-
 #include <vector>
 
 // TODO: move file mapping stuff to OSL
@@ -58,8 +55,6 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
-#include <unx/fontmanager.hxx>
-#include <impfontcharmap.hxx>
 
 static FT_Library aLibFT = nullptr;
 
