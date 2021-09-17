@@ -46,7 +46,7 @@ static OUString lcl_MetricString( tools::Long nTwips, std::u16string_view rText 
         sal_Int64 nUserVal = vcl::ConvertValue( nTwips*100, 1, 2, FieldUnit::TWIP, eUserMet );
 
         OUString aStr = OUString::Concat(rText) + " "
-                        + ScGlobal::getLocaleDataPtr()->getNum( nUserVal, 2 )
+                        + ScGlobal::getLocaleData().getNum( nUserVal, 2 )
                         + " " + SdrFormatter::GetUnitStr(eUserMet);
         return aStr;
     }

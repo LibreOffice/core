@@ -38,7 +38,7 @@ using namespace ::com::sun::star;
 
 IMPL_LINK(ScShareDocumentDlg, SizeAllocated, const Size&, rSize, void)
 {
-    OUString sWidestAccessString = getWidestTime(*ScGlobal::getLocaleDataPtr());
+    OUString sWidestAccessString = getWidestTime(ScGlobal::getLocaleData());
     std::vector<int> aWidths;
     const int nAccessWidth = m_xLbUsers->get_pixel_size(sWidestAccessString).Width() * 2;
     aWidths.push_back(rSize.Width() - nAccessWidth);
@@ -146,7 +146,7 @@ void ScShareDocumentDlg::UpdateView()
                         tools::Time aTime( nHours, nMinutes );
                         DateTime aDateTime( aDate, aTime );
 
-                        OUString aString = formatTime(aDateTime, *ScGlobal::getLocaleDataPtr());
+                        OUString aString = formatTime(aDateTime, ScGlobal::getLocaleData());
 
                         m_xLbUsers->append_text(aUser);
                         m_xLbUsers->set_text(m_xLbUsers->n_children() - 1, aString, 1);
@@ -196,8 +196,8 @@ void ScShareDocumentDlg::UpdateView()
         util::DateTime uDT(xDocProps->getModificationDate());
         DateTime aDateTime(uDT);
 
-        OUString aString = formatTime(aDateTime, *ScGlobal::getLocaleDataPtr()) + " " +
-            ScGlobal::getLocaleDataPtr()->getTime( aDateTime, false );
+        OUString aString = formatTime(aDateTime, ScGlobal::getLocaleData()) + " " +
+            ScGlobal::getLocaleData().getTime( aDateTime, false );
 
         m_xLbUsers->append_text(aUser);
         m_xLbUsers->set_text(m_xLbUsers->n_children() - 1, aString, 1);

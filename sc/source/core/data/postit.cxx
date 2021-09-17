@@ -892,7 +892,7 @@ void ScPostIt::SetAuthor( const OUString& rAuthor )
 
 void ScPostIt::AutoStamp()
 {
-    maNoteData.maDate = ScGlobal::getLocaleDataPtr()->getDate( Date( Date::SYSTEM ) );
+    maNoteData.maDate = ScGlobal::getLocaleData().getDate( Date( Date::SYSTEM ) );
     maNoteData.maAuthor = SvtUserOptions().GetID();
 }
 

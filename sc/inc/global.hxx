@@ -535,7 +535,7 @@ class ScGlobal
 
 public:
     static std::optional<SvtSysLocale> oSysLocale;
-    SC_DLLPUBLIC static const LocaleDataWrapper* getLocaleDataPtr();
+    SC_DLLPUBLIC static const LocaleDataWrapper& getLocaleData();
     SC_DLLPUBLIC static const CharClass& getCharClass();
 
     static CalendarWrapper*     GetCalendar();

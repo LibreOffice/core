@@ -205,7 +205,7 @@ ScUserList::ScUserList()
     uno::Sequence< i18n::CalendarItem2 > xCal;
 
     const uno::Sequence< i18n::Calendar2 > xCalendars(
-            ScGlobal::getLocaleDataPtr()->getAllCalendars() );
+            ScGlobal::getLocaleData().getAllCalendars() );
 
     for ( const auto& rCalendar : xCalendars )
     {

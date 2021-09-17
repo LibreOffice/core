@@ -650,7 +650,7 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, tools::Long
     }
     sal_uInt8 nSignCount = 0, nDecimalCount = 0, nExpCount = 0;
     sal_Int32 nLen = aString.getLength();
-    sal_Unicode cDecSep = ScGlobal::getLocaleDataPtr()->getLocaleItem().decimalSeparator[0];
+    sal_Unicode cDecSep = ScGlobal::getLocaleData().getLocaleItem().decimalSeparator[0];
     for( sal_Int32 i = 0; i < nLen; ++i )
     {
         sal_Unicode c = aString[i];
@@ -759,7 +759,7 @@ tools::Long ScDrawStringsVars::GetDotWidth()
     if (nDotWidth > 0)
         return nDotWidth;
 
-    const OUString& sep = ScGlobal::getLocaleDataPtr()->getLocaleItem().decimalSeparator;
+    const OUString& sep = ScGlobal::getLocaleData().getLocaleItem().decimalSeparator;
     nDotWidth = pOutput->pFmtDevice->GetTextWidth(sep);
     return nDotWidth;
 }

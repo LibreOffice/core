@@ -1248,7 +1248,7 @@ OUString ScDPCache::GetFormattedString(tools::Long nDim, const ScDPItemData& rIt
         if (!p)
             return rItem.GetString();
 
-        sal_Unicode cDecSep = ScGlobal::getLocaleDataPtr()->getNumDecimalSep()[0];
+        sal_Unicode cDecSep = ScGlobal::getLocaleData().getNumDecimalSep()[0];
         return ScDPUtil::getNumGroupName(fVal, p->maInfo, cDecSep, mrDoc.GetFormatTable());
     }
 

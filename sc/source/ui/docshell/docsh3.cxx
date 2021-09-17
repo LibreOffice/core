@@ -643,8 +643,8 @@ void ScDocShell::ExecuteChangeCommentDialog( ScChangeAction* pAction, weld::Wind
     OUString aAuthor = pAction->GetUser();
 
     DateTime aDT = pAction->GetDateTime();
-    OUString aDate = ScGlobal::getLocaleDataPtr()->getDate( aDT ) + " " +
-        ScGlobal::getLocaleDataPtr()->getTime( aDT, false );
+    OUString aDate = ScGlobal::getLocaleData().getDate( aDT ) + " " +
+        ScGlobal::getLocaleData().getTime( aDT, false );
 
     SfxItemSet aSet(
         GetPool(), svl::Items<SID_ATTR_POSTIT_AUTHOR, SID_ATTR_POSTIT_TEXT>);
