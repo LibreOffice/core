@@ -405,7 +405,7 @@ bool SwNode::IsInVisibleArea( SwViewShell const * pSh ) const
                 while ( pFrame && !pFrame->isFrameAreaDefinitionValid() );
             }
 
-            if( !pFrame || pSh->VisArea().IsOver( pFrame->getFrameArea() ) )
+            if( !pFrame || pSh->VisArea().Overlaps( pFrame->getFrameArea() ) )
                 bRet = true;
         }
     }

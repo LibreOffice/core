@@ -114,7 +114,7 @@ static void ImpCheckInsertPos(Point& rPos, const Size& rSize, const ::tools::Rec
 
     ::tools::Rectangle aMarkRect(Point(rPos.X() - (rSize.Width() / 2), rPos.Y() - (rSize.Height() / 2)), rSize);
 
-    if(aMarkRect.IsInside(rWorkArea))
+    if(aMarkRect.Contains(rWorkArea))
         return;
 
     if(aMarkRect.Left() < rWorkArea.Left())
@@ -1421,7 +1421,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 ::tools::Rectangle   aRect( pOLV->GetOutputArea() );
                 Point       aPos( pOLV->GetWindow()->PixelToLogic( maDropPos ) );
 
-                if( aRect.IsInside( aPos ) || ( !bDrag && IsTextEdit() ) )
+                if( aRect.Contains( aPos ) || ( !bDrag && IsTextEdit() ) )
                 {
                     // mba: clipboard always must contain absolute URLs (could be from alien source)
                     pOLV->Read( *xStm, EETextFormat::Xml, mpDocSh->GetHeaderAttributes() );
@@ -1459,7 +1459,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                         ::tools::Rectangle   aRect( pOLV->GetOutputArea() );
                         Point       aPos( pOLV->GetWindow()->PixelToLogic( maDropPos ) );
 
-                        if( aRect.IsInside( aPos ) || ( !bDrag && IsTextEdit() ) )
+                        if( aRect.Contains( aPos ) || ( !bDrag && IsTextEdit() ) )
                         {
                             // mba: clipboard always must contain absolute URLs (could be from alien source)
                             pOLV->Read( *xStm, EETextFormat::Rtf, mpDocSh->GetHeaderAttributes() );

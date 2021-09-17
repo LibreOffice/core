@@ -1144,7 +1144,7 @@ void ScPrintFunc::SetDateTime( const DateTime& rDateTime )
 static void lcl_DrawGraphic( const Graphic &rGraphic, vcl::RenderContext& rOutDev,
                       const tools::Rectangle &rGrf, const tools::Rectangle &rOut )
 {
-    const bool bNotInside = !rOut.IsInside( rGrf );
+    const bool bNotInside = !rOut.Contains( rGrf );
     if ( bNotInside )
     {
         rOutDev.Push();
@@ -1273,7 +1273,7 @@ static void lcl_DrawGraphic( const SvxBrushItem &rBrush, vcl::RenderContext& rOu
         default: OSL_ENSURE( false, "new Graphic position?" );
     }
     tools::Rectangle aGrf( aPos,aDrawSize );
-    if ( bDraw && aGrf.IsOver( rOut ) )
+    if ( bDraw && aGrf.Overlaps( rOut ) )
     {
         lcl_DrawGraphic( *pGraphic, rOutDev, aGrf, rOut );
     }

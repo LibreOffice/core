@@ -242,7 +242,7 @@ void UnfloatTableButton::ShowAll(bool bShow) { Show(bShow); }
 bool UnfloatTableButton::Contains(const Point& rDocPt) const
 {
     ::tools::Rectangle aRect(GetPosPixel(), GetSizePixel());
-    if (aRect.IsInside(rDocPt))
+    if (aRect.Contains(rDocPt))
         return true;
 
     return false;

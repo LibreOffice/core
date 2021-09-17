@@ -799,7 +799,7 @@ void ImplRegionBand::XOr( tools::Long nXLeft, tools::Long nXRight )
     OptimizeBand();
 }
 
-bool ImplRegionBand::IsInside( tools::Long nX )
+bool ImplRegionBand::Contains( tools::Long nX )
 {
     ImplRegionBandSep* pSep = mpFirstSep;
     while ( pSep )

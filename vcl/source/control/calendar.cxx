@@ -331,9 +331,9 @@ sal_uInt16 Calendar::ImplDoHitTest( const Point& rPos, Date& rDate ) const
     if ( mbFormat )
         return 0;
 
-    if ( maPrevRect.IsInside( rPos ) )
+    if ( maPrevRect.Contains( rPos ) )
         return CALENDAR_HITTEST_PREV;
-    else if ( maNextRect.IsInside( rPos ) )
+    else if ( maNextRect.Contains( rPos ) )
         return CALENDAR_HITTEST_NEXT;
 
     tools::Long        nY;

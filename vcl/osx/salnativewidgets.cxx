@@ -220,7 +220,7 @@ bool AquaSalGraphics::hitTestNativeControl(ControlType nType, ControlPart nPart,
         tools::Rectangle aRect;
         bool bValid = AquaGetScrollRect(/* TODO: int nScreen, */
                                         nPart, rControlRegion, aRect);
-        rIsInside = bValid && aRect.IsInside(rPos);
+        rIsInside = bValid && aRect.Contains(rPos);
         return bValid;
     }
     return false;

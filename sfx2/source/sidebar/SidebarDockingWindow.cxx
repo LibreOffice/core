@@ -179,7 +179,7 @@ bool SidebarDockingWindow::EventNotify(NotifyEvent& rEvent)
         if (mEvt->IsLeft())
         {
             tools::Rectangle aGrip = mpSidebarController->GetDeckDragArea();
-            if ( aGrip.IsInside( mEvt->GetPosPixel() ) )
+            if ( aGrip.Contains( mEvt->GetPosPixel() ) )
                 mbIsReadyToDrag = true;
         }
     }
@@ -187,7 +187,7 @@ bool SidebarDockingWindow::EventNotify(NotifyEvent& rEvent)
     {
         const MouseEvent *mEvt = rEvent.GetMouseEvent();
         tools::Rectangle aGrip = mpSidebarController->GetDeckDragArea();
-        if (mEvt->IsLeft() && aGrip.IsInside( mEvt->GetPosPixel() ) && mbIsReadyToDrag )
+        if (mEvt->IsLeft() && aGrip.Contains( mEvt->GetPosPixel() ) && mbIsReadyToDrag )
         {
             Point aPos = mEvt->GetPosPixel();
             vcl::Window* pWindow = rEvent.GetWindow();

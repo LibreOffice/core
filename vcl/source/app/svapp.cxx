@@ -1302,7 +1302,7 @@ unsigned int Application::GetBestScreen( const tools::Rectangle& i_rRect )
     {
         const tools::Rectangle aCurScreenRect( GetScreenPosSizePixel( i ) );
         // if a screen contains the rectangle completely it is obviously the best screen
-        if( aCurScreenRect.IsInside( i_rRect ) )
+        if( aCurScreenRect.Contains( i_rRect ) )
             return i;
         // next the screen which contains most of the area of the rect is the best
         tools::Rectangle aIntersection( aCurScreenRect.GetIntersection( i_rRect ) );

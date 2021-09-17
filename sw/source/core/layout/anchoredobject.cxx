@@ -801,7 +801,7 @@ bool SwAnchoredObject::OverlapsPrevColumn() const
                 aChkRect.Union( pTmpColFrame->getFrameArea() );
                 pTmpColFrame = pTmpColFrame->GetPrev();
             }
-            bOverlapsPrevColumn = GetObjRect().IsOver( aChkRect );
+            bOverlapsPrevColumn = GetObjRect().Overlaps( aChkRect );
         }
     }
 

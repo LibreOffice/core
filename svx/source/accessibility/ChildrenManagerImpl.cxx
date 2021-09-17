@@ -315,7 +315,7 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
 
         // Insert shape if it is visible, i.e. its bounding box overlaps
         // the visible area.
-        if ( aBoundingBox.IsOver (aVisibleArea) )
+        if ( aBoundingBox.Overlaps(aVisibleArea) )
             raDescriptorList.emplace_back(xShape);
     }
 }
@@ -439,7 +439,7 @@ void ChildrenManagerImpl::AddShape (const Reference<drawing::XShape>& rxShape)
     if (xParent != mxShapeList)
         return;
 
-    if (!aBoundingBox.IsOver (aVisibleArea))
+    if (!aBoundingBox.Overlaps(aVisibleArea))
         return;
 
     // Add shape to list of visible shapes.

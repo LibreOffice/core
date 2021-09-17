@@ -629,7 +629,7 @@ bool SwTextFrame::GetModelPositionForViewPoint_(SwPosition* pPos, const Point& r
         }
     }
     bool bChgFillData = false;
-    if( pFillData && FindPageFrame()->getFrameArea().IsInside( aOldPoint ) )
+    if( pFillData && FindPageFrame()->getFrameArea().Contains( aOldPoint ) )
     {
         FillCursorPos( *pFillData );
         bChgFillData = true;

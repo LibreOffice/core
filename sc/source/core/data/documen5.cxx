@@ -108,7 +108,7 @@ bool ScDocument::HasChartAtPoint( SCTAB nTab, const Point& rPos, OUString& rName
         while (pObject)
         {
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
-                 pObject->GetCurrentBoundRect().IsInside(rPos) )
+                 pObject->GetCurrentBoundRect().Contains(rPos) )
             {
                 // also Chart-Objects that are not in the Collection
 

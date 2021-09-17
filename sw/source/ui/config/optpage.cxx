@@ -1530,7 +1530,7 @@ void SwMarkPreview::PaintPage(vcl::RenderContext& rRenderContext, const tools::R
         if (i == (nLines - 1))
             aTextLine.SetSize(Size(aTextLine.GetWidth() / 2, aTextLine.GetHeight()));
 
-        if (aPage.IsInside(aTextLine))
+        if (aPage.Contains(aTextLine))
             drawRect(rRenderContext, aTextLine, m_aTextCol, m_aTransCol);
 
         aTextLine.Move(0, nStep);

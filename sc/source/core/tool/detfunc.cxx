@@ -410,9 +410,9 @@ bool ScDetectiveFunc::HasArrow( const ScAddress& rStart,
                 lcl_IsOtherTab( rSet.Get(XATTR_LINEEND).GetLineEndValue() );
 
             bool bStartHit = bStartAlien ? bObjStartAlien :
-                                ( !bObjStartAlien && aStartRect.IsInside(pObject->GetPoint(0)) );
+                                ( !bObjStartAlien && aStartRect.Contains(pObject->GetPoint(0)) );
             bool bEndHit = bEndAlien ? bObjEndAlien :
-                                ( !bObjEndAlien && aEndRect.IsInside(pObject->GetPoint(1)) );
+                                ( !bObjEndAlien && aEndRect.Contains(pObject->GetPoint(1)) );
 
             if ( bStartHit && bEndHit )
                 bFound = true;
@@ -684,7 +684,7 @@ void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, bool bDestPnt )
         if ( pObject->GetLayer()==SC_LAYER_INTERN &&
                 pObject->IsPolyObj() && pObject->GetPointCount()==2 )
         {
-            if (aRect.IsInside(pObject->GetPoint(bDestPnt ? 1 : 0))) // start/destinationpoint
+            if (aRect.Contains(pObject->GetPoint(bDestPnt ? 1 : 0))) // start/destinationpoint
                 ppObj[nDelCount++] = pObject;
         }
 

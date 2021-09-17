@@ -1500,7 +1500,7 @@ bool Ruler::ImplDoHitTest( const Point& rPos, RulerSelection* pHitTest,
                         aRect.SetRight( n1 - ruler_tab.cwidth2 + ruler_tab.cwidth );
                     }
 
-                    if ( aRect.IsInside( Point( nX, nY ) ) )
+                    if ( aRect.Contains( Point( nX, nY ) ) )
                     {
                         pHitTest->eType   = RulerType::Tab;
                         pHitTest->nAryPos = i;
@@ -1540,7 +1540,7 @@ bool Ruler::ImplDoHitTest( const Point& rPos, RulerSelection* pHitTest,
                     aRect.SetBottom( nIndentHeight+RULER_OFF-1 );
                 }
 
-                if ( aRect.IsInside( Point( nX, nY ) ) )
+                if ( aRect.Contains( Point( nX, nY ) ) )
                 {
                     pHitTest->eType     = RulerType::Indent;
                     pHitTest->nAryPos   = i-1;
@@ -1686,7 +1686,7 @@ bool Ruler::ImplDoHitTest( const Point& rPos, RulerSelection* pHitTest,
                     aRect.AdjustLeft( -1 );
                     aRect.AdjustRight( 1 );
 
-                    if ( aRect.IsInside( Point( nX, nY ) ) )
+                    if ( aRect.Contains( Point( nX, nY ) ) )
                     {
                         pHitTest->eType   = RulerType::Tab;
                         pHitTest->nAryPos = i;
@@ -1925,7 +1925,7 @@ void Ruler::MouseButtonDown( const MouseEvent& rMEvt )
         Invalidate(InvalidateFlags::NoErase);
     }
 
-    if ( maExtraRect.IsInside( aMousePos ) )
+    if ( maExtraRect.Contains( aMousePos ) )
     {
         ExtraDown();
     }

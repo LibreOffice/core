@@ -897,7 +897,7 @@ void WinSalFrame::updateScreenNumber()
         size_t nMon = rMonitors.size();
         for( size_t i = 0; i < nMon; i++ )
         {
-            if( rMonitors[i].m_aArea.IsInside( aPoint ) )
+            if( rMonitors[i].m_aArea.Contains( aPoint ) )
             {
                 mnDisplay = static_cast<sal_Int32>(i);
                 maGeometry.nDisplayScreenNumber = static_cast<unsigned int>(i);
@@ -1769,7 +1769,7 @@ void WinSalFrame::SetScreenNumber( unsigned int nNewScreen )
             Point aCurPos( maGeometry.nX, maGeometry.nY );
             for( size_t i = 0; i < nMon; i++ )
             {
-                if( rMonitors[i].m_aArea.IsInside( aCurPos ) )
+                if( rMonitors[i].m_aArea.Contains( aCurPos ) )
                 {
                     aOldMonPos = rMonitors[i].m_aArea.TopLeft();
                     break;
@@ -3096,7 +3096,7 @@ static bool ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
                 if (const auto& pHelpWin = ImplGetSVHelpData().mpHelpWin)
                 {
                     const tools::Rectangle& rHelpRect = pHelpWin->GetHelpArea();
-                    if (rHelpRect.IsInside(Point(aPt.x, aPt.y)))
+                    if (rHelpRect.Contains(Point(aPt.x, aPt.y)))
                     {
                         // We have entered a tooltip (help window). Don't call the handler here; it
                         // would launch the sequence "Mouse leaves the Control->Control redraws->

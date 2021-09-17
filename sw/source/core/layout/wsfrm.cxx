@@ -2302,7 +2302,7 @@ SwTwips SwContentFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
                     if( aBound.Left() > aRect.Right() )
                         continue;
 
-                    if( aBound.IsOver( aRect ) )
+                    if( aBound.Overlaps( aRect ) )
                     {
                         const SwFrameFormat& rFormat = pAnchoredObj->GetFrameFormat();
                         if( css::text::WrapTextMode_THROUGH != rFormat.GetSurround().GetSurround() )

@@ -731,7 +731,7 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
             if ( GetOutDev()->HitTestNativeScrollbar( bHorizontal? (IsRTLEnabled()? ControlPart::ButtonRight: ControlPart::ButtonLeft): ControlPart::ButtonUp,
                         aControlRegion, rMousePos, bIsInside )?
                     bIsInside:
-                    maBtn1Rect.IsInside( rMousePos ) )
+                    maBtn1Rect.Contains( rMousePos ) )
             {
                 bAction = bCallAction;
                 mnStateFlags |= SCRBAR_STATE_BTN1_DOWN;
@@ -744,7 +744,7 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
             if ( GetOutDev()->HitTestNativeScrollbar( bHorizontal? (IsRTLEnabled()? ControlPart::ButtonLeft: ControlPart::ButtonRight): ControlPart::ButtonDown,
                         aControlRegion, rMousePos, bIsInside )?
                     bIsInside:
-                    maBtn2Rect.IsInside( rMousePos ) )
+                    maBtn2Rect.Contains( rMousePos ) )
             {
                 bAction = bCallAction;
                 mnStateFlags |= SCRBAR_STATE_BTN2_DOWN;
@@ -758,7 +758,7 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
             if ( GetOutDev()->HitTestNativeScrollbar( bHorizontal? ControlPart::TrackHorzLeft: ControlPart::TrackVertUpper,
                                        maPage1Rect, rMousePos, bIsInside )?
                     bIsInside:
-                    maPage1Rect.IsInside( rMousePos ) )
+                    maPage1Rect.Contains( rMousePos ) )
             {
                 bAction = bCallAction;
                 mnStateFlags |= SCRBAR_STATE_PAGE1_DOWN;
@@ -772,7 +772,7 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
             if ( GetOutDev()->HitTestNativeScrollbar( bHorizontal? ControlPart::TrackHorzRight: ControlPart::TrackVertLower,
                                        maPage2Rect, rMousePos, bIsInside )?
                     bIsInside:
-                    maPage2Rect.IsInside( rMousePos ) )
+                    maPage2Rect.Contains( rMousePos ) )
             {
                 bAction = bCallAction;
                 mnStateFlags |= SCRBAR_STATE_PAGE2_DOWN;
@@ -863,7 +863,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
     if ( GetOutDev()->HitTestNativeScrollbar( bHorizontal? (IsRTLEnabled()? ControlPart::ButtonRight: ControlPart::ButtonLeft): ControlPart::ButtonUp,
                 aControlRegion, rMousePos, bIsInside )?
             bIsInside:
-            maBtn1Rect.IsInside( rMousePos ) )
+            maBtn1Rect.Contains( rMousePos ) )
     {
         if (rMEvt.IsLeft() && !(mnStateFlags & SCRBAR_STATE_BTN1_DISABLE) )
         {
@@ -874,7 +874,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
     else if ( GetOutDev()->HitTestNativeScrollbar( bHorizontal? (IsRTLEnabled()? ControlPart::ButtonLeft: ControlPart::ButtonRight): ControlPart::ButtonDown,
                 aControlRegion, rMousePos, bIsInside )?
             bIsInside:
-            maBtn2Rect.IsInside( rMousePos ) )
+            maBtn2Rect.Contains( rMousePos ) )
     {
         if (rMEvt.IsLeft() && !(mnStateFlags & SCRBAR_STATE_BTN2_DISABLE) )
         {
@@ -886,7 +886,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
     {
         bool bThumbHit = GetOutDev()->HitTestNativeScrollbar( bHorizontal? ControlPart::ThumbHorz : ControlPart::ThumbVert,
                                                maThumbRect, rMousePos, bIsInside )
-                         ? bIsInside : maThumbRect.IsInside( rMousePos );
+                         ? bIsInside : maThumbRect.Contains( rMousePos );
 
         bool bThumbAction = bWarp || bPage;
 
@@ -939,7 +939,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
             if ( GetOutDev()->HitTestNativeScrollbar( bHorizontal? ControlPart::TrackHorzLeft : ControlPart::TrackVertUpper,
                                        maPage1Rect, rMousePos, bIsInside )?
                 bIsInside:
-                maPage1Rect.IsInside( rMousePos ) )
+                maPage1Rect.Contains( rMousePos ) )
             {
                 meScrollType    = ScrollType::PageUp;
             }
@@ -1220,30 +1220,30 @@ tools::Rectangle* ScrollBar::ImplFindPartRect( const Point& rPt )
     if( GetOutDev()->HitTestNativeScrollbar( bHorizontal? (IsRTLEnabled()? ControlPart::ButtonRight: ControlPart::ButtonLeft): ControlPart::ButtonUp,
                 aControlRegion, rPt, bIsInside )?
             bIsInside:
-            maBtn1Rect.IsInside( rPt ) )
+            maBtn1Rect.Contains( rPt ) )
         return &maBtn1Rect;
     else if( GetOutDev()->HitTestNativeScrollbar( bHorizontal? (IsRTLEnabled()? ControlPart::ButtonLeft: ControlPart::ButtonRight): ControlPart::ButtonDown,
                 aControlRegion, rPt, bIsInside )?
             bIsInside:
-            maBtn2Rect.IsInside( rPt ) )
+            maBtn2Rect.Contains( rPt ) )
         return &maBtn2Rect;
     // HitTestNativeScrollbar, see remark at top of file
     else if( GetOutDev()->HitTestNativeScrollbar( bHorizontal ? ControlPart::TrackHorzLeft : ControlPart::TrackVertUpper,
                 maPage1Rect, rPt, bIsInside)?
             bIsInside:
-            maPage1Rect.IsInside( rPt ) )
+            maPage1Rect.Contains( rPt ) )
         return &maPage1Rect;
     // HitTestNativeScrollbar, see remark at top of file
     else if( GetOutDev()->HitTestNativeScrollbar( bHorizontal ? ControlPart::TrackHorzRight : ControlPart::TrackVertLower,
                 maPage2Rect, rPt, bIsInside)?
             bIsInside:
-            maPage2Rect.IsInside( rPt ) )
+            maPage2Rect.Contains( rPt ) )
         return &maPage2Rect;
     // HitTestNativeScrollbar, see remark at top of file
     else if( GetOutDev()->HitTestNativeScrollbar( bHorizontal ? ControlPart::ThumbHorz : ControlPart::ThumbVert,
                 maThumbRect, rPt, bIsInside)?
              bIsInside:
-             maThumbRect.IsInside( rPt ) )
+             maThumbRect.Contains( rPt ) )
         return &maThumbRect;
     else
         return nullptr;

@@ -744,7 +744,7 @@ bool PushButton::ImplHitTestPushButton( vcl::Window const * pDev,
 {
     tools::Rectangle   aTestRect( Point(), pDev->GetOutputSizePixel() );
 
-    return aTestRect.IsInside( rPos );
+    return aTestRect.Contains( rPos );
 }
 
 DrawTextFlags PushButton::ImplGetTextStyle( SystemTextColorFlags nSystemTextColorFlags ) const
@@ -987,10 +987,10 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
                 if (Window::IsEnabled())
                     nState |= ControlState::ENABLED;
 
-                if (IsMouseOver() && aInRect.IsInside(GetPointerPosPixel()))
+                if (IsMouseOver() && aInRect.Contains(GetPointerPosPixel()))
                     nState |= ControlState::ROLLOVER;
 
-                if ( IsMouseOver() && aInRect.IsInside(GetPointerPosPixel()) && mbIsActive)
+                if ( IsMouseOver() && aInRect.Contains(GetPointerPosPixel()) && mbIsActive)
                 {
                     nState |= ControlState::ROLLOVER;
                     nButtonStyle &= ~DrawButtonFlags::Pressed;
@@ -1005,7 +1005,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
     if (bNativeOK)
         return;
 
-    bool bRollOver = (IsMouseOver() && aInRect.IsInside(GetPointerPosPixel()));
+    bool bRollOver = (IsMouseOver() && aInRect.Contains(GetPointerPosPixel()));
     if (bRollOver)
         nButtonStyle |= DrawButtonFlags::Highlight;
     bool bDrawMenuSep = mnDDStyle == PushButtonDropdownStyle::SplitMenuButton;
@@ -1932,7 +1932,7 @@ void RadioButton::ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext)
         if (IsEnabled())
             nState |= ControlState::ENABLED;
 
-        if (IsMouseOver() && maMouseRect.IsInside(GetPointerPosPixel()))
+        if (IsMouseOver() && maMouseRect.Contains(GetPointerPosPixel()))
             nState |= ControlState::ROLLOVER;
 
         bNativeOK = rRenderContext.DrawNativeControl(ControlType::Radiobutton, ControlPart::Entire, aCtrlRect,
@@ -2346,7 +2346,7 @@ void RadioButton::dispose()
 
 void RadioButton::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( rMEvt.IsLeft() && maMouseRect.IsInside( rMEvt.GetPosPixel() ) )
+    if ( rMEvt.IsLeft() && maMouseRect.Contains( rMEvt.GetPosPixel() ) )
     {
         GetButtonState() |= DrawButtonFlags::Pressed;
         Invalidate();
@@ -2379,7 +2379,7 @@ void RadioButton::Tracking( const TrackingEvent& rTEvt )
     }
     else
     {
-        if ( maMouseRect.IsInside( rTEvt.GetMouseEvent().GetPosPixel() ) )
+        if ( maMouseRect.Contains( rTEvt.GetMouseEvent().GetPosPixel() ) )
         {
             if ( !(GetButtonState() & DrawButtonFlags::Pressed) )
             {
@@ -2612,7 +2612,7 @@ bool RadioButton::PreNotify( NotifyEvent& rNEvt )
             // trigger redraw if mouse over state has changed
             if( IsNativeControlSupported(ControlType::Radiobutton, ControlPart::Entire) )
             {
-                if (maMouseRect.IsInside(GetPointerPosPixel()) != maMouseRect.IsInside(GetLastPointerPosPixel()) ||
+                if (maMouseRect.Contains(GetPointerPosPixel()) != maMouseRect.Contains(GetLastPointerPosPixel()) ||
                     pMouseEvt->IsLeaveWindow() || pMouseEvt->IsEnterWindow())
                 {
                     Invalidate( maStateRect );
@@ -3061,7 +3061,7 @@ void CheckBox::ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext)
         else if (meState == TRISTATE_INDET)
             aControlValue.setTristateVal(ButtonValue::Mixed);
 
-        if (IsMouseOver() && maMouseRect.IsInside(GetPointerPosPixel()))
+        if (IsMouseOver() && maMouseRect.Contains(GetPointerPosPixel()))
             nState |= ControlState::ROLLOVER;
 
         bNativeOK = rRenderContext.DrawNativeControl(ControlType::Checkbox, ControlPart::Entire, aCtrlRegion,
@@ -3172,7 +3172,7 @@ CheckBox::CheckBox( vcl::Window* pParent, WinBits nStyle ) :
 
 void CheckBox::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( rMEvt.IsLeft() && maMouseRect.IsInside( rMEvt.GetPosPixel() ) )
+    if ( rMEvt.IsLeft() && maMouseRect.Contains( rMEvt.GetPosPixel() ) )
     {
         GetButtonState() |= DrawButtonFlags::Pressed;
         Invalidate();
@@ -3205,7 +3205,7 @@ void CheckBox::Tracking( const TrackingEvent& rTEvt )
     }
     else
     {
-        if ( maMouseRect.IsInside( rTEvt.GetMouseEvent().GetPosPixel() ) )
+        if ( maMouseRect.Contains( rTEvt.GetMouseEvent().GetPosPixel() ) )
         {
             if ( !(GetButtonState() & DrawButtonFlags::Pressed) )
             {
@@ -3493,7 +3493,7 @@ bool CheckBox::PreNotify( NotifyEvent& rNEvt )
             // trigger redraw if mouse over state has changed
             if( IsNativeControlSupported(ControlType::Checkbox, ControlPart::Entire) )
             {
-                if (maMouseRect.IsInside(GetPointerPosPixel()) != maMouseRect.IsInside(GetLastPointerPosPixel()) ||
+                if (maMouseRect.Contains(GetPointerPosPixel()) != maMouseRect.Contains(GetLastPointerPosPixel()) ||
                     pMouseEvt->IsLeaveWindow() || pMouseEvt->IsEnterWindow())
                 {
                     Invalidate( maStateRect );

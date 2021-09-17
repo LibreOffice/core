@@ -2117,7 +2117,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
     aPoint.setX(aPoint.getX() + aPixPos.getX());
     aPoint.setY(aPoint.getY() + aPixPos.getY());
     Point aCorePoint( GetMap()->PixelToCore( aPoint ) );
-    if( !aLogBounds.IsInside( aCorePoint ) )
+    if( !aLogBounds.Contains( aCorePoint ) )
     {
         // #i12332# rPoint is may also be in rectangle returned by
         // getCharacterBounds(getCharacterCount()

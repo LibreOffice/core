@@ -2074,7 +2074,7 @@ void SdrMarkView::MarkObj(const tools::Rectangle& rRect, bool bUnmark)
         for (size_t nO=0; nO<nObjCount; ++nO) {
             SdrObject* pObj=pObjList->GetObj(nO);
             tools::Rectangle aRect(pObj->GetCurrentBoundRect());
-            if (aFrm1.IsInside(aRect)) {
+            if (aFrm1.Contains(aRect)) {
                 if (!bUnmark) {
                     if (IsObjMarkable(pObj,pPV))
                     {
@@ -2279,7 +2279,7 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
     aRect.AdjustRight(nTol2 );
     aRect.AdjustBottom(nTol2 );
 
-    if (aRect.IsInside(rPnt))
+    if (aRect.Contains(rPnt))
     {
         if (!bCheckIfMarkable || IsObjMarkable(pObj,pPV))
         {
@@ -2499,7 +2499,7 @@ bool SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageVie
             aRect.AdjustTop( -mnHitTolLog );
             aRect.AdjustRight(mnHitTolLog );
             aRect.AdjustBottom(mnHitTolLog );
-            if (aRect.IsInside(rPnt)) {
+            if (aRect.Contains(rPnt)) {
                 rpObj=pObj;
                 rpPV=pPV;
                 return true;

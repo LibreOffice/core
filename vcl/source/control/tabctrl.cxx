@@ -830,17 +830,17 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem co
         if (aLeftTestPos.Y() == rCurRect.Bottom())
         {
             aLeftTestPos.AdjustX( -2 );
-            if (rCurRect.IsInside(aLeftTestPos))
+            if (rCurRect.Contains(aLeftTestPos))
                 bLeftBorder = false;
             aRightTestPos.AdjustX(2 );
-            if (rCurRect.IsInside(aRightTestPos))
+            if (rCurRect.Contains(aRightTestPos))
                 bRightBorder = false;
         }
         else
         {
-            if (rCurRect.IsInside(aLeftTestPos))
+            if (rCurRect.Contains(aLeftTestPos))
                 nLeftBottom -= 2;
-            if (rCurRect.IsInside(aRightTestPos))
+            if (rCurRect.Contains(aRightTestPos))
                 nRightBottom -= 2;
         }
     }
@@ -856,11 +856,11 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem co
     }
     if (IsEnabled())
         nState |= ControlState::ENABLED;
-    if (IsMouseOver() && pItem->maRect.IsInside(GetPointerPosPixel()))
+    if (IsMouseOver() && pItem->maRect.Contains(GetPointerPosPixel()))
     {
         nState |= ControlState::ROLLOVER;
         for (auto const& item : mpTabCtrlData->maItemList)
-            if ((&item != pItem) && item.m_bVisible && item.maRect.IsInside(GetPointerPosPixel()))
+            if ((&item != pItem) && item.m_bVisible && item.maRect.Contains(GetPointerPosPixel()))
             {
                 nState &= ~ControlState::ROLLOVER; // avoid multiple highlighted tabs
                 break;
@@ -1522,7 +1522,7 @@ ImplTabItem* TabControl::ImplGetItem(const Point& rPt) const
     int nFound = 0;
     for (auto & item : mpTabCtrlData->maItemList)
     {
-        if (item.m_bVisible && item.maRect.IsInside(rPt))
+        if (item.m_bVisible && item.maRect.Contains(rPt))
         {
             nFound++;
             pFoundItem = &item;
@@ -1787,7 +1787,7 @@ sal_uInt16 TabControl::GetPageId( const Point& rPos ) const
     Size winSize = Control::GetOutputSizePixel();
     const auto &rList = mpTabCtrlData->maItemList;
     const auto it = std::find_if(rList.begin(), rList.end(), [&rPos, &winSize, this](const auto &item) {
-        return const_cast<TabControl*>(this)->ImplGetTabRect(&item, winSize.Width(), winSize.Height()).IsInside(rPos); });
+        return const_cast<TabControl*>(this)->ImplGetTabRect(&item, winSize.Width(), winSize.Height()).Contains(rPos); });
     return (it != rList.end()) ? it->id() : 0;
 }
 

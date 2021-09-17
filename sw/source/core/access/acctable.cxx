@@ -231,7 +231,7 @@ void SwAccessibleTableData_Impl::GetSelection(
         const SwFrame *pLower = rLower.GetSwFrame();
         OSL_ENSURE( pLower, "child should be a frame" );
         const SwRect& rBox = rLower.GetBox( mrAccMap );
-        if( pLower && rBox.IsOver( rArea ) )
+        if( pLower && rBox.Overlaps( rArea ) )
         {
             if( rLower.IsAccessible( mbIsInPagePreview ) )
             {

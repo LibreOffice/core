@@ -600,7 +600,7 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
     rRet.m_nSub = 0;
     //If the point stays inside the Cnt everything is clear already; the Content
     //automatically has a distance of 0.
-    if ( pCnt->getFrameArea().IsInside( rPt ) )
+    if ( pCnt->getFrameArea().Contains( rPt ) )
     {
         rRet.m_nMain = 0;
         return pCnt;
@@ -619,7 +619,7 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
         // #i70582#
         // --> OD 2009-03-05 - adopted for Support for Classical Mongolian Script
         const SwTwips nTopForObjPos = lcl_GetTopForObjPos(pCnt, bVert, bVertL2R);
-        if ( pUp->getFrameArea().IsInside( rPt ) )
+        if ( pUp->getFrameArea().Contains( rPt ) )
         {
             // <rPt> point is inside environment of given content frame
             // #i70582#
@@ -760,7 +760,7 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
                 }
                 bSct = nullptr != pSect;
             }
-            while ( pLay && !pLay->getFrameArea().IsInside( rPt ) &&
+            while ( pLay && !pLay->getFrameArea().Contains( rPt ) &&
                     ( pLay->getFrameArea().Top() <= rPt.Y() || pLay->IsInFly() ||
                       ( pLay->IsInSct() &&
                       pLay->FindSctFrame()->GetUpper()->getFrameArea().Top() <= rPt.Y())) )
@@ -867,7 +867,7 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
             }
             if ( pLay )
             {
-                if ( pLay->getFrameArea().IsInside( rPt ) )
+                if ( pLay->getFrameArea().Contains( rPt ) )
                 {
                     SwTwips nDiff = pLay->IsVertical() ? ( pLay->IsVertLR() ? ( rPt.X() - nFrameTop ) : ( nFrameTop - rPt.X() ) )
                                                        : ( rPt.Y() - nFrameTop );
@@ -1093,7 +1093,7 @@ const SwContentFrame *FindAnchor( const SwFrame *pOldAnch, const Point &rNew,
         ::lcl_PointToPrt( aNew, pPage );
     }
 
-    if ( pCnt->IsInDocBody() == bBody && pCnt->getFrameArea().IsInside( aNew ) )
+    if ( pCnt->IsInDocBody() == bBody && pCnt->getFrameArea().Contains( aNew ) )
         return pCnt;
     else if ( pOldAnch->IsInDocBody() || pOldAnch->IsPageFrame() )
     {
@@ -1102,7 +1102,7 @@ const SwContentFrame *FindAnchor( const SwFrame *pOldAnch, const Point &rNew,
         Point aTmp( aNew );
         const SwContentFrame *pTmp = pCnt->FindPageFrame()->
                                         GetContentPos( aTmp, false, true );
-        if ( pTmp && pTmp->getFrameArea().IsInside( aNew ) )
+        if ( pTmp && pTmp->getFrameArea().Contains( aNew ) )
             return pTmp;
     }
 
@@ -1251,7 +1251,7 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
 //!!!!!We can optimize here: FindAnchor could also return RelPos!
     const SwFrame *pFrame = nullptr;
     SwTwips nY;
-    if ( pCnt->getFrameArea().IsInside( aNew ) )
+    if ( pCnt->getFrameArea().Contains( aNew ) )
     {
         // #i70582#
         if ( bVert )

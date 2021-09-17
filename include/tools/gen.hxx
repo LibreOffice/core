@@ -336,7 +336,7 @@ public:
     tools::Long&           Min() { return nA; }
     tools::Long&           Max() { return nB; }
 
-    bool            IsInside( tools::Long nIs ) const;
+    bool            Contains( tools::Long nIs ) const;
 
     void            Justify();
 
@@ -346,7 +346,7 @@ public:
     using Pair::toString;
 };
 
-inline bool Range::IsInside( tools::Long nIs ) const
+inline bool Range::Contains( tools::Long nIs ) const
 {
     return ((nA <= nIs) && (nIs <= nB ));
 }
@@ -397,7 +397,7 @@ public:
     tools::Long&           Min() { return nA; }
     tools::Long&           Max() { return nB; }
 
-    bool            IsInside( tools::Long nIs ) const;
+    bool            Contains( tools::Long nIs ) const;
 
     void            Justify();
 
@@ -413,7 +413,7 @@ public:
     using Pair::toString;
 };
 
-inline bool Selection::IsInside( tools::Long nIs ) const
+inline bool Selection::Contains( tools::Long nIs ) const
 {
     return ((nA <= nIs) && (nIs < nB ));
 }
@@ -551,9 +551,9 @@ public:
 
     void                Justify();
 
-    bool                IsInside( const Point& rPOINT ) const;
-    bool                IsInside( const tools::Rectangle& rRect ) const;
-    bool                IsOver( const tools::Rectangle& rRect ) const;
+    bool                Contains( const Point& rPOINT ) const;
+    bool                Contains( const tools::Rectangle& rRect ) const;
+    bool                Overlaps( const tools::Rectangle& rRect ) const;
 
     void                SetEmpty() { nRight = nBottom = RECT_EMPTY; }
     void                SetWidthEmpty() { nRight = RECT_EMPTY; }

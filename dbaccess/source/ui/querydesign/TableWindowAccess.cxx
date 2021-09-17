@@ -153,9 +153,9 @@ namespace dbaui
         {
             Point aPoint(_aPoint.X,_aPoint.Y);
             tools::Rectangle aRect(m_pTable->GetDesktopRectPixel());
-            if( aRect.IsInside(aPoint) )
+            if( aRect.Contains(aPoint) )
                 aRet = this;
-            else if( m_pTable->GetListBox()->GetDesktopRectPixel().IsInside(aPoint))
+            else if( m_pTable->GetListBox()->GetDesktopRectPixel().Contains(aPoint))
                 aRet = m_pTable->GetListBox()->GetAccessible();
         }
         return aRet;

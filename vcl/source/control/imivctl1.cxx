@@ -217,7 +217,7 @@ void SvxIconChoiceCtrl_Impl::InsertEntry( std::unique_ptr<SvxIconChoiceCtrlEntry
         FindBoundingRect( pEntry );
         tools::Rectangle aOutputArea( GetOutputRect() );
         pGridMap->OccupyGrids( pEntry );
-        if( !aOutputArea.IsOver( pEntry->aRect ) )
+        if( !aOutputArea.Overlaps( pEntry->aRect ) )
             return; // is invisible
         pView->Invalidate( pEntry->aRect );
     }
@@ -556,7 +556,7 @@ void SvxIconChoiceCtrl_Impl::Paint(vcl::RenderContext& rRenderContext, const too
     {
         SvxIconChoiceCtrlEntry* pEntry = maZOrderList[nPos];
         const tools::Rectangle& rBoundRect = GetEntryBoundRect(pEntry);
-        if (rRect.IsOver(rBoundRect))
+        if (rRect.Overlaps(rBoundRect))
         {
             PaintEntry(pEntry, rBoundRect.TopLeft(), rRenderContext);
             // set entries to Top if they are being repainted
@@ -587,7 +587,7 @@ void SvxIconChoiceCtrl_Impl::RepaintSelectedEntries()
         if (pEntry->GetFlags() & SvxIconViewFlags::SELECTED)
         {
             const tools::Rectangle& rBoundRect = GetEntryBoundRect(pEntry);
-            if (aOutRect.IsOver(rBoundRect))
+            if (aOutRect.Overlaps(rBoundRect))
                 pView->Invalidate(rBoundRect);
         }
     }
@@ -1438,7 +1438,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
     if (!rRenderContext.IsClipRegion() && (aVerSBar->IsVisible() || aHorSBar->IsVisible()))
     {
         tools::Rectangle aOutputArea(GetOutputRect());
-        if (aOutputArea.IsOver(aTextRect) || aOutputArea.IsOver(aBmpRect))
+        if (aOutputArea.Overlaps(aTextRect) || aOutputArea.Overlaps(aBmpRect))
         {
             rRenderContext.SetClipRegion(vcl::Region(aOutputArea));
             bResetClipRegion = true;
@@ -1526,7 +1526,7 @@ SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetEntry( const Point& rDocPos, 
     {
         nCount--;
         SvxIconChoiceCtrlEntry* pEntry = maZOrderList[ nCount ];
-        if( pEntry->aRect.IsInside( rDocPos ) )
+        if( pEntry->aRect.Contains( rDocPos ) )
         {
             if( bHit )
             {
@@ -1535,10 +1535,10 @@ SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetEntry( const Point& rDocPos, 
                 aRect.AdjustBottom(3 );
                 aRect.AdjustLeft( -3 );
                 aRect.AdjustRight(3 );
-                if( aRect.IsInside( rDocPos ) )
+                if( aRect.Contains( rDocPos ) )
                     return pEntry;
                 aRect = CalcTextRect( pEntry );
-                if( aRect.IsInside( rDocPos ) )
+                if( aRect.Contains( rDocPos ) )
                     return pEntry;
             }
             else
@@ -1816,7 +1816,7 @@ bool SvxIconChoiceCtrl_Impl::HandleScrollCommand( const CommandEvent& rCmd )
 {
     tools::Rectangle aDocRect( Point(), aVirtOutputSize );
     tools::Rectangle aVisRect( GetOutputRect() );
-    if( aVisRect.IsInside( aDocRect ))
+    if( aVisRect.Contains( aDocRect ))
         return false;
     Size aDocSize( aDocRect.GetSize() );
     Size aVisSize( aVisRect.GetSize() );
@@ -1940,7 +1940,7 @@ void SvxIconChoiceCtrl_Impl::MakeVisible( const tools::Rectangle& rRect, bool bS
     // convert to document coordinate
     aOrigin *= -1;
     tools::Rectangle aOutputArea( GetOutputRect() );
-    if( aOutputArea.IsInside( aVirtRect ) )
+    if( aOutputArea.Contains( aVirtRect ) )
         return; // is already visible
 
     tools::Long nDy;
@@ -2280,7 +2280,7 @@ void SvxIconChoiceCtrl_Impl::SelectRect( const tools::Rectangle& rRect, bool bAd
             bOverlaps = IsOver( pOtherRects, aBoundRect );
         else
             bOverlaps = false;
-        bool bOver = aRect.IsOver( aBoundRect );
+        bool bOver = aRect.Overlaps( aBoundRect );
 
         if( bOver && !bOverlaps )
         {
@@ -2309,7 +2309,7 @@ void SvxIconChoiceCtrl_Impl::SelectRect( const tools::Rectangle& rRect, bool bAd
             // the intersection.
             // Possible solution: remember a snapshot of the selection before
             // spanning the rectangle.
-            if( aBoundRect.IsOver( rRect))
+            if( aBoundRect.Overlaps( rRect))
             {
                 // deselect intersection between old rectangles and current rectangle
                 if( bSelected )
@@ -2389,7 +2389,7 @@ bool SvxIconChoiceCtrl_Impl::IsOver( std::vector<tools::Rectangle>* pRectList, c
     for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
     {
         tools::Rectangle& rRect = (*pRectList)[ nCur ];
-        if( rBoundRect.IsOver( rRect ))
+        if( rBoundRect.Overlaps( rRect ))
             return true;
     }
     return false;
@@ -2786,7 +2786,7 @@ bool SvxIconChoiceCtrl_Impl::RequestHelp( const HelpEvent& rHEvt )
     OUString sQuickHelpText = pEntry->GetQuickHelpText();
     OUString aEntryText( SvtIconChoiceCtrl::GetEntryText( pEntry ) );
     tools::Rectangle aTextRect( CalcTextRect( pEntry, nullptr, &aEntryText ) );
-    if ( ( !aTextRect.IsInside( aPos ) || aEntryText.isEmpty() ) && sQuickHelpText.isEmpty() )
+    if ( ( !aTextRect.Contains( aPos ) || aEntryText.isEmpty() ) && sQuickHelpText.isEmpty() )
         return false;
 
     tools::Rectangle aOptTextRect( aTextRect );

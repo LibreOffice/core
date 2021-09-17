@@ -734,7 +734,7 @@ SelectionFunction::EventDescriptor::EventDescriptor (
     // explicit test.
     mbIsLeaving = rEvent.IsLeaveWindow()
         || ! ::tools::Rectangle(Point(0,0),
-             rSlideSorter.GetContentWindow()->GetOutputSizePixel()).IsInside(maMousePosition);
+             rSlideSorter.GetContentWindow()->GetOutputSizePixel()).Contains(maMousePosition);
 }
 
 SelectionFunction::EventDescriptor::EventDescriptor (
@@ -762,7 +762,7 @@ SelectionFunction::EventDescriptor::EventDescriptor (
     // explicit test.
     mbIsLeaving = rEvent.mbLeaving
         || ! ::tools::Rectangle(Point(0,0),
-             rSlideSorter.GetContentWindow()->GetOutputSizePixel()).IsInside(maMousePosition);
+             rSlideSorter.GetContentWindow()->GetOutputSizePixel()).Contains(maMousePosition);
 }
 
 sal_uInt32 SelectionFunction::EventDescriptor::EncodeMouseEvent (
@@ -1394,7 +1394,7 @@ void MultiSelectionModeHandler::UpdateSelection()
 
     for (sal_Int32 nIndex=0; nIndex<nPageCount; ++nIndex)
     {
-        UpdateSelectionState(rModel.GetPageDescriptor(nIndex), aRange.IsInside(nIndex));
+        UpdateSelectionState(rModel.GetPageDescriptor(nIndex), aRange.Contains(nIndex));
     }
 }
 

@@ -2177,7 +2177,7 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
             (pThis==nullptr || pObj!=static_cast<SdrObject const *>(pThis))) // don't connect it to itself
         {
             tools::Rectangle aObjBound(pObj->GetCurrentBoundRect());
-            if (aObjBound.IsOver(aMouseRect)) {
+            if (aObjBound.Overlaps(aMouseRect)) {
                 aTestCon.ResetVars();
                 bool bEdge=dynamic_cast<const SdrEdgeObj *>(pObj) != nullptr; // no BestCon for Edge
                 // User-defined connectors have absolute priority.
@@ -2222,7 +2222,7 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
                             bOk = true;
                         }
                     }
-                    if (bOk && aMouseRect.IsInside(aConPos)) {
+                    if (bOk && aMouseRect.Contains(aConPos)) {
                         if (bUser) bUserFnd = true;
                         bFnd = true;
                         sal_uIntPtr nDist=static_cast<sal_uIntPtr>(std::abs(aConPos.X()-rPt.X()))+static_cast<sal_uIntPtr>(std::abs(aConPos.Y()-rPt.Y()));

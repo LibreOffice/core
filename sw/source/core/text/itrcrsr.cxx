@@ -1767,7 +1767,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
                 if ( m_pFrame->IsVertical() )
                     m_pFrame->SwitchHorizontalToVertical( aTmpPoint );
 
-                if( bChgNodeInner && pTmp->getFrameArea().IsInside( aTmpPoint ) &&
+                if( bChgNodeInner && pTmp->getFrameArea().Contains( aTmpPoint ) &&
                     !( pTmp->IsProtected() ) )
                 {
                     pFlyPor->GetFlyCursorOfst(aTmpPoint, *pPos, pCMS);
@@ -1819,7 +1819,7 @@ bool SwTextFrame::FillSelection( SwSelectionList& rSelList, const SwRect& rRect 
     bool bRet = false;
     // GetPaintArea() instead getFrameArea() for negative indents
     SwRect aTmpFrame( GetPaintArea() );
-    if( !rRect.IsOver( aTmpFrame ) )
+    if( !rRect.Overlaps( aTmpFrame ) )
         return false;
     if( rSelList.checkContext( this ) )
     {

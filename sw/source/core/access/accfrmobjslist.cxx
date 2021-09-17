@@ -78,7 +78,7 @@ SwAccessibleChildSList_const_iterator::SwAccessibleChildSList_const_iterator(
         // Find the first visible
         while( m_aCurr.IsValid() &&
                !m_aCurr.AlwaysIncludeAsChild() &&
-               !m_aCurr.GetBox( rAccMap ).IsOver( m_rList.GetVisArea() ) )
+               !m_aCurr.GetBox( rAccMap ).Overlaps( m_rList.GetVisArea() ) )
         {
             next();
         }
@@ -147,7 +147,7 @@ SwAccessibleChildSList_const_iterator& SwAccessibleChildSList_const_iterator::ne
     next();
     while( m_aCurr.IsValid() &&
            !m_aCurr.AlwaysIncludeAsChild() &&
-           !m_aCurr.GetBox( m_rList.GetAccMap() ).IsOver( m_rList.GetVisArea() ) )
+           !m_aCurr.GetBox( m_rList.GetAccMap() ).Overlaps( m_rList.GetVisArea() ) )
     {
         next();
     }

@@ -140,7 +140,7 @@ void tools::Rectangle::Justify()
     }
 }
 
-bool tools::Rectangle::IsInside( const Point& rPoint ) const
+bool tools::Rectangle::Contains( const Point& rPoint ) const
 {
     if ( IsEmpty() )
         return false;
@@ -168,12 +168,12 @@ bool tools::Rectangle::IsInside( const Point& rPoint ) const
     return true;
 }
 
-bool tools::Rectangle::IsInside( const tools::Rectangle& rRect ) const
+bool tools::Rectangle::Contains( const tools::Rectangle& rRect ) const
 {
-    return IsInside( rRect.TopLeft() ) && IsInside( rRect.BottomRight() );
+    return Contains( rRect.TopLeft() ) && Contains( rRect.BottomRight() );
 }
 
-bool tools::Rectangle::IsOver( const tools::Rectangle& rRect ) const
+bool tools::Rectangle::Overlaps( const tools::Rectangle& rRect ) const
 {
     // If there's no intersection, they don't overlap
     return !GetIntersection( rRect ).IsEmpty();

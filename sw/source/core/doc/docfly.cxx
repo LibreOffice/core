@@ -853,7 +853,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
             case RndStdIds::FLY_AT_PAGE:
                 {
                     pNewAnchorFrame = getIDocumentLayoutAccess().GetCurrentLayout()->Lower();
-                    while ( pNewAnchorFrame && !pNewAnchorFrame->getFrameArea().IsInside( aPt ) )
+                    while ( pNewAnchorFrame && !pNewAnchorFrame->getFrameArea().Contains( aPt ) )
                         pNewAnchorFrame = pNewAnchorFrame->GetNext();
                     if ( !pNewAnchorFrame )
                         continue;
@@ -889,7 +889,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     SwTextFrame const*const pFrame(
                             static_cast<SwTextFrame const*>(pNewAnchorFrame));
                     SwPosition aPos( *pFrame->GetTextNodeForParaProps() );
-                    if ( pNewAnchorFrame->getFrameArea().IsInside( aPoint ) )
+                    if ( pNewAnchorFrame->getFrameArea().Contains( aPoint ) )
                     {
                     // We need to find a TextNode, because only there we can anchor a
                     // content-bound DrawObject.

@@ -637,7 +637,7 @@ IMPL_LINK_NOARG(SwEditWin, TimerHandler, Timer *, void)
     const SwRect aOldVis( rSh.VisArea() );
     bool bDone = false;
 
-    if ( !rSh.VisArea().IsInside( aModPt ) )
+    if ( !rSh.VisArea().Contains( aModPt ) )
     {
         if ( m_bInsDraw )
         {
@@ -3957,7 +3957,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
     }
 
     const Point aOldPt( rSh.VisArea().Pos() );
-    const bool bInsWin = rSh.VisArea().IsInside( aDocPt ) || comphelper::LibreOfficeKit::isActive();
+    const bool bInsWin = rSh.VisArea().Contains( aDocPt ) || comphelper::LibreOfficeKit::isActive();
 
     if (rSh.GetViewOptions()->IsShowOutlineContentVisibilityButton())
     {
@@ -3994,7 +3994,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
         Point aDD( SwEditWin::m_nDDStartPosX, SwEditWin::m_nDDStartPosY );
         aDD = LogicToPixel( aDD );
         tools::Rectangle aRect( aDD.X()-3, aDD.Y()-3, aDD.X()+3, aDD.Y()+3 );
-        if ( !aRect.IsInside( aPixPt ) )
+        if ( !aRect.Contains( aPixPt ) )
             StopDDTimer( &rSh, aDocPt );
     }
 
@@ -4831,7 +4831,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                             MOUSE_LEFT == (rMEvt.GetModifier() + rMEvt.GetButtons()) &&
                             !rSh.HasSelection() &&
                             !GetOutDev()->GetConnectMetaFile() &&
-                            rSh.VisArea().IsInside( aDocPt ))
+                            rSh.VisArea().Contains( aDocPt ))
                         {
                             SwUndoId nLastUndoId(SwUndoId::EMPTY);
                             if (rSh.GetLastUndoInfo(nullptr, & nLastUndoId))

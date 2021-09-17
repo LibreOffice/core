@@ -1028,7 +1028,7 @@ bool ScCsvGrid::Command( const CommandEvent& rCEvt )
         case CommandEventId::Wheel:
         {
             tools::Rectangle aRect( Point(), maWinSize );
-            if( aRect.IsInside( rCEvt.GetMousePosPixel() ) )
+            if( aRect.Contains( rCEvt.GetMousePosPixel() ) )
             {
                 const CommandWheelData* pData = rCEvt.GetWheelData();
                 if( pData && (pData->GetMode() == CommandWheelMode::SCROLL) && !pData->IsHorz() )

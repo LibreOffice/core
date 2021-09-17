@@ -192,7 +192,7 @@ void Drawing::convertAndInsert() const
         const uno::Any aGroup( "autoGroup_" + BoxItr.first );
         for ( auto RadioItr = RadioButtonMap.begin(); RadioItr != RadioButtonMap.end(); )
         {
-            if ( BoxItr.second.IsInside(RadioItr->second) )
+            if ( BoxItr.second.Contains(RadioItr->second) )
             {
                 RadioItr->first->setPropertyValue("GroupName", aGroup );
                 // If conflict, first created GroupBox wins

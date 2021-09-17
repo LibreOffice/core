@@ -301,7 +301,7 @@ void GetTableSel( const SwLayoutFrame* pStart, const SwLayoutFrame* pEnd,
                     break;
                 }
 
-                if ( pRow->getFrameArea().IsOver( pUnion->GetUnion() ) )
+                if ( pRow->getFrameArea().Overlaps( pUnion->GetUnion() ) )
                 {
                     const SwLayoutFrame *pCell = pRow->FirstCell();
 
@@ -515,7 +515,7 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
                     break;
                 }
 
-                if( pRow->getFrameArea().IsOver( pUnion->GetUnion() ) )
+                if( pRow->getFrameArea().Overlaps( pUnion->GetUnion() ) )
                 {
                     const SwLayoutFrame *pCell = pRow->FirstCell();
 
@@ -728,7 +728,7 @@ bool GetAutoSumSel( const SwCursorShell& rShell, SwCellFrames& rBoxes )
 
         while( pRow )
         {
-            if( pRow->getFrameArea().IsOver( pUnion->GetUnion() ) )
+            if( pRow->getFrameArea().Overlaps( pUnion->GetUnion() ) )
             {
                 const SwCellFrame* pUpperCell = nullptr;
                 const SwLayoutFrame *pCell = pRow->FirstCell();
@@ -799,7 +799,7 @@ bool GetAutoSumSel( const SwCursorShell& rShell, SwCellFrames& rBoxes )
 
             while( pRow )
             {
-                if( pRow->getFrameArea().IsOver( pUnion->GetUnion() ) )
+                if( pRow->getFrameArea().Overlaps( pUnion->GetUnion() ) )
                 {
                     const SwLayoutFrame *pCell = pRow->FirstCell();
 
@@ -979,7 +979,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 
         while ( pRow )
         {
-            if ( pRow->getFrameArea().IsOver( rUnion ) )
+            if ( pRow->getFrameArea().Overlaps( rUnion ) )
             {
                 const SwLayoutFrame *pCell = pRow->FirstCell();
 
@@ -1896,7 +1896,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrame *pStart,
                                       pTable->GetFirstNonHeadlineRow() :
                                       static_cast<const SwLayoutFrame*>(pTable->Lower());
 
-            while ( pRow && !pRow->getFrameArea().IsOver( aUnion ) )
+            while ( pRow && !pRow->getFrameArea().Overlaps( aUnion ) )
                 pRow = static_cast<const SwLayoutFrame*>(pRow->GetNext());
 
             // #i31976#
@@ -2016,7 +2016,7 @@ bool CheckSplitCells( const SwCursor& rCursor, sal_uInt16 nDiv,
 
         while ( pRow )
         {
-            if ( pRow->getFrameArea().IsOver( rSelUnion.GetUnion() ) )
+            if ( pRow->getFrameArea().Overlaps( rSelUnion.GetUnion() ) )
             {
                 const SwLayoutFrame *pCell = pRow->FirstCell();
 

@@ -72,7 +72,7 @@ void Client::RequestNewObjectArea( ::tools::Rectangle& aObjRect )
         aObjRect.SetSize( aOldRect.GetSize() );
 
     ::tools::Rectangle aWorkArea( pView->GetWorkArea() );
-    if ( aWorkArea.IsInside(aObjRect) || bPosProtect || aObjRect == aOldRect )
+    if ( aWorkArea.Contains(aObjRect) || bPosProtect || aObjRect == aOldRect )
         return;
 
     // correct position

@@ -127,7 +127,7 @@ bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent&
     Size aPopupSize;
     mpFilterButton->getPopupBoundingBox(aPopupPos, aPopupSize);
     tools::Rectangle aRect(aPopupPos, aPopupSize);
-    if (aRect.IsInside(rMEvt.GetPosPixel()))
+    if (aRect.Contains(rMEvt.GetPosPixel()))
     {
         if ( DoPageFieldSelection( nCol, nRow ) )
             return true;
@@ -358,7 +358,7 @@ bool ScGridWindow::DPTestFieldPopupArrow(
     Size aPopupSize;
     aBtn.getPopupBoundingBox(aPopupPos, aPopupSize);
     tools::Rectangle aRect(aPopupPos, aPopupSize);
-    if (aRect.IsInside(rMEvt.GetPosPixel()))
+    if (aRect.Contains(rMEvt.GetPosPixel()))
     {
         // Mouse cursor inside the popup arrow box.  Launch the field menu.
         DPLaunchFieldPopupMenu(OutputToScreenPixel(aScrPos), aScrSize, rDimPos, pDPObj);

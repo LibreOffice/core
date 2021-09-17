@@ -2882,7 +2882,7 @@ bool ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, bool bRepeat )
     {
         // is the cursor over the item?
         ImplToolItem* pItem = &mpData->m_aItems[mnCurPos];
-        if ( pItem->maRect.IsInside( aMousePos ) )
+        if ( pItem->maRect.Contains( aMousePos ) )
         {
             if ( !mnCurItemId )
             {
@@ -2910,7 +2910,7 @@ bool ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, bool bRepeat )
 
     if ( mbUpper )
     {
-        bool bNewIn = maUpperRect.IsInside( aMousePos );
+        bool bNewIn = maUpperRect.Contains( aMousePos );
         if ( bNewIn != mbIn )
         {
             mbIn = bNewIn;
@@ -2921,7 +2921,7 @@ bool ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, bool bRepeat )
 
     if ( mbLower )
     {
-        bool bNewIn = maLowerRect.IsInside( aMousePos );
+        bool bNewIn = maLowerRect.Contains( aMousePos );
         if ( bNewIn != mbIn )
         {
             mbIn = bNewIn;
@@ -2961,7 +2961,7 @@ bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel )
         if( mnCurPos < mpData->m_aItems.size() )
         {
             ImplToolItem* pItem = &mpData->m_aItems[mnCurPos];
-            if ( pItem->maRect.IsInside( rMEvt.GetPosPixel() ) )
+            if ( pItem->maRect.Contains( rMEvt.GetPosPixel() ) )
             {
                 mnCurItemId = pItem->mnId;
                 if ( !bCancel )
@@ -3080,7 +3080,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
 
     // change mouse cursor over drag area
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
-    if( pWrapper && pWrapper->GetDragArea().IsInside( rMEvt.GetPosPixel() ) )
+    if( pWrapper && pWrapper->GetDragArea().Contains( rMEvt.GetPosPixel() ) )
         eStyle = PointerStyle::Move;
 
     if ( (mnWinStyle & TB_WBLINESIZING) == TB_WBLINESIZING )
@@ -3113,7 +3113,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
             ImplToolItems::size_type nTempPos = 0;
             for (auto const& item : mpData->m_aItems)
             {
-                if ( item.maRect.IsInside( aMousePos ) )
+                if ( item.maRect.Contains( aMousePos ) )
                 {
                     if ( (item.meType == ToolBoxItemType::BUTTON) && item.mbEnabled )
                     {
@@ -3145,7 +3145,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
         }
 
         // only clear highlight when focus is not in toolbar
-        bool bMenuButtonHit = mpData->maMenubuttonItem.maRect.IsInside( aMousePos ) && ImplHasClippedItems();
+        bool bMenuButtonHit = mpData->maMenubuttonItem.maRect.Contains( aMousePos ) && ImplHasClippedItems();
         if ( !HasFocus() && (bClearHigh || bMenuButtonHit) )
         {
             if ( !bMenuButtonHit && mpData->mbMenubuttonSelected )
@@ -3208,7 +3208,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
         for (auto const& item : mpData->m_aItems)
         {
             // is this the item?
-            if ( item.maRect.IsInside( aMousePos ) )
+            if ( item.maRect.Contains( aMousePos ) )
             {
                 // do nothing if it is a separator or
                 // if the item has been disabled
@@ -3259,7 +3259,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
             if( mpData->m_aItems[nNewPos].mnBits & ToolBoxItemBits::DROPDOWN )
             {
                 if( ( (mpData->m_aItems[nNewPos].mnBits & ToolBoxItemBits::DROPDOWNONLY) == ToolBoxItemBits::DROPDOWNONLY)
-                    || mpData->m_aItems[nNewPos].GetDropDownRect( mbHorz ).IsInside( aMousePos ))
+                    || mpData->m_aItems[nNewPos].GetDropDownRect( mbHorz ).Contains( aMousePos ))
                 {
                     // dropdownonly always triggers the dropdown handler, over the whole button area
 
@@ -3307,7 +3307,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
         Deactivate();
 
         // menu button hit ?
-        if( mpData->maMenubuttonItem.maRect.IsInside( aMousePos ) && ImplHasClippedItems() )
+        if( mpData->maMenubuttonItem.maRect.Contains( aMousePos ) && ImplHasClippedItems() )
         {
             if ( maMenuButtonHdl.IsSet() )
                 maMenuButtonHdl.Call( this );
@@ -3317,7 +3317,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
         }
 
         // check scroll- and next-buttons here
-        if ( maUpperRect.IsInside( aMousePos ) )
+        if ( maUpperRect.Contains( aMousePos ) )
         {
             if ( mnCurLine > 1 )
             {
@@ -3328,7 +3328,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
             }
             return;
         }
-        if ( maLowerRect.IsInside( aMousePos ) )
+        if ( maLowerRect.Contains( aMousePos ) )
         {
             if ( mnCurLine+mnVisLines-1 < mnCurLines )
             {
@@ -3468,7 +3468,7 @@ void ToolBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& 
         ImplToolItem* pItem = &mpData->m_aItems[i];
 
         // only draw when the rectangle is in the draw rectangle
-        if ( !pItem->maRect.IsEmpty() && rPaintRect.IsOver( pItem->maRect ) )
+        if ( !pItem->maRect.IsEmpty() && rPaintRect.Overlaps( pItem->maRect ) )
         {
             sal_uInt16 nHighlight = 0;
             if ( i == mnCurPos )

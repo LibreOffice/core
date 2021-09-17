@@ -775,7 +775,7 @@ bool doesRectCoverWithUniformColor(
 {
     // shape needs to fully cover previous content, and have uniform
     // color
-    return (rMapModeVDev.LogicToPixel(rCurrRect).IsInside(rPrevRect) &&
+    return (rMapModeVDev.LogicToPixel(rCurrRect).Contains(rPrevRect) &&
         rMapModeVDev.IsFillColor());
 }
 
@@ -1511,7 +1511,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                 !aTotalComponents.bIsFullyTransparent )
             {
                 if( !aBackgroundComponent.aComponentList.empty() &&
-                    !aBackgroundComponent.aBounds.IsInside(aTotalBounds) )
+                    !aBackgroundComponent.aBounds.Contains(aTotalBounds) )
                 {
                     // it seems the background is not large enough. to
                     // be on the safe side, combine with this component.
@@ -1553,7 +1553,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                         // component.
                         if( !aCurrCC->aBounds.IsEmpty() &&
                             !aCurrCC->bIsFullyTransparent &&
-                            aCurrCC->aBounds.IsOver( aTotalBounds ) )
+                            aCurrCC->aBounds.Overlaps( aTotalBounds ) )
                         {
                             // union the intersecting aCCList element into aTotalComponents
 

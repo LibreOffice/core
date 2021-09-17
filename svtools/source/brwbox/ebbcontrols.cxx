@@ -269,7 +269,7 @@ namespace svt
                                   aBoxSize);
 
         // we want the initial mouse event to act as if it was performed on the checkbox
-        if (aHotRect.IsInside(aPos))
+        if (aHotRect.Contains(aPos))
             rControl.Clicked();
     }
 

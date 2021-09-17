@@ -687,13 +687,13 @@ void SdrEditView::ForceMarkedObjToAnotherPage()
         SdrObject* pObj=pM->GetMarkedSdrObj();
         tools::Rectangle aObjRect(pObj->GetCurrentBoundRect());
         tools::Rectangle aPgRect(pM->GetPageView()->GetPageRect());
-        if (!aObjRect.IsOver(aPgRect)) {
+        if (!aObjRect.Overlaps(aPgRect)) {
             bool bFnd=false;
             SdrPageView* pPV = GetSdrPageView();
 
             if(pPV)
             {
-                bFnd = aObjRect.IsOver(pPV->GetPageRect());
+                bFnd = aObjRect.Overlaps(pPV->GetPageRect());
             }
 
             if(bFnd)

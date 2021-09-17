@@ -879,7 +879,7 @@ struct PreviewPosInsidePagePred
         if ( _pPreviewPage->bVisible )
         {
             tools::Rectangle aPreviewPageRect( _pPreviewPage->aPreviewWinPos, _pPreviewPage->aPageSize );
-            return aPreviewPageRect.IsInside( mnPreviewPos );
+            return aPreviewPageRect.Contains( mnPreviewPos );
         }
         return false;
     }
@@ -1058,7 +1058,7 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const tools:
         aMapMode.SetOrigin( rpPreviewPage->aMapOffset );
         pOutputDev->SetMapMode( aMapMode );
         tools::Rectangle aPxPaintRect = pOutputDev->LogicToPixel( aPageRect );
-        if ( aPxOutRect.IsOver( aPxPaintRect) )
+        if ( aPxOutRect.Overlaps( aPxPaintRect) )
         {
             const SwPageFrame* pPage = rpPreviewPage->pPage;
 
@@ -1182,7 +1182,7 @@ void SwPagePreviewLayout::Repaint( const tools::Rectangle& rInvalidCoreRect ) co
             continue;
 
         tools::Rectangle aPageRect( rpPreviewPage->aLogicPos, rpPreviewPage->aPageSize );
-        if ( rInvalidCoreRect.IsOver( aPageRect ) )
+        if ( rInvalidCoreRect.Overlaps( aPageRect ) )
         {
             aPageRect.Intersection(rInvalidCoreRect);
             tools::Rectangle aInvalidPreviewRect = aPageRect;

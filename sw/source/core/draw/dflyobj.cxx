@@ -1269,14 +1269,14 @@ SdrObject* SwVirtFlyDrawObj::CheckMacroHit( const SdrObjMacroHitRec& rRec ) cons
         else
             aRect = m_pFlyFrame->getFrameArea();
 
-        if( aRect.IsInside( rRec.aPos ) )
+        if( aRect.Contains( rRec.aPos ) )
         {
             aRect.Pos().setX(aRect.Pos().getX() + rRec.nTol);
             aRect.Pos().setY(aRect.Pos().getY() + rRec.nTol);
             aRect.AddHeight( -(2 * rRec.nTol) );
             aRect.AddWidth( -(2 * rRec.nTol) );
 
-            if( aRect.IsInside( rRec.aPos ) )
+            if( aRect.Contains( rRec.aPos ) )
             {
                 if( !rURL.GetMap() ||
                     m_pFlyFrame->GetFormat()->GetIMapObject( rRec.aPos, m_pFlyFrame ))

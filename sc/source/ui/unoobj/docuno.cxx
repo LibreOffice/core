@@ -778,7 +778,7 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
 
         Point aPoint(convertTwipToMm100(nX), convertTwipToMm100(nY));
 
-        if (pTableView->GetOutputArea().IsInside(aPoint))
+        if (pTableView->GetOutputArea().Contains(aPoint))
         {
             switch (nType)
             {

@@ -412,7 +412,7 @@ void SdTiledRenderingTest::testRegisterCallback()
     // Check that the top left 256x256px tile would be invalidated.
     CPPUNIT_ASSERT(!m_aInvalidation.IsEmpty());
     ::tools::Rectangle aTopLeft(0, 0, 256*15, 256*15); // 1 px = 15 twips, assuming 96 DPI.
-    CPPUNIT_ASSERT(m_aInvalidation.IsOver(aTopLeft));
+    CPPUNIT_ASSERT(m_aInvalidation.Overlaps(aTopLeft));
 }
 
 void SdTiledRenderingTest::testPostKeyEvent()

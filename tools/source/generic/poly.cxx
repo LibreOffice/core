@@ -1494,7 +1494,7 @@ tools::Rectangle Polygon::GetBoundRect() const
     return tools::Rectangle( nXMin, nYMin, nXMax, nYMax );
 }
 
-bool Polygon::IsInside( const Point& rPoint ) const
+bool Polygon::Contains( const Point& rPoint ) const
 {
     DBG_ASSERT( !mpImplPolygon->mxFlagAry, "IsInside could fail with beziers!" );
 
@@ -1503,7 +1503,7 @@ bool Polygon::IsInside( const Point& rPoint ) const
     sal_uInt16          nCount = mpImplPolygon->mnPoints;
     sal_uInt16          nPCounter = 0;
 
-    if ( ( nCount > 2 ) && aBound.IsInside( rPoint ) )
+    if ( ( nCount > 2 ) && aBound.Contains( rPoint ) )
     {
         Point   aPt1( mpImplPolygon->mxPointAry[ 0 ] );
         Point   aIntersection;

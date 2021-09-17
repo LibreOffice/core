@@ -120,7 +120,7 @@ bool SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwContentFrame *p
 
         SwFlyFrame *pFly = pVirtFly->GetFlyFrame();
 
-        if ( pFly == pSelfFly || !rRect.IsOver( pFly->getFrameArea() ) )
+        if ( pFly == pSelfFly || !rRect.Overlaps( pFly->getFrameArea() ) )
             continue;
 
         if ( pSelfFly && pSelfFly->IsLowerOf( pFly ) )
@@ -1603,7 +1603,7 @@ bool SwLayAction::FormatLayoutTab( SwTabFrame *pTab, bool bAddRect )
 
     // Ugly shortcut!
     if ( pTab->IsLowersFormatted() &&
-         (bPainted || !m_pImp->GetShell()->VisArea().IsOver( pTab->getFrameArea())) )
+         (bPainted || !m_pImp->GetShell()->VisArea().Overlaps( pTab->getFrameArea())) )
         return false;
 
     // Now, deal with the lowers
@@ -2174,7 +2174,7 @@ bool SwLayIdle::DoIdleJob( IdleJobType eJob, bool bVisAreaOnly )
 
         pPage = static_cast<SwPageFrame*>(pPage->GetNext());
         if ( pPage && bVisAreaOnly &&
-             !pPage->getFrameArea().IsOver( m_pImp->GetShell()->VisArea()))
+             !pPage->getFrameArea().Overlaps( m_pImp->GetShell()->VisArea()))
              break;
     }
     return false;
@@ -2238,7 +2238,7 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
             bool bVis = false;
             if ( auto pCursorShell = dynamic_cast<SwCursorShell*>( &rSh) )
             {
-                bVis = pCursorShell->GetCharRect().IsOver(rSh.VisArea());
+                bVis = pCursorShell->GetCharRect().Overlaps(rSh.VisArea());
             }
             aBools.push_back( bVis );
         }
@@ -2286,7 +2286,7 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
                 bActions |= aTmp != rSh.VisArea();
                 if ( aTmp == rSh.VisArea() )
                     if ( auto pCursorShell = dynamic_cast< SwCursorShell*>( &rSh) )
-                        bActions |= aBools[nBoolIdx] != pCursorShell->GetCharRect().IsOver( rSh.VisArea() );
+                        bActions |= aBools[nBoolIdx] != pCursorShell->GetCharRect().Overlaps( rSh.VisArea() );
             }
 
             ++nBoolIdx;

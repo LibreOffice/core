@@ -474,7 +474,7 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
                 aTagRect.SetRight( aTagRect.Left() + width - 1 );
                 aTagRect.SetBottom( aTagRect.Top() + height - 1 );
 
-                if( aNewRect.IsOver( aTagRect ) )
+                if( aNewRect.Overlaps( aTagRect ) )
                 {
                     bFree = false;
                     break;

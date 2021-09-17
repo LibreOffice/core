@@ -815,7 +815,7 @@ bool MotionPathTag::MarkPoints(const ::tools::Rectangle* pRect, bool bUnmark )
             if( pHdl && (pHdl->getTag().get() == this) && mrView.IsPointMarkable(*pHdl) && pHdl->IsSelected() == bUnmark)
             {
                 Point aPos(pHdl->GetPos());
-                if( pRect==nullptr || pRect->IsInside(aPos))
+                if( pRect==nullptr || pRect->Contains(aPos))
                 {
                     if( mrView.MarkPointHelper(pHdl,mpMark.get(),bUnmark) )
                         bChgd=true;

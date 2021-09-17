@@ -1760,7 +1760,7 @@ sal_uInt16 TabBar::GetPageId(const Point& rPos) const
 {
     for (const auto& rItem : mpImpl->maItemList)
     {
-        if (rItem.maRect.IsInside(rPos))
+        if (rItem.maRect.Contains(rPos))
             return rItem.mnId;
     }
 

@@ -128,7 +128,7 @@ void FuPoor::ForceScroll(const Point& aPixPos)
 
     if ( bNoScrollUntilInside )
     {
-        if ( rRect.IsInside(aPos) )
+        if ( rRect.Contains(aPos) )
             bNoScrollUntilInside = false;
     }
     else
@@ -673,7 +673,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                                 ::tools::Rectangle aMarkRect(mpView->GetMarkedObjRect());
                                 aMarkRect.Move(nX, nY);
 
-                                if(!aMarkRect.IsInside(rWorkArea))
+                                if(!aMarkRect.Contains(rWorkArea))
                                 {
                                     if(aMarkRect.Left() < rWorkArea.Left())
                                     {

@@ -194,7 +194,7 @@ bool AccessibleDialogWindow::IsChildVisible( const ChildDescriptor& rDesc )
 
                     // check, if the shape's bounding box intersects with the bounding box of its parent
                     tools::Rectangle aParentRect( Point( 0, 0 ), m_pDialogWindow->GetSizePixel() );
-                    if ( aParentRect.IsOver( aRect ) )
+                    if ( aParentRect.Overlaps( aRect ) )
                         bVisible = true;
                 }
             }
@@ -717,7 +717,7 @@ Reference< XAccessible > AccessibleDialogWindow::getAccessibleAtPoint( const awt
             {
                 tools::Rectangle aRect = VCLRectangle( xComp->getBounds() );
                 Point aPos = VCLPoint( rPoint );
-                if ( aRect.IsInside( aPos ) )
+                if ( aRect.Contains( aPos ) )
                 {
                     xChild = xAcc;
                     break;

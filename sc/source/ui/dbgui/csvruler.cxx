@@ -438,7 +438,7 @@ bool ScCsvRuler::MouseMove( const MouseEvent& rMEvt )
         else
         {
             tools::Rectangle aRect( Point(), maWinSize );
-            if( !IsVisibleSplitPos( nPos ) || !aRect.IsInside( rMEvt.GetPosPixel() ) )
+            if( !IsVisibleSplitPos( nPos ) || !aRect.Contains( rMEvt.GetPosPixel() ) )
                 // if focused, keep old cursor position for key input
                 nPos = HasFocus() ? GetRulerCursorPos() : CSV_POS_INVALID;
             MoveCursor( nPos, false );

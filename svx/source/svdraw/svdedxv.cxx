@@ -1721,7 +1721,7 @@ bool SdrObjEditView::IsTextEditHit(const Point& rHit) const
         if (OutlinerView* pOLV = pTextEditOutliner->GetView(0))
             aEditArea.Union(pOLV->GetOutputArea());
 
-        if (aEditArea.IsInside(rHit))
+        if (aEditArea.Contains(rHit))
         { // check if any characters were actually hit
             const Point aPnt(rHit - aEditArea.TopLeft());
             tools::Long nHitTol = 2000;
@@ -1750,14 +1750,14 @@ bool SdrObjEditView::IsTextEditFrameHit(const Point& rHit) const
                 sal_uInt16 nPixSiz = pOLV->GetInvalidateMore();
                 tools::Rectangle aEditArea(aMinTextEditArea);
                 aEditArea.Union(pOLV->GetOutputArea());
-                if (!aEditArea.IsInside(rHit))
+                if (!aEditArea.Contains(rHit))
                 {
                     Size aSiz(pWin->PixelToLogic(Size(nPixSiz, nPixSiz)));
                     aEditArea.AdjustLeft(-(aSiz.Width()));
                     aEditArea.AdjustTop(-(aSiz.Height()));
                     aEditArea.AdjustRight(aSiz.Width());
                     aEditArea.AdjustBottom(aSiz.Height());
-                    bOk = aEditArea.IsInside(rHit);
+                    bOk = aEditArea.Contains(rHit);
                 }
             }
         }

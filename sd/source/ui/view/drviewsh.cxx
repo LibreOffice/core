@@ -83,7 +83,7 @@ void DrawViewShell::MakeVisible(const ::tools::Rectangle& rRect, vcl::Window& rW
         rWin.GetOutDev()->Pop();
     Size aVisAreaSize(aVisArea.GetSize());
 
-    if ( aVisArea.IsInside(rRect) )
+    if ( aVisArea.Contains(rRect) )
         return;
 
     // object is not entirely in visible area

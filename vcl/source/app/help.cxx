@@ -656,7 +656,7 @@ void ImplSetHelpWindowPos( vcl::Window* pHelpWin, sal_uInt16 nHelpWinStyle, Quic
         // otherwise it would directly be closed due to a focus change...
         */
         tools::Rectangle aHelpRect( aPos, aSz );
-        if( aHelpRect.IsInside( aMousePos ) )
+        if( aHelpRect.Contains( aMousePos ) )
         {
             Point delta(2,2);
             Point aSize( aSz.Width(), aSz.Height() );

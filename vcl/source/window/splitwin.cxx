@@ -330,7 +330,7 @@ static sal_uInt16 ImplFindItem( ImplSplitSet* pSet, const Point& rPos,
                     aRect.AdjustLeft( -(pSet->mnSplitSize) );
             }
 
-            if ( aRect.IsInside( rPos ) )
+            if ( aRect.Contains( rPos ) )
             {
                 if ( rItem.mpSet && !rItem.mpSet->mvItems.empty() )
                 {
@@ -1468,7 +1468,7 @@ void SplitWindow::ImplDrawGrip(vcl::RenderContext& rRenderContext, const tools::
 
     Color aColor;
 
-    if (rRect.IsInside(GetPointerPosPixel()))
+    if (rRect.Contains(GetPointerPosPixel()))
     {
         vcl::RenderTools::DrawSelectionBackground(rRenderContext, *this, rRect, 2, false, false, false);
 
@@ -1813,7 +1813,7 @@ void SplitWindow::MouseButtonDown( const MouseEvent& rMEvt )
     mbFadeNoButtonMode = false;
 
     ImplGetFadeOutRect( aTestRect );
-    if ( aTestRect.IsInside( aMousePosPixel ) )
+    if ( aTestRect.Contains( aMousePosPixel ) )
     {
         mbFadeOutDown = true;
         mbFadeOutPressed = true;
@@ -1822,7 +1822,7 @@ void SplitWindow::MouseButtonDown( const MouseEvent& rMEvt )
     else
     {
         ImplGetFadeInRect( aTestRect, true );
-        if ( aTestRect.IsInside( aMousePosPixel ) )
+        if ( aTestRect.Contains( aMousePosPixel ) )
         {
             mbFadeInDown = true;
             mbFadeInPressed = true;
@@ -1858,8 +1858,8 @@ void SplitWindow::MouseMove( const MouseEvent& rMEvt )
 
     ImplGetFadeInRect( aFadeInRect );
     ImplGetFadeOutRect( aFadeOutRect );
-    if ( !aFadeInRect.IsInside( aPos ) &&
-         !aFadeOutRect.IsInside( aPos ) )
+    if ( !aFadeInRect.Contains( aPos ) &&
+         !aFadeOutRect.Contains( aPos ) )
     {
         if ( nSplitTest && !(nSplitTest & SPLIT_NOSPLIT) )
         {
@@ -1895,7 +1895,7 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
         {
             tools::Rectangle aTestRect;
             ImplGetFadeInRect( aTestRect, true );
-            bool bNewPressed = aTestRect.IsInside( aMousePosPixel );
+            bool bNewPressed = aTestRect.Contains( aMousePosPixel );
             if ( bNewPressed != mbFadeInPressed )
             {
                 mbFadeInPressed = bNewPressed;
@@ -1921,7 +1921,7 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
         {
             tools::Rectangle aTestRect;
             ImplGetFadeOutRect( aTestRect );
-            bool bNewPressed = aTestRect.IsInside( aMousePosPixel );
+            bool bNewPressed = aTestRect.Contains( aMousePosPixel );
             if ( !bNewPressed )
             {
                 mbFadeOutPressed = bNewPressed;
@@ -2035,9 +2035,9 @@ bool SplitWindow::PreNotify( NotifyEvent& rNEvt )
             ImplGetFadeInRect( aFadeInRect );
             ImplGetFadeOutRect( aFadeOutRect );
 
-            if ( aFadeInRect.IsInside( GetPointerPosPixel() ) != aFadeInRect.IsInside( GetLastPointerPosPixel() ) )
+            if ( aFadeInRect.Contains( GetPointerPosPixel() ) != aFadeInRect.Contains( GetLastPointerPosPixel() ) )
                 Invalidate( aFadeInRect );
-            if ( aFadeOutRect.IsInside( GetPointerPosPixel() ) != aFadeOutRect.IsInside( GetLastPointerPosPixel() ) )
+            if ( aFadeOutRect.Contains( GetPointerPosPixel() ) != aFadeOutRect.Contains( GetLastPointerPosPixel() ) )
                 Invalidate( aFadeOutRect );
 
             if( pMouseEvt->IsLeaveWindow() || pMouseEvt->IsEnterWindow() )
@@ -2086,12 +2086,12 @@ void SplitWindow::RequestHelp( const HelpEvent& rHEvt )
         TranslateId pHelpResId;
 
         ImplGetFadeInRect( aHelpRect, true );
-        if ( aHelpRect.IsInside( aMousePosPixel ) )
+        if ( aHelpRect.Contains( aMousePosPixel ) )
             pHelpResId = SV_HELPTEXT_FADEIN;
         else
         {
             ImplGetFadeOutRect( aHelpRect );
-            if ( aHelpRect.IsInside( aMousePosPixel ) )
+            if ( aHelpRect.Contains( aMousePosPixel ) )
                 pHelpResId = SV_HELPTEXT_FADEOUT;
         }
 

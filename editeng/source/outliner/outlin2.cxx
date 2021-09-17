@@ -436,7 +436,7 @@ bool Outliner::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder, bool* pbBu
         if ( ( nPara != EE_PARA_NOT_FOUND ) && ImplHasNumberFormat( nPara ) )
         {
             tools::Rectangle aBulArea = ImpCalcBulletArea( nPara, true, true );
-            if ( aBulArea.IsInside( rPaperPos ) )
+            if ( aBulArea.Contains( rPaperPos ) )
             {
                 bTextPos = true;
                 if ( pbBullet)

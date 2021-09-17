@@ -561,13 +561,13 @@ bool SmElementsControl::MouseMove( const MouseEvent& rMouseEvent )
         return false;
     }
 
-    if (tools::Rectangle(Point(0, 0), GetOutputSizePixel()).IsInside(rMouseEvent.GetPosPixel()))
+    if (tools::Rectangle(Point(0, 0), GetOutputSizePixel()).Contains(rMouseEvent.GetPosPixel()))
     {
         const SmElement* pPrevElement = current();
         if (pPrevElement)
         {
             const tools::Rectangle rect(pPrevElement->mBoxLocation, pPrevElement->mBoxSize);
-            if (rect.IsInside(rMouseEvent.GetPosPixel()))
+            if (rect.Contains(rMouseEvent.GetPosPixel()))
                 return true;
         }
 
@@ -579,7 +579,7 @@ bool SmElementsControl::MouseMove( const MouseEvent& rMouseEvent )
                 continue;
 
             const tools::Rectangle rect(element->mBoxLocation, element->mBoxSize);
-            if (rect.IsInside(rMouseEvent.GetPosPixel()))
+            if (rect.Contains(rMouseEvent.GetPosPixel()))
             {
                 m_nCurrentRolloverElement = n;
                 Invalidate();
@@ -613,13 +613,13 @@ bool SmElementsControl::MouseButtonDown(const MouseEvent& rMouseEvent)
 {
     GrabFocus();
 
-    if (rMouseEvent.IsLeft() && tools::Rectangle(Point(0, 0), GetOutputSizePixel()).IsInside(rMouseEvent.GetPosPixel()) && maSelectHdlLink.IsSet())
+    if (rMouseEvent.IsLeft() && tools::Rectangle(Point(0, 0), GetOutputSizePixel()).Contains(rMouseEvent.GetPosPixel()) && maSelectHdlLink.IsSet())
     {
         const SmElement* pPrevElement = hasRollover() ? current() : nullptr;
         if (pPrevElement)
         {
             tools::Rectangle rect(pPrevElement->mBoxLocation, pPrevElement->mBoxSize);
-            if (rect.IsInside(rMouseEvent.GetPosPixel()))
+            if (rect.Contains(rMouseEvent.GetPosPixel()))
             {
                 setCurrentElement(m_nCurrentRolloverElement);
                 maSelectHdlLink.Call(*const_cast<SmElement*>(pPrevElement));
@@ -633,7 +633,7 @@ bool SmElementsControl::MouseButtonDown(const MouseEvent& rMouseEvent)
         {
             SmElement* element = maElementList[n].get();
             tools::Rectangle rect(element->mBoxLocation, element->mBoxSize);
-            if (rect.IsInside(rMouseEvent.GetPosPixel()))
+            if (rect.Contains(rMouseEvent.GetPosPixel()))
             {
                 setCurrentElement(n);
                 maSelectHdlLink.Call(*element);
@@ -726,7 +726,7 @@ void SmElementsControl::stepFocus(const bool bBackward)
         const tools::Rectangle outputRect(Point(0,0), GetOutputSizePixel());
         const SmElement *pCur = maElementList[nPos].get();
         tools::Rectangle elementRect(pCur->mBoxLocation, pCur->mBoxSize);
-        if (!outputRect.IsInside(elementRect))
+        if (!outputRect.Contains(elementRect))
             scrollToElement(bBackward, pCur);
         Invalidate();
     }
@@ -753,7 +753,7 @@ void SmElementsControl::pageFocus(const bool bBackward)
 
         SmElement *pCur = maElementList[nPos].get();
         tools::Rectangle elementRect(pCur->mBoxLocation, pCur->mBoxSize);
-        if (!outputRect.IsInside(elementRect))
+        if (!outputRect.Contains(elementRect))
         {
             if (nPrevPos != nStartPos)
             {
@@ -1134,7 +1134,7 @@ bool SmElementsControl::itemIsVisible(sal_uInt16 nPos) const
         return false;
 
     tools::Rectangle outputRect(Point(0, 0), GetOutputSizePixel());
-    return outputRect.IsInside(elementRect);
+    return outputRect.Contains(elementRect);
 }
 
 sal_uInt16 SmElementsControl::itemCount() const { return maElementList.size(); }
@@ -1185,7 +1185,7 @@ sal_uInt16 SmElementsControl::itemAtPos(const Point& rPoint) const
     {
         const SmElement* pItem = maElementList[n].get();
         tools::Rectangle elementRect(pItem->mBoxLocation, pItem->mBoxSize);
-        if (elementRect.IsInside(rPoint))
+        if (elementRect.Contains(rPoint))
             return n;
     }
     return SAL_MAX_UINT16;

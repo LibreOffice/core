@@ -49,7 +49,7 @@ void ImplGetSpinbuttonValue(vcl::Window* pWin,
         nState &= ~ControlState::ENABLED;
     if (pWin->HasFocus())
         nState |= ControlState::FOCUSED;
-    if (pWin->IsMouseOver() && rUpperRect.IsInside(aPointerPos))
+    if (pWin->IsMouseOver() && rUpperRect.Contains(aPointerPos))
         nState |= ControlState::ROLLOVER;
     rValue.mnUpperState = nState;
 
@@ -61,7 +61,7 @@ void ImplGetSpinbuttonValue(vcl::Window* pWin,
     if (pWin->HasFocus())
         nState |= ControlState::FOCUSED;
     // for overlapping spins: highlight only one
-    if (pWin->IsMouseOver() && rLowerRect.IsInside(aPointerPos) && !rUpperRect.IsInside(aPointerPos))
+    if (pWin->IsMouseOver() && rLowerRect.Contains(aPointerPos) && !rUpperRect.Contains(aPointerPos))
         nState |= ControlState::ROLLOVER;
     rValue.mnLowerState = nState;
 
@@ -383,19 +383,19 @@ void SpinField::MouseButtonDown( const MouseEvent& rMEvt )
 
     if (!IsReadOnly())
     {
-        if (maUpperRect.IsInside(rMEvt.GetPosPixel()))
+        if (maUpperRect.Contains(rMEvt.GetPosPixel()))
         {
             mbUpperIn   = true;
             mbInitialUp = true;
             Invalidate(maUpperRect);
         }
-        else if (maLowerRect.IsInside(rMEvt.GetPosPixel()))
+        else if (maLowerRect.Contains(rMEvt.GetPosPixel()))
         {
             mbLowerIn    = true;
             mbInitialDown = true;
             Invalidate(maLowerRect);
         }
-        else if (maDropDownRect.IsInside(rMEvt.GetPosPixel()))
+        else if (maDropDownRect.Contains(rMEvt.GetPosPixel()))
         {
             // put DropDownButton to the right
             mbInDropDown = ShowDropDown( !mbInDropDown );
@@ -443,7 +443,7 @@ void SpinField::MouseMove(const MouseEvent& rMEvt)
     {
         if (mbInitialUp)
         {
-            bool bNewUpperIn = maUpperRect.IsInside(rMEvt.GetPosPixel());
+            bool bNewUpperIn = maUpperRect.Contains(rMEvt.GetPosPixel());
             if (bNewUpperIn != mbUpperIn)
             {
                 if (bNewUpperIn)
@@ -460,7 +460,7 @@ void SpinField::MouseMove(const MouseEvent& rMEvt)
         }
         else if (mbInitialDown)
         {
-            bool bNewLowerIn = maLowerRect.IsInside(rMEvt.GetPosPixel());
+            bool bNewLowerIn = maLowerRect.Contains(rMEvt.GetPosPixel());
             if (bNewLowerIn != mbLowerIn)
             {
                 if (bNewLowerIn)
@@ -820,9 +820,9 @@ void SpinField::DataChanged( const DataChangedEvent& rDCEvt )
 
 tools::Rectangle* SpinField::ImplFindPartRect(const Point& rPt)
 {
-    if (maUpperRect.IsInside(rPt))
+    if (maUpperRect.Contains(rPt))
         return &maUpperRect;
-    else if (maLowerRect.IsInside(rPt))
+    else if (maLowerRect.Contains(rPt))
         return &maLowerRect;
     else
         return nullptr;

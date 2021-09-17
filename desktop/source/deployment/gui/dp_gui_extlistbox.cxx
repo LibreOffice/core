@@ -735,7 +735,7 @@ bool ExtensionBox_Impl::MouseMove( const MouseEvent& rMEvt )
     if ( ( nPos >= 0 ) && ( nPos < static_cast<tools::Long>(m_vEntries.size()) ) )
     {
         const auto& rEntry = m_vEntries[nPos];
-        bOverHyperlink = !rEntry->m_sPublisher.isEmpty() && rEntry->m_aLinkRect.IsInside(rMEvt.GetPosPixel());
+        bOverHyperlink = !rEntry->m_sPublisher.isEmpty() && rEntry->m_aLinkRect.Contains(rMEvt.GetPosPixel());
     }
 
     if (bOverHyperlink)
@@ -752,7 +752,7 @@ OUString ExtensionBox_Impl::RequestHelp(tools::Rectangle& rRect)
     if ( ( nPos >= 0 ) && ( nPos < static_cast<tools::Long>(m_vEntries.size()) ) )
     {
         const auto& rEntry = m_vEntries[nPos];
-        bool bOverHyperlink = !rEntry->m_sPublisher.isEmpty() && rEntry->m_aLinkRect.IsInside(rRect);
+        bool bOverHyperlink = !rEntry->m_sPublisher.isEmpty() && rEntry->m_aLinkRect.Contains(rRect);
         if (bOverHyperlink)
         {
             rRect = rEntry->m_aLinkRect;
@@ -776,7 +776,7 @@ bool ExtensionBox_Impl::MouseButtonDown( const MouseEvent& rMEvt )
             if ( ( nPos >= 0 ) && ( nPos < static_cast<tools::Long>(m_vEntries.size()) ) )
             {
                 const auto& rEntry = m_vEntries[nPos];
-                if (!rEntry->m_sPublisher.isEmpty() && rEntry->m_aLinkRect.IsInside(rMEvt.GetPosPixel()))
+                if (!rEntry->m_sPublisher.isEmpty() && rEntry->m_aLinkRect.Contains(rMEvt.GetPosPixel()))
                 {
                     try
                     {

@@ -304,7 +304,7 @@ bool ScDocument::HasOLEObjectsInArea( const ScRange& rRange, const ScMarkData* p
                 while (pObject)
                 {
                     if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
-                            aMMRect.IsInside( pObject->GetCurrentBoundRect() ) )
+                            aMMRect.Contains( pObject->GetCurrentBoundRect() ) )
                         return true;
 
                     pObject = aIter.Next();
@@ -357,7 +357,7 @@ bool ScDocument::HasBackgroundDraw( SCTAB nTab, const tools::Rectangle& rMMRect 
     SdrObject* pObject = aIter.Next();
     while (pObject && !bFound)
     {
-        if ( pObject->GetLayer() == SC_LAYER_BACK && pObject->GetCurrentBoundRect().IsOver( rMMRect ) )
+        if ( pObject->GetLayer() == SC_LAYER_BACK && pObject->GetCurrentBoundRect().Overlaps( rMMRect ) )
             bFound = true;
         pObject = aIter.Next();
     }
@@ -382,7 +382,7 @@ bool ScDocument::HasAnyDraw( SCTAB nTab, const tools::Rectangle& rMMRect ) const
     SdrObject* pObject = aIter.Next();
     while (pObject && !bFound)
     {
-        if ( pObject->GetCurrentBoundRect().IsOver( rMMRect ) )
+        if ( pObject->GetCurrentBoundRect().Overlaps( rMMRect ) )
             bFound = true;
         pObject = aIter.Next();
     }
@@ -410,7 +410,7 @@ SdrObject* ScDocument::GetObjectAtPoint( SCTAB nTab, const Point& rPos )
             SdrObject* pObject = aIter.Next();
             while (pObject)
             {
-                if ( pObject->GetCurrentBoundRect().IsInside(rPos) )
+                if ( pObject->GetCurrentBoundRect().Contains(rPos) )
                 {
                     // Intern is of no interest
                     // Only object form background layer, when no object form another layer is found

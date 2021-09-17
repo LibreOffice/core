@@ -935,7 +935,7 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
             SetId( reinterpret_cast<sal_IntPtr>( rInf.GetTextFrame() ) );
             rInf.GetTextFrame()->SetAnimation();
         }
-        if( aTmp.IsOver( rInf.GetPaintRect() ) && !bDraw )
+        if( aTmp.Overlaps( rInf.GetPaintRect() ) && !bDraw )
         {
             rInf.NoteAnimation();
             const SwViewShell* pViewShell = rInf.GetVsh();

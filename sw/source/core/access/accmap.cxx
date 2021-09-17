@@ -818,7 +818,7 @@ struct ContainsPredicate
     explicit ContainsPredicate( const Point& rPoint ) : mrPoint(rPoint) {}
     bool operator() ( const tools::Rectangle& rRect ) const
     {
-        return rRect.IsInside( mrPoint );
+        return rRect.Contains( mrPoint );
     }
 };
 

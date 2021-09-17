@@ -412,9 +412,9 @@ void BrowseBox::ExpandRowSelection( const BrowserMouseEvent& rEvt )
         Range aJustifiedRange( aSelRange );
         aJustifiedRange.Justify();
 
-        bool bSelectThis = ( bSelect != aJustifiedRange.IsInside( rEvt.GetRow() ) );
+        bool bSelectThis = ( bSelect != aJustifiedRange.Contains( rEvt.GetRow() ) );
 
-        if ( aJustifiedRange.IsInside( rEvt.GetRow() ) )
+        if ( aJustifiedRange.Contains( rEvt.GetRow() ) )
         {
             // down and up
             while ( rEvt.GetRow() < aSelRange.Max() )

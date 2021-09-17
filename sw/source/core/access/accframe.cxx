@@ -226,7 +226,7 @@ SwAccessibleChild SwAccessibleFrame::GetChildAtPixel( const SwRect& rVisArea,
                 if( !aLogBounds.IsEmpty() )
                 {
                     tools::Rectangle aPixBounds( rAccMap.CoreToPixel( aLogBounds ) );
-                    if( aPixBounds.IsInside( rPixPos ) )
+                    if( aPixBounds.Contains( rPixPos ) )
                         aRet = rLower;
                 }
             }
@@ -257,7 +257,7 @@ SwAccessibleChild SwAccessibleFrame::GetChildAtPixel( const SwRect& rVisArea,
                 if( !aLogBounds.IsEmpty() )
                 {
                     tools::Rectangle aPixBounds( rAccMap.CoreToPixel( aLogBounds ) );
-                    if( aPixBounds.IsInside( rPixPos ) )
+                    if( aPixBounds.Contains( rPixPos ) )
                         aRet = rLower;
                 }
             }

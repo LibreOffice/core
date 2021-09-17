@@ -88,7 +88,7 @@ void SwOleClient::ObjectAreaChanged()
 {
     SwWrtShell &rSh  = static_cast<SwView*>(GetViewShell())->GetWrtShell();
     SwRect aFrame( rSh.GetAnyCurRect( CurRectType::FlyEmbedded,     nullptr, GetObject() ));
-    if ( !aFrame.IsOver( rSh.VisArea() ) )
+    if ( !aFrame.Overlaps( rSh.VisArea() ) )
         rSh.MakeVisible( aFrame );
 }
 

@@ -1603,7 +1603,7 @@ Pair ImpEditView::Scroll( tools::Long ndX, tools::Long ndY, ScrollRangeCheck nRa
         if ( bVisCursor )
         {
             tools::Rectangle aCursorRect( pCrsr->GetPos(), pCrsr->GetSize() );
-            if ( aOutArea.IsInside( aCursorRect ) )
+            if ( aOutArea.Contains( aCursorRect ) )
                 pCrsr->Show();
         }
 
@@ -1818,7 +1818,7 @@ void ImpEditView::DeleteSelected()
 
 const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_Int32* pPara, sal_Int32* pPos ) const
 {
-    if( !GetOutputArea().IsInside( rPos ) )
+    if( !GetOutputArea().Contains( rPos ) )
         return nullptr;
 
     Point aDocPos( GetDocPos( rPos ) );
@@ -1858,7 +1858,7 @@ bool ImpEditView::IsBulletArea( const Point& rPos, sal_Int32* pPara )
     if ( pPara )
         *pPara = EE_PARA_NOT_FOUND;
 
-    if( !GetOutputArea().IsInside( rPos ) )
+    if( !GetOutputArea().Contains( rPos ) )
         return false;
 
     Point aDocPos( GetDocPos( rPos ) );
@@ -2063,7 +2063,7 @@ bool ImpEditView::IsSelectionAtPoint( const Point& rPosPixel )
     const OutputDevice& rOutDev = GetOutputDevice();
     Point aMousePos = rOutDev.PixelToLogic(rPosPixel);
 
-    if ( ( !GetOutputArea().IsInside( aMousePos ) ) && !pEditEngine->pImpEditEngine->IsInSelectionMode() )
+    if ( ( !GetOutputArea().Contains( aMousePos ) ) && !pEditEngine->pImpEditEngine->IsInSelectionMode() )
     {
         return false;
     }
@@ -2083,7 +2083,7 @@ bool ImpEditView::SetCursorAtPoint( const Point& rPointPixel )
     const OutputDevice& rOutDev = GetOutputDevice();
     aMousePos = rOutDev.PixelToLogic( aMousePos );
 
-    if ( ( !GetOutputArea().IsInside( aMousePos ) ) && !pEditEngine->pImpEditEngine->IsInSelectionMode() )
+    if ( ( !GetOutputArea().Contains( aMousePos ) ) && !pEditEngine->pImpEditEngine->IsInSelectionMode() )
     {
         return false;
     }
@@ -2486,7 +2486,7 @@ void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rD
 
     bool bAccept = false;
 
-    if ( GetOutputArea().IsInside( aMousePos ) && !bReadOnly )
+    if ( GetOutputArea().Contains( aMousePos ) && !bReadOnly )
     {
         if ( pDragAndDropInfo && pDragAndDropInfo->bHasValidData )
         {

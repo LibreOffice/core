@@ -106,7 +106,7 @@ public:
     void                        MoveX( tools::Long nHorzMove );
     void                        ScaleX( double fHorzScale );
 
-    bool                        IsInside( tools::Long nX );
+    bool                        Contains( tools::Long nX );
 
     bool                        IsEmpty() const { return ((!mpFirstSep) && (!mpFirstBandPoint)); }
 

@@ -334,7 +334,7 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
             aRect.AdjustRight(mx );
             aRect.AdjustTop( -my );
             aRect.AdjustBottom(my );
-            if (aRect.IsInside(rPnt)) {
+            if (aRect.Contains(rPnt)) {
                 if (bOPntSnap && nMaxPointSnapCount>0)
                 {
                     sal_uInt32 nCount(pO->GetSnapPointCount());
@@ -357,7 +357,7 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
                     aR1.AdjustRight(mx );
                     aR1.AdjustTop( -my );
                     aR1.AdjustBottom(my );
-                    if (aR1.IsInside(rPnt)) {
+                    if (aR1.Contains(rPnt)) {
                         if (std::abs(x-aLog.Left  ())<=mx) { dx1=-(x-aLog.Left  ()); if (std::abs(dx1)<std::abs(dx)) dx=dx1; }
                         if (std::abs(x-aLog.Right ())<=mx) { dx1=-(x-aLog.Right ()); if (std::abs(dx1)<std::abs(dx)) dx=dx1; }
                         if (std::abs(y-aLog.Top   ())<=my) { dy1=-(y-aLog.Top   ()); if (std::abs(dy1)<std::abs(dy)) dy=dy1; }

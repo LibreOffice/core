@@ -559,7 +559,7 @@ void SwViewShell::InvalidateWindows( const SwRect &rRect )
                 ::RepaintPagePreview( &rSh, rRect );
             // In case of tiled rendering, invalidation is wanted even if
             // the rectangle is outside the visual area.
-            else if ( rSh.VisArea().IsOver( rRect ) || comphelper::LibreOfficeKit::isActive() )
+            else if ( rSh.VisArea().Overlaps( rRect ) || comphelper::LibreOfficeKit::isActive() )
                 rSh.GetWin()->Invalidate( rRect.SVRect() );
         }
     }
@@ -574,7 +574,7 @@ const SwRect& SwViewShell::VisArea() const
 
 void SwViewShell::MakeVisible( const SwRect &rRect )
 {
-    if ( !(!VisArea().IsInside( rRect ) || IsScrollMDI( this, rRect ) || GetCareDialog(*this)) )
+    if ( !(!VisArea().Contains( rRect ) || IsScrollMDI( this, rRect ) || GetCareDialog(*this)) )
         return;
 
     if ( IsViewLocked() )
@@ -1138,7 +1138,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
                 }
 
                 // #i9719# - consider new border and shadow width
-                if ( aPageRect.IsOver( aBoth ) )
+                if ( aPageRect.Overlaps( aBoth ) )
                 {
                     SwTwips nPageLeft = 0;
                     SwTwips nPageRight = 0;
@@ -1184,7 +1184,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
             tools::Rectangle aRect( aPrevArea.SVRect() );
             aRect.SetLeft( nMinLeft );
             aRect.SetRight( nMaxRight );
-            if( VisArea().IsOver( aPrevArea ) && !mnLockPaint )
+            if( VisArea().Overlaps( aPrevArea ) && !mnLockPaint )
             {
                 bScrolled = true;
                 maVisArea.Pos() = aPrevArea.Pos();
@@ -1197,7 +1197,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
         }
         else if ( !mnLockPaint ) //will be released in Unlock
         {
-            if( VisArea().IsOver( aPrevArea ) )
+            if( VisArea().Overlaps( aPrevArea ) )
             {
                 bScrolled = true;
                 maVisArea.Pos() = aPrevArea.Pos();
@@ -1491,7 +1491,7 @@ void SwViewShell::PaintDesktop(vcl::RenderContext& rRenderContext, const SwRect 
         const SwFrame *pPg = pRoot->Lower();
         while ( pPg && pPg->GetNext() )
             pPg = pPg->GetNext();
-        if ( !pPg || !pPg->getFrameArea().IsOver( VisArea() ) )
+        if ( !pPg || !pPg->getFrameArea().Overlaps( VisArea() ) )
             bBorderOnly = true;
     }
 
@@ -1546,7 +1546,7 @@ void SwViewShell::PaintDesktop(vcl::RenderContext& rRenderContext, const SwRect 
             aPageRect.Pos().AdjustX( -(bSidebarRight ? 0 : nSidebarWidth) );
             aPageRect.AddWidth(nSidebarWidth );
 
-            if ( aPageRect.IsOver( rRect ) )
+            if ( aPageRect.Overlaps( rRect ) )
                 aRegion -= aPageRect;
 
             pPage = pPage->GetNext();
@@ -1652,7 +1652,7 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
             for ( size_t i = 0; i < pRegion->size(); ++i )
             {
                 const SwRect &rTmp = (*pRegion)[i];
-                bStop = rTmp.IsOver( VisArea() );
+                bStop = rTmp.Overlaps( VisArea() );
                 if ( !bStop )
                     break;
             }
@@ -1673,10 +1673,10 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
                 SwRegionRects aRegion( rRect );
                 for ( size_t i = 0; i < pRegion->size(); ++i )
                 {   const SwRect &rTmp = (*pRegion)[i];
-                    if ( !rRect.IsInside( rTmp ) )
+                    if ( !rRect.Contains( rTmp ) )
                     {
                         InvalidateWindows( rTmp );
-                        if ( rTmp.IsOver( VisArea() ) )
+                        if ( rTmp.Overlaps( VisArea() ) )
                         {   aRegion -= rTmp;
                             bRet = true;
                         }
@@ -1764,7 +1764,7 @@ void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
         if ( Imp()->m_bSmoothUpdate )
         {
             SwRect aTmp( rRect );
-            if ( !Imp()->m_aSmoothRect.IsInside( aTmp ) )
+            if ( !Imp()->m_aSmoothRect.Contains( aTmp ) )
                 Imp()->m_bStopSmooth = true;
             else
             {
@@ -1811,7 +1811,7 @@ void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
             if ( IsPreview() )
             {
                 //When useful, process or destroy the old InvalidRect.
-                if ( aRect.IsInside( maInvalidRect ) )
+                if ( aRect.Contains( maInvalidRect ) )
                     ResetInvalidRect();
                 SwViewShell::sbLstAct = true;
                 GetLayout()->PaintSwFrame( rRenderContext, aRect );
@@ -1832,7 +1832,7 @@ void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
                     PaintDesktop(rRenderContext, aRect);
 
                     //When useful, process or destroy the old InvalidRect.
-                    if ( aRect.IsInside( maInvalidRect ) )
+                    if ( aRect.Contains( maInvalidRect ) )
                         ResetInvalidRect();
                     SwViewShell::sbLstAct = true;
                     GetLayout()->PaintSwFrame( rRenderContext, aRect );
@@ -2592,7 +2592,7 @@ void SwViewShell::OnGraphicArrived(const SwRect& rRect)
             if(rShell.GetWin())
                 ::RepaintPagePreview(&rShell, rRect);
         }
-        else if(rShell.VisArea().IsOver(rRect) && OUTDEV_WINDOW == rShell.GetOut()->GetOutDevType())
+        else if(rShell.VisArea().Overlaps(rRect) && OUTDEV_WINDOW == rShell.GetOut()->GetOutDevType())
         {
             // invalidate instead of painting
             rShell.GetWin()->Invalidate(rRect.SVRect());

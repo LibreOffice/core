@@ -107,8 +107,8 @@ public:
     bool HasPolyPolygonOrB2DPolyPolygon() const { return (getB2DPolyPolygon() || getPolyPolygon()); }
     void GetRegionRectangles(RectangleVector& rTarget) const;
 
-    bool IsInside( const Point& rPoint ) const;
-    bool IsOver( const tools::Rectangle& rRect ) const;
+    bool Contains( const Point& rPoint ) const;
+    bool Overlaps( const tools::Rectangle& rRect ) const;
 
     vcl::Region& operator=( const vcl::Region& rRegion );
     vcl::Region& operator=( vcl::Region&& rRegion ) noexcept;

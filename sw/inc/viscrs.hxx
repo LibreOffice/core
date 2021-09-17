@@ -189,7 +189,7 @@ public:
     virtual void FillStartEnd(SwRect& rStart, SwRect& rEnd) const override;
 
     // Check if SPoint is within table SSelection.
-    bool IsInside( const Point& rPt ) const;
+    bool Contains( const Point& rPt ) const;
 
     virtual void SetMark() override;
     virtual SwCursor* Create( SwPaM* pRing = nullptr ) const override;

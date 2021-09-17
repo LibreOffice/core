@@ -572,7 +572,7 @@ void VclProcessor2D::RenderFillGraphicPrimitive2D(
                                         const ::tools::Rectangle aOutRectPixel(
                                             Point(nXPos, nYPos), aNeededBitmapSizePixel);
 
-                                        if (aOutRectPixel.IsOver(aVisiblePixel))
+                                        if (aOutRectPixel.Overlaps(aVisiblePixel))
                                         {
                                             if (bPreScaled)
                                             {
@@ -606,7 +606,7 @@ void VclProcessor2D::RenderFillGraphicPrimitive2D(
                                         const ::tools::Rectangle aOutRectPixel(
                                             Point(nXPos, nYPos), aNeededBitmapSizePixel);
 
-                                        if (aOutRectPixel.IsOver(aVisiblePixel))
+                                        if (aOutRectPixel.Overlaps(aVisiblePixel))
                                         {
                                             if (bPreScaled)
                                             {

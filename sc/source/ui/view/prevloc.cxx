@@ -324,7 +324,7 @@ bool ScPreviewLocationData::HasCellsInRange( const tools::Rectangle& rVisiblePix
     for (auto const& it : m_Entries)
     {
         if ( it->eType == SC_PLOC_CELLRANGE || it->eType == SC_PLOC_COLHEADER || it->eType == SC_PLOC_ROWHEADER )
-            if ( it->aPixelRect.IsOver( rVisiblePixel ) )
+            if ( it->aPixelRect.Overlaps( rVisiblePixel ) )
                 return true;
     }
 
@@ -394,7 +394,7 @@ tools::Long ScPreviewLocationData::GetNoteCountInRange( const tools::Rectangle& 
     sal_uLong nRet = 0;
     for (auto const& it : m_Entries)
     {
-        if ( it->eType == eType && it->aPixelRect.IsOver( rVisiblePixel ) )
+        if ( it->eType == eType && it->aPixelRect.Overlaps( rVisiblePixel ) )
             ++nRet;
     }
 
@@ -409,7 +409,7 @@ bool ScPreviewLocationData::GetNoteInRange( const tools::Rectangle& rVisiblePixe
     sal_uLong nPos = 0;
     for (auto const& it : m_Entries)
     {
-        if ( it->eType == eType && it->aPixelRect.IsOver( rVisiblePixel ) )
+        if ( it->eType == eType && it->aPixelRect.Overlaps( rVisiblePixel ) )
         {
             if ( nPos == sal::static_int_cast<sal_uLong>(nIndex) )
             {
@@ -431,7 +431,7 @@ tools::Rectangle ScPreviewLocationData::GetNoteInRangeOutputRect(const tools::Re
     sal_uLong nPos = 0;
     for (auto const& it : m_Entries)
     {
-        if ( it->eType == eType && it->aPixelRect.IsOver( rVisiblePixel ) )
+        if ( it->eType == eType && it->aPixelRect.Overlaps( rVisiblePixel ) )
         {
             if ( aCellPos == it->aCellRange.aStart )
                 return it->aPixelRect;

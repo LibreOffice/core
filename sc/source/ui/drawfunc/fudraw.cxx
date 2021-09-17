@@ -478,7 +478,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                                     tools::Rectangle aMarkRect(pView->GetMarkedObjRect());
                                     aMarkRect.Move(nX, nY);
 
-                                    if(!aMarkRect.IsInside(rWorkArea))
+                                    if(!aMarkRect.Contains(rWorkArea))
                                     {
                                         if(aMarkRect.Left() < rWorkArea.Left())
                                         {

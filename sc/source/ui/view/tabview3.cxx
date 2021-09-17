@@ -998,7 +998,7 @@ void ScTabView::AlignToCursor( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
                             tools::Long nCSX, nCSY;
                             aViewData.GetMergeSizePixel( nCurX, nCurY, nCSX, nCSY );
                             tools::Rectangle aCursor( aStart, Size( nCSX, nCSY ) );
-                            if ( aCursor.IsOver( aDlgPixel ) )
+                            if ( aCursor.Overlaps( aDlgPixel ) )
                                 bLimit = true;      // cell is covered by the dialog
                         }
                     }

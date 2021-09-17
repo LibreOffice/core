@@ -764,7 +764,7 @@ bool SvImpLBox::EntryReallyHit(SvTreeListEntry* pEntry, const Point& rPosPixel, 
 
     Point aPos( rPosPixel );
     aPos -= m_pView->GetMapMode().GetOrigin();
-    bRet = aRect.IsInside( aPos );
+    bRet = aRect.Contains( aPos );
     return bRet;
 }
 
@@ -2898,7 +2898,7 @@ bool SvImpLBox::RequestHelp( const HelpEvent& rHEvt )
     if( rHEvt.GetMode() & HelpEventMode::QUICK )
     {
         Point aPos( m_pView->ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
-        if( !GetVisibleArea().IsInside( aPos ))
+        if( !GetVisibleArea().Contains( aPos ))
             return false;
 
         SvTreeListEntry* pEntry = GetEntry( aPos );
@@ -2925,7 +2925,7 @@ bool SvImpLBox::RequestHelp( const HelpEvent& rHEvt )
 
             tools::Rectangle aViewRect( GetVisibleArea() );
 
-            if( bItemClipped || !aViewRect.IsInside( aItemRect ) )
+            if( bItemClipped || !aViewRect.Contains( aItemRect ) )
             {
                 // clip the right edge of the item at the edge of the view
                 //if( aItemRect.Right() > aViewRect.Right() )

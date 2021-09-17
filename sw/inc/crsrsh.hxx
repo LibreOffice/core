@@ -517,7 +517,7 @@ public:
     /*
      * Returns if cursor is wholly or partly within visible range.
      */
-    bool IsCursorVisible() const { return VisArea().IsOver( GetCharRect() ); }
+    bool IsCursorVisible() const { return VisArea().Overlaps( GetCharRect() ); }
     /*
      * Returns SwRect, at which the character is located.
      */

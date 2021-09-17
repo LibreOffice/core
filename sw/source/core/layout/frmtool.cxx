@@ -3294,7 +3294,7 @@ static void lcl_CheckFlowBack( SwFrame* pFrame, const SwRect &rRect )
     {
         if( pFrame->IsLayoutFrame() )
         {
-            if( rRect.IsOver( pFrame->getFrameArea() ) )
+            if( rRect.Overlaps( pFrame->getFrameArea() ) )
                 lcl_CheckFlowBack( static_cast<SwLayoutFrame*>(pFrame)->Lower(), rRect );
         }
         else if( !pFrame->GetNext() && nBottom > pFrame->getFrameArea().Bottom() )
@@ -3320,12 +3320,12 @@ static void lcl_NotifyContent( const SdrObject *pThis, SwContentFrame *pCnt,
     {
         // #i35640# - use given rectangle <rRect> instead
         // of current bound rectangle
-        if ( aCntPrt.IsOver( rRect ) )
+        if ( aCntPrt.Overlaps( rRect ) )
             pCnt->Prepare( PrepareHint::FlyFrameAttributesChanged );
     }
     // #i23129# - only invalidate, if the text frame
     // printing area overlaps with the given rectangle.
-    else if ( aCntPrt.IsOver( rRect ) )
+    else if ( aCntPrt.Overlaps( rRect ) )
         pCnt->Prepare( eHint, static_cast<void*>(&aCntPrt.Intersection_( rRect )) );
     if ( !pCnt->GetDrawObjs() )
         return;
@@ -3434,8 +3434,8 @@ void Notify_Background( const SdrObject* pObj,
                 // instead of <GetCurrentBoundRect()>, because a recalculation
                 // of the bounding rectangle isn't intended here.
                 if (!isValidTableBeforeAnchor
-                    && (pTab->getFrameArea().IsOver(SwRect(pObj->GetLastBoundRect())) ||
-                        pTab->getFrameArea().IsOver(rRect)))
+                    && (pTab->getFrameArea().Overlaps(SwRect(pObj->GetLastBoundRect())) ||
+                        pTab->getFrameArea().Overlaps(rRect)))
                 {
                     if ( !pFlyFrame || !pFlyFrame->IsLowerOf( pTab ) )
                         pTab->InvalidatePrt();
@@ -3446,8 +3446,8 @@ void Notify_Background( const SdrObject* pObj,
             // instead of <GetCurrentBoundRect()>, because a recalculation
             // of the bounding rectangle isn't intended here.
             if (!isValidTableBeforeAnchor && pCell->IsCellFrame() &&
-                 ( pCell->getFrameArea().IsOver( SwRect(pObj->GetLastBoundRect()) ) ||
-                   pCell->getFrameArea().IsOver( rRect ) ) )
+                 ( pCell->getFrameArea().Overlaps( SwRect(pObj->GetLastBoundRect()) ) ||
+                   pCell->getFrameArea().Overlaps( rRect ) ) )
             {
                 const SwFormatVertOrient &rOri = pCell->GetFormat()->GetVertOrient();
                 if ( text::VertOrientation::NONE != rOri.GetVertOrient() )
@@ -3531,14 +3531,14 @@ const SwFrame* GetVirtualUpper( const SwFrame* pFrame, const Point& rPos )
     if( pFrame->IsTextFrame() )
     {
         pFrame = pFrame->GetUpper();
-        if( !pFrame->getFrameArea().IsInside( rPos ) )
+        if( !pFrame->getFrameArea().Contains( rPos ) )
         {
             if( pFrame->IsFootnoteFrame() )
             {
                 const SwFootnoteFrame* pTmp = static_cast<const SwFootnoteFrame*>(pFrame)->GetFollow();
                 while( pTmp )
                 {
-                    if( pTmp->getFrameArea().IsInside( rPos ) )
+                    if( pTmp->getFrameArea().Contains( rPos ) )
                         return pTmp;
                     pTmp = pTmp->GetFollow();
                 }
@@ -3548,7 +3548,7 @@ const SwFrame* GetVirtualUpper( const SwFrame* pFrame, const Point& rPos )
                 SwFlyFrame* pTmp = const_cast<SwFlyFrame*>(pFrame->FindFlyFrame());
                 while( pTmp )
                 {
-                    if( pTmp->getFrameArea().IsInside( rPos ) )
+                    if( pTmp->getFrameArea().Contains( rPos ) )
                         return pTmp;
                     pTmp = pTmp->GetNextLink();
                 }
@@ -3689,7 +3689,7 @@ SwTwips CalcRowRstHeight( SwLayoutFrame *pRow )
 
 const SwFrame* FindPage( const SwRect &rRect, const SwFrame *pPage )
 {
-    if ( !rRect.IsOver( pPage->getFrameArea() ) )
+    if ( !rRect.Overlaps( pPage->getFrameArea() ) )
     {
         const SwRootFrame* pRootFrame = static_cast<const SwRootFrame*>(pPage->GetUpper());
         const SwFrame* pTmpPage = pRootFrame ? pRootFrame->GetPageAtPos( rRect.TopLeft(), &rRect.SSize(), true ) : nullptr;
@@ -3817,7 +3817,7 @@ SwFrame* GetFrameOfModify(SwRootFrame const*const pLayout, sw::BroadcastingModif
                     else
                         aCalcRect = pTmpFrame->getFrameArea();
 
-                    if (aCalcRect.IsInside(pViewPosAndCalcFrame->first))
+                    if (aCalcRect.Contains(pViewPosAndCalcFrame->first))
                     {
                         pMinFrame = pTmpFrame;
                         break;

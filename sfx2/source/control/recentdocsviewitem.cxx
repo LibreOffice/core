@@ -105,7 +105,7 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
 {
     ::tools::Rectangle aRect(ThumbnailViewItem::updateHighlight(bVisible, rPoint));
 
-    if (bVisible && getRemoveIconArea().IsInside(rPoint))
+    if (bVisible && getRemoveIconArea().Contains(rPoint))
     {
         if (!m_bRemoveIconHighlighted)
             aRect.Union(getRemoveIconArea());
@@ -161,7 +161,7 @@ void RecentDocsViewItem::MouseButtonUp(const MouseEvent& rMEvt)
 {
     if (rMEvt.IsLeft())
     {
-        if (getRemoveIconArea().IsInside(rMEvt.GetPosPixel()))
+        if (getRemoveIconArea().Contains(rMEvt.GetPosPixel()))
         {
             SvtHistoryOptions::DeleteItem(EHistoryType::PickList, maURL);
             mrParent.Reload();

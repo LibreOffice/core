@@ -2160,7 +2160,7 @@ void ToolbarLayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( ui::D
                 awt::Rectangle aWindowRect = rRowColumnWindowData.aRowColumnWindows[i]->getPosSize();
                 ::tools::Rectangle aRect( aWindowRect.X, aWindowRect.Y, aWindowRect.X+aWindowRect.Width, aWindowRect.Y+aWindowRect.Height );
                 aRect.SetPos( pContainerWindow->ScreenToOutputPixel( pDockingAreaWindow->OutputToScreenPixel( aRect.TopLeft() )));
-                if ( aRect.IsInside( rMousePos ))
+                if ( aRect.Contains( rMousePos ))
                 {
                     // Check if we have found the excluded element. If yes, we have to provide an empty rectangle.
                     // We prevent that a toolbar cannot be moved when the mouse pointer is inside its own rectangle!
@@ -2637,7 +2637,7 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
     }
 
     // default docking operation, dock on the given row/column
-    bool                                     bOpOutsideOfDockingArea( !aDockingAreaRect.IsInside( rMousePos ));
+    bool                                     bOpOutsideOfDockingArea( !aDockingAreaRect.Contains( rMousePos ));
 
     std::vector< SingleRowColumnWindowData > aRowColumnsWindowData;
 
@@ -2678,7 +2678,7 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
                 aRect.SetPos( pContainerWindow->ScreenToOutputPixel( pDockingAreaWindow->OutputToScreenPixel( aRect.TopLeft() )));
             }
 
-            bool bIsInsideRowCol( aRect.IsInside( rMousePos ) );
+            bool bIsInsideRowCol( aRect.Contains( rMousePos ) );
             if ( bIsInsideRowCol )
             {
                 nIndex            = i;
@@ -2960,7 +2960,7 @@ framework::ToolbarLayoutManager::DockingOperation ToolbarLayoutManager::implts_d
     constexpr sal_Int32 nHorzVerticalRegionSize        = 6;
     constexpr sal_Int32 nHorzVerticalMoveRegion        = 4;
 
-    if ( rRowColRect.IsInside( rMousePos ))
+    if ( rRowColRect.Contains( rMousePos ))
     {
         if ( isHorizontalDockingArea( DockingArea ))
         {
@@ -3330,23 +3330,23 @@ awt::DockingData SAL_CALL ToolbarLayoutManager::docking( const awt::DockingEvent
             VclPtr<vcl::Window> pContainerWindow( VCLUnoHelper::GetWindow( xContainerWindow ) );
             ::Point aMousePos( pContainerWindow->ScreenToOutputPixel( ::Point( e.MousePos.X, e.MousePos.Y )));
 
-            if ( aHotZoneTopDockRect.IsInside( aMousePos ))
+            if ( aHotZoneTopDockRect.Contains( aMousePos ))
                 eDockingArea = ui::DockingArea_DOCKINGAREA_TOP;
-            else if ( aHotZoneBottomDockRect.IsInside( aMousePos ))
+            else if ( aHotZoneBottomDockRect.Contains( aMousePos ))
                 eDockingArea = ui::DockingArea_DOCKINGAREA_BOTTOM;
-            else if ( aHotZoneLeftDockRect.IsInside( aMousePos ))
+            else if ( aHotZoneLeftDockRect.Contains( aMousePos ))
                 eDockingArea = ui::DockingArea_DOCKINGAREA_LEFT;
-            else if ( aHotZoneRightDockRect.IsInside( aMousePos ))
+            else if ( aHotZoneRightDockRect.Contains( aMousePos ))
                 eDockingArea = ui::DockingArea_DOCKINGAREA_RIGHT;
 
             // Higher priority for movements inside the real docking area
-            if ( aTopDockRect.IsInside( aMousePos ))
+            if ( aTopDockRect.Contains( aMousePos ))
                 eDockingArea = ui::DockingArea_DOCKINGAREA_TOP;
-            else if ( aBottomDockRect.IsInside( aMousePos ))
+            else if ( aBottomDockRect.Contains( aMousePos ))
                 eDockingArea = ui::DockingArea_DOCKINGAREA_BOTTOM;
-            else if ( aLeftDockRect.IsInside( aMousePos ))
+            else if ( aLeftDockRect.Contains( aMousePos ))
                 eDockingArea = ui::DockingArea_DOCKINGAREA_LEFT;
-            else if ( aRightDockRect.IsInside( aMousePos ))
+            else if ( aRightDockRect.Contains( aMousePos ))
                 eDockingArea = ui::DockingArea_DOCKINGAREA_RIGHT;
 
             // Determine if we have a toolbar and set alignment according to the docking area!

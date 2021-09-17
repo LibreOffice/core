@@ -122,7 +122,7 @@ void SwViewShellImp::DelRegion()
 bool SwViewShellImp::AddPaintRect( const SwRect &rRect )
 {
     // In case of tiled rendering the visual area is the last painted tile -> not interesting.
-    if ( rRect.IsOver( m_pShell->VisArea() ) || comphelper::LibreOfficeKit::isActive() )
+    if ( rRect.Overlaps( m_pShell->VisArea() ) || comphelper::LibreOfficeKit::isActive() )
     {
         if ( !m_pRegion )
         {
@@ -177,7 +177,7 @@ void SwViewShellImp::SetFirstVisPage(OutputDevice const * pRenderContext)
 
         SwPageFrame *pPage = static_cast<SwPageFrame*>(m_pShell->GetLayout()->Lower());
         SwRect aPageRect = pPage->GetBoundRect(pRenderContext);
-        while ( pPage && !aPageRect.IsOver( m_pShell->VisArea() ) )
+        while ( pPage && !aPageRect.Overlaps( m_pShell->VisArea() ) )
         {
             pPage = static_cast<SwPageFrame*>(pPage->GetNext());
             if ( pPage )

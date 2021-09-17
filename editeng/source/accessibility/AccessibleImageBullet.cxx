@@ -218,7 +218,7 @@ namespace accessibility
         tools::Rectangle aRect( Point(aTmpRect.X, aTmpRect.Y), Size(aTmpRect.Width, aTmpRect.Height) );
         Point aPoint( rPoint.X, rPoint.Y );
 
-        return aRect.IsInside( aPoint );
+        return aRect.Contains( aPoint );
     }
 
     uno::Reference< XAccessible > SAL_CALL AccessibleImageBullet::getAccessibleAtPoint( const awt::Point& /*aPoint*/ )

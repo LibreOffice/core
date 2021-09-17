@@ -1229,7 +1229,7 @@ void RegionBand::XOr(const RegionBand& rSource)
     }
 }
 
-bool RegionBand::IsInside(const Point& rPoint) const
+bool RegionBand::Contains(const Point& rPoint) const
 {
 
     // search band list
@@ -1241,7 +1241,7 @@ bool RegionBand::IsInside(const Point& rPoint) const
         if((pBand->mnYTop <= rPoint.Y()) && (pBand->mnYBottom >= rPoint.Y()))
         {
             // is point within separation of the band?
-            return pBand->IsInside(rPoint.X());
+            return pBand->Contains(rPoint.X());
         }
 
         pBand = pBand->mpNextBand;

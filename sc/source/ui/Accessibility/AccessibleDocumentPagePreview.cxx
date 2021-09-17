@@ -273,7 +273,7 @@ struct ScPointFound
     bool operator() (const ScAccNote& rNote)
     {
         bool bResult(false);
-        if (maPoint.IsInside(rNote.maRect))
+        if (maPoint.Contains(rNote.maRect))
             bResult = true;
         else
             mnParagraphs += rNote.mnParaCount;
@@ -918,7 +918,7 @@ struct ScShapePointFound
     bool operator() (const ScShapeChild& rShape)
     {
         bool bResult(false);
-        if (VCLRectangle(rShape.mpAccShape->getBounds()).IsInside(maPoint))
+        if (VCLRectangle(rShape.mpAccShape->getBounds()).Contains(maPoint))
             bResult = true;
         return bResult;
     }
@@ -1117,10 +1117,10 @@ ScPagePreviewCountData::ScPagePreviewCountData( const ScPreviewLocationData& rDa
 
     tools::Rectangle aObjRect;
 
-    if ( rData.GetHeaderPosition( aObjRect ) && aObjRect.IsOver( aVisRect ) )
+    if ( rData.GetHeaderPosition( aObjRect ) && aObjRect.Overlaps( aVisRect ) )
         nHeaders = 1;
 
-    if ( rData.GetFooterPosition( aObjRect ) && aObjRect.IsOver( aVisRect ) )
+    if ( rData.GetFooterPosition( aObjRect ) && aObjRect.Overlaps( aVisRect ) )
         nFooters = 1;
 
     if ( rData.HasCellsInRange( aVisRect ) )
@@ -1289,7 +1289,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
                     mpTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
                     mpTable->Init();
                 }
-                if (mpTable.is() && VCLRectangle(mpTable->getBounds()).IsInside(VCLPoint(rPoint)))
+                if (mpTable.is() && VCLRectangle(mpTable->getBounds()).Contains(VCLPoint(rPoint)))
                     xAccessible = mpTable.get();
             }
             if (!xAccessible.is())
@@ -1313,9 +1313,9 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
 
                 Point aPoint(VCLPoint(rPoint));
 
-                if (VCLRectangle(mpHeader->getBounds()).IsInside(aPoint))
+                if (VCLRectangle(mpHeader->getBounds()).Contains(aPoint))
                     xAccessible = mpHeader.get();
-                else if (VCLRectangle(mpFooter->getBounds()).IsInside(aPoint))
+                else if (VCLRectangle(mpFooter->getBounds()).Contains(aPoint))
                     xAccessible = mpFooter.get();
             }
             if (!xAccessible.is())

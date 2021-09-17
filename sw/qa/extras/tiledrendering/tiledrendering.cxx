@@ -442,7 +442,7 @@ void SwTiledRenderingTest::testRegisterCallback()
     // Check that the top left 256x256px tile would be invalidated.
     CPPUNIT_ASSERT(!m_aInvalidation.IsEmpty());
     tools::Rectangle aTopLeft(0, 0, 256*15, 256*15); // 1 px = 15 twips, assuming 96 DPI.
-    CPPUNIT_ASSERT(m_aInvalidation.IsOver(aTopLeft));
+    CPPUNIT_ASSERT(m_aInvalidation.Overlaps(aTopLeft));
 }
 
 void SwTiledRenderingTest::testPostKeyEvent()
@@ -3065,7 +3065,7 @@ void SwTiledRenderingTest::testBulletDeleteInvalidation()
     SwFrame* pBody = pPage->GetLower();
     SwFrame* pFirstText = pBody->GetLower();
     tools::Rectangle aFirstTextRect = pFirstText->getFrameArea().SVRect();
-    CPPUNIT_ASSERT(!aFirstTextRect.IsOver(m_aInvalidations));
+    CPPUNIT_ASSERT(!aFirstTextRect.Overlaps(m_aInvalidations));
 }
 
 void SwTiledRenderingTest::testBulletNoNumInvalidation()
@@ -3097,7 +3097,7 @@ void SwTiledRenderingTest::testBulletNoNumInvalidation()
     SwFrame* pBody = pPage->GetLower();
     SwFrame* pFirstText = pBody->GetLower();
     tools::Rectangle aFirstTextRect = pFirstText->getFrameArea().SVRect();
-    CPPUNIT_ASSERT(!aFirstTextRect.IsOver(m_aInvalidations));
+    CPPUNIT_ASSERT(!aFirstTextRect.Overlaps(m_aInvalidations));
 }
 
 void SwTiledRenderingTest::testBulletMultiDeleteInvalidation()
@@ -3133,7 +3133,7 @@ void SwTiledRenderingTest::testBulletMultiDeleteInvalidation()
     SwFrame* pBody = pPage->GetLower();
     SwFrame* pFirstText = pBody->GetLower();
     tools::Rectangle aFirstTextRect = pFirstText->getFrameArea().SVRect();
-    CPPUNIT_ASSERT(!aFirstTextRect.IsOver(m_aInvalidations));
+    CPPUNIT_ASSERT(!aFirstTextRect.Overlaps(m_aInvalidations));
 }
 
 void SwTiledRenderingTest::testCondCollCopy()

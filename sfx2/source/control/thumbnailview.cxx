@@ -200,7 +200,7 @@ OUString ThumbnailView::RequestHelp(tools::Rectangle& rHelpRect)
         if (!pItem->mbVisible)
             continue;
         const tools::Rectangle& rDrawArea = pItem->getDrawArea();
-        if (pItem->mbVisible && rDrawArea.IsInside(aPos))
+        if (pItem->mbVisible && rDrawArea.Contains(aPos))
         {
             rHelpRect = rDrawArea;
             return pItem->getHelpText();
@@ -494,7 +494,7 @@ size_t ThumbnailView::ImplGetItem( const Point& rPos ) const
 
     for (size_t i = 0; i < mFilteredItemList.size(); ++i)
     {
-        if (mFilteredItemList[i]->isVisible() && mFilteredItemList[i]->getDrawArea().IsInside(rPos))
+        if (mFilteredItemList[i]->isVisible() && mFilteredItemList[i]->getDrawArea().Contains(rPos))
             return i;
     }
 

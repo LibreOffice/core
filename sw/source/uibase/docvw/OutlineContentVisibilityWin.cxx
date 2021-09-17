@@ -162,7 +162,7 @@ void SwOutlineContentVisibilityWin::ShowAll(bool bShow)
 bool SwOutlineContentVisibilityWin::Contains(const Point& rDocPt) const
 {
     ::tools::Rectangle aRect(GetPosPixel(), GetSizePixel());
-    if (aRect.IsInside(rDocPt))
+    if (aRect.Contains(rDocPt))
         return true;
     return false;
 }
