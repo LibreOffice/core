@@ -925,8 +925,8 @@ void ScCheckListMenuControl::addDateMember(const OUString& rsName, double nVal, 
     sal_uInt16 nDay = aDate.GetDay();
 
     // Get the localized month name list.
-    CalendarWrapper* pCalendar = ScGlobal::GetCalendar();
-    uno::Sequence<i18n::CalendarItem2> aMonths = pCalendar->getMonths();
+    CalendarWrapper& rCalendar = ScGlobal::GetCalendar();
+    uno::Sequence<i18n::CalendarItem2> aMonths = rCalendar.getMonths();
     if (aMonths.getLength() < nMonth)
         return;
 

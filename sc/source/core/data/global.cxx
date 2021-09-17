@@ -1018,7 +1018,7 @@ const CharClass& ScGlobal::getCharClass()
     return oSysLocale->GetCharClass();
 }
 
-CalendarWrapper*     ScGlobal::GetCalendar()
+CalendarWrapper& ScGlobal::GetCalendar()
 {
     assert(!bThreadedGroupCalcInProgress);
     if ( !oCalendar )
@@ -1026,7 +1026,7 @@ CalendarWrapper*     ScGlobal::GetCalendar()
         oCalendar.emplace( ::comphelper::getProcessComponentContext() );
         oCalendar->loadDefaultCalendar( *GetLocale() );
     }
-    return &*oCalendar;
+    return *oCalendar;
 }
 
 namespace {

@@ -2388,14 +2388,14 @@ ScDPMember* ScDPMembers::getByIndex(sal_Int32 nIndex) const
                 else if ( nHier == SC_DAPI_HIERARCHY_WEEK && nLev == SC_DAPI_LEVEL_WEEKDAY )
                 {
                     nVal = nIndex;              // DayOfWeek is 0-based
-                    aName = ScGlobal::GetCalendar()->getDisplayName(
+                    aName = ScGlobal::GetCalendar().getDisplayName(
                         css::i18n::CalendarDisplayIndex::DAY,
                         sal::static_int_cast<sal_Int16>(nVal), 0 );
                 }
                 else if ( nHier == SC_DAPI_HIERARCHY_QUARTER && nLev == SC_DAPI_LEVEL_MONTH )
                 {
                     nVal = nIndex;              // Month is 0-based
-                    aName = ScGlobal::GetCalendar()->getDisplayName(
+                    aName = ScGlobal::GetCalendar().getDisplayName(
                         css::i18n::CalendarDisplayIndex::MONTH,
                         sal::static_int_cast<sal_Int16>(nVal), 0 );
                 }

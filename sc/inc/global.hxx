@@ -538,7 +538,7 @@ public:
     SC_DLLPUBLIC static const LocaleDataWrapper& getLocaleData();
     SC_DLLPUBLIC static const CharClass& getCharClass();
 
-    static CalendarWrapper*     GetCalendar();
+    static CalendarWrapper&     GetCalendar();
     SC_DLLPUBLIC static CollatorWrapper*        GetCollator();
     static CollatorWrapper*     GetCaseCollator();
     static css::lang::Locale*   GetLocale();
