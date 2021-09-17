@@ -1041,7 +1041,7 @@ bool ORowSetValue::getBool()    const
             case DataType::DECIMAL:
             case DataType::NUMERIC:
 
-                bRet = OUString(m_aValue.m_pString).toInt32() != 0;
+                bRet = OUString::unacquired(&m_aValue.m_pString).toInt32() != 0;
                 break;
             case DataType::FLOAT:
                 bRet = m_aValue.m_nFloat != 0.0;
@@ -1098,7 +1098,7 @@ sal_Int8 ORowSetValue::getInt8()    const
             case DataType::DECIMAL:
             case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
-                nRet = sal_Int8(OUString(m_aValue.m_pString).toInt32());
+                nRet = sal_Int8(OUString::unacquired(&m_aValue.m_pString).toInt32());
                 break;
             case DataType::FLOAT:
                 nRet = sal_Int8(m_aValue.m_nFloat);
@@ -1169,7 +1169,7 @@ sal_uInt8 ORowSetValue::getUInt8()    const
             case DataType::DECIMAL:
             case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
-                nRet = sal_uInt8(OUString(m_aValue.m_pString).toInt32());
+                nRet = sal_uInt8(OUString::unacquired(&m_aValue.m_pString).toInt32());
                 break;
             case DataType::FLOAT:
                 nRet = sal_uInt8(m_aValue.m_nFloat);
@@ -1244,7 +1244,7 @@ sal_Int16 ORowSetValue::getInt16()  const
             case DataType::DECIMAL:
             case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
-                nRet = sal_Int16(OUString(m_aValue.m_pString).toInt32());
+                nRet = sal_Int16(OUString::unacquired(&m_aValue.m_pString).toInt32());
                 break;
             case DataType::FLOAT:
                 nRet = sal_Int16(m_aValue.m_nFloat);
@@ -1315,7 +1315,7 @@ sal_uInt16 ORowSetValue::getUInt16()  const
             case DataType::DECIMAL:
             case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
-                nRet = sal_uInt16(OUString(m_aValue.m_pString).toInt32());
+                nRet = sal_uInt16(OUString::unacquired(&m_aValue.m_pString).toInt32());
                 break;
             case DataType::FLOAT:
                 nRet = sal_uInt16(m_aValue.m_nFloat);
@@ -1386,7 +1386,7 @@ sal_Int32 ORowSetValue::getInt32()  const
             case DataType::DECIMAL:
             case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
-                nRet = OUString(m_aValue.m_pString).toInt32();
+                nRet = OUString::unacquired(&m_aValue.m_pString).toInt32();
                 break;
             case DataType::FLOAT:
                 nRet = sal_Int32(m_aValue.m_nFloat);
@@ -1459,7 +1459,7 @@ sal_uInt32 ORowSetValue::getUInt32()  const
             case DataType::DECIMAL:
             case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
-                nRet = OUString(m_aValue.m_pString).toUInt32();
+                nRet = OUString::unacquired(&m_aValue.m_pString).toUInt32();
                 break;
             case DataType::FLOAT:
                 nRet = sal_uInt32(m_aValue.m_nFloat);
@@ -1532,7 +1532,7 @@ sal_Int64 ORowSetValue::getLong()   const
             case DataType::DECIMAL:
             case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
-                nRet = OUString(m_aValue.m_pString).toInt64();
+                nRet = OUString::unacquired(&m_aValue.m_pString).toInt64();
                 break;
             case DataType::FLOAT:
                 nRet = sal_Int64(m_aValue.m_nFloat);
@@ -1605,7 +1605,7 @@ sal_uInt64 ORowSetValue::getULong()   const
             case DataType::DECIMAL:
             case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
-                nRet = OUString(m_aValue.m_pString).toUInt64();
+                nRet = OUString::unacquired(&m_aValue.m_pString).toUInt64();
                 break;
             case DataType::FLOAT:
                 nRet = sal_uInt64(m_aValue.m_nFloat);
@@ -1678,7 +1678,7 @@ float ORowSetValue::getFloat()  const
             case DataType::DECIMAL:
             case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
-                nRet = OUString(m_aValue.m_pString).toFloat();
+                nRet = OUString::unacquired(&m_aValue.m_pString).toFloat();
                 break;
             case DataType::FLOAT:
                 nRet = m_aValue.m_nFloat;
@@ -1754,7 +1754,7 @@ double ORowSetValue::getDouble()    const
             case DataType::DECIMAL:
             case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
-                nRet = OUString(m_aValue.m_pString).toDouble();
+                nRet = OUString::unacquired(&m_aValue.m_pString).toDouble();
                 break;
             case DataType::FLOAT:
                 nRet = m_aValue.m_nFloat;
