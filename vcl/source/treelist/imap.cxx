@@ -201,7 +201,7 @@ IMapObjectType IMapRectangleObject::GetType() const
 
 bool IMapRectangleObject::IsHit( const Point& rPoint ) const
 {
-    return aRect.IsInside( rPoint );
+    return aRect.HasInside( rPoint );
 }
 
 tools::Rectangle IMapRectangleObject::GetRectangle( bool bPixelCoords ) const
@@ -458,7 +458,7 @@ IMapObjectType IMapPolygonObject::GetType() const
 
 bool IMapPolygonObject::IsHit( const Point& rPoint ) const
 {
-    return aPoly.IsInside( rPoint );
+    return aPoly.HasInside( rPoint );
 }
 
 tools::Polygon IMapPolygonObject::GetPolygon( bool bPixelCoords ) const

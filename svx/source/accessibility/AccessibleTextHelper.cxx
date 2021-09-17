@@ -1499,7 +1499,7 @@ namespace accessibility
 
             tools::Rectangle aParaBounds( rCacheTF.GetParaBounds( nChild ) );
 
-            if( aParaBounds.IsInside( aLogPoint ) )
+            if( aParaBounds.HasInside( aLogPoint ) )
                 return getAccessibleChild( nChild - mnFirstVisibleChild + GetStartIndex() );
         }
 

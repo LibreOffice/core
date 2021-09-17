@@ -61,7 +61,7 @@ void SwRegionRects::operator-=( const SwRect &rRect )
     sal_uInt16 nMax = size();
     for ( sal_uInt16 i = 0; i < nMax; ++i )
     {
-        if ( rRect.IsOver( (*this)[i] ) )
+        if ( rRect.HasOver( (*this)[i] ) )
         {
             SwRect aTmp( (*this)[i] );
             SwRect aInter( aTmp );
@@ -153,12 +153,12 @@ void SwRegionRects::Compress()
             {
                 // If one rectangle contains a second completely than the latter
                 // does not need to be stored and can be deleted
-                if ( (*this)[i].IsInside( (*this)[j] ) )
+                if ( (*this)[i].HasInside( (*this)[j] ) )
                 {
                     erase( begin() + j );
                     --j;
                 }
-                else if ( (*this)[j].IsInside( (*this)[i] ) )
+                else if ( (*this)[j].HasInside( (*this)[i] ) )
                 {
                     (*this)[i] = (*this)[j];
                     erase( begin() + j );

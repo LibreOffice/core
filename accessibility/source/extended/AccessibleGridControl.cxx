@@ -166,7 +166,7 @@ AccessibleGridControl::getAccessibleAtPoint( const awt::Point& rPoint )
             xCurrChildComp( xCurrChild, uno::UNO_QUERY );
 
             if( xCurrChildComp.is() &&
-                VCLRectangle( xCurrChildComp->getBounds() ).IsInside( aPoint ) )
+                VCLRectangle( xCurrChildComp->getBounds() ).HasInside( aPoint ) )
                 xChild = xCurrChild;
         }
     }

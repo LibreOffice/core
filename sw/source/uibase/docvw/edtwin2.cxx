@@ -431,12 +431,12 @@ void SwEditWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     {
         tools::Rectangle aRect( m_pShadCursor->GetRect());
         // fully resides inside?
-        if( rRect.IsInside( aRect ) )
+        if( rRect.HasInside( aRect ) )
         {
             // then cancel
             m_pShadCursor.reset();
         }
-        else if( rRect.IsOver( aRect ))
+        else if( rRect.HasOver( aRect ))
         {
             // resides somewhat above, then everything is clipped outside
             // and we have to make the "inner part" at the end of the
