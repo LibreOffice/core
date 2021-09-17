@@ -82,4 +82,4 @@ void FontConfigFontOptions::cairo_font_options_substitute(FcPattern* pPattern)
 }
 #endif
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
