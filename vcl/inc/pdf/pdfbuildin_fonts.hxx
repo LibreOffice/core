@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VCL_SOURCE_PDF_BUILDIN_FONTS_HXX
-#define INCLUDED_VCL_SOURCE_PDF_BUILDIN_FONTS_HXX
+
+#pragma once
 
 #include <PhysicalFontFace.hxx>
 #include <fontinstance.hxx>
@@ -75,7 +75,5 @@ public:
 };
 
 } // namespace vcl::pdf
-
-#endif // INCLUDED_VCL_SOURCE_PDF_BUILDIN_FONTS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
