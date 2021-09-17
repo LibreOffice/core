@@ -43,6 +43,7 @@
 
 #include <sfx2/objsh.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/gdimtf.hxx>
@@ -1503,6 +1504,12 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
         {
             if( maTextData.mxString->IsRich() )
             {
+                if (maTextData.mxString->GetText().getLength() > 1024 && utl::ConfigManager::IsFuzzing())
+                {
+                    SAL_WARN("sc.filter", "truncating slow long rich text for fuzzing performance");
+                    maTextData.mxString->SetText(maTextData.mxString->GetText().copy(0, 1024));
+                }
+
                 // rich text
                 std::unique_ptr< EditTextObject > xEditObj(
                     XclImpStringHelper::CreateTextObject( GetRoot(), *maTextData.mxString ) );
