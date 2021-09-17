@@ -104,9 +104,8 @@ Transliteration_body::transliterateImpl(
     constexpr sal_Int32 nLocalBuf = 2048;
     sal_Unicode* out;
     std::unique_ptr<sal_Unicode[]> pHeapBuf;
-    size_t nBytes = (nCount + 1) * sizeof(sal_Unicode);
-    if (nBytes <= nLocalBuf * NMAPPINGMAX)
-        out = static_cast<sal_Unicode*>(alloca(nBytes));
+    if (nCount <= nLocalBuf)
+        out = static_cast<sal_Unicode*>(alloca(nCount * NMAPPINGMAX * sizeof(sal_Unicode)));
     else
     {
         pHeapBuf.reset(new sal_Unicode[ nCount * NMAPPINGMAX ]);
