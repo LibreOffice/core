@@ -16,6 +16,24 @@
       "message": "I don\u0027t remember if I already asked - so please forgive me if I\u0027m asking again.\n\nWouldn\u0027t the syntax be more convenient, if there were an overload taking a reference of pointer to rtl_uString? Like\n\n    static OUString const \u0026 unacquired( rtl_uString * const \u0026 rpHandle )\n        { return unacquired(\u0026rpHandle); }\n\nand then\n\n    bRet \u003d OUString::unacquired(m_aValue.m_pString).toInt32() !\u003d 0;\n\nwithout taking the address of the m_aValue.m_pString explicitly?",
       "revId": "f2111a924ac7bf654e1bf30018007140deec9d78",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3abf9b0c_c928eb49",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-17T07:34:58Z",
+      "side": 1,
+      "message": "Would that really be worth it?  When there effectively was a more-or-less random choice to be made whether to take by pointer or by reference, the original author of unacquired apparently decided for pointer, for whatever reason.  Lets just accept that and leave it at that, I\u0027d say.  (Somewhat similar to how the inventor of `this` in C++ decided that it should be a pointer, not a reference, and we live with that somewhat curious wart since then...)",
+      "parentUuid": "ea3dbf78_32854b03",
+      "revId": "f2111a924ac7bf654e1bf30018007140deec9d78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
