@@ -744,11 +744,11 @@ ScAutoFormat::ScAutoFormat() :
 bool DefaultFirstEntry::operator() (const OUString& left, const OUString& right) const
 {
     OUString aStrStandard(ScResId(STR_STYLENAME_STANDARD));
-    if (ScGlobal::GetpTransliteration()->isEqual( left, right ) )
+    if (ScGlobal::GetTransliteration().isEqual( left, right ) )
         return false;
-    if ( ScGlobal::GetpTransliteration()->isEqual( left, aStrStandard ) )
+    if ( ScGlobal::GetTransliteration().isEqual( left, aStrStandard ) )
         return true;
-    if ( ScGlobal::GetpTransliteration()->isEqual( right, aStrStandard ) )
+    if ( ScGlobal::GetTransliteration().isEqual( right, aStrStandard ) )
         return false;
     return ScGlobal::GetCollator().compareString( left, right) < 0;
 }

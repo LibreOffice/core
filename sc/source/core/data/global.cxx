@@ -975,9 +975,9 @@ void ScGlobal::AddLanguage( SfxItemSet& rSet, const SvNumberFormatter& rFormatte
         rSet.Put( SvxLanguageItem( pHardFormat->GetLanguage(), ATTR_LANGUAGE_FORMAT ) );
 }
 
-utl::TransliterationWrapper* ScGlobal::GetpTransliteration()
+utl::TransliterationWrapper& ScGlobal::GetTransliteration()
 {
-    return comphelper::doubleCheckedInit( pTransliteration,
+    return *comphelper::doubleCheckedInit( pTransliteration,
         []()
         {
             const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
@@ -987,9 +987,9 @@ utl::TransliterationWrapper* ScGlobal::GetpTransliteration()
             return p;
         });
 }
-::utl::TransliterationWrapper* ScGlobal::GetCaseTransliteration()
+::utl::TransliterationWrapper& ScGlobal::GetCaseTransliteration()
 {
-    return comphelper::doubleCheckedInit( pCaseTransliteration,
+    return *comphelper::doubleCheckedInit( pCaseTransliteration,
         []()
         {
             const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
@@ -998,6 +998,10 @@ utl::TransliterationWrapper* ScGlobal::GetpTransliteration()
             p->loadModuleIfNeeded( eOfficeLanguage );
             return p;
         });
+}
+utl::TransliterationWrapper& ScGlobal::GetTransliteration(bool bCaseSensitive)
+{
+    return bCaseSensitive ? GetCaseTransliteration() : GetTransliteration();
 }
 
 const LocaleDataWrapper& ScGlobal::getLocaleData()

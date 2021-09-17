@@ -168,7 +168,7 @@ sal_Int32 ScUserListData::Compare(const OUString& rSubStr1, const OUString& rSub
     else if (bFound2)
         return 1;
     else
-        return ScGlobal::GetCaseTransliteration()->compareString( rSubStr1, rSubStr2 );
+        return ScGlobal::GetCaseTransliteration().compareString( rSubStr1, rSubStr2 );
 }
 
 sal_Int32 ScUserListData::ICompare(const OUString& rSubStr1, const OUString& rSubStr2) const
@@ -194,7 +194,7 @@ sal_Int32 ScUserListData::ICompare(const OUString& rSubStr1, const OUString& rSu
     else if (bFound2)
         return 1;
     else
-        return ScGlobal::GetpTransliteration()->compareString( rSubStr1, rSubStr2 );
+        return ScGlobal::GetTransliteration().compareString( rSubStr1, rSubStr2 );
 }
 
 ScUserList::ScUserList()

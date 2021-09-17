@@ -111,7 +111,7 @@ ScTypedCaseStrSet::const_iterator findText(
     const OUString& rStart, OUString& rResult, bool bBack)
 {
     auto lIsMatch = [&rStart](const ScTypedStrData& rData) {
-        return (rData.GetStringType() != ScTypedStrData::Value) && ScGlobal::GetpTransliteration()->isMatch(rStart, rData.GetString()); };
+        return (rData.GetStringType() != ScTypedStrData::Value) && ScGlobal::GetTransliteration().isMatch(rStart, rData.GetString()); };
 
     if (bBack) // Backwards
     {
@@ -155,7 +155,7 @@ OUString getExactMatch(const ScTypedCaseStrSet& rDataSet, const OUString& rStrin
     auto it = std::find_if(rDataSet.begin(), rDataSet.end(),
         [&rString](const ScTypedStrData& rData) {
             return (rData.GetStringType() != ScTypedStrData::Value)
-                && ScGlobal::GetpTransliteration()->isEqual(rData.GetString(), rString);
+                && ScGlobal::GetTransliteration().isEqual(rData.GetString(), rString);
         });
     if (it != rDataSet.end())
         return it->GetString();
@@ -207,7 +207,7 @@ ScTypedCaseStrSet::const_iterator findTextAll(
                 // skip values
                 continue;
 
-            if ( !ScGlobal::GetpTransliteration()->isMatch(rStart, rData.GetString()) )
+            if ( !ScGlobal::GetTransliteration().isMatch(rStart, rData.GetString()) )
                 // not a match
                 continue;
 
@@ -247,7 +247,7 @@ ScTypedCaseStrSet::const_iterator findTextAll(
                 // skip values
                 continue;
 
-            if ( !ScGlobal::GetpTransliteration()->isMatch(rStart, rData.GetString()) )
+            if ( !ScGlobal::GetTransliteration().isMatch(rStart, rData.GetString()) )
                 // not a match
                 continue;
 
@@ -1607,7 +1607,7 @@ void completeFunction( EditView* pView, const OUString& rInsert, bool& rParInser
         for (sal_Int32 n = aAll.getLength(); n >= nMinLen && aMatch.isEmpty(); --n)
         {
             const OUString aTest = aAll.copy(aAll.getLength() - n); // n trailing chars
-            if (ScGlobal::GetpTransliteration()->isMatch(aTest, rInsert))
+            if (ScGlobal::GetTransliteration().isMatch(aTest, rInsert))
                 aMatch = aTest; // Found => break the loop
         }
 
