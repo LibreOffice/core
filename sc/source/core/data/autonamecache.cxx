@@ -77,7 +77,7 @@ const ScAutoNameAddresses& ScAutoNameCache::GetNameOccurrences( const OUString& 
                     ;   // nothing, prevent compiler warning
                 break;
             }
-            if ( ScGlobal::GetpTransliteration()->isEqual( aStr, rName ) )
+            if ( ScGlobal::GetTransliteration().isEqual( aStr, rName ) )
             {
                 rAddresses.push_back(aIter.GetPos());
             }

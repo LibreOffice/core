@@ -1670,7 +1670,7 @@ bool isAtStart(
     {
         OUString aDequoted;
         bool bParsed = extractAtStart( rList, rMatched, bAllowBracket, pFunc, aDequoted);
-        if ( bParsed && ScGlobal::GetpTransliteration()->isEqual( aDequoted, rSearch ) )
+        if ( bParsed && ScGlobal::GetTransliteration().isEqual( aDequoted, rSearch ) )
         {
             nMatchList = rMatched;             // match count in the list string, including quotes
             nMatchSearch = rSearch.getLength();
@@ -1679,7 +1679,7 @@ bool isAtStart(
     else
     {
         // otherwise look for search string at the start of rList
-        ScGlobal::GetpTransliteration()->equals(
+        ScGlobal::GetTransliteration().equals(
             rList, 0, rList.getLength(), nMatchList, rSearch, 0, rSearch.getLength(), nMatchSearch);
     }
 
@@ -1904,10 +1904,10 @@ bool ScDPObject::ParseFilters(
                         if (bHasQuery)
                         {
                             // First check given value name against both.
-                            bThisItemFound = ScGlobal::GetpTransliteration()->isEqual(
+                            bThisItemFound = ScGlobal::GetTransliteration().isEqual(
                                     aQueryValueName, pItemNamesArr[nItem]);
                             if (!bThisItemFound && pItemValuesArr[nItem] != pItemNamesArr[nItem])
-                                bThisItemFound = ScGlobal::GetpTransliteration()->isEqual(
+                                bThisItemFound = ScGlobal::GetTransliteration().isEqual(
                                         aQueryValueName, pItemValuesArr[nItem]);
                             if (!bThisItemFound && aQueryValueName != aQueryValue)
                             {
@@ -1915,10 +1915,10 @@ bool ScDPObject::ParseFilters(
                                 // against both.
                                 /* TODO: or check only value string against
                                  * value string, not against the value name? */
-                                bThisItemFound = ScGlobal::GetpTransliteration()->isEqual(
+                                bThisItemFound = ScGlobal::GetTransliteration().isEqual(
                                         aQueryValue, pItemNamesArr[nItem]);
                                 if (!bThisItemFound && pItemValuesArr[nItem] != pItemNamesArr[nItem])
-                                    bThisItemFound = ScGlobal::GetpTransliteration()->isEqual(
+                                    bThisItemFound = ScGlobal::GetTransliteration().isEqual(
                                             aQueryValue, pItemValuesArr[nItem]);
                             }
                         }

@@ -50,7 +50,7 @@ using ::std::pair;
 
 bool ScDBData::less::operator() (const std::unique_ptr<ScDBData>& left, const std::unique_ptr<ScDBData>& right) const
 {
-    return ScGlobal::GetpTransliteration()->compareString(left->GetUpperName(), right->GetUpperName()) < 0;
+    return ScGlobal::GetTransliteration().compareString(left->GetUpperName(), right->GetUpperName()) < 0;
 }
 
 ScDBData::ScDBData( const OUString& rName,
@@ -767,7 +767,7 @@ public:
 
     bool operator()( const OUString& rName ) const
     {
-        return ScGlobal::GetpTransliteration()->isEqual( maSearchName, rName);
+        return ScGlobal::GetTransliteration().isEqual( maSearchName, rName);
     }
 
 private:

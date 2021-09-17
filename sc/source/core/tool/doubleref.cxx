@@ -350,7 +350,7 @@ SCCOL ScDBInternalRange::findFieldColumn(const OUString& rStr, FormulaError* pEr
         if (pErr)
             *pErr = nErr;
         lcl_uppercase(aCellStr);
-        bFound = ScGlobal::GetpTransliteration()->isEqual(aCellStr, aUpper);
+        bFound = ScGlobal::GetTransliteration().isEqual(aCellStr, aUpper);
         if (!bFound)
             aLook.IncCol();
     }

@@ -866,7 +866,7 @@ bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool bExternalDoc
                 if (maTabs[i] && (i != nTab))
                 {
                     OUString aOldName = maTabs[i]->GetName();
-                    bValid = !ScGlobal::GetpTransliteration()->isEqual( rName, aOldName );
+                    bValid = !ScGlobal::GetTransliteration().isEqual( rName, aOldName );
                 }
             if (bValid)
             {

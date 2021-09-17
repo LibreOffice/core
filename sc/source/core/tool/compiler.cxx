@@ -3707,7 +3707,7 @@ bool ScCompiler::IsColRowName( const OUString& rName )
                     if (bOk && aIter.hasString())
                     {
                         OUString aStr = aIter.getString();
-                        if ( ScGlobal::GetpTransliteration()->isEqual( aStr, aName ) )
+                        if ( ScGlobal::GetTransliteration().isEqual( aStr, aName ) )
                         {
                             aRef.InitFlags();
                             if ( !jRow )
@@ -3815,7 +3815,7 @@ bool ScCompiler::IsColRowName( const OUString& rName )
                 if (bOk && aIter.hasString())
                 {
                     OUString aStr = aIter.getString();
-                    if ( ScGlobal::GetpTransliteration()->isEqual( aStr, aName ) )
+                    if ( ScGlobal::GetTransliteration().isEqual( aStr, aName ) )
                     {
                         SCCOL nCol = aIter.GetPos().Col();
                         SCROW nRow = aIter.GetPos().Row();
@@ -4065,7 +4065,7 @@ bool ScCompiler::IsTableRefColumn( const OUString& rName ) const
             if (bOk && aIter.hasString())
             {
                 OUString aStr = aIter.getString();
-                if (ScGlobal::GetpTransliteration()->isEqual( aStr, aName))
+                if (ScGlobal::GetTransliteration().isEqual( aStr, aName))
                 {
                     // If this is successful and the internal column name
                     // lookup was not, it may be worth a warning.

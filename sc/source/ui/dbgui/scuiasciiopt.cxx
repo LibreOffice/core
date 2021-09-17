@@ -144,7 +144,7 @@ static sal_Unicode lcl_CharFromCombo(const weld::ComboBox& rCombo, const OUStrin
         OUString sToken {rList.getToken(0, '\t', nIdx)};
         while (nIdx>0)
         {
-            if ( ScGlobal::GetpTransliteration()->isEqual( aStr, sToken ) )
+            if ( ScGlobal::GetTransliteration().isEqual( aStr, sToken ) )
             {
                 sal_Int32 nTmpIdx {nIdx};
                 c = static_cast<sal_Unicode>(rList.getToken(0, '\t', nTmpIdx).toInt32());
