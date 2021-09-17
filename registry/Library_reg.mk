@@ -28,7 +28,6 @@ $(eval $(call gb_Library_use_libraries,reg,\
 $(eval $(call gb_Library_add_exception_objects,reg,\
 	registry/source/keyimpl \
 	registry/source/reflread \
-	registry/source/reflwrit \
 	registry/source/regimpl \
 	registry/source/registry \
 	registry/source/regkey \
