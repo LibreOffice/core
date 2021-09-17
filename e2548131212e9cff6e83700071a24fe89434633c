@@ -33,6 +33,24 @@
       "message": "Can\u0027t this leak own-created manager? SetUndoManager doesn\u0027t call a delete on it.",
       "revId": "e2548131212e9cff6e83700071a24fe89434633c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e40e5536_47f4d292",
+        "filename": "svx/source/svdraw/svdedxv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2765,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-17T14:53:10Z",
+      "side": 1,
+      "message": "My understanding is when an active text edit is ended, the editeng undo manager is deleted in SdrObjEditView::SdrEndTextEdit(). So at this point the undo manager is either nullptr already, or it has a non-owning pointer to the Writer one.\n\nOr did I miss something?",
+      "parentUuid": "ac7a032b_8d4fd5dd",
+      "revId": "e2548131212e9cff6e83700071a24fe89434633c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
