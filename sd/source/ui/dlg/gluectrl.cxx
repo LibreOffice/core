@@ -47,7 +47,7 @@ const SdrEscapeDirection aEscDirArray[] =
 SFX_IMPL_TOOLBOX_CONTROL( SdTbxCtlGlueEscDir, SfxUInt16Item )
 
 /**
- * Constructor for glue point escape direction Listbox
+ * Constructor for gluepoint escape direction Listbox
  */
 GlueEscDirLB::GlueEscDirLB(vcl::Window* pParent, const Reference<XFrame>& rFrame)
     : InterimItemWindow(pParent, "modules/simpress/ui/gluebox.ui", "GlueBox")
@@ -131,7 +131,7 @@ void GlueEscDirLB::Fill()
 }
 
 /**
- * Constructor for glue point escape direction toolbox control
+ * Constructor for gluepoint escape direction toolbox control
  */
 SdTbxCtlGlueEscDir::SdTbxCtlGlueEscDir(
     sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx ) :

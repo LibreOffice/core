@@ -650,7 +650,7 @@ public:
     // (see also documentation in SvdoEdge.hxx, SdrEdgeObj, as well as SvdGlue.hxx and SvdGlEV.hxx)
     //
     // There are nodes and edges. In theory an edge can also be a node, but this isn't implemented yet.
-    // A node has a number of glue points, onto which edges can glued to
+    // A node has a number of gluepoints, onto which edges can glued to
     // An edge can be either
     // - without any connection to any node,
     // - or connected on one end to a node, while the other end is not connected,
@@ -660,7 +660,7 @@ public:
     // This is also true for SetGluePoint()... on the node.
     // On the other hand, moving/resizing an edge breaks the connection.
 
-    // automatic glue points:
+    // automatic gluepoints:
     // a node object must provide four vertex and corner positions
     // usually 0: top, 1: right, 2: bottom, 3: left
     virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const;
@@ -669,7 +669,7 @@ public:
     // 0: top-left, 1: top-right, 2: bottom-right, 3: bottom-left
     virtual SdrGluePoint GetCornerGluePoint(sal_uInt16 nNum) const;
 
-    // list of all glue points, can be NULL
+    // list of all gluepoints, can be NULL
     virtual const SdrGluePointList* GetGluePointList() const;
 
     // after changing the GluePointList, one has to call the object's SendRepaintBroadcast!

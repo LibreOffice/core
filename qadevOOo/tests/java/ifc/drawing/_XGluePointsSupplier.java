@@ -36,7 +36,7 @@ public class _XGluePointsSupplier extends MultiMethodTest {
     public XGluePointsSupplier oObj = null;
 
     /**
-    * Gets glue points collection. <p>
+    * Gets gluepoints collection. <p>
     * Has <b> OK </b> status if the value returned is not null. <p>
     */
     public void _getGluePoints(){

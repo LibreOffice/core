@@ -71,8 +71,8 @@ struct ConnectionHint
 
 }
 
-/** this map store all glue point id mappings for shapes that had user defined glue points. This
-    is needed because on insertion the glue points will get a new and unique id */
+/** this map store all gluepoint id mappings for shapes that had user defined gluepoints. This
+    is needed because on insertion the gluepoints will get a new and unique id */
 typedef std::map<sal_Int32,sal_Int32> GluePointIdMap;
 typedef std::unordered_map< css::uno::Reference < css::drawing::XShape >, GluePointIdMap > ShapeGluePointsMap;
 
@@ -847,8 +847,8 @@ SvXMLImportPropertyMapper* XMLShapeImportHelper::CreateShapePropMapper( const un
     return pResult;
 }
 
-/** adds a mapping for a glue point identifier from an xml file to the identifier created after inserting
-    the new glue point into the core. The saved mappings can be retrieved by getGluePointId() */
+/** adds a mapping for a gluepoint identifier from an xml file to the identifier created after inserting
+    the new gluepoint into the core. The saved mappings can be retrieved by getGluePointId() */
 void XMLShapeImportHelper::addGluePointMapping( css::uno::Reference< css::drawing::XShape > const & xShape,
                           sal_Int32 nSourceId, sal_Int32 nDestinnationId )
 {
@@ -873,8 +873,8 @@ void XMLShapeImportHelper::moveGluePointMapping( const css::uno::Reference< css:
     }
 }
 
-/** retrieves a mapping for a glue point identifier from the current xml file to the identifier created after
-    inserting the new glue point into the core. The mapping must be initialized first with addGluePointMapping() */
+/** retrieves a mapping for a gluepoint identifier from the current xml file to the identifier created after
+    inserting the new gluepoint into the core. The mapping must be initialized first with addGluePointMapping() */
 sal_Int32 XMLShapeImportHelper::getGluePointId( const css::uno::Reference< css::drawing::XShape >& xShape, sal_Int32 nSourceId )
 {
     if( mpPageContext )

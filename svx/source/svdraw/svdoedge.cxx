@@ -460,12 +460,12 @@ SdrGluePoint SdrEdgeObj::GetCornerGluePoint(sal_uInt16 nNum) const
 
 const SdrGluePointList* SdrEdgeObj::GetGluePointList() const
 {
-    return nullptr; // no user defined glue points for connectors
+    return nullptr; // no user defined gluepoints for connectors
 }
 
 SdrGluePointList* SdrEdgeObj::ForceGluePointList()
 {
-    return nullptr; // no user defined glue points for connectors
+    return nullptr; // no user defined gluepoints for connectors
 }
 
 void SdrEdgeObj::ConnectToNode(bool bTail1, SdrObject* pObj)
@@ -2553,10 +2553,10 @@ void SdrEdgeObj::SetTailPoint( bool bTail, const Point& rPt )
     SetChanged();
 }
 
-/** this method is used by the api to set a glue point for a connection
+/** this method is used by the api to set a gluepoint for a connection
     nId == -1 :     The best default point is automatically chosen
     0 <= nId <= 3 : One of the default points is chosen
-    nId >= 4 :      A user defined glue point is chosen
+    nId >= 4 :      A user defined gluepoint is chosen
 */
 void SdrEdgeObj::setGluePointIndex( bool bTail, sal_Int32 nIndex /* = -1 */ )
 {
@@ -2570,7 +2570,7 @@ void SdrEdgeObj::setGluePointIndex( bool bTail, sal_Int32 nIndex /* = -1 */ )
     {
         nIndex -= 3;        // the start api index is 0, whereas the implementation in svx starts from 1
 
-        // for user defined glue points we have
+        // for user defined gluepoints we have
         // to get the id for this index first
         const SdrGluePointList* pList = rConn1.GetObject() ? rConn1.GetObject()->GetGluePointList() : nullptr;
         if( pList == nullptr || SDRGLUEPOINT_NOTFOUND == pList->FindGluePoint(static_cast<sal_uInt16>(nIndex)) )
@@ -2588,7 +2588,7 @@ void SdrEdgeObj::setGluePointIndex( bool bTail, sal_Int32 nIndex /* = -1 */ )
     ImpRecalcEdgeTrack();
 }
 
-/** this method is used by the api to return a glue point id for a connection.
+/** this method is used by the api to return a gluepoint id for a connection.
     See setGluePointId for possible return values */
 sal_Int32 SdrEdgeObj::getGluePointIndex( bool bTail )
 {

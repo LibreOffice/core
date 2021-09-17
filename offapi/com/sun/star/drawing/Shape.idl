@@ -66,7 +66,7 @@ published service Shape
     interface com::sun::star::drawing::XShapeDescriptor;
 
 
-    /** This interfaces gives access to an optional container of glue points.
+    /** This interfaces gives access to an optional container of gluepoints.
         To have unique ids you should query the returned interface for
         com::sun::star::container::XIdentifierContainer.
     */

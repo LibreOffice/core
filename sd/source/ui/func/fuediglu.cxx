@@ -115,12 +115,12 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
         }
         else if (eHit == SdrHitKind::MarkedObject && mpView->IsInsGluePointMode())
         {
-            // insert glue points
+            // insert gluepoints
             mpView->BegInsGluePoint(aMDPos);
         }
         else if (eHit == SdrHitKind::MarkedObject && rMEvt.IsMod1())
         {
-            // select glue points
+            // select gluepoints
             if (!rMEvt.IsShift())
                 mpView->UnmarkAllGluePoints();
 
@@ -133,7 +133,7 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
         }
         else if (eHit == SdrHitKind::Gluepoint)
         {
-            // select glue points
+            // select gluepoints
             if (!rMEvt.IsShift())
                 mpView->UnmarkAllGluePoints();
 
@@ -175,7 +175,7 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
             }
             else if (mpView->AreObjectsMarked())
             {
-                // select glue point
+                // select gluepoint
                 if (!rMEvt.IsShift())
                     mpView->UnmarkAllGluePoints();
 

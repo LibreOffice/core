@@ -501,7 +501,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-    // glue points
+    // gluepoints
     if( SfxItemState::DEFAULT == rSet.GetItemState( SID_GLUE_EDITMODE ) ||
         SfxItemState::DEFAULT == rSet.GetItemState( SID_GLUE_INSERT_POINT ) ||
         SfxItemState::DEFAULT == rSet.GetItemState( SID_GLUE_PERCENT ) ||

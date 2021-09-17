@@ -59,7 +59,7 @@ service EnhancedCustomShapePath
     */
     [optional, property] sequence<::com::sun::star::drawing::EnhancedCustomShapeTextFrame> TextFrames;
 
-    /** This property specifies custom glue points
+    /** This property specifies custom gluepoints
     */
     [optional, property] sequence<::com::sun::star::drawing::EnhancedCustomShapeParameterPair> GluePoints;
 

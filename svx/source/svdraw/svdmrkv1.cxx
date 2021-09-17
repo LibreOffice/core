@@ -322,7 +322,7 @@ void SdrMarkView::UndirtyMrkPnt() const
             SdrUShortCont& rPts = pM->GetMarkedGluePoints();
             const SdrGluePointList* pGPL=pObj->GetGluePointList();
             if (pGPL!=nullptr) {
-                // Remove invalid selected glue points, that is, all entries
+                // Remove invalid selected gluepoints, that is, all entries
                 // (IDs) that aren't contained in the GluePointList of the
                 // object
                 for(SdrUShortCont::const_iterator it = rPts.begin(); it != rPts.end(); )
@@ -337,7 +337,7 @@ void SdrMarkView::UndirtyMrkPnt() const
                 }
             } else {
                 if (!rPts.empty()) {
-                    rPts.clear(); // object doesn't have any glue points (any more)
+                    rPts.clear(); // object doesn't have any gluepoints (any more)
                     bChg=true;
                 }
             }

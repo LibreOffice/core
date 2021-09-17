@@ -1270,7 +1270,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
     }
 }
 
-/** exports all user defined glue points */
+/** exports all user defined gluepoints */
 void XMLShapeExport::ImpExportGluePoints( const uno::Reference< drawing::XShape >& xShape )
 {
     uno::Reference< drawing::XGluePointsSupplier > xSupplier( xShape, uno::UNO_QUERY );
@@ -1289,7 +1289,7 @@ void XMLShapeExport::ImpExportGluePoints( const uno::Reference< drawing::XShape 
     {
         if( (xGluePoints->getByIdentifier( nIdentifier ) >>= aGluePoint) && aGluePoint.IsUserDefined )
         {
-            // export only user defined glue points
+            // export only user defined gluepoints
 
             const OUString sId( OUString::number( nIdentifier ) );
             mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_ID, sId );

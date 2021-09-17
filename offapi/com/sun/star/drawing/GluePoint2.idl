@@ -27,13 +27,13 @@
  module com {  module sun {  module star {  module drawing {
 
 
-/** This struct defines the attributes of a glue point.
-    <p>A glue point is a position inside a drawing shape where an edge
+/** This struct defines the attributes of a gluepoint.
+    <p>A gluepoint is a position inside a drawing shape where an edge
     of a connector shape can be connected.</p>
  */
 published struct GluePoint2
 {
-    /** This is the position of this glue point. Depending on
+    /** This is the position of this gluepoint. Depending on
         the flag <code>IsRelative</code>, this is either in 1/100cm
         or in 1/100%.
 
@@ -41,13 +41,13 @@ published struct GluePoint2
      */
     com::sun::star::awt::Point Position;
 
-    /** if this flag is set to true, the position of this glue point
+    /** if this flag is set to true, the position of this gluepoint
         is given in 1/100% values instead of 1/100cm. */
     boolean IsRelative;
 
-    /** if this glue points position is not relative, this enum
+    /** if this gluepoints position is not relative, this enum
         specifies the vertical and horizontal alignment of this
-        point. The alignment specifies how the glue point is
+        point. The alignment specifies how the gluepoint is
         moved if the shape is resized. */
     com::sun::star::drawing::Alignment PositionAlignment;
 
@@ -58,7 +58,7 @@ published struct GluePoint2
     com::sun::star::drawing::EscapeDirection Escape;
 
     /** if this flag is set to false, this is a default glue
-        point. Some shapes may have default glue points attached
+        point. Some shapes may have default gluepoints attached
         to them which cannot be altered or removed. */
     boolean IsUserDefined;
 };

@@ -206,7 +206,7 @@ public:
     // The methods consider the particular context:
     // - simple drawing
     // - mode for editing points
-    // - mode for editing glue points
+    // - mode for editing gluepoints
     // - TextEdit
     // - ... to be continued
     void MarkAll();
@@ -216,7 +216,7 @@ public:
 
     virtual void DeleteMarked();
 
-    // Marking objects, traverse stations or glue points (depending on view-
+    // Marking objects, traverse stations or gluepoints (depending on view-
     // context) by enveloping the selection frame.
     //   bAddMark=TRUE: add to existing selection (->Shift)
     //   bUnmark=TRUE: remove objects from selection which are inside of

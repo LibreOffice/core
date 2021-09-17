@@ -562,7 +562,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
         sal_uInt16  nHitLog = static_cast<sal_uInt16>(GetActiveWindow()->PixelToLogic(
             Size(FuPoor::HITPIX, 0 ) ).Width());
         sal_uInt16  nHelpLine;
-        // for glue points
+        // for gluepoints
         SdrObject*  pObj = nullptr;
         sal_uInt16      nPickId = 0;
         // for field command
@@ -577,7 +577,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             ShowSnapLineContextMenu(*pPV, nHelpLine, rCEvt.GetMousePosPixel());
             return;
         }
-        // is glue point under cursor marked?
+        // is gluepoint under cursor marked?
         else if( mpDrawView->PickGluePoint( aMPos, pObj, nPickId, pPV ) &&
                  mpDrawView->IsGluePointMarked( pObj, nPickId ) )
         {

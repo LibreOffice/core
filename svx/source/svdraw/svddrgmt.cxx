@@ -1621,7 +1621,7 @@ void SdrDragMove::MoveSdrDrag(const Point& rNoSnapPnt_)
     }
 
     if (getSdrDragView().IsDraggingGluePoints())
-    { // restrict glue points to the BoundRect of the Obj
+    { // restrict gluepoints to the BoundRect of the Obj
         aPt1-=DragStat().GetStart();
         const SdrMarkList& rML=GetMarkedObjectList();
         const size_t nMarkCount=rML.GetMarkCount();

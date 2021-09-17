@@ -290,8 +290,8 @@ SdrGluePointList& SdrGluePointList::operator=(const SdrGluePointList& rSrcList)
     return *this;
 }
 
-// The ID's of the glue points always increase monotonously!
-// If an ID is taken already, the new glue point gets a new ID. ID 0 is reserved.
+// The ID's of the gluepoints always increase monotonously!
+// If an ID is taken already, the new gluepoint gets a new ID. ID 0 is reserved.
 sal_uInt16 SdrGluePointList::Insert(const SdrGluePoint& rGP)
 {
     SdrGluePoint aGP(rGP);

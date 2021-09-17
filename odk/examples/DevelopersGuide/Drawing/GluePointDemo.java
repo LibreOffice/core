@@ -138,14 +138,14 @@ public class GluePointDemo
             aGluePoint.Position.X = 0;
             aGluePoint.Position.Y = 0;
 
-            // create and insert a glue point at shape1
+            // create and insert a gluepoint at shape1
             xGluePointsSupplier = UnoRuntime.queryInterface( XGluePointsSupplier.class, xShape1 );
             xIndexContainer = xGluePointsSupplier.getGluePoints();
             xIdentifierContainer = UnoRuntime.queryInterface( XIdentifierContainer.class,
                     xIndexContainer );
             int nIndexOfGluePoint1 = xIdentifierContainer.insert( aGluePoint );
 
-            // create and insert a glue point at shape2
+            // create and insert a gluepoint at shape2
             xGluePointsSupplier = UnoRuntime.queryInterface( XGluePointsSupplier.class, xShape2 );
             xIndexContainer = xGluePointsSupplier.getGluePoints();
             xIdentifierContainer = UnoRuntime.queryInterface( XIdentifierContainer.class,
