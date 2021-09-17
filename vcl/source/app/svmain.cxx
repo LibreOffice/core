@@ -18,41 +18,61 @@
  */
 
 #include <sal/config.h>
+#include <config_features.h>
+#include <config_feature_opencl.h>
+
 #include <sal/log.hxx>
-
-#include <cassert>
-
-#include <osl/file.hxx>
+#include <osl/process.h>
 #include <osl/signal.h>
+#include <osl/file.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/asyncnotification.hxx>
+#include <comphelper/lok.hxx>
+#include <basegfx/utils/systemdependentdata.hxx>
+#include <tools/diagnose_ex.h>
+#include <unotools/syslocale.hxx>
+#include <unotools/syslocaleoptions.hxx>
+#include <i18nlangtag/mslangid.hxx>
 
 #include <desktop/exithelper.h>
 
-#include <comphelper/processfactory.hxx>
-#include <comphelper/asyncnotification.hxx>
-#include <i18nlangtag/mslangid.hxx>
-#include <unotools/syslocale.hxx>
-#include <unotools/syslocaleoptions.hxx>
+#include <vcl/ImageTree.hxx>
 #include <vcl/QueueInfo.hxx>
+#include <vcl/cvtgrf.hxx>
+#include <vcl/embeddedfontshelper.hxx>
+#include <vcl/image.hxx>
+#include <vcl/lazydelete.hxx>
+#include <vcl/menu.hxx>
+#include <vcl/print.hxx>
+#include <vcl/scheduler.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/svmain.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/toolkit/dialog.hxx>
+#include <vcl/toolkit/unowrap.hxx>
 #include <vcl/vclmain.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/cvtgrf.hxx>
-#include <vcl/scheduler.hxx>
-#include <vcl/image.hxx>
-#include <vcl/ImageTree.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/toolkit/unowrap.hxx>
-#include <configsettings.hxx>
-#include <vcl/lazydelete.hxx>
-#include <vcl/embeddedfontshelper.hxx>
-#include <vcl/toolkit/dialog.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/print.hxx>
+
+#include <print.h>
+#include <PhysicalFontCollection.hxx>
+#include <accmgr.hxx>
+#include <configsettings.hxx>
+#include <dbggui.hxx>
 #include <debugevent.hxx>
-#include <scrwnd.hxx>
-#include <windowdev.hxx>
+#include <displayconnectiondispatch.hxx>
+#include <impfontcache.hxx>
 #include <saldatabasic.hxx>
+#include <salinst.hxx>
+#include <salsys.hxx>
+#include <saltimer.hxx>
+#include <scrwnd.hxx>
+#include <svdata.hxx>
+#include <windowdev.hxx>
+
+#include <cassert>
 
 #ifdef _WIN32
 #include <svsys.h>
@@ -67,22 +87,6 @@
 #include <jni.h>
 #endif
 
-#include <impfontcache.hxx>
-#include <salinst.hxx>
-#include <svdata.hxx>
-#include <vcl/svmain.hxx>
-#include <dbggui.hxx>
-#include <accmgr.hxx>
-#include <PhysicalFontCollection.hxx>
-#include <print.h>
-#include <salsys.hxx>
-#include <saltimer.hxx>
-#include <displayconnectiondispatch.hxx>
-
-#include <config_features.h>
-#include <config_feature_opencl.h>
-
-#include <osl/process.h>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 
@@ -90,17 +94,12 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #endif
 
-#include <comphelper/lok.hxx>
-#include <cppuhelper/implbase.hxx>
 #include <uno/current_context.hxx>
 
 #include <opencl/OpenCLZone.hxx>
 #include <opengl/zone.hxx>
 #include <skia/zone.hxx>
 #include <watchdog.hxx>
-
-#include <basegfx/utils/systemdependentdata.hxx>
-#include <tools/diagnose_ex.h>
 
 #if OSL_DEBUG_LEVEL > 0
 #include <typeinfo>
