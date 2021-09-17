@@ -1329,7 +1329,7 @@ public:
         {
             mrDoc.GetName( rStartPos1.Tab(), aStr1 );
             mrDoc.GetName( rStartPos2.Tab(), aStr2 );
-            nComp = ScGlobal::GetCollator()->compareString( aStr1, aStr2 );
+            nComp = ScGlobal::GetCollator().compareString( aStr1, aStr2 );
         }
         if (nComp < 0)
         {
@@ -1360,7 +1360,7 @@ public:
         {
             mrDoc.GetName( rEndPos1.Tab(), aStr1 );
             mrDoc.GetName( rEndPos2.Tab(), aStr2 );
-            nComp = ScGlobal::GetCollator()->compareString( aStr1, aStr2 );
+            nComp = ScGlobal::GetCollator().compareString( aStr1, aStr2 );
         }
         if (nComp < 0)
         {

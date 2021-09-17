@@ -392,7 +392,7 @@ bool ScFuncDesc::isParameterOptional(sal_uInt32 _nPos) const
 
 bool ScFuncDesc::compareByName(const ScFuncDesc* a, const ScFuncDesc* b)
 {
-    return (ScGlobal::GetCaseCollator()->compareString(*a->mxFuncName, *b->mxFuncName ) < 0);
+    return (ScGlobal::GetCaseCollator().compareString(*a->mxFuncName, *b->mxFuncName ) < 0);
 }
 
 #define ENTRY(CODE) CODE, SAL_N_ELEMENTS(CODE)

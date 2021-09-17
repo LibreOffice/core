@@ -1138,7 +1138,7 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
     OUString aUpVal2( aStrVal2 );
 
     if ( eOp == ScConditionMode::Between || eOp == ScConditionMode::NotBetween )
-        if (ScGlobal::GetCollator()->compareString( aUpVal1, aUpVal2 ) > 0)
+        if (ScGlobal::GetCollator().compareString( aUpVal1, aUpVal2 ) > 0)
         {
             // Right order for value range
             OUString aTemp( aUpVal1 ); aUpVal1 = aUpVal2; aUpVal2 = aTemp;
@@ -1147,11 +1147,11 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
     switch ( eOp )
     {
         case ScConditionMode::Equal:
-            bValid = (ScGlobal::GetCollator()->compareString(
+            bValid = (ScGlobal::GetCollator().compareString(
                 rArg, aUpVal1 ) == 0);
         break;
         case ScConditionMode::NotEqual:
-            bValid = (ScGlobal::GetCollator()->compareString(
+            bValid = (ScGlobal::GetCollator().compareString(
                 rArg, aUpVal1 ) != 0);
         break;
         case ScConditionMode::TopPercent:
@@ -1181,7 +1181,7 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
         break;
         default:
         {
-            sal_Int32 nCompare = ScGlobal::GetCollator()->compareString(
+            sal_Int32 nCompare = ScGlobal::GetCollator().compareString(
                 rArg, aUpVal1 );
             switch ( eOp )
             {
@@ -1201,7 +1201,7 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
                 case ScConditionMode::NotBetween:
                     //  Test for NOTBETWEEN:
                     bValid = ( nCompare < 0 ||
-                        ScGlobal::GetCollator()->compareString( rArg,
+                        ScGlobal::GetCollator().compareString( rArg,
                         aUpVal2 ) > 0 );
                     if ( eOp == ScConditionMode::Between )
                         bValid = !bValid;
