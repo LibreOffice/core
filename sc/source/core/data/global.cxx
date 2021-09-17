@@ -80,8 +80,8 @@ std::atomic<ScUnoAddInCollection*> ScGlobal::pAddInCollection(nullptr);
 std::unique_ptr<ScUserList> ScGlobal::xUserList;
 LanguageType    ScGlobal::eLnge = LANGUAGE_SYSTEM;
 std::atomic<css::lang::Locale*> ScGlobal::pLocale(nullptr);
-std::unique_ptr<SvtSysLocale>   ScGlobal::xSysLocale;
-std::unique_ptr<CalendarWrapper> ScGlobal::xCalendar;
+std::optional<SvtSysLocale>   ScGlobal::oSysLocale;
+std::optional<CalendarWrapper> ScGlobal::oCalendar;
 std::atomic<CollatorWrapper*> ScGlobal::pCollator(nullptr);
 std::atomic<CollatorWrapper*> ScGlobal::pCaseCollator(nullptr);
 std::atomic<::utl::TransliterationWrapper*> ScGlobal::pTransliteration(nullptr);
@@ -438,7 +438,7 @@ void ScGlobal::Init()
     // FIXME: So remove this variable?
     eLnge = LANGUAGE_SYSTEM;
 
-    xSysLocale = std::make_unique<SvtSysLocale>();
+    oSysLocale.emplace();
 
     xEmptyBrushItem = std::make_unique<SvxBrushItem>( COL_TRANSPARENT, ATTR_BACKGROUND );
     xButtonBrushItem = std::make_unique<SvxBrushItem>( Color(), ATTR_BACKGROUND );
@@ -543,8 +543,8 @@ void ScGlobal::Clear()
     delete pTransliteration.load(); pTransliteration = nullptr;
     delete pCaseCollator.load(); pCaseCollator = nullptr;
     delete pCollator.load(); pCollator = nullptr;
-    xCalendar.reset();
-    xSysLocale.reset();
+    oCalendar.reset();
+    oSysLocale.reset();
     delete pLocale.load(); pLocale = nullptr;
 
     delete pUnitConverter.load(); pUnitConverter = nullptr;
@@ -1003,30 +1003,30 @@ utl::TransliterationWrapper* ScGlobal::GetpTransliteration()
 const LocaleDataWrapper* ScGlobal::getLocaleDataPtr()
 {
     OSL_ENSURE(
-        xSysLocale,
+        oSysLocale,
         "ScGlobal::getLocaleDataPtr() called before ScGlobal::Init()");
 
-    return &xSysLocale->GetLocaleData();
+    return &oSysLocale->GetLocaleData();
 }
 
 const CharClass& ScGlobal::getCharClass()
 {
     OSL_ENSURE(
-        xSysLocale,
+        oSysLocale,
         "ScGlobal::getCharClassPtr() called before ScGlobal::Init()");
 
-    return xSysLocale->GetCharClass();
+    return oSysLocale->GetCharClass();
 }
 
 CalendarWrapper*     ScGlobal::GetCalendar()
 {
     assert(!bThreadedGroupCalcInProgress);
-    if ( !xCalendar )
+    if ( !oCalendar )
     {
-        xCalendar.reset( new CalendarWrapper( ::comphelper::getProcessComponentContext() ) );
-        xCalendar->loadDefaultCalendar( *GetLocale() );
+        oCalendar.emplace( ::comphelper::getProcessComponentContext() );
+        oCalendar->loadDefaultCalendar( *GetLocale() );
     }
-    return xCalendar.get();
+    return &*oCalendar;
 }
 
 namespace {

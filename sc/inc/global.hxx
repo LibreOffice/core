@@ -35,6 +35,7 @@
 #undef bool
 
 #include <memory>
+#include <optional>
 #include <string_view>
 
 namespace com::sun::star::uno { template <typename > class Reference; }
@@ -521,7 +522,7 @@ class ScGlobal
     static std::unique_ptr<SvNumberFormatter> xEnglishFormatter;          // for UNO / XML export
 
     static css::uno::Reference< css::i18n::XOrdinalSuffix> xOrdinalSuffix;
-    static std::unique_ptr<CalendarWrapper>  xCalendar;
+    static std::optional<CalendarWrapper>    oCalendar;
     static std::atomic<CollatorWrapper*>     pCaseCollator;
     static std::atomic<CollatorWrapper*>     pCollator;
     static std::atomic<::utl::TransliterationWrapper*> pTransliteration;
@@ -533,7 +534,7 @@ class ScGlobal
     static void                 InitPPT();
 
 public:
-    static std::unique_ptr<SvtSysLocale> xSysLocale;
+    static std::optional<SvtSysLocale> oSysLocale;
     SC_DLLPUBLIC static const LocaleDataWrapper* getLocaleDataPtr();
     SC_DLLPUBLIC static const CharClass& getCharClass();
 

@@ -286,7 +286,7 @@ ScInputWindow::~ScInputWindow()
 
 void ScInputWindow::dispose()
 {
-    bool bDown = !ScGlobal::xSysLocale; // after Clear?
+    bool bDown = !ScGlobal::oSysLocale; // after Clear?
 
     //  if any view's input handler has a pointer to this input window, reset it
     //  (may be several ones, #74522#)
