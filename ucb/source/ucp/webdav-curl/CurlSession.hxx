@@ -12,16 +12,42 @@
 #include "DAVSession.hxx"
 #include "CurlUri.hxx"
 
+#include <curl/curl.h>
+
 namespace http_dav_ucp
 {
 class CurlSession : public DAVSession
 {
 private:
-    CurlUri m_URI;
-    ::ucbhelper::InternetProxyDecider const& m_rProxyDecider;
+    ::std::Mutex TODO;
+    css::uno::Reference<css::uno::XComponentContext> const xContext;
+    CurlUri const m_URI;
+    char[CURL_ERROR_SIZE] m_ErrorBuffer;
+    ::ucbhelper::InternetProxyServer const m_Proxy;
+#if 0
+    // does this have to be members? could be on the stack, no?
+    struct DownloadTarget
+    {
+        css::uno::Reference<css::io::XOutputStream> xStream;
+#if 0
+        uno::Sequence<sal_Int8> buffer;
+#endif
+    } m_DownloadTarget;
+    struct UploadSource
+    {
+        css::uno::Reference<css::io::XInputStream> xStream;
+#if 0
+        uno::Sequence<sal_Int8> buffer;
+#endif
+    } m_UploadSource;
+#endif
+
+    /// libcurl easy handle
+    ::std::unique_ptr<CURL, deleter_from_fn<curl_easy_cleanup>> m_pCurl;
 
 public:
-    explicit CurlSession(::rtl::Reference<DAVSessionFactory> const& rpFactory, OUString const& rURI,
+    explicit CurlSession(css::uno::Reference<css::uno::XComponentContext> const& xContext,
+                         ::rtl::Reference<DAVSessionFactory> const& rpFactory, OUString const& rURI,
                          ::ucbhelper::InternetProxyDecider const& rProxyDecider);
     virtual ~CurlSession() override;
 
