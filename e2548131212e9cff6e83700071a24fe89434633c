@@ -51,6 +51,24 @@
       "parentUuid": "ac7a032b_8d4fd5dd",
       "revId": "e2548131212e9cff6e83700071a24fe89434633c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1887f829_518bf424",
+        "filename": "svx/source/svdraw/svdedxv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2765,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-17T15:13:32Z",
+      "side": 1,
+      "message": "First of all, I am sure that you understand the dynamics of those undo managers better than I. I only look at the code for the first time 😊\n\nMy perception is that in SdrObjEditView::SdrEndTextEdit, some previous undo manager is installed into the outliner. I do not see which exactly that previous undo manager might be; but I suppose that the manager obtained from that SetUndoManager call can\u0027t be the manager created by outliner itself: SdrObjEditView::SdrBeginTextEdit installed the manager from getSdrUndoManagerForEnhancedTextEdit.\n\nSo *if* the previous manager could only be the already destroyed undo manager, that\u0027s OK. But I don\u0027t know where that pGivenOutliner in SdrObjEditView::SdrBeginTextEdit comes from, thus I only assumed that the previous manager could be an own one.\n\nGenerally it seems to me that a shared_ptr could be useful here...",
+      "parentUuid": "e40e5536_47f4d292",
+      "revId": "e2548131212e9cff6e83700071a24fe89434633c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
