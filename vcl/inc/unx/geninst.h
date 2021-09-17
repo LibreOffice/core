@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <sal/config.h>
+
 #include <memory>
 #include <comphelper/solarmutex.hxx>
 #include <salinst.hxx>
