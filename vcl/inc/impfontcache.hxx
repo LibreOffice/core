@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <sal/config.h>
+
 #include <rtl/ref.hxx>
 #include <o3tl/lru_map.hxx>
 #include <o3tl/hash_combine.hxx>
