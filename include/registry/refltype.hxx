@@ -23,17 +23,6 @@
 #include <registry/types.hxx>
 #include <sal/types.h>
 
-/** specifies the type source of a binary type blob.
-
-    Currently only RT_UNO_IDL type is used.
- */
-enum RTTypeSource
-{
-    RT_UNO_IDL,
-    RT_CORBA_IDL,
-    RT_JAVA
-};
-
 /** specifies a helper class for const values.
 
     This class is used for easy handling of constants or enum values
@@ -53,20 +42,6 @@ public:
     {
         m_value.aDouble = 0.0;
     }
-};
-
-/** deprecated.
-
-    An earlier version of UNO used a unique identifier for interfaces. In the
-    current version of UNO this uik was eliminated and this type is no longer used.
- */
-struct RTUik
-{
-    sal_uInt32 m_Data1;
-    sal_uInt16 m_Data2;
-    sal_uInt16 m_Data3;
-    sal_uInt32 m_Data4;
-    sal_uInt32 m_Data5;
 };
 
 /// specifies the calling convention for type reader/writer api
