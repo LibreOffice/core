@@ -62,8 +62,8 @@ ScNewScenarioDlg::ScNewScenarioDlg(weld::Window* pParent, const OUString& rName,
     OUString sOn(m_xOnFt->get_label());
 
     OUString aComment(sCreatedBy + " " + aUserOpt.GetFirstName() + " " +aUserOpt.GetLastName()
-              + ", " + sOn + " " + ScGlobal::getLocaleDataPtr()->getDate(Date(Date::SYSTEM))
-              + ", " + ScGlobal::getLocaleDataPtr()->getTime(tools::Time(tools::Time::SYSTEM)));
+              + ", " + sOn + " " + ScGlobal::getLocaleData().getDate(Date(Date::SYSTEM))
+              + ", " + ScGlobal::getLocaleData().getTime(tools::Time(tools::Time::SYSTEM)));
 
     m_xEdComment->set_text(aComment);
     m_xEdName->set_text(rName);

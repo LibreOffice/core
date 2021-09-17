@@ -29,7 +29,7 @@ bool ScOptionsUtil::IsMetricSystem()
 
     //TODO: which language should be used here - system language or installed office language?
 
-    MeasurementSystem eSys = ScGlobal::getLocaleDataPtr()->getMeasurementSystemEnum();
+    MeasurementSystem eSys = ScGlobal::getLocaleData().getMeasurementSystemEnum();
 
     return ( eSys == MeasurementSystem::Metric );
 }

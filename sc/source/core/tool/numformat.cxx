@@ -49,7 +49,7 @@ bool NumFmtUtil::isLatinScript( sal_uLong nFormat, ScDocument& rDoc )
     OUString aDecSep;
     LanguageType nFormatLang = pFormat->GetLanguage();
     if (nFormatLang == LANGUAGE_SYSTEM)
-        aDecSep = ScGlobal::getLocaleDataPtr()->getNumDecimalSep();
+        aDecSep = ScGlobal::getLocaleData().getNumDecimalSep();
     else
     {
         LocaleDataWrapper aLocaleData(

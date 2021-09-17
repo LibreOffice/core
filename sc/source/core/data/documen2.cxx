@@ -1336,9 +1336,9 @@ void ScDocument::GetCellChangeTrackNote( const ScAddress &aCellPos, OUString &aT
     DateTime aDT = pFound->GetDateTime();
     aTrackText  = pFound->GetUser();
     aTrackText += ", ";
-    aTrackText += ScGlobal::getLocaleDataPtr()->getDate(aDT);
+    aTrackText += ScGlobal::getLocaleData().getDate(aDT);
     aTrackText += " ";
-    aTrackText += ScGlobal::getLocaleDataPtr()->getTime(aDT);
+    aTrackText += ScGlobal::getLocaleData().getTime(aDT);
     aTrackText += ":\n";
     OUString aComStr = pFound->GetComment();
     if(!aComStr.isEmpty())

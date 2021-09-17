@@ -1000,13 +1000,13 @@ utl::TransliterationWrapper* ScGlobal::GetpTransliteration()
         });
 }
 
-const LocaleDataWrapper* ScGlobal::getLocaleDataPtr()
+const LocaleDataWrapper& ScGlobal::getLocaleData()
 {
     OSL_ENSURE(
         oSysLocale,
         "ScGlobal::getLocaleDataPtr() called before ScGlobal::Init()");
 
-    return &oSysLocale->GetLocaleData();
+    return oSysLocale->GetLocaleData();
 }
 
 const CharClass& ScGlobal::getCharClass()

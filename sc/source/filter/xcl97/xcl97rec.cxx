@@ -1512,7 +1512,7 @@ ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
                     sText = ::rtl::math::doubleToUString( fVal,
                             rtl_math_StringFormat_Automatic,
                             rtl_math_DecimalPlaces_Max,
-                            ScGlobal::getLocaleDataPtr()->getNumDecimalSep()[0],
+                            ScGlobal::getLocaleData().getNumDecimalSep()[0],
                             true );
                 }
                 else

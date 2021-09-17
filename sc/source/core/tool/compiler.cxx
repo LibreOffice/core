@@ -2136,8 +2136,8 @@ std::vector<ScCompiler::Whitespace> ScCompiler::NextSymbol(bool bInArray)
     sal_Unicode cSep = mxSymbols->getSymbolChar( ocSep);
     sal_Unicode cArrayColSep = mxSymbols->getSymbolChar( ocArrayColSep);
     sal_Unicode cArrayRowSep = mxSymbols->getSymbolChar( ocArrayRowSep);
-    sal_Unicode cDecSep = (mxSymbols->isEnglish() ? '.' : ScGlobal::getLocaleDataPtr()->getNumDecimalSep()[0]);
-    sal_Unicode cDecSepAlt = (mxSymbols->isEnglish() ? 0 : ScGlobal::getLocaleDataPtr()->getNumDecimalSepAlt().toChar());
+    sal_Unicode cDecSep = (mxSymbols->isEnglish() ? '.' : ScGlobal::getLocaleData().getNumDecimalSep()[0]);
+    sal_Unicode cDecSepAlt = (mxSymbols->isEnglish() ? 0 : ScGlobal::getLocaleData().getNumDecimalSepAlt().toChar());
 
     // special symbols specific to address convention used
     sal_Unicode cSheetPrefix = pConv->getSpecialSymbol(ScCompiler::Convention::ABS_SHEET_PREFIX);
@@ -2780,7 +2780,7 @@ Label_MaskStateMachine:
         // the bi18n case (which we don't want to include as yet another
         // special case above as it is rare enough and doesn't generally occur
         // in formulas).
-        const sal_Unicode cGroupSep = ScGlobal::getLocaleDataPtr()->getNumThousandSep()[0];
+        const sal_Unicode cGroupSep = ScGlobal::getLocaleData().getNumThousandSep()[0];
         const bool bGroupSeparator = (128 <= cGroupSep && cGroupSep != cSep &&
                 cGroupSep != cArrayColSep && cGroupSep != cArrayRowSep &&
                 cGroupSep != cDecSep && cGroupSep != cDecSepAlt &&
@@ -3395,14 +3395,14 @@ bool ScCompiler::IsReference( const OUString& rName, const OUString* pErrRef )
     mnCurrentSheetTab = -1;
 
     sal_Unicode ch1 = rName[0];
-    sal_Unicode cDecSep = ( mxSymbols->isEnglish() ? '.' : ScGlobal::getLocaleDataPtr()->getNumDecimalSep()[0] );
+    sal_Unicode cDecSep = ( mxSymbols->isEnglish() ? '.' : ScGlobal::getLocaleData().getNumDecimalSep()[0] );
     if ( ch1 == cDecSep )
         return false;
     // Code further down checks only if cDecSep=='.' so simply obtaining the
     // alternative decimal separator if it's not is sufficient.
     if (cDecSep != '.')
     {
-        cDecSep = ScGlobal::getLocaleDataPtr()->getNumDecimalSepAlt().toChar();
+        cDecSep = ScGlobal::getLocaleData().getNumDecimalSepAlt().toChar();
         if ( ch1 == cDecSep )
             return false;
     }
