@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbe87479_38907a62",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-17T09:05:51Z",
+      "side": 1,
+      "message": "Nice!",
+      "revId": "6184eefa835f0495ed8136471d61837f5662b6d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "349fcbf5_808961f9",
+        "filename": "sc/source/core/data/patattr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-17T09:05:51Z",
+      "side": 1,
+      "message": "I suppose it could be even more logical to reverse the order. Now the item is cloned, then the clone is cast to a type, getting a reference, and then an address of the reference is obtained.\n\nBut it\u0027s the original object that has the expected type; and its Clone\u0027s return value is already sub-typed, so it could be like this:\n\n        aColorItem.reset(pItem-\u003eStaticWhichCast(ATTR_FONT_COLOR).Clone());",
+      "revId": "6184eefa835f0495ed8136471d61837f5662b6d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
