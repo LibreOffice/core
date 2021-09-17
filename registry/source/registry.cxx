@@ -213,55 +213,6 @@ static RegError REGISTRY_CALLTYPE destroyRegistry(RegHandle hReg,
 }
 
 
-//  mergeKey
-
-static RegError REGISTRY_CALLTYPE mergeKey(RegHandle hReg,
-                                              RegKeyHandle hKey,
-                                           rtl_uString* keyName,
-                                           rtl_uString* regFileName,
-                                           sal_Bool bWarnings,
-                                           sal_Bool bReport)
-{
-    ORegistry* pReg = static_cast< ORegistry* >(hReg);
-    if (!pReg)
-        return RegError::INVALID_REGISTRY;
-    if (!pReg->isOpen())
-        return RegError::REGISTRY_NOT_OPEN;
-
-    ORegKey* pKey = static_cast< ORegKey* >(hKey);
-    if (!pKey)
-        return RegError::INVALID_KEY;
-    if (pKey->getRegistry() != pReg)
-        return RegError::INVALID_KEY;
-    if (pKey->isDeleted())
-        return RegError::INVALID_KEY;
-    if (pKey->isReadOnly())
-        return RegError::REGISTRY_READONLY;
-
-    if (keyName->length)
-    {
-        ORegKey* pNewKey = nullptr;
-        RegError _ret = pKey->createKey(OUString::unacquired(&keyName), reinterpret_cast<RegKeyHandle*>(&pNewKey));
-        if (_ret != RegError::NO_ERROR)
-            return _ret;
-
-        _ret = pReg->loadKey(pNewKey, regFileName, bWarnings, bReport);
-        if (_ret != RegError::NO_ERROR && (_ret != RegError::MERGE_CONFLICT || bWarnings))
-        {
-            if (pNewKey != pKey)
-                (void) pKey->closeKey(pNewKey);
-            else
-                (void) pKey->releaseKey(pNewKey);
-            return _ret;
-        }
-
-        return (pNewKey != pKey) ? pKey->closeKey(pNewKey) : pKey->releaseKey(pNewKey);
-    }
-
-    return pReg->loadKey(pKey, regFileName, bWarnings, bReport);
-}
-
-
 //  dumpRegistry
 
 static RegError REGISTRY_CALLTYPE dumpRegistry(RegHandle hReg,
@@ -298,7 +249,6 @@ Registry_Api* REGISTRY_CALLTYPE initRegistry_Api()
                                &openRegistry,
                                &closeRegistry,
                                &destroyRegistry,
-                               &mergeKey,
                                &acquireKey,
                                &releaseKey,
                                &isKeyReadOnly,

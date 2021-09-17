@@ -1169,15 +1169,9 @@ sal_Bool SAL_CALL NestedRegistryImpl::isReadOnly(  )
 }
 
 
-void SAL_CALL NestedRegistryImpl::mergeKey( const OUString& aKeyName, const OUString& aUrl )
+void SAL_CALL NestedRegistryImpl::mergeKey( const OUString&, const OUString& )
 {
-    Guard< Mutex > aGuard( m_mutex );
-    if ( m_localReg.is() && m_localReg->isValid() )
-    {
-        m_localReg->mergeKey(aKeyName, aUrl);
-
-        m_state++;
-    }
+    throw css::uno::RuntimeException("css.registry.NestedRegistry::mergeKey: not implemented");
 }
 
 } // namespace
