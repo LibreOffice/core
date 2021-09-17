@@ -1067,12 +1067,8 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis,
                              int nCharCode,
                              int nKeyCode);
 static void doc_setBlockedCommandList(LibreOfficeKitDocument* pThis,
-                                    const char* bolckedCommandList);
-
-static void doc_setBlockedCommandView(LibreOfficeKitDocument* pThis,
                                 int nViewId,
-                                const char* type,
-                                bool isBlocked);
+                                const char* bolckedCommandList);
 
 static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis,
                                             unsigned nWindowId,
@@ -1365,7 +1361,6 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->renderSearchResult = doc_renderSearchResult;
 
         m_pDocumentClass->setBlockedCommandList = doc_setBlockedCommandList;
-        m_pDocumentClass->setBlockedCommandView = doc_setBlockedCommandView;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -3587,16 +3582,10 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nChar
     }
 }
 
-static void doc_setBlockedCommandList(LibreOfficeKitDocument* /*pThis*/, const char* bolckedCommandList)
-{
-    comphelper::LibreOfficeKit::setBlockedCommandList(bolckedCommandList);
-}
-
-static void doc_setBlockedCommandView(LibreOfficeKitDocument* /*pThis*/, int nViewId, const char* type, bool isBlocked)
+static void doc_setBlockedCommandList(LibreOfficeKitDocument* /*pThis*/, int nViewId, const char* bolckedCommandList)
 {
     SolarMutexGuard aGuard;
-    OUString aType(type, strlen(type), RTL_TEXTENCODING_UTF8);
-    SfxLokHelper::setBlockedCommandView(nViewId, aType, isBlocked);
+    SfxLokHelper::setBlockedCommandList(nViewId, bolckedCommandList);
 }
 
 static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis, unsigned nWindowId, int nType, const char* pText)

@@ -460,13 +460,8 @@ struct _LibreOfficeKitDocumentClass
 
     /// @see lok::Document::setBlockedCommandList
     void (*setBlockedCommandList) (LibreOfficeKitDocument* pThis,
+                                int nViewId,
                                 const char* bolckedCommandList);
-
-    /// @see lok::Document::setBlockedCommandView
-    void (*setBlockedCommandView) (LibreOfficeKitDocument* pThis,
-                            int nViewId,
-                            const char* type,
-                            bool isBlocked);
 
     /// @see lok::Document::renderSearchResult
     bool (*renderSearchResult) (LibreOfficeKitDocument* pThis,
