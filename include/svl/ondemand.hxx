@@ -17,10 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVL_ONDEMAND_HXX
-#define INCLUDED_SVL_ONDEMAND_HXX
+#pragma once
 
-#include <memory>
+#include <optional>
 #include <unotools/syslocale.hxx>
 #include <i18nlangtag/lang.h>
 #include <unotools/localedatawrapper.hxx>
@@ -55,8 +54,8 @@ class OnDemandLocaleDataWrapper
     SvtSysLocale aSysLocale;
     LanguageType eCurrentLanguage;
     LanguageType eLastAnyLanguage;
-    std::unique_ptr<const LocaleDataWrapper> pEnglish;
-    std::unique_ptr<LocaleDataWrapper> pAny;
+    std::optional<LocaleDataWrapper> moEnglish;
+    std::optional<LocaleDataWrapper> moAny;
     int nCurrent; // 0 == system, 1 == english, 2 == any
     bool bInitialized;
 
@@ -86,20 +85,20 @@ public:
             nCurrent = 0;
         else if (eLang == LANGUAGE_ENGLISH_US)
         {
-            if (!pEnglish)
-                pEnglish.reset(new LocaleDataWrapper(m_xContext, rLanguageTag));
+            if (!moEnglish)
+                moEnglish.emplace(m_xContext, rLanguageTag);
             nCurrent = 1;
         }
         else
         {
-            if (!pAny)
+            if (!moAny)
             {
-                pAny.reset(new LocaleDataWrapper(m_xContext, rLanguageTag));
+                moAny.emplace(m_xContext, rLanguageTag);
                 eLastAnyLanguage = eLang;
             }
             else if (eLastAnyLanguage != eLang)
             {
-                pAny.reset(new LocaleDataWrapper(m_xContext, rLanguageTag));
+                moAny.emplace(m_xContext, rLanguageTag);
                 eLastAnyLanguage = eLang;
             }
             nCurrent = 2;
@@ -116,9 +115,9 @@ public:
             case 0:
                 return &aSysLocale.GetLocaleData();
             case 1:
-                return pEnglish.get();
+                return &*moEnglish;
             case 2:
-                return pAny.get();
+                return &*moAny;
             default:
                 assert(false);
                 return nullptr;
@@ -142,8 +141,8 @@ class OnDemandCalendarWrapper
     css::lang::Locale aEnglishLocale;
     css::lang::Locale aLocale;
     mutable css::lang::Locale aLastAnyLocale;
-    mutable std::unique_ptr<CalendarWrapper> pEnglishPtr;
-    mutable std::unique_ptr<CalendarWrapper> pAnyPtr;
+    mutable std::optional<CalendarWrapper> moEnglish;
+    mutable std::optional<CalendarWrapper> moAny;
 
 public:
     OnDemandCalendarWrapper()
@@ -158,8 +157,8 @@ public:
     {
         m_xContext = rxContext;
         changeLocale(rLocale);
-        pEnglishPtr.reset();
-        pAnyPtr.reset();
+        moEnglish.reset();
+        moAny.reset();
     }
 
     void changeLocale(const css::lang::Locale& rLocale) { aLocale = rLocale; }
@@ -169,27 +168,27 @@ public:
         CalendarWrapper* pPtr;
         if (aLocale == aEnglishLocale)
         {
-            if (!pEnglishPtr)
+            if (!moEnglish)
             {
-                pEnglishPtr.reset(new CalendarWrapper(m_xContext));
-                pEnglishPtr->loadDefaultCalendar(aEnglishLocale);
+                moEnglish.emplace(m_xContext);
+                moEnglish->loadDefaultCalendar(aEnglishLocale);
             }
-            pPtr = pEnglishPtr.get();
+            pPtr = &*moEnglish;
         }
         else
         {
-            if (!pAnyPtr)
+            if (!moAny)
             {
-                pAnyPtr.reset(new CalendarWrapper(m_xContext));
-                pAnyPtr->loadDefaultCalendar(aLocale);
+                moAny.emplace(m_xContext);
+                moAny->loadDefaultCalendar(aLocale);
                 aLastAnyLocale = aLocale;
             }
             else if (aLocale != aLastAnyLocale)
             {
-                pAnyPtr->loadDefaultCalendar(aLocale);
+                moAny->loadDefaultCalendar(aLocale);
                 aLastAnyLocale = aLocale;
             }
-            pPtr = pAnyPtr.get();
+            pPtr = &*moAny;
         }
         return pPtr;
     }
@@ -205,7 +204,7 @@ class OnDemandTransliterationWrapper
     css::uno::Reference<css::uno::XComponentContext> m_xContext;
     LanguageType eLanguage;
     TransliterationFlags nType;
-    mutable std::unique_ptr<::utl::TransliterationWrapper> pPtr;
+    mutable std::optional<::utl::TransliterationWrapper> moTransliterate;
     mutable bool bValid;
     bool bInitialized;
 
@@ -225,7 +224,7 @@ public:
         m_xContext = rxContext;
         nType = TransliterationFlags::IGNORE_CASE;
         changeLocale(eLang);
-        pPtr.reset();
+        moTransliterate.reset();
         bInitialized = true;
     }
 
@@ -239,12 +238,12 @@ public:
     {
         if (!bValid)
         {
-            if (!pPtr)
-                pPtr.reset(new ::utl::TransliterationWrapper(m_xContext, nType));
-            pPtr->loadModuleIfNeeded(eLanguage);
+            if (!moTransliterate)
+                moTransliterate.emplace(m_xContext, nType);
+            moTransliterate->loadModuleIfNeeded(eLanguage);
             bValid = true;
         }
-        return pPtr.get();
+        return &*moTransliterate;
     }
 
     const ::utl::TransliterationWrapper* operator->() const { return get(); }
@@ -260,7 +259,7 @@ public:
 class OnDemandNativeNumberWrapper
 {
     css::uno::Reference<css::uno::XComponentContext> m_xContext;
-    mutable std::unique_ptr<NativeNumberWrapper> pPtr;
+    mutable std::optional<NativeNumberWrapper> moNativeNumber;
 
 public:
     OnDemandNativeNumberWrapper() {}
@@ -268,17 +267,15 @@ public:
     void init(const css::uno::Reference<css::uno::XComponentContext>& rxContext)
     {
         m_xContext = rxContext;
-        pPtr.reset();
+        moNativeNumber.reset();
     }
 
     NativeNumberWrapper* get() const
     {
-        if (!pPtr)
-            pPtr.reset(new NativeNumberWrapper(m_xContext));
-        return pPtr.get();
+        if (!moNativeNumber)
+            moNativeNumber.emplace(m_xContext);
+        return &*moNativeNumber;
     }
 };
-
-#endif // INCLUDED_SVL_ONDEMAND_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
