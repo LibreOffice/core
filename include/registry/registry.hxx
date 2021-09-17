@@ -40,7 +40,6 @@ struct Registry_Api
     RegError    (REGISTRY_CALLTYPE *openRegistry)       (rtl_uString*, RegHandle*, RegAccessMode);
     RegError    (REGISTRY_CALLTYPE *closeRegistry)      (RegHandle);
     RegError    (REGISTRY_CALLTYPE *destroyRegistry)    (RegHandle, rtl_uString*);
-    RegError    (REGISTRY_CALLTYPE *mergeKey)           (RegHandle, RegKeyHandle, rtl_uString*, rtl_uString*, sal_Bool, sal_Bool);
     void        (REGISTRY_CALLTYPE *acquireKey)         (RegKeyHandle);
     void        (REGISTRY_CALLTYPE *releaseKey)         (RegKeyHandle);
     sal_Bool    (REGISTRY_CALLTYPE *isKeyReadOnly)      (RegKeyHandle);
@@ -153,25 +152,6 @@ public:
         @return RegError::NO_ERROR if succeeds else an error code.
     */
     inline RegError destroy(const OUString& registryName);
-
-    /** merges the registry information of the specified key with the registry
-        information of the specified file.
-
-        All existing keys will be extended and existing key values will be overwritten.
-        @param  rKey references a currently open key. The key which information is merged by this
-                     function is a subkey of this key
-        @param  keyName specifies the name of the key which will be merged.
-                        If keyName is an empty string the registry information under the key specified
-                        by rKey is merged with the information from the specified file.
-        @param  regFileName specifies the file containing the registry information.
-        @param  bReport if TRUE the function reports warnings on stdout if a key already exists.
-        @return RegError::NO_ERROR if succeeds else an error code. If it returns an error the registry will
-                restore the state before merging.
-    */
-    inline RegError mergeKey(RegistryKey& rKey,
-                                const OUString& keyName,
-                                const OUString& regFileName,
-                                bool bReport);
 
     friend class RegistryKey;
     friend class RegistryKeyArray;
@@ -1049,11 +1029,5 @@ inline RegError Registry::destroy(const OUString& registryName)
             m_hImpl = nullptr;
         return ret;
     }
-
-inline RegError Registry::mergeKey(RegistryKey& rKey,
-                                         const OUString& keyName,
-                                         const OUString& regFileName,
-                                         bool bReport)
-    {  return m_pApi->mergeKey(m_hImpl, rKey.m_hImpl, keyName.pData, regFileName.pData, false/*bWarnings*/, bReport); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
