@@ -10,6 +10,8 @@
 
 #pragma once
 
+#include <sal/config.h>
+
 #include <win/winlayout.hxx>
 
 #include <SkTypeface.h>
