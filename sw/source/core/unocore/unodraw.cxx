@@ -50,6 +50,7 @@
 #include <dflyobj.hxx>
 #include <ndtxt.hxx>
 #include <svx/svdview.hxx>
+#include <svx/svdogrp.hxx>
 #include <svx/unoshape.hxx>
 #include <dcontact.hxx>
 #include <fmtornt.hxx>
@@ -964,7 +965,21 @@ SwXShape::~SwXShape()
 
 uno::Any SwXShape::queryInterface( const uno::Type& aType )
 {
-    uno::Any aRet = SwTextBoxHelper::queryInterface(GetFrameFormat(), aType);
+    uno::Any aRet;
+
+    if (aType == cppu::UnoType<text::XTextRange>::get()
+        || aType == cppu::UnoType<text::XTextAppend>::get()
+        || aType == cppu::UnoType<text::XText>::get())
+        if (auto pObj = SdrObject::getSdrObjectFromXShape(mxShape))
+        {
+            if (dynamic_cast<SdrObjGroup*>(pObj->getParentSdrObjectFromSdrObject()))
+                aRet = SwTextBoxHelper::queryInterface(GetFrameFormat(), aType, pObj);
+            else
+                aRet = SwTextBoxHelper::queryInterface(GetFrameFormat(), aType);
+        }
+        else
+            aRet = SwTextBoxHelper::queryInterface(GetFrameFormat(), aType);
+
     if (aRet.hasValue())
         return aRet;
 
@@ -1077,21 +1092,22 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 SAL_WARN_IF(!pSvxShape, "sw.uno", "No SvxShape found!");
                 if(pSvxShape)
                 {
-                    SdrObject* pObj = pSvxShape->GetSdrObject();
-                    // set layer of new drawing
-                    // object to corresponding invisible layer.
-                    bool bIsVisible = pDoc->getIDocumentDrawModelAccess().IsVisibleLayerId( pObj->GetLayer() );
-                    if(SdrInventor::FmForm != pObj->GetObjInventor())
+                    if (SdrObject* pObj = pSvxShape->GetSdrObject())
                     {
-                        pObj->SetLayer( *o3tl::doAccess<bool>(aValue)
-                                        ? ( bIsVisible ? pDoc->getIDocumentDrawModelAccess().GetHeavenId() : pDoc->getIDocumentDrawModelAccess().GetInvisibleHeavenId() )
-                                        : ( bIsVisible ? pDoc->getIDocumentDrawModelAccess().GetHellId() : pDoc->getIDocumentDrawModelAccess().GetInvisibleHellId() ));
+                        // set layer of new drawing
+                        // object to corresponding invisible layer.
+                        bool bIsVisible = pDoc->getIDocumentDrawModelAccess().IsVisibleLayerId(pObj->GetLayer());
+                        if (SdrInventor::FmForm != pObj->GetObjInventor())
+                        {
+                            pObj->SetLayer(*o3tl::doAccess<bool>(aValue)
+                                ? (bIsVisible ? pDoc->getIDocumentDrawModelAccess().GetHeavenId() : pDoc->getIDocumentDrawModelAccess().GetInvisibleHeavenId())
+                                : (bIsVisible ? pDoc->getIDocumentDrawModelAccess().GetHellId() : pDoc->getIDocumentDrawModelAccess().GetInvisibleHellId()));
+                        }
+                        else
+                        {
+                            pObj->SetLayer(bIsVisible ? pDoc->getIDocumentDrawModelAccess().GetControlsId() : pDoc->getIDocumentDrawModelAccess().GetInvisibleControlsId());
+                        }
                     }
-                    else
-                    {
-                        pObj->SetLayer( bIsVisible ? pDoc->getIDocumentDrawModelAccess().GetControlsId() : pDoc->getIDocumentDrawModelAccess().GetInvisibleControlsId());
-                    }
-
                 }
 
             }

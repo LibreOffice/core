@@ -37,6 +37,8 @@
 #include <dmapper/PropertyIds.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 
 const sal_Unicode uCR = 0xd;
 const sal_Unicode uFtnEdnRef = 0x2;
@@ -1651,6 +1653,8 @@ OOXMLFastContextHandlerShape::OOXMLFastContextHandlerShape
 : OOXMLFastContextHandlerProperties(pContext), m_bShapeSent( false ),
     m_bShapeStarted(false), m_bShapeContextPushed(false)
 {
+    if (auto pParentShape = dynamic_cast<OOXMLFastContextHandlerGroupShape*>(pContext))
+        m_xParentShape.set( pParentShape->getGroupShape());
 }
 
 OOXMLFastContextHandlerShape::~OOXMLFastContextHandlerShape()
@@ -1694,7 +1698,8 @@ void OOXMLFastContextHandlerShape::setToken(Token_t nToken)
     if (!mrShapeContext.is())
     {
         // Define the shape context for the whole document
-        mrShapeContext = new oox::shape::ShapeContextHandler(getDocument()->getShapeFilterBase());
+        mrShapeContext = new oox::shape::ShapeContextHandler(getDocument()->getShapeFilterBase(),
+                                                             m_xParentShape);
         getDocument()->setShapeContext(mrShapeContext);
         auto pThemePtr = getDocument()->getTheme();
         if (pThemePtr)
@@ -1750,7 +1755,14 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
     // Notify the dmapper that the shape is ready to use
     if ( !bIsPicture )
     {
+
+
         mpStream->startShape( xShape );
+        if (m_xParentShape)
+        {
+            m_xParentShape->add(xShape);
+
+        }
         m_bShapeStarted = true;
     }
 }
@@ -1771,8 +1783,9 @@ void OOXMLFastContextHandlerShape::lcl_endFastElement
 
     // Ending the shape should be the last thing to do
     bool bIsPicture = Element == ( NMSP_dmlPicture | XML_pic );
-    if ( !bIsPicture && m_bShapeStarted)
+    if ( !bIsPicture && m_bShapeStarted )
         mpStream->endShape( );
+
 }
 
 void SAL_CALL OOXMLFastContextHandlerShape::endUnknownElement
@@ -1876,6 +1889,122 @@ void OOXMLFastContextHandlerShape::lcl_characters
     if (mrShapeContext.is())
         mrShapeContext->characters(aChars);
 }
+
+/*
+  class OOXMLFastContextHandlerGroupShape
+ */
+
+OOXMLFastContextHandlerGroupShape::OOXMLFastContextHandlerGroupShape
+(OOXMLFastContextHandler * pContext)
+: OOXMLFastContextHandlerProperties(pContext)
+{
+    try
+    {
+        uno::Reference< lang::XMultiServiceFactory > xServiceFact(getDocument()->getModel(), uno::UNO_QUERY_THROW);
+        m_xGroupShape.set(xServiceFact->createInstance("com.sun.star.drawing.GroupShape"), uno::UNO_QUERY_THROW);
+        uno::Reference< container::XNamed > xNamed( m_xGroupShape, uno::UNO_QUERY );
+        //xNamed->setName("cica");
+        uno::Reference<drawing::XShape> xShape(m_xGroupShape, uno::UNO_QUERY);
+        getDocument()->getDrawPage()->add(xShape);
+        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+        xShapeProps->setPropertyValue("AnchorPageNo", uno::Any(sal_uInt16(1)));
+        mpStream->startShape(xShape);
+    }
+    catch (uno::Exception& e)
+    {
+    }
+}
+
+OOXMLFastContextHandlerGroupShape::~OOXMLFastContextHandlerGroupShape()
+{
+    try
+    {
+
+
+    }
+    catch (uno::Exception& e)
+    {
+    }
+}
+
+void OOXMLFastContextHandlerGroupShape::lcl_startFastElement
+(Token_t Element,
+ const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
+{
+    startAction();
+
+}
+
+void SAL_CALL OOXMLFastContextHandlerGroupShape::startUnknownElement
+(const OUString & Namespace,
+ const OUString & Name,
+ const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
+{
+
+}
+
+void OOXMLFastContextHandlerGroupShape::setToken(Token_t nToken)
+{
+}
+
+void OOXMLFastContextHandlerGroupShape::sendShape( Token_t Element )
+{
+
+}
+
+void OOXMLFastContextHandlerGroupShape::lcl_endFastElement
+(Token_t Element)
+{
+    if (!isForwardEvents())
+        return;
+
+
+
+    OOXMLFastContextHandlerProperties::lcl_endFastElement(Element);
+
+
+    if (Element == Token_t(NMSP_wpg | XML_wgp))
+        mpStream->endShape();
+}
+
+void SAL_CALL OOXMLFastContextHandlerGroupShape::endUnknownElement
+(const OUString & Namespace,
+ const OUString & Name)
+{
+
+}
+
+uno::Reference< xml::sax::XFastContextHandler >
+OOXMLFastContextHandlerGroupShape::lcl_createFastChildContext
+(Token_t Element,
+ const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
+{
+    if (Element == Token_t(NMSP_wps | XML_wsp))
+    {
+        return OOXMLFactory::createFastChildContextFromStart(this, Element);
+    }
+    return this;
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+OOXMLFastContextHandlerGroupShape::createUnknownChildContext
+(const OUString & Namespace,
+ const OUString & Name,
+ const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
+{
+    uno::Reference< xml::sax::XFastContextHandler > xResult;
+
+
+
+    return xResult;
+}
+
+void OOXMLFastContextHandlerGroupShape::lcl_characters
+(const OUString & aChars)
+{
+
+}
+
 
 /*
   class OOXMLFastContextHandlerWrapper

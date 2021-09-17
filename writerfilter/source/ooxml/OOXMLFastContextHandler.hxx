@@ -192,6 +192,34 @@ protected:
     Id mnDefine;
     Token_t mnToken;
 
+
+    /// Tag handling helper class, what indicates the
+    /// current state of the desired tag pairs.
+    class TagParsingState
+    {
+        Token_t m_TagToken;
+        bool m_bOpeningTagReached;
+        bool m_bClosingTagReached;
+
+    public:
+        TagParsingState(Token_t TagToken)
+            : m_bOpeningTagReached(false)
+            , m_bClosingTagReached(false)
+            , m_TagToken(TagToken)
+        {
+        }
+        ~TagParsingState() {}
+
+        bool IsTagParsed() { return m_bOpeningTagReached && m_bClosingTagReached; }
+        bool IsTagOpened() { return m_bOpeningTagReached && !m_bClosingTagReached; }
+
+        void StartTag() { m_bOpeningTagReached = true; };
+        void EndTag() { m_bClosingTagReached = true; };
+
+        Token_t GetTagToken() { return m_TagToken; }
+
+    };
+
     // the formula insertion mode: inline/newline(left, center, right)
     sal_Int8 mnMathJcVal;
     bool mbIsMathPara;
@@ -446,6 +474,7 @@ class OOXMLFastContextHandlerShape: public OOXMLFastContextHandlerProperties
     /// Is it necessary to pop the stack in the dtor?
     bool m_bShapeContextPushed;
     rtl::Reference<oox::shape::ShapeContextHandler> mrShapeContext;
+    css::uno::Reference<css::drawing::XShapes> m_xParentShape;
 
 public:
     explicit OOXMLFastContextHandlerShape(OOXMLFastContextHandler * pContext);
@@ -467,6 +496,46 @@ public:
 
     void sendShape( Token_t Element );
     bool isShapeSent( ) const { return m_bShapeSent; }
+
+protected:
+    virtual void lcl_startFastElement(Token_t Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
+
+    virtual void lcl_endFastElement(Token_t Element) override;
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > lcl_createFastChildContext (Token_t Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
+
+    virtual void lcl_characters(const OUString & aChars) override;
+
+};
+
+class OOXMLFastContextHandlerGroupShape: public OOXMLFastContextHandlerProperties
+{
+
+    css::uno::Reference< css::drawing::XShapes > m_xGroupShape;
+
+
+
+public:
+    explicit OOXMLFastContextHandlerGroupShape(OOXMLFastContextHandler * pContext);
+    virtual ~OOXMLFastContextHandlerGroupShape() override;
+
+    virtual std::string getType() const override { return "Shape"; }
+
+    // css::xml::sax::XFastContextHandler:
+    virtual void SAL_CALL startUnknownElement (const OUString & Namespace, const OUString & Name, const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
+
+    virtual void SAL_CALL endUnknownElement(const OUString & Namespace, const OUString & Name) override;
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createUnknownChildContext(const OUString & Namespace, const OUString & Name,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
+
+    virtual void setToken(Token_t nToken) override;
+
+    virtual ResourceEnum_t getResource() const override { return SHAPE; }
+
+    void sendShape( Token_t Element );
+
+    css::uno::Reference<css::drawing::XShapes> getGroupShape() { return m_xGroupShape; };
 
 protected:
     virtual void lcl_startFastElement(Token_t Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;

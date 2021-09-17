@@ -45,9 +45,10 @@ namespace oox::shape {
 using namespace core;
 using namespace drawingml;
 
-ShapeContextHandler::ShapeContextHandler(const rtl::Reference<ShapeFilterBase>& xFilterBase) :
+ShapeContextHandler::ShapeContextHandler(const rtl::Reference<ShapeFilterBase>& xFilterBase, uno::Reference<drawing::XShapes> xParentShape) :
   mnStartToken(0),
-  mxShapeFilterBase(xFilterBase)
+  mxShapeFilterBase(xFilterBase),
+  mxParentShape(xParentShape)
 {
 }
 
@@ -473,7 +474,7 @@ ShapeContextHandler::getShape()
             {
                 basegfx::B2DHomMatrix aMatrix;
                 pShape->setPosition(maPosition);
-                pShape->addShape(*mxShapeFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShape->getFillProperties());
+                pShape->addShape(*mxShapeFilterBase, mpThemePtr.get(),mxParentShape.is() ? mxParentShape: xShapes, aMatrix, pShape->getFillProperties());
                 xResult = pShape->getXShape();
                 mxSavedShape = xResult;
                 mxWpsContext.clear();

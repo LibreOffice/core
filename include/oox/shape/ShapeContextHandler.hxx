@@ -50,7 +50,9 @@ class OOX_DLLPUBLIC ShapeContextHandler final :
     public ::cppu::WeakImplHelper< css::xml::sax::XFastContextHandler >
 {
 public:
-    explicit ShapeContextHandler(const rtl::Reference<ShapeFilterBase>& xFilterBase);
+    explicit ShapeContextHandler(const rtl::Reference<ShapeFilterBase>& xFilterBase,
+                                 css::uno::Reference<css::drawing::XShapes> xParentShape
+                                 = css::uno::Reference<css::drawing::XShapes>());
 
     virtual ~ShapeContextHandler() override;
 
@@ -110,6 +112,8 @@ private:
 
     ::sal_uInt32 mnStartToken;
     css::awt::Point maPosition;
+
+    css::uno::Reference<css::drawing::XShapes> mxParentShape;
 
     drawingml::ShapePtr mpShape;
     std::shared_ptr< vml::Drawing > mpDrawing;

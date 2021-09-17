@@ -354,6 +354,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
     SwFrameFormat* pDest = m_rDoc.GetDfltFrameFormat();
     if( rSource.GetRegisteredIn() != pSrcDoc->GetDfltFrameFormat() )
         pDest = m_rDoc.CopyFrameFormat( *static_cast<const SwFrameFormat*>(rSource.GetRegisteredIn()) );
+
     if( bFly )
     {
         // #i11176#
@@ -369,6 +370,10 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
     }
     else
         pDest = m_rDoc.MakeDrawFrameFormat( OUString(), pDest );
+
+    // Do not dereference NULL!
+    if (!pDest)
+        return nullptr;
 
     // Copy all other or new attributes
     pDest->CopyAttrs( rSource );
@@ -501,25 +506,26 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
                     SwFrameFormat* pDestTextBox
                         = CopyLayoutFormat(*pSourceTextBox, boxAnchor, bSetTextFlyAtt, bMakeFrames);
 
-                    SwAttrSet aSet(pDest->GetAttrSet());
-                    SwFormatContent aContent(
-                        pDestTextBox->GetContent().GetContentIdx()->GetNode().GetStartNode());
-                    aSet.Put(aContent);
-                    pDest->SetFormatAttr(aSet);
+                    // Do not dereference NULL!
+                    if (pDestTextBox)
+                    {
+                        SwAttrSet aSet(pDest->GetAttrSet());
+                        SwFormatContent aContent(
+                            pDestTextBox->GetContent().GetContentIdx()->GetNode().GetStartNode());
+                        aSet.Put(aContent);
+                        pDest->SetFormatAttr(aSet);
 
-                    // Link FLY and DRAW formats, so it becomes a text box
-                    SdrObject* pNewObj = pDest->FindRealSdrObject();
-                    if (bIsGroupObj && pNewObj
-                        && pNewObj->getChildrenOfSdrObject()
-                        && (pNewObj->getChildrenOfSdrObject()->GetObjCount() > it)
-                        && pNewObj->getChildrenOfSdrObject()->GetObj(it))
-                        pNewObj = pNewObj->getChildrenOfSdrObject()->GetObj(it);
-                    pTextBoxNd->AddTextBox(pNewObj, pDestTextBox);
-                    pDestTextBox->SetOtherTextBoxFormat(pTextBoxNd);
+                        // Link FLY and DRAW formats, so it becomes a text box
+                        SdrObject* pNewObj = pDest->FindRealSdrObject();
+                        if (bIsGroupObj && pDest->FindRealSdrObject()
+                            && pDest->FindRealSdrObject()->getChildrenOfSdrObject()
+                            && (pDest->FindRealSdrObject()->getChildrenOfSdrObject()->GetObjCount() > it)
+                            && pDest->FindRealSdrObject()->getChildrenOfSdrObject()->GetObj(it))
+                            pNewObj = pDest->FindRealSdrObject()->getChildrenOfSdrObject()->GetObj(it);
+                        pTextBoxNd->AddTextBox(pNewObj, pDestTextBox);
+                        pDestTextBox->SetOtherTextBoxFormat(pTextBoxNd);
+                    }
                 }
-
-                if (!bIsGroupObj)
-                    break;
             }
         }
     }

@@ -36,6 +36,7 @@ enum class ResourceType {
     HexColor,
     String,
     Shape,
+    GroupShape,
     Boolean,
     Value,
     XNote,

@@ -992,7 +992,7 @@ Reference< XShape > const & Shape::createAndInsert(
         {
             xSet->setPropertyValue( "Description", Any( msDescription ) );
         }
-        if (aServiceName != "com.sun.star.text.TextFrame")
+        if (aServiceName != "com.sun.star.text.TextFrame" && rxShapes.is())
             rxShapes->add( mxShape );
 
         if ( mbHidden || mbHiddenMasterShape )
