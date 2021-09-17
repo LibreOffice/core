@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea2ba9ae_1159fc27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-17T13:36:14Z",
+      "side": 1,
+      "message": "Mike, are you OK with this? I added the IRC chat snippet into the commit message to help...",
+      "revId": "f1f563c7d13311478cfcb53789494b506e549696",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
