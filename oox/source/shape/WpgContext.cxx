@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "WpsContext.hxx"
 #include "WpgContext.hxx"
 #include <sal/log.hxx>
 #include <drawingml/shapepropertiescontext.hxx>
@@ -44,9 +45,9 @@ oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken
             // it.
             oox::drawingml::ShapePtr pShape = std::make_shared<oox::drawingml::Shape>(
                 "com.sun.star.drawing.CustomShape", /*bDefaultHeight=*/false);
-            return new oox::drawingml::ShapeContext(*this, mpShape, pShape);
-            // return new oox::shape::WpsContext(*this, uno::Reference<drawing::XShape>(),
-            //                                   mpShape, pShape);
+            // return new oox::drawingml::ShapeContext(*this, mpShape, pShape);
+            return new oox::shape::WpsContext(*this, uno::Reference<drawing::XShape>(), mpShape,
+                                              pShape);
         }
         case XML_pic:
             return new oox::drawingml::GraphicShapeContext(

@@ -8452,6 +8452,9 @@
         <element name="grpSpPr">
           <ref name="CT_WordprocessingGroup"/>
         </element>
+        <element name="wps:wsp">
+          <ref name="CT_WordprocessingShape"/>
+        </element>
       </define>
       <define name="wgp">
         <element name="wpg:wgp">
@@ -8503,6 +8506,7 @@
     <resource name="CT_WordprocessingGroup" resource="Shape">
       <element name="wpg:cNvGrpSpPr" tokenid="ooxml:CT_WordprocessingGroup_cNvGrpSpPr"/>
       <element name="wpg:grpSpPr" tokenid="ooxml:CT_WordprocessingGroup_grpSpPr"/>
+      <element name="wps:wsp" tokenid="ooxml:CT_WordprocessingShape"/>
     </resource>
     <resource name="wgp" resource="Shape">
       <element name="wpg:wgp" tokenid="ooxml:wpg_wgp"/>
