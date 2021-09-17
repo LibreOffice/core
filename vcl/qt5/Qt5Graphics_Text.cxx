@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <Qt5Graphics.hxx>
 #include <Qt5FontFace.hxx>
 #include <Qt5Font.hxx>
