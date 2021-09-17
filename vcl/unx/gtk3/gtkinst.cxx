@@ -10431,6 +10431,8 @@ public:
             void* pData = g_object_get_data(G_OBJECT(pTopLevelMenu), "g-lo-GtkInstanceMenu");
             m_pTopLevelMenuHelper = static_cast<GtkInstanceMenu*>(pData);
         }
+#else
+        update_action_group_from_popover_model();
 #endif
     }
 
@@ -10449,6 +10451,8 @@ public:
         GMainLoop* pLoop = g_main_loop_new(nullptr, true);
 
 #if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_widget_insert_action_group(pWidget, "menu", m_pActionGroup);
+
         gulong nSignalId = g_signal_connect_swapped(G_OBJECT(m_pMenu), "closed", G_CALLBACK(g_main_loop_quit), pLoop);
 
         GdkRectangle aRect;
@@ -10524,6 +10528,8 @@ public:
             gtk_widget_unparent(GTK_WIDGET(m_pMenu));
         else
             gtk_widget_set_parent(GTK_WIDGET(m_pMenu), pOrigParent);
+
+        gtk_widget_insert_action_group(pWidget, "menu", nullptr);
 #else
         gtk_menu_detach(m_pMenu);
 #endif
