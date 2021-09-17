@@ -16,6 +16,23 @@
       "message": "Looks good to me. Quite a lot comments talking about \"glue points\" and I\u0027m afraid of developers taking this term in the future. OTOH, changing all the comments is maybe too much.",
       "revId": "898f034bb2112377566cd4d334db0fd67107dfbe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94ec7f2b_fa5be364",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003349
+      },
+      "writtenOn": "2021-09-17T07:43:49Z",
+      "side": 1,
+      "message": "I considered changing the comments but as they aren\u0027t visible to users I refrained. Happy to do so if you believe that would be preferable.",
+      "revId": "898f034bb2112377566cd4d334db0fd67107dfbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
