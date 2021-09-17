@@ -1417,7 +1417,7 @@ static const SwFrame *lcl_FindFrameInTab( const SwLayoutFrame *pLay, const Point
 
     while( pFrame && pLay->IsAnLower( pFrame ) )
     {
-        if ( pFrame->getFrameArea().IsNear( rPt, nFuzzy ) )
+        if ( pFrame->getFrameArea().HasNear( rPt, nFuzzy ) )
         {
             if ( pFrame->IsLayoutFrame() )
             {
@@ -1503,7 +1503,7 @@ static const SwCellFrame *lcl_FindFrame( const SwLayoutFrame *pLay, const Point 
                             SwRect aPrevRect = pPrev->getFramePrintArea();
                             aPrevRect.Pos() += pPrev->getFrameArea().Pos();
 
-                            if( aPrevRect.IsInside( rPt ) )
+                            if( aPrevRect.HasInside( rPt ) )
                             {
                                 bCloseToCol = false;
                             }
@@ -1643,7 +1643,7 @@ const SwFrame* SwFEShell::GetBox( const Point &rPt, bool* pbRow, bool* pbCol ) c
         nFuzzy = aTmp.Width();
     }
 
-    while ( pPage && !pPage->getFrameArea().IsNear( rPt, nFuzzy ) )
+    while ( pPage && !pPage->getFrameArea().HasNear( rPt, nFuzzy ) )
         pPage = static_cast<const SwPageFrame*>(pPage->GetNext());
 
     const SwCellFrame *pFrame = nullptr;

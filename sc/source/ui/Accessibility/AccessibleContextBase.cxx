@@ -143,7 +143,7 @@ sal_Bool SAL_CALL ScAccessibleContextBase::containsPoint(const awt::Point& rPoin
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    return tools::Rectangle (Point(), GetBoundingBox().GetSize()).IsInside(VCLPoint(rPoint));
+    return tools::Rectangle (Point(), GetBoundingBox().GetSize()).HasInside(VCLPoint(rPoint));
 }
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleContextBase::getAccessibleAtPoint(
@@ -193,7 +193,7 @@ bool ScAccessibleContextBase::isShowing(  )
         {
             tools::Rectangle aParentBounds(VCLRectangle(xParentComponent->getBounds()));
             tools::Rectangle aBounds(VCLRectangle(getBounds()));
-            bShowing = aBounds.IsOver(aParentBounds);
+            bShowing = aBounds.HasOver(aParentBounds);
         }
     }
     return bShowing;

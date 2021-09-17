@@ -87,7 +87,7 @@ void CandidateMgr::PaintTransparentChildren(vcl::Window const & rWindow, tools::
                             pCandidate->GetPosPixel(),
                             pCandidate->GetSizePixel());
 
-            if (aCandidatePosSizePixel.IsOver(rPixelRect))
+            if (aCandidatePosSizePixel.HasOver(rPixelRect))
             {
                 m_aCandidates.emplace_back(pCandidate);
                 pCandidate->AddEventListener(LINK(this, CandidateMgr, WindowEventListener));

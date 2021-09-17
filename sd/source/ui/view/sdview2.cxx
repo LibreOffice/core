@@ -456,7 +456,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                 aRect.Union( pObj->GetLogicRect() );
             }
 
-            if( aRect.IsInside( pOLV->GetWindow()->PixelToLogic( rEvt.maPosPixel ) ) )
+            if( aRect.HasInside( pOLV->GetWindow()->PixelToLogic( rEvt.maPosPixel ) ) )
             {
                 bIsInsideOutlinerView = true;
             }
@@ -637,7 +637,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
 
             Point aPos( pOLV->GetWindow()->PixelToLogic( rEvt.maPosPixel ) );
 
-            if( aRect.IsInside( aPos ) )
+            if( aRect.HasInside( aPos ) )
             {
                 bIsInsideOutlinerView = true;
             }

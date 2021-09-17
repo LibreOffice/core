@@ -1721,7 +1721,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
 
                     if( aTmpState.m_bPosCorr )
                     {
-                        if( pF && !pF->getFrameArea().IsInside( aPt ))
+                        if( pF && !pF->getFrameArea().HasInside( aPt ))
                             pF = nullptr;
                     }
                     else if( !pF )

@@ -56,7 +56,7 @@ SwRect& SwRect::Union( const SwRect& rRect )
 SwRect& SwRect::Intersection( const SwRect& rRect )
 {
     // any similarity between me and given element?
-    if ( IsOver( rRect ) )
+    if ( HasOver( rRect ) )
     {
         // get smaller right and lower, and greater left and upper edge
         if ( Left() < rRect.Left() )
@@ -90,7 +90,7 @@ SwRect& SwRect::Intersection_( const SwRect& rOther )
     return *this;
 }
 
-bool SwRect::IsInside( const SwRect& rRect ) const
+bool SwRect::HasInside( const SwRect& rRect ) const
 {
     const tools::Long nRight  = Right();
     const tools::Long nBottom = Bottom();
@@ -102,7 +102,7 @@ bool SwRect::IsInside( const SwRect& rRect ) const
            (Top()  <= nrBottom)     && (nrBottom    <= nBottom);
 }
 
-bool SwRect::IsInside( const Point& rPoint ) const
+bool SwRect::HasInside( const Point& rPoint ) const
 {
     return (Left()  <= rPoint.X()) &&
            (Top()   <= rPoint.Y()) &&
@@ -111,16 +111,16 @@ bool SwRect::IsInside( const Point& rPoint ) const
 }
 
 // mouse moving of table borders
-bool SwRect::IsNear( const Point& rPoint, tools::Long nTolerance ) const
+bool SwRect::HasNear( const Point& rPoint, tools::Long nTolerance ) const
 {
     bool bIsNearby = (((Left()   - nTolerance) <= rPoint.X()) &&
                       ((Top()    - nTolerance) <= rPoint.Y()) &&
                       ((Right()  + nTolerance) >= rPoint.X()) &&
                       ((Bottom() + nTolerance) >= rPoint.Y()));
-    return IsInside(rPoint) || bIsNearby;
+    return HasInside(rPoint) || bIsNearby;
 }
 
-bool SwRect::IsOver( const SwRect& rRect ) const
+bool SwRect::HasOver( const SwRect& rRect ) const
 {
     return (Top()   <= rRect.Bottom()) &&
            (Left()  <= rRect.Right())  &&

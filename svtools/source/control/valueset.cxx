@@ -171,12 +171,12 @@ size_t ValueSet::ImplGetItem( const Point& rPos ) const
         return VALUESET_ITEM_NOTFOUND;
     }
 
-    if (mpNoneItem && maNoneItemRect.IsInside(rPos))
+    if (mpNoneItem && maNoneItemRect.HasInside(rPos))
     {
         return VALUESET_ITEM_NONEITEM;
     }
 
-    if (maItemListRect.IsInside(rPos))
+    if (maItemListRect.HasInside(rPos))
     {
         const int xc = rPos.X() - maItemListRect.Left();
         const int yc = rPos.Y() - maItemListRect.Top();

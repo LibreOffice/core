@@ -128,7 +128,7 @@ void SdrEditView::MovMarkedToTop()
                 nNewPos--;
                 bEnd=true;
             }
-            else if (rBR.IsOver(pCmpObj->GetCurrentBoundRect()))
+            else if (rBR.HasOver(pCmpObj->GetCurrentBoundRect()))
             {
                 nNewPos=nCmpPos;
                 bEnd=true;
@@ -218,7 +218,7 @@ void SdrEditView::MovMarkedToBtm()
                 nNewPos++;
                 bEnd=true;
             }
-            else if (rBR.IsOver(pCmpObj->GetCurrentBoundRect()))
+            else if (rBR.HasOver(pCmpObj->GetCurrentBoundRect()))
             {
                 nNewPos=nCmpPos;
                 bEnd=true;

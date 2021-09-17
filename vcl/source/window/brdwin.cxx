@@ -175,17 +175,17 @@ BorderWindowHitTest ImplBorderWindowView::ImplHitTest( ImplBorderFrameData const
 {
     ImplBorderWindow* pBorderWindow = pData->mpBorderWindow;
 
-    if ( pData->maTitleRect.IsInside( rPos ) )
+    if ( pData->maTitleRect.HasInside( rPos ) )
     {
-        if ( pData->maCloseRect.IsInside( rPos ) )
+        if ( pData->maCloseRect.HasInside( rPos ) )
             return BorderWindowHitTest::Close;
-        else if ( pData->maMenuRect.IsInside( rPos ) )
+        else if ( pData->maMenuRect.HasInside( rPos ) )
             return BorderWindowHitTest::Menu;
-        else if ( pData->maDockRect.IsInside( rPos ) )
+        else if ( pData->maDockRect.HasInside( rPos ) )
             return BorderWindowHitTest::Dock;
-        else if ( pData->maHideRect.IsInside( rPos ) )
+        else if ( pData->maHideRect.HasInside( rPos ) )
             return BorderWindowHitTest::Hide;
-        else if ( pData->maHelpRect.IsInside( rPos ) )
+        else if ( pData->maHelpRect.HasInside( rPos ) )
             return BorderWindowHitTest::Help;
         else
             return BorderWindowHitTest::Title;
@@ -974,7 +974,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
 
         if ( maFrameData.mnHitTest & BorderWindowHitTest::Close )
         {
-            if ( maFrameData.maCloseRect.IsInside( aMousePos ) )
+            if ( maFrameData.maCloseRect.HasInside( aMousePos ) )
             {
                 if ( !(maFrameData.mnCloseState & DrawButtonFlags::Pressed) )
                 {
@@ -993,7 +993,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
         }
         else if ( maFrameData.mnHitTest & BorderWindowHitTest::Dock )
         {
-            if ( maFrameData.maDockRect.IsInside( aMousePos ) )
+            if ( maFrameData.maDockRect.HasInside( aMousePos ) )
             {
                 if ( !(maFrameData.mnDockState & DrawButtonFlags::Pressed) )
                 {
@@ -1012,7 +1012,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
         }
         else if ( maFrameData.mnHitTest & BorderWindowHitTest::Menu )
         {
-            if ( maFrameData.maMenuRect.IsInside( aMousePos ) )
+            if ( maFrameData.maMenuRect.HasInside( aMousePos ) )
             {
                 if ( !(maFrameData.mnMenuState & DrawButtonFlags::Pressed) )
                 {
@@ -1031,7 +1031,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
         }
         else if ( maFrameData.mnHitTest & BorderWindowHitTest::Hide )
         {
-            if ( maFrameData.maHideRect.IsInside( aMousePos ) )
+            if ( maFrameData.maHideRect.HasInside( aMousePos ) )
             {
                 if ( !(maFrameData.mnHideState & DrawButtonFlags::Pressed) )
                 {
@@ -1050,7 +1050,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
         }
         else if ( maFrameData.mnHitTest & BorderWindowHitTest::Help )
         {
-            if ( maFrameData.maHelpRect.IsInside( aMousePos ) )
+            if ( maFrameData.maHelpRect.HasInside( aMousePos ) )
             {
                 if ( !(maFrameData.mnHelpState & DrawButtonFlags::Pressed) )
                 {

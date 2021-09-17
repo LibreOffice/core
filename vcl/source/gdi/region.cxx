@@ -1336,7 +1336,7 @@ const RegionBand* vcl::Region::GetAsRegionBand() const
     return getRegionBand();
 }
 
-bool vcl::Region::IsInside( const Point& rPoint ) const
+bool vcl::Region::HasInside( const Point& rPoint ) const
 {
     if(IsEmpty())
     {
@@ -1353,7 +1353,7 @@ bool vcl::Region::IsInside( const Point& rPoint ) const
     // Too expensive (?)
     //if(mpImplRegion->getRegionPolyPoly())
     //{
-    //  return mpImplRegion->getRegionPolyPoly()->IsInside( rPoint );
+    //  return mpImplRegion->getRegionPolyPoly()->HasInside( rPoint );
     //}
 
     // ensure RegionBand existence
@@ -1361,13 +1361,13 @@ bool vcl::Region::IsInside( const Point& rPoint ) const
 
     if(pRegionBand)
     {
-        return pRegionBand->IsInside(rPoint);
+        return pRegionBand->HasInside(rPoint);
     }
 
     return false;
 }
 
-bool vcl::Region::IsOver( const tools::Rectangle& rRect ) const
+bool vcl::Region::HasOver( const tools::Rectangle& rRect ) const
 {
     if(IsEmpty())
     {

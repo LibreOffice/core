@@ -82,10 +82,10 @@ public:
     // Same as Intersection, only assume that Rects are overlapping!
     SwRect &Intersection_( const SwRect &rRect );
 
-    bool IsInside( const Point& rPOINT ) const;
-    bool IsNear(const Point& rPoint, tools::Long nTolerance ) const;
-    bool IsInside( const SwRect& rRect ) const;
-    bool IsOver( const SwRect& rRect ) const;
+    bool HasInside( const Point& rPOINT ) const;
+    bool HasNear(const Point& rPoint, tools::Long nTolerance ) const;
+    bool HasInside( const SwRect& rRect ) const;
+    bool HasOver( const SwRect& rRect ) const;
     inline bool HasArea() const;
     inline bool IsEmpty() const;
     inline void Clear();
