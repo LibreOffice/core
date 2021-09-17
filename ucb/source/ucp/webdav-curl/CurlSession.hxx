@@ -12,16 +12,44 @@
 #include "DAVSession.hxx"
 #include "CurlUri.hxx"
 
+#include <curl/curl.h>
+
+#include <mutex>
+
 namespace http_dav_ucp
 {
 class CurlSession : public DAVSession
 {
 private:
-    CurlUri m_URI;
-    ::ucbhelper::InternetProxyDecider const& m_rProxyDecider;
+    ::std::mutex m_Mutex;
+    css::uno::Reference<css::uno::XComponentContext> const m_xContext;
+    CurlUri const m_URI;
+    char m_ErrorBuffer[CURL_ERROR_SIZE];
+    ::ucbhelper::InternetProxyServer const m_Proxy;
+    /// once authentication was successful, rely on m_pCurl's data
+    bool m_isAuthenticated = false;
+    bool m_isAuthenticatedProxy = false;
+
+    /// libcurl easy handle
+    ::std::unique_ptr<CURL, deleter_from_fn<curl_easy_cleanup>> m_pCurl;
+
+#if 0
+    auto ProcessRequest(
+            OUString const& rInPath,
+#if 0
+            DownloadTarget * pTarget,
+            UploadSource * pSource,
+#endif
+            css::uno::Reference<css::io::XOutputStream> * pxOutStream,
+            css::uno::Reference<css::io::XInputStream> * pxInStream,
+            // extra headers
+            ) -> void;
+#endif
+    friend struct CurlProcessor;
 
 public:
-    explicit CurlSession(::rtl::Reference<DAVSessionFactory> const& rpFactory, OUString const& rURI,
+    explicit CurlSession(css::uno::Reference<css::uno::XComponentContext> const& xContext,
+                         ::rtl::Reference<DAVSessionFactory> const& rpFactory, OUString const& rURI,
                          ::ucbhelper::InternetProxyDecider const& rProxyDecider);
     virtual ~CurlSession() override;
 
