@@ -121,4 +121,4 @@ inline void LogicalFontInstance::DecodeOpenTypeTag(const uint32_t nTableTag, cha
     pTagName[4] = 0;
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
