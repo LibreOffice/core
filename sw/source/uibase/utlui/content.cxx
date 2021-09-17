@@ -1570,6 +1570,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     bool bRemoveToggleExpandEntry = true;
     bool bRemoveChapterEntries = true;
     bool bRemoveSendOutlineEntry = true;
+    bool bRemoveTableTracking = true;
 
     // Edit only if the shown content is coming from the current view.
     if (State::HIDDEN != m_eState &&
@@ -1632,6 +1633,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                 bool bProt = m_pActiveShell->HasTableAnyProtection( &sTableName, &bFull );
                 xPop->set_sensitive(OString::number(403), !bFull);
                 xPop->set_sensitive(OString::number(404), bProt);
+                xPop->set_active("tabletracking", m_bTableTracking);
+                bRemoveTableTracking = false;
                 bRemoveDeleteEntry = false;
             }
             else if(ContentTypeId::DRAWOBJECT == nContentType)
@@ -1684,11 +1687,16 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                 bRemoveToggleExpandEntry = lcl_InsertExpandCollapseAllItem(*m_xTreeView, *xEntry,
                                                                            *xPop);
             }
-            if (State::HIDDEN != m_eState &&
+            else if (State::HIDDEN != m_eState &&
                     pType->GetType() == ContentTypeId::POSTIT &&
                     !m_pActiveShell->GetView().GetDocShell()->IsReadOnly() &&
                     pType->GetMemberCount() > 0)
                 bRemovePostItEntries = false;
+            else if (ContentTypeId::TABLE == pType->GetType())
+            {
+                xPop->set_active("tabletracking", m_bTableTracking);
+                bRemoveTableTracking = false;
+            }
         }
     }
 
@@ -1772,6 +1780,9 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         xPop->remove(OString::number(5)); // outline content menu
         xPop->remove("separator1511");
     }
+
+    if (bRemoveTableTracking)
+        xPop->remove("tabletracking");
 
     OString sCommand = xPop->popup_at_rect(m_xTreeView.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
     if (!sCommand.isEmpty())
@@ -3552,7 +3563,7 @@ void SwContentTree::UpdateTracking()
         return;
     }
     // table
-    if (m_pActiveShell->IsCursorInTable()  &&
+    if (m_bTableTracking && m_pActiveShell->IsCursorInTable() &&
             !(m_bIsRoot && m_nRootType != ContentTypeId::TABLE))
     {
         if(m_pActiveShell->GetTableFormat())
@@ -4062,6 +4073,12 @@ IMPL_LINK(SwContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUStrin
 
 void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
 {
+    if (rSelectedPopupEntry == "tabletracking")
+    {
+        m_bTableTracking = !m_bTableTracking;
+        return;
+    }
+
     std::unique_ptr<weld::TreeIter> xFirst(m_xTreeView->make_iterator());
     if (!m_xTreeView->get_selected(xFirst.get()))
         xFirst.reset();
