@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_INC_SVDATA_HXX
 #define INCLUDED_VCL_INC_SVDATA_HXX
 
+#include <sal/config.h>
 #include <config_version.h>
 
 #include <o3tl/lru_map.hxx>
