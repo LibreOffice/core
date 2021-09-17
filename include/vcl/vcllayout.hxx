@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <sal/log.hxx>
+
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <tools/gen.hxx>
 #include <tools/degree.hxx>

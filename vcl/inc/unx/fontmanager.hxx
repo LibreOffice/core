@@ -19,7 +19,9 @@
 
 #pragma once
 
+#include <sal/config.h>
 #include <config_options.h>
+
 #include <tools/fontenum.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/glyphitem.hxx>

@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <sal/config.h>
+
 #include <vector>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
