@@ -352,16 +352,17 @@ tools::Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, tools
 
 static GtkWidget* gCacheWindow;
 static GtkWidget* gDumbContainer;
-static GtkWidget* gSpinBox;
 #if GTK_CHECK_VERSION(4, 0, 0)
 static GtkWidget* gVScrollbar;
 static GtkWidget* gHScrollbar;
 static GtkWidget* gTextView;
-#endif
-static GtkWidget* gEntryBox;
+#else
 static GtkWidget* gComboBox;
 static GtkWidget* gListBox;
+static GtkWidget* gSpinBox;
 static GtkWidget* gTreeViewWidget;
+#endif
+static GtkWidget* gEntryBox;
 
 namespace
 {
