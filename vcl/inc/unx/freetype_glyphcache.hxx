@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <sal/config.h>
+
 #include <vcl/glyphitem.hxx>
 
 #include <font/PhysicalFontFace.hxx>
