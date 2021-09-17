@@ -18,27 +18,30 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
+#include <sal/log.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <tools/long.hxx>
+
 #include <vcl/settings.hxx>
 
-
-#include <quartz/ctfonts.hxx>
+#include <PhysicalFontCollection.hxx>
+#include <fontattributes.hxx>
+#include <fontinstance.hxx>
 #include <impfont.hxx>
+#include <impglyphitem.hxx>
+#include <sallayout.hxx>
+
 #ifdef MACOSX
 #include <osx/saldata.hxx>
 #include <osx/salinst.h>
 #endif
-#include <fontinstance.hxx>
-#include <fontattributes.hxx>
-#include <impglyphitem.hxx>
-#include <PhysicalFontCollection.hxx>
+
+#include <quartz/ctfonts.hxx>
 #include <quartz/salgdi.h>
 #include <quartz/utils.h>
-#include <sallayout.hxx>
+
 #include <hb-coretext.h>
 
 static double toRadian(int nDegree)

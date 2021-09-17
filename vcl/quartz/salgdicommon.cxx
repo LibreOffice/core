@@ -18,19 +18,16 @@
  */
 
 #include <sal/config.h>
+
+#include <sal/types.h>
 #include <sal/log.hxx>
-
-#include <cassert>
-#include <cstring>
-#include <numeric>
-
+#include <osl/endian.h>
+#include <osl/file.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <osl/endian.h>
-#include <osl/file.hxx>
-#include <sal/types.h>
 #include <tools/long.hxx>
+
 #include <vcl/sysdata.hxx>
 
 #include <fontsubset.hxx>
@@ -43,6 +40,10 @@
 #include "saldatabasic.hxx"
 #endif
 #include <sft.hxx>
+
+#include <cassert>
+#include <cstring>
+#include <numeric>
 
 using namespace vcl;
 

@@ -20,17 +20,17 @@
 #pragma once
 
 #include <sal/config.h>
+#include <config_cairo_canvas.h>
+
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <vcl/outdev.hxx>
 
+#include "SalGradient.hxx"
+#include "WidgetDrawInterface.hxx"
 #include "impfontmetricdata.hxx"
 #include "salgdiimpl.hxx"
 #include "sallayout.hxx"
-#include "SalGradient.hxx"
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include "WidgetDrawInterface.hxx"
-
-#include <config_cairo_canvas.h>
 
 #include <map>
 #include <vector>
