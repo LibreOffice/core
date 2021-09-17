@@ -19,15 +19,16 @@
 
 #pragma once
 
-#include <optional>
-#include <unotools/syslocale.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 #include <i18nlangtag/lang.h>
+#include <i18nutil/transliteration.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/nativenumberwrapper.hxx>
-#include <com/sun/star/uno/Reference.hxx>
-#include <i18nutil/transliteration.hxx>
+#include <unotools/charclass.hxx>
+#include <optional>
 
 /*
     On demand instantiation and initialization of several i18n wrappers,
@@ -276,6 +277,73 @@ public:
             moNativeNumber.emplace(m_xContext);
         return &*moNativeNumber;
     }
+};
+
+/** @short
+    SvNumberformatter uses it upon switching locales.
+
+    @descr
+    Avoids reloading and analysing of locale data again and again.
+
+    @ATTENTION
+    If the default ctor is used the init() method MUST be called before
+    accessing any locale data.
+ */
+
+class OnDemandCharClass
+{
+    std::optional<CharClass> moCharClass1;
+    std::optional<CharClass> moCharClass2;
+    int nCurrent; // -1 == uninitialised, 0 == class1, 1 == class2
+
+public:
+    OnDemandCharClass()
+        : nCurrent(-1)
+    {
+    }
+
+    void changeLocale(const css::uno::Reference<css::uno::XComponentContext>& xContext,
+                      const LanguageTag& rLanguageTag)
+    {
+        // check for existing match
+        if (moCharClass1 && moCharClass1->getLanguageTag() == rLanguageTag)
+        {
+            nCurrent = 0;
+            return;
+        }
+        if (moCharClass2 && moCharClass2->getLanguageTag() == rLanguageTag)
+        {
+            nCurrent = 1;
+            return;
+        }
+        // no match - update one the current entries
+        if (nCurrent == -1 || nCurrent == 1)
+        {
+            moCharClass1.emplace(xContext, rLanguageTag);
+            nCurrent = 0;
+        }
+        else
+        {
+            moCharClass2.emplace(xContext, rLanguageTag);
+            nCurrent = 1;
+        }
+    }
+
+    const CharClass* get() const
+    {
+        switch (nCurrent)
+        {
+            case 0:
+                return &*moCharClass1;
+            case 1:
+                return &*moCharClass2;
+            default:
+                assert(false);
+                return nullptr;
+        }
+    }
+    const CharClass* operator->() const { return get(); }
+    const CharClass& operator*() const { return *get(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -303,7 +303,7 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
     nDefaultSystemCurrencyFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
 
     maLanguageTag.reset( eLang );
-    oCharClass.emplace( m_xContext, maLanguageTag );
+    xCharClass.changeLocale( m_xContext, maLanguageTag );
     xLocaleData.init( m_xContext, maLanguageTag );
     xCalendar.init( m_xContext, maLanguageTag.getLocale() );
     xTransliteration.init( m_xContext, eLang );
@@ -338,7 +338,7 @@ void SvNumberFormatter::ChangeIntl(LanguageType eLnge)
     ActLnge = eLnge;
 
     maLanguageTag.reset( eLnge );
-    oCharClass.emplace( m_xContext, maLanguageTag );
+    xCharClass.changeLocale( m_xContext, maLanguageTag );
     xLocaleData.changeLocale( maLanguageTag );
     xCalendar.changeLocale( maLanguageTag.getLocale() );
     xTransliteration.changeLocale( eLnge );
@@ -532,7 +532,7 @@ const ::utl::TransliterationWrapper* SvNumberFormatter::GetTransliteration() con
     return xTransliteration.get();
 }
 
-const CharClass* SvNumberFormatter::GetCharClass() const { return oCharClass ? &*oCharClass : nullptr; }
+const CharClass* SvNumberFormatter::GetCharClass() const { return xCharClass.get(); }
 
 const LocaleDataWrapper* SvNumberFormatter::GetLocaleData() const { return xLocaleData.get(); }
 
@@ -1846,7 +1846,7 @@ bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
     eLnge = ActLnge;
     bool bEnglish = (eLnge == LANGUAGE_ENGLISH_US);
 
-    OUString aFormatStringUpper( oCharClass->uppercase( sFormatString ) );
+    OUString aFormatStringUpper( xCharClass->uppercase( sFormatString ) );
     sal_uInt32 nCLOffset = ImpGenerateCL( eLnge );
     sal_uInt32 nKey = ImpIsEntry( aFormatStringUpper, nCLOffset, eLnge );
     if ( nKey != NUMBERFORMAT_ENTRY_NOT_FOUND )

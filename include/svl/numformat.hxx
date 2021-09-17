@@ -563,7 +563,7 @@ private:
     std::unique_ptr<SvNumberFormatTable> pFormatTable; // For the UI dialog
     std::unique_ptr<SvNumberFormatterIndexTable>
         pMergeTable; // List of indices for merging two formatters
-    std::optional<CharClass> oCharClass; // CharacterClassification
+    OnDemandCharClass xCharClass; // CharacterClassification
     OnDemandLocaleDataWrapper xLocaleData; // LocaleData switched between SYSTEM, ENGLISH and other
     OnDemandTransliterationWrapper xTransliteration; // Transliteration loaded on demand
     OnDemandCalendarWrapper xCalendar; // Calendar loaded on demand
