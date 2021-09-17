@@ -39,6 +39,30 @@
       },
       "revId": "dac29c278531d5474289eb54aa03987c4958ac83",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a59ca551_d2b0d097",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 899,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-17T13:13:42Z",
+      "side": 1,
+      "message": "Fixed here\n   https://gerrit.libreoffice.org/c/core/+/122250",
+      "parentUuid": "0fd6f367_527bedcf",
+      "range": {
+        "startLine": 898,
+        "startChar": 4,
+        "endLine": 899,
+        "endChar": 56
+      },
+      "revId": "dac29c278531d5474289eb54aa03987c4958ac83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
