@@ -31,8 +31,9 @@
 #include <osl/thread.h>
 #include <osl/nlsupport.h>
 
-#include <vector>
 #include <memory>
+#include <optional>
+#include <vector>
 
 using namespace osl;
 using namespace com::sun::star;
