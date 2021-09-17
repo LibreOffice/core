@@ -2514,7 +2514,9 @@ protected:
     GtkWidget* m_pMouseEventBox;
     GtkInstanceBuilder* m_pBuilder;
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     DECL_LINK(async_drag_cancel, void*, void);
+#endif
 
     bool IsFirstFreeze() const { return m_nFreezeCount == 0; }
     bool IsLastThaw() const { return m_nFreezeCount == 1; }
@@ -4382,9 +4384,9 @@ public:
 
 }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 IMPL_LINK(GtkInstanceWidget, async_drag_cancel, void*, arg, void)
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
     m_pDragCancelEvent = nullptr;
     GdkDragContext* context = static_cast<GdkDragContext*>(arg);
 
@@ -4396,10 +4398,8 @@ IMPL_LINK(GtkInstanceWidget, async_drag_cancel, void*, arg, void)
     g_signal_emit_by_name(context, "cancel", 0, GDK_DRAG_CANCEL_USER_CANCELLED);
 
     g_object_unref(context);
-#else
-    (void)arg;
-#endif
 }
+#endif
 
 namespace
 {
