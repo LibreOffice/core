@@ -102,19 +102,10 @@ published interface XSimpleRegistry: com::sun::star::uno::XInterface
     boolean isReadOnly()
             raises( com::sun::star::registry::InvalidRegistryException );
 
-    /** DEPRECATED: this method lacks a registry key (better than a URL).
+    /** merges a registry under the specified key.
 
-        merges a registry under the specified key.
-
-        <p>If the key does not exist it will be created. Existing
-        keys will be overridden from keys of registry specified by
-        <var>aUrl</var>.
-
-        @throws InvalidRegistryException
-        if the registry is not open.
-
-        @throws MergeConflictException
-        if any differences occur during merging
+        @deprecated The merge functionality is deprecated and not implemented.  Implementations will
+        throw a com::sun::star::RuntimeException.
     */
     void mergeKey( [in] string aKeyName,
              [in] string aUrl )
