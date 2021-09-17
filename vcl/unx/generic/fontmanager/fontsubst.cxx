@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <sal/config.h>
+
 #include <unx/geninst.h>
 #include <font/GlyphFallbackFontSubstitution.hxx>
 #include <unx/fontmanager.hxx>
