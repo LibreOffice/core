@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b08491ca_fa9ded1a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-09-17T07:37:42Z",
+      "side": 1,
+      "message": "Looks good to me. Quite a lot comments talking about \"glue points\" and I\u0027m afraid of developers taking this term in the future. OTOH, changing all the comments is maybe too much.",
+      "revId": "898f034bb2112377566cd4d334db0fd67107dfbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
