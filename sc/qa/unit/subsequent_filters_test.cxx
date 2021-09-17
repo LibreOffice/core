@@ -1854,25 +1854,10 @@ void ScFiltersTest::testPassword_Impl(std::u16string_view aFileNameBase)
     createFileURL(aFileNameBase, aFileExtension, aFileName);
     OUString aFilterType(getFileFormats()[0].pTypeName, strlen(getFileFormats()[0].pTypeName), RTL_TEXTENCODING_UTF8);
 
-    auto pFilter = std::make_shared<SfxFilter>(
-        aFilterName,
-        OUString(), getFileFormats()[0].nFormatType,
-        SotClipboardFormatId::STARCALC_8,
-        aFilterType, OUString(),
-        OUString(), "private:factory/scalc*" );
-    pFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
-
-    ScDocShellRef xDocSh = new ScDocShell;
-    SfxMedium* pMedium = new SfxMedium(aFileName, StreamMode::STD_READWRITE);
-    SfxItemSet* pSet = pMedium->GetItemSet();
-    pSet->Put(SfxStringItem(SID_PASSWORD, "test"));
-    pMedium->SetFilter(pFilter);
-    if (!xDocSh->DoLoad(pMedium))
-    {
-        xDocSh->DoClose();
-        // load failed.
-        xDocSh.clear();
-    }
+    SfxFilterFlags nFormatType = getFileFormats()[0].nFormatType;
+    OUString aPass("test");
+    ScDocShellRef xDocSh = ScBootstrapFixture::load(aFileName, aFilterName, OUString(), aFilterType,
+        nFormatType, SotClipboardFormatId::STARCALC_8, SOFFICE_FILEFORMAT_CURRENT, &aPass);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load password.ods", xDocSh.is());
     xDocSh->DoClose();
