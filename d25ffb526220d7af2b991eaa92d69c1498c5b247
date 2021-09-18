@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "551a000f_20e47086",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-18T04:34:02Z",
+      "side": 1,
+      "message": "Also, I removed the pch.",
+      "revId": "d25ffb526220d7af2b991eaa92d69c1498c5b247",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
