@@ -32,8 +32,7 @@
   <menu:menuitem menu:id=".uno:InsertCell"/>
   <menu:menuitem menu:id=".uno:DeleteCell"/>
   <menu:menuitem menu:id=".uno:Delete"/>
-  <menu:menuitem menu:id=".uno:MergeCells"/>
-  <menu:menuitem menu:id=".uno:SplitCell"/>
+  <menu:menuitem menu:id=".uno:ToggleMergeCells"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:FormatPaintbrush"/>
   <menu:menuitem menu:id=".uno:ResetAttributes"/>
