@@ -34,6 +34,24 @@
       "parentUuid": "4e66dcc6_207417dc",
       "revId": "bab91e64684571f5572124bf4ea58849f769a814",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f59bba2d_2bcbc90d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-18T18:46:29Z",
+      "side": 1,
+      "message": "\u003e But I have no good idea for IsNear()\n\nIsNear I would leave alone, it takes 2 params, and the types are different, so it is harder to get it\u0027s usage wrong.\n\nAnd whether a point is near a rectangle or a rectangle is near a point is somewhat symmetric anyhow.",
+      "parentUuid": "81353d64_0b8ae380",
+      "revId": "bab91e64684571f5572124bf4ea58849f769a814",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
