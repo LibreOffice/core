@@ -16,6 +16,24 @@
       "message": "I don\u0027t quite understand the comment. You seem to not delete the check below? Is this a TODO?",
       "revId": "9a3250f08f3d5a9fddbdebd592d9e3fbbf1e034b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f79b7b2a_4847c5f9",
+        "filename": "vcl/win/gdi/salvd.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-09-18T15:34:52Z",
+      "side": 1,
+      "message": "mpGraphics contains an HDC and stores various original values of it, if they are changed. The original values are reset on deinit, which is explicitly triggered by either the WinSalGraphics destructor or an empty HDC. Formerly it was done by explicit DeInitGraphics everywhere, which I made private.\n\nThe HDC of the WinSalVirtualDevice (svd) can either be foreign, so not owned by the svd, or created by the svd, indicated by !mbForeignDC and just in that case must be deleted.\n\nThe WinSalGraphics never \"owns\" a HDC, just gets a \"lease\".\n\nThe general problem with any kind of HDC sharing, is that you unfortunately can\u0027t share, if you don\u0027t want to restore the old values on every call. Maybe it would be generally better to pass HDCs as a unique_ptr with move, but that seems unpractical too.\n\nSo with that knowledge, how to amend the comment?",
+      "parentUuid": "fdce5891_9b64e51c",
+      "revId": "9a3250f08f3d5a9fddbdebd592d9e3fbbf1e034b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
