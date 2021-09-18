@@ -509,11 +509,11 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
 
                     // Link FLY and DRAW formats, so it becomes a text box
                     SdrObject* pNewObj = pDest->FindRealSdrObject();
-                    if (bIsGroupObj && pDest->FindRealSdrObject()
-                        && pDest->FindRealSdrObject()->getChildrenOfSdrObject()
-                        && (pDest->FindRealSdrObject()->getChildrenOfSdrObject()->GetObjCount() > it)
-                        && pDest->FindRealSdrObject()->getChildrenOfSdrObject()->GetObj(it))
-                        pNewObj = pDest->FindRealSdrObject()->getChildrenOfSdrObject()->GetObj(it);
+                    if (bIsGroupObj && pNewObj
+                        && pNewObj->getChildrenOfSdrObject()
+                        && (pNewObj->getChildrenOfSdrObject()->GetObjCount() > it)
+                        && pNewObj->getChildrenOfSdrObject()->GetObj(it))
+                        pNewObj = pNewObj->getChildrenOfSdrObject()->GetObj(it);
                     pTextBoxNd->AddTextBox(pNewObj, pDestTextBox);
                     pDestTextBox->SetOtherTextBoxFormat(pTextBoxNd);
                 }
