@@ -821,7 +821,7 @@ void LwpConnectedCellLayout::Read()
 
     m_nRealrowspan = cnumrows;
     if (utl::ConfigManager::IsFuzzing())
-        m_nRealrowspan = std::min<sal_uInt16>(m_nRealrowspan, SAL_MAX_INT16);
+        m_nRealrowspan = std::min<sal_uInt16>(m_nRealrowspan, 128);
     m_nRealcolspan = cnumcols;
 
     m_pObjStrm->SkipExtra();
