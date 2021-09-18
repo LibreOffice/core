@@ -24,6 +24,8 @@ public:
     static OUString splitAtLastToken(const OUString& rSrc, sal_Unicode aToken, OUString& rRight);
     static bool fileExists(const OUString& rBaseURL);
     static bool dirExists(const OUString& rDirURL);
+
+    // all rDirs and rFiles strings are already URI encoded, so safe for concat
     static void scanDirsAndFiles(const OUString& rDirURL, std::set<OUString>& rDirs,
                                  std::set<std::pair<OUString, OUString>>& rFiles);
     static bool deleteDirRecursively(const OUString& rDirURL);

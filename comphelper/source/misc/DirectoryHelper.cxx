@@ -11,6 +11,7 @@
 
 #include <sal/config.h>
 #include <osl/file.hxx>
+#include <rtl/uri.hxx>
 
 #include <memory>
 
@@ -77,6 +78,11 @@ void DirectoryHelper::scanDirsAndFiles(const OUString& rDirURL, std::set<OUStrin
     if (osl::FileBase::E_None != aDirectory.open())
         return;
 
+    auto lcl_encodeUriSegment = [](OUString const& rPath) {
+        return rtl::Uri::encode(rPath, rtl_UriCharClassUricNoSlash, rtl_UriEncodeIgnoreEscapes,
+                                RTL_TEXTENCODING_UTF8);
+    };
+
     osl::DirectoryItem aDirectoryItem;
 
     while (osl::FileBase::E_None == aDirectory.getNextItem(aDirectoryItem))
@@ -92,7 +98,7 @@ void DirectoryHelper::scanDirsAndFiles(const OUString& rDirURL, std::set<OUStrin
 
                 if (!aFileName.isEmpty())
                 {
-                    rDirs.insert(aFileName);
+                    rDirs.insert(lcl_encodeUriSegment(aFileName));
                 }
             }
             else if (aFileStatus.isRegular())
@@ -103,7 +109,8 @@ void DirectoryHelper::scanDirsAndFiles(const OUString& rDirURL, std::set<OUStrin
 
                 if (!aFileName.isEmpty())
                 {
-                    rFiles.insert(std::pair<OUString, OUString>(aFileName, aExtension));
+                    rFiles.insert(std::pair<OUString, OUString>(lcl_encodeUriSegment(aFileName),
+                                                                lcl_encodeUriSegment(aExtension)));
                 }
             }
         }
