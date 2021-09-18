@@ -1039,6 +1039,12 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
     if( pObjSiz )
         m_pDrawEditEngine->SetPaperSize( *pObjSiz );
 
+    if (m_bFuzzing && aString.getLength() > 1024)
+    {
+        SAL_WARN("sw.ww8", "Truncating long EditEngine strings when fuzzing for performance");
+        aString = aString.copy(0, 1024);
+    }
+
     const OUString aOrigString(aString);
     if( bTextWasRead )
     {
