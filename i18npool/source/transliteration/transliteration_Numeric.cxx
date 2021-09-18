@@ -119,7 +119,7 @@ transliteration_Numeric::transliterateImpl( const OUString& inStr, sal_Int32 sta
     if (tableSize)
         return transliterateBullet( inStr, startPos, nCount, pOffset);
     else
-        return rtl::Reference<NativeNumberSupplierService>(new NativeNumberSupplierService())->getNativeNumberString( inStr.copy(startPos, nCount), aLocale, nNativeNumberMode, pOffset );
+        return rtl::Reference(new NativeNumberSupplierService())->getNativeNumberString( inStr.copy(startPos, nCount), aLocale, nNativeNumberMode, pOffset );
 }
 
 sal_Unicode SAL_CALL
@@ -134,7 +134,7 @@ transliteration_Numeric::transliterateChar2Char( sal_Unicode inChar )
         return inChar;
     }
     else
-        return rtl::Reference<NativeNumberSupplierService>(new NativeNumberSupplierService)->getNativeNumberChar( inChar, aLocale, nNativeNumberMode );
+        return NativeNumberSupplierService::getNativeNumberChar( inChar, aLocale, nNativeNumberMode );
 }
 
 }

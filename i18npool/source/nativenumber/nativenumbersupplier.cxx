@@ -634,7 +634,7 @@ OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNum
                                                             Sequence<sal_Int32>* pOffset,
                                                             const OUString& rNativeNumberParams)
 {
-    if (!isValidNatNum(rLocale, nNativeNumberMode))
+    if (!isValidNatNumImpl(rLocale, nNativeNumberMode))
         return aNumberString;
 
     if (nNativeNumberMode == NativeNumberMode::NATNUM12)
@@ -806,7 +806,7 @@ sal_Unicode NativeNumberSupplierService::getNativeNumberChar( const sal_Unicode 
     if (!isNumber(inChar))
         return inChar;
 
-    if (!isValidNatNum(rLocale, nNativeNumberMode))
+    if (!isValidNatNumImpl(rLocale, nNativeNumberMode))
         return inChar;
 
     sal_Int16 langnum = getLanguageNumber(rLocale);
@@ -837,7 +837,7 @@ sal_Unicode NativeNumberSupplierService::getNativeNumberChar( const sal_Unicode 
     return inChar;
 }
 
-sal_Bool SAL_CALL NativeNumberSupplierService::isValidNatNum( const Locale& rLocale, sal_Int16 nNativeNumberMode )
+bool NativeNumberSupplierService::isValidNatNumImpl( const Locale& rLocale, sal_Int16 nNativeNumberMode )
 {
     sal_Int16 langnum = getLanguageNumber(rLocale);
 
