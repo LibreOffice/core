@@ -33,6 +33,24 @@
       "message": "Interesting, don\u0027t we abuse the TRUE in many places? do we really need the TRUE ~everywhere.",
       "revId": "43f8b79627f5a3579aa4f64ce38fe15a96a046c5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fc4be12_ade4e57b",
+        "filename": "vcl/inc/win/salgdi.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-09-18T16:45:39Z",
+      "side": 1,
+      "message": "? I just copied the SelectPalette interface. Just one call uses FALSE and I have no idea why.",
+      "parentUuid": "7c4c400c_74daff15",
+      "revId": "43f8b79627f5a3579aa4f64ce38fe15a96a046c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
