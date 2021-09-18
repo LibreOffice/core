@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdce5891_9b64e51c",
+        "filename": "vcl/win/gdi/salvd.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-18T04:23:15Z",
+      "side": 1,
+      "message": "I don\u0027t quite understand the comment. You seem to not delete the check below? Is this a TODO?",
+      "revId": "9a3250f08f3d5a9fddbdebd592d9e3fbbf1e034b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
