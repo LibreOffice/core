@@ -44,8 +44,8 @@ public:
         virtual OUString SAL_CALL getNativeNumberString( const OUString& aNumberString,
                 const css::lang::Locale& aLocale, sal_Int16 nNativeNumberMode ) override;
 
-        virtual sal_Bool SAL_CALL isValidNatNum( const css::lang::Locale& aLocale,
-                sal_Int16 nNativeNumberMode ) override;
+        virtual sal_Bool SAL_CALL isValidNatNum( const css::lang::Locale& rLocale,
+                sal_Int16 nNativeNumberMode ) override { return isValidNatNumImpl(rLocale, nNativeNumberMode); }
 
         virtual css::i18n::NativeNumberXmlAttributes SAL_CALL convertToXmlAttributes(
                 const css::lang::Locale& aLocale, sal_Int16 nNativeNumberMode ) override;
@@ -71,10 +71,12 @@ public:
                                        css::uno::Sequence<sal_Int32>* pOffset,
                                        const OUString& rNativeNumberParams = OUString());
         /// @throws css::uno::RuntimeException
-        sal_Unicode getNativeNumberChar( const sal_Unicode inChar,
+        static sal_Unicode getNativeNumberChar( const sal_Unicode inChar,
                 const css::lang::Locale& aLocale, sal_Int16 nNativeNumberMode ) ;
 
 private:
+        static bool isValidNatNumImpl( const css::lang::Locale& aLocale,
+                sal_Int16 nNativeNumberMode );
         css::lang::Locale aLocale;
         mutable css::uno::Reference< css::i18n::XCharacterClassification > xCharClass;
 };
