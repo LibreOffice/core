@@ -16,6 +16,24 @@
       "message": "if rectA.IsInside( rectB ) means \u0027rectB is inside rectA\u0027\n\nHasInside doesn\u0027t make it any clearer for me.\n\nPerhaps IsInside -\u003e Contains / Surrounds / Encloses / Bounds ? ",
       "revId": "bab91e64684571f5572124bf4ea58849f769a814",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81353d64_0b8ae380",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-09-18T17:22:46Z",
+      "side": 1,
+      "message": "\u0027if( rectA.HasInside( rectB ))\u0027 at least reads in the proper order, so I see it as an improvement, but yeah, it could improved further. Contains() seems to be the usual name. How would you name IsOver() and IsNear() then? I guess IsOver() could become Overlaps(). But I have no good idea for IsNear(), the most logical to me would be continuining to use that name, just in the proper order, but that\u0027d be a backwards compatibility problem that could make e.g. backporting problematic, and it\u0027d also make tools class depend on a Writer class.",
+      "parentUuid": "4e66dcc6_207417dc",
+      "revId": "bab91e64684571f5572124bf4ea58849f769a814",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
