@@ -509,7 +509,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
 
                     // Link FLY and DRAW formats, so it becomes a text box
                     SdrObject* pNewObj = pDest->FindRealSdrObject();
-                    if (bIsGroupObj && pDest && pDest->FindRealSdrObject()
+                    if (bIsGroupObj && pDest->FindRealSdrObject()
                         && pDest->FindRealSdrObject()->getChildrenOfSdrObject()
                         && (pDest->FindRealSdrObject()->getChildrenOfSdrObject()->GetObjCount() > it)
                         && pDest->FindRealSdrObject()->getChildrenOfSdrObject()->GetObj(it))
