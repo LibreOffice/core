@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41caf371_08c3daec",
+        "filename": "sw/source/core/doc/DocumentLayoutManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-18T11:51:06Z",
+      "side": 1,
+      "message": "looks like this whole thing could be simplified to\n\n    if (bIsGroupObj \u0026\u0026 pNewObj-\u003egetChildrenOfSdrObject()\n        \u0026\u0026 (pNewObj-\u003egetChildrenOfSdrObject()-\u003eGetObjCount() \u003e it)\n        \u0026\u0026 pNewObj-\u003egetChildrenOfSdrObject()-\u003eGetObj(it))\n        pNewObj \u003d pNewObj-\u003egetChildrenOfSdrObject()-\u003eGetObj(it);\nor better\n    if (bIsGroupObj)\n       if (auto pNewObjChildren \u003d -\u003egetChildrenOfSdrObject())\n         if (pNewObjChildren-\u003eGetObjCount() \u003e it)\n             \u0026\u0026 pNewObjChildren-\u003eGetObj(it))\n             pNewObj \u003d pNewObjChildren-\u003eGetObj(it);",
+      "revId": "5be2ea94d271f5a2ac5513b21a5e9daed4cb0509",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
