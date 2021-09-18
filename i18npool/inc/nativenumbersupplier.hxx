@@ -38,7 +38,7 @@ class NativeNumberSupplierService final : public cppu::WeakImplHelper
 >
 {
 public:
-        NativeNumberSupplierService(bool _useOffset = false) : useOffset(_useOffset) {}
+        NativeNumberSupplierService() {}
 
         // Methods
         virtual OUString SAL_CALL getNativeNumberString( const OUString& aNumberString,
@@ -68,7 +68,7 @@ public:
         OUString getNativeNumberString(const OUString& rNumberString,
                                        const css::lang::Locale& rLocale,
                                        sal_Int16 nNativeNumberMode,
-                                       css::uno::Sequence<sal_Int32>& offset,
+                                       css::uno::Sequence<sal_Int32>* pOffset,
                                        const OUString& rNativeNumberParams = OUString());
         /// @throws css::uno::RuntimeException
         sal_Unicode getNativeNumberChar( const sal_Unicode inChar,
@@ -76,7 +76,6 @@ public:
 
 private:
         css::lang::Locale aLocale;
-        bool useOffset;
         mutable css::uno::Reference< css::i18n::XCharacterClassification > xCharClass;
 };
 

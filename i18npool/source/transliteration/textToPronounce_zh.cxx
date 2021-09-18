@@ -62,7 +62,8 @@ TextToPronounce_zh::foldingImpl(const OUString & inStr, sal_Int32 startPos,
     if (startPos + nCount > inStr.getLength())
         nCount = inStr.getLength() - startPos;
 
-    (*pOffset)[0] = 0;
+    if (pOffset)
+        (*pOffset)[0] = 0;
     for (sal_Int32 i = 0; i < nCount; i++) {
         OUString pron(getPronounce(chArr[i]));
         sb.append(pron);
