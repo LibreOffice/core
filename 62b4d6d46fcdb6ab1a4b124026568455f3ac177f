@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c84fc87c_9070e400",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-18T13:16:58Z",
+      "side": 1,
+      "message": "Hum. Its parent changes are all merged, bit this shows merge conflict. It needs rebasing.",
+      "revId": "62b4d6d46fcdb6ab1a4b124026568455f3ac177f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
