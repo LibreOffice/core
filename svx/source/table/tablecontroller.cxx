@@ -435,7 +435,7 @@ void SvxTableController::GetState( SfxItemSet& rSet )
 
     SdrTableObj& rTableObj(*mxTableObj);
     SdrModel& rModel(rTableObj.getSdrModelFromSdrObject());
-    std::unique_ptr<SfxItemSet> xSet;
+    std::optional<SfxItemSet> oSet;
     bool bVertDone(false);
 
     // Iterate over all requested items in the set.
@@ -451,16 +451,16 @@ void SvxTableController::GetState( SfxItemSet& rSet )
                 {
                     if(!bVertDone)
                     {
-                        if (!xSet)
+                        if (!oSet)
                         {
-                            xSet.reset(new SfxItemSet(rModel.GetItemPool()));
-                            MergeAttrFromSelectedCells(*xSet, false);
+                            oSet.emplace(rModel.GetItemPool());
+                            MergeAttrFromSelectedCells(*oSet, false);
                         }
 
                         SdrTextVertAdjust eAdj = SDRTEXTVERTADJUST_BLOCK;
 
-                        if (xSet->GetItemState( SDRATTR_TEXT_VERTADJUST ) != SfxItemState::DONTCARE)
-                            eAdj = xSet->Get(SDRATTR_TEXT_VERTADJUST).GetValue();
+                        if (oSet->GetItemState( SDRATTR_TEXT_VERTADJUST ) != SfxItemState::DONTCARE)
+                            eAdj = oSet->Get(SDRATTR_TEXT_VERTADJUST).GetValue();
 
                         rSet.Put(SfxBoolItem(SID_TABLE_VERT_BOTTOM, eAdj == SDRTEXTVERTADJUST_BOTTOM));
                         rSet.Put(SfxBoolItem(SID_TABLE_VERT_CENTER, eAdj == SDRTEXTVERTADJUST_CENTER));
