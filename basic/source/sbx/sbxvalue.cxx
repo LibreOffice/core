@@ -137,7 +137,8 @@ SbxValue& SbxValue::operator=( const SbxValue& r )
 SbxValue::~SbxValue()
 {
     SetFlag( SbxFlagBits::Write );
-    SbxValue::Clear();
+    // cid#1486004 silence Uncaught exception
+    suppress_fun_call_w_exception(SbxValue::Clear());
 }
 
 void SbxValue::Clear()
