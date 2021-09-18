@@ -26,6 +26,7 @@
 #include <vector>
 
 #include <editeng/outlobj.hxx>
+#include <svl/itemset.hxx>
 #include <svl/undo.hxx>
 #include <svl/style.hxx>
 #include <tools/gen.hxx>
@@ -144,8 +145,8 @@ protected:
 class SVXCORE_DLLPUBLIC SdrUndoAttrObj : public SdrUndoObj
 {
 protected:
-    std::unique_ptr<SfxItemSet> pUndoSet;
-    std::unique_ptr<SfxItemSet> pRedoSet;
+    std::optional<SfxItemSet> moUndoSet;
+    std::optional<SfxItemSet> moRedoSet;
 
     // FIXME: Or should we better remember the StyleSheetNames?
     rtl::Reference< SfxStyleSheetBase > mxUndoStyleSheet;

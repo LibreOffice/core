@@ -268,7 +268,7 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSave
     if(bIsGroup && !bIs3DScene)
         return;
 
-    pUndoSet.reset( new SfxItemSet(pObj->GetMergedItemSet()) );
+    moUndoSet.emplace( pObj->GetMergedItemSet() );
 
     if(bStyleSheet)
         mxUndoStyleSheet = pObj->GetStyleSheet();
@@ -283,8 +283,8 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSave
 
 SdrUndoAttrObj::~SdrUndoAttrObj()
 {
-    pUndoSet.reset();
-    pRedoSet.reset();
+    moUndoSet.reset();
+    moRedoSet.reset();
     pUndoGroup.reset();
     pTextUndo.reset();
     pTextRedo.reset();
@@ -304,7 +304,7 @@ void SdrUndoAttrObj::Undo()
         {
             bHaveToTakeRedoSet = false;
 
-            pRedoSet.reset( new SfxItemSet(pObj->GetMergedItemSet()) );
+            moRedoSet.emplace( pObj->GetMergedItemSet() );
 
             if(bStyleSheet)
                 mxRedoStyleSheet = pObj->GetStyleSheet();
@@ -346,7 +346,7 @@ void SdrUndoAttrObj::Undo()
         // SdrObjCustomShape::NbcSetSnapRect needs logic instead of snap rect
         const tools::Rectangle aLogicRect = pObj->GetLogicRect();
 
-        if(pUndoSet)
+        if(moUndoSet)
         {
             if(dynamic_cast<const SdrCaptionObj*>( pObj) !=  nullptr)
             {
@@ -355,12 +355,12 @@ void SdrUndoAttrObj::Undo()
                 // vertical text is changed. When clearing only set items it's
                 // slower, but safer regarding such information (it's not changed
                 // usually)
-                SfxWhichIter aIter(*pUndoSet);
+                SfxWhichIter aIter(*moUndoSet);
                 sal_uInt16 nWhich(aIter.FirstWhich());
 
                 while(nWhich)
                 {
-                    if(SfxItemState::SET != pUndoSet->GetItemState(nWhich, false))
+                    if(SfxItemState::SET != moUndoSet->GetItemState(nWhich, false))
                     {
                         pObj->ClearMergedItem(nWhich);
                     }
@@ -373,7 +373,7 @@ void SdrUndoAttrObj::Undo()
                 pObj->ClearMergedItem();
             }
 
-            pObj->SetMergedItemSet(*pUndoSet);
+            pObj->SetMergedItemSet(*moUndoSet);
         }
 
         // Restore previous size here when it was changed.
@@ -427,7 +427,7 @@ void SdrUndoAttrObj::Redo()
         const tools::Rectangle aSnapRect = pObj->GetSnapRect();
         const tools::Rectangle aLogicRect = pObj->GetLogicRect();
 
-        if(pRedoSet)
+        if(moRedoSet)
         {
             if(dynamic_cast<const SdrCaptionObj*>( pObj) !=  nullptr)
             {
@@ -436,12 +436,12 @@ void SdrUndoAttrObj::Redo()
                 // vertical text is changed. When clearing only set items it's
                 // slower, but safer regarding such information (it's not changed
                 // usually)
-                SfxWhichIter aIter(*pRedoSet);
+                SfxWhichIter aIter(*moRedoSet);
                 sal_uInt16 nWhich(aIter.FirstWhich());
 
                 while(nWhich)
                 {
-                    if(SfxItemState::SET != pRedoSet->GetItemState(nWhich, false))
+                    if(SfxItemState::SET != moRedoSet->GetItemState(nWhich, false))
                     {
                         pObj->ClearMergedItem(nWhich);
                     }
@@ -454,7 +454,7 @@ void SdrUndoAttrObj::Redo()
                 pObj->ClearMergedItem();
             }
 
-            pObj->SetMergedItemSet(*pRedoSet);
+            pObj->SetMergedItemSet(*moRedoSet);
         }
 
         // Restore previous size here when it was changed.
