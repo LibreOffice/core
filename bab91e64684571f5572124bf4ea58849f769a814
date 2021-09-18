@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e66dcc6_207417dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-18T09:39:32Z",
+      "side": 1,
+      "message": "if rectA.IsInside( rectB ) means \u0027rectB is inside rectA\u0027\n\nHasInside doesn\u0027t make it any clearer for me.\n\nPerhaps IsInside -\u003e Contains / Surrounds / Encloses / Bounds ? ",
+      "revId": "bab91e64684571f5572124bf4ea58849f769a814",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
