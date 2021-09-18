@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1d76ea5_047e8d55",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-18T04:16:54Z",
+      "side": 1,
+      "message": "Looks reasonable.",
+      "revId": "43f8b79627f5a3579aa4f64ce38fe15a96a046c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c4c400c_74daff15",
+        "filename": "vcl/inc/win/salgdi.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-18T04:16:54Z",
+      "side": 1,
+      "message": "Interesting, don\u0027t we abuse the TRUE in many places? do we really need the TRUE ~everywhere.",
+      "revId": "43f8b79627f5a3579aa4f64ce38fe15a96a046c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
