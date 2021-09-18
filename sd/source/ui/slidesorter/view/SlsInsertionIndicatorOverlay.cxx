@@ -69,9 +69,10 @@ InsertionIndicatorOverlay::InsertionIndicatorOverlay (SlideSorter& rSlideSorter)
 {
 }
 
-InsertionIndicatorOverlay::~InsertionIndicatorOverlay() COVERITY_NOEXCEPT_FALSE
+InsertionIndicatorOverlay::~InsertionIndicatorOverlay()
 {
-    Hide();
+    // cid#1491947 silence Uncaught exception
+    suppress_fun_call_w_exception(Hide());
 }
 
 void InsertionIndicatorOverlay::Create (const SdTransferable* pTransferable)
