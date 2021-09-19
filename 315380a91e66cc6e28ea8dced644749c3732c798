@@ -18,6 +18,41 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fab750f8_b3242867",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-19T13:53:41Z",
+      "side": 1,
+      "message": "Thanks Mike, I\u0027ll get this fixed shortly. ",
+      "revId": "315380a91e66cc6e28ea8dced644749c3732c798",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f9ab89e_f100fa66",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-19T13:53:41Z",
+      "side": 1,
+      "message": "Thanks :-)",
+      "parentUuid": "eed2a30f_f2b609d1",
+      "revId": "315380a91e66cc6e28ea8dced644749c3732c798",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "51ce4790_aed3fdae",
@@ -31,6 +66,24 @@
       "writtenOn": "2021-09-19T09:47:07Z",
       "side": 1,
       "message": "I suppose that here we either need at least a comment stating that this ignores the size, or no rename. Because for an unexpecting user, \"Compare\" would mean \"check if anything is different\", and not comparing sizes would seem wrong/unexpected. Thus the old name could be still justified, even without the matching pair.",
+      "revId": "315380a91e66cc6e28ea8dced644749c3732c798",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0a09cf1_45faa202",
+        "filename": "vcl/inc/PhysicalFontFace.hxx",
+        "patchSetId": 24
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-19T13:53:41Z",
+      "side": 1,
+      "message": "That\u0027s a reasonable point, I think you are right! I\u0027ll get that changed shortly.",
+      "parentUuid": "51ce4790_aed3fdae",
       "revId": "315380a91e66cc6e28ea8dced644749c3732c798",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
