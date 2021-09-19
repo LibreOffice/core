@@ -531,7 +531,7 @@ lcl_UpdateLinkType(SwSection & rSection, bool const bLinkUpdateAlways)
 static void
 lcl_UpdateSection(SwSectionFormat *const pFormat,
     std::unique_ptr<SwSectionData> const& pSectionData,
-    std::unique_ptr<SfxItemSet> const& pItemSet,
+    std::optional<SfxItemSet> const& oItemSet,
     bool const bLinkModeChanged, bool const bLinkUpdateAlways = true)
 {
     if (!pFormat)
@@ -546,7 +546,7 @@ lcl_UpdateSection(SwSectionFormat *const pFormat,
         if (rFormats[i]->GetSection()->GetSectionName()
                 == rSection.GetSectionName())
         {
-            pDoc->UpdateSection(i, *pSectionData, pItemSet.get(),
+            pDoc->UpdateSection(i, *pSectionData, oItemSet ? &*oItemSet : nullptr,
                     pDoc->IsInReading());
             {
                 // temporarily remove actions to allow cursor update
@@ -583,7 +583,7 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
 
     OUString const*const pPropertyNames = rPropertyNames.getConstArray();
     uno::Any const*const pValues = rValues.getConstArray();
-    std::unique_ptr<SfxItemSet> pItemSet;
+    std::optional<SfxItemSet> oItemSet;
     bool bLinkModeChanged = false;
     bool bLinkMode = false;
 
@@ -829,10 +829,10 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
                 if (pFormat)
                 {
                     const SfxItemSet& rOldAttrSet = pFormat->GetAttrSet();
-                    pItemSet.reset( new SfxItemSet(*rOldAttrSet.GetPool(), pEntry->nWID, pEntry->nWID));
-                    pItemSet->Put(rOldAttrSet);
+                    oItemSet.emplace(*rOldAttrSet.GetPool(), pEntry->nWID, pEntry->nWID);
+                    oItemSet->Put(rOldAttrSet);
                     m_rPropSet.setPropertyValue(*pEntry,
-                            pValues[nProperty], *pItemSet);
+                            pValues[nProperty], *oItemSet);
                 }
                 else
                 {
@@ -918,7 +918,7 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
         }
     }
 
-    lcl_UpdateSection(pFormat, pSectionData, pItemSet, bLinkModeChanged,
+    lcl_UpdateSection(pFormat, pSectionData, oItemSet, bLinkModeChanged,
         bLinkMode);
 }
 
@@ -1469,7 +1469,7 @@ SwXTextSection::setPropertyToDefault(const OUString& rPropertyName)
     std::unique_ptr<SwSectionData> const pSectionData(
         pFormat ? new SwSectionData(*pFormat->GetSection()) : nullptr);
 
-    std::unique_ptr<SfxItemSet> pNewAttrSet;
+    std::optional<SfxItemSet> oNewAttrSet;
     bool bLinkModeChanged = false;
 
     switch (pEntry->nWID)
@@ -1561,8 +1561,8 @@ SwXTextSection::setPropertyToDefault(const OUString& rPropertyName)
                 if (pFormat)
                 {
                     const SfxItemSet& rOldAttrSet = pFormat->GetAttrSet();
-                    pNewAttrSet.reset( new SfxItemSet(*rOldAttrSet.GetPool(), pEntry->nWID, pEntry->nWID));
-                    pNewAttrSet->ClearItem(pEntry->nWID);
+                    oNewAttrSet.emplace(*rOldAttrSet.GetPool(), pEntry->nWID, pEntry->nWID);
+                    oNewAttrSet->ClearItem(pEntry->nWID);
                 }
                 else
                 {
@@ -1579,7 +1579,7 @@ SwXTextSection::setPropertyToDefault(const OUString& rPropertyName)
         }
     }
 
-    lcl_UpdateSection(pFormat, pSectionData, pNewAttrSet, bLinkModeChanged);
+    lcl_UpdateSection(pFormat, pSectionData, oNewAttrSet, bLinkModeChanged);
 }
 
 uno::Any SAL_CALL
