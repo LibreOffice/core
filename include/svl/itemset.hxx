@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVL_ITEMSET_HXX
-#define INCLUDED_SVL_ITEMSET_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -39,10 +38,10 @@ class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
 
     SfxItemPool*      m_pPool;         ///< pool that stores the items
     const SfxItemSet* m_pParent;       ///< derivation
-    std::unique_ptr<SfxPoolItem const*[]>
-                      m_pItems;        ///< array of items
+    SfxPoolItem const** m_ppItems;     ///< pointer to array of items, we allocate and free this unless m_bItemsFixed==true
     WhichRangesContainer m_pWhichRanges;  ///< array of Which Ranges
     sal_uInt16        m_nCount;        ///< number of items
+    bool              m_bItemsFixed; ///< true if this is a SfxItemSetFixed object
 
 friend class SfxItemPoolCache;
 friend class SfxAllItemSet;
@@ -53,7 +52,7 @@ private:
     SfxItemSet( SfxItemPool & pool, const WhichRangesContainer& wids, std::size_t items );
 
 public:
-    SfxPoolItem const**         GetItems_Impl() const { return m_pItems.get(); }
+    SfxPoolItem const**         GetItems_Impl() const { return m_ppItems; }
 
 private:
     const SfxItemSet&           operator=(const SfxItemSet &) = delete;
@@ -69,6 +68,8 @@ protected:
     /** special constructor for SfxAllItemSet */
     enum class SfxAllItemSetFlag { Flag };
     SfxItemSet( SfxItemPool&, SfxAllItemSetFlag );
+    /** special constructor for SfxItemSetFixed */
+    SfxItemSet( SfxItemPool&, WhichRangesContainer&& ranges, SfxPoolItem const ** ppItems );
 
 public:
     SfxItemSet( const SfxItemSet& );
@@ -223,6 +224,17 @@ private:
     virtual const SfxPoolItem*  PutImpl( const SfxPoolItem&, sal_uInt16 nWhich, bool bPassingOwnership ) override;
 };
 
-#endif // INCLUDED_SVL_ITEMSET_HXX
+
+// Allocate the items array inside the object, to reduce allocation cost.
+//
+template<sal_uInt16 nWID1, sal_uInt16 nWID2>
+class SfxItemSetFixed : public SfxItemSet
+{
+public:
+    SfxItemSetFixed( SfxItemPool& rPool)
+        : SfxItemSet(rPool, WhichRangesContainer(svl::Items_t<nWID1, nWID2>{}), m_aItems) {}
+private:
+    const SfxPoolItem* m_aItems[nWID2 - nWID1 + 1] = {};
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

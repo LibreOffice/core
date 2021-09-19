@@ -39,7 +39,7 @@ class ItemSetPrinter(object):
         for (whichfrom, whichto) in whichranges:
             size += whichto - whichfrom + 1
             whichids += [which for which in range(whichfrom, whichto+1)]
-        return self._iterator(self.value['m_pItems']['_M_t']['_M_t']['_M_head_impl'], size, whichids)
+        return self._iterator(self.value['m_ppItems'], size, whichids)
 
     class _iterator(six.Iterator):
 
