@@ -388,22 +388,22 @@ tools::Long ScColumn::GetNeededSize(
         pDev->SetMapMode( aHMMMode );
         pEngine->SetRefDevice( pDev );
         rDocument.ApplyAsianEditSettings( *pEngine );
-        std::unique_ptr<SfxItemSet> pSet(new SfxItemSet( pEngine->GetEmptyItemSet() ));
+        SfxItemSet aSet( pEngine->GetEmptyItemSet() );
         if ( ScStyleSheet* pPreviewStyle = rDocument.GetPreviewCellStyle( nCol, nRow, nTab ) )
         {
             ScPatternAttr aPreviewPattern( *pPattern );
             aPreviewPattern.SetStyleSheet(pPreviewStyle);
-            aPreviewPattern.FillEditItemSet( pSet.get(), pCondSet );
+            aPreviewPattern.FillEditItemSet( &aSet, pCondSet );
         }
         else
         {
             SfxItemSet* pFontSet = rDocument.GetPreviewFont( nCol, nRow, nTab );
-            pPattern->FillEditItemSet( pSet.get(), pFontSet ? pFontSet : pCondSet );
+            pPattern->FillEditItemSet( &aSet, pFontSet ? pFontSet : pCondSet );
         }
 //          no longer needed, are set with the text (is faster)
 //          pEngine->SetDefaults( pSet );
 
-        if ( pSet->Get(EE_PARA_HYPHENATE).GetValue() ) {
+        if ( aSet.Get(EE_PARA_HYPHENATE).GetValue() ) {
 
             css::uno::Reference<css::linguistic2::XHyphenator> xXHyphenator( LinguMgr::GetHyphenator() );
             pEngine->SetHyphenator( xXHyphenator );
@@ -456,7 +456,7 @@ tools::Long ScColumn::GetNeededSize(
 
         if (aCell.meType == CELLTYPE_EDIT)
         {
-            pEngine->SetTextNewDefaults(*aCell.mpEditText, std::move(pSet));
+            pEngine->SetTextNewDefaults(*aCell.mpEditText, std::move(aSet));
         }
         else
         {
@@ -467,9 +467,9 @@ tools::Long ScColumn::GetNeededSize(
                 rOptions.bFormula);
 
             if (!aString.isEmpty())
-                pEngine->SetTextNewDefaults(aString, std::move(pSet));
+                pEngine->SetTextNewDefaults(aString, std::move(aSet));
             else
-                pEngine->SetDefaults(std::move(pSet));
+                pEngine->SetDefaults(std::move(aSet));
         }
 
         bool bEngineVertical = pEngine->IsEffectivelyVertical();
