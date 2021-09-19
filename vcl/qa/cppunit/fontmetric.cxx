@@ -12,11 +12,17 @@
 
 #include <vcl/metric.hxx>
 
+#include <PhysicalFontFace.hxx>
+#include <fontattributes.hxx>
+
+#include "fontmocks.hxx"
+
 class VclFontMetricTest : public test::BootstrapFixture
 {
 public:
     VclFontMetricTest() : BootstrapFixture(true, false) {}
 
+    void testConstructorFromPhysicalFontFace();
     void testFullstopCenteredFlag();
     void testSpacings();
     void testSlant();
@@ -24,6 +30,7 @@ public:
     void testEqualityOperator();
 
     CPPUNIT_TEST_SUITE(VclFontMetricTest);
+    CPPUNIT_TEST(testConstructorFromPhysicalFontFace);
     CPPUNIT_TEST(testFullstopCenteredFlag);
     CPPUNIT_TEST(testSpacings);
     CPPUNIT_TEST(testSlant);
@@ -31,6 +38,43 @@ public:
     CPPUNIT_TEST(testEqualityOperator);
     CPPUNIT_TEST_SUITE_END();
 };
+
+void VclFontMetricTest::testConstructorFromPhysicalFontFace()
+{
+    const sal_uIntPtr FONTID = 1;
+
+    FontAttributes aFontAttrs;
+    aFontAttrs.SetFamilyName("testfont");
+    aFontAttrs.SetStyleName("testfont");
+    aFontAttrs.SetFamilyType(FAMILY_MODERN);
+    aFontAttrs.SetPitch(PITCH_FIXED);
+    aFontAttrs.SetItalic(ITALIC_OBLIQUE);
+    aFontAttrs.SetWeight(WEIGHT_THIN);
+    aFontAttrs.SetWidthType(WIDTH_CONDENSED);
+    aFontAttrs.SetSymbolFlag(false);
+    aFontAttrs.SetQuality(10);
+
+    TestFontFace aFontFace(aFontAttrs, FONTID);
+    FontMetric aFontMetric(aFontFace);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("ascent", tools::Long(0), aFontMetric.GetAscent());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("descent", tools::Long(0), aFontMetric.GetDescent());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("external leading", tools::Long(0), aFontMetric.GetExternalLeading());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("internal leading", tools::Long(0), aFontMetric.GetInternalLeading());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("line height", tools::Long(0), aFontMetric.GetLineHeight());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("slant", tools::Long(0), aFontMetric.GetSlant());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("bullet offset", tools::Long(0), aFontMetric.GetBulletOffset());
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("family name", aFontMetric.GetFamilyName(), OUString("testfont"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("style name", aFontMetric.GetStyleName(), OUString("testfont"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("family type", aFontMetric.GetFamilyType(), FAMILY_MODERN);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("pitch", aFontMetric.GetPitch(), PITCH_FIXED);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("italic", aFontMetric.GetItalic(), ITALIC_OBLIQUE);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("weight", aFontMetric.GetWeight(), WEIGHT_THIN);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("width", aFontMetric.GetWidthType(), WIDTH_CONDENSED);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("is symbol?", aFontMetric.IsSymbolFont(), false);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("quality", aFontMetric.GetQuality(), 10);
+}
 
 void VclFontMetricTest::testFullstopCenteredFlag()
 {
