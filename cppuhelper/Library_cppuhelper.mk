@@ -12,6 +12,8 @@ $(eval $(call gb_Library_Library,cppuhelper))
 
 $(eval $(call gb_Library_set_soversion_script,cppuhelper,$(SRCDIR)/cppuhelper/source/gcc3.map))
 
+$(eval $(call gb_Library_set_precompiled_header,cppuhelper,cppuhelper/inc/pch/precompiled_cppuhelper))
+
 $(eval $(call gb_Library_use_internal_comprehensive_api,cppuhelper,\
 	cppuhelper \
 	udkapi \
@@ -23,8 +25,6 @@ $(eval $(call gb_Library_set_is_ure_library,cppuhelper))
 $(eval $(call gb_Library_add_defs,cppuhelper,\
 	-DCPPUHELPER_DLLIMPLEMENTATION \
 ))
-
-$(eval $(call gb_Library_set_precompiled_header,cppuhelper,cppuhelper/inc/pch/precompiled_cppuhelper))
 
 $(eval $(call gb_Library_use_libraries,cppuhelper,\
 	cppu \

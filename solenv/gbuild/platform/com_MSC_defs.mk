@@ -133,6 +133,7 @@ gb_CXXFLAGS := \
 	-Gs \
 	-GS \
 	-Gy \
+	-Zc:inline \
 	$(if $(MSVC_USE_DEBUG_RUNTIME),-MDd,-MD) \
 	-nologo \
 	-W4 \
@@ -147,6 +148,8 @@ gb_CXXFLAGS := \
 	-wd4611 \
 	-wd4706 \
 	-bigobj \
+
+gb_CXXFLAGS_ZCINLINE_OFF := -Zc:inline-
 
 ifeq ($(CPUNAME),INTEL)
 
