@@ -655,8 +655,18 @@ static bool ImplKillTrailingWithExceptions( OUString& rName, const char* const* 
         {
             // check string match against string exceptions
             while( *++ppStr )
-                if( ImplIsTrailing( rName, *ppStr ) )
+            {
+                // if the name is the same as the string exception, then skip it
+                // for example - we have a caps font family, but without this check it
+                // will stripped
+                OUString sException(*ppStr, strlen(*ppStr), RTL_TEXTENCODING_MS_1252);
+
+               if (rName == sException)
                     return false;
+
+                if (ImplIsTrailing(rName, *ppStr))
+                    return false;
+            }
 
             rName = rName.copy(0, rName.getLength() - nTrailLen );
             return true;
