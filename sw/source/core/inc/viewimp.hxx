@@ -22,6 +22,7 @@
 #include <tools/color.hxx>
 #include <svx/svdtypes.hxx>
 #include <swrect.hxx>
+#include <swregion.hxx>
 #include <vector>
 #include <memory>
 
@@ -29,7 +30,6 @@ class OutputDevice;
 class SwViewShell;
 class SwFlyFrame;
 class SwViewOption;
-class SwRegionRects;
 class SwFrame;
 class SwLayAction;
 class SwLayIdle;
@@ -64,7 +64,7 @@ class SwViewShellImp
     SdrPageView *m_pSdrPageView;  // Exactly one Page for our DrawView
 
     SwPageFrame     *m_pFirstVisiblePage; // Always points to the first visible Page
-    std::unique_ptr<SwRegionRects> m_pRegion; // Collector of Paintrects from the LayAction
+    std::unique_ptr<SwRegionRects> m_pPaintRegion; // Collector of Paintrects from the LayAction
 
     SwLayAction   *m_pLayAction;      // Is set if an Action object exists
                                  // Is registered by the SwLayAction ctor and deregistered by the dtor
@@ -146,8 +146,10 @@ public:
     void SetFirstVisPageInvalid() { m_bFirstPageInvalid = true; }
 
     bool AddPaintRect( const SwRect &rRect );
-    SwRegionRects *GetRegion()      { return m_pRegion.get(); }
-    void DelRegion();
+    bool HasPaintRegion()      { return static_cast<bool>(m_pPaintRegion); }
+    std::unique_ptr<SwRegionRects> TakePaintRegion() { return std::move(m_pPaintRegion); }
+    const SwRegionRects* GetPaintRegion() { return m_pPaintRegion.get(); }
+    void DeletePaintRegion() { m_pPaintRegion.reset(); }
 
     /// New Interface for StarView Drawing
     bool  HasDrawView()             const { return nullptr != m_pDrawView; }

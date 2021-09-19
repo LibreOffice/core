@@ -247,7 +247,7 @@ void SwCursorShell::EndAction( const bool bIdleEnd )
     bool bVis = m_bSVCursorVis;
 
     // Idle-formatting?
-    if( bIdleEnd && Imp()->GetRegion() )
+    if( bIdleEnd && Imp()->HasPaintRegion() )
     {
         m_pCurrentCursor->Hide();
     }

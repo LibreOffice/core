@@ -274,8 +274,8 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
     if ( Imp()->HasDrawView() && !Imp()->GetDrawView()->areMarkHandlesHidden() )
         Imp()->StartAction();
 
-    if ( Imp()->GetRegion() && Imp()->GetRegion()->GetOrigin() != VisArea() )
-        Imp()->DelRegion();
+    if ( Imp()->HasPaintRegion() && Imp()->GetPaintRegion()->GetOrigin() != VisArea() )
+        Imp()->DeletePaintRegion();
 
     const bool bExtraData = ::IsExtraData( GetDoc() );
 
@@ -294,7 +294,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
 
     //If we don't call Paints, we wait for the Paint of the system.
     //Then the clipping is set correctly; e.g. shifting of a Draw object
-    if ( Imp()->GetRegion()     ||
+    if ( Imp()->HasPaintRegion()     ||
          maInvalidRect.HasArea() ||
          bExtraData )
     {
@@ -314,7 +314,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
             }
             mbPaintWorks = true;
 
-            std::unique_ptr<SwRegionRects> pRegion = std::move(Imp()->m_pRegion);
+            std::unique_ptr<SwRegionRects> pRegion = Imp()->TakePaintRegion();
 
             //JP 27.11.97: what hid the selection, must also Show it,
             //             else we get Paint errors!
@@ -437,7 +437,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
         }
         else
         {
-            Imp()->DelRegion();
+            Imp()->DeletePaintRegion();
             mbPaintWorks =  true;
         }
     }
@@ -1094,8 +1094,8 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
     //the PaintRegion is at least by now obsolete. The PaintRegion can
     //have been created by RootFrame::PaintSwFrame.
     if ( !mbInEndAction &&
-         Imp()->GetRegion() && Imp()->GetRegion()->GetOrigin() != VisArea() )
-        Imp()->DelRegion();
+         Imp()->HasPaintRegion() && Imp()->GetPaintRegion()->GetOrigin() != VisArea() )
+        Imp()->DeletePaintRegion();
 
     CurrShell aCurr( this );
 
@@ -1630,8 +1630,8 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
         //Unfortunately Start/EndAction won't help here, as the Paint originated
         //from GUI and so Clipping has been set against getting through.
         //Ergo: do it all yourself (see ImplEndAction())
-        if ( Imp()->GetRegion() && Imp()->GetRegion()->GetOrigin() != VisArea())
-             Imp()->DelRegion();
+        if ( Imp()->HasPaintRegion() && Imp()->GetPaintRegion()->GetOrigin() != VisArea())
+             Imp()->DeletePaintRegion();
 
         SwLayAction aAction( GetLayout(), Imp() );
         aAction.SetComplete( false );
@@ -1644,7 +1644,7 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
         aAction.Action(GetWin()->GetOutDev());
         --mnStartAction;
 
-        SwRegionRects *pRegion = Imp()->GetRegion();
+        std::unique_ptr<SwRegionRects> pRegion = Imp()->TakePaintRegion();
         if ( pRegion && aAction.IsBrowseActionStop() )
         {
             //only of interest when something has changed in the visible range
@@ -1657,10 +1657,7 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
                     break;
             }
             if ( bStop )
-            {
-                Imp()->DelRegion();
-                pRegion = nullptr;
-            }
+                pRegion.reset();
         }
 
         if ( pRegion )
@@ -1701,7 +1698,6 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
             }
             else
                 bRet = false;
-            Imp()->DelRegion();
         }
         else
             bRet = false;
