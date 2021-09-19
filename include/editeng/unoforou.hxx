@@ -23,7 +23,9 @@
 #include <editeng/unoedsrc.hxx>
 #include <editeng/editengdllapi.h>
 #include <editeng/editdata.hxx>
+#include <svl/itemset.hxx>
 #include <memory>
+#include <optional>
 
 class Outliner;
 
@@ -37,14 +39,14 @@ private:
 
     /** this pointer may be null or point to an item set for the attribs of
         the selection maAttribsSelection */
-    mutable std::unique_ptr<SfxItemSet> mpAttribsCache;
+    mutable std::optional<SfxItemSet> moAttribsCache;
 
     /** if we have a cached attribute item set, this is the selection of it */
     mutable ESelection  maAttribCacheSelection;
 
     /** this pointer may be null or point to an item set for the paragraph
         mnParaAttribsCache */
-    mutable std::unique_ptr<SfxItemSet> mpParaAttribsCache;
+    mutable std::optional<SfxItemSet> moParaAttribsCache;
 
     /** if we have a cached para attribute item set, this is the paragraph of it */
     mutable sal_Int32   mnParaAttribsCache;
