@@ -34,6 +34,24 @@
       "parentUuid": "fdce5891_9b64e51c",
       "revId": "9a3250f08f3d5a9fddbdebd592d9e3fbbf1e034b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16330494_1053ac35",
+        "filename": "vcl/win/gdi/salvd.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-19T09:53:53Z",
+      "side": 1,
+      "message": "Ah, so would the comment mean that \"the next call restores the graphics DC, so we can delete hDC in case it\u0027s not mbForeignDC\"?\n\nI\u0027m sorry for the nitpicking - I\u0027m just a dumb coder who needs comments written for clueless people 😊",
+      "parentUuid": "f79b7b2a_4847c5f9",
+      "revId": "9a3250f08f3d5a9fddbdebd592d9e3fbbf1e034b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
