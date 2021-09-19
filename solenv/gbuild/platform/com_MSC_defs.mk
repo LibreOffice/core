@@ -147,6 +147,7 @@ gb_CXXFLAGS := \
 	-wd4611 \
 	-wd4706 \
 	-bigobj \
+	-Zc:inline \
 
 ifeq ($(CPUNAME),INTEL)
 
