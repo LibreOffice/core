@@ -1366,7 +1366,7 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         break;
     }
     case 0x0004: {  // TxFace
-        char nFace;
+        char nFace(0);
         pPict->ReadChar( nFace );
         if ( (nFace & 0x01)!=0 ) aActFont.SetWeight(WEIGHT_BOLD);
         else                     aActFont.SetWeight(WEIGHT_NORMAL);
