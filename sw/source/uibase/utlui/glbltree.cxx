@@ -793,12 +793,9 @@ void SwGlobalTree::UpdateTracking()
     if (pActiveShellCurrSection)
     {
         const SwSection* pSection = pActiveShellCurrSection;
-        SwSection* pParent;
-        while ((pParent = pSection->GetParent()) != nullptr)
+        while (SwSection* pParent = pSection->GetParent())
             pSection = pParent;
-
-        if (pSection)
-            m_xTreeView->select_text(pSection->GetSectionName());
+        m_xTreeView->select_text(pSection->GetSectionName());
     }
 }
 
