@@ -1522,7 +1522,7 @@ void SmXMLSpaceContext_Impl::startFastElement(
         switch (aIter.getToken())
         {
             case XML_WIDTH:
-                if (ParseMathMLAttributeLengthValue(sValue.trim(), aLV) <= 0
+                if (!ParseMathMLAttributeLengthValue(sValue.trim(), aLV)
                     || !lcl_CountBlanks(aLV, &nWide, &nNarrow))
                     SAL_WARN("starmath", "ignore mspace's width: " << sValue);
                 break;

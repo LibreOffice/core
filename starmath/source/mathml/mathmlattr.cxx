@@ -10,14 +10,18 @@
 #include <mathmlattr.hxx>
 
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
+#include <rtl/math.h>
 
+#include <cstddef>
+#include <string_view>
 #include <unordered_map>
 
-static sal_Int32 ParseMathMLUnsignedNumber(const OUString& rStr, Fraction& rUN)
+static std::size_t ParseMathMLUnsignedNumber(std::u16string_view rStr, Fraction& rUN)
 {
-    auto nLen = rStr.getLength();
-    sal_Int32 nDecimalPoint = -1;
-    sal_Int32 nIdx;
+    auto nLen = rStr.length();
+    std::size_t nDecimalPoint = std::u16string_view::npos;
+    std::size_t nIdx;
     sal_Int64 nom = 0;
     sal_Int64 den = 1;
     bool validNomDen = true;
@@ -26,8 +30,8 @@ static sal_Int32 ParseMathMLUnsignedNumber(const OUString& rStr, Fraction& rUN)
         auto cD = rStr[nIdx];
         if (cD == u'.')
         {
-            if (nDecimalPoint >= 0)
-                return -1;
+            if (nDecimalPoint != std::u16string_view::npos)
+                return std::u16string_view::npos;
             nDecimalPoint = nIdx;
             continue;
         }
@@ -36,13 +40,14 @@ static sal_Int32 ParseMathMLUnsignedNumber(const OUString& rStr, Fraction& rUN)
         if (validNomDen
             && (o3tl::checked_multiply(nom, sal_Int64(10), nom)
                 || o3tl::checked_add(nom, sal_Int64(cD - u'0'), nom)
-                || (nDecimalPoint >= 0 && o3tl::checked_multiply(den, sal_Int64(10), den))))
+                || (nDecimalPoint != std::u16string_view::npos
+                    && o3tl::checked_multiply(den, sal_Int64(10), den))))
         {
             validNomDen = false;
         }
     }
     if (nIdx == 0 || (nIdx == 1 && nDecimalPoint == 0))
-        return -1;
+        return std::u16string_view::npos;
 
     // If the input "xx.yyy" can be represented with nom = xx*10^n + yyy and den = 10^n in sal_Int64
     // (where n is the length of "yyy"), then use that to create an accurate Fraction (and TODO: we
@@ -54,83 +59,74 @@ static sal_Int32 ParseMathMLUnsignedNumber(const OUString& rStr, Fraction& rUN)
     }
     else
     {
-        rUN = Fraction(rStr.copy(0, nIdx).toDouble());
+        rUN = Fraction(
+            rtl_math_uStringToDouble(rStr.data(), rStr.data() + nIdx, '.', 0, nullptr, nullptr));
     }
 
     return nIdx;
 }
 
-static sal_Int32 ParseMathMLNumber(const OUString& rStr, Fraction& rN)
+static std::size_t ParseMathMLNumber(std::u16string_view rStr, Fraction& rN)
 {
-    if (rStr.isEmpty())
-        return -1;
+    if (rStr.empty())
+        return std::u16string_view::npos;
     bool bNegative = (rStr[0] == '-');
-    sal_Int32 nOffset = bNegative ? 1 : 0;
-    auto nIdx = ParseMathMLUnsignedNumber(rStr.copy(nOffset), rN);
-    if (nIdx <= 0 || !rN.IsValid())
-        return -1;
+    std::size_t nOffset = bNegative ? 1 : 0;
+    auto nIdx = ParseMathMLUnsignedNumber(rStr.substr(nOffset), rN);
+    if (nIdx == std::u16string_view::npos || !rN.IsValid())
+        return std::u16string_view::npos;
     if (bNegative)
         rN *= -1;
     return nOffset + nIdx;
 }
 
-sal_Int32 ParseMathMLAttributeLengthValue(const OUString& rStr, MathMLAttributeLengthValue& rV)
+bool ParseMathMLAttributeLengthValue(std::u16string_view rStr, MathMLAttributeLengthValue& rV)
 {
     auto nIdx = ParseMathMLNumber(rStr, rV.aNumber);
-    if (nIdx <= 0)
-        return -1;
-    OUString sRest = rStr.copy(nIdx);
-    if (sRest.isEmpty())
+    if (nIdx == std::u16string_view::npos)
+        return false;
+    std::u16string_view sRest = rStr.substr(nIdx);
+    if (sRest.empty())
     {
         rV.eUnit = MathMLLengthUnit::None;
-        return nIdx;
     }
-    if (sRest.startsWith("em"))
+    if (o3tl::starts_with(sRest, u"em"))
     {
         rV.eUnit = MathMLLengthUnit::Em;
-        return nIdx + 2;
     }
-    if (sRest.startsWith("ex"))
+    if (o3tl::starts_with(sRest, u"ex"))
     {
         rV.eUnit = MathMLLengthUnit::Ex;
-        return nIdx + 2;
     }
-    if (sRest.startsWith("px"))
+    if (o3tl::starts_with(sRest, u"px"))
     {
         rV.eUnit = MathMLLengthUnit::Px;
-        return nIdx + 2;
     }
-    if (sRest.startsWith("in"))
+    if (o3tl::starts_with(sRest, u"in"))
     {
         rV.eUnit = MathMLLengthUnit::In;
-        return nIdx + 2;
     }
-    if (sRest.startsWith("cm"))
+    if (o3tl::starts_with(sRest, u"cm"))
     {
         rV.eUnit = MathMLLengthUnit::Cm;
-        return nIdx + 2;
     }
-    if (sRest.startsWith("mm"))
+    if (o3tl::starts_with(sRest, u"mm"))
     {
         rV.eUnit = MathMLLengthUnit::Mm;
-        return nIdx + 2;
     }
-    if (sRest.startsWith("pt"))
+    if (o3tl::starts_with(sRest, u"pt"))
     {
         rV.eUnit = MathMLLengthUnit::Pt;
-        return nIdx + 2;
     }
-    if (sRest.startsWith("pc"))
+    if (o3tl::starts_with(sRest, u"pc"))
     {
         rV.eUnit = MathMLLengthUnit::Pc;
-        return nIdx + 2;
     }
     if (sRest[0] == u'%')
     {
         rV.eUnit = MathMLLengthUnit::Percent;
-        return nIdx + 2;
     }
-    return nIdx;
+    return true;
 }
 
 bool GetMathMLMathvariantValue(const OUString& rStr, MathMLMathvariantValue& rV)
