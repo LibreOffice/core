@@ -9,6 +9,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <tools/fract.hxx>
@@ -44,7 +48,7 @@ struct MathMLAttributeLengthValue
     }
 };
 
-sal_Int32 ParseMathMLAttributeLengthValue(const OUString& rStr, MathMLAttributeLengthValue& rV);
+bool ParseMathMLAttributeLengthValue(std::u16string_view rStr, MathMLAttributeLengthValue& rV);
 
 // MathML 3: 3.2.2 Mathematics style attributes common to token elements
 // <https://www.w3.org/TR/MathML3/chapter3.html#presm.commatt>

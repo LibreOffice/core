@@ -13,6 +13,7 @@
 
 #include <cassert>
 #include <cstddef>
+#include <string>
 #include <string_view>
 
 #include <rtl/ustring.h>
@@ -45,6 +46,66 @@ inline std::string_view getToken(std::string_view sv, char delimiter, std::size_
         position = n + 1;
     }
     return t;
+}
+
+// Implementations of C++20 std::basic_string_view::starts_with and
+// std::basic_string_view::ends_with, until we can use those directly on all platforms:
+template <typename charT, typename traits = std::char_traits<charT>>
+constexpr bool starts_with(std::basic_string_view<charT, traits> sv,
+                           std::basic_string_view<charT, traits> x) noexcept
+{
+#if defined __cpp_lib_starts_ends_with
+    return sv.starts_with(x);
+#else
+    return sv.substr(0, x.size()) == x;
+#endif
+}
+template <typename charT, typename traits = std::char_traits<charT>>
+constexpr bool starts_with(std::basic_string_view<charT, traits> sv, charT x) noexcept
+{
+#if defined __cpp_lib_starts_ends_with
+    return sv.starts_with(x);
+#else
+    return !sv.empty() && traits::eq(sv.front(), x);
+#endif
+}
+template <typename charT, typename traits = std::char_traits<charT>>
+constexpr bool starts_with(std::basic_string_view<charT, traits> sv, charT const* x)
+{
+#if defined __cpp_lib_starts_ends_with
+    return sv.starts_with(x);
+#else
+    return starts_with(sv, std::basic_string_view<charT, traits>(x));
+#endif
+}
+template <typename charT, typename traits = std::char_traits<charT>>
+constexpr bool ends_with(std::basic_string_view<charT, traits> sv,
+                         std::basic_string_view<charT, traits> x) noexcept
+{
+#if defined __cpp_lib_ends_ends_with
+    return sv.ends_with(x);
+#else
+    return sv.size() >= x.size()
+           && sv.compare(sv.size() - x.size(), std::basic_string_view<charT, traits>::npos, x) == 0;
+#endif
+}
+template <typename charT, typename traits = std::char_traits<charT>>
+constexpr bool ends_with(std::basic_string_view<charT, traits> sv, charT x) noexcept
+{
+#if defined __cpp_lib_ends_ends_with
+    return sv.ends_with(x);
+#else
+    return !sv.empty() && traits::eq(sv.back(), x);
+#endif
+}
+template <typename charT, typename traits = std::char_traits<charT>>
+constexpr bool ends_with(std::basic_string_view<charT, traits> sv, charT const* x)
+{
+#if defined __cpp_lib_ends_ends_with
+    return sv.ends_with(x);
+#else
+    return ends_with(sv, std::basic_string_view<charT, traits>(x));
+#endif
 }
 }
 
