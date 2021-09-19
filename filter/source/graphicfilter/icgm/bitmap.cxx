@@ -92,7 +92,6 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
 
             switch ( rDesc.mnDstBitsPerPixel ) {
             case 1 : {
-                bool bOk = true;
                 std::vector<Color> palette(2);
                 if ( rDesc.mnLocalColorPrecision == 1 )
                     palette = ImplGeneratePalette( rDesc );
@@ -102,7 +101,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                                  ? BMCOL( mpCGM->pElement->pFillBundle->GetColor() )
                                  : BMCOL( mpCGM->pElement->aFillBundle.GetColor() );
                 };
-                for (ny = 0; bOk && --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize) {
+                for (ny = 0; rDesc.mbStatus && --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize) {
                     nxC = nxCount;
                     for ( nx = 0; --nxC; nx++ ) {
                         // this is not fast, but a one bit/pixel format is rarely used
@@ -110,7 +109,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                         if (pPos >= rDesc.mpEndBuf)
                         {
                             SAL_WARN("filter.icgm", "buffer is too small");
-                            bOk = false;
+                            rDesc.mbStatus = false;
                             break;
                         }
                         sal_uInt8 colorIndex = static_cast<sal_uInt8>((*pPos >> ((nx & 7)^7))) & 1;
@@ -121,9 +120,8 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
             break;
 
             case 2 : {
-                bool bOk = true;
                 auto palette = ImplGeneratePalette( rDesc );
-                for (ny = 0; bOk && --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize) {
+                for (ny = 0; rDesc.mbStatus && --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize) {
                     nxC = nxCount;
                     for ( nx = 0; --nxC; nx++ ) {
                         // this is not fast, but a two bits/pixel format is rarely used
@@ -131,7 +129,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                         if (pPos >= rDesc.mpEndBuf)
                         {
                             SAL_WARN("filter.icgm", "buffer is too small");
-                            bOk = false;
+                            rDesc.mbStatus = false;
                             break;
                         }
                         aBitmap.SetPixel(ny, nx, palette[static_cast<sal_uInt8>( (*pPos >> (((nx & 3)^3) << 1))) & 3]);
@@ -141,9 +139,8 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
             break;
 
             case 4 : {
-                bool bOk = true;
                 auto palette = ImplGeneratePalette( rDesc );
-                for (ny = 0; bOk && --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize) {
+                for (ny = 0; rDesc.mbStatus && --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize) {
                     nxC = nxCount;
                     sal_uInt8* pTemp = rDesc.mpBuf;
                     for ( nx = 0; --nxC; nx++ ) {
@@ -151,7 +148,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                         if (pTemp >= rDesc.mpEndBuf)
                         {
                             SAL_WARN("filter.icgm", "buffer is too small");
-                            bOk = false;
+                            rDesc.mbStatus = false;
                             break;
                         }
 
@@ -169,9 +166,8 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
             break;
 
             case 8 : {
-                bool bOk = true;
                 auto palette = ImplGeneratePalette( rDesc );
-                for (ny = 0; bOk && --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize) {
+                for (ny = 0; rDesc.mbStatus && --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize) {
                     sal_uInt8* pTemp = rDesc.mpBuf;
                     nxC = nxCount;
                     for ( nx = 0; --nxC; nx++ ) {
@@ -179,7 +175,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                         if (pTemp >= rDesc.mpEndBuf)
                         {
                             SAL_WARN("filter.icgm", "buffer is too small");
-                            bOk = false;
+                            rDesc.mbStatus = false;
                             break;
                         }
 
@@ -190,9 +186,8 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
             break;
 
             case 24 : {
-                bool bOk = true;
                 Color aBitmapColor;
-                for (ny = 0; bOk && --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize) {
+                for (ny = 0; rDesc.mbStatus && --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize) {
                     sal_uInt8* pTemp = rDesc.mpBuf;
                     nxC = nxCount;
                     for ( nx = 0; --nxC; nx++ ) {
@@ -200,7 +195,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                         if (pTemp + 2 >= rDesc.mpEndBuf)
                         {
                             SAL_WARN("filter.icgm", "buffer is too small");
-                            bOk = false;
+                            rDesc.mbStatus = false;
                             break;
                         }
 
