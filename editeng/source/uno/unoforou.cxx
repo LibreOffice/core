@@ -94,18 +94,18 @@ static SfxItemSet ImplOutlinerForwarderGetAttribs( const ESelection& rSel, EditE
 
 SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib ) const
 {
-    if( mpAttribsCache && ( EditEngineAttribs::All == nOnlyHardAttrib ) )
+    if( moAttribsCache && ( EditEngineAttribs::All == nOnlyHardAttrib ) )
     {
         // have we the correct set in cache?
         if( maAttribCacheSelection == rSel )
         {
             // yes! just return the cache
-            return *mpAttribsCache;
+            return *moAttribsCache;
         }
         else
         {
             // no, we need delete the old cache
-            mpAttribsCache.reset();
+            moAttribsCache.reset();
         }
     }
 
@@ -117,7 +117,7 @@ SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, EditEngineA
 
     if( EditEngineAttribs::All == nOnlyHardAttrib )
     {
-        mpAttribsCache.reset(new SfxItemSet( aSet ));
+        moAttribsCache.emplace( aSet );
         maAttribCacheSelection = rSel;
     }
 
@@ -130,31 +130,31 @@ SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, EditEngineA
 
 SfxItemSet SvxOutlinerForwarder::GetParaAttribs( sal_Int32 nPara ) const
 {
-    if( mpParaAttribsCache )
+    if( moParaAttribsCache )
     {
         // have we the correct set in cache?
         if( nPara == mnParaAttribsCache )
         {
             // yes! just return the cache
-            return *mpParaAttribsCache;
+            return *moParaAttribsCache;
         }
         else
         {
             // no, we need delete the old cache
-            mpParaAttribsCache.reset();
+            moParaAttribsCache.reset();
         }
     }
 
-    mpParaAttribsCache.reset(new SfxItemSet( rOutliner.GetParaAttribs( nPara ) ));
+    moParaAttribsCache.emplace( rOutliner.GetParaAttribs( nPara ) );
     mnParaAttribsCache = nPara;
 
     EditEngine& rEditEngine = const_cast<EditEngine&>(rOutliner.GetEditEngine());
 
     SfxStyleSheet* pStyle = rEditEngine.GetStyleSheet( nPara );
     if( pStyle )
-        mpParaAttribsCache->SetParent( &(pStyle->GetItemSet() ) );
+        moParaAttribsCache->SetParent( &(pStyle->GetItemSet() ) );
 
-    return *mpParaAttribsCache;
+    return *moParaAttribsCache;
 }
 
 void SvxOutlinerForwarder::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
@@ -247,8 +247,8 @@ SfxItemState SvxOutlinerForwarder::GetItemState( sal_Int32 nPara, sal_uInt16 nWh
 
 void SvxOutlinerForwarder::flushCache()
 {
-    mpAttribsCache.reset();
-    mpParaAttribsCache.reset();
+    moAttribsCache.reset();
+    moParaAttribsCache.reset();
 }
 
 LanguageType SvxOutlinerForwarder::GetLanguage( sal_Int32 nPara, sal_Int32 nIndex ) const
