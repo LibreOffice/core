@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eed2a30f_f2b609d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-19T09:47:43Z",
+      "side": 1,
+      "message": "Nice catch about unused function, btw!",
+      "revId": "315380a91e66cc6e28ea8dced644749c3732c798",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "51ce4790_aed3fdae",
