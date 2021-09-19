@@ -16,6 +16,57 @@
       "message": "suggestions for a better name welcome :-)",
       "revId": "f911e779c5d6a024b89531cf1d2dacccd21ada46",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d085022b_98d8a346",
+        "filename": "include/svl/itemset.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-19T09:27:55Z",
+      "side": 1,
+      "message": "\"in array\" is still not specific, given that m_ppItems is \"pointer to array of items\", and WhichRangesContainer is \"array of Which Ranges\". It needs to know the implementation details to understand :)",
+      "revId": "f911e779c5d6a024b89531cf1d2dacccd21ada46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b12d555d_f37d461d",
+        "filename": "include/svl/itemset.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-19T09:27:55Z",
+      "side": 1,
+      "message": "You might want to use default initializer right here, to make it false by default and avoid changing initializer section of existing functionally unchanged ctors\n\n    bool              m_bItemsFixed \u003d false;",
+      "revId": "f911e779c5d6a024b89531cf1d2dacccd21ada46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbe8c67f_08a35fc7",
+        "filename": "svl/source/items/itemset.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-19T09:27:55Z",
+      "side": 1,
+      "message": "m_bItemsFixed should be set to false here",
+      "revId": "f911e779c5d6a024b89531cf1d2dacccd21ada46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
