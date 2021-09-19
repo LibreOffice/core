@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
+#include <rtl/math.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weldutils.hxx>
@@ -422,7 +423,11 @@ void SAL_CALL FontHeightToolBoxControl::statusChanged(
             m_pBox->set_sensitive(true);
             frame::status::FontHeight aFontHeight;
             if ( rEvent.State >>= aFontHeight )
-                m_pBox->statusChanged_Impl( tools::Long( 10. * aFontHeight.Height ), false );
+            {
+                // tdf#83090 - correctly round the height of the font
+                aFontHeight.Height = rtl::math::round(10. * aFontHeight.Height);
+                m_pBox->statusChanged_Impl(tools::Long(aFontHeight.Height), false);
+            }
             else
                 m_pBox->statusChanged_Impl( tools::Long( -1 ), true );
         }
