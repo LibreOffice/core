@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51ce4790_aed3fdae",
+        "filename": "vcl/inc/PhysicalFontFace.hxx",
+        "patchSetId": 24
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-19T09:47:07Z",
+      "side": 1,
+      "message": "I suppose that here we either need at least a comment stating that this ignores the size, or no rename. Because for an unexpecting user, \"Compare\" would mean \"check if anything is different\", and not comparing sizes would seem wrong/unexpected. Thus the old name could be still justified, even without the matching pair.",
+      "revId": "315380a91e66cc6e28ea8dced644749c3732c798",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
