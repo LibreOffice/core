@@ -426,18 +426,18 @@ void CGM::ImplDoClass4()
                         double fTop = aCenterPoint.Y - fRadius;
                         double fRight = fLeft + (2 * fRadius);
                         double fBottom = fTop + (2 * fRadius);
-                        bUseless = useless(fLeft) || useless(fTop) || useless(fRight) || useless(fBottom);
+                        bUseless = useless(fLeft) || useless(fTop) || useless(2 * fRadius) || useless(fRight) || useless(fBottom);
                         if (!bUseless)
                         {
-                            double fWidth = fLeft + fRight;
-                            bUseless = !o3tl::convertsToAtLeast(fWidth, std::numeric_limits<tools::Long>::min()) ||
-                                       !o3tl::convertsToAtMost(fWidth, std::numeric_limits<tools::Long>::max());
+                            double fCenterCalc = fLeft + fRight;
+                            bUseless = !o3tl::convertsToAtLeast(fCenterCalc, std::numeric_limits<tools::Long>::min()) ||
+                                       !o3tl::convertsToAtMost(fCenterCalc, std::numeric_limits<tools::Long>::max());
                         }
                         if (!bUseless)
                         {
-                            double fHeight = fTop + fBottom;
-                            bUseless = !o3tl::convertsToAtLeast(fHeight, std::numeric_limits<tools::Long>::min()) ||
-                                       !o3tl::convertsToAtMost(fHeight, std::numeric_limits<tools::Long>::max());
+                            double fCenterCalc = fTop + fBottom;
+                            bUseless = !o3tl::convertsToAtLeast(fCenterCalc, std::numeric_limits<tools::Long>::min()) ||
+                                       !o3tl::convertsToAtMost(fCenterCalc, std::numeric_limits<tools::Long>::max());
                         }
                         if (!bUseless)
                         {
@@ -567,18 +567,18 @@ void CGM::ImplDoClass4()
                         double fTop = aCenter.Y - aRadius.X;
                         double fRight = fLeft + (2 * aRadius.X);
                         double fBottom = fTop + (2 * aRadius.X);
-                        bUseless = useless(fLeft) || useless(fTop) || useless(fRight) || useless(fBottom);
+                        bUseless = useless(fLeft) || useless(fTop) || useless(2 * aRadius.X) || useless(fRight) || useless(fBottom);
                         if (!bUseless)
                         {
-                            double fWidth = fLeft + fRight;
-                            bUseless = !o3tl::convertsToAtLeast(fWidth, std::numeric_limits<tools::Long>::min()) ||
-                                       !o3tl::convertsToAtMost(fWidth, std::numeric_limits<tools::Long>::max());
+                            double fCenterCalc = fLeft + fRight;
+                            bUseless = !o3tl::convertsToAtLeast(fCenterCalc, std::numeric_limits<tools::Long>::min()) ||
+                                       !o3tl::convertsToAtMost(fCenterCalc, std::numeric_limits<tools::Long>::max());
                         }
                         if (!bUseless)
                         {
-                            double fHeight = fTop + fBottom;
-                            bUseless = !o3tl::convertsToAtLeast(fHeight, std::numeric_limits<tools::Long>::min()) ||
-                                       !o3tl::convertsToAtMost(fHeight, std::numeric_limits<tools::Long>::max());
+                            double fCenterCalc = fTop + fBottom;
+                            bUseless = !o3tl::convertsToAtLeast(fCenterCalc, std::numeric_limits<tools::Long>::min()) ||
+                                       !o3tl::convertsToAtMost(fCenterCalc, std::numeric_limits<tools::Long>::max());
                         }
                         if (!bUseless)
                         {
