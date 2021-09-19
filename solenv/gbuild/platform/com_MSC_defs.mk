@@ -133,6 +133,7 @@ gb_CXXFLAGS := \
 	-Gs \
 	-GS \
 	-Gy \
+	-Zc:inline \
 	$(if $(MSVC_USE_DEBUG_RUNTIME),-MDd,-MD) \
 	-nologo \
 	-W4 \
