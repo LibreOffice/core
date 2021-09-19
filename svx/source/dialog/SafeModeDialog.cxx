@@ -49,6 +49,7 @@ SafeModeDialog::SafeModeDialog(weld::Window* pParent)
     , mxCBResetSharedExtensions(m_xBuilder->weld_check_button("check_reset_shared_extensions"))
     , mxCBResetBundledExtensions(m_xBuilder->weld_check_button("check_reset_bundled_extensions"))
     , mxCBDisableHWAcceleration(m_xBuilder->weld_check_button("check_disable_hw_acceleration"))
+    , mxCBDisableSkia(m_xBuilder->weld_check_button("check_disable_skia"))
     , mxCBResetCustomizations(m_xBuilder->weld_check_button("check_reset_customizations"))
     , mxCBResetWholeUserProfile(m_xBuilder->weld_check_button("check_reset_whole_userprofile"))
     , mxBugLink(m_xBuilder->weld_link_button("linkbutton_bugs"))
@@ -73,6 +74,7 @@ SafeModeDialog::SafeModeDialog(weld::Window* pParent)
     mxCBResetSharedExtensions->connect_toggled(LINK(this, SafeModeDialog, CheckBoxHdl));
     mxCBResetBundledExtensions->connect_toggled(LINK(this, SafeModeDialog, CheckBoxHdl));
     mxCBDisableHWAcceleration->connect_toggled(LINK(this, SafeModeDialog, CheckBoxHdl));
+    mxCBDisableSkia->connect_toggled(LINK(this, SafeModeDialog, CheckBoxHdl));
     mxCBResetCustomizations->connect_toggled(LINK(this, SafeModeDialog, CheckBoxHdl));
     mxCBResetWholeUserProfile->connect_toggled(LINK(this, SafeModeDialog, CheckBoxHdl));
 
@@ -148,9 +150,9 @@ void SafeModeDialog::applyChanges()
             comphelper::BackupFileHelper::tryDisableAllExtensions();
         }
 
-        if (mxCBDisableHWAcceleration->get_active())
+        if (mxCBDisableHWAcceleration->get_active() || mxCBDisableSkia->get_active())
         {
-            comphelper::BackupFileHelper::tryDisableHWAcceleration();
+            comphelper::BackupFileHelper::tryDisableHWAcceleration(mxCBDisableSkia->get_active());
         }
     }
 
@@ -302,6 +304,7 @@ IMPL_LINK(SafeModeDialog, CheckBoxHdl, weld::Toggleable&, /*pCheckBox*/, void)
         mxCBResetSharedExtensions->get_active() ||
         mxCBResetBundledExtensions->get_active() ||
         mxCBDisableHWAcceleration->get_active() ||
+        mxCBDisableSkia->get_active() ||
         mxCBResetCustomizations->get_active() ||
         mxCBResetWholeUserProfile->get_active());
 

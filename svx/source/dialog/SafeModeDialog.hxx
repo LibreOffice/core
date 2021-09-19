@@ -42,6 +42,7 @@ private:
     std::unique_ptr<weld::CheckButton> mxCBResetSharedExtensions;
     std::unique_ptr<weld::CheckButton> mxCBResetBundledExtensions;
     std::unique_ptr<weld::CheckButton> mxCBDisableHWAcceleration;
+    std::unique_ptr<weld::CheckButton> mxCBDisableSkia;
     std::unique_ptr<weld::CheckButton> mxCBResetCustomizations;
     std::unique_ptr<weld::CheckButton> mxCBResetWholeUserProfile;
 

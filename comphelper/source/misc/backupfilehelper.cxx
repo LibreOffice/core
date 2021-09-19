@@ -1889,7 +1889,7 @@ namespace comphelper
         }
     }
 
-    void BackupFileHelper::tryDisableHWAcceleration()
+    void BackupFileHelper::tryDisableHWAcceleration(bool bDisableSkia)
     {
         const OUString aRegistryModifications(maUserConfigWorkURL + "/registrymodifications.xcu");
         if (!DirectoryHelper::fileExists(aRegistryModifications))
@@ -1904,11 +1904,13 @@ namespace comphelper
                                                        "DisableOpenGL", "true"));
         xRootElement->appendChild(lcl_getConfigElement(xDocument, "/org.openoffice.Office.Common/Misc",
                                                        "UseOpenCL", "false"));
-        // Do not disable Skia entirely, just force its CPU-based raster mode.
         xRootElement->appendChild(lcl_getConfigElement(xDocument, "/org.openoffice.Office.Common/VCL",
                                                        "ForceSkia", "false"));
         xRootElement->appendChild(lcl_getConfigElement(xDocument, "/org.openoffice.Office.Common/VCL",
                                                        "ForceSkiaRaster", "true"));
+        if (bDisableSkia)
+            xRootElement->appendChild(lcl_getConfigElement(
+                xDocument, "/org.openoffice.Office.Common/VCL", "UseSkia", "false"));
 
         OUString aTempURL;
         {
