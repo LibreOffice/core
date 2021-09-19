@@ -523,8 +523,10 @@ ImplFontAttrTypeSearchData const aImplTypeAttrSearchList[] =
 {   "monotype",             ImplFontAttrs::None },
 {   "linotype",             ImplFontAttrs::None },
 {   "titling",              ImplFontAttrs::Titling },
-{   "captitals",            ImplFontAttrs::Capitals },
-{   "captital",             ImplFontAttrs::Capitals },
+{   "captitals",            ImplFontAttrs::Capitals }, // typo introduced in 2001, leave for compat.
+{   "captital",             ImplFontAttrs::Capitals }, // typo introduced in 2001, leave for compat.
+{   "capitals",             ImplFontAttrs::Capitals },
+{   "capital",              ImplFontAttrs::Capitals },
 {   "caps",                 ImplFontAttrs::Capitals },
 {   "italic",               ImplFontAttrs::Italic },
 {   "oblique",              ImplFontAttrs::Italic },
