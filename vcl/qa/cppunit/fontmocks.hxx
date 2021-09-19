@@ -7,13 +7,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#pragma once
+
 #include <sal/config.h>
 
 #include <PhysicalFontFace.hxx>
+#include <fontselect.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <fontattributes.hxx>
 #include <fontinstance.hxx>
-#include <fontselect.hxx>
 
 class TestFontInstance : public LogicalFontInstance
 {
