@@ -2015,6 +2015,7 @@ endef # gb_LinkTarget_use_vclmain
 # break public ABI.
 # call gb_LinkTarget_set_is_ure_library,linktarget,,linktargetmakefilename
 define gb_LinkTarget_set_is_ure_library
+$(call gb_LinkTarget_add_cxxflags,$(1),$(gb_CXXFLAGS_ZCINLINE_OFF))
 ifeq ($(HAVE_DLLEXPORTINLINES),TRUE)
 $(call gb_LinkTarget_add_cxxflags,$(1),-Zc:dllexportInlines)
 endif
