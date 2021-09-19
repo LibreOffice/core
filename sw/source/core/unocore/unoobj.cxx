@@ -1845,8 +1845,8 @@ SwUnoCursorHelper::GetPropertyStates(
     uno::Sequence< beans::PropertyState > aRet(rPropertyNames.getLength());
     beans::PropertyState* pStates = aRet.getArray();
     const SfxItemPropertyMap &rMap = rPropSet.getPropertyMap();
-    std::unique_ptr<SfxItemSet> pSet;
-    std::unique_ptr<SfxItemSet> pSetParent;
+    std::optional<SfxItemSet> oSet;
+    std::optional<SfxItemSet> oSetParent;
 
     for (sal_Int32 i = 0, nEnd = rPropertyNames.getLength(); i < nEnd; i++)
     {
@@ -1891,50 +1891,48 @@ SwUnoCursorHelper::GetPropertyStates(
             }
             else
             {
-                if (!pSet)
+                if (!oSet)
                 {
                     switch ( eCaller )
                     {
                         case SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION_TOLERANT:
                         case SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION:
-                            pSet.reset(
-                                new SfxItemSet( rPaM.GetDoc().GetAttrPool(),
-                                    svl::Items<RES_CHRATR_BEGIN,   RES_TXTATR_END> ));
+                            oSet.emplace( rPaM.GetDoc().GetAttrPool(),
+                                    svl::Items<RES_CHRATR_BEGIN,   RES_TXTATR_END> );
                         break;
                         case SW_PROPERTY_STATE_CALLER_SINGLE_VALUE_ONLY:
-                            pSet.reset(
-                                new SfxItemSet( rPaM.GetDoc().GetAttrPool(),
-                                    pEntry->nWID, pEntry->nWID ));
+                            oSet.emplace( rPaM.GetDoc().GetAttrPool(),
+                                    pEntry->nWID, pEntry->nWID );
                         break;
                         default:
-                            pSet.reset( new SfxItemSet(
+                            oSet.emplace(
                                 rPaM.GetDoc().GetAttrPool(),
                                 svl::Items<
                                     RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
                                     RES_UNKNOWNATR_CONTAINER,
-                                        RES_UNKNOWNATR_CONTAINER>));
+                                        RES_UNKNOWNATR_CONTAINER>);
                     }
                     // #i63870#
-                    SwUnoCursorHelper::GetCursorAttr( rPaM, *pSet );
+                    SwUnoCursorHelper::GetCursorAttr( rPaM, *oSet );
                 }
 
-                pStates[i] = ( pSet->Count() )
-                    ? rPropSet.getPropertyState( *pEntry, *pSet )
+                pStates[i] = ( oSet->Count() )
+                    ? rPropSet.getPropertyState( *pEntry, *oSet )
                     : beans::PropertyState_DEFAULT_VALUE;
 
                 //try again to find out if a value has been inherited
                 if( beans::PropertyState_DIRECT_VALUE == pStates[i] )
                 {
-                    if (!pSetParent)
+                    if (!oSetParent)
                     {
-                        pSetParent = pSet->Clone( false );
+                        oSetParent.emplace(oSet->CloneAsValue( false ));
                         // #i63870#
                         SwUnoCursorHelper::GetCursorAttr(
-                                rPaM, *pSetParent, true, false );
+                                rPaM, *oSetParent, true, false );
                     }
 
-                    pStates[i] = ( pSetParent->Count() )
-                        ? rPropSet.getPropertyState( *pEntry, *pSetParent )
+                    pStates[i] = ( oSetParent->Count() )
+                        ? rPropSet.getPropertyState( *pEntry, *oSetParent )
                         : beans::PropertyState_DEFAULT_VALUE;
                 }
             }
