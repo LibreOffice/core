@@ -25,6 +25,7 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_fontmetric, \
 	cppu \
 	cppuhelper \
 	sal \
+	salhelper \
 	svt \
 	test \
 	tl \
