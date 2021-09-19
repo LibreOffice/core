@@ -1910,26 +1910,31 @@ namespace comphelper
         xRootElement->appendChild(lcl_getConfigElement(xDocument, "/org.openoffice.Office.Common/VCL",
                                                        "ForceSkiaRaster", "true"));
 
-        // write back
-        uno::Reference< xml::sax::XSAXSerializable > xSerializer(xDocument, uno::UNO_QUERY);
-
-        if (!xSerializer.is())
-            return;
-
-        // create a SAXWriter
-        uno::Reference< xml::sax::XWriter > const xSaxWriter = xml::sax::Writer::create(xContext);
-        uno::Reference< io::XStream > xTempFile = io::TempFile::create(xContext);
-        uno::Reference< io::XOutputStream > xOutStrm = xTempFile->getOutputStream();
-
-        // set output stream and do the serialization
-        xSaxWriter->setOutputStream(xOutStrm);
-        xSerializer->serialize(xSaxWriter, uno::Sequence< beans::StringPair >());
-
-        // get URL from temp file
-        uno::Reference < beans::XPropertySet > xTempFileProps(xTempFile, uno::UNO_QUERY);
-        uno::Any aUrl = xTempFileProps->getPropertyValue("Uri");
         OUString aTempURL;
-        aUrl >>= aTempURL;
+        {
+            // use the scope to make sure that the temp file gets properly closed before move
+
+            // write back
+            uno::Reference< xml::sax::XSAXSerializable > xSerializer(xDocument, uno::UNO_QUERY);
+
+            if (!xSerializer.is())
+                return;
+
+            // create a SAXWriter
+            uno::Reference< xml::sax::XWriter > const xSaxWriter = xml::sax::Writer::create(xContext);
+            uno::Reference< io::XTempFile > xTempFile = io::TempFile::create(xContext);
+            xTempFile->setRemoveFile(false); // avoid removal of tempfile when leaving the scope
+            uno::Reference< io::XOutputStream > xOutStrm = xTempFile->getOutputStream();
+
+            // set output stream and do the serialization
+            xSaxWriter->setOutputStream(xOutStrm);
+            xSerializer->serialize(xSaxWriter, uno::Sequence< beans::StringPair >());
+
+            // get URL from temp file
+            uno::Reference < beans::XPropertySet > xTempFileProps(xTempFile, uno::UNO_QUERY);
+            uno::Any aUrl = xTempFileProps->getPropertyValue("Uri");
+            aUrl >>= aTempURL;
+        }
 
         // copy back file
         if (aTempURL.isEmpty() || !DirectoryHelper::fileExists(aTempURL))
