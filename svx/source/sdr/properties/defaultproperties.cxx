@@ -186,9 +186,9 @@ namespace sdr::properties
             const SfxPoolItem *pPoolItem;
             std::vector< sal_uInt16 > aPostItemChangeList;
             bool bDidChange(false);
-            std::optional<SfxItemSet> aSet;
+            std::optional<SfxItemSetFixed<SDRATTR_START, EE_ITEMS_END>> aSet;
             if (WantItemSetInItemSetChanged())
-                aSet.emplace(GetSdrObject().GetObjectItemPool(), svl::Items<SDRATTR_START, EE_ITEMS_END>);
+                aSet.emplace(GetSdrObject().GetObjectItemPool());
 
             // give a hint to STL_Vector
             aPostItemChangeList.reserve(rSet.Count());
