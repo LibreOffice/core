@@ -2262,15 +2262,15 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
             --rSh.mnStartAction;
 
             // When using tiled rendering, idle painting is disabled and paints are done
-            // only later by tiled rendering. But paints call SwViewShellImp::DelRegion()
-            // to reset this GetRegion(), and if it's done too late,
+            // only later by tiled rendering. But paints call SwViewShellImp::DeletePaintRegion()
+            // to reset this HasPaintRegion(), and if it's done too late,
             // SwTiledRenderingTest::testTablePaintInvalidate() will end up in an infinite
             // loop, because the idle layout will call this code repeatedly, because there
-            // will be no idle paints to reset GetRegion().
+            // will be no idle paints to reset HasPaintRegion().
             // This code dates back to the initial commit, and I find its purpose unclear,
             // so I'm still leaving it here in case it turns out it serves a purpose.
             static const bool blockOnRepaints = true;
-            if (!blockOnRepaints && rSh.Imp()->GetRegion())
+            if (!blockOnRepaints && rSh.Imp()->HasPaintRegion())
                 bActions = true;
             else
             {
@@ -2309,9 +2309,9 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
                 // solution would be disproportionally expensive.
                 SwViewShellImp *pViewImp = rSh.Imp();
                 bool bUnlock = false;
-                if ( pViewImp->GetRegion() )
+                if ( pViewImp->HasPaintRegion() )
                 {
-                    pViewImp->DelRegion();
+                    pViewImp->DeletePaintRegion();
 
                     // Cause a repaint with virtual device.
                     rSh.LockPaint();
