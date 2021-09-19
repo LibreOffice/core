@@ -1244,19 +1244,19 @@ void SwFEShell::SetFrameFormat( SwFrameFormat *pNewFormat, bool bKeepOrient, Poi
     SwFlyFrameFormat* pFlyFormat = pFly->GetFormat();
     const Point aPt( pFly->getFrameArea().Pos() );
 
-    std::unique_ptr<SfxItemSet> pSet;
+    std::optional<SfxItemSet> oSet;
     const SfxPoolItem* pItem;
     if( SfxItemState::SET == pNewFormat->GetItemState( RES_ANCHOR, false, &pItem ))
     {
-        pSet.reset(new SfxItemSet( GetDoc()->GetAttrPool(), aFrameFormatSetRange ));
-        pSet->Put( *pItem );
-        if( !sw_ChkAndSetNewAnchor( *pFly, *pSet ))
+        oSet.emplace( GetDoc()->GetAttrPool(), aFrameFormatSetRange );
+        oSet->Put( *pItem );
+        if( !sw_ChkAndSetNewAnchor( *pFly, *oSet ))
         {
-            pSet.reset();
+            oSet.reset();
         }
     }
 
-    if( GetDoc()->SetFrameFormatToFly( *pFlyFormat, *pNewFormat, pSet.get(), bKeepOrient ))
+    if( GetDoc()->SetFrameFormatToFly( *pFlyFormat, *pNewFormat, oSet ? &*oSet : nullptr, bKeepOrient ))
     {
         SwFlyFrame* pFrame = pFlyFormat->GetFrame( &aPt );
         if( pFrame )
@@ -1264,7 +1264,7 @@ void SwFEShell::SetFrameFormat( SwFrameFormat *pNewFormat, bool bKeepOrient, Poi
         else
             GetLayout()->SetAssertFlyPages();
     }
-    pSet.reset();
+    oSet.reset();
 
     EndAllActionAndCall();
 }
