@@ -51,6 +51,24 @@
       "parentUuid": "7c4c400c_74daff15",
       "revId": "43f8b79627f5a3579aa4f64ce38fe15a96a046c5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a654f78a_8611a988",
+        "filename": "vcl/inc/win/salgdi.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-19T09:58:27Z",
+      "side": 1,
+      "message": "Yes, I saw that you didn\u0027t change this. I was just curious if we already were abusing the flag, which is documented to avoid the immediate change for cases when the application is not in the foreground - so why do we want this at all cost? 😊\n\nYes, this my comment was just an unrelated thought, sorry for the noise.",
+      "parentUuid": "8fc4be12_ade4e57b",
+      "revId": "43f8b79627f5a3579aa4f64ce38fe15a96a046c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
