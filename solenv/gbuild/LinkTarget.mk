@@ -1786,6 +1786,44 @@ define gb_LinkTarget_use_clang
 $(call gb_LinkTarget_get_target,$(1)) : T_CC := $(LO_CLANG_CC)
 $(call gb_LinkTarget_get_target,$(1)) : T_CXX := $(LO_CLANG_CXX)
 $(call gb_LinkTarget_get_target,$(1)) : T_USE_LD := $(or $(CLANG_USE_LD),$(USE_LD))
+<<<<<<< HEAD   (fb8159 Warn harder about unknown constructors and factories on iOS )
+=======
+endef
+
+# call gb_LinkTarget_use_glxtest,linktarget,add_libs
+define gb_LinkTarget_use_glxtest
+$(call gb_LinkTarget_use_libraries,$(1),vcl)
+
+ifeq (,$(DISABLE_DYNLOADING))
+$(call gb_LinkTarget_add_libs,$(1),$(DLOPEN_LIBS))
+endif
+
+ifeq (,$(DISABLE_GUI))
+ifeq ($(USING_X11),TRUE)
+$(call gb_LinkTarget_add_libs,$(1),-lX11 $(2))
+$(call gb_LinkTarget_use_static_libraries,$(1),glxtest)
+endif
+endif
+
+endef # gb_LinkTarget_use_glxtest
+
+# call gb_LinkTarget_use_vclmain,linktarget,add_libs
+define gb_LinkTarget_use_vclmain
+$(call gb_LinkTarget_use_glxtest,$(1),$(2))
+$(call gb_LinkTarget_use_static_libraries,$(1),vclmain)
+
+endef # gb_LinkTarget_use_vclmain
+
+# Used by URE libraries that need to keep binary compatibility.
+# Reset some flags that make sense for our internal libraries but might
+# break public ABI.
+# call gb_LinkTarget_set_is_ure_library,linktarget,,linktargetmakefilename
+define gb_LinkTarget_set_is_ure_library
+$(call gb_LinkTarget_add_cxxflags,$(1),$(gb_CXXFLAGS_ZCINLINE_OFF))
+ifeq ($(HAVE_DLLEXPORTINLINES),TRUE)
+$(call gb_LinkTarget_add_cxxflags,$(1),-Zc:dllexportInlines)
+endif
+>>>>>>> CHANGE (47a8a6 use MSVC's /Zc:inline option to reduce binary size)
 
 endef
 

@@ -48,9 +48,19 @@ endef
 # Avoid annoying warning D9025 about overriding command-line arguments.
 gb_Helper_remove_overridden_flags = \
     $(lastword $(filter -W4 -w,$(1))) \
+<<<<<<< HEAD   (fb8159 Warn harder about unknown constructors and factories on iOS )
     $(filter-out -W4 -w -arch:SSE -arch:SSE2 -arch:AVX -arch:AVX2 -Od -O2,$(1)) \
+=======
+    $(filter-out -W4 -w -arch:SSE -arch:SSE2 -arch:AVX -arch:AVX2 -Od -O2 -Zc:inline -Zc:inline- -Zc:dllexportInlines -Zc:dllexportInlines-,$(1)) \
+>>>>>>> CHANGE (47a8a6 use MSVC's /Zc:inline option to reduce binary size)
     $(lastword $(filter -Od -O2,$(1))) \
+<<<<<<< HEAD   (fb8159 Warn harder about unknown constructors and factories on iOS )
     $(lastword $(filter -arch:SSE -arch:SSE2 -arch:AVX -arch:AVX2,$(1)))
+=======
+    $(lastword $(filter -arch:SSE -arch:SSE2 -arch:AVX -arch:AVX2,$(1))) \
+    $(lastword $(filter -Zc:inline -Zc:inline-,$(1))) \
+    $(lastword $(filter -Zc:dllexportInlines -Zc:dllexportInlines-,$(1)))
+>>>>>>> CHANGE (47a8a6 use MSVC's /Zc:inline option to reduce binary size)
 
 # $(call gb_CObject__command_pattern,object,flags,source,dep-file,compiler-plugins,symbols,compiler)
 define gb_CObject__command_pattern
