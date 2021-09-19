@@ -463,10 +463,14 @@ void LwpRowLayout::SetCellSplit(sal_uInt16 nEffectRows)
 {
     for (LwpConnectedCellLayout* pConnCell : m_ConnCellList)
     {
-        sal_uInt16 nRowSpan = pConnCell->GetRowID()+pConnCell->GetNumrows();
-        if ( nRowSpan > nEffectRows )
+        sal_uInt16 nRowSpan;
+        if (o3tl::checked_add(pConnCell->GetRowID(), pConnCell->GetNumrows(), nRowSpan))
+            throw std::range_error("bad span");
+        if (nRowSpan > nEffectRows)
         {
-            pConnCell->SetNumrows(nEffectRows - pConnCell->GetRowID());
+            if (o3tl::checked_sub(nEffectRows, pConnCell->GetRowID(), nRowSpan))
+                throw std::range_error("bad span");
+            pConnCell->SetNumrows(nRowSpan);
         }
     }
 }
