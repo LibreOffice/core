@@ -6550,10 +6550,10 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                     DffRecordHeader     aPresRuleHd;
                     DffRecordHeader*    pFirst = pHd;
 
-                    sal_uInt32  nTmpSlideId, nTmpRef;
                     while ( pHd )
                     {
                         pHd->SeekToContent( rIn );
+                        sal_uInt32 nTmpSlideId(0), nTmpRef;
                         rIn.ReadUInt32( nTmpSlideId )
                            .ReadUInt32( nTmpRef );         // this seems to be the instance
 
