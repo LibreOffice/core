@@ -3075,7 +3075,7 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
         aAction.Action(&rRenderContext);
         ResetTurboFlag();
         if ( !pSh->ActionPend() )
-            pSh->Imp()->DelRegion();
+            pSh->Imp()->DeletePaintRegion();
     }
 
     aRect.Intersection( pSh->VisArea() );

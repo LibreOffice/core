@@ -108,15 +108,15 @@ SwViewShellImp::~SwViewShellImp()
 
     m_pDrawView.reset();
 
-    DelRegion();
+    DeletePaintRegion();
 
     OSL_ENSURE( !m_pLayAction, "Have action for the rest of your life." );
     OSL_ENSURE( !m_pIdleAct,"Be idle for the rest of your life." );
 }
 
-void SwViewShellImp::DelRegion()
+void SwViewShellImp::DeletePaintRegion()
 {
-    m_pRegion.reset();
+    m_pPaintRegion.reset();
 }
 
 bool SwViewShellImp::AddPaintRect( const SwRect &rRect )
@@ -124,15 +124,15 @@ bool SwViewShellImp::AddPaintRect( const SwRect &rRect )
     // In case of tiled rendering the visual area is the last painted tile -> not interesting.
     if ( rRect.IsOver( m_pShell->VisArea() ) || comphelper::LibreOfficeKit::isActive() )
     {
-        if ( !m_pRegion )
+        if ( !m_pPaintRegion )
         {
             // In case of normal rendering, this makes sure only visible rectangles are painted.
             // Otherwise get the rectangle of the full document, so all paint rectangles are invalidated.
             const SwRect& rArea = comphelper::LibreOfficeKit::isActive() ? m_pShell->GetLayout()->getFrameArea() : m_pShell->VisArea();
-            m_pRegion.reset(new SwRegionRects);
-            m_pRegion->ChangeOrigin(rArea);
+            m_pPaintRegion.reset(new SwRegionRects);
+            m_pPaintRegion->ChangeOrigin(rArea);
         }
-        (*m_pRegion) += rRect;
+        (*m_pPaintRegion) += rRect;
         return true;
     }
     return false;
