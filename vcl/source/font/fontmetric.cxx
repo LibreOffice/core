@@ -52,6 +52,7 @@ FontMetric::FontMetric()
 FontMetric::FontMetric( const FontMetric& rFontMetric ) = default;
 
 FontMetric::FontMetric(PhysicalFontFace const& rFace)
+    : FontMetric()
 {
     SetFamilyName(rFace.GetFamilyName());
     SetStyleName(rFace.GetStyleName());
