@@ -25,6 +25,7 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_fontmetric, \
 	cppu \
 	cppuhelper \
 	sal \
+	salhelper \
 	svt \
 	test \
 	tl \
@@ -48,6 +49,7 @@ $(eval $(call gb_CppunitTest_use_configuration,vcl_fontmetric))
 
 $(eval $(call gb_CppunitTest_use_externals,vcl_fontmetric,\
     harfbuzz \
+    graphite \
 ))
 
 $(eval $(call gb_CppunitTest_use_more_fonts,vcl_fontmetric))
