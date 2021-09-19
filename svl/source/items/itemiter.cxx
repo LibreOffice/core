@@ -30,7 +30,7 @@ SfxItemIter::SfxItemIter(const SfxItemSet& rItemSet)
     }
     else
     {
-        SfxPoolItem const** ppFnd = m_rSet.m_pItems.get();
+        SfxPoolItem const** ppFnd = m_rSet.m_ppItems;
 
         // Find the first Item that is set
         for (m_nStart = 0; !*(ppFnd + m_nStart); ++m_nStart)
@@ -50,7 +50,7 @@ SfxItemIter::~SfxItemIter() {}
 // Precondition : m_nCurrent < m_nEnd
 const SfxPoolItem* SfxItemIter::ImplNextItem()
 {
-    SfxPoolItem const** ppFnd = m_rSet.m_pItems.get();
+    SfxPoolItem const** ppFnd = m_rSet.m_ppItems;
     do
     {
         m_nCurrent++;

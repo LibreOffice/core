@@ -38,7 +38,7 @@ public:
     /// get item, or null if no items
     const SfxPoolItem* GetCurItem() const
     {
-        return m_rSet.m_nCount ? *(m_rSet.m_pItems.get() + m_nCurrent) : nullptr;
+        return m_rSet.m_nCount ? *(m_rSet.m_ppItems + m_nCurrent) : nullptr;
     }
     const SfxPoolItem* NextItem() { return (m_nCurrent < m_nEnd) ? ImplNextItem() : nullptr; }
 
