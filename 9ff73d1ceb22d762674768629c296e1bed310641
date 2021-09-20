@@ -16,6 +16,24 @@
       "message": "Stephan: I suppose we do not have any special handling for our public SDK libraries, so I\u0027ll need to explicitly flag them to not use this feature? Does it even matter to care about binary compatibility for code built with clang-cl?\n\nAlthough /Zc:inline docs do not say anything about binary compatibility, it looks similar enough that SDK libs probably should get similar handling there too, in the next commit.\n\n",
       "revId": "9ff73d1ceb22d762674768629c296e1bed310641",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45cd4e3e_9fa2d4ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-20T11:34:16Z",
+      "side": 1,
+      "message": "\u003e Stephan: I suppose we do not have any special handling for our public SDK libraries, so I\u0027ll need to explicitly flag them to not use this feature? Does it even matter to care about binary compatibility for code built with clang-cl?\n\n(After reading \u003chttp://blog.llvm.org/2018/11/30-faster-windows-builds-with-clang-cl_14.html\u003e:)  Yes, all the libraries that make up the published URE interface would need to be built without that.  While we don\u0027t do \"official\" clang-cl--based builds right now, they are (intended to be) ABI-compatible with MSVC-based builds, so we could change \"official\" builds from MSVC- to clang-cl--based and would then need to worry about backwards compatibility of those URE DLLs.  So I would suggest to filter out the flag, to avoid any potential accidents in the future.\n\n\u003e Although /Zc:inline docs do not say anything about binary compatibility, it looks similar enough that SDK libs probably should get similar handling there too, in the next commit.\n\nsounds reasonable",
+      "parentUuid": "1686841b_3b8488ad",
+      "revId": "9ff73d1ceb22d762674768629c296e1bed310641",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
