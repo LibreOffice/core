@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1686841b_3b8488ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-09-20T10:46:40Z",
+      "side": 1,
+      "message": "Stephan: I suppose we do not have any special handling for our public SDK libraries, so I\u0027ll need to explicitly flag them to not use this feature? Does it even matter to care about binary compatibility for code built with clang-cl?\n\nAlthough /Zc:inline docs do not say anything about binary compatibility, it looks similar enough that SDK libs probably should get similar handling there too, in the next commit.\n\n",
+      "revId": "9ff73d1ceb22d762674768629c296e1bed310641",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
