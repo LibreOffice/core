@@ -16,6 +16,24 @@
       "message": "Samuel, Thorsten, the motivation behind this five-piece change series was discussed at \u003chttps://lists.freedesktop.org/archives/libreoffice/2021-September/087836.html\u003e \"ESC meeting minutes: 2021-09-09\", section \"Drop idlc/regmerge from SDK?\"  As you are somewhat involved in the SDK (and customers using it?), maybe you have some thoughts here, esp. on this change and on the first one in the series, \u003chttps://gerrit.libreoffice.org/c/core/+/121725\u003e \"Fix all bad UNOIDL identifiers across offapi\".",
       "revId": "5c40ebef723b10dab56c33277f3d56cf93c17814",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eea458ee_34955928",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-09-20T14:58:54Z",
+      "side": 1,
+      "message": "idlc and regmerge are widely used tools in the extension ecosystem. Many extension build tools need to be adopted (for example LOEclipse).\n\nWhat is the exact rationale behind this? Get rid of technical debt?\n\nI\u0027m not generally speaking against such changes, but we need to consider this carefully, e.g.:\n\n* DevGuide is still hosted on openoffice.org - we have no chance of updating documentation as long as it\u0027s not on our infra. We should have the DevGuide on our infra before doing such a change. Then all our documentation needs updating to reflect this change.\n* Although we allow incompatible changes in every release, users usually don\u0027t expect incompatible changes between point releases (7.2 -\u003e 7.3). We should wait until 8.0 (or do the 8.0 bump for the next release, currently 7.3).",
+      "parentUuid": "b02b35c9_7a40c9a2",
+      "revId": "5c40ebef723b10dab56c33277f3d56cf93c17814",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
