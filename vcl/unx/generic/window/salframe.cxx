@@ -89,6 +89,7 @@ constexpr auto CLIENT_EVENTS = StructureNotifyMask
 static ::Window  hPresentationWindow = None, hPresFocusWindow = None;
 static ::std::list< ::Window > aPresentationReparentList;
 static int          nVisibleFloats      = 0;
+static bool bIconGenerationRecursionProtection = false;
 
 static void doReparentPresentationDialogues( SalDisplay const * pDisplay )
 {
@@ -564,16 +565,23 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
         if( !(nStyle_ & SalFrameStyleFlags::INTRO) )
         {
             bool bOk=false;
-            try
+            if (!bIconGenerationRecursionProtection)
             {
-                bOk = lcl_SelectAppIconPixmap( pDisplay_, m_nXScreen,
-                                               mnIconID != SV_ICON_ID_OFFICE ? mnIconID :
-                                               (mpParent ? mpParent->mnIconID : SV_ICON_ID_OFFICE), 32,
-                                               Hints.icon_pixmap, Hints.icon_mask, netwm_icon );
-            }
-            catch( css::uno::Exception& )
-            {
-                // can happen - no ucb during early startup
+                bIconGenerationRecursionProtection = true;
+
+                try
+                {
+                    bOk = lcl_SelectAppIconPixmap( pDisplay_, m_nXScreen,
+                                                   mnIconID != SV_ICON_ID_OFFICE ? mnIconID :
+                                                   (mpParent ? mpParent->mnIconID : SV_ICON_ID_OFFICE), 32,
+                                                   Hints.icon_pixmap, Hints.icon_mask, netwm_icon );
+                }
+                catch( css::uno::Exception& )
+                {
+                    // can happen - no ucb during early startup
+                }
+
+                bIconGenerationRecursionProtection = false;
             }
             if( bOk )
             {
