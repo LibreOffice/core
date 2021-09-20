@@ -2286,6 +2286,29 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                             pTextNd = aIdx.GetNode().GetContentNode();
                     }
                 }
+
+                // delete tables of the deletion explicitly, to avoid
+                // remaining empty tables after accepting the rejection
+                // and visible empty tables in Hide Changes mode
+                // (this was the case, if tables have already contained
+                // other tracked changes)
+                // FIXME: because of recursive nature of AppendRedline,
+                // this doesn't work for selections with multiple tables
+                if ( m_rDoc.GetIDocumentUndoRedo().DoesUndo() )
+                {
+                    SwNodeIndex aSttIdx( pStt->nNode.GetNode() );
+                    SwNodeIndex aEndIdx( pEnd->nNode.GetNode() );
+                    while ( aSttIdx < aEndIdx )
+                    {
+                        if ( aSttIdx.GetNode().IsTableNode() )
+                        {
+                            SvxPrintItem aNotTracked(RES_PRINT, false);
+                            SwCursor aCursor( SwPosition(aSttIdx), nullptr );
+                            m_rDoc.SetRowNotTracked( aCursor, aNotTracked, /*bAll=*/true );
+                        }
+                        ++aSttIdx;
+                    }
+                }
             }
             bool const ret = mpRedlineTable->Insert( pNewRedl );
             assert(ret || !pNewRedl);

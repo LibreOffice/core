@@ -537,14 +537,21 @@ bool SwDoc::GetRowBackground( const SwCursor& rCursor, std::unique_ptr<SvxBrushI
     return bRet;
 }
 
-void SwDoc::SetRowNotTracked( const SwCursor& rCursor, const SvxPrintItem &rNew )
+void SwDoc::SetRowNotTracked( const SwCursor& rCursor, const SvxPrintItem &rNew, bool bAll )
 {
     SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
     if( !pTableNd )
         return;
 
     std::vector<SwTableLine*> aRowArr; // For Lines collecting
-    ::lcl_CollectLines( aRowArr, rCursor, true );
+    if ( bAll )
+    {
+        const SwTableLines &rLines = pTableNd->GetTable().GetTabLines();
+        for ( auto pLine : rLines )
+            aRowArr.push_back(pLine);
+    }
+    else
+        ::lcl_CollectLines( aRowArr, rCursor, true );
 
     if( aRowArr.empty() )
         return;
