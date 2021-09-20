@@ -16,6 +16,24 @@
       "message": "Since AFAIK nobody provides any Win Arm64 builds, except for one tinderbox, and I don\u0027t even own any aarch64 HW, I can\u0027t test, if the same applies for MSVC Arm64 (I did the port using QEMU). But I think compiling more code in CI is better then less. OTOH I don\u0027t care much.\n\nI used that to \"tag\" all patches of the port, so they are easier to \"git log --grep\". If you still think this commit improves something, please change the commit message to include \"Windows Arm64\".",
       "revId": "5fad4e08c0f55395b520641aeafa483fae0564c1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2acf37e_6d2525d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-09-20T17:16:25Z",
+      "side": 1,
+      "message": "\u003e I used that to \"tag\" all patches of the port, so they are easier to \"git log --grep\". If you still think this commit improves something, please change the commit message to include \"Windows Arm64\".\n\ns/that/\"Windows Arm64\"/",
+      "parentUuid": "2911e196_a108716f",
+      "revId": "5fad4e08c0f55395b520641aeafa483fae0564c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
