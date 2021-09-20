@@ -3391,6 +3391,47 @@ void SwContentTree::UpdateTracking()
         return;
     }
 
+    // hyperlinks
+    if (SwContentAtPos aContentAtPos(IsAttrAtPos::InetAttr);
+            m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
+            !(m_bIsRoot && m_nRootType != ContentTypeId::URLFIELD))
+    {
+        // Because hyperlink item names do not need to be unique, finding the corrosponding item
+        // in the tree by name may result in incorrect selection. Find the item in the tree by
+        // comparing the SwTextINetFormat pointer at the document cursor position to that stored
+        // in the item SwURLFieldContent.
+        // find content type entry
+        std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
+        bool bFoundEntry = m_xTreeView->get_iter_first(*xIter);
+        while (bFoundEntry && SwResId(STR_CONTENT_TYPE_URLFIELD) != m_xTreeView->get_text(*xIter))
+            bFoundEntry = m_xTreeView->iter_next_sibling(*xIter);
+        if (bFoundEntry)
+        {
+            // assure content type entry is expanded
+            m_xTreeView->expand_row(*xIter);
+            // find content type content entry and select it
+            while (m_xTreeView->iter_next(*xIter) && lcl_IsContent(*xIter, *m_xTreeView))
+            {
+                if (aContentAtPos.pFndTextAttr == reinterpret_cast<const SwURLFieldContent*>
+                        (m_xTreeView->get_id(*xIter).toInt64())->GetINetAttr())
+                {
+                    // get first selected for comparison
+                    std::unique_ptr<weld::TreeIter> xFirstSelected(m_xTreeView->make_iterator());
+                    if (!m_xTreeView->get_selected(xFirstSelected.get()))
+                        xFirstSelected.reset();
+                    if (m_xTreeView->count_selected_rows() != 1 ||
+                            m_xTreeView->iter_compare(*xIter, *xFirstSelected) != 0)
+                    {
+                        // unselect all entries and make found entry visible and selected
+                        m_xTreeView->set_cursor(*xIter);
+                        Select();
+                    }
+                    break;
+                }
+            }
+        }
+        return;
+    }
     // fields
     if (SwField* pField = m_pActiveShell->GetCurField(); pField &&
             !(m_bIsRoot && m_nRootType != ContentTypeId::TEXTFIELD))
