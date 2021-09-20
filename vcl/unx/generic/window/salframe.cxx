@@ -561,7 +561,7 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
         if( IsOverrideRedirect() )
             Attributes.override_redirect = True;
         // default icon
-        if( !(nStyle_ & SalFrameStyleFlags::INTRO) )
+        if( !(nStyle_ & SalFrameStyleFlags::INTRO) && !(nStyle_ & SalFrameStyleFlags::NOICON))
         {
             bool bOk=false;
             try

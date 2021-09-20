@@ -232,7 +232,7 @@ vcl::Window *ImplGetDefaultContextWindow()
             {
                 SAL_INFO( "vcl", "ImplGetDefaultWindow(): No AppWindow" );
 
-                pSVData->mpDefaultWin = VclPtr<WorkWindow>::Create( nullptr, WB_DEFAULTWIN );
+                pSVData->mpDefaultWin = VclPtr<WorkWindow>::Create(nullptr, WB_DEFAULTWIN);
                 pSVData->mpDefaultWin->SetText( "VCL ImplGetDefaultWindow" );
             }
             catch (const css::uno::Exception&)
