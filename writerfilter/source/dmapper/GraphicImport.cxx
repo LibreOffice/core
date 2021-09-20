@@ -1227,8 +1227,8 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         // But they aren't Writer pictures, either (which are already handled above).
                         uno::Reference< beans::XPropertySet > xShapeProps(m_xShape, uno::UNO_QUERY_THROW);
 
-                        // This needs to be AT_PARAGRAPH by default and not AT_CHARACTER, otherwise shape will move when the user inserts a new paragraph.
-                        text::TextContentAnchorType eAnchorType = text::TextContentAnchorType_AT_PARAGRAPH;
+                        // Anchored: Word only supports at-char in that case.
+                        text::TextContentAnchorType eAnchorType = text::TextContentAnchorType_AT_CHARACTER;
 
                         if (m_pImpl->bHidden)
                         {
@@ -1247,9 +1247,6 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         // just avoid until layout's repositioning is sync'd to the text frame.
                         if (m_pImpl->bLayoutInCell && bTextBox)
                             m_pImpl->bLayoutInCell = !m_pImpl->bCompatForcedLayoutInCell;
-
-                        if (m_pImpl->nVertRelation == text::RelOrientation::TEXT_LINE)
-                            eAnchorType = text::TextContentAnchorType_AT_CHARACTER;
 
                         xShapeProps->setPropertyValue("AnchorType", uno::makeAny(eAnchorType));
 

@@ -563,15 +563,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTextCopy)
     uno::Reference<beans::XPropertySet> xPageStyle(
         getStyles("PageStyles")->getByName(aPageStyleName), uno::UNO_QUERY);
     auto xHeaderText = getProperty<uno::Reference<text::XText>>(xPageStyle, "HeaderText");
-    uno::Reference<container::XContentEnumerationAccess> xHeaderPara(
-        getParagraphOfText(1, xHeaderText), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xHeaderShapes
-        = xHeaderPara->createContentEnumeration("com.sun.star.text.TextContent");
+    uno::Reference<text::XTextRange> xHeaderPara = getParagraphOfText(1, xHeaderText);
+    auto aTextPortionType = getProperty<OUString>(getRun(xHeaderPara, 1), "TextPortionType");
     // Without the accompanying fix in place, this test would have failed with:
-    // assertion failed
-    // - Expression: xHeaderShapes->hasMoreElements()
+    // - Expected: Frame
+    // - Actual  : Text
     // i.e. the second page's header had no anchored shapes.
-    CPPUNIT_ASSERT(xHeaderShapes->hasMoreElements());
+    CPPUNIT_ASSERT_EQUAL(OUString("Frame"), aTextPortionType);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf112443)
