@@ -122,7 +122,7 @@ JNIEXPORT jlong JNICALL Java_NativeView_getNativeWindow
      */
     if (GetProp( hWnd, OLD_PROC_KEY )==0)
     {
-        hFuncPtr = SetWindowLong( hWnd, GWL_WNDPROC, (DWORD)NativeViewWndProc );
+        hFuncPtr = SetWindowLongPtr( hWnd, GWLP_WNDPROC, (LONG_PTR)NativeViewWndProc );
         SetProp( hWnd, OLD_PROC_KEY, (HANDLE)hFuncPtr );
     }
 
