@@ -19,8 +19,8 @@
 
 #pragma once
 
-// Attention: stl headers must(!) be included at first. Otherwise it can make trouble
-// with solaris headers ...
+#include <sal/config.h>
+
 #include <vector>
 #include <mutex>
 
