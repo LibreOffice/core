@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aaecc0d5_a580b2e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-09-20T10:05:53Z",
+      "side": 1,
+      "message": "Code is not from me, I only moved it here from other places.\nBut still, LGTM.",
+      "revId": "d7ba437d3ebfc61740e7b089af67a111013ea65a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
