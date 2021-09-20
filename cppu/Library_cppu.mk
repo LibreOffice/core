@@ -14,6 +14,8 @@ $(eval $(call gb_Library_set_soversion_script,cppu,$(SRCDIR)/cppu/util/cppu.map)
 
 $(eval $(call gb_Library_use_udk_api,cppu))
 
+$(eval $(call gb_Library_set_is_ure_library,cppu))
+
 $(eval $(call gb_Library_add_defs,cppu,\
 	-DCPPU_DLLIMPLEMENTATION \
 ))
