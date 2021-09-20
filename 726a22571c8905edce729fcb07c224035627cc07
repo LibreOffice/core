@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0bd6abc_a42fa979",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-09-20T12:14:18Z",
+      "side": 1,
+      "message": "I generally have no direct fix idea, nor a viable debugging environment. Debian Bullseye\u0027s KDE is still to buggy on Wayland. This again maps SalFrameStyleFlags::FLOAT to Qt::ToolTip, which has other problems...",
+      "revId": "726a22571c8905edce729fcb07c224035627cc07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
