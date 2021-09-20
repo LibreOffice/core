@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a66285e8_4309d49a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-20T08:55:40Z",
+      "side": 1,
+      "message": "Hi Khaled, can you sanity check this for me? It doesn\u0027t look like we need these functions any more. ",
+      "revId": "494b74b5fd2817e7627e5bf6e4981c57340c8910",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
