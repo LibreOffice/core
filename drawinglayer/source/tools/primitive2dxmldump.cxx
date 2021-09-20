@@ -608,12 +608,43 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 break;
             }
 
+            case PRIMITIVE2D_ID_MODIFIEDCOLORPRIMITIVE2D:
+            {
+                // ModifiedColorPrimitive2D.
+                rWriter.startElement("modifiedColor");
+                drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
+                pBasePrimitive->get2DDecomposition(aPrimitiveContainer,
+                                                   drawinglayer::geometry::ViewInformation2D());
+                decomposeAndWrite(aPrimitiveContainer, rWriter);
+                rWriter.endElement();
+                break;
+            }
+
             default:
             {
-                rWriter.startElement("unhandled");
+                OString aName("unhandled");
+                switch (nId)
+                {
+                    case PRIMITIVE2D_ID_RANGE_SVX | 14: // PRIMITIVE2D_ID_SDRCELLPRIMITIVE2D
+                    {
+                        aName = "sdrCell";
+                        break;
+                    }
+                }
+                rWriter.startElement(aName);
                 rWriter.attribute("id",
                                   OUStringToOString(sCurrentElementTag, RTL_TEXTENCODING_UTF8));
                 rWriter.attribute("idNumber", nId);
+
+                auto pBufferedDecomposition
+                    = dynamic_cast<const BufferedDecompositionPrimitive2D*>(pBasePrimitive);
+                if (pBufferedDecomposition)
+                {
+                    rWriter.attribute(
+                        "excludeFromBlur",
+                        OString::boolean(pBufferedDecomposition->getExcludeFromBlur()));
+                }
+
                 drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
                 pBasePrimitive->get2DDecomposition(aPrimitiveContainer,
                                                    drawinglayer::geometry::ViewInformation2D());

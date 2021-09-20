@@ -67,6 +67,9 @@ private:
     /// a sequence used for buffering the last create2DDecomposition() result
     Primitive2DContainer maBuffered2DDecomposition;
 
+    /// When blur is invoked on a list of primitives, exclude this primitive from the blur effect.
+    bool mbExcludeFromBlur = false;
+
 protected:
     /** access methods to maBuffered2DDecomposition. The usage of this methods may allow
         later thread-safe stuff to be added if needed. Only to be used by getDecomposition()
@@ -99,6 +102,10 @@ public:
     virtual void
     get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
                        const geometry::ViewInformation2D& rViewInformation) const override;
+
+    void setExcludeFromBlur(bool bExcludeFromBlur) { mbExcludeFromBlur = bExcludeFromBlur; }
+
+    bool getExcludeFromBlur() const { return mbExcludeFromBlur; }
 };
 
 } // end of namespace drawinglayer::primitive2d

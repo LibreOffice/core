@@ -325,14 +325,16 @@ namespace sdr::contact
                                         aRetval.append(xCellReference);
                                     }
 
-                                    // Create cell primitive without text.
+                                    // Create cell primitive without text and blur.
                                     aAttribute
                                         = drawinglayer::primitive2d::createNewSdrFillTextAttribute(
                                             rCellItemSet, nullptr);
+                                    rtl::Reference pCellReference
+                                        = new drawinglayer::primitive2d::SdrCellPrimitive2D(
+                                            aCellMatrix, aAttribute);
+                                    pCellReference->setExcludeFromBlur(true);
                                     const drawinglayer::primitive2d::Primitive2DReference
-                                        xCellReference(
-                                            new drawinglayer::primitive2d::SdrCellPrimitive2D(
-                                                aCellMatrix, aAttribute));
+                                        xCellReference(pCellReference);
                                     aRetvalForShadow.append(xCellReference);
                                 }
                             }
@@ -382,7 +384,8 @@ namespace sdr::contact
                                 aTransform,
                                 drawinglayer::primitive2d::Primitive2DContainer(aCellBorderPrimitives)));
 
-                        // Borders are always the same for shadow as well.
+                        // Borders are always the same for shadow as well, and implicitly included
+                        // in blur.
                         aRetvalForShadow.append(new drawinglayer::primitive2d::TransformPrimitive2D(
                             aTransform, std::move(aCellBorderPrimitives)));
                     }
