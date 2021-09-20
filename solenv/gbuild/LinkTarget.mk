@@ -2010,4 +2010,15 @@ $(call gb_LinkTarget_use_static_libraries,$(1),vclmain)
 
 endef # gb_LinkTarget_use_vclmain
 
+# Used by URE libraries that need to keep binary compatibility.
+# Reset some flags that make sense for our internal libraries but might
+# break public ABI.
+# call gb_LinkTarget_set_is_ure_library,linktarget,,linktargetmakefilename
+define gb_LinkTarget_set_is_ure_library
+ifeq ($(HAVE_DLLEXPORTINLINES),TRUE)
+$(call gb_LinkTarget_add_cxxflags,$(1),-Zc:dllexportInlines)
+endif
+
+endef
+
 # vim: set noet sw=4:

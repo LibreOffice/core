@@ -7599,6 +7599,21 @@ if test "$GCC" = yes && test "$COM_IS_CLANG" != TRUE; then
 fi
 AC_SUBST([HAVE_BROKEN_GCC_WSTRINGOP_OVERFLOW])
 
+HAVE_DLLEXPORTINLINES=
+if test "$_os" = "WINNT"; then
+    AC_MSG_CHECKING([whether $CXX_BASE supports -Zc:dllexportInlines-])
+    AC_LANG_PUSH([C++])
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS -Werror -Zc:dllexportInlines-"
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE()], [
+            HAVE_DLLEXPORTINLINES=TRUE
+            AC_MSG_RESULT([yes])
+        ], [AC_MSG_RESULT([no])])
+    CXXFLAGS=$save_CXXFLAGS
+    AC_LANG_POP([C++])
+fi
+AC_SUBST([HAVE_DLLEXPORTINLINES])
+
 dnl ===================================================================
 dnl CPU Intrinsics support - SSE, AVX
 dnl ===================================================================

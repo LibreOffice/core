@@ -14,6 +14,8 @@ $(eval $(call gb_Library_set_soversion_script,sal,$(SRCDIR)/sal/util/sal.map))
 
 $(eval $(call gb_Library_set_precompiled_header,sal,sal/inc/pch/precompiled_sal))
 
+$(eval $(call gb_Library_set_is_ure_library,sal))
+
 $(eval $(call gb_Library_set_include,sal,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/sal/inc \
