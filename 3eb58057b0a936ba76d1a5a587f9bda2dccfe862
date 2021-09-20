@@ -16,6 +16,24 @@
       "message": "any specific reason you made this a lambda (with an empty capture list) rather than simply a free function?",
       "revId": "3eb58057b0a936ba76d1a5a587f9bda2dccfe862",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3c8c85d_6e5517a2",
+        "filename": "comphelper/source/misc/DirectoryHelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-09-20T10:38:51Z",
+      "side": 1,
+      "message": "None in particular. I just wanted it to be more of a detail of  DirectoryHelper::scanDirsAndFiles, so that felt more natural.",
+      "parentUuid": "80172ea2_86b08c09",
+      "revId": "3eb58057b0a936ba76d1a5a587f9bda2dccfe862",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
