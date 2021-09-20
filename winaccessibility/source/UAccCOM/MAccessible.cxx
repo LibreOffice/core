@@ -1364,15 +1364,14 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccAgent(hyper pAgent)
 /**
 * When a UNO control disposing, it disposes its listeners,
 * then notify AccObject in bridge management, then notify
-* COM that the XAccessible is invalid,so set m_xAccessible as NULL
-* @param    isDestroy, true is it needs to be destroyed.
+* COM that the XAccessible is invalid, so set m_xAccessible as NULL
 * @return   S_OK if successful and E_FAIL if failure.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::NotifyDestroy(BOOL isDestroy)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::NotifyDestroy()
 {
     // internal IMAccessible - no mutex meeded
 
-    m_isDestroy = isDestroy;
+    m_isDestroy = true;
     m_xAccessible.clear();
     return S_OK;
 }

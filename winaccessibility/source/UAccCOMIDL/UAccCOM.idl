@@ -49,7 +49,7 @@ import "defines.idl";
         [id(23), helpstring("method SetDefaultAction")] HRESULT SetDefaultAction(hyper pAction);
         [id(24), helpstring("method Put_ActionDescription")] HRESULT Put_ActionDescription( const OLECHAR* szAction);
         [id(25), helpstring("method Put_XAccAgent")] HRESULT Put_XAccAgent(hyper pAgent);
-        [id(26), helpstring("method NotifyDestroy")] HRESULT NotifyDestroy(BOOL isDestroy);
+        [id(26), helpstring("method NotifyDestroy")] HRESULT NotifyDestroy();
         [id(30), helpstring("method Get_XAccChildID")] HRESULT Get_XAccChildID([out,retval] long* childID);
     };
     [

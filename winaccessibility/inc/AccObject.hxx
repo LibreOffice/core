@@ -107,7 +107,7 @@ public:
     void DeleteChild( AccObject* pChild );
     AccObject* NextChild();
 
-    void NotifyDestroy(bool bDestroy);
+    void NotifyDestroy();
 
     void  DecreaseState(short xState );//call COM interface DecreaseState method
     void  IncreaseState( short xState );//call COM interface IncreaseState method
