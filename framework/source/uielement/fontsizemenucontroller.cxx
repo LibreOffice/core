@@ -159,13 +159,11 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
     if ( !pFontList )
         pFontList.reset(new FontList( Application::GetDefaultDevice() ));
 
-    FontMetric aFontMetric = pFontList->Get( m_aFontDescriptor.Name, m_aFontDescriptor.StyleName );
-
     // setup font size array
     m_pHeightArray.reset();
 
     const int* pTempAry;
-    const int* pAry = pFontList->GetSizeAry( aFontMetric );
+    const int* pAry = FontList::GetStdSizeAry();
     sal_uInt16 nSizeCount = 0;
     while ( pAry[nSizeCount] )
         nSizeCount++;

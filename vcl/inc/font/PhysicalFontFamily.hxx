@@ -72,7 +72,6 @@ public:
     const OUString& GetAliasNames() const { return maMapNames; }
     int GetMinQuality() const { return mnMinQuality; }
     FontTypeFaces GetTypeFaces() const { return mnTypeFaces; }
-    void GetFontHeights(o3tl::sorted_vector<int>& rHeights) const;
 
     const OUString& GetMatchFamilyName() const { return maMatchFamilyName; }
     ImplFontAttrs GetMatchType() const { return mnMatchType; }

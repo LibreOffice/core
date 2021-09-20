@@ -884,16 +884,11 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
     m_xLabelBox->set_entry_text(sCapBackup );
     m_xIdxBox->set_entry_text(sIdxBackup );
 
-    FontMetric aFontMetric( m_pFontList->Get(sStdBackup, sStdBackup) );
-    m_xStandardHeightLB->Fill( &aFontMetric, m_pFontList.get() );
-    aFontMetric = m_pFontList->Get(sOutBackup, sOutBackup );
-    m_xTitleHeightLB->Fill( &aFontMetric, m_pFontList.get() );
-    aFontMetric = m_pFontList->Get(sListBackup,sListBackup);
-    m_xListHeightLB->Fill( &aFontMetric, m_pFontList.get() );
-    aFontMetric = m_pFontList->Get(sCapBackup, sCapBackup );
-    m_xLabelHeightLB->Fill( &aFontMetric, m_pFontList.get() );
-    aFontMetric = m_pFontList->Get(sIdxBackup, sIdxBackup );
-    m_xIndexHeightLB->Fill( &aFontMetric, m_pFontList.get() );
+    m_xStandardHeightLB->Fill( m_pFontList.get() );
+    m_xTitleHeightLB->Fill( m_pFontList.get() );
+    m_xListHeightLB->Fill( m_pFontList.get() );
+    m_xLabelHeightLB->Fill( m_pFontList.get() );
+    m_xIndexHeightLB->Fill( m_pFontList.get() );
 
     m_xStandardHeightLB->set_value( CalcToPoint( nStandardHeight, MapUnit::MapTwip, 10 ) );
     m_xTitleHeightLB->set_value( CalcToPoint( nTitleHeight   , MapUnit::MapTwip, 10 ) );
@@ -976,7 +971,7 @@ IMPL_LINK( SwStdFontTabPage, LoseFocusHdl, weld::Widget&, rControl, void )
 {
     weld::ComboBox& rBox = dynamic_cast<weld::ComboBox&>(rControl);
     FontSizeBox* pHeightLB = nullptr;
-    const OUString sEntry = rBox.get_active_text();
+
     if (&rBox == m_xStandardBox.get())
     {
         pHeightLB = m_xStandardHeightLB.get();
@@ -997,8 +992,8 @@ IMPL_LINK( SwStdFontTabPage, LoseFocusHdl, weld::Widget&, rControl, void )
     {
         pHeightLB = m_xIndexHeightLB.get();
     }
-    FontMetric aFontMetric( m_pFontList->Get(sEntry, sEntry) );
-    pHeightLB->Fill( &aFontMetric, m_pFontList.get() );
+
+    pHeightLB->Fill( m_pFontList.get() );
 }
 
 void SwStdFontTabPage::PageCreated( const SfxAllItemSet& aSet)

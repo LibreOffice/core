@@ -132,45 +132,6 @@ bool OutputDevice::IsFontAvailable( const OUString& rFontName ) const
     return (pFound != nullptr);
 }
 
-int OutputDevice::GetDevFontSizeCount( const vcl::Font& rFont ) const
-{
-    mpDeviceFontSizeList.reset();
-
-    ImplInitFontList();
-    mpDeviceFontSizeList = mxFontCollection->GetDeviceFontSizeList( rFont.GetFamilyName() );
-    return mpDeviceFontSizeList->Count();
-}
-
-Size OutputDevice::GetDevFontSize( const vcl::Font& rFont, int nSizeIndex ) const
-{
-    // check range
-    int nCount = GetDevFontSizeCount( rFont );
-    if ( nSizeIndex >= nCount )
-        return Size();
-
-    // when mapping is enabled round to .5 points
-    Size aSize( 0, mpDeviceFontSizeList->Get( nSizeIndex ) );
-    if ( mbMap )
-    {
-        aSize.setHeight( aSize.Height() * 10 );
-        MapMode aMap( MapUnit::Map10thInch, Point(), Fraction( 1, 72 ), Fraction( 1, 72 ) );
-        aSize = PixelToLogic( aSize, aMap );
-        aSize.AdjustHeight(5 );
-        aSize.setHeight( aSize.Height() / 10 );
-        tools::Long nRound = aSize.Height() % 5;
-        if ( nRound >= 3 )
-            aSize.AdjustHeight(5-nRound);
-        else
-            aSize.AdjustHeight( -nRound );
-        aSize.setHeight( aSize.Height() * 10 );
-        aSize = LogicToPixel( aSize, aMap );
-        aSize = PixelToLogic( aSize );
-        aSize.AdjustHeight(5 );
-        aSize.setHeight( aSize.Height() / 10 );
-    }
-    return aSize;
-}
-
 bool OutputDevice::AddTempDevFont( const OUString& rFileURL, const OUString& rFontName )
 {
     ImplInitFontList();
