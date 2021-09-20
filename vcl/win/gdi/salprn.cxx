@@ -1040,17 +1040,8 @@ static bool ImplUpdateSalPrnIC( WinSalInfoPrinter* pPrinter, const ImplJobSetup*
     if ( !hNewDC )
         return FALSE;
 
-    if ( pPrinter->mpGraphics )
-    {
-        assert(pPrinter->mpGraphics->getHDC() == pPrinter->mhDC);
-        delete pPrinter->mpGraphics;
-        DeleteDC(pPrinter->mhDC);
-    }
-
-    pPrinter->mpGraphics = ImplCreateSalPrnGraphics( hNewDC );
-    pPrinter->mhDC      = hNewDC;
-
-    return TRUE;
+    pPrinter->setHDC(hNewDC);
+    return true;
 }
 
 
@@ -1074,8 +1065,7 @@ SalInfoPrinter* WinSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
         return nullptr;
     }
 
-    pPrinter->mpGraphics = ImplCreateSalPrnGraphics( hDC );
-    pPrinter->mhDC      = hDC;
+    pPrinter->setHDC(hDC);
     if ( !pSetupData->GetDriverData() )
         ImplUpdateSalJobSetup( pPrinter, pSetupData, false, nullptr );
     ImplDevModeToJobSetup( pPrinter, pSetupData, JobSetFlags::ALL );
@@ -1091,23 +1081,33 @@ void WinSalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
 
 
 WinSalInfoPrinter::WinSalInfoPrinter() :
-    mpGraphics( nullptr ),
-    mhDC( nullptr ),
-    mbGraphics( FALSE )
+    m_hDC(nullptr),
+    m_pGraphics(nullptr),
+    m_bGraphics(false)
 {
     m_bPapersInit = FALSE;
 }
 
 WinSalInfoPrinter::~WinSalInfoPrinter()
 {
-    if ( mpGraphics )
+    setHDC(nullptr);
+}
+
+void WinSalInfoPrinter::setHDC(HDC hNewDC)
+{
+    assert(!m_bGraphics);
+
+    if (m_hDC)
     {
+        assert(!m_pGraphics || m_hDC == m_pGraphics->getHDC());
         // we get intermittent crashes on the Windows jenkins box around here, let us see if there is something weird about the DC
-        SAL_WARN("vcl", "Graphics DC " << mpGraphics->getHDC());
-        assert(mpGraphics->getHDC() == mhDC);
-        delete mpGraphics;
-        DeleteDC(mhDC);
+        SAL_WARN_IF(!hNewDC, "vcl", "Graphics DC " << m_hDC);
+        delete m_pGraphics;
+        m_pGraphics = nullptr;
+        DeleteDC(m_hDC);
     }
+
+    m_hDC = hNewDC;
 }
 
 void WinSalInfoPrinter::InitPaperFormats( const ImplJobSetup* pSetupData )
@@ -1148,18 +1148,21 @@ int WinSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* pSetupData )
 
 SalGraphics* WinSalInfoPrinter::AcquireGraphics()
 {
-    if ( mbGraphics )
+    assert(m_hDC);
+    if (m_bGraphics)
         return nullptr;
 
-    if ( mpGraphics )
-        mbGraphics = TRUE;
+    if (!m_pGraphics)
+        m_pGraphics = ImplCreateSalPrnGraphics(m_hDC);
+    if (m_pGraphics)
+        m_bGraphics = true;
 
-    return mpGraphics;
+    return m_pGraphics;
 }
 
 void WinSalInfoPrinter::ReleaseGraphics( SalGraphics* )
 {
-    mbGraphics = FALSE;
+    m_bGraphics = false;
 }
 
 bool WinSalInfoPrinter::Setup(weld::Window* pFrame, ImplJobSetup* pSetupData)
@@ -1265,7 +1268,7 @@ void WinSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
                                   Point& rPageOffset,
                                   Size& rPaperSize )
 {
-    HDC hDC = mhDC;
+    HDC hDC = m_hDC;
 
     rOutWidth   = GetDeviceCaps( hDC, HORZRES );
     rOutHeight  = GetDeviceCaps( hDC, VERTRES );

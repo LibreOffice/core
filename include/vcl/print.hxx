@@ -226,6 +226,7 @@ public:
 protected:
     virtual bool                AcquireGraphics() const override;
     virtual void                ReleaseGraphics( bool bRelease = true ) override;
+    void ImplReleaseGraphics(bool bRelease = true);
     virtual void                ImplReleaseFonts() override;
 
     virtual long                GetGradientStepCount( long nMinRect ) override;
