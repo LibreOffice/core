@@ -16,6 +16,24 @@
       "message": "Out of curiosity, what is the advantage of using std::optional over std::unique_ptr here?",
       "revId": "7267b7b2730ba1af226f6620cdc4cd26d2f137a7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c277111_c3fe4fa4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-20T07:10:26Z",
+      "side": 1,
+      "message": "If we need to allocate it anyway, optional means \n(a) we save a call to malloc\n(b) we avoid some pointer chasing and have a higher chance of getting data out of L1/L2 cache instead of loading from DRAM",
+      "parentUuid": "8cbe568b_5285c4d6",
+      "revId": "7267b7b2730ba1af226f6620cdc4cd26d2f137a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
