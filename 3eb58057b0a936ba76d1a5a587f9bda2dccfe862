@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80172ea2_86b08c09",
+        "filename": "comphelper/source/misc/DirectoryHelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-20T09:49:52Z",
+      "side": 1,
+      "message": "any specific reason you made this a lambda (with an empty capture list) rather than simply a free function?",
+      "revId": "3eb58057b0a936ba76d1a5a587f9bda2dccfe862",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
