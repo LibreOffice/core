@@ -1824,7 +1824,6 @@ endef
 # call gb_LinkTarget_set_clang_precompiled_header,linktarget,pchcxxfile,,linktargetmakefilename
 define gb_LinkTarget_set_clang_precompiled_header
 $(call gb_LinkTarget_set_precompiled_header,$(1),$(2),$(3),$(4),$(LO_CLANG_CXX))
-
 endef
 
 # call gb_LinkTarget__reuse_precompiled_header_impl,linktarget,pchcxxfile,pchtarget,linktargetmakefilename
@@ -1985,7 +1984,6 @@ define gb_LinkTarget_use_clang
 $(call gb_LinkTarget_get_target,$(1)) : T_CC := $(LO_CLANG_CC)
 $(call gb_LinkTarget_get_target,$(1)) : T_CXX := $(LO_CLANG_CXX)
 $(call gb_LinkTarget_get_target,$(1)) : T_USE_LD := $(or $(CLANG_USE_LD),$(USE_LD))
-
 endef
 
 # call gb_LinkTarget_use_glxtest,linktarget,add_libs
