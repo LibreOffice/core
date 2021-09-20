@@ -105,6 +105,24 @@
       "parentUuid": "168b89c0_c7d527a9",
       "revId": "e2548131212e9cff6e83700071a24fe89434633c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c4db99a_53ca45f0",
+        "filename": "svx/source/svdraw/svdedxv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2765,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-20T07:18:20Z",
+      "side": 1,
+      "message": "I have a local patch to do this, will test it once Lubos fixes loolstress to work again, so I have a working baseline. :-)",
+      "parentUuid": "df785b49_8cd296a7",
+      "revId": "e2548131212e9cff6e83700071a24fe89434633c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
