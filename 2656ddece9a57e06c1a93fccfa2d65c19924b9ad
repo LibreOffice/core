@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca39e026_3f8171ec",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-20T07:49:31Z",
+      "side": 1,
+      "message": "I would consider breaking this commit into multiple pieces, and do exactly one thing in the commit.",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 10
+      },
+      "revId": "2656ddece9a57e06c1a93fccfa2d65c19924b9ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c21267f_74ce6826",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-20T07:49:31Z",
+      "side": 1,
+      "message": "I think that Sentence case should have been reverted from the rotation as soon as problem reports came in. An alternative is to cancel the toggle when there is no selection, and only include it when there is a selection (although that makes the toggle inconsistent in the rotation - which isn\u0027t ideal.)\n\nvoid SwTextShell::ExecRotateTransliteration( SfxRequest const \u0026 rReq )\n{\n    if(rReq.GetSlot() !\u003d SID_TRANSLITERATE_ROTATE_CASE)\n        return;\n\n    SwWrtShell \u0026rSh \u003d GetShell();\n    TransliterationFlags nType \u003d m_aRotateCase.getNextMode();\n    if (!rSh.HasSelection() \u0026\u0026  nType \u003d\u003d TransliterationFlags::SENTENCE_CASE)\n    {\nSAL_WARN(\"DEBUG\",\"---skipping SENTENCE_CASE since there is no selection\");\n        nType \u003d m_aRotateCase.getNextMode();\n    }\n    GetShell().TransliterateText(nType);\n}\n\nHowever \"has selection\" isn\u0027t smart, so if only one word is selected, then it becomes a duplicate of \"Title case\" again. So still not a great alternative.\n\nI suggest that doing something like the above should be handled in a separate commit.\n",
+      "revId": "2656ddece9a57e06c1a93fccfa2d65c19924b9ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea5c4882_0801347a",
+        "filename": "editeng/source/editeng/impedit4.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2785,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-20T07:49:31Z",
+      "side": 1,
+      "message": "I suggest ONLY doing this when there IS a selection. If there is no selection, then go back to the original logic. (The TOGGLE people won\u0027t like that, but the Format -\u003e Text -\u003e Sentence case people will like it.\n\nCurrently you are causing a \"regression\" by removing one use case. I suggest that BOTH are required.  IF there is a selection, then avoid going outside of it. OTHERWISE extend the selection to the sentence boundary.",
+      "range": {
+        "startLine": 2785,
+        "startChar": 12,
+        "endLine": 2785,
+        "endChar": 58
+      },
+      "revId": "2656ddece9a57e06c1a93fccfa2d65c19924b9ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
