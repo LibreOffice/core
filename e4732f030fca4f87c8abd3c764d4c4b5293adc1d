@@ -16,6 +16,24 @@
       "message": "\u003e All of the affected identifiers were present since early OOo times, but none of\nthem appear to be used much, at least not across LO itself (and\ncss.resource.XLocale appears to be vaporware that was never implemented at\nall?), so there is hope that we can get away with these incompatible changes.\n\nAgree with your assessment, this will mostly go unnoticed since the affected interfaces are for very special cases.\nNo problem with this change from my side.\n\nXLocale might be removed entirely if it\u0027s not implemented at all?",
       "revId": "e4732f030fca4f87c8abd3c764d4c4b5293adc1d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc88dfdb_0df52dad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-20T14:43:21Z",
+      "side": 1,
+      "message": "\u003e XLocale might be removed entirely if it\u0027s not implemented at all?\n\nI think that would be a somewhat orthogonal API CHANGE that should be addressed in a change of its own (if at all; though I do see the allure of avoiding the incompatible member rename here if we would instead incompatibly remove the type wholesale).",
+      "parentUuid": "7c631fd7_32115ea7",
+      "revId": "e4732f030fca4f87c8abd3c764d4c4b5293adc1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
