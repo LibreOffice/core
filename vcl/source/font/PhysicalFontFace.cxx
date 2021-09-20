@@ -30,8 +30,6 @@
 
 PhysicalFontFace::PhysicalFontFace( const FontAttributes& rDFA )
     : FontAttributes( rDFA )
-    , mnWidth(0)
-    , mnHeight(0)
 {
     // StarSymbol is a unicode font, but it still deserves the symbol flag
     if( !IsSymbolFont() )

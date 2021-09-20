@@ -87,7 +87,6 @@ class FontHeightToolBoxControl : public svt::ToolboxController,
         VclPtr<SvxFontSizeBox_Impl> m_xVclBox;
         std::unique_ptr<SvxFontSizeBox_Base> m_xWeldBox;
         SvxFontSizeBox_Base* m_pBox;
-        css::awt::FontDescriptor m_aCurrentFont;
 };
 
 class SvxFontSizeBox_Base
@@ -107,7 +106,7 @@ public:
     }
 
     void statusChanged_Impl(tools::Long nHeight, bool bErase);
-    void UpdateFont(const css::awt::FontDescriptor& rCurrentFont);
+    void UpdateFont();
 
 protected:
     FontHeightToolBoxControl& m_rCtrl;
@@ -251,24 +250,14 @@ void SvxFontSizeBox_Base::statusChanged_Impl( tools::Long nPoint, bool bErase )
     m_aCurText = m_xWidget->get_active_text();
 }
 
-void SvxFontSizeBox_Base::UpdateFont(const css::awt::FontDescriptor& rCurrentFont)
+void SvxFontSizeBox_Base::UpdateFont()
 {
     // filling up the sizes list
     auto nOldVal = m_xWidget->get_value(); // memorize old value
     FontList aFontList(Application::GetDefaultDevice());
 
-    if (!rCurrentFont.Name.isEmpty())
-    {
-        FontMetric aFontMetric;
-        aFontMetric.SetFamilyName(rCurrentFont.Name);
-        aFontMetric.SetStyleName(rCurrentFont.StyleName);
-        aFontMetric.SetFontHeight(rCurrentFont.Height);
-        m_xWidget->Fill(&aFontMetric, &aFontList);
-    }
-    else
-    {
-        m_xWidget->Fill(nullptr, &aFontList);
-    }
+    m_xWidget->Fill(&aFontList);
+
     m_xWidget->set_value(nOldVal); // restore old value
     m_aCurText = m_xWidget->get_active_text(); // memorize to reset at ESC
 }
@@ -455,8 +444,7 @@ void SAL_CALL FontHeightToolBoxControl::statusChanged(
     }
     else if ( rEvent.FeatureURL.Path == "CharFontName" )
     {
-        if ( rEvent.State >>= m_aCurrentFont )
-            m_pBox->UpdateFont( m_aCurrentFont );
+        m_pBox->UpdateFont();
     }
 }
 
@@ -494,7 +482,7 @@ uno::Reference< awt::XWindow > SAL_CALL FontHeightToolBoxControl::createItemWind
         m_xWeldBox.reset(new SvxFontSizeBox_Base(std::move(xWidget), m_xFrame, *this));
         m_pBox = m_xWeldBox.get();
         //Get the box to fill itself with all its sizes
-        m_pBox->UpdateFont(m_aCurrentFont);
+        m_pBox->UpdateFont();
     }
     else
     {
@@ -505,7 +493,7 @@ uno::Reference< awt::XWindow > SAL_CALL FontHeightToolBoxControl::createItemWind
             m_xVclBox = VclPtr<SvxFontSizeBox_Impl>::Create( pParent, m_xFrame, *this );
             m_pBox = m_xVclBox.get();
             //Get the box to fill itself with all its sizes
-            m_pBox->UpdateFont(m_aCurrentFont);
+            m_pBox->UpdateFont();
             //Make it size itself to its optimal size re above sizes
             m_xVclBox->SetOptimalSize();
             xItemWindow = VCLUnoHelper::GetInterface(m_xVclBox);
