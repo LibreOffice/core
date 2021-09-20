@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "019c473a_b9e62f9d",
+        "filename": "solenv/gbuild/LinkTarget.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 2021,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-20T12:52:29Z",
+      "side": 1,
+      "message": "see below",
+      "range": {
+        "startLine": 2021,
+        "startChar": 10,
+        "endLine": 2021,
+        "endChar": 13
+      },
+      "revId": "06559abea7c10f0059641a6900a074210e8060a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b478ef2c_db4de8b4",
+        "filename": "solenv/gbuild/LinkTarget.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 2024,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-20T12:52:29Z",
+      "side": 1,
+      "message": "I find this naming confusing.  While those libraries are exposed through the SDK, they are not part of the SDK (in the sense that some executables like idlc are part of the SDK) but are part of the URE.",
+      "range": {
+        "startLine": 2024,
+        "startChar": 28,
+        "endLine": 2024,
+        "endChar": 31
+      },
+      "revId": "06559abea7c10f0059641a6900a074210e8060a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
