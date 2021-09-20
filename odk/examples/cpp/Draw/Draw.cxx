@@ -35,6 +35,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/util/Color.hpp>
 
 using namespace std;
 using namespace cppu;
@@ -49,10 +50,10 @@ using namespace css::drawing;
 using namespace css::awt;
 using namespace css::container;
 
-int getCol(int r, int g, int b);
+css::util::Color getCol(int r, int g, int b);
 Reference<XComponent> openDraw(Reference<XComponentContext> xComponentContext);
 Reference<XShape> createShape(Reference<XComponent> xDocComp, int height, int width, int x, int y,
-                              OUString kind, int col);
+                              OUString kind, css::util::Color col);
 Reference<XShapeGroup> createSequence(Reference<XComponent> xDocComp, Reference<XDrawPage> xDP);
 
 int main()
@@ -126,7 +127,7 @@ Reference<XComponent> openDraw(Reference<XComponentContext> xContext)
 }
 
 Reference<XShape> createShape(Reference<XComponent> xDocComp, int height, int width, int x, int y,
-                              OUString kind, int col)
+                              OUString kind, css::util::Color col)
 {
     // kind can be either 'Ellipse', 'Line' or 'Rectangle'
     Size size;
@@ -230,6 +231,6 @@ Reference<XShapeGroup> createSequence(Reference<XComponent> xDocComp, Reference<
     return xSGrouper->group(xShapes);
 }
 
-int getCol(int r, int g, int b) { return r * 65536 + g * 256 + b; }
+css::util::Color getCol(int r, int g, int b) { return r * 65536 + g * 256 + b; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
