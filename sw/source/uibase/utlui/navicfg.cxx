@@ -42,13 +42,13 @@ Sequence<OUString> SwNavigationConfig::GetPropertyNames()
 
 SwNavigationConfig::SwNavigationConfig() :
     utl::ConfigItem("Office.Writer/Navigator"),
-    nRootType(ContentTypeId::UNKNOWN),
-    nSelectedPos(0),
-    nOutlineLevel(MAXLEVEL),
-    nRegionMode(RegionMode::NONE),
-    nActiveBlock(0),
-    bIsSmall(false),
-    bIsGlobalActive(true)
+    m_nRootType(ContentTypeId::UNKNOWN),
+    m_nSelectedPos(0),
+    m_nOutlineLevel(MAXLEVEL),
+    m_nRegionMode(RegionMode::NONE),
+    m_nActiveBlock(0),
+    m_bIsSmall(false),
+    m_bIsGlobalActive(true)
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
@@ -76,22 +76,22 @@ SwNavigationConfig::SwNavigationConfig() :
                                 "out-of-bounds ContentTypeId " << nTmp);
                             nTmp = sal_Int32(ContentTypeId::UNKNOWN);
                         }
-                        nRootType = static_cast<ContentTypeId>(nTmp);
+                        m_nRootType = static_cast<ContentTypeId>(nTmp);
                     }
                     break;
                 }
-                case 1: pValues[nProp] >>= nSelectedPos;   break;
-                case 2: pValues[nProp] >>= nOutlineLevel;  break;
+                case 1: pValues[nProp] >>= m_nSelectedPos;   break;
+                case 2: pValues[nProp] >>= m_nOutlineLevel;  break;
                 case 3:
                 {
                         sal_uInt16 nTmp;
                         if (pValues[nProp] >>= nTmp)
-                            nRegionMode = static_cast<RegionMode>(nTmp);
+                            m_nRegionMode = static_cast<RegionMode>(nTmp);
                         break;
                 }
-                case 4: pValues[nProp] >>= nActiveBlock;    break;
-                case 5: bIsSmall        = *o3tl::doAccess<bool>(pValues[nProp]);  break;
-                case 6: bIsGlobalActive = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                case 4: pValues[nProp] >>= m_nActiveBlock;    break;
+                case 5: m_bIsSmall        = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                case 6: m_bIsGlobalActive = *o3tl::doAccess<bool>(pValues[nProp]);  break;
             }
         }
     }
@@ -111,13 +111,13 @@ void SwNavigationConfig::ImplCommit()
     {
         switch(nProp)
         {
-            case 0: pValues[nProp] <<= static_cast<sal_Int32>(nRootType);     break;
-            case 1: pValues[nProp] <<= nSelectedPos;  break;
-            case 2: pValues[nProp] <<= nOutlineLevel; break;
-            case 3: pValues[nProp] <<= static_cast<sal_uInt16>(nRegionMode); break;
-            case 4: pValues[nProp] <<= nActiveBlock;    break;
-            case 5: pValues[nProp] <<= bIsSmall; break;
-            case 6: pValues[nProp] <<= bIsGlobalActive; break;
+            case 0: pValues[nProp] <<= static_cast<sal_Int32>(m_nRootType);     break;
+            case 1: pValues[nProp] <<= m_nSelectedPos;  break;
+            case 2: pValues[nProp] <<= m_nOutlineLevel; break;
+            case 3: pValues[nProp] <<= static_cast<sal_uInt16>(m_nRegionMode); break;
+            case 4: pValues[nProp] <<= m_nActiveBlock;    break;
+            case 5: pValues[nProp] <<= m_bIsSmall; break;
+            case 6: pValues[nProp] <<= m_bIsGlobalActive; break;
         }
     }
     PutProperties(aNames, aValues);

@@ -111,9 +111,9 @@ SwNumRulesWithName::SwNumRulesWithName( const SwNumRule &rCopy,
     {
         const SwNumFormat* pFormat = rCopy.GetNumFormat( n );
         if( pFormat )
-            aFormats[ n ].reset(new SwNumFormatGlobal( *pFormat ));
+            m_aFormats[ n ].reset(new SwNumFormatGlobal( *pFormat ));
         else
-            aFormats[ n ].reset();
+            m_aFormats[ n ].reset();
     }
 }
 
@@ -133,11 +133,11 @@ SwNumRulesWithName& SwNumRulesWithName::operator=(const SwNumRulesWithName &rCop
         maName = rCopy.maName;
         for( int n = 0; n < MAXLEVEL; ++n )
         {
-            SwNumFormatGlobal* pFormat = rCopy.aFormats[ n ].get();
+            SwNumFormatGlobal* pFormat = rCopy.m_aFormats[ n ].get();
             if( pFormat )
-                aFormats[ n ].reset(new SwNumFormatGlobal( *pFormat ));
+                m_aFormats[ n ].reset(new SwNumFormatGlobal( *pFormat ));
             else
-                aFormats[ n ].reset();
+                m_aFormats[ n ].reset();
         }
     }
     return *this;
@@ -150,7 +150,7 @@ void SwNumRulesWithName::ResetNumRule(SwWrtShell& rSh, SwNumRule& rNumRule) cons
     rNumRule.SetAutoRule( false );
     for (sal_uInt16 n = 0; n < MAXLEVEL; ++n)
     {
-        SwNumFormatGlobal* pFormat = aFormats[ n ].get();
+        SwNumFormatGlobal* pFormat = m_aFormats[ n ].get();
         if (!pFormat)
             continue;
         rNumRule.Set(n, pFormat->MakeNumFormat(rSh));
@@ -160,21 +160,21 @@ void SwNumRulesWithName::ResetNumRule(SwWrtShell& rSh, SwNumRule& rNumRule) cons
 void SwNumRulesWithName::GetNumFormat(
     size_t const nIndex, SwNumFormat const*& rpNumFormat, OUString const*& rpName) const
 {
-    rpNumFormat = (aFormats[nIndex]) ? &aFormats[nIndex]->aFormat : nullptr;
-    rpName = (aFormats[nIndex]) ? &aFormats[nIndex]->sCharFormatName : nullptr;
+    rpNumFormat = (m_aFormats[nIndex]) ? &m_aFormats[nIndex]->m_aFormat : nullptr;
+    rpName = (m_aFormats[nIndex]) ? &m_aFormats[nIndex]->m_sCharFormatName : nullptr;
 }
 
 void SwNumRulesWithName::SetNumFormat(
         size_t const nIndex, SwNumFormat const& rNumFormat, OUString const& rName)
 {
-    aFormats[nIndex].reset( new SwNumFormatGlobal(rNumFormat) );
-    aFormats[nIndex]->sCharFormatName = rName;
-    aFormats[nIndex]->nCharPoolId = USHRT_MAX;
-    aFormats[nIndex]->m_Items.clear();
+    m_aFormats[nIndex].reset( new SwNumFormatGlobal(rNumFormat) );
+    m_aFormats[nIndex]->m_sCharFormatName = rName;
+    m_aFormats[nIndex]->m_nCharPoolId = USHRT_MAX;
+    m_aFormats[nIndex]->m_Items.clear();
 }
 
 SwNumRulesWithName::SwNumFormatGlobal::SwNumFormatGlobal( const SwNumFormat& rFormat )
-    : aFormat( rFormat ), nCharPoolId( USHRT_MAX )
+    : m_aFormat( rFormat ), m_nCharPoolId( USHRT_MAX )
 {
     // relative gaps?????
 
@@ -182,8 +182,8 @@ SwNumRulesWithName::SwNumFormatGlobal::SwNumFormatGlobal( const SwNumFormat& rFo
     if( !pFormat )
         return;
 
-    sCharFormatName = pFormat->GetName();
-    nCharPoolId = pFormat->GetPoolFormatId();
+    m_sCharFormatName = pFormat->GetName();
+    m_nCharPoolId = pFormat->GetPoolFormatId();
     if( pFormat->GetAttrSet().Count() )
     {
         SfxItemIter aIter( pFormat->GetAttrSet() );
@@ -195,14 +195,14 @@ SwNumRulesWithName::SwNumFormatGlobal::SwNumFormatGlobal( const SwNumFormat& rFo
         } while (pCurr);
     }
 
-    aFormat.SetCharFormat( nullptr );
+    m_aFormat.SetCharFormat( nullptr );
 }
 
 SwNumRulesWithName::SwNumFormatGlobal::SwNumFormatGlobal( const SwNumFormatGlobal& rFormat )
     :
-    aFormat( rFormat.aFormat ),
-    sCharFormatName( rFormat.sCharFormatName ),
-    nCharPoolId( rFormat.nCharPoolId )
+    m_aFormat( rFormat.m_aFormat ),
+    m_sCharFormatName( rFormat.m_sCharFormatName ),
+    m_nCharPoolId( rFormat.m_nCharPoolId )
 {
     for (size_t n = rFormat.m_Items.size(); n; )
     {
@@ -217,14 +217,14 @@ SwNumRulesWithName::SwNumFormatGlobal::~SwNumFormatGlobal()
 SwNumFormat SwNumRulesWithName::SwNumFormatGlobal::MakeNumFormat(SwWrtShell& rSh) const
 {
     SwCharFormat* pFormat = nullptr;
-    if( !sCharFormatName.isEmpty() )
+    if( !m_sCharFormatName.isEmpty() )
     {
         // at first, look for the name
         sal_uInt16 nArrLen = rSh.GetCharFormatCount();
         for( sal_uInt16 i = 1; i < nArrLen; ++i )
         {
             pFormat = &rSh.GetCharFormat( i );
-            if (pFormat->GetName()==sCharFormatName)
+            if (pFormat->GetName()==m_sCharFormatName)
                 // exists, so leave attributes as they are!
                 break;
             pFormat = nullptr;
@@ -232,13 +232,13 @@ SwNumFormat SwNumRulesWithName::SwNumFormatGlobal::MakeNumFormat(SwWrtShell& rSh
 
         if( !pFormat )
         {
-            if( IsPoolUserFormat( nCharPoolId ) )
+            if( IsPoolUserFormat( m_nCharPoolId ) )
             {
-                pFormat = rSh.MakeCharFormat( sCharFormatName );
+                pFormat = rSh.MakeCharFormat( m_sCharFormatName );
                 pFormat->SetAuto(false);
             }
             else
-                pFormat = rSh.GetCharFormatFromPool( nCharPoolId );
+                pFormat = rSh.GetCharFormatFromPool( m_nCharPoolId );
 
             if( !pFormat->HasWriterListeners() )       // set attributes
             {
@@ -249,10 +249,10 @@ SwNumFormat SwNumRulesWithName::SwNumFormatGlobal::MakeNumFormat(SwWrtShell& rSh
             }
         }
     }
-    const_cast<SwNumFormat&>(aFormat).SetCharFormat(pFormat);
-    SwNumFormat aNew = aFormat;
+    const_cast<SwNumFormat&>(m_aFormat).SetCharFormat(pFormat);
+    SwNumFormat aNew = m_aFormat;
     if (pFormat)
-        const_cast<SwNumFormat&>(aFormat).SetCharFormat(nullptr);
+        const_cast<SwNumFormat&>(m_aFormat).SetCharFormat(nullptr);
     return aNew;
 }
 
