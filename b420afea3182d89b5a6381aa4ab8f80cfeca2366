@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "44ac8b1f_ef765028",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-20T05:41:38Z",
+      "side": 1,
+      "message": "Makes sense; let\u0027s do that then.",
+      "revId": "b420afea3182d89b5a6381aa4ab8f80cfeca2366",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f4ec5f2d_2b992ba2",
