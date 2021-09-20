@@ -4692,7 +4692,7 @@ static char* getFonts (const char* pCommand)
         {
             boost::property_tree::ptree aChildren;
             const FontMetric& rFontMetric = pList->GetFontName(i);
-            const int* pAry = pList->GetSizeAry(rFontMetric);
+            const int* pAry = FontList::GetStdSizeAry();
             sal_uInt16 nSizeCount = 0;
             while (pAry[nSizeCount])
             {

@@ -1115,9 +1115,6 @@ public:
 
     bool                        IsFontAvailable( const OUString& rFontName ) const;
 
-    Size                        GetDevFontSize( const vcl::Font& rFont, int nSizeIndex ) const;
-    int                         GetDevFontSizeCount( const vcl::Font& ) const;
-
     bool                        AddTempDevFont( const OUString& rFileURL, const OUString& rFontName );
     void                        RefreshFontData( const bool bNewFontLists );
 
