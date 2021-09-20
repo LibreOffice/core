@@ -1985,6 +1985,9 @@ define gb_LinkTarget_use_clang
 $(call gb_LinkTarget_get_target,$(1)) : T_CC := $(LO_CLANG_CC)
 $(call gb_LinkTarget_get_target,$(1)) : T_CXX := $(LO_CLANG_CXX)
 $(call gb_LinkTarget_get_target,$(1)) : T_USE_LD := $(or $(CLANG_USE_LD),$(USE_LD))
+ifeq ($(HAVE_LO_CLANG_DLLEXPORTINLINES),TRUE)
+$(call gb_LinkTarget_add_cxxflags,$(1),-Zc:dllexportInlines-)
+endif
 
 endef
 
