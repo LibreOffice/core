@@ -57,6 +57,17 @@ $(eval $(call gb_Library_use_system_win32_libs,skia,\
     usp10 \
     gdi32 \
 ))
+
+# cl.exe (and thus clang-cl) likes to emit copies of inline functions even when not needed,
+# which means that for e.g. AVX-compiled sources the .o may contain a copy of an inline
+# function built using AVX, and the linker may select that copy as the one to keep, thus
+# introducing AVX code into generic code. Avoid generating such inlines. The flag currently
+# cannot be used for the whole Skia, because code built without the flag cannot use
+# libraries built with the flag, so cl.exe-built VCL would have undefined references.
+ifeq ($(HAVE_LO_CLANG_DLLEXPORTINLINES),TRUE)
+LO_SKIA_AVOID_INLINE_COPIES := -Zc:dllexportInlines-
+endif
+
 else
 $(eval $(call gb_Library_use_externals,skia,\
     freetype \
@@ -802,20 +813,25 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/opts/SkOpts_avx, $(CXXFLAGS_INTRINSICS_AVX) $(LO_CLANG_CXXFLAGS_INTRINSICS_AVX) \
+        $(LO_SKIA_AVOID_INLINE_COPIES) \
 ))
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/opts/SkOpts_hsw, \
         $(CXXFLAGS_INTRINSICS_AVX2) $(CXXFLAGS_INTRINSICS_F16C) $(CXXFLAGS_INTRINSICS_FMA) \
         $(LO_CLANG_CXXFLAGS_INTRINSICS_AVX2) $(LO_CLANG_CXXFLAGS_INTRINSICS_F16C) $(LO_CLANG_CXXFLAGS_INTRINSICS_FMA) \
+        $(LO_SKIA_AVOID_INLINE_COPIES) \
 ))
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/opts/SkOpts_sse41, $(CXXFLAGS_INTRINSICS_SSE41) $(LO_CLANG_CXXFLAGS_INTRINSICS_SSE41) \
+        $(LO_SKIA_AVOID_INLINE_COPIES) \
 ))
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/opts/SkOpts_sse42, $(CXXFLAGS_INTRINSICS_SSE42) $(LO_CLANG_CXXFLAGS_INTRINSICS_SSE42) \
+        $(LO_SKIA_AVOID_INLINE_COPIES) \
 ))
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/opts/SkOpts_ssse3, $(CXXFLAGS_INTRINSICS_SSSE3) $(LO_CLANG_CXXFLAGS_INTRINSICS_SSSE3) \
+        $(LO_SKIA_AVOID_INLINE_COPIES) \
 ))
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/opts/SkOpts_crc32 \
@@ -823,6 +839,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/opts/SkOpts_skx, $(CXXFLAGS_INTRINSICS_AVX512)  $(LO_CLANG_CXXFLAGS_INTRINSICS_AVX512)\
+        $(LO_SKIA_AVOID_INLINE_COPIES) \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
