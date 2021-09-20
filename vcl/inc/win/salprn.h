@@ -40,18 +40,23 @@ struct SalDriverData
 
 class WinSalGraphics;
 
-class WinSalInfoPrinter : public SalInfoPrinter
+class WinSalInfoPrinter final : public SalInfoPrinter
 {
 public:
-    WinSalGraphics*        mpGraphics;             // current Printer graphics
     OUString               maDriverName;           // printer driver name
     OUString               maDeviceName;           // printer device name
     OUString               maPortName;             // printer port name
-    HDC                    mhDC;                   // printer hdc
-    bool                   mbGraphics;             // is Graphics used
+
+private:
+    HDC m_hDC;                    ///< printer hdc
+    WinSalGraphics* m_pGraphics;  ///< current Printer graphics
+    bool m_bGraphics;             ///< is Graphics used
+
 public:
     WinSalInfoPrinter();
     virtual ~WinSalInfoPrinter() override;
+
+    void setHDC(HDC);
 
     virtual SalGraphics*            AcquireGraphics() override;
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) override;
