@@ -563,17 +563,26 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
         // default icon
         if( !(nStyle_ & SalFrameStyleFlags::INTRO) )
         {
+            static bool bIconGenerationRecursionProtection = false;
+
             bool bOk=false;
-            try
+            if (!bIconGenerationRecursionProtection)
             {
-                bOk = lcl_SelectAppIconPixmap( pDisplay_, m_nXScreen,
-                                               mnIconID != SV_ICON_ID_OFFICE ? mnIconID :
-                                               (mpParent ? mpParent->mnIconID : SV_ICON_ID_OFFICE), 32,
-                                               Hints.icon_pixmap, Hints.icon_mask, netwm_icon );
-            }
-            catch( css::uno::Exception& )
-            {
-                // can happen - no ucb during early startup
+                bIconGenerationRecursionProtection = true;
+
+                try
+                {
+                    bOk = lcl_SelectAppIconPixmap( pDisplay_, m_nXScreen,
+                                                   mnIconID != SV_ICON_ID_OFFICE ? mnIconID :
+                                                   (mpParent ? mpParent->mnIconID : SV_ICON_ID_OFFICE), 32,
+                                                   Hints.icon_pixmap, Hints.icon_mask, netwm_icon );
+                }
+                catch( css::uno::Exception& )
+                {
+                    // can happen - no ucb during early startup
+                }
+
+                bIconGenerationRecursionProtection = false;
             }
             if( bOk )
             {
