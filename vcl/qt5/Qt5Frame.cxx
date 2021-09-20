@@ -144,13 +144,11 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
         else if ((nStyle & SalFrameStyleFlags::FLOAT)
                  && (nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION))
             aWinFlags |= Qt::Tool | Qt::FramelessWindowHint;
-        else if (nStyle & SalFrameStyleFlags::TOOLTIP)
+        else if (nStyle & (SalFrameStyleFlags::FLOAT | SalFrameStyleFlags::TOOLTIP))
             aWinFlags |= Qt::ToolTip;
-        // Can't use Qt::Popup, because it grabs the input focus and generates
-        // a focus-out event, reaking the compbo box. This used to map to
-        // Qt::ToolTip, which doesn't feel that correct...
-        else if (isPopup())
-            aWinFlags = Qt::Widget | Qt::FramelessWindowHint | Qt::BypassWindowManagerHint;
+        else if ((nStyle & SalFrameStyleFlags::FLOAT)
+                 && !(nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION))
+            aWinFlags |= Qt::Popup;
         else if (nStyle & SalFrameStyleFlags::TOOLWINDOW)
             aWinFlags |= Qt::Tool;
         // top level windows can't be transient in Qt, so make them dialogs, if they have a parent. At least
@@ -428,7 +426,7 @@ void Qt5Frame::Show(bool bVisible, bool bNoActivate)
     pSalInst->RunInMainThread([this, bVisible, bNoActivate]() {
         asChild()->setVisible(bVisible);
         asChild()->raise();
-        if (!bNoActivate && !isPopup())
+        if (!bNoActivate)
         {
             asChild()->activateWindow();
             asChild()->setFocus();
