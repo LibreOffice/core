@@ -16,6 +16,23 @@
       "message": "I generally have no direct fix idea, nor a viable debugging environment. Debian Bullseye\u0027s KDE is still to buggy on Wayland. This again maps SalFrameStyleFlags::FLOAT to Qt::ToolTip, which has other problems...",
       "revId": "726a22571c8905edce729fcb07c224035627cc07",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5427871c_5dc56a35",
+        "filename": "vcl/qt5/Qt5Frame.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-09-20T12:26:51Z",
+      "side": 1,
+      "message": "I know this block is never reached, because of the previous \n\n(nStyle \u0026 (SalFrameStyleFlags::FLOAT | SalFrameStyleFlags::TOOLTIP))\n\nso it could be dropped, but I wanted to go with a clean revert for now.",
+      "revId": "726a22571c8905edce729fcb07c224035627cc07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
