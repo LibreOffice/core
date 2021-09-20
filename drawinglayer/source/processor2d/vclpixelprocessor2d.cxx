@@ -1160,10 +1160,18 @@ void VclPixelProcessor2D::processShadowPrimitive2D(const primitive2d::ShadowPrim
     impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
     if (aBufferDevice.isVisible())
     {
+        // Process children which don't want blur.
+        primitive2d::Primitive2DContainer aContainer;
+        rCandidate.get2DDecompositionWithoutBlur(aContainer, getViewInformation2D());
+        process(aContainer);
+
+        // Process children which want blur.
         OutputDevice* pLastOutputDevice = mpOutputDevice;
         mpOutputDevice = &aBufferDevice.getContent();
 
-        process(rCandidate);
+        aContainer.clear();
+        rCandidate.get2DDecompositionWithBlur(aContainer, getViewInformation2D());
+        process(aContainer);
 
         const tools::Rectangle aRect(static_cast<tools::Long>(std::floor(aRange.getMinX())),
                                      static_cast<tools::Long>(std::floor(aRange.getMinY())),
