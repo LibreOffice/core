@@ -46,6 +46,7 @@ namespace com::sun::star::container { class XNameContainer; }
 namespace dbaui
 {
     struct DBTreeEditedEntry;
+    struct DBTreeListUserData;
     class ImageProvider;
 
     typedef ::cppu::ImplHelper5 <   css::frame::XStatusListener
@@ -354,9 +355,7 @@ namespace dbaui
         std::unique_ptr<weld::TreeIter> implAppendEntry(
             const weld::TreeIter* pParent,
             const OUString& rName,
-            void* pUserData,
-            EntryType eEntryType
-        );
+            DBTreeListUserData* pUserData);
 
         /// loads the grid control with the data object specified (which may be a table, a query or a command)
         bool implLoadAnything(const OUString& _rDataSourceName, const OUString& _rCommand,
