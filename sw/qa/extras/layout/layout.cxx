@@ -42,6 +42,8 @@
 #include <rootfrm.hxx>
 #include <docsh.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <textboxhelper.hxx>
 #include <unoframe.hxx>
 
@@ -2343,6 +2345,60 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf144057)
     assertXPath(pXmlDoc, "/root/page[2]/body/tab/row[6]/cell/txt/Text", "Portion", "A12");
     assertXPath(pXmlDoc, "/root/page[3]/body/tab/row[6]/cell/txt/Text", "Portion", "B6");
     assertXPath(pXmlDoc, "/root/page[4]/body/tab/row[6]/cell/txt/Text", "Portion", "B12");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf144347)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf144057.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
+    SwRootFrame* pLayout(pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
+
+    // enable redlining
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
+
+    // remove first table
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    for (int i = 0; i < 12; ++i)
+        pEditShell->AcceptRedline(0);
+
+    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    discardDumpedLayout();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // show tracked row deletions
+    assertXPath(pXmlDoc, "/root/page", 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab", 1);
+
+    // select all the text, including the texts before and after the table
+    // Note: this table contains tracked changes, which was a
+    // problem for the original OOo implementation of track changes,
+    // resulting empty tables after accepting the deletion of these tables.
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+
+    // table is deleted with change tracking: it still exists
+    assertXPath(pXmlDoc, "/root/page", 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab", 1);
+
+    // accept all deletions, removing the table completely
+    while (pEditShell->GetRedlineCount() > 0)
+        pEditShell->AcceptRedline(0);
+
+    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page", 1);
+    // This was 1 (bad empty table)
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab", 0);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
