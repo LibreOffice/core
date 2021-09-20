@@ -55,59 +55,9 @@ OUString SbaTableQueryBrowser::GetEntryText(const weld::TreeIter& rEntry) const
 
 SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType(const weld::TreeIter& rEntry) const
 {
-    std::unique_ptr<weld::TreeIter> xRootEntry = m_pTreeView->GetRootLevelParent(&rEntry);
-    weld::TreeView& rTreeView = m_pTreeView->GetWidget();
-
-    if (rTreeView.iter_compare(*xRootEntry, rEntry) == 0)
-        return etDatasource;
-
-    std::unique_ptr<weld::TreeIter> xEntryParent(rTreeView.make_iterator(&rEntry));
-    if (!rTreeView.iter_parent(*xEntryParent))
-        xEntryParent.reset();
-
-    std::unique_ptr<weld::TreeIter> xTables;
-    std::unique_ptr<weld::TreeIter> xQueries;
-
-    std::unique_ptr<weld::TreeIter> xContainer = rTreeView.make_iterator(xRootEntry.get());
-    if (rTreeView.iter_children(*xContainer))
-    {
-        // 1st child is queries
-        xQueries = rTreeView.make_iterator(xContainer.get());
-
-        if (rTreeView.iter_next_sibling(*xContainer))
-        {
-            // 2nd child is tables
-            xTables = rTreeView.make_iterator(xContainer.get());
-        }
-    }
-
-    if (xTables && rTreeView.iter_compare(*xTables, rEntry) == 0)
-        return etTableContainer;
-
-    if (xQueries && rTreeView.iter_compare(*xQueries, rEntry) == 0)
-        return etQueryContainer;
-
-    if (xTables && xEntryParent && rTreeView.iter_compare(*xTables, *xEntryParent) == 0)
-        return etTableOrView;
-
-    if (xQueries && xEntryParent)
-    {
-        if (rTreeView.iter_compare(*xQueries, *xEntryParent) == 0)
-        {
-            DBTreeListUserData* pEntryData = reinterpret_cast<DBTreeListUserData*>(rTreeView.get_id(rEntry).toUInt64());
-            if (pEntryData)
-                return pEntryData->eType;
-            return etQuery;
-        }
-
-        while (rTreeView.iter_compare(*xEntryParent, *xQueries) != 0)
-        {
-            if (!rTreeView.iter_parent(*xEntryParent))
-                return etUnknown;
-        }
-    }
-
-    return etQueryContainer;
+    const weld::TreeView& rTreeView = m_pTreeView->GetWidget();
+    DBTreeListUserData* pEntryData = reinterpret_cast<DBTreeListUserData*>(rTreeView.get_id(rEntry).toUInt64());
+    return pEntryData ? pEntryData->eType : etUnknown;
 }
 
 void SbaTableQueryBrowser::select(const weld::TreeIter* pEntry, bool bSelect)
