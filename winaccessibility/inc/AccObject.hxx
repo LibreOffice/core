@@ -59,7 +59,6 @@ private:
     short               m_accRole;
     long                m_resID;
     HWND                m_pParantID;
-    bool                m_bShouldDestroy; //avoid access COM interface when acc object is deleted
     IMAccessible*       m_pIMAcc;
     AccObject*          m_pParentObj;
     IAccChildList       m_childrenList;
@@ -108,8 +107,7 @@ public:
     void DeleteChild( AccObject* pChild );
     AccObject* NextChild();
 
-    void NotifyDestroy(bool ifDelete);
-    bool ifShouldDestroy();
+    void NotifyDestroy(bool bDestroy);
 
     void  DecreaseState(short xState );//call COM interface DecreaseState method
     void  IncreaseState( short xState );//call COM interface IncreaseState method
