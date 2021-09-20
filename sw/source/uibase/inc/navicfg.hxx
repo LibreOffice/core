@@ -26,13 +26,13 @@ enum class ContentTypeId;
 
 class SwNavigationConfig final : public utl::ConfigItem
 {
-    ContentTypeId  nRootType;      //RootType
-    sal_Int32      nSelectedPos;   //SelectedPosition
-    sal_Int32      nOutlineLevel;  //OutlineLevel
-    RegionMode     nRegionMode;    //InsertMode
-    sal_Int32      nActiveBlock;   //ActiveBlock//Expand/CollapsState
-    bool           bIsSmall;       //ShowListBox
-    bool           bIsGlobalActive; //GlobalDocMode// global view for GlobalDoc valid?
+    ContentTypeId  m_nRootType;      //RootType
+    sal_Int32      m_nSelectedPos;   //SelectedPosition
+    sal_Int32      m_nOutlineLevel;  //OutlineLevel
+    RegionMode     m_nRegionMode;    //InsertMode
+    sal_Int32      m_nActiveBlock;   //ActiveBlock//Expand/CollapsState
+    bool           m_bIsSmall;       //ShowListBox
+    bool           m_bIsGlobalActive; //GlobalDocMode// global view for GlobalDoc valid?
 
     static css::uno::Sequence<OUString> GetPropertyNames();
 
@@ -44,57 +44,57 @@ public:
 
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 
-    ContentTypeId GetRootType()const {return nRootType;}
+    ContentTypeId GetRootType()const {return m_nRootType;}
     void        SetRootType(ContentTypeId nSet){
-                        if(nRootType != nSet)
+                        if(m_nRootType != nSet)
                         {
                             SetModified();
-                            nRootType = nSet;
+                            m_nRootType = nSet;
                         }
                     }
 
-    sal_Int32   GetOutlineLevel()const {return nOutlineLevel;}
+    sal_Int32   GetOutlineLevel()const {return m_nOutlineLevel;}
     void        SetOutlineLevel(sal_Int32 nSet){
-                        if(nOutlineLevel != nSet)
+                        if(m_nOutlineLevel != nSet)
                         {
                             SetModified();
-                            nOutlineLevel = nSet;
+                            m_nOutlineLevel = nSet;
                         }
                     }
 
-    RegionMode  GetRegionMode()const {return nRegionMode;}
+    RegionMode  GetRegionMode()const {return m_nRegionMode;}
     void        SetRegionMode(RegionMode nSet){
-                    if(nRegionMode != nSet)
+                    if(m_nRegionMode != nSet)
                     {
                         SetModified();
-                        nRegionMode = nSet;
+                        m_nRegionMode = nSet;
                     }
                 }
 
-    sal_Int32   GetActiveBlock()const {return nActiveBlock;}
+    sal_Int32   GetActiveBlock()const {return m_nActiveBlock;}
     void        SetActiveBlock(sal_Int32 nSet){
-                        if(nActiveBlock != nSet)
+                        if(m_nActiveBlock != nSet)
                         {
                             SetModified();
-                            nActiveBlock = nSet;
+                            m_nActiveBlock = nSet;
                         }
                     }
 
-    bool    IsSmall() const {return bIsSmall;}
+    bool    IsSmall() const {return m_bIsSmall;}
     void        SetSmall(bool bSet){
-                        if(bIsSmall != bSet)
+                        if(m_bIsSmall != bSet)
                         {
                             SetModified();
-                            bIsSmall = bSet;
+                            m_bIsSmall = bSet;
                         }
                     }
 
-    bool    IsGlobalActive() const {return bIsGlobalActive;}
+    bool    IsGlobalActive() const {return m_bIsGlobalActive;}
     void        SetGlobalActive(bool bSet){
-                        if(bIsGlobalActive != bSet)
+                        if(m_bIsGlobalActive != bSet)
                         {
                             SetModified();
-                            bIsGlobalActive = bSet;
+                            m_bIsGlobalActive = bSet;
                         }
                     }
 };

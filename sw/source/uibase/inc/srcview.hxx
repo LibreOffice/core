@@ -32,12 +32,12 @@ class SfxMedium;
 
 class SwSrcView final : public SfxViewShell
 {
-    VclPtr<SwSrcEditWindow> aEditWin;
+    VclPtr<SwSrcEditWindow> m_aEditWin;
 
-    std::unique_ptr<SvxSearchItem> pSearchItem;
+    std::unique_ptr<SvxSearchItem> m_pSearchItem;
 
-    bool                bSourceSaved    :1;
-    rtl_TextEncoding    eLoadEncoding;
+    bool                m_bSourceSaved    :1;
+    rtl_TextEncoding    m_eLoadEncoding;
     void                Init();
 
     // for read-only switching
@@ -64,7 +64,7 @@ public:
     void                SaveContent(const OUString& rTmpFile);
     void                SaveContentTo(SfxMedium& rMed);
 
-    bool                IsModified() const {return aEditWin->IsModified();}
+    bool                IsModified() const {return m_aEditWin->IsModified();}
 
     void            Execute(SfxRequest&);
     void            GetState(SfxItemSet&);
@@ -79,7 +79,7 @@ public:
 
     sal_Int32       PrintSource( OutputDevice *pOutDev, sal_Int32 nPage, bool bCalcNumPagesOnly );
 
-    bool            HasSourceSaved() const {return bSourceSaved;}
+    bool            HasSourceSaved() const {return m_bSourceSaved;}
 
 };
 

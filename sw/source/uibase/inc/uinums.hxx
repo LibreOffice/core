@@ -41,9 +41,9 @@ class SW_DLLPUBLIC SwNumRulesWithName final
     class SAL_DLLPRIVATE SwNumFormatGlobal
     {
         friend class SwNumRulesWithName;
-        SwNumFormat aFormat;
-        OUString sCharFormatName;
-        sal_uInt16 nCharPoolId;
+        SwNumFormat m_aFormat;
+        OUString m_sCharFormatName;
+        sal_uInt16 m_nCharPoolId;
         std::vector<std::unique_ptr<SfxPoolItem>> m_Items;
 
         SwNumFormatGlobal& operator=( const SwNumFormatGlobal& ) = delete;
@@ -56,7 +56,7 @@ class SW_DLLPUBLIC SwNumRulesWithName final
         SwNumFormat MakeNumFormat(SwWrtShell& rSh) const;
     };
 
-    std::unique_ptr<SwNumFormatGlobal> aFormats[ MAXLEVEL ];
+    std::unique_ptr<SwNumFormatGlobal> m_aFormats[ MAXLEVEL ];
 
     friend class sw::StoredChapterNumberingRules;
     friend class SwChapterNumRules;
