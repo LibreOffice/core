@@ -205,7 +205,7 @@ VirtualDevice::VirtualDevice(const OutputDevice* pCompDev, DeviceFormat eFormat,
                             << ", " << static_cast<int>(eAlphaFormat)
                             << ", " << static_cast<int>(eOutDevType) << " )" );
 
-    ImplInitVirDev(pCompDev ? pCompDev : Application::GetDefaultDevice(), 0, 0);
+    ImplInitVirDev(pCompDev ? pCompDev : Application::GetDefaultDevice(false), 0, 0);
 }
 
 VirtualDevice::VirtualDevice(const SystemGraphicsData& rData, const Size &rSize,

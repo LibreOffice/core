@@ -80,6 +80,8 @@ enum class SalFrameStyleFlags
     INTRO               = 0x00000100,
     // partial fullscreen: fullscreen on one monitor of a multimonitor display
     PARTIAL_FULLSCREEN  = 0x00800000,
+    // tdf#144624: don't set icon
+    NOICON              = 0x01000000,
     // system child window inside another SalFrame
     SYSTEMCHILD         = 0x08000000,
     // plugged system child window
@@ -91,7 +93,7 @@ enum class SalFrameStyleFlags
 };
 
 namespace o3tl {
-    template<> struct typed_flags<SalFrameStyleFlags> : is_typed_flags<SalFrameStyleFlags, 0x788001ff> {};
+    template<> struct typed_flags<SalFrameStyleFlags> : is_typed_flags<SalFrameStyleFlags, 0x798001ff> {};
 };
 
 // Extended frame style (sal equivalent to extended WinBits)

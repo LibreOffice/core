@@ -1032,6 +1032,9 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
                 break;
         }
 
+        if( nStyle & WB_NOICON )
+            nFrameStyle |= SalFrameStyleFlags::NOICON;
+
         SalFrame* pParentFrame = nullptr;
         if ( pParent )
             pParentFrame = pParent->mpWindowImpl->mpFrame;
