@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a786b9e7_1960b0c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-20T15:01:43Z",
+      "side": 1,
+      "message": "The change in vcl/qa/cppunit/fontmocks.hxx looks totally unrelated?",
+      "revId": "a5b2399f9112feb6d2cfadf75efdf1c0c6f6ce7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
