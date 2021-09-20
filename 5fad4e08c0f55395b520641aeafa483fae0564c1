@@ -34,6 +34,24 @@
       "parentUuid": "2911e196_a108716f",
       "revId": "5fad4e08c0f55395b520641aeafa483fae0564c1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b9b1221_6d8428b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-09-20T18:55:56Z",
+      "side": 1,
+      "message": "\u003e But I think compiling more code in CI is better then less. OTOH I don\u0027t care much.\n\nSkia is meant to be compiled using Clang. Compiling it using MSVC doesn\u0027t really do much, the result is sub-optimal, and special-casing complicates the build setup.",
+      "parentUuid": "c2acf37e_6d2525d1",
+      "revId": "5fad4e08c0f55395b520641aeafa483fae0564c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
