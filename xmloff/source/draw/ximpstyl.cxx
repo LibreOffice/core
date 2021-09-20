@@ -618,7 +618,7 @@ void SdXMLPresentationPageLayoutContext::endFastElement(sal_Int32 )
             }
             case 7:
             {
-                mnTypeId = AUTOLAYOUT_4CLIPART; // FIXME: not AUTOLAYOUT_TITLE_6CONTENT?
+                mnTypeId = AUTOLAYOUT_TITLE_6CONTENT; // tdf#141978: Apply 6content layout
                 break;
             }
             default:
