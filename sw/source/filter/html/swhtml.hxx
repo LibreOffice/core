@@ -474,6 +474,7 @@ class SwHTMLParser : public SfxHTMLParser, public SvtListener
 
     int m_nTableDepth;
     int m_nFloatingFrames;
+    int m_nListItems;
 
     /// the names corresponding to the DOCINFO field subtypes INFO[1-4]
     OUString m_InfoNames[4];
