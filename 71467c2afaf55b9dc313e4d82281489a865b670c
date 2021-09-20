@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c8ddb00_488969d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-20T12:44:28Z",
+      "side": 1,
+      "message": "Looks reasonable.\n\nBut is there a relevant bug report about this? It is very desirable to have it filed and mentioned here in commit message (like \"tdf#NNN: Prevent ...\"). That would enable to understand how the problem manifests, and *how to check if it reproduces or not* - e.g., in case when there\u0027s a suspicion that the cause is fixed elsewhere, and the code is being cleaned up.\n\nBeing not familiar with the code, I have a question: can\u0027t it break loading of *another* icon in a nested call this way?",
+      "revId": "71467c2afaf55b9dc313e4d82281489a865b670c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f43828b5_11208e3b",
+        "filename": "vcl/unx/generic/window/salframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-20T12:44:28Z",
+      "side": 1,
+      "message": "The variable may be made function-local static. It would be then declared and used in one place.",
+      "revId": "71467c2afaf55b9dc313e4d82281489a865b670c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
