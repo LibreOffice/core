@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "adce24f2_9ec020ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001976
+      },
+      "writtenOn": "2021-09-20T13:47:59Z",
+      "side": 1,
+      "message": "I was going to add information about crash here, but had to link account first. Created bugreport with information I have.\n\nAs for question about breaking another icon in nested call: I don\u0027t know. I\u0027ll take a look if I can find a better place to break recursion too.",
+      "parentUuid": "3c8ddb00_488969d9",
+      "revId": "71467c2afaf55b9dc313e4d82281489a865b670c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f43828b5_11208e3b",
         "filename": "vcl/unx/generic/window/salframe.cxx",
         "patchSetId": 1
@@ -31,6 +49,24 @@
       "writtenOn": "2021-09-20T12:44:28Z",
       "side": 1,
       "message": "The variable may be made function-local static. It would be then declared and used in one place.",
+      "revId": "71467c2afaf55b9dc313e4d82281489a865b670c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54f1b0f4_4e5452ae",
+        "filename": "vcl/unx/generic/window/salframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1001976
+      },
+      "writtenOn": "2021-09-20T13:47:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f43828b5_11208e3b",
       "revId": "71467c2afaf55b9dc313e4d82281489a865b670c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
