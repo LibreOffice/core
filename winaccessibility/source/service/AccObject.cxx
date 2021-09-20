@@ -162,7 +162,6 @@ AccObject::AccObject(XAccessible* pAcc, AccObjectManagerAgent* pAgent,
                      AccEventListener* pListener) :
         m_resID     (NULL),
         m_pParantID (nullptr),
-        m_bShouldDestroy(false),
         m_pIMAcc    (nullptr),
         m_pParentObj(nullptr),
         m_pListener (pListener),
@@ -1117,11 +1116,10 @@ void AccObject::GetExpandedState( sal_Bool* isExpandable, sal_Bool* isExpanded)
     }
 }
 
-void AccObject::NotifyDestroy(bool ifDelete)
+void AccObject::NotifyDestroy(bool bDestroy)
 {
-    m_bShouldDestroy=ifDelete;
     if(m_pIMAcc)
-        m_pIMAcc->NotifyDestroy(m_bShouldDestroy);
+        m_pIMAcc->NotifyDestroy(bDestroy);
 }
 
 void AccObject::SetParentObj(AccObject* pParentAccObj)
@@ -1186,10 +1184,6 @@ HWND AccObject::GetParentHWND()
 AccObject* AccObject::GetParentObj()
 {
     return m_pParentObj;
-}
-bool  AccObject::ifShouldDestroy()
-{
-    return m_bShouldDestroy;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
