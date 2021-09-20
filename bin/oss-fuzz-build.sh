@@ -12,9 +12,6 @@ echo start at `date -u`
 #shuffle CXXFLAGS -stdlib=libc++ arg into CXX as well because we use
 #the CXX as the linker and need to pass -stdlib=libc++ to build
 export CXX="$CXX -stdlib=libc++ -fsanitize-blacklist=$SRC/libreoffice/bin/sanitize-excludelist.txt"
-if [[ $SANITIZER_FLAGS = *sanitize=memory* ]]; then
-    export CXX="$CXX -Wno-unused-command-line-argument -L/usr/msan/lib"
-fi
 export CC="$CC -fsanitize-blacklist=$SRC/libreoffice/bin/sanitize-excludelist.txt"
 #similarly force the -fsanitize etc args in as well as pthread to get
 #things to link successfully during the build
