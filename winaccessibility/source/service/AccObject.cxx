@@ -1116,10 +1116,10 @@ void AccObject::GetExpandedState( sal_Bool* isExpandable, sal_Bool* isExpanded)
     }
 }
 
-void AccObject::NotifyDestroy(bool bDestroy)
+void AccObject::NotifyDestroy()
 {
     if(m_pIMAcc)
-        m_pIMAcc->NotifyDestroy(bDestroy);
+        m_pIMAcc->NotifyDestroy();
 }
 
 void AccObject::SetParentObj(AccObject* pParentAccObj)

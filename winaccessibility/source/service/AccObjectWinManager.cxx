@@ -1154,7 +1154,7 @@ void AccObjectWinManager::NotifyDestroy(XAccessible* pXAcc)
     AccObject* accObj = GetAccObjByXAcc(pXAcc);
     if(accObj)
     {
-        accObj->NotifyDestroy(true);
+        accObj->NotifyDestroy();
     }
 }
 

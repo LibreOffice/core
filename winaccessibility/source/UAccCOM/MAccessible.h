@@ -147,7 +147,7 @@ public:
     STDMETHOD(Put_XAccWindowHandle)(HWND hwnd) override;
     STDMETHOD(Put_XAccChildID)(long dChildID) override;
     STDMETHOD(Put_XAccAgent)(hyper pAgent) override;
-    STDMETHOD(NotifyDestroy)(BOOL isDestroy) override;
+    STDMETHOD(NotifyDestroy)() override;
     STDMETHOD(Put_ActionDescription)( const OLECHAR* szAction) override;
     STDMETHOD(SetDefaultAction)(hyper pAction) override;
     STDMETHOD(GetUNOInterface)(hyper*) override;
