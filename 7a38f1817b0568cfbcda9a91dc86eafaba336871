@@ -16,6 +16,24 @@
       "message": "Is \u0027\u003c\u0027 intended here? Or maybe \u0027\u003e\u003d\u0027 was intended? It seems to me that we wouldn\u0027t want to call Init_ssse3 when SK_CPU_SSE_LEVEL \u003c SK_CPU_SSE_LEVEL_SSSE3...",
       "revId": "7a38f1817b0568cfbcda9a91dc86eafaba336871",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "462751c9_929cfc85",
+        "filename": "external/skia/source/skia_opts.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-09-20T10:10:00Z",
+      "side": 1,
+      "message": "Yes, it is. SK_CPU_SSE_LEVEL specifies the CPU settings the entire Skia has been built with. So only \u003cSSSE3 build needs to explicitly opt-in for SSSE3 code.",
+      "parentUuid": "431b60d5_98295c94",
+      "revId": "7a38f1817b0568cfbcda9a91dc86eafaba336871",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
