@@ -1183,7 +1183,7 @@ std::unique_ptr<weld::TreeIter> SbaTableQueryBrowser::getObjectEntry(const OUStr
                                         {
                                             pEntryData->eType = etQueryContainer;
                                         }
-                                        implAppendEntry(xObject.get(), sPath, pEntryData, pEntryData->eType);
+                                        implAppendEntry(xObject.get(), sPath, pEntryData);
                                     }
                                 }
                             }
@@ -2107,7 +2107,7 @@ void SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xNameAcce
                     if ( xChild.is() )
                         pEntryData->eType = etQueryContainer;
                 }
-                implAppendEntry(&rParent, rName, pEntryData, pEntryData->eType);
+                implAppendEntry(&rParent, rName, pEntryData);
             }
         }
     }
@@ -2119,8 +2119,10 @@ void SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xNameAcce
     rTreeView.make_sorted();
 }
 
-std::unique_ptr<weld::TreeIter> SbaTableQueryBrowser::implAppendEntry(const weld::TreeIter* pParent, const OUString& rName, void* pUserData, EntryType eEntryType)
+std::unique_ptr<weld::TreeIter> SbaTableQueryBrowser::implAppendEntry(const weld::TreeIter* pParent, const OUString& rName, DBTreeListUserData* pUserData)
 {
+    EntryType eEntryType = pUserData->eType;
+
     std::unique_ptr<ImageProvider> xImageProvider(getImageProviderFor(pParent));
 
     OUString aImage = xImageProvider->getImageId(rName, getDatabaseObjectType(eEntryType));
@@ -2776,7 +2778,7 @@ void SAL_CALL SbaTableQueryBrowser::elementInserted(const ContainerEvent& rEvent
             }
             pNewData->eType = etQuery;
         }
-        implAppendEntry(xEntry.get(), ::comphelper::getString(rEvent.Accessor), pNewData, pNewData->eType);
+        implAppendEntry(xEntry.get(), ::comphelper::getString(rEvent.Accessor), pNewData);
 
         rTreeView.make_sorted();
     }
@@ -2878,7 +2880,7 @@ void SAL_CALL SbaTableQueryBrowser::elementReplaced( const ContainerEvent& _rEve
                 if ( etTableOrView == pData->eType )
                 {
                     // only insert userdata when we have a table because the query is only a commanddefinition object and not a query
-                     _rEvent.Element >>= pData->xObjectProperties;  // remember the new element
+                    _rEvent.Element >>= pData->xObjectProperties;  // remember the new element
                 }
                 else
                 {
