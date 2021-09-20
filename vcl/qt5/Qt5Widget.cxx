@@ -46,7 +46,6 @@
 #include <cairo.h>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
-#include <vcl/toolkit/floatwin.hxx>
 #include <window.h>
 #include <tools/diagnose_ex.h>
 
@@ -178,13 +177,7 @@ void Qt5Widget::handleMouseButtonEvent(const Qt5Frame& rFrame, const QMouseEvent
     rFrame.CallCallback(nEventType, &aEvent);
 }
 
-void Qt5Widget::mousePressEvent(QMouseEvent* pEvent)
-{
-    handleMousePressEvent(m_rFrame, pEvent);
-    if (m_rFrame.isPopup()
-        && !geometry().translated(geometry().topLeft() * -1).contains(pEvent->pos()))
-        closePopup();
-}
+void Qt5Widget::mousePressEvent(QMouseEvent* pEvent) { handleMousePressEvent(m_rFrame, pEvent); }
 
 void Qt5Widget::mouseReleaseEvent(QMouseEvent* pEvent)
 {
@@ -598,22 +591,11 @@ void Qt5Widget::keyReleaseEvent(QKeyEvent* pEvent)
 
 void Qt5Widget::focusInEvent(QFocusEvent*) { m_rFrame.CallCallback(SalEvent::GetFocus, nullptr); }
 
-void Qt5Widget::closePopup()
-{
-    VclPtr<FloatingWindow> pFirstFloat = ImplGetSVData()->mpWinData->mpFirstFloat;
-    if (pFirstFloat && !(pFirstFloat->GetPopupModeFlags() & FloatWinPopupFlags::NoAppFocusClose))
-    {
-        SolarMutexGuard aGuard;
-        pFirstFloat->EndPopupMode(FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll);
-    }
-}
-
 void Qt5Widget::focusOutEvent(QFocusEvent*)
 {
     m_rFrame.m_nKeyModifiers = ModKeyFlags::NONE;
     endExtTextInput();
     m_rFrame.CallCallback(SalEvent::LoseFocus, nullptr);
-    closePopup();
 }
 
 Qt5Widget::Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f)
