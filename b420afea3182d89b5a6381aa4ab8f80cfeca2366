@@ -16,6 +16,24 @@
       "message": "Oh! Thanks to the last change (*thank you!*), I now see *this* change. And I realize, that mnWidth / mnHeight are now unused, right? At least they never change, being always 0 after initialization in ctor? I suppose that they should be also removed, their getters removed, too -\u003e their uses removed, too... and *then* you may safely rename CompareIgnoreSize to simply Compare (because there will not be members that are left out from the comparison).",
       "revId": "b420afea3182d89b5a6381aa4ab8f80cfeca2366",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7379cb1_fb18d8d1",
+        "filename": "vcl/source/font/PhysicalFontFamily.cxx",
+        "patchSetId": 26
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-20T04:02:57Z",
+      "side": 1,
+      "message": "That then leads to this patch:\n\nhttps://gerrit.libreoffice.org/c/core/+/121932/26\n\nI think it would be less risky to do this in two parts.",
+      "parentUuid": "f4ec5f2d_2b992ba2",
+      "revId": "b420afea3182d89b5a6381aa4ab8f80cfeca2366",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
