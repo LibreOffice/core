@@ -315,6 +315,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_isInTableStructure(false),
     m_nTableDepth( 0 ),
     m_nFloatingFrames( 0 ),
+    m_nListItems( 0 ),
     m_pTempViewFrame(nullptr)
 {
     // If requested explicitly, then force ignoring of comments (don't create postits for them).
@@ -1827,10 +1828,19 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
             EndPara();
         }
 
-        EndNumberBulletListItem( HtmlTokenId::NONE, false );// close <LI>/<LH> and don't set a template
-        NewNumberBulletListItem( nToken );
-        break;
+        if (m_bFuzzing && m_nListItems > 1024)
+        {
+            SAL_WARN("sw.html", "skipping remaining bullet import for performance during fuzzing");
+        }
+        else
+        {
+            EndNumberBulletListItem( HtmlTokenId::NONE, false );// close <LI>/<LH> and don't set a template
+            NewNumberBulletListItem( nToken );
+        }
 
+        ++m_nListItems;
+
+        break;
     case HtmlTokenId::LI_OFF:
     case HtmlTokenId::LISTHEADER_OFF:
         EndNumberBulletListItem( nToken, false );
