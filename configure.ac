@@ -12035,6 +12035,7 @@ LO_CLANG_CXXFLAGS_INTRINSICS_AVX512=
 LO_CLANG_CXXFLAGS_INTRINSICS_AVX512F=
 LO_CLANG_CXXFLAGS_INTRINSICS_F16C=
 LO_CLANG_CXXFLAGS_INTRINSICS_FMA=
+HAVE_LO_CLANG_DLLEXPORTINLINES=
 
 if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE -a ! \( "$_os" = "WINNT" -a "$CPUNAME" = "AARCH64" \); then
     if test -n "$LO_CLANG_CC" -a -n "$LO_CLANG_CXX"; then
@@ -12064,6 +12065,24 @@ if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE -a ! \( "$_os" = "WINNT
             AC_MSG_WARN(["$clang2_version" is too old or unrecognized, must be at least Clang 5.0.2])
             LO_CLANG_CC=
             LO_CLANG_CXX=
+        fi
+    fi
+    if test -n "$LO_CLANG_CC" -a -n "$LO_CLANG_CXX" -a "$_os" = "WINNT"; then
+        save_CXX="$CXX"
+        CXX="$LO_CLANG_CXX"
+        AC_MSG_CHECKING([whether $CXX supports -Zc:dllexportInlines-])
+        AC_LANG_PUSH([C++])
+        save_CXXFLAGS=$CXXFLAGS
+        CXXFLAGS="$CXXFLAGS -Werror -Zc:dllexportInlines-"
+        AC_COMPILE_IFELSE([AC_LANG_SOURCE()], [
+                HAVE_LO_CLANG_DLLEXPORTINLINES=TRUE
+                AC_MSG_RESULT([yes])
+            ], [AC_MSG_RESULT([no])])
+        CXXFLAGS=$save_CXXFLAGS
+        AC_LANG_POP([C++])
+        CXX="$save_CXX"
+        if test -z "$HAVE_LO_CLANG_DLLEXPORTINLINES"; then
+            AC_MSG_ERROR([Clang compiler does not support -Zc:dllexportInlines-. The Skia library needs to be built using a newer Clang version, or use --disable-skia.])
         fi
     fi
     if test -z "$LO_CLANG_CC" -o -z "$LO_CLANG_CXX"; then
@@ -12345,6 +12364,7 @@ AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_AVX512F)
 AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_F16C)
 AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_FMA)
 AC_SUBST(CLANG_USE_LD)
+AC_SUBST([HAVE_LO_CLANG_DLLEXPORTINLINES])
 
 SYSTEM_GPGMEPP=
 
