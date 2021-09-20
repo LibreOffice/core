@@ -147,7 +147,8 @@ DECLARE_OOXMLEXPORT_TEST(testWpsOnly, "wps-only.docx")
     // Document has wp:anchor, not wp:inline, so handle it accordingly.
     uno::Reference<drawing::XShape> xShape = getShape(1);
     text::TextContentAnchorType eValue = getProperty<text::TextContentAnchorType>(xShape, "AnchorType");
-    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_PARAGRAPH, eValue);
+    // Word only as as-char and at-char, so at-char is our only choice.
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, eValue);
 
     // Check position, it was 0. This is a shape, so use getPosition(), not a property.
     CPPUNIT_ASSERT_EQUAL(oox::drawingml::convertEmuToHmm(671830), xShape->getPosition().X);
