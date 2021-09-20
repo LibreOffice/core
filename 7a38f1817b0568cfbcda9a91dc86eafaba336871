@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "431b60d5_98295c94",
+        "filename": "external/skia/source/skia_opts.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-20T06:30:15Z",
+      "side": 1,
+      "message": "Is \u0027\u003c\u0027 intended here? Or maybe \u0027\u003e\u003d\u0027 was intended? It seems to me that we wouldn\u0027t want to call Init_ssse3 when SK_CPU_SSE_LEVEL \u003c SK_CPU_SSE_LEVEL_SSSE3...",
+      "revId": "7a38f1817b0568cfbcda9a91dc86eafaba336871",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
