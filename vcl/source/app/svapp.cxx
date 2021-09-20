@@ -1066,9 +1066,9 @@ vcl::Window* Application::GetFocusWindow()
     return ImplGetSVData()->mpWinData->mpFocusWin;
 }
 
-OutputDevice* Application::GetDefaultDevice()
+OutputDevice* Application::GetDefaultDevice(bool bUseIcon)
 {
-    return ImplGetDefaultWindow()->GetOutDev();
+    return ImplGetDefaultWindow(bUseIcon)->GetOutDev();
 }
 
 vcl::Window* Application::GetFirstTopLevelWindow()

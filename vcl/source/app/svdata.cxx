@@ -206,17 +206,17 @@ basegfx::SystemDependentDataManager& ImplGetSystemDependentDataManager()
 }
 
 /// Returns either the application window, or the default GL context window
-vcl::Window* ImplGetDefaultWindow()
+vcl::Window* ImplGetDefaultWindow(bool bUseIcon)
 {
     ImplSVData* pSVData = ImplGetSVData();
     if (pSVData->maFrameData.mpAppWin)
         return pSVData->maFrameData.mpAppWin;
     else
-        return ImplGetDefaultContextWindow();
+        return ImplGetDefaultContextWindow(bUseIcon);
 }
 
 /// returns the default window created to hold the persistent VCL GL context.
-vcl::Window *ImplGetDefaultContextWindow()
+vcl::Window *ImplGetDefaultContextWindow(bool bUseIcon)
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -231,7 +231,7 @@ vcl::Window *ImplGetDefaultContextWindow()
             {
                 SAL_INFO( "vcl", "ImplGetDefaultWindow(): No AppWindow" );
 
-                pSVData->mpDefaultWin = VclPtr<WorkWindow>::Create( nullptr, WB_DEFAULTWIN );
+                pSVData->mpDefaultWin = VclPtr<WorkWindow>::Create( nullptr, bUseIcon ? WB_DEFAULTWIN : WB_DEFAULTWIN | WB_NOICON );
                 pSVData->mpDefaultWin->SetText( "VCL ImplGetDefaultWindow" );
             }
             catch (const css::uno::Exception&)

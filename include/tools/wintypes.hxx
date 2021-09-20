@@ -229,6 +229,8 @@ WinBits const WB_NOINITIALSELECTION =   SAL_CONST_INT64(0x001000000000);
 WinBits const WB_HIDESELECTION =        SAL_CONST_INT64(0x002000000000);
 // DO NOT USE: 0x008000000000, that's WB_SYSTEMCHILDWINDOW
 
+// tdf#144624: special bit used to skip assigning icon to virtual window
+WinBits const WB_NOICON =               SAL_CONST_INT64(0x200000000000);
 
 enum class WindowAlign { Left, Top, Right, Bottom };
 
