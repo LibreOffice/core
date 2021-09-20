@@ -192,10 +192,8 @@ bool WinGlyphFallbackSubstititution::HasMissingChars(PhysicalFontFace* pFace, OU
     FontCharMapRef xFontCharMap = pWinFont->GetFontCharMap();
     if( !xFontCharMap.is() )
     {
-        // construct a Size structure as the parameter of constructor of class FontSelectPattern
-        const Size aSize( pFace->GetWidth(), pFace->GetHeight() );
         // create a FontSelectPattern object for getting s LOGFONT
-        const FontSelectPattern aFSD( *pFace, aSize, static_cast<float>(aSize.Height()), 0, false );
+        const FontSelectPattern aFSD( *pFace, Size(), 0.0, 0, false );
         // construct log font
         LOGFONTW aLogFont;
         ImplGetLogFontFromFontSelect( aFSD, pFace, aLogFont );

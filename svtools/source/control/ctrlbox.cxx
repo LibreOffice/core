@@ -1079,7 +1079,7 @@ IMPL_LINK(FontSizeBox, ModifyHdl, weld::ComboBox&, rBox, void)
     m_aChangeHdl.Call(rBox);
 }
 
-void FontSizeBox::Fill( const FontMetric* pFontMetric, const FontList* pList )
+void FontSizeBox::Fill( const FontList* pList )
 {
     // remember for relative mode
     pFontList = pList;
@@ -1092,15 +1092,7 @@ void FontSizeBox::Fill( const FontMetric* pFontMetric, const FontList* pList )
     const int* pTempAry;
     const int* pAry = nullptr;
 
-    if( pFontMetric )
-    {
-        aFontMetric = *pFontMetric;
-        pAry = pList->GetSizeAry( *pFontMetric );
-    }
-    else
-    {
-        pAry = FontList::GetStdSizeAry();
-    }
+    pAry = FontList::GetStdSizeAry();
 
     // first insert font size names (for simplified/traditional chinese)
     FontSizeNames aFontSizeNames( Application::GetSettings().GetUILanguageTag().getLanguageType() );
@@ -1245,7 +1237,7 @@ void FontSizeBox::SetRelative( bool bNewRelative )
         SetRange(20, 9999);
         SetUnit(FieldUnit::POINT);
         if ( pFontList)
-            Fill( &aFontMetric, pFontList );
+            Fill( pFontList );
     }
 
     set_active_or_entry_text(aStr);
