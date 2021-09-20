@@ -1390,7 +1390,6 @@ WinSalPrinter::~WinSalPrinter()
 
         pTempPrinter->mpNextPrinter = mpNextPrinter;
     }
-    mbValid = false;
 }
 
 void WinSalPrinter::markInvalid()
@@ -1530,7 +1529,7 @@ void WinSalPrinter::DoEndDoc(HDC hDC)
 bool WinSalPrinter::EndJob()
 {
     HDC hDC = mhDC;
-    if ( isValid() && hDC )
+    if (isValid())
     {
         delete mpGraphics;
         mpGraphics = nullptr;
@@ -1554,7 +1553,7 @@ bool WinSalPrinter::EndJob()
 
 SalGraphics* WinSalPrinter::StartPage( ImplJobSetup* pSetupData, bool bNewJobData )
 {
-    if( ! isValid() || mhDC == nullptr )
+    if (!isValid())
         return nullptr;
 
     HDC hDC = mhDC;
@@ -1597,7 +1596,7 @@ void WinSalPrinter::EndPage()
     delete mpGraphics;
     mpGraphics = nullptr;
 
-    if( ! isValid() )
+    if (!isValid())
         return;
 
     HDC hDC = mhDC;
