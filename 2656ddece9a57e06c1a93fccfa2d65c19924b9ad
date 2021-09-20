@@ -62,6 +62,30 @@
       },
       "revId": "2656ddece9a57e06c1a93fccfa2d65c19924b9ad",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "902e9594_ae21202f",
+        "filename": "editeng/source/editeng/impedit4.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2785,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2021-09-20T13:00:36Z",
+      "side": 1,
+      "message": "Alternatively, we adjust the Format -\u003e Text -\u003e Sentence control to behave the same, perform a selection (to sentence bounds) if none was made--honor selection if one exists (remember we now have .uno:SentenceSelection available, tdf#124552, that should be assigned a default shortcut, as well as mouse triple-click for efficient sentence selection at sentence bound iterators). Keeping the Sentence case assignment in the rotation is worthwhile.",
+      "parentUuid": "ea5c4882_0801347a",
+      "range": {
+        "startLine": 2785,
+        "startChar": 12,
+        "endLine": 2785,
+        "endChar": 58
+      },
+      "revId": "2656ddece9a57e06c1a93fccfa2d65c19924b9ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
