@@ -550,13 +550,7 @@ bool Printer::AcquireGraphics() const
 
 void Printer::ImplReleaseFonts()
 {
-#ifdef UNX
-    // HACK to fix an urgent P1 printing issue fast
-    // WinSalPrinter does not respect GetGraphics/ReleaseGraphics conventions
-    // so Printer::mpGraphics often points to a dead WinSalGraphics
-    // TODO: fix WinSalPrinter's GetGraphics/ReleaseGraphics handling
     mpGraphics->ReleaseFonts();
-#endif
     mbNewFont = true;
     mbInitFont = true;
 
@@ -565,7 +559,7 @@ void Printer::ImplReleaseFonts()
     mpDeviceFontSizeList.reset();
 }
 
-void Printer::ReleaseGraphics( bool bRelease )
+void Printer::ImplReleaseGraphics(bool bRelease)
 {
     DBG_TESTSOLARMUTEX();
 
@@ -616,6 +610,11 @@ void Printer::ReleaseGraphics( bool bRelease )
     mpGraphics      = nullptr;
     mpPrevGraphics  = nullptr;
     mpNextGraphics  = nullptr;
+}
+
+void Printer::ReleaseGraphics(bool bRelease)
+{
+    ImplReleaseGraphics(bRelease);
 }
 
 void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
@@ -912,7 +911,7 @@ void Printer::dispose()
 
     mpPrinterOptions.reset();
 
-    ReleaseGraphics();
+    ImplReleaseGraphics();
     if ( mpInfoPrinter )
         ImplGetSVData()->mpDefInst->DestroyInfoPrinter( mpInfoPrinter );
     if ( mpDisplayDev )
