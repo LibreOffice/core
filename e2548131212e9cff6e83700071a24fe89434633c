@@ -87,6 +87,24 @@
       "parentUuid": "1887f829_518bf424",
       "revId": "e2548131212e9cff6e83700071a24fe89434633c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df785b49_8cd296a7",
+        "filename": "svx/source/svdraw/svdedxv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2765,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-20T06:26:30Z",
+      "side": 1,
+      "message": "That indeed can happen. I\u0027ll do a follow-up change to address this later scenario and then these can be reviewed together. Thanks!",
+      "parentUuid": "168b89c0_c7d527a9",
+      "revId": "e2548131212e9cff6e83700071a24fe89434633c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
