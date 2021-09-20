@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37dc3d67_860c1a29",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1466,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-20T15:21:17Z",
+      "side": 1,
+      "message": "permissionIdAndName will always be empty in this block (due to the commented out if in the line above)",
+      "revId": "f5c266695a4a88da7db971a21915e2bbf758d48e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7f9df5d_0e779920",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1504,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-20T15:21:17Z",
+      "side": 1,
+      "message": "permissionIdAndName will always be empty in this block (due to the commented out if in the line above)",
+      "revId": "f5c266695a4a88da7db971a21915e2bbf758d48e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
