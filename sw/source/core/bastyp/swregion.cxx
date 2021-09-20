@@ -165,7 +165,8 @@ void SwRegionRects::Compress()
             // that are possibly overlapping or adjacent or close enough to be grouped by the fuzzy
             // code below.
             const tools::Long nFuzzy = 1361513;
-            const tools::Long yMax = (*this)[i].Bottom() + nFuzzy / (*this)[i].Width();
+            const tools::Long yMax = (*this)[i].Bottom() + nFuzzy
+                / std::max<tools::Long>( 1, (*this)[i].Width());
             size_type j = i+1;
             while( j < size() && (*this)[j].Top() <= yMax )
                 ++j;
