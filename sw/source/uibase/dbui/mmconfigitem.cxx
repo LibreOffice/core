@@ -290,6 +290,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
                 case 39: pValues[nProp] >>= m_nCurrentAddressBlock; break;
             }
         }
+        ClearModified();
     }
     //read the list of data base assignments
     Sequence<OUString> aAssignments = GetNodeNames(cAddressDataAssignments);
