@@ -116,10 +116,10 @@ FontList::GetStyleName()
 
 --------------------------------------------------------------------------
 
-const int* FontList::GetSizeAry( const FontMetric& rFontMetric ) const;
+static const int* FontList::GetStdSizeAry();
 
 This method returns the available sizes for the given font.
-If it is a scalable font, standard sizes are returned.
+As all fonts are scalable, standard sizes are returned.
 The array contains the heights of the font in tenth (1/10) point.
 The last value of the array is 0.
 The returned array will destroyed by the FontList.
@@ -144,7 +144,6 @@ private:
     OUString                maBoldItalic;
     OUString                maBlack;
     OUString                maBlackItalic;
-    mutable std::unique_ptr<int[]> mpSizeAry;
     VclPtr<OutputDevice>    mpDev;
     VclPtr<OutputDevice>    mpDev2;
     std::vector<std::unique_ptr<ImplFontListNameInfo>> m_Entries;
@@ -185,7 +184,6 @@ public:
     static sal_Handle           GetNextFontMetric( sal_Handle hFontMetric );
     static const FontMetric& GetFontMetric( sal_Handle hFontMetric );
 
-    const int* GetSizeAry( const FontMetric& rFontMetric ) const;
     static const int* GetStdSizeAry() { return aStdSizeAry; }
 
 private:

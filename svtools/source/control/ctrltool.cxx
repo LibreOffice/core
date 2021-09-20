@@ -79,17 +79,14 @@ class ImplFontListFontMetric : public FontMetric
     friend FontList;
 
 private:
-    VclPtr<OutputDevice>    mpDevice;
     ImplFontListFontMetric*   mpNext;
 
 public:
-                            ImplFontListFontMetric( const FontMetric& rInfo,
-                                                  OutputDevice* pDev ) :
-                                FontMetric( rInfo ), mpDevice(pDev), mpNext(nullptr)
+                            ImplFontListFontMetric( const FontMetric& rInfo ) :
+                                FontMetric( rInfo ), mpNext(nullptr)
                             {
                             }
 
-    OutputDevice*           GetDevice() const { return mpDevice; }
 };
 
 enum class FontListFontNameType
@@ -100,7 +97,6 @@ enum class FontListFontNameType
 };
 
 }
-
 namespace o3tl
 {
     template<> struct typed_flags<FontListFontNameType> : is_typed_flags<FontListFontNameType, 0x3> {};
@@ -274,7 +270,7 @@ void FontList::ImplInsertFonts(OutputDevice* pDevice, bool bInsertData)
         {
             if ( bInsertData )
             {
-                ImplFontListFontMetric* pNewInfo = new ImplFontListFontMetric( aFontMetric, pDevice );
+                ImplFontListFontMetric* pNewInfo = new ImplFontListFontMetric( aFontMetric );
                 pData = new ImplFontListNameInfo( aSearchName );
                 pData->mpFirst      = pNewInfo;
                 pNewInfo->mpNext    = nullptr;
@@ -293,7 +289,7 @@ void FontList::ImplInsertFonts(OutputDevice* pDevice, bool bInsertData)
                 bool                    bInsert = true;
                 ImplFontListFontMetric*   pPrev = nullptr;
                 ImplFontListFontMetric*   pTemp = pData->mpFirst;
-                ImplFontListFontMetric*   pNewInfo = new ImplFontListFontMetric( aFontMetric, pDevice );
+                ImplFontListFontMetric*   pNewInfo = new ImplFontListFontMetric( aFontMetric );
                 while ( pTemp )
                 {
                     sal_Int32 eComp = ImplCompareFontMetric( pNewInfo, pTemp );
@@ -742,49 +738,6 @@ const FontMetric& FontList::GetFontMetric( sal_Handle hFontMetric )
 {
     ImplFontListFontMetric* pInfo = static_cast<ImplFontListFontMetric*>(hFontMetric);
     return *pInfo;
-}
-
-const int* FontList::GetSizeAry( const FontMetric& rInfo ) const
-{
-    // first delete Size-Array
-    mpSizeAry.reset();
-
-    // use standard sizes if no name
-    if ( rInfo.GetFamilyName().isEmpty() )
-        return aStdSizeAry;
-
-    // first search fontname in order to use device from the matching font
-    OutputDevice*           pDevice = mpDev;
-    ImplFontListNameInfo*   pData = ImplFindByName( rInfo.GetFamilyName() );
-    if ( pData )
-        pDevice = pData->mpFirst->GetDevice();
-
-    int nDevSizeCount = pDevice->GetDevFontSizeCount( rInfo );
-    if ( !nDevSizeCount ||
-         (pDevice->GetDevFontSize( rInfo, 0 ).Height() == 0) )
-        return aStdSizeAry;
-
-    MapMode aOldMapMode = pDevice->GetMapMode();
-    MapMode aMap( MapUnit::Map10thInch, Point(), Fraction( 1, 72 ), Fraction( 1, 72 ) );
-    pDevice->SetMapMode( aMap );
-
-    int nRealCount = 0;
-    tools::Long    nOldHeight = 0;
-    mpSizeAry.reset(new int[nDevSizeCount+1] );
-    for (int i = 0; i < nDevSizeCount; ++i)
-    {
-        Size aSize = pDevice->GetDevFontSize( rInfo, i );
-        if ( aSize.Height() != nOldHeight )
-        {
-            nOldHeight = aSize.Height();
-            mpSizeAry[nRealCount] = nOldHeight;
-            nRealCount++;
-        }
-    }
-    mpSizeAry[nRealCount] = 0;
-
-    pDevice->SetMapMode( aOldMapMode );
-    return mpSizeAry.get();
 }
 
 struct ImplFSNameItem
