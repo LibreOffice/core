@@ -105,7 +105,7 @@ public:
     virtual SalPrinterError         GetErrorCode() override;
 
     void markInvalid();
-    bool isValid() const { return mbValid; }
+    bool isValid() const { return mbValid && mhDC; }
 };
 
 #endif // INCLUDED_VCL_INC_WIN_SALPRN_H
