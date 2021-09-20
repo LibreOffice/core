@@ -16,6 +16,23 @@
       "message": "Hello Justin,\nAny chance to have a unittest with the sample file from Mike ?",
       "revId": "eb830ad284f245165b6ab5e8647d48834622f2d5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3878d307_ec40a9ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-20T19:15:38Z",
+      "side": 1,
+      "message": "No unit test. The original commit (the one being reverted) documents that I (and you) couldn\u0027t make a unit test.",
+      "revId": "eb830ad284f245165b6ab5e8647d48834622f2d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
