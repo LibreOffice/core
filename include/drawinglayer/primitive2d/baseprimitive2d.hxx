@@ -29,17 +29,49 @@
 #include <cppuhelper/basemutex.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
+#include <mutex>
 
 namespace drawinglayer::geometry
 {
 class ViewInformation2D;
 }
 
+/** This is a custom re-implementation of cppu::WeakComponentImplHelper which uses
+   std::recursive_mutex and skips parts of the XComponent stuff.
+*/
+class DRAWINGLAYER_DLLPUBLIC BasePrimitive2DImplBase : public cppu::OWeakObject,
+                                                       public css::lang::XComponent,
+                                                       public css::lang::XTypeProvider,
+                                                       public css::graphic::XPrimitive2D,
+                                                       public css::util::XAccounting
+{
+public:
+    virtual ~BasePrimitive2DImplBase() override;
+
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
+    virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const& aType) override;
+
+    // css::lang::XComponent
+    virtual void SAL_CALL dispose() override;
+    virtual void SAL_CALL
+    addEventListener(css::uno::Reference<css::lang::XEventListener> const& xListener) override;
+    virtual void SAL_CALL
+    removeEventListener(css::uno::Reference<css::lang::XEventListener> const& xListener) override;
+
+    // css::lang::XTypeProvider
+    virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
+    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override
+    {
+        return css::uno::Sequence<sal_Int8>();
+    }
+
+protected:
+    mutable std::recursive_mutex m_aMutex;
+};
+
 namespace drawinglayer::primitive2d
 {
-typedef cppu::WeakComponentImplHelper<css::graphic::XPrimitive2D, css::util::XAccounting>
-    BasePrimitive2DImplBase;
-
 /** BasePrimitive2D class
 
     Baseclass for all C++ implementations of css::graphic::XPrimitive2D
@@ -113,8 +145,7 @@ typedef cppu::WeakComponentImplHelper<css::graphic::XPrimitive2D, css::util::XAc
     for view-independent primitives which are defined by not using ViewInformation2D
     in their get2DDecomposition/getB2DRange implementations.
 */
-class DRAWINGLAYER_DLLPUBLIC BasePrimitive2D : protected cppu::BaseMutex,
-                                               public BasePrimitive2DImplBase
+class DRAWINGLAYER_DLLPUBLIC BasePrimitive2D : public BasePrimitive2DImplBase
 {
     BasePrimitive2D(const BasePrimitive2D&) = delete;
     BasePrimitive2D& operator=(const BasePrimitive2D&) = delete;
