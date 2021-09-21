@@ -1212,9 +1212,31 @@ QString Qt5AccessibleWidget::columnDescription(int column) const
     return toQString(xTable->getAccessibleColumnDescription(column));
 }
 
-bool Qt5AccessibleWidget::isColumnSelected(int /* column */) const { return true; }
+bool Qt5AccessibleWidget::isColumnSelected(int nColumn) const
+{
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return false;
 
-bool Qt5AccessibleWidget::isRowSelected(int /* row */) const { return true; }
+    Reference<XAccessibleTable> xTable(xAc, UNO_QUERY);
+    if (!xTable.is())
+        return false;
+
+    return xTable->isAccessibleColumnSelected(nColumn);
+}
+
+bool Qt5AccessibleWidget::isRowSelected(int nRow) const
+{
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return false;
+
+    Reference<XAccessibleTable> xTable(xAc, UNO_QUERY);
+    if (!xTable.is())
+        return false;
+
+    return xTable->isAccessibleRowSelected(nRow);
+}
 
 void Qt5AccessibleWidget::modelChange(QAccessibleTableModelChangeEvent*) {}
 
