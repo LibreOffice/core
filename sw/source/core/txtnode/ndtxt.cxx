@@ -1426,28 +1426,6 @@ void SwTextNode::Update(
         }
 
         // at-char anchored flys shouldn't be moved, either.
-#if OSL_DEBUG_LEVEL > 0
-        std::vector<SwFrameFormat*> checkFormats;
-        const SwFrameFormats& rFormats = *GetDoc().GetSpzFrameFormats();
-        for (auto& rpFormat : rFormats)
-        {
-            const SwFormatAnchor& rAnchor = rpFormat->GetAnchor();
-            const SwPosition* pContentAnchor = rAnchor.GetContentAnchor();
-            if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR && pContentAnchor)
-            {
-                // The fly is at-char anchored and has an anchor position.
-                SwIndex& rEndIdx = const_cast<SwIndex&>(pContentAnchor->nContent);
-                if (&pContentAnchor->nNode.GetNode() == this && rEndIdx.GetIndex() == rPos.GetIndex())
-                {
-                    // The anchor position is exactly our insert position.
-                    #if 0
-                    rEndIdx.Assign(&aTmpIdxReg, rEndIdx.GetIndex());
-                    #endif
-                    checkFormats.push_back( rpFormat );
-                }
-            }
-        }
-#endif
         std::vector<SwFrameFormat*> const& rFlys(GetAnchoredFlys());
         for (size_t i = 0; i != rFlys.size(); ++i)
         {
@@ -1462,17 +1440,9 @@ void SwTextNode::Update(
                 {
                     // The anchor position is exactly our insert position.
                     rEndIdx.Assign(&aTmpIdxReg, rEndIdx.GetIndex());
-#if OSL_DEBUG_LEVEL > 0
-                    auto checkPos = std::find( checkFormats.begin(), checkFormats.end(), pFormat );
-                    assert( checkPos != checkFormats.end());
-                    checkFormats.erase( checkPos );
-#endif
                 }
             }
         }
-#if OSL_DEBUG_LEVEL > 0
-        assert( checkFormats.empty());
-#endif
 
         // The cursors of other shells shouldn't be moved, either.
         if (SwDocShell* pDocShell = GetDoc().GetDocShell())
