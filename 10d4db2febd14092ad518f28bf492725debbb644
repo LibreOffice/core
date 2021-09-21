@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d908981_808c0c41",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-09-21T19:19:06Z",
+      "side": 1,
+      "message": "I followed your comment but if still incorrect or if you want to be even more precise, don\u0027t hesitate to comment of course!",
+      "revId": "10d4db2febd14092ad518f28bf492725debbb644",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
