@@ -233,6 +233,7 @@ void Test::testNumberFormat()
     const char* pDateTimeExt2[] = {
         "YYYY-MM-DD HH:MM:SS",
         "YYYY-MM-DD\"T\"HH:MM:SS",
+        "YYYY-MM-DD\"T\"HH:MM:SS.000",
         nullptr
     };
 
@@ -264,7 +265,7 @@ void Test::testNumberFormat()
         { NF_TEXT, NF_TEXT, 1, pText },
         { NF_DATETIME_SYS_DDMMYYYY_HHMM, NF_DATETIME_SYS_DDMMYYYY_HHMM, 1, pDateTimeExt1 },
         { NF_FRACTION_3D, NF_FRACTION_100, 7, pFractionExt },
-        { NF_DATETIME_ISO_YYYYMMDD_HHMMSS, NF_DATETIME_ISO_YYYYMMDDTHHMMSS, 2, pDateTimeExt2 }
+        { NF_DATETIME_ISO_YYYYMMDD_HHMMSS, NF_DATETIME_ISO_YYYYMMDDTHHMMSS000, 3, pDateTimeExt2 }
     };
 
     SvNumberFormatter aFormatter(m_xContext, eLang);
