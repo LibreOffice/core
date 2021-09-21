@@ -281,7 +281,7 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
     const int nLength = rArgs.mrStr.getLength();
     const sal_Unicode *pStr = rArgs.mrStr.getStr();
 
-    std::unique_ptr<vcl::text::TextLayoutCache> pNewScriptRun;
+    std::optional<vcl::text::TextLayoutCache> oNewScriptRun;
     vcl::text::TextLayoutCache const* pTextLayout;
     if (rArgs.m_pTextLayoutCache)
     {
@@ -289,8 +289,8 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
     }
     else
     {
-        pNewScriptRun.reset(new vcl::text::TextLayoutCache(pStr, rArgs.mnEndCharPos));
-        pTextLayout = pNewScriptRun.get();
+        oNewScriptRun.emplace(pStr, rArgs.mnEndCharPos);
+        pTextLayout = &*oNewScriptRun;
     }
 
     // nBaseOffset is used to align vertical text to the center of rotated
