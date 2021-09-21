@@ -137,8 +137,9 @@ bool SvtAccessibilityOptions_Impl::GetIsAllowAnimatedText() const
 
     try
     {
+        static constexpr OUStringLiteral PROPNAME = u"IsAllowAnimatedText";
         if(m_xNode.is())
-            m_xNode->getPropertyValue("IsAllowAnimatedText") >>= bRet;
+            m_xNode->getPropertyValue(PROPNAME) >>= bRet;
     }
     catch(const css::uno::Exception&)
     {

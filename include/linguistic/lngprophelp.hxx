@@ -84,6 +84,7 @@ protected:
             GetPropSet()    { return xPropSet; }
 
     void    AddPropNames( const char *pNewNames[], sal_Int32 nCount );
+    void    AddPropNames( const OUString pNewNames[], sal_Int32 nCount );
 
     virtual bool    propertyChange_Impl( const css::beans::PropertyChangeEvent& rEvt );
 

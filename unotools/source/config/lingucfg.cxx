@@ -213,7 +213,7 @@ namespace {
 struct NamesToHdl
 {
     const char   *pFullPropName;      // full qualified name as used in configuration
-    const char   *pPropName;          // property name only (atom) of above
+    OUString     aPropName;          // property name only (atom) of above
     sal_Int32    nHdl;               // numeric handle representing the property
 };
 
@@ -257,9 +257,9 @@ NamesToHdl const aNamesToHdl[] =
 {/* 31 */    "GrammarChecking/IsInteractiveCheck",            UPN_IS_GRAMMAR_INTERACTIVE,               UPH_IS_GRAMMAR_INTERACTIVE},
 
             /* similar to entry 0 (thus no own configuration entry) but with different property name and type */
-{            nullptr,                                           UPN_DEFAULT_LANGUAGE,                      UPH_DEFAULT_LANGUAGE},
+{            nullptr,                                         UPN_DEFAULT_LANGUAGE,                      UPH_DEFAULT_LANGUAGE},
 
-{            nullptr,                                            nullptr,                                      -1}
+{            nullptr,                                         "",                                      -1}
 };
 
 uno::Sequence< OUString > SvtLinguConfigItem::GetPropertyNames()
@@ -304,16 +304,16 @@ bool SvtLinguConfigItem::GetHdlByName(
     }
     else
     {
-        while (pEntry && pEntry->pPropName != nullptr)
+        while (pEntry && pEntry->pFullPropName != nullptr)
         {
-            if (rPropertyName.equalsAscii( pEntry->pPropName ))
+            if (rPropertyName == pEntry->aPropName )
             {
                 rnHdl = pEntry->nHdl;
                 break;
             }
             ++pEntry;
         }
-        return pEntry && pEntry->pPropName != nullptr;
+        return pEntry && pEntry->pFullPropName != nullptr;
     }
 }
 
