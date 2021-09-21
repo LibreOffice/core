@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_WINDOW_H
-#define INCLUDED_VCL_INC_WINDOW_H
+#pragma once
 
 #include <sal/config.h>
 
@@ -426,7 +425,5 @@ VCL_DLLPUBLIC void ImplWindowStateFromStr(WindowStateData& rData, const OString&
 
 VCL_DLLPUBLIC css::uno::Reference<css::accessibility::XAccessibleEditableText>
 FindFocusedEditableText(css::uno::Reference<css::accessibility::XAccessibleContext> const&);
-
-#endif // INCLUDED_VCL_INC_WINDOW_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
