@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "0dc1968a_b15eca22",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-21T11:59:16Z",
+      "side": 1,
+      "message": "osl::Mutex needs to allocate when it calls osl_createMutex\nOBroadcastHelper will allocate a child object for dispose listeners.",
+      "parentUuid": "2f0c78ce_76062a96",
+      "revId": "361038778530ca8d839b674433cc72d822bdc003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "3e05d8f7_cb2c0c40",
@@ -48,6 +66,30 @@
       "writtenOn": "2021-09-21T11:54:10Z",
       "side": 1,
       "message": "Why replace the unhelpfully recursive osl::Mutex with the equally unhelpfully recursive std::recursive_mutex?",
+      "range": {
+        "startLine": 40,
+        "startChar": 3,
+        "endLine": 40,
+        "endChar": 23
+      },
+      "revId": "361038778530ca8d839b674433cc72d822bdc003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2c2f27c_6fd3107f",
+        "filename": "include/drawinglayer/primitive2d/baseprimitive2d.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-21T11:59:16Z",
+      "side": 1,
+      "message": "Because I don\u0027t believe they are harmful.",
+      "parentUuid": "a78267b6_04eb480a",
       "range": {
         "startLine": 40,
         "startChar": 3,
