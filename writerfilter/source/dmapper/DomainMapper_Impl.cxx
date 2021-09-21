@@ -7710,6 +7710,10 @@ void DomainMapper_Impl::ApplySettingsTable()
         {
             xSettings->setPropertyValue("GutterAtTop", uno::makeAny(true));
         }
+        uno::Sequence<beans::PropertyValue> aWriteProtection
+                = m_pSettingsTable->GetWriteProtectionSettings();
+        if (aWriteProtection.hasElements())
+                xSettings->setPropertyValue("ModifyPasswordInfo", uno::makeAny(aWriteProtection));
     }
     catch(const uno::Exception&)
     {

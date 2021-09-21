@@ -78,6 +78,7 @@ $(eval $(call gb_Library_add_exception_objects,writerfilter,\
     writerfilter/source/dmapper/CellColorHandler \
     writerfilter/source/dmapper/CellMarginHandler \
     writerfilter/source/dmapper/ConversionHelper \
+	writerfilter/source/dmapper/DocumentProtection \
     writerfilter/source/dmapper/DomainMapper \
     writerfilter/source/dmapper/DomainMapperTableHandler \
     writerfilter/source/dmapper/DomainMapperTableManager \
@@ -113,6 +114,7 @@ $(eval $(call gb_Library_add_exception_objects,writerfilter,\
     writerfilter/source/dmapper/TblStylePrHandler \
     writerfilter/source/dmapper/ThemeTable \
     writerfilter/source/dmapper/WrapPolygonHandler \
+	writerfilter/source/dmapper/WriteProtection \
     writerfilter/source/dmapper/util \
     writerfilter/source/filter/RtfFilter \
     writerfilter/source/filter/WriterFilter \

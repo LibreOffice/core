@@ -18,7 +18,9 @@
  */
 
 #include "SettingsTable.hxx"
+#include "DocumentProtection.hxx"
 #include "TagLogger.hxx"
+#include "WriteProtection.hxx"
 
 #include <vector>
 
@@ -32,7 +34,6 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
-#include <ooxml/resourceids.hxx>
 #include "ConversionHelper.hxx"
 #include "DomainMapper.hxx"
 #include "util.hxx"
@@ -61,176 +62,6 @@ sal_Int16 lcl_GetZoomType(Id nType)
 
 namespace dmapper
 {
-    namespace {
-
-    /** Document protection restrictions
-     *
-     * This element specifies the set of document protection restrictions which have been applied to the contents of a
-     * WordprocessingML document.These restrictions should be enforced by applications editing this document
-     * when the enforcement attribute is turned on, and ignored(but persisted) otherwise.Document protection is a
-     * set of restrictions used to prevent unintentional changes to all or part of a WordprocessingML document.
-     */
-    struct DocumentProtection_Impl
-    {
-        /** Document Editing Restrictions
-         *
-         * Possible values:
-         *  - NS_ooxml::LN_Value_doc_ST_DocProtect_none
-         *  - NS_ooxml::LN_Value_doc_ST_DocProtect_readOnly
-         *  - NS_ooxml::LN_Value_doc_ST_DocProtect_comments
-         *  - NS_ooxml::LN_Value_doc_ST_DocProtect_trackedChanges
-         *  - NS_ooxml::LN_Value_doc_ST_DocProtect_forms
-         */
-        sal_Int32       m_nEdit;
-        bool            m_bEnforcement;
-        bool            m_bFormatting;
-
-        /** Provider type
-         *
-         * Possible values:
-         *  "rsaAES"  - NS_ooxml::LN_Value_doc_ST_CryptProv_rsaAES
-         *  "rsaFull" - NS_ooxml::LN_Value_doc_ST_CryptProv_rsaFull
-         */
-        sal_Int32       m_nCryptProviderType;
-        OUString        m_sCryptAlgorithmClass;
-        OUString        m_sCryptAlgorithmType;
-        OUString        m_sCryptAlgorithmSid;
-        sal_Int32       m_CryptSpinCount;
-        OUString        m_sHash;
-        OUString        m_sSalt;
-
-        DocumentProtection_Impl()
-            : m_nEdit(NS_ooxml::LN_Value_doc_ST_DocProtect_none) // Specifies that no editing restrictions have been applied to the document
-            , m_bEnforcement(false)
-            , m_bFormatting(false)
-            , m_nCryptProviderType(NS_ooxml::LN_Value_doc_ST_CryptProv_rsaAES)
-            , m_sCryptAlgorithmClass("hash")
-            , m_sCryptAlgorithmType("typeAny")
-            , m_CryptSpinCount(0)
-        {
-        }
-
-        css::uno::Sequence<css::beans::PropertyValue> toSequence() const;
-
-        bool enabled() const
-        {
-            return ! isNone();
-        }
-
-        bool isNone()           const { return m_nEdit == NS_ooxml::LN_Value_doc_ST_DocProtect_none; };
-    };
-
-    }
-
-    css::uno::Sequence<css::beans::PropertyValue> DocumentProtection_Impl::toSequence() const
-    {
-        std::vector<beans::PropertyValue> documentProtection;
-
-        if (enabled())
-        {
-            // w:edit
-            {
-                beans::PropertyValue aValue;
-                aValue.Name = "edit";
-
-                switch (m_nEdit)
-                {
-                case NS_ooxml::LN_Value_doc_ST_DocProtect_none:             aValue.Value <<= OUString("none"); break;
-                case NS_ooxml::LN_Value_doc_ST_DocProtect_readOnly:         aValue.Value <<= OUString("readOnly"); break;
-                case NS_ooxml::LN_Value_doc_ST_DocProtect_comments:         aValue.Value <<= OUString("comments"); break;
-                case NS_ooxml::LN_Value_doc_ST_DocProtect_trackedChanges:   aValue.Value <<= OUString("trackedChanges"); break;
-                case NS_ooxml::LN_Value_doc_ST_DocProtect_forms:            aValue.Value <<= OUString("forms"); break;
-                default:
-                {
-#ifdef DBG_UTIL
-                    TagLogger::getInstance().element("unhandled");
-#endif
-                }
-                }
-
-                documentProtection.push_back(aValue);
-            }
-
-            // w:enforcement
-            if (m_bEnforcement)
-            {
-                beans::PropertyValue aValue;
-                aValue.Name = "enforcement";
-                aValue.Value <<= OUString("1");
-                documentProtection.push_back(aValue);
-            }
-
-            // w:formatting
-            if (m_bFormatting)
-            {
-                beans::PropertyValue aValue;
-                aValue.Name = "formatting";
-                aValue.Value <<= OUString("1");
-                documentProtection.push_back(aValue);
-            }
-
-            // w:cryptProviderType
-            {
-                beans::PropertyValue aValue;
-                aValue.Name = "cryptProviderType";
-                if (m_nCryptProviderType == NS_ooxml::LN_Value_doc_ST_CryptProv_rsaAES)
-                    aValue.Value <<= OUString("rsaAES");
-                else if (m_nCryptProviderType == NS_ooxml::LN_Value_doc_ST_CryptProv_rsaFull)
-                    aValue.Value <<= OUString("rsaFull");
-                documentProtection.push_back(aValue);
-            }
-
-            // w:cryptAlgorithmClass
-            {
-                beans::PropertyValue aValue;
-                aValue.Name = "cryptAlgorithmClass";
-                aValue.Value <<= m_sCryptAlgorithmClass;
-                documentProtection.push_back(aValue);
-            }
-
-            // w:cryptAlgorithmType
-            {
-                beans::PropertyValue aValue;
-                aValue.Name = "cryptAlgorithmType";
-                aValue.Value <<= m_sCryptAlgorithmType;
-                documentProtection.push_back(aValue);
-            }
-
-            // w:cryptAlgorithmSid
-            {
-                beans::PropertyValue aValue;
-                aValue.Name = "cryptAlgorithmSid";
-                aValue.Value <<= m_sCryptAlgorithmSid;
-                documentProtection.push_back(aValue);
-            }
-
-            // w:cryptSpinCount
-            {
-                beans::PropertyValue aValue;
-                aValue.Name = "cryptSpinCount";
-                aValue.Value <<= OUString::number(m_CryptSpinCount);
-                documentProtection.push_back(aValue);
-            }
-
-            // w:hash
-            {
-                beans::PropertyValue aValue;
-                aValue.Name = "hash";
-                aValue.Value <<= m_sHash;
-                documentProtection.push_back(aValue);
-            }
-
-            // w:salt
-            {
-                beans::PropertyValue aValue;
-                aValue.Name = "salt";
-                aValue.Value <<= m_sSalt;
-                documentProtection.push_back(aValue);
-            }
-        }
-
-        return comphelper::containerToSequence(documentProtection);
-    }
 
 struct SettingsTable_Impl
 {
@@ -259,10 +90,6 @@ struct SettingsTable_Impl
     bool                m_bSplitPgBreakAndParaMark;
     bool                m_bMirrorMargin;
     bool                m_bDoNotExpandShiftReturn;
-    bool                m_bProtectForm;
-    bool                m_bRedlineProtection;
-    OUString            m_sRedlineProtectionKey;
-    bool                m_bReadOnly;
     bool                m_bDisplayBackgroundShape;
     bool                m_bNoLeading = false;
     OUString            m_sDecimalSymbol;
@@ -274,7 +101,8 @@ struct SettingsTable_Impl
     uno::Sequence<beans::PropertyValue> m_pCurrentCompatSetting;
     OUString            m_sCurrentDatabaseDataSource;
 
-    DocumentProtection_Impl m_DocumentProtection;
+    std::shared_ptr<DocumentProtection> m_pDocumentProtection;
+    std::shared_ptr<WriteProtection> m_pWriteProtection;
     bool m_bGutterAtTop = false;
 
     SettingsTable_Impl() :
@@ -301,9 +129,6 @@ struct SettingsTable_Impl
     , m_bSplitPgBreakAndParaMark(false)
     , m_bMirrorMargin(false)
     , m_bDoNotExpandShiftReturn(false)
-    , m_bProtectForm(false)
-    , m_bRedlineProtection(false)
-    , m_bReadOnly(false)
     , m_bDisplayBackgroundShape(false)
     , m_sDecimalSymbol(".")
     , m_sListSeparator(",")
@@ -325,6 +150,8 @@ SettingsTable::SettingsTable(const DomainMapper& rDomainMapper)
         // Longer space sequence is opt-in for RTF, and not in OOXML.
         m_pImpl->m_bLongerSpaceSequence = true;
     }
+    m_pImpl->m_pDocumentProtection = std::make_shared<DocumentProtection>();
+    m_pImpl->m_pWriteProtection = std::make_shared<WriteProtection>();
 }
 
 SettingsTable::~SettingsTable()
@@ -370,57 +197,6 @@ void SettingsTable::lcl_attribute(Id nName, Value & val)
     case NS_ooxml::LN_CT_CompatSetting_val:
         m_pImpl->m_pCurrentCompatSetting[2].Name = "val";
         m_pImpl->m_pCurrentCompatSetting[2].Value <<= sStringValue;
-        break;
-    case NS_ooxml::LN_CT_DocProtect_edit: // 92037
-        m_pImpl->m_DocumentProtection.m_nEdit = nIntValue;
-        // multiple DocProtect_edits should not exist. If they do, last one wins
-        m_pImpl->m_bRedlineProtection = false;
-        m_pImpl->m_bProtectForm = false;
-        m_pImpl->m_bReadOnly = false;
-        switch (nIntValue)
-        {
-        case NS_ooxml::LN_Value_doc_ST_DocProtect_trackedChanges:
-        {
-            m_pImpl->m_bRedlineProtection = true;
-            m_pImpl->m_sRedlineProtectionKey = m_pImpl->m_DocumentProtection.m_sHash;
-            break;
-        }
-        case NS_ooxml::LN_Value_doc_ST_DocProtect_forms:
-            m_pImpl->m_bProtectForm = true;
-            break;
-        case NS_ooxml::LN_Value_doc_ST_DocProtect_readOnly:
-            m_pImpl->m_bReadOnly = true;
-            break;
-        }
-        break;
-    case NS_ooxml::LN_CT_DocProtect_enforcement: // 92039
-        m_pImpl->m_DocumentProtection.m_bEnforcement = (nIntValue != 0);
-        break;
-    case NS_ooxml::LN_CT_DocProtect_formatting: // 92038
-        m_pImpl->m_DocumentProtection.m_bFormatting = (nIntValue != 0);
-        break;
-    case NS_ooxml::LN_AG_Password_cryptProviderType: // 92025
-        m_pImpl->m_DocumentProtection.m_nCryptProviderType = nIntValue;
-        break;
-    case NS_ooxml::LN_AG_Password_cryptAlgorithmClass: // 92026
-        if (nIntValue == NS_ooxml::LN_Value_doc_ST_AlgClass_hash) // 92023
-            m_pImpl->m_DocumentProtection.m_sCryptAlgorithmClass = "hash";
-        break;
-    case NS_ooxml::LN_AG_Password_cryptAlgorithmType: // 92027
-        if (nIntValue == NS_ooxml::LN_Value_doc_ST_AlgType_typeAny) // 92024
-            m_pImpl->m_DocumentProtection.m_sCryptAlgorithmType = "typeAny";
-        break;
-    case NS_ooxml::LN_AG_Password_cryptAlgorithmSid: // 92028
-        m_pImpl->m_DocumentProtection.m_sCryptAlgorithmSid = sStringValue;
-        break;
-    case NS_ooxml::LN_AG_Password_cryptSpinCount: // 92029
-        m_pImpl->m_DocumentProtection.m_CryptSpinCount = nIntValue;
-        break;
-    case NS_ooxml::LN_AG_Password_hash: // 92035
-        m_pImpl->m_DocumentProtection.m_sHash = sStringValue;
-        break;
-    case NS_ooxml::LN_AG_Password_salt: // 92036
-        m_pImpl->m_DocumentProtection.m_sSalt = sStringValue;
         break;
     case NS_ooxml::LN_CT_TrackChangesView_insDel:
         m_pImpl->m_bShowInsDelChanges = (nIntValue != 0);
@@ -505,7 +281,10 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
         resolveSprmProps(*this, rSprm);
         break;
     case NS_ooxml::LN_CT_Settings_documentProtection:
-        resolveSprmProps(*this, rSprm);
+        resolveSprmProps(*(m_pImpl->m_pDocumentProtection), rSprm);
+        break;
+    case NS_ooxml::LN_CT_Settings_writeProtection:
+        resolveSprmProps(*(m_pImpl->m_pWriteProtection), rSprm);
         break;
     case NS_ooxml::LN_CT_Compat_usePrinterMetrics:
         m_pImpl->m_bUsePrinterMetrics = nIntValue;
@@ -678,12 +457,15 @@ bool SettingsTable::GetDoNotExpandShiftReturn() const
 
 bool SettingsTable::GetProtectForm() const
 {
-    return m_pImpl->m_bProtectForm && m_pImpl->m_DocumentProtection.m_bEnforcement;
+    return m_pImpl->m_pDocumentProtection->getProtectForm()
+           && m_pImpl->m_pDocumentProtection->getEnforcement();
 }
 
 bool SettingsTable::GetReadOnly() const
 {
-    return m_pImpl->m_bReadOnly && m_pImpl->m_DocumentProtection.m_bEnforcement;
+    return m_pImpl->m_pWriteProtection->getRecommended()
+           || (m_pImpl->m_pDocumentProtection->getReadOnly()
+               && m_pImpl->m_pDocumentProtection->getEnforcement());
 }
 
 bool SettingsTable::GetNoHyphenateCaps() const
@@ -733,9 +515,14 @@ uno::Sequence<beans::PropertyValue> SettingsTable::GetCompatSettings() const
     return comphelper::containerToSequence(m_pImpl->m_aCompatSettings);
 }
 
-css::uno::Sequence<css::beans::PropertyValue> SettingsTable::GetDocumentProtectionSettings() const
+uno::Sequence<beans::PropertyValue> SettingsTable::GetDocumentProtectionSettings() const
 {
-    return m_pImpl->m_DocumentProtection.toSequence();
+    return m_pImpl->m_pDocumentProtection->toSequence();
+}
+
+uno::Sequence<beans::PropertyValue> SettingsTable::GetWriteProtectionSettings() const
+{
+    return m_pImpl->m_pWriteProtection->toSequence();
 }
 
 const OUString & SettingsTable::GetCurrentDatabaseDataSource() const
@@ -772,7 +559,8 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
     {
         xDocProps->setPropertyValue("RecordChanges", uno::makeAny( m_pImpl->m_bRecordChanges ) );
         // Password protected Record changes
-        if ( m_pImpl->m_bRecordChanges && m_pImpl->m_bRedlineProtection && m_pImpl->m_DocumentProtection.m_bEnforcement )
+        if (m_pImpl->m_bRecordChanges && m_pImpl->m_pDocumentProtection->getRedlineProtection()
+            && m_pImpl->m_pDocumentProtection->getEnforcement())
         {
             // use dummy protection key to forbid disabling of Record changes without a notice
             // (extending the recent GrabBag support)    TODO support password verification...

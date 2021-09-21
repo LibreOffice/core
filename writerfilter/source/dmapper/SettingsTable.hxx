@@ -87,6 +87,8 @@ public:
 
     css::uno::Sequence<css::beans::PropertyValue> GetDocumentProtectionSettings() const;
 
+    css::uno::Sequence<css::beans::PropertyValue> GetWriteProtectionSettings() const;
+
     void ApplyProperties(css::uno::Reference<css::text::XTextDocument> const& xDoc);
 
     bool GetCompatSettingValue(std::u16string_view sCompatName) const;
