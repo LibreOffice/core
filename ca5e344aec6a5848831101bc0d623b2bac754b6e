@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d51f7bd_9ec07d44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-09-21T10:15:42Z",
+      "side": 1,
+      "message": "@Attila: thanks for the usage of the fodt format! I suggest to minimize it next time, e.g. removing the unnecessary settings, you could spare 15 kB, etc.",
+      "revId": "ca5e344aec6a5848831101bc0d623b2bac754b6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
