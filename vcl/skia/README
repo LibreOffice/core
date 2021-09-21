@@ -13,7 +13,7 @@ Skia drawing methods:
 =====================
 
 Skia supports several methods to draw:
-- Raster - CPU-based drawing (here primarily used for debugging)
+- Raster - CPU-based drawing (here primarily used for fallback when Vulkan isn't available or for debugging)
 - Vulkan - Vulkan-based GPU drawing, this is the default
 - Metal - MACOSX GPU drawing, this is the Mac default
 
