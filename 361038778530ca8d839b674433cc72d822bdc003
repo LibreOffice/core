@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e05d8f7_cb2c0c40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-21T10:23:17Z",
+      "side": 1,
+      "message": "sberg, looking at this and wondering if it is worth creating a new set of WeakImpl helper base classes",
+      "revId": "361038778530ca8d839b674433cc72d822bdc003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
