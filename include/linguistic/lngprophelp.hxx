@@ -55,7 +55,7 @@ typedef cppu::WeakImplHelper
 class UNLESS_MERGELIBS(LNG_DLLPUBLIC) PropertyChgHelper :
     public PropertyChgHelperBase
 {
-    css::uno::Sequence< OUString >                      aPropNames;
+    std::vector< OUString >                             aPropNames;
     css::uno::Reference< css::uno::XInterface >         xMyEvtObj;
     ::comphelper::OInterfaceContainerHelper2                   aLngSvcEvtListeners;
     css::uno::Reference< css::beans::XPropertySet >     xPropSet;
@@ -77,13 +77,10 @@ protected:
     virtual void    SetDefaultValues();
     virtual void    GetCurrentValues();
 
-    css::uno::Sequence< OUString > &
-            GetPropNames()  { return aPropNames; }
+    std::vector< OUString > & GetPropNames()  { return aPropNames; }
     css::uno::Reference<
         css::beans::XPropertySet > &
             GetPropSet()    { return xPropSet; }
-
-    void    AddPropNames( const char *pNewNames[], sal_Int32 nCount );
 
     virtual bool    propertyChange_Impl( const css::beans::PropertyChangeEvent& rEvt );
 
@@ -117,7 +114,7 @@ public:
     void    RemoveAsPropListener();
     void    LaunchEvent( const css::linguistic2::LinguServiceEvent& rEvt );
 
-    const css::uno::Sequence< OUString > &
+    const std::vector< OUString > &
             GetPropNames() const    { return aPropNames; }
     const css::uno::Reference< css::beans::XPropertySet > &
             GetPropSet() const      { return xPropSet; }

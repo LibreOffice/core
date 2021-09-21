@@ -48,54 +48,22 @@ namespace linguistic
 {
 
 
-static const char *aCH[] =
-{
-    UPN_IS_IGNORE_CONTROL_CHARACTERS,
-    UPN_IS_USE_DICTIONARY_LIST,
-};
-
-const int nCHCount = SAL_N_ELEMENTS(aCH);
-
-
 PropertyChgHelper::PropertyChgHelper(
         const Reference< XInterface > &rxSource,
         Reference< XLinguProperties > const &rxPropSet,
         int nAllowedEvents ) :
-    aPropNames          (nCHCount),
+    aPropNames          ({UPN_IS_IGNORE_CONTROL_CHARACTERS, UPN_IS_USE_DICTIONARY_LIST}),
     xMyEvtObj           (rxSource),
     aLngSvcEvtListeners (GetLinguMutex()),
     xPropSet            (rxPropSet),
     nEvtFlags           (nAllowedEvents)
 {
-    OUString *pName = aPropNames.getArray();
-    for (sal_Int32 i = 0;  i < nCHCount;  ++i)
-    {
-        pName[i] = OUString::createFromAscii( aCH[i] );
-    }
-
     SetDefaultValues();
 }
 
 PropertyChgHelper::~PropertyChgHelper()
 {
 }
-
-
-void PropertyChgHelper::AddPropNames( const char *pNewNames[], sal_Int32 nCount )
-{
-    if (pNewNames && nCount)
-    {
-        sal_Int32 nLen = GetPropNames().getLength();
-        GetPropNames().realloc( nLen + nCount );
-        OUString *pName = GetPropNames().getArray();
-        for (sal_Int32 i = 0;  i < nCount;  ++i)
-        {
-            pName[ nLen + i ] = OUString::createFromAscii( pNewNames[ i ] );
-
-        }
-    }
-}
-
 
 void PropertyChgHelper::SetDefaultValues()
 {
@@ -107,7 +75,7 @@ void PropertyChgHelper::SetDefaultValues()
 void PropertyChgHelper::GetCurrentValues()
 {
     const auto& rPropNames = GetPropNames();
-    if (!(GetPropSet().is() && rPropNames.hasElements()))
+    if (!GetPropSet().is() || rPropNames.empty())
         return;
 
     for (const OUString& rPropName : rPropNames)
@@ -256,7 +224,7 @@ void SAL_CALL PropertyChgHelper::disposing( const EventObject& rSource )
     {
         RemoveAsPropListener();
         xPropSet = nullptr;
-        aPropNames.realloc( 0 );
+        aPropNames.clear();
     }
 }
 
@@ -316,22 +284,15 @@ void SAL_CALL
 }
 
 
-// list of properties from the property set to be used
-// and listened to
-static const char *aSP[] =
-{
-    UPN_IS_SPELL_UPPER_CASE,
-    UPN_IS_SPELL_WITH_DIGITS,
-    UPN_IS_SPELL_CAPITALIZATION
-};
-
-
 PropertyHelper_Spell::PropertyHelper_Spell(
         const Reference< XInterface > & rxSource,
         Reference< XLinguProperties > const &rxPropSet ) :
     PropertyChgHelper   ( rxSource, rxPropSet, AE_SPELLCHECKER )
 {
-    AddPropNames( aSP, SAL_N_ELEMENTS(aSP) );
+    auto& rPropNames = GetPropNames();
+    rPropNames.push_back(UPN_IS_SPELL_UPPER_CASE);
+    rPropNames.push_back(UPN_IS_SPELL_WITH_DIGITS);
+    rPropNames.push_back(UPN_IS_SPELL_CAPITALIZATION);
     SetDefaultValues();
     GetCurrentValues();
 }
@@ -357,7 +318,7 @@ void PropertyHelper_Spell::GetCurrentValues()
     PropertyChgHelper::GetCurrentValues();
 
     const auto& rPropNames = GetPropNames();
-    if (!(GetPropSet().is() && rPropNames.hasElements()))
+    if (!GetPropSet().is() || rPropNames.empty())
         return;
 
     for (const OUString& rPropName : rPropNames)
@@ -490,20 +451,15 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
     }
 }
 
-static const char *aHP[] =
-{
-    UPN_HYPH_MIN_LEADING,
-    UPN_HYPH_MIN_TRAILING,
-    UPN_HYPH_MIN_WORD_LENGTH
-};
-
-
 PropertyHelper_Hyphen::PropertyHelper_Hyphen(
         const Reference< XInterface > & rxSource,
         Reference< XLinguProperties > const &rxPropSet ) :
     PropertyChgHelper   ( rxSource, rxPropSet, AE_HYPHENATOR )
 {
-    AddPropNames( aHP, SAL_N_ELEMENTS(aHP) );
+    auto& rPropNames = GetPropNames();
+    rPropNames.push_back(UPN_HYPH_MIN_LEADING);
+    rPropNames.push_back(UPN_HYPH_MIN_TRAILING);
+    rPropNames.push_back(UPN_HYPH_MIN_WORD_LENGTH);
     SetDefaultValues();
     GetCurrentValues();
 }
@@ -530,7 +486,7 @@ void PropertyHelper_Hyphen::GetCurrentValues()
     PropertyChgHelper::GetCurrentValues();
 
     const auto& rPropNames = GetPropNames();
-    if (!(GetPropSet().is() && rPropNames.hasElements()))
+    if (!GetPropSet().is() || rPropNames.empty())
         return;
 
     for (const OUString& rPropName : rPropNames)
