@@ -1794,6 +1794,7 @@ void DocxAttributeOutput::DoWritePermissionTagStart(const OUString & permission)
     if (permission.startsWith("permission-for-group:", &permissionIdAndName))
     {
         const sal_Int32 sparatorIndex = permissionIdAndName.indexOf(':');
+        assert(sparatorIndex != -1);
         const OUString permissionId   = permissionIdAndName.copy(0, sparatorIndex);
         const OUString permissionName = permissionIdAndName.copy(sparatorIndex + 1);
 
@@ -1801,9 +1802,12 @@ void DocxAttributeOutput::DoWritePermissionTagStart(const OUString & permission)
             FSNS(XML_w, XML_id), BookmarkToWord(permissionId),
             FSNS(XML_w, XML_edGrp), BookmarkToWord(permissionName));
     }
-    else // if (permission.startsWith("permission-for-user:", &permissionIdAndName))
+    else
     {
+        auto const ok = permission.startsWith("permission-for-user:", &permissionIdAndName);
+        assert(ok); (void)ok;
         const sal_Int32 sparatorIndex = permissionIdAndName.indexOf(':');
+        assert(sparatorIndex != -1);
         const OUString permissionId   = permissionIdAndName.copy(0, sparatorIndex);
         const OUString permissionName = permissionIdAndName.copy(sparatorIndex + 1);
 
@@ -1825,15 +1829,16 @@ void DocxAttributeOutput::DoWritePermissionTagEnd(const OUString & permission)
 {
     OUString permissionIdAndName;
 
-    if (permission.startsWith("permission-for-group:", &permissionIdAndName) ||
-        permission.startsWith("permission-for-user:", &permissionIdAndName))
-    {
-        const sal_Int32 sparatorIndex = permissionIdAndName.indexOf(':');
-        const OUString permissionId   = permissionIdAndName.copy(0, sparatorIndex);
+    auto const ok = permission.startsWith("permission-for-group:", &permissionIdAndName) ||
+        permission.startsWith("permission-for-user:", &permissionIdAndName);
+    assert(ok); (void)ok;
 
-        m_pSerializer->singleElementNS(XML_w, XML_permEnd,
-            FSNS(XML_w, XML_id), BookmarkToWord(permissionId));
-    }
+    const sal_Int32 sparatorIndex = permissionIdAndName.indexOf(':');
+    assert(sparatorIndex != -1);
+    const OUString permissionId   = permissionIdAndName.copy(0, sparatorIndex);
+
+    m_pSerializer->singleElementNS(XML_w, XML_permEnd,
+        FSNS(XML_w, XML_id), BookmarkToWord(permissionId));
 }
 
 /// Write the start permissions
