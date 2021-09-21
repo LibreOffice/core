@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce537c77_60bbbbe3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001300
+      },
+      "writtenOn": "2021-09-21T22:11:13Z",
+      "side": 1,
+      "message": "Now it is easier to add entries since the sorting is done with Proofing Tool GUI.",
+      "revId": "fd8075c4b9334f350774b191a57f1a6603dfc823",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
