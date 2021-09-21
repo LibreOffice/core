@@ -274,7 +274,7 @@ public:
     /// create a comment node
     XMLComment(
         const OString &rComment, // the comment
-        XMLParentNode *pParent   // the parent node of this comemnt, typically an element node
+        XMLParentNode *pParent   // the parent node of this comment, typically an element node
     )
         : XMLChildNode( pParent ), m_sComment( rComment ) {}
 
@@ -297,7 +297,7 @@ public:
     /// create a comment node
     XMLDefault(
         const OString &rDefault, // the comment
-        XMLParentNode *pParent   // the parent node of this comemnt, typically an element node
+        XMLParentNode *pParent   // the parent node of this comment, typically an element node
     )
         : XMLChildNode( pParent ), m_sDefault( rDefault ) {}
 
