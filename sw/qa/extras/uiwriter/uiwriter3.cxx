@@ -2089,6 +2089,40 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf87199)
     CPPUNIT_ASSERT(xCellA1->getString().endsWith("test1"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf39828)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf39828.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    pWrtShell->GotoNextTOXBase();
+
+    // show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be off",
+                           !pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTextTable->getRows()->getCount());
+
+    uno::Reference<text::XTextRange> xCellA1(xTextTable->getCellByName("A1"), uno::UNO_QUERY);
+    // deleted "1", inserted "2"
+    CPPUNIT_ASSERT_EQUAL(OUString("12"), xCellA1->getString());
+    uno::Reference<text::XTextRange> xCellA3(xTextTable->getCellByName("A3"), uno::UNO_QUERY);
+    // This was 14 (bad sum: 2 + A1, where A1 was 12 instead of the correct 2)
+    CPPUNIT_ASSERT_EQUAL(OUString("4"), xCellA3->getString());
+    uno::Reference<text::XTextRange> xCellA4(xTextTable->getCellByName("A4"), uno::UNO_QUERY);
+    // This was 28 (bad sum: 2 + A1 + A3, where A1 was 12 and A3 was 14)
+    CPPUNIT_ASSERT_EQUAL(OUString("8"), xCellA4->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132603)
 {
     createSwDoc();
