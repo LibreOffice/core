@@ -117,6 +117,7 @@
   <block-list:block block-list:abbreviated-name="alguem" block-list:name="alguém"/>
   <block-list:block block-list:abbreviated-name="algums" block-list:name="alguns"/>
   <block-list:block block-list:abbreviated-name="aliatória" block-list:name="aleatória"/>
+  <block-list:block block-list:abbreviated-name="aliatórias" block-list:name="aleatórias"/>
   <block-list:block block-list:abbreviated-name="aliatoriedade" block-list:name="aleatoriedade"/>
   <block-list:block block-list:abbreviated-name="almexa" block-list:name="ameixa"/>
   <block-list:block block-list:abbreviated-name="almexas" block-list:name="ameixas"/>
@@ -131,6 +132,7 @@
   <block-list:block block-list:abbreviated-name="alugem" block-list:name="aluguem"/>
   <block-list:block block-list:abbreviated-name="alugm" block-list:name="algum"/>
   <block-list:block block-list:abbreviated-name="ambar" block-list:name="âmbar"/>
+  <block-list:block block-list:abbreviated-name="ambito" block-list:name="âmbito"/>
   <block-list:block block-list:abbreviated-name="ameassada" block-list:name="ameaçada"/>
   <block-list:block block-list:abbreviated-name="ameassadas" block-list:name="ameaçadas"/>
   <block-list:block block-list:abbreviated-name="ameassado" block-list:name="ameaçado"/>
@@ -255,6 +257,7 @@
   <block-list:block block-list:abbreviated-name="assuntoi" block-list:name="assunto"/>
   <block-list:block block-list:abbreviated-name="asterístico" block-list:name="asterisco"/>
   <block-list:block block-list:abbreviated-name="atè" block-list:name="até"/>
+  <block-list:block block-list:abbreviated-name="atençao" block-list:name="atenção"/>
   <block-list:block block-list:abbreviated-name="atléctico" block-list:name="atlético"/>
   <block-list:block block-list:abbreviated-name="atlécticos" block-list:name="atléticos"/>
   <block-list:block block-list:abbreviated-name="atraiem" block-list:name="atraem"/>
@@ -276,8 +279,8 @@
   <block-list:block block-list:abbreviated-name="auciliar" block-list:name="auxiliar"/>
   <block-list:block block-list:abbreviated-name="auciliaram" block-list:name="auxiliaram"/>
   <block-list:block block-list:abbreviated-name="auciliem" block-list:name="auxiliem"/>
-  <block-list:block block-list:abbreviated-name="aucilio" block-list:name="auxilio"/>
   <block-list:block block-list:abbreviated-name="aucílio" block-list:name="auxílio"/>
+  <block-list:block block-list:abbreviated-name="aucilio" block-list:name="auxilio"/>
   <block-list:block block-list:abbreviated-name="auciliou" block-list:name="auxiliou"/>
   <block-list:block block-list:abbreviated-name="aue" block-list:name="que"/>
   <block-list:block block-list:abbreviated-name="auga" block-list:name="alga"/>
@@ -369,8 +372,8 @@
   <block-list:block block-list:abbreviated-name="blz" block-list:name="beleza"/>
   <block-list:block block-list:abbreviated-name="boasinha" block-list:name="boazinha"/>
   <block-list:block block-list:abbreviated-name="boasinhas" block-list:name="boazinhas"/>
-  <block-list:block block-list:abbreviated-name="bolêia" block-list:name="boleia"/>
   <block-list:block block-list:abbreviated-name="boléia" block-list:name="boleia"/>
+  <block-list:block block-list:abbreviated-name="bolêia" block-list:name="boleia"/>
   <block-list:block block-list:abbreviated-name="bon" block-list:name="bom"/>
   <block-list:block block-list:abbreviated-name="boqueaberto" block-list:name="boquiaberto"/>
   <block-list:block block-list:abbreviated-name="borbolha" block-list:name="borbulha"/>
@@ -380,8 +383,8 @@
   <block-list:block block-list:abbreviated-name="boservação" block-list:name="observação"/>
   <block-list:block block-list:abbreviated-name="boservações" block-list:name="observações"/>
   <block-list:block block-list:abbreviated-name="boxexa" block-list:name="bochecha"/>
-  <block-list:block block-list:abbreviated-name="Brasilha" block-list:name="Brasília"/>
   <block-list:block block-list:abbreviated-name="brasilha" block-list:name="Brasília"/>
+  <block-list:block block-list:abbreviated-name="Brasilha" block-list:name="Brasília"/>
   <block-list:block block-list:abbreviated-name="Brasilia" block-list:name="Brasília"/>
   <block-list:block block-list:abbreviated-name="bróculos" block-list:name="brócolos"/>
   <block-list:block block-list:abbreviated-name="brucha" block-list:name="bruxa"/>
@@ -404,6 +407,7 @@
   <block-list:block block-list:abbreviated-name="cadaveres" block-list:name="cadáveres"/>
   <block-list:block block-list:abbreviated-name="cadávres" block-list:name="cadáveres"/>
   <block-list:block block-list:abbreviated-name="cafe" block-list:name="café"/>
+  <block-list:block block-list:abbreviated-name="cafes" block-list:name="cafés"/>
   <block-list:block block-list:abbreviated-name="cafézinho" block-list:name="cafezinho"/>
   <block-list:block block-list:abbreviated-name="cafézinhos" block-list:name="cafezinhos"/>
   <block-list:block block-list:abbreviated-name="caicha" block-list:name="caixa"/>
@@ -430,6 +434,10 @@
   <block-list:block block-list:abbreviated-name="cançados" block-list:name="cansados"/>
   <block-list:block block-list:abbreviated-name="cançar" block-list:name="cansar"/>
   <block-list:block block-list:abbreviated-name="cançasso" block-list:name="cansaço"/>
+  <block-list:block block-list:abbreviated-name="cancerigena" block-list:name="cancerígena"/>
+  <block-list:block block-list:abbreviated-name="cancerigenas" block-list:name="cancerígenas"/>
+  <block-list:block block-list:abbreviated-name="cancirigena" block-list:name="cancerígena"/>
+  <block-list:block block-list:abbreviated-name="cancirigenas" block-list:name="cancerígenas"/>
   <block-list:block block-list:abbreviated-name="canço" block-list:name="canso"/>
   <block-list:block block-list:abbreviated-name="câncro" block-list:name="cancro"/>
   <block-list:block block-list:abbreviated-name="câncros" block-list:name="cancros"/>
@@ -541,6 +549,7 @@
   <block-list:block block-list:abbreviated-name="clorófila" block-list:name="clorofila"/>
   <block-list:block block-list:abbreviated-name="cmo" block-list:name="como"/>
   <block-list:block block-list:abbreviated-name="coachar" block-list:name="coaxar"/>
+  <block-list:block block-list:abbreviated-name="cocaina" block-list:name="cocaína"/>
   <block-list:block block-list:abbreviated-name="codex" block-list:name="códex"/>
   <block-list:block block-list:abbreviated-name="coizinha" block-list:name="coisinha"/>
   <block-list:block block-list:abbreviated-name="coizinhas" block-list:name="coisinhas"/>
@@ -554,6 +563,7 @@
   <block-list:block block-list:abbreviated-name="comcerteza" block-list:name="com certeza"/>
   <block-list:block block-list:abbreviated-name="comemtario" block-list:name="comentário"/>
   <block-list:block block-list:abbreviated-name="comentario" block-list:name="comentário"/>
+  <block-list:block block-list:abbreviated-name="comentarios" block-list:name="comentários"/>
   <block-list:block block-list:abbreviated-name="comericante" block-list:name="comerciante"/>
   <block-list:block block-list:abbreviated-name="comericantes" block-list:name="comerciantes"/>
   <block-list:block block-list:abbreviated-name="comesar" block-list:name="começar"/>
@@ -564,6 +574,8 @@
   <block-list:block block-list:abbreviated-name="comesse" block-list:name="comece"/>
   <block-list:block block-list:abbreviated-name="comessem" block-list:name="comecem"/>
   <block-list:block block-list:abbreviated-name="comessou" block-list:name="começou"/>
+  <block-list:block block-list:abbreviated-name="comiçao" block-list:name="comissão"/>
+  <block-list:block block-list:abbreviated-name="comição" block-list:name="comissão"/>
   <block-list:block block-list:abbreviated-name="comixão" block-list:name="comichão"/>
   <block-list:block block-list:abbreviated-name="compareçem" block-list:name="comparecem"/>
   <block-list:block block-list:abbreviated-name="compareçer" block-list:name="comparecer"/>
@@ -579,6 +591,7 @@
   <block-list:block block-list:abbreviated-name="compreenssão" block-list:name="compreensão"/>
   <block-list:block block-list:abbreviated-name="comprenção" block-list:name="compreensão"/>
   <block-list:block block-list:abbreviated-name="comprensão" block-list:name="compreensão"/>
+  <block-list:block block-list:abbreviated-name="comprir" block-list:name="cumprir"/>
   <block-list:block block-list:abbreviated-name="comtigo" block-list:name="contigo"/>
   <block-list:block block-list:abbreviated-name="comtra" block-list:name="contra"/>
   <block-list:block block-list:abbreviated-name="comun" block-list:name="comum"/>
@@ -590,6 +603,7 @@
   <block-list:block block-list:abbreviated-name="concluimos" block-list:name="concluímos"/>
   <block-list:block block-list:abbreviated-name="condeça" block-list:name="condessa"/>
   <block-list:block block-list:abbreviated-name="condeças" block-list:name="condessas"/>
+  <block-list:block block-list:abbreviated-name="confrimar" block-list:name="confirmar"/>
   <block-list:block block-list:abbreviated-name="congreço" block-list:name="congresso"/>
   <block-list:block block-list:abbreviated-name="congreso" block-list:name="congresso"/>
   <block-list:block block-list:abbreviated-name="conhecêmos" block-list:name="conhecemos"/>
@@ -642,11 +656,11 @@
   <block-list:block block-list:abbreviated-name="conzinha" block-list:name="cozinha"/>
   <block-list:block block-list:abbreviated-name="coqueluxe" block-list:name="coqueluche"/>
   <block-list:block block-list:abbreviated-name="côr" block-list:name="cor"/>
+  <block-list:block block-list:abbreviated-name="coracão" block-list:name="coração"/>
   <block-list:block block-list:abbreviated-name="coracao" block-list:name="coração"/>
   <block-list:block block-list:abbreviated-name="coraçao" block-list:name="coração"/>
-  <block-list:block block-list:abbreviated-name="coracão" block-list:name="coração"/>
-  <block-list:block block-list:abbreviated-name="coracoes" block-list:name="corações"/>
   <block-list:block block-list:abbreviated-name="coracões" block-list:name="corações"/>
+  <block-list:block block-list:abbreviated-name="coracoes" block-list:name="corações"/>
   <block-list:block block-list:abbreviated-name="corajem" block-list:name="coragem"/>
   <block-list:block block-list:abbreviated-name="corassao" block-list:name="coração"/>
   <block-list:block block-list:abbreviated-name="coroneis" block-list:name="coronéis"/>
@@ -683,6 +697,8 @@
   <block-list:block block-list:abbreviated-name="cuzinha" block-list:name="cozinha"/>
   <block-list:block block-list:abbreviated-name="danca" block-list:name="dança"/>
   <block-list:block block-list:abbreviated-name="das mos" block-list:name="das mãos"/>
+  <block-list:block block-list:abbreviated-name="decada" block-list:name="década"/>
+  <block-list:block block-list:abbreviated-name="decadas" block-list:name="décadas"/>
   <block-list:block block-list:abbreviated-name="decer" block-list:name="descer"/>
   <block-list:block block-list:abbreviated-name="décimal" block-list:name="decimal"/>
   <block-list:block block-list:abbreviated-name="defenido" block-list:name="definido"/>
@@ -702,6 +718,8 @@
   <block-list:block block-list:abbreviated-name="deliniado" block-list:name="delineado"/>
   <block-list:block block-list:abbreviated-name="dêm" block-list:name="deem"/>
   <block-list:block block-list:abbreviated-name="denovo" block-list:name="de novo"/>
+  <block-list:block block-list:abbreviated-name="dependencia" block-list:name="dependência"/>
+  <block-list:block block-list:abbreviated-name="dependencias" block-list:name="dependências"/>
   <block-list:block block-list:abbreviated-name="derimir" block-list:name="dirimir"/>
   <block-list:block block-list:abbreviated-name="derrepente" block-list:name="de repente"/>
   <block-list:block block-list:abbreviated-name="desanove" block-list:name="dezanove"/>
@@ -721,6 +739,7 @@
   <block-list:block block-list:abbreviated-name="descremenado" block-list:name="descriminado"/>
   <block-list:block block-list:abbreviated-name="descremenados" block-list:name="descriminados"/>
   <block-list:block block-list:abbreviated-name="deseijo" block-list:name="desejo"/>
+  <block-list:block block-list:abbreviated-name="desemrascar" block-list:name="desenrascar"/>
   <block-list:block block-list:abbreviated-name="desensabido" block-list:name="desenxabido"/>
   <block-list:block block-list:abbreviated-name="deshonestidade" block-list:name="desonestidade"/>
   <block-list:block block-list:abbreviated-name="deshonesto" block-list:name="desonesto"/>
@@ -754,6 +773,8 @@
   <block-list:block block-list:abbreviated-name="detriorado" block-list:name="deteriorado"/>
   <block-list:block block-list:abbreviated-name="detriorados" block-list:name="deteriorados"/>
   <block-list:block block-list:abbreviated-name="deven" block-list:name="devem"/>
+  <block-list:block block-list:abbreviated-name="día" block-list:name="dia"/>
+  <block-list:block block-list:abbreviated-name="días" block-list:name="dias"/>
   <block-list:block block-list:abbreviated-name="dicerto" block-list:name="decerto"/>
   <block-list:block block-list:abbreviated-name="dicionàrio" block-list:name="dicionário"/>
   <block-list:block block-list:abbreviated-name="difença" block-list:name="diferença"/>
@@ -784,11 +805,12 @@
   <block-list:block block-list:abbreviated-name="disfrutar" block-list:name="desfrutar"/>
   <block-list:block block-list:abbreviated-name="disinteria" block-list:name="disenteria"/>
   <block-list:block block-list:abbreviated-name="disinterias" block-list:name="disenterias"/>
-  <block-list:block block-list:abbreviated-name="disionário" block-list:name="dicionário"/>
   <block-list:block block-list:abbreviated-name="disionario" block-list:name="dicionário"/>
+  <block-list:block block-list:abbreviated-name="disionário" block-list:name="dicionário"/>
   <block-list:block block-list:abbreviated-name="disionários" block-list:name="dicionários"/>
   <block-list:block block-list:abbreviated-name="disionarios" block-list:name="dicionários"/>
   <block-list:block block-list:abbreviated-name="dispar" block-list:name="díspar"/>
+  <block-list:block block-list:abbreviated-name="dispender" block-list:name="despender"/>
   <block-list:block block-list:abbreviated-name="disponibilizda" block-list:name="disponibilizada"/>
   <block-list:block block-list:abbreviated-name="disponibilizdas" block-list:name="disponibilizadas"/>
   <block-list:block block-list:abbreviated-name="disponibilizdo" block-list:name="disponibilizado"/>
@@ -806,10 +828,10 @@
   <block-list:block block-list:abbreviated-name="doutormaento" block-list:name="doutoramento"/>
   <block-list:block block-list:abbreviated-name="doutormaentos" block-list:name="doutoramentos"/>
   <block-list:block block-list:abbreviated-name="dsa" block-list:name="das"/>
-  <block-list:block block-list:abbreviated-name="dubstituicao" block-list:name="substituição"/>
   <block-list:block block-list:abbreviated-name="dubstituiçao" block-list:name="substituição"/>
-  <block-list:block block-list:abbreviated-name="dubstituicoes" block-list:name="substituições"/>
+  <block-list:block block-list:abbreviated-name="dubstituicao" block-list:name="substituição"/>
   <block-list:block block-list:abbreviated-name="dubstituições" block-list:name="substituições"/>
+  <block-list:block block-list:abbreviated-name="dubstituicoes" block-list:name="substituições"/>
   <block-list:block block-list:abbreviated-name="duente" block-list:name="doente"/>
   <block-list:block block-list:abbreviated-name="duentes" block-list:name="doentes"/>
   <block-list:block block-list:abbreviated-name="durmir" block-list:name="dormir"/>
@@ -825,6 +847,8 @@
   <block-list:block block-list:abbreviated-name="educasão" block-list:name="educação"/>
   <block-list:block block-list:abbreviated-name="educassão" block-list:name="educação"/>
   <block-list:block block-list:abbreviated-name="eentão" block-list:name="e então"/>
+  <block-list:block block-list:abbreviated-name="eficiencia" block-list:name="eficiência"/>
+  <block-list:block block-list:abbreviated-name="eficiencias" block-list:name="eficiências"/>
   <block-list:block block-list:abbreviated-name="egoismo" block-list:name="egoísmo"/>
   <block-list:block block-list:abbreviated-name="eh" block-list:name="é"/>
   <block-list:block block-list:abbreviated-name="eicho" block-list:name="eixo"/>
@@ -857,6 +881,8 @@
   <block-list:block block-list:abbreviated-name="emprecionei" block-list:name="impressionei"/>
   <block-list:block block-list:abbreviated-name="emprecionou" block-list:name="impressionou"/>
   <block-list:block block-list:abbreviated-name="empreendorismo" block-list:name="empreendedorismo"/>
+  <block-list:block block-list:abbreviated-name="empresario" block-list:name="empresário"/>
+  <block-list:block block-list:abbreviated-name="empresarios" block-list:name="empresários"/>
   <block-list:block block-list:abbreviated-name="empreza" block-list:name="empresa"/>
   <block-list:block block-list:abbreviated-name="emprezas" block-list:name="empresas"/>
   <block-list:block block-list:abbreviated-name="emrpesa" block-list:name="empresa"/>
@@ -879,6 +905,7 @@
   <block-list:block block-list:abbreviated-name="enchurrada" block-list:name="enxurrada"/>
   <block-list:block block-list:abbreviated-name="enchuto" block-list:name="enxuto"/>
   <block-list:block block-list:abbreviated-name="encomoda" block-list:name="incomoda"/>
+  <block-list:block block-list:abbreviated-name="encomudar" block-list:name="incomodar"/>
   <block-list:block block-list:abbreviated-name="endidade" block-list:name="entidade"/>
   <block-list:block block-list:abbreviated-name="endidades" block-list:name="entidades"/>
   <block-list:block block-list:abbreviated-name="enexequível" block-list:name="inexequível"/>
@@ -912,6 +939,7 @@
   <block-list:block block-list:abbreviated-name="enssino" block-list:name="ensino"/>
   <block-list:block block-list:abbreviated-name="entao" block-list:name="então"/>
   <block-list:block block-list:abbreviated-name="enteiramente" block-list:name="inteiramente"/>
+  <block-list:block block-list:abbreviated-name="entermeada" block-list:name="entremeada"/>
   <block-list:block block-list:abbreviated-name="entertê" block-list:name="entreter"/>
   <block-list:block block-list:abbreviated-name="entertedemento" block-list:name="entretenimento"/>
   <block-list:block block-list:abbreviated-name="entertido" block-list:name="entretido"/>
@@ -962,8 +990,8 @@
   <block-list:block block-list:abbreviated-name="escrecia" block-list:name="escrevia"/>
   <block-list:block block-list:abbreviated-name="escritorio" block-list:name="escritório"/>
   <block-list:block block-list:abbreviated-name="escritorios" block-list:name="escritórios"/>
-  <block-list:block block-list:abbreviated-name="escurçao" block-list:name="excursão"/>
   <block-list:block block-list:abbreviated-name="escurção" block-list:name="excursão"/>
+  <block-list:block block-list:abbreviated-name="escurçao" block-list:name="excursão"/>
   <block-list:block block-list:abbreviated-name="escurçoes" block-list:name="excursões"/>
   <block-list:block block-list:abbreviated-name="escurções" block-list:name="excursões"/>
   <block-list:block block-list:abbreviated-name="ese" block-list:name="esse"/>
@@ -999,9 +1027,13 @@
   <block-list:block block-list:abbreviated-name="esquenci" block-list:name="esqueci"/>
   <block-list:block block-list:abbreviated-name="esquesito" block-list:name="esquisito"/>
   <block-list:block block-list:abbreviated-name="esquesitos" block-list:name="esquisitos"/>
+  <block-list:block block-list:abbreviated-name="esquezita" block-list:name="esquisita"/>
+  <block-list:block block-list:abbreviated-name="esquezitas" block-list:name="esquisitas"/>
+  <block-list:block block-list:abbreviated-name="esquezito" block-list:name="esquisito"/>
+  <block-list:block block-list:abbreviated-name="esquezitos" block-list:name="esquisitos"/>
   <block-list:block block-list:abbreviated-name="esrá" block-list:name="será"/>
-  <block-list:block block-list:abbreviated-name="esseçao" block-list:name="exceção"/>
   <block-list:block block-list:abbreviated-name="esseção" block-list:name="exceção"/>
+  <block-list:block block-list:abbreviated-name="esseçao" block-list:name="exceção"/>
   <block-list:block block-list:abbreviated-name="esseções" block-list:name="exceções"/>
   <block-list:block block-list:abbreviated-name="esselência" block-list:name="excelência"/>
   <block-list:block block-list:abbreviated-name="essessão" block-list:name="exceção"/>
@@ -1026,6 +1058,7 @@
   <block-list:block block-list:abbreviated-name="estarcionei" block-list:name="estacionei"/>
   <block-list:block block-list:abbreviated-name="estarciono" block-list:name="estaciono"/>
   <block-list:block block-list:abbreviated-name="estarcionou" block-list:name="estacionou"/>
+  <block-list:block block-list:abbreviated-name="estatistica" block-list:name="estatística"/>
   <block-list:block block-list:abbreviated-name="estatisticas" block-list:name="estatísticas"/>
   <block-list:block block-list:abbreviated-name="estavão" block-list:name="estavam"/>
   <block-list:block block-list:abbreviated-name="estensão" block-list:name="extensão"/>
@@ -1101,6 +1134,7 @@
   <block-list:block block-list:abbreviated-name="expreças" block-list:name="expressas"/>
   <block-list:block block-list:abbreviated-name="expreçem" block-list:name="expressem"/>
   <block-list:block block-list:abbreviated-name="expreço" block-list:name="expresso"/>
+  <block-list:block block-list:abbreviated-name="exprimentaste" block-list:name="experimentaste"/>
   <block-list:block block-list:abbreviated-name="extenção" block-list:name="extensão"/>
   <block-list:block block-list:abbreviated-name="extencivo" block-list:name="extensivo"/>
   <block-list:block block-list:abbreviated-name="extender" block-list:name="estender"/>
@@ -1127,8 +1161,8 @@
   <block-list:block block-list:abbreviated-name="falcidades" block-list:name="falsidades"/>
   <block-list:block block-list:abbreviated-name="falço" block-list:name="falso"/>
   <block-list:block block-list:abbreviated-name="falços" block-list:name="falsos"/>
-  <block-list:block block-list:abbreviated-name="familha" block-list:name="família"/>
   <block-list:block block-list:abbreviated-name="famílha" block-list:name="família"/>
+  <block-list:block block-list:abbreviated-name="familha" block-list:name="família"/>
   <block-list:block block-list:abbreviated-name="familhas" block-list:name="famílias"/>
   <block-list:block block-list:abbreviated-name="famílhas" block-list:name="famílias"/>
   <block-list:block block-list:abbreviated-name="familia" block-list:name="família"/>
@@ -1137,6 +1171,8 @@
   <block-list:block block-list:abbreviated-name="famozas" block-list:name="famosas"/>
   <block-list:block block-list:abbreviated-name="famozo" block-list:name="famoso"/>
   <block-list:block block-list:abbreviated-name="famozos" block-list:name="famosos"/>
+  <block-list:block block-list:abbreviated-name="fantastico" block-list:name="fantástico"/>
+  <block-list:block block-list:abbreviated-name="fantasticos" block-list:name="fantásticos"/>
   <block-list:block block-list:abbreviated-name="fas" block-list:name="faz"/>
   <block-list:block block-list:abbreviated-name="faser" block-list:name="fazer"/>
   <block-list:block block-list:abbreviated-name="fassa" block-list:name="faça"/>
@@ -1171,16 +1207,16 @@
   <block-list:block block-list:abbreviated-name="femeninos" block-list:name="femininos"/>
   <block-list:block block-list:abbreviated-name="femur" block-list:name="fémur"/>
   <block-list:block block-list:abbreviated-name="femures" block-list:name="fémures"/>
-  <block-list:block block-list:abbreviated-name="femurs" block-list:name="fémures"/>
   <block-list:block block-list:abbreviated-name="fêmurs" block-list:name="fémures"/>
+  <block-list:block block-list:abbreviated-name="femurs" block-list:name="fémures"/>
   <block-list:block block-list:abbreviated-name="fenomeno" block-list:name="fenómeno"/>
   <block-list:block block-list:abbreviated-name="fenomenos" block-list:name="fenómenos"/>
   <block-list:block block-list:abbreviated-name="fenonimo" block-list:name="fenómeno"/>
   <block-list:block block-list:abbreviated-name="fenónimo" block-list:name="fenómeno"/>
   <block-list:block block-list:abbreviated-name="fenônimo" block-list:name="fenómeno"/>
   <block-list:block block-list:abbreviated-name="fenônimos" block-list:name="fenómenos"/>
-  <block-list:block block-list:abbreviated-name="fenonimos" block-list:name="fenómenos"/>
   <block-list:block block-list:abbreviated-name="fenónimos" block-list:name="fenómenos"/>
+  <block-list:block block-list:abbreviated-name="fenonimos" block-list:name="fenómenos"/>
   <block-list:block block-list:abbreviated-name="fente" block-list:name="gente"/>
   <block-list:block block-list:abbreviated-name="ferias" block-list:name="férias"/>
   <block-list:block block-list:abbreviated-name="ferificar" block-list:name="verificar"/>
@@ -1192,8 +1228,12 @@
   <block-list:block block-list:abbreviated-name="fetios" block-list:name="feitos"/>
   <block-list:block block-list:abbreviated-name="fiablidade" block-list:name="fiabilidade"/>
   <block-list:block block-list:abbreviated-name="fican" block-list:name="ficam"/>
+  <block-list:block block-list:abbreviated-name="figrorifico" block-list:name="frigorifico"/>
+  <block-list:block block-list:abbreviated-name="figrorificos" block-list:name="frigorificos"/>
   <block-list:block block-list:abbreviated-name="fik" block-list:name="fique"/>
   <block-list:block block-list:abbreviated-name="fiko" block-list:name="fico"/>
+  <block-list:block block-list:abbreviated-name="filosofica" block-list:name="filosófica"/>
+  <block-list:block block-list:abbreviated-name="filosoficas" block-list:name="filosóficas"/>
   <block-list:block block-list:abbreviated-name="finjir" block-list:name="fingir"/>
   <block-list:block block-list:abbreviated-name="fiqueim" block-list:name="fiquem"/>
   <block-list:block block-list:abbreviated-name="fisica" block-list:name="física"/>
@@ -1226,6 +1266,7 @@
   <block-list:block block-list:abbreviated-name="fracaços" block-list:name="fracassos"/>
   <block-list:block block-list:abbreviated-name="fragil" block-list:name="frágil"/>
   <block-list:block block-list:abbreviated-name="frente à" block-list:name="frente a"/>
+  <block-list:block block-list:abbreviated-name="fujiu" block-list:name="fugiu"/>
   <block-list:block block-list:abbreviated-name="fulijem" block-list:name="fuligem"/>
   <block-list:block block-list:abbreviated-name="funcionalidad" block-list:name="funcionalidade"/>
   <block-list:block block-list:abbreviated-name="furmosura" block-list:name="formosura"/>
@@ -1244,6 +1285,8 @@
   <block-list:block block-list:abbreviated-name="gêlo" block-list:name="gelo"/>
   <block-list:block block-list:abbreviated-name="geneceu" block-list:name="gineceu"/>
   <block-list:block block-list:abbreviated-name="geneológica" block-list:name="genealógica"/>
+  <block-list:block block-list:abbreviated-name="genero" block-list:name="género"/>
+  <block-list:block block-list:abbreviated-name="generos" block-list:name="géneros"/>
   <block-list:block block-list:abbreviated-name="genjivas" block-list:name="gengivas"/>
   <block-list:block block-list:abbreviated-name="gibóia" block-list:name="jibóia"/>
   <block-list:block block-list:abbreviated-name="gigahertz" block-list:name="giga-hertz"/>
@@ -1251,22 +1294,26 @@
   <block-list:block block-list:abbreviated-name="gnt" block-list:name="gente"/>
   <block-list:block block-list:abbreviated-name="gorgeta" block-list:name="gorjeta"/>
   <block-list:block block-list:abbreviated-name="gracha" block-list:name="graxa"/>
+  <block-list:block block-list:abbreviated-name="grafica" block-list:name="gráfica"/>
+  <block-list:block block-list:abbreviated-name="graficas" block-list:name="gráficas"/>
   <block-list:block block-list:abbreviated-name="graínha" block-list:name="grainha"/>
   <block-list:block block-list:abbreviated-name="grassa" block-list:name="graça"/>
   <block-list:block block-list:abbreviated-name="grassas" block-list:name="graças"/>
+  <block-list:block block-list:abbreviated-name="gratis" block-list:name="grátis"/>
   <block-list:block block-list:abbreviated-name="gratuíto" block-list:name="gratuito"/>
   <block-list:block block-list:abbreviated-name="guela" block-list:name="goela"/>
-  <block-list:block block-list:abbreviated-name="Guiné Bissau" block-list:name="Guiné-Bissau"/>
   <block-list:block block-list:abbreviated-name="Guine Bissau" block-list:name="Guiné-Bissau"/>
+  <block-list:block block-list:abbreviated-name="Guiné Bissau" block-list:name="Guiné-Bissau"/>
   <block-list:block block-list:abbreviated-name="guizar" block-list:name="guisar"/>
   <block-list:block block-list:abbreviated-name="guspir" block-list:name="cuspir"/>
-  <block-list:block block-list:abbreviated-name="hà" block-list:name="há"/>
   <block-list:block block-list:abbreviated-name="ha" block-list:name="há"/>
+  <block-list:block block-list:abbreviated-name="hà" block-list:name="há"/>
   <block-list:block block-list:abbreviated-name="hachiche" block-list:name="haxixe"/>
   <block-list:block block-list:abbreviated-name="hãhã" block-list:name="hã-hã"/>
   <block-list:block block-list:abbreviated-name="hambúrger" block-list:name="hambúrguer"/>
   <block-list:block block-list:abbreviated-name="hambúrgers" block-list:name="hambúrgueres"/>
   <block-list:block block-list:abbreviated-name="hângar" block-list:name="hangar"/>
+  <block-list:block block-list:abbreviated-name="harwdare" block-list:name="hardware"/>
   <block-list:block block-list:abbreviated-name="hectar" block-list:name="hectare"/>
   <block-list:block block-list:abbreviated-name="helicoptero" block-list:name="helicóptero"/>
   <block-list:block block-list:abbreviated-name="helicopteros" block-list:name="helicópteros"/>
@@ -1277,6 +1324,8 @@
   <block-list:block block-list:abbreviated-name="herejes" block-list:name="hereges"/>
   <block-list:block block-list:abbreviated-name="heroina" block-list:name="heroína"/>
   <block-list:block block-list:abbreviated-name="heroinas" block-list:name="heroínas"/>
+  <block-list:block block-list:abbreviated-name="hetero" block-list:name="hétero"/>
+  <block-list:block block-list:abbreviated-name="heteros" block-list:name="héteros"/>
   <block-list:block block-list:abbreviated-name="hezitação" block-list:name="hesitação"/>
   <block-list:block block-list:abbreviated-name="hezitar" block-list:name="hesitar"/>
   <block-list:block block-list:abbreviated-name="hidro avião" block-list:name="hidroavião"/>
@@ -1302,9 +1351,11 @@
   <block-list:block block-list:abbreviated-name="hidro viários" block-list:name="hidroviários"/>
   <block-list:block block-list:abbreviated-name="hidro vias" block-list:name="hidrovias"/>
   <block-list:block block-list:abbreviated-name="hidroterápia" block-list:name="hidroterapia"/>
+  <block-list:block block-list:abbreviated-name="hieráquica" block-list:name="hierárquica"/>
+  <block-list:block block-list:abbreviated-name="hieráquicas" block-list:name="hierárquicas"/>
   <block-list:block block-list:abbreviated-name="hierarqui" block-list:name="hierarquia"/>
-  <block-list:block block-list:abbreviated-name="hífem" block-list:name="hífen"/>
   <block-list:block block-list:abbreviated-name="hifem" block-list:name="hífen"/>
+  <block-list:block block-list:abbreviated-name="hífem" block-list:name="hífen"/>
   <block-list:block block-list:abbreviated-name="hifen" block-list:name="hífen"/>
   <block-list:block block-list:abbreviated-name="himen" block-list:name="hímen"/>
   <block-list:block block-list:abbreviated-name="himenes" block-list:name="hímenes"/>
@@ -1319,8 +1370,8 @@
   <block-list:block block-list:abbreviated-name="homano" block-list:name="humano"/>
   <block-list:block block-list:abbreviated-name="homanos" block-list:name="humanos"/>
   <block-list:block block-list:abbreviated-name="homosexual" block-list:name="homossexual"/>
-  <block-list:block block-list:abbreviated-name="horivel" block-list:name="horrível"/>
   <block-list:block block-list:abbreviated-name="horível" block-list:name="horrível"/>
+  <block-list:block block-list:abbreviated-name="horivel" block-list:name="horrível"/>
   <block-list:block block-list:abbreviated-name="hóstil" block-list:name="hostil"/>
   <block-list:block block-list:abbreviated-name="hóstis" block-list:name="hostis"/>
   <block-list:block block-list:abbreviated-name="http:\\" block-list:name="http://"/>
@@ -1364,6 +1415,7 @@
   <block-list:block block-list:abbreviated-name="incenciveu" block-list:name="insensível"/>
   <block-list:block block-list:abbreviated-name="incensível" block-list:name="insensível"/>
   <block-list:block block-list:abbreviated-name="incessavel" block-list:name="incessável"/>
+  <block-list:block block-list:abbreviated-name="incluém" block-list:name="incluem"/>
   <block-list:block block-list:abbreviated-name="incluido" block-list:name="incluído"/>
   <block-list:block block-list:abbreviated-name="inclusivé" block-list:name="inclusive"/>
   <block-list:block block-list:abbreviated-name="incontaveis" block-list:name="incontáveis"/>
@@ -1380,12 +1432,14 @@
   <block-list:block block-list:abbreviated-name="indices" block-list:name="índices"/>
   <block-list:block block-list:abbreviated-name="indiota" block-list:name="idiota"/>
   <block-list:block block-list:abbreviated-name="indiotas" block-list:name="idiotas"/>
-  <block-list:block block-list:abbreviated-name="individuo" block-list:name="indivíduo"/>
   <block-list:block block-list:abbreviated-name="indíviduo" block-list:name="indivíduo"/>
+  <block-list:block block-list:abbreviated-name="individuo" block-list:name="indivíduo"/>
   <block-list:block block-list:abbreviated-name="indíviduos" block-list:name="indivíduos"/>
   <block-list:block block-list:abbreviated-name="individuos" block-list:name="indivíduos"/>
   <block-list:block block-list:abbreviated-name="inequidade" block-list:name="iniquidade"/>
   <block-list:block block-list:abbreviated-name="inequidades" block-list:name="iniquidades"/>
+  <block-list:block block-list:abbreviated-name="infancia" block-list:name="infância"/>
+  <block-list:block block-list:abbreviated-name="infancias" block-list:name="infâncias"/>
   <block-list:block block-list:abbreviated-name="infelis" block-list:name="infeliz"/>
   <block-list:block block-list:abbreviated-name="infelises" block-list:name="infelizes"/>
   <block-list:block block-list:abbreviated-name="infelismente" block-list:name="infelizmente"/>
@@ -1407,6 +1461,8 @@
   <block-list:block block-list:abbreviated-name="inpresionantes" block-list:name="impressionantes"/>
   <block-list:block block-list:abbreviated-name="insencíveis" block-list:name="insensíveis"/>
   <block-list:block block-list:abbreviated-name="insencível" block-list:name="insensível"/>
+  <block-list:block block-list:abbreviated-name="insolito" block-list:name="insólito"/>
+  <block-list:block block-list:abbreviated-name="insolitos" block-list:name="insólitos"/>
   <block-list:block block-list:abbreviated-name="instruido" block-list:name="instruído"/>
   <block-list:block block-list:abbreviated-name="instruidos" block-list:name="instruídos"/>
   <block-list:block block-list:abbreviated-name="intelegente" block-list:name="inteligente"/>
@@ -1497,14 +1553,14 @@
   <block-list:block block-list:abbreviated-name="lêr" block-list:name="ler"/>
   <block-list:block block-list:abbreviated-name="leucémia" block-list:name="leucemia"/>
   <block-list:block block-list:abbreviated-name="licha" block-list:name="lixa"/>
-  <block-list:block block-list:abbreviated-name="licitacão" block-list:name="licitação"/>
   <block-list:block block-list:abbreviated-name="licitacao" block-list:name="licitação"/>
   <block-list:block block-list:abbreviated-name="licitaçao" block-list:name="licitação"/>
+  <block-list:block block-list:abbreviated-name="licitacão" block-list:name="licitação"/>
   <block-list:block block-list:abbreviated-name="licitacoes" block-list:name="licitações"/>
   <block-list:block block-list:abbreviated-name="lictação" block-list:name="licitação"/>
-  <block-list:block block-list:abbreviated-name="lictações" block-list:name="licitações"/>
   <block-list:block block-list:abbreviated-name="lictacoes" block-list:name="licitações"/>
   <block-list:block block-list:abbreviated-name="lictacões" block-list:name="licitações"/>
+  <block-list:block block-list:abbreviated-name="lictações" block-list:name="licitações"/>
   <block-list:block block-list:abbreviated-name="líders" block-list:name="líderes"/>
   <block-list:block block-list:abbreviated-name="lígua" block-list:name="língua"/>
   <block-list:block block-list:abbreviated-name="liicitação" block-list:name="licitação"/>
@@ -1537,10 +1593,12 @@
   <block-list:block block-list:abbreviated-name="lusta" block-list:name="lista"/>
   <block-list:block block-list:abbreviated-name="lustas" block-list:name="listas"/>
   <block-list:block block-list:abbreviated-name="luxassão" block-list:name="luxação"/>
-  <block-list:block block-list:abbreviated-name="má fé" block-list:name="má-fé"/>
   <block-list:block block-list:abbreviated-name="ma fé" block-list:name="má-fé"/>
+  <block-list:block block-list:abbreviated-name="má fé" block-list:name="má-fé"/>
   <block-list:block block-list:abbreviated-name="macroscopica" block-list:name="macroscópica"/>
   <block-list:block block-list:abbreviated-name="macroscopicas" block-list:name="macroscópicas"/>
+  <block-list:block block-list:abbreviated-name="magabyte" block-list:name="megabyte"/>
+  <block-list:block block-list:abbreviated-name="magabytes" block-list:name="megabytes"/>
   <block-list:block block-list:abbreviated-name="magestade" block-list:name="majestade"/>
   <block-list:block block-list:abbreviated-name="magestades" block-list:name="majestades"/>
   <block-list:block block-list:abbreviated-name="maizena" block-list:name="maisena"/>
@@ -1588,8 +1646,8 @@
   <block-list:block block-list:abbreviated-name="meio claros" block-list:name="meio-claros"/>
   <block-list:block block-list:abbreviated-name="meios claros" block-list:name="meio-claros"/>
   <block-list:block block-list:abbreviated-name="meios-claros" block-list:name="meio-claros"/>
-  <block-list:block block-list:abbreviated-name="melhó" block-list:name="melhor"/>
   <block-list:block block-list:abbreviated-name="melho" block-list:name="melhor"/>
+  <block-list:block block-list:abbreviated-name="melhó" block-list:name="melhor"/>
   <block-list:block block-list:abbreviated-name="melitante" block-list:name="militante"/>
   <block-list:block block-list:abbreviated-name="melitantes" block-list:name="militantes"/>
   <block-list:block block-list:abbreviated-name="mema" block-list:name="mesma"/>
@@ -1631,6 +1689,8 @@
   <block-list:block block-list:abbreviated-name="minimo" block-list:name="mínimo"/>
   <block-list:block block-list:abbreviated-name="minimos" block-list:name="mínimos"/>
   <block-list:block block-list:abbreviated-name="mis" block-list:name="mais"/>
+  <block-list:block block-list:abbreviated-name="misterio" block-list:name="mistério"/>
+  <block-list:block block-list:abbreviated-name="misterios" block-list:name="mistérios"/>
   <block-list:block block-list:abbreviated-name="miuda" block-list:name="miúda"/>
   <block-list:block block-list:abbreviated-name="miudas" block-list:name="miúdas"/>
   <block-list:block block-list:abbreviated-name="miudo" block-list:name="miúdo"/>
@@ -1679,6 +1739,10 @@
   <block-list:block block-list:abbreviated-name="muintos" block-list:name="muitos"/>
   <block-list:block block-list:abbreviated-name="muiot" block-list:name="muito"/>
   <block-list:block block-list:abbreviated-name="mulhers" block-list:name="mulheres"/>
+  <block-list:block block-list:abbreviated-name="multiplo" block-list:name="múltiplo"/>
+  <block-list:block block-list:abbreviated-name="multiplos" block-list:name="múltiplos"/>
+  <block-list:block block-list:abbreviated-name="mumento" block-list:name="momento"/>
+  <block-list:block block-list:abbreviated-name="mumentos" block-list:name="momentos"/>
   <block-list:block block-list:abbreviated-name="m~es" block-list:name="mês"/>
   <block-list:block block-list:abbreviated-name="ñ" block-list:name="não"/>
   <block-list:block block-list:abbreviated-name="nao" block-list:name="não"/>
@@ -1713,8 +1777,8 @@
   <block-list:block block-list:abbreviated-name="niote" block-list:name="noite"/>
   <block-list:block block-list:abbreviated-name="nítidamente" block-list:name="nitidamente"/>
   <block-list:block block-list:abbreviated-name="nitrogeneo" block-list:name="nitrogénio"/>
-  <block-list:block block-list:abbreviated-name="nivéis" block-list:name="níveis"/>
   <block-list:block block-list:abbreviated-name="niveis" block-list:name="níveis"/>
+  <block-list:block block-list:abbreviated-name="nivéis" block-list:name="níveis"/>
   <block-list:block block-list:abbreviated-name="nivel" block-list:name="nível"/>
   <block-list:block block-list:abbreviated-name="nmossa" block-list:name="nossa"/>
   <block-list:block block-list:abbreviated-name="nmossas" block-list:name="nossas"/>
@@ -1776,6 +1840,7 @@
   <block-list:block block-list:abbreviated-name="ocm" block-list:name="com"/>
   <block-list:block block-list:abbreviated-name="ôco" block-list:name="oco"/>
   <block-list:block block-list:abbreviated-name="ocorrencia" block-list:name="ocorrência"/>
+  <block-list:block block-list:abbreviated-name="ocorrencias" block-list:name="ocorrências"/>
   <block-list:block block-list:abbreviated-name="ôcos" block-list:name="ocos"/>
   <block-list:block block-list:abbreviated-name="oçpão" block-list:name="opção"/>
   <block-list:block block-list:abbreviated-name="octagonal" block-list:name="octogonal"/>
@@ -1798,12 +1863,12 @@
   <block-list:block block-list:abbreviated-name="ons" block-list:name="nos"/>
   <block-list:block block-list:abbreviated-name="opcao" block-list:name="opção"/>
   <block-list:block block-list:abbreviated-name="opçao" block-list:name="opção"/>
-  <block-list:block block-list:abbreviated-name="opcoes" block-list:name="opções"/>
-  <block-list:block block-list:abbreviated-name="opcões" block-list:name="opções"/>
-  <block-list:block block-list:abbreviated-name="opçoes" block-list:name="opções"/>
   <block-list:block block-list:abbreviated-name="opcôes" block-list:name="opções"/>
-  <block-list:block block-list:abbreviated-name="opearção" block-list:name="operação"/>
+  <block-list:block block-list:abbreviated-name="opçoes" block-list:name="opções"/>
+  <block-list:block block-list:abbreviated-name="opcões" block-list:name="opções"/>
+  <block-list:block block-list:abbreviated-name="opcoes" block-list:name="opções"/>
   <block-list:block block-list:abbreviated-name="opearçao" block-list:name="operação"/>
+  <block-list:block block-list:abbreviated-name="opearção" block-list:name="operação"/>
   <block-list:block block-list:abbreviated-name="operande" block-list:name="operandi"/>
   <block-list:block block-list:abbreviated-name="opniões" block-list:name="opiniões"/>
   <block-list:block block-list:abbreviated-name="opôr" block-list:name="opor"/>
@@ -1812,12 +1877,12 @@
   <block-list:block block-list:abbreviated-name="opurtuno" block-list:name="oportuno"/>
   <block-list:block block-list:abbreviated-name="opurtunos" block-list:name="oportunos"/>
   <block-list:block block-list:abbreviated-name="orbigado" block-list:name="obrigado"/>
-  <block-list:block block-list:abbreviated-name="órgao" block-list:name="órgão"/>
-  <block-list:block block-list:abbreviated-name="orgao" block-list:name="órgão"/>
   <block-list:block block-list:abbreviated-name="orgão" block-list:name="órgão"/>
-  <block-list:block block-list:abbreviated-name="orgaos" block-list:name="órgãos"/>
+  <block-list:block block-list:abbreviated-name="orgao" block-list:name="órgão"/>
+  <block-list:block block-list:abbreviated-name="órgao" block-list:name="órgão"/>
   <block-list:block block-list:abbreviated-name="orgãos" block-list:name="órgãos"/>
   <block-list:block block-list:abbreviated-name="órgaos" block-list:name="órgãos"/>
+  <block-list:block block-list:abbreviated-name="orgaos" block-list:name="órgãos"/>
   <block-list:block block-list:abbreviated-name="órgulho" block-list:name="orgulho"/>
   <block-list:block block-list:abbreviated-name="orígem" block-list:name="origem"/>
   <block-list:block block-list:abbreviated-name="orijem" block-list:name="origem"/>
@@ -1892,10 +1957,10 @@
   <block-list:block block-list:abbreviated-name="paralizem" block-list:name="paralisem"/>
   <block-list:block block-list:abbreviated-name="paralizo" block-list:name="paraliso"/>
   <block-list:block block-list:abbreviated-name="paralizou" block-list:name="paralisou"/>
-  <block-list:block block-list:abbreviated-name="pârametro" block-list:name="parâmetro"/>
   <block-list:block block-list:abbreviated-name="parametro" block-list:name="parâmetro"/>
-  <block-list:block block-list:abbreviated-name="pârametros" block-list:name="parâmetros"/>
+  <block-list:block block-list:abbreviated-name="pârametro" block-list:name="parâmetro"/>
   <block-list:block block-list:abbreviated-name="parametros" block-list:name="parâmetros"/>
+  <block-list:block block-list:abbreviated-name="pârametros" block-list:name="parâmetros"/>
   <block-list:block block-list:abbreviated-name="parelisia" block-list:name="paralisia"/>
   <block-list:block block-list:abbreviated-name="parentese" block-list:name="parêntese"/>
   <block-list:block block-list:abbreviated-name="parenteses" block-list:name="parênteses"/>
@@ -1906,9 +1971,11 @@
   <block-list:block block-list:abbreviated-name="partucular" block-list:name="particular"/>
   <block-list:block block-list:abbreviated-name="partuculares" block-list:name="particulares"/>
   <block-list:block block-list:abbreviated-name="partucularmente" block-list:name="particularmente"/>
+  <block-list:block block-list:abbreviated-name="parvoice" block-list:name="parvoíce"/>
+  <block-list:block block-list:abbreviated-name="parvoices" block-list:name="parvoíces"/>
   <block-list:block block-list:abbreviated-name="pasiência" block-list:name="paciência"/>
-  <block-list:block block-list:abbreviated-name="pasiensia" block-list:name="paciência"/>
   <block-list:block block-list:abbreviated-name="pasiênsia" block-list:name="paciência"/>
+  <block-list:block block-list:abbreviated-name="pasiensia" block-list:name="paciência"/>
   <block-list:block block-list:abbreviated-name="passaro" block-list:name="pássaro"/>
   <block-list:block block-list:abbreviated-name="passaros" block-list:name="pássaros"/>
   <block-list:block block-list:abbreviated-name="passiência" block-list:name="paciência"/>
@@ -1954,7 +2021,9 @@
   <block-list:block block-list:abbreviated-name="perzervação" block-list:name="preservação"/>
   <block-list:block block-list:abbreviated-name="pesoa" block-list:name="pessoa"/>
   <block-list:block block-list:abbreviated-name="pesoaz" block-list:name="pessoas"/>
+  <block-list:block block-list:abbreviated-name="pesquiza" block-list:name="pesquisa"/>
   <block-list:block block-list:abbreviated-name="pesquizar" block-list:name="pesquisar"/>
+  <block-list:block block-list:abbreviated-name="pesquizas" block-list:name="pesquisas"/>
   <block-list:block block-list:abbreviated-name="pesso" block-list:name="peço"/>
   <block-list:block block-list:abbreviated-name="petio" block-list:name="peito"/>
   <block-list:block block-list:abbreviated-name="petios" block-list:name="peitos"/>
@@ -1967,10 +2036,10 @@
   <block-list:block block-list:abbreviated-name="pindurar" block-list:name="pendurar"/>
   <block-list:block block-list:abbreviated-name="piriquito" block-list:name="periquito"/>
   <block-list:block block-list:abbreviated-name="piriquitos" block-list:name="periquitos"/>
-  <block-list:block block-list:abbreviated-name="pírula" block-list:name="pílula"/>
   <block-list:block block-list:abbreviated-name="pirula" block-list:name="pílula"/>
-  <block-list:block block-list:abbreviated-name="pirulas" block-list:name="pílulas"/>
+  <block-list:block block-list:abbreviated-name="pírula" block-list:name="pílula"/>
   <block-list:block block-list:abbreviated-name="pírulas" block-list:name="pílulas"/>
+  <block-list:block block-list:abbreviated-name="pirulas" block-list:name="pílulas"/>
   <block-list:block block-list:abbreviated-name="pisina" block-list:name="piscina"/>
   <block-list:block block-list:abbreviated-name="pisinas" block-list:name="piscinas"/>
   <block-list:block block-list:abbreviated-name="pissina" block-list:name="piscina"/>
@@ -1999,23 +2068,23 @@
   <block-list:block block-list:abbreviated-name="polipos" block-list:name="pólipos"/>
   <block-list:block block-list:abbreviated-name="ponta à ponta" block-list:name="ponta a ponta"/>
   <block-list:block block-list:abbreviated-name="ponteagudo" block-list:name="pontiagudo"/>
-  <block-list:block block-list:abbreviated-name="populaçao" block-list:name="população"/>
-  <block-list:block block-list:abbreviated-name="populaçâo" block-list:name="população"/>
   <block-list:block block-list:abbreviated-name="populacão" block-list:name="população"/>
+  <block-list:block block-list:abbreviated-name="populaçâo" block-list:name="população"/>
   <block-list:block block-list:abbreviated-name="populacao" block-list:name="população"/>
-  <block-list:block block-list:abbreviated-name="populaçao alvo" block-list:name="população-alvo"/>
-  <block-list:block block-list:abbreviated-name="populacão alvo" block-list:name="população-alvo"/>
-  <block-list:block block-list:abbreviated-name="população alvo" block-list:name="população-alvo"/>
+  <block-list:block block-list:abbreviated-name="populaçao" block-list:name="população"/>
   <block-list:block block-list:abbreviated-name="populacao alvo" block-list:name="população-alvo"/>
+  <block-list:block block-list:abbreviated-name="população alvo" block-list:name="população-alvo"/>
+  <block-list:block block-list:abbreviated-name="populacão alvo" block-list:name="população-alvo"/>
+  <block-list:block block-list:abbreviated-name="populaçao alvo" block-list:name="população-alvo"/>
+  <block-list:block block-list:abbreviated-name="populacoes" block-list:name="populações"/>
+  <block-list:block block-list:abbreviated-name="populacões" block-list:name="populações"/>
   <block-list:block block-list:abbreviated-name="populaçoes" block-list:name="populações"/>
   <block-list:block block-list:abbreviated-name="populaçôes" block-list:name="populações"/>
   <block-list:block block-list:abbreviated-name="populacôes" block-list:name="populações"/>
-  <block-list:block block-list:abbreviated-name="populacões" block-list:name="populações"/>
-  <block-list:block block-list:abbreviated-name="populacoes" block-list:name="populações"/>
-  <block-list:block block-list:abbreviated-name="populaçoes alvo" block-list:name="populações-alvo"/>
-  <block-list:block block-list:abbreviated-name="populacoes alvo" block-list:name="populações-alvo"/>
-  <block-list:block block-list:abbreviated-name="populacões alvo" block-list:name="populações-alvo"/>
   <block-list:block block-list:abbreviated-name="populações alvo" block-list:name="populações-alvo"/>
+  <block-list:block block-list:abbreviated-name="populacões alvo" block-list:name="populações-alvo"/>
+  <block-list:block block-list:abbreviated-name="populacoes alvo" block-list:name="populações-alvo"/>
+  <block-list:block block-list:abbreviated-name="populaçoes alvo" block-list:name="populações-alvo"/>
   <block-list:block block-list:abbreviated-name="populaç~ao" block-list:name="população"/>
   <block-list:block block-list:abbreviated-name="populaç~o" block-list:name="população"/>
   <block-list:block block-list:abbreviated-name="por causa que" block-list:name="porque"/>
@@ -2073,6 +2142,8 @@
   <block-list:block block-list:abbreviated-name="preguissas" block-list:name="preguiças"/>
   <block-list:block block-list:abbreviated-name="prejuiso" block-list:name="prejuízo"/>
   <block-list:block block-list:abbreviated-name="prejuisos" block-list:name="prejuízos"/>
+  <block-list:block block-list:abbreviated-name="prejuizo" block-list:name="prejuízo"/>
+  <block-list:block block-list:abbreviated-name="prejuizos" block-list:name="prejuízos"/>
   <block-list:block block-list:abbreviated-name="prelongados" block-list:name="prolongados"/>
   <block-list:block block-list:abbreviated-name="premanece" block-list:name="permanece"/>
   <block-list:block block-list:abbreviated-name="premanecem" block-list:name="permanecem"/>
@@ -2117,10 +2188,10 @@
   <block-list:block block-list:abbreviated-name="probablidades" block-list:name="probabilidades"/>
   <block-list:block block-list:abbreviated-name="prócima" block-list:name="próxima"/>
   <block-list:block block-list:abbreviated-name="procima" block-list:name="próxima"/>
-  <block-list:block block-list:abbreviated-name="prócimas" block-list:name="próximas"/>
   <block-list:block block-list:abbreviated-name="procimas" block-list:name="próximas"/>
-  <block-list:block block-list:abbreviated-name="prócimo" block-list:name="próximo"/>
+  <block-list:block block-list:abbreviated-name="prócimas" block-list:name="próximas"/>
   <block-list:block block-list:abbreviated-name="procimo" block-list:name="próximo"/>
+  <block-list:block block-list:abbreviated-name="prócimo" block-list:name="próximo"/>
   <block-list:block block-list:abbreviated-name="procimos" block-list:name="próximos"/>
   <block-list:block block-list:abbreviated-name="proficionais" block-list:name="profissionais"/>
   <block-list:block block-list:abbreviated-name="proficional" block-list:name="profissional"/>
@@ -2128,8 +2199,8 @@
   <block-list:block block-list:abbreviated-name="proíbidos" block-list:name="proibidos"/>
   <block-list:block block-list:abbreviated-name="própia" block-list:name="própria"/>
   <block-list:block block-list:abbreviated-name="propia" block-list:name="própria"/>
-  <block-list:block block-list:abbreviated-name="propias" block-list:name="próprias"/>
   <block-list:block block-list:abbreviated-name="própias" block-list:name="próprias"/>
+  <block-list:block block-list:abbreviated-name="propias" block-list:name="próprias"/>
   <block-list:block block-list:abbreviated-name="própio" block-list:name="próprio"/>
   <block-list:block block-list:abbreviated-name="propio" block-list:name="próprio"/>
   <block-list:block block-list:abbreviated-name="propios" block-list:name="próprios"/>
@@ -2137,6 +2208,12 @@
   <block-list:block block-list:abbreviated-name="propôr" block-list:name="propor"/>
   <block-list:block block-list:abbreviated-name="propria" block-list:name="própria"/>
   <block-list:block block-list:abbreviated-name="proprias" block-list:name="próprias"/>
+  <block-list:block block-list:abbreviated-name="propriatario" block-list:name="proprietário"/>
+  <block-list:block block-list:abbreviated-name="propriatário" block-list:name="proprietário"/>
+  <block-list:block block-list:abbreviated-name="propriatários" block-list:name="proprietários"/>
+  <block-list:block block-list:abbreviated-name="propriatarios" block-list:name="proprietários"/>
+  <block-list:block block-list:abbreviated-name="proprietario" block-list:name="proprietário"/>
+  <block-list:block block-list:abbreviated-name="proprietarios" block-list:name="proprietários"/>
   <block-list:block block-list:abbreviated-name="proprio" block-list:name="próprio"/>
   <block-list:block block-list:abbreviated-name="proprios" block-list:name="próprios"/>
   <block-list:block block-list:abbreviated-name="propsota" block-list:name="proposta"/>
@@ -2155,6 +2232,10 @@
   <block-list:block block-list:abbreviated-name="prufessoras" block-list:name="professoras"/>
   <block-list:block block-list:abbreviated-name="psiconpata" block-list:name="psicopata"/>
   <block-list:block block-list:abbreviated-name="psiconpatas" block-list:name="psicopatas"/>
+  <block-list:block block-list:abbreviated-name="psicotica" block-list:name="psicótica"/>
+  <block-list:block block-list:abbreviated-name="psicoticas" block-list:name="psicóticas"/>
+  <block-list:block block-list:abbreviated-name="psiquatra" block-list:name="psiquiatra"/>
+  <block-list:block block-list:abbreviated-name="psiquatras" block-list:name="psiquiatras"/>
   <block-list:block block-list:abbreviated-name="psiquiatrica" block-list:name="psiquiátrica"/>
   <block-list:block block-list:abbreviated-name="psiquiatricas" block-list:name="psiquiátricas"/>
   <block-list:block block-list:abbreviated-name="público alvo" block-list:name="público-alvo"/>
@@ -2188,8 +2269,8 @@
   <block-list:block block-list:abbreviated-name="quetas" block-list:name="quietas"/>
   <block-list:block block-list:abbreviated-name="quimica" block-list:name="química"/>
   <block-list:block block-list:abbreviated-name="quiz" block-list:name="quis"/>
-  <block-list:block block-list:abbreviated-name="quizer" block-list:name="quiser"/>
   <block-list:block block-list:abbreviated-name="quizér" block-list:name="quiser"/>
+  <block-list:block block-list:abbreviated-name="quizer" block-list:name="quiser"/>
   <block-list:block block-list:abbreviated-name="quizerem" block-list:name="quiserem"/>
   <block-list:block block-list:abbreviated-name="quizermos" block-list:name="quisermos"/>
   <block-list:block block-list:abbreviated-name="quizesse" block-list:name="quisesse"/>
@@ -2218,8 +2299,11 @@
   <block-list:block block-list:abbreviated-name="rapidos" block-list:name="rápidos"/>
   <block-list:block block-list:abbreviated-name="raxar" block-list:name="rachar"/>
   <block-list:block block-list:abbreviated-name="razam" block-list:name="razão"/>
+  <block-list:block block-list:abbreviated-name="razao" block-list:name="razão"/>
   <block-list:block block-list:abbreviated-name="razoavel" block-list:name="razoável"/>
   <block-list:block block-list:abbreviated-name="rea" block-list:name="era"/>
+  <block-list:block block-list:abbreviated-name="realistico" block-list:name="realístico"/>
+  <block-list:block block-list:abbreviated-name="realisticos" block-list:name="realísticos"/>
   <block-list:block block-list:abbreviated-name="recem" block-list:name="recém"/>
   <block-list:block block-list:abbreviated-name="recencear" block-list:name="recensear"/>
   <block-list:block block-list:abbreviated-name="reciar" block-list:name="recear"/>
@@ -2251,6 +2335,9 @@
   <block-list:block block-list:abbreviated-name="relachou" block-list:name="relaxou"/>
   <block-list:block block-list:abbreviated-name="relatorio" block-list:name="relatório"/>
   <block-list:block block-list:abbreviated-name="relatorios" block-list:name="relatórios"/>
+  <block-list:block block-list:abbreviated-name="relevancia" block-list:name="relevância"/>
+  <block-list:block block-list:abbreviated-name="relogio" block-list:name="relógio"/>
+  <block-list:block block-list:abbreviated-name="relogios" block-list:name="relógios"/>
   <block-list:block block-list:abbreviated-name="repercução" block-list:name="repercussão"/>
   <block-list:block block-list:abbreviated-name="repôr" block-list:name="repor"/>
   <block-list:block block-list:abbreviated-name="requesito" block-list:name="requisito"/>
@@ -2316,8 +2403,10 @@
   <block-list:block block-list:abbreviated-name="sentros" block-list:name="centros"/>
   <block-list:block block-list:abbreviated-name="séo" block-list:name="céu"/>
   <block-list:block block-list:abbreviated-name="sequéncia" block-list:name="sequência"/>
+  <block-list:block block-list:abbreviated-name="sêr" block-list:name="ser"/>
   <block-list:block block-list:abbreviated-name="sereado" block-list:name="seriado"/>
   <block-list:block block-list:abbreviated-name="sereados" block-list:name="seriados"/>
+  <block-list:block block-list:abbreviated-name="seremoes" block-list:name="sermões"/>
   <block-list:block block-list:abbreviated-name="serivço" block-list:name="serviço"/>
   <block-list:block block-list:abbreviated-name="serivços" block-list:name="serviços"/>
   <block-list:block block-list:abbreviated-name="serta" block-list:name="certa"/>
@@ -2348,18 +2437,18 @@
   <block-list:block block-list:abbreviated-name="sinceranete" block-list:name="sinceramente"/>
   <block-list:block block-list:abbreviated-name="sinosite" block-list:name="sinusite"/>
   <block-list:block block-list:abbreviated-name="sinozite" block-list:name="sinusite"/>
-  <block-list:block block-list:abbreviated-name="sinpática" block-list:name="simpática"/>
   <block-list:block block-list:abbreviated-name="sinpatica" block-list:name="simpática"/>
+  <block-list:block block-list:abbreviated-name="sinpática" block-list:name="simpática"/>
   <block-list:block block-list:abbreviated-name="sinpaticas" block-list:name="simpáticas"/>
   <block-list:block block-list:abbreviated-name="sinpáticas" block-list:name="simpáticas"/>
-  <block-list:block block-list:abbreviated-name="sinpático" block-list:name="simpático"/>
   <block-list:block block-list:abbreviated-name="sinpatico" block-list:name="simpático"/>
-  <block-list:block block-list:abbreviated-name="sinpaticos" block-list:name="simpáticos"/>
+  <block-list:block block-list:abbreviated-name="sinpático" block-list:name="simpático"/>
   <block-list:block block-list:abbreviated-name="sinpáticos" block-list:name="simpáticos"/>
-  <block-list:block block-list:abbreviated-name="siume" block-list:name="ciúme"/>
+  <block-list:block block-list:abbreviated-name="sinpaticos" block-list:name="simpáticos"/>
   <block-list:block block-list:abbreviated-name="siúme" block-list:name="ciúme"/>
-  <block-list:block block-list:abbreviated-name="siumes" block-list:name="ciúmes"/>
+  <block-list:block block-list:abbreviated-name="siume" block-list:name="ciúme"/>
   <block-list:block block-list:abbreviated-name="siúmes" block-list:name="ciúmes"/>
+  <block-list:block block-list:abbreviated-name="siumes" block-list:name="ciúmes"/>
   <block-list:block block-list:abbreviated-name="siuva" block-list:name="Silva"/>
   <block-list:block block-list:abbreviated-name="so" block-list:name="só"/>
   <block-list:block block-list:abbreviated-name="sobrevivencia" block-list:name="sobrevivência"/>
@@ -2395,8 +2484,8 @@
   <block-list:block block-list:abbreviated-name="superficie" block-list:name="superfície"/>
   <block-list:block block-list:abbreviated-name="superficies" block-list:name="superfícies"/>
   <block-list:block block-list:abbreviated-name="supérfulo" block-list:name="supérfluo"/>
-  <block-list:block block-list:abbreviated-name="supérfulos" block-list:name="supérfluos"/>
   <block-list:block block-list:abbreviated-name="superfulos" block-list:name="supérfluos"/>
+  <block-list:block block-list:abbreviated-name="supérfulos" block-list:name="supérfluos"/>
   <block-list:block block-list:abbreviated-name="supermacia" block-list:name="supremacia"/>
   <block-list:block block-list:abbreviated-name="supermacias" block-list:name="supremacias"/>
   <block-list:block block-list:abbreviated-name="suscinto" block-list:name="sucinto"/>
@@ -2421,12 +2510,15 @@
   <block-list:block block-list:abbreviated-name="tbm" block-list:name="também"/>
   <block-list:block block-list:abbreviated-name="td" block-list:name="tudo"/>
   <block-list:block block-list:abbreviated-name="têem" block-list:name="têm"/>
+  <block-list:block block-list:abbreviated-name="telemoveis" block-list:name="telemóveis"/>
+  <block-list:block block-list:abbreviated-name="telemovel" block-list:name="telemóvel"/>
   <block-list:block block-list:abbreviated-name="televizivo" block-list:name="televisivo"/>
   <block-list:block block-list:abbreviated-name="televizivos" block-list:name="televisivos"/>
   <block-list:block block-list:abbreviated-name="tempaum" block-list:name="tempo"/>
   <block-list:block block-list:abbreviated-name="téncico" block-list:name="técnico"/>
   <block-list:block block-list:abbreviated-name="téncicos" block-list:name="técnicos"/>
   <block-list:block block-list:abbreviated-name="tenque" block-list:name="tem que"/>
+  <block-list:block block-list:abbreviated-name="tentaçao" block-list:name="tentação"/>
   <block-list:block block-list:abbreviated-name="teorica" block-list:name="teórica"/>
   <block-list:block block-list:abbreviated-name="teoricas" block-list:name="teóricas"/>
   <block-list:block block-list:abbreviated-name="tere" block-list:name="ter"/>
@@ -2434,10 +2526,10 @@
   <block-list:block block-list:abbreviated-name="terrasso" block-list:name="terraço"/>
   <block-list:block block-list:abbreviated-name="terrassos" block-list:name="terraços"/>
   <block-list:block block-list:abbreviated-name="tetorno" block-list:name="retorno"/>
-  <block-list:block block-list:abbreviated-name="textil" block-list:name="têxtil"/>
   <block-list:block block-list:abbreviated-name="téxtil" block-list:name="têxtil"/>
-  <block-list:block block-list:abbreviated-name="tia avó" block-list:name="tia-avó"/>
+  <block-list:block block-list:abbreviated-name="textil" block-list:name="têxtil"/>
   <block-list:block block-list:abbreviated-name="tia avo" block-list:name="tia-avó"/>
+  <block-list:block block-list:abbreviated-name="tia avó" block-list:name="tia-avó"/>
   <block-list:block block-list:abbreviated-name="tia avós" block-list:name="tias-avós"/>
   <block-list:block block-list:abbreviated-name="tias avós" block-list:name="tias-avós"/>
   <block-list:block block-list:abbreviated-name="tias avos" block-list:name="tias-avós"/>
@@ -2445,8 +2537,8 @@
   <block-list:block block-list:abbreviated-name="tio avô" block-list:name="tio-avô"/>
   <block-list:block block-list:abbreviated-name="tio avo" block-list:name="tio-avô"/>
   <block-list:block block-list:abbreviated-name="tio avôs" block-list:name="tios-avôs"/>
-  <block-list:block block-list:abbreviated-name="tios avôs" block-list:name="tios-avôs"/>
   <block-list:block block-list:abbreviated-name="tios avos" block-list:name="tios-avôs"/>
+  <block-list:block block-list:abbreviated-name="tios avôs" block-list:name="tios-avôs"/>
   <block-list:block block-list:abbreviated-name="tique taque" block-list:name="tique-taque"/>
   <block-list:block block-list:abbreviated-name="titúlo" block-list:name="título"/>
   <block-list:block block-list:abbreviated-name="todo amores" block-list:name="todo-amores"/>
@@ -2458,6 +2550,7 @@
   <block-list:block block-list:abbreviated-name="topicos" block-list:name="tópicos"/>
   <block-list:block block-list:abbreviated-name="trabaho" block-list:name="trabalho"/>
   <block-list:block block-list:abbreviated-name="trabahos" block-list:name="trabalhos"/>
+  <block-list:block block-list:abbreviated-name="trablhar" block-list:name="trabalhar"/>
   <block-list:block block-list:abbreviated-name="tradusir" block-list:name="traduzir"/>
   <block-list:block block-list:abbreviated-name="trangénicos" block-list:name="transgénicos"/>
   <block-list:block block-list:abbreviated-name="transfegar" block-list:name="trasfegar"/>
@@ -2547,8 +2640,8 @@
   <block-list:block block-list:abbreviated-name="vice governador" block-list:name="vice-governador"/>
   <block-list:block block-list:abbreviated-name="vice prefeito" block-list:name="vice-prefeito"/>
   <block-list:block block-list:abbreviated-name="video" block-list:name="vídeo"/>
-  <block-list:block block-list:abbreviated-name="video conferência" block-list:name="videoconferência"/>
   <block-list:block block-list:abbreviated-name="vídeo conferência" block-list:name="videoconferência"/>
+  <block-list:block block-list:abbreviated-name="video conferência" block-list:name="videoconferência"/>
   <block-list:block block-list:abbreviated-name="video conferências" block-list:name="videoconferências"/>
   <block-list:block block-list:abbreviated-name="vídeo conferências" block-list:name="videoconferências"/>
   <block-list:block block-list:abbreviated-name="video game" block-list:name="videojogo"/>
@@ -2560,8 +2653,9 @@
   <block-list:block block-list:abbreviated-name="vimdas" block-list:name="vindas"/>
   <block-list:block block-list:abbreviated-name="vimdo" block-list:name="vindo"/>
   <block-list:block block-list:abbreviated-name="vimdos" block-list:name="vindos"/>
-  <block-list:block block-list:abbreviated-name="víros" block-list:name="vírus"/>
+  <block-list:block block-list:abbreviated-name="violencia" block-list:name="violência"/>
   <block-list:block block-list:abbreviated-name="viros" block-list:name="vírus"/>
+  <block-list:block block-list:abbreviated-name="víros" block-list:name="vírus"/>
   <block-list:block block-list:abbreviated-name="virus" block-list:name="vírus"/>
   <block-list:block block-list:abbreviated-name="vísiveis" block-list:name="visíveis"/>
   <block-list:block block-list:abbreviated-name="vizar" block-list:name="visar"/>
@@ -2572,13 +2666,13 @@
   <block-list:block block-list:abbreviated-name="voc6es" block-list:name="vocês"/>
   <block-list:block block-list:abbreviated-name="vocabulario" block-list:name="vocabulário"/>
   <block-list:block block-list:abbreviated-name="vocabularios" block-list:name="vocabulários"/>
-  <block-list:block block-list:abbreviated-name="voçe" block-list:name="você"/>
-  <block-list:block block-list:abbreviated-name="voçê" block-list:name="você"/>
   <block-list:block block-list:abbreviated-name="voce" block-list:name="você"/>
+  <block-list:block block-list:abbreviated-name="voçê" block-list:name="você"/>
+  <block-list:block block-list:abbreviated-name="voçe" block-list:name="você"/>
   <block-list:block block-list:abbreviated-name="voceis" block-list:name="vocês"/>
+  <block-list:block block-list:abbreviated-name="voçes" block-list:name="vocês"/>
   <block-list:block block-list:abbreviated-name="voçês" block-list:name="vocês"/>
   <block-list:block block-list:abbreviated-name="voces" block-list:name="vocês"/>
-  <block-list:block block-list:abbreviated-name="voçes" block-list:name="vocês"/>
   <block-list:block block-list:abbreviated-name="voc~e" block-list:name="você"/>
   <block-list:block block-list:abbreviated-name="voc~es" block-list:name="vocês"/>
   <block-list:block block-list:abbreviated-name="volei" block-list:name="vólei"/>
