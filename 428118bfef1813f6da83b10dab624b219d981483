@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89963df9_0d955db0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-09-21T08:53:08Z",
+      "side": 1,
+      "message": "Bit concerned about this one. Is this code not shared with the pixel dialogs we render ? that is not the sidebar in co-2021 of course - but lots of eg. format-\u003echaracter type dialogs.\n\nIs it possible we are dropping important invalidations there ? and/or can we detect the window type from the window and drop invalidations of those ? also curious about in-sheet controls which may also use the same code-paths.\n\nThanks!",
+      "revId": "428118bfef1813f6da83b10dab624b219d981483",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
