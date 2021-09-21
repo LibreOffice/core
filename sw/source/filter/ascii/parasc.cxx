@@ -56,7 +56,7 @@ class SwASCIIParser
     std::unique_ptr<char[]> m_pArr;
     const SwAsciiOptions& m_rOpt;
     SwAsciiOptions m_usedAsciiOptions;
-    std::unique_ptr<SfxItemSet> m_pItemSet;
+    std::optional<SfxItemSet> m_oItemSet;
     tools::Long m_nFileSize;
     SvtScriptType m_nScript;
     bool m_bNewDoc;
@@ -115,7 +115,7 @@ SwASCIIParser::SwASCIIParser(SwDoc& rD, const SwPaM& rCursor, SvStream& rIn, boo
     m_pPam.reset(new SwPaM(*rCursor.GetPoint()));
     m_pArr.reset(new char[ASC_BUFFLEN + 2]);
 
-    m_pItemSet = std::make_unique<SfxItemSet>(
+    m_oItemSet.emplace(
         m_rDoc.GetAttrPool(),
         svl::Items<RES_CHRATR_FONT, RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_FONT,
                    RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_LANGUAGE>);
@@ -124,11 +124,11 @@ SwASCIIParser::SwASCIIParser(SwDoc& rD, const SwPaM& rCursor, SvStream& rIn, boo
     if (m_rOpt.GetLanguage())
     {
         SvxLanguageItem aLang(m_rOpt.GetLanguage(), RES_CHRATR_LANGUAGE);
-        m_pItemSet->Put(aLang);
+        m_oItemSet->Put(aLang);
         aLang.SetWhich(RES_CHRATR_CJK_LANGUAGE);
-        m_pItemSet->Put(aLang);
+        m_oItemSet->Put(aLang);
         aLang.SetWhich(RES_CHRATR_CTL_LANGUAGE);
-        m_pItemSet->Put(aLang);
+        m_oItemSet->Put(aLang);
     }
     if (m_rOpt.GetFontName().isEmpty())
         return;
@@ -138,11 +138,11 @@ SwASCIIParser::SwASCIIParser(SwDoc& rD, const SwPaM& rCursor, SvStream& rIn, boo
         aTextFont = m_rDoc.getIDocumentDeviceAccess().getPrinter(false)->GetFontMetric(aTextFont);
     SvxFontItem aFont( aTextFont.GetFamilyType(), aTextFont.GetFamilyName(),
                        OUString(), aTextFont.GetPitch(), aTextFont.GetCharSet(), RES_CHRATR_FONT );
-    m_pItemSet->Put(aFont);
+    m_oItemSet->Put(aFont);
     aFont.SetWhich(RES_CHRATR_CJK_FONT);
-    m_pItemSet->Put(aFont);
+    m_oItemSet->Put(aFont);
     aFont.SetWhich(RES_CHRATR_CTL_FONT);
-    m_pItemSet->Put(aFont);
+    m_oItemSet->Put(aFont);
 }
 
 // Calling the parser
@@ -179,25 +179,25 @@ ErrCode SwASCIIParser::CallParser()
 
     ErrCode nError = ReadChars();
 
-    if (m_pItemSet)
+    if (m_oItemSet)
     {
         // set only the attribute, for scanned scripts.
         if (!(SvtScriptType::LATIN & m_nScript))
         {
-            m_pItemSet->ClearItem(RES_CHRATR_FONT);
-            m_pItemSet->ClearItem(RES_CHRATR_LANGUAGE);
+            m_oItemSet->ClearItem(RES_CHRATR_FONT);
+            m_oItemSet->ClearItem(RES_CHRATR_LANGUAGE);
         }
         if (!(SvtScriptType::ASIAN & m_nScript))
         {
-            m_pItemSet->ClearItem(RES_CHRATR_CJK_FONT);
-            m_pItemSet->ClearItem(RES_CHRATR_CJK_LANGUAGE);
+            m_oItemSet->ClearItem(RES_CHRATR_CJK_FONT);
+            m_oItemSet->ClearItem(RES_CHRATR_CJK_LANGUAGE);
         }
         if (!(SvtScriptType::COMPLEX & m_nScript))
         {
-            m_pItemSet->ClearItem(RES_CHRATR_CTL_FONT);
-            m_pItemSet->ClearItem(RES_CHRATR_CTL_LANGUAGE);
+            m_oItemSet->ClearItem(RES_CHRATR_CTL_FONT);
+            m_oItemSet->ClearItem(RES_CHRATR_CTL_LANGUAGE);
         }
-        if (m_pItemSet->Count())
+        if (m_oItemSet->Count())
         {
             if (m_bNewDoc)
             {
@@ -224,16 +224,16 @@ ErrCode SwASCIIParser::CallParser()
                     {
                         const SfxPoolItem *pItem;
                         if (SfxItemState::SET
-                            == m_pItemSet->GetItemState(*pWhichIds, false, &pItem))
+                            == m_oItemSet->GetItemState(*pWhichIds, false, &pItem))
                         {
                             pColl->SetFormatAttr( *pItem );
-                            m_pItemSet->ClearItem(*pWhichIds);
+                            m_oItemSet->ClearItem(*pWhichIds);
                         }
                         ++pWhichIds;
                     }
                 }
-                if (m_pItemSet->Count())
-                    m_rDoc.SetDefault(*m_pItemSet);
+                if (m_oItemSet->Count())
+                    m_rDoc.SetDefault(*m_oItemSet);
             }
             else if( pInsPam )
             {
@@ -245,10 +245,10 @@ ErrCode SwASCIIParser::CallParser()
 
                 // !!!!!
                 OSL_ENSURE( false, "Have to change - hard attr. to para. style" );
-                m_rDoc.getIDocumentContentOperations().InsertItemSet(*pInsPam, *m_pItemSet);
+                m_rDoc.getIDocumentContentOperations().InsertItemSet(*pInsPam, *m_oItemSet);
             }
         }
-        m_pItemSet.reset();
+        m_oItemSet.reset();
     }
 
     pInsPam.reset();
@@ -513,7 +513,7 @@ void SwASCIIParser::InsertText( const OUString& rStr )
 {
     m_rDoc.getIDocumentContentOperations().InsertString(*m_pPam, rStr);
 
-    if (m_pItemSet && g_pBreakIt
+    if (m_oItemSet && g_pBreakIt
         && m_nScript != (SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX))
         m_nScript |= g_pBreakIt->GetAllScriptsOfText(rStr);
 }

@@ -24,6 +24,7 @@
 #include <set>
 #include <string_view>
 #include <map>
+#include <optional>
 
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/form/XForm.hpp>
@@ -213,7 +214,7 @@ struct SwHTMLFormatInfo
     OString aToken;             // the token to output
     OUString aClass;            // the class to output
 
-    std::unique_ptr<SfxItemSet> pItemSet;   // the attribute set to output
+    std::optional<SfxItemSet> moItemSet;   // the attribute set to output
 
     sal_Int32 nLeftMargin;      // some default values for
     sal_Int32 nRightMargin;     // paragraph styles
