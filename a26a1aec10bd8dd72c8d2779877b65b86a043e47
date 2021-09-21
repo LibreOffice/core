@@ -34,6 +34,24 @@
       "parentUuid": "a8ad0149_b32d6a9a",
       "revId": "a26a1aec10bd8dd72c8d2779877b65b86a043e47",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9eafb99_517dcc96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001976
+      },
+      "writtenOn": "2021-09-21T07:43:34Z",
+      "side": 1,
+      "message": "After running LibreOffice under debugger, I\u0027ve noticed that X11SalFrame::Init is called with SalFrameStyleFlags::NONE only once. I think it may be used instead of new flag.",
+      "parentUuid": "96ff98c6_3dada9e7",
+      "revId": "a26a1aec10bd8dd72c8d2779877b65b86a043e47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
