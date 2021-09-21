@@ -48,7 +48,7 @@ namespace linguistic
 {
 
 
-static const char *aCH[] =
+const OUString aCH[] =
 {
     UPN_IS_IGNORE_CONTROL_CHARACTERS,
     UPN_IS_USE_DICTIONARY_LIST,
@@ -70,7 +70,7 @@ PropertyChgHelper::PropertyChgHelper(
     OUString *pName = aPropNames.getArray();
     for (sal_Int32 i = 0;  i < nCHCount;  ++i)
     {
-        pName[i] = OUString::createFromAscii( aCH[i] );
+        pName[i] = aCH[i];
     }
 
     SetDefaultValues();
@@ -96,6 +96,19 @@ void PropertyChgHelper::AddPropNames( const char *pNewNames[], sal_Int32 nCount 
     }
 }
 
+void PropertyChgHelper::AddPropNames( const OUString pNewNames[], sal_Int32 nCount )
+{
+    if (pNewNames && nCount)
+    {
+        sal_Int32 nLen = GetPropNames().getLength();
+        GetPropNames().realloc( nLen + nCount );
+        OUString *pName = GetPropNames().getArray();
+        for (sal_Int32 i = 0;  i < nCount;  ++i)
+        {
+            pName[ nLen + i ] = pNewNames[ i ];
+        }
+    }
+}
 
 void PropertyChgHelper::SetDefaultValues()
 {
@@ -318,7 +331,7 @@ void SAL_CALL
 
 // list of properties from the property set to be used
 // and listened to
-static const char *aSP[] =
+const OUString aSP[] =
 {
     UPN_IS_SPELL_UPPER_CASE,
     UPN_IS_SPELL_WITH_DIGITS,
@@ -490,7 +503,7 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
     }
 }
 
-static const char *aHP[] =
+const OUString aHP[] =
 {
     UPN_HYPH_MIN_LEADING,
     UPN_HYPH_MIN_TRAILING,

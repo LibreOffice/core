@@ -198,7 +198,7 @@ enum EID_OPTIONS
 
 //! this array must have an entry for every value of EID_OPTIONS.
 //  It is used to get the respective property name.
-static const char * aEidToPropName[] =
+static const OUString aEidToPropName[] =
 {
     UPN_IS_SPELL_AUTO,              // EID_SPELL_AUTO
     UPN_IS_GRAMMAR_AUTO,            // EID_GRAMMAR_AUTO
@@ -212,10 +212,10 @@ static const char * aEidToPropName[] =
     UPN_IS_HYPH_SPECIAL             // EID_HYPH_SPECIAL
 };
 
-static OUString lcl_GetPropertyName( EID_OPTIONS eEntryId )
+static const OUString & lcl_GetPropertyName( EID_OPTIONS eEntryId )
 {
     DBG_ASSERT( static_cast<unsigned int>(eEntryId) < SAL_N_ELEMENTS(aEidToPropName), "index out of range" );
-    return OUString::createFromAscii( aEidToPropName[ static_cast<int>(eEntryId) ] );
+    return aEidToPropName[ static_cast<int>(eEntryId) ];
 }
 
 namespace {
