@@ -534,6 +534,7 @@ OUString PPDParser::getPPDFile( const OUString& rFile )
 
 const PPDParser* PPDParser::getParser( const OUString& rFile )
 {
+    // Recursive because we can get re-entered via CUPSManager::createCUPSParser
     static std::recursive_mutex aMutex;
     std::scoped_lock aGuard( aMutex );
 
