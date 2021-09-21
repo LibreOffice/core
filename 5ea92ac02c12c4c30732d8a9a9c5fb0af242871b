@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1225963e_17af07d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 45
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-21T19:35:47Z",
+      "side": 1,
+      "message": "Mike, ridiculous numbers of iterations to get this right, apologies - mainly issues with Windows build, but then found an issue on the Linux builds - had to setup a VM to find out what was going on after doing a couple of attempted blind fixes (I build on a Mac).",
+      "revId": "5ea92ac02c12c4c30732d8a9a9c5fb0af242871b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
