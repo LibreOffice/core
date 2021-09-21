@@ -16,6 +16,23 @@
       "message": "rene: FYI",
       "revId": "dec697bfa788a37f6d866bdc78af47f4c7c8a513",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfb2de57_f28d10e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2021-09-21T12:20:22Z",
+      "side": 1,
+      "message": "Should the bug in the commit summary be tdf#144585 instead of tdf#144037 (since it\u0027s about Wayland)?\n\nOtherwise, looks good to me.\n(If you intend to take another look for master, seems OK to me to have this for 7-2 only.)",
+      "revId": "dec697bfa788a37f6d866bdc78af47f4c7c8a513",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
