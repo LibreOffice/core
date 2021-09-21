@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fa4b060_a1fb6016",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-09-21T19:34:30Z",
+      "side": 1,
+      "message": "I confirm I don\u0027t reproduce the crash thanks to the patch.",
+      "revId": "4f7311abf92c0961600ac4b0fd3c15ae10f32c52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
