@@ -41,7 +41,7 @@ namespace linguistic
 
 const struct
 {
-    const char *pPropName;
+    OUString        aPropName;
     sal_Int32       nPropHdl;
 } aFlushProperties[ NUM_FLUSH_PROPS ] =
 {
@@ -62,7 +62,7 @@ static void lcl_AddAsPropertyChangeListener(
         for (auto& aFlushPropertie : aFlushProperties)
         {
             rPropSet->addPropertyChangeListener(
-                    OUString::createFromAscii(aFlushPropertie.pPropName), xListener );
+                aFlushPropertie.aPropName, xListener );
         }
     }
 }
@@ -77,7 +77,7 @@ static void lcl_RemoveAsPropertyChangeListener(
         for (auto& aFlushPropertie : aFlushProperties)
         {
             rPropSet->removePropertyChangeListener(
-                    OUString::createFromAscii(aFlushPropertie.pPropName), xListener );
+                    aFlushPropertie.aPropName, xListener );
         }
     }
 }
