@@ -98,6 +98,30 @@
       },
       "revId": "361038778530ca8d839b674433cc72d822bdc003",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fd5d0b4_e2e0a259",
+        "filename": "include/drawinglayer/primitive2d/baseprimitive2d.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-21T12:35:50Z",
+      "side": 1,
+      "message": "to record the results of the IRC conversion for posterity, \"so yeah, indeed, dropping one level of indirection is a benefit of std::recursive_mutex over osl::Mutex\"",
+      "parentUuid": "f2c2f27c_6fd3107f",
+      "range": {
+        "startLine": 40,
+        "startChar": 3,
+        "endLine": 40,
+        "endChar": 23
+      },
+      "revId": "361038778530ca8d839b674433cc72d822bdc003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
