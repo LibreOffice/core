@@ -100,6 +100,24 @@ Reference<XAccessibleContext> Qt5AccessibleWidget::getAccessibleContextImpl() co
     return xAc;
 }
 
+css::uno::Reference<css::accessibility::XAccessibleTable>
+Qt5AccessibleWidget::getAccessibleTableForParent() const
+{
+    Reference<XAccessibleContext> xAcc = getAccessibleContextImpl();
+    if (!xAcc.is())
+        return nullptr;
+
+    Reference<XAccessible> xParent = xAcc->getAccessibleParent();
+    if (!xParent.is())
+        return nullptr;
+
+    Reference<XAccessibleContext> xParentContext = xParent->getAccessibleContext();
+    if (!xParentContext.is())
+        return nullptr;
+
+    return Reference<XAccessibleTable>(xParentContext, UNO_QUERY);
+}
+
 QWindow* Qt5AccessibleWidget::window() const { return nullptr; }
 
 int Qt5AccessibleWidget::childCount() const
@@ -725,6 +743,8 @@ void* Qt5AccessibleWidget::interface_cast(QAccessible::InterfaceType t)
         return static_cast<QAccessibleEditableTextInterface*>(this);
     if (t == QAccessible::ValueInterface)
         return static_cast<QAccessibleValueInterface*>(this);
+    if (t == QAccessible::TableCellInterface)
+        return static_cast<QAccessibleTableCellInterface*>(this);
     if (t == QAccessible::TableInterface)
         return static_cast<QAccessibleTableInterface*>(this);
     return nullptr;
@@ -1341,6 +1361,97 @@ bool Qt5AccessibleWidget::unselectRow(int row)
     if (!xTableSelection.is())
         return false;
     return xTableSelection->unselectRow(row);
+}
+
+QList<QAccessibleInterface*> Qt5AccessibleWidget::columnHeaderCells() const
+{
+    SAL_WARN("vcl.qt5", "Unsupported QAccessibleTableCellInterface::columnHeaderCells");
+    return QList<QAccessibleInterface*>();
+}
+
+int Qt5AccessibleWidget::columnIndex() const
+{
+    Reference<XAccessibleContext> xAcc = getAccessibleContextImpl();
+    if (!xAcc.is())
+        return -1;
+
+    Reference<XAccessibleTable> xTable = getAccessibleTableForParent();
+    if (!xTable.is())
+        return -1;
+
+    const sal_Int32 nIndexInParent = xAcc->getAccessibleIndexInParent();
+    return xTable->getAccessibleColumn(nIndexInParent);
+}
+
+bool Qt5AccessibleWidget::isSelected() const
+{
+    Reference<XAccessibleContext> xAcc = getAccessibleContextImpl();
+    if (!xAcc.is())
+        return false;
+
+    Reference<XAccessibleTable> xTable = getAccessibleTableForParent();
+    if (!xTable.is())
+        return false;
+
+    const sal_Int32 nColumn = columnIndex();
+    const sal_Int32 nRow = rowIndex();
+    return xTable->isAccessibleSelected(nRow, nColumn);
+}
+
+int Qt5AccessibleWidget::columnExtent() const
+{
+    Reference<XAccessibleContext> xAcc = getAccessibleContextImpl();
+    if (!xAcc.is())
+        return -1;
+
+    Reference<XAccessibleTable> xTable = getAccessibleTableForParent();
+    if (!xTable.is())
+        return -1;
+
+    const sal_Int32 nColumn = columnIndex();
+    const sal_Int32 nRow = rowIndex();
+    return xTable->getAccessibleColumnExtentAt(nRow, nColumn);
+}
+
+QList<QAccessibleInterface*> Qt5AccessibleWidget::rowHeaderCells() const
+{
+    SAL_WARN("vcl.qt5", "Unsupported QAccessibleTableCellInterface::rowHeaderCells");
+    return QList<QAccessibleInterface*>();
+}
+
+int Qt5AccessibleWidget::rowExtent() const
+{
+    Reference<XAccessibleContext> xAcc = getAccessibleContextImpl();
+    if (!xAcc.is())
+        return -1;
+
+    Reference<XAccessibleTable> xTable = getAccessibleTableForParent();
+    if (!xTable.is())
+        return -1;
+
+    const sal_Int32 nColumn = columnIndex();
+    const sal_Int32 nRow = rowIndex();
+    return xTable->getAccessibleRowExtentAt(nRow, nColumn);
+}
+
+int Qt5AccessibleWidget::rowIndex() const
+{
+    Reference<XAccessibleContext> xAcc = getAccessibleContextImpl();
+    if (!xAcc.is())
+        return -1;
+
+    Reference<XAccessibleTable> xTable = getAccessibleTableForParent();
+    if (!xTable.is())
+        return -1;
+
+    const sal_Int32 nIndexInParent = xAcc->getAccessibleIndexInParent();
+    return xTable->getAccessibleRow(nIndexInParent);
+}
+
+QAccessibleInterface* Qt5AccessibleWidget::table() const
+{
+    SAL_WARN("vcl.qt5", "Unsupported QAccessibleTableCellInterface::table");
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
