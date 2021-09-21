@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "615d2d18_e77671bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-09-21T10:12:47Z",
+      "side": 1,
+      "message": "@Attila, Dani: very nice fix! I\u0027ve also verified, that the original fix which caused the regression, still works well, too.",
+      "revId": "93f78e5a7b5925c283ebd6e6d5ffee7634bc493e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
