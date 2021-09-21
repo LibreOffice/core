@@ -151,6 +151,15 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
 
         sal_Int32 nSttPos = 0;
         OUString sText = pTextNd->GetText();
+
+        // use text of the tracked changes
+        if ( sText != pTextNd->GetRedlineText() &&
+            sText.getLength() > 0 &&
+            sText[0] != CH_TXTATR_BREAKWORD && sText[0] != CH_TXTATR_INWORD )
+        {
+            sText = pTextNd->GetRedlineText();
+        }
+
         while ( nSttPos < sText.getLength() && ( sText[nSttPos]==' ' || sText[nSttPos]=='\t' ) )
             ++nSttPos;
 
