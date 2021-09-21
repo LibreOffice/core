@@ -1112,7 +1112,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                     }
                     sal_Int32 nStrPos = pSc->ScanFormat( sStr);
                     sal_uInt16 nCnt = pSc->GetResultStringsCnt();
-                    if (nCnt == 0)              // error
+                    if (nCnt == 0 && nStrPos == 0)  // error
                     {
                         nStrPos = 1;
                     }
