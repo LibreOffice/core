@@ -16,6 +16,23 @@
       "message": "This has not been merged into master. And if I try to backport https://gerrit.libreoffice.org/c/core/+/120433 to co-2021 I get failures in this test, so I expect this will fail in master the same way.\n",
       "revId": "56795f50abad3de960f23e85b2ccfa1ba0181370",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "115bcbb3_946583a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-09-21T09:27:00Z",
+      "side": 1,
+      "message": ".",
+      "revId": "56795f50abad3de960f23e85b2ccfa1ba0181370",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
