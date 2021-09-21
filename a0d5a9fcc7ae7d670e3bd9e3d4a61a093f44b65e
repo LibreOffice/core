@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "457a8885_1cee0c19",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-21T11:29:30Z",
+      "side": 1,
+      "message": "Is that assumption correct?  (At least, it succeeded an --enable-assert-always-abort `make check` for me.)",
+      "range": {
+        "startLine": 24,
+        "startChar": 12,
+        "endLine": 25,
+        "endChar": 40
+      },
+      "revId": "a0d5a9fcc7ae7d670e3bd9e3d4a61a093f44b65e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
