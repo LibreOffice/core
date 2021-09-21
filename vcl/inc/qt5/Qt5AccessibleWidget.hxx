@@ -19,6 +19,7 @@
 #include <QtGui/QAccessible>
 #include <QtGui/QAccessibleActionInterface>
 #include <QtGui/QAccessibleInterface>
+#include <QtGui/QAccessibleTableCellInterface>
 #include <QtGui/QAccessibleTableInterface>
 #include <QtGui/QAccessibleTextInterface>
 #include <QtGui/QAccessibleValueInterface>
@@ -26,6 +27,11 @@
 #include <QtGui/QWindow>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
+
+namespace com::sun::star::accessibility
+{
+class XAccessibleTable;
+}
 
 class Qt5Frame;
 class Qt5Widget;
@@ -35,6 +41,7 @@ class Qt5AccessibleWidget final : public QObject,
                                   public QAccessibleActionInterface,
                                   public QAccessibleTextInterface,
                                   public QAccessibleEditableTextInterface,
+                                  public QAccessibleTableCellInterface,
                                   public QAccessibleTableInterface,
                                   public QAccessibleValueInterface
 {
@@ -129,12 +136,23 @@ public:
     virtual bool unselectColumn(int column) override;
     virtual bool unselectRow(int row) override;
 
+    // QAccessibleTableCellInterface
+    virtual QList<QAccessibleInterface*> columnHeaderCells() const override;
+    virtual int columnIndex() const override;
+    virtual bool isSelected() const override;
+    virtual int columnExtent() const override;
+    virtual QList<QAccessibleInterface*> rowHeaderCells() const override;
+    virtual int rowExtent() const override;
+    virtual int rowIndex() const override;
+    virtual QAccessibleInterface* table() const override;
+
     // Factory
     static QAccessibleInterface* customFactory(const QString& classname, QObject* object);
 
 private:
     css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
     css::uno::Reference<css::accessibility::XAccessibleContext> getAccessibleContextImpl() const;
+    css::uno::Reference<css::accessibility::XAccessibleTable> getAccessibleTableForParent() const;
     QObject* m_pObject;
 };
 
