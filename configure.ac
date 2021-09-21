@@ -12024,7 +12024,7 @@ if test "$enable_skia" != "no" -a "$build_skia" = "yes" -a -z "$DISABLE_GUI"; th
             AC_SUBST(SKIA_GPU)
         fi
 
-        if test -n "$MAC_OS_X_VERSION_MIN_REQUIRED" -a "$MAC_OS_X_VERSION_MIN_REQUIRED" -lt "101200"; then
+        if test -n "$MAC_OS_X_VERSION_MIN_REQUIRED" && test "$MAC_OS_X_VERSION_MIN_REQUIRED" -lt "101200"; then
             SKIA_DISABLE_VMA_USE_STL_SHARED_MUTEX=1
             AC_SUBST(SKIA_DISABLE_VMA_USE_STL_SHARED_MUTEX)
         fi
