@@ -31,7 +31,7 @@ namespace vcl::graphic
 class Manager final
 {
 private:
-    std::recursive_mutex maMutex; // instead of SolarMutex because graphics can live past vcl main
+    std::mutex maMutex; // instead of SolarMutex because graphics can live past vcl main
     o3tl::sorted_vector<ImpGraphic*> m_pImpGraphicList;
     std::chrono::seconds mnAllowedIdleTime;
     bool mbSwapEnabled;
