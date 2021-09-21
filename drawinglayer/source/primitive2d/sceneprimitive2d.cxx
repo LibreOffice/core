@@ -128,8 +128,6 @@ namespace drawinglayer::primitive2d
 {
         bool ScenePrimitive2D::impGetShadow3D() const
         {
-            std::unique_lock aGuard( m_aMutex );
-
             // create on demand
             if(!mbShadow3DChecked && !getChildren3D().empty())
             {
@@ -511,6 +509,8 @@ namespace drawinglayer::primitive2d
 
         Primitive2DContainer ScenePrimitive2D::getShadow2D() const
         {
+            std::unique_lock aGuard( m_aMutex );
+
             Primitive2DContainer aRetval;
 
             // create 2D shadows from contained 3D primitives
@@ -681,6 +681,7 @@ namespace drawinglayer::primitive2d
             }
 
             // use parent implementation
+            aGuard.unlock();
             BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
 

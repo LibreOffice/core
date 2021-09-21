@@ -324,6 +324,7 @@ namespace drawinglayer::primitive2d
             }
 
             // use parent implementation
+            aGuard.unlock();
             BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
 

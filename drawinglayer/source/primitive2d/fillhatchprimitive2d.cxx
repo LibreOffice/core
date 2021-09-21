@@ -176,6 +176,7 @@ namespace drawinglayer::primitive2d
             std::unique_lock aGuard( m_aMutex );
             bool bAdaptDistance(0 != getFillHatch().getMinimalDiscreteDistance());
 
+            aGuard.unlock();
             if(bAdaptDistance)
             {
                 // behave view-dependent

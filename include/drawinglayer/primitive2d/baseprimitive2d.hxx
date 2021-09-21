@@ -37,7 +37,7 @@ class ViewInformation2D;
 }
 
 /** This is a custom re-implementation of cppu::WeakComponentImplHelper which uses
-   std::recursive_mutex and skips parts of the XComponent stuff.
+   std::mutex and skips parts of the XComponent stuff.
 */
 class DRAWINGLAYER_DLLPUBLIC BasePrimitive2DImplBase : public cppu::OWeakObject,
                                                        public css::lang::XComponent,
@@ -67,7 +67,7 @@ public:
     }
 
 protected:
-    mutable std::recursive_mutex m_aMutex;
+    mutable std::mutex m_aMutex;
 };
 
 namespace drawinglayer::primitive2d
