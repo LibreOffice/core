@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f0c78ce_76062a96",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-21T11:54:10Z",
+      "side": 1,
+      "message": "What do you mean with \"allocate\"?  I see that\n\n  ::cppu::OBroadcastHelper rBHelper;\n\nis a non-static data member of cppu::WeakComponentImplHelperBase in include/cppuhelper/compbase_ex.hxx, the constructor of which needs an osl::Mutex instance, which is typically realized as another base class subobject for classes that derive from cppu::WeakComponentImplHelper (like it was done here for drawinglayer::primitive2d::BasePrimitive2D in include/drawinglayer/primitive2d/baseprimitive2d.hxx).",
+      "revId": "361038778530ca8d839b674433cc72d822bdc003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "3e05d8f7_cb2c0c40",
@@ -14,6 +31,29 @@
       "writtenOn": "2021-09-21T10:23:17Z",
       "side": 1,
       "message": "sberg, looking at this and wondering if it is worth creating a new set of WeakImpl helper base classes",
+      "revId": "361038778530ca8d839b674433cc72d822bdc003",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a78267b6_04eb480a",
+        "filename": "include/drawinglayer/primitive2d/baseprimitive2d.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-21T11:54:10Z",
+      "side": 1,
+      "message": "Why replace the unhelpfully recursive osl::Mutex with the equally unhelpfully recursive std::recursive_mutex?",
+      "range": {
+        "startLine": 40,
+        "startChar": 3,
+        "endLine": 40,
+        "endChar": 23
+      },
       "revId": "361038778530ca8d839b674433cc72d822bdc003",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
