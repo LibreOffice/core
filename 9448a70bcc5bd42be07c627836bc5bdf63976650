@@ -16,6 +16,23 @@
       "message": "@Dani: very nice and useful fix!",
       "revId": "9448a70bcc5bd42be07c627836bc5bdf63976650",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91726076_0b89233c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-09-21T11:26:50Z",
+      "side": 1,
+      "message": "@Attila: thanks for the review!",
+      "revId": "9448a70bcc5bd42be07c627836bc5bdf63976650",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
