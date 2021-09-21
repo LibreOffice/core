@@ -193,6 +193,7 @@ void PolygonMarkerPrimitive2D::get2DDecomposition(
     }
 
     // use parent implementation
+    aGuard.unlock();
     BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
 }
 

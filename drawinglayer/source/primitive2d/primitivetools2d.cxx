@@ -45,6 +45,7 @@ namespace drawinglayer::primitive2d
             }
 
             // call base implementation
+            aGuard.unlock();
             BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
 
@@ -71,6 +72,7 @@ namespace drawinglayer::primitive2d
             }
 
             // call base implementation
+            aGuard.unlock();
             BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
 
@@ -94,6 +96,7 @@ namespace drawinglayer::primitive2d
             }
 
             // call base implementation
+            aGuard.unlock();
             BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
 
@@ -127,6 +130,7 @@ namespace drawinglayer::primitive2d
             }
 
             // call base implementation
+            aGuard.unlock();
             BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
 
