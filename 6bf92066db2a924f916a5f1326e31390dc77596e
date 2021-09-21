@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad3ac323_92e74efe",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2196,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-21T12:30:36Z",
+      "side": 1,
+      "message": "This nFirstRow handling makes no sense to me. What if nFirstRow\u003d\u003d0? What if nFirstRow\u003cnStartRow? That can happen if for example with nRow\u003dnStartNo in RowFiltered(nRow,...) points into a block that starts on a lower row number. And why evaluate nFirstRow at all and not nLastRow like below in the else case?",
+      "range": {
+        "startLine": 2196,
+        "startChar": 52,
+        "endLine": 2196,
+        "endChar": 87
+      },
+      "revId": "6bf92066db2a924f916a5f1326e31390dc77596e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2482187_ae463e23",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2197,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-21T12:30:36Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this bShow\u003dfalse instead if rows are filtered?",
+      "range": {
+        "startLine": 2197,
+        "startChar": 52,
+        "endLine": 2197,
+        "endChar": 56
+      },
+      "revId": "6bf92066db2a924f916a5f1326e31390dc77596e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "955a30c3_d54a1c63",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2199,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-21T12:30:36Z",
+      "side": 1,
+      "message": "Could be std::min\u003cSCROW\u003e(nLastRow, nEndNo)",
+      "range": {
+        "startLine": 2199,
+        "startChar": 52,
+        "endLine": 2199,
+        "endChar": 90
+      },
+      "revId": "6bf92066db2a924f916a5f1326e31390dc77596e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d886e2e1_8a0c15f2",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2201,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-21T12:30:36Z",
+      "side": 1,
+      "message": "With the ++nRow of the for() loop\u0027s increment, nRow for the next iteration ends up as nLastRow+2, thus skipping one row nLastRow+1.",
+      "range": {
+        "startLine": 2201,
+        "startChar": 43,
+        "endLine": 2201,
+        "endChar": 47
+      },
+      "revId": "6bf92066db2a924f916a5f1326e31390dc77596e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad65bd28_d77bac2b",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2229,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-21T12:30:36Z",
+      "side": 1,
+      "message": "Same as above.",
+      "revId": "6bf92066db2a924f916a5f1326e31390dc77596e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
