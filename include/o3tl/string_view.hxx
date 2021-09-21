@@ -15,6 +15,7 @@
 #include <cstddef>
 #include <string>
 #include <string_view>
+#include <type_traits>
 
 #include <rtl/ustring.h>
 
@@ -106,6 +107,126 @@ constexpr bool ends_with(std::basic_string_view<charT, traits> sv, charT const* 
 #else
     return ends_with(sv, std::basic_string_view<charT, traits>(x));
 #endif
+}
+// The following overloads prevent deduction failures that would occur with their template
+// counterparts, when x is of a type that is implicitly convertible to basic_string_view (like
+// OString or OUString, and we only bother to provide overloads for the char and char16_t cases, not
+// also for char32_t and wchar_t, nor for C++20 char8_t):
+constexpr bool starts_with(std::string_view sv, std::string_view x) noexcept
+{
+    return starts_with<char>(sv, x);
+}
+constexpr bool starts_with(std::u16string_view sv, std::u16string_view x) noexcept
+{
+    return starts_with<char16_t>(sv, x);
+}
+constexpr bool ends_with(std::string_view sv, std::string_view x) noexcept
+{
+    return ends_with<char>(sv, x);
+}
+constexpr bool ends_with(std::u16string_view sv, std::u16string_view x) noexcept
+{
+    return ends_with<char16_t>(sv, x);
+}
+
+// Variants of C++20 std::basic_string_view::starts_with and
+// std::basic_string_view::ends_with that have a rest out parameter, similar to our OString and
+// OUString startsWith and endsWith member functions:
+template <typename charT, typename traits = std::char_traits<charT>>
+constexpr bool starts_with(std::basic_string_view<charT, traits> sv,
+                           std::basic_string_view<charT, traits> x,
+                           std::basic_string_view<charT, traits>* rest) noexcept
+{
+    assert(rest != nullptr);
+    auto const found = starts_with(sv, x);
+    if (found)
+    {
+        *rest = sv.substr(x.length());
+    }
+    return found;
+}
+template <typename charT, typename traits = std::char_traits<charT>>
+constexpr bool starts_with(std::basic_string_view<charT, traits> sv, charT x,
+                           std::basic_string_view<charT, traits>* rest) noexcept
+{
+    assert(rest != nullptr);
+    auto const found = starts_with(sv, x);
+    if (found)
+    {
+        *rest = sv.substr(1);
+    }
+    return found;
+}
+template <typename charT, typename traits = std::char_traits<charT>>
+constexpr bool starts_with(std::basic_string_view<charT, traits> sv, charT const* x,
+                           std::basic_string_view<charT, traits>* rest)
+{
+    assert(rest != nullptr);
+    auto const found = starts_with(sv, x);
+    if (found)
+    {
+        *rest = sv.substr(traits::length(x));
+    }
+    return found;
+}
+template <typename charT, typename traits = std::char_traits<charT>>
+constexpr bool ends_with(std::basic_string_view<charT, traits> sv,
+                         std::basic_string_view<charT, traits> x,
+                         std::basic_string_view<charT, traits>* rest) noexcept
+{
+    assert(rest != nullptr);
+    auto const found = ends_with(sv, x);
+    if (found)
+    {
+        *rest = sv.substr(0, sv.length() - x.length());
+    }
+    return found;
+}
+template <typename charT, typename traits = std::char_traits<charT>>
+constexpr bool ends_with(std::basic_string_view<charT, traits> sv, charT x,
+                         std::basic_string_view<charT, traits>* rest) noexcept
+{
+    assert(rest != nullptr);
+    auto const found = ends_with(sv, x);
+    if (found)
+    {
+        *rest = sv.substr(0, sv.length() - 1);
+    }
+    return found;
+}
+template <typename charT, typename traits = std::char_traits<charT>>
+constexpr bool ends_with(std::basic_string_view<charT, traits> sv, charT const* x,
+                         std::basic_string_view<charT, traits>* rest)
+{
+    assert(rest != nullptr);
+    auto const found = ends_with(sv, x);
+    if (found)
+    {
+        *rest = sv.substr(0, sv.length() - traits::length(x));
+    }
+    return found;
+}
+// The following overloads prevent deduction failures that would occur with their template
+// counterparts, when x is of a type that is implicitly convertible to basic_string_view (like
+// OString or OUString, and we only bother to provide overloads for the char and char16_t cases, not
+// also for char32_t and wchar_t, nor for C++20 char8_t):
+constexpr bool starts_with(std::string_view sv, std::string_view x, std::string_view* rest) noexcept
+{
+    return starts_with<char>(sv, x, rest);
+}
+constexpr bool starts_with(std::u16string_view sv, std::u16string_view x,
+                           std::u16string_view* rest) noexcept
+{
+    return starts_with<char16_t>(sv, x, rest);
+}
+constexpr bool ends_with(std::string_view sv, std::string_view x, std::string_view* rest) noexcept
+{
+    return ends_with<char>(sv, x, rest);
+}
+constexpr bool ends_with(std::u16string_view sv, std::u16string_view x,
+                         std::u16string_view* rest) noexcept
+{
+    return ends_with<char16_t>(sv, x, rest);
 }
 }
 
