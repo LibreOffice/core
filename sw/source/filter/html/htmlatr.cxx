@@ -201,7 +201,7 @@ namespace {
 struct SwHTMLTextCollOutputInfo
 {
     OString aToken;        // End token to be output
-    std::unique_ptr<SfxItemSet> pItemSet;    // hard attribute
+    std::optional<SfxItemSet> moItemSet;    // hard attribute
 
     bool bInNumberBulletList;         // in an enumerated list;
     bool bParaPossible;         // a </P> may be output additionally
@@ -291,22 +291,22 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
 
     if( pReferenceFormat || nDeep==0 )
     {
-        pItemSet.reset( new SfxItemSet( *pFormat->GetAttrSet().GetPool(),
-                                       pFormat->GetAttrSet().GetRanges() ) );
+        moItemSet.emplace( *pFormat->GetAttrSet().GetPool(),
+                                       pFormat->GetAttrSet().GetRanges() );
         // if the differences to a different style are supposed to be
         // written, hard attribute is necessary. This is always true
         // for styles that are not derived from HTML-tag styles.
 
-        pItemSet->Set( pFormat->GetAttrSet() );
+        moItemSet->Set( pFormat->GetAttrSet() );
 
         if( pReferenceFormat )
-            SwHTMLWriter::SubtractItemSet( *pItemSet, pReferenceFormat->GetAttrSet(), true );
+            SwHTMLWriter::SubtractItemSet( *moItemSet, pReferenceFormat->GetAttrSet(), true );
 
         // delete ItemSet that is empty straight away. This will save work
         // later on
-        if( !pItemSet->Count() )
+        if( !moItemSet->Count() )
         {
-            pItemSet.reset();
+            moItemSet.reset();
         }
     }
 
@@ -355,10 +355,10 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
                 const SfxPoolItem& rSet = pFormat->GetFormatAttr( aWhichIds[nSet][i] );
                 if( rSet != rRef )
                 {
-                    if( !pItemSet )
-                        pItemSet.reset( new SfxItemSet( *pFormat->GetAttrSet().GetPool(),
-                                                   pFormat->GetAttrSet().GetRanges() ) );
-                    pItemSet->Put( rSet );
+                    if( !moItemSet )
+                        moItemSet.emplace( *pFormat->GetAttrSet().GetPool(),
+                                                   pFormat->GetAttrSet().GetRanges() );
+                    moItemSet->Put( rSet );
                 }
             }
         }
@@ -385,10 +385,10 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
     LanguageType eLang = rLang.GetLanguage();
     if( eLang != eDfltLang )
     {
-        if( !pItemSet )
-            pItemSet.reset( new SfxItemSet( *pFormat->GetAttrSet().GetPool(),
-                                       pFormat->GetAttrSet().GetRanges() ) );
-        pItemSet->Put( rLang );
+        if( !moItemSet )
+            moItemSet.emplace( *pFormat->GetAttrSet().GetPool(),
+                                       pFormat->GetAttrSet().GetRanges() );
+        moItemSet->Put( rLang );
     }
 
     static const sal_uInt16 aWhichIds[3] =
@@ -402,10 +402,10 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
                 static_cast<const SvxLanguageItem&>(pFormat->GetFormatAttr(i));
             if( rTmpLang.GetLanguage() != eLang )
             {
-                if( !pItemSet )
-                    pItemSet.reset( new SfxItemSet( *pFormat->GetAttrSet().GetPool(),
-                                               pFormat->GetAttrSet().GetRanges() ) );
-                pItemSet->Put( rTmpLang );
+                if( !moItemSet )
+                    moItemSet.emplace( *pFormat->GetAttrSet().GetPool(),
+                                               pFormat->GetAttrSet().GetRanges() );
+                moItemSet->Put( rTmpLang );
             }
         }
     }
@@ -562,19 +562,19 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     }
 
     // If necessary, take the hard attribute from the style
-    if( pFormatInfo->pItemSet )
+    if( pFormatInfo->moItemSet )
     {
-        OSL_ENSURE(!rInfo.pItemSet, "Where does this ItemSet come from?");
-        rInfo.pItemSet.reset(new SfxItemSet( *pFormatInfo->pItemSet ));
+        OSL_ENSURE(!rInfo.moItemSet, "Where does this ItemSet come from?");
+        rInfo.moItemSet.emplace( *pFormatInfo->moItemSet );
     }
 
     // additionally, add the hard attribute from the paragraph
     if( pNodeItemSet )
     {
-        if (rInfo.pItemSet)
-            rInfo.pItemSet->Put( *pNodeItemSet );
+        if (rInfo.moItemSet)
+            rInfo.moItemSet->Put( *pNodeItemSet );
         else
-            rInfo.pItemSet.reset(new SfxItemSet( *pNodeItemSet ));
+            rInfo.moItemSet.emplace( *pNodeItemSet );
     }
 
     // we will need the lower spacing of the paragraph later on
@@ -595,11 +595,11 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
             else
                 aULSpaceItem.SetUpper( rHWrt.m_nHeaderFooterSpace );
 
-            if (!rInfo.pItemSet)
+            if (!rInfo.moItemSet)
             {
-                rInfo.pItemSet.reset(new SfxItemSet(*rFormat.GetAttrSet().GetPool(), svl::Items<RES_UL_SPACE, RES_UL_SPACE>));
+                rInfo.moItemSet.emplace(*rFormat.GetAttrSet().GetPool(), svl::Items<RES_UL_SPACE, RES_UL_SPACE>);
             }
-            rInfo.pItemSet->Put( aULSpaceItem );
+            rInfo.moItemSet->Put( aULSpaceItem );
         }
         rHWrt.m_bOutHeader = false;
         rHWrt.m_bOutFooter = false;
@@ -619,8 +619,8 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     const SfxPoolItem* pAdjItem = nullptr;
     const SfxPoolItem* pItem;
 
-    if( rInfo.pItemSet &&
-        SfxItemState::SET == rInfo.pItemSet->GetItemState( RES_PARATR_ADJUST,
+    if( rInfo.moItemSet &&
+        SfxItemState::SET == rInfo.moItemSet->GetItemState( RES_PARATR_ADJUST,
                                                       false, &pItem ) )
     {
         pAdjItem = pItem;
@@ -812,12 +812,12 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     }
 
     LanguageType eLang;
-    if (rInfo.pItemSet)
-        eLang = static_cast<const SvxLanguageItem&>(rInfo.pItemSet->Get(SwHTMLWriter::GetLangWhichIdFromScript(rHWrt.m_nCSS1Script))).GetLanguage();
+    if (rInfo.moItemSet)
+        eLang = static_cast<const SvxLanguageItem&>(rInfo.moItemSet->Get(SwHTMLWriter::GetLangWhichIdFromScript(rHWrt.m_nCSS1Script))).GetLanguage();
     else
         eLang = rHWrt.m_eLang;
 
-    if( rInfo.pItemSet )
+    if( rInfo.moItemSet )
     {
         static const sal_uInt16 aWhichIds[3] = { RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CTL_LANGUAGE };
 
@@ -825,10 +825,10 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
         {
             // export language if it differs from the default language only.
             const SfxPoolItem *pTmpItem;
-            if( SfxItemState::SET == rInfo.pItemSet->GetItemState( i,
+            if( SfxItemState::SET == rInfo.moItemSet->GetItemState( i,
                         true, &pTmpItem ) &&
                 static_cast<const SvxLanguageItem *>(pTmpItem)->GetLanguage() == eLang )
-                rInfo.pItemSet->ClearItem( i );
+                rInfo.moItemSet->ClearItem( i );
         }
     }
 
@@ -918,9 +918,9 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
                 pTextNd->GetAnyFormatColl().GetPoolFormatId(), pTextNd->GetText()) > -1;
 
         // and now, if necessary, the STYLE options
-        if (rHWrt.m_bCfgOutStyles && rInfo.pItemSet)
+        if (rHWrt.m_bCfgOutStyles && rInfo.moItemSet)
         {
-            OutCSS1_ParaTagStyleOpt( rWrt, *rInfo.pItemSet );
+            OutCSS1_ParaTagStyleOpt( rWrt, *rInfo.moItemSet );
         }
 
         if (rHWrt.m_bParaDotLeaders) {
@@ -1652,9 +1652,9 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
                 // attributes
                 InsertItem( rItem, nStart, nEnd );
             }
-            if( pFormatInfo->pItemSet )
+            if( pFormatInfo->moItemSet )
             {
-                Insert( *pFormatInfo->pItemSet, nStart, nEnd,
+                Insert( *pFormatInfo->moItemSet, nStart, nEnd,
                         rFormatInfos, true, bParaAttrs );
             }
         }
@@ -2263,9 +2263,9 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                               rHTMLWrt.m_xDfltColor, rHTMLWrt.m_bCfgOutStyles,
                               rHTMLWrt.GetHTMLMode(), aFullText,
                                  rHTMLWrt.m_aScriptTextStyles );
-    if( aFormatInfo.pItemSet )
+    if( aFormatInfo.moItemSet )
     {
-        aEndPosLst.Insert( *aFormatInfo.pItemSet, 0, nEnd + nOffset,
+        aEndPosLst.Insert( *aFormatInfo.moItemSet, 0, nEnd + nOffset,
                            rHTMLWrt.m_CharFormatInfos, false, true );
     }
 

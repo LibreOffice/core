@@ -384,7 +384,7 @@ public:
 class SwXMLItemSetStyleContext_Impl : public SvXMLStyleContext
 {
     OUString                    m_sMasterPageName;
-    std::unique_ptr<SfxItemSet> m_pItemSet;
+    std::optional<SfxItemSet>   m_oItemSet;
     SwXMLTextStyleContext_Impl *m_pTextStyle;
     SvXMLStylesContext          &m_rStyles;
 
@@ -419,7 +419,7 @@ public:
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     // The item set may be empty!
-    SfxItemSet *GetItemSet() { return m_pItemSet.get(); }
+    SfxItemSet *GetItemSet() { return m_oItemSet ? &*m_oItemSet : nullptr; }
 
     bool HasMasterPageName() const { return m_bHasMasterPageName; }
 
@@ -519,7 +519,7 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
         sal_Int32 nElement,
         const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
-    OSL_ENSURE( !m_pItemSet,
+    OSL_ENSURE( !m_oItemSet,
             "SwXMLItemSetStyleContext_Impl::CreateItemSetContext: item set exists" );
 
     SvXMLImportContext *pContext = nullptr;
@@ -530,29 +530,29 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
     switch( GetFamily() )
     {
     case XmlStyleFamily::TABLE_TABLE:
-        m_pItemSet.reset( new SfxItemSet( rItemPool, aTableSetRange ) );
+        m_oItemSet.emplace( rItemPool, aTableSetRange );
         break;
     case XmlStyleFamily::TABLE_COLUMN:
-        m_pItemSet.reset( new SfxItemSet( rItemPool, svl::Items<RES_FRM_SIZE, RES_FRM_SIZE> ) );
+        m_oItemSet.emplace( rItemPool, svl::Items<RES_FRM_SIZE, RES_FRM_SIZE> );
         break;
     case XmlStyleFamily::TABLE_ROW:
-        m_pItemSet.reset( new SfxItemSet( rItemPool, aTableLineSetRange ) );
+        m_oItemSet.emplace( rItemPool, aTableLineSetRange );
         break;
     case XmlStyleFamily::TABLE_CELL:
-        m_pItemSet.reset( new SfxItemSet( rItemPool, aTableBoxSetRange ) );
+        m_oItemSet.emplace( rItemPool, aTableBoxSetRange );
         break;
     default:
         OSL_ENSURE( false,
         "SwXMLItemSetStyleContext_Impl::CreateItemSetContext: unknown family" );
         break;
     }
-    if( m_pItemSet )
+    if( m_oItemSet )
         pContext = GetSwImport().CreateTableItemImportContext(
                                 nElement, xAttrList, GetFamily(),
-                                *m_pItemSet );
+                                *m_oItemSet );
     if( !pContext )
     {
-        m_pItemSet.reset();
+        m_oItemSet.reset();
     }
 
     return pContext;
@@ -636,15 +636,15 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
     if( !pPageDesc )
         return;
 
-    if( !m_pItemSet )
+    if( !m_oItemSet )
     {
         SfxItemPool& rItemPool = pDoc->GetAttrPool();
-        m_pItemSet.reset( new SfxItemSet( rItemPool, aTableSetRange ) );
+        m_oItemSet.emplace( rItemPool, aTableSetRange );
     }
 
     const SfxPoolItem *pItem;
     std::unique_ptr<SwFormatPageDesc> pFormatPageDesc;
-    if( SfxItemState::SET == m_pItemSet->GetItemState( RES_PAGEDESC, false,
+    if( SfxItemState::SET == m_oItemSet->GetItemState( RES_PAGEDESC, false,
                                                 &pItem ) )
     {
          if( static_cast<const SwFormatPageDesc *>(pItem)->GetPageDesc() != pPageDesc )
@@ -656,7 +656,7 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
     if( pFormatPageDesc )
     {
         pFormatPageDesc->RegisterToPageDesc( *pPageDesc );
-        m_pItemSet->Put( *pFormatPageDesc );
+        m_oItemSet->Put( *pFormatPageDesc );
     }
 }
 
@@ -672,15 +672,15 @@ bool SwXMLItemSetStyleContext_Impl::ResolveDataStyleName()
         // if the key is valid, insert Item into ItemSet
         if( -1 != nFormat )
         {
-            if( !m_pItemSet )
+            if( !m_oItemSet )
             {
                 SwDoc *pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
 
                 SfxItemPool& rItemPool = pDoc->GetAttrPool();
-                m_pItemSet.reset( new SfxItemSet( rItemPool, aTableBoxSetRange ) );
+                m_oItemSet.emplace( rItemPool, aTableBoxSetRange );
             }
             SwTableBoxNumFormat aNumFormatItem(nFormat);
-            m_pItemSet->Put(aNumFormatItem);
+            m_oItemSet->Put(aNumFormatItem);
         }
 
         // now resolved
