@@ -121,6 +121,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/configmgr.hxx>
+#include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <uiitems.hxx>
 #include <dpobject.hxx>
@@ -3402,6 +3403,47 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportSLK(SvStream &rStream)
 
     ScImportExport aImpEx(aDocument);
     return aImpEx.ImportStream(rStream, OUString(), SotClipboardFormatId::SYLK);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDBF(SvStream &rStream)
+{
+    ScDLL::Init();
+
+    utl::TempFile aTempInput;
+    aTempInput.EnableKillingFile();
+
+    // need a real file for this filter
+    SvStream* pInputStream = aTempInput.GetStream(StreamMode::WRITE);
+    sal_uInt8 aBuffer[8192];
+    while (auto nRead = rStream.ReadBytes(aBuffer, SAL_N_ELEMENTS(aBuffer)))
+        pInputStream->WriteBytes(aBuffer, nRead);
+    aTempInput.CloseStream();
+
+    SfxMedium aMedium(aTempInput.GetURL(), StreamMode::STD_READWRITE);
+
+    ScDocShellRef xDocShell = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT |
+                                             SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
+                                             SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
+
+    xDocShell->DoInitNew();
+
+    ScDocument& rDoc = xDocShell->GetDocument();
+
+    ScDocOptions aDocOpt = rDoc.GetDocOptions();
+    aDocOpt.SetLookUpColRowNames(false);
+    rDoc.SetDocOptions(aDocOpt);
+    rDoc.MakeTable(0);
+    rDoc.EnableExecuteLink(false);
+    rDoc.SetInsertingFromOtherDoc(true);
+
+    ScDocRowHeightUpdater::TabRanges aRecalcRanges(0, rDoc.MaxRow());
+    std::map<SCCOL, ScColWidthParam> aColWidthParam;
+    ErrCode eError = xDocShell->DBaseImport(aMedium.GetPhysicalName(), RTL_TEXTENCODING_IBM_850, aColWidthParam, aRecalcRanges.maRanges);
+
+    xDocShell->DoClose();
+    xDocShell.clear();
+
+    return eError == ERRCODE_NONE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

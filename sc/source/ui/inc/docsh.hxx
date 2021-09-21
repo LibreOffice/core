@@ -70,6 +70,8 @@ typedef std::unordered_map< sal_uLong, sal_uLong > ScChangeActionMergeMap;
 
 enum class LOKCommentNotificationType { Add, Modify, Remove };
 
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDBF(SvStream &rStream);
+
                                     // Extra flags for Repaint
 #define SC_PF_LINES         1
 #define SC_PF_TESTMERGE     2
@@ -132,6 +134,8 @@ class SC_DLLPUBLIC ScDocShell final: public SfxObjectShell, public SfxListener
     SAL_DLLPRIVATE bool          LoadXML( SfxMedium* pMedium, const css::uno::Reference< css::embed::XStorage >& );
     SAL_DLLPRIVATE bool          SaveXML( SfxMedium* pMedium, const css::uno::Reference< css::embed::XStorage >& );
     SAL_DLLPRIVATE SCTAB         GetSaveTab();
+
+    friend bool TestImportDBF(SvStream &rStream);
 
     SAL_DLLPRIVATE ErrCode       DBaseImport( const OUString& rFullFileName, rtl_TextEncoding eCharSet,
                                              std::map<SCCOL, ScColWidthParam>& aColWidthParam, ScFlatBoolRowSegments& rRowHeightsRecalc );
