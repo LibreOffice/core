@@ -22,7 +22,6 @@
 #include <iostream>
 #include <iomanip>
 
-#include <sal/config.h>
 #include <sal/log.hxx>
 
 #include <cstdio>
