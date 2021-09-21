@@ -826,10 +826,6 @@ QStringList Qt5AccessibleWidget::keyBindingsForAction(const QString& actionName)
     return keyBindings;
 }
 
-QAccessibleValueInterface* Qt5AccessibleWidget::valueInterface() { return nullptr; }
-
-QAccessibleTextInterface* Qt5AccessibleWidget::textInterface() { return nullptr; }
-
 // QAccessibleTextInterface
 void Qt5AccessibleWidget::addSelection(int /* startOffset */, int /* endOffset */)
 {
