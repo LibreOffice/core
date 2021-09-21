@@ -956,7 +956,8 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
                     }
                     i++;
                 }
-                Point pos(mpAutoFilterPopup->GetSizePixel().getWidth(), 150);
+                Point pos(mpAutoFilterPopup->GetPosPixel());
+                pos.Move(150, 0);
                 sal_uInt16 nSelected = pColorMenu->Execute(this, pos);
                 pColorMenu.disposeAndClear();
                 rControl.terminateAllPopupMenus();
