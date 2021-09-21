@@ -16,6 +16,24 @@
       "message": "Bit concerned about this one. Is this code not shared with the pixel dialogs we render ? that is not the sidebar in co-2021 of course - but lots of eg. format-\u003echaracter type dialogs.\n\nIs it possible we are dropping important invalidations there ? and/or can we detect the window type from the window and drop invalidations of those ? also curious about in-sheet controls which may also use the same code-paths.\n\nThanks!",
       "revId": "428118bfef1813f6da83b10dab624b219d981483",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ec4aeae_93286ea1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-09-21T09:18:34Z",
+      "side": 1,
+      "message": "This commit is really an extension of T28236 (kill idle painting). AFAICT these invalidations are ignored later on anyway because of idle painting not taking place.\n\nAll tests pass, and I do not see any problems when trying at random (Format-\u003eCharacter seems to work fine), so unless you have a specific problem or area to test, I don\u0027t know what to do more here.",
+      "parentUuid": "89963df9_0d955db0",
+      "revId": "428118bfef1813f6da83b10dab624b219d981483",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
