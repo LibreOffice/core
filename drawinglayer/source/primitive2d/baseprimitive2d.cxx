@@ -24,15 +24,73 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/queryinterface.hxx>
 
 using namespace css;
 
+BasePrimitive2DImplBase::~BasePrimitive2DImplBase() {}
+
+css::uno::Any BasePrimitive2DImplBase::queryInterface(css::uno::Type const& rType)
+{
+    css::uno::Any aReturn = ::cppu::queryInterface(
+        rType, static_cast<uno::XWeak*>(this), static_cast<lang::XComponent*>(this),
+        static_cast<lang::XTypeProvider*>(this), static_cast<graphic::XPrimitive2D*>(this),
+        static_cast<util::XAccounting*>(this));
+    if (aReturn.hasValue())
+        return aReturn;
+    return OWeakObject::queryInterface(rType);
+}
+
+void BasePrimitive2DImplBase::acquire() noexcept { OWeakObject::acquire(); }
+
+void BasePrimitive2DImplBase::release() noexcept
+{
+    if (osl_atomic_decrement(&m_refCount) != 0)
+        return;
+
+    // ensure no other references are created, via the weak connection point, from now on
+    disposeWeakConnectionPoint();
+    // restore reference count:
+    osl_atomic_increment(&m_refCount);
+    //    if (! rBHelper.bDisposed) {
+    //        try {
+    //            dispose();
+    //        }
+    //        catch (RuntimeException const& exc) { // don't break throw ()
+    //            SAL_WARN( "cppuhelper", exc );
+    //        }
+    //        OSL_ASSERT( rBHelper.bDisposed );
+    //    }
+    OWeakObject::release();
+}
+
+void BasePrimitive2DImplBase::dispose() {}
+
+void BasePrimitive2DImplBase::addEventListener(
+    css::uno::Reference<css::lang::XEventListener> const&)
+{
+    assert(false);
+}
+void BasePrimitive2DImplBase::removeEventListener(
+    css::uno::Reference<css::lang::XEventListener> const&)
+{
+    assert(false);
+}
+
+css::uno::Sequence<css::uno::Type> BasePrimitive2DImplBase::getTypes()
+{
+    static const css::uno::Sequence<uno::Type> aTypeList{
+        cppu::UnoType<uno::XWeak>::get(), cppu::UnoType<lang::XComponent>::get(),
+        cppu::UnoType<lang::XTypeProvider>::get(), cppu::UnoType<graphic::XPrimitive2D>::get(),
+        cppu::UnoType<util::XAccounting>::get()
+    };
+
+    return aTypeList;
+}
+
 namespace drawinglayer::primitive2d
 {
-BasePrimitive2D::BasePrimitive2D()
-    : BasePrimitive2DImplBase(m_aMutex)
-{
-}
+BasePrimitive2D::BasePrimitive2D() {}
 
 BasePrimitive2D::~BasePrimitive2D() {}
 

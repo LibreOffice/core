@@ -67,7 +67,7 @@ namespace drawinglayer::primitive2d
 
         void BackgroundColorPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
-            ::osl::MutexGuard aGuard( m_aMutex );
+            std::unique_lock aGuard( m_aMutex );
 
             if(!getBuffered2DDecomposition().empty() && (maLastViewport != rViewInformation.getViewport()))
             {
