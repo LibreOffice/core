@@ -57,4 +57,47 @@ class ColorFilterTest(UITestCase):
             self.assertTrue(is_row_hidden(doc, 7))
             self.assertTrue(is_row_hidden(doc, 8))
 
+    def test_tdf142579(self):
+        with self.ui_test.load_file(get_url_for_data_file("tdf142579.xlsx")) as doc:
+
+            xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+            xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A8"}))
+
+            # Blue Background Color rows are displayed
+            self.assertFalse(is_row_hidden(doc, 0))
+            self.assertFalse(is_row_hidden(doc, 1))
+            self.assertTrue(is_row_hidden(doc, 2))
+            self.assertTrue(is_row_hidden(doc, 3))
+            self.assertTrue(is_row_hidden(doc, 4))
+            self.assertTrue(is_row_hidden(doc, 5))
+            self.assertTrue(is_row_hidden(doc, 6))
+            self.assertTrue(is_row_hidden(doc, 7))
+
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter") as xDialog:
+                xField1 = xDialog.getChild("field1")
+                xCond1 = xDialog.getChild("cond1")
+
+                # tdf#143103: Without the fix in place, this test would have failed with
+                # AssertionError: 'aaa' != ''
+                self.assertEqual("aaa", get_state_as_dict(xField1)['DisplayText'])
+                self.assertEqual("Background color", get_state_as_dict(xCond1)['DisplayText'])
+
+                xColor1 = xDialog.getChild("color1")
+
+                # tdf#142579: Without the fix in place, this test would have failed with
+                # AssertionError: '7' != '3'
+                self.assertEqual('7', get_state_as_dict(xColor1)["EntryCount"])
+
+                # Select Red Background Color
+                select_pos(xColor1, "3")
+
+            self.assertFalse(is_row_hidden(doc, 0))
+            self.assertTrue(is_row_hidden(doc, 1))
+            self.assertTrue(is_row_hidden(doc, 2))
+            self.assertTrue(is_row_hidden(doc, 3))
+            self.assertTrue(is_row_hidden(doc, 4))
+            self.assertTrue(is_row_hidden(doc, 5))
+            self.assertTrue(is_row_hidden(doc, 6))
+            self.assertFalse(is_row_hidden(doc, 7))
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
