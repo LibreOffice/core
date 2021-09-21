@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_HEADLESS_SVPGDI_HXX
-#define INCLUDED_VCL_INC_HEADLESS_SVPGDI_HXX
+#pragma once
 
 #ifdef IOS
 #error This file is not for iOS
@@ -285,7 +284,5 @@ public:
     static cairo_surface_t* createCairoSurface(const BitmapBuffer *pBuffer);
     void                    clipRegion(cairo_t* cr);
 };
-
-#endif // INCLUDED_VCL_INC_HEADLESS_SVPGDI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
