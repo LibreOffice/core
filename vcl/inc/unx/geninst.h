@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_GENERIC_GENINST_H
-#define INCLUDED_VCL_INC_GENERIC_GENINST_H
+#pragma once
 
 #include <sal/config.h>
 
@@ -80,7 +79,5 @@ inline SalGenericInstance *GetGenericInstance()
 {
     return static_cast<SalGenericInstance *>(GetSalData()->m_pInstance);
 }
-
-#endif // INCLUDED_VCL_INC_GENERIC_GENINST_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
