@@ -169,7 +169,8 @@ sal_uInt32 const indexTable[NF_INDEX_TABLE_ENTRIES] = {
     ZF_STANDARD_FRACTION + 7, // NF_FRACTION_10
     ZF_STANDARD_FRACTION + 8, // NF_FRACTION_100
     ZF_STANDARD_DATETIME + 2, // NF_DATETIME_ISO_YYYYMMDD_HHMMSS
-    ZF_STANDARD_DATETIME + 3  // NF_DATETIME_ISO_YYYYMMDDTHHMMSS
+    ZF_STANDARD_DATETIME + 3, // NF_DATETIME_ISO_YYYYMMDDTHHMMSS
+    ZF_STANDARD_DATETIME + 5  // NF_DATETIME_ISO_YYYYMMDDTHHMMSS000
 };
 
 /**
@@ -1273,11 +1274,18 @@ bool SvNumberFormatter::IsNumberFormat(const OUString& sString,
             // Preserve ISO 8601 input.
             if (pStringScanner->HasIso8601Tsep())
             {
-                F_Index = GetFormatIndex( NF_DATETIME_ISO_YYYYMMDDTHHMMSS, ActLnge );
+                if (pStringScanner->GetDecPos())
+                    F_Index = GetFormatIndex( NF_DATETIME_ISO_YYYYMMDDTHHMMSS000, ActLnge );
+                else
+                    F_Index = GetFormatIndex( NF_DATETIME_ISO_YYYYMMDDTHHMMSS, ActLnge );
             }
             else if (pStringScanner->CanForceToIso8601( DateOrder::Invalid))
             {
-                F_Index = GetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS, ActLnge );
+                /* TODO: add a millisecond format with space instead of 'T'? */
+                if (pStringScanner->GetDecPos())
+                    F_Index = GetFormatIndex( NF_DATETIME_ISO_YYYYMMDDTHHMMSS000, ActLnge );
+                else
+                    F_Index = GetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS, ActLnge );
             }
             else
             {
@@ -1639,6 +1647,8 @@ sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex,
     case SvNumFormatType::DATETIME :
         if (nFIndex == GetFormatIndex( NF_DATETIME_ISO_YYYYMMDDTHHMMSS, eLang))
             nKey = GetFormatIndex( NF_DATETIME_ISO_YYYYMMDDTHHMMSS, eLang );
+        else if (nFIndex == GetFormatIndex( NF_DATETIME_ISO_YYYYMMDDTHHMMSS000, eLang))
+            nKey = GetFormatIndex( NF_DATETIME_ISO_YYYYMMDDTHHMMSS000, eLang );
         else if (nFIndex == GetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS, eLang) || (pFormat && pFormat->IsIso8601( 0 )))
             nKey = GetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS, eLang );
         else
@@ -2890,6 +2900,20 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
         rKeyword[NF_KEY_SS];
     SvNumberformat* pFormat = ImpInsertFormat( aSingleFormatCode,
                      CLOffset + ZF_STANDARD_DATETIME+3 /* NF_DATETIME_ISO_YYYYMMDDTHHMMSS */ );
+    assert(pFormat);
+    pFormat->SetComment("ISO 8601");    // not to be localized
+
+    // YYYY-MM-DD"T"HH:MM:SS,000   ISO with milliseconds and ',' or '.' decimal separator
+    aSingleFormatCode.Code =
+        rKeyword[NF_KEY_YYYY] + "-" +
+        rKeyword[NF_KEY_MM] + "-" +
+        rKeyword[NF_KEY_DD] + "\"T\"" +
+        rKeyword[NF_KEY_HH] + ":" +
+        rKeyword[NF_KEY_MMI] + ":" +
+        rKeyword[NF_KEY_SS] + (GetLocaleData()->getTime100SecSep() == "." ? "." : ",") +
+        "000";
+    pFormat = ImpInsertFormat( aSingleFormatCode,
+                     CLOffset + ZF_STANDARD_DATETIME+5 /* NF_DATETIME_ISO_YYYYMMDDTHHMMSS000 */ );
     assert(pFormat);
     pFormat->SetComment("ISO 8601");    // not to be localized
 

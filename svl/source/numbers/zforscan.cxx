@@ -1432,9 +1432,37 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                 eNewType = SvNumFormatType::TEXT;
                 break;
             default:
-                if (pLoc->getTime100SecSep() == sStrArray[i])
+                // Separator for SS,0
+                if ((eScannedType & SvNumFormatType::TIME)
+                        && 0 < i && (nTypeArray[i-1] == NF_KEY_S || nTypeArray[i-1] == NF_KEY_SS))
                 {
-                    bDecSep = true;                  // for SS,0
+                    // For ISO 8601 only YYYY-MM-DD"T"HH:MM:SS,0  accept both
+                    // ',' and '.' regardless of locale's separator, and only
+                    // those.
+                    // XXX NOTE: this catches only known separators of
+                    // NF_SYMBOLTYPE_DEL as all NF_SYMBOLTYPE_STRING are
+                    // skipped during the loop. Meant to error out if the
+                    // Time100SecSep or decimal separator differ and were used.
+                    if ((eScannedType & SvNumFormatType::DATE)
+                            && 11 <= i && i < nStringsCnt-1
+                            && (nTypeArray[i-6] == NF_SYMBOLTYPE_STRING
+                                && (sStrArray[i-6] == "\"T\"" || sStrArray[i-6] == "\\T"
+                                    || sStrArray[i-6] == "T"))
+                            && (nTypeArray[i-11] == NF_KEY_YYYY)
+                            && (nTypeArray[i-9] == NF_KEY_M || nTypeArray[i-9] == NF_KEY_MM)
+                            && (nTypeArray[i-7] == NF_KEY_D || nTypeArray[i-7] == NF_KEY_DD)
+                            && (nTypeArray[i-5] == NF_KEY_H || nTypeArray[i-5] == NF_KEY_HH)
+                            && (nTypeArray[i-3] == NF_KEY_MI || nTypeArray[i-3] == NF_KEY_MMI)
+                            && (nTypeArray[i+1] == NF_SYMBOLTYPE_DEL && sStrArray[i+1][0] == '0'))
+
+                    {
+                        if (sStrArray[i].getLength() == 1 && (sStrArray[i][0] == ',' || sStrArray[i][0] == '.'))
+                            bDecSep = true;
+                        else
+                            return nPos;            // Error
+                    }
+                    else if (pLoc->getTime100SecSep() == sStrArray[i])
+                        bDecSep = true;
                 }
                 eNewType = SvNumFormatType::UNDEFINED;
                 break;

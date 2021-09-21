@@ -660,7 +660,7 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl(std::vector<OUString>& rL
 
     // Always add the internally generated ISO formats.
     nSelPos = FillEListWithFormats_Impl(rList, nSelPos, NF_DATETIME_ISO_YYYYMMDD_HHMMSS,
-                                        NF_DATETIME_ISO_YYYYMMDDTHHMMSS, false);
+                                        NF_DATETIME_ISO_YYYYMMDDTHHMMSS000, false);
 
     return nSelPos;
 }
@@ -720,6 +720,7 @@ bool SvxNumberFormatShell::IsEssentialFormat_Impl(SvNumFormatType eType, sal_uIn
         case NF_DATETIME_SYS_DDMMYYYY_HHMMSS:
         case NF_DATETIME_ISO_YYYYMMDD_HHMMSS:
         case NF_DATETIME_ISO_YYYYMMDDTHHMMSS:
+        case NF_DATETIME_ISO_YYYYMMDDTHHMMSS000:
             return true;
         default:
             break;
