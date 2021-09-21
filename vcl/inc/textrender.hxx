@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_CAIROFONTIMPL_HXX
-#define INCLUDED_VCL_INC_UNX_CAIROFONTIMPL_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -64,7 +63,5 @@ public:
                                     GetTextLayout(int nFallbackLevel) = 0;
     virtual void                    DrawTextLayout(const GenericSalLayout&, const SalGraphics&) = 0;
 };
-
-#endif
 
 /* vim:set tabstop=4 shiftwidth=4 softtabstop=4 expandtab: */
