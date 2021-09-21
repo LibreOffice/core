@@ -258,7 +258,7 @@ namespace sdr::contact
                 for (sal_Int32 i = 0; i < nObjCount; ++i)
                 {
                     SdrObject* pObject = GetSdrPage()->GetObj(i);
-                    if (rRedrawArea.IsOver(pObject->GetCurrentBoundRect()))
+                    if (rRedrawArea.Overlaps(pObject->GetCurrentBoundRect()))
                     {
                         bGetHierarchy = true;
                         break;

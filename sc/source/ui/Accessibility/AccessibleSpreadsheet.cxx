@@ -693,7 +693,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
 
                 Rectangle aNewPos(aNewVisCells);
 
-                if (aNewVisCells.IsOver(maVisCells))
+                if (aNewVisCells.Overlaps(maVisCells))
                     aNewPos.Union(maVisCells);
                 else
                     CommitTableModelChange(maVisCells.Top(), maVisCells.Left(), maVisCells.Bottom(), maVisCells.Right(), AccessibleTableModelChangeType::UPDATE);

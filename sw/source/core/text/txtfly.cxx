@@ -1123,7 +1123,7 @@ void SwTextFly::CalcRightMargin( SwRect &rFly,
     // and protrudes into the same line.
     // Flys with run-through are invisible for those below, i.e., they
     // are ignored for computing the margins of other Flys.
-    // 3301: pNext->getFrameArea().IsOver( rLine ) is necessary
+    // 3301: pNext->getFrameArea().Overlaps( rLine ) is necessary
     // #i68520#
     css::text::WrapTextMode eSurroundForTextWrap;
 
@@ -1214,7 +1214,7 @@ void SwTextFly::CalcLeftMargin( SwRect &rFly,
     // and protrudes into the same line.
     // Flys with run-through are invisible for those below, i.e., they
     // are ignored for computing the margins of other Flys.
-    // 3301: pNext->getFrameArea().IsOver( rLine ) is necessary
+    // 3301: pNext->getFrameArea().Overlaps( rLine ) is necessary
 
     // #i68520#
     SwAnchoredObjList::size_type nMyPos = nFlyPos;
