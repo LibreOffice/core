@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc630614_46cfb1af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-22T21:04:34Z",
+      "side": 1,
+      "message": "Na, as I additionally stated",
+      "revId": "a299894277da08389eb0fa8d8b80f8c2ff11907c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb276e50_e55100f6",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-22T21:04:34Z",
+      "side": 1,
+      "message": "Here I get the following values which are the same as in a cell in calc:\n01.01.0001 -693595 \n02.01.0001 -693594 \n30.12.1899  0\n\nIn addition, if I calculate \u003dDAYS(\"30.12.1899\"; \"01.01.0001\") I get 693595.",
+      "revId": "a299894277da08389eb0fa8d8b80f8c2ff11907c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9dfb396_70c4c4b2",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-22T21:04:34Z",
+      "side": 1,
+      "message": "Here the problem arises. The GetNullDate returns 693594 leading to a negative number of days (nDays1).",
+      "revId": "a299894277da08389eb0fa8d8b80f8c2ff11907c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

@@ -34,6 +34,24 @@
       "parentUuid": "6edb8efb_ea41efc3",
       "revId": "5fc94be9d55791340a56f238ded12261f68af552",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28843302_4a662d2b",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-22T21:04:34Z",
+      "side": 0,
+      "message": "I even tried a calculation using 02.01.0001:\nsal_uInt16 nDay \u003d 2;\nsal_uInt16 nMonth \u003d 1;\nsal_uInt16 nYear \u003d 1;\nsal_Int32 nDays \u003d DateToDays(nDay, nMonth, nYear);\n\nI would expect that one day passed, but nDays is 2, since the days are just added. For 01.01.0001 nDays is 1. Hence one day passed? *confused I don\u0027t know, but I would rather expect it to be 0.",
+      "parentUuid": "6edb8efb_ea41efc3",
+      "revId": "5fc94be9d55791340a56f238ded12261f68af552",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
