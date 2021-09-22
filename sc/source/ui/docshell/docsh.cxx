@@ -3409,10 +3409,17 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDBF(SvStream &rStream)
 {
     ScDLL::Init();
 
-    utl::TempFile aTempInput;
+    // we need a real file for this filter
+
+    // put it in an empty dir
+    utl::TempFile aTmpDir(nullptr, true);
+    aTmpDir.EnableKillingFile();
+    OUString sTmpDir = aTmpDir.GetURL();
+
+    OUString sNoExtension;
+    utl::TempFile aTempInput(OUString(), true, &sNoExtension, &sTmpDir);
     aTempInput.EnableKillingFile();
 
-    // need a real file for this filter
     SvStream* pInputStream = aTempInput.GetStream(StreamMode::WRITE);
     sal_uInt8 aBuffer[8192];
     while (auto nRead = rStream.ReadBytes(aBuffer, SAL_N_ELEMENTS(aBuffer)))
