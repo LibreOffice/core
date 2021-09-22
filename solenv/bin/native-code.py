@@ -111,6 +111,8 @@ core_constructor_list = [
     "com_sun_star_comp_configuration_Update_get_implementation",
 # connectivity/source/manager/sdbc2.component
     ("connectivity_OSDBCDriverManager_get_implementation", "#if HAVE_FEATURE_DBCONNECTIVITY"),
+# connectivity/source/drivers/dbase/dbase.component
+    ("connectivity_dbase_ODriver", "#if HAVE_FEATURE_DBCONNECTIVITY"),
 # cppcanvas/source/uno/mtfrenderer.component
     "com_sun_star_comp_rendering_MtfRenderer_get_implementation",
 # cui/util/cui.component
