@@ -32,6 +32,7 @@
 #include <bitmaps.hlst>
 #include <cursor_hotspots.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/thread.h>
 #include <osl/process.h>
 
@@ -875,7 +876,7 @@ struct ButtonOrder
 
 }
 
-int getButtonPriority(const OString &rType)
+int getButtonPriority(std::string_view rType)
 {
     static const size_t N_TYPES = 8;
     static const ButtonOrder aDiscardCancelSave[N_TYPES] =
@@ -915,7 +916,7 @@ int getButtonPriority(const OString &rType)
 
     for (size_t i = 0; i < N_TYPES; ++i, ++pOrder)
     {
-        if (rType.endsWith(pOrder->m_aType))
+        if (o3tl::ends_with(rType, pOrder->m_aType))
             return pOrder->m_nPriority;
     }
 

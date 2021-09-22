@@ -39,6 +39,7 @@
 #include <saltimer.hxx>
 #include <o3tl/enumarray.hxx>
 
+#include <string_view>
 #include <vector>
 
 namespace com::sun::star::accessibility { class XAccessibleEventListener; }
@@ -195,7 +196,7 @@ inline GdkGLContext* surface_create_gl_context(GdkSurface* pSurface)
 typedef GtkClipboard GdkClipboard;
 #endif
 
-int getButtonPriority(const OString &rType);
+int getButtonPriority(std::string_view rType);
 
 class GtkSalTimer final : public SalTimer
 {
