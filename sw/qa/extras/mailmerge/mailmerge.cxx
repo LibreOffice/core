@@ -234,7 +234,7 @@ public:
         if (mnCurOutputType != text::MailMergeType::FILE)
             return nullptr;
 
-        OUString name = msMailMergeOutputPrefix + OUString::number( 0 ) + ".odt";
+        OUString name = msMailMergeOutputPrefix + OUString::number(1) + ".odt";
         return parseExportInternal( msMailMergeOutputURL + "/" + name, rStreamName );
     }
 
@@ -268,7 +268,7 @@ public:
             aURLObj.SetSmartURL( msMailMergeDocumentURL );
             name = aURLObj.GetBase();
         }
-        name += OUString::number( number ) + ".odt";
+        name += OUString::number(number+1) + ".odt";
         loadMailMergeDocument( name );
     }
 
