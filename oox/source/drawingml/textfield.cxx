@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <drawingml/textfield.hxx>
 
 #include <rtl/ustring.hxx>
@@ -26,6 +30,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 
+#include <o3tl/string_view.hxx>
 #include <oox/helper/helper.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/core/xmlfilterbase.hxx>
@@ -56,11 +61,11 @@ namespace {
  * @param sType the OpenXML field type.
  */
 void lclCreateTextFields( std::vector< Reference< XTextField > > & aFields,
-                                                            const Reference< XModel > & xModel, const OUString & sType )
+                                                            const Reference< XModel > & xModel, std::u16string_view sType )
 {
     Reference< XInterface > xIface;
     Reference< XMultiServiceFactory > xFactory( xModel, UNO_QUERY_THROW );
-    if( sType.startsWith("datetime"))
+    if( o3tl::starts_with(sType, u"datetime"))
     {
         OString s = OUStringToOString( sType, RTL_TEXTENCODING_UTF8);
         OString p( s.pData->buffer + 8 );
@@ -100,22 +105,22 @@ void lclCreateTextFields( std::vector< Reference< XTextField > > & aFields,
             TOOLS_WARN_EXCEPTION("oox", "");
         }
     }
-    else if ( sType == "slidenum" )
+    else if ( sType == u"slidenum" )
     {
         xIface = xFactory->createInstance( "com.sun.star.text.TextField.PageNumber" );
         aFields.emplace_back( xIface, UNO_QUERY );
     }
-    else if ( sType == "slidecount" )
+    else if ( sType == u"slidecount" )
     {
         xIface = xFactory->createInstance( "com.sun.star.text.TextField.PageCount" );
         aFields.emplace_back( xIface, UNO_QUERY );
     }
-    else if ( sType == "slidename" )
+    else if ( sType == u"slidename" )
     {
         xIface = xFactory->createInstance( "com.sun.star.text.TextField.PageName" );
         aFields.emplace_back( xIface, uno::UNO_QUERY );
     }
-    else if ( sType.startsWith("file") )
+    else if ( o3tl::starts_with(sType, u"file") )
     {
         OString s = OUStringToOString( sType, RTL_TEXTENCODING_UTF8);
         OString p( s.pData->buffer + 4 );
@@ -139,7 +144,7 @@ void lclCreateTextFields( std::vector< Reference< XTextField > > & aFields,
                 xProps->setPropertyValue("FileFormat", makeAny<sal_Int16>(0));
         }
     }
-    else if( sType == "author" )
+    else if( sType == u"author" )
     {
         xIface = xFactory->createInstance( "com.sun.star.text.TextField.Author" );
         aFields.emplace_back( xIface, UNO_QUERY );

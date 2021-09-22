@@ -21,6 +21,7 @@
 
 #include <sal/log.hxx>
 #include <filter/msfilter/util.hxx>
+#include <o3tl/string_view.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/export/shapes.hxx>
 #include <oox/export/utils.hxx>
@@ -95,88 +96,88 @@ using ::sax_fastparser::FSHelperPtr;
 
 namespace oox {
 
-static void lcl_ConvertProgID(OUString const& rProgID,
+static void lcl_ConvertProgID(std::u16string_view rProgID,
     OUString & o_rMediaType, OUString & o_rRelationType, OUString & o_rFileExtension)
 {
-    if (rProgID == "Excel.Sheet.12")
+    if (rProgID == u"Excel.Sheet.12")
     {
         o_rMediaType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
         o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
         o_rFileExtension = "xlsx";
     }
-    else if (rProgID.startsWith("Excel.SheetBinaryMacroEnabled.12") )
+    else if (o3tl::starts_with(rProgID, u"Excel.SheetBinaryMacroEnabled.12") )
     {
         o_rMediaType = "application/vnd.ms-excel.sheet.binary.macroEnabled.12";
         o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
         o_rFileExtension = "xlsb";
     }
-    else if (rProgID.startsWith("Excel.SheetMacroEnabled.12"))
+    else if (o3tl::starts_with(rProgID, u"Excel.SheetMacroEnabled.12"))
     {
         o_rMediaType = "application/vnd.ms-excel.sheet.macroEnabled.12";
         o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
         o_rFileExtension = "xlsm";
     }
-    else if (rProgID.startsWith("Excel.Sheet"))
+    else if (o3tl::starts_with(rProgID, u"Excel.Sheet"))
     {
         o_rMediaType = "application/vnd.ms-excel";
         o_rRelationType = oox::getRelationship(Relationship::OLEOBJECT);
         o_rFileExtension = "xls";
     }
-    else if (rProgID == "PowerPoint.Show.12")
+    else if (rProgID == u"PowerPoint.Show.12")
     {
         o_rMediaType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
         o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
         o_rFileExtension = "pptx";
     }
-    else if (rProgID == "PowerPoint.ShowMacroEnabled.12")
+    else if (rProgID == u"PowerPoint.ShowMacroEnabled.12")
     {
         o_rMediaType = "application/vnd.ms-powerpoint.presentation.macroEnabled.12";
         o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
         o_rFileExtension = "pptm";
     }
-    else if (rProgID.startsWith("PowerPoint.Show"))
+    else if (o3tl::starts_with(rProgID, u"PowerPoint.Show"))
     {
         o_rMediaType = "application/vnd.ms-powerpoint";
         o_rRelationType = oox::getRelationship(Relationship::OLEOBJECT);
         o_rFileExtension = "ppt";
     }
-    else if (rProgID.startsWith("PowerPoint.Slide.12"))
+    else if (o3tl::starts_with(rProgID, u"PowerPoint.Slide.12"))
     {
        o_rMediaType = "application/vnd.openxmlformats-officedocument.presentationml.slide";
        o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
        o_rFileExtension = "sldx";
     }
-    else if (rProgID == "PowerPoint.SlideMacroEnabled.12")
+    else if (rProgID == u"PowerPoint.SlideMacroEnabled.12")
     {
        o_rMediaType = "application/vnd.ms-powerpoint.slide.macroEnabled.12";
        o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
        o_rFileExtension = "sldm";
     }
-    else if (rProgID == "Word.DocumentMacroEnabled.12")
+    else if (rProgID == u"Word.DocumentMacroEnabled.12")
     {
         o_rMediaType = "application/vnd.ms-word.document.macroEnabled.12";
         o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
         o_rFileExtension = "docm";
     }
-    else if (rProgID == "Word.Document.12")
+    else if (rProgID == u"Word.Document.12")
     {
         o_rMediaType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
         o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
         o_rFileExtension = "docx";
     }
-    else if (rProgID == "Word.Document.8")
+    else if (rProgID == u"Word.Document.8")
     {
         o_rMediaType = "application/msword";
         o_rRelationType = oox::getRelationship(Relationship::OLEOBJECT);
         o_rFileExtension = "doc";
     }
-    else if (rProgID == "Excel.Chart.8")
+    else if (rProgID == u"Excel.Chart.8")
     {
         o_rMediaType = "application/vnd.ms-excel";
         o_rRelationType = oox::getRelationship(Relationship::OLEOBJECT);
         o_rFileExtension = "xls";
     }
-    else if (rProgID == "AcroExch.Document.11")
+    else if (rProgID == u"AcroExch.Document.11")
     {
         o_rMediaType = "application/pdf";
         o_rRelationType = oox::getRelationship(Relationship::OLEOBJECT);
@@ -272,7 +273,7 @@ static uno::Reference<io::XInputStream> lcl_StoreOwnAsOOXML(
 uno::Reference<io::XInputStream> GetOLEObjectStream(
         uno::Reference<uno::XComponentContext> const& xContext,
         uno::Reference<embed::XEmbeddedObject> const& xObj,
-        OUString const& i_rProgID,
+        std::u16string_view i_rProgID,
         OUString & o_rMediaType,
         OUString & o_rRelationType,
         OUString & o_rSuffix,

@@ -22,6 +22,7 @@
 
 #include <cstddef>
 #include <memory>
+#include <string_view>
 #include <unordered_map>
 
 #include <com/sun/star/awt/Size.hpp>
@@ -67,7 +68,7 @@ namespace oox {
 OOX_DLLPUBLIC css::uno::Reference<css::io::XInputStream> GetOLEObjectStream(
     css::uno::Reference<css::uno::XComponentContext> const& xContext,
     css::uno::Reference<css::embed::XEmbeddedObject> const& xObj,
-    OUString const& i_rProgID,
+    std::u16string_view i_rProgID,
     OUString & o_rMediaType,
     OUString & o_rRelationType,
     OUString & o_rSuffix,
