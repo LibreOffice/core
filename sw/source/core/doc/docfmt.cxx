@@ -1898,7 +1898,7 @@ void SwDoc::ChgFormat(SwFormat & rFormat, const SfxItemSet & rSet)
         }
 
         GetIDocumentUndoRedo().AppendUndo(
-            std::make_unique<SwUndoFormatAttr>(aOldSet, rFormat, /*bSaveDrawPt*/true));
+            std::make_unique<SwUndoFormatAttr>(std::move(aOldSet), rFormat, /*bSaveDrawPt*/true));
     }
 
     rFormat.SetFormatAttr(rSet);

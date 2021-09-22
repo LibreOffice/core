@@ -86,7 +86,7 @@ class SwUndoFormatAttr final : public SwUndo
 {
     friend class SwUndoDefaultAttr;
     OUString m_sFormatName;
-    std::unique_ptr<SfxItemSet> m_pOldSet;      // old attributes
+    std::optional<SfxItemSet> m_oOldSet;      // old attributes
     sal_uLong m_nNodeIndex;
     const sal_uInt16 m_nFormatWhich;
     const bool m_bSaveDrawPt;
@@ -107,7 +107,7 @@ class SwUndoFormatAttr final : public SwUndo
 public:
     // register at the Format and save old attributes
     // --> OD 2008-02-27 #refactorlists# - removed <rNewSet>
-    SwUndoFormatAttr( const SfxItemSet& rOldSet,
+    SwUndoFormatAttr( SfxItemSet&& rOldSet,
                    SwFormat& rFormat,
                    bool bSaveDrawPt );
     SwUndoFormatAttr( const SfxPoolItem& rItem,
@@ -196,7 +196,7 @@ public:
 
 class SwUndoDefaultAttr final : public SwUndo
 {
-    std::unique_ptr<SfxItemSet> m_pOldSet;          // the old attributes
+    std::optional<SfxItemSet> m_oOldSet;          // the old attributes
     std::unique_ptr<SvxTabStopItem> m_pTabStop;
 
 public:

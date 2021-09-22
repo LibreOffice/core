@@ -488,8 +488,8 @@ SwUndoSetFlyFormat::SwUndoSetFlyFormat( SwFrameFormat& rFlyFormat, const SwFrame
     : SwUndo( SwUndoId::SETFLYFRMFMT, rFlyFormat.GetDoc() ), SwClient( &rFlyFormat ), m_pFrameFormat( &rFlyFormat ),
     m_DerivedFromFormatName( rFlyFormat.IsDefault() ? "" : rFlyFormat.DerivedFrom()->GetName() ),
     m_NewFormatName( rNewFrameFormat.GetName() ),
-    m_pItemSet( new SfxItemSet( *rFlyFormat.GetAttrSet().GetPool(),
-                                rFlyFormat.GetAttrSet().GetRanges() )),
+    m_oItemSet( std::in_place, *rFlyFormat.GetAttrSet().GetPool(),
+                rFlyFormat.GetAttrSet().GetRanges() ),
     m_nOldNode( 0 ), m_nNewNode( 0 ),
     m_nOldContent( 0 ), m_nNewContent( 0 ),
     m_nOldAnchorType( RndStdIds::FLY_AT_PARA ), m_nNewAnchorType( RndStdIds::FLY_AT_PARA ), m_bAnchorChanged( false )
@@ -571,11 +571,11 @@ void SwUndoSetFlyFormat::UndoImpl(::sw::UndoRedoContext & rContext)
     if( m_pFrameFormat->DerivedFrom() != pDerivedFromFrameFormat)
         m_pFrameFormat->SetDerivedFrom(pDerivedFromFrameFormat);
 
-    SfxItemIter aIter( *m_pItemSet );
+    SfxItemIter aIter( *m_oItemSet );
     for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
     {
         if( IsInvalidItem( pItem ))
-            m_pFrameFormat->ResetFormatAttr( m_pItemSet->GetWhichByPos(
+            m_pFrameFormat->ResetFormatAttr( m_oItemSet->GetWhichByPos(
                                     aIter.GetCurPos() ));
         else
             m_pFrameFormat->SetFormatAttr( *pItem );
@@ -696,10 +696,10 @@ void SwUndoSetFlyFormat::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
             }
         }
         else
-            m_pItemSet->Put( *pItem );
+            m_oItemSet->Put( *pItem );
     }
     else
-        m_pItemSet->InvalidateItem( nWhich );
+        m_oItemSet->InvalidateItem( nWhich );
 }
 
 void SwUndoSetFlyFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
