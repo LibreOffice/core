@@ -27,6 +27,7 @@
 
 #include <bitmaps.hlst>
 #include <fpicker/strings.hrc>
+#include <o3tl/string_view.hxx>
 #include <svx/svxids.hrc>
 #include <tools/diagnose_ex.h>
 #include <unotools/resmgr.hxx>
@@ -1634,9 +1635,9 @@ namespace svxform
             SetDocModified();
     }
 
-    bool DataNavigatorWindow::IsAdditionalPage(const OString& rIdent)
+    bool DataNavigatorWindow::IsAdditionalPage(std::string_view rIdent)
     {
-        return rIdent.startsWith("additional");
+        return o3tl::starts_with(rIdent, "additional");
     }
 
     IMPL_LINK( DataNavigatorWindow, MenuActivateHdl, weld::Toggleable&, rBtn, void )

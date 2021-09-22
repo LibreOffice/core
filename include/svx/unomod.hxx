@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SVX_UNOMOD_HXX
 #define INCLUDED_SVX_UNOMOD_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/document/EventObject.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
@@ -49,7 +53,7 @@ public:
 
     /// @throws css::uno::Exception
     /// @throws css::uno::RuntimeException
-    static css::uno::Reference< css::uno::XInterface > createTextField( const OUString& aServiceSpecifier );
+    static css::uno::Reference< css::uno::XInterface > createTextField( std::u16string_view aServiceSpecifier );
 
     /** fills the given EventObject from the given SdrHint.
         @returns
