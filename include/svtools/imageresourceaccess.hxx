@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <string_view>
 
 #include <config_options.h>
 #include <svtools/svtdllapi.h>
@@ -41,7 +42,7 @@ namespace svt::GraphicAccess
 */
 
 /** determines whether the given URL denotes an image within a resource */
-UNLESS_MERGELIBS(SVT_DLLPUBLIC) bool isSupportedURL(OUString const & rURL);
+UNLESS_MERGELIBS(SVT_DLLPUBLIC) bool isSupportedURL(std::u16string_view rURL);
 
 /** for a given URL of an image within a resource, this method retrieves an
     SvStream for this image.
