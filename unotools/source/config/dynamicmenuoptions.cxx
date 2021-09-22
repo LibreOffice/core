@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
 #include <tools/debug.hxx>
@@ -30,6 +31,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <string_view>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -51,7 +53,7 @@ constexpr OUStringLiteral SETNODE_WIZARDMENU = u"Wizard";
 
 #define PROPERTYCOUNT                                   4
 
-constexpr OUStringLiteral PATHPREFIX_SETUP = u"m";
+constexpr std::u16string_view PATHPREFIX_SETUP = u"m";
 
 namespace
 {
@@ -300,10 +302,10 @@ static void lcl_SortAndExpandPropertyNames( const Sequence< OUString >& lSource 
     };
     struct SelectByPrefix
     {
-        bool operator() ( const OUString& s ) const
+        bool operator() ( std::u16string_view s ) const
         {
             // Prefer setup written entries by check first letter of given string. It must be a "s".
-            return s.startsWith( PATHPREFIX_SETUP );
+            return o3tl::starts_with( s, PATHPREFIX_SETUP );
         }
     };
 
