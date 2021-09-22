@@ -48,6 +48,7 @@ private:
     DECL_LINK(SwapOutTimerHandler, Timer*, void);
 
     static sal_Int64 getGraphicSizeBytes(const ImpGraphic* pImpGraphic);
+    void reduceGraphicMemory();
 
 public:
     static Manager& get();
@@ -55,7 +56,6 @@ public:
     void swappedIn(const ImpGraphic* pImpGraphic, sal_Int64 nSizeBytes);
     void swappedOut(const ImpGraphic* pImpGraphic, sal_Int64 nSizeBytes);
 
-    void reduceGraphicMemory();
     void changeExisting(const ImpGraphic* pImpGraphic, sal_Int64 nOldSize);
     void unregisterGraphic(ImpGraphic* pImpGraphic);
 

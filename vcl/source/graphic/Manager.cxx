@@ -110,13 +110,13 @@ void Manager::loopGraphicsAndSwapOut()
 
 void Manager::reduceGraphicMemory()
 {
+    // maMutex is locked in callers
+
     if (!mbSwapEnabled)
         return;
 
     if (mnUsedSize < mnMemoryLimit)
         return;
-
-    std::scoped_lock aGuard(maMutex);
 
     // avoid recursive reduceGraphicMemory on reexport of tdf118346-1.odg to odg
     if (mbReducingGraphicMemory)
