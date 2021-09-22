@@ -388,6 +388,44 @@ def enforce_active_in_group_consistency(current):
       active.text = "True"
       current.insert(insertpos, active)
 
+def enforce_entry_text_column_id_column_for_gtkcombobox(current):
+  entrytextcolumn = None
+  idcolumn = None
+  isgtkcombobox = current.get('class') == "GtkComboBox"
+  insertpos = 0
+  for child in current:
+    enforce_entry_text_column_id_column_for_gtkcombobox(child)
+    if not isgtkcombobox:
+        continue
+    if child.tag == "property":
+      insertpos = insertpos + 1;
+      attributes = child.attrib
+      if attributes.get("name") == "entry_text_column":
+        entrytextcolumn = child
+      if attributes.get("name") == "id_column":
+        idcolumn = child
+
+  if isgtkcombobox:
+    if entrytextcolumn != None and entrytextcolumn.text != "0":
+      raise Exception(sys.argv[1] + ': non-standard entry_text_column value', entrytextcolumn.text)
+    if idcolumn != None and idcolumn.text != "1":
+      raise Exception(sys.argv[1] + ': non-standard id_column value', idcolumn.text)
+    if entrytextcolumn == None:
+      # if there is no entry_text_column, create one
+      entrytextcolumn = etree.Element("property")
+      attributes = entrytextcolumn.attrib
+      attributes["name"] = "entry_text_column"
+      entrytextcolumn.text = "0"
+      current.insert(insertpos, entrytextcolumn)
+      insertpos = insertpos + 1;
+    if idcolumn == None:
+      # if there is no id_column, create one
+      idcolumn = etree.Element("property")
+      attributes = idcolumn.attrib
+      attributes["name"] = "id_column"
+      idcolumn.text = "1"
+      current.insert(insertpos, idcolumn)
+
 with open(sys.argv[1], encoding="utf-8") as f:
   header = f.readline()
   f.seek(0)
@@ -417,8 +455,10 @@ remove_expander_label_fill(root)
 remove_expander_spacing(root)
 enforce_menubutton_indicator_consistency(root)
 enforce_active_in_group_consistency(root)
+enforce_entry_text_column_id_column_for_gtkcombobox(root)
 remove_double_buffered(root)
 remove_skip_pager_hint(root)
+
 
 with open(sys.argv[1], 'wb') as o:
   # without encoding='unicode' (and the matching encode("utf8")) we get &#XXXX replacements for non-ascii characters

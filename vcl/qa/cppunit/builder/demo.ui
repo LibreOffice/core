@@ -199,6 +199,8 @@
                       <object class="GtkComboBox" id="combobox1">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <property name="entry_text_column">0</property>
+                        <property name="id_column">1</property>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -733,6 +735,8 @@
                           <object class="GtkComboBox" id="LB_PAGE_PROPERTIES">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
+                            <property name="entry_text_column">0</property>
+                            <property name="id_column">1</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -864,6 +868,8 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="model">liststore1</property>
+                        <property name="entry_text_column">0</property>
+                        <property name="id_column">1</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1299,6 +1305,8 @@
                                   <object class="GtkComboBox" id="combobox2">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
+                                    <property name="entry_text_column">0</property>
+                                    <property name="id_column">1</property>
                                   </object>
                                   <packing>
                                     <property name="left-attach">0</property>
@@ -1362,6 +1370,8 @@
                                   <object class="GtkComboBox" id="combobox3">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
+                                    <property name="entry_text_column">0</property>
+                                    <property name="id_column">1</property>
                                   </object>
                                   <packing>
                                     <property name="left-attach">1</property>
@@ -1372,6 +1382,8 @@
                                   <object class="GtkComboBox" id="combobox4">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
+                                    <property name="entry_text_column">0</property>
+                                    <property name="id_column">1</property>
                                   </object>
                                   <packing>
                                     <property name="left-attach">1</property>
@@ -1628,6 +1640,8 @@
                           <object class="GtkComboBox" id="combobox5">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
+                            <property name="entry_text_column">0</property>
+                            <property name="id_column">1</property>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
@@ -1684,6 +1698,8 @@
                           <object class="GtkComboBox" id="combobox6">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
+                            <property name="entry_text_column">0</property>
+                            <property name="id_column">1</property>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
