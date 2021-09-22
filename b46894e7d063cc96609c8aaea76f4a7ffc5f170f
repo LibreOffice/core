@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "33e630f0_55529e41",
+        "filename": "include/o3tl/string_view.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-22T07:05:36Z",
+      "side": 1,
+      "message": "Or are you pointing to this templated function? I must had misunderstood it. Sorry.",
+      "range": {
+        "startLine": 55,
+        "startChar": 15,
+        "endLine": 55,
+        "endChar": 26
+      },
+      "revId": "b46894e7d063cc96609c8aaea76f4a7ffc5f170f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e86ce3bd_04feaa4c",
         "filename": "include/o3tl/string_view.hxx",
         "patchSetId": 2
