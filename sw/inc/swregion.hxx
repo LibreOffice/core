@@ -55,8 +55,9 @@ public:
     // Ensures all rectangles are within the origin area.
     void LimitToOrigin();
 
+    enum CompressType { CompressExact, CompressFuzzy };
     // Combine adjacent rectangles.
-    void Compress();
+    void Compress( CompressType type );
 
     const SwRect &GetOrigin() const { return m_aOrigin; }
     void ChangeOrigin( const SwRect &rRect ) { m_aOrigin = rRect; }
