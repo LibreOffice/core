@@ -33,6 +33,24 @@
       "message": ".",
       "revId": "56795f50abad3de960f23e85b2ccfa1ba0181370",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dc8aa08_7178c5d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2021-09-22T07:16:33Z",
+      "side": 1,
+      "message": "I\u0027ve merged this to master with your JSON assertion fix in it (CI found no issues with it).",
+      "parentUuid": "f6f20c3a_e3b929d8",
+      "revId": "56795f50abad3de960f23e85b2ccfa1ba0181370",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
