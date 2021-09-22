@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83f0e9d1_86f68b0b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-09-22T08:08:23Z",
+      "side": 1,
+      "message": "Very good.\n\nIt would be great if we could somehow enforce this our bin/ui-rules-enforcer.py script",
+      "revId": "5bec6685268dd4d15dff6f67cab3e280394f0250",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
