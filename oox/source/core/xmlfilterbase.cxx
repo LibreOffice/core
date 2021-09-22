@@ -1020,6 +1020,18 @@ bool XmlFilterBase::isMSO2007Document() const
     return mbMSO2007;
 }
 
+bool XmlFilterBase::isMSODocument() const
+{
+    Reference< XComponent > xModel = getModel();
+    Reference< XDocumentPropertiesSupplier > xPropSupplier(xModel, UNO_QUERY);
+    Reference< XDocumentProperties > xDocProps = xPropSupplier->getDocumentProperties();
+    if (!xDocProps->getGenerator().startsWithIgnoreAsciiCase("Microsoft"))
+    {
+        return false;
+    }
+    return true;
+}
+
 void XmlFilterBase::setMissingExtDrawing()
 {
     mbMissingExtDrawing = true;

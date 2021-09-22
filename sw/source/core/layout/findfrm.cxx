@@ -440,7 +440,9 @@ SwFootnoteBossFrame* SwFrame::FindFootnoteBossFrame( bool bFootnotes )
     // don't contain footnote texts there
     if( pRet->IsInTab() )
         pRet = pRet->FindTabFrame();
-    while ( pRet && !pRet->IsFootnoteBossFrame() )
+    SwSectionFrame* pSectframe = pRet->FindSctFrame();
+    bool bFAtEnd = pSectframe ? pSectframe->IsFootnoteAtEnd() : false;
+    while ( pRet && (bFAtEnd && !pRet->IsFootnoteBossFrame() || !bFAtEnd && !pRet->IsPageFrame()))
     {
         if ( pRet->GetUpper() )
             pRet = pRet->GetUpper();
