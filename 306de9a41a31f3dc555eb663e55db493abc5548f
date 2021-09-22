@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9b733b8_be02f404",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-09-22T08:01:24Z",
+      "side": 1,
+      "message": "We don\u0027t have any iOS Gerrit build thing anyway, so if this passes configury on other platforms, too, that is all we can check.",
+      "revId": "306de9a41a31f3dc555eb663e55db493abc5548f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
