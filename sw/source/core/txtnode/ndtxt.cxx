@@ -1971,9 +1971,9 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
     if (pDest->GetDoc().IsClipBoard() && GetNum())
     {
         // #i111677# cache expansion of source (for clipboard)
-        pDest->m_pNumStringCache.reset( (nTextStartIdx != 0)
-            ? new OUString // fdo#49076: numbering only if copy from para start
-            : new OUString(GetNumString()));
+        pDest->m_oNumStringCache = (nTextStartIdx != 0)
+            ? OUString() // fdo#49076: numbering only if copy from para start
+            : GetNumString();
     }
 
     if( !nLen )
@@ -3086,10 +3086,10 @@ OUString SwTextNode::GetNumString( const bool _bInclPrefixAndSuffixStrings,
         const unsigned int _nRestrictToThisLevel,
         SwRootFrame const*const pLayout) const
 {
-    if (GetDoc().IsClipBoard() && m_pNumStringCache)
+    if (GetDoc().IsClipBoard() && m_oNumStringCache)
     {
         // #i111677# do not expand number strings in clipboard documents
-        return *m_pNumStringCache;
+        return *m_oNumStringCache;
     }
     const SwNumRule* pRule = GetNum(pLayout) ? GetNum(pLayout)->GetNumRule() : nullptr;
     if ( pRule &&

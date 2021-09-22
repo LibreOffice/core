@@ -117,7 +117,7 @@ class SW_DLLPUBLIC SwTextNode final
        Needed to avoid duplicate handling of attribute change actions. */
     bool mbInSetOrResetAttr;
 
-    std::unique_ptr< OUString > m_pNumStringCache;
+    std::optional< OUString > m_oNumStringCache;
 
     css::uno::WeakReference<css::text::XTextContent> m_wXParagraph;
 
