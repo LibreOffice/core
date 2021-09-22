@@ -3948,13 +3948,13 @@ void PPTParaSheet::Read( SdrPowerPointImport const &
                     , sal_uInt32 nLevel, bool bFirst )
 {
     // paragraph attributes
-    sal_uInt16  nVal16;
     sal_uInt32 nPMask(0);
     rIn.ReadUInt32(nPMask);
 
     sal_uInt16 nMask16 = static_cast<sal_uInt16>(nPMask) & 0xf;
     if ( nMask16 )
     {
+        sal_uInt16 nVal16(0);
         rIn.ReadUInt16( nVal16 );
         maParaLevel[ nLevel ].mnBuFlags &=~ nMask16;
         nVal16 &= nMask16;
@@ -3966,6 +3966,7 @@ void PPTParaSheet::Read( SdrPowerPointImport const &
         rIn.ReadUInt16( maParaLevel[ nLevel ].mnBulletFont );
     if ( nPMask & 0x0040 )
     {
+        sal_uInt16 nVal16(0);
         rIn.ReadUInt16( nVal16 );
         maParaLevel[ nLevel ].mnBulletHeight = nVal16;
     }
@@ -3978,7 +3979,9 @@ void PPTParaSheet::Read( SdrPowerPointImport const &
     if ( bFirst )
     {
         if ( nPMask & 0xF00 )
-        {   // AbsJust!
+        {
+            // AbsJust!
+            sal_uInt16 nVal16(0);
             rIn.ReadUInt16( nVal16 );
             maParaLevel[ nLevel ].mnAdjust = nVal16 & 3;
         }
@@ -3996,6 +3999,7 @@ void PPTParaSheet::Read( SdrPowerPointImport const &
             rIn.ReadUInt16( maParaLevel[ nLevel ].mnDefaultTab );
         if ( nPMask & 0x200000 )
         {
+            sal_uInt16 nVal16;
             sal_uInt32 nVal32;
             // number of tabulators
             rIn.ReadUInt16( nVal16 );
@@ -4005,7 +4009,10 @@ void PPTParaSheet::Read( SdrPowerPointImport const &
                 rIn.ReadUInt32( nVal32 );      // reading the tabulators
         }
         if ( nPMask & 0x40000 )
+        {
+            sal_uInt16 nVal16;
             rIn.ReadUInt16( nVal16 );
+        }
         if ( nPMask & 0x80000 )
             rIn.ReadUInt16( maParaLevel[ nLevel ].mnAsianLineBreak );
         if ( nPMask & 0x100000 )
@@ -4015,6 +4022,7 @@ void PPTParaSheet::Read( SdrPowerPointImport const &
     {
         if ( nPMask & 0x800 )
         {
+            sal_uInt16 nVal16(0);
             rIn.ReadUInt16( nVal16 );
             maParaLevel[ nLevel ].mnAdjust = nVal16 & 3;
         }
@@ -4025,18 +4033,28 @@ void PPTParaSheet::Read( SdrPowerPointImport const &
         if ( nPMask & 0x4000 )
             rIn.ReadUInt16( maParaLevel[ nLevel ].mnLowerDist );
         if ( nPMask & 0x8000 )
+        {
+            sal_uInt16 nVal16;
             rIn.ReadUInt16( nVal16 );
+        }
         if ( nPMask & 0x100 )
             rIn.ReadUInt16( maParaLevel[ nLevel ].mnTextOfs );
         if ( nPMask & 0x200 )
+        {
+            sal_uInt16 nVal16;
             rIn.ReadUInt16( nVal16 );
+        }
         if ( nPMask & 0x400 )
             rIn.ReadUInt16( maParaLevel[ nLevel ].mnBulletOfs );
         if ( nPMask & 0x10000 )
+        {
+            sal_uInt16 nVal16;
             rIn.ReadUInt16( nVal16 );
+        }
         if ( nPMask & 0xe0000 )
         {
             sal_uInt16 nFlagsToModifyMask = static_cast<sal_uInt16>( ( nPMask >> 17 ) & 7 );
+            sal_uInt16 nVal16(0);
             rIn.ReadUInt16( nVal16 );
             // bits that are not involved to zero
             nVal16 &= nFlagsToModifyMask;
@@ -4047,6 +4065,7 @@ void PPTParaSheet::Read( SdrPowerPointImport const &
         }
         if ( nPMask & 0x100000 )
         {
+            sal_uInt16 nVal16;
             sal_uInt32 nVal32;
             // number of tabulators
             rIn.ReadUInt16( nVal16 );
@@ -4070,6 +4089,7 @@ void PPTParaSheet::Read( SdrPowerPointImport const &
                 OSL_FAIL( "PPTParaSheet::Read - unknown attribute, send me this document (SJ)" );
             }
 #endif
+            sal_uInt16 nVal16;
             rIn.ReadUInt16( nVal16 );
         }
         nPMask >>= 1;
