@@ -21,6 +21,7 @@
 
 #include <algorithm>
 
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <tools/fract.hxx>
 #include <tools/helpers.hxx>
@@ -884,9 +885,9 @@ Graphic GraphicObject::GetTransformedGraphic( const GraphicAttr* pAttr ) const
     return aGraphic;
 }
 
-bool GraphicObject::isGraphicObjectUniqueIdURL(OUString const & rURL)
+bool GraphicObject::isGraphicObjectUniqueIdURL(std::u16string_view rURL)
 {
-    return rURL.startsWith("vnd.sun.star.GraphicObject:");
+    return o3tl::starts_with(rURL, u"vnd.sun.star.GraphicObject:");
 }
 
 // calculate scalings between real image size and logic object size. This

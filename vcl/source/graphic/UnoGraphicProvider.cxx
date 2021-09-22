@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/string_view.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/image.hxx>
 #include <vcl/metaact.hxx>
@@ -45,6 +46,7 @@
 #include <vcl/dibtools.hxx>
 #include <comphelper/sequence.hxx>
 #include <memory>
+#include <string_view>
 
 #include <vcl/TypeSerializer.hxx>
 
@@ -81,9 +83,9 @@ protected:
 private:
 
     static css::uno::Reference< css::graphic::XGraphic > implLoadMemory( const OUString& rResourceURL );
-    static css::uno::Reference< css::graphic::XGraphic > implLoadRepositoryImage( const OUString& rResourceURL );
+    static css::uno::Reference< css::graphic::XGraphic > implLoadRepositoryImage( std::u16string_view rResourceURL );
     static css::uno::Reference< css::graphic::XGraphic > implLoadBitmap( const css::uno::Reference< css::awt::XBitmap >& rBitmap );
-    static css::uno::Reference< css::graphic::XGraphic > implLoadStandardImage( const OUString& rResourceURL );
+    static css::uno::Reference< css::graphic::XGraphic > implLoadStandardImage( std::u16string_view rResourceURL );
 };
 
 GraphicProvider::GraphicProvider()
@@ -142,15 +144,15 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadMemory( const OUS
 }
 
 
-uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( const OUString& rResourceURL )
+uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( std::u16string_view rResourceURL )
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
 
-    OUString sPathName;
-    if( rResourceURL.startsWith("private:graphicrepository/", &sPathName) )
+    std::u16string_view sPathName;
+    if( o3tl::starts_with(rResourceURL, u"private:graphicrepository/", &sPathName) )
     {
         BitmapEx aBitmap;
-        if ( vcl::ImageRepository::loadImage( sPathName, aBitmap ) )
+        if ( vcl::ImageRepository::loadImage( OUString(sPathName), aBitmap ) )
         {
             xRet = Graphic(aBitmap).GetXGraphic();
         }
@@ -159,26 +161,26 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( 
 }
 
 
-uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( const OUString& rResourceURL )
+uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( std::u16string_view rResourceURL )
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
 
-    OUString sImageName;
-    if( rResourceURL.startsWith("private:standardimage/", &sImageName) )
+    std::u16string_view sImageName;
+    if( o3tl::starts_with(rResourceURL, u"private:standardimage/", &sImageName) )
     {
-        if ( sImageName == "info" )
+        if ( sImageName == u"info" )
         {
             xRet = Graphic(GetStandardInfoBoxImage().GetBitmapEx()).GetXGraphic();
         }
-        else if ( sImageName == "warning" )
+        else if ( sImageName == u"warning" )
         {
             xRet = Graphic(GetStandardWarningBoxImage().GetBitmapEx()).GetXGraphic();
         }
-        else if ( sImageName == "error" )
+        else if ( sImageName == u"error" )
         {
             xRet = Graphic(GetStandardErrorBoxImage().GetBitmapEx()).GetXGraphic();
         }
-        else if ( sImageName == "query" )
+        else if ( sImageName == u"query" )
         {
             xRet = Graphic(GetStandardQueryBoxImage().GetBitmapEx()).GetXGraphic();
         }

@@ -7,11 +7,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <config_features.h>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <comphelper/base64.hxx>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/enumrange.hxx>
+#include <o3tl/string_view.hxx>
 #include <tools/stream.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/toolkit/button.hxx>
@@ -747,7 +752,7 @@ struct ButtonOrder
 
 }
 
-static int getButtonPriority(const OString &rType)
+static int getButtonPriority(std::string_view rType)
 {
     static const size_t N_TYPES = 6;
     static const ButtonOrder aDiscardCancelSave[N_TYPES] =
@@ -783,7 +788,7 @@ static int getButtonPriority(const OString &rType)
 
     for (size_t i = 0; i < N_TYPES; ++i, ++pOrder)
     {
-        if (rType.endsWith(pOrder->m_aType))
+        if (o3tl::ends_with(rType, pOrder->m_aType))
             return pOrder->m_nPriority;
     }
 

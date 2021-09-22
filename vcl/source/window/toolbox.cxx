@@ -36,6 +36,7 @@
 #include <tools/poly.hxx>
 #include <svl/imageitm.hxx>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 
 #include <accel.hxx>
@@ -49,6 +50,7 @@
 
 #include <cstdlib>
 #include <map>
+#include <string_view>
 #include <vector>
 #include <math.h>
 
@@ -3591,12 +3593,12 @@ void ToolBox::Resize()
 
 namespace
 {
-    bool DispatchableCommand(const OUString& rName)
+    bool DispatchableCommand(std::u16string_view rName)
     {
-        return rName.startsWith(".uno")  ||
-               rName.startsWith("slot:")  ||
-               rName.startsWith("macro:")  ||
-               rName.startsWith("vnd.sun.star.script");
+        return o3tl::starts_with(rName, u".uno")  ||
+               o3tl::starts_with(rName, u"slot:")  ||
+               o3tl::starts_with(rName, u"macro:")  ||
+               o3tl::starts_with(rName, u"vnd.sun.star.script");
     }
 }
 

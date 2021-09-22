@@ -20,6 +20,7 @@
 #pragma once
 
 #include <memory>
+#include <string_view>
 #include <vcl/graph.hxx>
 #include <vcl/dllapi.h>
 #include <o3tl/typed_flags_set.hxx>
@@ -268,7 +269,7 @@ public:
 
     void                    StopAnimation( const OutputDevice* pOut = nullptr, tools::Long nExtraData = 0 );
 
-    static bool isGraphicObjectUniqueIdURL(OUString const & rURL);
+    static bool isGraphicObjectUniqueIdURL(std::u16string_view rURL);
 
     // create CropScaling information
     // fWidth, fHeight: object size
