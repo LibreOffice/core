@@ -17,7 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <svl/style.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 
 #include <stylehelper.hxx>
@@ -120,9 +125,9 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( SfxStyleFamily nType )
 
 constexpr OUStringLiteral SC_SUFFIX_USER = u" (user)";
 
-static bool lcl_EndsWithUser( const OUString& rString )
+static bool lcl_EndsWithUser( std::u16string_view rString )
 {
-    return rString.endsWith(SC_SUFFIX_USER);
+    return o3tl::ends_with(rString, SC_SUFFIX_USER);
 }
 
 OUString ScStyleNameConversion::DisplayToProgrammaticName( const OUString& rDispName, SfxStyleFamily nType )

@@ -30,6 +30,7 @@
 #include "vbaworkbooks.hxx"
 #include <vbahelper/vbahelper.hxx>
 
+#include <o3tl/string_view.hxx>
 #include <osl/file.hxx>
 #include <rtl/ref.hxx>
 
@@ -164,13 +165,13 @@ ScVbaWorkbooks::isTextFile( std::u16string_view sType )
 }
 
 bool
-ScVbaWorkbooks::isSpreadSheetFile( const OUString& sType )
+ScVbaWorkbooks::isSpreadSheetFile( std::u16string_view sType )
 {
     // include calc_QPro etc. ? ( not for the moment anyway )
-    return sType.startsWith( "calc_MS" )
-      || sType.startsWith( "MS Excel" )
-      || sType.startsWith( "calc8" )
-      || sType.startsWith( "calc_StarOffice" );
+    return o3tl::starts_with( sType, u"calc_MS" )
+      || o3tl::starts_with( sType, u"MS Excel" )
+      || o3tl::starts_with( sType, u"calc8" )
+      || o3tl::starts_with( sType, u"calc_StarOffice" );
 }
 
 OUString

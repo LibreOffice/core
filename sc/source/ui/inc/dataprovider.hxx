@@ -10,6 +10,7 @@
 #pragma once
 
 #include <memory>
+#include <string_view>
 #include <salhelper/thread.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
@@ -134,7 +135,7 @@ class DataProviderFactory
 {
 private:
 
-    static bool isInternalDataProvider(const OUString& rProvider);
+    static bool isInternalDataProvider(std::u16string_view rProvider);
 
 public:
 

@@ -18,6 +18,10 @@
  */
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/excel/XWorkbooks.hpp>
 #include <vbahelper/vbadocumentsbase.hxx>
@@ -29,7 +33,7 @@ class ScVbaWorkbooks : public ScVbaWorkbooks_BASE
 private:
     OUString   getFileFilterType( const OUString& rString );
     static bool       isTextFile( std::u16string_view rString );
-    static bool       isSpreadSheetFile( const OUString& rString );
+    static bool       isSpreadSheetFile( std::u16string_view rString );
     static sal_Int16& getCurrentDelim(){ static sal_Int16 nDelim = 44; return nDelim; }
 public:
     ScVbaWorkbooks( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext );
