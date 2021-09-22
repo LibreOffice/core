@@ -808,7 +808,8 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
     const int nChars = FPDFTextObj_GetText(pPageObject, pTextPage, nullptr, 0);
     std::unique_ptr<sal_Unicode[]> pText(new sal_Unicode[nChars]);
 
-    const int nActualChars = FPDFTextObj_GetText(pPageObject, pTextPage, pText.get(), nChars);
+    const int nActualChars = FPDFTextObj_GetText(
+        pPageObject, pTextPage, reinterpret_cast<FPDF_WCHAR*>(pText.get()), nChars);
     if (nActualChars <= 0)
     {
         return;

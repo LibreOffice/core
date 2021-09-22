@@ -1672,7 +1672,7 @@ void PdfExportTest::testTdf115262()
         {
             unsigned long nTextSize = FPDFTextObj_GetText(pPageObject, pTextPage, nullptr, 0);
             std::vector<sal_Unicode> aText(nTextSize);
-            FPDFTextObj_GetText(pPageObject, pTextPage, aText.data(), nTextSize);
+            FPDFTextObj_GetText(pPageObject, pTextPage, reinterpret_cast<FPDF_WCHAR*>(aText.data()), nTextSize);
             OUString sText(aText.data(), nTextSize / 2 - 1);
             if (sText == "400")
                 nRowTop = fTop;
@@ -1707,7 +1707,7 @@ void PdfExportTest::testTdf121962()
             continue;
         unsigned long nTextSize = FPDFTextObj_GetText(pPageObject, pTextPage, nullptr, 0);
         std::vector<sal_Unicode> aText(nTextSize);
-        FPDFTextObj_GetText(pPageObject, pTextPage, aText.data(), nTextSize);
+        FPDFTextObj_GetText(pPageObject, pTextPage, reinterpret_cast<FPDF_WCHAR*>(aText.data()), nTextSize);
         OUString sText(aText.data(), nTextSize / 2 - 1);
         CPPUNIT_ASSERT(sText != "** Expression is faulty **");
     }
@@ -1738,7 +1738,7 @@ void PdfExportTest::testTdf115967()
             continue;
         unsigned long nTextSize = FPDFTextObj_GetText(pPageObject, pTextPage, nullptr, 2);
         std::vector<sal_Unicode> aText(nTextSize);
-        FPDFTextObj_GetText(pPageObject, pTextPage, aText.data(), nTextSize);
+        FPDFTextObj_GetText(pPageObject, pTextPage, reinterpret_cast<FPDF_WCHAR*>(aText.data()), nTextSize);
         OUString sChar(aText.data(), nTextSize / 2 - 1);
         sText += sChar.trim();
     }

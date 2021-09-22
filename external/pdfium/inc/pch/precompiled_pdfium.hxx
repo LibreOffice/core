@@ -33,13 +33,10 @@
 #include <array>
 #include <atomic>
 #include <cassert>
-#include <cctype>
 #include <cfloat>
 #include <climits>
 #include <cmath>
-#include <cstring>
-#include <cwchar>
-#include <cwctype>
+#include <ctype.h>
 #include <functional>
 #include <iterator>
 #include <limits.h>
@@ -64,6 +61,7 @@
 #include <type_traits>
 #include <utility>
 #include <vector>
+#include <wchar.h>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #endif // PCH_LEVEL >= 2
@@ -73,6 +71,7 @@
 #include <constants/annotation_common.h>
 #include <constants/annotation_flags.h>
 #include <constants/appearance.h>
+#include <constants/ascii.h>
 #include <constants/form_fields.h>
 #include <constants/form_flags.h>
 #include <constants/page_object.h>
@@ -107,6 +106,7 @@
 #include <core/fpdfapi/font/cpdf_type3font.h>
 #include <core/fpdfapi/page/cpdf_allstates.h>
 #include <core/fpdfapi/page/cpdf_annotcontext.h>
+#include <core/fpdfapi/page/cpdf_basedcs.h>
 #include <core/fpdfapi/page/cpdf_clippath.h>
 #include <core/fpdfapi/page/cpdf_color.h>
 #include <core/fpdfapi/page/cpdf_colorspace.h>
@@ -245,7 +245,7 @@
 #include <core/fxcodec/fx_codec.h>
 #include <core/fxcodec/gif/cfx_gif.h>
 #include <core/fxcodec/gif/lzw_decompressor.h>
-#include <core/fxcodec/icc/iccmodule.h>
+#include <core/fxcodec/icc/icc_transform.h>
 #include <core/fxcodec/jbig2/JBig2_ArithDecoder.h>
 #include <core/fxcodec/jbig2/JBig2_ArithIntDecoder.h>
 #include <core/fxcodec/jbig2/JBig2_BitStream.h>
@@ -310,6 +310,7 @@
 #include <core/fxcrt/fx_codepage.h>
 #include <core/fxcrt/fx_coordinates.h>
 #include <core/fxcrt/fx_extension.h>
+#include <core/fxcrt/fx_folder.h>
 #include <core/fxcrt/fx_memory.h>
 #include <core/fxcrt/fx_memory_wrappers.h>
 #include <core/fxcrt/fx_number.h>
@@ -389,7 +390,6 @@
 #include <fpdfsdk/cpdfsdk_baannot.h>
 #include <fpdfsdk/cpdfsdk_baannothandler.h>
 #include <fpdfsdk/cpdfsdk_customaccess.h>
-#include <fpdfsdk/cpdfsdk_fieldaction.h>
 #include <fpdfsdk/cpdfsdk_filewriteadapter.h>
 #include <fpdfsdk/cpdfsdk_formfillenvironment.h>
 #include <fpdfsdk/cpdfsdk_helpers.h>
@@ -402,10 +402,11 @@
 #include <fpdfsdk/formfiller/cffl_button.h>
 #include <fpdfsdk/formfiller/cffl_checkbox.h>
 #include <fpdfsdk/formfiller/cffl_combobox.h>
+#include <fpdfsdk/formfiller/cffl_fieldaction.h>
 #include <fpdfsdk/formfiller/cffl_formfield.h>
 #include <fpdfsdk/formfiller/cffl_interactiveformfiller.h>
 #include <fpdfsdk/formfiller/cffl_listbox.h>
-#include <fpdfsdk/formfiller/cffl_privatedata.h>
+#include <fpdfsdk/formfiller/cffl_perwindowdata.h>
 #include <fpdfsdk/formfiller/cffl_pushbutton.h>
 #include <fpdfsdk/formfiller/cffl_radiobutton.h>
 #include <fpdfsdk/formfiller/cffl_textfield.h>
@@ -484,7 +485,6 @@
 #include <third_party/base/memory/aligned_memory.h>
 #include <third_party/base/no_destructor.h>
 #include <third_party/base/notreached.h>
-#include <third_party/base/numerics/ranges.h>
 #include <third_party/base/numerics/safe_conversions.h>
 #include <third_party/base/numerics/safe_math.h>
 #include <third_party/base/optional.h>
