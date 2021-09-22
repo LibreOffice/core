@@ -4016,6 +4016,51 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineTableRowDeletionWithReject)
     assertXPath(pXmlDoc, "//page[1]//body/tab", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineTableRowInsertionWithReject)
+{
+    // load a 1-row table, and insert a row with enabled change tracking
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf118311.fodt");
+
+    // turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // check table and its single row
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row", 1);
+
+    // insert rows before and after with enabled change tracking
+    // (HasTextChangesOnly property of the row will be false, and
+    // add dummy characters CH_TXT_TRACKED_DUMMY_CHAR)
+    dispatchCommand(mxComponent, ".uno:InsertRowsBefore", {});
+    dispatchCommand(mxComponent, ".uno:InsertRowsAfter", {});
+
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    // This was 0 (not tracked row insertion)
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), pEditShell->GetRedlineCount());
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row", 3);
+
+    // reject redlines
+    pEditShell->RejectRedline(0);
+    pEditShell->RejectRedline(0);
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+    // This was 3 (not rejected row insertion)
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf128603)
 {
     // Load the bugdoc, which has 3 textboxes.
