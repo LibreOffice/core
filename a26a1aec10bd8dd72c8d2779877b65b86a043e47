@@ -88,6 +88,24 @@
       "parentUuid": "38bb08b7_185a3d74",
       "revId": "a26a1aec10bd8dd72c8d2779877b65b86a043e47",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "123f9f47_d129e296",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001976
+      },
+      "writtenOn": "2021-09-22T08:15:46Z",
+      "side": 1,
+      "message": "Well, I guess then proposed approach with SalFrameStyleFlags::NOICON has to be implemented.",
+      "parentUuid": "f826f5de_8080b176",
+      "revId": "a26a1aec10bd8dd72c8d2779877b65b86a043e47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
