@@ -159,6 +159,23 @@
       "message": "Mike: could you please review this?\n\nIt fixes an interaction between table shadow and blurry shadow. Both were \"right\" on their own, but the result was different from PowerPoint. Changing the rendering should be OK-ish I think, table shadow is a very recent feature.",
       "revId": "b9cb1d970ca7bd34a75c9e55a8e346cc051dc16b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47260ca7_97eb4c4e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-22T15:27:36Z",
+      "side": 1,
+      "message": "\u003e address as a follow-up change\n\nLet\u0027s have this merged now then :-)",
+      "revId": "b9cb1d970ca7bd34a75c9e55a8e346cc051dc16b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
