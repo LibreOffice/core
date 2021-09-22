@@ -27,6 +27,7 @@
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
+#include <oox/token/properties.hxx>
 
 using namespace oox::core;
 using namespace ::com::sun::star;
@@ -152,6 +153,8 @@ ContextHandlerRef PPTGraphicShapeContext::onCreateContext( sal_Int32 aElementTok
                         case XML_pic :
                             bUseText = false;
                     }
+                    pPlaceholder->getShapeProperties().setAnyProperty(
+                        PROP_URL, mpShapePtr->getShapeProperties().getProperty(PROP_URL));
                     mpShapePtr->applyShapeReference( *pPlaceholder, bUseText );
                     PPTShape* pPPTShape = dynamic_cast< PPTShape* >( pPlaceholder.get() );
                     if ( pPPTShape )

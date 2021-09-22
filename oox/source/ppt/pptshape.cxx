@@ -539,7 +539,9 @@ void PPTShape::addShape(
                 syncDiagramFontHeights();
             }
 
-            if (getShapeProperties().hasProperty(PROP_URL))
+            OUString sURL;
+            getShapeProperties().getProperty(PROP_URL) >>= sURL;
+            if (!sURL.isEmpty())
             {
                 Reference<XEventsSupplier> xEventsSupplier(xShape, UNO_QUERY);
                 if (!xEventsSupplier.is())
