@@ -742,8 +742,8 @@ OUString PDFiumPageObjectImpl::getText(std::unique_ptr<PDFiumTextPage> const& rT
 
     std::unique_ptr<sal_Unicode[]> pText(new sal_Unicode[nBytes]);
 
-    int nActualBytes
-        = FPDFTextObj_GetText(mpPageObject, pTextPage->getPointer(), pText.get(), nBytes * 2);
+    int nActualBytes = FPDFTextObj_GetText(mpPageObject, pTextPage->getPointer(),
+                                           reinterpret_cast<FPDF_WCHAR*>(pText.get()), nBytes * 2);
     assert(nActualBytes % 2 == 0);
     nActualBytes /= 2;
     if (nActualBytes > 1)
