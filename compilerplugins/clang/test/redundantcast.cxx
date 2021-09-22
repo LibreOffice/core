@@ -42,7 +42,7 @@ void testConstCast() {
 
     void * vp = nullptr;
     (void) const_cast<char *>(static_cast<char const *>(vp)); // expected-error {{redundant static_cast/const_cast combination from 'void *' via 'const char *' to 'char *' [loplugin:redundantcast]}}
-    (void) const_cast<char *>(static_cast<char const *>(nullptr)); // expected-error {{redundant static_cast/const_cast combination from 'nullptr_t' via 'const char *' to 'char *' [loplugin:redundantcast]}}
+    (void) const_cast<char *>(static_cast<char const *>(nullptr)); // expected-error-re {{redundant static_cast/const_cast combination from '{{(std::)?}}nullptr_t' via 'const char *' to 'char *' [loplugin:redundantcast]}}
     (void) const_cast<S &>(static_cast<S const &>(D{})); // expected-error {{redundant static_cast/const_cast combination from 'D' via 'const S &' to 'S &' [loplugin:redundantcast]}}
 
     S const s{};

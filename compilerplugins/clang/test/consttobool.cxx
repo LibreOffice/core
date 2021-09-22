@@ -28,7 +28,7 @@ constexpr int c2 = 2;
 struct S
 {
     S()
-    // expected-error-re@+1 {{implicit conversion of constant {{nullptr|0}} of type 'nullptr_t' to 'bool'; use 'false' instead [loplugin:consttobool]}}
+    // expected-error-re@+1 {{implicit conversion of constant {{nullptr|0}} of type '{{(std::)?}}nullptr_t' to 'bool'; use 'false' instead [loplugin:consttobool]}}
     : b(nullptr)
     {
     }
