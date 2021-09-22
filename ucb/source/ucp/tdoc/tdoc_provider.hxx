@@ -19,6 +19,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <rtl/ref.hxx>
 #include <com/sun/star/frame/XTransientDocumentsDocumentContentFactory.hpp>
 #include <com/sun/star/frame/XTransientDocumentsDocumentContentIdentifierFactory.hpp>
@@ -129,8 +133,8 @@ public:
     queryDocumentModel( const OUString & rUri ) const;
 
     // interface OfficeDocumentsEventListener
-    void notifyDocumentOpened( const OUString & rDocId );
-    void notifyDocumentClosed( const OUString & rDocId );
+    void notifyDocumentOpened( std::u16string_view rDocId );
+    void notifyDocumentClosed( std::u16string_view rDocId );
 
 private:
     rtl::Reference< OfficeDocumentsManager > m_xDocsMgr;

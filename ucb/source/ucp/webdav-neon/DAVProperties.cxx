@@ -35,38 +35,38 @@
 
 using namespace webdav_ucp;
 
-void DAVProperties::createNeonPropName( const OUString & rFullName,
+void DAVProperties::createNeonPropName( std::u16string_view rFullName,
                                         NeonPropName & rName )
 {
-    if ( rFullName.startsWith( "DAV:" ) )
+    if ( o3tl::starts_with( rFullName, u"DAV:" ) )
     {
         rName.nspace = "DAV:";
         rName.name
             = strdup( OUStringToOString(
-                        rFullName.subView( RTL_CONSTASCII_LENGTH( "DAV:" ) ),
+                        rFullName.substr( RTL_CONSTASCII_LENGTH( "DAV:" ) ),
                         RTL_TEXTENCODING_UTF8 ).getStr() );
     }
-    else if ( rFullName.startsWith( "http://apache.org/dav/props/" ) )
+    else if ( o3tl::starts_with( rFullName, u"http://apache.org/dav/props/" ) )
     {
         rName.nspace = "http://apache.org/dav/props/";
         rName.name
             = strdup( OUStringToOString(
-                        rFullName.subView(
+                        rFullName.substr(
                             RTL_CONSTASCII_LENGTH(
                                 "http://apache.org/dav/props/" ) ),
                         RTL_TEXTENCODING_UTF8 ).getStr() );
     }
-    else if ( rFullName.startsWith( "http://ucb.openoffice.org/dav/props/" ) )
+    else if ( o3tl::starts_with( rFullName, u"http://ucb.openoffice.org/dav/props/" ) )
     {
         rName.nspace = "http://ucb.openoffice.org/dav/props/";
         rName.name
             = strdup( OUStringToOString(
-                        rFullName.subView(
+                        rFullName.substr(
                             RTL_CONSTASCII_LENGTH(
                                 "http://ucb.openoffice.org/dav/props/" ) ),
                         RTL_TEXTENCODING_UTF8 ).getStr() );
     }
-    else if ( rFullName.startsWith( "<prop:" ) )
+    else if ( o3tl::starts_with( rFullName, u"<prop:" ) )
     {
         // Support for 3rd party namespaces/props
 

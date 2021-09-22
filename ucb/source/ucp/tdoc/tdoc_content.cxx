@@ -28,6 +28,7 @@
 
 #include <string_view>
 
+#include <o3tl/string_view.hxx>
 #include <tools/diagnose_ex.h>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/beans/IllegalTypeException.hpp>
@@ -1709,7 +1710,7 @@ void Content::notifyDocumentClosed()
 
 
 uno::Reference< ucb::XContent >
-Content::queryChildContent( const OUString & rRelativeChildUri )
+Content::queryChildContent( std::u16string_view rRelativeChildUri )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -1717,10 +1718,10 @@ Content::queryChildContent( const OUString & rRelativeChildUri )
     OUStringBuffer aBuf( aMyId );
     if ( !aMyId.endsWith("/") )
         aBuf.append( "/" );
-    if ( !rRelativeChildUri.startsWith("/") )
+    if ( !o3tl::starts_with(rRelativeChildUri, u"/") )
         aBuf.append( rRelativeChildUri );
     else
-        aBuf.append( rRelativeChildUri.subView(1) );
+        aBuf.append( rRelativeChildUri.substr(1) );
 
     uno::Reference< ucb::XContentIdentifier > xChildId
         = new ::ucbhelper::ContentIdentifier( aBuf.makeStringAndClear() );
@@ -1741,7 +1742,7 @@ Content::queryChildContent( const OUString & rRelativeChildUri )
 }
 
 
-void Content::notifyChildRemoved( const OUString & rRelativeChildUri )
+void Content::notifyChildRemoved( std::u16string_view rRelativeChildUri )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
@@ -1765,7 +1766,7 @@ void Content::notifyChildRemoved( const OUString & rRelativeChildUri )
 }
 
 
-void Content::notifyChildInserted( const OUString & rRelativeChildUri )
+void Content::notifyChildInserted( std::u16string_view rRelativeChildUri )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
