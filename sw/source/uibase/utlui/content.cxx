@@ -3406,7 +3406,7 @@ void SwContentTree::UpdateTracking()
             m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
             !(m_bIsRoot && m_nRootType != ContentTypeId::URLFIELD))
     {
-        // Because hyperlink item names do not need to be unique, finding the corrosponding item
+        // Because hyperlink item names do not need to be unique, finding the corresponding item
         // in the tree by name may result in incorrect selection. Find the item in the tree by
         // comparing the SwTextINetFormat pointer at the document cursor position to that stored
         // in the item SwURLFieldContent.

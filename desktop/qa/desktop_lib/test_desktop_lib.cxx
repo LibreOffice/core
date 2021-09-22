@@ -3299,7 +3299,7 @@ void DesktopLOKTest::testMultiViewTableSelection()
     Scheduler::ProcessEventsToIdle();
     // View1 should not get any table selection messages.
     CPPUNIT_ASSERT_EQUAL(0, aView1.m_nTableSelectionCount);
-    // View2 will first get table selection of Table1, then emty selection, and finally on 7th down arrow keypress,
+    // View2 will first get table selection of Table1, then empty selection, and finally on 7th down arrow keypress,
     // it will get table-selection of Table2. So in total it should get 3 table selections.
     CPPUNIT_ASSERT_EQUAL(3, aView2.m_nTableSelectionCount);
     CPPUNIT_ASSERT(!aView2.m_bEmptyTableSelection);
