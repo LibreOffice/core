@@ -242,7 +242,7 @@ struct CpyPara
 
 }
 
-static void lcl_CopyRow(FndLine_ & rFndLine, CpyPara *const pCpyPara);
+static SwTableLine* lcl_CopyRow(FndLine_ & rFndLine, CpyPara *const pCpyPara);
 
 static void lcl_CopyCol( FndBox_ & rFndBox, CpyPara *const pCpyPara)
 {
@@ -377,7 +377,7 @@ static void lcl_CopyCol( FndBox_ & rFndBox, CpyPara *const pCpyPara)
     }
 }
 
-static void lcl_CopyRow(FndLine_& rFndLine, CpyPara *const pCpyPara)
+static SwTableLine* lcl_CopyRow(FndLine_& rFndLine, CpyPara *const pCpyPara)
 {
     SwTableLine* pNewLine = new SwTableLine(
                             static_cast<SwTableLineFormat*>(rFndLine.GetLine()->GetFrameFormat()),
@@ -400,6 +400,8 @@ static void lcl_CopyRow(FndLine_& rFndLine, CpyPara *const pCpyPara)
     }
 
     pCpyPara->nDelBorderFlag &= 0xf8;
+
+    return pNewLine;
 }
 
 static void lcl_InsCol( FndLine_* pFndLn, CpyPara& rCpyPara, sal_uInt16 nCpyCnt,
@@ -582,7 +584,22 @@ bool SwTable::InsertRow_( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         if( bBehind )
             aCpyPara.nDelBorderFlag = 1;
         for (auto & rpFndLine : pFndBox->GetLines())
-            lcl_CopyRow( *rpFndLine, &aCpyPara );
+        {
+            SwTableLine* pNewTableLine = lcl_CopyRow( *rpFndLine, &aCpyPara );
+
+            // tracked insertion of empty table line
+            if ( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
+            {
+                SvxPrintItem aSetTracking(RES_PRINT, false);
+                SwPosition aPos(*pNewTableLine->GetTabBoxes()[0]->GetSttNd());
+                SwCursor aCursor( aPos, nullptr );
+                SwNodeIndex aInsPos(*pNewTableLine->GetTabBoxes()[0]->GetSttNd(), 1 );
+                SwPaM aPaM(aInsPos);
+                pDoc->getIDocumentContentOperations().InsertString( aPaM,
+                        OUStringChar(CH_TXT_TRACKED_DUMMY_CHAR) );
+                pDoc->SetRowNotTracked( aCursor, aSetTracking );
+            }
+        }
     }
 
     // clean up this Line's structure once again, generally all of them
