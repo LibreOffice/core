@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d438c271_30e49ae3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-22T10:30:03Z",
+      "side": 1,
+      "message": "fix for deadlock here:\n   https://gerrit.libreoffice.org/c/core/+/122426",
+      "revId": "300753bf1d4db7eff42d707f427180f0d1d1dffb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7493c24b_1eb95e03",
