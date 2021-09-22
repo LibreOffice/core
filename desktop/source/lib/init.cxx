@@ -2801,6 +2801,7 @@ static void doc_iniUnoCommands ()
 
     OUString sUnoCommands[] =
     {
+        // Removed two duplicated entries from this list: MergeCells and InsertAnnotation
         OUString(".uno:AlignLeft"),
         OUString(".uno:AlignHorizontalCenter"),
         OUString(".uno:AlignRight"),
@@ -2843,8 +2844,6 @@ static void doc_iniUnoCommands ()
         OUString(".uno:Copy"),
         OUString(".uno:Paste"),
         OUString(".uno:SelectAll"),
-        OUString(".uno:InsertAnnotation"),
-        OUString(".uno:DeleteAnnotation"),
         OUString(".uno:ReplyComment"),
         OUString(".uno:ResolveComment"),
         OUString(".uno:ResolveCommentThread"),
@@ -2852,7 +2851,6 @@ static void doc_iniUnoCommands ()
         OUString(".uno:InsertRowsAfter"),
         OUString(".uno:InsertColumnsBefore"),
         OUString(".uno:InsertColumnsAfter"),
-        OUString(".uno:MergeCells"),
         OUString(".uno:DeleteRows"),
         OUString(".uno:DeleteColumns"),
         OUString(".uno:DeleteTable"),
@@ -2905,6 +2903,7 @@ static void doc_iniUnoCommands ()
         OUString(".uno:InsertObjectChart"),
         OUString(".uno:InsertSection"),
         OUString(".uno:InsertAnnotation"),
+        OUString(".uno:DeleteAnnotation"),
         OUString(".uno:InsertPagebreak"),
         OUString(".uno:InsertColumnBreak"),
         OUString(".uno:HyperlinkDialog"),

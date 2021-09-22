@@ -1685,7 +1685,7 @@
       </node>
       <node oor:name=".uno:SplitCell" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Split Cells</value>
+          <value xml:lang="en-US">Unmerge Cells</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1694,6 +1694,9 @@
       <node oor:name=".uno:ToggleMergeCells" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">M~erge and Center Cells</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Merge and center or unmerge cells depending on the current toggle state</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2486,7 +2489,7 @@
       </node>
       <node oor:name=".uno:MergeCellsMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">M~erge Cells</value>
+          <value xml:lang="en-US">M~erge and Unmerge Cells</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
