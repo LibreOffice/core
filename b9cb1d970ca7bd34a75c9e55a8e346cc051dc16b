@@ -96,6 +96,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "05fdb2ca_1207b04b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-22T15:01:35Z",
+      "side": 1,
+      "message": "\u003e The shadow transparency should be multiplied by the transparency of the fill.\n\nHmm, how does this work? The bugdoc in this change has a 0% transparent red shadow and a 80% transparent black cell fill. If you multiply 0.0 with 0.8, you still get 0.0. Did you mean opacity? Probably I miss something obvious. :-) Thanks.",
+      "parentUuid": "6a39d3e6_5533263d",
+      "range": {
+        "startLine": 7,
+        "startChar": 20,
+        "endLine": 7,
+        "endChar": 64
+      },
+      "revId": "b9cb1d970ca7bd34a75c9e55a8e346cc051dc16b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "ed3b49db_347a5bf5",
