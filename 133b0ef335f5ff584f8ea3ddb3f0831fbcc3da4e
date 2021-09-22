@@ -16,6 +16,24 @@
       "message": "Hey Mike, any chance you could have a look at this one? Just a unit test. ",
       "revId": "133b0ef335f5ff584f8ea3ddb3f0831fbcc3da4e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e838e5e_16fa101c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-22T06:12:06Z",
+      "side": 1,
+      "message": "I\u0027m not sure I can. This unit test seems pointless to me: it establishes a status quo, but would not catch the same problem with an imaginary new class member. The problem was successfully caught by an automated test, right? which commit was that that fixed it, btw?\n\nI believe that it\u0027s best to leave this specific type of problems to the static analyzers/sanitizers. But I might be wrong, and maybe Caolan could correct me?",
+      "parentUuid": "81a8bb4a_b2ef1d47",
+      "revId": "133b0ef335f5ff584f8ea3ddb3f0831fbcc3da4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
