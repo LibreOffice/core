@@ -29,6 +29,7 @@
 #include <vector>
 #include <algorithm>
 
+#include <o3tl/string_view.hxx>
 #include <osl/file.h>
 #include <osl/file.hxx>
 #include <osl/thread.h>
@@ -49,17 +50,17 @@ using namespace std;
 namespace {
 
 bool matchList(
-    const OUString& rUrl, const std::u16string_view* pList, size_t nLength)
+    std::u16string_view rUrl, const std::u16string_view* pList, size_t nLength)
 {
     for (size_t i = 0; i != nLength; ++i) {
-        if (rUrl.endsWith(pList[i])) {
+        if (o3tl::ends_with(rUrl, pList[i])) {
             return true;
         }
     }
     return false;
 }
 
-bool passesNegativeList(const OUString& rUrl) {
+bool passesNegativeList(std::u16string_view rUrl) {
     static const std::u16string_view list[] = {
         u"/desktop/test/deployment/passive/help/en/help.tree",
         u"/desktop/test/deployment/passive/help/en/main.xhp",
@@ -77,7 +78,7 @@ bool passesNegativeList(const OUString& rUrl) {
     return !matchList(rUrl, list, SAL_N_ELEMENTS(list));
 }
 
-bool passesPositiveList(const OUString& rUrl) {
+bool passesPositiveList(std::u16string_view rUrl) {
     static const std::u16string_view list[] = {
         u"/description.xml"
     };
