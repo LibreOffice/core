@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "391f8ae3_da226e42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-22T16:47:21Z",
+      "side": 1,
+      "message": "Hi! I thought you may know an easier way to adapt the null date to the same number as Calc uses. For instance, if I insert 01.01.0001, Calc shows -693595, whereas the function DateToDays in this file returns -693594, leading to an error to upcoming data conversions.\n\nI simply copied the function from [1] in order to test the outcome. Maybe you have a code pointer where calc retrieves/calculates the value -693595 for the data 0001-01-01.\n\nThank you very much!\n\n[1] https://opengrok.libreoffice.org/xref/core/sc/source/filter/oox/unitconverter.cxx?r\u003dcfff893b#62\n",
+      "revId": "1b0c3766d85e88701da14735301ff45ad1cbb02a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
