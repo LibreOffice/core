@@ -64,12 +64,13 @@ public:
                     Same as above; additionally the name starts with some given characters followed by a counter ( example:
                     rLeadingChars="abc" means "abc0","abc1" and so on, depending on existing files in the folder ).
                     The extension string may be f.e. ".txt" or "", if no extension string is given, ".tmp" is used
-                        @param  _bStartWithZero If set to false names will be generated like "abc","abc0","abc1"
+                        @param  bStartWithoutNumber If set to false names will be generated like "abc","abc1","abc2"
                         @param  bCreateParentDirs If rLeadingChars contains a slash, this will create the required
                                 parent directories.
                     */
-                    TempFile( const OUString& rLeadingChars, bool _bStartWithZero=true, const OUString* pExtension=nullptr,
-                              const OUString* pParent=nullptr, bool bCreateParentDirs=false );
+                    TempFile(const OUString& rLeadingChars, bool bStartWithoutNumber=true,
+                             const OUString* pExtension=nullptr, const OUString* pParent=nullptr,
+                             bool bCreateParentDirs=false, sal_uInt32 nStartWith=0);
 
                     TempFile(TempFile && other) noexcept;
 
