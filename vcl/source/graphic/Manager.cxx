@@ -76,7 +76,7 @@ Manager::Manager()
     }
 }
 
-void Manager::loopGraphicsAndSwapOut()
+void Manager::loopGraphicsAndSwapOut(std::unique_lock<std::mutex>& rGuard)
 {
     // make a copy of m_pImpGraphicList because if we swap out a svg, the svg
     // filter may create more temp Graphics which are auto-added to
@@ -102,28 +102,33 @@ void Manager::loopGraphicsAndSwapOut()
                 auto aSeconds = std::chrono::duration_cast<std::chrono::seconds>(aDeltaTime);
 
                 if (aSeconds > mnAllowedIdleTime)
+                {
+                    // unlock because svgio can call back into us
+                    rGuard.unlock();
                     pEachImpGraphic->swapOut();
+                    rGuard.lock();
+                }
             }
         }
     }
 }
 
-void Manager::reduceGraphicMemory()
+void Manager::reduceGraphicMemory(std::unique_lock<std::mutex>& rGuard)
 {
+    // maMutex is locked in callers
+
     if (!mbSwapEnabled)
         return;
 
     if (mnUsedSize < mnMemoryLimit)
         return;
 
-    std::scoped_lock aGuard(maMutex);
-
     // avoid recursive reduceGraphicMemory on reexport of tdf118346-1.odg to odg
     if (mbReducingGraphicMemory)
         return;
     mbReducingGraphicMemory = true;
 
-    loopGraphicsAndSwapOut();
+    loopGraphicsAndSwapOut(rGuard);
 
     sal_Int64 calculatedSize = 0;
     for (ImpGraphic* pEachImpGraphic : m_pImpGraphicList)
@@ -151,20 +156,20 @@ sal_Int64 Manager::getGraphicSizeBytes(const ImpGraphic* pImpGraphic)
 
 IMPL_LINK(Manager, SwapOutTimerHandler, Timer*, pTimer, void)
 {
-    std::scoped_lock aGuard(maMutex);
+    std::unique_lock aGuard(maMutex);
 
     pTimer->Stop();
-    reduceGraphicMemory();
+    reduceGraphicMemory(aGuard);
     pTimer->Start();
 }
 
 void Manager::registerGraphic(const std::shared_ptr<ImpGraphic>& pImpGraphic)
 {
-    std::scoped_lock aGuard(maMutex);
+    std::unique_lock aGuard(maMutex);
 
     // make some space first
     if (mnUsedSize > mnMemoryLimit)
-        reduceGraphicMemory();
+        reduceGraphicMemory(aGuard);
 
     // Insert and update the used size (bytes)
     mnUsedSize += getGraphicSizeBytes(pImpGraphic.get());
