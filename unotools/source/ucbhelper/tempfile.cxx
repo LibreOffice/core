@@ -176,7 +176,11 @@ protected:
 
 class SequentialTokens: public Tokens {
 public:
-    explicit SequentialTokens(bool showZero): m_value(0), m_show(showZero) {}
+    explicit SequentialTokens(bool bStartWithoutNumber, sal_uInt32 nStartWith)
+        : m_value(nStartWith)
+        , m_show(bStartWithoutNumber)
+    {
+    }
 
     bool next(OUString * token) override {
         assert(token != nullptr);
@@ -365,13 +369,13 @@ TempFile::TempFile( const OUString* pParent, bool bDirectory )
     aName = CreateTempName_Impl( pParent, true, bDirectory );
 }
 
-TempFile::TempFile( const OUString& rLeadingChars, bool _bStartWithZero,
-                    const OUString* pExtension, const OUString* pParent,
-                    bool bCreateParentDirs )
+TempFile::TempFile(const OUString& rLeadingChars, bool bStartWithoutNumber,
+                   const OUString* pExtension, const OUString* pParent,
+                   bool bCreateParentDirs, sal_uInt32 nStartWith)
     : bIsDirectory( false )
     , bKillingFileEnabled( false )
 {
-    SequentialTokens t(_bStartWithZero);
+    SequentialTokens t(bStartWithoutNumber, nStartWith);
     aName = lcl_createName( rLeadingChars, t, pExtension, pParent, false,
                             true, true, bCreateParentDirs );
 }
