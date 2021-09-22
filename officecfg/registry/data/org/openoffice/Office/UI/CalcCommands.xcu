@@ -1685,7 +1685,7 @@
       </node>
       <node oor:name=".uno:SplitCell" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Split Cells</value>
+          <value xml:lang="en-US">Unmerge Cells</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2486,7 +2486,7 @@
       </node>
       <node oor:name=".uno:MergeCellsMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">M~erge Cells</value>
+          <value xml:lang="en-US">M~erge and Unmerge Cells</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
