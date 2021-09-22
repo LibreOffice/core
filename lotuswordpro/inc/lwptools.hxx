@@ -69,6 +69,7 @@
 #include "xfilter/xftimestyle.hxx"
 #include <rtl/textenc.h>
 #include <stdexcept>
+#include <string_view>
 
 // 01/19/2005
 const sal_uInt32 UNITS_PER_INCH = 65536L * 72L;
@@ -97,7 +98,7 @@ public:
     inline static bool IsOddNumber(sal_uInt16 nNumber);
     inline static bool IsEvenNumber(sal_uInt16 nNumber);
 
-    static bool isFileUrl(const OString& fileName);
+    static bool isFileUrl(std::string_view fileName);
     static OUString convertToFileUrl(const OString& fileName);
     static OUString    DateTimeToOUString(const LtTm& dt);
 
