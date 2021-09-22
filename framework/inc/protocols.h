@@ -21,6 +21,11 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
+#include <o3tl/string_view.hxx>
 #include <rtl/ustring.hxx>
 
 namespace framework{
@@ -34,23 +39,23 @@ namespace framework{
 // indicates a loadable content in general!
 #define SPECIALPROTOCOL_PRIVATE           "private:"
 // indicates loading of components using a model directly
-#define SPECIALPROTOCOL_PRIVATE_OBJECT    "private:object"
+#define SPECIALPROTOCOL_PRIVATE_OBJECT    u"private:object"
 // indicates loading of components using a stream only
-#define SPECIALPROTOCOL_PRIVATE_STREAM    "private:stream"
+#define SPECIALPROTOCOL_PRIVATE_STREAM    u"private:stream"
 // indicates creation of empty documents
-#define SPECIALPROTOCOL_PRIVATE_FACTORY   "private:factory"
+#define SPECIALPROTOCOL_PRIVATE_FACTORY   u"private:factory"
 // internal protocol of the sfx project for generic dispatch functionality
-#define SPECIALPROTOCOL_SLOT              "slot:"
+#define SPECIALPROTOCOL_SLOT              u"slot:"
 // external representation of the slot protocol using names instead of id's
-#define SPECIALPROTOCOL_UNO               ".uno:"
+#define SPECIALPROTOCOL_UNO               u".uno:"
 // special sfx protocol to execute macros
-#define SPECIALPROTOCOL_MACRO             "macro:"
+#define SPECIALPROTOCOL_MACRO             u"macro:"
 // generic way to start uno services during dispatch
-#define SPECIALPROTOCOL_SERVICE           "service:"
+#define SPECIALPROTOCOL_SERVICE           u"service:"
 // for sending mails
-#define SPECIALPROTOCOL_MAILTO            "mailto:"
+#define SPECIALPROTOCOL_MAILTO            u"mailto:"
 // for sending news
-#define SPECIALPROTOCOL_NEWS              "news:"
+#define SPECIALPROTOCOL_NEWS              u"news:"
 
 /** well known protocols */
 enum class EProtocol
@@ -75,37 +80,37 @@ class ProtocolCheck
         It should be used instead of specifyProtocol() if only this question
         is interesting to perform the code. We must not check for all possible protocols here...
      */
-    static bool isProtocol( const OUString& sURL, EProtocol eRequired )
+    static bool isProtocol( std::u16string_view sURL, EProtocol eRequired )
     {
         bool bRet = false;
         switch(eRequired)
         {
             case EProtocol::PrivateObject:
-                bRet = sURL.startsWith(SPECIALPROTOCOL_PRIVATE_OBJECT);
+                bRet = o3tl::starts_with(sURL, SPECIALPROTOCOL_PRIVATE_OBJECT);
                 break;
             case EProtocol::PrivateStream:
-                bRet = sURL.startsWith(SPECIALPROTOCOL_PRIVATE_STREAM);
+                bRet = o3tl::starts_with(sURL, SPECIALPROTOCOL_PRIVATE_STREAM);
                 break;
             case EProtocol::PrivateFactory:
-                bRet = sURL.startsWith(SPECIALPROTOCOL_PRIVATE_FACTORY);
+                bRet = o3tl::starts_with(sURL, SPECIALPROTOCOL_PRIVATE_FACTORY);
                 break;
             case EProtocol::Slot:
-                bRet = sURL.startsWith(SPECIALPROTOCOL_SLOT);
+                bRet = o3tl::starts_with(sURL, SPECIALPROTOCOL_SLOT);
                 break;
             case EProtocol::Uno:
-                bRet = sURL.startsWith(SPECIALPROTOCOL_UNO);
+                bRet = o3tl::starts_with(sURL, SPECIALPROTOCOL_UNO);
                 break;
             case EProtocol::Macro:
-                bRet = sURL.startsWith(SPECIALPROTOCOL_MACRO);
+                bRet = o3tl::starts_with(sURL, SPECIALPROTOCOL_MACRO);
                 break;
             case EProtocol::Service:
-                bRet = sURL.startsWith(SPECIALPROTOCOL_SERVICE);
+                bRet = o3tl::starts_with(sURL, SPECIALPROTOCOL_SERVICE);
                 break;
             case EProtocol::MailTo:
-                bRet = sURL.startsWith(SPECIALPROTOCOL_MAILTO);
+                bRet = o3tl::starts_with(sURL, SPECIALPROTOCOL_MAILTO);
                 break;
             case EProtocol::News:
-                bRet = sURL.startsWith(SPECIALPROTOCOL_NEWS);
+                bRet = o3tl::starts_with(sURL, SPECIALPROTOCOL_NEWS);
                 break;
             default:
                 bRet = false;

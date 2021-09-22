@@ -34,6 +34,7 @@
 #include <com/sun/star/ui/XUIFunctionListener.hpp>
 
 #include <cppuhelper/queryinterface.hxx>
+#include <o3tl/string_view.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
@@ -558,14 +559,14 @@ bool ToolbarLayoutManager::createToolbar( const OUString& rResourceURL )
     return bNotify;
 }
 
-bool ToolbarLayoutManager::destroyToolbar( const OUString& rResourceURL )
+bool ToolbarLayoutManager::destroyToolbar( std::u16string_view rResourceURL )
 {
     uno::Reference< lang::XComponent > xComponent;
 
     bool bNotify( false );
     bool bMustBeSorted( false );
     bool bMustLayouted( false );
-    bool bMustBeDestroyed( !rResourceURL.startsWith("private:resource/toolbar/addon_") );
+    bool bMustBeDestroyed( !o3tl::starts_with(rResourceURL, u"private:resource/toolbar/addon_") );
 
     {
         SolarMutexGuard aWriteLock;
