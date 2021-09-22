@@ -19,6 +19,10 @@
 #ifndef INCLUDED_SFX2_SFXHELP_HXX
 #define INCLUDED_SFX2_SFXHELP_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
@@ -34,7 +38,7 @@ private:
     SAL_DLLPRIVATE static bool Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUString& rKeyword);
     SAL_DLLPRIVATE virtual void SearchKeyword( const OUString& rKeyWord ) override;
     SAL_DLLPRIVATE virtual bool Start(const OUString& rURL, weld::Widget* pWidget = nullptr) override;
-    SAL_DLLPRIVATE static OUString GetHelpModuleName_Impl(const OUString &rHelpId);
+    SAL_DLLPRIVATE static OUString GetHelpModuleName_Impl(std::u16string_view rHelpId);
     SAL_DLLPRIVATE static OUString CreateHelpURL_Impl( const OUString& aCommandURL, const OUString& rModuleName );
 
     SAL_DLLPRIVATE static bool Start_Impl( const OUString& rURL, const vcl::Window* pWindow );

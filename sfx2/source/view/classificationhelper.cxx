@@ -41,6 +41,7 @@
 #include <vcl/weld.hxx>
 #include <svl/fstathelper.hxx>
 
+#include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>
 
 using namespace com::sun::star;
@@ -888,11 +889,11 @@ void SfxClassificationHelper::UpdateInfobar(SfxViewFrame& rViewFrame)
     }
 }
 
-SfxClassificationPolicyType SfxClassificationHelper::stringToPolicyType(const OUString& rType)
+SfxClassificationPolicyType SfxClassificationHelper::stringToPolicyType(std::u16string_view rType)
 {
-    if (rType.startsWith(PROP_PREFIX_EXPORTCONTROL()))
+    if (o3tl::starts_with(rType, PROP_PREFIX_EXPORTCONTROL()))
         return SfxClassificationPolicyType::ExportControl;
-    else if (rType.startsWith(PROP_PREFIX_NATIONALSECURITY()))
+    else if (o3tl::starts_with(rType, PROP_PREFIX_NATIONALSECURITY()))
         return SfxClassificationPolicyType::NationalSecurity;
     else
         return SfxClassificationPolicyType::IntellectualProperty;
