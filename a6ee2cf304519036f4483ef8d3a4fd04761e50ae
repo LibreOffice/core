@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "429572a8_ec7335e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-09-22T15:15:22Z",
+      "side": 1,
+      "message": "Gerrit seems stuck or something, but this hardly can be problematic as it has passed that many builds already, also for iOS.",
+      "revId": "a6ee2cf304519036f4483ef8d3a4fd04761e50ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
