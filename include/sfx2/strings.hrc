@@ -181,7 +181,7 @@
 #define STR_FILTER_CONSULT_SERVICE              NC_("STR_FILTER_CONSULT_SERVICE", "The selected filter $(FILTER) is not included in your edition.\nYou can find information about orders on our homepage.")
 
 #define STR_WELCOME_LINE1                       NC_("STR_WELCOME_LINE1", "Welcome to %PRODUCTNAME.")
-#define STR_WELCOME_LINE2                       NC_("STR_WELCOME_LINE2", "Drop a document here or pick an app from the left side to create one.")
+#define STR_WELCOME_LINE2                       NC_("STR_WELCOME_LINE2", "Drop a document here or open an app to create one.")
 
 // Translators: Target types in Auto-redaction dialog
 #define STR_REDACTION_TARGET_TYPE_TEXT          NC_("STR_REDACTION_TARGET_TYPE_TEXT", "Text")
