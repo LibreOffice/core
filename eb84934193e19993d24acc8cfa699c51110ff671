@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6608f9d_52eb6649",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-09-22T10:52:02Z",
+      "side": 1,
+      "message": "That works for the simple case but FWIW\nsoffice --headless --convert-to odg tdf118346-1.odg\nwill still deadlock itself",
+      "revId": "eb84934193e19993d24acc8cfa699c51110ff671",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
