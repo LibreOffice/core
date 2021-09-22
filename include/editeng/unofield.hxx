@@ -29,6 +29,7 @@
 
 #include <cppuhelper/basemutex.hxx>
 #include <memory>
+#include <string_view>
 
 namespace com::sun::star::beans { class XPropertySetInfo; }
 
@@ -39,7 +40,7 @@ class SvxFieldData;
 /// @throws css::uno::Exception
 /// @throws css::uno::RuntimeException
 css::uno::Reference< css::uno::XInterface > EDITENG_DLLPUBLIC SvxUnoTextCreateTextField(
-    const OUString& ServiceSpecifier );
+    std::u16string_view ServiceSpecifier );
 
 class EDITENG_DLLPUBLIC SvxUnoTextField final : public cppu::BaseMutex,
                         public ::cppu::OComponentHelper,
