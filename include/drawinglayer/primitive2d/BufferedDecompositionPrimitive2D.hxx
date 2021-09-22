@@ -79,9 +79,9 @@ protected:
     {
         return maBuffered2DDecomposition;
     }
-    void setBuffered2DDecomposition(const Primitive2DContainer& rNew)
+    void setBuffered2DDecomposition(Primitive2DContainer&& rNew)
     {
-        maBuffered2DDecomposition = rNew;
+        maBuffered2DDecomposition = std::move(rNew);
     }
 
     /** method which is to be used to implement the local decomposition of a 2D primitive. */
