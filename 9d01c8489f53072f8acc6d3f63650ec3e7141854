@@ -16,6 +16,23 @@
       "message": "Ugh, how old an Xcode is Gerrit building for iOS with?",
       "revId": "9d01c8489f53072f8acc6d3f63650ec3e7141854",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15af463e_f765d59c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-09-22T08:15:35Z",
+      "side": 1,
+      "message": "I mean, the gerrit_ios_core_cp-6.4 failed because it couldn\u0027t find the iOS SDK, and it is now with this patch looking for versions 15.0 (the current) or 14.5 (the last of the 14.* series).\n\nI don\u0027t see any reason to not have the latest Xcode installed, but I might be missing something.",
+      "revId": "9d01c8489f53072f8acc6d3f63650ec3e7141854",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
