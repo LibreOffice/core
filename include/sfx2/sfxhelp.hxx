@@ -24,7 +24,6 @@
 #include <string_view>
 
 #include <rtl/ustring.hxx>
-#include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
 #include <vcl/help.hxx>
