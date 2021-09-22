@@ -49,8 +49,6 @@ $(eval $(call gb_Library_use_libraries,dbtools,\
 ))
 endif
 
-#connectivity/source/commontools/RowFunctionParser.cxx disable optimization?
-
 $(eval $(call gb_Library_add_exception_objects,dbtools,\
 ))
 
