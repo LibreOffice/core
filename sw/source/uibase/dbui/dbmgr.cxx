@@ -1309,7 +1309,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 }
 
                 OUString sExt(comphelper::string::stripStart(pStoreToFilter->GetDefaultExtension(), '*'));
-                aTempFile.reset( new utl::TempFile(sLeading, sColumnData.isEmpty(), &sExt, &sPrefix, true) );
+                aTempFile.reset(new utl::TempFile(sLeading, sColumnData.isEmpty(), &sExt, &sPrefix, true, 1));
                 if( !aTempFile->IsValid() )
                 {
                     ErrorHandler::HandleError( ERRCODE_IO_NOTSUPPORTED );
