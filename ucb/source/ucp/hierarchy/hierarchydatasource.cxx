@@ -39,6 +39,7 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <o3tl/string_view.hxx>
 #include <ucbhelper/macros.hxx>
 #include <mutex>
 
@@ -443,18 +444,18 @@ HierarchyDataSource::getConfigProvider()
 
 
 bool HierarchyDataSource::createConfigPath(
-                const OUString & rInPath, OUString & rOutPath )
+                std::u16string_view rInPath, OUString & rOutPath )
 {
-    if ( !rInPath.isEmpty() )
+    if ( !rInPath.empty() )
     {
-        if ( rInPath.startsWith( "/" ) )
+        if ( o3tl::starts_with( rInPath, u"/" ) )
         {
             OSL_FAIL( "HierarchyDataSource::createConfigPath - "
                         "Leading slash in node path!" );
             return false;
         }
 
-        if ( rInPath.endsWith( "/" ) )
+        if ( o3tl::ends_with( rInPath, u"/" ) )
         {
             OSL_FAIL( "HierarchyDataSource::createConfigPath - "
                         "Trailing slash in node path!" );

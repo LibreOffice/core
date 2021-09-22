@@ -27,6 +27,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <memory>
+#include <string_view>
 
 namespace comphelper { class OInterfaceContainerHelper2; }
 
@@ -75,7 +76,7 @@ private:
 
     css::uno::Reference< css::lang::XMultiServiceFactory > getConfigProvider();
 
-    static bool createConfigPath( const OUString & rInPath, OUString & rOutPath );
+    static bool createConfigPath( std::u16string_view rInPath, OUString & rOutPath );
 };
 
 } // namespace hierarchy_ucp

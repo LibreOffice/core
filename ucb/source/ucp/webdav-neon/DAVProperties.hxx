@@ -27,6 +27,10 @@
  ************************************************************************/
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <config_lgpl.h>
 #include <rtl/ustring.hxx>
 #include "NeonTypes.hxx"
@@ -49,7 +53,7 @@ struct DAVProperties
     static constexpr OUStringLiteral SUPPORTEDLOCK = u"DAV:supportedlock";
     static constexpr OUStringLiteral EXECUTABLE = u"http://apache.org/dav/props/executable";
 
-    static void createNeonPropName( const OUString & rFullName,
+    static void createNeonPropName( std::u16string_view rFullName,
                                     NeonPropName & rName );
     static void createUCBPropName ( const char * nspace,
                                     const char * name,

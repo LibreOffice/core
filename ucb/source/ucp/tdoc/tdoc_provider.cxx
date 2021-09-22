@@ -229,7 +229,7 @@ ContentProvider::createDocumentContent(
 
 
 // virtual
-void ContentProvider::notifyDocumentClosed( const OUString & rDocId )
+void ContentProvider::notifyDocumentClosed( std::u16string_view rDocId )
 {
     osl::MutexGuard aGuard( getContentListMutex() );
 
@@ -287,7 +287,7 @@ void ContentProvider::notifyDocumentClosed( const OUString & rDocId )
 
 
 // virtual
-void ContentProvider::notifyDocumentOpened( const OUString & rDocId )
+void ContentProvider::notifyDocumentOpened( std::u16string_view rDocId )
 {
     osl::MutexGuard aGuard( getContentListMutex() );
 

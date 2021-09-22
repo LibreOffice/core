@@ -19,6 +19,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <ucbhelper/contenthelper.hxx>
 #include <com/sun/star/ucb/XContentCreator.hpp>
 #include "tdoc_provider.hxx"
@@ -190,7 +194,7 @@ private:
         const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
     css::uno::Reference< css::ucb::XContent >
-    queryChildContent( const OUString & rRelativeChildUri );
+    queryChildContent( std::u16string_view rRelativeChildUri );
 
     /// @throws css::ucb::CommandFailedException
     /// @throws css::task::DocumentPasswordRequest
@@ -266,8 +270,8 @@ public:
                        const OUString& rContentId );
 
     void notifyDocumentClosed();
-    void notifyChildRemoved( const OUString & rRelativeChildUri );
-    void notifyChildInserted( const OUString & rRelativeChildUri );
+    void notifyChildRemoved( std::u16string_view rRelativeChildUri );
+    void notifyChildInserted( std::u16string_view rRelativeChildUri );
 
     rtl::Reference< ContentProvider > getContentProvider() const
     { return rtl::Reference< ContentProvider >( m_pProvider ); }
