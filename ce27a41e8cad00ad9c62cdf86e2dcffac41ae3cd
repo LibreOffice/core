@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14388616_07065628",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-09-22T08:20:08Z",
+      "side": 1,
+      "message": "OK, so updated the patch to look for 13.7, too. Let\u0027s see.",
+      "revId": "ce27a41e8cad00ad9c62cdf86e2dcffac41ae3cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
