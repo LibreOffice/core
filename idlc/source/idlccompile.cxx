@@ -22,6 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/process.h>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
@@ -52,9 +53,9 @@ extern int yydebug;
 
 static char tmpFilePattern[512];
 
-bool isFileUrl(const OString& fileName)
+bool isFileUrl(std::string_view fileName)
 {
-    return fileName.startsWith("file://");
+    return o3tl::starts_with(fileName, "file://");
 }
 
 OString convertToAbsoluteSystemPath(const OString& fileName)
