@@ -821,7 +821,7 @@ sal_uInt64 PictReader::ReadPixMapEtc( BitmapEx &rBitmap, bool bBaseAddr, bool bC
     // conditionally read region (or skip it):
     if ( bMaskRgn )
     {
-        sal_uInt16 nSize;
+        sal_uInt16 nSize(0);
         pPict->ReadUInt16( nSize );
         pPict->SeekRel( nSize - 2 );
         nDataSize += nSize;
