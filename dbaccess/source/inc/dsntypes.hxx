@@ -158,7 +158,7 @@ public:
     bool isConnectionUrlRequired(std::u16string_view _sURL) const;
 
     /// checks if the given data source type embeds its data into the database document
-    static bool isEmbeddedDatabase( const OUString& _sURL );
+    static bool isEmbeddedDatabase( std::u16string_view _sURL );
 
     static OUString getEmbeddedDatabase();
 

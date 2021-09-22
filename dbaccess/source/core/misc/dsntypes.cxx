@@ -19,6 +19,7 @@
 
 #include <dsntypes.hxx>
 #include <unotools/confignode.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <tools/wldcrd.hxx>
 #include <osl/file.hxx>
@@ -278,9 +279,9 @@ Sequence<PropertyValue> ODsnTypeCollection::getDefaultDBSettings( std::u16string
     return aProperties.getPropertyValues();
 }
 
-bool ODsnTypeCollection::isEmbeddedDatabase( const OUString& _sURL )
+bool ODsnTypeCollection::isEmbeddedDatabase( std::u16string_view _sURL )
 {
-    return _sURL.startsWith( "sdbc:embedded:" );
+    return o3tl::starts_with( _sURL, u"sdbc:embedded:" );
 }
 
 OUString ODsnTypeCollection::getEmbeddedDatabase()
