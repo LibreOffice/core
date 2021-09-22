@@ -424,7 +424,7 @@ sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOptions )
             uno::Any aAny = xOptions->getPropertyValue( "NullDate" );
             util::Date aDate;
             if ( aAny >>= aDate )
-                return DateToDays( aDate.Day, aDate.Month, aDate.Year );
+                return DateToDays( aDate.Day, aDate.Month, aDate.Year ) + 1;
         }
         catch (uno::Exception&)
         {
