@@ -24,6 +24,7 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <memory>
+#include <string_view>
 #include <vector>
 #include <optional>
 
@@ -72,7 +73,7 @@ namespace svgio::svgreader
         // helper to convert a string associated with a token of type SVGTokenDisplay
         // to the enum Display. Empty strings return the default 'Display_inline' with
         // which members should be initialized
-        Display getDisplayFromContent(const OUString& aContent);
+        Display getDisplayFromContent(std::u16string_view aContent);
 
       class Visitor;
 

@@ -21,6 +21,7 @@
 #include <svgnode.hxx>
 #include <svgstyleattributes.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
+#include <o3tl/string_view.hxx>
 #include <tools/urlobj.hxx>
 
 
@@ -333,79 +334,79 @@ namespace svgio::svgreader
             }
         }
 
-        Display getDisplayFromContent(const OUString& aContent)
+        Display getDisplayFromContent(std::u16string_view aContent)
         {
-            if(!aContent.isEmpty())
+            if(!aContent.empty())
             {
-                if(aContent.startsWith("inline"))
+                if(o3tl::starts_with(aContent, u"inline"))
                 {
                     return Display::Inline;
                 }
-                else if(aContent.startsWith("none"))
+                else if(o3tl::starts_with(aContent, u"none"))
                 {
                     return Display::None;
                 }
-                else if(aContent.startsWith("inherit"))
+                else if(o3tl::starts_with(aContent, u"inherit"))
                 {
                     return Display::Inherit;
                 }
-                else if(aContent.startsWith("block"))
+                else if(o3tl::starts_with(aContent, u"block"))
                 {
                     return Display::Block;
                 }
-                else if(aContent.startsWith("list-item"))
+                else if(o3tl::starts_with(aContent, u"list-item"))
                 {
                     return Display::ListItem;
                 }
-                else if(aContent.startsWith("run-in"))
+                else if(o3tl::starts_with(aContent, u"run-in"))
                 {
                     return Display::RunIn;
                 }
-                else if(aContent.startsWith("compact"))
+                else if(o3tl::starts_with(aContent, u"compact"))
                 {
                     return Display::Compact;
                 }
-                else if(aContent.startsWith("marker"))
+                else if(o3tl::starts_with(aContent, u"marker"))
                 {
                     return Display::Marker;
                 }
-                else if(aContent.startsWith("table"))
+                else if(o3tl::starts_with(aContent, u"table"))
                 {
                     return Display::Table;
                 }
-                else if(aContent.startsWith("inline-table"))
+                else if(o3tl::starts_with(aContent, u"inline-table"))
                 {
                     return Display::InlineTable;
                 }
-                else if(aContent.startsWith("table-row-group"))
+                else if(o3tl::starts_with(aContent, u"table-row-group"))
                 {
                     return Display::TableRowGroup;
                 }
-                else if(aContent.startsWith("table-header-group"))
+                else if(o3tl::starts_with(aContent, u"table-header-group"))
                 {
                     return Display::TableHeaderGroup;
                 }
-                else if(aContent.startsWith("table-footer-group"))
+                else if(o3tl::starts_with(aContent, u"table-footer-group"))
                 {
                     return Display::TableFooterGroup;
                 }
-                else if(aContent.startsWith("table-row"))
+                else if(o3tl::starts_with(aContent, u"table-row"))
                 {
                     return Display::TableRow;
                 }
-                else if(aContent.startsWith("table-column-group"))
+                else if(o3tl::starts_with(aContent, u"table-column-group"))
                 {
                     return Display::TableColumnGroup;
                 }
-                else if(aContent.startsWith("table-column"))
+                else if(o3tl::starts_with(aContent, u"table-column"))
                 {
                     return Display::TableColumn;
                 }
-                else if(aContent.startsWith("table-cell"))
+                else if(o3tl::starts_with(aContent, u"table-cell"))
                 {
                     return Display::TableCell;
                 }
-                else if(aContent.startsWith("table-caption"))
+                else if(o3tl::starts_with(aContent, u"table-caption"))
                 {
                     return Display::TableCaption;
                 }
