@@ -60,6 +60,7 @@
 
 #include <lwptools.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
 #include <osl/file.hxx>
@@ -195,9 +196,9 @@ bool LwpTools::IsUnicodePacked(LwpObjectStream* pObjStrm, sal_uInt16 len)
     return false;
 }
 
-bool LwpTools::isFileUrl(const OString &fileName)
+bool LwpTools::isFileUrl(std::string_view fileName)
 {
-    return fileName.startsWith("file://");
+    return o3tl::starts_with(fileName, "file://");
 }
 
 OUString LwpTools::convertToFileUrl(const OString &fileName)
