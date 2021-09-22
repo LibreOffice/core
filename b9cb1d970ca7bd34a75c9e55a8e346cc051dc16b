@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f630511_0321d0e2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-22T06:42:25Z",
+      "side": 1,
+      "message": "I believe it is a wrong premise.\n\nThe blur is wanted. What is unwanted is ignoring its transparency. The shadow transparency should be multiplied by the transparency of the fill.\n\nE.g., here is a sample with transparency 0 from the bugdoc, with borders removed:\n\nhttps://imgur.com/hmYl8ni\n\nThe cell background is 80% transparent. Powerpoint gives the shadow taking care of that, *and* blurs that.",
+      "range": {
+        "startLine": 7,
+        "startChar": 20,
+        "endLine": 7,
+        "endChar": 64
+      },
+      "revId": "b9cb1d970ca7bd34a75c9e55a8e346cc051dc16b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "ed3b49db_347a5bf5",
