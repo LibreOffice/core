@@ -83,6 +83,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
+#include <com/sun/star/sheet/XHeaderFooterContent.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 
 using namespace ::com::sun::star;
@@ -126,6 +127,7 @@ public:
     void testRefStringConfigXLSX();
     void testRefStringUnspecified();
     void testHeaderImageODS();
+    void testHeaderFooterContentODS();
 
     void testTdf88657ODS();
     void testTdf41722();
@@ -233,6 +235,7 @@ public:
     CPPUNIT_TEST(testRefStringConfigXLSX);
     CPPUNIT_TEST(testRefStringUnspecified);
     CPPUNIT_TEST(testHeaderImageODS);
+    CPPUNIT_TEST(testHeaderFooterContentODS);
 
     CPPUNIT_TEST(testTdf88657ODS);
     CPPUNIT_TEST(testTdf41722);
@@ -482,6 +485,39 @@ void ScExportTest2::testHeaderImageODS()
     uno::Reference<graphic::XGraphic> xGraphic;
     xStyle->getPropertyValue("HeaderBackGraphic") >>= xGraphic;
     CPPUNIT_ASSERT(xGraphic.is());
+    xDocSh->DoClose();
+}
+
+void ScExportTest2::testHeaderFooterContentODS()
+{
+    ScDocShellRef xShell = loadDoc(u"header-footer-content.", FORMAT_ODS);
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_ODS);
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xDocSh->GetModel(),
+                                                                         uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies
+        = xStyleFamiliesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xPageStyles(xStyleFamilies->getByName("PageStyles"),
+                                                       uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(xPageStyles->getByName("Default"), uno::UNO_QUERY);
+
+    uno::Reference<css::sheet::XHeaderFooterContent> xContent;
+    xStyle->getPropertyValue("RightPageHeaderContent") >>= xContent;
+    CPPUNIT_ASSERT(xContent.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("header"), xContent->getCenterText()->getString());
+
+    xStyle->getPropertyValue("FirstPageHeaderContent") >>= xContent;
+    CPPUNIT_ASSERT(xContent.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("first page header"), xContent->getCenterText()->getString());
+
+    xStyle->getPropertyValue("RightPageFooterContent") >>= xContent;
+    CPPUNIT_ASSERT(xContent.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("footer"), xContent->getCenterText()->getString());
+
+    xStyle->getPropertyValue("FirstPageFooterContent") >>= xContent;
+    // First page footer content used to be lost upon export.
+    CPPUNIT_ASSERT(xContent.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("first page footer"), xContent->getCenterText()->getString());
+
     xDocSh->DoClose();
 }
 
