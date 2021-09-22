@@ -328,7 +328,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                 SwRootFrame* pCurrentLayout = GetLayout();
 
                 pRegion->LimitToOrigin();
-                pRegion->Compress();
+                pRegion->Compress( SwRegionRects::CompressFuzzy );
 
                 ScopedVclPtr<VirtualDevice> pVout;
                 while ( !pRegion->empty() )
@@ -1664,7 +1664,7 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
         if ( pRegion )
         {
             pRegion->LimitToOrigin();
-            pRegion->Compress();
+            pRegion->Compress( SwRegionRects::CompressFuzzy );
             bRet = false;
             if ( !pRegion->empty() )
             {
