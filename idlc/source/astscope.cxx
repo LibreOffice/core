@@ -20,17 +20,19 @@
 #include <sal/config.h>
 
 #include <algorithm>
+#include <string_view>
 
 #include <astscope.hxx>
 #include <astbasetype.hxx>
 #include <astinterface.hxx>
 #include <errorhandler.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 
 
-static bool isGlobal(const OString& scopedName)
+static bool isGlobal(std::string_view scopedName)
 {
-    return scopedName.isEmpty() || scopedName.startsWith(":");
+    return scopedName.empty() || o3tl::starts_with(scopedName, ":");
 }
 
 AstScope::AstScope(NodeType nodeType)

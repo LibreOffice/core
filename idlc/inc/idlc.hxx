@@ -147,7 +147,7 @@ void removeIfExists(std::string_view pathname);
 bool copyFile(const OString* source, const OString& target);
     // a null source means stdin
 
-bool isFileUrl(const OString& fileName);
+bool isFileUrl(std::string_view fileName);
 OString convertToAbsoluteSystemPath(const OString& fileName);
 OString convertToFileUrl(const OString& fileName);
 
