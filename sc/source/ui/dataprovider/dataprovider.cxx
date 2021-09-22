@@ -11,6 +11,7 @@
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <o3tl/string_view.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
@@ -266,9 +267,9 @@ ScDBData* ScDBDataManager::getDBData()
     return pDBData;
 }
 
-bool DataProviderFactory::isInternalDataProvider(const OUString& rProvider)
+bool DataProviderFactory::isInternalDataProvider(std::u16string_view rProvider)
 {
-    return rProvider.startsWith("org.libreoffice.calc");
+    return o3tl::starts_with(rProvider, u"org.libreoffice.calc");
 }
 
 std::shared_ptr<DataProvider> DataProviderFactory::getDataProvider(ScDocument* pDoc,

@@ -9,6 +9,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <rtl/ustring.hxx>
 #include "scdllapi.h"
 #include "global.hxx"
@@ -20,7 +24,7 @@ enum class ScGeneralFunction;
 class ScDPUtil
 {
 public:
-    static bool isDuplicateDimension(const OUString& rName);
+    static bool isDuplicateDimension(std::u16string_view rName);
 
     SC_DLLPUBLIC static OUString getSourceDimensionName(std::u16string_view rName);
 

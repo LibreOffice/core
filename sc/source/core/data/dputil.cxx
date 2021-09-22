@@ -20,6 +20,7 @@
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
@@ -57,9 +58,9 @@ OUString getSpecialDateName(double fValue, bool bFirst, SvNumberFormatter* pForm
 
 }
 
-bool ScDPUtil::isDuplicateDimension(const OUString& rName)
+bool ScDPUtil::isDuplicateDimension(std::u16string_view rName)
 {
-    return rName.endsWith("*");
+    return o3tl::ends_with(rName, u"*");
 }
 
 OUString ScDPUtil::getSourceDimensionName(std::u16string_view rName)
