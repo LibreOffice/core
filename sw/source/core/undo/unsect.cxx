@@ -47,12 +47,12 @@
 /// class Calc needed for calculation of the hidden condition of a section.
 #include <calc.hxx>
 
-static std::unique_ptr<SfxItemSet> lcl_GetAttrSet( const SwSection& rSect )
+static std::optional<SfxItemSet> lcl_GetAttrSet( const SwSection& rSect )
 {
     // save attributes of the format (columns, color, ...)
     // Content and Protect items are not interesting since they are already
     // stored in Section, thus delete them.
-    std::unique_ptr<SfxItemSet> pAttr;
+    std::optional<SfxItemSet> oAttr;
     if( rSect.GetFormat() )
     {
         sal_uInt16 nCnt = 1;
@@ -61,16 +61,16 @@ static std::unique_ptr<SfxItemSet> lcl_GetAttrSet( const SwSection& rSect )
 
         if( nCnt < rSect.GetFormat()->GetAttrSet().Count() )
         {
-            pAttr.reset(new SfxItemSet( rSect.GetFormat()->GetAttrSet() ));
-            pAttr->ClearItem( RES_PROTECT );
-            pAttr->ClearItem( RES_CNTNT );
-            if( !pAttr->Count() )
+            oAttr.emplace( rSect.GetFormat()->GetAttrSet() );
+            oAttr->ClearItem( RES_PROTECT );
+            oAttr->ClearItem( RES_CNTNT );
+            if( !oAttr->Count() )
             {
-                pAttr.reset();
+                oAttr.reset();
             }
         }
     }
-    return pAttr;
+    return oAttr;
 }
 
 SwUndoInsSection::SwUndoInsSection(
@@ -322,7 +322,7 @@ class SwUndoDelSection
 private:
     std::unique_ptr<SwSectionData> const m_pSectionData; /// section not TOX
     std::unique_ptr<SwTOXBase> const m_pTOXBase; /// set iff section is TOX
-    std::unique_ptr<SfxItemSet> const m_pAttrSet;
+    std::optional<SfxItemSet> const m_oAttrSet;
     std::shared_ptr< ::sfx2::MetadatableUndo > const m_pMetadataUndo;
     sal_uLong const m_nStartNode;
     sal_uLong const m_nEndNode;
@@ -349,7 +349,7 @@ SwUndoDelSection::SwUndoDelSection(
     , m_pTOXBase( dynamic_cast<const SwTOXBaseSection*>( &rSection) !=  nullptr
             ? new SwTOXBase(static_cast<SwTOXBaseSection const&>(rSection))
             : nullptr )
-    , m_pAttrSet( ::lcl_GetAttrSet(rSection) )
+    , m_oAttrSet( ::lcl_GetAttrSet(rSection) )
     , m_pMetadataUndo( rSectionFormat.CreateUndo() )
     , m_nStartNode( pIndex->GetIndex() )
     , m_nEndNode( pIndex->GetNode().EndOfSectionIndex() )
@@ -364,16 +364,16 @@ void SwUndoDelSection::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         // sw_redlinehide: this should work as-is; there will be another undo for the update
         rDoc.InsertTableOf(m_nStartNode, m_nEndNode-2, *m_pTOXBase,
-                m_pAttrSet.get());
+                m_oAttrSet ? &*m_oAttrSet : nullptr);
     }
     else
     {
         SwNodeIndex aStt( rDoc.GetNodes(), m_nStartNode );
         SwNodeIndex aEnd( rDoc.GetNodes(), m_nEndNode-2 );
         SwSectionFormat* pFormat = rDoc.MakeSectionFormat();
-        if (m_pAttrSet)
+        if (m_oAttrSet)
         {
-            pFormat->SetFormatAttr( *m_pAttrSet );
+            pFormat->SetFormatAttr( *m_oAttrSet );
         }
 
         /// OD 04.10.2002 #102894#
@@ -428,7 +428,7 @@ class SwUndoUpdateSection
 {
 private:
     std::unique_ptr<SwSectionData> m_pSectionData;
-    std::unique_ptr<SfxItemSet> m_pAttrSet;
+    std::optional<SfxItemSet> m_oAttrSet;
     sal_uLong const m_nStartNode;
     bool const m_bOnlyAttrChanged;
 
@@ -454,7 +454,7 @@ SwUndoUpdateSection::SwUndoUpdateSection(
         bool const bOnlyAttr)
     : SwUndo( SwUndoId::CHGSECTION, &pIndex->GetNode().GetDoc() )
     , m_pSectionData( new SwSectionData(rSection) )
-    , m_pAttrSet( ::lcl_GetAttrSet(rSection) )
+    , m_oAttrSet( ::lcl_GetAttrSet(rSection) )
     , m_nStartNode( pIndex->GetIndex() )
     , m_bOnlyAttrChanged( bOnlyAttr )
 {
@@ -470,19 +470,19 @@ void SwUndoUpdateSection::UndoImpl(::sw::UndoRedoContext & rContext)
     SwSection& rNdSect = pSectNd->GetSection();
     SwFormat* pFormat = rNdSect.GetFormat();
 
-    std::unique_ptr<SfxItemSet> pCur = ::lcl_GetAttrSet( rNdSect );
-    if (m_pAttrSet)
+    std::optional<SfxItemSet> oCur = ::lcl_GetAttrSet( rNdSect );
+    if (m_oAttrSet)
     {
         // The Content and Protect items must persist
         const SfxPoolItem* pItem;
-        m_pAttrSet->Put( pFormat->GetFormatAttr( RES_CNTNT ));
+        m_oAttrSet->Put( pFormat->GetFormatAttr( RES_CNTNT ));
         if( SfxItemState::SET == pFormat->GetItemState( RES_PROTECT, true, &pItem ))
         {
-            m_pAttrSet->Put( *pItem );
+            m_oAttrSet->Put( *pItem );
         }
-        pFormat->DelDiffs( *m_pAttrSet );
-        m_pAttrSet->ClearItem( RES_CNTNT );
-        pFormat->SetFormatAttr( *m_pAttrSet );
+        pFormat->DelDiffs( *m_oAttrSet );
+        m_oAttrSet->ClearItem( RES_CNTNT );
+        pFormat->SetFormatAttr( *m_oAttrSet );
     }
     else
     {
@@ -491,7 +491,10 @@ void SwUndoUpdateSection::UndoImpl(::sw::UndoRedoContext & rContext)
         pFormat->ResetFormatAttr( RES_HEADER, RES_OPAQUE );
         pFormat->ResetFormatAttr( RES_SURROUND, RES_FRMATR_END-1 );
     }
-    m_pAttrSet = std::move(pCur);
+    if (oCur)
+        m_oAttrSet.emplace(std::move(*oCur));
+    else
+        m_oAttrSet.reset();
 
     if (m_bOnlyAttrChanged)
         return;
