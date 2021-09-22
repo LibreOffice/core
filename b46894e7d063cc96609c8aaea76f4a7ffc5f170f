@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e86ce3bd_04feaa4c",
+        "filename": "include/o3tl/string_view.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-22T07:03:10Z",
+      "side": 1,
+      "message": "I\u0027m sorry, but is this correct? IIUC, you treat the string view as if it\u0027s a pointer to a null-terminated string, which IMO is not required in string views, nor correct when a string view is pointing to a substring?",
+      "revId": "b46894e7d063cc96609c8aaea76f4a7ffc5f170f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
