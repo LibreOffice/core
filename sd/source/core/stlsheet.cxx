@@ -25,6 +25,7 @@
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 
+#include <o3tl/string_view.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -627,14 +628,14 @@ OUString GetApiNameForHelpId(sal_uLong nId)
     return OUString();
 }
 
-sal_uInt32 GetHelpIdForApiName(const OUString& sName)
+sal_uInt32 GetHelpIdForApiName(std::u16string_view sName)
 {
-    OUString sRest;
-    if (sName.startsWith("outline", &sRest))
+    std::u16string_view sRest;
+    if (o3tl::starts_with(sName, u"outline", &sRest))
     {
-        if (sRest.getLength() == 1)
+        if (sRest.length() == 1)
         {
-            sal_Unicode ch = sRest.toChar();
+            sal_Unicode ch = sRest.front();
             if ('1' <= ch && ch <= '9')
                 return HID_PSEUDOSHEET_OUTLINE1 + ch - '1';
         }
