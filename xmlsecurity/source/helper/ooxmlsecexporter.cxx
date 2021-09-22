@@ -20,6 +20,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 #include <comphelper/ofopxmlhelper.hxx>
+#include <o3tl/string_view.hxx>
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
 #include <svx/xoutbmp.hxx>
@@ -55,7 +56,7 @@ public:
     }
 
     /// Should we intentionally not sign this stream?
-    static bool isOOXMLDenylist(const OUString& rStreamName);
+    static bool isOOXMLDenylist(std::u16string_view rStreamName);
     /// Should we intentionally not sign this relation type?
     static bool isOOXMLRelationDenylist(const OUString& rRelationName);
 
@@ -85,16 +86,17 @@ public:
     void writeSignatureLineImages();
 };
 
-bool OOXMLSecExporter::Impl::isOOXMLDenylist(const OUString& rStreamName)
+bool OOXMLSecExporter::Impl::isOOXMLDenylist(std::u16string_view rStreamName)
 {
     static const std::initializer_list<std::u16string_view> vDenylist
         = { u"/%5BContent_Types%5D.xml", u"/docProps/app.xml", u"/docProps/core.xml",
             // Don't attempt to sign other signatures for now.
             u"/_xmlsignatures" };
     // Just check the prefix, as we don't care about the content type part of the stream name.
-    return std::any_of(
-        vDenylist.begin(), vDenylist.end(),
-        [&](const std::u16string_view& rLiteral) { return rStreamName.startsWith(rLiteral); });
+    return std::any_of(vDenylist.begin(), vDenylist.end(),
+                       [&](const std::u16string_view& rLiteral) {
+                           return o3tl::starts_with(rStreamName, rLiteral);
+                       });
 }
 
 bool OOXMLSecExporter::Impl::isOOXMLRelationDenylist(const OUString& rRelationName)
