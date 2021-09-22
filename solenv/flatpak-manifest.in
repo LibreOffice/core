@@ -75,11 +75,11 @@
                     "type": "shell"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/pdfium-4568.tar.bz2",
-                    "sha256": "b0c5725e1cdcef7f52f068fd33adf9e8d833a271c28ba5b6a5a576ef8f2bbbf4",
+                    "url": "https://dev-www.libreoffice.org/src/pdfium-4643.tar.bz2",
+                    "sha256": "eb98a77eaaab9e9e8de541cfd18b9438dd3c538bd5ef163820353179727f5dc9",
                     "type": "file",
                     "dest": "external/tarballs",
-                    "dest-filename": "pdfium-4568.tar.bz2"
+                    "dest-filename": "pdfium-4643.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/0168229624cfac409e766913506961a8-ucpp-1.3.2.tar.gz",

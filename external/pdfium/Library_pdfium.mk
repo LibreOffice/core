@@ -58,7 +58,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_actionhandler \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_annotiterator \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_customaccess \
-    UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_fieldaction \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_filewriteadapter \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_helpers \
     UnpackedTarball/pdfium/fpdfsdk/fpdf_annot \
@@ -104,7 +103,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_textfield \
     UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_button \
     UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_textobject \
-    UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_privatedata \
+    UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_fieldaction \
+    UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_perwindowdata \
 ))
 
 # fpdfapi
@@ -288,6 +288,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_pagerendercontext \
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_transferfuncdib \
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_transferfunc \
+    UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_basedcs \
 ))
 
 # fpdfdoc
@@ -363,7 +364,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_DocumentContext \
     UnpackedTarball/pdfium/core/fxcodec/basic/basicmodule \
     UnpackedTarball/pdfium/core/fxcodec/flate/flatemodule \
-    UnpackedTarball/pdfium/core/fxcodec/icc/iccmodule \
+    UnpackedTarball/pdfium/core/fxcodec/icc/icc_transform \
     UnpackedTarball/pdfium/core/fxcodec/jbig2/jbig2_decoder \
     UnpackedTarball/pdfium/core/fxcodec/jpeg/jpeg_common \
 ))
@@ -615,12 +616,14 @@ $(eval $(call gb_Library_add_generated_cobjects,pdfium,\
     UnpackedTarball/pdfium/third_party/freetype/src/src/truetype/truetype \
     UnpackedTarball/pdfium/third_party/freetype/src/src/type1/type1 \
     UnpackedTarball/pdfium/third_party/freetype/src/src/base/ftdebug \
+    UnpackedTarball/pdfium/third_party/freetype/src/src/base/ftfstype \
 ))
 endif
 
 ifneq ($(OS),WNT)
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcrt/cfx_fileaccess_posix \
+    UnpackedTarball/pdfium/core/fxcrt/fx_folder_posix \
 ))
 endif
 
@@ -636,8 +639,10 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/win32/cps_printer_driver \
     UnpackedTarball/pdfium/core/fxge/win32/ctext_only_printer_driver \
     UnpackedTarball/pdfium/core/fxge/win32/cwin32_platform \
+    UnpackedTarball/pdfium/core/fxge/win32/cfx_psfonttracker \
     UnpackedTarball/pdfium/core/fxge/cfx_windowsrenderdevice \
     UnpackedTarball/pdfium/core/fxcrt/cfx_fileaccess_windows \
+    UnpackedTarball/pdfium/core/fxcrt/fx_folder_windows \
     UnpackedTarball/pdfium/third_party/base/win/win_util \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_windowsrenderdevice \
 ))
