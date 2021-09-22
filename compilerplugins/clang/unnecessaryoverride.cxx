@@ -325,6 +325,9 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
             }
         */
         auto bodyIt = compoundStmt->body_begin();
+        if (bodyIt == compoundStmt->body_end()) {
+            return true;
+        }
         auto declStmt = dyn_cast<DeclStmt>(*bodyIt);
         if (!declStmt || !declStmt->isSingleDecl())
             return true;
