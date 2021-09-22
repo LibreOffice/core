@@ -32,8 +32,10 @@
 #include <cppuhelper/weak.hxx>
 #include <algorithm>
 #include <cmath>
+#include <string_view>
 #include <unotools/resmgr.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star;
 using namespace sca::pricing;
@@ -309,10 +311,10 @@ uno::Sequence< sheet::LocalizedName > SAL_CALL ScaPricingAddIn::getCompatibility
 // auxiliary input handling functions
 namespace {
 
-bool getinput_putcall(bs::types::PutCall& pc, const OUString& str) {
-    if(str.startsWith("c")) {
+bool getinput_putcall(bs::types::PutCall& pc, std::u16string_view str) {
+    if(o3tl::starts_with(str, u"c")) {
         pc=bs::types::Call;
-    } else if(str.startsWith("p")) {
+    } else if(o3tl::starts_with(str, u"p")) {
         pc=bs::types::Put;
     } else {
         return false;
@@ -343,10 +345,10 @@ bool getinput_strike(double& strike, const uno::Any& anyval) {
     return true;
 }
 
-bool getinput_inout(bs::types::BarrierKIO& kio, const OUString& str) {
-    if(str.startsWith("i")) {
+bool getinput_inout(bs::types::BarrierKIO& kio, std::u16string_view str) {
+    if(o3tl::starts_with(str, u"i")) {
         kio=bs::types::KnockIn;
-    } else if(str.startsWith("o")) {
+    } else if(o3tl::starts_with(str, u"o")) {
         kio=bs::types::KnockOut;
     } else {
         return false;
@@ -354,10 +356,10 @@ bool getinput_inout(bs::types::BarrierKIO& kio, const OUString& str) {
     return true;
 }
 
-bool getinput_barrier(bs::types::BarrierActive& cont, const OUString& str) {
-    if(str.startsWith("c")) {
+bool getinput_barrier(bs::types::BarrierActive& cont, std::u16string_view str) {
+    if(o3tl::starts_with(str, u"c")) {
         cont=bs::types::Continuous;
-    } else if(str.startsWith("e")) {
+    } else if(o3tl::starts_with(str, u"e")) {
         cont=bs::types::Maturity;
     } else {
         return false;
@@ -365,10 +367,10 @@ bool getinput_barrier(bs::types::BarrierActive& cont, const OUString& str) {
     return true;
 }
 
-bool getinput_fordom(bs::types::ForDom& fd, const OUString& str) {
-    if(str.startsWith("f")) {
+bool getinput_fordom(bs::types::ForDom& fd, std::u16string_view str) {
+    if(o3tl::starts_with(str, u"f")) {
         fd=bs::types::Foreign;
-    } else if(str.startsWith("d")) {
+    } else if(o3tl::starts_with(str, u"d")) {
         fd=bs::types::Domestic;
     } else {
         return false;
