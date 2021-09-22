@@ -3391,6 +3391,16 @@ void SwContentTree::UpdateTracking()
         return;
     }
 
+    // references
+    if (SwContentAtPos aContentAtPos(IsAttrAtPos::RefMark);
+            m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
+            !(m_bIsRoot && m_nRootType != ContentTypeId::REFERENCE))
+    {
+        const SwFormatRefMark& rRefMark = aContentAtPos.pFndTextAttr->GetRefMark();
+        lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_REFERENCE),
+                                       rRefMark.GetRefName());
+        return;
+    }
     // hyperlinks
     if (SwContentAtPos aContentAtPos(IsAttrAtPos::InetAttr);
             m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
