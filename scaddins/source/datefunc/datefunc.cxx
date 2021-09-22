@@ -30,6 +30,8 @@
 #include <algorithm>
 #include "deffuncname.hxx"
 
+#include <boost/date_time/gregorian/gregorian.hpp>
+
 using namespace ::com::sun::star;
 
 constexpr OUStringLiteral ADDIN_SERVICE = u"com.sun.star.sheet.AddIn";
@@ -337,16 +339,15 @@ sal_uInt16 DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear )
  * this function converts a Day , Month, Year representation
  * to this internal Date value.
  */
-
 sal_Int32 DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
 {
-    sal_Int32 nDays = (static_cast<sal_Int32>(nYear)-1) * 365;
-    nDays += ((nYear-1) / 4) - ((nYear-1) / 100) + ((nYear-1) / 400);
-
-    for( sal_uInt16 i = 1; i < nMonth; i++ )
-        nDays += DaysInMonth(i,nYear);
+    sal_Int32 nDays
+        = nYear * 365 + ((nYear + 3) / 4) - ((nYear + 99) / 100) + ((nYear + 399) / 400);
+    static const sal_Int32 spnCumDays[] = { 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334 };
+    nDays += spnCumDays[nMonth - 1];
     nDays += nDay;
-
+    if ((nMonth < 3) || !IsLeapYear(nYear))
+        --nDays;
     return nDays;
 }
 
