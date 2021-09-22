@@ -187,7 +187,7 @@ void XMLTableMasterPageExport::exportMasterPageContent(
 
         bool bFirstFooter = (!::cppu::any2bool(rPropSet->getPropertyValue( SC_UNO_PAGE_FIRSTFTRSHARED )) && bFooter);
 
-        exportHeaderFooter( xFooterLeft, XML_FOOTER_FIRST, bFirstFooter );
+        exportHeaderFooter( xFooterFirst, XML_FOOTER_FIRST, bFirstFooter );
     }
 }
 
