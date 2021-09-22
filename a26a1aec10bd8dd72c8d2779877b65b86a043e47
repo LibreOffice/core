@@ -106,6 +106,24 @@
       "parentUuid": "f826f5de_8080b176",
       "revId": "a26a1aec10bd8dd72c8d2779877b65b86a043e47",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8e6387b_a7420f24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001976
+      },
+      "writtenOn": "2021-09-22T13:20:41Z",
+      "side": 1,
+      "message": "I\u0027ve added flags and boolean arguments needed to skip assigning icons to virtual device frames.\n\nNew enum and const values may be changed if needed. I assigned values randomly after ensuring that assigned values aren\u0027t used yet.",
+      "parentUuid": "123f9f47_d129e296",
+      "revId": "a26a1aec10bd8dd72c8d2779877b65b86a043e47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
