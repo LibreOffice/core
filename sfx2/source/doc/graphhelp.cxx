@@ -39,6 +39,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <o3tl/string_view.hxx>
 
 #include "graphhelp.hxx"
 #include <bitmaps.hlst>
@@ -235,27 +236,27 @@ bool GraphicHelper::getThumbnailReplacement_Impl(std::u16string_view rResID, con
 }
 
 // static
-OUString GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl( const OUString& aFactoryShortName )
+OUString GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl( std::u16string_view aFactoryShortName )
 {
     OUString sResult;
 
-    if ( aFactoryShortName == "scalc" )
+    if ( aFactoryShortName == u"scalc" )
     {
         sResult = BMP_128X128_CALC_DOC;
     }
-    else if ( aFactoryShortName == "sdraw" )
+    else if ( aFactoryShortName == u"sdraw" )
     {
         sResult = BMP_128X128_DRAW_DOC;
     }
-    else if ( aFactoryShortName == "simpress" )
+    else if ( aFactoryShortName == u"simpress" )
     {
         sResult = BMP_128X128_IMPRESS_DOC;
     }
-    else if ( aFactoryShortName == "smath" )
+    else if ( aFactoryShortName == u"smath" )
     {
         sResult = BMP_128X128_MATH_DOC;
     }
-    else if ( aFactoryShortName == "swriter" || aFactoryShortName.startsWith("swriter/") )
+    else if ( aFactoryShortName == u"swriter" || o3tl::starts_with(aFactoryShortName, u"swriter/") )
     {
         sResult = BMP_128X128_WRITER_DOC;
     }

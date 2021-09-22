@@ -23,6 +23,7 @@
 #include <string_view>
 #include <algorithm>
 #include <cassert>
+#include <cstddef>
 #ifdef MACOSX
 #include <premac.h>
 #include <Foundation/NSString.h>
@@ -50,6 +51,7 @@
 #include <unotools/pathoptions.hxx>
 #include <rtl/byteseq.hxx>
 #include <rtl/ustring.hxx>
+#include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/process.h>
 #include <osl/file.hxx>
@@ -443,7 +445,7 @@ namespace
     }
 }
 
-OUString SfxHelp::GetHelpModuleName_Impl(const OUString& rHelpID)
+OUString SfxHelp::GetHelpModuleName_Impl(std::u16string_view rHelpID)
 {
     OUString aFactoryShortName;
 
@@ -452,11 +454,12 @@ OUString SfxHelp::GetHelpModuleName_Impl(const OUString& rHelpID)
     //otherwise unknown. Cosmetic, same help is shown in any case because its
     //in the shared section, but title bar would state "Writer" when context is
     //expected to be "Calc"
-    OUString sRemainder;
-    if (rHelpID.startsWith("modules/", &sRemainder))
+    std::u16string_view sRemainder;
+    if (o3tl::starts_with(rHelpID, u"modules/", &sRemainder))
     {
-        sal_Int32 nEndModule = sRemainder.indexOf('/');
-        aFactoryShortName = nEndModule != -1 ? sRemainder.copy(0, nEndModule) : sRemainder;
+        std::size_t nEndModule = sRemainder.find(u'/');
+        aFactoryShortName = nEndModule != std::u16string_view::npos
+            ? sRemainder.substr(0, nEndModule) : sRemainder;
     }
 
     if (aFactoryShortName.isEmpty())

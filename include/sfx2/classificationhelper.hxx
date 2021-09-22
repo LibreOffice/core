@@ -11,8 +11,10 @@
 #define INCLUDED_SFX2_CLASSIFICATIONHELPER_HXX
 
 #include <memory>
+#include <string_view>
 #include <vector>
 
+#include <o3tl/string_view.hxx>
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/infobar.hxx>
@@ -100,7 +102,7 @@ public:
     std::vector<OUString> const& GetIntellectualPropertyPartNumbers() const;
 
     /// Does a best-effort conversion of rType to SfxClassificationPolicyType.
-    static SfxClassificationPolicyType stringToPolicyType(const OUString& rType);
+    static SfxClassificationPolicyType stringToPolicyType(std::u16string_view rType);
     /// Returns the string representation of a SfxClassificationPolicyType element.
     static const OUString& policyTypeToString(SfxClassificationPolicyType eType);
 
@@ -154,16 +156,19 @@ public:
         return makeTextKey() + ":n" + OUString::number(m_nTextNumber++);
     }
 
-    bool isMarkingTextKey(OUString const& aKey) const { return aKey.startsWith(makeTextKey()); }
+    bool isMarkingTextKey(std::u16string_view aKey) const
+    {
+        return o3tl::starts_with(aKey, makeTextKey());
+    }
 
     OUString makeCategoryNameKey() const
     {
         return getPolicyKey() + "BusinessAuthorizationCategory:Name";
     }
 
-    bool isCategoryNameKey(OUString const& aKey) const
+    bool isCategoryNameKey(std::u16string_view aKey) const
     {
-        return aKey.startsWith(makeCategoryNameKey());
+        return o3tl::starts_with(aKey, makeCategoryNameKey());
     }
 
     OUString makeCategoryIdentifierKey() const
@@ -171,9 +176,9 @@ public:
         return getPolicyKey() + "BusinessAuthorizationCategory:Identifier";
     }
 
-    bool isCategoryIdentifierKey(OUString const& aKey) const
+    bool isCategoryIdentifierKey(std::u16string_view aKey) const
     {
-        return aKey.startsWith(makeCategoryIdentifierKey());
+        return o3tl::starts_with(aKey, makeCategoryIdentifierKey());
     }
 
     OUString makeMarkingKey() const { return getPolicyKey() + "Custom:Marking"; }
@@ -183,7 +188,10 @@ public:
         return makeMarkingKey() + ":n" + OUString::number(m_nMarkingNumber++);
     }
 
-    bool isMarkingKey(OUString const& aKey) const { return aKey.startsWith(makeMarkingKey()); }
+    bool isMarkingKey(std::u16string_view aKey) const
+    {
+        return o3tl::starts_with(aKey, makeMarkingKey());
+    }
 
     OUString makeIntellectualPropertyPartKey() const
     {
@@ -195,9 +203,9 @@ public:
         return makeIntellectualPropertyPartKey() + ":n" + OUString::number(m_nIPPartNumber++);
     }
 
-    bool isIntellectualPropertyPartKey(OUString const& aKey) const
+    bool isIntellectualPropertyPartKey(std::u16string_view aKey) const
     {
-        return aKey.startsWith(makeIntellectualPropertyPartKey());
+        return o3tl::starts_with(aKey, makeIntellectualPropertyPartKey());
     }
 
     OUString makeFullTextualRepresentationKey() const
