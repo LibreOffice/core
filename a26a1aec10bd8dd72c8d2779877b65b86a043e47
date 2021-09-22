@@ -70,6 +70,24 @@
       "parentUuid": "e9eafb99_517dcc96",
       "revId": "a26a1aec10bd8dd72c8d2779877b65b86a043e47",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f826f5de_8080b176",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-09-22T07:50:26Z",
+      "side": 1,
+      "message": "In impress if I launch a full screen presentation then nStyle_ is also SalFrameStyleFlags::NONE which suggests that such a presentation window would not be assigned an icon which would be a unexpected side effect I believe",
+      "parentUuid": "38bb08b7_185a3d74",
+      "revId": "a26a1aec10bd8dd72c8d2779877b65b86a043e47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
