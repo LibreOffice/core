@@ -77,11 +77,13 @@
 #include "ww8par.hxx"
 #include "writerhelper.hxx"
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <xmloff/odffields.hxx>
 #include <osl/diagnose.h>
 
 #include <algorithm>
+#include <string_view>
 
 #define MAX_FIELDLEN 64000
 
@@ -98,9 +100,9 @@ using namespace nsSwDocInfoSubType;
 namespace
 {
     // #120879# - helper method to identify a bookmark name to match the internal TOC bookmark naming convention
-    bool IsTOCBookmarkName(const OUString& rName)
+    bool IsTOCBookmarkName(std::u16string_view rName)
     {
-        return rName.startsWith("_Toc") || rName.startsWith(OUString(IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()+"_Toc"));
+        return o3tl::starts_with(rName, u"_Toc") || o3tl::starts_with(rName, OUString(IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()+"_Toc"));
     }
 
     OUString EnsureTOCBookmarkName(const OUString& rName)

@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/hint.hxx>
@@ -115,6 +116,7 @@
 #include <cassert>
 #include <memory>
 #include <set>
+#include <string_view>
 #include <limits>
 
 using namespace css;
@@ -2468,12 +2470,12 @@ beans::PropertyState SwXStyle::getPropertyState(const OUString& rPropertyName)
 
 // allow to retarget the SfxItemSet working on, default correctly. Only
 // use pSourceSet below this point (except in header/footer processing)
-static const SfxItemSet* lcl_GetItemsetForProperty(const SfxItemSet& rSet, SfxStyleFamily eFamily, const OUString& rPropertyName)
+static const SfxItemSet* lcl_GetItemsetForProperty(const SfxItemSet& rSet, SfxStyleFamily eFamily, std::u16string_view rPropertyName)
 {
     if(eFamily != SfxStyleFamily::Page)
         return &rSet;
-    const bool isFooter = rPropertyName.startsWith("Footer");
-    if(!isFooter && !rPropertyName.startsWith("Header") && rPropertyName != UNO_NAME_FIRST_IS_SHARED)
+    const bool isFooter = o3tl::starts_with(rPropertyName, u"Footer");
+    if(!isFooter && !o3tl::starts_with(rPropertyName, u"Header") && rPropertyName != u"" UNO_NAME_FIRST_IS_SHARED)
         return &rSet;
     const SvxSetItem* pSetItem;
     if(!lcl_GetHeaderFooterItem(rSet, rPropertyName, isFooter, pSetItem))

@@ -17,12 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <swtypes.hxx>
 
 #include <strings.hrc>
 #include <unotools.hxx>
 #include <unoprnms.hxx>
 #include <i18nutil/unicode.hxx>
+#include <o3tl/string_view.hxx>
+#include <rtl/string.h>
 #include <svtools/colorcfg.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/jobset.hxx>
@@ -488,12 +494,12 @@ bool SwOneExampleFrame::CreatePopup(const Point& rPt)
     return true;
 }
 
-void SwOneExampleFrame::PopupHdl(const OString& rId)
+void SwOneExampleFrame::PopupHdl(std::string_view rId)
 {
-    OString sZoomValue;
-    if (rId.startsWith("zoom", &sZoomValue))
+    std::string_view sZoomValue;
+    if (o3tl::starts_with(rId, "zoom", &sZoomValue))
     {
-        sal_Int16 nZoom = sZoomValue.toInt32();
+        sal_Int16 nZoom = rtl_str_toInt64_WithLength(sZoomValue.data(), 10, sZoomValue.length());
         uno::Reference< view::XViewSettingsSupplier >  xSettings(m_xController, uno::UNO_QUERY);
         uno::Reference< beans::XPropertySet >  xViewProps = xSettings->getViewSettings();
 

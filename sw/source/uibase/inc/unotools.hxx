@@ -19,6 +19,10 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_UNOTOOLS_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_UNOTOOLS_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <vcl/idle.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/customweld.hxx>
@@ -55,7 +59,7 @@ class SW_DLLPUBLIC SwOneExampleFrame final : public weld::CustomWidgetController
     bool            m_bIsInitialized;
 
     DECL_DLLPRIVATE_LINK( TimeoutHdl, Timer*, void );
-    void PopupHdl(const OString& rId);
+    void PopupHdl(std::string_view rId);
 
     SAL_DLLPRIVATE void  CreateControl();
     SAL_DLLPRIVATE void  DisposeControl();

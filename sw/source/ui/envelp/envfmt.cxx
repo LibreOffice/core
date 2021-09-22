@@ -23,6 +23,7 @@
 #include <editeng/tstpitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <svtools/unitconv.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 
 #include <cmdid.h>
@@ -165,7 +166,7 @@ IMPL_LINK(SwEnvFormatPage, SendEditHdl, const OString&, rIdent, void)
     Edit(rIdent, true);
 }
 
-void SwEnvFormatPage::Edit(const OString& rIdent, bool bSender)
+void SwEnvFormatPage::Edit(std::string_view rIdent, bool bSender)
 {
     SwWrtShell* pSh = GetParentSwEnvDlg()->pSh;
     OSL_ENSURE(pSh, "Shell missing");
@@ -174,7 +175,7 @@ void SwEnvFormatPage::Edit(const OString& rIdent, bool bSender)
         bSender ? RES_POOLCOLL_SEND_ADDRESS : RES_POOLCOLL_ENVELOPE_ADDRESS));
     OSL_ENSURE(pColl, "Text collection missing");
 
-    if (rIdent.startsWith("character"))
+    if (o3tl::starts_with(rIdent, "character"))
     {
         SfxItemSet *pCollSet = GetCollItemSet(pColl, bSender);
 
@@ -193,7 +194,7 @@ void SwEnvFormatPage::Edit(const OString& rIdent, bool bSender)
             pCollSet->Put(aOutputSet);
         }
     }
-    else if (rIdent.startsWith("paragraph"))
+    else if (o3tl::starts_with(rIdent, "paragraph"))
     {
         SfxItemSet *pCollSet = GetCollItemSet(pColl, bSender);
 

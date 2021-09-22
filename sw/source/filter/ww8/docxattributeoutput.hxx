@@ -703,8 +703,8 @@ private:
     void DoWriteBookmarkStartIfExist(sal_Int32 nRunPos);
     void DoWriteBookmarkEndIfExist(sal_Int32 nRunPos);
 
-    void DoWritePermissionTagStart(const OUString & permission);
-    void DoWritePermissionTagEnd(const OUString & permission);
+    void DoWritePermissionTagStart(std::u16string_view permission);
+    void DoWritePermissionTagEnd(std::u16string_view permission);
     void DoWritePermissionsStart();
     void DoWritePermissionsEnd();
 
