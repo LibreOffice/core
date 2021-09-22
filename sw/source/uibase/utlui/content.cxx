@@ -97,6 +97,8 @@
 #include <fldmgr.hxx>
 #include <docufld.hxx>
 
+#include <frameformats.hxx>
+
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
 
@@ -658,9 +660,17 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
             OSL_ENSURE(m_nMemberCount == nCount, "MemberCount differs");
             Point aNullPt;
             m_nMemberCount = nCount;
-            for(size_t i = 0; i < m_nMemberCount; ++i)
+            const SwFrameFormats* pFrameFormats = m_pWrtShell->GetDoc()->GetTableFrameFormats();
+            SwAutoFormatGetDocNode aGetHt(&m_pWrtShell->GetNodes());
+            for(size_t n = 0, i = 0; i < m_nMemberCount + n; ++i)
             {
-                const SwFrameFormat& rTableFormat = m_pWrtShell->GetTableFrameFormat(i, true);
+                const SwTableFormat& rTableFormat =
+                        *static_cast<SwTableFormat*>(pFrameFormats->GetFormat(i));
+                if (rTableFormat.GetInfo(aGetHt))  // skip deleted tables
+                {
+                    n++;
+                    continue;
+                }
                 const OUString& sTableName( rTableFormat.GetName() );
 
                 SwContent* pCnt = new SwContent(this, sTableName,
