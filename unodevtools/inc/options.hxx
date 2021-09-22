@@ -21,6 +21,8 @@
 
 #include <sal/config.h>
 
+#include <string_view>
+
 #include <rtl/ustrbuf.hxx>
 
 namespace unodevtools {
@@ -32,7 +34,7 @@ bool readOption( OUString * pValue, const char * pOpt,
 
 
 bool readOption( const char * pOpt,
-                     sal_uInt32 * pnIndex, const OUString & aArg);
+                     sal_uInt32 * pnIndex, std::u16string_view aArg);
 
 } // end of namespace unodevtools
 

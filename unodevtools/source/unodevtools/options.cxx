@@ -20,6 +20,7 @@
 #include <stdio.h>
 
 #include <codemaker/global.hxx>
+#include <o3tl/string_view.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/process.h>
 #include <sal/log.hxx>
@@ -66,12 +67,12 @@ bool readOption( OUString * pValue, const char * pOpt,
 
 
 bool readOption( const char * pOpt,
-                     sal_uInt32 * pnIndex, const OUString & aArg)
+                     sal_uInt32 * pnIndex, std::u16string_view aArg)
 {
     OUString aOpt = OUString::createFromAscii(pOpt);
 
-    if((aArg.startsWith("-") && aOpt.equalsIgnoreAsciiCase(aArg.subView(1))) ||
-       (aArg.startsWith("--") && aOpt.equalsIgnoreAsciiCase(aArg.subView(2))) )
+    if((o3tl::starts_with(aArg, u"-") && aOpt.equalsIgnoreAsciiCase(aArg.substr(1))) ||
+       (o3tl::starts_with(aArg, u"--") && aOpt.equalsIgnoreAsciiCase(aArg.substr(2))) )
     {
         ++(*pnIndex);
         SAL_INFO("unodevtools", "identified option --" << pOpt);
