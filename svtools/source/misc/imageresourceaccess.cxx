@@ -25,6 +25,7 @@
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/io/XStream.hpp>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <tools/stream.hxx>
 #include <tools/diagnose_ex.h>
@@ -106,12 +107,12 @@ sal_Int64 SAL_CALL StreamSupplier::getLength()
     return m_xSeekable->getLength();
 }
 
-bool isSupportedURL(OUString const & rURL)
+bool isSupportedURL(std::u16string_view rURL)
 {
-    return rURL.startsWith("private:resource/")
-        || rURL.startsWith("private:graphicrepository/")
-        || rURL.startsWith("private:standardimage/")
-        || rURL.startsWith("vnd.sun.star.extension://");
+    return o3tl::starts_with(rURL, u"private:resource/")
+        || o3tl::starts_with(rURL, u"private:graphicrepository/")
+        || o3tl::starts_with(rURL, u"private:standardimage/")
+        || o3tl::starts_with(rURL, u"vnd.sun.star.extension://");
 }
 
 std::unique_ptr<SvStream> getImageStream(uno::Reference<uno::XComponentContext> const & rxContext, OUString const & rImageResourceURL)
