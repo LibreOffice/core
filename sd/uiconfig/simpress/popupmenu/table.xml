@@ -13,6 +13,7 @@
   <menu:menuitem menu:id=".uno:Paste"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:MergeCells"/>
+  <menu:menuitem menu:id=".uno:SplitCell"/>
   <menu:menu menu:id=".uno:TableInsertMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:InsertRowsBefore"/>

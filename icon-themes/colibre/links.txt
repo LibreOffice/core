@@ -1719,17 +1719,17 @@ cmd/sc_arrangemenu.png cmd/sc_bringtofront.png
 
 # Calc
 cmd/32/insertcell.png cmd/32/insertcellsright.png
-cmd/32/mergecellsmenu.png cmd/32/togglemergecells.png
+cmd/32/mergecellsmenu.png cmd/32/mergecells.png
 cmd/32/numberformatmenu.png cmd/32/numberformatstandard.png
 cmd/32/printrangesmenu.png cmd/32/defineprintarea.png
 
 cmd/lc_insertcell.png cmd/lc_insertcellsright.png
-cmd/lc_mergecellsmenu.png cmd/lc_togglemergecells.png
+cmd/lc_mergecellsmenu.png cmd/lc_mergecells.png
 cmd/lc_numberformatmenu.png cmd/lc_numberformatstandard.png
 cmd/lc_printrangesmenu.png cmd/lc_defineprintarea.png
 
 cmd/sc_insertcell.png cmd/sc_insertcellsright.png
-cmd/sc_mergecellsmenu.png cmd/sc_togglemergecells.png
+cmd/sc_mergecellsmenu.png cmd/sc_mergecells.png
 cmd/sc_numberformatmenu.png cmd/sc_numberformatstandard.png
 cmd/sc_printrangesmenu.png cmd/sc_defineprintarea.png
 

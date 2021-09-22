@@ -45,12 +45,15 @@
  <toolbar:toolbaritem xlink:href=".uno:AlignRight"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignBlock" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:WrapText"/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleMergeCells"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:AlignTop"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignVCenter"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignBottom"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapText"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleMergeCells"/>
+ <toolbar:toolbaritem xlink:href=".uno:MergeCells"/>
+ <toolbar:toolbaritem xlink:href=".uno:SplitCell"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatStandard" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatCurrency"/>
