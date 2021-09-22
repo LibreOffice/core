@@ -40,7 +40,7 @@ void BufferedDecompositionPrimitive2D::get2DDecomposition(
         Primitive2DContainer aNewSequence;
         create2DDecomposition(aNewSequence, rViewInformation);
         const_cast<BufferedDecompositionPrimitive2D*>(this)->setBuffered2DDecomposition(
-            aNewSequence);
+            std::move(aNewSequence));
     }
 
     rVisitor.append(getBuffered2DDecomposition());
