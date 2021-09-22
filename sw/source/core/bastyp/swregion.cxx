@@ -152,7 +152,7 @@ void SwRegionRects::LimitToOrigin()
 }
 
 // combine all adjacent rectangles
-void SwRegionRects::Compress()
+void SwRegionRects::Compress( CompressType type )
 {
     bool bAgain;
     do
@@ -164,8 +164,8 @@ void SwRegionRects::Compress()
             // Rectangles are sorted by Y axis, so check only pairs of rectangles
             // that are possibly overlapping or adjacent or close enough to be grouped by the fuzzy
             // code below.
-            const tools::Long nFuzzy = 1361513;
-            const tools::Long yMax = (*this)[i].Bottom() + nFuzzy
+            const tools::Long nFuzzy = type == CompressFuzzy ? 1361513 : 0;
+            const tools::Long yMax = (*this)[i].Top() + (*this)[i].Height() + nFuzzy
                 / std::max<tools::Long>( 1, (*this)[i].Width());
             size_type j = i+1;
             while( j < size() && (*this)[j].Top() <= yMax )
@@ -188,21 +188,12 @@ void SwRegionRects::Compress()
                 }
                 else
                 {
-                    // TODO: I think the comment below and the code are partially incorrect.
-                    // An obvious mistake is the comment saying that one rectangle can be deleted,
-                    // while it's the union that gets used instead of the two rectangles.
-                    // I think this code is supposed to merge adjacent rectangles (possibly
-                    // overlapping), and such rectangles can be detected by their merged areas
-                    // being equal to the area of the union (which is obviously the case if they
-                    // share one side, and using the nFuzzy extra allow merging also rectangles
-                    // that do not quite cover the entire union but it's close enough).
-                    // So another mistake seems to be using '- CalcArea( aInter )',
-                    // it should be on the other side of the comparison to subtract shared area
-                    // counted twice. In practice it seems rectangles here do not share areas,
-                    // so the error is irrelevant.
+                    // Merge adjacent rectangles (possibly overlapping), such rectangles can be
+                    // detected by their merged areas being equal to the area of the union
+                    // (which is obviously the case if they share one side, and using
+                    // the nFuzzy extra allows merging also rectangles that do not quite cover
+                    // the entire union but it's close enough).
 
-                    // If two rectangles have the same area of their union minus the
-                    // intersection then one of them can be deleted.
                     // For combining as much as possible (and for having less single
                     // paints), the area of the union can be a little bit larger:
                     // ( 9622 * 141.5 = 1361513 ~= a quarter (1/4) centimeter wider
@@ -211,9 +202,8 @@ void SwRegionRects::Compress()
                     aUnion.Union( (*this)[j] );
                     SwRect aInter( (*this)[i] );
                     aInter.Intersection( (*this)[j] );
-                    if ( (::CalcArea( (*this)[i] ) +
-                          ::CalcArea( (*this)[j] ) + nFuzzy) >=
-                         (::CalcArea( aUnion ) - CalcArea( aInter )) )
+                    if ( CalcArea( (*this)[i] ) + CalcArea( (*this)[j] ) - CalcArea( aInter )
+                            + nFuzzy >= CalcArea( aUnion ) )
                     {
                         (*this)[i] = aUnion;
                         erase( begin() + j );
