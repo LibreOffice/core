@@ -719,6 +719,7 @@ bool SvxNumberFormatShell::IsEssentialFormat_Impl(SvNumFormatType eType, sal_uIn
         case NF_DATETIME_SYS_DDMMYYYY_HHMM:
         case NF_DATETIME_SYS_DDMMYYYY_HHMMSS:
         case NF_DATETIME_ISO_YYYYMMDD_HHMMSS:
+        case NF_DATETIME_ISO_YYYYMMDD_HHMMSS000:
         case NF_DATETIME_ISO_YYYYMMDDTHHMMSS:
         case NF_DATETIME_ISO_YYYYMMDDTHHMMSS000:
             return true;
