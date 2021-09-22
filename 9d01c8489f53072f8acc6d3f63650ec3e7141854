@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c0a1766_669b3b67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2021-09-22T08:14:16Z",
+      "side": 1,
+      "message": "Ugh, how old an Xcode is Gerrit building for iOS with?",
+      "revId": "9d01c8489f53072f8acc6d3f63650ec3e7141854",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
