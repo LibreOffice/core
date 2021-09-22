@@ -1564,7 +1564,7 @@ void ScExportTest::testMiscRowHeightExport()
     static const TestParam::RowData DfltRowData[] = {
         { 0, 4, 0, 529, 0, false },
         { 5, 10, 0, 1058, 0, false },
-        { 17, 20, 0, 1767, 0, false },
+        { 17, 20, 0, 1746, 0, false },
         // check last couple of row in document to ensure
         // they are 5.29mm ( effective default row xlsx height )
         { 1048573, 1048575, 0, 529, 0, false },
