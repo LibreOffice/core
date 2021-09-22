@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1a1f14f_bed0494f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-22T21:22:05Z",
+      "side": 1,
+      "message": "lets get this in fast-track to unbreak master after \u003chttps://git.libreoffice.org/core/+/51c9d41ca97955dd986cd5fec1aed6fbc6ec1374%5E%21\u003e \"xtend loplugin:stringviewparam to starts/endsWith: svx\"",
+      "revId": "c2ef18ce1cf5c0637c2c0083710de03b301b3512",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
