@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7493c24b_1eb95e03",
+        "filename": "vcl/source/graphic/Manager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-09-22T08:45:19Z",
+      "side": 1,
+      "message": "oss-fuzz has a deadlock in the gif fuzzer today at this lock which is attempted after...",
+      "revId": "300753bf1d4db7eff42d707f427180f0d1d1dffb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe3a9fae_b6e412c8",
+        "filename": "vcl/source/graphic/Manager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-09-22T08:45:19Z",
+      "side": 1,
+      "message": "...this one is locked",
+      "revId": "300753bf1d4db7eff42d707f427180f0d1d1dffb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a1488bd_74967413",
+        "filename": "vcl/source/graphic/Manager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-09-22T08:45:19Z",
+      "side": 1,
+      "message": "cause its called here",
+      "revId": "300753bf1d4db7eff42d707f427180f0d1d1dffb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
