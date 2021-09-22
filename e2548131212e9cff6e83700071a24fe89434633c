@@ -123,6 +123,24 @@
       "parentUuid": "df785b49_8cd296a7",
       "revId": "e2548131212e9cff6e83700071a24fe89434633c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59b37f24_83a04769",
+        "filename": "svx/source/svdraw/svdedxv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2765,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-22T13:56:55Z",
+      "side": 1,
+      "message": "Done at https://gerrit.libreoffice.org/c/core/+/122458",
+      "parentUuid": "4c4db99a_53ca45f0",
+      "revId": "e2548131212e9cff6e83700071a24fe89434633c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
