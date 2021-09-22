@@ -9,13 +9,18 @@
 
 #ifndef INCLUDED_SVX_SOURCE_SVDRAW_PRESETOOXHANDLEADJUSTMENTRELATIONS_HXX
 #define INCLUDED_SVX_SOURCE_SVDRAW_PRESETOOXHANDLEADJUSTMENTRELATIONS_HXX
+
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <rtl/ustring.hxx>
 
 namespace PresetOOXHandleAdj
 {
 /* This method is used in SdrObjCustomShape::MergeDefaultAttributes() */
 void GetOOXHandleAdjRelation(
-    const OUString& sFullOOXShapeName, /* e.g. "ooxml-circularArrow" */
+    std::u16string_view sFullOOXShapeName, /* e.g. "ooxml-circularArrow" */
     const sal_Int32 nHandleIndex, /* index in sequence from property "Handles" */
     OUString& rFirstRefType, /* Propertyname, same as by pptx import, e.g. "RefX" */
     sal_Int32& rFirstAdjValueIndex, /* index in sequence from property "AdjustmentValues" */

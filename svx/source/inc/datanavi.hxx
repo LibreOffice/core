@@ -295,7 +295,7 @@ namespace svxform
         bool                        HasFirstInstancePage() const;
         OString                     GetNewPageId() const;
 
-        static bool                 IsAdditionalPage(const OString& rIdent);
+        static bool                 IsAdditionalPage(std::string_view rIdent);
 
     public:
         DataNavigatorWindow(vcl::Window* pParent, weld::Builder& rBuilder, SfxBindings const * pBindings);

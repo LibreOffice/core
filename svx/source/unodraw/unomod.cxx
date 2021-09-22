@@ -202,7 +202,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( 
     return create(rServiceSpecifier, "");
 }
 
-uno::Reference< uno::XInterface > SvxUnoDrawMSFactory::createTextField( const OUString& ServiceSpecifier )
+uno::Reference< uno::XInterface > SvxUnoDrawMSFactory::createTextField( std::u16string_view ServiceSpecifier )
 {
     return SvxUnoTextCreateTextField( ServiceSpecifier );
 }

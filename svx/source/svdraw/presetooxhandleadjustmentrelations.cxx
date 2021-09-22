@@ -7,6 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
+#include <o3tl/string_view.hxx>
 #include <rtl/ustring.hxx>
 #include <unordered_map>
 #include "presetooxhandleadjustmentrelations.hxx"
@@ -298,7 +303,7 @@ static sal_Int32 lcl_getAdjIndexFromToken(const sal_Int32 nTokenPos, const OUStr
 }
 
 void PresetOOXHandleAdj::GetOOXHandleAdjRelation(
-    const OUString& sFullOOXShapeName, const sal_Int32 nHandleIndex, OUString& rFirstRefType,
+    std::u16string_view sFullOOXShapeName, const sal_Int32 nHandleIndex, OUString& rFirstRefType,
     sal_Int32& rFirstAdjValueIndex, OUString& rSecondRefType, sal_Int32& rSecondAdjValueIndex)
 {
     static const HandleAdjRelHashMap s_HashMap = []() {
@@ -308,16 +313,16 @@ void PresetOOXHandleAdj::GetOOXHandleAdjRelation(
         return aH;
     }();
 
-    OUString sKey;
+    std::u16string_view sKey;
     OUString sValue;
     rFirstRefType = "na";
     rFirstAdjValueIndex = -1;
     rSecondRefType = "na";
     rSecondAdjValueIndex = -1;
-    if (sFullOOXShapeName.startsWith("ooxml-", &sKey))
+    if (o3tl::starts_with(sFullOOXShapeName, u"ooxml-", &sKey))
     {
-        sKey += "_" + OUString::number(nHandleIndex);
-        HandleAdjRelHashMap::const_iterator aHashIter(s_HashMap.find(sKey));
+        HandleAdjRelHashMap::const_iterator aHashIter(
+            s_HashMap.find(OUString::Concat(sKey) + "_" + OUString::number(nHandleIndex)));
         if (aHashIter != s_HashMap.end())
             sValue = (*aHashIter).second;
         else
