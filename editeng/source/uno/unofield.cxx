@@ -17,8 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
+#include <o3tl/string_view.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
 #include <svl/itemprop.hxx>
@@ -893,57 +898,57 @@ sal_Bool SAL_CALL SvxUnoTextField::supportsService( const OUString& ServiceName 
     return cppu::supportsService( this, ServiceName );
 }
 
-uno::Reference< uno::XInterface > SvxUnoTextCreateTextField( const OUString& ServiceSpecifier )
+uno::Reference< uno::XInterface > SvxUnoTextCreateTextField( std::u16string_view ServiceSpecifier )
 {
     uno::Reference< uno::XInterface > xRet;
 
     // #i93308# up to OOo 3.2 we used this wrong namespace name with the capital T & F. This is
     // fixed since OOo 3.2 but for compatibility we will still provide support for the wrong notation.
 
-    OUString aFieldType;
-    if( (ServiceSpecifier.startsWith( "com.sun.star.text.textfield.", &aFieldType )) ||
-        (ServiceSpecifier.startsWith( "com.sun.star.text.TextField.", &aFieldType )) )
+    std::u16string_view aFieldType;
+    if( (o3tl::starts_with( ServiceSpecifier, u"com.sun.star.text.textfield.", &aFieldType )) ||
+        (o3tl::starts_with( ServiceSpecifier, u"com.sun.star.text.TextField.", &aFieldType )) )
     {
         sal_Int32 nId = text::textfield::Type::UNSPECIFIED;
 
-        if ( aFieldType == "DateTime" )
+        if ( aFieldType == u"DateTime" )
         {
             nId = text::textfield::Type::DATE;
         }
-        else if ( aFieldType == "URL" )
+        else if ( aFieldType == u"URL" )
         {
             nId = text::textfield::Type::URL;
         }
-        else if ( aFieldType == "PageNumber" )
+        else if ( aFieldType == u"PageNumber" )
         {
             nId = text::textfield::Type::PAGE;
         }
-        else if ( aFieldType == "PageCount" )
+        else if ( aFieldType == u"PageCount" )
         {
             nId = text::textfield::Type::PAGES;
         }
-        else if ( aFieldType == "SheetName" )
+        else if ( aFieldType == u"SheetName" )
         {
             nId = text::textfield::Type::TABLE;
         }
-        else if ( aFieldType == "FileName" )
+        else if ( aFieldType == u"FileName" )
         {
             nId = text::textfield::Type::EXTENDED_FILE;
         }
-        else if (aFieldType == "docinfo.Title" ||
-                 aFieldType == "DocInfo.Title" )
+        else if (aFieldType == u"docinfo.Title" ||
+                 aFieldType == u"DocInfo.Title" )
         {
             nId = text::textfield::Type::DOCINFO_TITLE;
         }
-        else if ( aFieldType == "Author" )
+        else if ( aFieldType == u"Author" )
         {
             nId = text::textfield::Type::AUTHOR;
         }
-        else if ( aFieldType == "Measure" )
+        else if ( aFieldType == u"Measure" )
         {
             nId = text::textfield::Type::MEASURE;
         }
-        else if (aFieldType == "DocInfo.Custom")
+        else if (aFieldType == u"DocInfo.Custom")
         {
             nId = text::textfield::Type::DOCINFO_CUSTOM;
         }
