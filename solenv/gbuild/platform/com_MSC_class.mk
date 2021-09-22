@@ -47,10 +47,16 @@ endef
 
 # Avoid annoying warning D9025 about overriding command-line arguments.
 gb_Helper_remove_overridden_flags = \
+    $(filter-out -W4 -w -arch:SSE -arch:SSE2 -arch:AVX -arch:AVX2 -Od -O2 -Zc:inline -Zc:inline- \
+        -Zc:dllexportInlines -Zc:dllexportInlines- -EHs -EHa -DNOMINMAX -UNOMINMAX -D_X86_=1 -U_X86_ \
+        -D_AMD64_=1 -U_AMD64_,$(1)) \
     $(lastword $(filter -W4 -w,$(1))) \
-    $(filter-out -W4 -w -arch:SSE -arch:SSE2 -arch:AVX -arch:AVX2 -Od -O2 -Zc:inline -Zc:inline- -Zc:dllexportInlines -Zc:dllexportInlines-,$(1)) \
     $(lastword $(filter -Od -O2,$(1))) \
     $(lastword $(filter -arch:SSE -arch:SSE2 -arch:AVX -arch:AVX2,$(1))) \
+    $(lastword $(filter -EHs -EHa,$(1))) \
+    $(lastword $(filter -DNOMINMAX -UNOMINMAX,$(1))) \
+    $(lastword $(filter -D_X86_=1 -U_X86_,$(1))) \
+    $(lastword $(filter -D_AMD64_=1 -U_AMD64_,$(1))) \
     $(lastword $(filter -Zc:inline -Zc:inline-,$(1))) \
     $(lastword $(filter -Zc:dllexportInlines -Zc:dllexportInlines-,$(1)))
 
@@ -60,22 +66,22 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	unset INCLUDE && \
 	$(call gb_CObject__compiler,$(2),$(3),$(7)) \
-		$(DEFS) \
-		$(gb_LTOFLAGS) \
 		$(call gb_Helper_remove_overridden_flags, \
-			$(2) $(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS))) \
-		$(if $(EXTERNAL_CODE), \
-			$(if $(filter -clr,$(2)),,$(if $(COM_IS_CLANG),-Wno-undef)), \
-			$(gb_DEFS_INTERNAL)) \
-		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
-		$(if $(filter -clr,$(2)),,$(if $(5),$(gb_COMPILER_PLUGINS))) \
-		$(if $(COMPILER_TEST),-fsyntax-only -ferror-limit=0 -Xclang -verify) \
-		-Fd$(PDBFILE) \
-		$(PCHFLAGS) \
-		$(if $(COMPILER_TEST),,$(gb_COMPILERDEPFLAGS)) \
+			$(DEFS) \
+			$(gb_LTOFLAGS) \
+			$(2) $(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS)) \
+			$(if $(EXTERNAL_CODE), \
+				$(if $(filter -clr,$(2)),,$(if $(COM_IS_CLANG),-Wno-undef)), \
+				$(gb_DEFS_INTERNAL)) \
+			$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
+			$(if $(filter -clr,$(2)),,$(if $(5),$(gb_COMPILER_PLUGINS))) \
+			$(if $(COMPILER_TEST),-fsyntax-only -ferror-limit=0 -Xclang -verify) \
+			$(PCHFLAGS) \
+			$(if $(COMPILER_TEST),,$(gb_COMPILERDEPFLAGS)) \
+			$(if $(filter YES,$(LIBRARY_X64)), -U_X86_ -D_AMD64_,) \
+			$(if $(filter YES,$(PE_X86)), -D_X86_ -U_AMD64_,)) \
 		$(INCLUDE) \
-		$(if $(filter YES,$(LIBRARY_X64)), -U_X86_ -D_AMD64_,) \
-		$(if $(filter YES,$(PE_X86)), -D_X86_ -U_AMD64_,) \
+		-Fd$(PDBFILE) \
 		-c $(3) \
 		-Fo$(1)) $(if $(filter $(true),$(6)),/link /DEBUG:FASTLINK) \
 		$(if $(COMPILER_TEST),,$(call gb_create_deps,$(4),$(1),$(3)))
