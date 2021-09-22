@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6edb8efb_ea41efc3",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-22T19:57:21Z",
+      "side": 0,
+      "message": "I believe that this code matches e.g. Date::DateToDays, and is correct. Also I believe that the problem lies somewhere in the code that converts user string like \"0001-01-01\" into a serial date.",
+      "revId": "5fc94be9d55791340a56f238ded12261f68af552",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
