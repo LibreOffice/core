@@ -35,9 +35,11 @@
 
 #include <optional>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 
 #include <algorithm>
+#include <string_view>
 
 
 using namespace std;
@@ -756,7 +758,7 @@ OUString SwFormToken::GetString() const
 
    @return the type of the token
 */
-static FormTokenType lcl_GetTokenType(const OUString & sToken,
+static FormTokenType lcl_GetTokenType(std::u16string_view sToken,
                                       sal_Int32 & rTokenLen)
 {
     static struct
@@ -779,7 +781,7 @@ static FormTokenType lcl_GetTokenType(const OUString & sToken,
 
     for(const auto & i : aTokenArr)
     {
-        if( sToken.startsWith( i.sTokenStart ) )
+        if( o3tl::starts_with( sToken, i.sTokenStart ) )
         {
             rTokenLen = i.nTokenLength;
             return i.eTokenType;

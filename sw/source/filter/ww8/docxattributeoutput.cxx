@@ -138,6 +138,7 @@
 #include <txtatr.hxx>
 #include <frameformats.hxx>
 
+#include <o3tl/string_view.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <osl/file.hxx>
 #include <utility>
@@ -152,6 +153,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 
 #include <algorithm>
+#include <cstddef>
 #include <stdarg.h>
 #include <string_view>
 
@@ -1787,33 +1789,34 @@ void DocxAttributeOutput::DoWriteBookmarksEnd(std::vector<OUString>& rEnds)
 // - "permission-for-user:<permission-id>:<permission-user-name>"
 // - "permission-for-group:<permission-id>:<permission-group-name>"
 //
-void DocxAttributeOutput::DoWritePermissionTagStart(const OUString & permission)
+void DocxAttributeOutput::DoWritePermissionTagStart(std::u16string_view permission)
 {
-    OUString permissionIdAndName;
+    std::u16string_view permissionIdAndName;
 
-    if (permission.startsWith("permission-for-group:", &permissionIdAndName))
+    if (o3tl::starts_with(permission, u"permission-for-group:", &permissionIdAndName))
     {
-        const sal_Int32 separatorIndex = permissionIdAndName.indexOf(':');
-        assert(separatorIndex != -1);
-        const OUString permissionId   = permissionIdAndName.copy(0, separatorIndex);
-        const OUString permissionName = permissionIdAndName.copy(separatorIndex + 1);
+        const std::size_t separatorIndex = permissionIdAndName.find(u':');
+        assert(separatorIndex != std::u16string_view::npos);
+        const std::u16string_view permissionId   = permissionIdAndName.substr(0, separatorIndex);
+        const std::u16string_view permissionName = permissionIdAndName.substr(separatorIndex + 1);
 
         m_pSerializer->singleElementNS(XML_w, XML_permStart,
-            FSNS(XML_w, XML_id), BookmarkToWord(permissionId),
-            FSNS(XML_w, XML_edGrp), BookmarkToWord(permissionName));
+            FSNS(XML_w, XML_id), BookmarkToWord(OUString(permissionId)),
+            FSNS(XML_w, XML_edGrp), BookmarkToWord(OUString(permissionName)));
     }
     else
     {
-        auto const ok = permission.startsWith("permission-for-user:", &permissionIdAndName);
+        auto const ok = o3tl::starts_with(
+            permission, u"permission-for-user:", &permissionIdAndName);
         assert(ok); (void)ok;
-        const sal_Int32 separatorIndex = permissionIdAndName.indexOf(':');
-        assert(separatorIndex != -1);
-        const OUString permissionId   = permissionIdAndName.copy(0, separatorIndex);
-        const OUString permissionName = permissionIdAndName.copy(separatorIndex + 1);
+        const std::size_t separatorIndex = permissionIdAndName.find(u':');
+        assert(separatorIndex != std::u16string_view::npos);
+        const std::u16string_view permissionId   = permissionIdAndName.substr(0, separatorIndex);
+        const std::u16string_view permissionName = permissionIdAndName.substr(separatorIndex + 1);
 
         m_pSerializer->singleElementNS(XML_w, XML_permStart,
-            FSNS(XML_w, XML_id), BookmarkToWord(permissionId),
-            FSNS(XML_w, XML_ed), BookmarkToWord(permissionName));
+            FSNS(XML_w, XML_id), BookmarkToWord(OUString(permissionId)),
+            FSNS(XML_w, XML_ed), BookmarkToWord(OUString(permissionName)));
     }
 }
 
@@ -1825,20 +1828,20 @@ void DocxAttributeOutput::DoWritePermissionTagStart(const OUString & permission)
 // - "permission-for-user:<permission-id>:<permission-user-name>"
 // - "permission-for-group:<permission-id>:<permission-group-name>"
 //
-void DocxAttributeOutput::DoWritePermissionTagEnd(const OUString & permission)
+void DocxAttributeOutput::DoWritePermissionTagEnd(std::u16string_view permission)
 {
-    OUString permissionIdAndName;
+    std::u16string_view permissionIdAndName;
 
-    auto const ok = permission.startsWith("permission-for-group:", &permissionIdAndName) ||
-        permission.startsWith("permission-for-user:", &permissionIdAndName);
+    auto const ok = o3tl::starts_with(permission, u"permission-for-group:", &permissionIdAndName) ||
+        o3tl::starts_with(permission, u"permission-for-user:", &permissionIdAndName);
     assert(ok); (void)ok;
 
-    const sal_Int32 separatorIndex = permissionIdAndName.indexOf(':');
-    assert(separatorIndex != -1);
-    const OUString permissionId   = permissionIdAndName.copy(0, separatorIndex);
+    const std::size_t separatorIndex = permissionIdAndName.find(u':');
+    assert(separatorIndex != std::u16string_view::npos);
+    const std::u16string_view permissionId   = permissionIdAndName.substr(0, separatorIndex);
 
     m_pSerializer->singleElementNS(XML_w, XML_permEnd,
-        FSNS(XML_w, XML_id), BookmarkToWord(permissionId));
+        FSNS(XML_w, XML_id), BookmarkToWord(OUString(permissionId)));
 }
 
 /// Write the start permissions

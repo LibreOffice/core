@@ -21,6 +21,8 @@
 #define INCLUDED_SW_INC_IODETECT_HXX
 
 #include <memory>
+#include <string_view>
+#include <o3tl/string_view.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/lineend.hxx>
 #include <tools/solar.h>
@@ -59,9 +61,9 @@ struct SwIoDetect
     {
     }
 
-    bool IsFilter( const OUString& rNm ) const
+    bool IsFilter( std::u16string_view rNm ) const
     {
-        return rNm.startsWith(sName);
+        return o3tl::starts_with(rNm, sName);
     }
 };
 

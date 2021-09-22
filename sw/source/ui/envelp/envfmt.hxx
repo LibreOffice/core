@@ -19,6 +19,10 @@
 #ifndef INCLUDED_SW_SOURCE_UI_ENVELP_ENVFMT_HXX
 #define INCLUDED_SW_SOURCE_UI_ENVELP_ENVFMT_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <vcl/weld.hxx>
 #include <envlop.hxx>
 
@@ -50,7 +54,7 @@ class SwEnvFormatPage : public SfxTabPage
 
     SfxItemSet* GetCollItemSet(SwTextFormatColl const* pColl, bool bSender);
 
-    void Edit(const OString& rIdent, bool bSender);
+    void Edit(std::string_view rIdent, bool bSender);
 
     SwEnvDlg* GetParentSwEnvDlg() { return m_pDialog; }
 

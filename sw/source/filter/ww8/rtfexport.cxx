@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "rtfexport.hxx"
 
 #include "rtfexportfilter.hxx"
@@ -51,6 +55,7 @@
 #include <svtools/rtfkeywd.hxx>
 #include <filter/msfilter/rtfutil.hxx>
 #include <unotools/docinfohelper.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
@@ -1445,17 +1450,17 @@ private:
     bool m_bOutOutlineOnly;
 
 public:
-    SwRTFWriter(const OUString& rFilterName, const OUString& rBaseURL);
+    SwRTFWriter(std::u16string_view rFilterName, const OUString& rBaseURL);
 
     ErrCode WriteStream() override;
 };
 }
 
-SwRTFWriter::SwRTFWriter(const OUString& rFilterName, const OUString& rBaseURL)
+SwRTFWriter::SwRTFWriter(std::u16string_view rFilterName, const OUString& rBaseURL)
 {
     SetBaseURL(rBaseURL);
     // export outline nodes, only (send outline to clipboard/presentation)
-    m_bOutOutlineOnly = rFilterName.startsWith("O");
+    m_bOutOutlineOnly = o3tl::starts_with(rFilterName, u"O");
 }
 
 ErrCode SwRTFWriter::WriteStream()
