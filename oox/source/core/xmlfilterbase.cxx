@@ -200,6 +200,7 @@ XmlFilterBase::XmlFilterBase( const Reference< XComponentContext >& rxContext ) 
     mnRelId( 1 ),
     mnMaxDocId( 0 ),
     mbMSO2007(false),
+    mbMSO(false),
     mbMissingExtDrawing(false)
 {
 }
@@ -218,9 +219,10 @@ XmlFilterBase::~XmlFilterBase()
 
 void XmlFilterBase::checkDocumentProperties(const Reference<XDocumentProperties>& xDocProps)
 {
-    mbMSO2007 = false;
+    mbMSO2007 = mbMSO = false;
     if (!xDocProps->getGenerator().startsWithIgnoreAsciiCase("Microsoft"))
         return;
+    mbMSO = true;
 
     uno::Reference<beans::XPropertyAccess> xUserDefProps(xDocProps->getUserDefinedProperties(), uno::UNO_QUERY);
     if (!xUserDefProps.is())
@@ -1018,6 +1020,11 @@ StorageRef XmlFilterBase::implCreateStorage( const Reference< XStream >& rxOutSt
 bool XmlFilterBase::isMSO2007Document() const
 {
     return mbMSO2007;
+}
+
+bool XmlFilterBase::isMSODocument() const
+{
+    return mbMSO;
 }
 
 void XmlFilterBase::setMissingExtDrawing()

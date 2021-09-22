@@ -199,6 +199,7 @@ public:
     void testTdf136721_paper_size();
     void testTdf139258_rotated_image();
     void testTdf142854_GridVisibilityImportXlsxInHeadlessMode();
+    void testTdf144642_RowHeightRounding();
     void testTdf140431();
     void testCheckboxFormControlXlsxExport();
     void testButtonFormControlXlsxExport();
@@ -309,6 +310,7 @@ public:
     CPPUNIT_TEST(testTdf136721_paper_size);
     CPPUNIT_TEST(testTdf139258_rotated_image);
     CPPUNIT_TEST(testTdf142854_GridVisibilityImportXlsxInHeadlessMode);
+    CPPUNIT_TEST(testTdf144642_RowHeightRounding);
     CPPUNIT_TEST(testTdf140431);
     CPPUNIT_TEST(testCheckboxFormControlXlsxExport);
     CPPUNIT_TEST(testButtonFormControlXlsxExport);
@@ -2545,6 +2547,29 @@ void ScExportTest2::testTdf142854_GridVisibilityImportXlsxInHeadlessMode()
     // If there is only 1 sheet in the document, it will not result visible problems.
     xShell = loadDocAndSetupModelViewController(u"tdf126541_GridOff.", FORMAT_XLSX, true);
     CPPUNIT_ASSERT(!xShell->GetDocument().GetViewOptions().GetOption(VOPT_GRID));
+}
+
+void ScExportTest2::testTdf144642_RowHeightRounding()
+{
+    // MS Excel round down row heights to 0.75pt
+    // MS Excel can save a row height of 28.35pt, but will display it as a row height of 27.75pt.
+    // Calc simulates this roundings but only if the xlsx file was saved in MS Excel.
+
+    ScDocShellRef xShell = loadDoc(u"tdf144642_RowHeight_10mm_SavedByCalc.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+    ScDocument& rDoc = xShell->GetDocument();
+    // 10mm == 567 twips == 28.35pt
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(567), rDoc.GetRowHeight(0, 0));
+    CPPUNIT_ASSERT_EQUAL(sal_uLong(567 * 26), rDoc.GetRowHeight(0, 25, 0, true));
+    xShell->DoClose();
+
+    xShell = loadDoc(u"tdf144642_RowHeight_28.35pt_SavedByExcel.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+    ScDocument& rDoc2 = xShell->GetDocument();
+    // 555twips == 27.75pt == 9.79mm
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(555), rDoc2.GetRowHeight(0, 0));
+    CPPUNIT_ASSERT_EQUAL(sal_uLong(555 * 26), rDoc2.GetRowHeight(0, 25, 0, true));
+    xShell->DoClose();
 }
 
 void ScExportTest2::testTdf140431()
