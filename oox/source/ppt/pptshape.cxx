@@ -539,7 +539,9 @@ void PPTShape::addShape(
                 syncDiagramFontHeights();
             }
 
-            if (getShapeProperties().hasProperty(PROP_URL))
+            OUString sURL;
+            getShapeProperties().getProperty(PROP_URL) >>= sURL;
+            if (!sURL.isEmpty())
             {
                 Reference<XEventsSupplier> xEventsSupplier(xShape, UNO_QUERY);
                 if (!xEventsSupplier.is())
@@ -549,7 +551,6 @@ void PPTShape::addShape(
                 if (!xEvents.is())
                     return;
 
-                OUString sURL;
                 OUString sAPIEventName;
                 sal_Int32 nPropertyCount = 2;
                 css::presentation::ClickAction meClickAction;
@@ -563,7 +564,6 @@ void PPTShape::addShape(
                     { "#action?jump=endshow", ClickAction_STOPPRESENTATION },
                 };
 
-                getShapeProperties().getProperty(PROP_URL) >>= sURL;
                 std::map<OUString, css::presentation::ClickAction>::const_iterator aIt
                     = ActionMap.find(sURL);
                 aIt != ActionMap.end() ? meClickAction = aIt->second

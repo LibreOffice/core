@@ -122,6 +122,7 @@ public:
     virtual void setUp() override;
 
     void testDocumentLayout();
+    void testHyperlinkOnImage();
     void testTdf142645();
     void testTdf141704();
     void testTdf142915();
@@ -246,6 +247,7 @@ public:
     CPPUNIT_TEST_SUITE(SdImportTest);
 
     CPPUNIT_TEST(testDocumentLayout);
+    CPPUNIT_TEST(testHyperlinkOnImage);
     CPPUNIT_TEST(testTdf142645);
     CPPUNIT_TEST(testTdf141704);
     CPPUNIT_TEST(testTdf142915);
@@ -444,6 +446,34 @@ void SdImportTest::testDocumentLayout()
                 OUString(m_directories.getPathFromSrc( u"/sd/qa/unit/data/" ) + aFilesToCompare[i].sDump),
                 i == nUpdateMe );
     }
+}
+
+void SdImportTest::testHyperlinkOnImage()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/hyperlinkOnImage.pptx"), PPTX);
+
+    uno::Reference< beans::XPropertySet > xShape1(getShapeFromPage(1, 0, xDocShRef));
+    uno::Reference<document::XEventsSupplier> xEventsSupplier1(xShape1, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xEvents1(xEventsSupplier1->getEvents());
+    uno::Sequence<beans::PropertyValue> props1;
+    xEvents1->getByName("OnClick") >>= props1;
+    comphelper::SequenceAsHashMap map1(props1);
+    auto iter1(map1.find("ClickAction"));
+    CPPUNIT_ASSERT_EQUAL(css::presentation::ClickAction_LASTPAGE,
+        iter1->second.get<css::presentation::ClickAction>());
+
+    uno::Reference< beans::XPropertySet > xShape2(getShapeFromPage(1, 1, xDocShRef));
+    uno::Reference<document::XEventsSupplier> xEventsSupplier2(xShape2, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xEvents2(xEventsSupplier2->getEvents());
+    uno::Sequence<beans::PropertyValue> props2;
+    xEvents2->getByName("OnClick") >>= props2;
+    comphelper::SequenceAsHashMap map2(props2);
+    auto iter2(map2.find("ClickAction"));
+    CPPUNIT_ASSERT_EQUAL(css::presentation::ClickAction_NONE,
+                         iter2->second.get<css::presentation::ClickAction>());
+
+    xDocShRef->DoClose();
 }
 
 void SdImportTest::testTdf142645()
