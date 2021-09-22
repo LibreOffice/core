@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e0a4cb5_8492ea80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-09-22T20:46:28Z",
+      "side": 1,
+      "message": "Crash occurs when a table delete is followed by another table delete.",
+      "revId": "af43cb083e2e263a143daae249343860d1ce4aa8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
