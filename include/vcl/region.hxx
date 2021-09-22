@@ -132,11 +132,9 @@ public:
     static vcl::Region GetRegionFromPolyPolygon( const tools::PolyPolygon& rPolyPoly );
 };
 
-} /* namespace vcl */
-
 template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
-    std::basic_ostream<charT, traits> & stream, const vcl::Region& rRegion)
+    std::basic_ostream<charT, traits> & stream, const Region& rRegion)
 {
     if (rRegion.IsEmpty())
         return stream << "EMPTY";
@@ -161,6 +159,8 @@ inline std::basic_ostream<charT, traits> & operator <<(
     }
     return stream;
 }
+
+} /* namespace vcl */
 
 #endif // INCLUDED_VCL_REGION_HXX
 
