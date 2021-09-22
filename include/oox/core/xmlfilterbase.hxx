@@ -246,6 +246,7 @@ public:
     static FastParser* createParser();
 
     bool isMSO2007Document() const;
+    bool isMSODocument() const;
 
     /// Signal that an MSO 2007-created SmartArt was found, need to warn the
     /// user about it.
@@ -281,6 +282,7 @@ private:
     sal_Int32 mnRelId;
     sal_Int32 mnMaxDocId;
     bool mbMSO2007;
+    bool mbMSO;
 protected:
     bool mbMissingExtDrawing;
 };

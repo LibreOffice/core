@@ -19,6 +19,7 @@
 
 #include <sheetdatacontext.hxx>
 
+#include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/token/namespaces.hxx>
@@ -277,6 +278,11 @@ void SheetDataContext::importRow( const AttributeList& rAttribs )
     aModel.mbCollapsed    = rAttribs.getBool( XML_collapsed, false );
     aModel.mbThickTop     = rAttribs.getBool( XML_thickTop, false );
     aModel.mbThickBottom  = rAttribs.getBool( XML_thickBot, false );
+
+    if (aModel.mfHeight > 0 && getFilter().isMSODocument())
+    {
+        aModel.mfHeight -= fmod(aModel.mfHeight, 0.75);  //round down to 0.75pt
+    }
 
     // decode the column spans (space-separated list of colon-separated integer pairs)
     OUString aColSpansText = rAttribs.getString( XML_spans, OUString() );
