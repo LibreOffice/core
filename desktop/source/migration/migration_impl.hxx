@@ -19,9 +19,11 @@
 #pragma once
 
 #include <memory>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 
+#include <o3tl/string_view.hxx>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
@@ -64,9 +66,9 @@ typedef std::vector< migration_step > migrations_v;
 typedef std::unique_ptr< migrations_v > migrations_vr;
 typedef std::vector< supported_migration > migrations_available;
 
-inline bool areBothOpenFrom(std::u16string_view cmd1, OUString const & cmd2)
+inline bool areBothOpenFrom(std::u16string_view cmd1, std::u16string_view cmd2)
 {
-    return cmd1 == u".uno:Open" && cmd2.startsWith(".uno:OpenFrom");
+    return cmd1 == u".uno:Open" && o3tl::starts_with(cmd2, u".uno:OpenFrom");
 }
 
 /**
