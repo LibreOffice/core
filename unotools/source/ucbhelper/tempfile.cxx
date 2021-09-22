@@ -176,7 +176,7 @@ protected:
 
 class SequentialTokens: public Tokens {
 public:
-    explicit SequentialTokens(bool showZero): m_value(0), m_show(showZero) {}
+    explicit SequentialTokens(bool showFirst, sal_uInt32 nStartWith): m_value(nStartWith), m_show(showFirst) {}
 
     bool next(OUString * token) override {
         assert(token != nullptr);
@@ -367,11 +367,11 @@ TempFile::TempFile( const OUString* pParent, bool bDirectory )
 
 TempFile::TempFile( const OUString& rLeadingChars, bool _bStartWithZero,
                     const OUString* pExtension, const OUString* pParent,
-                    bool bCreateParentDirs )
+                    bool bCreateParentDirs, sal_uInt32 nStartWith )
     : bIsDirectory( false )
     , bKillingFileEnabled( false )
 {
-    SequentialTokens t(_bStartWithZero);
+    SequentialTokens t(_bStartWithZero, nStartWith);
     aName = lcl_createName( rLeadingChars, t, pExtension, pParent, false,
                             true, true, bCreateParentDirs );
 }
