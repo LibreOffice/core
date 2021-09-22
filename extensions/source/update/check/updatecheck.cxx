@@ -814,7 +814,7 @@ UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
                 bool downloadPaused = aModel.isDownloadPaused();
 
                 enableDownload(true, downloadPaused);
-                // coverity[lock_order : FALSE] - incorrect report of lock older error with std::recursive_mutex
+                // coverity[lock_order : FALSE] - incorrect report of lock order error with std::recursive_mutex
                 setUIState(downloadPaused ? UPDATESTATE_DOWNLOAD_PAUSED : UPDATESTATE_DOWNLOADING);
             }
 
