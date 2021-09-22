@@ -16,6 +16,24 @@
       "message": "I believe that this code matches e.g. Date::DateToDays, and is correct. Also I believe that the problem lies somewhere in the code that converts user string like \"0001-01-01\" into a serial date.",
       "revId": "5fc94be9d55791340a56f238ded12261f68af552",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bd53d03_53c16596",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-22T21:01:40Z",
+      "side": 0,
+      "message": "Converting the number -693595 (which is intended to be 0001-01-01) to string representation in SvNumberformat::ImpGetDateOutput calls GregorianCalendar::handleComputeFields (in UnpackedTarball/icu/source/i18n/gregocal.cpp). And there I can see that the value of \u0027julianDay\u0027 - which is the representation of the date passed from Calc (-693595) in the GregorianCalendar, counting from somewhere ~-4713-01-01, is 1721424, while \u0027kJan1_1JulianDay\u0027 (defined in UnpackedTarball/icu/source/i18n/gregoimp.h as \"January 1, year 1 (Gregorian)\") is 1721426. We obviously have something very wrong here.",
+      "parentUuid": "6edb8efb_ea41efc3",
+      "revId": "5fc94be9d55791340a56f238ded12261f68af552",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
