@@ -28,9 +28,9 @@ namespace sdr::overlay
             return maSequence;
         }
 
-        OverlayPrimitive2DSequenceObject::OverlayPrimitive2DSequenceObject(const drawinglayer::primitive2d::Primitive2DContainer& rSequence)
+        OverlayPrimitive2DSequenceObject::OverlayPrimitive2DSequenceObject(drawinglayer::primitive2d::Primitive2DContainer&& rSequence)
         :   OverlayObjectWithBasePosition(basegfx::B2DPoint(), COL_BLACK),
-            maSequence(rSequence)
+            maSequence(std::move(rSequence))
         {
         }
 

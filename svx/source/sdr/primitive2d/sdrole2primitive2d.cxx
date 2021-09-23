@@ -32,10 +32,10 @@ using namespace com::sun::star;
 namespace drawinglayer::primitive2d
 {
         SdrOle2Primitive2D::SdrOle2Primitive2D(
-            const Primitive2DContainer& rOLEContent,
+            Primitive2DContainer&& rOLEContent,
             const basegfx::B2DHomMatrix& rTransform,
             const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute)
-        :   maOLEContent(rOLEContent),
+        :   maOLEContent(std::move(rOLEContent)),
             maTransform(rTransform),
             maSdrLFSTAttribute(rSdrLFSTAttribute)
         {
@@ -158,7 +158,7 @@ namespace drawinglayer::primitive2d
             if(!getSdrLFSTAttribute().getShadow().isDefault())
             {
                 aRetval = createEmbeddedShadowPrimitive(
-                    aRetval,
+                    std::move(aRetval),
                     getSdrLFSTAttribute().getShadow());
             }
 

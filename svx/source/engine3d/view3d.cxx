@@ -175,7 +175,7 @@ void Impl3DMirrorConstructOverlay::SetMirrorAxis(Point aMirrorAxisA, Point aMirr
                     drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparencePrimitive2D(new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(std::move(aContent), 0.5));
                     aContent = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparencePrimitive2D };
 
-                    std::unique_ptr<sdr::overlay::OverlayPrimitive2DSequenceObject> pNew(new sdr::overlay::OverlayPrimitive2DSequenceObject(aContent));
+                    std::unique_ptr<sdr::overlay::OverlayPrimitive2DSequenceObject> pNew(new sdr::overlay::OverlayPrimitive2DSequenceObject(std::move(aContent)));
 
                     xTargetOverlay->add(*pNew);
                     maObjects.append(std::move(pNew));

@@ -53,7 +53,7 @@ namespace drawinglayer::primitive2d
         public:
             SdrCustomShapePrimitive2D(
                 const attribute::SdrEffectsTextAttribute& rSdrSTAttribute,
-                const Primitive2DContainer& rSubPrimitives,
+                Primitive2DContainer&& rSubPrimitives,
                 const basegfx::B2DHomMatrix& rTextBox,
                 bool bWordWrap,
                 bool b3DShape,

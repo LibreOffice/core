@@ -110,14 +110,14 @@ void SdrGrafPrimitive2D::create2DDecomposition(
     if (!aRetval.empty() && !getSdrLFSTAttribute().getGlow().isDefault())
     {
         // glow
-        aRetval = createEmbeddedGlowPrimitive(aRetval, getSdrLFSTAttribute().getGlow());
+        aRetval = createEmbeddedGlowPrimitive(std::move(aRetval), getSdrLFSTAttribute().getGlow());
     }
 
     // add shadow
     if (!getSdrLFSTAttribute().getShadow().isDefault())
     {
-        aRetval = createEmbeddedShadowPrimitive(aRetval, getSdrLFSTAttribute().getShadow(),
-                                                getTransform());
+        aRetval = createEmbeddedShadowPrimitive(std::move(aRetval),
+                                                getSdrLFSTAttribute().getShadow(), getTransform());
     }
 
     rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());

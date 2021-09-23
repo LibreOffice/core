@@ -61,7 +61,7 @@ namespace drawinglayer::primitive2d
             if (!aRetval.empty() && !getSdrSTAttribute().getGlow().isDefault())
             {
                 // glow
-                aRetval = createEmbeddedGlowPrimitive(aRetval, getSdrSTAttribute().getGlow());
+                aRetval = createEmbeddedGlowPrimitive(std::move(aRetval), getSdrSTAttribute().getGlow());
             }
 
             // add shadow
@@ -79,7 +79,7 @@ namespace drawinglayer::primitive2d
                 // shadow will be correct (using ColorModifierStack), but expensive.
                 if(!get3DShape())
                 {
-                    aRetval = createEmbeddedShadowPrimitive(aRetval, getSdrSTAttribute().getShadow(),
+                    aRetval = createEmbeddedShadowPrimitive(std::move(aRetval), getSdrSTAttribute().getShadow(),
                                                             maTransform);
                 }
             }
@@ -89,13 +89,13 @@ namespace drawinglayer::primitive2d
 
         SdrCustomShapePrimitive2D::SdrCustomShapePrimitive2D(
             const attribute::SdrEffectsTextAttribute& rSdrSTAttribute,
-            const Primitive2DContainer& rSubPrimitives,
+            Primitive2DContainer&& rSubPrimitives,
             const basegfx::B2DHomMatrix& rTextBox,
             bool bWordWrap,
             bool b3DShape,
             const basegfx::B2DHomMatrix& rTransform)
         :   maSdrSTAttribute(rSdrSTAttribute),
-            maSubPrimitives(rSubPrimitives),
+            maSubPrimitives(std::move(rSubPrimitives)),
             maTextBox(rTextBox),
             mbWordWrap(bWordWrap),
             mb3DShape(b3DShape),

@@ -114,7 +114,7 @@ void GraphicPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer,
         // embed to needed ModifiedColorPrimitive2D's if necessary. Do this for
         // adjustments and draw mode specials
         aRetval = create2DColorModifierEmbeddingsAsNeeded(
-            aRetval, aSuppressGraphicAttr.GetDrawMode(),
+            std::move(aRetval), aSuppressGraphicAttr.GetDrawMode(),
             std::clamp(aSuppressGraphicAttr.GetLuminance() * 0.01, -1.0, 1.0),
             std::clamp(aSuppressGraphicAttr.GetContrast() * 0.01, -1.0, 1.0),
             std::clamp(aSuppressGraphicAttr.GetChannelR() * 0.01, -1.0, 1.0),

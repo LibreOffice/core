@@ -425,7 +425,7 @@ namespace drawinglayer::primitive2d
             if(!getSdrLSTAttribute().getShadow().isDefault())
             {
                 aRetval = createEmbeddedShadowPrimitive(
-                    aRetval,
+                    std::move(aRetval),
                     getSdrLSTAttribute().getShadow());
             }
 

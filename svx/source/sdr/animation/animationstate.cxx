@@ -99,9 +99,9 @@ namespace sdr::animation
             mrVOContact.GetObjectContact().getPrimitiveAnimator().InsertEvent(*this);
         }
 
-        PrimitiveAnimation::PrimitiveAnimation(sdr::contact::ViewObjectContact& rVOContact, const drawinglayer::primitive2d::Primitive2DContainer& rAnimatedPrimitives)
+        PrimitiveAnimation::PrimitiveAnimation(sdr::contact::ViewObjectContact& rVOContact, drawinglayer::primitive2d::Primitive2DContainer&& rAnimatedPrimitives)
         :   mrVOContact(rVOContact),
-            maAnimatedPrimitives(rAnimatedPrimitives)
+            maAnimatedPrimitives(std::move(rAnimatedPrimitives))
         {
             if (!comphelper::LibreOfficeKit::isActive())
                 // setup initially
