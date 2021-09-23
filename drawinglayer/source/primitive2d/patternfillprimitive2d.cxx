@@ -262,10 +262,10 @@ namespace drawinglayer::primitive2d
 
         PatternFillPrimitive2D::PatternFillPrimitive2D(
             const basegfx::B2DPolyPolygon& rMask,
-            const Primitive2DContainer& rChildren,
+            Primitive2DContainer&& rChildren,
             const basegfx::B2DRange& rReferenceRange)
         :   maMask(rMask),
-            maChildren(rChildren),
+            maChildren(std::move(rChildren)),
             maReferenceRange(rReferenceRange),
             mnDiscreteWidth(0),
             mnDiscreteHeight(0)

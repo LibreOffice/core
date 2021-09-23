@@ -69,13 +69,13 @@ namespace drawinglayer::primitive2d
             bool bWordWrap);
 
         Primitive2DContainer SVXCORE_DLLPUBLIC createEmbeddedShadowPrimitive(
-            const Primitive2DContainer& rContent,
+            Primitive2DContainer&& rContent,
             const attribute::SdrShadowAttribute& rShadow,
             const basegfx::B2DHomMatrix& rObjectMatrix = basegfx::B2DHomMatrix(),
             const Primitive2DContainer* pContentForShadow = nullptr);
 
         Primitive2DContainer SVXCORE_DLLPUBLIC createEmbeddedGlowPrimitive(
-            const Primitive2DContainer& rContent,
+            Primitive2DContainer&& rContent,
             const attribute::SdrGlowAttribute& rGlow);
 
         Primitive2DContainer SVXCORE_DLLPUBLIC createEmbeddedSoftEdgePrimitive(
