@@ -46,17 +46,17 @@ namespace std
 
 
 LogicalFontInstance::LogicalFontInstance(const vcl::font::PhysicalFontFace& rFontFace, const vcl::font::FontSelectPattern& rFontSelData )
-    : mpConversion( nullptr )
-    , mnLineHeight( 0 )
-    , mnOwnOrientation( 0 )
-    , mnOrientation( 0 )
-    , mbInit( false )
-    , mxFontMetric( new vcl::font::FontInstanceData( rFontSelData ))
+    : mxFontMetric( new vcl::font::FontInstanceData( rFontSelData ))
+    , mpConversion( nullptr )
     , mpFontCache( nullptr )
     , m_aFontSelData(rFontSelData)
     , m_pHbFont(nullptr)
     , m_nAveWidthFactor(1.0f)
     , m_pFontFace(&const_cast<vcl::font::PhysicalFontFace&>(rFontFace))
+    , mnLineHeight(0)
+    , mnOwnOrientation(0)
+    , mnOrientation( 0 )
+    , mbInit( false )
 {
 }
 
