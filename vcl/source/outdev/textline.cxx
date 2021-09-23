@@ -101,14 +101,14 @@ namespace {
     };
 }
 
-void OutputDevice::ImplInitTextLineSize()
+void OutputDevice::InitTextLineSize()
 {
-    mpFontInstance->mxFontMetric->ImplInitTextLineSize( this );
+    mpFontInstance->InitTextLineSize(GetDPIY(), GetFont(), GetBulletOffset());
 }
 
-void OutputDevice::ImplInitAboveTextLineSize()
+void OutputDevice::InitAboveTextLineSize()
 {
-    mpFontInstance->mxFontMetric->ImplInitAboveTextLineSize();
+    mpFontInstance->InitAboveTextLineSize();
 }
 
 void OutputDevice::ImplDrawWavePixel( tools::Long nOriginX, tools::Long nOriginY,
@@ -285,13 +285,13 @@ void OutputDevice::ImplDrawWaveTextLine( tools::Long nBaseX, tools::Long nBaseY,
 
     if ( bIsAbove )
     {
-        nLineHeight = pFontInstance->mxFontMetric->GetAboveWavelineUnderlineSize();
-        nLinePos = pFontInstance->mxFontMetric->GetAboveWavelineUnderlineOffset();
+        nLineHeight = pFontInstance->GetAboveWavelineUnderlineSize();
+        nLinePos = pFontInstance->GetAboveWavelineUnderlineOffset();
     }
     else
     {
-        nLineHeight = pFontInstance->mxFontMetric->GetWavelineUnderlineSize();
-        nLinePos = pFontInstance->mxFontMetric->GetWavelineUnderlineOffset();
+        nLineHeight = pFontInstance->GetWavelineUnderlineSize();
+        nLinePos = pFontInstance->GetWavelineUnderlineOffset();
     }
     if ( (eTextLine == LINESTYLE_SMALLWAVE) && (nLineHeight > 3) )
         nLineHeight = 3;
@@ -367,13 +367,13 @@ void OutputDevice::ImplDrawStraightTextLine( tools::Long nBaseX, tools::Long nBa
     case LINESTYLE_DASHDOTDOT:
         if ( bIsAbove )
         {
-            nLineHeight = pFontInstance->mxFontMetric->GetAboveUnderlineSize();
-            nLinePos    = nY + pFontInstance->mxFontMetric->GetAboveUnderlineOffset();
+            nLineHeight = pFontInstance->GetAboveUnderlineSize();
+            nLinePos    = nY + pFontInstance->GetAboveUnderlineOffset();
         }
         else
         {
-            nLineHeight = pFontInstance->mxFontMetric->GetUnderlineSize();
-            nLinePos    = nY + pFontInstance->mxFontMetric->GetUnderlineOffset();
+            nLineHeight = pFontInstance->GetUnderlineSize();
+            nLinePos    = nY + pFontInstance->GetUnderlineOffset();
         }
         break;
     case LINESTYLE_BOLD:
@@ -384,27 +384,27 @@ void OutputDevice::ImplDrawStraightTextLine( tools::Long nBaseX, tools::Long nBa
     case LINESTYLE_BOLDDASHDOTDOT:
         if ( bIsAbove )
         {
-            nLineHeight = pFontInstance->mxFontMetric->GetAboveBoldUnderlineSize();
-            nLinePos    = nY + pFontInstance->mxFontMetric->GetAboveBoldUnderlineOffset();
+            nLineHeight = pFontInstance->GetAboveBoldUnderlineSize();
+            nLinePos    = nY + pFontInstance->GetAboveBoldUnderlineOffset();
         }
         else
         {
-            nLineHeight = pFontInstance->mxFontMetric->GetBoldUnderlineSize();
-            nLinePos    = nY + pFontInstance->mxFontMetric->GetBoldUnderlineOffset();
+            nLineHeight = pFontInstance->GetBoldUnderlineSize();
+            nLinePos    = nY + pFontInstance->GetBoldUnderlineOffset();
         }
         break;
     case LINESTYLE_DOUBLE:
         if ( bIsAbove )
         {
-            nLineHeight = pFontInstance->mxFontMetric->GetAboveDoubleUnderlineSize();
-            nLinePos    = nY + pFontInstance->mxFontMetric->GetAboveDoubleUnderlineOffset1();
-            nLinePos2   = nY + pFontInstance->mxFontMetric->GetAboveDoubleUnderlineOffset2();
+            nLineHeight = pFontInstance->GetAboveDoubleUnderlineSize();
+            nLinePos    = nY + pFontInstance->GetAboveDoubleUnderlineOffset1();
+            nLinePos2   = nY + pFontInstance->GetAboveDoubleUnderlineOffset2();
         }
         else
         {
-            nLineHeight = pFontInstance->mxFontMetric->GetDoubleUnderlineSize();
-            nLinePos    = nY + pFontInstance->mxFontMetric->GetDoubleUnderlineOffset1();
-            nLinePos2   = nY + pFontInstance->mxFontMetric->GetDoubleUnderlineOffset2();
+            nLineHeight = pFontInstance->GetDoubleUnderlineSize();
+            nLinePos    = nY + pFontInstance->GetDoubleUnderlineOffset1();
+            nLinePos2   = nY + pFontInstance->GetDoubleUnderlineOffset2();
         }
         break;
     default:
@@ -602,17 +602,17 @@ void OutputDevice::ImplDrawStrikeoutLine( tools::Long nBaseX, tools::Long nBaseY
     switch ( eStrikeout )
     {
     case STRIKEOUT_SINGLE:
-        nLineHeight = pFontInstance->mxFontMetric->GetStrikeoutSize();
-        nLinePos    = nY + pFontInstance->mxFontMetric->GetStrikeoutOffset();
+        nLineHeight = pFontInstance->GetStrikeoutSize();
+        nLinePos    = nY + pFontInstance->GetStrikeoutOffset();
         break;
     case STRIKEOUT_BOLD:
-        nLineHeight = pFontInstance->mxFontMetric->GetBoldStrikeoutSize();
-        nLinePos    = nY + pFontInstance->mxFontMetric->GetBoldStrikeoutOffset();
+        nLineHeight = pFontInstance->GetBoldStrikeoutSize();
+        nLinePos    = nY + pFontInstance->GetBoldStrikeoutOffset();
         break;
     case STRIKEOUT_DOUBLE:
-        nLineHeight = pFontInstance->mxFontMetric->GetDoubleStrikeoutSize();
-        nLinePos    = nY + pFontInstance->mxFontMetric->GetDoubleStrikeoutOffset1();
-        nLinePos2   = nY + pFontInstance->mxFontMetric->GetDoubleStrikeoutOffset2();
+        nLineHeight = pFontInstance->GetDoubleStrikeoutSize();
+        nLinePos    = nY + pFontInstance->GetDoubleStrikeoutOffset1();
+        nLinePos2   = nY + pFontInstance->GetDoubleStrikeoutOffset2();
         break;
     default:
         break;
@@ -715,8 +715,8 @@ void OutputDevice::ImplDrawStrikeoutChar( tools::Long nBaseX, tools::Long nBaseY
     tools::Rectangle aPixelRect;
     aPixelRect.SetLeft( nBaseX+mnTextOffX );
     aPixelRect.SetRight( aPixelRect.Left()+nWidth );
-    aPixelRect.SetBottom( nBaseY+mpFontInstance->mxFontMetric->GetDescent() );
-    aPixelRect.SetTop( nBaseY-mpFontInstance->mxFontMetric->GetAscent() );
+    aPixelRect.SetBottom( nBaseY+mpFontInstance->GetDescent() );
+    aPixelRect.SetTop( nBaseY-mpFontInstance->GetAscent() );
 
     if (mpFontInstance->mnOrientation)
     {
@@ -1027,9 +1027,9 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, to
 
     // #109280# make sure the waveline does not exceed the descent to avoid paint problems
     LogicalFontInstance* pFontInstance = mpFontInstance.get();
-    if (nWaveHeight > pFontInstance->mxFontMetric->GetWavelineUnderlineSize())
+    if (nWaveHeight > pFontInstance->GetWavelineUnderlineSize())
     {
-        nWaveHeight = pFontInstance->mxFontMetric->GetWavelineUnderlineSize();
+        nWaveHeight = pFontInstance->GetWavelineUnderlineSize();
         // tdf#124848 hairline
         nLineWidth = 0;
     }
