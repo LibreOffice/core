@@ -23,9 +23,12 @@
 
 #include "salgdi.hxx"
 
-class ImplFontMetricData;
 class PhysicalFontCollection;
-namespace vcl::font { class PhysicalFontFace; }
+namespace vcl::font
+{
+class FontInstanceData;
+class PhysicalFontFace;
+}
 
 class TextRenderImpl
 {
@@ -36,7 +39,7 @@ public:
     virtual void                    SetTextColor( Color nColor ) = 0;
     virtual void                    SetFont(LogicalFontInstance*, int nFallbackLevel) = 0;
     void ReleaseFonts() { SetFont(nullptr, 0); }
-    virtual void                    GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel ) = 0;
+    virtual void                    GetFontMetric( vcl::font::FontInstanceDataRef&, int nFallbackLevel ) = 0;
     virtual FontCharMapRef          GetFontCharMap() const = 0;
     virtual bool                    GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const = 0;
     virtual void                    GetDevFontList( vcl::font::PhysicalFontCollection* ) = 0;
