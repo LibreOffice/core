@@ -310,7 +310,10 @@ namespace {
 // auxiliary functions
 bool IsLeapYear( sal_uInt16 nYear )
 {
-    return ((((nYear % 4) == 0) && ((nYear % 100) != 0)) || ((nYear % 400) == 0));
+    // Taken from https://github.com/unicode-org/icu/blob/main/icu4c/source/i18n/gregocal.cpp#L462
+    return (nYear >= 1582
+                ? (((nYear & 0x3) == 0) && ((nYear % 100 != 0) || (nYear % 400 == 0))) // Gregorian
+                : ((nYear & 0x3) == 0)); // Julian
 }
 
 sal_uInt16 DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear )
