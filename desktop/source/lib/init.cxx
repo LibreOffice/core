@@ -1386,12 +1386,28 @@ static OUString getGenerator()
 
 extern "C" {
 
+CallbackFlushHandler::TimeoutIdle::TimeoutIdle( CallbackFlushHandler* handler )
+    : Timer( "lokit timer callback" )
+    , mHandler( handler )
+{
+    // A second timer with higher priority, it'll ensure we flush in reasonable time if we get too busy
+    // to get POST_PAINT priority processing. Otherwise it could take a long time to flush.
+    SetPriority(TaskPriority::DEFAULT);
+    SetTimeout( 100 ); // 100 ms
+}
+
+void CallbackFlushHandler::TimeoutIdle::Invoke()
+{
+    mHandler->Invoke();
+}
+
 CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, LibreOfficeKitCallback pCallback, void* pData)
-    : Idle( "lokit timer callback" ),
+    : Idle( "lokit idle callback" ),
       m_pDocument(pDocument),
       m_pCallback(pCallback),
       m_pData(pData),
-      m_nDisableCallbacks(0)
+      m_nDisableCallbacks(0),
+      m_TimeoutIdle( this )
 {
     SetPriority(TaskPriority::POST_PAINT);
 
@@ -1408,8 +1424,6 @@ CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, Li
     m_states.emplace(LOK_CALLBACK_CURSOR_VISIBLE, "NIL");
     m_states.emplace(LOK_CALLBACK_SET_PART, "NIL");
     m_states.emplace(LOK_CALLBACK_TABLE_SELECTED, "NIL");
-
-    Start();
 }
 
 CallbackFlushHandler::~CallbackFlushHandler()
@@ -1690,6 +1704,8 @@ void CallbackFlushHandler::queue(const int type, const char* data)
     {
         Start();
     }
+    if (!m_TimeoutIdle.IsActive())
+        m_TimeoutIdle.Start();
 }
 
 bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& aCallbackData)
@@ -2053,6 +2069,8 @@ void CallbackFlushHandler::Invoke()
 
     m_queue1.clear();
     m_queue2.clear();
+    Stop();
+    m_TimeoutIdle.Stop();
 }
 
 bool CallbackFlushHandler::removeAll(int type)
