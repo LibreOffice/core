@@ -100,6 +100,7 @@ namespace dbaccess
 
         ::dbtools::WarningsContainer                m_aWarnings;
 
+        // no Reference! see OCollection::acquire
         std::unique_ptr<OTableContainer>       m_xTables;
 
         OUString                               m_aCommand;

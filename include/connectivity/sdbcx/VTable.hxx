@@ -73,9 +73,10 @@ namespace connectivity::sdbcx
             OUString m_Description;
             OUString m_Type;
 
-            rtl::Reference<OCollection>  m_xKeys;
-            rtl::Reference<OCollection>  m_xColumns;
-            rtl::Reference<OCollection>  m_xIndexes;
+            // no Reference! see OCollection::acquire
+            std::unique_ptr<OCollection> m_xKeys;
+            std::unique_ptr<OCollection> m_xColumns;
+            std::unique_ptr<OCollection> m_xIndexes;
             OCollection*    m_pTables;  // must hold his own container to notify him when renaming
 
             using OTableDescriptor_BASE::rBHelper;
