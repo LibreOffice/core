@@ -45,7 +45,7 @@
 #include <langboost.hxx>
 #include <fontinstance.hxx>
 #include <fontattributes.hxx>
-#include <impfontmetricdata.hxx>
+#include <font/FontInstanceData.hxx>
 #include <font/FontSelectPattern.hxx>
 #include <font/PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFace.hxx>
@@ -291,7 +291,7 @@ void GenPspGraphics::ClearDevFontCache()
     FreetypeManager::get().ClearFontCache();
 }
 
-void GenPspGraphics::GetFontMetric(ImplFontMetricDataRef& rxFontMetric, int nFallbackLevel)
+void GenPspGraphics::GetFontMetric(vcl::font::FontInstanceDataRef& rxFontMetric, int nFallbackLevel)
 {
     if (nFallbackLevel >= MAX_FALLBACK)
         return;
