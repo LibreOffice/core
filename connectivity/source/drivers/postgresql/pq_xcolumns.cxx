@@ -34,6 +34,11 @@
  *
  ************************************************************************/
 
+#include <sal/config.h>
+
+#include <string_view>
+
+#include <o3tl/string_view.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -81,9 +86,9 @@ static Any isCurrency( const OUString & typeName )
 //         typeName.equalsIgnoreAsciiCase("bigserial");
 // }
 
-static Any isAutoIncrement( const OUString & defaultValue )
+static Any isAutoIncrement( std::u16string_view defaultValue )
 {
-    bool ret = defaultValue.startsWith( "nextval(" );
+    bool ret = o3tl::starts_with( defaultValue, u"nextval(" );
 //     printf( "%s %d\n",
 //             OUStringToOString(defaultValue, RTL_TEXTENCODING_ASCII_US).getStr(),
 //             ret );
