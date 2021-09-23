@@ -36,6 +36,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9e046ec_55f18ecf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-23T06:06:53Z",
+      "side": 1,
+      "message": "Make an experiment in Calc. Put numbers \u0027-115858\u0027 and \u0027-115859\u0027 into cells, and format as dates. They will appear as 1582-10-15 and 1582-10-04, resp. - just as expected if you use the normal Gregorian calendar introduction date.\n\nBut that means that for dates before Gregorian 1582-10-15, you use Julian calendar dates. And that also means that you must use Julian rules for leap years for those dates. Which IMO makes the difference that you struggle with.",
+      "revId": "a299894277da08389eb0fa8d8b80f8c2ff11907c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb276e50_e55100f6",
