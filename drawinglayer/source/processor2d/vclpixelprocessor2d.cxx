@@ -1037,7 +1037,7 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
     const sal_uInt8 nTransparency = rCandidate.getGlowColor().GetTransparency();
 
     impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
-    if (aBufferDevice.isVisible())
+    if (aBufferDevice.isVisible() && !aRange.isEmpty())
     {
         // remember last OutDev and set to content
         OutputDevice* pLastOutputDevice = mpOutputDevice;
@@ -1160,18 +1160,10 @@ void VclPixelProcessor2D::processShadowPrimitive2D(const primitive2d::ShadowPrim
     impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
     if (aBufferDevice.isVisible())
     {
-        // Process children which don't want blur.
-        primitive2d::Primitive2DContainer aContainer;
-        rCandidate.get2DDecompositionWithoutBlur(aContainer, getViewInformation2D());
-        process(aContainer);
-
-        // Process children which want blur.
         OutputDevice* pLastOutputDevice = mpOutputDevice;
         mpOutputDevice = &aBufferDevice.getContent();
 
-        aContainer.clear();
-        rCandidate.get2DDecompositionWithBlur(aContainer, getViewInformation2D());
-        process(aContainer);
+        process(rCandidate);
 
         const tools::Rectangle aRect(static_cast<tools::Long>(std::floor(aRange.getMinX())),
                                      static_cast<tools::Long>(std::floor(aRange.getMinY())),
