@@ -21789,14 +21789,17 @@ private:
         }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-        // tdf#142704 %PRODUCTNAME shown in extended tips
-        AtkObject* pAtkObject = gtk_widget_get_accessible(pWidget);
-        const char* pDesc = pAtkObject ? atk_object_get_description(pAtkObject) : nullptr;
-        if (pDesc && pDesc[0])
+        if (m_pStringReplace)
         {
-            OUString aDesc(pDesc, strlen(pDesc), RTL_TEXTENCODING_UTF8);
-            aDesc = (*m_pStringReplace)(aDesc);
-            atk_object_set_description(pAtkObject, OUStringToOString(aDesc, RTL_TEXTENCODING_UTF8).getStr());
+            // tdf#142704 %PRODUCTNAME shown in extended tips
+            AtkObject* pAtkObject = gtk_widget_get_accessible(pWidget);
+            const char* pDesc = pAtkObject ? atk_object_get_description(pAtkObject) : nullptr;
+            if (pDesc && pDesc[0])
+            {
+                OUString aDesc(pDesc, strlen(pDesc), RTL_TEXTENCODING_UTF8);
+                aDesc = (*m_pStringReplace)(aDesc);
+                atk_object_set_description(pAtkObject, OUStringToOString(aDesc, RTL_TEXTENCODING_UTF8).getStr());
+            }
         }
 #endif
 
@@ -21804,7 +21807,7 @@ private:
         if (GTK_IS_BUTTON(pWidget))
         {
             GtkButton* pButton = GTK_BUTTON(pWidget);
-            if (m_pStringReplace != nullptr)
+            if (m_pStringReplace)
             {
                 OUString aLabel(get_label(pButton));
                 if (!aLabel.isEmpty())
@@ -21817,7 +21820,7 @@ private:
         else if (GTK_IS_CHECK_BUTTON(pWidget))
         {
             GtkCheckButton* pButton = GTK_CHECK_BUTTON(pWidget);
-            if (m_pStringReplace != nullptr)
+            if (m_pStringReplace)
             {
                 OUString aLabel(get_label(pButton));
                 if (!aLabel.isEmpty())
@@ -21830,7 +21833,7 @@ private:
         else if (GTK_IS_LABEL(pWidget))
         {
             GtkLabel* pLabel = GTK_LABEL(pWidget);
-            if (m_pStringReplace != nullptr)
+            if (m_pStringReplace)
             {
                 OUString aLabel(get_label(pLabel));
                 if (!aLabel.isEmpty())
@@ -21842,7 +21845,7 @@ private:
         else if (GTK_IS_TEXT_VIEW(pWidget))
         {
             GtkTextView* pTextView = GTK_TEXT_VIEW(pWidget);
-            if (m_pStringReplace != nullptr)
+            if (m_pStringReplace)
             {
                 GtkTextBuffer* pBuffer = gtk_text_view_get_buffer(pTextView);
                 GtkTextIter start, end;
@@ -21860,7 +21863,8 @@ private:
         }
         else if (GTK_IS_WINDOW(pWidget))
         {
-            if (m_pStringReplace != nullptr) {
+            if (m_pStringReplace)
+            {
                 GtkWindow* pWindow = GTK_WINDOW(pWidget);
                 set_title(pWindow, (*m_pStringReplace)(get_title(pWindow)));
                 if (GTK_IS_MESSAGE_DIALOG(pWindow))
