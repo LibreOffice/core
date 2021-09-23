@@ -17,8 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <mysql/YDriver.hxx>
 #include <mysql/YCatalog.hxx>
+#include <o3tl/string_view.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
@@ -93,11 +98,14 @@ enum class T_DRIVERTYPE
     Native
 };
 
-bool isOdbcUrl(const OUString& _sUrl) { return _sUrl.startsWith("sdbc:mysql:odbc:"); }
+bool isOdbcUrl(std::u16string_view _sUrl) { return o3tl::starts_with(_sUrl, u"sdbc:mysql:odbc:"); }
 
-bool isNativeUrl(const OUString& _sUrl) { return _sUrl.startsWith("sdbc:mysql:mysqlc:"); }
+bool isNativeUrl(std::u16string_view _sUrl)
+{
+    return o3tl::starts_with(_sUrl, u"sdbc:mysql:mysqlc:");
+}
 
-T_DRIVERTYPE lcl_getDriverType(const OUString& _sUrl)
+T_DRIVERTYPE lcl_getDriverType(std::u16string_view _sUrl)
 {
     T_DRIVERTYPE eRet = T_DRIVERTYPE::Jdbc;
     if (isOdbcUrl(_sUrl))
