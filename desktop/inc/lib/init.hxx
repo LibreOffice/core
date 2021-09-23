@@ -128,9 +128,12 @@ namespace desktop {
         typedef std::vector<CallbackData> queue_type2;
 
     private:
+        bool removeAll(int type);
+        bool removeAll(int type, const std::function<bool (const CallbackData&)>& rTestFunc);
         bool removeAll(const std::function<bool (int, const CallbackData&)>& rTestFunc);
         bool processInvalidateTilesEvent(int type, CallbackData& aCallbackData);
         bool processWindowEvent(int type, CallbackData& aCallbackData);
+        queue_type2::iterator toQueue2(queue_type1::iterator);
         queue_type2::reverse_iterator toQueue2(queue_type1::reverse_iterator);
 
         /** we frequently want to scan the queue, and mostly when we do so, we only care about the element type
