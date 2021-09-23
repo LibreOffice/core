@@ -3557,6 +3557,14 @@ void SwContentTree::UpdateTracking()
         }
         return;
     }
+    // indexes
+    if (const SwTOXBase* pTOX = m_pActiveShell->GetCurTOX(); pTOX &&
+            !(m_bIsRoot && m_nRootType != ContentTypeId::INDEX))
+    {
+        lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_INDEX),
+                                       pTOX->GetTOXName());
+        return;
+    }
     // section
     if (const SwSection* pSection = m_pActiveShell->GetCurrSection(); pSection &&
             !(m_bIsRoot && m_nRootType != ContentTypeId::REGION))
