@@ -495,10 +495,20 @@ void ODbaseTable::construct()
         m_pFileStream = createStream_simpleError( sFileName, StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYNONE);
     }
 
-    if(!m_pFileStream)
+    if (!m_pFileStream)
         return;
 
     readHeader();
+
+    std::size_t nFileSize = lcl_getFileSize(*m_pFileStream);
+
+    if (m_aHeader.headerLength > nFileSize)
+    {
+        SAL_WARN("connectivity.drivers", "Parsing error: " << nFileSize <<
+                 " max possible size, but " << m_aHeader.headerLength << " claimed, abandoning");
+        return;
+    }
+
     if (HasMemoFields())
     {
     // Create Memo-Filename (.DBT):
@@ -520,9 +530,9 @@ void ODbaseTable::construct()
         if (m_pMemoStream)
             ReadMemoHeader();
     }
+
     fillColumns();
 
-    std::size_t nFileSize = lcl_getFileSize(*m_pFileStream);
     m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
     // seems to be empty or someone wrote bullshit into the dbase file
     // try and recover if m_aHeader.db_slng is sane
