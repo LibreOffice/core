@@ -70,6 +70,41 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb93ca6b_77d69c6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-23T06:55:59Z",
+      "side": 1,
+      "message": "Basically, ",
+      "revId": "a299894277da08389eb0fa8d8b80f8c2ff11907c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0acad812_e853b662",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-23T06:55:59Z",
+      "side": 1,
+      "message": "The calculation of Julian dates is in the mentioned GregorianCalendar::handleComputeFields, in ICU external library.\n\nhttps://github.com/unicode-org/icu/blob/main/icu4c/source/i18n/gregocal.cpp#L387\n\nBut it is based on already calculated \"Julian day\", which is calculated from their internal day zero, differing from ours.\n\nhttps://github.com/unicode-org/icu/blob/main/icu4c/source/i18n/gregocal.cpp#L788",
+      "parentUuid": "6fabbe36_26cb2d43",
+      "revId": "a299894277da08389eb0fa8d8b80f8c2ff11907c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb276e50_e55100f6",
