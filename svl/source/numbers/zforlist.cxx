@@ -160,7 +160,7 @@ sal_uInt32 const indexTable[NF_INDEX_TABLE_ENTRIES] = {
     ZF_STANDARD_DATETIME + 1, // NF_DATETIME_SYS_DDMMYYYY_HHMMSS
     ZF_STANDARD_LOGICAL, // NF_BOOLEAN
     ZF_STANDARD_TEXT, // NF_TEXT
-    ZF_STANDARD_DATETIME + 4, // NF_DATETIME_SYS_DDMMYYYY_HHMM
+    ZF_STANDARD_DATETIME + 2, // NF_DATETIME_SYS_DDMMYYYY_HHMM
     ZF_STANDARD_FRACTION + 2, // NF_FRACTION_3D
     ZF_STANDARD_FRACTION + 3, // NF_FRACTION_2
     ZF_STANDARD_FRACTION + 4, // NF_FRACTION_4
@@ -168,10 +168,10 @@ sal_uInt32 const indexTable[NF_INDEX_TABLE_ENTRIES] = {
     ZF_STANDARD_FRACTION + 6, // NF_FRACTION_16
     ZF_STANDARD_FRACTION + 7, // NF_FRACTION_10
     ZF_STANDARD_FRACTION + 8, // NF_FRACTION_100
-    ZF_STANDARD_DATETIME + 2, // NF_DATETIME_ISO_YYYYMMDD_HHMMSS
-    ZF_STANDARD_DATETIME + 6, // NF_DATETIME_ISO_YYYYMMDD_HHMMSS000
-    ZF_STANDARD_DATETIME + 3, // NF_DATETIME_ISO_YYYYMMDDTHHMMSS
-    ZF_STANDARD_DATETIME + 5  // NF_DATETIME_ISO_YYYYMMDDTHHMMSS000
+    ZF_STANDARD_DATETIME + 3, // NF_DATETIME_ISO_YYYYMMDD_HHMMSS
+    ZF_STANDARD_DATETIME + 4, // NF_DATETIME_ISO_YYYYMMDD_HHMMSS000
+    ZF_STANDARD_DATETIME + 5, // NF_DATETIME_ISO_YYYYMMDDTHHMMSS
+    ZF_STANDARD_DATETIME + 6  // NF_DATETIME_ISO_YYYYMMDDTHHMMSS000
 };
 
 /**
@@ -2875,7 +2875,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     // DD.MM.YYYY HH:MM   System
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATETIME_SYS_DDMMYYYY_HHMM );
     ImpInsertFormat( aFormatSeq[nIdx],
-                     CLOffset + ZF_STANDARD_DATETIME+4 /* NF_DATETIME_SYS_DDMMYYYY_HHMM */ );
+                     CLOffset + ZF_STANDARD_DATETIME+2 /* NF_DATETIME_SYS_DDMMYYYY_HHMM */ );
 
     const NfKeywordTable & rKeyword = pFormatScanner->GetKeywords();
     i18n::NumberFormatCode aSingleFormatCode;
@@ -2890,7 +2890,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
         rKeyword[NF_KEY_MMI] + ":" +
         rKeyword[NF_KEY_SS];
     SvNumberformat* pFormat = ImpInsertFormat( aSingleFormatCode,
-                     CLOffset + ZF_STANDARD_DATETIME+2 /* NF_DATETIME_ISO_YYYYMMDD_HHMMSS */ );
+                     CLOffset + ZF_STANDARD_DATETIME+3 /* NF_DATETIME_ISO_YYYYMMDD_HHMMSS */ );
     assert(pFormat);
 
     // YYYY-MM-DD HH:MM:SS,000   ISO (with blank instead of 'T') and
@@ -2904,7 +2904,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
         rKeyword[NF_KEY_SS] + GetLocaleData()->getTime100SecSep() +
         "000";
     pFormat = ImpInsertFormat( aSingleFormatCode,
-                     CLOffset + ZF_STANDARD_DATETIME+6 /* NF_DATETIME_ISO_YYYYMMDD_HHMMSS000 */ );
+                     CLOffset + ZF_STANDARD_DATETIME+4 /* NF_DATETIME_ISO_YYYYMMDD_HHMMSS000 */ );
     assert(pFormat);
 
     // YYYY-MM-DD"T"HH:MM:SS   ISO
@@ -2916,7 +2916,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
         rKeyword[NF_KEY_MMI] + ":" +
         rKeyword[NF_KEY_SS];
     pFormat = ImpInsertFormat( aSingleFormatCode,
-                     CLOffset + ZF_STANDARD_DATETIME+3 /* NF_DATETIME_ISO_YYYYMMDDTHHMMSS */ );
+                     CLOffset + ZF_STANDARD_DATETIME+5 /* NF_DATETIME_ISO_YYYYMMDDTHHMMSS */ );
     assert(pFormat);
     pFormat->SetComment("ISO 8601");    // not to be localized
 
@@ -2930,7 +2930,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
         rKeyword[NF_KEY_SS] + (GetLocaleData()->getTime100SecSep() == "." ? "." : ",") +
         "000";
     pFormat = ImpInsertFormat( aSingleFormatCode,
-                     CLOffset + ZF_STANDARD_DATETIME+5 /* NF_DATETIME_ISO_YYYYMMDDTHHMMSS000 */ );
+                     CLOffset + ZF_STANDARD_DATETIME+6 /* NF_DATETIME_ISO_YYYYMMDDTHHMMSS000 */ );
     assert(pFormat);
     pFormat->SetComment("ISO 8601");    // not to be localized
 
