@@ -30,6 +30,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
+#include <o3tl/string_view.hxx>
 #include <unotools/tempfile.hxx>
 #include <rtl/math.hxx>
 #include <svx/charthelper.hxx>
@@ -87,12 +88,12 @@ public:
     explicit CheckForChartName( const OUString& rDir ):
         aDir(rDir) {}
 
-    bool operator()(const OUString& rName)
+    bool operator()(std::u16string_view rName)
     {
-        if(!rName.startsWith(aDir))
+        if(!o3tl::starts_with(rName, aDir))
             return false;
 
-        if(!rName.endsWith(".xml"))
+        if(!o3tl::ends_with(rName, u".xml"))
             return false;
 
         return true;
