@@ -25,6 +25,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <officecfg/Office/Common.hxx>
 
+#include <vcl/font.hxx>
 #include <vcl/outdev.hxx>
 
 #include <fontattributes.hxx>
@@ -85,7 +86,7 @@ FontInstanceData::FontInstanceData( const FontSelectPattern& rFontSelData )
     SetStyleName( rFontSelData.GetStyleName() );
 }
 
-void FontInstanceData::ImplInitTextLineSize( const OutputDevice* pDev )
+void FontInstanceData::InitTextLineSize(sal_Int32 nDPIY, vcl::Font const& rFont, sal_Int32 nBulletOffset)
 {
     tools::Long nDescent = mnDescent;
     if ( nDescent <= 0 )
@@ -122,14 +123,13 @@ void FontInstanceData::ImplInitTextLineSize( const OutputDevice* pDev )
      /* #117909#
       * add some pixels to minimum double line distance on higher resolution devices
       */
-    tools::Long nMin2LineDY = 1 + pDev->GetDPIY()/150;
+    tools::Long nMin2LineDY = 1 + nDPIY / 150;
     if ( n2LineDY < nMin2LineDY )
         n2LineDY = nMin2LineDY;
     tools::Long n2LineDY2 = n2LineDY/2;
     if ( !n2LineDY2 )
         n2LineDY2 = 1;
 
-    const vcl::Font& rFont ( pDev->GetFont() );
     bool bCJKVertical = MsLangId::isCJK(rFont.GetLanguage()) && rFont.IsVertical();
     tools::Long nUnderlineOffset = bCJKVertical ? mnDescent : (mnDescent/2 + 1);
     tools::Long nStrikeoutOffset = rFont.IsVertical() ? -((mnAscent - mnDescent) / 2) : -((mnAscent - mnIntLeading) / 3);
@@ -170,12 +170,12 @@ void FontInstanceData::ImplInitTextLineSize( const OutputDevice* pDev )
     mnDStrikeoutOffset1    = nStrikeoutOffset - n2LineDY2 - n2LineHeight;
     mnDStrikeoutOffset2    = mnDStrikeoutOffset1 + n2LineDY + n2LineHeight;
 
-    mnBulletOffset = ( pDev->GetTextWidth( OUString( u' ' ) ) - pDev->GetTextWidth( OUString( u'\x00b7' ) ) ) >> 1 ;
+    mnBulletOffset = nBulletOffset;
 
 }
 
 
-void FontInstanceData::ImplInitAboveTextLineSize()
+void FontInstanceData::InitAboveTextLineSize()
 {
     tools::Long nIntLeading = mnIntLeading;
     // TODO: assess usage of nLeading below (changed in extleading CWS)
@@ -225,16 +225,13 @@ void FontInstanceData::ImplInitAboveTextLineSize()
     mnAboveWUnderlineOffset = nCeiling + (nIntLeading + 1) / 2;
 }
 
-void FontInstanceData::ImplInitFlags( const OutputDevice* pDev )
+void FontInstanceData::InitFlags(vcl::Font const& rFont, tools::Rectangle const& rRect)
 {
-    const vcl::Font& rFont ( pDev->GetFont() );
     bool bCentered = true;
     if (MsLangId::isCJK(rFont.GetLanguage()))
     {
-        tools::Rectangle aRect;
-        pDev->GetTextBoundRect( aRect, u"\x3001" ); // Fullwidth fullstop
         const auto nH = rFont.GetFontSize().Height();
-        const auto nB = aRect.Left();
+        const auto nB = rRect.Left();
         // Use 18.75% as a threshold to define a centered fullwidth fullstop.
         // In general, nB/nH < 5% for most Japanese fonts.
         bCentered = nB > (((nH >> 1)+nH)>>3);
