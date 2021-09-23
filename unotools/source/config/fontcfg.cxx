@@ -671,15 +671,21 @@ static bool ImplKillTrailingWithExceptions( OUString& rName, const char* const* 
 
 static bool ImplFindAndErase( OUString& rName, const char* pStr )
 {
-    sal_Int32 nLen = static_cast<sal_Int32>(strlen(pStr));
-    sal_Int32 nPos = rName.indexOfAsciiL(pStr, nLen );
-    if ( nPos < 0 )
-        return false;
+    if ( ImplIsTrailing(rName, pStr) )
+    {
+        sal_Int32 nLen = static_cast<sal_Int32>(strlen(pStr));
+        sal_Int32 nPos = rName.getLength() - nLen;
+        if ( nPos < 0 )
+            return false;
 
-    OUStringBuffer sBuff(rName);
-    sBuff.remove(nPos, nLen);
-    rName = sBuff.makeStringAndClear();
-    return true;
+        OUStringBuffer sBuff(rName);
+        sBuff.remove(nPos, nLen);
+        rName = sBuff.makeStringAndClear();
+
+        return true;
+    }
+
+    return false;
 }
 
 void FontSubstConfiguration::getMapName( const OUString& rOrgName, OUString& rShortName,
