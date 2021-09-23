@@ -53,6 +53,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fabbe36_26cb2d43",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-23T06:49:03Z",
+      "side": 1,
+      "message": "Is there a sample calculation somewhere in the code, or should we use the implementations of the calenders here?",
+      "revId": "a299894277da08389eb0fa8d8b80f8c2ff11907c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb276e50_e55100f6",
