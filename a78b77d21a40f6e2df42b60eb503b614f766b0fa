@@ -16,6 +16,24 @@
       "message": "Please beware that this change introduces two new strings.",
       "revId": "a78b77d21a40f6e2df42b60eb503b614f766b0fa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e00688f9_93a5b931",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-09-23T09:23:34Z",
+      "side": 1,
+      "message": "You are right!! Let\u0027s abandon it then. Thanks for flagging it",
+      "parentUuid": "ca669f02_b43f6aee",
+      "revId": "a78b77d21a40f6e2df42b60eb503b614f766b0fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
