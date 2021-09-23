@@ -29,8 +29,17 @@
 
 #include <vector>
 
+namespace tools
+{
+    class Rectangle;
+}
+
 class OutputDevice;
 class LogicalFontInstance;
+namespace vcl
+{
+class Font;
+}
 
 namespace vcl::font
 {
@@ -95,9 +104,9 @@ public:
     tools::Long            GetDoubleStrikeoutOffset1() const                               { return mnDStrikeoutOffset1; }
     tools::Long            GetDoubleStrikeoutOffset2() const                               { return mnDStrikeoutOffset2; }
 
-    void            ImplInitTextLineSize( const OutputDevice* pDev );
-    void            ImplInitAboveTextLineSize();
-    void            ImplInitFlags( const OutputDevice* pDev );
+    void            InitTextLineSize(sal_Int32 nDPIY, vcl::Font const& rFont, sal_Int32 nBulletOffset);
+    void            InitAboveTextLineSize();
+    void            InitFlags(vcl::Font const& rFont, tools::Rectangle const& rRect);
     void            ImplCalcLineSpacing(LogicalFontInstance *pFontInstance);
 
 private:
