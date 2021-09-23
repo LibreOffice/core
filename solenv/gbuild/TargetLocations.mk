@@ -29,7 +29,7 @@ gb_PackagePart_get_destinations = \
 
 # kind of lame but with just 3 of these why bother with registration etc.
 gb_UnoApi_get_target = $(INSTROOT)/$(if $(filter udkapi,$(1)),$(LIBO_URE_MISC_FOLDER)/types,$(LIBO_ETC_FOLDER)/types/$(1)).rdb
-gb_UnoApi_get_target_for_build = $(INSTROOT_FOR_BUILD)/$(if $(filter udkapi,$(1)),$(LIBO_URE_MISC_FOLDER)/types,$(LIBO_ETC_FOLDER)/types/$(1)).rdb
+gb_UnoApi_get_target_for_build = $(INSTROOT_FOR_BUILD)/$(if $(filter udkapi,$(1)),$(LIBO_URE_MISC_FOLDER_FOR_BUILD)/types,$(LIBO_ETC_FOLDER)/types/$(1)).rdb
 
 # workdir target patterns
 
