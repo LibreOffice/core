@@ -105,7 +105,7 @@ CoreTextStyle::~CoreTextStyle()
         CFRelease( mpStyleDict );
 }
 
-void CoreTextStyle::GetFontMetric( ImplFontMetricDataRef const & rxFontMetric )
+void CoreTextStyle::GetFontMetric( vcl::font::FontInstanceDataRef const & rxFontMetric )
 {
     // get the matching CoreText font handle
     // TODO: is it worth it to cache the CTFontRef in SetFont() and reuse it here?
@@ -113,7 +113,7 @@ void CoreTextStyle::GetFontMetric( ImplFontMetricDataRef const & rxFontMetric )
 
     rxFontMetric->ImplCalcLineSpacing(this);
 
-    // since ImplFontMetricData::mnWidth is only used for stretching/squeezing fonts
+    // since FontInstanceData::mnWidth is only used for stretching/squeezing fonts
     // setting this width to the pixel height of the fontsize is good enough
     // it also makes the calculation of the stretch factor simple
     rxFontMetric->SetWidth( lrint( CTFontGetSize( aCTFontRef ) * mfFontStretch) );
