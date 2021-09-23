@@ -23,9 +23,10 @@ typedef std::pair<css::uno::Reference<css::xml::dom::XNode>, OUString> named_nod
 
 bool sortButtonNodes(const named_node& rA, const named_node& rB)
 {
+    OString sA("/" + rA.second.toUtf8());
+    OString sB("/" + rB.second.toUtf8());
     //order within groups according to platform rules
-    return getButtonPriority("/" + rA.second.toUtf8())
-           < getButtonPriority("/" + rB.second.toUtf8());
+    return getButtonPriority(sA) < getButtonPriority(sB);
 }
 
 // <property name="spacing">6</property>
