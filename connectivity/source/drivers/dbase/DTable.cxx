@@ -468,7 +468,6 @@ ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables, ODbaseConnection* _pConne
     m_eEncoding = getConnection()->getTextEncoding();
 }
 
-
 void ODbaseTable::construct()
 {
     // initialize the header
@@ -658,7 +657,7 @@ void ODbaseTable::refreshColumns()
     if(m_xColumns)
         m_xColumns->reFill(aVector);
     else
-        m_xColumns = new ODbaseColumns(this,m_aMutex,aVector);
+        m_xColumns.reset(new ODbaseColumns(this,m_aMutex,aVector));
 }
 
 void ODbaseTable::refreshIndexes()
@@ -701,7 +700,7 @@ void ODbaseTable::refreshIndexes()
     if(m_xIndexes)
         m_xIndexes->reFill(aVector);
     else
-        m_xIndexes = new ODbaseIndexes(this,m_aMutex,aVector);
+        m_xIndexes.reset(new ODbaseIndexes(this,m_aMutex,aVector));
 }
 
 
@@ -1650,7 +1649,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
 
     ::comphelper::UStringMixEqual aCase(isCaseSensitive());
 
-    Reference<XIndexAccess> xColumns = m_xColumns;
+    Reference<XIndexAccess> xColumns(m_xColumns.get());
     // first search a key that exist already in the table
     for (sal_Int32 i = 0; i < nColumnCount; ++i)
     {
@@ -2516,7 +2515,7 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
                         }
                     }
                 }
-                bOk = _pNewTable->InsertRow(*aInsertRow,_pNewTable->m_xColumns);
+                bOk = _pNewTable->InsertRow(*aInsertRow, _pNewTable->m_xColumns.get());
                 SAL_WARN_IF(!bOk, "connectivity.drivers", "Row could not be inserted!");
             }
             else
