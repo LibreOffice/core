@@ -155,14 +155,14 @@ rtl::Reference<LogicalFontInstance> ImplFontCache::GetFontInstance( PhysicalFont
         if( pFontData->IsSymbolFont() || aFontSelData.IsSymbolFont() )
         {
             if( aFontSelData.maTargetName != aFontSelData.maSearchName )
-                pFontInstance->mpConversion = ConvertChar::GetRecodeData( aFontSelData.maTargetName, aFontSelData.maSearchName );
+                pFontInstance->SetCharConversion(ConvertChar::GetRecodeData(aFontSelData.maTargetName, aFontSelData.maSearchName));
         }
 
 #ifdef MACOSX
         //It might be better to dig out the font version of the target font
         //to see if it's a modern re-coded apple symbol font in case that
         //font shows up on a different platform
-        if (!pFontInstance->mpConversion &&
+        if (!pFontInstance->CanConvertChars() &&
             aFontSelData.maTargetName.equalsIgnoreAsciiCase("symbol") &&
             aFontSelData.maSearchName.equalsIgnoreAsciiCase("symbol"))
         {
