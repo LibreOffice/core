@@ -301,17 +301,13 @@ void ODbaseTable::fillColumns()
     for (; i < nFieldCount; i++)
     {
         DBFColumn aDBFColumn;
-#if !defined(NDEBUG)
-        sal_uInt64 const nOldPos(m_pFileStream->Tell());
-#endif
         m_pFileStream->ReadBytes(aDBFColumn.db_fnm, 11);
         m_pFileStream->ReadUChar(aDBFColumn.db_typ);
         m_pFileStream->ReadUInt32(aDBFColumn.db_adr);
         m_pFileStream->ReadUChar(aDBFColumn.db_flng);
         m_pFileStream->ReadUChar(aDBFColumn.db_dez);
         m_pFileStream->ReadBytes(aDBFColumn.db_free2, 14);
-        assert(m_pFileStream->GetError() || m_pFileStream->Tell() == nOldPos + sizeof(aDBFColumn));
-        if (m_pFileStream->GetError())
+        if (!m_pFileStream->good())
         {
             SAL_WARN("connectivity.drivers", "ODbaseTable::fillColumns: short read!");
             break;
