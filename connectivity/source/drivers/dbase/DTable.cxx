@@ -273,7 +273,11 @@ void ODbaseTable::readHeader()
 void ODbaseTable::fillColumns()
 {
     m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
-    m_pFileStream->Seek(32);
+    if (!checkSeek(*m_pFileStream, 32))
+    {
+        SAL_WARN("connectivity.drivers", "ODbaseTable::fillColumns: bad offset!");
+        return;
+    }
 
     if(!m_aColumns.is())
         m_aColumns = new OSQLColumns();
@@ -285,8 +289,21 @@ void ODbaseTable::fillColumns()
     m_aScales.clear();
 
     // Number of fields:
-    const sal_Int32 nFieldCount = (m_aHeader.headerLength - 1) / 32 - 1;
-    OSL_ENSURE(nFieldCount,"No columns in table!");
+    sal_Int32 nFieldCount = (m_aHeader.headerLength - 1) / 32 - 1;
+    if (nFieldCount <= 0)
+    {
+        SAL_WARN("connectivity.drivers", "No columns in table!");
+        return;
+    }
+
+    auto nRemainingsize = m_pFileStream->remainingSize();
+    auto nMaxPossibleRecords = nRemainingsize / 32;
+    if (o3tl::make_unsigned(nFieldCount) > nMaxPossibleRecords)
+    {
+        SAL_WARN("connectivity.drivers", "Parsing error: " << nMaxPossibleRecords <<
+                 " max possible entries, but " << nFieldCount << " claimed, truncating");
+        nFieldCount = nMaxPossibleRecords;
+    }
 
     m_aColumns->reserve(nFieldCount);
     m_aTypes.reserve(nFieldCount);
