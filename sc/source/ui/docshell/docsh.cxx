@@ -3416,8 +3416,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDBF(SvStream &rStream)
     aTmpDir.EnableKillingFile();
     OUString sTmpDir = aTmpDir.GetURL();
 
-    OUString sNoExtension;
-    utl::TempFile aTempInput(OUString(), true, &sNoExtension, &sTmpDir);
+    OUString sExtension(".dbf");
+    utl::TempFile aTempInput(OUString(), true, &sExtension, &sTmpDir);
     aTempInput.EnableKillingFile();
 
     SvStream* pInputStream = aTempInput.GetStream(StreamMode::WRITE);
