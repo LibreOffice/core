@@ -824,7 +824,7 @@ public:
 
      @see GetFocusWindow
     */
-    static OutputDevice*        GetDefaultDevice(bool bUseIcon = true);
+    static OutputDevice*        GetDefaultDevice();
 
     /** Get the first top-level window of the application.
 

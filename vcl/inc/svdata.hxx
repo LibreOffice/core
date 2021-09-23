@@ -428,8 +428,8 @@ css::uno::Reference<css::i18n::XCharacterClassification> const& ImplGetCharClass
 
 void        ImplDeInitSVData();
 VCL_PLUGIN_PUBLIC basegfx::SystemDependentDataManager& ImplGetSystemDependentDataManager();
-VCL_PLUGIN_PUBLIC vcl::Window* ImplGetDefaultWindow(bool bUseIcon = true);
-vcl::Window* ImplGetDefaultContextWindow(bool bUseIcon = true);
+VCL_PLUGIN_PUBLIC vcl::Window* ImplGetDefaultWindow();
+vcl::Window* ImplGetDefaultContextWindow();
 const std::locale& ImplGetResLocale();
 VCL_PLUGIN_PUBLIC OUString VclResId(TranslateId sContextAndId);
 DockingManager*     ImplGetDockingManager();
