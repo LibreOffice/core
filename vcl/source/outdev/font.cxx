@@ -183,7 +183,7 @@ FontMetric OutputDevice::GetFontMetric() const
         return aMetric;
 
     LogicalFontInstance* pFontInstance = mpFontInstance.get();
-    ImplFontMetricDataRef xFontMetric = pFontInstance->mxFontMetric;
+    vcl::font::FontInstanceDataRef xFontMetric = pFontInstance->mxFontMetric;
 
     // prepare metric
     aMetric = maFont;
