@@ -20,6 +20,8 @@
 #pragma once
 
 #include <sal/config.h>
+#include <rtl/ustring.hxx>
+#include <unotools/fontdefs.hxx>
 
 #include "font/FontInstanceData.hxx"
 
@@ -92,9 +94,16 @@ public: // TODO: make data members private
     tools::Long GetDoubleStrikeoutOffset2() const { return mxFontMetric->GetDoubleStrikeoutOffset2(); }
     tools::Long GetInternalLeading() const { return mxFontMetric->GetInternalLeading(); }
     tools::Long GetExternalLeading() const{ return mxFontMetric->GetExternalLeading(); }
-    Degree10 GetOrientationFromData() const { return mxFontMetric->GetOrientation(); }
     tools::Long GetMinKashida() const { return mxFontMetric->GetMinKashida(); }
+
+    tools::Long GetLineHeight() const { return mnLineHeight; }
+    Degree10 GetOwnOrientation() const { return mnOwnOrientation; }
+    Degree10 GetOrientationFromData() const { return mxFontMetric->GetOrientation(); }
+    bool IsInit() const { return mbInit; }
+    void SetLineHeight(tools::Long nLineHeight) { mnLineHeight = nLineHeight; }
+    void SetOwnOrientation(Degree10 nOwnOrientation) { mnOwnOrientation = nOwnOrientation; }
     void SetOrientationInData(Degree10 nOrientation) { mnOrientation = nOrientation; }
+    void SetInitFlag(bool bIsInit) { mbInit = bIsInit; }
 
     void InitTextLineSize(sal_Int32 nDPIY, vcl::Font const& rFont, sal_Int32 mnBulletOffset);
     void InitAboveTextLineSize() { mxFontMetric->InitAboveTextLineSize(); }
@@ -102,12 +111,10 @@ public: // TODO: make data members private
 
     vcl::font::FontInstanceDataRef GetFontInstanceData() { return mxFontMetric; }
 
-    const ConvertChar* mpConversion;        // used e.g. for StarBats->StarSymbol
-
-    tools::Long            mnLineHeight;
-    Degree10        mnOwnOrientation;       // text angle if lower layers don't rotate text themselves
-    Degree10        mnOrientation;          // text angle in 3600 system
-    bool            mbInit;                 // true if maFontMetric member is valid
+    // Conversion functions
+    bool CanConvertChars() { return (mpConversion ? true : false); }
+    void SetCharConversion(ConvertChar const* pConversion) { mpConversion = pConversion; }
+    void RecodeString(OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen) { mpConversion->RecodeString(rStr, nIndex, nLen); }
 
     void            AddFallbackForUnicode( sal_UCS4, FontWeight eWeight, const OUString& rFontName );
     bool            GetFallbackForUnicode( sal_UCS4, FontWeight eWeight, OUString* pFontName ) const;
@@ -142,6 +149,7 @@ protected:
 
 private:
     vcl::font::FontInstanceDataRef mxFontMetric;        // Font attributes
+    const ConvertChar* mpConversion;        // used e.g. for StarBats->StarSymbol
 
     // cache of Unicode characters and replacement font names
     // TODO: a fallback map can be shared with many other ImplFontEntries
@@ -154,6 +162,11 @@ private:
     double m_nAveWidthFactor;
     rtl::Reference<vcl::font::PhysicalFontFace> m_pFontFace;
     std::optional<bool> m_xbIsGraphiteFont;
+
+    tools::Long mnLineHeight;
+    Degree10 mnOwnOrientation; // text angle if lower layers don't rotate text themselves
+    Degree10 mnOrientation; // text angle in 3600 system
+    bool mbInit; // true if maFontMetric member is valid
 };
 
 inline hb_font_t* LogicalFontInstance::GetHbFont()
