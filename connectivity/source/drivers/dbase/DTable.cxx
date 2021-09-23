@@ -509,6 +509,24 @@ void ODbaseTable::construct()
         return;
     }
 
+    if (m_aHeader.recordLength)
+    {
+        std::size_t nMaxPossibleRecords = (nFileSize - m_aHeader.headerLength) / m_aHeader.recordLength;
+        // #i83401# seems to be empty or someone wrote nonsense into the dbase
+        // file try and recover if m_aHeader.db_slng is sane
+        if (m_aHeader.nbRecords == 0)
+        {
+            SAL_WARN("connectivity.drivers", "Parsing warning: 0 records claimed, recovering");
+            m_aHeader.nbRecords = nMaxPossibleRecords;
+        }
+        else if (m_aHeader.nbRecords > nMaxPossibleRecords)
+        {
+            SAL_WARN("connectivity.drivers", "Parsing error: " << nMaxPossibleRecords <<
+                     " max possible records, but " << m_aHeader.nbRecords << " claimed, truncating");
+            m_aHeader.nbRecords = nMaxPossibleRecords;
+        }
+    }
+
     if (HasMemoFields())
     {
     // Create Memo-Filename (.DBT):
@@ -532,16 +550,8 @@ void ODbaseTable::construct()
     }
 
     fillColumns();
-
     m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
-    // seems to be empty or someone wrote bullshit into the dbase file
-    // try and recover if m_aHeader.db_slng is sane
-    if (m_aHeader.nbRecords == 0 && m_aHeader.recordLength)
-    {
-        std::size_t nRecords = (nFileSize-m_aHeader.headerLength)/m_aHeader.recordLength;
-        if (nRecords > 0)
-            m_aHeader.nbRecords = nRecords;
-    }
+
 
     // Buffersize dependent on the file size
     m_pFileStream->SetBufferSize(nFileSize > 1000000 ? 32768 :
