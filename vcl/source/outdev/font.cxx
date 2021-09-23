@@ -201,8 +201,8 @@ FontMetric OutputDevice::GetFontMetric() const
     aMetric.SetItalic( xFontMetric->GetItalic() );
     aMetric.SetAlignment( TextAlign::ALIGN_TOP );
     aMetric.SetWidthType( xFontMetric->GetWidthType() );
-    if ( pFontInstance->mnOwnOrientation )
-        aMetric.SetOrientation( pFontInstance->mnOwnOrientation );
+    if ( pFontInstance->GetOwnOrientation() )
+        aMetric.SetOrientation( pFontInstance->GetOwnOrientation() );
     else
         aMetric.SetOrientation( xFontMetric->GetOrientation() );
 
@@ -923,10 +923,10 @@ bool OutputDevice::ImplNewFont() const
         mbInitFont = true;
 
     // select font when it has not been initialized yet
-    if (!pFontInstance->mbInit && InitFont())
+    if (!pFontInstance->IsInit() && InitFont())
     {
         // get metric data from device layers
-        pFontInstance->mbInit = true;
+        pFontInstance->SetInitFlag(true);
 
         pFontInstance->SetOrientationInData( mpFontInstance->GetFontSelectPattern().mnOrientation );
         vcl::font::FontInstanceDataRef pFontInstanceData = pFontInstance->GetFontInstanceData();
@@ -936,7 +936,7 @@ bool OutputDevice::ImplNewFont() const
         pFontInstance->InitAboveTextLineSize();
         pFontInstance->InitFlags(GetFont(), GetFullWidthFullStopRect());
 
-        pFontInstance->mnLineHeight = pFontInstance->GetAscent() + pFontInstance->GetDescent();
+        pFontInstance->SetLineHeight(pFontInstance->GetAscent() + pFontInstance->GetDescent());
 
         SetFontOrientation( pFontInstance );
     }
@@ -947,7 +947,7 @@ bool OutputDevice::ImplNewFont() const
     if ( maFont.GetEmphasisMark() & FontEmphasisMark::Style )
     {
         FontEmphasisMark    nEmphasisMark = ImplGetEmphasisMarkStyle( maFont );
-        tools::Long                nEmphasisHeight = (pFontInstance->mnLineHeight*250)/1000;
+        tools::Long                nEmphasisHeight = (pFontInstance->GetLineHeight() * 250) / 1000;
         if ( nEmphasisHeight < 1 )
             nEmphasisHeight = 1;
         if ( nEmphasisMark & FontEmphasisMark::PosBelow )
@@ -967,20 +967,20 @@ bool OutputDevice::ImplNewFont() const
     {
         mnTextOffX = 0;
         mnTextOffY = +pFontInstance->GetAscent() + mnEmphasisAscent;
-        if ( pFontInstance->mnOrientation )
+        if ( pFontInstance->GetOrientationFromData() )
         {
             Point aOriginPt(0, 0);
-            aOriginPt.RotateAround( mnTextOffX, mnTextOffY, pFontInstance->mnOrientation );
+            aOriginPt.RotateAround( mnTextOffX, mnTextOffY, pFontInstance->GetOrientationFromData() );
         }
     }
     else // eAlign == ALIGN_BOTTOM
     {
         mnTextOffX = 0;
         mnTextOffY = -pFontInstance->GetDescent() + mnEmphasisDescent;
-        if ( pFontInstance->mnOrientation )
+        if ( pFontInstance->GetOrientationFromData() )
         {
             Point aOriginPt(0, 0);
-            aOriginPt.RotateAround( mnTextOffX, mnTextOffY, pFontInstance->mnOrientation );
+            aOriginPt.RotateAround( mnTextOffX, mnTextOffY, pFontInstance->GetOrientationFromData() );
         }
     }
 
@@ -1019,12 +1019,12 @@ void OutputDevice::SetFontOrientation( LogicalFontInstance* const pFontInstance 
 {
     if( pFontInstance->GetFontSelectPattern().mnOrientation && !pFontInstance->GetOrientationFromData() )
     {
-        pFontInstance->mnOwnOrientation = pFontInstance->GetFontSelectPattern().mnOrientation;
-        pFontInstance->mnOrientation = pFontInstance->mnOwnOrientation;
+        pFontInstance->SetOwnOrientation(pFontInstance->GetFontSelectPattern().mnOrientation);
+        pFontInstance->SetOrientationInData(pFontInstance->GetOwnOrientation());
     }
     else
     {
-        pFontInstance->mnOrientation = pFontInstance->GetOrientationFromData();
+        pFontInstance->SetOrientationInData(pFontInstance->GetOrientationFromData());
     }
 }
 
@@ -1135,10 +1135,10 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
         {
             Point aAdjPoint = aOffset;
             aAdjPoint.AdjustX(aRectangle.Left() + (aRectangle.GetWidth() - nEmphasisWidth) / 2 );
-            if ( mpFontInstance->mnOrientation )
+            if ( mpFontInstance->GetOrientationFromData() )
             {
                 Point aOriginPt(0, 0);
-                aOriginPt.RotateAround( aAdjPoint, mpFontInstance->mnOrientation );
+                aOriginPt.RotateAround( aAdjPoint, mpFontInstance->GetOrientationFromData() );
             }
             aOutPoint += aAdjPoint;
             aOutPoint -= Point( nEmphasisWidth2, nEmphasisHeight2 );
