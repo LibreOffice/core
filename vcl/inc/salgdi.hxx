@@ -23,7 +23,7 @@
 
 #include <vcl/outdev.hxx>
 
-#include "impfontmetricdata.hxx"
+#include "font/FontInstanceData.hxx"
 #include "salgdiimpl.hxx"
 #include "sallayout.hxx"
 #include "SalGradient.hxx"
@@ -143,7 +143,7 @@ public:
     void                        ReleaseFonts() { SetFont( nullptr, 0 ); }
 
     // get the current font's metrics
-    virtual void                GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel ) = 0;
+    virtual void                GetFontMetric( vcl::font::FontInstanceDataRef&, int nFallbackLevel ) = 0;
 
     // get the repertoire of the current font
     virtual FontCharMapRef      GetFontCharMap() const = 0;
