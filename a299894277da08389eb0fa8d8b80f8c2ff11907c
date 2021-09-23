@@ -122,6 +122,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1f59958_b67e54a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-23T19:35:16Z",
+      "side": 1,
+      "message": "Seeing https://bugs.documentfoundation.org/show_bug.cgi?id\u003d144678 all this probably should either throw an error for dates before 1582-10-15, or the diff algorithms be completely reworked.\n",
+      "revId": "a299894277da08389eb0fa8d8b80f8c2ff11907c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f0b6db4b_46ac4f7f",
