@@ -34,7 +34,7 @@
 #include <unx/fc_fontoptions.hxx>
 #include <unx/freetype_glyphcache.hxx>
 #include <font/PhysicalFontFace.hxx>
-#include <impfontmetricdata.hxx>
+#include <font/FontInstanceData.hxx>
 
 #include <sallayout.hxx>
 
@@ -138,7 +138,7 @@ void FreeTypeTextRenderImpl::GetDevFontList( vcl::font::PhysicalFontCollection* 
         SalGenericInstance::RegisterFontSubstitutors( pFontCollection );
 }
 
-void FreeTypeTextRenderImpl::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFallbackLevel )
+void FreeTypeTextRenderImpl::GetFontMetric( vcl::font::FontInstanceDataRef& rxFontMetric, int nFallbackLevel )
 {
     if( nFallbackLevel >= MAX_FALLBACK )
         return;

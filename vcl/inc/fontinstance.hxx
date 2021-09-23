@@ -21,7 +21,7 @@
 
 #include <sal/config.h>
 
-#include "impfontmetricdata.hxx"
+#include "font/FontInstanceData.hxx"
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <rtl/ref.hxx>
@@ -61,7 +61,7 @@ class VCL_PLUGIN_PUBLIC LogicalFontInstance : public salhelper::SimpleReferenceO
 public: // TODO: make data members private
     virtual ~LogicalFontInstance() override;
 
-    ImplFontMetricDataRef mxFontMetric;        // Font attributes
+    vcl::font::FontInstanceDataRef mxFontMetric;        // Font attributes
     const ConvertChar* mpConversion;        // used e.g. for StarBats->StarSymbol
 
     tools::Long            mnLineHeight;
