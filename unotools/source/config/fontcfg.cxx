@@ -705,7 +705,7 @@ void FontSubstConfiguration::getMapName( const OUString& rOrgName, OUString& rSh
     const ImplFontAttrWeightSearchData* pWeightList = aImplWeightAttrSearchList;
     while ( pWeightList->mpStr )
     {
-        if ( ImplFindAndErase( rFamilyName, pWeightList->mpStr ) )
+        if ( ImplIsTrailing(rFamilyName, pWeightList->mpStr) && ImplFindAndErase( rFamilyName, pWeightList->mpStr ) )
         {
             if ( (rWeight == WEIGHT_DONTKNOW) || (rWeight == WEIGHT_NORMAL) )
                 rWeight = pWeightList->meWeight;
@@ -718,7 +718,7 @@ void FontSubstConfiguration::getMapName( const OUString& rOrgName, OUString& rSh
     const ImplFontAttrWidthSearchData* pWidthList = aImplWidthAttrSearchList;
     while ( pWidthList->mpStr )
     {
-        if ( ImplFindAndErase( rFamilyName, pWidthList->mpStr ) )
+        if ( ImplIsTrailing(rFamilyName, pWidthList->mpStr) && ImplFindAndErase( rFamilyName, pWidthList->mpStr ) )
         {
             if ( (rWidth == WIDTH_DONTKNOW) || (rWidth == WIDTH_NORMAL) )
                 rWidth = pWidthList->meWidth;
@@ -732,7 +732,7 @@ void FontSubstConfiguration::getMapName( const OUString& rOrgName, OUString& rSh
     const ImplFontAttrTypeSearchData* pTypeList = aImplTypeAttrSearchList;
     while ( pTypeList->mpStr )
     {
-        if ( ImplFindAndErase( rFamilyName, pTypeList->mpStr ) )
+        if ( ImplIsTrailing(rFamilyName, pTypeList->mpStr) && ImplFindAndErase( rFamilyName, pTypeList->mpStr ) )
             rType |= pTypeList->mnType;
         pTypeList++;
     }
