@@ -29,6 +29,7 @@
 
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <font/PhysicalFontCollection.hxx>
+#include <fontinstance.hxx>
 #include <font/fontsubstitution.hxx>
 
 #include <string_view>
