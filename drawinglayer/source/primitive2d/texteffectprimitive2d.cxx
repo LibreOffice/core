@@ -168,11 +168,11 @@ void TextEffectPrimitive2D::create2DDecomposition(
     }
 }
 
-TextEffectPrimitive2D::TextEffectPrimitive2D(const Primitive2DContainer& rTextContent,
+TextEffectPrimitive2D::TextEffectPrimitive2D(Primitive2DContainer&& rTextContent,
                                              const basegfx::B2DPoint& rRotationCenter,
                                              double fDirection,
                                              TextEffectStyle2D eTextEffectStyle2D)
-    : maTextContent(rTextContent)
+    : maTextContent(std::move(rTextContent))
     , maRotationCenter(rRotationCenter)
     , mfDirection(fDirection)
     , meTextEffectStyle2D(eTextEffectStyle2D)

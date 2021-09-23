@@ -226,7 +226,7 @@ class BorderLines
 {
     drawinglayer::primitive2d::Primitive2DContainer m_Lines;
 public:
-    void AddBorderLines(const drawinglayer::primitive2d::Primitive2DContainer& rContainer);
+    void AddBorderLines(drawinglayer::primitive2d::Primitive2DContainer&& rContainer);
     drawinglayer::primitive2d::Primitive2DContainer GetBorderLines_Clear()
     {
         drawinglayer::primitive2d::Primitive2DContainer lines;
@@ -504,11 +504,11 @@ SwSavePaintStatics::~SwSavePaintStatics()
     gProp.aSScaleY            = aSScaleY;
 }
 
-void BorderLines::AddBorderLines(const drawinglayer::primitive2d::Primitive2DContainer& rContainer)
+void BorderLines::AddBorderLines(drawinglayer::primitive2d::Primitive2DContainer&& rContainer)
 {
     if(!rContainer.empty())
     {
-        m_Lines.append(rContainer);
+        m_Lines.append(std::move(rContainer));
     }
 }
 
@@ -4938,7 +4938,7 @@ void PaintCharacterBorder(
                 aStyleRight,
                 aStyleBottom,
                 aStyleLeft)));
-    gProp.pBLines->AddBorderLines(aBorderLineTarget);
+    gProp.pBLines->AddBorderLines(std::move(aBorderLineTarget));
 }
 
 /// #i15844#
@@ -5323,7 +5323,7 @@ void SwFrame::PaintSwFrameShadowAndBorder(
                         aStyleRight,
                         aStyleBottom,
                         aStyleLeft)));
-            gProp.pBLines->AddBorderLines(aBorderLineTarget);
+            gProp.pBLines->AddBorderLines(std::move(aBorderLineTarget));
         }
     }
 

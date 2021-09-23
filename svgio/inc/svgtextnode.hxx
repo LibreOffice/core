@@ -46,7 +46,7 @@ namespace svgio::svgreader
             static void addTextPrimitives(
                 const SvgNode& rCandidate,
                 drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-                drawinglayer::primitive2d::Primitive2DContainer const & rSource);
+                drawinglayer::primitive2d::Primitive2DContainer&& rSource);
 
         public:
             SvgTextNode(

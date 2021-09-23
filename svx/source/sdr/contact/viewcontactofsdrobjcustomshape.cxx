@@ -227,7 +227,7 @@ namespace sdr::contact
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     new drawinglayer::primitive2d::SdrCustomShapePrimitive2D(
                         aAttribute,
-                        xGroup,
+                        std::move(xGroup),
                         aTextBoxMatrix,
                         bWordWrap,
                         b3DShape,

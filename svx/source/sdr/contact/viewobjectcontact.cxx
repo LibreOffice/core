@@ -67,6 +67,7 @@ public:
 
     // data access
     const drawinglayer::primitive2d::Primitive2DContainer& getPrimitive2DSequence() const { return maPrimitive2DSequence; }
+    drawinglayer::primitive2d::Primitive2DContainer extractPrimitive2DSequence() const { return std::move(maPrimitive2DSequence); }
 };
 
 AnimatedExtractingProcessor2D::AnimatedExtractingProcessor2D(
@@ -283,7 +284,7 @@ void ViewObjectContact::checkForPrimitive2DAnimations()
         if(!aAnimatedExtractor.getPrimitive2DSequence().empty())
         {
             // derived primitiveList is animated, setup new PrimitiveAnimation
-            mpPrimitiveAnimation.reset( new sdr::animation::PrimitiveAnimation(*this, aAnimatedExtractor.getPrimitive2DSequence()) );
+            mpPrimitiveAnimation.reset( new sdr::animation::PrimitiveAnimation(*this, aAnimatedExtractor.extractPrimitive2DSequence()) );
         }
     }
 }
