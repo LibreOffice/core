@@ -46,6 +46,7 @@
 
 namespace vcl::font
 {
+class FontInstanceData;
 class PhysicalFontCollection;
 class FontSelectPattern;
 }
@@ -53,7 +54,6 @@ class WinFontInstance;
 class ImplFontAttrCache;
 class SalGraphicsImpl;
 class WinSalGraphicsImplBase;
-class ImplFontMetricData;
 
 #define RGB_TO_PALRGB(nRGB)         ((nRGB)|0x02000000)
 #define PALRGB_TO_RGB(nPalRGB)      ((nPalRGB)&0x00ffffff)
@@ -339,7 +339,7 @@ public:
     // set the font
     virtual void            SetFont( LogicalFontInstance*, int nFallbackLevel ) override;
     // get the current font's metrics
-    virtual void            GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel ) override;
+    virtual void            GetFontMetric( vcl::font::FontInstanceDataRef&, int nFallbackLevel ) override;
     // get the repertoire of the current font
     virtual FontCharMapRef  GetFontCharMap() const override;
     // get the layout capabilities of the current font
