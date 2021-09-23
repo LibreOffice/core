@@ -393,7 +393,7 @@
    <style:table-column-properties fo:break-before="auto" style:column-width="62.95mm"/>
   </style:style>
   <style:style style:name="co8" style:family="table-column">
-   <style:table-column-properties fo:break-before="auto" style:column-width="49.72mm"/>
+   <style:table-column-properties fo:break-before="auto" style:column-width="64.61mm"/>
   </style:style>
   <style:style style:name="co9" style:family="table-column">
    <style:table-column-properties fo:break-before="auto" style:column-width="5.8mm"/>
@@ -547,7 +547,7 @@
      <text:p><text:sheet-name>???</text:sheet-name> (<text:title>???</text:title>)</text:p>
     </style:region-left>
     <style:region-right>
-     <text:p><text:date style:data-style-name="N2" text:date-value="2016-06-09">00.00.0000</text:date>, <text:time style:data-style-name="N2" text:time-value="18:13:16.449360792">00:00:00</text:time></text:p>
+     <text:p><text:date style:data-style-name="N2" text:date-value="2021-09-24">00.00.0000</text:date>, <text:time style:data-style-name="N2" text:time-value="15:09:16.449360792">00:00:00</text:time></text:p>
     </style:region-right>
    </style:header>
    <style:header-left style:display="false"/>
@@ -897,23 +897,62 @@
      <table:table-cell table:number-columns-repeated="10"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce14"/>
-     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce12" table:formula="of:=ORG.OPENOFFICE.ISLEAPYEAR([.J28])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce12" table:formula="of:=TRUE()" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce13" table:formula="of:=[.A16]=[.B16]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce15" table:formula="of:=FORMULA([.A16])" office:value-type="string" office:string-value="=ISLEAPYEAR(J28)" calcext:value-type="string">
+      <text:p>=ISLEAPYEAR(J28)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf#144687 (before Julian cutover year)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2008-01-01" calcext:value-type="date">
       <text:p>01.01.2008</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce16" table:number-columns-repeated="4"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce14"/>
-     <table:table-cell table:number-columns-repeated="11"/>
+     <table:table-cell table:style-name="ce12" table:formula="of:=ORG.OPENOFFICE.ISLEAPYEAR([.J29])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce12" table:formula="of:=TRUE()" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce13" table:formula="of:=[.A17]=[.B17]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce15" table:formula="of:=FORMULA([.A17])" office:value-type="string" office:string-value="=ISLEAPYEAR(J29)" calcext:value-type="string">
+      <text:p>=ISLEAPYEAR(J29)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf#144687 (after Julian cutover year)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce14"/>
-     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce12" table:formula="of:=ORG.OPENOFFICE.ISLEAPYEAR([.J30])" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
+      <text:p>NEPRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce12" table:formula="of:=FALSE()" office:value-type="boolean" office:boolean-value="false" calcext:value-type="boolean">
+      <text:p>NEPRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce13" table:formula="of:=[.A18]=[.B18]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce15" table:formula="of:=FORMULA([.A18])" office:value-type="string" office:string-value="=ISLEAPYEAR(J30)" calcext:value-type="string">
+      <text:p>=ISLEAPYEAR(J30)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Should fail after tdf#144699 </text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell office:value-type="float" office:value="2000" calcext:value-type="float">
       <text:p>2000</text:p>
      </table:table-cell>
@@ -951,7 +990,34 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="4"/>
     </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="73">
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce36"/>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce18" office:value-type="date" office:date-value="1100-03-07" calcext:value-type="date">
+      <text:p>29.02.1100</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce36"/>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce18" office:value-type="date" office:date-value="1584-12-31" calcext:value-type="date">
+      <text:p>31.12.1584</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce36"/>
+     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:style-name="ce18" office:value-type="date" office:date-value="1101-01-07" calcext:value-type="date">
+      <text:p>31.12.1100</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="4"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2" table:number-rows-repeated="70">
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce14"/>
      <table:table-cell table:number-columns-repeated="11"/>
