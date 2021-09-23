@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a99893d_55b6f4b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-09-23T09:25:29Z",
+      "side": 1,
+      "message": "In Word, the footnote container frame is growing up from the bottom of the page frame, i.e. it\u0027s directly under the page frame.\n\nIn Writer, the footnote container frame is a child of the column frame, where the hierarchy is page -\u003e body -\u003e section -\u003e column.\n\nThis change moves Writer closer to the Word behavior, so it looks reasonable to me.\n\nDid you consider compatibility with old ODF docs? Do we need a new compat flag for this?",
+      "revId": "22f1328ce3e22b049aab3da2eebd3a153292ed1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
