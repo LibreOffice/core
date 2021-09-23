@@ -24,7 +24,7 @@
 #include <vcl/fontcharmap.hxx>
 #include <basegfx/range/b2ibox.hxx>
 #include <headless/svpgdi.hxx>
-#include <impfontmetricdata.hxx>
+#include <font/FontInstanceData.hxx>
 #include <sallayout.hxx>
 #include <font/FontSelectPattern.hxx>
 #include <font/PhysicalFontFace.hxx>
@@ -34,7 +34,7 @@ void SvpSalGraphics::SetFont(LogicalFontInstance* pIFSD, int nFallbackLevel)
     m_aTextRenderImpl.SetFont(pIFSD, nFallbackLevel);
 }
 
-void SvpSalGraphics::GetFontMetric( ImplFontMetricDataRef& xFontMetric, int nFallbackLevel )
+void SvpSalGraphics::GetFontMetric( vcl::font::FontInstanceDataRef& xFontMetric, int nFallbackLevel )
 {
     m_aTextRenderImpl.GetFontMetric(xFontMetric, nFallbackLevel);
 }
