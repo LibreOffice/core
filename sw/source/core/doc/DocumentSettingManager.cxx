@@ -620,9 +620,10 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     Setn32DummyCompatibilityOptions1( rSource.Getn32DummyCompatibilityOptions1() );
     Setn32DummyCompatibilityOptions2( rSource.Getn32DummyCompatibilityOptions2() );
 
-    // No mbHTMLMode
-    // No mbIsGlobalDoc
-    // No mbGlblDocSaveLinks
+    // No mbHTMLMode: this is the subset of mbLastBrowseMode, which can be temporarily enabled even
+    // for non-SwWebDocShells.
+    // No mbIsGlobalDoc: this is true for SwGlobalDocShells.
+    mbGlblDocSaveLinks = rSource.mbGlblDocSaveLinks;
     // No mbIsLabelDoc
     mbPurgeOLE = rSource.mbPurgeOLE;
     mbKernAsianPunctuation = rSource.mbKernAsianPunctuation;
