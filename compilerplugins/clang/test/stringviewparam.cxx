@@ -23,7 +23,8 @@ void f1a(std::string_view);
 char f1b(OString const& s)
 {
     f1a(s);
-    if (s.isEmpty())
+    OString rest;
+    if (s.isEmpty() || s.startsWith("foo", &rest) || s.endsWith("foo"))
     {
         f1a(std::string_view(s));
     }
@@ -35,7 +36,8 @@ void f2a(std::u16string_view);
 sal_Unicode f2b(OUString const& s)
 {
     f2a(s);
-    if (s.isEmpty())
+    OUString rest;
+    if (s.isEmpty() || s.startsWith("foo", &rest) || s.endsWith("foo"))
     {
         f2a(std::u16string_view(s));
     }

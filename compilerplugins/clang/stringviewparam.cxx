@@ -168,7 +168,7 @@ DeclRefExpr const* relevantCXXMemberCallExpr(CXXMemberCallExpr const* expr)
     else if (auto const i = d->getIdentifier())
     {
         auto const n = i->getName();
-        if (n == "isEmpty" || n == "subView")
+        if (n == "endsWith" || n == "isEmpty" || n == "startsWith" || n == "subView")
         {
             good = true;
         }
