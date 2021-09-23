@@ -131,11 +131,11 @@
                     "dest-filename": "liberation-narrow-fonts-ttf-1.07.6.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/liberation-fonts-ttf-2.00.4.tar.gz",
-                    "sha256": "c40e95fc5e0ecb73d4be565ae2afc1114e2bc7dc5253e00ee92d8fd6cc4adf45",
+                    "url": "https://dev-www.libreoffice.org/src/liberation-fonts-ttf-2.1.4.tar.gz",
+                    "sha256": "26f85412dd0aa9d061504a1cc8aaf0aa12a70710e8d47d8b65a1251757c1a5ef",
                     "type": "file",
                     "dest": "external/tarballs",
-                    "dest-filename": "liberation-fonts-ttf-2.00.4.tar.gz"
+                    "dest-filename": "liberation-fonts-ttf-2.1.4.tar.gz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/e7a384790b13c29113e22e596ade9687-LinLibertineG-20120116.zip",
