@@ -544,7 +544,6 @@ basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
         {
             if(!rContent.empty())
             {
-                Primitive2DContainer aRetval(2);
                 basegfx::B2DHomMatrix aShadowOffset;
 
                 {
@@ -575,25 +574,66 @@ basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
                 }
 
                 // create shadow primitive and add content
-                aRetval[0] = Primitive2DReference(
-                    new ShadowPrimitive2D(
-                        aShadowOffset,
-                        rShadow.getColor(),
-                        rShadow.getBlur(),
-                        Primitive2DContainer(pContentForShadow ? *pContentForShadow : rContent)));
-
-                if(0.0 != rShadow.getTransparence())
+                const Primitive2DContainer& rContentForShadow
+                    = pContentForShadow ? *pContentForShadow : rContent;
+                int nContentWithTransparence = std::count_if(
+                    rContentForShadow.begin(), rContentForShadow.end(),
+                    [](const Primitive2DReference& xChild) {
+                        auto pChild = dynamic_cast<BufferedDecompositionPrimitive2D*>(xChild.get());
+                        return pChild && pChild->getTransparenceForShadow() != 0;
+                    });
+                if (nContentWithTransparence == 0)
                 {
-                    // create SimpleTransparencePrimitive2D
-                    Primitive2DContainer aTempContent { aRetval[0] };
-
+                    Primitive2DContainer aRetval(2);
                     aRetval[0] = Primitive2DReference(
-                        new UnifiedTransparencePrimitive2D(
-                            std::move(aTempContent),
-                            rShadow.getTransparence()));
+                        new ShadowPrimitive2D(
+                            aShadowOffset,
+                            rShadow.getColor(),
+                            rShadow.getBlur(),
+                            Primitive2DContainer(pContentForShadow ? *pContentForShadow : rContent)));
+
+                    if (0.0 != rShadow.getTransparence())
+                    {
+                        // create SimpleTransparencePrimitive2D
+                        Primitive2DContainer aTempContent{ aRetval[0] };
+
+                        aRetval[0] = Primitive2DReference(
+                            new UnifiedTransparencePrimitive2D(
+                                std::move(aTempContent),
+                                rShadow.getTransparence()));
+                    }
+
+                    aRetval[1] = Primitive2DReference(new GroupPrimitive2D(Primitive2DContainer(rContent)));
+                    return aRetval;
                 }
 
-                aRetval[1] = Primitive2DReference(new GroupPrimitive2D(Primitive2DContainer(rContent)));
+                Primitive2DContainer aRetval;
+                for (const auto& xChild : rContentForShadow)
+                {
+                    double fChildTransparence = 0.0;
+                    auto pChild = dynamic_cast<BufferedDecompositionPrimitive2D*>(xChild.get());
+                    if (pChild)
+                    {
+                        fChildTransparence = pChild->getTransparenceForShadow();
+                        fChildTransparence /= 100;
+                    }
+                    aRetval.push_back(Primitive2DReference(
+                        new ShadowPrimitive2D(aShadowOffset, rShadow.getColor(), rShadow.getBlur(),
+                                              Primitive2DContainer({ xChild }))));
+                    if (rShadow.getTransparence() != 0.0 || fChildTransparence != 0.0)
+                    {
+                        Primitive2DContainer aTempContent{ aRetval.back() };
+
+                        double fChildAlpha = 1.0 - fChildTransparence;
+                        double fShadowAlpha = 1.0 - rShadow.getTransparence();
+                        double fTransparence = 1.0 - fChildAlpha * fShadowAlpha;
+                        aRetval.back() = Primitive2DReference(new UnifiedTransparencePrimitive2D(
+                            std::move(aTempContent), fTransparence));
+                    }
+                }
+
+                aRetval.push_back(
+                    Primitive2DReference(new GroupPrimitive2D(Primitive2DContainer(rContent))));
                 return aRetval;
             }
             else

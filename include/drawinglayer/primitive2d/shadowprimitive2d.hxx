@@ -76,14 +76,6 @@ namespace drawinglayer::primitive2d
             ///  create decomposition
             virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const override;
 
-            void get2DDecompositionWithoutBlur(
-                Primitive2DDecompositionVisitor& rVisitor,
-                const geometry::ViewInformation2D& rViewInformation) const;
-
-            void
-            get2DDecompositionWithBlur(Primitive2DDecompositionVisitor& rVisitor,
-                                       const geometry::ViewInformation2D& rViewInformation) const;
-
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
