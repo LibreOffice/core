@@ -16,6 +16,24 @@
       "message": "Mike: could you please review this? This follow-up addresses your earlier comment. Thanks!",
       "revId": "e7ab6219a3b3f94c35863e4a6466e6546066cf38",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1dac143f_f2f32569",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-23T07:15:38Z",
+      "side": 1,
+      "message": "Oh. 😊\n\nMy comment was:\n\n\u003e 1. An outliner goes to the SdrObjEditView::SdrBeginTextEdit, with own undo manager.\n\u003e 2. There it gets the undo manager replaced; the old manager is stored in mpOldTextEditUndoManager.\n\u003e 3. For some reason, SdrObjEditView::SdrEndTextEdit didn\u0027t happen.\n\u003e 5. In SwView::~SwView, SdrObjEditView::DisposeUndoManager clears the undo manager in the outliner, but does not reinstate mpOldTextEditUndoManager.\n\nThe concern was that the manager in mpOldTextEditUndoManager gets leaked; I\u0027m afraid it is unchanged here.",
+      "parentUuid": "4ac83799_72a6c2d5",
+      "revId": "e7ab6219a3b3f94c35863e4a6466e6546066cf38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
