@@ -24,6 +24,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <tools/degree.hxx>
 #include <tools/gen.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/degree.hxx>
@@ -55,7 +56,46 @@ class VCL_PLUGIN_PUBLIC LogicalFontInstance : public salhelper::SimpleReferenceO
 public: // TODO: make data members private
     virtual ~LogicalFontInstance() override;
 
-    vcl::font::FontInstanceDataRef mxFontMetric;        // Font attributes
+    tools::Long GetWidth() const { return mxFontMetric->GetWidth(); }
+    tools::Long GetDescent() const{ return mxFontMetric->GetDescent(); }
+    tools::Long GetAscent() const{ return mxFontMetric->GetAscent(); }
+    tools::Long GetUnderlineSize()  const{ return mxFontMetric->GetUnderlineSize(); }
+    tools::Long GetUnderlineOffset() const{ return mxFontMetric->GetUnderlineOffset(); }
+    tools::Long GetAboveWavelineUnderlineSize() const{ return mxFontMetric->GetAboveWavelineUnderlineSize(); }
+    tools::Long GetAboveWavelineUnderlineOffset() const{ return mxFontMetric->GetAboveWavelineUnderlineOffset(); }
+    tools::Long GetWavelineUnderlineSize() const{ return mxFontMetric->GetWavelineUnderlineSize(); }
+    tools::Long GetWavelineUnderlineOffset() const{ return mxFontMetric->GetWavelineUnderlineOffset(); }
+    tools::Long GetAboveUnderlineSize() const { return mxFontMetric->GetAboveUnderlineSize(); }
+    tools::Long GetAboveUnderlineOffset() const { return mxFontMetric->GetAboveUnderlineOffset(); }
+    tools::Long GetBoldUnderlineSize() const { return mxFontMetric->GetBoldUnderlineSize(); }
+    tools::Long GetBoldUnderlineOffset() const { return mxFontMetric->GetBoldUnderlineOffset(); }
+    tools::Long GetAboveBoldUnderlineSize() const { return mxFontMetric->GetAboveBoldUnderlineSize(); }
+    tools::Long GetAboveBoldUnderlineOffset() const { return mxFontMetric->GetAboveBoldUnderlineOffset(); }
+    tools::Long GetDoubleUnderlineSize() const { return mxFontMetric->GetDoubleUnderlineSize(); }
+    tools::Long GetDoubleUnderlineOffset1() const { return mxFontMetric->GetDoubleUnderlineOffset1(); }
+    tools::Long GetDoubleUnderlineOffset2() const { return mxFontMetric->GetDoubleUnderlineOffset2(); }
+    tools::Long GetAboveDoubleUnderlineSize() const { return mxFontMetric->GetAboveDoubleUnderlineSize(); }
+    tools::Long GetAboveDoubleUnderlineOffset1() const { return mxFontMetric->GetAboveDoubleUnderlineOffset1(); }
+    tools::Long GetAboveDoubleUnderlineOffset2() const { return mxFontMetric->GetAboveDoubleUnderlineOffset2(); }
+    tools::Long GetStrikeoutSize() const { return mxFontMetric->GetStrikeoutSize(); }
+    tools::Long GetStrikeoutOffset() const { return mxFontMetric->GetStrikeoutOffset(); }
+    tools::Long GetBoldStrikeoutSize() const { return mxFontMetric->GetBoldStrikeoutSize(); }
+    tools::Long GetBoldStrikeoutOffset() const { return mxFontMetric->GetBoldStrikeoutOffset(); }
+    tools::Long GetDoubleStrikeoutSize() const { return mxFontMetric->GetDoubleStrikeoutSize(); }
+    tools::Long GetDoubleStrikeoutOffset1() const { return mxFontMetric->GetDoubleStrikeoutOffset1(); }
+    tools::Long GetDoubleStrikeoutOffset2() const { return mxFontMetric->GetDoubleStrikeoutOffset2(); }
+    tools::Long GetInternalLeading() const { return mxFontMetric->GetInternalLeading(); }
+    tools::Long GetExternalLeading() const{ return mxFontMetric->GetExternalLeading(); }
+    Degree10 GetOrientationFromData() const { return mxFontMetric->GetOrientation(); }
+    tools::Long GetMinKashida() const { return mxFontMetric->GetMinKashida(); }
+    void SetOrientationInData(Degree10 nOrientation) { mnOrientation = nOrientation; }
+
+    void InitTextLineSize(sal_Int32 nDPIY, vcl::Font const& rFont, sal_Int32 mnBulletOffset);
+    void InitAboveTextLineSize() { mxFontMetric->InitAboveTextLineSize(); }
+    void InitFlags(vcl::Font const& rFont, tools::Rectangle const& rRect) { mxFontMetric->InitFlags(rFont, rRect); }
+
+    vcl::font::FontInstanceDataRef GetFontInstanceData() { return mxFontMetric; }
+
     const ConvertChar* mpConversion;        // used e.g. for StarBats->StarSymbol
 
     tools::Long            mnLineHeight;
@@ -95,6 +135,8 @@ protected:
     virtual hb_font_t* ImplInitHbFont() { assert(false); return hb_font_get_empty(); }
 
 private:
+    vcl::font::FontInstanceDataRef mxFontMetric;        // Font attributes
+
     // cache of Unicode characters and replacement font names
     // TODO: a fallback map can be shared with many other ImplFontEntries
     // TODO: at least the ones which just differ in orientation, stretching or height
