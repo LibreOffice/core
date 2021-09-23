@@ -65,7 +65,7 @@
 #include <win/winlayout.hxx>
 #include <win/wingdiimpl.hxx>
 #include <impfontcharmap.hxx>
-#include <impfontmetricdata.hxx>
+#include <font/FontInstanceData.hxx>
 #include <impglyphitem.hxx>
 
 #if HAVE_FEATURE_SKIA
@@ -909,7 +909,7 @@ void WinSalGraphics::SetFont(LogicalFontInstance* pFont, int nFallbackLevel)
     pFontFace->UpdateFromHDC(getHDC());
 }
 
-void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFallbackLevel )
+void WinSalGraphics::GetFontMetric( vcl::font::FontInstanceDataRef& rxFontMetric, int nFallbackLevel )
 {
     // temporarily change the HDC to the font in the fallback level
     rtl::Reference<WinFontInstance> pFontInstance = mpWinFontEntry[nFallbackLevel];
