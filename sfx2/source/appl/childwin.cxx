@@ -51,7 +51,7 @@ struct SfxChildWindow_Impl
 {
     css::uno::Reference< css::frame::XFrame >             xFrame;
     css::uno::Reference< css::lang::XEventListener >      xListener;
-    SfxChildWinFactory* pFact;
+    SfxChildWinFactory aFact = { nullptr, 0, 0 };
     bool                bHideNotDelete;
     bool                bVisible;
     bool                bWantsFocus;
@@ -147,7 +147,6 @@ SfxChildWindow::SfxChildWindow(vcl::Window *pParentWindow, sal_uInt16 nId)
     , eChildAlignment(SfxChildAlignment::NOALIGNMENT)
     , nType(nId)
 {
-    pImpl->pFact = nullptr;
     pImpl->bHideNotDelete = false;
     pImpl->bWantsFocus = true;
     pImpl->bVisible = true;
@@ -291,7 +290,7 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
     aWinOpt.SetUserData( aSeq );
 
     // ... but save status at runtime!
-    pImpl->pFact->aInfo = rInfo;
+    pImpl->aFact.aInfo = rInfo;
 }
 
 void SfxChildWindow::SetAlignment(SfxChildAlignment eAlign)
@@ -301,7 +300,7 @@ void SfxChildWindow::SetAlignment(SfxChildAlignment eAlign)
 
 SfxChildWinInfo SfxChildWindow::GetInfo() const
 {
-    SfxChildWinInfo aInfo(pImpl->pFact->aInfo);
+    SfxChildWinInfo aInfo(pImpl->aFact.aInfo);
     if (xController)
     {
         weld::Dialog* pDialog = xController->getDialog();
@@ -343,7 +342,7 @@ SfxChildWinInfo SfxChildWindow::GetInfo() const
 
 sal_uInt16 SfxChildWindow::GetPosition() const
 {
-    return pImpl->pFact->nPos;
+    return pImpl->aFact.nPos;
 }
 
 void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinInfo& rInfo)
@@ -423,7 +422,7 @@ bool ParentIsFloatingWindow(const vcl::Window *pParent)
 
 void SfxChildWindow::SetFactory_Impl( SfxChildWinFactory *pF )
 {
-    pImpl->pFact = pF;
+    pImpl->aFact = *pF;
 }
 
 void SfxChildWindow::SetHideNotDelete( bool bOn )
