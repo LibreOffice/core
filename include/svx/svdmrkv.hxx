@@ -153,6 +153,7 @@ protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
     virtual void ModelHasChanged() override; // Is called by the PaintView
     virtual void SetMarkHandles(SfxViewShell* pOtherShell); // maHdlList - fill (List of handles)
+    void modelHasChangedLOKit();
     void         SetMarkRects();                                             // Rects at the PageViews
     void         CheckMarked();                                              // Scan MarkList after Del and Lock Layer ...
     void         AddDragModeHdl(SdrDragMode eMode);

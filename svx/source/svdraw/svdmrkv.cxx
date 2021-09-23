@@ -229,7 +229,13 @@ void SdrMarkView::ModelHasChanged()
         AdjustMarkHdl();
     }
 
-    if (!(comphelper::LibreOfficeKit::isActive() && GetMarkedObjectCount() > 0))
+    if (comphelper::LibreOfficeKit::isActive())
+        modelHasChangedLOKit();
+}
+
+void SdrMarkView::modelHasChangedLOKit()
+{
+    if (GetMarkedObjectCount() <= 0)
         return;
 
     //TODO: Is MarkedObjRect valid at this point?
@@ -269,10 +275,9 @@ void SdrMarkView::ModelHasChanged()
         pResultSelection = &aSelection;
     }
 
-    if(SfxViewShell* pViewShell = GetSfxViewShell())
+    if (SfxViewShell* pViewShell = GetSfxViewShell())
         SfxLokHelper::notifyInvalidation(pViewShell, pResultSelection);
 }
-
 
 bool SdrMarkView::IsAction() const
 {
