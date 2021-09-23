@@ -32,6 +32,7 @@
 #include <font/PreMatchFontSubstitution.hxx>
 
 #include <memory>
+#include <tuple>
 
 static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
 {
@@ -179,7 +180,104 @@ void PhysicalFontCollection::ImplInitGenericGlyphFallback() const
     mpFallbackList  = std::move(pFallbackList);
 }
 
-vcl::font::PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont( vcl::font::FontSelectPattern& rFontSelData,
+static std::tuple<sal_Int32, sal_UCS4, bool> CheckFirstEntry(vcl::font::FontSelectPattern& rFontSelectPattern,
+                                                LogicalFontInstance* pFontInstance,
+                                                OUString& rMissingCodes)
+{
+    // check cache for the first matching entry
+    // to avoid calling the expensive fallback hook (#i83491#)
+    sal_UCS4 cChar = 0;
+    bool bCached = true;
+    sal_Int32 nStrIndex = 0;
+    while (nStrIndex < rMissingCodes.getLength())
+    {
+        cChar = rMissingCodes.iterateCodePoints(&nStrIndex);
+        bCached = pFontInstance->GetFallbackForUnicode(cChar, rFontSelectPattern.GetWeight(), &rFontSelectPattern.maSearchName);
+
+        // ignore entries which don't have a fallback
+        if (!bCached || !rFontSelectPattern.maSearchName.isEmpty())
+            break;
+    }
+
+    return std::make_tuple(nStrIndex, cChar, bCached);
+}
+
+static void UpdateUnresolvedCodepoints(LogicalFontInstance* pFontInstance,
+                                       sal_Int32 nStrIndex, sal_UCS4 cChar,
+                                       vcl::font::FontSelectPattern const& rFontSelectPattern,
+                                       OUString& rMissingCodes)
+{
+    // there is a matching fallback in the cache
+    // so update rMissingCodes with codepoints not yet resolved by this fallback
+    int nRemainingLength = 0;
+    std::unique_ptr<sal_UCS4[]> const pRemainingCodes(new sal_UCS4[rMissingCodes.getLength()]);
+    OUString aFontName;
+
+    while( nStrIndex < rMissingCodes.getLength() )
+    {
+        cChar = rMissingCodes.iterateCodePoints( &nStrIndex );
+        bool bCached = pFontInstance->GetFallbackForUnicode( cChar, rFontSelectPattern.GetWeight(), &aFontName );
+
+        if( !bCached || (rFontSelectPattern.maSearchName != aFontName) )
+            pRemainingCodes[ nRemainingLength++ ] = cChar;
+    }
+
+    rMissingCodes = OUString( pRemainingCodes.get(), nRemainingLength );
+}
+
+static void UpdateBestMatchingGlyphFallbackFont(LogicalFontInstance* pFontInstance, OUString& rMissingCodes,
+                                    GlyphFallbackFontSubstitution* pFallbackHook,
+                                    vcl::font::FontSelectPattern& rFontSelectPattern)
+{
+    // call the hook to query the best matching glyph fallback font
+    if (pFallbackHook->FindFontSubstitute(rFontSelectPattern, pFontInstance, rMissingCodes))
+        rFontSelectPattern.maSearchName = GetEnglishSearchFontName( rFontSelectPattern.maSearchName );
+    else
+        rFontSelectPattern.maSearchName.clear();
+}
+
+static void ResolveFontFallbacksForUnicode(LogicalFontInstance* pFontInstance,
+                                    sal_Int32 nStrIndex, sal_UCS4 cChar, OUString& rMissingCodes,
+                                    GlyphFallbackFontSubstitution* pFallbackHook,
+                                    vcl::font::FontSelectPattern& rFontSelectPattern)
+{
+    OUString aOldMissingCodes = rMissingCodes;
+
+    UpdateBestMatchingGlyphFallbackFont(pFontInstance, rMissingCodes, pFallbackHook, rFontSelectPattern);
+
+    // See fdo#32665 for an example. FreeSerif that has glyphs in normal
+    // font, but not in the italic or bold version
+    bool bSubSetOfFontRequiresPropertyFaking = rFontSelectPattern.mbEmbolden || rFontSelectPattern.maItalicMatrix != ItalicMatrix();
+
+    // Cache the result even if there was no match, unless its from part of a font for which the properties need
+    // to be faked. We need to rework this cache to take into account that fontconfig can return different fonts
+    // for different input sizes, weights, etc. Basically the cache is way too naive
+    if (!bSubSetOfFontRequiresPropertyFaking)
+    {
+        for(;;)
+        {
+             if( !pFontInstance->GetFallbackForUnicode( cChar, rFontSelectPattern.GetWeight(), &rFontSelectPattern.maSearchName ) )
+                 pFontInstance->AddFallbackForUnicode( cChar, rFontSelectPattern.GetWeight(), rFontSelectPattern.maSearchName );
+
+             if( nStrIndex >= aOldMissingCodes.getLength() )
+                 break;
+
+             cChar = aOldMissingCodes.iterateCodePoints( &nStrIndex );
+        }
+
+        if( !rFontSelectPattern.maSearchName.isEmpty() )
+        {
+            // remove cache entries that were still not resolved
+            for( nStrIndex = 0; nStrIndex < rMissingCodes.getLength(); )
+            {
+                cChar = rMissingCodes.iterateCodePoints( &nStrIndex );
+                pFontInstance->IgnoreFallbackForUnicode( cChar, rFontSelectPattern.GetWeight(), rFontSelectPattern.maSearchName );
+            }
+        }
+    }
+}
+
+vcl::font::PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont( vcl::font::FontSelectPattern& rFontSelectPattern,
                                                                   LogicalFontInstance* pFontInstance,
                                                                   OUString& rMissingCodes,
                                                                   int nFallbackLevel ) const
@@ -194,76 +292,17 @@ vcl::font::PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont( vcl
         sal_UCS4 cChar = 0;
         bool bCached = true;
         sal_Int32 nStrIndex = 0;
-        while( nStrIndex < rMissingCodes.getLength() )
-        {
-            cChar = rMissingCodes.iterateCodePoints( &nStrIndex );
-            bCached = pFontInstance->GetFallbackForUnicode( cChar, rFontSelData.GetWeight(), &rFontSelData.maSearchName );
 
-            // ignore entries which don't have a fallback
-            if( !bCached || !rFontSelData.maSearchName.isEmpty() )
-                break;
-        }
+        std::tie(nStrIndex, cChar, bCached) = CheckFirstEntry(rFontSelectPattern, pFontInstance, rMissingCodes);
 
-        if( bCached )
-        {
-            // there is a matching fallback in the cache
-            // so update rMissingCodes with codepoints not yet resolved by this fallback
-            int nRemainingLength = 0;
-            std::unique_ptr<sal_UCS4[]> const pRemainingCodes(new sal_UCS4[rMissingCodes.getLength()]);
-            OUString aFontName;
-
-            while( nStrIndex < rMissingCodes.getLength() )
-            {
-                cChar = rMissingCodes.iterateCodePoints( &nStrIndex );
-                bCached = pFontInstance->GetFallbackForUnicode( cChar, rFontSelData.GetWeight(), &aFontName );
-                if( !bCached || (rFontSelData.maSearchName != aFontName) )
-                    pRemainingCodes[ nRemainingLength++ ] = cChar;
-            }
-            rMissingCodes = OUString( pRemainingCodes.get(), nRemainingLength );
-        }
+        if (bCached)
+            UpdateUnresolvedCodepoints(pFontInstance, nStrIndex, cChar, rFontSelectPattern, rMissingCodes);
         else
-        {
-            OUString aOldMissingCodes = rMissingCodes;
-
-            // call the hook to query the best matching glyph fallback font
-            if (mpFallbackHook->FindFontSubstitute(rFontSelData, pFontInstance, rMissingCodes))
-                // apply outdev3.cxx specific fontname normalization
-                rFontSelData.maSearchName = GetEnglishSearchFontName( rFontSelData.maSearchName );
-            else
-                rFontSelData.maSearchName.clear();
-
-            // See fdo#32665 for an example. FreeSerif that has glyphs in normal
-            // font, but not in the italic or bold version
-            bool bSubSetOfFontRequiresPropertyFaking = rFontSelData.mbEmbolden || rFontSelData.maItalicMatrix != ItalicMatrix();
-
-            // Cache the result even if there was no match, unless its from part of a font for which the properties need
-            // to be faked. We need to rework this cache to take into account that fontconfig can return different fonts
-            // for different input sizes, weights, etc. Basically the cache is way to naive
-            if (!bSubSetOfFontRequiresPropertyFaking)
-            {
-                for(;;)
-                {
-                     if( !pFontInstance->GetFallbackForUnicode( cChar, rFontSelData.GetWeight(), &rFontSelData.maSearchName ) )
-                         pFontInstance->AddFallbackForUnicode( cChar, rFontSelData.GetWeight(), rFontSelData.maSearchName );
-                     if( nStrIndex >= aOldMissingCodes.getLength() )
-                         break;
-                     cChar = aOldMissingCodes.iterateCodePoints( &nStrIndex );
-                }
-                if( !rFontSelData.maSearchName.isEmpty() )
-                {
-                    // remove cache entries that were still not resolved
-                    for( nStrIndex = 0; nStrIndex < rMissingCodes.getLength(); )
-                    {
-                        cChar = rMissingCodes.iterateCodePoints( &nStrIndex );
-                        pFontInstance->IgnoreFallbackForUnicode( cChar, rFontSelData.GetWeight(), rFontSelData.maSearchName );
-                    }
-                }
-            }
-        }
+            ResolveFontFallbacksForUnicode(pFontInstance, nStrIndex, cChar, rMissingCodes, mpFallbackHook, rFontSelectPattern);
 
         // find the matching device font
-        if( !rFontSelData.maSearchName.isEmpty() )
-            pFallbackData = FindFontFamily( rFontSelData.maSearchName );
+        if( !rFontSelectPattern.maSearchName.isEmpty() )
+            pFallbackData = FindFontFamily( rFontSelectPattern.maSearchName );
     }
 
     // else find a matching font candidate for generic glyph fallback
@@ -1219,13 +1258,13 @@ const std::vector<std::pair<OUString, OUString>> aMetricCompatibleMap =
     { "Calibri",         "Carlito" },
 };
 
-static bool FindMetricCompatibleFont(FontSelectPattern& rFontSelData)
+static bool FindMetricCompatibleFont(FontSelectPattern& rFontSelectPattern)
 {
     for (const auto& aSub : aMetricCompatibleMap)
     {
-        if (rFontSelData.maSearchName == GetEnglishSearchFontName(aSub.first))
+        if (rFontSelectPattern.maSearchName == GetEnglishSearchFontName(aSub.first))
         {
-            rFontSelData.maSearchName = aSub.second;
+            rFontSelectPattern.maSearchName = aSub.second;
             return true;
         }
     }
