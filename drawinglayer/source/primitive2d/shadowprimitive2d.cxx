@@ -22,7 +22,6 @@
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
-#include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
 
 #include <memory>
 
@@ -31,28 +30,6 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-namespace
-{
-void get2DDecompositionOfChildren(const ShadowPrimitive2D& rPrimitive,
-                                  Primitive2DDecompositionVisitor& rVisitor,
-                                  const Primitive2DContainer& rChildren)
-{
-    if (rChildren.empty())
-        return;
-
-    // create a modifiedColorPrimitive containing the shadow color and the content
-    const basegfx::BColorModifierSharedPtr aBColorModifier
-        = std::make_shared<basegfx::BColorModifier_replace>(rPrimitive.getShadowColor());
-    const Primitive2DReference xRefA(
-        new ModifiedColorPrimitive2D(Primitive2DContainer(rChildren), aBColorModifier));
-    Primitive2DContainer aSequenceB{ xRefA };
-
-    // build transformed primitiveVector with shadow offset and add to target
-    rVisitor.append(
-        new TransformPrimitive2D(rPrimitive.getShadowTransform(), std::move(aSequenceB)));
-}
-}
-
         ShadowPrimitive2D::ShadowPrimitive2D(
             const basegfx::B2DHomMatrix& rShadowTransform,
             const basegfx::BColor& rShadowColor,
@@ -89,41 +66,21 @@ void get2DDecompositionOfChildren(const ShadowPrimitive2D& rPrimitive,
 
         void ShadowPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            get2DDecompositionOfChildren(*this, rVisitor, getChildren());
-        }
+            if(getChildren().empty())
+                return;
 
-        void ShadowPrimitive2D::get2DDecompositionWithoutBlur(
-            Primitive2DDecompositionVisitor& rVisitor,
-            const geometry::ViewInformation2D& /*rViewInformation*/) const
-        {
-            Primitive2DContainer aChildren;
-            // Only decompose children which are not blurred (they opted in for this).
-            std::copy_if(getChildren().begin(), getChildren().end(), std::back_inserter(aChildren),
-                         [](const Primitive2DReference& xChild) {
-                             auto pChild
-                                 = dynamic_cast<primitive2d::BufferedDecompositionPrimitive2D*>(
-                                     xChild.get());
-                             return pChild && pChild->getExcludeFromBlur();
-                         });
+            // create a modifiedColorPrimitive containing the shadow color and the content
+            const basegfx::BColorModifierSharedPtr aBColorModifier =
+                std::make_shared<basegfx::BColorModifier_replace>(
+                    getShadowColor());
+            const Primitive2DReference xRefA(
+                new ModifiedColorPrimitive2D(
+                    Primitive2DContainer(getChildren()),
+                    aBColorModifier));
+            Primitive2DContainer aSequenceB { xRefA };
 
-            get2DDecompositionOfChildren(*this, rVisitor, aChildren);
-        }
-
-        void ShadowPrimitive2D::get2DDecompositionWithBlur(
-            Primitive2DDecompositionVisitor& rVisitor,
-            const geometry::ViewInformation2D& /*rViewInformation*/) const
-        {
-            // Only decompose children which are blurred (which is the default).
-            Primitive2DContainer aChildren;
-            std::copy_if(getChildren().begin(), getChildren().end(), std::back_inserter(aChildren),
-                         [](const Primitive2DReference& xChild) {
-                             auto pChild
-                                 = dynamic_cast<primitive2d::BufferedDecompositionPrimitive2D*>(
-                                     xChild.get());
-                             return !pChild || !pChild->getExcludeFromBlur();
-                         });
-
-            get2DDecompositionOfChildren(*this, rVisitor, aChildren);
+            // build transformed primitiveVector with shadow offset and add to target
+            rVisitor.append(new TransformPrimitive2D(getShadowTransform(), std::move(aSequenceB)));
         }
 
         // provide unique ID

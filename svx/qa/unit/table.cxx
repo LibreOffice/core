@@ -91,11 +91,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTableShadowBlur)
     drawinglayer::Primitive2dXmlDump aDumper;
     xmlDocUniquePtr pDocument = aDumper.dumpAndParse(xPrimitiveSequence);
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: true
-    // - Actual  : false
-    // i.e. blur was applied on both the cell fill and the cell border.
-    assertXPath(pDocument, "//shadow/transform/modifiedColor/sdrCell[1]", "excludeFromBlur",
-                "true");
+    // - number of nodes is incorrect
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the shadow itself was not transparent and that resulted in a non-transparent rendering
+    // as well, while the rendering transparency should be based on the transparency of the shadow
+    // itself and the transparency of the cell fill.
+    assertXPath(pDocument, "//objectinfo/unifiedtransparence[1]", "transparence", "80");
 }
 }
 

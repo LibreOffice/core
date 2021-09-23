@@ -641,8 +641,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 if (pBufferedDecomposition)
                 {
                     rWriter.attribute(
-                        "excludeFromBlur",
-                        OString::boolean(pBufferedDecomposition->getExcludeFromBlur()));
+                        "transparenceForShadow",
+                        OString::number(pBufferedDecomposition->getTransparenceForShadow()));
                 }
 
                 drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;

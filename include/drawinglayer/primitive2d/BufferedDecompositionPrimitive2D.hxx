@@ -67,8 +67,9 @@ private:
     /// a sequence used for buffering the last create2DDecomposition() result
     Primitive2DContainer maBuffered2DDecomposition;
 
-    /// When blur is invoked on a list of primitives, exclude this primitive from the blur effect.
-    bool mbExcludeFromBlur = false;
+    /// When a shadow wraps a list of primitives, this primitive wants to influence the transparency
+    /// of the shadow.
+    sal_uInt16 mnTransparenceForShadow = 0;
 
 protected:
     /** access methods to maBuffered2DDecomposition. The usage of this methods may allow
@@ -103,9 +104,12 @@ public:
     get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
                        const geometry::ViewInformation2D& rViewInformation) const override;
 
-    void setExcludeFromBlur(bool bExcludeFromBlur) { mbExcludeFromBlur = bExcludeFromBlur; }
+    void setTransparenceForShadow(sal_uInt16 nTransparenceForShadow)
+    {
+        mnTransparenceForShadow = nTransparenceForShadow;
+    }
 
-    bool getExcludeFromBlur() const { return mbExcludeFromBlur; }
+    sal_uInt16 getTransparenceForShadow() const { return mnTransparenceForShadow; }
 };
 
 } // end of namespace drawinglayer::primitive2d
