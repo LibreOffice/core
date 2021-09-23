@@ -19,6 +19,11 @@ BitmapFilter::~BitmapFilter() {}
 
 bool BitmapFilter::Filter(BitmapEx& rBmpEx, BitmapFilter const& rFilter)
 {
+    if (rBmpEx.IsEmpty())
+    {
+        return true;
+    }
+
     BitmapEx aTmpBmpEx(rFilter.execute(rBmpEx));
 
     if (aTmpBmpEx.IsEmpty())
