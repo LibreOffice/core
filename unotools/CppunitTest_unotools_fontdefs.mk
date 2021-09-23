@@ -15,6 +15,7 @@ $(eval $(call gb_CppunitTest_use_sdk_api,unotools_fontdefs))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,unotools_fontdefs, \
     unotools/qa/unit/testGetEnglishSearchName \
+    unotools/qa/unit/fontsubstconfiguration \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,unotools_fontdefs, \
