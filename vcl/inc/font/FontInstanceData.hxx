@@ -24,25 +24,26 @@
 #include <vcl/dllapi.h>
 #include <tools/long.hxx>
 #include <tools/ref.hxx>
-#include "fontattributes.hxx"
-#include "sft.hxx"
+
+#include <fontattributes.hxx>
+#include <sft.hxx>
 
 #include <vector>
 
-class ImplFontMetricData;
-typedef tools::SvRef<ImplFontMetricData> ImplFontMetricDataRef;
-
 class OutputDevice;
-namespace vcl::font
-{
-class FontSelectPattern;
-}
 class LogicalFontInstance;
 
-class VCL_DLLPUBLIC ImplFontMetricData final : public FontAttributes, public SvRefBase
+namespace vcl::font
+{
+
+class FontInstanceData;
+typedef tools::SvRef<FontInstanceData> FontInstanceDataRef;
+class FontSelectPattern;
+
+class VCL_DLLPUBLIC FontInstanceData final : public FontAttributes, public SvRefBase
 {
 public:
-    explicit        ImplFontMetricData( const vcl::font::FontSelectPattern& );
+    explicit        FontInstanceData( const FontSelectPattern& );
 
     // font instance attributes from the font request
     tools::Long            GetWidth() const                                                { return mnWidth; }
@@ -148,5 +149,6 @@ private:
     tools::Long            mnDStrikeoutOffset2;        // Offset of double strike-out to baseline
 
 };
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

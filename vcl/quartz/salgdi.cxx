@@ -42,7 +42,7 @@
 #include <fontsubset.hxx>
 #include <impfont.hxx>
 #include <impfontcharmap.hxx>
-#include <impfontmetricdata.hxx>
+#include <font/FontInstanceData.hxx>
 #include <font/fontsubstitution.hxx>
 #include <font/PhysicalFontCollection.hxx>
 
@@ -255,7 +255,7 @@ void AquaSalGraphics::SetTextColor( Color nColor )
     // SAL_ DEBUG(std::hex << nColor << std::dec << "={" << maShared.maTextColor.GetRed() << ", " << maShared.maTextColor.GetGreen() << ", " << maShared.maTextColor.GetBlue() << ", " << maShared.maTextColor.GetAlpha() << "}");
 }
 
-void AquaSalGraphics::GetFontMetric(ImplFontMetricDataRef& rxFontMetric, int nFallbackLevel)
+void AquaSalGraphics::GetFontMetric(vcl::font::FontInstanceDataRef& rxFontMetric, int nFallbackLevel)
 {
     if (nFallbackLevel < MAX_FALLBACK && mpTextStyle[nFallbackLevel])
     {
