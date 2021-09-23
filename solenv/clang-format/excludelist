@@ -14438,6 +14438,7 @@ vcl/inc/dndeventdispatcher.hxx
 vcl/inc/dndlistenercontainer.hxx
 vcl/inc/factory.hxx
 vcl/inc/fltcall.hxx
+vcl/inc/font/FontInstanceData.hxx
 vcl/inc/font/FontSelectPattern.hxx
 vcl/inc/font/ImplDeviceFontSizeList.hxx
 vcl/inc/font/PhysicalFontCollection.hxx
@@ -14942,6 +14943,7 @@ vcl/source/filter/wmf/wmf.cxx
 vcl/source/filter/wmf/wmfwr.cxx
 vcl/source/filter/wmf/wmfwr.hxx
 vcl/source/font/DirectFontSubstitution.cxx
+vcl/source/font/FontInstanceData.cxx
 vcl/source/font/FontSelectPattern.cxx
 vcl/source/font/PhysicalFontCollection.cxx
 vcl/source/font/PhysicalFontFace.cxx
