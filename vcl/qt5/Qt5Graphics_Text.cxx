@@ -57,7 +57,7 @@ void Qt5Graphics::SetFont(LogicalFontInstance* pReqFont, int nFallbackLevel)
     m_pTextStyle[nFallbackLevel] = static_cast<Qt5Font*>(pReqFont);
 }
 
-void Qt5Graphics::GetFontMetric(ImplFontMetricDataRef& rFMD, int nFallbackLevel)
+void Qt5Graphics::GetFontMetric(vcl::font::FontInstanceDataRef& rFMD, int nFallbackLevel)
 {
     QRawFont aRawFont(QRawFont::fromFont(*m_pTextStyle[nFallbackLevel]));
     Qt5FontFace::fillAttributesFromQFont(*m_pTextStyle[nFallbackLevel], *rFMD);
