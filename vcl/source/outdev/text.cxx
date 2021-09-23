@@ -179,7 +179,7 @@ void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
     mpGraphics->SetFillColor( GetTextFillColor() );
     mbInitFillColor = true;
 
-    ImplDrawTextRect( nX, nY, 0, -(mpFontInstance->mxFontMetric->GetAscent() + mnEmphasisAscent),
+    ImplDrawTextRect( nX, nY, 0, -(mpFontInstance->GetAscent() + mnEmphasisAscent),
                       nWidth,
                       mpFontInstance->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent );
 }
@@ -193,7 +193,7 @@ tools::Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout
     tools::Long nWidth = rSalLayout.GetTextWidth();
     tools::Long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
 
-    nY -= mpFontInstance->mxFontMetric->GetAscent() + mnEmphasisAscent;
+    nY -= mpFontInstance->GetAscent() + mnEmphasisAscent;
 
     if ( mpFontInstance->mnOrientation )
     {
@@ -234,7 +234,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     {
         // guess vertical text extents if GetBoundRect failed
         tools::Long nRight = rSalLayout.GetTextWidth();
-        tools::Long nTop = mpFontInstance->mxFontMetric->GetAscent() + mnEmphasisAscent;
+        tools::Long nTop = mpFontInstance->GetAscent() + mnEmphasisAscent;
         tools::Long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
         aBoundRect = tools::Rectangle( 0, -nTop, nRight, nHeight - nTop );
     }
