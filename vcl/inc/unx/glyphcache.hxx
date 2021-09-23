@@ -34,7 +34,7 @@
 
 #include <fontattributes.hxx>
 #include <fontinstance.hxx>
-#include <impfontmetricdata.hxx>
+#include <font/FontInstanceData.hxx>
 
 #include <unordered_map>
 
@@ -124,7 +124,7 @@ public:
     bool                    NeedsArtificialBold() const { return mbArtBold; }
     bool                    NeedsArtificialItalic() const { return mbArtItalic; }
 
-    void                    GetFontMetric(ImplFontMetricDataRef const &) const;
+    void                    GetFontMetric(vcl::font::FontInstanceDataRef const &) const;
     const unsigned char*    GetTable( const char* pName, sal_uLong* pLength ) const;
     const FontCharMapRef &  GetFontCharMap() const;
     bool                    GetFontCapabilities(vcl::FontCapabilities &) const;
