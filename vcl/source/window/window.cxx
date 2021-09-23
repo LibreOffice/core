@@ -1032,7 +1032,11 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
                 break;
         }
 
-        if( nStyle & WB_NOICON )
+        // tdf#144624 for the DefaultWindow, which is never visible, don't
+        // create an icon for it so construction of a DefaultWindow cannot
+        // trigger creation of a VirtualDevice which itself requires a
+        // DefaultWindow to exist
+        if( nStyle & WB_DEFAULTWIN )
             nFrameStyle |= SalFrameStyleFlags::NOICON;
 
         SalFrame* pParentFrame = nullptr;
