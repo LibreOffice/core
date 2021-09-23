@@ -43,7 +43,7 @@
 
 
 #include <fontinstance.hxx>
-#include <impfontmetricdata.hxx>
+#include <font/FontInstanceData.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <salgdi.hxx>
 
@@ -89,7 +89,7 @@ class CoreTextStyle final : public LogicalFontInstance
 public:
     ~CoreTextStyle() override;
 
-    void       GetFontMetric( ImplFontMetricDataRef const & );
+    void       GetFontMetric( vcl::font::FontInstanceDataRef const & );
     bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const override;
 
     CFMutableDictionaryRef  GetStyleDict( void ) const { return mpStyleDict; }
@@ -530,7 +530,7 @@ public:
     // set the font
     virtual void            SetFont( LogicalFontInstance*, int nFallbackLevel ) override;
     // get the current font's metrics
-    virtual void            GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel ) override;
+    virtual void            GetFontMetric( vcl::font::FontInstanceDataRef&, int nFallbackLevel ) override;
     // get the repertoire of the current font
     virtual FontCharMapRef  GetFontCharMap() const override;
     virtual bool            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const override;
