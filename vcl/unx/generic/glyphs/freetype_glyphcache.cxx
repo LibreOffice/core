@@ -512,7 +512,7 @@ FreetypeFont::~FreetypeFont()
     mxFontInfo->ReleaseFaceFT();
 }
 
-void FreetypeFont::GetFontMetric(ImplFontMetricDataRef const & rxTo) const
+void FreetypeFont::GetFontMetric(vcl::font::FontInstanceDataRef const & rxTo) const
 {
     rxTo->FontAttributes::operator =(mxFontInfo->GetFontAttributes());
 

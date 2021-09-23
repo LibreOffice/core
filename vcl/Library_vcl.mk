@@ -474,6 +474,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/font/Feature \
     vcl/source/font/FeatureCollector \
     vcl/source/font/FeatureParser \
+    vcl/source/font/FontInstanceData \
     vcl/source/font/FontSelectPattern \
     vcl/source/font/OpenTypeFeatureDefinitionList \
     vcl/source/font/PhysicalFontCollection \
