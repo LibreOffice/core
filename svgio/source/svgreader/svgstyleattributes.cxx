@@ -258,7 +258,7 @@ namespace svgio::svgreader
 
         void SvgStyleAttributes::add_text(
             drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-            drawinglayer::primitive2d::Primitive2DContainer const & rSource) const
+            drawinglayer::primitive2d::Primitive2DContainer&& rSource) const
         {
             if(rSource.empty())
                 return;
@@ -321,7 +321,7 @@ namespace svgio::svgreader
             else if(pFill)
             {
                 // add the already prepared primitives for single color fill
-                rTarget.append(rSource);
+                rTarget.append(std::move(rSource));
             }
 
             // add stroke
@@ -588,7 +588,7 @@ namespace svgio::svgreader
             rTarget.push_back(
                 new drawinglayer::primitive2d::PatternFillPrimitive2D(
                     rPath,
-                    aPrimitives,
+                    std::move(aPrimitives),
                     aReferenceRange));
         }
 
@@ -1148,7 +1148,7 @@ namespace svgio::svgreader
 
         void SvgStyleAttributes::add_postProcess(
             drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-            const drawinglayer::primitive2d::Primitive2DContainer& rSource,
+            drawinglayer::primitive2d::Primitive2DContainer&& rSource,
             const std::optional<basegfx::B2DHomMatrix>& pTransform) const
         {
             if(rSource.empty())
@@ -1161,7 +1161,7 @@ namespace svgio::svgreader
                 return;
             }
 
-            drawinglayer::primitive2d::Primitive2DContainer aSource(rSource);
+            drawinglayer::primitive2d::Primitive2DContainer aSource(std::move(rSource));
 
             if(basegfx::fTools::less(fOpacity, 1.0))
             {

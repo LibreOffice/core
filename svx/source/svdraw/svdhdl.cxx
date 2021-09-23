@@ -2656,7 +2656,7 @@ void SdrCropViewHdl::CreateB2dIAObject()
             const rtl::Reference< sdr::overlay::OverlayManager >& xManager = rPageWindow.GetOverlayManager();
             if(xManager.is())
             {
-                std::unique_ptr<sdr::overlay::OverlayObject> pNew(new sdr::overlay::OverlayPrimitive2DSequenceObject(aSequence));
+                std::unique_ptr<sdr::overlay::OverlayObject> pNew(new sdr::overlay::OverlayPrimitive2DSequenceObject(drawinglayer::primitive2d::Primitive2DContainer(aSequence)));
 
                 // only informative object, no hit
                 pNew->setHittable(false);

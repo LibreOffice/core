@@ -39,7 +39,7 @@ namespace drawinglayer::primitive2d
 
         public:
             SdrOle2Primitive2D(
-                const Primitive2DContainer& rOLEContent,
+                Primitive2DContainer&& rOLEContent,
                 const basegfx::B2DHomMatrix& rTransform,
                 const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute);
 
