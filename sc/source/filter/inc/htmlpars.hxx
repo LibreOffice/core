@@ -21,6 +21,7 @@
 
 #include <memory>
 #include <map>
+#include <optional>
 #include <stack>
 #include <string_view>
 #include <unordered_map>
@@ -446,7 +447,6 @@ protected:
 
 private:
     typedef ::std::unique_ptr< ScHTMLTableMap >         ScHTMLTableMapPtr;
-    typedef ::std::unique_ptr< SfxItemSet >             SfxItemSetPtr;
     typedef ::std::vector< SCCOLROW >                   ScSizeVec;
     typedef ::std::vector< ScHTMLEntry* >               ScHTMLEntryVector;
     typedef ::std::unique_ptr< ScHTMLEntry >            ScHTMLEntryPtr;
@@ -527,8 +527,8 @@ private:
     OUStringBuffer      maCaptionBuffer;    /// Caption buffer of the table from <caption> </caption>
     ScHTMLTableAutoId   maTableId;          /// Unique identifier of this table.
     SfxItemSet          maTableItemSet;     /// Items for the entire table.
-    SfxItemSetPtr       mxRowItemSet;       /// Items for the current table row.
-    SfxItemSetPtr       mxDataItemSet;      /// Items for the current cell.
+    std::optional<SfxItemSet> moRowItemSet;       /// Items for the current table row.
+    std::optional<SfxItemSet> moDataItemSet;      /// Items for the current cell.
     ScRangeList         maHMergedCells;     /// List of all horizontally merged cells.
     ScRangeList         maVMergedCells;     /// List of all vertically merged cells.
     ScRangeList         maUsedCells;        /// List of all used cells.

@@ -1874,7 +1874,7 @@ ScHTMLTable::~ScHTMLTable()
 const SfxItemSet& ScHTMLTable::GetCurrItemSet() const
 {
     // first try cell item set, then row item set, then table item set
-    return mxDataItemSet ? *mxDataItemSet : (mxRowItemSet ? *mxRowItemSet : maTableItemSet);
+    return moDataItemSet ? *moDataItemSet : (moRowItemSet ? *moRowItemSet : maTableItemSet);
 }
 
 ScHTMLSize ScHTMLTable::GetSpan( const ScHTMLPos& rCellPos ) const
@@ -1992,7 +1992,7 @@ void ScHTMLTable::RowOn( const HtmlImportInfo& rInfo )
     if( mpParentTable && !mbPreFormText )   // no rows allowed in global and preformatted tables
     {
         ImplRowOn();
-        ProcessFormatOptions( *mxRowItemSet, rInfo );
+        ProcessFormatOptions( *moRowItemSet, rInfo );
     }
     CreateNewEntry( rInfo );
 }
@@ -2110,9 +2110,9 @@ void ScHTMLTable::DataOn( const HtmlImportInfo& rInfo )
         ImplDataOn( aSpanSize );
 
         if (nNumberFormat != NUMBERFORMAT_ENTRY_NOT_FOUND)
-            mxDataItemSet->Put( SfxUInt32Item(ATTR_VALUE_FORMAT, nNumberFormat) );
+            moDataItemSet->Put( SfxUInt32Item(ATTR_VALUE_FORMAT, nNumberFormat) );
 
-        ProcessFormatOptions( *mxDataItemSet, rInfo );
+        ProcessFormatOptions( *moDataItemSet, rInfo );
         CreateNewEntry( rInfo );
         mxCurrEntry->pValStr = std::move(pValStr);
         mxCurrEntry->pNumStr = std::move(pNumStr);
@@ -2139,7 +2139,7 @@ void ScHTMLTable::BodyOn( const HtmlImportInfo& rInfo )
             ImplRowOn();
         if( bPushed || !mbDataOn )
             ImplDataOn( ScHTMLSize( 1, 1 ) );
-        ProcessFormatOptions( *mxDataItemSet, rInfo );
+        ProcessFormatOptions( *moDataItemSet, rInfo );
     }
     CreateNewEntry( rInfo );
 }
@@ -2440,7 +2440,7 @@ void ScHTMLTable::ImplRowOn()
 {
     if( mbRowOn )
         ImplRowOff();
-    mxRowItemSet.reset( new SfxItemSet( maTableItemSet ) );
+    moRowItemSet.emplace( maTableItemSet );
     maCurrCell.mnCol = 0;
     mbRowOn = true;
     mbDataOn = false;
@@ -2452,7 +2452,7 @@ void ScHTMLTable::ImplRowOff()
         ImplDataOff();
     if( mbRowOn )
     {
-        mxRowItemSet.reset();
+        moRowItemSet.reset();
         ++maCurrCell.mnRow;
         mbRowOn = mbDataOn = false;
     }
@@ -2464,7 +2464,7 @@ void ScHTMLTable::ImplDataOn( const ScHTMLSize& rSpanSize )
         ImplDataOff();
     if( !mbRowOn )
         ImplRowOn();
-    mxDataItemSet.reset( new SfxItemSet( *mxRowItemSet ) );
+    moDataItemSet.emplace( *moRowItemSet );
     InsertNewCell( rSpanSize );
     mbDataOn = true;
     mbPushEmptyLine = false;
@@ -2474,7 +2474,7 @@ void ScHTMLTable::ImplDataOff()
 {
     if( mbDataOn )
     {
-        mxDataItemSet.reset();
+        moDataItemSet.reset();
         ++maCurrCell.mnCol;
         mpCurrEntryVector = nullptr;
         mbDataOn = false;
