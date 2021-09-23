@@ -16,7 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#include <config_fuzzers.h>
+
 #include <connectivity/DriversConfig.hxx>
+#include <o3tl/string_view.hxx>
 #include <tools/wldcrd.hxx>
 #include <comphelper/sequence.hxx>
 
@@ -146,6 +149,11 @@ DriversConfig& DriversConfig::operator=( const DriversConfig& _rhs )
 
 OUString DriversConfig::getDriverFactoryName(std::u16string_view _sURL) const
 {
+#if ENABLE_FUZZERS
+    if (o3tl::starts_with(_sURL, u"sdbc:dbase:"))
+        return "com.sun.star.comp.sdbc.dbase.ODriver";
+#endif
+
     const TInstalledDrivers& rDrivers = m_aNode->getInstalledDrivers(m_xORB);
     OUString sRet;
     OUString sOldPattern;
