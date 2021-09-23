@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/string_view.hxx>
 #include <unotools/useroptions.hxx>
 #include <svl/adrparse.hxx>
 
@@ -24,7 +25,6 @@
 #include <hlmarkwn_def.hxx>
 
 constexpr OUStringLiteral sAnonymous = u"anonymous";
-char const sFTPScheme[]    = INET_FTP_SCHEME;
 
 /*************************************************************************
 |*
@@ -92,7 +92,7 @@ void SvxHyperlinkInternetTp::FillDlgFields(const OUString& rStrURL)
     OUString aStrScheme(GetSchemeFromURL(rStrURL));
 
     // set additional controls for FTP: Username / Password
-    if (aStrScheme.startsWith(sFTPScheme))
+    if (aStrScheme.startsWith(INET_FTP_SCHEME))
     {
         if ( aURL.GetUser().toAsciiLowerCase().startsWith( sAnonymous ) )
             setAnonymousFTPUser();
@@ -238,10 +238,10 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl, weld::Entry&, voi
     }
 }
 
-void SvxHyperlinkInternetTp::SetScheme(const OUString& rScheme)
+void SvxHyperlinkInternetTp::SetScheme(std::u16string_view rScheme)
 {
     //if rScheme is empty or unknown the default behaviour is like it where HTTP
-    bool bFTP = rScheme.startsWith(sFTPScheme);
+    bool bFTP = o3tl::starts_with(rScheme, u"" INET_FTP_SCHEME);
     bool bInternet = !bFTP;
 
     //update protocol button selection:
@@ -260,7 +260,7 @@ void SvxHyperlinkInternetTp::SetScheme(const OUString& rScheme)
     m_xCbAnonymous->set_visible( bFTP );
 
     //update 'link target in document'-window and opening-button
-    if (rScheme.startsWith(INET_HTTP_SCHEME) || rScheme.isEmpty())
+    if (o3tl::starts_with(rScheme, u"" INET_HTTP_SCHEME) || rScheme.empty())
     {
         if ( m_bMarkWndOpen )
             ShowMarkWnd ();
