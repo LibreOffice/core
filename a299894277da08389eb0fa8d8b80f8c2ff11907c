@@ -105,6 +105,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d362e09f_f47e949e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-23T08:18:56Z",
+      "side": 1,
+      "message": "In fact, we need to realize several things.\n\n0. Serial dates are counted internally from configurable epoch (1899-12-30; 1900-01-01; 1904-01-01)\n1. Still, they use internal counter starting from *proleptic Gregorian\u0027s 0001-01-01* (which is day 1); hence 1899-12-30 is day 693594 in that system (asserted in Date::GetAsNormalizedDays)\n2. The date recognition and formatting uses Julian calendar for dates prior to 1582-10-15 Gregorian. Hence e.g. \u0027-292127\u0027 is displayed as 1100-02-29\n4. Functions like ISLEAPYEAR use proleptic Gregorian. Hence e.g. ISLEAPYEAR(-292127) is FALSE\n5. Entering \u00270001-01-01\u0027 gets converted to *Julian*\u0027s date of that value (with some deviations described in GregorianCalendar::handleComputeFields at https://github.com/unicode-org/icu/blob/main/icu4c/source/i18n/gregocal.cpp#L397), which is equivalent to proleptic Gregorian\u0027s \u00270000-12-30\u0027 (two days off), i.e. serial date (counting from normal 1899-12-30) is -693595 (cf. to proleptic Gregorian\u0027s 0001-01-01, which would be -693593)\n6. DaysToDate in scaddins/source/datefunc/datefunc.cxx for some reason only accepts non-negative values of the \"date since calendar epoch\", which makes it accept also -693594, which results in 0 days since proleptic Gregorian epoch.\n\nFor completeness: Excel does not display dates before \"1900-01-00\" (it does not accept negative serial dates).\n\nIMO, #4 is an own problem, making the year 1100 to have Feb 29th, but being reported as non-leap. But regarding this specific issue in this change, what is important are:\n\n1. Do we count things correctly in MONTHS/YEARS, taking into account this Julian/Gregorian change?\n2. Why do we limit to Gregorian AD?\n\nThe last question is IMO the actual problem here, which would likely not need to change the calculations that drastically. The former one is to be investigated separately.",
+      "revId": "a299894277da08389eb0fa8d8b80f8c2ff11907c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb276e50_e55100f6",
