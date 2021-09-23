@@ -178,8 +178,8 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntrySdrObject::createPri
 
 
 SdrDragEntryPrimitive2DSequence::SdrDragEntryPrimitive2DSequence(
-    const drawinglayer::primitive2d::Primitive2DContainer& rSequence)
-:   maPrimitive2DSequence(rSequence)
+    drawinglayer::primitive2d::Primitive2DContainer&& rSequence)
+:   maPrimitive2DSequence(std::move(rSequence))
 {
     // add parts to transparent overlay stuff if necessary
     setAddToTransparent(true);
@@ -778,7 +778,7 @@ void SdrDragMethod::CreateOverlayGeometry(
         {
             std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject(
                 new sdr::overlay::OverlayPrimitive2DSequenceObject(
-                    aResult));
+                    std::move(aResult)));
 
             insertNewlyCreatedOverlayObjectForSdrDragMethod(
                 std::move(pNewOverlayObject),
@@ -793,7 +793,7 @@ void SdrDragMethod::CreateOverlayGeometry(
 
             std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject(
                 new sdr::overlay::OverlayPrimitive2DSequenceObject(
-                    aResultTransparent));
+                    std::move(aResultTransparent)));
 
             insertNewlyCreatedOverlayObjectForSdrDragMethod(
                 std::move(pNewOverlayObject),

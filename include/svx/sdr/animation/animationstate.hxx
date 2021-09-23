@@ -42,7 +42,7 @@ namespace sdr::animation
 
         public:
             // basic constructor.
-            PrimitiveAnimation(sdr::contact::ViewObjectContact& rVOContact, const drawinglayer::primitive2d::Primitive2DContainer& rAnimatedPrimitives);
+            PrimitiveAnimation(sdr::contact::ViewObjectContact& rVOContact, drawinglayer::primitive2d::Primitive2DContainer&& rAnimatedPrimitives);
 
             // destructor
             virtual ~PrimitiveAnimation() override;

@@ -537,117 +537,111 @@ basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
         }
 
         Primitive2DContainer createEmbeddedShadowPrimitive(
-            const Primitive2DContainer& rContent,
+            Primitive2DContainer&& rContent,
             const attribute::SdrShadowAttribute& rShadow,
             const basegfx::B2DHomMatrix& rObjectMatrix,
             const Primitive2DContainer* pContentForShadow)
         {
-            if(!rContent.empty())
+            if(rContent.empty())
+                return std::move(rContent);
+
+            basegfx::B2DHomMatrix aShadowOffset;
+
+            if(rShadow.getSize().getX() != 100000)
             {
-                basegfx::B2DHomMatrix aShadowOffset;
+                basegfx::B2DTuple aScale;
+                basegfx::B2DTuple aTranslate;
+                double fRotate = 0;
+                double fShearX = 0;
+                rObjectMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
+                // Scale the shadow
+                double nTranslateX = aTranslate.getX();
+                double nTranslateY = aTranslate.getY();
 
-                {
-                    if(rShadow.getSize().getX() != 100000)
-                    {
-                        basegfx::B2DTuple aScale;
-                        basegfx::B2DTuple aTranslate;
-                        double fRotate = 0;
-                        double fShearX = 0;
-                        rObjectMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
-                        // Scale the shadow
-                        double nTranslateX = aTranslate.getX();
-                        double nTranslateY = aTranslate.getY();
+                // The origin for scaling is the top left corner by default. A negative
+                // shadow offset changes the origin.
+                if (rShadow.getOffset().getX() < 0)
+                    nTranslateX += aScale.getX();
+                if (rShadow.getOffset().getY() < 0)
+                    nTranslateY += aScale.getY();
 
-                        // The origin for scaling is the top left corner by default. A negative
-                        // shadow offset changes the origin.
-                        if (rShadow.getOffset().getX() < 0)
-                            nTranslateX += aScale.getX();
-                        if (rShadow.getOffset().getY() < 0)
-                            nTranslateY += aScale.getY();
+                aShadowOffset.translate(-nTranslateX, -nTranslateY);
+                aShadowOffset.scale(rShadow.getSize().getX() * 0.00001, rShadow.getSize().getY() * 0.00001);
+                aShadowOffset.translate(nTranslateX, nTranslateY);
+            }
 
-                        aShadowOffset.translate(-nTranslateX, -nTranslateY);
-                        aShadowOffset.scale(rShadow.getSize().getX() * 0.00001, rShadow.getSize().getY() * 0.00001);
-                        aShadowOffset.translate(nTranslateX, nTranslateY);
-                    }
+            aShadowOffset.translate(rShadow.getOffset().getX(), rShadow.getOffset().getY());
 
-                    aShadowOffset.translate(rShadow.getOffset().getX(), rShadow.getOffset().getY());
-                }
-
-                // create shadow primitive and add content
-                const Primitive2DContainer& rContentForShadow
+            // create shadow primitive and add content
+            const Primitive2DContainer& rContentForShadow
                     = pContentForShadow ? *pContentForShadow : rContent;
-                int nContentWithTransparence = std::count_if(
-                    rContentForShadow.begin(), rContentForShadow.end(),
-                    [](const Primitive2DReference& xChild) {
-                        auto pChild = dynamic_cast<BufferedDecompositionPrimitive2D*>(xChild.get());
-                        return pChild && pChild->getTransparenceForShadow() != 0;
-                    });
-                if (nContentWithTransparence == 0)
-                {
-                    Primitive2DContainer aRetval(2);
-                    aRetval[0] = Primitive2DReference(
-                        new ShadowPrimitive2D(
-                            aShadowOffset,
-                            rShadow.getColor(),
-                            rShadow.getBlur(),
-                            Primitive2DContainer(pContentForShadow ? *pContentForShadow : rContent)));
-
-                    if (0.0 != rShadow.getTransparence())
-                    {
-                        // create SimpleTransparencePrimitive2D
-                        Primitive2DContainer aTempContent{ aRetval[0] };
-
-                        aRetval[0] = Primitive2DReference(
-                            new UnifiedTransparencePrimitive2D(
-                                std::move(aTempContent),
-                                rShadow.getTransparence()));
-                    }
-
-                    aRetval[1] = Primitive2DReference(new GroupPrimitive2D(Primitive2DContainer(rContent)));
-                    return aRetval;
-                }
-
-                Primitive2DContainer aRetval;
-                for (const auto& xChild : rContentForShadow)
-                {
-                    double fChildTransparence = 0.0;
+            int nContentWithTransparence = std::count_if(
+                rContentForShadow.begin(), rContentForShadow.end(),
+                [](const Primitive2DReference& xChild) {
                     auto pChild = dynamic_cast<BufferedDecompositionPrimitive2D*>(xChild.get());
-                    if (pChild)
-                    {
-                        fChildTransparence = pChild->getTransparenceForShadow();
-                        fChildTransparence /= 100;
-                    }
-                    aRetval.push_back(Primitive2DReference(
-                        new ShadowPrimitive2D(aShadowOffset, rShadow.getColor(), rShadow.getBlur(),
-                                              Primitive2DContainer({ xChild }))));
-                    if (rShadow.getTransparence() != 0.0 || fChildTransparence != 0.0)
-                    {
-                        Primitive2DContainer aTempContent{ aRetval.back() };
+                    return pChild && pChild->getTransparenceForShadow() != 0;
+                });
+            if (nContentWithTransparence == 0)
+            {
+                Primitive2DContainer aRetval(2);
+                aRetval[0] = Primitive2DReference(
+                    new ShadowPrimitive2D(
+                        aShadowOffset,
+                        rShadow.getColor(),
+                        rShadow.getBlur(),
+                        Primitive2DContainer(pContentForShadow ? *pContentForShadow : rContent)));
 
-                        double fChildAlpha = 1.0 - fChildTransparence;
-                        double fShadowAlpha = 1.0 - rShadow.getTransparence();
-                        double fTransparence = 1.0 - fChildAlpha * fShadowAlpha;
-                        aRetval.back() = Primitive2DReference(new UnifiedTransparencePrimitive2D(
-                            std::move(aTempContent), fTransparence));
-                    }
+                if (0.0 != rShadow.getTransparence())
+                {
+                    // create SimpleTransparencePrimitive2D
+                    Primitive2DContainer aTempContent{ aRetval[0] };
+
+                    aRetval[0] = Primitive2DReference(
+                        new UnifiedTransparencePrimitive2D(
+                            std::move(aTempContent),
+                            rShadow.getTransparence()));
                 }
 
-                aRetval.push_back(
-                    Primitive2DReference(new GroupPrimitive2D(Primitive2DContainer(rContent))));
+                aRetval[1] = Primitive2DReference(new GroupPrimitive2D(std::move(rContent)));
                 return aRetval;
             }
-            else
+
+            Primitive2DContainer aRetval;
+            for (const auto& xChild : rContentForShadow)
             {
-                return rContent;
+                double fChildTransparence = 0.0;
+                auto pChild = dynamic_cast<BufferedDecompositionPrimitive2D*>(xChild.get());
+                if (pChild)
+                {
+                        fChildTransparence = pChild->getTransparenceForShadow();
+                        fChildTransparence /= 100;
+                }
+                aRetval.push_back(Primitive2DReference(
+                    new ShadowPrimitive2D(aShadowOffset, rShadow.getColor(), rShadow.getBlur(),
+                                            Primitive2DContainer({ xChild }))));
+                if (rShadow.getTransparence() != 0.0 || fChildTransparence != 0.0)
+                {
+                    Primitive2DContainer aTempContent{ aRetval.back() };
+
+                    double fChildAlpha = 1.0 - fChildTransparence;
+                    double fShadowAlpha = 1.0 - rShadow.getTransparence();
+                    double fTransparence = 1.0 - fChildAlpha * fShadowAlpha;
+                    aRetval.back() = Primitive2DReference(new UnifiedTransparencePrimitive2D(
+                            std::move(aTempContent), fTransparence));
+                }
             }
+
+            aRetval.push_back(
+                    Primitive2DReference(new GroupPrimitive2D(std::move(rContent))));
+            return aRetval;
         }
 
         Primitive2DContainer createEmbeddedGlowPrimitive(
-            const Primitive2DContainer& rContent,
+            Primitive2DContainer&& rContent,
             const attribute::SdrGlowAttribute& rGlow)
         {
             if(rContent.empty())
-                return rContent;
+                return std::move(rContent);
             Primitive2DContainer aRetval(2);
             aRetval[0] = Primitive2DReference(
                 new GlowPrimitive2D(rGlow.getColor(), rGlow.getRadius(), Primitive2DContainer(rContent)));

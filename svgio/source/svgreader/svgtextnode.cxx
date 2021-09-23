@@ -83,7 +83,7 @@ namespace svgio::svgreader
         void SvgTextNode::addTextPrimitives(
             const SvgNode& rCandidate,
             drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-            drawinglayer::primitive2d::Primitive2DContainer const & rSource)
+            drawinglayer::primitive2d::Primitive2DContainer&& rSource)
         {
             if(rSource.empty())
                 return;
@@ -93,13 +93,13 @@ namespace svgio::svgreader
             if(pAttributes)
             {
                 // add text with taking all Fill/Stroke attributes into account
-                pAttributes->add_text(rTarget, rSource);
+                pAttributes->add_text(rTarget, std::move(rSource));
             }
             else
             {
                 // should not happen, every subnode from SvgTextNode will at least
                 // return the attributes from SvgTextNode. Nonetheless, add text
-                rTarget.append(rSource);
+                rTarget.append(std::move(rSource));
             }
         }
 
@@ -144,7 +144,7 @@ namespace svgio::svgreader
 
                         if(!aNewTarget.empty())
                         {
-                            addTextPrimitives(rCandidate, rTarget, aNewTarget);
+                            addTextPrimitives(rCandidate, rTarget, std::move(aNewTarget));
                         }
                     }
 
@@ -171,7 +171,7 @@ namespace svgio::svgreader
 
                         if(!aNewTarget.empty())
                         {
-                            addTextPrimitives(rCandidate, rTarget, aNewTarget);
+                            addTextPrimitives(rCandidate, rTarget, std::move(aNewTarget));
                         }
                     }
                     break;
@@ -200,7 +200,7 @@ namespace svgio::svgreader
 
                             if(!aNewTarget.empty())
                             {
-                                addTextPrimitives(rCandidate, rTarget, aNewTarget);
+                                addTextPrimitives(rCandidate, rTarget, std::move(aNewTarget));
                             }
                         }
                     }
@@ -245,13 +245,13 @@ namespace svgio::svgreader
             {
                 drawinglayer::primitive2d::Primitive2DContainer aNewTarget2;
 
-                addTextPrimitives(*this, aNewTarget2, aNewTarget);
+                addTextPrimitives(*this, aNewTarget2, std::move(aNewTarget));
                 aNewTarget = aNewTarget2;
             }
 
             if(!aNewTarget.empty())
             {
-                pStyle->add_postProcess(rTarget, aNewTarget, getTransform());
+                pStyle->add_postProcess(rTarget, std::move(aNewTarget), getTransform());
             }
         }
 

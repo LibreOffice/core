@@ -90,8 +90,7 @@ private:
     drawinglayer::primitive2d::Primitive2DContainer  maPrimitive2DSequence;
 
 public:
-    SdrDragEntryPrimitive2DSequence(
-        const drawinglayer::primitive2d::Primitive2DContainer& rSequence);
+    SdrDragEntryPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DContainer&& rSequence);
     virtual ~SdrDragEntryPrimitive2DSequence() override;
 
     virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod) override;

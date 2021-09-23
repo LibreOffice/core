@@ -35,7 +35,7 @@ namespace sdr::overlay
             virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;
 
         public:
-            explicit OverlayPrimitive2DSequenceObject(const drawinglayer::primitive2d::Primitive2DContainer& rSequence);
+            explicit OverlayPrimitive2DSequenceObject(drawinglayer::primitive2d::Primitive2DContainer&& rSequence);
 
             virtual ~OverlayPrimitive2DSequenceObject() override;
         };

@@ -262,7 +262,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageObj::crea
         {
             const uno::Reference< drawing::XDrawPage > xDrawPage(GetXDrawPageForSdrPage(const_cast< SdrPage*>(pPage)));
             const drawinglayer::primitive2d::Primitive2DReference xPagePreview(new drawinglayer::primitive2d::PagePreviewPrimitive2D(
-                xDrawPage, aPageObjectTransform, fPageWidth, fPageHeight, xPageContent));
+                xDrawPage, aPageObjectTransform, fPageWidth, fPageHeight, std::move(xPageContent)));
             xRetval = drawinglayer::primitive2d::Primitive2DContainer { xPagePreview };
         }
     }

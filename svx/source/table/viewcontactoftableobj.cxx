@@ -416,13 +416,13 @@ namespace sdr::contact
                             // with PowerPoint.
                             basegfx::B2DHomMatrix aMatrix;
                             aRetval = drawinglayer::primitive2d::createEmbeddedShadowPrimitive(
-                                aRetval, aNewShadowAttribute, aMatrix, &aRetvalForShadow);
+                                std::move(aRetval), aNewShadowAttribute, aMatrix, &aRetvalForShadow);
                         }
                         else
                         {
                             // Shadow as style: shadow for text, to be backwards-compatible.
                             aRetval = drawinglayer::primitive2d::createEmbeddedShadowPrimitive(
-                                aRetval, aNewShadowAttribute);
+                                std::move(aRetval), aNewShadowAttribute);
                         }
                     }
                 }

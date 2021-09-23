@@ -105,9 +105,9 @@ namespace drawinglayer::primitive2d
             const basegfx::B2DHomMatrix& rTransform,
             double fContentWidth,
             double fContentHeight,
-            const Primitive2DContainer& rPageContent)
+            Primitive2DContainer&& rPageContent)
         :   mxDrawPage(rxDrawPage),
-            maPageContent(rPageContent),
+            maPageContent(std::move(rPageContent)),
             maTransform(rTransform),
             mfContentWidth(fContentWidth),
             mfContentHeight(fContentHeight)
