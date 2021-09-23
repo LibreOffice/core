@@ -111,7 +111,7 @@ void OutputDevice::ImplDrawTextRect( tools::Long nBaseX, tools::Long nBaseY,
     tools::Long nX = nDistX;
     tools::Long nY = nDistY;
 
-    Degree10 nOrientation = mpFontInstance->mnOrientation;
+    Degree10 nOrientation = mpFontInstance->GetOrientationFromData();
     if ( nOrientation )
     {
         // Rotate rect without rounding problems for 90 degree rotations
@@ -152,7 +152,7 @@ void OutputDevice::ImplDrawTextRect( tools::Long nBaseX, tools::Long nBaseY,
             // inflate because polygons are drawn smaller
             tools::Rectangle aRect( Point( nX, nY ), Size( nWidth+1, nHeight+1 ) );
             tools::Polygon   aPoly( aRect );
-            aPoly.Rotate( Point( nBaseX, nBaseY ), mpFontInstance->mnOrientation );
+            aPoly.Rotate( Point( nBaseX, nBaseY ), mpFontInstance->GetOrientationFromData() );
             ImplDrawPolygon( aPoly );
             return;
         }
@@ -181,7 +181,7 @@ void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
 
     ImplDrawTextRect( nX, nY, 0, -(mpFontInstance->GetAscent() + mnEmphasisAscent),
                       nWidth,
-                      mpFontInstance->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent );
+                      mpFontInstance->GetLineHeight() +  mnEmphasisAscent+mnEmphasisDescent );
 }
 
 tools::Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout ) const
@@ -191,21 +191,21 @@ tools::Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout
     tools::Long nY = aPoint.Y();
 
     tools::Long nWidth = rSalLayout.GetTextWidth();
-    tools::Long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
+    tools::Long nHeight = mpFontInstance->GetLineHeight() + mnEmphasisAscent + mnEmphasisDescent;
 
     nY -= mpFontInstance->GetAscent() + mnEmphasisAscent;
 
-    if ( mpFontInstance->mnOrientation )
+    if ( mpFontInstance->GetOrientationFromData() )
     {
         tools::Long nBaseX = nX, nBaseY = nY;
-        if ( !(mpFontInstance->mnOrientation % 900_deg10) )
+        if ( !(mpFontInstance->GetOrientationFromData() % 900_deg10) )
         {
             tools::Long nX2 = nX+nWidth;
             tools::Long nY2 = nY+nHeight;
 
             Point aBasePt( nBaseX, nBaseY );
-            aBasePt.RotateAround( nX, nY, mpFontInstance->mnOrientation );
-            aBasePt.RotateAround( nX2, nY2, mpFontInstance->mnOrientation );
+            aBasePt.RotateAround( nX, nY, mpFontInstance->GetOrientationFromData() );
+            aBasePt.RotateAround( nX2, nY2, mpFontInstance->GetOrientationFromData() );
             nWidth = nX2-nX;
             nHeight = nY2-nY;
         }
@@ -214,7 +214,7 @@ tools::Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout
             // inflate by +1+1 because polygons are drawn smaller
             tools::Rectangle aRect( Point( nX, nY ), Size( nWidth+1, nHeight+1 ) );
             tools::Polygon   aPoly( aRect );
-            aPoly.Rotate( Point( nBaseX, nBaseY ), mpFontInstance->mnOrientation );
+            aPoly.Rotate( Point( nBaseX, nBaseY ), mpFontInstance->GetOrientationFromData() );
             return aPoly.GetBoundRect();
         }
     }
@@ -235,7 +235,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
         // guess vertical text extents if GetBoundRect failed
         tools::Long nRight = rSalLayout.GetTextWidth();
         tools::Long nTop = mpFontInstance->GetAscent() + mnEmphasisAscent;
-        tools::Long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
+        tools::Long nHeight = mpFontInstance->GetLineHeight() + mnEmphasisAscent + mnEmphasisDescent;
         aBoundRect = tools::Rectangle( 0, -nTop, nRight, nHeight - nTop );
     }
 
@@ -264,12 +264,12 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     rSalLayout.DrawText( *pVDev->mpGraphics );
 
     Bitmap aBmp = pVDev->GetBitmap( Point(), aBoundRect.GetSize() );
-    if ( aBmp.IsEmpty() || !aBmp.Rotate( mpFontInstance->mnOwnOrientation, COL_WHITE ) )
+    if ( aBmp.IsEmpty() || !aBmp.Rotate( mpFontInstance->GetOwnOrientation(), COL_WHITE ) )
         return false;
 
     // calculate rotation offset
     tools::Polygon aPoly( aBoundRect );
-    aPoly.Rotate( Point(), mpFontInstance->mnOwnOrientation );
+    aPoly.Rotate( Point(), mpFontInstance->GetOwnOrientation() );
     Point aPoint = aPoly.GetBoundRect().TopLeft();
     aPoint += Point( nX, nY );
 
@@ -297,7 +297,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
 void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
                                        bool bTextLines)
 {
-    if( mpFontInstance->mnOwnOrientation )
+    if( mpFontInstance->GetOwnOrientation() )
         if( ImplDrawRotateText( rSalLayout ) )
             return;
 
@@ -401,7 +401,7 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
     {
         if ( maFont.IsShadow() )
         {
-            tools::Long nOff = 1 + ((mpFontInstance->mnLineHeight-24)/24);
+            tools::Long nOff = 1 + ((mpFontInstance->GetLineHeight() - 24) / 24);
             if ( maFont.IsOutline() )
                 nOff++;
             SetTextLineColor();
@@ -847,7 +847,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
 
     if(mpFontInstance)
         // do not use cache with modified string
-        if(mpFontInstance->mpConversion)
+        if(mpFontInstance->CanConvertChars())
             pLayoutCache = nullptr;
 
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, nullptr, eDefaultLayout, nullptr, pLayoutCache);
@@ -876,7 +876,7 @@ tools::Long OutputDevice::GetTextHeight() const
     if (!InitFont())
         return 0;
 
-    tools::Long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
+    tools::Long nHeight = mpFontInstance->GetLineHeight() + mnEmphasisAscent + mnEmphasisDescent;
 
     if ( mbMap )
         nHeight = ImplDevicePixelToLogicHeight( nHeight );
@@ -1211,7 +1211,7 @@ vcl::text::ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
     // set layout options
     vcl::text::ImplLayoutArgs aLayoutArgs(rStr, nMinIndex, nEndIndex, nLayoutFlags, maFont.GetLanguageTag(), pLayoutCache);
 
-    Degree10 nOrientation = mpFontInstance ? mpFontInstance->mnOrientation : 0_deg10;
+    Degree10 nOrientation = mpFontInstance ? mpFontInstance->GetOrientationFromData() : 0_deg10;
     aLayoutArgs.SetOrientation( nOrientation );
 
     aLayoutArgs.SetLayoutWidth( nPixelWidth );
@@ -1249,8 +1249,8 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
 
     // convert from logical units to physical units
     // recode string if needed
-    if( mpFontInstance->mpConversion ) {
-        mpFontInstance->mpConversion->RecodeString( aStr, 0, aStr.getLength() );
+    if( mpFontInstance->CanConvertChars()) {
+        mpFontInstance->RecodeString( aStr, 0, aStr.getLength() );
         pLayoutCache = nullptr; // don't use cache with modified string!
         pGlyphs = nullptr;
     }
