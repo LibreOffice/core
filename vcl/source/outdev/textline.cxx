@@ -328,16 +328,16 @@ void OutputDevice::ImplDrawWaveTextLine( tools::Long nBaseX, tools::Long nBaseY,
 
         nLinePos -= nLineWidthHeight-nLineDY2;
         ImplDrawWaveLine( nBaseX, nBaseY, nDistX, nLinePos, nWidth, nLineHeight,
-                          nLineWidth, mpFontInstance->mnOrientation, aColor );
+                          nLineWidth, mpFontInstance->GetOrientationFromData(), aColor );
         nLinePos += nLineWidthHeight+nLineDY;
         ImplDrawWaveLine( nBaseX, nBaseY, nDistX, nLinePos, nWidth, nLineHeight,
-                          nLineWidth, mpFontInstance->mnOrientation, aColor );
+                          nLineWidth, mpFontInstance->GetOrientationFromData(), aColor );
     }
     else
     {
         nLinePos -= nLineWidthHeight/2;
         ImplDrawWaveLine( nBaseX, nBaseY, nDistX, nLinePos, nWidth, nLineHeight,
-                          nLineWidth, mpFontInstance->mnOrientation, aColor );
+                          nLineWidth, mpFontInstance->GetOrientationFromData(), aColor );
     }
 }
 
@@ -687,10 +687,10 @@ void OutputDevice::ImplDrawStrikeoutChar( tools::Long nBaseX, tools::Long nBaseY
 
     const OUString aStrikeoutText(aChars, nStrikeStrLen);
 
-    if( mpFontInstance->mnOrientation )
+    if( mpFontInstance->GetOrientationFromData() )
     {
         Point aOriginPt(0, 0);
-        aOriginPt.RotateAround( nDistX, nDistY, mpFontInstance->mnOrientation );
+        aOriginPt.RotateAround( nDistX, nDistY, mpFontInstance->GetOrientationFromData() );
     }
 
     nBaseX += nDistX;
@@ -718,10 +718,10 @@ void OutputDevice::ImplDrawStrikeoutChar( tools::Long nBaseX, tools::Long nBaseY
     aPixelRect.SetBottom( nBaseY+mpFontInstance->GetDescent() );
     aPixelRect.SetTop( nBaseY-mpFontInstance->GetAscent() );
 
-    if (mpFontInstance->mnOrientation)
+    if (mpFontInstance->GetOrientationFromData())
     {
         tools::Polygon aPoly( aPixelRect );
-        aPoly.Rotate( Point(nBaseX+mnTextOffX, nBaseY+mnTextOffY), mpFontInstance->mnOrientation);
+        aPoly.Rotate( Point(nBaseX+mnTextOffX, nBaseY+mnTextOffY), mpFontInstance->GetOrientationFromData());
         aPixelRect = aPoly.GetBoundRect();
     }
 
@@ -758,8 +758,8 @@ void OutputDevice::ImplDrawTextLine( tools::Long nX, tools::Long nY,
     if ( IsRTLEnabled() )
     {
         tools::Long nXAdd = nWidth - nDistX;
-        if( mpFontInstance->mnOrientation )
-            nXAdd = FRound( nXAdd * cos( mpFontInstance->mnOrientation.get() * F_PI1800 ) );
+        if( mpFontInstance->GetOrientationFromData() )
+            nXAdd = FRound( nXAdd * cos( mpFontInstance->GetOrientationFromData().get() * F_PI1800 ) );
 
         nX += nXAdd - 1;
     }
@@ -828,10 +828,10 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
                 {
                     // get the distance to the base point (as projected to baseline)
                     nDist = aPos.X() - aStartPt.X();
-                    if( mpFontInstance->mnOrientation )
+                    if( mpFontInstance->GetOrientationFromData() )
                     {
                         const tools::Long nDY = aPos.Y() - aStartPt.Y();
-                        const double fRad = mpFontInstance->mnOrientation.get() * F_PI1800;
+                        const double fRad = mpFontInstance->GetOrientationFromData().get() * F_PI1800;
                         nDist = FRound( nDist*cos(fRad) - nDY*sin(fRad) );
                     }
                 }
