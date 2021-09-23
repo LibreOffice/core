@@ -2227,7 +2227,7 @@ Reference< XNameAccess > ORowSet::impl_getTables_throw()
             DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
 
-        m_xTables = new OTableContainer(*this,m_aMutex,m_xActiveConnection,bCase,nullptr,nullptr,m_nInAppend);
+        m_xTables.reset(new OTableContainer(*this,m_aMutex,m_xActiveConnection,bCase,nullptr,nullptr,m_nInAppend));
         xTables = m_xTables.get();
         Sequence<OUString> aTableFilter { "%" };
         m_xTables->construct(aTableFilter,Sequence< OUString>());
@@ -2250,7 +2250,7 @@ void ORowSet::impl_resetTables_nothrow()
         DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
-    m_xTables.clear();
+    m_xTables.reset();
 }
 
 void ORowSet::impl_initComposer_throw( OUString& _out_rCommandToExecute )
