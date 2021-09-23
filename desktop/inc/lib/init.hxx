@@ -144,6 +144,15 @@ namespace desktop {
         int m_nDisableCallbacks;
         bool m_bEventLatch;
         std::mutex m_mutex;
+        class TimeoutIdle : public Timer
+        {
+        public:
+            TimeoutIdle( CallbackFlushHandler* handler );
+            virtual void Invoke() override;
+        private:
+            CallbackFlushHandler* mHandler;
+        };
+        TimeoutIdle m_TimeoutIdle;
     };
 
     struct DESKTOP_DLLPUBLIC LibLODocument_Impl : public _LibreOfficeKitDocument

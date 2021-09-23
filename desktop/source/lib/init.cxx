@@ -1405,13 +1405,32 @@ static OUString getGenerator()
 
 extern "C" {
 
+CallbackFlushHandler::TimeoutIdle::TimeoutIdle( CallbackFlushHandler* handler )
+    : Timer( "lokit timer callback" )
+    , mHandler( handler )
+{
+    // A second timer with higher priority, it'll ensure we flush in reasonable time if we get too busy
+    // to get POST_PAINT priority processing. Otherwise it could take a long time to flush.
+    SetPriority(TaskPriority::DEFAULT);
+    SetTimeout( 100 ); // 100 ms
+}
+
+void CallbackFlushHandler::TimeoutIdle::Invoke()
+{
+    mHandler->Invoke();
+}
+
 CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, LibreOfficeKitCallback pCallback, void* pData)
-    : Idle( "lokit timer callback" ),
+    : Idle( "lokit idle callback" ),
       m_pDocument(pDocument),
       m_pCallback(pCallback),
       m_pData(pData),
       m_nDisableCallbacks(0),
+<<<<<<< HEAD   (968874 fix buffer overruns in JsonWriter::put with UTF-8 values)
       m_bEventLatch(false)
+=======
+      m_TimeoutIdle( this )
+>>>>>>> CHANGE (3f6f1a add extra timeout with higher priority to LOK flushing)
 {
     SetPriority(TaskPriority::POST_PAINT);
 
@@ -1428,8 +1447,6 @@ CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, Li
     m_states.emplace(LOK_CALLBACK_CURSOR_VISIBLE, "NIL");
     m_states.emplace(LOK_CALLBACK_SET_PART, "NIL");
     m_states.emplace(LOK_CALLBACK_TABLE_SELECTED, "NIL");
-
-    Start();
 }
 
 CallbackFlushHandler::~CallbackFlushHandler()
@@ -1708,6 +1725,8 @@ void CallbackFlushHandler::queue(const int type, const char* data)
     {
         Start();
     }
+    if (!m_TimeoutIdle.IsActive())
+        m_TimeoutIdle.Start();
 }
 
 bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& aCallbackData)
@@ -2095,6 +2114,52 @@ void CallbackFlushHandler::Invoke()
         m_queue1.clear();
         m_queue2.clear();
     }
+<<<<<<< HEAD   (968874 fix buffer overruns in JsonWriter::put with UTF-8 values)
+=======
+
+    m_queue1.clear();
+    m_queue2.clear();
+    Stop();
+    m_TimeoutIdle.Stop();
+}
+
+bool CallbackFlushHandler::removeAll(int type)
+{
+    bool bErased = false;
+    auto it1 = m_queue1.begin();
+    for(;;)
+    {
+        it1 = std::find(it1, m_queue1.end(), type);
+        if(it1 == m_queue1.end())
+            break;
+        m_queue2.erase(toQueue2(it1));
+        it1 = m_queue1.erase(it1);
+        bErased = true;
+    }
+    return bErased;
+}
+
+bool CallbackFlushHandler::removeAll(int type, const std::function<bool (const CallbackData&)>& rTestFunc)
+{
+    bool bErased = false;
+    auto it1 = m_queue1.begin();
+    for(;;)
+    {
+        it1 = std::find(it1, m_queue1.end(), type);
+        if(it1 == m_queue1.end())
+            break;
+        auto it2 = toQueue2(it1);
+        if (rTestFunc(*it2))
+        {
+            m_queue2.erase(it2);
+            it1 = m_queue1.erase(it1);
+            bErased = true;
+        }
+        else
+            ++it1;
+    }
+    return bErased;
+>>>>>>> CHANGE (3f6f1a add extra timeout with higher priority to LOK flushing)
 }
 
 bool CallbackFlushHandler::removeAll(const std::function<bool (int, const CallbackData&)>& rTestFunc)
