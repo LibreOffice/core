@@ -296,7 +296,7 @@ void OTableHelper::refreshColumns()
     if(m_xColumns)
         m_xColumns->reFill(aVector);
     else
-        m_xColumns = createColumns(aVector);
+        m_xColumns.reset(createColumns(aVector));
 }
 
 const ColumnDesc* OTableHelper::getColumnDescription(const OUString& _sName) const
@@ -413,10 +413,10 @@ void OTableHelper::refreshKeys()
     {
         refreshPrimaryKeys(aNames);
         refreshForeignKeys(aNames);
-        m_xKeys = createKeys(aNames);
+        m_xKeys.reset(createKeys(aNames));
     } // if(!isNew())
     else if (!m_xKeys )
-        m_xKeys = createKeys(aNames);
+        m_xKeys.reset(createKeys(aNames));
     /*if(m_pKeys)
         m_pKeys->reFill(aVector);
     else*/
@@ -460,7 +460,7 @@ void OTableHelper::refreshIndexes()
     if(m_xIndexes)
         m_xIndexes->reFill(aVector);
     else
-        m_xIndexes = createIndexes(aVector);
+        m_xIndexes.reset(createIndexes(aVector));
 }
 
 OUString OTableHelper::getRenameStart() const
