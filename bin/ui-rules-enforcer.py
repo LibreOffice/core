@@ -400,9 +400,9 @@ def enforce_entry_text_column_id_column_for_gtkcombobox(current):
     if child.tag == "property":
       insertpos = insertpos + 1;
       attributes = child.attrib
-      if attributes.get("name") == "entry_text_column":
+      if attributes.get("name") == "entry_text_column" or attributes.get("name") == "entry-text-column":
         entrytextcolumn = child
-      if attributes.get("name") == "id_column":
+      if attributes.get("name") == "id_column" or attributes.get("name") == "id-column":
         idcolumn = child
 
   if isgtkcombobox:
@@ -414,7 +414,7 @@ def enforce_entry_text_column_id_column_for_gtkcombobox(current):
       # if there is no entry_text_column, create one
       entrytextcolumn = etree.Element("property")
       attributes = entrytextcolumn.attrib
-      attributes["name"] = "entry_text_column"
+      attributes["name"] = "entry-text-column"
       entrytextcolumn.text = "0"
       current.insert(insertpos, entrytextcolumn)
       insertpos = insertpos + 1;
@@ -422,7 +422,7 @@ def enforce_entry_text_column_id_column_for_gtkcombobox(current):
       # if there is no id_column, create one
       idcolumn = etree.Element("property")
       attributes = idcolumn.attrib
-      attributes["name"] = "id_column"
+      attributes["name"] = "id-column"
       idcolumn.text = "1"
       current.insert(insertpos, idcolumn)
 
