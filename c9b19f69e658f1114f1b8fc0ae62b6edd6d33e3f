@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff434343_d02f3dcd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-23T08:03:48Z",
+      "side": 1,
+      "message": "This causes e.g. CppunitTest_basctl_dialogs_test (from `make screenshot`) in a `--with-lang\u003dde en-US` to fail at\n\n  [CUT] basctl_dialogs_test\n  LO_TEST_LOCALE\u003dde\n  [_RUN_____] BasctlDialogsTest::openAnyDialog\n\ndue to a nullptr-deref SIGSEGV at\n\n  #0  0x0000000000000000 in  ()\n  #1  0x00007fffe04762a8 in (anonymous namespace)::GtkInstanceBuilder::postprocess_widget(GtkWidget*) (this\u003d0x1864200, pWidget\u003d0x1939500) at vcl/unx/gtk3/gtkinst.cxx:21798\n  #2  0x00007fffe0476f6a in (anonymous namespace)::GtkInstanceBuilder::postprocess(gpointer, gpointer) (data\u003d0x1939500, user_data\u003d0x1864200) at vcl/unx/gtk3/gtkinst.cxx:21904\n  #3  0x00007fffe45391f0 in g_slist_foreach () at /lib64/libglib-2.0.so.0\n  #4  0x00007fffe0477480 in (anonymous namespace)::GtkInstanceBuilder::GtkInstanceBuilder(GtkWidget*, std::u16string_view, rtl::OUString const\u0026, SystemChildWindow*, bool) (this\u003d0x1864200, pParent\u003d0x1708400, rUIRoot\u003du\"file://.../instdir/share/config/soffice.cfg/\", rUIFile\u003d\"modules/BasicIDE/ui/libpage.ui\", pInterimGlue\u003d0x0, bAllowCycleFocusOut\u003dtrue) at vcl/unx/gtk3/gtkinst.cxx:21979\n  #5  0x00007fffe047b3e1 in GtkInstance::CreateBuilder(weld::Widget*, rtl::OUString const\u0026, rtl::OUString const\u0026) (this\u003d0x5f7be0, pParent\u003d0x17218d0, rUIRoot\u003d\"file://.../instdir/share/config/soffice.cfg/\", rUIFile\u003d\"modules/BasicIDE/ui/libpage.ui\") at vcl/unx/gtk3/gtkinst.cxx:22616\n  [...]\n  #38 0x00000000004059e5 in (anonymous namespace)::ProtectedFixtureFunctor::run() const (this\u003d0x7fffffff14a0) at sal/cppunittester/cppunittester.cxx:329\n  #39 0x000000000040674d in main2() () at sal/cppunittester/cppunittester.cxx:478\n  #40 0x0000000000406947 in sal_main() () at sal/cppunittester/cppunittester.cxx:614\n  #41 0x0000000000406913 in main(int, char**) (argc\u003d22, argv\u003d0x7fffffff1928) at sal/cppunittester/cppunittester.cxx:609\n\napparently because there is no call to Translate::SetReadStringHook in unotools/source/i18n/resmgr.cxx, which in soffice.bin is called from Desktop::Main in desktop/source/app/app.cxx.",
+      "revId": "c9b19f69e658f1114f1b8fc0ae62b6edd6d33e3f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
