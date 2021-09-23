@@ -5801,7 +5801,7 @@ void PDFWriterImpl::drawShadow( SalLayout& rLayout, const OUString& rText, bool 
     setOverlineColor( rFont.GetColor() );
     updateGraphicsState();
 
-    tools::Long nOff = 1 + ((GetFontInstance()->mnLineHeight-24)/24);
+    tools::Long nOff = 1 + ((GetFontInstance()->GetLineHeight() - 24) / 24);
     if( rFont.IsOutline() )
         nOff++;
     rLayout.DrawBase() += Point( nOff, nOff );
@@ -6234,11 +6234,11 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         aRectangle.setHeight(aRefDevFontMetric.GetLineHeight());
 
         const LogicalFontInstance* pFontInstance = GetFontInstance();
-        if (pFontInstance->mnOrientation)
+        if (pFontInstance->GetOrientationFromData())
         {
             // Adapt rectangle for rotated text.
             tools::Polygon aPolygon(aRectangle);
-            aPolygon.Rotate(PixelToLogic(rLayout.GetDrawPosition()), pFontInstance->mnOrientation);
+            aPolygon.Rotate(PixelToLogic(rLayout.GetDrawPosition()), pFontInstance->GetOrientationFromData());
             drawPolygon(aPolygon);
         }
         else
@@ -7081,10 +7081,10 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, tools::Long nWidth, Fo
     aRect.SetTop( rPos.Y()-aRefDevFontMetric.GetAscent() );
 
     const LogicalFontInstance* pFontInstance = GetFontInstance();
-    if (pFontInstance->mnOrientation)
+    if (pFontInstance->GetOrientationFromData())
     {
         tools::Polygon aPoly( aRect );
-        aPoly.Rotate( rPos, pFontInstance->mnOrientation);
+        aPoly.Rotate( rPos, pFontInstance->GetOrientationFromData());
         aRect = aPoly.GetBoundRect();
     }
 
