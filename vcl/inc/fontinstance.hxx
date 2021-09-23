@@ -27,10 +27,11 @@
 #include <tools/gen.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/degree.hxx>
+
 #include <vcl/glyphitem.hxx>
 
+#include "font/FontInstanceData.hxx"
 #include "font/FontSelectPattern.hxx"
-#include "impfontmetricdata.hxx"
 
 #include <optional>
 #include <unordered_map>
@@ -54,7 +55,7 @@ class VCL_PLUGIN_PUBLIC LogicalFontInstance : public salhelper::SimpleReferenceO
 public: // TODO: make data members private
     virtual ~LogicalFontInstance() override;
 
-    ImplFontMetricDataRef mxFontMetric;        // Font attributes
+    vcl::font::FontInstanceDataRef mxFontMetric;        // Font attributes
     const ConvertChar* mpConversion;        // used e.g. for StarBats->StarSymbol
 
     tools::Long            mnLineHeight;
