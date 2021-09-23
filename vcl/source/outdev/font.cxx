@@ -183,7 +183,7 @@ FontMetric OutputDevice::GetFontMetric() const
         return aMetric;
 
     LogicalFontInstance* pFontInstance = mpFontInstance.get();
-    vcl::font::FontInstanceDataRef xFontMetric = pFontInstance->mxFontMetric;
+    vcl::font::FontInstanceDataRef xFontMetric = pFontInstance->GetFontInstanceData();
 
     // prepare metric
     aMetric = maFont;
@@ -447,7 +447,7 @@ FontEmphasisMark OutputDevice::ImplGetEmphasisMarkStyle( const vcl::Font& rFont 
 
 tools::Long OutputDevice::GetFontExtLeading() const
 {
-    return mpFontInstance->mxFontMetric->GetExternalLeading();
+    return mpFontInstance->GetExternalLeading();
 }
 
 void OutputDevice::ImplClearFontData( const bool bNewFontLists )
@@ -925,14 +925,15 @@ bool OutputDevice::ImplNewFont() const
         // get metric data from device layers
         pFontInstance->mbInit = true;
 
-        pFontInstance->mxFontMetric->SetOrientation( mpFontInstance->GetFontSelectPattern().mnOrientation );
-        mpGraphics->GetFontMetric( pFontInstance->mxFontMetric, 0 );
+        pFontInstance->SetOrientationInData( mpFontInstance->GetFontSelectPattern().mnOrientation );
+        vcl::font::FontInstanceDataRef pFontInstanceData = pFontInstance->GetFontInstanceData();
+        mpGraphics->GetFontMetric( pFontInstanceData, 0 );
 
-        pFontInstance->mxFontMetric->ImplInitTextLineSize( this );
-        pFontInstance->mxFontMetric->ImplInitAboveTextLineSize();
-        pFontInstance->mxFontMetric->ImplInitFlags( this );
+        pFontInstance->InitTextLineSize(GetDPIY(), GetFont(), GetBulletOffset());
+        pFontInstance->InitAboveTextLineSize();
+        pFontInstance->InitFlags(GetFont(), GetFullWidthFullStopRect());
 
-        pFontInstance->mnLineHeight = pFontInstance->mxFontMetric->GetAscent() + pFontInstance->mxFontMetric->GetDescent();
+        pFontInstance->mnLineHeight = pFontInstance->GetAscent() + pFontInstance->GetDescent();
 
         SetFontOrientation( pFontInstance );
     }
@@ -962,7 +963,7 @@ bool OutputDevice::ImplNewFont() const
     else if ( eAlign == ALIGN_TOP )
     {
         mnTextOffX = 0;
-        mnTextOffY = +pFontInstance->mxFontMetric->GetAscent() + mnEmphasisAscent;
+        mnTextOffY = +pFontInstance->GetAscent() + mnEmphasisAscent;
         if ( pFontInstance->mnOrientation )
         {
             Point aOriginPt(0, 0);
@@ -972,7 +973,7 @@ bool OutputDevice::ImplNewFont() const
     else // eAlign == ALIGN_BOTTOM
     {
         mnTextOffX = 0;
-        mnTextOffY = -pFontInstance->mxFontMetric->GetDescent() + mnEmphasisDescent;
+        mnTextOffY = -pFontInstance->GetDescent() + mnEmphasisDescent;
         if ( pFontInstance->mnOrientation )
         {
             Point aOriginPt(0, 0);
@@ -992,7 +993,7 @@ bool OutputDevice::ImplNewFont() const
     // #95414# fix for OLE objects which use scale factors very creatively
     if( mbMap && !aSize.Width() )
     {
-        int nOrigWidth = pFontInstance->mxFontMetric->GetWidth();
+        int nOrigWidth = pFontInstance->GetWidth();
         float fStretch = static_cast<float>(maMapRes.mnMapScNumX) * maMapRes.mnMapScDenomY;
         fStretch /= static_cast<float>(maMapRes.mnMapScNumY) * maMapRes.mnMapScDenomX;
         int nNewWidth = static_cast<int>(nOrigWidth * fStretch + 0.5);
@@ -1013,14 +1014,14 @@ bool OutputDevice::ImplNewFont() const
 
 void OutputDevice::SetFontOrientation( LogicalFontInstance* const pFontInstance ) const
 {
-    if( pFontInstance->GetFontSelectPattern().mnOrientation && !pFontInstance->mxFontMetric->GetOrientation() )
+    if( pFontInstance->GetFontSelectPattern().mnOrientation && !pFontInstance->GetOrientationFromData() )
     {
         pFontInstance->mnOwnOrientation = pFontInstance->GetFontSelectPattern().mnOrientation;
         pFontInstance->mnOrientation = pFontInstance->mnOwnOrientation;
     }
     else
     {
-        pFontInstance->mnOrientation = pFontInstance->mxFontMetric->GetOrientation();
+        pFontInstance->mnOrientation = pFontInstance->GetOrientationFromData();
     }
 }
 
@@ -1109,9 +1110,9 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     Point aOffset(0,0);
 
     if ( nEmphasisMark & FontEmphasisMark::PosBelow )
-        aOffset.AdjustY(mpFontInstance->mxFontMetric->GetDescent() + nEmphasisYOff );
+        aOffset.AdjustY(mpFontInstance->GetDescent() + nEmphasisYOff );
     else
-        aOffset.AdjustY( -(mpFontInstance->mxFontMetric->GetAscent() + nEmphasisYOff) );
+        aOffset.AdjustY( -(mpFontInstance->GetAscent() + nEmphasisYOff) );
 
     tools::Long nEmphasisWidth2  = nEmphasisWidth / 2;
     tools::Long nEmphasisHeight2 = nEmphasisHeight / 2;
@@ -1279,7 +1280,7 @@ tools::Long OutputDevice::GetMinKashida() const
     if (!ImplNewFont())
         return 0;
 
-    return ImplDevicePixelToLogicWidth( mpFontInstance->mxFontMetric->GetMinKashida() );
+    return ImplDevicePixelToLogicWidth( mpFontInstance->GetMinKashida() );
 }
 
 sal_Int32 OutputDevice::ValidateKashidas ( const OUString& rTxt,
@@ -1384,6 +1385,13 @@ void OutputDevice::ImplReleaseFonts()
 
     mpFontInstance.clear();
     mpFontFaceCollection.reset();
+}
+
+tools::Rectangle OutputDevice::GetFullWidthFullStopRect() const
+{
+    tools::Rectangle aRect;
+    GetTextBoundRect(aRect, u"\x3001"); // Fullwidth fullstop
+    return aRect;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

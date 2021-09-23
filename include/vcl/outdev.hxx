@@ -1080,8 +1080,10 @@ public:
     static std::shared_ptr<vcl::text::TextLayoutCache> CreateTextLayoutCache(OUString const&);
 
 protected:
-    SAL_DLLPRIVATE void         ImplInitTextLineSize();
-    SAL_DLLPRIVATE void         ImplInitAboveTextLineSize();
+    SAL_DLLPRIVATE void         InitTextLineSize();
+    sal_Int32 GetBulletOffset() const { return (GetTextWidth(OUString(u' ')) - GetTextWidth(OUString(u'\x00b7'))) >> 1; }
+    SAL_DLLPRIVATE void         InitAboveTextLineSize();
+    tools::Rectangle            GetFullWidthFullStopRect() const;
     static
     SAL_DLLPRIVATE tools::Long  ImplGetTextLines( const tools::Rectangle& rRect, tools::Long nTextHeight, ImplMultiTextLineInfo& rLineInfo, tools::Long nWidth, const OUString& rStr, DrawTextFlags nStyle, const vcl::ITextLayout& _rLayout );
     static

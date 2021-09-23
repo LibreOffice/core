@@ -46,12 +46,12 @@ namespace std
 
 
 LogicalFontInstance::LogicalFontInstance(const vcl::font::PhysicalFontFace& rFontFace, const vcl::font::FontSelectPattern& rFontSelData )
-    : mxFontMetric( new vcl::font::FontInstanceData( rFontSelData ))
-    , mpConversion( nullptr )
+    : mpConversion( nullptr )
     , mnLineHeight( 0 )
     , mnOwnOrientation( 0 )
     , mnOrientation( 0 )
     , mbInit( false )
+    , mxFontMetric( new vcl::font::FontInstanceData( rFontSelData ))
     , mpFontCache( nullptr )
     , m_aFontSelData(rFontSelData)
     , m_pHbFont(nullptr)
@@ -68,6 +68,11 @@ LogicalFontInstance::~LogicalFontInstance()
 
     if (m_pHbFont)
         hb_font_destroy(m_pHbFont);
+}
+
+void LogicalFontInstance::InitTextLineSize(sal_Int32 nDPIY, vcl::Font const& rFont, sal_Int32 nBulletOffset)
+{
+    mxFontMetric->InitTextLineSize(nDPIY, rFont, nBulletOffset);
 }
 
 hb_font_t* LogicalFontInstance::InitHbFont(hb_face_t* pHbFace)
