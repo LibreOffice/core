@@ -100,7 +100,7 @@ namespace dbaccess
 
         ::dbtools::WarningsContainer                m_aWarnings;
 
-        rtl::Reference<OTableContainer>        m_xTables;
+        std::unique_ptr<OTableContainer>       m_xTables;
 
         OUString                               m_aCommand;
         OUString                               m_aDataSourceName;
