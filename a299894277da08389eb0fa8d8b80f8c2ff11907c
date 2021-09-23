@@ -124,6 +124,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f0b6db4b_46ac4f7f",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-23T13:07:19Z",
+      "side": 1,
+      "message": "This from\nhttps://opengrok.libreoffice.org/xref/core/sc/source/filter/oox/unitconverter.cxx?r\u003dcfff893b#60\naccording to its description calculates days passed since 0000-01-01 (year 0! an invention of XML 2.0) \"before the passed date\", so excluding that day.\n\nThis is not a valid replacement code.\nFurthermore it breaks the week number calculation.",
+      "revId": "a299894277da08389eb0fa8d8b80f8c2ff11907c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eb276e50_e55100f6",
         "filename": "scaddins/source/datefunc/datefunc.cxx",
         "patchSetId": 4
@@ -152,6 +169,24 @@
       "writtenOn": "2021-09-22T21:04:34Z",
       "side": 1,
       "message": "Here the problem arises. The GetNullDate returns 693594 leading to a negative number of days (nDays1).",
+      "revId": "a299894277da08389eb0fa8d8b80f8c2ff11907c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "684740c8_99012698",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-23T13:07:19Z",
+      "side": 1,
+      "message": "Problem is that in the beginning this code was never meant to handle such non-Gregorian border-line dates. Actually it was code to demonstrate Add-In programming ...\n\nGetNullDate() or DateToDays() are not the problem, but the simplified algorithm here to calculate the year difference by calendar dates, which simply does not work at this border limit (see also comment about proleptic Gregorian vs Julian day count at DateToDays() above).\n\nAlso note that both DateToDays() and DaysToDate() are not able to handle (negative) years BCE at all.\n\nSo either we accept that this doesn\u0027t work for dates before 0001-01-02, or introduce some special cases for 0001-01-01, or use different algorithms.",
+      "parentUuid": "a9dfb396_70c4c4b2",
       "revId": "a299894277da08389eb0fa8d8b80f8c2ff11907c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }

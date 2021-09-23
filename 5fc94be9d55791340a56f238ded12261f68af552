@@ -52,6 +52,24 @@
       "parentUuid": "6edb8efb_ea41efc3",
       "revId": "5fc94be9d55791340a56f238ded12261f68af552",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d566da6_ad898c2d",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-23T13:07:19Z",
+      "side": 0,
+      "message": "This is not an offset but calculates a *count* of days starting 0001-01-01 as day 1 (including that day). So if you want, an offset from day 0 the day before (-0001-12-31).\nSee also\nhttps://opengrok.libreoffice.org/xref/core/tools/source/datetime/tdate.cxx?r\u003dea61644a#50 and\nhttps://opengrok.libreoffice.org/xref/core/tools/source/datetime/tdate.cxx?r\u003dea61644a#147\n\nNote also that this calculates the day count in the proleptic Gregorian calendar, which for the years 4 to 100 is behind the Julian calendar by 2 days, which probably explains the -2 days difference Mike observed in ICU. (Also, leap years in Julian calendar weren\u0027t introduced before year 4). See\nhttps://en.wikipedia.org/wiki/Proleptic_Gregorian_calendar#Difference_between_Julian_and_proleptic_Gregorian_calendar_dates\n\nICU Julian day numbers probably will be identical for day numbers passed from Calc for dates from 1 March 200 to 28 February 300.\n\nHowever, the offset from null-date (1899-12-30) calculated in Calc is based on the then current calendar, here Julian for 0001-01-01, for which the day count to a specific date in the proleptic Gregorian calendar is not identical (or only in the years 200 to 300).",
+      "parentUuid": "28843302_4a662d2b",
+      "revId": "5fc94be9d55791340a56f238ded12261f68af552",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
