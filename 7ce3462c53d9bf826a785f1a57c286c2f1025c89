@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f304694c_44b0a14a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-09-23T12:11:23Z",
+      "side": 1,
+      "message": "I think we will want to show current drop target in online by sending the position using some callback. So I would not merge this.",
+      "revId": "7ce3462c53d9bf826a785f1a57c286c2f1025c89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
