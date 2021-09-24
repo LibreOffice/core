@@ -14941,6 +14941,7 @@ vcl/source/filter/wmf/wmf.cxx
 vcl/source/filter/wmf/wmfwr.cxx
 vcl/source/filter/wmf/wmfwr.hxx
 vcl/source/font/DirectFontSubstitution.cxx
+vcl/source/font/EmphasisMark.cxx
 vcl/source/font/FontInstanceData.cxx
 vcl/source/font/FontSelectPattern.cxx
 vcl/source/font/PhysicalFontCollection.cxx
