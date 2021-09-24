@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "606648de_8d4abb98",
+        "filename": "i18npool/source/calendar/calendar_gregorian.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-24T17:42:38Z",
+      "side": 1,
+      "message": "It\u0027s not OK to test \u0027!gregocal\u0027 here, after you dereferenced it a line above ;)",
+      "range": {
+        "startLine": 182,
+        "startChar": 8,
+        "endLine": 182,
+        "endChar": 17
+      },
+      "revId": "3212766f48dc545ccf30f7d2836f558cf1537ca9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
