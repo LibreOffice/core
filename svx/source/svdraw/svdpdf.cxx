@@ -828,7 +828,7 @@ void ImpSdrPdfImport::InsertTextObject(const Point& rPos, const Size& rSize, con
 
     if (!aFont.IsTransparent())
     {
-        SfxItemSet aAttr(*mpFillAttr->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>);
+        SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aAttr(*mpFillAttr->GetPool());
         aAttr.Put(XFillStyleItem(drawing::FillStyle_SOLID));
         aAttr.Put(XFillColorItem(OUString(), aFont.GetFillColor()));
         pText->SetMergedItemSet(aAttr);
