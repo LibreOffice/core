@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e331cf2e_c4542619",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3860,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-09-24T08:52:09Z",
+      "side": 1,
+      "message": "wouldn\u0027t be easier to just make the SvStream::Read* functions zero-fill the return value on failure?",
+      "revId": "edd5cf0005d88f6e5a30edd9bb07be86b424d144",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
