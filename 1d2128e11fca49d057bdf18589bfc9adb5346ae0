@@ -86,6 +86,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "27fc1367_5d5e9059",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-24T06:26:40Z",
+      "side": 1,
+      "message": "Note also, how use of Julian calendar makes \u0027YYYY-MM-DD\u0027 *not* a valid ISO format *in LO* - just because ISO requires that all dates are sequential, and Cals has the sequence break at the cutover.",
+      "revId": "1d2128e11fca49d057bdf18589bfc9adb5346ae0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e6cf6d3a_55b32344",
