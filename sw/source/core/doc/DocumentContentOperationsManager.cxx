@@ -3809,7 +3809,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
                 }
             }
         }
-        if( bAdd )
+        if( bAdd && (pFormat->Which() == RES_FLYFRMFMT && !pFormat->GetOtherTextBoxFormat()))
         {
             aSet.insert( ZSortFly( pFormat, pAnchor, nArrLen + aSet.size() ));
         }

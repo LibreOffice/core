@@ -151,6 +151,10 @@
 // SwFormatFollowTextFlow
 #define MID_FOLLOW_TEXT_FLOW    0
 
+// TextBox
+#define MID_IS_TEXTBOX          0
+#define MID_TEXTBOX_CONTENT     1
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

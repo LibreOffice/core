@@ -339,13 +339,13 @@ DECLARE_OOXMLEXPORT_TEST(testBtlrShape, "btlr-textbox.docx")
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     const SwFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFormats.size());
-    CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(RES_DRAWFRMFMT), rFormats[0]->Which());
-    CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(RES_FLYFRMFMT), rFormats[1]->Which());
+    CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(RES_FLYFRMFMT), rFormats[0]->Which());
+    CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(RES_DRAWFRMFMT), rFormats[1]->Which());
     // Without the accompanying fix in place, this test would have failed with 'Expected: 5, Actual:
     // 4', i.e. the textbox inherited its writing direction instead of having an explicit btlr
     // value.
     CPPUNIT_ASSERT_EQUAL(SvxFrameDirection::Vertical_LR_BT,
-                         rFormats[1]->GetAttrSet().GetFrameDir().GetValue());
+                         rFormats[0]->GetAttrSet().GetFrameDir().GetValue());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf127316_autoEscapement, "tdf127316_autoEscapement.odt")

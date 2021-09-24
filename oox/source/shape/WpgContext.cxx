@@ -8,35 +8,47 @@
  */
 
 #include "WpgContext.hxx"
+#include "WpsContext.hxx"
 #include <sal/log.hxx>
 #include <drawingml/shapepropertiescontext.hxx>
 #include <oox/drawingml/shapegroupcontext.hxx>
 #include <oox/drawingml/graphicshapecontext.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
+#include <oox/helper/attributelist.hxx>
 
 using namespace com::sun::star;
 
 namespace oox::shape
 {
-WpgContext::WpgContext(FragmentHandler2 const& rParent)
+WpgContext::WpgContext(FragmentHandler2 const& rParent, oox::drawingml::ShapePtr pMaster)
     : FragmentHandler2(rParent)
 {
     mpShape = std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.GroupShape");
     mpShape->setWps(true);
+    if (pMaster && mpShape)
+        pMaster->addChild(mpShape);
 }
 
 WpgContext::~WpgContext() = default;
 
 oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken,
-                                                         const oox::AttributeList& /*rAttribs*/)
+                                                         const oox::AttributeList& rAttribs)
 {
     switch (getBaseToken(nElementToken))
     {
         case XML_wgp:
         case XML_cNvGrpSpPr:
+            return this;
         case XML_grpSpPr:
             return new oox::drawingml::ShapePropertiesContext(*this, *mpShape);
+        case XML_cNvPr:
+        {
+            mpShape->setHidden(rAttribs.getBool(XML_hidden, false));
+            mpShape->setId(rAttribs.getString(XML_id).get());
+            mpShape->setName(rAttribs.getString(XML_name).get());
+            return this;
+        }
         case XML_wsp:
         {
             // Don't set default character height, Writer has its own way to set
@@ -44,9 +56,8 @@ oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken
             // it.
             oox::drawingml::ShapePtr pShape = std::make_shared<oox::drawingml::Shape>(
                 "com.sun.star.drawing.CustomShape", /*bDefaultHeight=*/false);
-            return new oox::drawingml::ShapeContext(*this, mpShape, pShape);
-            // return new oox::shape::WpsContext(*this, uno::Reference<drawing::XShape>(),
-            //                                   mpShape, pShape);
+            return new oox::shape::WpsContext(*this, uno::Reference<drawing::XShape>(), mpShape,
+                                              pShape);
         }
         case XML_pic:
             return new oox::drawingml::GraphicShapeContext(
@@ -54,9 +65,7 @@ oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken
                 std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.GraphicObjectShape"));
         case XML_grpSp:
         {
-            return new oox::drawingml::ShapeGroupContext(
-                *this, mpShape,
-                std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.GroupShape"));
+            return new oox::shape::WpgContext(*this, mpShape);
         }
         case XML_graphicFrame:
         {
