@@ -118,7 +118,7 @@ SfxItemSet E3dView::Get3DAttributes() const
     if(!nSelectedItems)
     {
         // Get defaults and apply
-        SfxItemSet aDefaultSet(mpModel->GetItemPool(), svl::Items<SDRATTR_3D_FIRST, SDRATTR_3D_LAST>);
+        SfxItemSetFixed<SDRATTR_3D_FIRST, SDRATTR_3D_LAST> aDefaultSet(mpModel->GetItemPool());
         GetAttributes(aDefaultSet);
         aSet.Put(aDefaultSet);
 
@@ -158,7 +158,7 @@ void E3dView::Set3DAttributes( const SfxItemSet& rAttr)
     if(!nSelectedItems)
     {
         // Set defaults
-        SfxItemSet aDefaultSet(mpModel->GetItemPool(), svl::Items<SDRATTR_3D_FIRST, SDRATTR_3D_LAST>);
+        SfxItemSetFixed<SDRATTR_3D_FIRST, SDRATTR_3D_LAST> aDefaultSet(mpModel->GetItemPool());
         aDefaultSet.Put(rAttr);
         SetAttributes(aDefaultSet);
     }
