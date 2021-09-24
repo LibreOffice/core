@@ -449,6 +449,8 @@ bool SwDoc::BalanceRowHeight( const SwCursor& rCursor, bool bTstOnly, const bool
                 sal_Int32 nTotalHeight = 0;
                 for ( auto pLn : aRowArr )
                 {
+                    if (bOptimize)
+                        nHeight = 0;
                     SwIterator<SwFrame,SwFormat> aIter( *pLn->GetFrameFormat() );
                     SwFrame* pFrame = aIter.First();
                     while ( pFrame )
