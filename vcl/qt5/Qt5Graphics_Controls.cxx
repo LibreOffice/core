@@ -795,7 +795,8 @@ bool Qt5Graphics_Controls::getNativeControlRegion(ControlType type, ControlPart 
                     // find out the minimum size that should be used
                     // assume contents is a text line
                     QSize aContentSize = downscale(contentRect.size(), Round::Ceil);
-                    aContentSize.setHeight(QApplication::fontMetrics().height());
+                    QFontMetrics aFontMetrics(QApplication::font());
+                    aContentSize.setHeight(aFontMetrics.height());
                     QSize aMinSize = upscale(
                         sizeFromContents(QStyle::CT_ComboBox, &cbo, aContentSize), Round::Ceil);
                     if (aMinSize.height() > contentRect.height())
@@ -838,7 +839,8 @@ bool Qt5Graphics_Controls::getNativeControlRegion(ControlType type, ControlPart 
                 case ControlPart::Entire:
                 {
                     QSize aContentSize = downscale(contentRect.size(), Round::Ceil);
-                    aContentSize.setHeight(QApplication::fontMetrics().height());
+                    QFontMetrics aFontMetrics(QApplication::font());
+                    aContentSize.setHeight(aFontMetrics.height());
                     QSize aMinSize = upscale(
                         sizeFromContents(QStyle::CT_SpinBox, &sbo, aContentSize), Round::Ceil);
                     if (aMinSize.height() > contentRect.height())
