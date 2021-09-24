@@ -23,6 +23,7 @@
 #include <pam.hxx>
 #include <swtable.hxx>
 #include <ndtxt.hxx>
+#include <swcrsr.hxx>
 #include <swundo.hxx>
 #include <frmfmt.hxx>
 #include <UndoCore.hxx>
@@ -71,7 +72,7 @@ SwUndoSplitNode::~SwUndoSplitNode()
 void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc *const pDoc = & rContext.GetDoc();
-    SwPaM & rPam( rContext.GetCursorSupplier().CreateNewShellCursor() );
+    SwCursor & rPam( rContext.GetCursorSupplier().CreateNewShellCursor() );
     rPam.DeleteMark();
     if( m_bTableFlag )
     {
@@ -149,7 +150,7 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoSplitNode::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwPaM & rPam( rContext.GetCursorSupplier().CreateNewShellCursor() );
+    SwCursor & rPam( rContext.GetCursorSupplier().CreateNewShellCursor() );
     rPam.GetPoint()->nNode = m_nNode;
     SwTextNode * pTNd = rPam.GetNode().GetTextNode();
     OSL_ENSURE(pTNd, "SwUndoSplitNode::RedoImpl(): SwTextNode expected");
