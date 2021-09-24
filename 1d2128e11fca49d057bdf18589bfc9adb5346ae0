@@ -120,6 +120,60 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "73fde70c_4c8e85d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-24T09:16:21Z",
+      "side": 1,
+      "message": "For me this could be a viable solution, but I don\u0027t have the insight where in the UI this option should be set, and I think there are a lot of places where data functions are in use or a dates are calculated.",
+      "parentUuid": "99cd730f_802e3a1a",
+      "revId": "1d2128e11fca49d057bdf18589bfc9adb5346ae0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4481a39_17497d19",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-24T09:16:21Z",
+      "side": 1,
+      "message": "Ya, I thougth that this would just solve the ISLEAPYEAR problem",
+      "parentUuid": "e531a0bb_9aa2340c",
+      "revId": "1d2128e11fca49d057bdf18589bfc9adb5346ae0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4804baa4_5d12f1c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-24T09:16:21Z",
+      "side": 1,
+      "message": "Sometimes I sit at home after a work day and think to myself that I could fix a small bug/enhancement in LO. I thought, hm, the years function has an internal limit. Lets check it out ... and then a small commit in order to test this issue stirred up a hornets\u0027 nest 😄",
+      "parentUuid": "d28054f8_05f82fcd",
+      "revId": "1d2128e11fca49d057bdf18589bfc9adb5346ae0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e6cf6d3a_55b32344",
