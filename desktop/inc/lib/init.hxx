@@ -26,6 +26,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <tools/gen.hxx>
+#include <sfx2/lokcallback.hxx>
 #include <sfx2/lokhelper.hxx>
 
 #include <desktop/dllapi.h>
@@ -42,6 +43,12 @@ namespace desktop {
 
         RectangleAndPart()
             : m_nPart(INT_MIN)  // -1 is reserved to mean "all parts".
+        {
+        }
+
+        RectangleAndPart(const tools::Rectangle* pRect, int nPart)
+            : m_aRectangle( pRect ? *pRect : tools::Rectangle(0, 0, SfxLokHelper::MaxTwips, SfxLokHelper::MaxTwips))
+            , m_nPart(nPart)
         {
         }
 
@@ -70,13 +77,13 @@ namespace desktop {
         static RectangleAndPart Create(const std::string& rPayload);
     };
 
-    class DESKTOP_DLLPUBLIC CallbackFlushHandler final : public Idle
+    class DESKTOP_DLLPUBLIC CallbackFlushHandler final : public Idle, public SfxLokCallbackInterface
     {
     public:
         explicit CallbackFlushHandler(LibreOfficeKitDocument* pDocument, LibreOfficeKitCallback pCallback, void* pData);
         virtual ~CallbackFlushHandler() override;
         virtual void Invoke() override;
-        static void callback(const int type, const char* payload, void* data);
+        // TODO This should be dropped and the binary libreOfficeKitViewCallback() variants should be called?
         void queue(const int type, const char* data);
 
         /// Disables callbacks on this handler. Must match with identical count
@@ -91,17 +98,33 @@ namespace desktop {
         void addViewStates(int viewId);
         void removeViewStates(int viewId);
 
+        // SfxLockCallbackInterface
+        virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) override;
+        virtual void libreOfficeKitViewCallback(int nType, const char* pPayload, int nViewId) override;
+        virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart) override;
+
+    private:
         struct CallbackData
         {
-            CallbackData(const std::string& payload)
-                : PayloadString(payload)
+            CallbackData(const char* payload)
+                : PayloadString(payload ? payload : "(nil)")
             {
             }
 
-            /// Parse and set the RectangleAndPart object and return it. Clobbers PayloadString.
-            RectangleAndPart& setRectangleAndPart(const std::string& payload);
-            /// Set a RectangleAndPart object and update PayloadString.
-            void setRectangleAndPart(const RectangleAndPart& rRectAndPart);
+            CallbackData(const char* payload, int viewId)
+                : PayloadString(payload ? payload : "(nil)")
+                , PayloadObject(viewId)
+            {
+            }
+
+            CallbackData(const tools::Rectangle* pRect, int viewId)
+                : PayloadObject(RectangleAndPart(pRect, viewId))
+            { // PayloadString will be done on demand
+            }
+
+            const std::string& getPayload() const;
+            /// Update a RectangleAndPart object and update PayloadString if necessary.
+            void updateRectangleAndPart(const RectangleAndPart& rRectAndPart);
             /// Return the parsed RectangleAndPart instance.
             const RectangleAndPart& getRectangleAndPart() const;
             /// Parse and set the JSON object and return it. Clobbers PayloadString.
@@ -111,29 +134,41 @@ namespace desktop {
             /// Return the parsed JSON instance.
             const boost::property_tree::ptree& getJson() const;
 
+            int getViewId() const;
+
+            bool isEmpty() const
+            {
+                return PayloadString.empty() && PayloadObject.which() == 0;
+            }
+            void clear()
+            {
+                PayloadString.clear();
+                PayloadObject = boost::blank();
+            }
+
             /// Validate that the payload and parsed object match.
             bool validate() const;
 
             /// Returns true iff there is cached data.
             bool isCached() const { return PayloadObject.which() != 0; }
 
-            std::string PayloadString;
-
         private:
+            mutable std::string PayloadString;
+
             /// The parsed payload cache. Update validate() when changing this.
-            boost::variant<boost::blank, RectangleAndPart, boost::property_tree::ptree> PayloadObject;
+            mutable boost::variant<boost::blank, RectangleAndPart, boost::property_tree::ptree, int> PayloadObject;
         };
 
         typedef std::vector<int> queue_type1;
         typedef std::vector<CallbackData> queue_type2;
 
-    private:
         bool removeAll(int type);
         bool removeAll(int type, const std::function<bool (const CallbackData&)>& rTestFunc);
         bool processInvalidateTilesEvent(int type, CallbackData& aCallbackData);
         bool processWindowEvent(int type, CallbackData& aCallbackData);
         queue_type2::iterator toQueue2(queue_type1::iterator);
         queue_type2::reverse_iterator toQueue2(queue_type1::reverse_iterator);
+        void queue(const int type, CallbackData& data);
 
         /** we frequently want to scan the queue, and mostly when we do so, we only care about the element type
             so we split the queue in 2 to make the scanning cache friendly. */

@@ -347,8 +347,7 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
 
     // Invalidate first
     tools::Rectangle aRectangle(0, 0, 1000000000, 1000000000);
-    OString sPayload = aRectangle.toString() + ", " + OString::number(aViewData.GetTabNo());
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, sPayload.getStr());
+    pViewShell->libreOfficeKitViewInvalidateTilesCallback(&aRectangle, aViewData.GetTabNo());
 
     ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(pViewShell->GetCurrentDocument());
     SfxLokHelper::notifyDocumentSizeChanged(pViewShell, sRect, pModel, false);

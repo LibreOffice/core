@@ -175,6 +175,7 @@ public:
     void testNotificationCompression();
     void testTileInvalidationCompression();
     void testPartInInvalidation();
+    void testBinaryCallback();
     void testInput();
     void testRedlineWriter();
     void testTrackChanges();
@@ -240,6 +241,7 @@ public:
     CPPUNIT_TEST(testNotificationCompression);
     CPPUNIT_TEST(testTileInvalidationCompression);
     CPPUNIT_TEST(testPartInInvalidation);
+    CPPUNIT_TEST(testBinaryCallback);
     CPPUNIT_TEST(testInput);
     CPPUNIT_TEST(testRedlineWriter);
     CPPUNIT_TEST(testTrackChanges);
@@ -1827,6 +1829,45 @@ void DesktopLOKTest::testPartInInvalidation()
         // This failed as RectangleAndPart::Create() always assumed no part in
         // payload, so this was merged -> it was 1.
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), notifs.size());
+    }
+}
+
+static void callbackBinaryCallbackTest(const int type, const char* payload, void* data)
+{
+    std::vector<std::tuple<int, std::string>>* notifs = static_cast<std::vector<std::tuple<int, std::string>>*>(data);
+    notifs->emplace_back(type, std::string(payload ? payload : "(nil)"));
+}
+
+void DesktopLOKTest::testBinaryCallback()
+{
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+
+    const tools::Rectangle rect1(Point(10,15),Size(20,25));
+    const std::string rect1String(rect1.toString().getStr());
+    // Very that using queue() and libreOfficeKitViewInvalidateTilesCallback() has the same result.
+    {
+        std::vector<std::tuple<int, std::string>> notifs;
+        std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackBinaryCallbackTest, &notifs));
+
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, rect1String.c_str());
+
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), notifs.size());
+        CPPUNIT_ASSERT_EQUAL(int(LOK_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[0]));
+        CPPUNIT_ASSERT_EQUAL(rect1String, std::get<1>(notifs[0]));
+    }
+    {
+        std::vector<std::tuple<int, std::string>> notifs;
+        std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackBinaryCallbackTest, &notifs));
+
+        handler->libreOfficeKitViewInvalidateTilesCallback(&rect1, INT_MIN);
+
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), notifs.size());
+        CPPUNIT_ASSERT_EQUAL(int(LOK_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[0]));
+        CPPUNIT_ASSERT_EQUAL(rect1String, std::get<1>(notifs[0]));
     }
 }
 
