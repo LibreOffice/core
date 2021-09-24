@@ -346,8 +346,7 @@ namespace sdr::properties
                 bool bAutoGrowHeight = rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT).GetValue();
 
                 // prepare ItemSet to set exchanged width and height items
-                SfxItemSet aNewSet(*rSet.GetPool(),
-                    svl::Items<SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT>);
+                SfxItemSetFixed<SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT> aNewSet(*rSet.GetPool());
 
                 aNewSet.Put(rSet);
                 aNewSet.Put(makeSdrTextAutoGrowWidthItem(bAutoGrowHeight));
