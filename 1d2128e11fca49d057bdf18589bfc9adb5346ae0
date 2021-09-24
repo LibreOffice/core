@@ -52,6 +52,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d28054f8_05f82fcd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-24T06:16:02Z",
+      "side": 1,
+      "message": "Andreas: we have a major problem here.\n\nWe need to decide globally how to deal with the Gregorian/Julian cutover in general. It is just too large, and potentially compatibility-breaking. Maybe we need a configuration, that would allow to use and display proleptic Gregorian or Julian everywhere; or maybe we may use some new set of functions; or introduce a locale flag or a calendar or function argument ...",
+      "revId": "1d2128e11fca49d057bdf18589bfc9adb5346ae0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e6cf6d3a_55b32344",
