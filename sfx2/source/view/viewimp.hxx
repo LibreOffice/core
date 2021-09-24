@@ -48,8 +48,7 @@ struct SfxViewShell_Impl
 
     mutable std::unique_ptr<std::vector<SfxInPlaceClient*>> mpIPClients;
 
-    LibreOfficeKitCallback m_pLibreOfficeKitViewCallback;
-    void* m_pLibreOfficeKitViewData;
+    SfxLokCallbackInterface* m_pLibreOfficeKitViewCallback;
     /// Set if we are in the middle of a tiled search.
     bool m_bTiledSearching;
     static sal_uInt32 m_nLastViewShellId;

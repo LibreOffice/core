@@ -14,6 +14,7 @@
 #include <comphelper/string.hxx>
 #include <osl/conditn.hxx>
 #include <sfx2/viewsh.hxx>
+#include <sfx2/lokcallback.hxx>
 
 namespace
 {
@@ -44,7 +45,7 @@ void lcl_convertRectangle(const OUString& rString, tools::Rectangle& rRectangle)
 }
 }
 
-struct CallbackRecorder
+struct CallbackRecorder : public SfxLokCallbackInterface
 {
     CallbackRecorder()
         : m_bFound(true)
@@ -67,22 +68,16 @@ struct CallbackRecorder
     /// For document size changed callback.
     osl::Condition m_aDocumentSizeCondition;
 
-    static void callback(int nType, const char* pPayload, void* pData)
+    void libreOfficeKitViewCallback(int nType, const char* pPayload) override
     {
-        static_cast<CallbackRecorder*>(pData)->processCallback(nType, pPayload);
+        libreOfficeKitViewCallback(nType, pPayload, -1);
     }
-
-    void processCallback(int nType, const char* pPayload)
+    void libreOfficeKitViewCallback(int nType, const char* pPayload, int /*nViewId*/) override
     {
         switch (nType)
         {
             case LOK_CALLBACK_INVALIDATE_TILES:
-            {
-                OUString aPayload = OUString::createFromAscii(pPayload);
-                if (aPayload != "EMPTY" && m_aInvalidation.IsEmpty())
-                    lcl_convertRectangle(aPayload, m_aInvalidation);
-            }
-            break;
+                abort();
             case LOK_CALLBACK_TEXT_SELECTION:
             {
                 OUString aPayload = OUString::createFromAscii(pPayload);
@@ -136,9 +131,16 @@ struct CallbackRecorder
         }
     }
 
+    virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect,
+                                                           int /*nPart*/) override
+    {
+        if (pRect != nullptr && m_aInvalidation.IsEmpty())
+            m_aInvalidation = *pRect;
+    }
+
     void registerCallbacksFor(SfxViewShell& rViewShell)
     {
-        rViewShell.registerLibreOfficeKitViewCallback(&CallbackRecorder::callback, this);
+        rViewShell.setLibreOfficeKitViewCallback(this);
     }
 };
 
