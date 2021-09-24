@@ -45,7 +45,9 @@
 #include <QtWidgets/QStyle>
 #include <QtWidgets/QToolTip>
 #include <QtWidgets/QApplication>
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
 #include <QtWidgets/QDesktopWidget>
+#endif
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QMainWindow>
 
@@ -482,26 +484,26 @@ Size Qt5Frame::CalcDefaultSize()
     if (!m_bFullScreen)
     {
         const QScreen* pScreen = screen();
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        aSize = bestmaxFrameSizeForScreenSize(
-            toSize(pScreen ? pScreen->size() : QApplication::desktop()->screenGeometry(0).size()));
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        if (!pScreen)
+            pScreen = QGuiApplication::screens().at(0);
+        aSize = bestmaxFrameSizeForScreenSize(toSize(pScreen->size()));
     }
     else
     {
         if (!m_bFullScreenSpanAll)
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            aSize = toSize(
-                QApplication::desktop()->screenGeometry(maGeometry.nDisplayScreenNumber).size());
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            aSize = toSize(QGuiApplication::screens().at(maGeometry.nDisplayScreenNumber)->size());
         }
         else
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+            QScreen* pScreen = QGuiApplication::screenAt(QPoint(0, 0));
+#else
+            // QGuiApplication::screenAt was added in Qt 5.10, use deprecated QDesktopWidget
             int nLeftScreen = QApplication::desktop()->screenNumber(QPoint(0, 0));
-            SAL_WNODEPRECATED_DECLARATIONS_POP
-            aSize = toSize(QApplication::screens()[nLeftScreen]->availableVirtualGeometry().size());
+            QScreen* pScreen = QGuiApplication::screens()[nLeftScreen];
+#endif
+            aSize = toSize(pScreen->availableVirtualGeometry().size());
         }
     }
 
@@ -1216,23 +1218,25 @@ void Qt5Frame::SetScreenNumber(unsigned int nScreen)
 
         if (!m_bFullScreenSpanAll)
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            screenGeo = QApplication::desktop()->screenGeometry(nScreen);
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            screenGeo = QGuiApplication::screens().at(nScreen)->geometry();
             pWindow->setScreen(QApplication::screens()[nScreen]);
         }
         else // special case: fullscreen over all available screens
         {
             assert(m_bFullScreen);
             // left-most screen
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+            QScreen* pScreen = QGuiApplication::screenAt(QPoint(0, 0));
+#else
+            // QGuiApplication::screenAt was added in Qt 5.10, use deprecated QDesktopWidget
             int nLeftScreen = QApplication::desktop()->screenNumber(QPoint(0, 0));
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            QScreen* pScreen = QGuiApplication::screens()[nLeftScreen];
+#endif
             // entire virtual desktop
-            screenGeo = QApplication::screens()[nLeftScreen]->availableVirtualGeometry();
-            pWindow->setScreen(QApplication::screens()[nLeftScreen]);
+            screenGeo = pScreen->availableVirtualGeometry();
+            pWindow->setScreen(pScreen);
             pWindow->setGeometry(screenGeo);
-            nScreen = nLeftScreen;
+            nScreen = screenNumber(pScreen);
         }
 
         // setScreen by itself has no effect, explicitly move the widget to
