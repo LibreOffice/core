@@ -54,6 +54,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea79bc5c_2b8dfe72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-24T15:44:55Z",
+      "side": 1,
+      "message": "The option should be per document, otherwise you\u0027d get unpredictable results. ODF-wise similar to the other HOST-* Host-defined Behaviors https://docs.oasis-open.org/office/OpenDocument/v1.3/os/part4-formula/OpenDocument-v1.3-os-part4-formula.html#__RefHeading__1017868_715980110",
+      "parentUuid": "4158c1d4_2b8e7152",
+      "revId": "063fafc50848ae19e1f31b21f2975cb82894eb9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b9cd227e_de31827e",
