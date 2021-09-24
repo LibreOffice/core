@@ -19,6 +19,7 @@
 
 #include <algorithm>
 
+#include <unicode/gregocal.h>
 #include <calendar_gregorian.hxx>
 #include <localedata.hxx>
 #include <nativenumbersupplier.hxx>
@@ -173,6 +174,15 @@ Calendar_gregorian::init(const Era *_eraArray)
     UErrorCode status = U_ZERO_ERROR;
     body.reset( icu::Calendar::createInstance( aIcuLocale, status) );
     if (!body || !U_SUCCESS(status)) throw RuntimeException();
+
+    // tdf#144699 - use proleptic Gregorian consistently for every date formatting and recognition
+    status = U_ZERO_ERROR;
+    auto gregocal = dynamic_cast<icu_69::GregorianCalendar*>(body.get());
+    UDate udate = 0;
+    gregocal->setGregorianChange(udate, status);
+    if (!U_SUCCESS(status))
+        throw RuntimeException();
+
     eraArray=_eraArray;
 }
 
