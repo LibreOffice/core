@@ -20,7 +20,9 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 #include <svl/style.hxx>
+#include <svl/itemset.hxx>
 #include "undobase.hxx"
 
 class ScDocShell;
@@ -30,7 +32,7 @@ class ScStyleSaveData
 private:
     OUString        aName;
     OUString        aParent;
-    std::unique_ptr<SfxItemSet>  xItems;
+    std::optional<SfxItemSet> moItems;
 
 public:
     ScStyleSaveData();
@@ -41,7 +43,7 @@ public:
 
     const OUString&     GetName() const     { return aName; }
     const OUString&     GetParent() const   { return aParent; }
-    const SfxItemSet*   GetItems() const    { return xItems.get(); }
+    const std::optional<SfxItemSet>& GetItems() const { return moItems; }
 };
 
 class ScUndoModifyStyle: public ScSimpleUndo
