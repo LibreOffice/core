@@ -501,7 +501,7 @@ VclPtr<InterimItemWindow> SvxGrafModeToolBoxControl::CreateItemWindow( vcl::Wind
 void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 {
     SfxItemPool&    rPool = rView.GetModel()->GetItemPool();
-    SfxItemSet      aSet( rPool, svl::Items<SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST> );
+    SfxItemSetFixed<SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST> aSet( rPool );
     OUString        aUndoStr;
     const bool      bUndo = rView.IsUndoEnabled();
 
@@ -618,7 +618,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                 if( ( pObj->GetGraphicType() != GraphicType::NONE ) &&
                     ( pObj->GetGraphicType() != GraphicType::Default ) )
                 {
-                    SfxItemSet          aGrfAttr( rPool, svl::Items<SDRATTR_GRAFCROP, SDRATTR_GRAFCROP> );
+                    SfxItemSetFixed<SDRATTR_GRAFCROP, SDRATTR_GRAFCROP> aGrfAttr( rPool );
                     const MapUnit       eOldMetric = rPool.GetMetric( 0 );
 
                     aGrfAttr.Put(pObj->GetMergedItemSet());
