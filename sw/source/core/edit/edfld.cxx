@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_fuzzers.h>
 
 #include <osl/diagnose.h>
 #include <unotools/charclass.hxx>
@@ -316,7 +317,7 @@ void SwEditShell::UpdateExpFields(bool bCloseDB)
     GetDoc()->getIDocumentFieldsAccess().UpdateExpFields(nullptr, true);
     if (bCloseDB)
     {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         GetDoc()->GetDBManager()->CloseAll(); // close all database connections
 #endif
     }
@@ -325,7 +326,7 @@ void SwEditShell::UpdateExpFields(bool bCloseDB)
 
 SwDBManager* SwEditShell::GetDBManager() const
 {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     return GetDoc()->GetDBManager();
 #else
     return NULL;

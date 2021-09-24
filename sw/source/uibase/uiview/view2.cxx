@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_fuzzers.h>
 
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <o3tl/any.hxx>
@@ -1247,7 +1248,7 @@ void SwView::Execute(SfxRequest &rReq)
                 GetViewFrame()->ToggleChildWindow(nSlot);
             //if fields have been successfully inserted call the "real"
             //mail merge dialog
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
             SwWrtShell &rSh = GetWrtShell();
             if(m_bInMailMerge && rSh.IsAnyDatabaseFieldInDoc())
             {
@@ -2547,7 +2548,7 @@ void SwView::EnableMailMerge()
     rBind.Update(FN_INSERT_FIELD_DATA_ONLY);
 }
 
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
 
 namespace
 {
@@ -2567,7 +2568,7 @@ namespace
 
 void SwView::GenerateFormLetter(bool bUseCurrentDocument)
 {
-#if !HAVE_FEATURE_DBCONNECTIVITY
+#if !HAVE_FEATURE_DBCONNECTIVITY || ENABLE_FUZZERS
     (void) bUseCurrentDocument;
 #else
     if(bUseCurrentDocument)

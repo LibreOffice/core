@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_fuzzers.h>
 
 #include <hintids.hxx>
 
@@ -139,7 +140,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
     static sal_uInt16 nLabelTitleNo = 0;
     static sal_uInt16 nBCTitleNo = 0;
 
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     // Create DB-Manager
     std::unique_ptr<SwDBManager, o3tl::default_delete<SwDBManager>> pDBManager(new SwDBManager(nullptr));
 #endif
@@ -154,7 +155,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
     SwAbstractDialogFactory* pDialogFactory = SwAbstractDialogFactory::Create();
 
     ScopedVclPtr<AbstractSwLabDlg> pDlg(pDialogFactory->CreateSwLabDlg(rReq.GetFrameWeld(), aSet,
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
                                                                             pDBManager.get(),
 #else
                                                                             NULL,

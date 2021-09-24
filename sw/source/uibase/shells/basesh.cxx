@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_fuzzers.h>
 
 #include <sal/config.h>
 
@@ -3111,7 +3112,7 @@ void SwBaseShell::ExecField( SfxRequest const & rReq )
     sal_uInt16 nSlot = rReq.GetSlot();
     switch( nSlot )
     {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         case FN_CHANGE_DBFIELD:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();

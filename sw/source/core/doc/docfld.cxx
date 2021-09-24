@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_fuzzers.h>
 
 #include <hintids.hxx>
 
@@ -369,7 +370,7 @@ OUString LookString( SwHashTable<HashStr> const & rTable, std::u16string_view rN
 
 SwDBData const & SwDoc::GetDBData()
 {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     if(maDBData.sDataSource.isEmpty())
     {
         // Similar to: SwEditShell::IsAnyDatabaseFieldInDoc
@@ -409,14 +410,14 @@ SwDBData const & SwDoc::GetDBData()
 
 void SwDoc::SetInitDBFields( bool b )
 {
-#if !HAVE_FEATURE_DBCONNECTIVITY
+#if !HAVE_FEATURE_DBCONNECTIVITY || ENABLE_FUZZERS
     (void) b;
 #else
     GetDBManager()->SetInitDBFields( b );
 #endif
 }
 
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
 
 /// Get all databases that are used by fields
 static OUString lcl_DBDataToString(const SwDBData& rData)
@@ -431,7 +432,7 @@ static OUString lcl_DBDataToString(const SwDBData& rData)
 void SwDoc::GetAllUsedDB( std::vector<OUString>& rDBNameList,
                           const std::vector<OUString>* pAllDBNames )
 {
-#if !HAVE_FEATURE_DBCONNECTIVITY
+#if !HAVE_FEATURE_DBCONNECTIVITY || ENABLE_FUZZERS
     (void) rDBNameList;
     (void) pAllDBNames;
 #else
@@ -509,7 +510,7 @@ void SwDoc::GetAllUsedDB( std::vector<OUString>& rDBNameList,
 
 void SwDoc::GetAllDBNames( std::vector<OUString>& rAllDBNames )
 {
-#if !HAVE_FEATURE_DBCONNECTIVITY
+#if !HAVE_FEATURE_DBCONNECTIVITY || ENABLE_FUZZERS
     (void) rAllDBNames;
 #else
     SwDBManager* pMgr = GetDBManager();
@@ -561,7 +562,7 @@ void SwDoc::AddUsedDBToList( std::vector<OUString>& rDBNameList,
 
 void SwDoc::AddUsedDBToList( std::vector<OUString>& rDBNameList, const OUString& rDBName)
 {
-#if !HAVE_FEATURE_DBCONNECTIVITY
+#if !HAVE_FEATURE_DBCONNECTIVITY || ENABLE_FUZZERS
     (void) rDBNameList;
     (void) rDBName;
 #else
@@ -592,7 +593,7 @@ void SwDoc::AddUsedDBToList( std::vector<OUString>& rDBNameList, const OUString&
 void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
                             const OUString& rNewName )
 {
-#if !HAVE_FEATURE_DBCONNECTIVITY
+#if !HAVE_FEATURE_DBCONNECTIVITY || ENABLE_FUZZERS
     (void) rOldNames;
     (void) rNewName;
 #else
@@ -628,7 +629,7 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
             switch( pField->GetTyp()->Which() )
             {
                 case SwFieldIds::Database:
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
                     if (IsNameInArray(rOldNames, lcl_DBDataToString(static_cast<SwDBField*>(pField)->GetDBData())))
                     {
                         SwDBFieldType* pOldTyp = static_cast<SwDBFieldType*>(pField->GetTyp());
@@ -904,7 +905,7 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
     static const OUStringLiteral sTrue(u"TRUE");
     static const OUStringLiteral sFalse(u"FALSE");
 
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     bool bIsDBManager = nullptr != rDoc.GetDBManager();
 #endif
 
@@ -978,7 +979,7 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
                     }
                     break;
 
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
                 case SwFieldIds::DbNumSet:
                 {
                     SwDBData aDBData(const_cast<SwDBNumSetField*>(static_cast<const SwDBNumSetField*>(pField))->GetDBData(&rDoc));
@@ -1063,7 +1064,7 @@ void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, SwFieldIds nFiel
         SwGetExpField* pGetField = const_cast<SwGetExpField*>(static_cast<const SwGetExpField*>(rTField.GetFormatField().GetField()));
         pGetField->ChgBodyTextFlag( bIsInBody );
     }
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     else if( SwFieldIds::Database == nFieldWhich )
     {
         SwDBField* pDBField = const_cast<SwDBField*>(static_cast<const SwDBField*>(rTField.GetFormatField().GetField()));

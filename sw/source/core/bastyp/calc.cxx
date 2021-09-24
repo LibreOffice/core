@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_fuzzers.h>
 
 #include <calc.hxx>
 #include <cfloat>
@@ -499,9 +500,8 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
 
     if( !bIns )
     {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         SwDBManager *pMgr = m_rDoc.GetDBManager();
-
         OUString sDBName(GetDBName( sTmpName ));
         OUString sSourceName(sDBName.getToken(0, DB_DELIM));
         OUString sTableName(sDBName.getToken(0, ';').getToken(1, DB_DELIM));
@@ -560,7 +560,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
     if( sColumnName.equalsIgnoreAsciiCase(
                             SwFieldType::GetTypeStr( SwFieldTypesEnum::DatabaseSetNumber ) ))
     {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         SwDBManager *pMgr = m_rDoc.GetDBManager();
         OUString sDBName(GetDBName( sTmpName ));
         OUString sSourceName(sDBName.getToken(0, DB_DELIM));
