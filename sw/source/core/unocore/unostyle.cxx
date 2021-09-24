@@ -1789,6 +1789,21 @@ void SwXStyle::SetPropertyValue<FN_UNO_FOLLOW_STYLE>(const SfxItemPropertyMapEnt
     SwStyleNameMapper::FillUIName(sValue, aString, m_rEntry.m_aPoolId);
     o_rStyleBase.getNewBase()->SetFollow(aString);
 }
+
+template <>
+void SwXStyle::SetPropertyValue<FN_UNO_LINK_STYLE>(const SfxItemPropertyMapEntry&,
+                                                   const SfxItemPropertySet&,
+                                                   const uno::Any& rValue,
+                                                   SwStyleBase_Impl& o_rStyleBase)
+{
+    if (!rValue.has<OUString>())
+        return;
+    const auto sValue(rValue.get<OUString>());
+    OUString aString;
+    SwStyleNameMapper::FillUIName(sValue, aString, m_rEntry.m_aPoolId);
+    o_rStyleBase.getNewBase()->SetLink(aString);
+}
+
 template<>
 void SwXStyle::SetPropertyValue<sal_uInt16(RES_PAGEDESC)>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
@@ -2013,6 +2028,7 @@ void SwXStyle::SetStyleProperty(const SfxItemPropertyMapEntry& rEntry, const Sfx
             { FN_UNO_NUM_RULES,              std::mem_fn(&SwXStyle::SetPropertyValue<FN_UNO_NUM_RULES>)              },
             { RES_PARATR_OUTLINELEVEL,       std::mem_fn(&SwXStyle::SetPropertyValue<sal_uInt16(RES_PARATR_OUTLINELEVEL)>)       },
             { FN_UNO_FOLLOW_STYLE,           std::mem_fn(&SwXStyle::SetPropertyValue<FN_UNO_FOLLOW_STYLE>)           },
+            { FN_UNO_LINK_STYLE,             std::mem_fn(&SwXStyle::SetPropertyValue<FN_UNO_LINK_STYLE>)             },
             { RES_PAGEDESC,                  std::mem_fn(&SwXStyle::SetPropertyValue<sal_uInt16(RES_PAGEDESC)>)                  },
             { RES_TEXT_VERT_ADJUST,          std::mem_fn(&SwXStyle::SetPropertyValue<sal_uInt16(RES_TEXT_VERT_ADJUST)>)          },
             { FN_UNO_IS_AUTO_UPDATE,         std::mem_fn(&SwXStyle::SetPropertyValue<FN_UNO_IS_AUTO_UPDATE>)         },
@@ -2187,6 +2203,19 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_FOLLOW_STYLE>(const SfxItemPropertyMa
     SwStyleNameMapper::FillProgName(rBase.getNewBase()->GetFollow(), aString, lcl_GetSwEnumFromSfxEnum(GetFamily()));
     return uno::makeAny(aString);
 }
+
+template <>
+uno::Any SwXStyle::GetStyleProperty<FN_UNO_LINK_STYLE>(const SfxItemPropertyMapEntry&,
+                                                       const SfxItemPropertySet&,
+                                                       SwStyleBase_Impl& rBase)
+{
+    PrepareStyleBase(rBase);
+    OUString aString;
+    SwStyleNameMapper::FillProgName(rBase.getNewBase()->GetLink(), aString,
+                                    lcl_GetSwEnumFromSfxEnum(GetFamily()));
+    return uno::makeAny(aString);
+}
+
 template<>
 uno::Any SwXStyle::GetStyleProperty<sal_uInt16(RES_PAGEDESC)>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
 {
@@ -2348,6 +2377,7 @@ uno::Any SwXStyle::GetStyleProperty_Impl(const SfxItemPropertyMapEntry& rEntry, 
             { FN_UNO_NUM_RULES,              std::mem_fn(&SwXStyle::GetStyleProperty<FN_UNO_NUM_RULES>)              },
             { RES_PARATR_OUTLINELEVEL,       std::mem_fn(&SwXStyle::GetStyleProperty<sal_uInt16(RES_PARATR_OUTLINELEVEL)>)       },
             { FN_UNO_FOLLOW_STYLE,           std::mem_fn(&SwXStyle::GetStyleProperty<FN_UNO_FOLLOW_STYLE>)           },
+            { FN_UNO_LINK_STYLE,             std::mem_fn(&SwXStyle::GetStyleProperty<FN_UNO_LINK_STYLE>)             },
             { RES_PAGEDESC,                  std::mem_fn(&SwXStyle::GetStyleProperty<sal_uInt16(RES_PAGEDESC)>)                  },
             { FN_UNO_IS_AUTO_UPDATE,         std::mem_fn(&SwXStyle::GetStyleProperty<FN_UNO_IS_AUTO_UPDATE>)         },
             { FN_UNO_DISPLAY_NAME,           std::mem_fn(&SwXStyle::GetStyleProperty<FN_UNO_DISPLAY_NAME>)           },
@@ -2512,7 +2542,8 @@ uno::Sequence<beans::PropertyState> SwXStyle::getPropertyStates(const uno::Seque
         if(!pEntry)
             throw beans::UnknownPropertyException("Unknown property: " + sPropName, static_cast<cppu::OWeakObject*>(this));
 
-        if(FN_UNO_NUM_RULES == pEntry->nWID || FN_UNO_FOLLOW_STYLE == pEntry->nWID)
+        if (FN_UNO_NUM_RULES == pEntry->nWID || FN_UNO_FOLLOW_STYLE == pEntry->nWID
+            || pEntry->nWID == FN_UNO_LINK_STYLE)
         {
             // handle NumRules first, done
             pStates[i] = beans::PropertyState_DIRECT_VALUE;
@@ -2625,7 +2656,8 @@ void SAL_CALL SwXStyle::setPropertiesToDefault(const uno::Sequence<OUString>& aP
         const SfxItemPropertyMapEntry* pEntry = rMap.getByName(rName);
         if(!pEntry)
             throw beans::UnknownPropertyException("Unknown property: " + rName, static_cast<cppu::OWeakObject*>(this));
-        if(pEntry->nWID == FN_UNO_FOLLOW_STYLE || pEntry->nWID == FN_UNO_NUM_RULES)
+        if (pEntry->nWID == FN_UNO_FOLLOW_STYLE || pEntry->nWID == FN_UNO_LINK_STYLE
+            || pEntry->nWID == FN_UNO_NUM_RULES)
             throw uno::RuntimeException("Cannot reset: " + rName, static_cast<cppu::OWeakObject*>(this));
         if(pEntry->nFlags & beans::PropertyAttribute::READONLY)
             throw uno::RuntimeException("setPropertiesToDefault: property is read-only: " + rName, static_cast<cppu::OWeakObject*>(this));

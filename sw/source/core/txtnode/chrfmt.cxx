@@ -27,9 +27,20 @@ void SwCharFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwCharFormat"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"),
                                       BAD_CAST(GetName().toUtf8().getStr()));
+
+    if (mpLinkedParaFormat)
+    {
+        (void)xmlTextWriterWriteAttribute(
+            pWriter, BAD_CAST("linked"), BAD_CAST(mpLinkedParaFormat->GetName().toUtf8().getStr()));
+    }
+
     GetAttrSet().dumpAsXml(pWriter);
     (void)xmlTextWriterEndElement(pWriter);
 }
+
+void SwCharFormat::SetLinkedParaFormat(SwTextFormatColl& rLink) { mpLinkedParaFormat = &rLink; }
+
+const SwTextFormatColl* SwCharFormat::GetLinkedParaFormat() const { return mpLinkedParaFormat; }
 
 void SwCharFormats::dumpAsXml(xmlTextWriterPtr pWriter) const
 {

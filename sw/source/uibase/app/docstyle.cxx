@@ -733,6 +733,51 @@ const OUString&  SwDocStyleSheet::GetFollow() const
     return aFollow;
 }
 
+void SwDocStyleSheet::SetLink(const OUString& rStr)
+{
+    SwImplShellAction aTmpSh(m_rDoc);
+    switch (nFamily)
+    {
+        case SfxStyleFamily::Para:
+        {
+            if (m_pColl)
+            {
+                SwCharFormat* pLink = lcl_FindCharFormat(m_rDoc, rStr);
+                if (pLink)
+                {
+                    m_pColl->SetLinkedCharFormat(*pLink);
+                }
+            }
+            break;
+        }
+        case SfxStyleFamily::Char:
+        {
+            if (m_pCharFormat)
+            {
+                SwTextFormatColl* pLink = lcl_FindParaFormat(m_rDoc, rStr);
+                if (pLink)
+                {
+                    m_pCharFormat->SetLinkedParaFormat(*pLink);
+                }
+            }
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+const OUString& SwDocStyleSheet::GetLink() const
+{
+    if (!m_bPhysical)
+    {
+        SwDocStyleSheet* pThis = const_cast<SwDocStyleSheet*>(this);
+        pThis->FillStyleSheet(FillAllInfo);
+    }
+
+    return m_aLink;
+}
+
 // What Linkage is possible
 bool  SwDocStyleSheet::HasFollowSupport() const
 {
@@ -1849,12 +1894,22 @@ bool SwDocStyleSheet::FillStyleSheet(
         }
 
         pFormat = m_pCharFormat;
+        m_aLink.clear();
         if( !bCreate && !pFormat )
         {
             if( aName == SwResId(STR_POOLCHR_STANDARD))
                 nPoolId = 0;
             else
                 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( aName, SwGetPoolIdFromName::ChrFmt );
+        }
+
+        if (m_pCharFormat)
+        {
+            const SwTextFormatColl* pParaFormat = m_pCharFormat->GetLinkedParaFormat();
+            if (pParaFormat)
+            {
+                m_aLink = pParaFormat->GetName();
+            }
         }
 
         bRet = nullptr != m_pCharFormat || USHRT_MAX != nPoolId;
@@ -1876,8 +1931,16 @@ bool SwDocStyleSheet::FillStyleSheet(
             }
 
             pFormat = m_pColl;
+            m_aLink.clear();
             if( m_pColl )
+            {
                 PresetFollow( m_pColl->GetNextTextFormatColl().GetName() );
+                const SwCharFormat* pCharFormat = m_pColl->GetLinkedCharFormat();
+                if (pCharFormat)
+                {
+                    m_aLink = pCharFormat->GetName();
+                }
+            }
             else if( !bCreate )
                 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( aName, SwGetPoolIdFromName::TxtColl );
 

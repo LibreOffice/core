@@ -134,6 +134,30 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testBiblioLocalCopy)
     CPPUNIT_ASSERT_EQUAL(OUString("file:///home/me/test.pdf"), aActual);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testLinkedStyles)
+{
+    // Given an empty document:
+    createSwDoc();
+
+    // When defining a linked style for a para style:
+    uno::Reference<container::XNameAccess> xParaStyles = getStyles("ParagraphStyles");
+    uno::Reference<beans::XPropertySet> xParaStyle(xParaStyles->getByName("Caption"),
+                                                   uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(xParaStyle, "LinkStyle"));
+    xParaStyle->setPropertyValue("LinkStyle", uno::makeAny(OUString("Emphasis")));
+    // Then make sure we get the linked char style back:
+    CPPUNIT_ASSERT_EQUAL(OUString("Emphasis"), getProperty<OUString>(xParaStyle, "LinkStyle"));
+
+    // When defining a linked style for a char style:
+    uno::Reference<container::XNameAccess> xCharStyles = getStyles("CharacterStyles");
+    uno::Reference<beans::XPropertySet> xCharStyle(xCharStyles->getByName("Emphasis"),
+                                                   uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(xCharStyle, "LinkStyle"));
+    xCharStyle->setPropertyValue("LinkStyle", uno::makeAny(OUString("Caption")));
+    // Then make sure we get the linked para style back:
+    CPPUNIT_ASSERT_EQUAL(OUString("Caption"), getProperty<OUString>(xCharStyle, "LinkStyle"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -584,6 +584,7 @@
 #define FN_INSERT_GLOSSARY                  (FN_EXTRA2 + 89)
 #define FN_NEW_GLOSSARY                     (FN_EXTRA2 + 90)
 #define FN_SET_ACT_GLOSSARY                 (FN_EXTRA2 + 91)
+#define FN_UNO_LINK_STYLE (FN_EXTRA2 + 92)
 
 #define FN_UNO_CHARFMT_SEQUENCE             (FN_EXTRA2 + 94)
 #define FN_UNO_CLSID                        (FN_EXTRA2 + 95)

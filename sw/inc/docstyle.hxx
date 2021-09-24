@@ -60,6 +60,7 @@ class SW_DLLPUBLIC SwDocStyleSheet final : public SfxStyleSheetBase
     SfxItemSet          m_aCoreSet;
 
     bool                m_bPhysical;
+    OUString m_aLink;
 
     /// Make empty shell a real StyleSheet (Core).
     SAL_DLLPRIVATE void              Create();
@@ -109,6 +110,7 @@ public:
     void MergeIndentAttrsOfListStyle( SfxItemSet& rSet );
     virtual const OUString& GetParent() const override;
     virtual const OUString& GetFollow() const override;
+    const OUString& GetLink() const;
 
     virtual sal_uLong GetHelpId( OUString& rFile ) override;
     virtual void SetHelpId( const OUString& r, sal_uLong nId ) override;
@@ -123,6 +125,7 @@ public:
     virtual bool            SetName(const OUString& rNewName, bool bReindexNow = true) override;
     virtual bool            SetParent( const OUString& rStr) override;
     virtual bool            SetFollow( const OUString& rStr) override;
+    void SetLink(const OUString& rStr);
 
     virtual bool            HasFollowSupport() const override;
     virtual bool            HasParentSupport() const override;

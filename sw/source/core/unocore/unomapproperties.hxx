@@ -455,6 +455,7 @@
                     { u"" UNO_NAME_CHAR_RELIEF, RES_CHRATR_RELIEF,      cppu::UnoType<sal_Int16>::get(),    PROPERTY_NONE,      MID_RELIEF },\
                     PROP_DIFF_FONTHEIGHT\
                     { u"" UNO_NAME_FOLLOW_STYLE, FN_UNO_FOLLOW_STYLE,     cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0},\
+                    { u"" UNO_NAME_LINK_STYLE, FN_UNO_LINK_STYLE,     cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0},\
                     { u"" UNO_NAME_IS_PHYSICAL, FN_UNO_IS_PHYSICAL,     cppu::UnoType<bool>::get(), PropertyAttribute::READONLY, 0},\
                     { u"" UNO_NAME_IS_AUTO_UPDATE, FN_UNO_IS_AUTO_UPDATE, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},\
                     { u"" UNO_NAME_DISPLAY_NAME, FN_UNO_DISPLAY_NAME, cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0},\
