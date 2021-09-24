@@ -155,12 +155,12 @@ ErrCode SwASCIIParser::CallParser()
 
     ::StartProgress(STR_STATSTR_W4WREAD, 0, m_nFileSize, m_rDoc.GetDocShell());
 
-    std::unique_ptr<SwPaM> pInsPam;
+    std::optional<SwPaM> pInsPam;
     sal_Int32 nSttContent = 0;
     if (!m_bNewDoc)
     {
         const SwNodeIndex& rTmp = m_pPam->GetPoint()->nNode;
-        pInsPam.reset(new SwPaM( rTmp, rTmp, 0, -1 ));
+        pInsPam.emplace( rTmp, rTmp, 0, -1 );
         nSttContent = m_pPam->GetPoint()->nContent.GetIndex();
     }
 

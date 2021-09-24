@@ -1630,7 +1630,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
         tAccParaPropValMap& rRunAttrSeq )
 {
     // create PaM for character at position <nIndex>
-    std::unique_ptr<SwPaM> pPaM;
+    std::optional<SwPaM> pPaM;
     const TextFrameIndex nCorePos(GetPortionData().GetCoreViewPosition(nIndex));
     SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
     SwPosition const aModelPos(pFrame->MapViewToModelPos(nCorePos));
@@ -1640,7 +1640,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
             aModelPos.nContent.GetIndex() == pTextNode->Len()
                 ? pTextNode->Len() // ???
                 : aModelPos.nContent.GetIndex() + 1);
-        pPaM.reset(new SwPaM(aModelPos, aEndPos));
+        pPaM.emplace(aModelPos, aEndPos);
     }
 
     // retrieve character attributes for the created PaM <pPaM>

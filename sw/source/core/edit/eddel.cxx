@@ -91,12 +91,12 @@ void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
     }
     else
     {
-        std::unique_ptr<SwPaM> pNewPam;
+        std::optional<SwPaM> pNewPam;
         SwPaM * pPam = &rPam;
         if (bSelectAll)
         {
             assert(dynamic_cast<SwShellCursor*>(&rPam)); // must be corrected pam
-            pNewPam.reset(new SwPaM(*rPam.GetMark(), *rPam.GetPoint()));
+            pNewPam.emplace(*rPam.GetMark(), *rPam.GetPoint());
             // Selection starts at the first para of the first cell, but we
             // want to delete the table node before the first cell as well.
             while (SwTableNode const* pTableNode =
@@ -111,7 +111,7 @@ void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
                 pNewPam->Start()->nNode = *pSectionNode;
             }
             pNewPam->Start()->nContent.Assign(nullptr, 0);
-            pPam = pNewPam.get();
+            pPam = &*pNewPam;
         }
         // delete everything
         GetDoc()->getIDocumentContentOperations().DeleteAndJoin(*pPam);
