@@ -749,15 +749,13 @@ public:
     XclExpDxfs( const XclExpRoot& rRoot );
 
     sal_Int32 GetDxfId(const OUString& rName);
-    sal_Int32 GetDxfByBackColor(Color aColor);
-    sal_Int32 GetDxfByForeColor(Color aColor);
+    sal_Int32 GetDxfByColor(Color aColor);
 
     virtual void SaveXml( XclExpXmlStream& rStrm) override;
 private:
     typedef std::vector< std::unique_ptr<XclExpDxf> > DxfContainer;
     std::map<OUString, sal_Int32> maStyleNameToDxfId;
-    std::map<Color, sal_Int32> maBackColorToDxfId;
-    std::map<Color, sal_Int32> maForeColorToDxfId;
+    std::map<Color, sal_Int32> maColorToDxfId;
     DxfContainer maDxf;
     std::unique_ptr<NfKeywordTable>   mpKeywordTable; /// Replacement table.
 };

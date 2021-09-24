@@ -850,13 +850,18 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
             if (!maColorValues.empty())
             {
                 Color color = maColorValues[0].first;
-                sal_Int32 nDxfId;
+                rtl::Reference<sax_fastparser::FastAttributeList> pAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
+
                 if (maColorValues[0].second) // is background color
-                    nDxfId = GetDxfs().GetDxfByBackColor(color);
+                {
+                    pAttrList->add(XML_cellColor, OString::number(1));
+                }
                 else
-                    nDxfId = GetDxfs().GetDxfByForeColor(color);
-                nDxfId++; // Count is 1-based
-                rWorksheet->singleElement(XML_colorFilter, XML_dxfId, OString::number(nDxfId));
+                {
+                    pAttrList->add(XML_cellColor, OString::number(0));
+                }
+                pAttrList->add(XML_dxfId, OString::number(GetDxfs().GetDxfByColor(color)));
+                rWorksheet->singleElement(XML_colorFilter, pAttrList);
             }
         }
         break;
