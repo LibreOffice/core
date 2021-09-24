@@ -50,6 +50,24 @@
       "message": "Did you make sure that this test fails without the fix?",
       "revId": "b2fc3c912463fa9f6a81907a016a8182f3156f41",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b881d05_f865bf71",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2021-09-24T13:07:06Z",
+      "side": 1,
+      "message": "Yes, it is failing with this:\nExpected: 1\nActual: 2",
+      "parentUuid": "f560f64c_6ae87ba2",
+      "revId": "b2fc3c912463fa9f6a81907a016a8182f3156f41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
