@@ -69,6 +69,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f1a9fce_c3c344aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-24T06:24:13Z",
+      "side": 1,
+      "message": "Note how \u003dDATE(1582;1;1) gives error - likely because ScInterpreter::GetDateSerial checks Date::IsValidAndGregorian",
+      "revId": "1d2128e11fca49d057bdf18589bfc9adb5346ae0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e6cf6d3a_55b32344",
