@@ -45,6 +45,7 @@
 #include <grfatr.hxx>
 #include <cntfrm.hxx>
 #include <flyfrm.hxx>
+#include <swcrsr.hxx>
 #include <swtable.hxx>
 #include <redline.hxx>
 #include <docary.hxx>
@@ -202,7 +203,7 @@ SwUndoInsert::~SwUndoInsert()
 void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc *const pTmpDoc = & rContext.GetDoc();
-    SwPaM *const pPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
+    SwCursor *const pPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
 
     if( m_bIsAppend )
     {
@@ -289,7 +290,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc *const pTmpDoc = & rContext.GetDoc();
-    SwPaM *const pPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
+    SwCursor *const pPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
     pPam->DeleteMark();
 
     if( m_bIsAppend )
@@ -638,7 +639,7 @@ SwUndoReplace::Impl::Impl(
 void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc *const pDoc = & rContext.GetDoc();
-    SwPaM & rPam(rContext.GetCursorSupplier().CreateNewShellCursor());
+    SwCursor & rPam(rContext.GetCursorSupplier().CreateNewShellCursor());
     rPam.DeleteMark();
 
     SwTextNode* pNd = pDoc->GetNodes()[ m_nSttNd - m_nOffset ]->GetTextNode();
@@ -720,7 +721,7 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoReplace::Impl::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
-    SwPaM & rPam(rContext.GetCursorSupplier().CreateNewShellCursor());
+    SwCursor & rPam(rContext.GetCursorSupplier().CreateNewShellCursor());
     rPam.DeleteMark();
     rPam.GetPoint()->nNode = m_nSttNd;
 

@@ -3651,7 +3651,7 @@ void SwContentTree::UpdateTracking()
 
 void SwContentTree::SelectOutlinesWithSelection()
 {
-    SwCursor* pFirstCursor = m_pActiveShell->GetSwCursor();
+    SwCursor* pFirstCursor = m_pActiveShell->GetCursor();
     SwCursor* pCursor = pFirstCursor;
     std::vector<SwOutlineNodes::size_type> aOutlinePositions;
     do

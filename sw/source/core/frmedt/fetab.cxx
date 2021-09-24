@@ -90,7 +90,7 @@ public:
 
 void SwFEShell::ParkCursorInTab()
 {
-    SwCursor * pSwCursor = GetSwCursor();
+    SwCursor * pSwCursor = GetCursor();
 
     OSL_ENSURE(pSwCursor, "no SwCursor");
 

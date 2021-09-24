@@ -1448,7 +1448,7 @@ void SwXTextViewCursor::setString(const OUString& aString)
         case ShellMode::Text            :
         {
             SwWrtShell& rSh = m_pView->GetWrtShell();
-            SwCursor* pShellCursor = rSh.GetSwCursor();
+            SwCursor* pShellCursor = rSh.GetCursor();
             SwUnoCursorHelper::SetString(*pShellCursor, aString);
             break;
         }
