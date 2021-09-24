@@ -191,6 +191,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e44e18eb_94c3b14b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-24T09:24:02Z",
+      "side": 1,
+      "message": "\u003e I thougth that this would just solve the ISLEAPYEAR problem\n\nI meant, it would not even fix ISLEAPYEAR in full: \u003dISLEAPYEAR(\"1100-12-31\") would still give FALSE.\n\n\u003e Sometimes I sit at home ...\n\nYeah 😊 Happens to me, too 😉",
+      "revId": "1d2128e11fca49d057bdf18589bfc9adb5346ae0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e6cf6d3a_55b32344",
