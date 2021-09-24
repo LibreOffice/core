@@ -2032,6 +2032,7 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
             pFormat->Broadcast( SwFormatFieldHint( nullptr, SwFormatFieldHintWhich::FOCUS, &GetView() ) );
     }
 }
+
 bool SwWrtShell::IsOutlineContentVisible(const size_t nPos)
 {
     const SwOutlineNodes& rOutlineNodes = GetDoc()->GetNodes().GetOutLineNds();
@@ -2047,20 +2048,37 @@ bool SwWrtShell::IsOutlineContentVisible(const size_t nPos)
     if (&aIdx.GetNode() == &aIdx.GetNodes().GetEndOfContent()) // end of regular content
         return false;
 
-    if (aIdx.GetNode().IsTextNode())
+    if (aIdx.GetNode().IsTextNode() || aIdx.GetNode().IsTableNode() ||
+            aIdx.GetNode().IsSectionNode())
     {
-        // sublevels treated as outline content
-        //   If next node (aIdx) doesn't have a layout frame
-        //  then this outline node does not have visible outline content.
-        // sublevels NOT treated as outline content
-        //   If the next node (aIdx) is the next outline node
-        //   then return the outline content visible attribute value.
+        // * sublevels treated as outline content
+        //     If next node (aIdx) doesn't have a layout frame
+        //     then this outline node does not have visible outline content.
+        // * sublevels NOT treated as outline content
+        //     If the next node (aIdx) is the next outline node
+        //     then return the outline content visible attribute value.
         if (!GetViewOptions()->IsTreatSubOutlineLevelsAsContent() &&
                 nPos + 1 < rOutlineNodes.size() &&
                 rOutlineNodes[nPos + 1] == &aIdx.GetNode())
             return GetAttrOutlineContentVisible(nPos);
 
-        return aIdx.GetNode().GetTextNode()->getLayoutFrame(nullptr);
+        if (aIdx.GetNode().IsTextNode())
+            return aIdx.GetNode().GetTextNode()->getLayoutFrame(nullptr);
+        if (aIdx.GetNode().IsTableNode())
+        {
+            SwTable& rTable = aIdx.GetNode().GetTableNode()->GetTable();
+            return rTable.HasLayout();
+        }
+        if (aIdx.GetNode().IsSectionNode())
+        {
+            const SwSectionFormat* pFormat =
+                    aIdx.GetNode().GetSectionNode()->GetSection().GetFormat();
+            if (!pFormat)
+                return false;
+            SwPtrMsgPoolItem aAskItem(RES_CONTENT_VISIBLE, nullptr);
+            pFormat->GetInfo(aAskItem);
+            return aAskItem.pObject;
+        }
     }
 
     return true;
