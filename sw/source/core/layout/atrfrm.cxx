@@ -2549,12 +2549,12 @@ SwFrameFormat::~SwFrameFormat()
 
     if( nullptr != m_pOtherTextBoxFormat )
     {
-        auto pObj = FindRealSdrObject();
-        if (Which() == RES_FLYFRMFMT && pObj)
+
+        if (Which() == RES_FLYFRMFMT)
         {
             // This is a fly-frame-format just delete this
             // textbox entry from the draw-frame-format.
-            m_pOtherTextBoxFormat->DelTextBox(pObj);
+            m_pOtherTextBoxFormat->DelTextBox(this);
         }
 
         if (Which() == RES_DRAWFRMFMT)
@@ -2564,6 +2564,7 @@ SwFrameFormat::~SwFrameFormat()
             delete m_pOtherTextBoxFormat;
             m_pOtherTextBoxFormat = nullptr;
         }
+
     }
 }
 
