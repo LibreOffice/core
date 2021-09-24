@@ -275,6 +275,7 @@ public:
     virtual std::unique_ptr<weld::MenuButton> weld_menu_button(const OString& id) override;
     virtual std::unique_ptr<weld::Popover> weld_popover(const OString& id) override;
     virtual std::unique_ptr<weld::Box> weld_box(const OString& id) override;
+    virtual std::unique_ptr<weld::Widget> weld_widget(const OString& id) override;
 
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent,
                                                     VclMessageType eMessageType,

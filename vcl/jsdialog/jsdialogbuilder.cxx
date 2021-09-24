@@ -1045,6 +1045,19 @@ std::unique_ptr<weld::Box> JSInstanceBuilder::weld_box(const OString& id)
     return pWeldWidget;
 }
 
+std::unique_ptr<weld::Widget> JSInstanceBuilder::weld_widget(const OString& id)
+{
+    vcl::Window* pWidget = m_xBuilder->get(id);
+    auto pWeldWidget = pWidget ? std::make_unique<JSWidget<SalInstanceWidget, vcl::Window>>(
+                                     this, pWidget, this, false)
+                               : nullptr;
+
+    if (pWeldWidget)
+        RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
 weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent,
                                                             VclMessageType eMessageType,
                                                             VclButtonsType eButtonType,
