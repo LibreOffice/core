@@ -2,10 +2,54 @@
 <!-- Generated with glade 3.38.2 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
-  <object class="GtkListStore" id="liststore1"/>
-  <object class="GtkListStore" id="liststore2"/>
-  <object class="GtkListStore" id="liststore3"/>
-  <object class="GtkListStore" id="liststore4"/>
+  <object class="GtkListStore" id="liststore1">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name image -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name surface -->
+      <column type="CairoSurface"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="liststore2">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name image -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name surface -->
+      <column type="CairoSurface"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="liststore3">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name image -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name surface -->
+      <column type="CairoSurface"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="liststore4">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name color -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name surface -->
+      <column type="CairoSurface"/>
+    </columns>
+  </object>
   <object class="GtkDialog" id="StandardFilterDialog">
     <property name="can-focus">False</property>
     <property name="border-width">6</property>
@@ -506,6 +550,20 @@
                                         <property name="can-focus">False</property>
                                         <property name="hexpand">True</property>
                                         <property name="model">liststore1</property>
+                                        <property name="entry-text-column">0</property>
+                                        <property name="id-column">1</property>
+                                        <child>
+                                          <object class="GtkCellRendererText"/>
+                                          <attributes>
+                                            <attribute name="text">1</attribute>
+                                          </attributes>
+                                        </child>
+                                        <child>
+                                          <object class="GtkCellRendererPixbuf"/>
+                                          <attributes>
+                                            <attribute name="pixbuf">3</attribute>
+                                          </attributes>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -555,6 +613,20 @@
                                         <property name="can-focus">False</property>
                                         <property name="hexpand">True</property>
                                         <property name="model">liststore2</property>
+                                        <property name="entry-text-column">0</property>
+                                        <property name="id-column">1</property>
+                                        <child>
+                                          <object class="GtkCellRendererText"/>
+                                          <attributes>
+                                            <attribute name="text">1</attribute>
+                                          </attributes>
+                                        </child>
+                                        <child>
+                                          <object class="GtkCellRendererPixbuf"/>
+                                          <attributes>
+                                            <attribute name="pixbuf">3</attribute>
+                                          </attributes>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -604,6 +676,20 @@
                                         <property name="can-focus">False</property>
                                         <property name="hexpand">True</property>
                                         <property name="model">liststore3</property>
+                                        <property name="entry-text-column">0</property>
+                                        <property name="id-column">1</property>
+                                        <child>
+                                          <object class="GtkCellRendererText"/>
+                                          <attributes>
+                                            <attribute name="text">1</attribute>
+                                          </attributes>
+                                        </child>
+                                        <child>
+                                          <object class="GtkCellRendererPixbuf"/>
+                                          <attributes>
+                                            <attribute name="pixbuf">3</attribute>
+                                          </attributes>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -653,6 +739,20 @@
                                         <property name="can-focus">False</property>
                                         <property name="hexpand">True</property>
                                         <property name="model">liststore4</property>
+                                        <property name="entry-text-column">0</property>
+                                        <property name="id-column">1</property>
+                                        <child>
+                                          <object class="GtkCellRendererText"/>
+                                          <attributes>
+                                            <attribute name="text">1</attribute>
+                                          </attributes>
+                                        </child>
+                                        <child>
+                                          <object class="GtkCellRendererPixbuf"/>
+                                          <attributes>
+                                            <attribute name="pixbuf">3</attribute>
+                                          </attributes>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
