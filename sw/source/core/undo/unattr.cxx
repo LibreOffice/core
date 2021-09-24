@@ -39,6 +39,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IShellCursorSupplier.hxx>
 #include <docary.hxx>
+#include <swcrsr.hxx>
 #include <swundo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -1035,7 +1036,7 @@ SwUndoDontExpandFormat::SwUndoDontExpandFormat( const SwPosition& rPos )
 
 void SwUndoDontExpandFormat::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwPaM *const pPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
+    SwCursor *const pPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
     SwDoc *const pDoc = & rContext.GetDoc();
 
     SwPosition& rPos = *pPam->GetPoint();

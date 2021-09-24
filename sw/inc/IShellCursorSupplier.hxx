@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_INC_ISHELLCURSORSUPPLIER_HXX
 #define INCLUDED_SW_INC_ISHELLCURSORSUPPLIER_HXX
 
-class SwPaM;
+class SwCursor;
 
 namespace sw
 {
@@ -32,8 +32,8 @@ class IShellCursorSupplier
 {
 public:
     virtual ~IShellCursorSupplier() {}
-    virtual SwPaM& CreateNewShellCursor() = 0;
-    virtual SwPaM& GetCurrentShellCursor() = 0;
+    virtual SwCursor& CreateNewShellCursor() = 0;
+    virtual SwCursor& GetCurrentShellCursor() = 0;
 };
 
 } // namespace sw

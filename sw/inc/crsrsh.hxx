@@ -300,8 +300,8 @@ public:
     virtual ~SwCursorShell() override;
 
     // create new cursor and append the old one
-    virtual SwPaM & CreateNewShellCursor() override;
-    virtual SwPaM & GetCurrentShellCursor() override;
+    virtual SwCursor & CreateNewShellCursor() override;
+    virtual SwCursor & GetCurrentShellCursor() override;
 
     SwPaM * CreateCursor();
     ///< delete the current cursor and make the following into the current
@@ -322,7 +322,7 @@ public:
     /// If document body starts with a table.
     bool StartsWithTable();
 
-    SwPaM* GetCursor( bool bMakeTableCursor = true ) const;
+    SwCursor* GetCursor( bool bMakeTableCursor = true ) const;
     inline SwCursor* GetSwCursor() const;
     // return only the current cursor
           SwShellCursor* GetCursor_()                       { return m_pCurrentCursor; }
