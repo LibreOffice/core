@@ -64,8 +64,13 @@ public:
     /// like group shapes, it will destroy only that textbox what belongs
     /// to the given pObject shape.
     static void destroy(SwFrameFormat* pShape, SdrObject* pObject);
+    /// Sets the given extising textframe for the shape to become a texbox.
+    /// Used by the TEXT_BOX_CONTENT property setting.
+    static void setTextBox(SwFrameFormat* pShape, SdrObject* pObject,
+                           css::uno::Reference<css::text::XTextFrame> xNew);
     /// Get interface of a shape's TextBox, if there is any.
-    static css::uno::Any queryInterface(const SwFrameFormat* pShape, const css::uno::Type& rType);
+    static css::uno::Any queryInterface(const SwFrameFormat* pShape, const css::uno::Type& rType,
+                                        SdrObject* pObj = nullptr);
 
     /// Sync property of TextBox with the one of the shape.
     static void syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID,
