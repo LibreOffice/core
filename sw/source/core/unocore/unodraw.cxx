@@ -964,7 +964,13 @@ SwXShape::~SwXShape()
 
 uno::Any SwXShape::queryInterface( const uno::Type& aType )
 {
-    uno::Any aRet = SwTextBoxHelper::queryInterface(GetFrameFormat(), aType);
+    uno::Any aRet;
+    if (aType == cppu::UnoType<text::XText>::get() ||
+        aType == cppu::UnoType<text::XTextAppend>::get() ||
+        aType == cppu::UnoType<text::XTextRange>::get())
+        aRet = SwTextBoxHelper::queryInterface(GetFrameFormat(), aType,
+                                               SdrObject::getSdrObjectFromXShape(mxShape));
+
     if (aRet.hasValue())
         return aRet;
 

@@ -387,9 +387,11 @@ SwTextBoxHelper::getUnoTextFrame(uno::Reference<drawing::XShape> const& xShape)
     return {};
 }
 
-template <typename T> static void lcl_queryInterface(const SwFrameFormat* pShape, uno::Any& rAny)
+template <typename T>
+static void lcl_queryInterface(const SwFrameFormat* pShape, uno::Any& rAny, SdrObject* pObj)
 {
-    if (SwFrameFormat* pFormat = SwTextBoxHelper::getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT))
+    if (SwFrameFormat* pFormat
+        = SwTextBoxHelper::getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT, pObj))
     {
         uno::Reference<T> const xInterface(
             SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat), uno::UNO_QUERY);
@@ -397,21 +399,22 @@ template <typename T> static void lcl_queryInterface(const SwFrameFormat* pShape
     }
 }
 
-uno::Any SwTextBoxHelper::queryInterface(const SwFrameFormat* pShape, const uno::Type& rType)
+uno::Any SwTextBoxHelper::queryInterface(const SwFrameFormat* pShape, const uno::Type& rType,
+                                         SdrObject* pObj)
 {
     uno::Any aRet;
 
     if (rType == cppu::UnoType<css::text::XTextAppend>::get())
     {
-        lcl_queryInterface<text::XTextAppend>(pShape, aRet);
+        lcl_queryInterface<text::XTextAppend>(pShape, aRet, pObj);
     }
     else if (rType == cppu::UnoType<css::text::XText>::get())
     {
-        lcl_queryInterface<text::XText>(pShape, aRet);
+        lcl_queryInterface<text::XText>(pShape, aRet, pObj);
     }
     else if (rType == cppu::UnoType<css::text::XTextRange>::get())
     {
-        lcl_queryInterface<text::XTextRange>(pShape, aRet);
+        lcl_queryInterface<text::XTextRange>(pShape, aRet, pObj);
     }
 
     return aRet;
