@@ -160,31 +160,39 @@ void SwRegionRects::Compress()
     {
         sort( begin(), end(), []( const SwRect& l, const SwRect& r ) { return l.Top() < r.Top(); } );
         bAgain = false;
+        bool bRemoved = false;
         for (size_type i = 0; i < size(); ++i )
         {
+            if( (*this)[i].IsEmpty())
+                continue;
             // Rectangles are sorted by Y axis, so check only pairs of rectangles
             // that are possibly overlapping or adjacent or close enough to be grouped by the fuzzy
             // code below.
             const tools::Long nFuzzy = 1361513;
             const tools::Long yMax = (*this)[i].Bottom() + nFuzzy
                 / std::max<tools::Long>( 1, (*this)[i].Width());
-            size_type j = i+1;
-            while( j < size() && (*this)[j].Top() <= yMax )
-                ++j;
-            --j;
-            // Walk backwards for simpler and faster erase().
-            for ( ; j >= i+1; --j )
+            for(size_type j = i+1; j < size(); ++j)
             {
+                if( (*this)[j].IsEmpty())
+                    continue;
+                if( (*this)[j].Top() > yMax )
+                    break;
                 // If one rectangle contains a second completely than the latter
                 // does not need to be stored and can be deleted
+<<<<<<< HEAD   (b96d0f go on switching from boost::property_tree to JsonWriter)
                 if ( (*this)[i].IsInside( (*this)[j] ) )
+=======
+                else if ( (*this)[i].Contains( (*this)[j] ) )
+>>>>>>> CHANGE (e72b4c avoid repeated std::vector::erase() in SwRegionRects::Compre)
                 {
-                    erase( begin() + j );
+                    (*this)[j].Width(0); // = erase(), see below
+                    bRemoved = true;
                 }
                 else if ( (*this)[j].IsInside( (*this)[i] ) )
                 {
                     (*this)[i] = (*this)[j];
-                    erase( begin() + j );
+                    (*this)[j].Width(0);
+                    bRemoved = true;
                     bAgain = true;
                 }
                 else
@@ -217,12 +225,17 @@ void SwRegionRects::Compress()
                          (::CalcArea( aUnion ) - CalcArea( aInter )) )
                     {
                         (*this)[i] = aUnion;
-                        erase( begin() + j );
+                        (*this)[j].Width(0);
+                        bRemoved = true;
                         bAgain = true;
                     }
                 }
             }
         }
+        // Instead of repeated erase() we Width(0) the elements, and now erase
+        // all empty elements just once.
+        if( bRemoved )
+            resize( std::remove_if(begin(), end(), [](const SwRect& rect) { return rect.IsEmpty(); }) - begin());
         // Code paths setting bAgain alter elements of the vector, possibly breaking
         // the Y-axis optimization, so run another pass just to make sure. The adjacent-rects
         // merging code may possibly benefit from a repeated pass also if two pairs of merged
