@@ -1432,10 +1432,8 @@ void ScCellRangesBase::ForgetCurrentAttrs()
 {
     pCurrentFlat.reset();
     pCurrentDeep.reset();
-    pCurrentDataSet.reset();
-    pNoDfltCurrentDataSet.reset();
-    pCurrentDataSet = nullptr;
-    pNoDfltCurrentDataSet = nullptr;
+    moCurrentDataSet.reset();
+    moNoDfltCurrentDataSet.reset();
 
     // #i62483# pMarkData can remain unchanged, is deleted only if the range changes (RefChanged)
 }
@@ -1471,18 +1469,28 @@ const ScPatternAttr* ScCellRangesBase::GetCurrentAttrsDeep()
 
 SfxItemSet* ScCellRangesBase::GetCurrentDataSet(bool bNoDflt)
 {
-    if(!pCurrentDataSet)
+    if(!moCurrentDataSet)
     {
         const ScPatternAttr* pPattern = GetCurrentAttrsDeep();
         if ( pPattern )
         {
             //  replace Dontcare with Default,  so that we always have a reflection
-            pCurrentDataSet.reset( new SfxItemSet( pPattern->GetItemSet() ) );
-            pNoDfltCurrentDataSet.reset( new SfxItemSet( pPattern->GetItemSet() ) );
-            pCurrentDataSet->ClearInvalidItems();
+            moCurrentDataSet.emplace( pPattern->GetItemSet() );
+            moNoDfltCurrentDataSet.emplace( pPattern->GetItemSet() );
+            moCurrentDataSet->ClearInvalidItems();
         }
     }
-    return bNoDflt ? pNoDfltCurrentDataSet.get() : pCurrentDataSet.get();
+    if (bNoDflt)
+    {
+        if (moNoDfltCurrentDataSet)
+            return &*moNoDfltCurrentDataSet;
+    }
+    else
+    {
+        if (moCurrentDataSet)
+            return &*moCurrentDataSet;
+    }
+    return nullptr;
 }
 
 const ScMarkData* ScCellRangesBase::GetMarkData()

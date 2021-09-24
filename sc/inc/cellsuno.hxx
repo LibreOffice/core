@@ -26,6 +26,7 @@
 #include <rtl/ref.hxx>
 #include <sal/types.h>
 #include <tools/link.hxx>
+#include <svl/itemset.hxx>
 #include <svl/lstner.hxx>
 #include <svl/listener.hxx>
 #include <com/sun/star/table/XTableChartsSupplier.hpp>
@@ -89,6 +90,7 @@
 #include <cppuhelper/weakref.hxx>
 
 #include <memory>
+#include <optional>
 #include <vector>
 
 namespace com::sun::star::table { struct BorderLine2; }
@@ -112,7 +114,6 @@ class SfxBroadcaster;
 class SfxHint;
 class SfxItemPropertyMap;
 class SfxItemPropertySet;
-class SfxItemSet;
 struct SfxItemPropertyMapEntry;
 
 namespace editeng { class SvxBorderLine; }
@@ -181,8 +182,8 @@ private:
     std::unique_ptr<ScLinkListener> pValueListener;
     std::unique_ptr<ScPatternAttr>  pCurrentFlat;
     std::unique_ptr<ScPatternAttr>  pCurrentDeep;
-    std::unique_ptr<SfxItemSet>     pCurrentDataSet;
-    std::unique_ptr<SfxItemSet>     pNoDfltCurrentDataSet;
+    std::optional<SfxItemSet>       moCurrentDataSet;
+    std::optional<SfxItemSet>       moNoDfltCurrentDataSet;
     std::unique_ptr<ScMarkData>     pMarkData;
     ScRangeList             aRanges;
     sal_Int64               nObjectId;
