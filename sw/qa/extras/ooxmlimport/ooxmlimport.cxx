@@ -1829,14 +1829,14 @@ CPPUNIT_TEST_FIXTURE(Test, testGroupShapeTextHighlight)
         0xFF00FFUL, // magenta
         0x0000FFUL, // blue
         0xFF0000UL, // red
-        0x00008BUL, // dark blue
-        0x008B8BUL, // dark cyan
-        0x006400UL, // dark green
+        0x000080UL, // dark blue
+        0x008080UL, // dark cyan
+        0x008000UL, // dark green
         0x800080UL, // dark magenta
-        0x8B0000UL, // dark red
+        0x800000UL, // dark red
         0x808000UL, // dark yellow
-        0xA9A9A9UL, // dark grey
-        0xD3D3D3UL, // light grey
+        0x808080UL, // dark grey
+        0xC0C0C0UL, // light grey
         0x000000UL  // black
     };
 
@@ -1852,7 +1852,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGroupShapeTextHighlight)
         uno::Reference<text::XTextRange> firstRun = getRun(firstParagraph, 1);
         uno::Reference<beans::XPropertySet> props(firstRun, uno::UNO_QUERY_THROW);
 
-        CPPUNIT_ASSERT_EQUAL(xColors[idx], props->getPropertyValue("CharBackColor").get<sal_uInt32>());
+        CPPUNIT_ASSERT_EQUAL(xColors[idx], props->getPropertyValue("CharHighlight").get<sal_uInt32>());
     }
 }
 

@@ -1064,7 +1064,7 @@ void SwFEShell::SelectionToTop( bool bTop )
             if (auto pFormat = FindFrameFormat(pObj))
             {
                 // If it has not textframe skip...
-                if (!SwTextBoxHelper::isTextBoxShapeHasValidTextFrame(pFormat))
+                if (!SwTextBoxHelper::isTextBoxShapeHasValidTextFrame(pFormat, pObj))
                     continue;
                 // If it has a textframe so it is a textbox, get its page
                 if (auto pDrwModel
@@ -1133,7 +1133,7 @@ void SwFEShell::SelectionToBottom( bool bBottom )
             if (auto pFormat = FindFrameFormat(pObj))
             {
                 // If the shape has not textframes skip.
-                if (!SwTextBoxHelper::isTextBoxShapeHasValidTextFrame(pFormat))
+                if (!SwTextBoxHelper::isTextBoxShapeHasValidTextFrame(pFormat, pObj))
                     continue;
                 // If has, move the shape to correct level with...
                 if (auto pDrwModel
