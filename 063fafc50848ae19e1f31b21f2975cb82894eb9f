@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb1241e6_328106a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-24T14:42:30Z",
+      "side": 1,
+      "message": "I think there are even compatibility problems. For instance if you open the fods-file from https://gerrit.libreoffice.org/c/core/+/122545 all the data before the Julian/Gregorian cutover date will be changed.",
+      "revId": "063fafc50848ae19e1f31b21f2975cb82894eb9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
