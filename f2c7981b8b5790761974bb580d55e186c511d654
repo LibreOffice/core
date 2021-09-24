@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c03f684b_e311349a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-24T11:09:22Z",
+      "side": 1,
+      "message": "Re-saving as .xlsx or .ods and reloading and recalculating still breaks, #N/A for .xlsx and #NAME? for .ods",
+      "revId": "f2c7981b8b5790761974bb580d55e186c511d654",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
