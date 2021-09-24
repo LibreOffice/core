@@ -225,16 +225,32 @@ private:
 };
 
 
+namespace svl::detail
+{
+/**
+ * Determines the number of sal_uInt16s in a container of pairs of
+ * sal_uInt16s, each representing a range of sal_uInt16s, and total capacity of the ranges.
+ */
+template <sal_uInt16 WID1, sal_uInt16 WID2, sal_uInt16... Rest>
+static constexpr sal_uInt16 CountRanges1()
+{
+    sal_uInt16 nCapacity = rangeSize(WID1, WID2);
+    if constexpr (sizeof...(Rest) > 0)
+        nCapacity += CountRanges1<Rest...>();
+    return nCapacity;
+}}
+
 // Allocate the items array inside the object, to reduce allocation cost.
 //
-template<sal_uInt16 nWID1, sal_uInt16 nWID2>
+template<sal_uInt16... WIDs>
 class SfxItemSetFixed : public SfxItemSet
 {
 public:
     SfxItemSetFixed( SfxItemPool& rPool)
-        : SfxItemSet(rPool, WhichRangesContainer(svl::Items_t<nWID1, nWID2>{}), m_aItems) {}
+        : SfxItemSet(rPool, WhichRangesContainer(svl::Items_t<WIDs...>{}), m_aItems) {}
 private:
-    const SfxPoolItem* m_aItems[nWID2 - nWID1 + 1] = {};
+    static constexpr sal_uInt16 NITEMS = svl::detail::CountRanges1<WIDs...>();
+    const SfxPoolItem* m_aItems[NITEMS] = {};
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

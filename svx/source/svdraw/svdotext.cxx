@@ -1503,11 +1503,10 @@ void SdrTextObj::SetVerticalWriting(bool bVertical)
     tools::Rectangle aObjectRect = GetSnapRect();
 
     // prepare ItemSet to set exchanged width and height items
-    SfxItemSet aNewSet(*rSet.GetPool(),
-        svl::Items<SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
+    SfxItemSetFixed<SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
         // Expanded item ranges to also support hor and ver adjust.
         SDRATTR_TEXT_VERTADJUST, SDRATTR_TEXT_VERTADJUST,
-        SDRATTR_TEXT_AUTOGROWWIDTH, SDRATTR_TEXT_HORZADJUST>);
+        SDRATTR_TEXT_AUTOGROWWIDTH, SDRATTR_TEXT_HORZADJUST> aNewSet(*rSet.GetPool());
 
     aNewSet.Put(rSet);
     aNewSet.Put(makeSdrTextAutoGrowWidthItem(bAutoGrowHeight));

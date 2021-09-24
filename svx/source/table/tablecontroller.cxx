@@ -2749,7 +2749,7 @@ void SvxTableController::SetAttrToSelectedShape(const SfxItemSet& rAttr)
         return;
 
     // Filter out non-shadow items from rAttr.
-    SfxItemSet aSet(*rAttr.GetPool(), svl::Items<SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST>);
+    SfxItemSetFixed<SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST> aSet(*rAttr.GetPool());
     aSet.Put(rAttr);
 
     // Set shadow items on the marked shape.
