@@ -207,7 +207,7 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
     DBG_ASSERT(pPool,"no pool :-(");
     MapUnit eUnit = pPool->GetMetric(nWSize);
     // take over DrawingLayer FillStyles
-    SfxItemSet aSet(*pPool, svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>);
+    SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aSet(*pPool);
     // Keep it valid
     aSet.MergeRange(nWSize, nWSize);
     aSet.MergeRange(nWLRSpace, nWLRSpace);
@@ -642,8 +642,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
                         // create FillAttributes from SvxBrushItem
                         const SvxBrushItem& rItem
                             = static_cast<const SvxBrushItem&>(pBBSet->Get(nWhich));
-                        SfxItemSet aTempSet(*pBBSet->GetPool(),
-                                            svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>);
+                        SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aTempSet(*pBBSet->GetPool());
 
                         setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
                         aFillAttributes =
@@ -717,7 +716,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
                 {
                     // create FillAttributes from SvxBrushItem
                     const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rTmpSet.Get(nWhich));
-                    SfxItemSet aTempSet(*rTmpSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>);
+                    SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aTempSet(*rTmpSet.GetPool());
 
                     setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
                     aHeaderFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(aTempSet);
@@ -753,7 +752,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
                 {
                     // create FillAttributes from SvxBrushItem
                     const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rTmpSet.Get(nWhich));
-                    SfxItemSet aTempSet(*rTmpSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>);
+                    SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aTempSet(*rTmpSet.GetPool());
 
                     setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
                     aFooterFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(aTempSet);
@@ -779,7 +778,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
         {
             // create FillAttributes from SvxBrushItem
             const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rSet.Get(nWhich));
-            SfxItemSet aTempSet(*rSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>);
+            SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aTempSet(*rSet.GetPool());
 
             setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
             aPageFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(aTempSet);
