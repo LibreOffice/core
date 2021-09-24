@@ -310,10 +310,12 @@ SwXReferenceMark::getAnchor()
                     &m_pImpl->m_pDoc->GetNodes()))
             {
                 SwTextNode const& rTextNode = pTextMark->GetTextNode();
-                const std::unique_ptr<SwPaM> pPam( (pTextMark->End())
-                    ?   new SwPaM( rTextNode, *pTextMark->End(),
-                                   rTextNode, pTextMark->GetStart())
-                    :   new SwPaM( rTextNode, pTextMark->GetStart()) );
+                std::optional<SwPaM> pPam;
+                if ( pTextMark->End() )
+                    pPam.emplace( rTextNode, *pTextMark->End(),
+                                   rTextNode, pTextMark->GetStart());
+                else
+                    pPam.emplace( rTextNode, pTextMark->GetStart());
 
                 return SwXTextRange::CreateXTextRange(
                             *m_pImpl->m_pDoc, *pPam->Start(), pPam->End());

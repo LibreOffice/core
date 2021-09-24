@@ -128,9 +128,7 @@ void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
                     rPam = *pRedline;
                 else
                 {
-                    std::unique_ptr<SwPaM> pNewPam;
-                    pNewPam.reset(new SwPaM(*pRedline->GetMark(), *rPam.GetPoint()));
-                    rPam = *pNewPam;
+                    rPam = SwPaM(*pRedline->GetMark(), *rPam.GetPoint());
                 }
             }
         }

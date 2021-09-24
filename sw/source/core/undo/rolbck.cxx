@@ -644,7 +644,7 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
 
     SwNodes& rNds = pDoc->GetNodes();
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
-    std::unique_ptr<SwPaM> pPam;
+    std::optional<SwPaM> pPam;
     ::sw::mark::IMark* pMark = nullptr;
 
     if(m_bSavePos)
@@ -656,12 +656,12 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
 
         // #111660# don't crash when nNode1 doesn't point to content node.
         if(pContentNd)
-            pPam.reset(new SwPaM(*pContentNd, m_nContent));
+            pPam.emplace(*pContentNd, m_nContent);
     }
     else
     {
         pMark = *pMarkAccess->findMark(m_aName);
-        pPam.reset(new SwPaM(pMark->GetMarkPos()));
+        pPam.emplace(pMark->GetMarkPos());
     }
 
     if(m_bSaveOtherPos)
@@ -671,7 +671,7 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
             "<SwHistoryBookmark::SetInDoc(..)>"
             " - wrong node for a mark");
 
-        if (pPam != nullptr && pContentNd)
+        if (pPam && pContentNd)
         {
             pPam->SetMark();
             pPam->GetMark()->nNode = m_nOtherNode;
@@ -739,11 +739,11 @@ void SwHistoryNoTextFieldmark::SetInDoc(SwDoc* pDoc, bool)
     ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     SwNodes& rNds = pDoc->GetNodes();
-    std::unique_ptr<SwPaM> pPam;
+    std::optional<SwPaM> pPam;
 
     const SwContentNode* pContentNd = rNds[m_nNode]->GetContentNode();
     if(pContentNd)
-        pPam.reset(new SwPaM(*pContentNd, m_nContent));
+        pPam.emplace(*pContentNd, m_nContent);
 
     if (pPam)
     {
@@ -757,11 +757,11 @@ void SwHistoryNoTextFieldmark::ResetInDoc(SwDoc& rDoc)
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
     SwNodes& rNds = rDoc.GetNodes();
-    std::unique_ptr<SwPaM> pPam;
+    std::optional<SwPaM> pPam;
 
     const SwContentNode* pContentNd = rNds[m_nNode]->GetContentNode();
     if(pContentNd)
-        pPam.reset(new SwPaM(*pContentNd, m_nContent-1));
+        pPam.emplace(*pContentNd, m_nContent-1);
 
     if (pPam)
     {
