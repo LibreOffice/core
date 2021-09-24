@@ -90,6 +90,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "006c58b0_103252b9",
+        "filename": "i18npool/source/calendar/calendar_gregorian.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-24T15:39:11Z",
+      "side": 1,
+      "message": "Do not use the ICU version, it will fail with any other version. Should be icu::GregorianCalendar instead.",
+      "range": {
+        "startLine": 180,
+        "startChar": 33,
+        "endLine": 180,
+        "endChar": 39
+      },
+      "revId": "063fafc50848ae19e1f31b21f2975cb82894eb9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "27cecdfc_0f0a790f",
         "filename": "i18npool/source/calendar/calendar_gregorian.cxx",
         "patchSetId": 1
