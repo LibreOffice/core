@@ -6441,6 +6441,9 @@ void DocxAttributeOutput::WriteTextBox(uno::Reference<drawing::XShape> xShape)
 {
     DocxTableExportContext aTableExportContext(*this);
 
+    if (uno::Reference<drawing::XShapes>(xShape, uno::UNO_QUERY_THROW).is())
+        return;
+
     SwFrameFormat* pTextBox = SwTextBoxHelper::getOtherTextBoxFormat(xShape);
     assert(pTextBox);
     const SwPosition* pAnchor = nullptr;
