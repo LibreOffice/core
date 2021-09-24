@@ -855,6 +855,7 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
                     nDxfId = GetDxfs().GetDxfByBackColor(color);
                 else
                     nDxfId = GetDxfs().GetDxfByForeColor(color);
+                nDxfId++; // Count is 1-based
                 rWorksheet->singleElement(XML_colorFilter, XML_dxfId, OString::number(nDxfId));
             }
         }
