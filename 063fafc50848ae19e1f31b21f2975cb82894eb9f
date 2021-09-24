@@ -34,6 +34,75 @@
       "parentUuid": "cb1241e6_328106a3",
       "revId": "063fafc50848ae19e1f31b21f2975cb82894eb9f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4158c1d4_2b8e7152",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-24T15:19:07Z",
+      "side": 1,
+      "message": "Eike: so what do you think about how to introduce the option? should it be per-document, or for application? If per-document, we would need to check if the calendar is a singleton, and instead make sure we have a per-document instance.",
+      "parentUuid": "a57e9d7b_42af386f",
+      "revId": "063fafc50848ae19e1f31b21f2975cb82894eb9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9cd227e_de31827e",
+        "filename": "i18npool/source/calendar/calendar_gregorian.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-24T15:19:07Z",
+      "side": 1,
+      "message": "There\u0027s no need to reset it to U_ZERO_ERROR here. You had already checked that it\u0027s some success code; that\u0027s enough for icu functions to work.",
+      "revId": "063fafc50848ae19e1f31b21f2975cb82894eb9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4bd61b5_21d01092",
+        "filename": "i18npool/source/calendar/calendar_gregorian.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-24T15:19:07Z",
+      "side": 1,
+      "message": "Here we need to check that dynamic_cast succeeded (and throw if gregocal is nullptr)",
+      "revId": "063fafc50848ae19e1f31b21f2975cb82894eb9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27cecdfc_0f0a790f",
+        "filename": "i18npool/source/calendar/calendar_gregorian.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-24T15:19:07Z",
+      "side": 1,
+      "message": "I believe it\u0027s wrong. This is milliseconds since UNIX epoch; see UDate definition in UnpackedTarball/icu/source/common/unicode/utypes.h. So here you make all dates till 1970 Julian.\n\nIt could be enough to just pass std::numeric_limits\u003cdouble\u003e::min() here: current implementation of GregorianCalendar::setGregorianChange checks its limits, and if the value is too small, sets the internal cutover day to INT32_MIN. But the sanitizing was introduced only recently ( https://github.com/unicode-org/icu/commit/ddadc9427b243e5224f3b398d96e0b99d9301642 ), so we need to consider that, and pass the value corresponding to INT32_MIN manually:\n\n    constexpr UDate udate \u003d double(SAL_MIN_INT32) * U_MILLIS_PER_DAY;",
+      "revId": "063fafc50848ae19e1f31b21f2975cb82894eb9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
