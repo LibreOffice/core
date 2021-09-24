@@ -48,6 +48,8 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf123621, "tdf123621.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf131540, "tdf131540.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // There are 2 OLEs test if one of them moved on save:
     CPPUNIT_ASSERT_EQUAL_MESSAGE("The shape1 moved on saving!", text::RelOrientation::PAGE_FRAME,
                                  getProperty<sal_Int16>(getShape(1), "HoriOrientRelation"));
@@ -791,6 +793,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138345_charStyleHighlight, "tdf138345_charStyleH
 
 DECLARE_OOXMLEXPORT_TEST(testTdf125268, "tdf125268.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     const uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 1, "Hello"), uno::UNO_QUERY);
     // Without the fix in place, this test would have failed with
     // - Expected: -1
@@ -921,6 +924,8 @@ DECLARE_OOXMLEXPORT_TEST(TestTdf132483, "tdf132483.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(TestTdf143028, "fail_bracePair.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     auto pExportXml = parseExport();
 
     CPPUNIT_ASSERT_EQUAL(1, getXPathNode(

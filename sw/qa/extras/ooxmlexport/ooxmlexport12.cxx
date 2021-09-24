@@ -923,6 +923,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf117137, "tdf117137.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf138780, "tdf138780.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Paragraphs were not part of a numbering anymore after roundtrip.
     uno::Reference<beans::XPropertySet> xPara1(getParagraph(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPara1.is());

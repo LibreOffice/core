@@ -185,6 +185,8 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf123873, "tdf123873.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Tdf133065, "tdf133065.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(7, getShapes());
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
     auto pxmldoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pxmldoc);
     OUString aVal;

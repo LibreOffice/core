@@ -95,6 +95,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf92470_footnoteRestart, "tdf92470_footnoteRestart
 
 DECLARE_OOXMLEXPORT_TEST(testTdf108944_footnoteSeparator2, "tdf108944_footnoteSeparator2.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     //This was zero. The comment was causing the bHasFtnSep flag to be reset to false, so the separator was missing.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(25), getProperty<sal_Int32>(xPageStyle, "FootnoteLineRelativeWidth"));
@@ -1206,6 +1207,8 @@ CPPUNIT_TEST_FIXTURE(Test, testBodyPrUpright)
 
 DECLARE_OOXMLEXPORT_TEST(testLostArrow, "tdf99810-lost-arrow.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#99810: check whether we use normal shape instead of connector shape if the XML namespace
     // is wps, because wps:
     xmlDocUniquePtr pDoc = parseExport("word/document.xml");
