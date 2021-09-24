@@ -1523,8 +1523,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         case LOK_CALLBACK_CALC_FUNCTION_LIST:
         case LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
         {
-            const auto& pos = std::find_if(m_queue1.rbegin(), m_queue1.rend(),
-                    [type] (int elemType) { return (elemType == type); });
+            const auto& pos = std::find(m_queue1.rbegin(), m_queue1.rend(), type);
             auto pos2 = toQueue2(pos);
             if (pos != m_queue1.rend() && pos2->PayloadString == payload)
             {
@@ -1537,14 +1536,12 @@ void CallbackFlushHandler::queue(const int type, const char* data)
 
     if (type == LOK_CALLBACK_TEXT_SELECTION && payload.empty())
     {
-        const auto& posStart = std::find_if(m_queue1.rbegin(), m_queue1.rend(),
-                [] (int elemType) { return (elemType == LOK_CALLBACK_TEXT_SELECTION_START); });
+        const auto& posStart = std::find(m_queue1.rbegin(), m_queue1.rend(), LOK_CALLBACK_TEXT_SELECTION_START);
         auto posStart2 = toQueue2(posStart);
         if (posStart != m_queue1.rend())
             posStart2->PayloadString.clear();
 
-        const auto& posEnd = std::find_if(m_queue1.rbegin(), m_queue1.rend(),
-                [] (int elemType) { return (elemType == LOK_CALLBACK_TEXT_SELECTION_END); });
+        const auto& posEnd = std::find(m_queue1.rbegin(), m_queue1.rend(), LOK_CALLBACK_TEXT_SELECTION_END);
         auto posEnd2 = toQueue2(posEnd);
         if (posEnd != m_queue1.rend())
             posEnd2->PayloadString.clear();
@@ -1709,9 +1706,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
     // If we have to invalidate all tiles, we can skip any new tile invalidation.
     // Find the last INVALIDATE_TILES entry, if any to see if it's invalidate-all.
     const auto& pos
-        = std::find_if(m_queue1.rbegin(), m_queue1.rend(), [](int elemType) {
-              return (elemType == LOK_CALLBACK_INVALIDATE_TILES);
-          });
+        = std::find(m_queue1.rbegin(), m_queue1.rend(), LOK_CALLBACK_INVALIDATE_TILES);
     if (pos != m_queue1.rend())
     {
         auto pos2 = toQueue2(pos);
