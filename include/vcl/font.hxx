@@ -150,6 +150,8 @@ public:
     void                SetWordLineMode( bool bWordLine );
     bool                IsWordLineMode() const;
 
+    FontEmphasisMark GetEmphasisMarkStyle() const;
+
     void                Merge( const Font& rFont );
     void                GetFontAttributes( FontAttributes& rAttrs ) const;
 
