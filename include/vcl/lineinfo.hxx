@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_LINEINFO_HXX
-#define INCLUDED_VCL_LINEINFO_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <vcl/dllapi.h>
@@ -64,31 +63,31 @@ public:
     bool            operator!=( const LineInfo& rLineInfo ) const { return !(LineInfo::operator==( rLineInfo ) ); }
 
     void            SetStyle( LineStyle eStyle );
-    LineStyle       GetStyle() const { return mpImplLineInfo->meStyle; }
+    LineStyle       GetStyle() const { return mpImpl->meStyle; }
 
     void            SetWidth( double nWidth );
-    double          GetWidth() const { return mpImplLineInfo->mnWidth; }
+    double          GetWidth() const { return mpImpl->mnWidth; }
 
     void            SetDashCount( sal_uInt16 nDashCount );
-    sal_uInt16      GetDashCount() const { return mpImplLineInfo->mnDashCount; }
+    sal_uInt16      GetDashCount() const { return mpImpl->mnDashCount; }
 
     void            SetDashLen( double nDashLen );
-    double          GetDashLen() const { return mpImplLineInfo->mnDashLen; }
+    double          GetDashLen() const { return mpImpl->mnDashLen; }
 
     void            SetDotCount( sal_uInt16 nDotCount );
-    sal_uInt16      GetDotCount() const { return mpImplLineInfo->mnDotCount; }
+    sal_uInt16      GetDotCount() const { return mpImpl->mnDotCount; }
 
     void            SetDotLen( double nDotLen );
-    double          GetDotLen() const { return mpImplLineInfo->mnDotLen; }
+    double          GetDotLen() const { return mpImpl->mnDotLen; }
 
     void            SetDistance( double nDistance );
-    double          GetDistance() const { return mpImplLineInfo->mnDistance; }
+    double          GetDistance() const { return mpImpl->mnDistance; }
 
     void SetLineJoin(basegfx::B2DLineJoin eLineJoin);
-    basegfx::B2DLineJoin GetLineJoin() const { return mpImplLineInfo->meLineJoin; }
+    basegfx::B2DLineJoin GetLineJoin() const { return mpImpl->meLineJoin; }
 
     void SetLineCap(css::drawing::LineCap eLineCap);
-    css::drawing::LineCap GetLineCap() const { return mpImplLineInfo->meLineCap; }
+    css::drawing::LineCap GetLineCap() const { return mpImpl->meLineCap; }
 
     bool            IsDefault() const;
 
@@ -106,9 +105,31 @@ public:
         basegfx::B2DPolyPolygon& o_rFillPolyPolygon) const;
 
 private:
-    o3tl::cow_wrapper< ImplLineInfo >          mpImplLineInfo;
+friend class ::std::optional<LineInfo>;
+friend class ::o3tl::cow_optional<LineInfo>;
+
+    LineInfo(std::nullopt_t) noexcept;
+
+    o3tl::cow_wrapper< ImplLineInfo >          mpImpl;
 };
 
-#endif // INCLUDED_VCL_LINEINFO_HXX
+namespace std
+{
+    /** Specialise std::optional template for the case where we are wrapping a o3tl::cow_wrapper
+        type, and we can make the pointer inside the cow_wrapper act as an empty value,
+        and save ourselves some storage */
+    template<>
+    class VCL_DLLPUBLIC optional<LineInfo> final : public o3tl::cow_optional<LineInfo>
+    {
+    public:
+        using cow_optional::cow_optional; // inherit constructors
+        optional(const optional&) = default;
+        optional(optional&&) = default;
+        optional& operator=(const optional&) = default;
+        optional& operator=(optional&&) = default;
+        ~optional();
+        void reset();
+    };
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

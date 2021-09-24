@@ -196,7 +196,7 @@ void ImpXPolygon::CheckPointDelete() const
 }
 
 XPolygon::XPolygon( sal_uInt16 nSize )
-    : pImpXPolygon( ImpXPolygon( nSize, 16 ) )
+    : mpImpl( ImpXPolygon( nSize, 16 ) )
 {
 }
 
@@ -206,21 +206,21 @@ XPolygon::XPolygon( XPolygon&& ) = default;
 
 /// create a XPolygon out of a standard polygon
 XPolygon::XPolygon( const tools::Polygon& rPoly )
-    : pImpXPolygon( rPoly.GetSize() )
+    : mpImpl( rPoly.GetSize() )
 {
     sal_uInt16 nSize = rPoly.GetSize();
-    pImpXPolygon->nPoints = nSize;
+    mpImpl->nPoints = nSize;
 
     for( sal_uInt16 i = 0; i < nSize;  i++ )
     {
-        pImpXPolygon->pPointAry[i] = rPoly[i];
-        pImpXPolygon->pFlagAry[i] = rPoly.GetFlags( i );
+        mpImpl->pPointAry[i] = rPoly[i];
+        mpImpl->pFlagAry[i] = rPoly.GetFlags( i );
     }
 }
 
 /// create a rectangle (also with rounded corners) as a Bézier polygon
 XPolygon::XPolygon(const tools::Rectangle& rRect, tools::Long nRx, tools::Long nRy)
-    : pImpXPolygon( 17 )
+    : mpImpl( 17 )
 {
     tools::Long nWh = (rRect.GetWidth()  - 1) / 2;
     tools::Long nHh = (rRect.GetHeight() - 1) / 2;
@@ -262,26 +262,26 @@ XPolygon::XPolygon(const tools::Rectangle& rRect, tools::Long nRx, tools::Long n
                         break;
             }
             GenBezArc(aCenter, nRx, nRy, nXHdl, nYHdl, 0_deg100, 9000_deg100, nQuad, nPos);
-            pImpXPolygon->pFlagAry[nPos  ] = PolyFlags::Smooth;
-            pImpXPolygon->pFlagAry[nPos+3] = PolyFlags::Smooth;
+            mpImpl->pFlagAry[nPos  ] = PolyFlags::Smooth;
+            mpImpl->pFlagAry[nPos+3] = PolyFlags::Smooth;
             nPos += 4;
         }
     }
     else
     {
-        pImpXPolygon->pPointAry[nPos++] = rRect.TopLeft();
-        pImpXPolygon->pPointAry[nPos++] = rRect.TopRight();
-        pImpXPolygon->pPointAry[nPos++] = rRect.BottomRight();
-        pImpXPolygon->pPointAry[nPos++] = rRect.BottomLeft();
+        mpImpl->pPointAry[nPos++] = rRect.TopLeft();
+        mpImpl->pPointAry[nPos++] = rRect.TopRight();
+        mpImpl->pPointAry[nPos++] = rRect.BottomRight();
+        mpImpl->pPointAry[nPos++] = rRect.BottomLeft();
     }
-    pImpXPolygon->pPointAry[nPos] = pImpXPolygon->pPointAry[0];
-    pImpXPolygon->nPoints = nPos + 1;
+    mpImpl->pPointAry[nPos] = mpImpl->pPointAry[0];
+    mpImpl->nPoints = nPos + 1;
 }
 
 /// create an ellipse (curve) as Bézier polygon
 XPolygon::XPolygon(const Point& rCenter, tools::Long nRx, tools::Long nRy,
                    Degree100 nStartAngle, Degree100 nEndAngle, bool bClose)
-    : pImpXPolygon( 17 )
+    : mpImpl( 17 )
 {
     nStartAngle %= 36000_deg100;
     if ( nEndAngle > 36000_deg100 ) nEndAngle %= 36000_deg100;
@@ -302,80 +302,83 @@ XPolygon::XPolygon(const Point& rCenter, tools::Long nRx, tools::Long nRy,
         GenBezArc(rCenter, nRx, nRy, nXHdl, nYHdl, nA1, nA2, nQuad, nPos);
         nPos += 3;
         if ( !bLoopEnd )
-            pImpXPolygon->pFlagAry[nPos] = PolyFlags::Smooth;
+            mpImpl->pFlagAry[nPos] = PolyFlags::Smooth;
 
     } while ( !bLoopEnd );
 
     // if not a full circle then connect edges with center point if necessary
     if ( !bFull && bClose )
-        pImpXPolygon->pPointAry[++nPos] = rCenter;
+        mpImpl->pPointAry[++nPos] = rCenter;
 
     if ( bFull )
     {
-        pImpXPolygon->pFlagAry[0   ] = PolyFlags::Smooth;
-        pImpXPolygon->pFlagAry[nPos] = PolyFlags::Smooth;
+        mpImpl->pFlagAry[0   ] = PolyFlags::Smooth;
+        mpImpl->pFlagAry[nPos] = PolyFlags::Smooth;
     }
-    pImpXPolygon->nPoints = nPos + 1;
+    mpImpl->nPoints = nPos + 1;
 }
+
+XPolygon::XPolygon(std::nullopt_t) noexcept
+    : mpImpl( std::nullopt ) {}
 
 XPolygon::~XPolygon() = default;
 
 void XPolygon::SetPointCount( sal_uInt16 nPoints )
 {
-    std::as_const(*pImpXPolygon).CheckPointDelete();
+    std::as_const(*mpImpl).CheckPointDelete();
 
-    if( pImpXPolygon->nSize < nPoints )
-        pImpXPolygon->Resize( nPoints );
+    if( mpImpl->nSize < nPoints )
+        mpImpl->Resize( nPoints );
 
-    if ( nPoints < pImpXPolygon->nPoints )
+    if ( nPoints < mpImpl->nPoints )
     {
-        sal_uInt16 nSize = pImpXPolygon->nPoints - nPoints;
+        sal_uInt16 nSize = mpImpl->nPoints - nPoints;
         std::fill(
-            pImpXPolygon->pPointAry.get() + nPoints, pImpXPolygon->pPointAry.get() + nPoints + nSize, Point());
-        memset( &pImpXPolygon->pFlagAry [nPoints], 0, nSize );
+            mpImpl->pPointAry.get() + nPoints, mpImpl->pPointAry.get() + nPoints + nSize, Point());
+        memset( &mpImpl->pFlagAry [nPoints], 0, nSize );
     }
-    pImpXPolygon->nPoints = nPoints;
+    mpImpl->nPoints = nPoints;
 }
 
 sal_uInt16 XPolygon::GetSize() const
 {
-    pImpXPolygon->CheckPointDelete();
-    return pImpXPolygon->nSize;
+    mpImpl->CheckPointDelete();
+    return mpImpl->nSize;
 }
 
 sal_uInt16 XPolygon::GetPointCount() const
 {
-    pImpXPolygon->CheckPointDelete();
-    return pImpXPolygon->nPoints;
+    mpImpl->CheckPointDelete();
+    return mpImpl->nPoints;
 }
 
 void XPolygon::Insert( sal_uInt16 nPos, const Point& rPt, PolyFlags eFlags )
 {
-    if (nPos>pImpXPolygon->nPoints) nPos=pImpXPolygon->nPoints;
-    pImpXPolygon->InsertSpace( nPos, 1 );
-    pImpXPolygon->pPointAry[nPos] = rPt;
-    pImpXPolygon->pFlagAry[nPos]  = eFlags;
+    if (nPos>mpImpl->nPoints) nPos=mpImpl->nPoints;
+    mpImpl->InsertSpace( nPos, 1 );
+    mpImpl->pPointAry[nPos] = rPt;
+    mpImpl->pFlagAry[nPos]  = eFlags;
 }
 
 void XPolygon::Insert( sal_uInt16 nPos, const XPolygon& rXPoly )
 {
-    if (nPos>pImpXPolygon->nPoints) nPos=pImpXPolygon->nPoints;
+    if (nPos>mpImpl->nPoints) nPos=mpImpl->nPoints;
 
     sal_uInt16 nPoints = rXPoly.GetPointCount();
 
-    pImpXPolygon->InsertSpace( nPos, nPoints );
+    mpImpl->InsertSpace( nPos, nPoints );
 
-    memcpy( &(pImpXPolygon->pPointAry[nPos]),
-            rXPoly.pImpXPolygon->pPointAry.get(),
+    memcpy( &(mpImpl->pPointAry[nPos]),
+            rXPoly.mpImpl->pPointAry.get(),
             nPoints*sizeof( Point ) );
-    memcpy( &(pImpXPolygon->pFlagAry[nPos]),
-            rXPoly.pImpXPolygon->pFlagAry.get(),
+    memcpy( &(mpImpl->pFlagAry[nPos]),
+            rXPoly.mpImpl->pFlagAry.get(),
             nPoints );
 }
 
 void XPolygon::Remove( sal_uInt16 nPos, sal_uInt16 nCount )
 {
-    pImpXPolygon->Remove( nPos, nCount );
+    mpImpl->Remove( nPos, nCount );
 }
 
 void XPolygon::Move( tools::Long nHorzMove, tools::Long nVertMove )
@@ -384,10 +387,10 @@ void XPolygon::Move( tools::Long nHorzMove, tools::Long nVertMove )
         return;
 
     // move points
-    sal_uInt16 nCount = pImpXPolygon->nPoints;
+    sal_uInt16 nCount = mpImpl->nPoints;
     for ( sal_uInt16 i = 0; i < nCount; i++ )
     {
-        Point* pPt = &(pImpXPolygon->pPointAry[i]);
+        Point* pPt = &(mpImpl->pPointAry[i]);
         pPt->AdjustX( nHorzMove );
         pPt->AdjustY( nVertMove );
     }
@@ -395,10 +398,10 @@ void XPolygon::Move( tools::Long nHorzMove, tools::Long nVertMove )
 
 tools::Rectangle XPolygon::GetBoundRect() const
 {
-    pImpXPolygon->CheckPointDelete();
+    mpImpl->CheckPointDelete();
     tools::Rectangle aRetval;
 
-    if(pImpXPolygon->nPoints)
+    if(mpImpl->nPoints)
     {
         // #i37709#
         // For historical reasons the control points are not part of the
@@ -417,25 +420,25 @@ tools::Rectangle XPolygon::GetBoundRect() const
 
 const Point& XPolygon::operator[]( sal_uInt16 nPos ) const
 {
-    DBG_ASSERT(nPos < pImpXPolygon->nPoints, "Invalid index at const array access to XPolygon");
+    DBG_ASSERT(nPos < mpImpl->nPoints, "Invalid index at const array access to XPolygon");
 
-    pImpXPolygon->CheckPointDelete();
-    return pImpXPolygon->pPointAry[nPos];
+    mpImpl->CheckPointDelete();
+    return mpImpl->pPointAry[nPos];
 }
 
 Point& XPolygon::operator[]( sal_uInt16 nPos )
 {
-    std::as_const(*pImpXPolygon).CheckPointDelete();
+    std::as_const(*mpImpl).CheckPointDelete();
 
-    if( nPos >= pImpXPolygon->nSize )
+    if( nPos >= mpImpl->nSize )
     {
-        DBG_ASSERT(pImpXPolygon->nResize, "Invalid index at array access to XPolygon");
-        pImpXPolygon->Resize(nPos + 1, false);
+        DBG_ASSERT(mpImpl->nResize, "Invalid index at array access to XPolygon");
+        mpImpl->Resize(nPos + 1, false);
     }
-    if( nPos >= pImpXPolygon->nPoints )
-        pImpXPolygon->nPoints = nPos + 1;
+    if( nPos >= mpImpl->nPoints )
+        mpImpl->nPoints = nPos + 1;
 
-    return pImpXPolygon->pPointAry[nPos];
+    return mpImpl->pPointAry[nPos];
 }
 
 XPolygon& XPolygon::operator=( const XPolygon& ) = default;
@@ -444,34 +447,34 @@ XPolygon& XPolygon::operator=( XPolygon&& ) = default;
 
 bool XPolygon::operator==( const XPolygon& rXPoly ) const
 {
-    pImpXPolygon->CheckPointDelete();
-    return rXPoly.pImpXPolygon == pImpXPolygon;
+    mpImpl->CheckPointDelete();
+    return rXPoly.mpImpl == mpImpl;
 }
 
 /// get the flags for the point at the given position
 PolyFlags XPolygon::GetFlags( sal_uInt16 nPos ) const
 {
-    pImpXPolygon->CheckPointDelete();
-    return pImpXPolygon->pFlagAry[nPos];
+    mpImpl->CheckPointDelete();
+    return mpImpl->pFlagAry[nPos];
 }
 
 /// set the flags for the point at the given position
 void XPolygon::SetFlags( sal_uInt16 nPos, PolyFlags eFlags )
 {
-    std::as_const(*pImpXPolygon).CheckPointDelete();
-    pImpXPolygon->pFlagAry[nPos] = eFlags;
+    std::as_const(*mpImpl).CheckPointDelete();
+    mpImpl->pFlagAry[nPos] = eFlags;
 }
 
 /// short path to read the CONTROL flag directly (TODO: better explain what the sense behind this flag is!)
 bool XPolygon::IsControl(sal_uInt16 nPos) const
 {
-    return pImpXPolygon->pFlagAry[nPos] == PolyFlags::Control;
+    return mpImpl->pFlagAry[nPos] == PolyFlags::Control;
 }
 
 /// short path to read the SMOOTH and SYMMTR flag directly (TODO: better explain what the sense behind these flags is!)
 bool XPolygon::IsSmooth(sal_uInt16 nPos) const
 {
-    PolyFlags eFlag = pImpXPolygon->pFlagAry[nPos];
+    PolyFlags eFlag = mpImpl->pFlagAry[nPos];
     return ( eFlag == PolyFlags::Smooth || eFlag == PolyFlags::Symmetric );
 }
 
@@ -482,8 +485,8 @@ bool XPolygon::IsSmooth(sal_uInt16 nPos) const
  */
 double XPolygon::CalcDistance(sal_uInt16 nP1, sal_uInt16 nP2)
 {
-    const Point& rP1 = pImpXPolygon->pPointAry[nP1];
-    const Point& rP2 = pImpXPolygon->pPointAry[nP2];
+    const Point& rP1 = mpImpl->pPointAry[nP1];
+    const Point& rP2 = mpImpl->pPointAry[nP2];
     double fDx = rP2.X() - rP1.X();
     double fDy = rP2.Y() - rP1.Y();
     return sqrt(fDx * fDx + fDy * fDy);
@@ -491,7 +494,7 @@ double XPolygon::CalcDistance(sal_uInt16 nP1, sal_uInt16 nP2)
 
 void XPolygon::SubdivideBezier(sal_uInt16 nPos, bool bCalcFirst, double fT)
 {
-    Point*  pPoints = pImpXPolygon->pPointAry.get();
+    Point*  pPoints = mpImpl->pPointAry.get();
     double  fT2 = fT * fT;
     double  fT3 = fT * fT2;
     double  fU = 1.0 - fT;
@@ -540,7 +543,7 @@ void XPolygon::GenBezArc(const Point& rCenter, tools::Long nRx, tools::Long nRy,
                          tools::Long nXHdl, tools::Long nYHdl, Degree100 nStart, Degree100 nEnd,
                          sal_uInt16 nQuad, sal_uInt16 nFirst)
 {
-    Point* pPoints = pImpXPolygon->pPointAry.get();
+    Point* pPoints = mpImpl->pPointAry.get();
     pPoints[nFirst  ] = rCenter;
     pPoints[nFirst+3] = rCenter;
 
@@ -622,7 +625,7 @@ void XPolygon::CalcSmoothJoin(sal_uInt16 nCenter, sal_uInt16 nDrag, sal_uInt16 n
         nDrag = nPnt;
         nPnt = nTmp;
     }
-    Point*  pPoints = pImpXPolygon->pPointAry.get();
+    Point*  pPoints = mpImpl->pPointAry.get();
     Point   aDiff   = pPoints[nDrag] - pPoints[nCenter];
     double  fDiv    = CalcDistance(nCenter, nDrag);
 
@@ -652,9 +655,9 @@ void XPolygon::CalcTangent(sal_uInt16 nCenter, sal_uInt16 nPrev, sal_uInt16 nNex
     if ( !fAbsLen )
         return;
 
-    const Point& rCenter = pImpXPolygon->pPointAry[nCenter];
-    Point&  rNext = pImpXPolygon->pPointAry[nNext];
-    Point&  rPrev = pImpXPolygon->pPointAry[nPrev];
+    const Point& rCenter = mpImpl->pPointAry[nCenter];
+    Point&  rNext = mpImpl->pPointAry[nNext];
+    Point&  rPrev = mpImpl->pPointAry[nPrev];
     Point   aDiff = rNext - rPrev;
     double  fNextLen = CalcDistance(nCenter, nNext) / fAbsLen;
     double  fPrevLen = CalcDistance(nCenter, nPrev) / fAbsLen;
@@ -678,9 +681,9 @@ void XPolygon::PointsToBezier(sal_uInt16 nFirst)
     double  fX0, fY0, fX1, fY1, fX2, fY2, fX3, fY3;
     double  fTx1, fTx2, fTy1, fTy2;
     double  fT1, fU1, fT2, fU2, fV;
-    Point*  pPoints = pImpXPolygon->pPointAry.get();
+    Point*  pPoints = mpImpl->pPointAry.get();
 
-    if ( nFirst > pImpXPolygon->nPoints - 4 || IsControl(nFirst) ||
+    if ( nFirst > mpImpl->nPoints - 4 || IsControl(nFirst) ||
          IsControl(nFirst+1) || IsControl(nFirst+2) || IsControl(nFirst+3) )
         return;
 
@@ -741,13 +744,13 @@ void XPolygon::PointsToBezier(sal_uInt16 nFirst)
 /// scale in X- and/or Y-direction
 void XPolygon::Scale(double fSx, double fSy)
 {
-    std::as_const(*pImpXPolygon).CheckPointDelete();
+    std::as_const(*mpImpl).CheckPointDelete();
 
-    sal_uInt16 nPntCnt = pImpXPolygon->nPoints;
+    sal_uInt16 nPntCnt = mpImpl->nPoints;
 
     for (sal_uInt16 i = 0; i < nPntCnt; i++)
     {
-        Point& rPnt = pImpXPolygon->pPointAry[i];
+        Point& rPnt = mpImpl->pPointAry[i];
         rPnt.setX( static_cast<tools::Long>(fSx * rPnt.X()) );
         rPnt.setY( static_cast<tools::Long>(fSy * rPnt.Y()) );
     }
@@ -766,7 +769,7 @@ void XPolygon::Scale(double fSx, double fSy)
 void XPolygon::Distort(const tools::Rectangle& rRefRect,
                        const XPolygon& rDistortedRect)
 {
-    std::as_const(*pImpXPolygon).CheckPointDelete();
+    std::as_const(*mpImpl).CheckPointDelete();
 
     tools::Long    Xr, Wr;
     tools::Long    Yr, Hr;
@@ -781,7 +784,7 @@ void XPolygon::Distort(const tools::Rectangle& rRefRect,
 
     tools::Long    X1, X2, X3, X4;
     tools::Long    Y1, Y2, Y3, Y4;
-    DBG_ASSERT(rDistortedRect.pImpXPolygon->nPoints >= 4,
+    DBG_ASSERT(rDistortedRect.mpImpl->nPoints >= 4,
                "Distort: rectangle too small");
 
     X1 = rDistortedRect[0].X();
@@ -793,12 +796,12 @@ void XPolygon::Distort(const tools::Rectangle& rRefRect,
     X4 = rDistortedRect[2].X();
     Y4 = rDistortedRect[2].Y();
 
-    sal_uInt16 nPntCnt = pImpXPolygon->nPoints;
+    sal_uInt16 nPntCnt = mpImpl->nPoints;
 
     for (sal_uInt16 i = 0; i < nPntCnt; i++)
     {
         double  fTx, fTy, fUx, fUy;
-        Point& rPnt = pImpXPolygon->pPointAry[i];
+        Point& rPnt = mpImpl->pPointAry[i];
 
         fTx = static_cast<double>(rPnt.X() - Xr) / Wr;
         fTy = static_cast<double>(rPnt.Y() - Yr) / Hr;
@@ -817,13 +820,13 @@ basegfx::B2DPolygon XPolygon::getB2DPolygon() const
     // #i74631# use tools Polygon class for conversion to not have the code doubled
     // here. This needs one more conversion but avoids different converters in
     // the long run
-    const tools::Polygon aSource(GetPointCount(), pImpXPolygon->pPointAry.get(), pImpXPolygon->pFlagAry.get());
+    const tools::Polygon aSource(GetPointCount(), mpImpl->pPointAry.get(), mpImpl->pFlagAry.get());
 
     return aSource.getB2DPolygon();
 }
 
 XPolygon::XPolygon(const basegfx::B2DPolygon& rPolygon)
-    : pImpXPolygon( tools::Polygon( rPolygon ).GetSize() )
+    : mpImpl( tools::Polygon( rPolygon ).GetSize() )
 {
     // #i74631# use tools Polygon class for conversion to not have the code doubled
     // here. This needs one more conversion but avoids different converters in
@@ -831,12 +834,12 @@ XPolygon::XPolygon(const basegfx::B2DPolygon& rPolygon)
 
     const tools::Polygon aSource(rPolygon);
     sal_uInt16 nSize = aSource.GetSize();
-    pImpXPolygon->nPoints = nSize;
+    mpImpl->nPoints = nSize;
 
     for( sal_uInt16 i = 0; i < nSize;  i++ )
     {
-        pImpXPolygon->pPointAry[i] = aSource[i];
-        pImpXPolygon->pFlagAry[i] = aSource.GetFlags( i );
+        mpImpl->pPointAry[i] = aSource[i];
+        mpImpl->pFlagAry[i] = aSource.GetFlags( i );
     }
 }
 
@@ -859,7 +862,7 @@ XPolyPolygon::~XPolyPolygon() = default;
 
 void XPolyPolygon::Insert( XPolygon&& rXPoly )
 {
-    pImpXPolyPolygon->aXPolyList.emplace_back( std::move(rXPoly) );
+    mpImpl->aXPolyList.emplace_back( std::move(rXPoly) );
 }
 
 /// insert all XPolygons of a XPolyPolygon
@@ -867,38 +870,38 @@ void XPolyPolygon::Insert( const XPolyPolygon& rXPolyPoly )
 {
     for ( size_t i = 0; i < rXPolyPoly.Count(); i++)
     {
-        pImpXPolyPolygon->aXPolyList.emplace_back( rXPolyPoly[i] );
+        mpImpl->aXPolyList.emplace_back( rXPolyPoly[i] );
     }
 }
 
 void XPolyPolygon::Remove( sal_uInt16 nPos )
 {
-    pImpXPolyPolygon->aXPolyList.erase( pImpXPolyPolygon->aXPolyList.begin() + nPos );
+    mpImpl->aXPolyList.erase( mpImpl->aXPolyList.begin() + nPos );
 }
 
 const XPolygon& XPolyPolygon::GetObject( sal_uInt16 nPos ) const
 {
-    return pImpXPolyPolygon->aXPolyList[ nPos ];
+    return mpImpl->aXPolyList[ nPos ];
 }
 
 void XPolyPolygon::Clear()
 {
-    pImpXPolyPolygon->aXPolyList.clear();
+    mpImpl->aXPolyList.clear();
 }
 
 sal_uInt16 XPolyPolygon::Count() const
 {
-    return static_cast<sal_uInt16>(pImpXPolyPolygon->aXPolyList.size());
+    return static_cast<sal_uInt16>(mpImpl->aXPolyList.size());
 }
 
 tools::Rectangle XPolyPolygon::GetBoundRect() const
 {
-    size_t nXPoly = pImpXPolyPolygon->aXPolyList.size();
+    size_t nXPoly = mpImpl->aXPolyList.size();
     tools::Rectangle aRect;
 
     for ( size_t n = 0; n < nXPoly; n++ )
     {
-        XPolygon const & rXPoly = pImpXPolyPolygon->aXPolyList[ n ];
+        XPolygon const & rXPoly = mpImpl->aXPolyList[ n ];
         aRect.Union( rXPoly.GetBoundRect() );
     }
 
@@ -907,7 +910,7 @@ tools::Rectangle XPolyPolygon::GetBoundRect() const
 
 XPolygon& XPolyPolygon::operator[]( sal_uInt16 nPos )
 {
-    return pImpXPolyPolygon->aXPolyList[ nPos ];
+    return mpImpl->aXPolyList[ nPos ];
 }
 
 XPolyPolygon& XPolyPolygon::operator=( const XPolyPolygon& ) = default;
@@ -928,7 +931,7 @@ void XPolyPolygon::Distort(const tools::Rectangle& rRefRect,
                            const XPolygon& rDistortedRect)
 {
     for (size_t i = 0; i < Count(); i++)
-        pImpXPolyPolygon->aXPolyList[ i ].Distort(rRefRect, rDistortedRect);
+        mpImpl->aXPolyList[ i ].Distort(rRefRect, rDistortedRect);
 }
 
 basegfx::B2DPolyPolygon XPolyPolygon::getB2DPolyPolygon() const
@@ -943,5 +946,10 @@ basegfx::B2DPolyPolygon XPolyPolygon::getB2DPolyPolygon() const
 
     return aRetval;
 }
+
+std::optional<XPolyPolygon>::~optional() {}
+
+std::optional<XPolygon>::~optional() {}
+void std::optional<XPolygon>::reset() { cow_optional::reset(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

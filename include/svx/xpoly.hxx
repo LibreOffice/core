@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_XPOLY_HXX
-#define INCLUDED_SVX_XPOLY_HXX
+#pragma once
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <svx/svxdllapi.h>
@@ -44,7 +43,9 @@ class ImpXPolygon;
 
 class SVXCORE_DLLPUBLIC XPolygon final
 {
-    o3tl::cow_wrapper< ImpXPolygon > pImpXPolygon;
+friend class std::optional<XPolygon>;
+friend class ::o3tl::cow_optional<XPolygon>;
+    o3tl::cow_wrapper< ImpXPolygon > mpImpl;
 
     // auxiliary functions for Bezier conversion
     void    SubdivideBezier(sal_uInt16 nPos, bool bCalcFirst, double fT);
@@ -53,6 +54,7 @@ class SVXCORE_DLLPUBLIC XPolygon final
                       sal_uInt16 nQuad, sal_uInt16 nFirst);
     static bool CheckAngles(Degree100& nStart, Degree100 nEnd, Degree100& nA1, Degree100& nA2);
 
+    XPolygon(std::nullopt_t) noexcept;
 public:
     XPolygon( sal_uInt16 nSize=16 );
     XPolygon( const XPolygon& );
@@ -107,13 +109,36 @@ public:
      explicit XPolygon(const basegfx::B2DPolygon& rPolygon);
 };
 
+
+namespace std
+{
+    /** Specialise std::optional template for the case where we are wrapping a o3tl::cow_wrapper
+        type, and we can make the pointer inside the cow_wrapper act as an empty value,
+        and save ourselves some storage */
+    template<>
+    class optional<XPolygon> final : public o3tl::cow_optional<XPolygon>
+    {
+    public:
+        using cow_optional::cow_optional; // inherit constructors
+        optional(const optional&) = default;
+        optional(optional&&) = default;
+        optional& operator=(const optional&) = default;
+        optional& operator=(optional&&) = default;
+        ~optional();
+        void reset();
+    };
+};
+
 // Class XPolyPolygon; like PolyPolygon, composed of XPolygons instead of Polygons
 
 class ImpXPolyPolygon;
 
 class XPolyPolygon final
 {
-    o3tl::cow_wrapper< ImpXPolyPolygon > pImpXPolyPolygon;
+friend class ::std::optional<XPolyPolygon>;
+friend class ::o3tl::cow_optional<XPolyPolygon>;
+
+    o3tl::cow_wrapper< ImpXPolyPolygon > mpImpl;
 
 public:
                     XPolyPolygon();
@@ -150,6 +175,23 @@ public:
      explicit XPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon);
 };
 
-#endif // INCLUDED_SVX_XPOLY_HXX
+namespace std
+{
+    /** Specialise std::optional template for the case where we are wrapping a o3tl::cow_wrapper
+        type, and we can make the pointer inside the cow_wrapper act as an empty value,
+        and save ourselves some storage */
+    template<>
+    class SVXCORE_DLLPUBLIC optional<XPolyPolygon> final : public o3tl::cow_optional<XPolyPolygon>
+    {
+    public:
+        using cow_optional::cow_optional; // inherit constructors
+        optional(const optional&) = default;
+        optional(optional&&) = default;
+        optional& operator=(const optional&) = default;
+        optional& operator=(optional&&) = default;
+        ~optional();
+        void reset();
+    };
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

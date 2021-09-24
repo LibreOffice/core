@@ -45,10 +45,11 @@ Hatch::Hatch( const Hatch& ) = default;
 Hatch::Hatch( HatchStyle eStyle, const Color& rColor,
               tools::Long nDistance, Degree10 nAngle10 )
 {
-    mpImplHatch->maColor = rColor;
-    mpImplHatch->meStyle = eStyle;
-    mpImplHatch->mnDistance = nDistance;
-    mpImplHatch->mnAngle = nAngle10;
+
+    mpImpl->maColor = rColor;
+    mpImpl->meStyle = eStyle;
+    mpImpl->mnDistance = nDistance;
+    mpImpl->mnAngle = nAngle10;
 }
 
 Hatch::~Hatch() = default;
@@ -57,23 +58,23 @@ Hatch& Hatch::operator=( const Hatch& ) = default;
 
 bool Hatch::operator==( const Hatch& rHatch ) const
 {
-    return mpImplHatch == rHatch.mpImplHatch;
+    return mpImpl == rHatch.mpImpl;
 }
 
 
 void Hatch::SetColor( const Color& rColor )
 {
-    mpImplHatch->maColor = rColor;
+    mpImpl->maColor = rColor;
 }
 
 void Hatch::SetDistance( tools::Long nDistance )
 {
-    mpImplHatch->mnDistance = nDistance;
+    mpImpl->mnDistance = nDistance;
 }
 
 void Hatch::SetAngle( Degree10 nAngle10 )
 {
-    mpImplHatch->mnAngle = nAngle10;
+    mpImpl->mnAngle = nAngle10;
 }
 
 SvStream& ReadHatch( SvStream& rIStm, Hatch& rHatch )
@@ -83,14 +84,14 @@ SvStream& ReadHatch( SvStream& rIStm, Hatch& rHatch )
     sal_Int32 nTmp32(0);
 
     rIStm.ReadUInt16(nTmp16);
-    rHatch.mpImplHatch->meStyle = static_cast<HatchStyle>(nTmp16);
+    rHatch.mpImpl->meStyle = static_cast<HatchStyle>(nTmp16);
 
     tools::GenericTypeSerializer aSerializer(rIStm);
-    aSerializer.readColor(rHatch.mpImplHatch->maColor);
+    aSerializer.readColor(rHatch.mpImpl->maColor);
     rIStm.ReadInt32(nTmp32);
-    rHatch.mpImplHatch->mnDistance = nTmp32;
+    rHatch.mpImpl->mnDistance = nTmp32;
     rIStm.ReadUInt16(nTmp16);
-    rHatch.mpImplHatch->mnAngle = Degree10(nTmp16);
+    rHatch.mpImpl->mnAngle = Degree10(nTmp16);
 
     return rIStm;
 }
@@ -99,11 +100,11 @@ SvStream& WriteHatch( SvStream& rOStm, const Hatch& rHatch )
 {
     VersionCompatWrite aCompat(rOStm, 1);
 
-    rOStm.WriteUInt16( static_cast<sal_uInt16>(rHatch.mpImplHatch->meStyle) );
+    rOStm.WriteUInt16( static_cast<sal_uInt16>(rHatch.mpImpl->meStyle) );
 
     tools::GenericTypeSerializer aSerializer(rOStm);
-    aSerializer.writeColor(rHatch.mpImplHatch->maColor);
-    rOStm.WriteInt32( rHatch.mpImplHatch->mnDistance ).WriteUInt16( rHatch.mpImplHatch->mnAngle.get() );
+    aSerializer.writeColor(rHatch.mpImpl->maColor);
+    rOStm.WriteInt32( rHatch.mpImpl->mnDistance ).WriteUInt16( rHatch.mpImpl->mnAngle.get() );
 
     return rOStm;
 }

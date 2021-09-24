@@ -71,7 +71,7 @@ namespace
     }
 }
 
-MapMode::MapMode() : mpImplMapMode(GetGlobalDefault())
+MapMode::MapMode() : mpImpl(GetGlobalDefault())
 {
 }
 
@@ -79,46 +79,50 @@ MapMode::MapMode( const MapMode& ) = default;
 
 MapMode::MapMode( MapUnit eUnit )
 {
-    mpImplMapMode->meUnit = eUnit;
+    mpImpl->meUnit = eUnit;
 }
 
 MapMode::MapMode( MapUnit eUnit, const Point& rLogicOrg,
                   const Fraction& rScaleX, const Fraction& rScaleY )
 {
-    mpImplMapMode->meUnit   = eUnit;
-    mpImplMapMode->maOrigin = rLogicOrg;
-    mpImplMapMode->maScaleX = rScaleX;
-    mpImplMapMode->maScaleY = rScaleY;
-    mpImplMapMode->maScaleX.ReduceInaccurate(32);
-    mpImplMapMode->maScaleY.ReduceInaccurate(32);
-    mpImplMapMode->mbSimple = false;
+    mpImpl->meUnit   = eUnit;
+    mpImpl->maOrigin = rLogicOrg;
+    mpImpl->maScaleX = rScaleX;
+    mpImpl->maScaleY = rScaleY;
+    mpImpl->maScaleX.ReduceInaccurate(32);
+    mpImpl->maScaleY.ReduceInaccurate(32);
+    mpImpl->mbSimple = false;
+}
+
+MapMode::MapMode(std::nullopt_t) noexcept : mpImpl(std::nullopt)
+{
 }
 
 MapMode::~MapMode() = default;
 
 void MapMode::SetMapUnit( MapUnit eUnit )
 {
-    mpImplMapMode->meUnit = eUnit;
+    mpImpl->meUnit = eUnit;
 }
 
 void MapMode::SetOrigin( const Point& rLogicOrg )
 {
-    mpImplMapMode->maOrigin = rLogicOrg;
-    mpImplMapMode->mbSimple = false;
+    mpImpl->maOrigin = rLogicOrg;
+    mpImpl->mbSimple = false;
 }
 
 void MapMode::SetScaleX( const Fraction& rScaleX )
 {
-    mpImplMapMode->maScaleX = rScaleX;
-    mpImplMapMode->maScaleX.ReduceInaccurate(32);
-    mpImplMapMode->mbSimple = false;
+    mpImpl->maScaleX = rScaleX;
+    mpImpl->maScaleX.ReduceInaccurate(32);
+    mpImpl->mbSimple = false;
 }
 
 void MapMode::SetScaleY( const Fraction& rScaleY )
 {
-    mpImplMapMode->maScaleY = rScaleY;
-    mpImplMapMode->maScaleY.ReduceInaccurate(32);
-    mpImplMapMode->mbSimple = false;
+    mpImpl->maScaleY = rScaleY;
+    mpImpl->maScaleY.ReduceInaccurate(32);
+    mpImpl->mbSimple = false;
 }
 
 MapMode& MapMode::operator=( const MapMode& ) = default;
@@ -127,22 +131,24 @@ MapMode& MapMode::operator=( MapMode&& ) = default;
 
 bool MapMode::operator==( const MapMode& rMapMode ) const
 {
-   return mpImplMapMode == rMapMode.mpImplMapMode;
+   return mpImpl == rMapMode.mpImpl;
 }
 
 bool MapMode::IsDefault() const
 {
-    return mpImplMapMode.same_object(GetGlobalDefault());
+    return mpImpl.same_object(GetGlobalDefault());
 }
 
-MapUnit MapMode::GetMapUnit() const { return mpImplMapMode->meUnit; }
+MapUnit MapMode::GetMapUnit() const { return mpImpl->meUnit; }
 
-const Point& MapMode::GetOrigin() const { return mpImplMapMode->maOrigin; }
+const Point& MapMode::GetOrigin() const { return mpImpl->maOrigin; }
 
-const Fraction& MapMode::GetScaleX() const { return mpImplMapMode->maScaleX; }
+const Fraction& MapMode::GetScaleX() const { return mpImpl->maScaleX; }
 
-const Fraction& MapMode::GetScaleY() const { return mpImplMapMode->maScaleY; }
+const Fraction& MapMode::GetScaleY() const { return mpImpl->maScaleY; }
 
-bool MapMode::IsSimple() const { return mpImplMapMode->mbSimple; }
+bool MapMode::IsSimple() const { return mpImpl->mbSimple; }
+
+std::optional<MapMode>::~optional() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

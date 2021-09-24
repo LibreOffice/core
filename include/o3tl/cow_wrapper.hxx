@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_O3TL_COW_WRAPPER_HXX
-#define INCLUDED_O3TL_COW_WRAPPER_HXX
+#pragma once
 
 #include <osl/interlck.h>
 
 #include <optional>
 #include <utility>
 #include <cstddef>
+#include <stdexcept>
 
 namespace o3tl
 {
@@ -381,8 +381,83 @@ int cow_wrapper_client::queryUnmodified() const
         a.swap(b);
     }
 
-}
 
-#endif /* INCLUDED_O3TL_COW_WRAPPER_HXX */
+    /** Specialise std::optional template for the case where we are wrapping a o3tl::cow_wrapper
+        type, and we can make the pointer inside the cow_wrapper act as an empty value,
+        and save ourselves some storage */
+    template<typename T>
+    class cow_optional
+    {
+    public:
+        cow_optional() noexcept : maOptionalObject(std::nullopt) {}
+        cow_optional(std::nullopt_t) noexcept : maOptionalObject(std::nullopt) {}
+        cow_optional(const cow_optional& other) :
+            // call special constructor which doesn't object when maOptionalObject contains a nullptr
+            maOptionalObject(other.maOptionalObject, std::nullopt) {}
+        cow_optional(cow_optional&& other) noexcept :
+            maOptionalObject(std::move(other.maOptionalObject)) {}
+        cow_optional(T&& para) noexcept :
+            maOptionalObject(std::move(para)) {}
+        cow_optional(const T& para) noexcept :
+            maOptionalObject(para) {}
+        template< class... Args >
+        explicit cow_optional( std::in_place_t, Args&&... args ) :
+            maOptionalObject(std::forward<Args>(args)...) {}
+
+        cow_optional& operator=(cow_optional const & other)
+        {
+            maOptionalObject = other.maOptionalObject;
+            return *this;
+        }
+        cow_optional& operator=(cow_optional&& other) noexcept
+        {
+            maOptionalObject = std::move(other.maOptionalObject);
+            return *this;
+        }
+        template< class... Args >
+        void emplace(Args&&... args )
+        {
+            maOptionalObject = T(std::forward<Args>(args)...);
+        }
+
+        T& value()
+        {
+            throwIfEmpty();
+            return maOptionalObject;
+        }
+        T& operator*()
+        {
+            throwIfEmpty();
+            return maOptionalObject;
+        }
+        const T& operator*() const
+        {
+            throwIfEmpty();
+            return maOptionalObject;
+        }
+        T* operator->()
+        {
+            throwIfEmpty();
+            return &maOptionalObject;
+        }
+        const T* operator->() const
+        {
+            throwIfEmpty();
+            return &maOptionalObject;
+        }
+        void reset() { maOptionalObject.mpImpl.set_empty(); }
+        bool has_value() const noexcept { return !maOptionalObject.mpImpl.empty(); }
+        explicit operator bool() const noexcept { return !maOptionalObject.mpImpl.empty(); }
+    protected:
+        void throwIfEmpty() const
+        {
+            if (maOptionalObject.mpImpl.empty())
+                throw std::logic_error("empty std::optional<T>");
+        }
+        T maOptionalObject;
+    };
+
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

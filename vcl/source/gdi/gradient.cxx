@@ -86,112 +86,118 @@ Gradient::Gradient( Gradient&& ) = default;
 Gradient::Gradient( GradientStyle eStyle,
                     const Color& rStartColor, const Color& rEndColor )
 {
-    mpImplGradient->meStyle         = eStyle;
-    mpImplGradient->maStartColor    = rStartColor;
-    mpImplGradient->maEndColor      = rEndColor;
+    mpImpl->meStyle         = eStyle;
+    mpImpl->maStartColor    = rStartColor;
+    mpImpl->maEndColor      = rEndColor;
 }
+
+Gradient::Gradient( Gradient const & rOther, std::nullopt_t ) noexcept
+    : mpImpl(rOther.mpImpl, std::nullopt) {}
+
+Gradient::Gradient( std::nullopt_t ) noexcept
+    : mpImpl(std::nullopt) {}
 
 Gradient::~Gradient() = default;
 
 
 GradientStyle Gradient::GetStyle() const
 {
-    return mpImplGradient->meStyle;
+    return mpImpl->meStyle;
 }
 
 void Gradient::SetStyle( GradientStyle eStyle )
 {
-    mpImplGradient->meStyle = eStyle;
+    mpImpl->meStyle = eStyle;
 }
 
 const Color& Gradient::GetStartColor() const
 {
-    return mpImplGradient->maStartColor;
+    return mpImpl->maStartColor;
 }
 
 void Gradient::SetStartColor( const Color& rColor )
 {
-    mpImplGradient->maStartColor = rColor;
+    mpImpl->maStartColor = rColor;
 }
 
 const Color& Gradient::GetEndColor() const
 {
-    return mpImplGradient->maEndColor;
+    return mpImpl->maEndColor;
 }
 
 void Gradient::SetEndColor( const Color& rColor )
 {
-    mpImplGradient->maEndColor = rColor;
+    mpImpl->maEndColor = rColor;
 }
 
 Degree10 Gradient::GetAngle() const
 {
-    return mpImplGradient->mnAngle;
+    return mpImpl->mnAngle;
 }
 
 void Gradient::SetAngle( Degree10 nAngle )
 {
-    mpImplGradient->mnAngle = nAngle;
+    mpImpl->mnAngle = nAngle;
 }
 
 sal_uInt16 Gradient::GetBorder() const
 {
-    return mpImplGradient->mnBorder;
+    return mpImpl->mnBorder;
 }
 
 void Gradient::SetBorder( sal_uInt16 nBorder )
 {
-    mpImplGradient->mnBorder = nBorder;
+    mpImpl->mnBorder = nBorder;
 }
 
 sal_uInt16 Gradient::GetOfsX() const
 {
-    return mpImplGradient->mnOfsX;
+    return mpImpl->mnOfsX;
 }
 
 void Gradient::SetOfsX( sal_uInt16 nOfsX )
 {
-    mpImplGradient->mnOfsX = nOfsX;
+    mpImpl->mnOfsX = nOfsX;
 }
 
 sal_uInt16 Gradient::GetOfsY() const
 {
-    return mpImplGradient->mnOfsY;
+    return mpImpl->mnOfsY;
 }
 
 void Gradient::SetOfsY( sal_uInt16 nOfsY )
 {
-    mpImplGradient->mnOfsY = nOfsY;
+    mpImpl->mnOfsY = nOfsY;
 }
 
 sal_uInt16 Gradient::GetStartIntensity() const
 {
-    return mpImplGradient->mnIntensityStart;
+    return mpImpl->mnIntensityStart;
 }
 
 void Gradient::SetStartIntensity( sal_uInt16 nIntens )
 {
-    mpImplGradient->mnIntensityStart = nIntens;
+    mpImpl->mnIntensityStart = nIntens;
 }
 
 sal_uInt16 Gradient::GetEndIntensity() const
 {
-    return mpImplGradient->mnIntensityEnd;
+    return mpImpl->mnIntensityEnd;
 }
 
 void Gradient::SetEndIntensity( sal_uInt16 nIntens )
 {
-    mpImplGradient->mnIntensityEnd = nIntens;
+    mpImpl->mnIntensityEnd = nIntens;
 }
 
 sal_uInt16 Gradient::GetSteps() const
 {
-    return mpImplGradient->mnStepCount;
+    return mpImpl->mnStepCount;
 }
 
 void Gradient::SetSteps( sal_uInt16 nSteps )
 {
-    mpImplGradient->mnStepCount = nSteps;
+    mpImpl->mnStepCount = nSteps;
 }
 
 void Gradient::GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle& rBoundRect, Point& rCenter ) const
@@ -292,7 +298,10 @@ Gradient& Gradient::operator=( Gradient&& ) = default;
 
 bool Gradient::operator==( const Gradient& rGradient ) const
 {
-    return mpImplGradient == rGradient.mpImplGradient;
+    return mpImpl == rGradient.mpImpl;
 }
+
+void std::optional<Gradient>::reset() { cow_optional::reset(); }
+std::optional<Gradient>::~optional() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

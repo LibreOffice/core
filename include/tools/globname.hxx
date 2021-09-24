@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_TOOLS_GLOBNAME_HXX
-#define INCLUDED_TOOLS_GLOBNAME_HXX
+#pragma once
 
 #include <tools/toolsdllapi.h>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -52,16 +51,21 @@ class SvStream;
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC SvGlobalName
 {
-    ::o3tl::cow_wrapper< ImpSvGlobalName > pImp;
+friend class ::std::optional<SvGlobalName>;
+friend class ::o3tl::cow_optional<SvGlobalName>;
 
+    ::o3tl::cow_wrapper< ImpSvGlobalName > mpImpl;
+
+    SvGlobalName(std::nullopt_t) noexcept;
+    SvGlobalName(const SvGlobalName&, std::nullopt_t) noexcept;
 public:
     SvGlobalName();
     SvGlobalName( const SvGlobalName & rObj ) :
-        pImp( rObj.pImp )
+        mpImpl( rObj.mpImpl )
     {
     }
     SvGlobalName( SvGlobalName && rObj ) noexcept :
-        pImp( std::move(rObj.pImp) )
+        mpImpl( std::move(rObj.mpImpl) )
     {
     }
 
@@ -91,13 +95,30 @@ public:
     bool          MakeId( const OUString & rId );
     OUString      GetHexName() const;
 
-    const SvGUID& GetCLSID() const { return pImp->szData; }
+    const SvGUID& GetCLSID() const { return mpImpl->szData; }
 
     // platform independent representation of a "GlobalName"
     // maybe transported remotely
     css::uno::Sequence < sal_Int8 > GetByteSequence() const;
 };
 
-#endif
+namespace std
+{
+    /** Specialise std::optional template for the case where we are wrapping a o3tl::cow_wrapper
+        type, and we can make the pointer inside the cow_wrapper act as an empty value,
+        and save ourselves some storage */
+    template<>
+    class TOOLS_DLLPUBLIC optional<SvGlobalName> final : public o3tl::cow_optional<SvGlobalName>
+    {
+    public:
+        using cow_optional::cow_optional; // inherit constructors
+        optional(const optional&) = default;
+        optional(optional&&) = default;
+        optional& operator=(const optional&) = default;
+        optional& operator=(optional&&) = default;
+        ~optional();
+        void reset();
+    };
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

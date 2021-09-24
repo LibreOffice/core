@@ -73,7 +73,32 @@ public:
     typedef o3tl::cow_wrapper< ImplBitmapPalette > ImplType;
 
 private:
+friend class ::std::optional<BitmapPalette>;
+friend class ::o3tl::cow_optional<BitmapPalette>;
+
+    BitmapPalette(std::nullopt_t) noexcept;
+    BitmapPalette(const BitmapPalette &, std::nullopt_t) noexcept;
+
     ImplType mpImpl;
+};
+
+namespace std
+{
+    /** Specialise std::optional template for the case where we are wrapping a o3tl::cow_wrapper
+        type, and we can make the pointer inside the cow_wrapper act as an empty value,
+        and save ourselves some storage */
+    template<>
+    class VCL_DLLPUBLIC optional<BitmapPalette> final : public o3tl::cow_optional<BitmapPalette>
+    {
+    public:
+        using cow_optional::cow_optional; // inherit constructors
+        optional(const optional&) = default;
+        optional(optional&&) = default;
+        optional& operator=(const optional&) = default;
+        optional& operator=(optional&&) = default;
+        ~optional();
+        void reset();
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

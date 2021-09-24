@@ -35,6 +35,10 @@ namespace basegfx
 
     B2DHomMatrix::B2DHomMatrix() : mpImpl(DEFAULT) {}
 
+    B2DHomMatrix::B2DHomMatrix(std::nullopt_t) noexcept : mpImpl(std::nullopt) {}
+
+    B2DHomMatrix::B2DHomMatrix(const B2DHomMatrix& rOther, std::nullopt_t) noexcept : mpImpl(rOther.mpImpl, std::nullopt) {}
+
     B2DHomMatrix::B2DHomMatrix(const B2DHomMatrix&) = default;
 
     B2DHomMatrix::B2DHomMatrix(B2DHomMatrix&&) = default;
@@ -425,5 +429,7 @@ namespace basegfx
         return true;
     }
 } // end of namespace basegfx
+
+std::optional<basegfx::B2DHomMatrix>::~optional() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
