@@ -652,7 +652,7 @@ void SwEditShell::SpellStart(
 
     if (pLinguIter)
     {
-        SwCursor* pSwCursor = GetSwCursor();
+        SwCursor* pSwCursor = GetCursor();
 
         SwPosition *pTmp = new SwPosition( *pSwCursor->GetPoint() );
         pSwCursor->FillFindPos( eCurr, *pTmp );

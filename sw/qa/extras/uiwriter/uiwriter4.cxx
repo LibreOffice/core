@@ -2777,11 +2777,11 @@ void SwUiWriterTest4::testTdf115132()
         pWrtShell->GotoTable(rTableName);
         do
         {
-            const SwStartNode* pNd = pWrtShell->GetSwCursor()->GetNode().FindTableBoxStartNode();
+            const SwStartNode* pNd = pWrtShell->GetCursor()->GetNode().FindTableBoxStartNode();
             pWrtShell->DelRight();
-            CPPUNIT_ASSERT_EQUAL(pNd, pWrtShell->GetSwCursor()->GetNode().FindTableBoxStartNode());
+            CPPUNIT_ASSERT_EQUAL(pNd, pWrtShell->GetCursor()->GetNode().FindTableBoxStartNode());
             pWrtShell->DelLeft();
-            CPPUNIT_ASSERT_EQUAL(pNd, pWrtShell->GetSwCursor()->GetNode().FindTableBoxStartNode());
+            CPPUNIT_ASSERT_EQUAL(pNd, pWrtShell->GetCursor()->GetNode().FindTableBoxStartNode());
         } while (pWrtShell->GoNextCell(false));
     }
 }

@@ -25,6 +25,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IShellCursorSupplier.hxx>
+#include <swcrsr.hxx>
 #include <swundo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -178,7 +179,7 @@ bool SwUndoOverwrite::CanGrouping( SwDoc& rDoc, SwPosition& rPos,
 void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc& rDoc = rContext.GetDoc();
-    SwPaM& rCurrentPam(rContext.GetCursorSupplier().CreateNewShellCursor());
+    SwCursor& rCurrentPam(rContext.GetCursorSupplier().CreateNewShellCursor());
 
     rCurrentPam.DeleteMark();
     rCurrentPam.GetPoint()->nNode = m_nStartNode;
@@ -260,7 +261,7 @@ void SwUndoOverwrite::RepeatImpl(::sw::RepeatContext & rContext)
 void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc& rDoc = rContext.GetDoc();
-    SwPaM& rCurrentPam(rContext.GetCursorSupplier().CreateNewShellCursor());
+    SwCursor& rCurrentPam(rContext.GetCursorSupplier().CreateNewShellCursor());
 
     rCurrentPam.DeleteMark();
     rCurrentPam.GetPoint()->nNode = m_nStartNode;

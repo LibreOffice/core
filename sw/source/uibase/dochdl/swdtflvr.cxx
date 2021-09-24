@@ -4101,7 +4101,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         {
             rSrcSh.CalcLayout();
             rSrcSh.SwCursorShell::SetCursor(rDragPt);
-            rSrcSh.GetSwCursor()->SetMark();
+            rSrcSh.GetCursor()->SetMark();
         }
     }
 
