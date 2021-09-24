@@ -1825,7 +1825,6 @@ void Fill::finalizeImport()
         {
             if( rModel.mbFillColorUsed && (!rModel.mbPatternUsed || (rModel.mnPattern == XML_solid)) )
             {
-                rModel.maPatternColor = rModel.maFillColor;
                 rModel.mnPattern = XML_solid;
                 rModel.mbPattColorUsed = rModel.mbPatternUsed = true;
             }
