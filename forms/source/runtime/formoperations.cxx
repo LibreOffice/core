@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_fuzzers.h>
 
 #include "formoperations.hxx"
 #include <frm_strings.hxx>
@@ -1739,7 +1740,7 @@ namespace frm
         {
             f();
         }
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         catch( const SQLException& )
         {
             if (!pErrorResourceId) // no information to prepend

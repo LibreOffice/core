@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_fuzzers.h>
 
 #include <cmdid.h>
 
@@ -73,7 +74,7 @@ SwView_Impl::~SwView_Impl()
         mxClipEvtLstnr->AddRemoveListener( false );
         mxClipEvtLstnr->ViewDestroyed();
     }
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     xConfigItem.reset();
 #endif
     m_pDocInserter.reset();

@@ -18,6 +18,7 @@
  */
 #include <DocumentFieldsManager.hxx>
 #include <config_features.h>
+#include <config_fuzzers.h>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentState.hxx>
@@ -77,7 +78,7 @@ namespace sw
 
 namespace
 {
-    #if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
 
     OUString lcl_GetDBVarName( SwDoc& rDoc, SwDBNameInfField& rDBField )
     {
@@ -95,7 +96,7 @@ namespace
         return sDBNumNm;
     }
 
-    #endif
+#endif
 
     bool IsFieldDeleted(IDocumentRedlineAccess const& rIDRA,
             SwRootFrame const& rLayout, SwTextField const& rTextField)
@@ -143,7 +144,7 @@ namespace
         }
         else if( pMgr )
         {
-    #if !HAVE_FEATURE_DBCONNECTIVITY
+    #if !HAVE_FEATURE_DBCONNECTIVITY || ENABLE_FUZZERS
             (void) rDoc;
     #else
             switch( nFieldWhich )
@@ -429,7 +430,7 @@ void DocumentFieldsManager::UpdateFields( bool bCloseDB )
     UpdateRefFields();
     if( bCloseDB )
     {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         m_rDoc.GetDBManager()->CloseAll();
 #endif
     }
@@ -586,7 +587,7 @@ bool DocumentFieldsManager::UpdateField(SwTextField * pDstTextField, SwField & r
             break;
 
         case SwFieldIds::Database:
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
             {
                 // JP 10.02.96: call ChgValue, so that the style change sets the
                 // ContentString correctly
@@ -965,7 +966,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
     // The array is filled with all fields; start calculation.
     SwCalc aCalc( m_rDoc );
 
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     OUString sDBNumNm( SwFieldType::GetTypeStr( SwFieldTypesEnum::DatabaseSetNumber ) );
 
     // already set the current record number
@@ -1093,7 +1094,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
         }
         break;
         case SwFieldIds::DbSetNumber:
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         {
             const_cast<SwDBSetNumberField*>(static_cast<const SwDBSetNumberField*>(pField))->Evaluate(m_rDoc);
             aCalc.VarChange( sDBNumNm, static_cast<const SwDBSetNumberField*>(pField)->GetSetNumber());
@@ -1103,7 +1104,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
         break;
         case SwFieldIds::DbNextSet:
         case SwFieldIds::DbNumSet:
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         {
             UpdateDBNumFields( *const_cast<SwDBNameInfField*>(static_cast<const SwDBNameInfField*>(pField)), aCalc );
             if( bCanFill )
@@ -1113,7 +1114,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
         break;
         case SwFieldIds::Database:
         {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
             // evaluate field
             const_cast<SwDBField*>(static_cast<const SwDBField*>(pField))->Evaluate();
 
@@ -1293,7 +1294,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
         }
     }
 
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     pMgr->CloseAll(false);
 #endif
 }
@@ -1551,7 +1552,7 @@ void DocumentFieldsManager::FieldsToCalc(SwCalc& rCalc,
     mpUpdateFields->MakeFieldList( m_rDoc, mbNewFieldLst, GETFLD_CALC );
     mbNewFieldLst = false;
 
-#if !HAVE_FEATURE_DBCONNECTIVITY
+#if !HAVE_FEATURE_DBCONNECTIVITY || ENABLE_FUZZERS
     SwDBManager* pMgr = NULL;
 #else
     SwDBManager* pMgr = m_rDoc.GetDBManager();
@@ -1568,7 +1569,7 @@ void DocumentFieldsManager::FieldsToCalc(SwCalc& rCalc,
             lcl_CalcField(m_rDoc, rCalc, **it, pMgr, pLayout);
         }
     }
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     pMgr->CloseAll(false);
 #endif
 }
@@ -1580,7 +1581,7 @@ void DocumentFieldsManager::FieldsToCalc(SwCalc& rCalc,
     mpUpdateFields->MakeFieldList( m_rDoc, mbNewFieldLst, GETFLD_CALC );
     mbNewFieldLst = false;
 
-#if !HAVE_FEATURE_DBCONNECTIVITY
+#if !HAVE_FEATURE_DBCONNECTIVITY || ENABLE_FUZZERS
     SwDBManager* pMgr = NULL;
 #else
     SwDBManager* pMgr = m_rDoc.GetDBManager();
@@ -1620,7 +1621,7 @@ void DocumentFieldsManager::FieldsToCalc(SwCalc& rCalc,
         }
     }
 
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     pMgr->CloseAll(false);
 #endif
 }
@@ -1825,7 +1826,7 @@ void DocumentFieldsManager::ClearFieldTypes()
 
 void DocumentFieldsManager::UpdateDBNumFields( SwDBNameInfField& rDBField, SwCalc& rCalc )
 {
-#if !HAVE_FEATURE_DBCONNECTIVITY
+#if !HAVE_FEATURE_DBCONNECTIVITY || ENABLE_FUZZERS
     (void) rDBField;
     (void) rCalc;
 #else

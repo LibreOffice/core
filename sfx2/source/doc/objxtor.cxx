@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_fuzzers.h>
 
 #include <map>
 
@@ -969,7 +970,7 @@ OUString SfxObjectShell::GetServiceNameFromFactory( const OUString& rFact )
         aServiceName = "com.sun.star.script.BasicIDE";
     }
 #endif
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     else if ( aFact == "sdatabase" )
     {
         aServiceName = "com.sun.star.sdb.OfficeDatabaseDocument";

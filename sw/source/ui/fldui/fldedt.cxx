@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_fuzzers.h>
 
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -201,7 +202,7 @@ SfxTabPage* SwFieldEditDlg::CreatePage(sal_uInt16 nGroup)
                 xTabPage = SwFieldDokInfPage::Create(get_content_area(), this, pSet);
                 break;
             }
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         case GRP_DB:
             xTabPage = SwFieldDBPage::Create(get_content_area(), this, nullptr);
             static_cast<SwFieldDBPage*>(xTabPage.get())->SetWrtShell(*pSh);

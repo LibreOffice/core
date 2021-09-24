@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_fuzzers.h>
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -199,7 +200,7 @@ void SwXDispatch::dispatch(const util::URL& aURL,
 {
     if(!m_pView)
         throw uno::RuntimeException();
-#if !HAVE_FEATURE_DBCONNECTIVITY
+#if !HAVE_FEATURE_DBCONNECTIVITY || ENABLE_FUZZERS
     (void) aArgs;
     if (false)
     {

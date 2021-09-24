@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_fuzzers.h>
 
 #include <cmdid.h>
 #include <unotools/confignode.hxx>
@@ -74,7 +75,7 @@ SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, weld::Window *pP
                 -1,
                 utl::OConfigurationTreeRoot::CM_READONLY);
 
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         bool bDatabaseFields = true;
         aCfgRoot.getNodeValue(
             OUString("DatabaseFields")) >>= bDatabaseFields;
@@ -244,7 +245,7 @@ void SwFieldDlg::InsertHdl()
 
 void SwFieldDlg::ActivateDatabasePage()
 {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     m_bDataBaseMode = true;
     ShowPage("database");
     SfxTabPage* pDBPage = GetTabPage("database");
@@ -268,7 +269,7 @@ void SwFieldDlg::ShowReferencePage()
 
 void SwFieldDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
 {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     if (rId != "database")
         return;
 

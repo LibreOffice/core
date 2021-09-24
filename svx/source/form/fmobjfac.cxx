@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_fuzzers.h>
 
 #include <tools/diagnose_ex.h>
 #include <svx/svdobj.hxx>
@@ -70,7 +71,7 @@ FmFormObjFactory::FmFormObjFactory()
     FmPropBrwMgr::RegisterChildWindow();
     NavigatorFrameManager::RegisterChildWindow();
     DataNavigatorManager::RegisterChildWindow();
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     FmFilterNavigatorWinMgr::RegisterChildWindow();
 #endif
 

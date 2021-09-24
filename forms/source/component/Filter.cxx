@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <config_features.h>
+#include <config_fuzzers.h>
 
 #include <string_view>
 
@@ -90,7 +91,7 @@ namespace frm
 
     bool OFilterControl::ensureInitialized( )
     {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         if ( !m_xField.is() )
         {
             OSL_FAIL( "OFilterControl::ensureInitialized: improperly initialized: no field!" );
@@ -271,7 +272,7 @@ namespace frm
 
     void SAL_CALL OFilterControl::itemStateChanged( const ItemEvent& rEvent )
     {
-#if !HAVE_FEATURE_DBCONNECTIVITY
+#if !HAVE_FEATURE_DBCONNECTIVITY || ENABLE_FUZZERS
         (void) rEvent;
 #else
         OUStringBuffer aText;
@@ -366,7 +367,7 @@ namespace frm
 
     void OFilterControl::implInitFilterList()
     {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         if ( !ensureInitialized( ) )
             // already asserted in ensureInitialized
             return;
@@ -491,7 +492,7 @@ namespace frm
 
     sal_Bool SAL_CALL OFilterControl::commit()
     {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         if ( !ensureInitialized( ) )
             // already asserted in ensureInitialized
             return true;
@@ -806,7 +807,7 @@ namespace frm
 
     void OFilterControl::initControlModel(Reference< XPropertySet > const & xControlModel)
     {
-#if !HAVE_FEATURE_DBCONNECTIVITY
+#if !HAVE_FEATURE_DBCONNECTIVITY || ENABLE_FUZZERS
         (void) xControlModel;
 #else
         if ( !xControlModel.is() )

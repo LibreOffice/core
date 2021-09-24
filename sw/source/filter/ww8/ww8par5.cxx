@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_fuzzers.h>
 
 #include <sal/types.h>
 #include <tools/solar.h>
@@ -2552,7 +2553,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* /*pF*/, OUString& rSt
 // "SERIALPRINT"
 eF_ResT SwWW8ImplReader::Read_F_DBField( WW8FieldDesc* pF, OUString& rStr )
 {
-#if !HAVE_FEATURE_DBCONNECTIVITY
+#if !HAVE_FEATURE_DBCONNECTIVITY || ENABLE_FUZZERS
     (void) pF;
     (void) rStr;
 #else
@@ -2593,7 +2594,7 @@ eF_ResT SwWW8ImplReader::Read_F_DBField( WW8FieldDesc* pF, OUString& rStr )
 // "NEXT"
 eF_ResT SwWW8ImplReader::Read_F_DBNext( WW8FieldDesc*, OUString& )
 {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     SwDBNextSetFieldType aN;
     SwFieldType* pFT = m_rDoc.getIDocumentFieldsAccess().InsertFieldType( aN );
     SwDBNextSetField aField( static_cast<SwDBNextSetFieldType*>(pFT), OUString(),
@@ -2606,7 +2607,7 @@ eF_ResT SwWW8ImplReader::Read_F_DBNext( WW8FieldDesc*, OUString& )
 // "DATASET"
 eF_ResT SwWW8ImplReader::Read_F_DBNum( WW8FieldDesc*, OUString& )
 {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     SwDBSetNumberFieldType aN;
     SwFieldType* pFT = m_rDoc.getIDocumentFieldsAccess().InsertFieldType( aN );
     SwDBSetNumberField aField( static_cast<SwDBSetNumberFieldType*>(pFT),

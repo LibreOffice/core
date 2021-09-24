@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_fuzzers.h>
 
 #include <textapi.hxx>
 
@@ -1326,7 +1327,7 @@ void SwHiddenTextField::Evaluate(SwDoc& rDoc)
     if( SwFieldTypesEnum::ConditionalText != m_nSubType )
         return;
 
-#if !HAVE_FEATURE_DBCONNECTIVITY
+#if !HAVE_FEATURE_DBCONNECTIVITY || ENABLE_FUZZERS
     (void) rDoc;
 #else
     SwDBManager* pMgr = rDoc.GetDBManager();
@@ -1352,7 +1353,7 @@ void SwHiddenTextField::Evaluate(SwDoc& rDoc)
         {   // remove brackets
             sTmpName = sTmpName.copy(1, sTmpName.getLength() - 2);
         }
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         if( pMgr)
         {
             sal_Int32 nIdx{ 0 };

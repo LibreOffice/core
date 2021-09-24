@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_fuzzers.h>
 
 #include <comphelper/propertysequence.hxx>
 #include <sfx2/dispatch.hxx>
@@ -292,7 +293,7 @@ std::shared_ptr<SwMailMergeConfigItem> SwView::EnsureMailMergeConfigItem(const S
     return xMMConfig;
 }
 
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
 
 namespace
 {
@@ -733,7 +734,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
                 m_pModuleConfig->SetInsTableFormatNum( bWebView, bSet );
             }
             break;
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         case FN_MAILMERGE_WIZARD:
         {
             // show the mailmerge wizard
