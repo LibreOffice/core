@@ -41,8 +41,8 @@ ScStyleSaveData::ScStyleSaveData( const ScStyleSaveData& rOther ) :
     aName( rOther.aName ),
     aParent( rOther.aParent )
 {
-    if (rOther.xItems)
-        xItems.reset(new SfxItemSet(*rOther.xItems));
+    if (rOther.moItems)
+        moItems.emplace(*rOther.moItems);
 }
 
 ScStyleSaveData& ScStyleSaveData::operator=( const ScStyleSaveData& rOther )
@@ -51,7 +51,10 @@ ScStyleSaveData& ScStyleSaveData::operator=( const ScStyleSaveData& rOther )
     {
         aName   = rOther.aName;
         aParent = rOther.aParent;
-        xItems.reset(rOther.xItems ? new SfxItemSet(*rOther.xItems) : nullptr);
+        if (rOther.moItems)
+            moItems.emplace(*rOther.moItems);
+        else
+            moItems.reset();
     }
     return *this;
 }
@@ -62,7 +65,7 @@ void ScStyleSaveData::InitFromStyle( const SfxStyleSheetBase* pSource )
     {
         aName   = pSource->GetName();
         aParent = pSource->GetParent();
-        xItems.reset(new SfxItemSet(const_cast<SfxStyleSheetBase*>(pSource)->GetItemSet()));
+        moItems.emplace(const_cast<SfxStyleSheetBase*>(pSource)->GetItemSet());
     }
     else
         *this = ScStyleSaveData();      // empty
@@ -157,7 +160,7 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
                 pStyle->SetParent( aNewParent );
 
             SfxItemSet& rStyleSet = pStyle->GetItemSet();
-            const SfxItemSet* pNewSet = rData.GetItems();
+            const std::optional<SfxItemSet>& pNewSet = rData.GetItems();
             OSL_ENSURE( pNewSet, "no ItemSet for style" );
             if (pNewSet)
                 rStyleSet.Set( *pNewSet, false );
