@@ -16,6 +16,24 @@
       "message": "LGTM",
       "revId": "5244f02b4da126a1361a72ae07e8c53618dc920f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b16152f5_baf67b2a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003349
+      },
+      "writtenOn": "2021-09-24T23:16:57Z",
+      "side": 1,
+      "message": "What is the accepted method of modifying this change please?\n\nEssentially it should revert this change and replace it with a new patchset. It is sufficiently different to not be an update, in fact backtracks and goes in a different direction.\n\nBeing new to the system I\u0027m tempted to click on the Revert button above.",
+      "parentUuid": "32a845d1_e31bf7ca",
+      "revId": "5244f02b4da126a1361a72ae07e8c53618dc920f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
