@@ -33,7 +33,7 @@ namespace
     struct CursorStateHelper
     {
         explicit CursorStateHelper(SwCursorShell const & rShell)
-            : m_pCursor(rShell.GetSwCursor())
+            : m_pCursor(rShell.GetCursor())
             , m_aSaveState(*m_pCursor)
         { }
 

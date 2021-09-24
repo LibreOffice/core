@@ -28,6 +28,7 @@
 #include <UndoManager.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <docary.hxx>
+#include <swcrsr.hxx>
 #include <swundo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -109,7 +110,7 @@ void SwUndRng::SetPaM( SwPaM & rPam, bool bCorrToContent ) const
 SwPaM & SwUndRng::AddUndoRedoPaM(
         ::sw::UndoRedoContext & rContext, bool const bCorrToContent) const
 {
-    SwPaM & rPaM( rContext.GetCursorSupplier().CreateNewShellCursor() );
+    SwCursor & rPaM( rContext.GetCursorSupplier().CreateNewShellCursor() );
     SetPaM( rPaM, bCorrToContent );
     return rPaM;
 }
