@@ -170,7 +170,7 @@ void SwCursorShell::DestroyCursor()
  * Simply returns the current shell cursor if there is no selection
  * (HasSelection()).
  */
-SwPaM & SwCursorShell::CreateNewShellCursor()
+SwCursor & SwCursorShell::CreateNewShellCursor()
 {
     if (HasSelection())
     {
@@ -183,16 +183,16 @@ SwPaM & SwCursorShell::CreateNewShellCursor()
  * Return the current shell cursor
  * @return - returns current `SwPaM` shell cursor
  */
-SwPaM & SwCursorShell::GetCurrentShellCursor()
+SwCursor & SwCursorShell::GetCurrentShellCursor()
 {
     return *GetCursor();
 }
 
 /**
  * Return pointer to the current shell cursor
- * @return - returns pointer to current `SwPaM` shell cursor
+ * @return - returns pointer to current `SwCursor` shell cursor
  */
-SwPaM* SwCursorShell::GetCursor( bool bMakeTableCursor ) const
+SwCursor* SwCursorShell::GetCursor( bool bMakeTableCursor ) const
 {
     if( m_pTableCursor )
     {
@@ -1055,7 +1055,7 @@ int SwCursorShell::CompareCursorStackMkCurrPt() const
 {
     int nRet = 0;
     const SwPosition *pFirst = nullptr, *pSecond = nullptr;
-    const SwPaM *pCur = GetCursor(), *pStack = m_pStackCursor;
+    const SwCursor *pCur = GetCursor(), *pStack = m_pStackCursor;
     // cursor on stack is needed if we compare against stack
     if( pStack  )
     {
@@ -3538,7 +3538,7 @@ sal_uLong SwCursorShell::FindAttrs( const SfxItemSet& rSet,
 void SwCursorShell::SetSelection( const SwPaM& rCursor )
 {
     StartAction();
-    SwPaM* pCursor = GetCursor();
+    SwCursor* pCursor = GetCursor();
     *pCursor->GetPoint() = *rCursor.GetPoint();
     if(rCursor.GetNext() != &rCursor)
     {
