@@ -359,12 +359,11 @@ void PictReader::SetFillColor( const Color& rColor )
 
 Point PictReader::ReadPoint()
 {
-    short nx,ny;
+    short nx(0), ny(0);
 
     pPict->ReadInt16( ny ).ReadInt16( nx );
 
-    Point aPoint( static_cast<tools::Long>(nx) - aBoundingRect.Left(),
-                 static_cast<tools::Long>(ny) - aBoundingRect.Top() );
+    Point aPoint(nx - aBoundingRect.Left(), ny - aBoundingRect.Top());
 
     SAL_INFO("filter.pict", "ReadPoint: " << aPoint);
     return aPoint;
@@ -372,7 +371,7 @@ Point PictReader::ReadPoint()
 
 Point PictReader::ReadDeltaH(Point aBase)
 {
-    signed char ndh;
+    signed char ndh(0);
 
     pPict->ReadChar( reinterpret_cast<char&>(ndh) );
 
@@ -381,7 +380,7 @@ Point PictReader::ReadDeltaH(Point aBase)
 
 Point PictReader::ReadDeltaV(Point aBase)
 {
-    signed char ndv;
+    signed char ndv(0);
 
     pPict->ReadChar( reinterpret_cast<char&>(ndv) );
 
@@ -390,7 +389,7 @@ Point PictReader::ReadDeltaV(Point aBase)
 
 Point PictReader::ReadUnsignedDeltaH(Point aBase)
 {
-    sal_uInt8 ndh;
+    sal_uInt8 ndh(0);
 
     pPict->ReadUChar( ndh );
 
@@ -399,7 +398,7 @@ Point PictReader::ReadUnsignedDeltaH(Point aBase)
 
 Point PictReader::ReadUnsignedDeltaV(Point aBase)
 {
-    sal_uInt8 ndv;
+    sal_uInt8 ndv(0);
 
     pPict->ReadUChar( ndv );
 
@@ -408,11 +407,11 @@ Point PictReader::ReadUnsignedDeltaV(Point aBase)
 
 Size PictReader::ReadSize()
 {
-    short nx,ny;
+    short nx(0), ny(0);
 
     pPict->ReadInt16( ny ).ReadInt16( nx );
 
-    return Size( static_cast<tools::Long>(nx), static_cast<tools::Long>(ny) );
+    return Size(nx, ny);
 }
 
 Color PictReader::ReadColor()
@@ -438,7 +437,7 @@ Color PictReader::ReadColor()
 
 Color PictReader::ReadRGBColor()
 {
-    sal_uInt16 nR, nG, nB;
+    sal_uInt16 nR(0), nG(0), nB(0);
 
     pPict->ReadUInt16( nR ).ReadUInt16( nG ).ReadUInt16( nB );
     return Color( static_cast<sal_uInt8>( nR >> 8 ), static_cast<sal_uInt8>( nG >> 8 ), static_cast<sal_uInt8>( nB >> 8 ) );
@@ -804,9 +803,8 @@ sal_uInt64 PictReader::ReadPixMapEtc( BitmapEx &rBitmap, bool bBaseAddr, bool bC
     // conditionally read destination rectangle:
     if ( pDestRect != nullptr )
     {
-        Point aTL, aBR;
-        aTL = ReadPoint();
-        aBR = ReadPoint();
+        Point aTL = ReadPoint();
+        Point aBR = ReadPoint();
         *pDestRect = tools::Rectangle( aTL, aBR );
         nDataSize += 8;
     }
