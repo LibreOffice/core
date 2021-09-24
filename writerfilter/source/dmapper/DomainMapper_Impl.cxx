@@ -332,6 +332,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_aSmartTagHandler(m_xComponentContext, m_xTextDocument),
         m_xInsertTextRange(rMediaDesc.getUnpackedValueOrDefault("TextInsertModeRange", uno::Reference<text::XTextRange>())),
         m_xAltChunkStartingRange(rMediaDesc.getUnpackedValueOrDefault("AltChunkStartingRange", uno::Reference<text::XTextRange>())),
+        m_bInsideTextBox(false),
         m_bIsNewDoc(!rMediaDesc.getUnpackedValueOrDefault("InsertMode", false)),
         m_bIsAltChunk(rMediaDesc.getUnpackedValueOrDefault("AltChunkMode", false)),
         m_bIsReadGlossaries(rMediaDesc.getUnpackedValueOrDefault("ReadGlossaries", false)),
@@ -2365,13 +2366,16 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
     if (m_bDiscardHeaderFooter)
         return;
 
-    if (m_aTextAppendStack.empty())
+    if (m_aTextAppendStack.empty() && !m_bInsideTextBox)
         return;
     // Before placing call to processDeferredCharacterProperties(), TopContextType should be CONTEXT_CHARACTER
     // processDeferredCharacterProperties() invokes only if character inserted
     if( pPropertyMap == m_pTopContext && !deferredCharacterProperties.empty() && (GetTopContextType() == CONTEXT_CHARACTER) )
         processDeferredCharacterProperties();
-    uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
+    uno::Reference< text::XTextAppend >  xTextAppend;
+
+        xTextAppend = m_aTextAppendStack.top().xTextAppend;
+
     if (!xTextAppend.is() || !hasTableManager() || getTableManager().isIgnore())
         return;
 
@@ -2510,7 +2514,7 @@ void DomainMapper_Impl::appendTextContent(
     )
 {
     SAL_WARN_IF(m_aTextAppendStack.empty(), "writerfilter.dmapper", "no text append stack");
-    if (m_aTextAppendStack.empty())
+    if (m_aTextAppendStack.empty() && !m_bInsideTextBox)
         return;
     uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert( m_aTextAppendStack.top().xTextAppend, uno::UNO_QUERY );
     OSL_ENSURE( xTextAppendAndConvert.is(), "trying to append a text content without XTextAppendAndConvert" );
@@ -4381,6 +4385,91 @@ void DomainMapper_Impl::ChainTextFrames()
     catch (const uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("writerfilter.dmapper");
+    }
+}
+
+void DomainMapper_Impl::AddNewDummyTextBox()
+{
+    try
+    {
+        // Create a new frame.
+        uno::Reference<text::XTextFrame> xDummyFrame(
+            m_xTextFactory->createInstance("com.sun.star.text.TextFrame"), uno::UNO_QUERY);
+        uno::Reference<container::XNamed> xName(xDummyFrame, uno::UNO_QUERY);
+        // Name it.
+        xName->setName("DummyTextBox-" + OUString::number(m_aPendingTextBoxes.size()));
+        // Insert to the body text.
+        uno::Reference<text::XTextAppendAndConvert>(m_xBodyText, uno::UNO_QUERY)
+            ->appendTextContent(xDummyFrame, beans::PropertyValues());
+        // Save for the shape
+        m_aPendingTextBoxes.push(xDummyFrame);
+        // Set for the append stack, so the DMapper will write to inside it.
+        m_aTextAppendStack.push(
+            TextAppendContext(uno::Reference<text::XTextAppend>(xDummyFrame, uno::UNO_QUERY), {}));
+    }
+    catch (...)
+    {
+        // Do nothing.
+    }
+}
+
+void DomainMapper_Impl::CloseDummyTextBox()
+{
+    // If there was inside a texbox and the append stack has a textbox on top...
+    if (m_bInsideTextBox
+        && (uno::Reference<text::XTextFrame>(m_aTextAppendStack.top().xTextAppend, uno::UNO_QUERY))
+               .is())
+        // Restore the state (so the writing will happen to the original place again)
+        m_aTextAppendStack.pop();
+}
+
+void DomainMapper_Impl::AttachDummyTextBox(uno::Reference<drawing::XShape> xShape)
+{
+    // There must be a shape!
+    if (!xShape)
+        return;
+
+    // And waiting textbox too!
+    if (!m_aPendingTextBoxes.size())
+        return;
+
+    try
+    {
+        // Is this shape a group shape?
+        uno::Reference<drawing::XShapes> xGroup(xShape, uno::UNO_QUERY);
+        if (xGroup)
+        {
+            // If it is a group, iterate over
+            for (sal_Int32 i = 0; i < xGroup->getCount(); ++i)
+            {
+                // get the member
+                auto xChild = xGroup->getByIndex(i).get<uno::Reference<drawing::XShape>>();
+                // And if this member is a textbox
+                uno::Reference<beans::XPropertySet> xProps(xChild, uno::UNO_QUERY);
+                if (xProps->getPropertyValue("TextBox").get<bool>())
+                {
+                    // Set its textbox.
+                    xProps->setPropertyValue("TextBoxContent",
+                                             uno::Any(m_aPendingTextBoxes.front()));
+                    m_aPendingTextBoxes.pop();
+                }
+            }
+        }
+        else
+        {
+            // Simple shape?
+            uno::Reference<beans::XPropertySet> xProps(xShape, uno::UNO_QUERY);
+            if (xProps->getPropertyValue("TextBox").get<bool>())
+            {
+                // If its a textbox set it.
+                xProps->setPropertyValue("TextBoxContent", uno::Any(m_aPendingTextBoxes.front()));
+                m_aPendingTextBoxes.pop();
+            }
+        }
+    }
+    catch (...)
+    {
+        // Do nothing.
     }
 }
 
