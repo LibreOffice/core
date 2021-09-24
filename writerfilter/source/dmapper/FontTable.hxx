@@ -80,6 +80,9 @@ class FontTable : public LoggedProperties, public LoggedTable
                                ::writerfilter::Reference<Stream>::Pointer_t ref) override;
     virtual void lcl_startShape(css::uno::Reference<css::drawing::XShape> const& xShape) override;
     virtual void lcl_endShape( ) override;
+
+    virtual void lcl_startTextBox() override { };
+    virtual void lcl_endTextBox() override {};
 };
 typedef tools::SvRef< FontTable >          FontTablePtr;
 
