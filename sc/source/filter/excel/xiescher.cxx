@@ -1866,7 +1866,7 @@ void XclImpNoteObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
         // create cell note with all data from drawing object
         ScNoteUtil::CreateNoteFromObjectData(
             GetDoc(), maScPos,
-            rSdrObj.GetMergedItemSet().Clone(),             // new object on heap expected
+            rSdrObj.GetMergedItemSet().CloneAsValue(),             // new object on heap expected
             *pOutlinerObj,
             rSdrObj.GetLogicRect(),
             ::get_flag( mnNoteFlags, EXC_NOTE_VISIBLE ) );

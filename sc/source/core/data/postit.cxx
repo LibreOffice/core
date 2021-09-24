@@ -820,9 +820,9 @@ void ScCaptionPtr::clear()
 
 struct ScCaptionInitData
 {
-    std::unique_ptr< SfxItemSet >       mxItemSet;          /// Caption object formatting.
-    std::optional< OutlinerParaObject >  mxOutlinerObj;      /// Text object with all text portion formatting.
-    OUString     maSimpleText;       /// Simple text without formatting.
+    std::optional< SfxItemSet > moItemSet;  /// Caption object formatting.
+    std::optional< OutlinerParaObject > mxOutlinerObj; /// Text object with all text portion formatting.
+    OUString            maSimpleText;       /// Simple text without formatting.
     Point               maCaptionOffset;    /// Caption position relative to cell corner.
     Size                maCaptionSize;      /// Size of the caption object.
     bool                mbDefaultPosSize;   /// True = use default position and size for caption.
@@ -1058,7 +1058,7 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
         maNoteData.mxCaption->SetText( xInitData->maSimpleText );
 
     // copy all items or set default items; reset shadow items
-    ScCaptionUtil::SetDefaultItems( *maNoteData.mxCaption, mrDoc, xInitData->mxItemSet.get() );
+    ScCaptionUtil::SetDefaultItems( *maNoteData.mxCaption, mrDoc, xInitData->moItemSet ? &*xInitData->moItemSet : nullptr );
 
     // set position and size of the caption object
     if( xInitData->mbDefaultPosSize )
@@ -1240,15 +1240,14 @@ ScPostIt* ScNoteUtil::CreateNoteFromCaption(
 }
 
 ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
-        ScDocument& rDoc, const ScAddress& rPos, std::unique_ptr<SfxItemSet> pItemSet,
+        ScDocument& rDoc, const ScAddress& rPos, SfxItemSet&& rItemSet,
         const OutlinerParaObject& rOutlinerObj, const tools::Rectangle& rCaptionRect,
         bool bShown )
 {
-    OSL_ENSURE( pItemSet, "ScNoteUtil::CreateNoteFromObjectData - item set expected" );
     ScNoteData aNoteData( bShown );
     aNoteData.mxInitData = std::make_shared<ScCaptionInitData>();
     ScCaptionInitData& rInitData = *aNoteData.mxInitData;
-    rInitData.mxItemSet = std::move(pItemSet);
+    rInitData.moItemSet.emplace(std::move(rItemSet));
     rInitData.mxOutlinerObj = rOutlinerObj;
 
     // convert absolute caption position to relative position
