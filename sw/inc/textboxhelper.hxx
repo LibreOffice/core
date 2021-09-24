@@ -56,6 +56,8 @@ public:
     using SavedLink = std::map<const SwFrameFormat*, const SwFrameFormat*>;
     /// Maps a draw format to content.
     using SavedContent = std::map<const SwFrameFormat*, SwFormatContent>;
+    /// Helper function for syncing all texboxes of the group.
+    static void doGroupTextBoxSync(SwFrameFormat* pShapeFormat, SdrObject* pMasterObj);
     /// Create a TextBox for a shape. If the third parameter is true,
     /// the original text in the shape will be copied to the frame
     /// The textbox is created for the shape given by the pObject parameter.
@@ -64,8 +66,13 @@ public:
     /// like group shapes, it will destroy only that textbox what belongs
     /// to the given pObject shape.
     static void destroy(const SwFrameFormat* pShape, const SdrObject* pObject);
+    /// Sets the given extising textframe for the shape to become a texbox.
+    /// Used by the TEXT_BOX_CONTENT property setting.
+    static void setTextBox(SwFrameFormat* pShape, SdrObject* pObject,
+                           css::uno::Reference<css::text::XTextFrame> xNew);
     /// Get interface of a shape's TextBox, if there is any.
-    static css::uno::Any queryInterface(const SwFrameFormat* pShape, const css::uno::Type& rType);
+    static css::uno::Any queryInterface(const SwFrameFormat* pShape, const css::uno::Type& rType,
+                                        SdrObject* pObj = nullptr);
 
     /// Sync property of TextBox with the one of the shape.
     static void syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID,
@@ -194,6 +201,19 @@ class SwTextBoxNode
         SdrObject* m_pDrawObject;
         // This is for indicating if the textbox is in special case: for example during undo.
         bool m_bIsActive;
+
+        SwTextBoxElement()
+            : m_pTextBoxFormat(nullptr)
+            , m_pDrawObject(nullptr)
+            , m_bIsActive(false)
+        {
+        }
+        ~SwTextBoxElement()
+        {
+            m_pDrawObject = nullptr;
+            m_pTextBoxFormat = nullptr;
+            m_bIsActive = false;
+        }
     };
 
     // This vector stores the textboxes what belongs to this node

@@ -946,6 +946,22 @@ SfxViewShell* SwDrawView::GetSfxViewShell() const
     return m_rImp.GetShell()->GetSfxViewShell();
 }
 
+static void lcl_DeleteMarkedTextBoxes(std::vector<SwFrameFormat*>* pTextBoxesToDelete, SwTextBoxNode* pTextBoxesNode, SdrObject* pObj)
+{
+    if (auto pChildren = pObj->getChildrenOfSdrObject())
+    {
+        for (size_t i = 0; i < pChildren->GetObjCount(); ++i)
+        {
+            lcl_DeleteMarkedTextBoxes(pTextBoxesToDelete, pTextBoxesNode, pChildren->GetObj(i));
+        }
+    }
+    else
+    {
+        if (auto pTextBox = pTextBoxesNode->GetTextBox(pObj))
+            pTextBoxesToDelete->emplace_back(pTextBox);
+    }
+}
+
 void SwDrawView::DeleteMarked()
 {
     SwDoc* pDoc = Imp().GetShell()->GetDoc();
@@ -967,16 +983,11 @@ void SwDrawView::DeleteMarked()
         SdrObject *pObject = rMarkList.GetMark(i)->GetMarkedSdrObj();
         SwContact* pContact = GetUserCall(pObject);
         SwFrameFormat* pFormat = pContact->GetFormat();
-        if (auto pChildren = pObject->getChildrenOfSdrObject())
+
+        if (auto pTextBoxNd = pFormat->GetOtherTextBoxFormat())
         {
-            for (size_t it = 0; it < pChildren->GetObjCount(); ++it)
-                if (SwFrameFormat* pTextBox = SwTextBoxHelper::getOtherTextBoxFormat(
-                        pFormat, RES_DRAWFRMFMT, pChildren->GetObj(it)))
-                    aTextBoxesToDelete.push_back(pTextBox);
+            lcl_DeleteMarkedTextBoxes(&aTextBoxesToDelete, pTextBoxNd, pObject);
         }
-        else
-            if (SwFrameFormat* pTextBox = SwTextBoxHelper::getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT))
-                aTextBoxesToDelete.push_back(pTextBox);
     }
 
     if ( pDoc->DeleteSelection( *this ) )
