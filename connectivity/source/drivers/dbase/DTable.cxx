@@ -523,7 +523,7 @@ void ODbaseTable::construct()
         {
             SAL_WARN("connectivity.drivers", "Parsing error: " << nMaxPossibleRecords <<
                      " max possible records, but " << m_aHeader.nbRecords << " claimed, truncating");
-            m_aHeader.nbRecords = nMaxPossibleRecords;
+            m_aHeader.nbRecords = std::max(nMaxPossibleRecords, static_cast<size_t>(1));
         }
     }
 
