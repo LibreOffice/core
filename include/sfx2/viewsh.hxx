@@ -55,6 +55,7 @@ class SfxPrinter;
 class Menu;
 class NotifyEvent;
 class SfxInPlaceClient;
+class SfxLokCallbackInterface;
 namespace vcl { class PrinterController; }
 
 namespace com::sun::star::beans { struct PropertyValue; }
@@ -333,10 +334,13 @@ public:
     SAL_DLLPRIVATE void PopSubShells_Impl() { PushSubShells_Impl( false ); }
     SAL_DLLPRIVATE bool ExecKey_Impl(const KeyEvent& aKey);
 
-    /// The actual per-view implementation of lok::Document::registerCallback().
-    void registerLibreOfficeKitViewCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
+    /// Set up a more efficient internal callback instead of LibreOfficeKitCallback.
+    void setLibreOfficeKitViewCallback(SfxLokCallbackInterface* pCallback);
     /// Invokes the registered callback, if there are any.
-    void libreOfficeKitViewCallback(int nType, const char* pPayload) const override;
+    virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) const override;
+    virtual void libreOfficeKitViewCallback(int nType, const char* pPayload, int nViewId) const override;
+    virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart) const override;
+
     /// Set if we are doing tiled searching.
     void setTiledSearching(bool bTiledSearching);
     /// See lok::Document::getPart().
