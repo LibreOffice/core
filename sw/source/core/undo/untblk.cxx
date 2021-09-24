@@ -25,6 +25,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IShellCursorSupplier.hxx>
 #include <docary.hxx>
+#include <swcrsr.hxx>
 #include <swundo.hxx>
 #include <pam.hxx>
 #include <mvsave.hxx>
@@ -372,7 +373,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     // position cursor onto REDO section
-    SwPaM& rPam(rContext.GetCursorSupplier().CreateNewShellCursor());
+    SwCursor& rPam(rContext.GetCursorSupplier().CreateNewShellCursor());
     SwDoc& rDoc = rPam.GetDoc();
     rPam.DeleteMark();
     rPam.GetPoint()->nNode = m_nSttNode - m_nNodeDiff;
