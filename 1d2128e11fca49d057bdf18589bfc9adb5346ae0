@@ -35,6 +35,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e531a0bb_9aa2340c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-24T06:08:10Z",
+      "side": 1,
+      "message": "But even though the change itself seems OK, it would likely not resolve tdf#144687 in full itself: e.g., it will likely to give wrong results at some Dec 25th (Julian), when proleptic Gregorian gives the next year already. Just check what \u0027\u003dYEAR(\"1581-12-22\")\u0027 gives ;)",
+      "revId": "1d2128e11fca49d057bdf18589bfc9adb5346ae0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e6cf6d3a_55b32344",
