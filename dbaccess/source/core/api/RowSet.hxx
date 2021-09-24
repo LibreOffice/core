@@ -116,6 +116,7 @@ namespace dbaccess
         OUString                               m_aUpdateCatalogName; // is set by a query
         OUString                               m_aUpdateSchemaName; // is set by a query
         OUString                               m_aUpdateTableName; // is set by a query
+        OUString                               m_sErrorString;
 
         sal_Int32                   m_nFetchDirection;
         sal_Int32                   m_nFetchSize;

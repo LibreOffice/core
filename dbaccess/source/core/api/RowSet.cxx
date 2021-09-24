@@ -123,6 +123,7 @@ ORowSet::ORowSet( const Reference< css::uno::XComponentContext >& _rxContext )
     ,m_aRowsetListeners(*m_pMutex)
     ,m_aApproveListeners(*m_pMutex)
     ,m_aRowsChangeListener(*m_pMutex)
+    ,m_sErrorString(ResourceManager::loadString(RID_STR_COMMAND_LEADING_TO_ERROR))
     ,m_nFetchDirection(FetchDirection::FORWARD)
     ,m_nFetchSize(50)
     ,m_nMaxFieldSize(0)
@@ -1644,21 +1645,18 @@ void ORowSet::impl_ensureStatement_throw()
             // then the driver doesn't support this feature
         }
     }
-    catch( const SQLException& )
+    catch (SQLException& rException)
     {
-        SQLExceptionInfo aError( ::cppu::getCaughtException() );
-        OSL_ENSURE( aError.isValid(), "ORowSet::impl_makeNewStatement_throw: caught an SQLException which we cannot analyze!" );
+        css::sdbc::SQLException* pLastExceptionInChain = SQLExceptionInfo::getLastException(&rException);
+        assert(pLastExceptionInChain && "will at least be &rException");
 
         // append information about what we were actually going to execute
-        try
-        {
-            OUString sInfo(DBA_RES_PARAM( RID_STR_COMMAND_LEADING_TO_ERROR, "$command$", sCommandToExecute )  );
-            aError.append( SQLExceptionInfo::TYPE::SQLContext, sInfo );
-        }
-        catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION("dbaccess"); }
+        OUString sInfo(m_sErrorString.replaceFirst("$command$", sCommandToExecute));
+        css::uno::Any aAppend = SQLExceptionInfo::createException(SQLExceptionInfo::TYPE::SQLContext, sInfo, OUString(), 0);
+        pLastExceptionInChain->NextException = aAppend;
 
         // propagate
-        aError.doThrow();
+        throw;
     }
 }
 
