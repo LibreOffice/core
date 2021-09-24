@@ -76,6 +76,8 @@ protected:
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf143860NonPrimitiveCustomShape,
                                     "tdf143860_NonPrimitiveCustomShape.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The document has a custom shape of type non-primitive without handles. Make sure that the shape
     // is not exported with preset but with custom geometry.
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
@@ -86,6 +88,8 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf143860NonPrimitiveCustomShape,
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testWrapPolygonCurve, "tdf136386_WrapPolygonCurve.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Document has a curve with contour wrap and 'outside only'. Error was, that type 'square' was
     // written and no wrap polygon. Make sure we write wrapTight and a wrapPolygon.
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
@@ -101,6 +105,8 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testWrapPolygonCurve, "tdf136386_WrapPolygon
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testWrapPolygonLineShape, "tdf136386_WrapPolygonLineShape.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Document has a sloping line with contour wrap. Error was, that type 'square' was written and
     // no wrap polygon. Now we write 'through' and use wrap polygon 0|0, 21600|21600, 0|0.
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
@@ -116,6 +122,8 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testWrapPolygonLineShape, "tdf136386_WrapPol
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testWrapPolygonCustomShape,
                                     "tdf142433_WrapPolygonCustomShape.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Document has 4-point star with contour wrap. Error was, that the enhanced path was written
     // literally as wrap polygon. But that does not work, because path might have links to equations
     // and handles and not only numbers.
@@ -134,6 +142,8 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testWrapPolygonCustomShape,
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFrameWrapTextMode, "tdf143432_Frame_WrapTextMode.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDocument);
     // Without the fix the value "largest" was written to file in both cases.
@@ -193,6 +203,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134219ContourWrap_stroke_shadow)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf123569_rotWriterImage, "tdf123569_rotWriterImage_46deg.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
     // Error was, that position of logical rectangle was treated as position of snap rectangle.
     // Thus a wrong position was calculated.
@@ -215,6 +227,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142486_LeftMarginShadowLeft, "tdf142486_LeftMarg
 
 DECLARE_OOXMLEXPORT_TEST(testTdf142486_FrameShadow, "tdf142486_FrameShadow.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
         xModel->getCurrentController(), uno::UNO_QUERY_THROW);
@@ -233,6 +247,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142486_FrameShadow, "tdf142486_FrameShadow.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf136059, "tdf136059.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Contour has not been exported!", true,
         getProperty<bool>(getShape(1), "SurroundContour"));
     // With the fix this shall pass, see tdf136059.
@@ -475,6 +491,8 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf134619_numberingProps, "tdf134619_num
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf134951_duplicates, "tdf134951_duplicates.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(3, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XEndnotesSupplier> xEndnotesSupplier(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xEndnotesSupplier->getEndnotes()->getCount());
 
@@ -492,6 +510,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf135773_numberingShading, "tdf135774_n
 
 DECLARE_OOXMLEXPORT_TEST(testTdf140336_paraNoneShading, "tdf140336_paraNoneShading.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Before the fix, the background from a style was exported to dis-inheriting paragraphs/styles.
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(COL_AUTO), getProperty<sal_uInt32>(getParagraph(1), "ParaBackColor"));
     uno::Reference<beans::XPropertySet> xStyle(getStyles("ParagraphStyles")->getByName("CanclledBackground"), uno::UNO_QUERY);
@@ -691,6 +710,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138953, "croppedAndRotated.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf118535, "tdf118535.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("word/media/image1.jpeg")));
     // Without the accompanying fix in place, this test would have failed with:
@@ -842,6 +863,8 @@ DECLARE_OOXMLEXPORT_TEST(testCommentDoneModel, "CommentDone.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_ShadowDirection, "tdf142361ShadowDirection.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The attribute 'rotWithShape' has the default value 'true' in OOXML, so Words interprets a
     // missing attribute as 'true'. That means that Word rotates the shadow if the shape is
     // rotated. Because in LibreOffice a shadow is never rotated, we must not omit this
@@ -895,6 +918,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf139549, "tdf139549.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf143726, "Simple-TOC.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
     CPPUNIT_ASSERT(pXmlStyles);
     // Without the fix this was "TOA Heading" which belongs to the "Table of Authorities" index in Word

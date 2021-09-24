@@ -134,6 +134,8 @@ DECLARE_ODFEXPORT_TEST(testMathObjectFlatExport, "2_MathType3.docx")
 
 DECLARE_ODFEXPORT_TEST(testTdf144319, "tdf144319.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(7, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     OUString formula1(getFormula(getRun(getParagraph(3), 1)));
     CPPUNIT_ASSERT_EQUAL(OUString("{ x = frac { { - b +- sqrt { b ^ 2 - 4 a c } } } { { 2 a } } }"), formula1);
     OUString formula2(getFormula(getRun(getParagraph(4), 1)));
@@ -252,6 +254,8 @@ DECLARE_ODFEXPORT_TEST(testTdf130314, "tdf130314.docx")
 
 DECLARE_ODFEXPORT_EXPORTONLY_TEST(testTdf133487, "MadeByLO7.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(3, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     // shape in background has lowest index
     assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p[2]/draw:custom-shape", "z-index", "0");
@@ -266,6 +270,8 @@ DECLARE_ODFEXPORT_EXPORTONLY_TEST(testTdf133487, "MadeByLO7.odt")
 
 DECLARE_ODFEXPORT_EXPORTONLY_TEST(testTdf141467, "Formcontrol needs high z-index.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     // shape in foreground has lowest index
     assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p[2]/draw:custom-shape", "z-index", "0");
@@ -1877,6 +1883,7 @@ DECLARE_ODFEXPORT_TEST(testTdf118393, "tdf118393.odt")
 
 DECLARE_ODFEXPORT_TEST(testTdf135338_firstLeftPageFooter, "tdf135338_firstLeftPageFooter.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(6, getPages());
     // The first page is a left page only style, but it should still show the first page footer
     // instead of the left footer text "EVEN/LEFT (Left page only)"
     CPPUNIT_ASSERT_EQUAL(OUString("First (Left page only)"),  parseDump("/root/page[2]/footer/txt/text()"));
@@ -1936,6 +1943,7 @@ DECLARE_ODFEXPORT_TEST(testMasterPageWithDrawingPage, "sw_hatch.odt")
 
 DECLARE_ODFEXPORT_EXPORTONLY_TEST(testPageStyleBackgroundFullSizeOOo, "pagestyle_background_ooo33.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
     // Standard
     assertXPath(pXmlDoc,
@@ -1992,6 +2000,7 @@ DECLARE_ODFEXPORT_EXPORTONLY_TEST(testPageStyleBackgroundFullSizeOOo, "pagestyle
 
 DECLARE_ODFEXPORT_EXPORTONLY_TEST(testPageStyleBackgroundFullSizeLO64, "pagestyle_background_lo64.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(6, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
     // Standard
     assertXPath(pXmlDoc,
@@ -2099,6 +2108,7 @@ DECLARE_ODFEXPORT_EXPORTONLY_TEST(testPageStyleBackgroundFullSizeLO64, "pagestyl
 
 DECLARE_ODFEXPORT_EXPORTONLY_TEST(testPageStyleBackgroundFullSizeLO70, "pagestyle_background_lo70.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(6, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
     // Standard
     assertXPath(pXmlDoc,
@@ -2206,6 +2216,8 @@ DECLARE_ODFEXPORT_EXPORTONLY_TEST(testPageStyleBackgroundFullSizeLO70, "pagestyl
 
 DECLARE_ODFEXPORT_EXPORTONLY_TEST(testFillBitmapUnused, "fillbitmap3.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // nav_5f_home and all its references are completely gone
     xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
 
@@ -3135,6 +3147,7 @@ DECLARE_ODFEXPORT_EXPORTONLY_TEST(tdf135942, "nestedTableInFooter.odt")
 
 DECLARE_ODFEXPORT_TEST(testGutterLeft, "gutter-left.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xPageStyle;
     getStyles("PageStyles")->getByName("Standard") >>= xPageStyle;
     sal_Int32 nGutterMargin{};

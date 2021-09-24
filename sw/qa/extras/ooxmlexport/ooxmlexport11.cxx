@@ -1500,6 +1500,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf67207_MERGEFIELD_DATABASE, "tdf67207.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf101122_noFillForCustomShape, "tdf101122_noFillForCustomShape.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#101122 check whether the "F" (noFill) option has been exported to docx
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
@@ -1520,6 +1522,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf101122_noFillForCustomShape, "tdf1011
 //
 DECLARE_OOXMLEXPORT_TEST(testTdf124678_case1, "tdf124678_no_leading_paragraph.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("First page header text", OUString(""), parseDump("/root/page[1]/header/txt"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Second page header text", OUString("HEADER"), parseDump("/root/page[2]/header/txt"));
 }
@@ -1531,6 +1534,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124678_case1, "tdf124678_no_leading_paragraph.od
 //
 DECLARE_OOXMLEXPORT_TEST(testTdf124678_case2, "tdf124678_with_leading_paragraph.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("First page header text", OUString(""), parseDump("/root/page[1]/header/txt"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Second page header text", OUString("HEADER"), parseDump("/root/page[2]/header/txt"));
 }

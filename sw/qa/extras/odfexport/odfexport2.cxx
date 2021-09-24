@@ -32,6 +32,7 @@ public:
 
 DECLARE_ODFEXPORT_TEST(testTdf52065_centerTabs, "testTdf52065_centerTabs.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     sal_Int32 nTabStop = parseDump("//body/txt[4]/Text[3]", "nWidth").toInt32();
     // Without the fix, the text was unseen, with a tabstop width of 64057. It should be 3057
     CPPUNIT_ASSERT(nTabStop < 4000);
@@ -41,6 +42,8 @@ DECLARE_ODFEXPORT_TEST(testTdf52065_centerTabs, "testTdf52065_centerTabs.odt")
 
 DECLARE_ODFEXPORT_TEST(testTdf104254_noHeaderWrapping, "tdf104254_noHeaderWrapping.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     sal_Int32 nParaHeight = getXPath(pXmlDoc, "//header/txt[1]/infos/bounds", "height").toInt32();
@@ -51,6 +54,7 @@ DECLARE_ODFEXPORT_TEST(testTdf104254_noHeaderWrapping, "tdf104254_noHeaderWrappi
 
 DECLARE_ODFEXPORT_TEST(testTdf143793_noBodyWrapping, "tdf143793_noBodyWrapping.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
     // Preserve old document wrapping. Compat "Use OOo 1.1 text wrapping around objects"
     // Originally, the body text did not wrap around spill-over header images
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Fits on one page", 1, getPages() );
@@ -76,6 +80,7 @@ DECLARE_ODFEXPORT_TEST(testTdf137199, "tdf137199.docx")
 
 DECLARE_ODFEXPORT_TEST(testTdf143605, "tdf143605.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // With numbering type "none" there should be nothing
     CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(getParagraph(1), "ListLabelString"));
 }
@@ -114,6 +119,8 @@ DECLARE_ODFEXPORT_TEST(testListFormatDocx, "listformat.docx")
 
 DECLARE_ODFEXPORT_TEST(testShapeWithHyperlink, "shape-with-hyperlink.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport("content.xml"))
     {
         // Check how conversion from prefix/suffix to list format did work
@@ -124,6 +131,7 @@ DECLARE_ODFEXPORT_TEST(testShapeWithHyperlink, "shape-with-hyperlink.odt")
 
 DECLARE_ODFEXPORT_TEST(testShapesHyperlink, "shapes-hyperlink.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL(5, getShapes());
     uno::Reference<beans::XPropertySet> const xPropSet1(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("http://libreoffice.org/"), getProperty<OUString>(xPropSet1, "Hyperlink"));
@@ -143,6 +151,7 @@ DECLARE_ODFEXPORT_TEST(testShapesHyperlink, "shapes-hyperlink.odt")
 
 DECLARE_ODFEXPORT_TEST(testListFormatOdt, "listformat.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Ensure in resulting ODT we also have not just prefix/suffix, but custom delimiters
     CPPUNIT_ASSERT_EQUAL(OUString(">1<"), getProperty<OUString>(getParagraph(1), "ListLabelString"));
     CPPUNIT_ASSERT_EQUAL(OUString(">>1.1<<"), getProperty<OUString>(getParagraph(2), "ListLabelString"));
