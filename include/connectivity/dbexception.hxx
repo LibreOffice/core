@@ -131,6 +131,12 @@ public:
         m_eType = TYPE::Undefined;
     }
 
+    // create an exception
+    static css::uno::Any createException(TYPE eType, const OUString& rErrorMessage, const OUString& rSQLState, const sal_Int32 nErrorCode);
+
+    // find the end of the exception chain
+    static css::sdbc::SQLException* getLastException(css::sdbc::SQLException* pLastException);
+
 private:
     void implDetermineType();
 };
