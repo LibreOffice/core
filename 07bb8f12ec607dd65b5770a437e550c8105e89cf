@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2088ccdb_b54ad1cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003371
+      },
+      "writtenOn": "2021-09-24T19:38:52Z",
+      "side": 1,
+      "message": "Hi, it\u0027s my first patch to gerrit, I hope you\u0027re the right reviewers to add here. Basically, I took the line Heiko had introduced earlier, but abandoned the commit.",
+      "revId": "07bb8f12ec607dd65b5770a437e550c8105e89cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
