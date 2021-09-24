@@ -270,6 +270,7 @@ DECLARE_WW8EXPORT_TEST(testdf79553_lineNumbers, "tdf79553_lineNumbers.doc")
 
 DECLARE_WW8EXPORT_TEST(tesTdf138302_restartNumbering, "tdf138302_restartNumbering.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xPara(getParagraph(8), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("1."), getProperty<OUString>(xPara, "ListLabelString"));
 }
@@ -436,11 +437,15 @@ DECLARE_WW8EXPORT_TEST(testTdf120225_textControlCrossRef, "tdf120225_textControl
 
 DECLARE_WW8EXPORT_TEST(testTdf134948, "tdf134948.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Only 1 paragraph", 1, getParagraphs());
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf132726, "tdf132726.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 1, "What sentence has a yellow background? ");
     CPPUNIT_ASSERT_EQUAL( COL_AUTO, Color(ColorTransparency, getProperty<sal_uInt32>(xRun, "CharBackColor")) );
 
@@ -572,6 +577,7 @@ DECLARE_WW8EXPORT_TEST(testTdf128608_tableParaBackColor, "tdf128608_tableParaBac
 
 DECLARE_WW8EXPORT_TEST(testTdf117217_largeTableBackgrounds, "tdf117217_largeTableBackgrounds.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
@@ -946,15 +952,14 @@ DECLARE_WW8EXPORT_TEST(testTdf142760, "tdf142760.doc")
 DECLARE_WW8EXPORT_TEST(testTdf134570, "tdf134570.doc")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    {
-        uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), getProperty<sal_Int16>(xPara, "NumberingLevel"));
-        CPPUNIT_ASSERT_EQUAL(OUString("1"), getProperty<OUString>(xPara, "ListLabelString"));
-    }
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), getProperty<sal_Int16>(xPara, "NumberingLevel"));
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), getProperty<OUString>(xPara, "ListLabelString"));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf136814, "tdf136814.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     sal_Int32 nBorderDistance = static_cast<sal_Int32>(106);
 

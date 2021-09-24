@@ -1261,6 +1261,7 @@ DECLARE_RTFEXPORT_TEST(testTdf138210, "tdf138210.rtf")
 
 DECLARE_RTFEXPORT_TEST(testTdf137894, "tdf137894.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     lang::Locale locale1(getProperty<lang::Locale>(getRun(getParagraph(1), 1), "CharLocaleAsian"));
     CPPUNIT_ASSERT_EQUAL(OUString("ja"), locale1.Language);
     CPPUNIT_ASSERT_EQUAL(OUString("MS UI Gothic"),
