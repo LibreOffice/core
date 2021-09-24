@@ -34,6 +34,24 @@
       "parentUuid": "c03f684b_e311349a",
       "revId": "f2c7981b8b5790761974bb580d55e186c511d654",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e0a7437_42070def",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-09-24T14:52:01Z",
+      "side": 1,
+      "message": "Yes I used the test file here, but if importing from that test file only without having the other source file works once, shouldn\u0027t the cached range name and its data be stored such that it survives a save-load cycle at least with .xlsx, in the same \u003cexternalLink\u003e manner? As is, the \u003csheetDataSet\u003e\u003csheetData\u003e content is completely omitted. It might be the cell range needs to be marked as used/referenced as it\u0027s done for \"regular\" cell references.\n\nNote also that\n\n      \u003cdefinedName name\u003d\"MonthNames\" refersTo\u003d\"\u003d\u0027Munka1\u0027!$A$2:$A$13\"/\u003e\n\nis changed to\n\n      \u003cdefinedName name\u003d\"MonthNames\" refersTo\u003d\"[1]Munka1!$A$2:$A$13\"\u003e\u003c/definedName\u003e\n\nwith the [1] external document identifier.",
+      "parentUuid": "161fe119_0467f01b",
+      "revId": "f2c7981b8b5790761974bb580d55e186c511d654",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
