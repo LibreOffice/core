@@ -2874,7 +2874,7 @@ void SwCursorShell::ParkCursor( const SwNodeIndex &rIdx )
     SwNode *pNode = &rIdx.GetNode();
 
     // create a new PaM
-    std::unique_ptr<SwPaM> pNew( new SwPaM( *GetCursor()->GetPoint() ) );
+    SwPaM aNew( *GetCursor()->GetPoint() );
     if( pNode->GetStartNode() )
     {
         pNode = pNode->StartOfSectionNode();
@@ -2882,18 +2882,18 @@ void SwCursorShell::ParkCursor( const SwNodeIndex &rIdx )
         {
             // the given node is in a table, thus park cursor to table node
             // (outside of the table)
-            pNew->GetPoint()->nNode = *pNode->StartOfSectionNode();
+            aNew.GetPoint()->nNode = *pNode->StartOfSectionNode();
         }
         else
             // Also on the start node itself. Then we need to request the start
             // node always via its end node! (StartOfSelection of StartNode is
             // the parent)
-            pNew->GetPoint()->nNode = *pNode->EndOfSectionNode()->StartOfSectionNode();
+            aNew.GetPoint()->nNode = *pNode->EndOfSectionNode()->StartOfSectionNode();
     }
     else
-        pNew->GetPoint()->nNode = *pNode->StartOfSectionNode();
-    pNew->SetMark();
-    pNew->GetPoint()->nNode = *pNode->EndOfSectionNode();
+        aNew.GetPoint()->nNode = *pNode->StartOfSectionNode();
+    aNew.SetMark();
+    aNew.GetPoint()->nNode = *pNode->EndOfSectionNode();
 
     // take care of all shells
     for(SwViewShell& rTmp : GetRingContainer())
@@ -2901,9 +2901,9 @@ void SwCursorShell::ParkCursor( const SwNodeIndex &rIdx )
         if( auto pSh = dynamic_cast<SwCursorShell *>(&rTmp))
         {
             if (pSh->m_pStackCursor)
-                pSh->ParkPams(pNew.get(), &pSh->m_pStackCursor);
+                pSh->ParkPams(&aNew, &pSh->m_pStackCursor);
 
-            pSh->ParkPams( pNew.get(), &pSh->m_pCurrentCursor );
+            pSh->ParkPams( &aNew, &pSh->m_pCurrentCursor );
             if( pSh->m_pTableCursor )
             {
                 // set table cursor always to 0 and the current one always to

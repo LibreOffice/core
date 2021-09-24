@@ -1590,13 +1590,13 @@ ErrCode SwDocShell::LoadStylesFromFile(const OUString& rURL, SwgReaderOption& rO
     {
         Reader* pRead =  ReadXML;
         SwReaderPtr pReader;
-        std::unique_ptr<SwPaM> pPam;
+        std::optional<SwPaM> pPam;
         // the SW3IO - Reader need the pam/wrtshell, because only then he
         // insert the styles!
         if( bUnoCall )
         {
             SwNodeIndex aIdx( m_xDoc->GetNodes().GetEndOfContent(), -1 );
-            pPam.reset(new SwPaM( aIdx ));
+            pPam.emplace( aIdx );
             pReader.reset(new SwReader( aMed, rURL, *pPam ));
         }
         else

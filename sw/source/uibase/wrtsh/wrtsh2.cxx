@@ -72,10 +72,10 @@ void SwWrtShell::Insert(SwField const& rField, SwPaM* pAnnotationRange)
     StartUndo(SwUndoId::INSERT, &aRewriter);
 
     bool bDeleted = false;
-    std::unique_ptr<SwPaM> pAnnotationTextRange;
+    std::optional<SwPaM> pAnnotationTextRange;
     if (pAnnotationRange)
     {
-        pAnnotationTextRange.reset(new SwPaM(*pAnnotationRange->Start(), *pAnnotationRange->End()));
+        pAnnotationTextRange.emplace(*pAnnotationRange->Start(), *pAnnotationRange->End());
     }
 
     if ( HasSelection() )
@@ -95,13 +95,13 @@ void SwWrtShell::Insert(SwField const& rField, SwPaM* pAnnotationRange)
                     EndPara();
                 }
                 const SwPosition rEndPos( *GetCurrentShellCursor().GetPoint() );
-                pAnnotationTextRange.reset(new SwPaM( rStartPos, rEndPos ));
+                pAnnotationTextRange.emplace( rStartPos, rEndPos );
             }
             else
             {
                 NormalizePam( false );
                 const SwPaM& rCurrPaM = GetCurrentShellCursor();
-                pAnnotationTextRange.reset(new SwPaM( *rCurrPaM.GetPoint(), *rCurrPaM.GetMark() ));
+                pAnnotationTextRange.emplace( *rCurrPaM.GetPoint(), *rCurrPaM.GetMark() );
                 ClearMark();
             }
         }
