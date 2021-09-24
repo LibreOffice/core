@@ -3070,18 +3070,20 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                 rRoot.GetDoc().GetFilterEntriesArea(nCol, aRange.aStart.Row(),
                                                     aRange.aEnd.Row(), nTab, true, aFilterEntries);
 
+                // Excel has all filter values stored as forground colors
+                // Does not matter it is text color or cell background color
                 for (auto& rColor : aFilterEntries.getBackgroundColors())
                 {
-                    if (!maBackColorToDxfId.emplace(rColor, nColorIndex).second)
+                    if (!maColorToDxfId.emplace(rColor, nColorIndex).second)
                         continue;
 
-                    std::unique_ptr<XclExpCellArea> pExpCellArea(new XclExpCellArea(0, rColor));
+                    std::unique_ptr<XclExpCellArea> pExpCellArea(new XclExpCellArea(rColor, 0));
                     maDxf.push_back(std::make_unique<XclExpDxf>(rRoot, std::move(pExpCellArea)));
                     nColorIndex++;
                 }
                 for (auto& rColor : aFilterEntries.getTextColors())
                 {
-                    if (!maForeColorToDxfId.emplace(rColor, nColorIndex).second)
+                    if (!maColorToDxfId.emplace(rColor, nColorIndex).second)
                         continue;
 
                     std::unique_ptr<XclExpCellArea> pExpCellArea(new XclExpCellArea(rColor, 0));
@@ -3182,18 +3184,10 @@ sal_Int32 XclExpDxfs::GetDxfId( const OUString& rStyleName )
     return -1;
 }
 
-sal_Int32 XclExpDxfs::GetDxfByBackColor(Color aColor)
+sal_Int32 XclExpDxfs::GetDxfByColor(Color aColor)
 {
-    std::map<Color, sal_Int32>::iterator itr = maBackColorToDxfId.find(aColor);
-    if (itr != maBackColorToDxfId.end())
-        return itr->second;
-    return -1;
-}
-
-sal_Int32 XclExpDxfs::GetDxfByForeColor(Color aColor)
-{
-    std::map<Color, sal_Int32>::iterator itr = maForeColorToDxfId.find(aColor);
-    if (itr != maForeColorToDxfId.end())
+    std::map<Color, sal_Int32>::iterator itr = maColorToDxfId.find(aColor);
+    if (itr != maColorToDxfId.end())
         return itr->second;
     return -1;
 }
