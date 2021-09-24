@@ -25,6 +25,8 @@ public:
     void testAlignment();
     void testQuality();
     void testSymbolFlagAndCharSet();
+    void testEmphasisMarkShouldBePosAboveWhenSimplifiedChinese();
+    void testEmphasisMarkShouldBePosAboveWhenNotSimplifiedChinese();
 
     CPPUNIT_TEST_SUITE(VclFontTest);
     CPPUNIT_TEST(testName);
@@ -35,6 +37,8 @@ public:
     CPPUNIT_TEST(testAlignment);
     CPPUNIT_TEST(testQuality);
     CPPUNIT_TEST(testSymbolFlagAndCharSet);
+    CPPUNIT_TEST(testEmphasisMarkShouldBePosAboveWhenSimplifiedChinese);
+    CPPUNIT_TEST(testEmphasisMarkShouldBePosAboveWhenNotSimplifiedChinese);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -152,6 +156,26 @@ void VclFontTest::testSymbolFlagAndCharSet()
     CPPUNIT_ASSERT_MESSAGE( "Test 4: Symbol font flag should be off", !aFont.IsSymbolFont() );
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Test 4: Character set should be RTL_TEXTENCODING_UNICODE",
                             RTL_TEXTENCODING_UNICODE, aFont.GetCharSet() );
+}
+
+void VclFontTest::testEmphasisMarkShouldBePosAboveWhenSimplifiedChinese()
+{
+    vcl::Font aFont;
+    aFont.SetLanguage(LANGUAGE_CHINESE_SIMPLIFIED);
+    aFont.SetEmphasisMark(FontEmphasisMark::Accent);
+
+    CPPUNIT_ASSERT_MESSAGE("Emphasis not positioned below", (aFont.GetEmphasisMarkStyle() & FontEmphasisMark::PosBelow));
+    CPPUNIT_ASSERT_MESSAGE("Accent mark not kept", (aFont.GetEmphasisMarkStyle() & FontEmphasisMark::Accent));
+}
+
+void VclFontTest::testEmphasisMarkShouldBePosAboveWhenNotSimplifiedChinese()
+{
+    vcl::Font aFont;
+    aFont.SetLanguage(LANGUAGE_ENGLISH);
+    aFont.SetEmphasisMark(FontEmphasisMark::Accent);
+
+    CPPUNIT_ASSERT_MESSAGE("Emphasis not positioned above", (aFont.GetEmphasisMarkStyle() & FontEmphasisMark::PosAbove));
+    CPPUNIT_ASSERT_MESSAGE("Accent mark not kept", (aFont.GetEmphasisMarkStyle() & FontEmphasisMark::Accent));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclFontTest);
