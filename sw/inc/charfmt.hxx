@@ -22,6 +22,7 @@
 #include "format.hxx"
 #include "hintids.hxx"
 
+/// Represents the style of a text portion.
 class SwCharFormat final : public SwFormat
 {
     friend class SwDoc;
