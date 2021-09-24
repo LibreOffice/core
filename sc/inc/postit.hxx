@@ -20,17 +20,18 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
+#include <svl/itemset.hxx>
 #include "address.hxx"
 #include "scdllapi.h"
 
 #include <memory>
+#include <optional>
 
 class EditTextObject;
 class OutlinerParaObject;
 class SdrCaptionObj;
 class SdrPage;
 
-class SfxItemSet;
 class ScDocument;
 namespace tools { class Rectangle; }
 struct ScCaptionInitData;
@@ -331,7 +332,7 @@ public:
      */
     static ScPostIt*    CreateNoteFromObjectData(
                             ScDocument& rDoc, const ScAddress& rPos,
-                            std::unique_ptr<SfxItemSet> pItemSet,
+                            SfxItemSet&& oItemSet,
                             const OutlinerParaObject& rOutlinerObj,
                             const tools::Rectangle& rCaptionRect, bool bShown );
 

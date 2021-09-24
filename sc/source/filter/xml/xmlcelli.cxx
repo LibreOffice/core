@@ -860,7 +860,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
         if( pObject )
         {
             // rescue settings from drawing object before the shape is removed
-            ::std::unique_ptr< SfxItemSet > xItemSet( new SfxItemSet( pObject->GetMergedItemSet() ) );
+            SfxItemSet aItemSet( pObject->GetMergedItemSet() );
             std::optional<OutlinerParaObject> pOutlinerObj;
             if (auto p = pObject->GetOutlinerParaObject())
                 pOutlinerObj = *p;
@@ -881,14 +881,14 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
                 if(!comphelper::LibreOfficeKit::isActive())
                 {
                     pNote = ScNoteUtil::CreateNoteFromObjectData( *pDoc, rPos,
-                    std::move(xItemSet), *pOutlinerObj,
-                    aCaptionRect, mxAnnotationData->mbShown );
+                        std::move(aItemSet), *pOutlinerObj,
+                        aCaptionRect, mxAnnotationData->mbShown );
                 }
                 else
                 {
                     pNote = ScNoteUtil::CreateNoteFromObjectData( *pDoc, rPos,
-                    std::move(xItemSet), *pOutlinerObj,
-                    aCaptionRect, false );
+                        std::move(aItemSet), *pOutlinerObj,
+                        aCaptionRect, false );
                 }
 
             }
