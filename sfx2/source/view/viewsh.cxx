@@ -20,6 +20,7 @@
 #include <config_features.h>
 
 #include <sal/log.hxx>
+#include <rtl/strbuf.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
@@ -82,6 +83,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/objface.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <sfx2/lokcallback.hxx>
 #include <openuriexternally.hxx>
 
 #include <vector>
@@ -221,7 +223,6 @@ SfxViewShell_Impl::SfxViewShell_Impl(SfxViewShellFlags const nFlags, ViewShellDo
 :   m_bHasPrintOptions(nFlags & SfxViewShellFlags::HAS_PRINTOPTIONS)
 ,   m_nFamily(0xFFFF)   // undefined, default set by TemplateDialog
 ,   m_pLibreOfficeKitViewCallback(nullptr)
-,   m_pLibreOfficeKitViewData(nullptr)
 ,   m_bTiledSearching(false)
 ,   m_nViewShellId(SfxViewShell_Impl::m_nLastViewShellId++)
 ,   m_nDocId(nDocId)
@@ -1429,14 +1430,14 @@ bool SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
     return pImpl->m_xAccExec->execute(aKey.GetKeyCode());
 }
 
-void SfxViewShell::registerLibreOfficeKitViewCallback(LibreOfficeKitCallback pCallback, void* pData)
+void SfxViewShell::setLibreOfficeKitViewCallback(SfxLokCallbackInterface* pCallback)
 {
+    pImpl->m_pLibreOfficeKitViewCallback = nullptr;
     pImpl->m_pLibreOfficeKitViewCallback = pCallback;
-    pImpl->m_pLibreOfficeKitViewData = pData;
 
     afterCallbackRegistered();
 
-    if (!pCallback)
+    if (!pImpl->m_pLibreOfficeKitViewCallback)
         return;
 
     // Ask other views to tell us about their cursors.
@@ -1449,10 +1450,10 @@ void SfxViewShell::registerLibreOfficeKitViewCallback(LibreOfficeKitCallback pCa
     }
 }
 
-void SfxViewShell::libreOfficeKitViewCallback(int nType, const char* pPayload) const
+static bool ignoreLibreOfficeKitViewCallback(int nType, const SfxViewShell_Impl* pImpl)
 {
     if (!comphelper::LibreOfficeKit::isActive())
-        return;
+        return true;
 
     if (comphelper::LibreOfficeKit::isTiledPainting())
     {
@@ -1463,7 +1464,7 @@ void SfxViewShell::libreOfficeKitViewCallback(int nType, const char* pPayload) c
             break;
         default:
             // Reject e.g. invalidate during paint.
-            return;
+            return true;
         }
     }
 
@@ -1477,12 +1478,44 @@ void SfxViewShell::libreOfficeKitViewCallback(int nType, const char* pPayload) c
         case LOK_CALLBACK_TEXT_SELECTION_END:
         case LOK_CALLBACK_GRAPHIC_SELECTION:
         case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
-            return;
+            return true;
         }
     }
 
+    return false;
+}
+
+void SfxViewShell::libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart) const
+{
+    if (ignoreLibreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, pImpl.get()))
+        return;
     if (pImpl->m_pLibreOfficeKitViewCallback)
-        pImpl->m_pLibreOfficeKitViewCallback(nType, pPayload, pImpl->m_pLibreOfficeKitViewData);
+        pImpl->m_pLibreOfficeKitViewCallback->libreOfficeKitViewInvalidateTilesCallback(pRect, nPart);
+    else
+        SAL_INFO(
+            "sfx.view",
+            "SfxViewShell::libreOfficeKitViewInvalidateTilesCallback no callback set!");
+}
+
+void SfxViewShell::libreOfficeKitViewCallback(int nType, const char* pPayload, int nViewId) const
+{
+    if (ignoreLibreOfficeKitViewCallback(nType, pImpl.get()))
+        return;
+    if (pImpl->m_pLibreOfficeKitViewCallback)
+        pImpl->m_pLibreOfficeKitViewCallback->libreOfficeKitViewCallback(nType, pPayload, nViewId);
+    else
+        SAL_INFO(
+            "sfx.view",
+            "SfxViewShell::libreOfficeKitViewCallback no callback set! Dropped payload of type "
+            << lokCallbackTypeToString(nType) << ": [" << pPayload << ']');
+}
+
+void SfxViewShell::libreOfficeKitViewCallback(int nType, const char* pPayload) const
+{
+    if (ignoreLibreOfficeKitViewCallback(nType, pImpl.get()))
+        return;
+    if (pImpl->m_pLibreOfficeKitViewCallback)
+        pImpl->m_pLibreOfficeKitViewCallback->libreOfficeKitViewCallback(nType, pPayload);
     else
         SAL_INFO(
             "sfx.view",
