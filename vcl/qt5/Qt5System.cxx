@@ -7,26 +7,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QDesktopWidget>
+#include <QtGui/QGuiApplication>
+#include <QtGui/QScreen>
 
-#include <string.h>
 #include <tools/gen.hxx>
 #include <Qt5System.hxx>
 #include <Qt5Tools.hxx>
 
-unsigned int Qt5System::GetDisplayScreenCount()
-{
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    return QApplication::desktop()->screenCount();
-    SAL_WNODEPRECATED_DECLARATIONS_POP
-}
+unsigned int Qt5System::GetDisplayScreenCount() { return QGuiApplication::screens().size(); }
 
 tools::Rectangle Qt5System::GetDisplayScreenPosSizePixel(unsigned int nScreen)
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    QRect qRect = QApplication::desktop()->screenGeometry(nScreen);
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    QRect qRect = QGuiApplication::screens().at(nScreen)->geometry();
     return toRectangle(scaledQRect(qRect, qApp->devicePixelRatio()));
 }
 
