@@ -47,7 +47,7 @@ inline OUString toOUString(const QString& s)
 
 inline QString toQString(const OUString& s)
 {
-    return QString::fromUtf16(reinterpret_cast<ushort const*>(s.getStr()), s.getLength());
+    return QString::fromUtf16(s.getStr(), s.getLength());
 }
 
 inline QRect toQRect(const tools::Rectangle& rRect)
