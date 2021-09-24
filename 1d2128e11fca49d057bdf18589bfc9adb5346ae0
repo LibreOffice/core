@@ -208,6 +208,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1928f354_2a1eb202",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-24T09:37:38Z",
+      "side": 1,
+      "message": "Hmm. I don\u0027t see problems there? :)\n\n* calendar_hijri.cxx just discards everything before the cutoff -\u003e no problem (we may keep it, or extend it, as we want / as reasonable; bein safe and keeping current status is safe, and I don\u0027t see it as an \"existing problem\" that needs resolving?).\n* IsValidAndGregorian() uses need to be checked (and btw used in calendar_hijri.cxx); but those seem to also mostly limit allowed range, and previous bullet\u0027s reasoning apply. The only suspicious place that I see is in SfxMedium::IsExpired, which returns false for all non-Gregorian dates, and which is likely (insignificant) bug ;)\n* GetDateSerial is likely subject to relax the requirement - but no problem is keep it.\n* lcl_CalcJulDate in connectivity/source/drivers/dbase/DTable.cxx is an own case, unrelated to everything else, ... but maybe needs checking.\n\nGenerally it seems much less problematic than I feared 😊",
+      "parentUuid": "fbdb2420_0df99783",
+      "revId": "1d2128e11fca49d057bdf18589bfc9adb5346ae0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e6cf6d3a_55b32344",
