@@ -210,6 +210,8 @@ protected:
 
     // the table depth of this context
     unsigned int mnTableDepth;
+    // is there a floating table?
+    bool mbIsInFloatingTable;
 
     /// @throws css::uno::RuntimeException
     /// @throws css::xml::sax::SAXException

@@ -395,7 +395,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf124600)
 
     // Make sure that "Shape 1 text" (anchored in the header) has the same left margin as the body
     // text.
-    OUString aShapeTextLeft = parseDump("/root/page/header/txt/anchored/fly/infos/bounds", "left");
+    OUString aShapeTextLeft
+        = parseDump("/root/page/header/txt/anchored/fly[2]/infos/bounds", "left");
     OUString aBodyTextLeft = parseDump("/root/page/body/txt/infos/bounds", "left");
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1701
@@ -661,10 +662,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121804)
     // This failed with a NoSuchElementException, super/subscript property was
     // lost on import, so the whole paragraph was a single run.
     uno::Reference<text::XTextRange> xSecondRun = getRun(xFirstPara, 2);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(30),
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(14000),
                          getProperty<sal_Int32>(xSecondRun, "CharEscapement"));
     uno::Reference<text::XTextRange> xThirdRun = getRun(xFirstPara, 3);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-25),
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-14000),
                          getProperty<sal_Int32>(xThirdRun, "CharEscapement"));
 }
 
@@ -910,7 +911,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126426)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xGroup->getCount());
 
     // get second shape in group
-    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xGroup->getByIndex(1),
+    uno::Reference<text::XTextRange> xShapeTextBox(xGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xShapeTextBox,
                                                                   uno::UNO_QUERY_THROW);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
 
@@ -927,8 +929,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126426)
         // Link and this content was completely missong before
         uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(OUString("Link"), xRun->getString());
-        auto xURLField = getProperty<uno::Reference<text::XTextField>>(xRun, "TextField");
-        auto aURL = getProperty<OUString>(xURLField, "URL");
+        auto aURL = getProperty<OUString>(xRun, "HyperLinkURL");
         CPPUNIT_ASSERT_EQUAL(OUString("http://libreoffice.org/"), aURL);
     }
     {
