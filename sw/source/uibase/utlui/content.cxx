@@ -3338,6 +3338,10 @@ static void lcl_SelectDrawObjectByName(weld::TreeView& rContentTree, std::u16str
 /** No idle with focus or while dragging */
 IMPL_LINK_NOARG(SwContentTree, TimerUpdate, Timer *, void)
 {
+    // No need to update if content tree is not visible
+    if (!m_xTreeView->is_visible())
+        return;
+
     // No update while focus is not in document.
     // No update while drag and drop.
     // Query view because the Navigator is cleared too late.
