@@ -86,7 +86,7 @@ protected:
     const OUString m_sArgs;
 
     TraceEvent(const OUString& sArgs)
-        : m_nPid(getPid())
+        : m_nPid(s_bRecording ? getPid() : 1)
         , m_sArgs(sArgs)
     {
     }
