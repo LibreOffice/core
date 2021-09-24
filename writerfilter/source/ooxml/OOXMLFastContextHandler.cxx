@@ -70,6 +70,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
   mbIsMathPara(false),
   mpStream(nullptr),
   mnTableDepth(0),
+  mbIsInFloatingTable(false),
   inPositionV(false),
   mbAllowInCell(true),
   mbIsVMLfound(false),
@@ -93,6 +94,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler(OOXMLFastContextHandler * pCont
   mpStream(pContext->mpStream),
   mpParserState(pContext->mpParserState),
   mnTableDepth(pContext->mnTableDepth),
+  mbIsInFloatingTable(pContext->mbIsInFloatingTable),
   inPositionV(pContext->inPositionV),
   mbAllowInCell(pContext->mbAllowInCell),
   mbIsVMLfound(pContext->mbIsVMLfound),
@@ -188,6 +190,11 @@ void SAL_CALL OOXMLFastContextHandler::startFastElement
         if (aAttrLst[0].Value == "left") mpParent->mpParent->mnMathJcVal = eMathParaJc::LEFT;
         if (aAttrLst[0].Value == "right") mpParent->mpParent->mnMathJcVal = eMathParaJc::RIGHT;
     }
+    else if (Element == W_TOKEN(tblpPr))
+    {
+        if (mpParent->mpParent)
+            mpParent->mpParent->mbIsInFloatingTable = true;
+    }
 
     if (oox::getNamespace(Element) == NMSP_mce)
         m_bDiscardChildren = prepareMceContext(Element, Attribs);
@@ -218,6 +225,13 @@ void SAL_CALL OOXMLFastContextHandler::endFastElement(sal_Int32 Element)
     }
     else if (!m_bDiscardChildren)
         lcl_endFastElement(Element);
+    if (Element == W_TOKEN(tbl))
+        if (mpParent->mpParent)
+        {
+            mpParent->mpParent->mbIsInFloatingTable = false;
+            mpParent->mbIsInFloatingTable = false;
+            mbIsInFloatingTable = false;
+        }
 }
 
 void OOXMLFastContextHandler::lcl_startFastElement
@@ -1798,16 +1812,15 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
 
     uno::Reference< xml::sax::XFastContextHandler > xContextHandler;
 
-    bool bGroupShape = Element == Token_t(NMSP_vml | XML_group);
-    // drawingML version also counts as a group shape.
-    bGroupShape |= mrShapeContext->getStartToken() == Token_t(NMSP_wpg | XML_wgp);
+    bool bVMLGroupShape = Element == Token_t(NMSP_vml | XML_group);
+
     mbIsVMLfound = (getNamespace(Element) == NMSP_vmlOffice) || (getNamespace(Element) == NMSP_vml);
     switch (oox::getNamespace(Element))
     {
         case NMSP_doc:
         case NMSP_vmlWord:
         case NMSP_vmlOffice:
-            if (!bGroupShape)
+            if (!bVMLGroupShape && !mbIsInFloatingTable)
                 xContextHandler.set(OOXMLFactory::createFastChildContextFromStart(this, Element));
             [[fallthrough]];
         default:
@@ -1828,12 +1841,12 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
                         mbAllowInCell
                             = !(Attribs->getValue(NMSP_vmlOffice | XML_allowincell) == "f");
 
-                    if (!bGroupShape)
+                    if (!bVMLGroupShape && !mbIsInFloatingTable)
                     {
                         pWrapper->addNamespace(NMSP_doc);
                         pWrapper->addNamespace(NMSP_vmlWord);
                         pWrapper->addNamespace(NMSP_vmlOffice);
-                        pWrapper->addToken( NMSP_vml|XML_textbox );
+                        pWrapper->addToken(NMSP_vml | XML_textbox);
                     }
                     xContextHandler.set(pWrapper);
                 }
@@ -1848,8 +1861,11 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
     // handle the WPS import of shape text, as there the parent context is a
     // Shape one, so a different situation.
     if (Element == static_cast<sal_Int32>(NMSP_wps | XML_txbx) ||
-        Element == static_cast<sal_Int32>(NMSP_wps | XML_linkedTxbx) )
+        Element == static_cast<sal_Int32>(NMSP_wps | XML_linkedTxbx))
+    {
+        mpStream->startTextBox();
         sendShape(Element);
+    }
 
     return xContextHandler;
 }
@@ -1964,11 +1980,25 @@ void OOXMLFastContextHandlerWrapper::lcl_startFastElement
 {
     if (mxWrappedContext.is())
         mxWrappedContext->startFastElement(Element, Attribs);
+
+    if (!mbIsInFloatingTable)
+        if (Element == Token_t(NMSP_wps | XML_txbx) ||
+            Element == Token_t(NMSP_wps | XML_linkedTxbx))
+        {
+            mpStream->startTextBox();
+        }
 }
 
 void OOXMLFastContextHandlerWrapper::lcl_endFastElement
 (Token_t Element)
 {
+    if (!mbIsInFloatingTable)
+        if (Element == Token_t(NMSP_wps | XML_txbx) ||
+            Element == Token_t(NMSP_wps | XML_linkedTxbx))
+        {
+            mpStream->endTextBox();
+        }
+
     if (mxWrappedContext.is())
         mxWrappedContext->endFastElement(Element);
 }
