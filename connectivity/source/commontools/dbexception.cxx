@@ -224,23 +224,18 @@ void SQLExceptionInfo::append( TYPE _eType, const OUString& _rErrorMessage, cons
     Any aAppend = createException(_eType, _rErrorMessage, _rSQLState, _nErrorCode);
 
     // find the end of the current chain
-    Any* pChainIterator = &m_aContent;
-    SQLException* pLastException = nullptr;
-    const Type& aSQLExceptionType( cppu::UnoType<SQLException>::get() );
-    while ( pChainIterator )
+    SQLException* pLastException = const_cast<SQLException*>(o3tl::tryAccess<SQLException>(m_aContent));
+    SQLException* pException = pLastException;
+    while (pException)
     {
-        if ( !pChainIterator->hasValue() )
+        pException = const_cast<SQLException*>(o3tl::tryAccess<SQLException>(pException->NextException));
+        if (!pException)
             break;
-
-        if ( !isAssignableFrom( aSQLExceptionType, pChainIterator->getValueType() ) )
-            break;
-
-        pLastException = const_cast< SQLException* >( o3tl::doAccess<SQLException>( *pChainIterator ) );
-        pChainIterator = &pLastException->NextException;
+        pLastException = pException;
     }
 
     // append
-    if ( pLastException )
+    if (pLastException)
         pLastException->NextException = aAppend;
     else
     {
