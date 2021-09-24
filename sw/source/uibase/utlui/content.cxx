@@ -493,8 +493,8 @@ void SwContentType::Init(bool* pbInvalidateWindow)
         case ContentTypeId::REFERENCE:
         {
             m_nMemberCount = m_pWrtShell->GetRefMarks();
-            m_bEdit = true;
-            m_bDelete = true;
+            m_bEdit = false;
+            m_bDelete = false;
         }
         break;
         case ContentTypeId::URLFIELD:
@@ -1587,12 +1587,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                 ContentTypeId::INDEX == nContentType ||
                 ContentTypeId::DRAWOBJECT == nContentType);
 
-        if (ContentTypeId::TEXTFIELD == nContentType || ContentTypeId::REFERENCE == nContentType)
-        {
-            bRemoveEditEntry = false;
-            bRemoveDeleteEntry = false;
-        }
-        else if(ContentTypeId::OUTLINE == nContentType)
+        if(ContentTypeId::OUTLINE == nContentType)
         {
             bOutline = true;
             lcl_SetOutlineContentEntriesSensitivities(this, *m_xTreeView, *xEntry, *xSubPopOutlineContent);
@@ -4523,8 +4518,9 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
             else
                 nSlot = SID_EDIT_HYPERLINK;
         break;
-        case ContentTypeId::TEXTFIELD:
         case ContentTypeId::REFERENCE:
+        break;
+        case ContentTypeId::TEXTFIELD:
         {
             const SwTextFieldContent* pTextFieldCnt = static_cast<const SwTextFieldContent*>(pCnt);
             if (nMode == EditEntryMode::DELETE)
