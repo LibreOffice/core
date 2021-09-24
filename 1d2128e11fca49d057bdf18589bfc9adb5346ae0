@@ -103,6 +103,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "99cd730f_802e3a1a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-24T06:44:36Z",
+      "side": 1,
+      "message": "Actually, maybe the simplest would be to settle on proleptic Gregorian everywhere, and introduce a compatibility option to not break older documents. There is an API for ICU to set the cutover date; setting it to the start of ICU\u0027s date range would make ICU to use Gregorian everywhere. Then all our calculations would start being correct...",
+      "revId": "1d2128e11fca49d057bdf18589bfc9adb5346ae0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e6cf6d3a_55b32344",
