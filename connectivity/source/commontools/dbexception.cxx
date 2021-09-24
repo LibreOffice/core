@@ -189,9 +189,9 @@ void SQLExceptionInfo::prepend( const OUString& _rErrorMessage )
 
 namespace
 {
+    // create the to-be-appended exception
     Any createException(SQLExceptionInfo::TYPE eType, const OUString& rErrorMessage, const OUString& rSQLState, const sal_Int32 nErrorCode)
     {
-        // create the to-be-appended exception
         Any aAppend;
         switch (eType)
         {
@@ -216,6 +216,20 @@ namespace
 
         return aAppend;
     }
+
+    // find the end of the exception chain
+    SQLException* getLastException(SQLException* pLastException)
+    {
+        SQLException* pException = pLastException;
+        while (pException)
+        {
+            pException = const_cast<SQLException*>(o3tl::tryAccess<SQLException>(pException->NextException));
+            if (!pException)
+                break;
+            pLastException = pException;
+        }
+        return pLastException;
+    }
 }
 
 void SQLExceptionInfo::append( TYPE _eType, const OUString& _rErrorMessage, const OUString& _rSQLState, const sal_Int32 _nErrorCode )
@@ -224,15 +238,7 @@ void SQLExceptionInfo::append( TYPE _eType, const OUString& _rErrorMessage, cons
     Any aAppend = createException(_eType, _rErrorMessage, _rSQLState, _nErrorCode);
 
     // find the end of the current chain
-    SQLException* pLastException = const_cast<SQLException*>(o3tl::tryAccess<SQLException>(m_aContent));
-    SQLException* pException = pLastException;
-    while (pException)
-    {
-        pException = const_cast<SQLException*>(o3tl::tryAccess<SQLException>(pException->NextException));
-        if (!pException)
-            break;
-        pLastException = pException;
-    }
+    SQLException* pLastException = getLastException(const_cast<SQLException*>(o3tl::tryAccess<SQLException>(m_aContent)));
 
     // append
     if (pLastException)
