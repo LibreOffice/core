@@ -4108,7 +4108,7 @@ void ScExportTest::testAutofilterColorsOOXML()
                                                      "xl/tables/table1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "/x:table/x:autoFilter/x:filterColumn/x:colorFilter", "dxfId", "4");
+    assertXPath(pDoc, "/x:table/x:autoFilter/x:filterColumn/x:colorFilter", "dxfId", "5");
 }
 
 void ScExportTest::testAutofilterColorsStyleOOXML()
