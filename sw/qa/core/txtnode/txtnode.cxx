@@ -12,6 +12,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <sfx2/viewsh.hxx>
+#include <sfx2/lokcallback.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/scheduler.hxx>
 
@@ -91,30 +92,17 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTextBoxNodeSplit)
 
 namespace
 {
-struct ViewCallback
+struct ViewCallback : public SfxLokCallbackInterface
 {
     int m_nInvalidations = 0;
 
-    static void callback(int nType, const char* pPayload, void* pData);
-    void callbackImpl(int nType, const char* pPayload);
-};
-
-void ViewCallback::callback(int nType, const char* pPayload, void* pData)
-{
-    static_cast<ViewCallback*>(pData)->callbackImpl(nType, pPayload);
-}
-
-void ViewCallback::callbackImpl(int nType, const char* /*pPayload*/)
-{
-    switch (nType)
+    virtual void libreOfficeKitViewCallback(int, const char*) override {}
+    virtual void libreOfficeKitViewCallback(int, const char*, int) override {}
+    virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle*, int) override
     {
-        case LOK_CALLBACK_INVALIDATE_TILES:
-        {
-            ++m_nInvalidations;
-        }
-        break;
+        ++m_nInvalidations;
     }
-}
+};
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTitleFieldInvalidate)
@@ -131,8 +119,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTitleFieldInvalidate)
     SwWrtShell* pWrtShell = pShell->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/false);
     ViewCallback aCallback;
-    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&ViewCallback::callback,
-                                                                     &aCallback);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&aCallback);
     Scheduler::ProcessEventsToIdle();
     aCallback.m_nInvalidations = 0;
 
@@ -148,7 +135,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTitleFieldInvalidate)
     CPPUNIT_ASSERT_EQUAL(1, aCallback.m_nInvalidations);
 
     // Tear down LOK.
-    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(nullptr);
     mxComponent->dispose();
     mxComponent.clear();
     comphelper::LibreOfficeKit::setActive(false);
