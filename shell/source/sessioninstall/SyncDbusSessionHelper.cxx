@@ -11,6 +11,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <gio/gio.h>
+#include <cstring>
 #include <memory>
 #include <string_view>
 #include <vector>
@@ -32,7 +33,8 @@ namespace
             {
                 if(!m_pError)
                     return;
-                OUString sMsg = OUString::createFromAscii(m_pError->message);
+                OUString sMsg(
+                    m_pError->message, std::strlen(m_pError->message), RTL_TEXTENCODING_UTF8);
                 g_error_free(m_pError);
                 throw RuntimeException(sMsg);
             }
