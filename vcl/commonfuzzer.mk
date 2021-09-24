@@ -55,12 +55,14 @@ fuzzer_core_libraries = \
     cppcanvas \
     ctl \
     dba \
+    dbase \
     dbtools \
     deployment \
     deploymentmisc \
     drawinglayer \
     editeng \
     emfio \
+    file \
     filterconfig \
     fsstorage \
     fwk \
@@ -73,6 +75,7 @@ fuzzer_core_libraries = \
     package2 \
     sax \
     sb \
+    sdbc2 \
     $(call gb_Helper_optional,SCRIPTING, \
         scriptframe) \
     spell \
