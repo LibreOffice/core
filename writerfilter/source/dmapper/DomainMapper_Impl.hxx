@@ -22,6 +22,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextAppend.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -63,6 +64,7 @@ namespace com::sun::star{
         {
                 class XTextField;
                 class XFormField;
+                class xTextFrame;
         }
         namespace beans{ class XPropertySet;}
 }
@@ -516,6 +518,7 @@ private:
     FontTablePtr            m_pFontTable;
     ListsManager::Pointer   m_pListTable;
     std::deque< css::uno::Reference<css::drawing::XShape> > m_aPendingShapes;
+    std::queue< css::uno::Reference<css::text::XTextFrame> > m_aPendingTextBoxes;
     StyleSheetTablePtr      m_pStyleSheetTable;
     ThemeTablePtr           m_pThemeTable;
     SettingsTablePtr        m_pSettingsTable;
@@ -620,6 +623,7 @@ private:
 public:
     css::uno::Reference<css::text::XTextRange> m_xInsertTextRange;
     css::uno::Reference<css::text::XTextRange> m_xAltChunkStartingRange;
+    bool m_bInsideTextBox;
 private:
     bool m_bIsNewDoc;
     bool m_bIsAltChunk = false;
@@ -662,6 +666,9 @@ public:
     void StartParaMarkerChange( );
     void EndParaMarkerChange( );
     void ChainTextFrames();
+    void AddNewDummyTextBox();
+    void CloseDummyTextBox();
+    void AttachDummyTextBox(css::uno::Reference<css::drawing::XShape> xShape);
 
     void RemoveDummyParaForTableInSection();
     void AddDummyParaForTableInSection();

@@ -446,6 +446,7 @@ class OOXMLFastContextHandlerShape: public OOXMLFastContextHandlerProperties
     /// Is it necessary to pop the stack in the dtor?
     bool m_bShapeContextPushed;
     rtl::Reference<oox::shape::ShapeContextHandler> mrShapeContext;
+    css::uno::Reference<css::drawing::XShape> mxShape;
 
 public:
     explicit OOXMLFastContextHandlerShape(OOXMLFastContextHandler * pContext);

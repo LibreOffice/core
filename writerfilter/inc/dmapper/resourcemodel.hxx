@@ -231,6 +231,10 @@ public:
 
     virtual void endShape() = 0;
 
+    virtual void startTextBox() = 0;
+
+    virtual void endTextBox() = 0;
+
     /**
        Receives 8-bit per character text.
 

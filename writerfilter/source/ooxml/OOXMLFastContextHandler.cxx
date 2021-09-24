@@ -1665,6 +1665,9 @@ void OOXMLFastContextHandlerShape::lcl_startFastElement
 {
     startAction();
 
+    if (Element == Token_t(NMSP_wps | XML_txbx))
+        mpStream->startTextBox();
+
     if (mrShapeContext.is())
     {
         mrShapeContext->startFastElement(Element, Attribs);
@@ -1717,7 +1720,10 @@ void OOXMLFastContextHandlerShape::setToken(Token_t nToken)
     OOXMLFastContextHandler::setToken(nToken);
 
     if (mrShapeContext.is())
+    {
         mrShapeContext->setStartToken(nToken);
+
+    }
 }
 
 void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
@@ -1727,7 +1733,7 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
 
     awt::Point aPosition = mpStream->getPositionOffset();
     mrShapeContext->setPosition(aPosition);
-    uno::Reference<drawing::XShape> xShape(mrShapeContext->getShape());
+    uno::Reference<drawing::XShape> xShape((mrShapeContext->getShape()));
     m_bShapeSent = true;
     if (!xShape.is())
         return;
@@ -1761,6 +1767,9 @@ void OOXMLFastContextHandlerShape::lcl_endFastElement
     if (!isForwardEvents())
         return;
 
+    if (Element == Token_t(NMSP_wps | XML_txbx))
+        mpStream->endTextBox();
+
     if (mrShapeContext.is())
     {
         mrShapeContext->endFastElement(Element);
@@ -1769,10 +1778,14 @@ void OOXMLFastContextHandlerShape::lcl_endFastElement
 
     OOXMLFastContextHandlerProperties::lcl_endFastElement(Element);
 
+
+
     // Ending the shape should be the last thing to do
     bool bIsPicture = Element == ( NMSP_dmlPicture | XML_pic );
     if ( !bIsPicture && m_bShapeStarted)
         mpStream->endShape( );
+
+
 }
 
 void SAL_CALL OOXMLFastContextHandlerShape::endUnknownElement
@@ -1808,7 +1821,7 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
         case NMSP_doc:
         case NMSP_vmlWord:
         case NMSP_vmlOffice:
-            if (!bGroupShape)
+            //if (!bGroupShape)
                 xContextHandler.set(OOXMLFactory::createFastChildContextFromStart(this, Element));
             [[fallthrough]];
         default:
@@ -1829,7 +1842,7 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
                         mbAllowInCell
                             = !(Attribs->getValue(NMSP_vmlOffice | XML_allowincell) == "f");
 
-                    if (!bGroupShape)
+                    //if (!bGroupShape)
                     {
                         pWrapper->addNamespace(NMSP_doc);
                         pWrapper->addNamespace(NMSP_vmlWord);
@@ -1849,8 +1862,11 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
     // handle the WPS import of shape text, as there the parent context is a
     // Shape one, so a different situation.
     if (Element == static_cast<sal_Int32>(NMSP_wps | XML_txbx) ||
-        Element == static_cast<sal_Int32>(NMSP_wps | XML_linkedTxbx) )
+        Element == static_cast<sal_Int32>(NMSP_wps | XML_linkedTxbx))
+    {
+        mpStream->startTextBox();
         sendShape(Element);
+    }
 
     return xContextHandler;
 }
@@ -1963,13 +1979,18 @@ void OOXMLFastContextHandlerWrapper::lcl_startFastElement
 (Token_t Element,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
+
     if (mxWrappedContext.is())
         mxWrappedContext->startFastElement(Element, Attribs);
+    if (Element == Token_t(NMSP_wps | XML_txbx))
+        mpStream->startTextBox();
 }
 
 void OOXMLFastContextHandlerWrapper::lcl_endFastElement
 (Token_t Element)
 {
+    if (Element == Token_t(NMSP_wps | XML_txbx))
+        mpStream->endTextBox();
     if (mxWrappedContext.is())
         mxWrappedContext->endFastElement(Element);
 }

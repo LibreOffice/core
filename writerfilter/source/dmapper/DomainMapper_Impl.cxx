@@ -350,7 +350,8 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bFirstParagraphInCell(true),
         m_bSaveFirstParagraphInCell(false),
         m_bParaWithInlineObject(false),
-        m_bSaxError(false)
+        m_bSaxError(false),
+        m_bInsideTextBox(false)
 {
     m_aBaseUrl = rMediaDesc.getUnpackedValueOrDefault(
         utl::MediaDescriptor::PROP_DOCUMENTBASEURL(), OUString());
@@ -2365,13 +2366,16 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
     if (m_bDiscardHeaderFooter)
         return;
 
-    if (m_aTextAppendStack.empty())
+    if (m_aTextAppendStack.empty() && !m_bInsideTextBox)
         return;
     // Before placing call to processDeferredCharacterProperties(), TopContextType should be CONTEXT_CHARACTER
     // processDeferredCharacterProperties() invokes only if character inserted
     if( pPropertyMap == m_pTopContext && !deferredCharacterProperties.empty() && (GetTopContextType() == CONTEXT_CHARACTER) )
         processDeferredCharacterProperties();
-    uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
+    uno::Reference< text::XTextAppend >  xTextAppend;
+
+        xTextAppend = m_aTextAppendStack.top().xTextAppend;
+
     if (!xTextAppend.is() || !hasTableManager() || getTableManager().isIgnore())
         return;
 
@@ -2510,9 +2514,13 @@ void DomainMapper_Impl::appendTextContent(
     )
 {
     SAL_WARN_IF(m_aTextAppendStack.empty(), "writerfilter.dmapper", "no text append stack");
-    if (m_aTextAppendStack.empty())
+    if (m_aTextAppendStack.empty() && !m_bInsideTextBox)
         return;
-    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert( m_aTextAppendStack.top().xTextAppend, uno::UNO_QUERY );
+
+    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert;
+
+        xTextAppendAndConvert.set( m_aTextAppendStack.top().xTextAppend, uno::UNO_QUERY );
+
     OSL_ENSURE( xTextAppendAndConvert.is(), "trying to append a text content without XTextAppendAndConvert" );
     if (!xTextAppendAndConvert.is() || !hasTableManager() || getTableManager().isIgnore())
         return;
@@ -4382,6 +4390,72 @@ void DomainMapper_Impl::ChainTextFrames()
     {
         DBG_UNHANDLED_EXCEPTION("writerfilter.dmapper");
     }
+}
+
+void DomainMapper_Impl::AddNewDummyTextBox()
+{
+    try
+    {
+        uno::Reference<text::XTextFrame> xDummyFrame(
+            m_xTextFactory->createInstance("com.sun.star.text.TextFrame"), uno::UNO_QUERY);
+        uno::Reference<container::XNamed> xName(xDummyFrame, uno::UNO_QUERY);
+        xName->setName("DummyTextBox-" + OUString::number(m_aPendingTextBoxes.size()));
+        uno::Reference<text::XTextAppendAndConvert>(m_xBodyText, uno::UNO_QUERY)
+            ->appendTextContent(xDummyFrame, beans::PropertyValues());
+        m_aPendingTextBoxes.push(xDummyFrame);
+        m_aTextAppendStack.push(TextAppendContext(uno::Reference<text::XTextAppend>(xDummyFrame, uno::UNO_QUERY), {}));
+    }
+    catch (...)
+    {
+    }
+}
+
+void DomainMapper_Impl::CloseDummyTextBox()
+{
+    if (m_bInsideTextBox && (uno::Reference<text::XTextFrame>(m_aTextAppendStack.top().xTextAppend, uno::UNO_QUERY)).is())
+        m_aTextAppendStack.pop();
+}
+
+void DomainMapper_Impl::AttachDummyTextBox(uno::Reference<drawing::XShape> xShape)
+{
+    if (!xShape)
+        return;
+
+    if (!m_aPendingTextBoxes.size())
+        return;
+
+        try
+        {
+            uno::Reference<drawing::XShapes>xGroup(xShape, uno::UNO_QUERY);
+            if (xGroup)
+            {
+                for (size_t i = 0; i < xGroup->getCount(); ++i)
+                {
+                    auto xChild = xGroup->getByIndex(i).get<uno::Reference<drawing::XShape>>();
+                    uno::Reference<beans::XPropertySet>xProps(xChild, uno::UNO_QUERY);
+                    if (xProps->getPropertyValue("TextBox").get<bool>())
+                    {
+                        xProps->setPropertyValue("TextBoxContent", uno::Any(m_aPendingTextBoxes.front()));
+                        m_aPendingTextBoxes.pop();
+                    }
+
+                }
+            }
+            else
+            {
+                uno::Reference<beans::XPropertySet>xProps(xShape, uno::UNO_QUERY);
+                if (xProps->getPropertyValue("TextBox").get<bool>())
+                {
+                    xProps->setPropertyValue("TextBoxContent", uno::Any(m_aPendingTextBoxes.front()));
+                    m_aPendingTextBoxes.pop();
+                }
+            }
+        }
+        catch (...)
+        {
+        }
+
+
 }
 
 uno::Reference<beans::XPropertySet> DomainMapper_Impl::FindOrCreateFieldMaster(const char* pFieldMasterService, const OUString& rFieldMasterName)
