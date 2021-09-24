@@ -3853,11 +3853,11 @@ void PPTCharSheet::Read( SvStream& rIn, sal_uInt32 nLevel)
     // character attributes
     sal_uInt32 nCMask(0);
     sal_uInt16 nVal16;
-    rIn.ReadUInt32( nCMask );
+    rIn.ReadUInt32(nCMask);
 
     if ( nCMask & 0x0000FFFF )
     {
-        sal_uInt16 nBitAttr;
+        sal_uInt16 nBitAttr(0);
         maCharLevel[ nLevel ].mnFlags &= ~static_cast<sal_uInt16>(nCMask);
         rIn.ReadUInt16( nBitAttr ); // Bit attributes (bold, underlined, ...)
         maCharLevel[ nLevel ].mnFlags |= nBitAttr;
