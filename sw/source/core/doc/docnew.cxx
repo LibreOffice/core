@@ -23,6 +23,7 @@
 #include <string_view>
 
 #include <config_features.h>
+#include <config_fuzzers.h>
 
 #include <o3tl/sorted_vector.hxx>
 
@@ -336,7 +337,7 @@ SwDoc::SwDoc()
     maOLEModifiedIdle.SetInvokeHandler( LINK( this, SwDoc, DoUpdateModifiedOLE ));
     maOLEModifiedIdle.SetDebugName( "sw::SwDoc maOLEModifiedIdle" );
 
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     // Create DBManager
     m_pOwnDBManager.reset(new SwDBManager(this));
     m_pDBManager = m_pOwnDBManager.get();
@@ -534,7 +535,7 @@ SwDoc::~SwDoc()
      */
     mpFrameFormatTable->erase( mpFrameFormatTable->begin() );
 
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     // On load, SwDBManager::setEmbeddedName() may register a data source.
     // If we have an embedded one, then sDataSource points to the registered name, so revoke it here.
     if (!m_pOwnDBManager->getEmbeddedName().isEmpty() && !maDBData.sDataSource.isEmpty())

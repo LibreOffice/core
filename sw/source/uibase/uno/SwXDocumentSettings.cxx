@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_fuzzers.h>
 
 #include <sal/config.h>
 #include <sal/log.hxx>
@@ -545,7 +546,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_EMBEDDED_DATABASE_NAME:
         {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
             OUString sEmbeddedName;
             if (rValue >>= sEmbeddedName)
                 mpDoc->GetDBManager()->setEmbeddedName(sEmbeddedName, *mpDocSh);
@@ -1171,7 +1172,7 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_EMBEDDED_DATABASE_NAME:
         {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
             rValue <<= mpDoc->GetDBManager()->getEmbeddedName();
 #else
             rValue = uno::Any();

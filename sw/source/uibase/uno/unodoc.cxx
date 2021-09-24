@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 #include <config_features.h>
+#include <config_fuzzers.h>
 
 #include <sfx2/sfxmodelfactory.hxx>
 #include <swdll.hxx>
@@ -78,7 +79,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 SwXMailMerge_get_implementation(css::uno::XComponentContext*,
                                 css::uno::Sequence<css::uno::Any> const &)
 {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     SolarMutexGuard aGuard;
 
     //the module may not be loaded

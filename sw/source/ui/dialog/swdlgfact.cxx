@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_fuzzers.h>
 
 #include "swdlgfact.hxx"
 #include <svl/style.hxx>
@@ -396,7 +397,7 @@ void AbstractSwInsertDBColAutoPilot_Impl::DataToDoc( const uno::Sequence< uno::A
         uno::Reference< sdbc::XConnection> xConnection,
         uno::Reference< sdbc::XResultSet > xResultSet)
 {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     m_xDlg->DataToDoc(rSelection, rxSource, xConnection, xResultSet);
 #else
     (void) rSelection;
@@ -832,7 +833,7 @@ std::shared_ptr<AbstractSwBreakDlg> SwAbstractDialogFactory_Impl::CreateSwBreakD
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwChangeDBDlg(SwView& rVw)
 {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_shared<SwChangeDBDlg>(rVw));
 #else
     (void) rVw;
@@ -861,7 +862,7 @@ VclPtr<AbstractSwInsertDBColAutoPilot> SwAbstractDialogFactory_Impl::CreateSwIns
         uno::Reference<sdbcx::XColumnsSupplier> xColSupp,
         const SwDBData& rData)
 {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     return VclPtr<AbstractSwInsertDBColAutoPilot_Impl>::Create(std::make_unique<SwInsertDBColAutoPilot>(rView, rxSource, xColSupp, rData));
 #else
     (void) rView;
@@ -1156,7 +1157,7 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateIndexMarkModalDlg(
 VclPtr<AbstractMailMergeWizard> SwAbstractDialogFactory_Impl::CreateMailMergeWizard(
                                     SwView& rView, std::shared_ptr<SwMailMergeConfigItem>& rConfigItem)
 {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     return VclPtr<AbstractMailMergeWizard_Impl>::Create(std::make_shared<SwMailMergeWizard>(rView, rConfigItem));
 #else
     (void) rView;
@@ -1235,7 +1236,7 @@ CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
 
 void SwAbstractDialogFactory_Impl::ExecuteMMResultSaveDialog(weld::Window* pParent)
 {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     SwMMResultSaveDialog aDialog(pParent);
     aDialog.run();
 #else
@@ -1245,7 +1246,7 @@ void SwAbstractDialogFactory_Impl::ExecuteMMResultSaveDialog(weld::Window* pPare
 
 void SwAbstractDialogFactory_Impl::ExecuteMMResultPrintDialog(weld::Window* pParent)
 {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     SwMMResultPrintDialog aDialog(pParent);
     aDialog.run();
 #else
@@ -1255,7 +1256,7 @@ void SwAbstractDialogFactory_Impl::ExecuteMMResultPrintDialog(weld::Window* pPar
 
 void SwAbstractDialogFactory_Impl::ExecuteMMResultEmailDialog(weld::Window* pParent)
 {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     SwMMResultEmailDialog aDialog(pParent);
     aDialog.run();
 #else

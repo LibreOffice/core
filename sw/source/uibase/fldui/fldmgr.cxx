@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_fuzzers.h>
 
 #include <cmdid.h>
 #include <hintids.hxx>
@@ -1159,7 +1160,7 @@ bool SwFieldMgr::InsertField(
 
     case SwFieldTypesEnum::Database:
         {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
             SwDBData aDBData;
             OUString sPar1;
 
@@ -1215,7 +1216,7 @@ bool SwFieldMgr::InsertField(
     case SwFieldTypesEnum::DatabaseNextSet:
     case SwFieldTypesEnum::DatabaseName:
         {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
             SwDBData aDBData;
 
             // extract DBName from rData.m_sPar1. Format: DBName.TableName.CommandType.ExpStrg

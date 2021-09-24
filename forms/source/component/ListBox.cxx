@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_fuzzers.h>
 
 #include "ListBox.hxx"
 #include <property.hxx>
@@ -345,7 +346,7 @@ namespace frm
         }
         break;
 
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         case PROPERTY_ID_SELECT_VALUE :
         {
             ORowSetValue v;
@@ -875,7 +876,7 @@ namespace frm
 
             switch (m_eListSourceType)
             {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
             case ListSourceType_SQL:
             case ListSourceType_SQLPASSTHROUGH:
             case ListSourceType_TABLE:
@@ -1206,7 +1207,7 @@ namespace frm
 
         sal_Int32 nCount(0);
 
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         sal_Int16 *pIndex = aSelectionIndicies.getArray();
         for ( auto const & value : i_aValues)
         {
@@ -1241,7 +1242,7 @@ namespace frm
 
     Any OListBoxModel::translateDbColumnToControlValue()
     {
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         Reference< XPropertySet > xBoundField( getField() );
         if ( !xBoundField.is() )
         {
@@ -1360,7 +1361,7 @@ namespace frm
         break;
 
         case eValue:
-#if HAVE_FEATURE_DBCONNECTIVITY
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
         {
             ORowSetValue v;
             v.fill(_rExternalValue);
