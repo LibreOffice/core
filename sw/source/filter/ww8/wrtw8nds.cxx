@@ -2828,7 +2828,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
         if ( !bFlyInTable )
         {
-            SfxItemSet* pTmpSet = nullptr;
+            std::optional<SfxItemSet> oTmpSet;
             const sal_uInt8 nPrvNxtNd = rNode.HasPrevNextLayNode();
 
             if( (ND_HAS_PREV_LAYNODE|ND_HAS_NEXT_LAYNODE ) != nPrvNxtNd )
@@ -2841,7 +2841,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                       ( !( ND_HAS_NEXT_LAYNODE & nPrvNxtNd ) &&
                        static_cast<const SvxULSpaceItem*>(pItem)->GetLower()) ))
                 {
-                    pTmpSet = new SfxItemSet( rNode.GetSwAttrSet() );
+                    oTmpSet.emplace( rNode.GetSwAttrSet() );
                     SvxULSpaceItem aUL( *static_cast<const SvxULSpaceItem*>(pItem) );
                     // #i25901#- consider compatibility option
                     if (!m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::PARA_SPACE_MAX_AT_PAGES))
@@ -2855,7 +2855,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                         if( !(ND_HAS_NEXT_LAYNODE & nPrvNxtNd ))
                             aUL.SetLower( 0 );
                     }
-                    pTmpSet->Put( aUL );
+                    oTmpSet->Put( aUL );
                 }
             }
 
@@ -2872,10 +2872,10 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 if( !pFormat )
                     pFormat = &pRule->Get( nLvl );
 
-                if( !pTmpSet )
-                    pTmpSet = new SfxItemSet( rNode.GetSwAttrSet() );
+                if( !oTmpSet )
+                    oTmpSet.emplace( rNode.GetSwAttrSet() );
 
-                SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*pTmpSet, RES_LR_SPACE));
+                SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*oTmpSet, RES_LR_SPACE));
                 // #i86652#
                 if ( pFormat->GetPositionAndSpaceMode() ==
                                         SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
@@ -2901,12 +2901,12 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
                     // correct fix for issue i94187
                     if (SfxItemState::SET !=
-                        pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
+                        oTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
                     {
                         // List style set via paragraph style - then put it into the itemset.
                         // This is needed to get list level and list id exported for
                         // the paragraph.
-                        pTmpSet->Put( SwNumRuleItem( pRule->GetName() ));
+                        oTmpSet->Put( SwNumRuleItem( pRule->GetName() ));
 
                         // Put indent values into the itemset in case that the list
                         // style is applied via paragraph style and the list level
@@ -2915,27 +2915,27 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                                                 SvxNumberFormat::LABEL_ALIGNMENT &&
                              !rNode.AreListLevelIndentsApplicable() )
                         {
-                            pTmpSet->Put( aLR );
+                            oTmpSet->Put( aLR );
                         }
                     }
                 }
                 else
-                    pTmpSet->ClearItem(RES_PARATR_NUMRULE);
+                    oTmpSet->ClearItem(RES_PARATR_NUMRULE);
 
                 // #i86652#
                 if ( pFormat->GetPositionAndSpaceMode() ==
                                         SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
-                    pTmpSet->Put(aLR);
+                    oTmpSet->Put(aLR);
 
                     //#i21847#
                     SvxTabStopItem aItem(
-                        ItemGet<SvxTabStopItem>(*pTmpSet, RES_PARATR_TABSTOP));
+                        ItemGet<SvxTabStopItem>(*oTmpSet, RES_PARATR_TABSTOP));
                     SvxTabStop aTabStop(pFormat->GetAbsLSpace());
                     aItem.Insert(aTabStop);
-                    pTmpSet->Put(aItem);
+                    oTmpSet->Put(aItem);
 
-                    MSWordExportBase::CorrectTabStopInSet(*pTmpSet, pFormat->GetAbsLSpace());
+                    MSWordExportBase::CorrectTabStopInSet(*oTmpSet, pFormat->GetAbsLSpace());
                 }
             }
 
@@ -2952,17 +2952,17 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 rTextColl.GetFrameDir().GetValue() == SvxFrameDirection::Environment
                )
             {
-                if ( !pTmpSet )
-                    pTmpSet = new SfxItemSet(rNode.GetSwAttrSet());
+                if ( !oTmpSet )
+                    oTmpSet.emplace(rNode.GetSwAttrSet());
 
                 if ( bParaRTL )
-                    pTmpSet->Put(SvxFrameDirectionItem(SvxFrameDirection::Horizontal_RL_TB, RES_FRAMEDIR));
+                    oTmpSet->Put(SvxFrameDirectionItem(SvxFrameDirection::Horizontal_RL_TB, RES_FRAMEDIR));
                 else
-                    pTmpSet->Put(SvxFrameDirectionItem(SvxFrameDirection::Horizontal_LR_TB, RES_FRAMEDIR));
+                    oTmpSet->Put(SvxFrameDirectionItem(SvxFrameDirection::Horizontal_LR_TB, RES_FRAMEDIR));
 
                 const SvxAdjustItem* pAdjust = rNode.GetSwAttrSet().GetItem(RES_PARATR_ADJUST);
                 if ( pAdjust && (pAdjust->GetAdjust() == SvxAdjust::Left || pAdjust->GetAdjust() == SvxAdjust::Right ) )
-                    pTmpSet->Put( *pAdjust, RES_PARATR_ADJUST );
+                    oTmpSet->Put( *pAdjust, RES_PARATR_ADJUST );
             }
             // move code for handling of numbered,
             // but not counted paragraphs to this place. Otherwise, the paragraph
@@ -2979,12 +2979,12 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 // no numbering. Here, we will adjust the indents to match
                 // visually.
 
-                if ( !pTmpSet )
-                    pTmpSet = new SfxItemSet(rNode.GetSwAttrSet());
+                if ( !oTmpSet )
+                    oTmpSet.emplace(rNode.GetSwAttrSet());
 
                 // create new LRSpace item, based on the current (if present)
                 const SfxPoolItem* pPoolItem = nullptr;
-                pTmpSet->GetItemState(RES_LR_SPACE, true, &pPoolItem);
+                oTmpSet->GetItemState(RES_LR_SPACE, true, &pPoolItem);
                 SvxLRSpaceItem aLRSpace(
                     ( pPoolItem == nullptr )
                         ? SvxLRSpaceItem(0, 0, 0, 0, RES_LR_SPACE)
@@ -3019,12 +3019,12 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     aLRSpace.SetTextFirstLineOffset( 0 );
 
                 // put back the new item
-                pTmpSet->Put( aLRSpace );
+                oTmpSet->Put( aLRSpace );
 
-                // assure that numbering rule is in <pTmpSet>
-                if (SfxItemState::SET != pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
+                // assure that numbering rule is in <oTmpSet>
+                if (SfxItemState::SET != oTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
                 {
-                    pTmpSet->Put( SwNumRuleItem( pRule->GetName() ));
+                    oTmpSet->Put( SwNumRuleItem( pRule->GetName() ));
                 }
             }
 
@@ -3039,19 +3039,17 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     = ItemGet<SvxFormatBreakItem>(rNode.GetSwAttrSet(), RES_BREAK);
                 if (rBreakAtParaStyle.GetBreak() == SvxBreak::PageAfter)
                 {
-                    if ( !pTmpSet )
-                    {
-                        pTmpSet = new SfxItemSet(rNode.GetSwAttrSet());
-                    }
-                    pTmpSet->Put(rBreakAtParaStyle);
+                    if ( !oTmpSet )
+                        oTmpSet.emplace(rNode.GetSwAttrSet());
+                    oTmpSet->Put(rBreakAtParaStyle);
                 }
-                else if( pTmpSet )
+                else if( oTmpSet )
                 {   // Even a pagedesc item is set, the break item can be set 'NONE',
                     // this has to be overruled.
                     const SwFormatPageDesc& rPageDescAtParaStyle =
                         ItemGet<SwFormatPageDesc>( rNode, RES_PAGEDESC );
                     if( rPageDescAtParaStyle.KnowsPageDesc() )
-                        pTmpSet->ClearItem( RES_BREAK );
+                        oTmpSet->ClearItem( RES_BREAK );
                 }
             }
 
@@ -3096,11 +3094,11 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
                                     if ( bSetAtPara )
                                     {
-                                        if ( !pTmpSet )
-                                            pTmpSet = new SfxItemSet(rNode.GetSwAttrSet());
+                                        if ( !oTmpSet )
+                                            oTmpSet.emplace(rNode.GetSwAttrSet());
 
                                         const SvxFormatKeepItem aKeepItem( true, RES_KEEP );
-                                        pTmpSet->Put( aKeepItem );
+                                        oTmpSet->Put( aKeepItem );
                                     }
                                 }
                             }
@@ -3109,7 +3107,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 }
             }
 
-            const SfxItemSet* pNewSet = pTmpSet ? pTmpSet : rNode.GetpSwAttrSet();
+            const SfxItemSet* pNewSet = oTmpSet ? &*oTmpSet : rNode.GetpSwAttrSet();
             if( pNewSet )
             {                                               // Para-Attrs
                 m_pStyAttr = &rNode.GetAnyFormatColl().GetAttrSet();
@@ -3122,9 +3120,6 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
                 m_pStyAttr = nullptr;
                 m_pOutFormatNode = pOldMod;
-
-                if( pNewSet != rNode.GetpSwAttrSet() )
-                    delete pNewSet;
             }
         }
 
