@@ -1179,8 +1179,11 @@ void Window::Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags )
     tools::Rectangle aRect = pOutDev->ImplLogicToDevicePixel( rRect );
     if ( !aRect.IsEmpty() )
     {
-        vcl::Region aRegion( aRect );
-        ImplInvalidate( &aRegion, nFlags );
+        if (!comphelper::LibreOfficeKit::isActive())
+        {   // ImplInvalidate() immediatelly returns in LOK mode, skip useless Region construction
+            vcl::Region aRegion( aRect );
+            ImplInvalidate( &aRegion, nFlags );
+        }
         tools::Rectangle aLogicRectangle(rRect);
         LogicInvalidate(&aLogicRectangle);
     }
