@@ -19,9 +19,9 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include "rtfexport.hxx"
+
+#include <string_view>
 
 #include "rtfexportfilter.hxx"
 #include "rtfsdrexport.hxx"
