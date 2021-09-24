@@ -187,49 +187,46 @@ void SQLExceptionInfo::prepend( const OUString& _rErrorMessage )
     m_eType = TYPE::SQLException;
 }
 
-namespace
+// create the to-be-appended exception
+Any SQLExceptionInfo::createException(TYPE eType, const OUString& rErrorMessage, const OUString& rSQLState, const sal_Int32 nErrorCode)
 {
-    // create the to-be-appended exception
-    Any createException(SQLExceptionInfo::TYPE eType, const OUString& rErrorMessage, const OUString& rSQLState, const sal_Int32 nErrorCode)
+    Any aAppend;
+    switch (eType)
     {
-        Any aAppend;
-        switch (eType)
-        {
-            case SQLExceptionInfo::TYPE::SQLException:
-                aAppend <<= SQLException();
-                break;
-            case SQLExceptionInfo::TYPE::SQLWarning:
-                aAppend <<= SQLWarning();
-                break;
-            case SQLExceptionInfo::TYPE::SQLContext:
-                aAppend <<= SQLContext();
-                break;
-            default:
-                TOOLS_WARN_EXCEPTION("connectivity.commontools", "SQLExceptionInfo::createException: invalid exception type: this will crash!");
-                break;
-        }
-
-        SQLException& pAppendException = const_cast<SQLException &>(*o3tl::forceAccess<SQLException>(aAppend));
-        pAppendException.Message = rErrorMessage;
-        pAppendException.SQLState = rSQLState;
-        pAppendException.ErrorCode = nErrorCode;
-
-        return aAppend;
+        case TYPE::SQLException:
+            aAppend <<= SQLException();
+            break;
+        case TYPE::SQLWarning:
+            aAppend <<= SQLWarning();
+            break;
+        case TYPE::SQLContext:
+            aAppend <<= SQLContext();
+            break;
+        default:
+            TOOLS_WARN_EXCEPTION("connectivity.commontools", "SQLExceptionInfo::createException: invalid exception type: this will crash!");
+            break;
     }
 
-    // find the end of the exception chain
-    SQLException* getLastException(SQLException* pLastException)
+    SQLException& pAppendException = const_cast<SQLException &>(*o3tl::forceAccess<SQLException>(aAppend));
+    pAppendException.Message = rErrorMessage;
+    pAppendException.SQLState = rSQLState;
+    pAppendException.ErrorCode = nErrorCode;
+
+    return aAppend;
+}
+
+// find the end of the exception chain
+SQLException* SQLExceptionInfo::getLastException(SQLException* pLastException)
+{
+    SQLException* pException = pLastException;
+    while (pException)
     {
-        SQLException* pException = pLastException;
-        while (pException)
-        {
-            pException = const_cast<SQLException*>(o3tl::tryAccess<SQLException>(pException->NextException));
-            if (!pException)
-                break;
-            pLastException = pException;
-        }
-        return pLastException;
+        pException = const_cast<SQLException*>(o3tl::tryAccess<SQLException>(pException->NextException));
+        if (!pException)
+            break;
+        pLastException = pException;
     }
+    return pLastException;
 }
 
 void SQLExceptionInfo::append( TYPE _eType, const OUString& _rErrorMessage, const OUString& _rSQLState, const sal_Int32 _nErrorCode )
