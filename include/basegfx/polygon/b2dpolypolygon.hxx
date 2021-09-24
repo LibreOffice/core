@@ -43,8 +43,13 @@ namespace basegfx
         typedef o3tl::cow_wrapper< ImplB2DPolyPolygon > ImplType;
 
     private:
-        ImplType                                        mpPolyPolygon;
+        friend class ::std::optional<B2DPolyPolygon>;
+        friend class ::o3tl::cow_optional<B2DPolyPolygon>;
 
+        ImplType                                        mpImpl;
+
+        B2DPolyPolygon(std::nullopt_t) noexcept;
+        B2DPolyPolygon(const B2DPolyPolygon&, std::nullopt_t) noexcept;
     public:
         B2DPolyPolygon();
         B2DPolyPolygon(const B2DPolyPolygon& rPolyPolygon);
@@ -174,4 +179,22 @@ namespace basegfx
 
 } // end of namespace basegfx
 
+namespace std
+{
+    /** Specialise std::optional template for the case where we are wrapping a o3tl::cow_wrapper
+        type, and we can make the pointer inside the cow_wrapper act as an empty value,
+        and save ourselves some storage */
+    template<>
+    class optional<::basegfx::B2DPolyPolygon> final : public o3tl::cow_optional<::basegfx::B2DPolyPolygon>
+    {
+    public:
+        using cow_optional::cow_optional; // inherit constructors
+        optional(const optional&) = default;
+        optional(optional&&) = default;
+        optional& operator=(const optional&) = default;
+        optional& operator=(optional&&) = default;
+        ~optional();
+        void reset();
+    };
+};
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

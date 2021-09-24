@@ -16,9 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_VCL_FONT_HXX
-#define INCLUDED_VCL_FONT_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -170,7 +168,13 @@ public:
     inline bool IsUnderlineAbove() const;
 
 private:
-    ImplType mpImplFont;
+friend class ::std::optional<Font>;
+friend class ::o3tl::cow_optional<Font>;
+
+    Font(std::nullopt_t) noexcept;
+    Font(const Font&, std::nullopt_t) noexcept;
+
+    ImplType mpImpl;
 };
 
 inline bool Font::IsUnderlineAbove() const
@@ -184,6 +188,23 @@ inline bool Font::IsUnderlineAbove() const
 
 }
 
-#endif  // _VCL_FONT_HXX
+namespace std
+{
+    /** Specialise std::optional template for the case where we are wrapping a o3tl::cow_wrapper
+        type, and we can make the pointer inside the cow_wrapper act as an empty value,
+        and save ourselves some storage */
+    template<>
+    class optional<::vcl::Font> final : public o3tl::cow_optional<::vcl::Font>
+    {
+    public:
+        using cow_optional::cow_optional; // inherit constructors
+        optional(const optional&) = default;
+        optional(optional&&) = default;
+        optional& operator=(const optional&) = default;
+        optional& operator=(optional&&) = default;
+        ~optional();
+        void reset();
+    };
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

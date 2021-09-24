@@ -199,14 +199,18 @@ namespace basegfx
     static o3tl::cow_wrapper<ImplB2DPolyPolygon> DEFAULT;
 
     B2DPolyPolygon::B2DPolyPolygon() :
-        mpPolyPolygon(DEFAULT) {}
+        mpImpl(DEFAULT) {}
+
+    B2DPolyPolygon::B2DPolyPolygon(std::nullopt_t) noexcept : mpImpl(std::nullopt) {}
+
+    B2DPolyPolygon::B2DPolyPolygon(const B2DPolyPolygon& rOther, std::nullopt_t) noexcept : mpImpl(rOther.mpImpl, std::nullopt) {}
 
     B2DPolyPolygon::B2DPolyPolygon(const B2DPolyPolygon&) = default;
 
     B2DPolyPolygon::B2DPolyPolygon(B2DPolyPolygon&&) = default;
 
     B2DPolyPolygon::B2DPolyPolygon(const B2DPolygon& rPolygon) :
-        mpPolyPolygon( ImplB2DPolyPolygon(rPolygon) )
+        mpImpl( ImplB2DPolyPolygon(rPolygon) )
     {
     }
 
@@ -218,16 +222,16 @@ namespace basegfx
 
     void B2DPolyPolygon::makeUnique()
     {
-        mpPolyPolygon.make_unique();
-        mpPolyPolygon->makeUnique();
+        mpImpl.make_unique();
+        mpImpl->makeUnique();
     }
 
     bool B2DPolyPolygon::operator==(const B2DPolyPolygon& rPolyPolygon) const
     {
-        if(mpPolyPolygon.same_object(rPolyPolygon.mpPolyPolygon))
+        if(mpImpl.same_object(rPolyPolygon.mpImpl))
             return true;
 
-        return ((*mpPolyPolygon) == (*rPolyPolygon.mpPolyPolygon));
+        return ((*mpImpl) == (*rPolyPolygon.mpImpl));
     }
 
     bool B2DPolyPolygon::operator!=(const B2DPolyPolygon& rPolyPolygon) const
@@ -237,29 +241,29 @@ namespace basegfx
 
     sal_uInt32 B2DPolyPolygon::count() const
     {
-        return mpPolyPolygon->count();
+        return mpImpl->count();
     }
 
     B2DPolygon const & B2DPolyPolygon::getB2DPolygon(sal_uInt32 nIndex) const
     {
-        OSL_ENSURE(nIndex < mpPolyPolygon->count(), "B2DPolyPolygon access outside range (!)");
+        OSL_ENSURE(nIndex < mpImpl->count(), "B2DPolyPolygon access outside range (!)");
 
-        return mpPolyPolygon->getB2DPolygon(nIndex);
+        return mpImpl->getB2DPolygon(nIndex);
     }
 
     void B2DPolyPolygon::setB2DPolygon(sal_uInt32 nIndex, const B2DPolygon& rPolygon)
     {
-        OSL_ENSURE(nIndex < std::as_const(*mpPolyPolygon).count(), "B2DPolyPolygon access outside range (!)");
+        OSL_ENSURE(nIndex < std::as_const(*mpImpl).count(), "B2DPolyPolygon access outside range (!)");
 
         if(getB2DPolygon(nIndex) != rPolygon)
-            mpPolyPolygon->setB2DPolygon(nIndex, rPolygon);
+            mpImpl->setB2DPolygon(nIndex, rPolygon);
     }
 
     bool B2DPolyPolygon::areControlPointsUsed() const
     {
-        for(sal_uInt32 a(0); a < mpPolyPolygon->count(); a++)
+        for(sal_uInt32 a(0); a < mpImpl->count(); a++)
         {
-            const B2DPolygon& rPolygon = mpPolyPolygon->getB2DPolygon(a);
+            const B2DPolygon& rPolygon = mpImpl->getB2DPolygon(a);
 
             if(rPolygon.areControlPointsUsed())
             {
@@ -272,25 +276,25 @@ namespace basegfx
 
     void B2DPolyPolygon::insert(sal_uInt32 nIndex, const B2DPolygon& rPolygon, sal_uInt32 nCount)
     {
-        OSL_ENSURE(nIndex <= std::as_const(*mpPolyPolygon).count(), "B2DPolyPolygon Insert outside range (!)");
+        OSL_ENSURE(nIndex <= std::as_const(*mpImpl).count(), "B2DPolyPolygon Insert outside range (!)");
 
         if(nCount)
-            mpPolyPolygon->insert(nIndex, rPolygon, nCount);
+            mpImpl->insert(nIndex, rPolygon, nCount);
     }
 
     void B2DPolyPolygon::append(const B2DPolygon& rPolygon, sal_uInt32 nCount)
     {
         if(nCount)
-            mpPolyPolygon->insert(std::as_const(*mpPolyPolygon).count(), rPolygon, nCount);
+            mpImpl->insert(std::as_const(*mpImpl).count(), rPolygon, nCount);
     }
 
     B2DPolyPolygon B2DPolyPolygon::getDefaultAdaptiveSubdivision() const
     {
         B2DPolyPolygon aRetval;
 
-        for(sal_uInt32 a(0); a < mpPolyPolygon->count(); a++)
+        for(sal_uInt32 a(0); a < mpImpl->count(); a++)
         {
-            aRetval.append(mpPolyPolygon->getB2DPolygon(a).getDefaultAdaptiveSubdivision());
+            aRetval.append(mpImpl->getB2DPolygon(a).getDefaultAdaptiveSubdivision());
         }
 
         return aRetval;
@@ -300,9 +304,9 @@ namespace basegfx
     {
         B2DRange aRetval;
 
-        for(sal_uInt32 a(0); a < mpPolyPolygon->count(); a++)
+        for(sal_uInt32 a(0); a < mpImpl->count(); a++)
         {
-            aRetval.expand(mpPolyPolygon->getB2DPolygon(a).getB2DRange());
+            aRetval.expand(mpImpl->getB2DPolygon(a).getB2DRange());
         }
 
         return aRetval;
@@ -310,29 +314,29 @@ namespace basegfx
 
     void B2DPolyPolygon::insert(sal_uInt32 nIndex, const B2DPolyPolygon& rPolyPolygon)
     {
-        OSL_ENSURE(nIndex <= std::as_const(*mpPolyPolygon).count(), "B2DPolyPolygon Insert outside range (!)");
+        OSL_ENSURE(nIndex <= std::as_const(*mpImpl).count(), "B2DPolyPolygon Insert outside range (!)");
 
         if(rPolyPolygon.count())
-            mpPolyPolygon->insert(nIndex, rPolyPolygon);
+            mpImpl->insert(nIndex, rPolyPolygon);
     }
 
     void B2DPolyPolygon::append(const B2DPolyPolygon& rPolyPolygon)
     {
         if(rPolyPolygon.count())
-            mpPolyPolygon->insert(std::as_const(*mpPolyPolygon).count(), rPolyPolygon);
+            mpImpl->insert(std::as_const(*mpImpl).count(), rPolyPolygon);
     }
 
     void B2DPolyPolygon::remove(sal_uInt32 nIndex, sal_uInt32 nCount)
     {
-        OSL_ENSURE(nIndex + nCount <= std::as_const(*mpPolyPolygon).count(), "B2DPolyPolygon Remove outside range (!)");
+        OSL_ENSURE(nIndex + nCount <= std::as_const(*mpImpl).count(), "B2DPolyPolygon Remove outside range (!)");
 
         if(nCount)
-            mpPolyPolygon->remove(nIndex, nCount);
+            mpImpl->remove(nIndex, nCount);
     }
 
     void B2DPolyPolygon::clear()
     {
-        *mpPolyPolygon = ImplB2DPolyPolygon();
+        *mpImpl = ImplB2DPolyPolygon();
     }
 
     bool B2DPolyPolygon::isClosed() const
@@ -341,9 +345,9 @@ namespace basegfx
 
         // PolyPOlygon is closed when all contained Polygons are closed or
         // no Polygon exists.
-        for(sal_uInt32 a(0); bRetval && a < mpPolyPolygon->count(); a++)
+        for(sal_uInt32 a(0); bRetval && a < mpImpl->count(); a++)
         {
-            if(!mpPolyPolygon->getB2DPolygon(a).isClosed())
+            if(!mpImpl->getB2DPolygon(a).isClosed())
             {
                 bRetval = false;
             }
@@ -355,14 +359,14 @@ namespace basegfx
     void B2DPolyPolygon::setClosed(bool bNew)
     {
         if(bNew != isClosed())
-            mpPolyPolygon->setClosed(bNew);
+            mpImpl->setClosed(bNew);
     }
 
     void B2DPolyPolygon::flip()
     {
-        if(std::as_const(*mpPolyPolygon).count())
+        if(std::as_const(*mpImpl).count())
         {
-            mpPolyPolygon->flip();
+            mpImpl->flip();
         }
     }
 
@@ -370,9 +374,9 @@ namespace basegfx
     {
         bool bRetval(false);
 
-        for(sal_uInt32 a(0); !bRetval && a < mpPolyPolygon->count(); a++)
+        for(sal_uInt32 a(0); !bRetval && a < mpImpl->count(); a++)
         {
-            if(mpPolyPolygon->getB2DPolygon(a).hasDoublePoints())
+            if(mpImpl->getB2DPolygon(a).hasDoublePoints())
             {
                 bRetval = true;
             }
@@ -384,35 +388,35 @@ namespace basegfx
     void B2DPolyPolygon::removeDoublePoints()
     {
         if(hasDoublePoints())
-            mpPolyPolygon->removeDoublePoints();
+            mpImpl->removeDoublePoints();
     }
 
     void B2DPolyPolygon::transform(const B2DHomMatrix& rMatrix)
     {
-        if(std::as_const(*mpPolyPolygon).count() && !rMatrix.isIdentity())
+        if(std::as_const(*mpImpl).count() && !rMatrix.isIdentity())
         {
-            mpPolyPolygon->transform(rMatrix);
+            mpImpl->transform(rMatrix);
         }
     }
 
     const B2DPolygon* B2DPolyPolygon::begin() const
     {
-        return mpPolyPolygon->begin();
+        return mpImpl->begin();
     }
 
     const B2DPolygon* B2DPolyPolygon::end() const
     {
-        return mpPolyPolygon->end();
+        return mpImpl->end();
     }
 
     B2DPolygon* B2DPolyPolygon::begin()
     {
-        return mpPolyPolygon->begin();
+        return mpImpl->begin();
     }
 
     B2DPolygon* B2DPolyPolygon::end()
     {
-        return mpPolyPolygon->end();
+        return mpImpl->end();
     }
 
     void B2DPolyPolygon::addOrReplaceSystemDependentDataInternal(SystemDependentData_SharedPtr& rData) const
@@ -422,16 +426,19 @@ namespace basegfx
         // 'modify' the ImplB2DPolyPolygon, but add buffered data that
         // is valid for all referencing instances
         const B2DPolyPolygon* pMe(this);
-        const ImplB2DPolyPolygon* pMyImpl(pMe->mpPolyPolygon.get());
+        const ImplB2DPolyPolygon* pMyImpl(pMe->mpImpl.get());
 
         const_cast<ImplB2DPolyPolygon*>(pMyImpl)->addOrReplaceSystemDependentData(rData);
     }
 
     SystemDependentData_SharedPtr B2DPolyPolygon::getSystemDependantDataInternal(size_t hash_code) const
     {
-        return mpPolyPolygon->getSystemDependentData(hash_code);
+        return mpImpl->getSystemDependentData(hash_code);
     }
 
 } // end of namespace basegfx
+
+std::optional<basegfx::B2DPolyPolygon>::~optional() {}
+void std::optional<basegfx::B2DPolyPolygon>::reset() { cow_optional::reset(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

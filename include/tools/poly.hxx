@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_TOOLS_POLY_HXX
-#define INCLUDED_TOOLS_POLY_HXX
+#pragma once
 
 #include <tools/toolsdllapi.h>
 #include <tools/gen.hxx>
@@ -70,17 +69,19 @@ namespace tools {
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Polygon
 {
+friend class ::std::optional<Polygon>;
+friend class ::o3tl::cow_optional<Polygon>;
 public:
     typedef             o3tl::cow_wrapper<ImplPolygon> ImplType;
 private:
-    ImplType            mpImplPolygon;
+    ImplType            mpImpl;
 
+                        Polygon(std::nullopt_t) noexcept;
 public:
     static void         ImplReduceEdges( tools::Polygon& rPoly, const double& rArea, sal_uInt16 nPercent );
     void                ImplRead( SvStream& rIStream );
     void                ImplWrite( SvStream& rOStream ) const;
 
-public:
                         Polygon();
                         Polygon( sal_uInt16 nSize );
                         Polygon( sal_uInt16 nPoints, const Point* pPtAry,
@@ -185,13 +186,19 @@ public:
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC PolyPolygon
 {
 private:
-    o3tl::cow_wrapper<ImplPolyPolygon>  mpImplPolyPolygon;
+friend class ::std::optional<PolyPolygon>;
+friend class ::o3tl::cow_optional<PolyPolygon>;
+
+    o3tl::cow_wrapper<ImplPolyPolygon>  mpImpl;
 
     enum class PolyClipOp {
         INTERSECT,
         UNION
     };
     TOOLS_DLLPRIVATE void  ImplDoOperation( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rResult, PolyClipOp nOperation ) const;
+
+    PolyPolygon(std::nullopt_t) noexcept;
+    PolyPolygon(const PolyPolygon &, std::nullopt_t) noexcept;
 
 public:
                         PolyPolygon( sal_uInt16 nInitSize = 16 );
@@ -296,6 +303,36 @@ inline std::basic_ostream<charT, traits> & operator <<(
 
 typedef std::vector< tools::PolyPolygon > PolyPolyVector;
 
-#endif
+namespace std
+{
+    /** Specialise std::optional template for the case where we are wrapping a o3tl::cow_wrapper
+        type, and we can make the pointer inside the cow_wrapper act as an empty value,
+        and save ourselves some storage */
+    template<>
+    class optional<::tools::Polygon> final : public o3tl::cow_optional<::tools::Polygon>
+    {
+    public:
+        using cow_optional::cow_optional; // inherit constructors
+        optional(const optional&) = default;
+        optional(optional&&) = default;
+        optional& operator=(const optional&) = default;
+        optional& operator=(optional&&) = default;
+        ~optional();
+        void reset();
+    };
+
+    template<>
+    class optional<::tools::PolyPolygon> final : public o3tl::cow_optional<::tools::PolyPolygon>
+    {
+    public:
+        using cow_optional::cow_optional; // inherit constructors
+        optional(const optional&) = default;
+        optional(optional&&) = default;
+        optional& operator=(const optional&) = default;
+        optional& operator=(optional&&) = default;
+        ~optional();
+        void reset();
+    };
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
