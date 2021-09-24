@@ -1617,6 +1617,8 @@ IMPL_LINK(SvxNumOptionsTabPage, AllLevelHdl_Impl, weld::SpinButton&, rBox, void)
         {
             SvxNumberFormat aNumFmt(pActNum->GetLevel(e));
             aNumFmt.SetIncludeUpperLevels(static_cast<sal_uInt8>(std::min(rBox.get_value(), int(e + 1))) );
+            aNumFmt.SetListFormat(aNumFmt.GetPrefix(), aNumFmt.GetSuffix(), e);
+
             pActNum->SetLevel(e, aNumFmt);
         }
         nMask <<= 1;
