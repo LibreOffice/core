@@ -1693,7 +1693,7 @@ SwXText::convertToTextFrame(
     std::set<OUString> aAnchoredObjectsByName;
     for (size_t i = 0; i < m_pImpl->m_pDoc->GetSpzFrameFormats()->size(); ++i)
     {
-        const SwFrameFormat* pFrameFormat = (*m_pImpl->m_pDoc->GetSpzFrameFormats())[i];
+        SwFrameFormat* pFrameFormat = (*m_pImpl->m_pDoc->GetSpzFrameFormats())[i];
         const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
         if ( !isGraphicNode(pFrameFormat) &&
                 (RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId() || RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()) &&
@@ -1708,6 +1708,18 @@ SwXText::convertToTextFrame(
             {
                 aAnchoredObjectsByName.insert(pFrameFormat->GetName());
             }
+
+            //if (auto pTextBox = pFrameFormat->GetOtherTextBoxFormat())
+            //{
+            //    if (auto pShape = pTextBox->GetOwnerShape())
+            //    {
+            //        if (pFrameFormat->GetAnchor().GetAnchorId() != pShape->GetAnchor().GetAnchorId()
+            //            && pFrameFormat->Which() == RES_FLYFRMFMT)
+            //            pFrameFormat->SetFormatAttr(
+            //                SwFormatAnchor(RndStdIds::FLY_AT_PAGE,
+            //                               pStartPam->GetPageNum() ? pStartPam->GetPageNum() : 1));
+            //    }
+            //}
         }
     }
 
