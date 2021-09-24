@@ -187,25 +187,41 @@ void SQLExceptionInfo::prepend( const OUString& _rErrorMessage )
     m_eType = TYPE::SQLException;
 }
 
+namespace
+{
+    Any createException(SQLExceptionInfo::TYPE eType, const OUString& rErrorMessage, const OUString& rSQLState, const sal_Int32 nErrorCode)
+    {
+        // create the to-be-appended exception
+        Any aAppend;
+        switch (eType)
+        {
+            case SQLExceptionInfo::TYPE::SQLException:
+                aAppend <<= SQLException();
+                break;
+            case SQLExceptionInfo::TYPE::SQLWarning:
+                aAppend <<= SQLWarning();
+                break;
+            case SQLExceptionInfo::TYPE::SQLContext:
+                aAppend <<= SQLContext();
+                break;
+            default:
+                TOOLS_WARN_EXCEPTION("connectivity.commontools", "SQLExceptionInfo::createException: invalid exception type: this will crash!");
+                break;
+        }
+
+        SQLException& pAppendException = const_cast<SQLException &>(*o3tl::forceAccess<SQLException>(aAppend));
+        pAppendException.Message = rErrorMessage;
+        pAppendException.SQLState = rSQLState;
+        pAppendException.ErrorCode = nErrorCode;
+
+        return aAppend;
+    }
+}
 
 void SQLExceptionInfo::append( TYPE _eType, const OUString& _rErrorMessage, const OUString& _rSQLState, const sal_Int32 _nErrorCode )
 {
     // create the to-be-appended exception
-    Any aAppend;
-    switch ( _eType )
-    {
-    case TYPE::SQLException: aAppend <<= SQLException(); break;
-    case TYPE::SQLWarning:   aAppend <<= SQLWarning();   break;
-    case TYPE::SQLContext:   aAppend <<= SQLContext();   break;
-    default:
-        TOOLS_WARN_EXCEPTION( "connectivity.commontools", "SQLExceptionInfo::append: invalid exception type: this will crash!" );
-        break;
-    }
-
-    SQLException& pAppendException = const_cast<SQLException &>(*o3tl::forceAccess<SQLException>(aAppend));
-    pAppendException.Message = _rErrorMessage;
-    pAppendException.SQLState = _rSQLState;
-    pAppendException.ErrorCode = _nErrorCode;
+    Any aAppend = createException(_eType, _rErrorMessage, _rSQLState, _nErrorCode);
 
     // find the end of the current chain
     Any* pChainIterator = &m_aContent;
@@ -232,7 +248,6 @@ void SQLExceptionInfo::append( TYPE _eType, const OUString& _rErrorMessage, cons
         m_eType = _eType;
     }
 }
-
 
 void SQLExceptionInfo::doThrow()
 {
