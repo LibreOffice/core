@@ -72,6 +72,7 @@
 #include <svdata.hxx>
 #include <bitmap/BitmapWriteAccess.hxx>
 #include <fontsubset.hxx>
+#include <font/EmphasisMark.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <salgdi.hxx>
 #include <textlayout.hxx>
@@ -6369,34 +6370,22 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     if( !(m_aCurrentPDFState.m_aFont.GetEmphasisMark() & FontEmphasisMark::Style) )
         return;
 
-    tools::PolyPolygon             aEmphPoly;
-    tools::Rectangle               aEmphRect1;
-    tools::Rectangle               aEmphRect2;
-    tools::Long                    nEmphYOff;
-    tools::Long                    nEmphWidth;
-    tools::Long                    nEmphHeight;
-    bool                    bEmphPolyLine;
-    FontEmphasisMark        nEmphMark;
-
     push( PushFlags::ALL );
 
     aLine.setLength( 0 );
     aLine.append( "q\n" );
 
-    nEmphMark = m_aCurrentPDFState.m_aFont.GetEmphasisMarkStyle();
+    FontEmphasisMark nEmphMark = m_aCurrentPDFState.m_aFont.GetEmphasisMarkStyle();
+
+    tools::Long nEmphHeight;
+
     if ( nEmphMark & FontEmphasisMark::PosBelow )
         nEmphHeight = GetEmphasisDescent();
     else
         nEmphHeight = GetEmphasisAscent();
-    ImplGetEmphasisMark( aEmphPoly,
-                                             bEmphPolyLine,
-                                             aEmphRect1,
-                                             aEmphRect2,
-                                             nEmphYOff,
-                                             nEmphWidth,
-                                             nEmphMark,
-                                             ImplDevicePixelToLogicWidth(nEmphHeight) );
-    if ( bEmphPolyLine )
+
+    vcl::font::EmphasisMark aEmphasisMark(nEmphMark, ImplDevicePixelToLogicWidth(nEmphHeight), GetDPIY());
+    if ( aEmphasisMark.IsShapePolyLine() )
     {
         setLineColor( m_aCurrentPDFState.m_aFont.GetColor() );
         setFillColor( COL_TRANSPARENT );
@@ -6411,13 +6400,13 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     Point aOffset(0,0);
 
     if ( nEmphMark & FontEmphasisMark::PosBelow )
-        aOffset.AdjustY(GetFontInstance()->GetDescent() + nEmphYOff );
+        aOffset.AdjustY(GetFontInstance()->GetDescent() + aEmphasisMark.GetYOffset() );
     else
-        aOffset.AdjustY( -(GetFontInstance()->GetAscent() + nEmphYOff) );
+        aOffset.AdjustY( -(GetFontInstance()->GetAscent() + aEmphasisMark.GetYOffset()) );
 
-    tools::Long nEmphWidth2     = nEmphWidth / 2;
-    tools::Long nEmphHeight2    = nEmphHeight / 2;
-    aOffset += Point( nEmphWidth2, nEmphHeight2 );
+    tools::Long aEmphasisWidth2 = aEmphasisMark.GetWidth() / 2;
+    tools::Long nEmphHeight2 = nEmphHeight / 2;
+    aOffset += Point( aEmphasisWidth2, nEmphHeight2 );
 
     if ( eAlign == ALIGN_BOTTOM )
         aOffset.AdjustY( -(GetFontInstance()->GetDescent()) );
@@ -6430,16 +6419,16 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         if (pGlyph->IsSpacing())
         {
             Point aAdjOffset = aOffset;
-            aAdjOffset.AdjustX((pGlyph->m_nNewWidth - nEmphWidth) / 2 );
+            aAdjOffset.AdjustX((pGlyph->m_nNewWidth - aEmphasisMark.GetWidth()) / 2 );
             aAdjOffset = aRotScale.transform( aAdjOffset );
 
-            aAdjOffset -= Point( nEmphWidth2, nEmphHeight2 );
+            aAdjOffset -= Point( aEmphasisWidth2, nEmphHeight2 );
 
             aPos += aAdjOffset;
             aPos = PixelToLogic( aPos );
             drawEmphasisMark( aPos.X(), aPos.Y(),
-                              aEmphPoly, bEmphPolyLine,
-                              aEmphRect1, aEmphRect2 );
+                              aEmphasisMark.GetShape(), aEmphasisMark.IsShapePolyLine(),
+                              aEmphasisMark.GetRect1(), aEmphasisMark.GetRect2() );
         }
     }
 
