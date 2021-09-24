@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_GRADIENT_HXX
-#define INCLUDED_VCL_GRADIENT_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <vcl/dllapi.h>
@@ -37,8 +36,14 @@ class SvStream;
 class VCL_DLLPUBLIC Gradient
 {
 private:
+friend class ::std::optional<Gradient>;
+friend class ::o3tl::cow_optional<Gradient>;
+
     class Impl;
-    ::o3tl::cow_wrapper<Impl>  mpImplGradient;
+    ::o3tl::cow_wrapper<Impl>  mpImpl;
+
+    Gradient(std::nullopt_t) noexcept;
+    Gradient(const Gradient& rGradient, std::nullopt_t) noexcept;
 
 public:
                     Gradient();
@@ -85,6 +90,23 @@ public:
                         { return !(Gradient::operator==( rGradient )); }
 };
 
-#endif // INCLUDED_VCL_GRADIENT_HXX
+namespace std
+{
+    /** Specialise std::optional template for the case where we are wrapping a o3tl::cow_wrapper
+        type, and we can make the pointer inside the cow_wrapper act as an empty value,
+        and save ourselves some storage */
+    template<>
+    class VCL_DLLPUBLIC optional<Gradient> final : public o3tl::cow_optional<Gradient>
+    {
+    public:
+        using cow_optional::cow_optional; // inherit constructors
+        optional(const optional&) = default;
+        optional(optional&&) = default;
+        optional& operator=(const optional&) = default;
+        optional& operator=(optional&&) = default;
+        ~optional();
+        void reset();
+    };
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

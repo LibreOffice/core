@@ -25,7 +25,6 @@
 #include <svl/poolitem.hxx>
 #include <svl/style.hxx>
 #include <o3tl/cow_wrapper.hxx>
-#include <stdexcept>
 #include <memory>
 
 class EditTextObject;
@@ -64,13 +63,15 @@ struct EDITENG_DLLPUBLIC OutlinerParaObjData
 
 class EDITENG_DLLPUBLIC OutlinerParaObject
 {
-friend class std::optional<OutlinerParaObject>;
+friend class ::std::optional<OutlinerParaObject>;
+friend class ::o3tl::cow_optional<OutlinerParaObject>;
+
     ::o3tl::cow_wrapper< OutlinerParaObjData > mpImpl;
 
     OutlinerParaObject(std::nullopt_t) noexcept
         : mpImpl(std::nullopt) {}
-    OutlinerParaObject( const OutlinerParaObject& other, std::nullopt_t ) noexcept
-        : mpImpl(other.mpImpl, std::nullopt) {}
+    OutlinerParaObject(const OutlinerParaObject& rOther, std::nullopt_t) noexcept
+        : mpImpl(rOther.mpImpl, std::nullopt) {}
 
 public:
     // constructors/destructor
@@ -129,75 +130,10 @@ namespace std
         type, and we can make the pointer inside the cow_wrapper act as an empty value,
         and save ourselves some storage */
     template<>
-    class optional<OutlinerParaObject>
+    class optional<OutlinerParaObject> final : public o3tl::cow_optional<OutlinerParaObject>
     {
     public:
-        optional() noexcept : maParaObject(std::nullopt) {}
-        optional(std::nullopt_t) noexcept : maParaObject(std::nullopt) {}
-        optional(const optional& other) :
-            maParaObject(other.maParaObject, std::nullopt) {}
-        optional(optional&& other) noexcept :
-            maParaObject(std::move(other.maParaObject)) {}
-        optional(OutlinerParaObject&& para) noexcept :
-            maParaObject(std::move(para)) {}
-        optional(const OutlinerParaObject& para) noexcept :
-            maParaObject(para) {}
-        template< class... Args >
-        explicit optional( std::in_place_t, Args&&... args ) :
-            maParaObject(std::forward<Args>(args)...) {}
-
-        optional& operator=(optional const & other)
-        {
-            maParaObject = other.maParaObject;
-            return *this;
-        }
-        optional& operator=(optional&& other) noexcept
-        {
-            maParaObject = std::move(other.maParaObject);
-            return *this;
-        }
-        template< class... Args >
-        void emplace(Args&&... args )
-        {
-            maParaObject = OutlinerParaObject(std::forward<Args>(args)...);
-        }
-
-        bool has_value() const noexcept { return !maParaObject.mpImpl.empty(); }
-        explicit operator bool() const noexcept { return !maParaObject.mpImpl.empty(); }
-        void reset() { maParaObject.mpImpl.set_empty(); }
-
-        OutlinerParaObject& value()
-        {
-            throwIfEmpty();
-            return maParaObject;
-        }
-        OutlinerParaObject& operator*()
-        {
-            throwIfEmpty();
-            return maParaObject;
-        }
-        const OutlinerParaObject& operator*() const
-        {
-            throwIfEmpty();
-            return maParaObject;
-        }
-        OutlinerParaObject* operator->()
-        {
-            throwIfEmpty();
-            return &maParaObject;
-        }
-        const OutlinerParaObject* operator->() const
-        {
-            throwIfEmpty();
-            return &maParaObject;
-        }
-    private:
-        void throwIfEmpty() const
-        {
-            if (maParaObject.mpImpl.empty())
-                throw std::logic_error("empty std::optional<OutlinerParaObject>");
-        }
-        OutlinerParaObject maParaObject;
+        using cow_optional::cow_optional; // inherit constructors
     };
 };
 

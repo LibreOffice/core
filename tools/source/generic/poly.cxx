@@ -868,49 +868,54 @@ tools::Polygon Polygon::SubdivideBezier( const tools::Polygon& rPoly )
     return aPoly;
 }
 
-Polygon::Polygon() : mpImplPolygon(ImplPolygon())
+Polygon::Polygon() : mpImpl(ImplPolygon())
 {
 }
 
-Polygon::Polygon( sal_uInt16 nSize ) : mpImplPolygon(ImplPolygon(nSize))
+Polygon::Polygon( sal_uInt16 nSize ) : mpImpl(ImplPolygon(nSize))
 {
 }
 
-Polygon::Polygon( sal_uInt16 nPoints, const Point* pPtAry, const PolyFlags* pFlagAry ) : mpImplPolygon(ImplPolygon(nPoints, pPtAry, pFlagAry))
+Polygon::Polygon( sal_uInt16 nPoints, const Point* pPtAry, const PolyFlags* pFlagAry ) : mpImpl(ImplPolygon(nPoints, pPtAry, pFlagAry))
 {
 }
 
-Polygon::Polygon( const tools::Polygon& rPoly ) : mpImplPolygon(rPoly.mpImplPolygon)
+Polygon::Polygon( const tools::Polygon& rPoly ) : mpImpl(rPoly.mpImpl)
 {
 }
 
 Polygon::Polygon( tools::Polygon&& rPoly) noexcept
-    : mpImplPolygon(std::move(rPoly.mpImplPolygon))
+    : mpImpl(std::move(rPoly.mpImpl))
 {
 }
 
-Polygon::Polygon( const tools::Rectangle& rRect ) : mpImplPolygon(ImplPolygon(rRect))
+Polygon::Polygon( const tools::Rectangle& rRect ) : mpImpl(ImplPolygon(rRect))
 {
 }
 
 Polygon::Polygon( const tools::Rectangle& rRect, sal_uInt32 nHorzRound, sal_uInt32 nVertRound )
-    : mpImplPolygon(ImplPolygon(rRect, nHorzRound, nVertRound))
+    : mpImpl(ImplPolygon(rRect, nHorzRound, nVertRound))
 {
 }
 
 Polygon::Polygon( const Point& rCenter, tools::Long nRadX, tools::Long nRadY )
-    : mpImplPolygon(ImplPolygon(rCenter, nRadX, nRadY))
+    : mpImpl(ImplPolygon(rCenter, nRadX, nRadY))
 {
 }
 
 Polygon::Polygon( const tools::Rectangle& rBound, const Point& rStart, const Point& rEnd,
-                  PolyStyle eStyle ) : mpImplPolygon(ImplPolygon(rBound, rStart, rEnd, eStyle))
+                  PolyStyle eStyle ) : mpImpl(ImplPolygon(rBound, rStart, rEnd, eStyle))
 {
 }
 
 Polygon::Polygon( const Point& rBezPt1, const Point& rCtrlPt1,
                   const Point& rBezPt2, const Point& rCtrlPt2,
-                  sal_uInt16 nPoints ) : mpImplPolygon(ImplPolygon(rBezPt1, rCtrlPt1, rBezPt2, rCtrlPt2, nPoints))
+                  sal_uInt16 nPoints ) : mpImpl(ImplPolygon(rBezPt1, rCtrlPt1, rBezPt2, rCtrlPt2, nPoints))
+{
+}
+
+Polygon::Polygon(std::nullopt_t) noexcept
+    : mpImpl(std::nullopt)
 {
 }
 
@@ -920,75 +925,75 @@ Polygon::~Polygon()
 
 Point * Polygon::GetPointAry()
 {
-    return mpImplPolygon->mxPointAry.get();
+    return mpImpl->mxPointAry.get();
 }
 
 const Point* Polygon::GetConstPointAry() const
 {
-    return mpImplPolygon->mxPointAry.get();
+    return mpImpl->mxPointAry.get();
 }
 
 const PolyFlags* Polygon::GetConstFlagAry() const
 {
-    return mpImplPolygon->mxFlagAry.get();
+    return mpImpl->mxFlagAry.get();
 }
 
 void Polygon::SetPoint( const Point& rPt, sal_uInt16 nPos )
 {
-    DBG_ASSERT( nPos < mpImplPolygon->mnPoints,
+    DBG_ASSERT( nPos < mpImpl->mnPoints,
                 "Polygon::SetPoint(): nPos >= nPoints" );
 
-    mpImplPolygon->mxPointAry[nPos] = rPt;
+    mpImpl->mxPointAry[nPos] = rPt;
 }
 
 void Polygon::SetFlags( sal_uInt16 nPos, PolyFlags eFlags )
 {
-    DBG_ASSERT( nPos < mpImplPolygon->mnPoints,
+    DBG_ASSERT( nPos < mpImpl->mnPoints,
                 "Polygon::SetFlags(): nPos >= nPoints" );
 
     // we do only want to create the flag array if there
     // is at least one flag different to PolyFlags::Normal
     if ( eFlags != PolyFlags::Normal )
     {
-        mpImplPolygon->ImplCreateFlagArray();
-        mpImplPolygon->mxFlagAry[ nPos ] = eFlags;
+        mpImpl->ImplCreateFlagArray();
+        mpImpl->mxFlagAry[ nPos ] = eFlags;
     }
 }
 
 const Point& Polygon::GetPoint( sal_uInt16 nPos ) const
 {
-    DBG_ASSERT( nPos < mpImplPolygon->mnPoints,
+    DBG_ASSERT( nPos < mpImpl->mnPoints,
                 "Polygon::GetPoint(): nPos >= nPoints" );
 
-    return mpImplPolygon->mxPointAry[nPos];
+    return mpImpl->mxPointAry[nPos];
 }
 
 PolyFlags Polygon::GetFlags( sal_uInt16 nPos ) const
 {
-    DBG_ASSERT( nPos < mpImplPolygon->mnPoints,
+    DBG_ASSERT( nPos < mpImpl->mnPoints,
                 "Polygon::GetFlags(): nPos >= nPoints" );
-    return mpImplPolygon->mxFlagAry
-           ? mpImplPolygon->mxFlagAry[ nPos ]
+    return mpImpl->mxFlagAry
+           ? mpImpl->mxFlagAry[ nPos ]
            : PolyFlags::Normal;
 }
 
 bool Polygon::HasFlags() const
 {
-    return bool(mpImplPolygon->mxFlagAry);
+    return bool(mpImpl->mxFlagAry);
 }
 
 bool Polygon::IsRect() const
 {
     bool bIsRect = false;
-    if (!mpImplPolygon->mxFlagAry)
+    if (!mpImpl->mxFlagAry)
     {
-        if ( ( ( mpImplPolygon->mnPoints == 5 ) && ( mpImplPolygon->mxPointAry[ 0 ] == mpImplPolygon->mxPointAry[ 4 ] ) ) ||
-             ( mpImplPolygon->mnPoints == 4 ) )
+        if ( ( ( mpImpl->mnPoints == 5 ) && ( mpImpl->mxPointAry[ 0 ] == mpImpl->mxPointAry[ 4 ] ) ) ||
+             ( mpImpl->mnPoints == 4 ) )
         {
-            if ( ( mpImplPolygon->mxPointAry[ 0 ].X() == mpImplPolygon->mxPointAry[ 3 ].X() ) &&
-                 ( mpImplPolygon->mxPointAry[ 0 ].Y() == mpImplPolygon->mxPointAry[ 1 ].Y() ) &&
-                 ( mpImplPolygon->mxPointAry[ 1 ].X() == mpImplPolygon->mxPointAry[ 2 ].X() ) &&
-                 ( mpImplPolygon->mxPointAry[ 2 ].Y() == mpImplPolygon->mxPointAry[ 3 ].Y() ) )
+            if ( ( mpImpl->mxPointAry[ 0 ].X() == mpImpl->mxPointAry[ 3 ].X() ) &&
+                 ( mpImpl->mxPointAry[ 0 ].Y() == mpImpl->mxPointAry[ 1 ].Y() ) &&
+                 ( mpImpl->mxPointAry[ 1 ].X() == mpImpl->mxPointAry[ 2 ].X() ) &&
+                 ( mpImpl->mxPointAry[ 2 ].Y() == mpImpl->mxPointAry[ 3 ].Y() ) )
                 bIsRect = true;
         }
     }
@@ -997,31 +1002,31 @@ bool Polygon::IsRect() const
 
 void Polygon::SetSize( sal_uInt16 nNewSize )
 {
-    if( nNewSize != mpImplPolygon->mnPoints )
+    if( nNewSize != mpImpl->mnPoints )
     {
-        mpImplPolygon->ImplSetSize( nNewSize );
+        mpImpl->ImplSetSize( nNewSize );
     }
 }
 
 sal_uInt16 Polygon::GetSize() const
 {
-    return mpImplPolygon->mnPoints;
+    return mpImpl->mnPoints;
 }
 
 void Polygon::Clear()
 {
-    mpImplPolygon = ImplType(ImplPolygon());
+    mpImpl = ImplType(ImplPolygon());
 }
 
 double Polygon::CalcDistance( sal_uInt16 nP1, sal_uInt16 nP2 ) const
 {
-    DBG_ASSERT( nP1 < mpImplPolygon->mnPoints,
+    DBG_ASSERT( nP1 < mpImpl->mnPoints,
                 "Polygon::CalcDistance(): nPos1 >= nPoints" );
-    DBG_ASSERT( nP2 < mpImplPolygon->mnPoints,
+    DBG_ASSERT( nP2 < mpImpl->mnPoints,
                 "Polygon::CalcDistance(): nPos2 >= nPoints" );
 
-    const Point& rP1 = mpImplPolygon->mxPointAry[ nP1 ];
-    const Point& rP2 = mpImplPolygon->mxPointAry[ nP2 ];
+    const Point& rP1 = mpImpl->mxPointAry[ nP1 ];
+    const Point& rP2 = mpImpl->mxPointAry[ nP2 ];
     const double fDx = rP2.X() - rP1.X();
     const double fDy = rP2.Y() - rP1.Y();
 
@@ -1030,9 +1035,9 @@ double Polygon::CalcDistance( sal_uInt16 nP1, sal_uInt16 nP2 ) const
 
 void Polygon::Optimize( PolyOptimizeFlags nOptimizeFlags )
 {
-    DBG_ASSERT( !mpImplPolygon->mxFlagAry, "Optimizing could fail with beziers!" );
+    DBG_ASSERT( !mpImpl->mxFlagAry, "Optimizing could fail with beziers!" );
 
-    sal_uInt16 nSize = mpImplPolygon->mnPoints;
+    sal_uInt16 nSize = mpImpl->mnPoints;
 
     if( !(bool(nOptimizeFlags) && nSize) )
         return;
@@ -1049,9 +1054,9 @@ void Polygon::Optimize( PolyOptimizeFlags nOptimizeFlags )
     else if( nOptimizeFlags & PolyOptimizeFlags::NO_SAME )
     {
         tools::Polygon aNewPoly;
-        const Point& rFirst = mpImplPolygon->mxPointAry[ 0 ];
+        const Point& rFirst = mpImpl->mxPointAry[ 0 ];
 
-        while( nSize && ( mpImplPolygon->mxPointAry[ nSize - 1 ] == rFirst ) )
+        while( nSize && ( mpImpl->mxPointAry[ nSize - 1 ] == rFirst ) )
             nSize--;
 
         if( nSize > 1 )
@@ -1063,10 +1068,10 @@ void Polygon::Optimize( PolyOptimizeFlags nOptimizeFlags )
 
             for( sal_uInt16 i = 1; i < nSize; i++ )
             {
-                if( mpImplPolygon->mxPointAry[ i ] != mpImplPolygon->mxPointAry[ nLast ])
+                if( mpImpl->mxPointAry[ i ] != mpImpl->mxPointAry[ nLast ])
                 {
                     nLast = i;
-                    aNewPoly[ nNewCount++ ] = mpImplPolygon->mxPointAry[ i ];
+                    aNewPoly[ nNewCount++ ] = mpImpl->mxPointAry[ i ];
                 }
             }
 
@@ -1079,15 +1084,15 @@ void Polygon::Optimize( PolyOptimizeFlags nOptimizeFlags )
         *this = aNewPoly;
     }
 
-    nSize = mpImplPolygon->mnPoints;
+    nSize = mpImpl->mnPoints;
 
     if( nSize > 1 )
     {
         if( ( nOptimizeFlags & PolyOptimizeFlags::CLOSE ) &&
-            ( mpImplPolygon->mxPointAry[ 0 ] != mpImplPolygon->mxPointAry[ nSize - 1 ] ) )
+            ( mpImpl->mxPointAry[ 0 ] != mpImpl->mxPointAry[ nSize - 1 ] ) )
         {
-            SetSize( mpImplPolygon->mnPoints + 1 );
-            mpImplPolygon->mxPointAry[ mpImplPolygon->mnPoints - 1 ] = mpImplPolygon->mxPointAry[ 0 ];
+            SetSize( mpImpl->mnPoints + 1 );
+            mpImpl->mxPointAry[ mpImpl->mnPoints - 1 ] = mpImpl->mxPointAry[ 0 ];
         }
     }
 }
@@ -1175,7 +1180,7 @@ static void ImplAdaptiveSubdivide( ::std::back_insert_iterator< ::std::vector< P
 
 void Polygon::AdaptiveSubdivide( Polygon& rResult, const double d ) const
 {
-    if (!mpImplPolygon->mxFlagAry)
+    if (!mpImpl->mxFlagAry)
     {
         rResult = *this;
     }
@@ -1191,25 +1196,25 @@ void Polygon::AdaptiveSubdivide( Polygon& rResult, const double d ) const
         {
             if( ( i + 3 ) < nPts )
             {
-                PolyFlags P1( mpImplPolygon->mxFlagAry[ i ] );
-                PolyFlags P4( mpImplPolygon->mxFlagAry[ i + 3 ] );
+                PolyFlags P1( mpImpl->mxFlagAry[ i ] );
+                PolyFlags P4( mpImpl->mxFlagAry[ i + 3 ] );
 
                 if( ( PolyFlags::Normal == P1 || PolyFlags::Smooth == P1 || PolyFlags::Symmetric == P1 ) &&
-                    ( PolyFlags::Control == mpImplPolygon->mxFlagAry[ i + 1 ] ) &&
-                    ( PolyFlags::Control == mpImplPolygon->mxFlagAry[ i + 2 ] ) &&
+                    ( PolyFlags::Control == mpImpl->mxFlagAry[ i + 1 ] ) &&
+                    ( PolyFlags::Control == mpImpl->mxFlagAry[ i + 2 ] ) &&
                     ( PolyFlags::Normal == P4 || PolyFlags::Smooth == P4 || PolyFlags::Symmetric == P4 ) )
                 {
                     ImplAdaptiveSubdivide( aPointIter, d*d+1.0, 0, d*d,
-                                           mpImplPolygon->mxPointAry[ i ].X(),   mpImplPolygon->mxPointAry[ i ].Y(),
-                                           mpImplPolygon->mxPointAry[ i+1 ].X(), mpImplPolygon->mxPointAry[ i+1 ].Y(),
-                                           mpImplPolygon->mxPointAry[ i+2 ].X(), mpImplPolygon->mxPointAry[ i+2 ].Y(),
-                                           mpImplPolygon->mxPointAry[ i+3 ].X(), mpImplPolygon->mxPointAry[ i+3 ].Y() );
+                                           mpImpl->mxPointAry[ i ].X(),   mpImpl->mxPointAry[ i ].Y(),
+                                           mpImpl->mxPointAry[ i+1 ].X(), mpImpl->mxPointAry[ i+1 ].Y(),
+                                           mpImpl->mxPointAry[ i+2 ].X(), mpImpl->mxPointAry[ i+2 ].Y(),
+                                           mpImpl->mxPointAry[ i+3 ].X(), mpImpl->mxPointAry[ i+3 ].Y() );
                     i += 3;
                     continue;
                 }
             }
 
-            *aPointIter++ = mpImplPolygon->mxPointAry[ i++ ];
+            *aPointIter++ = mpImpl->mxPointAry[ i++ ];
 
             if (aPoints.size() >= SAL_MAX_UINT16)
             {
@@ -1227,7 +1232,7 @@ void Polygon::AdaptiveSubdivide( Polygon& rResult, const double d ) const
 
         // fill result polygon
         rResult = tools::Polygon( static_cast<sal_uInt16>(aPoints.size()) ); // ensure sufficient size for copy
-        ::std::copy(aPoints.begin(), aPoints.end(), rResult.mpImplPolygon->mxPointAry.get());
+        ::std::copy(aPoints.begin(), aPoints.end(), rResult.mpImpl->mxPointAry.get());
     }
 }
 
@@ -1375,10 +1380,10 @@ void Polygon::Move( tools::Long nHorzMove, tools::Long nVertMove )
         return;
 
     // Move points
-    sal_uInt16 nCount = mpImplPolygon->mnPoints;
+    sal_uInt16 nCount = mpImpl->mnPoints;
     for ( sal_uInt16 i = 0; i < nCount; i++ )
     {
-        Point& rPt = mpImplPolygon->mxPointAry[i];
+        Point& rPt = mpImpl->mxPointAry[i];
         rPt.AdjustX(nHorzMove );
         rPt.AdjustY(nVertMove );
     }
@@ -1386,15 +1391,15 @@ void Polygon::Move( tools::Long nHorzMove, tools::Long nVertMove )
 
 void Polygon::Translate(const Point& rTrans)
 {
-    for ( sal_uInt16 i = 0, nCount = mpImplPolygon->mnPoints; i < nCount; i++ )
-        mpImplPolygon->mxPointAry[ i ] += rTrans;
+    for ( sal_uInt16 i = 0, nCount = mpImpl->mnPoints; i < nCount; i++ )
+        mpImpl->mxPointAry[ i ] += rTrans;
 }
 
 void Polygon::Scale( double fScaleX, double fScaleY )
 {
-    for ( sal_uInt16 i = 0, nCount = mpImplPolygon->mnPoints; i < nCount; i++ )
+    for ( sal_uInt16 i = 0, nCount = mpImpl->mnPoints; i < nCount; i++ )
     {
-        Point& rPnt = mpImplPolygon->mxPointAry[i];
+        Point& rPnt = mpImpl->mxPointAry[i];
         rPnt.setX( static_cast<tools::Long>( fScaleX * rPnt.X() ) );
         rPnt.setY( static_cast<tools::Long>( fScaleY * rPnt.Y() ) );
     }
@@ -1416,9 +1421,9 @@ void Polygon::Rotate( const Point& rCenter, double fSin, double fCos )
     tools::Long nCenterX = rCenter.X();
     tools::Long nCenterY = rCenter.Y();
 
-    for( sal_uInt16 i = 0, nCount = mpImplPolygon->mnPoints; i < nCount; i++ )
+    for( sal_uInt16 i = 0, nCount = mpImpl->mnPoints; i < nCount; i++ )
     {
-        Point& rPt = mpImplPolygon->mxPointAry[ i ];
+        Point& rPt = mpImpl->mxPointAry[ i ];
 
         const tools::Long nX = rPt.X() - nCenterX;
         const tools::Long nY = rPt.Y() - nCenterY;
@@ -1437,7 +1442,7 @@ void Polygon::Clip( const tools::Rectangle& rRect )
     tools::Rectangle               aJustifiedRect( rRect );
     aJustifiedRect.Justify();
 
-    sal_uInt16              nSourceSize = mpImplPolygon->mnPoints;
+    sal_uInt16              nSourceSize = mpImpl->mnPoints;
     ImplPolygonPointFilter  aPolygon( nSourceSize );
     ImplEdgePointFilter     aHorzFilter( EDGE_HORZ, aJustifiedRect.Left(), aJustifiedRect.Right(),
                                          aPolygon );
@@ -1445,13 +1450,13 @@ void Polygon::Clip( const tools::Rectangle& rRect )
                                          aHorzFilter );
 
     for ( sal_uInt16 i = 0; i < nSourceSize; i++ )
-        aVertFilter.Input( mpImplPolygon->mxPointAry[i] );
+        aVertFilter.Input( mpImpl->mxPointAry[i] );
     if ( aVertFilter.IsPolygon() )
         aVertFilter.LastPoint();
     else
         aPolygon.LastPoint();
 
-    mpImplPolygon = ImplType(aPolygon.get());
+    mpImpl = ImplType(aPolygon.get());
 }
 
 tools::Rectangle Polygon::GetBoundRect() const
@@ -1465,21 +1470,21 @@ tools::Rectangle Polygon::GetBoundRect() const
     // but will always create a valid BoundRect, at least as long as this method
     // 'blindly' travels over all points, including control points.
 
-    // DBG_ASSERT( !mpImplPolygon->mxFlagAry.get(), "GetBoundRect could fail with beziers!" );
+    // DBG_ASSERT( !mpImpl->mxFlagAry.get(), "GetBoundRect could fail with beziers!" );
 
-    sal_uInt16  nCount = mpImplPolygon->mnPoints;
+    sal_uInt16  nCount = mpImpl->mnPoints;
     if( ! nCount )
         return tools::Rectangle();
 
     tools::Long    nXMin, nXMax, nYMin, nYMax;
 
-    const Point& pFirstPt = mpImplPolygon->mxPointAry[0];
+    const Point& pFirstPt = mpImpl->mxPointAry[0];
     nXMin = nXMax = pFirstPt.X();
     nYMin = nYMax = pFirstPt.Y();
 
     for ( sal_uInt16 i = 0; i < nCount; i++ )
     {
-        const Point& rPt = mpImplPolygon->mxPointAry[i];
+        const Point& rPt = mpImpl->mxPointAry[i];
 
         if (rPt.X() < nXMin)
             nXMin = rPt.X();
@@ -1496,25 +1501,25 @@ tools::Rectangle Polygon::GetBoundRect() const
 
 bool Polygon::Contains( const Point& rPoint ) const
 {
-    DBG_ASSERT( !mpImplPolygon->mxFlagAry, "IsInside could fail with beziers!" );
+    DBG_ASSERT( !mpImpl->mxFlagAry, "IsInside could fail with beziers!" );
 
     const tools::Rectangle aBound( GetBoundRect() );
     const Line      aLine( rPoint, Point( aBound.Right() + 100, rPoint.Y() ) );
-    sal_uInt16          nCount = mpImplPolygon->mnPoints;
+    sal_uInt16          nCount = mpImpl->mnPoints;
     sal_uInt16          nPCounter = 0;
 
     if ( ( nCount > 2 ) && aBound.Contains( rPoint ) )
     {
-        Point   aPt1( mpImplPolygon->mxPointAry[ 0 ] );
+        Point   aPt1( mpImpl->mxPointAry[ 0 ] );
         Point   aIntersection;
         Point   aLastIntersection;
 
-        while ( ( aPt1 == mpImplPolygon->mxPointAry[ nCount - 1 ] ) && ( nCount > 3 ) )
+        while ( ( aPt1 == mpImpl->mxPointAry[ nCount - 1 ] ) && ( nCount > 3 ) )
             nCount--;
 
         for ( sal_uInt16 i = 1; i <= nCount; i++ )
         {
-            const Point& rPt2 = mpImplPolygon->mxPointAry[ ( i < nCount ) ? i : 0 ];
+            const Point& rPt2 = mpImpl->mxPointAry[ ( i < nCount ) ? i : 0 ];
 
             if ( aLine.Intersection( Line( aPt1, rPt2 ), aIntersection ) )
             {
@@ -1544,51 +1549,51 @@ bool Polygon::Contains( const Point& rPoint ) const
 
 void Polygon::Insert( sal_uInt16 nPos, const Point& rPt )
 {
-    if( nPos >= mpImplPolygon->mnPoints )
-        nPos = mpImplPolygon->mnPoints;
+    if( nPos >= mpImpl->mnPoints )
+        nPos = mpImpl->mnPoints;
 
-    if (mpImplPolygon->ImplSplit(nPos, 1))
-        mpImplPolygon->mxPointAry[ nPos ] = rPt;
+    if (mpImpl->ImplSplit(nPos, 1))
+        mpImpl->mxPointAry[ nPos ] = rPt;
 }
 
 void Polygon::Insert( sal_uInt16 nPos, const tools::Polygon& rPoly )
 {
-    const sal_uInt16 nInsertCount = rPoly.mpImplPolygon->mnPoints;
+    const sal_uInt16 nInsertCount = rPoly.mpImpl->mnPoints;
 
     if( nInsertCount )
     {
-        if( nPos >= mpImplPolygon->mnPoints )
-            nPos = mpImplPolygon->mnPoints;
+        if( nPos >= mpImpl->mnPoints )
+            nPos = mpImpl->mnPoints;
 
-        if (rPoly.mpImplPolygon->mxFlagAry)
-            mpImplPolygon->ImplCreateFlagArray();
+        if (rPoly.mpImpl->mxFlagAry)
+            mpImpl->ImplCreateFlagArray();
 
-        mpImplPolygon->ImplSplit( nPos, nInsertCount, rPoly.mpImplPolygon.get() );
+        mpImpl->ImplSplit( nPos, nInsertCount, rPoly.mpImpl.get() );
     }
 }
 
 Point& Polygon::operator[]( sal_uInt16 nPos )
 {
-    DBG_ASSERT( nPos < mpImplPolygon->mnPoints, "Polygon::[]: nPos >= nPoints" );
+    DBG_ASSERT( nPos < mpImpl->mnPoints, "Polygon::[]: nPos >= nPoints" );
 
-    return mpImplPolygon->mxPointAry[nPos];
+    return mpImpl->mxPointAry[nPos];
 }
 
 tools::Polygon& Polygon::operator=( const tools::Polygon& rPoly )
 {
-    mpImplPolygon = rPoly.mpImplPolygon;
+    mpImpl = rPoly.mpImpl;
     return *this;
 }
 
 tools::Polygon& Polygon::operator=( tools::Polygon&& rPoly ) noexcept
 {
-    mpImplPolygon = std::move(rPoly.mpImplPolygon);
+    mpImpl = std::move(rPoly.mpImpl);
     return *this;
 }
 
 bool Polygon::operator==( const tools::Polygon& rPoly ) const
 {
-    return (mpImplPolygon == rPoly.mpImplPolygon);
+    return (mpImpl == rPoly.mpImpl);
 }
 
 bool Polygon::IsEqual( const tools::Polygon& rPoly ) const
@@ -1626,14 +1631,14 @@ SvStream& ReadPolygon( SvStream& rIStream, tools::Polygon& rPoly )
         nPoints = nMaxRecordsPossible;
     }
 
-    rPoly.mpImplPolygon->ImplSetSize( nPoints, false );
+    rPoly.mpImpl->ImplSetSize( nPoints, false );
 
     for (sal_uInt16 i = 0; i < nPoints; i++)
     {
         sal_Int32 nTmpX(0), nTmpY(0);
         rIStream.ReadInt32(nTmpX).ReadInt32(nTmpY);
-        rPoly.mpImplPolygon->mxPointAry[i].setX(nTmpX);
-        rPoly.mpImplPolygon->mxPointAry[i].setY(nTmpY);
+        rPoly.mpImpl->mxPointAry[i].setX(nTmpX);
+        rPoly.mpImpl->mxPointAry[i].setY(nTmpY);
     }
 
     return rIStream;
@@ -1648,8 +1653,8 @@ SvStream& WritePolygon( SvStream& rOStream, const tools::Polygon& rPoly )
 
     for (sal_uInt16 i = 0; i < nPoints; i++)
     {
-        rOStream.WriteInt32(rPoly.mpImplPolygon->mxPointAry[i].X())
-            .WriteInt32(rPoly.mpImplPolygon->mxPointAry[i].Y());
+        rOStream.WriteInt32(rPoly.mpImpl->mxPointAry[i].X())
+            .WriteInt32(rPoly.mpImpl->mxPointAry[i].Y());
     }
 
     return rOStream;
@@ -1664,8 +1669,8 @@ void Polygon::ImplRead( SvStream& rIStream )
 
     if ( bHasPolyFlags )
     {
-        mpImplPolygon->mxFlagAry.reset(new PolyFlags[mpImplPolygon->mnPoints]);
-        rIStream.ReadBytes(mpImplPolygon->mxFlagAry.get(), mpImplPolygon->mnPoints);
+        mpImpl->mxFlagAry.reset(new PolyFlags[mpImpl->mnPoints]);
+        rIStream.ReadBytes(mpImpl->mxFlagAry.get(), mpImpl->mnPoints);
     }
 }
 
@@ -1678,12 +1683,12 @@ void Polygon::Read( SvStream& rIStream )
 
 void Polygon::ImplWrite( SvStream& rOStream ) const
 {
-    bool bHasPolyFlags(mpImplPolygon->mxFlagAry);
+    bool bHasPolyFlags(mpImpl->mxFlagAry);
     WritePolygon( rOStream, *this );
     rOStream.WriteBool(bHasPolyFlags);
 
     if ( bHasPolyFlags )
-        rOStream.WriteBytes(mpImplPolygon->mxFlagAry.get(), mpImplPolygon->mnPoints);
+        rOStream.WriteBytes(mpImpl->mxFlagAry.get(), mpImpl->mnPoints);
 }
 
 void Polygon::Write( SvStream& rOStream ) const
@@ -1758,15 +1763,15 @@ static void impCorrectContinuity(basegfx::B2DPolygon& roPolygon, sal_uInt32 nInd
 basegfx::B2DPolygon Polygon::getB2DPolygon() const
 {
     basegfx::B2DPolygon aRetval;
-    const sal_uInt16 nCount(mpImplPolygon->mnPoints);
+    const sal_uInt16 nCount(mpImpl->mnPoints);
 
     if (nCount)
     {
-        if (mpImplPolygon->mxFlagAry)
+        if (mpImpl->mxFlagAry)
         {
             // handling for curves. Add start point
-            const Point aStartPoint(mpImplPolygon->mxPointAry[0]);
-            PolyFlags nPointFlag(mpImplPolygon->mxFlagAry[0]);
+            const Point aStartPoint(mpImpl->mxPointAry[0]);
+            PolyFlags nPointFlag(mpImpl->mxFlagAry[0]);
             aRetval.append(basegfx::B2DPoint(aStartPoint.X(), aStartPoint.Y()));
             Point aControlA, aControlB;
 
@@ -1775,15 +1780,15 @@ basegfx::B2DPolygon Polygon::getB2DPolygon() const
                 bool bControlA(false);
                 bool bControlB(false);
 
-                if(PolyFlags::Control == mpImplPolygon->mxFlagAry[a])
+                if(PolyFlags::Control == mpImpl->mxFlagAry[a])
                 {
-                    aControlA = mpImplPolygon->mxPointAry[a++];
+                    aControlA = mpImpl->mxPointAry[a++];
                     bControlA = true;
                 }
 
-                if(a < nCount && PolyFlags::Control == mpImplPolygon->mxFlagAry[a])
+                if(a < nCount && PolyFlags::Control == mpImpl->mxFlagAry[a])
                 {
-                    aControlB = mpImplPolygon->mxPointAry[a++];
+                    aControlB = mpImpl->mxPointAry[a++];
                     bControlB = true;
                 }
 
@@ -1792,7 +1797,7 @@ basegfx::B2DPolygon Polygon::getB2DPolygon() const
 
                 if(a < nCount)
                 {
-                    const Point aEndPoint(mpImplPolygon->mxPointAry[a]);
+                    const Point aEndPoint(mpImpl->mxPointAry[a]);
 
                     if(bControlA)
                     {
@@ -1810,7 +1815,7 @@ basegfx::B2DPolygon Polygon::getB2DPolygon() const
                         aRetval.append(basegfx::B2DPoint(aEndPoint.X(), aEndPoint.Y()));
                     }
 
-                    nPointFlag = mpImplPolygon->mxFlagAry[a++];
+                    nPointFlag = mpImpl->mxFlagAry[a++];
                 }
             }
 
@@ -1821,7 +1826,7 @@ basegfx::B2DPolygon Polygon::getB2DPolygon() const
             {
                 // closeWithGeometryChange did really close, so last point(s) were removed.
                 // Correct the continuity in the changed point
-                impCorrectContinuity(aRetval, 0, mpImplPolygon->mxFlagAry[0]);
+                impCorrectContinuity(aRetval, 0, mpImpl->mxFlagAry[0]);
             }
         }
         else
@@ -1830,7 +1835,7 @@ basegfx::B2DPolygon Polygon::getB2DPolygon() const
             for(sal_uInt16 a(0); a < nCount; a++)
             {
                 // get point and add
-                const Point aPoint(mpImplPolygon->mxPointAry[a]);
+                const Point aPoint(mpImpl->mxPointAry[a]);
                 aRetval.append(basegfx::B2DPoint(aPoint.X(), aPoint.Y()));
             }
 
@@ -1842,10 +1847,13 @@ basegfx::B2DPolygon Polygon::getB2DPolygon() const
     return aRetval;
 }
 
-Polygon::Polygon(const basegfx::B2DPolygon& rPolygon) :  mpImplPolygon(ImplPolygon(rPolygon))
+Polygon::Polygon(const basegfx::B2DPolygon& rPolygon) :  mpImpl(ImplPolygon(rPolygon))
 {
 }
 
 } // namespace tools
+
+void std::optional<tools::Polygon>::reset() { cow_optional::reset(); }
+std::optional<tools::Polygon>::~optional() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

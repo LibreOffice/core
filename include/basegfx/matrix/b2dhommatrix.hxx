@@ -38,8 +38,13 @@ namespace basegfx
         typedef o3tl::cow_wrapper< Impl2DHomMatrix > ImplType;
 
     private:
+        friend class ::std::optional<B2DHomMatrix>;
+        friend class ::o3tl::cow_optional<B2DHomMatrix>;
+
         ImplType                                     mpImpl;
 
+        B2DHomMatrix(std::nullopt_t) noexcept;
+        B2DHomMatrix(const B2DHomMatrix&, std::nullopt_t) noexcept;
     public:
         B2DHomMatrix();
         B2DHomMatrix(const B2DHomMatrix& rMat);
@@ -149,5 +154,24 @@ namespace basegfx
             << matrix.get(2, 2) << ']';
     }
 } // end of namespace basegfx
+
+namespace std
+{
+    /** Specialise std::optional template for the case where we are wrapping a o3tl::cow_wrapper
+        type, and we can make the pointer inside the cow_wrapper act as an empty value,
+        and save ourselves some storage */
+    template<>
+    class BASEGFX_DLLPUBLIC optional<::basegfx::B2DHomMatrix> final : public o3tl::cow_optional<::basegfx::B2DHomMatrix>
+    {
+    public:
+        using cow_optional::cow_optional; // inherit constructors
+        optional(const optional&) = default;
+        optional(optional&&) = default;
+        optional& operator=(const optional&) = default;
+        optional& operator=(optional&&) = default;
+        ~optional();
+        void reset();
+    };
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

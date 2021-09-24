@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_JOBSET_HXX
-#define INCLUDED_VCL_JOBSET_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
@@ -55,9 +54,26 @@ public:
     typedef o3tl::cow_wrapper< ImplJobSetup > ImplType;
 
 private:
-    ImplType        mpData;
+    ImplType        mpImpl;
 };
 
-#endif // INCLUDED_VCL_JOBSET_HXX
+namespace std
+{
+    /** Specialise std::optional template for the case where we are wrapping a o3tl::cow_wrapper
+        type, and we can make the pointer inside the cow_wrapper act as an empty value,
+        and save ourselves some storage */
+    template<>
+    class VCL_DLLPUBLIC optional<JobSetup> final : public o3tl::cow_optional<JobSetup>
+    {
+    public:
+        using cow_optional::cow_optional; // inherit constructors
+        optional(const optional&) = default;
+        optional(optional&&) = default;
+        optional& operator=(const optional&) = default;
+        optional& operator=(optional&&) = default;
+        ~optional();
+        void reset();
+    };
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

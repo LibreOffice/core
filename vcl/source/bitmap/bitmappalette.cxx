@@ -87,6 +87,16 @@ BitmapPalette::BitmapPalette(sal_uInt16 nCount)
 {
 }
 
+BitmapPalette::BitmapPalette(std::nullopt_t) noexcept
+    : mpImpl(std::nullopt)
+{
+}
+
+BitmapPalette::BitmapPalette(BitmapPalette const& rOther, std::nullopt_t) noexcept
+    : mpImpl(rOther.mpImpl, std::nullopt)
+{
+}
+
 BitmapPalette::~BitmapPalette() {}
 
 BitmapPalette& BitmapPalette::operator=(const BitmapPalette& rOther)
@@ -211,5 +221,8 @@ bool BitmapPalette::IsGreyPalette8Bit() const
     }
     return true;
 }
+
+std::optional<BitmapPalette>::~optional() {}
+void std::optional<BitmapPalette>::reset() { cow_optional::reset(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

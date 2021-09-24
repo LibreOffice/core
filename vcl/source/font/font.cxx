@@ -52,35 +52,43 @@ namespace
     }
 }
 
-Font::Font() : mpImplFont(GetGlobalDefault())
+Font::Font() : mpImpl(GetGlobalDefault())
 {
 }
 
-Font::Font( const vcl::Font& rFont ) : mpImplFont( rFont.mpImplFont )
+Font::Font( const vcl::Font& rFont ) : mpImpl( rFont.mpImpl )
 {
 }
 
-Font::Font( vcl::Font&& rFont ) noexcept : mpImplFont( std::move(rFont.mpImplFont) )
+Font::Font( vcl::Font&& rFont ) noexcept : mpImpl( std::move(rFont.mpImpl) )
 {
 }
 
 Font::Font( const OUString& rFamilyName, const Size& rSize )
 {
-    mpImplFont->SetFamilyName( rFamilyName );
-    mpImplFont->SetFontSize( rSize );
+    mpImpl->SetFamilyName( rFamilyName );
+    mpImpl->SetFontSize( rSize );
 }
 
 Font::Font( const OUString& rFamilyName, const OUString& rStyleName, const Size& rSize )
 {
-    mpImplFont->SetFamilyName( rFamilyName );
-    mpImplFont->SetStyleName( rStyleName );
-    mpImplFont->SetFontSize( rSize );
+    mpImpl->SetFamilyName( rFamilyName );
+    mpImpl->SetStyleName( rStyleName );
+    mpImpl->SetFontSize( rSize );
 }
 
 Font::Font( FontFamily eFamily, const Size& rSize )
 {
-    mpImplFont->SetFamilyType( eFamily );
-    mpImplFont->SetFontSize( rSize );
+    mpImpl->SetFamilyType( eFamily );
+    mpImpl->SetFontSize( rSize );
+}
+
+Font::Font(std::nullopt_t) noexcept : mpImpl(std::nullopt)
+{
+}
+
+Font::Font(Font const & rOther, std::nullopt_t) noexcept : mpImpl(rOther.mpImpl, std::nullopt)
+{
 }
 
 Font::~Font()
@@ -89,220 +97,220 @@ Font::~Font()
 
 void Font::SetColor( const Color& rColor )
 {
-    if (const_cast<const ImplType&>(mpImplFont)->maColor != rColor)
+    if (const_cast<const ImplType&>(mpImpl)->maColor != rColor)
     {
-        mpImplFont->maColor = rColor;
+        mpImpl->maColor = rColor;
     }
 }
 
 void Font::SetFillColor( const Color& rColor )
 {
-    mpImplFont->maFillColor = rColor;
+    mpImpl->maFillColor = rColor;
     if ( rColor.IsTransparent() )
-        mpImplFont->mbTransparent = true;
+        mpImpl->mbTransparent = true;
 }
 
 void Font::SetTransparent( bool bTransparent )
 {
-    if (const_cast<const ImplType&>(mpImplFont)->mbTransparent != bTransparent)
-        mpImplFont->mbTransparent = bTransparent;
+    if (const_cast<const ImplType&>(mpImpl)->mbTransparent != bTransparent)
+        mpImpl->mbTransparent = bTransparent;
 }
 
 void Font::SetAlignment( TextAlign eAlign )
 {
-    if (const_cast<const ImplType&>(mpImplFont)->meAlign != eAlign)
-        mpImplFont->SetAlignment(eAlign);
+    if (const_cast<const ImplType&>(mpImpl)->meAlign != eAlign)
+        mpImpl->SetAlignment(eAlign);
 }
 
 void Font::SetFamilyName( const OUString& rFamilyName )
 {
-    mpImplFont->SetFamilyName( rFamilyName );
+    mpImpl->SetFamilyName( rFamilyName );
 }
 
 void Font::SetStyleName( const OUString& rStyleName )
 {
-    mpImplFont->maStyleName = rStyleName;
+    mpImpl->maStyleName = rStyleName;
 }
 
 void Font::SetFontSize( const Size& rSize )
 {
-    if (const_cast<const ImplType&>(mpImplFont)->GetFontSize() != rSize)
-        mpImplFont->SetFontSize( rSize );
+    if (const_cast<const ImplType&>(mpImpl)->GetFontSize() != rSize)
+        mpImpl->SetFontSize( rSize );
 }
 
 void Font::SetFamily( FontFamily eFamily )
 {
-    if (const_cast<const ImplType&>(mpImplFont)->GetFamilyTypeNoAsk() != eFamily)
-        mpImplFont->SetFamilyType( eFamily );
+    if (const_cast<const ImplType&>(mpImpl)->GetFamilyTypeNoAsk() != eFamily)
+        mpImpl->SetFamilyType( eFamily );
 }
 
 void Font::SetCharSet( rtl_TextEncoding eCharSet )
 {
-    if (const_cast<const ImplType&>(mpImplFont)->GetCharSet() != eCharSet)
+    if (const_cast<const ImplType&>(mpImpl)->GetCharSet() != eCharSet)
     {
-        mpImplFont->SetCharSet( eCharSet );
+        mpImpl->SetCharSet( eCharSet );
 
         if ( eCharSet == RTL_TEXTENCODING_SYMBOL )
-            mpImplFont->SetSymbolFlag( true );
+            mpImpl->SetSymbolFlag( true );
         else
-            mpImplFont->SetSymbolFlag( false );
+            mpImpl->SetSymbolFlag( false );
     }
 }
 
 bool Font::IsSymbolFont() const
 {
-    return mpImplFont->IsSymbolFont();
+    return mpImpl->IsSymbolFont();
 }
 
 void Font::SetSymbolFlag( bool bSymbol )
 {
-    mpImplFont->SetSymbolFlag( bSymbol );
+    mpImpl->SetSymbolFlag( bSymbol );
 
     if ( IsSymbolFont() )
     {
-        mpImplFont->SetCharSet( RTL_TEXTENCODING_SYMBOL );
+        mpImpl->SetCharSet( RTL_TEXTENCODING_SYMBOL );
     }
     else
     {
-        if ( std::as_const(*mpImplFont).GetCharSet() == RTL_TEXTENCODING_SYMBOL )
-            mpImplFont->SetCharSet( RTL_TEXTENCODING_DONTKNOW );
+        if ( std::as_const(*mpImpl).GetCharSet() == RTL_TEXTENCODING_SYMBOL )
+            mpImpl->SetCharSet( RTL_TEXTENCODING_DONTKNOW );
     }
 }
 
 void Font::SetLanguageTag( const LanguageTag& rLanguageTag )
 {
-    if (const_cast<const ImplType&>(mpImplFont)->maLanguageTag != rLanguageTag)
-        mpImplFont->maLanguageTag = rLanguageTag;
+    if (const_cast<const ImplType&>(mpImpl)->maLanguageTag != rLanguageTag)
+        mpImpl->maLanguageTag = rLanguageTag;
 }
 
 void Font::SetCJKContextLanguageTag( const LanguageTag& rLanguageTag )
 {
-    if (const_cast<const ImplType&>(mpImplFont)->maCJKLanguageTag != rLanguageTag)
-        mpImplFont->maCJKLanguageTag = rLanguageTag;
+    if (const_cast<const ImplType&>(mpImpl)->maCJKLanguageTag != rLanguageTag)
+        mpImpl->maCJKLanguageTag = rLanguageTag;
 }
 
 void Font::SetLanguage( LanguageType eLanguage )
 {
-    if (const_cast<const ImplType&>(mpImplFont)->maLanguageTag.getLanguageType(false) != eLanguage)
-        mpImplFont->maLanguageTag.reset( eLanguage);
+    if (const_cast<const ImplType&>(mpImpl)->maLanguageTag.getLanguageType(false) != eLanguage)
+        mpImpl->maLanguageTag.reset( eLanguage);
 }
 
 void Font::SetCJKContextLanguage( LanguageType eLanguage )
 {
-    if (const_cast<const ImplType&>(mpImplFont)->maCJKLanguageTag.getLanguageType(false) != eLanguage)
-        mpImplFont->maCJKLanguageTag.reset( eLanguage);
+    if (const_cast<const ImplType&>(mpImpl)->maCJKLanguageTag.getLanguageType(false) != eLanguage)
+        mpImpl->maCJKLanguageTag.reset( eLanguage);
 }
 
 void Font::SetPitch( FontPitch ePitch )
 {
-    if (const_cast<const ImplType&>(mpImplFont)->GetPitchNoAsk() != ePitch)
-        mpImplFont->SetPitch( ePitch );
+    if (const_cast<const ImplType&>(mpImpl)->GetPitchNoAsk() != ePitch)
+        mpImpl->SetPitch( ePitch );
 }
 
 void Font::SetOrientation( Degree10 nOrientation )
 {
-    if (const_cast<const ImplType&>(mpImplFont)->mnOrientation != nOrientation)
-        mpImplFont->mnOrientation = nOrientation;
+    if (const_cast<const ImplType&>(mpImpl)->mnOrientation != nOrientation)
+        mpImpl->mnOrientation = nOrientation;
 }
 
 void Font::SetVertical( bool bVertical )
 {
-    if (const_cast<const ImplType&>(mpImplFont)->mbVertical != bVertical)
-        mpImplFont->mbVertical = bVertical;
+    if (const_cast<const ImplType&>(mpImpl)->mbVertical != bVertical)
+        mpImpl->mbVertical = bVertical;
 }
 
 void Font::SetKerning( FontKerning eKerning )
 {
-    if (const_cast<const ImplType&>(mpImplFont)->meKerning != eKerning)
-        mpImplFont->meKerning = eKerning;
+    if (const_cast<const ImplType&>(mpImpl)->meKerning != eKerning)
+        mpImpl->meKerning = eKerning;
 }
 
 bool Font::IsKerning() const
 {
-    return mpImplFont->meKerning != FontKerning::NONE;
+    return mpImpl->meKerning != FontKerning::NONE;
 }
 
 void Font::SetWeight( FontWeight eWeight )
 {
-    if (const_cast<const ImplType&>(mpImplFont)->GetWeightNoAsk() != eWeight)
-        mpImplFont->SetWeight( eWeight );
+    if (const_cast<const ImplType&>(mpImpl)->GetWeightNoAsk() != eWeight)
+        mpImpl->SetWeight( eWeight );
 }
 
 void Font::SetWidthType( FontWidth eWidth )
 {
-    if (const_cast<const ImplType&>(mpImplFont)->GetWidthTypeNoAsk() != eWidth)
-        mpImplFont->SetWidthType( eWidth );
+    if (const_cast<const ImplType&>(mpImpl)->GetWidthTypeNoAsk() != eWidth)
+        mpImpl->SetWidthType( eWidth );
 }
 
 void Font::SetItalic( FontItalic eItalic )
 {
-    if (const_cast<const ImplType&>(mpImplFont)->GetItalicNoAsk() != eItalic)
-        mpImplFont->SetItalic( eItalic );
+    if (const_cast<const ImplType&>(mpImpl)->GetItalicNoAsk() != eItalic)
+        mpImpl->SetItalic( eItalic );
 }
 
 void Font::SetOutline( bool bOutline )
 {
-    if (const_cast<const ImplType&>(mpImplFont)->mbOutline != bOutline)
-        mpImplFont->mbOutline = bOutline;
+    if (const_cast<const ImplType&>(mpImpl)->mbOutline != bOutline)
+        mpImpl->mbOutline = bOutline;
 }
 
 void Font::SetShadow( bool bShadow )
 {
-    if (const_cast<const ImplType&>(mpImplFont)->mbShadow != bShadow)
-        mpImplFont->mbShadow = bShadow;
+    if (const_cast<const ImplType&>(mpImpl)->mbShadow != bShadow)
+        mpImpl->mbShadow = bShadow;
 }
 
 void Font::SetUnderline( FontLineStyle eUnderline )
 {
-    if (const_cast<const ImplType&>(mpImplFont)->meUnderline != eUnderline)
-        mpImplFont->meUnderline = eUnderline;
+    if (const_cast<const ImplType&>(mpImpl)->meUnderline != eUnderline)
+        mpImpl->meUnderline = eUnderline;
 }
 
 void Font::SetOverline( FontLineStyle eOverline )
 {
-    if (const_cast<const ImplType&>(mpImplFont)->meOverline != eOverline)
-        mpImplFont->meOverline = eOverline;
+    if (const_cast<const ImplType&>(mpImpl)->meOverline != eOverline)
+        mpImpl->meOverline = eOverline;
 }
 
 void Font::SetStrikeout( FontStrikeout eStrikeout )
 {
-    if (const_cast<const ImplType&>(mpImplFont)->meStrikeout != eStrikeout)
-        mpImplFont->meStrikeout = eStrikeout;
+    if (const_cast<const ImplType&>(mpImpl)->meStrikeout != eStrikeout)
+        mpImpl->meStrikeout = eStrikeout;
 }
 
 void Font::SetRelief( FontRelief eRelief )
 {
-    if (const_cast<const ImplType&>(mpImplFont)->meRelief != eRelief)
-        mpImplFont->meRelief = eRelief;
+    if (const_cast<const ImplType&>(mpImpl)->meRelief != eRelief)
+        mpImpl->meRelief = eRelief;
 }
 
 void Font::SetEmphasisMark( FontEmphasisMark eEmphasisMark )
 {
-    if (const_cast<const ImplType&>(mpImplFont)->meEmphasisMark != eEmphasisMark )
-        mpImplFont->meEmphasisMark = eEmphasisMark;
+    if (const_cast<const ImplType&>(mpImpl)->meEmphasisMark != eEmphasisMark )
+        mpImpl->meEmphasisMark = eEmphasisMark;
 }
 
 void Font::SetWordLineMode( bool bWordLine )
 {
-    if (const_cast<const ImplType&>(mpImplFont)->mbWordLine != bWordLine)
-        mpImplFont->mbWordLine = bWordLine;
+    if (const_cast<const ImplType&>(mpImpl)->mbWordLine != bWordLine)
+        mpImpl->mbWordLine = bWordLine;
 }
 
 Font& Font::operator=( const vcl::Font& rFont )
 {
-    mpImplFont = rFont.mpImplFont;
+    mpImpl = rFont.mpImpl;
     return *this;
 }
 
 Font& Font::operator=( vcl::Font&& rFont ) noexcept
 {
-    mpImplFont = std::move(rFont.mpImplFont);
+    mpImpl = std::move(rFont.mpImpl);
     return *this;
 }
 
 bool Font::operator==( const vcl::Font& rFont ) const
 {
-    return mpImplFont == rFont.mpImplFont;
+    return mpImpl == rFont.mpImpl;
 }
 
 void Font::Merge( const vcl::Font& rFont )
@@ -315,16 +323,16 @@ void Font::Merge( const vcl::Font& rFont )
         SetLanguageTag( rFont.GetLanguageTag() );
         SetCJKContextLanguageTag( rFont.GetCJKContextLanguageTag() );
         // don't use access methods here, might lead to AskConfig(), if DONTKNOW
-        SetFamily( rFont.mpImplFont->GetFamilyTypeNoAsk() );
-        SetPitch( rFont.mpImplFont->GetPitchNoAsk() );
+        SetFamily( rFont.mpImpl->GetFamilyTypeNoAsk() );
+        SetPitch( rFont.mpImpl->GetPitchNoAsk() );
     }
 
     // don't use access methods here, might lead to AskConfig(), if DONTKNOW
-    if ( rFont.mpImplFont->GetWeightNoAsk() != WEIGHT_DONTKNOW )
+    if ( rFont.mpImpl->GetWeightNoAsk() != WEIGHT_DONTKNOW )
         SetWeight( rFont.GetWeight() );
-    if ( rFont.mpImplFont->GetItalicNoAsk() != ITALIC_DONTKNOW )
+    if ( rFont.mpImpl->GetItalicNoAsk() != ITALIC_DONTKNOW )
         SetItalic( rFont.GetItalic() );
-    if ( rFont.mpImplFont->GetWidthTypeNoAsk() != WIDTH_DONTKNOW )
+    if ( rFont.mpImpl->GetWidthTypeNoAsk() != WIDTH_DONTKNOW )
         SetWidthType( rFont.GetWidthType() );
 
     if ( rFont.GetFontSize().Height() )
@@ -357,20 +365,20 @@ void Font::Merge( const vcl::Font& rFont )
 
 void Font::GetFontAttributes( FontAttributes& rAttrs ) const
 {
-    rAttrs.SetFamilyName( mpImplFont->GetFamilyName() );
-    rAttrs.SetStyleName( mpImplFont->maStyleName );
-    rAttrs.SetFamilyType( mpImplFont->GetFamilyTypeNoAsk() );
-    rAttrs.SetPitch( mpImplFont->GetPitchNoAsk() );
-    rAttrs.SetItalic( mpImplFont->GetItalicNoAsk() );
-    rAttrs.SetWeight( mpImplFont->GetWeightNoAsk() );
+    rAttrs.SetFamilyName( mpImpl->GetFamilyName() );
+    rAttrs.SetStyleName( mpImpl->maStyleName );
+    rAttrs.SetFamilyType( mpImpl->GetFamilyTypeNoAsk() );
+    rAttrs.SetPitch( mpImpl->GetPitchNoAsk() );
+    rAttrs.SetItalic( mpImpl->GetItalicNoAsk() );
+    rAttrs.SetWeight( mpImpl->GetWeightNoAsk() );
     rAttrs.SetWidthType( WIDTH_DONTKNOW );
-    rAttrs.SetSymbolFlag( mpImplFont->GetCharSet() == RTL_TEXTENCODING_SYMBOL );
+    rAttrs.SetSymbolFlag( mpImpl->GetCharSet() == RTL_TEXTENCODING_SYMBOL );
 }
 
 // tdf#127471 for corrections on EMF/WMF we need the AvgFontWidth in Windows-specific notation
 tools::Long Font::GetOrCalculateAverageFontWidth() const
 {
-    if(0 == mpImplFont->GetCalculatedAverageFontWidth())
+    if(0 == mpImpl->GetCalculatedAverageFontWidth())
     {
         // VirtualDevice is not thread safe
         SolarMutexGuard aGuard;
@@ -384,7 +392,7 @@ tools::Long Font::GetOrCalculateAverageFontWidth() const
 #ifdef _WIN32
         // on Windows systems use FontMetric to get/create AverageFontWidth from system
         const FontMetric aMetric(pTempVirtualDevice->GetFontMetric());
-        const_cast<Font*>(this)->mpImplFont->SetCalculatedAverageFontWidth(aMetric.GetAverageFontWidth());
+        const_cast<Font*>(this)->mpImpl->SetCalculatedAverageFontWidth(aMetric.GetAverageFontWidth());
 #else
         // On non-Windows systems we need to calculate AvgFontWidth
         // as close as possible (discussion see documentation in task),
@@ -407,11 +415,11 @@ tools::Long Font::GetOrCalculateAverageFontWidth() const
         const double fAverageFontWidth(
             pTempVirtualDevice->GetTextWidth(aMeasureString) /
             static_cast<double>(aMeasureString.getLength()));
-        const_cast<Font*>(this)->mpImplFont->SetCalculatedAverageFontWidth(basegfx::fround(fAverageFontWidth));
+        const_cast<Font*>(this)->mpImpl->SetCalculatedAverageFontWidth(basegfx::fround(fAverageFontWidth));
 #endif
     }
 
-    return mpImplFont->GetCalculatedAverageFontWidth();
+    return mpImpl->GetCalculatedAverageFontWidth();
 }
 
 SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont, tools::Long& rnNormedFontScaling )
@@ -517,7 +525,7 @@ SvStream& ReadFont( SvStream& rIStm, vcl::Font& rFont )
 {
     // tdf#127471 try to read NormedFontScaling
     tools::Long nNormedFontScaling(0);
-    SvStream& rRetval(ReadImplFont( rIStm, *rFont.mpImplFont, nNormedFontScaling ));
+    SvStream& rRetval(ReadImplFont( rIStm, *rFont.mpImpl, nNormedFontScaling ));
 
     if (nNormedFontScaling > 0)
     {
@@ -608,7 +616,7 @@ SvStream& WriteFont( SvStream& rOStm, const vcl::Font& rFont )
         }
     }
 
-    return WriteImplFont( rOStm, *rFont.mpImplFont, nNormedFontScaling );
+    return WriteImplFont( rOStm, *rFont.mpImpl, nNormedFontScaling );
 }
 
 namespace
@@ -820,58 +828,58 @@ Font Font::identifyFont( const void* i_pBuffer, sal_uInt32 i_nSize )
 }
 
 // The inlines from the font.hxx header are now instantiated for pImpl-ification
-const Color& Font::GetColor() const { return mpImplFont->maColor; }
-const Color& Font::GetFillColor() const { return mpImplFont->maFillColor; }
-bool Font::IsTransparent() const { return mpImplFont->mbTransparent; }
+const Color& Font::GetColor() const { return mpImpl->maColor; }
+const Color& Font::GetFillColor() const { return mpImpl->maFillColor; }
+bool Font::IsTransparent() const { return mpImpl->mbTransparent; }
 
-TextAlign Font::GetAlignment() const { return mpImplFont->GetAlignment(); }
+TextAlign Font::GetAlignment() const { return mpImpl->GetAlignment(); }
 
-const OUString& Font::GetFamilyName() const { return mpImplFont->GetFamilyName(); }
-const OUString& Font::GetStyleName() const { return mpImplFont->maStyleName; }
+const OUString& Font::GetFamilyName() const { return mpImpl->GetFamilyName(); }
+const OUString& Font::GetStyleName() const { return mpImpl->maStyleName; }
 
-const Size& Font::GetFontSize() const { return mpImplFont->GetFontSize(); }
-void Font::SetFontHeight( tools::Long nHeight ) { SetFontSize( Size( std::as_const(*mpImplFont).GetFontSize().Width(), nHeight ) ); }
-tools::Long Font::GetFontHeight() const { return mpImplFont->GetFontSize().Height(); }
-void Font::SetAverageFontWidth( tools::Long nWidth ) { SetFontSize( Size( nWidth, std::as_const(*mpImplFont).GetFontSize().Height() ) ); }
-tools::Long Font::GetAverageFontWidth() const { return mpImplFont->GetFontSize().Width(); }
+const Size& Font::GetFontSize() const { return mpImpl->GetFontSize(); }
+void Font::SetFontHeight( tools::Long nHeight ) { SetFontSize( Size( std::as_const(*mpImpl).GetFontSize().Width(), nHeight ) ); }
+tools::Long Font::GetFontHeight() const { return mpImpl->GetFontSize().Height(); }
+void Font::SetAverageFontWidth( tools::Long nWidth ) { SetFontSize( Size( nWidth, std::as_const(*mpImpl).GetFontSize().Height() ) ); }
+tools::Long Font::GetAverageFontWidth() const { return mpImpl->GetFontSize().Width(); }
 
-rtl_TextEncoding Font::GetCharSet() const { return mpImplFont->GetCharSet(); }
+rtl_TextEncoding Font::GetCharSet() const { return mpImpl->GetCharSet(); }
 
-const LanguageTag& Font::GetLanguageTag() const { return mpImplFont->maLanguageTag; }
-const LanguageTag& Font::GetCJKContextLanguageTag() const { return mpImplFont->maCJKLanguageTag; }
-LanguageType Font::GetLanguage() const { return mpImplFont->maLanguageTag.getLanguageType( false); }
-LanguageType Font::GetCJKContextLanguage() const { return mpImplFont->maCJKLanguageTag.getLanguageType( false); }
+const LanguageTag& Font::GetLanguageTag() const { return mpImpl->maLanguageTag; }
+const LanguageTag& Font::GetCJKContextLanguageTag() const { return mpImpl->maCJKLanguageTag; }
+LanguageType Font::GetLanguage() const { return mpImpl->maLanguageTag.getLanguageType( false); }
+LanguageType Font::GetCJKContextLanguage() const { return mpImpl->maCJKLanguageTag.getLanguageType( false); }
 
-Degree10 Font::GetOrientation() const { return mpImplFont->mnOrientation; }
-bool Font::IsVertical() const { return mpImplFont->mbVertical; }
-FontKerning Font::GetKerning() const { return mpImplFont->meKerning; }
+Degree10 Font::GetOrientation() const { return mpImpl->mnOrientation; }
+bool Font::IsVertical() const { return mpImpl->mbVertical; }
+FontKerning Font::GetKerning() const { return mpImpl->meKerning; }
 
-FontPitch Font::GetPitch() { return mpImplFont->GetPitch(); }
-FontWeight Font::GetWeight() { return mpImplFont->GetWeight(); }
-FontWidth Font::GetWidthType() { return mpImplFont->GetWidthType(); }
-FontItalic Font::GetItalic() { return mpImplFont->GetItalic(); }
-FontFamily Font::GetFamilyType() { return mpImplFont->GetFamilyType(); }
+FontPitch Font::GetPitch() { return mpImpl->GetPitch(); }
+FontWeight Font::GetWeight() { return mpImpl->GetWeight(); }
+FontWidth Font::GetWidthType() { return mpImpl->GetWidthType(); }
+FontItalic Font::GetItalic() { return mpImpl->GetItalic(); }
+FontFamily Font::GetFamilyType() { return mpImpl->GetFamilyType(); }
 
-FontPitch Font::GetPitch() const { return mpImplFont->GetPitchNoAsk(); }
-FontWeight Font::GetWeight() const { return mpImplFont->GetWeightNoAsk(); }
-FontWidth Font::GetWidthType() const { return mpImplFont->GetWidthTypeNoAsk(); }
-FontItalic Font::GetItalic() const { return mpImplFont->GetItalicNoAsk(); }
-FontFamily Font::GetFamilyType() const { return mpImplFont->GetFamilyTypeNoAsk(); }
+FontPitch Font::GetPitch() const { return mpImpl->GetPitchNoAsk(); }
+FontWeight Font::GetWeight() const { return mpImpl->GetWeightNoAsk(); }
+FontWidth Font::GetWidthType() const { return mpImpl->GetWidthTypeNoAsk(); }
+FontItalic Font::GetItalic() const { return mpImpl->GetItalicNoAsk(); }
+FontFamily Font::GetFamilyType() const { return mpImpl->GetFamilyTypeNoAsk(); }
 
-int Font::GetQuality() const { return mpImplFont->GetQuality(); }
-void Font::SetQuality( int nQuality ) { mpImplFont->SetQuality( nQuality ); }
-void Font::IncreaseQualityBy( int nQualityAmount ) { mpImplFont->IncreaseQualityBy( nQualityAmount ); }
-void Font::DecreaseQualityBy( int nQualityAmount ) { mpImplFont->DecreaseQualityBy( nQualityAmount ); }
+int Font::GetQuality() const { return mpImpl->GetQuality(); }
+void Font::SetQuality( int nQuality ) { mpImpl->SetQuality( nQuality ); }
+void Font::IncreaseQualityBy( int nQualityAmount ) { mpImpl->IncreaseQualityBy( nQualityAmount ); }
+void Font::DecreaseQualityBy( int nQualityAmount ) { mpImpl->DecreaseQualityBy( nQualityAmount ); }
 
-bool Font::IsOutline() const { return mpImplFont->mbOutline; }
-bool Font::IsShadow() const { return mpImplFont->mbShadow; }
-FontRelief Font::GetRelief() const { return mpImplFont->meRelief; }
-FontLineStyle Font::GetUnderline() const { return mpImplFont->meUnderline; }
-FontLineStyle Font::GetOverline()  const { return mpImplFont->meOverline; }
-FontStrikeout Font::GetStrikeout() const { return mpImplFont->meStrikeout; }
-FontEmphasisMark Font::GetEmphasisMark() const { return mpImplFont->meEmphasisMark; }
-bool Font::IsWordLineMode() const { return mpImplFont->mbWordLine; }
-bool Font::IsSameInstance( const vcl::Font& rFont ) const { return (mpImplFont == rFont.mpImplFont); }
+bool Font::IsOutline() const { return mpImpl->mbOutline; }
+bool Font::IsShadow() const { return mpImpl->mbShadow; }
+FontRelief Font::GetRelief() const { return mpImpl->meRelief; }
+FontLineStyle Font::GetUnderline() const { return mpImpl->meUnderline; }
+FontLineStyle Font::GetOverline()  const { return mpImpl->meOverline; }
+FontStrikeout Font::GetStrikeout() const { return mpImpl->meStrikeout; }
+FontEmphasisMark Font::GetEmphasisMark() const { return mpImpl->meEmphasisMark; }
+bool Font::IsWordLineMode() const { return mpImpl->mbWordLine; }
+bool Font::IsSameInstance( const vcl::Font& rFont ) const { return (mpImpl == rFont.mpImpl); }
 
 
 ImplFont::ImplFont() :
@@ -1051,5 +1059,9 @@ void ImplFont::AskConfig()
     if( meWidthType == WIDTH_DONTKNOW )
         meWidthType = eWidthType;
 }
+
+void std::optional<vcl::Font>::reset() { cow_optional::reset(); }
+
+std::optional<vcl::Font>::~optional() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

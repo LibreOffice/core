@@ -384,6 +384,12 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
         return true;
     }
 
+    // the std::optional specialisations we do for cow_wrapper classes need to just call
+    // the parent - they have to be declared in .cxx files because that's the only place
+    // where the required classes are all fully visible
+    if (loplugin::DeclCheck(methodDecl->getParent()).Class("optional").StdNamespace())
+        return true;
+
     report(
             DiagnosticsEngine::Warning, "%0%1 function just calls %2 parent",
             methodDecl->getLocation())

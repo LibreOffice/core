@@ -196,7 +196,7 @@ namespace
     }
 }
 
-JobSetup::JobSetup() : mpData(GetGlobalDefault())
+JobSetup::JobSetup() : mpImpl(GetGlobalDefault())
 {
 }
 
@@ -206,27 +206,27 @@ JobSetup::~JobSetup() = default;
 
 bool JobSetup::operator==( const JobSetup& rJobSetup ) const
 {
-    return mpData == rJobSetup.mpData;
+    return mpImpl == rJobSetup.mpImpl;
 }
 
 const ImplJobSetup& JobSetup::ImplGetConstData() const
 {
-    return *mpData;
+    return *mpImpl;
 }
 
 ImplJobSetup& JobSetup::ImplGetData()
 {
-    return *mpData;
+    return *mpImpl;
 }
 
 OUString const & JobSetup::GetPrinterName() const
 {
-    return mpData->GetPrinterName();
+    return mpImpl->GetPrinterName();
 }
 
 bool JobSetup::IsDefault() const
 {
-    return mpData.same_object(GetGlobalDefault());
+    return mpImpl.same_object(GetGlobalDefault());
 }
 
 SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
