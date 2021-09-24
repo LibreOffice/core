@@ -3179,6 +3179,9 @@ void DomainMapper::lcl_startShape(uno::Reference<drawing::XShape> const& xShape)
 {
     assert(xShape.is());
 
+    // If there is a texbox wainting for its shape, lets attach it now.
+    m_pImpl->AttachDummyTextBox(xShape);
+
     if (m_pImpl->GetTopContext())
     {
         // If there is a deferred page break, handle it now, so that the
@@ -3224,6 +3227,35 @@ void DomainMapper::lcl_endShape( )
     m_pImpl->PopShapeContext( );
     // A shape is always inside a paragraph (anchored or inline).
     m_pImpl->SetIsOutsideAParagraph(false);
+}
+
+void DomainMapper::lcl_startTextBox()
+{
+    // Textbox can not be in other.
+    if (m_pImpl->m_bInsideTextBox)
+        OSL_FAIL("Already in textbox!");
+    else
+    {
+        // Set that flag to indicate the state.
+        m_pImpl->m_bInsideTextBox = true;
+        // Create a new textbox and read the content to it.
+        m_pImpl->AddNewDummyTextBox();
+    }
+}
+
+void DomainMapper::lcl_endTextBox()
+{
+    // Must be in a textbox to get closed
+    if (!m_pImpl->m_bInsideTextBox)
+        OSL_FAIL("No textbox to close!");
+    else
+    {
+        // Handle closing
+        m_pImpl->RemoveLastParagraph();
+        m_pImpl->CloseDummyTextBox();
+        // Set the flag
+        m_pImpl->m_bInsideTextBox = false;
+    }
 }
 
 void DomainMapper::PushStyleSheetProperties( const PropertyMapPtr& pStyleProperties, bool bAffectTableMngr )

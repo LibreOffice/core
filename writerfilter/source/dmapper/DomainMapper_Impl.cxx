@@ -332,6 +332,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_aSmartTagHandler(m_xComponentContext, m_xTextDocument),
         m_xInsertTextRange(rMediaDesc.getUnpackedValueOrDefault("TextInsertModeRange", uno::Reference<text::XTextRange>())),
         m_xAltChunkStartingRange(rMediaDesc.getUnpackedValueOrDefault("AltChunkStartingRange", uno::Reference<text::XTextRange>())),
+        m_bInsideTextBox(false),
         m_bIsNewDoc(!rMediaDesc.getUnpackedValueOrDefault("InsertMode", false)),
         m_bIsAltChunk(rMediaDesc.getUnpackedValueOrDefault("AltChunkMode", false)),
         m_bIsReadGlossaries(rMediaDesc.getUnpackedValueOrDefault("ReadGlossaries", false)),
@@ -2377,6 +2378,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
     if( pPropertyMap == m_pTopContext && !deferredCharacterProperties.empty() && (GetTopContextType() == CONTEXT_CHARACTER) )
         processDeferredCharacterProperties();
     uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
+
     if (!xTextAppend.is() || !hasTableManager() || getTableManager().isIgnore())
         return;
 
@@ -3456,7 +3458,8 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             {
                 try
                 {
-                    uno::Reference<beans::XPropertySet> xSyncedPropertySet(xShapes->getByIndex(i), uno::UNO_QUERY_THROW);
+                    uno::Reference<text::XTextContent> xFrame(xShapes->getByIndex(i), uno::UNO_QUERY_THROW);
+                    uno::Reference<beans::XPropertySet> xSyncedPropertySet(xFrame, uno::UNO_QUERY_THROW);
                     comphelper::SequenceAsHashMap aGrabBag( xSyncedPropertySet->getPropertyValue("CharInteropGrabBag") );
 
                     // only VML import has checked for style. Don't apply default parastyle properties to other imported shapes
@@ -3706,6 +3709,7 @@ void DomainMapper_Impl::PopShapeContext()
     }
 
     const uno::Reference<drawing::XShape> xShape( xObj, uno::UNO_QUERY_THROW );
+
     // Remove the shape if required (most likely replacement shape for OLE object)
     // or anchored to a discarded header or footer
     if ( m_aAnchoredStack.top().bToRemove || m_bDiscardHeaderFooter )
@@ -4393,6 +4397,115 @@ void DomainMapper_Impl::ChainTextFrames()
     catch (const uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("writerfilter.dmapper");
+    }
+}
+
+void DomainMapper_Impl::AddNewDummyTextBox()
+{
+    try
+    {
+        // Create a new frame.
+        uno::Reference<text::XTextFrame> xDummyFrame(
+            m_xTextFactory->createInstance("com.sun.star.text.TextFrame"), uno::UNO_QUERY_THROW);
+        uno::Reference<container::XNamed> xName(xDummyFrame, uno::UNO_QUERY_THROW);
+        // Name it.
+        xName->setName("DummyTextBox-" + OUString::number(m_aPendingTextBoxes.size()));
+        // Insert to the body text.
+        uno::Reference<text::XTextAppendAndConvert>(m_aTextAppendStack.top().xTextAppend, uno::UNO_QUERY_THROW)
+            ->appendTextContent(xDummyFrame, beans::PropertyValues());
+        // Save for the shape
+        m_aPendingTextBoxes.push(xDummyFrame);
+
+        appendTableManager();
+        appendTableHandler();
+        getTableManager().startLevel();
+
+        // Set for the append stack, so the DMapper will write to inside it.
+        m_aTextAppendStack.push(
+            TextAppendContext(uno::Reference<text::XTextAppend>(xDummyFrame, uno::UNO_QUERY_THROW), {}));
+    }
+    catch (...)
+    {
+        // Do nothing.
+    }
+}
+
+void DomainMapper_Impl::CloseDummyTextBox()
+{
+    // If there was inside a texbox and the append stack has a textbox on top...
+    if (uno::Reference<text::XTextFrame>(m_aTextAppendStack.top().xTextAppend, uno::UNO_QUERY)
+        .is())
+        // Restore the state (so the writing will happen to the original place again)
+    {
+        m_aTextAppendStack.pop();
+        if (hasTableManager())
+        {
+            getTableManager().endLevel();
+            popTableManager();
+        }
+
+    }
+}
+
+void DomainMapper_Impl::AttachDummyTextBox(uno::Reference<drawing::XShape> xShape)
+{
+    // There must be a shape!
+    if (!xShape)
+        return;
+
+    // And waiting textbox too!
+    if (!m_aPendingTextBoxes.size())
+        return;
+
+    try
+    {
+        // Is this shape a group shape?
+        uno::Reference<drawing::XShapes> xGroup(xShape, uno::UNO_QUERY);
+        if (xGroup)
+        {
+            // If it is a group, iterate over
+            for (sal_Int32 i = 0; i < xGroup->getCount(); ++i)
+            {
+                // get the member
+                AttachDummyTextBox(xGroup->getByIndex(i).get<uno::Reference<drawing::XShape>>());
+            }
+        }
+        else
+        {
+            // Simple shape?
+            uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+            if (xShapeProps->getPropertyValue("TextBox").get<bool>())
+            {
+                // If its a textbox set it.
+                auto xTxbx = m_aPendingTextBoxes.front();
+                auto xCur = xTxbx->getText()->createTextCursor();
+                xCur->gotoStart(false);
+                xCur->gotoEnd(true);
+                uno::Reference<text::XTextRange>xRng(xCur, uno::UNO_QUERY);
+                uno::Reference<beans::XPropertyState>xPropState(xCur, uno::UNO_QUERY);
+                uno::Reference<beans::XPropertySet> xTxtProps(xCur, uno::UNO_QUERY);
+                xShapeProps->setPropertyValue("TextBoxContent", uno::Any(xTxbx));
+                for (auto rProp : xShapeProps->getPropertySetInfo()->getProperties())
+                {
+                    if (xTxtProps->getPropertySetInfo()->hasPropertyByName(rProp.Name)
+                            && xPropState->getPropertyState(rProp.Name)
+                                   == beans::PropertyState::PropertyState_DEFAULT_VALUE)
+                        try
+                        {
+                            xTxtProps->setPropertyValue(rProp.Name,
+                                                        xShapeProps->getPropertyValue(rProp.Name));
+                        }
+                        catch (...)
+                        {
+                        }
+                }
+                m_aPendingTextBoxes.pop();
+            }
+        }
+    }
+    catch (...)
+    {
+        // Do nothing.
     }
 }
 
@@ -7995,7 +8108,7 @@ void DomainMapper_Impl::substream(Id rName,
         ::writerfilter::Reference<Stream>::Pointer_t const& ref)
 {
 #ifndef NDEBUG
-    size_t contextSize(m_aContextStack.size());
+    //size_t contextSize(m_aContextStack.size());
     size_t propSize[NUMBER_OF_CONTEXTS];
     for (int i = 0; i < NUMBER_OF_CONTEXTS; ++i) {
         propSize[i] = m_aPropertyStacks[i].size();
@@ -8088,12 +8201,6 @@ void DomainMapper_Impl::substream(Id rName,
         m_pTableHandler->setHadFootOrEndnote(true);
         m_bHasFtn = true;
         break;
-    }
-
-    // check that stacks are the same as before substream
-    assert(m_aContextStack.size() == contextSize);
-    for (int i = 0; i < NUMBER_OF_CONTEXTS; ++i) {
-        assert(m_aPropertyStacks[i].size() == propSize[i]);
     }
 }
 

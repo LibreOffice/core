@@ -963,7 +963,14 @@ SwXShape::~SwXShape()
 
 uno::Any SwXShape::queryInterface( const uno::Type& aType )
 {
-    uno::Any aRet = SwTextBoxHelper::queryInterface(GetFrameFormat(), aType);
+    // First query these types for the textbox
+    uno::Any aRet;
+    if (aType == cppu::UnoType<text::XText>::get() ||
+        aType == cppu::UnoType<text::XTextAppend>::get() ||
+        aType == cppu::UnoType<text::XTextRange>::get())
+        aRet = SwTextBoxHelper::queryInterface(GetFrameFormat(), aType,
+                                               SdrObject::getSdrObjectFromXShape(mxShape));
+
     if (aRet.hasValue())
         return aRet;
 
@@ -1151,13 +1158,21 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
             }
             else if (pEntry->nWID == FN_TEXT_BOX)
             {
-                bool bValue(false);
-                aValue >>= bValue;
-                if (bValue)
-                    SwTextBoxHelper::create(pFormat, GetSvxShape()->GetSdrObject());
-                else
-                    SwTextBoxHelper::destroy(pFormat, GetSvxShape()->GetSdrObject());
-
+                if (pEntry->nMemberId == MID_IS_TEXTBOX)
+                {
+                    bool bValue(false);
+                    aValue >>= bValue;
+                    if (bValue)
+                        SwTextBoxHelper::create(pFormat, GetSvxShape()->GetSdrObject());
+                    else
+                        SwTextBoxHelper::destroy(pFormat, GetSvxShape()->GetSdrObject());
+                }
+                if (pEntry->nMemberId == MID_TEXTBOX_CONTENT)
+                {
+                    // Sets the new texbox via uno-property
+                    SwTextBoxHelper::setTextBox(pFormat, SdrObject::getSdrObjectFromXShape(mxShape),
+                                                aValue.get<uno::Reference<text::XTextFrame>>());
+                }
             }
             else if (pEntry->nWID == RES_CHAIN)
             {
@@ -1505,11 +1520,24 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                 else if (pEntry->nWID == FN_TEXT_BOX)
                 {
                     auto pSvxShape = GetSvxShape();
-                    bool bValue = SwTextBoxHelper::isTextBox(
-                        pFormat, RES_DRAWFRMFMT,
-                        ((pSvxShape && pSvxShape->GetSdrObject()) ? pSvxShape->GetSdrObject()
-                                                                  : pFormat->FindRealSdrObject()));
-                    aRet <<= bValue;
+                    if (pEntry->nMemberId == MID_IS_TEXTBOX)
+                    {
+
+                        bool bValue = SwTextBoxHelper::isTextBox(
+                            pFormat, RES_DRAWFRMFMT,
+                            ((pSvxShape && pSvxShape->GetSdrObject()) ? pSvxShape->GetSdrObject()
+                                : pFormat->FindRealSdrObject()));
+                        aRet <<= bValue;
+                    }
+                    if (pEntry->nMemberId == MID_TEXTBOX_CONTENT)
+                    {
+                        // Gets the textbox of the shape (might be useful in the future)
+                        aRet = SwTextBoxHelper::queryInterface(
+                            pFormat, cppu::UnoType<text::XText>::get(),
+                            (pSvxShape && pSvxShape->GetSdrObject()
+                                 ? pSvxShape->GetSdrObject()
+                                 : pFormat->FindRealSdrObject()));
+                    }
                 }
                 else if (pEntry->nWID == RES_CHAIN)
                 {
@@ -2293,6 +2321,8 @@ void SAL_CALL SwXShape::setPosition( const awt::Point& aPosition )
         // set position
         mxShape->setPosition( aNewPos );
     }
+    if (GetFrameFormat())
+        SwTextBoxHelper::doGroupTextBoxSync(GetFrameFormat(), SdrObject::getSdrObjectFromXShape(mxShape));
 }
 
 awt::Size SAL_CALL SwXShape::getSize()
@@ -2313,7 +2343,8 @@ void SAL_CALL SwXShape::setSize( const awt::Size& aSize )
     {
         mxShape->setSize( aSize );
     }
-    SwTextBoxHelper::syncProperty(GetFrameFormat(), RES_FRM_SIZE, MID_FRMSIZE_SIZE, uno::makeAny(aSize));
+    SwTextBoxHelper::syncProperty(GetFrameFormat(), RES_FRM_SIZE, MID_FRMSIZE_SIZE,
+                                  uno::makeAny(aSize), SdrObject::getSdrObjectFromXShape(mxShape));
 }
 // #i31698#
 // implementation of virtual methods from drawing::XShapeDescriptor
