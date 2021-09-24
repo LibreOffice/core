@@ -20,6 +20,7 @@
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/gen.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <unotools/fontcfg.hxx>
 #include <unotools/fontdefs.hxx>
 
@@ -873,6 +874,34 @@ FontEmphasisMark Font::GetEmphasisMark() const { return mpImplFont->meEmphasisMa
 bool Font::IsWordLineMode() const { return mpImplFont->mbWordLine; }
 bool Font::IsSameInstance( const vcl::Font& rFont ) const { return (mpImplFont == rFont.mpImplFont); }
 
+FontEmphasisMark Font::GetEmphasisMarkStyle() const
+{
+    FontEmphasisMark nEmphasisMark = GetEmphasisMark();
+
+    // If no Position is set, then calculate the default position, which
+    // depends on the language
+    if ( !(nEmphasisMark & (FontEmphasisMark::PosAbove | FontEmphasisMark::PosBelow)) )
+    {
+        LanguageType eLang = GetLanguage();
+        // In Chinese Simplified the EmphasisMarks are below/left
+        if (MsLangId::isSimplifiedChinese(eLang))
+        {
+            nEmphasisMark |= FontEmphasisMark::PosBelow;
+        }
+        else
+        {
+            eLang = GetCJKContextLanguage();
+
+            // In Chinese Simplified the EmphasisMarks are below/left
+            if (MsLangId::isSimplifiedChinese(eLang))
+                nEmphasisMark |= FontEmphasisMark::PosBelow;
+            else
+                nEmphasisMark |= FontEmphasisMark::PosAbove;
+        }
+    }
+
+    return nEmphasisMark;
+}
 
 ImplFont::ImplFont() :
     meWeight( WEIGHT_DONTKNOW ),
