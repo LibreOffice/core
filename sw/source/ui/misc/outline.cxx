@@ -555,11 +555,8 @@ IMPL_LINK(SwOutlineSettingsTabPage, ToggleComplete, weld::SpinButton&, rEdit, vo
             SwNumFormat aNumFormat(pNumRule->Get(i));
             aNumFormat.SetIncludeUpperLevels( std::min( static_cast<sal_uInt8>(rEdit.get_value()),
                                                 static_cast<sal_uInt8>(i + 1)) );
-            if (aNumFormat.HasListFormat())
-            {
-                aNumFormat.SetListFormat();  // clear custom format
-                m_xAllLevelNF->set_min(1);
-            }
+            // Set the same prefix/suffix to generate list format with changed IncludedUpperLevels
+            aNumFormat.SetListFormat(aNumFormat.GetPrefix(), aNumFormat.GetSuffix(), i);
             pNumRule->Set(i, aNumFormat);
         }
         nMask <<= 1;
