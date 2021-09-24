@@ -1693,7 +1693,7 @@ SwXText::convertToTextFrame(
     std::set<OUString> aAnchoredObjectsByName;
     for (size_t i = 0; i < m_pImpl->m_pDoc->GetSpzFrameFormats()->size(); ++i)
     {
-        const SwFrameFormat* pFrameFormat = (*m_pImpl->m_pDoc->GetSpzFrameFormats())[i];
+        SwFrameFormat* pFrameFormat = (*m_pImpl->m_pDoc->GetSpzFrameFormats())[i];
         const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
         if ( !isGraphicNode(pFrameFormat) &&
                 (RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId() || RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()) &&
@@ -1708,6 +1708,26 @@ SwXText::convertToTextFrame(
             {
                 aAnchoredObjectsByName.insert(pFrameFormat->GetName());
             }
+
+            // FIXME: if the desired text range has flys (and textboxes) afer frame conversion these
+            // flys will lost. This hack saves the textbox with changing its anchor to page, and
+            // moving it outside from the converted range, but it will have wrong position, after
+            // the conversion. This is needed for the floating tables and WPG shapes.
+            // If this issue will be fixed the nested floating tables might be imported well too.
+            //if (auto pTextBox = pFrameFormat->GetOtherTextBoxFormat())
+            //{
+            //    if (auto pShape = pTextBox->GetOwnerShape())
+            //    {
+            //        if (pFrameFormat->GetAnchor().GetAnchorId() != pShape->GetAnchor().GetAnchorId()
+            //            && pFrameFormat->Which() == RES_FLYFRMFMT)
+            //        {
+            //           pShape->SetFormatAttr(
+            //               SwFormatAnchor(RndStdIds::FLY_AT_PAGE,
+            //                              pStartPam->GetPageNum() ? pStartPam->GetPageNum() : 1));
+            //           SwTextBoxHelper::doGroupTextBoxSync(pShape, pShape->FindRealSdrObject());
+            //        }
+            //    }
+            //}
         }
     }
 

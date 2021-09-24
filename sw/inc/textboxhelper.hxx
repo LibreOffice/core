@@ -11,6 +11,7 @@
 #define INCLUDED_SW_INC_TEXTBOXHELPER_HXX
 
 #include <map>
+#include <unordered_map>
 #include <optional>
 #include <set>
 #include <vector>
@@ -56,6 +57,8 @@ public:
     using SavedLink = std::map<const SwFrameFormat*, const SwFrameFormat*>;
     /// Maps a draw format to content.
     using SavedContent = std::map<const SwFrameFormat*, SwFormatContent>;
+    /// Helper function for syncing all texboxes of the group.
+    static void doGroupTextBoxSync(SwFrameFormat* pShapeFormat, SdrObject* pMasterObj);
     /// Create a TextBox for a shape. If the third parameter is true,
     /// the original text in the shape will be copied to the frame
     /// The textbox is created for the shape given by the pObject parameter.
@@ -64,8 +67,13 @@ public:
     /// like group shapes, it will destroy only that textbox what belongs
     /// to the given pObject shape.
     static void destroy(const SwFrameFormat* pShape, const SdrObject* pObject);
+    /// Sets the given extising textframe for the shape to become a texbox.
+    /// Used by the TEXT_BOX_CONTENT property setting.
+    static void setTextBox(SwFrameFormat* pShape, SdrObject* pObject,
+                           css::uno::Reference<css::text::XTextFrame> xNew);
     /// Get interface of a shape's TextBox, if there is any.
-    static css::uno::Any queryInterface(const SwFrameFormat* pShape, const css::uno::Type& rType);
+    static css::uno::Any queryInterface(const SwFrameFormat* pShape, const css::uno::Type& rType,
+                                        SdrObject* pObj = nullptr);
 
     /// Sync property of TextBox with the one of the shape.
     static void syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID,
@@ -90,7 +98,7 @@ public:
 
     /// Sets the surround to through for the textframe of the given shape,
     /// not to interfere with the layout. Returns true on success.
-    static bool setWrapThrough(SwFrameFormat* pShape);
+    static bool setWrapThrough(SwFrameFormat* pShape, const SdrObject* pObj);
 
     /// Sets the anchor of the associated textframe of the given shape, and
     /// returns true on success.
@@ -105,10 +113,11 @@ public:
     /// Note: In case of AS_CHAR anchor the anchor type must be different,
     /// because if not, layout breaks, but this situation also handled by
     /// this function, and returns true in that case too.
-    static std::optional<bool> isAnchorTypeDifferent(const SwFrameFormat* pShape);
+    static std::optional<bool> isAnchorTypeDifferent(const SwFrameFormat* pShape,
+                                                     const SdrObject* pObj);
 
     /// Returns true if the given shape has a valid textframe.
-    static bool isTextBoxShapeHasValidTextFrame(const SwFrameFormat* pShape);
+    static bool isTextBoxShapeHasValidTextFrame(const SwFrameFormat* pShape, const SdrObject* pObj);
 
     // Returns true on success. Synchronize z-order of the text frame of the given textbox
     // by setting it one level higher than the z-order of the shape of the textbox.
@@ -185,19 +194,8 @@ public:
 /// it can have multiple textboxes.
 class SwTextBoxNode
 {
-    // One TextBox-entry
-    struct SwTextBoxElement
-    {
-        // The textframe format
-        SwFrameFormat* m_pTextBoxFormat;
-        // The Draw object where the textbox belongs to
-        SdrObject* m_pDrawObject;
-        // This is for indicating if the textbox is in special case: for example during undo.
-        bool m_bIsActive;
-    };
-
-    // This vector stores the textboxes what belongs to this node
-    std::vector<SwTextBoxElement> m_pTextBoxes;
+    // This map stores the textboxes what belongs to this node
+    std::unordered_map<const SdrObject*, SwFrameFormat*> m_pTextBoxTable;
     // This is the pointer to the shape format, which has this node
     // (and the textboxes)
     SwFrameFormat* m_pOwnerShapeFormat;
@@ -224,24 +222,16 @@ public:
     // Parameters:
     //     pDrawObject: The shape which have the textbox to be deleted.
     void DelTextBox(const SdrObject* pDrawObject);
+    void DelTextBox(SwFrameFormat* pTextBox);
 
     // This will return with the frame format of the textbox what belongs
     // to the given shape (pDrawObject)
     SwFrameFormat* GetTextBox(const SdrObject* pDrawObject) const;
 
-    // Is this textbox has special state, undo for example?
-    bool IsTextBoxActive(const SdrObject* pDrawObject) const;
-
-    // Setters for the state flag.
-    void SetTextBoxInactive(const SdrObject* pDrawObject);
-    void SetTextBoxActive(const SdrObject* pDrawObject);
-
-    // If this is a group shape, that returns true.
-    bool IsGroupTextBox() const;
     // This returns with the shape what this class belongs to.
     SwFrameFormat* GetOwnerShape() { return m_pOwnerShapeFormat; };
     // This will give the current number of textboxes.
-    size_t GetTextBoxCount() const { return m_pTextBoxes.size(); };
+    size_t GetTextBoxCount() const { return m_pTextBoxTable.size(); };
 };
 
 #endif // INCLUDED_SW_INC_TEXTBOXHELPER_HXX

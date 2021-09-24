@@ -1798,16 +1798,15 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
 
     uno::Reference< xml::sax::XFastContextHandler > xContextHandler;
 
-    bool bGroupShape = Element == Token_t(NMSP_vml | XML_group);
-    // drawingML version also counts as a group shape.
-    bGroupShape |= mrShapeContext->getStartToken() == Token_t(NMSP_wpg | XML_wgp);
+    bool bVMLGroupShape = Element == Token_t(NMSP_vml | XML_group);
+
     mbIsVMLfound = (getNamespace(Element) == NMSP_vmlOffice) || (getNamespace(Element) == NMSP_vml);
     switch (oox::getNamespace(Element))
     {
         case NMSP_doc:
         case NMSP_vmlWord:
         case NMSP_vmlOffice:
-            if (!bGroupShape)
+            if (!bVMLGroupShape)
                 xContextHandler.set(OOXMLFactory::createFastChildContextFromStart(this, Element));
             [[fallthrough]];
         default:
@@ -1828,12 +1827,12 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
                         mbAllowInCell
                             = !(Attribs->getValue(NMSP_vmlOffice | XML_allowincell) == "f");
 
-                    if (!bGroupShape)
+                    if (!bVMLGroupShape)
                     {
                         pWrapper->addNamespace(NMSP_doc);
                         pWrapper->addNamespace(NMSP_vmlWord);
                         pWrapper->addNamespace(NMSP_vmlOffice);
-                        pWrapper->addToken( NMSP_vml|XML_textbox );
+                        pWrapper->addToken(NMSP_vml | XML_textbox);
                     }
                     xContextHandler.set(pWrapper);
                 }
@@ -1848,8 +1847,11 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
     // handle the WPS import of shape text, as there the parent context is a
     // Shape one, so a different situation.
     if (Element == static_cast<sal_Int32>(NMSP_wps | XML_txbx) ||
-        Element == static_cast<sal_Int32>(NMSP_wps | XML_linkedTxbx) )
+        Element == static_cast<sal_Int32>(NMSP_wps | XML_linkedTxbx))
+    {
+        mpStream->startTextBox();
         sendShape(Element);
+    }
 
     return xContextHandler;
 }
@@ -1964,11 +1966,25 @@ void OOXMLFastContextHandlerWrapper::lcl_startFastElement
 {
     if (mxWrappedContext.is())
         mxWrappedContext->startFastElement(Element, Attribs);
+
+    if (Element == Token_t(NMSP_wps | XML_txbx) ||
+        Element == Token_t(NMSP_wps | XML_linkedTxbx))
+    {
+        mpStream->startTextBox();
+        mpParserState->startTxbxContent();
+    }
 }
 
 void OOXMLFastContextHandlerWrapper::lcl_endFastElement
 (Token_t Element)
 {
+    if (Element == Token_t(NMSP_wps | XML_txbx) ||
+        Element == Token_t(NMSP_wps | XML_linkedTxbx))
+    {
+        mpParserState->endTxbxContent();
+        mpStream->endTextBox();
+    }
+
     if (mxWrappedContext.is())
         mxWrappedContext->endFastElement(Element);
 }
