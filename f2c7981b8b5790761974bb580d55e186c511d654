@@ -16,6 +16,24 @@
       "message": "Re-saving as .xlsx or .ods and reloading and recalculating still breaks, #N/A for .xlsx and #NAME? for .ods",
       "revId": "f2c7981b8b5790761974bb580d55e186c511d654",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "161fe119_0467f01b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2021-09-24T11:36:17Z",
+      "side": 1,
+      "message": "Thanks for the reveiw, Eike. If you used the unit test file and save it as .XLSX the result will be #N/A, because I didn\u0027t add a datasource file to the unit test. I only added the reference file (tdf144397.xlsx). If there would be a datasource file too, the result after an XLSX export wouldn\u0027t be #N/A, because the datasource file would be found by external link route. But if you test this patch with a datasource file it should work well after the XLSX export.\n\nOther side, this patch only works for OOXML not for ods. That should be fixed in another patch with another BUG report.",
+      "parentUuid": "c03f684b_e311349a",
+      "revId": "f2c7981b8b5790761974bb580d55e186c511d654",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
