@@ -325,6 +325,10 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
         SwFormatColl::SwClientNotify(rModify, rHint);
 }
 
+void SwTextFormatColl::SetLinkedCharFormat(SwCharFormat& rLink) { mpLinkedCharFormat = &rLink; }
+
+const SwCharFormat* SwTextFormatColl::GetLinkedCharFormat() const { return mpLinkedCharFormat; }
+
 bool SwTextFormatColl::IsAtDocNodeSet() const
 {
     SwIterator<SwContentNode,SwFormatColl> aIter( *this );
@@ -475,6 +479,16 @@ void SwTextFormatColl::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("symbol"), "%s", BAD_CAST(typeid(*this).name()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toUtf8().getStr()));
+    if (mpNextTextFormatColl)
+    {
+        (void)xmlTextWriterWriteAttribute(
+            pWriter, BAD_CAST("next"), BAD_CAST(mpNextTextFormatColl->GetName().toUtf8().getStr()));
+    }
+    if (mpLinkedCharFormat)
+    {
+        (void)xmlTextWriterWriteAttribute(
+            pWriter, BAD_CAST("linked"), BAD_CAST(mpLinkedCharFormat->GetName().toUtf8().getStr()));
+    }
     GetAttrSet().dumpAsXml(pWriter);
     (void)xmlTextWriterEndElement(pWriter);
 }

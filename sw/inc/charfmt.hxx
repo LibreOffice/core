@@ -27,6 +27,8 @@ class SwCharFormat final : public SwFormat
     friend class SwDoc;
     friend class SwTextFormatColl;
 
+    SwTextFormatColl* mpLinkedParaFormat = nullptr;
+
     SwCharFormat( SwAttrPool& rPool, const OUString &rFormatName,
                 SwCharFormat *pDerivedFrom )
           : SwFormat( rPool, rFormatName, aCharFormatSetRange, pDerivedFrom, RES_CHRFMT )
@@ -35,6 +37,10 @@ class SwCharFormat final : public SwFormat
 public:
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
+
+    void SetLinkedParaFormat(SwTextFormatColl& rLink);
+
+    const SwTextFormatColl* GetLinkedParaFormat() const;
 };
 
 namespace CharFormat

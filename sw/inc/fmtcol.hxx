@@ -70,6 +70,8 @@ class SW_DLLPUBLIC SwTextFormatColl
 
     SwTextFormatColl *mpNextTextFormatColl;
 
+    SwCharFormat* mpLinkedCharFormat = nullptr;
+
 protected:
     SwTextFormatColl( SwAttrPool& rPool, const char* pFormatCollName,
                     SwTextFormatColl* pDerFrom = nullptr,
@@ -100,6 +102,10 @@ public:
     virtual ~SwTextFormatColl();
     inline void SetNextTextFormatColl(SwTextFormatColl& rNext);
     SwTextFormatColl& GetNextTextFormatColl() const { return *mpNextTextFormatColl; }
+
+    void SetLinkedCharFormat(SwCharFormat& rLink);
+
+    const SwCharFormat* GetLinkedCharFormat() const;
 
     bool IsAtDocNodeSet() const;
 

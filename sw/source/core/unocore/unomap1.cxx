@@ -233,6 +233,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetCharStylePropertyMa
         { u"" UNO_NAME_CHAR_TOP_BORDER_DISTANCE, RES_CHRATR_BOX, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, TOP_BORDER_DISTANCE |CONVERT_TWIPS },
         { u"" UNO_NAME_CHAR_BOTTOM_BORDER_DISTANCE, RES_CHRATR_BOX, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
         { u"" UNO_NAME_CHAR_SHADOW_FORMAT, RES_CHRATR_SHADOW, cppu::UnoType<css::table::ShadowFormat>::get(), PROPERTY_NONE, CONVERT_TWIPS},
+        { u"" UNO_NAME_LINK_STYLE, FN_UNO_LINK_STYLE, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0},
         { u"", 0, css::uno::Type(), 0, 0 }
     };
 

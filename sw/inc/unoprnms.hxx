@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #define UNO_NAME_FOLLOW_STYLE "FollowStyle"
+#define UNO_NAME_LINK_STYLE "LinkStyle"
 #define UNO_NAME_IS_PHYSICAL "IsPhysical"
 #define UNO_NAME_IS_AUTO_UPDATE "IsAutoUpdate"
 #define UNO_NAME_DISPLAY_NAME "DisplayName"
