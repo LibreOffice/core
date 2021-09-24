@@ -56,6 +56,30 @@
       },
       "revId": "1d2128e11fca49d057bdf18589bfc9adb5346ae0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "336e4085_4e9d29b9",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-24T06:03:13Z",
+      "side": 1,
+      "message": "Just make it \u0027\u003e 1582\u0027. 1582-10-15 was the ~end of the year, so even though it doesn\u0027t matter in practice (1582 was not leap in either calendar), it seems pedantically more correct to use \u0027\u003e\u0027 here.",
+      "parentUuid": "e6cf6d3a_55b32344",
+      "range": {
+        "startLine": 315,
+        "startChar": 27,
+        "endLine": 315,
+        "endChar": 32
+      },
+      "revId": "1d2128e11fca49d057bdf18589bfc9adb5346ae0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
