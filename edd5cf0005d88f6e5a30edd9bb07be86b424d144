@@ -16,6 +16,24 @@
       "message": "wouldn\u0027t be easier to just make the SvStream::Read* functions zero-fill the return value on failure?",
       "revId": "edd5cf0005d88f6e5a30edd9bb07be86b424d144",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c7673f9_ea2368dc",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3860,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-09-24T09:02:52Z",
+      "side": 1,
+      "message": "there is at least one case where the existing code depends on a failed read not changing the explicitly set default value",
+      "parentUuid": "e331cf2e_c4542619",
+      "revId": "edd5cf0005d88f6e5a30edd9bb07be86b424d144",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
