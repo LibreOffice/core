@@ -120,7 +120,6 @@ public:
     void testDateAutofilterODS();
     void testAutofilterColorsODF();
     void testAutofilterColorsOOXML();
-    void testAutofilterColorsStyleOOXML();
     void testAutofilterTop10XLSX();
 
     void testRefStringXLSX();
@@ -228,7 +227,6 @@ public:
     CPPUNIT_TEST(testDateAutofilterODS);
     CPPUNIT_TEST(testAutofilterColorsODF);
     CPPUNIT_TEST(testAutofilterColorsOOXML);
-    CPPUNIT_TEST(testAutofilterColorsStyleOOXML);
     CPPUNIT_TEST(testAutofilterTop10XLSX);
 
     CPPUNIT_TEST(testRefStringXLSX);
@@ -793,27 +791,49 @@ void ScExportTest2::testAutofilterColorsODF()
 
 void ScExportTest2::testAutofilterColorsOOXML()
 {
-    ScDocShellRef xDocSh = loadDoc(u"autofilter-colors.", FORMAT_XLSX);
-    CPPUNIT_ASSERT(xDocSh.is());
+    {
+        ScDocShellRef xDocSh = loadDoc(u"autofilter-colors.", FORMAT_XLSX);
+        CPPUNIT_ASSERT(xDocSh.is());
+        std::shared_ptr<utl::TempFile> pXPathFile
+            = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+        xmlDocUniquePtr pTable1
+            = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/tables/table1.xml");
+        CPPUNIT_ASSERT(pTable1);
+        sal_Int32 nDxfId
+            = getXPath(pTable1, "/x:table/x:autoFilter/x:filterColumn/x:colorFilter", "dxfId")
+                  .toInt32()
+              + 1;
 
-    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
-                                                     "xl/tables/table1.xml", FORMAT_XLSX);
-    CPPUNIT_ASSERT(pDoc);
+        xmlDocUniquePtr pStyles
+            = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/styles.xml");
+        CPPUNIT_ASSERT(pStyles);
+        OString sDxfXPath("/x:styleSheet/x:dxfs/x:dxf[" + OString::number(nDxfId)
+                          + "]/x:fill/x:patternFill/x:fgColor");
+        assertXPath(pStyles, sDxfXPath, "rgb", "FFFFD7D7");
+        xDocSh->DoClose();
+    }
 
-    assertXPath(pDoc, "/x:table/x:autoFilter/x:filterColumn/x:colorFilter", "dxfId", "5");
-}
+    {
+        ScDocShellRef xDocSh = loadDoc(u"autofilter-colors-fg.", FORMAT_XLSX);
+        CPPUNIT_ASSERT(xDocSh.is());
+        std::shared_ptr<utl::TempFile> pXPathFile
+            = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+        xmlDocUniquePtr pTable1
+            = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/tables/table1.xml");
+        CPPUNIT_ASSERT(pTable1);
+        sal_Int32 nDxfId
+            = getXPath(pTable1, "/x:table/x:autoFilter/x:filterColumn/x:colorFilter", "dxfId")
+                  .toInt32()
+              + 1;
 
-void ScExportTest2::testAutofilterColorsStyleOOXML()
-{
-    ScDocShellRef xDocSh = loadDoc(u"autofilter-colors.", FORMAT_XLSX);
-    CPPUNIT_ASSERT(xDocSh.is());
-
-    xmlDocUniquePtr pDoc
-        = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
-    CPPUNIT_ASSERT(pDoc);
-
-    assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf[5]/x:fill/x:patternFill/x:bgColor", "rgb",
-                "FFFFD7D7");
+        xmlDocUniquePtr pStyles
+            = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/styles.xml");
+        CPPUNIT_ASSERT(pStyles);
+        OString sDxfXPath("/x:styleSheet/x:dxfs/x:dxf[" + OString::number(nDxfId)
+                          + "]/x:fill/x:patternFill/x:fgColor");
+        assertXPath(pStyles, sDxfXPath, "rgb", "FF3465A4");
+        xDocSh->DoClose();
+    }
 }
 
 void ScExportTest2::testAutofilterTop10XLSX()
