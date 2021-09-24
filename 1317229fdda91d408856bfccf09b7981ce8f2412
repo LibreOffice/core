@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41083086_18a52815",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-24T12:54:06Z",
+      "side": 1,
+      "message": "The fods-file should cover the problematic cases, but until (tdf#144699 - Use proleptic Gregorian) has not been fixed, it classifies 1100-12-31 as a common year, since it calculates 1101.",
+      "revId": "1317229fdda91d408856bfccf09b7981ce8f2412",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
