@@ -174,7 +174,7 @@ void PhysicalFontCollection::ImplInitGenericGlyphFallback() const
     mpFallbackList  = std::move(pFallbackList);
 }
 
-vcl::font::PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont( FontSelectPattern& rFontSelData,
+vcl::font::PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont( vcl::font::FontSelectPattern& rFontSelData,
                                                                   LogicalFontInstance* pFontInstance,
                                                                   OUString& rMissingCodes,
                                                                   int nFallbackLevel ) const
@@ -914,7 +914,7 @@ const std::vector<std::pair<OUString, OUString>> aMetricCompatibleMap =
     { "Calibri",         "Carlito" },
 };
 
-static bool FindMetricCompatibleFont(FontSelectPattern& rFontSelData)
+static bool FindMetricCompatibleFont(vcl::font::FontSelectPattern& rFontSelData)
 {
     for (const auto& aSub : aMetricCompatibleMap)
     {
@@ -928,7 +928,7 @@ static bool FindMetricCompatibleFont(FontSelectPattern& rFontSelData)
     return false;
 }
 
-vcl::font::PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& rFSD ) const
+vcl::font::PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( vcl::font::FontSelectPattern& rFSD ) const
 {
     // give up if no fonts are available
     if( !Count() )
@@ -956,7 +956,7 @@ vcl::font::PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelec
 
         // Until features are properly supported, they are appended to the
         // font name, so we need to strip them off so the font is found.
-        sal_Int32 nFeat = aSearchName.indexOf(FontSelectPattern::FEAT_PREFIX);
+        sal_Int32 nFeat = aSearchName.indexOf(vcl::font::FontSelectPattern::FEAT_PREFIX);
         OUString aOrigName = rFSD.maTargetName;
         OUString aBaseFontName = aSearchName.copy( 0, (nFeat != -1) ? nFeat : aSearchName.getLength() );
 

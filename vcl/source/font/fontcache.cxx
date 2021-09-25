@@ -28,12 +28,12 @@
 
 using namespace vcl::font;
 
-size_t ImplFontCache::IFSD_Hash::operator()( const FontSelectPattern& rFSD ) const
+size_t ImplFontCache::IFSD_Hash::operator()( const vcl::font::FontSelectPattern& rFSD ) const
 {
     return rFSD.hashCode();
 }
 
-bool ImplFontCache::IFSD_Equal::operator()(const FontSelectPattern& rA, const FontSelectPattern& rB) const
+bool ImplFontCache::IFSD_Equal::operator()(const vcl::font::FontSelectPattern& rA, const vcl::font::FontSelectPattern& rB) const
 {
     // check normalized font family name
     if( rA.maSearchName != rB.maSearchName )
@@ -70,9 +70,9 @@ bool ImplFontCache::IFSD_Equal::operator()(const FontSelectPattern& rA, const Fo
     }
 
     // check for features
-    if ((rA.maTargetName.indexOf(FontSelectPattern::FEAT_PREFIX)
+    if ((rA.maTargetName.indexOf(vcl::font::FontSelectPattern::FEAT_PREFIX)
          != -1 ||
-         rB.maTargetName.indexOf(FontSelectPattern::FEAT_PREFIX)
+         rB.maTargetName.indexOf(vcl::font::FontSelectPattern::FEAT_PREFIX)
          != -1) && rA.maTargetName != rB.maTargetName)
         return false;
 
@@ -104,12 +104,12 @@ rtl::Reference<LogicalFontInstance> ImplFontCache::GetFontInstance( PhysicalFont
     const vcl::Font& rFont, const Size& rSize, float fExactHeight, bool bNonAntialias )
 {
     // initialize internal font request object
-    FontSelectPattern aFontSelData(rFont, rFont.GetFamilyName(), rSize, fExactHeight, bNonAntialias);
+    vcl::font::FontSelectPattern aFontSelData(rFont, rFont.GetFamilyName(), rSize, fExactHeight, bNonAntialias);
     return GetFontInstance( pFontList, aFontSelData );
 }
 
 rtl::Reference<LogicalFontInstance> ImplFontCache::GetFontInstance( PhysicalFontCollection const * pFontList,
-    FontSelectPattern& aFontSelData )
+    vcl::font::FontSelectPattern& aFontSelData )
 {
     rtl::Reference<LogicalFontInstance> pFontInstance;
     PhysicalFontFamily* pFontFamily = nullptr;
@@ -203,7 +203,7 @@ rtl::Reference<LogicalFontInstance> ImplFontCache::GetFontInstance( PhysicalFont
 }
 
 rtl::Reference<LogicalFontInstance> ImplFontCache::GetGlyphFallbackFont( PhysicalFontCollection const * pFontCollection,
-    FontSelectPattern& rFontSelData, LogicalFontInstance* pFontInstance, int nFallbackLevel, OUString& rMissingCodes )
+    vcl::font::FontSelectPattern& rFontSelData, LogicalFontInstance* pFontInstance, int nFallbackLevel, OUString& rMissingCodes )
 {
     // get a candidate font for glyph fallback
     // unless the previously selected font got a device specific substitution

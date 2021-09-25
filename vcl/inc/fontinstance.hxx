@@ -21,7 +21,6 @@
 
 #include <sal/config.h>
 
-#include "fontselect.hxx"
 #include "impfontmetricdata.hxx"
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -31,6 +30,8 @@
 #include <tools/fontenum.hxx>
 #include <tools/degree.hxx>
 #include <vcl/glyphitem.hxx>
+
+#include <font/FontSelectPattern.hxx>
 
 #include <optional>
 #include <unordered_map>
@@ -70,7 +71,7 @@ public: // TODO: make data members private
     bool IsGraphiteFont();
     void SetAverageWidthFactor(double nFactor) { m_nAveWidthFactor = std::abs(nFactor); }
     double GetAverageWidthFactor() const { return m_nAveWidthFactor; }
-    const FontSelectPattern& GetFontSelectPattern() const { return m_aFontSelData; }
+    const vcl::font::FontSelectPattern& GetFontSelectPattern() const { return m_aFontSelData; }
 
     const PhysicalFontFace* GetFontFace() const { return m_pFontFace.get(); }
     PhysicalFontFace* GetFontFace() { return m_pFontFace.get(); }
@@ -85,7 +86,7 @@ public: // TODO: make data members private
     static inline void DecodeOpenTypeTag(const uint32_t nTableTag, char* pTagName);
 
 protected:
-    explicit LogicalFontInstance(const PhysicalFontFace&, const FontSelectPattern&);
+    explicit LogicalFontInstance(const PhysicalFontFace&, const vcl::font::FontSelectPattern&);
 
     virtual bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const = 0;
 
@@ -100,7 +101,7 @@ private:
     typedef ::std::unordered_map< ::std::pair<sal_UCS4,FontWeight>, OUString > UnicodeFallbackList;
     std::unique_ptr<UnicodeFallbackList> mpUnicodeFallbackList;
     mutable ImplFontCache * mpFontCache;
-    const FontSelectPattern m_aFontSelData;
+    const vcl::font::FontSelectPattern m_aFontSelData;
     hb_font_t* m_pHbFont;
     double m_nAveWidthFactor;
     rtl::Reference<PhysicalFontFace> m_pFontFace;
