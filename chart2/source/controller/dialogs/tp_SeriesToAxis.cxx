@@ -27,6 +27,8 @@
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 
+#include <officecfg/Office/Common.hxx>
+
 namespace chart
 {
 
@@ -50,6 +52,7 @@ SchOptionTabPage::SchOptionTabPage(weld::Container* pPage, weld::DialogControlle
     , m_xRB_AssumeZero(m_xBuilder->weld_radio_button("RB_ASSUME_ZERO"))
     , m_xRB_ContinueLine(m_xBuilder->weld_radio_button("RB_CONTINUE_LINE"))
     , m_xCBIncludeHiddenCells(m_xBuilder->weld_check_button("CB_INCLUDE_HIDDEN_CELLS"))
+    , m_xCBVaryColorsbyPoint(m_xBuilder->weld_check_button("CB_VARYCOLORS"))
     , m_xCBHideLegendEntry(m_xBuilder->weld_check_button("CB_LEGEND_ENTRY_HIDDEN"))
 {
     m_xRbtAxis1->connect_toggled(LINK(this, SchOptionTabPage, EnableHdl));
@@ -104,6 +107,9 @@ bool SchOptionTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 
     if (m_xCBIncludeHiddenCells->get_visible())
         rOutAttrs->Put(SfxBoolItem(SCHATTR_INCLUDE_HIDDEN_CELLS, m_xCBIncludeHiddenCells->get_active()));
+
+    if (m_xCBVaryColorsbyPoint->get_visible())
+        rOutAttrs->Put(SfxBoolItem(SCHATTR_VARY_COLORS_BY_POINT, m_xCBVaryColorsbyPoint->get_active()));
 
     if(m_xCBHideLegendEntry->get_visible())
         rOutAttrs->Put(SfxBoolItem(SCHATTR_HIDE_LEGEND_ENTRY, m_xCBHideLegendEntry->get_active()));
@@ -219,6 +225,17 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
     {
         bool bVal = pEntryItem->GetValue();
         m_xCBHideLegendEntry->set_active(bVal);
+    }
+
+    if (const SfxBoolItem* pVaryColorsItem = rInAttrs->GetItemIfSet(SCHATTR_VARY_COLORS_BY_POINT))
+    {
+        bool bVal = pVaryColorsItem->GetValue();
+        m_xCBVaryColorsbyPoint->set_active(bVal);
+        // Show only in experimental mode until it works reliable
+        if (!officecfg::Office::Common::Misc::ExperimentalMode::get())
+        {
+            m_xCBVaryColorsbyPoint->hide();
+        }
     }
 
     AdaptControlPositionsAndVisibility();
