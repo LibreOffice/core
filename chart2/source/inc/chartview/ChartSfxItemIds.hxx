@@ -169,8 +169,9 @@ constexpr TypedWhichId<SfxInt32Item>       SCHATTR_MISSING_VALUE_TREATMENT      
 constexpr TypedWhichId<SfxIntegerListItem> SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS (SCHATTR_CHARTTYPE_START + 10);
 constexpr TypedWhichId<SfxBoolItem>        SCHATTR_INCLUDE_HIDDEN_CELLS               (SCHATTR_CHARTTYPE_START + 11);
 constexpr TypedWhichId<SfxBoolItem>        SCHATTR_HIDE_LEGEND_ENTRY                  (SCHATTR_CHARTTYPE_START + 12);
+constexpr TypedWhichId<SfxBoolItem>        SCHATTR_VARY_COLORS_BY_POINT               (SCHATTR_CHARTTYPE_START + 13);
 
-constexpr sal_uInt16                       SCHATTR_CHARTTYPE_END                      (SCHATTR_HIDE_LEGEND_ENTRY);
+constexpr sal_uInt16                       SCHATTR_CHARTTYPE_END                      (SCHATTR_VARY_COLORS_BY_POINT);
 
 // items for transporting information to dialogs
 constexpr sal_uInt16                 SCHATTR_MISC_START          (SCHATTR_CHARTTYPE_END + 1);
