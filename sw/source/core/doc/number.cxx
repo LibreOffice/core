@@ -656,9 +656,6 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
 
     const SwNumFormat& rMyNFormat = Get( o3tl::narrowing<sal_uInt16>(nLevel) );
 
-    if (rMyNFormat.GetNumberingType() == SVX_NUM_NUMBER_NONE)
-        return OUString();
-
     css::lang::Locale aLocale( LanguageTag::convertToLocale(nLang));
 
     if (rMyNFormat.HasListFormat())
@@ -670,7 +667,11 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
         for (SwNumberTree::tNumberVector::size_type i=0; i <= nLevel; ++i)
         {
             OUString sReplacement;
-            if (rNumVector[i])
+            if (rMyNFormat.GetNumberingType() == SVX_NUM_NUMBER_NONE)
+            {
+                // Numbering disabled - replacement is empty
+            }
+            else if (rNumVector[i])
             {
                 if (bOnlyArabic)
                     sReplacement = OUString::number(rNumVector[i]);
