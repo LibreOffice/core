@@ -589,7 +589,7 @@ class WW8ReaderSave
 {
 private:
     WW8PLCFxSaveAll maPLCFxSave;
-    SwPosition maTmpPos;
+    std::shared_ptr<SwUnoCursor> mxTmpPos;
     std::deque<bool> maOldApos;
     std::deque<WW8FieldEntry> maOldFieldStack;
     std::unique_ptr<SwWW8FltControlStack> mxOldStck;
@@ -617,7 +617,7 @@ private:
 public:
     WW8ReaderSave(SwWW8ImplReader* pRdr, WW8_CP nStart=-1);
     void Restore(SwWW8ImplReader* pRdr);
-    const SwPosition &GetStartPos() const { return maTmpPos; }
+    const SwPosition &GetStartPos() const { return *mxTmpPos->GetPoint(); }
 };
 
 enum class eF_ResT { OK, TEXT, TAGIGN, READ_FSPA };

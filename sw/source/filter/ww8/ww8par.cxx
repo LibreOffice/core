@@ -1984,7 +1984,7 @@ void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
  * Footnotes and Endnotes
  */
 WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
-    maTmpPos(*pRdr->m_pPaM->GetPoint()),
+    mxTmpPos(pRdr->m_rDoc.CreateUnoCursor(*pRdr->m_pPaM->GetPoint())),
     mxOldStck(std::move(pRdr->m_xCtrlStck)),
     mxOldAnchorStck(std::move(pRdr->m_xAnchorStck)),
     mxOldRedlines(std::move(pRdr->m_xRedlineStack)),
@@ -2081,7 +2081,7 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
     pRdr->DeleteAnchorStack();
     pRdr->m_xAnchorStck = std::move(mxOldAnchorStck);
 
-    *pRdr->m_pPaM->GetPoint() = maTmpPos;
+    *pRdr->m_pPaM->GetPoint() = GetStartPos();
 
     if (mxOldPlcxMan != pRdr->m_xPlcxMan)
         pRdr->m_xPlcxMan = mxOldPlcxMan;
