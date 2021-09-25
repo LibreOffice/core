@@ -967,6 +967,12 @@ std::optional<OutlinerParaObject> SwWW8ImplReader::ImportAsOutliner(OUString &rS
     sal_Int32 nLen = GetRangeAsDrawingString(rString, nStartCp, nEndCp, eType);
     if (nLen > 0)
     {
+        if (m_bFuzzing && rString.getLength() > 1024)
+        {
+            SAL_WARN("sw.ww8", "Truncating long EditEngine strings when fuzzing for performance");
+            rString = rString.copy(0, 1024);
+        }
+
         if (!m_pDrawEditEngine)
         {
             m_pDrawEditEngine.reset(new EditEngine(nullptr));
