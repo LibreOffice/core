@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fa2bc2b_21682833",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-25T23:41:53Z",
+      "side": 1,
+      "message": "Mike, to make this easier to review I split out the change to move FontSelectPattern into vcl::font into a new patch.",
+      "revId": "a44439532919467d714dd5e95fd738dab6234858",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
