@@ -73,7 +73,7 @@ public:
     bool GetFontCapabilities(vcl::FontCapabilities&) const override;
     bool                            HasChar( sal_uInt32 cChar ) const;
 
-    rtl::Reference<LogicalFontInstance> CreateFontInstance(const FontSelectPattern&) const override;
+    rtl::Reference<LogicalFontInstance> CreateFontInstance(const vcl::font::FontSelectPattern&) const override;
 
 private:
     const sal_IntPtr                mnFontId;
@@ -84,7 +84,7 @@ private:
 
 class CoreTextStyle final : public LogicalFontInstance
 {
-    friend rtl::Reference<LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const FontSelectPattern&) const;
+    friend rtl::Reference<LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const vcl::font::FontSelectPattern&) const;
 
 public:
     ~CoreTextStyle() override;
@@ -102,7 +102,7 @@ public:
     bool mbFauxBold;
 
 private:
-    explicit CoreTextStyle(const PhysicalFontFace&, const FontSelectPattern&);
+    explicit CoreTextStyle(const PhysicalFontFace&, const vcl::font::FontSelectPattern&);
 
     hb_font_t* ImplInitHbFont() override;
     bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const override;

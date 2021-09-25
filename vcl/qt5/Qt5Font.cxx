@@ -120,7 +120,7 @@ static inline void applyStyle(Qt5Font& rFont, FontItalic eItalic)
     }
 }
 
-Qt5Font::Qt5Font(const PhysicalFontFace& rPFF, const FontSelectPattern& rFSP)
+Qt5Font::Qt5Font(const PhysicalFontFace& rPFF, const vcl::font::FontSelectPattern& rFSP)
     : LogicalFontInstance(rPFF, rFSP)
 {
     setFamily(toQString(rPFF.GetFamilyName()));

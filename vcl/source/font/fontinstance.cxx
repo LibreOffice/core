@@ -45,7 +45,7 @@ namespace std
 }
 
 
-LogicalFontInstance::LogicalFontInstance(const PhysicalFontFace& rFontFace, const FontSelectPattern& rFontSelData )
+LogicalFontInstance::LogicalFontInstance(const PhysicalFontFace& rFontFace, const vcl::font::FontSelectPattern& rFontSelData )
     : mxFontMetric( new ImplFontMetricData( rFontSelData ))
     , mpConversion( nullptr )
     , mnLineHeight( 0 )

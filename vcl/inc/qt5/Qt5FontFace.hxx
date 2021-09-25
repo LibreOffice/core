@@ -32,7 +32,10 @@
 #include <QtGui/QFont>
 
 class FontAttributes;
+namespace vcl::font
+{
 class FontSelectPattern;
+}
 
 class Qt5FontFace final : public PhysicalFontFace
 {
@@ -55,7 +58,7 @@ public:
     bool HasChar(sal_uInt32 cChar) const;
 
     rtl::Reference<LogicalFontInstance>
-    CreateFontInstance(const FontSelectPattern& rFSD) const override;
+    CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const override;
 
 private:
     typedef enum { Font, FontDB } FontIdType;

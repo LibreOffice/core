@@ -52,7 +52,7 @@ class BuildinFontInstance final : public LogicalFontInstance
     bool ImplGetGlyphBoundRect(sal_GlyphId nID, tools::Rectangle& rRect, bool) const override;
 
 public:
-    BuildinFontInstance(const PhysicalFontFace&, const FontSelectPattern&);
+    BuildinFontInstance(const PhysicalFontFace&, const vcl::font::FontSelectPattern&);
 
     bool GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rPoly, bool) const override;
 };
@@ -63,7 +63,7 @@ class BuildinFontFace final : public PhysicalFontFace
     const BuildinFont& mrBuildin;
 
     rtl::Reference<LogicalFontInstance>
-    CreateFontInstance(const FontSelectPattern& rFSD) const override;
+    CreateFontInstance(const vcl::font::FontSelectPattern& rFSD) const override;
 
 public:
     explicit BuildinFontFace(int nId);

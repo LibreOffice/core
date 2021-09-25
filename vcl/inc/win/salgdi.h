@@ -43,7 +43,10 @@
 #include <hb-ot.h>
 #include <dwrite.h>
 
+namespace vcl::font
+{
 class FontSelectPattern;
+}
 class WinFontInstance;
 class ImplFontAttrCache;
 class PhysicalFontCollection;
@@ -63,7 +66,7 @@ public:
                                 BYTE nPitchAndFamily  );
     virtual                 ~WinFontFace() override;
 
-    virtual rtl::Reference<LogicalFontInstance> CreateFontInstance( const FontSelectPattern& ) const override;
+    virtual rtl::Reference<LogicalFontInstance> CreateFontInstance( const vcl::font::FontSelectPattern& ) const override;
     virtual sal_IntPtr      GetFontId() const override;
     void                    SetFontId( sal_IntPtr nId ) { mnId = nId; }
     void                    UpdateFromHDC( HDC ) const;
@@ -171,7 +174,7 @@ private:
     void DeInitGraphics();
 
 public:
-    HFONT ImplDoSetFont(FontSelectPattern const & i_rFont, const PhysicalFontFace * i_pFontFace, HFONT& o_rOldFont);
+    HFONT ImplDoSetFont(vcl::font::FontSelectPattern const & i_rFont, const PhysicalFontFace * i_pFontFace, HFONT& o_rOldFont);
 
     HDC getHDC() const { return mhLocalDC; }
     void setHDC(HDC aNew);
@@ -396,7 +399,7 @@ public:
 // Init/Deinit Graphics
 void    ImplUpdateSysColorEntries();
 int     ImplIsSysColorEntry( Color nColor );
-void    ImplGetLogFontFromFontSelect( const FontSelectPattern&,
+void    ImplGetLogFontFromFontSelect( const vcl::font::FontSelectPattern&,
             const PhysicalFontFace*, LOGFONTW& );
 
 #define MAX_64KSALPOINTS    ((((sal_uInt16)0xFFFF)-8)/sizeof(POINTS))

@@ -24,7 +24,7 @@
 #include <unotools/fontdefs.hxx>
 
 #include <fontattributes.hxx>
-#include <fontselect.hxx>
+#include <font/FontSelectPattern.hxx>
 
 #include <PhysicalFontFace.hxx>
 
@@ -65,7 +65,7 @@ sal_Int32 PhysicalFontFace::CompareIgnoreSize( const PhysicalFontFace& rOther ) 
     return nRet;
 }
 
-bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchStatus& rStatus ) const
+bool PhysicalFontFace::IsBetterMatch( const vcl::font::FontSelectPattern& rFSD, FontMatchStatus& rStatus ) const
 {
     int nMatch = 0;
 

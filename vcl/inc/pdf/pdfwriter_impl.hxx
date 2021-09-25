@@ -60,7 +60,6 @@
 #include <pdf/pdffontcache.hxx>
 
 class StyleSettings;
-class FontSelectPattern;
 class FontSubsetInfo;
 class ZCodec;
 class EncHashTransporter;
