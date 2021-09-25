@@ -1608,12 +1608,23 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                 const bool hyperLinkException = type == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR &&
                     payload.find("\"hyperlink\":\"\"") == std::string::npos &&
                     payload.find("\"hyperlink\": {}") == std::string::npos;
+<<<<<<< HEAD   (b96d0f go on switching from boost::property_tree to JsonWriter)
                 const int nViewId = lcl_getViewId(payload);
                 removeAll(
                     [type, nViewId, hyperLinkException] (int elemType, const CallbackData& elemData) {
                         return (elemType == type && nViewId == lcl_getViewId(elemData) && !hyperLinkException);
                     }
                 );
+=======
+                if(!hyperLinkException)
+                {
+                    const int nViewId = lcl_getViewId(payload);
+                    removeAll(type, [nViewId] (const CallbackData& elemData) {
+                            return (nViewId == lcl_getViewId(elemData));
+                        }
+                    );
+                }
+>>>>>>> CHANGE (4a650f do not check a const variable in every lambda invocation)
             }
             break;
 
