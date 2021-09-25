@@ -34,6 +34,7 @@
 #include <svl/ilstitem.hxx>
 #include <svx/sdangitm.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -64,6 +65,7 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         , m_bSupportingPlottingOfHiddenCells(false)
         , m_bIncludeHiddenCells(true)
         , m_bHideLegendEntry(false)
+        , m_bVaryColorsByPoint(false)
 {
     try
     {
@@ -148,6 +150,7 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         }
 
         m_bHideLegendEntry = !xPropertySet->getPropertyValue("ShowLegendEntry").get<bool>();
+        m_bVaryColorsByPoint = xPropertySet->getPropertyValue("VaryColorsByPoint").get<bool>();
     }
     catch( const uno::Exception & )
     {
@@ -352,6 +355,17 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
             }
         }
         break;
+
+        case SCHATTR_VARY_COLORS_BY_POINT:
+        {
+            bool bVaryColorsByPoint = static_cast<const SfxBoolItem &>(rItemSet.Get(nWhichId)).GetValue();
+            if (bVaryColorsByPoint != m_bVaryColorsByPoint)
+            {
+                GetPropertySet()->setPropertyValue("VaryColorsByPoint", css::uno::makeAny(bVaryColorsByPoint));
+                bChanged = true;
+            }
+        }
+        break;
     }
     return bChanged;
 }
@@ -426,6 +440,11 @@ void SeriesOptionsItemConverter::FillSpecialItem(
         case SCHATTR_HIDE_LEGEND_ENTRY:
         {
             rOutItemSet.Put(SfxBoolItem(nWhichId, m_bHideLegendEntry));
+            break;
+        }
+        case SCHATTR_VARY_COLORS_BY_POINT:
+        {
+            rOutItemSet.Put(SfxBoolItem(nWhichId, m_bVaryColorsByPoint));
             break;
         }
         default:
