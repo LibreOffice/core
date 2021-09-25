@@ -400,6 +400,7 @@ void SaveAsMenuController::impl_setPopupMenu()
 
     pVCLPopupMenu->InsertItem( ".uno:SaveAs", nullptr );
     pVCLPopupMenu->InsertItem( ".uno:ExportTo", nullptr );
+    pVCLPopupMenu->InsertItem( ".uno:SaveACopy", nullptr );
     pVCLPopupMenu->InsertItem( ".uno:SaveAsTemplate", nullptr );
     pVCLPopupMenu->InsertSeparator();
     pVCLPopupMenu->InsertItem( ".uno:SaveAsRemote", nullptr );
