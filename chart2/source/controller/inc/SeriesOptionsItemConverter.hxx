@@ -73,6 +73,7 @@ private:
     bool m_bIncludeHiddenCells;
 
     bool m_bHideLegendEntry;
+    bool m_bVaryColorsByPoint;
 };
 
 } //  namespace chart::wrapper
