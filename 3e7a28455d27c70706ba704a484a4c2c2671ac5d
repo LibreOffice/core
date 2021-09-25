@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "578b7752_e722d25f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-09-25T15:32:43Z",
+      "side": 1,
+      "message": "I read your comment but I don\u0027t think I\u0027d be able to implement it so I tried to improve a bit the current situation by using the patch I quoted in bugtracker + took into account DELETE part.\nNow, I hope it won\u0027t create some regression.",
+      "revId": "3e7a28455d27c70706ba704a484a4c2c2671ac5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
