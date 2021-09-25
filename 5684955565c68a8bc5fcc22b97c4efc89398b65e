@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2e5549f_fd054c1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-25T11:22:33Z",
+      "side": 1,
+      "message": "For now, while the question if proleptic Gregorian was meant in the ODF standard, and hence if this is in fact making us compliant with ODF:\n\n1. This needs a unit test with checks for formatted strings for both normal and proleptic ranges, and also that the related bugs are now working correctly (by the way, tdf#96756 needs to change \"\u003e\u003d0\" to \"\u003e0\" to only consider dates starting from 0001-01-01, not -0001-12-31);\n2. This needs a new compatibility option written to all ODF formats. In https://gerrit.libreoffice.org/c/core/+/26737, I introduced an option with the same logic (on for new and imported documents, defaulted to off for own document types); unfortunately, don\u0027t know of a more recent example;\n3. This needs that calendar takes this option into account. The CalendarImpl::loadCalendarTZ is likely the place where this should happen. We can use the context to provide the information \"use proleptic Gregorian or not\" in a way similar to e.g. https://gerrit.libreoffice.org/c/core/+/81616.\n4. This then needs an UI to set the compatibility option. And to apply the changed option (so its modification should trigger recalculation in Calc, and at least UI refresh in other modules).",
+      "revId": "5684955565c68a8bc5fcc22b97c4efc89398b65e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
