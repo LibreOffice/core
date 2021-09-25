@@ -1606,11 +1606,14 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                 const bool hyperLinkException = type == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR &&
                     payload.find("\"hyperlink\":\"\"") == std::string::npos &&
                     payload.find("\"hyperlink\": {}") == std::string::npos;
-                const int nViewId = lcl_getViewId(payload);
-                removeAll(type, [nViewId, hyperLinkException] (const CallbackData& elemData) {
-                        return (nViewId == lcl_getViewId(elemData) && !hyperLinkException);
-                    }
-                );
+                if(!hyperLinkException)
+                {
+                    const int nViewId = lcl_getViewId(payload);
+                    removeAll(type, [nViewId] (const CallbackData& elemData) {
+                            return (nViewId == lcl_getViewId(elemData));
+                        }
+                    );
+                }
             }
             break;
 
