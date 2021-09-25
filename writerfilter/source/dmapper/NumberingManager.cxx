@@ -175,7 +175,7 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetCharStyleProperties( )
     uno::Sequence< beans::PropertyValue > vPropVals = PropertyMap::GetPropertyValues();
     beans::PropertyValue* aValIter = vPropVals.begin();
     beans::PropertyValue* aEndIter = vPropVals.end();
-    const bool bIsSymbol(m_sBulletChar.getLength() <= 1);
+    const bool bIsSymbol(GetBulletChar().getLength() <= 1);
     for( ; aValIter != aEndIter; ++aValIter )
         if (! IgnoreForCharStyle(aValIter->Name, bIsSymbol))
             rProperties.emplace_back(aValIter->Name, 0, aValIter->Value, beans::PropertyState_DIRECT_VALUE);
@@ -211,9 +211,9 @@ uno::Sequence<beans::PropertyValue> ListLevel::GetLevelProperties(bool bDefaults
     // todo: this is not the bullet char
     if( nNumberFormat == style::NumberingType::CHAR_SPECIAL )
     {
-        if (!m_sBulletChar.isEmpty())
+        if (!GetBulletChar().isEmpty())
         {
-            aNumberingProperties.push_back(lcl_makePropVal(PROP_BULLET_CHAR, m_sBulletChar.copy(0, 1)));
+            aNumberingProperties.push_back(lcl_makePropVal(PROP_BULLET_CHAR, m_sBulletChar->copy(0, 1)));
         }
         else
         {
@@ -584,7 +584,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                            ? pAbsLevel->GetBulletChar()
                            : OUString();
             // Inherit <w:lvlText> from the abstract level in case the override would be empty.
-            if (pLevel && !pLevel->GetBulletChar().isEmpty())
+            if (pLevel && pLevel->HasBulletChar())
                 sText = pLevel->GetBulletChar( );
 
             aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_PREFIX), OUString("")));
