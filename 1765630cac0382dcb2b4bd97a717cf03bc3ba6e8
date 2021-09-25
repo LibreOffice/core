@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bbb7897_04a2ef83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2021-09-25T15:26:03Z",
+      "side": 1,
+      "message": "Hi Xisco,\n\nCan you help with unittest here (see comment)?\nI have no idea why I can\u0027t select numbering level in python unittest.\nselect_pos(), select_by_text() and even xLevel.executeAction(\"DOWN\", tuple()) are not working.\n\nProbably because this control is not actually a listbox, but GtkTreeView?",
+      "revId": "1765630cac0382dcb2b4bd97a717cf03bc3ba6e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9a64d62_4707131f",
+        "filename": "sw/qa/uitest/writer_tests7/tdf144439.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2021-09-25T15:26:03Z",
+      "side": 1,
+      "message": "This does not work, but how to select another level in this levels list?",
+      "range": {
+        "startLine": 54,
+        "startChar": 16,
+        "endLine": 54,
+        "endChar": 39
+      },
+      "revId": "1765630cac0382dcb2b4bd97a717cf03bc3ba6e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
