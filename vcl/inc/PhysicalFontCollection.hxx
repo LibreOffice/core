@@ -50,13 +50,13 @@ public:
     // find the device font family
     vcl::font::PhysicalFontFamily* FindFontFamily( const OUString& rFontName ) const;
     vcl::font::PhysicalFontFamily* FindOrCreateFontFamily( const OUString &rFamilyName );
-    vcl::font::PhysicalFontFamily* FindFontFamily( FontSelectPattern& ) const;
+    vcl::font::PhysicalFontFamily* FindFontFamily( vcl::font::FontSelectPattern& ) const;
     vcl::font::PhysicalFontFamily* FindFontFamilyByTokenNames(const OUString& rTokenStr) const;
     vcl::font::PhysicalFontFamily* FindFontFamilyByAttributes(ImplFontAttrs nSearchType, FontWeight, FontWidth,
                                              FontItalic, const OUString& rSearchFamily) const;
 
     // suggest fonts for glyph fallback
-    vcl::font::PhysicalFontFamily* GetGlyphFallbackFont( FontSelectPattern&,
+    vcl::font::PhysicalFontFamily* GetGlyphFallbackFont( vcl::font::FontSelectPattern&,
                                                   LogicalFontInstance* pLogicalFont,
                                                   OUString& rMissingCodes, int nFallbackLevel ) const;
 
