@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e3e2ab0_3cc624cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-25T21:39:00Z",
+      "side": 1,
+      "message": "Just needed something small before I am going on a gregorian date 😉",
+      "revId": "eecf138e03af630b1a03578c19e50a3534cb4d5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0121bb85_dcfaa4a3",
@@ -14,6 +31,24 @@
       "writtenOn": "2021-09-25T21:09:33Z",
       "side": 1,
       "message": "Please use 6-dgit hex literals for colors - it\u0027s customary to read the r, g, and b digit pairs. And it\u0027s interesting that here the order is inverted, which was not obvious to me at the first glance, looking on vbRed as FF instead of 0000FF.",
+      "revId": "eecf138e03af630b1a03578c19e50a3534cb4d5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7335c73_51a28348",
+        "filename": "basic/qa/vba_tests/constants.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-09-25T21:39:00Z",
+      "side": 1,
+      "message": "Ya, kinda strange that MS just used the short notation. I just copied the values from ther. I hope in the cpp file it is enough to use the 6 digit hex codes, or should I use the rgb color class?",
+      "parentUuid": "0121bb85_dcfaa4a3",
       "revId": "eecf138e03af630b1a03578c19e50a3534cb4d5d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
