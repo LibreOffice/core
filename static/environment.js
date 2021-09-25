@@ -1,3 +1,3 @@
 Module.preRun.push(function() {
-    ENV.SAL_LOG = "+INFO+WARN"
+    ENV.SAL_LOG = "+INFO+WARN+DEBUG"
 });
