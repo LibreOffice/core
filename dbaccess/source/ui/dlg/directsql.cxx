@@ -227,17 +227,27 @@ namespace dbaui
             }
             else
             {
-                if (_rStatement.toAsciiUpperCase().startsWith("SELECT"))
+                if (_rStatement.toAsciiUpperCase().startsWith("UPDATE"))
+                {
+                    sal_Int32 resultCount = xStatement->executeUpdate(_rStatement);
+                    addOutputText(OUString(OUString::number(resultCount) + " rows updated\n"));
+                };
+                if (_rStatement.toAsciiUpperCase().startsWith("INSERT"))
+                {
+                    sal_Int32 resultCount = xStatement->executeUpdate(_rStatement);
+                    addOutputText(OUString(OUString::number(resultCount) + " rows inserted\n"));
+                };
+                if ( (_rStatement.toAsciiUpperCase().startsWith("CREATE")) || (_rStatement.toAsciiUpperCase().startsWith("DELETE")) )
+                {
+                    xStatement->execute(_rStatement);
+                    addOutputText(u"Command executed\n");
+                }
+                else
                 {
                     css::uno::Reference< css::sdbc::XResultSet > xRS = xStatement->executeQuery(_rStatement);
                     if (m_xShowOutput->get_active())
                         display(xRS);
-                }
-                else
-                {
-                    sal_Int32 resultCount = xStatement->executeUpdate(_rStatement);
-                    addOutputText(OUString(OUString::number(resultCount) + " rows updated\n"));
-                }
+                };
             }
             // successful
             sStatus = DBA_RES(STR_COMMAND_EXECUTED_SUCCESSFULLY);
