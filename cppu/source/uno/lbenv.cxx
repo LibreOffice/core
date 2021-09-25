@@ -1002,7 +1002,6 @@ void EnvironmentsData::getRegisteredEnvironments(
 bool loadEnv(OUString const  & cLibStem,
                     uno_Environment * pEnv)
 {
-#ifndef __EMSCRIPTEN__
 #ifdef DISABLE_DYNLOADING
     uno_initEnvironmentFunc fpInit;
 
@@ -1042,11 +1041,6 @@ bool loadEnv(OUString const  & cLibStem,
 
     (*fpInit)( pEnv ); // init of environment
     return true;
-#else
-    (void)cLibStem;
-    (void)pEnv;
-    return false;
-#endif
 }
 
 }

@@ -613,13 +613,11 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \
 ))
 
 $(eval $(call gb_Helper_register_plugins_for_install,PLAINLIBS_URE,ure, \
-	$(if $(filter EMSCRIPTEN,$(OS)),, \
 		$(if $(filter MSC,$(COM)), \
 			$(if $(filter INTEL,$(CPUNAME)),msci_uno) \
 			$(if $(filter X86_64,$(CPUNAME)),mscx_uno) \
 			$(if $(filter AARCH64,$(CPUNAME)),msca_uno) \
 		, gcc3_uno) \
-	) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PRIVATELIBS_URE,ure, \
