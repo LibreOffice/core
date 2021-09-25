@@ -243,6 +243,7 @@ public:
     void testTdf113198();
     void testTdf49856();
     void testTdf103347();
+    void testHyperlinksOnShapes();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -366,6 +367,7 @@ public:
     CPPUNIT_TEST(testGreysScaleGraphic);
     CPPUNIT_TEST(testTdf134210CropPosition);
     CPPUNIT_TEST(testTdf103347);
+    CPPUNIT_TEST(testHyperlinksOnShapes);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -3597,6 +3599,63 @@ void SdImportTest::testTdf103347()
     uno::Reference<drawing::XDrawPage> xPage3(xDoc->getDrawPages()->getByIndex(2), uno::UNO_QUERY);
     uno::Reference<container::XNamed> xNamed3(xPage3, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("Hello (3)"), xNamed3->getName());
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testHyperlinksOnShapes()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf144616.pptx"), PPTX);
+
+    for (sal_Int32 i = 0; i < 7; i++)
+    {
+        uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(i, 0, xDocShRef));
+        uno::Reference<document::XEventsSupplier> xEventsSupplier(xShape, uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> xEvents(xEventsSupplier->getEvents());
+
+        uno::Sequence<beans::PropertyValue> props;
+        xEvents->getByName("OnClick") >>= props;
+        comphelper::SequenceAsHashMap map(props);
+        auto iter(map.find("ClickAction"));
+        switch (i)
+        {
+        case 0:
+            CPPUNIT_ASSERT_EQUAL(css::presentation::ClickAction_FIRSTPAGE,
+                iter->second.get<css::presentation::ClickAction>());
+            break;
+        case 1:
+            CPPUNIT_ASSERT_EQUAL(css::presentation::ClickAction_LASTPAGE,
+                iter->second.get<css::presentation::ClickAction>());
+            break;
+        case 2:
+            CPPUNIT_ASSERT_EQUAL(css::presentation::ClickAction_NEXTPAGE,
+                iter->second.get<css::presentation::ClickAction>());
+            break;
+        case 3:
+            CPPUNIT_ASSERT_EQUAL(css::presentation::ClickAction_PREVPAGE,
+                iter->second.get<css::presentation::ClickAction>());
+            break;
+        case 4:
+        {
+            auto iter2(map.find("Bookmark"));
+            CPPUNIT_ASSERT_EQUAL(OUString("Second slide"), iter2->second.get<OUString>());
+        }
+        break;
+        case 5:
+            CPPUNIT_ASSERT_EQUAL(css::presentation::ClickAction_STOPPRESENTATION,
+                iter->second.get<css::presentation::ClickAction>());
+            break;
+        case 6:
+        {
+            auto iter1(map.find("Bookmark"));
+            CPPUNIT_ASSERT_EQUAL(OUString("http://www.example.com/"), iter1->second.get<OUString>());
+        }
+        break;
+        default:
+            break;
+        }
+    }
 
     xDocShRef->DoClose();
 }

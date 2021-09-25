@@ -187,7 +187,7 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
         }
     }
 
-    return this;
+    return ShapeContext::onCreateContext(aElementToken, rAttribs);
 }
 
 }
