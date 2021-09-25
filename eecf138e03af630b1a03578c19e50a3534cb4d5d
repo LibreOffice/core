@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0121bb85_dcfaa4a3",
+        "filename": "basic/qa/vba_tests/constants.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-25T21:09:33Z",
+      "side": 1,
+      "message": "Please use 6-dgit hex literals for colors - it\u0027s customary to read the r, g, and b digit pairs. And it\u0027s interesting that here the order is inverted, which was not obvious to me at the first glance, looking on vbRed as FF instead of 0000FF.",
+      "revId": "eecf138e03af630b1a03578c19e50a3534cb4d5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
