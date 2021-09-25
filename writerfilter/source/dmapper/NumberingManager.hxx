@@ -46,7 +46,7 @@ class ListLevel : public PropertyMap
     /// LN_CT_NumFmt_format, in case m_nNFC is custom.
     OUString m_aCustomNumberFormat;
     sal_Int16                                     m_nXChFollow;      //LN_IXCHFOLLOW
-    OUString                               m_sBulletChar;
+    std::optional<OUString>                       m_sBulletChar;
     css::awt::Size                         m_aGraphicSize;
     css::uno::Reference<css::awt::XBitmap> m_xGraphicBitmap;
     std::optional<sal_Int32>               m_nTabstop;
@@ -76,7 +76,8 @@ public:
 
     // Getters
     sal_Int16 GetNumberingType(sal_Int16 nDefault) const;
-    const OUString& GetBulletChar( ) const { return m_sBulletChar; };
+    bool HasBulletChar() const { return m_sBulletChar.has_value(); };
+    OUString GetBulletChar( ) const { return m_sBulletChar.has_value()? *m_sBulletChar : OUString(); };
     const tools::SvRef< StyleSheetEntry >& GetParaStyle( ) const { return m_pParaStyle; };
     sal_Int32 GetStartOverride() const { return m_nStartOverride; };
     /// Determines if SetValue() was called at least once.
