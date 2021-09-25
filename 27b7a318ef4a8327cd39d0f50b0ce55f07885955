@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad480598_79d3438d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-09-25T18:08:30Z",
+      "side": 1,
+      "message": "Tiny nitpick, which isn’t a big deal and can be fixed as a follow-up patch of course:",
+      "revId": "27b7a318ef4a8327cd39d0f50b0ce55f07885955",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffbb31c9_79061a4b",
+        "filename": "cui/uiconfig/ui/qrcodegen.ui",
+        "patchSetId": 14
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-09-25T18:08:30Z",
+      "side": 1,
+      "message": "Please remove the CamelCase here 😊",
+      "revId": "27b7a318ef4a8327cd39d0f50b0ce55f07885955",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
