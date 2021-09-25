@@ -81,8 +81,8 @@ DECLARE_ODFEXPORT_TEST(testTdf137199, "tdf137199.docx")
 DECLARE_ODFEXPORT_TEST(testTdf143605, "tdf143605.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    // With numbering type "none" there should be nothing
-    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(getParagraph(1), "ListLabelString"));
+    // With numbering type "none" there should be just prefix & suffix
+    CPPUNIT_ASSERT_EQUAL(OUString("."), getProperty<OUString>(getParagraph(1), "ListLabelString"));
 }
 
 DECLARE_ODFEXPORT_TEST(testListFormatDocx, "listformat.docx")
