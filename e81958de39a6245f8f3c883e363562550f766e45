@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3056fb4f_b16e1864",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-25T13:34:42Z",
+      "side": 1,
+      "message": "I think you just missed that it wasn\u0027t visible.\n\nI guess this is probably true for all the other applications as well, and I should be doing the same for them (where they are explicitly marked as invisible).",
+      "revId": "e81958de39a6245f8f3c883e363562550f766e45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3d1c90e_49c19964",
+        "filename": "sw/uiconfig/swriter/ui/notebookbar_compact.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-25T13:34:42Z",
+      "side": 1,
+      "message": "This one is also not visible. Not sure what good a non-visible menu item is, but I guess it could be programmatically turned on. But is there anything that would have turned on SaveACopy?",
+      "range": {
+        "startLine": 215,
+        "startChar": 38,
+        "endLine": 215,
+        "endChar": 54
+      },
+      "revId": "e81958de39a6245f8f3c883e363562550f766e45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
