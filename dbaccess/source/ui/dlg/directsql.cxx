@@ -227,7 +227,28 @@ namespace dbaui
             }
             else
             {
-                if (_rStatement.toAsciiUpperCase().startsWith("SELECT"))
+                const OUString upperStatement = _rStatement.toAsciiUpperCase();
+                if (upperStatement.startsWith("UPDATE"))
+                {
+                    sal_Int32 resultCount = xStatement->executeUpdate(_rStatement);
+                    addOutputText(OUString(OUString::number(resultCount) + " rows updated\n"));
+                }
+                else if (upperStatement.startsWith("INSERT"))
+                {
+                    sal_Int32 resultCount = xStatement->executeUpdate(_rStatement);
+                    addOutputText(OUString(OUString::number(resultCount) + " rows inserted\n"));
+                }
+                else if (upperStatement.startsWith("DELETE"))
+                {
+                    sal_Int32 resultCount = xStatement->executeUpdate(_rStatement);
+                    addOutputText(OUString(OUString::number(resultCount) + " rows deleted\n"));
+                }
+                else if (upperStatement.startsWith("CREATE"))
+                {
+                    xStatement->executeUpdate(_rStatement);
+                    addOutputText(u"Command executed\n");
+                }
+                else if (upperStatement.startsWith("SELECT") || m_xShowOutput->get_active())
                 {
                     css::uno::Reference< css::sdbc::XResultSet > xRS = xStatement->executeQuery(_rStatement);
                     if (m_xShowOutput->get_active())
