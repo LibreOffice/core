@@ -397,7 +397,13 @@
           <menu:menuitem menu:id=".uno:ShowColumn"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:ToggleMergeCells"/>
+      <menu:menu menu:id=".uno:MergeCellsMenu">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:ToggleMergeCells"/>
+          <menu:menuitem menu:id=".uno:MergeCells"/>
+          <menu:menuitem menu:id=".uno:SplitCell"/>
+        </menu:menupopup>
+      </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:FontDialog"/>
       <menu:menuitem menu:id=".uno:ParagraphDialog"/>
