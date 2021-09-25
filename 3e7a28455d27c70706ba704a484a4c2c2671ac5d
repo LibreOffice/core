@@ -16,6 +16,121 @@
       "message": "I read your comment but I don\u0027t think I\u0027d be able to implement it so I tried to improve a bit the current situation by using the patch I quoted in bugtracker + took into account DELETE part.\nNow, I hope it won\u0027t create some regression.",
       "revId": "3e7a28455d27c70706ba704a484a4c2c2671ac5d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8229d7af_bcc390f6",
+        "filename": "dbaccess/source/ui/dlg/directsql.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2021-09-25T17:15:48Z",
+      "side": 1,
+      "message": "FYI, that\u0027s the part I was calling \"if the SDBC driver is full-featured\" in the bug tracker. It always uses execute() and the *driver* tells us whether that was a query returning rows or an update.",
+      "range": {
+        "startLine": 203,
+        "startChar": 0,
+        "endLine": 204,
+        "endChar": 13
+      },
+      "revId": "3e7a28455d27c70706ba704a484a4c2c2671ac5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b7e883e_6edba835",
+        "filename": "dbaccess/source/ui/dlg/directsql.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2021-09-25T17:15:48Z",
+      "side": 1,
+      "message": "That part is executed only of the driver doesn\u0027t have the XMultipleResults feature.",
+      "range": {
+        "startLine": 228,
+        "startChar": 12,
+        "endLine": 228,
+        "endChar": 16
+      },
+      "revId": "3e7a28455d27c70706ba704a484a4c2c2671ac5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38e562e6_56df44be",
+        "filename": "dbaccess/source/ui/dlg/directsql.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2021-09-25T17:15:48Z",
+      "side": 1,
+      "message": "Continuing with the improvement you introduced for UPDATE and INSERT, I suggest to use executeUpdate for DELETE, and output the text: resultCount + \" rows deleted\\n\"",
+      "range": {
+        "startLine": 240,
+        "startChar": 78,
+        "endLine": 240,
+        "endChar": 131
+      },
+      "revId": "3e7a28455d27c70706ba704a484a4c2c2671ac5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbb3bc82_13141aa6",
+        "filename": "dbaccess/source/ui/dlg/directsql.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2021-09-25T17:15:48Z",
+      "side": 1,
+      "message": "Just use executeUpdate for CREATE; it is a DDL statement, and the documentation of executeUpdate says \"In addition, SQL statements that return nothing, such as SQL DDL statements, can be executed\".",
+      "range": {
+        "startLine": 240,
+        "startChar": 65,
+        "endLine": 240,
+        "endChar": 71
+      },
+      "revId": "3e7a28455d27c70706ba704a484a4c2c2671ac5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8b5e773_55003d8e",
+        "filename": "dbaccess/source/ui/dlg/directsql.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2021-09-25T17:15:48Z",
+      "side": 1,
+      "message": "You now make executeQuery the default; as this is all partial and heuristics, whatever we do, we will get cases wrong. I\u0027m not sure making executeQuery the default rather than executeUpdate makes more sense, but I don\u0027t have strong arguments for the status quo (executeUpdate as default) either. \u003cshrug\u003e\n\nAn idea. Maybe we keep the special-casing of SELECT, and then (if we are not going to introduce an explicit choice for the user as I proposed in the bug) maybe we can take the value of the \"show results\" checkbox as a hint for the default (essentially: unknown SQL command) case? Something like:\n\n  if (m_xShowOutput-\u003eget_active())\n  {\n    xRS \u003d xStatement-\u003eexecuteQuery(...)\n    display(xRS);\n  }\n  else\n  {\n     resultCount \u003d xStatement-\u003eexecuteUpdate(_rStatement);\n     addOutputText(\"SQL command executed; \" + OUString::number(resultCount) + \" rows affected\\n\");\n  }",
+      "range": {
+        "startLine": 245,
+        "startChar": 16,
+        "endLine": 245,
+        "endChar": 20
+      },
+      "revId": "3e7a28455d27c70706ba704a484a4c2c2671ac5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
