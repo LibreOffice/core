@@ -28,7 +28,7 @@
 
 #include <PhysicalFontFace.hxx>
 #include <fontinstance.hxx>
-#include <fontselect.hxx>
+#include <font/FontSelectPattern.hxx>
 #include <impfontmetricdata.hxx>
 #include <sft.hxx>
 
@@ -96,7 +96,7 @@ bool FontMetric::operator==( const FontMetric& r ) const
     return true;
 }
 
-ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
+ImplFontMetricData::ImplFontMetricData( const vcl::font::FontSelectPattern& rFontSelData )
     : FontAttributes( rFontSelData )
     , mnHeight ( rFontSelData.mnHeight )
     , mnWidth ( rFontSelData.mnWidth )

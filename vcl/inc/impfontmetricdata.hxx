@@ -33,13 +33,16 @@ class ImplFontMetricData;
 typedef tools::SvRef<ImplFontMetricData> ImplFontMetricDataRef;
 
 class OutputDevice;
+namespace vcl::font
+{
 class FontSelectPattern;
+}
 class LogicalFontInstance;
 
 class VCL_DLLPUBLIC ImplFontMetricData final : public FontAttributes, public SvRefBase
 {
 public:
-    explicit        ImplFontMetricData( const FontSelectPattern& );
+    explicit        ImplFontMetricData( const vcl::font::FontSelectPattern& );
 
     // font instance attributes from the font request
     tools::Long            GetWidth() const                                                { return mnWidth; }
