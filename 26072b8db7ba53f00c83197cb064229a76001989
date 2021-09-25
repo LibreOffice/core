@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b82c04f_707de6b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-09-25T10:49:14Z",
+      "side": 1,
+      "message": "FYI: fixed the illegal instruction error when running tests when compiling for x86_64 on apple silicon/m1 machine",
+      "revId": "26072b8db7ba53f00c83197cb064229a76001989",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
