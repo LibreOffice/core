@@ -9,7 +9,6 @@
 
 $(eval $(call gb_Module_Module,bridges))
 
-ifneq ($(OS),EMSCRIPTEN)
 $(eval $(call gb_Module_add_targets,bridges,\
 	Library_cpp_uno \
 	$(if $(ENABLE_JAVA),\
@@ -28,7 +27,6 @@ ifeq ($(strip $(bridges_SELECTED_BRIDGE)),)
 $(call gb_Output_error,no bridge selected for build: bailing out)
 else ifneq ($(words $(bridges_SELECTED_BRIDGE)),1)
 $(call gb_Output_error,multiple bridges selected for build: $(bridges_SELECTED_BRIDGE))
-endif
 endif
 endif
 

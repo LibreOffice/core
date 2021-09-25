@@ -85,6 +85,9 @@ else ifeq ($(COM),MSC)
 bridges_SELECTED_BRIDGE := msvc_win32_intel
 bridge_exception_objects := cpp2uno uno2cpp
 bridge_noopt_objects := except
+else ifeq ($(OS),EMSCRIPTEN)
+bridges_SELECTED_BRIDGE := gcc3_wasm
+bridge_noopt_objects := cpp2uno except uno2cpp
 endif
 
 else ifeq ($(CPUNAME),M68K)

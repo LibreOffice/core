@@ -421,6 +421,7 @@ static Mapping loadExternalMapping(
             OSL_ASSERT( aExt.is() );
             if (aExt.is())
                 return aExt;
+            SAL_INFO("cppu", "Could not load external mapping for " << aName);
         }
 #else
         // find proper lib
