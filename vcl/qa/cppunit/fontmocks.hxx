@@ -13,12 +13,13 @@
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <fontattributes.hxx>
 #include <fontinstance.hxx>
-#include <fontselect.hxx>
+#include <font/FontSelectPattern.hxx>
 
 class TestFontInstance : public LogicalFontInstance
 {
 public:
-    TestFontInstance(PhysicalFontFace const& rFontFace, FontSelectPattern const& rFontSelectPattern)
+    TestFontInstance(PhysicalFontFace const& rFontFace,
+                     vcl::font::FontSelectPattern const& rFontSelectPattern)
         : LogicalFontInstance(rFontFace, rFontSelectPattern)
     {
     }
@@ -48,7 +49,7 @@ public:
     }
 
     rtl::Reference<LogicalFontInstance>
-    CreateFontInstance(FontSelectPattern const& rFontSelectPattern) const override
+    CreateFontInstance(vcl::font::FontSelectPattern const& rFontSelectPattern) const override
     {
         return new TestFontInstance(*this, rFontSelectPattern);
     }

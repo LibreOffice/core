@@ -81,7 +81,7 @@ public:
 
     void AddFontFace(PhysicalFontFace*);
 
-    PhysicalFontFace* FindBestFontFace(const FontSelectPattern& rFSD) const;
+    PhysicalFontFace* FindBestFontFace(const vcl::font::FontSelectPattern& rFSD) const;
 
     void UpdateDevFontList(PhysicalFontFaceCollection&) const;
     void UpdateCloneFontList(PhysicalFontCollection&) const;
