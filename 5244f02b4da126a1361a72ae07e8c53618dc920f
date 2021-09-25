@@ -34,6 +34,24 @@
       "parentUuid": "32a845d1_e31bf7ca",
       "revId": "5244f02b4da126a1361a72ae07e8c53618dc920f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b5a55e5_e4813576",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-09-25T11:18:49Z",
+      "side": 1,
+      "message": "Yes, to revert and start new would be preferred. It just takes a bit longer.",
+      "parentUuid": "b16152f5_baf67b2a",
+      "revId": "5244f02b4da126a1361a72ae07e8c53618dc920f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
