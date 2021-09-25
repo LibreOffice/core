@@ -502,7 +502,7 @@
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-SaveACopy">
-        <property name="visible">False</property>
+        <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SaveACopy</property>
       </object>
