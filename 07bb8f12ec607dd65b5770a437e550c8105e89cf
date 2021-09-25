@@ -67,6 +67,42 @@
       "message": "Note that the format of bug reference is mentioned in the wiki:\nhttps://wiki.documentfoundation.org/Development/GetInvolved#4._Submit_the_patch",
       "revId": "07bb8f12ec607dd65b5770a437e550c8105e89cf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39acfecc_22120f7c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003371
+      },
+      "writtenOn": "2021-09-25T18:10:30Z",
+      "side": 1,
+      "message": "Done!",
+      "parentUuid": "59f2c163_cfcaef9c",
+      "revId": "07bb8f12ec607dd65b5770a437e550c8105e89cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ab3e334_9f805e23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003371
+      },
+      "writtenOn": "2021-09-25T18:10:30Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "9e4a49ff_9ab29874",
+      "revId": "07bb8f12ec607dd65b5770a437e550c8105e89cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
