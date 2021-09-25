@@ -841,8 +841,26 @@ static void addStringConst( SbiSymPool& rPool, const OUString& pSym, const OUStr
     rPool.Add( pConst );
 }
 
+static void addNumericConst(SbiSymPool& rPool, const OUString& pSym, double nVal)
+{
+    SbiConstDef* pConst = new SbiConstDef(pSym);
+    pConst->Set(nVal, SbxDOUBLE);
+    rPool.Add(pConst);
+}
+
 void SbiParser::AddConstants()
 {
+    // tdf#131563 - add vba color constants
+    // See https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/color-constants
+    addNumericConst(aPublics, "vbBlack", 0x0);
+    addNumericConst(aPublics, "vbRed", 0xFF);
+    addNumericConst(aPublics, "vbGreen", 0xFF00);
+    addNumericConst(aPublics, "vbYellow", 0xFFFF);
+    addNumericConst(aPublics, "vbBlue", 0xFF0000);
+    addNumericConst(aPublics, "vbMagenta", 0xFF00FF);
+    addNumericConst(aPublics, "vbCyan", 0xFFFF00);
+    addNumericConst(aPublics, "vbWhite", 0xFFFFFF);
+
     // #113063 Create constant RTL symbols
     addStringConst( aPublics, "vbCr", "\x0D" );
     addStringConst( aPublics, "vbCrLf", "\x0D\x0A" );
