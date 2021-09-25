@@ -31,7 +31,7 @@
 // win32 specific logical font instance
 class WinFontInstance : public LogicalFontInstance
 {
-    friend rtl::Reference<LogicalFontInstance> WinFontFace::CreateFontInstance(const FontSelectPattern&) const;
+    friend rtl::Reference<LogicalFontInstance> WinFontFace::CreateFontInstance(const vcl::font::FontSelectPattern&) const;
 
 public:
     ~WinFontInstance() override;
@@ -55,7 +55,7 @@ public:
     bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const override;
 
 private:
-    explicit WinFontInstance(const WinFontFace&, const FontSelectPattern&);
+    explicit WinFontInstance(const WinFontFace&, const vcl::font::FontSelectPattern&);
 
     hb_font_t* ImplInitHbFont() override;
     bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const override;
