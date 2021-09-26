@@ -832,7 +832,7 @@ namespace emfio
                     break;
                 }
                 const vcl::PixelFormat ePixelFormat = vcl::bitDepthToPixelFormat( nBitCount );
-                bool bOk = nWidth > 0 && nHeight > 0 && nBytesPerScan > 0 && nPlanes == 1 && ePixelFormat != vcl::PixelFormat::INVALID;
+                bool bOk = nWidth > 0 && nHeight > 0 && nBytesPerScan > 0 && ePixelFormat != vcl::PixelFormat::INVALID;
                 if (bOk)
                 {
                     // must be enough data to fulfil the request
