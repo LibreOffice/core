@@ -918,6 +918,7 @@ cygwin*|wsl*)
     LINKFLAGSNOUNDEFS=
 
     if test "$host_cpu" = "aarch64"; then
+        build_skia=no
         enable_gpgmepp=no
         enable_coinmp=no
         enable_firebird_sdbc=no
@@ -5526,6 +5527,7 @@ if test "$cross_compiling" = "yes"; then
         BOOST
         CAIRO
         CLUCENE
+        CUCKOO
         CURL
         DBCONNECTIVITY
         DESKTOP
