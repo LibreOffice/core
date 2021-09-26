@@ -591,13 +591,13 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
 
 void AreaPropertyPanelBase::ImpUpdateTransparencies()
 {
-    if(mpTransparanceItem || mpFloatTransparenceItem)
+    if(mpTransparenceItem || mpFloatTransparenceItem)
     {
         bool bZeroValue(false);
 
-        if (mpTransparanceItem)
+        if (mpTransparenceItem)
         {
-            const sal_uInt16 nValue(mpTransparanceItem->GetValue());
+            const sal_uInt16 nValue(mpTransparenceItem->GetValue());
 
             if(!nValue)
             {
@@ -720,7 +720,7 @@ void AreaPropertyPanelBase::updateFillTransparence(bool bDisabled, bool bDefault
 {
     if (bDisabled)
     {
-        mpTransparanceItem.reset();
+        mpTransparenceItem.reset();
         return;
     }
     else if (bDefaultOrSet)
@@ -728,19 +728,19 @@ void AreaPropertyPanelBase::updateFillTransparence(bool bDisabled, bool bDefault
         if (pState)
         {
             const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pState);
-            mpTransparanceItem.reset(pItem->Clone());
+            mpTransparenceItem.reset(pItem->Clone());
         }
         else
         {
-            mpTransparanceItem.reset();
+            mpTransparenceItem.reset();
         }
     }
     else
     {
-        mpTransparanceItem.reset();
+        mpTransparenceItem.reset();
     }
 
-    // update transparency settings dependent of mpTransparanceItem and mpFloatTransparenceItem
+    // update transparency settings dependent of mpTransparenceItem and mpFloatTransparenceItem
     ImpUpdateTransparencies();
 }
 
@@ -769,7 +769,7 @@ void AreaPropertyPanelBase::updateFillFloatTransparence(bool bDisabled, bool bDe
         mpFloatTransparenceItem.reset();
     }
 
-    // update transparency settings dependent of mpTransparanceItem and mpFloatTransparenceItem
+    // update transparency settings dependent of mpTransparenceItem and mpFloatTransparenceItem
     ImpUpdateTransparencies();
 }
 

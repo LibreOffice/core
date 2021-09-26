@@ -145,7 +145,7 @@ protected:
     OUString  maImgLinear;
 
     std::unique_ptr< XFillFloatTransparenceItem >   mpFloatTransparenceItem;
-    std::unique_ptr< SfxUInt16Item >                mpTransparanceItem;
+    std::unique_ptr< SfxUInt16Item >                mpTransparenceItem;
 
     DECL_LINK(SelectFillTypeHdl, weld::ComboBox&, void );
     DECL_LINK(SelectFillAttrHdl, weld::ComboBox&, void );
