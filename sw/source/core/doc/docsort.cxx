@@ -881,18 +881,18 @@ void FlatFndBox::FillFlat(const FndBox_& rBox, bool bLastBox)
                     SfxItemState::SET == pFormat->GetItemState( RES_BOXATR_FORMULA ) ||
                     SfxItemState::SET == pFormat->GetItemState( RES_BOXATR_VALUE ) )
                 {
-                    auto pSet = std::make_unique<SfxItemSet>(
+                    SfxItemSet aSet(
                         m_pDoc->GetAttrPool(),
                         svl::Items<
                             RES_VERT_ORIENT, RES_VERT_ORIENT,
                             RES_BOXATR_FORMAT, RES_BOXATR_VALUE>);
-                    pSet->Put( pFormat->GetAttrSet() );
-                    if( m_ppItemSets.empty() )
+                    aSet.Put( pFormat->GetAttrSet() );
+                    if( m_vItemSets.empty() )
                     {
                         size_t nCount = static_cast<size_t>(m_nRows) * m_nCols;
-                        m_ppItemSets.resize(nCount);
+                        m_vItemSets.resize(nCount);
                     }
-                    m_ppItemSets[nOff] = std::move(pSet);
+                    m_vItemSets[nOff].emplace(std::move(aSet));
                 }
 
                 bModRow = true;
@@ -924,9 +924,9 @@ const FndBox_* FlatFndBox::GetBox(sal_uInt16 n_Col, sal_uInt16 n_Row) const
 
 const SfxItemSet* FlatFndBox::GetItemSet(sal_uInt16 n_Col, sal_uInt16 n_Row) const
 {
-    OSL_ENSURE( m_ppItemSets.empty() || ( n_Col < m_nCols && n_Row < m_nRows), "invalid array access");
+    OSL_ENSURE( m_vItemSets.empty() || ( n_Col < m_nCols && n_Row < m_nRows), "invalid array access");
 
-    return !m_ppItemSets.empty() ? m_ppItemSets[unsigned(n_Row * m_nCols) + n_Col].get() : nullptr;
+    return !m_vItemSets.empty() ? &*m_vItemSets[unsigned(n_Row * m_nCols) + n_Col] : nullptr;
 }
 
 sal_uInt16 SwMovedBoxes::GetPos(const SwTableBox* pTableBox) const

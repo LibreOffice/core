@@ -134,7 +134,8 @@ private:
 
     SwDoc*              m_pDoc;
     std::unique_ptr<FndBox_ const *[]> m_pArr;
-    std::vector<std::unique_ptr<SfxItemSet>> m_ppItemSets;
+    /// using optional because SfxItemSet has no default constructor
+    std::vector<std::optional<SfxItemSet>> m_vItemSets;
 
     sal_uInt16          m_nRows;
     sal_uInt16          m_nCols;
@@ -144,7 +145,7 @@ private:
     bool            m_bSym;
 };
 
-inline bool FlatFndBox::HasItemSets() const { return !m_ppItemSets.empty(); }
+inline bool FlatFndBox::HasItemSets() const { return !m_vItemSets.empty(); }
 
 #endif
 
