@@ -1240,7 +1240,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         return;
     }
 
-    auto xDeleteGuard = std::make_unique<SwFrameDeleteGuard>(this);
+    std::optional<SwFrameDeleteGuard> oDeleteGuard(std::in_place, this);
     LockJoin();
     tools::Long nFormatCount = 0;
     // - loop prevention
@@ -1907,7 +1907,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     pSaveFootnote.reset();
 
     UnlockJoin();
-    xDeleteGuard.reset();
+    oDeleteGuard.reset();
     if ( bMovedFwd || bMovedBwd )
         pNotify->SetInvaKeep();
     if ( bMovedFwd )
