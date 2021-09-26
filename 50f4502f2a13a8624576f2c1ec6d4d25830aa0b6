@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "655b2ddd_31c319e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-26T02:15:21Z",
+      "side": 1,
+      "message": "Hey guys, I\u0027m about to propose a DrawingInterface (discussed with Tomaz), but before I can introduce it I need to fix an issue where I can remove this MetaActionType default parameter from these functions. ",
+      "revId": "50f4502f2a13a8624576f2c1ec6d4d25830aa0b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
