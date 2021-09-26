@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a90ecbc7_cd8998fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-09-26T11:07:23Z",
+      "side": 1,
+      "message": "Better description indeed!\nLet\u0027s push this one then.",
+      "revId": "3dd2e6f210ddfb08c86f160875e1a571311265e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
