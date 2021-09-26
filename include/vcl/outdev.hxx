@@ -1286,6 +1286,13 @@ public:
                                     const Size& rDestSize,
                                     const Point& rSrcPtPixel,
                                     const Size& rSrcSizePixel,
+                                    const Bitmap& rBitmap) override;
+
+    void                        DrawBitmap(
+                                    const Point& rDestPt,
+                                    const Size& rDestSize,
+                                    const Point& rSrcPtPixel,
+                                    const Size& rSrcSizePixel,
                                     const Bitmap& rBitmap,
                                     MetaActionType nAction = MetaActionType::BMPSCALEPART );
 
@@ -1316,6 +1323,13 @@ public:
                                     const Point& rDestPt,
                                     const Size& rDestSize,
                                     const BitmapEx& rBitmapEx );
+
+    void                        DrawBitmapEx(
+                                    const Point& rDestPt,
+                                    const Size& rDestSize,
+                                    const Point& rSrcPtPixel,
+                                    const Size& rSrcSizePixel,
+                                    const BitmapEx& rBitmapEx) override;
 
     void                        DrawBitmapEx(
                                     const Point& rDestPt,
@@ -1521,6 +1535,10 @@ public:
 
     void                        DrawMask( const Point& rDestPt, const Size& rDestSize,
                                           const Bitmap& rBitmap, const Color& rMaskColor );
+
+    void                        DrawMask( const Point& rDestPt, const Size& rDestSize,
+                                          const Point& rSrcPtPixel, const Size& rSrcSizePixel,
+                                          const Bitmap& rBitmap, const Color& rMaskColor) override;
 
     void                        DrawMask( const Point& rDestPt, const Size& rDestSize,
                                           const Point& rSrcPtPixel, const Size& rSrcSizePixel,
