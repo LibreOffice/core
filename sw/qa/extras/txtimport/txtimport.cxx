@@ -176,6 +176,27 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf115088)
     CPPUNIT_ASSERT_EQUAL(OUString("1\n"), aActual.replaceAll("\r", "\n"));
 }
 
+CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf70423)
+{
+    load(mpTestDocumentPath, "longtext.txt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    // Without the fix, this test would have failed with:
+    // - Expected: 1
+    // - Actual: 2
+    CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
+
+    uno::Reference<text::XTextRange> xPara(getParagraph(1));
+    OUString aPara = xPara->getString();
+
+    // Without the fix, this test would have failed with:
+    // - Expected: 10000
+    // - Actual: 9999
+    CPPUNIT_ASSERT_EQUAL(10000, aPara.getLength());
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
