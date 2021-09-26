@@ -64,7 +64,7 @@ bool SwWrtShell::TryRemoveIndent()
 {
     bool bResult = false;
 
-    SfxItemSet aAttrSet(GetAttrPool(), svl::Items<RES_LR_SPACE, RES_LR_SPACE>);
+    SfxItemSetFixed<RES_LR_SPACE, RES_LR_SPACE> aAttrSet(GetAttrPool());
     GetCurAttr(aAttrSet);
 
     SvxLRSpaceItem aItem = aAttrSet.Get(RES_LR_SPACE);
@@ -441,7 +441,7 @@ bool SwWrtShell::DelRight()
                     if ( IsRedlineOn() && (eAnchorId != RndStdIds::FLY_AS_CHAR &&
                                            eAnchorId != RndStdIds::FLY_AT_CHAR) )
                     {
-                        SfxItemSet aSet(GetAttrPool(), svl::Items<RES_ANCHOR, RES_ANCHOR>);
+                        SfxItemSetFixed<RES_ANCHOR, RES_ANCHOR> aSet(GetAttrPool());
                         GetFlyFrameAttr(aSet);
                         SwFormatAnchor aAnch(RndStdIds::FLY_AT_CHAR);
                         aSet.Put(aAnch);

@@ -704,14 +704,12 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
     //try attribute search first
     if(pSearch->HasSearchAttributes()||pSearch->HasReplaceAttributes())
     {
-        SfxItemSet aSearch(m_pDocShell->GetDoc()->GetAttrPool(),
-                            svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1,
+        SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END-1,
                             RES_PARATR_BEGIN, RES_PARATR_END-1,
-                            RES_FRMATR_BEGIN, RES_FRMATR_END-1>);
-        SfxItemSet aReplace(m_pDocShell->GetDoc()->GetAttrPool(),
-                            svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1,
+                            RES_FRMATR_BEGIN, RES_FRMATR_END-1>  aSearch(m_pDocShell->GetDoc()->GetAttrPool());
+        SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END-1,
                             RES_PARATR_BEGIN, RES_PARATR_END-1,
-                            RES_FRMATR_BEGIN, RES_FRMATR_END-1>);
+                            RES_FRMATR_BEGIN, RES_FRMATR_END-1>  aReplace(m_pDocShell->GetDoc()->GetAttrPool());
         pSearch->FillSearchItemSet(aSearch);
         pSearch->FillReplaceItemSet(aReplace);
         bool bCancel;
