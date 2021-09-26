@@ -105,6 +105,9 @@ namespace connectivity
         const OSQLParseNode*    getTableNode( OSQLTables& _rTables, const OSQLParseNode* pTableRef, OUString& aTableRange );
         void                    getQualified_join( OSQLTables& _rTables, const OSQLParseNode *pTableRef, OUString& aTableRange );
         void                    getSelect_statement(OSQLTables& _rTables,const OSQLParseNode* pSelect);
+        // get all the column names of m_aSelectColumns and return in a vector sorted by a UStringMixLess that's constructed from
+        // isCaseSensitive()
+        std::vector<OUString> getSelectColumnNames() const;
         OUString         getUniqueColumnName(const OUString & rColumnName)    const;
 
         /** finds the column with a given name, belonging to a given table, in a given tables collection
@@ -141,8 +144,8 @@ namespace connectivity
         css::uno::Reference< css::beans::XPropertySet > findSelectColumn(
             std::u16string_view rColumnName );
 
-        void setSelectColumnName(::rtl::Reference<OSQLColumns> const & _rColumns,const OUString & rColumnName,const OUString & rColumnAlias, const OUString & rTableRange, bool bFkt=false, sal_Int32 _nType = css::sdbc::DataType::VARCHAR, bool bAggFkt=false);
-        void appendColumns(::rtl::Reference<OSQLColumns> const & _rColumns,const OUString& _rTableAlias,const OSQLTable& _rTable);
+        void setSelectColumnName(const OUString& rColumnName, const OUString& rColumnAlias, const OUString& rTableRange, bool bFkt = false, sal_Int32 _nType = css::sdbc::DataType::VARCHAR, bool bAggFkt=false);
+        void appendColumns(const OUString& _rTableAlias, const OSQLTable& _rTable);
         // Other member variables that should be available in the "set" functions
         // can be defined in the derived class. They can be initialized
         // in its constructor and, after the "traverse" routines have been used,

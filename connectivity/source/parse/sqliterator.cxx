@@ -1716,15 +1716,24 @@ void OSQLParseTreeIterator::setSelectColumnName(const OUString & rColumnName,con
     }
 }
 
-OUString OSQLParseTreeIterator::getUniqueColumnName(const OUString& rColumnName) const
+std::vector<OUString> OSQLParseTreeIterator::getSelectColumnNames() const
 {
     ::comphelper::UStringMixLess aCompare(isCaseSensitive());
+
     std::vector<OUString> aColumnNames;
     OUString sPropertyName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
     for (const auto& col : *m_aSelectColumns)
         aColumnNames.push_back(getString(col->getPropertyValue(sPropertyName)));
     std::sort(aColumnNames.begin(), aColumnNames.end(), aCompare);
 
+    return aColumnNames;
+}
+
+OUString OSQLParseTreeIterator::getUniqueColumnName(const OUString& rColumnName) const
+{
+    std::vector<OUString> aColumnNames(getSelectColumnNames());
+
+    ::comphelper::UStringMixLess aCompare(isCaseSensitive());
     if (!std::binary_search(aColumnNames.begin(), aColumnNames.end(), rColumnName, aCompare))
         return rColumnName;
 
