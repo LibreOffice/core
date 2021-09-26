@@ -1718,27 +1718,25 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns> co
     }
 }
 
-OUString OSQLParseTreeIterator::getUniqueColumnName(const OUString & rColumnName) const
+OUString OSQLParseTreeIterator::getUniqueColumnName(const OUString& rColumnName) const
 {
-    OUString aAlias(rColumnName);
+    ::comphelper::UStringMixLess aCompare(isCaseSensitive());
+    std::vector<OUString> aColumnNames;
+    OUString sPropertyName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
+    for (const auto& col : *m_aSelectColumns)
+        aColumnNames.push_back(getString(col->getPropertyValue(sPropertyName)));
+    std::sort(aColumnNames.begin(), aColumnNames.end(), aCompare);
 
-    OSQLColumns::const_iterator aIter = find(
-        m_aSelectColumns->begin(),
-        m_aSelectColumns->end(),
-        aAlias,
-        ::comphelper::UStringMixEqual( isCaseSensitive() )
-    );
+    if (!std::binary_search(aColumnNames.begin(), aColumnNames.end(), rColumnName, aCompare))
+        return rColumnName;
+
+    OUString aAlias;
     sal_Int32 i=1;
-    while(aIter != m_aSelectColumns->end())
+    do
     {
         aAlias = rColumnName + OUString::number(i++);
-        aIter = find(
-            m_aSelectColumns->begin(),
-            m_aSelectColumns->end(),
-            aAlias,
-            ::comphelper::UStringMixEqual( isCaseSensitive() )
-        );
     }
+    while (std::binary_search(aColumnNames.begin(), aColumnNames.end(), aAlias, aCompare));
     return aAlias;
 }
 
