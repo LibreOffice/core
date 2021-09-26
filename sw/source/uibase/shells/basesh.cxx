@@ -243,7 +243,7 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
                             break;
                         --aIdx;
                         if (aIdx.GetNode().IsContentNode() &&
-                                !aIdx.GetNode().GetContentNode()->getLayoutFrame(nullptr))
+                                !aIdx.GetNode().GetContentNode()->getLayoutFrame(rSh.GetLayout()))
                             break;
                     }
                 }
