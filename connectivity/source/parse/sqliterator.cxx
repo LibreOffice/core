@@ -1536,10 +1536,12 @@ void OSQLParseTreeIterator::appendColumns(const OUString& _rTableAlias, const OS
     const OUString* pBegin = aColNames.getConstArray();
     const OUString* pEnd = pBegin + aColNames.getLength();
 
+    ::comphelper::UStringMixLess aCompare(isCaseSensitive());
+    std::vector<OUString> aSelectColumnNames = getSelectColumnNames();
+
     for(;pBegin != pEnd;++pBegin)
     {
-
-        OUString aName(getUniqueColumnName(getSelectColumnNames(), *pBegin));
+        OUString aName(getUniqueColumnName(aSelectColumnNames, *pBegin));
         Reference< XPropertySet > xColumn;
         if(xColumns->hasByName(*pBegin) && (xColumns->getByName(*pBegin) >>= xColumn) && xColumn.is())
         {
@@ -1561,6 +1563,8 @@ void OSQLParseTreeIterator::appendColumns(const OUString& _rTableAlias, const OS
             pColumn->setTableName(_rTableAlias);
             pColumn->setRealName(*pBegin);
             m_aSelectColumns->push_back(pColumn);
+            // update aSelectColumnNames with newly insert aName
+            aSelectColumnNames.insert(std::upper_bound(aSelectColumnNames.begin(), aSelectColumnNames.end(), aName, aCompare), aName);
         }
         else
             impl_appendError( IParseContext::ErrorCode::InvalidColumn, pBegin, &_rTableAlias );
