@@ -802,10 +802,8 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
     for (std::size_t i = 1; aIter != aEnd && nByteOffset <= m_nBufferSize && i < nCount;++aIter, i++)
     {
         // Lengths depending on data type:
-        sal_Int32 nLen = 0;
-        sal_Int32 nType = 0;
-        nLen    = m_aPrecisions[i-1];
-        nType   = m_aTypes[i-1];
+        sal_Int32 nLen = m_aPrecisions[i-1];
+        sal_Int32 nType = m_aTypes[i-1];
 
         switch(nType)
         {
@@ -864,8 +862,13 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
         else if ( DataType::TIMESTAMP == nType )
         {
             sal_Int32 nDate = 0,nTime = 0;
+            if (o3tl::make_unsigned(nLen) < 8)
+            {
+                SAL_WARN("connectivity.drivers", "short TIMESTAMP");
+                return false;
+            }
             memcpy(&nDate, pData, 4);
-            memcpy(&nTime, pData+ 4, 4);
+            memcpy(&nTime, pData + 4, 4);
             if ( !nDate && !nTime )
             {
                 (*_rRow)[i]->setNull();
