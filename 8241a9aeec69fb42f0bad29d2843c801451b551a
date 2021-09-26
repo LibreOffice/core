@@ -85,6 +85,24 @@
       "message": "Let\u0027s push this. At worst, it can be reverted.",
       "revId": "8241a9aeec69fb42f0bad29d2843c801451b551a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0255a6fb_fe3f9708",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-09-26T19:20:24Z",
+      "side": 1,
+      "message": "On windows if I install libreoffice 7.2.1 and launch it and use help, checkout for updates as the very first thing I do then I could reproduce it. Just the first time.",
+      "parentUuid": "3712f044_00ca5107",
+      "revId": "8241a9aeec69fb42f0bad29d2843c801451b551a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
