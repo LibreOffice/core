@@ -142,7 +142,7 @@ namespace connectivity
             std::u16string_view rColumnName );
 
         void setSelectColumnName(const OUString& rColumnName, const OUString& rColumnAlias, const OUString& rTableRange, bool bFkt = false, sal_Int32 _nType = css::sdbc::DataType::VARCHAR, bool bAggFkt = false);
-        void appendColumns(::rtl::Reference<OSQLColumns> const & _rColumns,const OUString& _rTableAlias,const OSQLTable& _rTable);
+        void appendColumns(const OUString& _rTableAlias, const OSQLTable& _rTable);
         // Other member variables that should be available in the "set" functions
         // can be defined in the derived class. They can be initialized
         // in its constructor and, after the "traverse" routines have been used,
