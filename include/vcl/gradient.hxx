@@ -54,6 +54,8 @@ public:
     void            SetStyle( GradientStyle eStyle );
     GradientStyle   GetStyle() const;
 
+    static sal_uInt8 GetColorValue(tools::Long nValue);
+
     void            SetStartColor( const Color& rColor );
     const Color&    GetStartColor() const;
     void            SetEndColor( const Color& rColor );
