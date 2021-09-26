@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "22d4c68b_e8c9a20b",
+        "filename": "sw/inc/shellio.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-09-26T21:40:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b06ab261_711525d7",
+      "revId": "b2fc3c912463fa9f6a81907a016a8182f3156f41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f560f64c_6ae87ba2",
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "Yes, it is failing with this:\nExpected: 1\nActual: 2",
       "parentUuid": "f560f64c_6ae87ba2",
+      "revId": "b2fc3c912463fa9f6a81907a016a8182f3156f41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0505ff9c_2fbfc298",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-09-26T21:40:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b881d05_f865bf71",
       "revId": "b2fc3c912463fa9f6a81907a016a8182f3156f41",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }

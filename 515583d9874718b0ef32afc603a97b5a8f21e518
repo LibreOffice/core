@@ -52,6 +52,24 @@
       "parentUuid": "c421b9f4_41ef888b",
       "revId": "515583d9874718b0ef32afc603a97b5a8f21e518",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "617f7c82_736adeaa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-09-26T21:40:20Z",
+      "side": 1,
+      "message": "A test is added. It is not a round-trip, but I think it should be OK.",
+      "parentUuid": "73fd12b2_a8b50a2e",
+      "revId": "515583d9874718b0ef32afc603a97b5a8f21e518",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
