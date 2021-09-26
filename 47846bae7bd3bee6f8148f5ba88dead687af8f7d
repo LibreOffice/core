@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b0abf76_3142f5dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-09-26T11:08:24Z",
+      "side": 1,
+      "message": "I don\u0027t think it worths it for 7.1 branch but for 7.2, why not?",
+      "revId": "47846bae7bd3bee6f8148f5ba88dead687af8f7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
