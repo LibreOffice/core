@@ -24,10 +24,12 @@
 #include <vcl/dllapi.h>
 #include <tools/color.hxx>
 #include <tools/degree.hxx>
+#include <tools/long.hxx>
 
 #include <vcl/vclenum.hxx>
 #include <o3tl/cow_wrapper.hxx>
 
+#include <tuple>
 
 namespace tools { class Rectangle; }
 
@@ -72,6 +74,9 @@ public:
     sal_uInt16      GetStartIntensity() const;
     void            SetEndIntensity( sal_uInt16 nIntens );
     sal_uInt16      GetEndIntensity() const;
+
+    std::tuple<tools::Long, tools::Long, tools::Long, tools::Long, tools::Long, tools::Long>
+    GetColorIntensities() const;
 
     void            SetSteps( sal_uInt16 nSteps );
     sal_uInt16      GetSteps() const;
