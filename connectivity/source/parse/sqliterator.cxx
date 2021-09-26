@@ -1523,7 +1523,7 @@ OSQLTable OSQLParseTreeIterator::impl_createTableObject( const OUString& rTableN
     return aReturnTable;
 }
 
-void OSQLParseTreeIterator::appendColumns(::rtl::Reference<OSQLColumns> const & _rColumns,const OUString& _rTableAlias,const OSQLTable& _rTable)
+void OSQLParseTreeIterator::appendColumns(const OUString& _rTableAlias, const OSQLTable& _rTable)
 {
     if (!_rTable.is())
         return;
@@ -1560,7 +1560,7 @@ void OSQLParseTreeIterator::appendColumns(::rtl::Reference<OSQLColumns> const & 
 
             pColumn->setTableName(_rTableAlias);
             pColumn->setRealName(*pBegin);
-            _rColumns->push_back(pColumn);
+            m_aSelectColumns->push_back(pColumn);
         }
         else
             impl_appendError( IParseContext::ErrorCode::InvalidColumn, pBegin, &_rTableAlias );
@@ -1572,14 +1572,14 @@ void OSQLParseTreeIterator::setSelectColumnName(const OUString & rColumnName,con
     if(rColumnName.toChar() == '*' && rTableRange.isEmpty())
     {   // SELECT * ...
         for (auto const& table : *m_pImpl->m_pTables)
-            appendColumns(m_aSelectColumns, table.first, table.second);
+            appendColumns(table.first, table.second);
     }
     else if( rColumnName.toChar() == '*' && !rTableRange.isEmpty() )
     {   // SELECT <table>.*
         OSQLTables::const_iterator aFind = m_pImpl->m_pTables->find(rTableRange);
 
         if(aFind != m_pImpl->m_pTables->end())
-            appendColumns(m_aSelectColumns, rTableRange, aFind->second);
+            appendColumns(rTableRange, aFind->second);
     }
     else if ( rTableRange.isEmpty() )
     {   // SELECT <something> ...
