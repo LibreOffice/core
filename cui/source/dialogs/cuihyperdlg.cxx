@@ -184,8 +184,7 @@ void SvxHpLinkDlg::Close()
 
 void SvxHpLinkDlg::Apply()
 {
-    SfxItemSet aItemSet( SfxGetpApp()->GetPool(), svl::Items<SID_HYPERLINK_GETLINK,
-                         SID_HYPERLINK_SETLINK> );
+    SfxItemSetFixed<SID_HYPERLINK_GETLINK, SID_HYPERLINK_SETLINK> aItemSet( SfxGetpApp()->GetPool() );
 
     SvxHyperlinkTabPageBase* pCurrentPage = static_cast<SvxHyperlinkTabPageBase*>(
                                                 GetTabPage( GetCurPageId() ) );
