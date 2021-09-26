@@ -124,6 +124,30 @@ void Gradient::SetEndColor( const Color& rColor )
     mpImplGradient->maEndColor = rColor;
 }
 
+std::tuple<tools::Long, tools::Long, tools::Long> Gradient::GetStartColorIntensities() const
+{
+    tools::Long nFactor = GetStartIntensity();
+
+    Color aCol = GetStartColor();
+    tools::Long nRed = (aCol.GetRed() * nFactor) / 100;
+    tools::Long nGreen = (aCol.GetGreen() * nFactor) / 100;
+    tools::Long nBlue = (aCol.GetBlue() * nFactor) / 100;
+
+    return std::make_tuple(nRed, nGreen, nBlue);
+}
+
+std::tuple<tools::Long, tools::Long, tools::Long> Gradient::GetEndColorIntensities() const
+{
+    tools::Long nFactor = GetEndIntensity();
+
+    Color aCol = GetEndColor();
+    tools::Long nRed = (aCol.GetRed() * nFactor) / 100;
+    tools::Long nGreen = (aCol.GetGreen() * nFactor) / 100;
+    tools::Long nBlue = (aCol.GetBlue() * nFactor) / 100;
+
+    return std::make_tuple(nRed, nGreen, nBlue);
+}
+
 Degree10 Gradient::GetAngle() const
 {
     return mpImplGradient->mnAngle;
