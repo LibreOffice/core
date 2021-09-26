@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+#include <config_fuzzers.h>
+
 #include <sal/config.h>
 
 #include <string_view>
@@ -1295,6 +1298,7 @@ void SwHTMLParser::NewForm( bool bAppend )
         }
     }
 
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     const uno::Reference< XMultiServiceFactory > & rSrvcMgr =
         m_pFormImpl->GetServiceFactory();
     if( !rSrvcMgr.is() )
@@ -1363,6 +1367,7 @@ void SwHTMLParser::NewForm( bool bAppend )
         if (bHasEvents)
             NotifyMacroEventRead();
     }
+#endif
 }
 
 void SwHTMLParser::EndForm( bool bAppend )
