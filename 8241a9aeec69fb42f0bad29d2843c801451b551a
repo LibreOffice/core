@@ -51,6 +51,23 @@
       "message": "though I\u0027m unsure how to get it to display this screen with --enable-online-update turned on",
       "revId": "8241a9aeec69fb42f0bad29d2843c801451b551a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3712f044_00ca5107",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-09-26T17:07:09Z",
+      "side": 1,
+      "message": "Yes I don\u0027t know how to reproduce this too.\n\nPerhaps this part may need some refactoring.\nI remember some people had thought about taking a look at Mozilla upgrade mechanism  to know if we could inspire from it but I don\u0027t know if there was any plan then.",
+      "revId": "8241a9aeec69fb42f0bad29d2843c801451b551a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
