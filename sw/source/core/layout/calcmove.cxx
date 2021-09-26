@@ -810,7 +810,7 @@ void SwPageFrame::MakeAll(vcl::RenderContext* pRenderContext)
 
     const SwRect aOldRect( getFrameArea() );     // Adjust root size
     const SwLayNotify aNotify( this );  // takes care of the notification in the dtor
-    std::unique_ptr<SwBorderAttrAccess> pAccess;
+    std::optional<SwBorderAttrAccess> oAccess;
     const SwBorderAttrs*pAttrs = nullptr;
 
     while ( !isFrameAreaPositionValid() || !isFrameAreaSizeValid() || !isFramePrintAreaValid() )
@@ -839,10 +839,10 @@ void SwPageFrame::MakeAll(vcl::RenderContext* pRenderContext)
             }
             else
             {
-                if (!pAccess)
+                if (!oAccess)
                 {
-                    pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
-                    pAttrs = pAccess->Get();
+                    oAccess.emplace(SwFrame::GetCache(), this);
+                    pAttrs = oAccess->Get();
                 }
                 assert(pAttrs);
 
@@ -964,7 +964,7 @@ void SwLayoutFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
     SwRectFn fnRect = ( IsNeighbourFrame() == bVert )? fnRectHori : ( IsVertLR() ? (IsVertLRBT() ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert );
 
-    std::unique_ptr<SwBorderAttrAccess> pAccess;
+    std::optional<SwBorderAttrAccess> oAccess;
     const SwBorderAttrs*pAttrs = nullptr;
 
     while ( !isFrameAreaPositionValid() || !isFrameAreaSizeValid() || !isFramePrintAreaValid() )
@@ -1030,10 +1030,10 @@ void SwLayoutFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
         if ( !isFrameAreaSizeValid() || !isFramePrintAreaValid() )
         {
-            if ( !pAccess )
+            if ( !oAccess )
             {
-                pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
-                pAttrs  = pAccess->Get();
+                oAccess.emplace(SwFrame::GetCache(), this);
+                pAttrs  = oAccess->Get();
             }
             Format( getRootFrame()->GetCurrShell()->GetOut(), pAttrs );
         }

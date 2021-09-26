@@ -1922,8 +1922,8 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
     const bool bFootnotesInDoc = !GetFormat()->GetDoc()->GetFootnoteIdxs().empty();
     const bool bFly     = IsInFly();
 
-    auto pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
-    const SwBorderAttrs *pAttrs = pAccess->Get();
+    std::optional<SwBorderAttrAccess> oAccess(std::in_place, SwFrame::GetCache(), this);
+    const SwBorderAttrs *pAttrs = oAccess->Get();
 
     // All rows should keep together
     const bool bDontSplit = !IsFollow() &&
@@ -2036,11 +2036,11 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 SwHTMLTableLayout *pLayout = GetTable()->GetHTMLTableLayout();
                 if( pLayout )
                 {
-                    pAccess.reset();
+                    oAccess.reset();
                     m_bCalcLowers |= pLayout->Resize(
                         pLayout->GetBrowseWidthByTabFrame( *this ) );
-                    pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
-                    pAttrs = pAccess->Get();
+                    oAccess.emplace(SwFrame::GetCache(), this);
+                    pAttrs = oAccess->Get();
                 }
 
                 setFramePrintAreaValid(false);
@@ -2082,11 +2082,11 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 (aRectFnSet.GetWidth(getFramePrintArea()) != nOldPrtWidth ||
                 aRectFnSet.GetWidth(getFrameArea()) != nOldFrameWidth) )
             {
-                pAccess.reset();
+                oAccess.reset();
                 m_bCalcLowers |= pLayout->Resize(
                     pLayout->GetBrowseWidthByTabFrame( *this ) );
-                pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
-                pAttrs = pAccess->Get();
+                oAccess.emplace(SwFrame::GetCache(), this);
+                pAttrs = oAccess->Get();
             }
             if ( aOldPrtPos != aRectFnSet.GetPos(getFramePrintArea()) )
                 aNotify.SetLowersComplete( false );
@@ -2131,12 +2131,12 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                             GetTable()->GetHTMLTableLayout();
                         if( pHTMLLayout )
                         {
-                            pAccess.reset();
+                            oAccess.reset();
                             m_bCalcLowers |= pHTMLLayout->Resize(
                                 pHTMLLayout->GetBrowseWidthByTabFrame( *this ) );
 
-                            pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
-                            pAttrs = pAccess->Get();
+                            oAccess.emplace(SwFrame::GetCache(), this);
+                            pAttrs = oAccess->Get();
                         }
 
                         setFramePrintAreaValid(false);
@@ -2316,7 +2316,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
 
                 if ( bFormat )
                 {
-                    pAccess.reset();
+                    oAccess.reset();
 
                     // Consider case that table is inside another table, because
                     // it has to be avoided, that superior table is formatted.
@@ -2324,8 +2324,8 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     // is found, get its first content.
                     const SwFrame* pTmpNxt = sw_FormatNextContentForKeep( this );
 
-                    pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
-                    pAttrs = pAccess->Get();
+                    oAccess.emplace(SwFrame::GetCache(), this);
+                    pAttrs = oAccess->Get();
 
                     // The last row wants to keep with the frame behind the table.
                     // Check if the next frame is on a different page and valid.
@@ -2568,12 +2568,12 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                         {
                             ++nStack;
                             StackHack aHack;
-                            pAccess.reset();
+                            oAccess.reset();
 
                             GetFollow()->MakeAll(pRenderContext);
 
-                            pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
-                            pAttrs = pAccess->Get();
+                            oAccess.emplace(SwFrame::GetCache(), this);
+                            pAttrs = oAccess->Get();
 
                             GetFollow()->SetLowersFormatted(false);
                             // #i43913# - lock follow table
@@ -2724,7 +2724,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
     }
 
     m_bCalcLowers = m_bONECalcLowers = false;
-    pAccess.reset();
+    oAccess.reset();
     UnlockJoin();
     if ( bMovedFwd || bMovedBwd || !bOldValidPos )
         aNotify.SetInvaKeep();

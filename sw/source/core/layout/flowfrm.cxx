@@ -1434,8 +1434,8 @@ static bool lcl_IdenticalStyles(const SwFrame* pPrevFrame, const SwFrame* pFrame
 static bool lcl_getContextualSpacing(const SwFrame* pPrevFrame)
 {
     bool bRet;
-    auto pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), pPrevFrame);
-    const SwBorderAttrs *pAttrs = pAccess->Get();
+    SwBorderAttrAccess aAccess(SwFrame::GetCache(), pPrevFrame);
+    const SwBorderAttrs *pAttrs = aAccess.Get();
 
     bRet = pAttrs->GetULSpace().GetContext();
 
@@ -1449,7 +1449,7 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
 {
     const SwFrame* pPrevFrame = GetPrevFrameForUpperSpaceCalc_( pPr );
 
-    std::unique_ptr<SwBorderAttrAccess> pAccess;
+    std::optional<SwBorderAttrAccess> oAccess;
     SwFrame* pOwn;
     if( !pAttrs )
     {
@@ -1464,8 +1464,8 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
         }
         else
             pOwn = &m_rThis;
-        pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), pOwn);
-        pAttrs = pAccess->Get();
+        oAccess.emplace(SwFrame::GetCache(), pOwn);
+        pAttrs = oAccess->Get();
     }
     else
     {
@@ -1744,11 +1744,11 @@ SwTwips SwFlowFrame::CalcLowerSpace( const SwBorderAttrs* _pAttrs ) const
 {
     SwTwips nLowerSpace = 0;
 
-    std::unique_ptr<SwBorderAttrAccess> pAttrAccess;
+    std::optional<SwBorderAttrAccess> oAttrAccess;
     if ( !_pAttrs )
     {
-        pAttrAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), &m_rThis);
-        _pAttrs = pAttrAccess->Get();
+        oAttrAccess.emplace(SwFrame::GetCache(), &m_rThis);
+        _pAttrs = oAttrAccess->Get();
     }
 
     bool bCommonBorder = true;
@@ -1810,11 +1810,11 @@ SwTwips SwFlowFrame::CalcAddLowerSpaceAsLastInTableCell(
             }
         }
 
-        std::unique_ptr<SwBorderAttrAccess> pAttrAccess;
+        std::optional<SwBorderAttrAccess> oAttrAccess;
         if (pFrame && (!_pAttrs || pFrame != &m_rThis))
         {
-            pAttrAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), pFrame);
-            _pAttrs = pAttrAccess->Get();
+            oAttrAccess.emplace(SwFrame::GetCache(), pFrame);
+            _pAttrs = oAttrAccess->Get();
         }
 
         if (_pAttrs)
