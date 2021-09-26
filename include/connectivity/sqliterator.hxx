@@ -108,7 +108,8 @@ namespace connectivity
         // get all the column names of m_aSelectColumns and return in a vector sorted by a UStringMixLess that's constructed from
         // isCaseSensitive()
         std::vector<OUString> getSelectColumnNames() const;
-        OUString         getUniqueColumnName(const OUString & rColumnName)    const;
+        // rColumnNames is expected to be sorted as returned by getSelectColumnNames
+        OUString getUniqueColumnName(const std::vector<OUString>& rColumnNames, const OUString & rColumnName) const;
 
         /** finds the column with a given name, belonging to a given table, in a given tables collection
             @param  _rTables
