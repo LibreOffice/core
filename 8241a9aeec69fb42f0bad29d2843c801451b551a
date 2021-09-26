@@ -16,6 +16,41 @@
       "message": "I don\u0027t think it may trigger some regression here and this is the last place which may explain the \"%PERCENT%\" in UI.",
       "revId": "8241a9aeec69fb42f0bad29d2843c801451b551a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9500e2b2_687a69de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-09-26T15:14:25Z",
+      "side": 1,
+      "message": "I think you\u0027re probably right FWIW",
+      "parentUuid": "5e09a18b_27474a1b",
+      "revId": "8241a9aeec69fb42f0bad29d2843c801451b551a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e4d0a60_59d61fa5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-09-26T15:14:25Z",
+      "side": 1,
+      "message": "though I\u0027m unsure how to get it to display this screen with --enable-online-update turned on",
+      "revId": "8241a9aeec69fb42f0bad29d2843c801451b551a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
