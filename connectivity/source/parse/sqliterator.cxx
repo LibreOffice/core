@@ -852,7 +852,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
     if (pSelectNode->getChild(2)->isRule() && SQL_ISPUNCTUATION(pSelectNode->getChild(2)->getChild(0),"*"))
     {
         // SELECT * ...
-        setSelectColumnName(m_aSelectColumns, "*", "", "");
+        setSelectColumnName("*", "", "");
     }
     else if (SQL_ISRULE(pSelectNode->getChild(2),scalar_exp_commalist))
     {
@@ -872,7 +872,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                 // All the table's columns
                 OUString aTableRange;
                 pColumnRef->getChild(0)->parseNodeToStr( aTableRange, m_pImpl->m_xConnection, nullptr, false, false );
-                setSelectColumnName(m_aSelectColumns, "*", "", aTableRange);
+                setSelectColumnName("*", "", aTableRange);
                 continue;
             }
             else if (SQL_ISRULE(pColumnRef,derived_column))
@@ -924,7 +924,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                 */
                 if(aColumnAlias.isEmpty())
                     aColumnAlias = sColumnName;
-                setSelectColumnName(m_aSelectColumns,sColumnName,aColumnAlias,aTableRange,bFkt,nType,SQL_ISRULE(pColumnRef,general_set_fct) || SQL_ISRULE(pColumnRef,set_fct_spec));
+                setSelectColumnName(sColumnName,aColumnAlias,aTableRange,bFkt,nType,SQL_ISRULE(pColumnRef,general_set_fct) || SQL_ISRULE(pColumnRef,set_fct_spec));
             }
         }
     }
@@ -1567,21 +1567,19 @@ void OSQLParseTreeIterator::appendColumns(::rtl::Reference<OSQLColumns> const & 
     }
 }
 
-void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns> const & _rColumns,const OUString & rColumnName,const OUString & rColumnAlias, const OUString & rTableRange, bool bFkt, sal_Int32 _nType, bool bAggFkt)
+void OSQLParseTreeIterator::setSelectColumnName(const OUString & rColumnName,const OUString & rColumnAlias, const OUString & rTableRange, bool bFkt, sal_Int32 _nType, bool bAggFkt)
 {
     if(rColumnName.toChar() == '*' && rTableRange.isEmpty())
     {   // SELECT * ...
-        OSL_ENSURE(_rColumns == m_aSelectColumns,"Invalid columns used here!");
         for (auto const& table : *m_pImpl->m_pTables)
-            appendColumns(_rColumns,table.first,table.second);
+            appendColumns(m_aSelectColumns, table.first, table.second);
     }
     else if( rColumnName.toChar() == '*' && !rTableRange.isEmpty() )
     {   // SELECT <table>.*
-        OSL_ENSURE(_rColumns == m_aSelectColumns,"Invalid columns used here!");
         OSQLTables::const_iterator aFind = m_pImpl->m_pTables->find(rTableRange);
 
         if(aFind != m_pImpl->m_pTables->end())
-            appendColumns(_rColumns,rTableRange,aFind->second);
+            appendColumns(m_aSelectColumns, rTableRange, aFind->second);
     }
     else if ( rTableRange.isEmpty() )
     {   // SELECT <something> ...
@@ -1642,7 +1640,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns> co
                 pColumn->setRealName( rColumnName );
             }
 
-            _rColumns->push_back( xNewColumn );
+            m_aSelectColumns->push_back( xNewColumn );
         }
         else
         {
@@ -1655,7 +1653,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns> co
             pColumn->setAggregateFunction(bAggFkt);
             pColumn->setRealName(rColumnName);
 
-            _rColumns->push_back(pColumn);
+            m_aSelectColumns->push_back(pColumn);
         }
     }
     else    // ColumnName and TableName exist
@@ -1679,7 +1677,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns> co
                 assert(false);
                 pColumn->setTableName(aFind->first);
 
-                _rColumns->push_back(pColumn);
+                m_aSelectColumns->push_back(pColumn);
             }
             else
             {
@@ -1693,7 +1691,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns> co
                     pColumn->setRealName(rColumnName);
                     pColumn->setTableName(aFind->first);
 
-                    _rColumns->push_back(pColumn);
+                    m_aSelectColumns->push_back(pColumn);
                 }
                 else
                     bError = true;
@@ -1713,7 +1711,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns> co
             pColumn->setFunction(true);
             pColumn->setAggregateFunction(bAggFkt);
 
-            _rColumns->push_back(pColumn);
+            m_aSelectColumns->push_back(pColumn);
         }
     }
 }
