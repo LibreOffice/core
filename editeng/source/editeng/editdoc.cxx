@@ -2012,7 +2012,7 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, S
 
 void EditDoc::CreateDefFont( bool bUseStyles )
 {
-    SfxItemSet aTmpSet( GetItemPool(), svl::Items<EE_PARA_START, EE_CHAR_END> );
+    SfxItemSetFixed<EE_PARA_START, EE_CHAR_END> aTmpSet( GetItemPool() );
     CreateFont( aDefFont, aTmpSet );
     aDefFont.SetVertical( IsEffectivelyVertical() );
     aDefFont.SetOrientation( Degree10(IsEffectivelyVertical() ? (IsTopToBottom() ? 2700 : 900) : 0) );
