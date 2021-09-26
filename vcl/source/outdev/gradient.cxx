@@ -284,37 +284,14 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
     }
 
     // colour-intensities of start- and finish; change if needed
-    tools::Long    nFactor;
-    Color   aStartCol   = rGradient.GetStartColor();
-    Color   aEndCol     = rGradient.GetEndColor();
-    tools::Long    nStartRed   = aStartCol.GetRed();
-    tools::Long    nStartGreen = aStartCol.GetGreen();
-    tools::Long    nStartBlue  = aStartCol.GetBlue();
-    tools::Long    nEndRed     = aEndCol.GetRed();
-    tools::Long    nEndGreen   = aEndCol.GetGreen();
-    tools::Long    nEndBlue    = aEndCol.GetBlue();
-    nFactor     = rGradient.GetStartIntensity();
-    nStartRed   = (nStartRed   * nFactor) / 100;
-    nStartGreen = (nStartGreen * nFactor) / 100;
-    nStartBlue  = (nStartBlue  * nFactor) / 100;
-    nFactor     = rGradient.GetEndIntensity();
-    nEndRed     = (nEndRed   * nFactor) / 100;
-    nEndGreen   = (nEndGreen * nFactor) / 100;
-    nEndBlue    = (nEndBlue  * nFactor) / 100;
+    tools::Long nStartRed = 0;
+    tools::Long nStartGreen = 0;
+    tools::Long nStartBlue = 0;
+    tools::Long nEndRed = 0;
+    tools::Long nEndGreen = 0;
+    tools::Long nEndBlue = 0;
 
-    // gradient style axial has exchanged start and end colors
-    if ( bAxial)
-    {
-        tools::Long nTempColor = nStartRed;
-        nStartRed = nEndRed;
-        nEndRed = nTempColor;
-        nTempColor = nStartGreen;
-        nStartGreen = nEndGreen;
-        nEndGreen = nTempColor;
-        nTempColor = nStartBlue;
-        nStartBlue = nEndBlue;
-        nEndBlue = nTempColor;
-    }
+    std::tie(nStartRed, nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue) = rGradient.GetColorIntensities();
 
     sal_uInt8   nRed;
     sal_uInt8   nGreen;
@@ -460,20 +437,22 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
     std::optional<tools::PolyPolygon> xPolyPoly;
     tools::Rectangle       aRect;
     Point           aCenter;
-    Color           aStartCol( rGradient.GetStartColor() );
-    Color           aEndCol( rGradient.GetEndColor() );
-    tools::Long            nStartRed = ( static_cast<tools::Long>(aStartCol.GetRed()) * rGradient.GetStartIntensity() ) / 100;
-    tools::Long            nStartGreen = ( static_cast<tools::Long>(aStartCol.GetGreen()) * rGradient.GetStartIntensity() ) / 100;
-    tools::Long            nStartBlue = ( static_cast<tools::Long>(aStartCol.GetBlue()) * rGradient.GetStartIntensity() ) / 100;
-    tools::Long            nEndRed = ( static_cast<tools::Long>(aEndCol.GetRed()) * rGradient.GetEndIntensity() ) / 100;
-    tools::Long            nEndGreen = ( static_cast<tools::Long>(aEndCol.GetGreen()) * rGradient.GetEndIntensity() ) / 100;
-    tools::Long            nEndBlue = ( static_cast<tools::Long>(aEndCol.GetBlue()) * rGradient.GetEndIntensity() ) / 100;
+    Degree10       nAngle = rGradient.GetAngle() % 3600_deg10;
+    rGradient.GetBoundRect( rRect, aRect, aCenter );
+
+    // colour-intensities of start- and finish; change if needed
+    tools::Long nStartRed = 0;
+    tools::Long nStartGreen = 0;
+    tools::Long nStartBlue = 0;
+    tools::Long nEndRed = 0;
+    tools::Long nEndGreen = 0;
+    tools::Long nEndBlue = 0;
+
+    std::tie(nStartRed, nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue) = rGradient.GetColorIntensities();
+
     tools::Long            nRedSteps = nEndRed - nStartRed;
     tools::Long            nGreenSteps = nEndGreen - nStartGreen;
     tools::Long            nBlueSteps = nEndBlue   - nStartBlue;
-    Degree10       nAngle = rGradient.GetAngle() % 3600_deg10;
-
-    rGradient.GetBoundRect( rRect, aRect, aCenter );
 
     if ( UsePolyPolygonForComplexGradient() )
         xPolyPoly = tools::PolyPolygon( 2 );
@@ -642,37 +621,14 @@ void OutputDevice::DrawLinearGradientToMetafile( const tools::Rectangle& rRect,
     }
 
     // colour-intensities of start- and finish; change if needed
-    tools::Long    nFactor;
-    Color   aStartCol   = rGradient.GetStartColor();
-    Color   aEndCol     = rGradient.GetEndColor();
-    tools::Long    nStartRed   = aStartCol.GetRed();
-    tools::Long    nStartGreen = aStartCol.GetGreen();
-    tools::Long    nStartBlue  = aStartCol.GetBlue();
-    tools::Long    nEndRed     = aEndCol.GetRed();
-    tools::Long    nEndGreen   = aEndCol.GetGreen();
-    tools::Long    nEndBlue    = aEndCol.GetBlue();
-    nFactor     = rGradient.GetStartIntensity();
-    nStartRed   = (nStartRed   * nFactor) / 100;
-    nStartGreen = (nStartGreen * nFactor) / 100;
-    nStartBlue  = (nStartBlue  * nFactor) / 100;
-    nFactor     = rGradient.GetEndIntensity();
-    nEndRed     = (nEndRed   * nFactor) / 100;
-    nEndGreen   = (nEndGreen * nFactor) / 100;
-    nEndBlue    = (nEndBlue  * nFactor) / 100;
+    tools::Long nStartRed = 0;
+    tools::Long nStartGreen = 0;
+    tools::Long nStartBlue = 0;
+    tools::Long nEndRed = 0;
+    tools::Long nEndGreen = 0;
+    tools::Long nEndBlue = 0;
 
-    // gradient style axial has exchanged start and end colors
-    if (bAxial)
-    {
-        tools::Long nTempColor = nStartRed;
-        nStartRed = nEndRed;
-        nEndRed = nTempColor;
-        nTempColor = nStartGreen;
-        nStartGreen = nEndGreen;
-        nEndGreen = nTempColor;
-        nTempColor = nStartBlue;
-        nStartBlue = nEndBlue;
-        nEndBlue = nTempColor;
-    }
+    std::tie(nStartRed, nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue) = rGradient.GetColorIntensities();
 
     sal_uInt8   nRed;
     sal_uInt8   nGreen;
@@ -810,20 +766,22 @@ void OutputDevice::DrawComplexGradientToMetafile( const tools::Rectangle& rRect,
     std::optional<tools::PolyPolygon> xPolyPoly;
     tools::Rectangle       aRect;
     Point           aCenter;
-    Color           aStartCol( rGradient.GetStartColor() );
-    Color           aEndCol( rGradient.GetEndColor() );
-    tools::Long            nStartRed = ( static_cast<tools::Long>(aStartCol.GetRed()) * rGradient.GetStartIntensity() ) / 100;
-    tools::Long            nStartGreen = ( static_cast<tools::Long>(aStartCol.GetGreen()) * rGradient.GetStartIntensity() ) / 100;
-    tools::Long            nStartBlue = ( static_cast<tools::Long>(aStartCol.GetBlue()) * rGradient.GetStartIntensity() ) / 100;
-    tools::Long            nEndRed = ( static_cast<tools::Long>(aEndCol.GetRed()) * rGradient.GetEndIntensity() ) / 100;
-    tools::Long            nEndGreen = ( static_cast<tools::Long>(aEndCol.GetGreen()) * rGradient.GetEndIntensity() ) / 100;
-    tools::Long            nEndBlue = ( static_cast<tools::Long>(aEndCol.GetBlue()) * rGradient.GetEndIntensity() ) / 100;
+    Degree10       nAngle = rGradient.GetAngle() % 3600_deg10;
+    rGradient.GetBoundRect( rRect, aRect, aCenter );
+
+    // colour-intensities of start- and finish; change if needed
+    tools::Long nStartRed = 0;
+    tools::Long nStartGreen = 0;
+    tools::Long nStartBlue = 0;
+    tools::Long nEndRed = 0;
+    tools::Long nEndGreen = 0;
+    tools::Long nEndBlue = 0;
+
+    std::tie(nStartRed, nStartGreen, nStartBlue, nEndRed, nEndGreen, nEndBlue) = rGradient.GetColorIntensities();
+
     tools::Long            nRedSteps = nEndRed - nStartRed;
     tools::Long            nGreenSteps = nEndGreen - nStartGreen;
     tools::Long            nBlueSteps = nEndBlue   - nStartBlue;
-    Degree10       nAngle = rGradient.GetAngle() % 3600_deg10;
-
-    rGradient.GetBoundRect( rRect, aRect, aCenter );
 
     xPolyPoly = tools::PolyPolygon( 2 );
 
