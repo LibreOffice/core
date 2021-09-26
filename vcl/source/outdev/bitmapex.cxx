@@ -67,6 +67,24 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
     }
 }
 
+void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
+                                 const Point& rSrcPtPixel, const Size& rSrcSizePixel,
+                                 const BitmapEx& rBitmapEx)
+{
+    assert(!is_double_buffered_window());
+
+    if( ImplIsRecordLayout() )
+        return;
+
+    if ( !rBitmapEx.IsAlpha() )
+    {
+        DrawBitmap( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, rBitmapEx.GetBitmap() );
+    }
+    else
+    {
+        DrawBitmapEx( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, rBitmapEx, MetaActionType::BMPEXSCALEPART );
+    }
+}
 
 void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                  const Point& rSrcPtPixel, const Size& rSrcSizePixel,

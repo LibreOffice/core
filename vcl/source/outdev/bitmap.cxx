@@ -49,6 +49,14 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize, cons
     DrawBitmap( rDestPt, rDestSize, Point(), rBitmap.GetSizePixel(), rBitmap, MetaActionType::BMPSCALE );
 }
 
+void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
+                                   const Point& rSrcPtPixel, const Size& rSrcSizePixel,
+                                   const Bitmap& rBitmap)
+{
+    assert(!is_double_buffered_window());
+
+    DrawBitmap( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, rBitmap, MetaActionType::BMPSCALEPART );
+}
 
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
                                    const Point& rSrcPtPixel, const Size& rSrcSizePixel,
