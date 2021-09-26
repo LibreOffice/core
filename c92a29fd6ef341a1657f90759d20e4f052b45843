@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8f770d0_4a7d2c56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-09-26T16:50:55Z",
+      "side": 1,
+      "message": "Thank you! I thought changing the order would create some side effect.",
+      "revId": "c92a29fd6ef341a1657f90759d20e4f052b45843",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
