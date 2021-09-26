@@ -26,6 +26,8 @@
 #include <tools/solar.h>
 #include <tools/color.hxx>
 #include <tools/poly.hxx>
+
+#include <vcl/DrawingInterface.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/devicecoordinate.hxx>
@@ -165,7 +167,8 @@ typedef struct _cairo_surface cairo_surface_t;
 * so we need to use virtual inheritance to keep the referencing counting
 * OK.
 */
-class SAL_WARN_UNUSED VCL_DLLPUBLIC OutputDevice : public virtual VclReferenceBase
+class SAL_WARN_UNUSED VCL_DLLPUBLIC OutputDevice : public virtual VclReferenceBase,
+                                                   public virtual DrawingInterface
 {
     friend class Printer;
     friend class VirtualDevice;
@@ -469,8 +472,8 @@ private:
 
 public:
 
-    void                        Push( PushFlags nFlags = PushFlags::ALL );
-    void                        Pop();
+    void                        Push( PushFlags nFlags = PushFlags::ALL ) override;
+    void                        Pop() override;
     void                        ClearStack();
 
     void                        EnableOutput( bool bEnable = true );
@@ -483,13 +486,13 @@ public:
     void                        SetDrawMode( DrawModeFlags nDrawMode );
     DrawModeFlags               GetDrawMode() const { return mnDrawMode; }
 
-    void                        SetLayoutMode( ComplexTextLayoutFlags nTextLayoutMode );
+    void                        SetLayoutMode( ComplexTextLayoutFlags nTextLayoutMode ) override;
     ComplexTextLayoutFlags      GetLayoutMode() const { return mnTextLayoutMode; }
 
-    void                        SetDigitLanguage( LanguageType );
+    void                        SetDigitLanguage( LanguageType ) override;
     LanguageType                GetDigitLanguage() const { return meTextLanguage; }
 
-    void                        SetRasterOp( RasterOp eRasterOp );
+    void                        SetRasterOp( RasterOp eRasterOp ) override;
     RasterOp                    GetRasterOp() const { return meRasterOp; }
 
     /**
@@ -503,12 +506,12 @@ public:
     OutDevViewType              GetOutDevViewType() const { return meOutDevViewType; }
 
     void                        SetLineColor();
-    void                        SetLineColor( const Color& rColor );
+    void                        SetLineColor( const Color& rColor ) override;
     const Color&                GetLineColor() const { return maLineColor; }
     bool                        IsLineColor() const { return mbLineColor; }
 
     void                        SetFillColor();
-    void                        SetFillColor( const Color& rColor );
+    void                        SetFillColor( const Color& rColor ) override;
     const Color&                GetFillColor() const { return maFillColor; }
     bool                        IsFillColor() const { return mbFillColor; }
 
@@ -522,7 +525,7 @@ public:
     virtual Color               GetReadableFontColor(const Color& rFontColor, const Color& rBgColor) const;
     bool                        IsBackground() const { return mbBackground; }
 
-    void                        SetFont( const vcl::Font& rNewFont );
+    void                        SetFont( const vcl::Font& rNewFont ) override;
     const vcl::Font&            GetFont() const { return maFont; }
 
 protected:
@@ -546,14 +549,14 @@ public:
 
     vcl::Region                 GetClipRegion() const;
     void                        SetClipRegion();
-    void                        SetClipRegion( const vcl::Region& rRegion );
+    void                        SetClipRegion( const vcl::Region& rRegion ) override;
     bool                        SelectClipRegion( const vcl::Region&, SalGraphics* pGraphics = nullptr );
 
     bool                        IsClipRegion() const { return mbClipRegion; }
 
-    void                        MoveClipRegion( tools::Long nHorzMove, tools::Long nVertMove );
+    void                        MoveClipRegion( tools::Long nHorzMove, tools::Long nVertMove ) override;
     void                        IntersectClipRegion( const tools::Rectangle& rRect );
-    void                        IntersectClipRegion( const vcl::Region& rRegion );
+    void                        IntersectClipRegion( const vcl::Region& rRegion ) override;
 
     virtual vcl::Region         GetActiveClipRegion() const;
     virtual vcl::Region         GetOutputBoundsClipRegion() const;
@@ -577,7 +580,7 @@ private:
     ///@}
 
 public:
-    virtual void                DrawBorder(tools::Rectangle aBorderRect);
+    virtual void                DrawBorder(tools::Rectangle aBorderRect) override;
 
 
     /** @name Pixel functions
@@ -586,8 +589,8 @@ public:
 
 public:
 
-    void                        DrawPixel( const Point& rPt );
-    void                        DrawPixel( const Point& rPt, const Color& rColor );
+    void                        DrawPixel( const Point& rPt ) override;
+    void                        DrawPixel( const Point& rPt, const Color& rColor ) override;
 
     Color                       GetPixel( const Point& rPt ) const;
     ///@}
@@ -599,9 +602,9 @@ public:
 
 public:
 
-    void                        DrawRect( const tools::Rectangle& rRect );
+    void                        DrawRect( const tools::Rectangle& rRect ) override;
     void                        DrawRect( const tools::Rectangle& rRect,
-                                          sal_uLong nHorzRount, sal_uLong nVertRound );
+                                          sal_uLong nHorzRount, sal_uLong nVertRound ) override;
 
     /// Fill the given rectangle with checkered rectangles of size nLen x nLen using the colors aStart and aEnd
     void                        DrawCheckered(
@@ -609,9 +612,9 @@ public:
                                     const Size& rSize,
                                     sal_uInt32 nLen = 8,
                                     Color aStart = COL_WHITE,
-                                    Color aEnd = COL_BLACK);
+                                    Color aEnd = COL_BLACK) override;
 
-    void                        DrawGrid( const tools::Rectangle& rRect, const Size& rDist, DrawGridFlags nFlags );
+    void                        DrawGrid( const tools::Rectangle& rRect, const Size& rDist, DrawGridFlags nFlags ) override;
 
     ///@}
 
@@ -619,8 +622,8 @@ public:
      */
     ///@{
 public:
-    void Invert( const tools::Rectangle& rRect, InvertFlags nFlags = InvertFlags::NONE );
-    void Invert( const tools::Polygon& rPoly, InvertFlags nFlags = InvertFlags::NONE );
+    void Invert( const tools::Rectangle& rRect, InvertFlags nFlags = InvertFlags::NONE ) override;
+    void Invert( const tools::Polygon& rPoly, InvertFlags nFlags = InvertFlags::NONE ) override;
     ///@}
 
     /** @name Line functions
@@ -629,10 +632,10 @@ public:
 
 public:
 
-    void                        DrawLine( const Point& rStartPt, const Point& rEndPt );
+    void                        DrawLine( const Point& rStartPt, const Point& rEndPt ) override;
 
     void                        DrawLine( const Point& rStartPt, const Point& rEndPt,
-                                          const LineInfo& rLineInfo );
+                                          const LineInfo& rLineInfo ) override;
 
 protected:
     virtual void DrawHatchLine_DrawLine(const Point& rStartPoint, const Point& rEndPoint);
@@ -659,14 +662,14 @@ public:
         @see DrawPolygon
         @see DrawPolyPolygon
      */
-    void                        DrawPolyLine( const tools::Polygon& rPoly );
+    void                        DrawPolyLine( const tools::Polygon& rPoly ) override;
 
     void                        DrawPolyLine(
                                     const basegfx::B2DPolygon&,
                                     double fLineWidth = 0.0,
                                     basegfx::B2DLineJoin eLineJoin = basegfx::B2DLineJoin::Round,
                                     css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT,
-                                    double fMiterMinimumAngle = basegfx::deg2rad(15.0));
+                                    double fMiterMinimumAngle = basegfx::deg2rad(15.0)) override;
 
     /** Render the given polygon as a line stroke
 
@@ -679,7 +682,7 @@ public:
         @see DrawPolyPolygon
      */
     void                        DrawPolyLine( const tools::Polygon& rPoly,
-                                              const LineInfo& rLineInfo );
+                                              const LineInfo& rLineInfo ) override;
 
     // #i101491#
     // Helper who tries to use SalGDI's DrawPolyLine direct and returns it's bool.
@@ -728,8 +731,8 @@ public:
 
         @see DrawPolyLine
      */
-    void                        DrawPolygon( const tools::Polygon& rPoly );
-    void                        DrawPolygon( const basegfx::B2DPolygon& );
+    void                        DrawPolygon( const tools::Polygon& rPoly ) override;
+    void                        DrawPolygon( const basegfx::B2DPolygon& ) override;
 
     /** Render the given poly-polygon
 
@@ -741,8 +744,8 @@ public:
 
         @see DrawPolyLine
      */
-    void                        DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly );
-    void                        DrawPolyPolygon( const basegfx::B2DPolyPolygon& );
+    void                        DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly ) override;
+    void                        DrawPolyPolygon( const basegfx::B2DPolyPolygon& ) override;
 
 private:
 
@@ -764,19 +767,19 @@ private:
 
 public:
 
-    void                        DrawEllipse( const tools::Rectangle& rRect );
+    void                        DrawEllipse( const tools::Rectangle& rRect ) override;
 
     void                        DrawArc(
                                     const tools::Rectangle& rRect,
-                                    const Point& rStartPt, const Point& rEndPt );
+                                    const Point& rStartPt, const Point& rEndPt ) override;
 
     void                        DrawPie(
                                     const tools::Rectangle& rRect,
-                                    const Point& rStartPt, const Point& rEndPt );
+                                    const Point& rStartPt, const Point& rEndPt ) override;
 
     void                        DrawChord(
                                     const tools::Rectangle& rRect,
-                                    const Point& rStartPt, const Point& rEndPt );
+                                    const Point& rStartPt, const Point& rEndPt ) override;
 
     ///@}
 
@@ -786,8 +789,8 @@ public:
     ///@{
 
 public:
-    void                        DrawGradient( const tools::Rectangle& rRect, const Gradient& rGradient );
-    void                        DrawGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient );
+    void                        DrawGradient( const tools::Rectangle& rRect, const Gradient& rGradient ) override;
+    void                        DrawGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient ) override;
 
     void                        AddGradientActions(
                                     const tools::Rectangle& rRect,
@@ -822,12 +825,12 @@ private:
 public:
 
 #ifdef _MSC_VER
-    void                        DrawHatch( const tools::PolyPolygon& rPolyPoly, const ::Hatch& rHatch );
+    void                        DrawHatch( const tools::PolyPolygon& rPolyPoly, const ::Hatch& rHatch ) override;
     void                        AddHatchActions( const tools::PolyPolygon& rPolyPoly,
                                                  const ::Hatch& rHatch,
                                                  GDIMetaFile& rMtf );
 #else
-    void                        DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch );
+    void                        DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch ) override;
     void                        AddHatchActions( const tools::PolyPolygon& rPolyPoly,
                                                  const Hatch& rHatch,
                                                  GDIMetaFile& rMtf );
@@ -847,10 +850,10 @@ private:
     ///@{
 
 public:
-    void                        DrawWallpaper( const tools::Rectangle& rRect, const Wallpaper& rWallpaper );
+    void                        DrawWallpaper( const tools::Rectangle& rRect, const Wallpaper& rWallpaper ) override;
 
-    void                        Erase();
-    void                        Erase(const tools::Rectangle& rRect);
+    void                        Erase() override;
+    void                        Erase(const tools::Rectangle& rRect) override;
 
 protected:
     void                        DrawGradientWallpaper( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, const Wallpaper& rWallpaper );
@@ -871,12 +874,12 @@ public:
     void                        DrawText( const Point& rStartPt, const OUString& rStr,
                                           sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                           std::vector< tools::Rectangle >* pVector = nullptr, OUString* pDisplayText = nullptr,
-                                          const SalLayoutGlyphs* pLayoutCache = nullptr );
+                                          const SalLayoutGlyphs* pLayoutCache = nullptr ) override;
 
     void                        DrawText( const tools::Rectangle& rRect,
                                           const OUString& rStr, DrawTextFlags nStyle = DrawTextFlags::NONE,
                                           std::vector< tools::Rectangle >* pVector = nullptr, OUString* pDisplayText = nullptr,
-                                          vcl::ITextLayout* _pTextLayout = nullptr );
+                                          vcl::ITextLayout* _pTextLayout = nullptr ) override;
 
     static void                 ImplDrawText( OutputDevice& rTargetDevice, const tools::Rectangle& rRect,
                                               const OUString& rOrigStr, DrawTextFlags nStyle,
@@ -889,13 +892,13 @@ public:
     void                        DrawCtrlText( const Point& rPos, const OUString& rStr,
                                               sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                               DrawTextFlags nStyle = DrawTextFlags::Mnemonic, std::vector< tools::Rectangle >* pVector = nullptr, OUString* pDisplayText = nullptr,
-                                              const SalLayoutGlyphs* pGlyphs = nullptr);
+                                              const SalLayoutGlyphs* pGlyphs = nullptr) override;
 
     void                        DrawTextLine( const Point& rPos, tools::Long nWidth,
                                               FontStrikeout eStrikeout,
                                               FontLineStyle eUnderline,
                                               FontLineStyle eOverline,
-                                              bool bUnderlineAbove = false );
+                                              bool bUnderlineAbove = false ) override;
 
     void                        ImplDrawTextLine( tools::Long nBaseX, tools::Long nX, tools::Long nY, DeviceCoordinate nWidth,
                                                   FontStrikeout eStrikeout, FontLineStyle eUnderline,
@@ -904,7 +907,7 @@ public:
     void                        ImplDrawTextLines( SalLayout&, FontStrikeout eStrikeout, FontLineStyle eUnderline,
                                                    FontLineStyle eOverline, bool bWordLine, bool bUnderlineAbove );
 
-    void                        DrawWaveLine( const Point& rStartPos, const Point& rEndPos, tools::Long nLineWidth = 1 );
+    void                        DrawWaveLine( const Point& rStartPos, const Point& rEndPos, tools::Long nLineWidth = 1 ) override;
 
     bool                        ImplDrawRotateText( SalLayout& );
 
@@ -1007,12 +1010,12 @@ public:
                                                     DrawTextFlags    nStyle,
                                                     GDIMetaFile&     rMtf );
 
-    void                        SetTextColor( const Color& rColor );
+    void                        SetTextColor( const Color& rColor ) override;
     virtual void                SetSystemTextColor(SystemTextColorFlags nFlags, bool bEnabled);
     const Color&                GetTextColor() const { return maTextColor; }
 
     void                        SetTextFillColor();
-    void                        SetTextFillColor( const Color& rColor );
+    void                        SetTextFillColor( const Color& rColor ) override;
     Color                       GetTextFillColor() const;
     bool                        IsTextFillColor() const { return !maFont.IsTransparent(); }
 
@@ -1026,7 +1029,7 @@ public:
     const Color&                GetOverlineColor() const { return maOverlineColor; }
     bool                        IsOverlineColor() const { return !maOverlineColor.IsTransparent(); }
 
-    void                        SetTextAlign( TextAlign eAlign );
+    void                        SetTextAlign( TextAlign eAlign ) override;
     TextAlign                   GetTextAlign() const { return maFont.GetAlignment(); }
 
     /** Width of the text.
@@ -1049,7 +1052,7 @@ public:
                                                sal_Int32 nIndex = 0,
                                                sal_Int32 nLen = -1,
                                                SalLayoutFlags flags = SalLayoutFlags::NONE,
-                                               const SalLayoutGlyphs* pLayoutCache = nullptr);
+                                               const SalLayoutGlyphs* pLayoutCache = nullptr) override;
     tools::Long                        GetTextArray( const OUString& rStr, std::vector<tools::Long>* pDXAry,
                                               sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                               vcl::text::TextLayoutCache const* = nullptr,
@@ -1060,7 +1063,7 @@ public:
                                               const SalLayoutGlyphs* pGlyphs = nullptr ) const;
     void                        DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
                                                  const OUString& rStr,
-                                                 sal_Int32 nIndex = 0, sal_Int32 nLen = -1);
+                                                 sal_Int32 nIndex = 0, sal_Int32 nLen = -1) override;
     sal_Int32                   GetTextBreak( const OUString& rStr, tools::Long nTextWidth,
                                               sal_Int32 nIndex, sal_Int32 nLen = -1,
                                               tools::Long nCharExtra = 0,
@@ -1118,7 +1121,7 @@ public:
     bool                        AddTempDevFont( const OUString& rFileURL, const OUString& rFontName );
     void                        RefreshFontData( const bool bNewFontLists );
 
-    FontMetric                  GetFontMetric() const;
+    FontMetric                  GetFontMetric() const override;
     FontMetric                  GetFontMetric( const vcl::Font& rFont ) const;
 
     bool                        GetFontCharMap( FontCharMapRef& rxFontCharMap ) const;
@@ -1265,7 +1268,7 @@ public:
       */
     void                        DrawBitmap(
                                     const Point& rDestPt,
-                                    const Bitmap& rBitmap );
+                                    const Bitmap& rBitmap ) override;
 
     /** @overload
         void DrawBitmap(
@@ -1279,14 +1282,14 @@ public:
     void                        DrawBitmap(
                                     const Point& rDestPt,
                                     const Size& rDestSize,
-                                    const Bitmap& rBitmap );
+                                    const Bitmap& rBitmap ) override;
 
     void                        DrawBitmap(
                                     const Point& rDestPt,
                                     const Size& rDestSize,
                                     const Point& rSrcPtPixel,
                                     const Size& rSrcSizePixel,
-                                    const Bitmap& rBitmap);
+                                    const Bitmap& rBitmap) override;
 
     void                        DrawBitmap(
                                     const Point& rDestPt,
@@ -1307,7 +1310,7 @@ public:
      */
     void                        DrawBitmapEx(
                                     const Point& rDestPt,
-                                    const BitmapEx& rBitmapEx );
+                                    const BitmapEx& rBitmapEx ) override;
 
 
     /** @overload
@@ -1322,7 +1325,7 @@ public:
     void                        DrawBitmapEx(
                                     const Point& rDestPt,
                                     const Size& rDestSize,
-                                    const BitmapEx& rBitmapEx );
+                                    const BitmapEx& rBitmapEx ) override;
 
     void                        DrawBitmapEx(
                                     const Point& rDestPt,
@@ -1349,13 +1352,13 @@ public:
     void                        DrawImage(
                                     const Point& rPos,
                                     const Image& rImage,
-                                    DrawImageFlags nStyle = DrawImageFlags::NONE );
+                                    DrawImageFlags nStyle = DrawImageFlags::NONE ) override;
 
     void                        DrawImage(
                                     const Point& rPos,
                                     const Size& rSize,
                                     const Image& rImage,
-                                    DrawImageFlags nStyle = DrawImageFlags::NONE );
+                                    DrawImageFlags nStyle = DrawImageFlags::NONE ) override;
 
 
     virtual Bitmap              GetBitmap( const Point& rSrcPt, const Size& rSize ) const;
@@ -1381,7 +1384,7 @@ public:
     void                        DrawTransformedBitmapEx(
                                     const basegfx::B2DHomMatrix& rTransformation,
                                     const BitmapEx& rBitmapEx,
-                                    double fAlpha = 1.0);
+                                    double fAlpha = 1.0) override;
 
     /** Return true if DrawTransformedBitmapEx() is fast.
 
@@ -1500,16 +1503,16 @@ public:
                                     bool bDownsampleBitmaps,
                                     const Color& rBackground = COL_TRANSPARENT );
 
-    void                        DrawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
+    void                        DrawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent ) override;
 
     void                        DrawTransparent(
                                     const basegfx::B2DHomMatrix& rObjectTransform,
                                     const basegfx::B2DPolyPolygon& rB2DPolyPoly,
-                                    double fTransparency);
+                                    double fTransparency) override;
 
     void                        DrawTransparent(
                                         const GDIMetaFile& rMtf, const Point& rPos, const Size& rSize,
-                                        const Gradient& rTransparenceGradient );
+                                        const Gradient& rTransparenceGradient ) override;
 
 protected:
 
@@ -1531,10 +1534,10 @@ private:
 public:
 
     void                        DrawMask( const Point& rDestPt,
-                                          const Bitmap& rBitmap, const Color& rMaskColor );
+                                          const Bitmap& rBitmap, const Color& rMaskColor ) override;
 
     void                        DrawMask( const Point& rDestPt, const Size& rDestSize,
-                                          const Bitmap& rBitmap, const Color& rMaskColor );
+                                          const Bitmap& rBitmap, const Color& rMaskColor ) override;
 
     void                        DrawMask( const Point& rDestPt, const Size& rDestSize,
                                           const Point& rSrcPtPixel, const Size& rSrcSizePixel,
@@ -1543,7 +1546,7 @@ public:
     void                        DrawMask( const Point& rDestPt, const Size& rDestSize,
                                           const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                           const Bitmap& rBitmap, const Color& rMaskColor,
-                                          MetaActionType nAction );
+                                          MetaActionType nAction ) override;
 
 protected:
 
@@ -1564,7 +1567,7 @@ public:
     bool                        IsMapModeEnabled() const { return mbMap; }
 
     void                        SetMapMode();
-    void                        SetMapMode( const MapMode& rNewMapMode );
+    void                        SetMapMode( const MapMode& rNewMapMode ) override;
     void                        SetRelativeMapMode( const MapMode& rNewMapMode );
     virtual void                SetMetafileMapMode(const MapMode& rNewMapMode, bool bIsRecord);
     const MapMode&              GetMapMode() const { return maMapMode; }
@@ -1909,7 +1912,7 @@ public:
         that's too much for now, wrote \#i107046# for this */
     bool                        DrawEPS(
                                     const Point& rPt, const Size& rSz,
-                                    const GfxLink& rGfxLink, GDIMetaFile* pSubst = nullptr );
+                                    const GfxLink& rGfxLink, GDIMetaFile* pSubst = nullptr ) override;
     ///@}
 
 public:
