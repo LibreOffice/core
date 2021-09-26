@@ -244,19 +244,6 @@ void OutputDevice::DrawGradientToMetafile ( const tools::PolyPolygon& rPolyPoly,
         DrawComplexGradientToMetafile( aRect, aGradient );
 }
 
-namespace
-{
-    sal_uInt8 GetGradientColorValue( tools::Long nValue )
-    {
-        if ( nValue < 0 )
-            return 0;
-        else if ( nValue > 0xFF )
-            return 0xFF;
-        else
-            return static_cast<sal_uInt8>(nValue);
-    }
-}
-
 void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
                                        const Gradient& rGradient,
                                        const tools::PolyPolygon* pClixPolyPoly )
@@ -362,11 +349,11 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
         // linear interpolation of color
         const double fAlpha = static_cast<double>(i) / fStepsMinus1;
         double fTempColor = static_cast<double>(nStartRed) * (1.0-fAlpha) + static_cast<double>(nEndRed) * fAlpha;
-        nRed = GetGradientColorValue(static_cast<tools::Long>(fTempColor));
+        nRed = Gradient::GetColorValue(static_cast<tools::Long>(fTempColor));
         fTempColor = static_cast<double>(nStartGreen) * (1.0-fAlpha) + static_cast<double>(nEndGreen) * fAlpha;
-        nGreen = GetGradientColorValue(static_cast<tools::Long>(fTempColor));
+        nGreen = Gradient::GetColorValue(static_cast<tools::Long>(fTempColor));
         fTempColor = static_cast<double>(nStartBlue) * (1.0-fAlpha) + static_cast<double>(nEndBlue) * fAlpha;
-        nBlue = GetGradientColorValue(static_cast<tools::Long>(fTempColor));
+        nBlue = Gradient::GetColorValue(static_cast<tools::Long>(fTempColor));
 
         mpGraphics->SetFillColor( Color( nRed, nGreen, nBlue ) );
 
@@ -398,9 +385,9 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
         return;
 
     // draw middle polygon with end color
-    nRed = GetGradientColorValue(nEndRed);
-    nGreen = GetGradientColorValue(nEndGreen);
-    nBlue = GetGradientColorValue(nEndBlue);
+    nRed = Gradient::GetColorValue(nEndRed);
+    nGreen = Gradient::GetColorValue(nEndGreen);
+    nBlue = Gradient::GetColorValue(nEndBlue);
 
     mpGraphics->SetFillColor( Color( nRed, nGreen, nBlue ) );
 
@@ -540,9 +527,9 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
 
         // adapt colour accordingly
         const tools::Long nStepIndex = ( xPolyPoly ? i : ( i + 1 ) );
-        nRed = GetGradientColorValue( nStartRed + ( ( nRedSteps * nStepIndex ) / nSteps ) );
-        nGreen = GetGradientColorValue( nStartGreen + ( ( nGreenSteps * nStepIndex ) / nSteps ) );
-        nBlue = GetGradientColorValue( nStartBlue + ( ( nBlueSteps * nStepIndex ) / nSteps ) );
+        nRed = Gradient::GetColorValue( nStartRed + ( ( nRedSteps * nStepIndex ) / nSteps ) );
+        nGreen = Gradient::GetColorValue( nStartGreen + ( ( nGreenSteps * nStepIndex ) / nSteps ) );
+        nBlue = Gradient::GetColorValue( nStartBlue + ( ( nBlueSteps * nStepIndex ) / nSteps ) );
 
         // either slow tools::PolyPolygon output or fast Polygon-Painting
         if( xPolyPoly )
@@ -586,9 +573,9 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
     // (i.e. start) color is taken, to generate _any_ output.
     if( bPaintLastPolygon )
     {
-        nRed = GetGradientColorValue( nEndRed );
-        nGreen = GetGradientColorValue( nEndGreen );
-        nBlue = GetGradientColorValue( nEndBlue );
+        nRed = Gradient::GetColorValue( nEndRed );
+        nGreen = Gradient::GetColorValue( nEndGreen );
+        nBlue = Gradient::GetColorValue( nEndBlue );
     }
 
     mpGraphics->SetFillColor( Color( nRed, nGreen, nBlue ) );
@@ -698,11 +685,11 @@ void OutputDevice::DrawLinearGradientToMetafile( const tools::Rectangle& rRect,
         // linear interpolation of color
         double fAlpha = static_cast<double>(i) / fStepsMinus1;
         double fTempColor = static_cast<double>(nStartRed) * (1.0-fAlpha) + static_cast<double>(nEndRed) * fAlpha;
-        nRed = GetGradientColorValue(static_cast<tools::Long>(fTempColor));
+        nRed = Gradient::GetColorValue(static_cast<tools::Long>(fTempColor));
         fTempColor = static_cast<double>(nStartGreen) * (1.0-fAlpha) + static_cast<double>(nEndGreen) * fAlpha;
-        nGreen = GetGradientColorValue(static_cast<tools::Long>(fTempColor));
+        nGreen = Gradient::GetColorValue(static_cast<tools::Long>(fTempColor));
         fTempColor = static_cast<double>(nStartBlue) * (1.0-fAlpha) + static_cast<double>(nEndBlue) * fAlpha;
-        nBlue = GetGradientColorValue(static_cast<tools::Long>(fTempColor));
+        nBlue = Gradient::GetColorValue(static_cast<tools::Long>(fTempColor));
 
         mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
 
@@ -734,9 +721,9 @@ void OutputDevice::DrawLinearGradientToMetafile( const tools::Rectangle& rRect,
         return;
 
     // draw middle polygon with end color
-    nRed = GetGradientColorValue(nEndRed);
-    nGreen = GetGradientColorValue(nEndGreen);
-    nBlue = GetGradientColorValue(nEndBlue);
+    nRed = Gradient::GetColorValue(nEndRed);
+    nGreen = Gradient::GetColorValue(nEndGreen);
+    nBlue = Gradient::GetColorValue(nEndBlue);
 
     mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
 
@@ -853,9 +840,9 @@ void OutputDevice::DrawComplexGradientToMetafile( const tools::Rectangle& rRect,
 
         // adapt colour accordingly
         const tools::Long nStepIndex = ( xPolyPoly ? i : ( i + 1 ) );
-        nRed = GetGradientColorValue( nStartRed + ( ( nRedSteps * nStepIndex ) / nSteps ) );
-        nGreen = GetGradientColorValue( nStartGreen + ( ( nGreenSteps * nStepIndex ) / nSteps ) );
-        nBlue = GetGradientColorValue( nStartBlue + ( ( nBlueSteps * nStepIndex ) / nSteps ) );
+        nRed = Gradient::GetColorValue( nStartRed + ( ( nRedSteps * nStepIndex ) / nSteps ) );
+        nGreen = Gradient::GetColorValue( nStartGreen + ( ( nGreenSteps * nStepIndex ) / nSteps ) );
+        nBlue = Gradient::GetColorValue( nStartBlue + ( ( nBlueSteps * nStepIndex ) / nSteps ) );
 
         bPaintLastPolygon = true; // #107349# Paint last polygon only if loop has generated any output
 
@@ -884,9 +871,9 @@ void OutputDevice::DrawComplexGradientToMetafile( const tools::Rectangle& rRect,
     // (i.e. start) color is taken, to generate _any_ output.
     if( bPaintLastPolygon )
     {
-        nRed = GetGradientColorValue( nEndRed );
-        nGreen = GetGradientColorValue( nEndGreen );
-        nBlue = GetGradientColorValue( nEndBlue );
+        nRed = Gradient::GetColorValue( nEndRed );
+        nGreen = Gradient::GetColorValue( nEndGreen );
+        nBlue = Gradient::GetColorValue( nEndBlue );
     }
 
     mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
