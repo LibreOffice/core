@@ -270,15 +270,15 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
 
     rGradient.GetBoundRect( rRect, aRect, aCenter );
 
-    bool bLinear = (rGradient.GetStyle() == GradientStyle::Linear);
+    bool bAxial = (rGradient.GetStyle() == GradientStyle::Axial);
     double fBorder = rGradient.GetBorder() * aRect.GetHeight() / 100.0;
-    if ( !bLinear )
+    if ( bAxial )
     {
         fBorder /= 2.0;
     }
     tools::Rectangle aMirrorRect = aRect; // used in style axial
     aMirrorRect.SetTop( ( aRect.Top() + aRect.Bottom() ) / 2 );
-    if ( !bLinear )
+    if ( bAxial )
     {
         aRect.SetBottom( aMirrorRect.Top() );
     }
@@ -303,7 +303,7 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
     nEndBlue    = (nEndBlue  * nFactor) / 100;
 
     // gradient style axial has exchanged start and end colors
-    if ( !bLinear)
+    if ( bAxial)
     {
         tools::Long nTempColor = nStartRed;
         nStartRed = nEndRed;
@@ -341,7 +341,7 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
 
         ImplDrawPolygon( aPoly, pClixPolyPoly );
 
-        if ( !bLinear)
+        if ( bAxial)
         {
             aBorderRect = aMirrorRect;
             aBorderRect.SetTop( static_cast<tools::Long>( aBorderRect.Bottom() - fBorder ) );
@@ -376,7 +376,7 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
     double fMirrorGradientLine = static_cast<double>(aMirrorRect.Bottom());
 
     const double fStepsMinus1 = static_cast<double>(nSteps) - 1.0;
-    if ( !bLinear)
+    if ( bAxial)
     {
         nSteps -= 1; // draw middle polygons as one polygon after loop to avoid gap
     }
@@ -404,7 +404,7 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
 
         ImplDrawPolygon( aPoly, pClixPolyPoly );
 
-        if ( !bLinear )
+        if ( bAxial )
         {
             aMirrorRect.SetBottom( static_cast<tools::Long>( fMirrorGradientLine - static_cast<double>(i) * fScanInc ) );
             aMirrorRect.SetTop( static_cast<tools::Long>( fMirrorGradientLine - (static_cast<double>(i) + 1.0)* fScanInc ) );
@@ -417,7 +417,7 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
             ImplDrawPolygon( aPoly, pClixPolyPoly );
         }
     }
-    if ( bLinear)
+    if ( !bAxial )
         return;
 
     // draw middle polygon with end color
@@ -628,15 +628,15 @@ void OutputDevice::DrawLinearGradientToMetafile( const tools::Rectangle& rRect,
 
     rGradient.GetBoundRect( rRect, aRect, aCenter );
 
-    bool bLinear = (rGradient.GetStyle() == GradientStyle::Linear);
+    bool bAxial = (rGradient.GetStyle() == GradientStyle::Linear);
     double fBorder = rGradient.GetBorder() * aRect.GetHeight() / 100.0;
-    if ( !bLinear )
+    if (!bAxial)
     {
         fBorder /= 2.0;
     }
     tools::Rectangle aMirrorRect = aRect; // used in style axial
     aMirrorRect.SetTop( ( aRect.Top() + aRect.Bottom() ) / 2 );
-    if ( !bLinear )
+    if (!bAxial)
     {
         aRect.SetBottom( aMirrorRect.Top() );
     }
@@ -661,7 +661,7 @@ void OutputDevice::DrawLinearGradientToMetafile( const tools::Rectangle& rRect,
     nEndBlue    = (nEndBlue  * nFactor) / 100;
 
     // gradient style axial has exchanged start and end colors
-    if ( !bLinear)
+    if (bAxial)
     {
         tools::Long nTempColor = nStartRed;
         nStartRed = nEndRed;
@@ -699,7 +699,7 @@ void OutputDevice::DrawLinearGradientToMetafile( const tools::Rectangle& rRect,
 
         mpMetaFile->AddAction( new MetaPolygonAction( aPoly ) );
 
-        if ( !bLinear)
+        if (bAxial)
         {
             aBorderRect = aMirrorRect;
             aBorderRect.SetTop( static_cast<tools::Long>( aBorderRect.Bottom() - fBorder ) );
@@ -733,7 +733,7 @@ void OutputDevice::DrawLinearGradientToMetafile( const tools::Rectangle& rRect,
     double fMirrorGradientLine = static_cast<double>(aMirrorRect.Bottom());
 
     const double fStepsMinus1 = static_cast<double>(nSteps) - 1.0;
-    if ( !bLinear)
+    if (bAxial)
     {
         nSteps -= 1; // draw middle polygons as one polygon after loop to avoid gap
     }
@@ -761,7 +761,7 @@ void OutputDevice::DrawLinearGradientToMetafile( const tools::Rectangle& rRect,
 
         mpMetaFile->AddAction( new MetaPolygonAction( aPoly ) );
 
-        if ( !bLinear )
+        if (bAxial)
         {
             aMirrorRect.SetBottom( static_cast<tools::Long>( fMirrorGradientLine - static_cast<double>(i) * fScanInc ) );
             aMirrorRect.SetTop( static_cast<tools::Long>( fMirrorGradientLine - (static_cast<double>(i) + 1.0)* fScanInc ) );
@@ -774,7 +774,7 @@ void OutputDevice::DrawLinearGradientToMetafile( const tools::Rectangle& rRect,
             mpMetaFile->AddAction( new MetaPolygonAction( aPoly ) );
         }
     }
-    if ( bLinear)
+    if (!bAxial)
         return;
 
     // draw middle polygon with end color
