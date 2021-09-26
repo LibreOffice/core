@@ -46,6 +46,16 @@ void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
 
 void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
                              const Point& rSrcPtPixel, const Size& rSrcSizePixel,
+                             const Bitmap& rBitmap, const Color& rMaskColor)
+{
+
+    assert(!is_double_buffered_window());
+
+    DrawMask( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, rBitmap, rMaskColor, MetaActionType::MASKSCALEPART );
+}
+
+void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
+                             const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                              const Bitmap& rBitmap, const Color& rMaskColor,
                              const MetaActionType nAction )
 {

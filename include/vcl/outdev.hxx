@@ -1253,33 +1253,21 @@ public:
     ///@{
 
 public:
-
-    /** @overload
-        void DrawBitmap(
-                const Point& rDestPt,
-                const Size& rDestSize,
-                const Point& rSrcPtPixel,
-                const Size& rSecSizePixel,
-                const Bitmap& rBitmap,
-                MetaActionType nAction = MetaActionType::BMPSCALEPART)
-      */
     void                        DrawBitmap(
                                     const Point& rDestPt,
                                     const Bitmap& rBitmap );
 
-    /** @overload
-        void DrawBitmap(
-                const Point& rDestPt,
-                const Size& rDestSize,
-                const Point& rSrcPtPixel,
-                const Size& rSecSizePixel,
-                const Bitmap& rBitmap,
-                MetaActionType nAction = MetaActionType::BMPSCALEPART)
-      */
     void                        DrawBitmap(
                                     const Point& rDestPt,
                                     const Size& rDestSize,
                                     const Bitmap& rBitmap );
+
+    void                        DrawBitmap(
+                                    const Point& rDestPt,
+                                    const Size& rDestSize,
+                                    const Point& rSrcPtPixel,
+                                    const Size& rSrcSizePixel,
+                                    const Bitmap& rBitmap);
 
     void                        DrawBitmap(
                                     const Point& rDestPt,
@@ -1287,31 +1275,13 @@ public:
                                     const Point& rSrcPtPixel,
                                     const Size& rSrcSizePixel,
                                     const Bitmap& rBitmap,
-                                    MetaActionType nAction = MetaActionType::BMPSCALEPART );
+                                    MetaActionType nAction );
 
-    /** @overload
-        void DrawBitmapEx(
-                const Point& rDestPt,
-                const Size& rDestSize,
-                const Point& rSrcPtPixel,
-                const Size& rSecSizePixel,
-                const BitmapEx& rBitmapEx,
-                MetaActionType nAction = MetaActionType::BMPEXSCALEPART)
-     */
     void                        DrawBitmapEx(
                                     const Point& rDestPt,
                                     const BitmapEx& rBitmapEx );
 
 
-    /** @overload
-        void DrawBitmapEx(
-                const Point& rDestPt,
-                const Size& rDestSize,
-                const Point& rSrcPtPixel,
-                const Size& rSecSizePixel,
-                const BitmapEx& rBitmapEx,
-                MetaActionType nAction = MetaActionType::BMPEXSCALEPART)
-     */
     void                        DrawBitmapEx(
                                     const Point& rDestPt,
                                     const Size& rDestSize,
@@ -1322,8 +1292,15 @@ public:
                                     const Size& rDestSize,
                                     const Point& rSrcPtPixel,
                                     const Size& rSrcSizePixel,
+                                    const BitmapEx& rBitmapEx);
+
+    void                        DrawBitmapEx(
+                                    const Point& rDestPt,
+                                    const Size& rDestSize,
+                                    const Point& rSrcPtPixel,
+                                    const Size& rSrcSizePixel,
                                     const BitmapEx& rBitmapEx,
-                                    MetaActionType nAction = MetaActionType::BMPEXSCALEPART );
+                                    MetaActionType nAction );
 
     /** @overload
         virtual void DrawImage(
@@ -1521,6 +1498,10 @@ public:
 
     void                        DrawMask( const Point& rDestPt, const Size& rDestSize,
                                           const Bitmap& rBitmap, const Color& rMaskColor );
+
+    void                        DrawMask( const Point& rDestPt, const Size& rDestSize,
+                                          const Point& rSrcPtPixel, const Size& rSrcSizePixel,
+                                          const Bitmap& rBitmap, const Color& rMaskColor);
 
     void                        DrawMask( const Point& rDestPt, const Size& rDestSize,
                                           const Point& rSrcPtPixel, const Size& rSrcSizePixel,
