@@ -110,6 +110,54 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e22bfc5_f6bd61a7",
+        "filename": "dbaccess/source/ui/dlg/directsql.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-09-26T08:12:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38e562e6_56df44be",
+      "range": {
+        "startLine": 240,
+        "startChar": 78,
+        "endLine": 240,
+        "endChar": 131
+      },
+      "revId": "3e7a28455d27c70706ba704a484a4c2c2671ac5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "448da3c0_fa29bcaa",
+        "filename": "dbaccess/source/ui/dlg/directsql.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-09-26T08:12:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fbb3bc82_13141aa6",
+      "range": {
+        "startLine": 240,
+        "startChar": 65,
+        "endLine": 240,
+        "endChar": 71
+      },
+      "revId": "3e7a28455d27c70706ba704a484a4c2c2671ac5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8b5e773_55003d8e",
@@ -123,6 +171,30 @@
       "writtenOn": "2021-09-25T17:15:48Z",
       "side": 1,
       "message": "You now make executeQuery the default; as this is all partial and heuristics, whatever we do, we will get cases wrong. I\u0027m not sure making executeQuery the default rather than executeUpdate makes more sense, but I don\u0027t have strong arguments for the status quo (executeUpdate as default) either. \u003cshrug\u003e\n\nAn idea. Maybe we keep the special-casing of SELECT, and then (if we are not going to introduce an explicit choice for the user as I proposed in the bug) maybe we can take the value of the \"show results\" checkbox as a hint for the default (essentially: unknown SQL command) case? Something like:\n\n  if (m_xShowOutput-\u003eget_active())\n  {\n    xRS \u003d xStatement-\u003eexecuteQuery(...)\n    display(xRS);\n  }\n  else\n  {\n     resultCount \u003d xStatement-\u003eexecuteUpdate(_rStatement);\n     addOutputText(\"SQL command executed; \" + OUString::number(resultCount) + \" rows affected\\n\");\n  }",
+      "range": {
+        "startLine": 245,
+        "startChar": 16,
+        "endLine": 245,
+        "endChar": 20
+      },
+      "revId": "3e7a28455d27c70706ba704a484a4c2c2671ac5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7496bbf4_9e39afee",
+        "filename": "dbaccess/source/ui/dlg/directsql.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-09-26T08:12:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8b5e773_55003d8e",
       "range": {
         "startLine": 245,
         "startChar": 16,
