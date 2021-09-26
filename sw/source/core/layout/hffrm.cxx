@@ -453,10 +453,10 @@ SwTwips SwHeadFootFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
     {
         nResult = 0;
 
-        auto pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
-        OSL_ENSURE(pAccess, "no border attributes");
+        std::optional<SwBorderAttrAccess> oAccess(std::in_place, SwFrame::GetCache(), this);
+        OSL_ENSURE(oAccess, "no border attributes");
 
-        SwBorderAttrs * pAttrs = pAccess->Get();
+        SwBorderAttrs * pAttrs = oAccess->Get();
 
         /* First assume the whole amount to grow can be provided by eating
            spacing. */
@@ -582,10 +582,10 @@ SwTwips SwHeadFootFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
         bool bNotifyFlys = false;
         if (nRest > 0)
         {
-            auto pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
-            OSL_ENSURE(pAccess, "no border attributes");
+            std::optional<SwBorderAttrAccess> oAccess(std::in_place, SwFrame::GetCache(), this);
+            OSL_ENSURE(oAccess, "no border attributes");
 
-            SwBorderAttrs * pAttrs = pAccess->Get();
+            SwBorderAttrs * pAttrs = oAccess->Get();
 
             /* minimal height of print area */
             SwTwips nMinPrtHeight = nMinHeight
