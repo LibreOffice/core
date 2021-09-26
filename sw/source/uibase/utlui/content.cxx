@@ -99,6 +99,10 @@
 
 #include <frameformats.hxx>
 
+#include <unotextrange.hxx>
+#include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/text/XTextRangeCompare.hpp>
+
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
 
@@ -3408,6 +3412,43 @@ void SwContentTree::UpdateTracking()
         return;
     }
 
+    // bookmarks - track first bookmark at cursor
+    SwDoc* pDoc = m_pActiveShell->GetDoc();
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(pDoc->GetDocShell()->GetBaseModel(),
+                                                                uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xBookmarks(xBookmarksSupplier->getBookmarks(),
+                                                       uno::UNO_QUERY);
+    sal_Int32 nBookmarkCount = xBookmarks->getCount();
+    if (nBookmarkCount && !(m_bIsRoot && m_nRootType != ContentTypeId::BOOKMARK))
+    {
+        SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
+        uno::Reference<text::XTextRange> xRange(
+            SwXTextRange::CreateXTextRange(*pDoc, *pCursor->GetPoint(), nullptr));
+        for (sal_Int32 i = 0; i < nBookmarkCount; ++i)
+        {
+            uno::Reference<text::XTextContent> bookmark;
+            xBookmarks->getByIndex(i) >>= bookmark;
+            try
+            {
+                uno::Reference<text::XTextRange> bookmarkRange = bookmark->getAnchor();
+                uno::Reference<text::XTextRangeCompare> xTextRangeCompare(xRange->getText(),
+                                                                          uno::UNO_QUERY);
+                if (xTextRangeCompare.is()
+                        && xTextRangeCompare->compareRegionStarts(bookmarkRange, xRange) != -1
+                        && xTextRangeCompare->compareRegionEnds(xRange, bookmarkRange) != -1)
+                {
+                    uno::Reference<container::XNamed> xBookmark(bookmark, uno::UNO_QUERY);
+                    lcl_SelectByContentTypeAndName(this, *m_xTreeView,
+                                                   SwResId(STR_CONTENT_TYPE_BOOKMARK),
+                                                   xBookmark->getName());
+                    return;
+                }
+            }
+            catch (const lang::IllegalArgumentException&)
+            {
+            }
+        }
+    }
     // references
     if (SwContentAtPos aContentAtPos(IsAttrAtPos::RefMark);
             m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
