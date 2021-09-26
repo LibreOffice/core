@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ada78707_3f5c096d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-09-26T14:39:49Z",
+      "side": 1,
+      "message": "I still need to test printing on Windows with this patch.\n\nCan we code a clang plugin, which detects + prevents virtual function calls from destructors? This probably makes more stress, then it helps…",
+      "revId": "36805bb9148d7517893e87b3e4e2eba095350832",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
