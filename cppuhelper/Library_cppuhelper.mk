@@ -39,6 +39,12 @@ $(eval $(call gb_Library_use_static_libraries,cppuhelper,\
 	findsofficepath \
 ))
 
+ifeq ($(OS),iOS)
+$(eval $(call gb_Library_add_cxxflags,cppuhelper,\
+    $(gb_OBJCXXFLAGS) \
+))
+endif
+
 $(eval $(call gb_Library_add_exception_objects,cppuhelper,\
 	cppuhelper/source/access_control \
 	cppuhelper/source/bootstrap \
