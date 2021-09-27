@@ -244,12 +244,11 @@ CSS1PropertyEnum const aBulletStyleTable[] =
     { nullptr,       0                        }
 };
 
-
 sal_uInt16 const aBorderWidths[] =
 {
-    DEF_LINE_WIDTH_0,
-    DEF_LINE_WIDTH_5,
-    DEF_LINE_WIDTH_1
+    SvxBorderLineWidth::VeryThin,
+    SvxBorderLineWidth::Thin,
+    SvxBorderLineWidth::Medium
 };
 
 #undef SBORDER_ENTRY
