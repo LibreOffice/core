@@ -2122,7 +2122,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rect
     GdkFullscreenMode eMode =
         bSpanMonitorsWhenFullscreen ? GDK_FULLSCREEN_ON_ALL_MONITORS : GDK_FULLSCREEN_ON_CURRENT_MONITOR;
 
-    g_object_set(widget_get_surface(m_pWindow), "fullscreen-mode", eMode, nullptr);
+    gdk_window_set_fullscreen_mode(widget_get_surface(m_pWindow), eMode);
 
     GtkWidget* pMenuBarContainerWidget = m_pSalMenu ? m_pSalMenu->GetMenuBarContainerWidget() : nullptr;
     if( eType == SetType::Fullscreen )
