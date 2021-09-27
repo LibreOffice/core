@@ -197,6 +197,20 @@ void Window::ImplClipBoundaries( vcl::Region& rRegion, bool bThis, bool bOverlap
         ImplGetParent()->ImplIntersectWindowClipRegion( rRegion );
 }
 
+void Window::ImplClipBoundaries( tools::Rectangle& rRegion, bool bThis )
+{
+    if ( bThis )
+        ImplIntersectWindowClipRegion( rRegion );
+    else if ( ImplIsOverlapWindow() )
+    {
+        // clip to frame if required
+        if ( !mpWindowImpl->mbFrame )
+            rRegion.Intersection( tools::Rectangle( Point( 0, 0 ), mpWindowImpl->mpFrameWindow->GetOutputSizePixel() ) );
+    }
+    else
+        ImplGetParent()->ImplIntersectWindowClipRegion( rRegion );
+}
+
 bool Window::ImplClipChildren( vcl::Region& rRegion ) const
 {
     bool    bOtherClip = false;
@@ -210,6 +224,29 @@ bool Window::ImplClipChildren( vcl::Region& rRegion ) const
             if ( !(nClipMode & ParentClipMode::NoClip) &&
                  ((nClipMode & ParentClipMode::Clip) || (GetStyle() & WB_CLIPCHILDREN)) )
                 pWindow->ImplExcludeWindowRegion( rRegion );
+            else
+                bOtherClip = true;
+        }
+
+        pWindow = pWindow->mpWindowImpl->mpNext;
+    }
+
+    return bOtherClip;
+}
+
+bool Window::ImplClipChildren() const
+{
+    bool    bOtherClip = false;
+    vcl::Window* pWindow = mpWindowImpl->mpFirstChild;
+    while ( pWindow )
+    {
+        if ( pWindow->mpWindowImpl->mbReallyVisible )
+        {
+            // read-out ParentClipMode-Flags
+            ParentClipMode nClipMode = pWindow->GetParentClipMode();
+            if ( !(nClipMode & ParentClipMode::NoClip) &&
+                 ((nClipMode & ParentClipMode::Clip) || (GetStyle() & WB_CLIPCHILDREN)) )
+                ;
             else
                 bOtherClip = true;
         }
@@ -497,6 +534,14 @@ void Window::ImplIntersectWindowClipRegion( vcl::Region& rRegion )
         ImplInitWinClipRegion();
 
     rRegion.Intersect( mpWindowImpl->maWinClipRegion );
+}
+
+void Window::ImplIntersectWindowClipRegion( tools::Rectangle& rRegion )
+{
+    if ( mpWindowImpl->mbInitWinClipRegion )
+        ImplInitWinClipRegion();
+
+    rRegion.Intersection( mpWindowImpl->maWinClipRegion.GetBoundRect() );
 }
 
 void Window::ImplIntersectWindowRegion( vcl::Region& rRegion )

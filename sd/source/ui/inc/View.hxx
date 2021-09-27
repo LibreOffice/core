@@ -100,7 +100,7 @@ public:
         ViewShell* pViewSh=nullptr);
     virtual ~View() override;
 
-    void                    CompleteRedraw( OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr) override;
+    void                    CompleteRedraw( OutputDevice* pOutDev, const ::tools::Rectangle& rPaintArea, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr) override;
 
     virtual void            GetAttributes( SfxItemSet& rTargetSet, bool bOnlyHardAttr = false ) const;
     virtual bool            SetAttributes(const SfxItemSet& rSet, bool bReplaceAll = false, bool bSlide = false, bool bMaster = false);

@@ -450,7 +450,7 @@ void ToolBox::ImplDrawTransparentBackground(const vcl::Region &rRegion)
     mpData->mbIsPaintLocked = true;
 
     // send an invalidate to the first opaque parent and invalidate the whole hierarchy from there (noclipchildren)
-    Invalidate(rRegion, InvalidateFlags::Update | InvalidateFlags::NoClipChildren);
+    Invalidate(rRegion.GetBoundRect(), InvalidateFlags::Update | InvalidateFlags::NoClipChildren);
 
     mpData->mbIsPaintLocked = bOldPaintLock;
 }

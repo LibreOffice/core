@@ -430,11 +430,9 @@ VclPtr<VirtualDevice> GraphicExporter::CreatePageVDev( SdrPage* pPage, tools::Lo
         aView.SetGlueVisible( false );
         aView.ShowSdrPage(pPage);
 
-        vcl::Region aRegion (tools::Rectangle( aPoint, aPageSize ) );
-
         ImplExportCheckVisisbilityRedirector aRedirector( mpCurrentPage );
 
-        aView.CompleteRedraw(pVDev, aRegion, &aRedirector);
+        aView.CompleteRedraw(pVDev, tools::Rectangle( aPoint, aPageSize ), &aRedirector);
     }
     else
     {
@@ -750,7 +748,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
                 // Use new StandardCheckVisisbilityRedirector
                 ImplExportCheckVisisbilityRedirector aRedirector( mpCurrentPage );
 
-                pView->CompleteRedraw(aVDev, vcl::Region(tools::Rectangle(aNewOrg, aNewSize)), &aRedirector);
+                pView->CompleteRedraw(aVDev, tools::Rectangle(aNewOrg, aNewSize), &aRedirector);
 
                 aVDev->Pop();
 

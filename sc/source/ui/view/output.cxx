@@ -1729,9 +1729,9 @@ std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> ScOutputData::Create
 
 // Printer
 
-vcl::Region ScOutputData::GetChangedAreaRegion()
+tools::Rectangle ScOutputData::GetChangedAreaRegion()
 {
-    vcl::Region aRegion;
+    tools::Rectangle aRegion;
     tools::Rectangle aDrawingRect;
     bool bHad(false);
     tools::Long nPosY = nScrY;

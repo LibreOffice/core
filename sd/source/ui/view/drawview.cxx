@@ -496,7 +496,7 @@ bool DrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAtt
  * Paint-method: Redirect event to the view
  */
 
-void DrawView::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector /*=0*/)
+void DrawView::CompleteRedraw(OutputDevice* pOutDev, const ::tools::Rectangle& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector /*=0*/)
 {
     bool bStandardPaint = true;
 
