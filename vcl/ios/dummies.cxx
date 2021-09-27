@@ -129,4 +129,13 @@ PrintFontManager::~PrintFontManager()
 {
 }
 
+bool AquaGraphicsBackend::drawNativeControl(ControlType /* nType */,
+                                            ControlPart /* nPart */,
+                                            const tools::Rectangle & /* rControlRegion */,
+                                            ControlState /* nState */,
+                                            const ImplControlValue & /* aValue */)
+{
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
