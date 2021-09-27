@@ -554,7 +554,7 @@ void MediaWindowImpl::StateChanged(StateChangedType eType)
     }
 }
 
-void MediaWindowImpl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void MediaWindowImpl::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     if (mxPlayerWindow.is())
         mxPlayerWindow->update();
