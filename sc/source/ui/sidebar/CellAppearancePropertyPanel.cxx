@@ -366,23 +366,23 @@ void CellAppearancePropertyPanel::SetStyleIcon()
     const sal_uInt16 nIdBorderLineStyle = mpTBLineStyle->GetItemId( UNO_LINESTYLE );
 
     //FIXME: update for new line border possibilities
-    if(mnOutWidth == DEF_LINE_WIDTH_0 && mnInWidth == 0 && mnDistance == 0)    //1
+    if(mnOutWidth == SvxBorderLineWidth::Hairline && mnInWidth == 0 && mnDistance == 0)    //1
         mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle1);
-    else if(mnOutWidth == DEF_LINE_WIDTH_2 && mnInWidth == 0 && mnDistance == 0) //2
+    else if(mnOutWidth == SvxBorderLineWidth::Medium && mnInWidth == 0 && mnDistance == 0) //2
         mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle2);
-    else if(mnOutWidth == DEF_LINE_WIDTH_3 && mnInWidth == 0 && mnDistance == 0) //3
+    else if(mnOutWidth == SvxBorderLineWidth::Thick && mnInWidth == 0 && mnDistance == 0) //3
         mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle3);
-    else if(mnOutWidth == DEF_LINE_WIDTH_4 && mnInWidth == 0 && mnDistance == 0) //4
+    else if(mnOutWidth == SvxBorderLineWidth::ExtraThick && mnInWidth == 0 && mnDistance == 0) //4
         mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle4);
-    else if(mnOutWidth == DEF_LINE_WIDTH_0 && mnInWidth == DEF_LINE_WIDTH_0 && mnDistance == DEF_LINE_WIDTH_1) //5
+    else if(mnOutWidth == SvxBorderLineWidth::Hairline && mnInWidth == SvxBorderLineWidth::Hairline && mnDistance == SvxBorderLineWidth::Thin) //5
         mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle5);
-    else if(mnOutWidth == DEF_LINE_WIDTH_0 && mnInWidth == DEF_LINE_WIDTH_0 && mnDistance == DEF_LINE_WIDTH_2) //6
+    else if(mnOutWidth == SvxBorderLineWidth::Hairline && mnInWidth == SvxBorderLineWidth::Hairline && mnDistance == SvxBorderLineWidth::Medium) //6
         mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle6);
-    else if(mnOutWidth == DEF_LINE_WIDTH_1 && mnInWidth == DEF_LINE_WIDTH_2 && mnDistance == DEF_LINE_WIDTH_1) //7
+    else if(mnOutWidth == SvxBorderLineWidth::Thin && mnInWidth == SvxBorderLineWidth::Medium && mnDistance == SvxBorderLineWidth::Thin) //7
         mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle7);
-    else if(mnOutWidth == DEF_LINE_WIDTH_2 && mnInWidth == DEF_LINE_WIDTH_0 && mnDistance == DEF_LINE_WIDTH_2) //8
+    else if(mnOutWidth == SvxBorderLineWidth::Medium && mnInWidth == SvxBorderLineWidth::Hairline && mnDistance == SvxBorderLineWidth::Medium) //8
         mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle8);
-    else if(mnOutWidth == DEF_LINE_WIDTH_2 && mnInWidth == DEF_LINE_WIDTH_2 && mnDistance == DEF_LINE_WIDTH_2) //9
+    else if(mnOutWidth == SvxBorderLineWidth::Medium && mnInWidth == SvxBorderLineWidth::Medium && mnDistance == SvxBorderLineWidth::Medium) //9
         mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle9);
     else
         mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle1);
