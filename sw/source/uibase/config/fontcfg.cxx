@@ -88,9 +88,9 @@ SwStdFontConfig::SwStdFontConfig() :
 
     for(sal_Int16 i = 0; i < DEF_FONT_COUNT; i++)
     {
-        sDefaultFonts[i] = GetDefaultFor(i,
+        m_sDefaultFonts[i] = GetDefaultFor(i,
             lcl_LanguageOfType(i, eWestern, eCJK, eCTL));
-        nDefaultFontHeight[i] = -1;
+        m_nDefaultFontHeight[i] = -1;
     }
 
     Sequence<OUString> aNames = GetPropertyNames();
@@ -108,12 +108,12 @@ SwStdFontConfig::SwStdFontConfig() :
             {
                 OUString sVal;
                 pValues[nProp] >>= sVal;
-                sDefaultFonts[nProp] = sVal;
+                m_sDefaultFonts[nProp] = sVal;
             }
             else
             {
-               pValues[nProp] >>= nDefaultFontHeight[nProp - DEF_FONT_COUNT];
-               nDefaultFontHeight[nProp - DEF_FONT_COUNT] = o3tl::toTwips(nDefaultFontHeight[nProp - DEF_FONT_COUNT], o3tl::Length::mm100);
+               pValues[nProp] >>= m_nDefaultFontHeight[nProp - DEF_FONT_COUNT];
+               m_nDefaultFontHeight[nProp - DEF_FONT_COUNT] = o3tl::toTwips(m_nDefaultFontHeight[nProp - DEF_FONT_COUNT], o3tl::Length::mm100);
             }
         }
     }
@@ -138,13 +138,13 @@ void SwStdFontConfig::ImplCommit()
     {
         if( nProp < DEF_FONT_COUNT )
         {
-            if(GetDefaultFor(nProp, lcl_LanguageOfType(nProp, eWestern, eCJK, eCTL)) != sDefaultFonts[nProp])
-                pValues[nProp] <<= sDefaultFonts[nProp];
+            if(GetDefaultFor(nProp, lcl_LanguageOfType(nProp, eWestern, eCJK, eCTL)) != m_sDefaultFonts[nProp])
+                pValues[nProp] <<= m_sDefaultFonts[nProp];
         }
         else
         {
-            if(nDefaultFontHeight[nProp - DEF_FONT_COUNT] > 0)
-                pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(nDefaultFontHeight[nProp - DEF_FONT_COUNT]));
+            if(m_nDefaultFontHeight[nProp - DEF_FONT_COUNT] > 0)
+                pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(m_nDefaultFontHeight[nProp - DEF_FONT_COUNT]));
         }
     }
     PutProperties(aNames, aValues);
@@ -173,40 +173,40 @@ bool SwStdFontConfig::IsFontDefault(sal_uInt16 nFontType) const
     switch( nFontType )
     {
         case FONT_STANDARD:
-            bSame = sDefaultFonts[nFontType] == sDefFont;
+            bSame = m_sDefaultFonts[nFontType] == sDefFont;
         break;
         case FONT_STANDARD_CJK:
-            bSame = sDefaultFonts[nFontType] == sDefFontCJK;
+            bSame = m_sDefaultFonts[nFontType] == sDefFontCJK;
         break;
         case FONT_STANDARD_CTL:
-            bSame = sDefaultFonts[nFontType] == sDefFontCTL;
+            bSame = m_sDefaultFonts[nFontType] == sDefFontCTL;
         break;
         case FONT_OUTLINE :
         case FONT_OUTLINE_CJK :
         case FONT_OUTLINE_CTL :
-            bSame = sDefaultFonts[nFontType] ==
+            bSame = m_sDefaultFonts[nFontType] ==
                 GetDefaultFor(nFontType, eLang);
         break;
         case FONT_LIST    :
         case FONT_CAPTION :
         case FONT_INDEX   :
-            bSame = sDefaultFonts[nFontType] == sDefFont &&
-                    sDefaultFonts[FONT_STANDARD] == sDefFont;
+            bSame = m_sDefaultFonts[nFontType] == sDefFont &&
+                    m_sDefaultFonts[FONT_STANDARD] == sDefFont;
         break;
         case FONT_LIST_CJK    :
         case FONT_CAPTION_CJK :
         case FONT_INDEX_CJK   :
         {
-            bool b1 = sDefaultFonts[FONT_STANDARD_CJK] == sDefFontCJK;
-            bSame = b1 && sDefaultFonts[nFontType] == sDefFontCJK;
+            bool b1 = m_sDefaultFonts[FONT_STANDARD_CJK] == sDefFontCJK;
+            bSame = b1 && m_sDefaultFonts[nFontType] == sDefFontCJK;
         }
         break;
         case FONT_LIST_CTL    :
         case FONT_CAPTION_CTL :
         case FONT_INDEX_CTL   :
         {
-            bool b1 = sDefaultFonts[FONT_STANDARD_CJK] == sDefFontCTL;
-            bSame = b1 && sDefaultFonts[nFontType] == sDefFontCTL;
+            bool b1 = m_sDefaultFonts[FONT_STANDARD_CJK] == sDefFontCTL;
+            bSame = b1 && m_sDefaultFonts[nFontType] == sDefFontCTL;
         }
         break;
     }
@@ -270,7 +270,7 @@ sal_Int32 SwStdFontConfig::GetDefaultHeightFor(sal_uInt16 nFontType, LanguageTyp
 void SwStdFontConfig::ChangeInt( sal_uInt16 nFontType, sal_Int32 nHeight )
 {
     OSL_ENSURE( nFontType < DEF_FONT_COUNT, "invalid index in SwStdFontConfig::ChangeInt()");
-    if( nFontType >= DEF_FONT_COUNT || nDefaultFontHeight[nFontType] == nHeight)
+    if( nFontType >= DEF_FONT_COUNT || m_nDefaultFontHeight[nFontType] == nHeight)
         return;
 
     SvtLinguOptions aLinguOpt;
@@ -284,22 +284,22 @@ void SwStdFontConfig::ChangeInt( sal_uInt16 nFontType, sal_Int32 nHeight )
     // #i92090# default height value sets back to -1
     const sal_Int32 nDefaultHeight = GetDefaultHeightFor(nFontType, lcl_LanguageOfType(nFontType, eWestern, eCJK, eCTL));
     const bool bIsDefaultHeight = nHeight == nDefaultHeight;
-    if( bIsDefaultHeight && nDefaultFontHeight[nFontType] > 0 )
+    if( bIsDefaultHeight && m_nDefaultFontHeight[nFontType] > 0 )
     {
         SetModified();
-        nDefaultFontHeight[nFontType] = -1;
+        m_nDefaultFontHeight[nFontType] = -1;
     }
-    else if( !bIsDefaultHeight && nHeight != nDefaultFontHeight[nFontType] )
+    else if( !bIsDefaultHeight && nHeight != m_nDefaultFontHeight[nFontType] )
     {
         SetModified();
-        nDefaultFontHeight[nFontType] = nHeight;
+        m_nDefaultFontHeight[nFontType] = nHeight;
     }
 }
 
 sal_Int32 SwStdFontConfig::GetFontHeight( sal_uInt8 nFont, sal_uInt8 nScriptType, LanguageType eLang )
 {
     OSL_ENSURE(nFont + FONT_PER_GROUP * nScriptType < DEF_FONT_COUNT, "wrong index in SwStdFontConfig::GetFontHeight()");
-    sal_Int32 nRet = nDefaultFontHeight[nFont + FONT_PER_GROUP * nScriptType];
+    sal_Int32 nRet = m_nDefaultFontHeight[nFont + FONT_PER_GROUP * nScriptType];
     if(nRet <= 0)
         return GetDefaultHeightFor(nFont + FONT_PER_GROUP * nScriptType, eLang);
     return nRet;

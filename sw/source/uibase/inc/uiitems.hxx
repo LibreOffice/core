@@ -31,7 +31,7 @@ class SwPaM;
 // container for FootNote
 class SW_DLLPUBLIC SwPageFootnoteInfoItem final : public SfxPoolItem
 {
-    SwPageFootnoteInfo aFootnoteInfo;
+    SwPageFootnoteInfo m_aFootnoteInfo;
 
 public:
 
@@ -54,8 +54,8 @@ public:
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    SwPageFootnoteInfo& GetPageFootnoteInfo()             { return aFootnoteInfo; }
-    const SwPageFootnoteInfo& GetPageFootnoteInfo() const { return aFootnoteInfo; }
+    SwPageFootnoteInfo& GetPageFootnoteInfo()             { return m_aFootnoteInfo; }
+    const SwPageFootnoteInfo& GetPageFootnoteInfo() const { return m_aFootnoteInfo; }
 };
 
 class SW_DLLPUBLIC SwPtrItem final : public SfxPoolItem

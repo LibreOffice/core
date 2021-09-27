@@ -37,7 +37,7 @@ class DataChangedEvent;
 
 class TextViewOutWin final : public vcl::Window
 {
-    TextView*    pTextView;
+    TextView*    m_pTextView;
 
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
     virtual void    KeyInput( const KeyEvent& rKeyEvt ) override;
@@ -49,9 +49,9 @@ class TextViewOutWin final : public vcl::Window
 
 public:
         TextViewOutWin(vcl::Window* pParent, WinBits nBits) :
-            Window(pParent, nBits), pTextView(nullptr){}
+            Window(pParent, nBits), m_pTextView(nullptr){}
 
-    void    SetTextView( TextView* pView ) {pTextView = pView;}
+    void    SetTextView( TextView* pView ) {m_pTextView = pView;}
 
 };
 
