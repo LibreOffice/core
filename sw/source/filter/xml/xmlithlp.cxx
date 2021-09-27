@@ -68,11 +68,10 @@ const struct SvXMLEnumMapEntry<sal_uInt16> psXML_NamedBorderWidths[] =
 };
 // mapping tables to map external xml input to internal box line widths
 
-const sal_uInt16 aBorderWidths[] =
-{
-        DEF_LINE_WIDTH_0,
-        DEF_LINE_WIDTH_5,
-        DEF_LINE_WIDTH_1,
+const sal_uInt16 aBorderWidths[] = {
+    SvxBorderLineWidth::Hairline,
+    SvxBorderLineWidth::VeryThin,
+    SvxBorderLineWidth::Thin
 };
 
 bool sw_frmitems_parseXMLBorder( std::u16string_view rValue,

@@ -975,14 +975,8 @@ void HTMLTable::InitCtor(const HTMLTableOptions& rOptions)
     m_aRightBorderLine = m_aLeftBorderLine;
 
     if( rOptions.nCellSpacing != 0 )
-    {
         m_aBorderLine.SetBorderLineStyle(SvxBorderLineStyle::DOUBLE);
-        m_aBorderLine.SetWidth( DEF_LINE_WIDTH_0 );
-    }
-    else
-    {
-        m_aBorderLine.SetWidth( DEF_LINE_WIDTH_0 );
-    }
+    m_aBorderLine.SetWidth(SvxBorderLineWidth::Hairline);
     m_aBorderLine.SetColor( rBorderColor );
 
     if( m_nCellPadding )

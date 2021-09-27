@@ -689,7 +689,7 @@ ScAutoFormat::ScAutoFormat() :
 
     //  black thin border
     Color aBlack( COL_BLACK );
-    ::editeng::SvxBorderLine aLine( &aBlack, DEF_LINE_WIDTH_0 );
+    ::editeng::SvxBorderLine aLine( &aBlack, SvxBorderLineWidth::VeryThin );
     SvxBoxItem aBox( ATTR_BORDER );
     aBox.SetLine(&aLine, SvxBoxItemLine::LEFT);
     aBox.SetLine(&aLine, SvxBoxItemLine::TOP);
