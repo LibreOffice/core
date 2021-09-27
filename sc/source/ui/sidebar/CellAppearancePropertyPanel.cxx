@@ -372,23 +372,23 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
 void CellAppearancePropertyPanel::SetStyleIcon()
 {
     //FIXME: update for new line border possibilities
-    if(mnOutWidth == DEF_LINE_WIDTH_0 && mnInWidth == 0 && mnDistance == 0)    //1
+    if(mnOutWidth == SvxBorderLineWidth::Hairline && mnInWidth == 0 && mnDistance == 0)    //1
         mxTBLineStyle->set_item_icon_name(LINESTYLE, msIMGLineStyle1);
-    else if(mnOutWidth == DEF_LINE_WIDTH_2 && mnInWidth == 0 && mnDistance == 0) //2
+    else if(mnOutWidth == SvxBorderLineWidth::Medium && mnInWidth == 0 && mnDistance == 0) //2
         mxTBLineStyle->set_item_icon_name(LINESTYLE, msIMGLineStyle2);
-    else if(mnOutWidth == DEF_LINE_WIDTH_3 && mnInWidth == 0 && mnDistance == 0) //3
+    else if(mnOutWidth == SvxBorderLineWidth::Thick && mnInWidth == 0 && mnDistance == 0) //3
         mxTBLineStyle->set_item_icon_name(LINESTYLE, msIMGLineStyle3);
-    else if(mnOutWidth == DEF_LINE_WIDTH_4 && mnInWidth == 0 && mnDistance == 0) //4
+    else if(mnOutWidth == SvxBorderLineWidth::ExtraThick && mnInWidth == 0 && mnDistance == 0) //4
         mxTBLineStyle->set_item_icon_name(LINESTYLE, msIMGLineStyle4);
-    else if(mnOutWidth == DEF_LINE_WIDTH_0 && mnInWidth == DEF_LINE_WIDTH_0 && mnDistance == DEF_LINE_WIDTH_1) //5
+    else if(mnOutWidth == SvxBorderLineWidth::Hairline && mnInWidth == SvxBorderLineWidth::Hairline && mnDistance == SvxBorderLineWidth::Thin) //5
         mxTBLineStyle->set_item_icon_name(LINESTYLE, msIMGLineStyle5);
-    else if(mnOutWidth == DEF_LINE_WIDTH_0 && mnInWidth == DEF_LINE_WIDTH_0 && mnDistance == DEF_LINE_WIDTH_2) //6
+    else if(mnOutWidth == SvxBorderLineWidth::Hairline && mnInWidth == SvxBorderLineWidth::Hairline && mnDistance == SvxBorderLineWidth::Medium) //6
         mxTBLineStyle->set_item_icon_name(LINESTYLE, msIMGLineStyle6);
-    else if(mnOutWidth == DEF_LINE_WIDTH_1 && mnInWidth == DEF_LINE_WIDTH_2 && mnDistance == DEF_LINE_WIDTH_1) //7
+    else if(mnOutWidth == SvxBorderLineWidth::Thin && mnInWidth == SvxBorderLineWidth::Medium && mnDistance == SvxBorderLineWidth::Thin) //7
         mxTBLineStyle->set_item_icon_name(LINESTYLE, msIMGLineStyle7);
-    else if(mnOutWidth == DEF_LINE_WIDTH_2 && mnInWidth == DEF_LINE_WIDTH_0 && mnDistance == DEF_LINE_WIDTH_2) //8
+    else if(mnOutWidth == SvxBorderLineWidth::Medium && mnInWidth == SvxBorderLineWidth::Hairline && mnDistance == SvxBorderLineWidth::Medium) //8
         mxTBLineStyle->set_item_icon_name(LINESTYLE, msIMGLineStyle8);
-    else if(mnOutWidth == DEF_LINE_WIDTH_2 && mnInWidth == DEF_LINE_WIDTH_2 && mnDistance == DEF_LINE_WIDTH_2) //9
+    else if(mnOutWidth == SvxBorderLineWidth::Medium && mnInWidth == SvxBorderLineWidth::Medium && mnDistance == SvxBorderLineWidth::Medium) //9
         mxTBLineStyle->set_item_icon_name(LINESTYLE, msIMGLineStyle9);
     else
         mxTBLineStyle->set_item_icon_name(LINESTYLE, msIMGLineStyle1);

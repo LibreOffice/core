@@ -105,45 +105,45 @@ IMPL_LINK_NOARG(CellLineStylePopup, VSSelectHdl, ValueSet*, void)
     switch(iPos)
     {
         case 1:
-            n1 = DEF_LINE_WIDTH_0;
+            n1 = SvxBorderLineWidth::Hairline;
             break;
         case 2:
-            n1 = DEF_LINE_WIDTH_2;
+            n1 = SvxBorderLineWidth::Medium;
             break;
         case 3:
-            n1 = DEF_LINE_WIDTH_3;
+            n1 = SvxBorderLineWidth::Thick;
             break;
         case 4:
-            n1 = DEF_LINE_WIDTH_4;
+            n1 = SvxBorderLineWidth::ExtraThick;
             break;
         case 5:
-            n1 = DEF_LINE_WIDTH_0;
-            n2 = DEF_LINE_WIDTH_0;
-            n3 = DEF_LINE_WIDTH_1;
+            n1 = SvxBorderLineWidth::Hairline;
+            n2 = SvxBorderLineWidth::Hairline;
+            n3 = SvxBorderLineWidth::Medium;
             nStyle = SvxBorderLineStyle::DOUBLE;
             break;
         case 6:
-            n1 = DEF_LINE_WIDTH_0;
-            n2 = DEF_LINE_WIDTH_0;
-            n3 = DEF_LINE_WIDTH_2;
+            n1 = SvxBorderLineWidth::Hairline;
+            n2 = SvxBorderLineWidth::Hairline;
+            n3 = SvxBorderLineWidth::Thick;
             nStyle = SvxBorderLineStyle::DOUBLE;
             break;
         case 7:
-            n1 = DEF_LINE_WIDTH_1;
-            n2 = DEF_LINE_WIDTH_2;
-            n3 = DEF_LINE_WIDTH_1;
+            n1 = SvxBorderLineWidth::Thin;
+            n2 = SvxBorderLineWidth::Medium;
+            n3 = SvxBorderLineWidth::Thin;
             nStyle = SvxBorderLineStyle::DOUBLE;
             break;
         case 8:
-            n1 = DEF_LINE_WIDTH_2;
-            n2 = DEF_LINE_WIDTH_0;
-            n3 = DEF_LINE_WIDTH_2;
+            n1 = SvxBorderLineWidth::Medium;
+            n2 = SvxBorderLineWidth::Hairline;
+            n3 = SvxBorderLineWidth::Medium;
             nStyle = SvxBorderLineStyle::DOUBLE;
             break;
         case 9:
-            n1 = DEF_LINE_WIDTH_2;
-            n2 = DEF_LINE_WIDTH_2;
-            n3 = DEF_LINE_WIDTH_2;
+            n1 = SvxBorderLineWidth::Medium;
+            n2 = SvxBorderLineWidth::Medium;
+            n3 = SvxBorderLineWidth::Medium;
             nStyle = SvxBorderLineStyle::DOUBLE;
             break;
         default:
@@ -173,42 +173,43 @@ void CellLineStylePopup::SetLineStyleSelect(sal_uInt16 out, sal_uInt16 in, sal_u
 
     //FIXME: fully for new border line possibilities
 
-    if(out == DEF_LINE_WIDTH_0 && in == 0 && dis == 0)  //1
+    if(out == SvxBorderLineWidth::Hairline && in == 0 && dis == 0)  //1
     {
         mxCellLineStyleValueSet->SetSelItem(1);
     }
-    else if(out == DEF_LINE_WIDTH_2 && in == 0 && dis == 0) //2
+    else if(out == SvxBorderLineWidth::Medium && in == 0 && dis == 0) //2
     {
         mxCellLineStyleValueSet->SetSelItem(2);
     }
-    else if(out == DEF_LINE_WIDTH_3 && in == 0 && dis == 0) //3
+    else if(out == SvxBorderLineWidth::Thick && in == 0 && dis == 0) //3
     {
         mxCellLineStyleValueSet->SetSelItem(3);
     }
-    else if(out == DEF_LINE_WIDTH_4 && in == 0 && dis == 0) //4
+    else if(out == SvxBorderLineWidth::ExtraThick && in == 0 && dis == 0) //4
     {
         mxCellLineStyleValueSet->SetSelItem(4);
     }
-    else if(out == DEF_LINE_WIDTH_0 && in == DEF_LINE_WIDTH_0 && dis == DEF_LINE_WIDTH_1) //5
+    else if(out == SvxBorderLineWidth::Hairline && in == SvxBorderLineWidth::Hairline && dis == SvxBorderLineWidth::Thin) //5
     {
         mxCellLineStyleValueSet->SetSelItem(5);
     }
-    else if(out == DEF_LINE_WIDTH_0 && in == DEF_LINE_WIDTH_0 && dis == DEF_LINE_WIDTH_2) //6
+    else if(out == SvxBorderLineWidth::Hairline && in == SvxBorderLineWidth::Hairline && dis == SvxBorderLineWidth::Medium) //6
     {
         mxCellLineStyleValueSet->SetSelItem(6);
     }
-    else if(out == DEF_LINE_WIDTH_1 && in == DEF_LINE_WIDTH_2 && dis == DEF_LINE_WIDTH_1) //7
+    else if(out == SvxBorderLineWidth::Thin && in == SvxBorderLineWidth::Medium && dis == SvxBorderLineWidth::Thin) //7
     {
         mxCellLineStyleValueSet->SetSelItem(7);
     }
-    else if(out == DEF_LINE_WIDTH_2 && in == DEF_LINE_WIDTH_0 && dis == DEF_LINE_WIDTH_2) //8
+    else if(out == SvxBorderLineWidth::Medium && in == SvxBorderLineWidth::Hairline && dis == SvxBorderLineWidth::Medium) //8
     {
         mxCellLineStyleValueSet->SetSelItem(8);
     }
-    else if(out == DEF_LINE_WIDTH_2 && in == DEF_LINE_WIDTH_2 && dis == DEF_LINE_WIDTH_2) //9
+    else if(out == SvxBorderLineWidth::Medium && in == SvxBorderLineWidth::Medium && dis == SvxBorderLineWidth::Medium) //9
     {
         mxCellLineStyleValueSet->SetSelItem(9);
     }
+
     else
     {
         mxCellLineStyleValueSet->SetSelItem(0);

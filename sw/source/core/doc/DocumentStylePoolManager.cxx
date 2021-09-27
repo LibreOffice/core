@@ -1630,7 +1630,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
                 aSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::PRINT_AREA ) );
                 aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::PRINT_AREA ) );
                 Color aCol( COL_BLACK );
-                SvxBorderLine aLine( &aCol, DEF_LINE_WIDTH_0 );
+                SvxBorderLine aLine( &aCol, SvxBorderLineWidth::Hairline );
                 SvxBoxItem aBox( RES_BOX );
                 aBox.SetLine( &aLine, SvxBoxItemLine::TOP );
                 aBox.SetLine( &aLine, SvxBoxItemLine::BOTTOM );

@@ -563,29 +563,29 @@ bool SwAutoFormat::DoUnderline()
         editeng::SvxBorderLine aLine;
         switch( eState )
         {
-        case 1:         // single, 0.05 pt
+        case 1:         // single, hairline
             aLine.SetBorderLineStyle(SvxBorderLineStyle::SOLID);
-            aLine.SetWidth( DEF_LINE_WIDTH_0 );
+            aLine.SetWidth( SvxBorderLineWidth::Hairline );
             break;
-        case 2:         // single, 1.0 pt
+        case 2:         // single, thin
             aLine.SetBorderLineStyle(SvxBorderLineStyle::SOLID);
-            aLine.SetWidth( DEF_LINE_WIDTH_1 );
+            aLine.SetWidth( SvxBorderLineWidth::Thin );
             break;
-        case 3:         // double, 1.0 pt
+        case 3:         // double, thin
             aLine.SetBorderLineStyle(SvxBorderLineStyle::DOUBLE);
-            aLine.SetWidth( DEF_LINE_WIDTH_1 );
+            aLine.SetWidth( SvxBorderLineWidth::Thin );
             break;
-        case 4:         // double (thick/thin), 4.0 pt
+        case 4:         // double, thick/thin
             aLine.SetBorderLineStyle(SvxBorderLineStyle::THICKTHIN_SMALLGAP);
-            aLine.SetWidth( DEF_LINE_WIDTH_3  );
+            aLine.SetWidth( SvxBorderLineWidth::Thick  );
             break;
-        case 5:         // double (thin/thick), 4.0 pt
+        case 5:         // double, thin/thick
             aLine.SetBorderLineStyle(SvxBorderLineStyle::THINTHICK_SMALLGAP);
-            aLine.SetWidth( DEF_LINE_WIDTH_3 );
+            aLine.SetWidth( SvxBorderLineWidth::Thick );
             break;
-        case 6:         // double, 2.5 pt
+        case 6:         // double, medium
             aLine.SetBorderLineStyle(SvxBorderLineStyle::DOUBLE);
-            aLine.SetWidth( DEF_LINE_WIDTH_2 );
+            aLine.SetWidth( SvxBorderLineWidth::Medium );
             break;
         }
         SfxItemSetFixed<RES_PARATR_CONNECT_BORDER, RES_PARATR_CONNECT_BORDER,

@@ -266,9 +266,12 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">False</property>
                     <items>
+                      <item translatable="yes" context="borderpage|linewidthlb">Hairline</item>
+                      <item translatable="yes" context="borderpage|linewidthlb">Very thin</item>
                       <item translatable="yes" context="borderpage|linewidthlb">Thin</item>
                       <item translatable="yes" context="borderpage|linewidthlb">Medium</item>
                       <item translatable="yes" context="borderpage|linewidthlb">Thick</item>
+                      <item translatable="yes" context="borderpage|linewidthlb">Extra thick</item>
                       <item translatable="yes" context="borderpage|linewidthlb">Custom</item>
                     </items>
                   </object>

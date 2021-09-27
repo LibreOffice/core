@@ -2227,11 +2227,11 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     SvxBorderLine       theDefLine;
 
     // diagonal down border
-    SvxBorderLine       dDownBorderLine(nullptr, 1);
+    SvxBorderLine       dDownBorderLine(nullptr, SvxBorderLineWidth::Hairline);
     SvxLineItem         dDownLineItem(SID_ATTR_BORDER_DIAG_TLBR);
 
     // diagonal up border
-    SvxBorderLine       dUpBorderLine(nullptr, 1);
+    SvxBorderLine       dUpBorderLine(nullptr, SvxBorderLineWidth::Hairline);
     SvxLineItem         dUpLineItem(SID_ATTR_BORDER_DIAG_BLTR);
 
     bool                bIsDiagonalBorder = false;
@@ -2244,8 +2244,8 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     sal_uInt16           nModifier = mxFrameSet->GetModifier();
     FrmValidFlags        nValidFlags = FrmValidFlags::NONE;
 
-    theDefLine.GuessLinesWidths(theDefLine.GetBorderLineStyle(),
-            DEF_LINE_WIDTH_0);
+    theDefLine.GuessLinesWidths(theDefLine.GetBorderLineStyle(), SvxBorderLineWidth::Hairline);
+
     switch ( nSel )
     {
         case 1: nValidFlags |= FrmValidFlags::AllMask;
@@ -2540,7 +2540,7 @@ IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl, ValueSet*, void)
     {
         SvxBorderLine aTmp;
         aTmp.SetBorderLineStyle( nStyle );
-        aTmp.SetWidth( 20 ); // TODO Make it depend on a width field
+        aTmp.SetWidth( SvxBorderLineWidth::Thin ); // TODO Make it depend on a width field
         aLineItem.SetLine( &aTmp );
     }
     else

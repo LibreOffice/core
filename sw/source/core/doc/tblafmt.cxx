@@ -1006,7 +1006,7 @@ SwTableAutoFormatTable::SwTableAutoFormatTable()
     SvxBoxItem aBox( RES_BOX );
 
     aBox.SetAllDistances(55);
-    SvxBorderLine aLn( &aColor, DEF_LINE_WIDTH_5 );
+    SvxBorderLine aLn( &aColor, SvxBorderLineWidth::VeryThin );
     aBox.SetLine( &aLn, SvxBoxItemLine::LEFT );
     aBox.SetLine( &aLn, SvxBoxItemLine::BOTTOM );
 

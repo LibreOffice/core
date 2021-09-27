@@ -1350,7 +1350,7 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
         aAttr.reset(static_cast<SvxBoxItem*>(pItem->Clone()));
     }
 
-    SvxBorderLine aBrd( nullptr, DEF_LINE_WIDTH_0 );  // Simple plain line
+    SvxBorderLine aBrd( nullptr, SvxBorderLineWidth::Hairline );
     bool bContinue = true;
     int nBorderTyp = 0;
 
@@ -1418,7 +1418,7 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
         case RTF_BRDRHAIR:      // hairline border
             {
                 aBrd.SetBorderLineStyle( SvxBorderLineStyle::SOLID);
-                aBrd.SetWidth( DEF_LINE_WIDTH_0 );
+                aBrd.SetWidth( SvxBorderLineWidth::Hairline );
             }
             break;
         case RTF_BRDRDB:        // Double border

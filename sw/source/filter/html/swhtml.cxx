@@ -5354,12 +5354,12 @@ void SwHTMLParser::InsertHorzRule()
         }
         else if( bNoShade )
         {
-            aBorderLine.SetWidth( DEF_LINE_WIDTH_2 );
+            aBorderLine.SetWidth( SvxBorderLineWidth::Medium );
         }
         else
         {
             aBorderLine.SetBorderLineStyle(SvxBorderLineStyle::DOUBLE);
-            aBorderLine.SetWidth( DEF_LINE_WIDTH_0 );
+            aBorderLine.SetWidth(SvxBorderLineWidth::Hairline);
         }
 
         SvxBoxItem aBoxItem(RES_BOX);

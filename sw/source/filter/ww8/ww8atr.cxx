@@ -4438,7 +4438,7 @@ WW8_BRCVer9 WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
         {
             case SvxBorderLineStyle::SOLID:
                 {
-                    if ( rLine.GetWidth( ) == DEF_LINE_WIDTH_0 )
+                    if ( rLine.GetWidth( ) == SvxBorderLineWidth::Hairline )
                         brcType = 5;
                     else
                         brcType = 1;

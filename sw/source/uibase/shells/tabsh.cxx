@@ -522,7 +522,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             if(aBorderLine.GetOutWidth() == 0)
             {
                 aBorderLine.SetBorderLineStyle(SvxBorderLineStyle::SOLID);
-                aBorderLine.SetWidth( DEF_LINE_WIDTH_5 );
+                aBorderLine.SetWidth( SvxBorderLineWidth::VeryThin );
             }
 
             if( aBox->GetTop() != nullptr )

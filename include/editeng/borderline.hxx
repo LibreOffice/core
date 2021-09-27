@@ -30,16 +30,19 @@
 
 class IntlWrapper;
 
-// Line defaults in twips (former Writer defaults):
-
-#define DEF_LINE_WIDTH_0        1
-#define DEF_LINE_WIDTH_1        20
-#define DEF_LINE_WIDTH_2        50
-#define DEF_LINE_WIDTH_3        80
-#define DEF_LINE_WIDTH_4        100
-#define DEF_LINE_WIDTH_5        10
-#define DEF_LINE_WIDTH_6        5   // 0.25pt
-
+// Line width defaults in twips
+// Thin matches Excel's default values
+// See tdf#48622 for the discussion leading to these defaults.
+class SvxBorderLineWidth
+{
+public:
+    static const sal_Int16 Hairline = 1; // 0.05pt
+    static const sal_Int16 VeryThin = 10; // 0.5pt
+    static const sal_Int16 Thin = 15; // 0.75pt
+    static const sal_Int16 Medium = 30; // 1.5pt
+    static const sal_Int16 Thick = 45; // 2.25pt
+    static const sal_Int16 ExtraThick = 90; // 4.5pt
+};
 
 // Abstracts over values from css::table::BorderLineStyle
 enum class SvxBorderLineStyle : sal_Int16
