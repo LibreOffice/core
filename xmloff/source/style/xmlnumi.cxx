@@ -423,8 +423,6 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
 
     aProperties.push_back(comphelper::makePropertyValue("Suffix", sSuffix));
 
-    aProperties.push_back(comphelper::makePropertyValue("ListFormat", *sListFormat));
-
     aProperties.push_back(comphelper::makePropertyValue("Adjust", eAdjust));
 
     sal_Int32 nLeftMargin = nSpaceBefore + nMinLabelWidth;
@@ -521,6 +519,8 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
     {
         aProperties.push_back(comphelper::makePropertyValue("BulletColor", m_nColor));
     }
+
+    aProperties.push_back(comphelper::makePropertyValue("ListFormat", *sListFormat));
 
     return comphelper::containerToSequence(aProperties);
 }
