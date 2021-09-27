@@ -251,17 +251,20 @@
               </packing>
             </child>
             <child>
+              <!-- n-columns=2 n-rows=1 -->
               <object class="GtkGrid" id="gridlinewidth">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="row_spacing">0</property>
                 <property name="column_spacing">6</property>
+                <property name="halign">start</property>
                 <property name="margin-start">0</property>
                 <property name="margin-top">0</property>
                 <child>
                   <object class="GtkComboBoxText" id="linewidthlb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">False</property>
                     <items>
                       <item translatable="yes" context="borderpage|linewidthlb">Thin</item>
                       <item translatable="yes" context="borderpage|linewidthlb">Medium</item>
@@ -277,7 +280,6 @@
                   <object class="GtkSpinButton" id="linewidthmf">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="halign">start</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="digits">2</property>
