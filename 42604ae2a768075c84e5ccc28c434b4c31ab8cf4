@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fda445dd_55d4a1ed",
+        "filename": "vcl/inc/font/FontSelectPattern.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-27T07:01:57Z",
+      "side": 1,
+      "message": "What is the reason for this reorder?",
+      "revId": "42604ae2a768075c84e5ccc28c434b4c31ab8cf4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08d63f58_78a9049e",
+        "filename": "vcl/inc/impfontmetricdata.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-27T07:01:57Z",
+      "side": 1,
+      "message": "This insertion, while reasonable (definitions from degree header is used in this file), is unrelated to the change, it seems?",
+      "revId": "42604ae2a768075c84e5ccc28c434b4c31ab8cf4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2a2a83d_3bb1f33a",
+        "filename": "vcl/inc/outdev.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-27T07:01:57Z",
+      "side": 1,
+      "message": "On the other hand, in this file (and some similar cases below) that uses the definition handled in this change, it would be logical to add ** to the include list, or to forward declarations?",
+      "revId": "42604ae2a768075c84e5ccc28c434b4c31ab8cf4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
