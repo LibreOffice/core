@@ -179,7 +179,7 @@ namespace dbaui
         return aBoundingRect;
     }
 
-    void OTableConnection::Draw(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
+    void OTableConnection::Draw(OutputDevice& rRenderContext, const tools::Rectangle& /*rRect*/)
     {
         // Draw line
         for( const auto& pLine : m_vConnLine )

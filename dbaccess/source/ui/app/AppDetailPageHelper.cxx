@@ -1171,7 +1171,7 @@ OPreviewWindow::OPreviewWindow()
 {
 }
 
-bool OPreviewWindow::ImplGetGraphicCenterRect(const vcl::RenderContext& rRenderContext, const Graphic& rGraphic, tools::Rectangle& rResultRect) const
+bool OPreviewWindow::ImplGetGraphicCenterRect(const OutputDevice& rRenderContext, const Graphic& rGraphic, tools::Rectangle& rResultRect) const
 {
     const Size aWinSize( GetOutputSizePixel() );
     Size       aNewSize(rRenderContext.LogicToPixel(rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode()));
@@ -1204,7 +1204,7 @@ bool OPreviewWindow::ImplGetGraphicCenterRect(const vcl::RenderContext& rRenderC
     return bRet;
 }
 
-void OPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
+void OPreviewWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     if (ImplGetGraphicCenterRect(rRenderContext, m_aGraphicObj.GetGraphic(), m_aPreviewRect))
     {

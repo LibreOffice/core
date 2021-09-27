@@ -66,7 +66,7 @@ namespace dbaui
     {
     }
 
-    void ODataView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& _rRect)
+    void ODataView::Paint(OutputDevice& rRenderContext, const tools::Rectangle& _rRect)
     {
         // draw the background
         {

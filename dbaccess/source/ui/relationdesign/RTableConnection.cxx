@@ -47,7 +47,7 @@ ORelationTableConnection& ORelationTableConnection::operator=( const ORelationTa
     return *this;
 }
 
-void ORelationTableConnection::Draw(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect )
+void ORelationTableConnection::Draw(OutputDevice& rRenderContext, const tools::Rectangle& rRect )
 {
     OTableConnection::Draw(rRenderContext, rRect);
     ORelationTableConnectionData* pData = static_cast< ORelationTableConnectionData* >(GetData().get());

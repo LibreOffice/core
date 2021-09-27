@@ -77,7 +77,7 @@ namespace dbaui
         void attachFrame(const css::uno::Reference< css::frame::XFrame >& _xFrame);
     protected:
         // window overridables
-        virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& _rRect ) override;
+        virtual void Paint( OutputDevice& rRenderContext, const tools::Rectangle& _rRect ) override;
 
         /// re-arrange all controls, including the toolbox, it's separator, and the "real view"
         virtual void resizeAll( const tools::Rectangle& _rPlayground );

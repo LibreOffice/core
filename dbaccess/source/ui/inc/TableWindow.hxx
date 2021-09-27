@@ -77,7 +77,7 @@ namespace dbaui
 
     protected:
         virtual void    Resize() override;
-        virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+        virtual void    Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
         virtual void    MouseMove( const MouseEvent& rEvt ) override;
         virtual void    MouseButtonDown( const MouseEvent& rEvt ) override;
         virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
