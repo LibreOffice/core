@@ -117,11 +117,10 @@ static void lcl_SetDfltBoxAttr( SwFrameFormat& rFormat, sal_uInt8 nId )
 
     const bool bHTML = rFormat.getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE);
     Color aCol( bHTML ? COL_GRAY : COL_BLACK );
-    SvxBorderLine aLine( &aCol, DEF_LINE_WIDTH_0 );
+    SvxBorderLine aLine( &aCol, SvxBorderLineWidth::Hairline );
     if ( bHTML )
     {
         aLine.SetBorderLineStyle(SvxBorderLineStyle::DOUBLE);
-        aLine.SetWidth( DEF_LINE_WIDTH_0 );
     }
     SvxBoxItem aBox(RES_BOX);
     aBox.SetAllDistances(55);
