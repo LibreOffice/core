@@ -27,13 +27,13 @@ class GDIMetaFile;
 class SfxPreviewWin_Impl final : public weld::CustomWidgetController
 {
 private:
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle&) override;
     std::shared_ptr<GDIMetaFile> xMetaFile;
 
 public:
     SfxPreviewWin_Impl();
     void SetObjectShell(SfxObjectShell const* pObj);
-    static void ImpPaint(vcl::RenderContext& rRenderContext, GDIMetaFile* pFile);
+    static void ImpPaint(OutputDevice& rRenderContext, GDIMetaFile* pFile);
 };
 
 #endif

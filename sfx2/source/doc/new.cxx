@@ -51,7 +51,7 @@ SfxPreviewWin_Impl::SfxPreviewWin_Impl()
 {
 }
 
-void SfxPreviewWin_Impl::ImpPaint(vcl::RenderContext& rRenderContext, GDIMetaFile* pFile)
+void SfxPreviewWin_Impl::ImpPaint(OutputDevice& rRenderContext, GDIMetaFile* pFile)
 {
     rRenderContext.SetLineColor();
     rRenderContext.SetFillColor(COL_LIGHTGRAY);
@@ -93,7 +93,7 @@ void SfxPreviewWin_Impl::ImpPaint(vcl::RenderContext& rRenderContext, GDIMetaFil
     }
 }
 
-void SfxPreviewWin_Impl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SfxPreviewWin_Impl::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     ImpPaint(rRenderContext, xMetaFile.get());
 }

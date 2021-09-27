@@ -1417,7 +1417,7 @@ bool SfxDockingWindow::Close()
     return true;
 }
 
-void SfxDockingWindow::Paint(vcl::RenderContext&, const tools::Rectangle& /*rRect*/)
+void SfxDockingWindow::Paint(OutputDevice&, const tools::Rectangle& /*rRect*/)
 {
 }
 

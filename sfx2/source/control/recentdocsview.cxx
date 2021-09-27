@@ -52,7 +52,7 @@ using namespace com::sun::star::beans;
 namespace {
 
 /// Set (larger) font for the Welcome message.
-void SetMessageFont(vcl::RenderContext& rRenderContext)
+void SetMessageFont(OutputDevice& rRenderContext)
 {
     vcl::Font aFont(rRenderContext.GetFont());
     aFont.SetFontHeight(aFont.GetFontHeight() * 1.3);
@@ -346,7 +346,7 @@ void RecentDocsView::OnItemDblClicked(ThumbnailViewItem *pItem)
         pRecentItem->OpenDocument();
 }
 
-void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle &aRect)
+void RecentDocsView::Paint(OutputDevice& rRenderContext, const tools::Rectangle &aRect)
 {
     ThumbnailView::Paint(rRenderContext, aRect);
 

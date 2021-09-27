@@ -67,7 +67,7 @@ protected:
     virtual bool        Docking( const Point& rPos, tools::Rectangle& rRect ) override;
     virtual void        EndDocking( const tools::Rectangle& rRect, bool bFloatMode ) override;
     virtual void        Resizing( Size& rSize ) override;
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void        Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual bool        Close() override;
     virtual void        Move() override;
 

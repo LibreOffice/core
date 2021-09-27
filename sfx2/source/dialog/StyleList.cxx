@@ -1565,7 +1565,7 @@ IMPL_LINK(StyleList, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUString)
 
 IMPL_LINK(StyleList, CustomRenderHdl, weld::TreeView::render_args, aPayload, void)
 {
-    vcl::RenderContext& rRenderContext = std::get<0>(aPayload);
+    OutputDevice& rRenderContext = std::get<0>(aPayload);
     const ::tools::Rectangle& rRect = std::get<1>(aPayload);
     ::tools::Rectangle aRect(
         rRect.TopLeft(),
@@ -1772,7 +1772,7 @@ const SfxStyleFamilyItem& StyleList::GetFamilyItemByIndex(size_t i) const
 
 IMPL_STATIC_LINK(StyleList, CustomGetSizeHdl, weld::TreeView::get_size_args, aPayload, Size)
 {
-    vcl::RenderContext& rRenderContext = aPayload.first;
+    OutputDevice& rRenderContext = aPayload.first;
     return Size(42, 32 * rRenderContext.GetDPIScaleFactor());
 }
 

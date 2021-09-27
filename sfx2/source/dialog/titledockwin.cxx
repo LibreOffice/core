@@ -117,7 +117,7 @@ namespace sfx2
         );
     }
 
-    void TitledDockingWindow::ApplySettings(vcl::RenderContext& rRenderContext)
+    void TitledDockingWindow::ApplySettings(OutputDevice& rRenderContext)
     {
         const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
@@ -129,7 +129,7 @@ namespace sfx2
         rRenderContext.SetTextFillColor();
     }
 
-    void TitledDockingWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& i_rArea)
+    void TitledDockingWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle& i_rArea)
     {
         const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
