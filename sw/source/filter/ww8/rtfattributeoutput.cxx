@@ -110,7 +110,7 @@ static OString OutTBLBorderLine(RtfExport const& rExport, const editeng::SvxBord
         {
             case SvxBorderLineStyle::SOLID:
             {
-                if (DEF_LINE_WIDTH_0 == pLine->GetWidth())
+                if (SvxBorderLineWidth::Hairline == pLine->GetWidth())
                     aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRHAIR);
                 else
                     aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRS);
