@@ -3916,11 +3916,15 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
         else if (m_pSavedOutlineFrame && !m_pSavedOutlineFrame->IsInDtor())
         {
             // current pointer pos is not over an outline frame
-            // previous frame was an outline frame
+            // previous pointer pos was over an outline frame
             // remove outline content visibility button if showing
-            if (rNds.GetOutLineNds().Seek_Entry(static_cast<SwTextFrame*>(m_pSavedOutlineFrame)->GetTextNodeFirst(), &nPos) &&
-                    rSh.GetAttrOutlineContentVisible(nPos))
-                GetFrameControlsManager().RemoveControlsByType(FrameControlType::Outline, m_pSavedOutlineFrame);
+            if (m_pSavedOutlineFrame->isFrameAreaDefinitionValid() &&
+                    m_pSavedOutlineFrame->IsTextFrame() &&
+                    rNds.GetOutLineNds().Seek_Entry(
+                        static_cast<SwTextFrame*>(m_pSavedOutlineFrame)->GetTextNodeFirst(), &nPos)
+                    && rSh.GetAttrOutlineContentVisible(nPos))
+                GetFrameControlsManager().RemoveControlsByType(FrameControlType::Outline,
+                                                               m_pSavedOutlineFrame);
             m_pSavedOutlineFrame = nullptr;
         }
     }
