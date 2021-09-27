@@ -1205,12 +1205,10 @@ void ImportExcel::Bof5()
     {
         case 0x0005:    eDatei = Biff5W;    break;  // workbook globals
         case 0x0006:    eDatei = Biff5V;    break;  // VB module
-        case 0x0010:    eDatei = Biff5;     break;  // worksheet
         case 0x0020:    eDatei = Biff5C;    break;  // chart
         case 0x0040:    eDatei = Biff5M4;   break;  // macro sheet
-        default:
-            pExcRoot->eDateiTyp = BiffX;
-            return;
+        case 0x0010:                                // worksheet
+        default:        eDatei = Biff5;     break;  // tdf#144732 Excel interprets invalid indexes as worksheet
     }
 
     if( nVers == 0x0600 && (GetBiff() == EXC_BIFF8) )
