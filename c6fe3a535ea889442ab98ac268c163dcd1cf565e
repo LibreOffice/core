@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d063e6a9_d5a55705",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003349
+      },
+      "writtenOn": "2021-09-27T00:43:28Z",
+      "side": 1,
+      "message": "Hi Heiko, I have a new patchset to go in for this change. I\u0027m just holding off until I can rebase before submitting it.\n\nRegards.",
+      "revId": "c6fe3a535ea889442ab98ac268c163dcd1cf565e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
