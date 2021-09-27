@@ -34,7 +34,7 @@ void LineNumberWindow::dispose()
     Window::dispose();
 }
 
-void LineNumberWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void LineNumberWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     if (SyncYOffset())
         return;

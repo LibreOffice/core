@@ -137,7 +137,7 @@ void setTextEngineText (ExtTextEngine& rEngine, std::u16string_view aStr)
 namespace
 {
 
-void lcl_DrawIDEWindowFrame(DockingWindow const * pWin, vcl::RenderContext& rRenderContext)
+void lcl_DrawIDEWindowFrame(DockingWindow const * pWin, OutputDevice& rRenderContext)
 {
     if (pWin->IsFloatingMode())
         return;
@@ -930,7 +930,7 @@ void EditorWindow::SetupAndShowCodeCompleteWnd( const std::vector< OUString >& a
     pEditView->GetWindow()->GrabFocus();
 }
 
-void EditorWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void EditorWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     if (!pEditEngine)     // We need it now at latest
         CreateEditEngine();
@@ -1382,7 +1382,7 @@ BreakPointWindow::BreakPointWindow (vcl::Window* pParent, ModulWindow* pModulWin
     SetHelpId(HID_BASICIDE_BREAKPOINTWINDOW);
 }
 
-void BreakPointWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void BreakPointWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     if (SyncYOffset())
         return;
@@ -1411,7 +1411,7 @@ void BreakPointWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Re
     ShowMarker(rRenderContext);
 }
 
-void BreakPointWindow::ShowMarker(vcl::RenderContext& rRenderContext)
+void BreakPointWindow::ShowMarker(OutputDevice& rRenderContext)
 {
     if (nMarkerPos == NoMarker)
         return;
@@ -1682,7 +1682,7 @@ void WatchWindow::dispose()
     DockingWindow::dispose();
 }
 
-void WatchWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void WatchWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     lcl_DrawIDEWindowFrame(this, rRenderContext);
 }
@@ -1840,7 +1840,7 @@ void StackWindow::dispose()
     DockingWindow::dispose();
 }
 
-void StackWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void StackWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     lcl_DrawIDEWindowFrame(this, rRenderContext);
 }

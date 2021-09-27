@@ -181,7 +181,7 @@ public:
     void            MouseButtonDown( const MouseEvent& rMEvt );
     void            MouseButtonUp( const MouseEvent& rMEvt );
     void            MouseMove( const MouseEvent& rMEvt );
-    void            Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
+    void            Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect);
     bool            KeyInput( const KeyEvent& rKEvt );
 
     void            SetMode (Mode eMode);

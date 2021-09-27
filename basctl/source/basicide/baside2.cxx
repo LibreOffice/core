@@ -260,7 +260,7 @@ void ModulWindow::DoInit()
     GetEditorWindow().InitScrollBars();
 }
 
-void ModulWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle&)
+void ModulWindow::Paint(OutputDevice& /*rRenderContext*/, const tools::Rectangle&)
 {
 }
 
@@ -1464,7 +1464,7 @@ void ModulWindowLayout::UpdateDebug (bool bBasicStopped)
     aStackWindow->UpdateCalls();
 }
 
-void ModulWindowLayout::Paint (vcl::RenderContext& rRenderContext, tools::Rectangle const&)
+void ModulWindowLayout::Paint (OutputDevice& rRenderContext, tools::Rectangle const&)
 {
     rRenderContext.DrawText(Point(), IDEResId(RID_STR_NOMODULE));
 }

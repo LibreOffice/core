@@ -54,7 +54,7 @@ private:
     sal_uInt16          m_nControlSlotId;
 
 protected:
-    virtual void        Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void        Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void        Resize() override;
     virtual void        dispose() override;
 
