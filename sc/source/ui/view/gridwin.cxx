@@ -4837,7 +4837,7 @@ void ScGridWindow::UpdateFormulas(SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2)
 
     // #i122149# do not use old GetChangedArea() which used polygon-based Regions, but use
     // the region-band based new version; anyways, only rectangles are added
-    vcl::Region aChangedRegion( aOutputData.GetChangedAreaRegion() );   // logic (PixelToLogic)
+    tools::Rectangle aChangedRegion( aOutputData.GetChangedAreaRegion() );   // logic (PixelToLogic)
     if(!aChangedRegion.IsEmpty())
     {
         Invalidate(aChangedRegion);

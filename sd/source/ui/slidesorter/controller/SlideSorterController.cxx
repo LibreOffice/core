@@ -250,7 +250,7 @@ void SlideSorterController::Paint (
 
     try
     {
-        mrView.CompleteRedraw(pWindow->GetOutDev(), vcl::Region(rBBox));
+        mrView.CompleteRedraw(pWindow->GetOutDev(), rBBox);
     }
     catch (const Exception&)
     {

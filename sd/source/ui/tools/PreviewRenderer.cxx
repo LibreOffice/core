@@ -272,7 +272,6 @@ void PreviewRenderer::PaintPage (
 {
     // Paint the page.
     ::tools::Rectangle aPaintRectangle (Point(0,0), pPage->GetSize());
-    vcl::Region aRegion (aPaintRectangle);
 
     // Turn off online spelling and redlining.
     SdrOutliner* pOutliner = nullptr;
@@ -291,7 +290,7 @@ void PreviewRenderer::PaintPage (
 
     try
     {
-        mpView->CompleteRedraw(mpPreviewDevice.get(), aRegion, pRedirector.get());
+        mpView->CompleteRedraw(mpPreviewDevice.get(), aPaintRectangle, pRedirector.get());
     }
     catch (const css::uno::Exception&)
     {

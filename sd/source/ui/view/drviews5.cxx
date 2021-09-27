@@ -417,7 +417,7 @@ void DrawViewShell::Paint(const ::tools::Rectangle& rRect, ::sd::Window* pWin)
                 character in a symbol font */
     GetDoc()->GetDrawOutliner().SetDefaultLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
 
-    mpDrawView->CompleteRedraw( pWin->GetOutDev(), vcl::Region( rRect ) );
+    mpDrawView->CompleteRedraw( pWin->GetOutDev(), rRect );
 }
 
 /**

@@ -70,7 +70,7 @@ public:
 
     //pMarkHandleProvider can be NULL; ownership is not taken
     void setMarkHandleProvider( MarkHandleProvider* pMarkHandleProvider );
-    void CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr) override;
+    void CompleteRedraw(OutputDevice* pOut, const tools::Rectangle& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr) override;
 
     SdrObject*   getSelectedObject() const;
     SdrObject*   getTextEditObject() const;

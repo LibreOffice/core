@@ -537,16 +537,6 @@ void SlideSorterView::RequestRepaint (const ::tools::Rectangle& rRepaintBox)
     }
 }
 
-void SlideSorterView::RequestRepaint (const vcl::Region& rRepaintRegion)
-{
-    sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
-    if (pWindow)
-    {
-        mpLayeredDevice->InvalidateAllLayers(rRepaintRegion);
-        pWindow->Invalidate(rRepaintRegion);
-    }
-}
-
 ::tools::Rectangle SlideSorterView::GetModelArea() const
 {
     return mpLayouter->GetTotalBoundingBox();
@@ -564,7 +554,7 @@ static double gnLastFrameStart = 0;
 
 void SlideSorterView::CompleteRedraw (
     OutputDevice* pDevice,
-    const vcl::Region& rPaintArea,
+    const tools::Rectangle& rPaintArea,
     sdr::contact::ViewObjectContactRedirector* pRedirector)
 {
     (void)pRedirector;

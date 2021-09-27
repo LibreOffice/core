@@ -156,7 +156,7 @@ void OReportSection::Paint( vcl::RenderContext& rRenderContext, const tools::Rec
         pPgView->GetView().EndDrawLayers(*pTargetPaintWindow, true);
     }
 
-    m_pView->CompleteRedraw(&rRenderContext, aPaintRectRegion);
+    m_pView->CompleteRedraw(&rRenderContext, rRect);
     --m_nPaintEntranceCount;
 }
 

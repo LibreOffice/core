@@ -1217,7 +1217,7 @@ SelectionFunction::Mode MultiSelectionModeHandler::GetMode() const
 
 void MultiSelectionModeHandler::Abort()
 {
-    mrSlideSorter.GetView().RequestRepaint(mrSlideSorter.GetModel().RestoreSelection());
+    mrSlideSorter.GetView().RequestRepaint(mrSlideSorter.GetModel().RestoreSelection().GetBoundRect());
 }
 
 void MultiSelectionModeHandler::ProcessEvent (

@@ -43,8 +43,7 @@ ClientView::~ClientView() {}
 
 void ClientView::InvalidateOneWin(OutputDevice& rWin)
 {
-    vcl::Region aRegion;
-    CompleteRedraw(&rWin, aRegion);
+    CompleteRedraw(&rWin, ::tools::Rectangle());
 }
 
 /**
@@ -54,7 +53,7 @@ void ClientView::InvalidateOneWin(OutputDevice& rWin)
 
 void ClientView::InvalidateOneWin(OutputDevice& rWin, const ::tools::Rectangle& rRect)
 {
-    CompleteRedraw(&rWin, vcl::Region(rRect));
+    CompleteRedraw(&rWin, rRect);
 }
 
 } // end of namespace sd
