@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "987bf7e0_0e6de43e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-27T12:11:45Z",
+      "side": 1,
+      "message": "Hi Tomaz, first of the patches to excise RenderContext to make way for the new RenderContext class. ",
+      "revId": "7077667873f73db4da77c78cdc81cfead89b55ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
