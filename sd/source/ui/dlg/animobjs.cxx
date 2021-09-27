@@ -77,7 +77,7 @@ void SdDisplay::SetBitmapEx( BitmapEx const * pBmpEx )
     }
 }
 
-void SdDisplay::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
+void SdDisplay::Paint(OutputDevice& rRenderContext, const ::tools::Rectangle&)
 {
     rRenderContext.Push(PushFlags::MAPMODE);
 

@@ -55,7 +55,7 @@ public:
 
     void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const ::tools::Rectangle& rRect) override;
     virtual bool KeyInput(const KeyEvent& rKeyEvt) override;
     virtual bool Command(const CommandEvent& rCEvt) override;
 };

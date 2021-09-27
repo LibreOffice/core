@@ -201,13 +201,13 @@ void Window::Resize()
         mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
 }
 
-void Window::PrePaint(vcl::RenderContext& /*rRenderContext*/)
+void Window::PrePaint(OutputDevice& /*rRenderContext*/)
 {
     if ( mpViewShell )
         mpViewShell->PrePaint();
 }
 
-void Window::Paint(vcl::RenderContext& /*rRenderContext*/, const ::tools::Rectangle& rRect)
+void Window::Paint(OutputDevice& /*rRenderContext*/, const ::tools::Rectangle& rRect)
 {
     if ( mpViewShell )
         mpViewShell->Paint(rRect, this);

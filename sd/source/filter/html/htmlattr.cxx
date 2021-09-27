@@ -30,7 +30,7 @@ SdHtmlAttrPreview::~SdHtmlAttrPreview()
 {
 }
 
-void SdHtmlAttrPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
+void SdHtmlAttrPreview::Paint(OutputDevice& rRenderContext, const ::tools::Rectangle& rRect)
 {
     ::tools::Rectangle aTextRect;
     aTextRect.SetSize(GetOutputSizePixel());

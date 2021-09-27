@@ -69,7 +69,7 @@ using namespace ::com::sun::star::text;
 
 namespace sd {
 
-void AnnotationTextWindow::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
+void AnnotationTextWindow::Paint(OutputDevice& rRenderContext, const ::tools::Rectangle& rRect)
 {
     Size aSize = GetOutputSizePixel();
 
