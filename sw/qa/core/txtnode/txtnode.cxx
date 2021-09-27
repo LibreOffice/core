@@ -154,6 +154,31 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTitleFieldInvalidate)
     comphelper::LibreOfficeKit::setActive(false);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testFlyAnchorUndo)
+{
+    // Given a document with a fly frame, anchored after the last char of the document:
+    load(DATA_DIRECTORY, "fly-anchor-undo.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pShell = pTextDoc->GetDocShell();
+    SwDoc* pDoc = pShell->GetDoc();
+    const SwFrameFormats& rSpz = *pDoc->GetSpzFrameFormats();
+    sal_Int32 nExpected = rSpz[0]->GetAnchor().GetContentAnchor()->nContent.GetIndex();
+
+    // When deleting that last character and undoing it:
+    SwWrtShell* pWrtShell = pShell->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->DelLeft();
+    pWrtShell->Undo();
+
+    // Then make sure the anchor position after the undo is the same as the original:
+    sal_Int32 nActual = rSpz[0]->GetAnchor().GetContentAnchor()->nContent.GetIndex();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 3
+    // - Actual  : 2
+    // i.e. the anchor position was left unchanged by the undo.
+    CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
