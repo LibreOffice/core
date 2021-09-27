@@ -16,6 +16,24 @@
       "message": "I think we will want to show current drop target in online by sending the position using some callback. So I would not merge this.",
       "revId": "7ce3462c53d9bf826a785f1a57c286c2f1025c89",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2531ffac_e0d743ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000865
+      },
+      "writtenOn": "2021-09-27T20:48:10Z",
+      "side": 1,
+      "message": "Unfortunately, it has unnecessary loops, also it has a performance issue in desktop case when using a remote DISPLAY\u003dIP soffice --Calc. We should disable\nthose operations for now until someone implement sending the drop cursor position.",
+      "parentUuid": "f304694c_44b0a14a",
+      "revId": "7ce3462c53d9bf826a785f1a57c286c2f1025c89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
