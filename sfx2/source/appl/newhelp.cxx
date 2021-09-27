@@ -426,7 +426,7 @@ IMPL_LINK_NOARG(IndexTabPage_Impl, CustomGetSizeHdl, weld::TreeView::get_size_ar
 
 IMPL_LINK(IndexTabPage_Impl, CustomRenderHdl, weld::TreeView::render_args, aPayload, void)
 {
-    vcl::RenderContext& rRenderContext = std::get<0>(aPayload);
+    OutputDevice& rRenderContext = std::get<0>(aPayload);
     const ::tools::Rectangle& rRect = std::get<1>(aPayload);
     bool bSelected = std::get<2>(aPayload);
     const OUString& rId = std::get<3>(aPayload);

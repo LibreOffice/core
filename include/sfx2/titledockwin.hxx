@@ -57,13 +57,13 @@ namespace sfx2
 
     protected:
         // Window overridables
-        virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& i_rArea) override;
+        virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& i_rArea) override;
         virtual void Resize() override;
         virtual void StateChanged( StateChangedType i_nType ) override;
         virtual void DataChanged( const DataChangedEvent& i_rDataChangedEvent ) override;
         virtual void SetText( const OUString& i_rText ) override;
 
-        virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
+        virtual void ApplySettings(OutputDevice& rRenderContext) override;
     protected:
         /** internal version of ResetToolBox
         */

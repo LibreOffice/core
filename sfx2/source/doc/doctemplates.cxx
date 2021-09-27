@@ -138,7 +138,7 @@ public:
     WaitWindow_Impl();
     virtual ~WaitWindow_Impl() override;
     virtual void dispose() override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
 };
 
 #define X_OFFSET 15
@@ -2266,7 +2266,7 @@ void  WaitWindow_Impl::dispose()
 }
 
 
-void WaitWindow_Impl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
+void WaitWindow_Impl::Paint(OutputDevice& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     rRenderContext.DrawText(maRect, maText, gnTextStyle);
 }

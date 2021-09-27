@@ -876,7 +876,7 @@ void ThumbnailView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     SetOutputSizePixel(pDrawingArea->get_preferred_size());
 }
 
-void ThumbnailView::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& /*rRect*/)
+void ThumbnailView::Paint(OutputDevice& rRenderContext, const ::tools::Rectangle& /*rRect*/)
 {
     rRenderContext.Push(PushFlags::ALL);
 

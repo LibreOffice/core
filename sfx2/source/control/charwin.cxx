@@ -127,7 +127,7 @@ void SvxCharView::ContextMenuSelect(std::string_view rMenuId)
         maClearAllClickHdl.Call(this);
 }
 
-void SvxCharView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SvxCharView::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.SetFont(maFont);
 
