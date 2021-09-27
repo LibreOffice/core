@@ -863,9 +863,11 @@ void WinSalGraphics::SetFont(LogicalFontInstance* pFont, int nFallbackLevel)
             return;
 
         // select original DC font
-        assert(mhDefFont);
-        ::SelectFont(getHDC(), mhDefFont);
-        mhDefFont = nullptr;
+        if (mhDefFont)
+        {
+            ::SelectFont(getHDC(), mhDefFont);
+            mhDefFont = nullptr;
+        }
 
         // release no longer referenced font handles
         for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
