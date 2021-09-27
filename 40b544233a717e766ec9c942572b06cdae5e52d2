@@ -34,6 +34,46 @@
       "parentUuid": "16f4b5b7_d1d718bf",
       "revId": "40b544233a717e766ec9c942572b06cdae5e52d2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f7f4e80_1ebe6798",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-09-27T19:16:58Z",
+      "side": 1,
+      "message": "This is getting rather old so we would need to rebase anyway...",
+      "revId": "40b544233a717e766ec9c942572b06cdae5e52d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c95e5814_def0d61a",
+        "filename": "svtools/source/graphic/renderer.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-09-27T19:16:58Z",
+      "side": 1,
+      "message": "I don\u0027t think this change is relevant - and many other \"css\" changes in this patch.",
+      "range": {
+        "startLine": 109,
+        "startChar": 36,
+        "endLine": 109,
+        "endChar": 39
+      },
+      "revId": "40b544233a717e766ec9c942572b06cdae5e52d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
