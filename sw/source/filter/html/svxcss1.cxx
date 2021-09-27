@@ -244,14 +244,6 @@ CSS1PropertyEnum const aBulletStyleTable[] =
     { nullptr,       0                        }
 };
 
-
-sal_uInt16 const aBorderWidths[] =
-{
-    DEF_LINE_WIDTH_0,
-    DEF_LINE_WIDTH_5,
-    DEF_LINE_WIDTH_1
-};
-
 #undef SBORDER_ENTRY
 #undef DBORDER_ENTRY
 
@@ -358,9 +350,9 @@ void SvxCSS1BorderInfo::SetBorderLine( SvxBoxItemLine nLine, SvxBoxItem &rBoxIte
             break;
     }
 
-    // convert named width, if no absolute is given
+    // Use default width, if no absolute is given
     if( nAbsWidth==USHRT_MAX )
-        aBorderLine.SetWidth( aBorderWidths[ nNamedWidth ] );
+        aBorderLine.SetWidth( SvxBorderLineWidth::Thin);
     else
         aBorderLine.SetWidth( nAbsWidth );
 
