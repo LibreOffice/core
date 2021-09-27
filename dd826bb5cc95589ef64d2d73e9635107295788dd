@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "761988b3_0d6ee80f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-09-27T16:28:48Z",
+      "side": 1,
+      "message": "Maybe fixes your assert mentioned on IRC. I just saw your comments in the backlog, but you were already gone.\n\nThat\u0027s what the original code was doing when I cleaned up the font handling years ago. If you have a repo, open a bug report and add me to CC.\n\nHTH",
+      "revId": "dd826bb5cc95589ef64d2d73e9635107295788dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
