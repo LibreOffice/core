@@ -110,7 +110,7 @@ public:
     virtual ~SvHeaderTabListBox() override;
     virtual void dispose() override;
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
+    virtual void    Paint( OutputDevice& rRenderContext, const tools::Rectangle& ) override;
 
     void            InitHeaderBar(HeaderBar* pHeaderBar);
     HeaderBar*      GetHeaderBar();

@@ -838,7 +838,7 @@ tools::Rectangle SvImpLBox::GetClipRegionRect() const
 }
 
 
-void SvImpLBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void SvImpLBox::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     if (!m_pView->GetVisibleCount())
         return;
@@ -976,7 +976,7 @@ void SvImpLBox::ScrollToAbsPos( tools::Long nPos )
     }
 }
 
-void SvImpLBox::DrawNet(vcl::RenderContext& rRenderContext)
+void SvImpLBox::DrawNet(OutputDevice& rRenderContext)
 {
     if (m_pView->GetVisibleCount() < 2 && !m_pStartEntry->HasChildrenOnDemand() &&
         !m_pStartEntry->HasChildren())

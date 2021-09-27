@@ -668,7 +668,7 @@ void Splitter::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-void Splitter::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rPaintRect)
+void Splitter::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rPaintRect)
 {
     rRenderContext.DrawRect(rPaintRect);
 

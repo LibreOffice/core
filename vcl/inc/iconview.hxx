@@ -31,8 +31,7 @@ public:
 
     virtual tools::Rectangle GetFocusRect(const SvTreeListEntry*, tools::Long nEntryPos) override;
 
-    void PaintEntry(SvTreeListEntry&, tools::Long nX, tools::Long nY,
-                    vcl::RenderContext& rRenderContext);
+    void PaintEntry(SvTreeListEntry&, tools::Long nX, tools::Long nY, OutputDevice& rRenderContext);
 
     virtual FactoryFunction GetUITestFactory() const override;
     virtual void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;

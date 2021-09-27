@@ -2233,7 +2233,7 @@ void SvTreeListBox::AdjustEntryHeightAndRecalc()
     RecalcViewData();
 }
 
-void SvTreeListBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void SvTreeListBox::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     Control::Paint(rRenderContext, rRect);
     if (nTreeFlags & SvTreeFlags::RECALCTABS)
@@ -2550,7 +2550,7 @@ void SvTreeListBox::InvalidateEntry(SvTreeListEntry* pEntry)
     }
 }
 
-void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl::RenderContext& rRenderContext)
+void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, OutputDevice& rRenderContext)
 {
     tools::Rectangle aRect; // multi purpose
 
@@ -2842,14 +2842,14 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
     }
 }
 
-void SvTreeListBox::DrawCustomEntry(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const SvTreeListEntry& rEntry)
+void SvTreeListBox::DrawCustomEntry(OutputDevice& rRenderContext, const tools::Rectangle& rRect, const SvTreeListEntry& rEntry)
 {
-    aCustomRenderHdl.Call(std::tuple<vcl::RenderContext&, const tools::Rectangle&, const SvTreeListEntry&>(rRenderContext, rRect, rEntry));
+    aCustomRenderHdl.Call(std::tuple<OutputDevice&, const tools::Rectangle&, const SvTreeListEntry&>(rRenderContext, rRect, rEntry));
 }
 
-Size SvTreeListBox::MeasureCustomEntry(vcl::RenderContext& rRenderContext, const SvTreeListEntry& rEntry)
+Size SvTreeListBox::MeasureCustomEntry(OutputDevice& rRenderContext, const SvTreeListEntry& rEntry)
 {
-    return aCustomMeasureHdl.Call(std::pair<vcl::RenderContext&, const SvTreeListEntry&>(rRenderContext, rEntry));
+    return aCustomMeasureHdl.Call(std::pair<OutputDevice&, const SvTreeListEntry&>(rRenderContext, rEntry));
 }
 
 tools::Rectangle SvTreeListBox::GetFocusRect(const SvTreeListEntry* pEntry, tools::Long nLine )
@@ -3414,7 +3414,7 @@ void SvTreeListBox::StateChanged( StateChangedType eType )
         ImplInitStyle();
 }
 
-void SvTreeListBox::ApplySettings(vcl::RenderContext& rRenderContext)
+void SvTreeListBox::ApplySettings(OutputDevice& rRenderContext)
 {
     SetPointFont(rRenderContext, GetPointFont(*GetOutDev()));
 

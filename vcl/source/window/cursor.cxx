@@ -43,7 +43,7 @@ struct ImplCursorData
     VclPtr<vcl::Window> mpWindow;           // assigned window
 };
 
-static tools::Rectangle ImplCursorInvert(vcl::RenderContext* pRenderContext, ImplCursorData const * pData)
+static tools::Rectangle ImplCursorInvert(OutputDevice* pRenderContext, ImplCursorData const * pData)
 {
     tools::Rectangle aPaintRect;
 
@@ -123,7 +123,7 @@ static void ImplCursorInvert(vcl::Window* pWindow, ImplCursorData const * pData)
     if (bDoubleBuffering)
         pGuard.reset(new vcl::PaintBufferGuard(pWindow->ImplGetWindowImpl()->mpFrameData, pWindow));
 
-    vcl::RenderContext* pRenderContext = bDoubleBuffering ? pGuard->GetRenderContext() : pWindow->GetOutDev();
+    OutputDevice* pRenderContext = bDoubleBuffering ? pGuard->GetRenderContext() : pWindow->GetOutDev();
 
     tools::Rectangle aPaintRect = ImplCursorInvert(pRenderContext, pData);
     if (bDoubleBuffering)

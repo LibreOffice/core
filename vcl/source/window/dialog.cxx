@@ -493,7 +493,7 @@ void Dialog::ImplInitDialog( vcl::Window* pParent, WinBits nStyle, InitFlag eFla
     ImplInitSettings();
 }
 
-void Dialog::ApplySettings(vcl::RenderContext& rRenderContext)
+void Dialog::ApplySettings(OutputDevice& rRenderContext)
 {
     if (IsControlBackground())
     {

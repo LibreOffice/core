@@ -736,7 +736,7 @@ void TextWindow::KeyInput( const KeyEvent& rKEvent )
         Window::KeyInput( rKEvent );
 }
 
-void TextWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void TextWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     mpExtTextView->Paint(rRenderContext, rRect);
 }
@@ -908,7 +908,7 @@ WinBits VclMultiLineEdit::ImplInitStyle( WinBits nStyle )
     return nStyle;
 }
 
-void VclMultiLineEdit::ApplySettings(vcl::RenderContext& rRenderContext)
+void VclMultiLineEdit::ApplySettings(OutputDevice& rRenderContext)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 

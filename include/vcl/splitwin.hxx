@@ -93,14 +93,14 @@ private:
     SAL_DLLPRIVATE void ImplGetButtonRect( tools::Rectangle& rRect, bool bTest ) const;
     SAL_DLLPRIVATE void ImplGetFadeInRect( tools::Rectangle& rRect, bool bTest = false ) const;
     SAL_DLLPRIVATE void ImplGetFadeOutRect( tools::Rectangle& rRect ) const;
-    SAL_DLLPRIVATE void ImplDrawFadeIn(vcl::RenderContext& rRenderContext);
-    SAL_DLLPRIVATE void ImplDrawFadeOut(vcl::RenderContext& rRenderContext);
+    SAL_DLLPRIVATE void ImplDrawFadeIn(OutputDevice& rRenderContext);
+    SAL_DLLPRIVATE void ImplDrawFadeOut(OutputDevice& rRenderContext);
     SAL_DLLPRIVATE void ImplNewAlign();
-    SAL_DLLPRIVATE void ImplDrawGrip(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, bool bHorz, bool bLeft);
+    SAL_DLLPRIVATE void ImplDrawGrip(OutputDevice& rRenderContext, const tools::Rectangle& rRect, bool bHorz, bool bLeft);
     SAL_DLLPRIVATE void ImplStartSplit( const MouseEvent& rMEvt );
 
-    SAL_DLLPRIVATE void ImplDrawBorder(vcl::RenderContext& rRenderContext);
-    SAL_DLLPRIVATE void ImplDrawBorderLine(vcl::RenderContext& rRenderContext);
+    SAL_DLLPRIVATE void ImplDrawBorder(OutputDevice& rRenderContext);
+    SAL_DLLPRIVATE void ImplDrawBorderLine(OutputDevice& rRenderContext);
     static SAL_DLLPRIVATE void ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, bool bHide,
                                              bool bRows );
     static SAL_DLLPRIVATE sal_uInt16 ImplTestSplit( ImplSplitSet* pSet, const Point& rPos,
@@ -126,7 +126,7 @@ public:
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void        MouseMove( const MouseEvent& rMEvt ) override;
     virtual void        Tracking( const TrackingEvent& rTEvt ) override;
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void        Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void        Resize() override;
     virtual void        RequestHelp( const HelpEvent& rHEvt ) override;
     virtual void        StateChanged( StateChangedType nType ) override;

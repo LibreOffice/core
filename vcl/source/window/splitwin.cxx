@@ -170,7 +170,7 @@ static void ImplCalcBorder( WindowAlign eAlign,
     }
 }
 
-void SplitWindow::ImplDrawBorder(vcl::RenderContext& rRenderContext)
+void SplitWindow::ImplDrawBorder(OutputDevice& rRenderContext)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     tools::Long nDX = mnDX;
@@ -191,7 +191,7 @@ void SplitWindow::ImplDrawBorder(vcl::RenderContext& rRenderContext)
     }
 }
 
-void SplitWindow::ImplDrawBorderLine(vcl::RenderContext& rRenderContext)
+void SplitWindow::ImplDrawBorderLine(OutputDevice& rRenderContext)
 {
     if (!mbFadeOut)
         return;
@@ -809,7 +809,7 @@ static void ImplCalcLogSize( std::vector< ImplSplitItem > & rItems, size_t nItem
     }
 }
 
-static void ImplDrawSplit(vcl::RenderContext& rRenderContext, ImplSplitSet* pSet, bool bRows, bool bDown)
+static void ImplDrawSplit(OutputDevice& rRenderContext, ImplSplitSet* pSet, bool bRows, bool bDown)
 {
     if (pSet->mvItems.empty())
         return;
@@ -1462,7 +1462,7 @@ void SplitWindow::ImplGetFadeOutRect( tools::Rectangle& rRect ) const
     rRect = aRect;
 }
 
-void SplitWindow::ImplDrawGrip(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, bool bHorizontal, bool bLeft)
+void SplitWindow::ImplDrawGrip(OutputDevice& rRenderContext, const tools::Rectangle& rRect, bool bHorizontal, bool bLeft)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
@@ -1543,7 +1543,7 @@ void SplitWindow::ImplDrawGrip(vcl::RenderContext& rRenderContext, const tools::
     rRenderContext.SetAntialiasing(nAA);
 }
 
-void SplitWindow::ImplDrawFadeIn(vcl::RenderContext& rRenderContext)
+void SplitWindow::ImplDrawFadeIn(OutputDevice& rRenderContext)
 {
     if (!mbFadeIn)
         return;
@@ -1568,7 +1568,7 @@ void SplitWindow::ImplDrawFadeIn(vcl::RenderContext& rRenderContext)
     ImplDrawGrip(rRenderContext, aTempRect, (meAlign == WindowAlign::Top) || (meAlign == WindowAlign::Bottom), bLeft);
 }
 
-void SplitWindow::ImplDrawFadeOut(vcl::RenderContext& rRenderContext)
+void SplitWindow::ImplDrawFadeOut(OutputDevice& rRenderContext)
 {
     if (!mbFadeOut)
         return;
@@ -2050,7 +2050,7 @@ bool SplitWindow::PreNotify( NotifyEvent& rNEvt )
     return Window::PreNotify( rNEvt );
 }
 
-void SplitWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SplitWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     if (mnWinStyle & WB_BORDER)
         ImplDrawBorder(rRenderContext);

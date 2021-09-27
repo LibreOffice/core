@@ -54,12 +54,12 @@ public:
         }
     }
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)  override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)  override;
 };
 
 }
 
-void DemoMtfWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void DemoMtfWin::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     maMtf.Play(*GetOutDev(), maMtf.GetActionSize());
 

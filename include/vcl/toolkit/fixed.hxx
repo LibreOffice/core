@@ -57,9 +57,9 @@ public:
     virtual         ~FixedText() override;
     virtual void    dispose() override;
 
-    virtual void    ApplySettings(vcl::RenderContext& rRenderContext) override;
+    virtual void    ApplySettings(OutputDevice& rRenderContext) override;
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void    Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
     virtual void    Resize() override;
     virtual void    StateChanged( StateChangedType nType ) override;
@@ -82,7 +82,7 @@ public:
     explicit SelectableFixedText( vcl::Window* pParent, WinBits nStyle );
 
     virtual void    LoseFocus() override;
-    virtual void    ApplySettings(vcl::RenderContext&) override;
+    virtual void    ApplySettings(OutputDevice&) override;
 };
 
 class VCL_DLLPUBLIC FixedLine final : public Control
@@ -92,7 +92,7 @@ private:
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE static WinBits ImplInitStyle( WinBits nStyle );
-    SAL_DLLPRIVATE void    ImplDraw(vcl::RenderContext& rRenderContext);
+    SAL_DLLPRIVATE void    ImplDraw(OutputDevice& rRenderContext);
 
     virtual void    FillLayoutData() const override;
     virtual const vcl::Font&
@@ -103,9 +103,9 @@ private:
 public:
     explicit        FixedLine( vcl::Window* pParent, WinBits nStyle = WB_HORZ );
 
-    virtual void    ApplySettings(vcl::RenderContext&) override;
+    virtual void    ApplySettings(OutputDevice&) override;
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void    Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
     virtual void    Resize() override;
     virtual void    StateChanged( StateChangedType nType ) override;
@@ -129,9 +129,9 @@ private:
 public:
     explicit        FixedBitmap( vcl::Window* pParent, WinBits nStyle = 0 );
 
-    virtual void    ApplySettings(vcl::RenderContext&) override;
+    virtual void    ApplySettings(OutputDevice&) override;
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void    Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
     virtual void    Resize() override;
     virtual void    StateChanged( StateChangedType nType ) override;
@@ -157,9 +157,9 @@ protected:
 public:
     explicit        FixedImage( vcl::Window* pParent, WinBits nStyle = 0 );
 
-    virtual void    ApplySettings(vcl::RenderContext&) override;
+    virtual void    ApplySettings(OutputDevice&) override;
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void    Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
     virtual void    Resize() override;
     virtual void    StateChanged( StateChangedType nType ) override;

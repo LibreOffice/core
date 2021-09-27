@@ -238,7 +238,7 @@ class SvxIconChoiceCtrl_Impl
     void                SetOrigin( const Point& );
 
     void                ShowFocus ( tools::Rectangle const & rRect );
-    void                DrawFocusRect(vcl::RenderContext& rRenderContext);
+    void                DrawFocusRect(OutputDevice& rRenderContext);
 
     bool                IsMnemonicChar( sal_Unicode cChar, sal_uLong& rPos ) const;
 
@@ -273,7 +273,7 @@ public:
                             bool bSelect,
                             bool bAddToSelection = false
                         );
-    void                Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
+    void                Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect);
     bool                MouseButtonDown( const MouseEvent& );
     bool                MouseButtonUp( const MouseEvent& );
     bool                MouseMove( const MouseEvent&);
@@ -290,7 +290,7 @@ public:
     void                LoseFocus();
     void                SetUpdateMode( bool bUpdate );
     bool                GetUpdateMode() const { return bUpdateMode; }
-    void                PaintEntry(SvxIconChoiceCtrlEntry*, const Point&, vcl::RenderContext& rRenderContext);
+    void                PaintEntry(SvxIconChoiceCtrlEntry*, const Point&, OutputDevice& rRenderContext);
 
     void                SetEntryPos(
                             SvxIconChoiceCtrlEntry* pEntry,
@@ -342,10 +342,10 @@ public:
     static bool         IsBoundingRectValid( const tools::Rectangle& rRect ) { return ( rRect.Right() != LONG_MAX ); }
 
     static void         PaintEmphasis(const tools::Rectangle& rRect1, bool bSelected,
-                                      vcl::RenderContext& rRenderContext );
+                                      OutputDevice& rRenderContext );
 
     void                PaintItem(const tools::Rectangle& rRect, IcnViewFieldType eItem, SvxIconChoiceCtrlEntry* pEntry,
-                            sal_uInt16 nPaintFlags, vcl::RenderContext& rRenderContext);
+                            sal_uInt16 nPaintFlags, OutputDevice& rRenderContext);
 
     // recalculates all BoundingRects if bMustRecalcBoundingRects == true
     void                CheckBoundingRects() { if (bBoundRectsDirty) RecalcAllBoundingRectsSmart(); }
@@ -409,7 +409,7 @@ public:
                             SvxIconChoiceCtrlEntry* pEntry,
                             bool bKeepHighlightFlags
                         );
-    void                DrawHighlightFrame(vcl::RenderContext& rRenderContext, const tools::Rectangle& rBmpRect);
+    void                DrawHighlightFrame(OutputDevice& rRenderContext, const tools::Rectangle& rBmpRect);
 
     void                CallEventListeners( VclEventId nEvent, void* pData );
 

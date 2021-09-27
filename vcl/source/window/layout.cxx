@@ -1553,7 +1553,7 @@ void VclFrame::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 
 class DisclosureButton final : public CheckBox
 {
-    virtual void ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext) override
+    virtual void ImplDrawCheckBoxState(OutputDevice& rRenderContext) override
     {
         /* HACK: DisclosureButton is currently assuming, that the disclosure sign
            will fit into the rectangle occupied by a normal checkbox on all themes.
@@ -2107,7 +2107,7 @@ bool VclScrolledWindow::EventNotify(NotifyEvent& rNEvt)
     return bDone || VclBin::EventNotify( rNEvt );
 }
 
-void VclScrolledWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void VclScrolledWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     VclBin::Paint(rRenderContext, rRect);
     if (m_eDrawFrameStyle == DrawFrameStyle::NONE)

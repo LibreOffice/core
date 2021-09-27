@@ -115,7 +115,7 @@ WindowAlign DockingAreaWindow::GetAlign() const
     return mpImplData->meAlign;
 }
 
-void DockingAreaWindow::ApplySettings(vcl::RenderContext& rRenderContext)
+void DockingAreaWindow::ApplySettings(OutputDevice& rRenderContext)
 {
     const StyleSettings rSetting = rRenderContext.GetSettings().GetStyleSettings();
     const BitmapEx& rPersonaBitmap = (GetAlign() == WindowAlign::Top) ? rSetting.GetPersonaHeader() : rSetting.GetPersonaFooter();
@@ -151,7 +151,7 @@ void DockingAreaWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 
 }
 
-void DockingAreaWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void DockingAreaWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     const StyleSettings rSetting = rRenderContext.GetSettings().GetStyleSettings();
 

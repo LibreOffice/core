@@ -1432,7 +1432,7 @@ public:
         }
     };
 
-    void drawThumbs(vcl::RenderContext& rDev, tools::Rectangle aRect, bool bVDev)
+    void drawThumbs(OutputDevice& rDev, tools::Rectangle aRect, bool bVDev)
     {
         RenderContext aCtx;
         aCtx.meStyle = RENDER_THUMB;
@@ -1467,7 +1467,7 @@ public:
         }
     }
 
-    void drawToDevice(vcl::RenderContext& rDev, Size aSize, bool bVDev)
+    void drawToDevice(OutputDevice& rDev, Size aSize, bool bVDev)
     {
         RenderContext aCtx;
         aCtx.mbVDev = bVDev;
@@ -1779,7 +1779,7 @@ public:
         mrRenderer.SetSizePixel(GetSizePixel());
         mrRenderer.KeyInput(rKEvt);
     }
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override
     {
         mrRenderer.SetSizePixel(GetSizePixel());
         fprintf(stderr, "DemoWin::Paint(%" SAL_PRIdINT64 ",%" SAL_PRIdINT64 ",%" SAL_PRIdINT64 ",%" SAL_PRIdINT64 ")\n", sal_Int64(rRect.Left()), sal_Int64(rRect.Top()), sal_Int64(rRect.getWidth()), sal_Int64(rRect.getHeight()));
@@ -1789,7 +1789,7 @@ public:
             TestAndQuit(rRenderContext);
     }
 
-    void TestAndQuit(vcl::RenderContext& rRenderContext)
+    void TestAndQuit(OutputDevice& rRenderContext)
     {
         if (underTesting)
             return;
@@ -1970,7 +1970,7 @@ public:
         mpBar.disposeAndClear();
         WorkWindow::dispose();
     }
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle&) override
     {
         tools::Rectangle aWholeSize(Point(0, 0),GetOutputSizePixel());
         vcl::Region aClip(aWholeSize);
@@ -2028,7 +2028,7 @@ class DemoPopup : public FloatingWindow
         PaintImmediately();
     }
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle&) override
     {
         Size aSize = GetOutputSizePixel();
         tools::Rectangle aTextRect(Point(6, 6), aSize);

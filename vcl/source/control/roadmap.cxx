@@ -46,7 +46,7 @@ class IDLabel :  public FixedText
 public:
     IDLabel( vcl::Window* _pParent, WinBits _nWinStyle );
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
+    virtual void ApplySettings(OutputDevice& rRenderContext) override;
 };
 
 }
@@ -207,7 +207,7 @@ ORoadmap::ORoadmap(vcl::Window* _pParent, WinBits _nWinStyle)
 {
 }
 
-void ORoadmap::implInit(vcl::RenderContext& rRenderContext)
+void ORoadmap::implInit(OutputDevice& rRenderContext)
 {
     delete m_pImpl->InCompleteHyperLabel;
     m_pImpl->InCompleteHyperLabel = nullptr;
@@ -546,7 +546,7 @@ bool ORoadmap::SelectRoadmapItemByID(ItemId _nNewID, bool bGrabFocus)
     return false;
 }
 
-void ORoadmap::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& _rRect)
+void ORoadmap::Paint(OutputDevice& rRenderContext, const tools::Rectangle& _rRect)
 {
     if (!m_pImpl->m_bPaintInitialized)
         implInit(rRenderContext);
@@ -568,7 +568,7 @@ void ORoadmap::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&
     DrawHeadline(rRenderContext);
 }
 
-void ORoadmap::DrawHeadline(vcl::RenderContext& rRenderContext)
+void ORoadmap::DrawHeadline(OutputDevice& rRenderContext)
 {
     Point aTextPos = LogicToPixel(Point(ROADMAP_INDENT_X, 8), MapMode(MapUnit::MapAppFont));
 
@@ -657,7 +657,7 @@ void ORoadmap::DataChanged(const DataChangedEvent& rDCEvt)
     Invalidate();
 }
 
-void ORoadmap::ApplySettings(vcl::RenderContext& rRenderContext)
+void ORoadmap::ApplySettings(OutputDevice& rRenderContext)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     Color aTextColor = rStyleSettings.GetFieldTextColor();
@@ -813,7 +813,7 @@ IDLabel::IDLabel(vcl::Window* _pParent, WinBits _nWinStyle)
 {
 }
 
-void IDLabel::ApplySettings(vcl::RenderContext& rRenderContext)
+void IDLabel::ApplySettings(OutputDevice& rRenderContext)
 {
     FixedText::ApplySettings(rRenderContext);
 

@@ -309,7 +309,7 @@ void ListBox::ToggleDropDown()
     }
 }
 
-void ListBox::ApplySettings(vcl::RenderContext& rRenderContext)
+void ListBox::ApplySettings(OutputDevice& rRenderContext)
 {
     rRenderContext.SetBackground();
 }

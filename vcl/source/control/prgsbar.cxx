@@ -113,7 +113,7 @@ void ProgressBar::ImplInitSettings( bool bFont,
 */
 }
 
-void ProgressBar::ImplDrawProgress(vcl::RenderContext& rRenderContext, sal_uInt16 nNewPerc)
+void ProgressBar::ImplDrawProgress(OutputDevice& rRenderContext, sal_uInt16 nNewPerc)
 {
     if (mbCalcNew)
     {
@@ -146,7 +146,7 @@ void ProgressBar::ImplDrawProgress(vcl::RenderContext& rRenderContext, sal_uInt1
                    tools::Rectangle(Point(), GetSizePixel()));
 }
 
-void ProgressBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
+void ProgressBar::Paint(OutputDevice& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     ImplDrawProgress(rRenderContext, mnPercent);
 }

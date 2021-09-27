@@ -63,14 +63,14 @@ private:
     virtual void StateChanged( StateChangedType nType ) override;
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    void InitMenuClipRegion(vcl::RenderContext& rRenderContext);
+    void InitMenuClipRegion(OutputDevice& rRenderContext);
 
     void Start();
     void End();
 
 protected:
     vcl::Region ImplCalcClipRegion() const;
-    void ImplDrawScroller(vcl::RenderContext& rRenderContext, bool bUp);
+    void ImplDrawScroller(OutputDevice& rRenderContext, bool bUp);
     using Window::ImplScroll;
     void ImplScroll( const Point& rMousePos );
     void ImplScroll( bool bUp );
@@ -78,7 +78,7 @@ protected:
     void ImplHighlightItem( const MouseEvent& rMEvt, bool bMBDown );
     tools::Long ImplGetStartY() const;
     tools::Rectangle ImplGetItemRect( sal_uInt16 nPos );
-    void RenderHighlightItem( vcl::RenderContext& rRenderContext, sal_uInt16 nPos );
+    void RenderHighlightItem( OutputDevice& rRenderContext, sal_uInt16 nPos );
     tools::Long GetInitialItemY( tools::Long *pOptStartY = nullptr ) const;
     void InvalidateItem( sal_uInt16 nPos );
 
@@ -94,11 +94,11 @@ public:
     virtual void MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual void KeyInput(const KeyEvent& rKEvent) override;
     virtual void Command(const CommandEvent& rCEvt) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void RequestHelp( const HelpEvent& rHEvt ) override;
     virtual void Resize() override;
 
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
+    virtual void ApplySettings(OutputDevice& rRenderContext) override;
 
     void SetFocusId( const VclPtr<vcl::Window>& xId ) { xSaveFocusId = xId; }
     const VclPtr<vcl::Window>& GetFocusId() const      { return xSaveFocusId; }

@@ -182,7 +182,7 @@ void FloatingWindow::doDeferredInit(WinBits nBits)
     mbIsDeferredInit = false;
 }
 
-void FloatingWindow::ApplySettings(vcl::RenderContext& rRenderContext)
+void FloatingWindow::ApplySettings(OutputDevice& rRenderContext)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 

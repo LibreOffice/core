@@ -63,12 +63,12 @@ private:
     using Window::ImplInit;
     SAL_DLLPRIVATE void             ImplInit();
     SAL_DLLPRIVATE void             ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
-    SAL_DLLPRIVATE void ImplDrawProgress(vcl::RenderContext& rRenderContext, sal_uInt16 nNewPerc);
+    SAL_DLLPRIVATE void ImplDrawProgress(OutputDevice& rRenderContext, sal_uInt16 nNewPerc);
 
 public:
                         ProgressBar( vcl::Window* pParent, WinBits nWinBits );
 
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void        Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void        Resize() override;
     virtual void        StateChanged( StateChangedType nStateChange ) override;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;

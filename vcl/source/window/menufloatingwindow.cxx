@@ -132,7 +132,7 @@ void MenuFloatingWindow::Resize()
     InitMenuClipRegion(*GetOutDev()); // FIXME
 }
 
-void MenuFloatingWindow::ApplySettings(vcl::RenderContext& rRenderContext)
+void MenuFloatingWindow::ApplySettings(OutputDevice& rRenderContext)
 {
     FloatingWindow::ApplySettings(rRenderContext);
 
@@ -197,7 +197,7 @@ vcl::Region MenuFloatingWindow::ImplCalcClipRegion() const
     return aRegion;
 }
 
-void MenuFloatingWindow::InitMenuClipRegion(vcl::RenderContext& rRenderContext)
+void MenuFloatingWindow::InitMenuClipRegion(OutputDevice& rRenderContext)
 {
     if (IsScrollMenu())
     {
@@ -827,7 +827,7 @@ void MenuFloatingWindow::InvalidateItem(sal_uInt16 nPos)
     }
 }
 
-void MenuFloatingWindow::RenderHighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos)
+void MenuFloatingWindow::RenderHighlightItem(OutputDevice& rRenderContext, sal_uInt16 nPos)
 {
     if (!pMenu)
         return;
@@ -1184,7 +1184,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
     }
 }
 
-void MenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle &rPaintRect)
+void MenuFloatingWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle &rPaintRect)
 {
     if (!pMenu)
         return;
@@ -1223,7 +1223,7 @@ void MenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
     rRenderContext.Pop();
 }
 
-void MenuFloatingWindow::ImplDrawScroller(vcl::RenderContext& rRenderContext, bool bUp)
+void MenuFloatingWindow::ImplDrawScroller(OutputDevice& rRenderContext, bool bUp)
 {
     if (!pMenu)
         return;

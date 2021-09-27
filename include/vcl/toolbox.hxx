@@ -187,9 +187,9 @@ private:
     SAL_DLLPRIVATE bool            ImplCalcItem();
     SAL_DLLPRIVATE ImplToolItems::size_type ImplCalcBreaks( tools::Long nWidth, tools::Long* pMaxLineWidth, bool bCalcHorz ) const;
     SAL_DLLPRIVATE void            ImplFormat( bool bResize = false );
-    SAL_DLLPRIVATE void            ImplDrawSpin(vcl::RenderContext& rRenderContext);
-    SAL_DLLPRIVATE void            ImplDrawSeparator(vcl::RenderContext& rRenderContext, ImplToolItems::size_type nPos, const tools::Rectangle& rRect);
-    SAL_DLLPRIVATE void            ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::size_type nPos, sal_uInt16 nHighlight );
+    SAL_DLLPRIVATE void            ImplDrawSpin(OutputDevice& rRenderContext);
+    SAL_DLLPRIVATE void            ImplDrawSeparator(OutputDevice& rRenderContext, ImplToolItems::size_type nPos, const tools::Rectangle& rRect);
+    SAL_DLLPRIVATE void            ImplDrawItem(OutputDevice& rRenderContext, ImplToolItems::size_type nPos, sal_uInt16 nHighlight );
     using Window::ImplInvalidate;
     SAL_DLLPRIVATE void            ImplInvalidate( bool bNewCalc = false, bool bFullPaint = false );
     SAL_DLLPRIVATE void            ImplUpdateItem( ImplToolItems::size_type nIndex = ITEM_NOTFOUND );
@@ -212,7 +212,7 @@ private:
     SAL_DLLPRIVATE const OUString& ImplGetHelpText( ToolBoxItemId nItemId ) const;
     SAL_DLLPRIVATE Size            ImplGetOptimalFloatingSize();
     SAL_DLLPRIVATE bool            ImplHasExternalMenubutton();
-    SAL_DLLPRIVATE void            ImplDrawFloatwinBorder(vcl::RenderContext& rRenderContext, ImplToolItem const * pItem );
+    SAL_DLLPRIVATE void            ImplDrawFloatwinBorder(OutputDevice& rRenderContext, ImplToolItem const * pItem );
 
     DECL_DLLPRIVATE_LINK(    ImplUpdateHdl, Timer*, void );
     DECL_DLLPRIVATE_LINK(    ImplCustomMenuListener, VclMenuEvent&, void );
@@ -225,7 +225,7 @@ public:
     SAL_DLLPRIVATE void            ImplFloatControl( bool bStart, FloatingWindow* pWindow );
 
     SAL_DLLPRIVATE int ImplGetDragWidth() const;
-    static SAL_DLLPRIVATE int ImplGetDragWidth( const vcl::RenderContext& rRenderContext,
+    static SAL_DLLPRIVATE int ImplGetDragWidth( const OutputDevice& rRenderContext,
                                                 bool bHorz );
     static SAL_DLLPRIVATE int ImplGetDragWidth( const vcl::Window& rWindow,
                                                 bool bHorz );
@@ -233,20 +233,20 @@ public:
     SAL_DLLPRIVATE void ImplCalcBorder( WindowAlign eAlign, tools::Long& rLeft, tools::Long& rTop,
                                                tools::Long& rRight, tools::Long& rBottom ) const;
     SAL_DLLPRIVATE void ImplCheckUpdate();
-    static SAL_DLLPRIVATE void ImplDrawGrip(vcl::RenderContext& rRenderContext,
+    static SAL_DLLPRIVATE void ImplDrawGrip(OutputDevice& rRenderContext,
                                             const tools::Rectangle &aDragArea, int nDragWidth,
                                             WindowAlign eAlign, bool bHorz);
 
-    SAL_DLLPRIVATE void ImplDrawGrip(vcl::RenderContext& rRenderContext);
-    SAL_DLLPRIVATE void ImplDrawGradientBackground(vcl::RenderContext& rRenderContext);
-    SAL_DLLPRIVATE bool ImplDrawNativeBackground(vcl::RenderContext& rRenderContext);
+    SAL_DLLPRIVATE void ImplDrawGrip(OutputDevice& rRenderContext);
+    SAL_DLLPRIVATE void ImplDrawGradientBackground(OutputDevice& rRenderContext);
+    SAL_DLLPRIVATE bool ImplDrawNativeBackground(OutputDevice& rRenderContext);
     SAL_DLLPRIVATE void ImplDrawTransparentBackground(const vcl::Region &rRegion);
-    SAL_DLLPRIVATE static void ImplDrawConstantBackground(vcl::RenderContext& rRenderContext, const vcl::Region &rRegion, bool bIsInPopupMode);
-    SAL_DLLPRIVATE void ImplDrawBackground(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect);
+    SAL_DLLPRIVATE static void ImplDrawConstantBackground(OutputDevice& rRenderContext, const vcl::Region &rRegion, bool bIsInPopupMode);
+    SAL_DLLPRIVATE void ImplDrawBackground(OutputDevice& rRenderContext, const tools::Rectangle &rRect);
 
-    SAL_DLLPRIVATE void ImplErase(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect, bool bHighlight, bool bHasOpenPopup = false );
+    SAL_DLLPRIVATE void ImplErase(OutputDevice& rRenderContext, const tools::Rectangle &rRect, bool bHighlight, bool bHasOpenPopup = false );
 
-    SAL_DLLPRIVATE void ImplDrawBorder(vcl::RenderContext& rRenderContext);
+    SAL_DLLPRIVATE void ImplDrawBorder(OutputDevice& rRenderContext);
     SAL_DLLPRIVATE const ImplToolItem *ImplGetFirstClippedItem() const;
     SAL_DLLPRIVATE Size ImplCalcSize( ImplToolItems::size_type nCalcLines, sal_uInt16 nCalcMode = 0 );
     SAL_DLLPRIVATE void ImplCalcFloatSizes();
@@ -257,16 +257,16 @@ public:
     SAL_DLLPRIVATE sal_uInt16 ImplTestLineSize( const Point& rPos ) const;
     SAL_DLLPRIVATE void ImplLineSizing( const Point& rPos, tools::Rectangle& rRect, sal_uInt16 nLineMode );
     SAL_DLLPRIVATE static ImplToolItems::size_type ImplFindItemPos( const ImplToolItem* pItem, const ImplToolItems& rList );
-    SAL_DLLPRIVATE void ImplDrawMenuButton(vcl::RenderContext& rRenderContext, bool bHighlight);
-    SAL_DLLPRIVATE void ImplDrawButton(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect, sal_uInt16 highlight, bool bChecked, bool bEnabled, bool bIsWindow);
+    SAL_DLLPRIVATE void ImplDrawMenuButton(OutputDevice& rRenderContext, bool bHighlight);
+    SAL_DLLPRIVATE void ImplDrawButton(OutputDevice& rRenderContext, const tools::Rectangle &rRect, sal_uInt16 highlight, bool bChecked, bool bEnabled, bool bIsWindow);
     SAL_DLLPRIVATE ImplToolItems::size_type ImplCountLineBreaks() const;
     SAL_DLLPRIVATE ImplToolBoxPrivateData* ImplGetToolBoxPrivateData() const { return mpData.get(); }
 
-    SAL_DLLPRIVATE void ApplyBackgroundSettings(vcl::RenderContext&, const StyleSettings&);
-    SAL_DLLPRIVATE void ApplyForegroundSettings(vcl::RenderContext&, const StyleSettings&);
+    SAL_DLLPRIVATE void ApplyBackgroundSettings(OutputDevice&, const StyleSettings&);
+    SAL_DLLPRIVATE void ApplyForegroundSettings(OutputDevice&, const StyleSettings&);
 
 protected:
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
+    virtual void ApplySettings(OutputDevice& rRenderContext) override;
 
 public:
     ToolBox(vcl::Window* pParent, WinBits nStyle = 0);
@@ -286,7 +286,7 @@ public:
     virtual void        MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void        MouseMove( const MouseEvent& rMEvt ) override;
     virtual void        Tracking( const TrackingEvent& rTEvt ) override;
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void        Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void        Resize() override;
     virtual void        RequestHelp( const HelpEvent& rHEvt ) override;
     virtual bool        EventNotify( NotifyEvent& rNEvt ) override;

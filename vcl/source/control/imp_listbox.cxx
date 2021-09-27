@@ -492,7 +492,7 @@ void ImplListBoxWindow::dispose()
     Control::dispose();
 }
 
-void ImplListBoxWindow::ApplySettings(vcl::RenderContext& rRenderContext)
+void ImplListBoxWindow::ApplySettings(OutputDevice& rRenderContext)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
@@ -1601,7 +1601,7 @@ void ImplListBoxWindow::SelectEntry( vcl::StringEntryIdentifier _entry )
     }
 }
 
-void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 nPos)
+void ImplListBoxWindow::ImplPaint(OutputDevice& rRenderContext, sal_Int32 nPos)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
@@ -1648,7 +1648,7 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
     }
 }
 
-void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 nPos, bool bDrawImage, bool bDrawText)
+void ImplListBoxWindow::DrawEntry(OutputDevice& rRenderContext, sal_Int32 nPos, bool bDrawImage, bool bDrawText)
 {
     const ImplEntryType* pEntry = maEntryList.GetEntryPtr(nPos);
     if (!pEntry)
@@ -1749,7 +1749,7 @@ void ImplListBoxWindow::FillLayoutData() const
     const_cast<ImplListBoxWindow*>(this)->Invalidate(tools::Rectangle(Point(0, 0), GetOutDev()->GetOutputSize()));
 }
 
-void ImplListBoxWindow::ImplDoPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void ImplListBoxWindow::ImplDoPaint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     sal_Int32 nCount = maEntryList.GetEntryCount();
 
@@ -1780,7 +1780,7 @@ void ImplListBoxWindow::ImplDoPaint(vcl::RenderContext& rRenderContext, const to
         ImplShowFocusRect();
 }
 
-void ImplListBoxWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void ImplListBoxWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     if (SupportsDoubleBuffering())
     {
@@ -2520,7 +2520,7 @@ bool ImplWin::PreNotify( NotifyEvent& rNEvt )
     return Control::PreNotify(rNEvt);
 }
 
-void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
+void ImplWin::ImplDraw(OutputDevice& rRenderContext, bool bLayout)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
@@ -2633,7 +2633,7 @@ void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
     DrawEntry(rRenderContext, bLayout);
 }
 
-void ImplWin::ApplySettings(vcl::RenderContext& rRenderContext)
+void ImplWin::ApplySettings(OutputDevice& rRenderContext)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
@@ -2646,12 +2646,12 @@ void ImplWin::ApplySettings(vcl::RenderContext& rRenderContext)
         rRenderContext.SetBackground(rStyleSettings.GetFieldColor());
 }
 
-void ImplWin::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
+void ImplWin::Paint( OutputDevice& rRenderContext, const tools::Rectangle& )
 {
     ImplDraw(rRenderContext);
 }
 
-void ImplWin::DrawEntry(vcl::RenderContext& rRenderContext, bool bLayout)
+void ImplWin::DrawEntry(OutputDevice& rRenderContext, bool bLayout)
 {
     tools::Long nBorder = 1;
     Size aOutSz(GetOutputSizePixel());

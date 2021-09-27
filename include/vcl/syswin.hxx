@@ -125,8 +125,8 @@ private:
     // try to extract content and return as Bitmap. To do that reliably, a Yield-loop
     // like in Execute() has to be executed and it is necessary to detect when the
     // paint is finished
-    virtual void PrePaint(vcl::RenderContext& rRenderContext) override;
-    virtual void PostPaint(vcl::RenderContext& rRenderContext) override;
+    virtual void PrePaint(OutputDevice& rRenderContext) override;
+    virtual void PostPaint(OutputDevice& rRenderContext) override;
 
     // ensureRepaint - triggers Application::Yield until the dialog is
     // completely repainted. Sometimes needed for dialogs showing progress

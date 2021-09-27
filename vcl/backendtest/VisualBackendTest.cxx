@@ -36,7 +36,7 @@
 using namespace css;
 
 static void drawBitmapCentered(tools::Rectangle const& rRect, const Bitmap& aBitmap,
-                        vcl::RenderContext& rRenderContext)
+                        OutputDevice& rRenderContext)
 {
     tools::Long nWidth = rRect.GetWidth();
     tools::Long nHeight = rRect.GetHeight();
@@ -51,7 +51,7 @@ static void drawBitmapCentered(tools::Rectangle const& rRect, const Bitmap& aBit
     rRenderContext.DrawBitmap(aPoint, aBitmap);
 }
 
-static void drawBitmapScaledAndCentered(tools::Rectangle const & rRect, Bitmap aBitmap, vcl::RenderContext& rRenderContext, BmpScaleFlag aFlag = BmpScaleFlag::Fast)
+static void drawBitmapScaledAndCentered(tools::Rectangle const & rRect, Bitmap aBitmap, OutputDevice& rRenderContext, BmpScaleFlag aFlag = BmpScaleFlag::Fast)
 {
     tools::Long nWidth = rRect.GetWidth();
     tools::Long nHeight = rRect.GetHeight();
@@ -65,7 +65,7 @@ static void drawBitmapScaledAndCentered(tools::Rectangle const & rRect, Bitmap a
     drawBitmapCentered(rRect, aBitmap, rRenderContext);
 }
 
-static void drawBackgroundRect(tools::Rectangle const & rRect, Color aColor, vcl::RenderContext& rRenderContext)
+static void drawBackgroundRect(tools::Rectangle const & rRect, Color aColor, OutputDevice& rRenderContext)
 {
     rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
     rRenderContext.SetFillColor(aColor);
@@ -74,7 +74,7 @@ static void drawBackgroundRect(tools::Rectangle const & rRect, Color aColor, vcl
     rRenderContext.Pop();
 }
 
-static void assertAndSetBackground(vcl::test::TestResult eResult, tools::Rectangle const & rRect, vcl::RenderContext& rRenderContext)
+static void assertAndSetBackground(vcl::test::TestResult eResult, tools::Rectangle const & rRect, OutputDevice& rRenderContext)
 {
     if (eResult == vcl::test::TestResult::Passed)
         drawBackgroundRect(rRect, COL_GREEN, rRenderContext);
@@ -162,7 +162,7 @@ public:
         return aRegions;
     }
 
-    static void testRectangles(vcl::RenderContext& rRenderContext, int nWidth, int nHeight, bool AA)
+    static void testRectangles(OutputDevice& rRenderContext, int nWidth, int nHeight, bool AA)
     {
         tools::Rectangle aRectangle;
         size_t index = 0;
@@ -234,7 +234,7 @@ public:
         }
     }
 
-    static void testFilledRectangles(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
+    static void testFilledRectangles(OutputDevice& rRenderContext, int nWidth, int nHeight)
     {
         tools::Rectangle aRectangle;
         size_t index = 0;
@@ -306,7 +306,7 @@ public:
         }
     }
 
-    static void testDiamondsAndBezier(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
+    static void testDiamondsAndBezier(OutputDevice& rRenderContext, int nWidth, int nHeight)
     {
         tools::Rectangle aRectangle;
         size_t index = 0;
@@ -358,7 +358,7 @@ public:
         }
     }
 
-    static void testLines(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
+    static void testLines(OutputDevice& rRenderContext, int nWidth, int nHeight)
     {
         tools::Rectangle aRectangle;
         size_t index = 0;
@@ -409,7 +409,7 @@ public:
         }
     }
 
-    static void testLineTypes(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
+    static void testLineTypes(OutputDevice& rRenderContext, int nWidth, int nHeight)
     {
         tools::Rectangle aRectangle;
         size_t index = 0;
@@ -467,7 +467,7 @@ public:
         }
     }
 
-    static void testBitmaps(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
+    static void testBitmaps(OutputDevice& rRenderContext, int nWidth, int nHeight)
     {
         tools::Rectangle aRectangle;
         size_t index = 0;
@@ -511,7 +511,7 @@ public:
         }
     }
 
-    static void testInvert(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
+    static void testInvert(OutputDevice& rRenderContext, int nWidth, int nHeight)
     {
         tools::Rectangle aRectangle;
         size_t index = 0;
@@ -548,7 +548,7 @@ public:
         }
     }
 
-    static void testClip(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
+    static void testClip(OutputDevice& rRenderContext, int nWidth, int nHeight)
     {
         tools::Rectangle aRectangle;
         size_t index = 0;
@@ -585,7 +585,7 @@ public:
         }
     }
 
-    static void testGradients(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
+    static void testGradients(OutputDevice& rRenderContext, int nWidth, int nHeight)
     {
         tools::Rectangle aRectangle;
         size_t index = 0;
@@ -650,7 +650,7 @@ public:
         }
     }
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/) override
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& /*rRect*/) override
     {
         if (mnTest % gnNumberOfTests == gnNumberOfTests - 1)
         {

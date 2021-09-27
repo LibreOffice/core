@@ -123,7 +123,7 @@ public:
     virtual             ~ListBox() override;
     virtual void        dispose() override;
 
-    virtual void        ApplySettings(vcl::RenderContext& rRenderContext) override;
+    virtual void        ApplySettings(OutputDevice& rRenderContext) override;
     virtual void        Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
     virtual void        Resize() override;
     virtual bool        PreNotify( NotifyEvent& rNEvt ) override;

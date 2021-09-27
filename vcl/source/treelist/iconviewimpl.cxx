@@ -355,7 +355,7 @@ void IconViewImpl::UpdateAll( bool bInvalidateCompleteView )
         m_pView->Invalidate( GetVisibleArea() );
 }
 
-void IconViewImpl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void IconViewImpl::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     if (!m_pView->GetVisibleCount())
         return;

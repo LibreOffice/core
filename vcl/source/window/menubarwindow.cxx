@@ -573,7 +573,7 @@ static int ImplGetTopDockingAreaHeight( vcl::Window const *pWindow )
     return 0;
 }
 
-static void ImplAddNWFSeparator(vcl::RenderContext& rRenderContext, const Size& rSize, const MenubarValue& rMenubarValue)
+static void ImplAddNWFSeparator(OutputDevice& rRenderContext, const Size& rSize, const MenubarValue& rMenubarValue)
 {
     // add a separator if
     // - we have an adjacent docking area
@@ -590,7 +590,7 @@ static void ImplAddNWFSeparator(vcl::RenderContext& rRenderContext, const Size& 
     }
 }
 
-void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos)
+void MenuBarWindow::HighlightItem(OutputDevice& rRenderContext, sal_uInt16 nPos)
 {
     if (!m_pMenu)
         return;
@@ -851,7 +851,7 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
     return bDone;
 }
 
-void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void MenuBarWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     if (!m_pMenu)
         return;
@@ -1024,7 +1024,7 @@ void MenuBarWindow::LayoutChanged()
     m_pMenu->ImplKillLayoutData();
 }
 
-void MenuBarWindow::ApplySettings(vcl::RenderContext& rRenderContext)
+void MenuBarWindow::ApplySettings(OutputDevice& rRenderContext)
 {
     Window::ApplySettings(rRenderContext);
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();

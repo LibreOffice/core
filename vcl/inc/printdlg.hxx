@@ -60,7 +60,7 @@ namespace vcl
             PrintPreviewWindow(PrintDialog* pDialog);
             virtual ~PrintPreviewWindow() override;
 
-            virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+            virtual void Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
             virtual bool Command( const CommandEvent& ) override;
             virtual void Resize() override;
 
@@ -82,7 +82,7 @@ namespace vcl
 
             virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
-            virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
+            virtual void Paint( OutputDevice& rRenderContext, const tools::Rectangle& ) override;
 
             void setValues( NupOrderType i_nOrderMode, int i_nColumns, int i_nRows )
             {

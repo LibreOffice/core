@@ -370,7 +370,7 @@ void Window::SetZoom( const Fraction& rZoom )
     }
 }
 
-void Window::SetZoomedPointFont(vcl::RenderContext& rRenderContext, const vcl::Font& rFont)
+void Window::SetZoomedPointFont(OutputDevice& rRenderContext, const vcl::Font& rFont)
 {
     const Fraction& rZoom = GetZoom();
     if (rZoom.GetNumerator() != rZoom.GetDenominator())
@@ -440,7 +440,7 @@ vcl::Font Window::GetControlFont() const
     }
 }
 
-void Window::ApplyControlFont(vcl::RenderContext& rRenderContext, const vcl::Font& rFont)
+void Window::ApplyControlFont(OutputDevice& rRenderContext, const vcl::Font& rFont)
 {
     vcl::Font aFont(rFont);
     if (IsControlFont())
@@ -480,7 +480,7 @@ void Window::SetControlForeground(const Color& rColor)
     }
 }
 
-void Window::ApplyControlForeground(vcl::RenderContext& rRenderContext, const Color& rDefaultColor)
+void Window::ApplyControlForeground(OutputDevice& rRenderContext, const Color& rDefaultColor)
 {
     Color aTextColor(rDefaultColor);
     if (IsControlForeground())
@@ -520,7 +520,7 @@ void Window::SetControlBackground(const Color& rColor)
     }
 }
 
-void Window::ApplyControlBackground(vcl::RenderContext& rRenderContext, const Color& rDefaultColor)
+void Window::ApplyControlBackground(OutputDevice& rRenderContext, const Color& rDefaultColor)
 {
     Color aColor(rDefaultColor);
     if (IsControlBackground())
@@ -1988,7 +1988,7 @@ const std::vector<VclPtr<FixedText> >& Window::list_mnemonic_labels() const
 
 } /* namespace vcl */
 
-void InvertFocusRect(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void InvertFocusRect(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     const int nBorder = 1;
     rRenderContext.Invert(tools::Rectangle(Point(rRect.Left(), rRect.Top()), Size(rRect.GetWidth(), nBorder)), InvertFlags::N50);

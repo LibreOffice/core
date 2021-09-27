@@ -409,7 +409,7 @@ const Color& Control::GetCanonicalTextColor( const StyleSettings& _rStyle ) cons
     return _rStyle.GetLabelTextColor();
 }
 
-void Control::ApplySettings(vcl::RenderContext& rRenderContext)
+void Control::ApplySettings(OutputDevice& rRenderContext)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 

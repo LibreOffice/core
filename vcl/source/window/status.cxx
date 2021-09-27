@@ -157,7 +157,7 @@ void StatusBar::AdjustItemWidthsForHiDPI()
     mbAdjustHiDPI = true;
 }
 
-void StatusBar::ApplySettings(vcl::RenderContext& rRenderContext)
+void StatusBar::ApplySettings(OutputDevice& rRenderContext)
 {
     rRenderContext.SetLineColor();
 
@@ -337,7 +337,7 @@ sal_uInt16 StatusBar::ImplGetFirstVisiblePos() const
     return SAL_MAX_UINT16;
 }
 
-void StatusBar::ImplDrawText(vcl::RenderContext& rRenderContext)
+void StatusBar::ImplDrawText(OutputDevice& rRenderContext)
 {
     // prevent item box from being overwritten
     tools::Rectangle aTextRect;
@@ -361,7 +361,7 @@ void StatusBar::ImplDrawText(vcl::RenderContext& rRenderContext)
     }
 }
 
-void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen, sal_uInt16 nPos)
+void StatusBar::ImplDrawItem(OutputDevice& rRenderContext, bool bOffScreen, sal_uInt16 nPos)
 {
     tools::Rectangle aRect = ImplGetItemRectPos(nPos);
 
@@ -465,7 +465,7 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
         CallEventListeners(VclEventId::StatusbarDrawItem, reinterpret_cast<void*>(pItem->mnId));
 }
 
-void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, const Point& rPos,
+void DrawProgress(vcl::Window* pWindow, OutputDevice& rRenderContext, const Point& rPos,
                   tools::Long nOffset, tools::Long nPrgsWidth, tools::Long nPrgsHeight,
                   sal_uInt16 nPercent1, sal_uInt16 nPercent2, sal_uInt16 nPercentCount,
                   const tools::Rectangle& rFramePosSize)
@@ -577,7 +577,7 @@ void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, cons
     }
 }
 
-void StatusBar::ImplDrawProgress(vcl::RenderContext& rRenderContext, sal_uInt16 nPercent2)
+void StatusBar::ImplDrawProgress(OutputDevice& rRenderContext, sal_uInt16 nPercent2)
 {
     bool bNative = rRenderContext.IsNativeControlSupported(ControlType::Progress, ControlPart::Entire);
     // bPaint: draw text also, else only update progress
@@ -686,7 +686,7 @@ void StatusBar::MouseButtonDown( const MouseEvent& rMEvt )
         Click();
 }
 
-void StatusBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void StatusBar::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     if (mbFormat)
         ImplFormat();

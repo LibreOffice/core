@@ -285,7 +285,7 @@ void Edit::ImplInitEditData()
     mxDnDListener = new vcl::unohelper::DragAndDropWrapper( this );
 }
 
-bool Edit::ImplUseNativeBorder(vcl::RenderContext const & rRenderContext, WinBits nStyle)
+bool Edit::ImplUseNativeBorder(OutputDevice const & rRenderContext, WinBits nStyle)
 {
     bool bRet = rRenderContext.IsNativeControlSupported(ImplGetNativeControlType(),
                                                         ControlPart::HasBackgroundTexture)
@@ -360,7 +360,7 @@ bool Edit::IsCharInput( const KeyEvent& rKeyEvent )
             !rKeyEvent.GetKeyCode().IsMod1() );
 }
 
-void Edit::ApplySettings(vcl::RenderContext& rRenderContext)
+void Edit::ApplySettings(OutputDevice& rRenderContext)
 {
     Control::ApplySettings(rRenderContext);
 
@@ -461,7 +461,7 @@ tools::Long Edit::ImplGetTextYPosition() const
     return ( GetOutputSizePixel().Height() - GetTextHeight() ) / 2;
 }
 
-void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRectangle)
+void Edit::ImplRepaint(OutputDevice& rRenderContext, const tools::Rectangle& rRectangle)
 {
     if (!IsReallyVisible())
         return;
@@ -976,7 +976,7 @@ ControlType Edit::ImplGetNativeControlType() const
     return nCtrl;
 }
 
-void Edit::ImplClearBackground(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRectangle, tools::Long nXStart, tools::Long nXEnd )
+void Edit::ImplClearBackground(OutputDevice& rRenderContext, const tools::Rectangle& rRectangle, tools::Long nXStart, tools::Long nXEnd )
 {
     /*
     * note: at this point the cursor must be switched off already
@@ -996,7 +996,7 @@ void Edit::ImplClearBackground(vcl::RenderContext& rRenderContext, const tools::
     }
 }
 
-void Edit::ImplPaintBorder(vcl::RenderContext const & rRenderContext)
+void Edit::ImplPaintBorder(OutputDevice const & rRenderContext)
 {
     // this is not needed when double-buffering
     if (SupportsDoubleBuffering())
@@ -1719,7 +1719,7 @@ void Edit::FillLayoutData() const
     const_cast<Edit*>(this)->Invalidate();
 }
 
-void Edit::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRectangle)
+void Edit::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRectangle)
 {
     if (!mpSubEdit)
         ImplRepaint(rRenderContext, rRectangle);

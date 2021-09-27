@@ -66,7 +66,7 @@ private:
     SAL_DLLPRIVATE void    ImplInitSettings();
     SAL_DLLPRIVATE VclPtr<vcl::Window> AddBorderWindow(vcl::Window* pParent, WinBits nBits);
 
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
+    virtual void ApplySettings(OutputDevice& rRenderContext) override;
 
     SAL_DLLPRIVATE         Dialog (const Dialog &) = delete;
     SAL_DLLPRIVATE         Dialog & operator= (const Dialog &) = delete;

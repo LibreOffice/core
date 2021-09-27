@@ -124,7 +124,7 @@ int ToolBox::ImplGetDragWidth( const vcl::Window& rWindow, bool bHorz )
 {
     return ImplGetDragWidth(*rWindow.GetOutDev(), bHorz);
 }
-int ToolBox::ImplGetDragWidth( const vcl::RenderContext& rRenderContext, bool bHorz )
+int ToolBox::ImplGetDragWidth( const OutputDevice& rRenderContext, bool bHorz )
 {
     int nWidth = TB_DRAGWIDTH;
     if( rRenderContext.IsNativeControlSupported( ControlType::Toolbar, ControlPart::Entire ) )
@@ -245,7 +245,7 @@ void ToolBox::ImplCheckUpdate()
         PaintImmediately();
 }
 
-void ToolBox::ImplDrawGrip(vcl::RenderContext& rRenderContext,
+void ToolBox::ImplDrawGrip(OutputDevice& rRenderContext,
         const tools::Rectangle &aDragArea, int nDragWidth, WindowAlign eAlign, bool bHorz)
 {
     bool bNativeOk = false;
@@ -297,7 +297,7 @@ void ToolBox::ImplDrawGrip(vcl::RenderContext& rRenderContext,
     }
 }
 
-void ToolBox::ImplDrawGrip(vcl::RenderContext& rRenderContext)
+void ToolBox::ImplDrawGrip(OutputDevice& rRenderContext)
 {
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper(this);
     if( pWrapper && !pWrapper->GetDragArea().IsEmpty() )
@@ -309,7 +309,7 @@ void ToolBox::ImplDrawGrip(vcl::RenderContext& rRenderContext)
     }
 }
 
-void ToolBox::ImplDrawGradientBackground(vcl::RenderContext& rRenderContext)
+void ToolBox::ImplDrawGradientBackground(OutputDevice& rRenderContext)
 {
     // draw a nice gradient
 
@@ -434,7 +434,7 @@ void ToolBox::ImplDrawGradientBackground(vcl::RenderContext& rRenderContext)
 
 }
 
-bool ToolBox::ImplDrawNativeBackground(vcl::RenderContext& rRenderContext)
+bool ToolBox::ImplDrawNativeBackground(OutputDevice& rRenderContext)
 {
     // use NWF
     tools::Rectangle aCtrlRegion(Point(), GetOutputSizePixel());
@@ -455,7 +455,7 @@ void ToolBox::ImplDrawTransparentBackground(const vcl::Region &rRegion)
     mpData->mbIsPaintLocked = bOldPaintLock;
 }
 
-void ToolBox::ImplDrawConstantBackground(vcl::RenderContext& rRenderContext, const vcl::Region &rRegion, bool bIsInPopupMode)
+void ToolBox::ImplDrawConstantBackground(OutputDevice& rRenderContext, const vcl::Region &rRegion, bool bIsInPopupMode)
 {
     // draw a constant color
     if (!bIsInPopupMode)
@@ -472,7 +472,7 @@ void ToolBox::ImplDrawConstantBackground(vcl::RenderContext& rRenderContext, con
     }
 }
 
-void ToolBox::ImplDrawBackground(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void ToolBox::ImplDrawBackground(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     // execute pending paint requests
     ImplCheckUpdate();
@@ -524,7 +524,7 @@ void ToolBox::ImplDrawBackground(vcl::RenderContext& rRenderContext, const tools
     rRenderContext.Pop();
 }
 
-void ToolBox::ImplErase(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect, bool bHighlight, bool bHasOpenPopup)
+void ToolBox::ImplErase(OutputDevice& rRenderContext, const tools::Rectangle &rRect, bool bHighlight, bool bHasOpenPopup)
 {
     // the background of non NWF buttons is painted in a constant color
     // to have the same highlight color (transparency in DrawSelectionBackground())
@@ -552,7 +552,7 @@ void ToolBox::ImplErase(vcl::RenderContext& rRenderContext, const tools::Rectang
         ImplDrawBackground(rRenderContext, rRect);
 }
 
-void ToolBox::ImplDrawBorder(vcl::RenderContext& rRenderContext)
+void ToolBox::ImplDrawBorder(OutputDevice& rRenderContext)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     tools::Long nDX = mnDX;
@@ -1185,7 +1185,7 @@ void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     ImplInitSettings(true, true, true);
 }
 
-void ToolBox::ApplyForegroundSettings(vcl::RenderContext& rRenderContext, const StyleSettings& rStyleSettings)
+void ToolBox::ApplyForegroundSettings(OutputDevice& rRenderContext, const StyleSettings& rStyleSettings)
 {
     Color aColor;
     if (IsControlForeground())
@@ -1198,7 +1198,7 @@ void ToolBox::ApplyForegroundSettings(vcl::RenderContext& rRenderContext, const 
     rRenderContext.SetTextFillColor();
 }
 
-void ToolBox::ApplyBackgroundSettings(vcl::RenderContext& rRenderContext, const StyleSettings& rStyleSettings)
+void ToolBox::ApplyBackgroundSettings(OutputDevice& rRenderContext, const StyleSettings& rStyleSettings)
 {
     if (IsControlBackground())
     {
@@ -1232,7 +1232,7 @@ void ToolBox::ApplyBackgroundSettings(vcl::RenderContext& rRenderContext, const 
     }
 }
 
-void ToolBox::ApplySettings(vcl::RenderContext& rRenderContext)
+void ToolBox::ApplySettings(OutputDevice& rRenderContext)
 {
     mpData->mbNativeButtons = rRenderContext.IsNativeControlSupported(ControlType::Toolbar, ControlPart::Button);
 
@@ -2370,7 +2370,7 @@ IMPL_LINK_NOARG(ToolBox, ImplUpdateHdl, Timer *, void)
         ImplFormat();
 }
 
-static void ImplDrawMoreIndicator(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+static void ImplDrawMoreIndicator(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     const Image pImage(StockImage::Yes, CHEVRON);
     Size aImageSize = pImage.GetSizePixel();
@@ -2381,7 +2381,7 @@ static void ImplDrawMoreIndicator(vcl::RenderContext& rRenderContext, const tool
     rRenderContext.DrawImage(Point(x,y), pImage, nImageStyle);
 }
 
-static void ImplDrawDropdownArrow(vcl::RenderContext& rRenderContext, const tools::Rectangle& rDropDownRect, bool bSetColor, bool bRotate )
+static void ImplDrawDropdownArrow(OutputDevice& rRenderContext, const tools::Rectangle& rDropDownRect, bool bSetColor, bool bRotate )
 {
     bool bLineColor = rRenderContext.IsLineColor();
     bool bFillColor = rRenderContext.IsFillColor();
@@ -2434,7 +2434,7 @@ static void ImplDrawDropdownArrow(vcl::RenderContext& rRenderContext, const tool
         rRenderContext.SetLineColor();
 }
 
-void ToolBox::ImplDrawMenuButton(vcl::RenderContext& rRenderContext, bool bHighlight)
+void ToolBox::ImplDrawMenuButton(OutputDevice& rRenderContext, bool bHighlight)
 {
     if (mpData->maMenubuttonItem.maRect.IsEmpty())
         return;
@@ -2464,7 +2464,7 @@ void ToolBox::ImplDrawMenuButton(vcl::RenderContext& rRenderContext, bool bHighl
     rRenderContext.Pop();
 }
 
-void ToolBox::ImplDrawSpin(vcl::RenderContext& rRenderContext)
+void ToolBox::ImplDrawSpin(OutputDevice& rRenderContext)
 {
     bool    bTmpUpper;
     bool    bTmpLower;
@@ -2486,7 +2486,7 @@ void ToolBox::ImplDrawSpin(vcl::RenderContext& rRenderContext)
                           false/*bUpperIn*/, false/*bLowerIn*/, bTmpUpper, bTmpLower, !mbHorz);
 }
 
-void ToolBox::ImplDrawSeparator(vcl::RenderContext& rRenderContext, ImplToolItems::size_type nPos, const tools::Rectangle& rRect)
+void ToolBox::ImplDrawSeparator(OutputDevice& rRenderContext, ImplToolItems::size_type nPos, const tools::Rectangle& rRect)
 {
     if ( nPos >= mpData->m_aItems.size() - 1 )
         // no separator if it's the last item
@@ -2531,7 +2531,7 @@ void ToolBox::ImplDrawSeparator(vcl::RenderContext& rRenderContext, ImplToolItem
     }
 }
 
-void ToolBox::ImplDrawButton(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect, sal_uInt16 highlight,
+void ToolBox::ImplDrawButton(OutputDevice& rRenderContext, const tools::Rectangle &rRect, sal_uInt16 highlight,
                              bool bChecked, bool bEnabled, bool bIsWindow )
 {
     // draws toolbar button background either native or using a coloured selection
@@ -2558,7 +2558,7 @@ void ToolBox::ImplDrawButton(vcl::RenderContext& rRenderContext, const tools::Re
                                                   bChecked, true, bIsWindow, nullptr, 2);
 }
 
-void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::size_type nPos, sal_uInt16 nHighlight)
+void ToolBox::ImplDrawItem(OutputDevice& rRenderContext, ImplToolItems::size_type nPos, sal_uInt16 nHighlight)
 {
     if (nPos >= mpData->m_aItems.size())
         return;
@@ -2788,7 +2788,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
     ImplDrawDropdownArrow(rRenderContext, aDropDownRect, bSetColor, bRotate);
 }
 
-void ToolBox::ImplDrawFloatwinBorder(vcl::RenderContext& rRenderContext, ImplToolItem const * pItem)
+void ToolBox::ImplDrawFloatwinBorder(OutputDevice& rRenderContext, ImplToolItem const * pItem)
 {
     if ( pItem->maRect.IsEmpty() )
         return;
@@ -3430,7 +3430,7 @@ void ToolBox::InvalidateSpin(bool bUpperIn, bool bLowerIn)
         Invalidate(maLowerRect);
 }
 
-void ToolBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rPaintRect)
+void ToolBox::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rPaintRect)
 {
     if( mpData->mbIsPaintLocked )
         return;

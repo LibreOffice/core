@@ -412,7 +412,7 @@ void ScrollBar::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlag
     mbCalcSize = true;
 }
 
-bool ScrollBar::ImplDrawNative(vcl::RenderContext& rRenderContext, sal_uInt16 nSystemTextColorFlags)
+bool ScrollBar::ImplDrawNative(OutputDevice& rRenderContext, sal_uInt16 nSystemTextColorFlags)
 {
     ScrollbarValue scrValue;
 
@@ -576,7 +576,7 @@ bool ScrollBar::ImplDrawNative(vcl::RenderContext& rRenderContext, sal_uInt16 nS
     return bNativeOK;
 }
 
-void ScrollBar::ImplDraw(vcl::RenderContext& rRenderContext)
+void ScrollBar::ImplDraw(OutputDevice& rRenderContext)
 {
     DecorationView aDecoView(&rRenderContext);
     tools::Rectangle aTempRect;
@@ -1080,12 +1080,12 @@ void ScrollBar::KeyInput( const KeyEvent& rKEvt )
         Control::KeyInput( rKEvt );
 }
 
-void ScrollBar::ApplySettings(vcl::RenderContext& rRenderContext)
+void ScrollBar::ApplySettings(OutputDevice& rRenderContext)
 {
     rRenderContext.SetBackground();
 }
 
-void ScrollBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void ScrollBar::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     ImplDraw(rRenderContext);
 }
@@ -1435,7 +1435,7 @@ ScrollBarBox::ScrollBarBox( vcl::Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-void ScrollBarBox::ApplySettings(vcl::RenderContext& rRenderContext)
+void ScrollBarBox::ApplySettings(OutputDevice& rRenderContext)
 {
     if (rRenderContext.IsBackground())
     {

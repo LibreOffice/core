@@ -44,7 +44,7 @@ public:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void    Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    Draw( OutputDevice* pDev, const Point& rPos,SystemTextColorFlags nFlags ) override;
     virtual void    Resize() override;
     virtual void    StateChanged( StateChangedType nType ) override;

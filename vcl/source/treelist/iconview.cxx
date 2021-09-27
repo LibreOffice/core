@@ -80,7 +80,7 @@ tools::Rectangle IconView::GetFocusRect(const SvTreeListEntry*, tools::Long nEnt
 }
 
 void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long nY,
-                          vcl::RenderContext& rRenderContext)
+                          OutputDevice& rRenderContext)
 {
     tools::Rectangle aRect; // multi purpose
 

@@ -793,7 +793,7 @@ void TabControl::ImplShowFocus()
     ShowFocus( aRect );
 }
 
-void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem const * pItem, const tools::Rectangle& rCurRect,
+void TabControl::ImplDrawItem(OutputDevice& rRenderContext, ImplTabItem const * pItem, const tools::Rectangle& rCurRect,
                               bool bFirstInGroup, bool bLastInGroup )
 {
     if (!pItem->m_bVisible || pItem->maRect.IsEmpty())
@@ -1065,7 +1065,7 @@ void TabControl::KeyInput( const KeyEvent& rKEvt )
     Control::KeyInput( rKEvt );
 }
 
-static bool lcl_canPaint(const vcl::RenderContext& rRenderContext, const tools::Rectangle& rDrawRect,
+static bool lcl_canPaint(const OutputDevice& rRenderContext, const tools::Rectangle& rDrawRect,
                          const tools::Rectangle& rItemRect)
 {
     vcl::Region aClipRgn(rRenderContext.GetActiveClipRegion());
@@ -1075,7 +1075,7 @@ static bool lcl_canPaint(const vcl::RenderContext& rRenderContext, const tools::
     return !aClipRgn.IsEmpty();
 }
 
-void TabControl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void TabControl::Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     if (GetStyle() & WB_NOBORDER)
         return;

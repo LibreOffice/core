@@ -43,7 +43,7 @@ namespace vcl
         virtual ~HyperLabel( ) override;
 
         virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
-        virtual void    ApplySettings(vcl::RenderContext& rRenderContext) override;
+        virtual void    ApplySettings(OutputDevice& rRenderContext) override;
 
         void                SetID( sal_Int16 ID );
         sal_Int16           GetID() const;

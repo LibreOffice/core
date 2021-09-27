@@ -284,7 +284,7 @@ HelpTextWindow::HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal
     maHideTimer.SetDebugName( "vcl::HelpTextWindow maHideTimer" );
 }
 
-void HelpTextWindow::ApplySettings(vcl::RenderContext& rRenderContext)
+void HelpTextWindow::ApplySettings(OutputDevice& rRenderContext)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     SetPointFont(rRenderContext, rStyleSettings.GetHelpFont());
@@ -372,7 +372,7 @@ void HelpTextWindow::ImplShow()
         PaintImmediately();
 }
 
-void HelpTextWindow::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
+void HelpTextWindow::Paint( OutputDevice& rRenderContext, const tools::Rectangle& )
 {
     // paint native background
     bool bNativeOK = false;

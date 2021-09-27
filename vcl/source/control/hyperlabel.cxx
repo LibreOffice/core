@@ -145,7 +145,7 @@ namespace vcl
         SetText(_rText);
     }
 
-    void HyperLabel::ApplySettings(vcl::RenderContext& rRenderContext)
+    void HyperLabel::ApplySettings(OutputDevice& rRenderContext)
     {
         FixedText::ApplySettings(rRenderContext);
 

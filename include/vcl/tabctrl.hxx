@@ -74,7 +74,7 @@ protected:
     SAL_DLLPRIVATE bool         ImplPosCurTabPage();
     virtual void                ImplActivateTabPage( bool bNext );
     SAL_DLLPRIVATE void         ImplShowFocus();
-    SAL_DLLPRIVATE void         ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem const * pItem,
+    SAL_DLLPRIVATE void         ImplDrawItem(OutputDevice& rRenderContext, ImplTabItem const * pItem,
                                              const tools::Rectangle& rCurRect, bool bFirstInGroup,
                                              bool bLastInGroup);
     SAL_DLLPRIVATE void         ImplFreeLayoutData();
@@ -100,7 +100,7 @@ public:
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void        KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void        Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void        Resize() override;
     virtual void        GetFocus() override;
     virtual void        LoseFocus() override;

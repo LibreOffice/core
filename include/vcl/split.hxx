@@ -75,7 +75,7 @@ public:
     virtual void        GetFocus() override;
     virtual void        LoseFocus() override;
     virtual void        KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rPaintRect ) override;
+    virtual void        Paint( OutputDevice& rRenderContext, const tools::Rectangle& rPaintRect ) override;
     virtual Size        GetOptimalSize() const override;
 
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
