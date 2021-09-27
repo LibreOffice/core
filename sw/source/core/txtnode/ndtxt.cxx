@@ -194,7 +194,8 @@ SwTextNode::SwTextNode( const SwNodeIndex &rWhere, SwTextFormatColl *pTextColl, 
     m_bLastOutlineState( false ),
     m_bNotifiable( false ),
     mbEmptyListStyleSetDueToSetOutlineLevelAttr( false ),
-    mbInSetOrResetAttr( false )
+    mbInSetOrResetAttr( false ),
+    m_bInUndo(false)
 {
     InitSwParaStatistics( true );
 
@@ -1426,20 +1427,23 @@ void SwTextNode::Update(
         }
 
         // at-char anchored flys shouldn't be moved, either.
-        std::vector<SwFrameFormat*> const& rFlys(GetAnchoredFlys());
-        for (size_t i = 0; i != rFlys.size(); ++i)
+        if (!m_bInUndo)
         {
-            SwFrameFormat const*const pFormat = rFlys[i];
-            const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
-            const SwPosition* pContentAnchor = rAnchor.GetContentAnchor();
-            if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR && pContentAnchor)
+            std::vector<SwFrameFormat*> const& rFlys(GetAnchoredFlys());
+            for (size_t i = 0; i != rFlys.size(); ++i)
             {
-                // The fly is at-char anchored and has an anchor position.
-                SwIndex& rEndIdx = const_cast<SwIndex&>(pContentAnchor->nContent);
-                if (&pContentAnchor->nNode.GetNode() == this && rEndIdx.GetIndex() == rPos.GetIndex())
+                SwFrameFormat const*const pFormat = rFlys[i];
+                const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
+                const SwPosition* pContentAnchor = rAnchor.GetContentAnchor();
+                if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR && pContentAnchor)
                 {
-                    // The anchor position is exactly our insert position.
-                    rEndIdx.Assign(&aTmpIdxReg, rEndIdx.GetIndex());
+                    // The fly is at-char anchored and has an anchor position.
+                    SwIndex& rEndIdx = const_cast<SwIndex&>(pContentAnchor->nContent);
+                    if (&pContentAnchor->nNode.GetNode() == this && rEndIdx.GetIndex() == rPos.GetIndex())
+                    {
+                        // The anchor position is exactly our insert position.
+                        rEndIdx.Assign(&aTmpIdxReg, rEndIdx.GetIndex());
+                    }
                 }
             }
         }
@@ -4857,6 +4861,11 @@ bool SwTextNode::SetAttr( const SfxItemSet& rSet )
     mbInSetOrResetAttr = bOldIsSetOrResetAttr;
 
     return bRet;
+}
+
+void SwTextNode::SetInSwUndo(bool bInUndo)
+{
+    m_bInUndo = bInUndo;
 }
 
 namespace {
