@@ -62,7 +62,7 @@ namespace DatabaseObject = css::sdb::application::DatabaseObject;
 
 namespace {
 
-void Draw3DBorder(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void Draw3DBorder(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     // Use the System Style-Settings for my colours
     const StyleSettings& aSystemStyle = Application::GetSettings().GetStyleSettings();
@@ -310,7 +310,7 @@ void OTableWindow::DataChanged(const DataChangedEvent& rDCEvt)
     }
 }
 
-void OTableWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void OTableWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     tools::Rectangle aRect(Point(0,0), GetOutputSizePixel());
     Window::Paint(rRenderContext, rRect);

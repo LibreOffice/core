@@ -125,7 +125,7 @@ namespace dbaui
         ScrollBar& GetVScrollBar() { return static_cast<OScrollWindowHelper*>(GetParent())->GetVScrollBar(); }
         DECL_LINK( ScrollHdl, ScrollBar*, void );
 
-        void DrawConnections(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
+        void DrawConnections(OutputDevice& rRenderContext, const tools::Rectangle& rRect);
         void InvalidateConnections();
 
         void BeginChildMove( OTableWindow* pTabWin, const Point& rMousePos );
@@ -267,7 +267,7 @@ namespace dbaui
         virtual void MouseButtonUp( const MouseEvent& rEvt ) override;
         virtual void MouseButtonDown( const MouseEvent& rEvt ) override;
         virtual void Tracking( const TrackingEvent& rTEvt ) override;
-        virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+        virtual void Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
         virtual void ConnDoubleClicked(VclPtr<OTableConnection>& rConnection);
         void SetDefaultTabWinPosSize( OTableWindow* pTabWin );
         virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;

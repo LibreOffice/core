@@ -62,12 +62,12 @@ namespace dbaui
             @return
                 <TRUE/> when successful
         */
-        bool ImplGetGraphicCenterRect(const vcl::RenderContext& rRenderContext, const Graphic& rGraphic, tools::Rectangle& rResultRect) const;
+        bool ImplGetGraphicCenterRect(const OutputDevice& rRenderContext, const Graphic& rGraphic, tools::Rectangle& rResultRect) const;
 
     public:
         OPreviewWindow();
 
-        virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+        virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
 
         void setGraphic(const Graphic& _rGraphic ) { m_aGraphicObj.SetGraphic(_rGraphic); }
     };

@@ -925,7 +925,7 @@ void OJoinTableView::SelectConn(OTableConnection* pConn)
     }
 }
 
-void OJoinTableView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void OJoinTableView::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     DrawConnections(rRenderContext, rRect);
 }
@@ -937,7 +937,7 @@ void OJoinTableView::InvalidateConnections()
         conn->InvalidateConnection();
 }
 
-void OJoinTableView::DrawConnections(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void OJoinTableView::DrawConnections(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     // draw Joins
     for(const auto& connection : m_vTableConnection)
