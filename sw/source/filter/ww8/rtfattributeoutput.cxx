@@ -1724,17 +1724,17 @@ void RtfAttributeOutput::WriteBookmarks_Impl(std::vector<OUString>& rStarts,
 {
     for (const auto& rStart : rStarts)
     {
-        m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_BKMKSTART " ");
-        m_aRun->append(msfilter::rtfutil::OutString(rStart, m_rExport.GetCurrentEncoding()));
-        m_aRun->append('}');
+        m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_BKMKSTART " ");
+        m_aRunText->append(msfilter::rtfutil::OutString(rStart, m_rExport.GetCurrentEncoding()));
+        m_aRunText->append('}');
     }
     rStarts.clear();
 
     for (const auto& rEnd : rEnds)
     {
-        m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_BKMKEND " ");
-        m_aRun->append(msfilter::rtfutil::OutString(rEnd, m_rExport.GetCurrentEncoding()));
-        m_aRun->append('}');
+        m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_BKMKEND " ");
+        m_aRunText->append(msfilter::rtfutil::OutString(rEnd, m_rExport.GetCurrentEncoding()));
+        m_aRunText->append('}');
     }
     rEnds.clear();
 }

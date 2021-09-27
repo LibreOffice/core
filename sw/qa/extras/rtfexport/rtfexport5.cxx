@@ -1282,6 +1282,26 @@ DECLARE_RTFEXPORT_TEST(testTdf138779, "tdf138779.docx")
     CPPUNIT_ASSERT_EQUAL(11.f, getProperty<float>(getRun(getParagraph(2), 14), "CharHeight"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf144437, "tdf144437.odt")
+{
+    SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
+    CPPUNIT_ASSERT(pStream);
+    OString aRtfContent(read_uInt8s_ToOString(*pStream, pStream->TellEnd()));
+
+    sal_Int32 nTextEndPos = aRtfContent.indexOf("Bookmark here->", 0) + 14;
+    CPPUNIT_ASSERT_MESSAGE("Para content wasn't found in file", nTextEndPos > 0);
+
+    sal_Int32 nBmkStartPos = aRtfContent.indexOf("{\\*\\bkmkstart bookmark}", 0);
+    CPPUNIT_ASSERT_MESSAGE("Bookmark start wasn't found in file", nBmkStartPos > 0);
+
+    sal_Int32 nBmkEndPos = aRtfContent.indexOf("{\\*\\bkmkend bookmark}", 0);
+    CPPUNIT_ASSERT_MESSAGE("Bookmark end wasn't found in file", nBmkEndPos > 0);
+
+    CPPUNIT_ASSERT_MESSAGE("Bookmark started in wrong position", nBmkStartPos > nTextEndPos);
+    CPPUNIT_ASSERT_MESSAGE("Bookmark ended in wrong position", nBmkEndPos > nTextEndPos);
+    CPPUNIT_ASSERT_MESSAGE("Bookmark start & end are wrong", nBmkEndPos > nBmkStartPos);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
