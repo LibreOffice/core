@@ -816,7 +816,7 @@ void SwOutlineSettingsTabPage::CheckForStartValue_Impl(sal_uInt16 nNumberingType
         StartModified(*m_xStartEdit);
 }
 
-static tools::Long lcl_DrawBullet(vcl::RenderContext* pVDev, const SwNumFormat& rFormat, tools::Long nXStart, tools::Long nYStart, const Size& rSize)
+static tools::Long lcl_DrawBullet(OutputDevice* pVDev, const SwNumFormat& rFormat, tools::Long nXStart, tools::Long nYStart, const Size& rSize)
 {
     vcl::Font aTmpFont(pVDev->GetFont());
 
@@ -850,7 +850,7 @@ static tools::Long lcl_DrawBullet(vcl::RenderContext* pVDev, const SwNumFormat& 
     return nRet;
 }
 
-static tools::Long lcl_DrawGraphic(vcl::RenderContext& rVDev, const SwNumFormat &rFormat, tools::Long nXStart, tools::Long nYStart, tools::Long nDivision)
+static tools::Long lcl_DrawGraphic(OutputDevice& rVDev, const SwNumFormat &rFormat, tools::Long nXStart, tools::Long nYStart, tools::Long nDivision)
 {
     const SvxBrushItem* pBrushItem = rFormat.GetBrush();
     tools::Long nRet = 0;
@@ -869,7 +869,7 @@ static tools::Long lcl_DrawGraphic(vcl::RenderContext& rVDev, const SwNumFormat 
     return nRet;
 }
 
-void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void NumberingPreview::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     const Size aSize(rRenderContext.PixelToLogic(GetOutputSizePixel()));
 

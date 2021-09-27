@@ -22,12 +22,12 @@
 #include <flyfrm.hxx>
 #include <osl/diagnose.h>
 
-void SwFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs * )
+void SwFrame::Format( OutputDevice* /*pRenderContext*/, const SwBorderAttrs * )
 {
     OSL_FAIL( "Format() of the base class called." );
 }
 
-void SwFrame::PaintSwFrame(vcl::RenderContext&, SwRect const&, SwPrintData const*const) const
+void SwFrame::PaintSwFrame(OutputDevice&, SwRect const&, SwPrintData const*const) const
 {
     OSL_FAIL( "PaintSwFrame() of the base class called." );
 }

@@ -230,7 +230,7 @@ void SidebarTextControl::DrawForPage(OutputDevice* pDev, const Point& rPt)
     pDev->Pop();
 }
 
-void SidebarTextControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void SidebarTextControl::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     Size aSize = GetOutputSizePixel();
     Point aPos;

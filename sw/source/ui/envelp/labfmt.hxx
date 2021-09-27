@@ -55,7 +55,7 @@ class SwLabPreview : public weld::CustomWidgetController
     SwLabItem m_aItem;
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
 
 public:
     SwLabPreview();

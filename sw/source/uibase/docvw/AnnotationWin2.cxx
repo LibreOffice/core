@@ -103,7 +103,7 @@ namespace sw::annotation {
 #define POSTIT_META_FIELD_HEIGHT  sal_Int32(15)
 #define POSTIT_MINIMUMSIZE_WITHOUT_META     50
 
-void SwAnnotationWin::PaintTile(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void SwAnnotationWin::PaintTile(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     bool bMenuButtonVisible = mxMenuButton->get_visible();
     // No point in showing this button till click on it are not handled.

@@ -72,7 +72,7 @@ using namespace ::com::sun::star;
 
 namespace {
 
-void drawRect(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect, const Color &rFillColor, const Color &rLineColor)
+void drawRect(OutputDevice& rRenderContext, const tools::Rectangle &rRect, const Color &rFillColor, const Color &rLineColor)
 {
     rRenderContext.SetFillColor(rFillColor);
     rRenderContext.SetLineColor(rLineColor);
@@ -1433,7 +1433,7 @@ void SwMarkPreview::InitColors()
     m_aPrintAreaCol = m_aTextCol;
 }
 
-void SwMarkPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle &/*rRect*/)
+void SwMarkPreview::Paint(OutputDevice& rRenderContext, const tools::Rectangle &/*rRect*/)
 {
     const Size aSz(GetOutputSizePixel());
 
@@ -1503,7 +1503,7 @@ void SwMarkPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     drawRect(rRenderContext, aRightMark, m_aMarkCol, m_aTransCol);
 }
 
-void SwMarkPreview::PaintPage(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect)
+void SwMarkPreview::PaintPage(OutputDevice& rRenderContext, const tools::Rectangle &rRect)
 {
     // draw PrintArea
     drawRect(rRenderContext, rRect, m_aTransCol, m_aPrintAreaCol);

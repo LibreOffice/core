@@ -57,7 +57,7 @@ Reference< XHyphenatedWord >  SwTextFormatInfo::HyphWord(
  */
 bool SwTextFrame::Hyphenate(SwInterHyphInfoTextFrame & rHyphInf)
 {
-    vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
+    OutputDevice* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"swapped frame at SwTextFrame::Hyphenate" );
 
     assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());

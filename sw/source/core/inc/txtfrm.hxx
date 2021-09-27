@@ -259,7 +259,7 @@ class SW_DLLPUBLIC SwTextFrame final : public SwContentFrame
 
     // In order to safe stack space, we split this method:
     // Format_ calls Format_ with parameters
-    void Format_( vcl::RenderContext* pRenderContext, SwParaPortion *pPara );
+    void Format_( OutputDevice* pRenderContext, SwParaPortion *pPara );
     void Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
                   const bool bAdjust = false );
     void FormatOnceMore( SwTextFormatter &rLine, SwTextFormatInfo &rInf );
@@ -404,7 +404,7 @@ public:
 
     void   PaintExtraData( const SwRect & rRect ) const; /// Page number etc.
     SwRect GetPaintSwRect();
-    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&,
+    virtual void PaintSwFrame( OutputDevice& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = nullptr ) const override;
     virtual bool GetInfo( SfxPoolItem & ) const override;
 
@@ -573,7 +573,7 @@ public:
     LanguageType GetLangOfChar(TextFrameIndex nIndex, sal_uInt16 nScript,
             bool bNoChar = false) const;
 
-    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
+    virtual void Format( OutputDevice* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     virtual void CheckDirection( bool bVert ) override;
 
     /// Returns the sum of line height in pLine

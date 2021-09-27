@@ -106,7 +106,7 @@ void SwSrcView::InitInterface_Impl()
 }
 
 
-static void lcl_PrintHeader( vcl::RenderContext &rOutDev, sal_Int32 nPages, sal_Int32 nCurPage, const OUString& rTitle )
+static void lcl_PrintHeader( OutputDevice &rOutDev, sal_Int32 nPages, sal_Int32 nCurPage, const OUString& rTitle )
 {
     short nLeftMargin   = LMARGPRN;
     Size aSz = rOutDev.GetOutputSize();

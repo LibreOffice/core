@@ -87,7 +87,7 @@ void SwViewLayoutControl::StateChangedAtStatusBarControl( sal_uInt16 /*nSID*/, S
 
 void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
 {
-    vcl::RenderContext* pDev = rUsrEvt.GetRenderContext();
+    OutputDevice* pDev = rUsrEvt.GetRenderContext();
     tools::Rectangle aRect(rUsrEvt.GetRect());
 
     const tools::Rectangle aControlRect = getControlRect();

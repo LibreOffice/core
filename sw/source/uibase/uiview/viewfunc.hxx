@@ -39,7 +39,7 @@ void SetPrinter( IDocumentDeviceAccess*, SfxPrinter const *, bool bWeb );
 void SetAppPrintOptions( SwViewShell* pSh, bool bWeb );
 
 // The following functions are available in viewport.cxx
-void ViewResizePixel( const vcl::RenderContext &rRef,
+void ViewResizePixel( const OutputDevice &rRef,
                     const Point &rOfst,
                     const Size &rSize,
                     const Size &rEditSz,

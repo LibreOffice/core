@@ -42,7 +42,7 @@ public:
      * Paint the ruler.
      * \param rRect ignored
      */
-    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     void CreateJsonNotification(tools::JsonWriter& rJsonWriter);
 
 private:
@@ -91,7 +91,7 @@ private:
     /**
      * Paint the comment control on VirtualDevice.
      */
-    void DrawCommentControl(vcl::RenderContext& rRenderContext);
+    void DrawCommentControl(OutputDevice& rRenderContext);
 
     /**
      * Update the tooltip text.

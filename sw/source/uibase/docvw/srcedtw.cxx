@@ -482,7 +482,7 @@ void  TextViewOutWin::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
-void TextViewOutWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void TextViewOutWin::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     m_pTextView->Paint(rRenderContext, rRect);
 }

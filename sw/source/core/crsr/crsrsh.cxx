@@ -1408,7 +1408,7 @@ void SwCursorShell::GoNextPrevCursorSetSearchLabel(const bool bNext)
         GoPrevCursor();
 }
 
-void SwCursorShell::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect)
+void SwCursorShell::Paint(OutputDevice& rRenderContext, const tools::Rectangle &rRect)
 {
     comphelper::FlagRestorationGuard g(mbSelectAll, StartsWithTable() && ExtendedSelectedAll());
     CurrShell aCurr( this );

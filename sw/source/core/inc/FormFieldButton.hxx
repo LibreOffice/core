@@ -34,7 +34,7 @@ public:
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
     DECL_LINK(FieldPopupModeEndHdl, weld::Popover&, void);
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
     virtual WindowHitTest ImplHitTest(const Point& rFramePos) override;
 
     virtual void LaunchPopup();

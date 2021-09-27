@@ -111,7 +111,7 @@ void SwPagePreviewLayout::ClearPreviewPageData()
 */
 void SwPagePreviewLayout::CalcPreviewLayoutSizes()
 {
-    vcl::RenderContext* pRenderContext = mrParentViewShell.GetOut();
+    OutputDevice* pRenderContext = mrParentViewShell.GetOut();
     // calculate maximal page size; calculate also number of pages
 
     const SwPageFrame* pPage = static_cast<const SwPageFrame*>(mrLayoutRootFrame.Lower());
@@ -523,7 +523,7 @@ void SwPagePreviewLayout::CalcDocPreviewPaintRect()
 */
 void SwPagePreviewLayout::CalcPreviewPages()
 {
-    vcl::RenderContext* pRenderContext = mrParentViewShell.GetOut();
+    OutputDevice* pRenderContext = mrParentViewShell.GetOut();
     ClearPreviewPageData();
 
     if ( mbNoPageVisible )
@@ -965,11 +965,11 @@ namespace
 /// Similar to RenderContextGuard, but does not touch the draw view.
 class PreviewRenderContextGuard
 {
-    VclPtr<vcl::RenderContext> m_pOriginalValue;
+    VclPtr<OutputDevice> m_pOriginalValue;
     SwViewShell& m_rShell;
 
 public:
-    PreviewRenderContextGuard(SwViewShell& rShell, vcl::RenderContext* pValue)
+    PreviewRenderContextGuard(SwViewShell& rShell, OutputDevice* pValue)
         : m_pOriginalValue(rShell.GetOut()),
         m_rShell(rShell)
     {
@@ -986,7 +986,7 @@ public:
 /** paint prepared preview
 
 */
-bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rOutRect) const
+bool SwPagePreviewLayout::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rOutRect) const
 {
     PreviewRenderContextGuard aGuard(mrParentViewShell, &rRenderContext);
     // check environment and parameters
@@ -1198,7 +1198,7 @@ void SwPagePreviewLayout::Repaint( const tools::Rectangle& rInvalidCoreRect ) co
 
     OD 17.12.2002 #103492#
 */
-void SwPagePreviewLayout::PaintSelectMarkAtPage(vcl::RenderContext& rRenderContext,
+void SwPagePreviewLayout::PaintSelectMarkAtPage(OutputDevice& rRenderContext,
                                     const PreviewPage* _aSelectedPreviewPage ) const
 {
     OutputDevice* pOutputDev = &rRenderContext;

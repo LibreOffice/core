@@ -48,7 +48,7 @@ class SwEnvPreview final : public weld::CustomWidgetController
 private:
     SwEnvDlg* m_pDialog;
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
 public:

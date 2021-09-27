@@ -39,7 +39,7 @@ class TextViewOutWin final : public vcl::Window
 {
     TextView*    m_pTextView;
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
+    virtual void    Paint( OutputDevice& rRenderContext, const tools::Rectangle& ) override;
     virtual void    KeyInput( const KeyEvent& rKeyEvt ) override;
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;

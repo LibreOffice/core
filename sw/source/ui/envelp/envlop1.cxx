@@ -53,7 +53,7 @@ void SwEnvPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
                                    pDrawingArea->get_text_height() * 8);
 }
 
-void SwEnvPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SwEnvPreview::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
     rRenderContext.SetBackground(rRenderContext.GetSettings().GetStyleSettings().GetDialogColor());

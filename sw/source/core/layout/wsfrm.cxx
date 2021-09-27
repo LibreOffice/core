@@ -3408,7 +3408,7 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
  *
  * The Fixsize is not set here.
  */
-void SwLayoutFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs *pAttrs )
+void SwLayoutFrame::Format( OutputDevice* /*pRenderContext*/, const SwBorderAttrs *pAttrs )
 {
     OSL_ENSURE( pAttrs, "LayoutFrame::Format, pAttrs is 0." );
 
@@ -3694,7 +3694,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
     bool bBackLock = false;
     SwViewShell *pSh = getRootFrame()->GetCurrShell();
     SwViewShellImp *pImp = pSh ? pSh->Imp() : nullptr;
-    vcl::RenderContext* pRenderContext = pSh ? pSh->GetOut() : nullptr;
+    OutputDevice* pRenderContext = pSh ? pSh->GetOut() : nullptr;
     {
         // Underlying algorithm
         // We try to find the optimal height for the column.

@@ -71,7 +71,7 @@ SwBodyFrame::SwBodyFrame( SwFrameFormat *pFormat, SwFrame* pSib ):
     mnFrameType = SwFrameType::Body;
 }
 
-void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs * )
+void SwBodyFrame::Format( OutputDevice* /*pRenderContext*/, const SwBorderAttrs * )
 {
     // Formatting of the body is too simple, thus, it gets its own format method.
     // Borders etc. are not taken into account here.
@@ -196,7 +196,7 @@ SwPageFrame::SwPageFrame( SwFrameFormat *pFormat, SwFrame* pSib, SwPageDesc *pPg
 
     SwViewShell *pSh = getRootFrame()->GetCurrShell();
     const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
-    vcl::RenderContext* pRenderContext = pSh ? pSh->GetOut() : nullptr;
+    OutputDevice* pRenderContext = pSh ? pSh->GetOut() : nullptr;
 
     {
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
@@ -369,7 +369,7 @@ void SwPageFrame::CheckDirection( bool bVert )
 /// create specific Flys for this page and format generic content
 static void lcl_FormatLay( SwLayoutFrame *pLay )
 {
-    vcl::RenderContext* pRenderContext = pLay->getRootFrame()->GetCurrShell()->GetOut();
+    OutputDevice* pRenderContext = pLay->getRootFrame()->GetCurrShell()->GetOut();
     // format all LayoutFrames - no tables, Flys etc.
 
     SwFrame *pTmp = pLay->Lower();
@@ -581,7 +581,7 @@ void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                     // if we were an empty page before there is not yet a BodyArea in the
                     // form of a SwBodyFrame, see constructor
                     SwViewShell* pSh(getRootFrame()->GetCurrShell());
-                    vcl::RenderContext* pRenderContext(pSh ? pSh->GetOut() : nullptr);
+                    OutputDevice* pRenderContext(pSh ? pSh->GetOut() : nullptr);
                     Calc(pRenderContext); // so that the PrtArea is correct
                     SwBodyFrame* pBodyFrame = new SwBodyFrame(GetFormat(), this);
                     pBodyFrame->ChgSize(getFramePrintArea().SSize());
@@ -1733,7 +1733,7 @@ Size SwRootFrame::ChgSize( const Size& aNewSize )
     return getFrameArea().SSize();
 }
 
-void SwRootFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
+void SwRootFrame::MakeAll(OutputDevice* /*pRenderContext*/)
 {
     if ( !isFrameAreaPositionValid() )
     {
@@ -2101,7 +2101,7 @@ static void lcl_MoveAllLowers( SwFrame* pFrame, const Point& rOffset )
 void SwRootFrame::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVisArea )
 {
     SwViewShell* pSh = GetCurrShell();
-    vcl::RenderContext* pRenderContext = pSh ? pSh->GetOut() : nullptr;
+    OutputDevice* pRenderContext = pSh ? pSh->GetOut() : nullptr;
     // #i91432#
     // No calculation of page positions, if only an empty page is present.
     // This situation occurs when <SwRootFrame> instance is in construction

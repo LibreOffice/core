@@ -166,7 +166,7 @@ void SetSwVisArea( SwViewShell *pSh, const SwRect &rRect )
     // at the same position
     aPt.setX( -aPt.X() ); aPt.setY( -aPt.Y() );
 
-    vcl::RenderContext *pOut = pSh->GetOut();
+    OutputDevice *pOut = pSh->GetOut();
 
     MapMode aMapMode( pOut->GetMapMode() );
     aMapMode.SetOrigin( aPt );
@@ -569,7 +569,7 @@ bool SwViewShell::PrintOrPDFExport(
 }
 
 void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintData& rOptions,
-                           vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect )
+                           OutputDevice& rRenderContext, const tools::Rectangle& rRect )
 {
     // For printing a shell is needed. Either the Doc already has one, then we
     // create a new view, or it has none, then we create the first view.

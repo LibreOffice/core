@@ -150,7 +150,7 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
 
 
 
-    SAL_DLLPRIVATE void PaintDesktop(vcl::RenderContext& rRenderContext, const SwRect&);  // Collect values for painting of desktop
+    SAL_DLLPRIVATE void PaintDesktop(OutputDevice& rRenderContext, const SwRect&);  // Collect values for painting of desktop
                                                         // and calling.
     // PaintDesktop split. This pars is also used by PreviewPage.
     SAL_DLLPRIVATE void PaintDesktop_(const SwRegionRects &rRegion);
@@ -226,7 +226,7 @@ public:
     void DLPostPaint2(bool bPaintFormLayer);
     const MapMode& getPrePostMapMode() const { return maPrePostMapMode; }
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect);
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle &rRect);
 
     /** Paint tile.
 
@@ -333,12 +333,12 @@ public:
     // 1. GetRefDev:   Either the printer or the virtual device from the doc
     // 2. GetWin:      Available if we not printing
     // 3. GetOut:      Printer, Window or Virtual device
-    vcl::RenderContext& GetRefDev() const;
+    OutputDevice& GetRefDev() const;
     vcl::Window* GetWin()    const { return mpWin; }
-    vcl::RenderContext* GetOut()     const { return mpOut; }
+    OutputDevice* GetOut()     const { return mpOut; }
 
     void SetWin(vcl::Window* win) { mpWin = win; }
-    void SetOut(vcl::RenderContext* pOut) { mpOut = pOut; }
+    void SetOut(OutputDevice* pOut) { mpOut = pOut; }
     static bool IsLstEndAction() { return SwViewShell::sbLstAct; }
 
     // Change of all page descriptors.
@@ -358,7 +358,7 @@ public:
 
     // Printing for OLE 2.0.
     static void PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintData& rOptions,
-                         vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect );
+                         OutputDevice& rRenderContext, const tools::Rectangle& rRect );
 
     // Fill temporary doc with selected text for Print or PDF export.
     void FillPrtDoc( SwDoc& rPrtDoc, const SfxPrinter* pPrt );

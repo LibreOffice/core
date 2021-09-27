@@ -186,7 +186,7 @@ private:
     const PreviewPage* GetPreviewPageByPageNum( const sal_uInt16 _nPageNum ) const;
 
     /** paint selection mark at page */
-    void PaintSelectMarkAtPage(vcl::RenderContext& rRenderContext, const PreviewPage* _aSelectedPreviewPage) const;
+    void PaintSelectMarkAtPage(OutputDevice& rRenderContext, const PreviewPage* _aSelectedPreviewPage) const;
 
 public:
     /** constructor of <SwPagePreviewLayout>
@@ -303,7 +303,7 @@ public:
 
         @return boolean, indicating, if paint of preview was performed
     */
-    bool Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rOutRect) const;
+    bool Paint(OutputDevice& rRenderContext, const tools::Rectangle& rOutRect) const;
 
     /** repaint pages on page preview
 

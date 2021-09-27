@@ -140,7 +140,7 @@ bool SwOneExampleFrame::Command(const CommandEvent& rCEvt)
     return CustomWidgetController::Command(rCEvt);
 }
 
-void SwOneExampleFrame::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SwOneExampleFrame::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     Size aSize(GetOutputSizePixel());
     // m_xVirDev instead of rRenderContext just to avoid overlays in writer re-triggering

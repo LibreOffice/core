@@ -411,7 +411,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
         Window::RequestHelp( rEvt );
 }
 
-void SwEditWin::PrePaint(vcl::RenderContext& /*rRenderContext*/)
+void SwEditWin::PrePaint(OutputDevice& /*rRenderContext*/)
 {
     SwWrtShell* pWrtShell = GetView().GetWrtShellPtr();
 
@@ -421,7 +421,7 @@ void SwEditWin::PrePaint(vcl::RenderContext& /*rRenderContext*/)
     }
 }
 
-void SwEditWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void SwEditWin::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     SwWrtShell* pWrtShell = GetView().GetWrtShellPtr();
     if(!pWrtShell)

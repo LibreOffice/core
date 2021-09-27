@@ -645,7 +645,7 @@ static bool lcl_RecalcSplitLine( SwRowFrame& rLastLine, SwRowFrame& rFollowLine,
 {
     bool bRet = true;
 
-    vcl::RenderContext* pRenderContext = rLastLine.getRootFrame()->GetCurrShell()->GetOut();
+    OutputDevice* pRenderContext = rLastLine.getRootFrame()->GetCurrShell()->GetOut();
     SwTabFrame& rTab = static_cast<SwTabFrame&>(*rLastLine.GetUpper());
     SwRectFnSet aRectFnSet(rTab.GetUpper());
     SwTwips nCurLastLineHeight = aRectFnSet.GetHeight(rLastLine.getFrameArea());
@@ -1490,7 +1490,7 @@ static void lcl_InvalidateAllLowersPrt( SwLayoutFrame* pLayFrame )
 bool SwContentFrame::CalcLowers(SwLayoutFrame & rLay, SwLayoutFrame const& rDontLeave,
                                  tools::Long nBottom, bool bSkipRowSpanCells )
 {
-    vcl::RenderContext* pRenderContext = rLay.getRootFrame()->GetCurrShell()->GetOut();
+    OutputDevice* pRenderContext = rLay.getRootFrame()->GetCurrShell()->GetOut();
     // LONG_MAX == nBottom means we have to calculate all
     bool bAll = LONG_MAX == nBottom;
     bool bRet = false;
@@ -1585,7 +1585,7 @@ static bool lcl_InnerCalcLayout( SwFrame *pFrame,
                                       tools::Long nBottom,
                                       bool _bOnlyRowsAndCells )
 {
-    vcl::RenderContext* pRenderContext = pFrame->getRootFrame()->GetCurrShell() ? pFrame->getRootFrame()->GetCurrShell()->GetOut() : nullptr;
+    OutputDevice* pRenderContext = pFrame->getRootFrame()->GetCurrShell() ? pFrame->getRootFrame()->GetCurrShell()->GetOut() : nullptr;
     // LONG_MAX == nBottom means we have to calculate all
     bool bAll = LONG_MAX == nBottom;
     bool bRet = false;
@@ -1784,7 +1784,7 @@ static bool lcl_NoPrev( const SwFrame& rFrame )
 // Precondition: The given table frame hasn't a follow and isn't a follow.
 SwFrame* sw_FormatNextContentForKeep( SwTabFrame* pTabFrame )
 {
-    vcl::RenderContext* pRenderContext = pTabFrame->getRootFrame()->GetCurrShell()->GetOut();
+    OutputDevice* pRenderContext = pTabFrame->getRootFrame()->GetCurrShell()->GetOut();
     // find next content, table or section
     SwFrame* pNxt = pTabFrame->FindNext();
 
@@ -1855,7 +1855,7 @@ static void InvalidateFramePositions(SwFrame * pFrame)
     }
 }
 
-void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
+void SwTabFrame::MakeAll(OutputDevice* pRenderContext)
 {
     if ( IsJoinLocked() || StackHack::IsLocked() || StackHack::Count() > 50 )
         return;
@@ -2951,7 +2951,7 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
 
 /// "Formats" the frame; Frame and PrtArea.
 /// The fixed size is not adjusted here.
-void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs *pAttrs )
+void SwTabFrame::Format( OutputDevice* /*pRenderContext*/, const SwBorderAttrs *pAttrs )
 {
     OSL_ENSURE( pAttrs, "TabFrame::Format, pAttrs is 0." );
 
@@ -3997,7 +3997,7 @@ void SwRowFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
     }
 }
 
-void SwRowFrame::MakeAll(vcl::RenderContext* pRenderContext)
+void SwRowFrame::MakeAll(OutputDevice* pRenderContext)
 {
     if ( !GetNext() )
     {
@@ -4408,7 +4408,7 @@ static SwTwips lcl_calcHeightOfRowBeforeThisFrame(const SwRowFrame& rRow)
     return nResult;
 }
 
-void SwRowFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs *pAttrs )
+void SwRowFrame::Format( OutputDevice* /*pRenderContext*/, const SwBorderAttrs *pAttrs )
 {
     SwRectFnSet aRectFnSet(this);
     OSL_ENSURE( pAttrs, "SwRowFrame::Format without Attrs." );
@@ -5179,7 +5179,7 @@ static bool lcl_ArrangeLowers( SwLayoutFrame *pLay, tools::Long lYStart, bool bI
     return bRet;
 }
 
-void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs *pAttrs )
+void SwCellFrame::Format( OutputDevice* /*pRenderContext*/, const SwBorderAttrs *pAttrs )
 {
     OSL_ENSURE( pAttrs, "CellFrame::Format, pAttrs is 0." );
     const SwTabFrame* pTab = FindTabFrame();

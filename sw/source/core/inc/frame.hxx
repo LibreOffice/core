@@ -456,7 +456,7 @@ protected:
     void setRootFrame( SwRootFrame* pRoot ) { mpRoot = pRoot; }
 
     SwPageFrame *InsertPage( SwPageFrame *pSibling, bool bFootnote );
-    void PrepareMake(vcl::RenderContext* pRenderContext);
+    void PrepareMake(OutputDevice* pRenderContext);
     void OptPrepareMake();
     virtual void MakePos();
     // Format next frame of table frame to assure keeping attributes.
@@ -464,7 +464,7 @@ protected:
     // avoid formatting of superior table frame.
     friend SwFrame* sw_FormatNextContentForKeep( SwTabFrame* pTabFrame );
 
-    virtual void MakeAll(vcl::RenderContext* pRenderContext) = 0;
+    virtual void MakeAll(OutputDevice* pRenderContext) = 0;
     // adjust frames of a page
     SwTwips AdjustNeighbourhood( SwTwips nDiff, bool bTst = false );
 
@@ -656,7 +656,7 @@ public:
     // environment (not e.g. for repeating table headlines)
     bool IsFootnoteAllowed() const;
 
-    virtual void  Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr );
+    virtual void  Format( OutputDevice* pRenderContext, const SwBorderAttrs *pAttrs = nullptr );
 
     virtual void CheckDirection( bool bVert );
 
@@ -740,7 +740,7 @@ public:
     inline SwLayoutFrame *GetPrevLayoutLeaf();
     inline SwLayoutFrame *GetNextLayoutLeaf();
 
-    virtual void Calc(vcl::RenderContext* pRenderContext) const; // here might be "formatted"
+    virtual void Calc(OutputDevice* pRenderContext) const; // here might be "formatted"
     inline void OptCalc() const;    // here we assume (for optimization) that
                                     // the predecessors are already formatted
     Point   GetRelPos() const;
@@ -838,7 +838,7 @@ public:
                                  SwCursorMoveState* = nullptr, bool bTestBackground = false ) const;
     virtual bool    GetCharRect( SwRect &, const SwPosition&,
                                  SwCursorMoveState* = nullptr, bool bAllowFarAway = true ) const;
-    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&,
+    virtual void PaintSwFrame( OutputDevice& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = nullptr ) const;
 
     // HACK: shortcut between frame and formatting

@@ -115,7 +115,7 @@ class SAL_DLLPUBLIC_RTTI SwPageFrame final: public SwFootnoteBossFrame
 
     virtual void DestroyImpl() override;
     virtual ~SwPageFrame() override;
-    virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
+    virtual void MakeAll(OutputDevice* pRenderContext) override;
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
     /// Calculate the content height of a page (without columns).

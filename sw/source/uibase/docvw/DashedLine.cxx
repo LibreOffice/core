@@ -29,7 +29,7 @@ SwDashedLine::~SwDashedLine( )
 {
 }
 
-void SwDashedLine::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SwDashedLine::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
     std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(

@@ -138,7 +138,7 @@ protected:
     Point m_aContentPos;        // content area's position relatively to Frame
     bool m_bValidContentPos;
 
-    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
+    virtual void Format( OutputDevice* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     void MakePrtArea( const SwBorderAttrs &rAttrs );
     void MakeContentPos( const SwBorderAttrs &rAttrs );
 
@@ -173,7 +173,7 @@ public:
 
     // get client information
     virtual bool GetInfo( SfxPoolItem& ) const override;
-    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&,
+    virtual void PaintSwFrame( OutputDevice& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = nullptr ) const override;
     virtual Size ChgSize( const Size& aNewSize ) override;
     virtual bool GetModelPositionForViewPoint( SwPosition *, Point&,
@@ -288,7 +288,7 @@ public:
 
     virtual void dumpAsXml( xmlTextWriterPtr writer ) const override { SwLayoutFrame::dumpAsXml( writer ); };
 
-    virtual void Calc(vcl::RenderContext* pRenderContext) const override;
+    virtual void Calc(OutputDevice* pRenderContext) const override;
 
     const Point& ContentPos() const { return m_aContentPos; }
     Point& ContentPos() { return m_aContentPos; }

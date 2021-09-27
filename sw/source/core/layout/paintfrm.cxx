@@ -376,7 +376,7 @@ bool isTableBoundariesEnabled()
  * For 'small' twip-to-pixel relations (less than 2:1)
  * values of <gProp.nSHalfPixelSzW> and <gProp.nSHalfPixelSzH> are set to ZERO
  */
-void SwCalcPixStatics( vcl::RenderContext const *pOut )
+void SwCalcPixStatics( OutputDevice const *pOut )
 {
     // determine 'small' twip-to-pixel relation
     bool bSmallTwipToPxRelW = false;
@@ -1121,7 +1121,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
  * that the border "leaves its original pixel", if it has to
  * No prior adjustments for odd relation between pixel and twip
  */
-void SwAlignRect( SwRect &rRect, const SwViewShell *pSh, const vcl::RenderContext* pRenderContext )
+void SwAlignRect( SwRect &rRect, const SwViewShell *pSh, const OutputDevice* pRenderContext )
 {
     if( !rRect.HasArea() )
         return;
@@ -1134,7 +1134,7 @@ void SwAlignRect( SwRect &rRect, const SwViewShell *pSh, const vcl::RenderContex
         return;
     }
 
-    const vcl::RenderContext *pOut = gProp.bSFlyMetafile ?
+    const OutputDevice *pOut = gProp.bSFlyMetafile ?
                         gProp.pSFlyMetafileOut.get() : pRenderContext;
 
     // Hold original rectangle in pixel
@@ -1227,7 +1227,7 @@ void SwAlignRect( SwRect &rRect, const SwViewShell *pSh, const vcl::RenderContex
  *
  * NOTE: Call this method before each <GraphicObject.Draw(...)>
 */
-void SwAlignGrfRect( SwRect *pGrfRect, const vcl::RenderContext &rOut )
+void SwAlignGrfRect( SwRect *pGrfRect, const OutputDevice &rOut )
 {
     tools::Rectangle aPxRect = rOut.LogicToPixel( pGrfRect->SVRect() );
     pGrfRect->Pos( rOut.PixelToLogic( aPxRect.TopLeft() ) );
@@ -1548,7 +1548,7 @@ static void lcl_SubtractFlys( const SwFrame *pFrame, const SwPageFrame *pPage,
 }
 
 static void lcl_implDrawGraphicBackground(const SvxBrushItem& _rBackgrdBrush,
-                                       vcl::RenderContext& _rOut,
+                                       OutputDevice& _rOut,
                                        const SwRect& _rAlignedPaintRect,
                                        const GraphicObject& _rGraphicObj,
                                        SwPaintProperties const & properties)
@@ -1665,7 +1665,7 @@ static void lcl_DrawGraphicBackground( const SvxBrushItem& _rBackgrdBrush,
  *
  * Also, change type of <bGrfNum> and <bClip> from <bool> to <bool>
  */
-static void lcl_DrawGraphic( const SvxBrushItem& rBrush, vcl::RenderContext &rOutDev,
+static void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice &rOutDev,
                       SwViewShell &rSh, const SwRect &rGrf, const SwRect &rOut,
                       bool bGrfNum,
                       SwPaintProperties const & properties,
@@ -1725,7 +1725,7 @@ bool DrawFillAttributes(
     const SwRect& rOriginalLayoutRect,
     const SwRegionRects& rPaintRegion,
     const basegfx::utils::B2DClipState& rClipState,
-    vcl::RenderContext& rOut)
+    OutputDevice& rOut)
 {
     if(rFillAttributes && rFillAttributes->isUsed())
     {
@@ -1813,7 +1813,7 @@ bool DrawFillAttributes(
 
 void DrawGraphic(
     const SvxBrushItem *pBrush,
-    vcl::RenderContext &rOutDev,
+    OutputDevice &rOutDev,
     const SwRect &rOrg,
     const SwRect &rOut,
     const sal_uInt8 nGrfNum,
@@ -2151,7 +2151,7 @@ void DrawGraphic(
  * and other changes to the to be painted rectangle, this method is called for the
  * rectangle to be painted in order to adjust it to the pixel it is overlapping
 */
-static void lcl_AdjustRectToPixelSize( SwRect& io_aSwRect, const vcl::RenderContext &aOut )
+static void lcl_AdjustRectToPixelSize( SwRect& io_aSwRect, const OutputDevice &aOut )
 {
     // local constant object of class <Size> to determine number of Twips
     // representing a pixel.
@@ -3004,7 +3004,7 @@ namespace
  * 3. Paint the document content (text)
  * 4. Paint the draw layer that is above the document
 |*/
-void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const pPrintData) const
+void SwRootFrame::PaintSwFrame(OutputDevice& rRenderContext, SwRect const& rRect, SwPrintData const*const pPrintData) const
 {
     OSL_ENSURE( Lower() && Lower()->IsPageFrame(), "Lower of root is no page." );
 
@@ -3370,7 +3370,7 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
 
 static void lcl_EmergencyFormatFootnoteCont( SwFootnoteContFrame *pCont )
 {
-    vcl::RenderContext* pRenderContext = pCont->getRootFrame()->GetCurrShell()->GetOut();
+    OutputDevice* pRenderContext = pCont->getRootFrame()->GetCurrShell()->GetOut();
 
     //It's possible that the Cont will get destroyed.
     SwContentFrame *pCnt = pCont->ContainsContent();
@@ -3432,7 +3432,7 @@ SwShortCut::SwShortCut( const SwFrame& rFrame, const SwRect& rRect )
     }
 }
 
-void SwLayoutFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
+void SwLayoutFrame::PaintSwFrame(OutputDevice& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
     // #i16816# tagged pdf support
     Frame_Info aFrameInfo( *this );
@@ -3943,7 +3943,7 @@ bool SwFlyFrame::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
     return bPaint;
 }
 
-void SwCellFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
+void SwCellFrame::PaintSwFrame(OutputDevice& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
     if ( GetLayoutRowSpan() >= 1 )
         SwLayoutFrame::PaintSwFrame( rRenderContext, rRect );
@@ -3982,7 +3982,7 @@ void SwFrame::SetDrawObjsAsDeleted( bool bDeleted )
     }
 }
 
-void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
+void SwFlyFrame::PaintSwFrame(OutputDevice& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
     //optimize thumbnail generation and store procedure to improve odt saving performance, #i120030#
     SwViewShell *pShell = getRootFrame()->GetCurrShell();
@@ -4273,7 +4273,7 @@ void SwTextFrame::PaintOutlineContentVisibilityButton() const
 }
 
 
-void SwTabFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
+void SwTabFrame::PaintSwFrame(OutputDevice& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
     const SwViewOption* pViewOption = gProp.pSGlobalShell->GetViewOptions();
     if (pViewOption->IsTable())
@@ -4491,7 +4491,7 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
             break;
     }
 
-    vcl::RenderContext *pOut = properties.pSGlobalShell->GetOut();
+    OutputDevice *pOut = properties.pSGlobalShell->GetOut();
 
     DrawModeFlags nOldDrawMode = pOut->GetDrawMode();
     Color aShadowColor( rShadow.GetColor().GetRGBColor() );
@@ -5849,7 +5849,7 @@ enum PaintArea {LEFT, RIGHT, TOP, BOTTOM};
 #define BORDER_TILE_SIZE 512
 
 /// Wrapper around pOut->DrawBitmapEx.
-static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoint, const Size& aSize, const BitmapEx& rBitmapEx, PaintArea eArea)
+static void lcl_paintBitmapExToRect(OutputDevice *pOut, const Point& aPoint, const Size& aSize, const BitmapEx& rBitmapEx, PaintArea eArea)
 {
     // The problem is that if we get called multiple times and the color is
     // partly transparent, then the result will get darker and darker. To avoid

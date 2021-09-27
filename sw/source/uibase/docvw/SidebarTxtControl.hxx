@@ -40,7 +40,7 @@ class SidebarTextControl : public WeldEditView
         void MakeVisible();
 
     protected:
-        virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+        virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
 
         virtual bool Command(const CommandEvent& rCEvt) override;
         virtual void GetFocus() override;

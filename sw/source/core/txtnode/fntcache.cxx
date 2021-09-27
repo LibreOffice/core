@@ -261,8 +261,8 @@ void SwFntObj::ClearCachedTextGlyphs()
  *  2. PDF export from online layout
  *  3. Prospect/PagePreview printing
  */
-static bool lcl_IsFontAdjustNecessary( const vcl::RenderContext& rOutDev,
-                                const vcl::RenderContext& rRefDev )
+static bool lcl_IsFontAdjustNecessary( const OutputDevice& rOutDev,
+                                const OutputDevice& rRefDev )
 {
     return &rRefDev != &rOutDev &&
            OUTDEV_WINDOW != rRefDev.GetOutDevType() &&
@@ -702,14 +702,14 @@ static sal_uInt8 lcl_WhichPunctuation( sal_Unicode cChar )
     return SwScriptInfo::SPECIAL_LEFT;
 }
 
-static bool lcl_IsMonoSpaceFont( const vcl::RenderContext& rOut )
+static bool lcl_IsMonoSpaceFont( const OutputDevice& rOut )
 {
     const tools::Long nWidth1 = rOut.GetTextWidth( OUString( u'\x3008' ) );
     const tools::Long nWidth2 = rOut.GetTextWidth( OUString( u'\x307C' ) );
     return nWidth1 == nWidth2;
 }
 
-static bool lcl_IsFullstopCentered( const vcl::RenderContext& rOut )
+static bool lcl_IsFullstopCentered( const OutputDevice& rOut )
 {
     const FontMetric aMetric( rOut.GetFontMetric() );
     return aMetric.IsFullstopCentered() ;

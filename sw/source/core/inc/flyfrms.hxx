@@ -78,7 +78,7 @@ protected:
 public:
     // #i28701#
 
-    virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
+    virtual void MakeAll(OutputDevice* pRenderContext) override;
 
     // #i37068# - accessors for member <mbNoMoveOnCheckClip>
     void SetNoMoveOnCheckClip( const bool _bNewNoMoveOnCheckClip )
@@ -156,7 +156,7 @@ public:
 // Flys that are bound to Content but not in Content
 class SwFlyAtContentFrame final: public SwFlyFreeFrame
 {
-    virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
+    virtual void MakeAll(OutputDevice* pRenderContext) override;
 
     // #i28701#
     virtual bool InvalidationAllowed( const InvalidationType _nInvalid ) const override;
@@ -199,7 +199,7 @@ class SwFlyInContentFrame final: public SwFlyFrame
     virtual ~SwFlyInContentFrame() override;
 
     virtual void NotifyBackground(SwPageFrame *pPage, const SwRect& rRect, PrepareHint eHint) override;
-    virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
+    virtual void MakeAll(OutputDevice* pRenderContext) override;
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
@@ -207,7 +207,7 @@ public:
 
     SwFlyInContentFrame( SwFlyFrameFormat*, SwFrame*, SwFrame *pAnchor );
 
-    virtual void  Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
+    virtual void  Format( OutputDevice* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
 
     void SetRefPoint( const Point& rPoint, const Point &rRelAttr,
         const Point &rRelPos );

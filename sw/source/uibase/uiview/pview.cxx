@@ -186,7 +186,7 @@ SwPagePreviewWin::~SwPagePreviewWin()
 {
 }
 
-void  SwPagePreviewWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void  SwPagePreviewWin::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     if (!mpViewShell || !mpViewShell->GetLayout())
         return;

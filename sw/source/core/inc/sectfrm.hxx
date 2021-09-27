@@ -67,9 +67,9 @@ class SwSectionFrame final: public SwLayoutFrame, public SwFlowFrame
     virtual void DestroyImpl() override;
     virtual ~SwSectionFrame() override;
 
-    virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
+    virtual void MakeAll(OutputDevice* pRenderContext) override;
     virtual bool ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool &rReformat ) override;
-    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
+    virtual void Format( OutputDevice* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     virtual void SwClientNotify( const SwModify&, const SfxHint& ) override;
 
 public:

@@ -63,18 +63,18 @@ private:
     uno::Reference<i18n::XBreakIterator> m_xBreak;
 
     void Init();
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void Resize() override;
     void CalcCellArray(bool bFitWidth);
     void CalcLineMap();
-    void PaintCells(vcl::RenderContext& rRenderContext);
+    void PaintCells(OutputDevice& rRenderContext);
 
     sal_uInt8 GetFormatIndex(size_t nCol, size_t nRow) const;
 
-    void DrawString(vcl::RenderContext& rRenderContext, size_t nCol, size_t nRow);
-    void DrawBackground(vcl::RenderContext& rRenderContext);
+    void DrawString(OutputDevice& rRenderContext, size_t nCol, size_t nRow);
+    void DrawBackground(OutputDevice& rRenderContext);
 
-    void MakeFonts(vcl::RenderContext const& rRenderContext, sal_uInt8 nIndex, vcl::Font& rFont,
+    void MakeFonts(OutputDevice const& rRenderContext, sal_uInt8 nIndex, vcl::Font& rFont,
                    vcl::Font& rCJKFont, vcl::Font& rCTLFont);
 };
 

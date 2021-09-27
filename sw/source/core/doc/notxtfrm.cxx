@@ -172,7 +172,7 @@ void SetOutDev( SwViewShell *pSh, OutputDevice *pOut )
 }
 
 static void lcl_ClearArea( const SwFrame &rFrame,
-                    vcl::RenderContext &rOut, const SwRect& rPtArea,
+                    OutputDevice &rOut, const SwRect& rPtArea,
                     const SwRect &rGrfArea )
 {
     SwRegionRects aRegion( rPtArea, 4 );
@@ -211,7 +211,7 @@ static void lcl_ClearArea( const SwFrame &rFrame,
     }
 }
 
-void SwNoTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
+void SwNoTextFrame::PaintSwFrame(OutputDevice& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
     if ( getFrameArea().IsEmpty() )
         return;
@@ -476,7 +476,7 @@ const Size& SwNoTextFrame::GetSize() const
     return pFly->getFramePrintArea().SSize();
 }
 
-void SwNoTextFrame::MakeAll(vcl::RenderContext* pRenderContext)
+void SwNoTextFrame::MakeAll(OutputDevice* pRenderContext)
 {
     // RotateFlyFrame3 - inner frame. Get rotation and check if used
     const double fRotation(getLocalFrameRotation());
@@ -650,7 +650,7 @@ double SwNoTextFrame::getLocalFrameRotation() const
 }
 
 /** Calculate the Bitmap's site, if needed */
-void SwNoTextFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs * )
+void SwNoTextFrame::Format( OutputDevice* /*pRenderContext*/, const SwBorderAttrs * )
 {
     const Size aNewSize( GetSize() );
 
@@ -840,7 +840,7 @@ void SwNoTextFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint
     }
 }
 
-static void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInArea, vcl::RenderContext const * pOut )
+static void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInArea, OutputDevice const * pOut )
 {
 
     if(!pOut)
@@ -870,7 +870,7 @@ static void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInAr
 }
 
 static bool paintUsingPrimitivesHelper(
-    vcl::RenderContext& rOutputDevice,
+    OutputDevice& rOutputDevice,
     const drawinglayer::primitive2d::Primitive2DContainer& rSequence,
     const basegfx::B2DRange& rSourceRange,
     const basegfx::B2DRange& rTargetRange)
@@ -914,7 +914,7 @@ static bool paintUsingPrimitivesHelper(
 
 // MM02 original using falölback to VOC and primitive-based version
 void paintGraphicUsingPrimitivesHelper(
-    vcl::RenderContext & rOutputDevice,
+    OutputDevice & rOutputDevice,
     GraphicObject const& rGrfObj,
     GraphicAttr const& rGraphicAttr,
     const basegfx::B2DHomMatrix& rGraphicTransform,
@@ -944,7 +944,7 @@ void paintGraphicUsingPrimitivesHelper(
 
 // MM02 new VOC and primitive-based version
 void paintGraphicUsingPrimitivesHelper(
-    vcl::RenderContext & rOutputDevice,
+    OutputDevice & rOutputDevice,
     drawinglayer::primitive2d::Primitive2DContainer& rContent,
     const basegfx::B2DHomMatrix& rGraphicTransform,
     const OUString& rName,
@@ -1104,7 +1104,7 @@ sdr::contact::ViewContact& SwNoTextFrame::GetViewContact() const
 
     @todo use aligned rectangle for drawing graphic.
     @todo pixel-align coordinations for drawing graphic. */
-void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfArea ) const
+void SwNoTextFrame::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) const
 {
     SwViewShell* pShell = getRootFrame()->GetCurrShell();
 

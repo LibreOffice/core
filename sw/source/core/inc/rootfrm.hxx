@@ -182,7 +182,7 @@ class SW_DLLPUBLIC SwRootFrame final : public SwLayoutFrame
     virtual void DestroyImpl() override;
     virtual ~SwRootFrame() override;
 
-    virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
+    virtual void MakeAll(OutputDevice* pRenderContext) override;
 
 public:
 
@@ -231,7 +231,7 @@ public:
     virtual bool  GetModelPositionForViewPoint( SwPosition *, Point&,
                                SwCursorMoveState* = nullptr, bool bTestBackground = false ) const override;
 
-    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&,
+    virtual void PaintSwFrame( OutputDevice& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = nullptr ) const override;
     virtual SwTwips ShrinkFrame( SwTwips, bool bTst = false, bool bInfo = false ) override;
     virtual SwTwips GrowFrame  ( SwTwips, bool bTst = false, bool bInfo = false ) override;

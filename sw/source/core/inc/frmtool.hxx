@@ -79,7 +79,7 @@ void AppendAllObjs(const SwFrameFormats* pTable, const SwFrame* pSib);
 // transparency, saved in the color of the brush item.
 void DrawGraphic(
     const SvxBrushItem *,
-    vcl::RenderContext &,
+    OutputDevice &,
     const SwRect &rOrg,
     const SwRect &rOut,
     const sal_uInt8 nGrfNum = GRFNUM_NO,
@@ -89,11 +89,11 @@ bool DrawFillAttributes(
     const SwRect& rOriginalLayoutRect,
     const SwRegionRects& rPaintRegion,
     const basegfx::utils::B2DClipState& rClipState,
-    vcl::RenderContext& rOut);
+    OutputDevice& rOut);
 
 // RotGrfFlyFrame: Adapted to rotation
 void paintGraphicUsingPrimitivesHelper(
-    vcl::RenderContext & rOutputDevice,
+    OutputDevice & rOutputDevice,
     GraphicObject const& rGraphicObj,
     GraphicAttr const& rGraphicAttr,
     const basegfx::B2DHomMatrix& rGraphicTransform,
@@ -103,7 +103,7 @@ void paintGraphicUsingPrimitivesHelper(
 
 // MM02 new VOC and primitive-based version
 void paintGraphicUsingPrimitivesHelper(
-    vcl::RenderContext & rOutputDevice,
+    OutputDevice & rOutputDevice,
     drawinglayer::primitive2d::Primitive2DContainer& rContent,
     const basegfx::B2DHomMatrix& rGraphicTransform,
     const OUString& rName,
@@ -112,11 +112,11 @@ void paintGraphicUsingPrimitivesHelper(
 
 // method to align rectangle.
 // Created declaration here to avoid <extern> declarations
-void SwAlignRect( SwRect &rRect, const SwViewShell *pSh, const vcl::RenderContext* pRenderContext );
+void SwAlignRect( SwRect &rRect, const SwViewShell *pSh, const OutputDevice* pRenderContext );
 
 // method to align graphic rectangle
 // Created declaration here to avoid <extern> declarations
-void SwAlignGrfRect( SwRect *pGrfRect, const vcl::RenderContext &rOut );
+void SwAlignGrfRect( SwRect *pGrfRect, const OutputDevice &rOut );
 
 /**
  * Paint border around a run of characters using frame painting code.

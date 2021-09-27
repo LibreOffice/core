@@ -310,7 +310,7 @@ bool SwOszControl::ChkOsz()
 |*      alignment to not trigger a 'big oscillation' when calling from outside
 |*      again.
 |*/
-void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
+void SwFlyAtContentFrame::MakeAll(OutputDevice* pRenderContext)
 {
     if ( !GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )
     {

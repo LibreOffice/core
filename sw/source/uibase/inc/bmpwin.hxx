@@ -35,7 +35,7 @@ private:
     bool        bVert : 1;
     bool        bGraphic : 1;
 
-    virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& /*rRenderContext*/, const tools::Rectangle& rRect) override;
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
