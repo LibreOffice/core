@@ -273,7 +273,7 @@ void ScDataTableView::Resize()
     mpHScroll->setPosSizePixel(nRowHeaderWidth, aSize.Height() - nScrollBarSize, aSize.Width() - nRowHeaderWidth - nScrollBarSize, nScrollBarSize);
 }
 
-void ScDataTableView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRectangle)
+void ScDataTableView::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRectangle)
 {
     Size aSize = GetSizePixel();
     SCCOL nMaxVisibleCol = findColFromPos(aSize.Width() - nScrollBarSize, mpDoc.get(), mnFirstVisibleCol);

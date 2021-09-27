@@ -266,7 +266,7 @@ private:
 
     double          GetStretch() const;
 
-    void            DrawRotatedFrame(vcl::RenderContext& rRenderContext);       // pixel
+    void            DrawRotatedFrame(OutputDevice& rRenderContext);       // pixel
 
     std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> CreateProcessor2D( );
 
@@ -336,17 +336,17 @@ public:
 
     void    SetSnapPixel();
 
-    void    DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool bPage, bool bMergeCover = false);
+    void    DrawGrid(OutputDevice& rRenderContext, bool bGrid, bool bPage, bool bMergeCover = false);
     void    DrawStrings( bool bPixelToLogic = false );
 
     /// Draw all strings, or provide Rectangle where the text (defined by rAddress) would be drawn.
     tools::Rectangle LayoutStrings(bool bPixelToLogic, bool bPaint = true, const ScAddress &rAddress = ScAddress());
 
     void    DrawDocumentBackground();
-    void    DrawBackground(vcl::RenderContext& rRenderContext);
+    void    DrawBackground(OutputDevice& rRenderContext);
     void    DrawShadow();
     void    DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBottom);
-    void    DrawFrame(vcl::RenderContext& rRenderContext);
+    void    DrawFrame(OutputDevice& rRenderContext);
 
                     // with logic MapMode set!
     void    DrawEdit(bool bPixelToLogic);
@@ -380,7 +380,7 @@ public:
     void    DrawChangeTrack();
     void    DrawClipMarks();
 
-    void    DrawNoteMarks(vcl::RenderContext& rRenderContext);
+    void    DrawNoteMarks(OutputDevice& rRenderContext);
     void    AddPDFNotes();
 };
 

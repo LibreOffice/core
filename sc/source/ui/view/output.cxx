@@ -288,7 +288,7 @@ void ScOutputData::SetSyntaxMode( bool bNewMode )
     }
 }
 
-void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool bPage, bool bMergeCover)
+void ScOutputData::DrawGrid(OutputDevice& rRenderContext, bool bGrid, bool bPage, bool bMergeCover)
 {
     // bMergeCover : Draw lines in sheet bgcolor to cover lok client grid lines in merged cell areas.
     // (Used when scNoGridBackground is set in lok mode.)
@@ -850,7 +850,7 @@ namespace {
 
 const double lclCornerRectTransparency = 40.0;
 
-void drawDataBars(vcl::RenderContext& rRenderContext, const ScDataBarInfo* pOldDataBarInfo, const tools::Rectangle& rRect, tools::Long nOneX, tools::Long nOneY)
+void drawDataBars(OutputDevice& rRenderContext, const ScDataBarInfo* pOldDataBarInfo, const tools::Rectangle& rRect, tools::Long nOneX, tools::Long nOneY)
 {
     tools::Long nPosZero = 0;
     tools::Rectangle aPaintRect = rRect;
@@ -927,7 +927,7 @@ const BitmapEx& getIcon(sc::IconSetBitmapMap & rIconSetBitmapMap, ScIconSetType 
     return ScIconSetFormat::getBitmap(rIconSetBitmapMap, eType, nIndex);
 }
 
-void drawIconSets(vcl::RenderContext& rRenderContext, const ScIconSetInfo* pOldIconSetInfo, const tools::Rectangle& rRect, tools::Long nOneX, tools::Long nOneY,
+void drawIconSets(OutputDevice& rRenderContext, const ScIconSetInfo* pOldIconSetInfo, const tools::Rectangle& rRect, tools::Long nOneX, tools::Long nOneY,
         sc::IconSetBitmapMap & rIconSetBitmapMap)
 {
     //long nSize = 16;
@@ -938,7 +938,7 @@ void drawIconSets(vcl::RenderContext& rRenderContext, const ScIconSetInfo* pOldI
     rRenderContext.DrawBitmapEx( Point( rRect.Left() + 2 * nOneX, rRect.Top() + 2 * nOneY), Size(aOrigSize, aOrigSize), rIcon );
 }
 
-void drawCells(vcl::RenderContext& rRenderContext, std::optional<Color> const & pColor, const SvxBrushItem* pBackground, std::optional<Color>& pOldColor, const SvxBrushItem*& pOldBackground,
+void drawCells(OutputDevice& rRenderContext, std::optional<Color> const & pColor, const SvxBrushItem* pBackground, std::optional<Color>& pOldColor, const SvxBrushItem*& pOldBackground,
         tools::Rectangle& rRect, tools::Long nPosX, tools::Long nLayoutSign, tools::Long nOneX, tools::Long nOneY, const ScDataBarInfo* pDataBarInfo, const ScDataBarInfo*& pOldDataBarInfo,
         const ScIconSetInfo* pIconSetInfo, const ScIconSetInfo*& pOldIconSetInfo,
         sc::IconSetBitmapMap & rIconSetBitmapMap)
@@ -1016,7 +1016,7 @@ void drawCells(vcl::RenderContext& rRenderContext, std::optional<Color> const & 
 
 }
 
-void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
+void ScOutputData::DrawBackground(OutputDevice& rRenderContext)
 {
     Size aOnePixel = rRenderContext.PixelToLogic(Size(1,1));
     tools::Long nOneXLogic = aOnePixel.Width();
@@ -1380,7 +1380,7 @@ static size_t lclGetArrayColFromCellInfoX( sal_uInt16 nCellInfoX, sal_uInt16 nCe
     return static_cast< size_t >( bRTL ? (nCellInfoLastX + 2 - nCellInfoX) : (nCellInfoX - nCellInfoFirstX) );
 }
 
-void ScOutputData::DrawFrame(vcl::RenderContext& rRenderContext)
+void ScOutputData::DrawFrame(OutputDevice& rRenderContext)
 {
     DrawModeFlags nOldDrawMode = rRenderContext.GetDrawMode();
 
@@ -1506,7 +1506,7 @@ void ScOutputData::DrawFrame(vcl::RenderContext& rRenderContext)
     rRenderContext.SetDrawMode(nOldDrawMode);
 }
 
-void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
+void ScOutputData::DrawRotatedFrame(OutputDevice& rRenderContext)
 {
     //! save nRotMax
     SCCOL nRotMax = nX2;
@@ -2318,7 +2318,7 @@ void ScOutputData::DrawChangeTrack()
 }
 
 //TODO: moggi Need to check if this can't be written simpler
-void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
+void ScOutputData::DrawNoteMarks(OutputDevice& rRenderContext)
 {
 
     bool bFirst = true;

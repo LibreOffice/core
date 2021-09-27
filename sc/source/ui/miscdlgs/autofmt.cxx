@@ -107,7 +107,7 @@ static void lcl_SetFontProperties(
     rFont.SetItalic     ( rPostureItem.GetValue() );
 }
 
-void ScAutoFmtPreview::MakeFonts(vcl::RenderContext const& rRenderContext, sal_uInt16 nIndex, vcl::Font& rFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont)
+void ScAutoFmtPreview::MakeFonts(OutputDevice const& rRenderContext, sal_uInt16 nIndex, vcl::Font& rFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont)
 {
     if ( !pCurData )
         return;
@@ -179,7 +179,7 @@ const SvxLineItem& ScAutoFmtPreview::GetDiagItem( size_t nCol, size_t nRow, bool
     return * pCurData->GetItem( GetFormatIndex( nCol, nRow ), bTLBR ? ATTR_BORDER_TLBR : ATTR_BORDER_BLTR );
 }
 
-void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCol, size_t nRow)
+void ScAutoFmtPreview::DrawString(OutputDevice& rRenderContext, size_t nCol, size_t nRow)
 {
     if (!pCurData)
     {
@@ -354,7 +354,7 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
 
 #undef FRAME_OFFSET
 
-void ScAutoFmtPreview::DrawBackground(vcl::RenderContext& rRenderContext)
+void ScAutoFmtPreview::DrawBackground(OutputDevice& rRenderContext)
 {
     if (!pCurData)
         return;
@@ -381,7 +381,7 @@ void ScAutoFmtPreview::DrawBackground(vcl::RenderContext& rRenderContext)
     }
 }
 
-void ScAutoFmtPreview::PaintCells(vcl::RenderContext& rRenderContext)
+void ScAutoFmtPreview::PaintCells(OutputDevice& rRenderContext)
 {
     if (!pCurData)
         return;
@@ -490,7 +490,7 @@ void ScAutoFmtPreview::NotifyChange( ScAutoFormatData* pNewData )
     Invalidate();
 }
 
-void ScAutoFmtPreview::DoPaint(vcl::RenderContext& rRenderContext)
+void ScAutoFmtPreview::DoPaint(OutputDevice& rRenderContext)
 {
     rRenderContext.Push(PushFlags::ALL);
     DrawModeFlags nOldDrawMode = aVD->GetDrawMode();
@@ -521,7 +521,7 @@ void ScAutoFmtPreview::DoPaint(vcl::RenderContext& rRenderContext)
     rRenderContext.Pop();
 }
 
-void ScAutoFmtPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
+void ScAutoFmtPreview::Paint(OutputDevice& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     DoPaint(rRenderContext);
 }

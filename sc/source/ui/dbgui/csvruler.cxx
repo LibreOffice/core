@@ -519,12 +519,12 @@ void ScCsvRuler::EndMouseTracking()
 
 // painting -------------------------------------------------------------------
 
-void ScCsvRuler::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
+void ScCsvRuler::Paint( OutputDevice& rRenderContext, const tools::Rectangle& )
 {
     ImplRedraw(rRenderContext);
 }
 
-void ScCsvRuler::ImplRedraw(vcl::RenderContext& rRenderContext)
+void ScCsvRuler::ImplRedraw(OutputDevice& rRenderContext)
 {
     if( IsVisible() )
     {

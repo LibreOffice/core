@@ -90,7 +90,7 @@ static void lcl_LimitRect( tools::Rectangle& rRect, const tools::Rectangle& rVis
     // When it is far away, then lcl_DrawOneFrame is not even called.
 }
 
-static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const tools::Rectangle& rInnerPixel,
+static void lcl_DrawOneFrame( OutputDevice* pDev, const tools::Rectangle& rInnerPixel,
                         const OUString& rTitle, const Color& rColor, bool bTextBelow,
                         double nPPTX, double nPPTY, const Fraction& rZoomY,
                         ScDocument& rDoc, ScViewData& rButtonViewData, bool bLayoutRTL )
@@ -312,7 +312,7 @@ void ScGridWindow::DoInvertRect( const tools::Rectangle& rPixel )
     UpdateHeaderOverlay();      // uses aInvertRect
 }
 
-void ScGridWindow::PrePaint(vcl::RenderContext& /*rRenderContext*/)
+void ScGridWindow::PrePaint(OutputDevice& /*rRenderContext*/)
 {
     // forward PrePaint to DrawingLayer
     ScTabViewShell* pTabViewShell = mrViewData.GetViewShell();
@@ -381,7 +381,7 @@ void ScGridWindow::InvalidateLOKViewCursor(const tools::Rectangle& rCursorRect,
     }
 }
 
-void ScGridWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect )
+void ScGridWindow::Paint( OutputDevice& /*rRenderContext*/, const tools::Rectangle& rRect )
 {
     ScDocument& rDoc = mrViewData.GetDocument();
     if ( rDoc.IsInInterpreter() )
@@ -1655,7 +1655,7 @@ void ScGridWindow::CheckNeedsRepaint()
     rBindings.Invalidate( SID_TABLE_CELL );
 }
 
-void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, vcl::RenderContext& rRenderContext)
+void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, OutputDevice& rRenderContext)
 {
     ScPageBreakData* pPageData = mrViewData.GetView()->GetPageBreakData();
     if (!pPageData)

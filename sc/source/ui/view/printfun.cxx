@@ -1141,7 +1141,7 @@ void ScPrintFunc::SetDateTime( const DateTime& rDateTime )
     aFieldData.aDateTime = rDateTime;
 }
 
-static void lcl_DrawGraphic( const Graphic &rGraphic, vcl::RenderContext& rOutDev,
+static void lcl_DrawGraphic( const Graphic &rGraphic, OutputDevice& rOutDev,
                       const tools::Rectangle &rGrf, const tools::Rectangle &rOut )
 {
     const bool bNotInside = !rOut.Contains( rGrf );
@@ -1157,7 +1157,7 @@ static void lcl_DrawGraphic( const Graphic &rGraphic, vcl::RenderContext& rOutDe
         rOutDev.Pop();
 }
 
-static void lcl_DrawGraphic( const SvxBrushItem &rBrush, vcl::RenderContext& rOutDev, const OutputDevice* pRefDev,
+static void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice& rOutDev, const OutputDevice* pRefDev,
                         const tools::Rectangle &rOrg, const tools::Rectangle &rOut,
                         OUString const & referer )
 {

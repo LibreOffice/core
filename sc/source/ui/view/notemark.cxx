@@ -116,7 +116,7 @@ IMPL_LINK_NOARG(ScNoteMarker, TimeHdl, Timer *, void)
     Draw();
 }
 
-static void lcl_DrawWin( const SdrObject* pObject, vcl::RenderContext* pWindow, const MapMode& rMap )
+static void lcl_DrawWin( const SdrObject* pObject, OutputDevice* pWindow, const MapMode& rMap )
 {
     MapMode aOld = pWindow->GetMapMode();
     pWindow->SetMapMode( rMap );

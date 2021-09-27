@@ -38,7 +38,7 @@ public:
                     virtual ~ScTabSplitter() override;
 
     void            SetFixed(bool bSet);
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rPaintRect ) override;
+    virtual void    Paint( OutputDevice& rRenderContext, const tools::Rectangle& rPaintRect ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

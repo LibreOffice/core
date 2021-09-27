@@ -274,7 +274,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
     void            DrawAfterScroll();
     tools::Rectangle       GetListValButtonRect( const ScAddress& rButtonPos );
 
-    void            DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, vcl::RenderContext& rRenderContext);
+    void            DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, OutputDevice& rRenderContext);
 
     bool            GetEditUrl( const Point& rPos,
                                 OUString* pName=nullptr, OUString* pUrl=nullptr, OUString* pTarget=nullptr );
@@ -316,8 +316,8 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
     DECL_LINK(InitiatePageBreaksTimer, Timer*, void);
 
 protected:
-    virtual void    PrePaint(vcl::RenderContext& rRenderContext) override;
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void    PrePaint(OutputDevice& rRenderContext) override;
+    virtual void    Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void    GetFocus() override;
     virtual void    LoseFocus() override;
 

@@ -216,7 +216,7 @@ tools::Long ScHeaderControl::GetScrPos( SCCOLROW nEntryNo ) const
     return nScrPos;
 }
 
-void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect )
+void ScHeaderControl::Paint( OutputDevice& /*rRenderContext*/, const tools::Rectangle& rRect )
 {
     // It is important for VCL to have few calls, that is why the outer lines are
     // grouped together

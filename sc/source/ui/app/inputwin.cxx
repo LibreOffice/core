@@ -420,7 +420,7 @@ void ScInputWindow::Select()
     }
 }
 
-void ScInputWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void ScInputWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isDialogPainting())
         return;
@@ -1272,7 +1272,7 @@ IMPL_LINK_NOARG(ScTextWndGroup, Impl_ScrollHdl, weld::ScrolledWindow&, void)
     mxTextWnd->DoScroll();
 }
 
-void ScTextWnd::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect )
+void ScTextWnd::Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect )
 {
     if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isDialogPainting())
         return;

@@ -53,7 +53,7 @@ void ScTabSplitter::SetFixed(bool bSet)
         SetPointer(PointerStyle::VSplit);
 }
 
-void ScTabSplitter::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect )
+void ScTabSplitter::Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect )
 {
     rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
