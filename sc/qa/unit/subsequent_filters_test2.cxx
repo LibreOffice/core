@@ -207,6 +207,7 @@ public:
     void testTdf129940();
     void testTdf139763ShapeAnchor();
     void testAutofilterNamedRangesXLSX();
+    void testInvalidBareBiff5();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest2);
 
@@ -313,6 +314,7 @@ public:
     CPPUNIT_TEST(testTdf129940);
     CPPUNIT_TEST(testTdf139763ShapeAnchor);
     CPPUNIT_TEST(testAutofilterNamedRangesXLSX);
+    CPPUNIT_TEST(testInvalidBareBiff5);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2891,6 +2893,74 @@ void ScFiltersTest2::testAutofilterNamedRangesXLSX()
     const ScRangeData* pRData = rDoc.GetRangeAtBlock(aRange, aPosStr, &bSheetLocal);
     CPPUNIT_ASSERT(!pRData);
     CPPUNIT_ASSERT_EQUAL(OUString(), aPosStr);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest2::testInvalidBareBiff5()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf144732.", FORMAT_XLS);
+    CPPUNIT_ASSERT(xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    rDoc.CalcAll();
+
+    // Check that we import the contents from such file, as Excel does
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), rDoc.GetTableCount());
+
+    const std::vector<std::vector<std::pair<css::uno::Any, OUString>>> expectedValues = {
+        { { { 1.0 }, {} }, { { 2.0 }, {} }, { { 3.0 }, {} }, { {}, {} } },
+        { { { 1.0 }, { "=TRUE()" } },
+          { { 0.0 }, { "=FALSE()" } },
+          { {}, {} },
+          { { OUString("sheetjs") }, {} } },
+        { { { OUString("foo    bar") }, {} },
+          { { OUString("baz") }, {} },
+          { { 41689.4375 }, {} },
+          { { OUString("0.3") }, {} } },
+        { { { OUString("baz") }, {} }, { {}, {} }, { { OUString("_") }, {} }, { { 3.14159 }, {} } },
+        { { { OUString("hidden") }, {} }, { {}, {} }, { {}, {} }, { {}, {} } },
+        { { { OUString("visible") }, {} }, { {}, {} }, { {}, {} }, { {}, {} } }
+    };
+
+    ScAddress aPos(0, 0, 0);
+    for (const auto& row : expectedValues)
+    {
+        for (const auto& [value, formula] : row)
+        {
+            const OString sAddress = "Row: " + OString::number(aPos.Row())
+                                     + ", column: " + OString::number(aPos.Col());
+            const auto errMsg = sAddress.getStr();
+
+            CellType cellType;
+            if (!value.hasValue())
+            {
+                cellType = CELLTYPE_NONE;
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(errMsg, OUString(), rDoc.GetString(aPos));
+            }
+            else if (value.has<double>())
+            {
+                cellType = CELLTYPE_VALUE;
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(errMsg, value.get<double>(), rDoc.GetValue(aPos));
+            }
+            else if (value.has<OUString>())
+            {
+                cellType = CELLTYPE_STRING;
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(errMsg, value.get<OUString>(), rDoc.GetString(aPos));
+            }
+            if (!formula.isEmpty())
+            {
+                cellType = CELLTYPE_FORMULA;
+                OUString act_formula;
+                rDoc.GetFormula(aPos.Col(), aPos.Row(), aPos.Tab(), act_formula);
+                CPPUNIT_ASSERT_EQUAL(formula, act_formula);
+            }
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(errMsg, cellType, rDoc.GetCellType(aPos));
+
+            aPos.IncCol();
+        }
+        aPos.IncRow();
+        aPos.SetCol(0);
+    }
 
     xDocSh->DoClose();
 }
