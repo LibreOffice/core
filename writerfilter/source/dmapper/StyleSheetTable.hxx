@@ -58,6 +58,7 @@ public:
     StyleType       nStyleTypeCode; //sgc
     OUString sBaseStyleIdentifier;
     OUString sNextStyleIdentifier;
+    OUString sLinkStyleIdentifier;
     OUString sStyleName;
     const tools::SvRef<StyleSheetPropertyMap> pProperties;
     OUString sConvertedStyleName;

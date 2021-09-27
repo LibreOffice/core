@@ -1148,8 +1148,8 @@ void RtfAttributeOutput::EndStyles(sal_uInt16 /*nNumberOfStyles*/)
 void RtfAttributeOutput::DefaultStyle() { /* noop, the default style is always 0 in RTF */}
 
 void RtfAttributeOutput::StartStyle(const OUString& rName, StyleType eType, sal_uInt16 nBase,
-                                    sal_uInt16 nNext, sal_uInt16 /*nWwId*/, sal_uInt16 nId,
-                                    bool bAutoUpdate)
+                                    sal_uInt16 nNext, sal_uInt16 /*nLink*/, sal_uInt16 /*nWwId*/,
+                                    sal_uInt16 nId, bool bAutoUpdate)
 {
     SAL_INFO("sw.rtf", __func__ << ", rName = '" << rName << "'");
 

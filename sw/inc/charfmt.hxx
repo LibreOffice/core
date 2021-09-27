@@ -23,7 +23,7 @@
 #include "hintids.hxx"
 
 /// Represents the style of a text portion.
-class SwCharFormat final : public SwFormat
+class SW_DLLPUBLIC SwCharFormat final : public SwFormat
 {
     friend class SwDoc;
     friend class SwTextFormatColl;
