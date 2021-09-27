@@ -17,8 +17,6 @@
 
 #include <iostream>
 
-using namespace std;
-
 namespace svl {
 
 // String ID
@@ -79,10 +77,10 @@ void GridPrinter::print( const char* pHeader ) const
         return;
 
     if (pHeader)
-        cout << pHeader << endl;
+        std::cout << pHeader << std::endl;
 
     MatrixImplType::size_pair_type ns = mpImpl->maMatrix.size();
-    vector<sal_Int32> aColWidths(ns.column, 0);
+    std::vector<sal_Int32> aColWidths(ns.column, 0);
 
     // Calculate column widths first.
     for (size_t row = 0; row < ns.row; ++row)
@@ -109,10 +107,10 @@ void GridPrinter::print( const char* pHeader ) const
     OUString aSep = aBuf.makeStringAndClear();
 
     // Now print to stdout.
-    cout << aSep << endl;
+    std::cout << aSep << std::endl;
     for (size_t row = 0; row < ns.row; ++row)
     {
-        cout << "| ";
+        std::cout << "| ";
         for (size_t col = 0; col < ns.column; ++col)
         {
             OUString aStr = mpImpl->maMatrix.get_string(row, col);
@@ -120,10 +118,10 @@ void GridPrinter::print( const char* pHeader ) const
             aBuf.append(aStr);
             for (size_t i = 0; i < nPadding; ++i)
                 aBuf.append(u' ');
-            cout << aBuf.makeStringAndClear() << " | ";
+            std::cout << aBuf.makeStringAndClear() << " | ";
         }
-        cout << endl;
-        cout << aSep << endl;
+        std::cout << std::endl;
+        std::cout << aSep << std::endl;
     }
 }
 
