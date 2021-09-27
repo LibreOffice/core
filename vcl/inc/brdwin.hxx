@@ -122,7 +122,7 @@ public:
     virtual void            MouseMove( const MouseEvent& rMEvt ) override;
     virtual void            MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void            Tracking( const TrackingEvent& rTEvt ) override;
-    virtual void            Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void            Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void            Activate() override;
     virtual void            Deactivate() override;
     virtual void            Resize() override;
@@ -220,7 +220,7 @@ public:
     virtual void            GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                        sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const = 0;
     virtual tools::Long            CalcTitleWidth() const = 0;
-    virtual void            DrawWindow(vcl::RenderContext& rRenderContext, const Point* pOffset = nullptr) = 0;
+    virtual void            DrawWindow(OutputDevice& rRenderContext, const Point* pOffset = nullptr) = 0;
     virtual tools::Rectangle       GetMenuRect() const;
 
     static void             ImplInitTitle( ImplBorderFrameData* pData );
@@ -239,7 +239,7 @@ public:
     virtual void            GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                        sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const override;
     virtual tools::Long            CalcTitleWidth() const override;
-    virtual void            DrawWindow(vcl::RenderContext& rRenderContext, const Point* pOffset = nullptr) override;
+    virtual void            DrawWindow(OutputDevice& rRenderContext, const Point* pOffset = nullptr) override;
 };
 
 class ImplSmallBorderWindowView final : public ImplBorderWindowView
@@ -261,7 +261,7 @@ public:
     virtual void            GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                        sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const override;
     virtual tools::Long            CalcTitleWidth() const override;
-    virtual void            DrawWindow(vcl::RenderContext& rRenderContext, const Point* pOffset = nullptr) override;
+    virtual void            DrawWindow(OutputDevice& rRenderContext, const Point* pOffset = nullptr) override;
 };
 
 class ImplStdBorderWindowView final : public ImplBorderWindowView
@@ -282,7 +282,7 @@ public:
     virtual void            GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                        sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const override;
     virtual tools::Long            CalcTitleWidth() const override;
-    virtual void            DrawWindow(vcl::RenderContext& rRenderContext, const Point* pOffset = nullptr) override;
+    virtual void            DrawWindow(OutputDevice& rRenderContext, const Point* pOffset = nullptr) override;
 };
 
 #endif // INCLUDED_VCL_INC_BRDWIN_HXX

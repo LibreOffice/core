@@ -45,9 +45,9 @@ private:
 private:
     DECL_LINK( TimerHdl, Timer*, void );
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle&) override;
     virtual void RequestHelp( const HelpEvent& rHEvt ) override;
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
+    virtual void ApplySettings(OutputDevice& rRenderContext) override;
 
     virtual OUString GetText() const override;
     void ImplShow();

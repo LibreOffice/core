@@ -4917,7 +4917,7 @@ IMPL_LINK(SalInstanceTreeView, TooltipHdl, const HelpEvent&, rHEvt, bool)
 
 IMPL_LINK(SalInstanceTreeView, CustomRenderHdl, svtree_render_args, payload, void)
 {
-    vcl::RenderContext& rRenderDevice = std::get<0>(payload);
+    OutputDevice& rRenderDevice = std::get<0>(payload);
     const tools::Rectangle& rRect = std::get<1>(payload);
     const SvTreeListEntry& rEntry = std::get<2>(payload);
     const OUString* pId = static_cast<const OUString*>(rEntry.GetUserData());
@@ -4928,7 +4928,7 @@ IMPL_LINK(SalInstanceTreeView, CustomRenderHdl, svtree_render_args, payload, voi
 
 IMPL_LINK(SalInstanceTreeView, CustomMeasureHdl, svtree_measure_args, payload, Size)
 {
-    vcl::RenderContext& rRenderDevice = payload.first;
+    OutputDevice& rRenderDevice = payload.first;
     const SvTreeListEntry& rEntry = payload.second;
     const OUString* pId = static_cast<const OUString*>(rEntry.GetUserData());
     if (!pId)
@@ -6026,8 +6026,7 @@ SalInstanceDrawingArea::~SalInstanceDrawingArea()
     m_xDrawingArea->SetKeyPressHdl(Link<const KeyEvent&, bool>());
     m_xDrawingArea->SetKeyReleaseHdl(Link<const KeyEvent&, bool>());
     m_xDrawingArea->SetResizeHdl(Link<const Size&, void>());
-    m_xDrawingArea->SetPaintHdl(
-        Link<std::pair<vcl::RenderContext&, const tools::Rectangle&>, void>());
+    m_xDrawingArea->SetPaintHdl(Link<std::pair<OutputDevice&, const tools::Rectangle&>, void>());
 }
 
 OutputDevice& SalInstanceDrawingArea::get_ref_device() { return *m_xDrawingArea->GetOutDev(); }

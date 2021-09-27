@@ -237,9 +237,9 @@ private:
     VCL_DLLPRIVATE tools::Rectangle ImplGetItemRect( sal_uInt16 nPos ) const;
     VCL_DLLPRIVATE sal_uInt16       ImplDoHitTest( const Point& rPos, tools::Long& nMouseOff, sal_uInt16& nPos ) const;
     VCL_DLLPRIVATE void             ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos );
-    VCL_DLLPRIVATE void             ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh,
+    VCL_DLLPRIVATE void             ImplDrawItem(OutputDevice& rRenderContext, sal_uInt16 nPos, bool bHigh,
                                                  const tools::Rectangle& rItemRect, const tools::Rectangle* pRect);
-    VCL_DLLPRIVATE void             ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh,
+    VCL_DLLPRIVATE void             ImplDrawItem(OutputDevice& rRenderContext, sal_uInt16 nPos, bool bHigh,
                                                  const tools::Rectangle* pRect);
     VCL_DLLPRIVATE void             ImplUpdate( sal_uInt16 nPos,
                                        bool bEnd = false );
@@ -247,7 +247,7 @@ private:
     VCL_DLLPRIVATE void             ImplDrag( const Point& rPos );
     VCL_DLLPRIVATE void             ImplEndDrag( bool bCancel );
 
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
+    virtual void ApplySettings(OutputDevice& rRenderContext) override;
 
 public:
     HeaderBar( vcl::Window* pParent, WinBits nWinBits );
@@ -256,7 +256,7 @@ public:
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void        MouseMove( const MouseEvent& rMEvt ) override;
     virtual void        Tracking( const TrackingEvent& rTEvt ) override;
-    virtual void        Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void        Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void        Draw( OutputDevice* pDev, const Point& rPos,SystemTextColorFlags nFlags ) override;
     virtual void        Resize() override;
     virtual void        Command( const CommandEvent& rCEvt ) override;

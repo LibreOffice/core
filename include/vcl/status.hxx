@@ -33,7 +33,7 @@ class MouseEvent;
 class UserDrawEvent;
 struct ImplStatusItem;
 
-void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, const Point& rPos,
+void DrawProgress(vcl::Window* pWindow, OutputDevice& rRenderContext, const Point& rPos,
                                 tools::Long nOffset, tools::Long nPrgsWidth, tools::Long nPrgsHeight,
                                 sal_uInt16 nPercent1, sal_uInt16 nPercent2, sal_uInt16 nPercentCount,
                                 const tools::Rectangle& rFramePosSize);
@@ -93,16 +93,16 @@ private:
     SAL_DLLPRIVATE void      ImplFormat();
     SAL_DLLPRIVATE bool      ImplIsItemUpdate();
 
-    SAL_DLLPRIVATE void      ImplDrawText(vcl::RenderContext& rRenderContext);
-    SAL_DLLPRIVATE void      ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen,
+    SAL_DLLPRIVATE void      ImplDrawText(OutputDevice& rRenderContext);
+    SAL_DLLPRIVATE void      ImplDrawItem(OutputDevice& rRenderContext, bool bOffScreen,
                                           sal_uInt16 nPos);
-    SAL_DLLPRIVATE void      ImplDrawProgress(vcl::RenderContext& rRenderContext, sal_uInt16 nNewPerc);
+    SAL_DLLPRIVATE void      ImplDrawProgress(OutputDevice& rRenderContext, sal_uInt16 nNewPerc);
     SAL_DLLPRIVATE void      ImplCalcProgressRect();
     SAL_DLLPRIVATE tools::Rectangle ImplGetItemRectPos( sal_uInt16 nPos ) const;
     SAL_DLLPRIVATE sal_uInt16    ImplGetFirstVisiblePos() const;
 
 protected:
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
+    virtual void ApplySettings(OutputDevice& rRenderContext) override;
 
 public:
                         StatusBar( vcl::Window* pParent,
@@ -113,7 +113,7 @@ public:
     void                AdjustItemWidthsForHiDPI();
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void        Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void        Resize() override;
     virtual void        RequestHelp( const HelpEvent& rHEvt ) override;
     virtual void        StateChanged( StateChangedType nType ) override;

@@ -113,7 +113,7 @@ Size HeaderBar::GetOptimalSize() const
 
 HeaderBar::~HeaderBar() = default;
 
-void HeaderBar::ApplySettings(vcl::RenderContext& rRenderContext)
+void HeaderBar::ApplySettings(OutputDevice& rRenderContext)
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -265,7 +265,7 @@ void HeaderBar::ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos )
     GetOutDev()->SetRasterOp( RasterOp::OverPaint );
 }
 
-void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh,
+void HeaderBar::ImplDrawItem(OutputDevice& rRenderContext, sal_uInt16 nPos, bool bHigh,
                              const tools::Rectangle& rItemRect, const tools::Rectangle* pRect )
 {
     ImplControlValue aControlValue(0);
@@ -568,7 +568,7 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
     }
 }
 
-void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos,
+void HeaderBar::ImplDrawItem(OutputDevice& rRenderContext, sal_uInt16 nPos,
                              bool bHigh, const tools::Rectangle* pRect )
 {
     tools::Rectangle aRect = ImplGetItemRect(nPos);
@@ -847,7 +847,7 @@ void HeaderBar::Tracking( const TrackingEvent& rTEvt )
         ImplDrag( aMousePos );
 }
 
-void HeaderBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void HeaderBar::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     if (mnBorderOff1 || mnBorderOff2)
     {

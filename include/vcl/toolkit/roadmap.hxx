@@ -79,7 +79,7 @@ public:
     Link<LinkParamNone*,void> const & GetItemSelectHdl( ) const;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual void    GetFocus() override;
-    virtual void    ApplySettings( vcl::RenderContext& rRenderContext ) override;
+    virtual void    ApplySettings( OutputDevice& rRenderContext ) override;
 
 private:
     bool            PreNotify( NotifyEvent& rNEvt ) override;
@@ -96,7 +96,7 @@ private:
     const RoadmapItem*   GetByID( ItemId _nID  ) const;
     RoadmapItem*         GetPreviousHyperLabel( ItemIndex Index);
 
-    void                 DrawHeadline(vcl::RenderContext& rRenderContext);
+    void                 DrawHeadline(OutputDevice& rRenderContext);
     void                 DeselectOldRoadmapItems();
     ItemId               GetNextAvailableItemId( ItemIndex NewIndex );
     ItemId               GetPreviousAvailableItemId( ItemIndex NewIndex );
@@ -105,8 +105,8 @@ private:
     void                 UpdatefollowingHyperLabels( ItemIndex Index );
 
     // Window overridables
-    void            Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& _rRect) override;
-    void            implInit(vcl::RenderContext& rRenderContext);
+    void            Paint(OutputDevice& rRenderContext, const tools::Rectangle& _rRect) override;
+    void            implInit(OutputDevice& rRenderContext);
 
     std::unique_ptr<RoadmapImpl>    m_pImpl;
 };

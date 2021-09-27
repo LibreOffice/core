@@ -11,7 +11,7 @@
 
 namespace vcl
 {
-BufferDevice::BufferDevice(const VclPtr<vcl::Window>& pWindow, vcl::RenderContext& rRenderContext)
+BufferDevice::BufferDevice(const VclPtr<vcl::Window>& pWindow, OutputDevice& rRenderContext)
     : m_pBuffer(VclPtr<VirtualDevice>::Create(rRenderContext))
     , m_pWindow(pWindow)
     , m_rRenderContext(rRenderContext)
@@ -37,9 +37,9 @@ void BufferDevice::Dispose()
 
 BufferDevice::~BufferDevice() { Dispose(); }
 
-vcl::RenderContext* BufferDevice::operator->() { return m_pBuffer.get(); }
+OutputDevice* BufferDevice::operator->() { return m_pBuffer.get(); }
 
-vcl::RenderContext& BufferDevice::operator*() { return *m_pBuffer; }
+OutputDevice& BufferDevice::operator*() { return *m_pBuffer; }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -112,7 +112,7 @@ void Calendar::ImplInit( WinBits nWinStyle )
     ImplInitSettings();
 }
 
-void Calendar::ApplySettings(vcl::RenderContext& rRenderContext)
+void Calendar::ApplySettings(OutputDevice& rRenderContext)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     maSelColor = rStyleSettings.GetHighlightTextColor();
@@ -456,7 +456,7 @@ sal_uInt16 Calendar::ImplDoHitTest( const Point& rPos, Date& rDate ) const
 namespace
 {
 
-void ImplDrawSpinArrow(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, bool bPrev)
+void ImplDrawSpinArrow(OutputDevice& rRenderContext, const tools::Rectangle& rRect, bool bPrev)
 {
     tools::Long i;
     tools::Long n;
@@ -501,7 +501,7 @@ void ImplDrawSpinArrow(vcl::RenderContext& rRenderContext, const tools::Rectangl
 
 } //end anonymous namespace
 
-void Calendar::ImplDrawSpin(vcl::RenderContext& rRenderContext )
+void Calendar::ImplDrawSpin(OutputDevice& rRenderContext )
 {
     rRenderContext.SetLineColor();
     rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetButtonTextColor());
@@ -519,7 +519,7 @@ void Calendar::ImplDrawSpin(vcl::RenderContext& rRenderContext )
     ImplDrawSpinArrow(rRenderContext, aOutRect, false);
 }
 
-void Calendar::ImplDrawDate(vcl::RenderContext& rRenderContext,
+void Calendar::ImplDrawDate(OutputDevice& rRenderContext,
                             tools::Long nX, tools::Long nY,
                             sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear,
                             bool bOther, sal_Int32 nToday )
@@ -594,7 +594,7 @@ void Calendar::ImplDrawDate(vcl::RenderContext& rRenderContext,
         ShowFocus(aDateRect);
 }
 
-void Calendar::ImplDraw(vcl::RenderContext& rRenderContext)
+void Calendar::ImplDraw(OutputDevice& rRenderContext)
 {
     ImplFormat();
 
@@ -1125,7 +1125,7 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
-void Calendar::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
+void Calendar::Paint( OutputDevice& rRenderContext, const tools::Rectangle& )
 {
     ImplDraw(rRenderContext);
 }

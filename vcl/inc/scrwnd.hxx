@@ -58,12 +58,12 @@ private:
     void                ImplSetRegion(const Bitmap& rRegionBmp);
     using Window::ImplGetMousePointer;
     PointerStyle        ImplGetMousePointer( tools::Long nDistX, tools::Long nDistY );
-    void                ImplDrawWheel(vcl::RenderContext& rRenderContext);
+    void                ImplDrawWheel(OutputDevice& rRenderContext);
     void                ImplRecalcScrollValues();
 
                         DECL_LINK(ImplScrollHdl, Timer *, void);
 
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void        Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void        MouseMove( const MouseEvent& rMEvt ) override;
     virtual void        MouseButtonUp( const MouseEvent& rMEvt ) override;
 

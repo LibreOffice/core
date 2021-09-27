@@ -45,7 +45,7 @@ public:
                                   const OUString& rText, const Image& rImage );
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void    Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
     void            Resize() override;
     void            Show( bool bVisible = true );
     void            SetTipPosPixel( const Point& rTipPos ) { maTipPos = rTipPos; }

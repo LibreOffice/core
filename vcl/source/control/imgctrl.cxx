@@ -122,7 +122,7 @@ void ImageControl::ImplDraw(OutputDevice& rDev, const Point& rPos, const Size& r
     }   // switch ( mnScaleMode )
 }
 
-void ImageControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
+void ImageControl::Paint(OutputDevice& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     ImplDraw(rRenderContext, Point(), GetOutputSizePixel());
 

@@ -58,7 +58,7 @@ private:
     tools::Long ImplCalcThumbPos( tools::Long nPixPos );
     tools::Long ImplCalcThumbPosPix( tools::Long nPos );
     void ImplCalc( bool bUpdate = true );
-    void ImplDraw(vcl::RenderContext& rRenderContext);
+    void ImplDraw(OutputDevice& rRenderContext);
     bool ImplIsPageUp( const Point& rPos );
     bool ImplIsPageDown( const Point& rPos );
     tools::Long ImplSlide( tools::Long nNewPos );
@@ -74,7 +74,7 @@ public:
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void    Tracking( const TrackingEvent& rTEvt ) override;
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void    Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void    Resize() override;
     virtual void    StateChanged( StateChangedType nType ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;

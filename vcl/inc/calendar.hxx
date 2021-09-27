@@ -163,15 +163,15 @@ class Calendar final : public Control
     void         ImplInit( WinBits nWinStyle );
     void         ImplInitSettings();
 
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
+    virtual void ApplySettings(OutputDevice& rRenderContext) override;
 
     void         ImplFormat();
     sal_uInt16   ImplDoHitTest( const Point& rPos, Date& rDate ) const;
-    void         ImplDrawSpin(vcl::RenderContext& rRenderContext);
-    void         ImplDrawDate(vcl::RenderContext& rRenderContext, tools::Long nX, tools::Long nY,
+    void         ImplDrawSpin(OutputDevice& rRenderContext);
+    void         ImplDrawDate(OutputDevice& rRenderContext, tools::Long nX, tools::Long nY,
                                              sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear,
                                              bool bOther, sal_Int32 nToday);
-    void         ImplDraw(vcl::RenderContext& rRenderContext);
+    void         ImplDraw(OutputDevice& rRenderContext);
     void         ImplUpdateDate( const Date& rDate );
     void         ImplUpdateSelection( IntDateSet* pOld );
     void         ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest );
@@ -192,7 +192,7 @@ public:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    Tracking( const TrackingEvent& rMEvt ) override;
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void    Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    Resize() override;
     virtual void    GetFocus() override;
     virtual void    LoseFocus() override;

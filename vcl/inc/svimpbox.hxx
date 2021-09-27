@@ -140,7 +140,7 @@ private:
     bool                IsLineVisible( tools::Long nY ) const;
     void                KeyLeftRight( tools::Long nDiff );
 
-    void                DrawNet(vcl::RenderContext& rRenderContext);
+    void                DrawNet(OutputDevice& rRenderContext);
 
     // ScrollBar-Handler
     DECL_LINK( ScrollUpDownHdl, ScrollBar*, void );
@@ -243,7 +243,7 @@ public:
     void                CollapsingEntry( SvTreeListEntry* pEntry );
     void                EntrySelected( SvTreeListEntry* pEntry, bool bSelect );
 
-    virtual void        Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
+    virtual void        Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect);
     void                MouseButtonDown( const MouseEvent& );
     void                MouseButtonUp( const MouseEvent& );
     void                MouseMove( const MouseEvent&);

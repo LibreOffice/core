@@ -62,7 +62,7 @@ public:
 
     virtual void    Command( const CommandEvent& rCEvt ) override;
 
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void    Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void    Resize() override;
 
     virtual void    GetFocus() override;
@@ -97,7 +97,7 @@ protected:
     TextView*       GetTextView() const;
     ExtTextEngine*  GetTextEngine() const;
 
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
+    virtual void ApplySettings(OutputDevice& rRenderContext) override;
 public:
                     VclMultiLineEdit( vcl::Window* pParent,
                                       WinBits nWinStyle );

@@ -168,7 +168,7 @@ void PriorityHBox::Resize()
     VclHBox::Resize();
 }
 
-void PriorityHBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void PriorityHBox::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     if (!m_bInitialized)
         Initialize();

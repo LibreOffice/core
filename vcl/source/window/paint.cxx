@@ -153,7 +153,7 @@ void PaintBufferGuard::SetPaintRect(const tools::Rectangle& rRectangle)
     m_aPaintRect = rRectangle;
 }
 
-vcl::RenderContext* PaintBufferGuard::GetRenderContext()
+OutputDevice* PaintBufferGuard::GetRenderContext()
 {
     if (mpFrameData->mpBuffer)
         return mpFrameData->mpBuffer;
@@ -321,7 +321,7 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
 namespace vcl
 {
 
-void RenderTools::DrawSelectionBackground(vcl::RenderContext& rRenderContext, vcl::Window const & rWindow,
+void RenderTools::DrawSelectionBackground(OutputDevice& rRenderContext, vcl::Window const & rWindow,
                                           const tools::Rectangle& rRect, sal_uInt16 nHighlight,
                                           bool bChecked, bool bDrawBorder, bool bDrawExtBorderOnly,
                                           Color* pSelectionTextColor, tools::Long nCornerRadius, Color const * pPaintColor)
@@ -473,7 +473,7 @@ void RenderTools::DrawSelectionBackground(vcl::RenderContext& rRenderContext, vc
     rRenderContext.Pop(); // LINECOLOR | FILLCOLOR
 }
 
-void Window::PushPaintHelper(PaintHelper *pHelper, vcl::RenderContext& rRenderContext)
+void Window::PushPaintHelper(PaintHelper *pHelper, OutputDevice& rRenderContext)
 {
     pHelper->SetPop();
 
@@ -1030,15 +1030,15 @@ void Window::ImplUpdateAll()
         GetOutDev()->Flush();
 }
 
-void Window::PrePaint(vcl::RenderContext& /*rRenderContext*/)
+void Window::PrePaint(OutputDevice& /*rRenderContext*/)
 {
 }
 
-void Window::PostPaint(vcl::RenderContext& /*rRenderContext*/)
+void Window::PostPaint(OutputDevice& /*rRenderContext*/)
 {
 }
 
-void Window::Paint(vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect)
+void Window::Paint(OutputDevice& /*rRenderContext*/, const tools::Rectangle& rRect)
 {
     CallEventListeners(VclEventId::WindowPaint, const_cast<tools::Rectangle *>(&rRect));
 }
@@ -1613,7 +1613,7 @@ void Window::PaintToDevice(OutputDevice* pDev, const Point& rPos)
         SetParent( pRealParent );
 }
 
-void Window::Erase(vcl::RenderContext& rRenderContext)
+void Window::Erase(OutputDevice& rRenderContext)
 {
     if (!GetOutDev()->IsDeviceOutputNecessary() || GetOutDev()->ImplIsRecordLayout())
         return;

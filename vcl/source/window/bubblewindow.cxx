@@ -87,7 +87,7 @@ void BubbleWindow::SetTitleAndText( const OUString& rTitle,
     Resize();
 }
 
-void BubbleWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
+void BubbleWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     LineInfo aThickLine( LineStyle::Solid, 2 );
 

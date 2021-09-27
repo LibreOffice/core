@@ -69,7 +69,7 @@ void ImplGetSpinbuttonValue(vcl::Window* pWin,
     rValue.mnLowerPart = bHorz ? ControlPart::ButtonRight : ControlPart::ButtonDown;
 }
 
-bool ImplDrawNativeSpinfield(vcl::RenderContext& rRenderContext, vcl::Window const * pWin, const SpinbuttonValue& rSpinbuttonValue)
+bool ImplDrawNativeSpinfield(OutputDevice& rRenderContext, vcl::Window const * pWin, const SpinbuttonValue& rSpinbuttonValue)
 {
     bool bNativeOK = false;
 
@@ -94,7 +94,7 @@ bool ImplDrawNativeSpinfield(vcl::RenderContext& rRenderContext, vcl::Window con
             tools::Rectangle aClipRect(rSpinbuttonValue.maLowerRect);
             aClipRect.Union(rSpinbuttonValue.maUpperRect);
 
-            vcl::RenderContext* pContext = &rRenderContext;
+            OutputDevice* pContext = &rRenderContext;
             vcl::Region oldRgn;
             Point aPt;
             Size aSize(pBorder->GetOutputSizePixel());    // the size of the border window, i.e., the whole control
@@ -137,7 +137,7 @@ bool ImplDrawNativeSpinfield(vcl::RenderContext& rRenderContext, vcl::Window con
     return bNativeOK;
 }
 
-bool ImplDrawNativeSpinbuttons(vcl::RenderContext& rRenderContext, const SpinbuttonValue& rSpinbuttonValue)
+bool ImplDrawNativeSpinbuttons(OutputDevice& rRenderContext, const SpinbuttonValue& rSpinbuttonValue)
 {
     bool bNativeOK = false;
 
@@ -153,7 +153,7 @@ bool ImplDrawNativeSpinbuttons(vcl::RenderContext& rRenderContext, const Spinbut
 
 }
 
-void ImplDrawSpinButton(vcl::RenderContext& rRenderContext, vcl::Window* pWindow,
+void ImplDrawSpinButton(OutputDevice& rRenderContext, vcl::Window* pWindow,
                         const tools::Rectangle& rUpperRect, const tools::Rectangle& rLowerRect,
                         bool bUpperIn, bool bLowerIn, bool bUpperEnabled, bool bLowerEnabled,
                         bool bHorz, bool bMirrorHorz)
@@ -202,7 +202,7 @@ void ImplDrawSpinButton(vcl::RenderContext& rRenderContext, vcl::Window* pWindow
                           bHorz, bMirrorHorz);
 }
 
-void ImplDrawUpDownButtons(vcl::RenderContext& rRenderContext,
+void ImplDrawUpDownButtons(OutputDevice& rRenderContext,
                            const tools::Rectangle& rUpperRect, const tools::Rectangle& rLowerRect,
                            bool bUpperIn, bool bLowerIn, bool bUpperEnabled, bool bLowerEnabled,
                            bool bHorz, bool bMirrorHorz)
@@ -578,7 +578,7 @@ void SpinField::FillLayoutData() const
         Edit::FillLayoutData();
 }
 
-void SpinField::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void SpinField::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     if (mbSpin)
     {

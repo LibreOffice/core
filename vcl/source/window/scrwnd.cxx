@@ -147,7 +147,7 @@ void ImplWheelWindow::ImplSetWheelMode( WheelMode nWheelMode )
     }
 }
 
-void ImplWheelWindow::ImplDrawWheel(vcl::RenderContext& rRenderContext)
+void ImplWheelWindow::ImplDrawWheel(OutputDevice& rRenderContext)
 {
     int nIndex;
 
@@ -289,7 +289,7 @@ PointerStyle ImplWheelWindow::ImplGetMousePointer( tools::Long nDistX, tools::Lo
     return eStyle;
 }
 
-void ImplWheelWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void ImplWheelWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     ImplDrawWheel(rRenderContext);
 }

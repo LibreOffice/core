@@ -193,7 +193,7 @@ SvLBoxItemType SvLBoxString::GetType() const
 
 namespace
 {
-    void drawSeparator(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRegion)
+    void drawSeparator(OutputDevice& rRenderContext, const tools::Rectangle& rRegion)
     {
         Color aOldLineColor(rRenderContext.GetLineColor());
         const StyleSettings& rStyle = rRenderContext.GetSettings().GetStyleSettings();
@@ -207,7 +207,7 @@ namespace
 }
 
 void SvLBoxString::Paint(
-    const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
+    const Point& rPos, SvTreeListBox& rDev, OutputDevice& rRenderContext,
     const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
 {
     DrawTextFlags nStyle = (rDev.IsEnabled() && !mbDisabled) ? DrawTextFlags::NONE : DrawTextFlags::Disable;
@@ -360,7 +360,7 @@ void SvLBoxButton::ClickHdl( SvTreeListEntry* pEntry )
 }
 
 void SvLBoxButton::Paint(
-    const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
+    const Point& rPos, SvTreeListBox& rDev, OutputDevice& rRenderContext,
     const SvViewDataEntry* /*pView*/, const SvTreeListEntry& /*rEntry*/)
 {
     SvBmp nIndex = SvLBoxButtonData::GetIndex(nItemFlags);
@@ -405,7 +405,7 @@ std::unique_ptr<SvLBoxItem> SvLBoxButton::Clone(SvLBoxItem const * pSource) cons
     return std::unique_ptr<SvLBoxItem>(pNew.release());
 }
 
-void SvLBoxButton::ImplAdjustBoxSize(Size& io_rSize, ControlType i_eType, vcl::RenderContext const & rRenderContext)
+void SvLBoxButton::ImplAdjustBoxSize(Size& io_rSize, ControlType i_eType, OutputDevice const & rRenderContext)
 {
     if (!rRenderContext.IsNativeControlSupported( i_eType, ControlPart::Entire) )
         return;
@@ -509,7 +509,7 @@ void SvLBoxContextBmp::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntr
 }
 
 void SvLBoxContextBmp::Paint(
-    const Point& _rPos, SvTreeListBox& _rDev, vcl::RenderContext& rRenderContext,
+    const Point& _rPos, SvTreeListBox& _rDev, OutputDevice& rRenderContext,
     const SvViewDataEntry* pView, const SvTreeListEntry& rEntry)
 {
 

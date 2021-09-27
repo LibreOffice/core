@@ -237,14 +237,14 @@ private:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
     virtual void    Tracking( const TrackingEvent& rTEvt ) override;
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void    Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void    Resize() override;
     virtual void    GetFocus() override;
     virtual void    LoseFocus() override;
 
     bool            SelectEntries( sal_Int32  nSelect, LB_EVENT_TYPE eLET, bool bShift = false, bool bCtrl = false, bool bSelectPosChange = false );
-    void            ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 nPos);
-    void            ImplDoPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
+    void            ImplPaint(OutputDevice& rRenderContext, sal_Int32 nPos);
+    void            ImplDoPaint(OutputDevice& rRenderContext, const tools::Rectangle& rRect);
     void            ImplCalcMetrics();
     void            ImplUpdateEntryMetrics( ImplEntryType& rEntry );
     void            ImplCallSelect();
@@ -274,7 +274,7 @@ public:
     sal_uInt16      GetDisplayLineCount() const;
     void            SetEntryFlags( sal_Int32  nPos, ListBoxEntryFlags nFlags );
 
-    void            DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32  nPos, bool bDrawImage, bool bDrawText);
+    void            DrawEntry(OutputDevice& rRenderContext, sal_Int32  nPos, bool bDrawImage, bool bDrawText);
 
     void            SelectEntry( sal_Int32  nPos, bool bSelect );
     void            DeselectAll();
@@ -365,7 +365,7 @@ public:
     void SetEdgeBlending(bool bNew) { mbEdgeBlending = bNew; }
 
     using Control::ImplInitSettings;
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
+    virtual void ApplySettings(OutputDevice& rRenderContext) override;
 
 private:
     // ISearchableStringList
@@ -544,14 +544,14 @@ private:
 
     bool            mbEdgeBlending : 1;
 
-    void ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout = false);
+    void ImplDraw(OutputDevice& rRenderContext, bool bLayout = false);
     virtual void  FillLayoutData() const override;
 
 public:
                     ImplWin( vcl::Window* pParent, WinBits nWinStyle );
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void    Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    Resize() override;
     virtual void    GetFocus() override;
     virtual void    LoseFocus() override;
@@ -566,7 +566,7 @@ public:
 
     void            SetMBDownHdl( const Link<void*,void>& rLink ) { maMBDownHdl = rLink; }
 
-    void DrawEntry(vcl::RenderContext& rRenderContext, bool bLayout);
+    void DrawEntry(OutputDevice& rRenderContext, bool bLayout);
 
     bool GetEdgeBlending() const { return mbEdgeBlending; }
     void SetEdgeBlending(bool bNew) { mbEdgeBlending = bNew; }
@@ -574,7 +574,7 @@ public:
     virtual void    ShowFocus(const tools::Rectangle& rRect) override;
 
     using Control::ImplInitSettings;
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
+    virtual void ApplySettings(OutputDevice& rRenderContext) override;
 
 };
 

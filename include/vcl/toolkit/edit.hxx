@@ -89,14 +89,14 @@ private:
     SAL_DLLPRIVATE bool        ImplTruncateToMaxLen( OUString&, sal_Int32 nSelectionLen ) const;
     SAL_DLLPRIVATE void        ImplInitEditData();
     SAL_DLLPRIVATE OUString    ImplGetText() const;
-    SAL_DLLPRIVATE void        ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRectangle);
+    SAL_DLLPRIVATE void        ImplRepaint(OutputDevice& rRenderContext, const tools::Rectangle& rRectangle);
     SAL_DLLPRIVATE void        ImplInvalidateOrRepaint();
     SAL_DLLPRIVATE void        ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uInt8 nMode );
     SAL_DLLPRIVATE void        ImplSetText( const OUString& rStr, const Selection* pNewSelection );
     SAL_DLLPRIVATE void        ImplInsertText( const OUString& rStr, const Selection* pNewSelection = nullptr, bool bIsUserInput = false );
     SAL_DLLPRIVATE static OUString ImplGetValidString( const OUString& rString );
-    SAL_DLLPRIVATE void        ImplClearBackground(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRectangle, tools::Long nXStart, tools::Long nXEnd);
-    SAL_DLLPRIVATE void        ImplPaintBorder(vcl::RenderContext const & rRenderContext);
+    SAL_DLLPRIVATE void        ImplClearBackground(OutputDevice& rRenderContext, const tools::Rectangle& rRectangle, tools::Long nXStart, tools::Long nXEnd);
+    SAL_DLLPRIVATE void        ImplPaintBorder(OutputDevice const & rRenderContext);
     SAL_DLLPRIVATE void        ImplShowCursor( bool bOnlyIfVisible = true );
     SAL_DLLPRIVATE void        ImplAlign();
     SAL_DLLPRIVATE void        ImplAlignAndPaint();
@@ -140,10 +140,10 @@ protected:
 protected:
     Edit(WindowType nType);
     virtual void FillLayoutData() const override;
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
+    virtual void ApplySettings(OutputDevice& rRenderContext) override;
 public:
     // public because needed in button.cxx
-    SAL_DLLPRIVATE bool ImplUseNativeBorder(vcl::RenderContext const & rRenderContext, WinBits nStyle);
+    SAL_DLLPRIVATE bool ImplUseNativeBorder(OutputDevice const & rRenderContext, WinBits nStyle);
 
     Edit( vcl::Window* pParent, WinBits nStyle = WB_BORDER );
     virtual ~Edit() override;
@@ -152,7 +152,7 @@ public:
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void        MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void        KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void        Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void        Resize() override;
     virtual void        Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
     virtual void        GetFocus() override;

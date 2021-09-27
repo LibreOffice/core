@@ -696,7 +696,7 @@ void PushButton::ImplInitSettings( bool bBackground )
     }
 }
 
-void PushButton::ImplDrawPushButtonFrame(vcl::RenderContext& rRenderContext,
+void PushButton::ImplDrawPushButtonFrame(OutputDevice& rRenderContext,
                                          tools::Rectangle& rRect, DrawButtonFlags nStyle)
 {
     if (!(GetStyle() & (WB_RECTSTYLE | WB_SMALLSTYLE)))
@@ -912,7 +912,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice *pDev, SystemTextColorFl
     pDev->Pop();  // restore clipregion
 }
 
-void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
+void PushButton::ImplDrawPushButton(OutputDevice& rRenderContext)
 {
     HideFocus();
 
@@ -1343,7 +1343,7 @@ void PushButton::FillLayoutData() const
     const_cast<PushButton*>(this)->Invalidate();
 }
 
-void PushButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void PushButton::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     const Image& rCustomButtonImage = GetCustomButtonImage();
     if (!!rCustomButtonImage)
@@ -1912,7 +1912,7 @@ void RadioButton::ImplInitSettings( bool bBackground )
     }
 }
 
-void RadioButton::ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext)
+void RadioButton::ImplDrawRadioButtonState(OutputDevice& rRenderContext)
 {
     bool bNativeOK = false;
 
@@ -2166,7 +2166,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, SystemTextColorFlags nSystemText
     pDev->Pop();
 }
 
-void RadioButton::ImplDrawRadioButton(vcl::RenderContext& rRenderContext)
+void RadioButton::ImplDrawRadioButton(OutputDevice& rRenderContext)
 {
     HideFocus();
 
@@ -2438,7 +2438,7 @@ void RadioButton::FillLayoutData() const
     const_cast<RadioButton*>(this)->Invalidate();
 }
 
-void RadioButton::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
+void RadioButton::Paint( OutputDevice& rRenderContext, const tools::Rectangle& )
 {
     ImplDrawRadioButton(rRenderContext);
 }
@@ -3038,7 +3038,7 @@ void CheckBox::ImplInitSettings( bool bBackground )
     }
 }
 
-void CheckBox::ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext)
+void CheckBox::ImplDrawCheckBoxState(OutputDevice& rRenderContext)
 {
     bool bNativeOK = rRenderContext.IsNativeControlSupported(ControlType::Checkbox, ControlPart::Entire);
     if (bNativeOK)
@@ -3126,7 +3126,7 @@ void CheckBox::ImplDraw( OutputDevice* pDev, SystemTextColorFlags nSystemTextCol
     pDev->Pop();
 }
 
-void CheckBox::ImplDrawCheckBox(vcl::RenderContext& rRenderContext)
+void CheckBox::ImplDrawCheckBox(OutputDevice& rRenderContext)
 {
     Size aImageSize = ImplGetCheckImageSize();
     aImageSize.setWidth( CalcZoom( aImageSize.Width() ) );
@@ -3264,7 +3264,7 @@ void CheckBox::FillLayoutData() const
     const_cast<CheckBox*>(this)->Invalidate();
 }
 
-void CheckBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void CheckBox::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     ImplDrawCheckBox(rRenderContext);
 }

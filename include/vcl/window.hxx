@@ -431,7 +431,7 @@ public:
     // transparent background for selected or checked items in toolboxes etc.
     // + selection Color with a text color complementing the selection background
     // + rounded edge
-    static void DrawSelectionBackground(vcl::RenderContext& rRenderContext, vcl::Window const & rWindow,
+    static void DrawSelectionBackground(OutputDevice& rRenderContext, vcl::Window const & rWindow,
                                         const tools::Rectangle& rRect, sal_uInt16 nHighlight,
                                         bool bChecked, bool bDrawBorder, bool bDrawExtBorderOnly,
                                         Color* pSelectionTextColor = nullptr, tools::Long nCornerRadius = 0,
@@ -591,7 +591,7 @@ protected:
     SAL_DLLPRIVATE bool                 ImplSetClipFlagChildren( bool bSysObjOnlySmaller );
     SAL_DLLPRIVATE bool                 ImplSetClipFlagOverlapWindows( bool bSysObjOnlySmaller = false );
 
-    SAL_DLLPRIVATE void                 PushPaintHelper(PaintHelper* pHelper, vcl::RenderContext& rRenderContext);
+    SAL_DLLPRIVATE void                 PushPaintHelper(PaintHelper* pHelper, OutputDevice& rRenderContext);
     SAL_DLLPRIVATE void                 PopPaintHelper(PaintHelper const * pHelper);
 
 private:
@@ -618,8 +618,8 @@ private:
 
     SAL_DLLPRIVATE void                 ImplInitResolutionSettings();
 
-    SAL_DLLPRIVATE void                 ImplPointToLogic(vcl::RenderContext const & rRenderContext, vcl::Font& rFont) const;
-    SAL_DLLPRIVATE void                 ImplLogicToPoint(vcl::RenderContext const & rRenderContext, vcl::Font& rFont) const;
+    SAL_DLLPRIVATE void                 ImplPointToLogic(OutputDevice const & rRenderContext, vcl::Font& rFont) const;
+    SAL_DLLPRIVATE void                 ImplLogicToPoint(OutputDevice const & rRenderContext, vcl::Font& rFont) const;
 
     SAL_DLLPRIVATE bool                 ImplSysObjClip( const vcl::Region* pOldRegion );
     SAL_DLLPRIVATE void                 ImplUpdateSysObjChildrenClip();
@@ -716,7 +716,7 @@ protected:
     // FIXME: this is a hack to workaround missing layout functionality
     virtual void                        ImplAdjustNWFSizes();
 
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext);
+    virtual void ApplySettings(OutputDevice& rRenderContext);
 
 public:
     // Single argument ctors shall be explicit.
@@ -739,11 +739,11 @@ public:
     virtual void                        MouseButtonUp( const MouseEvent& rMEvt );
     virtual void                        KeyInput( const KeyEvent& rKEvt );
     virtual void                        KeyUp( const KeyEvent& rKEvt );
-    virtual void                        PrePaint(vcl::RenderContext& rRenderContext);
-    virtual void                        Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
-    virtual void                        PostPaint(vcl::RenderContext& rRenderContext);
+    virtual void                        PrePaint(OutputDevice& rRenderContext);
+    virtual void                        Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect);
+    virtual void                        PostPaint(OutputDevice& rRenderContext);
 
-    void                                Erase(vcl::RenderContext& rRenderContext);
+    void                                Erase(OutputDevice& rRenderContext);
 
     virtual void                        Draw( ::OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags );
     virtual void                        Move();
@@ -837,9 +837,9 @@ public:
     void                                UpdateSettings( const AllSettings& rSettings, bool bChild = false );
     void                                NotifyAllChildren( DataChangedEvent& rDCEvt );
 
-    void                                SetPointFont(vcl::RenderContext& rRenderContext, const vcl::Font& rFont);
-    vcl::Font                           GetPointFont(vcl::RenderContext const & rRenderContext) const;
-    void                                SetZoomedPointFont(vcl::RenderContext& rRenderContext, const vcl::Font& rFont);
+    void                                SetPointFont(OutputDevice& rRenderContext, const vcl::Font& rFont);
+    vcl::Font                           GetPointFont(OutputDevice const & rRenderContext) const;
+    void                                SetZoomedPointFont(OutputDevice& rRenderContext, const vcl::Font& rFont);
     tools::Long                                GetDrawPixel( ::OutputDevice const * pDev, tools::Long nPixels ) const;
     vcl::Font                           GetDrawPixelFont( ::OutputDevice const * pDev ) const;
 
@@ -847,19 +847,19 @@ public:
     void SetControlFont( const vcl::Font& rFont );
     vcl::Font GetControlFont() const;
     bool IsControlFont() const;
-    void ApplyControlFont(vcl::RenderContext& rRenderContext, const vcl::Font& rDefaultFont);
+    void ApplyControlFont(OutputDevice& rRenderContext, const vcl::Font& rDefaultFont);
 
     void SetControlForeground();
     void SetControlForeground(const Color& rColor);
     const Color& GetControlForeground() const;
     bool IsControlForeground() const;
-    void ApplyControlForeground(vcl::RenderContext& rRenderContext, const Color& rDefaultColor);
+    void ApplyControlForeground(OutputDevice& rRenderContext, const Color& rDefaultColor);
 
     void SetControlBackground();
     void SetControlBackground( const Color& rColor );
     const Color& GetControlBackground() const;
     bool IsControlBackground() const;
-    void ApplyControlBackground(vcl::RenderContext& rRenderContext, const Color& rDefaultColor);
+    void ApplyControlBackground(OutputDevice& rRenderContext, const Color& rDefaultColor);
 
     void                                SetParentClipMode( ParentClipMode nMode = ParentClipMode::NONE );
     ParentClipMode                      GetParentClipMode() const;

@@ -323,7 +323,7 @@ void Slider::ImplCalc( bool bUpdate )
     ImplUpdateRects( bUpdate );
 }
 
-void Slider::ImplDraw(vcl::RenderContext& rRenderContext)
+void Slider::ImplDraw(OutputDevice& rRenderContext)
 {
     // do missing calculations
     if (mbCalcSize)
@@ -759,7 +759,7 @@ void Slider::KeyInput( const KeyEvent& rKEvt )
         Control::KeyInput( rKEvt );
 }
 
-void Slider::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
+void Slider::Paint(OutputDevice& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     ImplDraw(rRenderContext);
 }

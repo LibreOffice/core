@@ -807,7 +807,7 @@ public:
 
     void call_signal_custom_render(UserDrawEvent* pEvent)
     {
-        vcl::RenderContext* pRenderContext = pEvent->GetRenderContext();
+        OutputDevice* pRenderContext = pEvent->GetRenderContext();
         auto nPos = pEvent->GetItemId();
         const tools::Rectangle& rRect = pEvent->GetRect();
         const OUString sId = get_id(nPos);
@@ -1123,7 +1123,7 @@ class SalInstanceDrawingArea : public SalInstanceWidget, public virtual weld::Dr
 private:
     VclPtr<VclDrawingArea> m_xDrawingArea;
 
-    typedef std::pair<vcl::RenderContext&, const tools::Rectangle&> target_and_area;
+    typedef std::pair<OutputDevice&, const tools::Rectangle&> target_and_area;
     DECL_LINK(PaintHdl, target_and_area, void);
     DECL_LINK(ResizeHdl, const Size&, void);
     DECL_LINK(MousePressHdl, const MouseEvent&, bool);

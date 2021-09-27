@@ -1370,7 +1370,7 @@ void Window::ImplInitResolutionSettings()
     }
 }
 
-void Window::ImplPointToLogic(vcl::RenderContext const & rRenderContext, vcl::Font& rFont) const
+void Window::ImplPointToLogic(OutputDevice const & rRenderContext, vcl::Font& rFont) const
 {
     Size aSize = rFont.GetFontSize();
 
@@ -1390,7 +1390,7 @@ void Window::ImplPointToLogic(vcl::RenderContext const & rRenderContext, vcl::Fo
     rFont.SetFontSize(aSize);
 }
 
-void Window::ImplLogicToPoint(vcl::RenderContext const & rRenderContext, vcl::Font& rFont) const
+void Window::ImplLogicToPoint(OutputDevice const & rRenderContext, vcl::Font& rFont) const
 {
     Size aSize = rFont.GetFontSize();
 
@@ -2169,14 +2169,14 @@ void Window::CollectChildren(::std::vector<vcl::Window *>& rAllChildren )
     }
 }
 
-void Window::SetPointFont(vcl::RenderContext& rRenderContext, const vcl::Font& rFont)
+void Window::SetPointFont(OutputDevice& rRenderContext, const vcl::Font& rFont)
 {
     vcl::Font aFont = rFont;
     ImplPointToLogic(rRenderContext, aFont);
     rRenderContext.SetFont(aFont);
 }
 
-vcl::Font Window::GetPointFont(vcl::RenderContext const & rRenderContext) const
+vcl::Font Window::GetPointFont(OutputDevice const & rRenderContext) const
 {
     vcl::Font aFont = rRenderContext.GetFont();
     ImplLogicToPoint(rRenderContext, aFont);
@@ -3839,7 +3839,7 @@ bool WindowOutputDevice::UsePolyPolygonForComplexGradient()
     return meRasterOp != RasterOp::OverPaint;
 }
 
-void Window::ApplySettings(vcl::RenderContext& /*rRenderContext*/)
+void Window::ApplySettings(OutputDevice& /*rRenderContext*/)
 {
 }
 

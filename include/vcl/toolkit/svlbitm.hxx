@@ -140,7 +140,7 @@ public:
     }
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev,
-                       vcl::RenderContext& rRenderContext,
+                       OutputDevice& rRenderContext,
                        const SvViewDataEntry* pView,
                        const SvTreeListEntry& rEntry) override;
 
@@ -153,7 +153,7 @@ class SvLBoxButton final : public SvLBoxItem
     SvLBoxButtonData*   pData;
     SvItemStateFlags nItemFlags;
 
-    static void ImplAdjustBoxSize( Size& io_rCtrlSize, ControlType i_eType, vcl::RenderContext const & pRenderContext);
+    static void ImplAdjustBoxSize( Size& io_rCtrlSize, ControlType i_eType, OutputDevice const & pRenderContext);
 public:
     // An SvLBoxButton can be of two different kinds: an
     // enabled checkbox (the normal kind), or a static image
@@ -171,7 +171,7 @@ public:
 
     virtual void Paint(const Point& rPos,
                        SvTreeListBox& rOutDev,
-                       vcl::RenderContext& rRenderContext,
+                       OutputDevice& rRenderContext,
                        const SvViewDataEntry* pView,
                        const SvTreeListEntry& rEntry) override;
 
@@ -245,7 +245,7 @@ public:
                               SvViewDataItem* pViewData = nullptr) override;
     virtual void Paint(const Point& rPos,
                        SvTreeListBox& rOutDev,
-                       vcl::RenderContext& rRenderContext,
+                       OutputDevice& rRenderContext,
                        const SvViewDataEntry* pView,
                        const SvTreeListEntry& rEntry) override;
 

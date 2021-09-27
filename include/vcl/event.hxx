@@ -222,14 +222,14 @@ class VCL_DLLPUBLIC UserDrawEvent
 {
 private:
     /// RenderContext to which we should draw - can be a VirtualDevice or anything.
-    VclPtr<vcl::RenderContext> mpRenderContext;
+    VclPtr<OutputDevice> mpRenderContext;
 
     tools::Rectangle    maOutRect;
     sal_uInt16          mnItemId;
     bool                mbSelected;
 
 public:
-    UserDrawEvent(vcl::RenderContext* pRenderContext,
+    UserDrawEvent(OutputDevice* pRenderContext,
                   const tools::Rectangle& rOutRect, sal_uInt16 nId, bool bSelected = false)
         : mpRenderContext(pRenderContext)
         , maOutRect( rOutRect )
@@ -238,7 +238,7 @@ public:
     {
     }
 
-    vcl::RenderContext* GetRenderContext() const { return mpRenderContext; }
+    OutputDevice* GetRenderContext() const { return mpRenderContext; }
     const tools::Rectangle&    GetRect() const { return maOutRect; }
     sal_uInt16          GetItemId() const { return mnItemId; }
     bool                IsSelected() const { return mbSelected; }

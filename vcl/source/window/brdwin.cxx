@@ -61,7 +61,7 @@ void Window::ImplCalcSymbolRect( tools::Rectangle& rRect )
 
 } /* namespace vcl */
 
-static void ImplDrawBrdWinSymbol( vcl::RenderContext* pDev,
+static void ImplDrawBrdWinSymbol( OutputDevice* pDev,
                                   const tools::Rectangle& rRect, SymbolType eSymbol )
 {
     // we leave 5% room between the symbol and the button border
@@ -72,7 +72,7 @@ static void ImplDrawBrdWinSymbol( vcl::RenderContext* pDev,
                           pDev->GetSettings().GetStyleSettings().GetButtonTextColor() );
 }
 
-static void ImplDrawBrdWinSymbolButton( vcl::RenderContext* pDev,
+static void ImplDrawBrdWinSymbolButton( OutputDevice* pDev,
                                         const tools::Rectangle& rRect,
                                         SymbolType eSymbol, DrawButtonFlags nState )
 {
@@ -374,7 +374,7 @@ tools::Long ImplNoBorderWindowView::CalcTitleWidth() const
     return 0;
 }
 
-void ImplNoBorderWindowView::DrawWindow(vcl::RenderContext&, const Point*)
+void ImplNoBorderWindowView::DrawWindow(OutputDevice&, const Point*)
 {
 }
 
@@ -573,7 +573,7 @@ tools::Long ImplSmallBorderWindowView::CalcTitleWidth() const
     return 0;
 }
 
-void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, const Point*)
+void ImplSmallBorderWindowView::DrawWindow(OutputDevice& rRenderContext, const Point*)
 {
     WindowBorderStyle nBorderStyle = mpBorderWindow->GetBorderStyle();
     if (nBorderStyle & WindowBorderStyle::NOBORDER)
@@ -1339,7 +1339,7 @@ tools::Long ImplStdBorderWindowView::CalcTitleWidth() const
     return ImplCalcTitleWidth( &maFrameData );
 }
 
-void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, const Point* pOffset)
+void ImplStdBorderWindowView::DrawWindow(OutputDevice& rRenderContext, const Point* pOffset)
 {
     ImplBorderFrameData* pData = &maFrameData;
     ImplBorderWindow* pBorderWindow = pData->mpBorderWindow;
@@ -1613,7 +1613,7 @@ void ImplBorderWindow::Tracking( const TrackingEvent& rTEvt )
         mpBorderView->Tracking( rTEvt );
 }
 
-void ImplBorderWindow::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
+void ImplBorderWindow::Paint( OutputDevice& rRenderContext, const tools::Rectangle& )
 {
     if (mpBorderView)
         mpBorderView->DrawWindow(rRenderContext);

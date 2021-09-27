@@ -133,7 +133,7 @@ public:
     static int GetHeight(const SvViewDataEntry* pData, sal_uInt16 nItemPos);
     void Enable(bool bEnabled) { mbDisabled = !bEnabled; }
 
-    virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext, const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) = 0;
+    virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, OutputDevice& rRenderContext, const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) = 0;
 
     virtual void InitViewData(SvTreeListBox* pView, SvTreeListEntry* pEntry,
                             // If != 0: this Pointer must be used!
@@ -173,8 +173,8 @@ namespace o3tl
 
 struct SvTreeListBoxImpl;
 
-typedef std::pair<vcl::RenderContext&, const SvTreeListEntry&> svtree_measure_args;
-typedef std::tuple<vcl::RenderContext&, const tools::Rectangle&, const SvTreeListEntry&> svtree_render_args;
+typedef std::pair<OutputDevice&, const SvTreeListEntry&> svtree_measure_args;
+typedef std::tuple<OutputDevice&, const tools::Rectangle&, const SvTreeListEntry&> svtree_render_args;
 
 class VCL_DLLPUBLIC SvTreeListBox
                 :public Control
@@ -274,8 +274,8 @@ private:
     // autowidth for the 1st checkbox column
     VCL_DLLPRIVATE void CheckBoxInserted(SvTreeListEntry* pEntry);
 
-    VCL_DLLPRIVATE void DrawCustomEntry(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const SvTreeListEntry& rEntry);
-    VCL_DLLPRIVATE Size MeasureCustomEntry(vcl::RenderContext& rRenderContext, const SvTreeListEntry& rEntry);
+    VCL_DLLPRIVATE void DrawCustomEntry(OutputDevice& rRenderContext, const tools::Rectangle& rRect, const SvTreeListEntry& rEntry);
+    VCL_DLLPRIVATE Size MeasureCustomEntry(OutputDevice& rRenderContext, const SvTreeListEntry& rEntry);
 
     /** Handles the given key event.
 
@@ -477,7 +477,7 @@ protected:
     VCL_DLLPRIVATE void         AdjustEntryHeight();
 
     VCL_DLLPRIVATE void         ImpEntryInserted( SvTreeListEntry* pEntry );
-    VCL_DLLPRIVATE void         PaintEntry1( SvTreeListEntry&, tools::Long nLine, vcl::RenderContext& rRenderContext );
+    VCL_DLLPRIVATE void         PaintEntry1( SvTreeListEntry&, tools::Long nLine, OutputDevice& rRenderContext );
 
     VCL_DLLPRIVATE void         InitTreeView();
     VCL_DLLPRIVATE SvLBoxItem*  GetItem_Impl( SvTreeListEntry*, tools::Long nX, SvLBoxTab** ppTab );
@@ -513,7 +513,7 @@ protected:
 
     void            InitSettings();
 
-    virtual void    ApplySettings(vcl::RenderContext& rRenderContext) override;
+    virtual void    ApplySettings(OutputDevice& rRenderContext) override;
 
     void            CallImplEventListeners(VclEventId nEvent, void* pData);
 
@@ -583,7 +583,7 @@ public:
     virtual bool    EditingEntry( SvTreeListEntry* pEntry );
     virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void    Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;

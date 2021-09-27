@@ -680,8 +680,7 @@ private:
 
 public:
     // OUString is the id of the row, it may be null to measure the height of a generic line
-    typedef std::tuple<vcl::RenderContext&, const tools::Rectangle&, bool, const OUString&>
-        render_args;
+    typedef std::tuple<OutputDevice&, const tools::Rectangle&, bool, const OUString&> render_args;
 
 protected:
     Link<ComboBox&, void> m_aChangeHdl;
@@ -696,14 +695,14 @@ protected:
     virtual void signal_popup_toggled() { m_aPopupToggledHdl.Call(*this); }
 
     Link<render_args, void> m_aRenderHdl;
-    void signal_custom_render(vcl::RenderContext& rDevice, const tools::Rectangle& rRect,
-                              bool bSelected, const OUString& rId)
+    void signal_custom_render(OutputDevice& rDevice, const tools::Rectangle& rRect, bool bSelected,
+                              const OUString& rId)
     {
         m_aRenderHdl.Call(render_args(rDevice, rRect, bSelected, rId));
     }
 
-    Link<vcl::RenderContext&, Size> m_aGetSizeHdl;
-    Size signal_custom_get_size(vcl::RenderContext& rDevice) { return m_aGetSizeHdl.Call(rDevice); }
+    Link<OutputDevice&, Size> m_aGetSizeHdl;
+    Size signal_custom_get_size(OutputDevice& rDevice) { return m_aGetSizeHdl.Call(rDevice); }
 
 public:
     virtual void insert(int pos, const OUString& rStr, const OUString* pId,
@@ -805,10 +804,7 @@ public:
     bool get_value_changed_from_saved() const { return m_sSavedValue != get_active_text(); }
 
     // for custom rendering a row
-    void connect_custom_get_size(const Link<vcl::RenderContext&, Size>& rLink)
-    {
-        m_aGetSizeHdl = rLink;
-    }
+    void connect_custom_get_size(const Link<OutputDevice&, Size>& rLink) { m_aGetSizeHdl = rLink; }
     void connect_custom_render(const Link<render_args, void>& rLink) { m_aRenderHdl = rLink; }
     // call set_custom_renderer after setting custom callbacks
     virtual void set_custom_renderer(bool bOn) = 0;
@@ -857,9 +853,8 @@ public:
     typedef std::pair<const TreeIter&, int> iter_col;
     typedef std::pair<const TreeIter&, OUString> iter_string;
     // OUString is the id of the row, it may be null to measure the height of a generic line
-    typedef std::pair<vcl::RenderContext&, const OUString&> get_size_args;
-    typedef std::tuple<vcl::RenderContext&, const tools::Rectangle&, bool, const OUString&>
-        render_args;
+    typedef std::pair<OutputDevice&, const OUString&> get_size_args;
+    typedef std::tuple<OutputDevice&, const tools::Rectangle&, bool, const OUString&> render_args;
 
 private:
     OUString m_sSavedValue;
@@ -912,14 +907,14 @@ protected:
     OUString signal_query_tooltip(const TreeIter& rIter) { return m_aQueryTooltipHdl.Call(rIter); }
 
     Link<render_args, void> m_aRenderHdl;
-    void signal_custom_render(vcl::RenderContext& rDevice, const tools::Rectangle& rRect,
-                              bool bSelected, const OUString& rId)
+    void signal_custom_render(OutputDevice& rDevice, const tools::Rectangle& rRect, bool bSelected,
+                              const OUString& rId)
     {
         m_aRenderHdl.Call(render_args(rDevice, rRect, bSelected, rId));
     }
 
     Link<get_size_args, Size> m_aGetSizeHdl;
-    Size signal_custom_get_size(vcl::RenderContext& rDevice, const OUString& rId)
+    Size signal_custom_get_size(OutputDevice& rDevice, const OUString& rId)
     {
         return m_aGetSizeHdl.Call(get_size_args(rDevice, rId));
     }
@@ -2189,7 +2184,7 @@ public:
 class VCL_DLLPUBLIC DrawingArea : virtual public Widget
 {
 public:
-    typedef std::pair<vcl::RenderContext&, const tools::Rectangle&> draw_args;
+    typedef std::pair<OutputDevice&, const tools::Rectangle&> draw_args;
 
 protected:
     Link<draw_args, void> m_aDrawHdl;

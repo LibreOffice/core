@@ -250,7 +250,7 @@ void TextView::DeleteSelected()
     ShowCursor();
 }
 
-void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const Point& rStartPos, tools::Rectangle const* pPaintArea, TextSelection const* pSelection)
+void TextView::ImpPaint(OutputDevice& rRenderContext, const Point& rStartPos, tools::Rectangle const* pPaintArea, TextSelection const* pSelection)
 {
     if (!mpImpl->mbPaintSelection)
     {
@@ -275,12 +275,12 @@ void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const Point& rStartP
     mpImpl->mpTextEngine->ImpPaint(&rRenderContext, rStartPos, pPaintArea, pSelection);
 }
 
-void TextView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void TextView::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     ImpPaint(rRenderContext, rRect);
 }
 
-void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void TextView::ImpPaint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     if ( !mpImpl->mpTextEngine->GetUpdateMode() || mpImpl->mpTextEngine->IsInUndo() )
         return;

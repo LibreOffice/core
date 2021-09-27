@@ -479,7 +479,7 @@ void SvxIconChoiceCtrl_Impl::ImpArrange( bool bKeepPredecessors )
     ShowCursor( true );
 }
 
-void SvxIconChoiceCtrl_Impl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void SvxIconChoiceCtrl_Impl::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
 #if defined(OV_DRAWGRID)
     Color aOldColor (rRenderContext.GetLineColor());
@@ -1340,7 +1340,7 @@ void SvxIconChoiceCtrl_Impl::SetUpdateMode( bool bUpdate )
 
 // priorities of the emphasis:  bSelected
 void SvxIconChoiceCtrl_Impl::PaintEmphasis(const tools::Rectangle& rTextRect, bool bSelected,
-                                           vcl::RenderContext& rRenderContext)
+                                           OutputDevice& rRenderContext)
 {
     Color aOldFillColor(rRenderContext.GetFillColor());
 
@@ -1366,7 +1366,7 @@ void SvxIconChoiceCtrl_Impl::PaintEmphasis(const tools::Rectangle& rTextRect, bo
 
 void SvxIconChoiceCtrl_Impl::PaintItem(const tools::Rectangle& rRect,
     IcnViewFieldType eItem, SvxIconChoiceCtrlEntry* pEntry, sal_uInt16 nPaintFlags,
-    vcl::RenderContext& rRenderContext )
+    OutputDevice& rRenderContext )
 {
     if (eItem == IcnViewFieldType::Text)
     {
@@ -1392,7 +1392,7 @@ void SvxIconChoiceCtrl_Impl::PaintItem(const tools::Rectangle& rRect,
     }
 }
 
-void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Point& rPos, vcl::RenderContext& rRenderContext)
+void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Point& rPos, OutputDevice& rRenderContext)
 {
     bool bSelected = false;
 
@@ -2474,7 +2474,7 @@ void SvxIconChoiceCtrl_Impl::ShowFocus ( tools::Rectangle const & rRect )
     aFocus.aRect = rRect;
 }
 
-void SvxIconChoiceCtrl_Impl::DrawFocusRect(vcl::RenderContext& rRenderContext)
+void SvxIconChoiceCtrl_Impl::DrawFocusRect(OutputDevice& rRenderContext)
 {
     rRenderContext.SetLineColor(aFocus.aPenColor);
     rRenderContext.SetFillColor();
@@ -2842,7 +2842,7 @@ const SvxIconChoiceCtrlColumnInfo* SvxIconChoiceCtrl_Impl::GetColumn( sal_uInt16
     return it->second.get();
 }
 
-void SvxIconChoiceCtrl_Impl::DrawHighlightFrame(vcl::RenderContext& rRenderContext, const tools::Rectangle& rBmpRect)
+void SvxIconChoiceCtrl_Impl::DrawHighlightFrame(OutputDevice& rRenderContext, const tools::Rectangle& rBmpRect)
 {
     tools::Rectangle aBmpRect(rBmpRect);
     tools::Long nBorder = 2;

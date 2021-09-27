@@ -113,7 +113,7 @@ void ImplClosePopupToolBox( const VclPtr<vcl::Window>& pWin )
 
 // TODO: Move to common code with the same function in toolbox
 // Draw the ">>" - more indicator at the coordinates
-void lclDrawMoreIndicator(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void lclDrawMoreIndicator(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
     rRenderContext.SetLineColor();
@@ -1348,7 +1348,7 @@ void Menu::SetAccessible(const css::uno::Reference<css::accessibility::XAccessib
     mxAccessible = rxAccessible;
 }
 
-Size Menu::ImplGetNativeCheckAndRadioSize(vcl::RenderContext const & rRenderContext, tools::Long& rCheckHeight, tools::Long& rRadioHeight ) const
+Size Menu::ImplGetNativeCheckAndRadioSize(OutputDevice const & rRenderContext, tools::Long& rCheckHeight, tools::Long& rRadioHeight ) const
 {
     tools::Long nCheckWidth = 0, nRadioWidth = 0;
     rCheckHeight = rRadioHeight = 0;
@@ -1384,7 +1384,7 @@ Size Menu::ImplGetNativeCheckAndRadioSize(vcl::RenderContext const & rRenderCont
     return Size(std::max(nCheckWidth, nRadioWidth), std::max(rCheckHeight, rRadioHeight));
 }
 
-bool Menu::ImplGetNativeSubmenuArrowSize(vcl::RenderContext const & rRenderContext, Size& rArrowSize, tools::Long& rArrowSpacing)
+bool Menu::ImplGetNativeSubmenuArrowSize(OutputDevice const & rRenderContext, Size& rArrowSize, tools::Long& rArrowSpacing)
 {
     ImplControlValue aVal;
     tools::Rectangle aCtrlRegion(tools::Rectangle(Point(), Size(100, 15)));
@@ -1660,7 +1660,7 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
     return aSz;
 }
 
-static void ImplPaintCheckBackground(vcl::RenderContext & rRenderContext, vcl::Window const & rWindow, const tools::Rectangle& i_rRect, bool i_bHighlight)
+static void ImplPaintCheckBackground(OutputDevice & rRenderContext, vcl::Window const & rWindow, const tools::Rectangle& i_rRect, bool i_bHighlight)
 {
     bool bNativeOk = false;
     if (rRenderContext.IsNativeControlSupported(ControlType::Toolbar, ControlPart::Button))
@@ -1683,7 +1683,7 @@ static void ImplPaintCheckBackground(vcl::RenderContext & rRenderContext, vcl::W
     }
 }
 
-static OUString getShortenedString( const OUString& i_rLong, vcl::RenderContext const & rRenderContext, tools::Long i_nMaxWidth )
+static OUString getShortenedString( const OUString& i_rLong, OutputDevice const & rRenderContext, tools::Long i_nMaxWidth )
 {
     sal_Int32 nPos = -1;
     OUString aNonMnem(OutputDevice::GetNonMnemonicString(i_rLong, nPos));
@@ -1700,7 +1700,7 @@ static OUString getShortenedString( const OUString& i_rLong, vcl::RenderContext 
     return aNonMnem;
 }
 
-void Menu::ImplPaintMenuTitle(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) const
+void Menu::ImplPaintMenuTitle(OutputDevice& rRenderContext, const tools::Rectangle& rRect ) const
 {
     // Save previous graphical settings, set new one
     rRenderContext.Push(PushFlags::FONT | PushFlags::FILLCOLOR);
@@ -1735,7 +1735,7 @@ void Menu::ImplPaintMenuTitle(vcl::RenderContext& rRenderContext, const tools::R
     rRenderContext.SetBackground(aOldBackground);
 }
 
-void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
+void Menu::ImplPaint(OutputDevice& rRenderContext, Size const & rSize,
                      sal_uInt16 nBorder, tools::Long nStartY, MenuItemData const * pThisItemOnly,
                      bool bHighlighted, bool bLayout, bool bRollover) const
 {

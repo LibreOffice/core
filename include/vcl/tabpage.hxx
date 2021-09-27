@@ -50,7 +50,7 @@ public:
     virtual         ~TabPage() override;
     virtual void    dispose() override;
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void    Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
 
     virtual void    StateChanged( StateChangedType nStateChange ) override;

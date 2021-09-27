@@ -39,7 +39,7 @@ public:
 
     bool IsEntryInView(SvTreeListEntry* pEntry) const override;
 
-    void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
 
     // returns 0 if position is just past the last entry
     SvTreeListEntry* GetEntry(const Point& rPoint) const override;

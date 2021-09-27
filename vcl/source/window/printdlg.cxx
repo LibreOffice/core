@@ -116,7 +116,7 @@ void PrintDialog::PrintPreviewWindow::Resize()
     preparePreviewBitmap();
 }
 
-void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void PrintDialog::PrintPreviewWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.Push();
     weld::SetPointFont(rRenderContext, rRenderContext.GetSettings().GetStyleSettings().GetLabelFont());
@@ -453,7 +453,7 @@ void PrintDialog::ShowNupOrderWindow::SetDrawingArea(weld::DrawingArea* pDrawing
     SetOutputSizePixel(aSize);
 }
 
-void PrintDialog::ShowNupOrderWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*i_rRect*/)
+void PrintDialog::ShowNupOrderWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle& /*i_rRect*/)
 {
     rRenderContext.SetMapMode(MapMode(MapUnit::MapPixel));
     rRenderContext.SetTextColor(rRenderContext.GetSettings().GetStyleSettings().GetFieldTextColor());

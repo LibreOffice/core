@@ -16791,7 +16791,7 @@ private:
         tools::Rectangle aRect(Point(rect.x, rect.y), Size(rect.width, rect.height));
         aRect = m_xDevice->PixelToLogic(aRect);
         m_xDevice->Erase(aRect);
-        m_aDrawHdl.Call(std::pair<vcl::RenderContext&, const tools::Rectangle&>(*m_xDevice, aRect));
+        m_aDrawHdl.Call(std::pair<OutputDevice&, const tools::Rectangle&>(*m_xDevice, aRect));
         cairo_surface_mark_dirty(m_pSurface);
 
         cairo_set_source_surface(cr, m_pSurface, 0, 0);

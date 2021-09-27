@@ -528,7 +528,7 @@ void VclOutdevTest::testRTL()
 {
     ScopedVclPtrInstance<vcl::Window> pWindow(nullptr, WB_APP | WB_STDWORK);
     pWindow->EnableRTL();
-    vcl::RenderContext& rRenderContext = *pWindow->GetOutDev();
+    OutputDevice& rRenderContext = *pWindow->GetOutDev();
     vcl::BufferDevice pBuffer(pWindow, rRenderContext);
 
     // Without the accompanying fix in place, this test would have failed, because the RTL status

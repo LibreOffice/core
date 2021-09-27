@@ -488,7 +488,7 @@ public:
     virtual vcl::Window *get_child() override;
     virtual const vcl::Window *get_child() const override;
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
     bool HasVisibleBorder() const { return m_eDrawFrameStyle != DrawFrameStyle::NONE; }
     ScrollBar& getVertScrollBar() { return *m_pVScroll; }
     ScrollBar& getHorzScrollBar() { return *m_pHScroll; }
@@ -623,7 +623,7 @@ private:
     void* m_pUserData;
     rtl::Reference<TransferDataContainer> m_xTransferHelper;
     sal_Int8 m_nDragAction;
-    Link<std::pair<vcl::RenderContext&, const tools::Rectangle&>, void> m_aPaintHdl;
+    Link<std::pair<OutputDevice&, const tools::Rectangle&>, void> m_aPaintHdl;
     Link<const Size&, void> m_aResizeHdl;
     Link<const MouseEvent&, bool> m_aMousePressHdl;
     Link<const MouseEvent&, bool> m_aMouseMotionHdl;
@@ -637,9 +637,9 @@ private:
     Link<const Selection&, bool> m_aDeleteSurroundingHdl;
     Link<VclDrawingArea*, bool> m_aStartDragHdl;
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override
     {
-        m_aPaintHdl.Call(std::pair<vcl::RenderContext&, const tools::Rectangle&>(rRenderContext, rRect));
+        m_aPaintHdl.Call(std::pair<OutputDevice&, const tools::Rectangle&>(rRenderContext, rRect));
     }
     virtual void Resize() override
     {
@@ -721,7 +721,7 @@ public:
     {
         return m_pUserData;
     }
-    void SetPaintHdl(const Link<std::pair<vcl::RenderContext&, const tools::Rectangle&>, void>& rLink)
+    void SetPaintHdl(const Link<std::pair<OutputDevice&, const tools::Rectangle&>, void>& rLink)
     {
         m_aPaintHdl = rLink;
     }

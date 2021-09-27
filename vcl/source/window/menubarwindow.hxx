@@ -83,7 +83,7 @@ private:
 
     std::map< sal_uInt16, AddButtonEntry > m_aAddButtons;
 
-    void            HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos);
+    void            HighlightItem(OutputDevice& rRenderContext, sal_uInt16 nPos);
     void    ChangeHighlightItem(sal_uInt16 n, bool bSelectPopupEntry, bool bAllowRestoreFocus = true, bool bDefaultToDocument = true);
 
     sal_uInt16      ImplFindEntry( const Point& rMousePos ) const;
@@ -93,7 +93,7 @@ private:
 
     void            ImplInitStyleSettings();
 
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
+    virtual void ApplySettings(OutputDevice& rRenderContext) override;
 
     DECL_LINK( CloseHdl, ToolBox*, void );
     DECL_LINK( ToolboxEventHdl, VclWindowEvent&, void );
@@ -115,7 +115,7 @@ public:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void    KeyInput( const KeyEvent& rKEvent ) override;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void    Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    Resize() override;
     virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
 

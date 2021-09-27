@@ -163,7 +163,7 @@ void FixedText::ImplDraw(OutputDevice* pDev, SystemTextColorFlags nSystemTextCol
         bFillLayout ? &mxLayoutData->m_aDisplayText : nullptr);
 }
 
-void FixedText::ApplySettings(vcl::RenderContext& rRenderContext)
+void FixedText::ApplySettings(OutputDevice& rRenderContext)
 {
     Control::ApplySettings(rRenderContext);
 
@@ -193,7 +193,7 @@ void FixedText::ApplySettings(vcl::RenderContext& rRenderContext)
     }
 }
 
-void FixedText::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
+void FixedText::Paint( OutputDevice& rRenderContext, const tools::Rectangle& )
 {
     ImplDraw(&rRenderContext, SystemTextColorFlags::NONE, Point(), GetOutputSizePixel());
 }
@@ -442,7 +442,7 @@ SelectableFixedText::SelectableFixedText(vcl::Window* pParent, WinBits nStyle)
     SetControlBackground();
 }
 
-void SelectableFixedText::ApplySettings(vcl::RenderContext& rRenderContext)
+void SelectableFixedText::ApplySettings(OutputDevice& rRenderContext)
 {
     rRenderContext.SetBackground();
 }
@@ -478,7 +478,7 @@ const Color& FixedLine::GetCanonicalTextColor( const StyleSettings& _rStyle ) co
     return _rStyle.GetGroupTextColor();
 }
 
-void FixedLine::ImplDraw(vcl::RenderContext& rRenderContext)
+void FixedLine::ImplDraw(OutputDevice& rRenderContext)
 {
     // we need to measure according to the window, not according to the
     // RenderContext we paint to
@@ -559,7 +559,7 @@ void FixedLine::FillLayoutData() const
     const_cast<FixedLine*>(this)->Invalidate();
 }
 
-void FixedLine::ApplySettings(vcl::RenderContext& rRenderContext)
+void FixedLine::ApplySettings(OutputDevice& rRenderContext)
 {
     Control::ApplySettings(rRenderContext);
 
@@ -584,7 +584,7 @@ void FixedLine::ApplySettings(vcl::RenderContext& rRenderContext)
     }
 }
 
-void FixedLine::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void FixedLine::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     ImplDraw(rRenderContext);
 }
@@ -697,7 +697,7 @@ void FixedBitmap::ImplDraw( OutputDevice* pDev, const Point& rPos, const Size& r
     }
 }
 
-void FixedBitmap::ApplySettings(vcl::RenderContext& rRenderContext)
+void FixedBitmap::ApplySettings(OutputDevice& rRenderContext)
 {
     vcl::Window* pParent = GetParent();
     if (pParent->IsChildTransparentModeEnabled() && !IsControlBackground())
@@ -720,7 +720,7 @@ void FixedBitmap::ApplySettings(vcl::RenderContext& rRenderContext)
     }
 }
 
-void FixedBitmap::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void FixedBitmap::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     ImplDraw(&rRenderContext, Point(), GetOutputSizePixel());
 }
@@ -838,7 +838,7 @@ void FixedImage::ImplDraw( OutputDevice* pDev,
     }
 }
 
-void FixedImage::ApplySettings(vcl::RenderContext& rRenderContext)
+void FixedImage::ApplySettings(OutputDevice& rRenderContext)
 {
     vcl::Window* pParent = GetParent();
     if (pParent && pParent->IsChildTransparentModeEnabled() && !IsControlBackground())
@@ -862,7 +862,7 @@ void FixedImage::ApplySettings(vcl::RenderContext& rRenderContext)
 }
 
 
-void FixedImage::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void FixedImage::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     ImplDraw(&rRenderContext, Point(), GetOutputSizePixel());
 }

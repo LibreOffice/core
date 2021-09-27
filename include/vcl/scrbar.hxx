@@ -73,13 +73,13 @@ private:
     SAL_DLLPRIVATE tools::Long         ImplCalcThumbPos( tools::Long nPixPos );
     SAL_DLLPRIVATE tools::Long         ImplCalcThumbPosPix( tools::Long nPos );
     SAL_DLLPRIVATE void         ImplCalc( bool bUpdate = true );
-    SAL_DLLPRIVATE void         ImplDraw(vcl::RenderContext& rRenderContext);
+    SAL_DLLPRIVATE void         ImplDraw(OutputDevice& rRenderContext);
     using Window::ImplScroll;
     SAL_DLLPRIVATE tools::Long         ImplScroll( tools::Long nNewPos, bool bCallEndScroll );
     SAL_DLLPRIVATE tools::Long         ImplDoAction( bool bCallEndScroll );
     SAL_DLLPRIVATE void         ImplDoMouseAction( const Point& rPos, bool bCallAction = true );
     SAL_DLLPRIVATE void         ImplInvert();
-    SAL_DLLPRIVATE bool         ImplDrawNative(vcl::RenderContext& rRenderContext, sal_uInt16 SystemTextColorFlags);
+    SAL_DLLPRIVATE bool         ImplDrawNative(OutputDevice& rRenderContext, sal_uInt16 SystemTextColorFlags);
     SAL_DLLPRIVATE void         ImplDragThumb( const Point& rMousePos );
     SAL_DLLPRIVATE Size         getCurrentCalcSize() const;
     DECL_DLLPRIVATE_LINK( ImplAutoTimerHdl, Timer*, void );
@@ -92,7 +92,7 @@ public:
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual void Tracking(const TrackingEvent& rTEvt) override;
     virtual void KeyInput(const KeyEvent& rKEvt) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void Draw(OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags) override;
     virtual void Move() override;
     virtual void Resize() override;
@@ -101,7 +101,7 @@ public:
     virtual bool PreNotify(NotifyEvent& rNEvt) override;
     virtual void GetFocus() override;
     virtual void LoseFocus() override;
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
+    virtual void ApplySettings(OutputDevice& rRenderContext) override;
 
     using Window::Scroll;
     void            Scroll();
@@ -144,7 +144,7 @@ private:
     using Window::ImplInit;
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
 
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
+    virtual void ApplySettings(OutputDevice& rRenderContext) override;
 
 public:
     explicit        ScrollBarBox( vcl::Window* pParent, WinBits nStyle = 0 );

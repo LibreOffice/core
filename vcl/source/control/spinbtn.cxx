@@ -163,7 +163,7 @@ void SpinButton::Draw(OutputDevice* pDev, const Point& rPos, SystemTextColorFlag
     pDev->Pop();
 }
 
-void SpinButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
+void SpinButton::Paint(OutputDevice& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     HideFocus();
 

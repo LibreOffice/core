@@ -1124,13 +1124,13 @@ VclPtr<VirtualDevice> SystemWindow::createScreenshot()
     return xOutput;
 }
 
-void SystemWindow::PrePaint(vcl::RenderContext& rRenderContext)
+void SystemWindow::PrePaint(OutputDevice& rRenderContext)
 {
     Window::PrePaint(rRenderContext);
     mbPaintComplete = false;
 }
 
-void SystemWindow::PostPaint(vcl::RenderContext& rRenderContext)
+void SystemWindow::PostPaint(OutputDevice& rRenderContext)
 {
     Window::PostPaint(rRenderContext);
     mbPaintComplete = true;

@@ -140,7 +140,7 @@ void ImplAnimView::getPosSize( const AnimationBitmap& rAnimationBitmap, Point& r
 
 void ImplAnimView::drawToPos( sal_uLong nPos )
 {
-    VclPtr<vcl::RenderContext> pRenderContext = mpRenderContext;
+    VclPtr<OutputDevice> pRenderContext = mpRenderContext;
 
     vcl::PaintBufferGuardPtr pGuard;
     if (mpRenderContext->GetOutDevType() == OUTDEV_WINDOW)
@@ -174,7 +174,7 @@ void ImplAnimView::drawToPos( sal_uLong nPos )
 
 void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
 {
-    VclPtr<vcl::RenderContext> pRenderContext = mpRenderContext;
+    VclPtr<OutputDevice> pRenderContext = mpRenderContext;
 
     vcl::PaintBufferGuardPtr pGuard;
     if (!pVDev && mpRenderContext->GetOutDevType() == OUTDEV_WINDOW)

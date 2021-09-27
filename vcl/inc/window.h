@@ -410,7 +410,7 @@ public:
     /// If this is called, then the dtor will also copy rRectangle to the window from the buffer, before restoring the state.
     void SetPaintRect(const tools::Rectangle& rRectangle);
     /// Returns either the frame's buffer or the window, in case of no buffering.
-    vcl::RenderContext* GetRenderContext();
+    OutputDevice* GetRenderContext();
 };
 typedef std::unique_ptr<PaintBufferGuard, o3tl::default_delete<PaintBufferGuard>> PaintBufferGuardPtr;
 }
