@@ -39,6 +39,30 @@
       },
       "revId": "1765630cac0382dcb2b4bd97a717cf03bc3ba6e8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "169063e1_a9ecba11",
+        "filename": "sw/qa/uitest/writer_tests7/tdf144439.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-09-27T10:54:18Z",
+      "side": 1,
+      "message": "you need to get the child you want to select and then select it. Fixed in the latest patch",
+      "parentUuid": "d9a64d62_4707131f",
+      "range": {
+        "startLine": 54,
+        "startChar": 16,
+        "endLine": 54,
+        "endChar": 39
+      },
+      "revId": "1765630cac0382dcb2b4bd97a717cf03bc3ba6e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
