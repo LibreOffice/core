@@ -6569,10 +6569,10 @@ static bool lcl_guessQFormat(const OUString& rName, sal_uInt16 nWwId)
 }
 
 void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
-        sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nWwId, sal_uInt16 nId, bool bAutoUpdate )
+        sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nLink, sal_uInt16 nWwId, sal_uInt16 nId, bool bAutoUpdate )
 {
     bool bQFormat = false, bUnhideWhenUsed = false, bSemiHidden = false, bLocked = false, bDefault = false, bCustomStyle = false;
-    OUString aLink, aRsid, aUiPriority;
+    OUString aRsid, aUiPriority;
     rtl::Reference<FastAttributeList> pStyleAttributeList = FastSerializerHelper::createAttrList();
     uno::Any aAny;
     if (eType == STYLE_TYPE_PARA || eType == STYLE_TYPE_CHAR)
@@ -6593,8 +6593,6 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
             aUiPriority = rProp.Value.get<OUString>();
         else if (rProp.Name == "qFormat")
             bQFormat = true;
-        else if (rProp.Name == "link")
-            aLink = rProp.Value.get<OUString>();
         else if (rProp.Name == "rsid")
             aRsid = rProp.Value.get<OUString>();
         else if (rProp.Name == "unhideWhenUsed")
@@ -6646,8 +6644,11 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
                 FSNS( XML_w, XML_val ), m_rExport.m_pStyles->GetStyleId(nNext) );
     }
 
-    if (!aLink.isEmpty())
-        m_pSerializer->singleElementNS(XML_w, XML_link, FSNS(XML_w, XML_val), aLink);
+    if (nLink != 0x0FFF && (eType == STYLE_TYPE_PARA || eType == STYLE_TYPE_CHAR))
+    {
+        m_pSerializer->singleElementNS(XML_w, XML_link, FSNS(XML_w, XML_val),
+                                       m_rExport.m_pStyles->GetStyleId(nLink));
+    }
 
     if ( bAutoUpdate )
         m_pSerializer->singleElementNS(XML_w, XML_autoRedefine);

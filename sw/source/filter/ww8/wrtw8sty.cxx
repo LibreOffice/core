@@ -403,7 +403,7 @@ void WW8AttributeOutput::EndStyle()
 }
 
 void WW8AttributeOutput::StartStyle( const OUString& rName, StyleType eType, sal_uInt16 nWwBase,
-    sal_uInt16 nWwNext, sal_uInt16 nWwId, sal_uInt16 /*nId*/, bool bAutoUpdate )
+    sal_uInt16 nWwNext, sal_uInt16 /*nWwLink*/, sal_uInt16 nWwId, sal_uInt16 /*nId*/, bool bAutoUpdate )
 {
     sal_uInt8 aWW8_STD[ sizeof( WW8_STD ) ] = {};
     sal_uInt8* pData = aWW8_STD;
@@ -549,7 +549,7 @@ void WW8AttributeOutput::EndStyleProperties( bool /*bParProp*/ )
     ShortToSVBT16( nLen, pUpxLen );                 // add default length
 }
 
-void MSWordStyles::GetStyleData( SwFormat* pFormat, bool& bFormatColl, sal_uInt16& nBase, sal_uInt16& nNext )
+void MSWordStyles::GetStyleData( SwFormat* pFormat, bool& bFormatColl, sal_uInt16& nBase, sal_uInt16& nNext, sal_uInt16& nLink )
 {
     bFormatColl = pFormat->Which() == RES_TXTFMTCOLL || pFormat->Which() == RES_CONDTXTFMTCOLL;
 
@@ -561,12 +561,26 @@ void MSWordStyles::GetStyleData( SwFormat* pFormat, bool& bFormatColl, sal_uInt1
         nBase = GetSlot( pFormat->DerivedFrom() );
 
     SwFormat* pNext;
+    const SwFormat* pLink = nullptr;
     if ( bFormatColl )
-        pNext = &static_cast<SwTextFormatColl*>(pFormat)->GetNextTextFormatColl();
+    {
+        auto pFormatColl = static_cast<SwTextFormatColl*>(pFormat);
+        pNext = &pFormatColl->GetNextTextFormatColl();
+        pLink = pFormatColl->GetLinkedCharFormat();
+    }
     else
+    {
         pNext = pFormat; // CharFormat: next CharFormat == self
+        auto pCharFormat = static_cast<SwCharFormat*>(pFormat);
+        pLink = pCharFormat->GetLinkedParaFormat();
+    }
 
     nNext = GetSlot( pNext );
+
+    if (pLink)
+    {
+        nLink = GetSlot(pLink);
+    }
 }
 
 void WW8AttributeOutput::DefaultStyle()
@@ -577,7 +591,7 @@ void WW8AttributeOutput::DefaultStyle()
 void MSWordStyles::OutputStyle(const SwNumRule* pNumRule, sal_uInt16 nPos)
 {
     m_rExport.AttrOutput().StartStyle( pNumRule->GetName(), STYLE_TYPE_LIST,
-            /*nBase =*/ 0, /*nWwNext =*/ 0, /*nWWId =*/ 0, nPos,
+            /*nBase =*/ 0, /*nWwNext =*/ 0, /*nWwLink =*/ 0, /*nWWId =*/ 0, nPos,
             /*bAutoUpdateFormat =*/ false );
 
     m_rExport.AttrOutput().EndStyle();
@@ -592,8 +606,9 @@ void MSWordStyles::OutputStyle( SwFormat* pFormat, sal_uInt16 nPos )
     {
         bool bFormatColl;
         sal_uInt16 nBase, nWwNext;
+        sal_uInt16 nWwLink = 0x0FFF;
 
-        GetStyleData( pFormat, bFormatColl, nBase, nWwNext );
+        GetStyleData(pFormat, bFormatColl, nBase, nWwNext, nWwLink);
 
         OUString aName = pFormat->GetName();
         // We want to map LO's default style to Word's "Normal" style.
@@ -641,7 +656,7 @@ void MSWordStyles::OutputStyle( SwFormat* pFormat, sal_uInt16 nPos )
         }
 
         m_rExport.AttrOutput().StartStyle( aName, (bFormatColl ? STYLE_TYPE_PARA : STYLE_TYPE_CHAR),
-                nBase, nWwNext, GetWWId( *pFormat ), nPos,
+                nBase, nWwNext, nWwLink, GetWWId( *pFormat ), nPos,
                 pFormat->IsAutoUpdateFormat() );
 
         if ( bFormatColl )

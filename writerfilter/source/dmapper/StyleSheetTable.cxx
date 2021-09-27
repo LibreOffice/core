@@ -75,6 +75,7 @@ TableStyleSheetEntry::TableStyleSheetEntry( StyleSheetEntry const & rEntry )
     nStyleTypeCode = STYLE_TYPE_TABLE;
     sBaseStyleIdentifier = rEntry.sBaseStyleIdentifier;
     sNextStyleIdentifier = rEntry.sNextStyleIdentifier;
+    sLinkStyleIdentifier = rEntry.sLinkStyleIdentifier;
     sStyleName = rEntry.sStyleName;
     sStyleIdentifierD = rEntry.sStyleIdentifierD;
 }
@@ -556,6 +557,9 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 pTableEntry->AppendInteropGrabBag(aValue);
             }
             break;
+        case NS_ooxml::LN_CT_Style_link:
+            m_pImpl->m_pCurrentEntry->sLinkStyleIdentifier = sStringValue;
+            break;
         case NS_ooxml::LN_CT_Style_next:
             m_pImpl->m_pCurrentEntry->sNextStyleIdentifier = sStringValue;
             break;
@@ -591,7 +595,6 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_Style_semiHidden:
         case NS_ooxml::LN_CT_Style_unhideWhenUsed:
         case NS_ooxml::LN_CT_Style_uiPriority:
-        case NS_ooxml::LN_CT_Style_link:
         case NS_ooxml::LN_CT_Style_locked:
             if (m_pImpl->m_pCurrentEntry->nStyleTypeCode != STYLE_TYPE_UNKNOWN)
             {
@@ -624,12 +627,6 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 {
                     aValue.Name = "uiPriority";
                     aValue.Value <<= OUString::number(nIntValue);
-                }
-                break;
-                case NS_ooxml::LN_CT_Style_link:
-                {
-                    aValue.Name = "link";
-                    aValue.Value <<= sStringValue;
                 }
                 break;
                 case NS_ooxml::LN_CT_Style_locked:
@@ -1006,6 +1003,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
         {
             std::vector< ::std::pair<OUString, uno::Reference<style::XStyle>> > aMissingParent;
             std::vector< ::std::pair<OUString, uno::Reference<style::XStyle>> > aMissingFollow;
+            std::vector<std::pair<OUString, uno::Reference<style::XStyle>>> aMissingLink;
             std::vector<beans::PropertyValue> aTableStylesVec;
             for( auto& pEntry : m_pImpl->m_aStyleSheetEntries )
             {
@@ -1015,6 +1013,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                 if( pEntry->nStyleTypeCode == STYLE_TYPE_CHAR || pEntry->nStyleTypeCode == STYLE_TYPE_PARA || pEntry->nStyleTypeCode == STYLE_TYPE_LIST )
                 {
                     bool bParaStyle = pEntry->nStyleTypeCode == STYLE_TYPE_PARA;
+                    bool bCharStyle = pEntry->nStyleTypeCode == STYLE_TYPE_CHAR;
                     bool bListStyle = pEntry->nStyleTypeCode == STYLE_TYPE_LIST;
                     bool bInsert = false;
                     uno::Reference< container::XNameContainer > xStyles = bParaStyle ? xParaStyles : (bListStyle ? xNumberingStyles : xCharStyles);
@@ -1136,6 +1135,19 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                     }
 
                     auto aPropValues = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(pEntry->pProperties->GetPropertyValues());
+
+                    if (bParaStyle || bCharStyle)
+                    {
+                        // delay adding LinkStyle property: all styles need to be created first
+                        if (!pEntry->sLinkStyleIdentifier.isEmpty())
+                        {
+                            StyleSheetEntryPtr pLinkStyle
+                                = FindStyleSheetByISTD(pEntry->sLinkStyleIdentifier);
+                            if (pLinkStyle && !pLinkStyle->sStyleName.isEmpty())
+                                aMissingLink.emplace_back(ConvertStyleName(pLinkStyle->sStyleName),
+                                                          xStyle);
+                        }
+                    }
 
                     if( bParaStyle )
                     {
@@ -1318,6 +1330,23 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                     xPropertySet->setPropertyValue( "FollowStyle", uno::makeAny(iter.first) );
                 }
                 catch( uno::Exception & ) {}
+            }
+
+            // Update the styles that were created before their linked styles.
+            for (auto const& rLinked : aMissingLink)
+            {
+                try
+                {
+                    uno::Reference<beans::XPropertySet> xPropertySet(rLinked.second,
+                                                                     uno::UNO_QUERY);
+                    xPropertySet->setPropertyValue("LinkStyle", uno::makeAny(rLinked.first));
+                }
+                catch (uno::Exception&)
+                {
+                    TOOLS_WARN_EXCEPTION(
+                        "writerfilter",
+                        "StyleSheetTable::ApplyStyleSheets: failed to set LinkStyle");
+                }
             }
 
             if (!aTableStylesVec.empty())
