@@ -51,6 +51,9 @@
         <col id="0" translatable="yes" context="borderpage|linewidthlb">Thick</col>
       </row>
       <row>
+        <col id="0" translatable="yes" context="borderpage|linewidthlb">Extra thick</col>
+      </row>
+      <row>
         <col id="0" translatable="yes" context="borderpage|linewidthlb">Custom</col>
       </row>
     </data>
