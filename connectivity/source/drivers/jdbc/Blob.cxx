@@ -135,7 +135,7 @@ sal_Int64 SAL_CALL java_sql_Blob::positionOfBlob( const css::uno::Reference< css
     ::dbtools::throwFeatureNotImplementedSQLException( "XBlob::positionOfBlob", *this );
     // this was put here in CWS warnings01. The previous implementation was defective, as it did ignore
     // the pattern parameter. Since the effort for proper implementation is rather high - we would need
-    // to translated patter into a byte[] -, we defer this functionality for the moment (hey, it was
+    // to translated pattern into a byte[] -, we defer this functionality for the moment (hey, it was
     // unusable, anyway)
     // #i57457#
     return 0;
