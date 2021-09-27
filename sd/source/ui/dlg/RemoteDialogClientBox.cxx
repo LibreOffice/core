@@ -24,10 +24,6 @@
 
 #include <vcl/svapp.hxx>
 
-using namespace std;
-
-using namespace ::com::sun::star;
-
 namespace sd {
 
 //                          struct ClientBoxEntry
@@ -107,7 +103,7 @@ void ClientBox::populateEntries()
 #ifdef ENABLE_SDREMOTE
     RemoteServer::ensureDiscoverable();
 
-    vector< std::shared_ptr< ClientInfo > > aClients( RemoteServer::getClients() );
+    std::vector< std::shared_ptr< ClientInfo > > aClients( RemoteServer::getClients() );
 
     for ( const auto& rxClient : aClients )
     {
