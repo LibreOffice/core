@@ -1419,6 +1419,18 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf127118)
     assertXPath(pXmlDoc, "/root/page[2]/body/tab/row[1]/cell[1]/txt[1]", "WritingMode", "VertBTLR");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf141220)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf141220.docx");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nShapeTop
+        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject/bounds", "top").toInt32();
+    sal_Int32 nTextBoxTop = getXPath(pXmlDoc, "//anchored/fly/infos/bounds", "top").toInt32();
+    // Make sure the textbox stays inside the shape.
+    CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(15), nTextBoxTop - nShapeTop);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf121509)
 {
     auto pDoc = createSwDoc(DATA_DIRECTORY, "Tdf121509.odt");
