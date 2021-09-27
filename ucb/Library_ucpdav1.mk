@@ -41,6 +41,7 @@ $(eval $(call gb_Library_add_exception_objects,ucpdav1,\
 	ucb/source/ucp/webdav-curl/DAVResourceAccess \
 	ucb/source/ucp/webdav-curl/DAVSessionFactory \
 	ucb/source/ucp/webdav-curl/DateTimeHelper \
+	ucb/source/ucp/webdav-curl/SerfLockStore \
 	ucb/source/ucp/webdav-curl/UCBDeadPropertyValue \
 	ucb/source/ucp/webdav-curl/webdavcontent \
 	ucb/source/ucp/webdav-curl/webdavcontentcaps \
