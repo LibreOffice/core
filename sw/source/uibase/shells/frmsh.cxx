@@ -1135,7 +1135,7 @@ void SwFrameShell::ExecFrameStyle(SfxRequest const & rReq)
                     {
                         aBorderLine.SetBorderLineStyle(
                                 SvxBorderLineStyle::SOLID);
-                        aBorderLine.SetWidth( DEF_LINE_WIDTH_0 );
+                        aBorderLine.SetWidth( SvxBorderLineWidth::Hairline );
                     }
                     //Set distance only if the request is received from the controller.
 
