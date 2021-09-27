@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fc4a52d_7dacdfc8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-09-27T14:24:46Z",
+      "side": 1,
+      "message": "@Tünde: very nice fix and refactorization!\n\nA question about the fix: documentProtection still works, as before, i.e. it\u0027s possible to edit without password, e.g. using Edit option of the local menu. This is better now, than applying password verification here, too, because it seems for me, writeProtection password verification doesn\u0027t work for passwords longer than 1 character. Is that possible?",
+      "revId": "947614b1c7887fca0de0d933e050c0fd05870a5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
