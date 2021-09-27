@@ -47,6 +47,7 @@ public:
 
     void testNonPlaceableWmf();
     void testTdf88163NonPlaceableWmf();
+    void testTdf88163PlaceableWmf();
     void testSine();
     void testEmfProblem();
     void testEmfLineStyles();
@@ -59,6 +60,7 @@ public:
     CPPUNIT_TEST_SUITE(WmfTest);
     CPPUNIT_TEST(testNonPlaceableWmf);
     CPPUNIT_TEST(testTdf88163NonPlaceableWmf);
+    CPPUNIT_TEST(testTdf88163PlaceableWmf);
     CPPUNIT_TEST(testSine);
     CPPUNIT_TEST(testEmfProblem);
     CPPUNIT_TEST(testEmfLineStyles);
@@ -138,6 +140,47 @@ void WmfTest::testTdf88163NonPlaceableWmf()
     assertXPath(pDoc, "/metafile/push[2]/textarray[3]", "x", "20769");
     // Fails without the fix: Expected: 4077, Actual: 4062
     assertXPath(pDoc, "/metafile/push[2]/textarray[3]", "y", "4077");
+}
+
+void WmfTest::testTdf88163PlaceableWmf()
+{
+    OUString fileName(u"tdf88163-wrong-font-size.wmf");
+    SvFileStream aFileStream(getFullUrl(fileName), StreamMode::READ);
+    GDIMetaFile aGDIMetaFile;
+    ReadWindowMetafile(aFileStream, aGDIMetaFile);
+
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
+
+    CPPUNIT_ASSERT(pDoc);
+
+    // These values come from the fix for tdf#88163
+
+    // Font 'Roman' and its height can vary according to the platform
+    // The fix does not affect the font size
+    // Linux: 300 - Mac: 309 - Windows: 316
+    auto x = getXPath(pDoc, "/metafile/push[2]/font[1]", "height");
+    CPPUNIT_ASSERT_MESSAGE(fileName.toUtf8().getStr(), x.toInt32() > 290);
+    CPPUNIT_ASSERT_MESSAGE(fileName.toUtf8().getStr(), x.toInt32() < 320);
+
+    // Fails without the fix: Expected: 1900, Actual: 19818
+    assertXPath(pDoc, "/metafile", "height", "1900");
+
+    // Fails without the fix: Expected: 704, Actual: 7336
+    assertXPath(pDoc, "/metafile/push[2]/textarray[1]", "x", "704");
+    // Fails without the fix: Expected: 394, Actual: 4110
+    assertXPath(pDoc, "/metafile/push[2]/textarray[1]", "y", "394");
+
+    // Fails without the fix: Expected: 573, Actual: 5971
+    assertXPath(pDoc, "/metafile/push[2]/textarray[2]", "x", "573");
+    // Fails without the fix: Expected: 1556, Actual: 16230
+    assertXPath(pDoc, "/metafile/push[2]/textarray[2]", "y", "1556");
+
+    // Fails without the fix: Expected: 1987, Actual: 20706
+    assertXPath(pDoc, "/metafile/push[2]/textarray[3]", "x", "1987");
+    // Fails without the fix: Expected: 390, Actual: 4068
+    assertXPath(pDoc, "/metafile/push[2]/textarray[3]", "y", "390");
 }
 
 void WmfTest::testSine()
