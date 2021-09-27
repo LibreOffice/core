@@ -56,6 +56,23 @@
       "message": "Just to be sure, could you please increase the file size to, say, 30000 characters? And maybe better just generate the input file dynamically, to avoid being limited to what we may reasonably store in the source tree, and be able to test with arbitrarily long data, even say 10 M?",
       "revId": "e1c50d65452b1edf0804e0b176f228aaf8a18a5a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0380324_f5111c05",
+        "filename": "sw/source/filter/ascii/parasc.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-27T09:48:08Z",
+      "side": 1,
+      "message": "We skip the trailing empty paragraph here",
+      "revId": "e1c50d65452b1edf0804e0b176f228aaf8a18a5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
