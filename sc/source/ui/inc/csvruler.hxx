@@ -140,11 +140,11 @@ private:
 
     // painting ---------------------------------------------------------------
 protected:
-    virtual void                Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
+    virtual void                Paint( OutputDevice& rRenderContext, const tools::Rectangle& ) override;
 
 public:
     /** Redraws the entire ruler. */
-    void                        ImplRedraw(vcl::RenderContext& rRenderContext);
+    void                        ImplRedraw(OutputDevice& rRenderContext);
 
 private:
     /** Returns the width of the control. */

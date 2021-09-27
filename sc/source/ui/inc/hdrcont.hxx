@@ -80,7 +80,7 @@ protected:
 
                     // Window overrides
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void    Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
 
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;

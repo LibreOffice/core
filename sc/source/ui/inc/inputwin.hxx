@@ -113,7 +113,7 @@ public:
     DECL_LINK(ModifyHdl, LinkParamNone*, void);
 
 protected:
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void    Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
 
     virtual bool    MouseMove( const MouseEvent& rMEvt ) override;
     virtual bool    MouseButtonDown( const MouseEvent& rMEvt ) override;
@@ -287,7 +287,7 @@ public:
     virtual         ~ScInputWindow() override;
     virtual void    dispose() override;
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void    Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    PixelInvalidate(const tools::Rectangle* pRectangle) override;
     virtual void    setPosSizePixel( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
                                      PosSizeFlags nFlags = PosSizeFlags::All ) override;

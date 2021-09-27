@@ -1061,12 +1061,12 @@ void ScCsvGrid::ConfigurationChanged( utl::ConfigurationBroadcaster*, Configurat
 
 // painting -------------------------------------------------------------------
 
-void ScCsvGrid::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void ScCsvGrid::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     ImplRedraw(rRenderContext);
 }
 
-void ScCsvGrid::ImplRedraw(vcl::RenderContext& rRenderContext)
+void ScCsvGrid::ImplRedraw(OutputDevice& rRenderContext)
 {
     if( IsVisible() )
     {

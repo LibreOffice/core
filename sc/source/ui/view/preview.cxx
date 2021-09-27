@@ -617,7 +617,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
     GetOutDev()->DrawRect( PixelToLogic( aPixel ) );
 }
 
-void ScPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& /* rRect */ )
+void ScPreview::Paint( OutputDevice& /*rRenderContext*/, const tools::Rectangle& /* rRect */ )
 {
     bool bWasInPaint = bInPaint;        // nested calls shouldn't be necessary, but allow for now
     bInPaint = true;

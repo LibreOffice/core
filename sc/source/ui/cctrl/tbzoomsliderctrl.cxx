@@ -361,12 +361,12 @@ void ScZoomSlider::UpdateFromItem(const SvxZoomSliderItem* pZoomSliderItem)
        Invalidate(aRect);
 }
 
-void ScZoomSlider::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
+void ScZoomSlider::Paint(OutputDevice& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     DoPaint(rRenderContext);
 }
 
-void ScZoomSlider::DoPaint(vcl::RenderContext& rRenderContext)
+void ScZoomSlider::DoPaint(OutputDevice& rRenderContext)
 {
     if (mbOmitPaint)
         return;

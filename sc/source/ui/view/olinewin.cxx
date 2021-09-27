@@ -615,7 +615,7 @@ const std::u16string_view aLevelBmps[]=
     u"" RID_BMP_LEVEL8
 };
 
-void ScOutlineWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& /* rRect */ )
+void ScOutlineWindow::Paint( OutputDevice& /*rRenderContext*/, const tools::Rectangle& /* rRect */ )
 {
     tools::Long nEntriesSign = mbMirrorEntries ? -1 : 1;
     tools::Long nLevelsSign  = mbMirrorLevels  ? -1 : 1;

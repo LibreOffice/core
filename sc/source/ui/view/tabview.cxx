@@ -85,7 +85,7 @@ ScCornerButton::~ScCornerButton()
 {
 }
 
-void ScCornerButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void ScCornerButton::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     SetBackground(rStyleSettings.GetFaceColor());
