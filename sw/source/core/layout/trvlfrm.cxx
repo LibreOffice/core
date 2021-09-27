@@ -151,7 +151,7 @@ static SwCursorOszControl g_OszCtrl = { nullptr, nullptr, nullptr };
 bool SwLayoutFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
                                SwCursorMoveState* pCMS, bool ) const
 {
-    vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
+    OutputDevice* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
     bool bRet = false;
     const SwFrame *pFrame = Lower();
     while ( !bRet && pFrame )
@@ -472,7 +472,7 @@ bool SwRootFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
 bool SwCellFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
                              SwCursorMoveState* pCMS, bool ) const
 {
-    vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
+    OutputDevice* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
     // cell frame does not necessarily have a lower (split table cell)
     if ( !Lower() )
         return false;
@@ -540,7 +540,7 @@ bool SwCellFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
 bool SwFlyFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
                             SwCursorMoveState* pCMS, bool ) const
 {
-    vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
+    OutputDevice* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
     g_OszCtrl.Entry( this );
 
     //If the Points lies inside the Fly, we try hard to set the Cursor inside it.
@@ -996,7 +996,7 @@ sal_uInt16 SwRootFrame::GetCurrPage( const SwPaM *pActualCursor ) const
  */
 sal_uInt16 SwRootFrame::SetCurrPage( SwCursor* pToSet, sal_uInt16 nPageNum )
 {
-    vcl::RenderContext* pRenderContext = GetCurrShell() ? GetCurrShell()->GetOut() : nullptr;
+    OutputDevice* pRenderContext = GetCurrShell() ? GetCurrShell()->GetOut() : nullptr;
     OSL_ENSURE( Lower() && Lower()->IsPageFrame(), "No page available." );
 
     SwPageFrame *pPage = static_cast<SwPageFrame*>(Lower());
@@ -1474,7 +1474,7 @@ void SwPageFrame::GetContentPosition( const Point &rPt, SwPosition &rPos ) const
  */
 Point SwRootFrame::GetNextPrevContentPos( const Point& rPoint, bool bNext ) const
 {
-    vcl::RenderContext* pRenderContext = GetCurrShell() ? GetCurrShell()->GetOut() : nullptr;
+    OutputDevice* pRenderContext = GetCurrShell() ? GetCurrShell()->GetOut() : nullptr;
     // #123110# - disable creation of an action by a callback
     // event during processing of this method. Needed because formatting is
     // triggered by this method.
@@ -1785,7 +1785,7 @@ bool SwFrame::OnFirstPage() const
     return bRet;
 }
 
-void SwFrame::Calc(vcl::RenderContext* pRenderContext) const
+void SwFrame::Calc(OutputDevice* pRenderContext) const
 {
     if ( !isFrameAreaPositionValid() || !isFramePrintAreaValid() || !isFrameAreaSizeValid() )
     {

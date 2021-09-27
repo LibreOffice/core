@@ -112,7 +112,7 @@ static OUString GetDefaultString(sal_Int32 nChars)
     return aStr.makeStringAndClear();
 }
 
-static void calcFontHeightAnyAscent(vcl::RenderContext& rWin, vcl::Font const & _rFont, tools::Long& _nHeight, tools::Long& _nAscent)
+static void calcFontHeightAnyAscent(OutputDevice& rWin, vcl::Font const & _rFont, tools::Long& _nHeight, tools::Long& _nAscent)
 {
     if ( !_nHeight )
     {
@@ -263,7 +263,7 @@ void SwDropCapsPict::UpdatePaintSettings()
     Invalidate();
 }
 
-void SwDropCapsPict::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
+void SwDropCapsPict::Paint(OutputDevice& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     if (!IsVisible())
         return;
@@ -305,7 +305,7 @@ void SwDropCapsPict::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     rRenderContext.SetClipRegion();
 }
 
-void SwDropCapsPict::DrawPrev(vcl::RenderContext& rRenderContext, const Point& rPt)
+void SwDropCapsPict::DrawPrev(OutputDevice& rRenderContext, const Point& rPt)
 {
     Point aPt(rPt);
     InitPrinter();

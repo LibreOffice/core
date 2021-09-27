@@ -27,7 +27,7 @@ class SwBorderAttrs;
 /// SwRowFrame is one table row in the document layout.
 class SwRowFrame final : public SwLayoutFrame
 {
-    virtual void Format(vcl::RenderContext* pRenderContext,
+    virtual void Format(OutputDevice* pRenderContext,
                         const SwBorderAttrs* pAttrs = nullptr) override;
     /// Only change the Frame size, not the PrtArea SSize
     virtual SwTwips ShrinkFrame(SwTwips, bool bTst = false, bool bInfo = false) override;
@@ -50,7 +50,7 @@ class SwRowFrame final : public SwLayoutFrame
     virtual void DestroyImpl() override;
     virtual ~SwRowFrame() override;
 
-    virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
+    virtual void MakeAll(OutputDevice* pRenderContext) override;
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
     virtual const SwRowFrame* DynCastRowFrame() const override { return this; }
 

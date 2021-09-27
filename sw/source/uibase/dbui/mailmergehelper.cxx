@@ -371,7 +371,7 @@ void SwAddressPreview::UpdateScrollBar()
     }
 }
 
-void SwAddressPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SwAddressPreview::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
     rRenderContext.SetFillColor(rSettings.GetWindowColor());
@@ -490,7 +490,7 @@ bool SwAddressPreview::KeyInput( const KeyEvent& rKEvt )
     return bHandled;
 }
 
-void SwAddressPreview::DrawText_Impl(vcl::RenderContext& rRenderContext, const OUString& rAddress,
+void SwAddressPreview::DrawText_Impl(OutputDevice& rRenderContext, const OUString& rAddress,
                                      const Point& rTopLeft, const Size& rSize, bool bIsSelected)
 {
     rRenderContext.SetClipRegion(vcl::Region(tools::Rectangle(rTopLeft, rSize)));

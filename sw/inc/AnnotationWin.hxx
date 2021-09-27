@@ -178,7 +178,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
 
         void DrawForPage(OutputDevice* pDev, const Point& rPos);
 
-        void PaintTile(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
+        void PaintTile(OutputDevice& rRenderContext, const tools::Rectangle& rRect);
         /// Is there a matching sub-widget inside this sidebar widget for rPointLogic?
         bool IsHitWindow(const Point& rPointLogic);
         /// Allows adjusting the point or mark of the selection to a document coordinate.

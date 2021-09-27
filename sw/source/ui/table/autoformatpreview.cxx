@@ -97,7 +97,7 @@ static void lcl_SetFontProperties(vcl::Font& rFont, const SvxFontItem& rFontItem
     rCJKFont.MethodName(Value);                                                                    \
     rCTLFont.MethodName(Value);
 
-void AutoFormatPreview::MakeFonts(vcl::RenderContext const& rRenderContext, sal_uInt8 nIndex,
+void AutoFormatPreview::MakeFonts(OutputDevice const& rRenderContext, sal_uInt8 nIndex,
                                   vcl::Font& rFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont)
 {
     const SwBoxAutoFormat& rBoxFormat = maCurrentData.GetBoxFormat(nIndex);
@@ -129,7 +129,7 @@ sal_uInt8 AutoFormatPreview::GetFormatIndex(size_t nCol, size_t nRow) const
     return pnFormatMap[maArray.GetCellIndex(nCol, nRow, mbRTL)];
 }
 
-void AutoFormatPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCol, size_t nRow)
+void AutoFormatPreview::DrawString(OutputDevice& rRenderContext, size_t nCol, size_t nRow)
 {
     // Output of the cell text:
     sal_uLong nNum;
@@ -312,7 +312,7 @@ void AutoFormatPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nC
     aScriptedText.DrawText(aPos);
 }
 
-void AutoFormatPreview::DrawBackground(vcl::RenderContext& rRenderContext)
+void AutoFormatPreview::DrawBackground(OutputDevice& rRenderContext)
 {
     for (size_t nRow = 0; nRow < 5; ++nRow)
     {
@@ -333,7 +333,7 @@ void AutoFormatPreview::DrawBackground(vcl::RenderContext& rRenderContext)
     }
 }
 
-void AutoFormatPreview::PaintCells(vcl::RenderContext& rRenderContext)
+void AutoFormatPreview::PaintCells(OutputDevice& rRenderContext)
 {
     // 1) background
     if (maCurrentData.IsBackground())
@@ -426,7 +426,7 @@ void AutoFormatPreview::NotifyChange(const SwTableAutoFormat& rNewData)
     Invalidate();
 }
 
-void AutoFormatPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void AutoFormatPreview::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.Push(PushFlags::ALL);
 

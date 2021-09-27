@@ -119,8 +119,8 @@ class SwTabFrame final: public SwLayoutFrame, public SwFlowFrame
     virtual void DestroyImpl() override;
     virtual ~SwTabFrame() override;
 
-    virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
-    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
+    virtual void MakeAll(OutputDevice* pRenderContext) override;
+    virtual void Format( OutputDevice* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
     // only changes the Framesize, not the PrtArea size
     virtual SwTwips GrowFrame  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
@@ -140,7 +140,7 @@ public:
     SwTabFrame* FindMaster( bool bFirstMaster = false ) const;
 
     virtual bool GetInfo( SfxPoolItem &rHint ) const override;
-    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&,
+    virtual void PaintSwFrame( OutputDevice& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = nullptr ) const override;
     virtual void CheckDirection( bool bVert ) override;
 

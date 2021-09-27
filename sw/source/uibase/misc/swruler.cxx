@@ -40,8 +40,8 @@ namespace
  * \param Color arrow color
  * \param bCollapsed if the arrow should display the collapsed state
  */
-void ImplDrawArrow(vcl::RenderContext& rRenderContext, tools::Long nX, tools::Long nY,
-                   tools::Long nSize, const Color& rColor, bool bCollapsed)
+void ImplDrawArrow(OutputDevice& rRenderContext, tools::Long nX, tools::Long nY, tools::Long nSize,
+                   const Color& rColor, bool bCollapsed)
 {
     tools::Polygon aTrianglePolygon(4);
 
@@ -106,7 +106,7 @@ void SwCommentRuler::dispose()
     SvxRuler::dispose();
 }
 
-void SwCommentRuler::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void SwCommentRuler::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     if (comphelper::LibreOfficeKit::isActive())
         return; // no need to waste time on startup
@@ -118,7 +118,7 @@ void SwCommentRuler::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
         DrawCommentControl(rRenderContext);
 }
 
-void SwCommentRuler::DrawCommentControl(vcl::RenderContext& rRenderContext)
+void SwCommentRuler::DrawCommentControl(OutputDevice& rRenderContext)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     const bool bIsCollapsed = !mpViewShell->GetPostItMgr()->ShowNotes();

@@ -2595,7 +2595,7 @@ void BmpWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     SetOutputSizePixel(aSize);
 }
 
-void BmpWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void BmpWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     // Setup
     rRenderContext.SetBackground();

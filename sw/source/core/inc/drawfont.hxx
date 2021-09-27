@@ -179,12 +179,12 @@ public:
         return m_pSh;
     }
 
-    vcl::RenderContext& GetOut() const
+    OutputDevice& GetOut() const
     {
         return *m_pOut;
     }
 
-    vcl::RenderContext *GetpOut() const
+    OutputDevice *GetpOut() const
     {
         return m_pOut;
     }

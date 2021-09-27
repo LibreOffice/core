@@ -397,7 +397,7 @@ public:
     /*
      * virtual paint method to make selection visible again after Paint
      */
-    void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle & rRect) override;
+    void Paint(OutputDevice& rRenderContext, const tools::Rectangle & rRect) override;
 
     // Areas
     inline void SetMark();

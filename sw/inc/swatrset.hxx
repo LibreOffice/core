@@ -314,7 +314,7 @@ public:
 //Helper for filters to find true lineheight of a font
 SW_DLLPUBLIC tools::Long AttrSetToLineHeight( const IDocumentSettingAccess& rIDocumentSettingAccess,
                           const SwAttrSet &rSet,
-                          const vcl::RenderContext &rOut, sal_Int16 nScript);
+                          const OutputDevice &rOut, sal_Int16 nScript);
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

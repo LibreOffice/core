@@ -25,7 +25,7 @@
 
 using namespace com::sun::star;
 
-Size GetGraphicSizeTwip(const Graphic& rGraphic, vcl::RenderContext* pOutDev)
+Size GetGraphicSizeTwip(const Graphic& rGraphic, OutputDevice* pOutDev)
 {
     const MapMode aMapTwip(MapUnit::MapTwip);
     Size aSize(rGraphic.GetPrefSize());

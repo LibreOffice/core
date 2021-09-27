@@ -243,7 +243,7 @@ static bool lcl_IsCalcUpperAllowed( const SwFrame& rFrame )
  *
  * @see MakeAll()
  */
-void SwFrame::PrepareMake(vcl::RenderContext* pRenderContext)
+void SwFrame::PrepareMake(OutputDevice* pRenderContext)
 {
     StackHack aHack;
     if ( GetUpper() )
@@ -804,7 +804,7 @@ size_t SwPageFrame::GetContentHeight(const tools::Long nTop, const tools::Long n
     return nBot;
 }
 
-void SwPageFrame::MakeAll(vcl::RenderContext* pRenderContext)
+void SwPageFrame::MakeAll(OutputDevice* pRenderContext)
 {
     PROTOCOL_ENTER( this, PROT::MakeAll, DbgAction::NONE, nullptr )
 
@@ -954,7 +954,7 @@ void SwPageFrame::MakeAll(vcl::RenderContext* pRenderContext)
         "Upper (Root) must be wide enough to contain the widest page");
 }
 
-void SwLayoutFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
+void SwLayoutFrame::MakeAll(OutputDevice* /*pRenderContext*/)
 {
     PROTOCOL_ENTER( this, PROT::MakeAll, DbgAction::NONE, nullptr )
 
@@ -1219,7 +1219,7 @@ inline void ValidateSz( SwFrame *pFrame )
     }
 }
 
-void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
+void SwContentFrame::MakeAll(OutputDevice* /*pRenderContext*/)
 {
     OSL_ENSURE( GetUpper(), "no Upper?" );
     OSL_ENSURE( IsTextFrame(), "MakeAll(), NoText" );

@@ -374,7 +374,7 @@ SwCaptionPreview::SwCaptionPreview()
 {
 }
 
-void SwCaptionPreview::ApplySettings(vcl::RenderContext& rRenderContext)
+void SwCaptionPreview::ApplySettings(OutputDevice& rRenderContext)
 {
     Wallpaper aBack(rRenderContext.GetSettings().GetStyleSettings().GetWindowColor());
     rRenderContext.SetBackground(aBack);
@@ -406,7 +406,7 @@ void SwCaptionPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
 }
 
-void SwCaptionPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SwCaptionPreview::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     ApplySettings(rRenderContext);
 

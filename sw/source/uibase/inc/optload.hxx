@@ -103,13 +103,13 @@ private:
     bool mbFontInitialized;
     vcl::Font maFont;
 
-    void ApplySettings(vcl::RenderContext& rRenderContext);
+    void ApplySettings(OutputDevice& rRenderContext);
 
 public:
     SwCaptionPreview();
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     void SetPreviewText(const OUString& rText);
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
 };
 
 class SwCaptionOptPage final : public SfxTabPage

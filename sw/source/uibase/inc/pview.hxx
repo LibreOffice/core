@@ -65,7 +65,7 @@ public:
     virtual ~SwPagePreviewWin() override;
 
     // calls SwViewShell::Paint
-    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void KeyInput( const KeyEvent & ) override;
     virtual void Command( const CommandEvent& rCEvt ) override;
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;

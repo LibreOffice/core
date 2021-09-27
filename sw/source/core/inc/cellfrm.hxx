@@ -34,7 +34,7 @@ class SwCellFrame final : public SwLayoutFrame
     virtual void DestroyImpl() override;
     virtual ~SwCellFrame() override;
 
-    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
+    virtual void Format( OutputDevice* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
     virtual const SwCellFrame* DynCastCellFrame() const override { return this; }
 
@@ -42,7 +42,7 @@ public:
     SwCellFrame( const SwTableBox &, SwFrame*, bool bInsertContent );
 
     virtual bool GetModelPositionForViewPoint( SwPosition *, Point&, SwCursorMoveState* = nullptr, bool bTestBackground = false ) const override;
-    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&,
+    virtual void PaintSwFrame( OutputDevice& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = nullptr ) const override;
     virtual void CheckDirection( bool bVert ) override;
 

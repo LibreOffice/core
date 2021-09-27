@@ -45,7 +45,7 @@ using namespace ::com::sun::star::beans;
 namespace {
 
 // Arrow or interval character
-void DrawArrow(vcl::RenderContext& rRenderContext, const Point &rP1, const Point &rP2, bool bArrow)
+void DrawArrow(OutputDevice& rRenderContext, const Point &rP1, const Point &rP2, bool bArrow)
 {
     rRenderContext.DrawLine(rP1, rP2);
     if (bArrow)
@@ -136,7 +136,7 @@ void SwLabPreview::SetDrawingArea(weld::DrawingArea* pWidget)
     m_lXHeight = pWidget->get_text_height();
 }
 
-void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SwLabPreview::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     const Size aSize(GetOutputSizePixel());
     const tools::Long lOutWPix = aSize.Width();

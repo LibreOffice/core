@@ -27,7 +27,7 @@ class SwBorderAttrs;
 /// SwPageFrame, typical lower is an SwTextFrame.
 class SAL_DLLPUBLIC_RTTI SwBodyFrame final : public SwLayoutFrame
 {
-    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
+    virtual void Format( OutputDevice* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
 
 public:
     SwBodyFrame( SwFrameFormat*, SwFrame* );

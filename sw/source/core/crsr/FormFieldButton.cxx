@@ -98,7 +98,7 @@ static basegfx::BColor lcl_GetFillColor(const basegfx::BColor& rLineColor, doubl
     return basegfx::utils::hsl2rgb(aHslLine);
 }
 
-void FormFieldButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void FormFieldButton::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     SetMapMode(MapMode(MapUnit::MapPixel));
 

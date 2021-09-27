@@ -35,8 +35,8 @@ private:
     friend void FrameFinit();
     const Size& GetSize() const;
 
-    void Format ( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
-    void PaintPicture( vcl::RenderContext*, const SwRect& ) const;
+    void Format ( OutputDevice* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
+    void PaintPicture( OutputDevice*, const SwRect& ) const;
 
     virtual void DestroyImpl() override;
     virtual ~SwNoTextFrame() override;
@@ -57,7 +57,7 @@ private:
     sdr::contact::ViewContact& GetViewContact() const;
     void OnGraphicArrived();
 
-    virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
+    virtual void MakeAll(OutputDevice* pRenderContext) override;
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
@@ -71,7 +71,7 @@ public:
     virtual bool LeftMargin(SwPaM *) const override;
     virtual bool RightMargin(SwPaM *, bool bAPI = false) const override;
 
-    virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&,
+    virtual void PaintSwFrame( OutputDevice& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = nullptr ) const override;
     virtual bool GetCharRect( SwRect &, const SwPosition&,
                               SwCursorMoveState* = nullptr, bool bAllowFarAway = true ) const override;

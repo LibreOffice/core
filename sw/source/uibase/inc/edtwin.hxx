@@ -170,8 +170,8 @@ class SW_DLLPUBLIC SwEditWin final : public vcl::Window,
                                 const bool bOnlyText, bool bLockView );
 
     virtual void    DataChanged( const DataChangedEvent& ) override;
-    virtual void    PrePaint(vcl::RenderContext& rRenderContext) override;
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void    PrePaint(OutputDevice& rRenderContext) override;
+    virtual void    Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
 
     virtual void    GetFocus() override;
     virtual void    LoseFocus() override;

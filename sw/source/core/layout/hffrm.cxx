@@ -412,7 +412,7 @@ void SwHeadFootFrame::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
     }
 }
 
-void SwHeadFootFrame::Format(vcl::RenderContext* pRenderContext, const SwBorderAttrs * pAttrs)
+void SwHeadFootFrame::Format(OutputDevice* pRenderContext, const SwBorderAttrs * pAttrs)
 {
     OSL_ENSURE( pAttrs, "SwFooterFrame::Format, pAttrs is 0." );
 

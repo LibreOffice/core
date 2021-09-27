@@ -987,7 +987,7 @@ static const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrame* _pPage,
  */
 bool SwLayAction::IsShortCut( SwPageFrame *&prPage )
 {
-    vcl::RenderContext* pRenderContext = m_pImp->GetShell()->GetOut();
+    OutputDevice* pRenderContext = m_pImp->GetShell()->GetOut();
     bool bRet = false;
     const SwViewShell *pSh = m_pRoot->GetCurrShell();
     const bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
@@ -1438,7 +1438,7 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrame *pLa
 
 void SwLayAction::FormatLayoutFly( SwFlyFrame* pFly )
 {
-    vcl::RenderContext* pRenderContext = m_pImp->GetShell()->GetOut();
+    OutputDevice* pRenderContext = m_pImp->GetShell()->GetOut();
     OSL_ENSURE( !IsAgain(), "Attention to the invalid page." );
     if ( IsAgain() )
         return;
@@ -1491,7 +1491,7 @@ bool SwLayAction::FormatLayoutTab( SwTabFrame *pTab, bool bAddRect )
     if ( IsAgain() || !pTab->Lower() )
         return false;
 
-    vcl::RenderContext* pRenderContext = m_pImp->GetShell()->GetOut();
+    OutputDevice* pRenderContext = m_pImp->GetShell()->GetOut();
     IDocumentTimerAccess& rTimerAccess = m_pRoot->GetFormat()->getIDocumentTimerAccess();
     rTimerAccess.BlockIdling();
 

@@ -278,8 +278,8 @@ class SwMarkPreview final : public weld::CustomWidgetController
 
     sal_uInt16 nMarkPos;
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
-    void PaintPage(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect);
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle&) override;
+    void PaintPage(OutputDevice& rRenderContext, const tools::Rectangle &rRect);
     void InitColors();
 
 public:

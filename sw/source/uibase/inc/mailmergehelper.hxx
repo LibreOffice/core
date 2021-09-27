@@ -62,10 +62,10 @@ class SW_DLLPUBLIC SwAddressPreview final : public weld::CustomWidgetController
     std::unique_ptr<weld::ScrolledWindow> m_xVScrollBar;
     Link<LinkParamNone*,void> m_aSelectHdl;
 
-    void DrawText_Impl(vcl::RenderContext& rRenderContext, const OUString& rAddress,
+    void DrawText_Impl(OutputDevice& rRenderContext, const OUString& rAddress,
                        const Point& rTopLeft, const Size& rSize, bool bIsSelected);
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle&) override;
     virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual bool KeyInput( const KeyEvent& rKEvt ) override;
     void UpdateScrollBar();

@@ -186,7 +186,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
     Invalidate();
 }
 
-void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOrg,
+void SwColExample::DrawPage(OutputDevice& rRenderContext, const Point& rOrg,
                             const bool bSecond, const bool bEnabled)
 {
     SwPageExample::DrawPage(rRenderContext, rOrg, bSecond, bEnabled);
@@ -328,7 +328,7 @@ SwColumnOnlyExample::SwColumnOnlyExample()
     ::FitToActualSize(m_aCols, o3tl::narrowing<sal_uInt16>(m_aFrameSize.Width()));
 }
 
-void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
+void SwColumnOnlyExample::Paint(OutputDevice& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     rRenderContext.Push(PushFlags::MAPMODE);
 
@@ -495,7 +495,7 @@ SwPageGridExample::SwPageGridExample()
 {
 }
 
-void SwPageGridExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOrg,
+void SwPageGridExample::DrawPage(OutputDevice& rRenderContext, const Point& rOrg,
                                  const bool bSecond, const bool bEnabled)
 {
     SwPageExample::DrawPage(rRenderContext, rOrg, bSecond, bEnabled);

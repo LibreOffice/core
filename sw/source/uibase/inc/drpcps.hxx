@@ -67,7 +67,7 @@ class SwDropCapsPict final : public weld::CustomWidgetController
     Size            maTextSize;
     css::uno::Reference< css::i18n::XBreakIterator >   xBreak;
 
-    virtual void    Paint(vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle &rRect) override;
+    virtual void    Paint(OutputDevice& /*rRenderContext*/, const tools::Rectangle &rRect) override;
     void            CheckScript();
     Size            CalcTextSize();
     inline void     InitPrinter();
@@ -104,7 +104,7 @@ public:
     void SetDistance( sal_uInt16 nD );
     void SetValues( const OUString& rText, sal_uInt8 nLines, sal_uInt16 nDistance );
 
-    void DrawPrev(vcl::RenderContext& rRenderContext, const Point& rPt);
+    void DrawPrev(OutputDevice& rRenderContext, const Point& rPt);
 };
 
 class SwDropCapsPage final : public SfxTabPage

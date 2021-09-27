@@ -768,7 +768,7 @@ void SwSectionFrame::MoveContentAndDelete( SwSectionFrame* pDel, bool bSave )
     }
 }
 
-void SwSectionFrame::MakeAll(vcl::RenderContext* pRenderContext)
+void SwSectionFrame::MakeAll(OutputDevice* pRenderContext)
 {
     if ( IsJoinLocked() || IsColLocked() || StackHack::IsLocked() || StackHack::Count() > 50 )
         return;
@@ -1015,7 +1015,7 @@ static SwFootnoteFrame* lcl_FindEndnote( SwSectionFrame* &rpSect, bool &rbEmpty,
 
 static void lcl_ColumnRefresh( SwSectionFrame* pSect, bool bFollow )
 {
-    vcl::RenderContext* pRenderContext = pSect->getRootFrame()->GetCurrShell()->GetOut();
+    OutputDevice* pRenderContext = pSect->getRootFrame()->GetCurrShell()->GetOut();
     while( pSect )
     {
         bool bOldLock = pSect->IsColLocked();
@@ -1257,7 +1257,7 @@ class ExtraFormatToPositionObjs
 
         void FormatSectionToPositionObjs()
         {
-            vcl::RenderContext* pRenderContext = mpSectFrame->getRootFrame()->GetCurrShell()->GetOut();
+            OutputDevice* pRenderContext = mpSectFrame->getRootFrame()->GetCurrShell()->GetOut();
             // perform extra format for multi-columned section.
             if ( !(mpSectFrame->Lower() && mpSectFrame->Lower()->IsColumnFrame() &&
                  mpSectFrame->Lower()->GetNext()) )
@@ -1331,7 +1331,7 @@ class ExtraFormatToPositionObjs
 }
 
 /// "formats" the frame; Frame and PrtArea
-void SwSectionFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttr )
+void SwSectionFrame::Format( OutputDevice* pRenderContext, const SwBorderAttrs *pAttr )
 {
     if( !m_pSection ) // via DelEmpty
     {
@@ -2819,7 +2819,7 @@ SwTwips SwSectionFrame::Undersize()
 
 void SwSectionFrame::CalcFootnoteContent()
 {
-    vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
+    OutputDevice* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
     SwFootnoteContFrame* pCont = ContainsFootnoteCont();
     if( !pCont )
         return;

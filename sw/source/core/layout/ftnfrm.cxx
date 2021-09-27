@@ -227,7 +227,7 @@ SwTwips FootnoteSeparatorHeight(SwPageFootnoteInfo const& rInf)
 } // namespace sw
 
 /// "format" the frame (Fixsize is not set here).
-void SwFootnoteContFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs * )
+void SwFootnoteContFrame::Format( OutputDevice* /*pRenderContext*/, const SwBorderAttrs * )
 {
     // calculate total border, only one distance to the top
     const SwPageFrame* pPage = FindPageFrame();

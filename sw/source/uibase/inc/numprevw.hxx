@@ -35,7 +35,7 @@ class NumberingPreview final : public weld::CustomWidgetController
     sal_uInt16          nActLevel;
 
 private:
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
 
 public:
     NumberingPreview()

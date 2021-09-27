@@ -1475,7 +1475,7 @@ bool SwViewShell::SmoothScroll( tools::Long lXDiff, tools::Long lYDiff, const to
     return false;
 }
 
-void SwViewShell::PaintDesktop(vcl::RenderContext& rRenderContext, const SwRect &rRect)
+void SwViewShell::PaintDesktop(OutputDevice& rRenderContext, const SwRect &rRect)
 {
     if ( !GetWin() && !GetOut()->GetConnectMetaFile() )
         return;                     //for the printer we don't do anything here.
@@ -1707,7 +1707,7 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
 
 namespace
 {
-/// Similar to comphelper::FlagRestorationGuard, but for vcl::RenderContext.
+/// Similar to comphelper::FlagRestorationGuard, but for OutputDevice.
 class RenderContextGuard
 {
     std::unique_ptr<SdrPaintWindow> m_TemporaryPaintWindow;
@@ -1715,7 +1715,7 @@ class RenderContextGuard
     SdrPaintWindow* m_pPreviousPaintWindow = nullptr;
 
 public:
-    RenderContextGuard(VclPtr<vcl::RenderContext>& pRef, vcl::RenderContext* pValue, SwViewShell* pShell)
+    RenderContextGuard(VclPtr<OutputDevice>& pRef, OutputDevice* pValue, SwViewShell* pShell)
         : m_pPatchedPageWindow(nullptr)
     {
         pRef = pValue;
@@ -1752,7 +1752,7 @@ public:
 };
 }
 
-void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect)
+void SwViewShell::Paint(OutputDevice& rRenderContext, const tools::Rectangle &rRect)
 {
     RenderContextGuard aGuard(mpOut, &rRenderContext, this);
     if ( mnLockPaint )
@@ -2069,7 +2069,7 @@ SwRootFrame *SwViewShell::GetLayout() const
     return mpLayout.get();
 }
 
-vcl::RenderContext& SwViewShell::GetRefDev() const
+OutputDevice& SwViewShell::GetRefDev() const
 {
     OutputDevice* pTmpOut = nullptr;
     if (  GetWin() &&

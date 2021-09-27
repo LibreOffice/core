@@ -61,7 +61,7 @@ class SAL_DLLPUBLIC_RTTI SwContentFrame: public SwFrame, public SwFlowFrame
                     bool bTstMove,
                     const bool bObjsInNewUpper );
 
-    virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
+    virtual void MakeAll(OutputDevice* pRenderContext) override;
 
     void UpdateAttr_( const SfxPoolItem*, const SfxPoolItem*, SwContentFrameInvFlags &,
                       SwAttrSetChg *pa = nullptr, SwAttrSetChg *pb = nullptr );

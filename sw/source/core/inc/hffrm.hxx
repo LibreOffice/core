@@ -31,7 +31,7 @@ protected:
 
 public:
     SwHeadFootFrame(SwFrameFormat * pFrame, SwFrame*, SwFrameType aType);
-    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
+    virtual void Format( OutputDevice* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     virtual SwTwips GrowFrame( SwTwips,
                              bool bTst = false, bool bInfo = false ) override;
     virtual SwTwips ShrinkFrame( SwTwips,

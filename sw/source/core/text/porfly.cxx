@@ -224,7 +224,7 @@ void sw::FlyContentPortion::Paint(const SwTextPaintInfo& rInf) const
     // GetFlyFrame() may change the layout mode at the output device.
     {
         SwLayoutModeModifier aLayoutModeModifier(*rInf.GetOut());
-        m_pFly->PaintSwFrame(const_cast<vcl::RenderContext&>(*rInf.GetOut()), aRect);
+        m_pFly->PaintSwFrame(const_cast<OutputDevice&>(*rInf.GetOut()), aRect);
 
         // track changes: cross out the image, if it is deleted
         const SwFrame *pFrame = m_pFly->Lower();
@@ -235,15 +235,15 @@ void sw::FlyContentPortion::Paint(const SwTextPaintInfo& rInf) const
             const AntialiasingFlags nFormerAntialiasing( rInf.GetOut()->GetAntialiasing() );
             const bool bIsAntiAliasing = officecfg::Office::Common::Drawinglayer::AntiAliasing::get();
             if ( bIsAntiAliasing )
-                const_cast<vcl::RenderContext&>(*rInf.GetOut()).SetAntialiasing(AntialiasingFlags::Enable);
+                const_cast<OutputDevice&>(*rInf.GetOut()).SetAntialiasing(AntialiasingFlags::Enable);
             tools::Long startX = aPaintRect.Left(  ), endX = aPaintRect.Right();
             tools::Long startY = aPaintRect.Top(  ),  endY = aPaintRect.Bottom();
-            const_cast<vcl::RenderContext&>(*rInf.GetOut()).SetLineColor(
+            const_cast<OutputDevice&>(*rInf.GetOut()).SetLineColor(
                 SwPostItMgr::GetColorAnchor(GetAuthor()) );
-            const_cast<vcl::RenderContext&>(*rInf.GetOut()).DrawLine(Point(startX, startY), Point(endX, endY));
-            const_cast<vcl::RenderContext&>(*rInf.GetOut()).DrawLine(Point(startX, endY), Point(endX, startY));
+            const_cast<OutputDevice&>(*rInf.GetOut()).DrawLine(Point(startX, startY), Point(endX, endY));
+            const_cast<OutputDevice&>(*rInf.GetOut()).DrawLine(Point(startX, endY), Point(endX, startY));
             if ( bIsAntiAliasing )
-                const_cast<vcl::RenderContext&>(*rInf.GetOut()).SetAntialiasing(nFormerAntialiasing);
+                const_cast<OutputDevice&>(*rInf.GetOut()).SetAntialiasing(nFormerAntialiasing);
         }
     }
     const_cast<SwTextPaintInfo&>(rInf).GetRefDev()->SetLayoutMode(rInf.GetOut()->GetLayoutMode());

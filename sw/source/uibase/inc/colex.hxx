@@ -46,7 +46,7 @@ class SW_DLLPUBLIC SwPageGridExample final : public SwPageExample
 {
     std::unique_ptr<SwTextGridItem> pGridItem;
 
-    virtual void DrawPage(vcl::RenderContext& rRenderContext,
+    virtual void DrawPage(OutputDevice& rRenderContext,
                           const Point& rPoint,
                           const bool bSecond,
                           const bool bEnabled) override;
@@ -63,7 +63,7 @@ class SW_DLLPUBLIC SwColExample final : public SwPageExample
 
     using SwPageExample::UpdateExample;
 
-    virtual void DrawPage(vcl::RenderContext& rRenderContext,
+    virtual void DrawPage(OutputDevice& rRenderContext,
                           const Point& rPoint,
                           const bool bSecond,
                           const bool bEnabled) override;
@@ -90,7 +90,7 @@ private:
     SwFormatCol    m_aCols;
 
     virtual void Resize() override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
 
 public:
     SwColumnOnlyExample();

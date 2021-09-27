@@ -1236,7 +1236,7 @@ void SwFlyFrame::ChgRelPos( const Point &rNewPos )
  *
  * The FixSize is not inserted here.
  */
-void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs *pAttrs )
+void SwFlyFrame::Format( OutputDevice* /*pRenderContext*/, const SwBorderAttrs *pAttrs )
 {
     OSL_ENSURE( pAttrs, "FlyFrame::Format, pAttrs is 0." );
 
@@ -1410,7 +1410,7 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
 //                          Thus, <bNoCalcFollow> no longer used by <FormatWidthCols(..)>.
 void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
 {
-    vcl::RenderContext* pRenderContext = pLay->getRootFrame()->GetCurrShell()->GetOut();
+    OutputDevice* pRenderContext = pLay->getRootFrame()->GetCurrShell()->GetOut();
     SwSectionFrame* pSect;
     bool bCollect = false;
     if( pLay->IsSctFrame() )
@@ -1725,7 +1725,7 @@ void SwFlyFrame::MakeObjPos()
     if ( isFrameAreaPositionValid() )
         return;
 
-    vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
+    OutputDevice* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
     setFrameAreaPositionValid(true);
 
     // use new class to position object
@@ -2636,7 +2636,7 @@ static SwTwips lcl_CalcAutoWidth( const SwLayoutFrame& rFrame )
 bool SwFlyFrame::GetContour( tools::PolyPolygon&   rContour,
                            const bool _bForPaint ) const
 {
-    vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
+    OutputDevice* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
     bool bRet = false;
     const bool bIsCandidate(Lower() && Lower()->IsNoTextFrame());
 
@@ -2884,7 +2884,7 @@ SwFlyFrameFormat * SwFlyFrame::GetFormat()
     return static_cast< SwFlyFrameFormat * >( GetDep() );
 }
 
-void SwFlyFrame::Calc(vcl::RenderContext* pRenderContext) const
+void SwFlyFrame::Calc(OutputDevice* pRenderContext) const
 {
     if ( !m_bValidContentPos )
         const_cast<SwFlyFrame*>(this)->PrepareMake(pRenderContext);

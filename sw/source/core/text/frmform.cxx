@@ -80,7 +80,7 @@ void ValidateText( SwFrame *pFrame )     // Friend of frame
 
 void SwTextFrame::ValidateFrame()
 {
-    vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
+    OutputDevice* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
     // Validate surroundings to avoid oscillation
     SwSwapIfSwapped swap( this );
 
@@ -116,7 +116,7 @@ void SwTextFrame::ValidateFrame()
 // First we search outwards, on the way back we calculate everything.
 static void ValidateBodyFrame_( SwFrame *pFrame )
 {
-    vcl::RenderContext* pRenderContext = pFrame ? pFrame->getRootFrame()->GetCurrShell()->GetOut() : nullptr;
+    OutputDevice* pRenderContext = pFrame ? pFrame->getRootFrame()->GetCurrShell()->GetOut() : nullptr;
     if( !pFrame || pFrame->IsCellFrame() )
         return;
 
@@ -171,7 +171,7 @@ bool SwTextFrame::GetDropRect_( SwRect &rRect ) const
 
 bool SwTextFrame::CalcFollow(TextFrameIndex const nTextOfst)
 {
-    vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
+    OutputDevice* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
     SwSwapIfSwapped swap( this );
 
     OSL_ENSURE( HasFollow(), "CalcFollow: missing Follow." );
@@ -362,7 +362,7 @@ void SwTextFrame::MakePos()
 
 void SwTextFrame::AdjustFrame( const SwTwips nChgHght, bool bHasToFit )
 {
-    vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
+    OutputDevice* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
     if( IsUndersized() )
     {
         if( GetOffset() && !IsFollow() ) // A scrolled paragraph (undersized)
@@ -1694,7 +1694,7 @@ void SwTextFrame::FormatOnceMore( SwTextFormatter &rLine, SwTextFormatInfo &rInf
     }
 }
 
-void SwTextFrame::Format_( vcl::RenderContext* pRenderContext, SwParaPortion *pPara )
+void SwTextFrame::Format_( OutputDevice* pRenderContext, SwParaPortion *pPara )
 {
     const bool bIsEmpty = GetText().isEmpty();
 
@@ -1753,7 +1753,7 @@ void SwTextFrame::Format_( vcl::RenderContext* pRenderContext, SwParaPortion *pP
 
 // We calculate the text frame's size and send a notification.
 // Shrink() or Grow() to adjust the frame's size to the changed required space.
-void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs * )
+void SwTextFrame::Format( OutputDevice* pRenderContext, const SwBorderAttrs * )
 {
     SwRectFnSet aRectFnSet(this);
 

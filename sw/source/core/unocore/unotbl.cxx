@@ -583,7 +583,7 @@ static bool lcl_FormatTable(SwFrameFormat const * pTableFormat)
     SwIterator<SwFrame,SwFormat> aIter( *pTableFormat );
     for(SwFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
     {
-        vcl::RenderContext* pRenderContext = pFrame->getRootFrame()->GetCurrShell()->GetOut();
+        OutputDevice* pRenderContext = pFrame->getRootFrame()->GetCurrShell()->GetOut();
         // mba: no TYPEINFO for SwTabFrame
         if(!pFrame->IsTabFrame())
             continue;

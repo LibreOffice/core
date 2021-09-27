@@ -138,7 +138,7 @@ void SwFlyInContentFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rH
 }
 
 /// Here the content gets formatted initially.
-void SwFlyInContentFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs )
+void SwFlyInContentFrame::Format( OutputDevice* pRenderContext, const SwBorderAttrs *pAttrs )
 {
     if ( !getFrameArea().Height() )
     {
@@ -210,7 +210,7 @@ void SwFlyInContentFrame::RegistFlys()
     ::RegistFlys( pPage, this );
 }
 
-void SwFlyInContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
+void SwFlyInContentFrame::MakeAll(OutputDevice* /*pRenderContext*/)
 {
     // OD 2004-01-19 #110582#
     if ( !GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )

@@ -3365,7 +3365,7 @@ sal_uInt32 SwTextFrame::GetParHeight() const
  */
 SwTextFrame* SwTextFrame::GetFormatted( bool bForceQuickFormat )
 {
-    vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
+    OutputDevice* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
     SwSwapIfSwapped swap( this );
 
     // In case the SwLineLayout was cleared out of the s_pTextCache, recreate it
