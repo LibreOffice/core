@@ -1359,10 +1359,10 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                     pDoc->GetAttrPool(),
                     svl::Items<RES_VERT_ORIENT, RES_HORI_ORIENT, RES_ANCHOR, RES_ANCHOR>);
                 aSyncSet.Put(GetFormat()->GetHoriOrient());
-                aSyncSet.Put(SwFormatVertOrient(aObjRect.Top() - rPageFrame->getFrameArea().Top(),
+                aSyncSet.Put(SwFormatVertOrient(pAnchoredDrawObj->GetRelPosToAnchorFrame().getY(),
                                                 text::VertOrientation::NONE,
-                                                text::RelOrientation::PAGE_FRAME));
-                aSyncSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_PAGE, pAnchoredDrawObj->GetPageFrame()->GetPhyPageNum()));
+                                                text::RelOrientation::FRAME));
+                aSyncSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_PAGE, rPageFrame->GetPhyPageNum()));
 
                 auto pSdrObj = const_cast<SdrObject*>(&rObj);
                 if (pSdrObj != GetFormat()->FindRealSdrObject())
