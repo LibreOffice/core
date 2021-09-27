@@ -125,6 +125,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6981daea_1c3eb449",
+        "filename": "emfio/source/reader/wmfreader.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-09-27T20:07:30Z",
+      "side": 1,
+      "message": "Sure, I will create a follow-up, and do the requested refactoring and other changes.\nThank you for reviewing. 😊",
+      "parentUuid": "212a45a3_f4e3a76e",
+      "revId": "47e681879f3f87cde3b7324c9bf4778a2b9a3922",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "098cf97f_52b2cda0",
         "filename": "emfio/source/reader/wmfreader.cxx",
         "patchSetId": 7
