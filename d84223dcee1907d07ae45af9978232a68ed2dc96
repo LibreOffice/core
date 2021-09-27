@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85923495_a8b2248d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-09-27T10:11:17Z",
+      "side": 1,
+      "message": "@Caolan/Julien: Again, here is a problem with the GtkComboBox. Dialog crashes when starting under Gtk3. Works fine with Win/gen backend. Any idea what\u0027s missing this time?",
+      "revId": "d84223dcee1907d07ae45af9978232a68ed2dc96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
