@@ -35,7 +35,7 @@ class CheckTable(unittest.TestCase):
     def setUpClass(cls):
         cls._uno = UnoInProcess()
         cls._uno.setUp()
-        cls.OOLineHairline = 2
+        cls.OOLineHairline = 18
 
     @classmethod
     def tearDownClass(cls):
