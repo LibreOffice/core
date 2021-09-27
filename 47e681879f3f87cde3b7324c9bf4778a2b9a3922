@@ -35,6 +35,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "223469bd_fe4405d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2021-09-27T15:41:21Z",
+      "side": 1,
+      "message": "Thanks Hossein for your great work.\n\nSee my inline comments.",
+      "revId": "47e681879f3f87cde3b7324c9bf4778a2b9a3922",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7fa75b6b_f0a0a0e1",
@@ -66,6 +83,92 @@
       "side": 1,
       "message": "The code here is added to read what comes AFTER the META_PLACEABLE record and WMF header and calculate aPlaceableBound.\n\nThis part of the WMF data was previously ignored, but META_SETWINDOWORG (0x20b) and META_SETWINDOWEXT (0x20c) are among the records that should be read in order to calculate the correct bounds. We skip 22+18\u003d40 bytes to reach to the place after WMF header: 22 bytes for META_PLACEABLE and 18 bytes for the WMF header. Then we call GetPlaceableBound to read and calculate the bounds.\n\nThis skipping of bytes to reach exactly after the WMF header is something similar to what we see after the second else, in line #1472. So, I thought this way of reading bounds should be OK. The only difference there is that it skips 18 bytes, because that else comes when there is no 22 bytes META_PLACEABLE header.\n\nThe checksum was previously ignored. Are you suggesting that I should check the correctness of checksum? I can do that in a followup.",
       "parentUuid": "7fa75b6b_f0a0a0e1",
+      "revId": "47e681879f3f87cde3b7324c9bf4778a2b9a3922",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83fc7676_0bd83914",
+        "filename": "emfio/source/reader/wmfreader.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2021-09-27T15:41:21Z",
+      "side": 1,
+      "message": "Thanks for explanation.\nI would move the calculating the bounds after the reading header. \nI think it will be easier to understand, if we will keep the order, and not jump.\n\nWhat do you think?\n\nI know that it is not your fault, but it will be great if you could improve this code.",
+      "parentUuid": "4705db2d_4c6ea69e",
+      "revId": "47e681879f3f87cde3b7324c9bf4778a2b9a3922",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "098cf97f_52b2cda0",
+        "filename": "emfio/source/reader/wmfreader.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1446,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2021-09-27T15:41:21Z",
+      "side": 1,
+      "message": "This file have mixed code styles.\nThe LO has defined code styles, which is applied only to new files.\nThe wmfreader.cxx is exluded from it\nhttp://61.133.41.25:8082/so.huangjunli/core/blob/dd6e0ab30a120512e39f0d9b2e422243deae7b5f/solenv/clang-format/excludelist#L3891\n\nMaybe it would be great to follow the \"clang-format\" rules here, for newly introduced code?\n\nSo the code would look like:\n            // Skip wmf header\n            mpInputStream-\u003eSeek(nStrmPos + 40);    // set the streampos to the start of the metaactions\n            GetPlaceableBound(aPlaceableBound, mpInputStream);\n            // Go back to the place after placeable header\n            mpInputStream-\u003eSeek(nStrmPos + 22);",
+      "revId": "47e681879f3f87cde3b7324c9bf4778a2b9a3922",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "096ef372_4024988f",
+        "filename": "emfio/source/reader/wmfreader.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1466,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2021-09-27T15:41:21Z",
+      "side": 1,
+      "message": "It will be great to display \"aPlaceableBound\" only once, but always (see comment below).",
+      "revId": "47e681879f3f87cde3b7324c9bf4778a2b9a3922",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6d004b0_925d2d54",
+        "filename": "emfio/source/reader/wmfreader.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2021-09-27T15:41:21Z",
+      "side": 1,
+      "message": "It will be great if you would move `SAL_INFO(\"emfio\", \"Placeable bounds \"` information displaying outside of condition.\n\nAs a result \"Placeable bounds\" information would be always displayed (with current implementation there is no information about \"Placeable bounds \"\n displayed, where \"bPlaceable\" is displayed)",
+      "revId": "47e681879f3f87cde3b7324c9bf4778a2b9a3922",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbc7a95e_42543d1c",
+        "filename": "emfio/source/reader/wmfreader.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1493,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2021-09-27T15:41:21Z",
+      "side": 1,
+      "message": "We could always display information about  `SAL_INFO(\"emfio\", \"Placeable bounds \"` here .",
       "revId": "47e681879f3f87cde3b7324c9bf4778a2b9a3922",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
