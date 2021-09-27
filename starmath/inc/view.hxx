@@ -139,7 +139,7 @@ private:
     void SetCursor(const tools::Rectangle &rRect);
     static bool IsInlineEditEnabled();
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle&) override;
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
     virtual bool Command(const CommandEvent& rCEvt) override;
 

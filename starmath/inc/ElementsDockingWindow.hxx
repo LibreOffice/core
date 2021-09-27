@@ -85,7 +85,7 @@ class SmElementsControl : public weld::CustomWidgetController
     // Parser for them
     std::unique_ptr<AbstractSmParser> maParser;
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle&) override;
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual bool MouseMove(const MouseEvent& rMEvt) override;
     virtual OUString RequestHelp(tools::Rectangle& rRect) override;
@@ -126,7 +126,7 @@ class SmElementsControl : public weld::CustomWidgetController
     void build();
 
     //if bDraw is true, then draw, otherwise just layout
-    void LayoutOrPaintContents(vcl::RenderContext& rContext, bool bDraw);
+    void LayoutOrPaintContents(OutputDevice& rContext, bool bDraw);
 
 public:
     explicit SmElementsControl(std::unique_ptr<weld::ScrolledWindow> xScrolledWindow);

@@ -67,7 +67,7 @@ public:
 
 class SmShowFont final : public weld::CustomWidgetController
 {
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle&) override;
 
     vcl::Font maFont;
 
@@ -256,7 +256,7 @@ class SmShowSymbolSet final : public weld::CustomWidgetController
     void SetScrollBarRange();
     Point OffsetPoint(const Point &rPoint) const;
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
     virtual void Resize() override;
@@ -276,7 +276,7 @@ public:
         calccols(pDrawingArea->get_ref_device());
     }
 
-    void calccols(const vcl::RenderContext& rRenderContext);
+    void calccols(const OutputDevice& rRenderContext);
     void    SelectSymbol(sal_uInt16 nSymbol);
     sal_uInt16  GetSelectSymbol() const { return nSelectSymbol; }
     void SetSymbolSet(const SymbolPtrVec_t& rSymbolSet);
@@ -292,7 +292,7 @@ private:
 
     Link<SmShowSymbol&,void> aDblClickHdlLink;
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle&) override;
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
 
     void setFontSize(vcl::Font &rFont) const;
@@ -363,7 +363,7 @@ private:
     OUString m_aText;
     vcl::Font m_aFont;
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle&) override;
     virtual void Resize() override;
 
 public:

@@ -31,7 +31,7 @@
 
 namespace {
 
-bool SmGetGlyphBoundRect(const vcl::RenderContext &rDev,
+bool SmGetGlyphBoundRect(const OutputDevice &rDev,
                          const OUString &rText, tools::Rectangle &rRect)
     // basically the same as 'GetTextBoundRect' (in class 'OutputDevice')
     // but with a string as argument.
