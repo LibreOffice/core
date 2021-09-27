@@ -1830,6 +1830,8 @@ class GtkOpenGLContext : public OpenGLContext
     GLWindow m_aGLWin;
     GtkWidget *m_pGLArea;
     GdkGLContext *m_pContext;
+    gulong m_nDestroySignalId;
+    gulong m_nRenderSignalId;
     guint m_nAreaFrameBuffer;
     guint m_nFrameBuffer;
     guint m_nRenderBuffer;
@@ -1842,6 +1844,8 @@ public:
     GtkOpenGLContext()
         : m_pGLArea(nullptr)
         , m_pContext(nullptr)
+        , m_nDestroySignalId(0)
+        , m_nRenderSignalId(0)
         , m_nAreaFrameBuffer(0)
         , m_nFrameBuffer(0)
         , m_nRenderBuffer(0)
@@ -1874,6 +1878,8 @@ private:
     {
         GtkOpenGLContext* pThis = static_cast<GtkOpenGLContext*>(context);
         pThis->m_pGLArea = nullptr;
+        pThis->m_nDestroySignalId = 0;
+        pThis->m_nRenderSignalId = 0;
     }
 
     static gboolean signalRender(GtkGLArea*, GdkGLContext*, gpointer window)
@@ -1957,8 +1963,8 @@ private:
         const SystemEnvData* pEnvData = m_pChildWindow->GetSystemData();
         GtkWidget *pParent = static_cast<GtkWidget*>(pEnvData->pWidget);
         m_pGLArea = gtk_gl_area_new();
-        g_signal_connect(G_OBJECT(m_pGLArea), "destroy", G_CALLBACK(signalDestroy), this);
-        g_signal_connect(G_OBJECT(m_pGLArea), "render", G_CALLBACK(signalRender), this);
+        m_nDestroySignalId = g_signal_connect(G_OBJECT(m_pGLArea), "destroy", G_CALLBACK(signalDestroy), this);
+        m_nRenderSignalId = g_signal_connect(G_OBJECT(m_pGLArea), "render", G_CALLBACK(signalRender), this);
         gtk_gl_area_set_has_depth_buffer(GTK_GL_AREA(m_pGLArea), true);
         gtk_gl_area_set_auto_render(GTK_GL_AREA(m_pGLArea), false);
         gtk_widget_set_hexpand(m_pGLArea, true);
@@ -2083,10 +2089,12 @@ private:
 
     virtual ~GtkOpenGLContext() override
     {
+        if (m_nDestroySignalId)
+            g_signal_handler_disconnect(m_pGLArea, m_nDestroySignalId);
+        if (m_nRenderSignalId)
+            g_signal_handler_disconnect(m_pGLArea, m_nRenderSignalId);
         if (m_pContext)
-        {
             g_clear_object(&m_pContext);
-        }
     }
 };
 
