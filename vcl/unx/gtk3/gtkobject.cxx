@@ -110,9 +110,11 @@ GtkSalObjectBase::~GtkSalObjectBase()
 
 GtkSalObject::~GtkSalObject()
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
     if( m_pSocket )
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_widget_unparent(m_pSocket);
+#else
         // remove socket from parent frame's fixed container
         gtk_container_remove( GTK_CONTAINER(gtk_widget_get_parent(m_pSocket)),
                               m_pSocket );
@@ -122,8 +124,8 @@ GtkSalObject::~GtkSalObject()
         // this is just a sanity check
         if( m_pSocket )
             gtk_widget_destroy( m_pSocket );
-    }
 #endif
+    }
 }
 
 void GtkSalObject::ResetClipRegion()
