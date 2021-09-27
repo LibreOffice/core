@@ -42,7 +42,7 @@ public:
     virtual ~DrawView() override;
 
     virtual void MarkListHasChanged() override;
-    void CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr) override;
+    void CompleteRedraw(OutputDevice* pOutDev, const ::tools::Rectangle& rPaintArea, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr) override;
 
     virtual bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll = false, bool bSlide = false, bool bMaster = false) override;
     void SetMasterAttributes(SdrObject* pObject, const SdPage& rPage, SfxItemSet rSet, SfxStyleSheetBasePool* pStShPool, bool& bOk, bool bMaster, bool bSlide);

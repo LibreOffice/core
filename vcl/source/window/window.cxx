@@ -1691,7 +1691,10 @@ void Window::ImplPosSizeWindow( tools::Long nX, tools::Long nY,
                         if ( !bInvalidate )
                         {
                             if ( !pOverlapRegion->IsEmpty() )
-                                ImplInvalidateFrameRegion( pOverlapRegion.get(), InvalidateFlags::Children );
+                            {
+                                tools::Rectangle aTmp = pOverlapRegion->GetBoundRect();
+                                ImplInvalidateFrameRegion( &aTmp, InvalidateFlags::Children );
+                            }
                         }
                     }
                     else
@@ -1710,7 +1713,10 @@ void Window::ImplPosSizeWindow( tools::Long nX, tools::Long nY,
                     aRegion.Intersect( GetOutDev()->ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
                 ImplClipBoundaries( aRegion, false, true );
                 if ( !aRegion.IsEmpty() )
-                    ImplInvalidateFrameRegion( &aRegion, InvalidateFlags::Children );
+                {
+                    tools::Rectangle aTmp = aRegion.GetBoundRect();
+                    ImplInvalidateFrameRegion( &aTmp, InvalidateFlags::Children );
+                }
             }
         }
 
@@ -1723,7 +1729,7 @@ void Window::ImplPosSizeWindow( tools::Long nX, tools::Long nY,
                 ImplExcludeWindowRegion( aRegion );
             ImplClipBoundaries( aRegion, false, true );
             if ( !aRegion.IsEmpty() && !mpWindowImpl->mpBorderWindow )
-                ImplInvalidateParentFrameRegion( aRegion );
+                ImplInvalidateParentFrameRegion( aRegion.GetBoundRect() );
         }
     }
 
@@ -2264,7 +2270,7 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
                 if ( !mpWindowImpl->mbNoParentUpdate )
                 {
                     if ( !aInvRegion.IsEmpty() )
-                        ImplInvalidateParentFrameRegion( aInvRegion );
+                        ImplInvalidateParentFrameRegion( aInvRegion.GetBoundRect() );
                 }
                 ImplGenerateMouseMove();
             }

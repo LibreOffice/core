@@ -254,7 +254,7 @@ void LayeredDevice::RemovePainter (
         mpLayers->pop_back();
 }
 
-void LayeredDevice::Repaint (const vcl::Region& rRepaintRegion)
+void LayeredDevice::Repaint (const ::tools::Rectangle& rRepaintRegion)
 {
     // Validate the contents of all layers (that have their own devices.)
     for (auto const& it : *mpLayers)
@@ -262,8 +262,7 @@ void LayeredDevice::Repaint (const vcl::Region& rRepaintRegion)
         it->Validate(mpTargetWindow->GetMapMode());
     }
 
-    ForAllRectangles(rRepaintRegion,
-            [this] (::tools::Rectangle const& r) { this->RepaintRectangle(r); });
+    RepaintRectangle(rRepaintRegion);
 }
 
 void LayeredDevice::RepaintRectangle (const ::tools::Rectangle& rRepaintRectangle)

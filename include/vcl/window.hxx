@@ -510,8 +510,8 @@ public:
     SAL_DLLPRIVATE vcl::Window*         ImplGetParent() const;
     SAL_DLLPRIVATE vcl::Window*         ImplFindWindow( const Point& rFramePos );
 
-    SAL_DLLPRIVATE void                 ImplInvalidateFrameRegion( const vcl::Region* pRegion, InvalidateFlags nFlags );
-    SAL_DLLPRIVATE void                 ImplInvalidateOverlapFrameRegion( const vcl::Region& rRegion );
+    SAL_DLLPRIVATE void                 ImplInvalidateFrameRegion( const tools::Rectangle* pRegion, InvalidateFlags nFlags );
+    SAL_DLLPRIVATE void                 ImplInvalidateOverlapFrameRegion( const tools::Rectangle& rRegion );
 
     SAL_DLLPRIVATE bool                 ImplSetClipFlag( bool bSysObjOnlySmaller = false );
 
@@ -572,15 +572,15 @@ protected:
 
     SAL_DLLPRIVATE Point                ImplOutputToFrame( const Point& rPos );
 
-    SAL_DLLPRIVATE void                 ImplInvalidateParentFrameRegion( vcl::Region& rRegion );
-    SAL_DLLPRIVATE void                 ImplValidateFrameRegion( const vcl::Region* rRegion, ValidateFlags nFlags );
+    SAL_DLLPRIVATE void                 ImplInvalidateParentFrameRegion( const tools::Rectangle& rRegion );
+    SAL_DLLPRIVATE void                 ImplValidateFrameRegion( const tools::Rectangle* rRegion, ValidateFlags nFlags );
     SAL_DLLPRIVATE void                 ImplValidate();
     SAL_DLLPRIVATE void                 ImplMoveInvalidateRegion( const tools::Rectangle& rRect, tools::Long nHorzScroll, tools::Long nVertScroll, bool bChildren );
     SAL_DLLPRIVATE void                 ImplMoveAllInvalidateRegions( const tools::Rectangle& rRect, tools::Long nHorzScroll, tools::Long nVertScroll, bool bChildren );
 
     SAL_DLLPRIVATE vcl::Window*         ImplGetBorderWindow() const;
 
-    SAL_DLLPRIVATE void                 ImplInvalidate( const vcl::Region* rRegion, InvalidateFlags nFlags );
+    SAL_DLLPRIVATE void                 ImplInvalidate( const tools::Rectangle* rRegion, InvalidateFlags nFlags );
 
     virtual WindowHitTest               ImplHitTest( const Point& rFramePos );
 
@@ -960,7 +960,6 @@ public:
                                                 const tools::Rectangle& rRect, ScrollFlags nFlags = ScrollFlags::NONE );
     virtual void                        Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE );
     virtual void                        Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE );
-    virtual void                        Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags = InvalidateFlags::NONE );
     /**
      * Notification about some rectangle of the output device got invalidated.Used for the main
      * document window.

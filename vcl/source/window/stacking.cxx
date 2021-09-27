@@ -42,7 +42,7 @@ struct ImplCalcToTopData
 {
     std::unique_ptr<ImplCalcToTopData> mpNext;
     VclPtr<vcl::Window>                mpWindow;
-    std::unique_ptr<vcl::Region>       mpInvalidateRegion;
+    std::optional<tools::Rectangle>    moInvalidateRegion;
 };
 
 namespace vcl {
@@ -228,7 +228,7 @@ void Window::ImplCalcToTop( ImplCalcToTopData* pPrevData )
         ImplCalcToTopData* pData    = new ImplCalcToTopData;
         pPrevData->mpNext.reset(pData);
         pData->mpWindow             = this;
-        pData->mpInvalidateRegion.reset(new vcl::Region( aInvalidateRegion ));
+        pData->moInvalidateRegion = aInvalidateRegion.GetBoundRect();
     }
 }
 
@@ -353,7 +353,7 @@ void Window::ImplStartToTop( ToTopFlags nFlags )
     pCurData = aStartData.mpNext.get();
     while ( pCurData )
     {
-        pCurData->mpWindow->ImplInvalidateFrameRegion( pCurData->mpInvalidateRegion.get(), InvalidateFlags::Children );
+        pCurData->mpWindow->ImplInvalidateFrameRegion( pCurData->moInvalidateRegion ? &*pCurData->moInvalidateRegion : nullptr, InvalidateFlags::Children );
         pCurData = pCurData->mpNext.get();
     }
 }

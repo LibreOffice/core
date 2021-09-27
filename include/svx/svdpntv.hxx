@@ -316,7 +316,7 @@ public:
 
 
     // Used internally for Draw/Impress/sch/chart2
-    virtual void CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr);
+    virtual void CompleteRedraw(OutputDevice* pOut, const tools::Rectangle& rPaintArea, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr);
 
     // #i72889# used from CompleteRedraw() implementation internally, added to be able to do a complete redraw in single steps
 

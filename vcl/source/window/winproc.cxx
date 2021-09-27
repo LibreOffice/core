@@ -1610,8 +1610,7 @@ static void ImplHandlePaint( vcl::Window* pWindow, const tools::Rectangle& rBoun
     pWindow->ImplGetWindowImpl()->mnPaintFlags |= ImplPaintFlags::CheckRtl;
 
     // trigger paint for all windows that live in the new paint region
-    vcl::Region aRegion( rBoundRect );
-    pWindow->ImplInvalidateOverlapFrameRegion( aRegion );
+    pWindow->ImplInvalidateOverlapFrameRegion( rBoundRect );
     if( bImmediateUpdate )
     {
         // #i87663# trigger possible pending resize notifications
