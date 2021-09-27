@@ -16,6 +16,23 @@
       "message": "This patch takes in a bit more territory than I am comfortable with. It makes good sense for the MS-lookalike modes, but it isn\u0027t necessary at all for the traditional menu/toolbar.\n\nI just produced it since I mentioned it in a comment and wanted to see how it could be done. Consistency everywhere is nice I guess, and there aren\u0027t that many save options that will exist, so adding one more shouldn\u0027t hurt at all.\n\nBut I couldn\u0027t care less if this is approved or not, so I won\u0027t even bother to self code-review it.",
       "revId": "5aba380d9a133da6b8db332f3393e2fa102f4f99",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d8c794d_d5c25a79",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-27T04:54:04Z",
+      "side": 1,
+      "message": "I\u0027m not sure what process decides whether a toolbar dropdown menu should gain an entry. Is adding this one (which is usually only available through the major file name) useful as a more-discoverable shortcut? [see my earlier comment where I add some doubt about that]",
+      "revId": "5aba380d9a133da6b8db332f3393e2fa102f4f99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
