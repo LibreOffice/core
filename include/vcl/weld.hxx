@@ -63,7 +63,6 @@ struct SystemEnvData;
 namespace vcl
 {
 class ILibreOfficeKitNotifier;
-typedef OutputDevice RenderContext;
 }
 namespace tools
 {
