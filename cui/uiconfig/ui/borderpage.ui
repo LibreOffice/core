@@ -37,7 +37,7 @@
   </object>
   <object class="GtkListStore" id="liststore_linewidth">
     <columns>
-      <!-- column-name gchararray1 -->
+      <!-- column-name text -->
       <column type="gchararray"/>
     </columns>
     <data>
@@ -283,6 +283,14 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="model">liststore_linewidth</property>
+                    <property name="entry-text-column">0</property>
+                    <property name="id-column">1</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
