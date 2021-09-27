@@ -103,7 +103,7 @@ IMPL_LINK(CellBorderStylePopup, TB1SelectHdl, const OString&, rId, void)
     }
     else if (rId == "thickbox")
     {
-        theDefLine.SetWidth(DEF_LINE_WIDTH_2);
+        theDefLine.SetWidth(SvxBorderLineWidth::Medium);
         pLeft = pRight = pTop = pBottom = &theDefLine;
         nValidFlags |= FRM_VALID_OUTER;
     }
@@ -228,25 +228,25 @@ IMPL_LINK(CellBorderStylePopup, TB4SelectHdl, const OString&, rId, void)
 
     if (rId == "thickbottom")
     {
-        pBottom.reset(new editeng::SvxBorderLine(nullptr, DEF_LINE_WIDTH_2 ));
+        pBottom.reset(new editeng::SvxBorderLine(nullptr, SvxBorderLineWidth::Medium ));
         nValidFlags |= FRM_VALID_BOTTOM;
     }
     else if (rId == "doublebottom")
     {
         pBottom.reset(new editeng::SvxBorderLine(nullptr));
-        pBottom->GuessLinesWidths(SvxBorderLineStyle::DOUBLE, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_1);
+        pBottom->GuessLinesWidths(SvxBorderLineStyle::DOUBLE, SvxBorderLineWidth::Hairline, SvxBorderLineWidth::Hairline, SvxBorderLineWidth::Thin);
         nValidFlags |= FRM_VALID_BOTTOM;
     }
     else if (rId == "topthickbottom")
     {
-        pBottom.reset(new editeng::SvxBorderLine(nullptr, DEF_LINE_WIDTH_2 ));
+        pBottom.reset(new editeng::SvxBorderLine(nullptr, SvxBorderLineWidth::Medium ));
         pTop.reset(new editeng::SvxBorderLine(nullptr, 1));
         nValidFlags |= FRM_VALID_BOTTOM|FRM_VALID_TOP;
     }
     else if (rId == "topdoublebottom")
     {
         pBottom.reset(new editeng::SvxBorderLine(nullptr));
-        pBottom->GuessLinesWidths(SvxBorderLineStyle::DOUBLE, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_1);
+        pBottom->GuessLinesWidths(SvxBorderLineStyle::DOUBLE, SvxBorderLineWidth::Hairline, SvxBorderLineWidth::Hairline, SvxBorderLineWidth::Thin);
         pTop.reset(new editeng::SvxBorderLine(nullptr, 1));
         nValidFlags |= FRM_VALID_BOTTOM|FRM_VALID_TOP;
     }
