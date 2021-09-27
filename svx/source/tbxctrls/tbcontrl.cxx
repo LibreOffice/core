@@ -2462,8 +2462,8 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     sal_uInt16           nModifier = aFrameSet->GetModifier();
     FrmValidFlags        nValidFlags = FrmValidFlags::NONE;
 
-    theDefLine.GuessLinesWidths(theDefLine.GetBorderLineStyle(),
-            DEF_LINE_WIDTH_0);
+    theDefLine.GuessLinesWidths(theDefLine.GetBorderLineStyle(), SvxBorderLineWidth::Hairline);
+
     switch ( nSel )
     {
         case 1: nValidFlags |= FrmValidFlags::AllMask;
@@ -2773,7 +2773,7 @@ IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl, ListBox&, void)
     {
         SvxBorderLine aTmp;
         aTmp.SetBorderLineStyle( nStyle );
-        aTmp.SetWidth( 20 ); // TODO Make it depend on a width field
+        aTmp.SetWidth( SvxBorderLineWidth::Thin ); // TODO Make it depend on a width field
         aLineItem.SetLine( &aTmp );
     }
     else
