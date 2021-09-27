@@ -709,6 +709,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/quartz/salgdicommon \
     vcl/quartz/salvd \
     vcl/quartz/utils \
+    vcl/quartz/AquaGraphicsBackend \
     $(vcl_headless_code) \
 ))
 $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
