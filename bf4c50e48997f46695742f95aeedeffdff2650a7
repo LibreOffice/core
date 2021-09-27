@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fc85b23_de11a289",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-09-27T07:29:08Z",
+      "side": 1,
+      "message": "Using the highlight color instead of font color is requested by users and makes sense to me. I see no blocker.",
+      "revId": "bf4c50e48997f46695742f95aeedeffdff2650a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
