@@ -90,6 +90,7 @@ core_constructor_list = [
     "com_sun_star_comp_chart2_ChartDocumentWrapper_get_implementation",
     "com_sun_star_comp_chart2_ChartFrameLoader_get_implementation",
     "com_sun_star_comp_chart2_WizardDialog_get_implementation",
+    "org_libreoffice_chart2_Chart2ToolboxController",
     "org_libreoffice_comp_chart2_sidebar_ChartPanelFactory",
 # comphelper/util/comphelp.component
     "com_sun_star_comp_MemoryStream",
@@ -371,8 +372,12 @@ core_constructor_list = [
 # svgio/svgio.component
     "svgio_XSvgParser_get_implementation",
 # svx/util/svx.component
+    "com_sun_star_comp_svx_CharacterSpacingToolBoxControl_get_implementation",
+    "com_sun_star_comp_svx_CTLToolBoxControl_get_implementation",
+    "com_sun_star_comp_svx_LineSpacingToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_NumberingToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_SmartTagMenuController_get_implementation",
+    "com_sun_star_comp_svx_UnderlineToolBoxControl_get_implementation",
     "com_sun_star_drawing_EnhancedCustomShapeEngine_get_implementation",
     "com_sun_star_drawing_SvxShapeCollection_get_implementation",
     "com_sun_star_svx_FontHeightToolBoxController_get_implementation",
@@ -380,10 +385,14 @@ core_constructor_list = [
 # svx/util/svxcore.component
     "com_sun_star_comp_graphic_PrimitiveFactory2D_get_implementation",
     "com_sun_star_comp_Draw_GraphicExporter_get_implementation",
+    "com_sun_star_comp_svx_CharacterSpacingToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_ColorToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_FontNameToolBoxControl_get_implementation",
+    "com_sun_star_comp_svx_FrameToolBoxControl_get_implementation",
     "com_sun_star_comp_Svx_GraphicExportHelper_get_implementation",
     "com_sun_star_comp_Svx_GraphicImportHelper_get_implementation",
+    "com_sun_star_comp_svx_LineEndToolBoxControl_get_implementation",
+    "com_sun_star_comp_svx_LineStyleToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_StyleToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_StylesPreviewToolBoxControl_get_implementation",
 # toolkit/util/tk.component
