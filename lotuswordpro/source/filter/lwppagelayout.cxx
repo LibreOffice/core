@@ -74,6 +74,7 @@
 #include <lwpchangemgr.hxx>
 #include <lwpfilehdr.hxx>
 #include <lwpglobalmgr.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <sal/log.hxx>
 #include <vcl/print.hxx>
 
@@ -548,8 +549,11 @@ LwpPageLayout* LwpPageLayout::GetOddChildLayout()
     {
         rtl::Reference<LwpVirtualLayout> xLay(
             dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
+        o3tl::sorted_vector<LwpVirtualLayout*> aSeen;
         while (xLay.is())
         {
+            aSeen.insert(xLay.get());
+
             if (xLay->GetLayoutType() == LWP_PAGE_LAYOUT)
             {
                 LwpPageLayout* pPageLayout = static_cast<LwpPageLayout*>(xLay.get());
@@ -560,6 +564,9 @@ LwpPageLayout* LwpPageLayout::GetOddChildLayout()
                 }
             }
             xLay.set(dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
+
+            if (aSeen.find(xLay.get()) != aSeen.end())
+                throw std::runtime_error("loop in conversion");
         }
     }
     return nullptr;
