@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17d23c95_92cc5284",
+        "filename": "include/vcl/outdev.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-09-27T07:49:03Z",
+      "side": 1,
+      "message": "does this need to be virtual inheritance?",
+      "range": {
+        "startLine": 171,
+        "startChar": 58,
+        "endLine": 171,
+        "endChar": 65
+      },
+      "revId": "eaba608d91d9de61b3c9ca31c25f59f3e4d8702f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
