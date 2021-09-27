@@ -44,13 +44,14 @@ struct SC_DLLPUBLIC ScQueryEntry
 
     struct SAL_DLLPRIVATE Item
     {
-        QueryType     meType;
-        double        mfVal;
+        QueryType         meType;
+        double            mfVal;
         svl::SharedString maString;
+        Color             maColor;
         bool              mbMatchEmpty;
-        Color maColor;
+        bool              mbRoundForFilter;
 
-        Item() : meType(ByValue), mfVal(0.0), mbMatchEmpty(false) {}
+        Item() : meType(ByValue), mfVal(0.0), mbMatchEmpty(false), mbRoundForFilter(false) {}
 
         bool operator== (const Item& r) const;
     };
