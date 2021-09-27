@@ -16,6 +16,24 @@
       "message": "pass rColumnNames by const\u0026 ?",
       "revId": "b89dc911a35412dc42afa90e5671d963e5dd6083",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce4cef78_8830f312",
+        "filename": "include/connectivity/sqliterator.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-09-27T14:37:11Z",
+      "side": 1,
+      "message": "yeah, that was the intent",
+      "parentUuid": "ef260735_22f4a3ee",
+      "revId": "b89dc911a35412dc42afa90e5671d963e5dd6083",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
