@@ -353,14 +353,14 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testReqIfTable)
     auto aBorder = getProperty<table::BorderLine2>(xCell, "TopBorder");
     // This was 0, tables had no borders, even if the default autoformat has
     // borders and the markup allows no custom borders.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Top Border", static_cast<sal_uInt32>(18), aBorder.LineWidth);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Top Border", static_cast<sal_uInt32>(26), aBorder.LineWidth);
     aBorder = getProperty<table::BorderLine2>(xCell, "BottomBorder");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Bottom Border", static_cast<sal_uInt32>(18), aBorder.LineWidth);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Bottom Border", static_cast<sal_uInt32>(26), aBorder.LineWidth);
     aBorder = getProperty<table::BorderLine2>(xCell, "LeftBorder");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Left Border", static_cast<sal_uInt32>(18), aBorder.LineWidth);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Left Border", static_cast<sal_uInt32>(26), aBorder.LineWidth);
     aBorder = getProperty<table::BorderLine2>(xCell, "RightBorder");
     // This was 0. Single column tables had no right border.  tdf#115576
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Right Border", static_cast<sal_uInt32>(18), aBorder.LineWidth);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Right Border", static_cast<sal_uInt32>(26), aBorder.LineWidth);
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageSize)
