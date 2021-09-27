@@ -75,7 +75,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxRectCtl : public weld::CustomWidgetContro
 private:
     SvxTabPage* m_pPage;
 
-    SVX_DLLPRIVATE static void      InitSettings(vcl::RenderContext& rRenderContext);
+    SVX_DLLPRIVATE static void      InitSettings(OutputDevice& rRenderContext);
     SVX_DLLPRIVATE void             InitRectBitmap();
     SVX_DLLPRIVATE BitmapEx&        GetRectBitmap();
     SVX_DLLPRIVATE void             Resize_Impl(const Size& rSize);
@@ -106,7 +106,7 @@ public:
     void SetControlSettings(RectPoint eRpt, sal_uInt16 nBorder);
     virtual ~SvxRectCtl() override;
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle&) override;
     virtual void Resize() override;
     virtual bool MouseButtonDown(const MouseEvent&) override;
     virtual bool KeyInput(const KeyEvent&) override;
@@ -172,7 +172,7 @@ public:
     virtual ~SvxPixelCtl() override;
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
-    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void Resize() override;
     virtual tools::Rectangle GetFocusRect() override;
@@ -289,10 +289,10 @@ protected:
     tools::Rectangle GetPreviewSize() const;
 
     // prepare buffered paint
-    void LocalPrePaint(vcl::RenderContext const & rRenderContext);
+    void LocalPrePaint(OutputDevice const & rRenderContext);
 
     // end and output buffered paint
-    void LocalPostPaint(vcl::RenderContext& rRenderContext);
+    void LocalPostPaint(OutputDevice& rRenderContext);
 
 public:
     SvxPreviewBase();
@@ -352,7 +352,7 @@ public:
     void SetSymbol( Graphic* p, const Size& s );
     void ResizeSymbol( const Size& s );
 
-    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void Resize() override;
 };
 
@@ -368,7 +368,7 @@ public:
 
     void SetAttributes(const SfxItemSet& rItemSet);
 
-    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void Resize() override;
 };
 
@@ -395,7 +395,7 @@ public:
     void SetShadowAttributes(const SfxItemSet& rItemSet);
     void SetShadowPosition(const Point& rPos);
 
-    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
 };
 
 class SvxRelativeField;

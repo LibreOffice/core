@@ -179,7 +179,7 @@ void SvxSelectionModeControl::Click()
 void SvxSelectionModeControl::Paint( const UserDrawEvent& rUsrEvt )
 {
     const tools::Rectangle aControlRect = getControlRect();
-    vcl::RenderContext* pDev = rUsrEvt.GetRenderContext();
+    OutputDevice* pDev = rUsrEvt.GetRenderContext();
     tools::Rectangle aRect = rUsrEvt.GetRect();
 
     Size aImgSize( maImages[mnState].GetSizePixel() );

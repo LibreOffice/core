@@ -77,7 +77,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC DialControl final : public weld::CustomWidge
 public:
     virtual void        SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
-    virtual void        Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void        Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
 
     virtual void        StyleUpdated() override;
 

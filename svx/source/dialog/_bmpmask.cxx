@@ -69,7 +69,7 @@ public:
         Invalidate();
     }
 
-    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
 
     virtual void SetDrawingArea(weld::DrawingArea* pArea) override
     {
@@ -304,7 +304,7 @@ IMPL_LINK_NOARG(MaskData, ExecHdl, weld::Button&, void)
             { &aBItem });
 }
 
-void BmpColorWindow::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& /*Rect*/)
+void BmpColorWindow::Paint( OutputDevice& rRenderContext, const tools::Rectangle& /*Rect*/)
 {
     rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
     rRenderContext.SetLineColor(aColor);

@@ -111,7 +111,7 @@ bool GalleryPreview::ImplGetGraphicCenterRect( const Graphic& rGraphic, tools::R
     return ::ImplGetGraphicCenterRect(*this, rGraphic, rResultRect);
 }
 
-void GalleryPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
+void GalleryPreview::Paint(OutputDevice& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     rRenderContext.SetBackground(Wallpaper(GALLERY_BG_COLOR));
     rRenderContext.Erase();
@@ -256,7 +256,7 @@ bool DialogGalleryPreview::ImplGetGraphicCenterRect( const Graphic& rGraphic, to
     return ::ImplGetGraphicCenterRect(*this, rGraphic, rResultRect);
 }
 
-void DialogGalleryPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void DialogGalleryPreview::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.SetBackground(Wallpaper(GALLERY_BG_COLOR));
 
@@ -272,7 +272,7 @@ void DialogGalleryPreview::Paint(vcl::RenderContext& rRenderContext, const tools
     }
 }
 
-void GalleryIconView::drawTransparenceBackground(vcl::RenderContext& rOut, const Point& rPos, const Size& rSize)
+void GalleryIconView::drawTransparenceBackground(OutputDevice& rOut, const Point& rPos, const Size& rSize)
 {
     // draw checkered background
     static const sal_uInt32 nLen(8);

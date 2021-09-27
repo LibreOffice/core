@@ -64,12 +64,12 @@ private:
     SvxPageUsage eUsage;
 
 protected:
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
 
-    virtual void DrawPage(vcl::RenderContext& rRenderContext, const Point& rPoint,
+    virtual void DrawPage(OutputDevice& rRenderContext, const Point& rPoint,
                           const bool bSecond, const bool bEnabled);
 
-    static void drawFillAttributes(vcl::RenderContext& rRenderContext,
+    static void drawFillAttributes(OutputDevice& rRenderContext,
                             const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
                             const tools::Rectangle& rPaintRange, const tools::Rectangle& rDefineRange);
 

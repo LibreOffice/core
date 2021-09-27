@@ -141,14 +141,14 @@ void SvxSearchCharSet::SelectCharacter( const Subset* sub )
     Invalidate();
 }
 
-void SvxSearchCharSet::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SvxSearchCharSet::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     InitSettings(rRenderContext);
     RecalculateFont(rRenderContext);
     DrawChars_Impl(rRenderContext, FirstInView(), LastInView());
 }
 
-void SvxSearchCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, int n2)
+void SvxSearchCharSet::DrawChars_Impl(OutputDevice& rRenderContext, int n1, int n2)
 {
     if (n1 > LastInView() || n2 < FirstInView())
         return;
@@ -282,7 +282,7 @@ sal_UCS4 SvxSearchCharSet::GetSelectCharacter() const
     return 1;
 }
 
-void SvxSearchCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
+void SvxSearchCharSet::RecalculateFont(OutputDevice& rRenderContext)
 {
     if (!mbRecalculateFont)
         return;

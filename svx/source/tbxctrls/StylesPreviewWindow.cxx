@@ -108,7 +108,7 @@ StyleItemController::StyleItemController(const std::pair<OUString, OUString>& aS
 {
 }
 
-void StyleItemController::Paint(vcl::RenderContext& rRenderContext)
+void StyleItemController::Paint(OutputDevice& rRenderContext)
 {
     rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::FONT | PushFlags::TEXTCOLOR);
 
@@ -230,7 +230,7 @@ static SvxFont GetFontFromItems(const SvxFontItem* pFontItem, Size aPixelFontSiz
     return aFont;
 }
 
-void StyleItemController::DrawEntry(vcl::RenderContext& rRenderContext)
+void StyleItemController::DrawEntry(OutputDevice& rRenderContext)
 {
     SfxObjectShell* pShell = SfxObjectShell::Current();
     if (!pShell)
@@ -310,7 +310,7 @@ void StyleItemController::DrawEntry(vcl::RenderContext& rRenderContext)
     rRenderContext.SetLineColor(aOriginalLineColor);
 }
 
-void StyleItemController::DrawContentBackground(vcl::RenderContext& rRenderContext,
+void StyleItemController::DrawContentBackground(OutputDevice& rRenderContext,
                                                 const tools::Rectangle& aContentRect,
                                                 const Color& aColor)
 {
@@ -319,7 +319,7 @@ void StyleItemController::DrawContentBackground(vcl::RenderContext& rRenderConte
     rRenderContext.DrawRect(aContentRect);
 }
 
-void StyleItemController::DrawHighlight(vcl::RenderContext& rRenderContext, Color aFontBack)
+void StyleItemController::DrawHighlight(OutputDevice& rRenderContext, Color aFontBack)
 {
     tools::Rectangle aTextRect;
     rRenderContext.GetTextBoundRect(aTextRect, m_aStyleName.second);
@@ -339,7 +339,7 @@ void StyleItemController::DrawHighlight(vcl::RenderContext& rRenderContext, Colo
     rRenderContext.DrawRect(aTextRect);
 }
 
-void StyleItemController::DrawText(vcl::RenderContext& rRenderContext)
+void StyleItemController::DrawText(OutputDevice& rRenderContext)
 {
     tools::Rectangle aTextRect;
     rRenderContext.GetTextBoundRect(aTextRect, m_aStyleName.second);

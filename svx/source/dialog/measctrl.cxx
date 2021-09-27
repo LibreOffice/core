@@ -73,7 +73,7 @@ void SvxXMeasurePreview::Resize()
 
 SvxXMeasurePreview::~SvxXMeasurePreview() {}
 
-void SvxXMeasurePreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SvxXMeasurePreview::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.SetBackground(rRenderContext.GetSettings().GetStyleSettings().GetWindowColor());
     rRenderContext.Erase();

@@ -150,7 +150,7 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     const Color aBackColor(COL_WHITE);
     const Color aTextColor(COL_BLACK);
 
-    vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
+    OutputDevice* pDev = rUDEvt.GetRenderContext();
     tools::Rectangle aRect = rUDEvt.GetRect();
     sal_uInt16 nItemId = rUDEvt.GetItemId();
 
@@ -494,7 +494,7 @@ void SvxBmpNumValueSet::UserDraw(const UserDrawEvent& rUDEvt)
     SvxNumValueSet::UserDraw(rUDEvt);
 
     tools::Rectangle aRect = rUDEvt.GetRect();
-    vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
+    OutputDevice* pDev = rUDEvt.GetRenderContext();
     sal_uInt16  nItemId = rUDEvt.GetItemId();
     Point aBLPos = aRect.TopLeft();
 

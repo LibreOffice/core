@@ -194,7 +194,7 @@ private:
     DECL_LINK(CustomGetSizeHdl, OutputDevice&, Size);
 
     /// Calculate the optimal width of the dropdown.  Very expensive operation, triggers lots of font measurement.
-    void CalcOptimalExtraUserWidth(vcl::RenderContext& rRenderContext);
+    void CalcOptimalExtraUserWidth(OutputDevice& rRenderContext);
 
     void Select(bool bNonTravelSelect);
 
@@ -219,8 +219,8 @@ protected:
 
     void            ReleaseFocus();
     static Color    TestColorsVisible(const Color &FontCol, const Color &BackCol);
-    static void     UserDrawEntry(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const OUString &rStyleName);
-    void            SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 nItem, const tools::Rectangle& rRect, std::u16string_view rStyleName, bool bIsNotSelected);
+    static void     UserDrawEntry(OutputDevice& rRenderContext, const tools::Rectangle& rRect, const OUString &rStyleName);
+    void            SetupEntry(OutputDevice& rRenderContext, sal_Int32 nItem, const tools::Rectangle& rRect, std::u16string_view rStyleName, bool bIsNotSelected);
     static bool     AdjustFontForItemHeight(OutputDevice& rDevice, tools::Rectangle const & rTextRect, tools::Long nHeight);
     DECL_LINK(MenuSelectHdl, const OString&, void);
     DECL_STATIC_LINK(SvxStyleBox_Base, ShowMoreHdl, void*, void);
@@ -1112,7 +1112,7 @@ void SvxStyleBox_Impl::SetOptimalSize()
     SetSizePixel(get_preferred_size());
 }
 
-void SvxStyleBox_Base::UserDrawEntry(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const OUString &rStyleName)
+void SvxStyleBox_Base::UserDrawEntry(OutputDevice& rRenderContext, const tools::Rectangle& rRect, const OUString &rStyleName)
 {
     // IMG_TXT_DISTANCE in ilstbox.hxx is 6, then 1 is added as
     // nBorder, and we are adding 1 in order to look better when
@@ -1131,7 +1131,7 @@ void SvxStyleBox_Base::UserDrawEntry(vcl::RenderContext& rRenderContext, const t
     rRenderContext.DrawText(aPos, rStyleName);
 }
 
-void SvxStyleBox_Base::SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 nItem, const tools::Rectangle& rRect, std::u16string_view rStyleName, bool bIsNotSelected)
+void SvxStyleBox_Base::SetupEntry(OutputDevice& rRenderContext, sal_Int32 nItem, const tools::Rectangle& rRect, std::u16string_view rStyleName, bool bIsNotSelected)
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     if (!bIsNotSelected)
@@ -1277,7 +1277,7 @@ void SvxStyleBox_Base::SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 
 
 IMPL_LINK(SvxStyleBox_Base, CustomRenderHdl, weld::ComboBox::render_args, aPayload, void)
 {
-    vcl::RenderContext& rRenderContext = std::get<0>(aPayload);
+    OutputDevice& rRenderContext = std::get<0>(aPayload);
     const ::tools::Rectangle& rRect = std::get<1>(aPayload);
     bool bSelected = std::get<2>(aPayload);
     const OUString& rId = std::get<3>(aPayload);
@@ -1295,7 +1295,7 @@ IMPL_LINK(SvxStyleBox_Base, CustomRenderHdl, weld::ComboBox::render_args, aPaylo
     rRenderContext.Pop();
 }
 
-void SvxStyleBox_Base::CalcOptimalExtraUserWidth(vcl::RenderContext& rRenderContext)
+void SvxStyleBox_Base::CalcOptimalExtraUserWidth(OutputDevice& rRenderContext)
 {
     if (m_nMaxUserDrawFontWidth)
         return;

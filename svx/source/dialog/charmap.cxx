@@ -443,7 +443,7 @@ bool SvxShowCharSet::KeyInput(const KeyEvent& rKEvt)
     return bRet;
 }
 
-void SvxShowCharSet::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SvxShowCharSet::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     InitSettings(rRenderContext);
     RecalculateFont(rRenderContext);
@@ -493,7 +493,7 @@ tools::Rectangle SvxShowCharSet::getGridRectangle(const Point &rPointUL, const S
     return tools::Rectangle(aPointUL, aGridSize);
 }
 
-void SvxShowCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, int n2)
+void SvxShowCharSet::DrawChars_Impl(OutputDevice& rRenderContext, int n1, int n2)
 {
     if (n1 > LastInView() || n2 < FirstInView())
         return;
@@ -605,7 +605,7 @@ void SvxShowCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, 
 }
 
 
-void SvxShowCharSet::InitSettings(vcl::RenderContext& rRenderContext)
+void SvxShowCharSet::InitSettings(OutputDevice& rRenderContext)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
@@ -638,7 +638,7 @@ sal_UCS4 SvxShowCharSet::GetSelectCharacter() const
 }
 
 
-void SvxShowCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
+void SvxShowCharSet::RecalculateFont(OutputDevice& rRenderContext)
 {
     if (!mbRecalculateFont)
         return;

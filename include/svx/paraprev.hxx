@@ -52,9 +52,9 @@ class SVX_DLLPUBLIC SvxParaPrevWindow final : public weld::CustomWidgetControlle
     // line distance
     SvxPrevLineSpace    eLine;
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
-    void DrawParagraph(vcl::RenderContext& rRenderContext);
+    void DrawParagraph(OutputDevice& rRenderContext);
 
 public:
     SvxParaPrevWindow();

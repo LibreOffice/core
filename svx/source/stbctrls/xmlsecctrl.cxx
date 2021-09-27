@@ -125,7 +125,7 @@ void XmlSecStatusBarControl::Command( const CommandEvent& rCEvt )
 
 void XmlSecStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
 {
-    vcl::RenderContext* pDev = rUsrEvt.GetRenderContext();
+    OutputDevice* pDev = rUsrEvt.GetRenderContext();
 
     tools::Rectangle           aRect = rUsrEvt.GetRect();
     Color               aOldLineColor = pDev->GetLineColor();

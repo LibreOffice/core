@@ -42,14 +42,14 @@ void SvxParaPrevWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     pDrawingArea->set_size_request(aOptimalSize.Width(), aOptimalSize.Height());
 }
 
-void SvxParaPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SvxParaPrevWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     DrawParagraph(rRenderContext);
 }
 
 #define DEF_MARGIN  120
 
-void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
+void SvxParaPrevWindow::DrawParagraph(OutputDevice& rRenderContext)
 {
     // Count in Twips by default
     rRenderContext.Push(PushFlags::MAPMODE);

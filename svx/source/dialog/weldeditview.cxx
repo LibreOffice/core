@@ -157,7 +157,7 @@ void WeldEditView::Resize()
     weld::CustomWidgetController::Resize();
 }
 
-void WeldEditView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void WeldEditView::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color aBgColor = rStyleSettings.GetWindowColor();
@@ -169,7 +169,7 @@ void WeldEditView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     DoPaint(rRenderContext, rRect);
 }
 
-void WeldEditView::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void WeldEditView::DoPaint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     rRenderContext.Push(PushFlags::ALL);
     rRenderContext.SetClipRegion();

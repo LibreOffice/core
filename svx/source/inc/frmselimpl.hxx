@@ -183,10 +183,10 @@ struct FrameSelectorImpl
     /** Draws all contents of the control. */
     void                DrawVirtualDevice();
     /** Copies contents of the virtual device to the control. */
-    void                CopyVirDevToControl(vcl::RenderContext& rRenderContext);
+    void                CopyVirDevToControl(OutputDevice& rRenderContext);
 
     /** Draws tracking rectangles for all selected frame borders. */
-    void                DrawAllTrackingRects(vcl::RenderContext& rRenderContext);
+    void                DrawAllTrackingRects(OutputDevice& rRenderContext);
 
     /** Converts a mouse position to the virtual device position. */
     Point               GetDevPosFromMousePos( const Point& rMousePos ) const;

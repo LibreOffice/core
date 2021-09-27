@@ -45,7 +45,7 @@ private:
     bool             ImplGetGraphicCenterRect( const Graphic& rGraphic, tools::Rectangle& rResultRect ) const;
 
     // Window
-    virtual void     Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void     Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void     SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual bool     MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual bool     Command(const CommandEvent& rCEvt) override;
@@ -74,7 +74,7 @@ private:
 
     SVX_DLLPRIVATE bool             ImplGetGraphicCenterRect( const Graphic& rGraphic, tools::Rectangle& rResultRect ) const;
 
-    SVX_DLLPRIVATE virtual void     Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    SVX_DLLPRIVATE virtual void     Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
 
 public:
 
@@ -111,7 +111,7 @@ public:
 
     virtual bool StartDrag() override;
 
-    static void drawTransparenceBackground(vcl::RenderContext& rOut, const Point& rPos, const Size& rSize);
+    static void drawTransparenceBackground(OutputDevice& rOut, const Point& rPos, const Size& rSize);
 };
 
 #endif // INCLUDED_SVX_GALCTRL_HXX
