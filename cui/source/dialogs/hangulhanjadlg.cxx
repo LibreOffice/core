@@ -101,7 +101,7 @@ namespace svx
         const OUString& getSecondaryText() const { return m_sSecondaryText; }
 
     public:
-        void Paint( vcl::RenderContext& _rDevice, const ::tools::Rectangle& _rRect,
+        void Paint( OutputDevice& _rDevice, const ::tools::Rectangle& _rRect,
             ::tools::Rectangle* _pPrimaryLocation, ::tools::Rectangle* _pSecondaryLocation );
     };
 
@@ -120,7 +120,7 @@ namespace svx
     }
 
 
-    void PseudoRubyText::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& _rRect,
+    void PseudoRubyText::Paint(OutputDevice& rRenderContext, const ::tools::Rectangle& _rRect,
                                ::tools::Rectangle* _pPrimaryLocation, ::tools::Rectangle* _pSecondaryLocation )
     {
         // calculate the text flags for the painting
@@ -209,7 +209,7 @@ namespace svx
 
     private:
         Size GetOptimalSize() const;
-        void Paint(vcl::RenderContext& rRenderContext);
+        void Paint(OutputDevice& rRenderContext);
 
         ScopedVclPtr<VirtualDevice> m_xVirDev;
         std::unique_ptr<weld::RadioButton> m_xControl;
@@ -237,7 +237,7 @@ namespace svx
         m_xImage->set_image(m_xVirDev.get());
     }
 
-    void RubyRadioButton::Paint(vcl::RenderContext& rRenderContext)
+    void RubyRadioButton::Paint(OutputDevice& rRenderContext)
     {
         ::tools::Rectangle aOverallRect(Point(0, 0), rRenderContext.GetOutputSizePixel());
         // inflate the rect a little bit (because the VCL radio button does the same)
@@ -279,7 +279,7 @@ namespace svx
 
     void SuggestionSet::UserDraw( const UserDrawEvent& rUDEvt )
     {
-        vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
+        OutputDevice* pDev = rUDEvt.GetRenderContext();
         ::tools::Rectangle aRect = rUDEvt.GetRect();
         sal_uInt16  nItemId = rUDEvt.GetItemId();
 

@@ -45,7 +45,7 @@ static void FillUpWithDefTabs_Impl( tools::Long nDefDist, SvxTabStopItem& rTabs 
     }
 }
 
-void TabWin_Impl::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
+void TabWin_Impl::Paint(OutputDevice& rRenderContext, const ::tools::Rectangle&)
 {
     // Paint tabulators
     Point aPoint;

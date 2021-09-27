@@ -35,7 +35,7 @@ private:
     double    mfScaleX;
     double    mfScaleY;
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const ::tools::Rectangle& rRect) override;
     virtual void Resize() override;
 
     void ScaleImageToFit();

@@ -13,8 +13,7 @@ class CUI_DLLPUBLIC SvxNumberingPreview final : public weld::CustomWidgetControl
     bool bPosition;
     sal_uInt16 nActLevel;
 
-    virtual void Paint(vcl::RenderContext& rRenderContext,
-                       const ::tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const ::tools::Rectangle& rRect) override;
 
 public:
     SvxNumberingPreview();

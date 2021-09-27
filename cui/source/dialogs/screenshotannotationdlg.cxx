@@ -112,7 +112,7 @@ namespace
         ScreenshotAnnotationDlg_Impl *m_pDialog;
         bool m_bMouseOver;
     private:
-        virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
+        virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle&) override;
         virtual bool MouseMove(const MouseEvent& rMouseEvent) override;
         virtual bool MouseButtonUp(const MouseEvent& rMouseEvent) override;
     public:
@@ -186,7 +186,7 @@ private:
     // folder URL
     static OUString             maLastFolderURL;
 public:
-    void Paint(vcl::RenderContext& rRenderContext);
+    void Paint(OutputDevice& rRenderContext);
     bool MouseMove(const MouseEvent& rMouseEvent);
     bool MouseButtonUp();
 };
@@ -478,14 +478,14 @@ void ScreenshotAnnotationDlg_Impl::RepaintPictureElement()
     }
 }
 
-void ScreenshotAnnotationDlg_Impl::Paint(vcl::RenderContext& rRenderContext)
+void ScreenshotAnnotationDlg_Impl::Paint(OutputDevice& rRenderContext)
 {
     Point aPos(GetOffsetInPicture());
     Size aSize(mxVirtualBufferDevice->GetOutputSizePixel());
     rRenderContext.DrawOutDev(aPos, aSize, Point(), aSize, *mxVirtualBufferDevice);
 }
 
-void Picture::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void Picture::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     m_pDialog->Paint(rRenderContext);
 }
