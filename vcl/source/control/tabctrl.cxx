@@ -2183,10 +2183,10 @@ void TabControl::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
     Control::DumpAsPropertyTree(rJsonWriter);
     {
-        auto tabsNode = rJsonWriter.startNode("tabs");
+        auto tabsNode = rJsonWriter.startArray("tabs");
         for(auto id : GetPageIDs())
         {
-            auto tabNode = rJsonWriter.startNode("");
+            auto tabNode = rJsonWriter.startStruct();
             rJsonWriter.put("text", GetPageText(id));
             rJsonWriter.put("id", id);
             rJsonWriter.put("name", GetPageName(id));
