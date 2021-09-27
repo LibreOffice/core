@@ -856,16 +856,22 @@ HFONT WinSalGraphics::ImplDoSetFont(vcl::font::FontSelectPattern const & i_rFont
 
 void WinSalGraphics::SetFont(LogicalFontInstance* pFont, int nFallbackLevel)
 {
+    // check that we don't change the first font while ScopedFont has replaced HFONT
+    assert(!mpWinFontEntry[0].is() || nFallbackLevel != 0 || mpWinFontEntry[0]->GetHFONT());
+    assert(nFallbackLevel >= 0 && nFallbackLevel < MAX_FALLBACK);
+
     // return early if there is no new font
     if( !pFont )
     {
         if (!mpWinFontEntry[nFallbackLevel].is())
             return;
 
-        // select original DC font
-        assert(mhDefFont);
-        ::SelectFont(getHDC(), mhDefFont);
-        mhDefFont = nullptr;
+        // DeInitGraphics doesn't free the cached fonts, so mhDefFont might be nullptr
+        if (mhDefFont)
+        {
+            ::SelectFont(getHDC(), mhDefFont);
+            mhDefFont = nullptr;
+        }
 
         // release no longer referenced font handles
         for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
