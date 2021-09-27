@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f13c218_4204a009",
+        "filename": "sw/qa/uitest/writer_tests7/tdf144439.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-09-27T14:42:54Z",
+      "side": 1,
+      "message": "IMHO, this is a \u0027nice to have\u0027 assert",
+      "revId": "76a92fa65979cb806ae3be3bef359d16dd77fd22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
