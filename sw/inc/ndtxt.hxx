@@ -117,6 +117,9 @@ class SW_DLLPUBLIC SwTextNode final
        Needed to avoid duplicate handling of attribute change actions. */
     bool mbInSetOrResetAttr;
 
+    /// Is an undo operation in progress?
+    bool m_bInUndo;
+
     std::optional< OUString > m_oNumStringCache;
 
     css::uno::WeakReference<css::text::XTextContent> m_wXParagraph;
@@ -790,6 +793,7 @@ public:
     /// sfx2::Metadatable
     virtual ::sfx2::IXmlIdRegistry& GetRegistry() override;
     virtual bool IsInClipboard() const override;
+    /// Is this node in the undo array?
     virtual bool IsInUndo() const override;
     virtual bool IsInContent() const override;
     virtual css::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override;
@@ -811,6 +815,8 @@ public:
     static bool IsIgnoredCharFormatForNumbering(const sal_uInt16 nWhich, bool bIsCharStyle = false);
     void FormatDropNotify(const SwFormatDrop& rDrop) override
             { TriggerNodeUpdate(sw::LegacyModifyHint(&rDrop, &rDrop)); };
+
+    void SetInSwUndo(bool bInUndo);
 };
 
 inline SwpHints & SwTextNode::GetSwpHints()
