@@ -381,7 +381,7 @@ void ExtensionBox_Impl::selectEntry( const tools::Long nPos )
 }
 
 
-void ExtensionBox_Impl::DrawRow(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const TEntry_Impl& rEntry)
+void ExtensionBox_Impl::DrawRow(OutputDevice& rRenderContext, const tools::Rectangle& rRect, const TEntry_Impl& rEntry)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
@@ -632,7 +632,7 @@ bool ExtensionBox_Impl::HandleCursorKey( sal_uInt16 nKeyCode )
 }
 
 
-void ExtensionBox_Impl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rPaintRect*/)
+void ExtensionBox_Impl::Paint(OutputDevice& rRenderContext, const tools::Rectangle& /*rPaintRect*/)
 {
     if ( !m_bInDelete )
         DeleteRemoved();
