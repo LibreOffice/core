@@ -63,6 +63,30 @@
       },
       "revId": "1765630cac0382dcb2b4bd97a717cf03bc3ba6e8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9391c7b0_63891242",
+        "filename": "sw/qa/uitest/writer_tests7/tdf144439.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2021-09-27T12:38:26Z",
+      "side": 1,
+      "message": "Xisco, thx for help!",
+      "parentUuid": "169063e1_a9ecba11",
+      "range": {
+        "startLine": 54,
+        "startChar": 16,
+        "endLine": 54,
+        "endChar": 39
+      },
+      "revId": "1765630cac0382dcb2b4bd97a717cf03bc3ba6e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
