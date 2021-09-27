@@ -3194,6 +3194,58 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf50447_keep_hints)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf144272)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf50447.fodt");
+
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // paragraph style of the first paragraph: Heading 1, second paragraph: Standard
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
+                         getProperty<OUString>(getParagraph(1), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
+                         getProperty<OUString>(getParagraph(2), "ParaStyleName"));
+
+    // modify with track changes: Standard and Heading 2
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+        { "Style", uno::makeAny(OUString("Standard")) },
+        { "FamilyName", uno::makeAny(OUString("ParagraphStyles")) },
+    });
+    dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues);
+    pWrtShell->Down(/*bSelect=*/false);
+    aPropertyValues = comphelper::InitPropertySequence({
+        { "Style", uno::makeAny(OUString("Heading 2")) },
+        { "FamilyName", uno::makeAny(OUString("ParagraphStyles")) },
+    });
+    dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
+                         getProperty<OUString>(getParagraph(1), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 2"),
+                         getProperty<OUString>(getParagraph(2), "ParaStyleName"));
+
+    // reject tracked changes
+    dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
+
+    // This was Standard (missing reject)
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
+                         getProperty<OUString>(getParagraph(1), "ParaStyleName"));
+    // This was Heading 2 (missing reject)
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
+                         getProperty<OUString>(getParagraph(2), "ParaStyleName"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf101873)
 {
     SwDoc* pDoc = createSwDoc();

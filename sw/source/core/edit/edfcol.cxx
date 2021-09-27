@@ -68,6 +68,8 @@
 #include <vcl/weld.hxx>
 #include <vcl/virdev.hxx>
 
+#include <redline.hxx>
+#include <poolfmt.hxx>
 #include <hintids.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -2216,6 +2218,21 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
                 GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eRedlMode );
             }
 
+            // store previous paragraph style for track changes
+            OUString sParaStyleName;
+            sal_uInt16 nPoolId = USHRT_MAX;
+            SwContentNode * pCnt = rPaM.Start()->nNode.GetNode().GetContentNode();
+            if ( pCnt && pCnt->GetTextNode() && GetDoc()->getIDocumentRedlineAccess().IsRedlineOn() )
+            {
+                const SwTextFormatColl* pTextFormatColl = pCnt->GetTextNode()->GetTextColl();
+                sal_uInt16 nStylePoolId = pTextFormatColl->GetPoolFormatId();
+                // default paragraph style
+                if ( nStylePoolId == RES_POOLCOLL_STANDARD )
+                    nPoolId = nStylePoolId;
+                else
+                    sParaStyleName = pTextFormatColl->GetName();
+            }
+
             // Change the paragraph style to pLocal and remove all direct paragraph formatting.
             GetDoc()->SetTextFormatColl(rPaM, pLocal, true, bResetListAttrs, GetLayout());
 
@@ -2227,6 +2244,27 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
                 aPaM.End()->nContent = pEndTextNode->GetText().getLength();
             }
             GetDoc()->RstTextAttrs(aPaM, /*bInclRefToxMark=*/false, /*bExactRange=*/true, GetLayout());
+
+            // add redline tracking the previous paragraph style
+            if ( GetDoc()->getIDocumentRedlineAccess().IsRedlineOn() &&
+                // multi-paragraph ParagraphFormat redline ranges
+                // haven't supported by AppendRedline(), yet
+                // TODO handle multi-paragraph selections, too,
+                // e.g. by breaking them to single paragraphs
+                aPaM.Start()->nNode == aPaM.End()->nNode )
+            {
+                SwRangeRedline * pRedline = new SwRangeRedline( RedlineType::ParagraphFormat, aPaM );
+                auto const result(GetDoc()->getIDocumentRedlineAccess().AppendRedline( pRedline, true));
+                // store original paragraph style to reject formatting change
+                if ( IDocumentRedlineAccess::AppendResult::IGNORED != result &&
+                    ( nPoolId == RES_POOLCOLL_STANDARD || !sParaStyleName.isEmpty() ) )
+                {
+                    std::unique_ptr<SwRedlineExtraData_FormatColl> xExtra;
+                    xExtra.reset(new SwRedlineExtraData_FormatColl(sParaStyleName, nPoolId, nullptr));
+                    if (xExtra)
+                       pRedline->SetExtraData( xExtra.get() );
+                }
+            }
         }
 
     }
