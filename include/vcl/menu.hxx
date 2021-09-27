@@ -62,7 +62,6 @@ namespace vcl
 {
 class Window;
 struct MenuLayoutData;
-typedef OutputDevice RenderContext; // same as in include/vcl/outdev.hxx
 class ILibreOfficeKitNotifier;
 }
 
