@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a226d537_68b8edd0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-09-27T07:36:23Z",
+      "side": 1,
+      "message": "Thanks Natalia for the screenshot at the bug!\nhttps://bug-attachments.documentfoundation.org/attachment.cgi?id\u003d175273\nLooks good to me, too.",
+      "revId": "b1c318e9f18f6a4e56d42fc7b7c5c2942b28941d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
