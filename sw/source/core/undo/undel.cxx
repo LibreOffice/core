@@ -1015,8 +1015,10 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 // SectionNode mode and selection from top to bottom:
                 //  -> in StartNode is still the rest of the Join => delete
                 aPos.nContent.Assign( pTextNd, m_nSttContent );
+                pTextNd->SetInSwUndo(true);
                 OUString const ins( pTextNd->InsertText(*m_aSttStr, aPos.nContent,
                         SwInsertFlags::NOHINTEXPAND) );
+                pTextNd->SetInSwUndo(false);
                 assert(ins.getLength() == m_aSttStr->getLength()); // must succeed
                 (void) ins;
                 // METADATA: restore
