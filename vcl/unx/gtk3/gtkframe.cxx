@@ -1078,7 +1078,6 @@ void GtkSalFrame::InitCommon()
     // init members
     m_nKeyModifiers     = ModKeyFlags::NONE;
     m_bFullscreen       = false;
-    m_bSpanMonitorsWhenFullscreen = false;
 #if GTK_CHECK_VERSION(4,0,0)
     m_nState            = static_cast<GdkToplevelState>(0);
 #else
@@ -2015,22 +2014,22 @@ bool GtkSalFrame::GetWindowState( SalFrameState* pState )
 
 void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rectangle const *pSize )
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
     if( !m_pWindow )
         return;
 
     if (maGeometry.nDisplayScreenNumber == nNewScreen && eType == SetType::RetainSize)
         return;
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     int nX = maGeometry.nX, nY = maGeometry.nY,
         nWidth = maGeometry.nWidth, nHeight = maGeometry.nHeight;
     GdkScreen *pScreen = nullptr;
     GdkRectangle aNewMonitor;
 
     bool bSpanAllScreens = nNewScreen == static_cast<unsigned int>(-1);
-    m_bSpanMonitorsWhenFullscreen = bSpanAllScreens && getDisplay()->getSystem()->GetDisplayScreenCount() > 1;
+    bool bSpanMonitorsWhenFullscreen = bSpanAllScreens && getDisplay()->getSystem()->GetDisplayScreenCount() > 1;
     gint nMonitor = -1;
-    if (m_bSpanMonitorsWhenFullscreen)   //span all screens
+    if (bSpanMonitorsWhenFullscreen)   //span all screens
     {
         pScreen = gtk_widget_get_screen( m_pWindow );
         aNewMonitor.x = 0;
@@ -2120,20 +2119,20 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rect
 
     gtk_window_move(GTK_WINDOW(m_pWindow), nX, nY);
 
-    gdk_window_set_fullscreen_mode( widget_get_surface(m_pWindow), m_bSpanMonitorsWhenFullscreen
-        ? GDK_FULLSCREEN_ON_ALL_MONITORS : GDK_FULLSCREEN_ON_CURRENT_MONITOR );
+    GdkFullscreenMode eMode =
+        bSpanMonitorsWhenFullscreen ? GDK_FULLSCREEN_ON_ALL_MONITORS : GDK_FULLSCREEN_ON_CURRENT_MONITOR;
+
+    g_object_set(widget_get_surface(m_pWindow), "fullscreen-mode", eMode, nullptr);
 
     GtkWidget* pMenuBarContainerWidget = m_pSalMenu ? m_pSalMenu->GetMenuBarContainerWidget() : nullptr;
     if( eType == SetType::Fullscreen )
     {
         if (pMenuBarContainerWidget)
             gtk_widget_hide(pMenuBarContainerWidget);
-        if (m_bSpanMonitorsWhenFullscreen)
+        if (bSpanMonitorsWhenFullscreen)
             gtk_window_fullscreen(GTK_WINDOW(m_pWindow));
         else
-        {
             gtk_window_fullscreen_on_monitor(GTK_WINDOW(m_pWindow), pScreen, nMonitor);
-        }
 
     }
     else if( eType == SetType::UnFullscreen )
@@ -2150,6 +2149,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rect
     // FIXME: we should really let gtk+ handle our widget hierarchy ...
     if( m_pParent && gtk_widget_get_screen( m_pParent->m_pWindow ) != pScreen )
         SetParent( nullptr );
+
     std::list< GtkSalFrame* > aChildren = m_aChildren;
     for (auto const& child : aChildren)
         child->SetScreen( nNewScreen, SetType::RetainSize );
@@ -2159,10 +2159,62 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rect
 
     if( bVisible )
         Show( true );
+
 #else
-    (void)nNewScreen;
-    (void)eType;
-    (void)pSize;
+    (void)pSize; // assume restore will restore the original size without our help
+
+    bool bSpanMonitorsWhenFullscreen = nNewScreen == static_cast<unsigned int>(-1);
+
+    GdkFullscreenMode eMode =
+        bSpanMonitorsWhenFullscreen ? GDK_FULLSCREEN_ON_ALL_MONITORS : GDK_FULLSCREEN_ON_CURRENT_MONITOR;
+
+    g_object_set(widget_get_surface(m_pWindow), "fullscreen-mode", eMode, nullptr);
+
+    GtkWidget* pMenuBarContainerWidget = m_pSalMenu ? m_pSalMenu->GetMenuBarContainerWidget() : nullptr;
+    if (eType == SetType::Fullscreen)
+    {
+        if (!(m_nStyle & SalFrameStyleFlags::SIZEABLE))
+        {
+            // temp make it resizable, restore when unfullscreened
+            gtk_window_set_resizable(GTK_WINDOW(m_pWindow), true);
+        }
+
+        m_nStyle |= SalFrameStyleFlags::PARTIAL_FULLSCREEN;
+
+        if (pMenuBarContainerWidget)
+            gtk_widget_hide(pMenuBarContainerWidget);
+        if (bSpanMonitorsWhenFullscreen)
+            gtk_window_fullscreen(GTK_WINDOW(m_pWindow));
+        else
+        {
+            GdkDisplay* pDisplay = gtk_widget_get_display(m_pWindow);
+            GListModel* pList = gdk_display_get_monitors(pDisplay);
+            GdkMonitor* pMonitor = static_cast<GdkMonitor*>(g_list_model_get_item(pList, nNewScreen));
+            if (!pMonitor)
+                pMonitor = gdk_display_get_monitor_at_surface(pDisplay, widget_get_surface(m_pWindow));
+            gtk_window_fullscreen_on_monitor(GTK_WINDOW(m_pWindow), pMonitor);
+        }
+    }
+    else if (eType == SetType::UnFullscreen)
+    {
+        m_nStyle &= ~SalFrameStyleFlags::PARTIAL_FULLSCREEN;
+
+        if (pMenuBarContainerWidget)
+            gtk_widget_show(pMenuBarContainerWidget);
+        gtk_window_unfullscreen(GTK_WINDOW(m_pWindow));
+
+        if (!(m_nStyle & SalFrameStyleFlags::SIZEABLE))
+        {
+            // restore temp resizability
+            gtk_window_set_resizable(GTK_WINDOW(m_pWindow), false);
+        }
+    }
+
+    for (auto const& child : m_aChildren)
+        child->SetScreen(nNewScreen, SetType::RetainSize);
+
+    m_bDefaultPos = m_bDefaultSize = false;
+    updateScreenNumber();
 #endif
 }
 
