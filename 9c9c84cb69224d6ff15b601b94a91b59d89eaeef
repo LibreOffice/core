@@ -16,6 +16,24 @@
       "message": "this should resolve that problem",
       "revId": "9c9c84cb69224d6ff15b601b94a91b59d89eaeef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6fd8093_925f6f15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-09-27T15:14:55Z",
+      "side": 1,
+      "message": "Thx!",
+      "parentUuid": "9ed5e593_ceba23e2",
+      "revId": "9c9c84cb69224d6ff15b601b94a91b59d89eaeef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
