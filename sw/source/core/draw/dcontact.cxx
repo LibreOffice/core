@@ -1337,7 +1337,6 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
             }
 
             // tdf#135198: keep text box together with its shape
-            SwRect aObjRect(rObj.GetSnapRect());
             const SwPageFrame* rPageFrame = pAnchoredDrawObj->GetPageFrame();
             if (rPageFrame && rPageFrame->isFrameAreaPositionValid())
             {
@@ -1352,10 +1351,11 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
 
                 SfxItemSet aSyncSet(pDoc->GetAttrPool(),
                                     svl::Items<RES_VERT_ORIENT, RES_ANCHOR>{});
-                aSyncSet.Put(SwFormatVertOrient(aObjRect.Top() - rPageFrame->getFrameArea().Top(),
+                bool bRelToTableCell(false);
+                aSyncSet.Put(SwFormatVertOrient(pAnchoredDrawObj->GetRelPosToPageFrame(false, bRelToTableCell).getY(),
                                                 text::VertOrientation::NONE,
                                                 text::RelOrientation::PAGE_FRAME));
-                aSyncSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_PAGE, pAnchoredDrawObj->GetPageFrame()->GetPhyPageNum()));
+                aSyncSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_PAGE, rPageFrame->GetPhyPageNum()));
 
                 SwTextBoxHelper::syncFlyFrameAttr(*GetFormat(), aSyncSet);
 
