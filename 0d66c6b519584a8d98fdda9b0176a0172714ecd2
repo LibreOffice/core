@@ -16,6 +16,24 @@
       "message": "I think we can share more code with original method.\nCan we just add optional parameter to the Window::EndTracking\neg. bUseLocalFrame (and describe what this does in the comment)\n\nthen you can guard not needed code paths with just !bUseLocalFrame\n\nI think our goal is to share as much as possible.\n\n(this note applies also to other methods in this change)",
       "revId": "0d66c6b519584a8d98fdda9b0176a0172714ecd2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0ee70fd_803fc7df",
+        "filename": "vcl/source/window/window2.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1000865
+      },
+      "writtenOn": "2021-09-27T20:50:46Z",
+      "side": 1,
+      "message": "I think it could work, checking...",
+      "parentUuid": "f0e043d6_91844434",
+      "revId": "0d66c6b519584a8d98fdda9b0176a0172714ecd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
