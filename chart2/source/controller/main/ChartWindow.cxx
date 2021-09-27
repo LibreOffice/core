@@ -269,12 +269,6 @@ void ChartWindow::Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFl
         return;
     vcl::Window::Invalidate( rRect, nFlags );
 }
-void ChartWindow::Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags )
-{
-    if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
-        return;
-    vcl::Window::Invalidate( rRegion, nFlags );
-}
 
 void ChartWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
 {

@@ -474,7 +474,7 @@ void SdrPaintView::PrePaint()
 
 // #define SVX_REPAINT_TIMER_TEST
 
-void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector)
+void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const tools::Rectangle& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector)
 {
 #ifdef SVX_REPAINT_TIMER_TEST
 #define REMEMBERED_TIMES_COUNT  (10)

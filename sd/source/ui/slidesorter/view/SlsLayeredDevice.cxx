@@ -108,7 +108,6 @@ public:
 
     void Initialize (sd::Window *pTargetWindow);
     void InvalidateRectangle (const ::tools::Rectangle& rInvalidationBox);
-    void InvalidateRegion (const vcl::Region& rInvalidationRegion);
     void Validate (const MapMode& rMapMode);
     void Repaint (
         OutputDevice& rTargetDevice,
@@ -122,7 +121,7 @@ public:
 private:
     ScopedVclPtr<VirtualDevice> mpLayerDevice;
     ::std::vector<SharedILayerPainter> maPainters;
-    vcl::Region maInvalidationRegion;
+    ::tools::Rectangle maInvalidationRegion;
 
     void ValidateRectangle (const ::tools::Rectangle& rBox);
 };
@@ -190,12 +189,6 @@ void LayeredDevice::InvalidateAllLayers (const ::tools::Rectangle& rInvalidation
         (*mpLayers)[nLayer]->InvalidateRectangle(rInvalidationArea);
 }
 
-void LayeredDevice::InvalidateAllLayers (const vcl::Region& rInvalidationRegion)
-{
-    for (size_t nLayer=0; nLayer<mpLayers->size(); ++nLayer)
-        (*mpLayers)[nLayer]->InvalidateRegion(rInvalidationRegion);
-}
-
 void LayeredDevice::RegisterPainter (
     const SharedILayerPainter& rpPainter,
     const sal_Int32 nLayer)
@@ -254,7 +247,7 @@ void LayeredDevice::RemovePainter (
         mpLayers->pop_back();
 }
 
-void LayeredDevice::Repaint (const vcl::Region& rRepaintRegion)
+void LayeredDevice::Repaint (const ::tools::Rectangle& rRepaintRegion)
 {
     // Validate the contents of all layers (that have their own devices.)
     for (auto const& it : *mpLayers)
@@ -262,8 +255,7 @@ void LayeredDevice::Repaint (const vcl::Region& rRepaintRegion)
         it->Validate(mpTargetWindow->GetMapMode());
     }
 
-    ForAllRectangles(rRepaintRegion,
-            [this] (::tools::Rectangle const& r) { this->RepaintRectangle(r); });
+    RepaintRectangle(rRepaintRegion);
 }
 
 void LayeredDevice::RepaintRectangle (const ::tools::Rectangle& rRepaintRectangle)
@@ -393,11 +385,6 @@ void Layer::Initialize (sd::Window *pTargetWindow)
 void Layer::InvalidateRectangle (const ::tools::Rectangle& rInvalidationBox)
 {
     maInvalidationRegion.Union(rInvalidationBox);
-}
-
-void Layer::InvalidateRegion (const vcl::Region& rInvalidationRegion)
-{
-    maInvalidationRegion.Union(rInvalidationRegion);
 }
 
 void Layer::Validate (const MapMode& rMapMode)

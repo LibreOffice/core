@@ -1840,7 +1840,7 @@ void ImplBorderWindow::InvalidateBorder()
         return;
 
     tools::Rectangle   aWinRect( Point( 0, 0 ), GetOutputSizePixel() );
-    vcl::Region      aRegion( aWinRect );
+    tools::Rectangle   aRegion( aWinRect );
     aWinRect.AdjustLeft(nLeftBorder );
     aWinRect.AdjustTop(nTopBorder );
     aWinRect.AdjustRight( -nRightBorder );
@@ -1850,10 +1850,7 @@ void ImplBorderWindow::InvalidateBorder()
          (aWinRect.Bottom() < aWinRect.Top()) )
         Invalidate( InvalidateFlags::NoChildren );
     else
-    {
-        aRegion.Exclude( aWinRect );
         Invalidate( aRegion, InvalidateFlags::NoChildren );
-    }
 }
 
 void ImplBorderWindow::SetDisplayActive( bool bActive )

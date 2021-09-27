@@ -107,8 +107,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
         pOut->SetMapMode(aMapMode);
     }
 
-    vcl::Region aRegion(aVisArea);
-    pView->CompleteRedraw(pOut, aRegion);
+    pView->CompleteRedraw(pOut, aVisArea);
 
     if (pOut->GetOutDevType() == OUTDEV_PRINTER)
     {
@@ -253,7 +252,7 @@ BitmapEx DrawDocShell::GetPagePreviewBitmap(SdPage* pPage)
             pView->SetActiveLayer( pFrameView->GetActiveLayer() );
     }
 
-    pView->CompleteRedraw( pVDev, vcl::Region(::tools::Rectangle(aNullPt, aSize)) );
+    pView->CompleteRedraw( pVDev, ::tools::Rectangle(aNullPt, aSize) );
 
     // IsRedrawReady() always gives sal_True while ( !pView->IsRedrawReady() ) {}
     pView.reset();

@@ -1892,7 +1892,6 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
     ::sd::ClientView aView( mpDocShell, pOut );
     ::tools::Rectangle aVisArea( Point(), mpDoc->GetSdPage( static_cast<sal_uInt16>(nPageNumber) - 1, ePageKind )->GetSize() );
-    vcl::Region                       aRegion( aVisArea );
 
     ::sd::ViewShell* pOldViewSh = mpDocShell->GetViewShell();
     ::sd::View* pOldSdView = pOldViewSh ? pOldViewSh->GetView() : nullptr;
@@ -1949,7 +1948,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
             // hint value if screen display. Only then the AutoColor mechanisms shall be applied
             rOutl.SetBackgroundColor( pPage->GetPageBackgroundColor( pPV, bScreenDisplay ) );
         }
-        aView.SdrPaintView::CompleteRedraw( pOut, aRegion, &aImplRenderPaintProc );
+        aView.SdrPaintView::CompleteRedraw( pOut, aVisArea, &aImplRenderPaintProc );
 
         if ( pPDFExtOutDevData && pPage )
         {
@@ -2259,7 +2258,7 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
     Size aSize(nTileWidthHMM, nTileHeightHMM);
     ::tools::Rectangle aRect(aPoint, aSize);
 
-    pViewSh->GetView()->CompleteRedraw(&rDevice, vcl::Region(aRect));
+    pViewSh->GetView()->CompleteRedraw(&rDevice, aRect);
 
     LokChartHelper::PaintAllChartsOnTile(rDevice, nOutputWidth, nOutputHeight,
                                          nTilePosX, nTilePosY, nTileWidth, nTileHeight);

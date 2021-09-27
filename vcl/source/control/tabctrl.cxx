@@ -1574,7 +1574,7 @@ bool TabControl::PreNotify( NotifyEvent& rNEvt )
                     }
 
                     if( !aClipRgn.IsEmpty() )
-                        Invalidate( aClipRgn );
+                        Invalidate( aClipRgn.GetBoundRect() );
                 }
             }
         }

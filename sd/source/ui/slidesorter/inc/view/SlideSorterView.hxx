@@ -69,7 +69,6 @@ public:
     void RequestRepaint();
     void RequestRepaint (const model::SharedPageDescriptor& rDescriptor);
     void RequestRepaint (const ::tools::Rectangle& rRepaintBox);
-    void RequestRepaint (const vcl::Region& rRepaintRegion);
 
     ::tools::Rectangle GetModelArea() const;
 
@@ -110,7 +109,7 @@ public:
     void Resize();
     virtual void CompleteRedraw (
         OutputDevice* pDevice,
-        const vcl::Region& rPaintArea,
+        const ::tools::Rectangle& rPaintArea,
         sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr) override;
     void Paint (OutputDevice& rDevice, const ::tools::Rectangle& rRepaintArea);
 
@@ -205,7 +204,7 @@ private:
     Layouter::Orientation meOrientation;
     model::SharedPageDescriptor mpPageUnderMouse;
     std::shared_ptr<PageObjectPainter> mpPageObjectPainter;
-    vcl::Region maRedrawRegion;
+    ::tools::Rectangle maRedrawRegion;
     SharedILayerPainter mpBackgroundPainter;
     std::unique_ptr<ToolTip, o3tl::default_delete<ToolTip>> mpToolTip;
     bool mbIsRearrangePending;

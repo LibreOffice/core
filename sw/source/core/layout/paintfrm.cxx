@@ -3165,8 +3165,7 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
                          aRectFnSet.GetLeft(pPage->getFrameArea()),
                          aRectFnSet.GetWidth(pPage->getFrameArea()) );
                     aPageRectTemp.Intersection_( pSh->VisArea() );
-                    vcl::Region aPageRectRegion( aPageRectTemp.SVRect() );
-                    aPageRectRegion.Exclude( aPaintRect.SVRect() );
+                    tools::Rectangle aPageRectRegion( aPageRectTemp.SVRect() );
                     pSh->GetWin()->Invalidate( aPageRectRegion, InvalidateFlags::Children );
                 }
 

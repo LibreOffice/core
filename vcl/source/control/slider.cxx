@@ -188,7 +188,7 @@ void Slider::ImplUpdateRects( bool bUpdate )
         Invalidate(InvalidateFlags::NoChildren | InvalidateFlags::NoErase);
     else
     {
-        vcl::Region aInvalidRegion( aOldThumbRect );
+        tools::Rectangle aInvalidRegion( aOldThumbRect );
         aInvalidRegion.Union( maThumbRect );
 
         if( !IsBackground() && GetParent() )
