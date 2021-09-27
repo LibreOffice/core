@@ -152,7 +152,7 @@ class ExtensionBox_Impl : public weld::CustomWidgetController
     void CalcActiveHeight( const tools::Long nPos );
     tools::Long GetTotalHeight() const;
     void SetupScrollBar();
-    void DrawRow(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const TEntry_Impl& rEntry);
+    void DrawRow(OutputDevice& rRenderContext, const tools::Rectangle& rRect, const TEntry_Impl& rEntry);
     bool HandleCursorKey( sal_uInt16 nKeyCode );
     bool FindEntryPos( const TEntry_Impl& rEntry, tools::Long nStart, tools::Long nEnd, tools::Long &nFound );
     void DeleteRemoved();
@@ -167,7 +167,7 @@ public:
     virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual bool MouseMove( const MouseEvent& rMEvt ) override;
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
-    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle &rPaintRect ) override;
+    virtual void Paint( OutputDevice& rRenderContext, const tools::Rectangle &rPaintRect ) override;
     virtual void Resize() override;
     virtual OUString RequestHelp(tools::Rectangle& rRect) override;
 
