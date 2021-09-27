@@ -790,7 +790,7 @@ OutputDevice& FontNameBox::CachePreview(size_t nIndex, Point* pTopLeft)
 
 IMPL_LINK(FontNameBox, CustomRenderHdl, weld::ComboBox::render_args, aPayload, void)
 {
-    vcl::RenderContext& rRenderContext = std::get<0>(aPayload);
+    OutputDevice& rRenderContext = std::get<0>(aPayload);
     const ::tools::Rectangle& rRect = std::get<1>(aPayload);
     bool bSelected = std::get<2>(aPayload);
     const OUString& rId = std::get<3>(aPayload);

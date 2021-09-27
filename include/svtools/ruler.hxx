@@ -658,35 +658,35 @@ private:
 
     std::map<OUString, SalLayoutGlyphs> maTextGlyphs;
 
-    SVT_DLLPRIVATE void ImplVDrawLine(vcl::RenderContext& rRenderContext,  tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 );
-    SVT_DLLPRIVATE void ImplVDrawRect(vcl::RenderContext& rRenderContext, tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 );
-    SVT_DLLPRIVATE void ImplVDrawText(vcl::RenderContext& rRenderContext, tools::Long nX, tools::Long nY, const OUString& rText,
+    SVT_DLLPRIVATE void ImplVDrawLine(OutputDevice& rRenderContext,  tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 );
+    SVT_DLLPRIVATE void ImplVDrawRect(OutputDevice& rRenderContext, tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 );
+    SVT_DLLPRIVATE void ImplVDrawText(OutputDevice& rRenderContext, tools::Long nX, tools::Long nY, const OUString& rText,
                                       tools::Long nMin = LONG_MIN, tools::Long nMax = LONG_MAX );
 
-    SVT_DLLPRIVATE void ImplDrawTicks(vcl::RenderContext& rRenderContext,
+    SVT_DLLPRIVATE void ImplDrawTicks(OutputDevice& rRenderContext,
                                       tools::Long nMin, tools::Long nMax, tools::Long nStart, tools::Long nVirTop, tools::Long nVirBottom);
-    SVT_DLLPRIVATE void ImplDrawBorders(vcl::RenderContext& rRenderContext,
+    SVT_DLLPRIVATE void ImplDrawBorders(OutputDevice& rRenderContext,
                                         tools::Long nMin, tools::Long nMax, tools::Long nVirTop, tools::Long nVirBottom);
-    SVT_DLLPRIVATE static void ImplDrawIndent(vcl::RenderContext& rRenderContext,
+    SVT_DLLPRIVATE static void ImplDrawIndent(OutputDevice& rRenderContext,
                                        const tools::Polygon& rPoly, bool bIsHit);
-    SVT_DLLPRIVATE void ImplDrawIndents(vcl::RenderContext& rRenderContext,
+    SVT_DLLPRIVATE void ImplDrawIndents(OutputDevice& rRenderContext,
                                         tools::Long nMin, tools::Long nMax, tools::Long nVirTop, tools::Long nVirBottom);
-    SVT_DLLPRIVATE void ImplDrawTab(vcl::RenderContext& rRenderContext, const Point& rPos, sal_uInt16 nStyle);
-    SVT_DLLPRIVATE void ImplDrawTabs(vcl::RenderContext& rRenderContext,
+    SVT_DLLPRIVATE void ImplDrawTab(OutputDevice& rRenderContext, const Point& rPos, sal_uInt16 nStyle);
+    SVT_DLLPRIVATE void ImplDrawTabs(OutputDevice& rRenderContext,
                                      tools::Long nMin, tools::Long nMax, tools::Long nVirTop, tools::Long nVirBottom);
 
     using Window::ImplInit;
     SVT_DLLPRIVATE void ImplInit( WinBits nWinBits );
     SVT_DLLPRIVATE void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SVT_DLLPRIVATE void ImplCalc();
-    SVT_DLLPRIVATE void ImplFormat(vcl::RenderContext const & rRenderContext);
+    SVT_DLLPRIVATE void ImplFormat(OutputDevice const & rRenderContext);
     SVT_DLLPRIVATE void ImplInitExtraField( bool bUpdate );
-    SVT_DLLPRIVATE void ImplInvertLines(vcl::RenderContext& rRenderContext);
-    SVT_DLLPRIVATE void ImplDraw(vcl::RenderContext& rRenderContext);
-    SVT_DLLPRIVATE void ImplDrawExtra(vcl::RenderContext& rRenderContext);
+    SVT_DLLPRIVATE void ImplInvertLines(OutputDevice& rRenderContext);
+    SVT_DLLPRIVATE void ImplDraw(OutputDevice& rRenderContext);
+    SVT_DLLPRIVATE void ImplDrawExtra(OutputDevice& rRenderContext);
     SVT_DLLPRIVATE void ImplUpdate( bool bMustCalc = false );
 
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
+    virtual void ApplySettings(OutputDevice& rRenderContext) override;
 
     SVT_DLLPRIVATE bool ImplDoHitTest( const Point& rPosition,
                                          RulerSelection* pHitTest,
@@ -713,7 +713,7 @@ public:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
     virtual void    Tracking( const TrackingEvent& rTEvt ) override;
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void    Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void    Resize() override;
     virtual void    StateChanged( StateChangedType nStateChange ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
@@ -778,7 +778,7 @@ public:
     void            SetTabs( sal_uInt32 n = 0, const RulerTab* pTabAry = nullptr );
     const std::vector<RulerTab>& GetTabs() const;
 
-    static void     DrawTab(vcl::RenderContext& rRenderContext, const Color &rFillColor,
+    static void     DrawTab(OutputDevice& rRenderContext, const Color &rFillColor,
                             const Point& rPos, sal_uInt16 nStyle);
 
     void            SetStyle( WinBits nStyle );
