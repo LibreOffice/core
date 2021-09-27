@@ -39,6 +39,30 @@
       },
       "revId": "e81958de39a6245f8f3c883e363562550f766e45",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e47aeec6_4efe5de6",
+        "filename": "sw/uiconfig/swriter/ui/notebookbar_compact.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-09-27T04:45:33Z",
+      "side": 1,
+      "message": ".",
+      "parentUuid": "c3d1c90e_49c19964",
+      "range": {
+        "startLine": 215,
+        "startChar": 38,
+        "endLine": 215,
+        "endChar": 54
+      },
+      "revId": "e81958de39a6245f8f3c883e363562550f766e45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
