@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b42723a_9773a543",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-27T20:05:07Z",
+      "side": 1,
+      "message": "Hi Tomaz, I have removed the css alias from the files I added it to. ",
+      "revId": "d0490c87a8b63f54e114a914db2b935bc8969222",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
