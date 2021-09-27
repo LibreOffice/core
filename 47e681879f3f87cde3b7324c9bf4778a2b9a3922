@@ -16,6 +16,40 @@
       "message": "Bartosz: could you please take a look? Thanks.",
       "revId": "47e681879f3f87cde3b7324c9bf4778a2b9a3922",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58493f7a_9d63dd1d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2021-09-27T13:00:48Z",
+      "side": 1,
+      "message": "See my inline comments",
+      "revId": "47e681879f3f87cde3b7324c9bf4778a2b9a3922",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fa75b6b_f0a0a0e1",
+        "filename": "emfio/source/reader/wmfreader.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2021-09-27T13:00:48Z",
+      "side": 1,
+      "message": "I don\u0027t fully understand what we are reading.\nThe bPlaceable is reading the META_PLACEABLE record, which ends up with checksum:\n\n* Checksum (2 bytes): A checksum for the previous 10 16-bit values in the header. This value can be used to determine whether the metafile has become corrupted.\n\nWe don\u0027t know after checksum there will be an valid WMF header.\nCan we move reading \"aPlaceableBound\" into reading of header?\nWe could check if \"bPlaceable\" is set there.",
+      "revId": "47e681879f3f87cde3b7324c9bf4778a2b9a3922",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
