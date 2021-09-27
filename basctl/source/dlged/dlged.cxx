@@ -470,7 +470,7 @@ bool DlgEditor::KeyInput( const KeyEvent& rKEvt )
 }
 
 
-void DlgEditor::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void DlgEditor::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     aPaintRect = rRect;
     mnPaintGuard++;

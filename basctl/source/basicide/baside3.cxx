@@ -117,7 +117,7 @@ void DialogWindow::LoseFocus()
     Window::LoseFocus();
 }
 
-void DialogWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void DialogWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     m_pEditor->Paint(rRenderContext, rRect);
 }
