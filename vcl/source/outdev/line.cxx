@@ -35,50 +35,25 @@
 
 void OutputDevice::SetLineColor()
 {
+    if (mpMetaFile)
+        mpMetaFile->AddAction(new MetaLineColorAction(Color(), false));
 
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaLineColorAction( Color(), false ) );
-
-    if ( mbLineColor )
-    {
-        mbInitLineColor = true;
-        mbLineColor = false;
-        maLineColor = COL_TRANSPARENT;
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetLineColor();
+    RenderContext2::SetLineColor();
 }
 
-void OutputDevice::SetLineColor( const Color& rColor )
+void OutputDevice::SetLineColor(Color const& rColor)
 {
+    Color aColor;
 
-    Color aColor = vcl::drawmode::GetLineColor(rColor, GetDrawMode(), GetSettings().GetStyleSettings());
-
-    if( mpMetaFile )
-        mpMetaFile->AddAction( new MetaLineColorAction( aColor, true ) );
-
-    if( aColor.IsTransparent() )
-    {
-        if ( mbLineColor )
-        {
-            mbInitLineColor = true;
-            mbLineColor = false;
-            maLineColor = COL_TRANSPARENT;
-        }
-    }
+    if (rColor.IsTransparent())
+        aColor = rColor;
     else
-    {
-        if( maLineColor != aColor )
-        {
-            mbInitLineColor = true;
-            mbLineColor = true;
-            maLineColor = aColor;
-        }
-    }
+        aColor = vcl::drawmode::GetLineColor(rColor, GetDrawMode(), GetSettings().GetStyleSettings());
 
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetLineColor( COL_BLACK );
+    if (mpMetaFile)
+        mpMetaFile->AddAction(new MetaLineColorAction(aColor, true));
+
+    RenderContext2::SetLineColor(rColor);
 }
 
 void OutputDevice::InitLineColor()

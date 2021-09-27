@@ -21,7 +21,6 @@
 #include <vcl/bitmap/BitmapTypes.hxx>
 #include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/virdev.hxx>
 
 #include <drawmode.hxx>
 

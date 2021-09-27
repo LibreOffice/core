@@ -222,25 +222,6 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
     rMapRes.mnMapScDenomY = aTempY.GetDenominator();
 }
 
-// #i75163#
-void OutputDevice::ImplInvalidateViewTransform()
-{
-    if(!mpOutDevData)
-        return;
-
-    if(mpOutDevData->mpViewTransform)
-    {
-        delete mpOutDevData->mpViewTransform;
-        mpOutDevData->mpViewTransform = nullptr;
-    }
-
-    if(mpOutDevData->mpInverseViewTransform)
-    {
-        delete mpOutDevData->mpInverseViewTransform;
-        mpOutDevData->mpInverseViewTransform = nullptr;
-    }
-}
-
 static tools::Long ImplLogicToPixel(tools::Long n, tools::Long nDPI, tools::Long nMapNum,
                                     tools::Long nMapDenom)
 {
@@ -583,14 +564,6 @@ vcl::Region OutputDevice::ImplPixelToDevicePixel( const vcl::Region& rRegion ) c
     return aRegion;
 }
 
-void OutputDevice::EnableMapMode( bool bEnable )
-{
-    mbMap = bEnable;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->EnableMapMode( bEnable );
-}
-
 void OutputDevice::SetMapMode()
 {
 
@@ -705,87 +678,6 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
 
     // #i75163#
     ImplInvalidateViewTransform();
-}
-
-void OutputDevice::SetMetafileMapMode(const MapMode& rNewMapMode, bool bIsRecord)
-{
-    if (bIsRecord)
-        SetRelativeMapMode(rNewMapMode);
-    else
-        SetMapMode(rNewMapMode);
-}
-
-void OutputDevice::ImplInitMapModeObjects() {}
-
-void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
-{
-    // do nothing if MapMode did not change
-    if ( maMapMode == rNewMapMode )
-        return;
-
-    MapUnit eOld = maMapMode.GetMapUnit();
-    MapUnit eNew = rNewMapMode.GetMapUnit();
-
-    // a?F = rNewMapMode.GetScale?() / maMapMode.GetScale?()
-    Fraction aXF = ImplMakeFraction( rNewMapMode.GetScaleX().GetNumerator(),
-                                     maMapMode.GetScaleX().GetDenominator(),
-                                     rNewMapMode.GetScaleX().GetDenominator(),
-                                     maMapMode.GetScaleX().GetNumerator() );
-    Fraction aYF = ImplMakeFraction( rNewMapMode.GetScaleY().GetNumerator(),
-                                     maMapMode.GetScaleY().GetDenominator(),
-                                     rNewMapMode.GetScaleY().GetDenominator(),
-                                     maMapMode.GetScaleY().GetNumerator() );
-
-    Point aPt( LogicToLogic( Point(), nullptr, &rNewMapMode ) );
-    if ( eNew != eOld )
-    {
-        if ( eOld > MapUnit::MapPixel )
-        {
-            SAL_WARN( "vcl.gdi", "Not implemented MapUnit" );
-        }
-        else if ( eNew > MapUnit::MapPixel )
-        {
-            SAL_WARN( "vcl.gdi", "Not implemented MapUnit" );
-        }
-        else
-        {
-            const auto eFrom = MapToO3tlLength(eOld, o3tl::Length::in);
-            const auto eTo = MapToO3tlLength(eNew, o3tl::Length::in);
-            const auto& [mul, div] = o3tl::getConversionMulDiv(eFrom, eTo);
-            Fraction aF(div, mul);
-
-            // a?F =  a?F * aF
-            aXF = ImplMakeFraction( aXF.GetNumerator(),   aF.GetNumerator(),
-                                    aXF.GetDenominator(), aF.GetDenominator() );
-            aYF = ImplMakeFraction( aYF.GetNumerator(),   aF.GetNumerator(),
-                                    aYF.GetDenominator(), aF.GetDenominator() );
-            if ( eOld == MapUnit::MapPixel )
-            {
-                aXF *= Fraction( mnDPIX, 1 );
-                aYF *= Fraction( mnDPIY, 1 );
-            }
-            else if ( eNew == MapUnit::MapPixel )
-            {
-                aXF *= Fraction( 1, mnDPIX );
-                aYF *= Fraction( 1, mnDPIY );
-            }
-        }
-    }
-
-    MapMode aNewMapMode( MapUnit::MapRelative, Point( -aPt.X(), -aPt.Y() ), aXF, aYF );
-    SetMapMode( aNewMapMode );
-
-    if ( eNew != eOld )
-        maMapMode = rNewMapMode;
-
-    // #106426# Adapt logical offset when changing MapMode
-    mnOutOffLogicX = ImplPixelToLogic( mnOutOffOrigX, mnDPIX,
-                                       maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX );
-    mnOutOffLogicY = ImplPixelToLogic( mnOutOffOrigY, mnDPIY,
-                                       maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY );
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetRelativeMapMode( rNewMapMode );
 }
 
 // #i75163#

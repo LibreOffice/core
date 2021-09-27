@@ -73,19 +73,9 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
     mpDeviceFontSizeList            = nullptr;
     mpAlphaVDev                     = nullptr;
     mpExtOutDevData                 = nullptr;
-    mnOutOffX                       = 0;
-    mnOutOffY                       = 0;
-    mnOutWidth                      = 0;
-    mnOutHeight                     = 0;
-    mnDPIX                          = 0;
-    mnDPIY                          = 0;
     mnDPIScalePercentage            = 100;
     mnTextOffX                      = 0;
     mnTextOffY                      = 0;
-    mnOutOffOrigX                   = 0;
-    mnOutOffLogicX                  = 0;
-    mnOutOffOrigY                   = 0;
-    mnOutOffLogicY                  = 0;
     mnEmphasisAscent                = 0;
     mnEmphasisDescent               = 0;
     mnDrawMode                      = DrawModeFlags::Default;
@@ -95,23 +85,15 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
         mnTextLayoutMode            = ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft;
 
     meOutDevViewType                = OutDevViewType::DontKnow;
-    mbMap                           = false;
     mbClipRegion                    = false;
     mbBackground                    = false;
     mbOutput                        = true;
     mbDevOutput                     = false;
     mbOutputClipped                 = false;
-    maTextColor                     = COL_BLACK;
     maOverlineColor                 = COL_TRANSPARENT;
-    meRasterOp                      = RasterOp::OverPaint;
     mnAntialiasing                  = AntialiasingFlags::NONE;
-    meTextLanguage                  = LANGUAGE_SYSTEM;  // TODO: get default from configuration?
-    mbLineColor                     = true;
-    mbFillColor                     = true;
     mbInitLineColor                 = true;
-    mbInitFillColor                 = true;
     mbInitFont                      = true;
-    mbInitTextColor                 = true;
     mbInitClipRegion                = true;
     mbClipRegionSet                 = false;
     mbNewFont                       = true;
@@ -311,25 +293,12 @@ void OutputDevice::SetRefPoint( const Point& rRefPoint )
         mpAlphaVDev->SetRefPoint( rRefPoint );
 }
 
-void OutputDevice::SetRasterOp( RasterOp eRasterOp )
+void OutputDevice::SetRasterOp(RasterOp eRasterOp)
 {
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaRasterOpAction( eRasterOp ) );
+    if (mpMetaFile)
+        mpMetaFile->AddAction(new MetaRasterOpAction(eRasterOp));
 
-    if ( meRasterOp != eRasterOp )
-    {
-        meRasterOp = eRasterOp;
-        mbInitLineColor = mbInitFillColor = true;
-
-        if( mpGraphics || AcquireGraphics() )
-        {
-            assert(mpGraphics);
-            mpGraphics->SetXORMode( (RasterOp::Invert == meRasterOp) || (RasterOp::Xor == meRasterOp), RasterOp::Invert == meRasterOp );
-        }
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetRasterOp( eRasterOp );
+    RenderContext2::SetRasterOp(eRasterOp);
 }
 
 void OutputDevice::EnableOutput( bool bEnable )

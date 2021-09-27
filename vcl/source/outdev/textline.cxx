@@ -880,14 +880,10 @@ void OutputDevice::ImplDrawMnemonicLine( tools::Long nX, tools::Long nY, tools::
 
 void OutputDevice::SetTextLineColor()
 {
+    if (mpMetaFile)
+        mpMetaFile->AddAction(new MetaTextLineColorAction(Color(), false));
 
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaTextLineColorAction( Color(), false ) );
-
-    maTextLineColor = COL_TRANSPARENT;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetTextLineColor();
+    RenderContext2::SetTextLineColor();
 }
 
 void OutputDevice::SetTextLineColor( const Color& rColor )

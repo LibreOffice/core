@@ -26,6 +26,8 @@
 #include <tools/solar.h>
 #include <tools/color.hxx>
 #include <tools/poly.hxx>
+
+#include <vcl/RenderContext.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/devicecoordinate.hxx>
@@ -161,7 +163,8 @@ typedef struct _cairo_surface cairo_surface_t;
 * so we need to use virtual inheritance to keep the referencing counting
 * OK.
 */
-class SAL_WARN_UNUSED VCL_DLLPUBLIC OutputDevice : public virtual VclReferenceBase
+class SAL_WARN_UNUSED VCL_DLLPUBLIC OutputDevice : public virtual VclReferenceBase,
+                                                   public vcl::RenderContext
 {
     friend class Printer;
     friend class VirtualDevice;
@@ -188,25 +191,8 @@ private:
     // The canvas interface for this output device. Is persistent after the first GetCanvas() call
     mutable css::uno::WeakReference< css::rendering::XCanvas >    mxCanvas;
 
-    // TEMP TEMP TEMP
-    VclPtr<VirtualDevice>           mpAlphaVDev;
-
-    /// Additional output pixel offset, applied in LogicToPixel (used by SetPixelOffset/GetPixelOffset)
-    tools::Long                            mnOutOffOrigX;
-    /// Additional output offset in _logical_ coordinates, applied in PixelToLogic (used by SetPixelOffset/GetPixelOffset)
-    tools::Long                            mnOutOffLogicX;
-    /// Additional output pixel offset, applied in LogicToPixel (used by SetPixelOffset/GetPixelOffset)
-    tools::Long                            mnOutOffOrigY;
-    /// Additional output offset in _logical_ coordinates, applied in PixelToLogic (used by SetPixelOffset/GetPixelOffset)
-    tools::Long                            mnOutOffLogicY;
-    /// Output offset for device output in pixel (pseudo window offset within window system's frames)
-    tools::Long                            mnOutOffX;
-    /// Output offset for device output in pixel (pseudo window offset within window system's frames)
-    tools::Long                            mnOutOffY;
     tools::Long                            mnOutWidth;
     tools::Long                            mnOutHeight;
-    sal_Int32                       mnDPIX;
-    sal_Int32                       mnDPIY;
     sal_Int32                       mnDPIScalePercentage; ///< For HiDPI displays, we want to draw elements for a percentage larger
     /// font specific text alignment offsets in pixel units
     mutable tools::Long                    mnTextOffX;
@@ -214,40 +200,27 @@ private:
     mutable tools::Long                    mnEmphasisAscent;
     mutable tools::Long                    mnEmphasisDescent;
     DrawModeFlags                   mnDrawMode;
-    ComplexTextLayoutFlags           mnTextLayoutMode;
-    ImplMapRes                      maMapRes;
     const OutDevType                meOutDevType;
     OutDevViewType                  meOutDevViewType;
     vcl::Region                     maRegion;           // contains the clip region, see SetClipRegion(...)
     Color                           maLineColor;
-    Color                           maFillColor;
-    vcl::Font                       maFont;
-    Color                           maTextColor;
     Color                           maTextLineColor;
     Color                           maOverlineColor;
-    RasterOp                        meRasterOp;
     Wallpaper                       maBackground;
     std::unique_ptr<AllSettings>    mxSettings;
     MapMode                         maMapMode;
     Point                           maRefPoint;
     AntialiasingFlags               mnAntialiasing;
-    LanguageType                    meTextLanguage;
 
-    mutable bool                    mbMap : 1;
     mutable bool                    mbClipRegion : 1;
     mutable bool                    mbBackground : 1;
     mutable bool                    mbOutput : 1;
     mutable bool                    mbDevOutput : 1;
     mutable bool                    mbOutputClipped : 1;
-    mutable bool                    mbLineColor : 1;
-    mutable bool                    mbFillColor : 1;
     mutable bool                    mbInitLineColor : 1;
-    mutable bool                    mbInitFillColor : 1;
     mutable bool                    mbInitFont : 1;
-    mutable bool                    mbInitTextColor : 1;
     mutable bool                    mbInitClipRegion : 1;
     mutable bool                    mbClipRegionSet : 1;
-    mutable bool                    mbNewFont : 1;
     mutable bool                    mbTextLines : 1;
     mutable bool                    mbTextSpecial : 1;
     mutable bool                    mbRefPoint : 1;
@@ -465,9 +438,8 @@ private:
 
 public:
 
-    void                        Push( PushFlags nFlags = PushFlags::ALL );
-    void                        Pop();
-    void                        ClearStack();
+    void                        Push(PushFlags nFlags = PushFlags::ALL) override;
+    void                        Pop() override;
 
     void                        EnableOutput( bool bEnable = true );
     bool                        IsOutputEnabled() const { return mbOutput; }
@@ -479,14 +451,8 @@ public:
     void                        SetDrawMode( DrawModeFlags nDrawMode );
     DrawModeFlags               GetDrawMode() const { return mnDrawMode; }
 
-    void                        SetLayoutMode( ComplexTextLayoutFlags nTextLayoutMode );
-    ComplexTextLayoutFlags      GetLayoutMode() const { return mnTextLayoutMode; }
-
-    void                        SetDigitLanguage( LanguageType );
-    LanguageType                GetDigitLanguage() const { return meTextLanguage; }
-
-    void                        SetRasterOp( RasterOp eRasterOp );
-    RasterOp                    GetRasterOp() const { return meRasterOp; }
+    void                        SetLayoutMode(ComplexTextLayoutFlags nTextLayoutMode) override;
+    void                        SetDigitLanguage(LanguageType) override;
 
     /**
     If this OutputDevice is used for displaying a Print Preview
@@ -498,15 +464,10 @@ public:
     void                        SetOutDevViewType( OutDevViewType eOutDevViewType ) { meOutDevViewType=eOutDevViewType; }
     OutDevViewType              GetOutDevViewType() const { return meOutDevViewType; }
 
-    void                        SetLineColor();
-    void                        SetLineColor( const Color& rColor );
-    const Color&                GetLineColor() const { return maLineColor; }
-    bool                        IsLineColor() const { return mbLineColor; }
-
-    void                        SetFillColor();
-    void                        SetFillColor( const Color& rColor );
-    const Color&                GetFillColor() const { return maFillColor; }
-    bool                        IsFillColor() const { return mbFillColor; }
+    void                        SetLineColor() override;
+    void                        SetLineColor(Color const& rColor) override;
+    void                        SetFillColor() override;
+    void                        SetFillColor(Color const& rColor) override;
 
     void                        SetBackground();
     void                        SetBackground( const Wallpaper& rBackground );
@@ -518,8 +479,7 @@ public:
     virtual Color               GetReadableFontColor(const Color& rFontColor, const Color& rBgColor) const;
     bool                        IsBackground() const { return mbBackground; }
 
-    void                        SetFont( const vcl::Font& rNewFont );
-    const vcl::Font&            GetFont() const { return maFont; }
+    void                        SetFont(vcl::Font const& rNewFont) override;
 
 protected:
 
@@ -1003,14 +963,11 @@ public:
                                                     DrawTextFlags    nStyle,
                                                     GDIMetaFile&     rMtf );
 
-    void                        SetTextColor( const Color& rColor );
+    void                        SetTextColor( const Color& rColor ) override;
     virtual void                SetSystemTextColor(SystemTextColorFlags nFlags, bool bEnabled);
-    const Color&                GetTextColor() const { return maTextColor; }
 
-    void                        SetTextFillColor();
-    void                        SetTextFillColor( const Color& rColor );
-    Color                       GetTextFillColor() const;
-    bool                        IsTextFillColor() const { return !maFont.IsTransparent(); }
+    void                        SetTextFillColor() override;
+    void                        SetTextFillColor(Color const& rColor) override;
 
     void                        SetTextLineColor();
     void                        SetTextLineColor( const Color& rColor );
@@ -1022,8 +979,7 @@ public:
     const Color&                GetOverlineColor() const { return maOverlineColor; }
     bool                        IsOverlineColor() const { return !maOverlineColor.IsTransparent(); }
 
-    void                        SetTextAlign( TextAlign eAlign );
-    TextAlign                   GetTextAlign() const { return maFont.GetAlignment(); }
+    void                        SetTextAlign(TextAlign eAlign) override;
 
     /** Width of the text.
 
@@ -1537,15 +1493,9 @@ protected:
     ///@{
 
 public:
-
-    void                        EnableMapMode( bool bEnable = true );
-    bool                        IsMapModeEnabled() const { return mbMap; }
-
-    void                        SetMapMode();
-    void                        SetMapMode( const MapMode& rNewMapMode );
-    void                        SetRelativeMapMode( const MapMode& rNewMapMode );
+    void                        SetMapMode() override;
+    void                        SetMapMode( const MapMode& rNewMapMode ) override;
     virtual void                SetMetafileMapMode(const MapMode& rNewMapMode, bool bIsRecord);
-    const MapMode&              GetMapMode() const { return maMapMode; }
 
 protected:
     virtual void ImplInitMapModeObjects();
@@ -1812,12 +1762,6 @@ public:
      @returns vcl::Region based on device pixel coordinates and units.
      */
     SAL_DLLPRIVATE vcl::Region       ImplPixelToDevicePixel( const vcl::Region& rRegion ) const;
-
-    /** Invalidate the view transformation.
-
-     @since AOO bug 75163 (OpenOffice.org 2.4.3 - OOH 680 milestone 212)
-     */
-    SAL_DLLPRIVATE void         ImplInvalidateViewTransform();
 
     /** Get device transformation.
 

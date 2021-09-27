@@ -54,26 +54,20 @@
 
 #define TEXT_DRAW_ELLIPSIS  (DrawTextFlags::EndEllipsis | DrawTextFlags::PathEllipsis | DrawTextFlags::NewsEllipsis)
 
-void OutputDevice::SetLayoutMode( ComplexTextLayoutFlags nTextLayoutMode )
+void OutputDevice::SetLayoutMode(ComplexTextLayoutFlags nTextLayoutMode)
 {
-    if( mpMetaFile )
-        mpMetaFile->AddAction( new MetaLayoutModeAction( nTextLayoutMode ) );
+    if (mpMetaFile)
+        mpMetaFile->AddAction(new MetaLayoutModeAction(nTextLayoutMode));
 
-    mnTextLayoutMode = nTextLayoutMode;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetLayoutMode( nTextLayoutMode );
+    RenderContext::SetLayoutMode(nTextLayoutMode);
 }
 
-void OutputDevice::SetDigitLanguage( LanguageType eTextLanguage )
+void OutputDevice::SetDigitLanguage(LanguageType eTextLanguage)
 {
-    if( mpMetaFile )
-        mpMetaFile->AddAction( new MetaTextLanguageAction( eTextLanguage ) );
+    if (mpMetaFile)
+        mpMetaFile->AddAction(new MetaTextLanguageAction(eTextLanguage));
 
-    meTextLanguage = eTextLanguage;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetDigitLanguage( eTextLanguage );
+    RenderContext::SetDigitLanguage(eTextLanguage);
 }
 
 ImplMultiTextLineInfo::ImplMultiTextLineInfo()
@@ -685,27 +679,19 @@ tools::Long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
     return nMaxLineWidth;
 }
 
-void OutputDevice::SetTextColor( const Color& rColor )
+void OutputDevice::SetTextColor(Color const& rColor)
 {
-
-    Color aColor(vcl::drawmode::GetTextColor(rColor, GetDrawMode(), GetSettings().GetStyleSettings()));
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaTextColorAction( aColor ) );
-
-    if ( maTextColor != aColor )
+    if (mpMetaFile)
     {
-        maTextColor = aColor;
-        mbInitTextColor = true;
+        mpMetaFile->AddAction(new MetaTextColorAction(
+            vcl::drawmode::GetTextColor(rColor, GetDrawMode(), GetSettings().GetStyleSettings())));
     }
 
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetTextColor( COL_BLACK );
+    RenderContext2::SetTextColor(rColor);
 }
 
 void OutputDevice::SetTextFillColor()
 {
-
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaTextFillColorAction( Color(), false ) );
 
@@ -719,44 +705,20 @@ void OutputDevice::SetTextFillColor()
         mpAlphaVDev->SetTextFillColor();
 }
 
-void OutputDevice::SetTextFillColor( const Color& rColor )
+void OutputDevice::SetTextFillColor()
 {
-    Color aColor(vcl::drawmode::GetFillColor(rColor, GetDrawMode(), GetSettings().GetStyleSettings()));
+    if (mpMetaFile)
+        mpMetaFile->AddAction(new MetaTextFillColorAction(Color(), false));
 
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaTextFillColorAction( aColor, true ) );
-
-    if ( maFont.GetFillColor() != aColor )
-        maFont.SetFillColor( aColor );
-    if ( maFont.IsTransparent() != rColor.IsTransparent() )
-        maFont.SetTransparent( rColor.IsTransparent() );
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetTextFillColor( COL_BLACK );
+    RenderContext2::SetTextFillColor();
 }
 
-Color OutputDevice::GetTextFillColor() const
+void OutputDevice::SetTextAlign(TextAlign eAlign)
 {
-    if ( maFont.IsTransparent() )
-        return COL_TRANSPARENT;
-    else
-        return maFont.GetFillColor();
-}
+    if (mpMetaFile)
+        mpMetaFile->AddAction(new MetaTextAlignAction(eAlign));
 
-void OutputDevice::SetTextAlign( TextAlign eAlign )
-{
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaTextAlignAction( eAlign ) );
-
-    if ( maFont.GetAlignment() != eAlign )
-    {
-        maFont.SetAlignment( eAlign );
-        mbNewFont = true;
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetTextAlign( eAlign );
+    RenderContext::SetTextAlign(eAlign)
 }
 
 vcl::Region OutputDevice::GetOutputBoundsClipRegion() const

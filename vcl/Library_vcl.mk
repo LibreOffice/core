@@ -94,9 +94,15 @@ $(eval $(call gb_Library_use_externals,vcl,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/rendercontext/drawmode \
     vcl/skia/SkiaHelper \
-    vcl/source/rendercontext/ImplMapRes \
+    vcl/source/rendercontext/drawmode \
+    vcl/source/rendercontext/fill \
+    vcl/source/rendercontext/font \
+    vcl/source/rendercontext/line \
+    vcl/source/rendercontext/map \
+    vcl/source/rendercontext/rendercontext \
+    vcl/source/rendercontext/stack \
+    vcl/source/rendercontext/text \
     vcl/source/animate/Animation \
     vcl/source/animate/AnimationBitmap \
     vcl/source/cnttype/mcnttfactory \
