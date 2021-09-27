@@ -21,8 +21,8 @@
 
 #include <memory>
 
-#include <qt5/Qt5Frame.hxx>
-#include <qt5/Qt5SvpGraphics.hxx>
+#include <Qt5Frame.hxx>
+#include <Qt5SvpGraphics.hxx>
 
 class QWidget;
 

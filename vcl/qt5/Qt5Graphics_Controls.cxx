@@ -24,8 +24,8 @@
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QLabel>
 
-#include <qt5/Qt5Tools.hxx>
-#include <qt5/Qt5GraphicsBase.hxx>
+#include <Qt5Tools.hxx>
+#include <Qt5GraphicsBase.hxx>
 #include <vcl/decoview.hxx>
 
 /**

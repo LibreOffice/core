@@ -20,7 +20,7 @@
 #pragma once
 
 #include <headless/svpvd.hxx>
-#include <qt5/Qt5SvpGraphics.hxx>
+#include <Qt5SvpGraphics.hxx>
 
 class VCL_DLLPUBLIC Qt5SvpVirtualDevice : public SvpSalVirtualDevice
 {
