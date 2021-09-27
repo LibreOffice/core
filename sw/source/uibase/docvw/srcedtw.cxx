@@ -379,9 +379,9 @@ void TextViewOutWin::DataChanged( const DataChangedEvent& rDCEvt )
         {
             const Color &rCol = GetSettings().GetStyleSettings().GetWindowColor();
             SetBackground( rCol );
-            vcl::Font aFont( pTextView->GetTextEngine()->GetFont() );
+            vcl::Font aFont( m_pTextView->GetTextEngine()->GetFont() );
             aFont.SetFillColor( rCol );
-            pTextView->GetTextEngine()->SetFont( aFont );
+            m_pTextView->GetTextEngine()->SetFont( aFont );
         }
         break;
     default: break;
@@ -390,15 +390,15 @@ void TextViewOutWin::DataChanged( const DataChangedEvent& rDCEvt )
 
 void  TextViewOutWin::MouseMove( const MouseEvent &rEvt )
 {
-    if ( pTextView )
-        pTextView->MouseMove( rEvt );
+    if ( m_pTextView )
+        m_pTextView->MouseMove( rEvt );
 }
 
 void  TextViewOutWin::MouseButtonUp( const MouseEvent &rEvt )
 {
-    if ( pTextView )
+    if ( m_pTextView )
     {
-        pTextView->MouseButtonUp( rEvt );
+        m_pTextView->MouseButtonUp( rEvt );
         SfxViewFrame *pFrame = static_cast<SwSrcEditWindow*>(GetParent())->GetSrcView()->GetViewFrame();
         if ( pFrame )
         {
@@ -413,8 +413,8 @@ void  TextViewOutWin::MouseButtonUp( const MouseEvent &rEvt )
 void  TextViewOutWin::MouseButtonDown( const MouseEvent &rEvt )
 {
     GrabFocus();
-    if ( pTextView )
-        pTextView->MouseButtonDown( rEvt );
+    if ( m_pTextView )
+        m_pTextView->MouseButtonDown( rEvt );
 }
 
 void  TextViewOutWin::Command( const CommandEvent& rCEvt )
@@ -437,8 +437,8 @@ void  TextViewOutWin::Command( const CommandEvent& rCEvt )
         break;
 
         default:
-            if ( pTextView )
-                pTextView->Command( rCEvt );
+            if ( m_pTextView )
+                m_pTextView->Command( rCEvt );
             else
                 Window::Command(rCEvt);
     }
@@ -450,7 +450,7 @@ void  TextViewOutWin::KeyInput( const KeyEvent& rKEvt )
     SwSrcEditWindow* pSrcEditWin = static_cast<SwSrcEditWindow*>(GetParent());
     bool bChange = !pSrcEditWin->IsReadonly() || !TextEngine::DoesKeyChangeText( rKEvt );
     if(bChange)
-        bDone = pTextView->KeyInput( rKEvt );
+        bDone = m_pTextView->KeyInput( rKEvt );
 
     SfxBindings& rBindings = static_cast<SwSrcEditWindow*>(GetParent())->GetSrcView()->GetViewFrame()->GetBindings();
     if ( !bDone )
@@ -484,7 +484,7 @@ void  TextViewOutWin::KeyInput( const KeyEvent& rKEvt )
 
 void TextViewOutWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-    pTextView->Paint(rRenderContext, rRect);
+    m_pTextView->Paint(rRenderContext, rRect);
 }
 
 void SwSrcEditWindow::CreateTextEngine()

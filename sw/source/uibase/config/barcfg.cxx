@@ -36,7 +36,7 @@ SwToolbarConfigItem::SwToolbarConfigItem( bool bWeb ) :
         ConfigItemMode::ReleaseTree)
 {
     for(int i = 0; i <= SEL_TYPE_GRAPHIC; ++i)
-        aTbxIdArray[i] = -1;
+        m_aTbxIdArray[i] = -1;
 
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
@@ -50,7 +50,7 @@ SwToolbarConfigItem::SwToolbarConfigItem( bool bWeb ) :
             {
                 sal_Int32 nVal = 0;
                 pValues[nProp] >>= nVal;
-                aTbxIdArray[nProp] = nVal;
+                m_aTbxIdArray[nProp] = nVal;
             }
         }
     }
@@ -84,7 +84,7 @@ void SwToolbarConfigItem::SetTopToolbar(SelectionType nSelType, ToolbarId eBarId
     sal_Int32 nProp = lcl_getArrayIndex(nSelType);
     if(nProp >= 0)
     {
-        aTbxIdArray[nProp] = static_cast<sal_Int32>(eBarId);
+        m_aTbxIdArray[nProp] = static_cast<sal_Int32>(eBarId);
         SetModified();
     }
 }
@@ -115,7 +115,7 @@ void SwToolbarConfigItem::ImplCommit()
     Any* pValues = aValues.getArray();
 
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
-        pValues[nProp] <<= aTbxIdArray[nProp];
+        pValues[nProp] <<= m_aTbxIdArray[nProp];
     PutProperties(aNames, aValues);
 }
 
