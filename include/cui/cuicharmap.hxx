@@ -55,7 +55,7 @@ private:
     bool mbCenter;
     vcl::Font m_aFont;
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle&) override;
     virtual void Resize() override;
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 

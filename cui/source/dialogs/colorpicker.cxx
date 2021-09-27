@@ -152,7 +152,7 @@ class ColorPreviewControl : public weld::CustomWidgetController
 private:
     Color m_aColor;
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle&) override;
 public:
     ColorPreviewControl()
     {
@@ -177,7 +177,7 @@ public:
 
 }
 
-void ColorPreviewControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void ColorPreviewControl::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.SetFillColor(m_aColor);
     rRenderContext.SetLineColor(m_aColor);
@@ -217,7 +217,7 @@ public:
         mxBitmap.disposeAndClear();
     }
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void Resize() override;
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual bool MouseMove(const MouseEvent& rMEvt) override;
@@ -457,7 +457,7 @@ bool ColorFieldControl::MouseButtonUp(const MouseEvent&)
     return true;
 }
 
-void ColorFieldControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void ColorFieldControl::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     if (!mxBitmap)
         UpdateBitmap();
@@ -528,7 +528,7 @@ public:
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual bool MouseMove(const MouseEvent& rMEvt) override;
     virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle&) override;
     virtual void Resize() override;
 
     void UpdateBitmap();
@@ -685,7 +685,7 @@ bool ColorSliderControl::MouseButtonUp(const MouseEvent&)
     return true;
 }
 
-void ColorSliderControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void ColorSliderControl::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     if (!mxBitmap)
         UpdateBitmap();

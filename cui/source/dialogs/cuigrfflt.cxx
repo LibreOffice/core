@@ -45,7 +45,7 @@ void CuiGraphicPreviewWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     pDrawingArea->set_size_request(maOutputSizePixel.Width(), maOutputSizePixel.Height());
 }
 
-void CuiGraphicPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
+void CuiGraphicPreviewWindow::Paint(OutputDevice& rRenderContext, const ::tools::Rectangle&)
 {
     rRenderContext.SetBackground(Wallpaper(Application::GetSettings().GetStyleSettings().GetDialogColor()));
     rRenderContext.Erase();

@@ -1150,7 +1150,7 @@ void SvxShowText::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     m_xVirDev->Pop();
 }
 
-void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SvxShowText::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.SetFont(m_aFont);
 

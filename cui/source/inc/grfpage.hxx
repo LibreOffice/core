@@ -33,7 +33,7 @@ class SvxCropExample : public weld::CustomWidgetController
 public:
     SvxCropExample();
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const ::tools::Rectangle& rRect) override;
     virtual void Resize() override;
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 

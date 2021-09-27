@@ -2184,7 +2184,7 @@ SvxNumberingPreview::SvxNumberingPreview()
 }
 
 // paint preview of numeration
-void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& /*rRect*/)
+void SvxNumberingPreview::Paint(OutputDevice& rRenderContext, const ::tools::Rectangle& /*rRect*/)
 {
     Size aSize(rRenderContext.PixelToLogic(GetOutputSizePixel()));
 

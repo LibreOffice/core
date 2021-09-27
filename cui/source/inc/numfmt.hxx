@@ -40,7 +40,7 @@ private:
     sal_Unicode     mnChar;
 
 protected:
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
+    virtual void    Paint(OutputDevice& rRenderContext, const ::tools::Rectangle& rRect) override;
 
 public:
     SvxNumberPreview();

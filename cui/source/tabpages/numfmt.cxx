@@ -130,7 +130,7 @@ void SvxNumberPreview::NotifyChange( const OUString& rPrevStr,
 #*
 #************************************************************************/
 
-void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
+void SvxNumberPreview::Paint(OutputDevice& rRenderContext, const ::tools::Rectangle&)
 {
     rRenderContext.Push(PushFlags::ALL);
 

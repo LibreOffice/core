@@ -39,7 +39,7 @@ public:
     TabWin_Impl() : nTabStyle(0)
     {
     }
-    virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const ::tools::Rectangle& rRect) override;
 
     void SetTabStyle(sal_uInt16 nStyle) {nTabStyle = nStyle; }
 };
