@@ -203,7 +203,6 @@ class GtkSalFrame final : public SalFrame
     ScreenSaverInhibitor            m_ScreenSaverInhibitor;
     gulong                          m_nSetFocusSignalId;
     bool                            m_bFullscreen;
-    bool                            m_bSpanMonitorsWhenFullscreen;
     bool                            m_bDefaultPos;
     bool                            m_bDefaultSize;
     bool                            m_bTooltipBlocked;
