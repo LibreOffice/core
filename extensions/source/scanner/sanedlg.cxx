@@ -43,7 +43,7 @@
 
 namespace {
 
-void DrawRectangles(vcl::RenderContext& rRenderContext, Point const & rUL, Point const & rBR)
+void DrawRectangles(OutputDevice& rRenderContext, Point const & rUL, Point const & rBR)
 {
     int nMiddleX, nMiddleY;
     Point aBL, aUR;
@@ -125,7 +125,7 @@ public:
         return mbDragEnable;
     }
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual bool MouseMove(const MouseEvent& rMEvt) override;
     virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
@@ -180,7 +180,7 @@ public:
         maMinTopLeft = rTopLeft;
         maMaxBottomRight = rBottomRight;
     }
-    void DrawDrag(vcl::RenderContext& rRenderContext);
+    void DrawDrag(OutputDevice& rRenderContext);
     void UpdatePreviewBounds();
     void SetBitmap(SvStream &rStream)
     {
@@ -913,7 +913,7 @@ void ScanPreview::UpdatePreviewBounds()
     }
 }
 
-void ScanPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void ScanPreview::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.SetMapMode(MapMode(MapUnit::MapAppFont));
     rRenderContext.SetFillColor(COL_WHITE);
@@ -1180,7 +1180,7 @@ bool ScanPreview::MouseButtonUp(const MouseEvent&)
     return false;
 }
 
-void ScanPreview::DrawDrag(vcl::RenderContext& rRenderContext)
+void ScanPreview::DrawDrag(OutputDevice& rRenderContext)
 {
     if (!mbDragEnable)
         return;
