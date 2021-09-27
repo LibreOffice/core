@@ -58,6 +58,10 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/drawing/XDrawPages.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/document/XEventsSupplier.hpp>
+#include <com/sun/star/presentation/ClickAction.hpp>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -696,6 +700,32 @@ static sal_Int32 lcl_CircleAngle2CustomShapeEllipseAngleOOX(const sal_Int32 nInt
         return 0;
 }
 
+static OUString lcl_GetTarget(const css::uno::Reference<css::frame::XModel>& xModel,
+                              std::u16string_view rURL)
+{
+    Reference<drawing::XDrawPagesSupplier> xDPS(xModel, uno::UNO_QUERY_THROW);
+    Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages(), uno::UNO_SET_THROW);
+    sal_uInt32 nPageCount = xDrawPages->getCount();
+    OUString sTarget;
+
+    for (sal_uInt32 i = 0; i < nPageCount; ++i)
+    {
+        Reference<XDrawPage> xDrawPage;
+        xDrawPages->getByIndex(i) >>= xDrawPage;
+        Reference<container::XNamed> xNamed(xDrawPage, UNO_QUERY);
+        if (!xNamed)
+            continue;
+        OUString sSlideName = "#" + xNamed->getName();
+        if (rURL == sSlideName)
+        {
+            sTarget = "slide" + OUString::number(i + 1) + ".xml";
+            break;
+        }
+    }
+
+    return sTarget;
+}
+
 ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
 {
     SAL_INFO("oox.shape", "write custom shape");
@@ -1195,24 +1225,55 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
 
     pFS->startElementNS(mnXmlNamespace, XML_nvPicPr);
 
-    OUString sDescr, sURL;
+    presentation::ClickAction eClickAction = presentation::ClickAction_NONE;
+    OUString sDescr, sURL, sBookmark, sPPAction;
     bool bHaveDesc;
 
     if ( ( bHaveDesc = GetProperty( xShapeProps, "Description" ) ) )
         mAny >>= sDescr;
     if ( GetProperty( xShapeProps, "URL" ) )
         mAny >>= sURL;
+    if (GetProperty(xShapeProps, "Bookmark"))
+        mAny >>= sBookmark;
+    if (GetProperty(xShapeProps, "OnClick"))
+        mAny >>= eClickAction;
 
     pFS->startElementNS( mnXmlNamespace, XML_cNvPr,
                           XML_id,     OString::number(GetNewShapeID(xShape)),
                           XML_name,   GetShapeName(xShape),
                           XML_descr,  sax_fastparser::UseIf(sDescr, bHaveDesc));
 
+    if (eClickAction != presentation::ClickAction_NONE)
+    {
+        switch (eClickAction)
+        {
+            case presentation::ClickAction_STOPPRESENTATION:
+                sPPAction = "ppaction://hlinkshowjump?jump=endshow";
+                break;
+            case presentation::ClickAction_NEXTPAGE:
+                sPPAction = "ppaction://hlinkshowjump?jump=nextslide";
+                break;
+            case presentation::ClickAction_LASTPAGE:
+                sPPAction = "ppaction://hlinkshowjump?jump=lastslide";
+                break;
+            case presentation::ClickAction_PREVPAGE:
+                sPPAction = "ppaction://hlinkshowjump?jump=previousslide";
+                break;
+            case presentation::ClickAction_FIRSTPAGE:
+                sPPAction = "ppaction://hlinkshowjump?jump=firstslide";
+                break;
+            case presentation::ClickAction_BOOKMARK:
+                sBookmark = "#" + sBookmark;
+                break;
+            default:
+                break;
+        }
+    }
+
     // OOXTODO: //cNvPr children: XML_extLst, XML_hlinkHover
-    if (bHasMediaURL)
-        pFS->singleElementNS(XML_a, XML_hlinkClick,
-                             FSNS(XML_r, XML_id), "",
-                             XML_action, "ppaction://media");
+    if (bHasMediaURL || !sPPAction.isEmpty())
+        pFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), "", XML_action,
+                             bHasMediaURL ? "ppaction://media" : sPPAction);
     if( !sURL.isEmpty() )
     {
         OUString sRelId = mpFB->addRelation( mpFS->getOutputStream(),
@@ -1221,6 +1282,23 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
                 mpURLTransformer->isExternalURL(sURL));
 
         mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
+    }
+
+    if (!sBookmark.isEmpty())
+    {
+        bool bExtURL = URLTransformer().isExternalURL(sBookmark);
+        sBookmark = bExtURL ? sBookmark : lcl_GetTarget(GetFB()->getModel(), sBookmark);
+
+        OUString sRelId = mpFB->addRelation(mpFS->getOutputStream(),
+                                            bExtURL ? oox::getRelationship(Relationship::HYPERLINK)
+                                                    : oox::getRelationship(Relationship::SLIDE),
+                                            sBookmark, bExtURL);
+
+        if (bExtURL)
+            mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
+        else
+            mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId, XML_action,
+                                  "ppaction://hlinksldjump");
     }
     pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
 
