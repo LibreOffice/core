@@ -1342,7 +1342,6 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
             }
 
             // tdf#135198: keep text box together with its shape
-            SwRect aObjRect(rObj.GetSnapRect());
             const SwPageFrame* rPageFrame = pAnchoredDrawObj->GetPageFrame();
             if (rPageFrame && rPageFrame->isFrameAreaPositionValid() && !rObj.getChildrenOfSdrObject())
             {
@@ -1359,10 +1358,11 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                     pDoc->GetAttrPool(),
                     svl::Items<RES_VERT_ORIENT, RES_HORI_ORIENT, RES_ANCHOR, RES_ANCHOR>);
                 aSyncSet.Put(GetFormat()->GetHoriOrient());
-                aSyncSet.Put(SwFormatVertOrient(aObjRect.Top() - rPageFrame->getFrameArea().Top(),
+                bool bRelToTableCell(false);
+                aSyncSet.Put(SwFormatVertOrient(pAnchoredDrawObj->GetRelPosToPageFrame(false, bRelToTableCell).getY(),
                                                 text::VertOrientation::NONE,
                                                 text::RelOrientation::PAGE_FRAME));
-                aSyncSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_PAGE, pAnchoredDrawObj->GetPageFrame()->GetPhyPageNum()));
+                aSyncSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_PAGE, rPageFrame->GetPhyPageNum()));
 
                 auto pSdrObj = const_cast<SdrObject*>(&rObj);
                 if (pSdrObj != GetFormat()->FindRealSdrObject())
