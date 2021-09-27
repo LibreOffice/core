@@ -234,7 +234,7 @@ std::unique_ptr<SfxTabPage> SmPrintOptionsTabPage::Create(weld::Container* pPage
     return std::make_unique<SmPrintOptionsTabPage>(pPage, pController, rSet);
 }
 
-void SmShowFont::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
+void SmShowFont::Paint(OutputDevice& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     Color aBackColor;
     Color aTextColor;
@@ -965,7 +965,7 @@ void SmShowSymbolSet::Resize()
     }
 }
 
-void SmShowSymbolSet::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SmShowSymbolSet::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     Color aBackgroundColor;
     Color aTextColor;
@@ -1085,7 +1085,7 @@ bool SmShowSymbolSet::KeyInput(const KeyEvent& rKEvt)
     return true;
 }
 
-void SmShowSymbolSet::calccols(const vcl::RenderContext& rRenderContext)
+void SmShowSymbolSet::calccols(const OutputDevice& rRenderContext)
 {
     // Height of 16pt in pixels (matching 'aOutputSize')
     nLen = rRenderContext.LogicToPixel(Size(0, 16), MapMode(MapUnit::MapPoint)).Height();
@@ -1160,7 +1160,7 @@ void SmShowSymbol::setFontSize(vcl::Font &rFont) const
     rFont.SetFontSize(Size(0, aSize.Height() - aSize.Height() / 3));
 }
 
-void SmShowSymbol::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SmShowSymbol::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     Color aBackgroundColor;
     Color aTextColor;
@@ -1388,7 +1388,7 @@ void SmShowChar::Resize()
     SetSymbol(cChar, GetFont()); //force recalculation of size
 }
 
-void SmShowChar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SmShowChar::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     Color aTextCol = rRenderContext.GetTextColor();
     Color aFillCol = rRenderContext.GetFillColor();

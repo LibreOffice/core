@@ -538,7 +538,7 @@ const SmNode * SmGraphicWidget::SetCursorPos(sal_uInt16 nRow, sal_uInt16 nCol)
     return pNode;
 }
 
-void SmGraphicWidget::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SmGraphicWidget::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     SmDocShell& rDoc = *mrViewShell.GetDoc();
     Point aPoint;

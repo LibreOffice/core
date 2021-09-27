@@ -355,7 +355,7 @@ Color SmElementsControl::GetControlBackground()
  * The first paint (m_bFirstPaintAfterLayout) therefore needs to update a
  * visible scrollbar, because the layouting was wrong.
  **/
-void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext& rContext, bool bDraw)
+void SmElementsControl::LayoutOrPaintContents(OutputDevice& rContext, bool bDraw)
 {
     rContext.Push();
 
@@ -532,7 +532,7 @@ void SmElementsControl::Resize()
     LayoutOrPaintContents(GetDrawingArea()->get_ref_device(), false);
 }
 
-void SmElementsControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SmElementsControl::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     LayoutOrPaintContents(rRenderContext, true);
 }
