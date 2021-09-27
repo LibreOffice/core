@@ -55,7 +55,7 @@ class GridWindow : public weld::CustomWidgetController
             return (maPos.X() < rComp.maPos.X());
         }
 
-        void draw(vcl::RenderContext& rRenderContext, const BitmapEx& rBitmapEx)
+        void draw(OutputDevice& rRenderContext, const BitmapEx& rBitmapEx)
         {
             const Point aOffset(rRenderContext.PixelToLogic(Point(mnOffX, mnOffY)));
             rRenderContext.DrawBitmapEx(maPos - aOffset, rBitmapEx);
@@ -107,10 +107,10 @@ class GridWindow : public weld::CustomWidgetController
     double findMaxX();
     double findMaxY();
 
-    void drawGrid(vcl::RenderContext& rRenderContext);
-    void drawOriginal(vcl::RenderContext& rRenderContext);
-    void drawNew(vcl::RenderContext& rRenderContext);
-    void drawHandles(vcl::RenderContext& rRenderContext);
+    void drawGrid(OutputDevice& rRenderContext);
+    void drawOriginal(OutputDevice& rRenderContext);
+    void drawNew(OutputDevice& rRenderContext);
+    void drawHandles(OutputDevice& rRenderContext);
 
     void computeExtremes();
     static void computeChunk( double fMin, double fMax, double& fChunkOut, double& fMinChunkOut );
@@ -123,7 +123,7 @@ class GridWindow : public weld::CustomWidgetController
     void onResize();
     virtual void Resize() override;
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
-    void drawLine(vcl::RenderContext& rRenderContext, double x1, double y1, double x2, double y2);
+    void drawLine(OutputDevice& rRenderContext, double x1, double y1, double x2, double y2);
 public:
     GridWindow();
     void Init(double* pXValues, double* pYValues, int nValues, bool bCutValues, const BitmapEx &rMarkerBitmap);
@@ -135,7 +135,7 @@ public:
 
     void ChangeMode(ResetType nType);
 
-    virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect ) override;
+    virtual void Paint( OutputDevice& /*rRenderContext*/, const tools::Rectangle& rRect ) override;
 };
 
 GridWindow::GridWindow()
@@ -319,7 +319,7 @@ void GridWindow::transform( const Point& rOriginal, double& x, double& y )
     y = ( m_aGridArea.Bottom() - rOriginal.Y() ) * (m_fMaxY - m_fMinY) / static_cast<double>(nHeight) + m_fMinY;
 }
 
-void GridWindow::drawLine(vcl::RenderContext& rRenderContext, double x1, double y1, double x2, double y2 )
+void GridWindow::drawLine(OutputDevice& rRenderContext, double x1, double y1, double x2, double y2 )
 {
     rRenderContext.DrawLine(transform(x1, y1), transform(x2, y2));
 }
@@ -436,7 +436,7 @@ void GridWindow::setBoundings(double fMinX, double fMinY, double fMaxX, double f
     computeChunk( m_fMinY, m_fMaxY, m_fChunkY, m_fMinChunkY );
 }
 
-void GridWindow::drawGrid(vcl::RenderContext& rRenderContext)
+void GridWindow::drawGrid(OutputDevice& rRenderContext)
 {
     char pBuf[256];
     rRenderContext.SetLineColor(COL_BLACK);
@@ -474,7 +474,7 @@ void GridWindow::drawGrid(vcl::RenderContext& rRenderContext)
     drawLine(rRenderContext, m_fMaxX, m_fMinY, m_fMaxX, m_fMaxY);
 }
 
-void GridWindow::drawOriginal(vcl::RenderContext& rRenderContext)
+void GridWindow::drawOriginal(OutputDevice& rRenderContext)
 {
     if (m_nValues && m_pXValues && m_pOrigYValues)
     {
@@ -488,7 +488,7 @@ void GridWindow::drawOriginal(vcl::RenderContext& rRenderContext)
     }
 }
 
-void GridWindow::drawNew(vcl::RenderContext& rRenderContext)
+void GridWindow::drawNew(OutputDevice& rRenderContext)
 {
     if (m_nValues && m_pXValues && m_pNewYValues)
     {
@@ -504,7 +504,7 @@ void GridWindow::drawNew(vcl::RenderContext& rRenderContext)
     }
 }
 
-void GridWindow::drawHandles(vcl::RenderContext& rRenderContext)
+void GridWindow::drawHandles(OutputDevice& rRenderContext)
 {
     for(impHandle & rHandle : m_aHandles)
     {
@@ -512,7 +512,7 @@ void GridWindow::drawHandles(vcl::RenderContext& rRenderContext)
     }
 }
 
-void GridWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void GridWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.SetBackground(Wallpaper(Application::GetSettings().GetStyleSettings().GetDialogColor()));
     drawGrid(rRenderContext);
