@@ -127,7 +127,7 @@ void OReportSection::dispose()
     vcl::Window::dispose();
 }
 
-void OReportSection::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect )
+void OReportSection::Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect )
 {
     Window::Paint(rRenderContext, rRect);
 

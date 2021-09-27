@@ -42,7 +42,7 @@ OEndMarker::~OEndMarker()
 {
 }
 
-void OEndMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
+void OEndMarker::Paint(OutputDevice& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     Fraction aCornerSpace(tools::Long(CORNER_SPACE));
     aCornerSpace *= rRenderContext.GetMapMode().GetScaleX();

@@ -95,7 +95,7 @@ sal_Int32 OStartMarker::getMinHeight() const
     return LogicToPixel(Size(0, GetTextHeight())).Height() + tools::Long(aExtraWidth);
 }
 
-void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
+void OStartMarker::Paint(OutputDevice& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     rRenderContext.Push(PushFlags::TEXTCOLOR);
 
@@ -203,7 +203,7 @@ void OStartMarker::initDefaultNodeImages()
     m_aImage = m_bCollapsed ? *s_pDefCollapsed : *s_pDefExpanded;
 }
 
-void OStartMarker::ApplySettings(vcl::RenderContext& rRenderContext)
+void OStartMarker::ApplySettings(OutputDevice& rRenderContext)
 {
     rRenderContext.SetBackground();
     rRenderContext.SetFillColor(Application::GetSettings().GetStyleSettings().GetDialogColor());

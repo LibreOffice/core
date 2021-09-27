@@ -248,7 +248,7 @@ void OViewsWindow::Resize()
     }
 }
 
-void OViewsWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void OViewsWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     Window::Paint(rRenderContext, rRect);
 
