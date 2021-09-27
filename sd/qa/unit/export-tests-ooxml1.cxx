@@ -61,6 +61,7 @@ using namespace css;
 class SdOOXMLExportTest1 : public SdModelTestBaseXML
 {
 public:
+    void testTdf124232();
     void testTdf143624();
     void testTdf142648();
     void testTdf47365();
@@ -124,6 +125,7 @@ public:
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
+    CPPUNIT_TEST(testTdf124232);
     CPPUNIT_TEST(testTdf143624);
     CPPUNIT_TEST(testTdf142648);
     CPPUNIT_TEST(testTdf47365);
@@ -212,6 +214,48 @@ void checkFontAttributes( const SdrTextObj* pObj, ItemValue nVal, sal_uInt32 nId
     }
 }
 
+}
+
+void SdOOXMLExportTest1::testTdf124232()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf141704.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXmlDoc1 = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:spTree/p:pic/p:nvPicPr/p:cNvPr/a:hlinkClick", "action",
+                "ppaction://hlinkshowjump?jump=lastslide");
+
+    xmlDocUniquePtr pXmlDoc2 = parseExport(tempFile, "ppt/slides/slide2.xml");
+    assertXPath(pXmlDoc2, "/p:sld/p:cSld/p:spTree/p:pic/p:nvPicPr/p:cNvPr/a:hlinkClick", "action",
+                "ppaction://hlinkshowjump?jump=nextslide");
+
+    xmlDocUniquePtr pXmlDoc3 = parseExport(tempFile, "ppt/slides/slide3.xml");
+    assertXPath(pXmlDoc3, "/p:sld/p:cSld/p:spTree/p:pic/p:nvPicPr/p:cNvPr/a:hlinkClick", "action",
+                "ppaction://hlinkshowjump?jump=previousslide");
+
+    xmlDocUniquePtr pXmlDoc4 = parseExport(tempFile, "ppt/slides/slide4.xml");
+    assertXPath(pXmlDoc4, "/p:sld/p:cSld/p:spTree/p:pic/p:nvPicPr/p:cNvPr/a:hlinkClick",
+        "id", "rId1");
+    xmlDocUniquePtr pRelsDoc4 = parseExport(tempFile, "ppt/slides/_rels/slide4.xml.rels");
+    assertXPath(pRelsDoc4, "/rels:Relationships/rels:Relationship[@Id='rId1']", "Target",
+                "http://www.example.com/");
+
+    xmlDocUniquePtr pXmlDoc5 = parseExport(tempFile, "ppt/slides/slide5.xml");
+    assertXPath(pXmlDoc5, "/p:sld/p:cSld/p:spTree/p:pic/p:nvPicPr/p:cNvPr/a:hlinkClick",
+        "action", "ppaction://hlinksldjump");
+    xmlDocUniquePtr pRelsDoc5 = parseExport(tempFile, "ppt/slides/_rels/slide5.xml.rels");
+    assertXPath(pRelsDoc5, "/rels:Relationships/rels:Relationship[@Id='rId1']", "Target",
+        "slide6.xml");
+
+    xmlDocUniquePtr pXmlDoc6 = parseExport(tempFile, "ppt/slides/slide6.xml");
+    assertXPath(pXmlDoc6, "/p:sld/p:cSld/p:spTree/p:pic/p:nvPicPr/p:cNvPr/a:hlinkClick",
+        "action", "ppaction://hlinkshowjump?jump=endshow");
+
+    xmlDocUniquePtr pXmlDoc7 = parseExport(tempFile, "ppt/slides/slide7.xml");
+    assertXPath(pXmlDoc7, "/p:sld/p:cSld/p:spTree/p:pic/p:nvPicPr/p:cNvPr/a:hlinkClick",
+        "action", "ppaction://hlinkshowjump?jump=firstslide");
 }
 
 void SdOOXMLExportTest1::testTdf143624()
