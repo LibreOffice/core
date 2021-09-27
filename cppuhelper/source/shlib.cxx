@@ -23,6 +23,12 @@
 #include <cstdlib>
 #include <string_view>
 
+#ifdef IOS
+#include <premac.h>
+#include <Foundation/Foundation.h>
+#include <postmac.h>
+#endif
+
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/registry/CannotRegisterImplementationException.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
@@ -267,6 +273,9 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
         }
         if (fp == 0) {
             SAL_WARN("cppuhelper", "unknown factory name \"" << uri << "\"");
+#ifdef IOS
+            NSLog(@"Unknown factory %s", uri.toUtf8().getStr());
+#endif
             throw css::loader::CannotActivateFactoryException(
                 "unknown factory name \"" + uri + "\"",
                 css::uno::Reference<css::uno::XInterface>());
@@ -287,6 +296,9 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
             }
         }
         SAL_WARN("cppuhelper", "unknown constructor name \"" << constructor << "\"");
+#ifdef IOS
+            NSLog(@"Unknown constructor %s", constructor.toUtf8().getStr());
+#endif
         throw css::loader::CannotActivateFactoryException(
             "unknown constructor name \"" + constructor + "\"",
             css::uno::Reference<css::uno::XInterface>());
