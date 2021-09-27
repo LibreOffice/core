@@ -50,7 +50,7 @@ public:
 
     std::array<tools::Rectangle,8> FillHandleRectsPixel() const;
     std::array<tools::Rectangle,4> FillMoveRectsPixel() const;
-    void        Draw(vcl::RenderContext& rRenderContext);
+    void        Draw(OutputDevice& rRenderContext);
     void        InvalidateBorder( vcl::Window * );
     bool        SelectBegin( vcl::Window *, const Point & rPos );
     short       SelectMove( vcl::Window * pWin, const Point & rPos );
@@ -83,7 +83,7 @@ public:
     virtual void    MouseButtonDown( const MouseEvent & rEvt ) override;
     virtual void    KeyInput( const KeyEvent & rEvt ) override;
     virtual void    Resize() override;
-    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle & ) override;
+    virtual void    Paint( OutputDevice& /*rRenderContext*/, const tools::Rectangle & ) override;
     virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
 };

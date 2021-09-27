@@ -120,7 +120,7 @@ public:
     void            SetImage( const Image& rImage );
     const OUString& GetGraphicURL() const { return maGraphicURL;}
     void            SetGraphicURL( const OUString& rGraphicURL );
-    virtual void    Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
+    virtual void    Paint(const Point& rPos, SvTreeListBox& rOutDev, OutputDevice& rRenderContext,
                           const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
     std::unique_ptr<SvLBoxItem> Clone( SvLBoxItem const * pSource ) const override;
 
@@ -1502,7 +1502,7 @@ UnoTreeListItem::UnoTreeListItem()
 }
 
 void UnoTreeListItem::Paint(
-    const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext, const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
+    const Point& rPos, SvTreeListBox& rDev, OutputDevice& rRenderContext, const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
 {
     Point aPos(rPos);
     Size aSize(GetWidth(&rDev, &rEntry), GetHeight(&rDev, &rEntry));
