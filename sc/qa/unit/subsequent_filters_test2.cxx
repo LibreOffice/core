@@ -207,6 +207,7 @@ public:
     void testTdf129940();
     void testTdf139763ShapeAnchor();
     void testAutofilterNamedRangesXLSX();
+    void testInvalidBareBiff5();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest2);
 
@@ -313,6 +314,7 @@ public:
     CPPUNIT_TEST(testTdf129940);
     CPPUNIT_TEST(testTdf139763ShapeAnchor);
     CPPUNIT_TEST(testAutofilterNamedRangesXLSX);
+    CPPUNIT_TEST(testInvalidBareBiff5);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2891,6 +2893,107 @@ void ScFiltersTest2::testAutofilterNamedRangesXLSX()
     const ScRangeData* pRData = rDoc.GetRangeAtBlock(aRange, aPosStr, &bSheetLocal);
     CPPUNIT_ASSERT(!pRData);
     CPPUNIT_ASSERT_EQUAL(OUString(), aPosStr);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest2::testInvalidBareBiff5()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf144732.", FORMAT_XLS);
+    CPPUNIT_ASSERT(xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    rDoc.CalcAll();
+
+    // Check that we import the contents from such file, as Excel does
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), rDoc.GetTableCount());
+
+    // Row 1
+    ScAddress aPos(0, 0, 0);
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_VALUE, rDoc.GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(aPos));
+    aPos.IncCol();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_VALUE, rDoc.GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(2.0, rDoc.GetValue(aPos));
+    aPos.IncCol();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_VALUE, rDoc.GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(3.0, rDoc.GetValue(aPos));
+    aPos.IncCol();
+    CPPUNIT_ASSERT_EQUAL(OUString(), rDoc.GetString(aPos));
+
+    // Row 2
+    aPos = ScAddress(0, 1, 0);
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_FORMULA, rDoc.GetCellType(aPos));
+    OUString sFormula;
+    rDoc.GetFormula(aPos.Col(), aPos.Row(), aPos.Tab(), sFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=TRUE()"), sFormula);
+    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(aPos));
+    aPos.IncCol();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_FORMULA, rDoc.GetCellType(aPos));
+    rDoc.GetFormula(aPos.Col(), aPos.Row(), aPos.Tab(), sFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), sFormula);
+    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(aPos));
+    aPos.IncCol();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, rDoc.GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(OUString(), rDoc.GetString(aPos));
+    aPos.IncCol();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, rDoc.GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"sheetjs"), rDoc.GetString(aPos));
+
+    // Row 3
+    aPos = ScAddress(0, 2, 0);
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, rDoc.GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"foo    bar"), rDoc.GetString(aPos));
+    aPos.IncCol();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, rDoc.GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"baz"), rDoc.GetString(aPos));
+    aPos.IncCol();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_VALUE, rDoc.GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(41689.4375, rDoc.GetValue(aPos));
+    aPos.IncCol();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, rDoc.GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"0.3"), rDoc.GetString(aPos));
+
+    // Row 4
+    aPos = ScAddress(0, 3, 0);
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, rDoc.GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"baz"), rDoc.GetString(aPos));
+    aPos.IncCol();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, rDoc.GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(OUString(), rDoc.GetString(aPos));
+    aPos.IncCol();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, rDoc.GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"_"), rDoc.GetString(aPos));
+    aPos.IncCol();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_VALUE, rDoc.GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(3.14159, rDoc.GetValue(aPos));
+
+    // Row 5
+    aPos = ScAddress(0, 4, 0);
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, rDoc.GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"hidden"), rDoc.GetString(aPos));
+    aPos.IncCol();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, rDoc.GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(OUString(), rDoc.GetString(aPos));
+    aPos.IncCol();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, rDoc.GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(OUString(), rDoc.GetString(aPos));
+    aPos.IncCol();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, rDoc.GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(OUString(), rDoc.GetString(aPos));
+
+    // Row 6
+    aPos = ScAddress(0, 5, 0);
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, rDoc.GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"visible"), rDoc.GetString(aPos));
+    aPos.IncCol();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, rDoc.GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(OUString(), rDoc.GetString(aPos));
+    aPos.IncCol();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, rDoc.GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(OUString(), rDoc.GetString(aPos));
+    aPos.IncCol();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, rDoc.GetCellType(aPos));
+    CPPUNIT_ASSERT_EQUAL(OUString(), rDoc.GetString(aPos));
 
     xDocSh->DoClose();
 }
