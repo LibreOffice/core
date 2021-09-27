@@ -116,7 +116,7 @@ std::array<tools::Rectangle,4> SvResizeHelper::FillMoveRectsPixel() const
 |*
 |*    Description
 *************************************************************************/
-void SvResizeHelper::Draw(vcl::RenderContext& rRenderContext)
+void SvResizeHelper::Draw(OutputDevice& rRenderContext)
 {
     rRenderContext.Push();
     rRenderContext.SetMapMode( MapMode() );
@@ -589,7 +589,7 @@ void SvResizeWindow::Resize()
 |*
 |*    Description
 *************************************************************************/
-void SvResizeWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle & /*rRect*/ )
+void SvResizeWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle & /*rRect*/ )
 {
     m_aResizer.Draw(rRenderContext);
 }
