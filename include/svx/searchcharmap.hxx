@@ -40,7 +40,7 @@ public:
     SvxSearchCharSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow, const VclPtr<VirtualDevice> &rDevice);
     virtual ~SvxSearchCharSet() override;
 
-    virtual void                        RecalculateFont(vcl::RenderContext& rRenderContext) override;
+    virtual void                        RecalculateFont(OutputDevice& rRenderContext) override;
 
     void                                SelectCharacter( const Subset* sub);
     virtual sal_UCS4                    GetSelectCharacter() const override;
@@ -60,8 +60,8 @@ private:
     //to uniquely identify each appended element
     std::unordered_map<sal_Int32, sal_UCS4> m_aItemList;
 private:
-    virtual void DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, int n2) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void DrawChars_Impl(OutputDevice& rRenderContext, int n1, int n2) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
 };
 

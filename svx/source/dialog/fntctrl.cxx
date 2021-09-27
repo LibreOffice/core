@@ -81,7 +81,7 @@ using ::com::sun::star::i18n::BreakIterator;
 
 namespace
 {
-void scaleFontWidth(vcl::Font& rFont, vcl::RenderContext const & rRenderContext,tools::Long& n100PercentFont)
+void scaleFontWidth(vcl::Font& rFont, OutputDevice const & rRenderContext,tools::Long& n100PercentFont)
 {
     rFont.SetAverageFontWidth(0);
     n100PercentFont = rRenderContext.GetFontMetric(rFont).GetAverageFontWidth();
@@ -101,7 +101,7 @@ void setFontSize(vcl::Font& rFont)
     rFont.SetFontSize(aSize);
 }
 
-void calcFontHeightAnyAscent(vcl::RenderContext& rRenderContext, const vcl::Font& rFont, tools::Long& nHeight, tools::Long& nAscent)
+void calcFontHeightAnyAscent(OutputDevice& rRenderContext, const vcl::Font& rFont, tools::Long& nHeight, tools::Long& nAscent)
 {
     if (!nHeight)
     {
@@ -203,13 +203,13 @@ public:
     }
 
     void CheckScript();
-    Size CalcTextSize(vcl::RenderContext& rRenderContext, OutputDevice const * pPrinter, const SvxFont& rFont);
-    void DrawPrev(vcl::RenderContext& rRenderContext, Printer* pPrinter, Point& rPt, const SvxFont& rFont);
+    Size CalcTextSize(OutputDevice& rRenderContext, OutputDevice const * pPrinter, const SvxFont& rFont);
+    void DrawPrev(OutputDevice& rRenderContext, Printer* pPrinter, Point& rPt, const SvxFont& rFont);
 
     bool SetFontWidthScale(sal_uInt16 nScaleInPercent);
     inline void Invalidate100PercentFontWidth();
     inline bool Is100PercentFontWidthValid() const;
-    void ScaleFontWidth(vcl::RenderContext const & rRenderContext);
+    void ScaleFontWidth(OutputDevice const & rRenderContext);
                             // scales rNonCJKFont and aCJKFont depending on nFontWidthScale and
                             // sets the 100%-Font-Widths
 };
@@ -296,7 +296,7 @@ void FontPrevWin_Impl::CheckScript()
  * The member nAscent is calculated to the maximal ascent of all used fonts.
  */
 
-Size FontPrevWin_Impl::CalcTextSize(vcl::RenderContext& rRenderContext, OutputDevice const * _pPrinter, const SvxFont& rInFont)
+Size FontPrevWin_Impl::CalcTextSize(OutputDevice& rRenderContext, OutputDevice const * _pPrinter, const SvxFont& rInFont)
 {
     sal_uInt16 nScript;
     sal_uInt16 nIdx = 0;
@@ -388,7 +388,7 @@ Size FontPrevWin_Impl::CalcTextSize(vcl::RenderContext& rRenderContext, OutputDe
  * given rFont.
  */
 
-void FontPrevWin_Impl::DrawPrev(vcl::RenderContext& rRenderContext, Printer* _pPrinter, Point &rPt, const SvxFont& rInFont)
+void FontPrevWin_Impl::DrawPrev(OutputDevice& rRenderContext, Printer* _pPrinter, Point &rPt, const SvxFont& rInFont)
 {
     vcl::Font aOldFont = _pPrinter->GetFont();
     sal_uInt16 nScript;
@@ -443,7 +443,7 @@ bool FontPrevWin_Impl::SetFontWidthScale(sal_uInt16 nScale)
     return false;
 }
 
-void FontPrevWin_Impl::ScaleFontWidth(vcl::RenderContext const & rOutDev)
+void FontPrevWin_Impl::ScaleFontWidth(OutputDevice const & rOutDev)
 {
     if (!Is100PercentFontWidthValid())
     {
@@ -500,7 +500,7 @@ static void SetPrevFontEscapement(SvxFont& rFont, sal_uInt8 nProp, sal_uInt8 nEs
     rFont.SetEscapement(nEsc);
 }
 
-void SvxFontPrevWindow::ApplySettings(vcl::RenderContext& rRenderContext)
+void SvxFontPrevWindow::ApplySettings(OutputDevice& rRenderContext)
 {
     rRenderContext.SetTextColor( svtools::ColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
     rRenderContext.SetBackground( svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
@@ -604,7 +604,7 @@ void SvxFontPrevWindow::SetOverlineColor(const Color &rColor)
     Invalidate();
 }
 
-void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SvxFontPrevWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.Push(PushFlags::ALL);
     rRenderContext.SetMapMode(MapMode(MapUnit::MapTwip));

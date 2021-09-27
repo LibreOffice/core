@@ -62,7 +62,7 @@ public:
     SvxShowCharSet(std::unique_ptr<weld::ScrolledWindow> pScrollArea, const VclPtr<VirtualDevice>& rVirDev);
     virtual ~SvxShowCharSet() override;
 
-    virtual void            RecalculateFont(vcl::RenderContext& rRenderContext);
+    virtual void            RecalculateFont(OutputDevice& rRenderContext);
 
     void                    SelectCharacter( sal_UCS4 cNew );
     virtual sal_UCS4        GetSelectCharacter() const;
@@ -103,7 +103,7 @@ public:
 
 private:
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void Resize() override;
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual bool MouseMove(const MouseEvent& rMEvt) override;
@@ -147,8 +147,8 @@ protected:
 
 
 protected:
-    virtual void            DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, int n2);
-    void            InitSettings(vcl::RenderContext& rRenderContext);
+    virtual void            DrawChars_Impl(OutputDevice& rRenderContext, int n1, int n2);
+    void            InitSettings(OutputDevice& rRenderContext);
     // abstraction layers are: Unicode<->MapIndex<->Pixel
     Point           MapIndexToPixel( int) const;
     DECL_LINK(VscrollHdl, weld::ScrolledWindow&, void);

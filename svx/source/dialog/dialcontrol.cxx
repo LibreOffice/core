@@ -273,7 +273,7 @@ void DialControl::Resize()
     InvalidateControl();
 }
 
-void DialControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void DialControl::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     Point aPos;
     rRenderContext.DrawBitmapEx(aPos, mpImpl->mxBmpBuffered->GetBitmapEx(aPos, mpImpl->maWinSize));

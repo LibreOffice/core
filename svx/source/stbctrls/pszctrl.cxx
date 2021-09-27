@@ -389,7 +389,7 @@ void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
 
 void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
 {
-    vcl::RenderContext* pDev = rUsrEvt.GetRenderContext();
+    OutputDevice* pDev = rUsrEvt.GetRenderContext();
 
     const tools::Rectangle& rRect = rUsrEvt.GetRect();
     StatusBar& rBar = GetStatusBar();

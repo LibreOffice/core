@@ -168,7 +168,7 @@ void SvxRectCtl::StyleUpdated()
     CustomWidgetController::StyleUpdated();
 }
 
-void SvxRectCtl::InitSettings(vcl::RenderContext& rRenderContext)
+void SvxRectCtl::InitSettings(OutputDevice& rRenderContext)
 {
     svtools::ColorConfig aColorConfig;
     Color aTextColor(aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor);
@@ -278,7 +278,7 @@ bool SvxRectCtl::KeyInput(const KeyEvent& rKeyEvt)
 }
 
 // the control (rectangle with 9 circles)
-void SvxRectCtl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SvxRectCtl::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     InitSettings(rRenderContext);
 
@@ -691,7 +691,7 @@ tools::Rectangle SvxPixelCtl::GetFocusRect()
 }
 
 // Draws the Control (Rectangle with nine circles)
-void SvxPixelCtl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
+void SvxPixelCtl::Paint( OutputDevice& rRenderContext, const tools::Rectangle& )
 {
     if (!aRectSize.Width() || !aRectSize.Height())
         return;
@@ -1156,7 +1156,7 @@ void SvxXLinePreview::SetLineAttributes(const SfxItemSet& rItemSet)
     mpLineObjC->SetMergedItemSet(aTempSet);
 }
 
-void SvxXLinePreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SvxXLinePreview::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     LocalPrePaint(rRenderContext);
 
@@ -1236,7 +1236,7 @@ void SvxXShadowPreview::SetShadowPosition(const Point& rPos)
     maShadowOffset = rPos;
 }
 
-void SvxXShadowPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SvxXShadowPreview::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.Push(PushFlags::MAPMODE);
     rRenderContext.SetMapMode(MapMode(MapUnit::Map100thMM));
@@ -1307,7 +1307,7 @@ SvxPreviewBase::~SvxPreviewBase()
     mpBufferDevice.disposeAndClear();
 }
 
-void SvxPreviewBase::LocalPrePaint(vcl::RenderContext const & rRenderContext)
+void SvxPreviewBase::LocalPrePaint(OutputDevice const & rRenderContext)
 {
     // init BufferDevice
     if (mpBufferDevice->GetOutputSizePixel() != GetOutputSizePixel())
@@ -1334,7 +1334,7 @@ void SvxPreviewBase::LocalPrePaint(vcl::RenderContext const & rRenderContext)
     }
 }
 
-void SvxPreviewBase::LocalPostPaint(vcl::RenderContext& rRenderContext)
+void SvxPreviewBase::LocalPostPaint(OutputDevice& rRenderContext)
 {
     // copy to front (in pixel mode)
     const bool bWasEnabledSrc(mpBufferDevice->IsMapModeEnabled());
@@ -1401,7 +1401,7 @@ void SvxXRectPreview::SetAttributes(const SfxItemSet& rItemSet)
     mpRectangleObject->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
 }
 
-void SvxXRectPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SvxXRectPreview::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.Push(PushFlags::MAPMODE);
     rRenderContext.SetMapMode(MapMode(MapUnit::Map100thMM));

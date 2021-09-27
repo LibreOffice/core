@@ -689,7 +689,7 @@ RubyPreview::RubyPreview()
 
 RubyPreview::~RubyPreview() {}
 
-void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
+void RubyPreview::Paint(OutputDevice& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     rRenderContext.Push(PushFlags::ALL);
 

@@ -220,7 +220,7 @@ void SvxZoomSliderControl::Paint( const UserDrawEvent& rUsrEvt )
         return;
 
     const tools::Rectangle     aControlRect = getControlRect();
-    vcl::RenderContext* pDev = rUsrEvt.GetRenderContext();
+    OutputDevice* pDev = rUsrEvt.GetRenderContext();
     tools::Rectangle           aRect = rUsrEvt.GetRect();
     tools::Rectangle           aSlider = aRect;
 

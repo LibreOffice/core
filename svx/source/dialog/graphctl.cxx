@@ -222,7 +222,7 @@ void GraphCtrl::Resize()
     Invalidate();
 }
 
-void GraphCtrl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void GraphCtrl::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     // #i72889# used split repaint to be able to paint an own background
     // even to the buffered view
@@ -238,7 +238,7 @@ void GraphCtrl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
 
         if (bGraphicValid)
         {
-            vcl::RenderContext& rTarget = pPaintWindow->GetTargetOutputDevice();
+            OutputDevice& rTarget = pPaintWindow->GetTargetOutputDevice();
 
             OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
             rTarget.SetBackground(rDevice.GetBackground());

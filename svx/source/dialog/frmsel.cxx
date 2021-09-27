@@ -708,14 +708,14 @@ void FrameSelectorImpl::DrawVirtualDevice()
     mbFullRepaint = false;
 }
 
-void FrameSelectorImpl::CopyVirDevToControl(vcl::RenderContext& rRenderContext)
+void FrameSelectorImpl::CopyVirDevToControl(OutputDevice& rRenderContext)
 {
     if (mbFullRepaint)
         DrawVirtualDevice();
     rRenderContext.DrawBitmapEx(maVirDevPos, mpVirDev->GetBitmapEx(Point(0, 0), mpVirDev->GetOutputSizePixel()));
 }
 
-void FrameSelectorImpl::DrawAllTrackingRects(vcl::RenderContext& rRenderContext)
+void FrameSelectorImpl::DrawAllTrackingRects(OutputDevice& rRenderContext)
 {
     tools::PolyPolygon aPPoly;
     if (mrFrameSel.IsAnyBorderSelected())
@@ -1068,7 +1068,7 @@ tools::Rectangle FrameSelector::GetClickBoundRect( FrameBorderType eBorder ) con
 }
 
 // virtual functions from base class
-void FrameSelector::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void FrameSelector::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     mxImpl->CopyVirDevToControl(rRenderContext);
     if (HasFocus())

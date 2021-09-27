@@ -35,7 +35,7 @@ constexpr OUStringLiteral DEMOTEXT = u"Ij";
 
 namespace {
 
-void DrawRect_Impl(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect,
+void DrawRect_Impl(OutputDevice& rRenderContext, const tools::Rectangle &rRect,
                    const Color &rFillColor, const Color &rLineColor)
 {
     rRenderContext.SetFillColor(rFillColor);
@@ -91,7 +91,7 @@ void SwFrameExample::StyleUpdated()
     CustomWidgetController::StyleUpdated();
 }
 
-void SwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
+void SwFrameExample::InitAllRects_Impl(OutputDevice& rRenderContext)
 {
     aPage.SetSize(GetOutputSizePixel());
 
@@ -225,7 +225,7 @@ void SwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
     }
 }
 
-void SwFrameExample::CalcBoundRect_Impl(const vcl::RenderContext& rRenderContext, tools::Rectangle &rRect)
+void SwFrameExample::CalcBoundRect_Impl(const OutputDevice& rRenderContext, tools::Rectangle &rRect)
 {
     switch (nAnchor)
     {
@@ -437,7 +437,7 @@ void SwFrameExample::CalcBoundRect_Impl(const vcl::RenderContext& rRenderContext
     }
 }
 
-tools::Rectangle SwFrameExample::DrawInnerFrame_Impl(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect,
+tools::Rectangle SwFrameExample::DrawInnerFrame_Impl(OutputDevice& rRenderContext, const tools::Rectangle &rRect,
                                                  const Color &rFillColor, const Color &rBorderColor)
 {
     DrawRect_Impl(rRenderContext, rRect, rFillColor, rBorderColor);
@@ -465,7 +465,7 @@ tools::Rectangle SwFrameExample::DrawInnerFrame_Impl(vcl::RenderContext& rRender
     return aRect;
 }
 
-void SwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SwFrameExample::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.SetMapMode(MapMode(MapUnit::MapPixel));
 

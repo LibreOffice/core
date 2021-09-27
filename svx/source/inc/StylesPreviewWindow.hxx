@@ -64,13 +64,13 @@ class StyleItemController
 public:
     StyleItemController(const std::pair<OUString, OUString>& aStyleName);
 
-    void Paint(vcl::RenderContext& rRenderContext);
+    void Paint(OutputDevice& rRenderContext);
 
 private:
-    void DrawEntry(vcl::RenderContext& rRenderContext);
-    void DrawText(vcl::RenderContext& rRenderContext);
-    void DrawHighlight(vcl::RenderContext& rRenderContext, Color aFontBack);
-    static void DrawContentBackground(vcl::RenderContext& rRenderContext,
+    void DrawEntry(OutputDevice& rRenderContext);
+    void DrawText(OutputDevice& rRenderContext);
+    void DrawHighlight(OutputDevice& rRenderContext, Color aFontBack);
+    static void DrawContentBackground(OutputDevice& rRenderContext,
                                       const tools::Rectangle& aContentRect, const Color& aColor);
 };
 

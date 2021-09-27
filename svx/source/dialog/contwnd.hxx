@@ -40,7 +40,7 @@ class ContourWindow final : public GraphCtrl
     virtual bool        MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual void        SdrObjCreated( const SdrObject& rObj ) override;
     virtual void        InitSdrModel() override;
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void        Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void        SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
 public:

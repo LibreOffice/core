@@ -138,7 +138,7 @@ Point centerImage(const tools::Rectangle& rBoundingRect, const Image& rImg)
 
 void SvxModifyControl::Paint( const UserDrawEvent& rUsrEvt )
 {
-    vcl::RenderContext* pDev = rUsrEvt.GetRenderContext();
+    OutputDevice* pDev = rUsrEvt.GetRenderContext();
     tools::Rectangle aRect(rUsrEvt.GetRect());
 
     ImplData::ModificationState state = mxImpl->mnModState;

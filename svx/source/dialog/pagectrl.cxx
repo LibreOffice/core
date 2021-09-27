@@ -65,7 +65,7 @@ SvxPageWindow::~SvxPageWindow()
 {
 }
 
-void SvxPageWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SvxPageWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.Push(PushFlags::MAPMODE);
     rRenderContext.SetMapMode(MapMode(MapUnit::MapTwip));
@@ -122,7 +122,7 @@ void SvxPageWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     rRenderContext.Pop();
 }
 
-void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOrg, const bool bSecond, const bool bEnabled)
+void SvxPageWindow::DrawPage(OutputDevice& rRenderContext, const Point& rOrg, const bool bSecond, const bool bEnabled)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     const Color& rFieldColor = rStyleSettings.GetFieldColor();
@@ -315,7 +315,7 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
     }
 }
 
-void SvxPageWindow::drawFillAttributes(vcl::RenderContext& rRenderContext,
+void SvxPageWindow::drawFillAttributes(OutputDevice& rRenderContext,
                                        const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
                                        const tools::Rectangle& rPaintRange,
                                        const tools::Rectangle& rDefineRange)

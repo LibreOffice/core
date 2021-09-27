@@ -192,7 +192,7 @@ void SvxXConnectionPreview::Construct()
     AdaptSize();
 }
 
-void SvxXConnectionPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SvxXConnectionPreview::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.Push(PushFlags::ALL);
 

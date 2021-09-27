@@ -33,7 +33,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFontPrevWindow final : public weld::Custo
 private:
     std::unique_ptr<FontPrevWin_Impl> pImpl;
 
-    SVX_DLLPRIVATE static void ApplySettings(vcl::RenderContext& rRenderContext);
+    SVX_DLLPRIVATE static void ApplySettings(OutputDevice& rRenderContext);
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     SVX_DLLPRIVATE static void SetFontSize(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont);
     SVX_DLLPRIVATE static void SetFontLang(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont);
@@ -51,7 +51,7 @@ public:
     void                ResetColor();
     void                SetTextLineColor(const Color& rColor);
     void                SetOverlineColor(const Color& rColor);
-    void                Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
+    void                Paint( OutputDevice& rRenderContext, const tools::Rectangle& ) override;
 
     bool                IsTwoLines() const;
     void                SetTwoLines(bool bSet);

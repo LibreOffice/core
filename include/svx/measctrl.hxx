@@ -44,7 +44,7 @@ public:
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual ~SvxXMeasurePreview() override;
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void Resize() override;
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
 

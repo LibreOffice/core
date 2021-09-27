@@ -76,7 +76,7 @@ public:
     virtual bool MouseButtonDown(const MouseEvent&) override;
     virtual bool MouseMove(const MouseEvent&) override;
     virtual bool MouseButtonUp(const MouseEvent&) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
 };
 
 class TableWindow final : public WeldToolbarPopup
@@ -250,7 +250,7 @@ bool TableWidget::MouseButtonDown(const MouseEvent&)
     return true;
 }
 
-void TableWidget::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void TableWidget::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.Push(PushFlags::FONT);
 
@@ -421,7 +421,7 @@ public:
     virtual bool MouseButtonDown(const MouseEvent&) override;
     virtual bool MouseMove(const MouseEvent&) override;
     virtual bool MouseButtonUp(const MouseEvent&) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
 };
 
 
@@ -593,7 +593,7 @@ bool ColumnsWidget::MouseButtonUp(const MouseEvent&)
     return true;
 }
 
-void ColumnsWidget::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void ColumnsWidget::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.Push(PushFlags::FONT);
 

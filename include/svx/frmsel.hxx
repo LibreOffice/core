@@ -175,7 +175,7 @@ public:
     tools::Rectangle           GetClickBoundRect( FrameBorderType eBorder ) const;
 
 private:
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void        Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual bool        MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual bool        KeyInput( const KeyEvent& rKEvt ) override;
     virtual void        GetFocus() override;

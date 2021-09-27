@@ -60,7 +60,7 @@ void ValueSetWithTextControl::AddItem(
 void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
 {
     const tools::Rectangle aRect = rUDEvt.GetRect();
-    vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
+    OutputDevice* pDev = rUDEvt.GetRenderContext();
     pDev->Push();
     const sal_uInt16 nItemId = rUDEvt.GetItemId();
 

@@ -597,7 +597,7 @@ IMPL_LINK_NOARG(SvxSuperContourDlg, PipetteHdl, ContourWindow&, void)
     m_xStbStatusColor->Invalidate();
 }
 
-void StatusColor::Paint(vcl::RenderContext& rDevice, const tools::Rectangle&)
+void StatusColor::Paint(OutputDevice& rDevice, const tools::Rectangle&)
 {
     const Color& rOldLineColor = rDevice.GetLineColor();
     const Color& rOldFillColor = rDevice.GetFillColor();

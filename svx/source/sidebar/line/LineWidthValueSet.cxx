@@ -76,7 +76,7 @@ void LineWidthValueSet::SetCusEnable(bool bEnable)
 void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 {
     tools::Rectangle aRect = rUDEvt.GetRect();
-    vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
+    OutputDevice* pDev = rUDEvt.GetRenderContext();
     sal_uInt16  nItemId = rUDEvt.GetItemId();
 
     tools::Long nRectHeight = aRect.GetHeight();
