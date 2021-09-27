@@ -2328,6 +2328,17 @@ public:
         return mrTab.HasStringData(nCol, nRow);
     }
 
+    sal_uInt32 getNumFmt( SCCOL nCol, SCROW nRow, const ScInterpreterContext* pContext )
+    {
+        sal_uInt32 nNumFmt = (pContext ?
+                mrTab.GetNumberFormat(*pContext, ScAddress(nCol, nRow, mrTab.GetTab())) :
+                mrTab.GetNumberFormat(nCol, nRow));
+        if (nNumFmt && (nNumFmt % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
+            // Any General of any locale is irrelevant for rounding.
+            nNumFmt = 0;
+        return nNumFmt;
+    }
+
     std::pair<bool,bool> compareByValue(
         const ScRefCellValue& rCell, SCCOL nCol, SCROW nRow,
         const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem,
@@ -2336,22 +2347,41 @@ public:
         bool bOk = false;
         bool bTestEqual = false;
         double nCellVal;
-        double fRoundedValue = rItem.mfVal;
-        sal_uInt32 nNumFmt = pContext ? mrTab.GetNumberFormat(*pContext, ScAddress(nCol, nRow, mrTab.GetTab())) :
-            mrTab.GetNumberFormat(nCol, nRow);
+        double fQueryVal = rItem.mfVal;
+        // Defer all number format detection to as late as possible as it's a
+        // bottle neck, even if that complicates the code. Also do not
+        // unnecessarily call ScDocument::RoundValueAsShown() for the same
+        // reason.
+        sal_uInt32 nNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND;
 
         if (!rCell.isEmpty())
         {
             switch (rCell.meType)
             {
                 case CELLTYPE_VALUE :
-                    nCellVal = mrDoc.RoundValueAsShown(rCell.mfValue, nNumFmt, pContext);
+                    nCellVal = rCell.mfValue;
                 break;
                 case CELLTYPE_FORMULA :
-                    nCellVal = mrDoc.RoundValueAsShown(rCell.mpFormula->GetValue(), nNumFmt, pContext);
+                    nCellVal = rCell.mpFormula->GetValue();
                 break;
                 default:
                     nCellVal = 0.0;
+            }
+            if (rItem.mbRoundForFilter && nCellVal != 0.0)
+            {
+                nNumFmt = getNumFmt( nCol, nRow, pContext);
+                if (nNumFmt)
+                {
+                    switch (rCell.meType)
+                    {
+                        case CELLTYPE_VALUE :
+                        case CELLTYPE_FORMULA :
+                            nCellVal = mrDoc.RoundValueAsShown(nCellVal, nNumFmt, pContext);
+                        break;
+                        default:
+                            assert(!"can't be");
+                    }
+                }
             }
         }
         else
@@ -2366,51 +2396,68 @@ public:
 
         if (rItem.meType == ScQueryEntry::ByDate)
         {
-            SvNumberFormatter* pFormatter = pContext ? pContext->GetFormatTable() : mrDoc.GetFormatTable();
-            const SvNumberformat* pEntry = pFormatter->GetEntry(nNumFmt);
-            if (pEntry)
+            if (nNumFmt == NUMBERFORMAT_ENTRY_NOT_FOUND)
+                nNumFmt = getNumFmt( nCol, nRow, pContext);
+            if (nNumFmt)
             {
-                SvNumFormatType nNumFmtType = pEntry->GetType();
-                /* NOTE: Omitting the check for absence of
-                 * css::util::NumberFormat::TIME would include also date+time formatted
-                 * values of the same day. That may be desired in some
-                 * cases, querying all time values of a day, but confusing
-                 * in other cases. A user can always setup a standard
-                 * filter query for x >= date AND x < date+1 */
-                if ((nNumFmtType & SvNumFormatType::DATE) && !(nNumFmtType & SvNumFormatType::TIME))
+                SvNumberFormatter* pFormatter = pContext ? pContext->GetFormatTable() : mrDoc.GetFormatTable();
+                const SvNumberformat* pEntry = pFormatter->GetEntry(nNumFmt);
+                if (pEntry)
                 {
-                    // The format is of date type.  Strip off the time
-                    // element.
-                    nCellVal = ::rtl::math::approxFloor(nCellVal);
+                    SvNumFormatType nNumFmtType = pEntry->GetType();
+                    /* NOTE: Omitting the check for absence of
+                     * css::util::NumberFormat::TIME would include also date+time formatted
+                     * values of the same day. That may be desired in some
+                     * cases, querying all time values of a day, but confusing
+                     * in other cases. A user can always setup a standard
+                     * filter query for x >= date AND x < date+1 */
+                    if ((nNumFmtType & SvNumFormatType::DATE) && !(nNumFmtType & SvNumFormatType::TIME))
+                    {
+                        // The format is of date type.  Strip off the time
+                        // element.
+                        nCellVal = ::rtl::math::approxFloor(nCellVal);
+                    }
                 }
             }
         }
-        else if (nNumFmt)
-            fRoundedValue = mrDoc.RoundValueAsShown(rItem.mfVal, nNumFmt, pContext);
+        else if (rItem.mbRoundForFilter && fQueryVal != 0.0)
+        {
+            /* TODO: shouldn't rItem.mfVal (which fQueryVal is) already had
+             * been stored as rounded in all cases if needed so this extra
+             * rounding is superfluous? Or rather, if not, then rounding it
+             * here may produce different roundings for different cell number
+             * formats, which is odd. This all looks suspicious and the
+             * intention of tdf#142910 commit
+             * f6b143a57d9bd8f5d7b29febcb4e01ee1eb2ff1d isn't quite clear. */
+            if (nNumFmt == NUMBERFORMAT_ENTRY_NOT_FOUND)
+                nNumFmt = getNumFmt( nCol, nRow, pContext);
+            if (nNumFmt)
+                fQueryVal = mrDoc.RoundValueAsShown(fQueryVal, nNumFmt, pContext);
+        }
 
         switch (rEntry.eOp)
         {
             case SC_EQUAL :
-                bOk = ::rtl::math::approxEqual(nCellVal, fRoundedValue);
+                bOk = ::rtl::math::approxEqual(nCellVal, fQueryVal);
                 break;
             case SC_LESS :
-                bOk = (nCellVal < fRoundedValue) && !::rtl::math::approxEqual(nCellVal, fRoundedValue);
+                bOk = (nCellVal < fQueryVal) && !::rtl::math::approxEqual(nCellVal, fQueryVal);
                 break;
             case SC_GREATER :
-                bOk = (nCellVal > fRoundedValue) && !::rtl::math::approxEqual(nCellVal, fRoundedValue);
+                bOk = (nCellVal > fQueryVal) && !::rtl::math::approxEqual(nCellVal, fQueryVal);
                 break;
             case SC_LESS_EQUAL :
-                bOk = (nCellVal < fRoundedValue) || ::rtl::math::approxEqual(nCellVal, fRoundedValue);
+                bOk = (nCellVal < fQueryVal) || ::rtl::math::approxEqual(nCellVal, fQueryVal);
                 if ( bOk && mpTestEqualCondition )
-                    bTestEqual = ::rtl::math::approxEqual(nCellVal, fRoundedValue);
+                    bTestEqual = ::rtl::math::approxEqual(nCellVal, fQueryVal);
                 break;
             case SC_GREATER_EQUAL :
-                bOk = (nCellVal > fRoundedValue) || ::rtl::math::approxEqual( nCellVal, fRoundedValue);
+                bOk = (nCellVal > fQueryVal) || ::rtl::math::approxEqual( nCellVal, fQueryVal);
                 if ( bOk && mpTestEqualCondition )
-                    bTestEqual = ::rtl::math::approxEqual(nCellVal, fRoundedValue);
+                    bTestEqual = ::rtl::math::approxEqual(nCellVal, fQueryVal);
                 break;
             case SC_NOT_EQUAL :
-                bOk = !::rtl::math::approxEqual(nCellVal, fRoundedValue);
+                bOk = !::rtl::math::approxEqual(nCellVal, fQueryVal);
                 break;
             default:
             {
@@ -3015,11 +3062,15 @@ bool CanOptimizeQueryStringToNumber( SvNumberFormatter* pFormatter, sal_uInt32 n
 class PrepareQueryItem
 {
     const ScDocument& mrDoc;
+    const bool mbRoundForFilter;
 public:
-    explicit PrepareQueryItem(const ScDocument& rDoc) : mrDoc(rDoc) {}
+    explicit PrepareQueryItem(const ScDocument& rDoc, bool bRoundForFilter) :
+        mrDoc(rDoc), mbRoundForFilter(bRoundForFilter) {}
 
     void operator() (ScQueryEntry::Item& rItem)
     {
+        rItem.mbRoundForFilter = mbRoundForFilter;
+
         if (rItem.meType != ScQueryEntry::ByString && rItem.meType != ScQueryEntry::ByDate)
             return;
 
@@ -3061,7 +3112,7 @@ public:
     }
 };
 
-void lcl_PrepareQuery( const ScDocument* pDoc, ScTable* pTab, ScQueryParam& rParam )
+void lcl_PrepareQuery( const ScDocument* pDoc, ScTable* pTab, ScQueryParam& rParam, bool bRoundForFilter )
 {
     bool bTopTen = false;
     SCSIZE nEntryCount = rParam.GetEntryCount();
@@ -3073,7 +3124,7 @@ void lcl_PrepareQuery( const ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPar
             continue;
 
         ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
-        std::for_each(rItems.begin(), rItems.end(), PrepareQueryItem(*pDoc));
+        std::for_each(rItems.begin(), rItems.end(), PrepareQueryItem(*pDoc, bRoundForFilter));
 
         if ( !bTopTen )
         {
@@ -3104,7 +3155,7 @@ void lcl_PrepareQuery( const ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPar
 
 void ScTable::PrepareQuery( ScQueryParam& rQueryParam )
 {
-    lcl_PrepareQuery(&rDocument, this, rQueryParam);
+    lcl_PrepareQuery(&rDocument, this, rQueryParam, false);
 }
 
 SCSIZE ScTable::Query(const ScQueryParam& rParamOrg, bool bKeepSub)
@@ -3122,7 +3173,7 @@ SCSIZE ScTable::Query(const ScQueryParam& rParamOrg, bool bKeepSub)
     SCROW nOutRow   = 0;
     SCROW nHeader   = aParam.bHasHeader ? 1 : 0;
 
-    lcl_PrepareQuery(&rDocument, this, aParam);
+    lcl_PrepareQuery(&rDocument, this, aParam, true);
 
     if (!aParam.bInplace)
     {
@@ -3527,7 +3578,7 @@ void ScTable::GetFilteredFilterEntries(
     ScQueryParam aParam( rParam );
     aParam.RemoveEntryByField(nCol);
 
-    lcl_PrepareQuery(&rDocument, this, aParam);
+    lcl_PrepareQuery(&rDocument, this, aParam, true);
     for ( SCROW j = nRow1; j <= nRow2; ++j )
     {
         if (ValidQuery(j, aParam))
