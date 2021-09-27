@@ -69,7 +69,7 @@ class TestWindow : public WorkWindow
             //TODO: do something cool
             Application::Quit();
         }
-        virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+        virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
 };
 
 class DemoRenderer
@@ -525,7 +525,7 @@ class DemoRenderer
 
 }
 
-void TestWindow::Paint(vcl::RenderContext&, const tools::Rectangle&)
+void TestWindow::Paint(OutputDevice&, const tools::Rectangle&)
 {
     try
     {
