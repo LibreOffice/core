@@ -324,6 +324,27 @@ void Gradient::GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle& rB
     }
 }
 
+std::tuple<tools::Rectangle, tools::Rectangle, Point, double> Gradient::GetBounds(tools::Rectangle const& rRect) const
+{
+    Point aCenter;
+    tools::Rectangle aBoundsRect;
+
+    GetBoundRect(rRect, aBoundsRect, aCenter);
+
+    double fBorder = GetBorder() * aBoundsRect.GetHeight() / 100.0;
+
+    if (GetStyle() == GradientStyle::Axial)
+        fBorder /= 2.0;
+
+    tools::Rectangle aMirrorRect(aBoundsRect);
+    aMirrorRect.SetTop((rRect.Top() + rRect.Bottom()) / 2);
+
+    if (GetStyle() == GradientStyle::Axial)
+        aBoundsRect.SetBottom(aMirrorRect.Top());
+
+    return std::make_tuple(aBoundsRect, aMirrorRect, aCenter, fBorder);
+}
+
 void Gradient::MakeGrayscale()
 {
     Color aStartCol(GetStartColor());
