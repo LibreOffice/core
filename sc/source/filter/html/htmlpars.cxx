@@ -2232,8 +2232,8 @@ void ScHTMLTable::ApplyCellBorders( ScDocument* pDoc, const ScAddress& rFirstPos
     {
         const SCCOL nLastCol = maSize.mnCols - 1;
         const SCROW nLastRow = maSize.mnRows - 1;
-        const tools::Long nOuterLine = DEF_LINE_WIDTH_2;
-        const tools::Long nInnerLine = DEF_LINE_WIDTH_0;
+        const tools::Long nOuterLine = SvxBorderLineWidth::Medium;
+        const tools::Long nInnerLine = SvxBorderLineWidth::Hairline;
         SvxBorderLine aOuterLine(nullptr, nOuterLine, SvxBorderLineStyle::SOLID);
         SvxBorderLine aInnerLine(nullptr, nInnerLine, SvxBorderLineStyle::SOLID);
         SvxBoxItem aBorderItem( ATTR_BORDER );
