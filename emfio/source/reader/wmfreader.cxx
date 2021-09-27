@@ -1420,6 +1420,7 @@ namespace emfio
             mpInputStream->SeekRel(2);
 
             // BoundRect
+            // These are simply ignored for now
             mpInputStream->ReadInt16( nVal );
             aPlaceableBound.SetLeft( nVal );
             mpInputStream->ReadInt16( nVal );
@@ -1437,9 +1438,16 @@ namespace emfio
 
             // Skip and don't check the checksum
             mpInputStream->SeekRel( 2 );
+
+            // Skip wmf header
+            mpInputStream->Seek( nStrmPos + 40 );    // set the streampos to the start of the metaactions
+            GetPlaceableBound( aPlaceableBound, mpInputStream );
+            // Go back to the place after placeable header
+            mpInputStream->Seek( nStrmPos + 22);
         }
         else
         {
+            // Default is 1440, but it is set to 96 to show the wmf larger
             mnUnitsPerInch = 96;
 
             if (mpExternalHeader != nullptr
