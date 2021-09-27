@@ -111,7 +111,7 @@ private:
     virtual void Command( const CommandEvent& rCEvt ) override;
     virtual void Resize() override;
     virtual void StateChanged( StateChangedType ) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override; // const
+    virtual void Paint(OutputDevice& rRenderContext, const tools::Rectangle&) override; // const
     virtual void GetFocus() override;
 
     // DropTargetHelper
