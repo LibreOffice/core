@@ -107,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "212a45a3_f4e3a76e",
+        "filename": "emfio/source/reader/wmfreader.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2021-09-27T16:08:20Z",
+      "side": 1,
+      "message": "I think such refactoring should be made with separate Review",
+      "parentUuid": "83fc7676_0bd83914",
+      "revId": "47e681879f3f87cde3b7324c9bf4778a2b9a3922",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "098cf97f_52b2cda0",
         "filename": "emfio/source/reader/wmfreader.cxx",
         "patchSetId": 7
