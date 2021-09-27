@@ -77,7 +77,23 @@ const WhichRangesContainer SvxBorderTabPage::pRanges(
         SID_SW_COLLAPSING_BORDERS,  SID_SW_COLLAPSING_BORDERS,
         SID_ATTR_BORDER_DIAG_TLBR,  SID_ATTR_BORDER_DIAG_BLTR>);
 
-const std::vector<int> SvxBorderTabPage::m_aLineWidths = { 75, 200, 400, -1 };
+namespace
+{
+int lcl_twipsToPt(sal_Int64 nTwips)
+{
+    return vcl::ConvertDoubleValue(nTwips, 0, FieldUnit::TWIP, MapUnit::MapPoint) * 100;
+}
+}
+
+const std::vector<int> SvxBorderTabPage::m_aLineWidths = {
+    lcl_twipsToPt(SvxBorderLineWidth::Hairline),
+    lcl_twipsToPt(SvxBorderLineWidth::VeryThin),
+    lcl_twipsToPt(SvxBorderLineWidth::Thin),
+    lcl_twipsToPt(SvxBorderLineWidth::Medium),
+    lcl_twipsToPt(SvxBorderLineWidth::Thick),
+    lcl_twipsToPt(SvxBorderLineWidth::ExtraThick),
+    -1
+};
 
 static void lcl_SetDecimalDigitsTo1(weld::MetricSpinButton& rField)
 {
