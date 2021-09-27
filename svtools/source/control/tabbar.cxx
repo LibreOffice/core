@@ -53,7 +53,7 @@ constexpr sal_uInt16 ADDNEWPAGE_AREAWIDTH = 10;
 class TabDrawer
 {
 private:
-    vcl::RenderContext& mrRenderContext;
+    OutputDevice& mrRenderContext;
     const StyleSettings& mrStyleSettings;
 
     tools::Rectangle maRect;
@@ -68,7 +68,7 @@ public:
     bool mbEnabled:1;
     bool mbProtect:1;
 
-    explicit TabDrawer(vcl::RenderContext& rRenderContext)
+    explicit TabDrawer(OutputDevice& rRenderContext)
         : mrRenderContext(rRenderContext)
         , mrStyleSettings(rRenderContext.GetSettings().GetStyleSettings())
         , mbSelected(false)
@@ -243,7 +243,7 @@ private:
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    Tracking( const TrackingEvent& rTEvt ) override;
-    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect ) override;
+    virtual void    Paint( OutputDevice& /*rRenderContext*/, const tools::Rectangle& rRect ) override;
 
     Point           maStartPos;
     tools::Long            mnStartWidth;
@@ -296,7 +296,7 @@ void ImplTabSizer::Tracking( const TrackingEvent& rTEvt )
         ImplTrack( OutputToScreenPixel( rTEvt.GetMouseEvent().GetPosPixel() ) );
 }
 
-void ImplTabSizer::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
+void ImplTabSizer::Paint( OutputDevice& rRenderContext, const tools::Rectangle& )
 {
     DecorationView aDecoView(&rRenderContext);
     tools::Rectangle aOutputRect(Point(0, 0), GetOutputSizePixel());
@@ -1096,7 +1096,7 @@ void TabBar::MouseButtonUp(const MouseEvent& rMEvt)
     Window::MouseButtonUp(rMEvt);
 }
 
-void TabBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rect)
+void TabBar::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rect)
 {
     if (rRenderContext.IsNativeControlSupported(ControlType::WindowBackground,ControlPart::Entire))
     {

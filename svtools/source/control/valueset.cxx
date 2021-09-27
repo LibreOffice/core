@@ -253,7 +253,7 @@ IMPL_LINK(ValueSet, ImplScrollHdl, weld::ScrolledWindow&, rScrollWin, void)
     }
 }
 
-void ValueSet::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void ValueSet::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     if (GetStyle() & WB_FLATVALUESET)
     {
@@ -682,7 +682,7 @@ void ValueSet::ImplHighlightItem( sal_uInt16 nItemId, bool bIsSelection )
     mbDrawSelection = true;
 }
 
-void ValueSet::ImplDraw(vcl::RenderContext& rRenderContext)
+void ValueSet::ImplDraw(OutputDevice& rRenderContext)
 {
     if (mbFormat)
         Format(rRenderContext);
@@ -870,7 +870,7 @@ void ValueSet::SetStyle(WinBits nStyle)
     }
 }
 
-void ValueSet::Format(vcl::RenderContext const & rRenderContext)
+void ValueSet::Format(OutputDevice const & rRenderContext)
 {
     Size aWinSize(GetOutputSizePixel());
     size_t nItemCount = mItemList.size();
@@ -1191,7 +1191,7 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
     mbFormat = false;
 }
 
-void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext)
+void ValueSet::ImplDrawSelect(OutputDevice& rRenderContext)
 {
     if (!IsReallyVisible())
         return;
@@ -1212,7 +1212,7 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext)
     }
 }
 
-void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel )
+void ValueSet::ImplDrawSelect(OutputDevice& rRenderContext, sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel )
 {
     ValueSetItem* pItem;
     tools::Rectangle aRect;
@@ -1332,7 +1332,7 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nIt
     ImplDrawItemText(rRenderContext, pItem->maText);
 }
 
-void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSetItem* pItem, tools::Rectangle aRect)
+void ValueSet::ImplFormatItem(OutputDevice const & rRenderContext, ValueSetItem* pItem, tools::Rectangle aRect)
 {
     WinBits nStyle = GetStyle();
     if (nStyle & WB_ITEMBORDER)
@@ -1468,7 +1468,7 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
     }
 }
 
-void ValueSet::ImplDrawItemText(vcl::RenderContext& rRenderContext, const OUString& rText)
+void ValueSet::ImplDrawItemText(OutputDevice& rRenderContext, const OUString& rText)
 {
     if (!(GetStyle() & WB_NAMEFIELD))
         return;

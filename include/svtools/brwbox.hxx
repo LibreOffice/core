@@ -181,7 +181,7 @@ public:
     virtual void    dispose() override;
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void    Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
     virtual void    Command( const CommandEvent& rEvt ) override;
     virtual void    MouseButtonDown( const MouseEvent& rEvt ) override;
@@ -409,8 +409,8 @@ protected:
     */
     virtual bool    SeekRow( sal_Int32 nRow ) = 0;
     void            DrawCursor();
-    void            PaintData(vcl::Window const & rWin, vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
-    virtual void    PaintField(vcl::RenderContext& rDev, const tools::Rectangle& rRect, sal_uInt16 nColumnId) const = 0;
+    void            PaintData(vcl::Window const & rWin, OutputDevice& rRenderContext, const tools::Rectangle& rRect);
+    virtual void    PaintField(OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColumnId) const = 0;
     // Advice for the subclass: the visible scope of rows has changed.
     // The subclass is able to announce changes of the model with the
     // help of the methods RowInserted and RowRemoved. Because of the
@@ -471,7 +471,7 @@ public:
     virtual void    LoseFocus() override;
     virtual void    GetFocus() override;
     virtual void    Resize() override;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void    Paint( OutputDevice& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
     virtual void    Command( const CommandEvent& rEvt ) override;
     virtual void    StartDrag( sal_Int8 _nAction, const Point& _rPosPixel ) override;

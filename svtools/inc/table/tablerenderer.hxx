@@ -91,7 +91,7 @@ namespace svt::table
                 the style to be used for drawing
         */
         virtual void    PaintHeaderArea(
-                            vcl::RenderContext& _rDevice, const tools::Rectangle& _rArea,
+                            OutputDevice& _rDevice, const tools::Rectangle& _rArea,
                             bool _bIsColHeaderArea, bool _bIsRowHeaderArea,
                             const StyleSettings& _rStyle ) = 0;
 
@@ -107,7 +107,7 @@ namespace svt::table
                 the style to be used for drawing
         */
         virtual void    PaintColumnHeader( ColPos _nCol,
-                            vcl::RenderContext& _rDevice, const tools::Rectangle& _rArea,
+                            OutputDevice& _rDevice, const tools::Rectangle& _rArea,
                             const StyleSettings& _rStyle ) = 0;
 
         /** prepares a row for painting
@@ -142,7 +142,7 @@ namespace svt::table
                 the style to be used for drawing
         */
         virtual void    PrepareRow( RowPos _nRow, bool i_hasControlFocus, bool _bSelected,
-                            vcl::RenderContext& _rDevice, const tools::Rectangle& _rRowArea,
+                            OutputDevice& _rDevice, const tools::Rectangle& _rRowArea,
                             const StyleSettings& _rStyle ) = 0;
 
         /** paints the header of a row
@@ -158,7 +158,7 @@ namespace svt::table
                 the style to be used for drawing
         */
         virtual void    PaintRowHeader(
-                            vcl::RenderContext& _rDevice, tools::Rectangle const & _rArea,
+                            OutputDevice& _rDevice, tools::Rectangle const & _rArea,
                             StyleSettings const & _rStyle ) = 0;
 
         /** paints a certain cell
@@ -189,7 +189,7 @@ namespace svt::table
         */
         virtual void    PaintCell( ColPos const i_col,
                             bool i_hasControlFocus, bool _bSelected,
-                            vcl::RenderContext& _rDevice, const tools::Rectangle& _rArea,
+                            OutputDevice& _rDevice, const tools::Rectangle& _rArea,
                             const StyleSettings& _rStyle ) = 0;
 
         /** draws a cell cursor in the given rectangle

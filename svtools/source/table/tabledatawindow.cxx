@@ -52,7 +52,7 @@ namespace svt::table
         Window::dispose();
     }
 
-    void TableDataWindow::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rUpdateRect )
+    void TableDataWindow::Paint( OutputDevice& rRenderContext, const tools::Rectangle& rUpdateRect )
     {
         m_rTableControl.doPaintContent(rRenderContext, rUpdateRect);
     }

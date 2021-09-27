@@ -70,7 +70,7 @@ namespace
  * Pre-calculates glyph items for rText on rRenderContext. Subsequent calls
  * avoid the calculation and just return a pointer to rTextGlyphs.
  */
-SalLayoutGlyphs* lcl_GetRulerTextGlyphs(const vcl::RenderContext& rRenderContext, const OUString& rText,
+SalLayoutGlyphs* lcl_GetRulerTextGlyphs(const OutputDevice& rRenderContext, const OUString& rText,
                                         SalLayoutGlyphs& rTextGlyphs)
 {
     if (rTextGlyphs.IsValid())
@@ -291,7 +291,7 @@ void Ruler::dispose()
     Window::dispose();
 }
 
-void Ruler::ImplVDrawLine(vcl::RenderContext& rRenderContext, tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2)
+void Ruler::ImplVDrawLine(OutputDevice& rRenderContext, tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2)
 {
     if ( nX1 < -RULER_CLIP )
     {
@@ -313,7 +313,7 @@ void Ruler::ImplVDrawLine(vcl::RenderContext& rRenderContext, tools::Long nX1, t
         rRenderContext.DrawLine( Point( nY1, nX1 ), Point( nY2, nX2 ) );
 }
 
-void Ruler::ImplVDrawRect(vcl::RenderContext& rRenderContext, tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2)
+void Ruler::ImplVDrawRect(OutputDevice& rRenderContext, tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2)
 {
     if ( nX1 < -RULER_CLIP )
     {
@@ -335,7 +335,7 @@ void Ruler::ImplVDrawRect(vcl::RenderContext& rRenderContext, tools::Long nX1, t
         rRenderContext.DrawRect(tools::Rectangle(nY1, nX1, nY2, nX2));
 }
 
-void Ruler::ImplVDrawText(vcl::RenderContext& rRenderContext, tools::Long nX, tools::Long nY, const OUString& rText, tools::Long nMin, tools::Long nMax)
+void Ruler::ImplVDrawText(OutputDevice& rRenderContext, tools::Long nX, tools::Long nY, const OUString& rText, tools::Long nMin, tools::Long nMax)
 {
     tools::Rectangle aRect;
     SalLayoutGlyphs* pTextLayout
@@ -356,7 +356,7 @@ void Ruler::ImplVDrawText(vcl::RenderContext& rRenderContext, tools::Long nX, to
     }
 }
 
-void Ruler::ImplInvertLines(vcl::RenderContext& rRenderContext)
+void Ruler::ImplInvertLines(OutputDevice& rRenderContext)
 {
     // Position lines
     if (mpData->pLines.empty() || !mbActive || mbDrag || mbFormat || (mnUpdateFlags & RULER_UPDATE_LINES) )
@@ -416,7 +416,7 @@ void Ruler::ImplInvertLines(vcl::RenderContext& rRenderContext)
     mnUpdateFlags = 0;
 }
 
-void Ruler::ImplDrawTicks(vcl::RenderContext& rRenderContext, tools::Long nMin, tools::Long nMax, tools::Long nStart, tools::Long nTop, tools::Long nBottom)
+void Ruler::ImplDrawTicks(OutputDevice& rRenderContext, tools::Long nMin, tools::Long nMax, tools::Long nStart, tools::Long nTop, tools::Long nBottom)
 {
     double nCenter = nTop + ((nBottom - nTop) / 2);
 
@@ -642,7 +642,7 @@ void Ruler::ImplDrawTicks(vcl::RenderContext& rRenderContext, tools::Long nMin, 
     }
 }
 
-void Ruler::ImplDrawBorders(vcl::RenderContext& rRenderContext, tools::Long nMin, tools::Long nMax, tools::Long nVirTop, tools::Long nVirBottom)
+void Ruler::ImplDrawBorders(OutputDevice& rRenderContext, tools::Long nMin, tools::Long nMax, tools::Long nVirTop, tools::Long nVirBottom)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     tools::Long    n;
@@ -734,7 +734,7 @@ void Ruler::ImplDrawBorders(vcl::RenderContext& rRenderContext, tools::Long nMin
     }
 }
 
-void Ruler::ImplDrawIndent(vcl::RenderContext& rRenderContext, const tools::Polygon& rPoly, bool bIsHit)
+void Ruler::ImplDrawIndent(OutputDevice& rRenderContext, const tools::Polygon& rPoly, bool bIsHit)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
@@ -745,7 +745,7 @@ void Ruler::ImplDrawIndent(vcl::RenderContext& rRenderContext, const tools::Poly
     rRenderContext.DrawPolygon(aPolygon);
 }
 
-void Ruler::ImplDrawIndents(vcl::RenderContext& rRenderContext, tools::Long nMin, tools::Long nMax, tools::Long nVirTop, tools::Long nVirBottom)
+void Ruler::ImplDrawIndents(OutputDevice& rRenderContext, tools::Long nMin, tools::Long nMax, tools::Long nVirTop, tools::Long nVirBottom)
 {
     tools::Long n;
     tools::Long nIndentHeight = (mnVirHeight / 2) - 1;
@@ -842,7 +842,7 @@ static void lcl_RotateRect_Impl(tools::Rectangle& rRect, const tools::Long nRefe
     }
 }
 
-static void ImplDrawRulerTab(vcl::RenderContext& rRenderContext, const Point& rPos,
+static void ImplDrawRulerTab(OutputDevice& rRenderContext, const Point& rPos,
                               sal_uInt16 nStyle, WinBits nWinBits)
 {
     if (nStyle & RULER_STYLE_INVISIBLE)
@@ -934,7 +934,7 @@ static void ImplDrawRulerTab(vcl::RenderContext& rRenderContext, const Point& rP
         rRenderContext.DrawRect(aRect3);
 }
 
-void Ruler::ImplDrawTab(vcl::RenderContext& rRenderContext, const Point& rPos, sal_uInt16 nStyle)
+void Ruler::ImplDrawTab(OutputDevice& rRenderContext, const Point& rPos, sal_uInt16 nStyle)
 {
     if (nStyle & RULER_STYLE_INVISIBLE)
         return;
@@ -952,7 +952,7 @@ void Ruler::ImplDrawTab(vcl::RenderContext& rRenderContext, const Point& rPos, s
     ImplDrawRulerTab(rRenderContext, rPos, nStyle, GetStyle());
 }
 
-void Ruler::ImplDrawTabs(vcl::RenderContext& rRenderContext, tools::Long nMin, tools::Long nMax, tools::Long nVirTop, tools::Long nVirBottom)
+void Ruler::ImplDrawTabs(OutputDevice& rRenderContext, tools::Long nMin, tools::Long nMax, tools::Long nVirTop, tools::Long nVirBottom)
 {
     for (const RulerTab & rTab : mpData->pTabs)
     {
@@ -977,7 +977,7 @@ static int adjustSize(int nOrig)
     return ( (3*nOrig) / 8) * 2 + 1;
 }
 
-void Ruler::ApplySettings(vcl::RenderContext& rRenderContext)
+void Ruler::ApplySettings(OutputDevice& rRenderContext)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
@@ -1083,7 +1083,7 @@ void Ruler::ImplCalc()
     mbCalc = false;
 }
 
-void Ruler::ImplFormat(vcl::RenderContext const & rRenderContext)
+void Ruler::ImplFormat(OutputDevice const & rRenderContext)
 {
     // if already formatted, don't do it again
     if (!mbFormat)
@@ -1297,7 +1297,7 @@ void Ruler::ImplInitExtraField( bool bUpdate )
     }
 }
 
-void Ruler::ImplDraw(vcl::RenderContext& rRenderContext)
+void Ruler::ImplDraw(OutputDevice& rRenderContext)
 {
     if (mbFormat)
     {
@@ -1330,7 +1330,7 @@ void Ruler::ImplDraw(vcl::RenderContext& rRenderContext)
     ImplInvertLines(rRenderContext);
 }
 
-void Ruler::ImplDrawExtra(vcl::RenderContext& rRenderContext)
+void Ruler::ImplDrawExtra(OutputDevice& rRenderContext)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     tools::Rectangle aRect = maExtraRect;
@@ -2047,7 +2047,7 @@ void Ruler::Tracking( const TrackingEvent& rTEvt )
         ImplDrag( rTEvt.GetMouseEvent().GetPosPixel() );
 }
 
-void Ruler::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void Ruler::Paint(OutputDevice& rRenderContext, const tools::Rectangle&)
 {
     ImplDraw(rRenderContext);
 
@@ -2681,7 +2681,7 @@ void Ruler::SetStyle( WinBits nStyle )
     }
 }
 
-void Ruler::DrawTab(vcl::RenderContext& rRenderContext, const Color &rFillColor, const Point& rPos, sal_uInt16 nStyle)
+void Ruler::DrawTab(OutputDevice& rRenderContext, const Color &rFillColor, const Point& rPos, sal_uInt16 nStyle)
 {
     Point aPos(rPos);
     sal_uInt16 nTabStyle = nStyle & (RULER_TAB_STYLE | RULER_TAB_RTL);

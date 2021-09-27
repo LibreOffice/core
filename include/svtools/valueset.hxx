@@ -236,12 +236,12 @@ private:
     friend class ValueSetAcc;
 
     SVT_DLLPRIVATE void         ImplDeleteItems();
-    SVT_DLLPRIVATE void         ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSetItem* pItem, tools::Rectangle aRect);
-    SVT_DLLPRIVATE void         ImplDrawItemText(vcl::RenderContext& rRenderContext, const OUString& rStr);
-    SVT_DLLPRIVATE void         ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel);
-    SVT_DLLPRIVATE void         ImplDrawSelect(vcl::RenderContext& rRenderContext);
+    SVT_DLLPRIVATE void         ImplFormatItem(OutputDevice const & rRenderContext, ValueSetItem* pItem, tools::Rectangle aRect);
+    SVT_DLLPRIVATE void         ImplDrawItemText(OutputDevice& rRenderContext, const OUString& rStr);
+    SVT_DLLPRIVATE void         ImplDrawSelect(OutputDevice& rRenderContext, sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel);
+    SVT_DLLPRIVATE void         ImplDrawSelect(OutputDevice& rRenderContext);
     SVT_DLLPRIVATE void         ImplHighlightItem(sal_uInt16 nItemId, bool bIsSelection = true);
-    SVT_DLLPRIVATE void         ImplDraw(vcl::RenderContext& rRenderContext);
+    SVT_DLLPRIVATE void         ImplDraw(OutputDevice& rRenderContext);
     SVT_DLLPRIVATE size_t       ImplGetItem( const Point& rPoint ) const;
     SVT_DLLPRIVATE ValueSetItem*    ImplGetItem( size_t nPos );
     SVT_DLLPRIVATE ValueSetItem*    ImplGetFirstItem();
@@ -277,7 +277,7 @@ public:
     virtual bool    MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual bool    MouseMove( const MouseEvent& rMEvt ) override;
     virtual bool    KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void    Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void    GetFocus() override;
     virtual void    LoseFocus() override;
     virtual void    Resize() override;
@@ -373,7 +373,7 @@ public:
 
     void            SetExtraSpacing( sal_uInt16 nNewSpacing );
 
-    void            Format(vcl::RenderContext const & rRenderContext);
+    void            Format(OutputDevice const & rRenderContext);
     void            SetFormat();
 
     Size            CalcWindowSizePixel(const Size& rItemSize,

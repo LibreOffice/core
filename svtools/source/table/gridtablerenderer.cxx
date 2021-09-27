@@ -62,7 +62,7 @@ namespace svt::table
         {
         }
 
-        BitmapEx const & getBitmapFor(vcl::RenderContext const & i_device, tools::Long const i_headerHeight,
+        BitmapEx const & getBitmapFor(OutputDevice const & i_device, tools::Long const i_headerHeight,
                                       StyleSettings const & i_style, bool const i_sortAscending);
 
     private:
@@ -74,7 +74,7 @@ namespace svt::table
 
     }
 
-    BitmapEx const & CachedSortIndicator::getBitmapFor(vcl::RenderContext const& i_device, tools::Long const i_headerHeight,
+    BitmapEx const & CachedSortIndicator::getBitmapFor(OutputDevice const& i_device, tools::Long const i_headerHeight,
         StyleSettings const & i_style, bool const i_sortAscending )
     {
         BitmapEx& rBitmap(i_sortAscending ? m_sortAscending : m_sortDescending);
@@ -214,7 +214,7 @@ namespace svt::table
     }
 
 
-    void GridTableRenderer::PaintHeaderArea(vcl::RenderContext& rRenderContext, const tools::Rectangle& _rArea,
+    void GridTableRenderer::PaintHeaderArea(OutputDevice& rRenderContext, const tools::Rectangle& _rArea,
                                             bool _bIsColHeaderArea, bool _bIsRowHeaderArea, const StyleSettings& _rStyle)
     {
         OSL_PRECOND(_bIsColHeaderArea || _bIsRowHeaderArea, "GridTableRenderer::PaintHeaderArea: invalid area flags!");
@@ -241,7 +241,7 @@ namespace svt::table
 
     void GridTableRenderer::PaintColumnHeader(
         ColPos _nCol,
-        vcl::RenderContext& rRenderContext,
+        OutputDevice& rRenderContext,
         const tools::Rectangle& _rArea, const StyleSettings& _rStyle)
     {
         rRenderContext.Push(PushFlags::LINECOLOR);
@@ -299,7 +299,7 @@ namespace svt::table
     }
 
 
-    void GridTableRenderer::PrepareRow(RowPos _nRow, bool i_hasControlFocus, bool _bSelected, vcl::RenderContext& rRenderContext,
+    void GridTableRenderer::PrepareRow(RowPos _nRow, bool i_hasControlFocus, bool _bSelected, OutputDevice& rRenderContext,
                                        const tools::Rectangle& _rRowArea, const StyleSettings& _rStyle)
     {
         // remember the row for subsequent calls to the other ->ITableRenderer methods
@@ -360,7 +360,7 @@ namespace svt::table
     }
 
 
-    void GridTableRenderer::PaintRowHeader(vcl::RenderContext& rRenderContext,
+    void GridTableRenderer::PaintRowHeader(OutputDevice& rRenderContext,
                                            const tools::Rectangle& _rArea, const StyleSettings& _rStyle)
     {
         rRenderContext.Push( PushFlags::LINECOLOR | PushFlags::TEXTCOLOR );
@@ -413,7 +413,7 @@ namespace svt::table
 
 
     void GridTableRenderer::PaintCell(ColPos const i_column, bool _bSelected, bool i_hasControlFocus,
-                                      vcl::RenderContext& rRenderContext, const tools::Rectangle& _rArea, const StyleSettings& _rStyle)
+                                      OutputDevice& rRenderContext, const tools::Rectangle& _rArea, const StyleSettings& _rStyle)
     {
         rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
 

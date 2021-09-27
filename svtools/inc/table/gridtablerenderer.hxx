@@ -66,21 +66,21 @@ namespace svt::table
     public:
         // ITableRenderer overridables
         virtual void    PaintHeaderArea(
-                            vcl::RenderContext& _rDevice, const tools::Rectangle& _rArea,
+                            OutputDevice& _rDevice, const tools::Rectangle& _rArea,
                             bool _bIsColHeaderArea, bool _bIsRowHeaderArea,
                             const StyleSettings& _rStyle ) override;
         virtual void    PaintColumnHeader( ColPos _nCol,
-                            vcl::RenderContext& _rDevice, const tools::Rectangle& _rArea,
+                            OutputDevice& _rDevice, const tools::Rectangle& _rArea,
                             const StyleSettings& _rStyle ) override;
         virtual void    PrepareRow( RowPos _nRow, bool i_hasControlFocus, bool _bSelected,
-                            vcl::RenderContext& _rDevice, const tools::Rectangle& _rRowArea,
+                            OutputDevice& _rDevice, const tools::Rectangle& _rRowArea,
                             const StyleSettings& _rStyle ) override;
         virtual void    PaintRowHeader(
-                            vcl::RenderContext& _rDevice, const tools::Rectangle& _rArea,
+                            OutputDevice& _rDevice, const tools::Rectangle& _rArea,
                             const StyleSettings& _rStyle ) override;
         virtual void    PaintCell( ColPos const i_col,
                             bool i_hasControlFocus, bool _bSelected,
-                            vcl::RenderContext& _rDevice, const tools::Rectangle& _rArea,
+                            OutputDevice& _rDevice, const tools::Rectangle& _rArea,
                             const StyleSettings& _rStyle ) override;
         virtual void    ShowCellCursor( vcl::Window& _rView, const tools::Rectangle& _rCursorRect) override;
         virtual void    HideCellCursor( vcl::Window& _rView ) override;

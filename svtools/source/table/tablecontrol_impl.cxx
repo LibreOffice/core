@@ -1168,7 +1168,7 @@ namespace svt::table
     }
 
 
-    void TableControl_Impl::doPaintContent(vcl::RenderContext& rRenderContext, const tools::Rectangle& _rUpdateRect)
+    void TableControl_Impl::doPaintContent(OutputDevice& rRenderContext, const tools::Rectangle& _rUpdateRect)
     {
         if (!getModel())
             return;

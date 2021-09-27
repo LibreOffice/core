@@ -159,7 +159,7 @@ namespace svt::table
 
         /** paints the table control content which intersects with the given rectangle
         */
-        void    doPaintContent(vcl::RenderContext& rRenderContext, const tools::Rectangle& _rUpdateRect);
+        void    doPaintContent(OutputDevice& rRenderContext, const tools::Rectangle& _rUpdateRect);
 
         /** moves the cursor to the cell with the given coordinates
 
