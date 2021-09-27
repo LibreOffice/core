@@ -262,6 +262,27 @@ static tools::Long GetSteps(tools::Long nStartRed, tools::Long nStartGreen, tool
     return nSteps;
 }
 
+static std::tuple<sal_uInt8, sal_uInt8, sal_uInt8>
+InterpolateColor(tools::Long nStartRed, tools::Long nStartGreen, tools::Long nStartBlue,
+                 tools::Long nEndRed, tools::Long nEndGreen, tools::Long nEndBlue,
+                 tools::Long nSteps, tools::Long nStep)
+{
+    const double fStepsMinus1 = static_cast<double>(nSteps) - 1.0;
+
+    double fAlpha = static_cast<double>(nStep) / fStepsMinus1;
+
+    double fTempColor = static_cast<double>(nStartRed) * (1.0-fAlpha) + static_cast<double>(nEndRed) * fAlpha;
+    sal_uInt8 nRed = Gradient::GetColorValue(static_cast<tools::Long>(fTempColor));
+
+    fTempColor = static_cast<double>(nStartGreen) * (1.0-fAlpha) + static_cast<double>(nEndGreen) * fAlpha;
+    sal_uInt8 nGreen = Gradient::GetColorValue(static_cast<tools::Long>(fTempColor));
+
+    fTempColor = static_cast<double>(nStartBlue) * (1.0-fAlpha) + static_cast<double>(nEndBlue) * fAlpha;
+    sal_uInt8 nBlue = Gradient::GetColorValue(static_cast<tools::Long>(fTempColor));
+
+    return std::make_tuple(nRed, nGreen, nBlue);
+}
+
 static tools::Polygon GenerateBorderPolygon(tools::Rectangle aBorderRect, tools::Long nTop, tools::Long nBottom, Point aCenter, Degree10 nAngle)
 {
     aBorderRect.SetTop(nTop);
@@ -343,21 +364,14 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
     double fGradientLine = static_cast<double>(aRect.Top());
     double fMirrorGradientLine = static_cast<double>(aMirrorRect.Bottom());
 
-    const double fStepsMinus1 = static_cast<double>(nSteps) - 1.0;
     if ( bAxial)
     {
         nSteps -= 1; // draw middle polygons as one polygon after loop to avoid gap
     }
     for ( tools::Long i = 0; i < nSteps; i++ )
     {
-        // linear interpolation of color
-        const double fAlpha = static_cast<double>(i) / fStepsMinus1;
-        double fTempColor = static_cast<double>(nStartRed) * (1.0-fAlpha) + static_cast<double>(nEndRed) * fAlpha;
-        nRed = Gradient::GetColorValue(static_cast<tools::Long>(fTempColor));
-        fTempColor = static_cast<double>(nStartGreen) * (1.0-fAlpha) + static_cast<double>(nEndGreen) * fAlpha;
-        nGreen = Gradient::GetColorValue(static_cast<tools::Long>(fTempColor));
-        fTempColor = static_cast<double>(nStartBlue) * (1.0-fAlpha) + static_cast<double>(nEndBlue) * fAlpha;
-        nBlue = Gradient::GetColorValue(static_cast<tools::Long>(fTempColor));
+        std::tie(nRed, nGreen, nBlue) = InterpolateColor(nStartRed, nStartGreen, nStartBlue,
+                nEndRed, nEndGreen, nEndBlue, nSteps, i);
 
         mpGraphics->SetFillColor( Color( nRed, nGreen, nBlue ) );
 
@@ -642,21 +656,14 @@ void OutputDevice::DrawLinearGradientToMetafile( const tools::Rectangle& rRect,
     double fGradientLine = static_cast<double>(aRect.Top());
     double fMirrorGradientLine = static_cast<double>(aMirrorRect.Bottom());
 
-    const double fStepsMinus1 = static_cast<double>(nSteps) - 1.0;
     if (bAxial)
     {
         nSteps -= 1; // draw middle polygons as one polygon after loop to avoid gap
     }
     for ( tools::Long i = 0; i < nSteps; i++ )
     {
-        // linear interpolation of color
-        double fAlpha = static_cast<double>(i) / fStepsMinus1;
-        double fTempColor = static_cast<double>(nStartRed) * (1.0-fAlpha) + static_cast<double>(nEndRed) * fAlpha;
-        nRed = Gradient::GetColorValue(static_cast<tools::Long>(fTempColor));
-        fTempColor = static_cast<double>(nStartGreen) * (1.0-fAlpha) + static_cast<double>(nEndGreen) * fAlpha;
-        nGreen = Gradient::GetColorValue(static_cast<tools::Long>(fTempColor));
-        fTempColor = static_cast<double>(nStartBlue) * (1.0-fAlpha) + static_cast<double>(nEndBlue) * fAlpha;
-        nBlue = Gradient::GetColorValue(static_cast<tools::Long>(fTempColor));
+        std::tie(nRed, nGreen, nBlue) = InterpolateColor(nStartRed, nStartGreen, nStartBlue,
+                nEndRed, nEndGreen, nEndBlue, nSteps, i);
 
         mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
 
