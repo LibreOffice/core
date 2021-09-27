@@ -221,10 +221,10 @@ public:
                                  const CustomAnimationEffectPtr& pEffect);
     const CustomAnimationEffectPtr& getEffect() const { return mpEffect; }
 
-    Size GetSize(const vcl::RenderContext& rRenderContext);
-    void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect, bool bSelected);
-    void PaintEffect(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect, bool bSelected);
-    void PaintTrigger(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect);
+    Size GetSize(const OutputDevice& rRenderContext);
+    void Paint(OutputDevice& rRenderContext, const ::tools::Rectangle& rRect, bool bSelected);
+    void PaintEffect(OutputDevice& rRenderContext, const ::tools::Rectangle& rRect, bool bSelected);
+    void PaintTrigger(OutputDevice& rRenderContext, const ::tools::Rectangle& rRect);
 
 private:
     OUString        msDescription;
@@ -260,7 +260,7 @@ CustomAnimationListEntryItem::CustomAnimationListEntryItem(const OUString& aDesc
 
 IMPL_STATIC_LINK(CustomAnimationList, CustomRenderHdl, weld::TreeView::render_args, aPayload, void)
 {
-    vcl::RenderContext& rRenderContext = std::get<0>(aPayload);
+    OutputDevice& rRenderContext = std::get<0>(aPayload);
     const ::tools::Rectangle& rRect = std::get<1>(aPayload);
     bool bSelected = std::get<2>(aPayload);
     const OUString& rId = std::get<3>(aPayload);
@@ -272,7 +272,7 @@ IMPL_STATIC_LINK(CustomAnimationList, CustomRenderHdl, weld::TreeView::render_ar
 
 IMPL_STATIC_LINK(CustomAnimationList, CustomGetSizeHdl, weld::TreeView::get_size_args, aPayload, Size)
 {
-    vcl::RenderContext& rRenderContext = aPayload.first;
+    OutputDevice& rRenderContext = aPayload.first;
     const OUString& rId = aPayload.second;
 
     CustomAnimationListEntryItem* pItem = reinterpret_cast<CustomAnimationListEntryItem*>(rId.toInt64());
@@ -281,7 +281,7 @@ IMPL_STATIC_LINK(CustomAnimationList, CustomGetSizeHdl, weld::TreeView::get_size
     return pItem->GetSize(rRenderContext);
 }
 
-Size CustomAnimationListEntryItem::GetSize(const vcl::RenderContext& rRenderContext)
+Size CustomAnimationListEntryItem::GetSize(const OutputDevice& rRenderContext)
 {
     auto width = rRenderContext.GetTextWidth( msDescription ) + nIconWidth;
     if (width < (rRenderContext.GetTextWidth( msEffectName ) + 2*nIconWidth))
@@ -293,7 +293,7 @@ Size CustomAnimationListEntryItem::GetSize(const vcl::RenderContext& rRenderCont
     return aSize;
 }
 
-void CustomAnimationListEntryItem::PaintTrigger(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
+void CustomAnimationListEntryItem::PaintTrigger(OutputDevice& rRenderContext, const ::tools::Rectangle& rRect)
 {
     Size aSize(rRect.GetSize());
 
@@ -328,7 +328,7 @@ void CustomAnimationListEntryItem::PaintTrigger(vcl::RenderContext& rRenderConte
     rRenderContext.Pop();
 }
 
-void CustomAnimationListEntryItem::PaintEffect(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect, bool bSelected)
+void CustomAnimationListEntryItem::PaintEffect(OutputDevice& rRenderContext, const ::tools::Rectangle& rRect, bool bSelected)
 {
     rRenderContext.Push(PushFlags::TEXTCOLOR);
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
@@ -405,7 +405,7 @@ void CustomAnimationListEntryItem::PaintEffect(vcl::RenderContext& rRenderContex
     rRenderContext.Pop();
 }
 
-void CustomAnimationListEntryItem::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect, bool bSelected)
+void CustomAnimationListEntryItem::Paint(OutputDevice& rRenderContext, const ::tools::Rectangle& rRect, bool bSelected)
 {
     if (mpEffect)
         PaintEffect(rRenderContext, rRect, bSelected);

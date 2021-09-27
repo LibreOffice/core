@@ -173,9 +173,8 @@ protected:
     bool mbUseDropScroll;
 
     virtual void Resize() override;
-    virtual void PrePaint(vcl::RenderContext& rRenderContext) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext,
-                       const ::tools::Rectangle& rRect) override;
+    virtual void PrePaint(OutputDevice& rRenderContext) override;
+    virtual void Paint(OutputDevice& rRenderContext, const ::tools::Rectangle& rRect) override;
     virtual void MouseMove(const MouseEvent& rMEvt) override;
     virtual void MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;

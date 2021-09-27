@@ -31,7 +31,7 @@ public:
     SdHtmlAttrPreview();
     virtual ~SdHtmlAttrPreview() override;
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const ::tools::Rectangle& rRect) override;
 
     void    SetColors( Color const & aBack, Color const & aText, Color const & aLink,
                        Color const & aVLink, Color const & aALink );

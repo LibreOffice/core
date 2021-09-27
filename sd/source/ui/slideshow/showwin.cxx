@@ -256,7 +256,7 @@ void ShowWindow::MouseButtonUp(const MouseEvent& rMEvt)
 /**
  * if FuSlideShow is still available, forward it
  */
-void ShowWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const ::tools::Rectangle& rRect)
+void ShowWindow::Paint(OutputDevice& /*rRenderContext*/, const ::tools::Rectangle& rRect)
 {
     if( (meShowWindowMode == SHOWWINDOWMODE_NORMAL) || (meShowWindowMode == SHOWWINDOWMODE_PREVIEW) )
     {

@@ -59,7 +59,7 @@ public:
     SdDisplay();
     virtual ~SdDisplay() override;
 
-    virtual void Paint( vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect ) override;
+    virtual void Paint( OutputDevice& rRenderContext, const ::tools::Rectangle& rRect ) override;
 
     void    SetBitmapEx( BitmapEx const * pBmpEx );
     void    SetScale( const Fraction& rFrac );

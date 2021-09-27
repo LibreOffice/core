@@ -63,14 +63,14 @@ private:
     ::tools::Rectangle maOutRect;
 
 private:
-    void Paint(vcl::RenderContext& rRenderContext, SdrTextObj const * pObj, bool bVisible, bool bDotted = false);
+    void Paint(OutputDevice& rRenderContext, SdrTextObj const * pObj, bool bVisible, bool bDotted = false);
 
 public:
     explicit PresLayoutPreview();
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& rRenderContext, const ::tools::Rectangle& rRect) override;
 
     void init(SdPage* pMaster);
     void update(HeaderFooterSettings const & rSettings);
@@ -650,7 +650,7 @@ void PresLayoutPreview::update( HeaderFooterSettings const & rSettings )
     Invalidate();
 }
 
-void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, SdrTextObj const * pObj, bool bVisible, bool bDotted /* = false*/ )
+void PresLayoutPreview::Paint(OutputDevice& rRenderContext, SdrTextObj const * pObj, bool bVisible, bool bDotted /* = false*/ )
 {
     // get object transformation
     basegfx::B2DHomMatrix aObjectTransform;
@@ -695,7 +695,7 @@ void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, SdrTextObj con
     }
 }
 
-void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
+void PresLayoutPreview::Paint(OutputDevice& rRenderContext, const ::tools::Rectangle&)
 {
     rRenderContext.Push();
 

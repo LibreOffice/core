@@ -51,7 +51,7 @@ public:
     ContentWindow(vcl::Window& rParent, SlideSorter& rSlideSorter);
 
     void SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction);
-    virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const ::tools::Rectangle& rRect) override;
+    virtual void Paint(OutputDevice& /*rRenderContext*/, const ::tools::Rectangle& rRect) override;
     virtual void KeyInput (const KeyEvent& rEvent) override;
     virtual void MouseMove (const MouseEvent& rEvent) override;
     virtual void MouseButtonUp (const MouseEvent& rEvent) override;
@@ -409,7 +409,7 @@ void ContentWindow::SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction
     mpCurrentFunction = rpFunction;
 }
 
-void ContentWindow::Paint (vcl::RenderContext& /*rRenderContext*/, const ::tools::Rectangle& rRect)
+void ContentWindow::Paint (OutputDevice& /*rRenderContext*/, const ::tools::Rectangle& rRect)
 {
     mrSlideSorter.Paint(rRect);
 }
