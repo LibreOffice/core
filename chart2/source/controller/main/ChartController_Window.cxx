@@ -456,7 +456,7 @@ void ChartController::PrePaint()
     }
 }
 
-void ChartController::execute_Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void ChartController::execute_Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     try
     {

@@ -77,7 +77,7 @@ void ChartWindow::dispose()
     vcl::Window::dispose();
 }
 
-void ChartWindow::PrePaint(vcl::RenderContext& )
+void ChartWindow::PrePaint(OutputDevice& )
 {
     // forward VCLs PrePaint window event to DrawingLayer
     if (m_pWindowController)
@@ -86,7 +86,7 @@ void ChartWindow::PrePaint(vcl::RenderContext& )
     }
 }
 
-void ChartWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void ChartWindow::Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect)
 {
     if (comphelper::LibreOfficeKit::isActive() && !rRenderContext.IsVirtual())
         return;

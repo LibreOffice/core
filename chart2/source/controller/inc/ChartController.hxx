@@ -287,7 +287,7 @@ public:
 
     // WindowController stuff
     void PrePaint();
-    void execute_Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
+    void execute_Paint(OutputDevice& rRenderContext, const tools::Rectangle& rRect);
     void execute_MouseButtonDown( const MouseEvent& rMEvt );
     void execute_MouseMove( const MouseEvent& rMEvt );
     void execute_MouseButtonUp( const MouseEvent& rMEvt );
