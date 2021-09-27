@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e95314a5_a2c42e00",
+        "filename": "vcl/inc/font/FontSelectPattern.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-27T08:10:02Z",
+      "side": 1,
+      "message": "Oops, sorry!",
+      "parentUuid": "fda445dd_55d4a1ed",
+      "revId": "42604ae2a768075c84e5ccc28c434b4c31ab8cf4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08d63f58_78a9049e",
@@ -35,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b63adbb2_bb13ba29",
+        "filename": "vcl/inc/impfontmetricdata.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-27T08:10:02Z",
+      "side": 1,
+      "message": "I think at one point I put it in to test something and missed it... removing now.",
+      "parentUuid": "08d63f58_78a9049e",
+      "revId": "42604ae2a768075c84e5ccc28c434b4c31ab8cf4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c2a2a83d_3bb1f33a",
@@ -48,6 +84,24 @@
       "writtenOn": "2021-09-27T07:01:57Z",
       "side": 1,
       "message": "On the other hand, in this file (and some similar cases below) that uses the definition handled in this change, it would be logical to add ** to the include list, or to forward declarations?",
+      "revId": "42604ae2a768075c84e5ccc28c434b4c31ab8cf4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be74923c_cec64094",
+        "filename": "vcl/inc/outdev.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2021-09-27T08:10:02Z",
+      "side": 1,
+      "message": "that\u0027s reasonable, have added to forward declaration",
+      "parentUuid": "c2a2a83d_3bb1f33a",
       "revId": "42604ae2a768075c84e5ccc28c434b4c31ab8cf4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
