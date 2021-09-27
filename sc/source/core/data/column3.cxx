@@ -2554,7 +2554,7 @@ class FilterEntriesHandler
             pFormatter->GetInputLineString(fVal, nIndex, aStr);
         }
         // store the formatted/rounded value for filtering
-        if (nFormat && !bDate)
+        if ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0 && !bDate)
             mrFilterEntries.push_back(ScTypedStrData(aStr, fVal, rColumn.GetDoc().RoundValueAsShown(fVal, nFormat), ScTypedStrData::Value, bDate));
         else
             mrFilterEntries.push_back(ScTypedStrData(aStr, fVal, fVal, ScTypedStrData::Value, bDate));
