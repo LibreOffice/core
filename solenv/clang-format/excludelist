@@ -14006,6 +14006,8 @@ ucb/source/ucp/webdav-curl/DAVTypes.hxx
 ucb/source/ucp/webdav-curl/DateTimeHelper.cxx
 ucb/source/ucp/webdav-curl/DateTimeHelper.hxx
 ucb/source/ucp/webdav-curl/PropertyMap.hxx
+ucb/source/ucp/webdav-curl/SerfLockStore.cxx
+ucb/source/ucp/webdav-curl/SerfLockStore.hxx
 ucb/source/ucp/webdav-curl/UCBDeadPropertyValue.cxx
 ucb/source/ucp/webdav-curl/UCBDeadPropertyValue.hxx
 ucb/source/ucp/webdav-curl/webdavcontent.cxx
