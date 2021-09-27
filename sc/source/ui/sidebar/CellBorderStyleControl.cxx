@@ -108,7 +108,7 @@ IMPL_LINK(CellBorderStylePopup, TB1SelectHdl, ToolBox*, pToolBox, void)
     }
     else if (nId == maTBBorder1->GetItemId("thickbox"))
     {
-        theDefLine.SetWidth(DEF_LINE_WIDTH_2);
+        theDefLine.SetWidth(SvxBorderLineWidth::Thick);
         pLeft = pRight = pTop = pBottom = &theDefLine;
         nValidFlags |= FRM_VALID_OUTER;
     }
@@ -236,25 +236,27 @@ IMPL_LINK(CellBorderStylePopup, TB3SelectHdl, ToolBox *, pToolBox, void)
 
     if (nId == maTBBorder3->GetItemId("thickbottom"))
     {
-        pBottom.reset(new editeng::SvxBorderLine(nullptr, DEF_LINE_WIDTH_2 ));
+        pBottom.reset(new editeng::SvxBorderLine(nullptr, SvxBorderLineWidth::Thick));
         nValidFlags |= FRM_VALID_BOTTOM;
     }
     else if (nId == maTBBorder3->GetItemId("doublebottom"))
     {
         pBottom.reset(new editeng::SvxBorderLine(nullptr));
-        pBottom->GuessLinesWidths(SvxBorderLineStyle::DOUBLE, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_1);
+        pBottom->GuessLinesWidths(SvxBorderLineStyle::DOUBLE, SvxBorderLineWidth::Hairline,
+                                  SvxBorderLineWidth::Hairline, SvxBorderLineWidth::Thin);
         nValidFlags |= FRM_VALID_BOTTOM;
     }
     else if (nId == maTBBorder3->GetItemId("topthickbottom"))
     {
-        pBottom.reset(new editeng::SvxBorderLine(nullptr, DEF_LINE_WIDTH_2 ));
+        pBottom.reset(new editeng::SvxBorderLine(nullptr, SvxBorderLineWidth::Thick));
         pTop.reset(new editeng::SvxBorderLine(nullptr, 1));
         nValidFlags |= FRM_VALID_BOTTOM|FRM_VALID_TOP;
     }
     else if (nId == maTBBorder3->GetItemId("topdoublebottom"))
     {
         pBottom.reset(new editeng::SvxBorderLine(nullptr));
-        pBottom->GuessLinesWidths(SvxBorderLineStyle::DOUBLE, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_0, DEF_LINE_WIDTH_1);
+        pBottom->GuessLinesWidths(SvxBorderLineStyle::DOUBLE, SvxBorderLineWidth::Hairline,
+                                  SvxBorderLineWidth::Hairline, SvxBorderLineWidth::Thin);
         pTop.reset(new editeng::SvxBorderLine(nullptr, 1));
         nValidFlags |= FRM_VALID_BOTTOM|FRM_VALID_TOP;
     }

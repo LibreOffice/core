@@ -220,7 +220,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     std::unique_ptr<ScPageHFItem> pHeaderItem(new ScPageHFItem( ATTR_PAGE_HEADERRIGHT ));
     std::unique_ptr<ScPageHFItem> pFooterItem(new ScPageHFItem( ATTR_PAGE_FOOTERRIGHT ));
     ScStyleSheet*   pSheet          = nullptr;
-    ::editeng::SvxBorderLine    aBorderLine     ( &aColBlack, DEF_LINE_WIDTH_2 );
+    ::editeng::SvxBorderLine    aBorderLine     ( &aColBlack, SvxBorderLineWidth::Medium );
     SvxBoxItem      aBoxItem        ( ATTR_BORDER );
     SvxBoxInfoItem  aBoxInfoItem    ( ATTR_BORDER_INNER );
 
