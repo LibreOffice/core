@@ -53,6 +53,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2113fe5e_92bb4a47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-09-27T19:18:31Z",
+      "side": 1,
+      "message": "Otherwise I went through it and I\u0027m ok with the patch (except for the additions of \"css\" in places that I think they aren\u0027t needed) ...",
+      "revId": "40b544233a717e766ec9c942572b06cdae5e52d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c95e5814_def0d61a",
