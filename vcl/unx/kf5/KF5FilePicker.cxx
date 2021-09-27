@@ -24,7 +24,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 
-#include <qt5/Qt5Instance.hxx>
+#include <Qt5Instance.hxx>
 
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QGridLayout>

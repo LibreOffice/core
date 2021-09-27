@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <qt5/Qt5Instance.hxx>
+#include <Qt5Instance.hxx>
 
 class KF5SalInstance final : public Qt5Instance
 {
