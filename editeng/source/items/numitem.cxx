@@ -621,7 +621,9 @@ void SvxNumberFormat::SetListFormat(std::optional<OUString> oSet)
 
     sListFormat = oSet;
 
-    // For backward compatibility and UI we should create prefix/suffix also
+    // For backward compatibility and UI we should create something looking like
+    // a prefix, suffix and included levels also. This is not possible in general case
+    // since level format string is much more flexible. But for most cases is okay
     sal_Int32 nFirstReplacement = sListFormat->indexOf('%');
     sal_Int32 nLastReplacement = sListFormat->lastIndexOf('%') + 1;
     if (nFirstReplacement > 0)
@@ -630,6 +632,14 @@ void SvxNumberFormat::SetListFormat(std::optional<OUString> oSet)
     if (nLastReplacement >= 0 && nLastReplacement < sListFormat->getLength())
         // Everything beyond last '%' is a suffix
         sSuffix = sListFormat->copy(nLastReplacement);
+
+    sal_uInt8 nPercents = 0;
+    for (sal_Int32 i = 0; i < sListFormat->getLength(); i++)
+    {
+        if ((*sListFormat)[i] == '%')
+            nPercents++;
+    }
+    nInclUpperLevels = nPercents/2;
 }
 
 OUString SvxNumberFormat::GetListFormat(bool bIncludePrefixSuffix /*= true*/) const
