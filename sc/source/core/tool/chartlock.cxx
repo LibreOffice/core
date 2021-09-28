@@ -141,7 +141,7 @@ void ScChartLockGuard::AlsoLockThisChart( const Reference< frame::XModel >& xMod
 
 // ScTemporaryChartLock
 ScTemporaryChartLock::ScTemporaryChartLock( ScDocument* pDocP ) :
-    mpDoc( pDocP )
+    mpDoc( pDocP ), maTimer("ScTemporaryChartLock maTimer")
 {
     maTimer.SetTimeout( SC_CHARTLOCKTIMEOUT );
     maTimer.SetInvokeHandler( LINK( this, ScTemporaryChartLock, TimeoutHdl ) );

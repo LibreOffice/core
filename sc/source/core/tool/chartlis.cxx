@@ -347,11 +347,11 @@ void ScChartListenerCollection::Init()
 {
     aIdle.SetInvokeHandler( LINK( this, ScChartListenerCollection, TimerHdl ) );
     aIdle.SetPriority( TaskPriority::REPAINT );
-    aIdle.SetDebugName( "sc::ScChartListenerCollection aIdle" );
 }
 
 ScChartListenerCollection::ScChartListenerCollection( ScDocument& rDocP ) :
     meModifiedDuringUpdate( SC_CLCUPDATE_NONE ),
+    aIdle( "sc::ScChartListenerCollection aIdle" ),
     rDoc( rDocP )
 {
     Init();
@@ -360,6 +360,7 @@ ScChartListenerCollection::ScChartListenerCollection( ScDocument& rDocP ) :
 ScChartListenerCollection::ScChartListenerCollection(
         const ScChartListenerCollection& rColl ) :
     meModifiedDuringUpdate( SC_CLCUPDATE_NONE ),
+    aIdle( "sc::ScChartListenerCollection aIdle" ),
     rDoc( rColl.rDoc )
 {
     Init();

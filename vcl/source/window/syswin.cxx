@@ -64,7 +64,7 @@ SystemWindow::ImplData::ImplData()
     maMaxOutSize = Size( SHRT_MAX, SHRT_MAX );
 }
 
-SystemWindow::SystemWindow(WindowType nType)
+SystemWindow::SystemWindow(WindowType nType, const char* pIdleDebugName)
     : Window(nType)
     , mbDockBtn(false)
     , mbHideBtn(false)
@@ -74,6 +74,7 @@ SystemWindow::SystemWindow(WindowType nType)
     , mnMenuBarMode(MenuBarMode::Normal)
     , mnIcon(0)
     , mpImplData(new ImplData)
+    , maLayoutIdle( pIdleDebugName )
     , mbIsDeferredInit(false)
 {
     mpWindowImpl->mbSysWin            = true;
@@ -82,7 +83,6 @@ SystemWindow::SystemWindow(WindowType nType)
     //To-Do, reuse maResizeTimer
     maLayoutIdle.SetPriority(TaskPriority::RESIZE);
     maLayoutIdle.SetInvokeHandler( LINK( this, SystemWindow, ImplHandleLayoutTimerHdl ) );
-    maLayoutIdle.SetDebugName( "vcl::SystemWindow maLayoutIdle" );
 }
 
 void SystemWindow::loadUI(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,

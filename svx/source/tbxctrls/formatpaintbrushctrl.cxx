@@ -37,10 +37,10 @@ SFX_IMPL_TOOLBOX_CONTROL( FormatPaintBrushToolBoxControl, SfxBoolItem );
 FormatPaintBrushToolBoxControl::FormatPaintBrushToolBoxControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx )
     : SfxToolBoxControl( nSlotId, nId, rTbx )
     , m_bPersistentCopy(false)
+    , m_aDoubleClickTimer("FormatPaintBrushToolBoxControl m_aDoubleClickTimer")
 {
     sal_uInt64 nDblClkTime = rTbx.GetSettings().GetMouseSettings().GetDoubleClickTime();
 
-    m_aDoubleClickTimer.SetDebugName("FormatPaintBrushToolBoxControl m_aDoubleClickTimer");
     m_aDoubleClickTimer.SetInvokeHandler( LINK(this, FormatPaintBrushToolBoxControl, WaitDoubleClickHdl) );
     m_aDoubleClickTimer.SetTimeout(nDblClkTime);
 }

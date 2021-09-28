@@ -855,7 +855,8 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     const OUString& sStandardDir,
     const css::uno::Sequence< OUString >& rDenyList
     )
-    :m_nDialogType          ( nDialogType )
+    :maPreviewIdle("sfx2 FileDialogHelper_Impl maPreviewIdle")
+    ,m_nDialogType          ( nDialogType )
     ,meContext              ( FileDialogHelper::UnknownContext )
 {
     const char* pServiceName=nullptr;

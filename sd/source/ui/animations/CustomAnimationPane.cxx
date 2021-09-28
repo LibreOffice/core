@@ -151,6 +151,7 @@ CustomAnimationPane::CustomAnimationPane( weld::Widget* pParent, ViewShellBase& 
     , mnCurvePathPos(-1)
     , mnPolygonPathPos(-1)
     , mnFreeformPathPos(-1)
+    , maLateInitTimer("sd CustomAnimationPane maLateInitTimer")
 {
     initialize();
 }

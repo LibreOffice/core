@@ -157,7 +157,8 @@ SwHTMLTableLayout::SwHTMLTableLayout( const SwTable * pTable,
                                       sal_uInt16 nLMargin, sal_uInt16 nRMargin,
                                       sal_uInt16 nBWidth, sal_uInt16 nLeftBWidth,
                                       sal_uInt16 nRightBWidth )
-    : m_aColumns( nCls )
+    : m_aResizeTimer("SwHTMLTableLayout m_aResizeTimer")
+    , m_aColumns( nCls )
     , m_aCells( static_cast<size_t>(nRws)*nCls )
     , m_pSwTable( pTable )
     , m_nMin( 0 )

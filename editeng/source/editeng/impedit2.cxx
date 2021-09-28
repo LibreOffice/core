@@ -105,6 +105,8 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     eDefLanguage(LANGUAGE_DONTKNOW),
     nCurTextHeight(0),
     nCurTextHeightNTP(0),
+    aOnlineSpellTimer( "editeng::ImpEditEngine aOnlineSpellTimer" ),
+    aStatusTimer( "editeng::ImpEditEngine aStatusTimer" ),
     bKernAsianPunctuation(false),
     bAddExtLeading(false),
     bIsFormatting(false),
@@ -131,15 +133,12 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
 
     aStatusTimer.SetTimeout( 200 );
     aStatusTimer.SetInvokeHandler( LINK( this, ImpEditEngine, StatusTimerHdl ) );
-    aStatusTimer.SetDebugName( "editeng::ImpEditEngine aStatusTimer" );
 
     aIdleFormatter.SetPriority( TaskPriority::REPAINT );
     aIdleFormatter.SetInvokeHandler( LINK( this, ImpEditEngine, IdleFormatHdl ) );
-    aIdleFormatter.SetDebugName( "editeng::ImpEditEngine aIdleFormatter" );
 
     aOnlineSpellTimer.SetTimeout( 100 );
     aOnlineSpellTimer.SetInvokeHandler( LINK( this, ImpEditEngine, OnlineSpellHdl ) );
-    aOnlineSpellTimer.SetDebugName( "editeng::ImpEditEngine aOnlineSpellTimer" );
 
     // Access data already from here on!
     SetRefDevice( nullptr );

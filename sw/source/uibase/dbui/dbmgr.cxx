@@ -1607,9 +1607,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             {
                 // TODO: Instead of polling via an AutoTimer, post an Idle event,
                 // if the main loop has been made thread-safe.
-                AutoTimer aEmailDispatcherPollTimer;
-                aEmailDispatcherPollTimer.SetDebugName(
-                    "sw::SwDBManager aEmailDispatcherPollTimer" );
+                AutoTimer aEmailDispatcherPollTimer("sw::SwDBManager aEmailDispatcherPollTimer");
                 aEmailDispatcherPollTimer.SetTimeout( 500 );
                 aEmailDispatcherPollTimer.Start();
                 while( IsMergeOk() && m_pImpl->m_xLastMessage.is() && !Application::IsQuit())

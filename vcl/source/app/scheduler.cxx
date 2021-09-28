@@ -628,6 +628,7 @@ Task::Task( const char *pDebugName )
     , mbActive( false )
     , mbStatic( false )
 {
+    assert(mpDebugName);
 }
 
 Task::Task( const Task& rTask )
@@ -637,6 +638,7 @@ Task::Task( const Task& rTask )
     , mbActive( false )
     , mbStatic( false )
 {
+    assert(mpDebugName);
     if ( rTask.IsActive() )
         Start();
 }

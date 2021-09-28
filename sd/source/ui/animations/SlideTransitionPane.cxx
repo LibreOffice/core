@@ -398,7 +398,8 @@ SlideTransitionPane::SlideTransitionPane(
         mpDrawDoc( rBase.GetDocShell() ? rBase.GetDocShell()->GetDoc() : nullptr ),
         mbHasSelection( false ),
         mbUpdatingControls( false ),
-        mbIsMainViewChangePending( false )
+        mbIsMainViewChangePending( false ),
+        maLateInitTimer("sd SlideTransitionPane maLateInitTimer")
 {
     Initialize(mpDrawDoc);
 }

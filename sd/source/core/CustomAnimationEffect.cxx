@@ -3043,6 +3043,7 @@ void SAL_CALL AnimationChangeListener::disposing( const css::lang::EventObject& 
 
 MainSequence::MainSequence()
     : mxTimingRootNode(SequenceTimeContainer::create(::comphelper::getProcessComponentContext()))
+    , maTimer("sd MainSequence maTimer")
     , mbTimerMode(false)
     , mbRebuilding( false )
     , mnRebuildLockGuard( 0 )
@@ -3060,6 +3061,7 @@ MainSequence::MainSequence()
 
 MainSequence::MainSequence( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
     : mxTimingRootNode( xNode, UNO_QUERY )
+    , maTimer("sd MainSequence maTimer")
     , mbTimerMode( false )
     , mbRebuilding( false )
     , mnRebuildLockGuard( 0 )

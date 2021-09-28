@@ -40,8 +40,6 @@ void WorkWindow::ImplInitWorkWindowData()
     mbPresentationVisible   = false;
     mbPresentationFull      = false;
     mbFullScreenMode        = false;
-
-    maLayoutIdle.SetDebugName( "vcl::WorkWindow maLayoutIdle" );
 }
 
 void WorkWindow::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
@@ -85,20 +83,20 @@ void WorkWindow::ImplInit( vcl::Window* pParent, WinBits nStyle, const css::uno:
 }
 
 WorkWindow::WorkWindow( WindowType nType ) :
-    SystemWindow( nType )
+    SystemWindow( nType, "vcl::WorkWindow maLayoutIdle" )
 {
     ImplInitWorkWindowData();
 }
 
 WorkWindow::WorkWindow( vcl::Window* pParent, WinBits nStyle ) :
-    SystemWindow( WindowType::WORKWINDOW )
+    SystemWindow( WindowType::WORKWINDOW, "vcl::WorkWindow maLayoutIdle" )
 {
     ImplInitWorkWindowData();
     ImplInit( pParent, nStyle );
 }
 
 WorkWindow::WorkWindow( vcl::Window* pParent, const css::uno::Any& aSystemWorkWindowToken, WinBits nStyle ) :
-    SystemWindow( WindowType::WORKWINDOW )
+    SystemWindow( WindowType::WORKWINDOW, "vcl::WorkWindow maLayoutIdle" )
 {
     ImplInitWorkWindowData();
     mbSysChild = true;
@@ -106,7 +104,7 @@ WorkWindow::WorkWindow( vcl::Window* pParent, const css::uno::Any& aSystemWorkWi
 }
 
 WorkWindow::WorkWindow( SystemParentData* pParent ) :
-    SystemWindow( WindowType::WORKWINDOW )
+    SystemWindow( WindowType::WORKWINDOW, "vcl::WorkWindow maLayoutIdle" )
 {
     ImplInitWorkWindowData();
     mbSysChild = true;

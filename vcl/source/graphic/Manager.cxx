@@ -71,7 +71,6 @@ Manager::Manager()
     {
         maSwapOutTimer.SetInvokeHandler(LINK(this, Manager, SwapOutTimerHandler));
         maSwapOutTimer.SetTimeout(10000);
-        maSwapOutTimer.SetDebugName("graphic::Manager maSwapOutTimer");
         maSwapOutTimer.Start();
     }
 }

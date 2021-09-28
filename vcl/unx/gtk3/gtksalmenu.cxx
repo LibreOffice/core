@@ -568,6 +568,7 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
  */
 
 GtkSalMenu::GtkSalMenu( bool bMenuBar ) :
+    maUpdateMenuBarIdle("Native Gtk Menu Update Idle"),
     mbInActivateCallback( false ),
     mbMenuBar( bMenuBar ),
     mbNeedsUpdate( false ),
@@ -590,7 +591,6 @@ GtkSalMenu::GtkSalMenu( bool bMenuBar ) :
     //directly long before this idle would get called.
     maUpdateMenuBarIdle.SetPriority(TaskPriority::HIGHEST);
     maUpdateMenuBarIdle.SetInvokeHandler(LINK(this, GtkSalMenu, MenuBarHierarchyChangeHandler));
-    maUpdateMenuBarIdle.SetDebugName("Native Gtk Menu Update Idle");
 }
 
 IMPL_LINK_NOARG(GtkSalMenu, MenuBarHierarchyChangeHandler, Timer *, void)

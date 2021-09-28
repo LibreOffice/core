@@ -45,11 +45,11 @@ namespace sdr::animation
         }
 
         Scheduler::Scheduler()
-        :   mnTime(0),
+        :   Timer("sdr::animation::Scheduler"),
+            mnTime(0),
             mnDeltaTime(0),
             mbIsPaused(false)
         {
-            SetDebugName("sdr::animation::Scheduler");
             SetPriority(TaskPriority::POST_PAINT);
         }
 

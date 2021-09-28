@@ -83,11 +83,11 @@ void SwChartHelper::DoUpdateAllCharts( SwDoc* pDoc )
 
 SwChartLockController_Helper::SwChartLockController_Helper( SwDoc *pDocument ) :
     m_pDoc( pDocument )
+    , m_aUnlockTimer( "sw::SwChartLockController_Helper aUnlockTimer" )
     , m_bIsLocked( false )
 {
     m_aUnlockTimer.SetTimeout( 1500 );
     m_aUnlockTimer.SetInvokeHandler( LINK( this, SwChartLockController_Helper, DoUnlockAllCharts ));
-    m_aUnlockTimer.SetDebugName( "sw::SwChartLockController_Helper aUnlockTimer" );
 }
 
 SwChartLockController_Helper::~SwChartLockController_Helper() COVERITY_NOEXCEPT_FALSE

@@ -95,10 +95,9 @@ public:
 IMPL_LINK_NOARG(ExecuteWrapper, ExecuteActionHdl, Timer*, void)
 {
     {
-        Idle aIdle;
+        Idle aIdle("UI Test Idle Handler2");
         {
             mFunc();
-            aIdle.SetDebugName("UI Test Idle Handler2");
             aIdle.SetPriority(TaskPriority::LOWEST);
             aIdle.SetInvokeHandler(mHandler);
             aIdle.Start();
@@ -118,8 +117,7 @@ void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const css::
     if (!mpObj)
         throw css::uno::RuntimeException();
 
-    auto aIdle = std::make_unique<Idle>();
-    aIdle->SetDebugName("UI Test Idle Handler");
+    auto aIdle = std::make_unique<Idle>("UI Test Idle Handler");
     aIdle->SetPriority(TaskPriority::HIGHEST);
 
     std::function<void()> func = [&rAction, &rPropValues, this](){

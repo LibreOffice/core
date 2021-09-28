@@ -43,7 +43,7 @@ public:
     bool            bClosing;
     void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    Idle            aMoveIdle;
+    Idle            aMoveIdle { "SfxModelessDialog_Impl aMoveIdle" };
 };
 
 void SfxModelessDialog_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )

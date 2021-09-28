@@ -393,6 +393,7 @@ IndexTabPage_Impl::IndexTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow_I
     , m_xOpenBtn(m_xBuilder->weld_button("display"))
     , aFactoryIdle("sfx2 appl IndexTabPage_Impl Factory")
     , aAutoCompleteIdle("sfx2 appl IndexTabPage_Impl AutoComplete")
+    , aKeywordTimer("sfx2::IndexTabPage_Impl aKeywordTimer")
     , bIsActivated(false)
     , nRowHeight(m_xIndexList->get_height_rows(1))
     , nAllHeight(0)

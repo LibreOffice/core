@@ -153,8 +153,6 @@ private:
                            DockingWindow & operator= (const DockingWindow &) = delete;
 
 protected:
-    SAL_DLLPRIVATE void    SetIdleDebugName( const char *pDebugName );
-
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void    ImplInitSettings();
@@ -173,11 +171,11 @@ public:
     SAL_DLLPRIVATE bool    isDeferredInit() const { return mbIsDeferredInit; }
     virtual        void    doDeferredInit(WinBits nBits);
 protected:
-                    DockingWindow( WindowType nType );
-
+    DockingWindow( WindowType nType, const char* pIdleDebugName = "vcl::DockingWindow maLayoutIdle");
 public:
-    DockingWindow(vcl::Window* pParent, WinBits nStyle);
+    DockingWindow(vcl::Window* pParent, WinBits nStyle, const char* pIdleDebugName = "vcl::DockingWindow maLayoutIdle");
     DockingWindow(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
+        const char* pIdleDebugName = "vcl::DockingWindow maLayoutIdle",
         const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
     virtual ~DockingWindow() override;
     virtual void dispose() override;

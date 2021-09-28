@@ -541,7 +541,7 @@ void Dialog::ImplLOKNotifier(vcl::Window* pParent)
 }
 
 Dialog::Dialog( WindowType nType )
-    : SystemWindow( nType )
+    : SystemWindow( nType, "vcl::Dialog maLayoutIdle" )
     , mnInitFlag(InitFlag::Default)
 {
     ImplInitDialogData();
@@ -571,7 +571,7 @@ void Dialog::doDeferredInit(WinBits nBits)
 }
 
 Dialog::Dialog(vcl::Window* pParent, std::u16string_view rID, const OUString& rUIXMLDescription)
-    : SystemWindow(WindowType::DIALOG)
+    : SystemWindow(WindowType::DIALOG, "vcl::Dialog maLayoutIdle")
     , mnInitFlag(InitFlag::Default)
 {
     ImplLOKNotifier(pParent);
@@ -580,7 +580,7 @@ Dialog::Dialog(vcl::Window* pParent, std::u16string_view rID, const OUString& rU
 }
 
 Dialog::Dialog(vcl::Window* pParent, WinBits nStyle, InitFlag eFlag)
-    : SystemWindow(WindowType::DIALOG)
+    : SystemWindow(WindowType::DIALOG, "vcl::Dialog maLayoutIdle")
     , mnInitFlag(eFlag)
 {
     ImplLOKNotifier(pParent);

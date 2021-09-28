@@ -64,7 +64,7 @@
 
 struct ImplScrollBarData
 {
-    AutoTimer       maTimer; // Timer
+    AutoTimer       maTimer { "vcl::ScrollBar mpData->maTimer" };
     bool            mbHide;
 };
 
@@ -1138,7 +1138,6 @@ void ScrollBar::GetFocus()
     {
         mpData.reset(new ImplScrollBarData);
         mpData->maTimer.SetInvokeHandler( LINK( this, ScrollBar, ImplAutoTimerHdl ) );
-        mpData->maTimer.SetDebugName( "vcl::ScrollBar mpData->maTimer" );
         mpData->mbHide = false;
     }
     ImplInvert(); // react immediately

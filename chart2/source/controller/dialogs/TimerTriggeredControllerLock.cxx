@@ -28,6 +28,7 @@ using namespace ::com::sun::star;
 TimerTriggeredControllerLock::TimerTriggeredControllerLock(
     const uno::Reference<frame::XModel>& xModel)
     : m_xModel(xModel)
+    , m_aTimer("chart2 TimerTriggeredControllerLock")
 {
     m_aTimer.SetTimeout(4 * EDIT_UPDATEDATA_TIMEOUT);
     m_aTimer.SetInvokeHandler(LINK(this, TimerTriggeredControllerLock, TimerTimeout));

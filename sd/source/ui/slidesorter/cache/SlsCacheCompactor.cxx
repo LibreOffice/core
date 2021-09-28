@@ -122,11 +122,11 @@ CacheCompactor::CacheCompactor(
     sal_Int32 nMaximalCacheSize)
     : mrCache(rCache),
       mnMaximalCacheSize(nMaximalCacheSize),
+      maCompactionTimer("sd CacheCompactor maCompactionTimer"),
       mbIsCompactionRunning(false)
 {
     maCompactionTimer.SetTimeout(100);
     maCompactionTimer.SetInvokeHandler(LINK(this,CacheCompactor,CompactionCallback));
-
 }
 
 IMPL_LINK_NOARG(CacheCompactor, CompactionCallback, Timer *, void)

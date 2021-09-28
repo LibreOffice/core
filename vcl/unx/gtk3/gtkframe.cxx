@@ -471,6 +471,7 @@ GtkSalFrame::GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
     , m_pHeaderBar(nullptr)
     , m_bGraphics(false)
     , m_nSetFocusSignalId(0)
+    , m_aSmoothScrollIdle("GtkSalFrame m_aSmoothScrollIdle")
 {
     getDisplay()->registerFrame( this );
     m_bDefaultPos       = true;
@@ -483,6 +484,7 @@ GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
     , m_pHeaderBar(nullptr)
     , m_bGraphics(false)
     , m_nSetFocusSignalId(0)
+    , m_aSmoothScrollIdle("GtkSalFrame m_aSmoothScrollIdle")
 {
     getDisplay()->registerFrame( this );
     // permanently ignore errors from our unruly children ...

@@ -287,6 +287,7 @@ SmGraphicWidget::SmGraphicWidget(SmViewShell& rShell, SmGraphicWindow& rGraphicW
     : mrGraphicWindow(rGraphicWindow)
     , bIsCursorVisible(false)
     , bIsLineVisible(false)
+    , aCaretBlinkTimer("SmGraphicWidget aCaretBlinkTimer")
     , mrViewShell(rShell)
 {
 }
@@ -816,6 +817,7 @@ SmCmdBoxWindow::SmCmdBoxWindow(SfxBindings *pBindings_, SfxChildWindow *pChildWi
     , m_xEdit(new SmEditWindow(*this, *m_xBuilder))
     , aController(*m_xEdit, SID_TEXT, *pBindings_)
     , bExiting(false)
+    , aInitialFocusTimer("SmCmdBoxWindow aInitialFocusTimer")
 {
     set_id("math_edit");
 

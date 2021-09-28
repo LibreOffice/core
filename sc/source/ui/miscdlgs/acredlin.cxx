@@ -70,7 +70,7 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Windo
     ScViewData* ptrViewData)
     : SfxModelessDialogController(pB, pCW, pParent,
         "svx/ui/acceptrejectchangesdialog.ui", "AcceptRejectChangesDialog")
-    , aSelectionIdle("ScAcceptChgDlg SelectionIdle")
+    , aSelectionIdle( "ScAcceptChgDlg  aSelectionIdle" )
     , aReOpenIdle("ScAcceptChgDlg ReOpenIdle")
     , pViewData( ptrViewData )
     , pDoc( &ptrViewData->GetDocument() )
@@ -114,7 +114,6 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Windo
     pTheView = pTPView->GetTableControl();
     pTheView->SetCalcView();
     aSelectionIdle.SetInvokeHandler(LINK( this, ScAcceptChgDlg, UpdateSelectionHdl ));
-    aSelectionIdle.SetDebugName( "ScAcceptChgDlg  aSelectionIdle" );
 
     pTPFilter->SetReadyHdl(LINK( this, ScAcceptChgDlg, FilterHandle ));
     pTPFilter->SetRefHdl(LINK( this, ScAcceptChgDlg, RefHandle ));

@@ -125,7 +125,7 @@ private:
 
     ::osl::Mutex            maMutex;
     SvtFileView_Impl*       mpParent;
-    Timer                   maResetQuickSearch;
+    Timer                   maResetQuickSearch { "fpicker SvtFileView_Impl maResetQuickSearch" };
     OUString                maQuickSearchText;
     sal_uInt32              mnSearchIndex;
     bool                    mbEnableDelete;

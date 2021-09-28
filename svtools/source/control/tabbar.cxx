@@ -336,13 +336,13 @@ public:
 TabBarEdit::TabBarEdit(TabBar* pParent)
     : InterimItemWindow(pParent, "svt/ui/tabbaredit.ui", "TabBarEdit")
     , m_xEntry(m_xBuilder->weld_entry("entry"))
+    , maLoseFocusIdle( "svtools::TabBarEdit maLoseFocusIdle" )
 {
     InitControlBase(m_xEntry.get());
 
     mbPostEvt = false;
     maLoseFocusIdle.SetPriority( TaskPriority::REPAINT );
     maLoseFocusIdle.SetInvokeHandler( LINK( this, TabBarEdit, ImplEndTimerHdl ) );
-    maLoseFocusIdle.SetDebugName( "svtools::TabBarEdit maLoseFocusIdle" );
 
     m_xEntry->connect_activate(LINK(this, TabBarEdit, ActivatedHdl));
     m_xEntry->connect_key_press(LINK(this, TabBarEdit, KeyInputHdl));

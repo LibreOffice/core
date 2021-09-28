@@ -215,7 +215,9 @@ void BubbleWindow::RecalcTextRects()
 }
 
 MenuBarUpdateIconManager::MenuBarUpdateIconManager()
-    : mnIconID (0)
+    : maTimeoutTimer("MenuBarUpdateIconManager")
+    , maWaitIdle("vcl MenuBarUpdateIconManager maWaitIdle")
+    , mnIconID (0)
     , mbShowMenuIcon(false)
     , mbShowBubble(false)
     , mbBubbleChanged( false )

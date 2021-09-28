@@ -532,6 +532,8 @@ FormController::FormController(const Reference< css::uno::XComponentContext > & 
                   ,m_aRowSetApproveListeners(m_aMutex)
                   ,m_aParameterListeners(m_aMutex)
                   ,m_aFilterListeners(m_aMutex)
+                  ,m_aTabActivationIdle("svx FormController m_aTabActivationIdle")
+                  ,m_aFeatureInvalidationTimer("svx FormController m_aFeatureInvalidationTimer")
                   ,m_aMode( OUString( "DataMode"  ) )
                   ,m_aLoadEvent( LINK( this, FormController, OnLoad ) )
                   ,m_aToggleEvent( LINK( this, FormController, OnToggleAutoFields ) )

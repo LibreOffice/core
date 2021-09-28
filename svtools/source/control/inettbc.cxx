@@ -849,7 +849,8 @@ IMPL_LINK_NOARG(SvtURLBox, TryAutoComplete, Timer *, void)
 }
 
 SvtURLBox::SvtURLBox(std::unique_ptr<weld::ComboBox> pWidget)
-    : eSmartProtocol(INetProtocol::NotValid)
+    : aChangedIdle("svtools::URLBox aChangedIdle")
+    , eSmartProtocol(INetProtocol::NotValid)
     , bOnlyDirectories( false )
     , bHistoryDisabled( false )
     , bNoSelection( false )
@@ -866,7 +867,6 @@ SvtURLBox::SvtURLBox(std::unique_ptr<weld::ComboBox> pWidget)
     m_xWidget->connect_changed(LINK(this, SvtURLBox, ChangedHdl));
 
     aChangedIdle.SetInvokeHandler(LINK(this, SvtURLBox, TryAutoComplete));
-    aChangedIdle.SetDebugName("svtools::URLBox aChangedIdle");
 }
 
 void SvtURLBox::Init()

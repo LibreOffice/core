@@ -36,6 +36,7 @@
 
 ScInsertTableDlg::ScInsertTableDlg(weld::Window* pParent, ScViewData& rData, SCTAB nTabCount, bool bFromFile)
     : GenericDialogController(pParent, "modules/scalc/ui/insertsheet.ui", "InsertSheetDialog")
+    , aBrowseTimer("ScInsertTableDlg aBrowseTimer")
     , rViewData(rData)
     , rDoc(rData.GetDocument())
     , pDocShTables(nullptr)

@@ -347,11 +347,11 @@ IMPL_LINK_NOARG(SfxInfoBarWindow, CloseHandler, const OString&, void)
 SfxInfoBarContainerWindow::SfxInfoBarContainerWindow(SfxInfoBarContainerChild* pChildWin)
     : Window(pChildWin->GetParent(), WB_DIALOGCONTROL)
     , m_pChildWin(pChildWin)
+    , m_aLayoutIdle("SfxInfoBarContainerWindow m_aLayoutIdle")
     , m_bResizing(false)
 {
     m_aLayoutIdle.SetPriority(TaskPriority::HIGHEST);
     m_aLayoutIdle.SetInvokeHandler(LINK(this, SfxInfoBarContainerWindow, DoUpdateLayout));
-    m_aLayoutIdle.SetDebugName("SfxInfoBarContainerWindow m_aLayoutIdle");
 }
 
 IMPL_LINK_NOARG(SfxInfoBarContainerWindow, DoUpdateLayout, Timer*, void) { m_pChildWin->Update(); }
