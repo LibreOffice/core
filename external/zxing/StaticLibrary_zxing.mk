@@ -33,26 +33,28 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,zxing,\
 	UnpackedTarball/zxing/core/src/BarcodeFormat \
 	UnpackedTarball/zxing/core/src/BitArray \
 	UnpackedTarball/zxing/core/src/BitMatrixIO \
+	UnpackedTarball/zxing/core/src/BinaryBitmap \
 	UnpackedTarball/zxing/core/src/BitMatrix \
 	UnpackedTarball/zxing/core/src/BitSource \
 	UnpackedTarball/zxing/core/src/textcodec/Big5TextDecoder \
 	UnpackedTarball/zxing/core/src/textcodec/Big5TextEncoder \
 	UnpackedTarball/zxing/core/src/textcodec/Big5MapTable \
 	UnpackedTarball/zxing/core/src/CharacterSetECI \
+	UnpackedTarball/zxing/core/src/ConcentricFinder \
 	UnpackedTarball/zxing/core/src/DecodeHints \
 	UnpackedTarball/zxing/core/src/DecodeStatus \
 	UnpackedTarball/zxing/core/src/datamatrix/DMWriter \
-	UnpackedTarball/zxing/core/src/datamatrix/DMDefaultPlacement \
 	UnpackedTarball/zxing/core/src/datamatrix/DMDetector \
 	UnpackedTarball/zxing/core/src/datamatrix/DMVersion \
 	UnpackedTarball/zxing/core/src/datamatrix/DMSymbolInfo \
 	UnpackedTarball/zxing/core/src/datamatrix/DMDecoder \
-	UnpackedTarball/zxing/core/src/datamatrix/DMBitMatrixParser \
 	UnpackedTarball/zxing/core/src/datamatrix/DMReader \
+	UnpackedTarball/zxing/core/src/datamatrix/DMBitLayout \
 	UnpackedTarball/zxing/core/src/datamatrix/DMDataBlock \
 	UnpackedTarball/zxing/core/src/datamatrix/DMECEncoder \
 	UnpackedTarball/zxing/core/src/datamatrix/DMHighLevelEncoder \
 	UnpackedTarball/zxing/core/src/GlobalHistogramBinarizer \
+	UnpackedTarball/zxing/core/src/GTIN \
 	UnpackedTarball/zxing/core/src/GenericGF \
 	UnpackedTarball/zxing/core/src/GridSampler \
 	UnpackedTarball/zxing/core/src/GenericLuminanceSource \
@@ -71,35 +73,29 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,zxing,\
 	UnpackedTarball/zxing/core/src/maxicode/MCDecoder \
 	UnpackedTarball/zxing/core/src/maxicode/MCBitMatrixParser \
 	UnpackedTarball/zxing/core/src/maxicode/MCReader \
-	UnpackedTarball/zxing/core/src/oned/ODUPCEANExtensionSupport \
 	UnpackedTarball/zxing/core/src/oned/ODUPCEWriter \
 	UnpackedTarball/zxing/core/src/oned/ODEAN8Writer \
 	UnpackedTarball/zxing/core/src/oned/ODWriterHelper \
 	UnpackedTarball/zxing/core/src/oned/ODITFWriter \
 	UnpackedTarball/zxing/core/src/oned/ODITFReader \
 	UnpackedTarball/zxing/core/src/oned/ODCode39Reader \
-	UnpackedTarball/zxing/core/src/oned/ODRSSExpandedReader \
+	UnpackedTarball/zxing/core/src/oned/ODDataBarExpandedReader \
 	UnpackedTarball/zxing/core/src/oned/ODCode128Reader \
 	UnpackedTarball/zxing/core/src/oned/ODEAN13Writer \
-	UnpackedTarball/zxing/core/src/oned/ODEANManufacturerOrgSupport \
 	UnpackedTarball/zxing/core/src/oned/ODMultiUPCEANReader \
-	UnpackedTarball/zxing/core/src/oned/ODUPCEANReader \
 	UnpackedTarball/zxing/core/src/oned/ODCodabarWriter \
 	UnpackedTarball/zxing/core/src/oned/ODCode128Writer \
 	UnpackedTarball/zxing/core/src/oned/ODCode93Reader \
 	UnpackedTarball/zxing/core/src/oned/ODCodabarReader \
 	UnpackedTarball/zxing/core/src/oned/ODCode39Writer \
+	UnpackedTarball/zxing/core/src/oned/ODDataBarReader \
 	UnpackedTarball/zxing/core/src/oned/ODUPCEANCommon \
 	UnpackedTarball/zxing/core/src/oned/ODRowReader \
 	UnpackedTarball/zxing/core/src/oned/ODReader \
 	UnpackedTarball/zxing/core/src/oned/ODCode93Writer \
-	UnpackedTarball/zxing/core/src/oned/ODUPCEReader \
 	UnpackedTarball/zxing/core/src/oned/ODCode128Patterns \
-	UnpackedTarball/zxing/core/src/oned/ODEAN13Reader \
+	UnpackedTarball/zxing/core/src/oned/ODDataBarCommon \
 	UnpackedTarball/zxing/core/src/oned/ODUPCAWriter \
-	UnpackedTarball/zxing/core/src/oned/ODRSS14Reader \
-	UnpackedTarball/zxing/core/src/oned/ODUPCAReader \
-	UnpackedTarball/zxing/core/src/oned/ODEAN8Reader \
 	UnpackedTarball/zxing/core/src/PerspectiveTransform \
 	UnpackedTarball/zxing/core/src/pdf417/PDFCodewordDecoder \
 	UnpackedTarball/zxing/core/src/pdf417/PDFHighLevelEncoder \
@@ -115,22 +111,17 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,zxing,\
 	UnpackedTarball/zxing/core/src/pdf417/PDFModulusPoly \
 	UnpackedTarball/zxing/core/src/pdf417/PDFDetector \
 	UnpackedTarball/zxing/core/src/pdf417/PDFBarcodeValue \
-	UnpackedTarball/zxing/core/src/qrcode/QRFinderPatternFinder \
 	UnpackedTarball/zxing/core/src/qrcode/QRDecoder \
 	UnpackedTarball/zxing/core/src/qrcode/QRReader \
 	UnpackedTarball/zxing/core/src/qrcode/QRErrorCorrectionLevel \
-	UnpackedTarball/zxing/core/src/qrcode/QRAlignmentPattern \
 	UnpackedTarball/zxing/core/src/qrcode/QRFormatInformation \
 	UnpackedTarball/zxing/core/src/qrcode/QREncoder \
-	UnpackedTarball/zxing/core/src/qrcode/QRFinderPattern \
 	UnpackedTarball/zxing/core/src/qrcode/QRMaskUtil \
 	UnpackedTarball/zxing/core/src/qrcode/QRWriter \
-	UnpackedTarball/zxing/core/src/qrcode/QRDataMask \
 	UnpackedTarball/zxing/core/src/qrcode/QRMatrixUtil \
 	UnpackedTarball/zxing/core/src/qrcode/QRDetector \
 	UnpackedTarball/zxing/core/src/qrcode/QRVersion \
 	UnpackedTarball/zxing/core/src/qrcode/QRCodecMode \
-	UnpackedTarball/zxing/core/src/qrcode/QRAlignmentPatternFinder \
 	UnpackedTarball/zxing/core/src/qrcode/QRDataBlock \
 	UnpackedTarball/zxing/core/src/qrcode/QRBitMatrixParser \
 	UnpackedTarball/zxing/core/src/Result \

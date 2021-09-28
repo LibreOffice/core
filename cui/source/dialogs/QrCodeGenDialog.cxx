@@ -104,9 +104,9 @@ std::string GetBarCodeType(const int& type)
     switch (type)
     {
         case 1:
-            return "CODE_128";
+            return "Code128";
         default:
-            return "QR_CODE";
+            return "QRCode";
     }
 }
 
