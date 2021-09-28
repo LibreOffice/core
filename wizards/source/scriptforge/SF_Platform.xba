@@ -74,6 +74,15 @@ Property Get CurrentUser() As String
 End Property	&apos;	ScriptForge.SF_Platform.CurrentUser (get)
 
 REM -----------------------------------------------------------------------------
+Property Get Fonts() As Variant
+&apos;&apos;&apos;	Returns the list of available fonts as an unsorted array of unique strings
+&apos;&apos;&apos;	To get the list sorted, use SF_Array.Sort()
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		myFontsList = platform.Fonts
+	Fonts = _PropertyGet(&quot;Fonts&quot;)
+End Property	&apos;	ScriptForge.SF_Platform.Fonts (get)
+
+REM -----------------------------------------------------------------------------
 Property Get Locale() As String
 &apos;&apos;&apos;	Returns the locale combining language-COUNTRY (la-CO)
 &apos;&apos;&apos;	Example:
@@ -218,6 +227,7 @@ Public Function Properties() As Variant
 					, &quot;ComputerName&quot; _
 					, &quot;CPUCount&quot; _
 					, &quot;CurrentUser&quot; _
+					, &quot;Fonts&quot; _
 					, &quot;Locale&quot; _
 					, &quot;Machine&quot; _
 					, &quot;OfficeVersion&quot; _
@@ -308,6 +318,12 @@ Private Function _PropertyGet(Optional ByVal psProperty As String) As Variant
 Dim sOSName As String			&apos;	Operating system
 Dim oLocale As Object			&apos;	com.sun.star.lang.Locale
 Dim oPrinterServer As Object	&apos;	com.sun.star.awt.PrinterServer
+Dim oToolkit As Object			&apos;	com.sun.star.awt.Toolkit
+Dim oDevice As Object			&apos;	com.sun.star.awt.XDevice
+Dim oFontDescriptors As Variant	&apos;	Array of com.sun.star.awt.FontDescriptor
+Dim sFonts As String			&apos;	Comma-separated list of fonts
+Dim sFont As String				&apos;	A single font name
+Dim i As Long
 
 Const cstPyHelper = &quot;$&quot; &amp; &quot;_SF_Platform&quot;
 Dim cstThisSub As String
@@ -322,6 +338,18 @@ Const cstSubArgs = &quot;&quot;
 			With ScriptForge.SF_Session
 				_PropertyGet = .ExecutePythonScript(.SCRIPTISSHARED, _SF_.PythonHelper &amp; cstPyHelper, psProperty)
 			End With
+		Case &quot;Fonts&quot;
+			Set oToolkit = SF_Utils._GetUnoService(&quot;Toolkit&quot;)
+			Set oDevice = oToolkit.createScreenCompatibleDevice(0, 0)
+			oFontDescriptors = oDevice.FontDescriptors()
+			sFonts = &quot;,&quot;
+			&apos;	Select only not yet registered fonts
+			For i = 0 To UBound(oFontDescriptors)
+				sFont = oFontDescriptors(i).Name
+				If InStr(sFonts, &quot;,&quot; &amp; sFont &amp; &quot;,&quot;) = 0  Then sFonts = sFonts &amp; sFont &amp; &quot;,&quot;
+			Next i
+			&apos;	Remove leading and trailing commas
+			If Len(sFonts) &gt; 1 Then _PropertyGet = Split(Mid(sFonts, 2, Len(sFonts) - 2), &quot;,&quot;) Else _PropertyGet = Array()
 		Case &quot;Locale&quot;
 			Set oLocale = SF_Utils._GetUNOService(&quot;Locale&quot;)
 			_PropertyGet = oLocale.Language &amp; &quot;-&quot; &amp; oLocale.Country

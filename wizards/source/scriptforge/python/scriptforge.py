@@ -1209,7 +1209,7 @@ class SFScriptForge:
         servicename = 'ScriptForge.Platform'
         servicesynonyms = ('platform', 'scriptforge.platform')
         serviceproperties = dict(Architecture = False, ComputerName = False, CPUCount = False, CurrentUser = False,
-                                 Locale = False, Machine = False, OfficeVersion = False, OSName = False,
+                                 Fonts = False, Locale = False, Machine = False, OfficeVersion = False, OSName = False,
                                  OSPlatform = False, OSRelease = False, OSVersion = False, Printers = False,
                                  Processor = False, PythonVersion = False)
         # Python helper functions
