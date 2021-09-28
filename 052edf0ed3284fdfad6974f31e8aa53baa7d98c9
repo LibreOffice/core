@@ -51,6 +51,24 @@
       "parentUuid": "e3f15b5f_ad6ef95e",
       "revId": "052edf0ed3284fdfad6974f31e8aa53baa7d98c9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "198c5fd0_fd832ab6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-09-28T14:46:27Z",
+      "side": 1,
+      "message": "Guilhem, Thank you for reviewing. 😊\n\nYou\u0027ve mentioned good points, but in the end I agree with some of the points in the below article, that essentially says securing RSA is a hard task, and it should be avoided, if possible.\n\nSeriously, stop using RSA\nhttps://blog.trailofbits.com/2019/07/08/fuck-rsa/\n\nIf choosing the first option in \u0027ssh -Q key\u0027 is not good, I think there would be no problem in setting ed25519 the default algorithm for key generation. In my experience with newbies, I usually have to ask them to do this manually using this manual:\nhttps://www.unixtutorial.org/how-to-generate-ed25519-ssh-key/\n\nOK, let\u0027s do the hard coding, use ed25519 if it is supported, and if not, RSA instead. This is done in patchset 3.",
+      "parentUuid": "e3f15b5f_ad6ef95e",
+      "revId": "052edf0ed3284fdfad6974f31e8aa53baa7d98c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
