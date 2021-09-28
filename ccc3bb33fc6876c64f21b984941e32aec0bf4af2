@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a87c23b7_b7c3641b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-09-28T12:00:30Z",
+      "side": 1,
+      "message": "It looks like we conflicted here and in https://gerrit.libreoffice.org/c/core/+/122674 . AFAICT your patch makes mine pointless, so feel free to revert that one before pushing this.\n",
+      "revId": "ccc3bb33fc6876c64f21b984941e32aec0bf4af2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
