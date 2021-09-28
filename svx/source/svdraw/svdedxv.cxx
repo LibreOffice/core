@@ -1086,12 +1086,12 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
     bTextEditOnlyOneView = bOnlyOneView;
     bTextEditNewObj = bIsNewObj;
     const sal_uInt32 nWinCount(PaintWindowCount());
-    sal_uInt32 i;
+
     bool bBrk(false);
 
     if (!pWin)
     {
-        for (i = 0; i < nWinCount && !pWin; i++)
+        for (sal_uInt32 i = 0; i < nWinCount && !pWin; i++)
         {
             SdrPaintWindow* pPaintWindow = GetPaintWindow(i);
 
@@ -1279,7 +1279,7 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
             // register all windows as OutlinerViews with the Outliner
             if (!bOnlyOneView)
             {
-                for (i = 0; i < nWinCount; i++)
+                for (sal_uInt32 i = 0; i < nWinCount; i++)
                 {
                     SdrPaintWindow* pPaintWindow = GetPaintWindow(i);
                     OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
