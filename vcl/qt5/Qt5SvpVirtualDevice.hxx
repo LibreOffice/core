@@ -22,15 +22,15 @@
 #include <headless/svpvd.hxx>
 #include <Qt5SvpGraphics.hxx>
 
-class VCL_DLLPUBLIC Qt5SvpVirtualDevice : public SvpSalVirtualDevice
+class VCL_DLLPUBLIC QtSvpVirtualDevice : public SvpSalVirtualDevice
 {
 public:
-    Qt5SvpVirtualDevice(cairo_surface_t* pRefSurface, cairo_surface_t* pPreExistingTarget)
+    QtSvpVirtualDevice(cairo_surface_t* pRefSurface, cairo_surface_t* pPreExistingTarget)
         : SvpSalVirtualDevice(pRefSurface, pPreExistingTarget)
     {
     }
 
-    SalGraphics* AcquireGraphics() override { return AddGraphics(new Qt5SvpGraphics(nullptr)); }
+    SalGraphics* AcquireGraphics() override { return AddGraphics(new QtSvpGraphics(nullptr)); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

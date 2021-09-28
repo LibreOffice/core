@@ -23,10 +23,10 @@
 
 class SalFrame;
 
-class Qt5Printer final : public PspSalPrinter
+class QtPrinter final : public PspSalPrinter
 {
 public:
-    Qt5Printer(SalInfoPrinter* pInfoPrinter);
+    QtPrinter(SalInfoPrinter* pInfoPrinter);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,15 +30,14 @@ using namespace css::accessibility;
 using namespace css::lang;
 using namespace css::uno;
 
-Qt5AccessibleEventListener::Qt5AccessibleEventListener(const Reference<XAccessible> xAccessible,
-                                                       Qt5AccessibleWidget* pAccessibleWidget)
+QtAccessibleEventListener::QtAccessibleEventListener(const Reference<XAccessible> xAccessible,
+                                                     QtAccessibleWidget* pAccessibleWidget)
     : m_xAccessible(xAccessible)
     , m_pAccessibleWidget(pAccessibleWidget)
 {
 }
 
-void Qt5AccessibleEventListener::notifyEvent(
-    const css::accessibility::AccessibleEventObject& aEvent)
+void QtAccessibleEventListener::notifyEvent(const css::accessibility::AccessibleEventObject& aEvent)
 {
     QAccessibleInterface* pQAccessibleInterface = m_pAccessibleWidget;
 
@@ -169,6 +168,6 @@ void Qt5AccessibleEventListener::notifyEvent(
     }
 }
 
-void Qt5AccessibleEventListener::disposing(const EventObject& /* Source */) {}
+void QtAccessibleEventListener::disposing(const EventObject& /* Source */) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

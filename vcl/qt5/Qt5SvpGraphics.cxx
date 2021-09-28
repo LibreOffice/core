@@ -24,18 +24,18 @@
 #include <QtGui/QWindow>
 #include <QtWidgets/QWidget>
 
-Qt5SvpGraphics::Qt5SvpGraphics(Qt5Frame* pFrame)
+QtSvpGraphics::QtSvpGraphics(QtFrame* pFrame)
     : m_pFrame(pFrame)
 {
-    if (!Qt5Data::noNativeControls())
-        m_pWidgetDraw.reset(new Qt5Graphics_Controls(*this));
+    if (!QtData::noNativeControls())
+        m_pWidgetDraw.reset(new QtGraphics_Controls(*this));
     if (m_pFrame)
         setDevicePixelRatioF(m_pFrame->devicePixelRatioF());
 }
 
-Qt5SvpGraphics::~Qt5SvpGraphics() {}
+QtSvpGraphics::~QtSvpGraphics() {}
 
-void Qt5SvpGraphics::updateQWidget() const
+void QtSvpGraphics::updateQWidget() const
 {
     if (!m_pFrame)
         return;
@@ -46,18 +46,18 @@ void Qt5SvpGraphics::updateQWidget() const
 
 #if ENABLE_CAIRO_CANVAS
 
-bool Qt5SvpGraphics::SupportsCairo() const { return true; }
+bool QtSvpGraphics::SupportsCairo() const { return true; }
 
 cairo::SurfaceSharedPtr
-Qt5SvpGraphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const
+QtSvpGraphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const
 {
-    return std::make_shared<cairo::Qt5SvpSurface>(rSurface);
+    return std::make_shared<cairo::QtSvpSurface>(rSurface);
 }
 
-cairo::SurfaceSharedPtr Qt5SvpGraphics::CreateSurface(const OutputDevice& /*rRefDevice*/, int x,
-                                                      int y, int width, int height) const
+cairo::SurfaceSharedPtr QtSvpGraphics::CreateSurface(const OutputDevice& /*rRefDevice*/, int x,
+                                                     int y, int width, int height) const
 {
-    return std::make_shared<cairo::Qt5SvpSurface>(this, x, y, width, height);
+    return std::make_shared<cairo::QtSvpSurface>(this, x, y, width, height);
 }
 
 #endif
@@ -74,13 +74,13 @@ static void QImage2BitmapBuffer(QImage& rImg, BitmapBuffer& rBuf)
     rBuf.mnScanlineSize = rImg.bytesPerLine();
 }
 
-void Qt5SvpGraphics::handleDamage(const tools::Rectangle& rDamagedRegion)
+void QtSvpGraphics::handleDamage(const tools::Rectangle& rDamagedRegion)
 {
     assert(m_pWidgetDraw);
-    assert(dynamic_cast<Qt5Graphics_Controls*>(m_pWidgetDraw.get()));
+    assert(dynamic_cast<QtGraphics_Controls*>(m_pWidgetDraw.get()));
     assert(!rDamagedRegion.IsEmpty());
 
-    QImage* pImage = static_cast<Qt5Graphics_Controls*>(m_pWidgetDraw.get())->getImage();
+    QImage* pImage = static_cast<QtGraphics_Controls*>(m_pWidgetDraw.get())->getImage();
     assert(pImage);
     if (pImage->width() == 0 || pImage->height() == 0)
         return;
@@ -92,7 +92,7 @@ void Qt5SvpGraphics::handleDamage(const tools::Rectangle& rDamagedRegion)
     drawBitmap(aTR, &aBuffer, CAIRO_OPERATOR_OVER);
 }
 
-void Qt5SvpGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
+void QtSvpGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
 {
     char* pForceDpi;
     if ((pForceDpi = getenv("SAL_FORCEDPI")))

@@ -64,8 +64,8 @@ static OUString getPdfDir(const PrinterInfo& rInfo)
     return aDir;
 }
 
-SalInfoPrinter* Qt5Instance::CreateInfoPrinter(SalPrinterQueueInfo* pQueueInfo,
-                                               ImplJobSetup* pJobSetup)
+SalInfoPrinter* QtInstance::CreateInfoPrinter(SalPrinterQueueInfo* pQueueInfo,
+                                              ImplJobSetup* pJobSetup)
 {
     // create and initialize SalInfoPrinter
     PspSalInfoPrinter* pPrinter = new PspSalInfoPrinter;
@@ -74,18 +74,18 @@ SalInfoPrinter* Qt5Instance::CreateInfoPrinter(SalPrinterQueueInfo* pQueueInfo,
     return pPrinter;
 }
 
-void Qt5Instance::DestroyInfoPrinter(SalInfoPrinter* pPrinter) { delete pPrinter; }
+void QtInstance::DestroyInfoPrinter(SalInfoPrinter* pPrinter) { delete pPrinter; }
 
-std::unique_ptr<SalPrinter> Qt5Instance::CreatePrinter(SalInfoPrinter* pInfoPrinter)
+std::unique_ptr<SalPrinter> QtInstance::CreatePrinter(SalInfoPrinter* pInfoPrinter)
 {
     // create and initialize SalPrinter
-    Qt5Printer* pPrinter = new Qt5Printer(pInfoPrinter);
+    QtPrinter* pPrinter = new QtPrinter(pInfoPrinter);
     pPrinter->m_aJobData = static_cast<PspSalInfoPrinter*>(pInfoPrinter)->m_aJobData;
 
     return std::unique_ptr<SalPrinter>(pPrinter);
 }
 
-void Qt5Instance::GetPrinterQueueInfo(ImplPrnQueueList* pList)
+void QtInstance::GetPrinterQueueInfo(ImplPrnQueueList* pList)
 {
     PrinterInfoManager& rManager(PrinterInfoManager::get());
     static const char* pNoSyncDetection = getenv("SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION");
@@ -122,17 +122,17 @@ void Qt5Instance::GetPrinterQueueInfo(ImplPrnQueueList* pList)
     }
 }
 
-void Qt5Instance::GetPrinterQueueState(SalPrinterQueueInfo*) {}
+void QtInstance::GetPrinterQueueState(SalPrinterQueueInfo*) {}
 
-OUString Qt5Instance::GetDefaultPrinter()
+OUString QtInstance::GetDefaultPrinter()
 {
     PrinterInfoManager& rManager(PrinterInfoManager::get());
     return rManager.getDefaultPrinter();
 }
 
-void Qt5Instance::PostPrintersChanged() {}
+void QtInstance::PostPrintersChanged() {}
 
-std::unique_ptr<GenPspGraphics> Qt5Instance::CreatePrintGraphics()
+std::unique_ptr<GenPspGraphics> QtInstance::CreatePrintGraphics()
 {
     return std::make_unique<GenPspGraphics>();
 }

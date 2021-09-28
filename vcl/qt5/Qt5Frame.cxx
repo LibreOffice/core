@@ -76,7 +76,7 @@ static xcb_atom_t g_aXcbClientLeaderAtom = 0;
 static void SvpDamageHandler(void* handle, sal_Int32 nExtentsX, sal_Int32 nExtentsY,
                              sal_Int32 nExtentsWidth, sal_Int32 nExtentsHeight)
 {
-    Qt5Frame* pThis = static_cast<Qt5Frame*>(handle);
+    QtFrame* pThis = static_cast<QtFrame*>(handle);
     pThis->Damage(nExtentsX, nExtentsY, nExtentsWidth, nExtentsHeight);
 }
 
@@ -102,7 +102,7 @@ sal_Int32 screenNumber(const QScreen* pScreen)
 }
 }
 
-Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
+QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     : m_pTopLevel(nullptr)
     , m_bUseCairo(bUseCairo)
     , m_bNullRegion(true)
@@ -120,7 +120,7 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
 #endif
     , m_nInputLanguage(LANGUAGE_DONTKNOW)
 {
-    Qt5Instance* pInst = static_cast<Qt5Instance*>(GetSalData()->m_pInstance);
+    QtInstance* pInst = static_cast<QtInstance*>(GetSalData()->m_pInstance);
     pInst->insertFrame(this);
 
     m_aDamageHandler.handle = this;
@@ -166,13 +166,13 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
 
     if (aWinFlags == Qt::Window)
     {
-        m_pTopLevel = new Qt5MainWindow(*this, aWinFlags);
-        m_pQWidget = new Qt5Widget(*this, aWinFlags);
+        m_pTopLevel = new QtMainWindow(*this, aWinFlags);
+        m_pQWidget = new QtWidget(*this, aWinFlags);
         m_pTopLevel->setCentralWidget(m_pQWidget);
         m_pTopLevel->setFocusProxy(m_pQWidget);
     }
     else
-        m_pQWidget = new Qt5Widget(*this, aWinFlags);
+        m_pQWidget = new QtWidget(*this, aWinFlags);
 
     if (pParent && !(pParent->m_nStyle & SalFrameStyleFlags::PLUG))
     {
@@ -215,7 +215,7 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     fixICCCMwindowGroup();
 }
 
-void Qt5Frame::fixICCCMwindowGroup()
+void QtFrame::fixICCCMwindowGroup()
 {
 #if QT5_USING_X11 && QT5_HAVE_XCB_ICCCM
     // older Qt5 just sets WM_CLIENT_LEADER, but not the XCB_ICCCM_WM_HINT_WINDOW_GROUP
@@ -278,22 +278,22 @@ void Qt5Frame::fixICCCMwindowGroup()
 #endif
 }
 
-Qt5Frame::~Qt5Frame()
+QtFrame::~QtFrame()
 {
-    Qt5Instance* pInst = static_cast<Qt5Instance*>(GetSalData()->m_pInstance);
+    QtInstance* pInst = static_cast<QtInstance*>(GetSalData()->m_pInstance);
     pInst->eraseFrame(this);
     delete asChild();
     m_aSystemData.aShellWindow = 0;
 }
 
-void Qt5Frame::Damage(sal_Int32 nExtentsX, sal_Int32 nExtentsY, sal_Int32 nExtentsWidth,
-                      sal_Int32 nExtentsHeight) const
+void QtFrame::Damage(sal_Int32 nExtentsX, sal_Int32 nExtentsY, sal_Int32 nExtentsWidth,
+                     sal_Int32 nExtentsHeight) const
 {
     m_pQWidget->update(scaledQRect(QRect(nExtentsX, nExtentsY, nExtentsWidth, nExtentsHeight),
                                    1 / devicePixelRatioF()));
 }
 
-SalGraphics* Qt5Frame::AcquireGraphics()
+SalGraphics* QtFrame::AcquireGraphics()
 {
     if (m_bGraphicsInUse)
         return nullptr;
@@ -305,54 +305,54 @@ SalGraphics* Qt5Frame::AcquireGraphics()
         if (!m_pSvpGraphics)
         {
             QSize aSize = m_pQWidget->size() * devicePixelRatioF();
-            m_pSvpGraphics.reset(new Qt5SvpGraphics(this));
+            m_pSvpGraphics.reset(new QtSvpGraphics(this));
             m_pSurface.reset(
                 cairo_image_surface_create(CAIRO_FORMAT_ARGB32, aSize.width(), aSize.height()));
             m_pSvpGraphics->setSurface(m_pSurface.get(),
                                        basegfx::B2IVector(aSize.width(), aSize.height()));
-            cairo_surface_set_user_data(m_pSurface.get(), Qt5SvpGraphics::getDamageKey(),
+            cairo_surface_set_user_data(m_pSurface.get(), QtSvpGraphics::getDamageKey(),
                                         &m_aDamageHandler, nullptr);
         }
         return m_pSvpGraphics.get();
     }
     else
     {
-        if (!m_pQt5Graphics)
+        if (!m_pQtGraphics)
         {
-            m_pQt5Graphics.reset(new Qt5Graphics(this));
+            m_pQtGraphics.reset(new QtGraphics(this));
             m_pQImage.reset(
-                new QImage(m_pQWidget->size() * devicePixelRatioF(), Qt5_DefaultFormat32));
+                new QImage(m_pQWidget->size() * devicePixelRatioF(), Qt_DefaultFormat32));
             m_pQImage->fill(Qt::transparent);
-            m_pQt5Graphics->ChangeQImage(m_pQImage.get());
+            m_pQtGraphics->ChangeQImage(m_pQImage.get());
         }
-        return m_pQt5Graphics.get();
+        return m_pQtGraphics.get();
     }
 }
 
-void Qt5Frame::ReleaseGraphics(SalGraphics* pSalGraph)
+void QtFrame::ReleaseGraphics(SalGraphics* pSalGraph)
 {
     (void)pSalGraph;
     if (m_bUseCairo)
         assert(pSalGraph == m_pSvpGraphics.get());
     else
-        assert(pSalGraph == m_pQt5Graphics.get());
+        assert(pSalGraph == m_pQtGraphics.get());
     m_bGraphicsInUse = false;
 }
 
-bool Qt5Frame::PostEvent(std::unique_ptr<ImplSVEvent> pData)
+bool QtFrame::PostEvent(std::unique_ptr<ImplSVEvent> pData)
 {
-    Qt5Instance* pInst = static_cast<Qt5Instance*>(GetSalData()->m_pInstance);
+    QtInstance* pInst = static_cast<QtInstance*>(GetSalData()->m_pInstance);
     pInst->PostEvent(this, pData.release(), SalEvent::UserEvent);
     return true;
 }
 
-QWidget* Qt5Frame::asChild() const { return m_pTopLevel ? m_pTopLevel : m_pQWidget; }
+QWidget* QtFrame::asChild() const { return m_pTopLevel ? m_pTopLevel : m_pQWidget; }
 
-qreal Qt5Frame::devicePixelRatioF() const { return asChild()->devicePixelRatioF(); }
+qreal QtFrame::devicePixelRatioF() const { return asChild()->devicePixelRatioF(); }
 
-bool Qt5Frame::isWindow() const { return asChild()->isWindow(); }
+bool QtFrame::isWindow() const { return asChild()->isWindow(); }
 
-QWindow* Qt5Frame::windowHandle() const
+QWindow* QtFrame::windowHandle() const
 {
     // set attribute 'Qt::WA_NativeWindow' first to make sure a window handle actually exists
     QWidget* pChild = asChild();
@@ -360,27 +360,27 @@ QWindow* Qt5Frame::windowHandle() const
     return pChild->windowHandle();
 }
 
-QScreen* Qt5Frame::screen() const
+QScreen* QtFrame::screen() const
 {
     QWindow* const pWindow = windowHandle();
     return pWindow ? pWindow->screen() : nullptr;
 }
 
-bool Qt5Frame::isMinimized() const { return asChild()->isMinimized(); }
+bool QtFrame::isMinimized() const { return asChild()->isMinimized(); }
 
-bool Qt5Frame::isMaximized() const { return asChild()->isMaximized(); }
+bool QtFrame::isMaximized() const { return asChild()->isMaximized(); }
 
-void Qt5Frame::SetWindowStateImpl(Qt::WindowStates eState)
+void QtFrame::SetWindowStateImpl(Qt::WindowStates eState)
 {
     return asChild()->setWindowState(eState);
 }
 
-void Qt5Frame::SetTitle(const OUString& rTitle)
+void QtFrame::SetTitle(const OUString& rTitle)
 {
     m_pQWidget->window()->setWindowTitle(toQString(rTitle));
 }
 
-void Qt5Frame::SetIcon(sal_uInt16 nIcon)
+void QtFrame::SetIcon(sal_uInt16 nIcon)
 {
     if (m_nStyle
             & (SalFrameStyleFlags::PLUG | SalFrameStyleFlags::SYSTEMCHILD
@@ -410,13 +410,13 @@ void Qt5Frame::SetIcon(sal_uInt16 nIcon)
     m_pQWidget->window()->setWindowIcon(aIcon);
 }
 
-void Qt5Frame::SetMenu(SalMenu*) {}
+void QtFrame::SetMenu(SalMenu*) {}
 
-void Qt5Frame::DrawMenuBar() { /* not needed */}
+void QtFrame::DrawMenuBar() { /* not needed */}
 
-void Qt5Frame::SetExtendedFrameStyle(SalExtStyle /*nExtStyle*/) { /* not needed */}
+void QtFrame::SetExtendedFrameStyle(SalExtStyle /*nExtStyle*/) { /* not needed */}
 
-void Qt5Frame::Show(bool bVisible, bool bNoActivate)
+void QtFrame::Show(bool bVisible, bool bNoActivate)
 {
     assert(m_pQWidget);
     if (bVisible == asChild()->isVisible())
@@ -425,7 +425,7 @@ void Qt5Frame::Show(bool bVisible, bool bNoActivate)
     SetDefaultSize();
     SetDefaultPos();
 
-    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    auto* pSalInst(static_cast<QtInstance*>(GetSalData()->m_pInstance));
     assert(pSalInst);
     pSalInst->RunInMainThread([this, bVisible, bNoActivate]() {
         asChild()->setVisible(bVisible);
@@ -438,7 +438,7 @@ void Qt5Frame::Show(bool bVisible, bool bNoActivate)
     });
 }
 
-void Qt5Frame::SetMinClientSize(tools::Long nWidth, tools::Long nHeight)
+void QtFrame::SetMinClientSize(tools::Long nWidth, tools::Long nHeight)
 {
     if (!isChild())
     {
@@ -447,7 +447,7 @@ void Qt5Frame::SetMinClientSize(tools::Long nWidth, tools::Long nHeight)
     }
 }
 
-void Qt5Frame::SetMaxClientSize(tools::Long nWidth, tools::Long nHeight)
+void QtFrame::SetMaxClientSize(tools::Long nWidth, tools::Long nHeight)
 {
     if (!isChild())
     {
@@ -456,7 +456,7 @@ void Qt5Frame::SetMaxClientSize(tools::Long nWidth, tools::Long nHeight)
     }
 }
 
-void Qt5Frame::SetDefaultPos()
+void QtFrame::SetDefaultPos()
 {
     if (!m_bDefaultPos)
         return;
@@ -476,7 +476,7 @@ void Qt5Frame::SetDefaultPos()
         m_bDefaultPos = false;
 }
 
-Size Qt5Frame::CalcDefaultSize()
+Size QtFrame::CalcDefaultSize()
 {
     assert(isWindow());
 
@@ -510,7 +510,7 @@ Size Qt5Frame::CalcDefaultSize()
     return aSize;
 }
 
-void Qt5Frame::SetDefaultSize()
+void QtFrame::SetDefaultSize()
 {
     if (!m_bDefaultSize)
         return;
@@ -521,8 +521,8 @@ void Qt5Frame::SetDefaultSize()
     assert(!m_bDefaultSize);
 }
 
-void Qt5Frame::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
-                          sal_uInt16 nFlags)
+void QtFrame::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
+                         sal_uInt16 nFlags)
 {
     if (!isWindow() || isChild(true, false))
         return;
@@ -568,7 +568,7 @@ void Qt5Frame::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, to
             nX += aParentGeometry.nX;
         nY += aParentGeometry.nY;
 
-        Qt5MainWindow* pTopLevel = m_pParent->GetTopLevelWindow();
+        QtMainWindow* pTopLevel = m_pParent->GetTopLevelWindow();
         if (pTopLevel && pTopLevel->menuBar() && pTopLevel->menuBar()->isVisible())
             nY += round(pTopLevel->menuBar()->geometry().height() * devicePixelRatioF());
     }
@@ -587,13 +587,13 @@ void Qt5Frame::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, to
     asChild()->move(round(nX / devicePixelRatioF()), round(nY / devicePixelRatioF()));
 }
 
-void Qt5Frame::GetClientSize(tools::Long& rWidth, tools::Long& rHeight)
+void QtFrame::GetClientSize(tools::Long& rWidth, tools::Long& rHeight)
 {
     rWidth = round(m_pQWidget->width() * devicePixelRatioF());
     rHeight = round(m_pQWidget->height() * devicePixelRatioF());
 }
 
-void Qt5Frame::GetWorkArea(tools::Rectangle& rRect)
+void QtFrame::GetWorkArea(tools::Rectangle& rRect)
 {
     if (!isWindow())
         return;
@@ -605,14 +605,14 @@ void Qt5Frame::GetWorkArea(tools::Rectangle& rRect)
     rRect = tools::Rectangle(0, 0, aSize.width(), aSize.height());
 }
 
-SalFrame* Qt5Frame::GetParent() const { return m_pParent; }
+SalFrame* QtFrame::GetParent() const { return m_pParent; }
 
-void Qt5Frame::SetModal(bool bModal)
+void QtFrame::SetModal(bool bModal)
 {
     if (!isWindow())
         return;
 
-    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    auto* pSalInst(static_cast<QtInstance*>(GetSalData()->m_pInstance));
     assert(pSalInst);
     pSalInst->RunInMainThread([this, bModal]() {
 
@@ -630,9 +630,9 @@ void Qt5Frame::SetModal(bool bModal)
     });
 }
 
-bool Qt5Frame::GetModal() const { return isWindow() && windowHandle()->isModal(); }
+bool QtFrame::GetModal() const { return isWindow() && windowHandle()->isModal(); }
 
-void Qt5Frame::SetWindowState(const SalFrameState* pState)
+void QtFrame::SetWindowState(const SalFrameState* pState)
 {
     if (!isWindow() || !pState || isChild(true, false))
         return;
@@ -677,7 +677,7 @@ void Qt5Frame::SetWindowState(const SalFrameState* pState)
     }
 }
 
-bool Qt5Frame::GetWindowState(SalFrameState* pState)
+bool QtFrame::GetWindowState(SalFrameState* pState)
 {
     pState->mnState = WindowStateState::Normal;
     pState->mnMask = WindowStateMask::State;
@@ -702,7 +702,7 @@ bool Qt5Frame::GetWindowState(SalFrameState* pState)
     return true;
 }
 
-void Qt5Frame::ShowFullScreen(bool bFullScreen, sal_Int32 nScreen)
+void QtFrame::ShowFullScreen(bool bFullScreen, sal_Int32 nScreen)
 {
     // only top-level windows can go fullscreen
     assert(m_pTopLevel);
@@ -735,7 +735,7 @@ void Qt5Frame::ShowFullScreen(bool bFullScreen, sal_Int32 nScreen)
     }
 }
 
-void Qt5Frame::StartPresentation(bool bStart)
+void QtFrame::StartPresentation(bool bStart)
 {
 // meh - so there's no Qt platform independent solution
 // https://forum.qt.io/topic/38504/solved-qdialog-in-fullscreen-disable-os-screensaver
@@ -756,7 +756,7 @@ void Qt5Frame::StartPresentation(bool bStart)
 #endif
 }
 
-void Qt5Frame::SetAlwaysOnTop(bool bOnTop)
+void QtFrame::SetAlwaysOnTop(bool bOnTop)
 {
     QWidget* const pWidget = asChild();
     const Qt::WindowFlags flags = pWidget->windowFlags();
@@ -766,7 +766,7 @@ void Qt5Frame::SetAlwaysOnTop(bool bOnTop)
         pWidget->setWindowFlags(flags & ~(Qt::CustomizeWindowHint | Qt::WindowStaysOnTopHint));
 }
 
-void Qt5Frame::ToTop(SalFrameToTop nFlags)
+void QtFrame::ToTop(SalFrameToTop nFlags)
 {
     QWidget* const pWidget = asChild();
     if (isWindow() && !(nFlags & SalFrameToTop::GrabFocusOnly))
@@ -780,7 +780,7 @@ void Qt5Frame::ToTop(SalFrameToTop nFlags)
     }
 }
 
-void Qt5Frame::SetPointer(PointerStyle ePointerStyle)
+void QtFrame::SetPointer(PointerStyle ePointerStyle)
 {
     QWindow* pWindow = m_pQWidget->window()->windowHandle();
     if (!pWindow)
@@ -789,10 +789,10 @@ void Qt5Frame::SetPointer(PointerStyle ePointerStyle)
         return;
     m_ePointerStyle = ePointerStyle;
 
-    pWindow->setCursor(static_cast<Qt5Data*>(GetSalData())->getCursor(ePointerStyle));
+    pWindow->setCursor(static_cast<QtData*>(GetSalData())->getCursor(ePointerStyle));
 }
 
-void Qt5Frame::CaptureMouse(bool bMouse)
+void QtFrame::CaptureMouse(bool bMouse)
 {
     static const char* pEnv = getenv("SAL_NO_MOUSEGRABS");
     if (pEnv && *pEnv)
@@ -804,24 +804,24 @@ void Qt5Frame::CaptureMouse(bool bMouse)
         m_pQWidget->releaseMouse();
 }
 
-void Qt5Frame::SetPointerPos(tools::Long nX, tools::Long nY)
+void QtFrame::SetPointerPos(tools::Long nX, tools::Long nY)
 {
     // some cursor already exists (and it has m_ePointerStyle shape)
     // so here we just reposition it
     QCursor::setPos(m_pQWidget->mapToGlobal(QPoint(nX, nY)));
 }
 
-void Qt5Frame::Flush()
+void QtFrame::Flush()
 {
     // was: QGuiApplication::sync();
     // but FIXME it causes too many issues, figure out sth better
 
     // unclear if we need to also flush cairo surface - gtk3 backend
-    // does not do it. QPainter in Qt5Widget::paintEvent() is
+    // does not do it. QPainter in QtWidget::paintEvent() is
     // destroyed, so that state should be safely flushed.
 }
 
-bool Qt5Frame::ShowTooltip(const OUString& rText, const tools::Rectangle& rHelpArea)
+bool QtFrame::ShowTooltip(const OUString& rText, const tools::Rectangle& rHelpArea)
 {
     QRect aHelpArea(toQRect(rHelpArea));
     if (QGuiApplication::isRightToLeft())
@@ -830,7 +830,7 @@ bool Qt5Frame::ShowTooltip(const OUString& rText, const tools::Rectangle& rHelpA
     return true;
 }
 
-void Qt5Frame::SetInputContext(SalInputContext* pContext)
+void QtFrame::SetInputContext(SalInputContext* pContext)
 {
     if (!pContext)
         return;
@@ -841,14 +841,14 @@ void Qt5Frame::SetInputContext(SalInputContext* pContext)
     m_pQWidget->setAttribute(Qt::WA_InputMethodEnabled);
 }
 
-void Qt5Frame::EndExtTextInput(EndExtTextInputFlags /*nFlags*/)
+void QtFrame::EndExtTextInput(EndExtTextInputFlags /*nFlags*/)
 {
-    Qt5Widget* pQt5Widget = static_cast<Qt5Widget*>(m_pQWidget);
-    if (pQt5Widget)
-        pQt5Widget->endExtTextInput();
+    QtWidget* pQtWidget = static_cast<QtWidget*>(m_pQWidget);
+    if (pQtWidget)
+        pQtWidget->endExtTextInput();
 }
 
-OUString Qt5Frame::GetKeyName(sal_uInt16 nKeyCode)
+OUString QtFrame::GetKeyName(sal_uInt16 nKeyCode)
 {
     vcl::KeyCode vclKeyCode(nKeyCode);
     int nCode = vclKeyCode.GetCode();
@@ -996,16 +996,16 @@ OUString Qt5Frame::GetKeyName(sal_uInt16 nKeyCode)
     return sKeyName;
 }
 
-bool Qt5Frame::MapUnicodeToKeyCode(sal_Unicode /*aUnicode*/, LanguageType /*aLangType*/,
-                                   vcl::KeyCode& /*rKeyCode*/)
+bool QtFrame::MapUnicodeToKeyCode(sal_Unicode /*aUnicode*/, LanguageType /*aLangType*/,
+                                  vcl::KeyCode& /*rKeyCode*/)
 {
     // not supported yet
     return false;
 }
 
-LanguageType Qt5Frame::GetInputLanguage() { return m_nInputLanguage; }
+LanguageType QtFrame::GetInputLanguage() { return m_nInputLanguage; }
 
-void Qt5Frame::setInputLanguage(LanguageType nInputLanguage)
+void QtFrame::setInputLanguage(LanguageType nInputLanguage)
 {
     if (nInputLanguage == m_nInputLanguage)
         return;
@@ -1018,9 +1018,9 @@ static Color toColor(const QColor& rColor)
     return Color(rColor.red(), rColor.green(), rColor.blue());
 }
 
-void Qt5Frame::UpdateSettings(AllSettings& rSettings)
+void QtFrame::UpdateSettings(AllSettings& rSettings)
 {
-    if (Qt5Data::noNativeControls())
+    if (QtData::noNativeControls())
         return;
 
     StyleSettings style(rSettings.GetStyleSettings());
@@ -1160,9 +1160,9 @@ void Qt5Frame::UpdateSettings(AllSettings& rSettings)
     rSettings.SetStyleSettings(style);
 }
 
-void Qt5Frame::Beep() { QApplication::beep(); }
+void QtFrame::Beep() { QApplication::beep(); }
 
-SalFrame::SalPointerState Qt5Frame::GetPointerState()
+SalFrame::SalPointerState QtFrame::GetPointerState()
 {
     SalPointerState aState;
     aState.maPos = toPoint(QCursor::pos() * devicePixelRatioF());
@@ -1172,37 +1172,37 @@ SalFrame::SalPointerState Qt5Frame::GetPointerState()
     return aState;
 }
 
-KeyIndicatorState Qt5Frame::GetIndicatorState() { return KeyIndicatorState(); }
+KeyIndicatorState QtFrame::GetIndicatorState() { return KeyIndicatorState(); }
 
-void Qt5Frame::SimulateKeyPress(sal_uInt16 nKeyCode)
+void QtFrame::SimulateKeyPress(sal_uInt16 nKeyCode)
 {
     SAL_WARN("vcl.qt5", "missing simulate keypress " << nKeyCode);
 }
 
-void Qt5Frame::SetParent(SalFrame* pNewParent) { m_pParent = static_cast<Qt5Frame*>(pNewParent); }
+void QtFrame::SetParent(SalFrame* pNewParent) { m_pParent = static_cast<QtFrame*>(pNewParent); }
 
-void Qt5Frame::SetPluginParent(SystemParentData* /*pNewParent*/)
+void QtFrame::SetPluginParent(SystemParentData* /*pNewParent*/)
 {
     //FIXME: no SetPluginParent impl. for qt5
 }
 
-void Qt5Frame::ResetClipRegion() { m_bNullRegion = true; }
+void QtFrame::ResetClipRegion() { m_bNullRegion = true; }
 
-void Qt5Frame::BeginSetClipRegion(sal_uInt32)
+void QtFrame::BeginSetClipRegion(sal_uInt32)
 {
     m_aRegion = QRegion(QRect(QPoint(0, 0), m_pQWidget->size()));
 }
 
-void Qt5Frame::UnionClipRegion(tools::Long nX, tools::Long nY, tools::Long nWidth,
-                               tools::Long nHeight)
+void QtFrame::UnionClipRegion(tools::Long nX, tools::Long nY, tools::Long nWidth,
+                              tools::Long nHeight)
 {
     m_aRegion
         = m_aRegion.united(scaledQRect(QRect(nX, nY, nWidth, nHeight), 1 / devicePixelRatioF()));
 }
 
-void Qt5Frame::EndSetClipRegion() { m_bNullRegion = false; }
+void QtFrame::EndSetClipRegion() { m_bNullRegion = false; }
 
-void Qt5Frame::SetScreenNumber(unsigned int nScreen)
+void QtFrame::SetScreenNumber(unsigned int nScreen)
 {
     if (!isWindow())
         return;
@@ -1254,7 +1254,7 @@ void Qt5Frame::SetScreenNumber(unsigned int nScreen)
     maGeometry.nDisplayScreenNumber = nScreen;
 }
 
-void Qt5Frame::SetApplicationID(const OUString& rWMClass)
+void QtFrame::SetApplicationID(const OUString& rWMClass)
 {
 #if QT5_USING_X11
     if (QGuiApplication::platformName() != "xcb" || !m_pTopLevel)
@@ -1281,27 +1281,27 @@ void Qt5Frame::SetApplicationID(const OUString& rWMClass)
 
 // Drag'n'drop foo
 
-void Qt5Frame::registerDragSource(Qt5DragSource* pDragSource)
+void QtFrame::registerDragSource(QtDragSource* pDragSource)
 {
     assert(!m_pDragSource);
     m_pDragSource = pDragSource;
 }
 
-void Qt5Frame::deregisterDragSource(Qt5DragSource const* pDragSource)
+void QtFrame::deregisterDragSource(QtDragSource const* pDragSource)
 {
     assert(m_pDragSource == pDragSource);
     (void)pDragSource;
     m_pDragSource = nullptr;
 }
 
-void Qt5Frame::registerDropTarget(Qt5DropTarget* pDropTarget)
+void QtFrame::registerDropTarget(QtDropTarget* pDropTarget)
 {
     assert(!m_pDropTarget);
     m_pDropTarget = pDropTarget;
     m_pQWidget->setAcceptDrops(true);
 }
 
-void Qt5Frame::deregisterDropTarget(Qt5DropTarget const* pDropTarget)
+void QtFrame::deregisterDropTarget(QtDropTarget const* pDropTarget)
 {
     assert(m_pDropTarget == pDropTarget);
     (void)pDropTarget;
@@ -1312,11 +1312,11 @@ static css::uno::Reference<css::datatransfer::XTransferable>
 lcl_getXTransferable(const QMimeData* pMimeData)
 {
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
-    const Qt5MimeData* pQt5MimeData = dynamic_cast<const Qt5MimeData*>(pMimeData);
-    if (!pQt5MimeData)
-        xTransferable = new Qt5DnDTransferable(pMimeData);
+    const QtMimeData* pQtMimeData = dynamic_cast<const QtMimeData*>(pMimeData);
+    if (!pQtMimeData)
+        xTransferable = new QtDnDTransferable(pMimeData);
     else
-        xTransferable = pQt5MimeData->xTransferable();
+        xTransferable = pQtMimeData->xTransferable();
     return xTransferable;
 }
 
@@ -1341,7 +1341,7 @@ static sal_Int8 lcl_getUserDropAction(const QDropEvent* pEvent, const sal_Int8 n
     if (0 == nUserDropAction)
     {
         // default LO internal action is move, but default external action is copy
-        nUserDropAction = dynamic_cast<const Qt5MimeData*>(pMimeData)
+        nUserDropAction = dynamic_cast<const QtMimeData*>(pMimeData)
                               ? css::datatransfer::dnd::DNDConstants::ACTION_MOVE
                               : css::datatransfer::dnd::DNDConstants::ACTION_COPY;
         nUserDropAction &= nSourceActions;
@@ -1358,7 +1358,7 @@ static sal_Int8 lcl_getUserDropAction(const QDropEvent* pEvent, const sal_Int8 n
     return nUserDropAction;
 }
 
-void Qt5Frame::handleDragMove(QDragMoveEvent* pEvent)
+void QtFrame::handleDragMove(QDragMoveEvent* pEvent)
 {
     assert(m_pDropTarget);
 
@@ -1396,7 +1396,7 @@ void Qt5Frame::handleDragMove(QDragMoveEvent* pEvent)
         pEvent->ignore();
 }
 
-void Qt5Frame::handleDrop(QDropEvent* pEvent)
+void QtFrame::handleDrop(QDropEvent* pEvent)
 {
     assert(m_pDropTarget);
 
@@ -1425,7 +1425,7 @@ void Qt5Frame::handleDrop(QDropEvent* pEvent)
     // inform the drag source of the drag-origin frame of the drop result
     if (pEvent->source())
     {
-        Qt5Widget* pWidget = dynamic_cast<Qt5Widget*>(pEvent->source());
+        QtWidget* pWidget = dynamic_cast<QtWidget*>(pEvent->source());
         assert(pWidget); // AFAIK there shouldn't be any non-Qt5Widget as source in LO itself
         if (pWidget)
             pWidget->frame().m_pDragSource->fire_dragEnd(nDropAction, bDropSuccessful);
@@ -1441,7 +1441,7 @@ void Qt5Frame::handleDrop(QDropEvent* pEvent)
         pEvent->ignore();
 }
 
-void Qt5Frame::handleDragLeave()
+void QtFrame::handleDragLeave()
 {
     css::datatransfer::dnd::DropTargetEvent aEvent;
     aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(m_pDropTarget);

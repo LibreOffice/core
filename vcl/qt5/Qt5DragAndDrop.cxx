@@ -23,15 +23,15 @@
 
 using namespace com::sun::star;
 
-Qt5DragSource::~Qt5DragSource() {}
+QtDragSource::~QtDragSource() {}
 
-void Qt5DragSource::deinitialize() { m_pFrame = nullptr; }
+void QtDragSource::deinitialize() { m_pFrame = nullptr; }
 
-sal_Bool Qt5DragSource::isDragImageSupported() { return true; }
+sal_Bool QtDragSource::isDragImageSupported() { return true; }
 
-sal_Int32 Qt5DragSource::getDefaultCursor(sal_Int8) { return 0; }
+sal_Int32 QtDragSource::getDefaultCursor(sal_Int8) { return 0; }
 
-void Qt5DragSource::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
+void QtDragSource::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
 {
     if (rArguments.getLength() < 2)
     {
@@ -48,11 +48,11 @@ void Qt5DragSource::initialize(const css::uno::Sequence<css::uno::Any>& rArgumen
                                     static_cast<OWeakObject*>(this));
     }
 
-    m_pFrame = reinterpret_cast<Qt5Frame*>(nFrame);
+    m_pFrame = reinterpret_cast<QtFrame*>(nFrame);
     m_pFrame->registerDragSource(this);
 }
 
-void Qt5DragSource::startDrag(
+void QtDragSource::startDrag(
     const datatransfer::dnd::DragGestureEvent& /*rEvent*/, sal_Int8 sourceActions,
     sal_Int32 /*cursor*/, sal_Int32 /*image*/,
     const css::uno::Reference<css::datatransfer::XTransferable>& rTrans,
@@ -63,7 +63,7 @@ void Qt5DragSource::startDrag(
     if (m_pFrame)
     {
         QDrag* drag = new QDrag(m_pFrame->GetQWidget());
-        drag->setMimeData(new Qt5MimeData(rTrans));
+        drag->setMimeData(new QtMimeData(rTrans));
         // just a reminder that exec starts a nested event loop, so everything after
         // this call is just executed, after D'n'D has finished!
         drag->exec(toQtDropActions(sourceActions), getPreferredDropAction(sourceActions));
@@ -76,7 +76,7 @@ void Qt5DragSource::startDrag(
     fire_dragEnd(datatransfer::dnd::DNDConstants::ACTION_NONE, false);
 }
 
-void Qt5DragSource::fire_dragEnd(sal_Int8 nAction, bool bDropSuccessful)
+void QtDragSource::fire_dragEnd(sal_Int8 nAction, bool bDropSuccessful)
 {
     if (!m_xListener.is())
         return;
@@ -90,22 +90,22 @@ void Qt5DragSource::fire_dragEnd(sal_Int8 nAction, bool bDropSuccessful)
     xListener->dragDropEnd(aEv);
 }
 
-OUString SAL_CALL Qt5DragSource::getImplementationName()
+OUString SAL_CALL QtDragSource::getImplementationName()
 {
-    return "com.sun.star.datatransfer.dnd.VclQt5DragSource";
+    return "com.sun.star.datatransfer.dnd.VclQtDragSource";
 }
 
-sal_Bool SAL_CALL Qt5DragSource::supportsService(OUString const& ServiceName)
+sal_Bool SAL_CALL QtDragSource::supportsService(OUString const& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL Qt5DragSource::getSupportedServiceNames()
+css::uno::Sequence<OUString> SAL_CALL QtDragSource::getSupportedServiceNames()
 {
-    return { "com.sun.star.datatransfer.dnd.Qt5DragSource" };
+    return { "com.sun.star.datatransfer.dnd.QtDragSource" };
 }
 
-Qt5DropTarget::Qt5DropTarget()
+QtDropTarget::QtDropTarget()
     : WeakComponentImplHelper(m_aMutex)
     , m_pFrame(nullptr)
     , m_bActive(false)
@@ -113,30 +113,30 @@ Qt5DropTarget::Qt5DropTarget()
 {
 }
 
-OUString SAL_CALL Qt5DropTarget::getImplementationName()
+OUString SAL_CALL QtDropTarget::getImplementationName()
 {
-    return "com.sun.star.datatransfer.dnd.VclQt5DropTarget";
+    return "com.sun.star.datatransfer.dnd.VclQtDropTarget";
 }
 
-sal_Bool SAL_CALL Qt5DropTarget::supportsService(OUString const& ServiceName)
+sal_Bool SAL_CALL QtDropTarget::supportsService(OUString const& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL Qt5DropTarget::getSupportedServiceNames()
+css::uno::Sequence<OUString> SAL_CALL QtDropTarget::getSupportedServiceNames()
 {
-    return { "com.sun.star.datatransfer.dnd.Qt5DropTarget" };
+    return { "com.sun.star.datatransfer.dnd.QtDropTarget" };
 }
 
-Qt5DropTarget::~Qt5DropTarget() {}
+QtDropTarget::~QtDropTarget() {}
 
-void Qt5DropTarget::deinitialize()
+void QtDropTarget::deinitialize()
 {
     m_pFrame = nullptr;
     m_bActive = false;
 }
 
-void Qt5DropTarget::initialize(const uno::Sequence<uno::Any>& rArguments)
+void QtDropTarget::initialize(const uno::Sequence<uno::Any>& rArguments)
 {
     if (rArguments.getLength() < 2)
     {
@@ -155,12 +155,12 @@ void Qt5DropTarget::initialize(const uno::Sequence<uno::Any>& rArguments)
 
     m_nDropAction = datatransfer::dnd::DNDConstants::ACTION_NONE;
 
-    m_pFrame = reinterpret_cast<Qt5Frame*>(nFrame);
+    m_pFrame = reinterpret_cast<QtFrame*>(nFrame);
     m_pFrame->registerDropTarget(this);
     m_bActive = true;
 }
 
-void Qt5DropTarget::addDropTargetListener(
+void QtDropTarget::addDropTargetListener(
     const uno::Reference<css::datatransfer::dnd::XDropTargetListener>& xListener)
 {
     ::osl::Guard<::osl::Mutex> aGuard(m_aMutex);
@@ -168,7 +168,7 @@ void Qt5DropTarget::addDropTargetListener(
     m_aListeners.push_back(xListener);
 }
 
-void Qt5DropTarget::removeDropTargetListener(
+void QtDropTarget::removeDropTargetListener(
     const uno::Reference<css::datatransfer::dnd::XDropTargetListener>& xListener)
 {
     ::osl::Guard<::osl::Mutex> aGuard(m_aMutex);
@@ -177,18 +177,18 @@ void Qt5DropTarget::removeDropTargetListener(
                        m_aListeners.end());
 }
 
-sal_Bool Qt5DropTarget::isActive() { return m_bActive; }
+sal_Bool QtDropTarget::isActive() { return m_bActive; }
 
-void Qt5DropTarget::setActive(sal_Bool bActive) { m_bActive = bActive; }
+void QtDropTarget::setActive(sal_Bool bActive) { m_bActive = bActive; }
 
-sal_Int8 Qt5DropTarget::getDefaultActions() { return m_nDefaultActions; }
+sal_Int8 QtDropTarget::getDefaultActions() { return m_nDefaultActions; }
 
-void Qt5DropTarget::setDefaultActions(sal_Int8 nDefaultActions)
+void QtDropTarget::setDefaultActions(sal_Int8 nDefaultActions)
 {
     m_nDefaultActions = nDefaultActions;
 }
 
-void Qt5DropTarget::fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde)
+void QtDropTarget::fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde)
 {
     osl::ClearableGuard<::osl::Mutex> aGuard(m_aMutex);
     std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(
@@ -201,7 +201,7 @@ void Qt5DropTarget::fire_dragEnter(const css::datatransfer::dnd::DropTargetDragE
     }
 }
 
-void Qt5DropTarget::fire_dragOver(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde)
+void QtDropTarget::fire_dragOver(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde)
 {
     osl::ClearableGuard<::osl::Mutex> aGuard(m_aMutex);
     std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(
@@ -212,7 +212,7 @@ void Qt5DropTarget::fire_dragOver(const css::datatransfer::dnd::DropTargetDragEn
         listener->dragOver(dtde);
 }
 
-void Qt5DropTarget::fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde)
+void QtDropTarget::fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde)
 {
     m_bDropSuccessful = true;
 
@@ -225,7 +225,7 @@ void Qt5DropTarget::fire_drop(const css::datatransfer::dnd::DropTargetDropEvent&
         listener->drop(dtde);
 }
 
-void Qt5DropTarget::fire_dragExit(const css::datatransfer::dnd::DropTargetEvent& dte)
+void QtDropTarget::fire_dragExit(const css::datatransfer::dnd::DropTargetEvent& dte)
 {
     osl::ClearableGuard<::osl::Mutex> aGuard(m_aMutex);
     std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(
@@ -236,15 +236,15 @@ void Qt5DropTarget::fire_dragExit(const css::datatransfer::dnd::DropTargetEvent&
         listener->dragExit(dte);
 }
 
-void Qt5DropTarget::acceptDrag(sal_Int8 dragOperation) { m_nDropAction = dragOperation; }
+void QtDropTarget::acceptDrag(sal_Int8 dragOperation) { m_nDropAction = dragOperation; }
 
-void Qt5DropTarget::rejectDrag() { m_nDropAction = 0; }
+void QtDropTarget::rejectDrag() { m_nDropAction = 0; }
 
-void Qt5DropTarget::acceptDrop(sal_Int8 dropOperation) { m_nDropAction = dropOperation; }
+void QtDropTarget::acceptDrop(sal_Int8 dropOperation) { m_nDropAction = dropOperation; }
 
-void Qt5DropTarget::rejectDrop() { m_nDropAction = 0; }
+void QtDropTarget::rejectDrop() { m_nDropAction = 0; }
 
-void Qt5DropTarget::dropComplete(sal_Bool success)
+void QtDropTarget::dropComplete(sal_Bool success)
 {
     m_bDropSuccessful = (m_bDropSuccessful && success);
 }

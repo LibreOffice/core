@@ -29,11 +29,11 @@
 #include <sal/log.hxx>
 #include <tools/helpers.hxx>
 
-Qt5Bitmap::Qt5Bitmap() {}
+QtBitmap::QtBitmap() {}
 
-Qt5Bitmap::Qt5Bitmap(const QImage& rImage) { m_pImage.reset(new QImage(rImage)); }
+QtBitmap::QtBitmap(const QImage& rImage) { m_pImage.reset(new QImage(rImage)); }
 
-bool Qt5Bitmap::Create(const Size& rSize, vcl::PixelFormat ePixelFormat, const BitmapPalette& rPal)
+bool QtBitmap::Create(const Size& rSize, vcl::PixelFormat ePixelFormat, const BitmapPalette& rPal)
 {
     if (ePixelFormat == vcl::PixelFormat::INVALID)
         return false;
@@ -58,55 +58,55 @@ bool Qt5Bitmap::Create(const Size& rSize, vcl::PixelFormat ePixelFormat, const B
     return true;
 }
 
-bool Qt5Bitmap::Create(const SalBitmap& rSalBmp)
+bool QtBitmap::Create(const SalBitmap& rSalBmp)
 {
-    const Qt5Bitmap* pBitmap = static_cast<const Qt5Bitmap*>(&rSalBmp);
+    const QtBitmap* pBitmap = static_cast<const QtBitmap*>(&rSalBmp);
     m_pImage.reset(new QImage(*pBitmap->m_pImage));
     m_aPalette = pBitmap->m_aPalette;
     return true;
 }
 
-bool Qt5Bitmap::Create(const SalBitmap& rSalBmp, SalGraphics* pSalGraphics)
+bool QtBitmap::Create(const SalBitmap& rSalBmp, SalGraphics* pSalGraphics)
 {
-    const Qt5Bitmap* pBitmap = static_cast<const Qt5Bitmap*>(&rSalBmp);
-    Qt5Graphics* pGraphics = static_cast<Qt5Graphics*>(pSalGraphics);
+    const QtBitmap* pBitmap = static_cast<const QtBitmap*>(&rSalBmp);
+    QtGraphics* pGraphics = static_cast<QtGraphics*>(pSalGraphics);
     QImage* pImage = pGraphics->getQImage();
     m_pImage.reset(new QImage(pBitmap->m_pImage->convertToFormat(pImage->format())));
     return true;
 }
 
-bool Qt5Bitmap::Create(const SalBitmap& rSalBmp, vcl::PixelFormat eNewPixelFormat)
+bool QtBitmap::Create(const SalBitmap& rSalBmp, vcl::PixelFormat eNewPixelFormat)
 {
     if (eNewPixelFormat == vcl::PixelFormat::INVALID)
         return false;
-    const Qt5Bitmap* pBitmap = static_cast<const Qt5Bitmap*>(&rSalBmp);
+    const QtBitmap* pBitmap = static_cast<const QtBitmap*>(&rSalBmp);
     m_pImage.reset(new QImage(pBitmap->m_pImage->convertToFormat(getBitFormat(eNewPixelFormat))));
     return true;
 }
 
-bool Qt5Bitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanvas>& /*rBitmapCanvas*/,
-                       Size& /*rSize*/, bool /*bMask*/)
+bool QtBitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanvas>& /*rBitmapCanvas*/,
+                      Size& /*rSize*/, bool /*bMask*/)
 {
     return false;
 }
 
-void Qt5Bitmap::Destroy() { m_pImage.reset(); }
+void QtBitmap::Destroy() { m_pImage.reset(); }
 
-Size Qt5Bitmap::GetSize() const
+Size QtBitmap::GetSize() const
 {
     if (m_pImage)
         return toSize(m_pImage->size());
     return Size();
 }
 
-sal_uInt16 Qt5Bitmap::GetBitCount() const
+sal_uInt16 QtBitmap::GetBitCount() const
 {
     if (m_pImage)
         return getFormatBits(m_pImage->format());
     return 0;
 }
 
-BitmapBuffer* Qt5Bitmap::AcquireBuffer(BitmapAccessMode /*nMode*/)
+BitmapBuffer* QtBitmap::AcquireBuffer(BitmapAccessMode /*nMode*/)
 {
     static const BitmapPalette aEmptyPalette;
 
@@ -152,7 +152,7 @@ BitmapBuffer* Qt5Bitmap::AcquireBuffer(BitmapAccessMode /*nMode*/)
     return pBuffer;
 }
 
-void Qt5Bitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode)
+void QtBitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode)
 {
     m_aPalette = pBuffer->maPalette;
     auto count = m_aPalette.GetEntryCount();
@@ -169,18 +169,18 @@ void Qt5Bitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode)
         InvalidateChecksum();
 }
 
-bool Qt5Bitmap::GetSystemData(BitmapSystemData& /*rData*/) { return false; }
+bool QtBitmap::GetSystemData(BitmapSystemData& /*rData*/) { return false; }
 
-bool Qt5Bitmap::ScalingSupported() const { return false; }
+bool QtBitmap::ScalingSupported() const { return false; }
 
-bool Qt5Bitmap::Scale(const double& /*rScaleX*/, const double& /*rScaleY*/,
-                      BmpScaleFlag /*nScaleFlag*/)
+bool QtBitmap::Scale(const double& /*rScaleX*/, const double& /*rScaleY*/,
+                     BmpScaleFlag /*nScaleFlag*/)
 {
     return false;
 }
 
-bool Qt5Bitmap::Replace(const Color& /*rSearchColor*/, const Color& /*rReplaceColor*/,
-                        sal_uInt8 /*nTol*/)
+bool QtBitmap::Replace(const Color& /*rSearchColor*/, const Color& /*rReplaceColor*/,
+                       sal_uInt8 /*nTol*/)
 {
     return false;
 }

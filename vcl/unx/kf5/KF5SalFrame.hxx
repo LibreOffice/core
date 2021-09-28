@@ -26,7 +26,7 @@
 
 class QWidget;
 
-class KF5SalFrame : public Qt5Frame
+class KF5SalFrame : public QtFrame
 {
 public:
     KF5SalFrame(KF5SalFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo);

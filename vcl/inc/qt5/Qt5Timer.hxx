@@ -22,7 +22,7 @@
 #include <saltimer.hxx>
 #include <QtCore/QTimer>
 
-class Qt5Timer final : public QObject, public SalTimer
+class QtTimer final : public QObject, public SalTimer
 {
     Q_OBJECT
 
@@ -38,7 +38,7 @@ Q_SIGNALS:
     void stopTimerSignal();
 
 public:
-    Qt5Timer();
+    QtTimer();
 
     int remainingTime() const { return m_aTimer.remainingTime(); }
 

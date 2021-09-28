@@ -32,9 +32,9 @@
 #include <QtGui/QOpenGLContext>
 #include <QtGui/QWindow>
 
-bool Qt5OpenGLContext::g_bAnyCurrent = false;
+bool QtOpenGLContext::g_bAnyCurrent = false;
 
-void Qt5OpenGLContext::swapBuffers()
+void QtOpenGLContext::swapBuffers()
 {
     OpenGLZone aZone;
 
@@ -46,7 +46,7 @@ void Qt5OpenGLContext::swapBuffers()
     BuffersSwapped();
 }
 
-void Qt5OpenGLContext::resetCurrent()
+void QtOpenGLContext::resetCurrent()
 {
     clearCurrent();
 
@@ -59,19 +59,19 @@ void Qt5OpenGLContext::resetCurrent()
     }
 }
 
-bool Qt5OpenGLContext::isCurrent()
+bool QtOpenGLContext::isCurrent()
 {
     OpenGLZone aZone;
     return g_bAnyCurrent && (QOpenGLContext::currentContext() == m_pContext);
 }
 
-bool Qt5OpenGLContext::isAnyCurrent()
+bool QtOpenGLContext::isAnyCurrent()
 {
     OpenGLZone aZone;
     return g_bAnyCurrent && (QOpenGLContext::currentContext() != nullptr);
 }
 
-bool Qt5OpenGLContext::ImplInit()
+bool QtOpenGLContext::ImplInit()
 {
     if (!m_pWindow)
     {
@@ -102,7 +102,7 @@ bool Qt5OpenGLContext::ImplInit()
     return bRet;
 }
 
-void Qt5OpenGLContext::makeCurrent()
+void QtOpenGLContext::makeCurrent()
 {
     if (isCurrent())
         return;
@@ -120,7 +120,7 @@ void Qt5OpenGLContext::makeCurrent()
     registerAsCurrent();
 }
 
-void Qt5OpenGLContext::destroyCurrentContext()
+void QtOpenGLContext::destroyCurrentContext()
 {
     OpenGLZone aZone;
 
@@ -136,7 +136,7 @@ void Qt5OpenGLContext::destroyCurrentContext()
     }
 }
 
-void Qt5OpenGLContext::initWindow()
+void QtOpenGLContext::initWindow()
 {
     if (!m_pChildWindow)
     {
@@ -150,5 +150,5 @@ void Qt5OpenGLContext::initWindow()
     }
 
     m_pWindow
-        = static_cast<Qt5Object*>(m_pChildWindow->ImplGetWindowImpl()->mpSysObj)->windowHandle();
+        = static_cast<QtObject*>(m_pChildWindow->ImplGetWindowImpl()->mpSysObj)->windowHandle();
 }

@@ -74,12 +74,12 @@ static void lcl_ApplyBackgroundColorToStyleOption(QStyleOption& rOption,
     }
 }
 
-Qt5Graphics_Controls::Qt5Graphics_Controls(const Qt5GraphicsBase& rGraphics)
+QtGraphics_Controls::QtGraphics_Controls(const QtGraphicsBase& rGraphics)
     : m_rGraphics(rGraphics)
 {
 }
 
-bool Qt5Graphics_Controls::isNativeControlSupported(ControlType type, ControlPart part)
+bool QtGraphics_Controls::isNativeControlSupported(ControlType type, ControlPart part)
 {
     switch (type)
     {
@@ -129,34 +129,33 @@ bool Qt5Graphics_Controls::isNativeControlSupported(ControlType type, ControlPar
     return false;
 }
 
-inline int Qt5Graphics_Controls::pixelMetric(QStyle::PixelMetric metric, const QStyleOption* option)
+inline int QtGraphics_Controls::pixelMetric(QStyle::PixelMetric metric, const QStyleOption* option)
 {
     return QApplication::style()->pixelMetric(metric, option);
 }
 
-inline QSize Qt5Graphics_Controls::sizeFromContents(QStyle::ContentsType type,
-                                                    const QStyleOption* option,
-                                                    const QSize& contentsSize)
+inline QSize QtGraphics_Controls::sizeFromContents(QStyle::ContentsType type,
+                                                   const QStyleOption* option,
+                                                   const QSize& contentsSize)
 {
     return QApplication::style()->sizeFromContents(type, option, contentsSize);
 }
 
-inline QRect Qt5Graphics_Controls::subControlRect(QStyle::ComplexControl control,
-                                                  const QStyleOptionComplex* option,
-                                                  QStyle::SubControl subControl)
+inline QRect QtGraphics_Controls::subControlRect(QStyle::ComplexControl control,
+                                                 const QStyleOptionComplex* option,
+                                                 QStyle::SubControl subControl)
 {
     return QApplication::style()->subControlRect(control, option, subControl);
 }
 
-inline QRect Qt5Graphics_Controls::subElementRect(QStyle::SubElement element,
-                                                  const QStyleOption* option)
+inline QRect QtGraphics_Controls::subElementRect(QStyle::SubElement element,
+                                                 const QStyleOption* option)
 {
     return QApplication::style()->subElementRect(element, option);
 }
 
-void Qt5Graphics_Controls::draw(QStyle::ControlElement element, QStyleOption& rOption,
-                                QImage* image, const Color& rBackgroundColor,
-                                QStyle::State const state, QRect rect)
+void QtGraphics_Controls::draw(QStyle::ControlElement element, QStyleOption& rOption, QImage* image,
+                               const Color& rBackgroundColor, QStyle::State const state, QRect rect)
 {
     const QRect& targetRect = !rect.isNull() ? rect : image->rect();
 
@@ -169,9 +168,9 @@ void Qt5Graphics_Controls::draw(QStyle::ControlElement element, QStyleOption& rO
     QApplication::style()->drawControl(element, &rOption, &painter);
 }
 
-void Qt5Graphics_Controls::draw(QStyle::PrimitiveElement element, QStyleOption& rOption,
-                                QImage* image, const Color& rBackgroundColor,
-                                QStyle::State const state, QRect rect)
+void QtGraphics_Controls::draw(QStyle::PrimitiveElement element, QStyleOption& rOption,
+                               QImage* image, const Color& rBackgroundColor,
+                               QStyle::State const state, QRect rect)
 {
     const QRect& targetRect = !rect.isNull() ? rect : image->rect();
 
@@ -184,9 +183,9 @@ void Qt5Graphics_Controls::draw(QStyle::PrimitiveElement element, QStyleOption& 
     QApplication::style()->drawPrimitive(element, &rOption, &painter);
 }
 
-void Qt5Graphics_Controls::draw(QStyle::ComplexControl element, QStyleOptionComplex& rOption,
-                                QImage* image, const Color& rBackgroundColor,
-                                QStyle::State const state)
+void QtGraphics_Controls::draw(QStyle::ComplexControl element, QStyleOptionComplex& rOption,
+                               QImage* image, const Color& rBackgroundColor,
+                               QStyle::State const state)
 {
     const QRect& targetRect = image->rect();
 
@@ -199,9 +198,9 @@ void Qt5Graphics_Controls::draw(QStyle::ComplexControl element, QStyleOptionComp
     QApplication::style()->drawComplexControl(element, &rOption, &painter);
 }
 
-void Qt5Graphics_Controls::drawFrame(QStyle::PrimitiveElement element, QImage* image,
-                                     const Color& rBackgroundColor, QStyle::State const& state,
-                                     bool bClip, QStyle::PixelMetric eLineMetric)
+void QtGraphics_Controls::drawFrame(QStyle::PrimitiveElement element, QImage* image,
+                                    const Color& rBackgroundColor, QStyle::State const& state,
+                                    bool bClip, QStyle::PixelMetric eLineMetric)
 {
     const int fw = pixelMetric(eLineMetric);
     QStyleOptionFrame option;
@@ -220,7 +219,7 @@ void Qt5Graphics_Controls::drawFrame(QStyle::PrimitiveElement element, QImage* i
     QApplication::style()->drawPrimitive(element, &option, &painter);
 }
 
-void Qt5Graphics_Controls::fillQStyleOptionTab(const ImplControlValue& value, QStyleOptionTab& sot)
+void QtGraphics_Controls::fillQStyleOptionTab(const ImplControlValue& value, QStyleOptionTab& sot)
 {
     const TabitemValue& rValue = static_cast<const TabitemValue&>(value);
     if (rValue.isFirst())
@@ -231,8 +230,8 @@ void Qt5Graphics_Controls::fillQStyleOptionTab(const ImplControlValue& value, QS
         sot.position = QStyleOptionTab::Middle;
 }
 
-void Qt5Graphics_Controls::fullQStyleOptionTabWidgetFrame(QStyleOptionTabWidgetFrame& option,
-                                                          bool bDownscale)
+void QtGraphics_Controls::fullQStyleOptionTabWidgetFrame(QStyleOptionTabWidgetFrame& option,
+                                                         bool bDownscale)
 {
     option.state = QStyle::State_Enabled;
     option.rightCornerWidgetSize = QSize(0, 0);
@@ -243,11 +242,11 @@ void Qt5Graphics_Controls::fullQStyleOptionTabWidgetFrame(QStyleOptionTabWidgetF
     option.shape = QTabBar::RoundedNorth;
 }
 
-bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
-                                             const tools::Rectangle& rControlRegion,
-                                             ControlState nControlState,
-                                             const ImplControlValue& value, const OUString&,
-                                             const Color& rBackgroundColor)
+bool QtGraphics_Controls::drawNativeControl(ControlType type, ControlPart part,
+                                            const tools::Rectangle& rControlRegion,
+                                            ControlState nControlState,
+                                            const ImplControlValue& value, const OUString&,
+                                            const Color& rBackgroundColor)
 {
     bool nativeSupport = isNativeControlSupported(type, part);
     if (!nativeSupport)
@@ -708,12 +707,12 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
     return returnVal;
 }
 
-bool Qt5Graphics_Controls::getNativeControlRegion(ControlType type, ControlPart part,
-                                                  const tools::Rectangle& controlRegion,
-                                                  ControlState controlState,
-                                                  const ImplControlValue& val, const OUString&,
-                                                  tools::Rectangle& nativeBoundingRegion,
-                                                  tools::Rectangle& nativeContentRegion)
+bool QtGraphics_Controls::getNativeControlRegion(ControlType type, ControlPart part,
+                                                 const tools::Rectangle& controlRegion,
+                                                 ControlState controlState,
+                                                 const ImplControlValue& val, const OUString&,
+                                                 tools::Rectangle& nativeBoundingRegion,
+                                                 tools::Rectangle& nativeContentRegion)
 {
     bool retVal = false;
 
@@ -1049,9 +1048,9 @@ bool Qt5Graphics_Controls::getNativeControlRegion(ControlType type, ControlPart 
     aPos was or was not inside the native widget specified by the
     nType/nPart combination.
 */
-bool Qt5Graphics_Controls::hitTestNativeControl(ControlType nType, ControlPart nPart,
-                                                const tools::Rectangle& rControlRegion,
-                                                const Point& rPos, bool& rIsInside)
+bool QtGraphics_Controls::hitTestNativeControl(ControlType nType, ControlPart nPart,
+                                               const tools::Rectangle& rControlRegion,
+                                               const Point& rPos, bool& rIsInside)
 {
     if (nType == ControlType::Scrollbar)
     {
@@ -1093,41 +1092,41 @@ bool Qt5Graphics_Controls::hitTestNativeControl(ControlType nType, ControlPart n
     return false;
 }
 
-inline int Qt5Graphics_Controls::downscale(int size, Round eRound)
+inline int QtGraphics_Controls::downscale(int size, Round eRound)
 {
     return static_cast<int>(eRound == Round::Ceil ? ceil(size / m_rGraphics.devicePixelRatioF())
                                                   : floor(size / m_rGraphics.devicePixelRatioF()));
 }
 
-inline int Qt5Graphics_Controls::upscale(int size, Round eRound)
+inline int QtGraphics_Controls::upscale(int size, Round eRound)
 {
     return static_cast<int>(eRound == Round::Ceil ? ceil(size * m_rGraphics.devicePixelRatioF())
                                                   : floor(size * m_rGraphics.devicePixelRatioF()));
 }
 
-inline QRect Qt5Graphics_Controls::downscale(const QRect& rect)
+inline QRect QtGraphics_Controls::downscale(const QRect& rect)
 {
     return QRect(downscale(rect.x(), Round::Floor), downscale(rect.y(), Round::Floor),
                  downscale(rect.width(), Round::Ceil), downscale(rect.height(), Round::Ceil));
 }
 
-inline QRect Qt5Graphics_Controls::upscale(const QRect& rect)
+inline QRect QtGraphics_Controls::upscale(const QRect& rect)
 {
     return QRect(upscale(rect.x(), Round::Floor), upscale(rect.y(), Round::Floor),
                  upscale(rect.width(), Round::Ceil), upscale(rect.height(), Round::Ceil));
 }
 
-inline QSize Qt5Graphics_Controls::downscale(const QSize& size, Round eRound)
+inline QSize QtGraphics_Controls::downscale(const QSize& size, Round eRound)
 {
     return QSize(downscale(size.width(), eRound), downscale(size.height(), eRound));
 }
 
-inline QSize Qt5Graphics_Controls::upscale(const QSize& size, Round eRound)
+inline QSize QtGraphics_Controls::upscale(const QSize& size, Round eRound)
 {
     return QSize(upscale(size.width(), eRound), upscale(size.height(), eRound));
 }
 
-inline QPoint Qt5Graphics_Controls::upscale(const QPoint& point, Round eRound)
+inline QPoint QtGraphics_Controls::upscale(const QPoint& point, Round eRound)
 {
     return QPoint(upscale(point.x(), eRound), upscale(point.y(), eRound));
 }

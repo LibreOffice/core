@@ -26,15 +26,15 @@
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 
 class QInputEvent;
-class Qt5Frame;
-class Qt5Object;
+class QtFrame;
+class QtObject;
 struct SalAbstractMouseEvent;
 
-class Qt5Widget : public QWidget
+class QtWidget : public QWidget
 {
     Q_OBJECT
 
-    Qt5Frame& m_rFrame;
+    QtFrame& m_rFrame;
     bool m_bNonEmptyIMPreeditSeen;
     int m_nDeltaX;
     int m_nDeltaY;
@@ -45,10 +45,10 @@ class Qt5Widget : public QWidget
         Released
     };
 
-    static void commitText(Qt5Frame&, const QString& aText);
-    static bool handleKeyEvent(Qt5Frame&, const QWidget&, QKeyEvent*, const ButtonKeyState);
-    static void handleMouseButtonEvent(const Qt5Frame&, const QMouseEvent*, const ButtonKeyState);
-    static void fillSalAbstractMouseEvent(const Qt5Frame& rFrame, const QInputEvent* pQEvent,
+    static void commitText(QtFrame&, const QString& aText);
+    static bool handleKeyEvent(QtFrame&, const QWidget&, QKeyEvent*, const ButtonKeyState);
+    static void handleMouseButtonEvent(const QtFrame&, const QMouseEvent*, const ButtonKeyState);
+    static void fillSalAbstractMouseEvent(const QtFrame& rFrame, const QInputEvent* pQEvent,
                                           const QPoint& rPos, Qt::MouseButtons eButtons, int nWidth,
                                           SalAbstractMouseEvent& aSalEvent);
 
@@ -78,30 +78,30 @@ class Qt5Widget : public QWidget
     static void closePopup();
 
 public:
-    Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f = Qt::WindowFlags());
+    QtWidget(QtFrame& rFrame, Qt::WindowFlags f = Qt::WindowFlags());
 
-    Qt5Frame& frame() const { return m_rFrame; }
+    QtFrame& frame() const { return m_rFrame; }
     void endExtTextInput();
 
-    static bool handleEvent(Qt5Frame&, const QWidget&, QEvent*);
+    static bool handleEvent(QtFrame&, const QWidget&, QEvent*);
     // key events might be propagated further down => call base on false
-    static inline bool handleKeyReleaseEvent(Qt5Frame&, const QWidget&, QKeyEvent*);
+    static inline bool handleKeyReleaseEvent(QtFrame&, const QWidget&, QKeyEvent*);
     // mouse events are always accepted
-    static inline void handleMousePressEvent(const Qt5Frame&, const QMouseEvent*);
-    static inline void handleMouseReleaseEvent(const Qt5Frame&, const QMouseEvent*);
+    static inline void handleMousePressEvent(const QtFrame&, const QMouseEvent*);
+    static inline void handleMouseReleaseEvent(const QtFrame&, const QMouseEvent*);
 };
 
-bool Qt5Widget::handleKeyReleaseEvent(Qt5Frame& rFrame, const QWidget& rWidget, QKeyEvent* pEvent)
+bool QtWidget::handleKeyReleaseEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent* pEvent)
 {
     return handleKeyEvent(rFrame, rWidget, pEvent, ButtonKeyState::Released);
 }
 
-void Qt5Widget::handleMousePressEvent(const Qt5Frame& rFrame, const QMouseEvent* pEvent)
+void QtWidget::handleMousePressEvent(const QtFrame& rFrame, const QMouseEvent* pEvent)
 {
     handleMouseButtonEvent(rFrame, pEvent, ButtonKeyState::Pressed);
 }
 
-void Qt5Widget::handleMouseReleaseEvent(const Qt5Frame& rFrame, const QMouseEvent* pEvent)
+void QtWidget::handleMouseReleaseEvent(const QtFrame& rFrame, const QMouseEvent* pEvent)
 {
     handleMouseButtonEvent(rFrame, pEvent, ButtonKeyState::Released);
 }

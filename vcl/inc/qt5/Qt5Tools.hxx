@@ -98,7 +98,7 @@ inline QList<int> toQList(const css::uno::Sequence<sal_Int32>& aSequence)
     return aList;
 }
 
-constexpr QImage::Format Qt5_DefaultFormat32 = QImage::Format_ARGB32;
+constexpr QImage::Format Qt_DefaultFormat32 = QImage::Format_ARGB32;
 
 inline QImage::Format getBitFormat(vcl::PixelFormat ePixelFormat)
 {
@@ -111,7 +111,7 @@ inline QImage::Format getBitFormat(vcl::PixelFormat ePixelFormat)
         case vcl::PixelFormat::N24_BPP:
             return QImage::Format_RGB888;
         case vcl::PixelFormat::N32_BPP:
-            return Qt5_DefaultFormat32;
+            return Qt_DefaultFormat32;
         default:
             std::abort();
             break;
@@ -129,7 +129,7 @@ inline sal_uInt16 getFormatBits(QImage::Format eFormat)
             return 8;
         case QImage::Format_RGB888:
             return 24;
-        case Qt5_DefaultFormat32:
+        case Qt_DefaultFormat32:
         case QImage::Format_ARGB32_Premultiplied:
             return 32;
         default:

@@ -16,24 +16,24 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/compbase.hxx>
 
-class Qt5Frame;
+class QtFrame;
 
-class Qt5DragSource final
+class QtDragSource final
     : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDragSource,
                                            css::lang::XInitialization, css::lang::XServiceInfo>
 {
     osl::Mutex m_aMutex;
-    Qt5Frame* m_pFrame;
+    QtFrame* m_pFrame;
     css::uno::Reference<css::datatransfer::dnd::XDragSourceListener> m_xListener;
 
 public:
-    Qt5DragSource()
+    QtDragSource()
         : WeakComponentImplHelper(m_aMutex)
         , m_pFrame(nullptr)
     {
     }
 
-    virtual ~Qt5DragSource() override;
+    virtual ~QtDragSource() override;
 
     // XDragSource
     virtual sal_Bool SAL_CALL isDragImageSupported() override;
@@ -57,14 +57,14 @@ public:
     void fire_dragEnd(sal_Int8 nAction, bool bSuccessful);
 };
 
-class Qt5DropTarget final
+class QtDropTarget final
     : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDropTarget,
                                            css::datatransfer::dnd::XDropTargetDragContext,
                                            css::datatransfer::dnd::XDropTargetDropContext,
                                            css::lang::XInitialization, css::lang::XServiceInfo>
 {
     osl::Mutex m_aMutex;
-    Qt5Frame* m_pFrame;
+    QtFrame* m_pFrame;
     sal_Int8 m_nDropAction;
     bool m_bActive;
     sal_Int8 m_nDefaultActions;
@@ -72,8 +72,8 @@ class Qt5DropTarget final
     bool m_bDropSuccessful;
 
 public:
-    Qt5DropTarget();
-    virtual ~Qt5DropTarget() override;
+    QtDropTarget();
+    virtual ~QtDropTarget() override;
 
     // XInitialization
     virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArgs) override;

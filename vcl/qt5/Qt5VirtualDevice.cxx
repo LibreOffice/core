@@ -24,34 +24,33 @@
 
 #include <QtGui/QImage>
 
-Qt5VirtualDevice::Qt5VirtualDevice(double fScale)
+QtVirtualDevice::QtVirtualDevice(double fScale)
     : m_fScale(fScale)
 {
 }
 
-SalGraphics* Qt5VirtualDevice::AcquireGraphics()
+SalGraphics* QtVirtualDevice::AcquireGraphics()
 {
     assert(m_pImage);
-    Qt5Graphics* pGraphics = new Qt5Graphics(m_pImage.get());
+    QtGraphics* pGraphics = new QtGraphics(m_pImage.get());
     m_aGraphics.push_back(pGraphics);
     return pGraphics;
 }
 
-void Qt5VirtualDevice::ReleaseGraphics(SalGraphics* pGraphics)
+void QtVirtualDevice::ReleaseGraphics(SalGraphics* pGraphics)
 {
     m_aGraphics.erase(
-        std::remove(m_aGraphics.begin(), m_aGraphics.end(), dynamic_cast<Qt5Graphics*>(pGraphics)),
+        std::remove(m_aGraphics.begin(), m_aGraphics.end(), dynamic_cast<QtGraphics*>(pGraphics)),
         m_aGraphics.end());
     delete pGraphics;
 }
 
-bool Qt5VirtualDevice::SetSize(tools::Long nNewDX, tools::Long nNewDY)
+bool QtVirtualDevice::SetSize(tools::Long nNewDX, tools::Long nNewDY)
 {
     return SetSizeUsingBuffer(nNewDX, nNewDY, nullptr);
 }
 
-bool Qt5VirtualDevice::SetSizeUsingBuffer(tools::Long nNewDX, tools::Long nNewDY,
-                                          sal_uInt8* pBuffer)
+bool QtVirtualDevice::SetSizeUsingBuffer(tools::Long nNewDX, tools::Long nNewDY, sal_uInt8* pBuffer)
 {
     if (nNewDX == 0)
         nNewDX = 1;
@@ -67,22 +66,22 @@ bool Qt5VirtualDevice::SetSizeUsingBuffer(tools::Long nNewDX, tools::Long nNewDY
     nNewDY *= m_fScale;
 
     if (pBuffer)
-        m_pImage.reset(new QImage(pBuffer, nNewDX, nNewDY, Qt5_DefaultFormat32));
+        m_pImage.reset(new QImage(pBuffer, nNewDX, nNewDY, Qt_DefaultFormat32));
     else
-        m_pImage.reset(new QImage(nNewDX, nNewDY, Qt5_DefaultFormat32));
+        m_pImage.reset(new QImage(nNewDX, nNewDY, Qt_DefaultFormat32));
 
     m_pImage->fill(Qt::transparent);
     m_pImage->setDevicePixelRatio(m_fScale);
 
     // update device in existing graphics
-    for (auto pQt5Graph : m_aGraphics)
-        pQt5Graph->ChangeQImage(m_pImage.get());
+    for (auto pQtGraph : m_aGraphics)
+        pQtGraph->ChangeQImage(m_pImage.get());
 
     return true;
 }
 
-tools::Long Qt5VirtualDevice::GetWidth() const { return m_pImage ? m_aFrameSize.width() : 0; }
+tools::Long QtVirtualDevice::GetWidth() const { return m_pImage ? m_aFrameSize.width() : 0; }
 
-tools::Long Qt5VirtualDevice::GetHeight() const { return m_pImage ? m_aFrameSize.height() : 0; }
+tools::Long QtVirtualDevice::GetHeight() const { return m_pImage ? m_aFrameSize.height() : 0; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,7 +27,7 @@
  * The first just sets the respective clipboard to the expected content from LO,
  * the latter will handle any reported changes.
  **/
-class Qt5Clipboard final
+class QtClipboard final
     : public QObject,
       public cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
                                            css::datatransfer::clipboard::XFlushableClipboard,
@@ -44,7 +44,7 @@ class Qt5Clipboard final
     // true, if LO really wants to give up clipboard ownership
     bool m_bDoClear;
 
-    // if not empty, this holds the setContents provided XTransferable or a Qt5ClipboardTransferable
+    // if not empty, this holds the setContents provided XTransferable or a QtClipboardTransferable
     css::uno::Reference<css::datatransfer::XTransferable> m_aContents;
     // the owner of the current contents, which must be informed on content change
     css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> m_aOwner;
@@ -53,7 +53,7 @@ class Qt5Clipboard final
     static bool isOwner(const QClipboard::Mode aMode);
     static bool isSupported(const QClipboard::Mode aMode);
 
-    explicit Qt5Clipboard(const OUString& aModeString, const QClipboard::Mode aMode);
+    explicit QtClipboard(const OUString& aModeString, const QClipboard::Mode aMode);
 
 private Q_SLOTS:
     void handleChanged(QClipboard::Mode mode);
@@ -63,7 +63,7 @@ signals:
     void clearClipboard();
 
 public:
-    // factory function to construct only valid Qt5Clipboard objects by name
+    // factory function to construct only valid QtClipboard objects by name
     static css::uno::Reference<css::uno::XInterface> create(const OUString& aModeString);
 
     // XServiceInfo

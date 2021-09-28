@@ -26,15 +26,15 @@
 #include "Qt5Frame.hxx"
 #include "Qt5Graphics.hxx"
 
-class Qt5Painter final : public QPainter
+class QtPainter final : public QPainter
 {
-    Qt5GraphicsBackend& m_rGraphics;
+    QtGraphicsBackend& m_rGraphics;
     QRegion m_aRegion;
 
 public:
-    Qt5Painter(Qt5GraphicsBackend& rGraphics, bool bPrepareBrush = false,
-               sal_uInt8 nTransparency = 255);
-    ~Qt5Painter()
+    QtPainter(QtGraphicsBackend& rGraphics, bool bPrepareBrush = false,
+              sal_uInt8 nTransparency = 255);
+    ~QtPainter()
     {
         if (m_rGraphics.m_pFrame && !m_aRegion.isEmpty())
             m_rGraphics.m_pFrame->GetQWidget()->update(m_aRegion);

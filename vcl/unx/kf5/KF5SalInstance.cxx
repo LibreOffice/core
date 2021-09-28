@@ -34,7 +34,7 @@
 using namespace com::sun::star;
 
 KF5SalInstance::KF5SalInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo)
-    : Qt5Instance(pQApp, bUseCairo)
+    : QtInstance(pQApp, bUseCairo)
 {
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mxToolkitName = constructToolkitID(u"kf5");
@@ -64,17 +64,17 @@ bool KF5SalInstance::hasNativeFileSelection() const
 {
     if (Application::GetDesktopEnvironment() == "PLASMA5")
         return true;
-    return Qt5Instance::hasNativeFileSelection();
+    return QtInstance::hasNativeFileSelection();
 }
 
-rtl::Reference<Qt5FilePicker>
+rtl::Reference<QtFilePicker>
 KF5SalInstance::createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
                              QFileDialog::FileMode eMode)
 {
     if (!IsMainThread())
     {
         SolarMutexGuard g;
-        rtl::Reference<Qt5FilePicker> pPicker;
+        rtl::Reference<QtFilePicker> pPicker;
         RunInMainThread([&, this]() { pPicker = createPicker(context, eMode); });
         assert(pPicker);
         return pPicker;
@@ -85,7 +85,7 @@ KF5SalInstance::createPicker(css::uno::Reference<css::uno::XComponentContext> co
     // Therefore, return the plain qt5 one in order to not lose custom controls.
     if (Application::GetDesktopEnvironment() == "PLASMA5")
         return new KF5FilePicker(context, eMode);
-    return Qt5Instance::createPicker(context, eMode);
+    return QtInstance::createPicker(context, eMode);
 }
 
 extern "C" {
@@ -96,15 +96,15 @@ VCLPLUG_KF5_PUBLIC SalInstance* create_SalInstance()
     std::unique_ptr<char* []> pFakeArgv;
     std::unique_ptr<int> pFakeArgc;
     std::vector<FreeableCStr> aFakeArgvFreeable;
-    Qt5Instance::AllocFakeCmdlineArgs(pFakeArgv, pFakeArgc, aFakeArgvFreeable);
+    QtInstance::AllocFakeCmdlineArgs(pFakeArgv, pFakeArgc, aFakeArgvFreeable);
 
     std::unique_ptr<QApplication> pQApp
-        = Qt5Instance::CreateQApplication(*pFakeArgc, pFakeArgv.get());
+        = QtInstance::CreateQApplication(*pFakeArgc, pFakeArgv.get());
 
     KF5SalInstance* pInstance = new KF5SalInstance(pQApp, bUseCairo);
     pInstance->MoveFakeCmdlineArgs(pFakeArgv, pFakeArgc, aFakeArgvFreeable);
 
-    new Qt5Data(pInstance);
+    new QtData(pInstance);
 
     return pInstance;
 }

@@ -33,23 +33,23 @@ namespace com::sun::star::accessibility
 class XAccessibleTable;
 }
 
-class Qt5Frame;
-class Qt5Widget;
+class QtFrame;
+class QtWidget;
 
-class Qt5AccessibleWidget final : public QObject,
-                                  public QAccessibleInterface,
-                                  public QAccessibleActionInterface,
-                                  public QAccessibleTextInterface,
-                                  public QAccessibleEditableTextInterface,
-                                  public QAccessibleTableCellInterface,
-                                  public QAccessibleTableInterface,
-                                  public QAccessibleValueInterface
+class QtAccessibleWidget final : public QObject,
+                                 public QAccessibleInterface,
+                                 public QAccessibleActionInterface,
+                                 public QAccessibleTextInterface,
+                                 public QAccessibleEditableTextInterface,
+                                 public QAccessibleTableCellInterface,
+                                 public QAccessibleTableInterface,
+                                 public QAccessibleValueInterface
 {
     Q_OBJECT
 
 public:
-    Qt5AccessibleWidget(const css::uno::Reference<css::accessibility::XAccessible> xAccessible,
-                        QObject* pObject);
+    QtAccessibleWidget(const css::uno::Reference<css::accessibility::XAccessible> xAccessible,
+                       QObject* pObject);
     QWindow* window() const override;
     int childCount() const override;
     int indexOfChild(const QAccessibleInterface* child) const override;

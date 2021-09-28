@@ -25,14 +25,14 @@
 
 class QImage;
 
-class Qt5Bitmap final : public SalBitmap
+class QtBitmap final : public SalBitmap
 {
     std::unique_ptr<QImage> m_pImage;
     BitmapPalette m_aPalette;
 
 public:
-    Qt5Bitmap();
-    Qt5Bitmap(const QImage& rQImage);
+    QtBitmap();
+    QtBitmap(const QImage& rQImage);
 
     const QImage* GetQImage() const { return m_pImage.get(); }
 

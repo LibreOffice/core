@@ -44,7 +44,7 @@
 #include <optional>
 
 KF5SalFrame::KF5SalFrame(KF5SalFrame* pParent, SalFrameStyleFlags nState, bool bUseCairo)
-    : Qt5Frame(pParent, nState, bUseCairo)
+    : QtFrame(pParent, nState, bUseCairo)
 {
 }
 
@@ -62,9 +62,9 @@ static vcl::Font toFont(const QFont& rQFont, const css::lang::Locale& rLocale)
                                    strlen(static_cast<const char*>(rQFont.family().toUtf8())),
                                    RTL_TEXTENCODING_UTF8);
 
-    aInfo.m_eItalic = Qt5FontFace::toFontItalic(qFontInfo.style());
-    aInfo.m_eWeight = Qt5FontFace::toFontWeight(qFontInfo.weight());
-    aInfo.m_eWidth = Qt5FontFace::toFontWidth(rQFont.stretch());
+    aInfo.m_eItalic = QtFontFace::toFontItalic(qFontInfo.style());
+    aInfo.m_eWeight = QtFontFace::toFontWeight(qFontInfo.weight());
+    aInfo.m_eWidth = QtFontFace::toFontWidth(rQFont.stretch());
 
     SAL_INFO("vcl.kf5", "font name BEFORE system match: \"" << aInfo.m_aFamilyName << "\"");
 
@@ -97,7 +97,7 @@ static vcl::Font toFont(const QFont& rQFont, const css::lang::Locale& rLocale)
 */
 void KF5SalFrame::UpdateSettings(AllSettings& rSettings)
 {
-    Qt5Frame::UpdateSettings(rSettings);
+    QtFrame::UpdateSettings(rSettings);
 
     StyleSettings style(rSettings.GetStyleSettings());
     bool bSetTitleFont = false;

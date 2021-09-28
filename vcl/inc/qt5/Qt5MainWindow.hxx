@@ -24,17 +24,17 @@
 
 #include "Qt5Frame.hxx"
 
-class Qt5MainWindow final : public QMainWindow
+class QtMainWindow final : public QMainWindow
 {
     Q_OBJECT
 
-    Qt5Frame& m_rFrame;
+    QtFrame& m_rFrame;
 
     virtual void closeEvent(QCloseEvent* pEvent) override;
     void moveEvent(QMoveEvent*) override;
 
 public:
-    Qt5MainWindow(Qt5Frame& rFrame, Qt::WindowFlags f = Qt::WindowFlags());
+    QtMainWindow(QtFrame& rFrame, Qt::WindowFlags f = Qt::WindowFlags());
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,7 +25,7 @@
 
 #include <QtGui/QGuiApplication>
 
-Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
+QtObject::QtObject(QtFrame* pParent, bool bShow)
     : m_pParent(pParent)
     , m_pQWidget(nullptr)
     , m_pQWindow(nullptr)
@@ -33,7 +33,7 @@ Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
     if (!m_pParent || !pParent->GetQWidget())
         return;
 
-    m_pQWindow = new Qt5ObjectWindow(*this);
+    m_pQWindow = new QtObjectWindow(*this);
     m_pQWidget = QWidget::createWindowContainer(m_pQWindow, pParent->GetQWidget());
     m_pQWidget->setAttribute(Qt::WA_NoSystemBackground);
     connect(m_pQWidget, &QObject::destroyed, this, [this]() { m_pQWidget = nullptr; });
@@ -65,7 +65,7 @@ Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
     }
 }
 
-Qt5Object::~Qt5Object()
+QtObject::~QtObject()
 {
     if (m_pQWidget)
     {
@@ -74,7 +74,7 @@ Qt5Object::~Qt5Object()
     }
 }
 
-void Qt5Object::ResetClipRegion()
+void QtObject::ResetClipRegion()
 {
     if (m_pQWidget)
         m_pRegion = QRegion(m_pQWidget->geometry());
@@ -82,21 +82,21 @@ void Qt5Object::ResetClipRegion()
         m_pRegion = QRegion();
 }
 
-void Qt5Object::BeginSetClipRegion(sal_uInt32) { m_pRegion = QRegion(); }
+void QtObject::BeginSetClipRegion(sal_uInt32) { m_pRegion = QRegion(); }
 
-void Qt5Object::UnionClipRegion(tools::Long nX, tools::Long nY, tools::Long nWidth,
-                                tools::Long nHeight)
+void QtObject::UnionClipRegion(tools::Long nX, tools::Long nY, tools::Long nWidth,
+                               tools::Long nHeight)
 {
     m_pRegion += QRect(nX, nY, nWidth, nHeight);
 }
 
-void Qt5Object::EndSetClipRegion()
+void QtObject::EndSetClipRegion()
 {
     if (m_pQWidget)
         m_pRegion = m_pRegion.intersected(m_pQWidget->geometry());
 }
 
-void Qt5Object::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight)
+void QtObject::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight)
 {
     if (m_pQWidget)
     {
@@ -105,52 +105,52 @@ void Qt5Object::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, t
     }
 }
 
-void Qt5Object::Show(bool bVisible)
+void QtObject::Show(bool bVisible)
 {
     if (m_pQWidget)
         m_pQWidget->setVisible(bVisible);
 }
 
-void Qt5Object::SetForwardKey(bool /*bEnable*/) {}
+void QtObject::SetForwardKey(bool /*bEnable*/) {}
 
-Qt5ObjectWindow::Qt5ObjectWindow(Qt5Object& rParent)
+QtObjectWindow::QtObjectWindow(QtObject& rParent)
     : m_rParent(rParent)
 {
     assert(m_rParent.frame() && m_rParent.frame()->GetQWidget());
 }
 
-void Qt5ObjectWindow::focusInEvent(QFocusEvent* pEvent)
+void QtObjectWindow::focusInEvent(QFocusEvent* pEvent)
 {
     m_rParent.CallCallback(SalObjEvent::GetFocus);
     QWindow::focusInEvent(pEvent);
 }
 
-void Qt5ObjectWindow::focusOutEvent(QFocusEvent* pEvent)
+void QtObjectWindow::focusOutEvent(QFocusEvent* pEvent)
 {
     m_rParent.CallCallback(SalObjEvent::LoseFocus);
     QWindow::focusOutEvent(pEvent);
 }
 
-void Qt5ObjectWindow::mousePressEvent(QMouseEvent* pEvent)
+void QtObjectWindow::mousePressEvent(QMouseEvent* pEvent)
 {
     m_rParent.CallCallback(SalObjEvent::ToTop);
-    Qt5Widget::handleMousePressEvent(*m_rParent.frame(), pEvent);
+    QtWidget::handleMousePressEvent(*m_rParent.frame(), pEvent);
 }
 
-void Qt5ObjectWindow::mouseReleaseEvent(QMouseEvent* pEvent)
+void QtObjectWindow::mouseReleaseEvent(QMouseEvent* pEvent)
 {
-    Qt5Widget::handleMouseReleaseEvent(*m_rParent.frame(), pEvent);
+    QtWidget::handleMouseReleaseEvent(*m_rParent.frame(), pEvent);
 }
 
-bool Qt5ObjectWindow::event(QEvent* pEvent)
+bool QtObjectWindow::event(QEvent* pEvent)
 {
-    return Qt5Widget::handleEvent(*m_rParent.frame(), *m_rParent.widget(), pEvent)
+    return QtWidget::handleEvent(*m_rParent.frame(), *m_rParent.widget(), pEvent)
            || QWindow::event(pEvent);
 }
 
-void Qt5ObjectWindow::keyReleaseEvent(QKeyEvent* pEvent)
+void QtObjectWindow::keyReleaseEvent(QKeyEvent* pEvent)
 {
-    if (!Qt5Widget::handleKeyReleaseEvent(*m_rParent.frame(), *m_rParent.widget(), pEvent))
+    if (!QtWidget::handleKeyReleaseEvent(*m_rParent.frame(), *m_rParent.widget(), pEvent))
         QWindow::keyReleaseEvent(pEvent);
 }
 

@@ -19,7 +19,7 @@
 
 #include <Qt5Printer.hxx>
 
-Qt5Printer::Qt5Printer(SalInfoPrinter* pInfoPrinter)
+QtPrinter::QtPrinter(SalInfoPrinter* pInfoPrinter)
     : PspSalPrinter(pInfoPrinter)
 {
 }

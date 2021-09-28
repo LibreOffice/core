@@ -23,7 +23,7 @@
 #include <cassert>
 #include <map>
 
-Qt5Clipboard::Qt5Clipboard(const OUString& aModeString, const QClipboard::Mode aMode)
+QtClipboard::QtClipboard(const OUString& aModeString, const QClipboard::Mode aMode)
     : cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
                                     css::datatransfer::clipboard::XFlushableClipboard,
                                     XServiceInfo>(m_aMutex)
@@ -34,15 +34,15 @@ Qt5Clipboard::Qt5Clipboard(const OUString& aModeString, const QClipboard::Mode a
 {
     assert(isSupported(m_aClipboardMode));
     // DirectConnection guarantees the changed slot runs in the same thread as the QClipboard
-    connect(QApplication::clipboard(), &QClipboard::changed, this, &Qt5Clipboard::handleChanged,
+    connect(QApplication::clipboard(), &QClipboard::changed, this, &QtClipboard::handleChanged,
             Qt::DirectConnection);
 
     // explicitly queue an event, so we can eventually ignore it
-    connect(this, &Qt5Clipboard::clearClipboard, this, &Qt5Clipboard::handleClearClipboard,
+    connect(this, &QtClipboard::clearClipboard, this, &QtClipboard::handleClearClipboard,
             Qt::QueuedConnection);
 }
 
-css::uno::Reference<css::uno::XInterface> Qt5Clipboard::create(const OUString& aModeString)
+css::uno::Reference<css::uno::XInterface> QtClipboard::create(const OUString& aModeString)
 {
     static const std::map<OUString, QClipboard::Mode> aNameToClipboardMap
         = { { "CLIPBOARD", QClipboard::Clipboard }, { "PRIMARY", QClipboard::Selection } };
@@ -51,26 +51,26 @@ css::uno::Reference<css::uno::XInterface> Qt5Clipboard::create(const OUString& a
 
     auto iter = aNameToClipboardMap.find(aModeString);
     if (iter != aNameToClipboardMap.end() && isSupported(iter->second))
-        return static_cast<cppu::OWeakObject*>(new Qt5Clipboard(aModeString, iter->second));
+        return static_cast<cppu::OWeakObject*>(new QtClipboard(aModeString, iter->second));
     SAL_WARN("vcl.qt5", "Ignoring unrecognized clipboard type: '" << aModeString << "'");
     return css::uno::Reference<css::uno::XInterface>();
 }
 
-void Qt5Clipboard::flushClipboard()
+void QtClipboard::flushClipboard()
 {
-    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
+    auto* pSalInst(static_cast<QtInstance*>(GetSalData()->m_pInstance));
     SolarMutexGuard g;
     pSalInst->RunInMainThread([this]() {
         if (!isOwner(m_aClipboardMode))
             return;
 
         QClipboard* pClipboard = QApplication::clipboard();
-        const Qt5MimeData* pQt5MimeData
-            = dynamic_cast<const Qt5MimeData*>(pClipboard->mimeData(m_aClipboardMode));
-        assert(pQt5MimeData);
+        const QtMimeData* pQtMimeData
+            = dynamic_cast<const QtMimeData*>(pClipboard->mimeData(m_aClipboardMode));
+        assert(pQtMimeData);
 
         QMimeData* pMimeCopy = nullptr;
-        if (pQt5MimeData && pQt5MimeData->deepCopy(&pMimeCopy))
+        if (pQtMimeData && pQtMimeData->deepCopy(&pMimeCopy))
         {
             m_bOwnClipboardChange = true;
             pClipboard->setMimeData(pMimeCopy, m_aClipboardMode);
@@ -79,7 +79,7 @@ void Qt5Clipboard::flushClipboard()
     });
 }
 
-css::uno::Reference<css::datatransfer::XTransferable> Qt5Clipboard::getContents()
+css::uno::Reference<css::datatransfer::XTransferable> QtClipboard::getContents()
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -89,28 +89,28 @@ css::uno::Reference<css::datatransfer::XTransferable> Qt5Clipboard::getContents(
     if (isOwner(m_aClipboardMode) && m_aContents.is())
         return m_aContents;
 
-    // check if we can still use the shared Qt5ClipboardTransferable
+    // check if we can still use the shared QtClipboardTransferable
     const QMimeData* pMimeData = QApplication::clipboard()->mimeData(m_aClipboardMode);
     if (m_aContents.is())
     {
-        const auto* pTrans = dynamic_cast<Qt5ClipboardTransferable*>(m_aContents.get());
+        const auto* pTrans = dynamic_cast<QtClipboardTransferable*>(m_aContents.get());
         assert(pTrans);
         if (pTrans && pTrans->mimeData() == pMimeData)
             return m_aContents;
     }
 
-    m_aContents = new Qt5ClipboardTransferable(m_aClipboardMode, pMimeData);
+    m_aContents = new QtClipboardTransferable(m_aClipboardMode, pMimeData);
     return m_aContents;
 }
 
-void Qt5Clipboard::handleClearClipboard()
+void QtClipboard::handleClearClipboard()
 {
     if (!m_bDoClear)
         return;
     QApplication::clipboard()->clear(m_aClipboardMode);
 }
 
-void Qt5Clipboard::setContents(
+void QtClipboard::setContents(
     const css::uno::Reference<css::datatransfer::XTransferable>& xTrans,
     const css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner>& xClipboardOwner)
 {
@@ -126,7 +126,7 @@ void Qt5Clipboard::setContents(
     if (!m_bDoClear)
     {
         m_bOwnClipboardChange = true;
-        QApplication::clipboard()->setMimeData(new Qt5MimeData(m_aContents), m_aClipboardMode);
+        QApplication::clipboard()->setMimeData(new QtMimeData(m_aContents), m_aClipboardMode);
         m_bOwnClipboardChange = false;
     }
     else
@@ -143,7 +143,7 @@ void Qt5Clipboard::setContents(
         xOldOwner->lostOwnership(this, xOldContents);
 }
 
-void Qt5Clipboard::handleChanged(QClipboard::Mode aMode)
+void QtClipboard::handleChanged(QClipboard::Mode aMode)
 {
     if (aMode != m_aClipboardMode)
         return;
@@ -153,10 +153,10 @@ void Qt5Clipboard::handleChanged(QClipboard::Mode aMode)
     // QtWayland will send a second change notification (seemingly without any
     // trigger). And any C'n'P operation in the Qt file picker emits a signal,
     // with LO still holding the clipboard ownership, but internally having lost
-    // it. So ignore any signal, which still delivers the internal Qt5MimeData
+    // it. So ignore any signal, which still delivers the internal QtMimeData
     // as the clipboard content and is no "advertised" change.
     if (!m_bOwnClipboardChange && isOwner(aMode)
-        && dynamic_cast<const Qt5MimeData*>(QApplication::clipboard()->mimeData(aMode)))
+        && dynamic_cast<const QtMimeData*>(QApplication::clipboard()->mimeData(aMode)))
         return;
 
     css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> xOldOwner(m_aOwner);
@@ -181,30 +181,30 @@ void Qt5Clipboard::handleChanged(QClipboard::Mode aMode)
         listener->changedContents(aEv);
 }
 
-OUString Qt5Clipboard::getImplementationName() { return "com.sun.star.datatransfer.Qt5Clipboard"; }
+OUString QtClipboard::getImplementationName() { return "com.sun.star.datatransfer.QtClipboard"; }
 
-css::uno::Sequence<OUString> Qt5Clipboard::getSupportedServiceNames()
+css::uno::Sequence<OUString> QtClipboard::getSupportedServiceNames()
 {
     return { "com.sun.star.datatransfer.clipboard.SystemClipboard" };
 }
 
-sal_Bool Qt5Clipboard::supportsService(const OUString& ServiceName)
+sal_Bool QtClipboard::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-OUString Qt5Clipboard::getName() { return m_aClipboardName; }
+OUString QtClipboard::getName() { return m_aClipboardName; }
 
-sal_Int8 Qt5Clipboard::getRenderingCapabilities() { return 0; }
+sal_Int8 QtClipboard::getRenderingCapabilities() { return 0; }
 
-void Qt5Clipboard::addClipboardListener(
+void QtClipboard::addClipboardListener(
     const css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)
 {
     osl::MutexGuard aGuard(m_aMutex);
     m_aListeners.push_back(listener);
 }
 
-void Qt5Clipboard::removeClipboardListener(
+void QtClipboard::removeClipboardListener(
     const css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)
 {
     osl::MutexGuard aGuard(m_aMutex);
@@ -212,7 +212,7 @@ void Qt5Clipboard::removeClipboardListener(
                        m_aListeners.end());
 }
 
-bool Qt5Clipboard::isSupported(const QClipboard::Mode aMode)
+bool QtClipboard::isSupported(const QClipboard::Mode aMode)
 {
     const QClipboard* pClipboard = QApplication::clipboard();
     switch (aMode)
@@ -229,7 +229,7 @@ bool Qt5Clipboard::isSupported(const QClipboard::Mode aMode)
     return false;
 }
 
-bool Qt5Clipboard::isOwner(const QClipboard::Mode aMode)
+bool QtClipboard::isOwner(const QClipboard::Mode aMode)
 {
     if (!isSupported(aMode))
         return false;

@@ -17,13 +17,13 @@
 
 #include <cppuhelper/implbase.hxx>
 
-class Qt5AccessibleEventListener final
+class QtAccessibleEventListener final
     : public cppu::WeakImplHelper<css::accessibility::XAccessibleEventListener>
 {
 public:
-    Qt5AccessibleEventListener(
+    QtAccessibleEventListener(
         const css::uno::Reference<css::accessibility::XAccessible> xAccessible,
-        Qt5AccessibleWidget* pAccessibleWidget);
+        QtAccessibleWidget* pAccessibleWidget);
 
     virtual void SAL_CALL
     notifyEvent(const css::accessibility::AccessibleEventObject& aEvent) override;
@@ -32,7 +32,7 @@ public:
 
 private:
     css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
-    Qt5AccessibleWidget* m_pAccessibleWidget;
+    QtAccessibleWidget* m_pAccessibleWidget;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

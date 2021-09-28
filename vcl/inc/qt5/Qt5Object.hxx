@@ -26,24 +26,24 @@
 #include <QtGui/QRegion>
 #include <QtGui/QWindow>
 
-class Qt5Frame;
+class QtFrame;
 class QWidget;
 
-class Qt5Object final : public QObject, public SalObject
+class QtObject final : public QObject, public SalObject
 {
     Q_OBJECT
 
     SystemEnvData m_aSystemData;
-    Qt5Frame* m_pParent;
+    QtFrame* m_pParent;
     QWidget* m_pQWidget; // main widget, container
     QWindow* m_pQWindow; // contained window, used for opengl rendering
     QRegion m_pRegion;
 
 public:
-    Qt5Object(Qt5Frame* pParent, bool bShow);
-    ~Qt5Object() override;
+    QtObject(QtFrame* pParent, bool bShow);
+    ~QtObject() override;
 
-    Qt5Frame* frame() const { return m_pParent; }
+    QtFrame* frame() const { return m_pParent; }
     QWidget* widget() const { return m_pQWidget; }
     QWindow* windowHandle() const { return m_pQWindow; }
 
@@ -62,20 +62,20 @@ public:
     virtual const SystemEnvData* GetSystemData() const override { return &m_aSystemData; }
 };
 
-class Qt5ObjectWindow final : public QWindow
+class QtObjectWindow final : public QWindow
 {
-    Qt5Object& m_rParent;
+    QtObject& m_rParent;
 
     bool event(QEvent*) override;
     void focusInEvent(QFocusEvent*) override;
     void focusOutEvent(QFocusEvent*) override;
     void mousePressEvent(QMouseEvent*) override;
     void mouseReleaseEvent(QMouseEvent*) override;
-    // keyPressEvent(QKeyEvent*) is handled via event(QEvent*); see comment in Qt5Widget::event
+    // keyPressEvent(QKeyEvent*) is handled via event(QEvent*); see comment in QtWidget::event
     void keyReleaseEvent(QKeyEvent*) override;
 
 public:
-    explicit Qt5ObjectWindow(Qt5Object& rParent);
+    explicit QtObjectWindow(QtObject& rParent);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

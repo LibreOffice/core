@@ -24,17 +24,17 @@
 
 #include "Qt5GraphicsBase.hxx"
 
-class Qt5Frame;
+class QtFrame;
 
-class VCLPLUG_QT5_PUBLIC Qt5SvpGraphics final : public SvpSalGraphics, public Qt5GraphicsBase
+class VCLPLUG_QT5_PUBLIC QtSvpGraphics final : public SvpSalGraphics, public QtGraphicsBase
 {
-    Qt5Frame* const m_pFrame;
+    QtFrame* const m_pFrame;
 
     void handleDamage(const tools::Rectangle&) override;
 
 public:
-    Qt5SvpGraphics(Qt5Frame* pFrame);
-    ~Qt5SvpGraphics() override;
+    QtSvpGraphics(QtFrame* pFrame);
+    ~QtSvpGraphics() override;
 
     void updateQWidget() const;
 

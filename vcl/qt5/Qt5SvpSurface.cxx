@@ -33,14 +33,14 @@ Size get_surface_size(cairo_surface_t* surface)
 
 namespace cairo
 {
-Qt5SvpSurface::Qt5SvpSurface(const CairoSurfaceSharedPtr& pSurface)
+QtSvpSurface::QtSvpSurface(const CairoSurfaceSharedPtr& pSurface)
     : m_pGraphics(nullptr)
     , m_pCairoContext(nullptr)
     , m_pSurface(pSurface)
 {
 }
 
-Qt5SvpSurface::Qt5SvpSurface(const Qt5SvpGraphics* pGraphics, int x, int y, int width, int height)
+QtSvpSurface::QtSvpSurface(const QtSvpGraphics* pGraphics, int x, int y, int width, int height)
     : m_pGraphics(pGraphics)
     , m_pCairoContext(pGraphics->getCairoContext(false))
 {
@@ -49,33 +49,33 @@ Qt5SvpSurface::Qt5SvpSurface(const Qt5SvpGraphics* pGraphics, int x, int y, int 
                      &cairo_surface_destroy);
 }
 
-Qt5SvpSurface::~Qt5SvpSurface()
+QtSvpSurface::~QtSvpSurface()
 {
     if (m_pCairoContext)
         cairo_destroy(m_pCairoContext);
 }
 
-CairoSharedPtr Qt5SvpSurface::getCairo() const
+CairoSharedPtr QtSvpSurface::getCairo() const
 {
     return CairoSharedPtr(cairo_create(m_pSurface.get()), &cairo_destroy);
 }
 
-SurfaceSharedPtr Qt5SvpSurface::getSimilar(int cairo_content_type, int width, int height) const
+SurfaceSharedPtr QtSvpSurface::getSimilar(int cairo_content_type, int width, int height) const
 {
-    return std::make_shared<Qt5SvpSurface>(CairoSurfaceSharedPtr(
+    return std::make_shared<QtSvpSurface>(CairoSurfaceSharedPtr(
         cairo_surface_create_similar(
             m_pSurface.get(), static_cast<cairo_content_t>(cairo_content_type), width, height),
         &cairo_surface_destroy));
 }
 
-void Qt5SvpSurface::flush() const
+void QtSvpSurface::flush() const
 {
     cairo_surface_flush(m_pSurface.get());
     if (m_pGraphics)
         m_pGraphics->updateQWidget();
 }
 
-VclPtr<VirtualDevice> Qt5SvpSurface::createVirtualDevice() const
+VclPtr<VirtualDevice> QtSvpSurface::createVirtualDevice() const
 {
     SystemGraphicsData aSystemGraphicsData;
 

@@ -39,9 +39,9 @@
 #include <QtGui/QRawFont>
 #include <QtCore/QStringList>
 
-void Qt5Graphics::SetTextColor(Color nColor) { m_aTextColor = nColor; }
+void QtGraphics::SetTextColor(Color nColor) { m_aTextColor = nColor; }
 
-void Qt5Graphics::SetFont(LogicalFontInstance* pReqFont, int nFallbackLevel)
+void QtGraphics::SetFont(LogicalFontInstance* pReqFont, int nFallbackLevel)
 {
     // release the text styles
     for (int i = nFallbackLevel; i < MAX_FALLBACK; ++i)
@@ -54,13 +54,13 @@ void Qt5Graphics::SetFont(LogicalFontInstance* pReqFont, int nFallbackLevel)
     if (!pReqFont)
         return;
 
-    m_pTextStyle[nFallbackLevel] = static_cast<Qt5Font*>(pReqFont);
+    m_pTextStyle[nFallbackLevel] = static_cast<QtFont*>(pReqFont);
 }
 
-void Qt5Graphics::GetFontMetric(ImplFontMetricDataRef& rFMD, int nFallbackLevel)
+void QtGraphics::GetFontMetric(ImplFontMetricDataRef& rFMD, int nFallbackLevel)
 {
     QRawFont aRawFont(QRawFont::fromFont(*m_pTextStyle[nFallbackLevel]));
-    Qt5FontFace::fillAttributesFromQFont(*m_pTextStyle[nFallbackLevel], *rFMD);
+    QtFontFace::fillAttributesFromQFont(*m_pTextStyle[nFallbackLevel], *rFMD);
 
     rFMD->ImplCalcLineSpacing(m_pTextStyle[nFallbackLevel].get());
 
@@ -70,21 +70,21 @@ void Qt5Graphics::GetFontMetric(ImplFontMetricDataRef& rFMD, int nFallbackLevel)
     rFMD->SetMinKashida(m_pTextStyle[nFallbackLevel]->GetKashidaWidth());
 }
 
-FontCharMapRef Qt5Graphics::GetFontCharMap() const
+FontCharMapRef QtGraphics::GetFontCharMap() const
 {
     if (!m_pTextStyle[0])
         return FontCharMapRef(new FontCharMap());
     return m_pTextStyle[0]->GetFontFace()->GetFontCharMap();
 }
 
-bool Qt5Graphics::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) const
+bool QtGraphics::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) const
 {
     if (!m_pTextStyle[0])
         return false;
     return m_pTextStyle[0]->GetFontFace()->GetFontCapabilities(rFontCapabilities);
 }
 
-void Qt5Graphics::GetDevFontList(PhysicalFontCollection* pPFC)
+void QtGraphics::GetDevFontList(PhysicalFontCollection* pPFC)
 {
     static const bool bUseFontconfig = (nullptr == getenv("SAL_VCL_QT5_NO_FONTCONFIG"));
 
@@ -119,32 +119,32 @@ void Qt5Graphics::GetDevFontList(PhysicalFontCollection* pPFC)
 
     for (auto& family : aFDB.families())
         for (auto& style : aFDB.styles(family))
-            pPFC->Add(Qt5FontFace::fromQFontDatabase(family, style));
+            pPFC->Add(QtFontFace::fromQFontDatabase(family, style));
 }
 
-void Qt5Graphics::ClearDevFontCache() {}
+void QtGraphics::ClearDevFontCache() {}
 
-bool Qt5Graphics::AddTempDevFont(PhysicalFontCollection*, const OUString& /*rFileURL*/,
-                                 const OUString& /*rFontName*/)
+bool QtGraphics::AddTempDevFont(PhysicalFontCollection*, const OUString& /*rFileURL*/,
+                                const OUString& /*rFontName*/)
 {
     return false;
 }
 
 namespace
 {
-class Qt5TrueTypeFont : public vcl::AbstractTrueTypeFont
+class QtTrueTypeFont : public vcl::AbstractTrueTypeFont
 {
     const QRawFont& m_aRawFont;
     mutable QByteArray m_aFontTable[vcl::NUM_TAGS];
 
 public:
-    Qt5TrueTypeFont(const Qt5FontFace& aFontFace, const QRawFont& aRawFont);
+    QtTrueTypeFont(const QtFontFace& aFontFace, const QRawFont& aRawFont);
 
     bool hasTable(sal_uInt32 ord) const override;
     const sal_uInt8* table(sal_uInt32 ord, sal_uInt32& size) const override;
 };
 
-Qt5TrueTypeFont::Qt5TrueTypeFont(const Qt5FontFace& aFontFace, const QRawFont& aRawFont)
+QtTrueTypeFont::QtTrueTypeFont(const QtFontFace& aFontFace, const QRawFont& aRawFont)
     : vcl::AbstractTrueTypeFont(nullptr, aFontFace.GetFontCharMap())
     , m_aRawFont(aRawFont)
 {
@@ -194,7 +194,7 @@ const char* vclFontTableAsChar(sal_uInt32 ord)
     }
 }
 
-bool Qt5TrueTypeFont::hasTable(sal_uInt32 ord) const
+bool QtTrueTypeFont::hasTable(sal_uInt32 ord) const
 {
     const char* table_char = vclFontTableAsChar(ord);
     if (!table_char)
@@ -204,7 +204,7 @@ bool Qt5TrueTypeFont::hasTable(sal_uInt32 ord) const
     return !m_aFontTable[ord].isEmpty();
 }
 
-const sal_uInt8* Qt5TrueTypeFont::table(sal_uInt32 ord, sal_uInt32& size) const
+const sal_uInt8* QtTrueTypeFont::table(sal_uInt32 ord, sal_uInt32& size) const
 {
     const char* table_char = vclFontTableAsChar(ord);
     if (!table_char)
@@ -216,17 +216,17 @@ const sal_uInt8* Qt5TrueTypeFont::table(sal_uInt32 ord, sal_uInt32& size) const
 }
 }
 
-bool Qt5Graphics::CreateFontSubset(const OUString& rToFile, const PhysicalFontFace* pFontFace,
-                                   const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
-                                   sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo)
+bool QtGraphics::CreateFontSubset(const OUString& rToFile, const PhysicalFontFace* pFontFace,
+                                  const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
+                                  sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo)
 {
     OUString aSysPath;
     if (osl_File_E_None != osl_getSystemPathFromFileURL(rToFile.pData, &aSysPath.pData))
         return false;
 
     // get the raw-bytes from the font to be subset
-    const Qt5FontFace* pQt5FontFace = static_cast<const Qt5FontFace*>(pFontFace);
-    const QFont aFont = pQt5FontFace->CreateFont();
+    const QtFontFace* pQtFontFace = static_cast<const QtFontFace*>(pFontFace);
+    const QFont aFont = pQtFontFace->CreateFont();
     const QRawFont aRawFont(QRawFont::fromFont(aFont));
     const OString aToFile(OUStringToOString(aSysPath, osl_getThreadTextEncoding()));
 
@@ -244,7 +244,7 @@ bool Qt5Graphics::CreateFontSubset(const OUString& rToFile, const PhysicalFontFa
     rInfo.m_nAscent = aRawFont.ascent();
     rInfo.m_nDescent = aRawFont.descent();
 
-    Qt5TrueTypeFont aTTF(*pQt5FontFace, aRawFont);
+    QtTrueTypeFont aTTF(*pQtFontFace, aRawFont);
     int nXmin, nYmin, nXmax, nYmax;
     sal_uInt16 nMacStyleFlags;
     if (GetTTGlobalFontHeadInfo(&aTTF, nXmin, nYmin, nXmax, nYmax, nMacStyleFlags))
@@ -254,28 +254,28 @@ bool Qt5Graphics::CreateFontSubset(const OUString& rToFile, const PhysicalFontFa
                                             pGlyphIds, pEncoding, pGlyphWidths, nGlyphCount);
 }
 
-const void* Qt5Graphics::GetEmbedFontData(const PhysicalFontFace*, tools::Long* /*pDataLen*/)
+const void* QtGraphics::GetEmbedFontData(const PhysicalFontFace*, tools::Long* /*pDataLen*/)
 {
     return nullptr;
 }
 
-void Qt5Graphics::FreeEmbedFontData(const void* /*pData*/, tools::Long /*nDataLen*/) {}
+void QtGraphics::FreeEmbedFontData(const void* /*pData*/, tools::Long /*nDataLen*/) {}
 
-void Qt5Graphics::GetGlyphWidths(const PhysicalFontFace* pFontFace, bool bVertical,
-                                 std::vector<sal_Int32>& rWidths, Ucs2UIntMap& rUnicodeEnc)
+void QtGraphics::GetGlyphWidths(const PhysicalFontFace* pFontFace, bool bVertical,
+                                std::vector<sal_Int32>& rWidths, Ucs2UIntMap& rUnicodeEnc)
 {
-    const Qt5FontFace* pQt5FontFace = static_cast<const Qt5FontFace*>(pFontFace);
-    const QRawFont aRawFont(QRawFont::fromFont(pQt5FontFace->CreateFont()));
-    Qt5TrueTypeFont aTTF(*pQt5FontFace, aRawFont);
+    const QtFontFace* pQtFontFace = static_cast<const QtFontFace*>(pFontFace);
+    const QRawFont aRawFont(QRawFont::fromFont(pQtFontFace->CreateFont()));
+    QtTrueTypeFont aTTF(*pQtFontFace, aRawFont);
     SalGraphics::GetGlyphWidths(aTTF, *pFontFace, bVertical, rWidths, rUnicodeEnc);
 }
 
 namespace
 {
-class Qt5CommonSalLayout : public GenericSalLayout
+class QtCommonSalLayout : public GenericSalLayout
 {
 public:
-    Qt5CommonSalLayout(LogicalFontInstance& rLFI)
+    QtCommonSalLayout(LogicalFontInstance& rLFI)
         : GenericSalLayout(rLFI)
     {
     }
@@ -284,17 +284,17 @@ public:
 };
 }
 
-std::unique_ptr<GenericSalLayout> Qt5Graphics::GetTextLayout(int nFallbackLevel)
+std::unique_ptr<GenericSalLayout> QtGraphics::GetTextLayout(int nFallbackLevel)
 {
     assert(m_pTextStyle[nFallbackLevel]);
     if (!m_pTextStyle[nFallbackLevel])
         return nullptr;
-    return std::make_unique<Qt5CommonSalLayout>(*m_pTextStyle[nFallbackLevel]);
+    return std::make_unique<QtCommonSalLayout>(*m_pTextStyle[nFallbackLevel]);
 }
 
-void Qt5Graphics::DrawTextLayout(const GenericSalLayout& rLayout)
+void QtGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {
-    const Qt5Font* pFont = static_cast<const Qt5Font*>(&rLayout.GetFont());
+    const QtFont* pFont = static_cast<const QtFont*>(&rLayout.GetFont());
     assert(pFont);
     QRawFont aRawFont(QRawFont::fromFont(*pFont));
 
@@ -303,11 +303,11 @@ void Qt5Graphics::DrawTextLayout(const GenericSalLayout& rLayout)
 
     // prevent glyph rotation inside the SalLayout
     // probably better to add a parameter to GetNextGlyphs?
-    Qt5CommonSalLayout* pQt5Layout
-        = static_cast<Qt5CommonSalLayout*>(const_cast<GenericSalLayout*>(&rLayout));
+    QtCommonSalLayout* pQtLayout
+        = static_cast<QtCommonSalLayout*>(const_cast<GenericSalLayout*>(&rLayout));
     Degree10 nOrientation = rLayout.GetOrientation();
     if (nOrientation)
-        pQt5Layout->SetOrientation(0_deg10);
+        pQtLayout->SetOrientation(0_deg10);
 
     Point aPos;
     const GlyphItem* pGlyph;
@@ -323,14 +323,14 @@ void Qt5Graphics::DrawTextLayout(const GenericSalLayout& rLayout)
         return;
 
     if (nOrientation)
-        pQt5Layout->SetOrientation(nOrientation);
+        pQtLayout->SetOrientation(nOrientation);
 
     QGlyphRun aGlyphRun;
     aGlyphRun.setPositions(positions);
     aGlyphRun.setGlyphIndexes(glyphIndexes);
     aGlyphRun.setRawFont(aRawFont);
 
-    Qt5Painter aPainter(*m_pBackend);
+    QtPainter aPainter(*m_pBackend);
     QColor aColor = toQColor(m_aTextColor);
     aPainter.setPen(aColor);
 
