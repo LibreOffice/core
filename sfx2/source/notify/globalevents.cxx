@@ -243,11 +243,17 @@ void SfxGlobalEvents_Impl::dispose() {
     std::multiset<css::uno::Reference<css::lang::XEventListener>> listeners;
     {
         std::unique_lock g(m_aLock);
-        m_xEvents.clear();
+        if (m_disposed)
+            return;
+        m_disposed = true;
+        auto tmp = std::move(m_xEvents);
         m_xJobExecutorListener.clear();
         m_disposeListeners.swap(listeners);
         m_lModels.clear();
-        m_disposed = true;
+        g.unlock();
+        // clear events outside lock because it will trigger a call back into us
+        tmp.clear();
+        g.lock();
         m_aLegacyListeners.disposeAndClear(g, {static_cast<OWeakObject *>(this)});
         g.lock(); // because disposeAndClear is going to want to unlock()
         m_aDocumentListeners.disposeAndClear(g, {static_cast<OWeakObject *>(this)});
