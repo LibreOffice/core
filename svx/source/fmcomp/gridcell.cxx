@@ -1681,12 +1681,107 @@ void DbCheckBox::PaintFieldToCell(OutputDevice& rDev, const tools::Rectangle& rR
     CheckBoxControl* pControl = static_cast<CheckBoxControl*>(m_pPainter.get());
     lcl_setCheckBoxState( _rxField, pControl );
 
-    Size aBoxSize = pControl->GetBox().get_preferred_size();
+    Size aBoxSize;
+
+    switch (rDev.GetOutDevType())
+    {
+        case OUTDEV_WINDOW:
+        case OUTDEV_VIRDEV:
+            aBoxSize = pControl->GetBox().get_preferred_size();
+            break;
+        case OUTDEV_PRINTER:
+        case OUTDEV_PDF:
+        {
+            auto nSize = std::min(rRect.GetWidth(), rRect.GetHeight());
+            aBoxSize = Size(nSize, nSize);
+            break;
+        }
+    }
+
     tools::Rectangle aRect(Point(rRect.Left() + ((rRect.GetWidth() - aBoxSize.Width()) / 2),
                                  rRect.Top() + ((rRect.GetHeight() - aBoxSize.Height()) / 2)),
                            aBoxSize);
 
     DbCellControl::PaintFieldToCell(rDev, aRect, _rxField, xFormatter);
+}
+
+void DbCheckBox::PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect)
+{
+    switch (rDev.GetOutDevType())
+    {
+        case OUTDEV_WINDOW:
+        case OUTDEV_VIRDEV:
+            DbCellControl::PaintCell(rDev, rRect);
+            break;
+        case OUTDEV_PRINTER:
+        case OUTDEV_PDF:
+        {
+            TriState eState = static_cast<CheckBoxControl*>(m_pWindow.get())->GetState();
+
+            MapMode aResMapMode(MapUnit::Map100thMM);
+            Size aBrd1Size = rDev.LogicToPixel(Size(20, 20), aResMapMode);
+            Size aBrd2Size = rDev.LogicToPixel(Size(30, 30), aResMapMode);
+            int nCheckWidth = rDev.LogicToPixel(Size(20, 20), aResMapMode).Width();
+            tools::Rectangle aStateRect(rRect);
+
+            rDev.Push();
+            rDev.SetMapMode();
+
+            rDev.SetLineColor();
+            rDev.SetFillColor(COL_BLACK);
+            rDev.DrawRect(aStateRect);
+            aStateRect.AdjustLeft(aBrd1Size.Width());
+            aStateRect.AdjustTop(aBrd1Size.Height());
+            aStateRect.AdjustRight(-aBrd1Size.Width());
+            aStateRect.AdjustBottom(-aBrd1Size.Height());
+            if (eState == TRISTATE_INDET)
+                rDev.SetFillColor(COL_LIGHTGRAY);
+            else
+                rDev.SetFillColor(COL_WHITE);
+            rDev.DrawRect(aStateRect);
+
+            if (eState == TRISTATE_TRUE)
+            {
+                aStateRect.AdjustLeft(aBrd2Size.Width());
+                aStateRect.AdjustTop(aBrd2Size.Height());
+                aStateRect.AdjustRight(-aBrd2Size.Width());
+                aStateRect.AdjustBottom(-aBrd2Size.Height());
+                Point aPos11(aStateRect.TopLeft());
+                Point aPos12(aStateRect.BottomRight());
+                Point aPos21(aStateRect.TopRight());
+                Point aPos22(aStateRect.BottomLeft());
+                Point aTempPos11(aPos11);
+                Point aTempPos12(aPos12);
+                Point aTempPos21(aPos21);
+                Point aTempPos22(aPos22);
+                rDev.SetLineColor(COL_BLACK);
+                int nDX = 0;
+                for (int i = 0; i < nCheckWidth; i++)
+                {
+                    if ( !(i % 2) )
+                    {
+                        aTempPos11.setX(aPos11.X() + nDX);
+                        aTempPos12.setX(aPos12.X() + nDX);
+                        aTempPos21.setX(aPos21.X() + nDX);
+                        aTempPos22.setX(aPos22.X() + nDX);
+                    }
+                    else
+                    {
+                        nDX++;
+                        aTempPos11.setX(aPos11.X() - nDX);
+                        aTempPos12.setX(aPos12.X() - nDX);
+                        aTempPos21.setX(aPos21.X() - nDX);
+                        aTempPos22.setX(aPos22.X() - nDX);
+                    }
+                    rDev.DrawLine(aTempPos11, aTempPos12);
+                    rDev.DrawLine(aTempPos21, aTempPos22);
+                }
+            }
+
+            rDev.Pop();
+            break;
+        }
+    }
 }
 
 void DbCheckBox::updateFromModel( Reference< XPropertySet > _rxModel )
