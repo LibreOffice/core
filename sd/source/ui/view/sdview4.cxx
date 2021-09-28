@@ -161,7 +161,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             EndUndo();
         }
 
-        SfxItemSet aSet(mpDocSh->GetPool(), svl::Items<XATTR_FILLSTYLE, XATTR_FILLBITMAP>);
+        SfxItemSetFixed<XATTR_FILLSTYLE, XATTR_FILLBITMAP> aSet(mpDocSh->GetPool());
 
         aSet.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
         aSet.Put(XFillBitmapItem(rGraphic));

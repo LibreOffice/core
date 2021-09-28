@@ -2105,7 +2105,7 @@ static SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourc
             }
 
             // Remove LRSpace item
-            SfxItemSet aSet(rModel.GetPool(), svl::Items<EE_PARA_LRSPACE, EE_PARA_LRSPACE> );
+            SfxItemSetFixed<EE_PARA_LRSPACE, EE_PARA_LRSPACE> aSet(rModel.GetPool());
 
             aSet.Put(pNewObj->GetMergedItemSet());
 
@@ -2142,7 +2142,7 @@ static SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourc
             pNewObj->SetEmptyPresObj(false);
 
             // reset left indent
-            SfxItemSet aSet(rModel.GetPool(), svl::Items<EE_PARA_LRSPACE, EE_PARA_LRSPACE> );
+            SfxItemSetFixed<EE_PARA_LRSPACE, EE_PARA_LRSPACE> aSet(rModel.GetPool());
 
             aSet.Put(pNewObj->GetMergedItemSet());
 

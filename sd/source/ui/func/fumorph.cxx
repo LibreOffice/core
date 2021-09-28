@@ -332,7 +332,7 @@ void FuMorph::ImpInsertPolygons(
     ::tools::Long                nEndLineWidth = 0;
     SdrPageView*        pPageView = mpView->GetSdrPageView();
     SfxItemPool &       rPool = pObj1->GetObjectItemPool();
-    SfxItemSet          aSet1( rPool,svl::Items<SDRATTR_START,SDRATTR_NOTPERSIST_FIRST-1,EE_ITEMS_START,EE_ITEMS_END> );
+    SfxItemSetFixed<SDRATTR_START,SDRATTR_NOTPERSIST_FIRST-1,EE_ITEMS_START,EE_ITEMS_END> aSet1( rPool );
     SfxItemSet          aSet2( aSet1 );
     bool                bLineColor = false;
     bool                bFillColor = false;

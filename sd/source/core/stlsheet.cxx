@@ -212,16 +212,14 @@ SfxItemSet& SdStyleSheet::GetItemSet()
         // we create the ItemSet 'on demand' if necessary
         if (!pSet)
         {
-            pSet = new SfxItemSet(
-                GetPool()->GetPool(),
-                svl::Items<
+            pSet = new SfxItemSetFixed<
                     XATTR_LINE_FIRST, XATTR_LINE_LAST,
                     XATTR_FILL_FIRST, XATTR_FILL_LAST,
                     SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,
                     SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_WORDWRAP,
                     SDRATTR_EDGE_FIRST, SDRATTR_MEASURE_LAST,
                     SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
-                    EE_PARA_START, EE_CHAR_END>);
+                    EE_PARA_START, EE_CHAR_END>(GetPool()->GetPool());
             bMySet = true;
         }
 
@@ -232,16 +230,15 @@ SfxItemSet& SdStyleSheet::GetItemSet()
     {
         if (!pSet)
         {
-            pSet = new SfxItemSet(
-                GetPool()->GetPool(),
-                svl::Items<
+            pSet = new SfxItemSetFixed<
                     XATTR_LINE_FIRST, XATTR_LINE_LAST,
                     XATTR_FILL_FIRST, XATTR_FILL_LAST,
                     SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,
                     SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_XMLATTRIBUTES,
                     SDRATTR_TEXT_WORDWRAP, SDRATTR_TEXT_WORDWRAP,
                     SDRATTR_TABLE_FIRST, SDRATTR_TABLE_LAST,
-                    EE_PARA_START, EE_CHAR_END>);
+                    EE_PARA_START, EE_CHAR_END>(GetPool()->GetPool());
+
             bMySet = true;
         }
 
@@ -263,16 +260,14 @@ SfxItemSet& SdStyleSheet::GetItemSet()
         {
             if (!pSet)
             {
-                pSet = new SfxItemSet(
-                    GetPool()->GetPool(),
-                    svl::Items<
+                pSet = new SfxItemSetFixed<
                         XATTR_LINE_FIRST, XATTR_LINE_LAST,
                         XATTR_FILL_FIRST, XATTR_FILL_LAST,
                         SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,
                         SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_WORDWRAP,
                         SDRATTR_EDGE_FIRST, SDRATTR_MEASURE_LAST,
                         SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
-                        EE_PARA_START, EE_CHAR_END>);
+                        EE_PARA_START, EE_CHAR_END>(GetPool()->GetPool());
                 bMySet = true;
             }
 
