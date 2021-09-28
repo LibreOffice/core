@@ -524,6 +524,7 @@ namespace svx
         ,m_bActiveControlIsRichText( false )
         ,m_pViewFrame( _pFrame )
         ,m_rBindings( _pFrame->GetBindings() )
+        ,m_aClipboardInvalidation("svx FmTextControlShell m_aClipboardInvalidation")
         ,m_bNeedClipboardInvalidation( true )
     {
         m_aClipboardInvalidation.SetInvokeHandler( LINK( this, FmTextControlShell, OnInvalidateClipboard ) );

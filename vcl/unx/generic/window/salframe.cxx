@@ -791,7 +791,8 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
 
 X11SalFrame::X11SalFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle,
                           SystemParentData const * pSystemParent ) :
-    m_nXScreen( 0 )
+    m_nXScreen( 0 ),
+    maAlwaysOnTopRaiseTimer( "vcl::X11SalFrame maAlwaysOnTopRaiseTimer" )
 {
     GenericUnixSalData *pData = GetGenericUnixSalData();
 
@@ -840,7 +841,6 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle,
 
     maAlwaysOnTopRaiseTimer.SetInvokeHandler( LINK( this, X11SalFrame, HandleAlwaysOnTopRaise ) );
     maAlwaysOnTopRaiseTimer.SetTimeout( 100 );
-    maAlwaysOnTopRaiseTimer.SetDebugName( "vcl::X11SalFrame maAlwaysOnTopRaiseTimer" );
 
     meWindowType                = WMWindowType::Normal;
     mbMaximizedVert             = false;

@@ -503,6 +503,7 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     , m_xGlobalBox(m_xBuilder->weld_widget("globalbox"))
     , m_xGlobalTree(new SwGlobalTree(m_xBuilder->weld_tree_view("globaltree"), this))
     , m_xDocListBox(m_xBuilder->weld_combo_box("documents"))
+    , m_aPageChgIdle("SwNavigationPI m_aPageChgIdle")
     , m_xNavigatorDlg(pNavigatorDlg)
     , m_pContentView(nullptr)
     , m_pContentWrtShell(nullptr)

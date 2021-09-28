@@ -84,7 +84,7 @@ struct SwSendMailDialog_Impl
     Idle                                        aRemoveIdle;
 
     SwSendMailDialog_Impl() :
-        nCurrentDescriptor(0)
+        nCurrentDescriptor(0), aRemoveIdle("SwSendMailDialog_Impl aRemoveIdle")
     {
         aRemoveIdle.SetPriority(TaskPriority::LOWEST);
     }

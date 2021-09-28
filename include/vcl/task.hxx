@@ -79,7 +79,6 @@ public:
     void            SetPriority(TaskPriority ePriority);
     TaskPriority    GetPriority() const { return mePriority; }
 
-    void            SetDebugName( const char *pDebugName ) { mpDebugName = pDebugName; }
     const char     *GetDebugName() const { return mpDebugName; }
 
     // Call handler

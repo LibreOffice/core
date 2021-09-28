@@ -43,7 +43,8 @@ namespace sd::slidesorter::controller {
 
 CurrentSlideManager::CurrentSlideManager (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
-      mnCurrentSlideIndex(-1)
+      mnCurrentSlideIndex(-1),
+      maSwitchPageDelayTimer("sd CurrentSlideManager maSwitchPageDelayTimer")
 {
     maSwitchPageDelayTimer.SetTimeout(100);
     maSwitchPageDelayTimer.SetInvokeHandler(LINK(this,CurrentSlideManager,SwitchPageCallback));

@@ -135,7 +135,7 @@ private:
 
 protected:
     // Single argument ctors shall be explicit.
-    explicit SystemWindow(WindowType nType);
+    explicit SystemWindow(WindowType nType, const char* pIdleDebugName);
     void loadUI(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
 
     void     SetWindowStateData( const WindowStateData& rData );
@@ -143,8 +143,6 @@ protected:
     virtual void settingOptimalLayoutSize(Window *pBox);
 
     SAL_DLLPRIVATE void DoInitialLayout();
-
-    SAL_DLLPRIVATE void SetIdleDebugName( const char *pDebugName );
 
 public:
     virtual         ~SystemWindow() override;
@@ -246,11 +244,5 @@ public:
     // Screenshot interface
     VclPtr<VirtualDevice> createScreenshot();
 };
-
-inline void SystemWindow::SetIdleDebugName( const char *pDebugName )
-{
-    maLayoutIdle.SetDebugName( pDebugName );
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

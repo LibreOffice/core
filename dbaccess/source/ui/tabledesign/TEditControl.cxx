@@ -69,7 +69,8 @@ using namespace ::com::sun::star::sdb;
 #define MAX_DESCR_LEN       256
 
 OTableEditorCtrl::ClipboardInvalidator::ClipboardInvalidator(OTableEditorCtrl* _pOwner)
-: m_pOwner(_pOwner)
+: m_aInvalidateTimer("dbaccess ClipboardInvalidator")
+, m_pOwner(_pOwner)
 {
 
     m_aInvalidateTimer.SetTimeout(500);

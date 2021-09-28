@@ -48,8 +48,8 @@ sal_uInt64 SwDocIdle::UpdateMinPeriod( sal_uInt64 /* nTimeNow */ ) const
         ? Scheduler::ImmediateTimeoutMs : Scheduler::InfiniteTimeoutMs;
 }
 
-SwDocIdle::SwDocIdle( SwDoc &doc )
-    : m_rDoc( doc )
+SwDocIdle::SwDocIdle( SwDoc &doc, const char * pDebugIdleName )
+    : Idle(pDebugIdleName), m_rDoc( doc )
 {
 }
 

@@ -35,7 +35,8 @@ QueueProcessor::QueueProcessor (
     const Size& rPreviewSize,
     const bool bDoSuperSampling,
     const SharedCacheContext& rpCacheContext)
-    : maPreviewSize(rPreviewSize),
+    : maTimer("sd::QueueProcessor maTimer"),
+      maPreviewSize(rPreviewSize),
       mbDoSuperSampling(bDoSuperSampling),
       mpCacheContext(rpCacheContext),
       mrQueue(rQueue),
@@ -44,7 +45,6 @@ QueueProcessor::QueueProcessor (
 {
     maTimer.SetInvokeHandler (LINK(this,QueueProcessor,ProcessRequestHdl));
     maTimer.SetTimeout (10);
-    maTimer.SetDebugName ("sd::QueueProcessor maTimer");
 }
 
 QueueProcessor::~QueueProcessor()

@@ -47,7 +47,8 @@ ScCheckListMenuControl::MenuItemData::MenuItemData()
 }
 
 ScCheckListMenuControl::SubMenuItemData::SubMenuItemData(ScCheckListMenuControl* pParent)
-    : mpSubMenu(nullptr)
+    : maTimer("sc SubMenuItemData maTimer")
+    , mpSubMenu(nullptr)
     , mnMenuPos(MENU_NOT_SELECTED)
     , mpParent(pParent)
 {

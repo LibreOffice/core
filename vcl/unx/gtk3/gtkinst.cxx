@@ -5444,10 +5444,10 @@ private:
 public:
     ChildFrame(vcl::Window* pParent, WinBits nStyle)
         : WorkWindow(pParent, nStyle)
+        , maLayoutIdle( "ChildFrame maLayoutIdle" )
     {
         maLayoutIdle.SetPriority(TaskPriority::RESIZE);
         maLayoutIdle.SetInvokeHandler( LINK( this, ChildFrame, ImplHandleLayoutTimerHdl ) );
-        maLayoutIdle.SetDebugName( "ChildFrame maLayoutIdle" );
     }
 
     virtual void dispose() override

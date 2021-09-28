@@ -331,7 +331,8 @@ std::shared_ptr<ViewShell::Implementation::ToolBarManagerLock>
 
 ViewShell::Implementation::ToolBarManagerLock::ToolBarManagerLock (
     const std::shared_ptr<ToolBarManager>& rpManager)
-    : mpLock(new ToolBarManager::UpdateLock(rpManager))
+    : mpLock(new ToolBarManager::UpdateLock(rpManager)),
+      maTimer("sd ToolBarManagerLock maTimer")
 {
     // Start a timer that will unlock the ToolBarManager update lock when
     // that is not done explicitly by calling Release().

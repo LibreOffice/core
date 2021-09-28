@@ -45,10 +45,10 @@ BreakDlg::BreakDlg(weld::Window* pWindow, DrawView* pDrView, DrawDocShell* pShel
     , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
     , m_pDrView(pDrView)
     , m_bCancel(false)
+    , m_aUpdateIdle( "sd::BreakDlg m_aUpdateIdle" )
 {
     m_aUpdateIdle.SetPriority( TaskPriority::REPAINT );
     m_aUpdateIdle.SetInvokeHandler( LINK( this, BreakDlg, InitialUpdate ) );
-    m_aUpdateIdle.SetDebugName( "sd::BreakDlg m_aUpdateIdle" );
 
     m_xBtnCancel->connect_clicked(LINK(this, BreakDlg, CancelButtonHdl));
 

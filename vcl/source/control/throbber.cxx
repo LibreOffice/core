@@ -44,6 +44,7 @@ Throbber::Throbber( vcl::Window* i_parentWindow, WinBits i_style )
     ,mbRepeat( true )
     ,mnStepTime( 100 )
     ,mnCurStep( 0 )
+    ,maWaitTimer("Throbber maWaitTimer")
 {
     maWaitTimer.SetTimeout( mnStepTime );
     maWaitTimer.SetInvokeHandler( LINK( this, Throbber, TimeOutHdl ) );

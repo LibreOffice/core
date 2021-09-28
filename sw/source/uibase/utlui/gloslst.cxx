@@ -85,7 +85,7 @@ IMPL_LINK_NOARG(SwGlossDecideDlg, SelectHdl, weld::TreeView&, void)
 }
 
 SwGlossaryList::SwGlossaryList() :
-    m_bFilled(false)
+    AutoTimer("SwGlossaryList"), m_bFilled(false)
 {
     SvtPathOptions aPathOpt;
     m_sPath = aPathOpt.GetAutoTextPath();

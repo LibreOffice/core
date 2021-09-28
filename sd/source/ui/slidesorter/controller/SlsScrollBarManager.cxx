@@ -46,6 +46,7 @@ ScrollBarManager::ScrollBarManager (SlideSorter& rSlideSorter)
       mnVerticalPosition (0),
       maScrollBorder (20,20),
       mpScrollBarFiller(mrSlideSorter.GetScrollBarFiller()),
+      maAutoScrollTimer("sd ScrollBarManager maAutoScrollTimer"),
       maAutoScrollOffset(0,0),
       mbIsAutoScrollActive(false),
       mpContentWindow(mrSlideSorter.GetContentWindow())

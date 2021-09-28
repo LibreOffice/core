@@ -127,6 +127,7 @@ GraphicFilterDialog::GraphicFilterDialog(weld::Window* pParent,
     const OUString& rUIXMLDescription, const OString& rID,
     const Graphic& rGraphic)
     : GenericDialogController(pParent, rUIXMLDescription, rID)
+    , maTimer("cui GraphicFilterDialog maTimer")
     , maModifyHdl(LINK(this, GraphicFilterDialog, ImplModifyHdl))
     , mxPreview(new weld::CustomWeld(*m_xBuilder, "preview", maPreview))
 {

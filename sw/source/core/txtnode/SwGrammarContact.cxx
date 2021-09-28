@@ -65,11 +65,13 @@ public:
 
 }
 
-SwGrammarContact::SwGrammarContact() : m_isFinished( false ), m_pTextNode(nullptr)
+SwGrammarContact::SwGrammarContact()
+  : m_aTimer( "sw::SwGrammarContact TimerRepaint" ),
+    m_isFinished( false ),
+    m_pTextNode(nullptr)
 {
     m_aTimer.SetTimeout( 2000 );  // Repaint of grammar check after 'setChecked'
     m_aTimer.SetInvokeHandler( LINK(this, SwGrammarContact, TimerRepaint) );
-    m_aTimer.SetDebugName( "sw::SwGrammarContact TimerRepaint" );
 }
 
 IMPL_LINK( SwGrammarContact, TimerRepaint, Timer *, pTimer, void )

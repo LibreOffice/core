@@ -157,7 +157,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(weld::Window *pParent)
     : GenericDialogController(pParent, "sfx/ui/templatedlg.ui", "TemplateDialog")
     , maSelTemplates(cmpSelectionItems)
     , mxDesktop(Desktop::create(comphelper::getProcessComponentContext()))
-    , m_aUpdateDataTimer("UpdateDataTimer")
+    , m_aUpdateDataTimer( "SfxTemplateManagerDlg UpdateDataTimer" )
     , mxSearchFilter(m_xBuilder->weld_entry("search_filter"))
     , mxCBApp(m_xBuilder->weld_combo_box("filter_application"))
     , mxCBFolder(m_xBuilder->weld_combo_box("filter_folder"))
@@ -240,7 +240,6 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(weld::Window *pParent)
     mxLocalView->Show();
 
     m_aUpdateDataTimer.SetInvokeHandler(LINK(this, SfxTemplateManagerDlg, ImplUpdateDataHdl));
-    m_aUpdateDataTimer.SetDebugName( "SfxTemplateManagerDlg UpdateDataTimer" );
     m_aUpdateDataTimer.SetTimeout(EDIT_UPDATEDATA_TIMEOUT);
 
     mxLocalView->connect_focus_rect(LINK(this, SfxTemplateManagerDlg, FocusRectLocalHdl));
@@ -1341,6 +1340,7 @@ void SfxTemplateCategoryDialog::SetCategoryLBEntries(std::vector<OUString> aFold
 
 SfxTemplateSelectionDlg::SfxTemplateSelectionDlg(weld::Window* pParent)
     : SfxTemplateManagerDlg(pParent)
+    , maIdle("sfx2 SfxTemplateManagerDlg maIdle")
 {
     mxCBApp->set_active(MNI_IMPRESS);
     mxCBFolder->set_active(0);
@@ -1377,7 +1377,6 @@ short SfxTemplateSelectionDlg::run()
 
     // tdf#125079 toggle off the size tracking at some future idle point
     maIdle.SetPriority(TaskPriority::LOWEST);
-    maIdle.SetDebugName("sfx2 SfxTemplateManagerDlg maIdle");
     maIdle.SetInvokeHandler(LINK(this,SfxTemplateSelectionDlg,TimeOut));
     maIdle.Start();
     setTemplateViewMode(TemplateViewMode::eThumbnailView);

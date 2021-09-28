@@ -210,6 +210,7 @@ namespace
     DelayedFileDeletion::DelayedFileDeletion( const Reference< XModel >& _rxModel, const OUString& _rTemporaryFile )
         :
         m_xDocument( _rxModel, UNO_QUERY )
+        ,m_aDeleteTimer("sw DelayedFileDeletion m_aDeleteTimer")
         ,m_sTemporaryFile( _rTemporaryFile )
         ,m_nPendingDeleteAttempts( 0 )
     {

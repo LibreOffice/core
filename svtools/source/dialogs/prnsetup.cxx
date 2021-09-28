@@ -223,6 +223,7 @@ PrinterSetupDialog::PrinterSetupDialog(weld::Window* pParent)
     , m_xFiType(m_xBuilder->weld_label("type"))
     , m_xFiLocation(m_xBuilder->weld_label("location"))
     , m_xFiComment(m_xBuilder->weld_label("comment"))
+    , maStatusTimer("PrinterSetupDialog maStatusTimer")
 {
     m_xLbName->make_sorted();
 

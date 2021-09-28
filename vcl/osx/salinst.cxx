@@ -99,7 +99,7 @@ class AquaDelayedSettingsChanged : public Idle
 
 public:
     AquaDelayedSettingsChanged( bool bInvalidate ) :
-        mbInvalidate( bInvalidate )
+        Idle("AquaDelayedSettingsChanged"), mbInvalidate( bInvalidate )
     {
     }
 

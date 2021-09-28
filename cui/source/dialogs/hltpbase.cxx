@@ -118,6 +118,7 @@ SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase(weld::Container* pParent,
   , mbIsCloseDisabled( false )
   , mpDialog( pDlg )
   , mbStdControlsInit( false )
+  , maTimer("cui SvxHyperlinkTabPageBase maTimer")
 {
     // create bookmark-window
 }

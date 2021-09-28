@@ -84,13 +84,13 @@ SwCommentRuler::SwCommentRuler(SwViewShell* pViewSh, vcl::Window* pParent, SwEdi
     , mpViewShell(pViewSh)
     , mpSwWin(pWin)
     , mbIsHighlighted(false)
+    , maFadeTimer("sw::SwCommentRuler maFadeTimer")
     , mnFadeRate(0)
     , maVirDev(VclPtr<VirtualDevice>::Create(*GetOutDev()))
 {
     // Set fading timeout: 5 x 40ms = 200ms
     maFadeTimer.SetTimeout(40);
     maFadeTimer.SetInvokeHandler(LINK(this, SwCommentRuler, FadeHandler));
-    maFadeTimer.SetDebugName("sw::SwCommentRuler maFadeTimer");
 
     // we have a little bit more space, as we don't draw ruler ticks
     vcl::Font aFont(maVirDev->GetFont());

@@ -149,13 +149,13 @@ void FloatingWindow::ImplInitSettings()
 }
 
 FloatingWindow::FloatingWindow(vcl::Window* pParent, WinBits nStyle) :
-    SystemWindow(WindowType::FLOATINGWINDOW)
+    SystemWindow(WindowType::FLOATINGWINDOW, "vcl::FloatingWindow maLayoutIdle")
 {
     ImplInitFloating(pParent, nStyle);
 }
 
 FloatingWindow::FloatingWindow(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
-    : SystemWindow(WindowType::FLOATINGWINDOW)
+    : SystemWindow(WindowType::FLOATINGWINDOW, "vcl::FloatingWindow maLayoutIdle")
     , mpNextFloat(nullptr)
     , mpFirstPopupModeWin(nullptr)
     , mnPostId(nullptr)

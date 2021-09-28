@@ -47,7 +47,7 @@ public:
     std::unique_ptr<weld::Frame>           m_xMacroFrame;
     std::unique_ptr<CuiConfigFunctionListBox> m_xMacroLB;
 
-    Idle                            m_aFillGroupIdle;
+    Idle                            m_aFillGroupIdle { "cui SfxMacroTabPage m_aFillGroupIdle" };
     bool                            m_bGotEvents;
 };
 
@@ -105,7 +105,6 @@ SfxMacroTabPage::SfxMacroTabPage(weld::Container* pPage, weld::DialogController*
 
     mpImpl->m_aFillGroupIdle.SetInvokeHandler( LINK( this, SfxMacroTabPage, TimeOut_Impl ) );
     mpImpl->m_aFillGroupIdle.SetPriority( TaskPriority::HIGHEST );
-    mpImpl->m_aFillGroupIdle.SetDebugName( "SfxMacroTabPage m_aFillGroupIdle" );
 
     mpImpl->m_xEventLB.reset(new MacroEventListBox(m_xBuilder->weld_tree_view("assignments")));
     mpImpl->m_xAssignPB = m_xBuilder->weld_button("assign");

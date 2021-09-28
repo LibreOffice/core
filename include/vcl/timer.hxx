@@ -36,7 +36,7 @@ protected:
     Timer( bool bAuto, const char *pDebugName );
 
 public:
-    Timer( const char *pDebugName = nullptr );
+    Timer( const char *pDebugName );
     Timer( const Timer& rTimer );
     virtual ~Timer() override;
     Timer& operator=( const Timer& rTimer );
@@ -66,7 +66,7 @@ public:
 class VCL_DLLPUBLIC AutoTimer : public Timer
 {
 public:
-    AutoTimer( const char *pDebugName = nullptr );
+    AutoTimer( const char *pDebugName );
 };
 
 /// Value suitable as a timeout user input into an EditBox to an expensive update

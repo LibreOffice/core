@@ -195,6 +195,7 @@ ImplGrafControl::ImplGrafControl(
     const OUString& rCmd,
     const Reference< XFrame >& rFrame)
     : InterimItemWindow(pParent, "svx/ui/grafctrlbox.ui", "GrafCtrlBox")
+    , maIdle("svx ImplGrafControl maIdle")
     , maCommand(rCmd)
     , mxFrame(rFrame)
     , mxImage(m_xBuilder->weld_image("image"))

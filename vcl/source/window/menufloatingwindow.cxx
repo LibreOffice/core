@@ -31,6 +31,9 @@
 MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, vcl::Window* pParent, WinBits nStyle ) :
     FloatingWindow( pParent, nStyle ),
     pMenu(pMen),
+    aHighlightChangedTimer("vcl::MenuFloatingWindow aHighlightChangedTimer"),
+    aSubmenuCloseTimer( "vcl::MenuFloatingWindow aSubmenuCloseTimer" ),
+    aScrollTimer( "vcl::MenuFloatingWindow aScrollTimer" ),
     nHighlightedItem(ITEMPOS_INVALID),
     nMBDownPos(ITEMPOS_INVALID),
     nScrollerHeight(0),
@@ -51,14 +54,11 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, vcl::Window* pParent, WinBit
 
     aHighlightChangedTimer.SetInvokeHandler( LINK( this, MenuFloatingWindow, HighlightChanged ) );
     aHighlightChangedTimer.SetTimeout( GetSettings().GetMouseSettings().GetMenuDelay() );
-    aHighlightChangedTimer.SetDebugName( "vcl::MenuFloatingWindow aHighlightChangedTimer" );
 
     aSubmenuCloseTimer.SetTimeout( GetSettings().GetMouseSettings().GetMenuDelay() );
     aSubmenuCloseTimer.SetInvokeHandler( LINK( this, MenuFloatingWindow, SubmenuClose ) );
-    aSubmenuCloseTimer.SetDebugName( "vcl::MenuFloatingWindow aSubmenuCloseTimer" );
 
     aScrollTimer.SetInvokeHandler( LINK( this, MenuFloatingWindow, AutoScroll ) );
-    aScrollTimer.SetDebugName( "vcl::MenuFloatingWindow aScrollTimer" );
 
     AddEventListener( LINK( this, MenuFloatingWindow, ShowHideListener ) );
 }

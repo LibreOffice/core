@@ -1298,13 +1298,14 @@ CustomPropertiesWindow::CustomPropertiesWindow(weld::Container& rParent, weld::L
     , m_pCurrentLine(nullptr)
     , m_aNumberFormatter(::comphelper::getProcessComponentContext(),
                          Application::GetSettings().GetLanguageTag().getLanguageType())
+    , m_aEditLoseFocusIdle("sfx2 CustomPropertiesWindow loseFocusIdle")
+    , m_aBoxLoseFocusIdle("sfx2 CustomPropertiesWindow m_aBoxLoseFocusIdle")
     , m_rBody(rParent)
     , m_rHeaderAccName(rHeaderAccName)
     , m_rHeaderAccType(rHeaderAccType)
     , m_rHeaderAccValue(rHeaderAccValue)
 {
     m_aEditLoseFocusIdle.SetPriority( TaskPriority::LOWEST );
-    m_aEditLoseFocusIdle.SetDebugName("sfx2 CustomPropertiesWindow loseFocusIdle");
     m_aEditLoseFocusIdle.SetInvokeHandler( LINK( this, CustomPropertiesWindow, EditTimeoutHdl ) );
     m_aBoxLoseFocusIdle.SetPriority( TaskPriority::LOWEST );
     m_aBoxLoseFocusIdle.SetInvokeHandler( LINK( this, CustomPropertiesWindow, BoxTimeoutHdl ) );

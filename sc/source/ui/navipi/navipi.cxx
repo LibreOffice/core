@@ -350,6 +350,7 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, weld::Widget* pParent, SfxNaviga
     , m_xLbDocuments(m_xBuilder->weld_combo_box("documents"))
     , m_xDragModeMenu(m_xBuilder->weld_menu("dragmodemenu"))
     , m_xNavigatorDlg(pNavigatorDlg)
+    , aContentIdle("ScNavigatorDlg aContentIdle")
     , aStrActiveWin(ScResId(SCSTR_ACTIVEWIN))
     , pViewData(nullptr )
     , eListMode(NAV_LMODE_NONE)

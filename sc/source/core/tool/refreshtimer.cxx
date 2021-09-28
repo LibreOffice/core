@@ -46,12 +46,12 @@ ScRefreshTimerProtector::~ScRefreshTimerProtector()
         m_rpControl->SetAllowRefresh( true );
 }
 
-ScRefreshTimer::ScRefreshTimer() : ppControl(nullptr)
+ScRefreshTimer::ScRefreshTimer() : AutoTimer("ScRefreshTimer"), ppControl(nullptr)
 {
     SetTimeout( 0 );
 }
 
-ScRefreshTimer::ScRefreshTimer( sal_uLong nSeconds ) : ppControl(nullptr)
+ScRefreshTimer::ScRefreshTimer( sal_uLong nSeconds ) : AutoTimer("ScRefreshTimer"), ppControl(nullptr)
 {
     SetTimeout( nSeconds * 1000 );
     Launch();

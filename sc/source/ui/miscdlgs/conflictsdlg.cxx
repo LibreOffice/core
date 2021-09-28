@@ -335,7 +335,7 @@ ScConflictsDlg::ScConflictsDlg(weld::Window* pParent, ScViewData* pViewData, ScD
     , mpSharedDoc        ( pSharedDoc )
     , mpSharedTrack      ( nullptr )
     , mrConflictsList    ( rConflictsList )
-    , maSelectionIdle    ( "ScConflictsDlg SelectionIdle" )
+    , maSelectionIdle    ( "ScConflictsDlg maSelectionIdle" )
     , mbInSelectHdl      ( false )
     , m_xBtnKeepMine(m_xBuilder->weld_button("keepmine"))
     , m_xBtnKeepOther(m_xBuilder->weld_button("keepother"))
@@ -364,7 +364,6 @@ ScConflictsDlg::ScConflictsDlg(weld::Window* pParent, ScViewData* pViewData, ScD
     rTreeView.set_size_request(-1, rTreeView.get_height_rows(16));
 
     maSelectionIdle.SetInvokeHandler( LINK( this, ScConflictsDlg, UpdateSelectionHdl ) );
-    maSelectionIdle.SetDebugName( "ScConflictsDlg maSelectionIdle" );
 
     rTreeView.connect_changed(LINK(this, ScConflictsDlg, SelectHandle));
 

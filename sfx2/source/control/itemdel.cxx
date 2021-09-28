@@ -43,11 +43,10 @@ public:
 
 SfxItemDisruptor_Impl::SfxItemDisruptor_Impl(std::unique_ptr<SfxPoolItem> pItemToDisrupt)
     : pItem(std::move(pItemToDisrupt))
-    , m_Idle("sfx SfxItemDisruptor_Impl::Delete")
+    , m_Idle("sfx::SfxItemDisruptor_Impl m_Idle")
 {
     m_Idle.SetInvokeHandler(LINK(this, SfxItemDisruptor_Impl, Delete));
     m_Idle.SetPriority(TaskPriority::DEFAULT_IDLE);
-    m_Idle.SetDebugName("sfx::SfxItemDisruptor_Impl m_Idle");
 
     DBG_ASSERT(0 == pItem->GetRefCount(), "disrupting pooled item");
     pItem->SetKind(SfxItemKind::DeleteOnIdle);

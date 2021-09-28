@@ -47,6 +47,8 @@ const sal_uInt64 SHOW_MOUSE_TIMEOUT = 1000;
 
 ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, vcl::Window* pParent )
 : ::sd::Window( pParent )
+, maPauseTimer("sd ShowWindow maPauseTimer")
+, maMouseTimer("sd ShowWindow maMouseTimer")
 , mnPauseTimeout( SLIDE_NO_TIMEOUT )
 , mnRestartPageIndex( PAGE_NO_END )
 , meShowWindowMode(SHOWWINDOWMODE_NORMAL)

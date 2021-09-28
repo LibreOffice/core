@@ -268,7 +268,8 @@ TEParaPortions::~TEParaPortions()
 }
 
 IdleFormatter::IdleFormatter()
-    : mpView(nullptr)
+    : Idle("vcl::TextEngine mpIdleFormatter")
+    , mpView(nullptr)
     , mnRestarts(0)
 {
     SetPriority(TaskPriority::HIGH_IDLE);
