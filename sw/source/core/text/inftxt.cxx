@@ -99,7 +99,7 @@ SwLineInfo::~SwLineInfo()
 void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
                                    const SwTextNode& rTextNode )
 {
-    m_pRuler.reset( new SvxTabStopItem( rAttrSet.GetTabStops() ) );
+    m_oRuler.emplace( rAttrSet.GetTabStops() );
     if ( rTextNode.GetListTabStopPosition( m_nListTabStopPosition ) )
     {
         m_bListTabStopIncluded = true;
@@ -107,15 +107,15 @@ void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
         // insert the list tab stop into SvxTabItem instance <pRuler>
         const SvxTabStop aListTabStop( m_nListTabStopPosition,
                                        SvxTabAdjust::Left );
-        m_pRuler->Insert( aListTabStop );
+        m_oRuler->Insert( aListTabStop );
 
         // remove default tab stops, which are before the inserted list tab stop
-        for ( sal_uInt16 i = 0; i < m_pRuler->Count(); i++ )
+        for ( sal_uInt16 i = 0; i < m_oRuler->Count(); i++ )
         {
-            if ( (*m_pRuler)[i].GetTabPos() < m_nListTabStopPosition &&
-                 (*m_pRuler)[i].GetAdjustment() == SvxTabAdjust::Default )
+            if ( (*m_oRuler)[i].GetTabPos() < m_nListTabStopPosition &&
+                 (*m_oRuler)[i].GetAdjustment() == SvxTabAdjust::Default )
             {
-                m_pRuler->Remove(i);
+                m_oRuler->Remove(i);
                 continue;
             }
         }
@@ -124,12 +124,12 @@ void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
     if ( !rTextNode.getIDocumentSettingAccess()->get(DocumentSettingId::TABS_RELATIVE_TO_INDENT) )
     {
         // remove default tab stop at position 0
-        for ( sal_uInt16 i = 0; i < m_pRuler->Count(); i++ )
+        for ( sal_uInt16 i = 0; i < m_oRuler->Count(); i++ )
         {
-            if ( (*m_pRuler)[i].GetTabPos() == 0 &&
-                 (*m_pRuler)[i].GetAdjustment() == SvxTabAdjust::Default )
+            if ( (*m_oRuler)[i].GetTabPos() == 0 &&
+                 (*m_oRuler)[i].GetAdjustment() == SvxTabAdjust::Default )
             {
-                m_pRuler->Remove(i);
+                m_oRuler->Remove(i);
                 break;
             }
         }
