@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <Qt5FilePicker.hxx>
+#include <QtFilePicker.hxx>
 #include <memory>
 
 class QGridLayout;

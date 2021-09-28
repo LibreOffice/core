@@ -25,7 +25,7 @@
 
 #include <sal/log.hxx>
 
-#include <Qt5Data.hxx>
+#include <QtData.hxx>
 
 #include "KF5FilePicker.hxx"
 #include "KF5SalFrame.hxx"
