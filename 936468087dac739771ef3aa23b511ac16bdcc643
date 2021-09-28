@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69560a36_ae89da42",
+        "filename": "cui/source/tabpages/border.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2021-09-28T08:02:00Z",
+      "side": 1,
+      "message": "Probably it will make sense to use SvxBorderLineWidth values directly, not define a new set of values?",
+      "range": {
+        "startLine": 81,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 6
+      },
+      "revId": "936468087dac739771ef3aa23b511ac16bdcc643",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
