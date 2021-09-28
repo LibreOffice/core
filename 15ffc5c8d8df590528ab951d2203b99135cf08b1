@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d020f416_0de0e6b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-09-28T09:48:43Z",
+      "side": 1,
+      "message": "Seeing as this seems a similar sort of problem as that solved by:\n\ncommit edc62adae9a354ca1305e83b10c98a545f58d341\nAuthor: Mike Kaganski \u003cmike.kaganski@collabora.com\u003e\nDate:   Mon Jul 9 19:49:34 2018 +1000\n    tdf#118634: Don\u0027t save embedded data source to a temporary preview document\n\nmaybe you have some insight if doing this proposed change is sane",
+      "revId": "15ffc5c8d8df590528ab951d2203b99135cf08b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
